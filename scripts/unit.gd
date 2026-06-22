@@ -1355,7 +1355,8 @@ func _init_ability_slots(def: Dictionary) -> void:
 	elif String(def.get("ability", "")) != "":
 		ids = [def["ability"]]
 	for id in ids:
-		var ad: Dictionary = Defs.ABILITIES.get(id, {})
+		# 优先取本场战斗的(可能被场景/内容包覆盖的)技能表，使本场景新增/改过的技能也能正确建槽
+		var ad: Dictionary = (battle._abilities.get(id, {}) if (battle != null and id in battle._abilities) else Defs.ABILITIES.get(id, {}))
 		ability_slots.append({"id": String(id), "rank": (0 if _hero_leveled else 1),
 			"cd_t": 0.0, "passive": bool(ad.get("passive", false))})
 	if _hero_leveled:

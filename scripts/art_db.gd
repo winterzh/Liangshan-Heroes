@@ -135,6 +135,16 @@ func _try_load(path: String) -> Texture2D:
 const CONTENT_ART_DIR := "res://content/art"
 var _content_tex := {}
 
+# 运行时美术别名（场景编辑器「新建单位」时让新 key 借用某现有单位的贴图/动画）。
+# 仅本场战斗有效；Battle 每局开场先清空，再由 scenario.apply_overrides 填入。
+var _runtime_alias := {}
+
+func set_runtime_alias(d: Dictionary) -> void:
+	_runtime_alias = d if d != null else {}
+
+func _ra(key: String) -> String:
+	return String(_runtime_alias.get(key, key))
+
 func _content_override(key: String) -> Texture2D:
 	if _content_tex.has(key):
 		return _content_tex[key]
@@ -188,6 +198,7 @@ func avatar_texture(key: String) -> Texture2D:
 
 
 func unit_texture(key: String) -> Texture2D:
+	key = _ra(key)                     # 运行时别名（场景新建单位借图）
 	var ov := _content_override(key)   # 内容包覆盖优先
 	if ov != null:
 		return ov
@@ -207,6 +218,7 @@ func unit_texture(key: String) -> Texture2D:
 
 
 func building_texture(key: String) -> Texture2D:
+	key = _ra(key)                     # 运行时别名
 	var ov := _content_override(key)   # 内容包覆盖优先
 	if ov != null:
 		return ov
@@ -238,6 +250,7 @@ var _standalone_portraits := {}
 
 
 func portrait_texture(key: String) -> Texture2D:
+	key = _ra(key)                  # 运行时别名
 	key = ART_ALIAS.get(key, key)   # 被擒英雄等沿用本体脸
 	if STANDALONE_PORTRAITS.has(key):   # 独立头像图（有就用）
 		if not _standalone_portraits.has(key):
@@ -261,6 +274,7 @@ func portrait_texture(key: String) -> Texture2D:
 ## 约定：assets/anim/<key>_<state>.png 为一条横向帧带（每帧为正方形），state ∈ idle/walk/attack。
 ## 文件存在则返回各帧 AtlasTexture，否则返回空数组（Unit 退回程序化动画）。
 func unit_anim_frames(key: String, state: String) -> Array:
+	key = _ra(key)                     # 运行时别名（场景新建单位借动画）
 	key = SPRITE_ALIAS.get(key, key)   # 无专属走图的将领/兵种借同型官军逐帧
 	var ck := key + "_" + state
 	if _anim_cache.has(ck):

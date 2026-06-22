@@ -55,6 +55,14 @@ func _m(key: String, def = {}) -> Variant:
 
 # ---------- 基本信息 / 地图 ----------
 
+## 关卡级覆盖（场景编辑器「单位/技能编辑」）：把本场景内嵌的 units / abilities 改动合并进本场
+## 的 _defs / _abilities——仅本场景生效，不动全局 Defs（魔兽编辑器式的"本图对象编辑"）。
+func apply_overrides(defs: Dictionary, abilities: Dictionary) -> void:
+	Defs.merge_into(defs, data.get("units", {}))
+	Defs.merge_into(abilities, data.get("abilities", {}))
+	Art.set_runtime_alias(data.get("sprite_alias", {}))   # 新建单位借用现有单位的贴图/动画
+
+
 func id() -> String: return String(data.get("id", "scenario"))
 func title() -> String: return String(data.get("title", "自定义关卡"))
 func subtitle() -> String: return String(data.get("subtitle", ""))

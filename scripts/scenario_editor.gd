@@ -14,6 +14,34 @@ const DECOR_LABELS := {"tower": "箭塔", "banner": "旗", "tent": "营帐", "bo
 	"rocks": "石", "pine": "松", "town_house": "民房", "scaffold": "刑台", "treasure_cart": "宝车",
 	"gold_mine": "金矿", "palisade": "栅栏"}
 
+# 单位属性表（编辑器属性栏）：[字段, 中文标签, 类型]。enum 用 | 分隔选项，首项空=「无」。
+const UNIT_SCHEMA := [
+	["name", "名称", "str"], ["hp", "生命", "int"], ["atk", "攻击", "int"], ["cd", "攻击间隔", "float"],
+	["range", "攻击距离", "int"], ["speed", "移速", "int"], ["radius", "体型", "int"], ["pop", "人口", "int"],
+	["cost_gold", "造价·金", "int"], ["cost_wood", "造价·木", "int"], ["train_time", "训练耗时", "float"], ["min_age", "时代门槛", "int"],
+	["hero", "英雄", "bool"], ["ranged", "远程", "bool"], ["cavalry", "骑兵", "bool"], ["worker", "工人", "bool"],
+	["building", "建筑", "bool"], ["buildable", "可建造", "bool"], ["build_order", "建造序", "int"], ["build_time", "建造耗时", "float"],
+	["melee_switch", "可拔刀", "bool"], ["drop_off", "卸货点", "bool"], ["is_main_base", "主基地", "bool"], ["is_altar", "祭坛", "bool"],
+	["garrison_cap", "驻军容量", "int"], ["provides_pop", "提供人口", "int"], ["splash", "溅射半径", "float"], ["bonus_cav", "克骑倍率", "float"],
+	["aura", "光环", "enum:|atk|speed"], ["aura_r", "光环半径", "int"], ["aura_p", "光环倍率", "float"],
+	["trained_at", "训练于(建筑id)", "str"], ["proj_kind", "弹道", "enum:|arrow|fireball|boulder"],
+	["ability", "主技能id", "str"], ["abilities", "技能组(逗号分隔)", "list"],
+]
+# 技能属性表
+const ABILITY_SCHEMA := [
+	["name", "名称", "str"], ["cd", "冷却", "float"], ["radius", "范围", "int"],
+	["targeted", "指向(点地放)", "bool"], ["weak_global", "弱托管全屏", "bool"], ["passive", "被动", "bool"],
+	["effect.kind", "效果类型", "enum:smite|rally|haste|fire_dot|self_buff|summon|debuff|drag|passive|sector_nuke|blink_shot|charge|orbit_axes|chrono|black_rain|ice_wall|slow_aura|drunk_buff|drunk_god|weapon_toggle|path"],
+	["effect.dmg", "伤害", "int"], ["effect.heal", "治疗", "int"], ["effect.dur", "持续", "float"],
+	["effect.slow", "减速(0-1)", "float"], ["effect.slow_dur", "减速时长", "float"], ["effect.stun", "眩晕", "float"],
+	["effect.self_atk", "自身攻×", "float"], ["effect.self_dur", "自增时长", "float"], ["effect.lifesteal", "吸血", "float"],
+	["effect.atk_mult", "队友攻×", "float"], ["effect.atk_add", "攻+", "int"], ["effect.hp_add", "血+", "int"],
+	["effect.range_add", "射程+", "int"], ["effect.bonus_cav", "克骑×", "float"], ["effect.speed_mult", "移速×", "float"],
+	["effect.dot_total", "持续伤害", "int"], ["effect.dot_dur", "持续伤害时长", "float"],
+	["effect.range", "作用距离", "int"], ["effect.len", "长度", "int"], ["effect.width", "宽度", "int"],
+	["effect.unit", "召唤单位id", "str"], ["effect.count", "召唤数", "int"],
+]
+
 var _cfg: Dictionary
 var _map: GameMap                  # 地形工作模型（不入树，仅存格 + 供绘制读取）
 var tool := "terrain"              # terrain / unit / gate / camera / erase
@@ -36,12 +64,31 @@ var _waves_box: VBoxContainer
 var _intro_box: VBoxContainer
 var _place_keys: Array = []        # 可放置单位 key（按名）
 var _combat_keys: Array = []       # 波次可用兵种 key
+# 单位/技能编辑器状态
+var _ue_root: ColorRect
+var _ue_list: VBoxContainer
+var _ue_form: VBoxContainer
+var _ue_sel := ""
 
 
 func _ready() -> void:
 	_cfg = ScenarioStore.default_scenario()
+	_refresh_unit_keys()
+	_rebuild_map_model()
+	_build()
+
+
+## 重算可放置/可入波的单位 key（含本场景自定义/覆盖的单位）。单位编辑后调用以刷新各处下拉。
+func _refresh_unit_keys() -> void:
+	_place_keys.clear()
+	_combat_keys.clear()
+	var src := {}
 	for k in Defs.UNITS:
-		var d: Dictionary = Defs.UNITS[k]
+		src[k] = Defs.UNITS[k]
+	for k in _cfg.get("units", {}):
+		src[k] = _cfg["units"][k]   # 自定义/覆盖优先
+	for k in src:
+		var d: Dictionary = src[k]
 		if d.has("res_kind"):
 			continue
 		_place_keys.append(k)
@@ -49,8 +96,14 @@ func _ready() -> void:
 			_combat_keys.append(k)
 	_place_keys.sort()
 	_combat_keys.sort()
-	_rebuild_map_model()
-	_build()
+
+
+## 单位的「有效定义」：本场景覆盖 > 全局 Defs。名字查找同理。
+func _udef(k: String) -> Dictionary:
+	return _cfg.get("units", {}).get(k, Defs.UNITS.get(k, {}))
+
+func _uname(k: String) -> String:
+	return String(_udef(k).get("name", k))
 
 
 func _process(delta: float) -> void:
@@ -135,6 +188,9 @@ func _build() -> void:
 		_flush_terrain()
 		var p := ScenarioStore.save(_cfg)
 		_show_toast("已保存：" + p if p != "" else "保存失败")))
+	var ueb := _btn("🛠 单位/技能", _ue_open)
+	ueb.add_theme_color_override("font_color", Color("87cefa"))
+	top.add_child(ueb)
 	var play := _btn("▶ 试玩", _playtest)
 	play.add_theme_color_override("font_color", Color("9fe06f"))
 	top.add_child(play)
@@ -245,7 +301,7 @@ func _refresh_tool_panel() -> void:
 			var us := ScrollContainer.new(); us.custom_minimum_size = Vector2(0, 260); _tool_panel.add_child(us)
 			var ub := VBoxContainer.new(); ub.size_flags_horizontal = Control.SIZE_EXPAND_FILL; us.add_child(ub)
 			for k in _place_keys:
-				var nm := String(Defs.UNITS[k].get("name", k))
+				var nm := _uname(k)
 				var kk: String = k
 				var kb := _btn(nm, func() -> void: cur_unit = kk; _show_toast("单位：" + nm))
 				kb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -275,7 +331,7 @@ func _refresh_tool_panel() -> void:
 			var rus := ScrollContainer.new(); rus.custom_minimum_size = Vector2(0, 220); _tool_panel.add_child(rus)
 			var rub := VBoxContainer.new(); rub.size_flags_horizontal = Control.SIZE_EXPAND_FILL; rus.add_child(rub)
 			for k in _place_keys:
-				var nm := String(Defs.UNITS[k].get("name", k))
+				var nm := _uname(k)
 				var kk: String = k
 				var kb := _btn(nm, func() -> void: cur_unit = kk; _show_toast("援军：" + nm))
 				kb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -548,6 +604,242 @@ func _show_load() -> void:
 	box.add_child(_btn("返回", func() -> void: ov.queue_free()))
 
 
+## ---------- 单位 / 技能编辑器（仅本场景生效，魔兽编辑器式对象编辑）----------
+
+func _ue_open() -> void:
+	_ue_root = ColorRect.new()
+	_ue_root.color = Color(0.06, 0.05, 0.035, 0.99)
+	_ue_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_ue_root.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(_ue_root)
+	var rootv := VBoxContainer.new()
+	rootv.set_anchors_preset(Control.PRESET_FULL_RECT)
+	rootv.offset_left = 14; rootv.offset_top = 10; rootv.offset_right = -14; rootv.offset_bottom = -10
+	rootv.add_theme_constant_override("separation", 8)
+	_ue_root.add_child(rootv)
+	var hdr := HBoxContainer.new()
+	var ttl := Label.new(); ttl.text = "单位 / 技能编辑　（改动仅对本场景生效）"
+	ttl.add_theme_font_size_override("font_size", 20); ttl.add_theme_color_override("font_color", Color("ffe9a8"))
+	hdr.add_child(ttl)
+	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hdr.add_child(sp)
+	hdr.add_child(_btn("✓ 关闭", _ue_close))
+	rootv.add_child(hdr)
+	var body := HBoxContainer.new(); body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 10); rootv.add_child(body)
+	# 左：单位列表
+	var leftv := VBoxContainer.new(); leftv.custom_minimum_size = Vector2(240, 0)
+	body.add_child(leftv)
+	leftv.add_child(_btn("＋ 新建单位（复制选中）", _ue_new_unit))
+	var lscroll := ScrollContainer.new(); lscroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	lscroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; leftv.add_child(lscroll)
+	_ue_list = VBoxContainer.new(); _ue_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL; lscroll.add_child(_ue_list)
+	# 右：属性表
+	var rscroll := ScrollContainer.new(); rscroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rscroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; rscroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(rscroll)
+	_ue_form = VBoxContainer.new(); _ue_form.size_flags_horizontal = Control.SIZE_EXPAND_FILL; rscroll.add_child(_ue_form)
+	if _ue_sel == "" or not _place_keys.has(_ue_sel):
+		_ue_sel = String(_place_keys[0]) if not _place_keys.is_empty() else ""
+	_ue_rebuild_list()
+	_ue_rebuild_form()
+
+
+func _ue_close() -> void:
+	if _ue_root != null:
+		_ue_root.queue_free(); _ue_root = null
+	_refresh_unit_keys()
+	_build()   # 重建主界面：放兵/波次下拉等会带上新单位
+
+
+func _ue_select(k: String) -> void:
+	_ue_sel = k
+	_ue_rebuild_list(); _ue_rebuild_form()
+
+
+func _ue_rebuild_list() -> void:
+	for c in _ue_list.get_children():
+		c.queue_free()
+	var custom: Array = _cfg.get("units", {}).keys(); custom.sort()
+	var bases: Array = []
+	for k in Defs.UNITS:
+		if not custom.has(k):
+			bases.append(k)
+	bases.sort()
+	if not custom.is_empty():
+		var h := Label.new(); h.text = "★ 本场景改过/自定义"; h.add_theme_color_override("font_color", Color("9fe06f")); _ue_list.add_child(h)
+		for k in custom:
+			_ue_list.add_child(_ue_list_btn(String(k), true))
+	var h2 := Label.new(); h2.text = "全部单位"; h2.add_theme_color_override("font_color", Color("9fd0e8")); _ue_list.add_child(h2)
+	for k in bases:
+		_ue_list.add_child(_ue_list_btn(String(k), false))
+
+
+func _ue_list_btn(k: String, custom: bool) -> Button:
+	var b := _btn(("✎ " if custom else "  ") + _uname(k), func() -> void: _ue_select(k))
+	b.alignment = HORIZONTAL_ALIGNMENT_LEFT; b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if k == _ue_sel:
+		b.add_theme_color_override("font_color", Color("ffd866"))
+	return b
+
+
+func _ue_rebuild_form() -> void:
+	for c in _ue_form.get_children():
+		c.queue_free()
+	if _ue_sel == "":
+		return
+	var ttl := Label.new(); ttl.text = "%s　〔key: %s〕" % [_uname(_ue_sel), _ue_sel]
+	ttl.add_theme_font_size_override("font_size", 18); ttl.add_theme_color_override("font_color", Color("ffe9a8"))
+	_ue_form.add_child(ttl)
+	var key := _ue_sel
+	for spec in UNIT_SCHEMA:
+		_ue_form.add_child(_prop_row(_udef(key), func(fk, v) -> void: _unit_set(key, fk, v), spec))
+	# 技能编辑入口
+	_ue_form.add_child(_head("技能（点「编辑」可改全部参数/新建）"))
+	var d := _udef(key)
+	var ab: Array = d.get("abilities", [])
+	if ab.is_empty() and String(d.get("ability", "")) != "":
+		ab = [d["ability"]]
+	for aid in ab:
+		var aid2 := String(aid)
+		var hr := HBoxContainer.new()
+		var al := Label.new(); al.text = "  " + _aname(aid2) + "　(" + aid2 + ")"; al.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hr.add_child(al)
+		hr.add_child(_btn("编辑", func() -> void: _ae_open(aid2)))
+		_ue_form.add_child(hr)
+
+
+## 写入单位字段(写时才固化为本场景 override)。改名时刷新左列标签(左列与属性表不同容器，不丢焦点)。
+func _unit_set(key: String, fk: String, v) -> void:
+	_spec_set(_edit_unit_dict(key), fk, v)
+	if fk == "name":
+		_ue_rebuild_list()
+
+
+func _ue_new_unit() -> void:
+	var src := _ue_sel
+	var base: Dictionary = _udef(src).duplicate(true)
+	if base.is_empty():
+		base = {"name": "新单位", "hp": 100, "atk": 10, "cd": 1.0, "range": 26, "speed": 72, "radius": 11}
+	var i := 1
+	while _cfg.get("units", {}).has("custom_%d" % i) or Defs.UNITS.has("custom_%d" % i):
+		i += 1
+	var nk := "custom_%d" % i
+	base["name"] = String(base.get("name", "新单位")) + "·改"
+	if not _cfg.has("units"):
+		_cfg["units"] = {}
+	_cfg["units"][nk] = base
+	if src != "":   # 借用源单位的贴图/动画，新单位不至于是占位方块
+		if not _cfg.has("sprite_alias"):
+			_cfg["sprite_alias"] = {}
+		_cfg["sprite_alias"][nk] = src
+	_refresh_unit_keys()
+	_ue_sel = nk
+	_ue_rebuild_list(); _ue_rebuild_form()
+	_show_toast("新建 %s（借用 %s 的美术，可改 key/数值/技能）" % [nk, _uname(src)])
+
+
+func _ae_open(aid: String) -> void:
+	var ov := ColorRect.new(); ov.color = Color(0.03, 0.025, 0.02, 1.0)
+	ov.set_anchors_preset(Control.PRESET_FULL_RECT); ov.mouse_filter = Control.MOUSE_FILTER_STOP
+	(_ue_root if _ue_root != null else self).add_child(ov)   # 叠在单位编辑器之上
+	var v := VBoxContainer.new(); v.set_anchors_preset(Control.PRESET_FULL_RECT)
+	v.offset_left = 40; v.offset_top = 20; v.offset_right = -40; v.offset_bottom = -20
+	v.add_theme_constant_override("separation", 6); ov.add_child(v)
+	var ttl := Label.new(); ttl.text = "技能编辑：%s　(%s)" % [_aname(aid), aid]
+	ttl.add_theme_font_size_override("font_size", 18); ttl.add_theme_color_override("font_color", Color("ffe9a8")); v.add_child(ttl)
+	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; v.add_child(sc)
+	var form := VBoxContainer.new(); form.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(form)
+	for spec in ABILITY_SCHEMA:
+		form.add_child(_prop_row(_adef(aid), func(fk, val) -> void: _spec_set(_edit_ability_dict(aid), fk, val), spec))
+	v.add_child(_btn("✓ 完成", func() -> void: ov.queue_free(); _ue_rebuild_form()))
+
+
+## 有效技能定义（本场景覆盖 > 全局）
+func _adef(aid: String) -> Dictionary:
+	return _cfg.get("abilities", {}).get(aid, Defs.ABILITIES.get(aid, {}))
+
+func _aname(aid: String) -> String:
+	return String(_adef(aid).get("name", aid))
+
+func _edit_unit_dict(key: String) -> Dictionary:
+	if not _cfg.has("units"):
+		_cfg["units"] = {}
+	if not _cfg["units"].has(key):
+		var base: Dictionary = Defs.UNITS.get(key, {})
+		_cfg["units"][key] = base.duplicate(true) if not base.is_empty() else {"name": key, "hp": 100, "atk": 10, "cd": 1.0, "range": 26, "speed": 72, "radius": 11}
+	return _cfg["units"][key]
+
+func _edit_ability_dict(aid: String) -> Dictionary:
+	if not _cfg.has("abilities"):
+		_cfg["abilities"] = {}
+	if not _cfg["abilities"].has(aid):
+		var base: Dictionary = Defs.ABILITIES.get(aid, {})
+		_cfg["abilities"][aid] = base.duplicate(true) if not base.is_empty() else {"name": aid, "cd": 8.0, "radius": 100.0, "targeted": false, "effect": {"kind": "smite", "dmg": 20.0}}
+	return _cfg["abilities"][aid]
+
+
+## 通用属性行：read_d 仅供显示当前值；on_set(字段, 值) 负责写入(写时才固化 override)。
+func _prop_row(read_d: Dictionary, on_set: Callable, spec: Array) -> HBoxContainer:
+	var key: String = spec[0]
+	var label: String = spec[1]
+	var typ: String = spec[2]
+	var h := HBoxContainer.new()
+	var l := Label.new(); l.text = label; l.custom_minimum_size = Vector2(124, 0); l.add_theme_font_size_override("font_size", 13)
+	h.add_child(l)
+	var cur = _spec_get(read_d, key)
+	if typ == "bool":
+		var cb := CheckBox.new(); cb.button_pressed = bool(cur)
+		cb.toggled.connect(func(v: bool) -> void: on_set.call(key, v))
+		h.add_child(cb)
+	elif typ == "int" or typ == "float":
+		var s := SpinBox.new(); s.min_value = 0; s.max_value = 99999; s.step = (1.0 if typ == "int" else 0.05)
+		s.allow_greater = true; s.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		s.value = float(cur) if (cur is float or cur is int) else 0.0
+		s.value_changed.connect(func(v: float) -> void: on_set.call(key, (int(v) if typ == "int" else v)))
+		h.add_child(s)
+	elif typ == "str":
+		var le := LineEdit.new(); le.text = String(cur) if cur != null else ""; le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		le.text_changed.connect(func(t: String) -> void: on_set.call(key, t))
+		h.add_child(le)
+	elif typ == "list":
+		var le2 := LineEdit.new(); le2.text = (",".join(cur) if cur is Array else ""); le2.placeholder_text = "技能id,逗号分隔"
+		le2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		le2.text_changed.connect(func(t: String) -> void: on_set.call(key, _split_csv(t)))
+		h.add_child(le2)
+	elif typ.begins_with("enum:"):
+		var opts := typ.substr(5).split("|")
+		var o := OptionButton.new(); o.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		for i in range(opts.size()):
+			o.add_item(opts[i] if opts[i] != "" else "(无)", i)
+			if String(cur) == opts[i]:
+				o.select(i)
+		o.item_selected.connect(func(idx: int) -> void: on_set.call(key, String(opts[idx])))
+		h.add_child(o)
+	return h
+
+
+func _spec_get(d: Dictionary, key: String):
+	if key.begins_with("effect."):
+		return d.get("effect", {}).get(key.substr(7), null)
+	return d.get(key, null)
+
+func _spec_set(d: Dictionary, key: String, val) -> void:
+	if key.begins_with("effect."):
+		if not d.has("effect"):
+			d["effect"] = {}
+		d["effect"][key.substr(7)] = val
+	else:
+		d[key] = val
+
+func _split_csv(t: String) -> Array:
+	var out: Array = []
+	for p in t.split(","):
+		var q := p.strip_edges()
+		if q != "":
+			out.append(q)
+	return out
+
+
 ## ---------- 小部件工具 ----------
 
 func _head(t: String) -> Label:
@@ -597,7 +889,7 @@ func _opt_row(label: String, items: Array, cur: String, cb: Callable) -> HBoxCon
 func _key_opt(keys: Array, cur: String, cb: Callable) -> OptionButton:
 	var o := OptionButton.new(); o.custom_minimum_size = Vector2(96, 0)
 	for i in range(keys.size()):
-		o.add_item(String(Defs.UNITS[keys[i]].get("name", keys[i])), i)
+		o.add_item(_uname(String(keys[i])), i)
 		if String(keys[i]) == cur:
 			o.select(i)
 	o.item_selected.connect(func(idx: int) -> void: cb.call(String(keys[idx])))
@@ -735,7 +1027,7 @@ class MapCanvas extends Control:
 			draw_circle(cp, cz * 0.42, Color(0, 0, 0, 0.6), false, 1.5)
 			if String(e.get("ref", "")) == "hall":
 				draw_arc(cp, cz * 0.6, 0, TAU, 16, Color(1, 0.9, 0.3), 2.0)
-			var nm := String(Defs.UNITS.get(String(e.get("key", "")), {}).get("name", "?"))
+			var nm: String = ed._uname(String(e.get("key", "")))
 			if cz >= 11.0:
 				draw_string(f, cp + Vector2(-cz * 0.35, cz * 0.28), nm.substr(0, 1), HORIZONTAL_ALIGNMENT_LEFT, -1, int(cz * 0.7), Color(0.06, 0.05, 0.04))
 		# 镜头起点

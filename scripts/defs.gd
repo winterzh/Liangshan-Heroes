@@ -453,15 +453,21 @@ static func apply_content_pack(defs: Dictionary, abilities: Dictionary) -> void:
 static func _merge_json(path: String, into: Dictionary) -> void:
 	if not FileAccess.file_exists(path):
 		return
-	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not (data is Dictionary):
+	merge_into(into, JSON.parse_string(FileAccess.get_file_as_string(path)))
+
+## 把 overrides 合并进 into（字段级覆盖 / 整条新增）。嵌套值深拷贝——
+## 这样战斗里改 _defs 不会污染来源(如场景 JSON、内容包)。场景编辑器的单位/技能 override 也走它。
+static func merge_into(into: Dictionary, overrides) -> void:
+	if not (overrides is Dictionary):
 		return
-	for k in data:
-		if into.has(k) and into[k] is Dictionary and data[k] is Dictionary:
-			for f in data[k]:
-				into[k][f] = data[k][f]   # 字段级覆盖
+	for k in overrides:
+		var v = overrides[k]
+		if into.has(k) and into[k] is Dictionary and v is Dictionary:
+			for f in v:
+				var fv = v[f]
+				into[k][f] = (fv.duplicate(true) if (fv is Dictionary or fv is Array) else fv)
 		else:
-			into[k] = data[k]             # 整条新增/替换
+			into[k] = (v.duplicate(true) if (v is Dictionary or v is Array) else v)
 
 
 # 护甲值（defense）总表：每点 −约5% 普攻伤害。所有 64 个战斗单位/英雄均非 0（逐一审查定值，

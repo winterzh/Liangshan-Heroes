@@ -116,6 +116,9 @@ func _ready() -> void:
 	_defs = Defs.UNITS.duplicate(true)
 	_abilities = Defs.ABILITIES.duplicate(true)
 	Defs.apply_content_pack(_defs, _abilities)   # 内容包覆盖（res://content/*.json，无则不变）
+	Art.set_runtime_alias({})                    # 清掉上局的运行时借图别名
+	if level.has_method("apply_overrides"):
+		level.apply_overrides(_defs, _abilities)   # 关卡级覆盖（场景编辑器：仅本场景的单位/技能改动）
 
 	economy = level.economy_enabled()
 	if economy:
