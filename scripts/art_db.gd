@@ -101,6 +101,17 @@ const PORTRAIT7_CELLS := {
 	"duan_pengju": Vector2i(0, 0), "tong_guan": Vector2i(1, 0), "ling_zhen": Vector2i(2, 0),
 	"wei_dingguo": Vector2i(0, 1), "shan_tinggui": Vector2i(1, 1), "wen_da": Vector2i(2, 1),
 }
+const PORTRAITS8_SHEET := "res://assets/portraits8.png" # 重画批·梁山好汉+配角 头像 3x3
+const PORTRAIT8_CELLS := {
+	"dai_zong": Vector2i(0, 0), "liu_tang": Vector2i(1, 0), "ruan_brother": Vector2i(2, 0),
+	"zhang_shun": Vector2i(0, 1), "yan_shun": Vector2i(1, 1), "gou_lian": Vector2i(2, 1),
+	"gong_ren": Vector2i(0, 2), "yu_hou": Vector2i(1, 2), "lao_duguan": Vector2i(2, 2),
+}
+const PORTRAITS9_SHEET := "res://assets/portraits9.png" # 重画批·江州牢子/连环马/朴刀/长枪/猛虎 头像 3x3(填5格)
+const PORTRAIT9_CELLS := {
+	"guan_laozi": Vector2i(0, 0), "lian_huan_ma": Vector2i(1, 0), "liang_dao": Vector2i(2, 0),
+	"liang_qiang": Vector2i(0, 1), "tiger_summon": Vector2i(1, 1),
+}
 
 var _units_tex: Texture2D
 var _terrain_tex: Texture2D
@@ -114,6 +125,8 @@ var _portraits4_tex: Texture2D
 var _portraits5_tex: Texture2D
 var _portraits6_tex: Texture2D
 var _portraits7_tex: Texture2D
+var _portraits8_tex: Texture2D
+var _portraits9_tex: Texture2D
 var _buildings_tex: Texture2D
 var _objects_tex: Texture2D
 var _cache := {}
@@ -135,6 +148,8 @@ func _ready() -> void:
 	_portraits5_tex = _try_load(PORTRAITS5_SHEET)
 	_portraits6_tex = _try_load(PORTRAITS6_SHEET)
 	_portraits7_tex = _try_load(PORTRAITS7_SHEET)
+	_portraits8_tex = _try_load(PORTRAITS8_SHEET)
+	_portraits9_tex = _try_load(PORTRAITS9_SHEET)
 	_buildings_tex = _try_load(BUILDINGS_SHEET)
 	_objects_tex = _try_load(OBJECTS_SHEET)
 
@@ -286,6 +301,10 @@ func portrait_texture(key: String) -> Texture2D:
 		return _atlas(_portraits6_tex, PORTRAIT6_CELLS[key], 3, "p6_" + key)
 	if _portraits7_tex != null and PORTRAIT7_CELLS.has(key):
 		return _atlas(_portraits7_tex, PORTRAIT7_CELLS[key], 3, "p7_" + key)
+	if _portraits8_tex != null and PORTRAIT8_CELLS.has(key):
+		return _atlas(_portraits8_tex, PORTRAIT8_CELLS[key], 3, "p8_" + key)
+	if _portraits9_tex != null and PORTRAIT9_CELLS.has(key):
+		return _atlas(_portraits9_tex, PORTRAIT9_CELLS[key], 3, "p9_" + key)
 	return null
 
 

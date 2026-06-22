@@ -51,6 +51,11 @@ func _init() -> void:
 		_process_sheet("res://assets/portraits6_raw.png", "res://assets/portraits6.png", 3, 400, false, [])
 	if FileAccess.file_exists(ProjectSettings.globalize_path("res://assets/portraits7_raw.png")):
 		_process_sheet("res://assets/portraits7_raw.png", "res://assets/portraits7.png", 3, 400, false, [])
+	# 重画批头像（梁山好汉/配角 + 江州牢子/连环马/朴刀/长枪/猛虎）
+	if FileAccess.file_exists(ProjectSettings.globalize_path("res://assets/portraits8_raw.png")):
+		_process_sheet("res://assets/portraits8_raw.png", "res://assets/portraits8.png", 3, 400, false, [])
+	if FileAccess.file_exists(ProjectSettings.globalize_path("res://assets/portraits9_raw.png")):
+		_process_sheet("res://assets/portraits9_raw.png", "res://assets/portraits9.png", 3, 400, false, [])
 
 	print("[process_sheets] done")
 	quit()
