@@ -4905,6 +4905,35 @@ class Overlay extends Node2D:
 				if kind == "blink_shot":   # 落点标记
 					draw_arc(tip, 9.0, 0.0, TAU, 18, Color(1, 1, 1, 0.9), 2.0)
 			return
+		# 冰墙：施法距离有限(range)——指示器把墙夹到最大射程处画出真实落点(不跟光标无限远)，
+		# 并画一圈"最大可达"虚环；与 _do_ice_wall 的 clamp 完全一致，所见即所得。
+		if caster != null and is_instance_valid(caster) and kind == "ice_wall":
+			var origin: Vector2 = caster.position
+			var rng := float(eff.get("range", 175.0))
+			var dirv := lp - origin
+			if dirv.length() < 1.0:
+				dirv = Vector2(-1.0 if caster.face_left else 1.0, 0.0)
+			var dn := dirv.normalized()
+			var reach := clampf(dirv.length(), 40.0, rng)   # 夹到最大射程
+			var wc := origin + dn * reach
+			var perp := Vector2(-dn.y, dn.x)
+			var hl := float(eff.get("len", 150.0)) * 0.5
+			var hw := 16.0
+			# 最大可达范围环（等距椭圆，淡）：标出"最远能放到哪"
+			var mring := PackedVector2Array()
+			for i in range(40):
+				var a := i * TAU / 40.0
+				mring.append(b.to_screen(origin + Vector2(cos(a), sin(a)) * rng))
+			draw_polyline(mring + PackedVector2Array([mring[0]]), Color(col.r, col.g, col.b, 0.22), 1.5)
+			# 施法者 → 墙心 连线 + 真实墙体（夹紧后的落点）
+			draw_line(b.to_screen(origin), b.to_screen(wc), edge, 1.5)
+			var e1 := wc - perp * hl
+			var e2 := wc + perp * hl
+			var wall := PackedVector2Array([b.to_screen(e1 - dn * hw), b.to_screen(e2 - dn * hw),
+				b.to_screen(e2 + dn * hw), b.to_screen(e1 + dn * hw)])
+			draw_colored_polygon(wall, fill)
+			draw_polyline(wall + PackedVector2Array([wall[0]]), edge, 2.0)
+			return
 		# 点目标（圆圈 AoE）：在光标处画作用范围环
 		var rr: float = ad.get("radius", 90.0)
 		var ring := PackedVector2Array()
