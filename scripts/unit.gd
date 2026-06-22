@@ -167,6 +167,7 @@ var _flash := 0.0
 var _stuck_t := 0.0
 var _last_pos := Vector2.ZERO
 var _combat_cool := 0.0  # 最近交战计时；梁山兵脱战后回血（主场休整）
+var _hit_recent_t := 0.0 # 最近被敌方击中计时（托管磁滞：被打后扩大防区/搜索范围）
 
 # 程序化动画：行走起伏/摇摆 + 攻击突刺 + 待机呼吸 + 死亡倒地 + 脚步扬尘
 var _stepped := false      # 本物理帧是否实际位移
@@ -579,6 +580,11 @@ func leave_garrison() -> void:
 
 var _killer: Unit = null   # 最后一击的攻击者（战后按英雄统计歼敌）
 
+## 最近是否被敌方击中（托管磁滞：被打后扩大防区/搜索范围）。
+func recently_hit() -> bool:
+	return _hit_recent_t > 0.0
+
+
 func take_damage(d: float, from: Unit = null, crit := false) -> void:
 	if hp <= 0.0:
 		return
@@ -587,6 +593,9 @@ func take_damage(d: float, from: Unit = null, crit := false) -> void:
 	hp -= d
 	_flash = 0.30 if crit else 0.18
 	_combat_cool = 6.0
+	if from != null and is_instance_valid(from) and from.faction != faction:
+		_hit_recent_t = 3.0   # 被敌方命中：3 秒内算「最近挨打」（托管磁滞用）
+
 	# 飘字伤害（建筑也显示，资源点不显示）；暴击放大变色 + 轻屏震
 	if battle != null and not is_resource:
 		battle.spawn_damage(position, d, crit, faction == FACTION_LIANG)
@@ -687,6 +696,7 @@ func _physics_process(delta: float) -> void:
 
 	# 梁山兵熟悉水泊、补给充足，脱战 6 秒后缓慢回血；官军远征无此待遇
 	_combat_cool = maxf(0.0, _combat_cool - delta)
+	_hit_recent_t = maxf(0.0, _hit_recent_t - delta)
 	var regen := 0.0
 	if faction == FACTION_LIANG and _combat_cool <= 0.0:
 		regen += 2.5
@@ -1333,14 +1343,17 @@ func _follow_path(delta: float) -> bool:
 	return false
 
 
+const FACE_FLIP_MIN := 7.0   # 翻面磁滞带：要改朝向必须明确朝反方向超过此屏幕横向量，
+                             # 否则目标在正上/正下方(sdx≈0)时微小抖动会让单位左右摇头
 func _face_dir(d: Vector2) -> void:
 	var sdx := d.x - d.y  # 等距投影下屏幕横向 = 逻辑 x - 逻辑 y
-	if absf(sdx) < 0.5:
-		return
 	var f := sdx < 0.0
-	if f != face_left:
-		face_left = f
-		queue_redraw()
+	if f == face_left:
+		return
+	if absf(sdx) < FACE_FLIP_MIN:   # 反向但不够明确 → 维持当前朝向（消除摇头）
+		return
+	face_left = f
+	queue_redraw()
 
 
 ## ---------- 技能接口（多槽 + 经典RTS式升级）----------

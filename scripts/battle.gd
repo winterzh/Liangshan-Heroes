@@ -299,6 +299,8 @@ func _open_pause() -> void:
 
 func _close_pause() -> void:
 	get_tree().paused = false
+	if phase != Phase.END:
+		Engine.time_scale = Settings.game_speed   # 恢复对战时套用最新游戏速度（设置改了即生效）
 	hud.hide_pause()
 
 
@@ -1447,10 +1449,13 @@ func _weak_leash(u: Unit) -> float:
 	var r: float = WEAK_LEASH_RANGED if u.is_ranged else WEAK_LEASH
 	return maxf(r, u.atk_range + 48.0)
 
+const WEAK_HYST := 320.0   # 磁滞：被敌击中后防区/搜索范围 +10 格（≈320px），脱战 3 秒后收回
 func _auto_micro_weak(u: Unit) -> void:
 	if u.stance != Unit.STANCE_DEFEND:
 		u.set_stance(Unit.STANCE_DEFEND)   # 守阵短追、自动归位
-	var leash := _weak_leash(u)
+	# 磁滞回线：主动引敌范围小；一旦被打，防区 +10 格（去追打你的那个，不再呆站挨射）
+	var hit := u.recently_hit()
+	var leash := _weak_leash(u) + (WEAK_HYST if hit else 0.0)
 	var fp := _nearest_foe_pos(u.position, u.faction)
 	var dfp: float = u.position.distance_to(fp) if fp != Vector2.INF else 1.0e20
 	for i in range(u.slot_count()):
@@ -1461,19 +1466,15 @@ func _auto_micro_weak(u: Unit) -> void:
 			continue
 		# 超远支援技能（weak_global，如花荣箭雨/定身、宋江/吴用火攻）弱托管下仍全屏支援，无视防区
 		var reach: float = WEAK_GLOBAL if bool(ad.get("weak_global", false)) else leash
-		var near: bool = dfp <= reach
-		var lp: Vector2 = u.position
-		if bool(ad.get("targeted", false)):
-			if not near:
-				continue
-			lp = fp
-		else:
-			var kind := String(ad.get("effect", {}).get("kind", ""))
-			var buff := kind in ["rally", "haste", "self_buff", "rally_heroes", "drunk_buff", "drunk_god", "summon"]
-			if not buff and not near:
-				continue
+		# 防区内没有敌人 → 一律不放（含增益/大招）：边上没人不要轻易开大
+		if dfp > reach:
+			continue
+		var lp: Vector2 = fp if bool(ad.get("targeted", false)) else u.position
 		_begin_cast(u, i, lp)
-		break
+		return
+	# 被打之后主动出击：奔向防区内最近的敌人砍/射，别原地呆站（与「开大后赶紧去砍人」同源）
+	if hit and dfp <= leash and u._state == Unit.ST_IDLE:
+		u.order_amove(fp)
 
 
 ## 召唤物自动出击：召出来的猛虎/金龙(is_summon)无需手操——空闲就攻击移动扑向最近敌、持续索敌

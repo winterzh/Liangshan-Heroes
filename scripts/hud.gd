@@ -37,7 +37,8 @@ var _delete_btn: Button      # 拆除按钮（选中己方单位/建筑时出现
 var _info_name: Label
 var _info_hp: Label
 var _info_stats: Label
-var _skill_bar: HBoxContainer
+var _skill_bar: GridContainer      # 命令卡：英雄技能/工人建造/生产训练（生产时多列分两排）
+var _queue_bar: VBoxContainer      # 生产队列专栏（仅生产建筑显示，与训练按钮分开，清晰可撤）
 var _sel_grid: GridContainer
 var _sel_ref: Array = []
 var _grid_keys: Array = []
@@ -846,11 +847,21 @@ func _build_bottom_panel() -> void:
 	_info_stats.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_child(_info_stats)
 
-	# 英雄技能按钮栏（选中英雄时显示）
-	_skill_bar = HBoxContainer.new()
-	_skill_bar.add_theme_constant_override("separation", 6)
+	# 命令卡（英雄技能 / 工人建造 / 生产训练）。GridContainer：生产建筑设多列→训练按钮分两排，
+	# 其余设大列数→单排。get_index 顺序不变，键盘 Q/W/E/R 经 train_menu/build_menu 索引派发，不受影响。
+	_skill_bar = GridContainer.new()
+	_skill_bar.columns = 99
+	_skill_bar.add_theme_constant_override("h_separation", 6)
+	_skill_bar.add_theme_constant_override("v_separation", 4)
 	_skill_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	hbox.add_child(_skill_bar)
+
+	# 生产队列专栏：标题「队列 N」+ 一排小图标（队首=训练中带进度，点击撤单退资源）。仅生产建筑显示。
+	_queue_bar = VBoxContainer.new()
+	_queue_bar.add_theme_constant_override("separation", 2)
+	_queue_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_queue_bar.visible = false
+	hbox.add_child(_queue_bar)
 
 	# 多选单位图标网格（经典RTS式）：每个图标含头像/精灵 + 血条，点击单选
 	var grid_wrap := MarginContainer.new()
@@ -911,6 +922,10 @@ func _rebuild_command_card() -> void:
 	_skill_keys = sig
 	for c in _skill_bar.get_children():
 		c.queue_free()
+	for c in _queue_bar.get_children():
+		c.queue_free()
+	_queue_bar.visible = false
+	_skill_bar.columns = 99   # 默认单排；生产建筑下面会改成多列分两排
 	if au == null:
 		return
 	if au.is_hero and au.slot_count() > 0:
@@ -935,25 +950,19 @@ func _rebuild_command_card() -> void:
 			"sub": "点亮后点选受损的己方建筑修缮"}
 		_skill_bar.add_child(rp)
 	elif au.is_building and not au.is_constructing and (au.setup_def.has("produces") or au.setup_def.has("researches")) and eco:
+		# 生产建筑：训练/研究按钮更小、分两排（多列）；键盘 Q/W/E/R 仍按 train_menu 顺序派发。
+		var prod: Array = []
 		for spec in battle.train_menu(au):
-			var cb := CmdButton.new()
-			cb.hud = self
-			cb.spec = spec
-			_skill_bar.add_child(cb)
+			var cb := CmdButton.new(); cb.hud = self; cb.spec = spec; cb.compact = true
+			prod.append(cb)
 		for spec in battle.research_menu(au):
-			var rb := CmdButton.new()
-			rb.hud = self
-			rb.spec = spec
-			_skill_bar.add_child(rb)
-		# 经典RTS式生产队列：每个排队单位一个可点撤的图标（队首=正在训练，点击退单退资源）
-		for qi in range(au._train_queue.size()):
-			var qkey: String = au._train_queue[qi]
-			var qb := CmdButton.new()
-			qb.hud = self
-			qb.spec = {"kind": "cancel_train", "key": qkey, "bld": au, "index": qi,
-				"label": String(battle._defs.get(qkey, {}).get("name", qkey)),
-				"cost_g": 0, "cost_w": 0, "sub": "左键点击 = 取消该项生产（资源退还）"}
-			_skill_bar.add_child(qb)
+			var rb := CmdButton.new(); rb.hud = self; rb.spec = spec; rb.compact = true
+			prod.append(rb)
+		_skill_bar.columns = maxi(1, int(ceil(prod.size() / 2.0)))   # 分两排
+		for b in prod:
+			_skill_bar.add_child(b)
+		# 生产队列专栏（与训练按钮分开，清楚显示在册项；队首=训练中带进度，点击撤单退资源）
+		_rebuild_queue_bar(au)
 	elif au.is_building and not au.is_constructing and au.setup_def.has("trades") and eco:
 		for spec in battle.trade_menu(au):
 			var tb := CmdButton.new()
@@ -974,6 +983,34 @@ func _rebuild_command_card() -> void:
 		eb.spec = {"kind": "eject", "label": "出击 (%d)" % au.passengers.size(),
 			"cost_g": 0, "cost_w": 0, "affordable": true, "sub": "驻军全部冲出", "bld": au}
 		_skill_bar.add_child(eb)
+
+
+## 生产队列专栏：标题「生产队列 N」+ 紧凑小图标网格（队首=训练中带剩余秒数，点击撤单退资源）。
+## 空队列则隐藏。与训练按钮分开摆放，使在册项一目了然、便于逐项取消。
+func _rebuild_queue_bar(bld) -> void:
+	if not is_instance_valid(bld) or bld._train_queue.is_empty():
+		_queue_bar.visible = false
+		return
+	_queue_bar.visible = true
+	var title := Label.new()
+	title.text = "生产队列  %d" % bld._train_queue.size()
+	title.add_theme_font_size_override("font_size", 13)
+	title.add_theme_color_override("font_color", Color("ffd866"))
+	_queue_bar.add_child(title)
+	var grid := GridContainer.new()
+	grid.columns = 8   # 队列过长时自动换行，不再挤成一长条
+	grid.add_theme_constant_override("h_separation", 3)
+	grid.add_theme_constant_override("v_separation", 3)
+	_queue_bar.add_child(grid)
+	for qi in range(bld._train_queue.size()):
+		var qkey: String = bld._train_queue[qi]
+		var qb := CmdButton.new()
+		qb.hud = self
+		qb.compact = true
+		qb.spec = {"kind": "cancel_train", "key": qkey, "bld": bld, "index": qi,
+			"label": String(battle._defs.get(qkey, {}).get("name", qkey)),
+			"cost_g": 0, "cost_w": 0, "sub": "左键点击 = 取消该项生产（资源退还）"}
+		grid.add_child(qb)
 
 
 ## 科技研究改变菜单后强制重建命令卡
@@ -1536,6 +1573,7 @@ class SkillButton extends Control:
 class CmdButton extends Control:
 	var hud = null
 	var spec := {}
+	var compact := false   # 生产训练/队列用：更小的图标，便于分两排紧凑排列
 	var _press_ms := 0
 	var _held := false
 	var _tip_shown := false
@@ -1549,7 +1587,11 @@ class CmdButton extends Control:
 
 	func _process(_delta: float) -> void:
 		queue_redraw()
-		custom_minimum_size = Vector2(88, 104) if (hud != null and hud.touch_ui) else Vector2(76, 88)   # 触屏放大易点
+		var _t: bool = hud != null and hud.touch_ui
+		if compact:
+			custom_minimum_size = Vector2(72, 86) if _t else Vector2(62, 74)   # 生产按钮更小
+		else:
+			custom_minimum_size = Vector2(88, 104) if _t else Vector2(76, 88)   # 触屏放大易点
 		# 触屏：长按 ≥400ms 弹说明（替代失效的鼠标 hover）
 		if _held and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
 			_tip_shown = true
@@ -1610,7 +1652,12 @@ class CmdButton extends Control:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
 		# 方形图标：有贴图用贴图（不可负担则压暗），否则画类别字形底。触屏整体放大（图标盒 + 字形随盒缩放）。
 		var big: bool = hud != null and hud.touch_ui
-		var ir := Rect2(14, 6, 60, 60) if big else Rect2(12, 5, 52, 52)
+		var ir: Rect2
+		if compact:
+			var isz := minf(size.x - 8.0, size.y - 26.0)   # 预留底部两行小字
+			ir = Rect2((size.x - isz) * 0.5, 4.0, isz, isz)
+		else:
+			ir = Rect2(14, 6, 60, 60) if big else Rect2(12, 5, 52, 52)
 		var gsc := ir.size.x / 52.0
 		draw_rect(ir, Color(0.06, 0.05, 0.04))
 		if tex != null:
@@ -1620,7 +1667,7 @@ class CmdButton extends Control:
 			draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.71), glyph, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(30 * gsc),
 				Color(0.96, 0.9, 0.78) if aff else Color(0.6, 0.55, 0.5))
 		# 名称（y 随按钮高度，desktop 88→69、touch 104→85）
-		draw_string(f, Vector2(3, size.y - 19), String(spec.get("label", "")), HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, 15 if big else 13,
+		draw_string(f, Vector2(3, size.y - 19), String(spec.get("label", "")), HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (11 if compact else (15 if big else 13)),
 			Color("ffd866") if aff else Color(0.62, 0.52, 0.4))
 		# 底行：花费；生产/研究中则显示进度
 		var info := ""
@@ -1655,11 +1702,11 @@ class CmdButton extends Control:
 			var bdg := Rect2(ir.position.x + ir.size.x - 17, ir.position.y, 17, 17)
 			draw_rect(bdg, Color(0.72, 0.14, 0.11, 0.92))
 			draw_string(f, Vector2(bdg.position.x + 3, bdg.position.y + 14), "×", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color(1, 1, 1))
-		draw_string(f, Vector2(3, size.y - 4), info, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, 13 if big else 11,
+		draw_string(f, Vector2(3, size.y - 4), info, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (9 if compact else (13 if big else 11)),
 			Color("ffd24a") if aff else Color(0.85, 0.35, 0.3))
-		# 快捷键键帽（Q/W/E/R，与 _command_hotkey 槽位一致）；「出击」非槽位命令，不画键帽。触屏隐藏（手机无键盘）
+		# 快捷键键帽（Q/W/E/R，与 _command_hotkey 槽位一致）；「出击」/撤单/队列 非槽位命令，不画键帽。触屏隐藏（手机无键盘）
 		var slot := get_index()
-		if slot < 4 and kind != "eject" and kind != "weapon" and kind != "repair" and kind != "garrison" and not (hud != null and hud.touch_ui):
+		if slot < 4 and kind != "eject" and kind != "weapon" and kind != "repair" and kind != "garrison" and kind != "cancel_train" and not (hud != null and hud.touch_ui):
 			var keyc: String = ["Q", "W", "E", "R"][slot]
 			var kr := Rect2(size.x - 17, 3, 15, 15)
 			draw_rect(kr, Color(0, 0, 0, 0.6))

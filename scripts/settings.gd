@@ -75,6 +75,8 @@ func _load() -> void:
 	sfx = float(c.get_value("audio", "sfx", sfx))
 	muted = bool(c.get_value("audio", "muted", muted))
 	game_speed = float(c.get_value("game", "speed", game_speed))
+	if game_speed < 1.0:
+		game_speed = 1.0   # 旧档「慢=0.8」迁移到新档位最低速 1.0（新：慢1.0/中1.2/快1.5）
 	atmosphere = bool(c.get_value("game", "atmosphere", atmosphere))
 	auto_micro_level = int(c.get_value("game", "auto_micro", auto_micro_level))
 	edge_scroll = bool(c.get_value("cam", "edge", edge_scroll))
