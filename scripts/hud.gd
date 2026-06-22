@@ -1632,7 +1632,7 @@ class CmdButton extends Control:
 		var glyph := "建"
 		var tex: Texture2D = null
 		if kind == "train":
-			accent = Color(0.45, 0.55, 0.32); glyph = "练"; tex = Art.unit_texture(key)
+			accent = Color(0.45, 0.55, 0.32); glyph = "练"; tex = Art.avatar_texture(key)   # 有头像优先用头像(干净)，无则退回走图
 		elif kind == "build":
 			tex = Art.building_texture(key)
 		elif kind == "research":
@@ -1648,7 +1648,7 @@ class CmdButton extends Control:
 		elif kind == "garrison":
 			accent = Color(0.42, 0.45, 0.72); glyph = "驻"
 		elif kind == "cancel_train":
-			accent = Color(0.66, 0.28, 0.24); glyph = "×"; tex = Art.unit_texture(key)
+			accent = Color(0.66, 0.28, 0.24); glyph = "×"; tex = Art.avatar_texture(key)   # 队列图标同样优先用头像
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
 		# 方形图标：有贴图用贴图（不可负担则压暗），否则画类别字形底。触屏整体放大（图标盒 + 字形随盒缩放）。
 		var big: bool = hud != null and hud.touch_ui
