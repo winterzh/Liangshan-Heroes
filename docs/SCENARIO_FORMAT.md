@@ -37,6 +37,12 @@
 | `start_msg` / `wave_gap_msg` | string | — | 开战提示 / 波间提示 |
 | `win` / `lose` | array | 见「胜负」 | 胜 / 负条件（任一满足即结算） |
 | `script` | res 路径 | — | 可选伴生 .gd，处理纯数据表达不了的定制逻辑 |
+| `units` | object | `{}` | **本场景单位覆盖/新增**（魔兽编辑器式，仅本场景生效）；`{"<key>": {字段...}}` 字段级合并进本场 _defs |
+| `abilities` | object | `{}` | **本场景技能覆盖/新增**；`{"<id>": {name,cd,radius,targeted,weak_global,passive,effect{...}}}` |
+| `sprite_alias` | object | `{}` | 新建单位借用现有单位的贴图/动画：`{"新key": "现有key"}` |
+
+> `units`/`abilities` 用「场景编辑器 → 🛠 单位/技能」可视化编辑：改任意单位/技能的全部参数、
+> 新建单位(复制现有为模板并自动借美术)。所有改动只写进本场景 JSON，**不动全局**，别的关卡/模式不受影响。
 
 ### 地图 `map`
 ```json
