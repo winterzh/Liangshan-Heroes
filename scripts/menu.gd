@@ -146,7 +146,7 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 # ======================================================================
 func _mk_overlay(title_text: String) -> Array:
 	var overlay := ColorRect.new()
-	overlay.color = Color(0, 0, 0, 0.82)
+	overlay.color = Color(0.06, 0.05, 0.035, 0.97)   # 近不透明的暖深底，弹层文字清晰可读
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(overlay)
@@ -391,7 +391,7 @@ func _show_scenario_picker() -> void:
 func _show_custom_picker() -> void:
 	var saved: Array = CustomConfig.list_saved()
 	var overlay := ColorRect.new()
-	overlay.color = Color(0, 0, 0, 0.82)
+	overlay.color = Color(0.06, 0.05, 0.035, 0.97)   # 近不透明的暖深底，弹层文字清晰可读
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(overlay)

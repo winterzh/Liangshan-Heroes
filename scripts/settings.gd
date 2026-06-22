@@ -11,6 +11,7 @@ var muted := false
 # —— 游戏 ——
 var game_speed := 1.0       # 战斗节奏倍率：0.5 慢 / 1.0 正常 / 1.5 快
 var atmosphere := true      # 氛围后期（暗角/暖色调）
+var auto_micro_level := 2   # 英雄托管档位：0 无托管(去掉T/触屏按钮、全部取消) / 1 弱托管(只守附近~15格) / 2 托管(全图)
 # —— 镜头 ——
 var edge_scroll := true     # 屏幕边缘滚屏
 var cam_speed := 1.0        # 镜头平移速度倍率
@@ -56,6 +57,7 @@ func save() -> void:
 	c.set_value("audio", "muted", muted)
 	c.set_value("game", "speed", game_speed)
 	c.set_value("game", "atmosphere", atmosphere)
+	c.set_value("game", "auto_micro", auto_micro_level)
 	c.set_value("cam", "edge", edge_scroll)
 	c.set_value("cam", "speed", cam_speed)
 	c.set_value("cam", "zoom", zoom_sens)
@@ -74,6 +76,7 @@ func _load() -> void:
 	muted = bool(c.get_value("audio", "muted", muted))
 	game_speed = float(c.get_value("game", "speed", game_speed))
 	atmosphere = bool(c.get_value("game", "atmosphere", atmosphere))
+	auto_micro_level = int(c.get_value("game", "auto_micro", auto_micro_level))
 	edge_scroll = bool(c.get_value("cam", "edge", edge_scroll))
 	cam_speed = float(c.get_value("cam", "speed", cam_speed))
 	zoom_sens = float(c.get_value("cam", "zoom", zoom_sens))

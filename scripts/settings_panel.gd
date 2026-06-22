@@ -15,7 +15,7 @@ func _ready() -> void:
 
 func _build() -> void:
 	var bg := ColorRect.new()
-	bg.color = Color(0, 0, 0, 0.86)
+	bg.color = Color(0.06, 0.05, 0.035, 0.96)
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(bg)
@@ -51,6 +51,7 @@ func _build() -> void:
 
 	_head(p, "⏱  游戏")
 	_row(p, "游戏速度", _seg([["慢", 0.8], ["正常", 1.0], ["快", 1.5]], Settings.game_speed, func(v) -> void: Settings.game_speed = v))
+	_row(p, "英雄托管", _seg([["无", 0], ["弱(守附近)", 1], ["托管", 2]], Settings.auto_micro_level, func(v) -> void: Settings.auto_micro_level = int(v)))
 	_row(p, "氛围特效", _check(Settings.atmosphere, func(on: bool) -> void: Settings.atmosphere = on))
 	_row(p, "全屏", _check(Screen.is_fullscreen(), func(on: bool) -> void: Screen.set_fullscreen(on)))
 

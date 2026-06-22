@@ -393,12 +393,14 @@ func _refresh_touch_controls() -> void:
 		_act_eject.visible = garrisoned_bld and not placing
 		if garrisoned_bld:
 			_act_eject.text = "🚪出击 (%d)" % au.passengers.size()
+	var micro_on: bool = int(Settings.auto_micro_level) > 0   # 「无托管」档隐藏托管按钮
 	if _act_auto != null:
-		_act_auto.visible = au != null and au.is_hero and not au.is_building and not placing
+		_act_auto.visible = micro_on and au != null and au.is_hero and not au.is_building and not placing
 		if _act_auto.visible:
 			_act_auto.text = "🚫取消托管" if au.auto_micro else "🪄托管"
 			_act_auto.add_theme_color_override("font_color", Color(1.0, 0.7, 0.6) if au.auto_micro else Color(1, 0.96, 0.9))
 	if _act_allauto != null:
+		_act_allauto.visible = micro_on
 		# 托管军：全员都在托管→显示「取消托管军」，否则「托管军」
 		var hs: Array = battle.liang_heroes() if battle != null else []
 		var all_on: bool = not hs.is_empty()
@@ -1155,7 +1157,7 @@ func _build_intro() -> void:
 
 func _build_end() -> void:
 	_end_root = ColorRect.new()
-	_end_root.color = Color(0, 0, 0, 0.65)
+	_end_root.color = Color(0.06, 0.05, 0.035, 0.93)   # 结算：近不透明暖深底
 	_end_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_end_root.mouse_filter = Control.MOUSE_FILTER_STOP
 	_end_root.visible = false
@@ -1286,7 +1288,7 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 ## 暂停菜单（Esc 呼出）：继续 / 重打 / 返回主菜单 / 退出
 func _build_pause() -> void:
 	_pause_root = ColorRect.new()
-	_pause_root.color = Color(0, 0, 0, 0.62)
+	_pause_root.color = Color(0.06, 0.05, 0.035, 0.95)   # 暂停菜单：近不透明暖深底，文字清晰
 	_pause_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_pause_root.mouse_filter = Control.MOUSE_FILTER_STOP
 	_pause_root.visible = false

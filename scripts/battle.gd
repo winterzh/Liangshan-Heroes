@@ -1010,6 +1010,7 @@ func _physics_process(delta: float) -> void:
 	_stealth_pass()
 	_enemy_ability_pass()
 	_auto_micro_pass()
+	_summon_hunt_pass()
 	_separation_pass(delta)
 	_decay_lit(delta)
 	if fog:
@@ -1406,6 +1407,13 @@ const AI_TICK := 16   # 托管决策节流：每英雄约每 16 物理帧(~0.27s
 func _auto_micro_pass() -> void:
 	if hud == null:
 		return
+	var lvl := int(Settings.auto_micro_level)
+	if lvl <= 0:
+		# 无托管：把任何仍处托管态的英雄一律关掉（切到「无」即全军取消托管）
+		for u in units:
+			if is_instance_valid(u) and u.is_hero and u.auto_micro:
+				u.auto_micro = false
+		return
 	var frame := Engine.get_physics_frames()
 	for u in units:
 		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or not u.is_hero \
@@ -1418,7 +1426,53 @@ func _auto_micro_pass() -> void:
 		# 节流：每帧都决策会让英雄不停改朝向(左右摇头)、徒增寻路抖动；改成每 ~0.27s 一次，按 id 错帧
 		if (frame + u.get_instance_id()) % AI_TICK != 0:
 			continue
-		_auto_micro_hero(u)
+		if lvl == 1:
+			_auto_micro_weak(u)   # 弱托管：守住附近一块（~15×15 格），不追远、不管别处
+		else:
+			_auto_micro_hero(u)
+
+
+## 弱托管：英雄各守一方。守备姿态（守阵短追、打完归位），只对「防区」内(≈7.5 格半径≈15×15 格)
+## 的敌人放招——不越区追击、不管别处战事。增益/召唤照常；指向技能命中点钳制在防区内。
+const WEAK_LEASH := 240.0   # 弱托管防区半径（px）：240/32 ≈ 7.5 格 → 约 15×15 格
+
+func _auto_micro_weak(u: Unit) -> void:
+	if u.stance != Unit.STANCE_DEFEND:
+		u.set_stance(Unit.STANCE_DEFEND)   # 守阵短追、自动归位
+	var fp := _nearest_foe_pos(u.position, u.faction)
+	var near: bool = fp != Vector2.INF and u.position.distance_to(fp) <= WEAK_LEASH
+	for i in range(u.slot_count()):
+		if not u.slot_ready(i):
+			continue
+		var ad: Dictionary = _abilities.get(String(u.ability_slots[i]["id"]), {})
+		if ad.is_empty():
+			continue
+		var lp: Vector2 = u.position
+		if bool(ad.get("targeted", false)):
+			if not near:
+				continue
+			lp = fp
+		else:
+			var kind := String(ad.get("effect", {}).get("kind", ""))
+			var buff := kind in ["rally", "haste", "self_buff", "rally_heroes", "drunk_buff", "drunk_god", "summon"]
+			if not buff and not near:
+				continue
+		_begin_cast(u, i, lp)
+		break
+
+
+## 召唤物自动出击：召出来的猛虎/金龙(is_summon)无需手操——空闲就攻击移动扑向最近敌、持续索敌
+## （等价「框住按 A 出去」）。与托管档位无关，始终生效；不打断正在进行的攻击/移动。
+func _summon_hunt_pass() -> void:
+	var frame := Engine.get_physics_frames()
+	for u in units:
+		if not is_instance_valid(u) or not u.is_summon or u.hp <= 0.0 or u._state != Unit.ST_IDLE:
+			continue
+		if (frame + u.get_instance_id()) % AI_TICK != 0:
+			continue
+		var fp := _nearest_foe_pos(u.position, u.faction)
+		if fp != Vector2.INF:
+			u.order_amove(fp)
 
 
 ## 托管自动加点：受 can_learn 全部门槛约束（普通[1,3,5]/大招[6,8,10]/技能点/满级3），先大招后 Q/W/E。
@@ -1599,12 +1653,16 @@ func _brain_wu(u: Unit) -> void:
 	# P2 推进：离敌尚远→攻击移动压上贴脸（不限 aggro，靠 amove 收紧索敌；近处交给放招）
 	_ai_push_into_range(u, fp, 90.0)
 	# P3 放招
-	# R 进攻开大（有大就开）：交战被围≥2 即放醉神
-	if u.slot_ready(3) and melee_near >= 2 and dnf <= 160.0:
-		if _ai_cast_slot(u, 3, u.position):
-			return
-	# Q 驱使猛虎（CD 一好、场上 <2 只、有敌即召；summon radius=0，brain 直接放不受附近判定限制）
-	if tigers < 2 and fp != Vector2.INF:
+	# R 醉神大闹快活林（进攻开大）：①贴身交战(≤180)或被围就开；②看对面人多(防区内≥3)且自己血不满 →
+	# 先开大再扎进人堆（20s 物免，扎进去最安全）。20s物免+每击加攻是武松核心强势期，别苛求条件否则放不出。
+	if u.slot_ready(3):
+		var crowd := _foe_count_within(u.position, 240.0, u.faction, false, false)
+		# 被围(身边≥2近战)就开；或「对面人多(防区内≥3)且血不满」→ 先开再扎进人堆。单个杂兵不浪费大招。
+		if melee_near >= 2 or (frac < 0.92 and crowd >= 3):
+			if _ai_cast_slot(u, 3, u.position):
+				return   # 开完大招：下一拍 P2 推进会自动扎进最近人堆（此处别下移动令，免得打断施法）
+	# Q 驱使猛虎（CD 一好、场上 <2 只、视野内有敌就召；summon radius=0，brain 直接放不受附近判定限制）
+	if tigers < 2 and fp != Vector2.INF and dnf <= 640.0:
 		if _ai_cast_slot(u, 0, u.position):
 			return
 	# E 双戒刀横扫（削甲+致盲）
@@ -1962,7 +2020,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif kc == KEY_G:
 			_cycle_stance()
 		elif kc == KEY_T:
-			if hud != null:
+			if hud != null and int(Settings.auto_micro_level) > 0:   # 「无托管」档关闭 T 热键
 				if event.shift_pressed:
 					hud._toggle_all_auto()        # Shift+T：全军托管
 				else:
@@ -3088,8 +3146,9 @@ func _do_summon(caster: Unit, eff: Dictionary, rank: int) -> void:
 				su.atk = float(_pick(eff["atk"], rank))
 		if dur > 0.0:
 			su._summon_ttl = dur
+		su.set_stance(Unit.STANCE_AGGRO)   # 召唤物默认进攻姿态：自己索敌（配合 _summon_hunt_pass 持续出击）
 		var tp := _nearest_foe_pos(pos, caster.faction)
-		if tp != Vector2.INF and pos.distance_to(tp) < 720.0:
+		if tp != Vector2.INF and pos.distance_to(tp) < 1200.0:
 			su.order_amove(tp)
 		var pf := AbilityFx.new()
 		pf.position = pos
