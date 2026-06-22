@@ -1438,6 +1438,7 @@ func _auto_micro_pass() -> void:
 ## 且不低于英雄自身够得着的范围（攻击距离+缓冲），免得忽视射程内的敌人。
 const WEAK_LEASH := 240.0        # 近战防区半径（px）：240/32 ≈ 7.5 格 → ~15×15 格
 const WEAK_LEASH_RANGED := 320.0 # 远程防区半径（px）：320/32 = 10 格 → ~20×20 格（比近战 +5 格直径）
+const WEAK_GLOBAL := 760.0       # 超远支援技能(weak_global)在弱托管下的施放半径(≈24格≈全屏)
 
 func _weak_leash(u: Unit) -> float:
 	var r: float = WEAK_LEASH_RANGED if u.is_ranged else WEAK_LEASH
@@ -1448,13 +1449,16 @@ func _auto_micro_weak(u: Unit) -> void:
 		u.set_stance(Unit.STANCE_DEFEND)   # 守阵短追、自动归位
 	var leash := _weak_leash(u)
 	var fp := _nearest_foe_pos(u.position, u.faction)
-	var near: bool = fp != Vector2.INF and u.position.distance_to(fp) <= leash
+	var dfp: float = u.position.distance_to(fp) if fp != Vector2.INF else 1.0e20
 	for i in range(u.slot_count()):
 		if not u.slot_ready(i):
 			continue
 		var ad: Dictionary = _abilities.get(String(u.ability_slots[i]["id"]), {})
 		if ad.is_empty():
 			continue
+		# 超远支援技能（weak_global，如花荣箭雨/定身、宋江/吴用火攻）弱托管下仍全屏支援，无视防区
+		var reach: float = WEAK_GLOBAL if bool(ad.get("weak_global", false)) else leash
+		var near: bool = dfp <= reach
 		var lp: Vector2 = u.position
 		if bool(ad.get("targeted", false)):
 			if not near:

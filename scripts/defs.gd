@@ -232,7 +232,7 @@ const UNITS := {
 const ABILITIES := {
 	"song_rally": {"name": "替天行道", "cd": 12.0, "targeted": false, "radius": 200.0, "color": Color("ffd24a"),
 		"desc": "号令群雄：周围梁山兵\n回血{v}、攻击+60%（8秒）", "effect": {"kind": "rally", "heal": 42.0, "atk_mult": 1.6, "dur": 8.0}},
-	"wu_fire": {"name": "锦囊火计", "cd": 14.0, "targeted": true, "radius": 95.0, "color": Color("ff7a2a"),
+	"wu_fire": {"name": "锦囊火计", "cd": 14.0, "targeted": true, "weak_global": true, "radius": 95.0, "color": Color("ff7a2a"),
 		"desc": "火攻：指定处腾起烈焰\n地面燃烧5秒，累计130灼伤", "effect": {"kind": "fire_dot", "dmg": 130.0, "dur": 5.0}},
 	"lin_sweep": {"name": "丈八横扫", "cd": 8.0, "targeted": false, "radius": 100.0, "color": Color("c0a0ff"),
 		"desc": "豹子头怒扫：身边官军\n受{v}伤害并被减速", "effect": {"kind": "smite", "dmg": 25.0, "slow": 0.5, "slow_dur": 3.0}},
@@ -297,7 +297,7 @@ const ABILITIES := {
 	# 宋江：指挥支援
 	"song_haste": {"name": "神行号令", "cd": 8.0, "cd_ranks": [12.0, 10.0, 8.0], "targeted": false, "radius": 190.0, "color": Color("9ce0a0"),
 		"desc": "周围梁山兵\n移速+45%（7秒）·升级缩短冷却", "effect": {"kind": "haste", "speed_mult": 1.45, "dur": 7.0}},
-	"song_fire": {"name": "火攻连营", "cd": 11.0, "targeted": true, "radius": 100.0, "color": Color("ff7a2a"),
+	"song_fire": {"name": "火攻连营", "cd": 11.0, "targeted": true, "weak_global": true, "radius": 100.0, "color": Color("ff7a2a"),
 		"desc": "指定处腾起烈焰\n地面每秒 20 灼伤，持续 5/8/10 秒(随等级)",
 		"effect": {"kind": "fire_dot", "dps": 20.0, "dur_ranks": [5.0, 8.0, 10.0], "dmg": 100.0, "dur": 5.0}},
 	"song_lead": {"name": "替天行道·仁义", "passive": true, "cd": 25.0, "targeted": false, "radius": 0.0, "color": Color("ffd24a"),
@@ -311,10 +311,10 @@ const ABILITIES := {
 	"lin_drill": {"name": "禁军教头", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("c0a0ff"),
 		"desc": "被动·枪法精进\n攻击+，更克骑兵", "effect": {"kind": "passive", "atk_add": 4.0, "bonus_cav": 1.0}},
 	# 花荣：神射
-	"hua_rain": {"name": "箭雨", "cd": 10.0, "targeted": true, "radius": 100.0, "color": Color("a0e8c0"),
+	"hua_rain": {"name": "箭雨", "cd": 10.0, "targeted": true, "weak_global": true, "radius": 100.0, "color": Color("a0e8c0"),
 		"desc": "箭雨覆盖：一次 {v} 伤害\n箭簇钉地再灼 3 秒（一级每秒 7）",
 		"effect": {"kind": "smite", "dmg": 28.0, "dot_total": 21.0, "dot_dur": 3.0}},
-	"hua_pin": {"name": "定身神箭", "cd": 9.0, "targeted": true, "radius": 55.0, "color": Color("8fd3ff"),
+	"hua_pin": {"name": "定身神箭", "cd": 9.0, "targeted": true, "weak_global": true, "radius": 55.0, "color": Color("8fd3ff"),
 		"desc": "钉住目标处官军\n{v} 伤害 + 重减速", "effect": {"kind": "smite", "dmg": 44.0, "slow": 0.2, "slow_dur": 3.5}},
 	"hua_eye": {"name": "小李广", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("a0e8c0"),
 		"desc": "被动·神射\n攻击+、射程+", "effect": {"kind": "passive", "atk_add": 3.0, "range_add": 30.0}},
