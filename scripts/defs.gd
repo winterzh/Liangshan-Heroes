@@ -180,6 +180,50 @@ const UNITS := {
 	"siege_workshop": {"name": "攻城作坊", "hp": 820, "atk": 0, "building": true, "radius": 28, "buildable": true, "build_order": 6,
 		"cost_gold": 160, "cost_wood": 120, "build_time": 30.0, "min_age": 3,
 		"produces": ["siege_cata", "siege_ram"]},
+
+	# ===== 驻守战·官军新兵种 =====
+	# 火枪手：攻高、攻速慢、射程略远（高单发压制，怕近身/快骑切入）
+	"guan_musket": {"name": "官军火枪手", "hp": 70, "atk": 24, "cd": 2.4, "range": 240, "speed": 60, "ranged": true, "radius": 11},
+	# 投弹手：很小范围 AoE（splash 半径小），怕被风筝/被骑兵贴脸
+	"guan_bomber": {"name": "官军投弹手", "hp": 82, "atk": 18, "cd": 2.2, "range": 150, "speed": 60, "ranged": true, "splash": 30.0, "radius": 11},
+	# 战象：巨兽重骑，血厚攻高但慢——属骑兵，被长枪/钩镰/林冲克制
+	"war_elephant": {"name": "战象", "hp": 380, "atk": 26, "cd": 1.4, "range": 32, "speed": 66, "cavalry": true, "radius": 20},
+	# 驼骑：沙漠骆驼快骑，机动骚扰——属骑兵，被长枪/钩镰/林冲克制
+	"camel_rider": {"name": "骆驼骑兵", "hp": 150, "atk": 14, "cd": 1.0, "range": 26, "speed": 124, "cavalry": true, "radius": 13},
+
+	# ===== 驻守战·官军地方大将（敌方英雄；faction 由波次指定为官军）=====
+	# 十节度使（朝廷征调的各路节度使，与梁山为敌）
+	"wang_huan": {"name": "王焕", "hp": 520, "atk": 22, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 15,
+		"aura": "atk", "aura_r": 175, "aura_p": 1.15, "ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
+	"xu_jing": {"name": "徐京", "hp": 460, "atk": 21, "cd": 1.0, "range": 30, "speed": 96, "hero": true, "radius": 14,
+		"ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
+	"wang_wende": {"name": "王文德", "hp": 450, "atk": 22, "cd": 0.95, "range": 28, "speed": 116, "hero": true, "cavalry": true, "radius": 14,
+		"ability": "jd_charge", "abilities": ["jd_charge", "jd_valor"]},
+	"mei_zhan": {"name": "梅展", "hp": 450, "atk": 23, "cd": 0.9, "range": 28, "speed": 100, "hero": true, "radius": 14,
+		"ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
+	"zhang_kai": {"name": "张开", "hp": 380, "atk": 20, "cd": 1.7, "range": 200, "speed": 88, "ranged": true, "hero": true, "radius": 12,
+		"ability": "guan_barrage", "abilities": ["guan_barrage", "jd_valor"]},
+	"yang_wen": {"name": "杨温", "hp": 450, "atk": 21, "cd": 1.0, "range": 30, "speed": 94, "hero": true, "radius": 14,
+		"ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
+	"li_congji": {"name": "李从吉", "hp": 460, "atk": 22, "cd": 0.95, "range": 28, "speed": 112, "hero": true, "cavalry": true, "radius": 14,
+		"ability": "jd_charge", "abilities": ["jd_charge", "jd_valor"]},
+	"xiang_yuanzhen": {"name": "项元镇", "hp": 380, "atk": 20, "cd": 1.6, "range": 205, "speed": 90, "ranged": true, "hero": true, "radius": 12,
+		"ability": "guan_barrage", "abilities": ["guan_barrage", "jd_valor"]},
+	"jing_zhong": {"name": "荆忠", "hp": 440, "atk": 21, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 14,
+		"ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
+	"duan_pengju": {"name": "段鹏举", "hp": 460, "atk": 22, "cd": 0.95, "range": 28, "speed": 116, "hero": true, "cavalry": true, "radius": 14,
+		"ability": "jd_charge", "abilities": ["jd_charge", "jd_valor"]},
+	# 特殊官军大将
+	"tong_guan": {"name": "童贯", "hp": 760, "atk": 24, "cd": 0.9, "range": 30, "speed": 96, "hero": true, "radius": 16,
+		"aura": "atk", "aura_r": 210, "aura_p": 1.2, "ability": "tong_drums", "abilities": ["tong_drums", "guan_fury", "jd_valor"]},
+	"ling_zhen": {"name": "凌振", "hp": 280, "atk": 20, "cd": 2.6, "range": 235, "speed": 60, "ranged": true, "hero": true, "radius": 13,
+		"proj_kind": "fireball", "splash": 38.0, "ability": "ling_cannon", "abilities": ["ling_cannon", "jd_valor"]},
+	"wei_dingguo": {"name": "魏定国", "hp": 320, "atk": 18, "cd": 2.0, "range": 200, "speed": 84, "ranged": true, "hero": true, "radius": 12,
+		"ability": "wei_fire", "abilities": ["wei_fire", "jd_valor"]},
+	"shan_tinggui": {"name": "单廷圭", "hp": 360, "atk": 19, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 14,
+		"ability": "shan_flood", "abilities": ["shan_flood", "jd_valor"]},
+	"wen_da": {"name": "闻达", "hp": 480, "atk": 22, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 15,
+		"aura": "atk", "aura_r": 170, "aura_p": 1.12, "ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
 }
 
 # 技能定义：name,cd,targeted,radius,color,desc(UI), 以及 effect(数据化结算描述)。
@@ -351,6 +395,29 @@ const ABILITIES := {
 	"wu_drunkgod": {"name": "醉神大闹快活林", "cd": 50.0, "targeted": false, "radius": 0.0, "color": Color("ffce4a"),
 		"desc": "大招·醉神附体\n20 秒物理免疫，每击 +10/20/30 攻\n结束时所受物理伤害 50% 转为回血",
 		"effect": {"kind": "drunk_god", "bonus": [10.0, 20.0, 30.0], "dur": 20.0}},
+
+	# ===== 驻守战·官军地方大将 技能（敌方用；全部复用现有 effect kind，名号官军化）=====
+	"jd_lance": {"name": "节度横扫", "cd": 9.0, "targeted": false, "radius": 118.0, "color": Color("d0a050"),
+		"desc": "（敌）节度使挥兵横扫\n身边梁山兵受 {v} 伤害并被震退眩晕",
+		"effect": {"kind": "smite", "dmg": 30.0, "stun": 1.4, "slow": 0.5, "slow_dur": 2.0}},
+	"jd_charge": {"name": "策马踏阵", "cd": 9.0, "targeted": false, "radius": 110.0, "color": Color("ff9a3a"),
+		"desc": "（敌）大将策马踏阵\n身边梁山兵受 {v} 伤害减速，自身攻势大涨",
+		"effect": {"kind": "smite", "dmg": 26.0, "slow": 0.45, "slow_dur": 1.6, "self_atk": 1.4, "self_dur": 5.0}},
+	"tong_drums": {"name": "童贯督战", "cd": 16.0, "targeted": false, "radius": 220.0, "color": Color("ffd24a"),
+		"desc": "（敌）枢密使擂鼓督战\n周围官军回血 50、攻击 +60%（9 秒）",
+		"effect": {"kind": "rally", "heal": 50.0, "atk_mult": 1.6, "dur": 9.0}},
+	"ling_cannon": {"name": "轰天雷·火炮", "cd": 12.0, "targeted": true, "radius": 120.0, "color": Color("ff7a2a"),
+		"desc": "（敌）凌振火炮轰击\n指定处炸开烈焰，每秒 28 灼伤·持续 5 秒",
+		"effect": {"kind": "fire_dot", "dps": 28.0, "dur": 5.0, "dmg": 140.0}},
+	"wei_fire": {"name": "神火·焚天", "cd": 13.0, "targeted": true, "radius": 105.0, "color": Color("ff5522"),
+		"desc": "（敌）神火将魏定国布火阵\n指定处腾起神火，每秒 24 灼伤·持续 6 秒",
+		"effect": {"kind": "fire_dot", "dps": 24.0, "dur": 6.0, "dmg": 144.0}},
+	"shan_flood": {"name": "圣水·水淹", "cd": 11.0, "targeted": true, "radius": 110.0, "color": Color("5fbfe0"),
+		"desc": "（敌）圣水将单廷圭引水倒灌\n指定处官军受 {v} 伤害并陷泥重减速",
+		"effect": {"kind": "smite", "dmg": 36.0, "slow": 0.3, "slow_dur": 4.0}},
+	"jd_valor": {"name": "宿将之威", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("d0a060"),
+		"desc": "（敌）被动·宿将之威\n久经沙场，生命 +、攻击 +",
+		"effect": {"kind": "passive", "atk_add": 4.0, "hp_add": 90.0}},
 }
 
 
@@ -411,6 +478,11 @@ const ARMOR := {
 	"lu_zhishen": 7, "dong_chao": 3, "xue_ba": 3, "lu_qian": 4, "gong_ren": 2, "wu_song": 6,
 	"shi_en": 4, "jiang_menshen": 8, "jiang_thug": 2, "zhang_tuanlian": 5, "zhang_qing": 6, "gong_wang": 5,
 	"ding_desun": 4, "shi_wengong": 8, "lou_luo": 1, "liang_ma": 4,
+	# 驻守战新增·兵种 + 官军大将
+	"guan_musket": 2, "guan_bomber": 2, "war_elephant": 8, "camel_rider": 4,
+	"wang_huan": 8, "xu_jing": 7, "wang_wende": 7, "mei_zhan": 7, "zhang_kai": 5,
+	"yang_wen": 7, "li_congji": 7, "xiang_yuanzhen": 5, "jing_zhong": 7, "duan_pengju": 7,
+	"tong_guan": 8, "ling_zhen": 4, "wei_dingguo": 5, "shan_tinggui": 6, "wen_da": 8,
 }
 
 
