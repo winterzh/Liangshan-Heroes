@@ -587,47 +587,41 @@ func _playtest() -> void:
 
 func _show_load() -> void:
 	var saved: Array = ScenarioStore.list_saved()
-	var ov := ColorRect.new(); ov.color = Color(0, 0, 0, 0.85); ov.set_anchors_preset(Control.PRESET_FULL_RECT)
-	ov.mouse_filter = Control.MOUSE_FILTER_STOP; add_child(ov)
-	var center := CenterContainer.new(); center.set_anchors_preset(Control.PRESET_FULL_RECT); ov.add_child(center)
-	var box := VBoxContainer.new(); box.add_theme_constant_override("separation", 8); center.add_child(box)
-	var ttl := Label.new(); ttl.text = "选择关卡" if not saved.is_empty() else "还没有保存的关卡"
-	ttl.add_theme_font_size_override("font_size", 22); ttl.add_theme_color_override("font_color", Color("ffe9a8"))
-	ttl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; box.add_child(ttl)
+	var pw := _popup_window("读取关卡", 420, 480)
+	var root: Control = pw["root"]
+	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	(pw["body"] as Control).add_child(sc)
+	var box := VBoxContainer.new(); box.add_theme_constant_override("separation", 6)
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(box)
+	if saved.is_empty():
+		var e := Label.new(); e.text = "还没有保存的关卡"; e.add_theme_color_override("font_color", Color("c8b89a")); box.add_child(e)
 	for name in saved:
 		var nm: String = name
-		var b := _btn("▶ " + nm, func() -> void:
-			var d := ScenarioStore.load_by_name(nm)
-			if not d.is_empty():
-				_cfg = d; _rebuild_map_model(); ov.queue_free(); _build())
-		b.custom_minimum_size = Vector2(320, 40); box.add_child(b)
-	box.add_child(_btn("返回", func() -> void: ov.queue_free()))
+		var b := _btn("▶ " + nm, _load_named.bind(nm, root))
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT; b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.custom_minimum_size = Vector2(0, 38); box.add_child(b)
+
+
+func _load_named(nm: String, root: Control) -> void:
+	var d := ScenarioStore.load_by_name(nm)
+	if not d.is_empty():
+		_cfg = d; _rebuild_map_model(); root.queue_free(); _build()
 
 
 ## ---------- 单位 / 技能编辑器（仅本场景生效，魔兽编辑器式对象编辑）----------
 
 func _ue_open() -> void:
-	_ue_root = ColorRect.new()
-	_ue_root.color = Color(0.06, 0.05, 0.035, 0.99)
-	_ue_root.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_ue_root.mouse_filter = Control.MOUSE_FILTER_STOP
-	add_child(_ue_root)
-	var rootv := VBoxContainer.new()
-	rootv.set_anchors_preset(Control.PRESET_FULL_RECT)
-	rootv.offset_left = 14; rootv.offset_top = 10; rootv.offset_right = -14; rootv.offset_bottom = -10
-	rootv.add_theme_constant_override("separation", 8)
-	_ue_root.add_child(rootv)
-	var hdr := HBoxContainer.new()
-	var ttl := Label.new(); ttl.text = "单位 / 技能编辑　（改动仅对本场景生效）"
-	ttl.add_theme_font_size_override("font_size", 20); ttl.add_theme_color_override("font_color", Color("ffe9a8"))
-	hdr.add_child(ttl)
-	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hdr.add_child(sp)
-	hdr.add_child(_btn("✓ 关闭", _ue_close))
-	rootv.add_child(hdr)
+	var pw := _popup_window("单位 / 技能编辑（改动仅对本场景生效）", 920, 640)
+	_ue_root = pw["root"]
+	pw["xbtn"].pressed.connect(_ue_after_close)   # 关窗后刷新主界面下拉(带上新单位)
 	var body := HBoxContainer.new(); body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 10); rootv.add_child(body)
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 10)
+	(pw["body"] as Control).add_child(body)
 	# 左：单位列表
-	var leftv := VBoxContainer.new(); leftv.custom_minimum_size = Vector2(240, 0)
+	var leftv := VBoxContainer.new(); leftv.custom_minimum_size = Vector2(236, 0)
 	body.add_child(leftv)
 	leftv.add_child(_btn("＋ 新建单位（复制选中）", _ue_new_unit))
 	var lscroll := ScrollContainer.new(); lscroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -644,11 +638,11 @@ func _ue_open() -> void:
 	_ue_rebuild_form()
 
 
-func _ue_close() -> void:
-	if _ue_root != null:
-		_ue_root.queue_free(); _ue_root = null
+## 单位编辑窗关闭后：刷新可放单位列表并重建主界面下拉（✕ 已销毁窗本身）。
+func _ue_after_close() -> void:
+	_ue_root = null
 	_refresh_unit_keys()
-	_build()   # 重建主界面：放兵/波次下拉等会带上新单位
+	_build()
 
 
 func _ue_select(k: String) -> void:
@@ -738,20 +732,16 @@ func _ue_new_unit() -> void:
 
 
 func _ae_open(aid: String) -> void:
-	var ov := ColorRect.new(); ov.color = Color(0.03, 0.025, 0.02, 1.0)
-	ov.set_anchors_preset(Control.PRESET_FULL_RECT); ov.mouse_filter = Control.MOUSE_FILTER_STOP
-	(_ue_root if _ue_root != null else self).add_child(ov)   # 叠在单位编辑器之上
-	var v := VBoxContainer.new(); v.set_anchors_preset(Control.PRESET_FULL_RECT)
-	v.offset_left = 40; v.offset_top = 20; v.offset_right = -40; v.offset_bottom = -20
-	v.add_theme_constant_override("separation", 6); ov.add_child(v)
-	var ttl := Label.new(); ttl.text = "技能编辑：%s　(%s)" % [_aname(aid), aid]
-	ttl.add_theme_font_size_override("font_size", 18); ttl.add_theme_color_override("font_color", Color("ffe9a8")); v.add_child(ttl)
+	# 叠在单位编辑器窗之上的小弹窗（背景半透明，仍能看见底下的单位属性）
+	var pw := _popup_window("技能编辑：%s (%s)" % [_aname(aid), aid], 560, 560, _ue_root)
+	pw["xbtn"].pressed.connect(_ue_rebuild_form)   # 关闭后刷新单位窗里的技能入口
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; v.add_child(sc)
+	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	(pw["body"] as Control).add_child(sc)
 	var form := VBoxContainer.new(); form.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(form)
 	for spec in ABILITY_SCHEMA:
 		form.add_child(_prop_row(_adef(aid), func(fk, val) -> void: _spec_set(_edit_ability_dict(aid), fk, val), spec))
-	v.add_child(_btn("✓ 完成", func() -> void: ov.queue_free(); _ue_rebuild_form()))
 
 
 ## 有效技能定义（本场景覆盖 > 全局）
@@ -842,6 +832,56 @@ func _split_csv(t: String) -> Array:
 
 ## ---------- 小部件工具 ----------
 
+## 浮动弹窗（替代全屏覆盖）：半透明背景(仍能看见编辑器) + 居中可拖动面板 + 标题栏✕。
+## 返回 {root, body, xbtn}。✕ 默认销毁整窗；调用方可再 connect xbtn 做收尾(刷新等)。
+func _popup_window(title_text: String, w: float, h: float, host: Node = null) -> Dictionary:
+	var parent: Node = host if host != null else self
+	var root := Control.new()
+	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.mouse_filter = Control.MOUSE_FILTER_STOP   # 模态：吞掉点击，但背景半透明仍可见编辑器
+	parent.add_child(root)
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.42)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.add_child(dim)
+	var vp := get_viewport_rect().size
+	w = minf(w, vp.x - 24.0); h = minf(h, vp.y - 24.0)
+	var win := Panel.new()
+	win.size = Vector2(w, h)
+	win.position = ((vp - Vector2(w, h)) * 0.5).floor()
+	root.add_child(win)
+	var vb := VBoxContainer.new()
+	vb.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vb.offset_left = 12; vb.offset_top = 8; vb.offset_right = -12; vb.offset_bottom = -12
+	vb.add_theme_constant_override("separation", 8)
+	win.add_child(vb)
+	# 标题栏（按住可拖动整窗）
+	var bar := DragBar.new()
+	bar.target = win
+	bar.bounds = vp
+	bar.custom_minimum_size = Vector2(0, 30)
+	vb.add_child(bar)
+	var bh := HBoxContainer.new()
+	bh.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bh.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(bh)
+	var tl := Label.new(); tl.text = "▦  " + title_text
+	tl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tl.add_theme_font_size_override("font_size", 17); tl.add_theme_color_override("font_color", Color("ffe9a8"))
+	bh.add_child(tl)
+	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sp.mouse_filter = Control.MOUSE_FILTER_IGNORE; bh.add_child(sp)
+	var xb := _btn("✕", func() -> void: root.queue_free())
+	xb.add_theme_font_size_override("font_size", 18); xb.custom_minimum_size = Vector2(34, 26)
+	bh.add_child(xb)
+	var body := VBoxContainer.new()
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vb.add_child(body)
+	return {"root": root, "win": win, "body": body, "xbtn": xb}
+
+
 func _head(t: String) -> Label:
 	var l := Label.new(); l.text = "— " + t + " —"
 	l.add_theme_font_size_override("font_size", 15); l.add_theme_color_override("font_color", Color("ffd866"))
@@ -917,6 +957,25 @@ func _show_toast(t: String) -> void:
 	if _toast == null:
 		return
 	_toast.text = t; _toast.visible = true; _toast_t = 2.2
+
+
+# ======================================================================
+# 弹窗标题栏：按住拖动整个浮动窗
+# ======================================================================
+class DragBar extends Panel:
+	var target: Control          # 被拖动的窗口面板
+	var bounds := Vector2.ZERO    # 视口尺寸：把窗口夹在屏内
+	var _drag := false
+	func _gui_input(e: InputEvent) -> void:
+		if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
+			_drag = e.pressed
+		elif e is InputEventMouseMotion and _drag and target != null:
+			var mm: InputEventMouseMotion = e
+			var p: Vector2 = target.position + mm.relative
+			if bounds != Vector2.ZERO:
+				p.x = clampf(p.x, -target.size.x + 80.0, bounds.x - 80.0)
+				p.y = clampf(p.y, 0.0, bounds.y - 40.0)
+			target.position = p
 
 
 # ======================================================================
