@@ -6,9 +6,9 @@ extends SceneTree
 
 const SHEETS := ["res://assets/units2.png", "res://assets/units3.png", "res://assets/units_sheet.png"]
 const GRID := 4
-const ZONE := 0.55          # 只在内容包围盒「底部 45%」清理
-const PALE_LUM := 0.57      # 近白阈值
-const PALE_SAT := 0.34      # 低饱和阈值（白/灰，非肤色/衣物）
+const ZONE := 0.0           # 整个人物包围盒都清（白云常在中上身周围，不止脚下）
+const PALE_LUM := 0.62      # 清近白~浅灰残留背景/地影；靠「从透明区泛洪 + 工笔墨线封边」保护人物本体
+const PALE_SAT := 0.26      # 低饱和（白/浅灰，非肤色/彩衣）
 
 
 func _init() -> void:

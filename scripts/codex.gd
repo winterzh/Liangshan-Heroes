@@ -17,6 +17,37 @@ var _lore_root: ColorRect
 var _lore_name: Label
 var _lore_text: Label
 var _detail_scroll: ScrollContainer
+var _list_scroll: ScrollContainer
+
+# 触屏：手指拖动滚动列表（原生 ScrollContainer 在密集小按钮上不跟手，这里显式接管）
+var _touch := false
+var _active_scroll: ScrollContainer = null
+var _drag_amt := 0.0
+var _dragging_list := false
+
+
+## 触屏：手指拖动滚动左列表/右详情。在 _input 里接管（早于子按钮消费），
+## 拖动超过阈值即标记 _dragging_list，使本次松手不触发选中（区分点选 vs 滚动）。
+func _input(e: InputEvent) -> void:
+	if not _touch:
+		return
+	if e is InputEventScreenTouch:
+		if e.pressed:
+			_drag_amt = 0.0
+			_dragging_list = false
+			var p: Vector2 = e.position
+			if _list_scroll != null and _list_scroll.get_global_rect().has_point(p):
+				_active_scroll = _list_scroll
+			elif _detail_scroll != null and _detail_scroll.get_global_rect().has_point(p):
+				_active_scroll = _detail_scroll
+			else:
+				_active_scroll = null
+		# 松手不复位 _dragging_list：留给紧随的按钮 release 判定，下次按下再清
+	elif e is InputEventScreenDrag and _active_scroll != null:
+		_drag_amt += absf(e.relative.y)
+		if _drag_amt > 10.0:
+			_dragging_list = true
+		_active_scroll.scroll_vertical -= int(e.relative.y)
 
 
 func _unhandled_input(e: InputEvent) -> void:
@@ -30,6 +61,7 @@ func _unhandled_input(e: InputEvent) -> void:
 
 
 func _ready() -> void:
+	_touch = OS.has_feature("mobile") or OS.has_feature("web") or OS.get_environment("TOUCH_UI") == "1"
 	var bg := ColorRect.new()
 	bg.color = Color(0.07, 0.06, 0.05)
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -60,13 +92,14 @@ func _ready() -> void:
 	body.add_theme_constant_override("separation", 16)
 	add_child(body)
 
-	# 左：分组单位列表
+	# 左：分组单位列表（触屏加宽，便于手指点选）
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(232, 0)
+	scroll.custom_minimum_size = Vector2(340 if _touch else 232, 0)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	body.add_child(scroll)
+	_list_scroll = scroll
 	var list := VBoxContainer.new()
-	list.add_theme_constant_override("separation", 3)
+	list.add_theme_constant_override("separation", 5 if _touch else 3)
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(list)
 
@@ -236,7 +269,7 @@ func _hide_lore() -> void:
 func _add_group(list: VBoxContainer, title: String, keys: Array) -> void:
 	var hd := Label.new()
 	hd.text = "【%s】%d" % [title, keys.size()]
-	hd.add_theme_font_size_override("font_size", 15)
+	hd.add_theme_font_size_override("font_size", 18 if _touch else 15)
 	hd.add_theme_color_override("font_color", Color("9fd0e8"))
 	list.add_child(hd)
 	for k in keys:
@@ -244,10 +277,15 @@ func _add_group(list: VBoxContainer, title: String, keys: Array) -> void:
 		var sl: String = Bios.star_label(k)
 		b.text = "  " + String(Defs.UNITS[k].get("name", k)) + ("　" + sl.split(" · ")[1] if sl != "" else "")
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.add_theme_font_size_override("font_size", 17)
+		b.add_theme_font_size_override("font_size", 22 if _touch else 17)
+		if _touch:
+			b.custom_minimum_size = Vector2(0, 54)   # 触屏：加高便于手指点选
 		b.focus_mode = Control.FOCUS_NONE
 		var key: String = k
-		b.pressed.connect(func() -> void: _select(key))
+		b.pressed.connect(func() -> void:
+			if _dragging_list:   # 拖动滚动中误触 → 不选中
+				return
+			_select(key))
 		list.add_child(b)
 
 
