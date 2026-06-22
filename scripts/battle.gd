@@ -1432,15 +1432,23 @@ func _auto_micro_pass() -> void:
 			_auto_micro_hero(u)
 
 
-## 弱托管：英雄各守一方。守备姿态（守阵短追、打完归位），只对「防区」内(≈7.5 格半径≈15×15 格)
-## 的敌人放招——不越区追击、不管别处战事。增益/召唤照常；指向技能命中点钳制在防区内。
-const WEAK_LEASH := 240.0   # 弱托管防区半径（px）：240/32 ≈ 7.5 格 → 约 15×15 格
+## 弱托管：英雄各守一方。守备姿态（守阵短追、打完归位），只对「防区」内的敌人放招——
+## 不越区追击、不管别处战事。增益/召唤照常；指向技能命中点钳制在防区内。
+## 防区按角色缩放（各司其职）：近战 ≈15×15 格；远程更宽 ≈20×20 格（+5 格，能提前点射来犯）；
+## 且不低于英雄自身够得着的范围（攻击距离+缓冲），免得忽视射程内的敌人。
+const WEAK_LEASH := 240.0        # 近战防区半径（px）：240/32 ≈ 7.5 格 → ~15×15 格
+const WEAK_LEASH_RANGED := 320.0 # 远程防区半径（px）：320/32 = 10 格 → ~20×20 格（比近战 +5 格直径）
+
+func _weak_leash(u: Unit) -> float:
+	var r: float = WEAK_LEASH_RANGED if u.is_ranged else WEAK_LEASH
+	return maxf(r, u.atk_range + 48.0)
 
 func _auto_micro_weak(u: Unit) -> void:
 	if u.stance != Unit.STANCE_DEFEND:
 		u.set_stance(Unit.STANCE_DEFEND)   # 守阵短追、自动归位
+	var leash := _weak_leash(u)
 	var fp := _nearest_foe_pos(u.position, u.faction)
-	var near: bool = fp != Vector2.INF and u.position.distance_to(fp) <= WEAK_LEASH
+	var near: bool = fp != Vector2.INF and u.position.distance_to(fp) <= leash
 	for i in range(u.slot_count()):
 		if not u.slot_ready(i):
 			continue
