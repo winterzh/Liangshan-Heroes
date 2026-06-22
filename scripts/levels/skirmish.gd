@@ -1,5 +1,5 @@
 extends LevelBase
-## 自由「遭遇战」模式（仿帝国时代经营 + 仿魔兽英雄）。
+## 自由「遭遇战」模式（经营养成 + 英雄成长）。
 ## Phase 0 地基：开放地图 + 聚义厅基地 + 起始喽啰/资源 + 金矿/树林资源点 + 资源条/人口。
 ## 采集、建造、生产、英雄祭坛/升级、Tab 子组、敌军波次将在后续阶段逐步接入。
 
@@ -193,7 +193,7 @@ func deploy(b) -> void:
 
 
 func on_start(b) -> void:
-	# 起始喽啰自动采办（3 采金、2 伐木）——帝国式开局
+	# 起始喽啰自动采办（3 采金、2 伐木）——经典RTS式开局
 	var workers: Array = []
 	for u in b.units:
 		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG:

@@ -25,7 +25,7 @@ var _res_bar: PanelContainer
 var _res_gold: Label
 var _res_wood: Label
 var _res_pop: Label
-var _res_idle: Button     # 闲置喽啰徽标：显示闲置数，点击轮流选中（帝国式）
+var _res_idle: Button     # 闲置喽啰徽标：显示闲置数，点击轮流选中（经典RTS式）
 
 # 底部指挥面板
 var minimap: Minimap
@@ -252,7 +252,7 @@ func _build_touch_controls() -> void:
 		chip.num = n
 		_touch_groups.add_child(chip)
 		_group_chips.append(chip)
-	# 「全军」一键：选中所有作战单位（王保式少微操）
+	# 「全军」一键：选中所有作战单位（轻操作式少微操）
 	var allb := Button.new()
 	allb.text = "全军"
 	allb.custom_minimum_size = Vector2(72, 68)
@@ -510,7 +510,7 @@ func _refresh_skill_rail() -> void:
 			row.queue_free()
 
 
-## 英雄快切栏（左缘竖排，KR 式·桌面+触屏通用）：点头像=选中并居中该英雄；
+## 英雄快切栏（左缘竖排，轻操作式·桌面+触屏通用）：点头像=选中并居中该英雄；
 ## 驻军中的英雄标「驻」，点头像=出击。GridContainer 由 _layout_hero_bar 自适应缩放/分列，
 ## 顶部贴资源条下方、底部止于底部面板之上——不压住左下编队 chips。
 func _build_hero_bar() -> void:
@@ -578,7 +578,7 @@ func _layout_hero_bar() -> void:
 		ch.custom_minimum_size = Vector2(chip, chip)
 
 
-## 顶部资源条：金 | 木 | 人口（帝国/魔兽式，左上角常驻）
+## 顶部资源条：金 | 木 | 人口（经典RTS式，左上角常驻）
 func _build_resource_bar() -> void:
 	_res_bar = PanelContainer.new()
 	_res_bar.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
@@ -741,7 +741,7 @@ func _process(delta: float) -> void:
 			_refresh_panel()
 
 
-## AoE2 式底部指挥面板：小地图 | 头像 | 属性 | 编队 | 操作提示
+## 经典RTS式底部指挥面板：小地图 | 头像 | 属性 | 编队 | 操作提示
 func _build_bottom_panel() -> void:
 	var panel := PanelContainer.new()
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
@@ -850,7 +850,7 @@ func _build_bottom_panel() -> void:
 	_skill_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	hbox.add_child(_skill_bar)
 
-	# 多选单位图标网格（AoE2 式）：每个图标含头像/精灵 + 血条，点击单选
+	# 多选单位图标网格（经典RTS式）：每个图标含头像/精灵 + 血条，点击单选
 	var grid_wrap := MarginContainer.new()
 	# 收缩到图标本身宽度（不再抢占空白）——否则它吃掉所有富余空间，把右侧提示推出屏外
 	grid_wrap.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -943,7 +943,7 @@ func _rebuild_command_card() -> void:
 			rb.hud = self
 			rb.spec = spec
 			_skill_bar.add_child(rb)
-		# 魔兽式生产队列：每个排队单位一个可点撤的图标（队首=正在训练，点击退单退资源）
+		# 经典RTS式生产队列：每个排队单位一个可点撤的图标（队首=正在训练，点击退单退资源）
 		for qi in range(au._train_queue.size()):
 			var qkey: String = au._train_queue[qi]
 			var qb := CmdButton.new()
@@ -1539,7 +1539,7 @@ class CmdButton extends Control:
 	var _tip_shown := false
 
 	func _init() -> void:
-		# AoE2 式紧凑命令图标：方形图标 + 单位/建筑名 + 花费。详细说明走「悬浮说明卡」，省横向空间。
+		# 经典RTS式紧凑命令图标：方形图标 + 单位/建筑名 + 花费。详细说明走「悬浮说明卡」，省横向空间。
 		custom_minimum_size = Vector2(76, 88)
 		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		mouse_entered.connect(_on_hover_in)
@@ -1974,7 +1974,7 @@ class HeroSlotButton extends Control:
 		accept_event()
 
 
-## 触屏英雄快切 chip（左缘竖排）：点头像 = 选中并居中该英雄（KR 式随时跳到英雄放招走位）。
+## 触屏英雄快切 chip（左缘竖排）：点头像 = 选中并居中该英雄（轻操作式随时跳到英雄放招走位）。
 class HeroChip extends Control:
 	var hud = null
 	var hero: Unit = null

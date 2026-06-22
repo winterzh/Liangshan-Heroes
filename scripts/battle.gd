@@ -821,7 +821,7 @@ func queue_train(bld: Unit, key: String) -> void:
 		bld._train_t = float(d.get("train_time", 12.0))
 
 
-## 取消生产队列里第 index 个（魔兽式：点队列图标即撤单），全额退还资源；撤的是队首则重置计时。
+## 取消生产队列里第 index 个（经典RTS式：点队列图标即撤单），全额退还资源；撤的是队首则重置计时。
 func cancel_train(bld: Unit, index: int) -> void:
 	if bld == null or not is_instance_valid(bld) or index < 0 or index >= bld._train_queue.size():
 		return
@@ -928,7 +928,7 @@ func on_unit_trained(bld: Unit, key: String) -> void:
 		if bld.has_rally:
 			u.order_move(bld.rally)
 			return
-		# 无集结点：自动去采当前较缺的那种资源（帝国式新村民不闲置）
+		# 无集结点：自动去采当前较缺的那种资源（经典RTS式新村民不闲置）
 		var want := "gold" if gold <= wood else "wood"
 		var auto := nearest_resource(u.position, want)
 		if auto == null:
@@ -1889,7 +1889,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				if event.double_click and not _touch_mode:
 					var du := _unit_at(p)
 					if du != null:
-						# 双击（桌面）：选中屏幕内所有同类己方单位（帝国式）；建筑/敌方则只选它
+						# 双击（桌面）：选中屏幕内所有同类己方单位（经典RTS式）；建筑/敌方则只选它
 						if du.faction == Unit.FACTION_LIANG and not du.is_building:
 							_select_all_type(du, event.shift_pressed)
 						else:
@@ -2315,7 +2315,7 @@ func _click_select(p: Vector2, additive: bool) -> void:
 	_set_selection(new_sel)
 
 
-## 触屏·点选即下令（王保式）：点到己方单位/建筑 = 选取；点空地/敌人/资源且有选中 = 上下文指令。
+## 触屏·点选即下令（轻操作式）：点到己方单位/建筑 = 选取；点空地/敌人/资源且有选中 = 上下文指令。
 func _tap_command(p: Vector2, additive: bool) -> void:
 	if _friendly_at(p) != null:
 		_click_select(p, additive)        # 命中己方单位/建筑 → 选取（含建筑回退、Shift 追加）
@@ -2448,7 +2448,7 @@ func _command_hotkey(slot: int) -> void:
 			do_trade(String(trm[slot]["give"]))
 
 
-## 循环选中闲置喽啰（AoE 式）
+## 循环选中闲置喽啰（经典RTS式）
 func _cycle_idle_worker() -> void:
 	var idle := units.filter(func(u: Unit) -> bool:
 		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_idle_worker())
@@ -2462,7 +2462,7 @@ func _cycle_idle_worker() -> void:
 	center_camera_cell(map.world_to_cell(w.position))
 
 
-## 双击选同屏同类（AoE 式）
+## 双击选同屏同类（经典RTS式）
 func _select_all_type(proto: Unit, additive: bool) -> void:
 	if proto == null or proto.faction != Unit.FACTION_LIANG or proto.is_building:
 		return
@@ -3520,7 +3520,7 @@ func _refresh_active_highlight() -> void:
 
 
 func _issue_order(p: Vector2, queued := false) -> void:
-	# 右键点击「建造中」的己方建筑 → 取消建造、退还资源（帝国式）。
+	# 右键点击「建造中」的己方建筑 → 取消建造、退还资源（经典RTS式）。
 	# 仅当没有可移动单位被选中时才取消——否则这一下右键是给部队下移动令，
 	# 不能因为点到了工地附近就把在建建筑拆了（这正是「建筑莫名消失」的元凶）。
 	var con := _constructing_building_at(p)
@@ -3528,7 +3528,7 @@ func _issue_order(p: Vector2, queued := false) -> void:
 		var movers_c := _selected_movers()
 		var builders := movers_c.filter(func(u: Unit) -> bool: return u.is_worker)
 		if not builders.is_empty():
-			# 工人续建：右键在建工地 → 派工人接着建。地基永不消失、任何工人都能续建（帝国式）。
+			# 工人续建：右键在建工地 → 派工人接着建。地基永不消失、任何工人都能续建（经典RTS式）。
 			for w in builders:
 				w.order_build(con, queued)
 			_click_fx_pos = p
@@ -3542,7 +3542,7 @@ func _issue_order(p: Vector2, queued := false) -> void:
 			return
 		# 选的是非工人单位 → 当作普通移动令（下方处理），既不续建也不取消
 	# 生产建筑：右键设集结点（rally）。设在资源上 → 记住该资源点(typed gather-point)，
-	# 新练的工人会自动去采该类资源，采空后就近补位（帝国式 TC 集结到金矿）。
+	# 新练的工人会自动去采该类资源，采空后就近补位（经典RTS式 TC 集结到金矿）。
 	var rally_res := _resource_at(p)
 	var rallied := false
 	for u in selection:
@@ -3920,7 +3920,7 @@ func _garrisonable_at(p: Vector2) -> Unit:
 	return null
 
 
-## 拆除（帝国式 Delete）：删除选中的己方单位/建筑。建筑/地基立即释放占地以防卡位；不退资源。
+## 拆除（经典RTS式 Delete）：删除选中的己方单位/建筑。建筑/地基立即释放占地以防卡位；不退资源。
 ## 在建工地按「取消建造」退资源走 cancel_construction；已成型建筑/单位则直接销毁。
 func delete_selected(skip_confirm := false) -> void:
 	if selection.is_empty():
@@ -4768,7 +4768,7 @@ class Overlay extends Node2D:
 			var quad := PackedVector2Array([b.to_screen(Vector2(x0, y0)), b.to_screen(Vector2(x1, y0)), b.to_screen(Vector2(x1, y1)), b.to_screen(Vector2(x0, y1))])
 			var bcol := Color(0.4, 1.0, 0.5) if bok else Color(1.0, 0.35, 0.3)
 			draw_colored_polygon(quad, Color(bcol.r, bcol.g, bcol.b, 0.22))
-			# 半透「建筑虚影」：直接在选址处画出这座建筑的样子（帝国式放置预览）
+			# 半透「建筑虚影」：直接在选址处画出这座建筑的样子（经典RTS式放置预览）
 			var btex: Texture2D = Art.building_texture(b._build_armed)
 			if btex != null:
 				var ctr: Vector2 = b.to_screen(Vector2((float(bcell.x) + 0.5) * cc, (float(bcell.y) + 0.5) * cc))

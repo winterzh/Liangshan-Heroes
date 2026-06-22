@@ -6,7 +6,7 @@ extends Node2D
 
 const CELL := 32
 
-# 等距投影（AoE2 式 2:1 菱形格）：逻辑空间(方格) <-> 屏幕空间。
+# 等距投影（经典RTS式 2:1 菱形格）：逻辑空间(方格) <-> 屏幕空间。
 const ISO := Transform2D(Vector2(1.0, 0.5), Vector2(-1.0, 0.5), Vector2.ZERO)
 const ISO_INV := Transform2D(Vector2(0.5, -0.5), Vector2(1.0, 1.0), Vector2.ZERO)
 
