@@ -1,0 +1,51 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="水浒英雄传：八幕战役"
+run/main_scene="res://scenes/menu.tscn"
+config/features=PackedStringArray("4.6")
+config/icon="res://icon.png"
+config/quit_on_go_back=false
+
+[autoload]
+
+Art="*res://scripts/art_db.gd"
+Campaign="*res://scripts/campaign.gd"
+Settings="*res://scripts/settings.gd"
+Sfx="*res://scripts/sfx.gd"
+Music="*res://scripts/music.gd"
+Screen="*res://scripts/screen.gd"
+
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=900
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation="landscape"
+
+[input_devices]
+
+pointing/emulate_mouse_from_touch=true
+pointing/emulate_touch_from_mouse=false
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=2
+textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_2d=2
