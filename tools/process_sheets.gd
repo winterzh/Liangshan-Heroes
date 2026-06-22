@@ -46,6 +46,11 @@ func _init() -> void:
 	# —— 第五批头像（据守模式·官军/庄兵兵种立绘：刀盾/弓手/骑兵/精骑/刽子手/打手/祝家马军/弓手/庄客）——
 	if FileAccess.file_exists(ProjectSettings.globalize_path("res://assets/portraits5_raw.png")):
 		_process_sheet("res://assets/portraits5_raw.png", "res://assets/portraits5.png", 3, 400, false, [])
+	# 驻守战官军大将头像（十节度使等）
+	if FileAccess.file_exists(ProjectSettings.globalize_path("res://assets/portraits6_raw.png")):
+		_process_sheet("res://assets/portraits6_raw.png", "res://assets/portraits6.png", 3, 400, false, [])
+	if FileAccess.file_exists(ProjectSettings.globalize_path("res://assets/portraits7_raw.png")):
+		_process_sheet("res://assets/portraits7_raw.png", "res://assets/portraits7.png", 3, 400, false, [])
 
 	print("[process_sheets] done")
 	quit()

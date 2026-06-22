@@ -90,6 +90,17 @@ const PORTRAIT5_CELLS := {
 	"guan_jingqi": Vector2i(0, 1), "guan_zhanzi": Vector2i(1, 1), "jiang_thug": Vector2i(2, 1),
 	"zhu_qi": Vector2i(0, 2), "zhu_gong": Vector2i(1, 2), "zhu_keke": Vector2i(2, 2),
 }
+const PORTRAITS6_SHEET := "res://assets/portraits6.png" # 驻守战·十节度使头像 3x3
+const PORTRAIT6_CELLS := {
+	"wang_huan": Vector2i(0, 0), "xu_jing": Vector2i(1, 0), "wang_wende": Vector2i(2, 0),
+	"mei_zhan": Vector2i(0, 1), "zhang_kai": Vector2i(1, 1), "yang_wen": Vector2i(2, 1),
+	"li_congji": Vector2i(0, 2), "xiang_yuanzhen": Vector2i(1, 2), "jing_zhong": Vector2i(2, 2),
+}
+const PORTRAITS7_SHEET := "res://assets/portraits7.png" # 驻守战·童贯/水火二将/凌振/闻达 头像 3x3
+const PORTRAIT7_CELLS := {
+	"duan_pengju": Vector2i(0, 0), "tong_guan": Vector2i(1, 0), "ling_zhen": Vector2i(2, 0),
+	"wei_dingguo": Vector2i(0, 1), "shan_tinggui": Vector2i(1, 1), "wen_da": Vector2i(2, 1),
+}
 
 var _units_tex: Texture2D
 var _terrain_tex: Texture2D
@@ -101,6 +112,8 @@ var _portraits2_tex: Texture2D
 var _portraits3_tex: Texture2D
 var _portraits4_tex: Texture2D
 var _portraits5_tex: Texture2D
+var _portraits6_tex: Texture2D
+var _portraits7_tex: Texture2D
 var _buildings_tex: Texture2D
 var _objects_tex: Texture2D
 var _cache := {}
@@ -120,6 +133,8 @@ func _ready() -> void:
 	_portraits3_tex = _try_load(PORTRAITS3_SHEET)
 	_portraits4_tex = _try_load(PORTRAITS4_SHEET)
 	_portraits5_tex = _try_load(PORTRAITS5_SHEET)
+	_portraits6_tex = _try_load(PORTRAITS6_SHEET)
+	_portraits7_tex = _try_load(PORTRAITS7_SHEET)
 	_buildings_tex = _try_load(BUILDINGS_SHEET)
 	_objects_tex = _try_load(OBJECTS_SHEET)
 
@@ -267,6 +282,10 @@ func portrait_texture(key: String) -> Texture2D:
 		return _atlas(_portraits4_tex, PORTRAIT4_CELLS[key], 3, "p4_" + key)
 	if _portraits5_tex != null and PORTRAIT5_CELLS.has(key):
 		return _atlas(_portraits5_tex, PORTRAIT5_CELLS[key], 3, "p5_" + key)
+	if _portraits6_tex != null and PORTRAIT6_CELLS.has(key):
+		return _atlas(_portraits6_tex, PORTRAIT6_CELLS[key], 3, "p6_" + key)
+	if _portraits7_tex != null and PORTRAIT7_CELLS.has(key):
+		return _atlas(_portraits7_tex, PORTRAIT7_CELLS[key], 3, "p7_" + key)
 	return null
 
 
