@@ -187,6 +187,10 @@ func _build() -> void:
 		_flush_terrain()
 		var p := ScenarioStore.save(_cfg)
 		_show_toast("已保存：" + p if p != "" else "保存失败")))
+	var mod := _btn("📋 已改单位", _show_modified_units)
+	mod.add_theme_color_override("font_color", Color("87cefa"))
+	mod.tooltip_text = "查看/编辑本关改过或自定义的单位"
+	top.add_child(mod)
 	var play := _btn("▶ 试玩", _playtest)
 	play.add_theme_color_override("font_color", Color("9fe06f"))
 	top.add_child(play)
@@ -218,7 +222,8 @@ func _build() -> void:
 
 	# 右：属性 + 波次
 	var rightscroll := ScrollContainer.new()
-	rightscroll.custom_minimum_size = Vector2(280, 0)
+	rightscroll.custom_minimum_size = Vector2(348, 0)   # 加宽，避免「据守：守基地+撑过所有波」等文字被截断
+	rightscroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	cols.add_child(rightscroll)
 	var right := VBoxContainer.new()
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -452,15 +457,15 @@ func _rebuild_waves() -> void:
 			var gid := gi
 			gr.add_child(_key_opt(_combat_keys, String(grp.get("key", _combat_keys[0] if not _combat_keys.is_empty() else "")), func(k: String) -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["key"] = k))
-			var gkey := String(grp.get("key", ""))
-			var eb := _btn("✎", func() -> void: _edit_unit(gkey))   # 改这个兵种的属性/技能(仅本关)
-			eb.tooltip_text = "编辑该兵种属性/技能（仅本关）"; gr.add_child(eb)
+			# ✎ 点击时「实时」读当前下拉选中的兵种(而非建表时的旧值)，换了兵种再点也对
+			var eb := _btn("✎", func() -> void: _edit_unit(String(((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary).get("key", ""))))
+			eb.tooltip_text = "编辑当前选中兵种的属性/技能（仅本关）"; gr.add_child(eb)
 			gr.add_child(_mini_spin("×", int(grp.get("n", 4)), 1, 40, func(v: int) -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["n"] = v))
 			gr.add_child(_gate_opt(String(grp.get("gate", "E")), func(g: String) -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["gate"] = g))
-			var boss := CheckBox.new(); boss.text = "首"; boss.button_pressed = String(grp.get("ref", "")) == "boss"
-			boss.tooltip_text = "标为 boss（斩首胜利目标）"
+			var boss := CheckBox.new(); boss.text = "首领"; boss.button_pressed = String(grp.get("ref", "")) == "boss"
+			boss.tooltip_text = "标记为首领/Boss：在「斩首」胜利模式下，此单位阵亡即获胜"
 			boss.toggled.connect(func(v: bool) -> void:
 				if v: ((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["ref"] = "boss"
 				else: ((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary).erase("ref"))
@@ -635,6 +640,36 @@ func _edit_unit_at(cell: Vector2i) -> void:
 					_edit_unit(String(e.get("key", "")))
 					return
 	_show_toast("这一格没有单位——切到「放单位」先摆一个，或双击已放的单位")
+
+
+## 列出本关「改过 / 自定义」的所有单位（_cfg.units 的 key），点一个进去继续编辑。
+func _show_modified_units() -> void:
+	var units: Dictionary = _cfg.get("units", {})
+	var pw := _popup_window("本关已改 / 自定义的单位（%d）" % units.size(), 440, 480)
+	var root: Control = pw["root"]
+	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	(pw["body"] as Control).add_child(sc)
+	var box := VBoxContainer.new(); box.add_theme_constant_override("separation", 5)
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(box)
+	if units.is_empty():
+		var e := Label.new()
+		e.text = "还没改过任何单位。\n切到「选择/改单位」双击地图上的单位，\n或在右栏波次里点兵种旁的「✎」。"
+		e.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; e.add_theme_color_override("font_color", Color("c8b89a"))
+		box.add_child(e)
+	else:
+		var keys: Array = units.keys(); keys.sort()
+		for k in keys:
+			var kk := String(k)
+			var b := _btn("✎ " + _uname(kk) + "  (" + kk + ")", _open_modified.bind(kk, root))
+			b.alignment = HORIZONTAL_ALIGNMENT_LEFT; b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			b.custom_minimum_size = Vector2(0, 36); box.add_child(b)
+
+
+func _open_modified(kk: String, root: Control) -> void:
+	if root != null and is_instance_valid(root):
+		root.queue_free()
+	_edit_unit(kk)
 
 
 ## 打开某单位的属性/技能编辑浮窗（只有改了才会写进本场景，其余单位保持默认）。
