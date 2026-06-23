@@ -70,6 +70,10 @@ var _end_next: Button
 
 var _pause_root: ColorRect
 
+# AI友好模式·自动镜头提示：左下角浮标（镜头被自动接管时显示，轻微呼吸闪烁）
+var _autocam_badge: PanelContainer
+var _autocam_pulse := 0.0
+
 # 触屏布局：屏上操作栏 + 编队 chips（手机/网页或收到首个触摸事件时启用）
 var touch_ui := false
 var _touch_built := false
@@ -151,6 +155,7 @@ func _ready() -> void:
 	_build_end()
 	_build_pause()
 	_build_skill_tip()
+	_build_autocam_badge()
 
 
 func setup(p_battle) -> void:
@@ -707,6 +712,10 @@ func _position_tip() -> void:
 
 
 func _process(delta: float) -> void:
+	# 自动镜头浮标：轻微呼吸闪烁（透明度 0.55~1.0），让玩家一眼留意到镜头已自动接管
+	if _autocam_badge != null and _autocam_badge.visible:
+		_autocam_pulse += delta * 3.2
+		_autocam_badge.modulate.a = 0.78 + 0.22 * sin(_autocam_pulse)
 	if _tip_panel != null and _tip_panel.visible:
 		_position_tip()   # 面板尺寸在内容变更后一帧才定，逐帧重定位以贴准按钮上方
 	if touch_ui:
@@ -1310,6 +1319,41 @@ func show_message(text: String, dur := 3.5) -> void:
 
 func set_top(text: String) -> void:
 	top_label.text = text
+
+
+## AI友好模式·自动镜头浮标：左下角小牌「🎥 自动镜头」（命令面板上方），呼吸闪烁提示镜头已自动接管。
+func _build_autocam_badge() -> void:
+	_autocam_badge = PanelContainer.new()
+	_autocam_badge.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	_autocam_badge.offset_left = 12.0
+	_autocam_badge.offset_bottom = -(RTSCamera.PANEL_H + 12.0)   # 浮在底部指挥面板之上
+	_autocam_badge.offset_top = _autocam_badge.offset_bottom - 34.0
+	_autocam_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_autocam_badge.visible = false
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.07, 0.12, 0.16, 0.86)
+	sb.border_color = Color("5fd0e0")
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(8)
+	sb.content_margin_left = 12
+	sb.content_margin_right = 12
+	sb.content_margin_top = 5
+	sb.content_margin_bottom = 5
+	_autocam_badge.add_theme_stylebox_override("panel", sb)
+	var lbl := Label.new()
+	lbl.text = "🎥 自动镜头"
+	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.add_theme_color_override("font_color", Color(0.74, 0.94, 1.0))
+	_autocam_badge.add_child(lbl)
+	add_child(_autocam_badge)
+
+
+## 显示/隐藏自动镜头浮标（battle 在自动镜头接管/释放时调用）。
+func set_autocam(on: bool) -> void:
+	if _autocam_badge != null:
+		_autocam_badge.visible = on
+		if on:
+			_autocam_badge.modulate.a = 1.0
 
 
 func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "") -> void:

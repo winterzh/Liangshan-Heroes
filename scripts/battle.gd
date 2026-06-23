@@ -18,6 +18,16 @@ var units_root: Node2D
 var fx_root: Node2D
 var overlay: Node2D
 
+# AI友好模式（驻守战）：开则敌方小兵×3(在 skirmish 出兵处生效) + 全员托管后自动镜头巡战场
+var ai_friendly := false
+var _autocam_active := false           # 当前是否正由自动镜头接管
+var _autocam_dwell := 0.0              # 当前机位已停留秒数（≥AUTOCAM_DWELL 才重选）
+var _autocam_target_pos := Vector2.ZERO   # 目标镜头中心(屏幕/iso 空间)
+var _autocam_target_zoom := 1.1        # 目标缩放
+var _autocam_focus := Vector2.INF      # 当前聚焦战团中心(逻辑坐标)，用于跨帧判定战团是否还在
+const AUTOCAM_DWELL := 2.4             # 每个机位至少停留秒数（>2s，避免切太勤眼花）
+const AUTOCAM_HOT_R := 224.0           # 战团聚合半径(px) ≈ 7 格
+
 var units: Array = []
 var selection: Array = []
 var phase := Phase.INTRO
@@ -165,6 +175,8 @@ func _ready() -> void:
 	camera.limit_right = int(mw + margin)
 	camera.limit_bottom = int((mw + mh) * 0.5 + margin + RTSCamera.PANEL_H)
 	add_child(camera)
+	ai_friendly = Campaign.ai_friendly   # AI友好模式：敌方小兵×3 + 全员托管自动镜头
+	_autocam_target_zoom = camera.zoom.x
 
 	_build_atmosphere()   # 后期处理层：暗角 + 暖色调 + 对比/饱和（在世界之上、HUD 之下）
 	add_child(AmbientMotes.new())   # 空气中缓缓飘动的暖色微尘（阳光浮尘），叠在调色之上
@@ -200,6 +212,8 @@ func _ready() -> void:
 			_armor_selftest()
 		if OS.get_environment("AUTOMICRO") == "1":
 			_automicro_selftest()
+		if OS.get_environment("AUTOCAM") == "1":
+			_autocam_selftest()
 	else:
 		Engine.time_scale = Settings.game_speed   # 实时节奏（设置可调慢/正常/快）：技能冷却/建造/训练/波次按倍率走时
 		hud.show_intro(level.intro_lines())
@@ -1078,6 +1092,138 @@ func _process(_delta: float) -> void:
 		var want := "battle" if enemies_alive() > 0 else "calm"
 		if Music.mood() != want:
 			Music.set_mood(want)
+	if ai_friendly:
+		_autocam_tick(_delta)
+
+
+## ───────────────── AI友好模式·自动镜头：全员托管后自动巡视战况最激烈处 ─────────────────
+## 触发：交战阶段、场上有敌、全部我方英雄均已托管，且玩家未在手动操控镜头。
+## 行为：每 ≥AUTOCAM_DWELL 秒重选「最激烈战团」，平滑移镜+缩放对准；同一战团则持续跟随，不乱跳。
+func _autocam_tick(delta: float) -> void:
+	var want := phase == Phase.FIGHT and not get_tree().paused \
+		and enemies_alive() > 0 and _all_heroes_managed()
+	if want != _autocam_active:
+		_autocam_active = want
+		_autocam_dwell = 999.0           # 刚接管：立即选点
+		camera.auto_driving = want
+		if hud != null:
+			hud.set_autocam(want)         # 左下角「自动镜头」提示图标
+		if not want:
+			return
+	if not _autocam_active:
+		return
+	# 玩家显式操控镜头（方向键/滚轮/拖拽/手势）→ 暂时让位，期间不抢镜
+	if camera.user_controlling():
+		_autocam_dwell = 999.0           # 让位结束后立即重新选点
+		return
+	_autocam_dwell += delta
+	if _autocam_dwell >= AUTOCAM_DWELL:
+		_autocam_repick()
+	# 平滑插值到目标机位（时间无关阻尼，掉帧也不突跳）
+	var t := 1.0 - pow(0.0025, delta)
+	camera.position = camera.position.lerp(_autocam_target_pos, t)
+	camera.zoom = camera.zoom.lerp(Vector2.ONE * _autocam_target_zoom, t)
+
+
+## 是否「全部我方英雄都在托管」（且至少有一名存活英雄）。
+func _all_heroes_managed() -> bool:
+	if int(Settings.auto_micro_level) <= 0:
+		return false
+	var any := false
+	for u in units:
+		if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG \
+				and u.hp > 0.0 and not u.is_building:
+			any = true
+			if not u.auto_micro:
+				return false
+	return any
+
+
+## 重新选机位：找最激烈战团；当前战团仍在且别处没「明显更激烈又离得远」时，继续跟随当前战团。
+func _autocam_repick() -> void:
+	var pts := _combat_points()
+	if pts.is_empty():
+		_autocam_dwell = AUTOCAM_DWELL - 0.5   # 暂无交战：~0.5s 后再试（别每帧全场扫描）
+		return
+	var chosen := _cluster_at(pts, _densest_point(pts))
+	var ch_center: Vector2 = chosen["center"]
+	var ch_heat := float(chosen["heat"])
+	if _autocam_focus != Vector2.INF:
+		var cur := _cluster_at(pts, _autocam_focus)
+		var cur_heat := float(cur["heat"])
+		# 当前战团还在、且别处没「(1.3×)更激烈又>9格远」→ 继续跟当前战团（防镜头来回跳）
+		if cur_heat > 0.0 and not (ch_center.distance_to(_autocam_focus) > 288.0 and ch_heat >= cur_heat * 1.3):
+			chosen = cur
+			ch_center = cur["center"]
+	_autocam_focus = ch_center
+	_autocam_target_pos = to_screen(ch_center)
+	_autocam_target_zoom = float(chosen["zoom"])
+	_autocam_dwell = 0.0
+
+
+## 交战点：每个「附近有我方战斗单位」的官军单位记一个带权点（敌将权重更高，更值得看）。
+func _combat_points() -> Array:
+	var lians: Array = []
+	for u in units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 \
+				and not u.is_building and not u.is_resource:
+			lians.append(u)
+	var pts: Array = []
+	if lians.is_empty():
+		return pts
+	var near2 := (6.0 * GameMap.CELL) * (6.0 * GameMap.CELL)   # 6 格内算「交战」
+	for e in units:
+		if not (is_instance_valid(e) and e.faction == Unit.FACTION_GUAN and e.hp > 0.0 and not e.is_building):
+			continue
+		var w := 0.0
+		for l in lians:
+			if e.position.distance_squared_to(l.position) <= near2:
+				w += 3.0 if l.is_hero else 1.0
+		if w > 0.0:
+			pts.append([e.position, w * (2.0 if e.is_hero else 1.0)])
+	return pts
+
+
+## 局部热度最高的交战点（聚合半径内权重和最大者）作为战团种子。
+func _densest_point(pts: Array) -> Vector2:
+	var r2 := AUTOCAM_HOT_R * AUTOCAM_HOT_R
+	var best := -1.0
+	var seed: Vector2 = pts[0][0]
+	for i in range(pts.size()):
+		var pi: Vector2 = pts[i][0]
+		var heat := 0.0
+		for j in range(pts.size()):
+			if pi.distance_squared_to(pts[j][0]) <= r2:
+				heat += float(pts[j][1])
+		if heat > best:
+			best = heat
+			seed = pi
+	return seed
+
+
+## 以 seed 为中心聚合半径内交战点 → {center 加权中心, heat 权重和, zoom 按散布定缩放}。
+func _cluster_at(pts: Array, seed: Vector2) -> Dictionary:
+	var r2 := AUTOCAM_HOT_R * AUTOCAM_HOT_R
+	var center := Vector2.ZERO
+	var wsum := 0.0
+	for j in range(pts.size()):
+		var pj: Vector2 = pts[j][0]
+		if seed.distance_squared_to(pj) <= r2:
+			center += pj * float(pts[j][1])
+			wsum += float(pts[j][1])
+	if wsum <= 0.0:
+		return {"center": seed, "heat": 0.0, "zoom": _autocam_target_zoom}
+	center /= wsum
+	# 实际散布半径（中心周围所有交战点）→ 定缩放：让战团约占视口 0.6
+	var maxd := 0.0
+	for j in range(pts.size()):
+		var pj2: Vector2 = pts[j][0]
+		if seed.distance_squared_to(pj2) <= r2:
+			maxd = maxf(maxd, center.distance_to(pj2))
+	var vp := get_viewport().get_visible_rect().size
+	var span := maxf(maxd * 2.0 * 1.12, 3.0 * GameMap.CELL)   # iso 投影约同尺度，留底
+	var zoom := clampf(vp.y * 0.6 / span, 0.85, 1.7)
+	return {"center": center, "heat": wsum, "zoom": zoom}
 
 
 ## 地面斑驳光影：生成一张柔和径向贴图，在地图范围内确定性地撒若干「亮斑/暗斑」（云隙光）。
@@ -6236,6 +6382,65 @@ func _pending_lp(who: Unit, slot: int) -> Vector2:
 		if pc["caster"] == who and int(pc["slot"]) == slot:
 			return pc["lp"]
 	return Vector2.INF
+
+
+## 自动镜头自检（AUTOCAM=1）：构造强/弱两处战团，确定性断言「最激烈处被选中、缩放合法、全员托管门控、会切走」。
+func _autocam_selftest() -> void:
+	var saved_af := ai_friendly
+	ai_friendly = true
+	phase = Phase.FIGHT
+	var origin := Vector2(800, 1500)
+	for u in units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.key == "hall":
+			origin = u.position
+			break
+	# 清场：移除已布官军 + 先前自检遗留的我方英雄（否则未托管的遗留英雄会污染「全员托管」判定）
+	for v in units.duplicate():
+		if not (is_instance_valid(v) and not v.is_building):
+			continue
+		if v.faction == Unit.FACTION_GUAN or (v.faction == Unit.FACTION_LIANG and v.is_hero):
+			v.take_damage(v.hp + 1.0, null)
+	var spawned: Array = []
+	# 弱战团 A：1 我方英雄 + 2 步兵
+	var A := origin + Vector2(0, 320)
+	var ha := spawn_unit("lin_chong", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(A))))
+	ha.auto_micro = true
+	spawned.append(ha)
+	for k in range(2):
+		spawned.append(spawn_unit("guan_dao", Unit.FACTION_GUAN, A + Vector2(24 + k * 18, 0)))
+	# 强战团 B：1 我方英雄 + 6 步兵 + 1 敌将（权重远高于 A）
+	var B := origin + Vector2(760, 0)
+	var hb := spawn_unit("hua_rong", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(B))))
+	hb.auto_micro = true
+	spawned.append(hb)
+	for k in range(6):
+		spawned.append(spawn_unit("guan_dao", Unit.FACTION_GUAN, B + Vector2(20 + (k % 3) * 22, (k / 3) * 22)))
+	spawned.append(spawn_unit("hu_yanzhuo", Unit.FACTION_GUAN, B + Vector2(0, 30)))
+
+	var managed_on := _all_heroes_managed()
+	var pts := _combat_points()
+	var pts_ok := pts.size() >= 6
+	# 无焦点 → 应选中强战团 B
+	_autocam_focus = Vector2.INF
+	_autocam_repick()
+	var pick_B := _autocam_focus != Vector2.INF and _autocam_focus.distance_to(B) < 160.0
+	var zoom_ok := _autocam_target_zoom >= 0.85 and _autocam_target_zoom <= 1.7
+	# 取消一名英雄托管 → 不再算「全员托管」（门控）
+	hb.auto_micro = false
+	var gate_ok := not _all_heroes_managed()
+	hb.auto_micro = true
+	# 焦点在弱战团 A，但 B 明显更激烈又远 → 应切到 B（不黏死在 A）
+	_autocam_focus = A
+	_autocam_repick()
+	var switch_ok := _autocam_focus.distance_to(B) < 160.0
+	var all_ok := managed_on and pts_ok and pick_B and zoom_ok and gate_ok and switch_ok
+	print("[autocam] managed=%s pts=%d(%s) pickB=%s zoom=%.2f(%s) gate=%s switch=%s ALL=%s" % [
+		managed_on, pts.size(), pts_ok, pick_B, _autocam_target_zoom, zoom_ok, gate_ok, switch_ok, all_ok])
+	for s in spawned:   # 清理测试单位 + 复位
+		if is_instance_valid(s):
+			s.take_damage(s.hp + 1.0, null)
+	_autocam_focus = Vector2.INF
+	ai_friendly = saved_af
 
 
 ## 托管 AI 自检（AUTOMICRO=1）：直接调 _brain_* / 工具函数做确定性断言——

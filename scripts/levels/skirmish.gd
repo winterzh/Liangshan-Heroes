@@ -238,9 +238,15 @@ func _spawn_wave(b, i: int) -> void:
 	var wave: Dictionary = ws[i]
 	b.msg("【第 %d/%d 波】%s" % [i + 1, ws.size(), wave.get("msg", "")], 5.5)
 	var hall_pos: Vector2 = b.map.cell_to_world(HALL)
+	# AI友好模式：非英雄小兵数量×3（英雄/敌将不×3），给托管 AI 更热闹的战场
+	var x3 := Campaign.ai_friendly
 	for g in wave["groups"]:
 		var gate: Vector2i = GATES[clampi(int(g[2]), 0, GATES.size() - 1)]
-		var spawned: Array = b.spawn_group(String(g[0]), int(g[1]), Unit.FACTION_GUAN, gate, hall_pos)
+		var key := String(g[0])
+		var cnt := int(g[1])
+		if x3 and not _is_hero_key(key):
+			cnt *= 3
+		var spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)
 		_arm_boss(spawned, _group_rank(g))
 	# 每波附带投石车：射程远、专破箭楼，轮换从一门压上（数量由 _cata_for 决定）
 	var n_cata: int = _cata_for(i)
@@ -264,6 +270,12 @@ func _arm_boss(spawned: Array, rank := 2) -> void:
 ## 该兵组敌将的技能等级（0=不放招 / 1 / 2满级）。据守本体一律满级；自定义据守按 config 第 4 元。
 func _group_rank(_g) -> int:
 	return 2
+
+
+## 该兵种是否为英雄/敌将（AI友好模式下不×3）。
+func _is_hero_key(key: String) -> bool:
+	var d: Variant = Defs.UNITS.get(key, {})
+	return d is Dictionary and bool((d as Dictionary).get("hero", false))
 
 
 func top_status(b) -> String:

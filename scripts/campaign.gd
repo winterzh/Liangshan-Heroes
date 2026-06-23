@@ -31,6 +31,7 @@ var ai_difficulty := "normal"   # AI 对战难度：easy / normal / hard
 var victory_mode := "conquest"  # 1v1 胜利条件：conquest 征服 / regicide 斩首 / koth 占山为王
 var defense_waves := 30         # 驻守战波数：20 速战 / 30 经典 / 60 史诗
 var defense_hero_cap := 4       # 驻守战英雄上限（60 关放宽到 6 员）
+var ai_friendly := false        # 驻守战「AI友好模式」：敌方小兵×3(英雄不×3) + 全员托管时自动镜头巡战场
 
 
 func _ready() -> void:
@@ -51,6 +52,8 @@ func _ready() -> void:
 	var dh := OS.get_environment("DEF_HEROES")
 	if dh != "":
 		defense_hero_cap = int(dh)
+	if OS.get_environment("AI_FRIENDLY") == "1":
+		ai_friendly = true
 	var lv := OS.get_environment("LEVEL")
 	if lv != "":
 		current = clampi(int(lv) - 1, 0, LEVELS.size() - 1)

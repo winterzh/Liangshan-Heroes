@@ -233,6 +233,27 @@ func _show_defense() -> void:
 	tip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(tip)
 
+	# AI友好模式开关：开 → 敌方小兵×3（英雄不变）；全部英雄托管后镜头自动巡视最激烈的战场
+	var afb := Button.new()
+	afb.toggle_mode = true
+	afb.button_pressed = Campaign.ai_friendly
+	afb.custom_minimum_size = Vector2(420, 44)
+	afb.add_theme_font_size_override("font_size", 17)
+	afb.text = "🤖 AI友好模式：%s" % ("开" if Campaign.ai_friendly else "关")
+	afb.add_theme_color_override("font_color", Color("ffd866") if Campaign.ai_friendly else Color("9fb0c4"))
+	afb.toggled.connect(func(on: bool) -> void:
+		Campaign.ai_friendly = on
+		afb.text = "🤖 AI友好模式：%s" % ("开" if on else "关")
+		afb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4")))
+	box.add_child(afb)
+
+	var aftip := Label.new()
+	aftip.text = "（开启后：敌方小兵数量×3·英雄不变；当全部英雄进入托管，镜头自动巡视战场）"
+	aftip.add_theme_font_size_override("font_size", 13)
+	aftip.add_theme_color_override("font_color", Color("7c8a9c"))
+	aftip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(aftip)
+
 	# [波数, 英雄上限, 文案, 配色]
 	var opts := [
 		[20, 4, "⚡  20 关 · 速战", Color("ffe9a8")],
@@ -321,6 +342,7 @@ func _show_1v1() -> void:
 			Campaign.skirmish = false
 			Campaign.custom_defense = false
 			Campaign.scenario = false
+			Campaign.ai_friendly = false   # AI友好模式仅限驻守战
 			Campaign.ai_difficulty = key
 			_launch())
 		drow.add_child(ab)
@@ -380,6 +402,7 @@ func _show_scenario_picker() -> void:
 				Campaign.custom_defense = false
 				Campaign.skirmish = false
 				Campaign.skirmish_ai = false
+				Campaign.ai_friendly = false   # AI友好模式仅限驻守战
 				_launch())
 		box.add_child(b)
 	_add_back(box, overlay)
@@ -493,6 +516,7 @@ func _make_card(i: int) -> Control:
 			Campaign.skirmish_ai = false    # 上次点过「据守/AI」的旗标会留着 → 否则战役关也进据守）
 			Campaign.custom_defense = false
 			Campaign.scenario = false
+			Campaign.ai_friendly = false   # AI友好模式仅限驻守战
 			_launch())
 	btn.add_theme_font_size_override("font_size", 18)
 	vb.add_child(btn)
