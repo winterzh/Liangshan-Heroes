@@ -642,34 +642,62 @@ func _edit_unit_at(cell: Vector2i) -> void:
 	_show_toast("这一格没有单位——切到「放单位」先摆一个，或双击已放的单位")
 
 
-## 列出本关「改过 / 自定义」的所有单位（_cfg.units 的 key），点一个进去继续编辑。
+## 列出本关「改过 / 自定义」的单位 + 技能（改单位属性进 units、改技能进 abilities，两者都列）。
 func _show_modified_units() -> void:
 	var units: Dictionary = _cfg.get("units", {})
-	var pw := _popup_window("本关已改 / 自定义的单位（%d）" % units.size(), 440, 480)
+	var abils: Dictionary = _cfg.get("abilities", {})
+	var pw := _popup_window("本关已改 / 自定义（单位 %d · 技能 %d）" % [units.size(), abils.size()], 460, 520)
 	var root: Control = pw["root"]
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	(pw["body"] as Control).add_child(sc)
 	var box := VBoxContainer.new(); box.add_theme_constant_override("separation", 5)
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(box)
-	if units.is_empty():
+	if units.is_empty() and abils.is_empty():
 		var e := Label.new()
-		e.text = "还没改过任何单位。\n切到「选择/改单位」双击地图上的单位，\n或在右栏波次里点兵种旁的「✎」。"
+		e.text = "还没改过任何东西。\n切到「选择/改单位」双击地图上的单位，\n或在右栏波次里点兵种旁的「✎」。"
 		e.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; e.add_theme_color_override("font_color", Color("c8b89a"))
 		box.add_child(e)
-	else:
-		var keys: Array = units.keys(); keys.sort()
-		for k in keys:
+		return
+	if not units.is_empty():
+		box.add_child(_head("改过的单位"))
+		var uk: Array = units.keys(); uk.sort()
+		for k in uk:
 			var kk := String(k)
 			var b := _btn("✎ " + _uname(kk) + "  (" + kk + ")", _open_modified.bind(kk, root))
 			b.alignment = HORIZONTAL_ALIGNMENT_LEFT; b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			b.custom_minimum_size = Vector2(0, 36); box.add_child(b)
+			b.custom_minimum_size = Vector2(0, 34); box.add_child(b)
+	if not abils.is_empty():
+		box.add_child(_head("改过的技能（点→打开其所属单位）"))
+		var ak: Array = abils.keys(); ak.sort()
+		for a in ak:
+			var aa := String(a)
+			var owner := _ability_owner(aa)
+			var lbl := "✦ " + _aname(aa) + "  (" + aa + ")" + ("  ←" + _uname(owner) if owner != "" else "")
+			var ab := _btn(lbl, _open_modified.bind(owner if owner != "" else aa, root, owner == ""))
+			ab.alignment = HORIZONTAL_ALIGNMENT_LEFT; ab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			ab.custom_minimum_size = Vector2(0, 34); box.add_child(ab)
 
 
-func _open_modified(kk: String, root: Control) -> void:
+## 找到拥有该技能的单位 key（用于从「改过的技能」跳回所属单位编辑）。
+func _ability_owner(aid: String) -> String:
+	var src := {}
+	for k in Defs.UNITS: src[k] = Defs.UNITS[k]
+	for k in _cfg.get("units", {}): src[k] = _cfg["units"][k]
+	for k in src:
+		var d: Dictionary = src[k]
+		if String(d.get("ability", "")) == aid or (d.get("abilities", []) as Array).has(aid):
+			return String(k)
+	return ""
+
+
+func _open_modified(target: String, root: Control, is_ability := false) -> void:
 	if root != null and is_instance_valid(root):
 		root.queue_free()
-	_edit_unit(kk)
+	if is_ability:
+		_ae_open(target)   # 找不到所属单位的孤立技能：直接开技能窗
+	else:
+		_edit_unit(target)
 
 
 ## 打开某单位的属性/技能编辑浮窗（只有改了才会写进本场景，其余单位保持默认）。
@@ -800,6 +828,7 @@ func _prop_row(read_d: Dictionary, on_set: Callable, spec: Array) -> HBoxContain
 	elif typ == "int" or typ == "float":
 		var s := SpinBox.new(); s.min_value = 0; s.max_value = 99999; s.step = (1.0 if typ == "int" else 0.05)
 		s.allow_greater = true; s.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		s.update_on_text_changed = true   # 边打字边生效，不必失焦才提交（确保改动写入 override）
 		s.value = float(cur) if (cur is float or cur is int) else 0.0
 		s.value_changed.connect(func(v: float) -> void: on_set.call(key, (int(v) if typ == "int" else v)))
 		h.add_child(s)
