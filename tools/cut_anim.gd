@@ -9,6 +9,7 @@ const FRAME := 256          # 每帧输出方格边长
 const INSET := 26           # 切格后内缩，吃掉网格线 + 每格黑框边
 const KEY_TOL2 := 0.05      # 抠绿底颜色距离平方阈值
 const GRID := 2
+var _interior_px := 0       # 当前帧带累计抠掉的「内部残绿」像素（日志用）
 
 
 func _init() -> void:
@@ -73,6 +74,7 @@ func _cut(src_path: String, key: String, state: String) -> void:
 	if img == null:
 		print("[cut_anim] SKIP missing ", src_path); return
 	img.convert(Image.FORMAT_RGBA8)
+	_interior_px = 0
 	var xb := _detect_bounds(img, true)
 	var yb := _detect_bounds(img, false)
 	# 阅读序 → 走循环序：左上,右上,左下,右下
@@ -87,7 +89,7 @@ func _cut(src_path: String, key: String, state: String) -> void:
 		var rh: int = yb[cy + 1] - INSET - ry
 		var cell := img.get_region(Rect2i(rx, ry, rw, rh))
 		cell.resize(FRAME, FRAME, Image.INTERPOLATE_LANCZOS)
-		_key_background(cell)
+		_interior_px += _key_background(cell)
 		_despill(cell)
 		if state == "death":
 			_bottom_anchor_content(cell)   # 死亡：脚底对齐基线（身体随帧塌下，不被居中抹平）
@@ -97,6 +99,8 @@ func _cut(src_path: String, key: String, state: String) -> void:
 	var dst := "res://assets/anim/%s_%s.png" % [key, state]
 	strip.save_png(ProjectSettings.globalize_path(dst))
 	print("[cut_anim] wrote ", dst)
+	if _interior_px > 0:
+		print("[degreen] %s_%s 内部残绿抠掉 %d px" % [key, state, _interior_px])
 
 
 func _detect_bounds(img: Image, vertical: bool) -> Array:
@@ -120,7 +124,8 @@ func _detect_bounds(img: Image, vertical: bool) -> Array:
 	return bounds
 
 
-func _key_background(img: Image) -> void:
+## 抠底；返回「内部绿池」(被图形包住、泛洪到不了的残绿)被额外抠掉的像素数，供日志统计。
+func _key_background(img: Image) -> int:
 	var w := img.get_width()
 	var h := img.get_height()
 	var bg := _border_median(img)
@@ -146,6 +151,16 @@ func _key_background(img: Image) -> void:
 			if absi(nx - x) > 1: continue
 			if visited[nn] == 0 and _near(img.get_pixel(nx, nn / w), bg):
 				visited[nn] = 1; stack.append(nn)
+	# 内部绿池：被图形圈住、与边缘不连通的残绿（如拉弓的臂弓之间、跨步的两腿之间）。
+	# 泛洪到不了 → 全图再扫一遍，凡仍是底色的直接抠透明（在去溢色之前，免得变成深青残块）。
+	var interior := 0
+	for yy in range(h):
+		for xx in range(w):
+			var c := img.get_pixel(xx, yy)
+			if c.a > 0.0 and _near(c, bg):
+				img.set_pixel(xx, yy, Color(0, 0, 0, 0))
+				interior += 1
+	return interior
 
 
 ## 去绿边溢色：残留的半透/不透明绿色描边像素，把过亮的绿分量压回到 max(r,b)
