@@ -1755,6 +1755,11 @@ func _auto_micro_generic(u: Unit) -> void:
 				continue
 		_begin_cast(u, i, lp)
 		break
+	# 没在放招时，主动集火高价值目标（敌将/投石/远程/残血），别干站等引擎索敌
+	if u._cast_t <= 0.0:
+		var gt := _focus_target(u, maxf(280.0, u.aggro_range))
+		if gt != null and u._target != gt:
+			u.order_attack(gt)
 
 
 ## 林冲·反骑突击：专盯骑兵（猎骑被动吸血续航），Q 突刺 / W 横扫收割身边小兵，R 时空封印定一片。
@@ -1836,8 +1841,8 @@ func _brain_li(u: Unit) -> void:
 		if _foe_count_within(u.position, 150.0, u.faction) >= 2 or frac < 0.45:
 			if _ai_cast_slot(u, 3, u.position):
 				return
-	# P3 兜底：敌超出引擎索敌半径 → 攻击移动切入贴脸（近处交给引擎/W冲锋）
-	_ai_push_into_range(u, fp, 90.0)
+	# P3 兜底：集火高价值目标（敌将/投石/远程/残血先杀），够不着才攻击移动切入贴脸
+	_engage_focus(u, fp)
 
 
 ## 武松·行者：召虎(CD一好就放) → 被围开 R 醉神（物免转血保命+反打）→ E 横扫。残血没大招才避战回撤。
@@ -1885,6 +1890,8 @@ func _brain_wu(u: Unit) -> void:
 	if frac > 0.40 and _foe_within(u.position, 110.0, u.faction):
 		if _ai_cast_slot(u, 1, u.position):
 			return
+	# 兜底集火：扑向高价值目标（敌将/投石/远程/残血），而非干站等引擎索敌
+	_engage_focus(u, fp)
 
 
 ## 花荣·射手：后排风筝。默认挂弓远射；被贴脸→定身神箭压速+拉开；残血→凌空闪朝『远离』方向逃。
@@ -3165,6 +3172,44 @@ func _nearest_foe_unit(from: Vector2, my_fac: int, only_cav := false, only_range
 			bd = d
 			best = v
 	return best
+
+
+## 集火目标（托管智商↑）：reach 内挑「最该先杀」的敌——敌将＞投石＞远程脆皮，残血可秒优先，越近越好。
+## 带去抖加权：当前目标仍有效就略加分，避免每拍换目标抖动。近战脑兜底索敌用。
+func _focus_target(u: Unit, reach: float) -> Unit:
+	var best: Unit = null
+	var best_s := -1.0e20
+	for v in units:
+		if not (is_instance_valid(v) and v.faction != u.faction and not v.is_building \
+				and not v.is_resource and not v.garrisoned and not v.is_captive and v.hp > 0.0):
+			continue
+		var d := u.position.distance_to(v.position)
+		if d > reach:
+			continue
+		var s := -d                                       # 近优先（基准）
+		if v.is_hero:
+			s += 320.0                                    # 敌将最该集火
+		elif String(v.key).begins_with("siege"):
+			s += 240.0                                    # 投石车（破基地/箭楼）次之
+		elif v.is_ranged:
+			s += 150.0                                    # 远程脆皮
+		s += (1.0 - v.hp / maxf(v.max_hp, 1.0)) * 170.0   # 残血可秒：先收掉，少一个输出源
+		if v == u._target:
+			s += 90.0                                     # 粘滞防抖：略偏向保持现目标
+		if s > best_s:
+			best_s = s
+			best = v
+	return best
+
+
+## 近战脑统一的「集火索敌」兜底：reach 内有高价值/残血目标就 order_attack(去抖)，没有则攻击移动压上最近敌。
+func _engage_focus(u: Unit, fp: Vector2) -> void:
+	var tgt := _focus_target(u, maxf(300.0, u.aggro_range))
+	if tgt != null:
+		if u._target != tgt:
+			u.order_attack(tgt)
+		return
+	_ai_push_into_range(u, fp, 90.0)
 
 
 ## 半径内敌方单位计数（want_cav=只数骑兵 / want_melee=只数非远程，含骑兵）。
@@ -6755,9 +6800,19 @@ func _automicro_selftest() -> void:
 	_brain_hua(hua)
 	var engage_ok := hua_far_w and hua._state == Unit.ST_AMOVE
 
-	var all_ok := helpers_ok and tiger_gate_ok and weak_tiger_ok and wu_ult_ok and lin_focus_ok and hua_blink_ok and retreat_ok and ult_ok and song_mutex_ok and learn_prio_ok and lr_cast_ok and engage_ok
-	print("[automicro] helpers=%s tigergate=%s weaktiger=%s wuult=%s linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s lrcast(song=%s hua=%s)=%s engage(farW=%s)=%s ALL=%s" % [
-		helpers_ok, tiger_gate_ok, weak_tiger_ok, wu_ult_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, all_ok])
+	# ───── S8 集火优先：近处小兵 vs 略远敌将 → _focus_target 应挑敌将（敌将集火权重压过距离）─────
+	for f in foes:
+		f.position = park
+	li.position = origin
+	li._target = null
+	emel.position = li.position + Vector2(60, 0)    # 近处杂兵(步兵)
+	ehero.position = li.position + Vector2(210, 0)   # 略远敌将(呼延灼)
+	var focus_pick := _focus_target(li, 320.0)
+	var focus_ok := focus_pick == ehero             # 该集火敌将而非最近杂兵
+
+	var all_ok := helpers_ok and tiger_gate_ok and weak_tiger_ok and wu_ult_ok and lin_focus_ok and hua_blink_ok and retreat_ok and ult_ok and song_mutex_ok and learn_prio_ok and lr_cast_ok and engage_ok and focus_ok
+	print("[automicro] helpers=%s tigergate=%s weaktiger=%s wuult=%s linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s lrcast(song=%s hua=%s)=%s engage(farW=%s)=%s focus=%s ALL=%s" % [
+		helpers_ok, tiger_gate_ok, weak_tiger_ok, wu_ult_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, focus_ok, all_ok])
 
 	# 清理：移除本测试 spawn 的英雄/敌兵/召唤物，避免污染后续 skirmish
 	for u in units.duplicate():
