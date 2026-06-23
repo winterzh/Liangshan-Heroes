@@ -38,9 +38,9 @@ var _eco_t := 0.0
 var _eco_deploy_t := 0.0
 var _eco_started := false              # 是否已自动开战
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
-const ECO_BOOT_WORKERS := 6           # 出英雄阶段的最低农民数（够采金供英雄即可，别挤人口）
-const ECO_PRE_HERO_POP := 38          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 农民）
-const ECO_WCAP := 10                   # 出齐英雄后的农民目标数
+const ECO_BOOT_WORKERS := 4           # 出英雄阶段的最低农民数（起手已有5个，通常一个都不补→不抢聚义厅队列，英雄连着出）
+const ECO_PRE_HERO_POP := 30          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 几个农民即可，别多盖民居拖时间）
+const ECO_WCAP := 6                    # 出齐英雄后的农民目标数（少养农民，人口/钱留给军队）
 const ECO_GOLD_MINERS := 4            # 金矿工目标（贴仓库·采矿效率 max），其余伐木
 const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农民）
 # 经济建筑(仓库/民居/集市)堆在金矿后方(安全角，远离东侧出兵口)护住人口；兵营/箭楼在聚义厅前沿御敌。
@@ -1098,7 +1098,7 @@ func _physics_process(delta: float) -> void:
 func _process(_delta: float) -> void:
 	# 触屏：单指按住原地 ≥350ms → 长按。按在己方可驻军建筑上且选了可动单位 → 驻扎；
 	# 否则进入「框选」态（之后拖动拖出选择框，不再拖地图）。建造选址态(_build_armed)不参与长按。
-	if _dragging and _touch_mode and not _box_mode and not _panning and _build_armed == "" \
+	if _dragging and _touch_mode and not _box_mode and not _panning and _build_armed == "" and _ability_armed == "" \
 			and Time.get_ticks_msec() - _press_ms >= 350 and _drag_from.distance_to(_drag_cur) < 16.0:
 		if _garrisonable_at(_drag_from) != null and not _selected_movers().is_empty():
 			_dragging = false
@@ -1107,6 +1107,21 @@ func _process(_delta: float) -> void:
 			_box_mode = true
 			overlay.queue_redraw()
 			Sfx.play("click")
+	# 触屏·指向技能瞄准：手指拖到屏幕边缘 → 地图朝该方向自动滚屏（够得着屏外目标；准星仍跟手指、松手即放）
+	if _touch_mode and _dragging and _ability_armed != "" and camera != null and not get_tree().paused:
+		var vs: Vector2 = get_viewport().get_visible_rect().size
+		var sm: Vector2 = get_viewport().get_mouse_position()
+		var bottom: float = vs.y - RTSCamera.PANEL_H   # 底部命令栏之上才算「下边缘」
+		var m := 70.0
+		var dir := Vector2.ZERO
+		if sm.x < m: dir.x = -1.0
+		elif sm.x > vs.x - m: dir.x = 1.0
+		if sm.y < m: dir.y = -1.0
+		elif sm.y > bottom - m: dir.y = 1.0
+		if dir != Vector2.ZERO:
+			camera.position += dir * (640.0 * _delta * Settings.cam_speed) / camera.zoom.x
+			_drag_cur = get_global_mouse_position()   # 滚屏后准星落在新露出的区域
+			overlay.queue_redraw()
 	if _click_fx_t > 0.0:
 		_click_fx_t = maxf(0.0, _click_fx_t - _delta)
 	if _alert_t > 0.0:
@@ -2124,6 +2139,38 @@ func _learn_order(h: Unit) -> Array:
 
 ## ───────────────── 分英雄战术大脑（托管 AI）：每帧每将只发一个动作 ─────────────────
 ## 按 key 分派；无专属脑→通用放招。所有动作走 _begin_cast / order_*，靠抬手 windup 自然错开 QWER。
+## 单位战斗力粗估：有效输出(atk×buff_atk/cd) × 当前血量。用于「能否轻松战胜」的双方对比，
+## 比单纯数人头更准——同样 2 个，普通小兵可秒、精锐/骑兵则未必。
+func _combat_power(u: Unit) -> float:
+	if u == null or not is_instance_valid(u) or u.hp <= 0.0:
+		return 0.0
+	var dps: float = u.atk * maxf(u.buff_atk, 0.1) / maxf(u.atk_cd, 0.3)
+	return dps * u.hp
+
+
+## 勇敢反打：血量 > 1/5，且「自己的战斗力 ≥ 周围全部追兵之和 × BRAVE_MARGIN」才回身反打——
+## 不再只看血量/人数(2 个精锐或骑兵照样该退就退)。作各英雄脑「残血退守」分支的闸门，
+## 满足时不撤退、落回正常索敌反打（远程英雄=回身放风筝）。
+const BRAVE_MARGIN := 2.0   # 需把追兵总战斗力压制到 2 倍以上才算「轻松战胜」
+func _brave_retaliate(u: Unit) -> bool:
+	if u.hp / maxf(u.max_hp, 1.0) <= 0.20:
+		return false
+	var r: float = maxf(220.0, u.aggro_range)
+	var foe_pow := 0.0
+	var n := 0
+	for v in units:
+		if not (is_instance_valid(v) and v.faction != u.faction and not v.is_building \
+				and not v.is_resource and not v.garrisoned and not v.is_captive and v.hp > 0.0):
+			continue
+		if u.position.distance_to(v.position) > r:
+			continue
+		foe_pow += _combat_power(v)
+		n += 1
+	if n == 0:
+		return false
+	return _combat_power(u) >= foe_pow * BRAVE_MARGIN
+
+
 func _auto_micro_hero(u: Unit) -> void:
 	match String(u.key):
 		"lin_chong": _brain_lin(u)
@@ -2171,11 +2218,11 @@ func _brain_lin(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
 		return
 	var hp_frac := u.hp / u.max_hp
-	var cav := _nearest_foe_unit(u.position, u.faction, true)
+	var cav := _nearest_foe_unit(u.position, u.faction, true, false, false, u)
 	var near_cav: bool = cav != null and u.position.distance_to(cav.position) <= u.atk_range + u.radius + 20.0
 	var e_rank := int(u.ability_slots[2]["rank"])   # 猎骑被动等级 → 是否能靠咬骑兵回血
-	# 退守：残血、身边没有可吸血的骑兵、且大招不可用
-	if hp_frac < 0.25 and not (near_cav and e_rank > 0) and not u.slot_ready(3):
+	# 退守：残血、身边没有可吸血的骑兵、且大招不可用（被一两个小兵追时血>1/5 则勇敢反打，不退）
+	if hp_frac < 0.25 and not (near_cav and e_rank > 0) and not u.slot_ready(3) and not _brave_retaliate(u):
 		if u.stance != Unit.STANCE_PASSIVE:
 			u.set_stance(Unit.STANCE_PASSIVE)
 		_ai_move(u, _retreat_point(u,200.0))
@@ -2207,7 +2254,7 @@ func _brain_lin(u: Unit) -> void:
 		if u._target == null or not is_instance_valid(u._target) or not u._target.is_cavalry:
 			u.order_attack(cav)
 	else:
-		var sq := _nearest_foe_unit(u.position, u.faction, false, true)   # 退而求次：切脆皮远程
+		var sq := _nearest_foe_unit(u.position, u.faction, false, true, false, u)   # 退而求次：切脆皮远程
 		if sq != null and u._target == null:
 			u.order_attack(sq)
 	# 兜底：仍无目标（没骑兵/脆皮、且引擎够不着） → 攻击移动压上最近敌
@@ -2221,7 +2268,7 @@ func _brain_li(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
 		return
 	var frac := u.hp / u.max_hp
-	if frac < 0.30 and not u.slot_ready(3):
+	if frac < 0.30 and not u.slot_ready(3) and not _brave_retaliate(u):
 		if u.stance != Unit.STANCE_PASSIVE:
 			u.set_stance(Unit.STANCE_PASSIVE)
 		_ai_move(u, _retreat_point(u,220.0))
@@ -2262,7 +2309,7 @@ func _brain_wu(u: Unit) -> void:
 				if fp != Vector2.INF:
 					_ai_move(u, fp, true)
 				return
-		elif frac <= 0.30:
+		elif frac <= 0.30 and not _brave_retaliate(u):
 			if u.stance != Unit.STANCE_PASSIVE:
 				u.set_stance(Unit.STANCE_PASSIVE)
 			_ai_move(u, _retreat_point(u,220.0))
@@ -2317,8 +2364,8 @@ func _brain_hua(u: Unit) -> void:
 	if u.stance == Unit.STANCE_PASSIVE and hp_frac > 0.5 and dnf > 200.0:
 		u.set_stance(Unit.STANCE_AGGRO)
 		u._home = u.position
-	# P1 撤退/保命
-	if hp_frac < 0.35 and dnf < 150.0:
+	# P1 撤退/保命（被一两个小兵贴身追时，血>1/5 则不逃，回身放风筝反打——见 _brave_retaliate）
+	if hp_frac < 0.35 and dnf < 150.0 and not _brave_retaliate(u):
 		if u.melee_mode and u.slot_ready(3):
 			if _ai_cast_slot(u, 3, u.position):   # 先切回弓
 				return
@@ -2370,8 +2417,8 @@ func _brain_gong(u: Unit) -> void:
 	var nf := _nearest_foe_pos(u.position, u.faction)
 	var d_near: float = u.position.distance_to(nf) if nf != Vector2.INF else 1.0e20
 	var melee_110: bool = threat != null and u.position.distance_to(threat.position) <= 110.0
-	# P1 退守/隔挡：残血或被贴脸 → 避战拉开 / 冰墙隔挡
-	if hp_frac <= 0.45 or melee_110:
+	# P1 退守/隔挡：残血或被贴脸 → 避战拉开 / 冰墙隔挡（被一两个小兵追且血>1/5 则不退，回身放招反打）
+	if (hp_frac <= 0.45 or melee_110) and not _brave_retaliate(u):
 		if u.stance != Unit.STANCE_PASSIVE:
 			u.set_stance(Unit.STANCE_PASSIVE)
 		if u.slot_ready(1) and threat != null:
@@ -2411,8 +2458,8 @@ func _brain_song(u: Unit) -> void:
 		return
 	var hpf := u.hp / u.max_hp
 	var melee_near := _foe_within(u.position, 60.0, u.faction)
-	# P1 退守（残血且贴脸）：先自救 Q / R 再撤
-	if hpf < 0.45 and melee_near:
+	# P1 退守（残血且贴脸）：先自救 Q / R 再撤（被一两个小兵追且血>1/5 则不撤，靠 P2/P3 边奶边打）
+	if hpf < 0.45 and melee_near and not _brave_retaliate(u):
 		if u.slot_ready(0):
 			if _ai_cast_slot(u, 0, u.position):
 				return
@@ -2528,6 +2575,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_drag_cur = get_global_mouse_position()
 		if _build_armed != "":
 			overlay.queue_redraw()   # 建造选址：单指拖动只移动虚影，不拖地图
+		elif _ability_armed != "":
+			overlay.queue_redraw()   # 技能瞄准：单指拖动只移动准星，不拖地图（松手才放招）
 		elif _box_mode:
 			overlay.queue_redraw()
 		elif _panning or _drag_from.distance_to(_drag_cur) > 12.0:
@@ -2552,7 +2601,17 @@ func _unhandled_input(event: InputEvent) -> void:
 						_try_place_building(p)
 					return
 				if _ability_armed != "":
-					_cast_armed_at(p)
+					if _touch_mode:
+						# 触屏：按下开始「拖动瞄准」，松手才放招——可先按下技能再拖到合适落点(见 release 分支)
+						_dragging = true
+						_drag_from = p
+						_drag_cur = p
+						_box_mode = false
+						_panning = false
+						_press_ms = Time.get_ticks_msec()
+						overlay.queue_redraw()
+					else:
+						_cast_armed_at(p)
 					return
 				if _amove_armed:
 					_order_amove_at(p, event.shift_pressed)
@@ -2587,6 +2646,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				if _build_armed != "" and _touch_mode:
 					# 触屏：松手 → 在虚影处落地（无效则保留 armed，可重选址或点「取消」）
 					_try_place_building(_drag_cur)
+				elif _ability_armed != "" and _touch_mode:
+					# 触屏：松手 → 在准星(手指当前处)放招（按下后可拖动调整落点/贴边滚屏，松手才结算）
+					_cast_armed_at(p)
 				elif _touch_mode:
 					if _box_mode:
 						if _drag_from.distance_to(p) >= 8.0:
@@ -3557,13 +3619,15 @@ func _nearest_foe_pos(from: Vector2, my_fac: int) -> Vector2:
 ## ───────────────── 托管 AI 通用工具（faction 过滤，绝不命中己方召唤物）─────────────────
 
 ## 最近的敌方『单位』（非位置），可按类别过滤：only_cav=只骑兵 / only_ranged=只远程 / only_melee=非远程(含骑兵)。
-func _nearest_foe_unit(from: Vector2, my_fac: int, only_cav := false, only_ranged := false, only_melee := false) -> Unit:
+func _nearest_foe_unit(from: Vector2, my_fac: int, only_cav := false, only_ranged := false, only_melee := false, chaser: Unit = null) -> Unit:
 	var best: Unit = null
 	var bd := 1.0e20
 	for v in units:
 		if not is_instance_valid(v) or v.faction == my_fac or v.is_building or v.is_resource \
 				or v.garrisoned or v.is_captive or v.hp <= 0.0:
 			continue
+		if chaser != null and chaser.chase_blocked(v):
+			continue   # 追击放弃冷却中：本单位暂不重锁该目标（取次近的）
 		if only_cav and not v.is_cavalry:
 			continue
 		if only_ranged and not v.is_ranged:
@@ -3586,6 +3650,8 @@ func _focus_target(u: Unit, reach: float) -> Unit:
 		if not (is_instance_valid(v) and v.faction != u.faction and not v.is_building \
 				and not v.is_resource and not v.garrisoned and not v.is_captive and v.hp > 0.0):
 			continue
+		if u.chase_blocked(v):
+			continue   # 刚追不上放弃的目标：冷却期内不再集火（免得立刻又锁回去一路追）
 		var d := u.position.distance_to(v.position)
 		if d > reach:
 			continue

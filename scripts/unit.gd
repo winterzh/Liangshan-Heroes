@@ -168,6 +168,15 @@ var _stuck_t := 0.0
 var _last_pos := Vector2.ZERO
 var _combat_cool := 0.0  # 最近交战计时；梁山兵脱战后回血（主场休整）
 var _hit_recent_t := 0.0 # 最近被敌方击中计时（托管磁滞：被打后扩大防区/搜索范围）
+# 追击放弃：出攻击范围连续追同一目标却始终够不着(对方更快/在风筝) → 超时放手，改打就近威胁，
+# 并在 _giveup_t 秒内不再重新锁定该目标(_giveup_id)，免得脑子立刻又把它锁回来一路追死。
+var _chase_t := 0.0        # 当前目标「出范围追击」的累计时长（进入攻击范围即清零）
+var _chase_last_id := 0    # 上一次 _do_chase 处理的目标 id（用于换目标时清零 _chase_t）
+var _giveup_id := 0        # 刚放弃的目标 instance_id
+var _giveup_t := 0.0       # 放弃冷却剩余：>0 时本单位拒绝再锁定 _giveup_id
+const CHASE_GIVEUP := 2.2       # 出范围连续追击上限(秒)：超时仍够不着 → 放弃改打就近
+const CHASE_GIVEUP_FAST := 1.1  # 目标比自己快(根本追不上) → 更早放弃
+const GIVEUP_COOLDOWN := 2.5    # 放弃后多久内不再重锁同一目标
 
 # 程序化动画：行走起伏/摇摆 + 攻击突刺 + 待机呼吸 + 死亡倒地 + 脚步扬尘
 var _stepped := false      # 本物理帧是否实际位移
@@ -244,6 +253,11 @@ func setup(p_key: String, def: Dictionary, p_faction: int, p_battle, p_map: Game
 
 func has_target() -> bool:
 	return _target != null
+
+
+## 该目标当前是否被本单位「放弃冷却」拉黑（刚追不上放手，短时间内别再锁它）。
+func chase_blocked(v: Unit) -> bool:
+	return v != null and _giveup_t > 0.0 and v.get_instance_id() == _giveup_id
 
 
 func is_idle_worker() -> bool:
@@ -763,6 +777,8 @@ func _physics_process(delta: float) -> void:
 	if _buff_glow > 0.0:
 		_buff_glow = maxf(0.0, _buff_glow - delta)
 		queue_redraw()
+	if _giveup_t > 0.0:
+		_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标
 
 	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned):
 		_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击
@@ -864,7 +880,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _do_chase(delta: float) -> void:
+	if _target != null and _target.get_instance_id() != _chase_last_id:
+		_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置
+		_chase_t = 0.0
 	if _target == null:
+		_chase_t = 0.0
 		# 目标没了：官军继续压向聚义厅，梁山兵回驻守点
 		if _resume_amove:
 			_begin_amove(_amove_dest)
@@ -896,6 +916,7 @@ func _do_chase(delta: float) -> void:
 	var d := position.distance_to(_target.position)
 	var reach := atk_range + radius + _target.radius
 	if d <= reach:
+		_chase_t = 0.0   # 已进攻击范围（咬住了）：追击计时清零
 		_face_dir(_target.position - position)
 		if _cd <= 0.0:
 			_attack()
@@ -904,6 +925,20 @@ func _do_chase(delta: float) -> void:
 		_target = null
 		_done_order()
 	else:
+		# 追不上判定：连续追同一目标却始终够不着 → 超时放手（对方更快则更早放弃），
+		# 拉黑该目标 GIVEUP_COOLDOWN 秒并就近重新索敌，免得一路追死/被旁敌砍死。
+		_chase_t += delta
+		var cap: float = CHASE_GIVEUP_FAST if _target.base_speed > base_speed + 1.0 else CHASE_GIVEUP
+		if _chase_t >= cap:
+			_giveup_id = _target.get_instance_id()
+			_giveup_t = GIVEUP_COOLDOWN
+			_target = null
+			_chase_t = 0.0
+			if not passive and not is_worker and stance != STANCE_PASSIVE:
+				_acquire()   # 立刻改打就近威胁（_acquire 会跳过刚拉黑的目标）
+			if _target == null:
+				_done_order()
+			return
 		_repath -= delta
 		if _repath <= 0.0:
 			_repath = 0.4
@@ -1303,7 +1338,7 @@ func _acquire(range_override := -1.0) -> void:
 		# 资源点（金矿/林木）不是攻击目标——否则敌人冲过来一直砍树；
 		# 被绑缚待救者（captive）亦非攻击目标——否则刽子手会在救援前先把人砍死。
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
-				or u.is_resource or u.garrisoned or u.is_captive:
+				or u.is_resource or u.garrisoned or u.is_captive or chase_blocked(u):
 			continue
 		var d: float = position.distance_to(u.position)
 		var limit := range_cap

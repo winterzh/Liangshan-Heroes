@@ -12,7 +12,8 @@ const UNIT_CELLS := {
 	"song_jiang": Vector2i(0, 0), "wu_yong": Vector2i(1, 0),
 	"lin_chong": Vector2i(2, 0), "hua_rong": Vector2i(3, 0),
 	"liang_dao": Vector2i(0, 1), "liang_qiang": Vector2i(1, 1),
-	"liang_gong": Vector2i(2, 1), "liang_banner": Vector2i(3, 1),
+	# liang_gong 不再走 units_sheet 旧格(那张带白光描边)——改回退到新画的逐帧走图(干净)，与马军同路
+	"liang_banner": Vector2i(3, 1),
 	"guan_dao": Vector2i(0, 2), "guan_qiang": Vector2i(1, 2),
 	"guan_gong": Vector2i(2, 2), "guan_qi": Vector2i(3, 2),
 	"gao_qiu": Vector2i(0, 3), "guan_banner": Vector2i(1, 3),
