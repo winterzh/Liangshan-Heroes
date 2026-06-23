@@ -95,7 +95,7 @@ const UNITS := {
 	"luan_tingyu": {"name": "栾廷玉", "hp": 1400, "atk": 56, "cd": 1.0, "range": 30, "speed": 80, "hero": true, "radius": 13, "ability": "luan_smash",
 		"abilities": ["luan_smash", "guan_charge", "guan_valor", "guan_fury"]},
 	"zhu_zhaofeng": {"name": "祝朝奉", "hp": 670, "atk": 28, "cd": 1.4, "range": 28, "speed": 60, "hero": true, "radius": 12},
-	"hu_sanniang": {"name": "扈三娘", "hp": 280, "atk": 42, "cd": 0.8, "range": 26, "speed": 112, "cavalry": true, "hero": true, "radius": 13},
+	"hu_sanniang": {"name": "扈三娘", "hp": 420, "atk": 42, "cd": 0.8, "range": 26, "speed": 112, "cavalry": true, "hero": true, "radius": 13},
 	"zhu_keke": {"name": "祝家庄客", "hp": 95, "atk": 11, "cd": 1.0, "range": 24, "speed": 66},
 	"zhu_gong": {"name": "祝家弓手", "hp": 60, "atk": 9, "cd": 1.4, "range": 180, "speed": 64, "ranged": true, "radius": 10},
 	"zhu_qi": {"name": "祝家马军", "hp": 200, "atk": 13, "cd": 1.0, "range": 26, "speed": 110, "cavalry": true, "radius": 13},
@@ -105,12 +105,12 @@ const UNITS := {
 	"lian_huan_ma": {"name": "连环马", "hp": 300, "atk": 15, "cd": 1.0, "range": 26, "speed": 118, "cavalry": true, "radius": 13},
 	"gou_lian": {"name": "钩镰枪手", "hp": 105, "atk": 11, "cd": 1.1, "range": 30, "speed": 68, "bonus_cav": 3.5},
 	"xu_ning": {"name": "徐宁", "hp": 210, "atk": 20, "cd": 0.85, "range": 30, "speed": 80, "hero": true, "bonus_cav": 2.0, "radius": 13, "ability": "xu_drill"},
-	"hu_yanzhuo": {"name": "呼延灼", "hp": 520, "atk": 53, "cd": 0.8, "range": 30, "speed": 110, "cavalry": true,
+	"hu_yanzhuo": {"name": "呼延灼", "hp": 780, "atk": 53, "cd": 0.8, "range": 30, "speed": 110, "cavalry": true,
 		"hero": true, "aura": "atk", "aura_r": 190, "aura_p": 1.2, "radius": 15, "ability": "hu_whips",
 		"abilities": ["hu_whips", "guan_charge", "guan_valor", "guan_fury"]},
 	"tang_long": {"name": "汤隆", "hp": 160, "atk": 12, "cd": 1.2, "range": 160, "speed": 78, "ranged": true, "hero": true, "radius": 12},
-	"han_tao": {"name": "韩滔", "hp": 300, "atk": 42, "cd": 0.9, "range": 26, "speed": 114, "cavalry": true, "hero": true, "radius": 13},
-	"peng_qi": {"name": "彭玘", "hp": 300, "atk": 42, "cd": 0.9, "range": 26, "speed": 114, "cavalry": true, "hero": true, "radius": 13},
+	"han_tao": {"name": "韩滔", "hp": 450, "atk": 42, "cd": 0.9, "range": 26, "speed": 114, "cavalry": true, "hero": true, "radius": 13},
+	"peng_qi": {"name": "彭玘", "hp": 450, "atk": 42, "cd": 0.9, "range": 26, "speed": 114, "cavalry": true, "hero": true, "radius": 13},
 	"jiangtai": {"name": "中军帅旗", "hp": 1600, "atk": 0, "building": true, "radius": 40},
 
 	# ---- 第5关 可选增强 ----
@@ -141,10 +141,10 @@ const UNITS := {
 	"signboard": {"name": "蒋家招牌", "hp": 800, "atk": 0, "building": true, "radius": 20, "objective": true},
 
 	# ---- 第8关 东昌府·飞石没羽箭（招安张清）----
-	"zhang_qing": {"name": "张清", "hp": 460, "atk": 37, "cd": 1.1, "range": 235, "speed": 96,
+	"zhang_qing": {"name": "张清", "hp": 690, "atk": 37, "cd": 1.1, "range": 235, "speed": 96,
 		"ranged": true, "hero": true, "radius": 12, "ability": "zhang_stone"},
-	"gong_wang": {"name": "龚旺", "hp": 210, "atk": 37, "cd": 0.9, "range": 26, "speed": 110, "cavalry": true, "hero": true, "radius": 13},
-	"ding_desun": {"name": "丁得孙", "hp": 210, "atk": 37, "cd": 0.95, "range": 28, "speed": 80, "hero": true, "radius": 12},
+	"gong_wang": {"name": "龚旺", "hp": 315, "atk": 37, "cd": 0.9, "range": 26, "speed": 110, "cavalry": true, "hero": true, "radius": 13},
+	"ding_desun": {"name": "丁得孙", "hp": 315, "atk": 37, "cd": 0.95, "range": 28, "speed": 80, "hero": true, "radius": 12},
 	"dongchang_yamen": {"name": "东昌府衙", "hp": 1600, "atk": 0, "building": true, "radius": 40},
 
 	# ---- 据守模式·新增地方英雄（曾头市教师·史文恭）----
