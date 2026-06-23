@@ -1654,6 +1654,14 @@ func _auto_micro_weak(u: Unit) -> void:
 		var ad: Dictionary = _abilities.get(String(u.ability_slots[i]["id"]), {})
 		if ad.is_empty():
 			continue
+		# 召唤类（武松驱虎 / 公孙画龙）：与防区/托管档位无关——CD 一好、场上有敌、还有名额就放，
+		# 召唤物自己扑出去打（_summon_hunt_pass）。「拉到战场上」靠召唤物自行索敌，不占英雄走位。
+		var eff: Dictionary = ad.get("effect", {})
+		if String(eff.get("kind", "")) == "summon":
+			if fp != Vector2.INF and _summon_room(u, eff):
+				_begin_cast(u, i, u.position)
+				return
+			continue
 		# 超远支援技能（weak_global，如花荣箭雨/定身、宋江/吴用火攻）弱托管下仍全屏支援，无视防区
 		var reach: float = WEAK_GLOBAL if bool(ad.get("weak_global", false)) else leash
 		# 防区内没有敌人 → 一律不放（含增益/大招）：边上没人不要轻易开大
@@ -1838,7 +1846,6 @@ func _brain_wu(u: Unit) -> void:
 		return
 	var frac := u.hp / u.max_hp
 	var fp := _nearest_foe_pos(u.position, u.faction)
-	var dnf: float = u.position.distance_to(fp) if fp != Vector2.INF else 1.0e20
 	var melee_near := _foe_count_within(u.position, 160.0, u.faction, false, true)
 	var tigers := _count_my_summons(u.faction, "tiger")
 	# P1 残血：有大开大（醉神 20s 物免+结束转血=保命兼反打），否则更低再避战回撤
@@ -1867,8 +1874,8 @@ func _brain_wu(u: Unit) -> void:
 		if melee_near >= 2 or (frac < 0.92 and crowd >= 3):
 			if _ai_cast_slot(u, 3, u.position):
 				return   # 开完大招：下一拍 P2 推进会自动扎进最近人堆（此处别下移动令，免得打断施法）
-	# Q 驱使猛虎（CD 一好、场上 <2 只、视野内有敌就召；summon radius=0，brain 直接放不受附近判定限制）
-	if tigers < 2 and fp != Vector2.INF and dnf <= 640.0:
+	# Q 驱使猛虎（CD 一好、场上 <2 只、地图上有敌就召；不论远近，召出来的虎自行扑向战场）
+	if tigers < 2 and fp != Vector2.INF:
 		if _ai_cast_slot(u, 0, u.position):
 			return
 	# E 双戒刀横扫（削甲+致盲）
@@ -3193,6 +3200,16 @@ func _count_my_summons(owner_fac: int, kind: String) -> int:
 		if is_instance_valid(v) and v.faction == owner_fac and v.is_summon and v.summon_kind == kind and v.hp > 0.0:
 			c += 1
 	return c
+
+
+## 托管放召唤技前的名额检查：虎≤2、龙≤1（按 summon_kind）；其余召唤不限。
+func _summon_room(u: Unit, eff: Dictionary) -> bool:
+	var skind := String(eff.get("summon_kind", ""))
+	if skind == "tiger":
+		return _count_my_summons(u.faction, "tiger") < 2
+	if skind == "dragon":
+		return _count_my_summons(u.faction, "dragon") < 1
+	return true
 
 
 ## 敌方最密集处的落点（AoE/大招落点：宋江火攻/花荣箭雨/林冲 R）。无敌返回 INF；仅 1 敌返回其位置。
@@ -6575,6 +6592,16 @@ func _automicro_selftest() -> void:
 	_brain_wu(wu)
 	var tiger_gate_ok := _pending_has(wu, 0)   # Q 驱使猛虎已入队（gate 修复后才放得出）
 
+	# ───── S1a' 弱托管也要召虎：唯一的敌人放在防区外，弱托管仍应召虎（summon 无视防区/档位）─────
+	wu._cast_t = 0.0
+	wu.ability_slots[0]["cd_t"] = 0.0
+	for f in foes:
+		f.position = park
+	emel.position = wu.position + Vector2(900, 0)   # 远在弱托管防区外
+	_pending_casts.clear()
+	_auto_micro_weak(wu)
+	var weak_tiger_ok := _pending_has(wu, 0)
+
 	# ───── S1b 武松『有大就开』(tactic ③)：被围≥2(无敌将)→开 R；单敌→不开 ─────
 	wu._cast_t = 0.0
 	for i in [0, 1, 2]:
@@ -6739,9 +6766,9 @@ func _automicro_selftest() -> void:
 	_brain_hua(hua)
 	var engage_ok := hua_far_w and hua._state == Unit.ST_AMOVE
 
-	var all_ok := helpers_ok and tiger_gate_ok and wu_ult_ok and lin_focus_ok and hua_blink_ok and retreat_ok and ult_ok and song_mutex_ok and learn_prio_ok and lr_cast_ok and engage_ok
-	print("[automicro] helpers=%s tigergate=%s wuult=%s linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s lrcast(song=%s hua=%s)=%s engage(farW=%s)=%s ALL=%s" % [
-		helpers_ok, tiger_gate_ok, wu_ult_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, all_ok])
+	var all_ok := helpers_ok and tiger_gate_ok and weak_tiger_ok and wu_ult_ok and lin_focus_ok and hua_blink_ok and retreat_ok and ult_ok and song_mutex_ok and learn_prio_ok and lr_cast_ok and engage_ok
+	print("[automicro] helpers=%s tigergate=%s weaktiger=%s wuult=%s linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s lrcast(song=%s hua=%s)=%s engage(farW=%s)=%s ALL=%s" % [
+		helpers_ok, tiger_gate_ok, weak_tiger_ok, wu_ult_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, all_ok])
 
 	# 清理：移除本测试 spawn 的英雄/敌兵/召唤物，避免污染后续 skirmish
 	for u in units.duplicate():

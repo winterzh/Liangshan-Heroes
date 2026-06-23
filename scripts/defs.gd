@@ -371,11 +371,11 @@ const ABILITIES := {
 	"gong_slow": {"name": "罡风·减速光环", "passive": true, "cd": 0.0, "targeted": false, "radius": 165.0, "color": Color("8fd3ff"),
 		"desc": "被动·罡风缠身\n附近官军移速 −10%/−20%/−30%（随等级）",
 		"effect": {"kind": "slow_aura", "slow": 0.10}},
-	# R·画龙点睛：召唤一条金龙参战（血/攻同公孙胜），持续 10 秒
+	# R·画龙点睛：召唤一条金龙参战（血/攻同公孙胜），持续 15 秒
 	"gong_dragon": {"name": "画龙点睛", "cd": 25.0, "targeted": false, "radius": 0.0, "color": Color("ffd24a"),
-		"desc": "大招·点睛唤龙\n召一条远程吐火金龙助战（血/攻为本体 100%/150%/200%）\n吐火带小范围溅射·持续 10 秒",
+		"desc": "大招·点睛唤龙\n召一条远程吐火金龙助战（血/攻为本体 100%/150%/200%）\n吐火带小范围溅射·持续 15 秒",
 		"effect": {"kind": "summon", "unit": "dragon_summon", "count": 1, "summon_kind": "dragon", "copy_caster": true,
-			"copy_mult": [1.0, 1.5, 2.0], "dur": 10.0}},
+			"copy_mult": [1.0, 1.5, 2.0], "dur": 15.0}},
 
 	# ===== 行者·武松 =====
 	# Q·驱使猛虎：召出两只猛虎（血/攻为骑兵基准的 70%/100%/130%，硬编码）
