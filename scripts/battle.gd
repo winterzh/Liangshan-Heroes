@@ -25,8 +25,11 @@ var _autocam_dwell := 0.0              # 当前机位已停留秒数（≥AUTOCA
 var _autocam_target_pos := Vector2.ZERO   # 目标镜头中心(屏幕/iso 空间)
 var _autocam_target_zoom := 1.1        # 目标缩放
 var _autocam_focus := Vector2.INF      # 当前聚焦战团中心(逻辑坐标)，用于跨帧判定战团是否还在
+var _autocam_review_idx := 0           # 检阅模式：当前轮到第几名英雄
+var _autocam_review_unit: Unit = null  # 检阅模式：正在跟拍的英雄（非空=检阅中，每帧跟随其走位）
 const AUTOCAM_DWELL := 2.4             # 每个机位至少停留秒数（>2s，避免切太勤眼花）
 const AUTOCAM_HOT_R := 224.0           # 战团聚合半径(px) ≈ 7 格
+const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（比战斗略近，看清人物）
 
 var units: Array = []
 var selection: Array = []
@@ -1100,11 +1103,14 @@ func _process(_delta: float) -> void:
 ## 触发：交战阶段、场上有敌、全部我方英雄均已托管，且玩家未在手动操控镜头。
 ## 行为：每 ≥AUTOCAM_DWELL 秒重选「最激烈战团」，平滑移镜+缩放对准；同一战团则持续跟随，不乱跳。
 func _autocam_tick(delta: float) -> void:
-	var want := phase == Phase.FIGHT and not get_tree().paused \
-		and enemies_alive() > 0 and _all_heroes_managed()
+	# 全员托管即接管（无敌时检阅我方英雄、有战事时盯最激烈处）；不再要求场上有敌
+	var want := phase == Phase.FIGHT and not get_tree().paused and _all_heroes_managed()
 	if want != _autocam_active:
 		_autocam_active = want
 		_autocam_dwell = 999.0           # 刚接管：立即选点
+		_autocam_focus = Vector2.INF     # 清掉上次的聚焦（未选到目标前不移镜）
+		_autocam_review_unit = null
+		_autocam_target_pos = camera.position   # 安全兜底：先对齐当前视角，避免漂向 (0,0)
 		camera.auto_driving = want
 		if hud != null:
 			hud.set_autocam(want)         # 左下角「自动镜头」提示图标
@@ -1119,6 +1125,13 @@ func _autocam_tick(delta: float) -> void:
 	_autocam_dwell += delta
 	if _autocam_dwell >= AUTOCAM_DWELL:
 		_autocam_repick()
+	# 检阅模式：持续跟拍被检阅的英雄（它会走动），镜头平滑跟随
+	if _autocam_review_unit != null and is_instance_valid(_autocam_review_unit) and _autocam_review_unit.hp > 0.0:
+		_autocam_target_pos = to_screen(_autocam_review_unit.position)
+		_autocam_focus = _autocam_review_unit.position
+	# 还没选到任何目标（_autocam_focus 仍为 INF）→ 保持原地，绝不漂向地图原点(尖角)
+	if _autocam_focus == Vector2.INF:
+		return
 	# 平滑插值到目标机位（时间无关阻尼，掉帧也不突跳）
 	var t := 1.0 - pow(0.0025, delta)
 	camera.position = camera.position.lerp(_autocam_target_pos, t)
@@ -1143,8 +1156,9 @@ func _all_heroes_managed() -> bool:
 func _autocam_repick() -> void:
 	var pts := _combat_points()
 	if pts.is_empty():
-		_autocam_dwell = AUTOCAM_DWELL - 0.5   # 暂无交战：~0.5s 后再试（别每帧全场扫描）
+		_autocam_review()   # 没有交战 → 转去逐个检阅我方英雄
 		return
+	_autocam_review_unit = null   # 进入战斗模式，停止检阅
 	var chosen := _cluster_at(pts, _densest_point(pts))
 	var ch_center: Vector2 = chosen["center"]
 	var ch_heat := float(chosen["heat"])
@@ -1158,6 +1172,25 @@ func _autocam_repick() -> void:
 	_autocam_focus = ch_center
 	_autocam_target_pos = to_screen(ch_center)
 	_autocam_target_zoom = float(chosen["zoom"])
+	_autocam_dwell = 0.0
+
+
+## 检阅模式：无战事时，镜头近景逐个巡视我方英雄（每名停留 ≥AUTOCAM_DWELL 秒，循环）。
+func _autocam_review() -> void:
+	var heroes: Array = []
+	for u in units:
+		if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG \
+				and u.hp > 0.0 and not u.is_building:
+			heroes.append(u)
+	if heroes.is_empty():
+		_autocam_review_unit = null   # 没英雄可看 → 保持原地
+		return
+	_autocam_review_idx = (_autocam_review_idx + 1) % heroes.size()
+	var h: Unit = heroes[_autocam_review_idx]
+	_autocam_review_unit = h
+	_autocam_focus = h.position
+	_autocam_target_pos = to_screen(h.position)
+	_autocam_target_zoom = AUTOCAM_REVIEW_ZOOM
 	_autocam_dwell = 0.0
 
 
@@ -6433,13 +6466,23 @@ func _autocam_selftest() -> void:
 	_autocam_focus = A
 	_autocam_repick()
 	var switch_ok := _autocam_focus.distance_to(B) < 160.0
-	var all_ok := managed_on and pts_ok and pick_B and zoom_ok and gate_ok and switch_ok
-	print("[autocam] managed=%s pts=%d(%s) pickB=%s zoom=%.2f(%s) gate=%s switch=%s ALL=%s" % [
-		managed_on, pts.size(), pts_ok, pick_B, _autocam_target_zoom, zoom_ok, gate_ok, switch_ok, all_ok])
+	# 检阅模式：清掉所有官军 → 无交战 → 应转去近景检阅我方英雄
+	for s2 in spawned:
+		if is_instance_valid(s2) and s2.faction == Unit.FACTION_GUAN:
+			s2.take_damage(s2.hp + 1.0, null)
+	_autocam_review_unit = null
+	_autocam_repick()
+	var review_ok := _autocam_review_unit != null and is_instance_valid(_autocam_review_unit) \
+		and _autocam_review_unit.is_hero and _autocam_review_unit.faction == Unit.FACTION_LIANG \
+		and absf(_autocam_target_zoom - AUTOCAM_REVIEW_ZOOM) < 0.01
+	var all_ok := managed_on and pts_ok and pick_B and zoom_ok and gate_ok and switch_ok and review_ok
+	print("[autocam] managed=%s pts=%d(%s) pickB=%s zoom_ok=%s gate=%s switch=%s review=%s ALL=%s" % [
+		managed_on, pts.size(), pts_ok, pick_B, zoom_ok, gate_ok, switch_ok, review_ok, all_ok])
 	for s in spawned:   # 清理测试单位 + 复位
 		if is_instance_valid(s):
 			s.take_damage(s.hp + 1.0, null)
 	_autocam_focus = Vector2.INF
+	_autocam_review_unit = null
 	ai_friendly = saved_af
 
 

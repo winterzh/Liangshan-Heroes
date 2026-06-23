@@ -861,7 +861,7 @@ func _build_bottom_panel() -> void:
 	_skill_bar = GridContainer.new()
 	_skill_bar.columns = 99
 	_skill_bar.add_theme_constant_override("h_separation", 6)
-	_skill_bar.add_theme_constant_override("v_separation", 4)
+	_skill_bar.add_theme_constant_override("v_separation", 2)
 	_skill_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	hbox.add_child(_skill_bar)
 
@@ -967,6 +967,12 @@ func _rebuild_command_card() -> void:
 		for spec in battle.research_menu(au):
 			var rb := CmdButton.new(); rb.hud = self; rb.spec = spec; rb.compact = true
 			prod.append(rb)
+		# 有驻军 → 出击键并入这张两排网格(同样紧凑)，免得单独成第三排溢出底栏
+		if not au.passengers.is_empty():
+			var eb := CmdButton.new(); eb.hud = self; eb.compact = true
+			eb.spec = {"kind": "eject", "label": "出击 (%d)" % au.passengers.size(),
+				"cost_g": 0, "cost_w": 0, "affordable": true, "sub": "驻军全部冲出", "bld": au}
+			prod.append(eb)
 		_skill_bar.columns = maxi(1, int(ceil(prod.size() / 2.0)))   # 分两排
 		for b in prod:
 			_skill_bar.add_child(b)
@@ -985,8 +991,9 @@ func _rebuild_command_card() -> void:
 		gb.spec = {"kind": "garrison", "label": "驻扎", "cost_g": 0, "cost_w": 0,
 			"affordable": true, "sub": "点亮后左键点选箭楼/聚义厅进驻"}
 		_skill_bar.add_child(gb)
-	# 出击按钮：任何有驻军的己方建筑（箭楼/聚义厅）都显示，让驻军冲出
-	if au.is_building and not au.passengers.is_empty():
+	# 出击按钮：有驻军的非生产建筑（如箭楼）显示在此（生产建筑的出击键已并入上面的两排网格）
+	if au.is_building and not au.passengers.is_empty() \
+			and not (au.setup_def.has("produces") or au.setup_def.has("researches")):
 		var eb := CmdButton.new()
 		eb.hud = self
 		eb.spec = {"kind": "eject", "label": "出击 (%d)" % au.passengers.size(),
@@ -1633,7 +1640,7 @@ class CmdButton extends Control:
 		queue_redraw()
 		var _t: bool = hud != null and hud.touch_ui
 		if compact:
-			custom_minimum_size = Vector2(72, 86) if _t else Vector2(62, 74)   # 生产按钮更小
+			custom_minimum_size = Vector2(74, 68) if _t else Vector2(62, 68)   # 生产按钮更小·矮一点，两排能完整放进底栏
 		else:
 			custom_minimum_size = Vector2(88, 104) if _t else Vector2(76, 88)   # 触屏放大易点
 		# 触屏：长按 ≥400ms 弹说明（替代失效的鼠标 hover）
