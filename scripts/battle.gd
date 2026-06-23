@@ -1658,7 +1658,7 @@ func _auto_micro_weak(u: Unit) -> void:
 		# 召唤物自己扑出去打（_summon_hunt_pass）。「拉到战场上」靠召唤物自行索敌，不占英雄走位。
 		var eff: Dictionary = ad.get("effect", {})
 		if String(eff.get("kind", "")) == "summon":
-			if fp != Vector2.INF and _summon_room(u, eff):
+			if fp != Vector2.INF:   # 召唤不设上限：CD 一好、场上有敌就召（虎/龙自行扑战场）
 				_begin_cast(u, i, u.position)
 				return
 			continue
@@ -1847,7 +1847,6 @@ func _brain_wu(u: Unit) -> void:
 	var frac := u.hp / u.max_hp
 	var fp := _nearest_foe_pos(u.position, u.faction)
 	var melee_near := _foe_count_within(u.position, 160.0, u.faction, false, true)
-	var tigers := _count_my_summons(u.faction, "tiger")
 	# P1 残血：有大开大（醉神 20s 物免+结束转血=保命兼反打），否则更低再避战回撤
 	if frac <= 0.35:
 		if u.slot_ready(3):
@@ -1874,8 +1873,8 @@ func _brain_wu(u: Unit) -> void:
 		if melee_near >= 2 or (frac < 0.92 and crowd >= 3):
 			if _ai_cast_slot(u, 3, u.position):
 				return   # 开完大招：下一拍 P2 推进会自动扎进最近人堆（此处别下移动令，免得打断施法）
-	# Q 驱使猛虎（CD 一好、场上 <2 只、地图上有敌就召；不论远近，召出来的虎自行扑向战场）
-	if tigers < 2 and fp != Vector2.INF:
+	# Q 驱使猛虎（CD 一好、地图上有敌就召；老虎不设上限，召出来的虎自行扑向战场）
+	if fp != Vector2.INF:
 		if _ai_cast_slot(u, 0, u.position):
 			return
 	# E 双戒刀横扫（削甲+致盲）
@@ -3200,16 +3199,6 @@ func _count_my_summons(owner_fac: int, kind: String) -> int:
 		if is_instance_valid(v) and v.faction == owner_fac and v.is_summon and v.summon_kind == kind and v.hp > 0.0:
 			c += 1
 	return c
-
-
-## 托管放召唤技前的名额检查：虎≤2、龙≤1（按 summon_kind）；其余召唤不限。
-func _summon_room(u: Unit, eff: Dictionary) -> bool:
-	var skind := String(eff.get("summon_kind", ""))
-	if skind == "tiger":
-		return _count_my_summons(u.faction, "tiger") < 2
-	if skind == "dragon":
-		return _count_my_summons(u.faction, "dragon") < 1
-	return true
 
 
 ## 敌方最密集处的落点（AoE/大招落点：宋江火攻/花荣箭雨/林冲 R）。无敌返回 INF；仅 1 敌返回其位置。
