@@ -241,16 +241,14 @@ func _show_defense() -> void:
 	afb.add_theme_font_size_override("font_size", 17)
 	afb.text = "🤖 AI友好模式：%s" % ("开" if Campaign.ai_friendly else "关")
 	afb.add_theme_color_override("font_color", Color("ffd866") if Campaign.ai_friendly else Color("9fb0c4"))
-	afb.toggled.connect(func(on: bool) -> void:
-		Campaign.ai_friendly = on
-		afb.text = "🤖 AI友好模式：%s" % ("开" if on else "关")
-		afb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4")))
 	box.add_child(afb)
 
-	# 敌方小兵倍率：可自填（>1，一位小数；默认 3）。出兵时 数量×倍率 向下取整，例：12×1.7=20.4→20。
+	# 敌方小兵倍率：仅 AI友好模式开启时显示。可自填（>1，一位小数；默认 3）。
+	# 出兵时 数量×倍率 向下取整，例：12×1.7=20.4→20。
 	var mrow := HBoxContainer.new()
 	mrow.alignment = BoxContainer.ALIGNMENT_CENTER
 	mrow.add_theme_constant_override("separation", 8)
+	mrow.visible = Campaign.ai_friendly
 	box.add_child(mrow)
 	var mlbl := Label.new()
 	mlbl.text = "敌方小兵倍数 ×"
@@ -268,6 +266,13 @@ func _show_defense() -> void:
 	msp.value_changed.connect(func(v: float) -> void:
 		Campaign.ai_friendly_mult = v)
 	mrow.add_child(msp)
+
+	# 开关切换：更新按钮文案/配色，并显隐倍率行
+	afb.toggled.connect(func(on: bool) -> void:
+		Campaign.ai_friendly = on
+		afb.text = "🤖 AI友好模式：%s" % ("开" if on else "关")
+		afb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4"))
+		mrow.visible = on)
 
 	var aftip := Label.new()
 	aftip.text = "（开启后：敌方小兵数量按倍率增援·英雄不乘；数量×倍率向下取整。全部英雄托管后，左下角点「自动镜头」开始自动观战）"
