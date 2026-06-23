@@ -181,7 +181,10 @@ func _apply_overrides(_b) -> void: pass
 func deploy(b) -> void:
 	_apply_overrides(b)   # 自定义据守：在任何 spawn 前把数值覆盖合并进 b._defs/_abilities
 	hall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)
-	b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)
+	var gm: Unit = b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)
+	# 60 关·史诗：六将全程升级/研究/造兵，默认 6000 储量撑不到后期 → 金矿储量放宽到 18000
+	if gm != null and int(Campaign.defense_waves) >= 60:
+		gm.res_left = 18000.0
 	# 林木资源点（伐木处）
 	for c in [Vector2i(23, 51), Vector2i(25, 52), Vector2i(24, 53), Vector2i(26, 51),
 			Vector2i(10, 37), Vector2i(11, 39), Vector2i(9, 38), Vector2i(33, 40), Vector2i(35, 40)]:

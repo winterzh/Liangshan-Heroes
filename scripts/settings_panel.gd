@@ -55,8 +55,18 @@ func _build() -> void:
 		Settings.game_speed = v
 		if not get_tree().paused:
 			Engine.time_scale = v))
-	_row(p, "英雄托管", _seg([["无", 0], ["弱", 1], ["托管", 2], ["全托管", 3]], Settings.auto_micro_level, func(v) -> void: Settings.auto_micro_level = int(v)))
-	_row(p, "", _note("全托管：驻守战里彻底挂机——喽啰自动采集/建造/修复、自动练兵练将研究、英雄全自动、镜头自动"))
+	# 第四档「全托管」+ 自动镜头仅在驻守战「AI友好模式」下可用；未开则只给前三档（无/弱/强）。
+	var micro_opts: Array = [["无", 0], ["弱", 1], ["强", 2]]
+	var micro_cur: int = int(Settings.auto_micro_level)
+	if Campaign.ai_friendly:
+		micro_opts.append(["全托管", 3])
+	elif micro_cur >= 3:
+		micro_cur = 2   # 关掉AI友好模式后，原「全托管」档在面板上回落显示为「强托管」
+	_row(p, "英雄托管", _seg(micro_opts, micro_cur, func(v) -> void: Settings.auto_micro_level = int(v)))
+	if Campaign.ai_friendly:
+		_row(p, "", _note("全托管：驻守战里彻底挂机——喽啰自动采集/建造/修复、自动练兵练将研究、英雄全自动、镜头自动"))
+	else:
+		_row(p, "", _note("「全托管」与自动镜头需先在驻守战开启「AI友好模式」才可用"))
 	_row(p, "氛围特效", _check(Settings.atmosphere, func(on: bool) -> void: Settings.atmosphere = on))
 	_row(p, "全屏", _check(Screen.is_fullscreen(), func(on: bool) -> void: Screen.set_fullscreen(on)))
 

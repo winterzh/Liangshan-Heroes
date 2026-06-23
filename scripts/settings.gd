@@ -11,7 +11,7 @@ var muted := false
 # —— 游戏 ——
 var game_speed := 1.0       # 战斗节奏倍率：0.5 慢 / 1.0 正常 / 1.5 快
 var atmosphere := true      # 氛围后期（暗角/暖色调）
-var auto_micro_level := 2   # 英雄托管档位：0 无托管(去掉T/触屏按钮、全部取消) / 1 弱托管(只守附近~15格) / 2 托管(全图)
+var auto_micro_level := 2   # 英雄托管档位：0 无托管(去掉T/触屏按钮、全部取消) / 1 弱托管(只守附近~15格) / 2 强托管(全图) / 3 全托管(彻底挂机，仅驻守战AI友好模式下可用)
 # —— 镜头 ——
 var edge_scroll := true     # 屏幕边缘滚屏
 var cam_speed := 1.0        # 镜头平移速度倍率

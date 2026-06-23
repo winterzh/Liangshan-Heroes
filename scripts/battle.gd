@@ -792,6 +792,10 @@ func train_menu(bld: Unit) -> Array:
 		if int(_defs.get(key, {}).get("min_age", 1)) > current_age:
 			continue   # 时代未到 → 不出（英雄/马军需聚义代、攻城需替天行道代）
 		var d: Dictionary = _defs.get(key, {})
+		# 可培养英雄：已在阵中(现役或在产队列)就不再显示按钮——唯有战死后(hero_progress)才显示「复活」
+		if bool(d.get("hero_trainable", false)):
+			if count_alive(Unit.FACTION_LIANG, key) > 0 or _eco_in_queue(key):
+				continue
 		var cg := int(d.get("cost_gold", 0))
 		var cw := int(d.get("cost_wood", 0))
 		# 祭坛复活：战死的可培养英雄在聚义厅以「训练原价」复活，保留等级/技能
@@ -975,6 +979,8 @@ func on_unit_trained(bld: Unit, key: String) -> void:
 			u.order_gather(auto)
 	elif bld.has_rally:
 		u.order_move(bld.rally)
+	elif ai_friendly and int(Settings.auto_micro_level) >= 3 and not u.is_hero:
+		u.order_amove(_eco_frontline())   # 全托管：新练的兵自动 A 移到防御前线（边走边打）
 
 
 ## ---------- 主循环 ----------
@@ -1049,8 +1055,8 @@ func _physics_process(delta: float) -> void:
 	_enemy_ability_pass()
 	_auto_micro_pass()
 	_summon_hunt_pass()
-	if int(Settings.auto_micro_level) >= 3:
-		_auto_economy_pass(delta)   # 全托管：喽啰自动经营 + 自动开战（DEPLOY/FIGHT 均跑）
+	if ai_friendly and int(Settings.auto_micro_level) >= 3:
+		_auto_economy_pass(delta)   # 全托管(仅AI友好模式)：喽啰自动经营 + 自动开战（DEPLOY/FIGHT 均跑）
 	_separation_pass(delta)
 	_decay_lit(delta)
 	if fog:
@@ -1113,7 +1119,7 @@ func _process(_delta: float) -> void:
 		var want := "battle" if enemies_alive() > 0 else "calm"
 		if Music.mood() != want:
 			Music.set_mood(want)
-	if ai_friendly or int(Settings.auto_micro_level) >= 3:
+	if ai_friendly:   # 自动镜头仅在 AI友好模式下生效（含其下的全托管档）
 		_autocam_tick(_delta)
 
 
@@ -1122,7 +1128,7 @@ func _process(_delta: float) -> void:
 ## 行为：每 ≥AUTOCAM_DWELL 秒重选「最激烈战团」，平滑移镜+缩放对准；同一战团则持续跟随，不乱跳。
 func _autocam_tick(delta: float) -> void:
 	# 全员托管 → 左下角出现「自动镜头」按钮；玩家点开后才接管（无敌时检阅我方英雄、有战事时盯最激烈处）
-	var full := int(Settings.auto_micro_level) >= 3   # 全托管：镜头自动接管，无需按钮
+	var full := ai_friendly and int(Settings.auto_micro_level) >= 3   # 全托管(仅AI友好模式)：镜头自动接管，无需按钮
 	var managed := phase == Phase.FIGHT and not get_tree().paused and _all_heroes_managed()
 	if full and managed:
 		_autocam_enabled = true          # 全托管：彻底不用操作，镜头直接自动
@@ -1588,6 +1594,28 @@ func _eco_first_building(key: String) -> Unit:
 	return null
 
 
+## 全托管·防御前线：新练的兵集结处。优先取我方前沿建筑(兵营/箭楼)形心并略向敌方推进；
+## 没有前沿建筑则朝最近的来犯之敌推进；都没有就站在聚义厅前沿。
+func _eco_frontline() -> Vector2:
+	var base := main_base(Unit.FACTION_LIANG)
+	var hp: Vector2 = base.position if (base != null and is_instance_valid(base)) else Vector2.ZERO
+	var sum := Vector2.ZERO
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_building \
+				and not u.is_constructing and (u.key == "barracks" or u.key == "arrow_tower"):
+			sum += u.position
+			n += 1
+	if n > 0:
+		var c: Vector2 = sum / float(n)
+		var dir: Vector2 = c - hp
+		return (c + dir.normalized() * 72.0) if dir.length() > 1.0 else c
+	var foe := _nearest_foe_pos(hp, Unit.FACTION_LIANG)
+	if foe != Vector2.INF:
+		return hp.lerp(foe, 0.45)
+	return hp
+
+
 ## 队列最短的兵营（多兵营并行出兵，别全挤在一座）。
 func _eco_idle_barracks() -> Unit:
 	var best: Unit = null
@@ -1980,7 +2008,7 @@ func _auto_micro_pass() -> void:
 			if is_instance_valid(u) and u.is_hero and u.auto_micro:
 				u.auto_micro = false
 		return
-	if lvl >= 3:   # 全托管：所有英雄自动进入托管，无需手动点「托管军」
+	if lvl >= 3 and ai_friendly:   # 全托管(仅AI友好模式)：所有英雄自动进入托管，无需手动点「托管军」
 		for u in units:
 			if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 and not u.auto_micro:
 				u.auto_micro = true
