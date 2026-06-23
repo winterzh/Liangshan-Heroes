@@ -238,14 +238,15 @@ func _spawn_wave(b, i: int) -> void:
 	var wave: Dictionary = ws[i]
 	b.msg("【第 %d/%d 波】%s" % [i + 1, ws.size(), wave.get("msg", "")], 5.5)
 	var hall_pos: Vector2 = b.map.cell_to_world(HALL)
-	# AI友好模式：非英雄小兵数量×3（英雄/敌将不×3），给托管 AI 更热闹的战场
-	var x3 := Campaign.ai_friendly
+	# AI友好模式：非英雄小兵按倍率增援（英雄/敌将不乘）。数量×倍率向下取整，例 12×1.7=20.4→20。
+	var amp := Campaign.ai_friendly
+	var mult: float = maxf(1.0, float(Campaign.ai_friendly_mult))
 	for g in wave["groups"]:
 		var gate: Vector2i = GATES[clampi(int(g[2]), 0, GATES.size() - 1)]
 		var key := String(g[0])
 		var cnt := int(g[1])
-		if x3 and not _is_hero_key(key):
-			cnt *= 3
+		if amp and not _is_hero_key(key):
+			cnt = int(floor(cnt * mult))
 		var spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)
 		_arm_boss(spawned, _group_rank(g))
 	# 每波附带投石车：射程远、专破箭楼，轮换从一门压上（数量由 _cata_for 决定）

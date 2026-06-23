@@ -70,8 +70,9 @@ var _end_next: Button
 
 var _pause_root: ColorRect
 
-# AI友好模式·自动镜头提示：左下角浮标（镜头被自动接管时显示，轻微呼吸闪烁）
-var _autocam_badge: PanelContainer
+# AI友好模式·自动镜头按钮：左下角（全员托管后出现，点一下开/关自动镜头；开启时呼吸闪烁）
+var _autocam_btn: Button
+var _autocam_on := false
 var _autocam_pulse := 0.0
 
 # 触屏布局：屏上操作栏 + 编队 chips（手机/网页或收到首个触摸事件时启用）
@@ -712,16 +713,21 @@ func _position_tip() -> void:
 
 
 func _process(delta: float) -> void:
-	# 自动镜头浮标：轻微呼吸闪烁（透明度 0.55~1.0），让玩家一眼留意到镜头已自动接管
-	if _autocam_badge != null and _autocam_badge.visible:
-		_autocam_pulse += delta * 3.2
-		_autocam_badge.modulate.a = 0.78 + 0.22 * sin(_autocam_pulse)
+	# 自动镜头按钮：已开启时轻微呼吸闪烁，提示镜头正自动接管；未开启则常亮（提示「点我」）
+	if _autocam_btn != null and _autocam_btn.visible:
+		if _autocam_on:
+			_autocam_pulse += delta * 3.2
+			_autocam_btn.modulate.a = 0.80 + 0.20 * sin(_autocam_pulse)
+		elif _autocam_btn.modulate.a != 1.0:
+			_autocam_btn.modulate.a = 1.0
 	if _tip_panel != null and _tip_panel.visible:
 		_position_tip()   # 面板尺寸在内容变更后一帧才定，逐帧重定位以贴准按钮上方
 	if touch_ui:
 		_refresh_touch_controls()
 		_refresh_skill_rail()
 	_refresh_hero_bar()   # 英雄快切栏：桌面与触屏都要刷新（含驻军英雄出击标记）
+	if battle != null:
+		_rebuild_command_card()   # 逐帧按签名比对：生产/研究队列一变(下单/完成)即刷新命令卡与队列栏，无需重选建筑
 	# 桌面「出击」浮动键：选中有驻军的己方建筑时显示（命令卡可能挤不下，这个一定看得见）
 	if _eject_float != null:
 		var au = battle.active_unit() if battle != null else null
@@ -1328,39 +1334,46 @@ func set_top(text: String) -> void:
 	top_label.text = text
 
 
-## AI友好模式·自动镜头浮标：左下角小牌「🎥 自动镜头」（命令面板上方），呼吸闪烁提示镜头已自动接管。
+## AI友好模式·自动镜头按钮：左下角（命令面板上方）。全员托管后出现，点一下开/关自动镜头。
 func _build_autocam_badge() -> void:
-	_autocam_badge = PanelContainer.new()
-	_autocam_badge.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	_autocam_badge.offset_left = 12.0
-	_autocam_badge.offset_bottom = -(RTSCamera.PANEL_H + 12.0)   # 浮在底部指挥面板之上
-	_autocam_badge.offset_top = _autocam_badge.offset_bottom - 34.0
-	_autocam_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_autocam_badge.visible = false
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0.07, 0.12, 0.16, 0.86)
-	sb.border_color = Color("5fd0e0")
-	sb.set_border_width_all(2)
-	sb.set_corner_radius_all(8)
-	sb.content_margin_left = 12
-	sb.content_margin_right = 12
-	sb.content_margin_top = 5
-	sb.content_margin_bottom = 5
-	_autocam_badge.add_theme_stylebox_override("panel", sb)
-	var lbl := Label.new()
-	lbl.text = "🎥 自动镜头"
-	lbl.add_theme_font_size_override("font_size", 16)
-	lbl.add_theme_color_override("font_color", Color(0.74, 0.94, 1.0))
-	_autocam_badge.add_child(lbl)
-	add_child(_autocam_badge)
+	_autocam_btn = Button.new()
+	_autocam_btn.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	_autocam_btn.offset_left = 12.0
+	_autocam_btn.offset_right = 12.0 + 156.0
+	_autocam_btn.offset_bottom = -(RTSCamera.PANEL_H + 12.0)   # 浮在底部指挥面板之上
+	_autocam_btn.offset_top = _autocam_btn.offset_bottom - 40.0
+	_autocam_btn.focus_mode = Control.FOCUS_NONE
+	_autocam_btn.add_theme_font_size_override("font_size", 16)
+	_autocam_btn.visible = false
+	for st in ["normal", "hover", "pressed"]:
+		var sb := StyleBoxFlat.new()
+		sb.bg_color = Color(0.07, 0.12, 0.16, 0.92) if st == "normal" else Color(0.12, 0.20, 0.26, 0.96)
+		sb.border_color = Color("5fd0e0")
+		sb.set_border_width_all(2)
+		sb.set_corner_radius_all(8)
+		_autocam_btn.add_theme_stylebox_override(st, sb)
+	_autocam_btn.add_theme_color_override("font_color", Color(0.74, 0.94, 1.0))
+	_autocam_btn.add_theme_color_override("font_hover_color", Color(0.88, 0.98, 1.0))
+	_autocam_btn.text = "🎥 自动镜头"
+	_autocam_btn.pressed.connect(func() -> void:
+		if battle != null and battle.has_method("toggle_autocam"):
+			battle.toggle_autocam())
+	add_child(_autocam_btn)
 
 
-## 显示/隐藏自动镜头浮标（battle 在自动镜头接管/释放时调用）。
-func set_autocam(on: bool) -> void:
-	if _autocam_badge != null:
-		_autocam_badge.visible = on
-		if on:
-			_autocam_badge.modulate.a = 1.0
+## 自动镜头按钮：show=全员托管才显示；on=当前是否已开启（开启时换文案+高亮，并在 _process 呼吸闪烁）。
+func set_autocam_button(show: bool, on: bool) -> void:
+	if _autocam_btn == null:
+		return
+	_autocam_on = on
+	_autocam_btn.visible = show
+	if not show:
+		return
+	_autocam_btn.text = "🎬 自动镜头·开" if on else "🎥 自动镜头"
+	_autocam_btn.add_theme_color_override("font_color",
+		Color(0.78, 1.0, 0.84) if on else Color(0.74, 0.94, 1.0))
+	if not on:
+		_autocam_btn.modulate.a = 1.0
 
 
 func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "") -> void:

@@ -20,6 +20,7 @@ var overlay: Node2D
 
 # AI友好模式（驻守战）：开则敌方小兵×3(在 skirmish 出兵处生效) + 全员托管后自动镜头巡战场
 var ai_friendly := false
+var _autocam_enabled := false          # 玩家是否点了「自动镜头」按钮开启（全托管后左下角出现该按钮）
 var _autocam_active := false           # 当前是否正由自动镜头接管
 var _autocam_dwell := 0.0              # 当前机位已停留秒数（≥AUTOCAM_DWELL 才重选）
 var _autocam_target_pos := Vector2.ZERO   # 目标镜头中心(屏幕/iso 空间)
@@ -1103,8 +1104,13 @@ func _process(_delta: float) -> void:
 ## 触发：交战阶段、场上有敌、全部我方英雄均已托管，且玩家未在手动操控镜头。
 ## 行为：每 ≥AUTOCAM_DWELL 秒重选「最激烈战团」，平滑移镜+缩放对准；同一战团则持续跟随，不乱跳。
 func _autocam_tick(delta: float) -> void:
-	# 全员托管即接管（无敌时检阅我方英雄、有战事时盯最激烈处）；不再要求场上有敌
-	var want := phase == Phase.FIGHT and not get_tree().paused and _all_heroes_managed()
+	# 全员托管 → 左下角出现「自动镜头」按钮；玩家点开后才接管（无敌时检阅我方英雄、有战事时盯最激烈处）
+	var managed := phase == Phase.FIGHT and not get_tree().paused and _all_heroes_managed()
+	if not managed:
+		_autocam_enabled = false         # 失去全托管（取消某英雄托管等）→ 收回自动镜头意图
+	if hud != null:
+		hud.set_autocam_button(managed, _autocam_enabled)   # 按钮：全托管才显示，反映开关态
+	var want := managed and _autocam_enabled
 	if want != _autocam_active:
 		_autocam_active = want
 		_autocam_dwell = 999.0           # 刚接管：立即选点
@@ -1112,8 +1118,6 @@ func _autocam_tick(delta: float) -> void:
 		_autocam_review_unit = null
 		_autocam_target_pos = camera.position   # 安全兜底：先对齐当前视角，避免漂向 (0,0)
 		camera.auto_driving = want
-		if hud != null:
-			hud.set_autocam(want)         # 左下角「自动镜头」提示图标
 		if not want:
 			return
 	if not _autocam_active:
@@ -1136,6 +1140,13 @@ func _autocam_tick(delta: float) -> void:
 	var t := 1.0 - pow(0.0025, delta)
 	camera.position = camera.position.lerp(_autocam_target_pos, t)
 	camera.zoom = camera.zoom.lerp(Vector2.ONE * _autocam_target_zoom, t)
+
+
+## 左下角「自动镜头」按钮的点击回调：开/关自动镜头（仅全托管时按钮可见）。
+func toggle_autocam() -> void:
+	_autocam_enabled = not _autocam_enabled
+	if hud != null:
+		hud.show_message("自动镜头：%s" % ("开" if _autocam_enabled else "关"), 1.2)
 
 
 ## 是否「全部我方英雄都在托管」（且至少有一名存活英雄）。
@@ -6475,9 +6486,21 @@ func _autocam_selftest() -> void:
 	var review_ok := _autocam_review_unit != null and is_instance_valid(_autocam_review_unit) \
 		and _autocam_review_unit.is_hero and _autocam_review_unit.faction == Unit.FACTION_LIANG \
 		and absf(_autocam_target_zoom - AUTOCAM_REVIEW_ZOOM) < 0.01
-	var all_ok := managed_on and pts_ok and pick_B and zoom_ok and gate_ok and switch_ok and review_ok
-	print("[autocam] managed=%s pts=%d(%s) pickB=%s zoom_ok=%s gate=%s switch=%s review=%s ALL=%s" % [
-		managed_on, pts.size(), pts_ok, pick_B, zoom_ok, gate_ok, switch_ok, review_ok, all_ok])
+	# 按钮流程：全托管下「点按钮」→ 接管；再点 → 释放（不点不接管）
+	_autocam_enabled = false
+	_autocam_active = false
+	_autocam_tick(0.016)
+	var btn_idle_ok := not _autocam_active        # 没点按钮 → 不接管
+	toggle_autocam()
+	_autocam_tick(0.016)
+	var btn_on_ok := _autocam_enabled and _autocam_active
+	toggle_autocam()
+	_autocam_tick(0.016)
+	var btn_off_ok := (not _autocam_enabled) and (not _autocam_active)
+	var btn_ok := btn_idle_ok and btn_on_ok and btn_off_ok
+	var all_ok := managed_on and pts_ok and pick_B and zoom_ok and gate_ok and switch_ok and review_ok and btn_ok
+	print("[autocam] managed=%s pts=%d(%s) pickB=%s zoom_ok=%s gate=%s switch=%s review=%s btn=%s ALL=%s" % [
+		managed_on, pts.size(), pts_ok, pick_B, zoom_ok, gate_ok, switch_ok, review_ok, btn_ok, all_ok])
 	for s in spawned:   # 清理测试单位 + 复位
 		if is_instance_valid(s):
 			s.take_damage(s.hp + 1.0, null)

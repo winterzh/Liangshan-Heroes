@@ -247,10 +247,34 @@ func _show_defense() -> void:
 		afb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4")))
 	box.add_child(afb)
 
+	# 敌方小兵倍率：可自填（>1，一位小数；默认 3）。出兵时 数量×倍率 向下取整，例：12×1.7=20.4→20。
+	var mrow := HBoxContainer.new()
+	mrow.alignment = BoxContainer.ALIGNMENT_CENTER
+	mrow.add_theme_constant_override("separation", 8)
+	box.add_child(mrow)
+	var mlbl := Label.new()
+	mlbl.text = "敌方小兵倍数 ×"
+	mlbl.add_theme_font_size_override("font_size", 16)
+	mlbl.add_theme_color_override("font_color", Color("c8b890"))
+	mrow.add_child(mlbl)
+	var msp := SpinBox.new()
+	msp.min_value = 1.1          # 必须大于 1
+	msp.max_value = 10.0
+	msp.step = 0.1               # 最多一位小数
+	msp.value = Campaign.ai_friendly_mult
+	msp.custom_minimum_size = Vector2(112, 40)
+	msp.update_on_text_changed = true
+	msp.add_theme_font_size_override("font_size", 18)
+	msp.value_changed.connect(func(v: float) -> void:
+		Campaign.ai_friendly_mult = v)
+	mrow.add_child(msp)
+
 	var aftip := Label.new()
-	aftip.text = "（开启后：敌方小兵数量×3·英雄不变；当全部英雄进入托管，镜头自动巡视战场）"
+	aftip.text = "（开启后：敌方小兵数量按倍率增援·英雄不乘；数量×倍率向下取整。全部英雄托管后，左下角点「自动镜头」开始自动观战）"
 	aftip.add_theme_font_size_override("font_size", 13)
 	aftip.add_theme_color_override("font_color", Color("7c8a9c"))
+	aftip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	aftip.custom_minimum_size = Vector2(520, 0)
 	aftip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(aftip)
 
