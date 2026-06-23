@@ -64,11 +64,10 @@ var _waves_box: VBoxContainer
 var _intro_box: VBoxContainer
 var _place_keys: Array = []        # 可放置单位 key（按名）
 var _combat_keys: Array = []       # 波次可用兵种 key
-# 单位/技能编辑器状态
-var _ue_root: ColorRect
-var _ue_list: VBoxContainer
-var _ue_form: VBoxContainer
-var _ue_sel := ""
+# 单位/技能编辑器状态（双击「用到的」单位 → 上下文编辑，只覆盖本场景）
+var _eu_root: Control
+var _eu_form: VBoxContainer
+var _eu_key := ""
 
 
 func _ready() -> void:
@@ -188,9 +187,6 @@ func _build() -> void:
 		_flush_terrain()
 		var p := ScenarioStore.save(_cfg)
 		_show_toast("已保存：" + p if p != "" else "保存失败")))
-	var ueb := _btn("🛠 单位/技能", _ue_open)
-	ueb.add_theme_color_override("font_color", Color("87cefa"))
-	top.add_child(ueb)
 	var play := _btn("▶ 试玩", _playtest)
 	play.add_theme_color_override("font_color", Color("9fe06f"))
 	top.add_child(play)
@@ -246,10 +242,12 @@ func _build_tools(left: VBoxContainer) -> void:
 	hint.text = "工具"
 	hint.add_theme_color_override("font_color", Color("ffd866"))
 	left.add_child(hint)
-	for t in [["刷地形", "terrain"], ["放单位", "unit"], ["放装饰", "decor"], ["放增援", "reinforce"], ["出兵口", "gate"], ["镜头起点", "camera"], ["擦除", "erase"]]:
+	for t in [["选择/改单位", "select"], ["刷地形", "terrain"], ["放单位", "unit"], ["放装饰", "decor"], ["放增援", "reinforce"], ["出兵口", "gate"], ["镜头起点", "camera"], ["擦除", "erase"]]:
 		var key: String = t[1]
 		var b := _btn(t[0], func() -> void: tool = key; _refresh_tool_panel())
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if key == "select":
+			b.add_theme_color_override("font_color", Color("87cefa"))
 		left.add_child(b)
 	left.add_child(HSeparator.new())
 	_tool_panel = VBoxContainer.new()
@@ -271,6 +269,13 @@ func _refresh_tool_panel() -> void:
 	for c in _tool_panel.get_children():
 		c.queue_free()
 	match tool:
+		"select":
+			var l := Label.new(); l.text = "选择 / 改单位"; l.add_theme_color_override("font_color", Color("87cefa")); _tool_panel.add_child(l)
+			var tip := Label.new()
+			tip.text = "双击地图上已放置的单位\n→ 编辑它的属性 / 技能。\n右栏波次里点单位旁「✎」同理。\n只有改过的单位会被写入本关，\n其余单位保持默认。改动仅本图生效。"
+			tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			tip.add_theme_font_size_override("font_size", 12); tip.add_theme_color_override("font_color", Color("b8c4d4"))
+			_tool_panel.add_child(tip)
 		"terrain":
 			var l := Label.new(); l.text = "地形"; l.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(l)
 			var grid := GridContainer.new(); grid.columns = 2; _tool_panel.add_child(grid)
@@ -447,6 +452,9 @@ func _rebuild_waves() -> void:
 			var gid := gi
 			gr.add_child(_key_opt(_combat_keys, String(grp.get("key", _combat_keys[0] if not _combat_keys.is_empty() else "")), func(k: String) -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["key"] = k))
+			var gkey := String(grp.get("key", ""))
+			var eb := _btn("✎", func() -> void: _edit_unit(gkey))   # 改这个兵种的属性/技能(仅本关)
+			eb.tooltip_text = "编辑该兵种属性/技能（仅本关）"; gr.add_child(eb)
 			gr.add_child(_mini_spin("×", int(grp.get("n", 4)), 1, 40, func(v: int) -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["n"] = v))
 			gr.add_child(_gate_opt(String(grp.get("gate", "E")), func(g: String) -> void:
@@ -610,106 +618,77 @@ func _load_named(nm: String, root: Control) -> void:
 		_cfg = d; _rebuild_map_model(); root.queue_free(); _build()
 
 
-## ---------- 单位 / 技能编辑器（仅本场景生效，魔兽编辑器式对象编辑）----------
+## ---------- 单位 / 技能编辑（双击「用到的」单位上下文编辑，仅本场景生效）----------
 
-func _ue_open() -> void:
-	var pw := _popup_window("单位 / 技能编辑（改动仅对本场景生效）", 920, 640)
-	_ue_root = pw["root"]
-	pw["xbtn"].pressed.connect(_ue_after_close)   # 关窗后刷新主界面下拉(带上新单位)
-	var body := HBoxContainer.new(); body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	body.add_theme_constant_override("separation", 10)
-	(pw["body"] as Control).add_child(body)
-	# 左：单位列表
-	var leftv := VBoxContainer.new(); leftv.custom_minimum_size = Vector2(236, 0)
-	body.add_child(leftv)
-	leftv.add_child(_btn("＋ 新建单位（复制选中）", _ue_new_unit))
-	var lscroll := ScrollContainer.new(); lscroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	lscroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; leftv.add_child(lscroll)
-	_ue_list = VBoxContainer.new(); _ue_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL; lscroll.add_child(_ue_list)
-	# 右：属性表
-	var rscroll := ScrollContainer.new(); rscroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	rscroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; rscroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	body.add_child(rscroll)
-	_ue_form = VBoxContainer.new(); _ue_form.size_flags_horizontal = Control.SIZE_EXPAND_FILL; rscroll.add_child(_ue_form)
-	if _ue_sel == "" or not _place_keys.has(_ue_sel):
-		_ue_sel = String(_place_keys[0]) if not _place_keys.is_empty() else ""
-	_ue_rebuild_list()
-	_ue_rebuild_form()
+## 双击地图上某格 → 找到该格的布兵/增援单位 → 编辑它。
+func _edit_unit_at(cell: Vector2i) -> void:
+	for e in _cfg.get("deploy", []):
+		var c = e.get("cell", [0, 0])
+		if int(c[0]) == cell.x and int(c[1]) == cell.y:
+			_edit_unit(String(e.get("key", "")))
+			return
+	for wave in _cfg.get("waves", []):
+		if wave.has("reinforce"):
+			for e in wave["reinforce"].get("units", []):
+				var rc = e.get("cell", [0, 0])
+				if int(rc[0]) == cell.x and int(rc[1]) == cell.y:
+					_edit_unit(String(e.get("key", "")))
+					return
+	_show_toast("这一格没有单位——切到「放单位」先摆一个，或双击已放的单位")
 
 
-## 单位编辑窗关闭后：刷新可放单位列表并重建主界面下拉（✕ 已销毁窗本身）。
-func _ue_after_close() -> void:
-	_ue_root = null
-	_refresh_unit_keys()
-	_build()
-
-
-func _ue_select(k: String) -> void:
-	_ue_sel = k
-	_ue_rebuild_list(); _ue_rebuild_form()
-
-
-func _ue_rebuild_list() -> void:
-	for c in _ue_list.get_children():
-		c.queue_free()
-	var custom: Array = _cfg.get("units", {}).keys(); custom.sort()
-	var bases: Array = []
-	for k in Defs.UNITS:
-		if not custom.has(k):
-			bases.append(k)
-	bases.sort()
-	if not custom.is_empty():
-		var h := Label.new(); h.text = "★ 本场景改过/自定义"; h.add_theme_color_override("font_color", Color("9fe06f")); _ue_list.add_child(h)
-		for k in custom:
-			_ue_list.add_child(_ue_list_btn(String(k), true))
-	var h2 := Label.new(); h2.text = "全部单位"; h2.add_theme_color_override("font_color", Color("9fd0e8")); _ue_list.add_child(h2)
-	for k in bases:
-		_ue_list.add_child(_ue_list_btn(String(k), false))
-
-
-func _ue_list_btn(k: String, custom: bool) -> Button:
-	var b := _btn(("✎ " if custom else "  ") + _uname(k), func() -> void: _ue_select(k))
-	b.alignment = HORIZONTAL_ALIGNMENT_LEFT; b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	if k == _ue_sel:
-		b.add_theme_color_override("font_color", Color("ffd866"))
-	return b
-
-
-func _ue_rebuild_form() -> void:
-	for c in _ue_form.get_children():
-		c.queue_free()
-	if _ue_sel == "":
+## 打开某单位的属性/技能编辑浮窗（只有改了才会写进本场景，其余单位保持默认）。
+func _edit_unit(key: String) -> void:
+	if key == "":
 		return
-	var ttl := Label.new(); ttl.text = "%s　〔key: %s〕" % [_uname(_ue_sel), _ue_sel]
-	ttl.add_theme_font_size_override("font_size", 18); ttl.add_theme_color_override("font_color", Color("ffe9a8"))
-	_ue_form.add_child(ttl)
-	var key := _ue_sel
+	_eu_key = key
+	var pw := _popup_window("编辑单位：%s (%s)" % [_uname(key), key], 560, 640)
+	_eu_root = pw["root"]
+	var top := HBoxContainer.new(); (pw["body"] as Control).add_child(top)
+	var hint := Label.new(); hint.text = "改动仅对本关生效"; hint.add_theme_color_override("font_color", Color("9fe06f"))
+	hint.add_theme_font_size_override("font_size", 12); hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(hint)
+	top.add_child(_btn("复制为新单位", _eu_clone))
+	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	(pw["body"] as Control).add_child(sc)
+	_eu_form = VBoxContainer.new(); _eu_form.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(_eu_form)
+	_eu_rebuild_form()
+
+
+## 重建编辑浮窗的属性表 + 技能入口（技能编辑窗关闭后刷新用）。
+func _eu_rebuild_form() -> void:
+	if _eu_form == null or not is_instance_valid(_eu_form):
+		return
+	for c in _eu_form.get_children():
+		c.queue_free()
+	var key := _eu_key
+	if key == "":
+		return
 	for spec in UNIT_SCHEMA:
-		_ue_form.add_child(_prop_row(_udef(key), func(fk, v) -> void: _unit_set(key, fk, v), spec))
-	# 技能编辑入口
-	_ue_form.add_child(_head("技能（点「编辑」可改全部参数/新建）"))
+		_eu_form.add_child(_prop_row(_udef(key), func(fk, v) -> void: _unit_set(key, fk, v), spec))
+	_eu_form.add_child(_head("技能（点「编辑」改全部参数）"))
 	var d := _udef(key)
 	var ab: Array = d.get("abilities", [])
 	if ab.is_empty() and String(d.get("ability", "")) != "":
 		ab = [d["ability"]]
+	if ab.is_empty():
+		var none := Label.new(); none.text = "（该单位无技能）"; none.add_theme_color_override("font_color", Color("9aa3ad")); _eu_form.add_child(none)
 	for aid in ab:
 		var aid2 := String(aid)
 		var hr := HBoxContainer.new()
-		var al := Label.new(); al.text = "  " + _aname(aid2) + "　(" + aid2 + ")"; al.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hr.add_child(al)
+		var al := Label.new(); al.text = "  " + _aname(aid2) + "  (" + aid2 + ")"; al.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hr.add_child(al)
 		hr.add_child(_btn("编辑", func() -> void: _ae_open(aid2)))
-		_ue_form.add_child(hr)
+		_eu_form.add_child(hr)
 
 
-## 写入单位字段(写时才固化为本场景 override)。改名时刷新左列标签(左列与属性表不同容器，不丢焦点)。
+## 写入单位字段（写时才固化为本场景 override；不重建表，免丢输入焦点）。
 func _unit_set(key: String, fk: String, v) -> void:
 	_spec_set(_edit_unit_dict(key), fk, v)
-	if fk == "name":
-		_ue_rebuild_list()
 
 
-func _ue_new_unit() -> void:
-	var src := _ue_sel
+## 把当前单位复制成一个新单位（借用其美术），并切到新单位继续编辑；新单位可在「放单位」里选用。
+func _eu_clone() -> void:
+	var src := _eu_key
 	var base: Dictionary = _udef(src).duplicate(true)
 	if base.is_empty():
 		base = {"name": "新单位", "hp": 100, "atk": 10, "cd": 1.0, "range": 26, "speed": 72, "radius": 11}
@@ -721,20 +700,22 @@ func _ue_new_unit() -> void:
 	if not _cfg.has("units"):
 		_cfg["units"] = {}
 	_cfg["units"][nk] = base
-	if src != "":   # 借用源单位的贴图/动画，新单位不至于是占位方块
+	if src != "":
 		if not _cfg.has("sprite_alias"):
 			_cfg["sprite_alias"] = {}
 		_cfg["sprite_alias"][nk] = src
 	_refresh_unit_keys()
-	_ue_sel = nk
-	_ue_rebuild_list(); _ue_rebuild_form()
-	_show_toast("新建 %s（借用 %s 的美术，可改 key/数值/技能）" % [nk, _uname(src)])
+	if _eu_root != null and is_instance_valid(_eu_root):
+		_eu_root.queue_free()
+	_build()                # 刷新「放单位」下拉，带上新单位
+	_edit_unit(nk)
+	_show_toast("已复制为 %s（借用 %s 美术），可在「放单位」里摆放" % [nk, _uname(src)])
 
 
 func _ae_open(aid: String) -> void:
-	# 叠在单位编辑器窗之上的小弹窗（背景半透明，仍能看见底下的单位属性）
-	var pw := _popup_window("技能编辑：%s (%s)" % [_aname(aid), aid], 560, 560, _ue_root)
-	pw["xbtn"].pressed.connect(_ue_rebuild_form)   # 关闭后刷新单位窗里的技能入口
+	# 叠在单位编辑窗之上的小弹窗（背景半透明，仍能看见底下的单位属性）
+	var pw := _popup_window("技能编辑：%s (%s)" % [_aname(aid), aid], 560, 560, _eu_root)
+	pw["xbtn"].pressed.connect(_eu_rebuild_form)   # 关闭后刷新单位窗里的技能入口
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -778,7 +759,7 @@ func _prop_row(read_d: Dictionary, on_set: Callable, spec: Array) -> HBoxContain
 	h.add_child(l)
 	var cur = _spec_get(read_d, key)
 	if typ == "bool":
-		var cb := CheckBox.new(); cb.button_pressed = bool(cur)
+		var cb := CheckBox.new(); cb.button_pressed = (cur == true)   # cur 可能为 null：勿用 bool(null)(会报错)
 		cb.toggled.connect(func(v: bool) -> void: on_set.call(key, v))
 		h.add_child(cb)
 	elif typ == "int" or typ == "float":
@@ -798,10 +779,11 @@ func _prop_row(read_d: Dictionary, on_set: Callable, spec: Array) -> HBoxContain
 		h.add_child(le2)
 	elif typ.begins_with("enum:"):
 		var opts := typ.substr(5).split("|")
+		var curs := String(cur) if cur != null else ""   # cur 可能为 null：勿用 String(null)
 		var o := OptionButton.new(); o.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		for i in range(opts.size()):
 			o.add_item(opts[i] if opts[i] != "" else "(无)", i)
-			if String(cur) == opts[i]:
+			if curs == opts[i]:
 				o.select(i)
 		o.item_selected.connect(func(idx: int) -> void: on_set.call(key, String(opts[idx])))
 		h.add_child(o)
@@ -1011,8 +993,12 @@ class MapCanvas extends Control:
 				_panning = e.pressed
 			elif e.button_index == MOUSE_BUTTON_LEFT:
 				if e.pressed:
-					_painting = true
-					ed.click_cell(_cell_at(e.position))
+					if ed.tool == "select":
+						if e.double_click:
+							ed._edit_unit_at(_cell_at(e.position))   # 双击已放置单位 → 编辑其属性/技能
+					else:
+						_painting = true
+						ed.click_cell(_cell_at(e.position))
 				else:
 					_painting = false
 		elif e is InputEventMouseMotion:
