@@ -24,6 +24,9 @@ var show_cooldown := true    # 技能冷却倒计时数字
 
 func _ready() -> void:
 	_load()
+	var am := OS.get_environment("AUTO_MICRO")   # 测试钩子：强制托管档位（0/1/2/3）
+	if am != "":
+		auto_micro_level = clampi(int(am), 0, 3)
 	apply_audio()
 
 

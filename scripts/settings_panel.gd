@@ -55,7 +55,8 @@ func _build() -> void:
 		Settings.game_speed = v
 		if not get_tree().paused:
 			Engine.time_scale = v))
-	_row(p, "英雄托管", _seg([["无", 0], ["弱(守附近)", 1], ["托管", 2]], Settings.auto_micro_level, func(v) -> void: Settings.auto_micro_level = int(v)))
+	_row(p, "英雄托管", _seg([["无", 0], ["弱", 1], ["托管", 2], ["全托管", 3]], Settings.auto_micro_level, func(v) -> void: Settings.auto_micro_level = int(v)))
+	_row(p, "", _note("全托管：驻守战里彻底挂机——喽啰自动采集/建造/修复、自动练兵练将研究、英雄全自动、镜头自动"))
 	_row(p, "氛围特效", _check(Settings.atmosphere, func(on: bool) -> void: Settings.atmosphere = on))
 	_row(p, "全屏", _check(Screen.is_fullscreen(), func(on: bool) -> void: Screen.set_fullscreen(on)))
 
@@ -147,6 +148,17 @@ func _slider(value: float, lo: float, hi: float, cb: Callable) -> Control:
 		vl.text = ("%d%%" % int(round(v * 100.0))) if hi <= 1.0 else ("%.1f×" % v)
 		cb.call(v))
 	return hb
+
+
+## 灰色小字说明（占控件位，配合空 label 行做整行提示）
+func _note(text: String) -> Control:
+	var l := Label.new()
+	l.text = text
+	l.add_theme_font_size_override("font_size", 12)
+	l.add_theme_color_override("font_color", Color("7c8a9c"))
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.custom_minimum_size = Vector2(360, 0)
+	return l
 
 
 func _check(value: bool, cb: Callable) -> Control:

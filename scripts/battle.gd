@@ -32,6 +32,21 @@ const AUTOCAM_DWELL := 2.4             # 每个机位至少停留秒数（>2s，
 const AUTOCAM_HOT_R := 224.0           # 战团聚合半径(px) ≈ 7 格
 const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（比战斗略近，看清人物）
 
+# 全托管经济 AI（auto_micro_level>=3）：喽啰自动采集/建造/修复 + 自动练兵练将研究 + 自动开战
+# 策略（用户定）：优先出齐英雄(AoE 打 3× 群)，再升级基地/造兵/科技/箭楼。
+var _eco_t := 0.0
+var _eco_deploy_t := 0.0
+var _eco_started := false              # 是否已自动开战
+const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
+const ECO_BOOT_WORKERS := 6           # 出英雄阶段的最低农民数（够采金供英雄即可，别挤人口）
+const ECO_PRE_HERO_POP := 38          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 农民）
+const ECO_WCAP := 10                   # 出齐英雄后的农民目标数
+const ECO_GOLD_MINERS := 4            # 金矿工目标（贴仓库·采矿效率 max），其余伐木
+const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农民）
+# 经济建筑(仓库/民居/集市)堆在金矿后方(安全角，远离东侧出兵口)护住人口；兵营/箭楼在聚义厅前沿御敌。
+const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"], ["house", 8, "gold"], ["arrow_tower", 7, "hall"]]
+const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng", "li_kui", "wu_song"]
+
 var units: Array = []
 var selection: Array = []
 var phase := Phase.INTRO
@@ -1034,6 +1049,8 @@ func _physics_process(delta: float) -> void:
 	_enemy_ability_pass()
 	_auto_micro_pass()
 	_summon_hunt_pass()
+	if int(Settings.auto_micro_level) >= 3:
+		_auto_economy_pass(delta)   # 全托管：喽啰自动经营 + 自动开战（DEPLOY/FIGHT 均跑）
 	_separation_pass(delta)
 	_decay_lit(delta)
 	if fog:
@@ -1096,7 +1113,7 @@ func _process(_delta: float) -> void:
 		var want := "battle" if enemies_alive() > 0 else "calm"
 		if Music.mood() != want:
 			Music.set_mood(want)
-	if ai_friendly:
+	if ai_friendly or int(Settings.auto_micro_level) >= 3:
 		_autocam_tick(_delta)
 
 
@@ -1105,11 +1122,14 @@ func _process(_delta: float) -> void:
 ## 行为：每 ≥AUTOCAM_DWELL 秒重选「最激烈战团」，平滑移镜+缩放对准；同一战团则持续跟随，不乱跳。
 func _autocam_tick(delta: float) -> void:
 	# 全员托管 → 左下角出现「自动镜头」按钮；玩家点开后才接管（无敌时检阅我方英雄、有战事时盯最激烈处）
+	var full := int(Settings.auto_micro_level) >= 3   # 全托管：镜头自动接管，无需按钮
 	var managed := phase == Phase.FIGHT and not get_tree().paused and _all_heroes_managed()
-	if not managed:
+	if full and managed:
+		_autocam_enabled = true          # 全托管：彻底不用操作，镜头直接自动
+	elif not managed:
 		_autocam_enabled = false         # 失去全托管（取消某英雄托管等）→ 收回自动镜头意图
 	if hud != null:
-		hud.set_autocam_button(managed, _autocam_enabled)   # 按钮：全托管才显示，反映开关态
+		hud.set_autocam_button(managed and not full, _autocam_enabled)   # 全托管不显示按钮（无需手动）
 	var want := managed and _autocam_enabled
 	if want != _autocam_active:
 		_autocam_active = want
@@ -1268,6 +1288,357 @@ func _cluster_at(pts: Array, seed: Vector2) -> Dictionary:
 	var span := maxf(maxd * 2.0 * 1.12, 3.0 * GameMap.CELL)   # iso 投影约同尺度，留底
 	var zoom := clampf(vp.y * 0.6 / span, 0.85, 1.7)
 	return {"center": center, "heat": wsum, "zoom": zoom}
+
+
+## ───────────────── 全托管·经济 AI（喽啰自动经营，auto_micro_level>=3）─────────────────
+## 每 ~0.5s 一拍：喽啰采集/建造/修复 → 推进建造计划 → 练农民/兵/将 → 研究科技；DEPLOY 阶段自动开战。
+func _auto_economy_pass(delta: float) -> void:
+	if not economy or level == null:
+		return
+	if phase == Phase.DEPLOY:
+		_eco_deploy_t += delta
+		if not _eco_started and _eco_deploy_t >= 5.0:
+			_eco_started = true
+			_on_start_battle()   # 全托管：自动开战（经济在战斗阶段持续铺，首波 120s 后才来）
+	elif phase != Phase.FIGHT:
+		return
+	_eco_t -= delta
+	if _eco_t > 0.0:
+		return
+	_eco_t = 0.5
+	_eco_workers()
+	_eco_build()
+	_eco_train()
+	_eco_research()
+	_eco_trade()
+
+
+## 喽啰：闲置→补在建工地/采集（金矿工不足补金、否则伐木）；另抽工修受损建筑。
+func _eco_workers() -> void:
+	var workers: Array = []
+	for u in units:
+		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0:
+			workers.append(u)
+	if workers.is_empty():
+		return
+	var gold_miners := _eco_count_miners("gold")
+	for w in workers:
+		if not w.is_idle_worker():
+			continue
+		var site := _eco_pending_site()
+		if site != null:
+			w.order_build(site)
+			continue
+		var want_gold := gold_miners < ECO_GOLD_MINERS
+		var node: Unit = nearest_free_gold(w.position, null, w) if want_gold else null
+		if node == null:
+			node = nearest_resource(w.position, "wood")
+		if node == null:
+			node = nearest_resource(w.position, "")
+		if node != null:
+			w.order_gather(node)
+			if node.res_kind == "gold":
+				gold_miners += 1
+	_eco_repair()
+
+
+## 自动修复：受损(<65%)、非施工、附近无敌的己方建筑 → 抽一名非金矿工去修（已有人修则不重复）。
+func _eco_repair() -> void:
+	var dmg: Unit = null
+	for u in units:
+		if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG and not u.is_constructing \
+				and u.hp > 0.0 and u.hp < u.max_hp * 0.65 and not _foe_within(u.position, 220.0, Unit.FACTION_LIANG):
+			dmg = u
+			break
+	if dmg == null:
+		return
+	for u in units:   # 已有人在修这座 → 不再派
+		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG \
+				and u._state == Unit.ST_REPAIR and u.position.distance_to(dmg.position) < 130.0:
+			return
+	var w := _eco_free_worker()
+	if w != null:
+		w.order_repair(dmg)
+
+
+## 建造（并行·纯状态驱动）：先给所有在建工地补工人；在建数 < ECO_MAX_SITES 且按需+负担得起+有空闲工 → 再开一座。
+func _eco_build() -> void:
+	var active := 0
+	for u in units:
+		if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG and u.is_constructing and u.hp > 0.0:
+			active += 1
+			if _eco_builders_on(u) == 0:   # 工地没人施工(工人阵亡/被打断)→ 补一个
+				var bw := _eco_free_worker()
+				if bw != null:
+					bw.order_build(u)
+	if active >= ECO_MAX_SITES:
+		return
+	var e: Dictionary = _eco_next_build()
+	if e.is_empty():
+		return
+	var key: String = e["key"]
+	var d: Dictionary = _defs.get(key, {})
+	var cg := int(d.get("cost_gold", 0))
+	var cw := int(d.get("cost_wood", 0))
+	if not can_afford(cg, cw):
+		return
+	var cell := _eco_find_cell(_eco_anchor(String(e.get("near", "hall"))), key)
+	if cell.x < 0:
+		return
+	var builder := _eco_free_worker()
+	if builder == null:
+		return
+	if not spend(cg, cw):
+		return
+	ai_start_construction(key, cell, Unit.FACTION_LIANG, builder)
+
+
+## 练兵（英雄优先）：出英雄阶段只保最低农民、全力按序出英雄；英雄齐了再补农民到 wcap + 兵营练常备军。
+func _eco_train() -> void:
+	var hall := main_base(Unit.FACTION_LIANG)
+	if hall == null or hall.is_constructing:
+		return
+	if _eco_hero_count() < _eco_hero_target():
+		# 出英雄阶段：保最低农民(采金供英雄)，金宽裕才补；其余一律攒钱按序出英雄
+		if _eco_count_workers() < ECO_BOOT_WORKERS and gold > 240 and _eco_can_train("lou_luo", hall):
+			queue_train(hall, "lou_luo")
+			return
+		for hk in ECO_HERO_ORDER:
+			if count_alive(Unit.FACTION_LIANG, hk) > 0 or _eco_in_queue(hk) or hero_progress.has(hk):
+				continue
+			if _eco_can_train(hk, hall):
+				queue_train(hall, hk)
+			return   # 严格按顺序：该出的英雄出不起就攒钱等它，不越位练后面的/兵
+		return   # 英雄还没排满(可能在等人口/钱)→ 本拍不练兵
+	# 英雄齐了：补农民 → 兵营常备军
+	if _eco_count_workers() < ECO_WCAP and _eco_can_train("lou_luo", hall):
+		queue_train(hall, "lou_luo")
+		return
+	if _eco_army_count() + _eco_queued_army() < ECO_ARMY_CAP:
+		var bar := _eco_idle_barracks()   # 选队列最短的兵营，多兵营并行出兵
+		if bar != null:
+			var sk := _eco_pick_soldier()
+			if sk != "" and _eco_can_train(sk, bar):
+				queue_train(bar, sk)
+
+
+## 研究（英雄之后）：出齐英雄前不研究(钱全留给英雄)；之后先精耕(经济)，再升 hp/atk 科技。
+func _eco_research() -> void:
+	if _eco_hero_count() < _eco_hero_target():
+		return
+	var hall := main_base(Unit.FACTION_LIANG)
+	if hall != null and not hall.is_constructing and hall._research_key == "" \
+			and not _tech_done.has("tech_gather") and _eco_afford_tech("tech_gather"):
+		queue_research(hall, "tech_gather")
+		return
+	if hall != null and not hall.is_constructing and hall._research_key == "":
+		for t in ["tech_age2", "tech_age3"]:   # 聚义·壮大(+10%血) / 替天行道(+10%攻)
+			if not _tech_done.has(t) and int(Defs.TECHS.get(t, {}).get("min_age", 1)) <= current_age and _eco_afford_tech(t):
+				queue_research(hall, t)
+				return
+	var bar := _eco_first_building("barracks")
+	if bar != null and not bar.is_constructing and bar._research_key == "":
+		for t2 in ["tech_armor", "tech_weapon"]:   # 甲胄·坚铠(+25%血) / 锻造·利刃(+20%攻)
+			if not _tech_done.has(t2) and _eco_afford_tech(t2):
+				queue_research(bar, t2)
+				return
+
+
+## 集市贸易：缺金又囤木时，把多余木头换成金（金是后期练兵瓶颈，木头常溢出）。有集市才换。
+func _eco_trade() -> void:
+	if gold >= 300 or wood < 500:
+		return
+	if _eco_first_building("market") != null:
+		do_trade("wood")   # 100 木 → 70 金
+
+
+# ---------- 全托管经济·助手 ----------
+
+## 下一座要建的（纯状态驱动·英雄优先）：
+##   ①仓库(采金命脉，最先且被拆即重建) → ②出英雄前只铺够 6 英雄人口的民居，其余省钱给英雄
+##   → ③出齐英雄后按 ECO_MAINT 补兵营/民居/箭楼(被拆即重建)。
+func _eco_next_build() -> Dictionary:
+	if _eco_count_building("depot") < 1:
+		return {"key": "depot", "near": "gold"}
+	if _eco_hero_count() < _eco_hero_target():
+		if pop_cap < ECO_PRE_HERO_POP:
+			return {"key": "house", "near": "gold"}   # 给 6 英雄铺人口(堆金矿后方安全角)
+		return {}                                       # 出英雄前别的都不修，把金留给英雄
+	for m in ECO_MAINT:
+		if _eco_count_building(String(m[0])) < int(m[1]):
+			return {"key": String(m[0]), "near": String(m[2])}
+	return {}
+
+
+func _eco_count_building(key: String) -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.key == key and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 and not u.is_constructing:
+			n += 1
+	return n
+
+
+func _eco_anchor(near: String) -> Vector2i:
+	var hall := main_base(Unit.FACTION_LIANG)
+	var hp: Vector2 = hall.position if hall != null else map.cell_to_world(level.camera_start_cell())
+	if near == "gold":
+		var g := nearest_resource(hp, "gold")
+		if g != null:
+			return map.world_to_cell(g.position)
+	return map.world_to_cell(hp)
+
+
+## 锚点四周环形搜一个能放下该建筑(footprint 全空)的格；找不到返回 (-1,-1)。
+func _eco_find_cell(anchor: Vector2i, key: String) -> Vector2i:
+	var half := building_footprint_half(key)
+	for r in range(half + 2, 17):
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				if absi(dx) != r and absi(dy) != r:
+					continue   # 只看当前环
+				var c := anchor + Vector2i(dx, dy)
+				if map.area_buildable(c, half):
+					return c
+	return Vector2i(-1, -1)
+
+
+## 拉一名可建造的工人：优先伐木/闲置(别抽金矿工，金是瓶颈)，实在没有才抽金矿工。
+func _eco_free_worker() -> Unit:
+	var fallback: Unit = null
+	for u in units:
+		if not (is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0):
+			continue
+		if u._state == Unit.ST_BUILD or u._state == Unit.ST_REPAIR:
+			continue
+		if is_instance_valid(u._gather_node) and u._gather_node.res_kind == "gold":
+			fallback = u
+			continue
+		return u
+	return fallback
+
+
+func _eco_pending_site() -> Unit:
+	for u in units:
+		if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG \
+				and u.is_constructing and u.hp > 0.0 and _eco_builders_on(u) == 0:
+			return u
+	return null
+
+
+func _eco_builders_on(site: Unit) -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 \
+				and u._state == Unit.ST_BUILD and u.position.distance_to(site.position) < 130.0:
+			n += 1
+	return n
+
+
+func _eco_count_workers() -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0:
+			n += 1
+	return n
+
+
+func _eco_count_miners(kind: String) -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 \
+				and is_instance_valid(u._gather_node) and u._gather_node.res_kind == kind:
+			n += 1
+	return n
+
+
+func _eco_hero_count() -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 and not u.is_building:
+			n += 1
+	return n
+
+
+## 升科技的英雄目标数：min(6, 英雄上限)；上限 0(不限)则按 6。
+func _eco_hero_target() -> int:
+	var hcap := int(level.hero_cap()) if (level != null and level.has_method("hero_cap")) else 0
+	return mini(6, hcap) if hcap > 0 else 6
+
+
+func _eco_army_count() -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and not u.is_building \
+				and not u.is_worker and not u.is_hero and not u.is_summon and u.hp > 0.0:
+			n += 1
+	return n
+
+
+func _eco_in_queue(key: String) -> bool:
+	for u in units:
+		if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG and key in u._train_queue:
+			return true
+	return false
+
+
+func _eco_first_building(key: String) -> Unit:
+	for u in units:
+		if is_instance_valid(u) and u.key == key and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 and not u.is_constructing:
+			return u
+	return null
+
+
+## 队列最短的兵营（多兵营并行出兵，别全挤在一座）。
+func _eco_idle_barracks() -> Unit:
+	var best: Unit = null
+	var bq := 999
+	for u in units:
+		if is_instance_valid(u) and u.key == "barracks" and u.faction == Unit.FACTION_LIANG \
+				and u.hp > 0.0 and not u.is_constructing and u._train_queue.size() < bq:
+			bq = u._train_queue.size()
+			best = u
+	return best
+
+
+## 各兵营队列里已排的常备兵总数（避免排超过军队上限）。
+func _eco_queued_army() -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.key == "barracks" and u.faction == Unit.FACTION_LIANG:
+			n += u._train_queue.size()
+	return n
+
+
+## 兵营出兵：弓手/长枪/刀手/马军里挑一个能负担的（偏好弓+枪，远程+克骑兵）。
+func _eco_pick_soldier() -> String:
+	for sk in ["liang_gong", "liang_qiang", "liang_dao", "liang_ma"]:
+		var d: Dictionary = _defs.get(sk, {})
+		if d.is_empty() or int(d.get("min_age", 1)) > current_age:
+			continue
+		if can_afford(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0))):
+			return sk
+	return "liang_dao"
+
+
+## 训练前置检查（钱/人口/队列/时代），避免直接 queue_train 触发资源不足提示刷屏。
+func _eco_can_train(key: String, bld: Unit) -> bool:
+	if bld == null or not is_instance_valid(bld):
+		return false
+	var d: Dictionary = _defs.get(key, {})
+	if int(d.get("min_age", 1)) > current_age:
+		return false
+	if not can_afford(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0))):
+		return false
+	if used_pop() + _queued_pop() + int(d.get("pop", 1)) > pop_cap:
+		return false
+	if bld._train_queue.size() >= 8:
+		return false
+	return true
+
+
+func _eco_afford_tech(key: String) -> bool:
+	var d: Dictionary = Defs.TECHS.get(key, {})
+	return can_afford(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0)))
 
 
 ## 地面斑驳光影：生成一张柔和径向贴图，在地图范围内确定性地撒若干「亮斑/暗斑」（云隙光）。
@@ -1609,6 +1980,10 @@ func _auto_micro_pass() -> void:
 			if is_instance_valid(u) and u.is_hero and u.auto_micro:
 				u.auto_micro = false
 		return
+	if lvl >= 3:   # 全托管：所有英雄自动进入托管，无需手动点「托管军」
+		for u in units:
+			if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 and not u.auto_micro:
+				u.auto_micro = true
 	var frame := Engine.get_physics_frames()
 	for u in units:
 		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or not u.is_hero \

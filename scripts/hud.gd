@@ -1123,13 +1123,14 @@ func _refresh_panel() -> void:
 		if prim.garrison_cap > 0 and not prim.is_constructing:
 			_info_stats.text += " · 驻军 %d/%d" % [prim.passengers.size(), prim.garrison_cap]
 	elif prim.is_hero and prim._hero_leveled:
+		# 攻显示「有效攻击」= atk×buff_atk（含科技/光环加成）；否则研究攻击科技后数字不变，看着像没生效
 		_info_stats.text = "攻 %d  生命 %d  ｜ 经验 %d/%d  技能点 %d  ｜ %s" % [
-			int(prim.atk), int(prim.max_hp), int(prim.hero_xp), int(prim.xp_to_next()), prim.skill_points, _stance_tag(prim)]
+			int(round(prim.atk * prim.buff_atk)), int(prim.max_hp), int(prim.hero_xp), int(prim.xp_to_next()), prim.skill_points, _stance_tag(prim)]
 	elif prim.is_worker:
-		_info_stats.text = "攻 %d    射程 %d    移速 %d" % [int(prim.atk), int(prim.atk_range), int(prim.base_speed)]
+		_info_stats.text = "攻 %d    射程 %d    移速 %d" % [int(round(prim.atk * prim.buff_atk)), int(prim.atk_range), int(prim.base_speed)]
 	else:
 		_info_stats.text = "攻 %d    射程 %d    移速 %d    ｜ %s" % [
-			int(prim.atk), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)]
+			int(round(prim.atk * prim.buff_atk)), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)]
 
 
 func _stance_tag(u) -> String:
