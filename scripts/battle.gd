@@ -35,8 +35,6 @@ const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（
 # 全托管经济 AI（auto_micro_level>=3）：喽啰自动采集/建造/修复 + 自动练兵练将研究 + 自动开战
 # 策略（用户定）：优先出齐英雄(AoE 打 3× 群)，再升级基地/造兵/科技/箭楼。
 var _eco_t := 0.0
-var _eco_deploy_t := 0.0
-var _eco_started := false              # 是否已自动开战
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
 const ECO_BOOT_WORKERS := 4           # 出英雄阶段的最低农民数（起手已有5个，通常一个都不补→不抢聚义厅队列，英雄连着出）
 const ECO_PRE_HERO_POP := 30          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 几个农民即可，别多盖民居拖时间）
@@ -1311,17 +1309,16 @@ func _cluster_at(pts: Array, seed: Vector2) -> Dictionary:
 	return {"center": center, "heat": wsum, "zoom": zoom}
 
 
+## 全托管 = AI友好模式 + 英雄托管档「全托管(3)」。统一闸门，避免散落的内联判断不一致。
+func _full_auto() -> bool:
+	return ai_friendly and int(Settings.auto_micro_level) >= 3
+
+
 ## ───────────────── 全托管·经济 AI（喽啰自动经营，auto_micro_level>=3）─────────────────
-## 每 ~0.5s 一拍：喽啰采集/建造/修复 → 推进建造计划 → 练农民/兵/将 → 研究科技；DEPLOY 阶段自动开战。
+## 每 ~0.5s 一拍：喽啰采集/建造/修复 → 推进建造计划 → 练农民/兵/将 → 研究科技 → 把成军拉去前线。
+## 仅在「开战(FIGHT)」后才动——全托管也要玩家点一次「开战」(不再自动开战)。
 func _auto_economy_pass(delta: float) -> void:
-	if not economy or level == null:
-		return
-	if phase == Phase.DEPLOY:
-		_eco_deploy_t += delta
-		if not _eco_started and _eco_deploy_t >= 5.0:
-			_eco_started = true
-			_on_start_battle()   # 全托管：自动开战（经济在战斗阶段持续铺，首波 120s 后才来）
-	elif phase != Phase.FIGHT:
+	if not economy or level == null or phase != Phase.FIGHT:
 		return
 	_eco_t -= delta
 	if _eco_t > 0.0:
@@ -1332,6 +1329,24 @@ func _auto_economy_pass(delta: float) -> void:
 	_eco_train()
 	_eco_research()
 	_eco_trade()
+	_eco_rally_army()
+
+
+## 全托管：把所有「非喽啰非英雄」的成军(闲置、未交战、离前线尚远)攻击移动到防御前线集结，参战。
+## 已在交战/已在前线附近/身边有敌(自行索敌中) → 不打扰，免得反复改令抖动。
+func _eco_rally_army() -> void:
+	var front := _eco_frontline()
+	for u in units:
+		if not (is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 \
+				and not u.is_worker and not u.is_hero and not u.is_building and not u.garrisoned):
+			continue
+		if u.has_target() or u._state == Unit.ST_AMOVE or u._state == Unit.ST_CHASE:
+			continue
+		if u.position.distance_to(front) <= 130.0:
+			continue
+		if _foe_within(u.position, u.aggro_range, u.faction):
+			continue   # 附近有敌 → 交给自身索敌，别硬拉离战
+		u.order_amove(front)
 
 
 ## 喽啰：闲置→补在建工地/采集（金矿工不足补金、否则伐木）；另抽工修受损建筑。
@@ -1406,6 +1421,9 @@ func _eco_build() -> void:
 	var cell := _eco_find_cell(_eco_anchor(String(e.get("near", "hall"))), key)
 	if cell.x < 0:
 		return
+	# 前沿建筑(兵营/箭楼·near=hall)选址处有敌 → 这拍先别起：否则工人和半成品都会被火线上的敌人打掉
+	if String(e.get("near", "hall")) == "hall" and _foe_within(map.cell_to_world(cell), 240.0, Unit.FACTION_LIANG):
+		return
 	var builder := _eco_free_worker()
 	if builder == null:
 		return
@@ -1419,6 +1437,12 @@ func _eco_train() -> void:
 	var hall := main_base(Unit.FACTION_LIANG)
 	if hall == null or hall.is_constructing:
 		return
+	# 最高优先：复活战死英雄（有存档、当前不在场、未在队列）——按 ECO_HERO_ORDER 顺序，先于补农民/出新将/造兵。
+	for hk in ECO_HERO_ORDER:
+		if hero_progress.has(hk) and count_alive(Unit.FACTION_LIANG, hk) == 0 and not _eco_in_queue(hk):
+			if _eco_can_train(hk, hall):
+				queue_train(hall, hk)   # 价同原价复活，保留等级/技能
+			return   # 攒钱等复活，不越位做别的
 	if _eco_hero_count() < _eco_hero_target():
 		# 出英雄阶段：保最低农民(采金供英雄)，金宽裕才补；其余一律攒钱按序出英雄
 		if _eco_count_workers() < ECO_BOOT_WORKERS and gold > 240 and _eco_can_train("lou_luo", hall):
@@ -1624,7 +1648,7 @@ func _eco_frontline() -> Vector2:
 	if n > 0:
 		var c: Vector2 = sum / float(n)
 		var dir: Vector2 = c - hp
-		return (c + dir.normalized() * 72.0) if dir.length() > 1.0 else c
+		return (c + dir.normalized() * 110.0) if dir.length() > 1.0 else c   # 站到前沿建筑「外面一点」
 	var foe := _nearest_foe_pos(hp, Unit.FACTION_LIANG)
 	if foe != Vector2.INF:
 		return hp.lerp(foe, 0.45)
@@ -2171,7 +2195,28 @@ func _brave_retaliate(u: Unit) -> bool:
 	return _combat_power(u) >= foe_pow * BRAVE_MARGIN
 
 
+## 全托管·非守家英雄是否「该出手」：身边有敌(260)就打；否则只在敌人已推进到防线内(离聚义厅≤HERO_FRONT_LEASH)
+## 才迎上去——避免战场空了还独自冲到敌方出生点被 ×3 群殴。
+const HERO_FRONT_LEASH := 720.0   # 英雄迎敌半径(以聚义厅为心，≈22 格)：敌人进了这圈才主动压上
+func _hero_engage_ok(u: Unit) -> bool:
+	if _foe_within(u.position, maxf(u.aggro_range, 260.0), u.faction):
+		return true
+	var base := main_base(u.faction)
+	if base == null:
+		return true
+	var nf := _nearest_foe_pos(u.position, u.faction)
+	if nf == Vector2.INF:
+		return false
+	return base.position.distance_to(nf) <= HERO_FRONT_LEASH
+
+
 func _auto_micro_hero(u: Unit) -> void:
+	# 全托管·非守家英雄(公孙专职守家走自己的脑)：没有该打的敌人时回前线集结待命，不孤军深入敌方出生点
+	if _full_auto() and u.key != "gongsun_sheng" and not _hero_engage_ok(u):
+		var front := _eco_frontline()
+		if u.position.distance_to(front) > 140.0:
+			_ai_move(u, front)
+		return
 	match String(u.key):
 		"lin_chong": _brain_lin(u)
 		"li_kui": _brain_li(u)
@@ -2382,7 +2427,10 @@ func _brain_hua(u: Unit) -> void:
 		if not u.melee_mode and u.slot_ready(2):
 			if _ai_cast_slot(u, 2, nf):
 				return
-		_ai_move(u, u.position + (u.position -nf).normalized() * 120.0)
+		# 朝「敌群质心」反方向拉开(而非只躲最近敌)，被左右夹击时方向稳定、不原地左右横跳
+		var cen := _foe_centroid_within(u.position, 200.0, u.faction)
+		var fromp: Vector2 = cen if cen != Vector2.INF else nf
+		_ai_move(u, u.position + (u.position - fromp).normalized() * 120.0)
 		return
 	# P3 箭雨(W·超视距主力)：有 CD 就放——任何同屏敌(≤520)都砸最密/最近，不受弓射程限制
 	if u.slot_ready(1):
@@ -2409,6 +2457,8 @@ func _brain_hua(u: Unit) -> void:
 
 
 ## 公孙胜·法师：脆皮后排。被贴脸/残血→冰墙横在身前隔挡或撤；交战召金龙；敌成堆放黑雨。
+## 全托管下他是「守家英雄」：锚在聚义厅附近 GONG_GUARD_R 圈内，绝不追出去（见下方守家预案）。
+const GONG_GUARD_R := 380.0   # 公孙守家半径（≈12 格）：圈外敌不追、被勾出去就回家
 func _brain_gong(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
 		return
@@ -2417,6 +2467,20 @@ func _brain_gong(u: Unit) -> void:
 	var nf := _nearest_foe_pos(u.position, u.faction)
 	var d_near: float = u.position.distance_to(nf) if nf != Vector2.INF else 1.0e20
 	var melee_110: bool = threat != null and u.position.distance_to(threat.position) <= 110.0
+	# 守家预案（仅全托管）：钉在聚义厅附近，被勾出圈就回家；圈外的敌人一律不理（专职守家）
+	if _full_auto():
+		var gbase := main_base(u.faction)
+		var gc: Vector2 = gbase.position if (gbase != null and is_instance_valid(gbase)) else u.position
+		if u.position.distance_to(gc) > GONG_GUARD_R:
+			if not (hp_frac <= 0.45 or melee_110):   # 没有迫近威胁/不残血才安心回家(否则继续走下面的保命逻辑)
+				u.set_stance(Unit.STANCE_DEFEND)
+				_ai_move(u, gc)
+				return
+		elif nf == Vector2.INF or gc.distance_to(nf) > GONG_GUARD_R:
+			# 守备圈内、且敌人都还在圈外 → 回锚点待命，不主动压上去送（圈外的不追）
+			if u.position.distance_to(gc) > 90.0:
+				_ai_move(u, gc)
+			return
 	# P1 退守/隔挡：残血或被贴脸 → 避战拉开 / 冰墙隔挡（被一两个小兵追且血>1/5 则不退，回身放招反打）
 	if (hp_frac <= 0.45 or melee_110) and not _brave_retaliate(u):
 		if u.stance != Unit.STANCE_PASSIVE:
@@ -2429,7 +2493,8 @@ func _brain_gong(u: Unit) -> void:
 		return
 	elif u.stance == Unit.STANCE_PASSIVE:
 		u.set_stance(Unit.STANCE_AGGRO)   # 脱离威胁、血也够 → 恢复远程索敌
-		u._home = u.position
+		if not _full_auto():
+			u._home = u.position   # 守家模式不漂移锚点（保持钉在聚义厅）
 	# P2 R 画龙点睛：交战中召龙（radius=0，brain 直接 _begin_cast 不受附近判定限制）
 	if u.slot_ready(3) and nf != Vector2.INF and d_near <= 720.0:
 		if _ai_cast_slot(u, 3, u.position):
@@ -3739,18 +3804,39 @@ func _densest_foe_pos(my_fac: int, sample_r: float) -> Vector2:
 	return best
 
 
-## 可走的撤退点：朝远离最近敌的方向退 kite_dist；无敌则退向聚义厅；落点不可走则吸附到最近开阔格。
+## 可走的撤退点：朝「远离附近敌群质心」且「偏向聚义厅」的方向退 kite_dist；无敌则退向聚义厅。
+## 用质心(而非最近敌)+回家偏置 → 被左右夹击时方向稳定，不会因「最近敌」左右翻转而原地左右横跳被打死。
 func _retreat_point(u: Unit, kite_dist: float) -> Vector2:
-	var fp := _nearest_foe_pos(u.position, u.faction)
-	var p: Vector2
-	if fp == Vector2.INF:
-		var base := main_base(u.faction)
-		p = base.position if base != null else u.position
+	var base := main_base(u.faction)
+	var home: Vector2 = base.position if (base != null and is_instance_valid(base)) else u.position
+	var c := _foe_centroid_within(u.position, maxf(300.0, u.aggro_range), u.faction)
+	var dir: Vector2
+	if c != Vector2.INF and u.position.distance_to(c) > 1.0:
+		dir = (u.position - c).normalized()                 # 远离敌群质心
+		var hd := home - u.position
+		if hd.length() > 1.0:
+			dir = (dir + hd.normalized()).normalized()       # 再朝家方向混合（别往敌后/地图角落撤）
 	else:
-		p = u.position + (u.position - fp).normalized() * kite_dist
+		var hd2 := home - u.position
+		dir = hd2.normalized() if hd2.length() > 1.0 else Vector2(-1, 0)
+	var p := u.position + dir * kite_dist
 	if not map.is_open_world(p):
 		p = map.cell_to_world(map.nearest_open(map.world_to_cell(p)))
 	return p
+
+
+## 半径内敌方单位的位置质心（无则 INF）。用于撤退/走位取「敌群中心」，避免只盯最近敌而方向抖动。
+func _foe_centroid_within(pos: Vector2, r: float, my_fac: int) -> Vector2:
+	var sum := Vector2.ZERO
+	var n := 0
+	for v in units:
+		if not is_instance_valid(v) or v.faction == my_fac or v.is_building or v.is_resource \
+				or v.garrisoned or v.is_captive or v.hp <= 0.0:
+			continue
+		if pos.distance_to(v.position) <= r:
+			sum += v.position
+			n += 1
+	return (sum / float(n)) if n > 0 else Vector2.INF
 
 
 ## 抬手守卫的单次放招：就绪且未抬手且落点有效→放并返回 true（调用方据此 return）。非指向传 lp=自身位置。

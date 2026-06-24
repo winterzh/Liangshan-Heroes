@@ -1124,13 +1124,19 @@ func _refresh_panel() -> void:
 			_info_stats.text += " · 驻军 %d/%d" % [prim.passengers.size(), prim.garrison_cap]
 	elif prim.is_hero and prim._hero_leveled:
 		# 攻显示「有效攻击」= atk×buff_atk（含科技/光环加成）；否则研究攻击科技后数字不变，看着像没生效
-		_info_stats.text = "攻 %d  生命 %d  ｜ 经验 %d/%d  技能点 %d  ｜ %s" % [
-			int(round(prim.atk * prim.buff_atk)), int(prim.max_hp), int(prim.hero_xp), int(prim.xp_to_next()), prim.skill_points, _stance_tag(prim)]
+		# 防显示「有效防御」= defense − 削甲(_def_down)；每点防约减 5% 普攻伤害
+		_info_stats.text = "攻 %d  防 %d  生命 %d  ｜ 经验 %d/%d  技能点 %d  ｜ %s" % [
+			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.max_hp), int(prim.hero_xp), int(prim.xp_to_next()), prim.skill_points, _stance_tag(prim)]
 	elif prim.is_worker:
-		_info_stats.text = "攻 %d    射程 %d    移速 %d" % [int(round(prim.atk * prim.buff_atk)), int(prim.atk_range), int(prim.base_speed)]
+		_info_stats.text = "攻 %d    防 %d    射程 %d    移速 %d" % [int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed)]
 	else:
-		_info_stats.text = "攻 %d    射程 %d    移速 %d    ｜ %s" % [
-			int(round(prim.atk * prim.buff_atk)), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)]
+		_info_stats.text = "攻 %d    防 %d    射程 %d    移速 %d    ｜ %s" % [
+			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)]
+
+
+## 有效防御值（含双戒刀削甲 _def_down）；每点防约减 5% 普攻伤害。
+func _eff_def(u) -> int:
+	return int(round(maxf(0.0, u.defense - u._def_down)))
 
 
 func _stance_tag(u) -> String:
