@@ -295,10 +295,10 @@ const ABILITIES := {
 
 	# ---- 自由模式·英雄技能组（每英雄 3 主动 + 1 被动；伤害随技能等级缩放）----
 	# 宋江：指挥支援
-	"song_meteor": {"name": "天降陨石", "cd": 13.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true, "radius": 96.0, "color": Color("ff7a2a"),
-		"desc": "宋江脸前召落巨型陨石，朝指向滚出约 19 格(≈2/3 屏)，\n碾过单位冲击伤害 30/40/50，过处地面灼烧 10/12/15 每秒、持续 10 秒",
+	"song_meteor": {"name": "天降陨石", "cd": 13.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true, "radius": 72.0, "color": Color("ff7a2a"),
+		"desc": "宋江脸前召落陨石，朝指向缓缓滚出约 19 格(≈2/3 屏)，\n碾过单位冲击伤害 30/40/50，过处地面灼烧 10/12/15 每秒、持续 10 秒",
 		"effect": {"kind": "meteor", "impact_ranks": [30.0, 40.0, 50.0], "dps_ranks": [10.0, 12.0, 15.0],
-			"len": 600.0, "width": 96.0, "dot_dur": 10.0, "roll_speed": 320.0}},
+			"len": 600.0, "width": 72.0, "dot_dur": 10.0, "roll_speed": 160.0}},
 	"song_fire": {"name": "火攻连营", "cd": 11.0, "targeted": true, "weak_global": true, "radius": 100.0, "color": Color("ff7a2a"),
 		"desc": "指定处腾起烈焰\n地面每秒 20 灼伤，持续 5/8/10 秒(随等级)",
 		"effect": {"kind": "fire_dot", "dps": 20.0, "dur_ranks": [5.0, 8.0, 10.0], "dmg": 100.0, "dur": 5.0}},

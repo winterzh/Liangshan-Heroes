@@ -194,6 +194,10 @@ func _ready() -> void:
 	camera.limit_bottom = int((mw + mh) * 0.5 + margin + RTSCamera.PANEL_H)
 	add_child(camera)
 	ai_friendly = Campaign.ai_friendly   # AI友好模式：敌方小兵×3 + 全员托管自动镜头
+	# 按模式给「英雄托管」默认档：AI友好模式→全托管(彻底挂机)；其余模式→无托管(手动)。
+	# 测试钩子 AUTO_MICRO 优先（设了就不覆盖），方便指定档位跑 smoke。
+	if OS.get_environment("AUTO_MICRO") == "":
+		Settings.auto_micro_level = 3 if ai_friendly else 0
 	_autocam_target_zoom = camera.zoom.x
 
 	_build_atmosphere()   # 后期处理层：暗角 + 暖色调 + 对比/饱和（在世界之上、HUD 之下）
@@ -6491,7 +6495,7 @@ class MeteorFx extends TimedFx:
 			return
 		var k := clampf(1.0 - t / maxf(dur, 0.01), 0.0, 1.0)
 		position = start_w.lerp(end_w, k)
-		_roll += delta * 9.0
+		_roll += delta * 4.5
 		queue_redraw()
 
 	# 卡通滚动火球：粗描边 + 平涂橙 + 钝头火舌；偏心亮斑与深色斑随 _roll 转 → 一眼看出在「滚」。
