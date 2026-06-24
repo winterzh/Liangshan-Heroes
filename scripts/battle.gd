@@ -91,6 +91,7 @@ var _ability_caster: Unit = null
 var _ground_dots: Array = []   # 活动的地面烈焰 DOT：{pos,r,foe,caster,t,tick_t,tick,per}
 var _chrono_zones: Array = []  # 时空封印立场：{pos,r,foe,t}——每帧把域内敌军续晕（林冲 R）
 var _orbit_zones: Array = []   # 双斧回旋扫伤区：{caster,foe,r,t,tick,tick_t,dmg,slow,slow_dur}（李逵 Q）
+var _meteor_zones: Array = []  # 天降陨石滚动区：{pos,dir,remain,hw,foe,caster,impact,dps,dot_dur,hit,trail}（宋江 W）
 var _ice_walls: Array = []     # 冰墙阻挡：{cells:[Vector2i],t}——到期解锁格子（公孙胜 W）
 var _pending_casts: Array = []  # 施法抬手·待结算队列：{caster,slot,lp}——抬手归零后才真正放招
 const CAST_WINDUP := 0.34       # 施法抬手时长（秒）：先抬手蓄势，再结算技能
@@ -99,7 +100,7 @@ const ABILITY_SFX_ID := {
 	"hua_rain": "sk_rain", "lin_chrono": "sk_chrono", "hua_blink": "sk_blink",
 	"li_charge": "sk_charge", "li_fury": "sk_fury", "li_axes": "sk_axes",
 	"lin_thrust": "sk_thrust", "lin_sweep": "sk_sweep",
-	"song_rally": "sk_rally", "song_fire": "sk_fire", "song_haste": "sk_haste",
+	"song_rally": "sk_rally", "song_fire": "sk_fire", "song_meteor": "sk_fire",
 }
 const ABILITY_SFX_KIND := {
 	"rally": "sk_rally", "haste": "sk_haste", "smite": "sk_smite",
@@ -1329,24 +1330,58 @@ func _auto_economy_pass(delta: float) -> void:
 	_eco_train()
 	_eco_research()
 	_eco_trade()
-	_eco_rally_army()
+	_eco_muster_and_charge()
 
 
 ## 全托管：把所有「非喽啰非英雄」的成军(闲置、未交战、离前线尚远)攻击移动到防御前线集结，参战。
 ## 已在交战/已在前线附近/身边有敌(自行索敌中) → 不打扰，免得反复改令抖动。
-func _eco_rally_army() -> void:
-	var front := _eco_frontline()
+## 全托管·成军集结后整队出击：兵营集结点设到「基地外面一点」的集结点 → 新兵直接走出去、不在寨门口堆住；
+## 闲散的成军回集结；攒够 ECO_CHARGE_SIZE 个就整队 A 移冲向最密敌群。彻底解决兵/虎卡在基地周围。
+const ECO_CHARGE_SIZE := 10
+func _eco_muster_and_charge() -> void:
+	var muster := _eco_muster_point()
+	# 兵营集结点 → 集结点（新兵 on_unit_trained 走 has_rally 分支，直接奔集结点，不堆寨门）
+	for u in units:
+		if is_instance_valid(u) and u.key == "barracks" and u.faction == Unit.FACTION_LIANG \
+				and not u.is_constructing and u.hp > 0.0:
+			if not u.has_rally or u.rally.distance_to(muster) > 80.0:
+				u.has_rally = true
+				u.rally = muster
+				u.rally_kind = ""
+				u.rally_node = null
+	# 收集闲散成军：交战中/身边有敌的不动；离集结远的回集结；到了集结的列入待命队
+	var mustered: Array = []
 	for u in units:
 		if not (is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 \
-				and not u.is_worker and not u.is_hero and not u.is_building and not u.garrisoned):
+				and not u.is_worker and not u.is_hero and not u.is_building and not u.is_summon and not u.garrisoned):
 			continue
-		if u.has_target() or u._state == Unit.ST_AMOVE or u._state == Unit.ST_CHASE:
-			continue
-		if u.position.distance_to(front) <= 130.0:
+		if u.has_target() or u._state == Unit.ST_CHASE:
 			continue
 		if _foe_within(u.position, u.aggro_range, u.faction):
-			continue   # 附近有敌 → 交给自身索敌，别硬拉离战
-		u.order_amove(front)
+			continue   # 身边有敌 → 自行索敌，不硬拉
+		if u.position.distance_to(muster) > 150.0:
+			if u._state != Unit.ST_AMOVE and u._state != Unit.ST_MOVE:
+				u.order_move(muster)   # 散在外面的回集结点（不 A 移，免得半路被零散勾走）
+		else:
+			mustered.append(u)
+	# 攒够一队 → 整队冲向最密敌群（没敌人就压到前线待命）
+	if mustered.size() >= ECO_CHARGE_SIZE:
+		var tgt := _densest_foe_pos(Unit.FACTION_LIANG, 120.0)
+		if tgt == Vector2.INF:
+			tgt = _nearest_foe_pos(muster, Unit.FACTION_LIANG)
+		if tgt == Vector2.INF:
+			tgt = _eco_frontline()
+		for s in mustered:
+			s.order_amove(tgt)
+
+
+## 集结点：前沿建筑外再朝敌方推一点（够 10 兵就从这儿冲出去）。
+func _eco_muster_point() -> Vector2:
+	var f := _eco_frontline()
+	var foe := _nearest_foe_pos(f, Unit.FACTION_LIANG)
+	if foe != Vector2.INF:
+		return f + (foe - f).normalized() * minf(f.distance_to(foe) * 0.5, 160.0)
+	return f
 
 
 ## 喽啰：闲置→补在建工地/采集（金矿工不足补金、否则伐木）；另抽工修受损建筑。
@@ -1962,6 +1997,14 @@ func _aura_pass() -> void:
 					if v.faction == sfoe and not v.is_building and not v.is_resource and v.hp > 0.0 and not v.garrisoned \
 							and h.position.distance_to(v.position) <= sr:
 						v.aura_slow = minf(v.aura_slow, 1.0 - float(sa[0]))
+			# 常驻移速光环（宋江 R·仁义之名·被动）：按 R 等级给附近友军加移速 5/10/15%
+			var spa := _speed_aura_of(h)
+			if not spa.is_empty():
+				var spr: float = spa[1]
+				for v in units:
+					if v.faction == h.faction and not v.is_building and v.hp > 0.0 and not v.garrisoned \
+							and h.position.distance_to(v.position) <= spr:
+						v.buff_speed = maxf(v.buff_speed, float(spa[0]))
 	if tech_atk != 1.0:
 		for u in units:
 			if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and not u.is_building:
@@ -1977,6 +2020,19 @@ func _slow_aura_of(h: Unit) -> Array:
 			var pct := float(eff.get("slow", 0.10)) * float(int(s["rank"]))
 			var rad := float(_abilities.get(s["id"], {}).get("radius", 160.0))
 			return [pct, rad]
+	return []
+
+
+## 已学的「常驻移速光环」(声明 speed_aura_ranks 的被动，如宋江 R)：返回 [速度乘子, 半径]，无则空。
+func _speed_aura_of(h: Unit) -> Array:
+	for s in h.ability_slots:
+		if int(s["rank"]) <= 0:
+			continue
+		var eff: Dictionary = _abilities.get(s["id"], {}).get("effect", {})
+		if eff.has("speed_aura_ranks"):
+			var mult := float(_pick(eff["speed_aura_ranks"], int(s["rank"])))
+			var rad := float(_abilities.get(s["id"], {}).get("radius", 170.0))
+			return [mult, rad]
 	return []
 
 
@@ -2129,6 +2185,11 @@ func _summon_hunt_pass() -> void:
 		var fp := _nearest_foe_pos(u.position, u.faction)
 		if fp != Vector2.INF:
 			u.order_amove(fp)
+		elif _full_auto() and u.faction == Unit.FACTION_LIANG:
+			# 没敌人时别窝在基地口堆着（卡住兵/虎）→ 去前线集结点待命
+			var fl := _eco_frontline()
+			if u.position.distance_to(fl) > 160.0:
+				u.order_amove(fl)
 
 
 ## 托管自动加点：受 can_learn 全部门槛约束（普通[1,3,5]/大招[6,8,10]/技能点/满级3），先大招后 Q/W/E。
@@ -2152,7 +2213,7 @@ func _auto_learn(h: Unit) -> void:
 func _learn_order(h: Unit) -> Array:
 	var last := h.slot_count() - 1
 	match String(h.key):
-		"song_jiang": return [2, last, 0, 1]   # 火攻(song_fire, E=2) 优先
+		"song_jiang": return [1, 2, last, 0]   # 天降陨石(song_meteor, W=1) 优先 → 火攻(E=2) → 大招 → Q
 		"hua_rong": return [1, last, 0, 2]      # 箭雨(hua_rain, W=1) 优先
 		"lin_chong": return [2, last, 0, 1]     # 猎骑被动(lin_predator, E=2) 优先
 	var o := [last]                             # 其它英雄照旧：先抢大招，再 Q/W/E
@@ -2458,7 +2519,7 @@ func _brain_hua(u: Unit) -> void:
 
 ## 公孙胜·法师：脆皮后排。被贴脸/残血→冰墙横在身前隔挡或撤；交战召金龙；敌成堆放黑雨。
 ## 全托管下他是「守家英雄」：锚在聚义厅附近 GONG_GUARD_R 圈内，绝不追出去（见下方守家预案）。
-const GONG_GUARD_R := 380.0   # 公孙守家半径（≈12 格）：圈外敌不追、被勾出去就回家
+const GONG_GUARD_R := 480.0   # 公孙守家半径（15 格 = 15×32px）：圈外敌不追、被勾出去就回家
 func _brain_gong(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
 		return
@@ -2551,7 +2612,15 @@ func _brain_song(u: Unit) -> void:
 				or _ally_hurt_within(u.position, 200.0, u.faction, 0.6):
 			if _ai_cast_slot(u, 0, u.position):
 				return
-	# P4 E 火攻连营（超视距·有 CD 就放：优先砸最密敌群，太远则砸最近敌，≤520）
+	# P4 W 天降陨石（主力 AOE·优先于火攻）：有 CD、朝最密敌群(≤560) 滚出
+	if u.slot_ready(1):
+		var mp := _densest_foe_pos(u.faction, 110.0)
+		if mp == Vector2.INF or u.position.distance_to(mp) > 560.0:
+			mp = _nearest_foe_pos(u.position, u.faction)
+		if mp != Vector2.INF and u.position.distance_to(mp) <= 560.0:
+			if _ai_cast_slot(u, 1, mp):
+				return
+	# P5 E 火攻连营（超视距·有 CD 就放：优先砸最密敌群，太远则砸最近敌，≤520）
 	if u.slot_ready(2):
 		var fp := _densest_foe_pos(u.faction, 100.0)
 		if fp == Vector2.INF or u.position.distance_to(fp) > 520.0:
@@ -2559,11 +2628,6 @@ func _brain_song(u: Unit) -> void:
 		if fp != Vector2.INF and u.position.distance_to(fp) <= 520.0:
 			if _ai_cast_slot(u, 2, fp):
 				return
-	# P5 W 神行号令（全队加速，团战追击/扑后排时）
-	if u.slot_ready(1) and _ally_combat_count_within(u.position, 190.0, u.faction) >= 2 \
-			and _foe_within(u.position, 240.0, u.faction):
-		if _ai_cast_slot(u, 1, u.position):
-			return
 	# P6 站位：太靠前→退到 buff 圈后沿；掉队→归队；都不满足且敌中距(360,520]→压进火攻射程
 	var c := _ally_combat_centroid(u.faction)
 	var front := _nearest_foe_pos(u.position, u.faction)
@@ -3566,6 +3630,8 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2) -> void:
 			caster.apply_lifesteal(float(eff.get("lifesteal", 1.0)), float(eff.get("dur", 5.0)))
 		"summon":   # 召唤物：武松·驱使猛虎 / 公孙胜·画龙点睛
 			_do_summon(caster, eff, rank)
+		"meteor":
+			_do_meteor(caster, eff, rank, center, foe)
 		"black_rain":   # 公孙胜 Q·黑雨：以己为心随身移动的 DOT；每秒伤害/时长随等级
 			var br_dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 6.0))
 			var br_dps := float(_pick(eff["dps_ranks"], rank)) if eff.has("dps_ranks") else (float(eff["dmg"]) * sc / maxf(br_dur, 0.1))
@@ -3637,6 +3703,54 @@ func _zone_pass(delta: float) -> void:
 						u.take_damage(float(z["dmg"]), src)
 						spawn_impact(u.position, false)
 		_orbit_zones = _orbit_zones.filter(func(z): return float(z["t"]) > 0.0)
+	# 天降陨石：滚动推进，碾过敌人吃一次冲击伤害，过处地面铺灼烧 DOT
+	if not _meteor_zones.is_empty():
+		for z in _meteor_zones:
+			var step: float = minf(float(z["speed"]) * delta, float(z["remain"]))
+			z["remain"] = float(z["remain"]) - step
+			z["pos"] = Vector2(z["pos"]) + Vector2(z["dir"]) * step
+			var mp: Vector2 = z["pos"]
+			var mhw: float = float(z["hw"])
+			var mfoe: int = int(z["foe"])
+			var src = z["caster"]
+			var hit: Dictionary = z["hit"]
+			for u in units:
+				if is_instance_valid(u) and u.faction == mfoe and u.hp > 0.0 and not u.is_resource and not u.garrisoned \
+						and not hit.has(u.get_instance_id()) and mp.distance_to(u.position) <= mhw + u.radius:
+					hit[u.get_instance_id()] = true
+					u.take_damage(float(z["impact"]), src if is_instance_valid(src) else null)
+					spawn_impact(u.position, true)
+			# 过处地面铺火（每滚约 60px 落一处持续灼烧），用现成地火 DOT 系统
+			z["trail"] = float(z["trail"]) + step
+			if float(z["trail"]) >= 60.0:
+				z["trail"] = 0.0
+				var dd: float = float(z["dot_dur"])
+				_spawn_ground_fire(mp, mhw, float(z["dps"]) * dd, dd, src if is_instance_valid(src) else null, mfoe)
+		_meteor_zones = _meteor_zones.filter(func(z): return float(z["remain"]) > 0.0)
+
+
+## 宋江 W·天降陨石：宋江脸前召落陨石朝指向滚出，建立滚动伤害区（碾过冲击 + 过处地火 DOT）。
+func _do_meteor(caster: Unit, eff: Dictionary, rank: int, center: Vector2, foe: int) -> void:
+	var dir := center - caster.position
+	if dir.length() < 1.0:
+		dir = Vector2(-1.0 if caster.face_left else 1.0, 0.0)
+	dir = dir.normalized()
+	var hw := float(eff.get("width", 96.0)) * 0.5
+	var llen := float(eff.get("len", 600.0))
+	var rspeed := float(eff.get("roll_speed", 320.0))
+	var start := caster.position + dir * (caster.radius + 40.0)   # 「脸前」一点落下
+	_meteor_zones.append({"pos": start, "dir": dir, "remain": llen, "speed": rspeed, "hw": hw,
+		"foe": foe, "caster": caster, "impact": float(_pick(eff["impact_ranks"], rank)),
+		"dps": float(_pick(eff["dps_ranks"], rank)), "dot_dur": float(eff.get("dot_dur", 10.0)),
+		"hit": {}, "trail": 999.0})   # trail 初值大 → 起手立刻先铺一处火
+	var mfx := MeteorFx.new()
+	mfx.start_w = start
+	mfx.end_w = start + dir * llen
+	mfx.rad = hw
+	mfx.life = llen / maxf(rspeed, 1.0)
+	mfx.col = Color("ff7a2a")
+	fx_root.add_child(mfx)
+	shake(5.0, start)
 
 
 func _nearest_water_dir(p: Vector2) -> Vector2:
@@ -4108,7 +4222,7 @@ func _ground_dot_pass(delta: float) -> void:
 const ABILITY_FX := {
 	"gongsun_thunder": "thunder",
 	"song_rally": "rally", "chao_rally": "rally",
-	"song_haste": "haste", "dai_dash": "haste",
+	"song_meteor": "fire", "dai_dash": "haste",
 	"lin_sweep": "spear", "lin_charge": "charge", "lin_storm": "stomp",
 	"liu_cleave": "slash", "li_berserk": "stomp", "li_whirl": "whirl", "li_rage": "blood",
 	"luan_smash": "slash", "hu_whips": "slash", "xu_drill": "slash",
@@ -6349,6 +6463,79 @@ class FloatLabel extends Node2D:
 		var pos := Vector2(-w * 0.5, rise)
 		draw_string_outline(font, pos, txt, HORIZONTAL_ALIGNMENT_LEFT, -1, size, 4, Color(0, 0, 0, alpha * 0.85))
 		draw_string(font, pos, txt, HORIZONTAL_ALIGNMENT_LEFT, -1, size, col)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+## 天降陨石（宋江 W 演出）：一颗巨型火球从起点滚到终点（life 秒匀速），亮核+不规则外焰+飞火星+地面焦痕。
+## 只负责画；碾压/地火伤害在 Battle._zone_pass 的 _meteor_zones 结算（视觉与伤害同速、同向）。
+class MeteorFx extends TimedFx:
+	var start_w := Vector2.ZERO
+	var end_w := Vector2.ZERO
+	var rad := 48.0
+	var life := 2.0
+	var col := Color("ff7a2a")
+	var _roll := 0.0
+	var _embers: Array = []
+
+	func _ready() -> void:
+		dur = life
+		t = life
+		position = start_w
+		for i in range(14):
+			_embers.append({"a": randf() * TAU, "d": randf(), "sp": randf_range(40.0, 95.0), "ph": randf() * TAU})
+
+	func _process(delta: float) -> void:
+		t -= delta
+		if t <= 0.0:
+			queue_free()
+			return
+		var k := clampf(1.0 - t / maxf(dur, 0.01), 0.0, 1.0)
+		position = start_w.lerp(end_w, k)
+		_roll += delta * 9.0
+		queue_redraw()
+
+	# 卡通滚动火球：粗描边 + 平涂橙 + 钝头火舌；偏心亮斑与深色斑随 _roll 转 → 一眼看出在「滚」。
+	func _draw() -> void:
+		draw_set_transform_matrix(GameMap.ISO_INV)
+		var R := rad
+		var k := clampf(1.0 - t / maxf(dur, 0.01), 0.0, 1.0)
+		# 入场：从天而降的下坠尾迹（前 0.16 段）
+		if k < 0.16:
+			var fall := 1.0 - k / 0.16
+			draw_line(Vector2(0, -300.0 * fall), Vector2.ZERO, Color(1.0, 0.6, 0.2, 0.5 * fall), R * 0.6)
+		# 地面影子（压扁暗椭圆）
+		draw_set_transform(Vector2(0, 8), 0.0, Vector2(1.0, 0.45))
+		draw_circle(Vector2.ZERO, R * 0.9, Color(0.10, 0.05, 0.02, 0.40))
+		draw_set_transform_matrix(GameMap.ISO_INV)
+		var OUT := Color(0.22, 0.06, 0.02)   # 卡通粗描边
+		var BODY := Color(1.0, 0.42, 0.10)   # 平涂橙
+		var HI := Color(1.0, 0.74, 0.24)     # 浅橙高光
+		var CORE := Color(1.0, 0.95, 0.66)   # 亮黄核
+		# 钝头火舌一圈（描边层 + 亮层），随滚动转
+		var n := 9
+		for i in range(n):
+			var ang := TAU * float(i) / float(n) + _roll
+			var dirp := Vector2(cos(ang), sin(ang))
+			var perp := Vector2(-dirp.y, dirp.x)
+			var tip := dirp * (R * 1.34)
+			var b1 := dirp * (R * 0.86) + perp * (R * 0.34)
+			var b2 := dirp * (R * 0.86) - perp * (R * 0.34)
+			draw_colored_polygon(PackedVector2Array([b1, b2, tip]), OUT)
+			draw_colored_polygon(PackedVector2Array([b1 + dirp * 2.0, b2 + dirp * 2.0, tip * 0.9]), BODY)
+		# 球体：描边 → 平涂橙
+		draw_circle(Vector2.ZERO, R + 3.0, OUT)
+		draw_circle(Vector2.ZERO, R, BODY)
+		# 滚动标记：偏心亮斑 + 深色斑随 _roll 公转 → 明显在滚
+		var off := Vector2(cos(_roll), sin(_roll)) * (R * 0.42)
+		draw_circle(off, R * 0.46, HI)
+		draw_circle(off + Vector2(cos(_roll), sin(_roll)) * (R * 0.20), R * 0.26, CORE)
+		draw_circle(Vector2(cos(_roll + 2.3), sin(_roll + 2.3)) * (R * 0.55), R * 0.14, OUT)
+		draw_circle(Vector2(cos(_roll - 1.9), sin(_roll - 1.9)) * (R * 0.60), R * 0.11, OUT)
+		# 飞溅火星
+		for em in _embers:
+			var a: float = float(em["a"]) + _roll * 0.5
+			var rr: float = R * (0.7 + 0.55 * float(em["d"]))
+			draw_circle(Vector2(cos(a), sin(a)) * rr, 2.6, HI)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 

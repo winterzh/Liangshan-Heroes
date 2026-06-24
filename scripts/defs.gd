@@ -9,7 +9,7 @@ const UNITS := {
 	# ---- 通用troops / 梁山主将（第5关及复用） ----
 	"song_jiang": {"name": "宋江", "hp": 280, "atk": 18, "cd": 0.9, "range": 26, "speed": 78,
 		"hero": true, "aura": "atk", "aura_r": 170, "aura_p": 1.25, "radius": 13, "ability": "song_rally",
-		"abilities": ["song_rally", "song_haste", "song_fire", "song_lead"],
+		"abilities": ["song_rally", "song_meteor", "song_fire", "song_lead"],
 		"hero_trainable": true, "pop": 3, "cost_gold": 160, "cost_wood": 40, "train_time": 38.0, "trained_at": "hall", "min_age": 2},
 	"wu_yong": {"name": "吴用", "hp": 150, "atk": 11, "cd": 1.2, "range": 200, "speed": 78,
 		"ranged": true, "hero": true, "aura": "speed", "aura_r": 170, "aura_p": 1.15, "radius": 12, "ability": "wu_fire"},
@@ -230,8 +230,8 @@ const UNITS := {
 # effect.kind: rally(治疗+攻击buff队友) / haste(队友移速) / smite(范围伤敌,可附slow,可cav加成,可self自身buff)
 #              / debuff(减速+削攻于敌) / drag(拖入水+伤害) / path(交给关卡处理)
 const ABILITIES := {
-	"song_rally": {"name": "替天行道", "cd": 12.0, "targeted": false, "radius": 200.0, "color": Color("ffd24a"),
-		"desc": "号令群雄：周围梁山兵\n回血{v}、攻击+60%（8秒）", "effect": {"kind": "rally", "heal": 42.0, "atk_mult": 1.6, "dur": 8.0}},
+	"song_rally": {"name": "替天行道", "cd": 12.0, "targeted": false, "radius": 300.0, "color": Color("ffd24a"),
+		"desc": "号令群雄：周围梁山兵\n回血{v}、攻击+60%（8秒）·范围加大", "effect": {"kind": "rally", "heal": 42.0, "atk_mult": 1.6, "dur": 8.0}},
 	"wu_fire": {"name": "锦囊火计", "cd": 14.0, "targeted": true, "weak_global": true, "radius": 95.0, "color": Color("ff7a2a"),
 		"desc": "火攻：指定处腾起烈焰\n地面燃烧5秒，累计130灼伤", "effect": {"kind": "fire_dot", "dmg": 130.0, "dur": 5.0}},
 	"lin_sweep": {"name": "丈八横扫", "cd": 8.0, "targeted": false, "radius": 100.0, "color": Color("c0a0ff"),
@@ -295,14 +295,16 @@ const ABILITIES := {
 
 	# ---- 自由模式·英雄技能组（每英雄 3 主动 + 1 被动；伤害随技能等级缩放）----
 	# 宋江：指挥支援
-	"song_haste": {"name": "神行号令", "cd": 8.0, "cd_ranks": [12.0, 10.0, 8.0], "targeted": false, "radius": 190.0, "color": Color("9ce0a0"),
-		"desc": "周围梁山兵\n移速+45%（7秒）·升级缩短冷却", "effect": {"kind": "haste", "speed_mult": 1.45, "dur": 7.0}},
+	"song_meteor": {"name": "天降陨石", "cd": 13.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true, "radius": 96.0, "color": Color("ff7a2a"),
+		"desc": "宋江脸前召落巨型陨石，朝指向滚出约 19 格(≈2/3 屏)，\n碾过单位冲击伤害 30/40/50，过处地面灼烧 10/12/15 每秒、持续 10 秒",
+		"effect": {"kind": "meteor", "impact_ranks": [30.0, 40.0, 50.0], "dps_ranks": [10.0, 12.0, 15.0],
+			"len": 600.0, "width": 96.0, "dot_dur": 10.0, "roll_speed": 320.0}},
 	"song_fire": {"name": "火攻连营", "cd": 11.0, "targeted": true, "weak_global": true, "radius": 100.0, "color": Color("ff7a2a"),
 		"desc": "指定处腾起烈焰\n地面每秒 20 灼伤，持续 5/8/10 秒(随等级)",
 		"effect": {"kind": "fire_dot", "dps": 20.0, "dur_ranks": [5.0, 8.0, 10.0], "dmg": 100.0, "dur": 5.0}},
-	"song_lead": {"name": "替天行道·仁义", "passive": true, "cd": 25.0, "targeted": false, "radius": 0.0, "color": Color("ffd24a"),
-		"desc": "被动·仁义之名：攻击+/生命+/自身回血\n主动·号令众将：所有友方英雄回血(=Q回血量)，宋江 Q 转入冷却",
-		"effect": {"kind": "passive", "atk_add": 3.0, "hp_add": 50.0, "regen": 3.0, "active_kind": "rally_heroes"}},
+	"song_lead": {"name": "替天行道·仁义", "passive": true, "cd": 25.0, "targeted": false, "radius": 170.0, "color": Color("ffd24a"),
+		"desc": "被动·仁义之名：攻击+3 / 生命+50 / 每秒回血3 / 常驻全军移速光环 +5%/10%/15%(随本技能等级)\n主动·号令众将：所有友方英雄回血(=Q回血量)，宋江 Q 同时转入冷却",
+		"effect": {"kind": "passive", "atk_add": 3.0, "hp_add": 50.0, "regen": 3.0, "speed_aura_ranks": [1.05, 1.10, 1.15], "active_kind": "rally_heroes"}},
 	# 林冲：近战突击
 	"lin_charge": {"name": "豹影冲锋", "cd": 7.0, "targeted": false, "radius": 92.0, "color": Color("e0a24a"),
 		"desc": "豹影突进：身边官军\n受 {v} 伤害减速；自身攻击+40%（5秒）", "effect": {"kind": "smite", "dmg": 23.0, "slow": 0.6, "slow_dur": 1.5, "self_atk": 1.4, "self_dur": 5.0}},
