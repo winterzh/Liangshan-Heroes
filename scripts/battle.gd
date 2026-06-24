@@ -1611,6 +1611,12 @@ func _eco_wcap_dyn() -> int:
 	return ECO_WCAP_WOOD if _eco_wood_short() else ECO_WCAP
 
 
+## 采集参照点：主基地(聚义厅)位置——按「离基地最近」挑资源点，避免工人跑远。
+func _eco_base_pos() -> Vector2:
+	var hall := main_base(Unit.FACTION_LIANG)
+	return hall.position if hall != null else map.cell_to_world(level.camera_start_cell())
+
+
 func _eco_workers() -> void:
 	var workers: Array = []
 	for u in units:
@@ -1627,11 +1633,12 @@ func _eco_workers() -> void:
 			w.order_build(site)
 			continue
 		var want_gold := gold_miners < _eco_gold_target()   # 木紧时金矿工目标-1，腾人去伐木
-		var node: Unit = nearest_free_gold(w.position, null, w) if want_gold else null
+		var ref := _eco_base_pos()   # 以基地为参照：先采离基地最近的资源，别让工人跑去远处那棵树
+		var node: Unit = nearest_free_gold(ref, null, w) if want_gold else null
 		if node == null:
-			node = nearest_resource(w.position, "wood")
+			node = nearest_resource(ref, "wood")
 		if node == null:
-			node = nearest_resource(w.position, "")
+			node = nearest_resource(ref, "")
 		if node != null:
 			w.order_gather(node)
 			if node.res_kind == "gold":

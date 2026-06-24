@@ -368,14 +368,15 @@ func _ai_trade_fallback(b) -> void:
 
 # 给一名农民挑资源点：want_gold 时优先没人占的金矿(没空金矿则伐木)；否则直接伐木(没木头才回退金矿)
 func _pick_ai_node(b, w: Unit, want_gold: bool):
+	var ref: Vector2 = ai_base.position if is_instance_valid(ai_base) else w.position   # 先采离大营最近的资源
 	if want_gold:
-		var gold = b.nearest_free_gold(w.position, null, w)
+		var gold = b.nearest_free_gold(ref, null, w)
 		if gold != null:
 			return gold
-	var wood = b.nearest_resource(w.position, "wood")
+	var wood = b.nearest_resource(ref, "wood")
 	if wood != null:
 		return wood
-	return b.nearest_resource(w.position, "")
+	return b.nearest_resource(ref, "")
 
 
 # 当前正下金矿的 AI 农民数（按其采集目标的资源类型计；含运送途中）
