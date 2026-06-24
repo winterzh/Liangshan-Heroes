@@ -164,6 +164,7 @@ var _has_home := false
 var _cd := 0.0
 var _repath := 0.0
 var _flash := 0.0
+var _muzzle_t := 0.0        # 防御塔开火闪光剩余时长（转向炮口闪一下）
 var _stuck_t := 0.0
 var _last_pos := Vector2.ZERO
 var _combat_cool := 0.0  # 最近交战计时；梁山兵脱战后回血（主场休整）
@@ -1146,23 +1147,52 @@ func _production_tick(delta: float) -> void:
 			_train_t = float(battle._defs.get(_train_queue[0], {}).get("train_time", 12.0))
 
 
-## 防御塔（箭楼）：固定索敌，冷却到就放箭
+## 防御塔：固定索敌，冷却到就开火。读 setup_def 实现各塔特化：
+##   target_priority=="hero" → 优先索敌敌方英雄（五雷法坛）；bonus_hero → 命中英雄倍伤；
+##   splash → 落点溅射（霹雳炮）；slow_mult/slow_dur → 命中减速（拒马）。
 func _tower_tick(delta: float) -> void:
 	_cd = maxf(0.0, _cd - delta)
+	_muzzle_t = maxf(0.0, _muzzle_t - delta)
 	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned \
 			or position.distance_to(_target.position) > atk_range + 60.0):
 		_target = null
 	if _target == null:
-		_acquire()
+		if String(setup_def.get("target_priority", "")) == "hero":
+			_tower_acquire_hero()   # 法坛：先锁英雄
+		if _target == null:
+			_acquire()              # 无英雄(或非法坛)→ 取最近
 	if _target != null:
 		var reach := atk_range + _target.radius
 		if position.distance_to(_target.position) <= reach and _cd <= 0.0:
 			_cd = atk_cd
-			battle.spawn_projectile(self, _target, atk * buff_atk)
+			var dmg := atk * buff_atk
+			if _target.is_hero:
+				dmg *= float(setup_def.get("bonus_hero", 1.0))   # 法坛对英雄 3×
+			var sp := float(setup_def.get("splash", 0.0))         # 霹雳炮溅射
+			var sm := float(setup_def.get("slow_mult", 1.0))      # 拒马减速倍率
+			var sd := float(setup_def.get("slow_dur", 0.0))       # 拒马减速时长
+			battle.spawn_projectile(self, _target, dmg, false, sp, sm, sd)
+			_muzzle_t = 0.18                                       # 炮口闪光（朝目标方向，转向开火感）
 			# 驻军增援：每个驻入的远程兵额外放一箭（经典RTS式 garrison-fire）
 			for pg in passengers:
 				if is_instance_valid(pg) and pg.is_ranged and pg.hp > 0.0:
 					battle.spawn_projectile(self, _target, pg.atk * 0.85)
+
+
+## 五雷法坛专用索敌：警戒范围内优先取最近的「敌方英雄」；无英雄则留空(交回 _acquire 取最近)。
+func _tower_acquire_hero() -> void:
+	var best: Unit = null
+	var best_d := INF
+	var cap: float = maxf(aggro_range, atk_range)
+	for u in battle.units:
+		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
+				or not u.is_hero or u.garrisoned or u.is_captive:
+			continue
+		var d: float = position.distance_to(u.position)
+		if d <= cap and d < best_d:
+			best = u
+			best_d = d
+	_target = best
 
 
 ## 发起一次攻击：起手挥击动画，伤害延后到挥击命中瞬间结算（含起手预备）
@@ -2140,9 +2170,101 @@ func _draw_placeholder() -> void:
 		draw_circle(Vector2(0, 0), 2.5, Color.WHITE)
 
 
+## 是否为防御塔（可攻击的塔类建筑）：用于转向绘制。
+func _is_tower() -> bool:
+	return is_building and not is_resource and atk > 0.0 and String(setup_def.get("build_cat", "")) == "tower"
+
+
+## 逻辑方向 → 3x3 朝向格（中心(1,1)=待机）。0=E 顺时针 8 向。
+func _dir8_cell(dlog: Vector2) -> Vector2i:
+	var sd := GameMap.ISO.basis_xform(dlog)   # 投影到屏幕方向
+	if sd.length() < 0.001:
+		return Vector2i(1, 1)
+	var sector := int(round(atan2(sd.y, sd.x) / (PI / 4.0)))
+	sector = ((sector % 8) + 8) % 8   # 0=E 1=SE 2=S 3=SW 4=W 5=NW 6=N 7=NE
+	var cells := [Vector2i(2, 1), Vector2i(2, 2), Vector2i(1, 2), Vector2i(0, 2),
+		Vector2i(0, 1), Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)]
+	return cells[sector]
+
+
+## 程序化塔身（新塔暂无美术时的兜底）。当前处于 ISO_INV(直立)空间。
+func _draw_tower_proc(tint: Color) -> void:
+	var pal := {
+		"thunder_tower": [Color("5a554f"), Color("7a3b2a")],
+		"altar_tower": [Color("47436a"), Color("8a5cc0")],
+		"caltrop_tower": [Color("6b573a"), Color("3a2f20")],
+	}
+	var cols: Array = pal.get(key, [Color("6a6258"), Color("4a443c")])
+	var body: Color = (cols[0] as Color) * tint
+	var top: Color = (cols[1] as Color) * tint
+	var s := radius * 2.2
+	draw_rect(Rect2(-s * 0.32, -s * 0.05, s * 0.64, s * 0.6), body)                    # 塔身
+	draw_rect(Rect2(-s * 0.32, -s * 0.05, s * 0.64, s * 0.6), body.darkened(0.4), false, 2.0)
+	draw_rect(Rect2(-s * 0.40, -s * 0.22, s * 0.80, s * 0.20), body.lightened(0.06))    # 平台
+	for i in range(3):                                                                  # 垛口
+		draw_rect(Rect2(-s * 0.40 + s * 0.28 * float(i), -s * 0.32, s * 0.16, s * 0.12), top)
+
+
+## 会转向的炮管/法杖：从塔顶指向当前目标（无目标朝下）。ISO_INV(直立)空间，方向取屏幕投影。
+func _draw_tower_barrel() -> void:
+	var dlog := Vector2(0.4, 1.0)
+	if _target != null and is_instance_valid(_target):
+		dlog = _target.position - position
+	var sd := GameMap.ISO.basis_xform(dlog)
+	if sd.length() < 0.001:
+		sd = Vector2(0, 1)
+	sd = sd.normalized()
+	var pivot := Vector2(0, -radius * 0.85)
+	var col := Color("3a332b")
+	match key:
+		"altar_tower": col = Color("9a6cd0")
+		"thunder_tower": col = Color("4a4540")
+		"caltrop_tower": col = Color("6b573a")
+	var blen := radius * 1.15
+	draw_circle(pivot, radius * 0.34, col.darkened(0.25))           # 炮座
+	draw_line(pivot, pivot + sd * blen, col, 4.0)                   # 炮管
+	var muzzle := pivot + sd * blen
+	draw_circle(muzzle, 3.2, col.lightened(0.25))                  # 口
+	if key == "altar_tower" and _target != null:                   # 法坛：口部紫光球
+		draw_circle(muzzle, 4.6, Color(0.66, 0.36, 1.0, 0.5))
+	if _muzzle_t > 0.0:                                             # 开火闪光（朝目标，转向开火感）
+		var fl := _muzzle_t / 0.18
+		var fc := Color(1.0, 0.85, 0.4, 0.9 * fl)
+		if key == "altar_tower":
+			fc = Color(0.8, 0.5, 1.0, 0.9 * fl)
+		draw_circle(muzzle, 4.0 + 5.0 * fl, fc)
+		draw_circle(muzzle + sd * 4.0, 2.5 + 3.0 * fl, Color(fc.r, fc.g, fc.b, 0.6 * fl))
+
+
 func _draw_building() -> void:
 	if is_resource:
 		_draw_resource_node()
+		return
+	# 防御塔：不能移动 → 用「转向」表达朝向。有 3x3 朝向图集就按对目标的方向取格(含开火朝向)；
+	# 无图集则程序化塔身 + 一根会转向瞄准目标的炮管/法杖。
+	if _is_tower():
+		var ttint := Color(0.62, 0.66, 0.78, 0.82) if is_constructing else Color.WHITE
+		if Art.tower_sheet(key) != null:
+			var cell := Vector2i(1, 1)   # 无目标→中心(待机)
+			if _target != null and is_instance_valid(_target):
+				cell = _dir8_cell(_target.position - position)
+			var dt := Art.tower_dir_texture(key, cell)
+			if dt != null:
+				var s2 := GameMap.building_visual_px(GameMap.footprint_half_for(radius))
+				draw_texture_rect(dt, Rect2(-s2 * 0.5, -s2 * 0.78, s2, s2), false, ttint)
+				if is_constructing:
+					_draw_build_progress()
+				return
+		var btex := Art.building_texture(key)
+		if btex != null:   # 有静态图集(箭楼/buildings2 新塔)：用其美术当塔身
+			var s3 := GameMap.building_visual_px(GameMap.footprint_half_for(radius))
+			draw_texture_rect(btex, Rect2(-s3 * 0.5, -s3 * 0.78, s3, s3), false, ttint)
+		else:              # 无美术：程序化塔身
+			_draw_tower_proc(ttint)
+		if not is_constructing:
+			_draw_tower_barrel()   # 所有塔都叠「转向炮管/法杖 + 开火闪光」→ 朝当前目标(转向动画)
+		if is_constructing:
+			_draw_build_progress()
 		return
 	# 按建筑自身 key 找专属美术：遭遇战建筑在 buildings；treasure_cart 在 units3；其余在 terrain
 	var tex: Texture2D = Art.building_texture(key)

@@ -35,13 +35,18 @@ const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（
 # 全托管经济 AI（auto_micro_level>=3）：喽啰自动采集/建造/修复 + 自动练兵练将研究 + 自动开战
 # 策略（用户定）：优先出齐英雄(AoE 打 3× 群)，再升级基地/造兵/科技/箭楼。
 var _eco_t := 0.0
+var _eco_trap_cd := 0.0   # 全托管布陷阱节流
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
 const ECO_PRE_HERO_POP := 30          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 几个农民即可，别多盖民居拖时间）
 const ECO_WCAP := 6                    # 出齐英雄后的农民目标数（少养农民，人口/钱留给军队）
 const ECO_GOLD_MINERS := 4            # 金矿工目标（贴仓库·采矿效率 max），其余伐木
+const ECO_WOOD_LOW := 130             # 木头低于此=产量吃紧 → 少派一个金矿工去伐木 + 多养一个农民补产
 const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农民）
 # 经济建筑(仓库/民居/集市)堆在金矿后方(安全角，远离东侧出兵口)护住人口；兵营/箭楼在聚义厅前沿御敌。
-const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"], ["house", 8, "gold"], ["arrow_tower", 7, "hall"]]
+## 全托管常备建筑配额（出齐英雄后按序补，被拆即重建）。塔走多塔种混搭，构筑集中防御。
+const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"], ["house", 8, "gold"],
+	["arrow_tower", 4, "hall"], ["caltrop_tower", 2, "hall"], ["thunder_tower", 3, "hall"], ["altar_tower", 2, "hall"]]
+const ECO_TRAP_CAP := 6   # 全托管同时在场陷阱上限
 const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng", "li_kui", "wu_song"]
 
 var units: Array = []
@@ -110,6 +115,9 @@ const ABILITY_SFX_KIND := {
 }
 var _ability_slot := 0
 var _build_armed := ""        # 待放置的建筑 key（遭遇战建造）
+var _trap_armed := ""         # 待布置的陷阱 key（喽啰 E 子菜单·一次性机关）
+var _worker_cat := ""         # 喽啰命令卡当前分类页：""=根 / "build"建筑 / "tower"塔 / "trap"陷阱
+var _traps: Array = []        # 已布置的陷阱：{key,pos,trigger_r,arm_t,effect,owner,fx}
 var _active: Unit = null      # 当前子组「活动单位」（Tab 切换；命令卡/QWER 针对它）
 var _inspect_unit: Unit = null  # 「查看中」的敌方单位（只读：显示信息+高亮，但不进 selection、不可下令）
 var _demolish_armed_t := 0.0  # 拆除已成型建筑的二次确认计时
@@ -233,6 +241,8 @@ func _ready() -> void:
 			_armor_selftest()
 		if OS.get_environment("AUTOMICRO") == "1":
 			_automicro_selftest()
+		if OS.get_environment("TOWERTRAP_TEST") == "1":
+			_towertrap_selftest()
 		if OS.get_environment("AUTOCAM") == "1":
 			_autocam_selftest()
 	else:
@@ -429,11 +439,13 @@ func lose(line: String) -> void:
 	_end(false, line)
 
 
-func spawn_projectile(from: Unit, target: Unit, dmg: float, crit := false, splash := 0.0) -> void:
+func spawn_projectile(from: Unit, target: Unit, dmg: float, crit := false, splash := 0.0, slow_mult := 1.0, slow_dur := 0.0) -> void:
 	var p := Projectile.new()
 	fx_root.add_child(p)
 	p.position = from.position + Vector2(0, -4)
 	p.splash = splash
+	p.on_slow_mult = slow_mult
+	p.on_slow_dur = slow_dur
 	p.setup(from, target, dmg, crit)
 
 
@@ -635,6 +647,28 @@ func build_menu() -> Array:
 	return out
 
 
+## 命令卡·建造菜单（分类）：cat="build"普通建筑 / "tower"防御塔。未标 build_cat 的默认归"build"。
+func build_menu_cat(cat: String) -> Array:
+	var out: Array = []
+	for spec in build_menu():
+		var d: Dictionary = _defs.get(String(spec["key"]), {})
+		if String(d.get("build_cat", "build")) == cat:
+			out.append(spec)
+	return out
+
+
+## 命令卡·陷阱菜单（喽啰 E）：从 Defs.TRAPS 派生，附当前是否买得起。
+func trap_menu() -> Array:
+	var out: Array = []
+	for key in Defs.TRAPS:
+		var d: Dictionary = Defs.TRAPS[key]
+		var cg := int(d.get("cost_gold", 0))
+		var cw := int(d.get("cost_wood", 0))
+		out.append({"key": key, "label": String(d.get("name", key)),
+			"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw)})
+	return out
+
+
 ## 主基地建筑（带 is_main_base 标记，回退到 key=="hall"）：引擎里"退守基地""默认卸货点"等用。
 ## 让引擎不写死 水浒 的"聚义厅"键——内容包把自己的主基地标 is_main_base 即可。
 func main_base(p_faction := Unit.FACTION_LIANG) -> Unit:
@@ -774,6 +808,175 @@ func ai_start_construction(key: String, cell: Vector2i, faction: int, builder: U
 	if is_instance_valid(builder):
 		builder.order_build(site)
 	return site
+
+
+# ---------- 喽啰命令卡·分类页（建筑 / 塔 / 陷阱 / 维修） ----------
+
+## 进入某分类子页（建筑/塔/陷阱）：先撤一切待指向态，刷新命令卡。
+func _open_worker_cat(cat: String) -> void:
+	cancel_armed()
+	_worker_cat = cat
+	Sfx.play("click")
+	if hud != null:
+		hud.refresh_command()
+
+
+## 退回命令卡根页（返回键 / 右键 / Esc）。
+func _worker_back() -> void:
+	if _worker_cat == "":
+		return
+	_worker_cat = ""
+	if hud != null:
+		hud.refresh_command()
+
+
+## 喽啰 QWER：按当前分类页分派——根页开分类/维修；建筑/塔页放建筑；陷阱页布陷阱。
+func _worker_hotkey(slot: int) -> void:
+	match _worker_cat:
+		"build", "tower":
+			var menu := build_menu_cat(_worker_cat)
+			if slot < menu.size():
+				arm_build(String(menu[slot]["key"]))
+			else:
+				_worker_back()   # 返回键位
+		"trap":
+			var tm := trap_menu()
+			if slot < tm.size():
+				arm_trap(String(tm[slot]["key"]))
+			else:
+				_worker_back()
+		_:
+			match slot:
+				0: _open_worker_cat("build")
+				1: _open_worker_cat("tower")
+				2: _open_worker_cat("trap")
+				3: arm_repair()
+
+
+# ---------- 陷阱（一次性地面机关） ----------
+
+## 武装布置陷阱（喽啰 E 子菜单）：随后点地放置。触屏先把虚影摆到视图中心，拖动定位、松手落地。
+func arm_trap(key: String) -> void:
+	if not Defs.TRAPS.has(key):
+		return
+	_disarm_ability()
+	_disarm_amove()
+	_cancel_build()
+	_trap_armed = key
+	if hud != null and hud.touch_ui:
+		_drag_cur = camera.get_screen_center_position() if is_instance_valid(camera) else get_global_mouse_position()
+		msg("拖动选址 → 松手布置（点「取消」放弃）", 2.0)
+	Sfx.play("click")
+	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
+
+
+func _cancel_trap() -> void:
+	_trap_armed = ""
+	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
+
+## 落点放置陷阱：校验地面可放 + 花费 → 登记一枚陷阱（短暂布防后生效）。
+func _try_place_trap(p: Vector2) -> void:
+	var key := _trap_armed
+	var d: Dictionary = Defs.TRAPS.get(key, {})
+	if d.is_empty():
+		return
+	var cell := map.world_to_cell(to_logic(p))
+	if not map.area_buildable(cell, 0):
+		msg("此处无法布置（地形不平或已被占用）", 1.5)
+		Sfx.play("cant")
+		return
+	var cg := int(d.get("cost_gold", 0))
+	var cw := int(d.get("cost_wood", 0))
+	if not can_afford(cg, cw):
+		msg("资源不足：需 金%d 木%d" % [cg, cw], 1.5)
+		Sfx.play("cant")
+		return
+	spend(cg, cw)
+	Sfx.play("build")
+	_place_trap(key, map.cell_to_world(cell), Unit.FACTION_LIANG)
+	if not Input.is_key_pressed(KEY_SHIFT):
+		_cancel_trap()
+
+
+## 登记一枚陷阱（玩家或全托管 AI 共用）：lp=逻辑落点，owner=布置方阵营（伤其敌）。
+func _place_trap(key: String, lp: Vector2, owner: int) -> void:
+	var d: Dictionary = Defs.TRAPS.get(key, {})
+	if d.is_empty():
+		return
+	var fx := TrapMarkerFx.new()
+	fx.position = lp
+	fx.key = key
+	fx.col = d.get("color", Color("ffaa44"))
+	fx.rad = float(d.get("trigger_r", 65.0)) * 0.4
+	fx_root.add_child(fx)
+	_traps.append({
+		"key": key, "pos": lp, "trigger_r": float(d.get("trigger_r", 65.0)),
+		"arm_t": float(d.get("arm_t", 1.0)), "effect": d.get("effect", {}),
+		"owner": owner, "fx": fx})
+
+
+## 陷阱逐帧：布防计时 → 警戒圈内出现敌人即触发一次后销毁。
+func _trap_pass(delta: float) -> void:
+	if _traps.is_empty():
+		return
+	var triggered: Array = []
+	for tr in _traps:
+		if float(tr["arm_t"]) > 0.0:
+			tr["arm_t"] = float(tr["arm_t"]) - delta
+			if float(tr["arm_t"]) <= 0.0 and is_instance_valid(tr["fx"]):
+				tr["fx"].armed = true   # 布防完成
+			continue
+		var owner: int = int(tr["owner"])
+		var pos: Vector2 = tr["pos"]
+		var rr: float = float(tr["trigger_r"])
+		var victim: Unit = null
+		for u in units:
+			if not is_instance_valid(u) or u.faction == owner or u.hp <= 0.0 \
+					or u.is_resource or u.is_building or u.garrisoned or u.is_captive:
+				continue
+			if pos.distance_to(u.position) <= rr:
+				victim = u
+				break
+		if victim != null:
+			_trigger_trap(tr, victim)
+			triggered.append(tr)
+	for tr in triggered:
+		if is_instance_valid(tr["fx"]):
+			tr["fx"].queue_free()
+		_traps.erase(tr)
+
+
+## 触发一枚陷阱：按 effect.kind 结算（aoe 范围伤 / stun 范围晕 / fire 地面长燃）。
+func _trigger_trap(tr: Dictionary, victim: Unit) -> void:
+	var owner: int = int(tr["owner"])
+	var pos: Vector2 = tr["pos"]
+	var eff: Dictionary = tr["effect"]
+	var kind := String(eff.get("kind", "aoe"))
+	var r := float(eff.get("radius", 90.0))
+	match kind:
+		"fire":
+			_spawn_ground_fire(pos, r, float(eff.get("total", 150.0)), float(eff.get("dur", 6.0)), null, victim.faction)
+		"stun":
+			var sdmg := float(eff.get("dmg", 0.0))
+			var sdur := float(eff.get("dur", 2.0))
+			for u in units:
+				if is_instance_valid(u) and u.faction != owner and u.hp > 0.0 and not u.is_resource \
+						and not u.is_building and not u.garrisoned and pos.distance_to(u.position) <= r:
+					u.apply_stun(sdur)
+					if sdmg > 0.0:
+						u.take_damage(sdmg, null)
+			spawn_impact(pos, true)
+			shake(4.0, pos)
+		_:   # aoe
+			var dmg := float(eff.get("dmg", 120.0))
+			for u in units:
+				if is_instance_valid(u) and u.faction != owner and u.hp > 0.0 and not u.is_resource \
+						and not u.is_building and not u.garrisoned and pos.distance_to(u.position) <= r:
+					u.take_damage(dmg, null)
+			spawn_impact(pos, true)
+			shake(5.0, pos)
+	Sfx.play("sk_smite")
 
 
 func on_building_complete(b: Unit) -> void:
@@ -1069,6 +1272,7 @@ func _physics_process(delta: float) -> void:
 
 	_ground_dot_pass(delta)
 	_zone_pass(delta)
+	_trap_pass(delta)
 	_ice_wall_pass(delta)
 	_tick_pending_casts()
 	level.process(self, delta)
@@ -1333,6 +1537,7 @@ func _auto_economy_pass(delta: float) -> void:
 	_eco_train()
 	_eco_research()
 	_eco_trade()
+	_eco_traps()
 	_eco_muster_and_charge()
 
 
@@ -1388,6 +1593,19 @@ func _eco_muster_point() -> Vector2:
 
 
 ## 喽啰：闲置→补在建工地/采集（金矿工不足补金、否则伐木）；另抽工修受损建筑。
+## 木头吃紧（库存低于阈值）：偏向伐木 + 多养一个农民补产。塔/陷阱很费木，木常成瓶颈。
+func _eco_wood_short() -> bool:
+	return wood < ECO_WOOD_LOW
+
+
+func _eco_gold_target() -> int:
+	return (ECO_GOLD_MINERS - 1) if _eco_wood_short() else ECO_GOLD_MINERS
+
+
+func _eco_wcap_dyn() -> int:
+	return ECO_WCAP + (1 if _eco_wood_short() else 0)
+
+
 func _eco_workers() -> void:
 	var workers: Array = []
 	for u in units:
@@ -1403,7 +1621,7 @@ func _eco_workers() -> void:
 		if site != null:
 			w.order_build(site)
 			continue
-		var want_gold := gold_miners < ECO_GOLD_MINERS
+		var want_gold := gold_miners < _eco_gold_target()   # 木紧时金矿工目标-1，腾人去伐木
 		var node: Unit = nearest_free_gold(w.position, null, w) if want_gold else null
 		if node == null:
 			node = nearest_resource(w.position, "wood")
@@ -1499,7 +1717,7 @@ func _eco_train() -> void:
 			queue_train(hall, hk)
 		return
 	# 英雄齐全且无人阵亡：补农民 → 兵营常备军
-	if _eco_count_workers() < ECO_WCAP and _eco_can_train("lou_luo", hall):
+	if _eco_count_workers() < _eco_wcap_dyn() and _eco_can_train("lou_luo", hall):
 		queue_train(hall, "lou_luo")
 		return
 	if _eco_army_count() + _eco_queued_army() < ECO_ARMY_CAP:
@@ -1560,6 +1778,45 @@ func _eco_trade() -> void:
 		do_trade("wood")   # 100 木 → 70 金
 
 
+## 全托管布陷阱：出齐英雄后、钱有富余时，沿前线再往敌方推一点散布一次性机关（轮换三种），上限 ECO_TRAP_CAP。
+func _eco_traps() -> void:
+	_eco_trap_cd -= 0.5   # 本拍 ~0.5s 调一次
+	if _eco_trap_cd > 0.0:
+		return
+	_eco_trap_cd = 5.0
+	if _traps.size() >= ECO_TRAP_CAP:
+		return
+	if _eco_hero_count() < _eco_hero_target():
+		return   # 英雄至上：没出齐不布陷阱
+	if gold < 220:
+		return   # 留钱给英雄/塔
+	var pick := ""
+	for k in Defs.TRAPS:
+		var d: Dictionary = Defs.TRAPS[k]
+		if can_afford(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0))):
+			pick = k
+			break
+	if pick == "":
+		return
+	# 落点：集结点(前线外推)再往敌方推一点 + 随机散布
+	var muster := _eco_muster_point()
+	var fl := _eco_frontline()
+	var fwd := muster - fl
+	fwd = fwd.normalized() if fwd.length() > 1.0 else Vector2(1, 0)
+	var spot := muster + fwd * randf_range(40.0, 150.0) + Vector2(randf_range(-90.0, 90.0), randf_range(-90.0, 90.0))
+	var cell := map.world_to_cell(to_logic(spot))
+	if not map.area_buildable(cell, 0):
+		return
+	var wp := map.cell_to_world(cell)
+	for tr in _traps:   # 别和已有陷阱挤一起
+		if wp.distance_to(tr["pos"]) < 80.0:
+			return
+	var dd: Dictionary = Defs.TRAPS[pick]
+	if not spend(int(dd.get("cost_gold", 0)), int(dd.get("cost_wood", 0))):
+		return
+	_place_trap(pick, wp, Unit.FACTION_LIANG)
+
+
 # ---------- 全托管经济·助手 ----------
 
 ## 下一座要建的（纯状态驱动·英雄优先）：
@@ -1568,6 +1825,9 @@ func _eco_trade() -> void:
 func _eco_next_build() -> Dictionary:
 	if _eco_count_building("depot") < 1:
 		return {"key": "depot", "near": "gold"}
+	# 出 2 个英雄后：在树边补一座仓库(木头落点)，缩短伐木往返、拉高木产；木紧时尤为关键。
+	if _eco_hero_count() >= 2 and not _eco_has_depot_near_wood():
+		return {"key": "depot", "near": "wood"}
 	if _eco_hero_count() < _eco_hero_target():
 		if pop_cap < ECO_PRE_HERO_POP:
 			return {"key": "house", "near": "gold"}   # 给 6 英雄铺人口(堆金矿后方安全角)
@@ -1576,6 +1836,20 @@ func _eco_next_build() -> Dictionary:
 		if _eco_count_building(String(m[0])) < int(m[1]):
 			return {"key": String(m[0]), "near": String(m[2])}
 	return {}
+
+
+## 树边是否已有仓库(木头落点)：最近林木 320px 内有完好仓库即算有。无林木则视为不需要。
+func _eco_has_depot_near_wood() -> bool:
+	var hall := main_base(Unit.FACTION_LIANG)
+	var hp: Vector2 = hall.position if hall != null else map.cell_to_world(level.camera_start_cell())
+	var tree := nearest_resource(hp, "wood")
+	if tree == null:
+		return true
+	for u in units:
+		if is_instance_valid(u) and u.key == "depot" and u.faction == Unit.FACTION_LIANG \
+				and u.hp > 0.0 and not u.is_constructing and u.position.distance_to(tree.position) < 320.0:
+			return true
+	return false
 
 
 func _eco_count_building(key: String) -> int:
@@ -1593,6 +1867,10 @@ func _eco_anchor(near: String) -> Vector2i:
 		var g := nearest_resource(hp, "gold")
 		if g != null:
 			return map.world_to_cell(g.position)
+	if near == "wood":
+		var w := nearest_resource(hp, "wood")
+		if w != null:
+			return map.world_to_cell(w.position)
 	return map.world_to_cell(hp)
 
 
@@ -2757,6 +3035,18 @@ func _unhandled_input(event: InputEvent) -> void:
 					else:
 						_try_place_building(p)
 					return
+				if _trap_armed != "":
+					if _touch_mode:
+						_dragging = true
+						_drag_from = p
+						_drag_cur = p
+						_box_mode = false
+						_panning = false
+						_press_ms = Time.get_ticks_msec()
+						overlay.queue_redraw()
+					else:
+						_try_place_trap(p)
+					return
 				if _ability_armed != "":
 					if _touch_mode:
 						# 触屏：按下开始「拖动瞄准」，松手才放招——可先按下技能再拖到合适落点(见 release 分支)
@@ -2806,6 +3096,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				elif _ability_armed != "" and _touch_mode:
 					# 触屏：松手 → 在准星(手指当前处)放招（按下后可拖动调整落点/贴边滚屏，松手才结算）
 					_cast_armed_at(p)
+				elif _trap_armed != "" and _touch_mode:
+					# 触屏：松手 → 在虚影处布置陷阱（无效则保留 armed，可重选址或点「取消」）
+					_try_place_trap(_drag_cur)
 				elif _touch_mode:
 					if _box_mode:
 						if _drag_from.distance_to(p) >= 8.0:
@@ -2822,6 +3115,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			if _build_armed != "":
 				_cancel_build()
+				return
+			if _trap_armed != "":
+				_cancel_trap()
 				return
 			if _ability_armed != "":
 				_disarm_ability()
@@ -2885,6 +3181,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif kc == KEY_ESCAPE:
 			if is_armed():
 				cancel_armed()
+			elif economy and _worker_cat != "":
+				_worker_back()   # 先退回命令卡根页，再按 Esc 才弹暂停菜单
 			else:
 				_open_pause()
 
@@ -2972,7 +3270,7 @@ func _ring_cursor(col: Color, glyph: String) -> ImageTexture:
 func _update_hover_cursor() -> void:
 	if DisplayServer.get_name() == "headless" or get_tree().paused:
 		return
-	if _ability_armed != "" or _amove_armed or _repair_armed or _garrison_armed or _build_armed != "":
+	if _ability_armed != "" or _amove_armed or _repair_armed or _garrison_armed or _build_armed != "" or _trap_armed != "":
 		return   # 指向态自管光标
 	var kind := _hover_kind_at(get_global_mouse_position())
 	if kind == _hover_kind:
@@ -3115,6 +3413,7 @@ func cancel_armed() -> void:
 	_disarm_ability()
 	_disarm_garrison()
 	_cancel_build()
+	_cancel_trap()
 
 
 ## 某编队当前存活成员数（触屏编队 chip 用来判断是否点亮）
@@ -3127,7 +3426,7 @@ func group_size(n: int) -> int:
 
 ## 是否处于待指向态（触屏「取消」键据此显隐）
 func is_armed() -> bool:
-	return _amove_armed or _repair_armed or _garrison_armed or _ability_armed != "" or _build_armed != ""
+	return _amove_armed or _repair_armed or _garrison_armed or _ability_armed != "" or _build_armed != "" or _trap_armed != ""
 
 
 ## 选中并把镜头移到某单位（触屏英雄快切栏：点英雄头像直达）
@@ -3334,9 +3633,7 @@ func _command_hotkey(slot: int) -> void:
 	if au.is_hero and au.slot_count() > 0:
 		_cast_ability_slot(slot)
 	elif economy and au.is_worker:
-		var menu := build_menu()
-		if slot < menu.size():
-			arm_build(String(menu[slot]["key"]))
+		_worker_hotkey(slot)   # 分类页分派（建筑/塔/陷阱/维修）
 	elif economy and au.is_building and not au.is_constructing and au.setup_def.has("produces"):
 		var tm := train_menu(au)
 		if slot < tm.size():
@@ -4500,6 +4797,7 @@ func _set_selection(arr: Array) -> void:
 	if _inspect_unit != null and is_instance_valid(_inspect_unit):
 		_inspect_unit.set_inspected(false)   # 选己方 → 退出敌方查看态
 	_inspect_unit = null
+	_worker_cat = ""   # 改选单位 → 命令卡回到根页（建筑/塔/陷阱/维修）
 	for u in selection:
 		if is_instance_valid(u):
 			u.set_selected(false)
@@ -5336,6 +5634,72 @@ func _economy_selftest() -> void:
 			8, 10, lingers_10s, faded_after_30s, bld_remembered, foe_hidden])
 
 
+## 防御塔/陷阱自检（TOWERTRAP_TEST=1）：三种新塔开火、法坛优先索敌英雄、三种陷阱触发。确定性、无需推帧。
+func _towertrap_selftest() -> void:
+	for u in units.duplicate():   # 隔离：清掉场上非建筑官军，免得污染索敌
+		if is_instance_valid(u) and u.faction == Unit.FACTION_GUAN and not u.is_building:
+			units.erase(u)
+			u.queue_free()
+	var origin := map.cell_to_world(map.nearest_open(Vector2i(40, 12)))
+	var results: Array = []
+	# 三种新塔开火（活塔索敌→射出弹体）
+	for tkey in ["thunder_tower", "altar_tower", "caltrop_tower"]:
+		var tw := spawn_unit(tkey, Unit.FACTION_LIANG, origin)
+		tw.is_constructing = false
+		tw.hp = tw.max_hp
+		var foe := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(90, 0))
+		tw._target = null
+		tw._cd = 0.0
+		var pj0 := fx_root.get_child_count()
+		tw._tower_tick(0.1)
+		results.append([tkey + "_shoots", fx_root.get_child_count() > pj0])
+		units.erase(tw); tw.queue_free()
+		units.erase(foe); foe.queue_free()
+	# 法坛优先索敌英雄：近处小兵 + 远处敌将 → 应锁敌将
+	var altar := spawn_unit("altar_tower", Unit.FACTION_LIANG, origin)
+	altar.is_constructing = false
+	altar.hp = altar.max_hp
+	var grunt := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(70, 0))
+	var ehero := spawn_unit("wang_huan", Unit.FACTION_GUAN, origin + Vector2(0, 150))
+	altar._target = null
+	altar._tower_tick(0.0)
+	results.append(["altar_targets_hero", altar._target != null and altar._target.is_hero])
+	units.erase(altar); altar.queue_free()
+	units.erase(grunt); grunt.queue_free()
+	units.erase(ehero); ehero.queue_free()
+	# 三种陷阱触发（布防完成→敌入触发圈→结算并销毁）
+	_traps.clear()
+	_place_trap("trap_logs", origin, Unit.FACTION_LIANG)
+	_traps[-1]["arm_t"] = 0.0
+	var v1 := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin)
+	var hp_b := v1.hp
+	_trap_pass(0.1)
+	results.append(["trap_logs_dmg", v1.hp < hp_b and _traps.is_empty()])
+	if is_instance_valid(v1): units.erase(v1); v1.queue_free()
+	_traps.clear()
+	_place_trap("trap_pit", origin, Unit.FACTION_LIANG)
+	_traps[-1]["arm_t"] = 0.0
+	var v2 := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin)
+	_trap_pass(0.1)
+	results.append(["trap_pit_stun", v2.is_stunned() and _traps.is_empty()])
+	if is_instance_valid(v2): units.erase(v2); v2.queue_free()
+	_traps.clear()
+	var gd0 := _ground_dots.size()
+	_place_trap("trap_oil", origin, Unit.FACTION_LIANG)
+	_traps[-1]["arm_t"] = 0.0
+	var v3 := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin)
+	_trap_pass(0.1)
+	results.append(["trap_oil_fire", _ground_dots.size() > gd0 and _traps.is_empty()])
+	if is_instance_valid(v3): units.erase(v3); v3.queue_free()
+	_traps.clear()
+	_ground_dots.clear()
+	var all_ok := true
+	for r in results:
+		if not bool(r[1]):
+			all_ok = false
+	print("[towertrap] %s ALL=%s" % [results, all_ok])
+
+
 ## 悬停光标 / 驻军出击 / 英雄栏含驻军英雄 自检（HOVERTEST=1，在 SMOKE 末尾跑一次）
 func _hover_selftest() -> void:
 	if OS.get_environment("HOVERTEST") != "1":
@@ -5789,6 +6153,25 @@ class Overlay extends Node2D:
 				draw_texture_rect(btex, Rect2(ctr - Vector2(gs * 0.5, gs * 0.78), Vector2(gs, gs)), false,
 					Color(bcol.r, bcol.g, bcol.b, 0.5))
 			draw_polyline(quad + PackedVector2Array([quad[0]]), bcol, 2.0)
+		# 陷阱布置预览：触发圈（绿=可放 / 红=不可），跟手指/鼠标
+		if b._trap_armed != "":
+			var td: Dictionary = Defs.TRAPS.get(b._trap_armed, {})
+			var tref: Vector2 = b._drag_cur if b._touch_mode else get_global_mouse_position()
+			var tcell: Vector2i = b.map.world_to_cell(b.to_logic(tref))
+			var tok: bool = b.map.area_buildable(tcell, 0) \
+				and b.can_afford(int(td.get("cost_gold", 0)), int(td.get("cost_wood", 0)))
+			var tcol := Color(0.4, 1.0, 0.5) if tok else Color(1.0, 0.35, 0.3)
+			var tctr: Vector2 = b.to_screen(b.map.cell_to_world(tcell))
+			var trr: float = float(td.get("trigger_r", 65.0))
+			# 触发圈用等距投影画成贴地椭圆
+			var pts := PackedVector2Array()
+			for i in range(28):
+				var a := TAU * float(i) / 28.0
+				pts.append(tctr + GameMap.ISO.basis_xform(Vector2(cos(a), sin(a)) * trr))
+			draw_colored_polygon(pts, Color(tcol.r, tcol.g, tcol.b, 0.16))
+			draw_polyline(pts + PackedVector2Array([pts[0]]), tcol, 2.0)
+			var tmk: Color = td.get("color", Color("ffaa44"))
+			draw_circle(tctr, 6.0, Color(tmk.r, tmk.g, tmk.b, 0.9))
 
 	## 技能释放指示器：按技能命中几何画地面预览（直线箭头 / 前方扇形 / 圆圈），跟随鼠标。
 	func _draw_cast_indicator(ad: Dictionary) -> void:
@@ -6496,6 +6879,45 @@ class FloatLabel extends Node2D:
 
 ## 天降陨石（宋江 W 演出）：一颗巨型火球从起点滚到终点（life 秒匀速），亮核+不规则外焰+飞火星+地面焦痕。
 ## 只负责画；碾压/地火伤害在 Battle._zone_pass 的 _meteor_zones 结算（视觉与伤害同速、同向）。
+## 陷阱地面标记（持续显示，直到触发被销毁）：贴地暗斑 + 直立机关图标；布防中虚框闪烁。
+## 位置=逻辑落点（fx_root 世界画布按等距投影）。只负责画；触发/伤害在 Battle._trap_pass/_trigger_trap。
+class TrapMarkerFx extends Node2D:
+	var key := ""
+	var col := Color("ffaa44")
+	var rad := 22.0
+	var armed := false
+	var _t := 0.0
+
+	func _process(delta: float) -> void:
+		_t += delta
+		queue_redraw()
+
+	func _draw() -> void:
+		var pulse := 0.5 + 0.5 * sin(_t * 3.0)
+		draw_circle(Vector2.ZERO, rad, Color(0.08, 0.06, 0.04, 0.30))             # 贴地暗斑
+		draw_circle(Vector2.ZERO, rad * 0.66, Color(col.r, col.g, col.b, 0.16))
+		if not armed:                                                             # 布防中：虚框闪烁
+			draw_arc(Vector2.ZERO, rad * (1.0 + 0.18 * pulse), 0.0, TAU, 28,
+				Color(col.r, col.g, col.b, 0.22 + 0.28 * pulse), 2.0)
+		draw_set_transform_matrix(GameMap.ISO_INV)                               # 直立图标
+		match key:
+			"trap_logs":   # 滚木礌石：几根横木
+				for i in range(3):
+					var y := -6.0 + float(i) * 6.0
+					draw_line(Vector2(-12, y), Vector2(12, y), Color(0.55, 0.36, 0.18), 4.0)
+					draw_line(Vector2(-12, y), Vector2(12, y), Color(0.30, 0.20, 0.10), 1.0)
+			"trap_pit":    # 陷坑：黑洞 + 交叉枝
+				draw_circle(Vector2(0, -2), 10.0, Color(0.05, 0.04, 0.03, 0.9))
+				draw_line(Vector2(-10, -10), Vector2(10, 4), Color(0.4, 0.34, 0.2), 2.0)
+				draw_line(Vector2(10, -10), Vector2(-10, 4), Color(0.4, 0.34, 0.2), 2.0)
+			"trap_oil":    # 火油：油渍 + 反光
+				draw_circle(Vector2(0, -2), 11.0, Color(0.10, 0.07, 0.04, 0.85))
+				draw_circle(Vector2(-3, -5), 3.0, Color(1.0, 0.6, 0.2, 0.5))
+			_:
+				draw_circle(Vector2(0, -2), 8.0, col)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
 class MeteorFx extends TimedFx:
 	var start_w := Vector2.ZERO
 	var end_w := Vector2.ZERO

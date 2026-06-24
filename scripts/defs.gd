@@ -169,8 +169,20 @@ const UNITS := {
 	"liang_ma": {"name": "梁山马军", "hp": 210, "atk": 15, "cd": 0.95, "range": 26, "speed": 112, "cavalry": true, "radius": 13,
 		"pop": 2, "cost_gold": 90, "cost_wood": 40, "train_time": 22.0, "trained_at": "barracks", "min_age": 2},
 	"arrow_tower": {"name": "箭楼", "hp": 700, "atk": 17, "cd": 1.3, "range": 215, "speed": 0, "ranged": true,
-		"building": true, "radius": 20, "buildable": true, "build_order": 2, "cost_gold": 110, "cost_wood": 60, "build_time": 24.0,
+		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 2, "cost_gold": 110, "cost_wood": 60, "build_time": 24.0,
 		"garrison_cap": 5, "min_age": 2},
+	# 霹雳炮：群伤炮塔——慢射速、落点小范围溅射（克密集小兵）。proj_kind=bomb 抛射炸弹视觉。
+	"thunder_tower": {"name": "霹雳炮", "hp": 650, "atk": 22, "cd": 2.2, "range": 200, "speed": 0, "ranged": true,
+		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 7, "cost_gold": 160, "cost_wood": 100, "build_time": 26.0,
+		"splash": 75.0, "proj_kind": "bomb", "min_age": 2},
+	# 五雷法坛：紫雷球——攻击略低于箭楼，但优先索敌英雄、对英雄 3× 伤害（克对方大将）。
+	"altar_tower": {"name": "五雷法坛", "hp": 600, "atk": 13, "cd": 1.6, "range": 235, "speed": 0, "ranged": true,
+		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 8, "cost_gold": 170, "cost_wood": 80, "build_time": 26.0,
+		"proj_kind": "magic", "bonus_hero": 3.0, "target_priority": "hero", "min_age": 2},
+	# 拒马（绊马坑）：控场塔——伤害很低，命中减速 ~55%/1.3s，拖住敌人挨别的塔火力。
+	"caltrop_tower": {"name": "拒马", "hp": 700, "atk": 5, "cd": 1.1, "range": 180, "speed": 0, "ranged": true,
+		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 9, "cost_gold": 100, "cost_wood": 70, "build_time": 20.0,
+		"slow_mult": 0.45, "slow_dur": 1.3, "min_age": 2},
 	"house": {"name": "民居", "hp": 480, "atk": 0, "building": true, "radius": 20, "buildable": true, "build_order": 3,
 		"cost_gold": 0, "cost_wood": 55, "build_time": 16.0, "provides_pop": 10},
 	"depot": {"name": "仓库", "hp": 560, "atk": 0, "building": true, "radius": 20, "buildable": true, "build_order": 4,
@@ -224,6 +236,18 @@ const UNITS := {
 		"ability": "shan_flood", "abilities": ["shan_flood", "jd_valor"]},
 	"wen_da": {"name": "闻达", "hp": 1600, "atk": 51, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 15,
 		"aura": "atk", "aura_r": 170, "aura_p": 1.12, "ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
+}
+
+# 陷阱（喽啰 E 子菜单）：一次性地面机关。布在必经之路，敌人进 trigger_r 即触发一次后消失。
+# 由 Battle._traps + _trap_pass 结算；art_db TRAP_CELLS / 程序化绘制。
+# effect.kind: aoe(落点范围物理伤) / stun(范围眩晕+微伤) / fire(地面长燃 DoT，复用 _spawn_ground_fire)
+const TRAPS := {
+	"trap_logs": {"name": "滚木礌石", "cost_gold": 60, "cost_wood": 30, "trigger_r": 70.0, "arm_t": 1.0,
+		"color": Color("9c6b3a"), "effect": {"kind": "aoe", "dmg": 120.0, "radius": 90.0}},
+	"trap_pit": {"name": "陷坑", "cost_gold": 50, "cost_wood": 20, "trigger_r": 60.0, "arm_t": 1.0,
+		"color": Color("6b5a3a"), "effect": {"kind": "stun", "dur": 2.0, "dmg": 15.0, "radius": 80.0}},
+	"trap_oil": {"name": "火油", "cost_gold": 70, "cost_wood": 40, "trigger_r": 65.0, "arm_t": 1.0,
+		"color": Color("ff7a2a"), "effect": {"kind": "fire", "total": 150.0, "dur": 6.0, "radius": 95.0}},
 }
 
 # 技能定义：name,cd,targeted,radius,color,desc(UI), 以及 effect(数据化结算描述)。

@@ -45,9 +45,30 @@ const BUILDING_CELLS := {
 	"house": Vector2i(0, 1), "depot": Vector2i(1, 1),
 }
 
+# 新防御塔 2x2 图集（霹雳炮/五雷法坛/拒马 + 备用）。无图则程序化塔身兜底。
+const BUILDINGS2_SHEET := "res://assets/buildings2.png"
+const BUILDING2_CELLS := {
+	"thunder_tower": Vector2i(0, 0), "altar_tower": Vector2i(1, 0), "caltrop_tower": Vector2i(0, 1),
+}
+
 const OBJECT_CELLS := {
 	"gold_mine": Vector2i(0, 0), "tree": Vector2i(1, 0),
 	"tree1": Vector2i(0, 1), "tree2": Vector2i(1, 1),
+}
+
+# 陷阱 2x2 图集（喽啰 E 一次性机关）。无图返回 null（程序化 TrapMarkerFx 兜底）。
+const TRAPS_SHEET := "res://assets/traps.png"
+const TRAP_CELLS := {
+	"trap_logs": Vector2i(0, 0), "trap_pit": Vector2i(1, 0), "trap_oil": Vector2i(0, 1),
+}
+
+# 防御塔朝向 3x3 图集：中心(1,1)=底座/头像，外围 8 格=八方向开火帧。
+# 命名 res://assets/tower_<short>.png。无图则 building_texture 退回 BUILDING_CELLS / 程序化。
+const TOWER_DIR_SHEETS := {
+	"arrow_tower": "res://assets/tower_arrow.png",
+	"thunder_tower": "res://assets/tower_thunder.png",
+	"altar_tower": "res://assets/tower_altar.png",
+	"caltrop_tower": "res://assets/tower_caltrop.png",
 }
 
 const UNIT2_CELLS := {
@@ -129,7 +150,10 @@ var _portraits7_tex: Texture2D
 var _portraits8_tex: Texture2D
 var _portraits9_tex: Texture2D
 var _buildings_tex: Texture2D
+var _buildings2_tex: Texture2D
 var _objects_tex: Texture2D
+var _traps_tex: Texture2D
+var _tower_tex := {}   # 塔 key -> 3x3 朝向贴图(或 null)，惰性加载
 var _cache := {}
 var _terrain_img: Image
 var _avg_cache := {}
@@ -152,7 +176,9 @@ func _ready() -> void:
 	_portraits8_tex = _try_load(PORTRAITS8_SHEET)
 	_portraits9_tex = _try_load(PORTRAITS9_SHEET)
 	_buildings_tex = _try_load(BUILDINGS_SHEET)
+	_buildings2_tex = _try_load(BUILDINGS2_SHEET)
 	_objects_tex = _try_load(OBJECTS_SHEET)
+	_traps_tex = _try_load(TRAPS_SHEET)
 
 
 func _try_load(path: String) -> Texture2D:
@@ -253,8 +279,36 @@ func building_texture(key: String) -> Texture2D:
 	var ov := _content_override(key)   # 内容包覆盖优先
 	if ov != null:
 		return ov
+	var tw := tower_sheet(key)         # 防御塔：3x3 朝向表的中心格当底座/图标
+	if tw != null:
+		return _atlas(tw, Vector2i(1, 1), 3, "twr_%s_c" % key)
 	if _buildings_tex != null and BUILDING_CELLS.has(key):
 		return _atlas(_buildings_tex, BUILDING_CELLS[key], 2, "b_" + key)
+	if _buildings2_tex != null and BUILDING2_CELLS.has(key):
+		return _atlas(_buildings2_tex, BUILDING2_CELLS[key], 2, "b2_" + key)
+	return null
+
+
+## 防御塔 3x3 朝向图集（惰性加载）。无图返回 null。
+func tower_sheet(key: String) -> Texture2D:
+	key = _ra(key)
+	if not _tower_tex.has(key):
+		_tower_tex[key] = _try_load(TOWER_DIR_SHEETS[key]) if TOWER_DIR_SHEETS.has(key) else null
+	return _tower_tex[key]
+
+
+## 防御塔朝向贴图：cell=3x3 中的格 (col,row)，(1,1)=中心底座。无 3x3 表则返回 null（在世界画程序化转向）。
+func tower_dir_texture(key: String, cell: Vector2i) -> Texture2D:
+	var tx := tower_sheet(key)
+	if tx == null:
+		return null
+	return _atlas(tx, cell, 3, "twrd_%s_%d_%d" % [key, cell.x, cell.y])
+
+
+## 陷阱贴图（喽啰 E）。无图返回 null（TrapMarkerFx 程序化兜底）。
+func trap_texture(key: String) -> Texture2D:
+	if _traps_tex != null and TRAP_CELLS.has(key):
+		return _atlas(_traps_tex, TRAP_CELLS[key], 2, "trap_" + key)
 	return null
 
 

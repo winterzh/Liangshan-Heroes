@@ -922,7 +922,7 @@ func _rebuild_command_card() -> void:
 	if au != null and au.is_hero and au.slot_count() > 0:
 		sig = ["hero", au.get_instance_id(), au.melee_mode]   # 切刀/弓 → 重建命令卡更新按钮态
 	elif au != null and au.is_worker and eco:
-		sig = ["build"]
+		sig = ["build", battle._worker_cat]   # 分类页切换 → 重建命令卡
 	elif au != null and au.is_building and not au.is_constructing and (au.setup_def.has("produces") or au.setup_def.has("researches")) and eco:
 		sig = ["train", au.get_instance_id(), au._train_queue.size()]   # 队列增减 → 重建以更新撤单图标
 	elif au != null and au.is_building and not au.is_constructing and au.setup_def.has("trades") and eco:
@@ -953,17 +953,34 @@ func _rebuild_command_card() -> void:
 			b.hotkey = hotkeys[i] if i < hotkeys.size() else ""
 			_skill_bar.add_child(b)
 	elif au.is_worker and eco:
-		for spec in battle.build_menu():
-			var cb := CmdButton.new()
-			cb.hud = self
-			cb.spec = spec
-			_skill_bar.add_child(cb)
-		# 维修键：让「修缮受损建筑」可被发现（不止右键）。点亮后再点己方建筑即派工人修。
-		var rp := CmdButton.new()
-		rp.hud = self
-		rp.spec = {"kind": "repair", "label": "维修", "cost_g": 0, "cost_w": 0,
-			"sub": "点亮后点选受损的己方建筑修缮"}
-		_skill_bar.add_child(rp)
+		var wcat: String = battle._worker_cat
+		if wcat == "build" or wcat == "tower":
+			for spec in battle.build_menu_cat(wcat):
+				var cb := CmdButton.new(); cb.hud = self; cb.spec = spec
+				_skill_bar.add_child(cb)
+			_add_worker_back()
+		elif wcat == "trap":
+			for spec in battle.trap_menu():
+				var cb := CmdButton.new(); cb.hud = self
+				cb.spec = {"kind": "trap", "key": spec["key"], "label": spec["label"],
+					"cost_g": spec["cost_g"], "cost_w": spec["cost_w"], "affordable": spec["affordable"],
+					"sub": "左键选址布置（一次性机关）"}
+				_skill_bar.add_child(cb)
+			_add_worker_back()
+		else:
+			# 根页：Q 建筑　W 塔　E 陷阱　R 维修
+			for cdef in [{"cat": "build", "label": "建筑", "sub": "兵营/民居/仓库/集市/作坊"},
+					{"cat": "tower", "label": "塔", "sub": "箭楼/霹雳炮/五雷法坛/拒马"},
+					{"cat": "trap", "label": "陷阱", "sub": "滚木/陷坑/火油（一次性）"}]:
+				var cb := CmdButton.new(); cb.hud = self
+				cb.spec = {"kind": "cat", "cat": cdef["cat"], "label": cdef["label"],
+					"cost_g": 0, "cost_w": 0, "affordable": true, "sub": cdef["sub"]}
+				_skill_bar.add_child(cb)
+			# 维修键：点亮后再点己方建筑即派工人修。
+			var rp := CmdButton.new(); rp.hud = self
+			rp.spec = {"kind": "repair", "label": "维修", "cost_g": 0, "cost_w": 0,
+				"sub": "点亮后点选受损的己方建筑修缮"}
+			_skill_bar.add_child(rp)
 	elif au.is_building and not au.is_constructing and (au.setup_def.has("produces") or au.setup_def.has("researches")) and eco:
 		# 生产建筑：训练/研究按钮更小、分两排（多列）；键盘 Q/W/E/R 仍按 train_menu 顺序派发。
 		var prod: Array = []
@@ -1005,6 +1022,15 @@ func _rebuild_command_card() -> void:
 		eb.spec = {"kind": "eject", "label": "出击 (%d)" % au.passengers.size(),
 			"cost_g": 0, "cost_w": 0, "affordable": true, "sub": "驻军全部冲出", "bld": au}
 		_skill_bar.add_child(eb)
+
+
+## 喽啰分类子页的「返回」键（也可 Esc/右键返回）。
+func _add_worker_back() -> void:
+	var bb := CmdButton.new()
+	bb.hud = self
+	bb.spec = {"kind": "back", "label": "返回", "cost_g": 0, "cost_w": 0,
+		"affordable": true, "sub": "回上一层（Esc / 右键也可）"}
+	_skill_bar.add_child(bb)
 
 
 ## 生产队列专栏：标题「生产队列 N」+ 紧凑小图标网格（队首=训练中带剩余秒数，点击撤单退资源）。
@@ -1648,6 +1674,8 @@ class CmdButton extends Control:
 	var _press_ms := 0
 	var _held := false
 	var _tip_shown := false
+	var _press_pos := Vector2.ZERO   # 触屏：按下位置（判定是否「拖出按钮」）
+	var _aiming := false             # 触屏：建造/陷阱按下即 arm，拖动选址、松手落地
 
 	func _init() -> void:
 		# 经典RTS式紧凑命令图标：方形图标 + 单位/建筑名 + 花费。详细说明走「悬浮说明卡」，省横向空间。
@@ -1663,8 +1691,8 @@ class CmdButton extends Control:
 			custom_minimum_size = Vector2(74, 68) if _t else Vector2(62, 68)   # 生产按钮更小·矮一点，两排能完整放进底栏
 		else:
 			custom_minimum_size = Vector2(88, 104) if _t else Vector2(76, 88)   # 触屏放大易点
-		# 触屏：长按 ≥400ms 弹说明（替代失效的鼠标 hover）
-		if _held and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
+		# 触屏：长按 ≥400ms 弹说明（替代失效的鼠标 hover）；瞄准中(建造/陷阱拖放)不弹
+		if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
 			_tip_shown = true
 			_on_hover_in()
 
@@ -1706,6 +1734,18 @@ class CmdButton extends Control:
 			accent = Color(0.45, 0.55, 0.32); glyph = "练"; tex = Art.avatar_texture(key)   # 有头像优先用头像(干净)，无则退回走图
 		elif kind == "build":
 			tex = Art.building_texture(key)
+		elif kind == "cat":
+			var cat := String(spec.get("cat", ""))
+			if cat == "tower":
+				accent = Color(0.5, 0.42, 0.62); glyph = "塔"; tex = Art.building_texture("arrow_tower")
+			elif cat == "trap":
+				accent = Color(0.6, 0.45, 0.25); glyph = "陷"
+			else:
+				accent = Color(0.5, 0.45, 0.3); glyph = "建"; tex = Art.building_texture("barracks")
+		elif kind == "trap":
+			accent = Color(0.6, 0.45, 0.25); glyph = String(spec.get("label", "陷")).substr(0, 1); tex = Art.trap_texture(key)
+		elif kind == "back":
+			accent = Color(0.4, 0.4, 0.42); glyph = "返"
 		elif kind == "research":
 			accent = Color(0.45, 0.4, 0.62); glyph = "研"
 		elif kind == "trade":
@@ -1754,6 +1794,12 @@ class CmdButton extends Control:
 			info = "+10%吸血" if bool(spec.get("melee", false)) else "可拔刀"
 		elif kind == "garrison":
 			info = "点亮后点建筑进驻"
+		elif kind == "cat":
+			info = "▸ 展开"
+		elif kind == "back":
+			info = "◂ 返回"
+		elif kind == "trap":
+			info = ("金%d " % cg if cg > 0 else "") + ("木%d" % cw if cw > 0 else "")
 		elif kind == "train":
 			var bld = spec.get("bld", null)
 			if is_instance_valid(bld) and not bld._train_queue.is_empty():
@@ -1777,7 +1823,7 @@ class CmdButton extends Control:
 			Color("ffd24a") if aff else Color(0.85, 0.35, 0.3))
 		# 快捷键键帽（Q/W/E/R，与 _command_hotkey 槽位一致）；「出击」/撤单/队列 非槽位命令，不画键帽。触屏隐藏（手机无键盘）
 		var slot := get_index()
-		if slot < 4 and kind != "eject" and kind != "weapon" and kind != "repair" and kind != "garrison" and kind != "cancel_train" and not (hud != null and hud.touch_ui):
+		if slot < 4 and kind != "eject" and kind != "weapon" and kind != "back" and kind != "garrison" and kind != "cancel_train" and not (hud != null and hud.touch_ui):
 			var keyc: String = ["Q", "W", "E", "R"][slot]
 			var kr := Rect2(size.x - 17, 3, 15, 15)
 			draw_rect(kr, Color(0, 0, 0, 0.6))
@@ -1806,29 +1852,64 @@ class CmdButton extends Control:
 			hud.battle.toggle_hero_melee(spec.get("hero", null))
 		elif kind == "cancel_train":
 			hud.battle.cancel_train(spec.get("bld", null), int(spec.get("index", -1)))
+		elif kind == "cat":
+			hud.battle._open_worker_cat(String(spec.get("cat", "")))
+		elif kind == "back":
+			hud.battle._worker_back()
+		elif kind == "trap":
+			hud.battle.arm_trap(String(spec.get("key", "")))
 		else:
 			hud.battle.arm_build(String(spec.get("key", "")))
 
 	func _gui_input(event: InputEvent) -> void:
-		if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
-			return
+		var is_btn: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT
 		if hud == null or not hud.touch_ui:
-			if event.pressed:           # 桌面：按下即执行（hover 出说明）
+			if is_btn and event.pressed:   # 桌面：按下即执行（hover 出说明；建造/陷阱随后点地图）
 				_execute()
-			accept_event()
+			if is_btn:
+				accept_event()
 			return
-		# 触屏：短按执行，长按只出说明（_process 里弹）
-		if event.pressed:
-			_held = true
-			_press_ms = Time.get_ticks_msec()
-		else:
-			_held = false
-			if _tip_shown:
-				_tip_shown = false
-				_on_hover_out()
+		# 触屏：建造/陷阱 = 单手势(按下 arm → 拖动选址 → 松手在落点落地)；与放技能一致。
+		# 其余键短按执行、长按出说明。原地点(没拖)→保持 armed，可接着点地图放（两段式也松手施放）。
+		var kind := String(spec.get("kind", "build"))
+		var aimable: bool = kind == "build" or kind == "trap"
+		if is_btn:
+			if event.pressed:
+				_held = true
+				_press_ms = Time.get_ticks_msec()
+				_press_pos = event.position
+				_aiming = false
+				if aimable and hud.battle != null:
+					_execute()   # 立刻 arm 建造/陷阱
+					if (kind == "build" and hud.battle._build_armed != "") or (kind == "trap" and hud.battle._trap_armed != ""):
+						_aiming = true
+						hud.battle._drag_cur = hud.battle.get_global_mouse_position()
+						if hud.battle.overlay != null:
+							hud.battle.overlay.queue_redraw()
 			else:
-				_execute()
-		accept_event()
+				_held = false
+				if _tip_shown:
+					_tip_shown = false
+					_on_hover_out()
+				elif _aiming:
+					# 拖出按钮(到战斗画面)再松手 → 在手指落点落地；原地点 → 保持 armed 等点地图
+					if _press_pos.distance_to(event.position) > 24.0:
+						var wp: Vector2 = hud.battle.get_global_mouse_position()
+						if kind == "build" and hud.battle._build_armed != "":
+							hud.battle._try_place_building(wp)
+						elif kind == "trap" and hud.battle._trap_armed != "":
+							hud.battle._try_place_trap(wp)
+					_aiming = false
+				else:
+					_execute()
+			accept_event()
+		elif event is InputEventMouseMotion and _held and _aiming:
+			# 虚影跟手指：实时更新落点 + 重画放置预览
+			if hud.battle != null:
+				hud.battle._drag_cur = hud.battle.get_global_mouse_position()
+				if hud.battle.overlay != null:
+					hud.battle.overlay.queue_redraw()
+			accept_event()
 
 
 ## 英雄技能槽按钮：名称 + 等级点 + 冷却 + 学习(+)；点击施放/学习

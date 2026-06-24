@@ -40,8 +40,46 @@ func _init() -> void:
 	# 资源点物件 2x2 图集（绿幕底）→ assets/objects.png（金矿+三种树）
 	if FileAccess.file_exists(SRC_DIR + "/objects.png"):
 		_cut_atlas(SRC_DIR + "/objects.png", "res://assets/objects.png", 256)
+	# 陷阱 2x2（均分切·绿幕抠像·逐格居中）→ assets/traps.png（滚木/陷坑/火油 + 备用）
+	if FileAccess.file_exists(SRC_DIR + "/traps_raw.png"):
+		_cut_grid(SRC_DIR + "/traps_raw.png", "res://assets/traps.png", 256, 2, true)
+	# 新防御塔 2x2（备用静态图集，3x3 朝向图缺失时回退）→ assets/buildings2.png
+	if FileAccess.file_exists(SRC_DIR + "/towers_raw.png"):
+		_cut_grid(SRC_DIR + "/towers_raw.png", "res://assets/buildings2.png", 304, 2, true)
+	# 防御塔 3x3 八方向开火图（均分切·绿幕抠像·【不】逐格居中，保持塔身固定只转武器）→ assets/tower_*.png
+	for tw in ["tower_arrow", "tower_thunder", "tower_altar", "tower_caltrop"]:
+		if FileAccess.file_exists(SRC_DIR + "/" + tw + ".png"):
+			_cut_grid(SRC_DIR + "/" + tw + ".png", "res://assets/" + tw + ".png", 256, 3, false)
 	print("[cut_anim] done, ", n, " sheets")
 	quit()
+
+
+## 均分网格切图（绿幕抠像）：grid×grid 等分 → 每格 INSET 内缩 → 抠绿底 → 去溢色 →（可选逐格居中）→
+## 拼成 cell*grid 的干净透明图集（art_db 以同 grid 切片）。无网格线的干净绿幕图用「等分」比找黑缝更稳。
+## do_center=false 用于「朝向图」：保持主体在格内同一相对位置（只让武器朝向变化，塔身不跳）。
+func _cut_grid(src_path: String, dst: String, cell: int, grid: int, do_center: bool) -> void:
+	var img := Image.load_from_file(src_path)
+	if img == null:
+		print("[cut_anim] SKIP missing ", src_path); return
+	img.convert(Image.FORMAT_RGBA8)
+	var W := img.get_width()
+	var H := img.get_height()
+	var out := Image.create(cell * grid, cell * grid, false, Image.FORMAT_RGBA8)
+	for cy in range(grid):
+		for cx in range(grid):
+			var rx: int = int(round(float(W) * cx / grid)) + INSET
+			var ry: int = int(round(float(H) * cy / grid)) + INSET
+			var rw: int = int(round(float(W) * (cx + 1) / grid)) - INSET - rx
+			var rh: int = int(round(float(H) * (cy + 1) / grid)) - INSET - ry
+			var sub := img.get_region(Rect2i(rx, ry, rw, rh))
+			sub.resize(cell, cell, Image.INTERPOLATE_LANCZOS)
+			_key_background(sub)
+			_despill(sub)
+			if do_center:
+				_center_content(sub)
+			out.blit_rect(sub, Rect2i(0, 0, cell, cell), Vector2i(cx * cell, cy * cell))
+	out.save_png(ProjectSettings.globalize_path(dst))
+	print("[cut_anim] wrote ", dst, " (", grid, "x", grid, ")")
 
 
 ## 2x2 绿幕图集 → 抠底·去溢色·居中后按 2x2 输出（art_db 以 grid=2 切片）
