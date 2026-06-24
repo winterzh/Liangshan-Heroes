@@ -44,13 +44,15 @@ const HERO_DIFF := {
 
 # 建造序列（相对大营的格偏移）：到点+负担得起+有空闲农民就开真实工地。民居提升 AI 人口上限。
 const BUILD_PLAN := [
-	{"key": "barracks",    "cell": Vector2i(3, 3)},    # 先兵营：尽快能练兵
-	{"key": "arrow_tower", "cell": Vector2i(-3, 1)},    # 再修箭楼护营
-	{"key": "house",       "cell": Vector2i(-4, 0)},
-	{"key": "arrow_tower", "cell": Vector2i(-2, 4)},
-	{"key": "house",       "cell": Vector2i(4, 1)},
-	{"key": "arrow_tower", "cell": Vector2i(1, -2)},
-	{"key": "siege_workshop", "cell": Vector2i(5, 3), "age": 3},   # 替天行道代才建，造撞车攻坚
+	{"key": "barracks",      "cell": Vector2i(3, 3)},                 # 先兵营：尽快能练兵
+	{"key": "arrow_tower",   "cell": Vector2i(-3, 1)},                # 再修箭楼护营
+	{"key": "house",         "cell": Vector2i(-4, 0)},
+	{"key": "thunder_tower", "cell": Vector2i(-2, 4), "age": 2},      # 霹雳炮：群伤护营(聚义代)
+	{"key": "house",         "cell": Vector2i(4, 1)},
+	{"key": "altar_tower",   "cell": Vector2i(1, -2), "age": 2},      # 五雷法坛：优先打来犯英雄
+	{"key": "caltrop_tower", "cell": Vector2i(-4, 3), "age": 2},      # 拒马：减速拖住攻势
+	{"key": "arrow_tower",   "cell": Vector2i(2, -3), "age": 2},      # 多一座箭楼补火力
+	{"key": "siege_workshop", "cell": Vector2i(5, 3), "age": 3},      # 替天行道代才建，造撞车攻坚
 ]
 
 var hall: Unit
@@ -336,12 +338,13 @@ func _ai_workers(b, delta: float) -> void:
 	if _worker_t > 0.0:
 		return
 	_worker_t = 5.0
-	if workers.size() >= int(_diff["wcap"]):
+	if workers.size() >= _ai_wcap(b):   # 木紧时上限+3，多产的农民去伐木(金矿工受金矿数封顶)
 		return
 	if _ai_pop(b) + WORKER_POP > _ai_pop_cap(b):
 		return
-	# 留足买兵营/练兵的金子，别把钱全砸在农民上（金是瓶颈）；但农民全没了必须重建，不看缓冲
-	if not workers.is_empty() and b.faction_gold(_guan()) < float(WORKER_G) + 130.0:
+	# 留足买兵营/练兵的金子，别把钱全砸在农民上（金是瓶颈）；木紧时放低缓冲优先补伐木工；农民全没了必须重建
+	var buf := 40.0 if _ai_wood_short(b) else 130.0
+	if not workers.is_empty() and b.faction_gold(_guan()) < float(WORKER_G) + buf:
 		return
 	if not b.faction_spend(_guan(), WORKER_G, 0):
 		return
@@ -383,6 +386,16 @@ func _count_gold_miners(b) -> int:
 				and is_instance_valid(u._gather_node) and u._gather_node.res_kind == "gold":
 			n += 1
 	return n
+
+
+# 木头吃紧（移植全托管思路）：库存 < 金的一半 或 绝对地板。塔/民居很费木，建造期常成瓶颈。
+func _ai_wood_short(b) -> bool:
+	return float(b.faction_wood(_guan())) < float(b.faction_gold(_guan())) * 0.5 or b.faction_wood(_guan()) < 120.0
+
+
+# 农民目标：平时按难度 wcap；木紧时 +3——金矿工受金矿数封顶(2)，多产的农民自动去伐木补产。
+func _ai_wcap(b) -> int:
+	return int(_diff["wcap"]) + (3 if _ai_wood_short(b) else 0)
 
 
 # ---------- 真经济：建造（真实工地，由农民施工） ----------

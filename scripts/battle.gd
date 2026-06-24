@@ -38,9 +38,12 @@ var _eco_t := 0.0
 var _eco_trap_cd := 0.0   # 全托管布陷阱节流
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
 const ECO_PRE_HERO_POP := 30          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 几个农民即可，别多盖民居拖时间）
-const ECO_WCAP := 6                    # 出齐英雄后的农民目标数（少养农民，人口/钱留给军队）
-const ECO_GOLD_MINERS := 4            # 金矿工目标（贴仓库·采矿效率 max），其余伐木
-const ECO_WOOD_LOW := 130             # 木头低于此=产量吃紧 → 少派一个金矿工去伐木 + 多养一个农民补产
+const ECO_WCAP := 6                    # 平时农民目标（少养农民，人口/钱留给军队）
+const ECO_WCAP_WOOD := 10             # 木紧时农民上限：英雄之后主动多产喽啰，多出的全去伐木
+const ECO_GOLD_MINERS := 5            # 金矿工目标（贴仓库·采矿效率 max，多留点金以备不时之需），其余伐木；木紧时-1
+# 木头目标：库存 ≈ 金的一半（建房/塔期极费木，民居/仓库/集市是纯木 0 金）。低于此比例或绝对地板 = 吃紧。
+const ECO_WOOD_RATIO := 0.5
+const ECO_WOOD_FLOOR := 140
 const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农民）
 # 经济建筑(仓库/民居/集市)堆在金矿后方(安全角，远离东侧出兵口)护住人口；兵营/箭楼在聚义厅前沿御敌。
 ## 全托管常备建筑配额（出齐英雄后按序补，被拆即重建）。塔走多塔种混搭，构筑集中防御。
@@ -1593,17 +1596,19 @@ func _eco_muster_point() -> Vector2:
 
 
 ## 喽啰：闲置→补在建工地/采集（金矿工不足补金、否则伐木）；另抽工修受损建筑。
-## 木头吃紧（库存低于阈值）：偏向伐木 + 多养一个农民补产。塔/陷阱很费木，木常成瓶颈。
+## 木头吃紧：库存低于「金的一半」(ECO_WOOD_RATIO) 或绝对地板。塔/民居/仓库/集市很费木(多为纯木)，木常成瓶颈。
 func _eco_wood_short() -> bool:
-	return wood < ECO_WOOD_LOW
+	return float(wood) < float(gold) * ECO_WOOD_RATIO or wood < ECO_WOOD_FLOOR
 
 
+## 金矿工目标：平时 5(其余伐木)；木紧时降到 4，把多产的农民全推去伐木（四到五个金矿工）。
 func _eco_gold_target() -> int:
 	return (ECO_GOLD_MINERS - 1) if _eco_wood_short() else ECO_GOLD_MINERS
 
 
+## 农民上限：平时 6；木紧时拉到 10——英雄之后、军队之前主动补喽啰专去伐木（修「木荒却不产农民」）。
 func _eco_wcap_dyn() -> int:
-	return ECO_WCAP + (1 if _eco_wood_short() else 0)
+	return ECO_WCAP_WOOD if _eco_wood_short() else ECO_WCAP
 
 
 func _eco_workers() -> void:
@@ -5693,6 +5698,16 @@ func _towertrap_selftest() -> void:
 	if is_instance_valid(v3): units.erase(v3); v3.queue_free()
 	_traps.clear()
 	_ground_dots.clear()
+	# 木产策略：木紧(库存 < 金的一半)→金矿工降到3 + 农民上限拉到10(多产去伐木)；充裕→4 + 6。
+	var _g0 := gold
+	var _w0 := wood
+	gold = 400; wood = 100
+	var wshort: bool = _eco_wood_short() and _eco_gold_target() == ECO_GOLD_MINERS - 1 and _eco_wcap_dyn() == ECO_WCAP_WOOD
+	gold = 400; wood = 320
+	var wok: bool = (not _eco_wood_short()) and _eco_gold_target() == ECO_GOLD_MINERS and _eco_wcap_dyn() == ECO_WCAP
+	gold = _g0; wood = _w0
+	results.append(["wood_short_policy", wshort])
+	results.append(["wood_ok_policy", wok])
 	var all_ok := true
 	for r in results:
 		if not bool(r[1]):
