@@ -36,7 +36,6 @@ const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（
 # 策略（用户定）：优先出齐英雄(AoE 打 3× 群)，再升级基地/造兵/科技/箭楼。
 var _eco_t := 0.0
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
-const ECO_BOOT_WORKERS := 4           # 出英雄阶段的最低农民数（起手已有5个，通常一个都不补→不抢聚义厅队列，英雄连着出）
 const ECO_PRE_HERO_POP := 30          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 几个农民即可，别多盖民居拖时间）
 const ECO_WCAP := 6                    # 出齐英雄后的农民目标数（少养农民，人口/钱留给军队）
 const ECO_GOLD_MINERS := 4            # 金矿工目标（贴仓库·采矿效率 max），其余伐木
@@ -1471,30 +1470,35 @@ func _eco_build() -> void:
 	ai_start_construction(key, cell, Unit.FACTION_LIANG, builder)
 
 
-## 练兵（英雄优先）：出英雄阶段只保最低农民、全力按序出英雄；英雄齐了再补农民到 wcap + 兵营练常备军。
+## 练兵（英雄至上·高于一切）：只要还没出齐 或 有英雄战死，聚义厅就【只许排英雄】——
+## 立刻停掉队列里的所有非英雄(喽啰)退资源，然后 有钱就复活 > 有钱就按序把没出的英雄全塞进队列。
+## 期间不补农民、不造兵。英雄全员在阵且无人阵亡时，才补农民到 wcap + 兵营练常备军。
 func _eco_train() -> void:
 	var hall := main_base(Unit.FACTION_LIANG)
 	if hall == null or hall.is_constructing:
 		return
-	# 最高优先：复活战死英雄（有存档、当前不在场、未在队列）——按 ECO_HERO_ORDER 顺序，先于补农民/出新将/造兵。
-	for hk in ECO_HERO_ORDER:
-		if hero_progress.has(hk) and count_alive(Unit.FACTION_LIANG, hk) == 0 and not _eco_in_queue(hk):
-			if _eco_can_train(hk, hall):
-				queue_train(hall, hk)   # 价同原价复活，保留等级/技能
-			return   # 攒钱等复活，不越位做别的
-	if _eco_hero_count() < _eco_hero_target():
-		# 出英雄阶段：保最低农民(采金供英雄)，金宽裕才补；其余一律攒钱按序出英雄
-		if _eco_count_workers() < ECO_BOOT_WORKERS and gold > 240 and _eco_can_train("lou_luo", hall):
-			queue_train(hall, "lou_luo")
+	var hero_pending := _eco_hero_count() < _eco_hero_target()   # 没出齐 或 有人战死(现役<目标)
+	if hero_pending:
+		_eco_clear_hall_nonhero(hall)   # 聚义厅有非英雄队列(喽啰)→ 全停掉，腾出来出英雄/复活
+		# 有钱就复活：战死英雄(有存档、不在场、未在队列) → 按 ORDER 能复几个复几个
+		var revived := false
+		for hk in ECO_HERO_ORDER:
+			if hero_progress.has(hk) and count_alive(Unit.FACTION_LIANG, hk) == 0 and not _eco_in_queue(hk):
+				if not _eco_can_train(hk, hall):
+					break
+				queue_train(hall, hk)   # 原价复活，保留等级/技能
+				revived = true
+		if revived:
 			return
+		# 有钱就出：按 ORDER 把还没出的英雄一口气全塞进队列(直到钱/人口/队列上限)；绝不越位、不补农民/造兵
 		for hk in ECO_HERO_ORDER:
 			if count_alive(Unit.FACTION_LIANG, hk) > 0 or _eco_in_queue(hk) or hero_progress.has(hk):
 				continue
-			if _eco_can_train(hk, hall):
-				queue_train(hall, hk)
-			return   # 严格按顺序：该出的英雄出不起就攒钱等它，不越位练后面的/兵
-		return   # 英雄还没排满(可能在等人口/钱)→ 本拍不练兵
-	# 英雄齐了：补农民 → 兵营常备军
+			if not _eco_can_train(hk, hall):
+				break
+			queue_train(hall, hk)
+		return
+	# 英雄齐全且无人阵亡：补农民 → 兵营常备军
 	if _eco_count_workers() < ECO_WCAP and _eco_can_train("lou_luo", hall):
 		queue_train(hall, "lou_luo")
 		return
@@ -1504,6 +1508,26 @@ func _eco_train() -> void:
 			var sk := _eco_pick_soldier()
 			if sk != "" and _eco_can_train(sk, bar):
 				queue_train(bar, sk)
+
+
+## 聚义厅队列里所有「非英雄」项(喽啰)立刻停掉并退还资源——全托管下英雄/复活高于一切，聚义厅专供英雄。
+## 静默处理(不弹提示/音效)：训练中的队首(index 0)也照停，停后重置队首计时。
+func _eco_clear_hall_nonhero(hall: Unit) -> void:
+	var changed := false
+	var i := 0
+	while i < hall._train_queue.size():
+		var k: String = hall._train_queue[i]
+		if bool(_defs.get(k, {}).get("hero_trainable", false)):
+			i += 1
+			continue
+		var d: Dictionary = _defs.get(k, {})
+		add_resources(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0)))   # 退还花费
+		hall._train_queue.remove_at(i)
+		if i == 0 and not hall._train_queue.is_empty():
+			hall._train_t = float(_defs.get(hall._train_queue[0], {}).get("train_time", 12.0))
+		changed = true
+	if changed and hud != null:
+		hud.refresh_command()
 
 
 ## 研究（英雄之后）：出齐英雄前不研究(钱全留给英雄)；之后先精耕(经济)，再升 hp/atk 科技。
