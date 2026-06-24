@@ -1842,6 +1842,7 @@ class HeroSlotButton extends Control:
 	var _held := false
 	var _tip_shown := false
 	var _press_pos := Vector2.ZERO
+	var _aiming := false       # 触屏：按下技能即进入「瞄准」(指向技)，拖动准星跟手指、松手在落点放招
 
 	# 技能 id → 矢量图标种类。花荣神射四式各有专属图标；其余英雄按招式归类，整张命令卡都图标化。
 	const ICON_TOKENS := {
@@ -1863,8 +1864,8 @@ class HeroSlotButton extends Control:
 		if is_instance_valid(hero) and slot < hero.slot_count():
 			queue_redraw()
 		custom_minimum_size = (Vector2(78, 94) if compact else Vector2(88, 104)) if (hud != null and hud.touch_ui) else Vector2(76, 88)   # 触屏放大易点；右侧技能轨也放大易点
-		# 触屏：长按 ≥400ms 弹技能说明（替代失效的鼠标 hover；松手不施放）
-		if _held and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
+		# 触屏：长按 ≥400ms 弹技能说明（替代失效的鼠标 hover；松手不施放）。瞄准中不弹说明。
+		if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
 			_tip_shown = true
 			_on_hover_in()
 
@@ -2071,27 +2072,60 @@ class HeroSlotButton extends Control:
 		elif (not bool(hero.ability_slots[slot]["passive"]) or hero.slot_has_active(slot)) and int(hero.ability_slots[slot]["rank"]) > 0:
 			hud.battle.cast_ability(hero, slot)
 
+	## 该槽此刻是否「指向技能、可直接瞄准施放」（用于触屏：按下技能即拖动瞄准、松手放招）。
+	## 学习「+」热区 / 非指向技 / 未学 / 冷却中 → 返回 false，走普通 _execute(学习 / 即放 / 提示)。
+	func _can_aim_cast() -> bool:
+		if hud == null or hud.battle == null or not is_instance_valid(hero) or slot >= hero.slot_count():
+			return false
+		var s: Dictionary = hero.ability_slots[slot]
+		if int(s["rank"]) <= 0:
+			return false
+		if bool(s["passive"]) and not hero.slot_has_active(slot):
+			return false
+		var ir := Rect2(14, 6, 60, 60) if (hud != null and hud.touch_ui) else Rect2(12, 5, 52, 52)
+		if hero.can_learn(slot) and _press_pos.distance_to(Vector2(ir.end.x - 9.0, ir.end.y - 9.0)) <= 22.0:
+			return false   # 按在「+」上 → 是学习，不是施放
+		var ad: Dictionary = hud.battle.ability_def(String(s["id"]))
+		if not bool(ad.get("targeted", false)):
+			return false   # 非指向技：松手即放(走 _execute)，无需瞄准
+		return hero.slot_ready(slot)
+
 	func _gui_input(event: InputEvent) -> void:
-		if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
-			return
 		if hud == null or not hud.touch_ui:
-			if event.pressed:           # 桌面：按下即执行（hover 出说明）
-				_execute(event.position)
-			accept_event()
+			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+				_execute(event.position)   # 桌面：按下即执行（指向技会进入 armed，再点地图）
+				accept_event()
 			return
-		# 触屏：短按执行，长按只出说明
-		if event.pressed:
-			_held = true
-			_press_ms = Time.get_ticks_msec()
-			_press_pos = event.position
-		else:
-			_held = false
-			if _tip_shown:
-				_tip_shown = false
-				_on_hover_out()
+		# 触屏：①按下技能→若是指向技立刻 arm 并瞄准 ②拖动→准星跟手指 ③松手→拖出去就在落点放、原地点则保持 armed 等点地图
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_held = true
+				_press_ms = Time.get_ticks_msec()
+				_press_pos = event.position
+				_aiming = false
+				if _can_aim_cast():
+					hud.battle.cast_ability(hero, slot)   # arm 指向技
+					if hud.battle._ability_armed != "":
+						_aiming = true
+						if hud.battle.overlay != null:
+							hud.battle.overlay.queue_redraw()
 			else:
-				_execute(_press_pos)
-		accept_event()
+				_held = false
+				if _tip_shown:
+					_tip_shown = false
+					_on_hover_out()
+				elif _aiming:
+					# 拖出按钮(到战斗画面)再松手 → 在手指落点放招；原地点(没拖)→保持 armed，玩家接着点地图放
+					if _press_pos.distance_to(event.position) > 24.0 and hud.battle._ability_armed != "":
+						hud.battle._cast_armed_at(hud.battle.get_global_mouse_position())
+					_aiming = false
+				else:
+					_execute(_press_pos)
+			accept_event()
+		elif event is InputEventMouseMotion and _held and _aiming:
+			if hud.battle != null and hud.battle.overlay != null:
+				hud.battle.overlay.queue_redraw()   # 准星跟手指(指示器用 get_global_mouse_position 实时定位)
+			accept_event()
 
 
 ## 触屏英雄快切 chip（左缘竖排）：点头像 = 选中并居中该英雄（轻操作式随时跳到英雄放招走位）。
