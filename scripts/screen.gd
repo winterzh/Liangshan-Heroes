@@ -5,15 +5,42 @@ extends Node
 const SAVE_PATH := "user://screen.cfg"
 
 
+var orient := "auto"   # 手机横屏方向：auto 重力感应(双横屏自动转) / normal 正向 / flip 反向
+
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停时也能切全屏
-	# 移动端/网页端窗口模式由系统接管，不在此处理
-	if OS.has_feature("mobile") or OS.has_feature("web"):
-		return
-	# 恢复上次的全屏偏好
 	var cfg := ConfigFile.new()
-	if cfg.load(SAVE_PATH) == OK and bool(cfg.get_value("display", "fullscreen", false)):
+	var loaded := cfg.load(SAVE_PATH) == OK
+	# 移动端：恢复并应用上次的横屏方向偏好（窗口模式由系统接管）
+	if OS.has_feature("mobile"):
+		orient = String(cfg.get_value("display", "orient", "auto")) if loaded else "auto"
+		_apply_orient()
+		return
+	if OS.has_feature("web"):
+		return
+	# 桌面：恢复上次的全屏偏好
+	if loaded and bool(cfg.get_value("display", "fullscreen", false)):
 		set_fullscreen(true)
+
+
+## 设置横屏方向并持久化（移动端）。auto=重力感应双横屏 / normal=正向 / flip=反向。
+func set_orientation(o: String) -> void:
+	orient = o
+	_apply_orient()
+	var cfg := ConfigFile.new()
+	cfg.load(SAVE_PATH)   # 先读，保留 fullscreen 等其它键
+	cfg.set_value("display", "orient", o)
+	cfg.save(SAVE_PATH)
+
+
+func _apply_orient() -> void:
+	var d := DisplayServer.SCREEN_SENSOR_LANDSCAPE
+	match orient:
+		"normal": d = DisplayServer.SCREEN_LANDSCAPE
+		"flip": d = DisplayServer.SCREEN_REVERSE_LANDSCAPE
+		_: d = DisplayServer.SCREEN_SENSOR_LANDSCAPE
+	DisplayServer.screen_set_orientation(d)
 
 
 func _input(event: InputEvent) -> void:

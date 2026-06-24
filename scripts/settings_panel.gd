@@ -68,7 +68,12 @@ func _build() -> void:
 	else:
 		_row(p, "", _note("「全托管」与自动镜头需先在驻守战开启「AI友好模式」才可用"))
 	_row(p, "氛围特效", _check(Settings.atmosphere, func(on: bool) -> void: Settings.atmosphere = on))
-	_row(p, "全屏", _check(Screen.is_fullscreen(), func(on: bool) -> void: Screen.set_fullscreen(on)))
+	if OS.has_feature("mobile"):
+		# 手机横屏方向：自动=重力感应双向横屏；手机不自动转就手动选正向/反向
+		_row(p, "横屏方向", _seg([["自动", "auto"], ["正向", "normal"], ["反向", "flip"]], Screen.orient, func(v) -> void: Screen.set_orientation(String(v))))
+		_row(p, "", _note("自动=重力感应双向横屏；若手机不自动旋转，可手动选正向/反向"))
+	else:
+		_row(p, "全屏", _check(Screen.is_fullscreen(), func(on: bool) -> void: Screen.set_fullscreen(on)))
 
 	_head(p, "🎥  镜头")
 	_row(p, "边缘滚屏", _check(Settings.edge_scroll, func(on: bool) -> void: Settings.edge_scroll = on))
@@ -178,6 +183,29 @@ func _check(value: bool, cb: Callable) -> Control:
 	return c
 
 
+## 分段单选按钮的醒目配色：选中=金底深字(粗边)，未选=暗底灰字。让「当前选中项」一眼可辨。
+func _style_seg(b: Button) -> void:
+	var norm := StyleBoxFlat.new()
+	norm.bg_color = Color(0.15, 0.14, 0.11)
+	norm.set_corner_radius_all(7)
+	norm.set_border_width_all(1)
+	norm.border_color = Color(0.34, 0.31, 0.24)
+	var sel := StyleBoxFlat.new()
+	sel.bg_color = Color("ffcf3f")          # 选中：醒目金黄
+	sel.set_corner_radius_all(7)
+	sel.set_border_width_all(2)
+	sel.border_color = Color("fff3c8")
+	b.add_theme_stylebox_override("normal", norm)
+	b.add_theme_stylebox_override("hover", norm)
+	b.add_theme_stylebox_override("pressed", sel)
+	b.add_theme_stylebox_override("hover_pressed", sel)
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	b.add_theme_color_override("font_color", Color("aa9f8c"))            # 未选：暗灰字
+	b.add_theme_color_override("font_hover_color", Color("e6dcc4"))
+	b.add_theme_color_override("font_pressed_color", Color("241a06"))    # 选中：深色压金底
+	b.add_theme_color_override("font_hover_pressed_color", Color("241a06"))
+
+
 ## 分段单选：[[显示文字, 值], ...]，高亮 current 对应项；点击互斥高亮并回调。
 func _seg(options: Array, current: Variant, cb: Callable) -> Control:
 	var hb := HBoxContainer.new()
@@ -190,6 +218,7 @@ func _seg(options: Array, current: Variant, cb: Callable) -> Control:
 		b.button_pressed = (opt[1] == current)
 		b.custom_minimum_size = Vector2(80, 38)
 		b.add_theme_font_size_override("font_size", 17)
+		_style_seg(b)   # 选中=醒目金底深字，未选=暗底灰字，一眼区分
 		btns.append(b)
 		hb.add_child(b)
 	for i in range(options.size()):
