@@ -672,6 +672,16 @@ func take_damage(d: float, from: Unit = null, crit := false) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# 压测计时(PERF_BENCH)：把单位每帧逻辑耗时回填到 battle._unit_proc_us；正常游玩零开销
+	if battle != null and battle._prof_on:
+		var __t0 := Time.get_ticks_usec()
+		_phys_body(delta)
+		battle._unit_proc_us += Time.get_ticks_usec() - __t0
+	else:
+		_phys_body(delta)
+
+
+func _phys_body(delta: float) -> void:
 	if is_building:
 		if hp <= 0.0:
 			return   # 已被摧毁的建筑（废墟）：停止一切活动——箭楼不再射箭、兵营不再生产/研究
@@ -811,8 +821,12 @@ func _physics_process(delta: float) -> void:
 					_done_order()
 			ST_AMOVE:
 				if _target == null:
-					# A 移动时收紧索敌半径：近战只打 ~130px 内、远程保留射程，倾向继续奔向目的地
-					_acquire(maxf(atk_range + 24.0, 130.0))
+					# A 移动时收紧索敌半径：近战只打 ~130px 内、远程保留射程，倾向继续奔向目的地。
+					# 限流 ~8 次/秒：兵海里大量「无目标 A 移动」单位每帧重扫，是索敌开销的最大头。
+					_acq_t -= delta
+					if _acq_t <= 0.0:
+						_acq_t = 0.12
+						_acquire(maxf(atk_range + 24.0, 130.0))
 				if _target != null:
 					_resume_amove = true
 					_repath = 0.0

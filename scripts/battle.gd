@@ -58,8 +58,15 @@ const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng",
 var units: Array = []
 var _grid: Dictionary = {}            # 空间网格(每物理帧重建)：Vector2i 格 → Array[Unit]，加速分离/光环/索敌的邻近查询
 var _lite_fx := false                 # 机动单位过多(>90)标志：保留备用；画面优先，当前不据此简化绘制
+var _sep_dense := false               # 超大规模(>130机动)混战：分离改隔帧(30Hz)跑
+var _sep_skip := false                # 分离隔帧开关
 var _stealth_acc := 0.0               # 潜行 pass 限流累加（不必每帧跑）
 var _ecast_acc := 0.0                 # 敌将放招 pass 限流累加（不必每帧跑）
+var _prof_on := false                 # 性能压测(PERF_BENCH)：逐帧给各系统计时；正常游玩为 false
+var _prof := {}                       # 标签 → 累计微秒
+var _prof_frames := 0
+var _prof_print_acc := 0.0
+var _unit_proc_us := 0                # 单位 _physics_process 累计耗时(由 unit.gd 回填)
 const GRID_CELL := 64.0               # 空间网格边长(px)
 var selection: Array = []
 var phase := Phase.INTRO
@@ -263,6 +270,8 @@ func _ready() -> void:
 		_screenshot_loop(OS.get_environment("SCREENSHOT_DIR"))
 	if OS.get_environment("BUILD_TEST") == "1":
 		await _build_test()
+	if OS.get_environment("PERF_BENCH") != "":
+		_perf_bench_setup(int(OS.get_environment("PERF_BENCH")))
 
 
 func _build_test() -> void:
@@ -421,13 +430,19 @@ func hero_alive(key: String) -> bool:
 
 
 func players_alive() -> int:
-	return units.filter(func(u) -> bool:
-		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and not u.is_building and u.hp > 0.0).size()
+	var n := 0   # 朴素循环：不再每次 filter 新建数组+lambda（关卡条件/音乐每帧多次调用）
+	for u in units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and not u.is_building and u.hp > 0.0:
+			n += 1
+	return n
 
 
 func enemies_alive() -> int:
-	return units.filter(func(u) -> bool:
-		return is_instance_valid(u) and u.faction == Unit.FACTION_GUAN and not u.is_building and u.hp > 0.0).size()
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_GUAN and not u.is_building and u.hp > 0.0:
+			n += 1
+	return n
 
 
 func msg(text: String, dur := 3.5) -> void:
@@ -1263,12 +1278,79 @@ func _on_unit_died(u: Unit) -> void:
 		level.on_unit_died(self, u)
 
 
+## ---------- 性能压测 / profiler（PERF_BENCH=N：造 N/side 混战，逐帧累计各系统微秒）----------
+func _pf(label: String, t0: int) -> int:
+	var now := Time.get_ticks_usec()
+	_prof[label] = int(_prof.get(label, 0)) + (now - t0)
+	return now
+
+
+func _prof_tick(delta: float) -> void:
+	_prof_print_acc += delta
+	if _prof_print_acc >= 1.0:
+		_prof_print_acc = 0.0
+		_prof_dump()
+
+
+func _prof_dump() -> void:
+	var f := float(maxi(1, _prof_frames))
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and not u.is_building and not u.is_resource and u.hp > 0.0:
+			n += 1
+	var keys := _prof.keys()
+	keys.sort()
+	var parts := PackedStringArray()
+	var work := float(_unit_proc_us) / f
+	for k in keys:
+		work += float(_prof[k]) / f
+		parts.append("%s=%.0f" % [k, float(_prof[k]) / f])
+	parts.append("units=%.0f" % (float(_unit_proc_us) / f))
+	print("[prof] fps=%.1f n=%d work=%.0fus/f(%.1fms) | %s" % [
+		Engine.get_frames_per_second(), n, work, work / 1000.0, " ".join(parts)])
+	_prof.clear()
+	_prof_frames = 0
+	_unit_proc_us = 0
+
+
+## 压测场景：清场 → 造 n/side 近战+远程对冲混战 + 6 英雄(开技能放光环) → 打开 profiler。
+func _perf_bench_setup(n: int) -> void:
+	Engine.time_scale = 1.0
+	phase = Phase.DEPLOY
+	_on_start_battle()
+	for u in units.duplicate():
+		if is_instance_valid(u) and not u.is_building and not u.is_resource:
+			units.erase(u); u.queue_free()
+	var c := map.cell_to_world(level.camera_start_cell())
+	var lk := ["liang_dao", "liang_gong"]
+	var rk := ["guan_dao", "guan_gong"]
+	for i in range(n):
+		var off := Vector2(float(i % 12) * 18.0, float(i / 12) * 18.0)
+		spawn_unit(lk[i % 2], Unit.FACTION_LIANG, c + Vector2(-420, -110) + off)
+		spawn_unit(rk[i % 2], Unit.FACTION_GUAN, c + Vector2(120, -110) + off)
+	var heroes := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng", "li_kui", "wu_song"]
+	for hi in heroes.size():
+		var h := spawn_unit(heroes[hi], Unit.FACTION_LIANG, c + Vector2(-460, -100 + hi * 26))
+		for s in h.ability_slots:
+			s["rank"] = 2; s["cd_t"] = 0.0
+		h._recompute_hero_stats()
+	for u in units:
+		if is_instance_valid(u) and not u.is_building and not u.is_resource:
+			u.order_amove(c + (Vector2(300, 0) if u.faction == Unit.FACTION_LIANG else Vector2(-300, 0)))
+	_prof_on = true
+	print("[prof] bench started: %d/side (~%d mobile)" % [n, n * 2 + heroes.size()])
+
+
 func _physics_process(delta: float) -> void:
 	if phase == Phase.INTRO:
 		return
-	_grid_build()           # 重建空间网格(分离/光环/索敌的邻近查询用)；顺带数在场机动单位→决定是否简化绘制
-	_hero_boost_refresh()   # 英雄倍率改动→实时重算在场你方英雄血量(CD/范围/伤害施放时即时生效)
+	var _t := Time.get_ticks_usec() if _prof_on else 0
+	if _prof_on: _prof_frames += 1
+	_grid_build()
+	if _prof_on: _t = _pf("grid", _t)
+	_hero_boost_refresh()
 	_aura_pass()
+	if _prof_on: _t = _pf("aura", _t)
 	# 潜行/敌将放招这些「决策」不必每帧跑：限流到 ~7~10Hz，兵海后期省下大把 O(N) 扫描
 	_stealth_acc += delta
 	if _stealth_acc >= 0.15:
@@ -1278,16 +1360,25 @@ func _physics_process(delta: float) -> void:
 	if _ecast_acc >= 0.1:
 		_ecast_acc = 0.0
 		_enemy_ability_pass()
+	if _prof_on: _t = _pf("stealth_ecast", _t)
 	_auto_micro_pass()
+	if _prof_on: _t = _pf("automicro", _t)
 	_summon_hunt_pass()
 	if ai_friendly and int(Settings.auto_micro_level) >= 3:
 		_auto_economy_pass(delta)   # 全托管(仅AI友好模式)：喽啰自动经营 + 自动开战（DEPLOY/FIGHT 均跑）
-	_separation_pass(delta)
+	if _prof_on: _t = _pf("summon_eco", _t)
+	# 超大规模(>130机动)混战：分离隔帧跑(30Hz)省一半开销；常规战每帧跑(画面/手感不变)
+	_sep_skip = _sep_dense and not _sep_skip
+	if not _sep_skip:
+		_separation_pass(delta)
+	if _prof_on: _t = _pf("separation", _t)
 	_decay_lit(delta)
 	if fog:
 		_fog_pass(delta)
+	if _prof_on: _t = _pf("fog", _t)
 
 	if phase != Phase.FIGHT:
+		if _prof_on: _prof_tick(delta)
 		return
 
 	_ground_dot_pass(delta)
@@ -1295,9 +1386,13 @@ func _physics_process(delta: float) -> void:
 	_trap_pass(delta)
 	_ice_wall_pass(delta)
 	_tick_pending_casts()
+	if _prof_on: _t = _pf("zones", _t)
 	level.process(self, delta)
 	if phase == Phase.FIGHT:
 		hud.set_top(level.top_status(self))
+	if _prof_on:
+		_t = _pf("level_hud", _t)
+		_prof_tick(delta)
 
 	if _smoke:
 		_smoke_t -= delta
@@ -3071,16 +3166,17 @@ func _grid_build() -> void:
 	_grid.clear()
 	var mob := 0
 	for u in units:
-		if not is_instance_valid(u) or u.hp <= 0.0 or u.garrisoned:
-			continue
-		if not u.is_building and not u.is_resource:
+		if not is_instance_valid(u) or u.hp <= 0.0 or u.garrisoned or u.is_resource:
+			continue   # 资源点(金矿/林木)从不是分离/索敌/光环目标 → 不入网格，免得林边把桶撑大拖慢邻近查询
+		if not u.is_building:
 			mob += 1
 		var k := Vector2i(int(floor(u.position.x / GRID_CELL)), int(floor(u.position.y / GRID_CELL)))
 		if _grid.has(k):
 			_grid[k].append(u)
 		else:
 			_grid[k] = [u]
-	_lite_fx = mob > 90   # 机动单位计数标志(备用)；画面优先，当前不据此简化绘制
+	_lite_fx = mob > 90    # 机动单位计数标志(备用)；画面优先，当前不据此简化绘制
+	_sep_dense = mob > 130 # 超大规模混战→分离隔帧(30Hz)跑：肉眼无感，省一半分离开销
 
 
 ## 返回 pos 半径 radius 内(按网格粗筛、含相邻格)的候选单位；调用方自行做精确距离判定。
@@ -3100,42 +3196,50 @@ func units_near(pos: Vector2, radius: float) -> Array:
 
 
 func _separation_pass(_delta: float) -> void:
-	# 空间网格邻近分离：每个机动单位只跟附近格里的单位比，避免全表 O(N²) 两两扫描(兵海时极卡的元凶)。
+	# 空间网格邻近分离：直接遍历相邻桶（不经 units_near 建临时数组），兵海时省下每帧上百次数组分配/拷贝。
 	for a: Unit in units:
 		if a.is_building or a.is_resource or a.hp <= 0.0 or a.garrisoned:
 			continue
 		var aid := a.get_instance_id()
 		var a_mv := a._state == Unit.ST_MOVE or a._state == Unit.ST_AMOVE or a._state == Unit.ST_CHASE
 		var a_phase := _gold_phasing(a)
-		for b: Unit in units_near(a.position, a.radius + 32.0):   # 32≈最大单位半径+冗余，足以覆盖任何重叠
-			if b == a or b.is_building or b.is_resource or b.hp <= 0.0 or b.garrisoned:
-				continue
-			if b.get_instance_id() <= aid:
-				continue   # 每对只处理一次(以 instance_id 去重，等价原 i<j)
-			# 采金农民「相位」：两个都在采/运金矿循环时彼此不卡位，免得挤在矿口互相推开采不到
-			# （采木头不需要——林木分散，不会扎堆；只对金矿放行）
-			if a_phase and _gold_phasing(b):
-				continue
-			var diff := a.position - b.position
-			var d := diff.length()
-			var min_d := a.radius + b.radius + 2.0
-			if d < min_d and d > 0.01:
-				# 非对称分离：行进中的单位多让位、静止单位少挪动 → 站桩的不被推得乱抖
-				var b_mv := b._state == Unit.ST_MOVE or b._state == Unit.ST_AMOVE or b._state == Unit.ST_CHASE
-				var aw := 0.5
-				var bw := 0.5
-				if a_mv and not b_mv:
-					aw = 0.85; bw = 0.15
-				elif b_mv and not a_mv:
-					aw = 0.15; bw = 0.85
-				var dirn := diff / d
-				var overlap := min_d - d
-				var ap := a.position + dirn * overlap * aw
-				var bp := b.position - dirn * overlap * bw
-				if map.is_open_world(ap):
-					a.position = ap
-				if map.is_open_world(bp):
-					b.position = bp
+		var rr := int(ceil((a.radius + 32.0) / GRID_CELL))   # 32≈最大单位半径+冗余
+		var cx := int(floor(a.position.x / GRID_CELL))
+		var cy := int(floor(a.position.y / GRID_CELL))
+		for gy in range(cy - rr, cy + rr + 1):
+			for gx in range(cx - rr, cx + rr + 1):
+				var bucket: Variant = _grid.get(Vector2i(gx, gy))
+				if bucket == null:
+					continue
+				for b: Unit in bucket:
+					if b.get_instance_id() <= aid:
+						continue   # 每对只处理一次(instance_id 去重，等价原 i<j；含跳过自身)
+					if b.is_building or b.is_resource or b.hp <= 0.0 or b.garrisoned:
+						continue
+					# 采金农民「相位」：两个都在采/运金矿循环时彼此不卡位，免得挤在矿口互相推开采不到
+					if a_phase and _gold_phasing(b):
+						continue
+					var diff := a.position - b.position
+					var d2 := diff.length_squared()
+					var min_d := a.radius + b.radius + 2.0
+					if d2 < min_d * min_d and d2 > 0.0001:
+						var d := sqrt(d2)   # 只对真正重叠的少数对开方(绝大多数邻近对不重叠，省掉 sqrt)
+						# 非对称分离：行进中的单位多让位、静止单位少挪动 → 站桩的不被推得乱抖
+						var b_mv := b._state == Unit.ST_MOVE or b._state == Unit.ST_AMOVE or b._state == Unit.ST_CHASE
+						var aw := 0.5
+						var bw := 0.5
+						if a_mv and not b_mv:
+							aw = 0.85; bw = 0.15
+						elif b_mv and not a_mv:
+							aw = 0.15; bw = 0.85
+						var dirn := diff / d
+						var overlap := min_d - d
+						var ap := a.position + dirn * overlap * aw
+						var bp := b.position - dirn * overlap * bw
+						if map.is_open_world(ap):
+							a.position = ap
+						if map.is_open_world(bp):
+							b.position = bp
 
 
 ## ---------- 选取与指挥 ----------
