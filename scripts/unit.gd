@@ -1464,7 +1464,7 @@ func _slot_cd(i: int) -> float:
 	# 冷却可随技能等级缩短（cd_ranks: [1级,2级,3级]），否则用固定 cd
 	var cr: Array = ad.get("cd_ranks", [])
 	var base: float = float(cr[clampi(int(ability_slots[i]["rank"]), 1, cr.size()) - 1]) if cr.size() > 0 else float(ad.get("cd", 0.0))
-	return base * (1.0 - (hero_boost_n() - 1.0) * 0.25)   # 英雄倍率：CD 线性缩短，n2=-25%、n3=-50%(减半)
+	return base * (1.0 - (hero_boost_n() - 1.0) * 0.2)   # 英雄倍率：CD 线性缩短(推荐)，n2=-20%、n3=-40%(=60%)
 
 
 func slot_ready(i: int) -> bool:
@@ -1598,7 +1598,7 @@ func _recompute_hero_stats() -> void:
 	var tech_hp_f: float = float(battle.tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
 	max_hp = (_base_hp * mult + add_hp) * tech_hp_f * (1.0 + (hero_boost_n() - 1.0) / 3.0)   # 英雄倍率：血量×(1+(n-1)/3)
 	hp = clampf(max_hp * frac, 1.0, max_hp)
-	atk = _base_atk * mult + add_atk
+	atk = (_base_atk * mult + add_atk) * (1.0 + (hero_boost_n() - 1.0) / 4.0)   # 英雄倍率：攻击力×(1+(n-1)/4)，与技能伤害同倍(n3=1.5×)
 	atk_range = float(setup_def.get("range", 24)) + add_range
 	bonus_vs_cav = float(setup_def.get("bonus_cav", 1.0)) + add_cav
 	if melee_mode:                 # 拔刀近战：射程缩为肉搏（即便升被动也维持近战）
