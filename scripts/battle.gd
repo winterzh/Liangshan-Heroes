@@ -58,8 +58,7 @@ const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng",
 var units: Array = []
 var _grid: Dictionary = {}            # 空间网格(每物理帧重建)：Vector2i 格 → Array[Unit]，加速分离/光环/索敌的邻近查询
 var _lite_fx := false                 # 机动单位过多(>90)标志：保留备用；画面优先，当前不据此简化绘制
-var _sep_dense := false               # 超大规模(>130机动)混战：分离改隔帧(30Hz)跑
-var _sep_skip := false                # 分离隔帧开关
+var _no_opt := false                  # 压测对照(NO_OPT=1)：关掉 1.1.1 索敌限流，量优化前后差
 var _stealth_acc := 0.0               # 潜行 pass 限流累加（不必每帧跑）
 var _ecast_acc := 0.0                 # 敌将放招 pass 限流累加（不必每帧跑）
 var _prof_on := false                 # 性能压测(PERF_BENCH)：逐帧给各系统计时；正常游玩为 false
@@ -272,6 +271,10 @@ func _ready() -> void:
 		await _build_test()
 	if OS.get_environment("PERF_BENCH") != "":
 		_perf_bench_setup(int(OS.get_environment("PERF_BENCH")))
+	if OS.get_environment("PROF") == "1":
+		_prof_on = true   # 在真实关卡(配合 SMOKE_TEST 跑实际波次)上开 profiler，量真实瓶颈与敌军峰值
+	if OS.get_environment("NO_OPT") == "1":
+		_no_opt = true
 
 
 func _build_test() -> void:
@@ -1294,10 +1297,14 @@ func _prof_tick(delta: float) -> void:
 
 func _prof_dump() -> void:
 	var f := float(maxi(1, _prof_frames))
-	var n := 0
+	var ne := 0   # 敌(官军)机动数
+	var na := 0   # 我方机动数
 	for u in units:
 		if is_instance_valid(u) and not u.is_building and not u.is_resource and u.hp > 0.0:
-			n += 1
+			if u.faction == Unit.FACTION_GUAN:
+				ne += 1
+			elif u.faction == Unit.FACTION_LIANG:
+				na += 1
 	var keys := _prof.keys()
 	keys.sort()
 	var parts := PackedStringArray()
@@ -1306,39 +1313,38 @@ func _prof_dump() -> void:
 		work += float(_prof[k]) / f
 		parts.append("%s=%.0f" % [k, float(_prof[k]) / f])
 	parts.append("units=%.0f" % (float(_unit_proc_us) / f))
-	print("[prof] fps=%.1f n=%d work=%.0fus/f(%.1fms) | %s" % [
-		Engine.get_frames_per_second(), n, work, work / 1000.0, " ".join(parts)])
+	print("[prof] fps=%.1f n=%d(e%d a%d) work=%.0fus/f(%.1fms) | %s" % [
+		Engine.get_frames_per_second(), ne + na, ne, na, work, work / 1000.0, " ".join(parts)])
 	_prof.clear()
 	_prof_frames = 0
 	_unit_proc_us = 0
 
 
-## 压测场景：清场 → 造 n/side 近战+远程对冲混战 + 6 英雄(开技能放光环) → 打开 profiler。
+## 防御压测：n 个官军压向基地侧 vs 我方 6 英雄(开技能·自动放招) → 打开 profiler。贴近 60关5x 实战峰值。
 func _perf_bench_setup(n: int) -> void:
 	Engine.time_scale = 1.0
+	ai_friendly = true
+	Settings.auto_micro_level = 3   # 6 英雄自动放招(光环/AoE)，贴近全托管实战
 	phase = Phase.DEPLOY
 	_on_start_battle()
 	for u in units.duplicate():
 		if is_instance_valid(u) and not u.is_building and not u.is_resource:
 			units.erase(u); u.queue_free()
 	var c := map.cell_to_world(level.camera_start_cell())
-	var lk := ["liang_dao", "liang_gong"]
-	var rk := ["guan_dao", "guan_gong"]
-	for i in range(n):
-		var off := Vector2(float(i % 12) * 18.0, float(i / 12) * 18.0)
-		spawn_unit(lk[i % 2], Unit.FACTION_LIANG, c + Vector2(-420, -110) + off)
-		spawn_unit(rk[i % 2], Unit.FACTION_GUAN, c + Vector2(120, -110) + off)
 	var heroes := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng", "li_kui", "wu_song"]
 	for hi in heroes.size():
-		var h := spawn_unit(heroes[hi], Unit.FACTION_LIANG, c + Vector2(-460, -100 + hi * 26))
+		var h := spawn_unit(heroes[hi], Unit.FACTION_LIANG, c + Vector2(-140, -100 + hi * 30))
 		for s in h.ability_slots:
 			s["rank"] = 2; s["cd_t"] = 0.0
 		h._recompute_hero_stats()
-	for u in units:
-		if is_instance_valid(u) and not u.is_building and not u.is_resource:
-			u.order_amove(c + (Vector2(300, 0) if u.faction == Unit.FACTION_LIANG else Vector2(-300, 0)))
+		h.auto_micro = true
+	var ek := ["guan_dao", "guan_dao", "guan_gong"]
+	for i in range(n):
+		var off := Vector2(float(i % 16) * 20.0, float(i / 16) * 20.0)
+		var e := spawn_unit(ek[i % 3], Unit.FACTION_GUAN, c + Vector2(340, -160) + off)
+		e.order_amove(c + Vector2(-140, 0))
 	_prof_on = true
-	print("[prof] bench started: %d/side (~%d mobile)" % [n, n * 2 + heroes.size()])
+	print("[prof] bench(def): %d 敌 vs 6 英雄" % n)
 
 
 func _physics_process(delta: float) -> void:
@@ -1367,10 +1373,7 @@ func _physics_process(delta: float) -> void:
 	if ai_friendly and int(Settings.auto_micro_level) >= 3:
 		_auto_economy_pass(delta)   # 全托管(仅AI友好模式)：喽啰自动经营 + 自动开战（DEPLOY/FIGHT 均跑）
 	if _prof_on: _t = _pf("summon_eco", _t)
-	# 超大规模(>130机动)混战：分离隔帧跑(30Hz)省一半开销；常规战每帧跑(画面/手感不变)
-	_sep_skip = _sep_dense and not _sep_skip
-	if not _sep_skip:
-		_separation_pass(delta)
+	_separation_pass(delta)   # 每帧全速跑：分离是软约束，隔帧跑会在密集堆里抖动(画面/手感优先)
 	if _prof_on: _t = _pf("separation", _t)
 	_decay_lit(delta)
 	if fog:
@@ -3176,7 +3179,6 @@ func _grid_build() -> void:
 		else:
 			_grid[k] = [u]
 	_lite_fx = mob > 90    # 机动单位计数标志(备用)；画面优先，当前不据此简化绘制
-	_sep_dense = mob > 130 # 超大规模混战→分离隔帧(30Hz)跑：肉眼无感，省一半分离开销
 
 
 ## 返回 pos 半径 radius 内(按网格粗筛、含相邻格)的候选单位；调用方自行做精确距离判定。

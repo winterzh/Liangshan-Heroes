@@ -824,7 +824,7 @@ func _phys_body(delta: float) -> void:
 					# A 移动时收紧索敌半径：近战只打 ~130px 内、远程保留射程，倾向继续奔向目的地。
 					# 限流 ~8 次/秒：兵海里大量「无目标 A 移动」单位每帧重扫，是索敌开销的最大头。
 					_acq_t -= delta
-					if _acq_t <= 0.0:
+					if (battle != null and battle._no_opt) or _acq_t <= 0.0:
 						_acq_t = 0.12
 						_acquire(maxf(atk_range + 24.0, 130.0))
 				if _target != null:
