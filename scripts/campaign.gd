@@ -31,6 +31,10 @@ var ai_difficulty := "normal"   # AI 对战难度：easy / normal / hard
 var victory_mode := "conquest"  # 1v1 胜利条件：conquest 征服 / regicide 斩首 / koth 占山为王
 var defense_waves := 30         # 驻守战波数：20 速战 / 30 经典 / 60 史诗
 var defense_hero_cap := 4       # 驻守战英雄上限（60 关放宽到 6 员）
+# 自定义随机波次：任意波数 + 每波固定间隔秒数；每波随机敌军(数量随波次增长)、受敌方倍率影响
+var defense_random := false     # 是否走「随机波次」模式（与三档预设互斥，按下随机开战时置真）
+var defense_rand_waves := 30    # 随机模式波数(1~999)
+var defense_interval := 25.0    # 每波之前的间隔秒数(1~600)
 var ai_friendly := false        # 驻守战「AI友好模式」：全自动（全员托管 + 自动镜头）。与倍率无关、独立开关。
 var ai_friendly_mult := 3.0     # 旧字段·保留兼容（敌方数量倍率现走 enemy_mult）
 # 「改变倍率」：独立于 AI友好。开后 敌方倍率(放大敌人) + 英雄倍率(放大你方英雄) 生效。
@@ -70,6 +74,13 @@ func _ready() -> void:
 	var dh := OS.get_environment("DEF_HEROES")
 	if dh != "":
 		defense_hero_cap = int(dh)
+	# 随机波次：DEF_RANDOM=1 启用，波数复用 DEF_WAVES，间隔用 DEF_INTERVAL
+	if OS.get_environment("DEF_RANDOM") == "1":
+		defense_random = true
+		defense_rand_waves = clampi(int(defense_waves), 1, 999)
+	var di := OS.get_environment("DEF_INTERVAL")
+	if di != "":
+		defense_interval = clampf(float(di), 1.0, 600.0)
 	if OS.get_environment("AI_FRIENDLY") == "1":
 		ai_friendly = true
 	var afm := OS.get_environment("AI_FRIENDLY_MULT")
@@ -153,6 +164,8 @@ func _save() -> void:
 	cfg.set_value("pref", "enemy_mult", enemy_mult)
 	cfg.set_value("pref", "hero_mult", hero_mult)
 	cfg.set_value("pref", "hero_mult_touched", hero_mult_touched)
+	cfg.set_value("pref", "defense_rand_waves", defense_rand_waves)
+	cfg.set_value("pref", "defense_interval", defense_interval)
 	cfg.save(SAVE_PATH)
 
 
@@ -166,3 +179,5 @@ func _load() -> void:
 		enemy_mult = clampf(float(cfg.get_value("pref", "enemy_mult", enemy_mult)), 1.0, 5.0)
 		hero_mult = clampf(float(cfg.get_value("pref", "hero_mult", hero_mult)), 1.0, 3.0)
 		hero_mult_touched = bool(cfg.get_value("pref", "hero_mult_touched", hero_mult_touched))
+		defense_rand_waves = clampi(int(cfg.get_value("pref", "defense_rand_waves", defense_rand_waves)), 1, 999)
+		defense_interval = clampf(float(cfg.get_value("pref", "defense_interval", defense_interval)), 1.0, 600.0)

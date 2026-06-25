@@ -145,6 +145,8 @@ func _waves() -> Array:
 
 ## 按菜单所选波数构造波次表：30=经典原表；<30 取前 n 波；>30 经典之后循环加量续到 n 波。
 func _build_wavelist() -> Array:
+	if Campaign.defense_random:
+		return _random_waves(int(Campaign.defense_rand_waves), float(Campaign.defense_interval))
 	var n := int(Campaign.defense_waves)
 	if n == WAVES.size():
 		return WAVES.duplicate(true)
@@ -174,6 +176,64 @@ func _extended_waves(n: int) -> Array:
 			boost += 1
 	out.append(WAVES[WAVES.size() - 1].duplicate(true))
 	return out
+
+
+# —— 自定义随机波次 ——————————————————————————————————————————————
+# 杂兵池（非英雄，构成主力）
+const RAND_TROOPS := ["guan_dao", "guan_gong", "guan_qi", "guan_jingqi",
+	"guan_zhanzi", "guan_musket", "guan_bomber", "camel_rider"]
+# 敌将池（偶尔单个登场，概率随波次升高）
+const RAND_BOSSES := ["luan_tingyu", "hu_yanzhuo", "jiang_menshen", "hu_sanniang",
+	"zhang_qing", "yang_wen", "mei_zhan", "shan_tinggui", "wei_dingguo",
+	"wang_huan", "xu_jing", "jing_zhong"]
+const RAND_MSGS := ["官军杂队四面来袭！", "援军不绝，旗号杂乱却势凶！",
+	"乌合之众却人多势众，守住！", "又一拨官军压上寨门！", "马步弓杂军合围而来！"]
+
+
+## 每波目标兵力（仿经典波次的增长曲线）：首波约 10，逐波递增，封顶 42。
+func _rand_wave_count(i: int) -> int:
+	return clampi(10 + i + i / 3, 10, 42)
+
+
+## 生成 n 波随机敌军，每波固定间隔 interval 秒。每波数量随波次增长（见 _rand_wave_count）；
+## 数量×e、血/攻×倍率由 _spawn_wave 统一施加（与经典波次同一条路径）。
+func _random_waves(n: int, interval: float) -> Array:
+	n = clampi(n, 1, 999)
+	interval = clampf(interval, 1.0, 600.0)
+	var out: Array = []
+	for i in range(n):
+		out.append(_make_random_wave(i, interval))
+	if OS.get_environment("DEF_RANDOM_DEBUG") == "1":
+		var sizes: Array = []
+		for w in out:
+			var c := 0
+			for g in w["groups"]:
+				c += int(g[1])
+			sizes.append(c)
+		print("[randwave] n=%d interval=%.1f counts=%s" % [out.size(), interval, str(sizes)])
+	return out
+
+
+## 单波随机编成：把目标兵力拆成 2~4 组随机杂兵(随机门)，并按波次概率附带敌将/战象。
+func _make_random_wave(i: int, interval: float) -> Dictionary:
+	var total := _rand_wave_count(i)
+	var ng := clampi(2 + i / 6, 2, 4)
+	var per := maxi(1, int(round(float(total) / float(ng))))
+	var groups: Array = []
+	var rem := total
+	for gi in range(ng):
+		var c := maxi(1, rem) if gi == ng - 1 else mini(per, maxi(1, rem - (ng - 1 - gi)))
+		rem -= c
+		groups.append([RAND_TROOPS[randi() % RAND_TROOPS.size()], c, randi() % GATES.size()])
+	# 偶尔来个敌将（概率随波次升高，封顶 60%）
+	if i >= 2 and randf() < clampf(0.15 + i * 0.02, 0.15, 0.6):
+		groups.append([RAND_BOSSES[randi() % RAND_BOSSES.size()], 1, randi() % GATES.size()])
+	# 中后期偶尔压上一头战象
+	if i >= 6 and randf() < 0.25:
+		groups.append(["war_elephant", 1, randi() % GATES.size()])
+	return {"t": interval, "msg": RAND_MSGS[randi() % RAND_MSGS.size()], "groups": groups}
+
+
 func _cata_for(i: int) -> int: return 1 if i < 10 else 2
 func _apply_overrides(_b) -> void: pass
 
@@ -183,7 +243,7 @@ func deploy(b) -> void:
 	hall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)
 	var gm: Unit = b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)
 	# 60 关·史诗：六将全程升级/研究/造兵，默认 6000 储量撑不到后期 → 金矿储量放宽到 18000
-	if gm != null and int(Campaign.defense_waves) >= 60:
+	if gm != null and (int(Campaign.defense_waves) >= 60 or Campaign.defense_random):
 		gm.res_left = 18000.0
 	# 林木资源点（伐木处）
 	for c in [Vector2i(23, 51), Vector2i(25, 52), Vector2i(24, 53), Vector2i(26, 51),

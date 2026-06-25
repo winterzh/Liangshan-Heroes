@@ -334,12 +334,63 @@ func _show_defense() -> void:
 		b.pressed.connect(func() -> void:
 			Campaign.defense_waves = waves
 			Campaign.defense_hero_cap = hcap
+			Campaign.defense_random = false
 			Campaign.skirmish = true
 			Campaign.skirmish_ai = false
 			Campaign.custom_defense = false
 			Campaign.scenario = false
 			_launch())
 		box.add_child(b)
+
+	# 自定义随机波次：任意波数 + 每波固定间隔(秒)，每波随机敌军(数量随波次增长)、受敌方倍率影响
+	var rndlbl := Label.new()
+	rndlbl.text = "🎲 自定义随机波次（任意波数 · 随机敌军 · 数量随波次增长）"
+	rndlbl.add_theme_font_size_override("font_size", 15)
+	rndlbl.add_theme_color_override("font_color", Color("7ad7ff"))
+	rndlbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(rndlbl)
+	var rrow := HBoxContainer.new()
+	rrow.alignment = BoxContainer.ALIGNMENT_CENTER
+	rrow.add_theme_constant_override("separation", 10)
+	box.add_child(rrow)
+	var rwl := Label.new()
+	rwl.text = "波次"
+	rwl.add_theme_font_size_override("font_size", 16)
+	rwl.add_theme_color_override("font_color", Color("c8d3e0"))
+	rrow.add_child(rwl)
+	var rwsp := SpinBox.new()
+	rwsp.min_value = 1.0; rwsp.max_value = 999.0; rwsp.step = 1.0
+	rwsp.value = Campaign.defense_rand_waves
+	rwsp.custom_minimum_size = Vector2(110, 40)
+	rwsp.update_on_text_changed = true
+	rwsp.add_theme_font_size_override("font_size", 18)
+	rrow.add_child(rwsp)
+	var ril := Label.new()
+	ril.text = "每波间隔(秒)"
+	ril.add_theme_font_size_override("font_size", 16)
+	ril.add_theme_color_override("font_color", Color("c8d3e0"))
+	rrow.add_child(ril)
+	var risp := SpinBox.new()
+	risp.min_value = 1.0; risp.max_value = 600.0; risp.step = 1.0
+	risp.value = Campaign.defense_interval
+	risp.custom_minimum_size = Vector2(110, 40)
+	risp.update_on_text_changed = true
+	risp.add_theme_font_size_override("font_size", 18)
+	rrow.add_child(risp)
+	var rbtn := _mk_big_btn("🎲  随机波次 · 开战", Color("7ad7ff"))
+	rbtn.pressed.connect(func() -> void:
+		Campaign.defense_rand_waves = clampi(int(rwsp.value), 1, 999)
+		Campaign.defense_interval = clampf(risp.value, 1.0, 600.0)
+		Campaign.defense_waves = Campaign.defense_rand_waves
+		Campaign.defense_hero_cap = 6
+		Campaign.defense_random = true
+		Campaign.skirmish = true
+		Campaign.skirmish_ai = false
+		Campaign.custom_defense = false
+		Campaign.scenario = false
+		Campaign.save_prefs()
+		_launch())
+	box.add_child(rbtn)
 
 	var cb := _mk_big_btn("📂  加载自定义配置", Color("c0a0ff"))
 	cb.pressed.connect(func() -> void:
