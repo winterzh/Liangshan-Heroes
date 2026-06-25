@@ -377,6 +377,14 @@ func _show_defense() -> void:
 	risp.update_on_text_changed = true
 	risp.add_theme_font_size_override("font_size", 18)
 	rrow.add_child(risp)
+	var rtip := Label.new()
+	rtip.text = "（第 1 波固定 120 秒备战；之后每波间隔 = 你填的秒数，越小越急、建议 20~30。数量随波次增长、并受敌方倍率放大）"
+	rtip.add_theme_font_size_override("font_size", 13)
+	rtip.add_theme_color_override("font_color", Color("7c8a9c"))
+	rtip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rtip.custom_minimum_size = Vector2(520, 0)
+	rtip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(rtip)
 	var rbtn := _mk_big_btn("🎲  随机波次 · 开战", Color("7ad7ff"))
 	rbtn.pressed.connect(func() -> void:
 		Campaign.defense_rand_waves = clampi(int(rwsp.value), 1, 999)

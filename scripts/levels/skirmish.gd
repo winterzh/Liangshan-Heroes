@@ -205,12 +205,14 @@ func _random_waves(n: int, interval: float) -> Array:
 		out.append(_make_random_wave(i, interval))
 	if OS.get_environment("DEF_RANDOM_DEBUG") == "1":
 		var sizes: Array = []
+		var ts: Array = []
 		for w in out:
 			var c := 0
 			for g in w["groups"]:
 				c += int(g[1])
 			sizes.append(c)
-		print("[randwave] n=%d interval=%.1f counts=%s" % [out.size(), interval, str(sizes)])
+			ts.append(float(w["t"]))
+		print("[randwave] n=%d interval=%.1f t=%s counts=%s" % [out.size(), interval, str(ts), str(sizes)])
 	return out
 
 
@@ -231,7 +233,9 @@ func _make_random_wave(i: int, interval: float) -> Dictionary:
 	# 中后期偶尔压上一头战象
 	if i >= 6 and randf() < 0.25:
 		groups.append(["war_elephant", 1, randi() % GATES.size()])
-	return {"t": interval, "msg": RAND_MSGS[randi() % RAND_MSGS.size()], "groups": groups}
+	# 第 1 波固定 120 秒备战(与经典一致)，之后每波 = 玩家所填间隔
+	var t: float = 120.0 if i == 0 else interval
+	return {"t": t, "msg": RAND_MSGS[randi() % RAND_MSGS.size()], "groups": groups}
 
 
 func _cata_for(i: int) -> int: return 1 if i < 10 else 2
