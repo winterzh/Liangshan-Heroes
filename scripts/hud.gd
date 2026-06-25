@@ -176,6 +176,7 @@ func set_touch_ui(v: bool) -> void:
 		_build_touch_controls()
 		_apply_touch_fonts()
 	_refresh_touch_controls()
+	_position_fps()   # 触屏布局启用 → FPS 移到菜单键左侧
 
 
 ## 手机上字太小 → 把「进图就看到」的关键文字整体放大：顶部目标条、剧情对话、开战钮、
@@ -342,6 +343,7 @@ func _apply_safe_area() -> void:
 	if _res_bar != null:
 		_res_bar.offset_left = 10.0 + left
 	_layout_hero_bar()
+	_position_fps()   # 安全区变化(横屏/刘海) → FPS 跟随菜单键
 
 
 func _mk_action_btn(text: String, col: Color, cb: Callable) -> Button:
@@ -1186,19 +1188,37 @@ func _style_label(l: Label, size: int) -> void:
 	l.add_theme_constant_override("outline_size", 5)
 
 
-## 右上角 FPS 显示：贴右上角、在「☰ 菜单」键(高52)下方，逐 0.25s 在 _process 里刷新。
+## FPS 显示：桌面贴右上角；触屏移到右上角「☰ 菜单」键左侧。逐 0.25s 在 _process 里刷新。
 func _build_fps_label() -> void:
 	_fps_label = Label.new()
-	_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-	_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	_fps_label.offset_right = -14.0
-	_fps_label.offset_top = 68.0    # 让开右上角的「☰ 菜单」键，避免重叠
 	_fps_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_fps_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_fps_label.text = "FPS --"
 	_style_label(_fps_label, 16)
 	_fps_label.add_theme_color_override("font_color", Color("9fe89f"))
 	add_child(_fps_label)
+	_position_fps()
+
+
+## FPS 标签定位：桌面→右上角；触屏→「☰ 菜单」键(右距12·宽104·顶10高52)左侧，随安全区位移、竖直居中。
+func _position_fps() -> void:
+	if _fps_label == null:
+		return
+	_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	if touch_ui:
+		var right := 0.0
+		if _touch_built:
+			var sa := DisplayServer.get_display_safe_area()
+			var ws := DisplayServer.window_get_size()
+			right = maxf(0.0, float(ws.x - (sa.position.x + sa.size.x)))
+		_fps_label.offset_right = -128.0 - right   # 菜单键(右距12+宽104)左边再留 12px 间隙
+		_fps_label.offset_top = 22.0               # 与菜单键(顶10高52)中线对齐
+		_fps_label.add_theme_font_size_override("font_size", 20)
+	else:
+		_fps_label.offset_right = -14.0            # 桌面：右上角
+		_fps_label.offset_top = 12.0
+		_fps_label.add_theme_font_size_override("font_size", 16)
 
 
 func _build_intro() -> void:
