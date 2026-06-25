@@ -1464,7 +1464,7 @@ func _slot_cd(i: int) -> float:
 	# 冷却可随技能等级缩短（cd_ranks: [1级,2级,3级]），否则用固定 cd
 	var cr: Array = ad.get("cd_ranks", [])
 	var base: float = float(cr[clampi(int(ability_slots[i]["rank"]), 1, cr.size()) - 1]) if cr.size() > 0 else float(ad.get("cd", 0.0))
-	return base * (1.0 - (hero_boost_n() - 1.0) * 0.2)   # 英雄倍率：CD 线性缩短(温和)，n2=-20%、n3=-40%
+	return base * (1.0 - (hero_boost_n() - 1.0) * 0.25)   # 英雄倍率：CD 线性缩短，n2=-25%、n3=-50%(减半)
 
 
 func slot_ready(i: int) -> bool:
