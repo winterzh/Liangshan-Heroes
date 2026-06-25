@@ -163,6 +163,7 @@ var _home := Vector2.ZERO   # 玩家单位的驻守点：追击后自动归位
 var _has_home := false
 var _cd := 0.0
 var _repath := 0.0
+var _acq_t := 0.0           # 待机索敌限流计时（每 ~0.12s 重扫一次最近敌人，省得兵海每帧全员索敌）
 var _flash := 0.0
 var _muzzle_t := 0.0        # 防御塔开火闪光剩余时长（转向炮口闪一下）
 var _stuck_t := 0.0
@@ -795,7 +796,10 @@ func _physics_process(delta: float) -> void:
 		match _state:
 			ST_IDLE:
 				if not passive and not is_worker:   # 工人不主动索敌（经典RTS式村民）
-					_acquire()
+					_acq_t -= delta
+					if _acq_t <= 0.0:
+						_acq_t = 0.12   # 待机索敌限流：~8 次/秒足够，省得兵海里每帧全员重扫
+						_acquire()
 				if _target != null:
 					if not _has_home:
 						_home = position
@@ -1184,7 +1188,7 @@ func _tower_acquire_hero() -> void:
 	var best: Unit = null
 	var best_d := INF
 	var cap: float = maxf(aggro_range, atk_range)
-	for u in battle.units:
+	for u in battle.units_near(position, cap):
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
 				or not u.is_hero or u.garrisoned or u.is_captive:
 			continue
@@ -1364,7 +1368,8 @@ func _acquire(range_override := -1.0) -> void:
 		range_cap = minf(range_cap, range_override)   # A 移动时收紧索敌：只打路上近处的敌人，不被远处勾走
 	var best: Unit = null
 	var best_d := INF
-	for u in battle.units:
+	# 只在网格邻近格里找(按警戒/据守半径粗筛)——不再每帧全表扫描，是兵海索敌卡顿的主因之一。
+	for u in battle.units_near(position, range_cap):
 		# 资源点（金矿/林木）不是攻击目标——否则敌人冲过来一直砍树；
 		# 被绑缚待救者（captive）亦非攻击目标——否则刽子手会在救援前先把人砍死。
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
@@ -1900,7 +1905,7 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 	draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off))
 	var srect := Rect2(-s * 0.5, -s * 0.82, s, s)
 	# 暗色描边：四方各偏移画成半透黑剪影，叠出轮廓 → 单位从草地/背景里清晰跳出（提升可读性）
-	if not _dying:
+	if not _dying and (is_hero or battle == null or not battle._lite_fx):
 		var ow := 1.7
 		var ocol := Color(0.05, 0.04, 0.03, 0.5)
 		draw_texture_rect(frame, Rect2(srect.position + Vector2(ow, 0), srect.size), false, ocol)
