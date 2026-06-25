@@ -36,6 +36,7 @@ const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（
 # 策略（用户定）：优先出齐英雄(AoE 打 3× 群)，再升级基地/造兵/科技/箭楼。
 var _eco_t := 0.0
 var _eco_trap_cd := 0.0   # 全托管布陷阱节流
+var _last_hb := 1.0       # 上次英雄倍率(变了就重算在场英雄血量)
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
 const ECO_PRE_HERO_POP := 30          # 出英雄前先铺到的人口上限（容 6 英雄=18 口 + 几个农民即可，别多盖民居拖时间）
 const ECO_WCAP := 6                    # 平时农民目标（少养农民，人口/钱留给军队）
@@ -50,6 +51,7 @@ const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农
 const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"], ["house", 8, "gold"],
 	["arrow_tower", 4, "hall"], ["caltrop_tower", 2, "hall"], ["thunder_tower", 3, "hall"], ["altar_tower", 2, "hall"]]
 const ECO_TRAP_CAP := 6   # 全托管同时在场陷阱上限
+const ECO_REVIVE_GOLD := 160   # 估算每个英雄复活所需金；复活留底线 = max(2,战死数)×此值
 const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng", "li_kui", "wu_song"]
 
 var units: Array = []
@@ -1258,6 +1260,7 @@ func _on_unit_died(u: Unit) -> void:
 func _physics_process(delta: float) -> void:
 	if phase == Phase.INTRO:
 		return
+	_hero_boost_refresh()   # 英雄倍率改动→实时重算在场你方英雄血量(CD/范围/伤害施放时即时生效)
 	_aura_pass()
 	_stealth_pass()
 	_enemy_ability_pass()
@@ -1686,6 +1689,8 @@ func _eco_build() -> void:
 	var cw := int(d.get("cost_wood", 0))
 	if not can_afford(cg, cw):
 		return
+	if cg > 0 and gold - cg < _eco_revive_reserve():
+		return   # 费金建筑要给复活留底线（纯木建筑 cg==0 不受限，照常盖）
 	var cell := _eco_find_cell(_eco_anchor(String(e.get("near", "hall"))), key)
 	if cell.x < 0:
 		return
@@ -1736,7 +1741,8 @@ func _eco_train() -> void:
 		var bar := _eco_idle_barracks()   # 选队列最短的兵营，多兵营并行出兵
 		if bar != null:
 			var sk := _eco_pick_soldier()
-			if sk != "" and _eco_can_train(sk, bar):
+			# 练常备军也要给复活留底线（费金）；纯靠木的兵很少，金不足就先攒着复活金
+			if sk != "" and _eco_can_train(sk, bar) and gold - int(_defs.get(sk, {}).get("cost_gold", 0)) >= _eco_revive_reserve():
 				queue_train(bar, sk)
 
 
@@ -1790,6 +1796,16 @@ func _eco_trade() -> void:
 		do_trade("wood")   # 100 木 → 70 金
 
 
+## 复活留金底线 = max(2, 当前战死可复活英雄数) × ECO_REVIVE_GOLD。
+## 所有非复活的花金行为(造塔/练常备军/布陷阱)都不得把金压到此线以下；复活本身(_eco_train 英雄分支)无视它。
+func _eco_revive_reserve() -> int:
+	var dead := 0
+	for hk in ECO_HERO_ORDER:
+		if hero_progress.has(hk) and count_alive(Unit.FACTION_LIANG, hk) == 0 and not _eco_in_queue(hk):
+			dead += 1
+	return maxi(2, dead) * ECO_REVIVE_GOLD
+
+
 ## 全托管布陷阱：出齐英雄后、钱有富余时，沿前线再往敌方推一点散布一次性机关（轮换三种），上限 ECO_TRAP_CAP。
 func _eco_traps() -> void:
 	_eco_trap_cd -= 0.5   # 本拍 ~0.5s 调一次
@@ -1800,8 +1816,8 @@ func _eco_traps() -> void:
 		return
 	if _eco_hero_count() < _eco_hero_target():
 		return   # 英雄至上：没出齐不布陷阱
-	if gold < 220:
-		return   # 留钱给英雄/塔
+	if gold < _eco_revive_reserve() + 80:
+		return   # 留钱给英雄复活(底线)+一点富余才布陷阱
 	var pick := ""
 	for k in Defs.TRAPS:
 		var d: Dictionary = Defs.TRAPS[k]
@@ -3781,11 +3797,66 @@ func _ability_sfx(aid: String, kind: String) -> String:
 
 
 ## 数据化技能结算：按 effect.kind 统一处理；伤害/治疗随技能等级缩放。
+## 英雄倍率改动 → 实时重算在场你方英雄属性（血量随 n 缩放，保留当前血量百分比）。CD/范围/伤害在施放时即时取值无需重算。
+func _hero_boost_refresh() -> void:
+	if Settings.hero_boost == _last_hb:
+		return
+	_last_hb = Settings.hero_boost
+	for u in units:
+		if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG:
+			u._recompute_hero_stats()
+
+
+## 英雄倍率(仅AI友好模式 + 你方英雄)：n=clamp(Settings.hero_boost,1,3)。
+func _hero_boost_n(u: Unit) -> float:
+	if u == null or not u.is_hero or u.faction != Unit.FACTION_LIANG or not Campaign.ai_friendly:
+		return 1.0
+	return clampf(float(Settings.hero_boost), 1.0, 3.0)
+
+
+func _hero_rb(u: Unit) -> float:   # 范围(半径)倍率 1+(n-1)/2
+	return 1.0 + (_hero_boost_n(u) - 1.0) / 2.0
+
+
+func _hero_db(u: Unit) -> float:   # 伤害倍率 1+(n-1)/4
+	return 1.0 + (_hero_boost_n(u) - 1.0) / 4.0
+
+
+func _scale_num_arr(a: Array, f: float) -> Array:
+	var o: Array = []
+	for v in a:
+		o.append(float(v) * f)
+	return o
+
+
+## 英雄倍率：返回按 rb(范围:radius/radius_ranks/len/width)、db(伤害:dmg/dps/dps_ranks/impact_ranks/dot_total/total)
+## 缩放后的技能 def 深拷贝（不动原表、不缩 heal/slow/dur/atk 等）。rb=db=1 时原样返回（零开销）。
+func _scaled_ability(ad: Dictionary, rb: float, db: float) -> Dictionary:
+	if rb == 1.0 and db == 1.0:
+		return ad
+	var out := ad.duplicate(true)
+	if out.has("radius"):
+		out["radius"] = float(out["radius"]) * rb
+	if out.has("radius_ranks"):
+		out["radius_ranks"] = _scale_num_arr(out["radius_ranks"], rb)
+	var eff: Dictionary = out.get("effect", {})
+	for k in ["len", "width"]:
+		if eff.has(k):
+			eff[k] = float(eff[k]) * rb
+	for k in ["dmg", "dps", "dot_total", "total"]:
+		if eff.has(k):
+			eff[k] = float(eff[k]) * db
+	for k in ["dps_ranks", "impact_ranks"]:
+		if eff.has(k):
+			eff[k] = _scale_num_arr(eff[k], db)
+	return out
+
+
 func _do_ability(caster: Unit, slot: int, lp: Vector2) -> void:
 	if not is_instance_valid(caster) or not caster.slot_ready(slot):
 		return
 	var aid: String = caster.ability_slots[slot]["id"]
-	var ad: Dictionary = _abilities[aid]
+	var ad: Dictionary = _scaled_ability(_abilities[aid], _hero_rb(caster), _hero_db(caster))   # 英雄倍率
 	if level.on_ability(self, caster, aid, lp):
 		caster.slot_start_cd(slot)
 		return
@@ -5715,6 +5786,28 @@ func _towertrap_selftest() -> void:
 	gold = _g0; wood = _w0
 	results.append(["wood_short_policy", wshort])
 	results.append(["wood_ok_policy", wok])
+	# 英雄倍率(仅AI友好)：n=clamp(input,1,3)；rb=1+(n-1)/2、db=1+(n-1)/4；CD×1/n、血量×(1+(n-1)/3)。
+	var _hb0 := Settings.hero_boost
+	Settings.hero_boost = 2.5
+	var hbh := spawn_unit("song_jiang", Unit.FACTION_LIANG, origin)
+	var nmath_ok: bool = absf(_hero_boost_n(hbh) - 2.5) < 0.01 and absf(_hero_rb(hbh) - 1.75) < 0.01 and absf(_hero_db(hbh) - 1.375) < 0.01
+	Settings.hero_boost = 4.0   # 封顶 → n=3
+	var cap_ok: bool = absf(_hero_boost_n(hbh) - 3.0) < 0.01
+	var sa: Dictionary = _scaled_ability(_abilities.get("lin_sweep", {}), _hero_rb(hbh), _hero_db(hbh))   # n=3: 范围×2、伤害×1.5
+	var scale_ok: bool = absf(float(sa.get("radius", 0.0)) - 200.0) < 1.0 and absf(float(sa.get("effect", {}).get("dmg", 0.0)) - 37.5) < 0.5
+	Settings.hero_boost = 1.0
+	hbh._recompute_hero_stats()
+	var hp1: float = hbh.max_hp
+	var cd1: float = hbh._slot_cd(0)
+	Settings.hero_boost = 4.0   # n=3：血量×1.667、CD×1/3（比值约掉科技系数）
+	hbh._recompute_hero_stats()
+	var hpcd_ok: bool = hp1 > 0.0 and absf(hbh.max_hp / hp1 - 1.6667) < 0.02 and (cd1 <= 0.0 or absf(hbh._slot_cd(0) / cd1 - 0.3333) < 0.02)
+	Settings.hero_boost = _hb0
+	units.erase(hbh); hbh.queue_free()
+	results.append(["hero_boost_math", nmath_ok and cap_ok])
+	results.append(["hero_boost_scale", scale_ok])
+	results.append(["hero_boost_hp_cd", hpcd_ok])
+	results.append(["revive_reserve_floor", _eco_revive_reserve() >= 2 * ECO_REVIVE_GOLD])
 	var all_ok := true
 	for r in results:
 		if not bool(r[1]):
@@ -6149,7 +6242,8 @@ class Overlay extends Node2D:
 		# 指向施法预览：按下技能即在地面显示「作用范围指示器」（跟随鼠标，等距投影）。
 		# 形状随技能：闪现/突刺/冲锋=直线箭头(封顶最大射程)；箭雨=前方扇形；其余点目标=圆圈。
 		if b._ability_armed != "":
-			_draw_cast_indicator(b.ability_def(b._ability_armed))
+			# 预览也按英雄倍率放大范围，所见即所得
+			_draw_cast_indicator(b._scaled_ability(b.ability_def(b._ability_armed), b._hero_rb(b._ability_caster), b._hero_db(b._ability_caster)))
 		# 建造放置预览：占地框（绿=可建 / 红=不可）
 		if b._build_armed != "":
 			var bhalf: int = b.building_footprint_half(b._build_armed)

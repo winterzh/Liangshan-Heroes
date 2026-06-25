@@ -1450,15 +1450,21 @@ func slot_count() -> int:
 	return ability_slots.size()
 
 
+## 英雄倍率(仅 AI友好模式 + 你方英雄)：n=clamp(Settings.hero_boost,1,3)，1=不变。放大技能范围/CD/伤害/血量。
+func hero_boost_n() -> float:
+	if not is_hero or faction != FACTION_LIANG or not Campaign.ai_friendly:
+		return 1.0
+	return clampf(float(Settings.hero_boost), 1.0, 3.0)
+
+
 func _slot_cd(i: int) -> float:
 	if i < 0 or i >= ability_slots.size():
 		return 0.0
 	var ad: Dictionary = Defs.ABILITIES.get(ability_slots[i]["id"], {})
 	# 冷却可随技能等级缩短（cd_ranks: [1级,2级,3级]），否则用固定 cd
 	var cr: Array = ad.get("cd_ranks", [])
-	if cr.size() > 0:
-		return float(cr[clampi(int(ability_slots[i]["rank"]), 1, cr.size()) - 1])
-	return float(ad.get("cd", 0.0))
+	var base: float = float(cr[clampi(int(ability_slots[i]["rank"]), 1, cr.size()) - 1]) if cr.size() > 0 else float(ad.get("cd", 0.0))
+	return base / hero_boost_n()   # 英雄倍率：CD 缩为 1/n
 
 
 func slot_ready(i: int) -> bool:
@@ -1590,7 +1596,7 @@ func _recompute_hero_stats() -> void:
 	var frac := (hp / max_hp) if max_hp > 0.0 else 1.0
 	# 把全军生命科技(甲胄/时代+10%)折进重算，否则英雄每次升级/学被动都会把科技血量清掉(攻击科技走 buff_atk 不受影响)
 	var tech_hp_f: float = float(battle.tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
-	max_hp = (_base_hp * mult + add_hp) * tech_hp_f
+	max_hp = (_base_hp * mult + add_hp) * tech_hp_f * (1.0 + (hero_boost_n() - 1.0) / 3.0)   # 英雄倍率：血量×(1+(n-1)/3)
 	hp = clampf(max_hp * frac, 1.0, max_hp)
 	atk = _base_atk * mult + add_atk
 	atk_range = float(setup_def.get("range", 24)) + add_range

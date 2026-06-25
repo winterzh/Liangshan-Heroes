@@ -189,6 +189,9 @@ func deploy(b) -> void:
 	for c in [Vector2i(23, 51), Vector2i(25, 52), Vector2i(24, 53), Vector2i(26, 51),
 			Vector2i(10, 37), Vector2i(11, 39), Vector2i(9, 38), Vector2i(33, 40), Vector2i(35, 40)]:
 		b.spawn_at("tree", Unit.FACTION_LIANG, c)
+	# 基地正上方近处小树林（6 棵）——缩短伐木往返，配合「优先采离基地最近的木头」
+	for c in [Vector2i(13, 42), Vector2i(15, 42), Vector2i(17, 42), Vector2i(14, 43), Vector2i(16, 43), Vector2i(18, 43)]:
+		b.spawn_at("tree", Unit.FACTION_LIANG, c)
 	for c in [Vector2i(19, 44), Vector2i(20, 45), Vector2i(19, 46), Vector2i(20, 47), Vector2i(21, 45)]:
 		b.spawn_at("lou_luo", Unit.FACTION_LIANG, c)
 	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(18, 49))
