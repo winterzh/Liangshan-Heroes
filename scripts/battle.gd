@@ -48,7 +48,7 @@ const ECO_WOOD_FLOOR := 140
 const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农民）
 # 经济建筑(仓库/民居/集市)堆在金矿后方(安全角，远离东侧出兵口)护住人口；兵营/箭楼在聚义厅前沿御敌。
 ## 全托管常备建筑配额（出齐英雄后按序补，被拆即重建）。塔走多塔种混搭，构筑集中防御。
-const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"], ["house", 8, "gold"],
+const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"], ["house", 8, "back"],
 	["arrow_tower", 4, "hall"], ["caltrop_tower", 2, "hall"], ["thunder_tower", 3, "hall"], ["altar_tower", 2, "hall"]]
 const ECO_TRAP_CAP := 6   # 全托管同时在场陷阱上限
 const ECO_REVIVE_GOLD := 160   # 估算每个英雄复活所需金；复活留底线 = max(2,战死数)×此值
@@ -1858,7 +1858,7 @@ func _eco_next_build() -> Dictionary:
 		return {"key": "depot", "near": "wood"}
 	if _eco_hero_count() < _eco_hero_target():
 		if pop_cap < ECO_PRE_HERO_POP:
-			return {"key": "house", "near": "gold"}   # 给 6 英雄铺人口(堆金矿后方安全角)
+			return {"key": "house", "near": "back"}   # 给 6 英雄铺人口(堆基地后方，别挤采矿角/集结走廊)
 		return {}                                       # 出英雄前别的都不修，把金留给英雄
 	for m in ECO_MAINT:
 		if _eco_count_building(String(m[0])) < int(m[1]):
@@ -1899,6 +1899,12 @@ func _eco_anchor(near: String) -> Vector2i:
 		var w := nearest_resource(hp, "wood")
 		if w != null:
 			return map.world_to_cell(w.position)
+	if near == "back":
+		# 基地「后方」（远离前线一侧）外推 7 格——民居堆这儿，别挤在基地/集结走廊/采矿角，免得卡住单位
+		var fl := _eco_frontline()
+		var away := hp - fl
+		away = away.normalized() if away.length() > 1.0 else Vector2(-1, 1)
+		return map.world_to_cell(hp + away * (7.0 * float(GameMap.CELL)))
 	return map.world_to_cell(hp)
 
 
@@ -2605,7 +2611,40 @@ func _hero_engage_ok(u: Unit) -> bool:
 	return base.position.distance_to(nf) <= HERO_FRONT_LEASH
 
 
+## 回身秒杀贴脸弱敌：被一两个能轻松砍死的近敌贴身追打时 → 直接回身普攻它，不绕去远处目标、不空等技能。
+## 解决「被一个小兵追着砍、要等半天才放个技能、其实回头一刀就砍死」。成群敌人(>2)交给脑放技能/AoE。
+func _kill_close_gnat(u: Unit) -> bool:
+	if u.hp / maxf(u.max_hp, 1.0) <= 0.25:
+		return false   # 残血走撤退脑，不恋战
+	if _foe_count_within(u.position, u.aggro_range, u.faction) > 2:
+		return false   # 成群敌人交给脑(放技能/AoE)，这里只清一两个贴脸小兵
+	var best: Unit = null
+	var best_d := INF
+	var reach: float = u.atk_range + u.radius + 60.0   # 贴脸/一两步内
+	for v in units:
+		if not (is_instance_valid(v) and v.faction != u.faction and not v.is_building \
+				and not v.is_resource and not v.garrisoned and not v.is_captive and v.hp > 0.0):
+			continue
+		var d := u.position.distance_to(v.position)
+		if d <= reach and d < best_d:
+			best = v
+			best_d = d
+	if best == null:
+		return false
+	var my_dps: float = u.atk * maxf(u.buff_atk, 0.1) / maxf(u.atk_cd, 0.3)
+	if best.hp > my_dps * 2.0:
+		return false   # 不是一两刀能解决的(精锐/厚血) → 交给脑正常应对
+	if u._target != best:   # 回身锁定这个贴脸小兵，普攻砍死
+		if u.stance != Unit.STANCE_AGGRO:
+			u.set_stance(Unit.STANCE_AGGRO)
+		u._home = u.position
+		u.order_attack(best)
+	return true
+
+
 func _auto_micro_hero(u: Unit) -> void:
+	if _kill_close_gnat(u):
+		return   # 贴脸弱敌优先回身砍死，别绕远/空等技能
 	# 全托管·非守家英雄(公孙专职守家走自己的脑)：没有该打的敌人时回前线集结待命，不孤军深入敌方出生点
 	if _full_auto() and u.key != "gongsun_sheng" and not _hero_engage_ok(u):
 		var front := _eco_frontline()
@@ -5802,12 +5841,34 @@ func _towertrap_selftest() -> void:
 	Settings.hero_boost = 4.0   # n=3：血量×1.667、CD×1/3（比值约掉科技系数）
 	hbh._recompute_hero_stats()
 	var hpcd_ok: bool = hp1 > 0.0 and absf(hbh.max_hp / hp1 - 1.6667) < 0.02 and (cd1 <= 0.0 or absf(hbh._slot_cd(0) / cd1 - 0.3333) < 0.02)
+	hbh.ability_slots[0]["rank"] = maxi(1, int(hbh.ability_slots[0]["rank"]))   # 确保已学，能真施放
+	hbh.slot_start_cd(0)   # 真·施放：cd_t 应被设成缩短后的冷却
+	var cdt: float = float(hbh.ability_slots[0]["cd_t"])
+	var cast_cd_ok: bool = absf(cdt - hbh._slot_cd(0)) < 0.01
+	print("[cdtest] song_rally(slot0): 原cd=%.1f  n=1→cd=%.1f  n=3→cd=%.1f  施放后cd_t=%.1f(应=%.1f)  ok=%s" % [
+		float(_abilities.get("song_rally", {}).get("cd", 0.0)), cd1, hbh._slot_cd(0), cdt, hbh._slot_cd(0), cast_cd_ok])
 	Settings.hero_boost = _hb0
 	units.erase(hbh); hbh.queue_free()
 	results.append(["hero_boost_math", nmath_ok and cap_ok])
 	results.append(["hero_boost_scale", scale_ok])
 	results.append(["hero_boost_hp_cd", hpcd_ok])
 	results.append(["revive_reserve_floor", _eco_revive_reserve() >= 2 * ECO_REVIVE_GOLD])
+	# 民居「后方」锚点：在远离前线一侧、离基地够远（别堆采矿角/集结走廊卡住单位）
+	var hall_t := main_base(Unit.FACTION_LIANG)
+	var hp_t: Vector2 = hall_t.position if hall_t != null else origin
+	var fl_t := _eco_frontline()
+	var away_t := hp_t - fl_t
+	away_t = away_t.normalized() if away_t.length() > 1.0 else Vector2(-1, 1)
+	var back_pos := map.cell_to_world(_eco_anchor("back"))
+	results.append(["house_back_anchor", (back_pos - hp_t).dot(away_t) > 1.0 and back_pos.distance_to(hp_t) >= float(GameMap.CELL) * 4.0])
+	# 回身秒杀贴脸弱敌：英雄旁放一个残血小兵 → 应回身普攻锁定它（不绕远/不空等技能）
+	var gh := spawn_unit("lin_chong", Unit.FACTION_LIANG, origin)
+	var gnat := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(40, 0))
+	gnat.hp = 20.0
+	var gnat_ok: bool = _kill_close_gnat(gh) and gh._target == gnat
+	units.erase(gh); gh.queue_free()
+	units.erase(gnat); gnat.queue_free()
+	results.append(["gnat_kill", gnat_ok])
 	var all_ok := true
 	for r in results:
 		if not bool(r[1]):
