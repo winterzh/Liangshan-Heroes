@@ -40,11 +40,11 @@ var _last_hb := 1.0       # 上次英雄倍率(变了就重算在场英雄血量
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
 const ECO_POP_HEADROOM := 10          # 人口余量(上限+在建民居 − 已用 − 在产)低于此值才补民居——按需建，不无脑堆满
 const ECO_POP_MAX := 90               # 人口上限硬顶（容 40 常备军+6 英雄+农民有余）；到顶不再铺民居
-const ECO_WCAP := 6                    # 平时农民目标（少养农民，人口/钱留给军队）
-const ECO_WCAP_WOOD := 10             # 木紧时农民上限：英雄之后主动多产喽啰，多出的全去伐木
+const ECO_WCAP := 8                    # 平时农民目标（5采金 + 3伐木，给塔/民居稳定供木，少卡木荒）
+const ECO_WCAP_WOOD := 12             # 木紧时农民上限：英雄之后主动多产喽啰，多出的全去伐木
 const ECO_GOLD_MINERS := 5            # 金矿工目标（贴仓库·采矿效率 max，多留点金以备不时之需），其余伐木；木紧时-1
 # 木头目标：库存 ≈ 金的一半（建房/塔期极费木，民居/仓库/集市是纯木 0 金）。低于此比例或绝对地板 = 吃紧。
-const ECO_WOOD_RATIO := 0.5
+const ECO_WOOD_RATIO := 0.6
 const ECO_WOOD_FLOOR := 140
 const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农民）
 # 经济建筑(仓库/民居/集市)堆在金矿后方(安全角，远离东侧出兵口)护住人口；兵营在聚义厅、各塔往前沿外推御敌。
@@ -58,6 +58,8 @@ const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng",
 var units: Array = []
 var _grid: Dictionary = {}            # 空间网格(每物理帧重建)：Vector2i 格 → Array[Unit]，加速分离/光环/索敌的邻近查询
 var _lite_fx := false                 # 在场机动单位过多时简化绘制(省每单位 4 向描边)以保帧率
+var _stealth_acc := 0.0               # 潜行 pass 限流累加（不必每帧跑）
+var _ecast_acc := 0.0                 # 敌将放招 pass 限流累加（不必每帧跑）
 const GRID_CELL := 64.0               # 空间网格边长(px)
 var selection: Array = []
 var phase := Phase.INTRO
@@ -1267,8 +1269,15 @@ func _physics_process(delta: float) -> void:
 	_grid_build()           # 重建空间网格(分离/光环/索敌的邻近查询用)；顺带数在场机动单位→决定是否简化绘制
 	_hero_boost_refresh()   # 英雄倍率改动→实时重算在场你方英雄血量(CD/范围/伤害施放时即时生效)
 	_aura_pass()
-	_stealth_pass()
-	_enemy_ability_pass()
+	# 潜行/敌将放招这些「决策」不必每帧跑：限流到 ~7~10Hz，兵海后期省下大把 O(N) 扫描
+	_stealth_acc += delta
+	if _stealth_acc >= 0.15:
+		_stealth_acc = 0.0
+		_stealth_pass()
+	_ecast_acc += delta
+	if _ecast_acc >= 0.1:
+		_ecast_acc = 0.0
+		_enemy_ability_pass()
 	_auto_micro_pass()
 	_summon_hunt_pass()
 	if ai_friendly and int(Settings.auto_micro_level) >= 3:
@@ -1699,9 +1708,11 @@ func _eco_build() -> void:
 	var cell := _eco_find_cell(_eco_anchor(String(e.get("near", "hall"))), key)
 	if cell.x < 0:
 		return
-	# 前沿建筑(兵营/各塔·near=hall/front)选址处有敌 → 这拍先别起：否则工人和半成品都会被火线上的敌人打掉
+	# 前沿建筑(兵营/各塔·near=hall/front)选址处有敌 → 这拍先别起：否则工人和半成品都会被火线上的敌人打掉。
+	# 塔(front)耐打、本就该顶在前面 → 只避开「贴脸」的敌(120px)，否则一开打就永远建不起来各种塔。
 	var nr := String(e.get("near", "hall"))
-	if (nr == "hall" or nr == "front") and _foe_within(map.cell_to_world(cell), 240.0, Unit.FACTION_LIANG):
+	var guard_r := 120.0 if nr == "front" else 240.0
+	if (nr == "hall" or nr == "front") and _foe_within(map.cell_to_world(cell), guard_r, Unit.FACTION_LIANG):
 		return
 	var builder := _eco_free_worker()
 	if builder == null:
@@ -1865,8 +1876,10 @@ func _eco_next_build() -> Dictionary:
 	# 民居：仅在人口快不够时按需补(含在产英雄/兵的人口)，不再无脑堆——出英雄前后同此一处判定。
 	if _eco_house_needed():
 		return {"key": "house", "near": "back"}
-	if _eco_hero_count() < _eco_hero_target():
-		return {}                                       # 英雄未出齐：除按需民居外别的都不修，把金留给英雄
+	# 英雄未出齐时：金吃紧→把金留给英雄/复活(别的不修)；金有富余→照样修塔/兵营/集市(走 ECO_MAINT)。
+	# 硬等「6 英雄同时在场」常因前线伤亡永远凑不齐，会让上千金睡大觉、各种塔永远建不起来——故富余即放行。
+	if _eco_hero_count() < _eco_hero_target() and gold < _eco_revive_reserve() + 200:
+		return {}
 	for m in ECO_MAINT:
 		if _eco_count_building(String(m[0])) < int(m[1]):
 			return {"key": String(m[0]), "near": String(m[2])}
@@ -2454,7 +2467,7 @@ func _enemy_ability_pass() -> void:
 
 ## 在 pos 半径 r 内是否有 my_fac 的敌方作战单位（供敌将范围技能起手判定）。
 func _foe_within(pos: Vector2, r: float, my_fac: int) -> bool:
-	for v in units:
+	for v in units_near(pos, r):
 		if is_instance_valid(v) and v.faction != my_fac and not v.is_building and not v.is_resource \
 				and not v.garrisoned and v.hp > 0.0 and pos.distance_to(v.position) <= r:
 			return true
@@ -2925,7 +2938,7 @@ func _brain_hua(u: Unit) -> void:
 
 ## 公孙胜·法师：脆皮后排。被贴脸/残血→冰墙横在身前隔挡或撤；交战召金龙；敌成堆放黑雨。
 ## 全托管下他是「守家英雄」：锚在聚义厅附近 GONG_GUARD_R 圈内，绝不追出去（见下方守家预案）。
-const GONG_GUARD_R := 480.0   # 公孙守家半径（15 格 = 15×32px）：圈外敌不追、被勾出去就回家
+const GONG_GUARD_R := 640.0   # 公孙守家半径（20 格 = 20×32px）：圈外敌不追、被勾出去就回家
 func _brain_gong(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
 		return
@@ -4413,7 +4426,7 @@ func _engage_focus(u: Unit, fp: Vector2) -> void:
 ## 半径内敌方单位计数（want_cav=只数骑兵 / want_melee=只数非远程，含骑兵）。
 func _foe_count_within(pos: Vector2, r: float, my_fac: int, want_cav := false, want_melee := false) -> int:
 	var c := 0
-	for v in units:
+	for v in units_near(pos, r):
 		if not is_instance_valid(v) or v.faction == my_fac or v.is_building or v.is_resource \
 				or v.garrisoned or v.is_captive or v.hp <= 0.0:
 			continue
@@ -4428,7 +4441,7 @@ func _foe_count_within(pos: Vector2, r: float, my_fac: int, want_cav := false, w
 
 ## 半径内是否有敌方英雄（林冲 R / 武松 R 开大判定）。
 func _any_enemy_hero_within(pos: Vector2, r: float, my_fac: int) -> bool:
-	for v in units:
+	for v in units_near(pos, r):
 		if is_instance_valid(v) and v.faction != my_fac and v.is_hero and v.hp > 0.0 \
 				and not v.is_building and pos.distance_to(v.position) <= r:
 			return true
@@ -5928,7 +5941,7 @@ func _towertrap_selftest() -> void:
 	gold = _g0; wood = _w0
 	results.append(["wood_short_policy", wshort])
 	results.append(["wood_ok_policy", wok])
-	# 英雄倍率(改变倍率开启)：n=clamp(hero_mult,1,3)；rb=1+(n-1)·0.4(n3=1.8×)、db=1+(n-1)/4；CD×(1-(n-1)·0.2)(n3=60%)、血量×(1+(n-1)/3)、攻击力×(1+(n-1)/4)(n3=1.5×)。
+	# 英雄倍率(改变倍率开启)：n=clamp(hero_mult,1,3)；rb=1+(n-1)·0.4(n3=1.8×)、db=1+(n-1)/4；CD×(1-(n-1)·0.2)(n3=60%)、血量×(1+(n-1)/3)、攻击力×(1+(n-1)·0.1)(n3=1.2×)。
 	var _hb0 := Campaign.hero_mult
 	var _so0 := Campaign.scale_on
 	Campaign.scale_on = true
@@ -5946,7 +5959,7 @@ func _towertrap_selftest() -> void:
 	var atk1: float = hbh.atk
 	Campaign.hero_mult = 4.0   # n=3：血量×1.667、CD×0.6、攻击×1.5（比值约掉科技系数）
 	hbh._recompute_hero_stats()
-	var hpcd_ok: bool = hp1 > 0.0 and absf(hbh.max_hp / hp1 - 1.6667) < 0.02 and (cd1 <= 0.0 or absf(hbh._slot_cd(0) / cd1 - 0.6) < 0.02) and (atk1 <= 0.0 or absf(hbh.atk / atk1 - 1.5) < 0.02)
+	var hpcd_ok: bool = hp1 > 0.0 and absf(hbh.max_hp / hp1 - 1.6667) < 0.02 and (cd1 <= 0.0 or absf(hbh._slot_cd(0) / cd1 - 0.6) < 0.02) and (atk1 <= 0.0 or absf(hbh.atk / atk1 - 1.2) < 0.02)
 	hbh.ability_slots[0]["rank"] = maxi(1, int(hbh.ability_slots[0]["rank"]))   # 确保已学，能真施放
 	hbh.slot_start_cd(0)   # 真·施放：cd_t 应被设成缩短后的冷却
 	var cdt: float = float(hbh.ability_slots[0]["cd_t"])

@@ -1603,7 +1603,7 @@ func _recompute_hero_stats() -> void:
 	var tech_hp_f: float = float(battle.tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
 	max_hp = (_base_hp * mult + add_hp) * tech_hp_f * (1.0 + (hero_boost_n() - 1.0) / 3.0)   # 英雄倍率：血量×(1+(n-1)/3)
 	hp = clampf(max_hp * frac, 1.0, max_hp)
-	atk = (_base_atk * mult + add_atk) * (1.0 + (hero_boost_n() - 1.0) / 4.0)   # 英雄倍率：攻击力×(1+(n-1)/4)，与技能伤害同倍(n3=1.5×)
+	atk = (_base_atk * mult + add_atk) * (1.0 + (hero_boost_n() - 1.0) * 0.1)   # 英雄倍率：攻击力×(1+(n-1)·0.1)，n3=+20%(普攻不宜过高，技能伤害另算)
 	atk_range = float(setup_def.get("range", 24)) + add_range
 	bonus_vs_cav = float(setup_def.get("bonus_cav", 1.0)) + add_cav
 	if melee_mode:                 # 拔刀近战：射程缩为肉搏（即便升被动也维持近战）
@@ -2035,18 +2035,21 @@ func _draw() -> void:
 
 	var death_f := clampf(_death_t / DEATH_DUR, 0.0, 1.0) if _dying else 0.0
 
+	# 兵海(battle._lite_fx)时省掉纯装饰绘制(投影/扬尘/增益辉光)，只留精灵+选中/状态标记 → 保后期帧率
+	var lite: bool = battle != null and battle._lite_fx and not selected and not is_active
 	# 地面层（逻辑空间直接绘制 → 被等距变换压成贴地椭圆）：投影 + 扬尘 + 增益辉光 + 选择圈
 	if is_building:
 		draw_circle(Vector2(0, 6), radius * 0.85, Color(0, 0, 0, 0.20))
-	else:
+	elif not lite:
 		var lift := maxf(0.0, -cos(_anim_t * 2.0)) * _move_blend   # 腾空时影子收缩
 		var ssc := radius * 0.95 * (1.0 - 0.16 * lift)
 		draw_circle(Vector2(2, 3), ssc, Color(0, 0, 0, (0.25 - 0.06 * lift) * (1.0 - death_f)))
-	for d in _dust:
-		var da: float = d.t / DUST_DUR
-		draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
-	if _buff_glow > 0.0:
-		draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
+	if not lite:
+		for d in _dust:
+			var da: float = d.t / DUST_DUR
+			draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
+		if _buff_glow > 0.0:
+			draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
 	# 减速光环（公孙胜 E）：脚下青蓝色范围环
 	if slow_aura_r > 0.0 and not _dying:
 		var pulse := 0.5 + 0.5 * sin(_idle_t * 2.2)
@@ -2104,8 +2107,8 @@ func _draw() -> void:
 			draw_string(f, Vector2(-49.0, gy + 1.0), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color(0, 0, 0, 0.8))
 			draw_string(f, Vector2(-50.0, gy), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color("9fe8b0"))
 
-	# 血条：常显（阵营色描边——梁山金、官军红）
-	if hp > 0.0 and Settings.show_healthbars:
+	# 血条：常显（阵营色描边——梁山金、官军红）。兵海时满血单位不画血条(省一堆 draw_rect)。
+	if hp > 0.0 and Settings.show_healthbars and not (lite and hp >= max_hp):
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
 		var bh := 5.0 if (is_hero or is_building) else 4.0
 		draw_rect(Rect2(-w * 0.5 - 1.0, bar_y - 1.0, w + 2.0, bh + 2.0), Color(0, 0, 0, 0.8))
