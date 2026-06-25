@@ -67,10 +67,6 @@ func _build() -> void:
 		_row(p, "", _note("全托管：驻守战里彻底挂机——喽啰自动采集/建造/修复、自动练兵练将研究、英雄全自动、镜头自动"))
 	else:
 		_row(p, "", _note("「全托管」与自动镜头需先在驻守战开启「AI友好模式」才可用"))
-	# 英雄倍率：仅 AI友好模式可用。输入 x → n=clamp(x,1,3)，放大你方英雄技能范围/CD/伤害/血量。
-	if Campaign.ai_friendly:
-		_row(p, "英雄倍率", _num(Settings.hero_boost, 1.0, 5.0, 0.5, func(v: float) -> void: Settings.hero_boost = v))
-		_row(p, "", _note("放大你方英雄：n=输入值(封顶3，输入4按3算)。范围×(1+(n-1)/2)、冷却×1/n、伤害×(1+(n-1)/4)、血量×(1+(n-1)/3)。1=不变。"))
 	_row(p, "氛围特效", _check(Settings.atmosphere, func(on: bool) -> void: Settings.atmosphere = on))
 	if OS.has_feature("mobile"):
 		# 手机横屏方向：自动=重力感应双向横屏；手机不自动转就手动选正向/反向

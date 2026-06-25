@@ -12,7 +12,6 @@ var muted := false
 var game_speed := 1.0       # 战斗节奏倍率：0.5 慢 / 1.0 正常 / 1.5 快
 var atmosphere := true      # 氛围后期（暗角/暖色调）
 var auto_micro_level := 2   # 英雄托管档位：0 无托管(去掉T/触屏按钮、全部取消) / 1 弱托管(只守附近~15格) / 2 强托管(全图) / 3 全托管(彻底挂机，仅驻守战AI友好模式下可用)
-var hero_boost := 1.0       # 英雄倍率(仅AI友好模式)：输入 x → n=clamp(x,1,3)，放大你方英雄 技能范围/CD/伤害/血量；1=不变
 # —— 镜头 ——
 var edge_scroll := true     # 屏幕边缘滚屏
 var cam_speed := 1.0        # 镜头平移速度倍率
@@ -62,7 +61,6 @@ func save() -> void:
 	c.set_value("game", "speed", game_speed)
 	c.set_value("game", "atmosphere", atmosphere)
 	c.set_value("game", "auto_micro", auto_micro_level)
-	c.set_value("game", "hero_boost", hero_boost)
 	c.set_value("cam", "edge", edge_scroll)
 	c.set_value("cam", "speed", cam_speed)
 	c.set_value("cam", "zoom", zoom_sens)
@@ -84,7 +82,6 @@ func _load() -> void:
 		game_speed = 1.0   # 旧档「慢=0.8」迁移到新档位最低速 1.0（新：慢1.0/中1.2/快1.5）
 	atmosphere = bool(c.get_value("game", "atmosphere", atmosphere))
 	auto_micro_level = int(c.get_value("game", "auto_micro", auto_micro_level))
-	hero_boost = float(c.get_value("game", "hero_boost", hero_boost))
 	edge_scroll = bool(c.get_value("cam", "edge", edge_scroll))
 	cam_speed = float(c.get_value("cam", "speed", cam_speed))
 	zoom_sens = float(c.get_value("cam", "zoom", zoom_sens))

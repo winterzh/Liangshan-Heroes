@@ -1450,11 +1450,11 @@ func slot_count() -> int:
 	return ability_slots.size()
 
 
-## 英雄倍率(仅 AI友好模式 + 你方英雄)：n=clamp(Settings.hero_boost,1,3)，1=不变。放大技能范围/CD/伤害/血量。
+## 英雄倍率(改变倍率开启 + 你方英雄)：n=clamp(Campaign.hero_mult,1,3)，1=不变。放大技能范围/CD/伤害/血量。
 func hero_boost_n() -> float:
-	if not is_hero or faction != FACTION_LIANG or not Campaign.ai_friendly:
+	if not is_hero or faction != FACTION_LIANG or not Campaign.scale_on:
 		return 1.0
-	return clampf(float(Settings.hero_boost), 1.0, 3.0)
+	return clampf(float(Campaign.hero_mult), 1.0, 3.0)
 
 
 func _slot_cd(i: int) -> float:

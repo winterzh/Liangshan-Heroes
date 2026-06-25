@@ -244,22 +244,25 @@ func _spawn_wave(b, i: int) -> void:
 	var wave: Dictionary = ws[i]
 	b.msg("【第 %d/%d 波】%s" % [i + 1, ws.size(), wave.get("msg", "")], 5.5)
 	var hall_pos: Vector2 = b.map.cell_to_world(HALL)
-	# AI友好模式：非英雄小兵按倍率增援（英雄/敌将不乘）。数量×倍率向下取整，例 12×1.7=20.4→20。
-	var amp := Campaign.ai_friendly
-	var mult: float = maxf(1.0, float(Campaign.ai_friendly_mult))
+	# 敌方倍率 e（「改变倍率」开启时）：非英雄小兵 数量×e（向下取整，至少1）；小兵+大将 血/攻按倍率放大。
+	var ecnt: float = b.enemy_count_mult()
 	for g in wave["groups"]:
 		var gate: Vector2i = GATES[clampi(int(g[2]), 0, GATES.size() - 1)]
 		var key := String(g[0])
 		var cnt := int(g[1])
-		if amp and not _is_hero_key(key):
-			cnt = int(floor(cnt * mult))
+		if ecnt > 1.0 and not _is_hero_key(key):
+			cnt = maxi(1, int(floor(cnt * ecnt)))
 		var spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)
 		_arm_boss(spawned, _group_rank(g))
+		for u in spawned:
+			b.apply_enemy_scale(u)   # 血/攻×倍率（小兵+大将都乘）
 	# 每波附带投石车：射程远、专破箭楼，轮换从一门压上（数量由 _cata_for 决定）
 	var n_cata: int = _cata_for(i)
 	if n_cata > 0:
 		var cgate: Vector2i = GATES[i % GATES.size()]
-		b.spawn_group("siege_cata", n_cata, Unit.FACTION_GUAN, cgate, hall_pos)
+		var scata: Array = b.spawn_group("siege_cata", n_cata, Unit.FACTION_GUAN, cgate, hall_pos)
+		for u in scata:
+			b.apply_enemy_scale(u)
 
 
 ## 经济模式下英雄技能默认未学(rank0)不放招 → 给来犯的地方英雄自动学满，使其会自动施放招式

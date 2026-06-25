@@ -3838,19 +3838,20 @@ func _ability_sfx(aid: String, kind: String) -> String:
 ## 数据化技能结算：按 effect.kind 统一处理；伤害/治疗随技能等级缩放。
 ## 英雄倍率改动 → 实时重算在场你方英雄属性（血量随 n 缩放，保留当前血量百分比）。CD/范围/伤害在施放时即时取值无需重算。
 func _hero_boost_refresh() -> void:
-	if Settings.hero_boost == _last_hb:
+	var cur: float = Campaign.hero_mult if Campaign.scale_on else 1.0
+	if cur == _last_hb:
 		return
-	_last_hb = Settings.hero_boost
+	_last_hb = cur
 	for u in units:
 		if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG:
 			u._recompute_hero_stats()
 
 
-## 英雄倍率(仅AI友好模式 + 你方英雄)：n=clamp(Settings.hero_boost,1,3)。
+## 英雄倍率(改变倍率开启 + 你方英雄)：n=clamp(Campaign.hero_mult,1,3)。
 func _hero_boost_n(u: Unit) -> float:
-	if u == null or not u.is_hero or u.faction != Unit.FACTION_LIANG or not Campaign.ai_friendly:
+	if u == null or not u.is_hero or u.faction != Unit.FACTION_LIANG or not Campaign.scale_on:
 		return 1.0
-	return clampf(float(Settings.hero_boost), 1.0, 3.0)
+	return clampf(float(Campaign.hero_mult), 1.0, 3.0)
 
 
 func _hero_rb(u: Unit) -> float:   # 范围(半径)倍率 1+(n-1)/2
@@ -3859,6 +3860,38 @@ func _hero_rb(u: Unit) -> float:   # 范围(半径)倍率 1+(n-1)/2
 
 func _hero_db(u: Unit) -> float:   # 伤害倍率 1+(n-1)/4
 	return 1.0 + (_hero_boost_n(u) - 1.0) / 4.0
+
+
+## 敌方倍率 e（改变倍率开启时；1~5）：小兵数量×e；血量×(1+(e-1)/3)、攻击×(1+(e-1)/4)。
+func _enemy_e() -> float:
+	return clampf(float(Campaign.enemy_mult), 1.0, 5.0) if Campaign.scale_on else 1.0
+
+
+func enemy_count_mult() -> float:
+	return _enemy_e()
+
+
+func enemy_hp_mult() -> float:
+	return 1.0 + (_enemy_e() - 1.0) / 3.0
+
+
+func enemy_atk_mult() -> float:
+	return 1.0 + (_enemy_e() - 1.0) / 4.0
+
+
+## 给一个已落点的敌方单位按敌方倍率放大 血/攻（小兵+大将都调；数量由出兵处×e）。基/现值同步缩放，兼顾英雄重算。
+func apply_enemy_scale(u: Unit) -> void:
+	if not Campaign.scale_on or not is_instance_valid(u):
+		return
+	var hpf := enemy_hp_mult()
+	var atkf := enemy_atk_mult()
+	if hpf != 1.0:
+		u._base_hp *= hpf
+		u.max_hp *= hpf
+		u.hp = u.max_hp
+	if atkf != 1.0:
+		u._base_atk *= atkf
+		u.atk *= atkf
 
 
 func _scale_num_arr(a: Array, f: float) -> Array:
@@ -5825,20 +5858,22 @@ func _towertrap_selftest() -> void:
 	gold = _g0; wood = _w0
 	results.append(["wood_short_policy", wshort])
 	results.append(["wood_ok_policy", wok])
-	# 英雄倍率(仅AI友好)：n=clamp(input,1,3)；rb=1+(n-1)/2、db=1+(n-1)/4；CD×1/n、血量×(1+(n-1)/3)。
-	var _hb0 := Settings.hero_boost
-	Settings.hero_boost = 2.5
+	# 英雄倍率(改变倍率开启)：n=clamp(hero_mult,1,3)；rb=1+(n-1)/2、db=1+(n-1)/4；CD×1/n、血量×(1+(n-1)/3)。
+	var _hb0 := Campaign.hero_mult
+	var _so0 := Campaign.scale_on
+	Campaign.scale_on = true
+	Campaign.hero_mult = 2.5
 	var hbh := spawn_unit("song_jiang", Unit.FACTION_LIANG, origin)
 	var nmath_ok: bool = absf(_hero_boost_n(hbh) - 2.5) < 0.01 and absf(_hero_rb(hbh) - 1.75) < 0.01 and absf(_hero_db(hbh) - 1.375) < 0.01
-	Settings.hero_boost = 4.0   # 封顶 → n=3
+	Campaign.hero_mult = 4.0   # 封顶 → n=3
 	var cap_ok: bool = absf(_hero_boost_n(hbh) - 3.0) < 0.01
 	var sa: Dictionary = _scaled_ability(_abilities.get("lin_sweep", {}), _hero_rb(hbh), _hero_db(hbh))   # n=3: 范围×2、伤害×1.5
 	var scale_ok: bool = absf(float(sa.get("radius", 0.0)) - 200.0) < 1.0 and absf(float(sa.get("effect", {}).get("dmg", 0.0)) - 37.5) < 0.5
-	Settings.hero_boost = 1.0
+	Campaign.hero_mult = 1.0
 	hbh._recompute_hero_stats()
 	var hp1: float = hbh.max_hp
 	var cd1: float = hbh._slot_cd(0)
-	Settings.hero_boost = 4.0   # n=3：血量×1.667、CD×1/3（比值约掉科技系数）
+	Campaign.hero_mult = 4.0   # n=3：血量×1.667、CD×1/3（比值约掉科技系数）
 	hbh._recompute_hero_stats()
 	var hpcd_ok: bool = hp1 > 0.0 and absf(hbh.max_hp / hp1 - 1.6667) < 0.02 and (cd1 <= 0.0 or absf(hbh._slot_cd(0) / cd1 - 0.3333) < 0.02)
 	hbh.ability_slots[0]["rank"] = maxi(1, int(hbh.ability_slots[0]["rank"]))   # 确保已学，能真施放
@@ -5847,7 +5882,19 @@ func _towertrap_selftest() -> void:
 	var cast_cd_ok: bool = absf(cdt - hbh._slot_cd(0)) < 0.01
 	print("[cdtest] song_rally(slot0): 原cd=%.1f  n=1→cd=%.1f  n=3→cd=%.1f  施放后cd_t=%.1f(应=%.1f)  ok=%s" % [
 		float(_abilities.get("song_rally", {}).get("cd", 0.0)), cd1, hbh._slot_cd(0), cdt, hbh._slot_cd(0), cast_cd_ok])
-	Settings.hero_boost = _hb0
+	# 敌方倍率 e=4：数量×4、血×(1+3/3)=2.0、攻×(1+3/4)=1.75
+	var _em0 := Campaign.enemy_mult
+	Campaign.enemy_mult = 4.0
+	var eg := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(0, 80))
+	var ehp0: float = eg.max_hp
+	var eatk0: float = eg.atk
+	apply_enemy_scale(eg)
+	var enemy_ok: bool = absf(enemy_count_mult() - 4.0) < 0.01 \
+		and absf(eg.max_hp / ehp0 - 2.0) < 0.02 and absf(eg.atk / eatk0 - 1.75) < 0.02
+	units.erase(eg); eg.queue_free()
+	Campaign.enemy_mult = _em0
+	Campaign.hero_mult = _hb0
+	Campaign.scale_on = _so0
 	units.erase(hbh); hbh.queue_free()
 	results.append(["hero_boost_math", nmath_ok and cap_ok])
 	results.append(["hero_boost_scale", scale_ok])
@@ -5869,6 +5916,7 @@ func _towertrap_selftest() -> void:
 	units.erase(gh); gh.queue_free()
 	units.erase(gnat); gnat.queue_free()
 	results.append(["gnat_kill", gnat_ok])
+	results.append(["enemy_scale", enemy_ok])
 	var all_ok := true
 	for r in results:
 		if not bool(r[1]):

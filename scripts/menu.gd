@@ -233,55 +233,93 @@ func _show_defense() -> void:
 	tip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(tip)
 
-	# AI友好模式开关：开 → 敌方小兵×3（英雄不变）；全部英雄托管后镜头自动巡视最激烈的战场
+	# AI友好模式：全自动（全员英雄托管 + 可开自动镜头）。独立开关，与倍率无关。
 	var afb := Button.new()
 	afb.toggle_mode = true
 	afb.button_pressed = Campaign.ai_friendly
 	afb.custom_minimum_size = Vector2(420, 44)
 	afb.add_theme_font_size_override("font_size", 17)
-	afb.text = "🤖 AI友好模式：%s" % ("开" if Campaign.ai_friendly else "关")
+	afb.text = "🤖 AI友好模式（全自动）：%s" % ("开" if Campaign.ai_friendly else "关")
 	afb.add_theme_color_override("font_color", Color("ffd866") if Campaign.ai_friendly else Color("9fb0c4"))
 	box.add_child(afb)
-
-	# 敌方小兵倍率：仅 AI友好模式开启时显示。可自填（>1，一位小数；默认 3）。
-	# 出兵时 数量×倍率 向下取整，例：12×1.7=20.4→20。
-	var mrow := HBoxContainer.new()
-	mrow.alignment = BoxContainer.ALIGNMENT_CENTER
-	mrow.add_theme_constant_override("separation", 8)
-	mrow.visible = Campaign.ai_friendly
-	box.add_child(mrow)
-	var mlbl := Label.new()
-	mlbl.text = "敌方小兵倍数 ×"
-	mlbl.add_theme_font_size_override("font_size", 16)
-	mlbl.add_theme_color_override("font_color", Color("c8b890"))
-	mrow.add_child(mlbl)
-	var msp := SpinBox.new()
-	msp.min_value = 1.1          # 必须大于 1
-	msp.max_value = 10.0
-	msp.step = 0.1               # 最多一位小数
-	msp.value = Campaign.ai_friendly_mult
-	msp.custom_minimum_size = Vector2(112, 40)
-	msp.update_on_text_changed = true
-	msp.add_theme_font_size_override("font_size", 18)
-	msp.value_changed.connect(func(v: float) -> void:
-		Campaign.ai_friendly_mult = v)
-	mrow.add_child(msp)
-
-	# 开关切换：更新按钮文案/配色，并显隐倍率行
 	afb.toggled.connect(func(on: bool) -> void:
 		Campaign.ai_friendly = on
-		afb.text = "🤖 AI友好模式：%s" % ("开" if on else "关")
-		afb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4"))
-		mrow.visible = on)
-
+		afb.text = "🤖 AI友好模式（全自动）：%s" % ("开" if on else "关")
+		afb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4")))
 	var aftip := Label.new()
-	aftip.text = "（开启后：敌方小兵数量按倍率增援·英雄不乘；数量×倍率向下取整。全部英雄托管后，左下角点「自动镜头」开始自动观战）"
+	aftip.text = "（开启=全员英雄自动托管、可开自动镜头观战。和下面的倍率互不影响）"
 	aftip.add_theme_font_size_override("font_size", 13)
 	aftip.add_theme_color_override("font_color", Color("7c8a9c"))
 	aftip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	aftip.custom_minimum_size = Vector2(520, 0)
 	aftip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(aftip)
+
+	# 改变倍率：独立开关。开后出现 敌方倍率(1~5) + 英雄倍率(1~3)，英雄默认=敌方(封顶3)、可单独改。
+	var scb := Button.new()
+	scb.toggle_mode = true
+	scb.button_pressed = Campaign.scale_on
+	scb.custom_minimum_size = Vector2(420, 44)
+	scb.add_theme_font_size_override("font_size", 17)
+	scb.text = "⚖ 改变倍率：%s" % ("开" if Campaign.scale_on else "关")
+	scb.add_theme_color_override("font_color", Color("ffd866") if Campaign.scale_on else Color("9fb0c4"))
+	box.add_child(scb)
+	var hsp := SpinBox.new()   # 英雄倍率框(先建引用，敌方回调里同步)
+	# 敌方倍率行
+	var erow := HBoxContainer.new()
+	erow.alignment = BoxContainer.ALIGNMENT_CENTER
+	erow.add_theme_constant_override("separation", 8)
+	erow.visible = Campaign.scale_on
+	box.add_child(erow)
+	var elbl := Label.new()
+	elbl.text = "敌方倍率 (1~5) ×"
+	elbl.add_theme_font_size_override("font_size", 16)
+	elbl.add_theme_color_override("font_color", Color("ff9a7a"))
+	erow.add_child(elbl)
+	var esp := SpinBox.new()
+	esp.min_value = 1.0; esp.max_value = 5.0; esp.step = 0.5
+	esp.value = Campaign.enemy_mult
+	esp.custom_minimum_size = Vector2(112, 40)
+	esp.update_on_text_changed = true
+	esp.add_theme_font_size_override("font_size", 18)
+	esp.value_changed.connect(func(v: float) -> void:
+		Campaign.set_enemy_mult(v)
+		if not Campaign.hero_mult_touched:
+			hsp.set_value_no_signal(Campaign.hero_mult))   # 英雄默认跟随敌方
+	erow.add_child(esp)
+	# 英雄倍率行
+	var hrow := HBoxContainer.new()
+	hrow.alignment = BoxContainer.ALIGNMENT_CENTER
+	hrow.add_theme_constant_override("separation", 8)
+	hrow.visible = Campaign.scale_on
+	box.add_child(hrow)
+	var hlbl := Label.new()
+	hlbl.text = "英雄倍率 (1~3) ×"
+	hlbl.add_theme_font_size_override("font_size", 16)
+	hlbl.add_theme_color_override("font_color", Color("a9e34b"))
+	hrow.add_child(hlbl)
+	hsp.min_value = 1.0; hsp.max_value = 3.0; hsp.step = 0.5
+	hsp.value = Campaign.hero_mult
+	hsp.custom_minimum_size = Vector2(112, 40)
+	hsp.update_on_text_changed = true
+	hsp.add_theme_font_size_override("font_size", 18)
+	hsp.value_changed.connect(func(v: float) -> void:
+		Campaign.set_hero_mult(v))   # 手动改英雄 → 脱钩、不再跟随敌方
+	hrow.add_child(hsp)
+	scb.toggled.connect(func(on: bool) -> void:
+		Campaign.scale_on = on
+		scb.text = "⚖ 改变倍率：%s" % ("开" if on else "关")
+		scb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4"))
+		erow.visible = on
+		hrow.visible = on)
+	var sctip := Label.new()
+	sctip.text = "（敌方倍率 e：小兵数量×e、血×(1+(e-1)/3)、攻×(1+(e-1)/4)，大将只乘血/攻。英雄倍率 n：你方英雄范围/CD/伤害/血量按 n 放大。默认英雄=敌方，可单独改；e=1/n=1 即原版）"
+	sctip.add_theme_font_size_override("font_size", 13)
+	sctip.add_theme_color_override("font_color", Color("7c8a9c"))
+	sctip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	sctip.custom_minimum_size = Vector2(520, 0)
+	sctip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(sctip)
 
 	# [波数, 英雄上限, 文案, 配色]
 	var opts := [

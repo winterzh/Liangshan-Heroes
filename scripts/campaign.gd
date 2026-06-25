@@ -31,8 +31,25 @@ var ai_difficulty := "normal"   # AI 对战难度：easy / normal / hard
 var victory_mode := "conquest"  # 1v1 胜利条件：conquest 征服 / regicide 斩首 / koth 占山为王
 var defense_waves := 30         # 驻守战波数：20 速战 / 30 经典 / 60 史诗
 var defense_hero_cap := 4       # 驻守战英雄上限（60 关放宽到 6 员）
-var ai_friendly := false        # 驻守战「AI友好模式」：敌方小兵按倍率增援(英雄不乘) + 全员托管后可开自动镜头
-var ai_friendly_mult := 3.0     # AI友好模式·敌方小兵数量倍率（>1，一位小数；出兵时 数量×倍率 向下取整）
+var ai_friendly := false        # 驻守战「AI友好模式」：全自动（全员托管 + 自动镜头）。与倍率无关、独立开关。
+var ai_friendly_mult := 3.0     # 旧字段·保留兼容（敌方数量倍率现走 enemy_mult）
+# 「改变倍率」：独立于 AI友好。开后 敌方倍率(放大敌人) + 英雄倍率(放大你方英雄) 生效。
+var scale_on := false           # 是否改变倍率
+var enemy_mult := 2.0           # 敌方倍率(1~5)：小兵 数量×e、血×(1+(e-1)/3)、攻×(1+(e-1)/4)；大将只乘血/攻
+var hero_mult := 2.0            # 英雄倍率(1~3)：你方英雄 范围/CD/伤害/血量按 n 放大；默认=敌方倍率(封顶3)
+var hero_mult_touched := false  # 玩家是否手动改过英雄倍率（改过后不再自动跟随敌方倍率）
+
+
+## 敌方倍率改动 → 英雄倍率默认跟随(=敌方，封顶3)，直到玩家手动改过英雄倍率才脱钩。
+func set_enemy_mult(v: float) -> void:
+	enemy_mult = clampf(v, 1.0, 5.0)
+	if not hero_mult_touched:
+		hero_mult = clampf(enemy_mult, 1.0, 3.0)
+
+
+func set_hero_mult(v: float) -> void:
+	hero_mult = clampf(v, 1.0, 3.0)
+	hero_mult_touched = true
 
 
 func _ready() -> void:
@@ -58,6 +75,14 @@ func _ready() -> void:
 	var afm := OS.get_environment("AI_FRIENDLY_MULT")
 	if afm != "":
 		ai_friendly_mult = maxf(1.1, float(afm))
+	if OS.get_environment("SCALE_ON") == "1":
+		scale_on = true
+	var em := OS.get_environment("ENEMY_MULT")
+	if em != "":
+		set_enemy_mult(float(em)); scale_on = true
+	var hm := OS.get_environment("HERO_MULT")
+	if hm != "":
+		set_hero_mult(float(hm)); scale_on = true
 	var lv := OS.get_environment("LEVEL")
 	if lv != "":
 		current = clampi(int(lv) - 1, 0, LEVELS.size() - 1)
@@ -124,6 +149,10 @@ func _save() -> void:
 	cfg.set_value("progress", "unlocked", unlocked)
 	cfg.set_value("pref", "ai_difficulty", ai_difficulty)
 	cfg.set_value("pref", "victory_mode", victory_mode)
+	cfg.set_value("pref", "scale_on", scale_on)
+	cfg.set_value("pref", "enemy_mult", enemy_mult)
+	cfg.set_value("pref", "hero_mult", hero_mult)
+	cfg.set_value("pref", "hero_mult_touched", hero_mult_touched)
 	cfg.save(SAVE_PATH)
 
 
@@ -133,3 +162,7 @@ func _load() -> void:
 		unlocked = maxi(1, int(cfg.get_value("progress", "unlocked", 1)))
 		ai_difficulty = String(cfg.get_value("pref", "ai_difficulty", ai_difficulty))
 		victory_mode = String(cfg.get_value("pref", "victory_mode", victory_mode))
+		scale_on = bool(cfg.get_value("pref", "scale_on", scale_on))
+		enemy_mult = clampf(float(cfg.get_value("pref", "enemy_mult", enemy_mult)), 1.0, 5.0)
+		hero_mult = clampf(float(cfg.get_value("pref", "hero_mult", hero_mult)), 1.0, 3.0)
+		hero_mult_touched = bool(cfg.get_value("pref", "hero_mult_touched", hero_mult_touched))
