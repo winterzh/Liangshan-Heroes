@@ -103,6 +103,20 @@ void fragment() {
 	col.add_child(_mk_module("📖  英雄图鉴", "108 将 · 立绘 / 技能 / 生平", Color("ff9a6a"), func() -> void: get_tree().change_scene_to_file.call_deferred("res://scenes/codex.tscn")))
 	col.add_child(_mk_module("🛠  更多", "关卡编辑器 · 设置", Color("c0a0ff"), _show_more))
 
+	# 版本号（右下角·低调灰）
+	var ver := Label.new()
+	ver.text = "v" + Campaign.VERSION
+	ver.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	ver.offset_left = -150.0
+	ver.offset_top = -36.0
+	ver.offset_right = -16.0
+	ver.offset_bottom = -12.0
+	ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	ver.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ver.add_theme_font_size_override("font_size", 16)
+	ver.add_theme_color_override("font_color", Color("6a7686"))
+	add_child(ver)
+
 
 ## 主菜单大模块：整块为一个带图标(emoji)的大按钮 + 下方小字副标题。
 func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callable, recommended := false) -> Control:
