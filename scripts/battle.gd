@@ -4240,7 +4240,7 @@ func _zone_pass(delta: float) -> void:
 			var zp: Vector2 = z["pos"]
 			var zr: float = z["r"]
 			var zfoe: int = int(z["foe"])
-			for u in units:
+			for u in units_near(zp, zr):
 				if is_instance_valid(u) and u.faction == zfoe and u.hp > 0.0 and not u.is_building \
 						and not u.is_resource and not u.garrisoned and zp.distance_to(u.position) <= zr:
 					u.apply_stun(maxf(0.22, delta * 2.0))
@@ -4258,7 +4258,7 @@ func _zone_pass(delta: float) -> void:
 				z["tick_t"] = float(z["tick_t"]) + float(z["tick"])
 				var zr2: float = z["r"]
 				var zfoe2: int = int(z["foe"])
-				for u in units:
+				for u in units_near(src.position, zr2):
 					if is_instance_valid(u) and u.faction == zfoe2 and u.hp > 0.0 and not u.is_resource \
 							and not u.garrisoned and src.position.distance_to(u.position) <= zr2:
 						if float(z["slow"]) > 0.0:
@@ -4277,7 +4277,7 @@ func _zone_pass(delta: float) -> void:
 			var mfoe: int = int(z["foe"])
 			var src = z["caster"]
 			var hit: Dictionary = z["hit"]
-			for u in units:
+			for u in units_near(mp, mhw + 40.0):
 				if is_instance_valid(u) and u.faction == mfoe and u.hp > 0.0 and not u.is_resource and not u.garrisoned \
 						and not hit.has(u.get_instance_id()) and mp.distance_to(u.position) <= mhw + u.radius:
 					hit[u.get_instance_id()] = true
@@ -4472,8 +4472,10 @@ func _densest_foe_pos(my_fac: int, sample_r: float) -> Vector2:
 	var bestn := -1
 	for a in foes:
 		var n := 0
-		for b in foes:
-			if a.position.distance_to(b.position) <= sample_r:
+		for b in units_near(a.position, sample_r):
+			if b.faction != my_fac and not b.is_building and not b.is_resource \
+					and not b.garrisoned and not b.is_captive and b.hp > 0.0 \
+					and a.position.distance_to(b.position) <= sample_r:
 				n += 1
 		if n > bestn:
 			bestn = n

@@ -78,7 +78,7 @@ func _physics_process(delta: float) -> void:
 					s.heal(dmg * ls)
 		# 小范围溅射（金龙吐火）：对命中点附近的其余敌人也造成同等伤害
 		if splash > 0.0 and s != null and is_instance_valid(s) and s.battle != null:
-			for u in s.battle.units:
+			for u in s.battle.units_near(tp, splash + 40.0):
 				if u == target or not is_instance_valid(u) or u.hp <= 0.0:
 					continue
 				if u.faction == s.faction or u.is_resource or u.garrisoned:
