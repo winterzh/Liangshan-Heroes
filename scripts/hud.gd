@@ -16,6 +16,7 @@ const SPEAKER_COLORS := {
 }
 
 var top_label: Label
+var _fps_label: Label       # 右上角 FPS 显示（绿≥50 / 黄≥30 / 红<30）
 var msg_box: VBoxContainer
 var start_btn: Button
 var battle = null
@@ -157,6 +158,7 @@ func _ready() -> void:
 	_build_pause()
 	_build_skill_tip()
 	_build_autocam_badge()
+	_build_fps_label()   # 最后建→置于最上层，覆盖各遮罩始终可见
 
 
 func setup(p_battle) -> void:
@@ -739,6 +741,11 @@ func _process(delta: float) -> void:
 	if _panel_accum >= 0.25:
 		_panel_accum = 0.0
 		_layout_hero_bar()   # 兜底重排（窗口缩放时；桌面端 _apply_safe_area 不跑）
+		if _fps_label != null:
+			var fps := int(round(Engine.get_frames_per_second()))
+			_fps_label.text = "FPS %d" % fps
+			_fps_label.add_theme_color_override("font_color",
+				Color("9fe89f") if fps >= 50 else (Color("f0d060") if fps >= 30 else Color("f07a6a")))
 		if battle != null and battle.economy and _res_bar.visible:
 			_res_gold.text = "金 %d" % battle.gold
 			_res_wood.text = "木 %d" % battle.wood
@@ -1177,6 +1184,21 @@ func _style_label(l: Label, size: int) -> void:
 	l.add_theme_font_size_override("font_size", size)
 	l.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.85))
 	l.add_theme_constant_override("outline_size", 5)
+
+
+## 右上角 FPS 显示：贴右上角、在「☰ 菜单」键(高52)下方，逐 0.25s 在 _process 里刷新。
+func _build_fps_label() -> void:
+	_fps_label = Label.new()
+	_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_fps_label.offset_right = -14.0
+	_fps_label.offset_top = 68.0    # 让开右上角的「☰ 菜单」键，避免重叠
+	_fps_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_fps_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fps_label.text = "FPS --"
+	_style_label(_fps_label, 16)
+	_fps_label.add_theme_color_override("font_color", Color("9fe89f"))
+	add_child(_fps_label)
 
 
 func _build_intro() -> void:
