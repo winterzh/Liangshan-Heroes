@@ -1905,7 +1905,7 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 	draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off))
 	var srect := Rect2(-s * 0.5, -s * 0.82, s, s)
 	# 暗色描边：四方各偏移画成半透黑剪影，叠出轮廓 → 单位从草地/背景里清晰跳出（提升可读性）
-	if not _dying and (is_hero or battle == null or not battle._lite_fx):
+	if not _dying:
 		var ow := 1.7
 		var ocol := Color(0.05, 0.04, 0.03, 0.5)
 		draw_texture_rect(frame, Rect2(srect.position + Vector2(ow, 0), srect.size), false, ocol)
@@ -2035,21 +2035,18 @@ func _draw() -> void:
 
 	var death_f := clampf(_death_t / DEATH_DUR, 0.0, 1.0) if _dying else 0.0
 
-	# 兵海(battle._lite_fx)时省掉纯装饰绘制(投影/扬尘/增益辉光)，只留精灵+选中/状态标记 → 保后期帧率
-	var lite: bool = battle != null and battle._lite_fx and not selected and not is_active
 	# 地面层（逻辑空间直接绘制 → 被等距变换压成贴地椭圆）：投影 + 扬尘 + 增益辉光 + 选择圈
 	if is_building:
 		draw_circle(Vector2(0, 6), radius * 0.85, Color(0, 0, 0, 0.20))
-	elif not lite:
+	else:
 		var lift := maxf(0.0, -cos(_anim_t * 2.0)) * _move_blend   # 腾空时影子收缩
 		var ssc := radius * 0.95 * (1.0 - 0.16 * lift)
 		draw_circle(Vector2(2, 3), ssc, Color(0, 0, 0, (0.25 - 0.06 * lift) * (1.0 - death_f)))
-	if not lite:
-		for d in _dust:
-			var da: float = d.t / DUST_DUR
-			draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
-		if _buff_glow > 0.0:
-			draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
+	for d in _dust:
+		var da: float = d.t / DUST_DUR
+		draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
+	if _buff_glow > 0.0:
+		draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
 	# 减速光环（公孙胜 E）：脚下青蓝色范围环
 	if slow_aura_r > 0.0 and not _dying:
 		var pulse := 0.5 + 0.5 * sin(_idle_t * 2.2)
@@ -2107,8 +2104,8 @@ func _draw() -> void:
 			draw_string(f, Vector2(-49.0, gy + 1.0), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color(0, 0, 0, 0.8))
 			draw_string(f, Vector2(-50.0, gy), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color("9fe8b0"))
 
-	# 血条：常显（阵营色描边——梁山金、官军红）。兵海时满血单位不画血条(省一堆 draw_rect)。
-	if hp > 0.0 and Settings.show_healthbars and not (lite and hp >= max_hp):
+	# 血条：常显（阵营色描边——梁山金、官军红）
+	if hp > 0.0 and Settings.show_healthbars:
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
 		var bh := 5.0 if (is_hero or is_building) else 4.0
 		draw_rect(Rect2(-w * 0.5 - 1.0, bar_y - 1.0, w + 2.0, bh + 2.0), Color(0, 0, 0, 0.8))

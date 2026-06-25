@@ -57,7 +57,7 @@ const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng",
 
 var units: Array = []
 var _grid: Dictionary = {}            # 空间网格(每物理帧重建)：Vector2i 格 → Array[Unit]，加速分离/光环/索敌的邻近查询
-var _lite_fx := false                 # 在场机动单位过多时简化绘制(省每单位 4 向描边)以保帧率
+var _lite_fx := false                 # 机动单位过多(>90)标志：保留备用；画面优先，当前不据此简化绘制
 var _stealth_acc := 0.0               # 潜行 pass 限流累加（不必每帧跑）
 var _ecast_acc := 0.0                 # 敌将放招 pass 限流累加（不必每帧跑）
 const GRID_CELL := 64.0               # 空间网格边长(px)
@@ -3080,7 +3080,7 @@ func _grid_build() -> void:
 			_grid[k].append(u)
 		else:
 			_grid[k] = [u]
-	_lite_fx = mob > 90   # 机动单位过多→绘制走简化分支(省每单位 4 向描边)，保住帧率
+	_lite_fx = mob > 90   # 机动单位计数标志(备用)；画面优先，当前不据此简化绘制
 
 
 ## 返回 pos 半径 radius 内(按网格粗筛、含相邻格)的候选单位；调用方自行做精确距离判定。
