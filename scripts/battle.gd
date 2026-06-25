@@ -3854,8 +3854,8 @@ func _hero_boost_n(u: Unit) -> float:
 	return clampf(float(Campaign.hero_mult), 1.0, 3.0)
 
 
-func _hero_rb(u: Unit) -> float:   # 范围(半径)倍率 1+(n-1)/2
-	return 1.0 + (_hero_boost_n(u) - 1.0) / 2.0
+func _hero_rb(u: Unit) -> float:   # 范围(半径)倍率 1+(n-1)/4（温和：n3=1.5×、面积2.25×）
+	return 1.0 + (_hero_boost_n(u) - 1.0) / 4.0
 
 
 func _hero_db(u: Unit) -> float:   # 伤害倍率 1+(n-1)/4
@@ -5858,24 +5858,24 @@ func _towertrap_selftest() -> void:
 	gold = _g0; wood = _w0
 	results.append(["wood_short_policy", wshort])
 	results.append(["wood_ok_policy", wok])
-	# 英雄倍率(改变倍率开启)：n=clamp(hero_mult,1,3)；rb=1+(n-1)/2、db=1+(n-1)/4；CD×1/n、血量×(1+(n-1)/3)。
+	# 英雄倍率(改变倍率开启)：n=clamp(hero_mult,1,3)；rb=1+(n-1)/4、db=1+(n-1)/4；CD×(1-(n-1)·0.2)、血量×(1+(n-1)/3)。
 	var _hb0 := Campaign.hero_mult
 	var _so0 := Campaign.scale_on
 	Campaign.scale_on = true
 	Campaign.hero_mult = 2.5
 	var hbh := spawn_unit("song_jiang", Unit.FACTION_LIANG, origin)
-	var nmath_ok: bool = absf(_hero_boost_n(hbh) - 2.5) < 0.01 and absf(_hero_rb(hbh) - 1.75) < 0.01 and absf(_hero_db(hbh) - 1.375) < 0.01
+	var nmath_ok: bool = absf(_hero_boost_n(hbh) - 2.5) < 0.01 and absf(_hero_rb(hbh) - 1.375) < 0.01 and absf(_hero_db(hbh) - 1.375) < 0.01
 	Campaign.hero_mult = 4.0   # 封顶 → n=3
 	var cap_ok: bool = absf(_hero_boost_n(hbh) - 3.0) < 0.01
-	var sa: Dictionary = _scaled_ability(_abilities.get("lin_sweep", {}), _hero_rb(hbh), _hero_db(hbh))   # n=3: 范围×2、伤害×1.5
-	var scale_ok: bool = absf(float(sa.get("radius", 0.0)) - 200.0) < 1.0 and absf(float(sa.get("effect", {}).get("dmg", 0.0)) - 37.5) < 0.5
+	var sa: Dictionary = _scaled_ability(_abilities.get("lin_sweep", {}), _hero_rb(hbh), _hero_db(hbh))   # n=3: 范围×1.5、伤害×1.5
+	var scale_ok: bool = absf(float(sa.get("radius", 0.0)) - 150.0) < 1.0 and absf(float(sa.get("effect", {}).get("dmg", 0.0)) - 37.5) < 0.5
 	Campaign.hero_mult = 1.0
 	hbh._recompute_hero_stats()
 	var hp1: float = hbh.max_hp
 	var cd1: float = hbh._slot_cd(0)
-	Campaign.hero_mult = 4.0   # n=3：血量×1.667、CD×1/3（比值约掉科技系数）
+	Campaign.hero_mult = 4.0   # n=3：血量×1.667、CD×0.6（比值约掉科技系数）
 	hbh._recompute_hero_stats()
-	var hpcd_ok: bool = hp1 > 0.0 and absf(hbh.max_hp / hp1 - 1.6667) < 0.02 and (cd1 <= 0.0 or absf(hbh._slot_cd(0) / cd1 - 0.3333) < 0.02)
+	var hpcd_ok: bool = hp1 > 0.0 and absf(hbh.max_hp / hp1 - 1.6667) < 0.02 and (cd1 <= 0.0 or absf(hbh._slot_cd(0) / cd1 - 0.6) < 0.02)
 	hbh.ability_slots[0]["rank"] = maxi(1, int(hbh.ability_slots[0]["rank"]))   # 确保已学，能真施放
 	hbh.slot_start_cd(0)   # 真·施放：cd_t 应被设成缩短后的冷却
 	var cdt: float = float(hbh.ability_slots[0]["cd_t"])
