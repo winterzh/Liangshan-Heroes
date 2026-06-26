@@ -51,8 +51,8 @@ const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农
 ## 全托管常备建筑配额（出齐英雄后按序补，被拆即重建）。民居不在此列——改按人口需求动态补(见 _eco_house_needed)。塔走多塔种混搭、往前沿外推，构筑前置防线。
 const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"],
 	["arrow_tower", 4, "front"], ["caltrop_tower", 2, "front"], ["thunder_tower", 3, "front"], ["altar_tower", 2, "front"]]
-const ECO_FRONT_CELLS := 14.0    # 塔前推格数（聚义厅→敌向）：构筑前置防线，越大越靠前线（14×32 ≈ 448px）
-const ECO_FRONT_CAP_FRAC := 0.45 # 塔前推距离上限 = hall→最近敌 ×此值：小图/敌近时别把半成品塔锚到敌脸上被秒
+const ECO_FRONT_CELLS := 18.0    # 塔前推格数（聚义厅→敌向）：构筑前置防线，越大越靠前线（18×32 ≈ 576px）
+const ECO_FRONT_CAP_FRAC := 0.55 # 塔前推距离上限 = hall→最近敌 ×此值：小图/敌近时别把半成品塔锚到敌脸上被秒
 const ECO_TRAP_CAP := 6   # 全托管同时在场陷阱上限
 const ECO_REVIVE_GOLD := 160   # 估算每个英雄复活所需金；复活留底线 = max(2,战死数)×此值
 const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng", "li_kui", "wu_song"]
