@@ -167,6 +167,7 @@ var _acq_t := 0.0           # 待机索敌限流计时（每 ~0.12s 重扫一次
 var _flash := 0.0
 var _muzzle_t := 0.0        # 防御塔开火闪光剩余时长（转向炮口闪一下）
 var _stuck_t := 0.0
+var _idle_push_t := 0.0     # 进攻方(官军)呆住计时：闲置太久没目标 → 重新攻击移动压向聚义厅
 var _last_pos := Vector2.ZERO
 var _combat_cool := 0.0  # 最近交战计时；梁山兵脱战后回血（主场休整）
 var _hit_recent_t := 0.0 # 最近被敌方击中计时（托管磁滞：被打后扩大防区/搜索范围）
@@ -815,7 +816,16 @@ func _phys_body(delta: float) -> void:
 						_home = position
 						_has_home = true
 					_repath = 0.0
+					_idle_push_t = 0.0
 					_state = ST_CHASE
+				elif faction == FACTION_GUAN and _amove_dest != Vector2.ZERO and battle != null:
+					# 进攻方呆住看门狗：没目标却停在原地超 2.5s → 重新攻击移动压向聚义厅，半路遇我方单位就接着打
+					_idle_push_t += delta
+					if _idle_push_t > 2.5:
+						_idle_push_t = 0.0
+						var hall = battle.main_base(FACTION_LIANG)
+						var dest: Vector2 = hall.position if (hall != null and is_instance_valid(hall)) else _amove_dest
+						order_amove(dest)
 			ST_MOVE:
 				if _follow_path(delta):
 					_done_order()
@@ -1297,8 +1307,8 @@ func _deal_hit() -> void:
 		if ls > 0.0:
 			heal(dmg * ls)
 		# 林冲·猎骑被动：打骑兵 cav_ls_chance 几率额外吸血 cav_ls_frac×伤害
-		if t.is_cavalry and cav_ls_chance > 0.0 and randf() < cav_ls_chance:
-			heal(dmg * cav_ls_frac)
+		if cav_ls_chance > 0.0 and not t.is_building and not t.is_resource and randf() < cav_ls_chance:
+			heal(dmg * (cav_ls_frac if t.is_cavalry else cav_ls_frac * 0.5))   # 打骑兵满额、非骑兵半额
 			_buff_glow = 1.0
 		if battle.has_method("spawn_impact"):
 			battle.spawn_impact(t.position, _swing_kind == WK.AXE or crit)
