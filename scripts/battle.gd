@@ -51,6 +51,8 @@ const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农
 ## 全托管常备建筑配额（出齐英雄后按序补，被拆即重建）。民居不在此列——改按人口需求动态补(见 _eco_house_needed)。塔走多塔种混搭、往前沿外推，构筑前置防线。
 const ECO_MAINT := [["depot", 1, "gold"], ["barracks", 2, "hall"], ["market", 1, "gold"],
 	["arrow_tower", 4, "front"], ["caltrop_tower", 2, "front"], ["thunder_tower", 3, "front"], ["altar_tower", 2, "front"]]
+const ECO_FRONT_CELLS := 14.0    # 塔前推格数（聚义厅→敌向）：构筑前置防线，越大越靠前线（14×32 ≈ 448px）
+const ECO_FRONT_CAP_FRAC := 0.45 # 塔前推距离上限 = hall→最近敌 ×此值：小图/敌近时别把半成品塔锚到敌脸上被秒
 const ECO_TRAP_CAP := 6   # 全托管同时在场陷阱上限
 const ECO_REVIVE_GOLD := 160   # 估算每个英雄复活所需金；复活留底线 = max(2,战死数)×此值
 const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng", "li_kui", "wu_song"]
@@ -2044,11 +2046,14 @@ func _eco_anchor(near: String) -> Vector2i:
 		away = away.normalized() if away.length() > 1.0 else Vector2(-1, 1)
 		return map.world_to_cell(hp + away * (7.0 * float(GameMap.CELL)))
 	if near == "front":
-		# 塔往前沿外推：从聚义厅朝战线方向推出 ~5 格，在基地前面结成防线（别贴脸基地，往外推一点）
-		var fl := _eco_frontline()
-		var fwd := fl - hp
-		fwd = fwd.normalized() if fwd.length() > 1.0 else Vector2(1, -1)
-		return map.world_to_cell(hp + fwd * (5.0 * float(GameMap.CELL)))
+		# 塔往前沿外推：从聚义厅朝「敌军来向」推出 ECO_FRONT_CELLS 格，在基地前面结成前置防线。
+		# 距离上限 = hall→最近敌 ×ECO_FRONT_CAP_FRAC：小图/敌近时别把塔锚到敌脸上、半成品被秒。
+		var dir := _eco_forward_dir()
+		var dist := ECO_FRONT_CELLS * float(GameMap.CELL)
+		var nf := _nearest_foe_pos(hp, Unit.FACTION_LIANG)
+		if nf != Vector2.INF:
+			dist = minf(dist, hp.distance_to(nf) * ECO_FRONT_CAP_FRAC)
+		return map.world_to_cell(hp + dir * dist)
 	return map.world_to_cell(hp)
 
 
@@ -2156,7 +2161,7 @@ func _eco_first_building(key: String) -> Unit:
 ## 没有前沿建筑则朝最近的来犯之敌推进；都没有就站在聚义厅前沿。
 func _eco_frontline() -> Vector2:
 	var base := main_base(Unit.FACTION_LIANG)
-	var hp: Vector2 = base.position if (base != null and is_instance_valid(base)) else Vector2.ZERO
+	var hp: Vector2 = base.position if (base != null and is_instance_valid(base)) else map.cell_to_world(level.camera_start_cell())
 	var sum := Vector2.ZERO
 	var n := 0
 	for u in units:
@@ -2172,6 +2177,44 @@ func _eco_frontline() -> Vector2:
 	if foe != Vector2.INF:
 		return hp.lerp(foe, 0.45)
 	return hp
+
+
+## 「前方」单位向量（聚义厅→敌军来向）：优先朝最近敌，无敌则朝战线方向，再无则默认东南。
+## 塔的前推方向用它——保证塔阵正对敌军来路，而非朝着随机环放的兵营。O(n)，只在建造拍/无塔时调用。
+func _eco_forward_dir() -> Vector2:
+	var base := main_base(Unit.FACTION_LIANG)
+	var hp: Vector2 = base.position if (base != null and is_instance_valid(base)) else map.cell_to_world(level.camera_start_cell())
+	var nf := _nearest_foe_pos(hp, Unit.FACTION_LIANG)
+	if nf != Vector2.INF:
+		var d := nf - hp
+		if d.length() > 1.0:
+			return d.normalized()
+	var fl := _eco_frontline()
+	var fwd := fl - hp
+	return fwd.normalized() if fwd.length() > 1.0 else Vector2(1, -1)
+
+
+## 英雄 hold-line（依塔而战的锚点）：我方已建成前置塔群的质心，朝外(远离聚义厅)再推 1.5 格——
+## 英雄站在塔阵稍前一点替塔扛线、依塔御敌。尚无塔时回退到塔的规划锚点(front anchor)。
+## 只在「身边无敌该回防待命」时调用(见 _auto_micro_hero)，故 O(n) 扫描落在低战斗负载的拍，不进热路径。
+func _eco_hold_line() -> Vector2:
+	var base := main_base(Unit.FACTION_LIANG)
+	var hp: Vector2 = base.position if (base != null and is_instance_valid(base)) else map.cell_to_world(level.camera_start_cell())
+	var sum := Vector2.ZERO
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_building \
+				and not u.is_constructing and u.hp > 0.0 \
+				and (u.key == "arrow_tower" or u.key == "caltrop_tower" \
+					or u.key == "thunder_tower" or u.key == "altar_tower"):
+			sum += u.position
+			n += 1
+	if n > 0:
+		var c: Vector2 = sum / float(n)
+		var out := c - hp
+		out = out.normalized() if out.length() > 1.0 else Vector2(1, -1)
+		return c + out * (1.5 * float(GameMap.CELL))
+	return map.cell_to_world(_eco_anchor("front"))
 
 
 ## 队列最短的兵营（多兵营并行出兵，别全挤在一座）。
@@ -2742,7 +2785,7 @@ func _brave_retaliate(u: Unit) -> bool:
 
 ## 全托管·非守家英雄是否「该出手」：身边有敌(260)就打；否则只在敌人已推进到防线内(离聚义厅≤HERO_FRONT_LEASH)
 ## 才迎上去——避免战场空了还独自冲到敌方出生点被 ×3 群殴。
-const HERO_FRONT_LEASH := 720.0   # 英雄迎敌半径(以聚义厅为心，≈22 格)：敌人进了这圈才主动压上
+const HERO_FRONT_LEASH := 820.0   # 英雄迎敌半径(以聚义厅为心，≈26 格)：敌人进了这圈才主动压上(依塔而战·前压)
 func _hero_engage_ok(u: Unit) -> bool:
 	if _foe_within(u.position, maxf(u.aggro_range, 260.0), u.faction):
 		return true
@@ -2789,9 +2832,10 @@ func _kill_close_gnat(u: Unit) -> bool:
 func _auto_micro_hero(u: Unit) -> void:
 	if _kill_close_gnat(u):
 		return   # 贴脸弱敌优先回身砍死，别绕远/空等技能
-	# 全托管·非守家英雄(公孙专职守家走自己的脑)：没有该打的敌人时回前线集结待命，不孤军深入敌方出生点
+	# 全托管·非守家英雄(公孙专职守家走自己的脑)：没有该打的敌人时回「塔线」(hold-line)依塔待命，
+	# 不再退到基地外圈、也不孤军深入敌方出生点——站在前置塔阵上替塔扛线。
 	if _full_auto() and u.key != "gongsun_sheng" and not _hero_engage_ok(u):
-		var front := _eco_frontline()
+		var front := _eco_hold_line()
 		if u.position.distance_to(front) > 140.0:
 			_ai_move(u, front)
 		return
@@ -6094,7 +6138,7 @@ func _towertrap_selftest() -> void:
 	results.append(["revive_reserve_floor", _eco_revive_reserve() >= 2 * ECO_REVIVE_GOLD])
 	# 民居「后方」锚点：在远离前线一侧、离基地够远（别堆采矿角/集结走廊卡住单位）
 	var hall_t := main_base(Unit.FACTION_LIANG)
-	var hp_t: Vector2 = hall_t.position if hall_t != null else origin
+	var hp_t: Vector2 = hall_t.position if hall_t != null else _eco_base_pos()
 	var fl_t := _eco_frontline()
 	var away_t := hp_t - fl_t
 	away_t = away_t.normalized() if away_t.length() > 1.0 else Vector2(-1, 1)
@@ -7961,6 +8005,8 @@ func _newhero_selftest() -> void:
 			break
 	if origin == Vector2.ZERO and not units.is_empty():
 		origin = units[0].position
+	var _eco_was := economy
+	economy = true   # 战役条件：升级制英雄才按 def["abilities"] 建满 4 技能槽（非经济场只建单 ability → 多技能英雄零槽，slot[1] 越界）
 	var gong := spawn_unit("gongsun_sheng", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(60, 0)))))
 	var wus := spawn_unit("wu_song", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(-60, 0)))))
 	var foe := spawn_unit("guan_dao", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(0, 64)))))
@@ -8071,6 +8117,7 @@ func _newhero_selftest() -> void:
 	for u in units.duplicate():
 		if is_instance_valid(u) and (u.key == "dragon_summon" or u.key == "tiger_summon" or u == foe or u == gong or u == wus or u == song):
 			u.take_damage(u.hp + 1.0, null)
+	economy = _eco_was
 
 
 ## 待结算队列里某将是否排了某槽（托管自检用）。
