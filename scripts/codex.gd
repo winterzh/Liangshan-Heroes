@@ -117,6 +117,10 @@ func _ready() -> void:
 			if not by_type.has(t):
 				by_type[t] = []
 			(by_type[t] as Array).append(key)
+	# 图鉴专条：STAR 名册里尚无战斗单位条目的一百单八将（新补的天罡/地煞）也列入「天罡地煞」。
+	for sk in Bios.STAR:
+		if not Defs.UNITS.has(sk):
+			stars.append(sk)
 	var first := ""
 	stars.sort_custom(func(a, b): return Bios.star_rank(a) < Bios.star_rank(b))
 	if not stars.is_empty():
@@ -255,7 +259,7 @@ func _show_lore() -> void:
 		return
 	var d: Dictionary = Defs.UNITS.get(_cur, {})
 	var sl: String = Bios.star_label(_cur)
-	_lore_name.text = String(d.get("name", _cur)) + ("　〔%s〕" % sl if sl != "" else "")
+	_lore_name.text = _disp_name(_cur) + ("　〔%s〕" % sl if sl != "" else "")
 	_lore_text.text = Bios.get_lore(_cur, _utype(d))
 	_lore_root.visible = true
 
@@ -275,7 +279,7 @@ func _add_group(list: VBoxContainer, title: String, keys: Array) -> void:
 	for k in keys:
 		var b := Button.new()
 		var sl: String = Bios.star_label(k)
-		b.text = "  " + String(Defs.UNITS[k].get("name", k)) + ("　" + sl.split(" · ")[1] if sl != "" else "")
+		b.text = "  " + _disp_name(k) + ("　" + sl.split(" · ")[1] if sl != "" else "")
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.add_theme_font_size_override("font_size", 22 if _touch else 17)
 		if _touch:
@@ -311,8 +315,11 @@ func _select(key: String) -> void:
 	var d: Dictionary = Defs.UNITS.get(key, {})
 	var t := _utype(d)
 	var sl: String = Bios.star_label(key)
-	_name_lbl.text = String(d.get("name", key)) + ("　〔%s〕" % sl if sl != "" else "")
-	_sub_lbl.text = "%s　血 %d　攻 %d　射程 %d" % [t, int(d.get("hp", 0)), int(d.get("atk", 0)), int(d.get("range", 0))]
+	_name_lbl.text = _disp_name(key) + ("　〔%s〕" % sl if sl != "" else "")
+	if d.is_empty():
+		_sub_lbl.text = "梁山一百单八将 · 图鉴专条"   # 无战斗单位条目者：不显血攻射程
+	else:
+		_sub_lbl.text = "%s　血 %d　攻 %d　射程 %d" % [t, int(d.get("hp", 0)), int(d.get("atk", 0)), int(d.get("range", 0))]
 	_bio_lbl.text = Bios.get_bio(key, t)
 	# 技能（1/2/3 级数值）：有技能组的英雄；战役单将退回单技能
 	var abil: Array = d.get("abilities", [])
@@ -364,6 +371,14 @@ func _select(key: String) -> void:
 	if af.is_empty():
 		af = wf
 	_atk.set_frames(af)
+
+
+## 显示名：有战斗单位条目用其 name；图鉴专条（仅 STAR 名册）用一百单八将姓名；都没有退回 key。
+func _disp_name(key: String) -> String:
+	if Defs.UNITS.has(key):
+		return String(Defs.UNITS[key].get("name", key))
+	var sn := Bios.star_name(key)
+	return sn if sn != "" else key
 
 
 func _utype(d: Dictionary) -> String:
