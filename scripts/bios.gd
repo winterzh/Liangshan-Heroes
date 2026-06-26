@@ -251,8 +251,10 @@ static func get_bio(key: String, type_label := "") -> String:
 	return "暂无生平记载。"
 
 
-## 详细小传：有 LORE 用之，否则退回简述。
+## 详细小传：优先用自动生成的详细生平(LoreData，约1000字)，其次本文件 LORE，再退回简述。
 static func get_lore(key: String, type_label := "") -> String:
+	if LoreData.LORE.has(key):
+		return LoreData.LORE[key]
 	if LORE.has(key):
 		return LORE[key]
 	return get_bio(key, type_label)
