@@ -361,8 +361,8 @@ const ABILITIES := {
 		"effect": {"kind": "sector_nuke", "dmg": 42.0, "range": 260.0, "arc": 70.0, "slow": 0.5, "slow_dur": 1.6}},
 	# 林冲 E·禁军教头·猎杀（被动）：更克骑兵，且打骑兵 30% 概率吸血 80%
 	"lin_predator": {"name": "禁军教头·猎骑", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("c8e0ff"),
-		"desc": "被动·专破马军\n克骑兵伤害 +0.3/0.6/0.9（满级 1.9×）；攻击 35% 几率\n按 50%/70%/90% 伤害吸血（打骑兵满额、非骑兵半额）",
-		"effect": {"kind": "passive", "atk_add": 3.0, "bonus_cav": 0.3, "cav_ls_chance": 0.35, "cav_ls_frac_ranks": [0.50, 0.70, 0.90]}},
+		"desc": "被动·专破马军\n克骑兵伤害 +0.3/0.6/0.9（满级 1.9×）；攻击 35% 几率\n按 90%/120%/150% 伤害吸血（打骑兵满额、非骑兵半额）",
+		"effect": {"kind": "passive", "atk_add": 3.0, "bonus_cav": 0.3, "cav_ls_chance": 0.35, "cav_ls_frac_ranks": [0.90, 1.20, 1.50]}},
 	# 林冲 R·时空封印（虚空大）：范围内时间停滞，敌军定身 10 秒
 	"lin_chrono": {"name": "时空封印", "cd": 40.0, "targeted": true, "radius": 200.0, "color": Color("a070ff"),
 		"desc": "撕裂时空：指定处结成封印立场\n域内官军时间停滞 10 秒（封印范围随等级扩大）",
