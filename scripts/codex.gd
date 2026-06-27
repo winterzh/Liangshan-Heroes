@@ -216,10 +216,15 @@ func _build_lore_overlay() -> void:
 	_lore_root = ColorRect.new()
 	_lore_root.color = Color(0, 0, 0, 0.5)
 	_lore_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_lore_root.mouse_filter = Control.MOUSE_FILTER_STOP   # 模态：自己接点击、挡住背后图鉴
 	_lore_root.visible = false
-	# 点左侧暗区收起（面板是其上的子节点、自己消费输入，拖动正文不会误触）
+	# 收起只认「暗区上的明确点击/轻点」：左键单击 或 触屏轻点。
+	# 关键：滚轮(WHEEL_*)也是 InputEventMouseButton——正文滚到底时滚轮事件会冒泡到此，
+	# 必须按 button_index 过滤掉，否则「滚到底就直接关了」。滚动绝不触发收起。
 	_lore_root.gui_input.connect(func(e: InputEvent) -> void:
-		if (e is InputEventMouseButton or e is InputEventScreenTouch) and e.pressed:
+		if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+			_hide_lore()
+		elif e is InputEventScreenTouch and e.pressed:
 			_hide_lore())
 	add_child(_lore_root)
 
