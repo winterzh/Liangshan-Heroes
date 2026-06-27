@@ -113,8 +113,10 @@ func _cut(src_path: String, key: String, state: String) -> void:
 		print("[cut_anim] SKIP missing ", src_path); return
 	img.convert(Image.FORMAT_RGBA8)
 	_interior_px = 0
-	var xb := _detect_bounds(img, true)
-	var yb := _detect_bounds(img, false)
+	# 干净绿幕 2×2（无网格线）：按 GRID 等分定格，比「找最暗缝」稳。
+	# 找暗缝会把人物暗部误当格缝 → 下排帧裁进上排人物的脚（脚跑到帧顶）。带网格线的图走 _cut_atlas。
+	var xb := _even_bounds(img.get_width())
+	var yb := _even_bounds(img.get_height())
 	# 阅读序 → 走循环序：左上,右上,左下,右下
 	var order := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
 	var strip := Image.create(FRAME * order.size(), FRAME, false, Image.FORMAT_RGBA8)
@@ -129,8 +131,8 @@ func _cut(src_path: String, key: String, state: String) -> void:
 		cell.resize(FRAME, FRAME, Image.INTERPOLATE_LANCZOS)
 		_interior_px += _key_background(cell)
 		_despill(cell)
-		if state == "death":
-			_bottom_anchor_content(cell)   # 死亡：脚底对齐基线（身体随帧塌下，不被居中抹平）
+		if state == "death" or OS.get_environment("BOTTOM_ANCHOR") == "1":
+			_bottom_anchor_content(cell)   # 死亡 / 图鉴批：脚底对齐基线（主体站底，比居中更稳；少数残脚源图待重生）
 		else:
 			_center_content(cell)
 		strip.blit_rect(cell, Rect2i(0, 0, FRAME, FRAME), Vector2i(i * FRAME, 0))
@@ -139,6 +141,14 @@ func _cut(src_path: String, key: String, state: String) -> void:
 	print("[cut_anim] wrote ", dst)
 	if _interior_px > 0:
 		print("[degreen] %s_%s 内部残绿抠掉 %d px" % [key, state, _interior_px])
+
+
+## 等分定界：GRID 等分图宽/高（干净绿幕无网格线时用，避免找暗缝误判）。
+func _even_bounds(size: int) -> Array:
+	var b := []
+	for k in range(GRID + 1):
+		b.append(int(round(float(size) * k / GRID)))
+	return b
 
 
 func _detect_bounds(img: Image, vertical: bool) -> Array:
