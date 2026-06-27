@@ -406,6 +406,15 @@ func _select(key: String) -> void:
 			var desc_txt := Defs.ability_desc(aid, 1).replace("\n", "\n    ")
 			txt += head + "\n    " + desc_txt + "\n    " + Defs.ability_levels(aid) + "\n\n"
 		_abil_lbl.text = txt.strip_edges()
+	# 塔：图鉴展示「旋转」——头像=静态底座，移动/攻击框=底座+绕塔顶转的炮管（与战场一致，验证不再移位）
+	if bool(d.get("building", false)) and bool(d.get("ranged", false)):
+		var tbase: Texture2D = Art.tower_dir_texture(key, Vector2i(1, 1))
+		if tbase == null:
+			tbase = Art.unit_texture(key)
+		_port.set_frames([tbase] if tbase != null else [])
+		_walk.set_tower(tbase, key)
+		_atk.set_tower(tbase, key)
+		return
 	# 头像：肖像 → 头像图标 → 立绘
 	var ptex: Texture2D = Art.portrait_texture(key)
 	if ptex == null:
@@ -441,22 +450,34 @@ func _utype(d: Dictionary) -> String:
 	return "步兵"
 
 
-## 动画框：>1 帧时按 fps 循环播放，否则静态展示。
+## 动画框：>1 帧循环播放；塔则展示「旋转」(静态底座 + 绕塔顶转的炮管/法杖)；否则静态展示。
 class AnimBox extends Control:
 	var frames: Array = []
 	var fps := 6.0
 	var _t := 0.0
 	var _i := 0
+	var tower_base: Texture2D = null   # 非空 → 进入塔旋转展示
+	var tower_key := ""
+	var _ang := 0.0
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(232, 232)
 
 	func set_frames(fr: Array) -> void:
+		tower_base = null
 		frames = fr; _i = 0; _t = 0.0
 		queue_redraw()
 
+	## 塔旋转展示：静态底座图 + 绕塔顶转的炮管（与战场 _draw_tower_barrel 同款，验证塔不再移位）。
+	func set_tower(base: Texture2D, key: String) -> void:
+		tower_base = base; tower_key = key; frames = []
+		queue_redraw()
+
 	func _process(delta: float) -> void:
-		if frames.size() > 1:
+		if tower_base != null:
+			_ang += delta * 1.7
+			queue_redraw()
+		elif frames.size() > 1:
 			_t += delta * fps
 			if _t >= 1.0:
 				_t -= 1.0
@@ -466,6 +487,9 @@ class AnimBox extends Control:
 	func _draw() -> void:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.10, 0.07))
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.45, 0.37, 0.24), false, 2.0)
+		if tower_base != null:
+			_draw_tower_spin()
+			return
 		if frames.is_empty():
 			draw_string(ThemeDB.fallback_font, Vector2(0, size.y * 0.52), "—", HORIZONTAL_ALIGNMENT_CENTER, size.x, 28, Color(0.5, 0.45, 0.4))
 			return
@@ -478,3 +502,28 @@ class AnimBox extends Control:
 		var sc: float = minf((size.x - 16.0) / ts.x, (size.y - 16.0) / ts.y)
 		var dsz := ts * sc
 		draw_texture_rect(tex, Rect2((size - dsz) * 0.5, dsz), false)
+
+	func _draw_tower_spin() -> void:
+		var ts := tower_base.get_size()
+		if ts.x <= 0.0 or ts.y <= 0.0:
+			return
+		var sc: float = minf((size.x - 16.0) / ts.x, (size.y - 16.0) / ts.y)
+		var dsz := ts * sc
+		var top := (size - dsz) * 0.5
+		draw_texture_rect(tower_base, Rect2(top, dsz), false)
+		var col := Color("3a332b")
+		match tower_key:
+			"altar_tower": col = Color("9a6cd0")
+			"thunder_tower": col = Color("4a4540")
+			"caltrop_tower": col = Color("6b573a")
+		var pivot := Vector2(size.x * 0.5, top.y + dsz.y * 0.32)
+		var sd := Vector2(cos(_ang), sin(_ang) * 0.55)
+		if sd.length() > 0.001:
+			sd = sd.normalized()
+		var blen := dsz.y * 0.30
+		var muzzle := pivot + sd * blen
+		draw_circle(pivot, dsz.y * 0.06, col.darkened(0.25))
+		draw_line(pivot, muzzle, col, 4.0)
+		draw_circle(muzzle, 4.0, col.lightened(0.3))
+		if tower_key == "altar_tower":
+			draw_circle(muzzle, 5.0, Color(0.66, 0.36, 1.0, 0.5))
