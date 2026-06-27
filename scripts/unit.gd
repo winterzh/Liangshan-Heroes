@@ -1623,8 +1623,8 @@ func _recompute_hero_stats() -> void:
 				else:
 					cav_ls_frac = float(eff.get("cav_ls_frac", 0.0))
 	var frac := (hp / max_hp) if max_hp > 0.0 else 1.0
-	# 把全军生命科技(甲胄/时代+10%)折进重算，否则英雄每次升级/学被动都会把科技血量清掉(攻击科技走 buff_atk 不受影响)
-	var tech_hp_f: float = float(battle.tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
+	# 英雄生命只吃「基地(聚义厅)·时代科技」(hero_tech_hp，约+10%)，不吃兵营的坚铠——折进重算保持持久
+	var tech_hp_f: float = float(battle.hero_tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
 	max_hp = (_base_hp * mult + add_hp) * tech_hp_f * (1.0 + (hero_boost_n() - 1.0) / 3.0)   # 英雄倍率：血量×(1+(n-1)/3)
 	hp = clampf(max_hp * frac, 1.0, max_hp)
 	atk = (_base_atk * mult + add_atk) * (1.0 + (hero_boost_n() - 1.0) * 0.1)   # 英雄倍率：攻击力×(1+(n-1)·0.1)，n3=+20%(普攻不宜过高，技能伤害另算)

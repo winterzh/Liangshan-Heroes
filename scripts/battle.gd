@@ -88,6 +88,10 @@ var faction_gather_mult := {}   # 非玩家阵营的采集系数 {faction: float
 var _tech_done := {}
 var tech_atk := 1.0
 var tech_hp := 1.0
+# 英雄专用科技倍率：只累计「聚义厅·时代科技」(tech_age2/age3)，不含兵营的利刃/坚铠——
+# 兵营升级只强化常备军，英雄的攻防只受基地(聚义厅)升级影响(各 +10% 左右)。
+var hero_tech_atk := 1.0
+var hero_tech_hp := 1.0
 var tech_gather := 1.0
 
 # 战争迷雾
@@ -262,6 +266,8 @@ func _ready() -> void:
 			_automicro_selftest()
 		if OS.get_environment("TOWERTRAP_TEST") == "1":
 			_towertrap_selftest()
+		if OS.get_environment("TECH_TEST") == "1":
+			_tech_selftest()
 		if OS.get_environment("AUTOCAM") == "1":
 			_autocam_selftest()
 	else:
@@ -1162,6 +1168,9 @@ func on_research_done(bld: Unit, key: String) -> void:
 	tech_atk *= float(eff.get("atk_mult", 1.0))
 	tech_gather *= float(eff.get("gather_mult", 1.0))
 	var hp_m := float(eff.get("hp_mult", 1.0))
+	if eff.has("advance_age"):   # 仅聚义厅·时代科技加成英雄：英雄攻/血各按该科技倍率(+10% 左右)
+		hero_tech_atk *= float(eff.get("atk_mult", 1.0))
+		hero_tech_hp *= hp_m
 	if hp_m != 1.0:
 		tech_hp *= hp_m
 		for u in units:   # 现役梁山兵立即受益
@@ -2532,10 +2541,10 @@ func _aura_pass() -> void:
 					if v.faction == h.faction and not v.is_building and v.hp > 0.0 and not v.garrisoned \
 							and h.position.distance_to(v.position) <= spr:
 						v.buff_speed = maxf(v.buff_speed, float(spa[0]))
-	if tech_atk != 1.0:
+	if tech_atk != 1.0 or hero_tech_atk != 1.0:
 		for u in units:
 			if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and not u.is_building:
-				u.buff_atk *= tech_atk
+				u.buff_atk *= (hero_tech_atk if u.is_hero else tech_atk)   # 英雄只吃基地科技；喽啰/常备军吃兵营+基地
 
 
 func _slow_aura_of(h: Unit) -> Array:
@@ -6022,6 +6031,46 @@ func _economy_selftest() -> void:
 		var foe_hidden := not is_visible_world(p)       # 普通敌人：非明亮即隐去
 		print("[fog] sight_unit=%d sight_bld=%d linger_10s=%s faded_30s=%s bld_remembered=%s foe_hidden=%s" % [
 			8, 10, lingers_10s, faded_after_30s, bld_remembered, foe_hidden])
+
+
+## 科技归属自检（TECH_TEST=1）：兵营科技(利刃/坚铠)不加成英雄；基地·时代科技(聚义/替天行道)加成英雄各 ~+10%。
+func _tech_selftest() -> void:
+	var prev_econ := economy
+	economy = true
+	tech_atk = 1.0; tech_hp = 1.0; hero_tech_atk = 1.0; hero_tech_hp = 1.0
+	_tech_done = {}
+	var age0 := current_age
+	var origin := map.cell_to_world(map.nearest_open(Vector2i(38, 12)))
+	var hero := spawn_unit("lin_chong", Unit.FACTION_LIANG, origin)
+	var sol := spawn_unit("liang_dao", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(64, 0)))))
+	hero._recompute_hero_stats()
+	var h_hp0: float = hero.max_hp
+	var s_hp0: float = sol.max_hp
+	var res := []
+	on_research_done(null, "tech_weapon")   # 兵营·利刃 atk+20%：英雄不受，常备军 ×1.2
+	res.append(["weapon_hero_atk_unchanged", absf(hero_tech_atk - 1.0) < 0.001])
+	res.append(["weapon_army_atk", absf(tech_atk - 1.2) < 0.001])
+	on_research_done(null, "tech_armor")    # 兵营·坚铠 hp+25%：英雄血不变，常备军 ×1.25
+	hero._recompute_hero_stats()
+	res.append(["armor_hero_hp_unchanged", absf(hero.max_hp - h_hp0) < 0.5])
+	res.append(["armor_army_hp", s_hp0 > 0.0 and absf(sol.max_hp / s_hp0 - 1.25) < 0.02])
+	on_research_done(null, "tech_age2")     # 基地·聚义时代 hp+10%（含英雄）
+	hero._recompute_hero_stats()
+	res.append(["age2_hero_hp+10", h_hp0 > 0.0 and absf(hero.max_hp / h_hp0 - 1.1) < 0.02])
+	on_research_done(null, "tech_age3")     # 基地·替天行道 atk+10%（含英雄）
+	res.append(["age3_hero_atk+10", absf(hero_tech_atk - 1.1) < 0.001])
+	res.append(["age3_army_atk", absf(tech_atk - 1.2 * 1.1) < 0.01])
+	var all_ok := true
+	for r in res:
+		if not bool(r[1]):
+			all_ok = false
+	print("[techtest] %s ALL=%s" % [str(res), all_ok])
+	units.erase(hero); hero.queue_free()
+	units.erase(sol); sol.queue_free()
+	tech_atk = 1.0; tech_hp = 1.0; hero_tech_atk = 1.0; hero_tech_hp = 1.0
+	_tech_done = {}
+	current_age = age0
+	economy = prev_econ
 
 
 ## 防御塔/陷阱自检（TOWERTRAP_TEST=1）：三种新塔开火、法坛优先索敌英雄、三种陷阱触发。确定性、无需推帧。

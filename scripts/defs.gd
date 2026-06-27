@@ -450,16 +450,16 @@ const ABILITIES := {
 # 科技升级（在建筑里研究，完成后给玩家全局加成；每项一次）
 const TECHS := {
 	"tech_weapon": {"name": "锻造·利刃", "cost_gold": 130, "cost_wood": 60, "time": 30.0,
-		"desc": "全军攻击 +20%", "effect": {"atk_mult": 1.2}},
+		"desc": "常备军攻击 +20%（英雄除外）", "effect": {"atk_mult": 1.2}},
 	"tech_armor": {"name": "甲胄·坚铠", "cost_gold": 100, "cost_wood": 110, "time": 30.0,
-		"desc": "全军生命 +25%", "effect": {"hp_mult": 1.25}},
+		"desc": "常备军生命 +25%（英雄除外）", "effect": {"hp_mult": 1.25}},
 	"tech_gather": {"name": "精耕·钱粮", "cost_gold": 80, "cost_wood": 80, "time": 24.0,
 		"desc": "采集效率 +30%", "effect": {"gather_mult": 1.3}},
 	# 时代进阶（聚义厅研究，单向）：解锁后期单位/建筑并给全军加成
 	"tech_age2": {"name": "聚义·壮大", "cost_gold": 200, "cost_wood": 120, "time": 40.0,
-		"desc": "进「聚义」时代：解锁英雄/马军/箭楼/集市，全军生命 +10%", "effect": {"advance_age": 2, "hp_mult": 1.1}},
+		"desc": "进「聚义」时代：解锁英雄/马军/箭楼/集市，全军生命 +10%（含英雄）", "effect": {"advance_age": 2, "hp_mult": 1.1}},
 	"tech_age3": {"name": "替天行道·鼎盛", "cost_gold": 350, "cost_wood": 220, "time": 55.0, "min_age": 2,
-		"desc": "进「替天行道」时代：解锁攻城作坊/撞车，全军攻击 +10%", "effect": {"advance_age": 3, "atk_mult": 1.1}},
+		"desc": "进「替天行道」时代：解锁攻城作坊/撞车，全军攻击 +10%（含英雄）", "effect": {"advance_age": 3, "atk_mult": 1.1}},
 }
 
 
