@@ -2280,14 +2280,15 @@ func _draw_building() -> void:
 	if _is_tower():
 		var ttint := Color(0.62, 0.66, 0.78, 0.82) if is_constructing else Color.WHITE
 		if Art.tower_sheet(key) != null:
-			# 朝向表 8 格的塔身没对齐(图模型画不准)→ 一律用中心格当【静态塔身】、不再按方向换格，
-			# 否则转向时塔身会跳/移位。开火朝向交给下面【会转向的程序化炮管/法杖】表达。
-			var dt := Art.tower_dir_texture(key, Vector2i(1, 1))
+			# 用塔自带的 8 向图按对目标方向取格(开火朝向)。朝向表已做过【脚底对齐】处理，
+			# 各格塔身位置一致 → 切方向时只武器转、塔身不再移位。
+			var cell := Vector2i(1, 1)   # 无目标→中心(待机)
+			if _target != null and is_instance_valid(_target):
+				cell = _dir8_cell(_target.position - position)
+			var dt := Art.tower_dir_texture(key, cell)
 			if dt != null:
 				var s2 := GameMap.building_visual_px(GameMap.footprint_half_for(radius))
 				draw_texture_rect(dt, Rect2(-s2 * 0.5, -s2 * 0.78, s2, s2), false, ttint)
-				if not is_constructing:
-					_draw_tower_barrel()   # 静态塔身 + 转向炮管：塔不动、只炮管瞄目标，消除「移位」
 				if is_constructing:
 					_draw_build_progress()
 				return
