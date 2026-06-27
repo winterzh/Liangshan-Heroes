@@ -14,8 +14,10 @@ var _port: AnimBox
 var _walk: AnimBox
 var _atk: AnimBox
 var _lore_root: ColorRect
+var _lore_panel: Panel
 var _lore_name: Label
 var _lore_text: Label
+var _lore_scroll: ScrollContainer
 var _detail_scroll: ScrollContainer
 var _list_scroll: ScrollContainer
 
@@ -36,7 +38,10 @@ func _input(e: InputEvent) -> void:
 			_drag_amt = 0.0
 			_dragging_list = false
 			var p: Vector2 = e.position
-			if _list_scroll != null and _list_scroll.get_global_rect().has_point(p):
+			if _lore_root != null and _lore_root.visible:
+				# 详情面板打开时为模态：手指在面板上→滚正文；在暗区→不滚背后（松手由 gui_input 收起）
+				_active_scroll = _lore_scroll if (_lore_panel != null and _lore_panel.get_global_rect().has_point(p)) else null
+			elif _list_scroll != null and _list_scroll.get_global_rect().has_point(p):
 				_active_scroll = _list_scroll
 			elif _detail_scroll != null and _detail_scroll.get_global_rect().has_point(p):
 				_active_scroll = _detail_scroll
@@ -205,53 +210,79 @@ func _ready() -> void:
 		_select(first)
 
 
-## 「详细」小传弹层（默认隐藏）
+## 「详细」生平：从右侧推出约半屏的古朴卷轴面板（点左侧暗区 / ✕ / ESC 收起）。
+## 修复点：每次打开滚动回顶（不再「共享」上一位的位置）；面板自占半屏、拖动不再误触关闭。
 func _build_lore_overlay() -> void:
 	_lore_root = ColorRect.new()
-	_lore_root.color = Color(0, 0, 0, 0.74)
+	_lore_root.color = Color(0, 0, 0, 0.5)
 	_lore_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_lore_root.visible = false
+	# 点左侧暗区收起（面板是其上的子节点、自己消费输入，拖动正文不会误触）
 	_lore_root.gui_input.connect(func(e: InputEvent) -> void:
-		if e is InputEventMouseButton and e.pressed:
+		if (e is InputEventMouseButton or e is InputEventScreenTouch) and e.pressed:
 			_hide_lore())
 	add_child(_lore_root)
-	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_lore_root.add_child(center)
-	var card := PanelContainer.new()
-	card.custom_minimum_size = Vector2(760, 480)
+
+	# 古朴宋体（系统字，零打包）：宋体/明体/思源宋体/Noto Serif CJK，找不到退回衬线
+	var serif := SystemFont.new()
+	serif.font_names = PackedStringArray(["Songti SC", "STSong", "SimSun", "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif CJK", "Noto Serif", "Serif", "serif"])
+
+	# 右侧推出的卷轴面板（Panel=自由定位，便于滑入动画）
+	_lore_panel = Panel.new()
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0.12, 0.10, 0.07, 1.0)
-	sb.border_color = Color("8a6a3a")
-	sb.set_border_width_all(2)
-	sb.set_corner_radius_all(8)
-	sb.set_content_margin_all(22)
-	card.add_theme_stylebox_override("panel", sb)
-	center.add_child(card)
+	sb.bg_color = Color(0.91, 0.85, 0.71)          # 米黄宣纸
+	sb.border_color = Color(0.42, 0.30, 0.16)       # 深褐装订边
+	sb.border_width_left = 5
+	sb.shadow_color = Color(0, 0, 0, 0.5)
+	sb.shadow_size = 16
+	_lore_panel.add_theme_stylebox_override("panel", sb)
+	_lore_root.add_child(_lore_panel)
+
 	var cv := VBoxContainer.new()
-	cv.add_theme_constant_override("separation", 12)
-	card.add_child(cv)
+	cv.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	cv.offset_left = 38; cv.offset_top = 26; cv.offset_right = -30; cv.offset_bottom = -26
+	cv.add_theme_constant_override("separation", 14)
+	_lore_panel.add_child(cv)
+
+	# 标题行：名号（朱砂印色）+ ✕
+	var head := HBoxContainer.new()
+	cv.add_child(head)
 	_lore_name = Label.new()
-	_lore_name.add_theme_font_size_override("font_size", 28)
-	_lore_name.add_theme_color_override("font_color", Color("ffe9a8"))
-	cv.add_child(_lore_name)
-	var sc := ScrollContainer.new()
-	sc.custom_minimum_size = Vector2(716, 360)
-	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	cv.add_child(sc)
+	_lore_name.add_theme_font_override("font", serif)
+	_lore_name.add_theme_font_size_override("font_size", 33)
+	_lore_name.add_theme_color_override("font_color", Color(0.46, 0.13, 0.10))   # 朱砂
+	_lore_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	head.add_child(_lore_name)
+	var close := Button.new()
+	close.text = "✕"
+	close.flat = true
+	close.focus_mode = Control.FOCUS_NONE
+	close.add_theme_font_size_override("font_size", 26)
+	close.add_theme_color_override("font_color", Color(0.35, 0.24, 0.14))
+	close.add_theme_color_override("font_hover_color", Color(0.6, 0.18, 0.12))
+	close.pressed.connect(_hide_lore)
+	head.add_child(close)
+
+	# 朱栏分隔线
+	var rule := ColorRect.new()
+	rule.color = Color(0.42, 0.30, 0.16, 0.55)
+	rule.custom_minimum_size = Vector2(0, 2)
+	cv.add_child(rule)
+
+	# 正文滚动区（横向滚动关→正文按面板宽自动换行）
+	_lore_scroll = ScrollContainer.new()
+	_lore_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_lore_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_lore_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	cv.add_child(_lore_scroll)
 	_lore_text = Label.new()
 	_lore_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_lore_text.custom_minimum_size = Vector2(700, 0)
-	_lore_text.add_theme_font_size_override("font_size", 20)
-	_lore_text.add_theme_color_override("font_color", Color(0.93, 0.89, 0.8))
-	_lore_text.add_theme_constant_override("line_spacing", 8)
-	sc.add_child(_lore_text)
-	var close := Button.new()
-	close.text = "关闭"
-	close.add_theme_font_size_override("font_size", 18)
-	close.focus_mode = Control.FOCUS_NONE
-	close.pressed.connect(_hide_lore)
-	cv.add_child(close)
+	_lore_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_lore_text.add_theme_font_override("font", serif)
+	_lore_text.add_theme_font_size_override("font_size", 22)
+	_lore_text.add_theme_color_override("font_color", Color(0.15, 0.10, 0.05))   # 墨色
+	_lore_text.add_theme_constant_override("line_spacing", 13)
+	_lore_scroll.add_child(_lore_text)
 
 
 func _show_lore() -> void:
@@ -261,12 +292,25 @@ func _show_lore() -> void:
 	var sl: String = Bios.star_label(_cur)
 	_lore_name.text = _disp_name(_cur) + ("　〔%s〕" % sl if sl != "" else "")
 	_lore_text.text = Bios.get_lore(_cur, _utype(d))
+	var vp: Vector2 = get_viewport_rect().size
+	var pw: float = clampf(vp.x * 0.54, 360.0, 760.0)   # 约半屏多一点，限个上下界
+	_lore_panel.size = Vector2(pw, vp.y)
+	_lore_panel.position = Vector2(vp.x, 0.0)            # 起始：屏幕右外
 	_lore_root.visible = true
+	_lore_scroll.scroll_vertical = 0                     # 每次打开回到开头（修共享滚动）
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(_lore_panel, "position:x", vp.x - pw, 0.22)   # 从右推出
 
 
 func _hide_lore() -> void:
-	if _lore_root != null:
-		_lore_root.visible = false
+	if _lore_root == null or not _lore_root.visible:
+		return
+	var vp: Vector2 = get_viewport_rect().size
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(_lore_panel, "position:x", vp.x, 0.16)        # 滑回右外
+	tw.tween_callback(func() -> void: _lore_root.visible = false)
 
 
 ## 列表分组：一个标题 + 若干单位按钮
@@ -312,6 +356,8 @@ func _img_col(parent: HBoxContainer, cap: String) -> AnimBox:
 
 func _select(key: String) -> void:
 	_cur = key
+	if _detail_scroll != null:
+		_detail_scroll.scroll_vertical = 0   # 切换武将→右侧详情回到顶部（修「共享滚动」）
 	var d: Dictionary = Defs.UNITS.get(key, {})
 	var t := _utype(d)
 	var sl: String = Bios.star_label(key)
