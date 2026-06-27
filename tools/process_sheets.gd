@@ -57,6 +57,12 @@ func _init() -> void:
 	if FileAccess.file_exists(ProjectSettings.globalize_path("res://assets/portraits9_raw.png")):
 		_process_sheet("res://assets/portraits9_raw.png", "res://assets/portraits9.png", 3, 400, false, [])
 
+	# 一百单八将补全批：portraits10..18（3×3 灰底头像，不抠底）
+	for n in range(10, 19):
+		var rp := "res://assets/portraits%d_raw.png" % n
+		if FileAccess.file_exists(ProjectSettings.globalize_path(rp)):
+			_process_sheet(rp, "res://assets/portraits%d.png" % n, 3, 400, false, [])
+
 	print("[process_sheets] done")
 	quit()
 

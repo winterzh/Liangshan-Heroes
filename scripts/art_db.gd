@@ -135,6 +135,62 @@ const PORTRAIT9_CELLS := {
 	"liang_qiang": Vector2i(0, 1), "tiger_summon": Vector2i(1, 1),
 }
 
+# ── 一百单八将补全批（portraits10..18，3×3 灰底头像，见 ART_REQUEST_108.md §5）──
+const PORTRAITS10_SHEET := "res://assets/portraits10.png"
+const PORTRAIT10_CELLS := {
+	"lu_junyi": Vector2i(0, 0), "guan_sheng": Vector2i(1, 0), "qin_ming": Vector2i(2, 0),
+	"chai_jin": Vector2i(0, 1), "li_ying": Vector2i(1, 1), "zhu_tong": Vector2i(2, 1),
+	"dong_ping": Vector2i(0, 2), "suo_chao": Vector2i(1, 2), "shi_jin": Vector2i(2, 2),
+}
+const PORTRAITS11_SHEET := "res://assets/portraits11.png"
+const PORTRAIT11_CELLS := {
+	"mu_hong": Vector2i(0, 0), "lei_heng": Vector2i(1, 0), "li_jun": Vector2i(2, 0),
+	"zhang_heng": Vector2i(0, 1), "ruan_xiaowu": Vector2i(1, 1), "ruan_xiaoqi": Vector2i(2, 1),
+	"yang_xiong": Vector2i(0, 2), "xie_zhen": Vector2i(1, 2), "xie_bao": Vector2i(2, 2),
+}
+const PORTRAITS12_SHEET := "res://assets/portraits12.png"
+const PORTRAIT12_CELLS := {
+	"yan_qing": Vector2i(0, 0), "zhu_wu": Vector2i(1, 0), "huang_xin": Vector2i(2, 0),
+	"sun_li": Vector2i(0, 1), "xuan_zan": Vector2i(1, 1), "hao_siwen": Vector2i(2, 1),
+	"xiao_rang": Vector2i(0, 2), "pei_xuan": Vector2i(1, 2), "ou_peng": Vector2i(2, 2),
+}
+const PORTRAITS13_SHEET := "res://assets/portraits13.png"
+const PORTRAIT13_CELLS := {
+	"deng_fei": Vector2i(0, 0), "yang_lin": Vector2i(1, 0), "jiang_jing": Vector2i(2, 0),
+	"lu_fang": Vector2i(0, 1), "guo_sheng": Vector2i(1, 1), "an_daoquan": Vector2i(2, 1),
+	"huangfu_duan": Vector2i(0, 2), "wang_ying": Vector2i(1, 2), "bao_xu": Vector2i(2, 2),
+}
+const PORTRAITS14_SHEET := "res://assets/portraits14.png"
+const PORTRAIT14_CELLS := {
+	"fan_rui": Vector2i(0, 0), "kong_ming": Vector2i(1, 0), "kong_liang": Vector2i(2, 0),
+	"xiang_chong": Vector2i(0, 1), "li_gun": Vector2i(1, 1), "jin_dajian": Vector2i(2, 1),
+	"ma_lin": Vector2i(0, 2), "tong_wei": Vector2i(1, 2), "tong_meng": Vector2i(2, 2),
+}
+const PORTRAITS15_SHEET := "res://assets/portraits15.png"
+const PORTRAIT15_CELLS := {
+	"meng_kang": Vector2i(0, 0), "hou_jian": Vector2i(1, 0), "chen_da": Vector2i(2, 0),
+	"yang_chun": Vector2i(0, 1), "zheng_tianshou": Vector2i(1, 1), "tao_zongwang": Vector2i(2, 1),
+	"song_qing": Vector2i(0, 2), "yue_he": Vector2i(1, 2), "mu_chun": Vector2i(2, 2),
+}
+const PORTRAITS16_SHEET := "res://assets/portraits16.png"
+const PORTRAIT16_CELLS := {
+	"cao_zheng": Vector2i(0, 0), "song_wan": Vector2i(1, 0), "du_qian": Vector2i(2, 0),
+	"xue_yong": Vector2i(0, 1), "li_zhong": Vector2i(1, 1), "zhou_tong": Vector2i(2, 1),
+	"du_xing": Vector2i(0, 2), "zou_yuan": Vector2i(1, 2), "zou_run": Vector2i(2, 2),
+}
+const PORTRAITS17_SHEET := "res://assets/portraits17.png"
+const PORTRAIT17_CELLS := {
+	"zhu_gui": Vector2i(0, 0), "zhu_fu": Vector2i(1, 0), "cai_fu": Vector2i(2, 0),
+	"cai_qing": Vector2i(0, 1), "li_li": Vector2i(1, 1), "li_yun": Vector2i(2, 1),
+	"jiao_ting": Vector2i(0, 2), "shi_yong": Vector2i(1, 2), "sun_xin": Vector2i(2, 2),
+}
+const PORTRAITS18_SHEET := "res://assets/portraits18.png"
+const PORTRAIT18_CELLS := {
+	"gu_dasao": Vector2i(0, 0), "zhang_qing_cai": Vector2i(1, 0), "sun_erniang": Vector2i(2, 0),
+	"wang_dingliu": Vector2i(0, 1), "yu_baosi": Vector2i(1, 1), "shi_qian": Vector2i(2, 1),
+	"duan_jingzhu": Vector2i(0, 2),
+}
+
 var _units_tex: Texture2D
 var _terrain_tex: Texture2D
 var _portraits_tex: Texture2D
@@ -149,6 +205,15 @@ var _portraits6_tex: Texture2D
 var _portraits7_tex: Texture2D
 var _portraits8_tex: Texture2D
 var _portraits9_tex: Texture2D
+var _portraits10_tex: Texture2D
+var _portraits11_tex: Texture2D
+var _portraits12_tex: Texture2D
+var _portraits13_tex: Texture2D
+var _portraits14_tex: Texture2D
+var _portraits15_tex: Texture2D
+var _portraits16_tex: Texture2D
+var _portraits17_tex: Texture2D
+var _portraits18_tex: Texture2D
 var _buildings_tex: Texture2D
 var _buildings2_tex: Texture2D
 var _objects_tex: Texture2D
@@ -175,6 +240,15 @@ func _ready() -> void:
 	_portraits7_tex = _try_load(PORTRAITS7_SHEET)
 	_portraits8_tex = _try_load(PORTRAITS8_SHEET)
 	_portraits9_tex = _try_load(PORTRAITS9_SHEET)
+	_portraits10_tex = _try_load(PORTRAITS10_SHEET)
+	_portraits11_tex = _try_load(PORTRAITS11_SHEET)
+	_portraits12_tex = _try_load(PORTRAITS12_SHEET)
+	_portraits13_tex = _try_load(PORTRAITS13_SHEET)
+	_portraits14_tex = _try_load(PORTRAITS14_SHEET)
+	_portraits15_tex = _try_load(PORTRAITS15_SHEET)
+	_portraits16_tex = _try_load(PORTRAITS16_SHEET)
+	_portraits17_tex = _try_load(PORTRAITS17_SHEET)
+	_portraits18_tex = _try_load(PORTRAITS18_SHEET)
 	_buildings_tex = _try_load(BUILDINGS_SHEET)
 	_buildings2_tex = _try_load(BUILDINGS2_SHEET)
 	_objects_tex = _try_load(OBJECTS_SHEET)
@@ -360,6 +434,24 @@ func portrait_texture(key: String) -> Texture2D:
 		return _atlas(_portraits8_tex, PORTRAIT8_CELLS[key], 3, "p8_" + key)
 	if _portraits9_tex != null and PORTRAIT9_CELLS.has(key):
 		return _atlas(_portraits9_tex, PORTRAIT9_CELLS[key], 3, "p9_" + key)
+	if _portraits10_tex != null and PORTRAIT10_CELLS.has(key):
+		return _atlas(_portraits10_tex, PORTRAIT10_CELLS[key], 3, "p10_" + key)
+	if _portraits11_tex != null and PORTRAIT11_CELLS.has(key):
+		return _atlas(_portraits11_tex, PORTRAIT11_CELLS[key], 3, "p11_" + key)
+	if _portraits12_tex != null and PORTRAIT12_CELLS.has(key):
+		return _atlas(_portraits12_tex, PORTRAIT12_CELLS[key], 3, "p12_" + key)
+	if _portraits13_tex != null and PORTRAIT13_CELLS.has(key):
+		return _atlas(_portraits13_tex, PORTRAIT13_CELLS[key], 3, "p13_" + key)
+	if _portraits14_tex != null and PORTRAIT14_CELLS.has(key):
+		return _atlas(_portraits14_tex, PORTRAIT14_CELLS[key], 3, "p14_" + key)
+	if _portraits15_tex != null and PORTRAIT15_CELLS.has(key):
+		return _atlas(_portraits15_tex, PORTRAIT15_CELLS[key], 3, "p15_" + key)
+	if _portraits16_tex != null and PORTRAIT16_CELLS.has(key):
+		return _atlas(_portraits16_tex, PORTRAIT16_CELLS[key], 3, "p16_" + key)
+	if _portraits17_tex != null and PORTRAIT17_CELLS.has(key):
+		return _atlas(_portraits17_tex, PORTRAIT17_CELLS[key], 3, "p17_" + key)
+	if _portraits18_tex != null and PORTRAIT18_CELLS.has(key):
+		return _atlas(_portraits18_tex, PORTRAIT18_CELLS[key], 3, "p18_" + key)
 	return null
 
 
