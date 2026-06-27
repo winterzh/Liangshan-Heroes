@@ -131,8 +131,10 @@ func _cut(src_path: String, key: String, state: String) -> void:
 		cell.resize(FRAME, FRAME, Image.INTERPOLATE_LANCZOS)
 		_interior_px += _key_background(cell)
 		_despill(cell)
-		if state == "death" or OS.get_environment("BOTTOM_ANCHOR") == "1":
-			_bottom_anchor_content(cell)   # 死亡 / 图鉴批：脚底对齐基线（主体站底，比居中更稳；少数残脚源图待重生）
+		if OS.get_environment("BOTTOM_ANCHOR") == "1":
+			_fit_and_anchor(cell)   # 图鉴批：把人物缩放到留边、脚底站基线（修源图「太满、腿被切」）
+		elif state == "death":
+			_bottom_anchor_content(cell)
 		else:
 			_center_content(cell)
 		strip.blit_rect(cell, Rect2i(0, 0, FRAME, FRAME), Vector2i(i * FRAME, 0))
@@ -141,6 +143,38 @@ func _cut(src_path: String, key: String, state: String) -> void:
 	print("[cut_anim] wrote ", dst)
 	if _interior_px > 0:
 		print("[degreen] %s_%s 内部残绿抠掉 %d px" % [key, state, _interior_px])
+
+
+## 把人物内容缩放到「留边」尺寸并脚底站基线：解决源图人物画得太满、腿/脚被切出帧的问题。
+## 目标：人物高 ≈ 帧高 TGT_H、宽 ≤ 帧宽 TGT_W（保横纵比，整体可见、四周留白），脚底落在 帧高 FOOT_Y。
+const TGT_H := 0.80
+const TGT_W := 0.84
+const FOOT_Y := 0.96
+func _fit_and_anchor(img: Image) -> void:
+	var w := img.get_width()
+	var h := img.get_height()
+	var minx := w; var miny := h; var maxx := -1; var maxy := -1
+	for y in range(h):
+		for x in range(w):
+			if img.get_pixel(x, y).a > 0.3:
+				if x < minx: minx = x
+				if x > maxx: maxx = x
+				if y < miny: miny = y
+				if y > maxy: maxy = y
+	if maxx < 0:
+		return
+	var bw := maxx - minx + 1
+	var bh := maxy - miny + 1
+	var content := img.get_region(Rect2i(minx, miny, bw, bh))
+	var s: float = minf(float(h) * TGT_H / float(bh), float(w) * TGT_W / float(bw))
+	s = minf(s, 1.25)   # 略放大封顶，避免把本就小的图放糊
+	var nw := maxi(1, int(round(float(bw) * s)))
+	var nh := maxi(1, int(round(float(bh) * s)))
+	content.resize(nw, nh, Image.INTERPOLATE_LANCZOS)
+	img.fill(Color(0, 0, 0, 0))
+	var px := int(round((float(w) - float(nw)) * 0.5))
+	var py := int(round(float(h) * FOOT_Y)) - nh
+	img.blit_rect(content, Rect2i(0, 0, nw, nh), Vector2i(maxi(px, 0), maxi(py, 0)))
 
 
 ## 等分定界：GRID 等分图宽/高（干净绿幕无网格线时用，避免找暗缝误判）。
