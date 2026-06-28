@@ -411,11 +411,10 @@ func _select(key: String) -> void:
 		_port.set_frames([Art.tower_dir_texture(key, Vector2i(1, 1))])
 		var ring := [Vector2i(1, 0), Vector2i(2, 0), Vector2i(2, 1), Vector2i(2, 2),
 			Vector2i(1, 2), Vector2i(0, 2), Vector2i(0, 1), Vector2i(0, 0)]   # 顺时针一圈
+		# tower_sheet 已非空 → tower_dir_texture 各格必非空，无需逐格判空
 		var tf: Array = []
 		for rc in ring:
-			var rt: Texture2D = Art.tower_dir_texture(key, rc)
-			if rt != null:
-				tf.append(rt)
+			tf.append(Art.tower_dir_texture(key, rc))
 		_walk.set_frames(tf)
 		_atk.set_frames(tf)
 		return
