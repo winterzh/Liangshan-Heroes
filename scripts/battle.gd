@@ -269,6 +269,8 @@ func _ready() -> void:
 			_automicro_selftest()
 		if OS.get_environment("TOWERTRAP_TEST") == "1":
 			_towertrap_selftest()
+		if OS.get_environment("DOTACAST") == "1":
+			_dota_cast_selftest()
 		if OS.get_environment("TECH_TEST") == "1":
 			_tech_selftest()
 		if OS.get_environment("AUTOCAM") == "1":
@@ -5879,6 +5881,42 @@ func _ability_selftest() -> void:
 	# 施法抬手后技能不再瞬发：进入待结算队列，物理帧推进抬手归零才上冷却（这里同步无帧→查队列）
 	var cd_started: bool = caster.ability_cd_frac() > 0.0 or not _pending_casts.is_empty() or _abilities[caster.ability]["targeted"]
 	print("[ability] %s cd/slot ok=%s order_ok=%s" % [caster.key, cd_started, order_ok])
+
+
+## headless 自检（DOTACAST=1 + SKIRMISH=1）：逐一生成每个 DOTA 英雄、升满 4 技能、
+## 朝靶子结算每个技能，确认 _do_ability 不会因缺字段/坏数据崩。跑完打印 OK 即全部通过。
+func _dota_cast_selftest() -> void:
+	if map == null:
+		print("[dota] no map"); return
+	var base: Vector2i = map.nearest_open(Vector2i(20, 20))
+	var foes: Array = []
+	for i in range(6):
+		var fu := spawn_unit("guan_dao", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(base + Vector2i(2 + i % 3, 2 + i / 3))))
+		if fu != null:
+			foes.append(fu)
+	var tgt: Vector2 = (foes[0].position if not foes.is_empty() else map.cell_to_world(base))
+	var nh := 0
+	var ncast := 0
+	for key in Defs.UNITS.keys():
+		var d: Dictionary = Defs.UNITS[key]
+		if not bool(d.get("hero_trainable", false)) or not d.has("abilities"):
+			continue
+		var h := spawn_unit(String(key), Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-3, 0))))
+		if h == null:
+			continue
+		nh += 1
+		if h.ability_slots.is_empty():
+			for aid in d["abilities"]:
+				var adx: Dictionary = _abilities.get(String(aid), {})
+				h.ability_slots.append({"id": String(aid), "rank": 3, "cd_t": 0.0, "passive": bool(adx.get("passive", false))})
+		for si in range(h.slot_count()):
+			h.ability_slots[si]["rank"] = 3
+		for si in range(h.slot_count()):
+			h.ability_slots[si]["cd_t"] = 0.0
+			_do_ability(h, si, tgt)
+			ncast += 1
+		h.position = map.cell_to_world(map.nearest_open(base + Vector2i(-8, 0)))   # 挪开堆叠，不释放(避免悬挂引用噪声)
+	print("[dota] cast_selftest OK: heroes=%d casts=%d (no crash)" % [nh, ncast])
 
 
 ## headless 自检：选一个工人造一座兵营，验证建造链路
