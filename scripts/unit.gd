@@ -166,6 +166,8 @@ var _repath := 0.0
 var _acq_t := 0.0           # 待机索敌限流计时（每 ~0.12s 重扫一次最近敌人，省得兵海每帧全员索敌）
 var _flash := 0.0
 var _muzzle_t := 0.0        # 防御塔开火闪光剩余时长（转向炮口闪一下）
+var _tower_aim := Vector2i(1, 1)   # 防御塔当前朝向格(8 向图)；目标丢失后短暂保持，避免「攻击后朝向闪回正面」
+var _tower_aim_hold := 0.0  # 朝向保持计时：>0 时即便暂无目标也维持上次开火方向
 var _stuck_t := 0.0
 var _idle_push_t := 0.0     # 进攻方(官军)呆住计时：闲置太久没目标 → 重新攻击移动压向聚义厅
 var _last_pos := Vector2.ZERO
@@ -1181,6 +1183,7 @@ func _production_tick(delta: float) -> void:
 func _tower_tick(delta: float) -> void:
 	_cd = maxf(0.0, _cd - delta)
 	_muzzle_t = maxf(0.0, _muzzle_t - delta)
+	_tower_aim_hold = maxf(0.0, _tower_aim_hold - delta)
 	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned \
 			or position.distance_to(_target.position) > atk_range + 60.0):
 		_target = null
@@ -1190,6 +1193,8 @@ func _tower_tick(delta: float) -> void:
 		if _target == null:
 			_acquire()              # 无英雄(或非法坛)→ 取最近
 	if _target != null:
+		_tower_aim = _dir8_cell(_target.position - position)   # 有目标→朝向跟随
+		_tower_aim_hold = 0.55                                  # 持续顶满保持时间；目标丢失后才开始倒数
 		var reach := atk_range + _target.radius
 		if position.distance_to(_target.position) <= reach and _cd <= 0.0:
 			_cd = atk_cd
@@ -2282,9 +2287,9 @@ func _draw_building() -> void:
 		if Art.tower_sheet(key) != null:
 			# 用塔自带的 8 向图按对目标方向取格(开火朝向)。朝向表已做过【脚底对齐】处理，
 			# 各格塔身位置一致 → 切方向时只武器转、塔身不再移位。
-			var cell := Vector2i(1, 1)   # 无目标→中心(待机)
-			if _target != null and is_instance_valid(_target):
-				cell = _dir8_cell(_target.position - position)
+			# 朝向用「保持式」：有目标时跟随，目标刚丢失/被打死的 0.55s 内仍维持上次开火方向，
+			# 之后才回正面(待机)——消除「攻击后朝向闪回正面再乱跳」。
+			var cell := _tower_aim if _tower_aim_hold > 0.0 else Vector2i(1, 1)
 			var dt := Art.tower_dir_texture(key, cell)
 			if dt != null:
 				var s2 := GameMap.building_visual_px(GameMap.footprint_half_for(radius))

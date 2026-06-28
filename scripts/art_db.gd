@@ -51,6 +51,12 @@ const BUILDING2_CELLS := {
 	"thunder_tower": Vector2i(0, 0), "altar_tower": Vector2i(1, 0), "caltrop_tower": Vector2i(0, 1),
 }
 
+# 杂项建筑 2x2 图集（集市/攻城作坊 + 2 备用）。无图则程序化兜底。
+const BUILDINGS3_SHEET := "res://assets/buildings3.png"
+const BUILDING3_CELLS := {
+	"market": Vector2i(0, 0), "siege_workshop": Vector2i(1, 0),
+}
+
 const OBJECT_CELLS := {
 	"gold_mine": Vector2i(0, 0), "tree": Vector2i(1, 0),
 	"tree1": Vector2i(0, 1), "tree2": Vector2i(1, 1),
@@ -216,6 +222,7 @@ var _portraits17_tex: Texture2D
 var _portraits18_tex: Texture2D
 var _buildings_tex: Texture2D
 var _buildings2_tex: Texture2D
+var _buildings3_tex: Texture2D
 var _objects_tex: Texture2D
 var _traps_tex: Texture2D
 var _tower_tex := {}   # 塔 key -> 3x3 朝向贴图(或 null)，惰性加载
@@ -251,6 +258,7 @@ func _ready() -> void:
 	_portraits18_tex = _try_load(PORTRAITS18_SHEET)
 	_buildings_tex = _try_load(BUILDINGS_SHEET)
 	_buildings2_tex = _try_load(BUILDINGS2_SHEET)
+	_buildings3_tex = _try_load(BUILDINGS3_SHEET)
 	_objects_tex = _try_load(OBJECTS_SHEET)
 	_traps_tex = _try_load(TRAPS_SHEET)
 
@@ -360,6 +368,8 @@ func building_texture(key: String) -> Texture2D:
 		return _atlas(_buildings_tex, BUILDING_CELLS[key], 2, "b_" + key)
 	if _buildings2_tex != null and BUILDING2_CELLS.has(key):
 		return _atlas(_buildings2_tex, BUILDING2_CELLS[key], 2, "b2_" + key)
+	if _buildings3_tex != null and BUILDING3_CELLS.has(key):
+		return _atlas(_buildings3_tex, BUILDING3_CELLS[key], 2, "b3_" + key)
 	return null
 
 

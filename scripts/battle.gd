@@ -153,6 +153,9 @@ var _last_group_time := 0
 var _smoke := false
 var _smoke_t := 0.0
 var _touch_mode := false   # 触摸屏模式（一旦收到触摸事件即开启触摸交互：轻点选取、长按下令）
+# 桌面端(Win/Mac exe)纯键鼠：默认不接触屏事件，避免触屏笔记本(如荣耀 MagicBook)误入触屏布局、
+# 且杜绝杂散触摸打断鼠标框选/施法。仅移动端/网页/TOUCH_UI=1 预览才允许触屏交互。
+var _allow_touch := OS.has_feature("mobile") or OS.has_feature("web") or OS.get_environment("TOUCH_UI") == "1"
 var _press_ms := 0         # 左键/单指按下的时刻
 var _box_mode := false     # 触屏：长按原地后进入「框选」态（再拖动拖出选择框）
 var _panning := false      # 触屏：单指拖动地图中
@@ -3304,6 +3307,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	# （镜头平移缩放在 RTSCamera 里另行处理，「开战」按钮是 HUD 控件，二者不受影响。）
 	if phase != Phase.FIGHT:
 		return
+	# 桌面端纯键鼠：丢弃一切触摸事件（不切触屏布局、不复位框选/施法）。触摸经鼠标模拟仍当点击用。
+	if not _allow_touch and (event is InputEventScreenTouch or event is InputEventScreenDrag):
+		return
 	if event is InputEventScreenTouch:
 		if not _touch_mode:
 			_touch_mode = true   # 进入触摸交互模式 → 通知 HUD 切到触屏布局（屏上操作栏/编队条/长按出说明）
@@ -3860,13 +3866,19 @@ func _touch_tap_or_double(p: Vector2, additive: bool) -> void:
 
 
 func _box_select(rect: Rect2, additive: bool) -> void:
-	var new_sel: Array = []
-	if additive:
-		new_sel = selection.duplicate()
+	# 先收集框内己方可选单位
+	var hits: Array = []
 	for u in units:
 		if u.faction != Unit.FACTION_LIANG or u.is_building or u.garrisoned:
 			continue
-		if rect.has_point(to_screen(u.position)) and not new_sel.has(u):
+		if rect.has_point(to_screen(u.position)):
+			hits.append(u)
+	# 框到空地（框内无单位）：保持当前选择不变，不清空（与「单击空地不取消选择」一致）
+	if hits.is_empty():
+		return
+	var new_sel: Array = selection.duplicate() if additive else []
+	for u in hits:
+		if not new_sel.has(u):
 			new_sel.append(u)
 	_set_selection(new_sel)
 

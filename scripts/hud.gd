@@ -1761,6 +1761,30 @@ class CmdButton extends Control:
 		if hud != null:
 			hud.hide_skill_tip(self)
 
+	## 返回按钮矢量图标：左指箭头（无专属美术，画干净的几何图标而非汉字）
+	func _draw_back_icon(r: Rect2, col: Color) -> void:
+		var c := r.position + r.size * 0.5
+		var w := r.size.x * 0.30
+		var h := r.size.y * 0.24
+		var th := maxf(2.5, r.size.x * 0.09)
+		draw_colored_polygon(PackedVector2Array([
+			c + Vector2(-w, 0), c + Vector2(-w * 0.05, -h), c + Vector2(-w * 0.05, h)]), col)  # 三角箭头
+		draw_line(c + Vector2(-w * 0.05, 0), c + Vector2(w, 0), col, th)                        # 箭杆
+
+	## 维修按钮矢量图标：锤子（斜柄 + 锤头）
+	func _draw_repair_icon(r: Rect2, col: Color) -> void:
+		var c := r.position + r.size * 0.5
+		var s := minf(r.size.x, r.size.y)
+		var th := maxf(2.5, s * 0.11)
+		var grip0 := c + Vector2(s * 0.22, s * 0.28)     # 柄尾(右下)
+		var grip1 := c + Vector2(-s * 0.08, -s * 0.06)   # 柄端(近锤头)
+		draw_line(grip0, grip1, col, th)                 # 锤柄
+		var dir := (grip1 - grip0).normalized()
+		var perp := dir.rotated(PI * 0.5) * s * 0.20
+		var along := dir * s * 0.13
+		draw_colored_polygon(PackedVector2Array([        # 锤头(矩形块)
+			grip1 + perp - along, grip1 - perp - along, grip1 - perp + along, grip1 + perp + along]), col)
+
 	func _draw() -> void:
 		var f := ThemeDB.fallback_font
 		var b = hud.battle if hud != null else null
@@ -1817,8 +1841,13 @@ class CmdButton extends Control:
 			draw_texture_rect(tex, ir, false, Color(1, 1, 1) if aff else Color(0.5, 0.46, 0.42))
 		else:
 			draw_rect(ir, accent.darkened(0.35))
-			draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.71), glyph, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(30 * gsc),
-				Color(0.96, 0.9, 0.78) if aff else Color(0.6, 0.55, 0.5))
+			var icol := Color(0.96, 0.9, 0.78) if aff else Color(0.6, 0.55, 0.5)
+			if kind == "back":
+				_draw_back_icon(ir, icol)        # 返回：左箭头矢量图标
+			elif kind == "repair":
+				_draw_repair_icon(ir, icol)      # 维修：锤子矢量图标
+			else:
+				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.71), glyph, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(30 * gsc), icol)
 		# 名称（y 随按钮高度，desktop 88→69、touch 104→85）
 		draw_string(f, Vector2(3, size.y - 19), String(spec.get("label", "")), HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (11 if compact else (15 if big else 13)),
 			Color("ffd866") if aff else Color(0.62, 0.52, 0.4))

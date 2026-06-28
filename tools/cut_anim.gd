@@ -46,6 +46,9 @@ func _init() -> void:
 	# 新防御塔 2x2（备用静态图集，3x3 朝向图缺失时回退）→ assets/buildings2.png
 	if FileAccess.file_exists(SRC_DIR + "/towers_raw.png"):
 		_cut_grid(SRC_DIR + "/towers_raw.png", "res://assets/buildings2.png", 304, 2, true)
+	# 杂项建筑 2x2（集市/攻城作坊 + 备用）→ assets/buildings3.png
+	if FileAccess.file_exists(SRC_DIR + "/buildings3_raw.png"):
+		_cut_grid(SRC_DIR + "/buildings3_raw.png", "res://assets/buildings3.png", 304, 2, true)
 	# 防御塔 3x3 八方向开火图（均分切·绿幕抠像·【不】逐格居中，保持塔身固定只转武器）→ assets/tower_*.png
 	for tw in ["tower_arrow", "tower_thunder", "tower_altar", "tower_caltrop"]:
 		if FileAccess.file_exists(SRC_DIR + "/" + tw + ".png"):
