@@ -820,11 +820,11 @@ func _try_place_building(p: Vector2) -> void:
 func _start_construction(key: String, cell: Vector2i, half: int) -> void:
 	var site := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))
 	site.is_constructing = true
+	site._pending_build = true   # 先「虚影」：不挡路、不可被攻击；工人走到起第一锤才转实体、封路（见 advance_build）
 	site.build_progress = 0.0
 	site.hp = site.max_hp * 0.1
 	site.set_meta("fcell", cell)
 	site.set_meta("fhalf", half)
-	map.block_footprint(cell, half, true)
 	var builders := selection.filter(func(u) -> bool:
 		return is_instance_valid(u) and u.is_worker and u.hp > 0.0)
 	# 按住 Shift 连续放置时，建造令排队（工人逐座建过去），而不是只建最后一座
@@ -840,11 +840,11 @@ func ai_start_construction(key: String, cell: Vector2i, faction: int, builder: U
 	var half := building_footprint_half(key)
 	var site := spawn_unit(key, faction, map.cell_to_world(cell))
 	site.is_constructing = true
+	site._pending_build = true   # 同玩家：先虚影、工人到场起建才封路（见 advance_build）
 	site.build_progress = 0.0
 	site.hp = site.max_hp * 0.1
 	site.set_meta("fcell", cell)
 	site.set_meta("fhalf", half)
-	map.block_footprint(cell, half, true)
 	if is_instance_valid(builder):
 		builder.order_build(site)
 	return site

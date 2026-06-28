@@ -56,6 +56,7 @@ const GATHER_PER_TICK := 10.0
 const GATHER_TICK := 1.6
 # 建造（建筑施工）
 var is_constructing := false
+var _pending_build := false   # 工地「虚影」态：已下单但工人未到、未真正起建——不挡路、不可被攻击、半透显示；工人到场起第一锤才转实体
 var build_progress := 0.0
 var build_time := 0.0
 var _build_site: Unit = null
@@ -607,6 +608,8 @@ func recently_hit() -> bool:
 func take_damage(d: float, from: Unit = null, crit := false) -> void:
 	if hp <= 0.0:
 		return
+	if _pending_build:
+		return   # 工地虚影：尚未真正起建（工人未到），不可被攻击——「走过去再开始建造」后才挨打
 	if garrisoned:
 		return   # 驻军中：藏在建筑里受庇护，免疫伤害（飞行中的箭/范围技能也打不到；建筑被毁才弹出）
 	hp -= d
@@ -1154,6 +1157,15 @@ func _do_repair(delta: float) -> void:
 func advance_build(delta: float) -> void:
 	if not is_constructing:
 		return
+	if _pending_build:
+		# 工人走到、起第一锤：虚影 → 实体工地。此刻才封路 + 立基（之前都是「虚的」，可被穿过、不可被攻击）。
+		_pending_build = false
+		var fc: Vector2i = get_meta("fcell", map.world_to_cell(position))
+		var fh: int = int(get_meta("fhalf", 1))
+		if map != null:
+			map.block_footprint(fc, fh, true)
+		hp = max_hp * 0.1
+		queue_redraw()
 	build_progress += delta
 	hp = max_hp * clampf(0.1 + 0.9 * build_progress / maxf(build_time, 0.1), 0.1, 1.0)
 	queue_redraw()
@@ -1402,7 +1414,7 @@ func _acquire(range_override := -1.0) -> void:
 		# 资源点（金矿/林木）不是攻击目标——否则敌人冲过来一直砍树；
 		# 被绑缚待救者（captive）亦非攻击目标——否则刽子手会在救援前先把人砍死。
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
-				or u.is_resource or u.garrisoned or u.is_captive or chase_blocked(u):
+				or u.is_resource or u.garrisoned or u.is_captive or u._pending_build or chase_blocked(u):
 			continue
 		var d: float = position.distance_to(u.position)
 		var limit := range_cap
@@ -2283,7 +2295,7 @@ func _draw_building() -> void:
 	# 防御塔：不能移动 → 用「转向」表达朝向。有 3x3 朝向图集就按对目标的方向取格(含开火朝向)；
 	# 无图集则程序化塔身 + 一根会转向瞄准目标的炮管/法杖。
 	if _is_tower():
-		var ttint := Color(0.62, 0.66, 0.78, 0.82) if is_constructing else Color.WHITE
+		var ttint := (Color(0.5, 0.72, 1.0, 0.34) if _pending_build else Color(0.62, 0.66, 0.78, 0.82)) if is_constructing else Color.WHITE
 		if Art.tower_sheet(key) != null:
 			# 用塔自带的 8 向图按对目标方向取格(开火朝向)。朝向表已做过【脚底对齐】处理，
 			# 各格塔身位置一致 → 切方向时只武器转、塔身不再移位。
@@ -2316,7 +2328,7 @@ func _draw_building() -> void:
 		tex = Art.terrain_texture(key)
 	if tex == null:
 		tex = Art.terrain_texture("hall")
-	var tint := Color(0.62, 0.66, 0.78, 0.82) if is_constructing else Color.WHITE
+	var tint := (Color(0.5, 0.72, 1.0, 0.34) if _pending_build else Color(0.62, 0.66, 0.78, 0.82)) if is_constructing else Color.WHITE
 	if tex != null:
 		# 视觉尺寸与「建造预览虚影」完全一致（GameMap.building_visual_px）——预览多大、建好就多大，
 		# 不再出现「预览很大、落成缩水」的落差。
@@ -2346,6 +2358,8 @@ func _draw_smoke(s: float) -> void:
 
 ## 施工进度条（直立空间）：经典RTS式——黑边底槽 + 黄→绿渐进填充 + 百分比
 func _draw_build_progress() -> void:
+	if _pending_build:
+		return   # 虚影态：尚未起建，不画进度条
 	var frac := clampf(build_progress / maxf(build_time, 0.1), 0.0, 1.0)
 	var bw := maxf(radius * 2.3, 48.0)
 	var bh := 8.0

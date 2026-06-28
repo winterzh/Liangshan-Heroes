@@ -113,7 +113,11 @@ func _ready() -> void:
 	var by_type := {}
 	for key in Defs.UNITS:
 		var d: Dictionary = Defs.UNITS[key]
-		if not CustomConfig.is_combat_unit(d):
+		if bool(d.get("building", false)):
+			# 建筑统一进「建筑」组：收可建造的 + 主基地(聚义厅)，跳过资源点/装饰/内容包占位
+			if not (bool(d.get("buildable", false)) or key == "hall"):
+				continue
+		elif not CustomConfig.is_combat_unit(d):
 			continue
 		if Bios.star_rank(key) < 9999:
 			stars.append(key)
@@ -157,6 +161,9 @@ func _ready() -> void:
 	_name_lbl.add_theme_color_override("font_color", Color("ffe9a8"))
 	detail.add_child(_name_lbl)
 	_sub_lbl = Label.new()
+	_sub_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_sub_lbl.custom_minimum_size = Vector2(660, 0)
+	_sub_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_sub_lbl.add_theme_font_size_override("font_size", 17)
 	_sub_lbl.add_theme_color_override("font_color", Color("c8b890"))
 	detail.add_child(_sub_lbl)
@@ -370,7 +377,7 @@ func _select(key: String) -> void:
 	if d.is_empty():
 		_sub_lbl.text = "梁山一百单八将 · 图鉴专条"   # 无战斗单位条目者：不显血攻射程
 	else:
-		_sub_lbl.text = "%s　血 %d　攻 %d　射程 %d" % [t, int(d.get("hp", 0)), int(d.get("atk", 0)), int(d.get("range", 0))]
+		_sub_lbl.text = _stat_block(d, t)
 	_bio_lbl.text = Bios.get_bio(key, t)
 	# 技能（1/2/3 级数值）：有技能组的英雄；战役单将退回单技能
 	var abil: Array = d.get("abilities", [])
@@ -442,6 +449,52 @@ func _disp_name(key: String) -> String:
 		return String(Defs.UNITS[key].get("name", key))
 	var sn := Bios.star_name(key)
 	return sn if sn != "" else key
+
+
+## 详细数值条：血量/攻击/攻击间隔/射程/移速/造价/人口/建造·训练/特性——建筑与英雄/单位通用。
+## 本作无独立「护甲」数值（减伤靠护甲科技），故以血量代表耐久；攻击间隔=出手冷却(cd)。
+func _stat_block(d: Dictionary, t: String) -> String:
+	var p: Array = []
+	if int(d.get("hp", 0)) > 0:
+		p.append("血量 %d" % int(d.get("hp", 0)))
+	var atk := int(d.get("atk", 0))
+	if atk > 0:
+		p.append("攻击 %d" % atk)
+		var cd := float(d.get("cd", 0.0))
+		if cd > 0.0:
+			p.append("攻击间隔 %.2fs" % cd)
+		var rng := int(d.get("range", 0))
+		if rng > 0:
+			p.append("射程 %d" % rng)
+	var spd := int(d.get("speed", 0))
+	if spd > 0:
+		p.append("移速 %d" % spd)
+	var cg := int(d.get("cost_gold", 0))
+	var cw := int(d.get("cost_wood", 0))
+	if cg > 0 or cw > 0:
+		p.append("造价 金%d/木%d" % [cg, cw])
+	if int(d.get("pop", 0)) > 0:
+		p.append("占人口 %d" % int(d.get("pop", 0)))
+	if int(d.get("provides_pop", 0)) > 0:
+		p.append("供给人口 +%d" % int(d.get("provides_pop", 0)))
+	if int(d.get("build_time", 0)) > 0:
+		p.append("建造 %ds" % int(d.get("build_time", 0)))
+	if int(d.get("train_time", 0)) > 0:
+		p.append("训练 %ds" % int(d.get("train_time", 0)))
+	if int(d.get("garrison_cap", 0)) > 0:
+		p.append("可驻军 %d" % int(d.get("garrison_cap", 0)))
+	if float(d.get("splash", 0.0)) > 0.0:
+		p.append("溅射半径 %d" % int(d.get("splash", 0.0)))
+	if float(d.get("bonus_cav", 1.0)) > 1.0:
+		p.append("克骑兵 ×%.1f" % float(d.get("bonus_cav", 1.0)))
+	if float(d.get("bonus_hero", 1.0)) > 1.0:
+		p.append("克英雄 ×%.1f" % float(d.get("bonus_hero", 1.0)))
+	if float(d.get("slow_mult", 1.0)) < 1.0:
+		p.append("减速 %d%%·%.1fs" % [int(round((1.0 - float(d.get("slow_mult", 1.0))) * 100.0)), float(d.get("slow_dur", 0.0))])
+	if String(d.get("aura", "")) != "":
+		var an: String = {"atk": "攻击", "speed": "移速", "def": "防御"}.get(String(d.get("aura", "")), String(d.get("aura", "")))
+		p.append("光环·%s ×%.2f(半径%d)" % [an, float(d.get("aura_p", 1.0)), int(d.get("aura_r", 0))])
+	return t + "　|　" + "　".join(p)
 
 
 func _utype(d: Dictionary) -> String:
