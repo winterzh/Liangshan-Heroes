@@ -7410,21 +7410,27 @@ class TrapMarkerFx extends Node2D:
 			draw_arc(Vector2.ZERO, rad * (1.0 + 0.18 * pulse), 0.0, TAU, 28,
 				Color(col.r, col.g, col.b, 0.22 + 0.28 * pulse), 2.0)
 		draw_set_transform_matrix(GameMap.ISO_INV)                               # 直立图标
-		match key:
-			"trap_logs":   # 滚木礌石：几根横木
-				for i in range(3):
-					var y := -6.0 + float(i) * 6.0
-					draw_line(Vector2(-12, y), Vector2(12, y), Color(0.55, 0.36, 0.18), 4.0)
-					draw_line(Vector2(-12, y), Vector2(12, y), Color(0.30, 0.20, 0.10), 1.0)
-			"trap_pit":    # 陷坑：黑洞 + 交叉枝
-				draw_circle(Vector2(0, -2), 10.0, Color(0.05, 0.04, 0.03, 0.9))
-				draw_line(Vector2(-10, -10), Vector2(10, 4), Color(0.4, 0.34, 0.2), 2.0)
-				draw_line(Vector2(10, -10), Vector2(-10, 4), Color(0.4, 0.34, 0.2), 2.0)
-			"trap_oil":    # 火油：油渍 + 反光
-				draw_circle(Vector2(0, -2), 11.0, Color(0.10, 0.07, 0.04, 0.85))
-				draw_circle(Vector2(-3, -5), 3.0, Color(1.0, 0.6, 0.2, 0.5))
-			_:
-				draw_circle(Vector2(0, -2), 8.0, col)
+		var tex: Texture2D = Art.trap_texture(key)
+		if tex != null:                                                         # 有美术：画机关贴图(布防中半透)
+			var s := rad * 2.6
+			draw_texture_rect(tex, Rect2(-s * 0.5, -s * 0.58, s, s), false,
+				Color(1, 1, 1, 1.0) if armed else Color(1, 1, 1, 0.72))
+		else:
+			match key:                                                          # 无美术兜底：程序化简笔
+				"trap_logs":   # 滚木礌石：几根横木
+					for i in range(3):
+						var y := -6.0 + float(i) * 6.0
+						draw_line(Vector2(-12, y), Vector2(12, y), Color(0.55, 0.36, 0.18), 4.0)
+						draw_line(Vector2(-12, y), Vector2(12, y), Color(0.30, 0.20, 0.10), 1.0)
+				"trap_pit":    # 陷坑：黑洞 + 交叉枝
+					draw_circle(Vector2(0, -2), 10.0, Color(0.05, 0.04, 0.03, 0.9))
+					draw_line(Vector2(-10, -10), Vector2(10, 4), Color(0.4, 0.34, 0.2), 2.0)
+					draw_line(Vector2(10, -10), Vector2(-10, 4), Color(0.4, 0.34, 0.2), 2.0)
+				"trap_oil":    # 火油：油渍 + 反光
+					draw_circle(Vector2(0, -2), 11.0, Color(0.10, 0.07, 0.04, 0.85))
+					draw_circle(Vector2(-3, -5), 3.0, Color(1.0, 0.6, 0.2, 0.5))
+				_:
+					draw_circle(Vector2(0, -2), 8.0, col)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 

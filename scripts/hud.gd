@@ -1781,7 +1781,7 @@ class CmdButton extends Control:
 			if cat == "tower":
 				accent = Color(0.5, 0.42, 0.62); glyph = "塔"; tex = Art.building_texture("arrow_tower")
 			elif cat == "trap":
-				accent = Color(0.6, 0.45, 0.25); glyph = "陷"
+				accent = Color(0.6, 0.45, 0.25); glyph = "陷"; tex = Art.trap_texture("trap_logs")
 			else:
 				accent = Color(0.5, 0.45, 0.3); glyph = "建"; tex = Art.building_texture("barracks")
 		elif kind == "trap":
