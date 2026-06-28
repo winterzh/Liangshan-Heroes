@@ -140,6 +140,7 @@ var _ability_slot := 0
 var _build_armed := ""        # 待放置的建筑 key（遭遇战建造）
 var _trap_armed := ""         # 待布置的陷阱 key（喽啰 E 子菜单·一次性机关）
 var _worker_cat := ""         # 喽啰命令卡当前分类页：""=根 / "build"建筑 / "tower"塔 / "trap"陷阱
+var _hall_page := 0           # 聚义厅「点将」菜单当前页（108 将太多 → 按星次分页）
 var _traps: Array = []        # 已布置的陷阱：{key,pos,trigger_r,arm_t,effect,owner,fx}
 var _active: Unit = null      # 当前子组「活动单位」（Tab 切换；命令卡/QWER 针对它）
 var _inspect_unit: Unit = null  # 「查看中」的敌方单位（只读：显示信息+高亮，但不进 selection、不可下令）
@@ -1034,26 +1035,52 @@ func on_building_complete(b: Unit) -> void:
 
 ## 命令卡·生产菜单：该建筑可训练的单位
 func train_menu(bld: Unit) -> Array:
-	var out: Array = []
+	var workers: Array = []
+	var heroes: Array = []
 	for key in bld.setup_def.get("produces", []):
 		if int(_defs.get(key, {}).get("min_age", 1)) > current_age:
-			continue   # 时代未到 → 不出（英雄/马军需聚义代、攻城需替天行道代）
+			continue   # 时代未到 → 不出
 		var d: Dictionary = _defs.get(key, {})
-		# 可培养英雄：已在阵中(现役或在产队列)就不再显示按钮——唯有战死后(hero_progress)才显示「复活」
-		if bool(d.get("hero_trainable", false)):
-			if count_alive(Unit.FACTION_LIANG, key) > 0 or _eco_in_queue(key):
-				continue
 		var cg := int(d.get("cost_gold", 0))
 		var cw := int(d.get("cost_wood", 0))
-		# 祭坛复活：战死的可培养英雄在聚义厅以「训练原价」复活，保留等级/技能
-		var lbl := String(d.get("name", key))
-		var is_revive := false
-		if hero_progress.has(key):
-			is_revive = true
-			lbl = "复活·%s Lv%d" % [lbl, int(hero_progress[key].get("level", 1))]
-		out.append({"kind": "train", "key": key, "label": lbl,
-			"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": is_revive})
+		if bool(d.get("hero_trainable", false)):
+			# 已在阵中(现役/在产)不显示；战死(hero_progress)显示「复活」
+			if count_alive(Unit.FACTION_LIANG, key) > 0 or _eco_in_queue(key):
+				continue
+			var lbl := String(d.get("name", key))
+			var is_revive := false
+			if hero_progress.has(key):
+				is_revive = true
+				lbl = "复活·%s Lv%d" % [lbl, int(hero_progress[key].get("level", 1))]
+			heroes.append({"kind": "train", "key": key, "label": lbl,
+				"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": is_revive,
+				"_star": int((Bios.STAR.get(key, [999]) as Array)[0])})
+		else:
+			workers.append({"kind": "train", "key": key, "label": String(d.get("name", key)),
+				"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": false})
+	heroes.sort_custom(func(a, b): return int(a["_star"]) < int(b["_star"]))   # 天罡在前、地煞在后
+	var out: Array = workers.duplicate()
+	var PAGE := 6
+	if heroes.size() <= PAGE + 1:
+		out.append_array(heroes)
+		return out
+	var pages := int(ceil(float(heroes.size()) / float(PAGE)))
+	_hall_page = clampi(_hall_page, 0, pages - 1)
+	var start := _hall_page * PAGE
+	out.append_array(heroes.slice(start, mini(start + PAGE, heroes.size())))
+	out.append({"kind": "train_page", "dir": -1, "label": "◀上页",
+		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
+	out.append({"kind": "train_page", "dir": 1, "label": "%d/%d页▶" % [_hall_page + 1, pages],
+		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 	return out
+
+
+## 聚义厅「点将」翻页（108 将太多 → 分页浏览；越界由 train_menu 钳制）。
+func hall_page_turn(dir: int) -> void:
+	_hall_page += dir
+	Sfx.play("click")
+	if hud != null:
+		hud.refresh_command()
 
 
 ## 队列中尚未生成的单位人口之和
@@ -5916,6 +5943,14 @@ func _dota_cast_selftest() -> void:
 			_do_ability(h, si, tgt)
 			ncast += 1
 		h.position = map.cell_to_world(map.nearest_open(base + Vector2i(-8, 0)))   # 挪开堆叠，不释放(避免悬挂引用噪声)
+	# 顺带验证聚义厅点将分页 menu（Bios.STAR 取星次 + 翻页）
+	var hall := find_unit("hall")
+	if hall != null:
+		var p0 := train_menu(hall).size()
+		_hall_page = 3
+		var p3 := train_menu(hall).size()
+		_hall_page = 0
+		print("[dota] hall train_menu pg0=%d pg3=%d (paging ok)" % [p0, p3])
 	print("[dota] cast_selftest OK: heroes=%d casts=%d (no crash)" % [nh, ncast])
 
 

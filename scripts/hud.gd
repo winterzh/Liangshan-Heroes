@@ -933,7 +933,7 @@ func _rebuild_command_card() -> void:
 	elif au != null and au.is_worker and eco:
 		sig = ["build", battle._worker_cat]   # 分类页切换 → 重建命令卡
 	elif au != null and au.is_building and not au.is_constructing and (au.setup_def.has("produces") or au.setup_def.has("researches")) and eco:
-		sig = ["train", au.get_instance_id(), au._train_queue.size()]   # 队列增减 → 重建以更新撤单图标
+		sig = ["train", au.get_instance_id(), au._train_queue.size(), battle._hall_page]   # 队列增减/翻页 → 重建
 	elif au != null and au.is_building and not au.is_constructing and au.setup_def.has("trades") and eco:
 		sig = ["trade", au.get_instance_id()]
 	else:
@@ -1814,6 +1814,8 @@ class CmdButton extends Control:
 			accent = Color(0.4, 0.4, 0.42); glyph = "返"
 		elif kind == "research":
 			accent = Color(0.45, 0.4, 0.62); glyph = "研"
+		elif kind == "train_page":
+			accent = Color(0.4, 0.42, 0.5); glyph = "页"
 		elif kind == "trade":
 			accent = Color(0.6, 0.5, 0.2); glyph = "易"
 		elif kind == "eject":
@@ -1869,6 +1871,8 @@ class CmdButton extends Control:
 			info = "▸ 展开"
 		elif kind == "back":
 			info = "◂ 返回"
+		elif kind == "train_page":
+			info = String(spec.get("label", ""))
 		elif kind == "trap":
 			info = ("金%d " % cg if cg > 0 else "") + ("木%d" % cw if cw > 0 else "")
 		elif kind == "train":
@@ -1929,6 +1933,8 @@ class CmdButton extends Control:
 			hud.battle._worker_back()
 		elif kind == "trap":
 			hud.battle.arm_trap(String(spec.get("key", "")))
+		elif kind == "train_page":
+			hud.battle.hall_page_turn(int(spec.get("dir", 1)))
 		else:
 			hud.battle.arm_build(String(spec.get("key", "")))
 
