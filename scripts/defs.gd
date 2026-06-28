@@ -168,19 +168,19 @@ const UNITS := {
 		"researches": ["tech_weapon", "tech_armor"]},
 	"liang_ma": {"name": "梁山马军", "hp": 210, "atk": 15, "cd": 0.95, "range": 26, "speed": 112, "cavalry": true, "radius": 13,
 		"pop": 2, "cost_gold": 60, "cost_wood": 30, "train_time": 22.0, "trained_at": "barracks", "min_age": 2},
-	"arrow_tower": {"name": "箭楼", "hp": 700, "atk": 17, "cd": 1.3, "range": 215, "speed": 0, "ranged": true,
+	"arrow_tower": {"name": "箭楼", "hp": 700, "atk": 51, "cd": 1.3, "range": 215, "speed": 0, "ranged": true,
 		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 2, "cost_gold": 65, "cost_wood": 30, "build_time": 24.0,
 		"garrison_cap": 5, "min_age": 1},
 	# 霹雳炮：群伤炮塔——慢射速、落点小范围溅射（克密集小兵）。proj_kind=bomb 抛射炸弹视觉。
-	"thunder_tower": {"name": "霹雳炮", "hp": 650, "atk": 22, "cd": 2.2, "range": 200, "speed": 0, "ranged": true,
+	"thunder_tower": {"name": "霹雳炮", "hp": 650, "atk": 66, "cd": 2.2, "range": 200, "speed": 0, "ranged": true,
 		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 7, "cost_gold": 95, "cost_wood": 45, "build_time": 26.0,
 		"splash": 75.0, "proj_kind": "bomb", "min_age": 1},
-	# 五雷法坛：紫雷球——攻击略低于箭楼，但优先索敌英雄、对英雄 3× 伤害（克对方大将）。
-	"altar_tower": {"name": "五雷法坛", "hp": 600, "atk": 13, "cd": 1.6, "range": 235, "speed": 0, "ranged": true,
+	# 五雷法坛：紫雷球——优先索敌英雄、对英雄 2× 伤害（克对方大将）。
+	"altar_tower": {"name": "五雷法坛", "hp": 600, "atk": 39, "cd": 1.6, "range": 235, "speed": 0, "ranged": true,
 		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 8, "cost_gold": 100, "cost_wood": 45, "build_time": 26.0,
-		"proj_kind": "magic", "bonus_hero": 3.0, "target_priority": "hero", "min_age": 1},
+		"proj_kind": "magic", "bonus_hero": 2.0, "target_priority": "hero", "min_age": 1},
 	# 拒马（绊马坑）：控场塔——伤害很低，命中减速 ~55%/1.3s，拖住敌人挨别的塔火力。
-	"caltrop_tower": {"name": "拒马", "hp": 700, "atk": 5, "cd": 1.1, "range": 180, "speed": 0, "ranged": true,
+	"caltrop_tower": {"name": "拒马", "hp": 700, "atk": 15, "cd": 1.1, "range": 180, "speed": 0, "ranged": true,
 		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 9, "cost_gold": 60, "cost_wood": 30, "build_time": 20.0,
 		"slow_mult": 0.45, "slow_dur": 1.3, "min_age": 1},
 	"house": {"name": "民居", "hp": 480, "atk": 0, "building": true, "radius": 20, "buildable": true, "build_order": 3,
