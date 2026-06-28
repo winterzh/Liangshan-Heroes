@@ -494,7 +494,10 @@ func _stat_block(d: Dictionary, t: String) -> String:
 	if String(d.get("aura", "")) != "":
 		var an: String = {"atk": "攻击", "speed": "移速", "def": "防御"}.get(String(d.get("aura", "")), String(d.get("aura", "")))
 		p.append("光环·%s ×%.2f(半径%d)" % [an, float(d.get("aura_p", 1.0)), int(d.get("aura_r", 0))])
-	return t + "　|　" + "　".join(p)
+	var head := t
+	if String(d.get("dota", "")) != "":
+		head += "　·　对应 DOTA：" + String(d.get("dota", ""))
+	return head + "　|　" + "　".join(p)
 
 
 func _utype(d: Dictionary) -> String:
