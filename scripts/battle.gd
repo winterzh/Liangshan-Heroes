@@ -2879,8 +2879,11 @@ func _auto_micro_generic(u: Unit) -> void:
 			lp = fp
 		else:
 			var kind := String(ad.get("effect", {}).get("kind", ""))
-			var buff := kind in ["rally", "haste", "self_buff", "rally_heroes", "drunk_buff", "drunk_god", "summon"]
-			if not buff and not _foe_within(u.position, r, u.faction):
+			var buff := kind in ["rally", "haste", "self_buff", "rally_heroes", "drunk_buff", "drunk_god", "summon", "shield", "atkspeed"]
+			if kind == "global_nuke":
+				if _nearest_foe_pos(u.position, u.faction) == Vector2.INF:
+					continue   # 全图大招：场上有敌才放
+			elif not buff and not _foe_within(u.position, r, u.faction):
 				continue
 		_begin_cast(u, i, lp)
 		break

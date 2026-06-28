@@ -236,6 +236,7 @@ const UNITS := {
 		"ability": "shan_flood", "abilities": ["shan_flood", "jd_valor"]},
 	"wen_da": {"name": "闻达", "hp": 1600, "atk": 51, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 15,
 		"aura": "atk", "aura_r": 170, "aura_p": 1.12, "ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
+	# __DOTA_UNITS_HERE__
 }
 
 # 陷阱（喽啰 E 子菜单）：一次性地面机关。布在必经之路，敌人进 trigger_r 即触发一次后消失。
@@ -444,6 +445,7 @@ const ABILITIES := {
 	"jd_valor": {"name": "宿将之威", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("d0a060"),
 		"desc": "（敌）被动·宿将之威\n久经沙场，生命 +、攻击 +",
 		"effect": {"kind": "passive", "atk_add": 4.0, "hp_add": 90.0}},
+	# __DOTA_ABILITIES_HERE__
 }
 
 
