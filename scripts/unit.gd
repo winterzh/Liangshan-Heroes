@@ -142,6 +142,22 @@ var _blind_t := 0.0
 # 减速光环（公孙胜 E）：每帧由 _aura_pass 写入；<1 = 受敌方减速光环影响。slow_aura_r>0 时自身画光环环
 var aura_slow := 1.0
 var slow_aura_r := 0.0
+# ===== DOTA 式新原语状态（护盾/沉默/攻速/暴击/闪避/攻击携带）=====
+var _shield := 0.0          # 护盾吸收池：take_damage 先扣盾再扣血
+var _shield_t := 0.0        # 护盾剩余时长（到点清盾）
+var _silence_t := 0.0       # 沉默：>0 时不可主动施法（被动不受影响）
+var temp_atkspeed := 1.0    # 临时攻速倍率（>1 出手更快），_attack 并入 _cd
+var _temp_atkspeed_t := 0.0
+# 被动衍生（_recompute_hero_stats 每次先重置再按已学被动累加）
+var atkspeed_mult := 1.0    # 被动攻速倍率
+var crit_chance_bonus := 0.0
+var crit_mult_bonus := 0.0  # 暴击倍率加成（叠加在基础 ×1.8 之上）
+var evasion := 0.0          # 闪避概率（被攻击时整下闪开）
+var bash_chance := 0.0      # 攻击附带眩晕概率
+var bash_dur := 0.0
+var on_hit_slow := 0.0      # 攻击附带减速（orb）
+var on_hit_slow_dur := 0.0
+var on_hit_dmg := 0.0       # 攻击附带额外纯伤
 # 冲锋（李逵 W·矢量单击）：蓄力→猛冲，沿途撞伤。窗口期独立于普通状态机。
 var _charge_t := 0.0        # 蓄力倒计时（>0 原地不动）
 var _charge_dash := 0.0     # 冲刺剩余时长（>0 高速平移）
@@ -612,6 +628,14 @@ func take_damage(d: float, from: Unit = null, crit := false) -> void:
 		return   # 工地虚影：尚未真正起建（工人未到），不可被攻击——「走过去再开始建造」后才挨打
 	if garrisoned:
 		return   # 驻军中：藏在建筑里受庇护，免疫伤害（飞行中的箭/范围技能也打不到；建筑被毁才弹出）
+	# DOTA 护盾：先扣吸收盾，剩余才扣血（盾扣空即失效）
+	if _shield > 0.0 and d > 0.0:
+		var _ab: float = minf(_shield, d)
+		_shield -= _ab
+		d -= _ab
+		_buff_glow = 1.0
+		if _shield <= 0.0:
+			_shield_t = 0.0
 	hp -= d
 	_flash = 0.30 if crit else 0.18
 	_combat_cool = 6.0
@@ -785,6 +809,17 @@ func _phys_body(delta: float) -> void:
 	# 致盲计时（武松 E）：期间攻击必失
 	if _blind_t > 0.0:
 		_blind_t -= delta
+	# DOTA 原语计时：护盾 / 沉默 / 临时攻速
+	if _shield_t > 0.0:
+		_shield_t -= delta
+		if _shield_t <= 0.0:
+			_shield = 0.0
+	if _silence_t > 0.0:
+		_silence_t = maxf(0.0, _silence_t - delta)
+	if _temp_atkspeed_t > 0.0:
+		_temp_atkspeed_t -= delta
+		if _temp_atkspeed_t <= 0.0:
+			temp_atkspeed = 1.0
 	# 限时召唤物：寿命到 → 消散
 	if _summon_ttl > 0.0:
 		_summon_ttl -= delta
@@ -1242,7 +1277,7 @@ func _tower_acquire_hero() -> void:
 
 ## 发起一次攻击：起手挥击动画，伤害延后到挥击命中瞬间结算（含起手预备）
 func _attack() -> void:
-	_cd = atk_cd / maxf(_drunk_atk, 0.1)   # 醉酒攻速：_drunk_atk>1 → 出手更快
+	_cd = atk_cd / maxf(_drunk_atk * temp_atkspeed * atkspeed_mult, 0.1)   # 攻速：醉酒/临时攻速/被动攻速 → 出手更快
 	_combat_cool = 6.0
 	_lunge = 1.0
 	_lunge_dir = (_target.position - position).normalized()
@@ -1284,6 +1319,12 @@ func _deal_hit() -> void:
 			battle.spawn_impact(t.position + Vector2(0, -4), false)
 		Sfx.play(_attack_sfx_name(), -11.0, 0.2, 45)
 		return
+	# 闪避（被动）：目标有几率整下闪开普攻（建筑/资源不闪）
+	if t.evasion > 0.0 and not t.is_building and not t.is_resource and randf() < t.evasion:
+		if battle != null and battle.has_method("spawn_impact"):
+			battle.spawn_impact(t.position + Vector2(0, -4), false)
+		Sfx.play(_attack_sfx_name(), -10.0, 0.2, 55)
+		return
 	var dmg := atk * buff_atk * temp_atk + temp_atk_add
 	if t.is_cavalry:
 		dmg *= bonus_vs_cav
@@ -1300,9 +1341,9 @@ func _deal_hit() -> void:
 	if t.is_hero and setup_def.has("vs_hero"):
 		dmg *= float(setup_def["vs_hero"])
 	# 暴击：英雄 25%、普通兵 12%，伤害 ×1.8（建筑/资源不暴击，免得拆墙乱跳）
-	var crit := not t.is_building and not t.is_resource and randf() < (0.25 if is_hero else 0.12)
+	var crit := not t.is_building and not t.is_resource and randf() < clampf((0.25 if is_hero else 0.12) + crit_chance_bonus, 0.0, 1.0)
 	if crit:
-		dmg *= 1.8
+		dmg *= 1.8 + crit_mult_bonus
 	# 目标防御值：每点 +5% 等效血量 → 伤害 ÷(1+0.05·防御)。仅普通攻击在此减；技能走 take_damage 不经过这里。
 	# 护甲削减（双戒刀）：有效防御 = 防御 − _def_down
 	var eff_def := maxf(0.0, t.defense - t._def_down)
@@ -1320,6 +1361,13 @@ func _deal_hit() -> void:
 		Sfx.play(_attack_sfx_name(), -8.0, 0.14, 60)
 	else:
 		t.take_damage(dmg, self, crit)
+		# 攻击携带（orb/被动）：额外纯伤 / 减速 / 几率眩晕
+		if on_hit_dmg > 0.0:
+			t.take_damage(on_hit_dmg, self)
+		if on_hit_slow > 0.0:
+			t.apply_slow(on_hit_slow, on_hit_slow_dur)
+		if bash_chance > 0.0 and not t.is_building and not t.is_resource and randf() < bash_chance:
+			t.apply_stun(bash_dur)
 		var ls := lifesteal_frac()
 		if ls > 0.0:
 			heal(dmg * ls)
@@ -1517,7 +1565,7 @@ func slot_ready(i: int) -> bool:
 	if i < 0 or i >= ability_slots.size():
 		return false
 	var s: Dictionary = ability_slots[i]
-	if int(s["rank"]) <= 0 or float(s["cd_t"]) > 0.0 or hp <= 0.0:
+	if int(s["rank"]) <= 0 or float(s["cd_t"]) > 0.0 or hp <= 0.0 or _silence_t > 0.0:
 		return false
 	# 普通主动：非被动即可施放；混合型被动（带 active_kind，如宋江 R）也可主动施放
 	return (not bool(s["passive"])) or slot_has_active(i)
@@ -1624,6 +1672,15 @@ func _recompute_hero_stats() -> void:
 	var add_cav := 0.0
 	cav_ls_chance = 0.0
 	cav_ls_frac = 0.0
+	atkspeed_mult = 1.0
+	crit_chance_bonus = 0.0
+	crit_mult_bonus = 0.0
+	evasion = 0.0
+	bash_chance = 0.0
+	bash_dur = 0.0
+	on_hit_slow = 0.0
+	on_hit_slow_dur = 0.0
+	on_hit_dmg = 0.0
 	for s in ability_slots:
 		if bool(s["passive"]) and int(s["rank"]) > 0:
 			var eff: Dictionary = Defs.ABILITIES.get(s["id"], {}).get("effect", {})
@@ -1631,6 +1688,18 @@ func _recompute_hero_stats() -> void:
 			add_hp += float(eff.get("hp_add", 0.0)) * int(s["rank"])
 			add_range += float(eff.get("range_add", 0.0)) * int(s["rank"])
 			add_cav += float(eff.get("bonus_cav", 0.0)) * int(s["rank"])
+			# DOTA 被动衍生：攻速 / 暴击 / 闪避 / 攻击携带眩晕·减速·纯伤
+			atkspeed_mult += float(eff.get("atkspeed_add", 0.0)) * int(s["rank"])
+			crit_chance_bonus += float(eff.get("crit_chance", 0.0)) * int(s["rank"])
+			crit_mult_bonus += float(eff.get("crit_mult", 0.0)) * int(s["rank"])
+			evasion = minf(0.8, evasion + float(eff.get("evasion", 0.0)) * int(s["rank"]))
+			if float(eff.get("bash_chance", 0.0)) > 0.0:
+				bash_chance = float(eff.get("bash_chance", 0.0))
+				bash_dur = float(eff.get("bash_dur", 0.6))
+			if float(eff.get("on_hit_slow", 0.0)) > 0.0:
+				on_hit_slow = float(eff.get("on_hit_slow", 0.0))
+				on_hit_slow_dur = float(eff.get("on_hit_slow_dur", 1.0))
+			on_hit_dmg += float(eff.get("on_hit_dmg", 0.0)) * int(s["rank"])
 			# 林冲·猎骑：被动学了就启用「打骑兵概率吸血」。frac 可按被动等级取数组 cav_ls_frac_ranks。
 			if float(eff.get("cav_ls_chance", 0.0)) > 0.0:
 				cav_ls_chance = float(eff.get("cav_ls_chance", 0.0))
@@ -1837,6 +1906,27 @@ func apply_stun(dur: float) -> void:
 	_stun_t = maxf(_stun_t, dur)
 	_target = null
 	queue_redraw()
+
+
+## DOTA 护盾：给一层吸收盾（取较大者，dur 秒后清盾）。
+func apply_shield(amount: float, dur: float) -> void:
+	_shield = maxf(_shield, amount)
+	_shield_t = maxf(_shield_t, dur)
+	_buff_glow = 1.0
+	queue_redraw()
+
+
+## DOTA 沉默：dur 秒内不可主动施法（被动不受影响）。
+func apply_silence(dur: float) -> void:
+	_silence_t = maxf(_silence_t, dur)
+	queue_redraw()
+
+
+## DOTA 攻速狂暴：临时攻速倍率（>1 出手更快），取较大者。
+func apply_atkspeed(mult: float, dur: float) -> void:
+	temp_atkspeed = maxf(temp_atkspeed, mult)
+	_temp_atkspeed_t = maxf(_temp_atkspeed_t, dur)
+	_buff_glow = 0.6
 
 
 func _spawn_dust() -> void:

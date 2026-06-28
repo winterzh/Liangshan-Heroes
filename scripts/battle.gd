@@ -4252,6 +4252,8 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2) -> void:
 						u.apply_def_down(float(_pick(eff["def_down"], rank)), float(eff.get("def_down_dur", 8.0)))   # 双戒刀·削甲
 					if eff.has("blind"):
 						u.apply_blind(float(eff["blind"]))   # 双戒刀·致盲：周围敌军攻击必失
+						if eff.get("silence", 0.0) > 0.0:
+							u.apply_silence(float(eff["silence"]))   # 沉默：禁止敌方英雄施法
 					u.take_damage(dmg, caster)
 					spawn_impact(u.position, true)   # 命中火花
 			if eff.get("self_atk", 0.0) > 0.0:
@@ -4378,6 +4380,20 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2) -> void:
 			caster.start_drunk(float(_pick(eff.get("lo", [0.9]), rank)), float(_pick(eff.get("hi", [1.3]), rank)), float(eff.get("dur", 30.0)))
 		"drunk_god":   # 武松 R·醉神大闹快活林：物免 + 每击加攻 + 结束转血
 			caster.start_drunk_god(float(_pick(eff.get("bonus", [10.0]), rank)), float(eff.get("dur", 20.0)))
+		"blink":   # DOTA·闪现：朝落点闪现(限 dist)，落点可带小范围伤
+			center = _do_blink(caster, eff, sc, center, r, foe, snap, ad)
+		"pull":   # DOTA·钩拉：沿一线把敌人拖向施法者
+			_do_pull(caster, eff, sc, center, r, foe, snap)
+		"knockback":   # DOTA·击退：推离落点 + 伤害
+			_do_knockback(caster, eff, sc, center, r, foe, snap)
+		"global_nuke":   # DOTA·全图轰击(或仅敌方英雄)
+			_do_global_nuke(caster, eff, sc, foe, snap)
+		"chain_nuke":   # DOTA·弹射闪电：逐跳衰减
+			_do_chain_nuke(caster, eff, sc, center, foe, snap, ad)
+		"shield":   # DOTA·护盾：自身/范围友军吸收盾
+			_do_shield(caster, eff, sc, r, ally, snap)
+		"atkspeed":   # DOTA·攻速狂暴：自身/范围友军提速
+			_do_atkspeed(caster, eff, r, ally, snap)
 	if String(eff.get("kind", "")) == "fire_dot":
 		var fd_dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 5.0))
 		var fd_total := (float(eff["dps"]) * fd_dur) if eff.has("dps") else (float(eff["dmg"]) * sc)
@@ -4485,6 +4501,149 @@ func _do_meteor(caster: Unit, eff: Dictionary, rank: int, center: Vector2, foe: 
 	mfx.col = Color("ff7a2a")
 	fx_root.add_child(mfx)
 	shake(5.0, start)
+
+
+## ===== DOTA 式新原语结算（闪现/钩拉/击退/全图/弹射/护盾/攻速）=====
+## 闪现：朝落点闪现(限 dist)，落点可带小范围伤；返回闪现后中心(供演出落点)。
+func _do_blink(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array, ad: Dictionary) -> Vector2:
+	var dir := center - caster.position
+	if dir.length() > 1.0:
+		var dist := minf(float(eff.get("dist", 260.0)), caster.position.distance_to(center))
+		var cell := map.nearest_open(map.world_to_cell(caster.position + dir.normalized() * dist))
+		caster.position = map.cell_to_world(cell)
+	var dmg := float(eff.get("dmg", 0.0)) * sc
+	if dmg > 0.0:
+		for u in snap:
+			if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and not u.is_resource and not u.is_building and caster.position.distance_to(u.position) <= r:
+				if eff.get("slow", 0.0) > 0.0:
+					u.apply_slow(eff["slow"], eff.get("slow_dur", 1.0))
+				u.take_damage(dmg, caster)
+				spawn_impact(u.position, true)
+	return caster.position
+
+
+## 钩拉：沿 caster→落点一线把敌人拖向施法者 + 伤害(可眩晕)。
+func _do_pull(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array) -> void:
+	var dir := center - caster.position
+	if dir.length() < 1.0:
+		dir = Vector2(-1.0 if caster.face_left else 1.0, 0.0)
+	dir = dir.normalized()
+	var llen := float(eff.get("len", r))
+	var hw := float(eff.get("width", 70.0)) * 0.5
+	var pull := float(eff.get("pull_dist", 120.0))
+	for u in snap:
+		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and not u.is_resource and not u.is_building and _in_capsule(caster.position, dir, llen, hw + u.radius, u.position):
+			var toc: Vector2 = caster.position - u.position
+			var np: Vector2 = u.position + toc.normalized() * minf(pull, maxf(0.0, toc.length() - (caster.radius + u.radius)))
+			if map.is_open_world(np):
+				u.position = np
+			if eff.get("stun", 0.0) > 0.0:
+				u.apply_stun(eff["stun"])
+			u.take_damage(float(eff.get("dmg", 0.0)) * sc, caster)
+			spawn_impact(u.position, true)
+
+
+## 击退：范围内敌人被推离落点 + 伤害(可减速/眩晕)。
+func _do_knockback(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array) -> void:
+	for u in snap:
+		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and not u.is_resource and not u.is_building and center.distance_to(u.position) <= r:
+			var away: Vector2 = u.position - center
+			if away.length() < 1.0:
+				away = Vector2(1, 0)
+			var np: Vector2 = u.position + away.normalized() * float(eff.get("push", 90.0))
+			if map.is_open_world(np):
+				u.position = np
+			if eff.get("slow", 0.0) > 0.0:
+				u.apply_slow(eff["slow"], eff.get("slow_dur", 1.0))
+			if eff.get("stun", 0.0) > 0.0:
+				u.apply_stun(eff["stun"])
+			u.take_damage(float(eff.get("dmg", 0.0)) * sc, caster)
+			spawn_impact(u.position, true)
+
+
+## 全图轰击：对全场敌军(或仅敌方英雄)结算一次(可减速/眩晕)。
+func _do_global_nuke(caster: Unit, eff: Dictionary, sc: float, foe: int, snap: Array) -> void:
+	var hero_only := bool(eff.get("heroes_only", false))
+	for u in snap:
+		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and not u.is_resource and not u.is_building and (not hero_only or u.is_hero):
+			if eff.get("slow", 0.0) > 0.0:
+				u.apply_slow(eff["slow"], eff.get("slow_dur", 1.0))
+			if eff.get("stun", 0.0) > 0.0:
+				u.apply_stun(eff["stun"])
+			u.take_damage(float(eff.get("dmg", 0.0)) * sc, caster)
+			spawn_impact(u.position, true)
+
+
+## 弹射闪电：从落点最近敌人起跳，逐个弹向最近未命中目标，伤害逐跳衰减。
+func _do_chain_nuke(caster: Unit, eff: Dictionary, sc: float, center: Vector2, foe: int, snap: Array, ad: Dictionary) -> void:
+	var jumps := int(eff.get("jumps", 4))
+	var jrange := float(eff.get("jump", 150.0))
+	var dmg := float(eff.get("dmg", 0.0)) * sc
+	var fall := float(eff.get("falloff", 0.85))
+	var hit := {}
+	var cur: Unit = _nearest_foe_to(center, foe, hit, INF, snap)
+	var prev := center
+	while cur != null and jumps > 0:
+		hit[cur.get_instance_id()] = true
+		if eff.get("slow", 0.0) > 0.0:
+			cur.apply_slow(eff["slow"], eff.get("slow_dur", 1.0))
+		if eff.get("stun", 0.0) > 0.0:
+			cur.apply_stun(eff["stun"])
+		cur.take_damage(dmg, caster)
+		spawn_impact(cur.position, true)
+		var bolt := BlinkShotFx.new()
+		bolt.start_w = prev
+		bolt.end_w = cur.position
+		bolt.col = ad["color"]
+		fx_root.add_child(bolt)
+		prev = cur.position
+		dmg *= fall
+		jumps -= 1
+		cur = _nearest_foe_to(prev, foe, hit, jrange, snap)
+
+
+## chain 用：找离 p 最近、未命中、在 maxd 内的敌军(无则 null)。
+func _nearest_foe_to(p: Vector2, foe: int, hit: Dictionary, maxd: float, snap: Array) -> Unit:
+	var best: Unit = null
+	var bd := maxd
+	for u in snap:
+		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and not u.is_resource and not u.is_building and not hit.has(u.get_instance_id()):
+			var d := p.distance_to(u.position)
+			if d <= bd:
+				bd = d
+				best = u
+	return best
+
+
+## 护盾：给自身(或范围友军)一层吸收盾。
+func _do_shield(caster: Unit, eff: Dictionary, sc: float, r: float, ally: int, snap: Array) -> void:
+	var amt := float(eff.get("shield", 100.0)) * sc
+	var dur := float(eff.get("dur", 8.0))
+	if bool(eff.get("allies", false)):
+		for u in snap:
+			if is_instance_valid(u) and u.faction == ally and not u.is_building and not u.garrisoned and u.hp > 0.0 and caster.position.distance_to(u.position) <= r:
+				u.apply_shield(amt, dur)
+	else:
+		caster.apply_shield(amt, dur)
+
+
+## 攻速狂暴：自身(或范围友军)提升攻速(可加移速/平攻)。
+func _do_atkspeed(caster: Unit, eff: Dictionary, r: float, ally: int, snap: Array) -> void:
+	var asx := float(eff.get("atkspeed", 1.5))
+	var dur := float(eff.get("dur", 6.0))
+	var spd := float(eff.get("speed_mult", 0.0))
+	if bool(eff.get("allies", false)):
+		for u in snap:
+			if is_instance_valid(u) and u.faction == ally and not u.is_building and not u.garrisoned and u.hp > 0.0 and caster.position.distance_to(u.position) <= r:
+				u.apply_atkspeed(asx, dur)
+				if spd > 0.0:
+					u.apply_slow(spd, dur)
+	else:
+		caster.apply_atkspeed(asx, dur)
+		if spd > 0.0:
+			caster.apply_slow(spd, dur)
+		if eff.get("self_atk", 0.0) > 0.0:
+			caster.apply_temp_atk(eff["self_atk"], dur)
 
 
 func _nearest_water_dir(p: Vector2) -> Vector2:
