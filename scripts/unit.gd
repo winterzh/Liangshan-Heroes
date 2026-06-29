@@ -1521,15 +1521,29 @@ func _face_dir(d: Vector2) -> void:
 func _init_ability_slots(def: Dictionary) -> void:
 	ability_slots.clear()
 	_hero_leveled = battle != null and battle.economy
+	# 关卡指定的英雄初始技能等级：>0 且有 4 技能组 ⇒ 一出场满配该等级、无需加点。
+	# 战役默认 2(换上对应 DOTA 英雄的 4 技能)、竞技场 3(满级随便放)、1v1/驻守战 0(走原经验加点)。
+	var start_rank := 2
+	if battle != null and battle.level != null and battle.level.has_method("hero_start_rank"):
+		start_rank = int(battle.level.hero_start_rank())
+	var fixed_kit: bool = start_rank > 0 and def.has("abilities")
 	var ids: Array = []
-	if _hero_leveled and def.has("abilities"):
+	if fixed_kit:
 		ids = def["abilities"]
+		_hero_leveled = false              # 固定等级模式：不走经验加点(即便竞技场是经济模式)
+	elif _hero_leveled and def.has("abilities"):
+		ids = def["abilities"]             # 1v1/驻守战：经验升级学技能
 	elif String(def.get("ability", "")) != "":
 		ids = [def["ability"]]
 	for id in ids:
 		# 优先取本场战斗的(可能被场景/内容包覆盖的)技能表，使本场景新增/改过的技能也能正确建槽
 		var ad: Dictionary = (battle._abilities.get(id, {}) if (battle != null and id in battle._abilities) else Defs.ABILITIES.get(id, {}))
-		ability_slots.append({"id": String(id), "rank": (0 if _hero_leveled else 1),
+		var r := 1
+		if fixed_kit:
+			r = start_rank
+		elif _hero_leveled:
+			r = 0
+		ability_slots.append({"id": String(id), "rank": r,
 			"cd_t": 0.0, "passive": bool(ad.get("passive", false))})
 	if _hero_leveled:
 		hero_level = 1

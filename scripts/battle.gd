@@ -1075,7 +1075,6 @@ func train_menu(bld: Unit) -> Array:
 			heroes.append({"kind": "train", "key": key, "label": String(d2.get("name", key)),
 				"cost_g": c2g, "cost_w": c2w, "affordable": can_afford(c2g, c2w), "bld": bld, "revive": false,
 				"_star": int((Bios.STAR.get(key, [999]) as Array)[0])})
-		workers.append({"kind": "arena_spawn", "label": "刷敌", "cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 	heroes.sort_custom(func(a, b): return int(a["_star"]) < int(b["_star"]))   # 天罡在前、地煞在后
 	var out: Array = workers.duplicate()
 	var PAGE := 6
@@ -1093,10 +1092,15 @@ func train_menu(bld: Unit) -> Array:
 	return out
 
 
-## 竞技场「刷敌」：交给关卡(arena.gd)刷一波官军试招。
-func arena_spawn_wave() -> void:
-	if level != null and level.has_method("arena_spawn_wave"):
-		level.arena_spawn_wave(self)
+## 竞技场「出兵 / 随机」：交给关卡(arena.gd)刷 50 兵 + 1 名随机敌将试招（主界面两枚按钮触发）。
+func arena_spawn_troops() -> void:
+	if level != null and level.has_method("arena_spawn_troops"):
+		level.arena_spawn_troops(self)
+
+
+func arena_spawn_random() -> void:
+	if level != null and level.has_method("arena_spawn_random"):
+		level.arena_spawn_random(self)
 
 
 ## 聚义厅「点将」翻页（108 将太多 → 分页浏览；越界由 train_menu 钳制）。
@@ -5932,7 +5936,7 @@ func _ability_selftest() -> void:
 		cast_ability(caster, 0)
 	# 施法抬手后技能不再瞬发：进入待结算队列，物理帧推进抬手归零才上冷却（这里同步无帧→查队列）
 	var cd_started: bool = caster.ability_cd_frac() > 0.0 or not _pending_casts.is_empty() or _abilities[caster.ability]["targeted"]
-	print("[ability] %s cd/slot ok=%s order_ok=%s" % [caster.key, cd_started, order_ok])
+	print("[ability] %s slots=%d cd/slot ok=%s order_ok=%s" % [caster.key, caster.slot_count(), cd_started, order_ok])
 
 
 ## headless 自检（DOTACAST=1 + SKIRMISH=1）：逐一生成每个 DOTA 英雄、升满 4 技能、
@@ -5981,10 +5985,11 @@ func _dota_cast_selftest() -> void:
 		var _t1 := Defs.ability_levels(String(aid))
 		var _t2 := Defs.ability_desc(String(aid), 3)
 	print("[dota] tooltip render OK: %d abilities" % Defs.ABILITIES.size())
-	if level != null and level.has_method("arena_spawn_wave"):
+	if level != null and level.has_method("arena_spawn_troops"):
 		var e0 := enemies_alive()
-		arena_spawn_wave()
-		print("[dota] arena_spawn_wave OK: enemies %d→%d" % [e0, enemies_alive()])
+		arena_spawn_troops()
+		arena_spawn_random()
+		print("[dota] arena_spawn OK: enemies %d→%d" % [e0, enemies_alive()])
 	print("[dota] cast_selftest OK: heroes=%d casts=%d (no crash)" % [nh, ncast])
 
 

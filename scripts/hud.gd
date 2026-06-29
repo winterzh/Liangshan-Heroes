@@ -73,6 +73,8 @@ var _pause_root: ColorRect
 
 # AI友好模式·自动镜头按钮：左下角（全员托管后出现，点一下开/关自动镜头；开启时呼吸闪烁）
 var _autocam_btn: Button
+var _arena_troops_btn: Button   # 竞技场·主界面「出兵」（仅竞技场显示）
+var _arena_random_btn: Button   # 竞技场·主界面「随机刷兵+英雄」
 var _autocam_on := false
 var _autocam_pulse := 0.0
 
@@ -158,6 +160,7 @@ func _ready() -> void:
 	_build_pause()
 	_build_skill_tip()
 	_build_autocam_badge()
+	_build_arena_buttons()
 	_build_fps_label()   # 最后建→置于最上层，覆盖各遮罩始终可见
 
 
@@ -1110,6 +1113,12 @@ func _refresh_panel() -> void:
 	if _delete_btn != null:
 		_delete_btn.visible = not touch_ui and alive.any(func(u) -> bool:
 			return u.faction == Unit.FACTION_LIANG and not u.is_resource)
+	# 竞技场「出兵 / 随机」按钮：仅竞技场显示
+	var in_arena: bool = battle != null and battle.level != null and battle.level.has_method("arena_spawn_troops")
+	if _arena_troops_btn != null:
+		_arena_troops_btn.visible = in_arena
+	if _arena_random_btn != null:
+		_arena_random_btn.visible = in_arena
 	if alive.is_empty():
 		_info_name.text = ""
 		_info_hp.text = ""
@@ -1434,6 +1443,42 @@ func _build_autocam_badge() -> void:
 		if battle != null and battle.has_method("toggle_autocam"):
 			battle.toggle_autocam())
 	add_child(_autocam_btn)
+
+
+## 竞技场·主界面两枚按钮（左下、命令面板之上）：⚔出兵 / 🎲随机。仅竞技场显示(见 _refresh_panel)。
+func _build_arena_buttons() -> void:
+	_arena_troops_btn = _mk_arena_btn("⚔ 出兵", Color("ff9a3a"), -(RTSCamera.PANEL_H + 12.0))
+	_arena_troops_btn.pressed.connect(func() -> void:
+		if battle != null and battle.has_method("arena_spawn_troops"):
+			battle.arena_spawn_troops())
+	_arena_random_btn = _mk_arena_btn("🎲 随机", Color("ff5a4a"), -(RTSCamera.PANEL_H + 54.0))
+	_arena_random_btn.pressed.connect(func() -> void:
+		if battle != null and battle.has_method("arena_spawn_random"):
+			battle.arena_spawn_random())
+
+
+func _mk_arena_btn(txt: String, col: Color, bottom: float) -> Button:
+	var b := Button.new()
+	b.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	b.offset_left = 12.0
+	b.offset_right = 12.0 + 124.0
+	b.offset_bottom = bottom
+	b.offset_top = bottom - 38.0
+	b.focus_mode = Control.FOCUS_NONE
+	b.add_theme_font_size_override("font_size", 16)
+	b.visible = false
+	for st in ["normal", "hover", "pressed"]:
+		var sb := StyleBoxFlat.new()
+		sb.bg_color = Color(0.16, 0.08, 0.05, 0.92) if st == "normal" else Color(0.24, 0.13, 0.09, 0.96)
+		sb.border_color = col
+		sb.set_border_width_all(2)
+		sb.set_corner_radius_all(8)
+		b.add_theme_stylebox_override(st, sb)
+	b.add_theme_color_override("font_color", Color(1.0, 0.9, 0.82))
+	b.add_theme_color_override("font_hover_color", Color(1.0, 0.96, 0.9))
+	b.text = txt
+	add_child(b)
+	return b
 
 
 ## 自动镜头按钮：show=全员托管才显示；on=当前是否已开启（开启时换文案+高亮，并在 _process 呼吸闪烁）。

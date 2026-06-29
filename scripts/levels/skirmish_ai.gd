@@ -107,6 +107,7 @@ func map_base() -> int: return T.GRASS
 func camera_start_cell() -> Vector2i: return Vector2i(20, 46)
 
 func economy_enabled() -> bool: return true
+func hero_start_rank() -> int: return 0   # 1v1：英雄仍走原来的经验升级学技能(不受 DOTA 改版影响)
 func start_age() -> int: return 1          # 1v1 走完整三代进阶（草莽→聚义→替天行道）
 func start_gold() -> int: return 280
 func start_wood() -> int: return 160

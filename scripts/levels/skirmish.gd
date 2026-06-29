@@ -95,6 +95,7 @@ func map_base() -> int: return T.GRASS
 func camera_start_cell() -> Vector2i: return Vector2i(22, 44)
 
 func economy_enabled() -> bool: return true
+func hero_start_rank() -> int: return 0   # 驻守战：英雄仍走原来的经验升级学技能(不受 DOTA 改版影响)
 func start_gold() -> int: return 250
 func start_wood() -> int: return 150
 func base_pop_cap() -> int: return 20
