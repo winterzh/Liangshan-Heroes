@@ -48,6 +48,7 @@ var tool := "terrain"              # terrain / unit / gate / camera / erase
 var cur_terrain := "WATER"
 var brush := 1
 var cur_unit := "liang_dao"
+var _palette_cat := "天罡"   # 编辑器单位面板·当前一级分类
 var cur_faction := "LIANG"
 var cur_gate := "E"
 var cur_decor := "tower"
@@ -103,6 +104,50 @@ func _udef(k: String) -> Dictionary:
 
 func _uname(k: String) -> String:
 	return String(_udef(k).get("name", k))
+
+
+## 单位一级分类：108将分天罡(座次1-36)/地煞(37-108)；其余按 英雄·大将 / 兵卒 / 建筑。
+func _unit_cat(k: String) -> String:
+	if Bios.STAR.has(k):
+		return "天罡" if int((Bios.STAR[k] as Array)[0]) <= 36 else "地煞"
+	var d := _udef(k)
+	if bool(d.get("building", false)):
+		return "建筑"
+	if bool(d.get("hero", false)):
+		return "英雄·大将"
+	return "兵卒"
+
+
+func _units_in_cat(cat: String) -> Array:
+	var out: Array = []
+	for k in _place_keys:
+		if _unit_cat(String(k)) == cat:
+			out.append(k)
+	if cat == "天罡" or cat == "地煞":
+		out.sort_custom(func(a, b): return int((Bios.STAR.get(a, [999]) as Array)[0]) < int((Bios.STAR.get(b, [999]) as Array)[0]))
+	else:
+		out.sort_custom(func(a, b): return _uname(String(a)) < _uname(String(b)))
+	return out
+
+
+## 二级菜单单位选择器：一行分类按钮(点切该类) + 当前类下单位列表。on_pick(key,name)。
+func _build_unit_picker(parent: Node, on_pick: Callable) -> void:
+	var cats := ["天罡", "地煞", "英雄·大将", "兵卒", "建筑"]
+	var catbar := GridContainer.new(); catbar.columns = 3; parent.add_child(catbar)
+	for cat in cats:
+		var c: String = cat
+		var cb := _btn(("▸" if c == _palette_cat else "") + c + " (%d)" % _units_in_cat(c).size(), func() -> void:
+			_palette_cat = c; _refresh_tool_panel())
+		cb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		catbar.add_child(cb)
+	var us := ScrollContainer.new(); us.custom_minimum_size = Vector2(0, 240); parent.add_child(us)
+	var ub := VBoxContainer.new(); ub.size_flags_horizontal = Control.SIZE_EXPAND_FILL; us.add_child(ub)
+	for k in _units_in_cat(_palette_cat):
+		var kk: String = k
+		var nm := _uname(String(k))
+		var kb := _btn(nm, func() -> void: on_pick.call(kk, nm))
+		kb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		ub.add_child(kb)
 
 
 func _process(delta: float) -> void:
@@ -307,15 +352,8 @@ func _refresh_tool_panel() -> void:
 				var fk: String = f[1]
 				var fbtn := _btn(f[0], func() -> void: cur_faction = fk; _show_toast("阵营：" + String(f[0])))
 				fb.add_child(fbtn)
-			var ul := Label.new(); ul.text = "单位（点选）"; ul.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(ul)
-			var us := ScrollContainer.new(); us.custom_minimum_size = Vector2(0, 260); _tool_panel.add_child(us)
-			var ub := VBoxContainer.new(); ub.size_flags_horizontal = Control.SIZE_EXPAND_FILL; us.add_child(ub)
-			for k in _place_keys:
-				var nm := _uname(k)
-				var kk: String = k
-				var kb := _btn(nm, func() -> void: cur_unit = kk; _show_toast("单位：" + nm))
-				kb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				ub.add_child(kb)
+			var ul := Label.new(); ul.text = "单位（先选类·再点单位）"; ul.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(ul)
+			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("单位：" + nm))
 		"decor":
 			var dl := Label.new(); dl.text = "装饰物（纯美观）"; dl.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(dl)
 			var dgrid := GridContainer.new(); dgrid.columns = 2; _tool_panel.add_child(dgrid)
@@ -337,15 +375,8 @@ func _refresh_tool_panel() -> void:
 			for f in [["梁山", "LIANG"], ["官军", "GUAN"]]:
 				var fk: String = f[1]
 				rfb.add_child(_btn(f[0], func() -> void: cur_rf_faction = fk; _show_toast("增援阵营：" + String(f[0]))))
-			var rul := Label.new(); rul.text = "援军单位（点选）"; rul.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(rul)
-			var rus := ScrollContainer.new(); rus.custom_minimum_size = Vector2(0, 220); _tool_panel.add_child(rus)
-			var rub := VBoxContainer.new(); rub.size_flags_horizontal = Control.SIZE_EXPAND_FILL; rus.add_child(rub)
-			for k in _place_keys:
-				var nm := _uname(k)
-				var kk: String = k
-				var kb := _btn(nm, func() -> void: cur_unit = kk; _show_toast("援军：" + nm))
-				kb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				rub.add_child(kb)
+			var rul := Label.new(); rul.text = "援军单位（先选类·再点单位）"; rul.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(rul)
+			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("援军：" + nm))
 			var rtip := Label.new(); rtip.text = "点地图把该单位放进第 N 波的增援；该波触发时刷出"
 			rtip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; rtip.add_theme_font_size_override("font_size", 11)
 			_tool_panel.add_child(rtip)
