@@ -1451,7 +1451,7 @@ func _build_arena_buttons() -> void:
 	_arena_troops_btn.pressed.connect(func() -> void:
 		if battle != null and battle.has_method("arena_spawn_troops"):
 			battle.arena_spawn_troops())
-	_arena_random_btn = _mk_arena_btn("🎲 随机", Color("ff5a4a"), -(RTSCamera.PANEL_H + 54.0))
+	_arena_random_btn = _mk_arena_btn("🎲 随机（带敌将）", Color("ff5a4a"), -(RTSCamera.PANEL_H + 54.0))
 	_arena_random_btn.pressed.connect(func() -> void:
 		if battle != null and battle.has_method("arena_spawn_random"):
 			battle.arena_spawn_random())
@@ -1461,7 +1461,7 @@ func _mk_arena_btn(txt: String, col: Color, bottom: float) -> Button:
 	var b := Button.new()
 	b.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	b.offset_left = 12.0
-	b.offset_right = 12.0 + 124.0
+	b.offset_right = 12.0 + 168.0
 	b.offset_bottom = bottom
 	b.offset_top = bottom - 38.0
 	b.focus_mode = Control.FOCUS_NONE

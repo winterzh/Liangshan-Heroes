@@ -30,7 +30,7 @@ func camera_start_cell() -> Vector2i: return Vector2i(24, 24)
 func economy_enabled() -> bool: return true
 func uses_dota_roster() -> bool: return true       # 聚义厅点将列全部 108 将
 func arena_instant_train() -> bool: return true     # 即时成军（沙盒不等训练）
-func hero_start_rank() -> int: return 3             # 英雄一出场即满配 4 技能(rank3)，随便放
+func hero_start_rank() -> int: return 0             # 英雄出场 1 级(经验加点)：刷敌练级、边打边学技能
 func start_gold() -> int: return 999999
 func start_wood() -> int: return 999999
 func base_pop_cap() -> int: return 300
@@ -81,17 +81,17 @@ func process(b, delta: float) -> void:
 			b._auto_micro_generic(u)
 
 
-## 「出兵」：标准官军一波(50，均分四类杂兵) + 1 名随机敌将。
+## 「出兵」：纯兵一波(50，均分四类标准杂兵)，不带敌将。
 func arena_spawn_troops(b) -> void:
-	_arena_spawn(b, TROOPS_STD, false)
+	_arena_spawn(b, TROOPS_STD, false, 0)
 
 
-## 「随机刷兵+英雄」：50 名随机杂兵(更杂) + 1 名随机敌将。
+## 「随机（带敌将）」：50 名随机杂兵(更杂) + 2 名随机敌将。
 func arena_spawn_random(b) -> void:
-	_arena_spawn(b, TROOPS_RAND, true)
+	_arena_spawn(b, TROOPS_RAND, true, 2)
 
 
-func _arena_spawn(b, pool: Array, randomized: bool) -> void:
+func _arena_spawn(b, pool: Array, randomized: bool, boss_count: int) -> void:
 	var target: Vector2 = b.map.cell_to_world(HALL)
 	var counts := {}
 	if randomized:
@@ -108,12 +108,20 @@ func _arena_spawn(b, pool: Array, randomized: bool) -> void:
 	for k in counts:
 		for u in b.spawn_group(String(k), int(counts[k]), Unit.FACTION_GUAN, SPAWN, target):
 			b.apply_enemy_scale(u)
-	# 1 名随机敌将（hero_start_rank=3 已给满配 4 技能；本关 process 驱动其自动放招）
-	var boss: String = BOSSES[randi() % BOSSES.size()]
-	for u in b.spawn_group(boss, 1, Unit.FACTION_GUAN, SPAWN, target):
-		b.apply_enemy_scale(u)
+	# 敌将：经济模式出场 rank0 → 武装到 2 级(会放招)；本关 process 驱动其自动施法
+	var names: Array = []
+	for bi in range(boss_count):
+		var boss: String = BOSSES[randi() % BOSSES.size()]
+		names.append(String(Defs.UNITS.get(boss, {}).get("name", boss)))
+		for u in b.spawn_group(boss, 1, Unit.FACTION_GUAN, SPAWN, target):
+			if is_instance_valid(u) and u.is_hero:
+				for s in range(u.slot_count()):
+					if not bool(u.ability_slots[s]["passive"]):
+						u.ability_slots[s]["rank"] = 2
+			b.apply_enemy_scale(u)
 	_wave += 1
-	b.msg("【刷敌 第 %d 波】50 兵 + 敌将「%s」压上——试招！" % [_wave, Defs.UNITS.get(boss, {}).get("name", boss)], 3.0)
+	var who := ("（敌将：%s）" % "、".join(names)) if not names.is_empty() else "（纯兵）"
+	b.msg("【刷敌 第 %d 波】50 兵%s压上——试招！" % [_wave, who], 3.0)
 
 
 func top_status(b) -> String:

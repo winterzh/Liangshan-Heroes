@@ -1185,6 +1185,8 @@ func cancel_train(bld: Unit, index: int) -> void:
 ## 命令卡·科技菜单：该建筑可研究、且尚未完成/进行中的科技
 func research_menu(bld: Unit) -> Array:
 	var out: Array = []
+	if level != null and level.has_method("arena_spawn_troops"):
+		return out   # 竞技场沙盒：移除聚义厅的升级/科技(时代进阶/锻造/甲胄/精耕)选项
 	for key in bld.setup_def.get("researches", []):
 		if _tech_done.has(key) or bld._research_key == key:
 			continue
