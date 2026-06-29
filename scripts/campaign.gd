@@ -1,7 +1,7 @@
 extends Node
 ## 战役进度管理（Autoload "Campaign"）：关卡注册表、当前关、解锁进度、存档。
 
-const VERSION := "1.3"   # 整体游戏版本号（主菜单右下角显示，与安卓包 version/name 一致）
+const VERSION := "1.3.1"   # 整体游戏版本号（主菜单右下角显示，与安卓包 version/name 一致）
 
 const LEVELS := [
 	{"id": "level1", "title": "智取生辰纲", "sub": "黄泥冈·七星聚义", "script": "res://scripts/levels/level1_huangnigang.gd"},
@@ -20,11 +20,13 @@ const SKIRMISH_SCRIPT := "res://scripts/levels/skirmish.gd"
 const SKIRMISH_AI_SCRIPT := "res://scripts/levels/skirmish_ai.gd"
 const CUSTOM_DEFENSE_SCRIPT := "res://scripts/levels/custom_defense.gd"
 const SCENARIO_SCRIPT := "res://scripts/levels/scenario.gd"
+const ARENA_SCRIPT := "res://scripts/levels/arena.gd"
 
 var current := 0
 var unlocked := 1
 var skirmish := false       # 启动自由「遭遇战」模式而非战役关卡
 var skirmish_ai := false    # 启动「AI 对战」1v1 模式
+var arena := false          # 启动「竞技场」沙盒模式（DOTA 改版技能试演场：自由点将+刷敌）
 var custom_defense := false # 启动「自定义据守」模式（用 custom_config）
 var custom_config := {}     # 自定义据守的配置（编辑器产出 / 存档读入）
 var scenario := false       # 启动「数据驱动自定义关卡」（用 scenario_data，见 scenario.gd）
@@ -64,6 +66,8 @@ func _ready() -> void:
 		skirmish = true
 	if OS.get_environment("SKIRMISH_AI") == "1":
 		skirmish_ai = true
+	if OS.get_environment("ARENA") == "1":
+		arena = true
 	var ad := OS.get_environment("AI_DIFF")
 	if ad != "":
 		ai_difficulty = ad
@@ -134,6 +138,8 @@ func make_level() -> LevelBase:
 		return s
 	if custom_defense and not custom_config.is_empty() and ResourceLoader.exists(CUSTOM_DEFENSE_SCRIPT):
 		return load(CUSTOM_DEFENSE_SCRIPT).new()
+	if arena and ResourceLoader.exists(ARENA_SCRIPT):
+		return load(ARENA_SCRIPT).new()
 	if skirmish_ai and ResourceLoader.exists(SKIRMISH_AI_SCRIPT):
 		return load(SKIRMISH_AI_SCRIPT).new()
 	if skirmish and ResourceLoader.exists(SKIRMISH_SCRIPT):

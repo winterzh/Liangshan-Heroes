@@ -1058,6 +1058,24 @@ func train_menu(bld: Unit) -> Array:
 		else:
 			workers.append({"kind": "train", "key": key, "label": String(d.get("name", key)),
 				"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": false})
+	# 竞技场沙盒：把全部 108 将(DOTA 改版 kit)动态列入点将菜单；并加「刷敌」键。
+	# 1v1/驻守战 level.uses_dota_roster()==false → 不进此分支 → 仍只有原 6 个可训练英雄(原样不变)。
+	if level != null and level.has_method("uses_dota_roster") and level.uses_dota_roster():
+		var seen := {}
+		for h in heroes:
+			seen[String(h["key"])] = true
+		for key in Defs.UNITS:
+			var d2: Dictionary = Defs.UNITS[key]
+			if not bool(d2.get("hero_trainable", false)) or seen.has(key):
+				continue
+			if count_alive(Unit.FACTION_LIANG, key) > 0 or _eco_in_queue(key):
+				continue
+			var c2g := int(d2.get("cost_gold", 0))
+			var c2w := int(d2.get("cost_wood", 0))
+			heroes.append({"kind": "train", "key": key, "label": String(d2.get("name", key)),
+				"cost_g": c2g, "cost_w": c2w, "affordable": can_afford(c2g, c2w), "bld": bld, "revive": false,
+				"_star": int((Bios.STAR.get(key, [999]) as Array)[0])})
+		workers.append({"kind": "arena_spawn", "label": "刷敌", "cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 	heroes.sort_custom(func(a, b): return int(a["_star"]) < int(b["_star"]))   # 天罡在前、地煞在后
 	var out: Array = workers.duplicate()
 	var PAGE := 6
@@ -1073,6 +1091,12 @@ func train_menu(bld: Unit) -> Array:
 	out.append({"kind": "train_page", "dir": 1, "label": "%d/%d页▶" % [_hall_page + 1, pages],
 		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 	return out
+
+
+## 竞技场「刷敌」：交给关卡(arena.gd)刷一波官军试招。
+func arena_spawn_wave() -> void:
+	if level != null and level.has_method("arena_spawn_wave"):
+		level.arena_spawn_wave(self)
 
 
 ## 聚义厅「点将」翻页（108 将太多 → 分页浏览；越界由 train_menu 钳制）。
@@ -1134,7 +1158,8 @@ func queue_train(bld: Unit, key: String) -> void:
 	Sfx.play("click")
 	bld._train_queue.append(key)
 	if bld._train_queue.size() == 1:
-		bld._train_t = float(d.get("train_time", 12.0))
+		# 竞技场沙盒：即时成军（不等训练）；其余模式照常
+		bld._train_t = 0.6 if (level != null and level.has_method("arena_instant_train") and level.arena_instant_train()) else float(d.get("train_time", 12.0))
 
 
 ## 取消生产队列里第 index 个（经典RTS式：点队列图标即撤单），全额退还资源；撤的是队首则重置计时。
@@ -5951,6 +5976,15 @@ func _dota_cast_selftest() -> void:
 		var p3 := train_menu(hall).size()
 		_hall_page = 0
 		print("[dota] hall train_menu pg0=%d pg3=%d (paging ok)" % [p0, p3])
+	# 渲染每个技能的「悬浮说明 + 1/2/3级速览」——覆盖 ability_levels/ability_desc 路径(此前漏测，def_down 标量曾在此崩)
+	for aid in Defs.ABILITIES.keys():
+		var _t1 := Defs.ability_levels(String(aid))
+		var _t2 := Defs.ability_desc(String(aid), 3)
+	print("[dota] tooltip render OK: %d abilities" % Defs.ABILITIES.size())
+	if level != null and level.has_method("arena_spawn_wave"):
+		var e0 := enemies_alive()
+		arena_spawn_wave()
+		print("[dota] arena_spawn_wave OK: enemies %d→%d" % [e0, enemies_alive()])
 	print("[dota] cast_selftest OK: heroes=%d casts=%d (no crash)" % [nh, ncast])
 
 

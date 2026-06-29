@@ -1816,6 +1816,8 @@ class CmdButton extends Control:
 			accent = Color(0.45, 0.4, 0.62); glyph = "研"
 		elif kind == "train_page":
 			accent = Color(0.4, 0.42, 0.5); glyph = "页"
+		elif kind == "arena_spawn":
+			accent = Color(0.66, 0.28, 0.24); glyph = "敌"
 		elif kind == "trade":
 			accent = Color(0.6, 0.5, 0.2); glyph = "易"
 		elif kind == "eject":
@@ -1873,6 +1875,8 @@ class CmdButton extends Control:
 			info = "◂ 返回"
 		elif kind == "train_page":
 			info = String(spec.get("label", ""))
+		elif kind == "arena_spawn":
+			info = "一键召敌试招"
 		elif kind == "trap":
 			info = ("金%d " % cg if cg > 0 else "") + ("木%d" % cw if cw > 0 else "")
 		elif kind == "train":
@@ -1935,6 +1939,8 @@ class CmdButton extends Control:
 			hud.battle.arm_trap(String(spec.get("key", "")))
 		elif kind == "train_page":
 			hud.battle.hall_page_turn(int(spec.get("dir", 1)))
+		elif kind == "arena_spawn":
+			hud.battle.arena_spawn_wave()
 		else:
 			hud.battle.arm_build(String(spec.get("key", "")))
 

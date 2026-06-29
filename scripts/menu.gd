@@ -100,6 +100,13 @@ void fragment() {
 	col.add_child(_mk_module("📜  剧情模式", "八幕战役 · 替天行道，从智取生辰纲到三败高太尉", Color("ffd866"), _show_story))
 	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", Color("a9e34b"), _show_defense, true))
 	col.add_child(_mk_module("⚔  1v1 对战", "对称经济 · 真实造兵造房，三种胜利条件、三档 AI", Color("8fd3ff"), _show_1v1))
+	col.add_child(_mk_module("🏟  竞技场", "DOTA 改版试演场 · 自由点将放技能、一键刷敌（仅此模式启用新技能组）", Color("ff7a4a"), func() -> void:
+		Campaign.arena = true
+		Campaign.skirmish = false
+		Campaign.skirmish_ai = false
+		Campaign.custom_defense = false
+		Campaign.scenario = false
+		_launch()))
 	col.add_child(_mk_module("📖  英雄图鉴", "108 将 · 立绘 / 技能 / 生平", Color("ff9a6a"), func() -> void: get_tree().change_scene_to_file.call_deferred("res://scenes/codex.tscn")))
 	col.add_child(_mk_module("🛠  更多", "关卡编辑器 · 设置", Color("c0a0ff"), _show_more))
 
@@ -351,6 +358,7 @@ func _show_defense() -> void:
 			Campaign.defense_random = false
 			Campaign.skirmish = true
 			Campaign.skirmish_ai = false
+			Campaign.arena = false
 			Campaign.custom_defense = false
 			Campaign.scenario = false
 			_launch())
@@ -408,6 +416,7 @@ func _show_defense() -> void:
 		Campaign.defense_random = true
 		Campaign.skirmish = true
 		Campaign.skirmish_ai = false
+		Campaign.arena = false
 		Campaign.custom_defense = false
 		Campaign.scenario = false
 		Campaign.save_prefs()
@@ -479,6 +488,7 @@ func _show_1v1() -> void:
 		var key: String = diff[1]
 		ab.pressed.connect(func() -> void:
 			Campaign.skirmish_ai = true
+			Campaign.arena = false
 			Campaign.skirmish = false
 			Campaign.custom_defense = false
 			Campaign.scenario = false
@@ -542,6 +552,7 @@ func _show_scenario_picker() -> void:
 				Campaign.custom_defense = false
 				Campaign.skirmish = false
 				Campaign.skirmish_ai = false
+				Campaign.arena = false
 				Campaign.ai_friendly = false   # AI友好模式仅限驻守战
 				_launch())
 		box.add_child(b)
@@ -585,6 +596,7 @@ func _show_custom_picker() -> void:
 				Campaign.scenario = false
 				Campaign.skirmish = false
 				Campaign.skirmish_ai = false
+				Campaign.arena = false
 				_launch())
 		box.add_child(b)
 	_add_back(box, overlay)

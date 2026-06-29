@@ -35,7 +35,7 @@ const UNITS := {
 		"ability": "guan_charge",
 		"abilities": ["guan_barrage", "guan_charge", "guan_valor", "guan_rally"]},
 	"hall": {"name": "聚义厅", "hp": 1500, "atk": 0, "building": true, "radius": 58, "drop_off": true, "is_main_base": true,
-		"produces": ["lou_luo", "an_daoquan", "bai_sheng", "bao_xu", "cai_fu", "cai_qing", "cao_zheng", "chai_jin", "chen_da", "dai_zong", "deng_fei", "ding_desun", "dong_ping", "du_qian", "du_xing", "duan_jingzhu", "fan_rui", "gong_wang", "gongsun_sheng", "gu_dasao", "guan_sheng", "guo_sheng", "han_tao", "hao_siwen", "hou_jian", "hu_sanniang", "hu_yanzhuo", "hua_rong", "huang_xin", "huangfu_duan", "jiang_jing", "jiao_ting", "jin_dajian", "kong_liang", "kong_ming", "lei_heng", "li_gun", "li_jun", "li_kui", "li_li", "li_ying", "li_yun", "li_zhong", "lin_chong", "ling_zhen", "liu_tang", "lu_fang", "lu_junyi", "lu_zhishen", "ma_lin", "meng_kang", "mu_chun", "mu_hong", "ou_peng", "pei_xuan", "peng_qi", "qin_ming", "ruan_brother", "ruan_xiaoqi", "ruan_xiaowu", "shan_tinggui", "shi_en", "shi_jin", "shi_qian", "shi_xiu", "shi_yong", "song_jiang", "song_qing", "song_wan", "sun_erniang", "sun_li", "sun_xin", "suo_chao", "tang_long", "tao_zongwang", "tong_meng", "tong_wei", "wang_dingliu", "wang_ying", "wei_dingguo", "wu_song", "wu_yong", "xiang_chong", "xiao_rang", "xie_bao", "xie_zhen", "xu_ning", "xuan_zan", "xue_yong", "yan_qing", "yan_shun", "yang_chun", "yang_lin", "yang_xiong", "yang_zhi", "yu_baosi", "yue_he", "zhang_heng", "zhang_qing", "zhang_qing_cai", "zhang_shun", "zheng_tianshou", "zhou_tong", "zhu_fu", "zhu_gui", "zhu_tong", "zhu_wu", "zou_run", "zou_yuan"], "is_altar": true,
+		"produces": ["lou_luo", "song_jiang", "lin_chong", "hua_rong", "li_kui", "gongsun_sheng", "wu_song"], "is_altar": true,
 		"researches": ["tech_age2", "tech_age3", "tech_gather"], "garrison_cap": 10},
 
 	# ---- 召唤物（技能产出，不可训练；血/攻在召唤时按等级覆盖） ----
@@ -1069,8 +1069,8 @@ static func ability_levels(aid: String) -> String:
 	if eff.has("dot_total"):
 		extra += "　续 %ss 共 %s" % [str(eff.get("dot_dur", 3.0)), _l3a(float(eff["dot_total"]))]
 	if eff.has("def_down"):
-		var dd: Array = eff["def_down"]
-		extra += "　削甲 %d/%d/%d" % [int(dd[0]), int(dd[1]), int(dd[2])]
+		var dd = eff["def_down"]
+		extra += ("　削甲 %d/%d/%d" % [int(dd[0]), int(dd[1]), int(dd[2])]) if (dd is Array and (dd as Array).size() >= 3) else ("　削甲 %d" % int(dd))
 	if eff.has("blind"):
 		extra += "　致盲 %ss(攻击必失)" % str(eff["blind"])
 	match kind:
