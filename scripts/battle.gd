@@ -2024,6 +2024,12 @@ func _eco_train() -> void:
 	var hero_pending := _eco_hero_count() < _eco_hero_target()   # 没出齐 或 有人战死(现役<目标)
 	if hero_pending:
 		_eco_clear_hall_nonhero(hall)   # 聚义厅有非英雄队列(喽啰)→ 全停掉，腾出来出英雄/复活
+		# 木荒急救(高于英雄逻辑)：木紧且喽啰不足上限 → 即便在攒/复活英雄，也补一个喽啰去伐木。
+		# 喽啰仅 20 金且不碰复活底线；否则「伐木工全死 + 英雄战死攒金复活」会锁死经济、永不产喽啰(用户反馈)。
+		if _eco_wood_short() and _eco_count_workers() < _eco_wcap_dyn() and not _eco_in_queue("lou_luo") \
+				and _eco_can_train("lou_luo", hall) \
+				and gold - int(_defs.get("lou_luo", {}).get("cost_gold", 20)) >= _eco_revive_reserve():
+			queue_train(hall, "lou_luo")
 		# 有钱就复活：战死英雄(有存档、不在场、未在队列) → 按 ORDER 能复几个复几个
 		var revived := false
 		for hk in ECO_HERO_ORDER:
@@ -2058,11 +2064,12 @@ func _eco_train() -> void:
 ## 聚义厅队列里所有「非英雄」项(喽啰)立刻停掉并退还资源——全托管下英雄/复活高于一切，聚义厅专供英雄。
 ## 静默处理(不弹提示/音效)：训练中的队首(index 0)也照停，停后重置队首计时。
 func _eco_clear_hall_nonhero(hall: Unit) -> void:
+	var keep_wood := _eco_wood_short()   # 木荒急救：保留喽啰(伐木工)，别把救命工也一并退了
 	var changed := false
 	var i := 0
 	while i < hall._train_queue.size():
 		var k: String = hall._train_queue[i]
-		if bool(_defs.get(k, {}).get("hero_trainable", false)):
+		if bool(_defs.get(k, {}).get("hero_trainable", false)) or (keep_wood and k == "lou_luo"):
 			i += 1
 			continue
 		var d: Dictionary = _defs.get(k, {})
@@ -2097,11 +2104,17 @@ func _eco_research() -> void:
 				return
 
 
-## 集市贸易：缺金又囤木时，把多余木头换成金（金是后期练兵瓶颈，木头常溢出）。有集市才换。
+## 集市贸易（双向·防经济死锁）：有集市才换。
+## ① 木荒急救(优先)：木紧(库存<金六成或低于地板)且金有富余(留足复活底线) → 卖金换木；
+##    修「有钱却无木 → 建造与补伐木工两停」的硬死锁（全托管常被塔/民居等纯木建筑把木抽干）。
+## ② 缺金囤木：金不足又木溢出 → 卖木换金（金是后期练兵瓶颈，木常溢出）。
 func _eco_trade() -> void:
-	if gold >= 300 or wood < 500:
+	if _eco_first_building("market") == null:
 		return
-	if _eco_first_building("market") != null:
+	if _eco_wood_short() and gold >= TRADE_AMT + _eco_revive_reserve():
+		do_trade("gold")   # 100 金 → 70 木：木荒兜底，绝不动复活底线
+		return
+	if gold < 300 and wood >= 500:
 		do_trade("wood")   # 100 木 → 70 金
 
 

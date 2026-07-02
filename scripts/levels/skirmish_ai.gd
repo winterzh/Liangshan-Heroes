@@ -340,8 +340,14 @@ func _ai_workers(b, delta: float) -> void:
 		nw.order_gather(node)
 
 
-# 金矿采空兜底：自家附近已无金矿、AI 缺金而囤木 → 折木成金（100木→70金，同集市价），防经济硬死锁
+# 经济兜底（双向·防硬死锁）：
+# ① 木荒兜底：缺木而囤金 → 折金成木(100金→70木)，防「有金无木、建造与补伐木工两停」的死锁；
+# ② 金矿采空兜底：自家附近已无金矿、缺金而囤木 → 折木成金(100木→70金，同集市价)。
 func _ai_trade_fallback(b) -> void:
+	if _ai_wood_short(b) and b.faction_gold(_guan()) >= 220.0:
+		if b.faction_spend(_guan(), 100, 0):
+			b.add_resources(0, 70, _guan())
+		return
 	var g = b.nearest_resource(_muster, "gold")
 	if g != null and _muster.distance_to(g.position) < 600.0:
 		return   # 本阵附近还有金矿可采，不折
