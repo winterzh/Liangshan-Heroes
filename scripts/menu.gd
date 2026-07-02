@@ -450,12 +450,12 @@ func _show_1v1() -> void:
 	vlbl.add_theme_font_size_override("font_size", 18)
 	vlbl.add_theme_color_override("font_color", Color("c8b890"))
 	vrow.add_child(vlbl)
-	var vnames := {"conquest": "征服·破营", "regicide": "斩首·杀主帅", "koth": "占山为王·控点"}
+	var vnames := {"conquest": "征服·破营", "regicide": "斩首·杀主帅"}
 	var vstat := Label.new()
 	vstat.add_theme_font_size_override("font_size", 18)
 	vstat.add_theme_color_override("font_color", Color("a9e34b"))
 	vstat.text = "▶ " + String(vnames.get(Campaign.victory_mode, "征服·破营"))
-	for vc in [["征服", "conquest"], ["斩首", "regicide"], ["占山为王", "koth"]]:
+	for vc in [["征服", "conquest"], ["斩首", "regicide"]]:
 		var vb := Button.new()
 		vb.text = vc[0]
 		vb.custom_minimum_size = Vector2(108, 42)

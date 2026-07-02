@@ -68,6 +68,24 @@ const TRAP_CELLS := {
 	"trap_logs": Vector2i(0, 0), "trap_pit": Vector2i(1, 0), "trap_oil": Vector2i(0, 1),
 }
 
+# 立桩贴图 2x2（治疗桩/死神桩/毒桩 + 1 备用格）。无图则 WardFx 退回程序化发光图腾。
+const WARDS_SHEET := "res://assets/wards.png"
+const WARD_CELLS := {
+	"heal": Vector2i(0, 0), "death": Vector2i(1, 0), "poison": Vector2i(0, 1),
+}
+
+# 技能V2道具 2x2（钩镰枪头/红锦套索/换位玉符/缠绕藤蔓）。无图则 BoltFx 等退回程序化光球。
+const KIT2_SHEET := "res://assets/fx_kit2.png"
+const KIT2_CELLS := {
+	"hook": Vector2i(0, 0), "bolt": Vector2i(1, 0), "swap": Vector2i(0, 1), "root": Vector2i(1, 1),
+}
+
+# 弹道/环绕物皮肤 2x2（bolt_art/orbit_art 字段引用：李逵板斧/毒镖/玄冰珠/噩梦黑焰）。
+const ITEMS_SHEET := "res://assets/fx_items.png"
+const ITEM_CELLS := {
+	"axe": Vector2i(0, 0), "poison": Vector2i(1, 0), "ice": Vector2i(0, 1), "dark": Vector2i(1, 1),
+}
+
 # 防御塔朝向 3x3 图集：中心(1,1)=底座/头像，外围 8 格=八方向开火帧。
 # 命名 res://assets/tower_<short>.png。无图则 building_texture 退回 BUILDING_CELLS / 程序化。
 const TOWER_DIR_SHEETS := {
@@ -225,6 +243,9 @@ var _buildings2_tex: Texture2D
 var _buildings3_tex: Texture2D
 var _objects_tex: Texture2D
 var _traps_tex: Texture2D
+var _wards_tex: Texture2D
+var _kit2_tex: Texture2D
+var _items_tex: Texture2D
 var _tower_tex := {}   # 塔 key -> 3x3 朝向贴图(或 null)，惰性加载
 var _cache := {}
 var _terrain_img: Image
@@ -261,6 +282,9 @@ func _ready() -> void:
 	_buildings3_tex = _try_load(BUILDINGS3_SHEET)
 	_objects_tex = _try_load(OBJECTS_SHEET)
 	_traps_tex = _try_load(TRAPS_SHEET)
+	_wards_tex = _try_load(WARDS_SHEET)
+	_kit2_tex = _try_load(KIT2_SHEET)
+	_items_tex = _try_load(ITEMS_SHEET)
 
 
 func _try_load(path: String) -> Texture2D:
@@ -354,6 +378,27 @@ func unit_texture(key: String) -> Texture2D:
 	if not wf.is_empty():
 		return wf[1 % wf.size()]
 	return null
+
+
+## 立桩贴图：style ∈ heal/death/poison → wards.png 对应格；无图返回 null（WardFx 退回程序化图腾）。
+func ward_texture(style: String) -> Texture2D:
+	if _wards_tex == null or not WARD_CELLS.has(style):
+		return null
+	return _atlas(_wards_tex, WARD_CELLS[style], 2, "ward_" + style)
+
+
+## 技能V2道具贴图（hook/bolt/swap/root）。无图返回 null（调用方程序化兜底）。
+func kit2_texture(style: String) -> Texture2D:
+	if _kit2_tex == null or not KIT2_CELLS.has(style):
+		return null
+	return _atlas(_kit2_tex, KIT2_CELLS[style], 2, "kit2_" + style)
+
+
+## 弹道/环绕物皮肤贴图（axe/poison/ice/dark）。无图返回 null（调用方程序化兜底）。
+func item_texture(style: String) -> Texture2D:
+	if _items_tex == null or not ITEM_CELLS.has(style):
+		return null
+	return _atlas(_items_tex, ITEM_CELLS[style], 2, "item_" + style)
 
 
 func building_texture(key: String) -> Texture2D:

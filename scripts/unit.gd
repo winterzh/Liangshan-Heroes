@@ -146,6 +146,20 @@ var slow_aura_r := 0.0
 var _shield := 0.0          # 护盾吸收池：take_damage 先扣盾再扣血
 var _shield_t := 0.0        # 护盾剩余时长（到点清盾）
 var _silence_t := 0.0       # 沉默：>0 时不可主动施法（被动不受影响）
+var _root_t := 0.0          # 缠绕：>0 时不能移动，但可以攻击/施法（DOTA root）
+var _disarm_t := 0.0        # 缴械：>0 时不能普攻，但可以移动/施法（DOTA disarm）
+var _taunt_t := 0.0         # 嘲讽：>0 时被迫攻击 _taunt_src（无视原目标/玩家指令/AI），优先级低于眩晕
+var _taunt_src: Unit = null
+var _channel_t := 0.0       # 引导施法：>0 时定身、不索敌/不普攻（battle._channel_pass 逐 tick 结算）；被眩晕/沉默打断
+var _channel_dur := 0.0     # 引导总时长（画头顶引导进度条用）
+var _invis_t := 0.0         # 主动隐身：>0 时不可被索敌/指向（己方半透可见），攻击/施法即破隐
+var _invis_strike_bonus := 0.0   # 破隐首击的额外纯伤（进入隐身时设定）
+var _invis_strike_pending := 0.0 # 已破隐、待下一击兑现的加成（_attack 设置 → _deal_hit 消费）
+var _hex_t := 0.0           # 变形术(hex)：>0 时画"小猪替身"（沉默+缴械+减速由 apply_hex 一并挂上）
+var _form_t := 0.0          # 变身(transform)：>0 时处于临时形态（燕顺狼形/朱仝龙形）——换攻/攻速/移速/体型/染色
+var _form: Dictionary = {}       # 当前形态修正表（recompute 时叠加 atk/hp/射程；到期还原）
+var _form_backup: Dictionary = {} # 进入变身前的原始 atk_cd/base_speed/radius/modulate（到期恢复）
+var _order_serial := 0      # 指令序号：每次 _enqueue +1（walk-cast 用它检测「玩家又下了新令」即让路）
 var temp_atkspeed := 1.0    # 临时攻速倍率（>1 出手更快），_attack 并入 _cd
 var _temp_atkspeed_t := 0.0
 # 被动衍生（_recompute_hero_stats 每次先重置再按已学被动累加）
@@ -158,6 +172,9 @@ var bash_dur := 0.0
 var on_hit_slow := 0.0      # 攻击附带减速（orb）
 var on_hit_slow_dur := 0.0
 var on_hit_dmg := 0.0       # 攻击附带额外纯伤
+# 易伤（樊瑞 W·摄魂咒）：>0 时本单位受到的一切伤害放大 (1+_dmg_amp) 倍，到点失效
+var _dmg_amp := 0.0
+var _dmg_amp_t := 0.0
 # 冲锋（李逵 W·矢量单击）：蓄力→猛冲，沿途撞伤。窗口期独立于普通状态机。
 var _charge_t := 0.0        # 蓄力倒计时（>0 原地不动）
 var _charge_dash := 0.0     # 冲刺剩余时长（>0 高速平移）
@@ -187,6 +204,9 @@ var _tower_aim := Vector2i(1, 1)   # 防御塔当前朝向格(8 向图)；目标
 var _tower_aim_hold := 0.0  # 朝向保持计时：>0 时即便暂无目标也维持上次开火方向
 var _stuck_t := 0.0
 var _idle_push_t := 0.0     # 进攻方(官军)呆住计时：闲置太久没目标 → 重新攻击移动压向聚义厅
+var manual_order_t := 0.0   # 手动指令保护期(秒)：>0 时托管 AI 不得覆盖玩家刚下的指令
+var _move_retry := 0        # ST_MOVE 路径耗尽重寻计数：同一地点反复重寻视为目的地不可达
+var _move_retry_pos := Vector2.ZERO
 var _last_pos := Vector2.ZERO
 var _combat_cool := 0.0  # 最近交战计时；梁山兵脱战后回血（主场休整）
 var _hit_recent_t := 0.0 # 最近被敌方击中计时（托管磁滞：被打后扩大防区/搜索范围）
@@ -389,6 +409,7 @@ func order_garrison(bld: Unit, queued := false) -> void:
 func _enqueue(o: Dictionary, queued: bool) -> void:
 	if is_building:
 		return
+	_order_serial += 1   # 新指令序号：walk-cast 据此发现「有人下了新令」而让路
 	passive = false
 	_patrolling = false   # 任何新明确指令都终止巡逻
 	if not queued:
@@ -408,6 +429,7 @@ func _done_order() -> void:
 		_begin_amove(far)   # _begin_amove 不改 _patrolling，循环保持
 		return
 	if _queue.is_empty():
+		manual_order_t = 0.0   # 手动指令自然执行完毕 → 立即解除托管保护，AI 无缝接管
 		_state = ST_IDLE
 		return
 	_begin_order(_queue.pop_front())
@@ -628,6 +650,9 @@ func take_damage(d: float, from: Unit = null, crit := false) -> void:
 		return   # 工地虚影：尚未真正起建（工人未到），不可被攻击——「走过去再开始建造」后才挨打
 	if garrisoned:
 		return   # 驻军中：藏在建筑里受庇护，免疫伤害（飞行中的箭/范围技能也打不到；建筑被毁才弹出）
+	# DOTA 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
+	if _dmg_amp > 0.0 and d > 0.0:
+		d *= 1.0 + _dmg_amp
 	# DOTA 护盾：先扣吸收盾，剩余才扣血（盾扣空即失效）
 	if _shield > 0.0 and d > 0.0:
 		var _ab: float = minf(_shield, d)
@@ -816,6 +841,38 @@ func _phys_body(delta: float) -> void:
 			_shield = 0.0
 	if _silence_t > 0.0:
 		_silence_t = maxf(0.0, _silence_t - delta)
+	if _root_t > 0.0:
+		_root_t = maxf(0.0, _root_t - delta)
+		queue_redraw()
+	if _disarm_t > 0.0:
+		_disarm_t = maxf(0.0, _disarm_t - delta)
+		queue_redraw()
+	if _taunt_t > 0.0:
+		_taunt_t = maxf(0.0, _taunt_t - delta)
+		if _taunt_t <= 0.0 or _taunt_src == null or not is_instance_valid(_taunt_src) or _taunt_src.hp <= 0.0:
+			_taunt_t = 0.0
+			_taunt_src = null
+		queue_redraw()
+	if _channel_t > 0.0:
+		_channel_t = maxf(0.0, _channel_t - delta)
+		queue_redraw()
+	if _invis_t > 0.0:
+		_invis_t = maxf(0.0, _invis_t - delta)
+		if _invis_t <= 0.0:
+			modulate.a = 1.0   # 隐身自然结束 → 现形（_stealth_pass 下一帧亦会校正）
+		queue_redraw()
+	if _hex_t > 0.0:
+		_hex_t = maxf(0.0, _hex_t - delta)
+		queue_redraw()
+	if _form_t > 0.0:
+		_form_t = maxf(0.0, _form_t - delta)
+		if _form_t <= 0.0:
+			_end_form()   # 变身到期 → 还原形态
+		queue_redraw()
+	if _dmg_amp_t > 0.0:
+		_dmg_amp_t -= delta
+		if _dmg_amp_t <= 0.0:
+			_dmg_amp = 0.0
 	if _temp_atkspeed_t > 0.0:
 		_temp_atkspeed_t -= delta
 		if _temp_atkspeed_t <= 0.0:
@@ -832,9 +889,18 @@ func _phys_body(delta: float) -> void:
 		queue_redraw()
 	if _giveup_t > 0.0:
 		_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标
+	if manual_order_t > 0.0:
+		manual_order_t = maxf(0.0, manual_order_t - delta)
 
 	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned):
 		_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击
+
+	# 引导施法（凌振轰天连炮等）：定身、不索敌/不移动/不普攻，逐 tick 结算由 battle._channel_pass 负责。
+	# 计时递减已在上面 timer 段完成；被眩晕/沉默/拖走时 _break_channel 会清零本状态。
+	if _channel_t > 0.0:
+		_stepped = false
+		queue_redraw()
+		return
 
 	# 冲锋窗口（李逵 W）：优先于普通状态机。蓄力期原地，冲刺期高速平移撞伤。
 	if _charge_t > 0.0 or _charge_dash > 0.0:
@@ -844,6 +910,10 @@ func _phys_body(delta: float) -> void:
 	if _stun_t > 0.0:
 		_stun_t = maxf(0.0, _stun_t - delta)   # 眩晕（踩地板）：呆立，本帧不索敌/不移动/不攻击
 	else:
+		# 嘲讽(taunt)：dur 内强制锁定并攻击 _taunt_src，压过玩家指令与 AI 大脑（仅上面的眩晕能盖过）
+		if _taunt_t > 0.0 and _taunt_src != null and is_instance_valid(_taunt_src) and _taunt_src.hp > 0.0 and _target != _taunt_src:
+			_target = _taunt_src
+			_state = ST_CHASE
 		match _state:
 			ST_IDLE:
 				if not passive and not is_worker:   # 工人不主动索敌（经典RTS式村民）
@@ -868,7 +938,17 @@ func _phys_body(delta: float) -> void:
 						order_amove(dest)
 			ST_MOVE:
 				if _follow_path(delta):
-					_done_order()
+					# 路径提前耗尽但离目的地还远（被挤出路线/跳点吃光路径导致截断）→ 重新寻路续走。
+					# 与 ST_AMOVE 同款兜底；否则半路转 IDLE 被待机索敌勾走，表现为「走一半回头打两下」。
+					if position.distance_to(_move_retry_pos) > 24.0:
+						_move_retry = 0   # 有实际推进 → 重置计数（长途拥挤行军允许多次重寻）
+					if _has_home and position.distance_to(_home) > 70.0 and _move_retry < 3:
+						_move_retry += 1
+						_move_retry_pos = position
+						var mh := _home
+						_begin_move(mh)
+					else:
+						_done_order()
 			ST_AMOVE:
 				if _target == null:
 					# A 移动时收紧索敌半径：近战只打 ~130px 内、远程保留射程，倾向继续奔向目的地。
@@ -940,7 +1020,12 @@ func _phys_body(delta: float) -> void:
 					ST_AMOVE:
 						_begin_amove(_amove_dest)
 					ST_MOVE:
-						_path_i = mini(_path_i + 1, _path.size())
+						# 整体重寻而非跳点：跳点会把路径吃光、半路「视为到达」转 IDLE（回头打的引信）
+						if _has_home:
+							var wh := _home
+							_begin_move(wh)
+						else:
+							_path_i = mini(_path_i + 1, _path.size())
 					ST_CHASE, ST_GATHER, ST_RETURN:
 						_repath = 0.0
 		else:
@@ -1161,8 +1246,11 @@ func _do_repair(delta: float) -> void:
 		# 维修速度降至原来的 20%（修得更慢；总耗材不变，只是耗时拉长到 5 倍）
 		var rate := bld.max_hp / maxf(float(bld.setup_def.get("build_time", 20.0)) * 0.5, 8.0) * 0.2
 		var dh := rate * delta
-		_repair_g += float(bld.setup_def.get("cost_gold", 0)) * 0.4 / maxf(bld.max_hp, 1.0) * dh
-		_repair_w += float(bld.setup_def.get("cost_wood", 0)) * 0.4 / maxf(bld.max_hp, 1.0) * dh
+		# 维修费改以木为主（金是全程瓶颈、木后期积压）：金份额只摊造价 15%，省下的 25% 金份额
+		# 折成木支付，木本身仍按 40% 摊——总耗材价值不变，大头落在木上，给后期木头一个刚性去向。
+		_repair_g += float(bld.setup_def.get("cost_gold", 0)) * 0.15 / maxf(bld.max_hp, 1.0) * dh
+		_repair_w += (float(bld.setup_def.get("cost_wood", 0)) * 0.4 + float(bld.setup_def.get("cost_gold", 0)) * 0.25) \
+			/ maxf(bld.max_hp, 1.0) * dh
 		var sg := int(_repair_g)
 		var sw := int(_repair_w)
 		if sg > 0 or sw > 0:
@@ -1277,6 +1365,11 @@ func _tower_acquire_hero() -> void:
 
 ## 发起一次攻击：起手挥击动画，伤害延后到挥击命中瞬间结算（含起手预备）
 func _attack() -> void:
+	if _disarm_t > 0.0:
+		return   # 缴械：出不了手（可移动/施法；_cd 不重置，解除后立刻能打）
+	if _invis_t > 0.0:
+		_invis_strike_pending = _invis_strike_bonus   # 破隐突袭：这一击兑现加成
+		_break_invis()
 	_cd = atk_cd / maxf(_drunk_atk * temp_atkspeed * atkspeed_mult, 0.1)   # 攻速：醉酒/临时攻速/被动攻速 → 出手更快
 	_combat_cool = 6.0
 	_lunge = 1.0
@@ -1326,6 +1419,9 @@ func _deal_hit() -> void:
 		Sfx.play(_attack_sfx_name(), -10.0, 0.2, 55)
 		return
 	var dmg := atk * buff_atk * temp_atk + temp_atk_add
+	if _invis_strike_pending > 0.0:
+		dmg += _invis_strike_pending   # 破隐第一击加成（隐身潜行后突袭）
+		_invis_strike_pending = 0.0
 	if t.is_cavalry:
 		dmg *= bonus_vs_cav
 	# 兵种相克（枪>骑>远>步>枪）：克制目标普攻 +10%、被目标克制 −10%。仅作战单位间生效，建筑/资源不参与。
@@ -1464,6 +1560,8 @@ func _acquire(range_override := -1.0) -> void:
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
 				or u.is_resource or u.garrisoned or u.is_captive or u._pending_build or chase_blocked(u):
 			continue
+		if u._invis_t > 0.0:
+			continue   # 主动隐身：完全不可索敌（出手/施法才现形）
 		var d: float = position.distance_to(u.position)
 		var limit := range_cap
 		if u.hidden_in_reeds:
@@ -1475,6 +1573,9 @@ func _acquire(range_override := -1.0) -> void:
 
 
 func _follow_path(delta: float) -> bool:
+	if _root_t > 0.0:
+		_stepped = false
+		return false   # 缠绕：原地定身（不吃掉路点、不算到达），可照常攻击/施法
 	if _path_i >= _path.size():
 		return true
 	var wp := _path[_path_i]
@@ -1559,8 +1660,12 @@ func slot_count() -> int:
 
 
 ## 英雄倍率(改变倍率开启 + 你方英雄)：n=clamp(Campaign.hero_mult,1,3)，1=不变。放大技能范围/CD/伤害/血量。
+## 只在会同步放大敌方的模式生效（驻守/自定义据守/竞技场）——修「驻守战开过倍率后进 1v1，
+## 玩家英雄仍单方面吃 1~3 倍加成而 AI 不吃」的跨模式泄漏。
 func hero_boost_n() -> float:
 	if not is_hero or faction != FACTION_LIANG or not Campaign.scale_on:
+		return 1.0
+	if not (Campaign.skirmish or Campaign.custom_defense or Campaign.arena):
 		return 1.0
 	return clampf(float(Campaign.hero_mult), 1.0, 3.0)
 
@@ -1714,6 +1819,16 @@ func _recompute_hero_stats() -> void:
 				on_hit_slow = float(eff.get("on_hit_slow", 0.0))
 				on_hit_slow_dur = float(eff.get("on_hit_slow_dur", 1.0))
 			on_hit_dmg += float(eff.get("on_hit_dmg", 0.0)) * int(s["rank"])
+			# 技能等级化光环（§3d）：被动声明 aura_power_ranks/aura_radius_ranks → 按当前等级写回单位 aura 字段，
+			# 令固定光环随该被动升级而增强（宋江 song_lead 的 speed_aura_ranks 是同款思路）。
+			if eff.has("aura_power_ranks"):
+				var apr: Array = eff["aura_power_ranks"]
+				if apr.size() > 0:
+					aura_power = float(apr[clampi(int(s["rank"]) - 1, 0, apr.size() - 1)])
+			if eff.has("aura_radius_ranks"):
+				var arr: Array = eff["aura_radius_ranks"]
+				if arr.size() > 0:
+					aura_radius = float(arr[clampi(int(s["rank"]) - 1, 0, arr.size() - 1)])
 			# 林冲·猎骑：被动学了就启用「打骑兵概率吸血」。frac 可按被动等级取数组 cav_ls_frac_ranks。
 			if float(eff.get("cav_ls_chance", 0.0)) > 0.0:
 				cav_ls_chance = float(eff.get("cav_ls_chance", 0.0))
@@ -1732,6 +1847,14 @@ func _recompute_hero_stats() -> void:
 	bonus_vs_cav = float(setup_def.get("bonus_cav", 1.0)) + add_cav
 	if melee_mode:                 # 拔刀近战：射程缩为肉搏（即便升被动也维持近战）
 		atk_range = 27.0           # 必须 <28：否则 _weapon_kind/身姿绘制会按「长枪」阈值画成枪而非刀
+	# 变身(transform)：形态修正叠加在基础数值之上——变身期间任何 recompute（升级/学技能）都保持形态加成
+	if _form_t > 0.0 and not _form.is_empty():
+		var ffrac := (hp / max_hp) if max_hp > 0.0 else 1.0
+		max_hp *= float(_form.get("hp_mult", 1.0))
+		hp = clampf(max_hp * ffrac, 1.0, max_hp)
+		atk *= float(_form.get("atk_mult", 1.0))
+		if _form.has("range"):
+			atk_range = float(_form["range"])
 
 
 ## 已学被动提供的持续回血（如宋江·仁义）
@@ -1919,6 +2042,7 @@ func is_stunned() -> bool:
 func apply_stun(dur: float) -> void:
 	_stun_t = maxf(_stun_t, dur)
 	_target = null
+	_break_channel()   # 眩晕必断引导
 	queue_redraw()
 
 
@@ -1933,6 +2057,141 @@ func apply_shield(amount: float, dur: float) -> void:
 ## DOTA 沉默：dur 秒内不可主动施法（被动不受影响）。
 func apply_silence(dur: float) -> void:
 	_silence_t = maxf(_silence_t, dur)
+	_break_channel()   # 沉默必断引导
+	queue_redraw()
+
+
+## DOTA 缠绕(root)：dur 秒内不能移动，但可以攻击/施法——与眩晕互补的软控。
+func apply_root(dur: float) -> void:
+	_root_t = maxf(_root_t, dur)
+	queue_redraw()
+
+
+## DOTA 缴械(disarm)：dur 秒内不能普攻，但可以移动/施法——克制物理核心的软控。
+func apply_disarm(dur: float) -> void:
+	_disarm_t = maxf(_disarm_t, dur)
+	queue_redraw()
+
+
+## 引导施法开始：定身进入引导态（battle 侧登记 tick 结算）。dur 秒内不可移动/普攻/索敌。
+func _begin_channel_state(dur: float) -> void:
+	_channel_t = dur
+	_channel_dur = dur
+	_target = null   # 放下当前目标，就地引导
+	queue_redraw()
+
+
+## 引导被打断（眩晕/沉默/被拖走）：立即中止——battle._channel_pass 下一帧发现 _channel_t<=0 即停止结算。
+func _break_channel() -> void:
+	if _channel_t > 0.0:
+		_channel_t = 0.0
+		queue_redraw()
+
+
+## DOTA 主动隐身：dur 秒内不可被索敌/指向（己方半透可见）；破隐首击带 strike_bonus 纯伤。
+func apply_invis(dur: float, strike_bonus: float) -> void:
+	_invis_t = maxf(_invis_t, dur)
+	_invis_strike_bonus = strike_bonus
+	modulate.a = 0.35
+	queue_redraw()
+
+
+## 破隐（攻击/施法即现形）：清隐身，并把破隐加成挂到下一击（由 _deal_hit 兑现）。
+func _break_invis() -> void:
+	if _invis_t > 0.0:
+		_invis_t = 0.0
+		modulate.a = 1.0
+		queue_redraw()
+
+
+## DOTA 变身(transform)：dur 秒内换到临时形态——按 form 表改攻/攻速/移速/体型/染色（到期还原）。
+## 无贴图版：靠染色(modulate)+体型(radius)+数值区分形态；atk/hp/射程修正在 _recompute_hero_stats 末尾叠加。
+func apply_form(form: Dictionary, dur: float) -> void:
+	if _form_t <= 0.0:   # 仅首次进入变身时备份原值（重复施放不叠备份）
+		_form_backup = {"atk_cd": atk_cd, "base_speed": base_speed, "radius": radius,
+			"mod_r": modulate.r, "mod_g": modulate.g, "mod_b": modulate.b}
+	_form = form
+	_form_t = dur
+	# 不经 recompute 的部分（攻速/移速/体型/染色）在此直接套用
+	if form.has("atk_cd_mult"):
+		atk_cd = float(_form_backup["atk_cd"]) * float(form["atk_cd_mult"])
+	if form.has("speed_mult"):
+		base_speed = float(_form_backup["base_speed"]) * float(form["speed_mult"])
+	if form.has("radius"):
+		radius = float(form["radius"])
+	if form.has("tint"):
+		var tc: Color = form["tint"]
+		modulate = Color(tc.r, tc.g, tc.b, modulate.a)
+	_recompute_hero_stats()   # 让 atk/血量/射程叠加 form 修正
+	_buff_glow = 1.0
+	queue_redraw()
+
+
+## 变身到期：从备份还原体型/攻速/移速/染色，清形态并重算（recompute 此时不再叠 form 修正）。
+func _end_form() -> void:
+	if not _form_backup.is_empty():
+		atk_cd = float(_form_backup.get("atk_cd", atk_cd))
+		base_speed = float(_form_backup.get("base_speed", base_speed))
+		radius = float(_form_backup.get("radius", radius))
+		modulate = Color(float(_form_backup.get("mod_r", 1.0)), float(_form_backup.get("mod_g", 1.0)), float(_form_backup.get("mod_b", 1.0)), modulate.a)
+	_form = {}
+	_form_backup = {}
+	_form_t = 0.0
+	if is_hero:
+		_recompute_hero_stats()
+	queue_redraw()
+
+
+## DOTA 变形术(hex)：dur 秒内沉默+缴械+大幅减速（组合软控·可反击），并显示"小猪替身"视觉。
+func apply_hex(dur: float) -> void:
+	_hex_t = maxf(_hex_t, dur)
+	apply_silence(dur)
+	apply_disarm(dur)
+	apply_slow(0.35, dur)   # 变形期间步履蹒跚
+	queue_redraw()
+
+
+## DOTA 驱散/净化：hostile=true 清自身增益（樊瑞驱敌方 buff）；false 清自身减益（安道全神医解控）。
+## buff_atk/aura_slow 由 _aura_pass 每帧重算，清了会立即回填，故不在此处理。
+func dispel(hostile: bool) -> void:
+	if hostile:
+		# 清增益：临时攻/攻速/吸血/护盾/加速/隐身
+		temp_atk = 1.0; _temp_atk_t = 0.0
+		temp_atk_add = 0.0; _temp_atk_add_t = 0.0
+		temp_atkspeed = 1.0; _temp_atkspeed_t = 0.0
+		temp_lifesteal = 0.0; _temp_lifesteal_t = 0.0
+		_shield = 0.0; _shield_t = 0.0
+		if temp_speed > 1.0:
+			temp_speed = 1.0; _temp_speed_t = 0.0   # 只清加速（减速归净化）
+		if _invis_t > 0.0:
+			_break_invis()
+	else:
+		# 净化减益：眩晕/缠绕/缴械/沉默/易伤/嘲讽/致盲/减速
+		_stun_t = 0.0
+		_root_t = 0.0
+		_disarm_t = 0.0
+		_silence_t = 0.0
+		_dmg_amp = 0.0; _dmg_amp_t = 0.0
+		_taunt_t = 0.0; _taunt_src = null
+		_blind_t = 0.0
+		if temp_speed < 1.0:
+			temp_speed = 1.0; _temp_speed_t = 0.0   # 只清减速（加速归驱散）
+	queue_redraw()
+
+
+## DOTA 嘲讽(taunt)：dur 秒内被迫攻击 src（无视原目标/玩家指令/AI 大脑）。优先级低于眩晕。
+func apply_taunt(src: Unit, dur: float) -> void:
+	_taunt_t = maxf(_taunt_t, dur)
+	_taunt_src = src
+	if src != null and is_instance_valid(src):
+		order_attack(src)   # 立刻转火
+	queue_redraw()
+
+
+## DOTA 易伤：dur 秒内受到的伤害放大 (1+amp) 倍（取较强者）。樊瑞 W·摄魂咒。
+func apply_dmg_amp(amp: float, dur: float) -> void:
+	_dmg_amp = maxf(_dmg_amp, amp)
+	_dmg_amp_t = maxf(_dmg_amp_t, dur)
 	queue_redraw()
 
 
@@ -2192,6 +2451,24 @@ func _draw() -> void:
 		draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
 	if _buff_glow > 0.0:
 		draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
+	# DOTA 被动/自身增益的持续视觉（只在状态激活时画、粒子≤3，兵海友好）
+	if _shield > 0.0 and not _dying:
+		# 护盾泡：身体外一圈淡蓝半透椭圆 + 搏动高光弧（take_damage 先扣此盾）
+		var shp := 0.55 + 0.45 * sin(_idle_t * 4.0)
+		draw_circle(Vector2.ZERO, radius + 5.0, Color(0.45, 0.72, 1.0, 0.10 + 0.05 * shp))
+		draw_arc(Vector2.ZERO, radius + 6.0, 0.0, TAU, 30, Color(0.6, 0.85, 1.0, 0.45 + 0.3 * shp), 2.0)
+	if (temp_atk > 1.01 or temp_atk_add > 0.0) and not _dying:
+		# 临时攻击增益：手部金红辉光粒子（环绕搏动）
+		var gp := _idle_t * 3.0
+		for gi in range(3):
+			var ga := gp + float(gi) * TAU / 3.0
+			draw_circle(Vector2(cos(ga), sin(ga) * 0.6) * (radius * 0.95), 2.0, Color(1.0, 0.68, 0.24, 0.6))
+	if temp_atkspeed > 1.01 and not _dying:
+		# 临时攻速：身侧双手残影短线
+		var asx := radius * 0.85
+		var aso := sin(_idle_t * 14.0) * 3.0
+		draw_line(Vector2(-asx, aso), Vector2(-asx - 6.0, aso), Color(0.8, 0.9, 1.0, 0.5), 1.6)
+		draw_line(Vector2(asx, -aso), Vector2(asx + 6.0, -aso), Color(0.8, 0.9, 1.0, 0.5), 1.6)
 	# 减速光环（公孙胜 E）：脚下青蓝色范围环
 	if slow_aura_r > 0.0 and not _dying:
 		var pulse := 0.5 + 0.5 * sin(_idle_t * 2.2)
@@ -2201,6 +2478,35 @@ func _draw() -> void:
 	if _phys_immune_t > 0.0 and not _dying:
 		var sp := 0.6 + 0.4 * sin(_idle_t * 7.0)
 		draw_arc(Vector2.ZERO, radius + 6.0, 0.0, TAU, 28, Color(1.0, 0.82, 0.3, 0.85 * sp), 3.0)
+	# 易伤（樊瑞 W·摄魂咒）：脚下暗红咒环 + 体表裂纹红光 + 头顶下垂的摄魂符，标识「受伤大增」
+	if _dmg_amp_t > 0.0 and not _dying:
+		var ap := 0.5 + 0.5 * sin(_idle_t * 5.0)
+		draw_arc(Vector2.ZERO, radius + 4.0, 0.0, TAU, 32, Color(0.9, 0.18, 0.32, 0.45 + 0.4 * ap), 2.4)
+		draw_circle(Vector2(0, -radius * 0.45), radius * 0.55, Color(0.75, 0.1, 0.28, 0.16 * ap))
+		for ai in range(3):   # 环上三点游走的摄魂火
+			var aa := _idle_t * 1.6 + float(ai) * TAU / 3.0
+			draw_circle(Vector2(cos(aa), sin(aa)) * (radius + 4.0), 2.2, Color(1.0, 0.5, 0.55, 0.5 + 0.4 * ap))
+	if _root_t > 0.0 and not _dying:
+		# 缠绕标记：脚下几束藤蔓弧线勾住，随时间轻摆
+		var rp := sin(_idle_t * 6.0) * 2.0
+		for ri in range(4):
+			var ra := float(ri) * TAU / 4.0 + 0.4
+			var rc := Vector2(cos(ra), sin(ra)) * (radius * 0.8)
+			draw_arc(rc + Vector2(0, 2), 5.0 + rp * 0.5, ra + PI * 0.7, ra + PI * 1.7, 8, Color(0.35, 0.72, 0.25, 0.85), 2.2)
+		draw_arc(Vector2(0, 2), radius * 0.9, 0.0, TAU, 24, Color(0.3, 0.6, 0.2, 0.5), 1.6)
+	if _disarm_t > 0.0 and not _dying:
+		# 缴械标记：头顶一把灰色斜杠划掉的小剑
+		var dy := -radius - 12.0 + sin(_idle_t * 4.0)
+		draw_line(Vector2(-4, dy + 4), Vector2(4, dy - 4), Color(0.75, 0.75, 0.78, 0.9), 2.0)
+		draw_line(Vector2(0, dy - 5), Vector2(0, dy + 5), Color(0.6, 0.6, 0.65, 0.9), 2.4)
+		draw_line(Vector2(-5, dy - 5), Vector2(5, dy + 5), Color(0.95, 0.3, 0.25, 0.95), 2.0)
+	if _taunt_t > 0.0 and not _dying:
+		# 嘲讽标记：脚下搏动的红色怒环 + 头顶红色怒气「!」（被迫死战）
+		var tp := 0.5 + 0.5 * sin(_idle_t * 8.0)
+		draw_arc(Vector2.ZERO, radius + 3.0, 0.0, TAU, 28, Color(0.95, 0.2, 0.15, 0.4 + 0.4 * tp), 2.6)
+		var ty2 := -radius - 12.0 + sin(_idle_t * 5.0)
+		draw_line(Vector2(0, ty2 - 6), Vector2(0, ty2 + 1), Color(1.0, 0.25, 0.2, 0.95), 2.8)
+		draw_circle(Vector2(0, ty2 + 5), 1.7, Color(1.0, 0.25, 0.2, 0.95))
 	if inspected and not selected and not _dying:
 		# 查看中的敌方单位：红圈（与己方绿圈区分），只读
 		draw_arc(Vector2.ZERO, radius + 5.0, 0.0, TAU, 28, Color(1.0, 0.4, 0.32, 0.92), 2.5)
@@ -2220,7 +2526,9 @@ func _draw() -> void:
 	var has_walk := not Art.unit_anim_frames(_anim_key(), "walk").is_empty()
 	var as_sprite := not is_building and (tex != null or has_walk)
 	var tint := Color(1.4, 1.2, 1.1) if _flash > 0.0 else Color.WHITE
-	if as_sprite:
+	if _hex_t > 0.0 and not is_building and not _dying:
+		_draw_hex_critter()   # 变形术：以小猪替身取代本体立绘
+	elif as_sprite:
 		_draw_sprite_animated(tex, tint, death_f)
 	elif is_building:
 		_draw_building()
@@ -2272,6 +2580,15 @@ func _draw() -> void:
 			draw_rect(Rect2(cx, by, cw + 1.0, 16), Color("ffd866"), false, 1.0)
 			draw_string(gf, Vector2(cx + 3.0, by + 13.0), str(group_nums[i]), HORIZONTAL_ALIGNMENT_LEFT, cw, 13, Color("ffe9a8"))
 
+	# 引导进度条（凌振轰天连炮等）：头顶一条青蓝色余量条 + 上方脉冲光点（正在引导）
+	if _channel_t > 0.0 and _channel_dur > 0.0 and not _dying:
+		var cf := clampf(_channel_t / _channel_dur, 0.0, 1.0)
+		var cwd := radius * 2.2
+		var cyy := bar_y - 11.0
+		draw_rect(Rect2(-cwd * 0.5 - 1.0, cyy - 1.0, cwd + 2.0, 5.0), Color(0, 0, 0, 0.8))
+		draw_rect(Rect2(-cwd * 0.5, cyy, cwd * cf, 3.0), Color(0.5, 0.82, 1.0, 0.95))
+		var cpz := 0.5 + 0.5 * sin(_idle_t * 12.0)
+		draw_circle(Vector2(0, cyy - 6.0), 2.0 + cpz, Color(0.7, 0.9, 1.0, 0.5 + 0.4 * cpz))
 	# 眩晕：头顶三颗旋转金星（经典「被打懵」标记）
 	if _stun_t > 0.0 and not is_building and not _dying:
 		var syc := bar_y - 16.0
@@ -2291,6 +2608,24 @@ func _draw_star(c: Vector2, rad: float, col: Color) -> void:
 		var rr := rad if i % 2 == 0 else rad * 0.45
 		pts.append(c + Vector2(cos(ang), sin(ang)) * rr)
 	draw_colored_polygon(pts, col)
+
+
+## 变形术替身：把被 hex 的目标画成一只蠢萌小猪（沉默+缴械+减速期间）。屏幕空间（调用处已切 ISO_INV）。
+func _draw_hex_critter() -> void:
+	var bob := sin(_idle_t * 6.0) * 2.0
+	var c := Vector2(0, -8 + bob)
+	var pink := Color(0.98, 0.66, 0.72)
+	draw_circle(c, 9.0, pink)                                        # 身体
+	draw_circle(c + Vector2(-4.5, -6.5), 2.6, pink)                  # 左耳
+	draw_circle(c + Vector2(4.5, -6.5), 2.6, pink)                   # 右耳
+	draw_circle(c + Vector2(0, 1.5), 4.2, Color(0.95, 0.55, 0.62))   # 猪拱嘴
+	draw_circle(c + Vector2(-1.4, 1.5), 0.9, Color(0.4, 0.2, 0.25))
+	draw_circle(c + Vector2(1.4, 1.5), 0.9, Color(0.4, 0.2, 0.25))
+	draw_circle(c + Vector2(-3, -1.5), 1.0, Color(0.15, 0.1, 0.12))  # 眼
+	draw_circle(c + Vector2(3, -1.5), 1.0, Color(0.15, 0.1, 0.12))
+	for i in range(3):                                              # 头顶变形残光
+		var a := _idle_t * 3.0 + float(i) * TAU / 3.0
+		draw_circle(c + Vector2(cos(a) * 12.0, sin(a) * 6.0 - 10.0), 1.4, Color(0.7, 0.5, 0.95, 0.7))
 
 
 func _draw_placeholder() -> void:

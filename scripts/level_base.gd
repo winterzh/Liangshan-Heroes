@@ -35,6 +35,7 @@ func start_gold() -> int: return 0
 func start_wood() -> int: return 0
 func base_pop_cap() -> int: return 0
 func hero_cap() -> int: return 0           # 英雄总数上限（0=不限）；驻守战覆写为 4
+func threat_gates() -> Array: return []    # 敌方固定出兵门（格坐标）；驻守战覆写 → 托管分路防守/陷阱布来路
 func fog_enabled() -> bool: return false   # 战争迷雾（默认关，战役不受影响）
 func start_age() -> int: return 3          # 起始时代：默认 3=全解锁(不分代，据守/战役不受影响)；1v1 覆写为 1 走三代进阶
 # 竞技场沙盒专用：聚义厅「点将」列出全部 108 将(DOTA 改版 kit)；即时成军。默认关——

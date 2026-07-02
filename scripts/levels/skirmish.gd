@@ -101,6 +101,7 @@ func start_wood() -> int: return 150
 func base_pop_cap() -> int: return 20
 func hero_cap() -> int: return int(Campaign.defense_hero_cap)   # 驻守战英雄上限（菜单选：默认 4 / 60关 6）
 func fog_enabled() -> bool: return true
+func threat_gates() -> Array: return GATES   # 官军固定三门来路 → 托管分路防守/陷阱布走廊
 
 func deploy_hint() -> String:
 	return "自由经营：用喽啰采金/伐木、建造营寨、在聚义厅训练英雄。妥当后点「开战」迎击官军。"

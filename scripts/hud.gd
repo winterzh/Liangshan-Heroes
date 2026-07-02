@@ -1119,6 +1119,14 @@ func _refresh_panel() -> void:
 		_arena_troops_btn.visible = in_arena
 	if _arena_random_btn != null:
 		_arena_random_btn.visible = in_arena
+	if in_arena and _arena_troops_btn != null and _arena_random_btn != null:
+		# 移动端左下有编队 1234 chips（约 bottom-234~-166 一条带）：出兵按钮整体上移 92px 让位，
+		# 否则正好叠在 chips 上互相误触；桌面无 chips 维持原位。
+		var lift: float = 92.0 if (_touch_groups != null and _touch_groups.visible) else 0.0
+		_arena_troops_btn.offset_bottom = -(RTSCamera.PANEL_H + 12.0 + lift)
+		_arena_troops_btn.offset_top = _arena_troops_btn.offset_bottom - 38.0
+		_arena_random_btn.offset_bottom = -(RTSCamera.PANEL_H + 54.0 + lift)
+		_arena_random_btn.offset_top = _arena_random_btn.offset_bottom - 38.0
 	if alive.is_empty():
 		_info_name.text = ""
 		_info_hp.text = ""
@@ -1797,14 +1805,49 @@ class CmdButton extends Control:
 				"research": sub = "左键研究科技"
 				"trade": sub = "左键交易"
 				"eject": sub = "驻军全部冲出"
+		var _hide_cost: bool = hud.battle != null and hud.battle.has_method("train_cost_hidden") and hud.battle.train_cost_hidden()
 		var foot := ""
-		if cg > 0 or cw > 0:
+		if (cg > 0 or cw > 0) and not _hide_cost:
 			foot = "花费　金 %d　木 %d" % [cg, cw]
+		# 点将悬浮卡：训练英雄时附上该英雄 4 技能速览（名字·kind·一句说明），点将前先看清 kit
+		if kind == "train":
+			var kit := _train_kit_summary(String(spec.get("key", "")))
+			if kit != "":
+				sub = (sub + "\n" + kit) if sub != "" else kit
 		hud.show_skill_tip(self, get_global_rect(), String(spec.get("label", "")), sub, foot, Color("ffd866"))
 
 	func _on_hover_out() -> void:
 		if hud != null:
 			hud.hide_skill_tip(self)
+
+	const KIND_LABEL := {
+		"smite": "范围", "line_nuke": "直线", "sector_nuke": "扇形", "bolt": "单体弹", "hook": "钩", "pull": "拉",
+		"swap": "换位", "blink": "闪现", "charge": "冲锋", "channel": "引导", "invis": "隐身", "transform": "变身",
+		"summon": "召唤", "ward": "立桩", "shield": "护盾", "rally": "鼓舞", "haste": "加速", "heal_wave": "治疗",
+		"passive": "被动", "chrono": "定身", "fire_dot": "灼烧", "fire_line": "火线", "black_rain": "黑雨",
+		"global_nuke": "全图", "chain_nuke": "连锁", "atkspeed": "狂暴", "self_buff": "自强", "knockback": "击退",
+		"weapon_toggle": "换武", "drag": "拖拽", "fissure": "地裂", "echo": "回响", "orbit_axes": "环刃",
+		"drunk_buff": "醉拳", "drunk_god": "醉神", "slow_aura": "减速环", "ice_wall": "冰墙", "debuff": "削弱",
+	}
+
+	## 点将悬浮卡：某英雄 4 技能速览——每行「Q/W/E/R 技能名〔类别〕」。非英雄/无 abilities → 空串。
+	func _train_kit_summary(key: String) -> String:
+		var d: Dictionary = Defs.UNITS.get(key, {})
+		var abils: Array = d.get("abilities", [])
+		if abils.is_empty():
+			return ""
+		var slots := ["Q", "W", "E", "R"]
+		var lines := PackedStringArray()
+		for i in range(abils.size()):
+			var ad: Dictionary = Defs.ABILITIES.get(String(abils[i]), {})
+			if ad.is_empty():
+				continue
+			var kd := String(ad.get("effect", {}).get("kind", ""))
+			var kl: String = KIND_LABEL.get(kd, kd)
+			var slot: String = slots[i] if i < slots.size() else "·"
+			var pas := "·被动" if bool(ad.get("passive", false)) else ""
+			lines.append("%s %s〔%s%s〕" % [slot, String(ad.get("name", "")), kl, pas])
+		return "\n".join(lines)
 
 	## 返回按钮矢量图标：左指箭头（无专属美术，画干净的几何图标而非汉字）
 	func _draw_back_icon(r: Rect2, col: Color) -> void:
@@ -1861,6 +1904,8 @@ class CmdButton extends Control:
 			accent = Color(0.45, 0.4, 0.62); glyph = "研"
 		elif kind == "train_page":
 			accent = Color(0.4, 0.42, 0.5); glyph = "页"
+		elif kind == "hall_cat":
+			accent = Color(0.5, 0.42, 0.6); glyph = String(spec.get("glyph", "将"))
 		elif kind == "arena_spawn":
 			accent = Color(0.66, 0.28, 0.24); glyph = "敌"
 		elif kind == "trade":
@@ -1900,11 +1945,12 @@ class CmdButton extends Control:
 		# 名称（y 随按钮高度，desktop 88→69、touch 104→85）
 		draw_string(f, Vector2(3, size.y - 19), String(spec.get("label", "")), HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (11 if compact else (15 if big else 13)),
 			Color("ffd866") if aff else Color(0.62, 0.52, 0.4))
-		# 底行：花费；生产/研究中则显示进度
+		# 底行：花费；生产/研究中则显示进度。竞技场沙盒资源无限 → 隐藏金木花费（信息噪声）。
+		var _hide_cost: bool = hud != null and hud.battle != null and hud.battle.has_method("train_cost_hidden") and hud.battle.train_cost_hidden()
 		var info := ""
-		if cg > 0:
+		if cg > 0 and not _hide_cost:
 			info += "金%d " % cg
-		if cw > 0:
+		if cw > 0 and not _hide_cost:
 			info += "木%d" % cw
 		if kind == "eject":
 			info = "驻军全出"
@@ -1916,6 +1962,8 @@ class CmdButton extends Control:
 			info = "点亮后点建筑进驻"
 		elif kind == "cat":
 			info = "▸ 展开"
+		elif kind == "hall_cat":
+			info = String(spec.get("info", "▸ 展开"))
 		elif kind == "back":
 			info = "◂ 返回"
 		elif kind == "train_page":
@@ -1923,7 +1971,7 @@ class CmdButton extends Control:
 		elif kind == "arena_spawn":
 			info = "一键召敌试招"
 		elif kind == "trap":
-			info = ("金%d " % cg if cg > 0 else "") + ("木%d" % cw if cw > 0 else "")
+			info = "" if _hide_cost else (("金%d " % cg if cg > 0 else "") + ("木%d" % cw if cw > 0 else ""))
 		elif kind == "train":
 			var bld = spec.get("bld", null)
 			if is_instance_valid(bld) and not bld._train_queue.is_empty():
@@ -1978,6 +2026,8 @@ class CmdButton extends Control:
 			hud.battle.cancel_train(spec.get("bld", null), int(spec.get("index", -1)))
 		elif kind == "cat":
 			hud.battle._open_worker_cat(String(spec.get("cat", "")))
+		elif kind == "hall_cat":
+			hud.battle.hall_set_cat(String(spec.get("cat", "")))
 		elif kind == "back":
 			hud.battle._worker_back()
 		elif kind == "trap":
@@ -2062,6 +2112,20 @@ class HeroSlotButton extends Control:
 		"wu_fire": "fire", "gongsun_thunder": "thunder", "bai_drug": "drug", "zhang_drag": "wave",
 	}
 
+	# 按效果 kind 回退的技能图标：400+ 生成技能没有专属 token 时用它，避免一律「名称首字」（信息噪声）。
+	const KIND_ICON := {
+		"smite": "k_burst", "line_nuke": "spear", "sector_nuke": "spear", "fissure": "k_burst", "echo": "k_burst", "knockback": "k_burst",
+		"bolt": "k_bolt", "hook": "k_hook", "pull": "k_hook", "swap": "k_swap",
+		"blink": "wing", "charge": "spear", "haste": "wing", "atkspeed": "wing",
+		"global_nuke": "thunder", "chain_nuke": "thunder",
+		"fire_dot": "fire", "fire_line": "fire", "fire_trail": "fire", "black_rain": "fire",
+		"shield": "k_shield", "ice_wall": "k_shield", "self_buff": "star", "passive": "star",
+		"rally": "banner", "heal_wave": "k_heal", "summon": "k_summon", "ward": "k_summon",
+		"chrono": "k_clock", "slow_aura": "wave", "debuff": "k_skull", "hex": "k_skull",
+		"weapon_toggle": "saber", "drag": "wave", "drunk_buff": "drug", "drunk_god": "drug", "orbit_axes": "axe",
+		"channel": "k_aim", "invis": "k_ghost", "transform": "k_beast",
+	}
+
 	func _init() -> void:
 		# 紧凑技能图标：色块徽记 + 技能名；等级/冷却/被动叠在图标上，详细说明走「悬浮说明卡」
 		custom_minimum_size = Vector2(76, 88)
@@ -2132,6 +2196,8 @@ class HeroSlotButton extends Control:
 		var ds := ir.size.x / 52.0
 		draw_rect(ir, col.darkened(0.15) if learned else col.darkened(0.55))
 		var token := String(ICON_TOKENS.get(String(s["id"]), ""))
+		if token == "":   # 无专属图标 → 按 effect.kind 回退到通用类别图标（400+ 生成技能免一律首字）
+			token = String(KIND_ICON.get(String(ad.get("effect", {}).get("kind", "")), ""))
 		if token != "":
 			_draw_ability_icon(token, ir, col, learned)
 		else:
@@ -2265,6 +2331,58 @@ class HeroSlotButton extends Control:
 			"star":  # 被动：四芒星
 				draw_colored_polygon(PackedVector2Array([Vector2(cx, cy - 15), Vector2(cx + 4, cy - 4), Vector2(cx + 15, cy), Vector2(cx + 4, cy + 4), Vector2(cx, cy + 15), Vector2(cx - 4, cy + 4), Vector2(cx - 15, cy), Vector2(cx - 4, cy - 4)]), ink)
 				draw_circle(Vector2(cx, cy), 3.0, ac)
+			"k_burst":  # 爆发/震击：放射星芒
+				for i in range(8):
+					var ba := float(i) * TAU / 8.0
+					draw_line(Vector2(cx, cy) + Vector2(cos(ba), sin(ba)) * 5.0, Vector2(cx, cy) + Vector2(cos(ba), sin(ba)) * 15.0, ac, 2.4)
+				draw_circle(Vector2(cx, cy), 4.0, ink)
+			"k_bolt":  # 单体弹：带尾迹的飞镖
+				draw_line(Vector2(cx - 15, cy + 6), Vector2(cx + 9, cy - 6), ac, 2.0)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx + 16, cy - 10), Vector2(cx + 6, cy - 8), Vector2(cx + 11, cy - 1)]), ink)
+				draw_line(Vector2(cx - 15, cy + 6), Vector2(cx - 18, cy + 9), ac, 1.4)
+			"k_hook":  # 钩镰/钩拉：倒钩
+				draw_line(Vector2(cx - 11, cy - 14), Vector2(cx - 11, cy + 5), ink, 2.4)
+				draw_arc(Vector2(cx - 1, cy + 5), 10.0, deg_to_rad(90), deg_to_rad(300), 16, ac, 2.6)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx - 1, cy - 5), Vector2(cx - 5, cy), Vector2(cx + 3, cy)]), ink)
+			"k_swap":  # 换位：两道对旋弧箭
+				draw_arc(Vector2(cx, cy), 12.0, deg_to_rad(20), deg_to_rad(160), 16, ac, 2.4)
+				draw_arc(Vector2(cx, cy), 12.0, deg_to_rad(200), deg_to_rad(340), 16, ink, 2.4)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx + 12, cy), Vector2(cx + 7, cy - 5), Vector2(cx + 7, cy + 3)]), ac)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx - 12, cy), Vector2(cx - 7, cy + 5), Vector2(cx - 7, cy - 3)]), ink)
+			"k_shield":  # 护盾/冰墙：盾牌
+				draw_colored_polygon(PackedVector2Array([Vector2(cx, cy - 15), Vector2(cx + 13, cy - 9), Vector2(cx + 11, cy + 8), Vector2(cx, cy + 16), Vector2(cx - 11, cy + 8), Vector2(cx - 13, cy - 9)]), ac)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx, cy - 9), Vector2(cx + 7, cy - 5), Vector2(cx + 6, cy + 5), Vector2(cx, cy + 10), Vector2(cx - 6, cy + 5), Vector2(cx - 7, cy - 5)]), ink)
+			"k_heal":  # 治疗：十字
+				draw_rect(Rect2(cx - 4, cy - 13, 8, 26), ac)
+				draw_rect(Rect2(cx - 13, cy - 4, 26, 8), ac)
+			"k_summon":  # 召唤/图腾：兽爪印
+				draw_circle(Vector2(cx, cy + 5), 8.0, ac)
+				for i in range(3):
+					draw_circle(Vector2(cx - 8 + float(i) * 8.0, cy - 8), 3.2, ink)
+			"k_clock":  # 定身/时空：钟面指针
+				draw_arc(Vector2(cx, cy), 14.0, 0.0, TAU, 26, ac, 2.2)
+				draw_line(Vector2(cx, cy), Vector2(cx, cy - 9), ink, 2.0)
+				draw_line(Vector2(cx, cy), Vector2(cx + 7, cy + 2), ink, 2.0)
+			"k_skull":  # 减益/诅咒/变形：骷髅
+				draw_circle(Vector2(cx, cy - 2), 11.0, ac)
+				draw_rect(Rect2(cx - 5, cy + 7, 10, 6), ac)
+				draw_circle(Vector2(cx - 4, cy - 3), 2.4, ink)
+				draw_circle(Vector2(cx + 4, cy - 3), 2.4, ink)
+			"k_aim":  # 引导/炮击：准星
+				draw_arc(Vector2(cx, cy), 13.0, 0.0, TAU, 26, ac, 2.0)
+				draw_line(Vector2(cx - 17, cy), Vector2(cx - 6, cy), ink, 2.0)
+				draw_line(Vector2(cx + 6, cy), Vector2(cx + 17, cy), ink, 2.0)
+				draw_line(Vector2(cx, cy - 17), Vector2(cx, cy - 6), ink, 2.0)
+				draw_line(Vector2(cx, cy + 6), Vector2(cx, cy + 17), ink, 2.0)
+				draw_circle(Vector2(cx, cy), 2.4, ac)
+			"k_ghost":  # 隐身：幽灵
+				draw_colored_polygon(PackedVector2Array([Vector2(cx - 10, cy + 14), Vector2(cx - 10, cy - 4), Vector2(cx, cy - 15), Vector2(cx + 10, cy - 4), Vector2(cx + 10, cy + 14), Vector2(cx + 5, cy + 9), Vector2(cx, cy + 14), Vector2(cx - 5, cy + 9)]), ac)
+				draw_circle(Vector2(cx - 4, cy - 3), 2.2, ink)
+				draw_circle(Vector2(cx + 4, cy - 3), 2.2, ink)
+			"k_beast":  # 变身：兽首獠牙
+				draw_colored_polygon(PackedVector2Array([Vector2(cx - 12, cy - 10), Vector2(cx, cy - 4), Vector2(cx + 12, cy - 10), Vector2(cx + 8, cy + 6), Vector2(cx, cy + 14), Vector2(cx - 8, cy + 6)]), ac)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx - 5, cy + 4), Vector2(cx - 2, cy + 12), Vector2(cx + 1, cy + 4)]), ink)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx + 5, cy + 4), Vector2(cx + 2, cy + 12), Vector2(cx - 1, cy + 4)]), ink)
 		if sc != 1.0:
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 

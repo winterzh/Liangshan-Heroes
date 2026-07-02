@@ -24,9 +24,9 @@ const DIFF := {
 
 # 可训练官军：花费(真实从 AI 私池扣) + 人口 + 抽签权重（defs 里这些兵无 cost 字段，AI 自带账本）
 const TROOPS := [
-	{"key": "guan_dao",  "g": 40, "w": 0,  "pop": 1, "wt": 5},
-	{"key": "guan_gong", "g": 35, "w": 15, "pop": 1, "wt": 3},
-	{"key": "guan_qi",   "g": 60, "w": 20, "pop": 2, "wt": 2},
+	{"key": "guan_dao",  "g": 25, "w": 0,  "pop": 1, "wt": 5},   # 与玩家兵种同步降价(~35%)，保持 1v1 对称
+	{"key": "guan_gong", "g": 22, "w": 12, "pop": 1, "wt": 3},
+	{"key": "guan_qi",   "g": 42, "w": 20, "pop": 2, "wt": 2},
 ]
 const WORKER_G := 45
 const WORKER_POP := 1
@@ -70,6 +70,7 @@ var _build_i := 0
 var _build_cool := 0.0
 var _pending_site: Unit = null   # 当前在建工地：完工/失败前不推进建造序列(防玩家拆工地永久断兵)
 var _pending_builder: Unit = null
+var _rebuilding := false         # 当前工地是否为「被拆重建」：完工时不推进主序列
 var _waves_sent := 0
 var _muster := Vector2.ZERO
 var _started := false
@@ -78,23 +79,20 @@ var _hero_t := 0.0
 var _hero_i := 0
 var _ai_age := 1            # 官军时代：到点按 DIFF.age2/age3 进阶（英雄需2代、攻城需3代）
 var _siege_t := 0.0
-# 胜利条件
-const KOTH_CELL := Vector2i(32, 42)   # 占山为王·中央聚义点（两营之间的陆地）
-const KOTH_R := 150.0
-const KOTH_WIN := 75.0
+var _built: Array = []      # 已建成过的建筑名单 [{key}]：被玩家拆掉 → 重建（原一次性序列「拆一次=永久没了」）
+var _defend_t := 0.0        # 回防判定节流
+# 胜利条件（占山为王 koth 已移除：守点兵与底层「呆住看门狗」互相拉扯、无法稳定控点）
 var _victory := "conquest"
 var _p_king: Unit = null
 var _ai_king: Unit = null
-var _koth_p := 0.0
-var _koth_a := 0.0
 
 
 func _resolve_victory() -> String:
 	var e := OS.get_environment("VICTORY")
-	if e == "conquest" or e == "regicide" or e == "koth":
+	if e == "conquest" or e == "regicide":
 		return e
 	var v: String = String(Campaign.victory_mode) if Campaign.get("victory_mode") != null else "conquest"
-	return v if (v == "conquest" or v == "regicide" or v == "koth") else "conquest"
+	return v if (v == "conquest" or v == "regicide") else "conquest"   # 旧存档里的 koth 一律回落到征服
 
 
 func id() -> String: return "skirmish_ai"
@@ -152,9 +150,6 @@ func decorate(map: GameMap) -> void:
 		["banner", Vector2i(52, 16), 52.0], ["banner", Vector2i(48, 12), 52.0],
 		["rocks", Vector2i(28, 46), 48.0], ["boat", Vector2i(33, 30), 56.0],
 	]
-	if _resolve_victory() == "koth":   # 占山为王：中央聚义点立大旗作标记
-		map.decor.append(["banner", KOTH_CELL, 64.0])
-		map.decor.append(["banner", KOTH_CELL + Vector2i(1, 0), 60.0])
 
 
 func deploy(b) -> void:
@@ -228,9 +223,9 @@ func on_start(b) -> void:
 	_hero_i = 0
 	_ai_age = 1
 	_siege_t = 30.0
+	_built.clear()
+	_defend_t = 8.0
 	_victory = _resolve_victory()
-	_koth_p = 0.0
-	_koth_a = 0.0
 	_assign_ai_workers(b)
 	_started = true
 	b.msg("官军（%s）已在对岸扎营——农民下矿伐木、修寨练兵，先发制人！" % String(_diff["name"]), 4.5)
@@ -254,26 +249,6 @@ func _check_victory(b, delta: float) -> bool:
 			b.lose("主帅宋江阵亡——群龙无首，梁山败了……"); return true
 		if _ai_king == null or not is_instance_valid(_ai_king) or _ai_king.hp <= 0.0:
 			b.win("阵斩高太尉！官军群龙无首、土崩瓦解——梁山大胜！"); return true
-	elif _victory == "koth" and _started:
-		var cp: Vector2 = b.map.cell_to_world(KOTH_CELL)
-		var p_in := 0
-		var a_in := 0
-		for u in b.units:
-			if not is_instance_valid(u) or u.is_building or u.is_resource or u.hp <= 0.0 or u.garrisoned:
-				continue
-			if cp.distance_to(u.position) <= KOTH_R:
-				if u.faction == Unit.FACTION_LIANG:
-					p_in += 1
-				elif u.faction == _guan():
-					a_in += 1
-		if p_in > 0 and a_in == 0:
-			_koth_p += delta
-		elif a_in > 0 and p_in == 0:
-			_koth_a += delta
-		if _koth_p >= KOTH_WIN:
-			b.win("梁山独占聚义点，据山为王——这一场赢了！"); return true
-		if _koth_a >= KOTH_WIN:
-			b.lose("官军牢牢占住聚义点……这一场败了。"); return true
 	# 征服 + 所有模式的底线：破营=胜、破厅=败
 	if hall_dead:
 		b.lose("聚义厅被官军攻破，杏黄旗倒下了……"); return true
@@ -302,6 +277,7 @@ func process(b, delta: float) -> void:
 	_ai_train(b, delta)
 	_ai_heroes(b, delta)
 	_ai_siege(b, delta)
+	_ai_defend(b, delta)
 	_ai_command(b, delta)
 
 
@@ -329,7 +305,15 @@ func _assign_ai_workers(b) -> void:
 func _ai_workers(b, delta: float) -> void:
 	var workers := _guan_workers(b)
 	for w in workers:
-		if is_instance_valid(w) and w.is_idle_worker():
+		if not is_instance_valid(w):
+			continue
+		# 农民避险：被打了就撒腿跑回大营（不再站在矿口挨刀）。到家转闲置后由下面的复采逻辑再派活，
+		# 骚扰者若一直蹲点，农民会跑-回-跑地拉扯，至少不白送；AI 的「死了再补」不再是唯一应对。
+		if w.recently_hit() and is_instance_valid(ai_base) \
+				and w.position.distance_to(ai_base.position) > 140.0 and w._state != Unit.ST_MOVE:
+			w.order_move(b.map.cell_to_world(b.map.nearest_open(AI_BASE + Vector2i(randi_range(-1, 1), randi_range(2, 3)))))
+			continue
+		if w.is_idle_worker():
 			var node = _pick_ai_node(b, w, _count_gold_miners(b) < 2)
 			if node != null:
 				w.order_gather(node)
@@ -410,8 +394,12 @@ func _ai_build(b, delta: float) -> void:
 		if not is_instance_valid(_pending_site) or _pending_site.hp <= 0.0:
 			_pending_site = null            # 工地没了 → 不推进，下面重开本档
 		elif not _pending_site.is_constructing:
+			if _rebuilding:
+				_rebuilding = false         # 重建完工：名单里本就有记录，不追加、不动主序列
+			else:
+				_built.append({"key": String(_pending_site.key)})   # 记入「已建成」名单：日后被拆即重建
+				_build_i += 1
 			_pending_site = null            # 建好了 → 推进
-			_build_i += 1
 			_build_cool = 9.0
 			return
 		else:
@@ -421,7 +409,11 @@ func _ai_build(b, delta: float) -> void:
 					w.order_build(_pending_site)
 					_pending_builder = w
 			return
-	if _build_cool > 0.0 or _build_i >= BUILD_PLAN.size():
+	if _build_cool > 0.0:
+		return
+	if _ai_rebuild_missing(b):   # 已建成建筑被毁 → 先补建（兵营被拆不再等于永久断兵）
+		return
+	if _build_i >= BUILD_PLAN.size():
 		return
 	var e: Dictionary = BUILD_PLAN[_build_i]
 	if int(e.get("age", 1)) > _ai_age:   # 该建筑要更高时代 → 等升代（如攻城作坊需3代）
@@ -439,9 +431,86 @@ func _ai_build(b, delta: float) -> void:
 	var cell: Vector2i = b.map.nearest_open(AI_BASE + e["cell"])
 	_pending_site = b.ai_start_construction(key, cell, _guan(), builder)   # 完工/失败前不推进 _build_i
 	_pending_builder = builder
+	_rebuilding = false   # 主序列工地：完工时正常推进 _build_i（防上一座重建工地半途被拆留下脏标志）
 	_build_cool = 9.0
 	if OS.get_environment("SMOKE_TEST") == "1":
 		print("[ai] build %s @%s t=%.0f" % [key, cell, _elapsed])
+
+
+# 已建成过却不在场的建筑 → 补建一座（挑回原计划里同类建筑的格位，nearest_open 自动避让）。
+# 返回 true=已开工地（本轮建造额度用掉）。
+func _ai_rebuild_missing(b) -> bool:
+	if _built.is_empty():
+		return false
+	var want := {}
+	for rec in _built:
+		var k := String(rec["key"])
+		want[k] = int(want.get(k, 0)) + 1
+	var have := {}
+	for u in b.units_of(_guan()):
+		if is_instance_valid(u) and u.is_building and not u.is_resource and u.hp > 0.0:
+			have[u.key] = int(have.get(u.key, 0)) + 1
+	for k in want:
+		if int(have.get(k, 0)) >= int(want[k]):
+			continue
+		var cg := int(Defs.get_unit(k).get("cost_gold", 0))
+		var cw := int(Defs.get_unit(k).get("cost_wood", 0))
+		if not b.faction_can_afford(_guan(), cg, cw):
+			continue
+		var builder := _free_worker(b)
+		if builder == null:
+			return false
+		var cell: Vector2i = AI_BASE + Vector2i(3, 3)
+		for e in BUILD_PLAN:
+			if String(e["key"]) == String(k):
+				cell = AI_BASE + e["cell"]
+				break
+		if not b.faction_spend(_guan(), cg, cw):
+			return false
+		# 记录保留在 _built 里：重建工地若中途被拆，下一轮仍会判定「缺这座」再补（完工分支不重复追加）
+		_pending_site = b.ai_start_construction(String(k), b.map.nearest_open(cell), _guan(), builder)
+		_pending_builder = builder
+		_rebuilding = true
+		_build_cool = 9.0
+		if OS.get_environment("SMOKE_TEST") == "1":
+			print("[ai] rebuild %s t=%.0f" % [k, _elapsed])
+		return true
+	return false
+
+
+# 回防救家：基地圈(400px)里出现成建制的玩家部队(≥3 作战单位) → 把在外的军队按距离就近召回，
+# 召回量 = 威胁×2+2（不整军回撤，防「3 人偷家钓走 30 人大部队」的钓鱼战术）。
+func _ai_defend(b, delta: float) -> void:
+	_defend_t -= delta
+	if _defend_t > 0.0:
+		return
+	_defend_t = 3.0
+	if ai_base == null or not is_instance_valid(ai_base):
+		return
+	var threat := 0
+	for u in b.units:
+		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and not u.is_building \
+				and not u.is_worker and not u.is_resource and u.hp > 0.0 and not u.garrisoned \
+				and u.position.distance_to(ai_base.position) < 400.0:
+			threat += 1
+	if threat < 3:
+		return
+	var afield: Array = []
+	for u in b.units_of(_guan()):
+		if is_instance_valid(u) and not u.is_building and not u.is_worker and u.hp > 0.0 \
+				and u.position.distance_to(ai_base.position) > 500.0:
+			afield.append(u)
+	if afield.is_empty():
+		return
+	afield.sort_custom(func(a, c): return a.position.distance_to(ai_base.position) < c.position.distance_to(ai_base.position))
+	var n: int = mini(afield.size(), threat * 2 + 2)
+	for i in range(n):
+		var u: Unit = afield[i]
+		u.stance = Unit.STANCE_AGGRO
+		u._has_home = false
+		u.order_amove(ai_base.position + Vector2(randf_range(-70, 70), randf_range(-70, 70)))
+	if OS.get_environment("SMOKE_TEST") == "1":
+		print("[ai] defend! threat=%d recalled=%d t=%.0f" % [threat, n, _elapsed])
 
 
 # 拉一名农民去建造：优先伐木/闲置的(别抓金矿工，金是瓶颈)；实在没有才抓任意非施工工人
@@ -503,15 +572,12 @@ func _ai_heroes(b, delta: float) -> void:
 	_hero_i += 1
 	var cell: Vector2i = b.map.nearest_open(AI_BASE + Vector2i(randi_range(-3, 0), randi_range(2, 4)))
 	var h: Unit = b.spawn_unit(key, _guan(), b.map.cell_to_world(cell))
-	# 经济模式英雄技能默认 rank0 不会放招——给敌将自动学技能(主动 rank2、被动 rank1)，
-	# 四技能由 Battle._enemy_ability_pass 智能施放；被动加成靠 _recompute 生效。
-	for s in range(h.slot_count()):
-		h.ability_slots[s]["rank"] = 1 if bool(h.ability_slots[s]["passive"]) else 2
-	if h.has_method("_recompute_hero_stats"):
-		h._recompute_hero_stats()
+	# 英雄成长对等（conquest 与玩家一致）：敌将同样 1 级出场、靠击杀经验升级——
+	# 经验镜像在 Battle 阵亡结算里，加点走 _enemy_ability_pass 的 _auto_learn，与玩家英雄同一套曲线。
+	# （斩首模式的双方主帅仍由 _seed_hero 开局满配，保持王对王对等。）
 	_garrison(h)
 	_staged.append(h)
-	b.msg("⚔ 官军调来大将【%s】助阵！（四技能）" % h.display_name, 4.0)
+	b.msg("⚔ 官军调来大将【%s】助阵！（与你同样从 1 级练起）" % h.display_name, 4.0)
 	if OS.get_environment("SMOKE_TEST") == "1":
 		print("[ai] hero %s @%s t=%.0f slots=%d" % [key, cell, _elapsed, h.slot_count()])
 
@@ -563,19 +629,11 @@ func _launch_push(b) -> void:
 		return
 	var n: int = mini(pool.size(), _push_size)
 	var army := pool.slice(0, n)
-	# 占山为王：大队去中央聚义点并「守」住它(以点为家，leash 150 把人留在圈内清场)；否则强攻姿态直扑聚义厅
-	var koth: bool = _victory == "koth"
-	var target: Vector2 = b.map.cell_to_world(KOTH_CELL) if koth else (hall.position if is_instance_valid(hall) else b.map.cell_to_world(HALL))
+	var target: Vector2 = hall.position if is_instance_valid(hall) else b.map.cell_to_world(HALL)
 	for u in army:
-		if koth:
-			u.stance = Unit.STANCE_DEFEND   # 守点：清掉圈内玩家单位但不远追，保持占领
-			u._home = target
-			u._has_home = true
-			u.order_amove(target + Vector2(randf_range(-60, 60), randf_range(-60, 60)))
-		else:
-			u.stance = Unit.STANCE_AGGRO
-			u._has_home = false
-			u.order_amove(target + Vector2(randf_range(-80, 80), randf_range(-80, 80)))
+		u.stance = Unit.STANCE_AGGRO
+		u._has_home = false
+		u.order_amove(target + Vector2(randf_range(-80, 80), randf_range(-80, 80)))
 	_staged = pool.slice(n)
 	_push_t = float(_diff["pint"])
 	_push_size = mini(_push_size + int(_diff["grow"]), 44)
@@ -670,8 +728,6 @@ func top_status(b) -> String:
 		var pk := int(_p_king.hp) if (_p_king != null and is_instance_valid(_p_king)) else 0
 		var ak := int(_ai_king.hp) if (_ai_king != null and is_instance_valid(_ai_king)) else 0
 		obj = "【斩首】宋江血%d / 高俅血%d ｜ " % [pk, ak]
-	elif _victory == "koth":
-		obj = "【占山为王】控点 你%d / 官军%d（满%d秒胜） ｜ " % [int(_koth_p), int(_koth_a), int(KOTH_WIN)]
 	return obj + "AI对战(%s·%d代) 官军 %d兵·农%d·待发%d%s ｜ 大营 %d%% ｜ AI 金%d 木%d 口%d/%d ｜ 你 金%d 木%d 口%d/%d ｜ 聚义厅 %d%%" % [
 		String(_diff.get("name", "")), _ai_age, _ai_alive_army(b), _guan_workers(b).size(), _staged.size(), nxt,
 		int(ai_base.hp / ai_base.max_hp * 100.0) if (ai_base != null and is_instance_valid(ai_base)) else 0,

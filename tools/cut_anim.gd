@@ -43,6 +43,15 @@ func _init() -> void:
 	# 陷阱 2x2（均分切·绿幕抠像·逐格居中）→ assets/traps.png（滚木/陷坑/火油 + 备用）
 	if FileAccess.file_exists(SRC_DIR + "/traps_raw.png"):
 		_cut_grid(SRC_DIR + "/traps_raw.png", "res://assets/traps.png", 256, 2, true)
+	# 立桩 2x2（均分切·绿幕抠像·逐格居中）→ assets/wards.png（治疗桩/死神桩/毒桩 + 备用空格）
+	if FileAccess.file_exists(SRC_DIR + "/wards_raw.png"):
+		_cut_grid(SRC_DIR + "/wards_raw.png", "res://assets/wards.png", 256, 2, true)
+	# 技能V2道具 2x2 → assets/fx_kit2.png（钩镰枪头/红锦套索/换位玉符/缠绕藤蔓）
+	if FileAccess.file_exists(SRC_DIR + "/kit2_raw.png"):
+		_cut_grid(SRC_DIR + "/kit2_raw.png", "res://assets/fx_kit2.png", 256, 2, true)
+	# 弹道/环绕物皮肤 2x2 → assets/fx_items.png（板斧/毒镖/玄冰珠/噩梦黑焰）
+	if FileAccess.file_exists(SRC_DIR + "/items_raw.png"):
+		_cut_grid(SRC_DIR + "/items_raw.png", "res://assets/fx_items.png", 256, 2, true)
 	# 新防御塔 2x2（备用静态图集，3x3 朝向图缺失时回退）→ assets/buildings2.png
 	if FileAccess.file_exists(SRC_DIR + "/towers_raw.png"):
 		_cut_grid(SRC_DIR + "/towers_raw.png", "res://assets/buildings2.png", 304, 2, true)

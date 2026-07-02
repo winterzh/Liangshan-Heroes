@@ -8,7 +8,7 @@ class_name Defs
 const UNITS := {
 	# ---- 通用troops / 梁山主将（第5关及复用） ----
 	"song_jiang": {"name": "宋江", "hp": 280, "atk": 18, "cd": 0.9, "range": 26, "speed": 78,
-		"hero": true, "aura": "atk", "aura_r": 170, "aura_p": 1.25, "radius": 13, "ability": "song_rally",
+		"hero": true, "aura": "atk", "aura_r": 210, "aura_p": 1.25, "radius": 13, "ability": "song_rally",
 		"abilities": ["song_rally", "song_meteor", "song_fire", "song_lead"],
 		"hero_trainable": true, "pop": 3, "cost_gold": 160, "cost_wood": 40, "train_time": 38.0, "trained_at": "hall", "min_age": 1, "dota": "Omniknight"},
 	"wu_yong": {"name": "吴用", "hp": 150, "atk": 11, "cd": 1.2, "range": 200, "speed": 78,
@@ -21,12 +21,14 @@ const UNITS := {
 		"ranged": true, "melee_switch": true, "hero": true, "radius": 12, "ability": "hua_shot",
 		"abilities": ["hua_blink", "hua_rain", "hua_pin", "hua_blade"],
 		"hero_trainable": true, "pop": 3, "cost_gold": 152, "cost_wood": 44, "train_time": 36.0, "trained_at": "hall", "min_age": 1, "dota": "Sniper"},
+	# 兵种价 2026-07 rebalance：英雄(150-200金)战力远超同价兵堆 → 全线降兵价约 35% 对齐性价比；
+	# 攻城械(后期兵)改以木为主，给后期积压的木头一个刚性去向。英雄价与复活价保持不动。
 	"liang_dao": {"name": "朴刀手", "hp": 110, "atk": 12, "cd": 1.0, "range": 24, "speed": 72,
-		"pop": 1, "cost_gold": 40, "cost_wood": 10, "train_time": 16.0, "trained_at": "barracks"},
+		"pop": 1, "cost_gold": 25, "cost_wood": 8, "train_time": 16.0, "trained_at": "barracks"},
 	"liang_qiang": {"name": "长枪手", "hp": 115, "atk": 10, "cd": 1.1, "range": 30, "speed": 66, "bonus_cav": 2.2,
-		"pop": 1, "cost_gold": 38, "cost_wood": 18, "train_time": 17.0, "trained_at": "barracks"},
+		"pop": 1, "cost_gold": 24, "cost_wood": 14, "train_time": 17.0, "trained_at": "barracks"},
 	"liang_gong": {"name": "弓手", "hp": 65, "atk": 10, "cd": 1.4, "range": 185, "speed": 74, "ranged": true, "radius": 10,
-		"pop": 1, "cost_gold": 38, "cost_wood": 18, "train_time": 16.0, "trained_at": "barracks"},
+		"pop": 1, "cost_gold": 24, "cost_wood": 14, "train_time": 16.0, "trained_at": "barracks"},
 	"guan_dao": {"name": "官军刀盾兵", "hp": 85, "atk": 9, "cd": 1.0, "range": 24, "speed": 64},
 	"guan_gong": {"name": "官军弓手", "hp": 55, "atk": 7, "cd": 1.4, "range": 165, "speed": 64, "ranged": true, "radius": 10},
 	"guan_qi": {"name": "官军骑兵", "hp": 200, "atk": 13, "cd": 1.0, "range": 26, "speed": 112, "cavalry": true, "radius": 13},
@@ -74,11 +76,11 @@ const UNITS := {
 	# 攻城投石车：射程很远、移速慢；对箭楼 ×3 伤害(仅箭楼，其余建筑/单位无加成)，约 5 下拆一座箭楼。
 	"siege_cata": {"name": "投石车", "hp": 260, "atk": 47, "cd": 3.0, "range": 280, "speed": 32, "ranged": true,
 		"radius": 16, "vs_tower": 3.0, "vs_hero": 0.3, "xp": 30.0,
-		"pop": 3, "cost_gold": 150, "cost_wood": 40, "train_time": 30.0, "trained_at": "siege_workshop", "min_age": 3},
+		"pop": 3, "cost_gold": 100, "cost_wood": 75, "train_time": 30.0, "trained_at": "siege_workshop", "min_age": 3},
 	# 撞车：硬克制攻城——对一切建筑 ×8 巨伤、护甲厚抗箭，但对人只挠痒(atk低)且移速慢，必须有兵护着推。
 	"siege_ram": {"name": "撞车", "hp": 380, "atk": 6, "cd": 2.0, "range": 30, "speed": 30,
 		"radius": 16, "vs_building": 8.0, "vs_hero": 0.3, "xp": 26.0,
-		"pop": 3, "cost_gold": 110, "cost_wood": 70, "train_time": 26.0, "trained_at": "siege_workshop", "min_age": 3},
+		"pop": 3, "cost_gold": 70, "cost_wood": 90, "train_time": 26.0, "trained_at": "siege_workshop", "min_age": 3},
 	"guan_laozi": {"name": "江州牢子", "hp": 80, "atk": 9, "cd": 1.05, "range": 24, "speed": 62, "radius": 11},
 	"cai_jiu": {"name": "蔡九知府", "hp": 260, "atk": 12, "cd": 1.0, "range": 26, "speed": 70,
 		"hero": true, "aura": "atk", "aura_r": 180, "aura_p": 1.2, "radius": 13},
@@ -106,8 +108,8 @@ const UNITS := {
 	"gou_lian": {"name": "钩镰枪手", "hp": 105, "atk": 11, "cd": 1.1, "range": 30, "speed": 68, "bonus_cav": 3.5},
 	"xu_ning": {"name": "徐宁", "hp": 210, "atk": 20, "cd": 0.85, "range": 30, "speed": 80, "hero": true, "bonus_cav": 2.0, "radius": 13, "ability": "xu_drill", "abilities": ["xu_ning_q", "xu_ning_w", "xu_ning_e", "xu_ning_r"], "dota": "Magnus", "hero_trainable": true, "pop": 3, "cost_gold": 175, "cost_wood": 36, "train_time": 40, "trained_at": "hall", "min_age": 1},
 	"hu_yanzhuo": {"name": "呼延灼", "hp": 780, "atk": 53, "cd": 0.8, "range": 30, "speed": 110, "cavalry": true,
-		"hero": true, "aura": "atk", "aura_r": 190, "aura_p": 1.2, "radius": 15, "ability": "hu_whips",
-		"abilities": ["hu_whips", "guan_charge", "guan_valor", "guan_fury"], "dota": "Sven", "hero_trainable": true, "pop": 3, "cost_gold": 205, "cost_wood": 60, "train_time": 43, "trained_at": "hall", "min_age": 1},
+		"hero": true, "aura": "atk", "aura_r": 190, "aura_p": 1.2, "radius": 15, "ability": "hu_yanzhuo_q",
+		"abilities": ["hu_yanzhuo_q", "hu_yanzhuo_w", "hu_yanzhuo_e", "hu_yanzhuo_r"], "dota": "Sven", "hero_trainable": true, "pop": 3, "cost_gold": 205, "cost_wood": 60, "train_time": 43, "trained_at": "hall", "min_age": 1},
 	"tang_long": {"name": "汤隆", "hp": 160, "atk": 12, "cd": 1.2, "range": 160, "speed": 78, "ranged": true, "hero": true, "radius": 12, "abilities": ["tang_long_q", "tang_long_w", "tang_long_e", "tang_long_r"], "dota": "Timbersaw", "hero_trainable": true, "pop": 3, "cost_gold": 190, "cost_wood": 40, "train_time": 40, "trained_at": "hall", "min_age": 1},
 	"han_tao": {"name": "韩滔", "hp": 450, "atk": 42, "cd": 0.9, "range": 26, "speed": 114, "cavalry": true, "hero": true, "radius": 13, "abilities": ["han_tao_q", "han_tao_w", "han_tao_e", "han_tao_r"], "dota": "Shadow Fiend", "hero_trainable": true, "pop": 3, "cost_gold": 205, "cost_wood": 54, "train_time": 44, "trained_at": "hall", "min_age": 1},
 	"peng_qi": {"name": "彭玘", "hp": 450, "atk": 42, "cd": 0.9, "range": 26, "speed": 114, "cavalry": true, "hero": true, "radius": 13, "abilities": ["peng_qi_q", "peng_qi_w", "peng_qi_e", "peng_qi_r"], "dota": "Pudge", "hero_trainable": true, "pop": 3, "cost_gold": 190, "cost_wood": 50, "train_time": 42, "trained_at": "hall", "min_age": 1},
@@ -167,7 +169,7 @@ const UNITS := {
 		"produces": ["liang_dao", "liang_qiang", "liang_gong", "liang_ma"],
 		"researches": ["tech_weapon", "tech_armor"]},
 	"liang_ma": {"name": "梁山马军", "hp": 210, "atk": 15, "cd": 0.95, "range": 26, "speed": 112, "cavalry": true, "radius": 13,
-		"pop": 2, "cost_gold": 60, "cost_wood": 30, "train_time": 22.0, "trained_at": "barracks", "min_age": 2},
+		"pop": 2, "cost_gold": 42, "cost_wood": 30, "train_time": 22.0, "trained_at": "barracks", "min_age": 2},
 	"arrow_tower": {"name": "箭楼", "hp": 700, "atk": 51, "cd": 1.3, "range": 215, "speed": 0, "ranged": true,
 		"building": true, "radius": 20, "buildable": true, "build_cat": "tower", "build_order": 2, "cost_gold": 65, "cost_wood": 30, "build_time": 24.0,
 		"garrison_cap": 5, "min_age": 1},
@@ -229,11 +231,11 @@ const UNITS := {
 	"tong_guan": {"name": "童贯", "hp": 2530, "atk": 56, "cd": 0.9, "range": 30, "speed": 96, "hero": true, "radius": 16,
 		"aura": "atk", "aura_r": 210, "aura_p": 1.2, "ability": "tong_drums", "abilities": ["tong_drums", "guan_fury", "jd_valor"]},
 	"ling_zhen": {"name": "凌振", "hp": 930, "atk": 46, "cd": 2.6, "range": 235, "speed": 60, "ranged": true, "hero": true, "radius": 13,
-		"proj_kind": "fireball", "splash": 38.0, "ability": "ling_cannon", "abilities": ["ling_cannon", "jd_valor"], "dota": "Techies", "hero_trainable": true, "pop": 3, "cost_gold": 200, "cost_wood": 60, "train_time": 42, "trained_at": "hall", "min_age": 1},
+		"proj_kind": "fireball", "splash": 38.0, "ability": "ling_zhen_q", "abilities": ["ling_zhen_q", "ling_zhen_w", "ling_zhen_e", "ling_zhen_r"], "dota": "Techies", "hero_trainable": true, "pop": 3, "cost_gold": 200, "cost_wood": 60, "train_time": 42, "trained_at": "hall", "min_age": 1},
 	"wei_dingguo": {"name": "魏定国", "hp": 1070, "atk": 42, "cd": 2.0, "range": 200, "speed": 84, "ranged": true, "hero": true, "radius": 12,
-		"ability": "wei_fire", "abilities": ["wei_fire", "jd_valor"], "dota": "Batrider", "hero_trainable": true, "pop": 3, "cost_gold": 205, "cost_wood": 55, "train_time": 44, "trained_at": "hall", "min_age": 1},
+		"ability": "wei_dingguo_q", "abilities": ["wei_dingguo_q", "wei_dingguo_w", "wei_dingguo_e", "wei_dingguo_r"], "dota": "Batrider", "hero_trainable": true, "pop": 3, "cost_gold": 205, "cost_wood": 55, "train_time": 44, "trained_at": "hall", "min_age": 1},
 	"shan_tinggui": {"name": "单廷圭", "hp": 1200, "atk": 44, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 14,
-		"ability": "shan_flood", "abilities": ["shan_flood", "jd_valor"], "dota": "Razor", "hero_trainable": true, "pop": 3, "cost_gold": 200, "cost_wood": 60, "train_time": 44, "trained_at": "hall", "min_age": 1},
+		"ability": "shan_tinggui_q", "abilities": ["shan_tinggui_q", "shan_tinggui_w", "shan_tinggui_e", "shan_tinggui_r"], "dota": "Razor", "hero_trainable": true, "pop": 3, "cost_gold": 200, "cost_wood": 60, "train_time": 44, "trained_at": "hall", "min_age": 1},
 	"wen_da": {"name": "闻达", "hp": 1600, "atk": 51, "cd": 1.0, "range": 30, "speed": 92, "hero": true, "radius": 15,
 		"aura": "atk", "aura_r": 170, "aura_p": 1.12, "ability": "jd_lance", "abilities": ["jd_lance", "jd_valor"]},
 	# __DOTA_UNITS_HERE__
@@ -409,7 +411,7 @@ const ABILITIES := {
 		"desc": "指定处腾起烈焰\n地面每秒 20 灼伤，持续 5/8/10 秒(随等级)",
 		"effect": {"kind": "fire_dot", "dps": 20.0, "dur_ranks": [5.0, 8.0, 10.0], "dmg": 100.0, "dur": 5.0}},
 	"song_lead": {"name": "替天行道·仁义", "passive": true, "cd": 25.0, "targeted": false, "radius": 170.0, "color": Color("ffd24a"),
-		"desc": "被动·仁义之名：攻击+3 / 生命+50 / 每秒回血3 / 常驻全军移速光环 +5%/10%/15%(随本技能等级)\n主动·号令众将：所有友方英雄回血(=Q回血量)，宋江 Q 同时转入冷却",
+		"desc": "被动·仁义之名：攻击+3 / 生命+50 / 每秒回血3 / 常驻全军移速光环 +5%/10%/15%(随本技能等级)\n仗义疏财：宋江在场，全军击杀赏金 +25%\n主动·号令众将：所有友方英雄回血(=Q回血量)，宋江 Q 同时转入冷却",
 		"effect": {"kind": "passive", "atk_add": 3.0, "hp_add": 50.0, "regen": 3.0, "speed_aura_ranks": [1.05, 1.10, 1.15], "active_kind": "rally_heroes"}},
 	# 林冲：近战突击
 	"lin_charge": {"name": "豹影冲锋", "cd": 7.0, "targeted": false, "radius": 92.0, "color": Color("e0a24a"),
@@ -456,7 +458,7 @@ const ABILITIES := {
 	# 李逵 Q·双斧回旋：两柄板斧绕身旋飞，持续扫伤减速
 	"li_axes": {"name": "双斧回旋", "cd": 9.0, "targeted": false, "radius": 120.0, "color": Color("ff7744"),
 		"desc": "两柄板斧绕身旋飞 3 秒\n身边官军反复受 {v} 伤害并被减速",
-		"effect": {"kind": "orbit_axes", "dmg": 16.0, "slow": 0.5, "slow_dur": 1.0, "dur": 3.0, "tick": 0.5}},
+		"effect": {"kind": "orbit_axes", "dmg": 16.0, "slow": 0.5, "slow_dur": 1.0, "dur": 3.0, "tick": 0.5, "orbit_art": "axe"}},
 	# 李逵 W·莽撞冲锋（矢量·单击方向）：原地蓄力 1 秒，朝指向猛冲，撞伤沿途
 	"li_charge": {"name": "莽撞冲锋", "cd": 11.0, "targeted": true, "radius": 210.0, "color": Color("ff9a3a"),
 		"desc": "选定方向蓄力 1 秒后猛冲出去\n撞翻沿途官军，受 {v} 伤害并减速",
@@ -529,7 +531,7 @@ const ABILITIES := {
 	# __DOTA_ABILITIES_HERE__
 	# __DOTA_GEN_ABIL_START__
 	"lu_junyi_q": {"name": "枪走龙蛇", "cd": 10, "targeted": false, "radius": 250, "color": Color("ffd24a"), "desc": "玉麒麟舞动银枪化作一阵旋风，绕身横扫四方，期间近敌持续受创并迟滞 {v}。", "effect": {"kind": "orbit_axes", "dmg": 30, "slow": 0.7, "slow_dur": 1.5, "dur": 3, "tick": 0.5}},
-	"lu_junyi_w": {"name": "疗伤金创", "cd": 20, "targeted": true, "radius": 300, "color": Color("a0e8c0"), "desc": "于阵中立下金创结界，周遭弟兄气血缓回、刀法愈疾，护持 {v} 时。", "effect": {"kind": "rally", "heal": 8, "atk_mult": 1.1, "dur": 6}},
+	"lu_junyi_w": {"name": "疗伤金创", "cd": 26, "targeted": true, "radius": 220, "color": Color("a0e8c0"), "desc": "玉麒麟于阵中钉下一根金创疗伤桩，立在原地不断为四周弟兄回血——桩在血不止，可随大军前推再插。", "effect": {"kind": "ward", "ward_mode": "heal", "ward_style": "heal", "ward_radius": 220, "pulse": 1.0, "heal_ranks": [14, 20, 28], "dur_ranks": [14, 16, 18]}},
 	"lu_junyi_e": {"name": "棍棒天下", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "卢俊义棍棒枪法俱为天下无双，出手时有几率施出致命重击。", "effect": {"kind": "passive", "crit_chance": 0.08, "crit_mult": 1.8}},
 	"lu_junyi_r": {"name": "万军取首", "cd": 40, "targeted": true, "radius": 70, "color": Color("ff3322"), "desc": "玉麒麟身形如电连斩数刀，于乱军之中直取敌将首级，爆发巨创 {v}。", "effect": {"kind": "smite", "dmg": 110, "stun": 0.6, "self_lifesteal": 0.8, "self_lifesteal_dur": 3}},
 	"wu_yong_q": {"name": "智珠破阵", "cd": 10, "targeted": true, "radius": 0, "color": Color("8fd3ff"), "desc": "智多星掐指放出一颗流转的智珠，沿线贯穿敌阵，所过者受创 {v} 并迟滞。", "effect": {"kind": "line_nuke", "dmg": 45, "len": 300, "width": 40, "slow": 0.6, "slow_dur": 2}},
@@ -544,8 +546,8 @@ const ABILITIES := {
 	"qin_ming_w": {"name": "落雷殛敌", "cd": 8, "targeted": true, "radius": 50, "color": Color("8fd3ff"), "desc": "凝空一道焦雷直劈落点之敌，轰然炸裂、致创 {v} 并震得对手呆立。", "effect": {"kind": "smite", "dmg": 50, "stun": 0.6}},
 	"qin_ming_e": {"name": "电芒缠身", "cd": 0, "targeted": false, "radius": 0, "color": Color("8fd3ff"), "passive": true, "desc": "秦明周身常绕电芒，每次施法皆有余电外泄，灼伤近旁之敌。", "effect": {"kind": "passive", "on_hit_dmg": 10}},
 	"qin_ming_r": {"name": "雷霆之怒", "cd": 45, "targeted": false, "radius": 0, "color": Color("8fd3ff"), "desc": "霹雳火召动满天雷霆，无论敌军藏于何处皆遭天罚轰顶，全图重创 {v}。", "effect": {"kind": "global_nuke", "dmg": 40, "slow": 0.7, "slow_dur": 1.5}},
-	"hu_yanzhuo_q": {"name": "风雷双鞭", "cd": 11, "targeted": true, "radius": 120, "color": Color("8fd3ff"), "desc": "双鞭呼啸如风雷砸落，将落点之敌尽数砸晕、致创 {v}。", "effect": {"kind": "smite", "dmg": 45, "stun": 1.6}},
-	"hu_yanzhuo_w": {"name": "横扫千军", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "呼延灼鞭势开阔，一鞭抡出余威波及左右，连伤身侧群敌。", "effect": {"kind": "passive", "on_hit_dmg": 12}},
+	"hu_yanzhuo_q": {"name": "风雷双鞭", "cd": 11, "targeted": true, "radius": 120, "color": Color("8fd3ff"), "desc": "双鞭呼啸如风雷砸落，落点之敌受创 {v}、震得踉跄，兵器脱手 2.5 秒打不出招（缴械）。", "effect": {"kind": "smite", "dmg": 45, "stun": 0.8, "disarm": 2.5}},
+	"hu_yanzhuo_w": {"name": "横扫千军", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "呼延灼鞭势开阔，一鞭抡出余威波及左右连伤群敌；连环马阵法愈熟，麾下弟兄攻势愈盛（攻击光环随等级增强）。", "effect": {"kind": "passive", "on_hit_dmg": 12, "aura_power_ranks": [1.14, 1.22, 1.30]}},
 	"hu_yanzhuo_e": {"name": "连环护甲", "cd": 18, "targeted": false, "radius": 250, "color": Color("a0e8c0"), "desc": "以连环马阵法护住周遭弟兄，为其披上一层可挡刀枪的甲气，吸伤 {v}。", "effect": {"kind": "shield", "shield": 150, "dur": 6, "allies": true, "radius": 250}},
 	"hu_yanzhuo_r": {"name": "神威鞭法", "cd": 40, "targeted": false, "radius": 0, "color": Color("ff3322"), "desc": "呼延灼神威贯顶，双鞭之力暴涨，平攻大增 {v} 并大口吸取敌血，持续一阵。", "effect": {"kind": "self_buff", "atk_add": 30, "lifesteal": 0.4, "dur": 8}},
 	"chai_jin_q": {"name": "幽火重锤", "cd": 10, "targeted": true, "radius": 100, "color": Color("6a4fb0"), "desc": "小旋风掷出一记缠着幽火的重锤，砸晕敌众、致创 {v}，余烬尚要灼烧片刻。", "effect": {"kind": "smite", "dmg": 40, "stun": 1.2, "dot_total": 40, "dot_dur": 3}},
@@ -557,18 +559,18 @@ const ABILITIES := {
 	"li_ying_e": {"name": "乱箭攒射", "cd": 12, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "desc": "李应张弓朝前方泼出一片箭雨，扇面之内敌众皆受箭创 {v}。", "effect": {"kind": "sector_nuke", "dmg": 35, "range": 280, "arc": 60, "slow": 0.7, "slow_dur": 1.5}},
 	"li_ying_r": {"name": "百步穿杨", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "扑天雕箭术登峰造极，射程更远、平攻更狠，且时有穿心一箭重创敌将。", "effect": {"kind": "passive", "atk_add": 5, "crit_chance": 0.08, "crit_mult": 1.8, "range_add": 20}},
 	"zhu_tong_q": {"name": "苍龙吐焰", "cd": 11, "targeted": false, "radius": 0, "color": Color("ff7a2a"), "desc": "美髯公催动龙威朝前喷出一道烈焰，扇面之敌尽被灼烧、受创 {v}。", "effect": {"kind": "sector_nuke", "dmg": 40, "range": 280, "arc": 50}},
-	"zhu_tong_w": {"name": "龙尾横扫", "cd": 10, "targeted": true, "radius": 60, "color": Color("ffd24a"), "desc": "一记沉重龙尾横扫落点，将当面之敌击晕在地，致创 {v}。", "effect": {"kind": "smite", "dmg": 35, "stun": 1.5}},
+	"zhu_tong_w": {"name": "龙尾拍击", "cd": 10, "targeted": true, "target": "unit", "radius": 0, "color": Color("ffd24a"), "desc": "美髯公挥龙尾直取一将（单体指向）：拍伤 {v} 并击晕 1.8 秒——先手开团的铁控。", "effect": {"kind": "bolt", "dmg": 35, "stun": 1.8, "proj_speed": 520}},
 	"zhu_tong_e": {"name": "龙血之躯", "cd": 0, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "passive": true, "desc": "朱仝身负龙血，气血雄厚、伤创自愈，临阵愈久愈坚。", "effect": {"kind": "passive", "regen": 3, "hp_add": 80}},
-	"zhu_tong_r": {"name": "神龙化身", "cd": 45, "targeted": false, "radius": 0, "color": Color("ff7a2a"), "desc": "美髯公化身神龙，攻势如疾、出手如电，平攻大涨 {v} 一段时辰。", "effect": {"kind": "atkspeed", "atkspeed": 1.5, "dur": 12, "self_atk": 1.4}},
-	"lu_zhishen_q": {"name": "倒拔垂杨", "cd": 12, "targeted": true, "radius": 0, "color": Color("8a5a2a"), "desc": "花和尚奋力一杖砸地，劈出一道贯穿的地裂，沿线之敌受创 {v} 并被困步。", "effect": {"kind": "line_nuke", "dmg": 40, "len": 320, "width": 36, "slow": 0.5, "slow_dur": 2}},
+	"zhu_tong_r": {"name": "神龙化身", "cd": 45, "targeted": false, "radius": 0, "color": Color("ff7a2a"), "desc": "美髯公化身巨龙 16 秒：龙躯庞大、气血雄浑、爪牙裂金，平攻大涨且愈战愈坚（变身·到期还原）。", "effect": {"kind": "transform", "dur": 16, "form": {"atk_mult": 1.6, "hp_mult": 1.4, "atk_cd_mult": 0.85, "radius": 18.0, "tint": Color(1.2, 0.95, 0.7)}}},
+	"lu_zhishen_q": {"name": "倒拔垂杨", "cd": 13, "targeted": true, "radius": 0, "color": Color("8a5a2a"), "desc": "花和尚奋力一杖砸地，劈出一道贯穿地裂——沿途官军受创 {v} 并被掀晕，裂沟更拱起一道阻路石墙，将去路硬生生截断数息。", "effect": {"kind": "fissure", "dmg": 45, "len": 320, "width": 40, "stun": 1.2, "slow": 0.5, "slow_dur": 2, "wall_dur": 4}},
 	"lu_zhishen_w": {"name": "运禅蓄力", "cd": 9, "targeted": false, "radius": 0, "color": Color("ffd24a"), "desc": "鲁智深运起禅杖之力凝聚一身，接下来几下重击平攻暴增 {v}。", "effect": {"kind": "self_buff", "atk_add": 40, "lifesteal": 0, "dur": 5}},
 	"lu_zhishen_e": {"name": "余震撼地", "cd": 0, "targeted": false, "radius": 0, "color": Color("ff7a2a"), "passive": true, "desc": "禅杖落处地动山摇，每次重击都有几率震晕近旁之敌。", "effect": {"kind": "passive", "bash_chance": 0.2, "bash_dur": 0.8}},
-	"lu_zhishen_r": {"name": "禅杖回音", "cd": 45, "targeted": false, "radius": 280, "color": Color("8a5a2a"), "desc": "花和尚禅杖狠砸大地，激起层层回荡震波撼裂四方，敌越密则伤越重，重创 {v} 并震晕。", "effect": {"kind": "smite", "dmg": 70, "stun": 1.2, "slow": 0.6, "slow_dur": 1.5}},
+	"lu_zhishen_r": {"name": "禅杖回音", "cd": 45, "targeted": false, "radius": 280, "color": Color("8a5a2a"), "desc": "花和尚禅杖狠砸大地，层层回荡震波撼裂四方——身周每多一名敌军，每人便多挨一记回音，敌越密则人人伤越重（基础 {v}）并震晕。", "effect": {"kind": "echo", "dmg": 55, "echo": 16, "stun": 1.2, "slow": 0.5, "slow_dur": 1.5}},
 	"dong_ping_q": {"name": "双枪贯刺", "cd": 8, "targeted": true, "radius": 60, "color": Color("8fd3ff"), "desc": "掷出双枪贯穿落点，刺中者重创并迟滞 {v} 移速。", "effect": {"kind": "smite", "dmg": 50, "slow": 0.5, "slow_dur": 2}},
 	"dong_ping_w": {"name": "幻身遁影", "cd": 12, "targeted": true, "radius": 100.0, "color": Color("a0c8ff"), "desc": "虚晃一枪化作幻影瞬移至指定处，避开围杀。", "effect": {"kind": "blink", "dist": 260, "dmg": 30.0}},
 	"dong_ping_e": {"name": "枪诀疾驰", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("9fd8ff"), "passive": true, "desc": "枪法愈练愈疾，被动提升移速、攻速与攻击。", "effect": {"kind": "passive", "speed_mult": 0.05, "atkspeed_add": 0.1, "atk_add": 3}},
-	"dong_ping_r": {"name": "百枪分身", "cd": 40, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "desc": "枪影重重，召出数名分身助阵，假假真真乱敌阵脚。", "effect": {"kind": "summon", "summon_kind": "phantom", "count": 3, "copy_caster": true, "copy_mult": [0.3, 0.4, 0.5], "dur": 18, "unit": "tiger_summon"}},
-	"zhang_qing_q": {"name": "流星乱坠", "cd": 8, "targeted": false, "radius": 200, "color": Color("c0d8ff"), "desc": "周身飞石如流星骤落，连番砸伤近身之敌。", "effect": {"kind": "smite", "dmg": 40}},
+	"dong_ping_r": {"name": "百枪分身", "cd": 40, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "desc": "枪影重重，董平裂出 3 名与本体一般无二的双枪分身（承本体三~五成战力、半透蓝影现形），真假难辨乱敌阵脚。", "effect": {"kind": "summon", "summon_kind": "phantom", "count": 3, "copy_caster": true, "copy_mult": [0.3, 0.4, 0.5], "dur": 18, "unit": "tiger_summon"}},
+	"zhang_qing_q": {"name": "没羽神石", "cd": 9, "targeted": true, "radius": 0, "color": Color("c0d8ff"), "desc": "没羽箭遥掷一记神石破空直飞，砸中路径上第一个敌人造成 {v} 巨伤并砸晕 1.6 秒——可被走位闪避。", "effect": {"kind": "bolt", "homing": false, "dmg": 60, "stun": 1.6, "proj_speed": 640, "len": 560, "width": 44}},
 	"zhang_qing_w": {"name": "没羽飞石", "cd": 14, "targeted": true, "radius": 40, "color": Color("8fd3ff"), "desc": "远掷一记神石正中目标，重创并定身 {v} 不能动。", "effect": {"kind": "smite", "dmg": 55, "stun": 1.8}},
 	"zhang_qing_e": {"name": "纵身一跃", "cd": 12, "targeted": true, "radius": 100.0, "color": Color("a0e8c0"), "desc": "足尖一点纵跃而出，瞬移腾挪拉开身位。", "effect": {"kind": "blink", "dist": 220, "dmg": 30.0}},
 	"zhang_qing_r": {"name": "月华隐踪", "cd": 40, "targeted": false, "radius": 330, "color": Color("c0d8ff"), "desc": "借月色掩护全军身形，范围友军加速疾行掩袭。", "effect": {"kind": "haste", "speed_mult": 1.5, "dur": 12}},
@@ -580,10 +582,10 @@ const ABILITIES := {
 	"xu_ning_w": {"name": "钩镰激励", "cd": 12, "targeted": false, "radius": 250, "color": Color("ffd24a"), "desc": "传授钩镰枪法，范围友军回血并大涨攻击 {v}。", "effect": {"kind": "rally", "heal": 20, "atk_mult": 1.3, "dur": 25}},
 	"xu_ning_e": {"name": "钩镰穿击", "cd": 14, "targeted": true, "radius": 100.0, "color": Color("a0c8ff"), "desc": "挺枪猛冲，把沿途之敌钩带穿插一线之上。", "effect": {"kind": "charge", "dmg": 50, "windup": 0.3, "dist": 300, "width": 70, "slow": 0.5, "slow_dur": 1.5}},
 	"xu_ning_r": {"name": "天崩枪威", "cd": 40, "targeted": false, "radius": 220, "color": Color("ff7a2a"), "desc": "枪罡爆发将四方之敌尽数卷住定身 {v} 秒。", "effect": {"kind": "smite", "dmg": 40, "stun": 2.5}},
-	"suo_chao_q": {"name": "急锋叱喝", "cd": 10, "targeted": false, "radius": 180, "color": Color("ff3322"), "desc": "急先锋一声暴喝逼敌近身死战，震伤并镇住四周之敌。", "effect": {"kind": "smite", "dmg": 30, "stun": 1.2}},
+	"suo_chao_q": {"name": "急锋叱喝", "cd": 12, "targeted": false, "radius": 180, "color": Color("ff3322"), "desc": "急先锋一声暴喝，逼周围之敌撇下一切与他死战 2 秒，震伤并自披一层硬甲护盾。", "effect": {"kind": "smite", "dmg": 10, "taunt": 2.0, "self_shield": 70, "self_shield_dur": 4.0}},
 	"suo_chao_w": {"name": "战饥追命", "cd": 12, "targeted": true, "radius": 30, "color": Color("ff7a2a"), "desc": "标定一敌穷追猛打，持续灼伤并拖慢其移速。", "effect": {"kind": "smite", "dmg": 15, "dot_total": 80, "dot_dur": 8, "slow": 0.6, "slow_dur": 8}},
 	"suo_chao_e": {"name": "反旋斩", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("ffd24a"), "passive": true, "desc": "大斧旋身回斩，被动赋予暴击与额外攻击。", "effect": {"kind": "passive", "crit_chance": 0.12, "crit_mult": 1.6, "atk_add": 2}},
-	"suo_chao_r": {"name": "斩首", "cd": 30, "targeted": true, "radius": 30, "color": Color("ff3322"), "desc": "一斧定生死，对目标造成 {v} 巨伤，残血者必应声落首。", "effect": {"kind": "smite", "dmg": 120}},
+	"suo_chao_r": {"name": "掷斧斩首", "cd": 30, "targeted": true, "target": "unit", "radius": 0, "color": Color("ff3322"), "desc": "急先锋掷出大斧直取一将首级（单体指向）：{v} 巨伤，残血者必应声落首。", "effect": {"kind": "bolt", "dmg": 120, "proj_speed": 560, "bolt_art": "axe"}},
 	"dai_zong_q": {"name": "神行冲撞", "cd": 14, "targeted": true, "radius": 100.0, "color": Color("8fd3ff"), "desc": "踏甲马疾风千里直撞目标，沿途冲伤并减速。", "effect": {"kind": "charge", "dmg": 55, "windup": 0.4, "dist": 600, "width": 60, "slow": 0.5, "slow_dur": 1.5}},
 	"dai_zong_w": {"name": "推山阔步", "cd": 12, "targeted": false, "radius": 100.0, "color": Color("a0e8c0"), "desc": "运起神行之术阔步如飞，骤增 {v} 移速势不可挡。", "effect": {"kind": "haste", "speed_mult": 1.5, "dur": 6}},
 	"dai_zong_e": {"name": "巨力重击", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("ffd24a"), "passive": true, "desc": "行势带力，平攻有几率震晕敌人、附伤并略增移速。", "effect": {"kind": "passive", "bash_chance": 0.17, "bash_dur": 1, "on_hit_dmg": 10, "speed_mult": 0.04}},
@@ -591,7 +593,7 @@ const ABILITIES := {
 	"liu_tang_q": {"name": "血怒", "cd": 10, "targeted": false, "radius": 100.0, "color": Color("ff3322"), "desc": "赤发鬼血气上涌，狂增攻速 {v} 并提升自身攻击。", "effect": {"kind": "atkspeed", "atkspeed": 1.5, "dur": 9, "self_atk": 1.3}},
 	"liu_tang_w": {"name": "赤血祭", "cd": 12, "targeted": true, "radius": 200, "color": Color("ff3322"), "desc": "洒血结阵，范围内之敌受伤且被噤声 {v} 秒不得施法。", "effect": {"kind": "smite", "dmg": 50, "silence": 3}},
 	"liu_tang_e": {"name": "嗜血", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("ff3322"), "passive": true, "desc": "嗜血成性，被动获得移速、吸血与额外攻击。", "effect": {"kind": "passive", "speed_mult": 0.05, "lifesteal": 0.4, "atk_add": 2}},
-	"liu_tang_r": {"name": "裂血", "cd": 30, "targeted": true, "radius": 30, "color": Color("ff3322"), "desc": "撕裂目标血脉重创 {v}，使其奔走时血流不止、移速大减。", "effect": {"kind": "smite", "dmg": 100, "slow": 0.5, "slow_dur": 3}},
+	"liu_tang_r": {"name": "裂血", "cd": 30, "targeted": true, "target": "unit", "radius": 0, "color": Color("ff3322"), "desc": "撕裂一将血脉（单体指向）：重创 {v}，伤口 6 秒不合——受到的一切伤害大增三成、移速大减。", "effect": {"kind": "bolt", "dmg": 100, "slow": 0.5, "slow_dur": 3, "amp": 0.3, "amp_dur": 6, "proj_speed": 500}},
 	"shi_jin_q": {"name": "无界棍", "cd": 9, "targeted": true, "radius": 100.0, "color": Color("ffd24a"), "desc": "九纹龙抡棍贯出一线棍气，沿途重击并减速。", "effect": {"kind": "line_nuke", "dmg": 50, "len": 320, "width": 80, "slow": 0.5, "slow_dur": 1.5}},
 	"shi_jin_w": {"name": "腾跃", "cd": 8, "targeted": true, "radius": 100.0, "color": Color("a0e8c0"), "desc": "借棍一点腾身跃起，瞬移至指定处突袭或脱身。", "effect": {"kind": "blink", "dist": 240, "dmg": 30.0}},
 	"shi_jin_e": {"name": "金箍精通", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("ffd24a"), "passive": true, "desc": "棍法纯熟，被动获暴击、吸血与额外攻击。", "effect": {"kind": "passive", "crit_chance": 0.1, "crit_mult": 1.8, "lifesteal": 0.5, "atk_add": 3}},
@@ -607,7 +609,7 @@ const ABILITIES := {
 	"li_jun_q": {"name": "怒涛冲击", "cd": 9, "targeted": true, "radius": 50, "color": Color("9fd8ff"), "desc": "卷起一道急流冲砸目标，伤{v}、久缓其行并破其护甲。", "effect": {"kind": "smite", "dmg": 50, "slow": 0.55, "slow_dur": 4, "def_down": 3, "def_down_dur": 4}},
 	"li_jun_w": {"name": "巨鲨甲", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "混江龙皮糙肉厚如鲨甲，气血雄厚、伤口自愈。", "effect": {"kind": "passive", "hp_add": 120, "regen": 3}},
 	"li_jun_e": {"name": "猛锚横扫", "cd": 7, "targeted": false, "radius": 130, "color": Color("8fd3ff"), "desc": "抡起船锚横扫四周，劈伤{v}并削去敌甲。", "effect": {"kind": "smite", "dmg": 36, "def_down": 3, "def_down_dur": 6}},
-	"li_jun_r": {"name": "翻江倒海", "cd": 40, "targeted": false, "radius": 320, "color": Color("6a4fb0"), "desc": "搅动满江波涛掀翻全场敌军，重伤{v}并定身良久。", "effect": {"kind": "smite", "dmg": 90, "stun": 2.4}},
+	"li_jun_r": {"name": "翻江倒海", "cd": 40, "targeted": false, "radius": 320, "color": Color("6a4fb0"), "desc": "混江龙以身为漩搅动满江波涛：周遭敌军越多、浪头砸得越狠（每多一敌回响加伤），重创 {v} 并久震。", "effect": {"kind": "echo", "dmg": 70, "echo": 14, "stun": 1.8, "slow": 0.5, "slow_dur": 2}},
 	"ruan_brother_q": {"name": "踏浪斩", "cd": 9, "targeted": true, "radius": 0, "color": Color("9fd8ff"), "desc": "化作一道水线疾掠而过，沿途劈伤{v}。", "effect": {"kind": "charge", "dmg": 45, "windup": 0.3, "dist": 300, "width": 40}},
 	"ruan_brother_w": {"name": "顺水推舟", "cd": 10, "targeted": true, "radius": 30, "color": Color("8fd3ff"), "desc": "顺势一推化作激流撞击目标，伤{v}并震晕。", "effect": {"kind": "smite", "dmg": 55, "stun": 1.4}},
 	"ruan_brother_e": {"name": "形随水变", "cd": 14, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "desc": "身形如水般凝聚劲力，短时内平攻大增、攻击吸血。", "effect": {"kind": "self_buff", "atk_add": 14, "lifesteal": 0.4, "dur": 10}},
@@ -639,50 +641,50 @@ const ABILITIES := {
 	"xie_zhen_q": {"name": "两头吞吐", "cd": 10, "targeted": true, "radius": 0, "color": Color("ff7a2a"), "desc": "两头蛇一口冰一口火\n朝前喷出扇形毒焰，{v}伤害并减速", "effect": {"kind": "sector_nuke", "dmg": 38, "range": 200, "arc": 60, "slow": 0.55, "slow_dur": 2.5}},
 	"xie_zhen_w": {"name": "寒蛇冰径", "cd": 11, "targeted": true, "radius": 0, "color": Color("9fd8ff"), "desc": "吐出一道寒蛇冰径\n冻住踩上的官军，{v}伤害·阻路减速", "effect": {"kind": "ice_wall", "dmg": 30, "range": 150, "len": 160, "dur": 3}},
 	"xie_zhen_e": {"name": "毒液灼骨", "cd": 9, "targeted": true, "radius": 70, "color": Color("a0e8c0"), "desc": "泼出毒蛇涎液\n落点官军{v}伤害，黏地续灼并迟缓", "effect": {"kind": "smite", "dmg": 28, "dot_total": 24, "dot_dur": 4, "slow": 0.6, "slow_dur": 3}},
-	"xie_zhen_r": {"name": "双头烈焰阵", "cd": 34, "targeted": true, "radius": 0, "color": Color("ff5522"), "desc": "纵一线长焰焚尽来路\n地火延烧8秒，累计{v}重创全队", "effect": {"kind": "fire_dot", "dps": 22, "dur": 8, "dmg": 150}},
+	"xie_zhen_r": {"name": "双头烈焰阵", "cd": 34, "targeted": true, "radius": 60, "color": Color("ff5522"), "desc": "两头蛇朝指向喷出一线长焰焚尽来路\n地火沿直线延烧 8 秒，踏者每秒受灼", "effect": {"kind": "fire_line", "dps": 22, "dur": 8, "len": 340, "patch_r": 60}},
 	"xie_bao_q": {"name": "穿地刺突", "cd": 11, "targeted": true, "radius": 60, "color": Color("d0a060"), "desc": "双尾蝎遁地猛冲\n钻出处沿途官军{v}伤害并被掀翻减速", "effect": {"kind": "charge", "dmg": 36, "windup": 0.4, "dist": 160, "width": 60, "slow": 0.5, "slow_dur": 2}},
 	"xie_bao_w": {"name": "风沙蔽天", "cd": 12, "targeted": false, "radius": 110, "color": Color("c8a850"), "desc": "卷起漫天风沙裹身\n绕身狂沙持续{v}撕割并迷眼减速", "effect": {"kind": "orbit_axes", "dmg": 14, "slow": 0.55, "slow_dur": 1.5, "dur": 5, "tick": 0.5}},
 	"xie_bao_e": {"name": "蝎尾余毒", "cd": 0, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "passive": true, "desc": "被动·尾针淬毒\n每次劈砍附带蚀骨毒伤并拖慢敌身", "effect": {"kind": "passive", "on_hit_dmg": 10, "on_hit_slow": 0.7, "on_hit_slow_dur": 1.5}},
-	"xie_bao_r": {"name": "震地波涛", "cd": 30, "targeted": false, "radius": 180, "color": Color("e0a040"), "desc": "震脚催动地龙翻涌\n大地连环爆裂，{v}重创四周并迟滞官军", "effect": {"kind": "smite", "dmg": 30, "slow": 0.5, "slow_dur": 3}},
+	"xie_bao_r": {"name": "穿地突刺", "cd": 30, "targeted": true, "radius": 0, "color": Color("e0a040"), "desc": "双尾蝎催动地龙贯线穿行\n沿途官军 {v} 重创、被地龙掀上半空僵立", "effect": {"kind": "line_nuke", "dmg": 40, "len": 300, "width": 56, "stun": 1.4}},
 	"yan_qing_q": {"name": "烟障迷踪", "cd": 10, "targeted": true, "radius": 90, "color": Color("8a8a9a"), "desc": "撒一把迷烟障目\n范围官军{v}伤害·噤声闭口、挥刀难中", "effect": {"kind": "smite", "dmg": 18, "silence": 2.5, "blind": 2.5, "slow": 0.6, "slow_dur": 2.5}},
 	"yan_qing_w": {"name": "燕青闪步", "cd": 7, "targeted": true, "radius": 0, "color": Color("9fd8ff"), "desc": "浪子飘身一闪\n瞬现敌后给目标处{v}重击", "effect": {"kind": "blink", "dist": 170, "dmg": 40, "radius": 40}},
 	"yan_qing_e": {"name": "背剑暗算", "cd": 0, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "passive": true, "desc": "被动·相扑暗手\n身法飘忽善避，绕背一击屡屡致命", "effect": {"kind": "passive", "crit_chance": 0.1, "crit_mult": 1.8, "evasion": 0.1}},
-	"yan_qing_r": {"name": "相扑乱花手", "cd": 28, "targeted": false, "radius": 120, "color": Color("ffd24a"), "desc": "隐入烟尘连环擒拿\n绕身疾点四方官军，每跳{v}连绵不绝", "effect": {"kind": "orbit_axes", "dmg": 18, "dur": 4, "tick": 0.4}},
+	"yan_qing_r": {"name": "隐入烟尘", "cd": 30, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "desc": "浪子隐入烟尘无影无踪\n敌军无法锁定，直到他出手；破隐背刺一击致命", "effect": {"kind": "invis", "dur": 8, "strike_bonus": 80}},
 	"zhu_wu_q": {"name": "破法点穴", "cd": 0, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "passive": true, "desc": "被动·神机破法\n指算如刀，每击焚去敌气并回补己身", "effect": {"kind": "passive", "on_hit_dmg": 12, "lifesteal": 0.4}},
 	"zhu_wu_w": {"name": "踏罡步斗", "cd": 8, "targeted": true, "radius": 0, "color": Color("9fd8ff"), "desc": "依阵图踏罡换位\n一步遁出落于指定阵眼", "effect": {"kind": "blink", "dist": 200, "dmg": 30.0}},
 	"zhu_wu_e": {"name": "八阵护身", "cd": 12, "targeted": false, "radius": 0, "color": Color("ffd24a"), "desc": "布奇门遁甲护身\n结一道挡灾护罡，吸{v}伤害", "effect": {"kind": "shield", "shield": 180, "dur": 6}},
 	"zhu_wu_r": {"name": "夺魂神机", "cd": 32, "targeted": true, "radius": 80, "color": Color("6a4fb0"), "desc": "算尽敌命门一击\n落点官军{v}雷霆爆杀并被定身", "effect": {"kind": "smite", "dmg": 120, "stun": 1.6}},
 	"huang_xin_q": {"name": "镇山慑魄", "cd": 10, "targeted": true, "radius": 80, "color": Color("6a4fb0"), "desc": "镇三山一声厉喝\n落点官军{v}伤害·破甲削力士气尽丧", "effect": {"kind": "smite", "dmg": 22, "def_down": 6, "def_down_dur": 6, "slow": 0.6, "slow_dur": 3}},
 	"huang_xin_w": {"name": "吸髓夺神", "cd": 9, "targeted": true, "radius": 55, "color": Color("8a3a6a"), "desc": "锁喉夺其精血\n目标处官军{v}重伤，回补自身血气", "effect": {"kind": "smite", "dmg": 48, "self_lifesteal": 1, "self_lifesteal_dur": 4}},
-	"huang_xin_e": {"name": "黑甜噩梦", "cd": 12, "targeted": true, "radius": 60, "color": Color("4a3a6a"), "desc": "施梦魇咒令昏睡\n落点官军{v}伤害并僵立无措", "effect": {"kind": "smite", "dmg": 20, "stun": 1.8}},
+	"huang_xin_e": {"name": "黑甜噩梦", "cd": 12, "targeted": true, "target": "unit", "radius": 0, "color": Color("4a3a6a"), "desc": "掷一道梦魇黑焰缠上一将（单体指向）：{v} 伤并昏睡 2.2 秒僵立无措——点谁谁睡。", "effect": {"kind": "bolt", "dmg": 20, "stun": 2.2, "proj_speed": 440, "bolt_art": "dark"}},
 	"huang_xin_r": {"name": "锁魂噩缚", "cd": 36, "targeted": true, "radius": 60, "color": Color("3a2a5a"), "desc": "十指扣魂死缚\n目标处官军{v}噬骨剧痛·禁声久缚动弹不得", "effect": {"kind": "smite", "dmg": 90, "stun": 2.6, "silence": 2.6}},
-	"sun_li_q": {"name": "病尉迟掷鞭", "cd": 10, "targeted": true, "radius": 50, "color": Color("d08050"), "desc": "钢鞭裹混沌之力掷出\n目标处官军{v}伤害·随手势或轻或重眩晕", "effect": {"kind": "smite", "dmg": 40, "stun": 1.8}},
+	"sun_li_q": {"name": "病尉迟掷鞭", "cd": 10, "targeted": true, "target": "unit", "radius": 0, "color": Color("d08050"), "desc": "钢鞭裹混沌之力掷向一将（单体指向）\n{v} 伤害·缠身眩晕 1.8 秒", "effect": {"kind": "bolt", "dmg": 40, "stun": 1.8, "proj_speed": 480}},
 	"sun_li_w": {"name": "裂地突阵", "cd": 9, "targeted": true, "radius": 45, "color": Color("8a5fb0"), "desc": "撕开战阵瞬步贴敌\n现身落点{v}伤害·撕甲拖慢官军", "effect": {"kind": "blink", "dist": 160, "dmg": 32, "slow": 0.55, "slow_dur": 2.5}},
 	"sun_li_e": {"name": "混世悍力", "cd": 0, "targeted": false, "radius": 0, "color": Color("d0a060"), "passive": true, "desc": "被动·尉迟蛮力\n钢鞭乱劈时有重击暴伤，并吮血回身", "effect": {"kind": "passive", "crit_chance": 0.12, "crit_mult": 1.7, "lifesteal": 0.5}},
 	"sun_li_r": {"name": "登州马军幻阵", "cd": 38, "targeted": false, "radius": 0, "color": Color("9a6fd0"), "desc": "幻分数骑同形而战\n召出三道分身助阵{v}秒，齐冲乱敌", "effect": {"kind": "summon", "unit": "tiger_summon", "count": 3, "summon_kind": "rider", "copy_caster": true, "copy_mult": [0.5, 0.55, 0.6], "dur": 22}},
 	"xuan_zan_q": {"name": "顿马踏阵", "cd": 11, "targeted": false, "radius": 110, "color": Color("d0a060"), "desc": "丑郡马勒马顿蹄\n身边官军{v}伤害·铁蹄震得人仰马翻", "effect": {"kind": "smite", "dmg": 26, "stun": 1.6}},
-	"xuan_zan_w": {"name": "舍身双刃", "cd": 8, "targeted": true, "radius": 50, "color": Color("ff5522"), "desc": "拼着自损猛劈一刀\n目标处官军{v}毁伤，势大力沉", "effect": {"kind": "smite", "dmg": 55}},
+	"xuan_zan_w": {"name": "郡马冲撞", "cd": 10, "targeted": true, "radius": 60, "color": Color("ff5522"), "desc": "丑郡马纵马猛冲一线\n沿途官军{v}撞伤·人仰马翻迟滞难行", "effect": {"kind": "charge", "dmg": 45, "windup": 0.4, "dist": 260, "width": 64, "slow": 0.5, "slow_dur": 2}},
 	"xuan_zan_e": {"name": "铁骑反击", "cd": 0, "targeted": false, "radius": 0, "color": Color("c0a060"), "passive": true, "desc": "被动·郡马蛮筋\n体魄雄健生命大增，挨打必反震伤来犯者", "effect": {"kind": "passive", "hp_add": 120, "on_hit_dmg": 10}},
 	"xuan_zan_r": {"name": "千骑奔腾", "cd": 34, "targeted": false, "radius": 220, "color": Color("ffd24a"), "desc": "号令全军纵马狂奔\n周围梁山兵移速暴涨{v}秒，踏平来路", "effect": {"kind": "haste", "speed_mult": 1.7, "dur": 6}},
 	"hao_siwen_q": {"name": "霜爆破阵", "cd": 10, "targeted": true, "radius": 100, "color": Color("9fd8ff"), "desc": "井木犴呼出寒星\n落点炸开{v}冰伤，霜气漫地大减官军步速", "effect": {"kind": "smite", "dmg": 32, "slow": 0.5, "slow_dur": 3}},
-	"hao_siwen_w": {"name": "寒冰锁体", "cd": 11, "targeted": true, "radius": 55, "color": Color("9fd8ff"), "desc": "冻封目标处官军\n冰枷困身{v}伤害·续冻刺骨动弹不得", "effect": {"kind": "smite", "dmg": 24, "dot_total": 30, "dot_dur": 3, "stun": 1.8}},
+	"hao_siwen_w": {"name": "寒冰锁体", "cd": 11, "targeted": true, "target": "unit", "radius": 0, "color": Color("9fd8ff"), "desc": "掷出玄冰珠冻缚一将（单体指向）：{v} 伤、冰枷缠足 1.8 秒动弹不得（仍可反击）、余寒续冻刺骨。", "effect": {"kind": "bolt", "dmg": 24, "dot_total": 30, "dot_dur": 3, "root": 1.8, "proj_speed": 430, "bolt_art": "ice"}},
 	"hao_siwen_e": {"name": "玄机护气", "cd": 0, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "passive": true, "desc": "被动·星宿护体\n气血绵长自愈不息，筋骨愈发坚厚", "effect": {"kind": "passive", "regen": 4, "hp_add": 100}},
 	"hao_siwen_r": {"name": "极寒冰封原", "cd": 40, "targeted": false, "radius": 150, "color": Color("9fd8ff"), "desc": "周天寒气倾泻而下\n绕身极寒连环炸裂{v}，封冻整片官军", "effect": {"kind": "orbit_axes", "dmg": 18, "slow": 0.45, "slow_dur": 1.5, "dur": 5, "tick": 0.5}},
 	"han_tao_q": {"name": "百胜枪贯阵", "cd": 8, "targeted": true, "radius": 0, "color": Color("3a3a4a"), "desc": "百胜将一枪荡出\n前方直线官军尽数{v}贯穿、势不可挡", "effect": {"kind": "line_nuke", "dmg": 40, "len": 180, "width": 60, "slow": 0.5, "slow_dur": 1.5}},
 	"han_tao_w": {"name": "聚魂蓄锐", "cd": 0, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "passive": true, "desc": "被动·摄魂炼锐\n每战吞噬亡魂，枪势日盛、枪尖噬血", "effect": {"kind": "passive", "atk_add": 4, "on_hit_dmg": 8}},
 	"han_tao_e": {"name": "煞气慑敌", "cd": 10, "targeted": true, "radius": 100, "color": Color("4a3a5a"), "desc": "周身煞气压顶\n落点官军{v}伤害·甲胄崩裂胆气尽丧", "effect": {"kind": "smite", "dmg": 22, "def_down": 7, "def_down_dur": 6}},
 	"han_tao_r": {"name": "群魂索命阵", "cd": 34, "targeted": false, "radius": 170, "color": Color("3a2a4a"), "desc": "尽放积蓄之亡魂\n四面群魂齐扑{v}爆杀，扑者皆被缠住迟滞", "effect": {"kind": "smite", "dmg": 32, "slow": 0.5, "slow_dur": 2.5, "stun": 0.8}},
-	"peng_qi_q": {"name": "钩镰拖钩", "cd": 11, "targeted": true, "radius": 24, "color": Color("9a6a3a"), "desc": "甩出钩镰枪贯线而出，钩中敌将便{v}伤拖回身前并短暂踉跄。", "effect": {"kind": "pull", "dmg": 50, "len": 300, "width": 24, "pull_dist": 300, "stun": 0.8}},
+	"peng_qi_q": {"name": "钩镰拖钩", "cd": 11, "targeted": true, "radius": 24, "color": Color("9a6a3a"), "desc": "甩出钩镰枪贯线而出，链条铮铮——钩中第一个敌人便 {v} 伤拖回身前，短暂踉跄任你处置。", "effect": {"kind": "hook", "dmg": 50, "len": 320, "width": 26, "stun": 0.8, "proj_speed": 540}},
 	"peng_qi_w": {"name": "缠斗腐毒", "cd": 8, "targeted": false, "radius": 90, "color": Color("6a8f3a"), "desc": "周身瘴毒翻滚，近身者每跳受{v}腐伤并被拖滞。", "effect": {"kind": "orbit_axes", "dmg": 18, "slow": 0.7, "slow_dur": 0.4, "dur": 4, "tick": 0.5}},
 	"peng_qi_e": {"name": "厚甲横肉", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("888888"), "passive": true, "desc": "杀伐越多血肉越厚，每级永久增{v}气血并缓缓自愈。", "effect": {"kind": "passive", "hp_add": 120, "regen": 1.5}},
 	"peng_qi_r": {"name": "分筋断尸", "cd": 30, "targeted": true, "radius": 30, "color": Color("ff3322"), "desc": "擒住一敌将寸寸分解，{v}重伤兼定身，自身大量回吸血气。", "effect": {"kind": "smite", "dmg": 90, "stun": 2, "self_lifesteal": 0.8, "self_lifesteal_dur": 3}},
 	"shan_tinggui_q": {"name": "圣水雷环", "cd": 8, "targeted": true, "radius": 240, "color": Color("8fd3ff"), "desc": "激水化雷扩成一环，环过处{v}伤并裹足难行。", "effect": {"kind": "smite", "dmg": 36, "slow": 0.6, "slow_dur": 1.5}},
-	"shan_tinggui_w": {"name": "引电吸雷", "cd": 12, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "desc": "牵起电链夺敌之锋，自身平攻增{v}并附吸血一段。", "effect": {"kind": "self_buff", "atk_add": 14, "lifesteal": 0.6, "dur": 6}},
+	"shan_tinggui_w": {"name": "圣水连雷", "cd": 12, "targeted": true, "radius": 0, "color": Color("8fd3ff"), "desc": "圣水将军引水为引、纵雷而出：雷光在敌群间逐个弹跳，每跳递减，初击 {v}。", "effect": {"kind": "chain_nuke", "dmg": 34, "jumps": 5, "jump": 180, "falloff": 0.85}},
 	"shan_tinggui_e": {"name": "涌动疾雷", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "passive": true, "desc": "雷气贯体，每级被动增攻速并略提移速。", "effect": {"kind": "passive", "atkspeed_add": 0.12, "speed_mult": 1.06}},
 	"shan_tinggui_r": {"name": "风暴之眼", "cd": 40, "targeted": false, "radius": 120, "color": Color("8fd3ff"), "desc": "召一片雷暴随身游走，域内敌将持续遭{v}雷击并迟缓。", "effect": {"kind": "orbit_axes", "dmg": 30, "slow": 0.7, "slow_dur": 0.5, "dur": 6, "tick": 0.8}},
 	"wei_dingguo_q": {"name": "黏油神火", "cd": 7, "targeted": true, "radius": 110, "color": Color("ff7a2a"), "desc": "泼洒火油裹身，{v}伤并引燃成片地火，被沾者迟缓。", "effect": {"kind": "smite", "dmg": 30, "dot_total": 40, "dot_dur": 4, "slow": 0.7, "slow_dur": 1.5}},
 	"wei_dingguo_w": {"name": "烈焰爆裂", "cd": 12, "targeted": true, "radius": 120, "color": Color("ff7a2a"), "desc": "掷火球轰然炸开，{v}伤将四周敌将震飞推离。", "effect": {"kind": "knockback", "dmg": 40, "push": 120, "radius": 120, "slow": 0.6, "slow_dur": 1.5}},
-	"wei_dingguo_e": {"name": "火萤流", "cd": 16, "targeted": false, "radius": 100.0, "color": Color("ff7a2a"), "desc": "纵火驰骋，身后拖出一道长燃火径，踏者持续受灼。", "effect": {"kind": "black_rain", "follow": true, "dps_ranks": [14, 18, 22], "dur_ranks": [5, 6, 7], "dmg": 0, "dur": 6}},
+	"wei_dingguo_e": {"name": "火萤流", "cd": 16, "targeted": false, "radius": 100.0, "color": Color("ff7a2a"), "desc": "神火将军纵火驰骋，此后每行一步都在脚下落下一段地火，连成一条长燃火尾——官军追来踏入便持续受灼。", "effect": {"kind": "fire_trail", "dps_ranks": [14, 18, 22], "dur_ranks": [5, 6, 7], "drop": 0.3, "patch_dur": 2.0, "patch_r": 50}},
 	"wei_dingguo_r": {"name": "火索擒拿", "cd": 30, "targeted": true, "radius": 24, "color": Color("ff3322"), "desc": "甩出火绳缚住一敌将拖至近前，{v}重伤兼长时定身。", "effect": {"kind": "pull", "dmg": 60, "len": 260, "width": 24, "pull_dist": 200, "stun": 2.5}},
 	"xiao_rang_q": {"name": "圣手挥毫", "cd": 9, "targeted": true, "radius": 60, "color": Color("ffd24a"), "desc": "凝神蓄笔一挥而下，正气化光成线贯敌，沿途{v}伤。", "effect": {"kind": "line_nuke", "dmg": 55, "len": 300, "width": 60}},
 	"xiao_rang_w": {"name": "灵泉回真", "cd": 12, "targeted": false, "radius": 200, "color": Color("a0e8c0"), "desc": "书符引灵泉普润，范围友军回{v}血并短时增攻。", "effect": {"kind": "rally", "heal": 90, "atk_mult": 1.2, "dur": 6}},
@@ -690,10 +692,10 @@ const ABILITIES := {
 	"xiao_rang_r": {"name": "化灵神笔", "cd": 40, "targeted": false, "radius": 240, "color": Color("ffd24a"), "desc": "笔走龙蛇灵化全军，范围友军大幅增攻速与移速。", "effect": {"kind": "atkspeed", "atkspeed": 1.5, "allies": true, "radius": 240, "speed_mult": 1.2, "dur": 8}},
 	"pei_xuan_q": {"name": "禁言判咒", "cd": 12, "targeted": true, "radius": 30, "color": Color("6a4fb0"), "desc": "落下判词封口，{v}伤并久久禁声，持续侵蚀心神。", "effect": {"kind": "smite", "dmg": 30, "silence": 3, "dot_total": 50, "dot_dur": 5}},
 	"pei_xuan_w": {"name": "智慧之刃", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "passive": true, "desc": "胸藏律例化作锋刃，每次出手附加{v}法术真伤。", "effect": {"kind": "passive", "on_hit_dmg": 12, "atk_add": 3}},
-	"pei_xuan_e": {"name": "一言定谳", "cd": 14, "targeted": true, "radius": 200, "color": Color("6a4fb0"), "desc": "铁面一拍木案，{v}伤并令成片敌将四载禁声。", "effect": {"kind": "smite", "dmg": 40, "silence": 4}},
-	"pei_xuan_r": {"name": "满堂封口", "cd": 45, "targeted": true, "radius": 330, "color": Color("6a4fb0"), "desc": "孔目当堂封禁，全场敌将{v}伤并长久哑然不能施法。", "effect": {"kind": "smite", "dmg": 40, "silence": 5}},
+	"pei_xuan_e": {"name": "一言定谳", "cd": 14, "targeted": true, "target": "unit", "radius": 0, "color": Color("6a4fb0"), "desc": "铁面孔目当庭点名定谳（单体指向）：判词化墨直贯其口，{v} 伤并禁声 4 秒不得施法。", "effect": {"kind": "bolt", "dmg": 40, "silence": 4, "proj_speed": 520, "bolt_art": "dark"}},
+	"pei_xuan_r": {"name": "满堂封口", "cd": 45, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "desc": "铁面孔目当堂拍案封禁——【全图】敌将 {v} 伤并长久哑然不能施法，任他天涯海角一体禁声。", "effect": {"kind": "global_nuke", "dmg": 40, "heroes_only": true, "silence": 5}},
 	"ou_peng_q": {"name": "金翅噬甲", "cd": 10, "targeted": true, "radius": 120, "color": Color("a0e8c0"), "desc": "放出群羽附敌啃啮，{v}伤并破甲减防，持续蚀肉。", "effect": {"kind": "smite", "dmg": 30, "def_down": 3, "def_down_dur": 6, "dot_total": 30, "dot_dur": 6}},
-	"ou_peng_w": {"name": "缩地疾掠", "cd": 9, "targeted": true, "radius": 100.0, "color": Color("9fd8ff"), "desc": "金翅一振瞬掠数丈，落点{v}伤，进退如风。", "effect": {"kind": "blink", "dist": 300, "dmg": 20}},
+	"ou_peng_w": {"name": "金翅掠袭", "cd": 9, "targeted": true, "radius": 60, "color": Color("9fd8ff"), "desc": "摩云金翅俯身掠地疾冲一线，沿途之敌 {v} 撞伤、翼风扫得踉跄难行。", "effect": {"kind": "charge", "dmg": 40, "windup": 0.3, "dist": 300, "width": 60, "slow": 0.4, "slow_dur": 1.5}},
 	"ou_peng_e": {"name": "双星连击", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("9fd8ff"), "passive": true, "desc": "翼速倍添，被动增攻速且每击附加{v}真伤。", "effect": {"kind": "passive", "atkspeed_add": 0.12, "on_hit_dmg": 8}},
 	"ou_peng_r": {"name": "时光回溯", "cd": 40, "targeted": false, "radius": 100.0, "color": Color("9fd8ff"), "desc": "逆抚光阴护住己身，化出{v}护盾抵御一切伤害数息。", "effect": {"kind": "shield", "shield": 220, "dur": 5}},
 	"deng_fei_q": {"name": "连珠链弹", "cd": 12, "targeted": false, "radius": 90, "color": Color("ff7a2a"), "desc": "周身迸射铁弹幕，近敌每跳遭{v}伤并被滞步。", "effect": {"kind": "orbit_axes", "dmg": 16, "slow": 0.8, "slow_dur": 0.3, "dur": 5, "tick": 0.4}},
@@ -703,15 +705,15 @@ const ABILITIES := {
 	"yan_shun_q": {"name": "唤啸双虎", "cd": 12, "targeted": false, "radius": 100.0, "color": Color("a0e8c0"), "desc": "锦毛虎长啸召出两头猛兽随阵厮杀，伴战许久。", "effect": {"kind": "summon", "unit": "tiger_summon", "count": 2, "summon_kind": "tiger", "hp": [260, 320, 380], "atk": [22, 26, 30], "dur": 40}},
 	"yan_shun_w": {"name": "虎啸号令", "cd": 14, "targeted": false, "radius": 220, "color": Color("ffd24a"), "desc": "一声虎吼壮全军胆气，范围友军增攻并回{v}血。", "effect": {"kind": "rally", "heal": 40, "atk_mult": 1.3, "dur": 8}},
 	"yan_shun_e": {"name": "野性嗜血", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("ff3322"), "passive": true, "desc": "兽血贲张，每级被动增攻、附吸血并略提暴击。", "effect": {"kind": "passive", "atk_add": 3, "lifesteal": 0.4, "crit_chance": 0.06}},
-	"yan_shun_r": {"name": "化身猛虎", "cd": 40, "targeted": false, "radius": 100.0, "color": Color("ff7a2a"), "desc": "现锦毛真身，攻速移速大涨、平攻倍增，势不可挡。", "effect": {"kind": "atkspeed", "atkspeed": 1.6, "speed_mult": 1.3, "self_atk": 1.4, "dur": 8}},
+	"yan_shun_r": {"name": "化身猛虎", "cd": 40, "targeted": false, "radius": 100.0, "color": Color("ff7a2a"), "desc": "锦毛虎现兽形真身 14 秒：平攻大涨、出手如风、身法迅疾，扑咬撕裂势不可挡（变身·到期还原）。", "effect": {"kind": "transform", "dur": 14, "form": {"atk_mult": 1.5, "atk_cd_mult": 0.6, "speed_mult": 1.35, "radius": 15.0, "tint": Color(1.35, 0.85, 0.6)}}},
 	"yang_lin_q": {"name": "飞镖手里剑", "cd": 9, "targeted": true, "radius": 30, "color": Color("8fd3ff"), "desc": "暗掷飞镖锁喉，{v}伤并令敌将一瞬眩晕。", "effect": {"kind": "smite", "dmg": 45, "stun": 0.6}},
 	"yang_lin_w": {"name": "暗袭杀机", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("444466"), "passive": true, "desc": "豹子身手，被动附暴击且时而一击重创使其踉跄。", "effect": {"kind": "passive", "crit_chance": 0.1, "crit_mult": 1.8, "bash_chance": 0.12, "bash_dur": 0.5}},
 	"yang_lin_e": {"name": "影行潜踪", "cd": 12, "targeted": true, "radius": 100.0, "color": Color("444466"), "desc": "隐身疾掠潜至落点，现身一击{v}伤，来去无影。", "effect": {"kind": "blink", "dist": 300, "dmg": 30}},
 	"yang_lin_r": {"name": "追踪标记", "cd": 30, "targeted": false, "radius": 240, "color": Color("ffd24a"), "desc": "锁定猎物号令同袍合围，范围友军大幅提速穷追不舍。", "effect": {"kind": "haste", "speed_mult": 1.25, "dur": 12}},
-	"ling_zhen_q": {"name": "地雷阵", "cd": 9, "targeted": true, "radius": 90, "color": Color("ff7a2a"), "desc": "于落点埋设连珠地雷，触之轰然炸裂，伤 {v} 并减速逃敌。", "effect": {"kind": "smite", "dmg": 48, "slow": 0.6, "slow_dur": 2}},
+	"ling_zhen_q": {"name": "轰天连炮", "cd": 13, "targeted": true, "radius": 110, "color": Color("ff7a2a"), "desc": "凌振架炮引导，连番轰击落点战场：每半秒落弹一轮，每轮 {v} 伤并减速逃敌——引导中不能动，被眩晕/沉默即止。", "effect": {"kind": "channel", "dur": 3.0, "tick": 0.5, "dmg": 22, "slow": 0.5, "slow_dur": 1.2}},
 	"ling_zhen_w": {"name": "机关定身", "cd": 11, "targeted": true, "radius": 80, "color": Color("8fd3ff"), "desc": "暗设机括，踏中者被困定身 1.6 秒，受伤 {v}。", "effect": {"kind": "smite", "dmg": 20, "stun": 1.6}},
 	"ling_zhen_e": {"name": "引爆轰身", "cd": 14, "targeted": true, "radius": 70, "color": Color("ff3322"), "desc": "舍身近爆，烈焰伤 {v}，震得敌将耳鸣口噤、3 秒不能施法。", "effect": {"kind": "smite", "dmg": 70, "silence": 3}},
-	"ling_zhen_r": {"name": "连环巨雷", "cd": 40, "targeted": true, "radius": 150, "color": Color("ff7a2a"), "desc": "轰天雷凌振的看家绝技，远控巨炮齐发，大范围炸伤 {v}。", "effect": {"kind": "smite", "dmg": 110}},
+	"ling_zhen_r": {"name": "架设神炮", "cd": 40, "targeted": true, "radius": 40, "color": Color("ff7a2a"), "desc": "轰天雷在落点架起一门神炮：自行锁定最近官军连珠轰击 {v}——阵地战的看家火力。", "effect": {"kind": "ward", "ward_mode": "attack", "ward_style": "death", "ward_radius": 280, "pulse": 0.5, "dmg_ranks": [24, 32, 42], "ward_dur": 10}},
 	"jiang_jing_q": {"name": "神算珠", "cd": 0, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "passive": true, "desc": "神算子运筹于算珠，每击附带玄奥真气，额外法伤 {v}。", "effect": {"kind": "passive", "on_hit_dmg": 12}},
 	"jiang_jing_w": {"name": "心算崩击", "cd": 9, "targeted": true, "radius": 100, "color": Color("6a4fb0"), "desc": "推演敌阵破绽，一算定崩，范围法伤 {v}。", "effect": {"kind": "smite", "dmg": 50}},
 	"jiang_jing_e": {"name": "星界囚牢", "cd": 12, "targeted": true, "radius": 40, "color": Color("9fd8ff"), "desc": "将敌将摄入星界囚困 2 秒，出狱时受伤 {v}。", "effect": {"kind": "smite", "dmg": 40, "stun": 2}},
@@ -725,27 +727,27 @@ const ABILITIES := {
 	"guo_sheng_e": {"name": "铁壁", "cd": 0, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "passive": true, "desc": "披甲执戟自成壁垒，临敌沉稳，10% 几率闪避来袭。", "effect": {"kind": "passive", "evasion": 0.1}},
 	"guo_sheng_r": {"name": "血斗之环", "cd": 40, "targeted": true, "radius": 160, "color": Color("ff3322"), "desc": "戟列成环困敌于内，环壁撞退群敌、撞伤 {v} 并震晕。", "effect": {"kind": "knockback", "dmg": 50, "push": 90, "radius": 160, "stun": 1.5}},
 	"an_daoquan_q": {"name": "毒手点穴", "cd": 10, "targeted": true, "radius": 0, "color": Color("a0e8c0"), "desc": "神医反用医术点敌经脉，一线封穴，伤 {v} 并重缓其行。", "effect": {"kind": "line_nuke", "dmg": 40, "len": 200, "width": 30, "slow": 0.5, "slow_dur": 2.5}},
-	"an_daoquan_w": {"name": "救命浅坟", "cd": 14, "targeted": false, "radius": 120, "color": Color("ffd24a"), "desc": "施回春续命之术，为范围友军罩上 {v} 护体真气，垂死可救。", "effect": {"kind": "shield", "shield": 180, "dur": 5, "allies": true, "radius": 120}},
-	"an_daoquan_e": {"name": "影波", "cd": 8, "targeted": false, "radius": 0, "color": Color("9fd8ff"), "desc": "一道波纹于敌我间往复弹跳，逐个灼伤敌将 {v}、抚愈己方。", "effect": {"kind": "chain_nuke", "dmg": 35, "jumps": 4, "jump": 120, "falloff": 0.9}},
+	"an_daoquan_w": {"name": "救命浅坟", "cd": 14, "targeted": false, "radius": 120, "color": Color("ffd24a"), "desc": "施回春续命之术，为范围友军罩上 {v} 护体真气并解去缠身控制减益（神医解控），垂死可救。", "effect": {"kind": "shield", "shield": 180, "dur": 5, "allies": true, "radius": 120, "dispel": "debuffs"}},
+	"an_daoquan_e": {"name": "影波", "cd": 8, "targeted": false, "radius": 0, "color": Color("9fd8ff"), "desc": "神医自身起波，一道波纹在敌我之间往复弹跳——撞到官军灼伤 {v}，掠过弟兄则同量回血，于乱战中边伤敌边救死扶伤。", "effect": {"kind": "heal_wave", "dmg": 40, "heal": 40, "jumps": 6, "jump": 150}},
 	"an_daoquan_r": {"name": "编织", "cd": 40, "targeted": true, "radius": 220, "color": Color("6a4fb0"), "desc": "安道全暗运歧黄之毒交织战场，大范围持续削敌护甲。", "effect": {"kind": "smite", "dmg": 10, "def_down": 3, "def_down_dur": 12}},
 	"huangfu_duan_q": {"name": "苦修", "cd": 10, "targeted": true, "radius": 50, "color": Color("6a4fb0"), "desc": "紫髯伯以驯兽鞭笞缚敌，伤 {v}、迟其步并破其甲 4 秒。", "effect": {"kind": "smite", "dmg": 30, "slow": 0.5, "slow_dur": 4, "def_down": 2, "def_down_dur": 4}},
 	"huangfu_duan_w": {"name": "神驹召唤", "cd": 24, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "desc": "皇甫端善相马驯兽，唤来山林猛兽两头助阵厮杀。", "effect": {"kind": "summon", "unit": "tiger_summon", "count": 2, "summon_kind": "tiger", "hp": [300, 360, 420], "atk": [22, 26, 30], "dur": 35}},
 	"huangfu_duan_e": {"name": "天恩", "cd": 0, "targeted": false, "radius": 0, "color": Color("a0e8c0"), "passive": true, "desc": "通晓兽性亦解人病，自身气血绵绵自复，每秒回血 {v}。", "effect": {"kind": "passive", "regen": 4}},
 	"huangfu_duan_r": {"name": "神手回春", "cd": 40, "targeted": false, "radius": 300, "color": Color("ffd24a"), "desc": "妙手回春之术普被三军，全场友军同沐生机、回血 {v} 并振奋。", "effect": {"kind": "rally", "heal": 160, "atk_mult": 1.2, "dur": 4}},
 	"wang_ying_q": {"name": "烈焰冲击", "cd": 9, "targeted": true, "radius": 60, "color": Color("ff7a2a"), "desc": "矮脚虎一掌拍出烈焰，轰伤 {v} 并震晕敌将 1.6 秒。", "effect": {"kind": "smite", "dmg": 50, "stun": 1.6}},
-	"wang_ying_w": {"name": "点燃", "cd": 11, "targeted": true, "radius": 90, "color": Color("ff3322"), "desc": "烈火附身久燃不熄，灼烧敌身共 {v}、并拖慢其逃势。", "effect": {"kind": "smite", "dmg": 20, "dot_total": 60, "dot_dur": 5, "slow": 0.6, "slow_dur": 4}},
+	"wang_ying_w": {"name": "燎原之火", "cd": 11, "targeted": true, "radius": 90, "color": Color("ff3322"), "desc": "矮脚虎把火油泼上落点，地面烈焰久燃不熄——5 秒累计灼伤 {v}，站在火里的官军插翅难逃。", "effect": {"kind": "fire_dot", "dmg": 90, "dur": 5}},
 	"wang_ying_e": {"name": "嗜血术", "cd": 14, "targeted": false, "radius": 130, "color": Color("ff3322"), "desc": "为范围友军灌注狂血，出手如风、奔走如电，攻速移速大涨。", "effect": {"kind": "atkspeed", "atkspeed": 1.5, "dur": 12, "allies": true, "radius": 130, "speed_mult": 1.2}},
 	"wang_ying_r": {"name": "多重施法", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "粗中有灵，时而妙手连发，平攻 12% 几率暴起重击。", "effect": {"kind": "passive", "crit_chance": 0.12, "crit_mult": 1.5}},
 	"hu_sanniang_q": {"name": "飞索打将", "cd": 9, "targeted": true, "radius": 50, "color": Color("8fd3ff"), "desc": "一丈青甩出红锦套索擒将，缚伤 {v} 并震晕 1.6 秒。", "effect": {"kind": "smite", "dmg": 50, "stun": 1.6}},
-	"hu_sanniang_w": {"name": "慑魂咆哮", "cd": 12, "targeted": true, "radius": 130, "color": Color("6a4fb0"), "desc": "一声厉喝慑破敌胆，范围伤 {v} 并削其护甲 8 秒。", "effect": {"kind": "smite", "dmg": 25, "def_down": 3, "def_down_dur": 8}},
+	"hu_sanniang_w": {"name": "红锦套索", "cd": 12, "targeted": true, "target": "unit", "radius": 0, "color": Color("ff5a7a"), "desc": "掷出红锦套索直取一将（单体指向）：索到便 {v} 伤、缚身眩晕 1.4 秒、卸其护甲 8 秒。", "effect": {"kind": "bolt", "dmg": 30, "stun": 1.4, "def_down": 3, "def_down_dur": 8, "proj_speed": 460, "bolt_art": "lasso"}},
 	"hu_sanniang_e": {"name": "复仇光环", "cd": 0, "targeted": false, "radius": 0, "color": Color("ff3322"), "passive": true, "desc": "巾帼煞气贯于阵中，激励左右袍泽平攻同涨 {v}。", "effect": {"kind": "passive", "atk_add": 4}},
-	"hu_sanniang_r": {"name": "乾坤挪移", "cd": 30, "targeted": true, "radius": 0, "color": Color("9fd8ff"), "desc": "扈三娘索法通神，一索将远敌强拖至阵前、撞伤 {v} 并定身。", "effect": {"kind": "pull", "dmg": 50, "len": 320, "width": 40, "pull_dist": 320, "stun": 1.2}},
+	"hu_sanniang_r": {"name": "乾坤挪移", "cd": 30, "targeted": true, "target": "unit", "unit_team": "any", "radius": 0, "color": Color("9fd8ff"), "desc": "扈三娘索法通神，与目标瞬间互换位置（敌我皆可点）——可把敌将换进阵中围杀 {v}，也可把残血袍泽换出险地。", "effect": {"kind": "swap", "dmg": 50, "stun": 0.9, "cast_range": 480}},
 	"bao_xu_q": {"name": "静电残影", "cd": 7, "targeted": false, "radius": 90, "color": Color("8fd3ff"), "desc": "丧门神留下一道带电残影，触之即炸，环身电伤 {v}。", "effect": {"kind": "smite", "dmg": 45}},
 	"bao_xu_w": {"name": "电磁旋涡", "cd": 14, "targeted": true, "radius": 0, "color": Color("8fd3ff"), "desc": "卷起电磁漩涡将敌将吸入旋心，定身 1.5 秒、伤 {v}。", "effect": {"kind": "pull", "dmg": 20, "len": 200, "width": 40, "pull_dist": 150, "stun": 1.5}},
 	"bao_xu_e": {"name": "超负荷", "cd": 0, "targeted": false, "radius": 0, "color": Color("8fd3ff"), "passive": true, "desc": "周身雷电过载，平攻附带电击额外伤 {v} 并迟滞其行。", "effect": {"kind": "passive", "on_hit_dmg": 10, "on_hit_slow": 0.6, "on_hit_slow_dur": 1}},
 	"bao_xu_r": {"name": "球状闪电", "cd": 30, "targeted": true, "radius": 110, "color": Color("8fd3ff"), "desc": "鲍旭化作一团滚雷掠地飞袭，骤现敌阵、落点炸伤 {v} 并减速。", "effect": {"kind": "blink", "dist": 400, "dmg": 60, "slow": 0.6, "slow_dur": 1.5, "radius": 110}},
 	"fan_rui_q": {"name": "影蛊毒雾", "cd": 8, "targeted": true, "radius": 120, "color": Color("6a4fb0"), "desc": "撒落幽冥毒雾，敌军踏入持续中毒蚀骨，每秒掉血 {v}。", "effect": {"kind": "fire_dot", "dps": 14, "dur": 5, "dmg": 20}},
-	"fan_rui_w": {"name": "摄魂咒", "cd": 10, "targeted": true, "radius": 110, "color": Color("6a4fb0"), "desc": "勾摄敌魂，范围内敌军护甲削弱，受到伤害大增。", "effect": {"kind": "smite", "dmg": 30, "def_down": 0.3, "def_down_dur": 6}},
+	"fan_rui_w": {"name": "摄魂咒", "cd": 10, "targeted": true, "radius": 110, "color": Color("6a4fb0"), "desc": "勾摄敌魂烙下易伤咒印，范围官军受创 {v}、抹去其护盾增益，并在 6 秒内受到的一切伤害大增三成——配合群攻成片收割。", "effect": {"kind": "smite", "dmg": 30, "amp": 0.3, "amp_dur": 6, "slow": 0.4, "slow_dur": 2, "dispel": "buffs"}},
 	"fan_rui_e": {"name": "幽冥放逐", "cd": 9, "targeted": true, "radius": 90, "color": Color("8a5fd0"), "desc": "一道魔气将敌将打入幽冥，定身昏厥 {v} 秒。", "effect": {"kind": "smite", "dmg": 40, "stun": 1.4}},
 	"fan_rui_r": {"name": "魔王降世", "cd": 30, "targeted": true, "radius": 160, "color": Color("ff3322"), "desc": "混世魔王现形，邪火洗地：重创、减速并持续焚魂。", "effect": {"kind": "smite", "dmg": 60, "slow": 0.5, "slow_dur": 4, "dot_total": 120, "dot_dur": 5}},
 	"kong_ming_q": {"name": "火凤俯冲", "cd": 10, "targeted": true, "radius": 60, "color": Color("ff7a2a"), "desc": "化作赤凤掠空俯冲，沿途焚灼敌军并拖慢其步。", "effect": {"kind": "charge", "dmg": 45, "windup": 0.4, "dist": 180, "width": 60, "slow": 0.6, "slow_dur": 2}},
@@ -763,7 +765,7 @@ const ABILITIES := {
 	"li_gun_q": {"name": "火龙箭", "cd": 8, "targeted": true, "radius": 0, "color": Color("ff7a2a"), "desc": "射出一道火龙之箭，烈焰直线席卷敌阵。", "effect": {"kind": "line_nuke", "dmg": 45, "len": 220, "width": 40}},
 	"li_gun_w": {"name": "烈焰天罡", "cd": 10, "targeted": true, "radius": 90, "color": Color("ff9a3a"), "desc": "落点天罡烈焰骤起，灼伤并震慑其中之敌。", "effect": {"kind": "smite", "dmg": 40, "stun": 1.5}},
 	"li_gun_e": {"name": "焚心", "cd": 0, "targeted": false, "radius": 0, "color": Color("ff7a2a"), "passive": true, "desc": "心火不熄，每施法身手愈快，攻势如烈焰升腾。", "effect": {"kind": "passive", "atkspeed_add": 0.14, "speed_mult": 1.04}},
-	"li_gun_r": {"name": "天火神雷", "cd": 35, "targeted": true, "radius": 30, "color": Color("ff3322"), "desc": "飞天大圣引天火神雷于一身，单点轰落雷霆，重创敌将。", "effect": {"kind": "smite", "dmg": 120}},
+	"li_gun_r": {"name": "天火神雷", "cd": 35, "targeted": true, "target": "unit", "radius": 0, "color": Color("ff3322"), "desc": "飞天大圣引天火神雷直贯一将（单体指向）：雷光追身而至，重创 {v}——躲无可躲的点名绝杀。", "effect": {"kind": "bolt", "dmg": 120, "proj_speed": 620}},
 	"jin_dajian_q": {"name": "镜钢激光", "cd": 9, "targeted": true, "radius": 60, "color": Color("8fd3ff"), "desc": "玉臂匠以磨镜钢反射烈光灼敌，强光致其睁眼难视、屡射不中。", "effect": {"kind": "smite", "dmg": 35, "blind": 2.5}},
 	"jin_dajian_w": {"name": "追魂火箭", "cd": 8, "targeted": true, "radius": 70, "color": Color("ff9a3a"), "desc": "巧造追魂火箭自寻敌将，凌空轰落。", "effect": {"kind": "smite", "dmg": 45}},
 	"jin_dajian_e": {"name": "机关械阵", "cd": 11, "targeted": true, "radius": 130, "color": Color("8fd3ff"), "desc": "布下机关械阵，铁械纵横绞杀踏入之敌。", "effect": {"kind": "fire_dot", "dps": 16, "dur": 5, "dmg": 15}},
@@ -777,17 +779,17 @@ const ABILITIES := {
 	"tong_wei_e": {"name": "噬魂", "cd": 11, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "desc": "吞噬敌魂滋养己身，一段时间内攻击大幅吸血。", "effect": {"kind": "self_buff", "atk_add": 0, "lifesteal": 1.2, "dur": 6}},
 	"tong_wei_r": {"name": "断魂指", "cd": 34, "targeted": true, "radius": 30, "color": Color("ff3322"), "desc": "一指断魂，单点倾泻死亡之力，敌将魂飞魄散。", "effect": {"kind": "smite", "dmg": 130}},
 	"tong_meng_q": {"name": "翻江雷", "cd": 9, "targeted": true, "radius": 0, "color": Color("8fd3ff"), "desc": "翻江蜃唤出一道连环水雷，逐敌弹击层层击晕。", "effect": {"kind": "chain_nuke", "dmg": 35, "jumps": 4, "jump": 120, "falloff": 0.8, "stun": 0.3}},
-	"tong_meng_w": {"name": "妖蜃幻形", "cd": 12, "targeted": true, "radius": 70, "color": Color("6a4fb0"), "desc": "蜃气幻形迷敌，将其镇于原地动弹不得。", "effect": {"kind": "smite", "dmg": 25, "stun": 1.5}},
+	"tong_meng_w": {"name": "妖蜃幻形", "cd": 12, "targeted": true, "target": "unit", "unit_team": "enemy", "radius": 0, "color": Color("6a4fb0"), "desc": "蜃气幻形，指定一名敌将变作一团蠢物 2.5 秒：不能施法、不能挥兵、寸步难行（仍可反击）——单体点控。", "effect": {"kind": "smite", "dmg": 25, "hex": 2.5}},
 	"tong_meng_e": {"name": "锁蛟枷", "cd": 11, "targeted": true, "radius": 60, "color": Color("9fd8ff"), "desc": "锁枷加身，长缚敌将，重创且久久昏厥。", "effect": {"kind": "smite", "dmg": 50, "stun": 2}},
 	"tong_meng_r": {"name": "群蛇阵", "cd": 32, "targeted": true, "radius": 90, "color": Color("a0e8c0"), "desc": "唤起满潭群蛇助阵，蜿蜒齐出咬噬来犯之敌。", "effect": {"kind": "summon", "unit": "dragon_summon", "count": 4, "summon_kind": "serpent", "hp": [80, 120, 160], "atk": [14, 18, 22], "dur": 20}},
 	"meng_kang_q": {"name": "连珠火箭", "cd": 8, "targeted": false, "radius": 110, "color": Color("ff7a2a"), "desc": "玉幡竿身藏火铳，绕身倾泻火箭如雨，持续灼烧周遭近敌，每跳伤 {v}。", "effect": {"kind": "orbit_axes", "dmg": 14, "dur": 3, "tick": 0.35, "slow": 0.85, "slow_dur": 0.4}},
 	"meng_kang_w": {"name": "追命导弹", "cd": 11, "targeted": true, "radius": 70, "color": Color("ffb347"), "desc": "锁定一处放出追命火弹，命中炸开 {v} 点伤并震晕来敌。", "effect": {"kind": "smite", "dmg": 55, "stun": 1.4}},
 	"meng_kang_e": {"name": "高射散花", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "炮管改作高射连发，每次普攻溅射周遭群敌，额外造成 {v} 伤，出手更疾。", "effect": {"kind": "passive", "on_hit_dmg": 9, "atkspeed_add": 0.1}},
-	"meng_kang_r": {"name": "天降神火", "cd": 32, "targeted": true, "radius": 150, "color": Color("ff5a1a"), "desc": "唤来空中两轮神火轰落指定战阵，重创并减速大片敌军，主伤 {v}。", "effect": {"kind": "smite", "dmg": 50, "slow": 0.55, "slow_dur": 3}},
+	"meng_kang_r": {"name": "天降神火", "cd": 32, "targeted": true, "radius": 150, "color": Color("ff5a1a"), "desc": "玉幡竿唤来神火覆压指定战阵：火雨倾泻数息、持续烧灼 {v}——覆盖阵地的空袭。", "effect": {"kind": "black_rain", "dps_ranks": [18, 22, 26], "dur_ranks": [5, 6, 7], "dmg": 50, "dur": 6}},
 	"hou_jian_q": {"name": "麻沸散弹", "cd": 9, "targeted": true, "radius": 80, "color": Color("6a4fb0"), "desc": "通臂猿掷出麻沸药囊，在敌阵间弹跳爆开，逐个震晕，每跳伤 {v}。", "effect": {"kind": "chain_nuke", "dmg": 30, "jumps": 4, "jump": 90, "falloff": 0.9, "stun": 0.9}},
 	"hou_jian_w": {"name": "巫祝回春", "cd": 10, "targeted": false, "radius": 130, "color": Color("a0e8c0"), "desc": "默念蛮巫祷词，持续为周遭义军回复气血，每息 {v}。", "effect": {"kind": "rally", "heal": 22, "atk_mult": 1, "dur": 4}},
 	"hou_jian_e": {"name": "恶咒缠身", "cd": 11, "targeted": true, "radius": 90, "color": Color("8a3ffb"), "desc": "诅咒一片敌军，咒力持续蚀骨，咒终引爆累计伤害，总伤 {v}。", "effect": {"kind": "smite", "dmg": 20, "dot_total": 80, "dot_dur": 4}},
-	"hou_jian_r": {"name": "死神之眼", "cd": 40, "targeted": true, "radius": 60, "color": Color("ff3322"), "desc": "立起一尊噬魂木桩，连珠射击附近敌军，每发 {v}，存续片刻。", "effect": {"kind": "summon", "unit": "tiger_summon", "count": 1, "summon_kind": "ward", "hp": [240, 280, 320], "atk": [40, 52, 64], "dur": 8}},
+	"hou_jian_r": {"name": "死神之眼", "cd": 40, "targeted": true, "radius": 260, "color": Color("ff3322"), "desc": "通臂猿立起一尊噬魂木桩，原地飞快连珠射击射程内最近的官军，存续 8 秒间箭无虚发。", "effect": {"kind": "ward", "ward_mode": "attack", "ward_style": "death", "ward_radius": 260, "pulse": 0.4, "dmg_ranks": [22, 30, 40], "ward_dur": 8}},
 	"chen_da_q": {"name": "穿地枪", "cd": 9, "targeted": true, "radius": 80, "color": Color("c08a3a"), "desc": "跳涧虎枪势破土，钉穿正前一线敌军，重伤 {v} 并将其牢牢钉死。", "effect": {"kind": "smite", "dmg": 50, "stun": 1.6}},
 	"chen_da_w": {"name": "夺气一击", "cd": 8, "targeted": true, "radius": 60, "color": Color("8fd3ff"), "desc": "一枪挑散敌将气力，伤 {v} 并令其短促失声难施招法。", "effect": {"kind": "smite", "dmg": 38, "silence": 1.6}},
 	"chen_da_e": {"name": "倒竖甲刺", "cd": 12, "targeted": false, "radius": 0, "color": Color("b5b5b5"), "desc": "周身甲刺反竖，结起护体硬壳吸伤 {v}，挡下迎面攻势。", "effect": {"kind": "shield", "shield": 160, "dur": 4}},
@@ -801,7 +803,7 @@ const ABILITIES := {
 	"zheng_tianshou_e": {"name": "子夜阴脉", "cd": 12, "targeted": true, "radius": 160, "color": Color("4a2f6a"), "desc": "在敌阵下布开一片阴脉，立身其上者按命数持续蚀血，每息 {v}。", "effect": {"kind": "fire_dot", "dps": 16, "dur": 5, "dmg": 8}},
 	"zheng_tianshou_r": {"name": "黑煞天坑", "cd": 42, "targeted": true, "radius": 150, "color": Color("1f1430"), "desc": "撕开吞天黑坑，将范围之敌尽数吸入定死，持续眩晕动弹不得。", "effect": {"kind": "chrono", "dur": 4, "radius_ranks": [130, 160, 190]}},
 	"tao_zongwang_q": {"name": "黏胶污泥", "cd": 8, "targeted": true, "radius": 90, "color": Color("9a8a3a"), "desc": "九尾龟甩出黏胶污泥糊住敌军，伤 {v}、减速并削其护甲。", "effect": {"kind": "smite", "dmg": 30, "slow": 0.55, "slow_dur": 3, "def_down": 3, "def_down_dur": 4}},
-	"tao_zongwang_w": {"name": "棘刺乱喷", "cd": 7, "targeted": false, "radius": 130, "color": Color("a0a060"), "desc": "周身龟刺暴喷而出，洞穿四面近敌，范围伤 {v}。", "effect": {"kind": "smite", "dmg": 32}},
+	"tao_zongwang_w": {"name": "掘地裂沟", "cd": 12, "targeted": true, "radius": 0, "color": Color("a0a060"), "desc": "九尾龟抡起铁锹贯线掘地：沿线之敌 {v} 伤震翻，掘出的土垄挡路 3.5 秒——断后路的活城墙。", "effect": {"kind": "fissure", "dmg": 38, "len": 300, "width": 40, "stun": 1.0, "slow": 0.5, "slow_dur": 2, "wall_dur": 3.5}},
 	"tao_zongwang_e": {"name": "倒竖背甲", "cd": 0, "targeted": false, "radius": 0, "color": Color("6f6f4a"), "passive": true, "desc": "背甲倒竖卸去来势，体魄愈坚，增血 {v}、回血加速且常有硬甲弹开攻击。", "effect": {"kind": "passive", "hp_add": 120, "regen": 2, "evasion": 0.08}},
 	"tao_zongwang_r": {"name": "战意如潮", "cd": 30, "targeted": false, "radius": 0, "color": Color("ff7a2a"), "desc": "越战越勇杀意翻涌，出手骤疾且平攻大增，自身攻击力升至 {v} 倍。", "effect": {"kind": "atkspeed", "atkspeed": 1.7, "dur": 8, "self_atk": 1.5}},
 	"song_qing_q": {"name": "命断飞符", "cd": 8, "targeted": true, "radius": 70, "color": Color("ffd24a"), "desc": "铁扇子掷出止行飞符，钉住敌将令其滞步，伤 {v} 并减速。", "effect": {"kind": "smite", "dmg": 36, "slow": 0.45, "slow_dur": 2.5}},
@@ -827,7 +829,7 @@ const ABILITIES := {
 	"cao_zheng_q": {"name": "幽冥爆", "cd": 8, "targeted": true, "radius": 120, "color": Color("6a4fb0"), "desc": "曹正掷出阴煞之力轰然炸裂，焚伤落点周遭敌军 {v}。", "effect": {"kind": "smite", "dmg": 50, "slow": 0.65, "slow_dur": 1.5}},
 	"cao_zheng_w": {"name": "朽骨咒", "cd": 12, "targeted": true, "radius": 90, "color": Color("6a4fb0"), "desc": "邪咒缠身，目标筋骨朽软、护甲尽失且行动迟缓 {v}。", "effect": {"kind": "smite", "dmg": 28, "def_down": 6, "def_down_dur": 4, "slow": 0.55, "slow_dur": 3, "silence": 1.5}},
 	"cao_zheng_e": {"name": "镇魂阵", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("6a4fb0"), "passive": true, "desc": "曹正立阵安魂，元气绵绵自复，气血缓缓回升。", "effect": {"kind": "passive", "regen": 3, "hp_add": 60}},
-	"cao_zheng_r": {"name": "夺命吸魂", "cd": 26, "cd_ranks": [26, 22, 18], "targeted": true, "radius": 70, "color": Color("6a4fb0"), "desc": "操刀鬼阴手摄魂，重创单敌并将其元气尽数夺归己身 {v}。", "effect": {"kind": "smite", "dmg": 100, "self_lifesteal": 1.2, "self_lifesteal_dur": 0.1}},
+	"cao_zheng_r": {"name": "放血引魂", "cd": 26, "cd_ranks": [26, 22, 18], "targeted": false, "radius": 0, "color": Color("6a4fb0"), "desc": "操刀鬼自身起刃，一道血光在敌我之间往复弹跳——割敌 {v}、掠过弟兄则同量补血，屠户的手艺救人也杀人。", "effect": {"kind": "heal_wave", "dmg": 60, "heal": 60, "jumps": 5, "jump": 160}},
 	"song_wan_q": {"name": "震地顿踏", "cd": 10, "targeted": false, "radius": 130, "color": Color("ffd24a"), "desc": "云里金刚一脚顿地，回声震荡四周敌军当场昏厥 {v}。", "effect": {"kind": "smite", "dmg": 36, "stun": 1.4}},
 	"song_wan_w": {"name": "魂魄附身", "cd": 14, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "desc": "宋万放出元神助战，归位时威势倍增，平攻加重一时。", "effect": {"kind": "self_buff", "atk_add": 4, "lifesteal": 0.3, "dur": 8}},
 	"song_wan_e": {"name": "天地法度", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "passive": true, "desc": "宋万立威慑场，凡近其身之敌护甲自损、抗性尽削。", "effect": {"kind": "passive", "hp_add": 100, "on_hit_dmg": 6}},
@@ -841,7 +843,7 @@ const ABILITIES := {
 	"xue_yong_e": {"name": "潜形伏击", "cd": 13, "targeted": true, "radius": 50, "color": Color("6a4fb0"), "desc": "薛永隐身瞬掠至落点，一击破其护甲再骤然现身 {v}。", "effect": {"kind": "blink", "dist": 280, "dmg": 60, "radius": 50, "slow": 0.6, "slow_dur": 1.5}},
 	"xue_yong_r": {"name": "灵纹陷阱", "cd": 28, "cd_ranks": [28, 24, 20], "targeted": true, "radius": 120, "color": Color("6a4fb0"), "desc": "病大虫预设灵纹机阵，落点炸裂重创并死死缚住敌军 {v}。", "effect": {"kind": "smite", "dmg": 80, "slow": 0.45, "slow_dur": 3.5, "def_down": 5, "def_down_dur": 3}},
 	"shi_en_q": {"name": "淬毒连击", "cd": 10, "targeted": true, "radius": 100, "color": Color("6a4fb0"), "desc": "金眼彪喷出毒雾染指落点，敌军中毒迟滞、血脉久燃 {v}。", "effect": {"kind": "smite", "dmg": 30, "slow": 0.6, "slow_dur": 3, "dot_total": 36, "dot_dur": 4}},
-	"shi_en_w": {"name": "幽毒侵骨", "cd": 12, "targeted": true, "radius": 90, "color": Color("6a4fb0"), "desc": "施恩布下噬甲毒障，凡入其中者护甲尽蚀、抗力大减 {v}。", "effect": {"kind": "smite", "dmg": 26, "def_down": 6, "def_down_dur": 4}},
+	"shi_en_w": {"name": "毒瘴桩", "cd": 14, "targeted": true, "radius": 0, "color": Color("6a4fb0"), "desc": "施恩在落点插下毒瘴桩：持续朝最近的官军喷吐毒射 {v} 并拖慢其行——守口扼道的毒哨。", "effect": {"kind": "ward", "ward_mode": "poison", "ward_style": "poison", "ward_radius": 220, "pulse": 0.5, "dmg_ranks": [12, 18, 24], "slow": 0.5, "slow_dur": 1.5, "dur_ranks": [8, 10, 12]}},
 	"shi_en_e": {"name": "毒鳞护体", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("6a4fb0"), "passive": true, "desc": "金眼彪一身毒鳞，刀枪难入，触之者反受毒蚀而迟缓。", "effect": {"kind": "passive", "evasion": 0.1, "on_hit_slow": 0.7, "on_hit_slow_dur": 1.5, "regen": 2}},
 	"shi_en_r": {"name": "毒蟒噬命", "cd": 26, "cd_ranks": [26, 22, 18], "targeted": true, "radius": 60, "color": Color("6a4fb0"), "desc": "施恩一口剧毒咬定单敌，剧痛锁身、毒发攻心绵绵不绝 {v}。", "effect": {"kind": "smite", "dmg": 70, "slow": 0.35, "slow_dur": 5, "dot_total": 80, "dot_dur": 5}},
 	"li_zhong_q": {"name": "寒冰断墙", "cd": 11, "targeted": true, "radius": 0, "color": Color("9fd8ff"), "desc": "打虎将横推一道寒冰，封堵去路、伤敌减速 {v}。", "effect": {"kind": "ice_wall", "dmg": 36, "range": 120, "len": 180, "dur": 4}},
@@ -852,7 +854,7 @@ const ABILITIES := {
 	"zhou_tong_w": {"name": "回旋月刃", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "passive": true, "desc": "周通刀作弯月，去而复返，一刀可连斩数敌。", "effect": {"kind": "passive", "atk_add": 3, "crit_chance": 0.08, "crit_mult": 1.6}},
 	"zhou_tong_e": {"name": "月色相助", "cd": 0, "targeted": false, "radius": 100.0, "color": Color("8fd3ff"), "passive": true, "desc": "夜战月明，周通借月色策马更疾、刀风更利。", "effect": {"kind": "passive", "atk_add": 2, "speed_mult": 1.08, "atkspeed_add": 0.06}},
 	"zhou_tong_r": {"name": "月蚀乱箭", "cd": 28, "cd_ranks": [28, 24, 20], "targeted": false, "radius": 220, "color": Color("8fd3ff"), "desc": "小霸王召满天月华暴落，乱光弹射连击四周群敌 {v}。", "effect": {"kind": "chain_nuke", "dmg": 30, "jumps": 7, "jump": 180, "falloff": 0.92, "stun": 0.4}},
-	"tang_long_q": {"name": "回旋锯斩", "cd": 7, "targeted": false, "radius": 180, "color": Color("ff3322"), "desc": "金钱豹子甩出连环锯片，周身敌人受 {v} 伤并被削去甲胄。", "effect": {"kind": "smite", "dmg": 40, "def_down": 2, "def_down_dur": 6}},
+	"tang_long_q": {"name": "钩镰试锋", "cd": 10, "targeted": true, "radius": 24, "color": Color("b0b0c0"), "desc": "打造钩镰枪的巧匠亲自试锋：钩头贯线飞出，钩中第一个敌人 {v} 伤拖回身前——自家兵器自家最熟。", "effect": {"kind": "hook", "dmg": 45, "len": 300, "width": 26, "stun": 0.7, "proj_speed": 520}},
 	"tang_long_w": {"name": "勾镰索", "cd": 10, "targeted": true, "radius": 0, "color": Color("b0b0c0"), "desc": "抛出铁索勾住远处，汤隆借力疾冲，撞伤沿途之敌。", "effect": {"kind": "blink", "dist": 200, "dmg": 30}},
 	"tang_long_e": {"name": "反应重甲", "cd": 0, "targeted": false, "radius": 0, "color": Color("8a8f9a"), "passive": true, "desc": "近身受击越多甲越厚，持续回复气血、增厚体魄。", "effect": {"kind": "passive", "hp_add": 90, "regen": 3}},
 	"tang_long_r": {"name": "飞轮锯", "cd": 30, "targeted": false, "radius": 150, "color": Color("ff7a2a"), "desc": "祭出大锯轮绕身狂转，持续切割并迟滞周围敌军。", "effect": {"kind": "orbit_axes", "dmg": 30, "slow": 0.6, "slow_dur": 1.5, "dur": 6, "tick": 0.5}},
@@ -881,17 +883,17 @@ const ABILITIES := {
 	"cai_fu_e": {"name": "霹雳风暴", "cd": 8, "targeted": true, "radius": 0, "color": Color("8fd3ff"), "desc": "召来霹雳连环跳跃，逐个劈击并迟滞敌人。", "effect": {"kind": "chain_nuke", "dmg": 30, "jumps": 4, "jump": 220, "falloff": 0.9, "slow": 0.5, "slow_dur": 1}},
 	"cai_fu_r": {"name": "脉冲新星", "cd": 26, "targeted": false, "radius": 0, "color": Color("ff3322"), "desc": "周身雷光一波波脉冲外涌，持续灼伤并迟滞群敌。", "effect": {"kind": "orbit_axes", "dmg": 28, "slow": 0.6, "slow_dur": 1, "dur": 7, "tick": 0.6}},
 	"cai_qing_q": {"name": "夺命弹", "cd": 9, "targeted": true, "radius": 0, "color": Color("ff3322"), "desc": "一枝花一枪贯出，直线撕裂沿途敌军 {v} 伤并迟滞。", "effect": {"kind": "line_nuke", "dmg": 45, "len": 260, "width": 50, "slow": 0.5, "slow_dur": 2}},
-	"cai_qing_w": {"name": "亡魂召唤", "cd": 11, "targeted": true, "radius": 220, "color": Color("6a4fb0"), "desc": "招来一众亡魂缠住范围敌军，持续受伤并大幅迟滞。", "effect": {"kind": "smite", "dmg": 25, "slow": 0.55, "slow_dur": 3}},
+	"cai_qing_w": {"name": "亡魂追命弹", "cd": 11, "targeted": true, "target": "unit", "radius": 0, "color": Color("6a4fb0"), "desc": "一枝花放出一缕亡魂黑焰追缠一将（单体指向）：{v} 伤并慑其心神、久久迟滞。", "effect": {"kind": "bolt", "dmg": 45, "slow": 0.55, "slow_dur": 2.5, "proj_speed": 470, "bolt_art": "dark"}},
 	"cai_qing_e": {"name": "快枪手", "cd": 0, "targeted": false, "radius": 0, "color": Color("ffd24a"), "passive": true, "desc": "枪法如神，平攻常有二连击与致命爆射。", "effect": {"kind": "passive", "crit_chance": 0.1, "crit_mult": 1.5, "on_hit_dmg": 8}},
 	"cai_qing_r": {"name": "破帷", "cd": 30, "targeted": false, "radius": 0, "color": Color("ff3322"), "desc": "撕开生死之帷化作幽魂态，短时攻力暴涨、弹弹吸血。", "effect": {"kind": "self_buff", "atk_add": 7, "lifesteal": 0.6, "dur": 8}},
 	"li_li_q": {"name": "夺命阴风", "cd": 8, "targeted": true, "radius": 120, "color": Color("6a4fb0"), "desc": "催命判官放出阴风夺其魂气，敌受 {v} 伤且步履凝滞。", "effect": {"kind": "smite", "dmg": 30, "slow": 0.5, "slow_dur": 3}},
 	"li_li_w": {"name": "摄魂印", "cd": 11, "targeted": true, "radius": 140, "color": Color("6a4fb0"), "desc": "烙下摄魂之印，目标甲胄崩坏、易于伤损。", "effect": {"kind": "smite", "dmg": 35, "def_down": 3, "def_down_dur": 6}},
 	"li_li_e": {"name": "墓守斗篷", "cd": 0, "targeted": false, "radius": 0, "color": Color("8a8f9a"), "passive": true, "desc": "裹一袭墓守斗篷，体魄渐厚、善避锋芒、缓缓自愈。", "effect": {"kind": "passive", "hp_add": 90, "evasion": 0.08, "regen": 2}},
 	"li_li_r": {"name": "石像鬼", "cd": 40, "targeted": false, "radius": 0, "color": Color("ff3322"), "desc": "唤出两尊石像鬼俯冲助战，一段时辰内随判官索命。", "effect": {"kind": "summon", "unit": "dragon_summon", "summon_kind": "familiar", "count": 2, "hp": [160, 200, 240], "atk": [20, 24, 28], "dur": 25}},
-	"li_yun_q": {"name": "暗噬", "cd": 9, "targeted": true, "radius": 70, "color": Color("3a2f6a"), "desc": "青眼虎掷出暗影毒囊，落点处敌军受 {v} 伤害并大幅迟滞、短暂呆立。", "effect": {"kind": "smite", "dmg": 50, "slow": 0.5, "slow_dur": 3, "stun": 0.6}},
+	"li_yun_q": {"name": "暗噬", "cd": 9, "targeted": true, "target": "unit", "radius": 0, "color": Color("3a2f6a"), "desc": "青眼虎掷出暗影毒囊咬定一将（单体指向）：{v} 伤、大幅迟滞并短暂呆立。", "effect": {"kind": "bolt", "dmg": 50, "slow": 0.5, "slow_dur": 3, "stun": 0.6, "proj_speed": 480, "bolt_art": "dark"}},
 	"li_yun_w": {"name": "夺魄威", "cd": 12, "targeted": false, "radius": 200, "color": Color("5a4a8a"), "desc": "身周敌军被青眼虎的杀气慑住，受 {v} 伤并被噤声无法施技。", "effect": {"kind": "smite", "dmg": 28, "silence": 3}},
 	"li_yun_e": {"name": "夜行猎手", "cd": 0, "targeted": false, "radius": 0, "color": Color("2e2752"), "passive": true, "desc": "惯于夜里行猎，被动提升移速与攻速。", "effect": {"kind": "passive", "speed_mult": 1.06, "atkspeed_add": 0.12}},
-	"li_yun_r": {"name": "黑天罩", "cd": 40, "targeted": false, "radius": 0, "color": Color("1b1638"), "desc": "唤来无边黑夜，青眼虎尽情扑杀：自身平攻大增、移速攻速暴涨，持续 {v} 秒。", "effect": {"kind": "atkspeed", "atkspeed": 1.7, "dur": 12, "self_atk": 1.5, "speed_mult": 1.15}},
+	"li_yun_r": {"name": "黑天罩", "cd": 40, "targeted": false, "radius": 170, "color": Color("1b1638"), "desc": "青眼虎唤来无边黑夜随身而行：夜幕罩中之敌持续遭暗噬 {v}，猎手在自己的夜里从不落空。", "effect": {"kind": "black_rain", "follow": true, "dps_ranks": [16, 20, 24], "dur_ranks": [8, 10, 12], "dmg": 40, "dur": 10}},
 	"jiao_ting_q": {"name": "撼山掌", "cd": 9, "targeted": true, "radius": 90, "color": Color("8a6a3a"), "desc": "没面目一掌拍裂大地，把落点敌军震飞推开，受 {v} 伤并眩晕。", "effect": {"kind": "knockback", "dmg": 42, "push": 120, "radius": 90, "stun": 0.8}},
 	"jiao_ting_w": {"name": "滚石躯", "cd": 11, "targeted": true, "radius": 60, "color": Color("9c7a44"), "desc": "蜷身化作磐石滚撞而出，沿途撞击敌军 {v} 伤并迟滞。", "effect": {"kind": "charge", "dmg": 46, "windup": 0.4, "dist": 230, "width": 60, "slow": 0.55, "slow_dur": 2}},
 	"jiao_ting_e": {"name": "磁牵手", "cd": 12, "targeted": true, "radius": 50, "color": Color("7a5a30"), "desc": "以巧力牵引前方敌军拖至身前，受 {v} 伤并被定住。", "effect": {"kind": "pull", "dmg": 34, "len": 230, "width": 55, "pull_dist": 200, "stun": 0.8}},
@@ -910,7 +912,7 @@ const ABILITIES := {
 	"gu_dasao_r": {"name": "天罚降", "cd": 40, "targeted": false, "radius": 0, "color": Color("3a7a40"), "desc": "号令天罚，全图敌军皆受 {v} 自然之力惩戒。", "effect": {"kind": "global_nuke", "dmg": 30, "heroes_only": false}},
 	"zhang_qing_cai_q": {"name": "毒刺", "cd": 0, "targeted": false, "radius": 0, "color": Color("6a4fb0"), "passive": true, "desc": "菜园子箭头淬毒，平攻附带毒伤并使敌减速。", "effect": {"kind": "passive", "on_hit_dmg": 10, "on_hit_slow": 0.7, "on_hit_slow_dur": 2}},
 	"zhang_qing_cai_w": {"name": "瘴毒风", "cd": 11, "targeted": true, "radius": 60, "color": Color("7a5fc0"), "desc": "放出一道瘴毒恶风贯穿敌阵，沿线 {v} 伤并大幅迟滞。", "effect": {"kind": "line_nuke", "dmg": 40, "len": 240, "width": 70, "slow": 0.5, "slow_dur": 3}},
-	"zhang_qing_cai_e": {"name": "布毒桩", "cd": 12, "targeted": false, "radius": 80, "color": Color("5a3fa0"), "desc": "栽下毒桩傀儡放冷箭蚕食敌军，持续 {v} 秒。", "effect": {"kind": "summon", "unit": "tiger_summon", "count": 2, "summon_kind": "ward", "hp": [120, 160, 200], "atk": [14, 18, 22], "dur": 25}},
+	"zhang_qing_cai_e": {"name": "布毒桩", "cd": 16, "targeted": true, "radius": 220, "color": Color("5a3fa0"), "desc": "菜园子栽下一根毒桩傀儡，原地朝最近官军连放冷箭，中者淬毒迟滞——栽一处，蚕食一整片来敌。", "effect": {"kind": "ward", "ward_mode": "poison", "ward_style": "poison", "ward_radius": 220, "pulse": 0.5, "dmg_ranks": [14, 20, 26], "slow": 0.5, "slow_dur": 1.5, "dur_ranks": [14, 16, 18]}},
 	"zhang_qing_cai_r": {"name": "万毒爆", "cd": 44, "targeted": false, "radius": 300, "color": Color("4a2f90"), "desc": "周身炸开漫天毒云，范围敌军受 {v} 即时伤，并长时间中毒灼磨。", "effect": {"kind": "smite", "dmg": 32, "dot_total": 120, "dot_dur": 8}},
 	"sun_erniang_q": {"name": "寒锋灼", "cd": 0, "targeted": false, "radius": 0, "color": Color("9fd8ff"), "passive": true, "desc": "母夜叉飞刀凝寒，射程更远、命中附带冰焰灼伤。", "effect": {"kind": "passive", "range_add": 30, "on_hit_dmg": 12}},
 	"sun_erniang_w": {"name": "碎冰镖", "cd": 10, "targeted": true, "radius": 110, "color": Color("8fd3ff"), "desc": "掷出寒镖击中目标四散碎裂，范围敌军 {v} 伤并迟滞。", "effect": {"kind": "smite", "dmg": 42, "slow": 0.55, "slow_dur": 2.5}},
@@ -928,9 +930,9 @@ const ABILITIES := {
 	"bai_sheng_w": {"name": "蒙汗网阵", "cd": 12, "targeted": true, "radius": 130, "color": Color("6a4fb0"), "desc": "白胜在落点暗设绊网，网住范围内众敌将其定住 {v}，并泼一把蒙汗药拖慢身形。", "effect": {"kind": "smite", "dmg": 38, "stun": 1.3, "slow": 0.5, "slow_dur": 2}},
 	"bai_sheng_e": {"name": "白日窜走", "cd": 10.0, "targeted": false, "radius": 100.0, "color": Color("ffd24a"), "passive": true, "desc": "白日鼠身轻足快，穿林越垄如履平地，平添移速与闪避，难被锁住。", "effect": {"kind": "passive", "speed_mult": 0.06, "evasion": 0.07}},
 	"bai_sheng_r": {"name": "穿云一弹", "cd": 36, "targeted": true, "radius": 90, "color": Color("8fd3ff"), "desc": "白胜屏息蓄力，弹出一记贯穿长射，沿线洞穿敌阵造成 {v} 重伤并震慑减速。", "effect": {"kind": "line_nuke", "dmg": 120, "len": 420, "width": 70, "slow": 0.5, "slow_dur": 2.5}},
-	"shi_qian_q": {"name": "飞檐走刃", "cd": 9, "targeted": true, "radius": 0, "color": Color("6a4fb0"), "desc": "时迁掷出短刃划出一道暗径，沿线敌人受 {v} 伤并被绊住放慢，他可循径疾走。", "effect": {"kind": "line_nuke", "dmg": 40, "len": 360, "width": 56, "slow": 0.55, "slow_dur": 3}},
+	"shi_qian_q": {"name": "飞檐走刃", "cd": 9, "targeted": true, "radius": 0, "color": Color("6a4fb0"), "desc": "时迁掷出系绳短刃划出一道暗径，沿线敌人受 {v} 伤并被绊索缠住 1.2 秒动弹不得（仍可反击）。", "effect": {"kind": "line_nuke", "dmg": 40, "len": 360, "width": 56, "root": 1.2}},
 	"shi_qian_w": {"name": "孤影绝杀", "cd": 10.0, "targeted": false, "radius": 100.0, "color": Color("ff3322"), "passive": true, "desc": "鼓上蚤专挑落单之人下手，攻击附带额外凶伤并回吸气血，越是孤立越是致命。", "effect": {"kind": "passive", "on_hit_dmg": 12, "lifesteal": 0.4}},
-	"shi_qian_e": {"name": "化形散身", "cd": 16, "targeted": false, "radius": 0, "color": Color("9fd8ff"), "desc": "时迁身形一散，化作虚影裹身护体，吸收来袭伤害 {v}，伤者反受其乱。", "effect": {"kind": "shield", "shield": 180, "dur": 6}},
+	"shi_qian_e": {"name": "化形散身", "cd": 16, "targeted": false, "radius": 0, "color": Color("9fd8ff"), "desc": "时迁身形一散，化作虚影潜行——敌军无法锁定，直到他出手；破隐首击奇袭重创。", "effect": {"kind": "invis", "dur": 7, "strike_bonus": 60}},
 	"shi_qian_r": {"name": "百鬼夜行", "cd": 40, "targeted": false, "radius": 0, "color": Color("8fd3ff"), "desc": "时迁遣无数鼓上分身潜入全场，扑向每一名敌将造成 {v} 重创并拖慢其行。", "effect": {"kind": "global_nuke", "dmg": 50, "heroes_only": true, "slow": 0.6, "slow_dur": 3}},
 	"duan_jingzhu_q": {"name": "回风斩", "cd": 10, "targeted": true, "radius": 90, "color": Color("ff7a2a"), "desc": "段景住策马一冲挥刀掠阵，沿途劈砍 {v}，刀气回旋再补一记余波。", "effect": {"kind": "charge", "dmg": 55, "windup": 0.3, "dist": 280, "width": 80, "slow": 0.6, "slow_dur": 1.5}},
 	"duan_jingzhu_w": {"name": "疾隼连击", "cd": 12, "targeted": false, "radius": 0, "color": Color("ffd24a"), "desc": "金毛犬刀势如隼扑食，暴起一阵连斩，攻速与平攻俱涨，越打越狠。", "effect": {"kind": "atkspeed", "atkspeed": 1.6, "dur": 5, "self_atk": 1.4}},
@@ -1073,7 +1075,48 @@ static func ability_levels(aid: String) -> String:
 		extra += ("　削甲 %d/%d/%d" % [int(dd[0]), int(dd[1]), int(dd[2])]) if (dd is Array and (dd as Array).size() >= 3) else ("　削甲 %d" % int(dd))
 	if eff.has("blind"):
 		extra += "　致盲 %ss(攻击必失)" % str(eff["blind"])
+	if float(eff.get("silence", 0.0)) > 0.0:
+		extra += "　噤声 %ss(禁敌施法)" % str(eff["silence"])
+	if float(eff.get("amp", 0.0)) > 0.0:
+		extra += "　易伤 +%d%%/%ss" % [int(float(eff["amp"]) * 100.0), int(float(eff.get("amp_dur", 6.0)))]
+	if float(eff.get("root", 0.0)) > 0.0:
+		extra += "　缠绕 %ss(定身可反击)" % str(eff["root"])
+	if float(eff.get("disarm", 0.0)) > 0.0:
+		extra += "　缴械 %ss(不能普攻)" % str(eff["disarm"])
+	if float(eff.get("taunt", 0.0)) > 0.0:
+		extra += "　嘲讽 %ss(强制攻击自己)" % str(eff["taunt"])
+	if String(eff.get("dispel", "")) == "buffs":
+		extra += "　驱散(清敌增益)"
+	elif String(eff.get("dispel", "")) == "debuffs":
+		extra += "　净化(解友减益)"
+	if float(eff.get("hex", 0.0)) > 0.0:
+		extra += "　变形 %ss(沉默+缴械+减速)" % str(eff["hex"])
 	match kind:
+		"bolt":
+			var _bl := "直线弹(可躲)" if (eff.has("homing") and not bool(eff["homing"])) else "单体追踪弹"
+			return "%s %s%s" % [_bl, _l3a(float(eff.get("dmg", 0.0))), extra]
+		"channel":
+			var _ct := int(float(eff.get("dur", 3.0)) / maxf(0.1, float(eff.get("tick", 0.5))))
+			return "引导%ss·每%ss轰一轮 %s（约%d轮）%s" % [str(eff.get("dur", 3.0)), str(eff.get("tick", 0.5)), _l3a(float(eff.get("dmg", 0.0))), _ct, extra]
+		"invis":
+			var _ib := float(eff.get("strike_bonus", 0.0))
+			var _isb := ("　破隐首击+%s" % _l3a(_ib)) if _ib > 0.0 else ""
+			return "隐身%ss(不可被索敌/指向·出手即现形)%s%s" % [str(eff.get("dur", 8.0)), _isb, extra]
+		"transform":
+			var fm: Dictionary = eff.get("form", {})
+			var fps := PackedStringArray()
+			if fm.has("atk_mult"): fps.append("攻×%.2f" % float(fm["atk_mult"]))
+			if fm.has("hp_mult"): fps.append("血×%.2f" % float(fm["hp_mult"]))
+			if fm.has("atk_cd_mult"): fps.append("攻速×%.2f" % (1.0 / maxf(0.1, float(fm["atk_cd_mult"]))))
+			if fm.has("speed_mult"): fps.append("移速×%.2f" % float(fm["speed_mult"]))
+			return "变身%ss·%s（到期还原）%s" % [str(eff.get("dur", 15.0)), " ".join(fps), extra]
+		"hook":
+			return "钩中拖回·伤 %s　钩程 %d%s" % [_l3a(float(eff.get("dmg", 0.0))), int(float(eff.get("len", 300.0))), extra]
+		"swap":
+			var sw := "与目标瞬间换位(敌我皆可点)"
+			if float(eff.get("dmg", 0.0)) > 0.0:
+				sw += "　换敌伤 %s" % _l3a(float(eff["dmg"]))
+			return sw + extra
 		"passive":
 			var ps := ""
 			if float(eff.get("atk_add", 0.0)) > 0.0: ps += "攻+%s　" % _l3p(float(eff["atk_add"]))
@@ -1085,6 +1128,9 @@ static func ability_levels(aid: String) -> String:
 			var fr: Array = eff.get("cav_ls_frac_ranks", [])
 			if fr.size() == 3:
 				ps += "打骑%d%%几率吸血%d/%d/%d%%" % [int(float(eff.get("cav_ls_chance", 0.0)) * 100.0), int(float(fr[0]) * 100.0), int(float(fr[1]) * 100.0), int(float(fr[2]) * 100.0)]
+			var apr2: Array = eff.get("aura_power_ranks", [])
+			if apr2.size() == 3:
+				ps += "攻击光环×%.2f/%.2f/%.2f　" % [float(apr2[0]), float(apr2[1]), float(apr2[2])]
 			return ps.strip_edges()
 		"slow_aura":
 			var b := float(eff.get("slow", 0.1))
@@ -1150,6 +1196,41 @@ static func ability_levels(aid: String) -> String:
 			var ats := ""
 			for x in atk: ats += ("/" if ats != "" else "") + str(int(x))
 			return "召%d只·血%s·攻%s" % [int(eff.get("count", 1)), hs, ats]
+		"ward":
+			var _mode := String(eff.get("ward_mode", "attack"))
+			var _durw := str(eff.get("ward_dur", 8.0))
+			if eff.has("dur_ranks"):
+				var _drw: Array = eff["dur_ranks"]
+				_durw = "%d/%d/%d" % [int(_drw[0]), int(_drw[1]), int(_drw[2])]
+			if _mode == "heal":
+				var _hs := str(int(float(eff.get("heal", 0.0))))
+				if eff.has("heal_ranks"):
+					var _hr: Array = eff["heal_ranks"]
+					_hs = "%d/%d/%d" % [int(_hr[0]), int(_hr[1]), int(_hr[2])]
+				return "立桩·每%ss回血%s · 范围%d · 存%ss" % [str(eff.get("pulse", 1.0)), _hs, int(eff.get("ward_radius", 200)), _durw]
+			var _ds := str(int(float(eff.get("dmg", 0.0))))
+			if eff.has("dmg_ranks"):
+				var _dr: Array = eff["dmg_ranks"]
+				_ds = "%d/%d/%d" % [int(_dr[0]), int(_dr[1]), int(_dr[2])]
+			return "立桩·每%ss射敌%s%s · 范围%d · 存%ss" % [str(eff.get("pulse", 1.0)), _ds, ("·减速" if float(eff.get("slow", 0.0)) > 0.0 else ""), int(eff.get("ward_radius", 200)), _durw]
+		"fissure":
+			return "贯穿 %s　震晕%ss · 裂墙阻路%ss%s" % [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("stun", 0.0)), str(eff.get("wall_dur", 4.0)), extra]
+		"echo":
+			return "每目标 %s　每多一敌+%s · 震晕%ss" % [_l3a(float(eff.get("dmg", 0.0))), _l3a(float(eff.get("echo", 0.0))), str(eff.get("stun", 0.0))]
+		"heal_wave":
+			return "弹跳%d次·伤敌%s／愈友%s" % [int(eff.get("jumps", 5)), _l3a(float(eff.get("dmg", 0.0))), _l3a(float(eff.get("heal", 0.0)))]
+		"fire_line", "fire_trail":
+			var _dps := ""
+			if eff.has("dps_ranks"):
+				var _dr2: Array = eff["dps_ranks"]
+				_dps = "%d/%d/%d" % [int(_dr2[0]), int(_dr2[1]), int(_dr2[2])]
+			elif eff.has("dps"):
+				_dps = str(int(float(eff["dps"])))
+			var _durf := str(eff.get("dur", 6.0))
+			if eff.has("dur_ranks"):
+				var _du: Array = eff["dur_ranks"]
+				_durf = "%d/%d/%d" % [int(_du[0]), int(_du[1]), int(_du[2])]
+			return "地火每秒 %s · 持续 %ss" % [_dps, _durf]
 		_:
 			if eff.has("dmg"):
 				return "伤害 %s%s" % [_l3a(float(eff["dmg"])), extra]
