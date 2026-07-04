@@ -570,12 +570,20 @@ func _layout_hero_bar() -> void:
 	var n := _hero_bar.get_child_count()
 	if n == 0:
 		return
-	var sa := DisplayServer.get_display_safe_area()
-	var ws := DisplayServer.window_get_size()
-	var left := maxf(0.0, float(sa.position.x))
-	var top := maxf(0.0, float(sa.position.y))
+	# 一律在「逻辑视口坐标」里排布（canvas_items 拉伸后的空间，与控件 offset 同系）。
+	# 安全区(DisplayServer)是物理/屏幕像素，直接当逻辑偏移会在 Retina/多显示器/刘海/桌面菜单栏下把英雄栏顶出画面——
+	# 桌面不吃安全区(left=top=0)，仅触屏按 物理→逻辑 比例内缩。修「AI友好/桌面下左侧英雄栏莫名不见」。
+	var vp := get_viewport().get_visible_rect().size
+	var left := 0.0
+	var top := 0.0
+	if touch_ui:
+		var ws := DisplayServer.window_get_size()
+		var sa := DisplayServer.get_display_safe_area()
+		if ws.x > 0 and ws.y > 0:
+			left = maxf(0.0, float(sa.position.x)) * vp.x / float(ws.x)
+			top = maxf(0.0, float(sa.position.y)) * vp.y / float(ws.y)
 	var band_top := 52.0 + top                      # 让位给左上资源条
-	var band_bottom := float(ws.y) - 250.0          # 让位给左下编队 chips（offset_bottom -166, 高 ~72）
+	var band_bottom := vp.y - 250.0                 # 让位给左下编队 chips（用逻辑视口高，别用物理窗口高）
 	var band_h := maxf(120.0, band_bottom - band_top)
 	var sep := 8.0
 	var cols := 1
