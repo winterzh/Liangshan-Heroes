@@ -20,6 +20,9 @@ var zoom_sens := 1.0        # 缩放灵敏度
 var show_damage := true      # 伤害飘字
 var show_healthbars := true  # 血条常显
 var show_cooldown := true    # 技能冷却倒计时数字
+var show_command_queue := true # 选中单位的当前路径/Shift队列
+var show_target_lines := true  # 选中单位攻击目标线
+var show_range_rings := true   # 活动单位/建筑的攻击范围圈
 
 
 func _ready() -> void:
@@ -67,6 +70,9 @@ func save() -> void:
 	c.set_value("show", "damage", show_damage)
 	c.set_value("show", "hpbar", show_healthbars)
 	c.set_value("show", "cooldown", show_cooldown)
+	c.set_value("show", "command_queue", show_command_queue)
+	c.set_value("show", "target_lines", show_target_lines)
+	c.set_value("show", "range_rings", show_range_rings)
 	c.save(PATH)
 
 
@@ -88,3 +94,6 @@ func _load() -> void:
 	show_damage = bool(c.get_value("show", "damage", show_damage))
 	show_healthbars = bool(c.get_value("show", "hpbar", show_healthbars))
 	show_cooldown = bool(c.get_value("show", "cooldown", show_cooldown))
+	show_command_queue = bool(c.get_value("show", "command_queue", show_command_queue))
+	show_target_lines = bool(c.get_value("show", "target_lines", show_target_lines))
+	show_range_rings = bool(c.get_value("show", "range_rings", show_range_rings))

@@ -1102,9 +1102,12 @@ func _rebuild_grid() -> void:
 		_sel_grid.add_child(icon)
 
 
-func _on_icon_clicked(u, additive: bool) -> void:
+func _on_icon_clicked(u, additive: bool, same_type := false) -> void:
 	if battle != null and is_instance_valid(u):
-		battle.select_single(u, additive)
+		if same_type:
+			battle.select_same_in_selection(u)
+		else:
+			battle.select_single(u, additive)
 
 
 func _refresh_panel() -> void:
@@ -1654,7 +1657,17 @@ class Minimap extends Control:
 			return
 		var jump := false
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var logic: Vector2 = event.position / size * _ws()
+			if battle._amove_armed:
+				battle.minimap_order(logic, true, event.shift_pressed)
+				accept_event()
+				return
 			jump = true
+		elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			var order_logic: Vector2 = event.position / size * _ws()
+			battle.minimap_order(order_logic, false, event.shift_pressed)
+			accept_event()
+			return
 		elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 			jump = true
 		if jump:
@@ -1708,7 +1721,7 @@ class UnitIcon extends Control:
 	func _gui_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if hud != null:
-				hud._on_icon_clicked(unit, event.shift_pressed)
+				hud._on_icon_clicked(unit, event.shift_pressed, event.ctrl_pressed or event.meta_pressed)
 			accept_event()
 
 
@@ -2008,7 +2021,7 @@ class CmdButton extends Control:
 			return
 		var kind := String(spec.get("kind", "build"))
 		if kind == "train":
-			hud.battle.queue_train(spec.get("bld", null), String(spec.get("key", "")))
+			hud.battle.queue_train_multi(spec.get("bld", null), String(spec.get("key", "")))
 		elif kind == "research":
 			hud.battle.queue_research(spec.get("bld", null), String(spec.get("key", "")))
 			hud.refresh_command()

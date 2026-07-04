@@ -35,6 +35,8 @@ const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（
 # 全托管经济 AI（auto_micro_level>=3）：喽啰自动采集/建造/修复 + 自动练兵练将研究 + 自动开战
 # 策略（用户定）：优先出齐英雄(AoE 打 3× 群)，再升级基地/造兵/科技/箭楼。
 var _eco_t := 0.0
+var _eco_last_wood := -1
+var _eco_wood_stall := 0.0
 var _eco_trap_cd := 0.0   # 全托管布陷阱节流
 var _eco_trap_lane := 0   # 布陷阱轮换的来路序号（三门轮流照顾）
 var _last_hb := 1.0       # 上次英雄倍率(变了就重算在场英雄血量)
@@ -47,6 +49,7 @@ const ECO_GOLD_MINERS := 5            # 金矿工目标（贴仓库·采矿效�
 # 木头目标：库存 ≈ 金的一半（建房/塔期极费木，民居/仓库/集市是纯木 0 金）。低于此比例或绝对地板 = 吃紧。
 const ECO_WOOD_RATIO := 0.6
 const ECO_WOOD_FLOOR := 140
+const ECO_MIN_WOODCUTTERS := 3
 const ECO_ARMY_CAP := 40              # 兵营常备军上限（不含英雄/农民）
 # 经济建筑(仓库/民居/集市)堆在金矿后方(安全角，远离东侧出兵口)护住人口；兵营在聚义厅、各塔往前沿外推御敌。
 ## 全托管常备建筑配额（出齐英雄后按序补，被拆即重建）。民居不在此列——改按人口需求动态补(见 _eco_house_needed)。塔走多塔种混搭、往前沿外推，构筑前置防线。
@@ -60,6 +63,9 @@ const ECO_HERO_ORDER := ["song_jiang", "hua_rong", "lin_chong", "gongsun_sheng",
 
 var units: Array = []
 var _grid: Dictionary = {}            # 空间网格(每物理帧重建)：Vector2i 格 → Array[Unit]，加速分离/光环/索敌的邻近查询
+var _focus_counts: Dictionary = {}    # 目标 instance_id → 有多少机动单位正锁定它(每物理帧随网格重建)；索敌打分的「过度集火」惩罚用
+var _res_block_cache: Dictionary = {} # 资源点 instance_id → 是否被建筑压住(按物理帧缓存；排矿农民每帧都问，别每次全表扫建筑)
+var _res_block_frame := -1
 var _lite_fx := false                 # 机动单位过多(>90)标志：保留备用；画面优先，当前不据此简化绘制
 var _no_opt := false                  # 压测对照(NO_OPT=1)：关掉 1.1.1 索敌限流，量优化前后差
 var _stealth_acc := 0.0               # 潜行 pass 限流累加（不必每帧跑）
@@ -158,6 +164,7 @@ var _idle_i := 0              # 闲置喽啰轮询索引
 var _groups := {}
 var _last_group_key := -1
 var _last_group_time := 0
+var _camera_locs := {}     # Ctrl/⌘+F1-F4 记录；Shift+F1-F4 跳转
 var _smoke := false
 var _smoke_t := 0.0
 var _touch_mode := false   # 触摸屏模式（一旦收到触摸事件即开启触摸交互：轻点选取、长按下令）
@@ -188,6 +195,9 @@ func _ready() -> void:
 	Art.set_runtime_alias({})                    # 清掉上局的运行时借图别名
 	if level.has_method("apply_overrides"):
 		level.apply_overrides(_defs, _abilities)   # 关卡级覆盖（场景编辑器：仅本场景的单位/技能改动）
+	var dv := DotaVisuals.apply(_defs, _abilities)  # 108将 DOTA 批量视觉语义；跳过驻守战玩家 6 将
+	if OS.get_environment("DOTA_VIS_AUDIT") == "1":
+		print("[dota_visuals] heroes=%d abilities=%d visuals=%d" % [int(dv.get("heroes", 0)), int(dv.get("abilities", 0)), int(dv.get("visuals", 0))])
 
 	economy = level.economy_enabled()
 	if economy:
@@ -275,6 +285,8 @@ func _ready() -> void:
 			_armor_selftest()
 		if OS.get_environment("AUTOMICRO") == "1":
 			_automicro_selftest()
+		if OS.get_environment("AMOVE_SIDE_TEST") == "1":
+			_amove_side_selftest()
 		if OS.get_environment("TOWERTRAP_TEST") == "1":
 			_towertrap_selftest()
 		if OS.get_environment("DOTACAST") == "1":
@@ -485,6 +497,36 @@ func center_camera_cell(cell: Vector2i) -> void:
 	camera.position = to_screen(map.cell_to_world(cell))
 
 
+func _jump_alert_or_home() -> void:
+	if _alert_t > 0.0:
+		camera.position = to_screen(_alert_pos)
+	else:
+		center_camera_cell(level.camera_start_cell())
+
+
+func _save_camera_loc(n: int) -> void:
+	_camera_locs[n] = camera.position
+	msg("已记录镜头位置 F%d" % n, 1.1)
+	Sfx.play("click")
+
+
+func _jump_camera_loc(n: int) -> void:
+	if not _camera_locs.has(n):
+		msg("F%d 尚未记录镜头位置" % n, 1.1)
+		return
+	camera.position = _camera_locs[n]
+	Sfx.play("select")
+
+
+func minimap_order(logic_pos: Vector2, amove: bool, queued := false) -> void:
+	var p := to_screen(logic_pos)
+	if amove:
+		_order_amove_at(p, queued)
+		_disarm_amove()
+	else:
+		_issue_order(p, queued)
+
+
 func win(line: String) -> void:
 	_end(true, line)
 
@@ -635,7 +677,8 @@ func nearest_resource(p: Vector2, kind := "") -> Unit:
 	var best: Unit = null
 	var bd := INF
 	for u in units:
-		if is_instance_valid(u) and u.is_resource and u.res_left > 0.0 and (kind == "" or u.res_kind == kind):
+		if is_instance_valid(u) and u.is_resource and u.res_left > 0.0 and (kind == "" or u.res_kind == kind) \
+				and not _resource_blocked(u):
 			var d: float = p.distance_to(u.position)
 			if d < bd:
 				bd = d
@@ -648,7 +691,8 @@ func nearest_free_gold(p: Vector2, exclude: Unit, w: Unit) -> Unit:
 	var best: Unit = null
 	var bd := INF
 	for u in units:
-		if not is_instance_valid(u) or not u.is_resource or u.res_kind != "gold" or u.res_left <= 0.0:
+		if not is_instance_valid(u) or not u.is_resource or u.res_kind != "gold" or u.res_left <= 0.0 \
+				or _resource_blocked(u):
 			continue
 		if u == exclude or u.gold_busy(w):
 			continue
@@ -657,6 +701,35 @@ func nearest_free_gold(p: Vector2, exclude: Unit, w: Unit) -> Unit:
 			bd = d
 			best = u
 	return best
+
+
+func _resource_blocked(node: Unit) -> bool:
+	if node == null or not is_instance_valid(node):
+		return true
+	var fr := int(Engine.get_physics_frames())
+	if _res_block_frame != fr:
+		_res_block_frame = fr
+		_res_block_cache.clear()
+	var nid := node.get_instance_id()
+	if _res_block_cache.has(nid):
+		return bool(_res_block_cache[nid])
+	var blocked := _resource_blocked_calc(node)
+	_res_block_cache[nid] = blocked
+	return blocked
+
+
+func _resource_blocked_calc(node: Unit) -> bool:
+	var rc := map.world_to_cell(node.position)
+	if not map.is_open_cell(rc):
+		return true
+	for u in units:
+		if not (is_instance_valid(u) and u.is_building and not u.is_resource and u.hp > 0.0):
+			continue
+		var bc: Vector2i = u.get_meta("fcell", map.world_to_cell(u.position))
+		var bh: int = int(u.get_meta("fhalf", GameMap.footprint_half_for(u.radius)))
+		if rc.x >= bc.x - bh and rc.x <= bc.x + bh and rc.y >= bc.y - bh and rc.y <= bc.y + bh:
+			return true
+	return false
 
 
 ## 最近的卸货点（指定阵营、带 drop_off 标记的建筑：聚义厅/仓库；默认玩家）
@@ -800,6 +873,16 @@ func _building_overlap(cell: Vector2i, half: int) -> bool:
 	return false
 
 
+func _resource_overlap(cell: Vector2i, half: int) -> bool:
+	for u in units:
+		if not (is_instance_valid(u) and u.is_resource and u.res_left > 0.0):
+			continue
+		var rc := map.world_to_cell(u.position)
+		if rc.x >= cell.x - half and rc.x <= cell.x + half and rc.y >= cell.y - half and rc.y <= cell.y + half:
+			return true
+	return false
+
+
 func arm_build(key: String) -> void:
 	if not _defs.get(key, {}).get("buildable", false):
 		return
@@ -829,6 +912,10 @@ func _try_place_building(p: Vector2) -> void:
 		return
 	if _building_overlap(cell, half):
 		msg("太靠近其它建筑了，不能压在上面", 1.5)
+		Sfx.play("cant")
+		return
+	if _resource_overlap(cell, half):
+		msg("不能把建筑压在资源点上", 1.5)
 		Sfx.play("cant")
 		return
 	var cg := int(d.get("cost_gold", 0))
@@ -1246,6 +1333,31 @@ func queue_train(bld: Unit, key: String) -> void:
 	if bld._train_queue.size() == 1:
 		# 竞技场沙盒：即时成军（不等训练）；其余模式照常
 		bld._train_t = 0.6 if (level != null and level.has_method("arena_instant_train") and level.arena_instant_train()) else float(d.get("train_time", 12.0))
+
+
+## 多生产建筑同选：从同类建筑里挑最短队列下单，形成 SC2 式宏操作；单建筑退回原逻辑。
+func queue_train_multi(bld: Unit, key: String) -> void:
+	var pool := _selected_producers_for(bld, key)
+	if pool.size() <= 1:
+		queue_train(bld, key)
+		return
+	pool.sort_custom(func(a: Unit, b: Unit) -> bool:
+		if a._train_queue.size() == b._train_queue.size():
+			return a.get_instance_id() < b.get_instance_id()
+		return a._train_queue.size() < b._train_queue.size())
+	queue_train(pool[0], key)
+
+
+func _selected_producers_for(bld: Unit, key: String) -> Array:
+	if bld == null or not is_instance_valid(bld):
+		return []
+	var out: Array = []
+	for u in selection:
+		if not (is_instance_valid(u) and u.is_building and not u.is_constructing and u.faction == bld.faction and u.key == bld.key):
+			continue
+		if key in u.setup_def.get("produces", []):
+			out.append(u)
+	return out
 
 
 ## 取消生产队列里第 index 个（经典RTS式：点队列图标即撤单），全额退还资源；撤的是队首则重置计时。
@@ -1844,6 +1956,7 @@ func _auto_economy_pass(delta: float) -> void:
 	if _eco_t > 0.0:
 		return
 	_eco_t = 0.5
+	_eco_update_wood_stall()
 	_eco_workers()
 	_eco_build()
 	_eco_train()
@@ -1926,6 +2039,99 @@ func _eco_base_pos() -> Vector2:
 	return hall.position if hall != null else map.cell_to_world(level.camera_start_cell())
 
 
+func _eco_update_wood_stall() -> void:
+	if _eco_last_wood < 0:
+		_eco_last_wood = wood
+		return
+	if _eco_wood_short() and wood <= _eco_last_wood:
+		_eco_wood_stall += 0.5
+	else:
+		_eco_wood_stall = 0.0
+	_eco_last_wood = wood
+
+
+func _eco_worker_kind(w: Unit) -> String:
+	if w == null or not is_instance_valid(w):
+		return ""
+	if w._carry_kind != "" and (w._state == Unit.ST_RETURN or w._carry_amt > 0.0):
+		return w._carry_kind
+	if is_instance_valid(w._gather_node) and (w._state == Unit.ST_GATHER or w._state == Unit.ST_RETURN):
+		return String(w._gather_node.res_kind)
+	return ""
+
+
+func _eco_effective_miners(kind: String) -> int:
+	var n := 0
+	for u in units:
+		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 \
+				and (u._state == Unit.ST_GATHER or u._state == Unit.ST_RETURN) \
+				and _eco_worker_kind(u) == kind:
+			n += 1
+	return n
+
+
+func _eco_wood_target() -> int:
+	var workers := _eco_count_workers()
+	if workers <= 0:
+		return 0
+	var keep_gold := 1 if workers > 1 else 0
+	var baseline := maxi(ECO_MIN_WOODCUTTERS, _eco_wcap_dyn() - _eco_gold_target())
+	return clampi(baseline, 1, maxi(1, workers - keep_gold))
+
+
+func _eco_reassign_wood(workers: Array) -> void:
+	if not _eco_wood_short():
+		return
+	var target := _eco_wood_target()
+	if target <= 0:
+		return
+	var have := _eco_effective_miners("wood")
+	var force_refresh := _eco_wood_stall >= 3.0
+	if have >= target and not force_refresh:
+		return
+	var node := nearest_resource(_eco_base_pos(), "wood")
+	if node == null:
+		return
+	var keep_gold := _eco_effective_miners("gold")
+	var candidates: Array = []
+	for w in workers:
+		if not (is_instance_valid(w) and w.hp > 0.0 and not w.garrisoned):
+			continue
+		if w._state == Unit.ST_BUILD or w._state == Unit.ST_REPAIR:
+			continue
+		var k := _eco_worker_kind(w)
+		if k == "wood" and not force_refresh:
+			continue
+		if k == "gold" and keep_gold <= 1:
+			continue
+		var pri := 2
+		if w.is_idle_worker():
+			pri = 0
+		elif k == "wood":
+			pri = 1
+		elif k == "":
+			pri = 1
+		elif k == "gold":
+			pri = 4
+		candidates.append({"w": w, "p": pri, "d": w.position.distance_to(node.position), "k": k})
+	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if int(a["p"]) == int(b["p"]):
+			return float(a["d"]) < float(b["d"])
+		return int(a["p"]) < int(b["p"]))
+	var orders := 0
+	var max_orders := target if force_refresh else maxi(0, target - have)
+	for c in candidates:
+		if orders >= max_orders:
+			break
+		var w: Unit = c["w"]
+		if String(c["k"]) == "gold":
+			if keep_gold <= 1:
+				continue   # 收集候选时用的是初始金矿工数，这里按实时余量再拦一次——至少留 1 个金矿工
+			keep_gold -= 1
+		w.order_gather(node)
+		orders += 1
+
+
 func _eco_workers() -> void:
 	var workers: Array = []
 	for u in units:
@@ -1933,12 +2139,13 @@ func _eco_workers() -> void:
 			workers.append(u)
 	if workers.is_empty():
 		return
+	_eco_reassign_wood(workers)
 	var gold_miners := _eco_count_miners("gold")
 	for w in workers:
 		if not w.is_idle_worker():
 			continue
 		var site := _eco_pending_site()
-		if site != null:
+		if site != null and not _eco_wood_short():
 			w.order_build(site)
 			continue
 		var want_gold := gold_miners < _eco_gold_target()   # 木紧时金矿工目标-1，腾人去伐木
@@ -1957,6 +2164,8 @@ func _eco_workers() -> void:
 
 ## 自动修复：受损(<65%)、非施工、附近无敌的己方建筑 → 抽一名非金矿工去修（已有人修则不重复）。
 func _eco_repair() -> void:
+	if _eco_wood_short() and _eco_effective_miners("wood") < _eco_wood_target():
+		return
 	var dmg: Unit = null
 	for u in units:
 		if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG and not u.is_constructing \
@@ -1969,7 +2178,7 @@ func _eco_repair() -> void:
 		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG \
 				and u._state == Unit.ST_REPAIR and u.position.distance_to(dmg.position) < 130.0:
 			return
-	var w := _eco_free_worker()
+	var w := _eco_free_worker(_eco_wood_short())
 	if w != null:
 		w.order_repair(dmg)
 
@@ -1981,7 +2190,7 @@ func _eco_build() -> void:
 		if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG and u.is_constructing and u.hp > 0.0:
 			active += 1
 			if _eco_builders_on(u) == 0:   # 工地没人施工(工人阵亡/被打断)→ 补一个
-				var bw := _eco_free_worker()
+				var bw := _eco_free_worker(_eco_wood_short())
 				if bw != null:
 					bw.order_build(u)
 	if active >= ECO_MAX_SITES:
@@ -1990,6 +2199,9 @@ func _eco_build() -> void:
 	if e.is_empty():
 		return
 	var key: String = e["key"]
+	if _eco_wood_short() and _eco_effective_miners("wood") < _eco_wood_target() \
+			and key != "depot" and key != "house":
+		return
 	var d: Dictionary = _defs.get(key, {})
 	var cg := int(d.get("cost_gold", 0))
 	var cw := int(d.get("cost_wood", 0))
@@ -2006,7 +2218,7 @@ func _eco_build() -> void:
 	var guard_r := 120.0 if nr == "front" else 240.0
 	if (nr == "hall" or nr == "front") and _foe_within(map.cell_to_world(cell), guard_r, Unit.FACTION_LIANG):
 		return
-	var builder := _eco_free_worker()
+	var builder := _eco_free_worker(_eco_wood_short())
 	if builder == null:
 		return
 	if not spend(cg, cw):
@@ -2026,9 +2238,11 @@ func _eco_train() -> void:
 		_eco_clear_hall_nonhero(hall)   # 聚义厅有非英雄队列(喽啰)→ 全停掉，腾出来出英雄/复活
 		# 木荒急救(高于英雄逻辑)：木紧且喽啰不足上限 → 即便在攒/复活英雄，也补一个喽啰去伐木。
 		# 喽啰仅 20 金且不碰复活底线；否则「伐木工全死 + 英雄战死攒金复活」会锁死经济、永不产喽啰(用户反馈)。
+		var wood_emergency := _eco_wood_short() and _eco_effective_miners("wood") < ECO_MIN_WOODCUTTERS
+		var worker_cost := int(_defs.get("lou_luo", {}).get("cost_gold", 20))
 		if _eco_wood_short() and _eco_count_workers() < _eco_wcap_dyn() and not _eco_in_queue("lou_luo") \
 				and _eco_can_train("lou_luo", hall) \
-				and gold - int(_defs.get("lou_luo", {}).get("cost_gold", 20)) >= _eco_revive_reserve():
+				and (wood_emergency or gold - worker_cost >= _eco_revive_reserve()):
 			queue_train(hall, "lou_luo")
 		# 有钱就复活：战死英雄(有存档、不在场、未在队列) → 按 ORDER 能复几个复几个
 		var revived := false
@@ -2111,8 +2325,9 @@ func _eco_research() -> void:
 func _eco_trade() -> void:
 	if _eco_first_building("market") == null:
 		return
-	if _eco_wood_short() and gold >= TRADE_AMT + _eco_revive_reserve():
-		do_trade("gold")   # 100 金 → 70 木：木荒兜底，绝不动复活底线
+	var wood_emergency := _eco_wood_short() and (_eco_effective_miners("wood") < ECO_MIN_WOODCUTTERS or _eco_wood_stall >= 3.0)
+	if _eco_wood_short() and (gold >= TRADE_AMT + _eco_revive_reserve() or (wood_emergency and gold >= TRADE_AMT + 20)):
+		do_trade("gold")   # 100 金 → 70 木：木荒兜底；常规不动复活底线，紧急木荒(伐木断档/木量停滞)例外——先解锁经济再攒复活金
 		return
 	if gold < 300 and wood >= 500:
 		do_trade("wood")   # 100 木 → 70 金
@@ -2286,24 +2501,27 @@ func _eco_find_cell(anchor: Vector2i, key: String) -> Vector2i:
 				if absi(dx) != r and absi(dy) != r:
 					continue   # 只看当前环
 				var c := anchor + Vector2i(dx, dy)
-				if map.area_buildable(c, half):
+				if map.area_buildable(c, half) and not _resource_overlap(c, half):
 					return c
 	return Vector2i(-1, -1)
 
 
-## 拉一名可建造的工人：优先伐木/闲置(别抽金矿工，金是瓶颈)，实在没有才抽金矿工。
-func _eco_free_worker() -> Unit:
-	var fallback: Unit = null
+## 拉一名可建造的工人：常规优先非金矿工；木荒时保护正在伐木/送木的工人，避免越缺木越把木工拉走。
+func _eco_free_worker(protect_wood := false) -> Unit:
+	var fallback_gold: Unit = null
 	for u in units:
 		if not (is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0):
 			continue
 		if u._state == Unit.ST_BUILD or u._state == Unit.ST_REPAIR:
 			continue
-		if is_instance_valid(u._gather_node) and u._gather_node.res_kind == "gold":
-			fallback = u
+		var k := _eco_worker_kind(u)
+		if protect_wood and k == "wood":
+			continue   # 木荒保护：绝不抽伐木/送木工（宁可这轮没人可派）
+		if k == "gold":
+			fallback_gold = u
 			continue
 		return u
-	return fallback
+	return fallback_gold
 
 
 func _eco_pending_site() -> Unit:
@@ -3516,12 +3734,17 @@ func _gold_phasing(u: Unit) -> bool:
 ## 每物理帧重建一次：把所有存活(未驻军)单位按 GRID_CELL 分桶；顺带统计机动单位数。
 func _grid_build() -> void:
 	_grid.clear()
+	_focus_counts.clear()
 	var mob := 0
 	for u in units:
 		if not is_instance_valid(u) or u.hp <= 0.0 or u.garrisoned or u.is_resource:
 			continue   # 资源点(金矿/林木)从不是分离/索敌/光环目标 → 不入网格，免得林边把桶撑大拖慢邻近查询
 		if not u.is_building:
 			mob += 1
+			var ft: Unit = u._target
+			if ft != null and is_instance_valid(ft):   # 顺路统计「谁被几人锁定」，索敌打分 O(1) 查——别在打分里逐目标扫邻格
+				var fid := ft.get_instance_id()
+				_focus_counts[fid] = int(_focus_counts.get(fid, 0)) + 1
 		var k := Vector2i(int(floor(u.position.x / GRID_CELL)), int(floor(u.position.y / GRID_CELL)))
 		if _grid.has(k):
 			_grid[k].append(u)
@@ -3755,7 +3978,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			else:
 				_recall_group(num)
 		elif kc == KEY_SPACE:
-			center_camera_cell(level.camera_start_cell())
+			_jump_alert_or_home()
 		elif kc == KEY_A:
 			arm_amove()
 		elif kc == KEY_S:
@@ -3780,8 +4003,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			_command_hotkey(2)
 		elif kc == KEY_R:
 			_command_hotkey(3)
+		elif kc == KEY_F2 and not event.shift_pressed and not event.ctrl_pressed and not event.meta_pressed:
+			select_all_army()
+		elif kc >= KEY_F1 and kc <= KEY_F4 and (event.ctrl_pressed or event.meta_pressed):
+			_save_camera_loc(kc - KEY_F1 + 1)
+		elif kc >= KEY_F1 and kc <= KEY_F4 and event.shift_pressed:
+			_jump_camera_loc(kc - KEY_F1 + 1)
 		elif kc >= KEY_F1 and kc <= KEY_F8:
-			_select_hero_by_index(kc - KEY_F1)   # F1..F8 按头像栏顺序选英雄
+			var hidx := kc - KEY_F1
+			if kc > KEY_F2:
+				hidx -= 1   # F2 留给全军；F3 起顺延选择后续英雄
+			_select_hero_by_index(hidx)
 		elif kc == KEY_TAB:
 			_cycle_subgroup()
 		elif kc == KEY_PERIOD or kc == KEY_COMMA:
@@ -4254,7 +4486,7 @@ func _command_hotkey(slot: int) -> void:
 	elif economy and au.is_building and not au.is_constructing and au.setup_def.has("produces"):
 		var tm := train_menu(au)
 		if slot < tm.size():
-			queue_train(au, String(tm[slot]["key"]))
+			queue_train_multi(au, String(tm[slot]["key"]))
 	elif economy and au.is_building and not au.is_constructing and au.setup_def.has("trades"):
 		var trm := trade_menu(au)
 		if slot < trm.size():
@@ -4753,7 +4985,10 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 			oax.col = ad["color"]
 			oax.life = float(eff.get("dur", 3.0))
 			if eff.has("orbit_art"):
-				oax.tex = Art.item_texture(String(eff["orbit_art"]))   # 手绘环绕物（李逵板斧）
+				var oa := String(eff["orbit_art"])
+				oax.tex = Art.item_texture(oa)   # 手绘环绕物（李逵板斧等旧图）
+				if oax.tex == null:
+					oax.tex = Art.dota_projectile_texture(oa)   # DOTA 批量视觉新图集
 			fx_root.add_child(oax)
 		"chrono":   # 林冲 R·时空封印：域内敌军定身（每帧续晕）持续 dur；封印范围随等级 radius_ranks 扩大
 			var cr := r
@@ -4849,9 +5084,12 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 		_spawn_ground_fire(center, r, fd_total, fd_dur, caster, foe)
 	if eff.has("dot_total"):   # 普通技附带地面持续伤害（如箭雨钉地续伤），不挂火焰演出，沿用本招演出
 		_add_ground_dot(center, r, float(eff["dot_total"]) * sc, float(eff.get("dot_dur", 3.0)), caster, foe)
-	# smite 按控制/减益参数分流专属演出（替换默认冲击环），让 80+ 个共用 smite 的英雄免费差异化
-	var _smite_special := String(eff.get("kind", "")) == "smite" and _spawn_smite_variant_fx(center, r, eff, ad)
-	if not _smite_special and String(eff.get("kind", "")) != "sector_nuke":   # 扇形突刺(林冲戳茅)不画整圈大光环——与前方扇形伤害不符，只留长枪贯穿演出
+	# DOTA 批量视觉优先替换默认大光环；没有 visual 的旧技能仍走 smite 分流/通用冲击波。
+	var _dota_visual_replaces := _spawn_dota_visual_fx(caster, center, r, ad, eff, cast_kind)
+	var _smite_special := false
+	if not _dota_visual_replaces:
+		_smite_special = String(eff.get("kind", "")) == "smite" and _spawn_smite_variant_fx(center, r, eff, ad)
+	if not _dota_visual_replaces and not _smite_special and String(eff.get("kind", "")) != "sector_nuke":   # 扇形突刺(林冲戳茅)不画整圈大光环——与前方扇形伤害不符，只留长枪贯穿演出
 		_spawn_ability_fx(center, r, ad["color"])
 	_spawn_hero_skill_fx(aid, caster, center, ad)   # 英雄专属华丽演出（花荣箭雨/神箭…）
 	if cast_kind != "invis" and caster._invis_t > 0.0:
@@ -5661,6 +5899,116 @@ func _spawn_smite_variant_fx(center: Vector2, r: float, eff: Dictionary, ad: Dic
 	return true
 
 
+## 108将 DOTA 批量视觉层：按 DotaVisuals 写入的 visual 字段生成弹体/符文/命中/扫线演出。
+## 这里只管表现，不延迟既有结算，避免改变竞技场外 AI/关卡节奏。
+func _spawn_dota_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dictionary, eff: Dictionary, cast_kind: String) -> bool:
+	var visual: Dictionary = ad.get("visual", {})
+	if visual.is_empty():
+		return false
+	var delivery := String(visual.get("delivery", "impact"))
+	var theme := String(visual.get("theme", "stone"))
+	var col := _dota_visual_color(theme, ad.get("color", Color.WHITE))
+	var projectile := String(visual.get("projectile", "stone"))
+	var impact := String(visual.get("impact", "dust_ring"))
+	var start := caster.position + Vector2(0, -10)
+	var target := center
+	match delivery:
+		"projectile", "thrown", "lob":
+			if cast_kind != "bolt":
+				if start.distance_to(target) > 18.0:
+					var pfx := DotaProjectileFx.new()
+					pfx.position = start
+					pfx.end_w = target
+					pfx.col = col
+					pfx.tex = Art.dota_projectile_texture(projectile)
+					pfx.impact_tex = Art.dota_impact_texture(impact)
+					pfx.lob = delivery == "lob"
+					fx_root.add_child(pfx)
+				else:
+					_spawn_dota_impact_node(target, r, col, impact, "impact")
+		"beam":
+			var bfx := DotaBeamFx.new()
+			bfx.position = target
+			bfx.start_w = start
+			bfx.end_w = target
+			bfx.col = col
+			fx_root.add_child(bfx)
+		"sweep":
+			var sw := DotaSweepFx.new()
+			sw.position = caster.position
+			sw.end_w = target
+			sw.rad = r
+			sw.col = col
+			fx_root.add_child(sw)
+		"chain":
+			if cast_kind != "hook":
+				var cfx := DotaBeamFx.new()
+				cfx.position = target
+				cfx.start_w = start
+				cfx.end_w = target
+				cfx.col = col
+				cfx.chain = true
+				fx_root.add_child(cfx)
+		"dash":
+			if cast_kind != "blink":
+				var dfx := DotaBeamFx.new()
+				dfx.position = target
+				dfx.start_w = caster.position
+				dfx.end_w = target
+				dfx.col = col
+				dfx.dash = true
+				fx_root.add_child(dfx)
+		"aura":
+			_spawn_dota_impact_node(caster.position, r, col, impact, "aura")
+		"rune", "manifest", "roar", "impact":
+			_spawn_dota_impact_node(target, r, col, impact, delivery)
+		_:
+			_spawn_dota_impact_node(target, r, col, impact, "impact")
+	return bool(visual.get("replace_default", true))
+
+
+func _spawn_dota_impact_node(pos: Vector2, r: float, col: Color, style: String, mode: String) -> void:
+	var fx := DotaImpactFx.new()
+	fx.position = pos
+	fx.rad = maxf(42.0, r)
+	fx.col = col
+	fx.tex = Art.dota_impact_texture(style)
+	fx.mode = mode
+	fx_root.add_child(fx)
+	if mode != "aura" and mode != "rune":   # 增益光环/符文域不震屏——放招频繁，逢法必抖会让镜头一直发颤
+		shake(clampf(r / 18.0, 1.2, 4.0), pos)
+
+
+func _dota_visual_color(theme: String, fallback: Color) -> Color:
+	var tc := fallback
+	match theme:
+		"hammer", "stone":
+			tc = Color(0.72, 0.66, 0.52)
+		"axe", "blade", "spear", "arrow":
+			tc = Color(0.88, 0.86, 0.74)
+		"fire":
+			tc = Color(1.0, 0.38, 0.12)
+		"ice":
+			tc = Color(0.58, 0.88, 1.0)
+		"water":
+			tc = Color(0.28, 0.66, 1.0)
+		"poison":
+			tc = Color(0.34, 0.95, 0.32)
+		"thunder":
+			tc = Color(0.55, 0.86, 1.0)
+		"shadow":
+			tc = Color(0.62, 0.38, 0.95)
+		"holy":
+			tc = Color(1.0, 0.86, 0.36)
+		"beast":
+			tc = Color(0.95, 0.47, 0.24)
+		"chain":
+			tc = Color(0.72, 0.68, 0.58)
+		"command":
+			tc = Color(0.95, 0.76, 0.28)
+	return fallback.lerp(tc, 0.65)
+
+
 ## 地面烈焰 DOT：在 center 铺一片燃烧区，dur 秒内按固定节拍分多次跳伤敌人（累计 total），
 ## 配 GroundFireFx 持续火焰演出。伤害结算在 _ground_dot_pass（施法者可中途阵亡，火照烧）。
 func _pick(arr, rank: int):
@@ -6366,6 +6714,15 @@ func select_single(u: Unit, additive: bool) -> void:
 	_set_selection(new_sel)
 
 
+func select_same_in_selection(proto: Unit) -> void:
+	if not is_instance_valid(proto):
+		return
+	var arr: Array = selection.filter(func(u) -> bool:
+		return is_instance_valid(u) and u.hp > 0.0 and u.key == proto.key and u.faction == proto.faction)
+	if not arr.is_empty():
+		_set_selection(arr)
+
+
 ## 查看敌方单位（只读）：清掉己方选区与命令卡，高亮该敌、面板显示其信息，但不可对其下令。
 func _set_inspect(u: Unit) -> void:
 	for s in selection:
@@ -6677,7 +7034,10 @@ func _formation_targets(movers: Array, dest: Vector2, spacing := 30.0) -> Array:
 		var row := slot / cols
 		var cx := (float(col) - float(cols - 1) * 0.5) * spacing
 		var cy := (float(row) - float(rows - 1) * 0.5) * spacing
-		res[mi] = dest + right * cx + fwd * (-cy)   # row 0 = 最前排（朝目标）
+		var fp := dest + right * cx + fwd * (-cy)   # row 0 = 最前排（朝目标）
+		if not map.is_open_world(fp):
+			fp = map.cell_to_world(map.nearest_open(map.world_to_cell(fp)))
+		res[mi] = fp
 	return res
 
 
@@ -7635,6 +7995,51 @@ func _economy_selftest() -> void:
 			8, 10, lingers_10s, faded_after_30s, bld_remembered, foe_hidden])
 
 
+## A 地板侧向接敌自检（AMOVE_SIDE_TEST=1）：往上 A 移，右侧 165px 的敌人应被收进目标。
+func _amove_side_selftest() -> void:
+	if map == null:
+		print("[amove] side_acquire=false reason=no_map")
+		return
+	var cell := Vector2i(-1, -1)
+	var found := false
+	for y in range(4, map.h - 4, 4):
+		for x in range(4, map.w - 4, 4):
+			var c := Vector2i(x, y)
+			if not map.is_open_cell(c):
+				continue
+			var p := map.cell_to_world(c)
+			var clear := true
+			for u in units:
+				if is_instance_valid(u) and not u.is_resource and u.hp > 0.0 and u.position.distance_to(p) < 420.0:
+					clear = false
+					break
+			if clear:
+				cell = c
+				found = true
+				break
+		if found:
+			break
+	if not found:
+		cell = map.nearest_open(level.camera_start_cell() + Vector2i(18, 18))
+	var origin := map.cell_to_world(cell)
+	var mover := spawn_unit("liang_dao", Unit.FACTION_LIANG, origin)
+	var side_foe := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(165.0, 0.0))
+	mover.set_stance(Unit.STANCE_AGGRO)
+	side_foe.set_stance(Unit.STANCE_PASSIVE)
+	mover.order_amove(map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(0.0, -320.0)))))
+	for _i in range(10):
+		_grid_build()
+		mover._physics_process(0.1)
+	var locked := mover._target == side_foe
+	var engaged := locked and (mover._state == Unit.ST_CHASE or mover._lunge > 0.0)
+	print("[amove] side_acquire=%s locked=%s state=%d dist=%.1f" % [
+		engaged, locked, mover._state, mover.position.distance_to(side_foe.position)])
+	units.erase(mover)
+	units.erase(side_foe)
+	mover.queue_free()
+	side_foe.queue_free()
+
+
 ## 科技归属自检（TECH_TEST=1）：兵营科技(利刃/坚铠)不加成英雄；基地·时代科技(聚义/替天行道)加成英雄各 ~+10%。
 func _tech_selftest() -> void:
 	var prev_econ := economy
@@ -8258,6 +8663,12 @@ class Overlay extends Node2D:
 			draw_arc(b._click_fx_pos, 8.0 + 20.0 * gr, 0.0, TAU, 22, c, 3.0)
 			draw_arc(b._click_fx_pos, 4.0 + 9.0 * gr, 0.0, TAU, 18, Color(c.r, c.g, c.b, t * 0.7), 2.0)
 			draw_circle(b._click_fx_pos, 3.0 * t, Color(c.r, c.g, c.b, t))
+		if Settings.show_command_queue:
+			_draw_selected_orders()
+		if Settings.show_target_lines:
+			_draw_selected_targets()
+		if Settings.show_range_rings:
+			_draw_selected_ranges()
 		# 指向施法预览：按下技能即在地面显示「作用范围指示器」（跟随鼠标，等距投影）。
 		# 形状随技能：闪现/突刺/冲锋=直线箭头(封顶最大射程)；箭雨=前方扇形；其余点目标=圆圈。
 		if b._ability_armed != "":
@@ -8307,6 +8718,80 @@ class Overlay extends Node2D:
 			draw_polyline(pts + PackedVector2Array([pts[0]]), tcol, 2.0)
 			var tmk: Color = td.get("color", Color("ffaa44"))
 			draw_circle(tctr, 6.0, Color(tmk.r, tmk.g, tmk.b, 0.9))
+
+	func _draw_selected_orders() -> void:
+		for u in b.selection:
+			if not (is_instance_valid(u) and u.hp > 0.0 and not u.is_building and not u.garrisoned):
+				continue
+			var pts := PackedVector2Array()
+			pts.append(b.to_screen(u.position))
+			for pi in range(u._path_i, u._path.size()):   # 只画还没走到的路点——从 0 画会拖出一条折回身后的假线
+				pts.append(b.to_screen(u._path[pi]))
+			if pts.size() >= 2:
+				draw_polyline(pts, Color(0.36, 0.95, 0.52, 0.55), 1.4)
+				draw_circle(pts[pts.size() - 1], 3.0, Color(0.5, 1.0, 0.6, 0.85))
+			var last: Vector2 = u.position
+			if u._path.size() > 0:
+				last = u._path[u._path.size() - 1]
+			var qn := 0
+			for o in u._queue:
+				var op: Vector2 = _order_world_pos(o)
+				if op == Vector2.INF:
+					continue
+				var a: Vector2 = b.to_screen(last)
+				var p: Vector2 = b.to_screen(op)
+				draw_dashed_line(a, p, Color(0.5, 0.85, 1.0, 0.58), 1.2, 8.0)
+				draw_circle(p, 4.5, Color(0.5, 0.85, 1.0, 0.7))
+				var f := ThemeDB.fallback_font
+				draw_string(f, p + Vector2(5, -5), str(qn + 1), HORIZONTAL_ALIGNMENT_LEFT, 24, 12, Color("d7f5ff"))
+				last = op
+				qn += 1
+
+
+	func _draw_selected_targets() -> void:
+		for u in b.selection:
+			if not (is_instance_valid(u) and u.hp > 0.0 and not u.is_building and is_instance_valid(u._target)):
+				continue
+			var tgt = u._target
+			if tgt == null or not is_instance_valid(tgt) or tgt.hp <= 0.0:
+				continue
+			var a: Vector2 = b.to_screen(u.position + Vector2(0, -6))
+			var p: Vector2 = b.to_screen(tgt.position + Vector2(0, -6))
+			var col := Color(1.0, 0.32, 0.22, 0.7) if tgt.faction != u.faction else Color(0.35, 0.9, 1.0, 0.65)
+			draw_line(a, p, col, 1.5)
+			draw_arc(p, maxf(8.0, tgt.radius * 0.35), 0.0, TAU, 18, col, 1.6)
+
+
+	func _draw_selected_ranges() -> void:
+		var act = b.active_unit()
+		if act == null or not is_instance_valid(act) or act.atk <= 0.0:
+			return
+		var col := Color(1.0, 0.82, 0.28, 0.72) if act.faction == Unit.FACTION_LIANG else Color(1.0, 0.35, 0.25, 0.7)
+		_draw_world_ring(act.position, act.atk_range + act.radius, col, Color(col.r, col.g, col.b, 0.045))
+
+
+	func _order_world_pos(o: Dictionary) -> Vector2:
+		var k := String(o.get("kind", ""))
+		if o.has("pos"):
+			return o["pos"]
+		if o.has("target"):
+			var t = o["target"]
+			if is_instance_valid(t):
+				return t.position
+		return Vector2.INF
+
+
+	func _draw_world_ring(center: Vector2, radius: float, edge: Color, fill: Color) -> void:
+		var pts := PackedVector2Array()
+		for i in range(48):
+			var a := TAU * float(i) / 48.0
+			pts.append(b.to_screen(center + Vector2(cos(a), sin(a)) * radius))
+		draw_colored_polygon(pts, fill)
+		var closed := PackedVector2Array()
+		for p in pts:
+			closed.append(p)
+		closed.append(pts[0])
+		draw_polyline(closed, edge, 1.6)
 
 	## 技能释放指示器：按技能命中几何画地面预览（直线箭头 / 前方扇形 / 圆圈），跟随鼠标。
 	func _draw_cast_indicator(ad: Dictionary) -> void:
@@ -9424,6 +9909,8 @@ class BoltFx extends Node2D:
 			tex = Art.kit2_texture("bolt")
 		elif art != "":
 			tex = Art.item_texture(art)
+			if tex == null:
+				tex = Art.dota_projectile_texture(art)
 		if tex != null:
 			var ts := 34.0 if chain else 28.0
 			var spin := sin(_t * 6.0) * 0.25   # 飞行中轻微摇摆
@@ -9433,6 +9920,187 @@ class BoltFx extends Node2D:
 		else:
 			draw_circle(Vector2.ZERO, 4.4 * pu, Color(col.r, col.g, col.b, 0.85))
 			draw_circle(Vector2.ZERO, 2.0, Color(1, 1, 1, 0.95))
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+## DOTA 批量技能：一次性投掷/抛射演出（不参与命中判定；真实结算仍由 _do_ability 当帧完成）。
+class DotaProjectileFx extends TimedFx:
+	var end_w := Vector2.ZERO
+	var col := Color(0.85, 0.85, 1.0)
+	var tex: Texture2D = null
+	var impact_tex: Texture2D = null
+	var lob := false
+	var _E := Vector2.ZERO
+	var _ang := 0.0
+
+	func _ready() -> void:
+		dur = 0.62
+		t = dur
+		_E = GameMap.ISO.basis_xform(end_w - position)
+		_ang = _E.angle()
+
+	func _draw() -> void:
+		var elapsed := dur - t
+		var fly := 0.34
+		var p := clampf(elapsed / fly, 0.0, 1.0)
+		draw_set_transform_matrix(GameMap.ISO_INV)
+		if p < 1.0:
+			var pos := _E * p
+			if lob:
+				pos.y -= sin(p * PI) * 44.0
+			for i in range(8):
+				var q := maxf(0.0, p - float(i) * 0.045)
+				var tp := _E * q
+				if lob:
+					tp.y -= sin(q * PI) * 44.0
+				draw_circle(tp, 5.0 * (1.0 - float(i) / 9.0), Color(col.r, col.g, col.b, 0.28 * (1.0 - float(i) / 8.0)))
+			draw_circle(pos, 13.0, Color(col.r, col.g, col.b, 0.22))
+			if tex != null:
+				var ts := 32.0
+				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(_ang + sin(elapsed * 13.0) * 0.18, Vector2.ONE, 0.0, pos))
+				draw_texture_rect(tex, Rect2(Vector2(-ts * 0.5, -ts * 0.5), Vector2(ts, ts)), false, Color(1, 1, 1, 0.98))
+				draw_set_transform_matrix(GameMap.ISO_INV)
+			else:
+				draw_circle(pos, 5.2, Color(col.r, col.g, col.b, 0.9))
+				draw_circle(pos + Vector2(-1.5, -1.5), 2.0, Color(1, 1, 1, 0.9))
+		else:
+			var k := clampf((elapsed - fly) / maxf(dur - fly, 0.01), 0.0, 1.0)
+			var bf := 1.0 - k
+			if impact_tex != null:
+				var sz := 50.0 + 24.0 * k
+				draw_texture_rect(impact_tex, Rect2(_E - Vector2(sz * 0.5, sz * 0.5), Vector2(sz, sz)), false, Color(1, 1, 1, 0.9 * bf))
+			draw_circle(_E, 16.0 * (0.6 + k), Color(col.r, col.g, col.b, 0.26 * bf))
+			draw_arc(_E, 26.0 * (0.5 + k), 0.0, TAU, 28, Color(col.r, col.g, col.b, 0.85 * bf), 2.5)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+## DOTA 批量技能：符文、命中、变身、吼叫、光环等落点演出。
+class DotaImpactFx extends TimedFx:
+	var rad := 90.0
+	var col := Color(0.85, 0.85, 1.0)
+	var tex: Texture2D = null
+	var mode := "impact"
+
+	func _ready() -> void:
+		dur = 0.78
+		t = dur
+
+	func _draw() -> void:
+		draw_set_transform_matrix(GameMap.ISO_INV)
+		var f := clampf(t / dur, 0.0, 1.0)
+		var grow := 1.0 - f
+		var rr := clampf(rad * (0.35 + 0.55 * grow), 24.0, 125.0)
+		if tex != null:
+			var sz := clampf(rad * 0.55, 34.0, 82.0) * (0.82 + grow * 0.22)
+			draw_texture_rect(tex, Rect2(Vector2(-sz * 0.5, -sz * 0.5), Vector2(sz, sz)), false, Color(1, 1, 1, 0.92 * f))
+		match mode:
+			"aura":
+				for i in range(3):
+					var pr := rr * (0.45 + grow * 0.85) - float(i) * 18.0
+					if pr > 8.0:
+						draw_arc(Vector2.ZERO, pr, 0.0, TAU, 36, Color(col.r, col.g, col.b, f * (0.8 - 0.14 * float(i))), 2.4)
+				draw_circle(Vector2.ZERO, rr * 0.35, Color(col.r, col.g, col.b, 0.16 * f))
+			"rune":
+				var pts := PackedVector2Array([Vector2(0, -rr * 0.42), Vector2(rr * 0.48, 0), Vector2(0, rr * 0.42), Vector2(-rr * 0.48, 0)])
+				draw_colored_polygon(pts, Color(col.r, col.g, col.b, 0.12 * f))
+				var closed := PackedVector2Array()
+				for p in pts:
+					closed.append(p)
+				closed.append(pts[0])
+				draw_polyline(closed, Color(col.r, col.g, col.b, 0.92 * f), 2.4)
+				draw_arc(Vector2.ZERO, rr * 0.62, 0.0, TAU, 32, Color(col.r, col.g, col.b, 0.45 * f), 1.6)
+			"manifest":
+				for i in range(8):
+					var a := float(i) / 8.0 * TAU + grow * 1.8
+					var p := Vector2(cos(a), sin(a) * 0.65) * rr * (0.35 + grow * 0.45)
+					draw_circle(p + Vector2(0, -18.0 * grow), 4.5 * f, Color(col.r, col.g, col.b, 0.72 * f))
+				draw_circle(Vector2.ZERO, 18.0 * (0.5 + grow), Color(1, 1, 1, 0.32 * f))
+			"roar":
+				for i in range(3):
+					var off := float(i) * 14.0
+					draw_arc(Vector2(-off, -4.0), rr * (0.35 + 0.22 * float(i) + grow * 0.45), -0.42, 0.42, 18, Color(col.r, col.g, col.b, 0.82 * f), 3.0 - float(i) * 0.5)
+					draw_arc(Vector2(off, -4.0), rr * (0.35 + 0.22 * float(i) + grow * 0.45), PI - 0.42, PI + 0.42, 18, Color(col.r, col.g, col.b, 0.82 * f), 3.0 - float(i) * 0.5)
+			_:
+				draw_circle(Vector2.ZERO, rr * 0.45, Color(col.r, col.g, col.b, 0.16 * f))
+				draw_arc(Vector2.ZERO, rr, 0.0, TAU, 36, Color(col.r, col.g, col.b, 0.82 * f), 2.6)
+				for i in range(10):
+					var a := float(i) / 10.0 * TAU
+					var d := Vector2(cos(a), sin(a) * 0.62)
+					draw_line(d * rr * 0.35, d * rr * (0.62 + grow * 0.38), Color(col.r, col.g, col.b, 0.58 * f), 1.6)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+## DOTA 批量技能：直线光束/链条/冲刺轨迹。
+class DotaBeamFx extends TimedFx:
+	var start_w := Vector2.ZERO
+	var end_w := Vector2.ZERO
+	var col := Color(0.85, 0.85, 1.0)
+	var chain := false
+	var dash := false
+	var _S := Vector2.ZERO
+	var _E := Vector2.ZERO
+
+	func _ready() -> void:
+		dur = 0.46
+		t = dur
+		_S = GameMap.ISO.basis_xform(start_w - position)
+		_E = GameMap.ISO.basis_xform(end_w - position)
+
+	func _draw() -> void:
+		draw_set_transform_matrix(GameMap.ISO_INV)
+		var f := clampf(t / dur, 0.0, 1.0)
+		var grow := 1.0 - f
+		var head := _S.lerp(_E, clampf(grow / 0.65, 0.0, 1.0))
+		if chain:
+			var seg := _E - _S
+			var n := maxi(3, int(seg.length() / 15.0))
+			for i in range(n + 1):
+				var p := _S + seg * (float(i) / float(n))
+				if _S.distance_to(p) > _S.distance_to(head):
+					break
+				draw_arc(p, 4.2, 0.0, TAU, 8, Color(col.r, col.g, col.b, 0.9 * f), 1.6)
+		elif dash:
+			var segd := head - _S
+			for i in range(7):
+				var a := float(i) / 7.0
+				var p0 := _S + segd * a
+				var p1 := _S + segd * minf(1.0, a + 0.08)
+				draw_line(p0, p1, Color(col.r, col.g, col.b, f * (0.85 - 0.07 * float(i))), 5.5 - float(i) * 0.45)
+		else:
+			draw_line(_S, head, Color(col.r, col.g, col.b, 0.38 * f), 9.0)
+			draw_line(_S, head, Color(1, 1, 1, 0.82 * f), 2.4)
+		draw_circle(_S, 7.0 * f, Color(col.r, col.g, col.b, 0.52 * f))
+		draw_arc(_E, 22.0 * grow, 0.0, TAU, 24, Color(col.r, col.g, col.b, 0.7 * f), 2.0)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+## DOTA 批量技能：扇形/震击/横扫类演出。
+class DotaSweepFx extends TimedFx:
+	var end_w := Vector2.ZERO
+	var rad := 90.0
+	var col := Color(0.85, 0.85, 1.0)
+	var _E := Vector2.ZERO
+	var _ang := 0.0
+
+	func _ready() -> void:
+		dur = 0.42
+		t = dur
+		_E = GameMap.ISO.basis_xform(end_w - position)
+		if _E.length() < 1.0:
+			_E = Vector2(rad, 0)
+		_ang = _E.angle()
+
+	func _draw() -> void:
+		var f := clampf(t / dur, 0.0, 1.0)
+		var grow := 1.0 - f
+		var reach := maxf(_E.length(), rad * 0.8)
+		draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(_ang, Vector2.ONE, 0.0, Vector2.ZERO))
+		for i in range(3):
+			var rr := reach * (0.34 + 0.21 * float(i)) * minf(1.0, grow * 1.65)
+			draw_arc(Vector2.ZERO, rr, -0.58, 0.58, 24, Color(col.r, col.g, col.b, f * (0.84 - 0.16 * float(i))), 3.0 - float(i) * 0.45)
+		var tip := Vector2(reach * minf(1.0, grow * 1.35), 0)
+		draw_line(Vector2.ZERO, tip, Color(1, 1, 1, 0.72 * f), 2.2)
+		draw_colored_polygon(PackedVector2Array([tip, tip - Vector2(18, 10), tip - Vector2(18, -10)]), Color(col.r, col.g, col.b, 0.58 * f))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 

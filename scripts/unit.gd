@@ -473,6 +473,8 @@ func _begin_order(o: Dictionary) -> void:
 func _begin_move(pos: Vector2) -> void:
 	if is_building:
 		return
+	if _lunge > 0.0 and _pending_done:
+		_lunge = 0.0   # 命中后的后摇可被移动取消，提升走A响应；未命中前仍不能白嫖伤害
 	_target = null
 	_resume_amove = false
 	_group_cap = 0.0   # 每次新移动默认解除队伍限速；成队移动时由 _apply_group_cap 在下令后重设
@@ -495,6 +497,8 @@ func _begin_attack(t: Unit) -> void:
 func _begin_amove(pos: Vector2) -> void:
 	if is_building:
 		return
+	if _lunge > 0.0 and _pending_done:
+		_lunge = 0.0
 	_target = null
 	_amove_dest = pos
 	_resume_amove = false
@@ -919,7 +923,7 @@ func _phys_body(delta: float) -> void:
 				if not passive and not is_worker:   # 工人不主动索敌（经典RTS式村民）
 					_acq_t -= delta
 					if _acq_t <= 0.0:
-						_acq_t = 0.12   # 待机索敌限流：~8 次/秒足够，省得兵海里每帧全员重扫
+						_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12
 						_acquire()
 				if _target != null:
 					if not _has_home:
@@ -951,12 +955,13 @@ func _phys_body(delta: float) -> void:
 						_done_order()
 			ST_AMOVE:
 				if _target == null:
-					# A 移动时收紧索敌半径：近战只打 ~130px 内、远程保留射程，倾向继续奔向目的地。
+					# A 移动时收紧索敌半径，但保留足够侧翼宽度；否则往一个方向 A 地板时，
+					# 侧边敌人擦身接敌却没进窄扫描圈，会表现成“接敌但不打”。
 					# 限流 ~8 次/秒：兵海里大量「无目标 A 移动」单位每帧重扫，是索敌开销的最大头。
 					_acq_t -= delta
 					if (battle != null and battle._no_opt) or _acq_t <= 0.0:
-						_acq_t = 0.12
-						_acquire(maxf(atk_range + 24.0, 130.0))
+						_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12
+						_acquire(maxf(atk_range + radius + 56.0, 180.0))
 				if _target != null:
 					_resume_amove = true
 					_repath = 0.0
@@ -1059,7 +1064,7 @@ func _do_chase(delta: float) -> void:
 		leash = atk_range + radius + 18.0
 	# 玩家单位（或任何非进攻姿态单位）追击过远则脱离、回防，防止被引离阵地
 	# 例外：托管(auto_micro)且进攻姿态的英雄不受牵引——主动压上交战、退守交给托管大脑
-	if _has_home and not (auto_micro and stance == STANCE_AGGRO) \
+	if _has_home and not _resume_amove and not (auto_micro and stance == STANCE_AGGRO) \
 			and (faction == FACTION_LIANG or stance != STANCE_AGGRO) \
 			and position.distance_to(_home) > leash:
 		_target = null
@@ -1091,7 +1096,10 @@ func _do_chase(delta: float) -> void:
 			if not passive and not is_worker and stance != STANCE_PASSIVE:
 				_acquire()   # 立刻改打就近威胁（_acquire 会跳过刚拉黑的目标）
 			if _target == null:
-				_done_order()
+				if _resume_amove:
+					_begin_amove(_amove_dest)
+				else:
+					_done_order()
 			return
 		_repath -= delta
 		if _repath <= 0.0:
@@ -1552,7 +1560,7 @@ func _acquire(range_override := -1.0) -> void:
 	if range_override >= 0.0:
 		range_cap = minf(range_cap, range_override)   # A 移动时收紧索敌：只打路上近处的敌人，不被远处勾走
 	var best: Unit = null
-	var best_d := INF
+	var best_s := -INF
 	# 只在网格邻近格里找(按警戒/据守半径粗筛)——不再每帧全表扫描，是兵海索敌卡顿的主因之一。
 	for u in battle.units_near(position, range_cap):
 		# 资源点（金矿/林木）不是攻击目标——否则敌人冲过来一直砍树；
@@ -1566,10 +1574,34 @@ func _acquire(range_override := -1.0) -> void:
 		var limit := range_cap
 		if u.hidden_in_reeds:
 			limit = minf(limit, 75.0)  # 芦苇荡里的伏兵很难被发现
-		if d <= limit and d < best_d:
+		if d > limit:
+			continue
+		var score := _target_score(u, d)
+		if score > best_s:
 			best = u
-			best_d = d
+			best_s = score
 	_target = best
+
+
+## 自动索敌的软优先级：别只追最近，优先处理高威胁/残血，并轻微分摊过度集火。
+func _target_score(u: Unit, d: float) -> float:
+	var s := -d
+	if u.is_hero:
+		s += 260.0
+	elif String(u.key).begins_with("siege"):
+		s += 180.0
+	elif u.is_ranged:
+		s += 95.0
+	s += (1.0 - clampf(u.hp / maxf(u.max_hp, 1.0), 0.0, 1.0)) * 130.0
+	if u == _target:
+		s += 55.0
+	if battle != null and not u.is_hero:
+		# 集火人数走 battle 每帧统计的全局表(O(1))——此前逐候选扫邻格是 O(候选×邻居)，兵海下正是索敌卡顿的老路
+		var already := int(battle._focus_counts.get(u.get_instance_id(), 0))
+		if u == _target:
+			already -= 1   # 自己当前锁定的不算「别人集火」
+		s -= float(clampi(already, 0, 6)) * 32.0
+	return s
 
 
 func _follow_path(delta: float) -> bool:

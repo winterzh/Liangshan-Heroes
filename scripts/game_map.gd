@@ -183,7 +183,39 @@ func find_path(from_w: Vector2, to_w: Vector2) -> PackedVector2Array:
 		out.append(cell_to_world(ids[i]))
 	if out.is_empty():
 		out.append(cell_to_world(b))
+	return _smooth_path(from_w, out)
+
+
+## AStar 保证可达；这里把相邻同向/可直达路点合并，减少单位沿网格折线左右摆。
+func _smooth_path(from_w: Vector2, raw: PackedVector2Array) -> PackedVector2Array:
+	if raw.size() <= 2:
+		return raw
+	var out := PackedVector2Array()
+	var anchor := from_w
+	var i := 0
+	while i < raw.size():
+		var best := i
+		# 直连窗口封顶 +14 格：全量回看是 O(n²) 段采样，长路/迷宫地形批量重寻路时会掉帧；14 格已够拉直大多数折线
+		for j in range(mini(raw.size() - 1, i + 14), i - 1, -1):
+			if _segment_open(anchor, raw[j]):
+				best = j
+				break
+		out.append(raw[best])
+		anchor = raw[best]
+		i = best + 1
 	return out
+
+
+func _segment_open(a: Vector2, b: Vector2) -> bool:
+	var dist := a.distance_to(b)
+	if dist <= 1.0:
+		return true
+	var steps := maxi(1, int(ceil(dist / (float(CELL) * 0.45))))
+	for i in range(steps + 1):
+		var p := a.lerp(b, float(i) / float(steps))
+		if not is_open_world(p):
+			return false
+	return true
 
 
 ## 建造占地：把 (2*half+1)² 范围内格子在寻路网格里设/清 solid（建筑挡路）

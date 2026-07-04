@@ -84,6 +84,9 @@ func _build() -> void:
 	_row(p, "伤害飘字", _check(Settings.show_damage, func(on: bool) -> void: Settings.show_damage = on))
 	_row(p, "血条常显", _check(Settings.show_healthbars, func(on: bool) -> void: Settings.show_healthbars = on))
 	_row(p, "技能冷却数字", _check(Settings.show_cooldown, func(on: bool) -> void: Settings.show_cooldown = on))
+	_row(p, "命令队列线", _check(Settings.show_command_queue, func(on: bool) -> void: Settings.show_command_queue = on))
+	_row(p, "攻击目标线", _check(Settings.show_target_lines, func(on: bool) -> void: Settings.show_target_lines = on))
+	_row(p, "攻击范围圈", _check(Settings.show_range_rings, func(on: bool) -> void: Settings.show_range_rings = on))
 
 	_head(p, "🎯  默认对战（1v1）")
 	_row(p, "难度", _seg([["简单", "easy"], ["普通", "normal"], ["困难", "hard"]], Campaign.ai_difficulty, func(v) -> void: Campaign.ai_difficulty = v))
@@ -248,9 +251,10 @@ func _seg(options: Array, current: Variant, cb: Callable) -> Control:
 func _keybind_text() -> String:
 	var lines := [
 		"编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入",
+		"F2 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头",
 		"A 攻击移动　S 停止　P 巡逻　G 切换站位",
-		"Q / W / E / R 英雄技能　F1–F8 按头像选英雄",
-		"空格 回起始视角　Tab 子编组　. / , 切闲置工人",
+		"Q / W / E / R 英雄技能　F1/F3-F8 按头像选英雄",
+		"空格 跳最近告警/回起始视角　Tab 子编组　. / , 切闲置工人",
 		"Delete 拆除　Esc 菜单 / 取消",
 		"镜头：方向键平移　+ / − 或滚轮 缩放　中键拖拽",
 	]
