@@ -1317,7 +1317,7 @@ func _production_tick(delta: float) -> void:
 		if battle != null:
 			battle.on_unit_trained(self, key)
 		if not _train_queue.is_empty():
-			_train_t = float(battle._defs.get(_train_queue[0], {}).get("train_time", 12.0))
+			_train_t = battle.train_time_for(_train_queue[0])
 
 
 ## 防御塔：固定索敌，冷却到就开火。读 setup_def 实现各塔特化：
