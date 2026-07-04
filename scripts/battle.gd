@@ -142,13 +142,7 @@ const ABILITY_SFX_ID := {
 	"lin_thrust": "sk_thrust", "lin_sweep": "sk_sweep",
 	"song_rally": "sk_rally", "song_fire": "sk_fire", "song_meteor": "sk_fire",
 }
-const ABILITY_SFX_KIND := {
-	"rally": "sk_rally", "haste": "sk_haste", "smite": "sk_smite",
-	"debuff": "sk_debuff", "drag": "sk_drag", "fire_dot": "sk_fire",
-	"line_nuke": "sk_thrust", "blink_shot": "sk_blink", "orbit_axes": "sk_axes",
-	"charge": "sk_charge", "chrono": "sk_chrono", "self_buff": "sk_fury",
-	"path": "sk_blink", "weapon_toggle": "sk_swap", "sector_nuke": "sk_sweep",
-}
+# （旧 ABILITY_SFX_KIND 共享类型音已废：非 6 将技能全部走 Sfx.play_ability 按 id 播种的专属音）
 var _ability_slot := 0
 var _build_armed := ""        # 待放置的建筑 key（遭遇战建造）
 var _trap_armed := ""         # 待布置的陷阱 key（喽啰 E 子菜单·一次性机关）
@@ -4721,12 +4715,6 @@ func _tick_pending_casts() -> void:
 
 
 ## 技能音效名：签名 id 优先，否则按 effect.kind，再退 "cast"。
-func _ability_sfx(aid: String, kind: String) -> String:
-	if ABILITY_SFX_ID.has(aid):
-		return ABILITY_SFX_ID[aid]
-	return ABILITY_SFX_KIND.get(kind, "cast")
-
-
 ## 数据化技能结算：按 effect.kind 统一处理；伤害/治疗随技能等级缩放。
 ## 英雄倍率改动 → 实时重算在场你方英雄属性（血量随 n 缩放，保留当前血量百分比）。CD/范围/伤害在施放时即时取值无需重算。
 func _hero_boost_refresh() -> void:
@@ -4865,7 +4853,12 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 		if tgt == null:
 			return
 		lp = tgt.position
-	Sfx.play(_ability_sfx(aid, String(eff.get("kind", ""))), 0.0, 0.05, 60)   # 技能专属音（按 id/种类区分）
+	# 技能专属音：6 将签名音保持既有听感；其余按 id 播种合成——每个技能各有其声（同主题也彼此有别）
+	if ABILITY_SFX_ID.has(aid):
+		Sfx.play(ABILITY_SFX_ID[aid], 0.0, 0.05, 60)
+	else:
+		var _sk := String(eff.get("kind", ""))
+		Sfx.play_ability(aid, String((ad.get("visual", {}) as Dictionary).get("theme", "")), String(eff.get("active_kind", _sk)))
 	# 花荣大招·换刀：切换弓/刀，非伤害技，单独处理。
 	if String(eff.get("kind", "")) == "weapon_toggle":
 		caster.toggle_melee()

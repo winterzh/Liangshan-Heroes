@@ -21,6 +21,42 @@ func _ready() -> void:
 		p.bus = "Master"
 		add_child(p)
 		_players.append(p)
+	if OS.get_environment("SFX_TEST") == "1":
+		_ability_sfx_selftest()
+
+
+## 技能专属音自检（SFX_TEST=1）：跨主题/类型合成样例，验证可生成、响度归一、同主题不同 id 波形确实有别。
+func _ability_sfx_selftest() -> void:
+	var demos := [
+		["t_fire_a", "fire", "smite"], ["t_fire_b", "fire", "smite"], ["t_fire_c", "fire", "fire_dot"],
+		["t_ice", "ice", "bolt"], ["t_thunder", "thunder", "chain_nuke"], ["t_water", "water", "hook"],
+		["t_poison", "poison", "debuff"], ["t_shadow", "shadow", "hex"], ["t_holy", "holy", "heal_wave"],
+		["t_stone", "stone", "smite"], ["t_blade", "blade", "blink"], ["t_beast", "beast", "transform"],
+		["t_chain", "chain", "pull"], ["t_cmd", "command", "rally"], ["t_fallback", "", "charge"],
+	]
+	var sigs := {}
+	for d in demos:
+		var b := _build_ability(String(d[0]), String(d[1]), String(d[2]))
+		var peak := 0.0
+		var energy := 0.0
+		for v in b:
+			peak = maxf(peak, absf(v))
+			energy += absf(v)
+		sigs[d[0]] = "%d_%d" % [b.size(), int(energy)]
+		print("[sfx] %s theme=%s kind=%s len=%.2fs peak=%.2f" % [d[0], d[1], d[2], float(b.size()) / RATE, peak])
+	var distinct: bool = sigs["t_fire_a"] != sigs["t_fire_b"]   # 同主题同类型、不同 id → 波形必须有别
+	print("[sfx] ability_selftest OK: samples=%d fire_a_vs_b_distinct=%s" % [demos.size(), str(distinct)])
+
+
+## 技能专属音：按技能 id 播种合成（同主题不同技能音高/层次/节奏皆异），懒生成缓存。
+## theme 取 DotaVisuals 写入的视觉主题（fire/ice/...），缺省按 kind 推断；kind 叠加施法类型动机（弹道/光环/位移…）。
+func play_ability(aid: String, theme: String, kind: String, vol_db := 0.0) -> void:
+	if not enabled:
+		return
+	var key := "ab_" + aid
+	if not _bank.has(key):
+		_bank[key] = _wav(_build_ability(aid, theme, kind))
+	play(key, vol_db, 0.03, 70)
 
 
 ## 播放：vol_db 增益，pitch 轻微随机，min_gap_ms 节流（同名）
@@ -152,3 +188,141 @@ func _mix(a: PackedFloat32Array, b: PackedFloat32Array) -> PackedFloat32Array:
 			v += b[i]
 		out[i] = clampf(v, -1.0, 1.0)
 	return out
+
+
+## ---------- 技能专属音合成 ----------
+## 设计：hash(aid) 播种 → 同一技能每次听到同一签名音、不同技能必然有别。
+## 主题模板给「材质」（火的呼啸噼啪 / 冰的清脆闪烁 / 雷的炸裂…），kind 动机给「动作」（弹道起飞 / 光环升腾 / 位移嗖离…）。
+
+## 频率滑音：f0→f1 线性滑，相位积分（无断裂）
+func _glide(f0: float, f1: float, dur: float, vol: float, decay := 6.0, wave := "sine") -> PackedFloat32Array:
+	var n := int(dur * RATE)
+	var out := PackedFloat32Array()
+	out.resize(n)
+	var ph := 0.0
+	for i in range(n):
+		var t := float(i) / RATE
+		ph += lerpf(f0, f1, t / dur) / RATE
+		var s: float
+		match wave:
+			"square": s = 1.0 if sin(ph * TAU) >= 0.0 else -1.0
+			"saw": s = fmod(ph, 1.0) * 2.0 - 1.0
+			"tri": s = absf(fmod(ph, 1.0) * 4.0 - 2.0) - 1.0
+			_: s = sin(ph * TAU)
+		out[i] = s * minf(1.0, t / 0.004) * exp(-decay * t) * vol
+	return out
+
+
+## 噼啪/滴答/叮当：span 秒内撒 count 个短促爆点；tone_f>0 用音头（水滴/链环），否则纯噪（火星）
+func _pops(rng: RandomNumberGenerator, count: int, span: float, vol: float, tone_f := 0.0, decay := 55.0) -> PackedFloat32Array:
+	var n := int(span * RATE)
+	var out := PackedFloat32Array()
+	out.resize(n)
+	for _k in range(count):
+		var s0 := int(rng.randf_range(0.0, span * 0.85) * RATE)
+		var f := tone_f * rng.randf_range(0.8, 1.25)
+		var ns := int(0.05 * RATE)
+		for i in range(ns):
+			var idx := s0 + i
+			if idx >= n:
+				break
+			var t := float(i) / RATE
+			var s := sin(TAU * f * t) if tone_f > 0.0 else rng.randf_range(-1.0, 1.0)
+			out[idx] += s * exp(-decay * t) * vol
+	return out
+
+
+## 和音：几个频率同时鸣响（钟磬/号角）
+func _chord(freqs: Array, dur: float, vol: float, decay := 5.0, wave := "sine") -> PackedFloat32Array:
+	var out := _silence(dur)
+	for f in freqs:
+		out = _mix(out, _tone(float(f), dur, vol / float(freqs.size()) * 1.6, decay, wave))
+	return out
+
+
+## 峰值归一：过响压回、过弱抬升到目标峰值（各技能响度一致，不会有的震耳有的听不见）
+func _norm(buf: PackedFloat32Array, target := 0.55) -> PackedFloat32Array:
+	var peak := 0.0
+	for v in buf:
+		peak = maxf(peak, absf(v))
+	if peak < 0.01:
+		return buf
+	var g := target / peak
+	for i in range(buf.size()):
+		buf[i] *= g
+	return buf
+
+
+## kind → 主题兜底（无 DotaVisuals 主题的技能：自定义关卡/内容包/旧 kit）
+const _KIND_THEME := {
+	"fire_dot": "fire", "fire_line": "fire", "fire_trail": "fire", "black_rain": "fire",
+	"ice_wall": "ice", "chrono": "ice", "heal_wave": "holy", "shield": "holy",
+	"hook": "chain", "pull": "chain", "drag": "chain", "ensnare": "chain",
+	"rally": "command", "haste": "command", "summon": "beast", "transform": "beast",
+	"hex": "shadow", "silence": "shadow", "invis": "shadow", "debuff": "shadow",
+}
+
+func _build_ability(aid: String, theme: String, kind: String) -> PackedFloat32Array:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(aid)
+	var pv := rng.randf_range(0.82, 1.22)   # 个体音高体质：同主题技能彼此拉开
+	if theme == "":
+		theme = String(_KIND_THEME.get(kind, ""))
+	var body: PackedFloat32Array
+	match theme:
+		"fire":
+			body = _mix(_noise(rng.randf_range(0.18, 0.3), 0.16, rng.randf_range(5.0, 8.5)),
+				_glide(190.0 * pv, 85.0 * pv, 0.24, 0.15, 6.0, "saw"))
+			body = _mix(body, _pops(rng, rng.randi_range(3, 7), 0.3, 0.14))   # 火星噼啪
+		"ice":
+			body = _mix(_glide(760.0 * pv, 1500.0 * pv, rng.randf_range(0.12, 0.2), 0.11, 8.0, "sine"),
+				_pops(rng, rng.randi_range(3, 6), 0.26, 0.10, 1900.0 * pv, 40.0))   # 冰晶叮铃
+		"thunder":
+			body = _mix(_noise(0.05, 0.30, 42.0), _glide(320.0 * pv, 62.0 * pv, rng.randf_range(0.28, 0.4), 0.22, 4.5, "saw"))
+			body = _mix(body, _pops(rng, 2, 0.12, 0.16))   # 炸裂枝杈
+		"water":
+			body = _mix(_glide(520.0 * pv, 260.0 * pv, rng.randf_range(0.2, 0.3), 0.13, 5.0, "sine"),
+				_noise(0.22, 0.11, 7.0))
+			body = _mix(body, _pops(rng, rng.randi_range(2, 5), 0.28, 0.09, 620.0 * pv, 30.0))   # 水珠
+		"poison":
+			body = _mix(_pops(rng, rng.randi_range(5, 9), rng.randf_range(0.24, 0.34), 0.13, 260.0 * pv, 22.0),
+				_noise(0.26, 0.09, 6.0))   # 咕嘟冒泡 + 毒雾嘶嘶
+		"shadow":
+			body = _mix(_glide(240.0 * pv, 108.0 * pv, rng.randf_range(0.3, 0.42), 0.15, 3.6, "saw"),
+				_glide(247.0 * pv, 111.0 * pv, 0.34, 0.10, 3.6, "saw"))   # 双saw微失谐·阴冷
+		"holy":
+			body = _chord([523.0 * pv, 659.0 * pv, 784.0 * pv], rng.randf_range(0.3, 0.42), 0.12, rng.randf_range(4.0, 6.0))
+			body = _mix(body, _noise(0.12, 0.05, 12.0))   # 圣钟 + 微光气息
+		"stone", "hammer":
+			body = _mix(_tone(88.0 * pv, 0.18, 0.30, 9.0), _noise(0.09, 0.24, 16.0))
+			body = _mix(body, _pops(rng, rng.randi_range(2, 5), 0.22, 0.10))   # 落石碎屑
+		"axe", "blade":
+			body = _mix(_tone(rng.randf_range(700.0, 950.0) * pv, 0.05, 0.17, 32.0, "tri"), _noise(0.05, 0.15, 34.0))
+			body = _mix(body, _tone(1300.0 * pv, 0.09, 0.07, 22.0, "sine"))   # 刃鸣余韵
+		"spear":
+			body = _mix(_noise(rng.randf_range(0.06, 0.1), 0.16, 22.0), _glide(420.0 * pv, 210.0 * pv, 0.1, 0.12, 18.0, "tri"))
+		"arrow":
+			body = _seq([_tone(rng.randf_range(480.0, 620.0) * pv, 0.025, 0.16, 22.0, "tri"), _noise(0.08, 0.12, 14.0)])   # 崩弦+破空
+		"beast":
+			body = _mix(_glide(170.0 * pv, 84.0 * pv, rng.randf_range(0.24, 0.36), 0.20, 4.0, "saw"), _noise(0.16, 0.10, 8.0))   # 低吼+鼻息
+		"chain":
+			body = _mix(_pops(rng, rng.randi_range(4, 7), rng.randf_range(0.18, 0.28), 0.15, 1050.0 * pv, 32.0), _noise(0.1, 0.08, 18.0))   # 铁环铮铮
+		"command":
+			body = _mix(_glide(233.0 * pv, 349.0 * pv, rng.randf_range(0.24, 0.34), 0.15, 3.2, "tri"), _tone(98.0, 0.16, 0.18, 8.0))   # 号角+鼓
+		_:
+			body = _mix(_noise(0.16, 0.16, 9.0), _glide(500.0 * pv, 300.0 * pv, 0.16, 0.12, 8.0, "tri"))   # 通用施法
+	# —— kind 动机叠加：给「动作感」——
+	match kind:
+		"bolt", "line_nuke", "chain_nuke", "global_nuke", "blink_shot":
+			body = _seq([_glide(360.0 * pv, 880.0 * pv, 0.1, 0.12, 10.0, "tri"), body])   # 起飞嗖
+		"charge", "blink", "path", "swap":
+			body = _mix(body, _glide(1250.0 * pv, 460.0 * pv, 0.14, 0.10, 9.0, "sine"))   # 疾离
+		"rally", "haste", "shield", "self_buff", "atkspeed", "heal_wave", "ward":
+			body = _mix(body, _seq([_tone(330.0 * pv, 0.07, 0.08, 8.0, "tri"), _tone(440.0 * pv, 0.07, 0.08, 8.0, "tri"), _tone(587.0 * pv, 0.1, 0.09, 7.0, "tri")]))   # 升腾三连
+		"debuff", "hex", "silence", "disarm", "ensnare":
+			body = _mix(body, _seq([_tone(392.0 * pv, 0.08, 0.08, 7.0, "saw"), _tone(311.0 * pv, 0.09, 0.08, 7.0, "saw"), _tone(233.0 * pv, 0.12, 0.08, 6.0, "saw")]))   # 沉降三连
+		"summon", "transform", "invis":
+			body = _mix(body, _glide(220.0 * pv, 640.0 * pv, 0.3, 0.09, 3.0, "sine"))   # 现形/化形涌起
+		"hook", "pull", "drag":
+			body = _seq([body, _tone(140.0 * pv, 0.1, 0.16, 12.0)])   # 拽定闷响
+	return _norm(body)
