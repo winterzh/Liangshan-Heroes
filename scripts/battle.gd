@@ -215,10 +215,13 @@ func _ready() -> void:
 	_build_dapple()   # 地面斑驳光影（云隙阳光）：打破大片纯绿的平板感，叠在地形之上、单位之下
 
 	units_root = Node2D.new()
-	units_root.y_sort_enabled = true
+	# 不用 y_sort：它按「逻辑 y」排，而本作等距投影的屏幕深度是 (x+y)——单位站在建筑东南侧(屏幕上明明在前)
+	# 会因 y 更小被建筑盖住。改为每帧按 z_index=(x+y) 排（_grid_build 顺路更新，星际/红警同款深度序）。
+	units_root.y_sort_enabled = false
 	world.add_child(units_root)
 
 	fx_root = Node2D.new()
+	fx_root.z_index = 3500   # 特效永远压在全体单位(z≤3400)之上，维持原「fx_root 在 units_root 之后」的层序
 	world.add_child(fx_root)
 
 	if fog:
@@ -226,6 +229,7 @@ func _ready() -> void:
 
 	overlay = Overlay.new()
 	overlay.b = self
+	overlay.z_index = 3800   # 选框/指示器永远最上（HUD 之下）；单位深度 z≤3400
 	add_child(overlay)
 
 	camera = RTSCamera.new()
@@ -247,7 +251,9 @@ func _ready() -> void:
 	_autocam_target_zoom = camera.zoom.x
 
 	_build_atmosphere()   # 后期处理层：暗角 + 暖色调 + 对比/饱和（在世界之上、HUD 之下）
-	add_child(AmbientMotes.new())   # 空气中缓缓飘动的暖色微尘（阳光浮尘），叠在调色之上
+	var _motes := AmbientMotes.new()   # 空气中缓缓飘动的暖色微尘（阳光浮尘），叠在调色之上
+	_motes.z_index = 3750
+	add_child(_motes)
 
 	hud = HUD.new()
 	hud.start_battle.connect(_on_start_battle)
@@ -696,6 +702,27 @@ func nearest_free_gold(p: Vector2, exclude: Unit, w: Unit) -> Unit:
 			bd = d
 			best = u
 	return best
+
+
+## 硬占位（星际/红警式）：建筑占地格永不站人。寻路层早已把占地设 solid（正常走路进不来）；
+## 这里兜住「传送类」落点——出生挤压、钩拽/闪现落点、AI 直点建筑中心——沿穿透最浅的轴
+## 一步弹出到占地外沿。废墟(hp<=0)已解封占地，允许踩。单位侧 10Hz 限流调用，常态零开销。
+func eject_from_buildings(u: Unit) -> void:
+	for b in units_near(u.position, 150.0):
+		if b == u or not (is_instance_valid(b) and b.is_building and not b.is_resource and b.hp > 0.0):
+			continue
+		var c: Vector2i = b.get_meta("fcell", map.world_to_cell(b.position))
+		var bh: int = int(b.get_meta("fhalf", GameMap.footprint_half_for(b.radius)))
+		var ctr := map.cell_to_world(c)
+		var half := (float(bh) + 0.5) * GameMap.CELL
+		var dx := u.position.x - ctr.x
+		var dy := u.position.y - ctr.y
+		if absf(dx) >= half or absf(dy) >= half:
+			continue
+		if absf(dx) >= absf(dy):
+			u.position.x = ctr.x + (half + 2.0) * (1.0 if dx >= 0.0 else -1.0)
+		else:
+			u.position.y = ctr.y + (half + 2.0) * (1.0 if dy >= 0.0 else -1.0)
 
 
 func _resource_blocked(node: Unit) -> bool:
@@ -2873,6 +2900,7 @@ void fragment() {
 	rect.color = Color(1, 1, 1, 1)
 	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.z_index = 3700   # 氛围调色在单位/特效/迷雾之上（单位现走 z_index 深度序，z≤3400）
 	add_child(rect)
 
 
@@ -2890,6 +2918,7 @@ func _init_fog() -> void:
 	_vision_img.fill(Color(0, 0, 0, 1.0))
 	_fog_tex = ImageTexture.create_from_image(_vision_img)
 	_fog_layer = FogLayer.new()
+	_fog_layer.z_index = 3600   # 迷雾盖住单位(z≤3400)与特效(3500)，维持原层序
 	_fog_layer.tex = _fog_tex
 	_fog_layer.ws = Vector2(map.w * GameMap.CELL, map.h * GameMap.CELL)
 	world.add_child(_fog_layer)   # 在 units/fx 之后 → 盖住迷雾中的敌人
@@ -3643,6 +3672,22 @@ func _brain_hua(u: Unit) -> void:
 ## 公孙胜·法师：脆皮后排。被贴脸/残血→冰墙横在身前隔挡或撤；交战召金龙；敌成堆放黑雨。
 ## 全托管下他是「守家英雄」：锚在聚义厅附近 GONG_GUARD_R 圈内，绝不追出去（见下方守家预案）。
 const GONG_GUARD_R := 640.0   # 公孙守家半径（20 格 = 20×32px）：圈外敌不追、被勾出去就回家
+
+
+## 公孙守家岗哨：不再钉在聚义厅正中（人叠在基地贴图上像消失了）——站到「朝敌一侧」
+## 占地外沿再往外 2 格的开阔位，真正守在家门口。方向随防线(muster)缓变，nearest_open 保证不落占地/水面。
+func _gong_guard_post(gbase: Unit) -> Vector2:
+	if gbase == null or not is_instance_valid(gbase):
+		return _eco_base_pos()
+	var gc: Vector2 = gbase.position
+	var bh: int = int(gbase.get_meta("fhalf", GameMap.footprint_half_for(gbase.radius)))
+	var dirv: Vector2 = _eco_muster_point() - gc
+	if dirv.length() < 1.0:
+		dirv = Vector2(1.0, 0.0)
+	var post: Vector2 = gc + dirv.normalized() * (float(bh + 2) * GameMap.CELL + 8.0)
+	return map.cell_to_world(map.nearest_open(map.world_to_cell(post)))
+
+
 func _brain_gong(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
 		return
@@ -3655,15 +3700,16 @@ func _brain_gong(u: Unit) -> void:
 	if _full_auto():
 		var gbase := main_base(u.faction)
 		var gc: Vector2 = gbase.position if (gbase != null and is_instance_valid(gbase)) else u.position
+		var post := _gong_guard_post(gbase)   # 岗哨=聚义厅朝敌一侧门口，绝不与基地贴图整叠
 		if u.position.distance_to(gc) > GONG_GUARD_R:
 			if not (hp_frac <= 0.45 or melee_110):   # 没有迫近威胁/不残血才安心回家(否则继续走下面的保命逻辑)
 				u.set_stance(Unit.STANCE_DEFEND)
-				_ai_move(u, gc)
+				_ai_move(u, post)
 				return
 		elif nf == Vector2.INF or gc.distance_to(nf) > GONG_GUARD_R:
-			# 守备圈内、且敌人都还在圈外 → 回锚点待命，不主动压上去送（圈外的不追）
-			if u.position.distance_to(gc) > 90.0:
-				_ai_move(u, gc)
+			# 守备圈内、且敌人都还在圈外 → 回岗哨待命，不主动压上去送（圈外的不追）
+			if u.position.distance_to(post) > 70.0:
+				_ai_move(u, post)
 			return
 	# P1 退守/隔挡：残血或被贴脸 → 避战拉开 / 冰墙隔挡（被一两个小兵追且血>1/5 则不退，回身放招反打）
 	if (hp_frac <= 0.45 or melee_110) and not _brave_retaliate(u):
@@ -3776,7 +3822,12 @@ func _grid_build() -> void:
 	_focus_counts.clear()
 	var mob := 0
 	for u in units:
-		if not is_instance_valid(u) or u.hp <= 0.0 or u.garrisoned or u.is_resource:
+		if not is_instance_valid(u):
+			continue
+		# 等距深度序：屏幕深度 = (x+y)（本作 ISO 投影 screen_y=(x+y)/2）。y_sort 的纯 y 轴在斜投影下会排错——
+		# 单位站在建筑东南侧被整个盖住。每帧顺路回填 z_index（含建筑/资源/废墟，靠后=靠前景=盖住身后）。
+		u.z_index = clampi(1 + int((u.position.x + u.position.y) * 0.5), 1, 3400)
+		if u.hp <= 0.0 or u.garrisoned or u.is_resource:
 			continue   # 资源点(金矿/林木)从不是分离/索敌/光环目标 → 不入网格，免得林边把桶撑大拖慢邻近查询
 		if not u.is_building:
 			mob += 1

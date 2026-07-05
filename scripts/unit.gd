@@ -204,6 +204,7 @@ var _tower_aim := Vector2i(1, 1)   # 防御塔当前朝向格(8 向图)；目标
 var _tower_aim_hold := 0.0  # 朝向保持计时：>0 时即便暂无目标也维持上次开火方向
 var _stuck_t := 0.0
 var _idle_push_t := 0.0     # 进攻方(官军)呆住计时：闲置太久没目标 → 重新攻击移动压向聚义厅
+var _eject_t := 0.0         # 建筑占地弹出检查限流（10Hz）：兜传送类落点落进占地
 var manual_order_t := 0.0   # 手动指令保护期(秒)：>0 时托管 AI 不得覆盖玩家刚下的指令
 var _move_retry := 0        # ST_MOVE 路径耗尽重寻计数：同一地点反复重寻视为目的地不可达
 var _move_retry_pos := Vector2.ZERO
@@ -895,6 +896,14 @@ func _phys_body(delta: float) -> void:
 		_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标
 	if manual_order_t > 0.0:
 		manual_order_t = maxf(0.0, manual_order_t - delta)
+
+	# 星际/红警式硬占位兜底：机动单位若被「放」进建筑占地（出生/钩拽/闪现/直点建筑中心），
+	# 弹出到占地外沿。寻路层本就把占地当 solid（走不进）；这里只兜传送类落点。10Hz 限流。
+	_eject_t -= delta
+	if _eject_t <= 0.0:
+		_eject_t = 0.1
+		if not is_building and not garrisoned and hp > 0.0 and battle != null:
+			battle.eject_from_buildings(self)
 
 	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned):
 		_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击
