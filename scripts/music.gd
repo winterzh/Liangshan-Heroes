@@ -229,22 +229,6 @@ func _add_note(buf: PackedFloat32Array, freq: float, start: float, dur: float, v
 		buf[idx] += s * env * vol
 
 
-## 竹笛：正弦 + 揉音（5.5Hz 颤音）+ 气息起音，悠长
-func _add_flute(buf: PackedFloat32Array, freq: float, start: float, dur: float, vol: float) -> void:
-	var n := buf.size()
-	var s0 := int(start * RATE)
-	var ns := int(dur * RATE)
-	for i in range(ns):
-		var idx := s0 + i
-		if idx < 0 or idx >= n:
-			continue
-		var t := float(i) / RATE
-		var vib := 1.0 + 0.006 * sin(TAU * 5.5 * t) * minf(1.0, t / 0.3)   # 起音后渐入揉音
-		var s := sin(TAU * freq * vib * t) + 0.18 * sin(TAU * freq * 2.0 * vib * t)
-		var env := minf(1.0, t / 0.06) * exp(-1.1 * t) * clampf((dur - t) * 8.0, 0.0, 1.0)   # 气息起音+尾音收束
-		buf[idx] += s * env * vol
-
-
 ## 战鼓：低频「咚」+ 噪声攻击（rng 供噪声，线程安全）
 func _add_drum(buf: PackedFloat32Array, start: float, vol: float, rng: RandomNumberGenerator, pitch := 92.0) -> void:
 	var n := buf.size()
@@ -285,10 +269,11 @@ func _walk_mel(rng: RandomNumberGenerator, count: int, phrase := 8) -> Array:
 
 
 ## ---------- 经营曲 4 式 ----------
-## 0 山寨晨昏·古筝拨奏 | 1 芦苇泛舟·竹笛 | 2 夜泊水寨·羽调夜曲 | 3 溪涧练兵·轻快弹拨
+## 0 山寨晨昏·古筝拨奏 | 1 芦苇泛舟·琵琶轮指 | 2 夜泊水寨·羽调夜曲 | 3 溪涧练兵·轻快弹拨
+## （注意：不要用「持续正弦+颤音」类音色作主旋律——听感酷似人声哼鸣"啊~"，用户反馈过。弹拨/短音安全。）
 func _build_calm_style(style: int, rng: RandomNumberGenerator) -> PackedFloat32Array:
 	match style:
-		1: return _calm_flute(rng)
+		1: return _calm_pipa(rng)
 		2: return _calm_night(rng)
 		3: return _calm_brook(rng)
 	return _calm_zheng(rng)
@@ -310,17 +295,21 @@ func _calm_zheng(rng: RandomNumberGenerator) -> PackedFloat32Array:
 	return buf
 
 
-func _calm_flute(rng: RandomNumberGenerator) -> PackedFloat32Array:
+func _calm_pipa(rng: RandomNumberGenerator) -> PackedFloat32Array:
 	var loop := 18.0
 	var buf := _silent(loop)
 	var tr := 9.0 / 8.0   # D 转调
 	var bass_seq := [0, 2, 3, 1, 0, 2]
 	for k in range(bass_seq.size()):
 		_add_note(buf, BASS[bass_seq[k]] * tr, k * 3.0, 2.9, 0.22, "sine", 0.6, 0.08)
+	# 琵琶轮指：同音快速两三连拨（短促弹拨，绝无人声感），句间留白
 	var mel := _walk_mel(rng, 12, 6)
 	for k in range(mel.size()):
 		var f: float = MEL[mel[k]] * tr
-		_add_flute(buf, f, k * 1.4 + rng.randf_range(0.0, 0.08), 1.35, 0.13)
+		var t0 := k * 1.4 + rng.randf_range(0.0, 0.08)
+		var reps := 2 + (1 if rng.randf() < 0.4 else 0)
+		for r in range(reps):
+			_add_note(buf, f, t0 + float(r) * 0.11, 0.5, 0.11 - float(r) * 0.02, "tri", 4.2)
 	# 偶尔一记古筝应和
 	for k in range(5):
 		var f2: float = MEL[_walk_mel(rng, 1)[0]] * tr
