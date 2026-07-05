@@ -113,7 +113,7 @@ func process(b, delta: float) -> void:
 		wave_spawned = false
 		spawn_timer = 9.0
 		b.msg("官军暂退！抓紧时间重整阵型……", 4.0)
-	if hall.hp <= 0.0:
+	if hall == null or not is_instance_valid(hall) or hall.hp <= 0.0:   # 建筑被毁即释放节点，须判 valid
 		b.lose("聚义厅燃起大火，杏黄旗倒下了……")
 	elif b.players_alive() == 0:
 		b.lose("梁山兵马折损殆尽，水泊易主……")

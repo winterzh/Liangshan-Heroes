@@ -193,7 +193,7 @@ func process(b, delta: float) -> void:
 			# 二波结束 或 帅旗血量首跌破 60% → 援军剧情
 			if _wave_cleared_to_next and not rescue_triggered:
 				event_t += delta
-				var hall_low := jiangtai.hp <= jiangtai.max_hp * 0.60
+				var hall_low: bool = (not is_instance_valid(jiangtai)) or jiangtai.hp <= jiangtai.max_hp * 0.60   # 被毁即释放节点，须判 valid
 				if hall_low or _lhm_alive(B) == 0 or event_t > 40.0:
 					_trigger_rescue(B)
 		RESCUE:

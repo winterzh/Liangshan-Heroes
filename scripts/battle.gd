@@ -1543,12 +1543,23 @@ func _on_unit_died(u: Unit) -> void:
 	if _ability_caster == u:   # 施法者阵亡：解除指向态，避免光标/预览悬空
 		_disarm_ability()
 	if u.is_building:
-		if u.has_meta("fcell"):   # 拆除后放开占地（瓦砾可通行）
+		if u.has_meta("fcell"):   # 摧毁后放开占地（地面恢复可通行）
 			map.block_footprint(u.get_meta("fcell"), u.get_meta("fhalf"), false)
 		if not u.is_constructing and u.faction == Unit.FACTION_LIANG:   # 只扣玩家人口上限
 			var pp := int(u.setup_def.get("provides_pop", 0))
 			if pp > 0:
 				pop_cap = maxi(0, pop_cap - pp)
+		# 非资源建筑：坍塌演出 + 释放节点——不留黑废墟，尘埃散尽地面如初（星际/红警式）
+		if not u.is_resource:
+			var cfx := BuildingCollapseFx.new()
+			cfx.position = u.position
+			cfx.tex = Art.building_texture(u.key)
+			if cfx.tex == null:
+				cfx.tex = Art.terrain_texture(u.key)
+			cfx.s = GameMap.building_visual_px(GameMap.footprint_half_for(u.radius))
+			fx_root.add_child(cfx)
+			Sfx.play("atk_catapult", -2.0, 0.10, 150)   # 坍塌闷响
+			u.queue_free()
 	_update_sel_label()
 	var mark := FadingMark.new()
 	mark.position = u.position
@@ -8127,6 +8138,7 @@ func _amove_side_selftest() -> void:
 	units.erase(side_foe)
 	mover.queue_free()
 	side_foe.queue_free()
+	_grid.clear()   # 清掉本测试手动构建的空间网格：残留过期网格会让后续自检(塔类)的 units_near 找不到新靶子
 
 
 ## 科技归属自检（TECH_TEST=1）：兵营科技(利刃/坚铠)不加成英雄；基地·时代科技(聚义/替天行道)加成英雄各 ~+10%。
@@ -8175,6 +8187,7 @@ func _towertrap_selftest() -> void:
 		if is_instance_valid(u) and u.faction == Unit.FACTION_GUAN and not u.is_building:
 			units.erase(u)
 			u.queue_free()
+	_grid.clear()   # 走「空网格→全表扫描」兜底：前序自检若手动建过网格，新生成的靶子不在里面
 	var origin := map.cell_to_world(map.nearest_open(Vector2i(40, 12)))
 	var results: Array = []
 	# 三种新塔开火（活塔索敌→射出弹体）
@@ -10060,6 +10073,40 @@ class DotaProjectileFx extends TimedFx:
 				draw_texture_rect(impact_tex, Rect2(_E - Vector2(sz * 0.5, sz * 0.5), Vector2(sz, sz)), false, Color(1, 1, 1, 0.9 * bf))
 			draw_circle(_E, 16.0 * (0.6 + k), Color(col.r, col.g, col.b, 0.26 * bf))
 			draw_arc(_E, 26.0 * (0.5 + k), 0.0, TAU, 28, Color(col.r, col.g, col.b, 0.85 * bf), 2.5)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+## 建筑坍塌演出：贴图下沉压扁+崩塌抖动+变暗淡出，四溅碎块 + 滚滚尘环——散尽后不留任何废墟。
+class BuildingCollapseFx extends TimedFx:
+	var tex: Texture2D = null
+	var s := 96.0
+
+	func _ready() -> void:
+		dur = 0.85
+		t = dur
+
+	func _draw() -> void:
+		var p := 1.0 - clampf(t / dur, 0.0, 1.0)   # 0→1 坍塌进度
+		var ep := p * p
+		draw_set_transform_matrix(GameMap.ISO_INV)
+		# 尘环：向外扩散渐淡
+		var dr := s * (0.35 + 0.75 * p)
+		draw_arc(Vector2.ZERO, dr, 0.0, TAU, 30, Color(0.58, 0.50, 0.40, (1.0 - p) * 0.55), 1.0 + 6.0 * (1.0 - p))
+		draw_circle(Vector2.ZERO, dr * 0.55, Color(0.50, 0.44, 0.36, (1.0 - p) * 0.22))
+		# 建筑本体：压扁下沉 + 高频抖动 + 变暗淡出
+		if tex != null:
+			var sq := 1.0 - ep * 0.85
+			var sink := s * 0.30 * ep
+			var jx := sin(p * 40.0) * (1.0 - p) * 3.0
+			var tint := Color(1.0 - 0.4 * p, 1.0 - 0.45 * p, 1.0 - 0.5 * p, 1.0 - ep)
+			draw_texture_rect(tex, Rect2(Vector2(-s * 0.5 + jx, -s * 0.78 * sq + sink), Vector2(s, s * sq)), false, tint)
+		# 迸溅碎块（确定性伪随机散射，随尘埃一同消散）
+		for i in range(7):
+			var a := float(i) * 0.9 + 0.4
+			var rad := s * (0.18 + 0.5 * p) * (0.6 + 0.4 * fmod(float(i) * 0.37, 1.0))
+			var pos := Vector2(cos(a), sin(a) * 0.6) * rad + Vector2(0, s * 0.08 * p - s * 0.1 * (1.0 - p))
+			var bs := (3.5 - 2.5 * p) * (0.7 + 0.3 * fmod(float(i) * 0.61, 1.0))
+			draw_rect(Rect2(pos, Vector2(bs, bs)), Color(0.45, 0.40, 0.34, (1.0 - p) * 0.85))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 

@@ -206,14 +206,45 @@ func _smooth_path(from_w: Vector2, raw: PackedVector2Array) -> PackedVector2Arra
 	return out
 
 
+## 线段可直达判定：Amanatides-Woo 网格遍历——走线段真正扫过的每一格，斜穿格角时两侧邻格都查。
+## 之前按 0.45 格步长采样会漏掉贴角的实心格 → 平滑出「穿墙线」，单位每帧移动(2~3px)又过不去，
+## 表现为撞上建筑原地来回抖动（用户反馈）。精确遍历后平滑绝不产出被封线段。
 func _segment_open(a: Vector2, b: Vector2) -> bool:
-	var dist := a.distance_to(b)
-	if dist <= 1.0:
+	var c := world_to_cell(a)
+	var cb := world_to_cell(b)
+	if c == cb:
 		return true
-	var steps := maxi(1, int(ceil(dist / (float(CELL) * 0.45))))
-	for i in range(steps + 1):
-		var p := a.lerp(b, float(i) / float(steps))
-		if not is_open_world(p):
+	var dx := b.x - a.x
+	var dy := b.y - a.y
+	var sx := 1 if dx > 0.0 else -1
+	var sy := 1 if dy > 0.0 else -1
+	var tmx := INF
+	var tdx := INF
+	if absf(dx) > 0.0001:
+		tmx = (float((c.x + (1 if sx > 0 else 0)) * CELL) - a.x) / dx
+		tdx = float(CELL) / absf(dx)
+	var tmy := INF
+	var tdy := INF
+	if absf(dy) > 0.0001:
+		tmy = (float((c.y + (1 if sy > 0 else 0)) * CELL) - a.y) / dy
+		tdy = float(CELL) / absf(dy)
+	var guard := 0
+	while (c.x != cb.x or c.y != cb.y) and guard < 512:
+		guard += 1
+		if absf(tmx - tmy) < 0.0001:   # 恰好穿过格角：斜向两侧任一实心即视为堵（防贴角穿缝）
+			if not is_open_cell(Vector2i(c.x + sx, c.y)) or not is_open_cell(Vector2i(c.x, c.y + sy)):
+				return false
+			c.x += sx
+			c.y += sy
+			tmx += tdx
+			tmy += tdy
+		elif tmx < tmy:
+			c.x += sx
+			tmx += tdx
+		else:
+			c.y += sy
+			tmy += tdy
+		if not is_open_cell(c):
 			return false
 	return true
 
