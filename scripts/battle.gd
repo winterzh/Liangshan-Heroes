@@ -704,25 +704,15 @@ func nearest_free_gold(p: Vector2, exclude: Unit, w: Unit) -> Unit:
 	return best
 
 
-## 硬占位（星际/红警式）：建筑占地格永不站人。寻路层早已把占地设 solid（正常走路进不来）；
-## 这里兜住「传送类」落点——出生挤压、钩拽/闪现落点、AI 直点建筑中心——沿穿透最浅的轴
-## 一步弹出到占地外沿。废墟(hp<=0)已解封占地，允许踩。单位侧 10Hz 限流调用，常态零开销。
+## 硬占位（星际/红警式）：实心格（建筑占地/实心地形）永不站人。判定直接问寻路网格——
+## 与走路吃同一份真源，绝不会「格子明明能走却被弹开」。此前按 radius 猜占地会比真实封闭区
+## 大一圈，把合法走廊上的工人反复弹出、与寻路拔河钉死（竞技场喽啰采矿卡住的元凶）。
+## 只兜「传送类」落点：出生挤压、钩拽/闪现落点、AI 直点建筑中心。单位侧 10Hz 限流，O(1)。
 func eject_from_buildings(u: Unit) -> void:
-	for b in units_near(u.position, 150.0):
-		if b == u or not (is_instance_valid(b) and b.is_building and not b.is_resource and b.hp > 0.0):
-			continue
-		var c: Vector2i = b.get_meta("fcell", map.world_to_cell(b.position))
-		var bh: int = int(b.get_meta("fhalf", GameMap.footprint_half_for(b.radius)))
-		var ctr := map.cell_to_world(c)
-		var half := (float(bh) + 0.5) * GameMap.CELL
-		var dx := u.position.x - ctr.x
-		var dy := u.position.y - ctr.y
-		if absf(dx) >= half or absf(dy) >= half:
-			continue
-		if absf(dx) >= absf(dy):
-			u.position.x = ctr.x + (half + 2.0) * (1.0 if dx >= 0.0 else -1.0)
-		else:
-			u.position.y = ctr.y + (half + 2.0) * (1.0 if dy >= 0.0 else -1.0)
+	var c := map.world_to_cell(u.position)
+	if map.is_open_cell(c):
+		return
+	u.position = map.cell_to_world(map.nearest_open(c))
 
 
 func _resource_blocked(node: Unit) -> bool:
@@ -10076,37 +10066,60 @@ class DotaProjectileFx extends TimedFx:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
-## 建筑坍塌演出：贴图下沉压扁+崩塌抖动+变暗淡出，四溅碎块 + 滚滚尘环——散尽后不留任何废墟。
+## 建筑坍塌演出（AoE2 式碎块）：贴图切成 N×N 小块，底层先垮、上层随后坠落，各块带
+## 随机延迟/横漂/翻暗，落地即散；底部腾起尘雾 + 扩散尘环——散尽后不留任何废墟。
 class BuildingCollapseFx extends TimedFx:
 	var tex: Texture2D = null
 	var s := 96.0
+	const N := 7   # 7×7 = 49 块碎片：块切得细才有「一块块塌下来」的颗粒感
 
 	func _ready() -> void:
-		dur = 0.85
+		dur = 1.1
 		t = dur
+
+	## 确定性伪随机（按块索引），逐帧重绘不闪变
+	func _rnd(i: int, j: int) -> float:
+		return absf(fmod(sin(float(i * 73 + j * 131 + 7)) * 43758.5453, 1.0))
 
 	func _draw() -> void:
 		var p := 1.0 - clampf(t / dur, 0.0, 1.0)   # 0→1 坍塌进度
-		var ep := p * p
 		draw_set_transform_matrix(GameMap.ISO_INV)
 		# 尘环：向外扩散渐淡
-		var dr := s * (0.35 + 0.75 * p)
-		draw_arc(Vector2.ZERO, dr, 0.0, TAU, 30, Color(0.58, 0.50, 0.40, (1.0 - p) * 0.55), 1.0 + 6.0 * (1.0 - p))
-		draw_circle(Vector2.ZERO, dr * 0.55, Color(0.50, 0.44, 0.36, (1.0 - p) * 0.22))
-		# 建筑本体：压扁下沉 + 高频抖动 + 变暗淡出
+		var dr := s * (0.30 + 0.80 * p)
+		draw_arc(Vector2.ZERO, dr, 0.0, TAU, 30, Color(0.58, 0.50, 0.40, (1.0 - p) * 0.5), 1.0 + 6.0 * (1.0 - p))
+		draw_circle(Vector2.ZERO, dr * 0.5, Color(0.50, 0.44, 0.36, (1.0 - p) * 0.20))
 		if tex != null:
-			var sq := 1.0 - ep * 0.85
-			var sink := s * 0.30 * ep
-			var jx := sin(p * 40.0) * (1.0 - p) * 3.0
-			var tint := Color(1.0 - 0.4 * p, 1.0 - 0.45 * p, 1.0 - 0.5 * p, 1.0 - ep)
-			draw_texture_rect(tex, Rect2(Vector2(-s * 0.5 + jx, -s * 0.78 * sq + sink), Vector2(s, s * sq)), false, tint)
-		# 迸溅碎块（确定性伪随机散射，随尘埃一同消散）
-		for i in range(7):
-			var a := float(i) * 0.9 + 0.4
-			var rad := s * (0.18 + 0.5 * p) * (0.6 + 0.4 * fmod(float(i) * 0.37, 1.0))
-			var pos := Vector2(cos(a), sin(a) * 0.6) * rad + Vector2(0, s * 0.08 * p - s * 0.1 * (1.0 - p))
-			var bs := (3.5 - 2.5 * p) * (0.7 + 0.3 * fmod(float(i) * 0.61, 1.0))
-			draw_rect(Rect2(pos, Vector2(bs, bs)), Color(0.45, 0.40, 0.34, (1.0 - p) * 0.85))
+			var tw := float(tex.get_width())
+			var th := float(tex.get_height())
+			var cw := s / float(N)
+			for j in range(N):
+				for i in range(N):
+					var rnd := _rnd(i, j)
+					# 底层(大 j)先垮、上层随后坠落；同层各块随机错峰
+					var delay := (1.0 - float(j) / float(N - 1)) * 0.10 + 0.06 + rnd * 0.24
+					var lp := clampf((p * 1.5 - delay) / 0.6, 0.0, 1.0)   # 本块坠落进度
+					if lp >= 1.0:
+						continue   # 已落定消散
+					var x0 := -s * 0.5 + float(i) * cw
+					var y0 := -s * 0.78 + float(j) * cw
+					var ground := s * 0.10 + rnd * s * 0.06          # 落点：基座线附近略散
+					var fall := lp * lp * (ground - y0)               # 重力二次加速坠向地面（顶层坠得远）
+					var drift := (rnd - 0.5) * s * 0.18 * lp          # 横漂
+					var dark := 1.0 - lp * 0.55                       # 坠落中翻暗
+					var a := clampf((1.0 - lp) * 1.6, 0.0, 1.0)       # 落地前后淡出
+					draw_texture_rect_region(tex,
+						Rect2(x0 + drift, y0 + fall, cw, cw),
+						Rect2(float(i) * tw / N, float(j) * th / N, tw / N, th / N),
+						Color(dark, dark * 0.97, dark * 0.92, a))
+		# 底部尘雾：几团灰云自基座腾起、渐大渐淡
+		for k in range(5):
+			var kr := _rnd(k, 3)
+			var kp := clampf(p * 1.4 - kr * 0.3, 0.0, 1.0)
+			if kp <= 0.0 or kp >= 1.0:
+				continue
+			var px := (kr - 0.5) * s * 0.8
+			draw_circle(Vector2(px, s * 0.06 - kp * s * 0.28),
+				s * (0.07 + kp * 0.13), Color(0.55, 0.49, 0.41, (1.0 - kp) * 0.5))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
