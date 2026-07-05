@@ -52,10 +52,12 @@ void fragment() {
 	bg.material = bgmat
 	add_child(bg)
 
+	# 标题/副标题/模块列的竖向档位重排：原来 标题46+字号52 压到 副标题112，
+	# 模块列居中后又顶进副标题区——「主菜单显示错位」。现在三段各留净空、互不侵入。
 	var title := Label.new()
 	title.text = "水浒英雄传"
 	title.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	title.offset_top = 46.0
+	title.offset_top = 24.0
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 52)
 	title.add_theme_color_override("font_color", Color("ffd866"))
@@ -64,7 +66,7 @@ void fragment() {
 	var sub := Label.new()
 	sub.text = "替天行道 · 八方共域，异姓一家"
 	sub.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	sub.offset_top = 112.0
+	sub.offset_top = 98.0
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub.add_theme_font_size_override("font_size", 18)
 	sub.add_theme_color_override("font_color", Color("a0b0c0"))
@@ -86,15 +88,16 @@ void fragment() {
 		fs.text = "⛶ 窗口" if Screen.is_fullscreen() else "⛶ 全屏")
 	add_child(fs)
 
-	# 四个大模块入口（竖排居中）
+	# 大模块入口（竖排，居中在「副标题以下 ~ 版本号以上」的带内，绝不再顶进标题区）
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	center.offset_top = 60.0
+	center.offset_top = 128.0
+	center.offset_bottom = -36.0
 	add_child(center)
 
 	var col := VBoxContainer.new()
 	col.alignment = BoxContainer.ALIGNMENT_CENTER
-	col.add_theme_constant_override("separation", 16)
+	col.add_theme_constant_override("separation", 10)
 	center.add_child(col)
 
 	col.add_child(_mk_module("📜  剧情模式", "八幕战役 · 替天行道，从智取生辰纲到三败高太尉", Color("ffd866"), _show_story))
@@ -133,8 +136,8 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 
 	var btn := Button.new()
 	btn.text = title_text + ("       ★ 推荐" if recommended else "")
-	btn.custom_minimum_size = Vector2(580, 82)
-	btn.add_theme_font_size_override("font_size", 32)
+	btn.custom_minimum_size = Vector2(580, 64)   # 6 模块要全塞进 900 高的窗口：82→64，配 col 间距 10
+	btn.add_theme_font_size_override("font_size", 28)
 	btn.add_theme_color_override("font_color", accent)
 	btn.focus_mode = Control.FOCUS_NONE
 	var sb := StyleBoxFlat.new()
@@ -165,8 +168,17 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 # ======================================================================
 # 覆盖层工具：建一个半透明居中弹层，返回 [overlay, 内容VBox]
 # ======================================================================
+
+## 二级菜单弹层：Esc 一键返回（关闭自毁）
+class MenuOverlay extends ColorRect:
+	func _unhandled_key_input(event: InputEvent) -> void:
+		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+			get_viewport().set_input_as_handled()
+			queue_free()
+
+
 func _mk_overlay(title_text: String) -> Array:
-	var overlay := ColorRect.new()
+	var overlay := MenuOverlay.new()
 	overlay.color = Color(0.06, 0.05, 0.035, 0.97)   # 近不透明的暖深底，弹层文字清晰可读
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -184,6 +196,18 @@ func _mk_overlay(title_text: String) -> Array:
 	title.add_theme_color_override("font_color", Color("ffe9a8"))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
+	# 常驻左上角「返回」：内容再高也永远看得见（底部那颗返回可能被挤出屏外）；Esc 同效
+	var backfix := Button.new()
+	backfix.text = "←  返回 (Esc)"
+	backfix.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	backfix.offset_left = 20.0
+	backfix.offset_top = 16.0
+	backfix.offset_right = 190.0
+	backfix.offset_bottom = 58.0
+	backfix.focus_mode = Control.FOCUS_NONE
+	backfix.add_theme_font_size_override("font_size", 18)
+	backfix.pressed.connect(overlay.queue_free)
+	overlay.add_child(backfix)
 	return [overlay, box]
 
 

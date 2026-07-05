@@ -288,6 +288,8 @@ func _ready() -> void:
 			_automicro_selftest()
 		if OS.get_environment("AMOVE_SIDE_TEST") == "1":
 			_amove_side_selftest()
+		if OS.get_environment("SHIFTBUILD_TEST") == "1":
+			_shiftbuild_selftest()
 		if OS.get_environment("TOWERTRAP_TEST") == "1":
 			_towertrap_selftest()
 		if OS.get_environment("DOTACAST") == "1":
@@ -953,11 +955,22 @@ func _start_construction(key: String, cell: Vector2i, half: int) -> void:
 	site.set_meta("fhalf", half)
 	var builders := selection.filter(func(u) -> bool:
 		return is_instance_valid(u) and u.is_worker and u.hp > 0.0)
-	# 按住 Shift 连续放置时，建造令排队（工人逐座建过去），而不是只建最后一座
-	var queued := Input.is_key_pressed(KEY_SHIFT)
-	for wkr in builders:
-		wkr.order_build(site, queued)
+	_order_builders_to_site(builders, site, Input.is_key_pressed(KEY_SHIFT))
 	msg("开始建造 %s" % String(_defs[key].get("name", key)), 1.5)
+
+
+## Shift 连放语义：首座「立刻开工」（非排队，打断采集——采集是无限循环任务，排在它后面的建造令
+## 永远轮不到，工地全成幽灵虚影；此时再手动催某座会先建那座、完了才轮旧单——正是用户反馈的
+## 「顺序与 Shift 顺序不符 + 卡住」）。工人已在建造/队列里已有建造令时才排队跟进，保持逐座顺序。
+func _order_builders_to_site(builders: Array, site: Unit, shift: bool) -> void:
+	for wkr in builders:
+		var busy_building: bool = wkr._state == Unit.ST_BUILD
+		if not busy_building:
+			for o in wkr._queue:
+				if String(o.get("kind", "")) == "build":
+					busy_building = true
+					break
+		wkr.order_build(site, shift and busy_building)
 
 
 ## AI 真实建造：在 cell 起一座 faction 阵营的工地（10% 血、占地封路），派 builder 工人去建。
@@ -8131,6 +8144,42 @@ func _amove_side_selftest() -> void:
 	_grid.clear()   # 清掉本测试手动构建的空间网格：残留过期网格会让后续自检(塔类)的 units_near 找不到新靶子
 
 
+## Shift 连造自检（SHIFTBUILD_TEST=1）：采集中的工人 shift 连放 3 座——
+## 首座应立刻开工（打断采集，修「挂在无限采集后永不执行」），其余按放置顺序排队、逐座跟进。
+func _shiftbuild_selftest() -> void:
+	var origin := map.cell_to_world(map.nearest_open(level.camera_start_cell() + Vector2i(6, 6)))
+	var w := spawn_unit("lou_luo", Unit.FACTION_LIANG, origin)
+	var tree: Unit = nearest_resource(origin, "wood")
+	if tree != null:
+		w.order_gather(tree)   # 先进入无限采集循环（用户实际场景）
+	var sites: Array = []
+	for k in range(3):
+		var st := spawn_unit("house", Unit.FACTION_LIANG, origin + Vector2(80.0 + 40.0 * float(k), 40.0))
+		st.is_constructing = true
+		st._pending_build = true
+		st.set_meta("fcell", map.world_to_cell(st.position))
+		st.set_meta("fhalf", 1)
+		sites.append(st)
+		_order_builders_to_site([w], st, true)   # 模拟按住 Shift 连续放置
+	var started_first: bool = w._state == Unit.ST_BUILD and w._build_site == sites[0]
+	var q_ok: bool = w._queue.size() == 2 \
+		and w._queue[0].get("target") == sites[1] and w._queue[1].get("target") == sites[2]
+	# 首座完工 → 应自动接第二座；再完 → 第三座（顺序与放置一致）
+	sites[0].is_constructing = false
+	w._physics_process(0.05)
+	var next_is_2: bool = w._build_site == sites[1]
+	sites[1].is_constructing = false
+	w._physics_process(0.05)
+	var next_is_3: bool = w._build_site == sites[2]
+	print("[shiftbuild] first_starts_now=%s queue_order_ok=%s then_2nd=%s then_3rd=%s" % [
+		started_first, q_ok, next_is_2, next_is_3])
+	for st in sites:
+		units.erase(st)
+		st.queue_free()
+	units.erase(w)
+	w.queue_free()
+
+
 ## 科技归属自检（TECH_TEST=1）：兵营科技(利刃/坚铠)不加成英雄；基地·时代科技(聚义/替天行道)加成英雄各 ~+10%。
 func _tech_selftest() -> void:
 	var prev_econ := economy
@@ -10071,7 +10120,7 @@ class DotaProjectileFx extends TimedFx:
 class BuildingCollapseFx extends TimedFx:
 	var tex: Texture2D = null
 	var s := 96.0
-	const N := 7   # 7×7 = 49 块碎片：块切得细才有「一块块塌下来」的颗粒感
+	const N := 10   # 10×10 = 100 块碎片：块切得细才有「一块块塌下来」的颗粒感
 
 	func _ready() -> void:
 		dur = 1.1
