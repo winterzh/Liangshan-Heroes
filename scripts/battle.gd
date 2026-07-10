@@ -455,6 +455,10 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 		u.max_hp *= tech_hp
 		u.hp = u.max_hp
 	u.position = world_pos
+	# 迷雾中新刷出的官军不能先用默认 visible=true 闪现一帧，等下次 fog pass 才隐藏。
+	if fog and faction == Unit.FACTION_GUAN:
+		u.fog_visible = is_explored_world(world_pos) if u.is_building else is_visible_world(world_pos)
+		u.visible = u.fog_visible
 	u.died.connect(_on_unit_died)
 	units.append(u)
 	return u
@@ -3227,12 +3231,16 @@ func _fog_pass(delta: float) -> void:
 		var r := int(u.setup_def.get("sight", 10 if u.is_building else 8))
 		_mark_sight_now(map.world_to_cell(u.position), r)
 	# 2) 更新真实侦察 + 地面驻留：敌军只看 _sight_now/_reveal_t，_vision==2 仅负责地面亮度。
+	#    单位真实视野才刷新 30s 驻留；技能临时侦察结束后应立即回到已探索阴影，不再多留 30s 亮洞。
 	for i in range(n):
 		if _reveal_t[i] > 0.0:
 			_reveal_t[i] = maxf(0.0, _reveal_t[i] - step)
-		if _sight_now[i] == 1 or _reveal_t[i] > 0.0:
+		if _sight_now[i] == 1:
 			_vision[i] = 2
 			_vis_t[i] = SIGHT_LINGER
+		elif _reveal_t[i] > 0.0:
+			_vision[i] = 2
+			_vis_t[i] = maxf(0.0, _vis_t[i] - step)   # 只消耗旧的真实视野驻留，不被技能重置
 		elif _vision[i] == 2:
 			_vis_t[i] -= step
 			if _vis_t[i] <= 0.0:
@@ -3277,7 +3285,6 @@ func _reveal_fog_at(center: Vector2, radius_px: float, dur := 6.0) -> void:
 			if x >= 0 and y >= 0 and x < map.w and y < map.h:
 				var idx := y * map.w + x
 				_vision[idx] = 2
-				_vis_t[idx] = maxf(_vis_t[idx], dur)
 				_reveal_t[idx] = maxf(_reveal_t[idx], dur)
 
 
@@ -5065,6 +5072,17 @@ func cancel_pending_cast(caster: Unit) -> void:
 	if caster == null or _pending_casts.is_empty():
 		return
 	_pending_casts = _pending_casts.filter(func(pc: Dictionary) -> bool: return pc.get("caster") != caster)
+
+
+## HUD 查询：某个技能是否正在抬手待结算。这与 cd_t 是两个独立状态，不能把抬手误画成「冷却 0」。
+func is_cast_pending(caster: Unit, slot: int) -> bool:
+	if caster == null or not is_instance_valid(caster):
+		return false
+	for pc in _pending_casts:
+		if pc.get("caster") == caster and int(pc.get("slot", -1)) == slot \
+				and int(pc.get("serial", -1)) == caster._cast_serial:
+			return true
+	return false
 
 
 ## 花荣·切刀/挂弓：在弓与刀之间切换（命令卡按钮触发）。
@@ -8596,6 +8614,7 @@ func _economy_selftest() -> void:
 		var idx := fc.y * map.w + fc.x
 		# 强制照亮该格，再模拟「单位已离开」连跑若干 pass：
 		_sight_now.fill(0)
+		_reveal_t[idx] = 0.0
 		_vision[idx] = 2
 		_vis_t[idx] = SIGHT_LINGER
 		# 跑 ~10 秒（无单位照亮）：仍应明亮（驻留未耗尽）
@@ -8606,12 +8625,21 @@ func _economy_selftest() -> void:
 		for _i in range(140):
 			_force_fog_decay(0.18)
 		var faded_after_30s := _vision[idx] == 1
-		# 建筑记忆：该格已探明（vision==1）→ 建筑应保留可见、普通敌人应隐去（纯判定，不生成单位）
+		# 技能临时开视野：持续期内能看见，到点必须立即回阴影，不能再继承 30s 真实视野驻留。
+		_vision[idx] = 0
+		_vis_t[idx] = 0.0
+		_reveal_t[idx] = 0.0
 		var p := map.cell_to_world(fc)
+		_reveal_fog_at(p, 1.0, 0.30)
+		var reveal_now := is_visible_world(p) and _vision[idx] == 2
+		_force_fog_decay(0.18)
+		_force_fog_decay(0.18)
+		var reveal_expires := not is_visible_world(p) and _vision[idx] == 1 and _vis_t[idx] <= 0.0
+		# 建筑记忆：该格已探明（vision==1）→ 建筑应保留可见、普通敌人应隐去（纯判定，不生成单位）
 		var bld_remembered := is_explored_world(p)     # 建筑：探明即保留
 		var foe_hidden := not is_visible_world(p)       # 普通敌人：非明亮即隐去
-		print("[fog] sight_unit=%d sight_bld=%d linger_10s=%s faded_30s=%s bld_remembered=%s foe_hidden=%s" % [
-			8, 10, lingers_10s, faded_after_30s, bld_remembered, foe_hidden])
+		print("[fog] sight_unit=%d sight_bld=%d linger_10s=%s faded_30s=%s reveal_now=%s reveal_expires=%s bld_remembered=%s foe_hidden=%s" % [
+			8, 10, lingers_10s, faded_after_30s, reveal_now, reveal_expires, bld_remembered, foe_hidden])
 
 
 ## 全托管研究互斥自检（ECO_RESEARCH_TEST=1）：不跑时间，确定性验证双向互斥、重复科技、兵营选择与预算预留。
@@ -8893,6 +8921,15 @@ func _towertrap_selftest() -> void:
 	var cast_cd_ok: bool = absf(cdt - hbh._slot_cd(0)) < 0.01
 	print("[cdtest] song_rally(slot0): 原cd=%.1f  n=1→cd=%.1f  n=3→cd=%.1f  施放后cd_t=%.1f(应=%.1f)  ok=%s" % [
 		float(_abilities.get("song_rally", {}).get("cd", 0.0)), cd1, hbh._slot_cd(0), cdt, hbh._slot_cd(0), cast_cd_ok])
+	# UI 时序：抬手阶段 cd_t 本来就应为 0，HUD 必须识别 pending 并显示「施法中」，不能显示「冷却 0」。
+	hbh.ability_slots[0]["cd_t"] = 0.0
+	_begin_cast(hbh, 0, hbh.position)
+	var cast_ui_state_ok := is_cast_pending(hbh, 0) and hbh._cast_t > 0.0 \
+			and float(hbh.ability_slots[0]["cd_t"]) <= 0.0
+	print("[cdui] pending=%s cd_t=%.1f label=%s ok=%s" % [
+		is_cast_pending(hbh, 0), float(hbh.ability_slots[0]["cd_t"]),
+		"施法中" if is_cast_pending(hbh, 0) else "冷却", cast_ui_state_ok])
+	hbh.cancel_cast_windup()
 	# 敌方倍率 e=4：数量×4、血×(1+3/3)=2.0、攻×(1+3/4)=1.75
 	var _em0 := Campaign.enemy_mult
 	Campaign.enemy_mult = 4.0
@@ -8911,6 +8948,7 @@ func _towertrap_selftest() -> void:
 	results.append(["hero_boost_math", nmath_ok and cap_ok])
 	results.append(["hero_boost_scale", scale_ok])
 	results.append(["hero_boost_hp_cd", hpcd_ok])
+	results.append(["cast_ui_no_zero", cast_ui_state_ok])
 	results.append(["revive_reserve_floor", _eco_revive_reserve() >= 2 * ECO_REVIVE_GOLD])
 	# 民居「后方」锚点：在远离前线一侧、离基地够远（别堆采矿角/集结走廊卡住单位）
 	var hall_t := main_base(Unit.FACTION_LIANG)
@@ -9028,9 +9066,14 @@ func _hover_selftest() -> void:
 
 func _force_fog_decay(step: float) -> void:
 	for i in range(_vision.size()):
+		if _reveal_t[i] > 0.0:
+			_reveal_t[i] = maxf(0.0, _reveal_t[i] - step)
 		if _sight_now[i] == 1:
 			_vision[i] = 2
 			_vis_t[i] = SIGHT_LINGER
+		elif _reveal_t[i] > 0.0:
+			_vision[i] = 2
+			_vis_t[i] = maxf(0.0, _vis_t[i] - step)
 		elif _vision[i] == 2:
 			_vis_t[i] -= step
 			if _vis_t[i] <= 0.0:
@@ -9333,6 +9376,13 @@ func _cmdcard_test(dir: String) -> void:
 				if hero.can_learn(sidx):
 					learn_slot(hero, sidx)
 		total_bad += await _cmdcard_capture(dir, "hero", [hero])
+		# 技能抬手可视回归：槽 0 应显示「施法中」，其余槽不得被误画成冷却 0。
+		hero.ability_slots[0]["cd_t"] = 0.0
+		_begin_cast(hero, 0, hero.position + Vector2(80, 0))
+		total_bad += await _cmdcard_capture(dir, "hero_casting", [hero])
+		print("[cmdcard] casting pending=%s cd_t=%.1f" % [
+			is_cast_pending(hero, 0), float(hero.ability_slots[0]["cd_t"])])
+		hero.cancel_cast_windup()
 	print("[cmdcard] TOTAL overflow=%d %s" % [total_bad, "PASS" if total_bad == 0 else "FAIL"])
 
 
@@ -11672,10 +11722,7 @@ func _newhero_selftest() -> void:
 
 ## 待结算队列里某将是否排了某槽（托管自检用）。
 func _pending_has(who: Unit, slot: int) -> bool:
-	for pc in _pending_casts:
-		if pc["caster"] == who and int(pc["slot"]) == slot:
-			return true
-	return false
+	return is_cast_pending(who, slot)
 
 
 func _pending_lp(who: Unit, slot: int) -> Vector2:

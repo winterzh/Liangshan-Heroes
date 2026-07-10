@@ -2558,13 +2558,15 @@ class HeroSlotButton extends Control:
 			draw_rect(Rect2(px, ir.end.y - 9.0 * ds, 9.0 * ds, 6.0 * ds), Color(0.5, 0.45, 0.3, 0.8), false, 1.0)
 		# 混合被动（宋江 R）既常驻又可主动放 → 当作可施放技能走冷却显示
 		var castable: bool = (not passive) or hero.slot_has_active(slot)
-		# 冷却遮罩 / 未学暗罩（叠在图标上）
-		if castable and learned and not hero.slot_ready(slot):
-			var frac := hero.slot_cd_frac(slot)
+		var cd_left := float(s["cd_t"])
+		var pending: bool = hud.battle.is_cast_pending(hero, slot)
+		# 冷却遮罩 / 施法抬手 / 未学暗罩（叠在图标上）。
+		# slot_ready 还会因抬手、沉默、眩晕而 false，不能拿它当「正在冷却」，否则 cd_t=0 会闪出数字 0。
+		if castable and learned and (pending or cd_left > 0.0):
 			draw_rect(ir, Color(0, 0, 0, 0.55))
 			if Settings.show_cooldown:
-				var secs := int(ceil(frac * hero.slot_cd(slot)))
-				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.65), str(secs), HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(24 * ds), Color(1, 1, 1, 0.95))
+				var center_text := "施法" if pending else str(int(ceil(cd_left)))
+				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.65), center_text, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int((16 if pending else 24) * ds), Color(1, 1, 1, 0.95))
 		elif rank == 0 and not passive:
 			draw_rect(ir, Color(0, 0, 0, 0.36))
 		# 名称（y 随按钮高度）
@@ -2572,8 +2574,10 @@ class HeroSlotButton extends Control:
 		draw_string(f, Vector2(3, size.y - 19), nm, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, nm_fs, Color("ffd866") if learned else Color(0.6, 0.55, 0.45))
 		# 底行状态：未冷却时显示该技能（当前等级）的冷却秒数——让玩家随时看到「CD 多少」
 		var st := ""
-		if castable and learned and not hero.slot_ready(slot):
-			st = "冷却 %ds" % int(ceil(hero.slot_cd_frac(slot) * hero.slot_cd(slot)))
+		if castable and learned and pending:
+			st = "施法中"
+		elif castable and learned and cd_left > 0.0:
+			st = "冷却 %ds" % int(ceil(cd_left))
 		elif castable and learned:
 			st = "CD %ds " % int(round(hero.slot_cd(slot))) + hotkey   # 就绪：直接标出冷却时长
 		elif passive:
