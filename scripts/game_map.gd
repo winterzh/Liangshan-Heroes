@@ -51,6 +51,9 @@ var base_fill := T.GRASS
 
 var grid := PackedInt32Array()
 var astar := AStarGrid2D.new()
+var astar_guan := AStarGrid2D.new()
+var _base_solid := PackedByteArray()
+var _block_count := PackedInt32Array()
 var decor: Array = []   # [tex_key, Vector2i cell, float size]，由关卡设置
 
 
@@ -122,19 +125,28 @@ func scatter(of_type: int, into: int, density: int, seed_mix: int = 0) -> void:
 ## ---------- 寻路烘焙 ----------
 
 func bake() -> void:
-	astar.region = Rect2i(0, 0, w, h)
-	astar.cell_size = Vector2(CELL, CELL)
-	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
-	astar.update()
+	for nav in [astar, astar_guan]:
+		nav.region = Rect2i(0, 0, w, h)
+		nav.cell_size = Vector2(CELL, CELL)
+		nav.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
+		nav.update()
+	_base_solid.resize(w * h)
+	_block_count.resize(w * h)
+	_base_solid.fill(0)
+	_block_count.fill(0)
 	for y in range(h):
 		for x in range(w):
 			var id := Vector2i(x, y)
 			var info: Dictionary = INFO[t_at(x, y)]
 			if info["solid"]:
 				astar.set_point_solid(id, true)
+				astar_guan.set_point_solid(id, true)
+				_base_solid[idx(x, y)] = 1
 			else:
 				var sl: float = info["sl"]
+				var sg: float = info["sg"]
 				astar.set_point_weight_scale(id, clampf(1.4 / maxf(sl, 0.2), 1.0, 4.0))
+				astar_guan.set_point_weight_scale(id, clampf(1.4 / maxf(sg, 0.2), 1.0, 4.0))
 	queue_redraw()
 
 
@@ -171,19 +183,51 @@ func nearest_open(c: Vector2i) -> Vector2i:
 	return c
 
 
-func find_path(from_w: Vector2, to_w: Vector2) -> PackedVector2Array:
+## 从 target 周边开放格里选“朝 origin 最近”的一格。攻击/采集建筑时各单位走自己最近的一侧，
+## 不再全部挤向扫描顺序固定的左上角。
+func nearest_open_from(target: Vector2i, origin: Vector2i) -> Vector2i:
+	target = Vector2i(clampi(target.x, 0, w - 1), clampi(target.y, 0, h - 1))
+	if is_open_cell(target):
+		return target
+	for r in range(1, 12):
+		var best := Vector2i(-1, -1)
+		var best_d := INF
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				if maxi(absi(dx), absi(dy)) != r:
+					continue
+				var n := target + Vector2i(dx, dy)
+				if not is_open_cell(n):
+					continue
+				var d := Vector2(n).distance_squared_to(Vector2(origin))
+				if d < best_d:
+					best_d = d
+					best = n
+		if best.x >= 0:
+			return best
+	return target
+
+
+func find_path(from_w: Vector2, to_w: Vector2, faction := 0) -> PackedVector2Array:
 	var a := nearest_open(world_to_cell(from_w))
-	var b := nearest_open(world_to_cell(to_w))
+	var target_cell := world_to_cell(to_w)
+	var b := nearest_open_from(target_cell, a)
 	var out := PackedVector2Array()
 	if a == b:
-		out.append(cell_to_world(b))
+		out.append(to_w if target_cell == b and is_open_world(to_w) else cell_to_world(b))
 		return out
-	var ids := astar.get_id_path(a, b)
+	var nav := astar if faction == 0 else astar_guan
+	var ids := nav.get_id_path(a, b)
+	if ids.is_empty():
+		return out   # 不可达就明确失败；单位状态机负责结束/重试，绝不伪造穿墙直线
 	for i in range(1, ids.size()):
 		out.append(cell_to_world(ids[i]))
-	if out.is_empty():
-		out.append(cell_to_world(b))
-	return _smooth_path(from_w, out)
+	var smooth := _smooth_path(from_w, out)
+	if target_cell == b and is_open_world(to_w) and not smooth.is_empty():
+		var prev := from_w if smooth.size() == 1 else smooth[smooth.size() - 2]
+		if _segment_open(prev, to_w):
+			smooth[smooth.size() - 1] = to_w
+	return smooth
 
 
 ## AStar 保证可达；这里把相邻同向/可直达路点合并，减少单位沿网格折线左右摆。
@@ -255,7 +299,11 @@ func block_footprint(c: Vector2i, half: int, solid: bool) -> void:
 		for dx in range(-half, half + 1):
 			var n := c + Vector2i(dx, dy)
 			if n.x >= 0 and n.y >= 0 and n.x < w and n.y < h:
-				astar.set_point_solid(n, solid)
+				var i := idx(n.x, n.y)
+				_block_count[i] = maxi(0, _block_count[i] + (1 if solid else -1))
+				var blocked := _base_solid[i] == 1 or _block_count[i] > 0
+				astar.set_point_solid(n, blocked)
+				astar_guan.set_point_solid(n, blocked)
 
 
 ## 该范围能否建造：全部在界内且当前可通行（非水/崖/已占建筑）

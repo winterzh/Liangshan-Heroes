@@ -472,9 +472,9 @@ func _smoke_drive(b, delta: float) -> void:
 			if u.is_building:
 				continue
 			if u.is_ranged and focus != null and is_instance_valid(focus):
-				u.order_attack(focus)                 # 弓手/花荣 远程点名硬目标
+				u.order_attack(focus, false, true)    # 剧情点名：持续追击硬目标
 			elif u == lin and focus != null and is_instance_valid(focus):
-				u.order_attack(focus)                 # 林冲咬住目标英雄
+				u.order_attack(focus, false, true)    # 林冲咬住目标英雄
 			else:
 				u.order_amove(mass + Vector2(randf_range(-55, 55), randf_range(-55, 55)))  # 步兵散开清扫
 		# 林冲横扫(非指向,自身周围)频放
@@ -492,7 +492,7 @@ func _smoke_drive(b, delta: float) -> void:
 		if is_instance_valid(gate) and gate.hp > 0.0:
 			for u in players:
 				if not u.is_building:
-					u.order_attack(gate)
+						u.order_attack(gate, false, true)
 			# 破门阶段也放技能清壁垒守军、加速破门
 			for hk in ["hua_rong", "lin_chong"]:
 				var h := B.find_unit(hk)

@@ -45,6 +45,7 @@ var _sel_ref: Array = []
 var _grid_keys: Array = []
 var _skill_keys: Array = []
 var _panel_accum := 0.0
+var _control_help: Label
 
 # 悬浮技能说明（鼠标移到命令卡/技能图标上即时浮现一张说明卡）
 var _tip_panel: PanelContainer
@@ -104,6 +105,8 @@ var _eject_float: Button   # 桌面：选中有驻军建筑时浮在面板上方
 func _ready() -> void:
 	layer = 10
 	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停时 UI（暂停菜单）仍可操作
+	if not Settings.keybinds_changed.is_connected(_on_keybinds_changed):
+		Settings.keybinds_changed.connect(_on_keybinds_changed)
 
 	top_label = Label.new()
 	top_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
@@ -442,6 +445,8 @@ func toggle_auto_selected() -> void:
 	for h in hs:
 		h.auto_micro = not any_on
 		if h.auto_micro:
+			h.manual_order_active = false
+			h.manual_order_t = 0.0
 			h.set_stance(Unit.STANCE_AGGRO)
 	show_message("%s %d 名英雄托管" % ["关闭" if any_on else "开启", hs.size()], 1.2)
 
@@ -461,6 +466,8 @@ func _toggle_all_auto() -> void:
 	for h in hs:
 		h.auto_micro = not all_on
 		if h.auto_micro:
+			h.manual_order_active = false
+			h.manual_order_t = 0.0
 			h.set_stance(Unit.STANCE_AGGRO)
 	show_message("%s全军托管（%d 名英雄）" % ["开启" if not all_on else "关闭", hs.size()], 1.2)
 
@@ -910,17 +917,32 @@ func _build_bottom_panel() -> void:
 	_sel_grid.add_theme_constant_override("v_separation", 3)
 	grid_wrap.add_child(_sel_grid)
 
-	var help := Label.new()
+	_control_help = Label.new()
 	# 拆成 5 行短句（纵向有余、横向窄）：每行都 < 聚义厅时的最窄富余宽，保证整段完整可见不被裁。
-	help.text = "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\nA攻击移动 S待命 P巡逻 G切姿态 T托管(Shift+T全军)\nDelete拆除 Shift排队 QWER命令 Tab切单位\n.选闲置 Ctrl/Shift+数字编队 空格回基地 Esc菜单"
-	help.add_theme_font_size_override("font_size", 11)
-	help.add_theme_color_override("font_color", Color(0.55, 0.55, 0.5))
-	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_control_help.text = _key_help_text()
+	_control_help.add_theme_font_size_override("font_size", 11)
+	_control_help.add_theme_color_override("font_color", Color(0.55, 0.55, 0.5))
+	_control_help.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	# 占据剩余空白、右缘贴屏幕边（grid_wrap 已改 SHRINK，提示不会被推出屏）。
 	# 不用 autowrap：容器里 autowrap Label 的最小高度按「最小宽度」算（一个汉字宽→堆成几十行）会撑高整栏。
 	# 改为精简文案保证最宽一行 < 最窄富余宽（聚义厅时约 396px）。
-	help.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(help)
+	_control_help.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.add_child(_control_help)
+
+
+func _key_help_text() -> String:
+	var ck := Settings.command_key_labels()
+	return "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s选闲置 Ctrl/Shift+数字编队 %s回基地 Esc菜单" % [
+		Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"),
+		Settings.key_label("patrol"), Settings.key_label("stance"), Settings.key_label("auto"),
+		Settings.key_label("demolish"), "/".join(ck), Settings.key_label("subgroup"),
+		Settings.key_label("idle_worker"), Settings.key_label("alert")]
+
+
+func _on_keybinds_changed() -> void:
+	if is_instance_valid(_control_help):
+		_control_help.text = _key_help_text()
+	refresh_command()
 
 
 func update_selection_panel(sel: Array) -> void:
@@ -964,7 +986,7 @@ func _rebuild_command_card() -> void:
 	if au == null:
 		return
 	if au.is_hero and au.slot_count() > 0:
-		var hotkeys := ["Q", "W", "E", "R"]
+		var hotkeys := Settings.command_key_labels()
 		for i in range(au.slot_count()):
 			var b := HeroSlotButton.new()
 			b.hud = self
@@ -1102,10 +1124,25 @@ func _rebuild_grid() -> void:
 	_grid_keys = keys
 	for c in _sel_grid.get_children():
 		c.queue_free()
-	_sel_grid.columns = clampi(alive.size(), 1, 12)
-	for u in alive:
+	var display: Array = []
+	if alive.size() > 24:
+		var by_key := {}
+		for u in alive:
+			var gkey := "%d:%s" % [u.faction, u.key]
+			if not by_key.has(gkey):
+				by_key[gkey] = []
+				display.append(by_key[gkey])
+			by_key[gkey].append(u)
+	else:
+		for u in alive:
+			display.append([u])
+	_sel_grid.columns = clampi(display.size(), 1, 12)
+	for members: Array in display:
+		var u = members[0]
 		var icon := UnitIcon.new()
 		icon.unit = u
+		icon.members = members
+		icon.count = members.size()
 		icon.hud = self
 		_sel_grid.add_child(icon)
 
@@ -1203,11 +1240,12 @@ func _eff_def(u) -> int:
 
 
 func _stance_tag(u) -> String:
+	var key := Settings.key_label("stance")
 	match u.stance:
-		Unit.STANCE_DEFEND: return "姿态 守备(G)"
-		Unit.STANCE_HOLD: return "姿态 据守(G)"
-		Unit.STANCE_PASSIVE: return "姿态 避战(G)"
-		_: return "姿态 进攻(G)"
+		Unit.STANCE_DEFEND: return "姿态 守备(%s)" % key
+		Unit.STANCE_HOLD: return "姿态 据守(%s)" % key
+		Unit.STANCE_PASSIVE: return "姿态 避战(%s)" % key
+		_: return "姿态 进攻(%s)" % key
 
 
 func _style_label(l: Label, size: int) -> void:
@@ -1632,18 +1670,28 @@ class Minimap extends Control:
 		if _bg == null:
 			_build_bg()
 		draw_texture_rect(_bg, Rect2(Vector2.ZERO, size), false)
+		# 小地图与主视野使用同一张探索/驻留遮罩；未探索地形不再提前泄露。
+		if battle.fog and battle._fog_tex != null:
+			draw_texture_rect(battle._fog_tex, Rect2(Vector2.ZERO, size), false)
 		var ws := _ws()
 		for u in battle.units:
 			if not is_instance_valid(u) or u.hp <= 0.0 or u.garrisoned:
 				continue   # 驻军单位藏在建筑里，小地图不另外画点
-			if u.faction == Unit.FACTION_GUAN and battle.fog and not battle.is_visible_world(u.position):
-				# 迷雾中：普通敌人不显示；但探明过的敌方建筑保留在小地图（记忆迷雾）
-				if not (u.is_building and battle.is_explored_world(u.position)):
+			if battle.fog:
+				if u.is_resource and not battle.is_explored_world(u.position):
 					continue
+				if u.faction == Unit.FACTION_GUAN and not battle.is_visible_world(u.position):
+					# 普通敌人离开真实视野立即消失；探明建筑只留记忆点。
+					if not (u.is_building and battle.is_explored_world(u.position)):
+						continue
 			var p: Vector2 = u.position / ws * size
-			var col := Color("ffd866") if u.faction == Unit.FACTION_LIANG else Color("ff5544")
-			if u.is_building:
-				col = Color.WHITE
+			var col := Color("67e58a") if u.faction == Unit.FACTION_LIANG else Color("ff5544")
+			if u.is_resource:
+				col = Color("ffd34d") if u.res_kind == "gold" else Color("5fbf62")
+			elif u.is_building:
+				col = Color("7be0ff") if u.faction == Unit.FACTION_LIANG else Color("e75b52")
+				if u.faction == Unit.FACTION_GUAN and battle.fog and not battle.is_visible_world(u.position):
+					col = Color("793b38")   # 阴影中的敌方建筑记忆
 			draw_rect(Rect2(p - Vector2(1.5, 1.5), Vector2(3, 3)), col)
 		var cam: Camera2D = battle.camera
 		var vp: Vector2 = get_viewport().get_visible_rect().size / cam.zoom.x
@@ -1686,6 +1734,8 @@ class Minimap extends Control:
 ## 选区单位图标：精灵/头像 + 实时血条；左键单选，Shift 加减
 class UnitIcon extends Control:
 	var unit: Unit = null
+	var members: Array = []
+	var count := 1
 	var hud = null
 
 	func _init() -> void:
@@ -1694,8 +1744,8 @@ class UnitIcon extends Control:
 
 	func _process(_delta: float) -> void:
 		if is_instance_valid(unit):
-			tooltip_text = unit.display_name
-			queue_redraw()
+			tooltip_text = unit.display_name if count <= 1 else "%s ×%d" % [unit.display_name, count]
+		queue_redraw()
 
 	func _draw() -> void:
 		if not is_instance_valid(unit) or unit.hp <= 0.0:
@@ -1725,11 +1775,19 @@ class UnitIcon extends Control:
 		else:
 			var bc := Color("ffd866") if unit.is_hero else Color(0.45, 0.38, 0.26)
 			draw_rect(Rect2(Vector2.ZERO, size), bc, false, 1.0)
+		if count > 1:
+			var badge := Rect2(size.x - 20.0, 2.0, 18.0, 16.0)
+			draw_rect(badge, Color(0.04, 0.04, 0.03, 0.92))
+			draw_string(ThemeDB.fallback_font, badge.position + Vector2(0, 12), str(count),
+				HORIZONTAL_ALIGNMENT_CENTER, badge.size.x, 11, Color("fff1b0"))
 
 	func _gui_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if hud != null:
-				hud._on_icon_clicked(unit, event.shift_pressed, event.ctrl_pressed or event.meta_pressed)
+				if count > 1 and hud.battle != null:
+					hud.battle.select_members(members, event.shift_pressed)
+				else:
+					hud._on_icon_clicked(unit, event.shift_pressed, event.ctrl_pressed or event.meta_pressed)
 			accept_event()
 
 
@@ -1857,7 +1915,7 @@ class CmdButton extends Control:
 		var abils: Array = d.get("abilities", [])
 		if abils.is_empty():
 			return ""
-		var slots := ["Q", "W", "E", "R"]
+		var slots := Settings.command_key_labels()
 		var lines := PackedStringArray()
 		for i in range(abils.size()):
 			var ad: Dictionary = Defs.ABILITIES.get(String(abils[i]), {})
@@ -2017,7 +2075,7 @@ class CmdButton extends Control:
 		# 快捷键键帽（Q/W/E/R，与 _command_hotkey 槽位一致）；「出击」/撤单/队列 非槽位命令，不画键帽。触屏隐藏（手机无键盘）
 		var slot := get_index()
 		if slot < 4 and kind != "eject" and kind != "weapon" and kind != "back" and kind != "garrison" and kind != "cancel_train" and not (hud != null and hud.touch_ui):
-			var keyc: String = ["Q", "W", "E", "R"][slot]
+			var keyc: String = Settings.command_key_labels()[slot]
 			var kr := Rect2(size.x - 17, 3, 15, 15)
 			draw_rect(kr, Color(0, 0, 0, 0.6))
 			draw_rect(kr, Color(0.75, 0.62, 0.34), false, 1.0)

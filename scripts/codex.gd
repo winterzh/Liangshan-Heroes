@@ -388,7 +388,7 @@ func _select(key: String) -> void:
 		_abil_lbl.text = ""
 	else:
 		_abil_title.text = "技能（数值＝1级 / 2级 / 3级）"
-		var slots := ["Q", "W", "E", "R"]
+		var slots := Settings.command_key_labels()
 		var txt := ""
 		for i in abil.size():
 			var aid: String = abil[i]

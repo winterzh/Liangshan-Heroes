@@ -4,6 +4,10 @@ extends Control
 ## 若调用方需在关闭后做事（如重新显示暂停菜单），设 on_close 回调。
 
 var on_close := Callable()
+var _capture_action := ""
+var _capture_button: Button = null
+var _key_buttons: Dictionary = {}
+var _key_overview: Label
 
 
 func _ready() -> void:
@@ -63,6 +67,7 @@ func _build() -> void:
 	elif micro_cur >= 3:
 		micro_cur = 2   # 关掉AI友好模式后，原「全托管」档在面板上回落显示为「强托管」
 	_row(p, "英雄托管", _seg(micro_opts, micro_cur, func(v) -> void: Settings.auto_micro_level = int(v)))
+	_row(p, "行军阵型", _seg([["松散", "loose"], ["方阵", "box"], ["横列", "line"]], Settings.formation_mode, func(v) -> void: Settings.formation_mode = String(v)))
 	if Campaign.ai_friendly:
 		_row(p, "", _note("全托管：驻守战里彻底挂机——喽啰自动采集/建造/修复、自动练兵练将研究、英雄全自动、镜头自动"))
 	else:
@@ -92,12 +97,23 @@ func _build() -> void:
 	_row(p, "难度", _seg([["简单", "easy"], ["普通", "normal"], ["困难", "hard"]], Campaign.ai_difficulty, func(v) -> void: Campaign.ai_difficulty = v))
 	_row(p, "胜利条件", _seg([["征服", "conquest"], ["斩首", "regicide"], ["占山", "koth"]], Campaign.victory_mode, func(v) -> void: Campaign.victory_mode = v))
 
-	_head(p, "⌨  键位一览")
-	var keys := Label.new()
-	keys.text = _keybind_text()
-	keys.add_theme_font_size_override("font_size", 14)
-	keys.add_theme_color_override("font_color", Color("b8c4d4"))
-	p.add_child(keys)
+	_head(p, "⌨  核心键位")
+	p.add_child(_keybind_grid())
+	var reset_keys := Button.new()
+	reset_keys.text = "恢复默认键位"
+	reset_keys.custom_minimum_size = Vector2(150, 34)
+	reset_keys.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	reset_keys.pressed.connect(func() -> void:
+		Settings.reset_keybinds()
+		_refresh_key_buttons())
+	p.add_child(reset_keys)
+
+	_head(p, "键位一览")
+	_key_overview = Label.new()
+	_key_overview.text = _keybind_text()
+	_key_overview.add_theme_font_size_override("font_size", 14)
+	_key_overview.add_theme_color_override("font_color", Color("b8c4d4"))
+	p.add_child(_key_overview)
 
 	var back := Button.new()
 	back.text = "←  返回（保存）"
@@ -115,7 +131,22 @@ func close() -> void:
 	queue_free()
 
 
+func _input(event: InputEvent) -> void:
+	if _capture_action == "" or not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	get_viewport().set_input_as_handled()
+	if event.keycode == KEY_ESCAPE:
+		_finish_key_capture()
+	elif Settings.rebind_key(_capture_action, event.keycode):
+		_finish_key_capture()
+		_refresh_key_buttons()
+	else:
+		_capture_button.text = "该键已保留"
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	if _capture_action != "":
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
 		get_viewport().set_input_as_handled()
 		close()
@@ -248,14 +279,72 @@ func _seg(options: Array, current: Variant, cb: Callable) -> Control:
 	return hb
 
 
+func _keybind_grid() -> Control:
+	var specs := [
+		["攻击移动", "amove"], ["停止", "stop"],
+		["原地据守", "hold"], ["巡逻", "patrol"],
+		["切换姿态", "stance"], ["英雄托管", "auto"],
+		["命令槽 1", "command_0"], ["命令槽 2", "command_1"],
+		["命令槽 3", "command_2"], ["命令槽 4", "command_3"],
+		["告警/基地", "alert"], ["全选军队", "select_army"],
+		["切子编组", "subgroup"], ["闲置工人", "idle_worker"],
+		["拆除", "demolish"],
+	]
+	var grid := GridContainer.new()
+	grid.columns = 4
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 5)
+	for spec in specs:
+		var label := Label.new()
+		label.text = String(spec[0])
+		label.custom_minimum_size = Vector2(100, 34)
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_color_override("font_color", Color("c8d2de"))
+		grid.add_child(label)
+		var action := String(spec[1])
+		var button := Button.new()
+		button.text = Settings.key_label(action)
+		button.custom_minimum_size = Vector2(86, 34)
+		button.tooltip_text = "点击后按下新键；冲突键会自动交换"
+		button.pressed.connect(_begin_key_capture.bind(action, button))
+		grid.add_child(button)
+		_key_buttons[action] = button
+	return grid
+
+
+func _begin_key_capture(action: String, button: Button) -> void:
+	_finish_key_capture()
+	_capture_action = action
+	_capture_button = button
+	button.text = "请按键…"
+	button.grab_focus()
+
+
+func _finish_key_capture() -> void:
+	if _capture_action != "" and is_instance_valid(_capture_button):
+		_capture_button.text = Settings.key_label(_capture_action)
+	_capture_action = ""
+	_capture_button = null
+
+
+func _refresh_key_buttons() -> void:
+	for action in _key_buttons:
+		var button: Button = _key_buttons[action]
+		if is_instance_valid(button):
+			button.text = Settings.key_label(action)
+	if is_instance_valid(_key_overview):
+		_key_overview.text = _keybind_text()
+
+
 func _keybind_text() -> String:
+	var command_keys := Settings.command_key_labels()
 	var lines := [
 		"编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入",
-		"F2 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头",
-		"A 攻击移动　S 停止　P 巡逻　G 切换站位",
-		"Q / W / E / R 英雄技能　F1/F3-F8 按头像选英雄",
-		"空格 跳最近告警/回起始视角　Tab 子编组　. / , 切闲置工人",
-		"Delete 拆除　Esc 菜单 / 取消",
+		"%s 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头" % Settings.key_label("select_army"),
+		"%s 攻击移动　%s 停止　%s 原地据守　%s 巡逻　%s 切换姿态" % [Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"), Settings.key_label("patrol"), Settings.key_label("stance")],
+		"%s 英雄技能/命令　F1/F3-F8 按头像选英雄" % " / ".join(command_keys),
+		"%s 跳最近告警/回起始视角　%s 子编组　%s 切闲置工人" % [Settings.key_label("alert"), Settings.key_label("subgroup"), Settings.key_label("idle_worker")],
+		"%s 拆除　Esc 菜单 / 取消" % Settings.key_label("demolish"),
 		"镜头：方向键平移　+ / − 或滚轮 缩放　中键拖拽",
 	]
 	return "\n".join(lines)

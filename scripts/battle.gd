@@ -107,11 +107,12 @@ var fog := false
 var _vision: PackedByteArray       # 每格 0=未探索 1=已探索(阴影) 2=明亮(正看 + 离开后驻留)
 var _vis_t: PackedFloat32Array     # 每格「明亮」驻留剩余秒数：离开视野后仍亮 SIGHT_LINGER 秒再退阴影
 var _sight_now: PackedByteArray    # 本次 pass 是否真正在某单位视野内（复用，免每帧重分配）
+var _reveal_t: PackedFloat32Array  # 技能临时侦察剩余秒数；属于真实视野，不与地面驻留混用
 var _vision_img: Image
 var _fog_tex: ImageTexture
 var _fog_layer: Node2D
 var _fog_t := 0.0
-const SIGHT_LINGER := 15.0          # 视野延时：单位离开后，已照亮区域保持明亮 15 秒再变回阴影
+const SIGHT_LINGER := 30.0          # 地面记忆延时；敌军显示只看真实视野，不随这 30 秒驻留
 
 var _dragging := false
 var _drag_from := Vector2.ZERO
@@ -119,6 +120,7 @@ var _click_fx_pos := Vector2.ZERO
 var _click_fx_t := 0.0
 var _click_fx_attack := false
 var _amove_armed := false
+var _patrol_armed := false
 var _repair_armed := false     # 武装维修：点己方受损建筑即派工人修缮
 var _garrison_armed := false   # 武装驻扎：英雄「驻扎」键点亮后，左键点己方建筑即进驻
 var _ability_armed := ""
@@ -131,7 +133,7 @@ var _ice_walls: Array = []     # 冰墙阻挡：{cells:[Vector2i],t}——到期
 var _wards: Array = []          # 立桩（DOTA·守卫）：{pos,r,t,pulse,pulse_t,mode,ally,foe,caster,heal,dmg,slow,slow_dur,col}——治疗桩/死神之眼/毒桩
 var _fire_trails: Array = []    # 火径：{caster,t,drop_t,drop,dps,dot_dur,r,foe}——随身移动沿途铺地火（魏定国 E）
 var _bolts: Array = []          # 技能弹道：{mode:bolt/hook_out/hook_drag, pos,tgt/dir,eff,sc,rank,caster,fx}——追踪弹/钩镰
-var _walk_casts: Array = []     # 走近施法队列：{c,slot,tgt,serial,t}——单体技能超射程时自动接近再放
+var _walk_casts: Array = []     # 走近施法队列：{c,slot,tgt/point,serial,t,age}——超射程时自动接近原目标再放
 var _channels: Array = []       # 引导施法：{caster,center,eff,sc,rank,r,tick,tick_t}——逐 tick 结算，施法者被打断即止
 var _pending_casts: Array = []  # 施法抬手·待结算队列：{caster,slot,lp}——抬手归零后才真正放招
 const CAST_WINDUP := 0.34       # 施法抬手时长（秒）：先抬手蓄势，再结算技能
@@ -438,7 +440,36 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 
 
 func spawn_at(key: String, faction: int, cell: Vector2i) -> Unit:
-	return spawn_unit(key, faction, map.cell_to_world(map.nearest_open(cell)))
+	var d: Dictionary = _defs.get(key, {})
+	var is_bld := bool(d.get("building", false)) and not d.has("res_kind")
+	var blocks := is_bld and not bool(d.get("captive", false))
+	# 建筑必须落在关卡声明的准确格位；机动单位/资源仍避开实心地形。
+	var at := cell if is_bld else map.nearest_open(cell)
+	var u := spawn_unit(key, faction, map.cell_to_world(at))
+	if blocks:
+		u.set_meta("fcell", at)
+		u.set_meta("fhalf", building_footprint_half(key))
+		register_building_footprint(u)
+	return u
+
+
+func register_building_footprint(bld: Unit) -> void:
+	if bld == null or not is_instance_valid(bld) or not bld.is_building or bld.is_resource \
+			or bld.is_captive or bool(bld.get_meta("footprint_blocked", false)):
+		return
+	var c: Vector2i = bld.get_meta("fcell", map.world_to_cell(bld.position))
+	var half: int = int(bld.get_meta("fhalf", building_footprint_half(bld.key)))
+	bld.set_meta("fcell", c)
+	bld.set_meta("fhalf", half)
+	map.block_footprint(c, half, true)
+	bld.set_meta("footprint_blocked", true)
+
+
+func unregister_building_footprint(bld: Unit) -> void:
+	if bld == null or not is_instance_valid(bld) or not bool(bld.get_meta("footprint_blocked", false)):
+		return
+	map.block_footprint(bld.get_meta("fcell"), int(bld.get_meta("fhalf", 1)), false)
+	bld.set_meta("footprint_blocked", false)
 
 
 ## 成批生成敌军并向目标 attack-move（波次用）。返回生成的单位数组。
@@ -873,8 +904,7 @@ func _bld_click_r(u: Unit) -> float:
 
 ## 该格放置的建筑是否会压到（或紧贴到）别的建筑：用占地 AABB 各向外扩 1 格判定，
 ## 确保两座建筑之间至少留一格缝、贴图屋檐不相叠（防止把箭塔造进聚义厅那种重叠）。
-## 关卡预置建筑（如聚义厅）spawn 时未登记 fcell/占地，故这里一律由 position+radius 现算占地，
-## 不依赖 area_buildable 的寻路 solid 判定——后者对预置建筑并不封格。
+## 关卡预置与动态建筑都会登记 fcell/占地；这里仍保留 position+radius 兜底，兼容脚本直接 spawn_unit 的临时建筑。
 func _building_overlap(cell: Vector2i, half: int) -> bool:
 	for u in units:
 		if not (is_instance_valid(u) and u.is_building and not u.is_resource and u.hp > 0.0):
@@ -902,6 +932,7 @@ func arm_build(key: String) -> void:
 		return
 	_disarm_ability()
 	_disarm_amove()
+	_disarm_patrol()
 	_build_armed = key
 	# 触屏：先把虚影摆到视图中心，玩家再拖动定位、松手落地（见 _unhandled_input 触屏分支）。
 	if hud != null and hud.touch_ui:
@@ -1040,6 +1071,7 @@ func arm_trap(key: String) -> void:
 		return
 	_disarm_ability()
 	_disarm_amove()
+	_disarm_patrol()
 	_cancel_build()
 	_trap_armed = key
 	if hud != null and hud.touch_ui:
@@ -1309,7 +1341,7 @@ func hall_page_turn(dir: int) -> void:
 func _queued_pop() -> int:
 	var n := 0
 	for u in units:
-		if is_instance_valid(u) and u.is_building:
+		if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG:
 			for k in u._train_queue:
 				n += int(_defs.get(k, {}).get("pop", 1))
 	return n
@@ -1317,6 +1349,10 @@ func _queued_pop() -> int:
 
 func queue_train(bld: Unit, key: String) -> void:
 	if bld == null or not is_instance_valid(bld) or bld.is_constructing:
+		return
+	if bld._research_key != "":
+		msg("该建筑正在研究科技，暂时不能训练", 1.4)
+		Sfx.play("cant")
 		return
 	var d: Dictionary = _defs.get(key, {})
 	var cg := int(d.get("cost_gold", 0))
@@ -1388,7 +1424,8 @@ func _selected_producers_for(bld: Unit, key: String) -> Array:
 		return []
 	var out: Array = []
 	for u in selection:
-		if not (is_instance_valid(u) and u.is_building and not u.is_constructing and u.faction == bld.faction and u.key == bld.key):
+		if not (is_instance_valid(u) and u.is_building and not u.is_constructing and u._research_key == "" \
+				and u.faction == bld.faction and u.key == bld.key):
 			continue
 		if key in u.setup_def.get("produces", []):
 			out.append(u)
@@ -1432,6 +1469,10 @@ func research_menu(bld: Unit) -> Array:
 
 func queue_research(bld: Unit, key: String) -> void:
 	if bld == null or not is_instance_valid(bld) or bld.is_constructing or bld._research_key != "":
+		return
+	if not bld._train_queue.is_empty():
+		msg("请先完成或取消生产队列，再开始研究", 1.5)
+		Sfx.play("cant")
 		return
 	if _tech_done.has(key):
 		return
@@ -1546,8 +1587,7 @@ func _on_unit_died(u: Unit) -> void:
 	if _ability_caster == u:   # 施法者阵亡：解除指向态，避免光标/预览悬空
 		_disarm_ability()
 	if u.is_building:
-		if u.has_meta("fcell"):   # 摧毁后放开占地（地面恢复可通行）
-			map.block_footprint(u.get_meta("fcell"), u.get_meta("fhalf"), false)
+		unregister_building_footprint(u)   # 摧毁后放开占地（地面恢复可通行）
 		if not u.is_constructing and u.faction == Unit.FACTION_LIANG:   # 只扣玩家人口上限
 			var pp := int(u.setup_def.get("provides_pop", 0))
 			if pp > 0:
@@ -2928,6 +2968,8 @@ func _init_fog() -> void:
 	_vis_t.resize(n)                # 默认 0=无驻留
 	_sight_now = PackedByteArray()
 	_sight_now.resize(n)
+	_reveal_t = PackedFloat32Array()
+	_reveal_t.resize(n)
 	_vision_img = Image.create(map.w, map.h, false, Image.FORMAT_RGBA8)
 	_vision_img.fill(Color(0, 0, 0, 1.0))
 	_fog_tex = ImageTexture.create_from_image(_vision_img)
@@ -2938,8 +2980,19 @@ func _init_fog() -> void:
 	world.add_child(_fog_layer)   # 在 units/fx 之后 → 盖住迷雾中的敌人
 
 
-# 「明亮」：当前正看或离开后 30 秒驻留内（_vision==2）。决定敌方普通单位是否显示。
+# 「当前可见」：只认单位真实视野或技能临时侦察。决定敌军显示、点击和锁定。
 func is_visible_world(p: Vector2) -> bool:
+	if not fog:
+		return true
+	var c := map.world_to_cell(p)
+	if c.x < 0 or c.y < 0 or c.x >= map.w or c.y >= map.h:
+		return false
+	var i := c.y * map.w + c.x
+	return _sight_now[i] == 1 or _reveal_t[i] > 0.0
+
+
+# 地面仍保持亮色：当前可见或离开后的驻留期。不得用于敌军交互判定。
+func is_lit_world(p: Vector2) -> bool:
 	if not fog:
 		return true
 	var c := map.world_to_cell(p)
@@ -2958,6 +3011,19 @@ func is_explored_world(p: Vector2) -> bool:
 	return _vision[c.y * map.w + c.x] != 0
 
 
+func target_visible_to(observer: Unit, target: Unit) -> bool:
+	if target == null or not is_instance_valid(target) or target._invis_t > 0.0:
+		return false
+	# 战争迷雾是玩家情报规则；官军 AI 不读取玩家的视野缓存。
+	if fog and observer != null and observer.faction == Unit.FACTION_LIANG and target.faction == Unit.FACTION_GUAN:
+		if is_visible_world(target.position):
+			return true
+		# 视野纹理约 0.18 秒刷新一次；逻辑索敌用观察者距离即时补判，避免敌人贴脸后还短暂无敌。
+		var sight := float(observer.setup_def.get("sight", 10 if observer.is_building else 8)) * GameMap.CELL
+		return observer.position.distance_to(target.position) <= sight
+	return true
+
+
 func _fog_pass(delta: float) -> void:
 	_fog_t -= delta
 	if _fog_t > 0.0:
@@ -2974,9 +3040,11 @@ func _fog_pass(delta: float) -> void:
 			continue
 		var r := int(u.setup_def.get("sight", 10 if u.is_building else 8))
 		_mark_sight_now(map.world_to_cell(u.position), r)
-	# 2) 更新可见度 + 驻留：视野内→满驻留并标记明亮；视野外→倒计时，到 0 才退为阴影
+	# 2) 更新真实侦察 + 地面驻留：敌军只看 _sight_now/_reveal_t，_vision==2 仅负责地面亮度。
 	for i in range(n):
-		if _sight_now[i] == 1:
+		if _reveal_t[i] > 0.0:
+			_reveal_t[i] = maxf(0.0, _reveal_t[i] - step)
+		if _sight_now[i] == 1 or _reveal_t[i] > 0.0:
 			_vision[i] = 2
 			_vis_t[i] = SIGHT_LINGER
 		elif _vision[i] == 2:
@@ -3020,6 +3088,7 @@ func _reveal_fog_at(center: Vector2, radius_px: float, dur := 6.0) -> void:
 				var idx := y * map.w + x
 				_vision[idx] = 2
 				_vis_t[idx] = maxf(_vis_t[idx], dur)
+				_reveal_t[idx] = maxf(_reveal_t[idx], dur)
 
 
 func _mark_sight_now(c: Vector2i, r: int) -> void:
@@ -3052,6 +3121,7 @@ func _end(victory: bool, line: String) -> void:
 		return
 	phase = Phase.END
 	_disarm_amove()
+	_disarm_patrol()
 	_disarm_ability()
 	var camp = get_node_or_null("/root/Campaign")
 	if camp != null and victory:
@@ -3242,7 +3312,7 @@ func _auto_micro_pass() -> void:
 			_auto_learn(u)
 		if u.slot_count() <= 0 or u._cast_t > 0.0:
 			continue
-		if u.manual_order_t > 0.0:
+		if u.manual_order_active or u.manual_order_t > 0.0:
 			continue   # 玩家刚亲自下过令：保护期内托管不插手（执行完会提前解除）
 		# 节流：每帧都决策会让英雄不停改朝向(左右摇头)、徒增寻路抖动；改成每 ~0.27s 一次，按 id 错帧
 		if (frame + u.get_instance_id()) % AI_TICK != 0:
@@ -3845,9 +3915,9 @@ func _grid_build() -> void:
 			continue   # 资源点(金矿/林木)从不是分离/索敌/光环目标 → 不入网格，免得林边把桶撑大拖慢邻近查询
 		if not u.is_building:
 			mob += 1
-			var ft: Unit = u._target
+			var ft = u._target   # 目标可能已在同帧释放；先以 Variant 接住，再做实例有效性检查。
 			if ft != null and is_instance_valid(ft):   # 顺路统计「谁被几人锁定」，索敌打分 O(1) 查——别在打分里逐目标扫邻格
-				var fid := ft.get_instance_id()
+				var fid: int = ft.get_instance_id()
 				_focus_counts[fid] = int(_focus_counts.get(fid, 0)) + 1
 		var k := Vector2i(int(floor(u.position.x / GRID_CELL)), int(floor(u.position.y / GRID_CELL)))
 		if _grid.has(k):
@@ -3871,6 +3941,19 @@ func units_near(pos: Vector2, radius: float) -> Array:
 			if _grid.has(k):
 				out.append_array(_grid[k])
 	return out
+
+
+## 轻量身体阻挡：敌对机动单位不能互相穿身；友军仍交给软分离，避免大编队堵死。
+func can_unit_step(mover: Unit, next: Vector2) -> bool:
+	if mover == null or not is_instance_valid(mover):
+		return false
+	for other in units_near(next, mover.radius + 34.0):
+		if other == mover or not is_instance_valid(other) or other.hp <= 0.0 or other.garrisoned \
+				or other.is_building or other.is_resource or other.faction == mover.faction:
+			continue
+		if next.distance_to(other.position) < mover.radius + other.radius + 2.0:
+			return false
+	return true
 
 
 func _separation_pass(_delta: float) -> void:
@@ -3999,6 +4082,10 @@ func _unhandled_input(event: InputEvent) -> void:
 					_order_amove_at(p, event.shift_pressed)
 					_disarm_amove()
 					return
+				if _patrol_armed:
+					_order_patrol_at(p)
+					_disarm_patrol()
+					return
 				if _repair_armed:
 					_order_repair_at(p, event.shift_pressed)
 					_disarm_repair()
@@ -4060,6 +4147,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			if _amove_armed:
 				_disarm_amove()
 				return
+			if _patrol_armed:
+				_disarm_patrol()
+				return
 			if _repair_armed:
 				_disarm_repair()
 				return
@@ -4081,46 +4171,49 @@ func _unhandled_input(event: InputEvent) -> void:
 				_add_to_group(num)
 			else:
 				_recall_group(num)
-		elif kc == KEY_SPACE:
+		elif kc >= KEY_F1 and kc <= KEY_F4 and (event.ctrl_pressed or event.meta_pressed):
+			_save_camera_loc(kc - KEY_F1 + 1)
+		elif kc >= KEY_F1 and kc <= KEY_F4 and event.shift_pressed:
+			_jump_camera_loc(kc - KEY_F1 + 1)
+		elif Settings.key_matches(event, "alert"):
 			_jump_alert_or_home()
-		elif kc == KEY_A:
+		elif Settings.key_matches(event, "amove"):
 			arm_amove()
-		elif kc == KEY_S:
+		elif Settings.key_matches(event, "stop"):
 			_order_stop()
-		elif kc == KEY_P:
-			_order_patrol_at(get_global_mouse_position())
-		elif kc == KEY_G:
+		elif Settings.key_matches(event, "hold"):
+			_order_hold_position()
+		elif Settings.key_matches(event, "patrol"):
+			arm_patrol()
+		elif Settings.key_matches(event, "stance"):
 			_cycle_stance()
-		elif kc == KEY_T:
+		elif Settings.key_matches(event, "auto"):
 			if hud != null and int(Settings.auto_micro_level) > 0:   # 「无托管」档关闭 T 热键
 				if event.shift_pressed:
 					hud._toggle_all_auto()        # Shift+T：全军托管
 				else:
 					hud.toggle_auto_selected()    # T：托管选中英雄（单个 / 编队）
-		elif kc == KEY_DELETE or kc == KEY_BACKSPACE:
+		elif Settings.key_matches(event, "demolish") or (Settings.key_for("demolish") == KEY_DELETE and kc == KEY_BACKSPACE):
 			delete_selected(event.shift_pressed)   # 拆除选中己方单位/建筑（Mac 上 Delete 即 Backspace；Shift 跳过确认）
-		elif kc == KEY_Q:
+		elif Settings.key_matches(event, "command_0"):
 			_command_hotkey(0)
-		elif kc == KEY_W:
+		elif Settings.key_matches(event, "command_1"):
 			_command_hotkey(1)
-		elif kc == KEY_E:
+		elif Settings.key_matches(event, "command_2"):
 			_command_hotkey(2)
-		elif kc == KEY_R:
+		elif Settings.key_matches(event, "command_3"):
 			_command_hotkey(3)
-		elif kc == KEY_F2 and not event.shift_pressed and not event.ctrl_pressed and not event.meta_pressed:
+		elif Settings.key_matches(event, "select_army") and not event.shift_pressed and not event.ctrl_pressed and not event.meta_pressed:
 			select_all_army()
-		elif kc >= KEY_F1 and kc <= KEY_F4 and (event.ctrl_pressed or event.meta_pressed):
-			_save_camera_loc(kc - KEY_F1 + 1)
-		elif kc >= KEY_F1 and kc <= KEY_F4 and event.shift_pressed:
-			_jump_camera_loc(kc - KEY_F1 + 1)
-		elif kc >= KEY_F1 and kc <= KEY_F8:
+		elif kc >= KEY_F1 and kc <= KEY_F8 and kc != KEY_F2:
 			var hidx := kc - KEY_F1
 			if kc > KEY_F2:
 				hidx -= 1   # F2 留给全军；F3 起顺延选择后续英雄
 			_select_hero_by_index(hidx)
-		elif kc == KEY_TAB:
+		elif Settings.key_matches(event, "subgroup"):
 			_cycle_subgroup()
-		elif kc == KEY_PERIOD or kc == KEY_COMMA:
+		elif Settings.key_matches(event, "idle_worker") \
+				or (Settings.key_for("idle_worker") == KEY_PERIOD and kc == KEY_COMMA):
 			_cycle_idle_worker()
 		elif kc == KEY_ESCAPE:
 			if is_armed():
@@ -4214,7 +4307,7 @@ func _ring_cursor(col: Color, glyph: String) -> ImageTexture:
 func _update_hover_cursor() -> void:
 	if DisplayServer.get_name() == "headless" or get_tree().paused:
 		return
-	if _ability_armed != "" or _amove_armed or _repair_armed or _garrison_armed or _build_armed != "" or _trap_armed != "":
+	if _ability_armed != "" or _amove_armed or _patrol_armed or _repair_armed or _garrison_armed or _build_armed != "" or _trap_armed != "":
 		return   # 指向态自管光标
 	var kind := _hover_kind_at(get_global_mouse_position())
 	if kind == _hover_kind:
@@ -4278,14 +4371,29 @@ func _disarm_amove() -> void:
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 
+func _disarm_patrol() -> void:
+	_patrol_armed = false
+	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
+
 ## 武装攻击移动（A 键与触屏「攻击」按钮共用）：随后点地即攻击移动。
 func arm_amove() -> void:
 	if selection.is_empty():
 		return
+	_disarm_patrol()
 	_disarm_ability()
 	_cancel_build()
 	_amove_armed = true
 	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
+
+
+func arm_patrol() -> void:
+	if _selected_movers().filter(func(u: Unit) -> bool: return not u.is_worker).is_empty():
+		return
+	cancel_armed()
+	_patrol_armed = true
+	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
+	msg("巡逻：左键选择另一端", 1.4)
 
 
 func _disarm_repair() -> void:
@@ -4301,6 +4409,7 @@ func arm_repair() -> void:
 	_disarm_ability()
 	_cancel_build()
 	_disarm_amove()
+	_disarm_patrol()
 	_repair_armed = true
 	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
 	msg("维修：点选要修缮的己方建筑", 1.5)
@@ -4321,6 +4430,7 @@ func arm_garrison() -> void:
 	_disarm_ability()
 	_cancel_build()
 	_disarm_amove()
+	_disarm_patrol()
 	_disarm_repair()
 	_garrison_armed = true
 	Input.set_custom_mouse_cursor(_cur_garrison, Input.CURSOR_ARROW, Vector2(CURSOR_SZ * 0.5, CURSOR_SZ * 0.5))
@@ -4353,6 +4463,7 @@ func _order_garrison_at(p: Vector2, queued := false) -> void:
 ## 取消一切「待指向」状态（触屏取消键 / Esc / 右键共用）
 func cancel_armed() -> void:
 	_disarm_amove()
+	_disarm_patrol()
 	_disarm_repair()
 	_disarm_ability()
 	_disarm_garrison()
@@ -4370,7 +4481,7 @@ func group_size(n: int) -> int:
 
 ## 是否处于待指向态（触屏「取消」键据此显隐）
 func is_armed() -> bool:
-	return _amove_armed or _repair_armed or _garrison_armed or _ability_armed != "" or _build_armed != "" or _trap_armed != ""
+	return _amove_armed or _patrol_armed or _repair_armed or _garrison_armed or _ability_armed != "" or _build_armed != "" or _trap_armed != ""
 
 
 ## 选中并把镜头移到某单位（触屏英雄快切栏：点英雄头像直达）
@@ -4427,7 +4538,7 @@ func _click_select(p: Vector2, additive: bool) -> void:
 	var best: Unit = null
 	var best_d := INF
 	for u in units:
-		if u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 or u.is_building:
+		if u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 or u.is_building or u.garrisoned:
 			continue
 		var d: float = to_screen(u.position).distance_to(p)
 		if d <= u.radius + _click_tol(10.0) and d < best_d:
@@ -4452,8 +4563,11 @@ func _click_select(p: Vector2, additive: bool) -> void:
 	var new_sel: Array = []
 	if additive:
 		new_sel = selection.duplicate()
-	if best != null and not new_sel.has(best):
-		new_sel.append(best)
+	if best != null:
+		if additive and new_sel.has(best):
+			new_sel.erase(best)
+		elif not new_sel.has(best):
+			new_sel.append(best)
 	_set_selection(new_sel)
 
 
@@ -4564,6 +4678,7 @@ func cast_ability(caster: Unit, slot := 0) -> void:
 	var ad: Dictionary = _abilities[aid]
 	if ad["targeted"]:
 		_disarm_amove()
+		_disarm_patrol()
 		_cancel_build()
 		_ability_caster = caster
 		_ability_armed = aid
@@ -4677,7 +4792,12 @@ func _cast_armed_at(p: Vector2) -> void:
 			_begin_cast(caster, slot, tu.position, tu)
 		return
 	_disarm_ability()
-	_begin_cast(caster, slot, to_logic(p))
+	var lp := to_logic(p)
+	var rng := ability_cast_range(caster, ad)
+	if rng != INF and caster.position.distance_to(lp) > rng:
+		_queue_walk_cast_point(caster, slot, lp)   # 保留玩家原落点，走进射程后再放
+	else:
+		_begin_cast(caster, slot, lp)
 
 
 ## 待指向态下点选目标单位：按 unit_team 决定可点敌方（迷雾过滤）/己方/任意。
@@ -4695,6 +4815,12 @@ func _disarm_ability() -> void:
 	_ability_caster = null
 	_ability_slot = 0
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
+
+func cancel_pending_cast(caster: Unit) -> void:
+	if caster == null or _pending_casts.is_empty():
+		return
+	_pending_casts = _pending_casts.filter(func(pc: Dictionary) -> bool: return pc.get("caster") != caster)
 
 
 ## 花荣·切刀/挂弓：在弓与刀之间切换（命令卡按钮触发）。
@@ -4759,7 +4885,7 @@ func _begin_cast(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 		lp = _clamp_cast_point(caster, ad, lp)   # 超出施法距离 → 沿射线收短到最远可放点
 		caster._face_dir(lp - caster.position)   # 转身面向施法点：方向型技能抬手更自然
 	caster.begin_cast_windup(CAST_WINDUP, col)
-	_pending_casts.append({"caster": caster, "slot": slot, "lp": lp, "tgt": tgt})
+	_pending_casts.append({"caster": caster, "slot": slot, "lp": lp, "tgt": tgt, "serial": caster._cast_serial})
 	Sfx.play("cast", -0.6, 0.05, 90)        # 抬手蓄能轻响（结算时各分支另有命中声）
 
 
@@ -4769,12 +4895,18 @@ func _tick_pending_casts() -> void:
 		return
 	var keep: Array = []
 	for pc in _pending_casts:
-		var c: Unit = pc["caster"]
+		var c = pc["caster"]
 		if c == null or not is_instance_valid(c) or c.hp <= 0.0:
 			continue                        # 抬手途中阵亡：取消
+		if int(pc.get("serial", -1)) != c._cast_serial:
+			continue                        # 被控制/新指令打断，或已被下一次起手替代
 		if c._cast_t > 0.0:
 			keep.append(pc)                 # 仍在抬手
 		else:
+			var tgt = pc.get("tgt")
+			if tgt != null and (not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned \
+					or not target_visible_to(c, tgt)):
+				continue
 			_do_ability(c, int(pc["slot"]), pc["lp"], pc.get("tgt"))
 	_pending_casts = keep
 
@@ -5424,11 +5556,11 @@ func _bolt_pass(delta: float) -> void:
 	var keep: Array = []
 	for b in _bolts:
 		var fx = b["fx"]
-		var caster: Unit = b["caster"]
+		var caster = b["caster"]
 		var alive := true
 		match String(b["mode"]):
 			"bolt":
-				var tgt: Unit = b["tgt"]
+				var tgt = b["tgt"]
 				if tgt == null or not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned:
 					alive = false   # 目标没了：弹道落空消散
 				else:
@@ -5492,7 +5624,7 @@ func _bolt_pass(delta: float) -> void:
 				elif float(b["traveled"]) >= float(b["len"]) or caster == null or not is_instance_valid(caster):
 					alive = false   # 飞满射程没钩到 → 消散
 			"hook_drag":
-				var v: Unit = b["victim"]
+				var v = b["victim"]
 				if v == null or not is_instance_valid(v) or v.hp <= 0.0 \
 						or caster == null or not is_instance_valid(caster) or caster.hp <= 0.0:
 					alive = false
@@ -5529,11 +5661,27 @@ func _queue_walk_cast(caster: Unit, slot: int, tgt: Unit) -> void:
 		if wc["c"] == caster:
 			wc["slot"] = slot
 			wc["tgt"] = tgt
+			wc["point"] = Vector2.INF
 			wc["serial"] = -1
+			wc["age"] = 0.0
 			return
-	_walk_casts.append({"c": caster, "slot": slot, "tgt": tgt, "serial": -1, "t": 0.0})
+	_walk_casts.append({"c": caster, "slot": slot, "tgt": tgt, "point": Vector2.INF, "serial": -1, "t": 0.0, "age": 0.0})
 	if hud != null:
 		hud.show_message("目标超出施法距离——正在接近…", 1.4)
+
+
+func _queue_walk_cast_point(caster: Unit, slot: int, point: Vector2) -> void:
+	for wc in _walk_casts:
+		if wc["c"] == caster:
+			wc["slot"] = slot
+			wc["tgt"] = null
+			wc["point"] = point
+			wc["serial"] = -1
+			wc["age"] = 0.0
+			return
+	_walk_casts.append({"c": caster, "slot": slot, "tgt": null, "point": point, "serial": -1, "t": 0.0, "age": 0.0})
+	if hud != null:
+		hud.show_message("落点超出施法距离——正在接近原落点…", 1.4)
 
 
 func _walk_cast_pass(delta: float) -> void:
@@ -5541,27 +5689,37 @@ func _walk_cast_pass(delta: float) -> void:
 		return
 	var keep: Array = []
 	for wc in _walk_casts:
-		var c: Unit = wc["c"]
-		var tgt: Unit = wc["tgt"]
-		if c == null or not is_instance_valid(c) or c.hp <= 0.0 \
-				or tgt == null or not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned:
+		var c = wc["c"]
+		var tgt = wc.get("tgt")
+		if c == null or not is_instance_valid(c) or c.hp <= 0.0:
+			continue
+		if tgt != null and (not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned \
+				or not target_visible_to(c, tgt)):
 			continue
 		var slot: int = int(wc["slot"])
 		if slot >= c.slot_count() or not c.slot_ready(slot):
 			continue
 		if int(wc["serial"]) >= 0 and c._order_serial != int(wc["serial"]):
 			continue   # 玩家亲自下了新指令 → 让路取消
+		wc["age"] = float(wc.get("age", 0.0)) + delta
+		if float(wc["age"]) > 15.0:
+			if c.faction == Unit.FACTION_LIANG:
+				msg("无法接近施法位置，命令已取消", 1.5)
+			continue
 		var ad: Dictionary = _abilities.get(String(c.ability_slots[slot]["id"]), {})
 		var rng := ability_cast_range(c, ad)
-		if rng == INF or c.position.distance_to(tgt.position) <= rng:
-			_begin_cast(c, slot, tgt.position, tgt)
+		var cast_pos: Vector2 = tgt.position if tgt != null else wc.get("point", Vector2.INF)
+		if cast_pos == Vector2.INF:
+			continue
+		if rng == INF or c.position.distance_to(cast_pos) <= rng:
+			_begin_cast(c, slot, cast_pos, tgt)
 			continue
 		wc["t"] = float(wc["t"]) - delta
 		if float(wc["t"]) <= 0.0:
 			wc["t"] = 0.4
-			c.order_move(tgt.position)   # 追移动目标：0.4s 刷新一次落点
+			c.order_move(cast_pos)   # 单体追移动目标；点地技能始终走向玩家原落点
 			wc["serial"] = c._order_serial
-			c.manual_order_t = maxf(c.manual_order_t, 1.0)   # 走近期间托管别插手（这就是玩家的意图）
+			c.manual_order_active = true   # 走近期间托管别插手（这就是玩家的意图）
 		keep.append(wc)
 	_walk_casts = keep
 
@@ -5580,7 +5738,7 @@ func _channel_pass(delta: float) -> void:
 		return
 	var keep: Array = []
 	for ch in _channels:
-		var caster: Unit = ch["caster"]
+		var caster = ch["caster"]
 		# 引导结束/被打断（_channel_t 归零）/施法者阵亡 → 效果停止（不再登记）
 		if caster == null or not is_instance_valid(caster) or caster.hp <= 0.0 or caster._channel_t <= 0.0:
 			continue
@@ -6733,7 +6891,7 @@ func _spawn_hero_skill_fx(aid: String, caster: Unit, center: Vector2, ad: Dictio
 
 func _assign_group(n: int) -> void:
 	var members := selection.filter(func(u) -> bool:
-		return is_instance_valid(u) and u.hp > 0.0 and not u.is_building)
+		return is_instance_valid(u) and u.hp > 0.0 and not u.is_resource)
 	if members.is_empty():
 		_groups.erase(n)
 		_refresh_group_badges()
@@ -6745,7 +6903,7 @@ func _assign_group(n: int) -> void:
 
 func _add_to_group(n: int) -> void:
 	var members := selection.filter(func(u) -> bool:
-		return is_instance_valid(u) and u.hp > 0.0 and not u.is_building)
+		return is_instance_valid(u) and u.hp > 0.0 and not u.is_resource)
 	if members.is_empty():
 		return
 	# 并入 n 队（保留 n 队原有成员 + 新增选中；不动其它队 → 可同属多队）
@@ -6817,6 +6975,24 @@ func select_single(u: Unit, additive: bool) -> void:
 	_set_selection(new_sel)
 
 
+func select_members(members: Array, additive: bool) -> void:
+	var valid: Array = members.filter(func(u) -> bool:
+		return is_instance_valid(u) and u.hp > 0.0 and not u.garrisoned)
+	if valid.is_empty():
+		return
+	if not additive:
+		_set_selection(valid)
+		return
+	var out := selection.duplicate()
+	var all_selected := valid.all(func(u) -> bool: return out.has(u))
+	for u in valid:
+		if all_selected:
+			out.erase(u)
+		elif not out.has(u):
+			out.append(u)
+	_set_selection(out)
+
+
 func select_same_in_selection(proto: Unit) -> void:
 	if not is_instance_valid(proto):
 		return
@@ -6879,13 +7055,13 @@ func _refresh_active_highlight() -> void:
 			u.set_active(multi and u == act)
 
 
-# 手动指令保护戳：玩家亲自下令的单位 5 秒内托管 AI 不得覆盖（修「托管英雄走一半回头 a 两下」）。
-# 指令自然执行完（队列空转待机）会提前解除，AI 无缝接管。
+# 手动指令保护戳：至少保护 5 秒，并持续到整条指令链自然执行完；停止/据守则保持到下一条命令。
 const MANUAL_ORDER_PROTECT := 5.0
 func _stamp_manual(arr: Array) -> void:
 	for u in arr:
 		if is_instance_valid(u):
 			u.manual_order_t = MANUAL_ORDER_PROTECT
+			u.manual_order_active = true
 
 
 func _issue_order(p: Vector2, queued := false) -> void:
@@ -6960,10 +7136,11 @@ func _issue_order(p: Vector2, queued := false) -> void:
 	_click_fx_attack = enemy != null
 	if enemy != null:
 		for u in movers:
-			u.order_attack(enemy, queued)
+			u.order_attack(enemy, queued, true)
 		return
 	var lp := to_logic(p)
-	var targets := _formation_targets(movers, lp)
+	var targets := _formation_targets(movers, lp, 30.0, _formation_origin(movers, queued))
+	var move_cap := _group_speed_cap(movers)
 	var repaired := false
 	for i in range(movers.size()):
 		var u: Unit = movers[i]
@@ -6973,10 +7150,9 @@ func _issue_order(p: Vector2, queued := false) -> void:
 			u.order_repair(rep, queued)         # 工人修理受损建筑
 			repaired = true
 		else:
-			u.order_move(targets[i], queued)
+			u.order_move(targets[i], queued, move_cap)
 	if repaired:
 		msg("工人前去修缮 %s" % rep.display_name, 1.3)
-	_apply_group_cap(movers)   # 下令后再设限速（_begin_move 会先清零），避免被覆盖
 
 
 ## 武装维修落点：点己方建筑 → 选区里的工人前去修缮（受损才修；完好则提示）。
@@ -7026,12 +7202,18 @@ func _order_amove_at(p: Vector2, queued := false) -> void:
 	_click_fx_pos = p
 	_click_fx_t = 0.5
 	_click_fx_attack = true
-	var lp := to_logic(p)
-	var targets := _formation_targets(movers, lp)
+	Sfx.play("order")
+	var enemy := _enemy_at(p)
 	_stamp_manual(movers)
+	if enemy != null:
+		for u in movers:
+			u.order_attack(enemy, queued, true)   # A+点单位是明确集火，不降级成地面阵型落点
+		return
+	var lp := to_logic(p)
+	var targets := _formation_targets(movers, lp, 30.0, _formation_origin(movers, queued))
+	var move_cap := _group_speed_cap(movers)
 	for i in range(movers.size()):
-		movers[i].order_amove(targets[i], queued)
-	_apply_group_cap(movers)
+		movers[i].order_amove(targets[i], queued, move_cap)
 
 
 ## S：停止/原地待命——清空选中单位的指令、就地驻守
@@ -7044,6 +7226,19 @@ func _order_stop() -> void:
 		u.order_stop()
 	Sfx.play("order")
 	msg("原地待命", 1.2)
+
+
+## H：原地据守——停止当前命令并切到据守姿态，只攻击进入射程的敌人。
+func _order_hold_position() -> void:
+	var movers := _selected_movers().filter(func(u: Unit) -> bool: return not u.is_worker)
+	if movers.is_empty():
+		return
+	_stamp_manual(movers)
+	for u in movers:
+		u.order_hold_position()
+	Sfx.play("order")
+	msg("原地据守", 1.2)
+	_refresh_active_highlight()
 
 
 ## P：巡逻——选中的战斗单位在「当前位置 ↔ 鼠标点」间往返，沿途攻击移动迎敌
@@ -7105,9 +7300,8 @@ func _selected_movers() -> Array:
 	return selection.filter(func(u) -> bool: return is_instance_valid(u) and u.hp > 0.0 and not u.is_building and not u.garrisoned)
 
 
-## 真·阵型：朝行军方向旋转的方阵 + 角色分排（近战在前、远程居中、工人靠后）。
-## 返回与 movers 同序的目标点数组（逻辑坐标）。让一队人成阵推进，而非乱挤一团。
-func _formation_targets(movers: Array, dest: Vector2, spacing := 30.0) -> Array:
+## 群体目标点：松散保持相对站位；方阵/横列按行军方向旋转并让近战靠前。
+func _formation_targets(movers: Array, dest: Vector2, spacing := 30.0, origin := Vector2.INF) -> Array:
 	var n := movers.size()
 	var res: Array = []
 	res.resize(n)
@@ -7116,15 +7310,32 @@ func _formation_targets(movers: Array, dest: Vector2, spacing := 30.0) -> Array:
 	if n == 1:
 		res[0] = dest
 		return res
-	# 行军方向：队伍质心 → 目标点
 	var c := Vector2.ZERO
 	for u in movers:
 		c += u.position
 	c /= float(n)
-	var fwd := dest - c
+	var from: Vector2 = c if origin == Vector2.INF else origin
+	var fwd := dest - from
 	fwd = fwd.normalized() if fwd.length() > 1.0 else Vector2.RIGHT
 	var right := Vector2(-fwd.y, fwd.x)
-	var cols := int(ceil(sqrt(float(n))))
+	var max_r := 0.0
+	for u in movers:
+		max_r = maxf(max_r, u.radius)
+	spacing = maxf(spacing, max_r * 2.0 + 4.0)
+	if Settings.formation_mode == "loose":
+		# 保留当前相对位置但收紧超大散布，类似星际式松散集结，不强制角色换排。
+		for i in range(n):
+			var rel: Vector2 = movers[i].position - c
+			if rel.length() > 120.0:
+				rel = rel.normalized() * 120.0
+			var fp := dest + rel * 0.72
+			if not map.is_open_world(fp):
+				fp = map.cell_to_world(map.nearest_open_from(map.world_to_cell(fp), map.world_to_cell(movers[i].position)))
+			res[i] = fp
+		return res
+	var cols := n if Settings.formation_mode == "line" else int(ceil(sqrt(float(n))))
+	if Settings.formation_mode == "line" and n > 10:
+		cols = int(ceil(float(n) / 2.0))   # 大队横列自动分两排，避免一字长蛇横跨半张图
 	var rows := int(ceil(float(n) / float(cols)))
 	# 按角色排序分配槽位：近战(0)→远程(1)→工人(2)，前排先填
 	var order: Array = []
@@ -7139,9 +7350,27 @@ func _formation_targets(movers: Array, dest: Vector2, spacing := 30.0) -> Array:
 		var cy := (float(row) - float(rows - 1) * 0.5) * spacing
 		var fp := dest + right * cx + fwd * (-cy)   # row 0 = 最前排（朝目标）
 		if not map.is_open_world(fp):
-			fp = map.cell_to_world(map.nearest_open(map.world_to_cell(fp)))
+			fp = map.cell_to_world(map.nearest_open_from(map.world_to_cell(fp), map.world_to_cell(movers[mi].position)))
 		res[mi] = fp
 	return res
+
+
+func _formation_origin(movers: Array, queued: bool) -> Vector2:
+	if not queued or movers.is_empty():
+		return Vector2.INF
+	var c := Vector2.ZERO
+	for u: Unit in movers:
+		var p := u.position
+		if not u._queue.is_empty():
+			var last: Dictionary = u._queue[u._queue.size() - 1]
+			if last.has("pos"):
+				p = last["pos"]
+			elif last.has("target") and is_instance_valid(last["target"]):
+				p = last["target"].position
+		elif not u._path.is_empty():
+			p = u._path[u._path.size() - 1]
+		c += p
+	return c / float(movers.size())
 
 
 func _form_rank(u: Unit) -> int:
@@ -7152,15 +7381,22 @@ func _form_rank(u: Unit) -> int:
 	return 0
 
 
-## 成队行军：把每个成员的速度上限设为队伍最慢者，使队形整体推进、不散开（单个单位不限速）。
+func _group_speed_cap(movers: Array) -> float:
+	if movers.size() <= 1:
+		return 0.0
+	var slow := INF
+	for u: Unit in movers:
+		slow = minf(slow, u.current_move_speed())
+	return slow
+
+
+## 巡逻等旧入口仍可在下令后直接应用队伍实际速度上限。
 func _apply_group_cap(movers: Array) -> void:
 	if movers.size() <= 1:
 		if movers.size() == 1:
 			movers[0]._group_cap = 0.0
 		return
-	var slow := INF
-	for u in movers:
-		slow = minf(slow, u.base_speed)
+	var slow := _group_speed_cap(movers)
 	for u in movers:
 		u._group_cap = slow
 
@@ -7171,8 +7407,8 @@ func _enemy_at(p: Vector2) -> Unit:
 	for u in units:
 		if u.faction != Unit.FACTION_GUAN or u.hp <= 0.0 or u.garrisoned or u._invis_t > 0.0:
 			continue
-		# 迷雾里的敌人不可交互（悬停变红/右键锁定/点选查看都不行）——只藏渲染不藏交互等于开图
-		if fog and not u.is_building and not is_visible_world(u.position):
+		# 迷雾里的敌人（含只剩记忆轮廓的建筑）不可交互；可攻击地面去探，但不能锁实时目标。
+		if fog and not is_visible_world(u.position):
 			continue
 		var d: float = to_screen(u.position).distance_to(p)
 		if d <= u.radius + _click_tol(12.0) and d < best_d:
@@ -7229,9 +7465,7 @@ func cancel_construction(bld: Unit) -> void:
 		return
 	var d: Dictionary = _defs.get(bld.key, {})
 	add_resources(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0)))
-	var fcell: Vector2i = bld.get_meta("fcell", map.world_to_cell(bld.position))
-	var fhalf: int = int(bld.get_meta("fhalf", 1))
-	map.block_footprint(fcell, fhalf, false)
+	unregister_building_footprint(bld)
 	bld.is_constructing = false
 	for u in units:                          # 停下正在建造它的工人
 		if is_instance_valid(u) and u._build_site == bld:
@@ -7340,8 +7574,7 @@ func _demolish(u: Unit) -> void:
 				if is_instance_valid(pg):
 					pg.leave_garrison()
 			u.passengers.clear()
-		if u.has_meta("fcell"):
-			map.block_footprint(u.get_meta("fcell"), u.get_meta("fhalf"), false)
+		unregister_building_footprint(u)
 		var pp := int(u.setup_def.get("provides_pop", 0))
 		if pp > 0:
 			pop_cap = maxi(0, pop_cap - pp)
@@ -7878,10 +8111,15 @@ func _economy_selftest() -> void:
 	var hold_ignores_far := cu._target == null
 	cu.set_stance(Unit.STANCE_AGGRO)
 	cu._acquire()
-	var aggro_sees_far := cu._target == far_foe
+	var aggro_sees_far := cu._target != null
+	cu.set_stance(Unit.STANCE_DEFEND)
+	cu.order_hold_position()
+	var hold_cmd := cu._hold_order_active and cu.stance == Unit.STANCE_HOLD
+	cu.order_move(cu.position + Vector2(40, 0))
+	var hold_releases := not cu._hold_order_active and cu.stance == Unit.STANCE_DEFEND
 	cu.order_patrol(map.cell_to_world(map.nearest_open(base + Vector2i(6, 3))))
-	print("[command] stop_ok=%s hold_ignores_far=%s aggro_sees_far=%s patrol_on=%s state=%d" % [
-		stop_ok, hold_ignores_far, aggro_sees_far, cu._patrolling, cu._state])
+	print("[command] stop_ok=%s hold_ignores_far=%s aggro_sees_far=%s hold_cmd=%s releases=%s patrol_on=%s state=%d" % [
+		stop_ok, hold_ignores_far, aggro_sees_far, hold_cmd, hold_releases, cu._patrolling, cu._state])
 	# 箭楼自检：活塔会射箭；被摧毁(废墟)后不再射箭（防「打掉塔还被不明箭矢打」）
 	var twr := spawn_unit("arrow_tower", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(base + Vector2i(-6, 5))))
 	twr.is_constructing = false
@@ -7915,14 +8153,30 @@ func _economy_selftest() -> void:
 	var resume_ok := fnd != null and newwkr._build_site == fnd
 	print("[resume] foundation_persists=%s any_worker_resumes=%s" % [fnd != null, resume_ok])
 	# 拆除自检：选中己方建筑+单位 → delete_selected 移除两者并释放占地（防卡位）
-	var dcell := map.nearest_open(base + Vector2i(-2, -5))
+	var dcell := Vector2i(-1, -1)
+	var dhalf := building_footprint_half("depot")
+	for r in range(3, 13):
+		var cand := base + Vector2i(-r, -5)
+		if map.area_buildable(cand, dhalf) and not _building_overlap(cand, dhalf):
+			dcell = cand
+			break
+	if dcell.x < 0:
+		for y in range(dhalf + 1, map.h - dhalf - 1, 3):
+			for x in range(dhalf + 1, map.w - dhalf - 1, 3):
+				var cand := Vector2i(x, y)
+				if map.area_buildable(cand, dhalf) and not _building_overlap(cand, dhalf):
+					dcell = cand
+					break
+			if dcell.x >= 0:
+				break
+	if dcell.x < 0:
+		dcell = map.nearest_open(base + Vector2i(-2, -5))
 	var dbld := spawn_unit("depot", Unit.FACTION_LIANG, map.cell_to_world(dcell))
 	dbld.is_constructing = false
 	dbld.hp = dbld.max_hp
-	var dhalf := building_footprint_half("depot")
 	dbld.set_meta("fcell", dcell)
 	dbld.set_meta("fhalf", dhalf)
-	map.block_footprint(dcell, dhalf, true)
+	register_building_footprint(dbld)
 	var blocked_before := not map.area_buildable(dcell, dhalf)
 	var dunit := spawn_unit("liang_dao", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-4, -5))))
 	_set_selection([dbld, dunit])
@@ -7976,7 +8230,10 @@ func _economy_selftest() -> void:
 		spawn_unit("liang_dao", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(2, 6)))),
 		spawn_unit("liang_gong", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(3, 6))))]
 	var fdest := map.cell_to_world(map.nearest_open(base + Vector2i(0, -8)))
+	var old_form: String = Settings.formation_mode
+	Settings.formation_mode = "box"
 	var ftargets := _formation_targets(fm, fdest)
+	Settings.formation_mode = old_form
 	var distinct := {}
 	for t in ftargets:
 		distinct[Vector2i(t)] = true
@@ -7990,7 +8247,7 @@ func _economy_selftest() -> void:
 	_apply_group_cap(fm)
 	var slowest := INF
 	for u in fm:
-		slowest = minf(slowest, u.base_speed)
+		slowest = minf(slowest, u.current_move_speed())
 	var cap_ok := true
 	for u in fm:
 		if absf(u._group_cap - slowest) > 0.01:
@@ -8804,9 +9061,11 @@ class Overlay extends Node2D:
 			draw_arc(b._click_fx_pos, 8.0 + 20.0 * gr, 0.0, TAU, 22, c, 3.0)
 			draw_arc(b._click_fx_pos, 4.0 + 9.0 * gr, 0.0, TAU, 18, Color(c.r, c.g, c.b, t * 0.7), 2.0)
 			draw_circle(b._click_fx_pos, 3.0 * t, Color(c.r, c.g, c.b, t))
-		if Settings.show_command_queue:
+		# 大编队常显几十条线会遮住战场；按住 Shift 时仍完整显示排队意图。
+		var detail_orders: bool = b.selection.size() <= 12 or Input.is_key_pressed(KEY_SHIFT)
+		if Settings.show_command_queue and detail_orders:
 			_draw_selected_orders()
-		if Settings.show_target_lines:
+		if Settings.show_target_lines and detail_orders:
 			_draw_selected_targets()
 		if Settings.show_range_rings:
 			_draw_selected_ranges()
@@ -8823,6 +9082,7 @@ class Overlay extends Node2D:
 			var bcell: Vector2i = b.map.world_to_cell(b.to_logic(bref))
 			var bdef: Dictionary = b._defs.get(b._build_armed, {})
 			var bok: bool = b.map.area_buildable(bcell, bhalf) and not b._building_overlap(bcell, bhalf) \
+				and not b._resource_overlap(bcell, bhalf) \
 				and b.can_afford(int(bdef.get("cost_gold", 0)), int(bdef.get("cost_wood", 0)))
 			var cc := float(GameMap.CELL)
 			var x0 := float(bcell.x - bhalf) * cc
