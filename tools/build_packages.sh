@@ -1,5 +1,5 @@
 #!/bin/bash
-# 一键打包：Windows x86_64 exe + macOS arm64 app + dmg。
+# 一键打包：Windows x86_64 exe + macOS arm64 app/dmg + Android arm64 debug APK。
 #   bash tools/build_packages.sh
 set -e
 GODOT="/Applications/Godot.app/Contents/MacOS/Godot"
@@ -10,6 +10,10 @@ mkdir -p build
 echo "== Windows x86_64 =="
 "$GODOT" --headless --path . --export-release "Windows Desktop" build/LiangshanHeroes.exe > /tmp/win_export.log 2>&1
 echo "  -> build/LiangshanHeroes.exe"
+
+echo "== Android arm64 (debug signed) =="
+"$GODOT" --headless --path . --export-debug "Android" build/LiangshanHeroes.apk > /tmp/android_export.log 2>&1
+echo "  -> build/LiangshanHeroes.apk"
 
 echo "== macOS: export universal -> thin to arm64 -> ad-hoc sign =="
 rm -rf build/LiangshanHeroes.app

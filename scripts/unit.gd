@@ -805,10 +805,11 @@ func _queue_motion_redraw() -> void:
 	if battle != null and battle._lite_fx:
 		if not battle.unit_visual_active(position):
 			return
-		if battle._mob_count > 500 and not selected:
-			if _animated_redraw_t > 0.0:
+		if battle._mob_count > 260 and not selected:
+			# 按 instance_id 把精灵重画均匀摊到不同物理帧，避免几百个单位同帧重画的尖峰。
+			var stride := 3 if battle._mob_count > 500 else 2
+			if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:
 				return
-			_animated_redraw_t = 0.025   # 位置仍 60Hz 更新；只把精灵走路帧降到约 30Hz。
 			queue_redraw()
 			return
 	queue_redraw()
@@ -2421,8 +2422,8 @@ func apply_atkspeed(mult: float, dur: float) -> void:
 func _spawn_dust() -> void:
 	if is_cavalry:
 		return  # 骑兵用马蹄尘另算；步兵扬尘
-	if battle != null and battle._mob_count > 500:
-		return  # 极端兵海不为每名步兵维护独立尘粒数组；技能/地面主特效照常保留。
+	if battle != null and battle._mob_count > 260:
+		return  # 兵海不为每名步兵维护独立尘粒数组；技能/地面主特效照常保留。
 	if map != null and map.t_world(position) == GameMap.T.WATER:
 		return
 	var back := 5.0 if face_left else -5.0   # 朝行进反方向向后蹬出

@@ -46,6 +46,16 @@ var _grid_keys: Array = []
 var _skill_keys: Array = []
 var _panel_accum := 0.0
 var _control_help: Label
+var _info_dock: VBoxContainer
+
+# 底栏最右信息区：上方展开/收起，下方桌面操作说明。
+var _info_panel: PanelContainer
+var _info_toggle: Button
+var _info_scroll: ScrollContainer
+var _info_log: Label
+var _info_expanded := false
+var _info_unread := 0
+var _message_log: Array = []
 
 # 悬浮技能说明（鼠标移到命令卡/技能图标上即时浮现一张说明卡）
 var _tip_panel: PanelContainer
@@ -116,9 +126,11 @@ func _ready() -> void:
 	add_child(top_label)
 
 	msg_box = VBoxContainer.new()
-	msg_box.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	msg_box.offset_top = 46.0
+	msg_box.alignment = BoxContainer.ALIGNMENT_END
+	msg_box.add_theme_constant_override("separation", 5)
 	msg_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	msg_box.z_index = 89
+	msg_box.visible = false
 	add_child(msg_box)
 
 	start_btn = Button.new()
@@ -158,6 +170,7 @@ func _ready() -> void:
 	_build_resource_bar()
 	_build_hero_bar()
 	_build_bottom_panel()
+	_build_info_panel()
 	_build_intro()
 	_build_end()
 	_build_pause()
@@ -183,6 +196,8 @@ func set_touch_ui(v: bool) -> void:
 		_apply_touch_fonts()
 	_refresh_touch_controls()
 	_position_fps()   # 触屏布局启用 → FPS 移到菜单键左侧
+	_update_info_panel_mode()
+	_layout_info_panel()
 
 
 ## 手机上字太小 → 把「进图就看到」的关键文字整体放大：顶部目标条、剧情对话、开战钮、
@@ -348,6 +363,7 @@ func _apply_safe_area() -> void:
 		_skill_rail.offset_right = -10.0 - right
 	if _res_bar != null:
 		_res_bar.offset_left = 10.0 + left
+	_layout_info_panel()
 	_layout_hero_bar()
 	_position_fps()   # 安全区变化(横屏/刘海) → FPS 跟随菜单键
 
@@ -434,7 +450,7 @@ func toggle_auto_selected() -> void:
 		return
 	var hs: Array = battle.selection.filter(func(u): return is_instance_valid(u) and u.is_hero and not u.is_building)
 	if hs.is_empty():
-		show_message("先选中英雄再托管（PC: T 托管 / Shift+T 全军）", 1.4)
+		show_message("先选中英雄再托管" if touch_ui else "先选中英雄再托管（T 托管 / Shift+T 全军）", 1.4)
 		return
 	# 有任一已托管 → 视为取消（全部关）；否则全部开。这样混合选区也能一键取消。
 	var any_on := false
@@ -917,22 +933,273 @@ func _build_bottom_panel() -> void:
 	_sel_grid.add_theme_constant_override("v_separation", 3)
 	grid_wrap.add_child(_sel_grid)
 
+	# 把最右信息区顶到屏幕右边；命令卡变多时此空白优先收缩。
+	var info_spacer := Control.new()
+	info_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hbox.add_child(info_spacer)
+
+	# 最右固定信息区：「展开/收起」按钮由 _build_info_panel 插到第一行，操作说明在下。
+	_info_dock = VBoxContainer.new()
+	_info_dock.custom_minimum_size = Vector2(330, 0)
+	_info_dock.add_theme_constant_override("separation", 3)
+	_info_dock.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hbox.add_child(_info_dock)
 	_control_help = Label.new()
-	# 拆成 5 行短句（纵向有余、横向窄）：每行都 < 聚义厅时的最窄富余宽，保证整段完整可见不被裁。
 	_control_help.text = _key_help_text()
-	_control_help.add_theme_font_size_override("font_size", 11)
-	_control_help.add_theme_color_override("font_color", Color(0.55, 0.55, 0.5))
-	_control_help.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	# 占据剩余空白、右缘贴屏幕边（grid_wrap 已改 SHRINK，提示不会被推出屏）。
-	# 不用 autowrap：容器里 autowrap Label 的最小高度按「最小宽度」算（一个汉字宽→堆成几十行）会撑高整栏。
-	# 改为精简文案保证最宽一行 < 最窄富余宽（聚义厅时约 396px）。
+	_control_help.add_theme_font_size_override("font_size", 10)
+	_control_help.add_theme_color_override("font_color", Color(0.62, 0.63, 0.60))
+	_control_help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_control_help.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	_control_help.clip_text = true
+	_control_help.custom_minimum_size = Vector2(0, 94)
 	_control_help.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(_control_help)
+	_control_help.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_info_dock.add_child(_control_help)
+
+
+## 底栏信息抽屉：按钮与操作说明同在最右区域，展开后向上弹出可滚动历史。
+func _build_info_panel() -> void:
+	_info_panel = PanelContainer.new()
+	_info_panel.z_index = 90
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.055, 0.06, 0.07, 0.96)
+	sb.border_color = Color(0.48, 0.40, 0.25, 0.95)
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(8)
+	sb.content_margin_left = 10
+	sb.content_margin_right = 10
+	sb.content_margin_top = 6
+	sb.content_margin_bottom = 8
+	sb.shadow_color = Color(0, 0, 0, 0.45)
+	sb.shadow_size = 6
+	_info_panel.add_theme_stylebox_override("panel", sb)
+	add_child(_info_panel)
+
+	var root := VBoxContainer.new()
+	root.add_theme_constant_override("separation", 6)
+	_info_panel.add_child(root)
+	var log_title := Label.new()
+	log_title.text = "最近消息"
+	log_title.add_theme_font_size_override("font_size", 13)
+	log_title.add_theme_color_override("font_color", Color("a9e34b"))
+	root.add_child(log_title)
+	_info_scroll = ScrollContainer.new()
+	_info_scroll.custom_minimum_size = Vector2(390, 214)
+	_info_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_info_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_info_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_info_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(_info_scroll)
+	_info_log = Label.new()
+	_info_log.custom_minimum_size = Vector2(390, 0)
+	_info_log.add_theme_font_size_override("font_size", 13)
+	_info_log.add_theme_color_override("font_color", Color(0.82, 0.84, 0.80))
+	_info_log.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_info_log.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	_info_log.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_info_scroll.add_child(_info_log)
+
+	# 按钮插入底栏最右区域的第一行，正好坐在操作说明上方。
+	_info_toggle = Button.new()
+	_info_toggle.focus_mode = Control.FOCUS_NONE
+	_info_toggle.custom_minimum_size = Vector2(0, 31)
+	_info_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_info_toggle.add_theme_font_size_override("font_size", 14)
+	_info_toggle.add_theme_color_override("font_color", Color("f1d38a"))
+	_info_toggle.add_theme_color_override("font_hover_color", Color("fff0bd"))
+	var tsb := StyleBoxFlat.new()
+	tsb.bg_color = Color(0.13, 0.105, 0.07, 0.98)
+	tsb.border_color = Color(0.52, 0.40, 0.22)
+	tsb.set_border_width_all(1)
+	tsb.set_corner_radius_all(6)
+	_info_toggle.add_theme_stylebox_override("normal", tsb)
+	var thover := tsb.duplicate()
+	thover.bg_color = Color(0.22, 0.17, 0.10, 1.0)
+	_info_toggle.add_theme_stylebox_override("hover", thover)
+	_info_toggle.add_theme_stylebox_override("pressed", thover)
+	_info_toggle.pressed.connect(func() -> void: _set_info_expanded(not _info_expanded))
+	_info_dock.add_child(_info_toggle)
+	_info_dock.move_child(_info_toggle, 0)
+	_refresh_info_log()
+	_update_info_panel_mode()
+	_set_info_expanded(false)
+
+
+func _set_info_expanded(v: bool) -> void:
+	_info_expanded = v
+	if _info_panel != null:
+		_info_panel.visible = v
+	if v:
+		_info_unread = 0
+		_clear_info_toasts()
+		_scroll_info_to_bottom()
+	_update_info_toggle()
+	_layout_info_panel()
+
+
+func _update_info_toggle() -> void:
+	if _info_toggle == null:
+		return
+	var badge := " (%d)" % _info_unread if _info_unread > 0 and not _info_expanded else ""
+	_info_toggle.text = ("▼ 收起信息" if _info_expanded else "▲ 展开信息") + badge
+
+
+func _update_info_panel_mode() -> void:
+	if _control_help != null:
+		_control_help.visible = not touch_ui
+	if _info_dock != null:
+		_info_dock.custom_minimum_size.x = 132.0 if touch_ui else 330.0
+	if _info_log != null:
+		_info_log.add_theme_font_size_override("font_size", 16 if touch_ui else 13)
+	_update_info_toggle()
+
+
+func _layout_info_panel() -> void:
+	if _info_panel == null or _info_toggle == null:
+		return
+	var safe_right := 0.0
+	if touch_ui and _touch_built:
+		var sa := DisplayServer.get_display_safe_area()
+		var ws := DisplayServer.window_get_size()
+		safe_right = maxf(0.0, float(ws.x - (sa.position.x + sa.size.x)))
+	var right_gap := 12.0 + safe_right
+	# 展开面板向上弹出；触屏再多让出一排拇指操作键。
+	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0)
+	var width := 430.0 if touch_ui else 420.0
+	var height := 276.0
+	_info_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	_info_panel.offset_right = -right_gap
+	_info_panel.offset_left = -right_gap - width
+	_info_panel.offset_bottom = -bottom_gap
+	_info_panel.offset_top = -bottom_gap - height
+	# 折叠态即时消息：靠右、贴着底栏上沿，最多三条向上滚动。
+	msg_box.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	msg_box.offset_right = -right_gap
+	msg_box.offset_left = -right_gap - width
+	msg_box.offset_bottom = -bottom_gap
+	msg_box.offset_top = -bottom_gap - 180.0
+
+
+func _append_info_message(text: String) -> void:
+	if text == "":
+		return
+	if not _message_log.is_empty() and String(_message_log[-1].get("text", "")) == text:
+		_message_log[-1]["count"] = int(_message_log[-1].get("count", 1)) + 1
+	else:
+		_message_log.append({"text": text, "count": 1})
+	if _message_log.size() > 50:
+		_message_log.pop_front()
+	if not _info_expanded:
+		_info_unread = mini(99, _info_unread + 1)
+		_show_info_toast(text)
+	_refresh_info_log()
+	_update_info_toggle()
+	if _info_expanded:
+		_scroll_info_to_bottom()
+
+
+func _show_info_toast(text: String) -> void:
+	# 同文案在屏上时只更新计数并重置 3 秒，不重复占行。
+	for child in msg_box.get_children():
+		if String(child.get_meta("info_text", "")) == text:
+			var count := int(child.get_meta("info_count", 1)) + 1
+			child.set_meta("info_count", count)
+			var label := child.get_node_or_null("Text") as Label
+			if label != null:
+				label.text = "%s  ×%d" % [text, count]
+			_arm_info_toast(child, false)
+			return
+	while msg_box.get_child_count() >= 3:
+		_remove_info_toast(msg_box.get_child(0))
+
+	var row := PanelContainer.new()
+	row.name = "InfoToast"
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.set_meta("info_text", text)
+	row.set_meta("info_count", 1)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.045, 0.05, 0.055, 0.94)
+	sb.border_color = Color(0.48, 0.40, 0.25, 0.92)
+	sb.border_width_left = 2
+	sb.set_corner_radius_all(5)
+	sb.content_margin_left = 10
+	sb.content_margin_right = 10
+	sb.content_margin_top = 6
+	sb.content_margin_bottom = 6
+	row.add_theme_stylebox_override("panel", sb)
+	var label := Label.new()
+	label.name = "Text"
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", 16 if touch_ui else 14)
+	label.add_theme_color_override("font_color", Color(0.92, 0.91, 0.84))
+	row.add_child(label)
+	msg_box.add_child(row)
+	msg_box.visible = true
+	_arm_info_toast(row, true)
+
+
+func _arm_info_toast(row: Control, fade_in: bool) -> void:
+	var old_tw = row.get_meta("toast_tween") if row.has_meta("toast_tween") else null
+	if old_tw is Tween and old_tw.is_valid():
+		old_tw.kill()
+	row.modulate.a = 0.0 if fade_in else 1.0
+	var tw := create_tween()
+	row.set_meta("toast_tween", tw)
+	if fade_in:
+		tw.tween_property(row, "modulate:a", 1.0, 0.15)
+		tw.tween_interval(2.60)
+	else:
+		tw.tween_interval(2.75)
+	tw.tween_property(row, "modulate:a", 0.0, 0.25)
+	tw.tween_callback(func() -> void: _remove_info_toast(row, false))
+
+
+func _remove_info_toast(row: Control, kill_tween := true) -> void:
+	if row == null or not is_instance_valid(row):
+		return
+	if kill_tween:
+		var tw = row.get_meta("toast_tween") if row.has_meta("toast_tween") else null
+		if tw is Tween and tw.is_valid():
+			tw.kill()
+	if row.get_parent() == msg_box:
+		msg_box.remove_child(row)
+	row.queue_free()
+	msg_box.visible = msg_box.get_child_count() > 0 and not _info_expanded
+
+
+func _clear_info_toasts() -> void:
+	for child in msg_box.get_children():
+		_remove_info_toast(child)
+	msg_box.visible = false
+
+
+func _scroll_info_to_bottom() -> void:
+	if _info_scroll == null or not is_inside_tree():
+		return
+	await get_tree().process_frame
+	if _info_scroll != null:
+		_info_scroll.scroll_vertical = int(_info_scroll.get_v_scroll_bar().max_value)
+
+
+func _refresh_info_log() -> void:
+	if _info_log == null:
+		return
+	if _message_log.is_empty():
+		_info_log.text = "暂无消息"
+		return
+	var lines: Array[String] = []
+	for row in _message_log:
+		var suffix := "  ×%d" % int(row.get("count", 1)) if int(row.get("count", 1)) > 1 else ""
+		lines.append("• %s%s" % [String(row.get("text", "")), suffix])
+	_info_log.text = "\n".join(lines)
 
 
 func _key_help_text() -> String:
 	var ck := Settings.command_key_labels()
-	return "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s选闲置 Ctrl/Shift+数字编队 %s回基地 Esc菜单" % [
+	return "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s选闲置 Ctrl/Shift+数字编队\n%s回基地 Esc菜单" % [
 		Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"),
 		Settings.key_label("patrol"), Settings.key_label("stance"), Settings.key_label("auto"),
 		Settings.key_label("demolish"), "/".join(ck), Settings.key_label("subgroup"),
@@ -966,7 +1233,8 @@ func _rebuild_command_card() -> void:
 	elif au != null and au.is_worker and eco:
 		sig = ["build", battle._worker_cat]   # 分类页切换 → 重建命令卡
 	elif au != null and au.is_building and not au.is_constructing and (au.setup_def.has("produces") or au.setup_def.has("researches")) and eco:
-		sig = ["train", au.get_instance_id(), au._train_queue.size(), battle._hall_page]   # 队列增减/翻页 → 重建
+		sig = ["train", au.get_instance_id(), au._train_queue.size(), au._research_key,
+			battle._tech_done.size(), battle.current_age, battle._hall_page]   # 生产/研究/时代/翻页变化 → 重建
 	elif au != null and au.is_building and not au.is_constructing and au.setup_def.has("trades") and eco:
 		sig = ["trade", au.get_instance_id()]
 	else:
@@ -1240,6 +1508,12 @@ func _eff_def(u) -> int:
 
 
 func _stance_tag(u) -> String:
+	if touch_ui:
+		match u.stance:
+			Unit.STANCE_DEFEND: return "姿态 守备"
+			Unit.STANCE_HOLD: return "姿态 据守"
+			Unit.STANCE_PASSIVE: return "姿态 避战"
+			_: return "姿态 进攻"
 	var key := Settings.key_label("stance")
 	match u.stance:
 		Unit.STANCE_DEFEND: return "姿态 守备(%s)" % key
@@ -1459,16 +1733,8 @@ func _on_start_pressed() -> void:
 	start_battle.emit()
 
 
-func show_message(text: String, dur := 3.5) -> void:
-	var l := Label.new()
-	l.text = text
-	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_style_label(l, 28 if touch_ui else 20)
-	msg_box.add_child(l)
-	var tw := create_tween()
-	tw.tween_interval(dur)
-	tw.tween_property(l, "modulate:a", 0.0, 0.6)
-	tw.tween_callback(l.queue_free)
+func show_message(text: String, _dur := 3.5) -> void:
+	_append_info_message(text)
 
 
 func set_top(text: String) -> void:
