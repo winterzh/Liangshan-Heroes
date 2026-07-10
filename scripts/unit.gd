@@ -84,6 +84,7 @@ var _research_t := 0.0
 var selected := false
 var is_active := false       # 编队里「活动单位」（命令面板/Tab 指向的那个）
 var inspected := false       # 「查看中」的敌方单位（只读高亮：红圈，不可下令）
+var fog_visible := true      # 战争迷雾情报可见性；Battle 再与镜头范围合并成 CanvasItem.visible
 var passive := false        # 伏击/按兵不动：不主动索敌，待玩家下令或被攻击才出手
 var stance := STANCE_AGGRO   # 作战姿态：进攻=追击索敌；守备=守阵地短追；据守=原地只打近敌
 var _hold_order_active := false
@@ -250,6 +251,7 @@ var _cast_serial := 0       # 每次起手/打断递增；Battle 用它淘汰同
 var _weapon := -1          # 缓存武器类型
 var _idle_t := 0.0         # 待机呼吸相位（恒进）
 var _real_frames := false  # 当前状态是否在播放真·逐帧（用于压低程序化叠加）
+var _animated_redraw_t := 0.0 # 兵海时受击/状态/死亡动画的重绘节流；移动动画仍逐帧
 var _dying := false        # 死亡动画进行中（已脱离战斗，待倒地淡出后释放）
 var _death_t := 0.0
 var _death_lean := 1.0     # 倒地方向（屏幕左右）
@@ -789,13 +791,49 @@ func _physics_process(delta: float) -> void:
 		_phys_body(delta)
 
 
+func _queue_animated_redraw(interval := 0.08, force := false) -> void:
+	if battle != null and battle._lite_fx and not battle.unit_visual_active(position):
+		return
+	if not force and battle != null and battle._lite_fx:
+		if _animated_redraw_t > 0.0:
+			return
+		_animated_redraw_t = interval
+	queue_redraw()
+
+
+func _queue_motion_redraw() -> void:
+	if battle != null and battle._lite_fx:
+		if not battle.unit_visual_active(position):
+			return
+		if battle._mob_count > 500 and not selected:
+			if _animated_redraw_t > 0.0:
+				return
+			_animated_redraw_t = 0.025   # 位置仍 60Hz 更新；只把精灵走路帧降到约 30Hz。
+			queue_redraw()
+			return
+	queue_redraw()
+
+
+func _mass_visuals() -> bool:
+	return battle != null and battle._mob_count > 320 and not selected and not is_hero and not is_building and not is_resource
+
+
+func _ultra_mass_visuals() -> bool:
+	return battle != null and battle._mob_count > 500 and not selected and not is_hero and not is_building and not is_resource
+
+
+func _mass_status_visuals() -> bool:
+	return battle != null and battle._lite_fx and not selected and not is_hero and not is_building and not is_resource
+
+
 func _phys_body(delta: float) -> void:
+	_animated_redraw_t = maxf(0.0, _animated_redraw_t - delta)
 	if is_building:
 		if hp <= 0.0:
 			return   # 已被摧毁的建筑：停止一切活动（节点随后由主控释放；自检直接置 hp=0 时也安全）
 		if not is_resource and not is_constructing and hp < max_hp * 0.65:
 			_burn_t += delta   # 受损起火：驱动火苗/浓烟动画（仅受损建筑每帧重绘，常态零开销）
-			queue_redraw()
+			_queue_animated_redraw()
 		if not passengers.is_empty():
 			for pg in passengers:   # 驻军缓慢回血（经典RTS式）
 				if is_instance_valid(pg) and pg.hp > 0.0 and pg.hp < pg.max_hp:
@@ -816,11 +854,11 @@ func _phys_body(delta: float) -> void:
 			_idle_t += delta
 			if _harvest_pulse > 0.0:
 				_harvest_pulse = maxf(0.0, _harvest_pulse - delta * 2.0)
-			queue_redraw()
+			_queue_animated_redraw()
 		return
 	if _dying:
 		_death_t += delta
-		queue_redraw()
+		_queue_animated_redraw()
 		if _death_t >= DEATH_DUR:
 			queue_free()
 		return
@@ -829,7 +867,7 @@ func _phys_body(delta: float) -> void:
 	_cd = maxf(0.0, _cd - delta)
 	if _flash > 0.0:
 		_flash = maxf(0.0, _flash - delta)
-		queue_redraw()
+		_queue_animated_redraw(0.08, _flash <= 0.0)
 
 	# 梁山兵熟悉水泊、补给充足，脱战 6 秒后缓慢回血；官军远征无此待遇
 	_combat_cool = maxf(0.0, _combat_cool - delta)
@@ -899,10 +937,10 @@ func _phys_body(delta: float) -> void:
 		_silence_t = maxf(0.0, _silence_t - delta)
 	if _root_t > 0.0:
 		_root_t = maxf(0.0, _root_t - delta)
-		queue_redraw()
+		_queue_animated_redraw(0.08, _root_t <= 0.0)
 	if _disarm_t > 0.0:
 		_disarm_t = maxf(0.0, _disarm_t - delta)
-		queue_redraw()
+		_queue_animated_redraw(0.08, _disarm_t <= 0.0)
 	if _taunt_t > 0.0:
 		_taunt_t = maxf(0.0, _taunt_t - delta)
 		if _taunt_t <= 0.0 or _taunt_src == null or not is_instance_valid(_taunt_src) or _taunt_src.hp <= 0.0:
@@ -910,23 +948,23 @@ func _phys_body(delta: float) -> void:
 			_taunt_src = null
 			if _chase_intent == CHASE_FORCED:
 				_chase_intent = CHASE_AUTO
-		queue_redraw()
+		_queue_animated_redraw(0.08, _taunt_t <= 0.0)
 	if _channel_t > 0.0:
 		_channel_t = maxf(0.0, _channel_t - delta)
-		queue_redraw()
+		_queue_animated_redraw(0.08, _channel_t <= 0.0)
 	if _invis_t > 0.0:
 		_invis_t = maxf(0.0, _invis_t - delta)
 		if _invis_t <= 0.0:
 			modulate.a = 1.0   # 隐身自然结束 → 现形（_stealth_pass 下一帧亦会校正）
-		queue_redraw()
+		_queue_animated_redraw(0.08, _invis_t <= 0.0)
 	if _hex_t > 0.0:
 		_hex_t = maxf(0.0, _hex_t - delta)
-		queue_redraw()
+		_queue_animated_redraw(0.08, _hex_t <= 0.0)
 	if _form_t > 0.0:
 		_form_t = maxf(0.0, _form_t - delta)
 		if _form_t <= 0.0:
 			_end_form()   # 变身到期 → 还原形态
-		queue_redraw()
+		_queue_animated_redraw(0.08, _form_t <= 0.0)
 	if _dmg_amp_t > 0.0:
 		_dmg_amp_t -= delta
 		if _dmg_amp_t <= 0.0:
@@ -944,7 +982,7 @@ func _phys_body(delta: float) -> void:
 				battle.despawn_summon(self)
 	if _buff_glow > 0.0:
 		_buff_glow = maxf(0.0, _buff_glow - delta)
-		queue_redraw()
+		_queue_animated_redraw(0.08, _buff_glow <= 0.0)
 	if _giveup_t > 0.0:
 		_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标
 	if manual_order_t > 0.0:
@@ -967,14 +1005,14 @@ func _phys_body(delta: float) -> void:
 	# 计时递减已在上面 timer 段完成；被眩晕/沉默/拖走时 _break_channel 会清零本状态。
 	if _channel_t > 0.0:
 		_stepped = false
-		queue_redraw()
+		_queue_animated_redraw()
 		return
 
 	# 普通施法抬手是正式动作状态：定身、停攻、停索敌；归零后的技能结算由 Battle 下一物理帧完成。
 	if _cast_t > 0.0:
 		_cast_t = maxf(0.0, _cast_t - delta)
 		_stepped = false
-		queue_redraw()
+		_queue_animated_redraw(0.08, _cast_t <= 0.0)
 		return
 
 	# 冲锋窗口（李逵 W）：优先于普通状态机。蓄力期原地，冲刺期高速平移撞伤。
@@ -984,6 +1022,7 @@ func _phys_body(delta: float) -> void:
 
 	if _stun_t > 0.0:
 		_stun_t = maxf(0.0, _stun_t - delta)   # 眩晕（踩地板）：呆立，本帧不索敌/不移动/不攻击
+		_queue_animated_redraw(0.08, _stun_t <= 0.0)
 	else:
 		# 嘲讽(taunt)：dur 内强制锁定并攻击 _taunt_src，压过玩家指令与 AI 大脑（仅上面的眩晕能盖过）
 		if _taunt_t > 0.0 and _taunt_src != null and is_instance_valid(_taunt_src) and _taunt_src.hp > 0.0 and _target != _taunt_src:
@@ -1070,7 +1109,7 @@ func _phys_body(delta: float) -> void:
 		# 每半个步频相位 = 一次落脚 → 扬尘
 		if floori(_anim_t / PI) != floori(prev / PI):
 			_spawn_dust()
-		queue_redraw()
+		_queue_motion_redraw()
 	if not _dust.is_empty():
 		for d in _dust:
 			d.t -= delta
@@ -1084,7 +1123,7 @@ func _phys_body(delta: float) -> void:
 		queue_redraw()
 	if _flinch != Vector2.ZERO:
 		_flinch = _flinch.move_toward(Vector2.ZERO, delta * 90.0)
-		queue_redraw()
+		_queue_animated_redraw(0.08, _flinch == Vector2.ZERO)
 	# 卡死看门狗：移动状态下长时间原地不动 → 强制重新寻路/跳过路点
 	if _state != ST_IDLE:
 		if position.distance_to(_last_pos) < 2.0:
@@ -1731,23 +1770,27 @@ func _follow_path(delta: float) -> bool:
 		return _path_i >= _path.size()
 	var next := position + dir / dist * step
 	_face_dir(dir)
-	if map.is_open_world(next) and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, next)):
+	var next_map_open := map.is_open_world(next)
+	var next_body_open: bool = next_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, next))
+	if next_body_open:
 		position = next
 		_stepped = true
 	else:
-		# 撞上封格（多半是路径算好后新落成/新封的建筑）：先贴墙单轴滑行，滑不动就整段废弃立即重寻。
-		# 旧「跳过路点」会朝着墙后的远路点反复顶墙 → 原地来回抖动（用户反馈）。
+		# 静态封格与动态身体分开处理：都先贴边滑；只有建筑/地形真封路才重算 AStar。
+		# 动态单位不在 AStar 里，反复重寻同一条静态路径只会制造 CPU 峰值，交给分离和卡死看门狗即可。
 		var nx := Vector2(next.x, position.y)
 		var ny := Vector2(position.x, next.y)
-		if absf(dir.x) > 0.5 and map.is_open_world(nx) \
-				and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, nx)):
+		var nx_map_open := absf(dir.x) > 0.5 and map.is_open_world(nx)
+		var ny_map_open := absf(dir.y) > 0.5 and map.is_open_world(ny)
+		var nx_body_open: bool = nx_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, nx))
+		var ny_body_open: bool = ny_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, ny))
+		if nx_body_open:
 			position = nx
 			_stepped = true
-		elif absf(dir.y) > 0.5 and map.is_open_world(ny) \
-				and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, ny)):
+		elif ny_body_open:
 			position = ny
 			_stepped = true
-		else:
+		elif not next_map_open or (not nx_map_open and not ny_map_open):
 			_block_rp -= delta
 			if _block_rp <= 0.0:
 				_block_rp = 0.45   # 重寻节流：封死路段最多每 0.45s 重算一次
@@ -2194,11 +2237,15 @@ func is_stunned() -> bool:
 
 ## 眩晕（踩地板控制）：取较长者，松开当前目标，呆立挨打。
 func apply_stun(dur: float) -> void:
+	var entering := _stun_t <= 0.0
 	_stun_t = maxf(_stun_t, dur)
-	_target = null
-	cancel_cast_windup()
-	_break_channel()   # 眩晕必断引导
-	queue_redraw()
+	if entering:
+		_target = null
+		cancel_cast_windup()
+		_break_channel()   # 眩晕必断引导
+		queue_redraw()
+	else:
+		_queue_animated_redraw()
 
 
 ## DOTA 护盾：给一层吸收盾（取较大者，dur 秒后清盾）。
@@ -2211,22 +2258,34 @@ func apply_shield(amount: float, dur: float) -> void:
 
 ## DOTA 沉默：dur 秒内不可主动施法（被动不受影响）。
 func apply_silence(dur: float) -> void:
+	var entering := _silence_t <= 0.0
 	_silence_t = maxf(_silence_t, dur)
-	cancel_cast_windup()
-	_break_channel()   # 沉默必断引导
-	queue_redraw()
+	if entering:
+		cancel_cast_windup()
+		_break_channel()   # 沉默必断引导
+		queue_redraw()
+	else:
+		_queue_animated_redraw()
 
 
 ## DOTA 缠绕(root)：dur 秒内不能移动，但可以攻击/施法——与眩晕互补的软控。
 func apply_root(dur: float) -> void:
+	var entering := _root_t <= 0.0
 	_root_t = maxf(_root_t, dur)
-	queue_redraw()
+	if entering:
+		queue_redraw()
+	else:
+		_queue_animated_redraw()
 
 
 ## DOTA 缴械(disarm)：dur 秒内不能普攻，但可以移动/施法——克制物理核心的软控。
 func apply_disarm(dur: float) -> void:
+	var entering := _disarm_t <= 0.0
 	_disarm_t = maxf(_disarm_t, dur)
-	queue_redraw()
+	if entering:
+		queue_redraw()
+	else:
+		_queue_animated_redraw()
 
 
 ## 引导施法开始：定身进入引导态（battle 侧登记 tick 结算）。dur 秒内不可移动/普攻/索敌。
@@ -2362,6 +2421,8 @@ func apply_atkspeed(mult: float, dur: float) -> void:
 func _spawn_dust() -> void:
 	if is_cavalry:
 		return  # 骑兵用马蹄尘另算；步兵扬尘
+	if battle != null and battle._mob_count > 500:
+		return  # 极端兵海不为每名步兵维护独立尘粒数组；技能/地面主特效照常保留。
 	if map != null and map.t_world(position) == GameMap.T.WATER:
 		return
 	var back := 5.0 if face_left else -5.0   # 朝行进反方向向后蹬出
@@ -2488,13 +2549,16 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 	draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off))
 	var srect := Rect2(-s * 0.5, -s * 0.82, s, s)
 	# 暗色描边：四方各偏移画成半透黑剪影，叠出轮廓 → 单位从草地/背景里清晰跳出（提升可读性）
-	if not _dying:
+	if not _dying and not _ultra_mass_visuals():
 		var ow := 1.7
 		var ocol := Color(0.05, 0.04, 0.03, 0.5)
-		draw_texture_rect(frame, Rect2(srect.position + Vector2(ow, 0), srect.size), false, ocol)
-		draw_texture_rect(frame, Rect2(srect.position + Vector2(-ow, 0), srect.size), false, ocol)
-		draw_texture_rect(frame, Rect2(srect.position + Vector2(0, ow), srect.size), false, ocol)
-		draw_texture_rect(frame, Rect2(srect.position + Vector2(0, -ow), srect.size), false, ocol)
+		if _mass_visuals():
+			draw_texture_rect(frame, Rect2(srect.position + Vector2(ow, ow), srect.size), false, Color(0.05, 0.04, 0.03, 0.42))
+		else:
+			draw_texture_rect(frame, Rect2(srect.position + Vector2(ow, 0), srect.size), false, ocol)
+			draw_texture_rect(frame, Rect2(srect.position + Vector2(-ow, 0), srect.size), false, ocol)
+			draw_texture_rect(frame, Rect2(srect.position + Vector2(0, ow), srect.size), false, ocol)
+			draw_texture_rect(frame, Rect2(srect.position + Vector2(0, -ow), srect.size), false, ocol)
 	draw_texture_rect(frame, srect, false, tint)
 	if not _dying and _lunge > 0.0:
 		_draw_swing_fx()
@@ -2621,7 +2685,7 @@ func _draw() -> void:
 	# 地面层（逻辑空间直接绘制 → 被等距变换压成贴地椭圆）：投影 + 扬尘 + 增益辉光 + 选择圈
 	if is_building:
 		draw_circle(Vector2(0, 6), radius * 0.85, Color(0, 0, 0, 0.20))
-	else:
+	elif not _ultra_mass_visuals():
 		var lift := maxf(0.0, -cos(_anim_t * 2.0)) * _move_blend   # 腾空时影子收缩
 		var ssc := radius * 0.95 * (1.0 - 0.16 * lift)
 		draw_circle(Vector2(2, 3), ssc, Color(0, 0, 0, (0.25 - 0.06 * lift) * (1.0 - death_f)))
@@ -2667,12 +2731,15 @@ func _draw() -> void:
 			draw_circle(Vector2(cos(aa), sin(aa)) * (radius + 4.0), 2.2, Color(1.0, 0.5, 0.55, 0.5 + 0.4 * ap))
 	if _root_t > 0.0 and not _dying:
 		# 缠绕标记：脚下几束藤蔓弧线勾住，随时间轻摆
-		var rp := sin(_idle_t * 6.0) * 2.0
-		for ri in range(4):
-			var ra := float(ri) * TAU / 4.0 + 0.4
-			var rc := Vector2(cos(ra), sin(ra)) * (radius * 0.8)
-			draw_arc(rc + Vector2(0, 2), 5.0 + rp * 0.5, ra + PI * 0.7, ra + PI * 1.7, 8, Color(0.35, 0.72, 0.25, 0.85), 2.2)
-		draw_arc(Vector2(0, 2), radius * 0.9, 0.0, TAU, 24, Color(0.3, 0.6, 0.2, 0.5), 1.6)
+		if _mass_status_visuals():
+			draw_circle(Vector2(0, 2), radius * 0.72, Color(0.3, 0.66, 0.22, 0.34))
+		else:
+			var rp := sin(_idle_t * 6.0) * 2.0
+			for ri in range(4):
+				var ra := float(ri) * TAU / 4.0 + 0.4
+				var rc := Vector2(cos(ra), sin(ra)) * (radius * 0.8)
+				draw_arc(rc + Vector2(0, 2), 5.0 + rp * 0.5, ra + PI * 0.7, ra + PI * 1.7, 8, Color(0.35, 0.72, 0.25, 0.85), 2.2)
+			draw_arc(Vector2(0, 2), radius * 0.9, 0.0, TAU, 24, Color(0.3, 0.6, 0.2, 0.5), 1.6)
 	if _disarm_t > 0.0 and not _dying:
 		# 缴械标记：头顶一把灰色斜杠划掉的小剑
 		var dy := -radius - 12.0 + sin(_idle_t * 4.0)
@@ -2681,11 +2748,14 @@ func _draw() -> void:
 		draw_line(Vector2(-5, dy - 5), Vector2(5, dy + 5), Color(0.95, 0.3, 0.25, 0.95), 2.0)
 	if _taunt_t > 0.0 and not _dying:
 		# 嘲讽标记：脚下搏动的红色怒环 + 头顶红色怒气「!」（被迫死战）
-		var tp := 0.5 + 0.5 * sin(_idle_t * 8.0)
-		draw_arc(Vector2.ZERO, radius + 3.0, 0.0, TAU, 28, Color(0.95, 0.2, 0.15, 0.4 + 0.4 * tp), 2.6)
-		var ty2 := -radius - 12.0 + sin(_idle_t * 5.0)
-		draw_line(Vector2(0, ty2 - 6), Vector2(0, ty2 + 1), Color(1.0, 0.25, 0.2, 0.95), 2.8)
-		draw_circle(Vector2(0, ty2 + 5), 1.7, Color(1.0, 0.25, 0.2, 0.95))
+		if _mass_status_visuals():
+			draw_circle(Vector2(0, -radius - 9.0), 3.2, Color(1.0, 0.24, 0.18, 0.9))
+		else:
+			var tp := 0.5 + 0.5 * sin(_idle_t * 8.0)
+			draw_arc(Vector2.ZERO, radius + 3.0, 0.0, TAU, 28, Color(0.95, 0.2, 0.15, 0.4 + 0.4 * tp), 2.6)
+			var ty2 := -radius - 12.0 + sin(_idle_t * 5.0)
+			draw_line(Vector2(0, ty2 - 6), Vector2(0, ty2 + 1), Color(1.0, 0.25, 0.2, 0.95), 2.8)
+			draw_circle(Vector2(0, ty2 + 5), 1.7, Color(1.0, 0.25, 0.2, 0.95))
 	if inspected and not selected and not _dying:
 		# 查看中的敌方单位：红圈（与己方绿圈区分），只读
 		draw_arc(Vector2.ZERO, radius + 5.0, 0.0, TAU, 28, Color(1.0, 0.4, 0.32, 0.92), 2.5)
@@ -2736,15 +2806,16 @@ func _draw() -> void:
 			draw_string(f, Vector2(-49.0, gy + 1.0), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color(0, 0, 0, 0.8))
 			draw_string(f, Vector2(-50.0, gy), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color("9fe8b0"))
 
-	# 血条：常显（阵营色描边——梁山金、官军红）
-	if hp > 0.0 and Settings.show_healthbars:
+	# 极端兵海下满血普通单位省略血条；受伤/英雄/选中单位仍完整显示，减少每帧上千次矩形绘制。
+	if hp > 0.0 and Settings.show_healthbars and (not _mass_visuals() or hp < max_hp - 0.5):
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
 		var bh := 5.0 if (is_hero or is_building) else 4.0
-		draw_rect(Rect2(-w * 0.5 - 1.0, bar_y - 1.0, w + 2.0, bh + 2.0), Color(0, 0, 0, 0.8))
 		var frac := clampf(hp / max_hp, 0.0, 1.0)
 		var hc := Color(0.85, 0.2, 0.15).lerp(Color(0.3, 0.85, 0.3), frac)
 		if faction == FACTION_GUAN:
 			hc = Color(0.6, 0.1, 0.1).lerp(Color(0.9, 0.55, 0.2), frac)
+		if not _ultra_mass_visuals():
+			draw_rect(Rect2(-w * 0.5 - 1.0, bar_y - 1.0, w + 2.0, bh + 2.0), Color(0, 0, 0, 0.8))
 		draw_rect(Rect2(-w * 0.5, bar_y, w * frac, bh), hc)
 
 	# 编队号徽标：单位右下角（同属多队 → 逐个号并排显示，如 1 2）
@@ -2771,10 +2842,13 @@ func _draw() -> void:
 	# 眩晕：头顶三颗旋转金星（经典「被打懵」标记）
 	if _stun_t > 0.0 and not is_building and not _dying:
 		var syc := bar_y - 16.0
-		var spin := _idle_t * 6.0
-		for i in range(3):
-			var a := spin + float(i) * TAU / 3.0
-			_draw_star(Vector2(cos(a) * 11.0, sin(a) * 4.0 + syc), 3.2, Color(1.0, 0.9, 0.35))
+		if _mass_status_visuals():
+			draw_circle(Vector2(0, syc), 3.5, Color(1.0, 0.88, 0.28, 0.95))
+		else:
+			var spin := _idle_t * 6.0
+			for i in range(3):
+				var a := spin + float(i) * TAU / 3.0
+				_draw_star(Vector2(cos(a) * 11.0, sin(a) * 4.0 + syc), 3.2, Color(1.0, 0.9, 0.35))
 
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
