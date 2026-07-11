@@ -39,6 +39,8 @@ var _eco_last_wood := -1
 var _eco_wood_stall := 0.0
 var _eco_trap_cd := 0.0   # 全托管布陷阱节流
 var _eco_trap_lane := 0   # 布陷阱轮换的来路序号（三门轮流照顾）
+var _eco_lane_cache_bucket := -1   # 动态分路态势按 AI_TICK 缓存；6 将同拍共用，避免兵海里重复全表扫描
+var _eco_lane_cache := {}
 var _last_hb := 1.0       # 上次英雄倍率(变了就重算在场英雄血量)
 const ECO_MAX_SITES := 2              # 同时在建的工地数（并行施工，盖得快、补得上被拆的）
 const ECO_POP_HEADROOM := 10          # 人口余量(上限+在建民居 − 已用 − 在产)低于此值才补民居——按需建，不无脑堆满
@@ -116,15 +118,14 @@ var tech_gather := 1.0
 
 # 战争迷雾
 var fog := false
-var _vision: PackedByteArray       # 每格 0=未探索 1=已探索(阴影) 2=明亮(正看 + 离开后驻留)
-var _vis_t: PackedFloat32Array     # 每格「明亮」驻留剩余秒数：离开视野后仍亮 SIGHT_LINGER 秒再退阴影
+var _vision: PackedByteArray       # 每格 0=未探索 1=已探索(阴影) 2=明亮(当前确有视野)
 var _sight_now: PackedByteArray    # 本次 pass 是否真正在某单位视野内（复用，免每帧重分配）
 var _reveal_t: PackedFloat32Array  # 技能临时侦察剩余秒数；属于真实视野，不与地面驻留混用
 var _vision_img: Image
 var _fog_tex: ImageTexture
 var _fog_layer: Node2D
 var _fog_t := 0.0
-const SIGHT_LINGER := 30.0          # 地面记忆延时；敌军显示只看真实视野，不随这 30 秒驻留
+const FOG_STEP := 0.18              # 迷雾逻辑/纹理刷新拍；明暗和敌军显隐在同一拍切换
 
 var _dragging := false
 var _drag_from := Vector2.ZERO
@@ -455,9 +456,10 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 		u.max_hp *= tech_hp
 		u.hp = u.max_hp
 	u.position = world_pos
-	# 迷雾中新刷出的官军不能先用默认 visible=true 闪现一帧，等下次 fog pass 才隐藏。
+	# 迷雾中新刷出的官军按「此刻真实视野」初始化，不能借用上一拍缓存先闪现一帧。
 	if fog and faction == Unit.FACTION_GUAN:
-		u.fog_visible = is_explored_world(world_pos) if u.is_building else is_visible_world(world_pos)
+		var seen_now := _has_live_sight_at(world_pos)
+		u.fog_visible = (seen_now or is_explored_world(world_pos)) if u.is_building else seen_now
 		u.visible = u.fog_visible
 	u.died.connect(_on_unit_died)
 	units.append(u)
@@ -2975,7 +2977,21 @@ func _eco_lanes() -> Array:
 	return out
 
 
-## 各路当前威胁（该路锚点是三路里离它最近的敌兵数）。
+## 返回离 pos 最近的路线编号。路线锚点从基地向三个敌门展开，可同时用于敌军/守军/英雄归路。
+func _eco_nearest_lane(pos: Vector2, lanes: Array) -> int:
+	if lanes.is_empty():
+		return -1
+	var best := 0
+	var bd := INF
+	for i in range(lanes.size()):
+		var d: float = pos.distance_squared_to(lanes[i])
+		if d < bd:
+			bd = d
+			best = i
+	return best
+
+
+## 各路当前敌军数量（该路锚点是三路里离它最近的一路）。
 func _eco_lane_threat(lanes: Array) -> Array:
 	var th: Array = []
 	th.resize(lanes.size())
@@ -2984,39 +3000,189 @@ func _eco_lane_threat(lanes: Array) -> Array:
 		if not is_instance_valid(u) or u.faction != Unit.FACTION_GUAN or u.is_building \
 				or u.is_resource or u.garrisoned or u.hp <= 0.0:
 			continue
-		var bi := 0
-		var bd := 1.0e20
-		for i in range(lanes.size()):
-			var d: float = u.position.distance_to(lanes[i])
-			if d < bd:
-				bd = d
-				bi = i
-		th[bi] += 1
+		var bi := _eco_nearest_lane(u.position, lanes)
+		if bi >= 0:
+			th[bi] += 1
 	return th
 
 
-func _eco_lane_anchor(u: Unit) -> Vector2:
-	var lanes := _eco_lanes()
-	if lanes.is_empty():
-		return _eco_hold_line()
+## 各路加权压力：普通兵=1、骑兵=1.25、攻城/战象=2.5、敌将=3。
+## 数量仍是主因素，但少量高威胁单位不会被误判成“这路没事”。
+func _eco_lane_pressure(lanes: Array) -> Array:
+	var pressure: Array = []
+	pressure.resize(lanes.size())
+	pressure.fill(0.0)
+	for u in units:
+		if not is_instance_valid(u) or u.faction != Unit.FACTION_GUAN or u.is_building \
+				or u.is_resource or u.garrisoned or u.is_captive or u.hp <= 0.0:
+			continue
+		var w := 1.0
+		if u.is_hero:
+			w = 3.0
+		elif String(u.key).begins_with("siege") or u.key == "war_elephant":
+			w = 2.5
+		elif u.is_cavalry:
+			w = 1.25
+		var li := _eco_nearest_lane(u.position, lanes)
+		if li >= 0:
+			pressure[li] = float(pressure[li]) + w
+	return pressure
+
+
+## 路线上已存在、不会参与本轮英雄调度的守备力量。工人不算；普通兵=1、塔=2.5、手操英雄=3。
+## 全托管英雄不在这里重复计数，稍后由分配器按每人 3 点防守量逐个填入。
+func _eco_lane_cover(lanes: Array) -> Array:
+	var cover: Array = []
+	cover.resize(lanes.size())
+	cover.fill(0.0)
+	for u in units:
+		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 \
+				or u.is_resource or u.is_worker or u.garrisoned:
+			continue
+		var w := 1.0
+		if u.is_building:
+			if u.is_constructing or u.atk <= 0.0:
+				continue
+			w = 2.5
+		elif u.is_hero:
+			if u.auto_micro and not u.manual_order_active and u.manual_order_t <= 0.0:
+				continue
+			w = 3.0
+		var li := _eco_nearest_lane(u.position, lanes)
+		if li >= 0:
+			cover[li] = float(cover[li]) + w
+	return cover
+
+
+func _eco_lane_heroes() -> Array:
 	var heroes: Array = []
 	for h in units:
 		if is_instance_valid(h) and h.faction == Unit.FACTION_LIANG and h.is_hero and h.hp > 0.0 \
-				and h.auto_micro and h.key != "gongsun_sheng":
+				and h.auto_micro and not h.manual_order_active and h.manual_order_t <= 0.0:
 			heroes.append(h)
 	heroes.sort_custom(func(a, b): return a.get_instance_id() < b.get_instance_id())
-	var li := maxi(0, heroes.find(u)) % lanes.size()
-	var th := _eco_lane_threat(lanes)
-	var total := 0
-	for t in th:
-		total += int(t)
-	if total > 0 and int(th[li]) == 0:
-		var hot := 0
-		for i in range(lanes.size()):
-			if int(th[i]) > int(th[hot]):
-				hot = i
-		li = hot
-	return lanes[li]
+	return heroes
+
+
+const ECO_LANE_HERO_COVER := 3.0
+
+
+## 纯分配器：无敌时均匀站三路；有敌时每次把下一名英雄投向
+## pressure / (现有守军 + 已派英雄) 最大的一路。多路同时来敌会自然分兵，守军已足的路不再堆人。
+func _eco_lane_allocate(pressure: Array, cover: Array, hero_count: int) -> Array:
+	var out: Array = []
+	out.resize(maxi(0, hero_count))
+	out.fill(-1)
+	var lane_n := pressure.size()
+	if lane_n <= 0 or hero_count <= 0:
+		return out
+	var total := 0.0
+	for p in pressure:
+		total += maxf(0.0, float(p))
+	if total <= 0.0:
+		for hi in range(hero_count):
+			out[hi] = hi % lane_n
+		return out
+	var assigned: Array = []
+	assigned.resize(lane_n)
+	assigned.fill(0)
+	var hi := 0
+	# 先给“有敌且现有守军压不住”的每一路至少一名英雄。敌军再多，也不能把另一条漏兵路线完全放空。
+	var uncovered: Array = []
+	for li in range(lane_n):
+		var fixed_cover := float(cover[li]) if li < cover.size() else 0.0
+		if float(pressure[li]) > maxf(0.0, fixed_cover):
+			uncovered.append(li)
+	while hi < hero_count and not uncovered.is_empty():
+		var pick := int(uncovered[0])
+		var pick_score := -INF
+		for li in uncovered:
+			var fixed_cover := float(cover[int(li)]) if int(li) < cover.size() else 0.0
+			var score := float(pressure[int(li)]) / maxf(1.0, fixed_cover)
+			if score > pick_score:
+				pick_score = score
+				pick = int(li)
+		out[hi] = pick
+		assigned[pick] = 1
+		uncovered.erase(pick)
+		hi += 1
+	# 剩余英雄继续投向压力/防守量最高的一路。
+	for slot_i in range(hi, hero_count):
+		var best := -1
+		var best_score := -INF
+		for li in range(lane_n):
+			var p := maxf(0.0, float(pressure[li]))
+			if p <= 0.0:
+				continue
+			var fixed_cover := float(cover[li]) if li < cover.size() else 0.0
+			var defence := maxf(1.0, fixed_cover + float(assigned[li]) * ECO_LANE_HERO_COVER)
+			var score := p / defence
+			if score > best_score:
+				best_score = score
+				best = li
+		if best < 0:
+			best = slot_i % lane_n
+		out[slot_i] = best
+		assigned[best] = int(assigned[best]) + 1
+	return out
+
+
+## 把分配器给出的各路“名额”映射到具体英雄：优先保留已经在该路的人，只调走超额者，减少横跳换线。
+func _eco_lane_assignments(lanes: Array, heroes: Array, pressure: Array, cover: Array) -> Dictionary:
+	var slots := _eco_lane_allocate(pressure, cover, heroes.size())
+	var need: Array = []
+	need.resize(lanes.size())
+	need.fill(0)
+	for li in slots:
+		if int(li) >= 0:
+			need[int(li)] = int(need[int(li)]) + 1
+	var result := {}
+	var open: Array = heroes.duplicate()
+	# 先保留本来就在该路的英雄（离该路锚点近者优先）。
+	for li in range(lanes.size()):
+		var stay: Array = []
+		for h in open:
+			if _eco_nearest_lane(h.position, lanes) == li:
+				stay.append(h)
+		stay.sort_custom(func(a, b): return a.position.distance_squared_to(lanes[li]) < b.position.distance_squared_to(lanes[li]))
+		for si in range(mini(int(need[li]), stay.size())):
+			var h: Unit = stay[si]
+			result[h.get_instance_id()] = li
+			open.erase(h)
+			need[li] = int(need[li]) - 1
+	# 剩余英雄按到尚缺路线的距离补位，跨路人数保持最少。
+	for h in open:
+		var best := -1
+		var bd := INF
+		for li in range(lanes.size()):
+			if int(need[li]) <= 0:
+				continue
+			var d: float = h.position.distance_squared_to(lanes[li])
+			if d < bd:
+				bd = d
+				best = li
+		if best < 0:
+			best = _eco_nearest_lane(h.position, lanes)
+		result[h.get_instance_id()] = best
+		if best >= 0:
+			need[best] = maxi(0, int(need[best]) - 1)
+	return result
+
+
+## 同一个 AI 决策周期只扫描一次全场敌军/守军，所有英雄共享同一份路线计划。
+## 最多延迟 AI_TICK 帧（约 0.27 秒）响应新波次，和英雄本身的决策节流一致。
+func _eco_lane_runtime_state() -> Dictionary:
+	var bucket := int(Engine.get_physics_frames() / maxi(1, AI_TICK))
+	if _eco_lane_cache_bucket == bucket and not _eco_lane_cache.is_empty():
+		return _eco_lane_cache
+	var lanes := _eco_lanes()
+	var pressure: Array = _eco_lane_pressure(lanes) if not lanes.is_empty() else []
+	var heroes := _eco_lane_heroes()
+	var assignments := _eco_lane_assignments(lanes, heroes, pressure, _eco_lane_cover(lanes)) \
+			if not lanes.is_empty() else {}
+	_eco_lane_cache_bucket = bucket
+	_eco_lane_cache = {"lanes": lanes, "pressure": pressure, "heroes": heroes, "assignments": assignments}
+	return _eco_lane_cache
 
 
 func _eco_hold_line() -> Vector2:
@@ -3154,8 +3320,6 @@ func _init_fog() -> void:
 	var n := map.w * map.h
 	_vision = PackedByteArray()
 	_vision.resize(n)               # 默认 0=未探索
-	_vis_t = PackedFloat32Array()
-	_vis_t.resize(n)                # 默认 0=无驻留
 	_sight_now = PackedByteArray()
 	_sight_now.resize(n)
 	_reveal_t = PackedFloat32Array()
@@ -3181,7 +3345,30 @@ func is_visible_world(p: Vector2) -> bool:
 	return _sight_now[i] == 1 or _reveal_t[i] > 0.0
 
 
-# 地面仍保持亮色：当前可见或离开后的驻留期。不得用于敌军交互判定。
+# 出生帧专用的即时视野判定：不读取最多落后 FOG_STEP 的 _sight_now，直接按当前友军格位计算。
+# 只在生成官军时调用，避免把全单位扫描放进逐帧索敌热路径。
+func _has_live_sight_at(p: Vector2) -> bool:
+	if not fog:
+		return true
+	var c := map.world_to_cell(p)
+	if c.x < 0 or c.y < 0 or c.x >= map.w or c.y >= map.h:
+		return false
+	var idx := c.y * map.w + c.x
+	if not _reveal_t.is_empty() and _reveal_t[idx] > 0.0:
+		return true
+	for u in units:
+		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 \
+				or u.is_resource or u.garrisoned:
+			continue
+		var uc := map.world_to_cell(u.position)
+		var dc := c - uc
+		var r := int(u.setup_def.get("sight", 10 if u.is_building else 8))
+		if dc.x * dc.x + dc.y * dc.y <= r * r:
+			return true
+	return false
+
+
+# 地面明亮与实时可见严格同义；失去视野后立即转为已探索阴影。
 func is_lit_world(p: Vector2) -> bool:
 	if not fog:
 		return true
@@ -3218,8 +3405,8 @@ func _fog_pass(delta: float) -> void:
 	_fog_t -= delta
 	if _fog_t > 0.0:
 		return
-	var step := 0.18 - _fog_t                   # 距上次 pass 的实际秒数（用于驻留倒计时）
-	_fog_t = 0.18
+	var step := FOG_STEP - _fog_t               # 距上次 pass 的实际秒数（用于临时侦察倒计时）
+	_fog_t = FOG_STEP
 	var n := _vision.size()
 	# 1) 计算本次真正在视野内的格（_sight_now）
 	for i in range(n):
@@ -3230,22 +3417,15 @@ func _fog_pass(delta: float) -> void:
 			continue
 		var r := int(u.setup_def.get("sight", 10 if u.is_building else 8))
 		_mark_sight_now(map.world_to_cell(u.position), r)
-	# 2) 更新真实侦察 + 地面驻留：敌军只看 _sight_now/_reveal_t，_vision==2 仅负责地面亮度。
-	#    单位真实视野才刷新 30s 驻留；技能临时侦察结束后应立即回到已探索阴影，不再多留 30s 亮洞。
+	# 2) 统一实时视野与地面明暗：明亮格必定能看见普通敌军；失去视野的已探索格本拍即转阴影。
+	#    禁止保留“地面仍亮、敌军却隐藏”的伪视野，否则敌人再次被发现时会像在亮地上凭空冒出。
 	for i in range(n):
 		if _reveal_t[i] > 0.0:
 			_reveal_t[i] = maxf(0.0, _reveal_t[i] - step)
-		if _sight_now[i] == 1:
+		if _sight_now[i] == 1 or _reveal_t[i] > 0.0:
 			_vision[i] = 2
-			_vis_t[i] = SIGHT_LINGER
-		elif _reveal_t[i] > 0.0:
-			_vision[i] = 2
-			_vis_t[i] = maxf(0.0, _vis_t[i] - step)   # 只消耗旧的真实视野驻留，不被技能重置
-		elif _vision[i] == 2:
-			_vis_t[i] -= step
-			if _vis_t[i] <= 0.0:
-				_vis_t[i] = 0.0
-				_vision[i] = 1                  # 驻留耗尽 → 退为已探索（阴影）
+		elif _vision[i] != 0:
+			_vision[i] = 1                    # 曾探索但当前无视野 → 阴影
 	# 3) 刷新迷雾纹理：2=明亮(透明) 1=阴影(半黑) 0=未探索(全黑)
 	for y in range(map.h):
 		for x in range(map.w):
@@ -3667,6 +3847,56 @@ func _hero_engage_ok(u: Unit) -> bool:
 	return base.position.distance_to(nf) <= HERO_FRONT_LEASH
 
 
+const ECO_LANE_TRANSFER_DANGER := 130.0   # 跨路调兵时若已被贴脸，先解决眼前威胁再走，避免转身白挨打
+
+
+## 全托管英雄分路调度。返回 true 表示本拍已接管（调路/去锚点/原地待命），不再进入个人战术脑。
+## 仅 _full_auto() 调用：弱托管和手动档完全不走这里；玩家手动命令也已在上层过滤。
+func _eco_rebalance_hero(u: Unit) -> bool:
+	var state := _eco_lane_runtime_state()
+	var lanes: Array = state.get("lanes", [])
+	if lanes.is_empty():
+		# 非三路关卡沿用原来的统一塔线，不改变其它模式的托管行为。
+		if not _hero_engage_ok(u):
+			var hold := _eco_hold_line()
+			if u.position.distance_to(hold) > 140.0:
+				_ai_move(u, hold)
+			return true
+		return false
+	var pressure: Array = state.get("pressure", [])
+	var assignments: Dictionary = state.get("assignments", {})
+	var li := int(assignments.get(u.get_instance_id(), _eco_nearest_lane(u.position, lanes)))
+	if li < 0:
+		return false
+	var anchor: Vector2 = lanes[li]
+	var total := 0.0
+	for p in pressure:
+		total += float(p)
+	# 无敌时三路均匀前出待命；不是把公孙胜单独钉回聚义厅。
+	if total <= 0.0:
+		if not _hero_engage_ok(u):
+			if u.position.distance_to(anchor) > 140.0:
+				_ai_move(u, anchor)
+			return true
+		return false
+	# 压力变化后只调走“当前路线超额”的英雄。真正贴脸或残血时先让个人战术脑保命/清敌，脱身后再换路。
+	var here := _eco_nearest_lane(u.position, lanes)
+	var healthy := u.hp / maxf(u.max_hp, 1.0) > 0.45
+	if here != li and float(pressure[li]) > 0.0 and healthy \
+			and not _foe_within(u.position, ECO_LANE_TRANSFER_DANGER, u.faction):
+		if u.stance != Unit.STANCE_AGGRO:
+			u.set_stance(Unit.STANCE_AGGRO)
+		u._home = u.position
+		_ai_move(u, anchor)   # 换线用普通移动，避免被沿途零散敌军反复勾停
+		return true
+	# 敌军尚在远端时先到自己路线的前置锚点，等进入防线再由各英雄大脑迎击。
+	if not _hero_engage_ok(u):
+		if u.position.distance_to(anchor) > 140.0:
+			_ai_move(u, anchor)
+		return true
+	return false
+
+
 ## 回身秒杀贴脸弱敌：被一两个能轻松砍死的近敌贴身追打时 → 直接回身普攻它，不绕去远处目标、不空等技能。
 ## 解决「被一个小兵追着砍、要等半天才放个技能、其实回头一刀就砍死」。成群敌人(>2)交给脑放技能/AoE。
 func _kill_close_gnat(u: Unit) -> bool:
@@ -3701,12 +3931,8 @@ func _kill_close_gnat(u: Unit) -> bool:
 func _auto_micro_hero(u: Unit) -> void:
 	if _kill_close_gnat(u):
 		return   # 贴脸弱敌优先回身砍死，别绕远/空等技能
-	# 全托管·非守家英雄(公孙专职守家走自己的脑)：没有该打的敌人时回「塔线」(hold-line)依塔待命，
-	# 不再退到基地外圈、也不孤军深入敌方出生点——站在前置塔阵上替塔扛线。
-	if _full_auto() and u.key != "gongsun_sheng" and not _hero_engage_ok(u):
-		var front := _eco_lane_anchor(u)   # 分路防守：各守一条来路，不再全挤塔阵平均点
-		if u.position.distance_to(front) > 140.0:
-			_ai_move(u, front)
+	# 全托管统一进入动态分路：公孙胜不再专职守家；敌多守少的路线自动多派英雄。
+	if _full_auto() and _eco_rebalance_hero(u):
 		return
 	match String(u.key):
 		"lin_chong": _brain_lin(u)
@@ -3951,22 +4177,7 @@ func _brain_hua(u: Unit) -> void:
 
 
 ## 公孙胜·法师：脆皮后排。被贴脸/残血→冰墙横在身前隔挡或撤；交战召金龙；敌成堆放黑雨。
-## 全托管下他是「守家英雄」：锚在聚义厅附近 GONG_GUARD_R 圈内，绝不追出去（见下方守家预案）。
-const GONG_GUARD_R := 640.0   # 公孙守家半径（20 格 = 20×32px）：圈外敌不追、被勾出去就回家
-
-
-## 公孙守家岗哨：不再钉在聚义厅正中（人叠在基地贴图上像消失了）——站到「朝敌一侧」
-## 占地外沿再往外 2 格的开阔位，真正守在家门口。方向随防线(muster)缓变，nearest_open 保证不落占地/水面。
-func _gong_guard_post(gbase: Unit) -> Vector2:
-	if gbase == null or not is_instance_valid(gbase):
-		return _eco_base_pos()
-	var gc: Vector2 = gbase.position
-	var bh: int = int(gbase.get_meta("fhalf", GameMap.footprint_half_for(gbase.radius)))
-	var dirv: Vector2 = _eco_muster_point() - gc
-	if dirv.length() < 1.0:
-		dirv = Vector2(1.0, 0.0)
-	var post: Vector2 = gc + dirv.normalized() * (float(bh + 2) * GameMap.CELL + 8.0)
-	return map.cell_to_world(map.nearest_open(map.world_to_cell(post)))
+## 全托管时与其他英雄共用动态分路；这里只负责法师自身的保命、施法和远程站位。
 
 
 func _brain_gong(u: Unit) -> void:
@@ -3977,21 +4188,6 @@ func _brain_gong(u: Unit) -> void:
 	var nf := _nearest_foe_pos(u.position, u.faction)
 	var d_near: float = u.position.distance_to(nf) if nf != Vector2.INF else 1.0e20
 	var melee_110: bool = threat != null and u.position.distance_to(threat.position) <= 110.0
-	# 守家预案（仅全托管）：钉在聚义厅附近，被勾出圈就回家；圈外的敌人一律不理（专职守家）
-	if _full_auto():
-		var gbase := main_base(u.faction)
-		var gc: Vector2 = gbase.position if (gbase != null and is_instance_valid(gbase)) else u.position
-		var post := _gong_guard_post(gbase)   # 岗哨=聚义厅朝敌一侧门口，绝不与基地贴图整叠
-		if u.position.distance_to(gc) > GONG_GUARD_R:
-			if not (hp_frac <= 0.45 or melee_110):   # 没有迫近威胁/不残血才安心回家(否则继续走下面的保命逻辑)
-				u.set_stance(Unit.STANCE_DEFEND)
-				_ai_move(u, post)
-				return
-		elif nf == Vector2.INF or gc.distance_to(nf) > GONG_GUARD_R:
-			# 守备圈内、且敌人都还在圈外 → 回岗哨待命，不主动压上去送（圈外的不追）
-			if u.position.distance_to(post) > 70.0:
-				_ai_move(u, post)
-			return
 	# P1 退守/隔挡：残血或被贴脸 → 避战拉开 / 冰墙隔挡（被一两个小兵追且血>1/5 则不退，回身放招反打）
 	if (hp_frac <= 0.45 or melee_110) and not _brave_retaliate(u):
 		if u.stance != Unit.STANCE_PASSIVE:
@@ -4004,8 +4200,7 @@ func _brain_gong(u: Unit) -> void:
 		return
 	elif u.stance == Unit.STANCE_PASSIVE:
 		u.set_stance(Unit.STANCE_AGGRO)   # 脱离威胁、血也够 → 恢复远程索敌
-		if not _full_auto():
-			u._home = u.position   # 守家模式不漂移锚点（保持钉在聚义厅）
+		u._home = u.position
 	# P2 R 画龙点睛：交战中召龙（radius=0，brain 直接 _begin_cast 不受附近判定限制）
 	if u.slot_ready(3) and nf != Vector2.INF and d_near <= 720.0:
 		if _ai_cast_slot(u, 3, u.position):
@@ -8608,38 +8803,58 @@ func _economy_selftest() -> void:
 	genemy.queue_free(); units.erase(genemy)
 	garch.queue_free(); units.erase(garch)
 	gtow.queue_free(); units.erase(gtow)
-	# 迷雾自检（仅 fog 开启的模式）：视野延时驻留 + 建筑记忆
+	# 迷雾自检（仅 fog 开启的模式）：明亮=实时可见、离开立即转阴影、技能侦察到点即退、建筑记忆
 	if fog:
 		var fc := map.world_to_cell(mu.position)
 		var idx := fc.y * map.w + fc.x
-		# 强制照亮该格，再模拟「单位已离开」连跑若干 pass：
+		# 强制实时照亮该格：地面明亮，普通敌军也应可见。
 		_sight_now.fill(0)
+		_sight_now[idx] = 1
 		_reveal_t[idx] = 0.0
-		_vision[idx] = 2
-		_vis_t[idx] = SIGHT_LINGER
-		# 跑 ~10 秒（无单位照亮）：仍应明亮（驻留未耗尽）
-		for _i in range(60):
-			_force_fog_decay(0.18)
-		var lingers_10s := _vision[idx] == 2
-		# 再跑 ~25 秒：累计 >30 秒，应退为阴影（已探索）
-		for _i in range(140):
-			_force_fog_decay(0.18)
-		var faded_after_30s := _vision[idx] == 1
-		# 技能临时开视野：持续期内能看见，到点必须立即回阴影，不能再继承 30s 真实视野驻留。
+		_force_fog_decay(FOG_STEP)
+		var live_is_bright := is_visible_world(map.cell_to_world(fc)) and is_lit_world(map.cell_to_world(fc))
+		# 单位离开：下一拍必须同时失去普通敌军可见性并转为阴影，不能留下“亮地藏人”。
+		_sight_now[idx] = 0
+		_force_fog_decay(FOG_STEP)
+		var leave_is_shadow := not is_visible_world(map.cell_to_world(fc)) \
+				and not is_lit_world(map.cell_to_world(fc)) and _vision[idx] == 1
+		# 技能临时开视野：持续期内能看见，到点必须立即回阴影。
 		_vision[idx] = 0
-		_vis_t[idx] = 0.0
 		_reveal_t[idx] = 0.0
 		var p := map.cell_to_world(fc)
 		_reveal_fog_at(p, 1.0, 0.30)
 		var reveal_now := is_visible_world(p) and _vision[idx] == 2
-		_force_fog_decay(0.18)
-		_force_fog_decay(0.18)
-		var reveal_expires := not is_visible_world(p) and _vision[idx] == 1 and _vis_t[idx] <= 0.0
+		_force_fog_decay(FOG_STEP)
+		_force_fog_decay(FOG_STEP)
+		var reveal_expires := not is_visible_world(p) and not is_lit_world(p) and _vision[idx] == 1
 		# 建筑记忆：该格已探明（vision==1）→ 建筑应保留可见、普通敌人应隐去（纯判定，不生成单位）
 		var bld_remembered := is_explored_world(p)     # 建筑：探明即保留
 		var foe_hidden := not is_visible_world(p)       # 普通敌人：非明亮即隐去
-		print("[fog] sight_unit=%d sight_bld=%d linger_10s=%s faded_30s=%s reveal_now=%s reveal_expires=%s bld_remembered=%s foe_hidden=%s" % [
-			8, 10, lingers_10s, faded_after_30s, reveal_now, reveal_expires, bld_remembered, foe_hidden])
+		# 出生帧不能信上一拍缓存：人为制造“缓存说可见、当前没有任何友军视野”，新刷敌军仍必须隐藏。
+		var stale_spawn_hidden := false
+		var dark_cell := Vector2i(-1, -1)
+		for fy in range(0, map.h, 4):
+			for fx in range(0, map.w, 4):
+				var candidate := Vector2i(fx, fy)
+				if not _has_live_sight_at(map.cell_to_world(candidate)):
+					dark_cell = candidate
+					break
+			if dark_cell.x >= 0:
+				break
+		if dark_cell.x >= 0:
+			var didx := dark_cell.y * map.w + dark_cell.x
+			var old_sight := _sight_now[didx]
+			_sight_now[didx] = 1                      # 故意留下错误的旧缓存
+			var cached_claims_visible := is_visible_world(map.cell_to_world(dark_cell))
+			var hidden_spawn := spawn_unit("guan_dao", Unit.FACTION_GUAN, map.cell_to_world(dark_cell))
+			stale_spawn_hidden = cached_claims_visible and not hidden_spawn.fog_visible and not hidden_spawn.visible
+			units.erase(hidden_spawn); hidden_spawn.queue_free()
+			_sight_now[didx] = old_sight
+		var fog_ok := live_is_bright and leave_is_shadow and reveal_now and reveal_expires \
+				and bld_remembered and foe_hidden and stale_spawn_hidden
+		print("[fog] sight_unit=%d sight_bld=%d live_bright=%s leave_shadow=%s reveal_now=%s reveal_expires=%s bld_remembered=%s foe_hidden=%s stale_spawn_hidden=%s ALL=%s" % [
+			8, 10, live_is_bright, leave_is_shadow, reveal_now, reveal_expires, bld_remembered, foe_hidden,
+			stale_spawn_hidden, fog_ok])
 
 
 ## 全托管研究互斥自检（ECO_RESEARCH_TEST=1）：不跑时间，确定性验证双向互斥、重复科技、兵营选择与预算预留。
@@ -8967,7 +9182,7 @@ func _towertrap_selftest() -> void:
 	units.erase(gnat); gnat.queue_free()
 	results.append(["gnat_kill", gnat_ok])
 	results.append(["enemy_scale", enemy_ok])
-	# 分路防守：threat_gates → 三条来路锚点；某路来敌时该路威胁计数 ≥1（托管英雄据此分派/支援）
+	# 全托管动态分路：三路锚点/计数有效；无敌 6 将均分；多路来敌会分兵；已有守军的两路让位给薄弱重压路。
 	var lanes_t := _eco_lanes()
 	var lanes_ok: bool = lanes_t.size() == 3
 	var lane_threat_ok := false
@@ -8978,6 +9193,39 @@ func _towertrap_selftest() -> void:
 		units.erase(lg); lg.queue_free()
 	results.append(["eco_lanes", lanes_ok])
 	results.append(["eco_lane_threat", lane_threat_ok])
+	var calm_slots := _eco_lane_allocate([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], 6)
+	var calm_split_ok := calm_slots.count(0) == 2 and calm_slots.count(1) == 2 and calm_slots.count(2) == 2
+	var multi_slots := _eco_lane_allocate([6.0, 6.0, 18.0], [0.0, 0.0, 0.0], 6)
+	var multi_split_ok := multi_slots.count(0) >= 1 and multi_slots.count(1) >= 1 \
+			and multi_slots.count(2) >= 3
+	var extreme_slots := _eco_lane_allocate([1.0, 1.0, 100.0], [0.0, 0.0, 0.0], 6)
+	var uncovered_lane_ok := extreme_slots.count(0) >= 1 and extreme_slots.count(1) >= 1 \
+			and extreme_slots.count(2) >= 1
+	var weak_slots := _eco_lane_allocate([8.0, 8.0, 16.0], [8.0, 8.0, 0.0], 6)
+	var weak_lane_help_ok := weak_slots.count(2) == 6   # 中/右上已有足量守军 → 六将可集中补左下缺口
+	var route_gong := spawn_unit("gongsun_sheng", Unit.FACTION_LIANG, lanes_t[0] if lanes_ok else origin)
+	route_gong.auto_micro = true
+	var gong_joins_routes := _eco_lane_heroes().has(route_gong)
+	var gong_cross_lane := false
+	var lane_foes: Array = []
+	if lanes_ok:
+		for fi in range(6):
+			lane_foes.append(spawn_unit("guan_dao", Unit.FACTION_GUAN, lanes_t[2] + Vector2(float(fi % 3) * 12.0, float(fi / 3) * 12.0)))
+		_eco_lane_cache_bucket = -1
+		_eco_lane_cache.clear()
+		_eco_rebalance_hero(route_gong)
+		gong_cross_lane = route_gong._state == Unit.ST_MOVE and route_gong._ai_dest.distance_to(lanes_t[2]) <= 30.0
+	for lf in lane_foes:
+		units.erase(lf); lf.queue_free()
+	units.erase(route_gong); route_gong.queue_free()
+	_eco_lane_cache_bucket = -1
+	_eco_lane_cache.clear()
+	results.append(["eco_lane_calm_split", calm_split_ok])
+	results.append(["eco_lane_multi_split", multi_split_ok])
+	results.append(["eco_lane_uncovered_guard", uncovered_lane_ok])
+	results.append(["eco_lane_weak_help", weak_lane_help_ok])
+	results.append(["gong_joins_routes", gong_joins_routes])
+	results.append(["gong_cross_lane", gong_cross_lane])
 	# 手动指令保护：玩家下令戳 5 秒保护期；指令执行完队列清空 → 立即解除
 	var mh_t := spawn_unit("lin_chong", Unit.FACTION_LIANG, origin)
 	_stamp_manual([mh_t])
@@ -9068,17 +9316,10 @@ func _force_fog_decay(step: float) -> void:
 	for i in range(_vision.size()):
 		if _reveal_t[i] > 0.0:
 			_reveal_t[i] = maxf(0.0, _reveal_t[i] - step)
-		if _sight_now[i] == 1:
+		if _sight_now[i] == 1 or _reveal_t[i] > 0.0:
 			_vision[i] = 2
-			_vis_t[i] = SIGHT_LINGER
-		elif _reveal_t[i] > 0.0:
-			_vision[i] = 2
-			_vis_t[i] = maxf(0.0, _vis_t[i] - step)
-		elif _vision[i] == 2:
-			_vis_t[i] -= step
-			if _vis_t[i] <= 0.0:
-				_vis_t[i] = 0.0
-				_vision[i] = 1
+		elif _vision[i] != 0:
+			_vision[i] = 1
 
 
 func _group_selftest() -> void:
@@ -11814,8 +12055,11 @@ func _autocam_selftest() -> void:
 
 
 ## 托管 AI 自检（AUTOMICRO=1）：直接调 _brain_* / 工具函数做确定性断言——
-## 不跑帧、不依赖 hud.touch_ui；每个子场景前清 _pending_casts 并复位 _cast_t，相互隔离。
+## 不跑帧、不依赖 hud.touch_ui；关闭迷雾并清空空间网格，避免远置靶子和前序缓存污染纯战术断言。
 func _automicro_selftest() -> void:
+	var saved_fog := fog
+	fog = false
+	_grid.clear()   # 测试会直接搬动单位且不推帧；空网格让 units_near 正确回退全表扫描
 	var origin := Vector2.ZERO
 	for u in units:
 		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.key == "hall":
@@ -12077,3 +12321,4 @@ func _automicro_selftest() -> void:
 	for u in units.duplicate():
 		if is_instance_valid(u) and (u in heroes or u in foes or u == troop or u.key == "tiger_summon" or u.key == "dragon_summon"):
 			u.take_damage(u.hp + 1.0, null)
+	fog = saved_fog
