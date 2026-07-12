@@ -309,6 +309,8 @@ func _ready() -> void:
 			_shiftbuild_selftest()
 		if OS.get_environment("TOWERTRAP_TEST") == "1":
 			_towertrap_selftest()
+		if OS.get_environment("FINAL_CLEANUP_TEST") == "1":
+			_final_cleanup_selftest()
 		if OS.get_environment("DOTACAST") == "1":
 			_dota_cast_selftest()
 		if OS.get_environment("REWORK_TEST") == "1":
@@ -2140,6 +2142,84 @@ func _cluster_at(pts: Array, seed: Vector2) -> Dictionary:
 ## 全托管 = AI友好模式 + 英雄托管档「全托管(3)」。统一闸门，避免散落的内联判断不一致。
 func _full_auto() -> bool:
 	return ai_friendly and int(Settings.auto_micro_level) >= 3
+
+
+## 全托管驻守战末波扫尾（由关卡在“残敌长期不减”后低频调用）。
+## 侦察只照亮残敌周围；空闲托管部队前去清剿；只有确认断路或持续卡死的敌人才重置回原进攻路线。
+## 返回统计供专项自检使用。
+func final_wave_cleanup() -> Dictionary:
+	var result := {"enemies": 0, "revealed": 0, "relocated": 0, "hunters": 0}
+	if not _full_auto():
+		return result
+	var hall := main_base(Unit.FACTION_LIANG)
+	if hall == null or not is_instance_valid(hall):
+		return result
+	var residuals: Array = []
+	for e in units:
+		if is_instance_valid(e) and e.faction == Unit.FACTION_GUAN and e.hp > 0.0 \
+				and not e.is_building and not e.is_resource and not e.garrisoned and not e.is_captive:
+			residuals.append(e)
+	result["enemies"] = residuals.size()
+	if residuals.is_empty():
+		return result
+	var lanes := _eco_lanes()
+	for e: Unit in residuals:
+		# 地面和敌军共用同一份临时视野，避免出现“亮地上凭空冒兵”。下一次迷雾刷新会同时生效。
+		_reveal_fog_at(e.position, maxf(96.0, e.radius + 64.0), 3.5)
+		result["revealed"] = int(result["revealed"]) + 1
+		var last_pos: Vector2 = e.get_meta("final_cleanup_pos", e.position)
+		var stalled := int(e.get_meta("final_cleanup_stall", 0))
+		if e.position.distance_to(last_pos) < 10.0 and not e.has_target():
+			stalled += 1
+		else:
+			stalled = 0
+		e.set_meta("final_cleanup_pos", e.position)
+		e.set_meta("final_cleanup_stall", stalled)
+		var far_from_hall := e.position.distance_to(hall.position) > 70.0
+		# 正常行军单位不重复跑 A*；只检查已经待机、路径为空，或连续三拍（约 6 秒）没有移动的残敌。
+		var needs_route_check := not e.has_target() and (e._state == Unit.ST_IDLE \
+				or (e._state == Unit.ST_AMOVE and e._path.is_empty()) or stalled >= 3)
+		var no_route := false
+		if far_from_hall and needs_route_check:
+			no_route = map.find_path(e.position, hall.position, e.faction).is_empty()
+		if far_from_hall and needs_route_check and (no_route or stalled >= 3) and not lanes.is_empty():
+			# 按残敌当前最近的进攻路线回填；instance_id 给少量散开，避免全部叠在同一格。
+			var li := _eco_nearest_lane(e.position, lanes)
+			var eid := e.get_instance_id()
+			var spread := Vector2i((eid % 5) - 2, (floori(float(eid) / 5.0) % 5) - 2)
+			var rc := map.nearest_open(map.world_to_cell(lanes[li]) + spread)
+			e.position = map.cell_to_world(rc)
+			e._target = null
+			e._path = PackedVector2Array()
+			e.set_meta("final_cleanup_pos", e.position)
+			e.set_meta("final_cleanup_stall", 0)
+			e.order_amove(hall.position)
+			_reveal_fog_at(e.position, maxf(96.0, e.radius + 64.0), 3.5)
+			result["relocated"] = int(result["relocated"]) + 1
+		elif needs_route_check:
+			# 可达但因拥挤/旧命令停住：低频补一条进攻令，单位自身有限重寻负责兜底。
+			e.order_amove(hall.position)
+	# 不足十人的残存守军原本会一直留在集结点；扫尾期让所有空闲托管战斗单位就近搜索残敌。
+	for s in units:
+		if not (is_instance_valid(s) and s.faction == Unit.FACTION_LIANG and s.hp > 0.0 \
+				and not s.is_worker and not s.is_building and not s.is_summon and not s.garrisoned):
+			continue
+		if s.manual_order_active or s.manual_order_t > 0.0 or s.has_target() or s._state == Unit.ST_CHASE:
+			continue
+		if s.is_hero and not s.auto_micro:
+			continue
+		var nearest: Unit = residuals[0]
+		var best_d: float = s.position.distance_squared_to(nearest.position)
+		for ri in range(1, residuals.size()):
+			var d: float = s.position.distance_squared_to(residuals[ri].position)
+			if d < best_d:
+				best_d = d
+				nearest = residuals[ri]
+		# 已经朝该片残敌 A 移就不重复下令，避免每两秒清空路径。
+		if s._state != Unit.ST_AMOVE or s._amove_dest.distance_to(nearest.position) > 100.0:
+			s.order_amove(nearest.position)
+			result["hunters"] = int(result["hunters"]) + 1
+	return result
 
 
 ## ───────────────── 全托管·经济 AI（喽啰自动经营，auto_micro_level>=3）─────────────────
@@ -9240,6 +9320,100 @@ func _towertrap_selftest() -> void:
 		if not bool(r[1]):
 			all_ok = false
 	print("[towertrap] %s ALL=%s" % [results, all_ok])
+
+
+## 末波残敌专项自检：A 移不可达只有限重寻；全托管扫尾能侦察、派兵，并把断路残敌放回进攻线。
+func _final_cleanup_selftest() -> void:
+	for u in units.duplicate():
+		if is_instance_valid(u) and u.faction == Unit.FACTION_GUAN and not u.is_building:
+			units.erase(u)
+			u.queue_free()
+	_grid.clear()
+	var results: Array = []
+	var hall := main_base(Unit.FACTION_LIANG)
+	var origin_c := Vector2i(-1, -1)
+	if hall != null:
+		# 找一格可走、且离基地足够远的位置；测试期封掉官军寻路图的八邻格，稳定制造“单位活着但无路可走”。
+		for y in range(3, map.h - 3):
+			for x in range(3, map.w - 3):
+				var c := Vector2i(x, y)
+				if map.is_open_cell(c) and not map.astar_guan.is_point_solid(c) \
+						and map.cell_to_world(c).distance_to(hall.position) > 500.0:
+					origin_c = c
+					break
+			if origin_c.x >= 0:
+				break
+	var blocked_before := {}
+	if origin_c.x >= 0:
+		for dy in range(-1, 2):
+			for dx in range(-1, 2):
+				if dx == 0 and dy == 0:
+					continue
+				var nc := origin_c + Vector2i(dx, dy)
+				blocked_before[nc] = map.astar_guan.is_point_solid(nc)
+				map.astar_guan.set_point_solid(nc, true)
+	var origin := map.cell_to_world(origin_c) if origin_c.x >= 0 else map.cell_to_world(map.nearest_open(Vector2i(40, 12)))
+	var foe := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin)
+	foe.passive = true
+	foe._target = null
+	foe._amove_dest = hall.position if hall != null else origin + Vector2(800, 0)
+	foe._move_retry = 0
+	foe._move_retry_pos = foe.position
+	foe._state = Unit.ST_AMOVE
+	# 每次强制模拟 A* 仍返回空路径；第 4 拍必须结束命令，而不是继续每帧重寻。
+	for _i in range(5):
+		foe._path = PackedVector2Array()
+		foe._phys_body(0.016)
+	results.append(["amove_retry_capped", foe._move_retry == 3 and foe._state == Unit.ST_IDLE])
+	var hunter := spawn_unit("liang_dao", Unit.FACTION_LIANG, origin + Vector2(320, 0))
+	hunter._state = Unit.ST_IDLE
+	hunter._target = null
+	var prev_ai := ai_friendly
+	var prev_micro := int(Settings.auto_micro_level)
+	ai_friendly = true
+	Settings.auto_micro_level = 3
+	foe.passive = false
+	foe._target = null
+	foe._state = Unit.ST_IDLE
+	var before_pos := foe.position
+	var stats := final_wave_cleanup()
+	results.append(["cleanup_reveals", int(stats["enemies"]) == 1 and int(stats["revealed"]) == 1])
+	var cleanup_cell := map.world_to_cell(foe.position)
+	var cleanup_idx := cleanup_cell.y * map.w + cleanup_cell.x
+	results.append(["cleanup_fog_synced", not fog or (is_visible_world(foe.position) \
+			and cleanup_idx >= 0 and cleanup_idx < _vision.size() and _vision[cleanup_idx] == 2)])
+	results.append(["cleanup_relocates_unreachable", origin_c.x >= 0 and int(stats["relocated"]) == 1 \
+			and foe.position.distance_to(before_pos) > 64.0 and foe._state == Unit.ST_AMOVE])
+	results.append(["cleanup_dispatches_hunter", int(stats["hunters"]) >= 1 and hunter._state == Unit.ST_AMOVE])
+	var activation_ok := false
+	if level.id() == "skirmish":
+		var wave_before = level.get("_wave")
+		var last_before = level.get("_final_cleanup_last_alive")
+		var quiet_before = level.get("_final_cleanup_quiet")
+		var active_before = level.get("_final_cleanup_active")
+		level.set("_wave", level.call("_waves").size())
+		level.set("_final_cleanup_last_alive", 1)
+		level.set("_final_cleanup_quiet", 8.0)
+		level.set("_final_cleanup_active", false)
+		level.set("_final_cleanup_tick", 0.0)
+		level.process(self, 0.1)
+		activation_ok = bool(level.get("_final_cleanup_active"))
+		level.set("_wave", wave_before)
+		level.set("_final_cleanup_last_alive", last_before)
+		level.set("_final_cleanup_quiet", quiet_before)
+		level.set("_final_cleanup_active", active_before)
+	results.append(["level_cleanup_activation", activation_ok])
+	ai_friendly = prev_ai
+	Settings.auto_micro_level = prev_micro
+	for nc in blocked_before:
+		map.astar_guan.set_point_solid(nc, bool(blocked_before[nc]))
+	units.erase(foe); foe.queue_free()
+	units.erase(hunter); hunter.queue_free()
+	var all_ok := true
+	for r in results:
+		if not bool(r[1]):
+			all_ok = false
+	print("[final_cleanup] %s ALL=%s" % [results, all_ok])
 
 
 ## 悬停光标 / 驻军出击 / 英雄栏含驻军英雄 自检（HOVERTEST=1，在 SMOKE 末尾跑一次）

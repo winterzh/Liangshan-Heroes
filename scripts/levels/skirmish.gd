@@ -83,6 +83,15 @@ var _wave := 0
 var _wave_t := 0.0
 var _wave_spawned := false
 var _started := false
+var _final_cleanup_last_alive := -1
+var _final_cleanup_quiet := 0.0
+var _final_cleanup_tick := 0.0
+var _final_cleanup_active := false
+
+const FINAL_CLEANUP_LOW_COUNT := 12
+const FINAL_CLEANUP_LOW_QUIET := 8.0
+const FINAL_CLEANUP_FORCE_QUIET := 24.0
+const FINAL_CLEANUP_STEP := 2.0
 
 
 func id() -> String: return "skirmish"
@@ -281,6 +290,10 @@ func on_start(b) -> void:
 	_wave_t = float(ws[0]["t"]) if not ws.is_empty() else 9999.0
 	_wave_spawned = false
 	_started = true
+	_final_cleanup_last_alive = -1
+	_final_cleanup_quiet = 0.0
+	_final_cleanup_tick = 0.0
+	_final_cleanup_active = false
 
 
 func process(b, delta: float) -> void:
@@ -298,10 +311,32 @@ func process(b, delta: float) -> void:
 			_wave += 1
 			if _wave < ws.size():
 				_wave_t = float(ws[_wave]["t"])
-	elif b.enemies_alive() == 0:
-		# 末波也已出，且场上敌人尽灭 → 守住了
-		b.win("官军围剿一波波尽数瓦解——梁山大寨，固若金汤！")
-		return
+	else:
+		var alive: int = b.enemies_alive()
+		if alive == 0:
+			# 末波也已出，且场上敌人尽灭 → 守住了
+			b.win("官军围剿一波波尽数瓦解——梁山大寨，固若金汤！")
+			return
+		if not b._full_auto():
+			return
+		# 全托管末波扫尾：正常交战仍在减员时不介入；只处理少量残敌长期不减，
+		# 或任何数量异常停滞很久的情况。这样不会把刚刷出的末波直接变成“开全图”。
+		if alive != _final_cleanup_last_alive:
+			_final_cleanup_last_alive = alive
+			_final_cleanup_quiet = 0.0
+		else:
+			_final_cleanup_quiet += delta
+		if not _final_cleanup_active:
+			_final_cleanup_active = (alive <= FINAL_CLEANUP_LOW_COUNT and _final_cleanup_quiet >= FINAL_CLEANUP_LOW_QUIET) \
+				or _final_cleanup_quiet >= FINAL_CLEANUP_FORCE_QUIET
+			if _final_cleanup_active:
+				b.msg("末波久未见动静，哨骑正搜寻残敌……", 4.0)
+				_final_cleanup_tick = 0.0
+		if _final_cleanup_active:
+			_final_cleanup_tick -= delta
+			if _final_cleanup_tick <= 0.0:
+				_final_cleanup_tick = FINAL_CLEANUP_STEP
+				b.final_wave_cleanup()
 
 
 func _spawn_wave(b, i: int) -> void:
