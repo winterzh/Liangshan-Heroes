@@ -19,6 +19,13 @@
 
 任何一步失败都不会加载补丁，也不会影响 APK 内的基础版本。
 
+端口 1234 的服务已登记为 `/etc/systemd/system/pai.service` 并启用开机自启。服务器重启后可用以下命令检查：
+
+```bash
+systemctl status pai.service
+curl -fsS http://127.0.0.1:1234/liangshan/android/stable/manifest.json
+```
+
 ## 发布机密钥
 
 以下文件不进入 Git：
