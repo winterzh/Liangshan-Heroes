@@ -3,6 +3,8 @@ extends Control
 ## headless 测试或设了 LEVEL/SKIRMISH 等环境变量时直接进入战斗。
 
 const SPEAKERS := {}
+var _update_label: Label
+var _update_overlay: Control
 
 
 func _ready() -> void:
@@ -116,6 +118,8 @@ void fragment() {
 	# 版本号（右下角·低调灰）
 	var ver := Label.new()
 	ver.text = "v" + Campaign.VERSION
+	if AndroidUpdater.enabled:
+		ver.text = "v" + AndroidUpdater.display_version()
 	ver.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 	ver.offset_left = -150.0
 	ver.offset_top = -36.0
@@ -126,6 +130,18 @@ void fragment() {
 	ver.add_theme_font_size_override("font_size", 16)
 	ver.add_theme_color_override("font_color", Color("6a7686"))
 	add_child(ver)
+
+	if AndroidUpdater.enabled:
+		_update_label = Label.new()
+		_update_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+		_update_label.offset_left = 16.0
+		_update_label.offset_top = -36.0
+		_update_label.offset_right = 620.0
+		_update_label.offset_bottom = -12.0
+		_update_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_update_label.add_theme_font_size_override("font_size", 15)
+		add_child(_update_label)
+		_setup_android_update_ui()
 
 
 ## 主菜单大模块：整块为一个带图标(emoji)的大按钮 + 下方小字副标题。
@@ -554,6 +570,13 @@ func _show_more() -> void:
 		_show_settings())
 	box.add_child(st)
 
+	if AndroidUpdater.enabled:
+		var update_btn := _mk_big_btn("↻  检查安卓更新", Color("8fd3ff"))
+		update_btn.pressed.connect(func() -> void:
+			overlay.queue_free()
+			AndroidUpdater.check_now())
+		box.add_child(update_btn)
+
 	_add_back(box, overlay)
 
 
@@ -703,3 +726,102 @@ func _make_card(i: int) -> Control:
 # 设置面板：复用 SettingsPanel（与战斗内 Esc 菜单同一套 UI）
 func _show_settings() -> void:
 	add_child(preload("res://scripts/settings_panel.gd").new())
+
+
+# ======================================================================
+# Android 内容热更新界面（桌面平台不创建任何控件）
+# ======================================================================
+func _setup_android_update_ui() -> void:
+	AndroidUpdater.status_changed.connect(_on_android_update_status)
+	AndroidUpdater.update_available.connect(_on_android_update_available)
+	AndroidUpdater.full_update_required.connect(_on_android_full_update)
+	AndroidUpdater.update_ready.connect(_on_android_update_ready)
+	_on_android_update_status(AndroidUpdater.state, AndroidUpdater.status_text, AndroidUpdater.progress)
+	match AndroidUpdater.state:
+		"available":
+			var p: Dictionary = AndroidUpdater.available_manifest.get("patch", {})
+			_on_android_update_available.call_deferred(
+				String(AndroidUpdater.available_manifest.get("content_version", "")), int(p.get("size", 0)))
+		"full_update":
+			var f: Dictionary = AndroidUpdater.available_manifest.get("full_apk", {})
+			_on_android_full_update.call_deferred(String(f.get("version_name", "")))
+		"ready":
+			_on_android_update_ready.call_deferred(
+				String(AndroidUpdater.available_manifest.get("content_version", "")))
+
+
+func _on_android_update_status(update_state: String, text: String, _progress: float) -> void:
+	if _update_label == null or not is_instance_valid(_update_label):
+		return
+	_update_label.text = text
+	var color := Color("8fa0b4")
+	if update_state in ["available", "ready", "full_update"]:
+		color = Color("ffd866")
+	elif update_state == "error":
+		color = Color("ff9a7a")
+	elif update_state == "current":
+		color = Color("7fa879")
+	_update_label.add_theme_color_override("font_color", color)
+
+
+func _on_android_update_available(version: String, size_bytes: int) -> void:
+	if _update_overlay != null and is_instance_valid(_update_overlay):
+		return
+	var ov := _mk_overlay("发现安卓内容更新")
+	var overlay: Control = ov[0]
+	var box: VBoxContainer = ov[1]
+	_update_overlay = overlay
+	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
+	var info := Label.new()
+	info.text = "内容版本 v%s\n差异包大小：%s\n\n只更新游戏脚本、关卡和素材，不需要重新安装 APK。" % [
+		version, AndroidUpdater.format_bytes(size_bytes)]
+	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	info.add_theme_font_size_override("font_size", 19)
+	info.add_theme_color_override("font_color", Color("c8d3df"))
+	box.add_child(info)
+	var download := _mk_big_btn("下载更新", Color("a9e34b"))
+	download.pressed.connect(func() -> void:
+		overlay.queue_free()
+		AndroidUpdater.begin_download())
+	box.add_child(download)
+	_add_back(box, overlay)
+
+
+func _on_android_update_ready(version: String) -> void:
+	if _update_overlay != null and is_instance_valid(_update_overlay):
+		_update_overlay.queue_free()
+	var ov := _mk_overlay("安卓更新已下载")
+	var overlay: Control = ov[0]
+	var box: VBoxContainer = ov[1]
+	_update_overlay = overlay
+	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
+	var info := Label.new()
+	info.text = "内容版本 v%s 已通过签名和完整性校验。\n退出后重新打开游戏即可生效。" % version
+	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	info.add_theme_font_size_override("font_size", 20)
+	info.add_theme_color_override("font_color", Color("c8e6b4"))
+	box.add_child(info)
+	var restart := _mk_big_btn("退出游戏，稍后重新打开", Color("ffd866"))
+	restart.pressed.connect(AndroidUpdater.quit_for_restart)
+	box.add_child(restart)
+	_add_back(box, overlay)
+
+
+func _on_android_full_update(version: String) -> void:
+	if _update_overlay != null and is_instance_valid(_update_overlay):
+		return
+	var ov := _mk_overlay("需要更新完整 APK")
+	var overlay: Control = ov[0]
+	var box: VBoxContainer = ov[1]
+	_update_overlay = overlay
+	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
+	var info := Label.new()
+	info.text = "新版 v%s 包含安卓程序层变更，无法使用差异包。\n请前往 GitHub 下载完整 APK 安装。" % version
+	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	info.add_theme_font_size_override("font_size", 20)
+	info.add_theme_color_override("font_color", Color("ffd0a0"))
+	box.add_child(info)
+	var open := _mk_big_btn("打开 GitHub 下载页", Color("8fd3ff"))
+	open.pressed.connect(AndroidUpdater.open_full_apk)
+	box.add_child(open)
+	_add_back(box, overlay)

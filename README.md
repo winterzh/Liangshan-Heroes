@@ -55,6 +55,9 @@
 
 ## 运行
 
+Android 完整 APK、累计 PCK 热更新、签名、服务器部署与回滚流程见
+[`docs/ANDROID_RELEASE.md`](docs/ANDROID_RELEASE.md)。
+
 1. 打开 Godot 4.6，导入本目录的 `project.godot`；
 2. 按 F5 运行（进入战役地图选关）。
 
