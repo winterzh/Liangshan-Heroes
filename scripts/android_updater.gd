@@ -69,8 +69,9 @@ func _ready() -> void:
 	add_child(_request)
 	_set_status("idle", "安卓内容 v%s" % active_content_version)
 	if OS.get_environment("ANDROID_UPDATE_TEST") == "1":
-		print("[android_update] boot apk=%s content=%s campaign=%s" % [
-			APK_VERSION_NAME, active_content_version, Campaign.VERSION])
+		# 首个 Autoload 不引用 Campaign 等项目全局类，避免在 _init() 装 PCK 前连锁预载脚本。
+		print("[android_update] boot apk=%s content=%s bootstrap=%d" % [
+			APK_VERSION_NAME, active_content_version, BOOTSTRAP_VERSION])
 	if OS.get_environment("ANDROID_UPDATE_NO_AUTO") != "1":
 		get_tree().create_timer(1.0).timeout.connect(check_now)
 

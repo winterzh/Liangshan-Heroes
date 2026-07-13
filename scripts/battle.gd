@@ -199,6 +199,7 @@ var _hover_kind := "normal"
 
 
 func _ready() -> void:
+	_refresh_hot_patch_classes()
 	level = _resolve_level()
 	_defs = Defs.UNITS.duplicate(true)
 	_abilities = Defs.ABILITIES.duplicate(true)
@@ -342,6 +343,35 @@ func _ready() -> void:
 		_prof_on = true   # 在真实关卡(配合 SMOKE_TEST 跑实际波次)上开 profiler，量真实瓶颈与敌军峰值
 	if OS.get_environment("NO_OPT") == "1":
 		_no_opt = true
+
+
+## Godot 会在 AndroidUpdater 装入 PCK 前预载 class_name 脚本；内容补丁若升级 Unit，
+## Battle 虽来自新 PCK，Unit 全局类却仍可能指向 APK 旧缓存。进入战斗、生成任何单位前用
+## CACHE_MODE_IGNORE 强制 GDScript 从补丁重新读盘并原位 reload 缓存对象，既保留全局类型
+## 身份，也让累计补丁里的新方法生效。CACHE_MODE_REPLACE 对 GDScript 仍会返回旧缓存，不能用。
+func _refresh_hot_patch_classes() -> void:
+	if not AndroidUpdater.enabled:
+		return
+	# 这里必须读取当前 Autoload 实例实际挂载的旧脚本常量；直接写
+	# AndroidUpdater.BASE_CONTENT_VERSION 会在补丁 Battle 编译时折叠成新版常量，无法识别旧 APK。
+	var updater_script: Script = AndroidUpdater.get_script()
+	var packaged_content := String(updater_script.get_script_constant_map().get(
+		"BASE_CONTENT_VERSION", AndroidUpdater.active_content_version))
+	var active_content := String(AndroidUpdater.active_content_version)
+	if active_content == packaged_content \
+			or String(AndroidUpdater.get_meta("unit_cache_content_version", "")) == active_content:
+		return
+	var refreshed := ResourceLoader.load("res://scripts/unit.gd", "GDScript", ResourceLoader.CACHE_MODE_IGNORE)
+	var probe := Unit.new()
+	var reduction_api := probe.has_method("apply_damage_reduction") and probe.has_method("clear_damage_reduction")
+	probe.free()
+	if refreshed != null and reduction_api:
+		AndroidUpdater.set_meta("unit_cache_content_version", active_content)
+	else:
+		push_error("安卓内容补丁未能刷新 Unit 脚本缓存（content=%s）" % active_content)
+	if OS.get_environment("ANDROID_UPDATE_TEST") == "1":
+		print("[android_update] unit_cache_refresh=%s reduction_api=%s" % [refreshed != null,
+			reduction_api])
 
 
 func _build_test() -> void:
