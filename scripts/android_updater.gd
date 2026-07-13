@@ -11,9 +11,9 @@ signal full_update_required(version: String)
 signal update_ready(version: String)
 
 const BOOTSTRAP_VERSION := 1
-const APK_VERSION_NAME := "1.5"
-const APK_VERSION_CODE := 11
-const BASE_CONTENT_VERSION := "1.5"
+const APK_VERSION_NAME := "1.5.2"
+const APK_VERSION_CODE := 12
+const BASE_CONTENT_VERSION := "1.5.2"
 const MANIFEST_URL := "http://120.26.237.195:1234/liangshan/android/stable/manifest.json"
 
 const UPDATE_DIR := "user://android_updates"
@@ -278,7 +278,7 @@ func _load_installed_patch() -> void:
 		return
 	var version := String(manifest.get("content_version", ""))
 	# 完整 APK 已内置同版或更新的资源时，旧 PCK 绝不能再覆盖 res://。
-	# 例如从热更后的 1.4.0 覆盖安装 1.5，用户目录中可能仍留着 1.4.1/1.5 PCK。
+	# 例如从旧版覆盖安装 1.5.2，用户目录中可能仍留着 1.4.1/1.5/1.5.1 PCK。
 	if version != "" and _version_compare(version, BASE_CONTENT_VERSION) <= 0:
 		_remove_file(STATE_PATH)
 		_cleanup_stale_patches("")

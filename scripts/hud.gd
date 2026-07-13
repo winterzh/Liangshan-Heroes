@@ -2496,6 +2496,7 @@ class HeroSlotButton extends Control:
 		var has_active: bool = hero.slot_has_active(slot)
 		var rank := int(s["rank"])
 		var cd := int(round(hero.slot_cd(slot)))
+		var max_charges := hero.slot_max_charges(slot)
 		var foot := ""
 		if passive and not has_active:
 			foot = "常驻被动 · 无需施放"
@@ -2503,6 +2504,13 @@ class HeroSlotButton extends Control:
 			foot = "常驻被动 + 主动 · 冷却 %d 秒 · 等级 %d/3 · 热键 %s" % [cd, rank, hotkey]
 		elif rank <= 0:
 			foot = "未学习 · 点图标右下「＋」学习（消耗技能点）"
+		elif max_charges > 0:
+			var variants: Array = ad.get("effect", {}).get("banner_variants", [])
+			var next_kind := String(variants[hero.slot_cast_sequence(slot) % variants.size()]) if not variants.is_empty() else ""
+			var next_label := "忠" if next_kind == "loyalty" else ("义" if next_kind == "righteous" else "")
+			foot = "%d点能量 · 每%d秒恢复1点 · 当前%d/%d%s · 等级 %d/3 · 热键 %s" % [
+				max_charges, int(round(hero.slot_charge_recovery(slot))), hero.slot_charges(slot), max_charges,
+				(" · 下一面「%s」" % next_label) if next_label != "" else "", rank, hotkey]
 		else:
 			foot = "冷却 %d 秒 · 等级 %d/3 · 热键 %s" % [cd, rank, hotkey]
 		# 说明 + 各级数值速览（1/2/3 级）——悬浮即见技能详情
@@ -2527,6 +2535,9 @@ class HeroSlotButton extends Control:
 		var passive: bool = bool(s["passive"])
 		var rank: int = int(s["rank"])
 		var learned := rank > 0
+		var max_charges := hero.slot_max_charges(slot)
+		var charges := hero.slot_charges(slot) if max_charges > 0 else 0
+		var recharge_left := hero.slot_recharge_left(slot) if max_charges > 0 else 0.0
 		var nm := String(ad.get("name", ""))
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
 		# 方形徽记：技能色块底 + 矢量图标（无图标的技能回退名称首字）
@@ -2551,6 +2562,18 @@ class HeroSlotButton extends Control:
 		# 被动角标
 		if passive:
 			draw_string(f, Vector2(ir.position.x, ir.position.y + 13.0 * ds), "被动", HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(11 * ds), Color(0.78, 0.92, 0.78))
+		# 多充能技能：图标右上画能量格，左上标下一面忠/义旗。
+		if max_charges > 0 and learned:
+			for ci in range(max_charges):
+				var cp := Vector2(ir.end.x - (7.0 + float(ci) * 11.0) * ds, ir.position.y + 8.0 * ds)
+				draw_circle(cp, 4.2 * ds, Color("ffe38a") if ci < charges else Color(0.12, 0.10, 0.08, 0.85))
+				draw_circle(cp, 4.2 * ds, Color(1.0, 0.86, 0.42, 0.9), false, 1.2 * ds)
+			var variants: Array = ad.get("effect", {}).get("banner_variants", [])
+			if not variants.is_empty():
+				var next_kind := String(variants[hero.slot_cast_sequence(slot) % variants.size()])
+				var next_label := "忠" if next_kind == "loyalty" else "义"
+				var next_col := Color("b9dcff") if next_kind == "loyalty" else Color("ffe69a")
+				draw_string(f, ir.position + Vector2(3.0 * ds, 14.0 * ds), next_label, HORIZONTAL_ALIGNMENT_LEFT, -1, int(12 * ds), next_col)
 		# 等级圆点（满 3 级）叠在图标底部
 		for i in range(3):
 			var px := ir.position.x + 8.0 * ds + float(i) * 13.0 * ds
@@ -2560,12 +2583,13 @@ class HeroSlotButton extends Control:
 		var castable: bool = (not passive) or hero.slot_has_active(slot)
 		var cd_left := float(s["cd_t"])
 		var pending: bool = hud.battle.is_cast_pending(hero, slot)
+		var charge_empty := max_charges > 0 and charges <= 0
 		# 冷却遮罩 / 施法抬手 / 未学暗罩（叠在图标上）。
 		# slot_ready 还会因抬手、沉默、眩晕而 false，不能拿它当「正在冷却」，否则 cd_t=0 会闪出数字 0。
-		if castable and learned and (pending or cd_left > 0.0):
+		if castable and learned and (pending or cd_left > 0.0 or charge_empty):
 			draw_rect(ir, Color(0, 0, 0, 0.55))
 			if Settings.show_cooldown:
-				var center_text := "施法" if pending else str(int(ceil(cd_left)))
+				var center_text := "施法" if pending else str(int(ceil(cd_left if cd_left > 0.0 else recharge_left)))
 				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.65), center_text, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int((16 if pending else 24) * ds), Color(1, 1, 1, 0.95))
 		elif rank == 0 and not passive:
 			draw_rect(ir, Color(0, 0, 0, 0.36))
@@ -2576,6 +2600,10 @@ class HeroSlotButton extends Control:
 		var st := ""
 		if castable and learned and pending:
 			st = "施法中"
+		elif castable and learned and max_charges > 0:
+			st = "%d/%d" % [charges, max_charges]
+			if charges < max_charges:
+				st += " · %ds" % int(ceil(recharge_left))
 		elif castable and learned and cd_left > 0.0:
 			st = "冷却 %ds" % int(ceil(cd_left))
 		elif castable and learned:

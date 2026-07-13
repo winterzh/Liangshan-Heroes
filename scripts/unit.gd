@@ -167,6 +167,8 @@ var _form_backup: Dictionary = {} # 进入变身前的原始 atk_cd/base_speed/r
 var _order_serial := 0      # 指令序号：每次 _enqueue +1（walk-cast 用它检测「玩家又下了新令」即让路）
 var temp_atkspeed := 1.0    # 临时攻速倍率（>1 出手更快），_attack 并入 _cd
 var _temp_atkspeed_t := 0.0
+var _aura_atkspeed := 1.0   # 义旗等区域攻速光环；与普通限时攻速取较高者，不相乘
+var _aura_atkspeed_sources: Dictionary = {}   # source_id → {mult,t}，重叠旗独立到期并正确降档
 # 被动衍生（_recompute_hero_stats 每次先重置再按已学被动累加）
 var atkspeed_mult := 1.0    # 被动攻速倍率
 var crit_chance_bonus := 0.0
@@ -180,7 +182,7 @@ var on_hit_dmg := 0.0       # 攻击附带额外纯伤
 # 易伤（樊瑞 W·摄魂咒）：>0 时本单位受到的一切伤害放大 (1+_dmg_amp) 倍，到点失效
 var _dmg_amp := 0.0
 var _dmg_amp_t := 0.0
-# 杏黄旗等区域护阵：受到的一切伤害按比例减免；多个来源只取最高值，不叠乘。
+# 忠义旗等区域护阵：受到的一切伤害按比例减免；多个来源只取最高值，不叠乘。
 var _damage_reduction := 0.0
 var _damage_reduction_t := 0.0
 var _damage_reduction_sources: Dictionary = {}   # source_id → {amount,t}，高阶旗离开后可正确降到仍生效的低阶旗
@@ -894,10 +896,8 @@ func _phys_body(delta: float) -> void:
 		hp = minf(max_hp, hp + regen * delta)
 		queue_redraw()
 
-	# 技能冷却（各槽）与临时增益计时
-	for s in ability_slots:
-		if float(s["cd_t"]) > 0.0:
-			s["cd_t"] = maxf(0.0, float(s["cd_t"]) - delta)
+	# 技能冷却/充能（各槽）与临时增益计时
+	_tick_ability_slots(delta)
 	if _temp_atk_t > 0.0:
 		_temp_atk_t -= delta
 		if _temp_atk_t <= 0.0:
@@ -994,6 +994,13 @@ func _phys_body(delta: float) -> void:
 		_temp_atkspeed_t -= delta
 		if _temp_atkspeed_t <= 0.0:
 			temp_atkspeed = 1.0
+	if not _aura_atkspeed_sources.is_empty():
+		for source_id in _aura_atkspeed_sources.keys():
+			var aura_state: Dictionary = _aura_atkspeed_sources[source_id]
+			aura_state["t"] = float(aura_state["t"]) - delta
+			if float(aura_state["t"]) <= 0.0:
+				_aura_atkspeed_sources.erase(source_id)
+		_refresh_aura_atkspeed()
 	# 限时召唤物：寿命到 → 消散
 	if _summon_ttl > 0.0:
 		_summon_ttl -= delta
@@ -1533,7 +1540,7 @@ func _attack() -> void:
 	if _invis_t > 0.0:
 		_invis_strike_pending = _invis_strike_bonus   # 破隐突袭：这一击兑现加成
 		_break_invis()
-	_cd = atk_cd / maxf(_drunk_atk * temp_atkspeed * atkspeed_mult, 0.1)   # 攻速：醉酒/临时攻速/被动攻速 → 出手更快
+	_cd = atk_cd / maxf(_drunk_atk * maxf(temp_atkspeed, _aura_atkspeed) * atkspeed_mult, 0.1)   # 普通攻速与区域攻速取高值，再乘醉酒/被动
 	_combat_cool = 6.0
 	_lunge = 1.0
 	_lunge_dir = (_target.position - position).normalized()
@@ -1840,6 +1847,38 @@ func _face_dir(d: Vector2) -> void:
 
 ## ---------- 技能接口（多槽 + 经典RTS式升级）----------
 
+## 普通技能走 cd_t；多充能技能另走 charges/recharge_t，保留 cd_t 作为关卡/测试的硬锁。
+## 第二次施放不会重置已经进行中的恢复，按标准顺序在第 10/20 秒各补回一点。
+func _tick_ability_slots(delta: float) -> void:
+	for i in ability_slots.size():
+		var s: Dictionary = ability_slots[i]
+		if float(s.get("cd_t", 0.0)) > 0.0:
+			s["cd_t"] = maxf(0.0, float(s["cd_t"]) - delta)
+		var max_charges := slot_max_charges(i)
+		if max_charges <= 0:
+			continue
+		var charges := clampi(int(s.get("charges", max_charges)), 0, max_charges)
+		if charges >= max_charges:
+			s["charges"] = max_charges
+			s["recharge_t"] = 0.0
+			continue
+		var recovery := slot_charge_recovery(i)
+		if recovery <= 0.0:
+			continue
+		var recharge_t := float(s.get("recharge_t", 0.0))
+		if recharge_t <= 0.0:
+			recharge_t = recovery
+		recharge_t -= delta
+		while recharge_t <= 0.0 and charges < max_charges:
+			charges += 1
+			if charges < max_charges:
+				recharge_t += recovery
+			else:
+				recharge_t = 0.0
+		s["charges"] = charges
+		s["recharge_t"] = recharge_t
+
+
 ## 建立技能槽：自由模式英雄用 abilities 全套(未学习)；其余用单 ability(默认满级可用)
 func _init_ability_slots(def: Dictionary) -> void:
 	ability_slots.clear()
@@ -1866,8 +1905,10 @@ func _init_ability_slots(def: Dictionary) -> void:
 			r = start_rank
 		elif _hero_leveled:
 			r = 0
+		var max_charges := maxi(0, int(ad.get("max_charges", 0)))
 		ability_slots.append({"id": String(id), "rank": r,
-			"cd_t": 0.0, "passive": bool(ad.get("passive", false))})
+			"cd_t": 0.0, "passive": bool(ad.get("passive", false)),
+			"charges": max_charges, "recharge_t": 0.0, "cast_seq": 0})
 	if _hero_leveled:
 		hero_level = 1
 		skill_points = 1
@@ -1892,10 +1933,48 @@ func hero_boost_n() -> float:
 	return clampf(float(Campaign.hero_mult), 1.0, 3.0)
 
 
+func _slot_def(i: int) -> Dictionary:
+	if i < 0 or i >= ability_slots.size():
+		return {}
+	var aid := String(ability_slots[i].get("id", ""))
+	if battle != null and aid in battle._abilities:
+		return battle._abilities[aid]
+	return Defs.ABILITIES.get(aid, {})
+
+
+func slot_max_charges(i: int) -> int:
+	return maxi(0, int(_slot_def(i).get("max_charges", 0)))
+
+
+func slot_charges(i: int) -> int:
+	var maximum := slot_max_charges(i)
+	if maximum <= 0 or i < 0 or i >= ability_slots.size():
+		return 0
+	return clampi(int(ability_slots[i].get("charges", maximum)), 0, maximum)
+
+
+func slot_charge_recovery(i: int) -> float:
+	return maxf(0.0, float(_slot_def(i).get("charge_recovery", 0.0)))
+
+
+func slot_recharge_left(i: int) -> float:
+	if slot_max_charges(i) <= 0 or i < 0 or i >= ability_slots.size():
+		return 0.0
+	return maxf(0.0, float(ability_slots[i].get("recharge_t", 0.0)))
+
+
+func slot_cast_sequence(i: int) -> int:
+	if i < 0 or i >= ability_slots.size():
+		return 0
+	return maxi(0, int(ability_slots[i].get("cast_seq", 0)))
+
+
 func _slot_cd(i: int) -> float:
 	if i < 0 or i >= ability_slots.size():
 		return 0.0
-	var ad: Dictionary = Defs.ABILITIES.get(ability_slots[i]["id"], {})
+	var ad: Dictionary = _slot_def(i)
+	if int(ad.get("max_charges", 0)) > 0:
+		return maxf(0.0, float(ad.get("charge_recovery", 0.0)))
 	# 冷却可随技能等级缩短（cd_ranks: [1级,2级,3级]），否则用固定 cd
 	var cr: Array = ad.get("cd_ranks", [])
 	var base: float = float(cr[clampi(int(ability_slots[i]["rank"]), 1, cr.size()) - 1]) if cr.size() > 0 else float(ad.get("cd", 0.0))
@@ -1908,6 +1987,8 @@ func slot_ready(i: int) -> bool:
 	var s: Dictionary = ability_slots[i]
 	if int(s["rank"]) <= 0 or float(s["cd_t"]) > 0.0 or hp <= 0.0 or _silence_t > 0.0 \
 			or _stun_t > 0.0 or _channel_t > 0.0 or _cast_t > 0.0 or _charge_t > 0.0 or _charge_dash > 0.0:
+		return false
+	if slot_max_charges(i) > 0 and slot_charges(i) <= 0:
 		return false
 	# 普通主动：非被动即可施放；混合型被动（带 active_kind，如宋江 R）也可主动施放
 	return (not bool(s["passive"])) or slot_has_active(i)
@@ -1925,7 +2006,11 @@ func slot_cd_frac(i: int) -> float:
 	var cd := _slot_cd(i)
 	if cd <= 0.0 or i < 0 or i >= ability_slots.size():
 		return 0.0
-	return clampf(float(ability_slots[i]["cd_t"]) / cd, 0.0, 1.0)
+	if float(ability_slots[i].get("cd_t", 0.0)) > 0.0:
+		return clampf(float(ability_slots[i]["cd_t"]) / cd, 0.0, 1.0)
+	if slot_max_charges(i) > 0 and slot_charges(i) < slot_max_charges(i):
+		return clampf(slot_recharge_left(i) / cd, 0.0, 1.0)
+	return 0.0
 
 
 ## 该技能槽按当前等级的冷却总时长（cd_ranks 优先），供 UI 显示「CD 多少秒」。
@@ -1936,7 +2021,17 @@ func slot_cd(i: int) -> float:
 func slot_start_cd(i: int) -> void:
 	if i < 0 or i >= ability_slots.size():
 		return
-	ability_slots[i]["cd_t"] = _slot_cd(i)
+	var maximum := slot_max_charges(i)
+	if maximum > 0:
+		var charges := slot_charges(i)
+		if charges <= 0:
+			return
+		ability_slots[i]["charges"] = charges - 1
+		if charges == maximum and float(ability_slots[i].get("recharge_t", 0.0)) <= 0.0:
+			ability_slots[i]["recharge_t"] = slot_charge_recovery(i)
+		ability_slots[i]["cast_seq"] = slot_cast_sequence(i) + 1
+	else:
+		ability_slots[i]["cd_t"] = _slot_cd(i)
 	_buff_glow = 0.6
 	queue_redraw()
 
@@ -1956,8 +2051,13 @@ func can_learn(i: int) -> bool:
 func learn(i: int) -> void:
 	if not can_learn(i):
 		return
+	var was_unlearned := int(ability_slots[i]["rank"]) == 0
 	skill_points -= 1
 	ability_slots[i]["rank"] = int(ability_slots[i]["rank"]) + 1
+	if was_unlearned and slot_max_charges(i) > 0:
+		ability_slots[i]["charges"] = slot_max_charges(i)
+		ability_slots[i]["recharge_t"] = 0.0
+		ability_slots[i]["cast_seq"] = 0
 	if bool(ability_slots[i]["passive"]):
 		_recompute_hero_stats()
 	queue_redraw()
@@ -2430,6 +2530,7 @@ func dispel(hostile: bool) -> void:
 		temp_atk = 1.0; _temp_atk_t = 0.0
 		temp_atk_add = 0.0; _temp_atk_add_t = 0.0
 		temp_atkspeed = 1.0; _temp_atkspeed_t = 0.0
+		clear_aura_atkspeed()
 		temp_lifesteal = 0.0; _temp_lifesteal_t = 0.0
 		_shield = 0.0; _shield_t = 0.0
 		clear_damage_reduction()
@@ -2473,6 +2574,29 @@ func apply_atkspeed(mult: float, dur: float) -> void:
 	temp_atkspeed = maxf(temp_atkspeed, mult)
 	_temp_atkspeed_t = maxf(_temp_atkspeed_t, dur)
 	_buff_glow = 0.6
+
+
+## 区域攻速光环：同一来源刷新，多来源取最高倍率；高阶旗到期后自动降到仍生效的低阶旗。
+## 与普通限时攻速分池，离开义旗后可恢复原有技能攻速，而不会把旗倍率拖长到普通 buff 的时长。
+func apply_aura_atkspeed(mult: float, dur: float, source_id: int) -> void:
+	var boosted := maxf(1.0, mult)
+	if boosted <= 1.0 or dur <= 0.0:
+		return
+	_aura_atkspeed_sources[source_id] = {"mult": boosted, "t": dur}
+	_refresh_aura_atkspeed()
+	_buff_glow = maxf(_buff_glow, 0.45)
+
+
+func clear_aura_atkspeed() -> void:
+	_aura_atkspeed_sources.clear()
+	_aura_atkspeed = 1.0
+
+
+func _refresh_aura_atkspeed() -> void:
+	_aura_atkspeed = 1.0
+	for state_v in _aura_atkspeed_sources.values():
+		var state: Dictionary = state_v
+		_aura_atkspeed = maxf(_aura_atkspeed, float(state["mult"]))
 
 
 func _spawn_dust() -> void:
@@ -2763,7 +2887,7 @@ func _draw() -> void:
 		for gi in range(3):
 			var ga := gp + float(gi) * TAU / 3.0
 			draw_circle(Vector2(cos(ga), sin(ga) * 0.6) * (radius * 0.95), 2.0, Color(1.0, 0.68, 0.24, 0.6))
-	if temp_atkspeed > 1.01 and not _dying:
+	if maxf(temp_atkspeed, _aura_atkspeed) > 1.01 and not _dying:
 		# 临时攻速：身侧双手残影短线
 		var asx := radius * 0.85
 		var aso := sin(_idle_t * 14.0) * 3.0

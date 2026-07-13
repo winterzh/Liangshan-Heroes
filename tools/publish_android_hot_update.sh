@@ -3,14 +3,14 @@
 set -euo pipefail
 
 if [ "$#" -lt 1 ]; then
-	echo "用法：bash tools/publish_android_hot_update.sh <内容版本，例如 1.5 或 1.5.1> [更新说明]" >&2
+	echo "用法：bash tools/publish_android_hot_update.sh <内容版本，例如 1.5.2> [更新说明]" >&2
 	exit 2
 fi
 
 VERSION="$1"
 NOTES="${2:-安卓内容更新}"
 if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
-	echo "内容版本必须是纯数字两段或三段式，例如 1.5 或 1.5.1" >&2
+	echo "内容版本必须是纯数字两段或三段式，例如 1.5.2" >&2
 	exit 2
 fi
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -42,7 +42,9 @@ PATCH_URL="http://120.26.237.195:1234/liangshan/android/releases/$PATCH_NAME"
 RELEASE_MANIFEST_URL="http://120.26.237.195:1234/liangshan/android/releases/manifest-$VERSION.json"
 RELEASE_SIGNATURE_URL="http://120.26.237.195:1234/liangshan/android/releases/manifest-$VERSION.sig"
 STABLE_MANIFEST_URL="http://120.26.237.195:1234/liangshan/android/stable/manifest.json"
-FULL_URL="https://github.com/winterzh/Liangshan-Heroes/releases/download/v1.5/LiangshanHeroes-v1.5.apk"
+FULL_APK_VERSION="1.5.2"
+FULL_APK_VERSION_CODE=12
+FULL_URL="https://github.com/winterzh/Liangshan-Heroes/releases/download/v${FULL_APK_VERSION}/LiangshanHeroes-v${FULL_APK_VERSION}.apk"
 
 mkdir -p "$OUT" "$WORK"
 [ -f "$PRIVATE_KEY" ] || { echo "缺少清单签名私钥：$PRIVATE_KEY" >&2; exit 1; }
@@ -88,9 +90,9 @@ cd "$ROOT"
 PATCH_SIZE="$(stat -f '%z' "$PATCH")"
 PATCH_SHA="$(shasum -a 256 "$PATCH" | awk '{print $1}')"
 
-python3 - "$WORK/manifest.json" "$VERSION" "$PATCH_URL" "$PATCH_SIZE" "$PATCH_SHA" "$FULL_URL" "$NOTES" <<'PY'
+python3 - "$WORK/manifest.json" "$VERSION" "$PATCH_URL" "$PATCH_SIZE" "$PATCH_SHA" "$FULL_APK_VERSION" "$FULL_APK_VERSION_CODE" "$FULL_URL" "$NOTES" <<'PY'
 import datetime, json, sys
-path, version, patch_url, size, sha256, full_url, notes = sys.argv[1:]
+path, version, patch_url, size, sha256, full_version, full_code, full_url, notes = sys.argv[1:]
 data = {
     "schema": 1,
     "channel": "stable",
@@ -98,7 +100,7 @@ data = {
     "content_version": version,
     "min_bootstrap": 1,
     "patch": {"url": patch_url, "size": int(size), "sha256": sha256},
-    "full_apk": {"version_name": "1.5", "version_code": 11, "url": full_url},
+    "full_apk": {"version_name": full_version, "version_code": int(full_code), "url": full_url},
     "notes": notes,
 }
 with open(path, "w", encoding="utf-8", newline="\n") as f:

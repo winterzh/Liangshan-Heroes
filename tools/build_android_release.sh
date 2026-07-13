@@ -6,7 +6,8 @@ GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/build/android-update"
 APK="$ROOT/build/LiangshanHeroes.apk"
-VERSION="1.5"
+VERSION="1.5.2"
+VERSION_CODE=12
 BASE="$OUT/base-$VERSION.pck"
 EXPECTED_SIGNER_SHA256="5d1a80e66ce545a69acb6e2ffc7c22d61d0c62961ac44a9b0b9619888196ac54"
 
@@ -28,8 +29,8 @@ AAPT="$HOME/Library/Android/sdk/build-tools/36.1.0/aapt"
 APK_BADGING="$("$AAPT" dump badging "$APK")"
 APK_PACKAGE_LINE="${APK_BADGING%%$'\n'*}"
 echo "$APK_PACKAGE_LINE"
-if [[ "$APK_PACKAGE_LINE" != *"versionCode='11'"* || "$APK_PACKAGE_LINE" != *"versionName='$VERSION'"* ]]; then
-	echo "APK 版本不匹配，拒绝发包（期望 $VERSION/code 11）" >&2
+if [[ "$APK_PACKAGE_LINE" != *"versionCode='$VERSION_CODE'"* || "$APK_PACKAGE_LINE" != *"versionName='$VERSION'"* ]]; then
+	echo "APK 版本不匹配，拒绝发包（期望 $VERSION/code $VERSION_CODE）" >&2
 	exit 1
 fi
 

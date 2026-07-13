@@ -402,11 +402,14 @@ func _select(key: String) -> void:
 			if is_passive and not has_active:
 				head += "（被动）"
 			else:
-				var cr: Array = a.get("cd_ranks", [])
-				if cr.size() == 3:
-					head += "　cd%s/%s/%ss" % [str(cr[0]), str(cr[1]), str(cr[2])]
+				if int(a.get("max_charges", 0)) > 0:
+					head += "　%d点充能·每%ss恢复1点" % [int(a["max_charges"]), str(a.get("charge_recovery", 0.0))]
 				else:
-					head += "　cd%ss" % str(a.get("cd", 0.0))
+					var cr: Array = a.get("cd_ranks", [])
+					if cr.size() == 3:
+						head += "　cd%s/%s/%ss" % [str(cr[0]), str(cr[1]), str(cr[2])]
+					else:
+						head += "　cd%ss" % str(a.get("cd", 0.0))
 				if is_passive and has_active:
 					head += "（被动+主动）"
 			# 技能详情：说明文字 + 各级数值速览

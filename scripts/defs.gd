@@ -403,13 +403,13 @@ const ABILITIES := {
 
 	# ---- 自由模式·英雄技能组（每英雄 3 主动 + 1 被动；伤害随技能等级缩放）----
 	# 宋江：指挥支援
-	"song_banner": {"name": "杏黄旗·镇阵", "cd": 12.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true,
+	"song_banner": {"name": "忠义双旗", "cd": 10.0, "max_charges": 2, "charge_recovery": 10.0, "targeted": true,
 		"weak_global": true, "radius": 130.0, "color": Color("ffd24a"),
-		"desc": "指定处竖起杏黄旗，持续 5/7/9 秒\n英雄减伤 20%/30%/40%，小兵与召唤物减伤 50%/70%/90%\n旗内友军每秒回血 3/5/7，敌军每秒受 4/6/8 伤害",
+		"desc": "2点能量，每10秒恢复1点；依次插下蓝色「忠」旗与黄色「义」旗\n两旗均持续 5/7/9 秒：英雄减伤 20%/30%/40%，小兵与召唤物减伤 50%/70%/90%\n忠旗每秒回血 20/25/30；义旗攻速 +50%/+70%/+90%",
 		"effect": {"kind": "ward", "ward_mode": "banner", "ward_style": "banner", "ward_radius": 130.0,
 			"dur_ranks": [5.0, 7.0, 9.0], "hero_reduction_ranks": [0.20, 0.30, 0.40],
-			"troop_reduction_ranks": [0.50, 0.70, 0.90], "heal_ranks": [3.0, 5.0, 7.0],
-			"dmg_ranks": [4.0, 6.0, 8.0], "pulse": 1.0}},
+			"troop_reduction_ranks": [0.50, 0.70, 0.90], "heal_ranks": [20.0, 25.0, 30.0],
+			"atkspeed_ranks": [1.50, 1.70, 1.90], "banner_variants": ["loyalty", "righteous"], "pulse": 1.0}},
 	"song_fire": {"name": "火攻连营", "cd": 11.0, "targeted": true, "weak_global": true, "radius": 100.0, "color": Color("ff7a2a"),
 		"desc": "指定处腾起烈焰\n地面每秒 20 灼伤，持续 5/8/10 秒(随等级)",
 		"effect": {"kind": "fire_dot", "dps": 20.0, "dur_ranks": [5.0, 8.0, 10.0], "dmg": 100.0, "dur": 5.0}},
@@ -1208,12 +1208,13 @@ static func ability_levels(aid: String) -> String:
 			if _mode == "banner":
 				var _hrr: Array = eff.get("hero_reduction_ranks", [0.2, 0.3, 0.4])
 				var _trr: Array = eff.get("troop_reduction_ranks", [0.5, 0.7, 0.9])
-				var _bhr: Array = eff.get("heal_ranks", [3.0, 5.0, 7.0])
-				var _bdr: Array = eff.get("dmg_ranks", [4.0, 6.0, 8.0])
-				return "英雄减伤%d/%d/%d%%·兵/召减伤%d/%d/%d%%·每秒回%d/%d/%d·伤%d/%d/%d·存%ss" % [
+				var _bhr: Array = eff.get("heal_ranks", [20.0, 25.0, 30.0])
+				var _bar: Array = eff.get("atkspeed_ranks", [1.5, 1.7, 1.9])
+				return "2点充能/10秒回1点·英雄减伤%d/%d/%d%%·兵/召减伤%d/%d/%d%%·忠回%d/%d/%d/s·义攻速+%d/%d/%d%%·存%ss" % [
 					int(float(_hrr[0]) * 100.0), int(float(_hrr[1]) * 100.0), int(float(_hrr[2]) * 100.0),
 					int(float(_trr[0]) * 100.0), int(float(_trr[1]) * 100.0), int(float(_trr[2]) * 100.0),
-					int(_bhr[0]), int(_bhr[1]), int(_bhr[2]), int(_bdr[0]), int(_bdr[1]), int(_bdr[2]), _durw]
+					int(_bhr[0]), int(_bhr[1]), int(_bhr[2]),
+					roundi((float(_bar[0]) - 1.0) * 100.0), roundi((float(_bar[1]) - 1.0) * 100.0), roundi((float(_bar[2]) - 1.0) * 100.0), _durw]
 			if _mode == "heal":
 				var _hs := str(int(float(eff.get("heal", 0.0))))
 				if eff.has("heal_ranks"):
