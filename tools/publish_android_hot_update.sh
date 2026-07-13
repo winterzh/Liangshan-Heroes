@@ -3,21 +3,28 @@
 set -euo pipefail
 
 if [ "$#" -lt 1 ]; then
-	echo "用法：bash tools/publish_android_hot_update.sh <内容版本，例如 1.4.1> [更新说明]" >&2
+	echo "用法：bash tools/publish_android_hot_update.sh <内容版本，例如 1.5 或 1.5.1> [更新说明]" >&2
 	exit 2
 fi
 
 VERSION="$1"
 NOTES="${2:-安卓内容更新}"
-if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-	echo "内容版本必须是纯数字三段式，例如 1.4.1" >&2
+if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+	echo "内容版本必须是纯数字两段或三段式，例如 1.5 或 1.5.1" >&2
 	exit 2
 fi
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
 BASE_VERSION="1.4.0"
-if [ "$VERSION" = "$BASE_VERSION" ]; then
-	echo "热更新版本不能等于基线 $BASE_VERSION" >&2
+BASE_SHA_EXPECTED="d2198b09743d692041c6a5b976a6c3f58943f1955086f5332f9395e6e1a144de"
+if ! python3 - "$VERSION" "$BASE_VERSION" <<'PY'
+import sys
+def parts(v):
+    return tuple(int(x) for x in v.split(".")) + (0,) * (3 - len(v.split(".")))
+sys.exit(0 if parts(sys.argv[1]) > parts(sys.argv[2]) else 1)
+PY
+then
+	echo "热更新版本必须高于基线 ${BASE_VERSION}：${VERSION}" >&2
 	exit 2
 fi
 OUT="$ROOT/build/android-update"
@@ -31,14 +38,26 @@ REMOTE="${LIANGSHAN_UPDATE_REMOTE:-root@120.26.237.195}"
 REMOTE_STABLE="/var/www/pAI/liangshan/android/stable"
 REMOTE_RELEASES="/var/www/pAI/liangshan/android/releases"
 PATCH_URL="http://120.26.237.195:1234/liangshan/android/releases/$PATCH_NAME"
-FULL_URL="https://github.com/winterzh/Liangshan-Heroes/releases/download/v1.4.0/LiangshanHeroes.apk"
+FULL_URL="https://github.com/winterzh/Liangshan-Heroes/releases/download/v1.5/LiangshanHeroes-v1.5.apk"
 
 mkdir -p "$OUT" "$WORK"
 [ -f "$PRIVATE_KEY" ] || { echo "缺少清单签名私钥：$PRIVATE_KEY" >&2; exit 1; }
 [ -f "$SSH_KEY" ] || { echo "缺少服务器 SSH 密钥：$SSH_KEY" >&2; exit 1; }
+# stable 清单会把需要完整包的用户引到该 URL；文件尚未发布时禁止提前切流量。
+if ! curl --fail --silent --show-error --location --head "$FULL_URL" >/dev/null; then
+	echo "GitHub 完整 APK 尚不可下载，拒绝发布热更新：$FULL_URL" >&2
+	exit 1
+fi
 if [ ! -f "$BASE" ]; then
 	echo "本地无基准 PCK，从服务器私有备份取回……"
 	scp -i "$SSH_KEY" "$REMOTE:/root/liangshan-update-bases/base-$BASE_VERSION.pck" "$BASE"
+fi
+BASE_SHA_ACTUAL="$(shasum -a 256 "$BASE" | awk '{print $1}')"
+if [ "$BASE_SHA_ACTUAL" != "$BASE_SHA_EXPECTED" ]; then
+	echo "基准 PCK 校验失败，已拒绝生成补丁：$BASE" >&2
+	echo "期望 SHA-256：$BASE_SHA_EXPECTED" >&2
+	echo "实际 SHA-256：$BASE_SHA_ACTUAL" >&2
+	exit 1
 fi
 
 cd "$ROOT"
@@ -56,7 +75,7 @@ data = {
     "content_version": version,
     "min_bootstrap": 1,
     "patch": {"url": patch_url, "size": int(size), "sha256": sha256},
-    "full_apk": {"version_name": "1.4.0", "version_code": 10, "url": full_url},
+    "full_apk": {"version_name": "1.5", "version_code": 11, "url": full_url},
     "notes": notes,
 }
 with open(path, "w", encoding="utf-8", newline="\n") as f:
@@ -71,7 +90,7 @@ openssl dgst -sha256 -verify <(openssl pkey -in "$PRIVATE_KEY" -pubout) \
 
 scp -i "$SSH_KEY" "$PATCH" "$REMOTE:$REMOTE_RELEASES/$PATCH_NAME.tmp"
 scp -i "$SSH_KEY" "$WORK/manifest.json" "$WORK/manifest.sig" "$REMOTE:/tmp/"
-ssh -i "$SSH_KEY" "$REMOTE" "\
+ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
 mv '$REMOTE_RELEASES/$PATCH_NAME.tmp' '$REMOTE_RELEASES/$PATCH_NAME'; \
 chmod 644 '$REMOTE_RELEASES/$PATCH_NAME'; \
 install -m 644 /tmp/manifest.json '$REMOTE_RELEASES/manifest-$VERSION.json'; \

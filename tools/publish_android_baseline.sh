@@ -7,6 +7,8 @@ VERSION="1.4.0"
 TAG="v$VERSION"
 APK="$ROOT/build/LiangshanHeroes.apk"
 BASE="$ROOT/build/android-update/base-$VERSION.pck"
+BASE_SHA_EXPECTED="d2198b09743d692041c6a5b976a6c3f58943f1955086f5332f9395e6e1a144de"
+AAPT="${AAPT:-$HOME/Library/Android/sdk/build-tools/36.1.0/aapt}"
 WORK="$ROOT/build/android-update/publish-$VERSION"
 PRIVATE_KEY="${LIANGSHAN_UPDATE_SIGNING_KEY:-$HOME/.config/liangshan-update/manifest-signing-private.pem}"
 SSH_KEY="${LIANGSHAN_UPDATE_SSH_KEY:-$HOME/.ssh/liangshan_update_ed25519}"
@@ -18,6 +20,23 @@ FULL_URL="https://github.com/winterzh/Liangshan-Heroes/releases/download/$TAG/Li
 for f in "$APK" "$BASE" "$PRIVATE_KEY" "$SSH_KEY"; do
 	[ -f "$f" ] || { echo "缺少文件：$f" >&2; exit 1; }
 done
+[ -x "$AAPT" ] || { echo "缺少可执行 aapt：$AAPT" >&2; exit 1; }
+
+# 这是不可变的历史基线发布脚本；禁止将当前新包 --clobber 到 v1.4.0。
+APK_BADGING="$("$AAPT" dump badging "$APK")"
+APK_PACKAGE_LINE="${APK_BADGING%%$'\n'*}"
+if [[ "$APK_PACKAGE_LINE" != *"versionCode='10'"* || "$APK_PACKAGE_LINE" != *"versionName='1.4.0'"* ]]; then
+	echo "历史基线 APK 版本校验失败，已拒绝发布：$APK" >&2
+	echo "aapt：$APK_PACKAGE_LINE" >&2
+	exit 1
+fi
+BASE_SHA_ACTUAL="$(shasum -a 256 "$BASE" | awk '{print $1}')"
+if [ "$BASE_SHA_ACTUAL" != "$BASE_SHA_EXPECTED" ]; then
+	echo "历史基线 PCK 校验失败，已拒绝发布：$BASE" >&2
+	echo "期望 SHA-256：$BASE_SHA_EXPECTED" >&2
+	echo "实际 SHA-256：$BASE_SHA_ACTUAL" >&2
+	exit 1
+fi
 mkdir -p "$WORK"
 
 python3 - "$WORK/manifest.json" "$FULL_URL" <<'PY'
@@ -53,7 +72,7 @@ fi
 ssh -i "$SSH_KEY" "$REMOTE" "install -d -m 755 '$REMOTE_STABLE' '$REMOTE_RELEASES'; install -d -m 700 /root/liangshan-update-bases"
 scp -i "$SSH_KEY" "$BASE" "$REMOTE:/root/liangshan-update-bases/base-$VERSION.pck"
 scp -i "$SSH_KEY" "$WORK/manifest.json" "$WORK/manifest.sig" "$REMOTE:/tmp/"
-ssh -i "$SSH_KEY" "$REMOTE" "\
+ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
 install -m 644 /tmp/manifest.json '$REMOTE_RELEASES/manifest-$VERSION.json'; \
 install -m 644 /tmp/manifest.sig '$REMOTE_RELEASES/manifest-$VERSION.sig'; \
 install -m 644 /tmp/manifest.sig '$REMOTE_STABLE/manifest.sig'; \

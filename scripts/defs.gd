@@ -9,7 +9,7 @@ const UNITS := {
 	# ---- 通用troops / 梁山主将（第5关及复用） ----
 	"song_jiang": {"name": "宋江", "hp": 280, "atk": 18, "cd": 0.9, "range": 26, "speed": 78,
 		"hero": true, "aura": "atk", "aura_r": 210, "aura_p": 1.25, "radius": 13, "ability": "song_rally",
-		"abilities": ["song_rally", "song_meteor", "song_fire", "song_lead"],
+		"abilities": ["song_rally", "song_banner", "song_fire", "song_lead"],
 		"hero_trainable": true, "pop": 3, "cost_gold": 160, "cost_wood": 40, "train_time": 38.0, "trained_at": "hall", "min_age": 1, "dota": "Omniknight"},
 	"wu_yong": {"name": "吴用", "hp": 150, "atk": 11, "cd": 1.2, "range": 200, "speed": 78,
 		"ranged": true, "hero": true, "aura": "speed", "aura_r": 170, "aura_p": 1.15, "radius": 12, "ability": "wu_fire", "abilities": ["wu_yong_q", "wu_yong_w", "wu_yong_e", "wu_yong_r"], "dota": "Puck", "hero_trainable": true, "pop": 3, "cost_gold": 190, "cost_wood": 40, "train_time": 40, "trained_at": "hall", "min_age": 1},
@@ -403,10 +403,13 @@ const ABILITIES := {
 
 	# ---- 自由模式·英雄技能组（每英雄 3 主动 + 1 被动；伤害随技能等级缩放）----
 	# 宋江：指挥支援
-	"song_meteor": {"name": "天降陨石", "cd": 13.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true, "radius": 72.0, "color": Color("ff7a2a"),
-		"desc": "宋江脸前召落陨石，朝指向缓缓滚出约 19 格(≈2/3 屏)，\n碾过单位冲击伤害 30/40/50，过处地面灼烧 10/12/15 每秒、持续 10 秒",
-		"effect": {"kind": "meteor", "impact_ranks": [30.0, 40.0, 50.0], "dps_ranks": [10.0, 12.0, 15.0],
-			"len": 600.0, "width": 72.0, "dot_dur": 10.0, "roll_speed": 160.0}},
+	"song_banner": {"name": "杏黄旗·镇阵", "cd": 12.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true,
+		"weak_global": true, "radius": 130.0, "color": Color("ffd24a"),
+		"desc": "指定处竖起杏黄旗，持续 5/7/9 秒\n英雄减伤 20%/30%/40%，小兵与召唤物减伤 50%/70%/90%\n旗内友军每秒回血 3/5/7，敌军每秒受 4/6/8 伤害",
+		"effect": {"kind": "ward", "ward_mode": "banner", "ward_style": "banner", "ward_radius": 130.0,
+			"dur_ranks": [5.0, 7.0, 9.0], "hero_reduction_ranks": [0.20, 0.30, 0.40],
+			"troop_reduction_ranks": [0.50, 0.70, 0.90], "heal_ranks": [3.0, 5.0, 7.0],
+			"dmg_ranks": [4.0, 6.0, 8.0], "pulse": 1.0}},
 	"song_fire": {"name": "火攻连营", "cd": 11.0, "targeted": true, "weak_global": true, "radius": 100.0, "color": Color("ff7a2a"),
 		"desc": "指定处腾起烈焰\n地面每秒 20 灼伤，持续 5/8/10 秒(随等级)",
 		"effect": {"kind": "fire_dot", "dps": 20.0, "dur_ranks": [5.0, 8.0, 10.0], "dmg": 100.0, "dur": 5.0}},
@@ -1202,6 +1205,15 @@ static func ability_levels(aid: String) -> String:
 			if eff.has("dur_ranks"):
 				var _drw: Array = eff["dur_ranks"]
 				_durw = "%d/%d/%d" % [int(_drw[0]), int(_drw[1]), int(_drw[2])]
+			if _mode == "banner":
+				var _hrr: Array = eff.get("hero_reduction_ranks", [0.2, 0.3, 0.4])
+				var _trr: Array = eff.get("troop_reduction_ranks", [0.5, 0.7, 0.9])
+				var _bhr: Array = eff.get("heal_ranks", [3.0, 5.0, 7.0])
+				var _bdr: Array = eff.get("dmg_ranks", [4.0, 6.0, 8.0])
+				return "英雄减伤%d/%d/%d%%·兵/召减伤%d/%d/%d%%·每秒回%d/%d/%d·伤%d/%d/%d·存%ss" % [
+					int(float(_hrr[0]) * 100.0), int(float(_hrr[1]) * 100.0), int(float(_hrr[2]) * 100.0),
+					int(float(_trr[0]) * 100.0), int(float(_trr[1]) * 100.0), int(float(_trr[2]) * 100.0),
+					int(_bhr[0]), int(_bhr[1]), int(_bhr[2]), int(_bdr[0]), int(_bdr[1]), int(_bdr[2]), _durw]
 			if _mode == "heal":
 				var _hs := str(int(float(eff.get("heal", 0.0))))
 				if eff.has("heal_ranks"):

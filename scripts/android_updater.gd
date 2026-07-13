@@ -11,9 +11,9 @@ signal full_update_required(version: String)
 signal update_ready(version: String)
 
 const BOOTSTRAP_VERSION := 1
-const APK_VERSION_NAME := "1.4.0"
-const APK_VERSION_CODE := 10
-const BASE_CONTENT_VERSION := "1.4.0"
+const APK_VERSION_NAME := "1.5"
+const APK_VERSION_CODE := 11
+const BASE_CONTENT_VERSION := "1.5"
 const MANIFEST_URL := "http://120.26.237.195:1234/liangshan/android/stable/manifest.json"
 
 const UPDATE_DIR := "user://android_updates"
@@ -276,6 +276,12 @@ func _load_installed_patch() -> void:
 	if int(manifest.get("schema", 0)) != 1 or int(manifest.get("min_bootstrap", 1)) > BOOTSTRAP_VERSION:
 		return
 	var version := String(manifest.get("content_version", ""))
+	# 完整 APK 已内置同版或更新的资源时，旧 PCK 绝不能再覆盖 res://。
+	# 例如从热更后的 1.4.0 覆盖安装 1.5，用户目录中可能仍留着 1.4.1/1.5 PCK。
+	if version != "" and _version_compare(version, BASE_CONTENT_VERSION) <= 0:
+		_remove_file(STATE_PATH)
+		_cleanup_stale_patches("")
+		return
 	var patch: Dictionary = manifest.get("patch", {})
 	var path := _patch_path(version)
 	if version == "" or not FileAccess.file_exists(path):

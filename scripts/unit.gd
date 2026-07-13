@@ -180,6 +180,10 @@ var on_hit_dmg := 0.0       # 攻击附带额外纯伤
 # 易伤（樊瑞 W·摄魂咒）：>0 时本单位受到的一切伤害放大 (1+_dmg_amp) 倍，到点失效
 var _dmg_amp := 0.0
 var _dmg_amp_t := 0.0
+# 杏黄旗等区域护阵：受到的一切伤害按比例减免；多个来源只取最高值，不叠乘。
+var _damage_reduction := 0.0
+var _damage_reduction_t := 0.0
+var _damage_reduction_sources: Dictionary = {}   # source_id → {amount,t}，高阶旗离开后可正确降到仍生效的低阶旗
 # 冲锋（李逵 W·矢量单击）：蓄力→猛冲，沿途撞伤。窗口期独立于普通状态机。
 var _charge_t := 0.0        # 蓄力倒计时（>0 原地不动）
 var _charge_dash := 0.0     # 冲刺剩余时长（>0 高速平移）
@@ -702,7 +706,7 @@ func recently_hit() -> bool:
 	return _hit_recent_t > 0.0
 
 
-func take_damage(d: float, from: Unit = null, crit := false) -> void:
+func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction := false) -> void:
 	if hp <= 0.0:
 		return
 	if _pending_build:
@@ -712,6 +716,9 @@ func take_damage(d: float, from: Unit = null, crit := false) -> void:
 	# DOTA 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
 	if _dmg_amp > 0.0 and d > 0.0:
 		d *= 1.0 + _dmg_amp
+	# 护阵减伤作用于普攻和技能等一切伤害；先结算易伤、再按最高减伤折算，随后才由护盾吸收。
+	if not ignore_reduction and _damage_reduction > 0.0 and d > 0.0:
+		d *= 1.0 - clampf(_damage_reduction, 0.0, 0.95)
 	# DOTA 护盾：先扣吸收盾，剩余才扣血（盾扣空即失效）
 	if _shield > 0.0 and d > 0.0:
 		var _ab: float = minf(_shield, d)
@@ -976,6 +983,13 @@ func _phys_body(delta: float) -> void:
 		_dmg_amp_t -= delta
 		if _dmg_amp_t <= 0.0:
 			_dmg_amp = 0.0
+	if not _damage_reduction_sources.is_empty():
+		for source_id in _damage_reduction_sources.keys():
+			var state: Dictionary = _damage_reduction_sources[source_id]
+			state["t"] = float(state["t"]) - delta
+			if float(state["t"]) <= 0.0:
+				_damage_reduction_sources.erase(source_id)
+		_refresh_damage_reduction()
 	if _temp_atkspeed_t > 0.0:
 		_temp_atkspeed_t -= delta
 		if _temp_atkspeed_t <= 0.0:
@@ -2268,6 +2282,36 @@ func apply_shield(amount: float, dur: float) -> void:
 	queue_redraw()
 
 
+## 区域护阵减伤：同一来源刷新，多个来源只取当前最高比例；来源到期后会正确降档。
+## source_id=0 保留给无来源的直接增益，同一批调用仍按最高值合并。
+func apply_damage_reduction(amount: float, dur: float, source_id: int = 0) -> void:
+	var reduced := clampf(amount, 0.0, 0.95)
+	if reduced <= 0.0 or dur <= 0.0:
+		return
+	if source_id == 0 and _damage_reduction_sources.has(0):
+		var prior: Dictionary = _damage_reduction_sources[0]
+		reduced = maxf(reduced, float(prior["amount"]))
+		dur = maxf(dur, float(prior["t"]))
+	_damage_reduction_sources[source_id] = {"amount": reduced, "t": dur}
+	_refresh_damage_reduction()
+	_buff_glow = maxf(_buff_glow, 0.55)
+
+
+func clear_damage_reduction() -> void:
+	_damage_reduction_sources.clear()
+	_damage_reduction = 0.0
+	_damage_reduction_t = 0.0
+
+
+func _refresh_damage_reduction() -> void:
+	_damage_reduction = 0.0
+	_damage_reduction_t = 0.0
+	for state_v in _damage_reduction_sources.values():
+		var state: Dictionary = state_v
+		_damage_reduction = maxf(_damage_reduction, float(state["amount"]))
+		_damage_reduction_t = maxf(_damage_reduction_t, float(state["t"]))
+
+
 ## DOTA 沉默：dur 秒内不可主动施法（被动不受影响）。
 func apply_silence(dur: float) -> void:
 	var entering := _silence_t <= 0.0
@@ -2388,6 +2432,7 @@ func dispel(hostile: bool) -> void:
 		temp_atkspeed = 1.0; _temp_atkspeed_t = 0.0
 		temp_lifesteal = 0.0; _temp_lifesteal_t = 0.0
 		_shield = 0.0; _shield_t = 0.0
+		clear_damage_reduction()
 		if temp_speed > 1.0:
 			temp_speed = 1.0; _temp_speed_t = 0.0   # 只清加速（减速归净化）
 		if _invis_t > 0.0:

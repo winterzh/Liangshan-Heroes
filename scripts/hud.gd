@@ -2451,7 +2451,7 @@ class HeroSlotButton extends Control:
 	# 技能 id → 矢量图标种类。花荣神射四式各有专属图标；其余英雄按招式归类，整张命令卡都图标化。
 	const ICON_TOKENS := {
 		"hua_shot": "bow", "hua_rain": "rain", "hua_pin": "pin", "hua_eye": "eye", "hua_blade": "saber",
-		"song_rally": "banner", "song_meteor": "fire", "song_fire": "fire", "song_lead": "star",
+		"song_rally": "banner", "song_banner": "banner", "song_fire": "fire", "song_lead": "star",
 		"lin_sweep": "blade", "lin_charge": "spear", "lin_storm": "blade", "lin_drill": "star",
 		"li_berserk": "axe", "li_whirl": "axe", "li_rage": "axe", "li_brawn": "star",
 		"wu_fire": "fire", "gongsun_thunder": "thunder", "bai_drug": "drug", "zhang_drag": "wave",
