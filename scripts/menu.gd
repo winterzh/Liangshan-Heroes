@@ -141,7 +141,7 @@ void fragment() {
 		_update_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		_update_label.add_theme_font_size_override("font_size", 15)
 		add_child(_update_label)
-		_setup_android_update_ui()
+		_setup_content_update_ui()
 
 
 ## 主菜单大模块：整块为一个带图标(emoji)的大按钮 + 下方小字副标题。
@@ -571,7 +571,7 @@ func _show_more() -> void:
 	box.add_child(st)
 
 	if AndroidUpdater.enabled:
-		var update_btn := _mk_big_btn("↻  检查安卓更新", Color("8fd3ff"))
+		var update_btn := _mk_big_btn("↻  检查%s更新" % _update_platform_name(), Color("8fd3ff"))
 		update_btn.pressed.connect(func() -> void:
 			overlay.queue_free()
 			AndroidUpdater.check_now())
@@ -729,28 +729,29 @@ func _show_settings() -> void:
 
 
 # ======================================================================
-# Android 内容热更新界面（桌面平台不创建任何控件）
+# Android / Windows / macOS 内容热更新界面
 # ======================================================================
-func _setup_android_update_ui() -> void:
-	AndroidUpdater.status_changed.connect(_on_android_update_status)
-	AndroidUpdater.update_available.connect(_on_android_update_available)
-	AndroidUpdater.full_update_required.connect(_on_android_full_update)
-	AndroidUpdater.update_ready.connect(_on_android_update_ready)
-	_on_android_update_status(AndroidUpdater.state, AndroidUpdater.status_text, AndroidUpdater.progress)
+func _setup_content_update_ui() -> void:
+	AndroidUpdater.status_changed.connect(_on_content_update_status)
+	AndroidUpdater.update_available.connect(_on_content_update_available)
+	AndroidUpdater.full_update_required.connect(_on_full_package_update)
+	AndroidUpdater.update_ready.connect(_on_content_update_ready)
+	_on_content_update_status(AndroidUpdater.state, AndroidUpdater.status_text, AndroidUpdater.progress)
 	match AndroidUpdater.state:
 		"available":
 			var p: Dictionary = AndroidUpdater.available_manifest.get("patch", {})
-			_on_android_update_available.call_deferred(
+			_on_content_update_available.call_deferred(
 				String(AndroidUpdater.available_manifest.get("content_version", "")), int(p.get("size", 0)))
 		"full_update":
-			var f: Dictionary = AndroidUpdater.available_manifest.get("full_apk", {})
-			_on_android_full_update.call_deferred(String(f.get("version_name", "")))
+			var f := _full_update_package()
+			var version := String(f.get("version", f.get("version_name", "")))
+			_on_full_package_update.call_deferred(version)
 		"ready":
-			_on_android_update_ready.call_deferred(
+			_on_content_update_ready.call_deferred(
 				String(AndroidUpdater.available_manifest.get("content_version", "")))
 
 
-func _on_android_update_status(update_state: String, text: String, _progress: float) -> void:
+func _on_content_update_status(update_state: String, text: String, _progress: float) -> void:
 	if _update_label == null or not is_instance_valid(_update_label):
 		return
 	_update_label.text = text
@@ -764,16 +765,16 @@ func _on_android_update_status(update_state: String, text: String, _progress: fl
 	_update_label.add_theme_color_override("font_color", color)
 
 
-func _on_android_update_available(version: String, size_bytes: int) -> void:
+func _on_content_update_available(version: String, size_bytes: int) -> void:
 	if _update_overlay != null and is_instance_valid(_update_overlay):
 		return
-	var ov := _mk_overlay("发现安卓内容更新")
+	var ov := _mk_overlay("发现%s内容更新" % _update_platform_name())
 	var overlay: Control = ov[0]
 	var box: VBoxContainer = ov[1]
 	_update_overlay = overlay
 	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
 	var info := Label.new()
-	info.text = "内容版本 v%s\n差异包大小：%s\n\n只更新游戏脚本、关卡和素材，不需要重新安装 APK。" % [
+	info.text = "内容版本 v%s\n差异包大小：%s\n\n只更新游戏脚本、关卡和素材，不需要重新安装完整包。" % [
 		version, AndroidUpdater.format_bytes(size_bytes)]
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info.add_theme_font_size_override("font_size", 19)
@@ -787,10 +788,10 @@ func _on_android_update_available(version: String, size_bytes: int) -> void:
 	_add_back(box, overlay)
 
 
-func _on_android_update_ready(version: String) -> void:
+func _on_content_update_ready(version: String) -> void:
 	if _update_overlay != null and is_instance_valid(_update_overlay):
 		_update_overlay.queue_free()
-	var ov := _mk_overlay("安卓更新已下载")
+	var ov := _mk_overlay("%s更新已下载" % _update_platform_name())
 	var overlay: Control = ov[0]
 	var box: VBoxContainer = ov[1]
 	_update_overlay = overlay
@@ -807,21 +808,44 @@ func _on_android_update_ready(version: String) -> void:
 	_add_back(box, overlay)
 
 
-func _on_android_full_update(version: String) -> void:
+func _on_full_package_update(version: String) -> void:
 	if _update_overlay != null and is_instance_valid(_update_overlay):
 		return
-	var ov := _mk_overlay("需要更新完整 APK")
+	var ov := _mk_overlay("需要更新完整包")
 	var overlay: Control = ov[0]
 	var box: VBoxContainer = ov[1]
 	_update_overlay = overlay
 	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
 	var info := Label.new()
-	info.text = "新版 v%s 包含安卓程序层变更，无法使用差异包。\n请前往 GitHub 下载完整 APK 安装。" % version
+	info.text = "新版 v%s 包含%s程序层变更，无法使用差异包。\n请下载对应的完整包进行更新。" % [
+		version, _update_platform_name()]
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info.add_theme_font_size_override("font_size", 20)
 	info.add_theme_color_override("font_color", Color("ffd0a0"))
 	box.add_child(info)
-	var open := _mk_big_btn("打开 GitHub 下载页", Color("8fd3ff"))
-	open.pressed.connect(AndroidUpdater.open_full_apk)
+	var open := _mk_big_btn("打开完整包下载页", Color("8fd3ff"))
+	open.pressed.connect(_open_full_update_package)
 	box.add_child(open)
 	_add_back(box, overlay)
+
+
+# v1.4.0 Android 引导器没有下列泛化方法；菜单可能由 PCK 更新，必须动态降级调用。
+func _update_platform_name() -> String:
+	if AndroidUpdater.has_method("platform_display_name"):
+		return String(AndroidUpdater.call("platform_display_name"))
+	return "安卓"
+
+
+func _full_update_package() -> Dictionary:
+	if AndroidUpdater.has_method("get_full_package"):
+		var full: Variant = AndroidUpdater.call("get_full_package")
+		return full if full is Dictionary else {}
+	var legacy: Variant = AndroidUpdater.available_manifest.get("full_apk", {})
+	return legacy if legacy is Dictionary else {}
+
+
+func _open_full_update_package() -> void:
+	if AndroidUpdater.has_method("open_full_package"):
+		AndroidUpdater.call("open_full_package")
+	else:
+		AndroidUpdater.open_full_apk()

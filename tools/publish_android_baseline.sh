@@ -2,6 +2,10 @@
 # 发布 Android 1.4.0 完整基线：GitHub 只放 APK，更新服务器只放签名清单；基准 PCK 私下备份。
 set -euo pipefail
 
+echo "此历史脚本已禁用：它只能重发 Android v1.4.0，现在运行会导致 stable 降级。" >&2
+echo "完整版请用 tools/publish_update_baseline.sh，小版本请用 tools/publish_hot_update.sh。" >&2
+exit 2
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VERSION="1.4.0"
 TAG="v$VERSION"

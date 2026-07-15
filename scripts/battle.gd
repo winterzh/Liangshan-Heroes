@@ -5251,8 +5251,12 @@ func _cycle_subgroup() -> void:
 	_update_sel_label()
 
 
-func cast_ability(caster: Unit, slot := 0) -> void:
-	if caster == null or not is_instance_valid(caster) or not caster.slot_ready(slot):
+func cast_ability(caster: Unit, slot := 0, show_blocked := false) -> void:
+	if caster == null or not is_instance_valid(caster) or slot < 0 or slot >= caster.slot_count():
+		return
+	if not caster.slot_ready(slot):
+		if show_blocked:
+			_show_cast_blocked(caster, slot)
 		return
 	var aid: String = caster.ability_slots[slot]["id"]
 	var ad: Dictionary = _abilities[aid]
@@ -5270,6 +5274,25 @@ func cast_ability(caster: Unit, slot := 0) -> void:
 		hud.show_message("%s · %s：%s" % [caster.display_name, ad["name"], aim_hint], 2.5)
 	else:
 		_begin_cast(caster, slot, caster.position)
+
+
+## 玩家从命令卡/触屏技能轨快速连点时给出真实阻塞原因。多充能技能第一发抬手期间
+## 第二次点击不是“没能量”，只是上一发尚未结算；以前这里静默 return，容易误判成只有1点充能。
+func _show_cast_blocked(caster: Unit, slot: int) -> void:
+	if hud == null or caster == null or not is_instance_valid(caster) or slot < 0 or slot >= caster.slot_count():
+		return
+	var text := "暂时无法施放"
+	if is_cast_pending(caster, slot) or caster._cast_t > 0.0:
+		text = "上一发仍在施法，请稍候"
+	elif caster.slot_max_charges(slot) > 0 and caster.slot_charges(slot) <= 0:
+		text = "能量恢复中"
+	elif float(caster.ability_slots[slot].get("cd_t", 0.0)) > 0.0:
+		text = "技能冷却中"
+	elif caster._silence_t > 0.0:
+		text = "沉默中，无法施法"
+	elif caster._stun_t > 0.0:
+		text = "眩晕中，无法施法"
+	hud.show_message("%s：%s" % [caster.display_name, text], 1.2)
 
 
 ## QWER：对「活动英雄」的第 slot 个技能（学习/施放/提示）
@@ -5336,8 +5359,7 @@ func _cast_ability_slot(slot: int) -> void:
 	if h.slot_ready(slot):
 		cast_ability(h, slot)
 	else:
-		var wait_text := "能量恢复中" if h.slot_max_charges(slot) > 0 and h.slot_charges(slot) <= 0 else "技能冷却中"
-		hud.show_message("%s的%s…" % [h.display_name, wait_text], 1.2)
+		_show_cast_blocked(h, slot)
 
 
 ## 学习/升级活动英雄的第 slot 个技能（花一点技能点）
@@ -5922,8 +5944,17 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 	_spawn_hero_skill_fx(aid, caster, center, ad)   # 英雄专属华丽演出（花荣箭雨/神箭…）
 	if cast_kind != "invis" and caster._invis_t > 0.0:
 		caster._break_invis()   # 施法（隐身技本身除外）即现形
-	hud.show_message("【%s】" % ad["name"], 1.8)
 	caster.slot_start_cd(slot)
+	if caster.slot_max_charges(slot) > 0:
+		var remaining := caster.slot_charges(slot)
+		var maximum := caster.slot_max_charges(slot)
+		var cast_label := String(ad["name"])
+		if aid == "song_banner":
+			# cast_seq 已在扣能量后 +1；刚刚落下的第奇数面为忠、偶数面为义。
+			cast_label = "忠义双旗·%s旗" % ("忠" if caster.slot_cast_sequence(slot) % 2 == 1 else "义")
+		hud.show_message("【%s】· 剩余能量 %d/%d" % [cast_label, remaining, maximum], 2.0)
+	else:
+		hud.show_message("【%s】" % ad["name"], 1.8)
 	# 技能音已在函数开头按 id/种类播放，这里不再重复
 
 
@@ -7206,7 +7237,21 @@ func _ally_combat_centroid(fac: int) -> Vector2:
 	return sum / float(n)
 
 
-## 宋江忠义旗落点：只在正在交战的己方作战单位中选点，减伤覆盖人数绝对优先，敌军压力仅破平局。
+## 某名友军是否已经处于本阵营一面有效忠义旗的减伤范围内。
+## 忠/义的减伤不叠加，托管若把第二点立刻砸在同一战团，只会让 UI 瞬间从 2/2 变 0/2。
+func _active_banner_covers(pos: Vector2, fac: int) -> bool:
+	for w in _wards:
+		if String(w.get("mode", "")) != "banner" or int(w.get("ally", -1)) != fac \
+				or float(w.get("t", 0.0)) <= 0.0:
+			continue
+		if Vector2(w.get("pos", Vector2.INF)).distance_to(pos) <= float(w.get("r", 0.0)):
+			return true
+	return false
+
+
+## 宋江忠义旗落点：只在正在交战的己方作战单位中选点。优先覆盖尚未吃到忠义旗减伤的人，
+## 再比较本旗总覆盖人数，最后才用敌军压力破平局。这样第二点会留给另一条受压战线；若所有
+## 交战友军都已在旗内则返回 INF，等旧旗到期再补，不把两点无意义地叠在同一处。
 ## 返回具体友军脚下，避免落在几路部队质心的空地上；无有效战团返回 INF。
 func _best_banner_pos(fac: int, banner_r: float, threat_r: float) -> Vector2:
 	var allies: Array = []
@@ -7215,6 +7260,7 @@ func _best_banner_pos(fac: int, banner_r: float, threat_r: float) -> Vector2:
 				and not v.is_resource and not v.is_worker and not v.garrisoned and not v.is_captive:
 			allies.append(v)
 	var best := Vector2.INF
+	var best_uncovered := -1
 	var best_covered := -1
 	var best_foes := -1
 	for anchor in allies:
@@ -7222,12 +7268,20 @@ func _best_banner_pos(fac: int, banner_r: float, threat_r: float) -> Vector2:
 		if foes <= 0:
 			continue
 		var covered := 0
+		var uncovered := 0
 		for friend in units_near(anchor.position, banner_r):
 			if is_instance_valid(friend) and friend.faction == fac and friend.hp > 0.0 and not friend.is_building \
 					and not friend.is_resource and not friend.is_worker and not friend.garrisoned \
 					and anchor.position.distance_to(friend.position) <= banner_r:
 				covered += 1
-		if covered > best_covered or (covered == best_covered and foes > best_foes):
+				if not _active_banner_covers(friend.position, fac):
+					uncovered += 1
+		if uncovered <= 0:
+			continue
+		if uncovered > best_uncovered \
+				or (uncovered == best_uncovered and covered > best_covered) \
+				or (uncovered == best_uncovered and covered == best_covered and foes > best_foes):
+			best_uncovered = uncovered
 			best_covered = covered
 			best_foes = foes
 			best = anchor.position
@@ -12210,11 +12264,13 @@ func _newhero_selftest() -> void:
 			h.ability_slots[i]["cd_t"] = 0.0
 		h._recompute_hero_stats()
 
-	# 公孙胜 Q 黑雨 → _ground_dots 增长，且跟随施法者(follow==gong)，rank2 每秒22 → 每跳11
+	# 公孙胜 Q 黑雨 → _ground_dots 增长，且跟随施法者(follow==gong)；
+	# 每跳基础 11，还要计入当前存档的英雄伤害倍率，否则开启驻守成长会让自检假失败。
 	var d0 := _ground_dots.size()
 	_do_ability(gong, 0, foe.position)
 	var blackrain_ok := _ground_dots.size() > d0
-	var br_follow_ok: bool = not _ground_dots.is_empty() and _ground_dots[-1].get("follow") == gong and absf(float(_ground_dots[-1]["per"]) - 11.0) < 0.6
+	var br_follow_ok: bool = not _ground_dots.is_empty() and _ground_dots[-1].get("follow") == gong \
+			and absf(float(_ground_dots[-1]["per"]) - 11.0 * _hero_db(gong)) < 0.6
 
 	# 公孙胜 W 冰墙 → _ice_walls 增长且锁了格子
 	gong.ability_slots[1]["cd_t"] = 0.0
@@ -12223,6 +12279,8 @@ func _newhero_selftest() -> void:
 	var icewall_ok := _ice_walls.size() > w0 and not _ice_walls.is_empty() and not (_ice_walls[-1]["cells"] as Array).is_empty()
 
 	# 公孙胜 E 减速光环（被动）→ _aura_pass 后敌人 aura_slow<1（rank2=-20%）
+	# 直接放到公孙胜身边；若再走 nearest_open，不同关卡大厅占地会把两者推到光环外。
+	foe.position = gong.position + Vector2(64, 0)
 	_aura_pass()
 	var slow_ok := foe.aura_slow < 0.99
 
@@ -12485,14 +12543,16 @@ func _newhero_selftest() -> void:
 		banner_building.position = bb_pos
 		banner_building.max_hp = bb_max
 		banner_building.hp = bb_hp
-	# 宋江 E 火攻 → 每秒20·rank2持续8s → 每跳 10
+	# 宋江 E 火攻 → 每秒20·rank2持续8s → 每跳基础 10，再乘英雄伤害倍率。
 	song.ability_slots[2]["cd_t"] = 0.0
 	var sf0 := _ground_dots.size()
 	_do_ability(song, 2, foe.position)
-	var song_fire_ok := _ground_dots.size() > sf0 and absf(float(_ground_dots[-1]["per"]) - 10.0) < 0.6
+	var song_fire_ok := _ground_dots.size() > sf0 \
+			and absf(float(_ground_dots[-1]["per"]) - 10.0 * _hero_db(song)) < 0.6
 
+	# hero_cap 是场景规则（驻守默认4，战役/竞技场为0=不限），单独打印但不影响技能链 ALL。
 	var cap_ok := level.hero_cap() == 4
-	var all_ok := blackrain_ok and br_follow_ok and icewall_ok and slow_ok and dragon_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok and immune_ok and absorbed_ok and heal_ok and song_hybrid_ok and song_rally_ok and banner_charge_ok and banner_variant_ok and banner_rank_ok and banner_reduce_ok and loyalty_ok and righteous_ok and overlap_ok and banner_downgrade_ok and aura_restore_ok and banner_exit_ok and summon_despawn_ok and song_fire_ok and cap_ok
+	var all_ok := blackrain_ok and br_follow_ok and icewall_ok and slow_ok and dragon_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok and immune_ok and absorbed_ok and heal_ok and song_hybrid_ok and song_rally_ok and banner_charge_ok and banner_variant_ok and banner_rank_ok and banner_reduce_ok and loyalty_ok and righteous_ok and overlap_ok and banner_downgrade_ok and aura_restore_ok and banner_exit_ok and summon_despawn_ok and song_fire_ok
 	print("[newhero] blackrain=%s brfollow=%s icewall=%s slowaura=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s absorbed=%s heal=%s songhybrid=%s songrally=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_follow_ok, icewall_ok, slow_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, absorbed_ok, heal_ok, song_hybrid_ok, song_rally_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
 
 	# 清理：移除召唤物与测试单位，避免污染后续
@@ -12795,6 +12855,7 @@ func _automicro_selftest() -> void:
 				learn_prio_ok = false
 
 	# ───── S8 宋江先在受压友军脚下插旗；W 无能量后仍会对远敌放 E 火攻。花荣箭雨照常。 ─────
+	_wards.clear()
 	for h in heroes:
 		h.hp = h.max_hp
 		h._cast_t = 0.0
@@ -12863,6 +12924,30 @@ func _automicro_selftest() -> void:
 	density_spawned.append(sparse_foe)
 	var density_pick := _best_banner_pos(song.faction, 130.0, 190.0)
 	var banner_density_ok := density_pick != Vector2.INF and density_pick.distance_to(dense_center) < 90.0
+	# 第一面旗已经覆盖高密战团后，第二点不能再叠同一处；另一条受压线存在时应转去覆盖它。
+	_wards.append({"mode": "banner", "ally": song.faction, "t": 5.0, "pos": dense_center, "r": 130.0})
+	var spread_pick := _best_banner_pos(song.faction, 130.0, 190.0)
+	var banner_spread_ok := spread_pick != Vector2.INF and spread_pick.distance_to(sparse_center) < 90.0
+	# 只剩已被旗覆盖的战团时应保留第二点，等待本旗到期，而非立即把能量打空。
+	emel.position = park
+	ehero.position = park
+	sparse_foe.position = park
+	var hold_pick := _best_banner_pos(song.faction, 130.0, 190.0)
+	# 走一次真实宋江托管脑：仍有1点时不能排入第二发，充能也必须继续保留。
+	song.ability_slots[1]["charges"] = 1
+	song.ability_slots[1]["recharge_t"] = 8.0
+	song._cast_t = 0.0
+	for locked_slot in [0, 2, 3]:
+		song.ability_slots[locked_slot]["cd_t"] = 99.0
+	_pending_casts.clear()
+	_brain_song(song)
+	var banner_hold_ok := hold_pick == Vector2.INF and not _pending_has(song, 1) \
+			and song.slot_charges(1) == 1
+	for locked_slot in [0, 2, 3]:
+		song.ability_slots[locked_slot]["cd_t"] = 0.0
+	song.ability_slots[1]["charges"] = 2
+	song.ability_slots[1]["recharge_t"] = 0.0
+	_wards.clear()
 	for du in density_spawned:
 		if is_instance_valid(du):
 			du.take_damage(du.hp + 1.0, null)
@@ -12914,9 +12999,9 @@ func _automicro_selftest() -> void:
 	var focus_pick := _focus_target(li, 320.0)
 	var focus_ok := focus_pick == ehero             # 该集火敌将而非最近杂兵
 
-	var all_ok := helpers_ok and tiger_gate_ok and weak_tiger_ok and wu_ult_ok and lin_focus_ok and hua_blink_ok and retreat_ok and ult_ok and song_mutex_ok and learn_prio_ok and lr_cast_ok and weak_banner_ok and banner_density_ok and banner_idle_ok and engage_ok and focus_ok
-	print("[automicro] helpers=%s tigergate=%s weaktiger=%s wuult=%s linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s banner(strong=%s weak=%s density=%s idle=%s) fire=%s hua=%s lr=%s engage(farW=%s)=%s focus=%s ALL=%s" % [
-		helpers_ok, tiger_gate_ok, weak_tiger_ok, wu_ult_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_banner_cast, weak_banner_ok, banner_density_ok, banner_idle_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, focus_ok, all_ok])
+	var all_ok := helpers_ok and tiger_gate_ok and weak_tiger_ok and wu_ult_ok and lin_focus_ok and hua_blink_ok and retreat_ok and ult_ok and song_mutex_ok and learn_prio_ok and lr_cast_ok and weak_banner_ok and banner_density_ok and banner_spread_ok and banner_hold_ok and banner_idle_ok and engage_ok and focus_ok
+	print("[automicro] helpers=%s tigergate=%s weaktiger=%s wuult=%s linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s banner(strong=%s weak=%s density=%s spread=%s hold=%s idle=%s) fire=%s hua=%s lr=%s engage(farW=%s)=%s focus=%s ALL=%s" % [
+		helpers_ok, tiger_gate_ok, weak_tiger_ok, wu_ult_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_banner_cast, weak_banner_ok, banner_density_ok, banner_spread_ok, banner_hold_ok, banner_idle_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, focus_ok, all_ok])
 
 	# 清理：移除本测试 spawn 的英雄/敌兵/召唤物，避免污染后续 skirmish
 	for u in units.duplicate():

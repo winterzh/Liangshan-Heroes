@@ -1380,7 +1380,7 @@ func refresh_command() -> void:
 
 func _on_skill_clicked(hero) -> void:
 	if battle != null and is_instance_valid(hero):
-		battle.cast_ability(hero)
+		battle.cast_ability(hero, 0, true)
 
 
 ## 选区成员变化时重建图标网格（成员不变只刷新血条由图标自身完成）
@@ -2601,9 +2601,9 @@ class HeroSlotButton extends Control:
 		if castable and learned and pending:
 			st = "施法中"
 		elif castable and learned and max_charges > 0:
-			st = "%d/%d" % [charges, max_charges]
-			if charges < max_charges:
-				st += " · %ds" % int(ceil(recharge_left))
+			# 充能数必须一眼可辨：只画小圆点或“2/2”很容易被误认成技能等级。
+			# 紧凑的移动端技能轨也保留完整“能量 2/2”，恢复倒计时交给零能量遮罩和说明卡。
+			st = "能量 %d/%d" % [charges, max_charges]
 		elif castable and learned and cd_left > 0.0:
 			st = "冷却 %ds" % int(ceil(cd_left))
 		elif castable and learned:
@@ -2774,7 +2774,8 @@ class HeroSlotButton extends Control:
 		if hero.can_learn(slot) and (on_plus or int(hero.ability_slots[slot]["rank"]) == 0):
 			hud.battle.learn_slot(hero, slot)
 		elif (not bool(hero.ability_slots[slot]["passive"]) or hero.slot_has_active(slot)) and int(hero.ability_slots[slot]["rank"]) > 0:
-			hud.battle.cast_ability(hero, slot)
+			# cast_ability 会对抬手/冷却/空能量分别提示；快速二连不再静默丢掉第二次操作。
+			hud.battle.cast_ability(hero, slot, true)
 
 	## 该槽此刻是否「指向技能、可直接瞄准施放」（用于触屏：按下技能即拖动瞄准、松手放招）。
 	## 学习「+」热区 / 非指向技 / 未学 / 冷却中 → 返回 false，走普通 _execute(学习 / 即放 / 提示)。
@@ -2808,7 +2809,7 @@ class HeroSlotButton extends Control:
 				_press_pos = event.position
 				_aiming = false
 				if _can_aim_cast():
-					hud.battle.cast_ability(hero, slot)   # arm 指向技
+					hud.battle.cast_ability(hero, slot, true)   # arm 指向技
 					if hud.battle._ability_armed != "":
 						_aiming = true
 						if hud.battle.overlay != null:

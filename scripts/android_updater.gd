@@ -1,22 +1,34 @@
 extends Node
-## Android 专用内容热更新引导器。
+## Android / Windows / macOS 内容热更新引导器。
 ##
 ## 必须位于 Autoload 第一位：_init() 在主场景和战斗资源加载前装入已验证的累计 PCK，
-## 从而让补丁中的 res:// 同路径资源覆盖 APK 基础资源。Autoload 自身仍须随完整 APK 更新。
-## Windows/macOS 永不启用。
+## 从而让补丁中的 res:// 同路径资源覆盖完整包基础资源。Autoload 自身仍须随完整包更新。
+## 保留 AndroidUpdater 这个 Autoload 名称及旧 Android 字段/环境变量，兼容 1.4.0 客户端。
 
 signal status_changed(state: String, text: String, progress: float)
 signal update_available(version: String, size_bytes: int)
 signal full_update_required(version: String)
 signal update_ready(version: String)
 
-const BOOTSTRAP_VERSION := 1
-const APK_VERSION_NAME := "1.5.2"
-const APK_VERSION_CODE := 12
-const BASE_CONTENT_VERSION := "1.5.2"
-const MANIFEST_URL := "http://120.26.237.195:1234/liangshan/android/stable/manifest.json"
+const BOOTSTRAP_VERSION := 2
+const PACKAGE_VERSION_NAME := "1.6"
+const PACKAGE_VERSION_CODE := 13
+const BASE_CONTENT_VERSION := "1.6"
 
-const UPDATE_DIR := "user://android_updates"
+# 旧补丁脚本和专项测试可能仍读取这两个名字，不能删除。
+const APK_VERSION_NAME := PACKAGE_VERSION_NAME
+const APK_VERSION_CODE := PACKAGE_VERSION_CODE
+
+const ANDROID_MANIFEST_URL := "http://120.26.237.195:1234/liangshan/android/stable/manifest.json"
+const WINDOWS_MANIFEST_URL := "http://120.26.237.195:1234/liangshan/windows/stable/manifest.json"
+const MACOS_MANIFEST_URL := "http://120.26.237.195:1234/liangshan/macos/stable/manifest.json"
+# 旧代码可能读取 MANIFEST_URL；它始终保持 Android 地址。
+const MANIFEST_URL := ANDROID_MANIFEST_URL
+
+const ANDROID_UPDATE_DIR := "user://android_updates"
+const DESKTOP_UPDATE_ROOT := "user://content_updates"
+# 旧代码可能读取这些常量；Android 目录布局保持原样。
+const UPDATE_DIR := ANDROID_UPDATE_DIR
 const STATE_PATH := UPDATE_DIR + "/state.json"
 const STATE_TMP_PATH := UPDATE_DIR + "/state.json.tmp"
 const DOWNLOAD_TMP_PATH := UPDATE_DIR + "/download.pck.tmp"
@@ -41,19 +53,31 @@ var status_text := ""
 var progress := -1.0
 var active_content_version := BASE_CONTENT_VERSION
 var available_manifest: Dictionary = {}
+var platform_id := ""
+var architecture := ""
 
 var _request: HTTPRequest
 var _phase := ""
 var _manifest_body := PackedByteArray()
 var _manifest_signature := ""
 var _last_progress_percent := -1
+var _update_dir := ""
+var _state_path := ""
+var _state_tmp_path := ""
+var _download_tmp_path := ""
 
 
 func _init() -> void:
-	enabled = OS.has_feature("android") or OS.get_environment("ANDROID_UPDATE_TEST") == "1"
+	platform_id = _detect_platform()
+	architecture = _detect_architecture()
+	enabled = platform_id != "" and (OS.has_feature("standalone") or _is_update_test())
 	if not enabled:
 		return
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(UPDATE_DIR))
+	_update_dir = ANDROID_UPDATE_DIR if platform_id == "android" else DESKTOP_UPDATE_ROOT.path_join(platform_id)
+	_state_path = _update_dir.path_join("state.json")
+	_state_tmp_path = _update_dir.path_join("state.json.tmp")
+	_download_tmp_path = _update_dir.path_join("download.pck.tmp")
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_update_dir))
 	_load_installed_patch()
 
 
@@ -67,12 +91,17 @@ func _ready() -> void:
 	_request.body_size_limit = MAX_MANIFEST_BYTES
 	_request.request_completed.connect(_on_request_completed)
 	add_child(_request)
-	_set_status("idle", "安卓内容 v%s" % active_content_version)
-	if OS.get_environment("ANDROID_UPDATE_TEST") == "1":
+	_set_status("idle", "%s内容 v%s" % [platform_display_name(), active_content_version])
+	if _is_update_test():
 		# 首个 Autoload 不引用 Campaign 等项目全局类，避免在 _init() 装 PCK 前连锁预载脚本。
-		print("[android_update] boot apk=%s content=%s bootstrap=%d" % [
-			APK_VERSION_NAME, active_content_version, BOOTSTRAP_VERSION])
-	if OS.get_environment("ANDROID_UPDATE_NO_AUTO") != "1":
+		if platform_id == "android":
+			# 保留旧回归脚本使用的 apk= 日志字段。
+			print("[android_update] boot apk=%s content=%s bootstrap=%d platform=%s architecture=%s" % [
+				APK_VERSION_NAME, active_content_version, BOOTSTRAP_VERSION, platform_id, architecture])
+		else:
+			print("[content_update] boot package=%s content=%s bootstrap=%d platform=%s architecture=%s" % [
+				PACKAGE_VERSION_NAME, active_content_version, BOOTSTRAP_VERSION, platform_id, architecture])
+	if not _env_flag("CONTENT_UPDATE_NO_AUTO") and not _env_flag("ANDROID_UPDATE_NO_AUTO"):
 		get_tree().create_timer(1.0).timeout.connect(check_now)
 
 
@@ -86,7 +115,7 @@ func _process(_delta: float) -> void:
 	var pct := clampi(int(float(got) * 100.0 / float(total)), 0, 100)
 	if pct != _last_progress_percent:
 		_last_progress_percent = pct
-		_set_status("downloading", "正在下载安卓更新 %d%%" % pct, float(pct) / 100.0)
+		_set_status("downloading", "正在下载%s更新 %d%%" % [platform_display_name(), pct], float(pct) / 100.0)
 
 
 func check_now() -> void:
@@ -95,7 +124,7 @@ func check_now() -> void:
 	available_manifest.clear()
 	_manifest_body = PackedByteArray()
 	_manifest_signature = ""
-	_set_status("checking", "正在检查安卓更新……")
+	_set_status("checking", "正在检查%s更新……" % platform_display_name())
 	_start_request(_cache_bust(_manifest_url()), "manifest")
 
 
@@ -107,21 +136,26 @@ func begin_download() -> void:
 	if url == "":
 		_fail("更新清单缺少补丁地址")
 		return
-	_remove_file(DOWNLOAD_TMP_PATH)
+	_remove_file(_download_tmp_path)
 	_request.body_size_limit = -1
 	_request.timeout = 0.0
-	_request.download_file = DOWNLOAD_TMP_PATH
+	_request.download_file = _download_tmp_path
 	_last_progress_percent = -1
 	set_process(true)
-	_set_status("downloading", "正在下载安卓更新 0%", 0.0)
+	_set_status("downloading", "正在下载%s更新 0%%" % platform_display_name(), 0.0)
 	_start_request(url, "patch")
 
 
-func open_full_apk() -> void:
-	var full: Dictionary = available_manifest.get("full_apk", {})
+func open_full_package() -> void:
+	var full := get_full_package()
 	var url := String(full.get("url", ""))
 	if url != "":
 		OS.shell_open(url)
+
+
+# 保留旧菜单/补丁调用入口。
+func open_full_apk() -> void:
+	open_full_package()
 
 
 func quit_for_restart() -> void:
@@ -129,9 +163,29 @@ func quit_for_restart() -> void:
 
 
 func display_version() -> String:
-	if active_content_version == APK_VERSION_NAME:
-		return APK_VERSION_NAME
-	return "%s · 内容%s" % [APK_VERSION_NAME, active_content_version]
+	if active_content_version == PACKAGE_VERSION_NAME:
+		return PACKAGE_VERSION_NAME
+	return "%s · 内容%s" % [PACKAGE_VERSION_NAME, active_content_version]
+
+
+func platform_display_name() -> String:
+	match platform_id:
+		"android":
+			return "安卓"
+		"windows":
+			return "Windows"
+		"macos":
+			return "macOS"
+	return "当前平台"
+
+
+func get_full_package() -> Dictionary:
+	var full: Variant = available_manifest.get("full_package", {})
+	if full is Dictionary and not full.is_empty():
+		return full
+	# schema 1 的 Android 1.4.0 清单使用 full_apk。
+	full = available_manifest.get("full_apk", {})
+	return full if full is Dictionary else {}
 
 
 func format_bytes(n: int) -> String:
@@ -158,7 +212,7 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 	if finished_phase == "patch":
 		_reset_download_request()
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
-		_remove_file(DOWNLOAD_TMP_PATH)
+		_remove_file(_download_tmp_path)
 		_fail("更新服务器暂时不可用（%d/%d）" % [result, response_code])
 		return
 	match finished_phase:
@@ -189,26 +243,41 @@ func _accept_manifest() -> void:
 	if int(manifest.get("schema", 0)) != 1 or String(manifest.get("channel", "")) != "stable":
 		_fail("更新清单版本不受支持")
 		return
+	var target_error := _target_validation_error(manifest, platform_id == "android")
+	if target_error != "":
+		_fail(target_error)
+		return
 	available_manifest = manifest
 	var latest := String(manifest.get("content_version", BASE_CONTENT_VERSION))
+	if not _valid_version(latest):
+		_fail("更新清单的内容版本无效")
+		return
 	var min_bootstrap := int(manifest.get("min_bootstrap", 1))
 	if min_bootstrap > BOOTSTRAP_VERSION:
-		var full: Dictionary = manifest.get("full_apk", {})
-		var full_version := String(full.get("version_name", latest))
-		_set_status("full_update", "需要安装安卓完整包 v%s" % full_version)
-		full_update_required.emit(full_version)
+		if not _offer_full_package_update(latest):
+			_fail("新版需要完整包，但清单缺少下载地址")
 		return
 	if _version_compare(latest, active_content_version) <= 0:
-		_set_status("current", "安卓内容 v%s · 已是最新" % active_content_version)
+		_set_status("current", "%s内容 v%s · 已是最新" % [platform_display_name(), active_content_version])
 		return
-	var patch: Dictionary = manifest.get("patch", {})
+	var patch_var: Variant = manifest.get("patch", null)
+	# 新的两段式完整发行版没有跨发行线差异包；已有桌面客户端应跳转完整包。
+	if not patch_var is Dictionary:
+		if not _offer_full_package_update(latest):
+			_fail("新版清单没有可用的差异包或完整包")
+		return
+	var patch: Dictionary = patch_var
+	var patch_target_error := _target_validation_error(patch, true)
+	if patch_target_error != "":
+		_fail("差异包%s" % patch_target_error.trim_prefix("更新清单"))
+		return
 	var size_bytes := int(patch.get("size", 0))
 	if String(patch.get("url", "")) == "" or size_bytes <= 0 or String(patch.get("sha256", "")).length() != 64:
 		_fail("新版清单没有可用的差异包")
 		return
-	_set_status("available", "发现安卓内容更新 v%s（%s）" % [latest, format_bytes(size_bytes)])
+	_set_status("available", "发现%s内容更新 v%s（%s）" % [platform_display_name(), latest, format_bytes(size_bytes)])
 	update_available.emit(latest, size_bytes)
-	if OS.get_environment("ANDROID_UPDATE_AUTO_DOWNLOAD") == "1":
+	if _env_flag("CONTENT_UPDATE_AUTO_DOWNLOAD") or _env_flag("ANDROID_UPDATE_AUTO_DOWNLOAD"):
 		begin_download.call_deferred()
 
 
@@ -216,36 +285,36 @@ func _accept_patch() -> void:
 	var patch: Dictionary = available_manifest.get("patch", {})
 	var expected_size := int(patch.get("size", -1))
 	var expected_sha := String(patch.get("sha256", "")).to_lower()
-	var f := FileAccess.open(DOWNLOAD_TMP_PATH, FileAccess.READ)
+	var f := FileAccess.open(_download_tmp_path, FileAccess.READ)
 	var actual_size := f.get_length() if f != null else -1
 	if f != null:
 		f.close()
 	if actual_size != expected_size:
-		_remove_file(DOWNLOAD_TMP_PATH)
+		_remove_file(_download_tmp_path)
 		_fail("补丁大小校验失败")
 		return
-	var actual_sha := FileAccess.get_sha256(DOWNLOAD_TMP_PATH).to_lower()
+	var actual_sha := FileAccess.get_sha256(_download_tmp_path).to_lower()
 	if actual_sha != expected_sha:
-		_remove_file(DOWNLOAD_TMP_PATH)
+		_remove_file(_download_tmp_path)
 		_fail("补丁 SHA-256 校验失败，已删除文件")
 		return
 	var version := String(available_manifest.get("content_version", ""))
 	var final_path := _patch_path(version)
 	_remove_file(final_path)
-	var rename_err := DirAccess.rename_absolute(ProjectSettings.globalize_path(DOWNLOAD_TMP_PATH), ProjectSettings.globalize_path(final_path))
+	var rename_err := DirAccess.rename_absolute(ProjectSettings.globalize_path(_download_tmp_path), ProjectSettings.globalize_path(final_path))
 	if rename_err != OK:
-		_remove_file(DOWNLOAD_TMP_PATH)
+		_remove_file(_download_tmp_path)
 		_fail("补丁保存失败（%s）" % error_string(rename_err))
 		return
 	var state_data := {
 		"manifest": _manifest_body.get_string_from_utf8(),
 		"signature": _manifest_signature,
 	}
-	if not _write_json_atomic(STATE_PATH, state_data):
+	if not _write_json_atomic(_state_path, state_data):
 		_remove_file(final_path)
 		_fail("更新状态保存失败")
 		return
-	_set_status("ready", "安卓内容 v%s 已下载，重启后生效" % version, 1.0)
+	_set_status("ready", "%s内容 v%s 已下载，重启后生效" % [platform_display_name(), version], 1.0)
 	update_ready.emit(version)
 
 
@@ -257,11 +326,11 @@ func _reset_download_request() -> void:
 
 
 func _load_installed_patch() -> void:
-	_remove_file(DOWNLOAD_TMP_PATH)
-	_remove_file(STATE_TMP_PATH)
-	if not FileAccess.file_exists(STATE_PATH):
+	_remove_file(_download_tmp_path)
+	_remove_file(_state_tmp_path)
+	if not FileAccess.file_exists(_state_path):
 		return
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(STATE_PATH))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(_state_path))
 	if not parsed is Dictionary:
 		return
 	var saved: Dictionary = parsed
@@ -276,14 +345,18 @@ func _load_installed_patch() -> void:
 	var manifest: Dictionary = manifest_var
 	if int(manifest.get("schema", 0)) != 1 or int(manifest.get("min_bootstrap", 1)) > BOOTSTRAP_VERSION:
 		return
+	if _target_validation_error(manifest, platform_id == "android") != "":
+		return
 	var version := String(manifest.get("content_version", ""))
-	# 完整 APK 已内置同版或更新的资源时，旧 PCK 绝不能再覆盖 res://。
-	# 例如从旧版覆盖安装 1.5.2，用户目录中可能仍留着 1.4.1/1.5/1.5.1 PCK。
+	# 完整包已内置同版或更新的资源时，旧 PCK 绝不能再覆盖 res://。
 	if version != "" and _version_compare(version, BASE_CONTENT_VERSION) <= 0:
-		_remove_file(STATE_PATH)
+		_remove_file(_state_path)
 		_cleanup_stale_patches("")
 		return
-	var patch: Dictionary = manifest.get("patch", {})
+	var patch_var: Variant = manifest.get("patch", null)
+	if not patch_var is Dictionary:
+		return
+	var patch: Dictionary = patch_var
 	var path := _patch_path(version)
 	if version == "" or not FileAccess.file_exists(path):
 		return
@@ -341,11 +414,11 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 
 
 func _cleanup_stale_patches(active_path: String) -> void:
-	var dir := DirAccess.open(UPDATE_DIR)
+	var dir := DirAccess.open(_update_dir)
 	if dir == null:
 		return
 	for name in dir.get_files():
-		var path := UPDATE_DIR.path_join(name)
+		var path := _update_dir.path_join(name)
 		if name.begins_with("patch-") and name.ends_with(".pck") and path != active_path:
 			dir.remove(name)
 
@@ -356,7 +429,7 @@ func _patch_path(version: String) -> String:
 		var ch := version.substr(i, 1)
 		if ch.to_lower() in "abcdefghijklmnopqrstuvwxyz0123456789._-":
 			safe += ch
-	return UPDATE_DIR.path_join("patch-%s.pck" % safe)
+	return _update_dir.path_join("patch-%s.pck" % safe)
 
 
 func _remove_file(path: String) -> void:
@@ -365,8 +438,17 @@ func _remove_file(path: String) -> void:
 
 
 func _manifest_url() -> String:
-	var override := OS.get_environment("ANDROID_UPDATE_URL")
-	return override if override != "" else MANIFEST_URL
+	var override := OS.get_environment("CONTENT_UPDATE_URL")
+	if override == "" and platform_id == "android":
+		override = OS.get_environment("ANDROID_UPDATE_URL")
+	if override != "":
+		return override
+	match platform_id:
+		"windows":
+			return WINDOWS_MANIFEST_URL
+		"macos":
+			return MACOS_MANIFEST_URL
+	return ANDROID_MANIFEST_URL
 
 
 func _signature_url() -> String:
@@ -377,6 +459,132 @@ func _signature_url() -> String:
 
 func _cache_bust(url: String) -> String:
 	return "%s%st=%d" % [url, "&" if "?" in url else "?", int(Time.get_unix_time_from_system())]
+
+
+func _detect_platform() -> String:
+	var override := OS.get_environment("CONTENT_UPDATE_PLATFORM")
+	if override != "":
+		return _normalize_platform(override)
+	# 历史 Android 专项在 macOS 构建机运行，继续将该开关解释为 Android 客户端。
+	if _env_flag("ANDROID_UPDATE_TEST"):
+		return "android"
+	if OS.has_feature("android"):
+		return "android"
+	if OS.has_feature("windows"):
+		return "windows"
+	if OS.has_feature("macos"):
+		return "macos"
+	return ""
+
+
+func _detect_architecture() -> String:
+	var override := OS.get_environment("CONTENT_UPDATE_ARCHITECTURE")
+	if override != "":
+		return _normalize_architecture(override)
+	if _env_flag("ANDROID_UPDATE_TEST") and OS.get_environment("CONTENT_UPDATE_PLATFORM") == "":
+		return "arm64"
+	var detected := _normalize_architecture(Engine.get_architecture_name())
+	if detected != "":
+		return detected
+	if OS.has_feature("arm64"):
+		return "arm64"
+	if OS.has_feature("x86_64"):
+		return "x86_64"
+	return "unknown"
+
+
+func _normalize_platform(value: String) -> String:
+	match value.strip_edges().to_lower().replace("_", "").replace("-", ""):
+		"android":
+			return "android"
+		"windows", "win", "win64":
+			return "windows"
+		"macos", "mac", "osx", "darwin":
+			return "macos"
+	return ""
+
+
+func _normalize_architecture(value: String) -> String:
+	match value.strip_edges().to_lower().replace("-", "_"):
+		"arm64", "arm64_v8a", "aarch64":
+			return "arm64"
+		"x86_64", "x64", "amd64":
+			return "x86_64"
+		"universal", "universal2", "any":
+			return "universal"
+	return ""
+
+
+func _target_validation_error(data: Dictionary, allow_missing: bool) -> String:
+	var target: Dictionary = {}
+	var target_var: Variant = data.get("target", {})
+	if target_var is Dictionary:
+		target = target_var
+	var declared_platform := String(data.get("platform", target.get("platform", "")))
+	if declared_platform == "":
+		if not allow_missing:
+			return "更新清单缺少平台标识"
+	elif _normalize_platform(declared_platform) != platform_id:
+		return "更新清单平台不匹配（需要 %s）" % platform_id
+
+	var declared_arches: Array[String] = []
+	var arches_var: Variant = data.get("architectures", target.get("architectures", []))
+	if arches_var is Array:
+		for item in arches_var:
+			declared_arches.append(String(item))
+	var single_arch := String(data.get("architecture",
+		data.get("arch", target.get("architecture", target.get("arch", "")))))
+	if single_arch != "":
+		declared_arches.append(single_arch)
+	if declared_arches.is_empty():
+		if not allow_missing:
+			return "更新清单缺少架构标识"
+		return ""
+	for declared in declared_arches:
+		var normalized := _normalize_architecture(declared)
+		if normalized == architecture or normalized == "universal":
+			return ""
+	return "更新清单架构不匹配（本机为 %s）" % architecture
+
+
+func _full_package_version(full: Dictionary, fallback: String) -> String:
+	var version := String(full.get("version", full.get("version_name", fallback)))
+	return version if version != "" else fallback
+
+
+func _offer_full_package_update(fallback_version: String) -> bool:
+	var full := get_full_package()
+	if String(full.get("url", "")) == "":
+		return false
+	var full_version := _full_package_version(full, fallback_version)
+	_set_status("full_update", "需要安装%s完整包 v%s" % [platform_display_name(), full_version])
+	full_update_required.emit(full_version)
+	return true
+
+
+func _valid_version(version: String) -> bool:
+	var parts := version.split(".")
+	if parts.size() < 2 or parts.size() > 3:
+		return false
+	for part in parts:
+		if part == "":
+			return false
+		for i in range(part.length()):
+			if not part.substr(i, 1) in "0123456789":
+				return false
+	return true
+
+
+func _is_update_test() -> bool:
+	return _env_flag("CONTENT_UPDATE_TEST") or _env_flag("ANDROID_UPDATE_TEST")
+
+
+func _env_flag(name: String) -> bool:
+	return OS.get_environment(name) == "1"
+
+
+func _log_tag() -> String:
+	return "android_update" if platform_id == "android" else "content_update"
 
 
 func _version_compare(a: String, b: String) -> int:
@@ -394,8 +602,8 @@ func _set_status(next_state: String, text: String, value := -1.0) -> void:
 	state = next_state
 	status_text = text
 	progress = value
-	if OS.get_environment("ANDROID_UPDATE_TEST") == "1":
-		print("[android_update] state=%s text=%s progress=%.2f" % [state, status_text, progress])
+	if _is_update_test():
+		print("[%s] state=%s text=%s progress=%.2f" % [_log_tag(), state, status_text, progress])
 	status_changed.emit(state, status_text, progress)
 
 
