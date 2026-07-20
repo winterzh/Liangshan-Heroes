@@ -153,11 +153,11 @@ echo '$signature_sha  $REMOTE_TMP/manifest-$platform.sig' | sha256sum -c -"
 done
 ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
 for platform in $PLATFORMS; do \
-  base_version=\$(python3 -c \"import json; print(json.load(open('$REMOTE_TMP/manifest-'\"\$platform\"'.json'))['patch_base']['version'])\"); \
-  patch_name='patch-'\"\$base_version\"'-to-$VERSION.pck'; \
-  install -m 644 '$REMOTE_TMP/'\"\$patch_name\" '$UPDATE_REMOTE_WEB_ROOT/'\"\$platform\"'/releases/'\"\$patch_name\"; \
-  install -m 644 '$REMOTE_TMP/manifest-'\"\$platform\"'.json' '$UPDATE_REMOTE_WEB_ROOT/'\"\$platform\"'/releases/manifest-$VERSION.json'; \
-  install -m 644 '$REMOTE_TMP/manifest-'\"\$platform\"'.sig' '$UPDATE_REMOTE_WEB_ROOT/'\"\$platform\"'/releases/manifest-$VERSION.sig'; \
+  base_version=\$(python3 -c \"import json,sys; print(json.load(open(sys.argv[1]))['patch_base']['version'])\" \"$REMOTE_TMP/manifest-\$platform.json\"); \
+  patch_name=\"patch-\$base_version-to-$VERSION.pck\"; \
+  install -m 644 \"$REMOTE_TMP/\$patch_name\" \"$UPDATE_REMOTE_WEB_ROOT/\$platform/releases/\$patch_name\"; \
+  install -m 644 \"$REMOTE_TMP/manifest-\$platform.json\" \"$UPDATE_REMOTE_WEB_ROOT/\$platform/releases/manifest-$VERSION.json\"; \
+  install -m 644 \"$REMOTE_TMP/manifest-\$platform.sig\" \"$UPDATE_REMOTE_WEB_ROOT/\$platform/releases/manifest-$VERSION.sig\"; \
 done; \
 rm -rf '$REMOTE_TMP'"
 
