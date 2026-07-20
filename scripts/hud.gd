@@ -581,6 +581,7 @@ func _refresh_hero_bar() -> void:
 		var chip := HeroChip.new()
 		chip.hud = self
 		chip.hero = h
+		chip.show_combat_stats = bool(battle.track_hero_combat_stats)
 		_hero_bar.add_child(chip)
 	_layout_hero_bar()
 
@@ -622,7 +623,21 @@ func _layout_hero_bar() -> void:
 	_hero_bar.offset_left = 8.0 + left
 	_hero_bar.offset_top = band_top
 	for ch in _hero_bar.get_children():
-		ch.custom_minimum_size = Vector2(chip, chip)
+		# 驻守战在头像右侧留三行小字；其他模式继续使用原方形头像。
+		var stat_w := 104.0 if bool(ch.get("show_combat_stats")) else 0.0
+		ch.custom_minimum_size = Vector2(chip + stat_w, chip)
+
+
+## 英雄战绩紧凑数字：1000 起用 k，100 万起用 M，k/M 固定保留 1 位小数。
+func _format_combat_stat(value: float) -> String:
+	var safe := maxf(0.0, value)
+	if safe >= 1000000.0:
+		var millions := floorf(safe / 100000.0 + 0.5) / 10.0
+		return "%.1fM" % millions
+	if safe >= 1000.0:
+		var thousands := floorf(safe / 100.0 + 0.5) / 10.0
+		return "%.1fk" % thousands
+	return str(int(round(safe)))
 
 
 ## 顶部资源条：金 | 木 | 人口（经典RTS式，左上角常驻）
@@ -2837,13 +2852,19 @@ class HeroSlotButton extends Control:
 class HeroChip extends Control:
 	var hud = null
 	var hero: Unit = null
+	var show_combat_stats := false
+	var _redraw_accum := 0.0
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(72, 72)
 		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
-	func _process(_d: float) -> void:
-		queue_redraw()
+	func _process(delta: float) -> void:
+		# 头像原本每帧重绘；战绩/血条 10Hz 已足够实时，大幅减少文字排版与绘制调用。
+		_redraw_accum += delta
+		if _redraw_accum >= 0.1:
+			_redraw_accum = 0.0
+			queue_redraw()
 
 	func _gui_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -2860,31 +2881,50 @@ class HeroChip extends Control:
 		var f := ThemeDB.fallback_font
 		var garr: bool = hero.garrisoned
 		var sel: bool = hud != null and hud.battle != null and hud.battle.selection.has(hero)
+		var avatar_w := minf(size.x, size.y)
+		var avatar_rect := Rect2(Vector2.ZERO, Vector2(avatar_w, size.y))
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.10, 0.08, 0.05, 0.95))
 		var border := Color("ffd866") if sel else Color(0.5, 0.42, 0.26)
 		if garr:
 			border = Color("7f9bff")   # 驻军中：靛蓝描边，与「驻军光标」同色系
 		elif hero.auto_micro:
 			border = Color(0.42, 0.85, 0.48)   # 托管中：绿描边
-		draw_rect(Rect2(Vector2.ZERO, size), border, false, 4.0 if (sel or garr or hero.auto_micro) else 3.0)
-		var ir := Rect2(3, 3, size.x - 6, size.y - 15)
+		draw_rect(avatar_rect, border, false, 4.0 if (sel or garr or hero.auto_micro) else 3.0)
+		var ir := Rect2(3, 3, avatar_w - 6, size.y - 15)
 		var tex: Texture2D = Art.avatar_texture(hero.key)   # 脸→走图→…回退，公孙胜无专属头像时也有图（不画空白首字）
 		if tex != null:
 			draw_texture_rect(tex, ir, false, Color(0.55, 0.6, 0.85) if garr else Color.WHITE)
 		else:
-			draw_string(f, Vector2(0, size.y * 0.52), hero.display_name.substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER, size.x, 32, Color("ffe9a8"))
+			draw_string(f, Vector2(0, size.y * 0.52), hero.display_name.substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 32, Color("ffe9a8"))
 		# 驻军徽标：左上「驻」+ 底部「点击出击」提示，让玩家知道这头像现在是出击键
 		if garr:
 			draw_rect(ir, Color(0.10, 0.13, 0.28, 0.42))
 			draw_string(f, Vector2(5, 22), "驻", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("cfe0ff"))
-			draw_string(f, Vector2(0, size.y - 16), "▶出击", HORIZONTAL_ALIGNMENT_CENTER, size.x, 14, Color("cfe0ff"))
+			draw_string(f, Vector2(0, size.y - 16), "▶出击", HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 14, Color("cfe0ff"))
 		# 托管徽标：绿底「托管」横幅压在头像顶部，一眼可辨哪些英雄在托管
 		if hero.auto_micro:
-			draw_rect(Rect2(3, 3, size.x - 6, 17), Color(0.10, 0.34, 0.15, 0.92))
-			draw_string(f, Vector2(3, 16), "托管", HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, 13, Color(0.80, 1.0, 0.84))
+			draw_rect(Rect2(3, 3, avatar_w - 6, 17), Color(0.10, 0.34, 0.15, 0.92))
+			draw_string(f, Vector2(3, 16), "托管", HORIZONTAL_ALIGNMENT_CENTER, avatar_w - 6, 13, Color(0.80, 1.0, 0.84))
 		var frac := clampf(hero.hp / hero.max_hp, 0.0, 1.0)
-		draw_rect(Rect2(3, size.y - 10, size.x - 6, 7), Color(0, 0, 0, 0.7))
-		draw_rect(Rect2(3, size.y - 10, (size.x - 6) * frac, 7), Color(0.3, 0.85, 0.3).lerp(Color(0.85, 0.2, 0.15), 1.0 - frac))
+		draw_rect(Rect2(3, size.y - 10, avatar_w - 6, 7), Color(0, 0, 0, 0.7))
+		draw_rect(Rect2(3, size.y - 10, (avatar_w - 6) * frac, 7), Color(0.3, 0.85, 0.3).lerp(Color(0.85, 0.2, 0.15), 1.0 - frac))
+		if show_combat_stats and hud != null and hud.battle != null:
+			var rec: Dictionary = hud.battle.hero_combat_stat(hero.key)
+			var stat_x := avatar_w + 4.0
+			var stat_w := maxf(1.0, size.x - stat_x)
+			draw_rect(Rect2(stat_x, 2, stat_w, size.y - 4), Color(0.055, 0.05, 0.04, 0.92))
+			draw_line(Vector2(stat_x, 3), Vector2(stat_x, size.y - 3), Color(0.48, 0.40, 0.24, 0.75), 1.0)
+			var font_size := 10 if size.y < 50.0 else 12
+			var line_h := size.y / 3.0
+			var labels := [
+				["伤害 " + hud._format_combat_stat(float(rec.get("damage", 0.0))), Color("ffbf75")],
+				["承伤 " + hud._format_combat_stat(float(rec.get("taken", 0.0))), Color("9fcfff")],
+				["击杀 %d" % int(rec.get("kills", 0)), Color("ffe48a")],
+			]
+			for i in range(3):
+				var baseline := float(i) * line_h + line_h * 0.69
+				draw_string(f, Vector2(stat_x + 6, baseline), String(labels[i][0]),
+					HORIZONTAL_ALIGNMENT_LEFT, stat_w - 8, font_size, labels[i][1])
 
 
 ## 触屏编队 chip：点=调出该队，长按(≥450ms)=把当前选中设为该队。点亮=该队有兵。

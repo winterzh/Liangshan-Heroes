@@ -39,6 +39,7 @@ var aggro_range := 200.0
 
 var battle = null           # Battle（不加类型注解避免循环引用）
 var map: GameMap = null
+var _track_combat_stats := false   # 生成时缓存模式开关，受击热路径不做动态属性查询
 
 # 经济（遭遇战）：工人采集 / 资源点
 var is_worker := false       # 喽啰：可采集/建造
@@ -129,6 +130,7 @@ var _buff_glow := 0.0       # 受增益时的金色辉光
 var is_summon := false
 var summon_kind := ""       # "tiger"/"dragon" → 驱动专属绘制
 var _summon_ttl := 0.0      # >0 = 限时召唤物剩余存活；0 = 永久（虎）
+var stat_owner_key := ""    # 驻守战统计归属：召唤物/幻象的伤害与击杀计入召唤英雄 key
 # 三碗不过岗（武松 W）：移动/攻速在 [lo,hi] 间随机波动，按 _drunk_reroll 周期重掷
 var _drunk_t := 0.0
 var _drunk_lo := 1.0
@@ -305,6 +307,7 @@ func setup(p_key: String, def: Dictionary, p_faction: int, p_battle, p_map: Game
 	aggro_range = maxf(200.0, atk_range + 50.0) if (not is_building or atk > 0.0) else 0.0
 	battle = p_battle
 	map = p_map
+	_track_combat_stats = p_battle != null and bool(p_battle.get("track_hero_combat_stats"))
 	_base_atk = atk
 	_base_hp = max_hp
 	if is_hero:
@@ -715,6 +718,8 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 		return   # 工地虚影：尚未真正起建（工人未到），不可被攻击——「走过去再开始建造」后才挨打
 	if garrisoned:
 		return   # 驻军中：藏在建筑里受庇护，免疫伤害（飞行中的箭/范围技能也打不到；建筑被毁才弹出）
+	var hp_before := hp
+	var shield_absorbed := 0.0
 	# DOTA 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
 	if _dmg_amp > 0.0 and d > 0.0:
 		d *= 1.0 + _dmg_amp
@@ -724,12 +729,22 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	# DOTA 护盾：先扣吸收盾，剩余才扣血（盾扣空即失效）
 	if _shield > 0.0 and d > 0.0:
 		var _ab: float = minf(_shield, d)
+		shield_absorbed = _ab
 		_shield -= _ab
 		d -= _ab
 		_buff_glow = 1.0
 		if _shield <= 0.0:
 			_shield_t = 0.0
+	# 战斗统计只计减伤后真正打到护盾/生命的数值，且不计溢出死亡血量的 overkill。
+	var hp_damage := minf(hp_before, maxf(0.0, d))
+	var effective_damage := shield_absorbed + hp_damage
 	hp -= d
+	if _track_combat_stats and effective_damage > 0.0:
+		var attacker_relevant := from != null and is_instance_valid(from) \
+				and from.faction == FACTION_LIANG and (from.is_hero or from.stat_owner_key != "")
+		var victim_relevant := is_hero and faction == FACTION_LIANG
+		if attacker_relevant or victim_relevant:
+			battle.record_hero_combat_damage(self, from, effective_damage)
 	_flash = 0.30 if crit else 0.18
 	_combat_cool = 6.0
 	if from != null and is_instance_valid(from) and from.faction != faction:
@@ -2832,6 +2847,14 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_real_frames = true
 			var cph := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0) * 0.55   # 只播到挥击中段
 			return ac[int(cph * ac.size()) % ac.size()]
+	# 武松旧素材的 idle / walk / attack 分别画成束发、光头、有髯三张脸。
+	# 以最贴近头像且与 death 同造型的 attack 末帧作唯一基准立姿；行走仍由下方
+	# 程序化步态驱动这张立姿，攻击/施法则播放同一人物的 attack 帧，切状态不再变脸。
+	if ak == "wu_song":
+		var canonical: Array = Art.unit_anim_frames(ak, "attack")
+		if not canonical.is_empty():
+			_real_frames = false
+			return canonical[canonical.size() - 1]
 	var moving := _move_blend > 0.3
 	var state := "walk" if moving else "idle"
 	var frames: Array = Art.unit_anim_frames(ak, state)

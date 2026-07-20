@@ -95,6 +95,8 @@ var selection: Array = []
 var phase := Phase.INTRO
 var kills := 0
 var hero_kills := {}          # 按英雄统计歼敌：instance_id -> {name, key, n}（战后结算展示）
+var track_hero_combat_stats := false   # 仅驻守/自定义据守启用；其他模式的受击路径只多一次布尔判断
+var hero_combat_stats := {}    # 英雄 key -> {name, damage, taken, kills}，英雄战死重练仍沿用
 var hero_progress := {}        # 英雄战死存档：key -> {level,xp,sp,ranks}（聚义厅重练后恢复，不从1级重来）
 var lit_cells := {}          # 关卡高亮格（如盘陀路指路）：Vector2i -> 剩余秒
 
@@ -201,6 +203,7 @@ var _hover_kind := "normal"
 func _ready() -> void:
 	_refresh_hot_patch_classes()
 	level = _resolve_level()
+	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense
 	_defs = Defs.UNITS.duplicate(true)
 	_abilities = Defs.ABILITIES.duplicate(true)
 	Defs.apply_content_pack(_defs, _abilities)   # 内容包覆盖（res://content/*.json，无则不变）
@@ -299,6 +302,8 @@ func _ready() -> void:
 		if OS.get_environment("ECO_RESEARCH_TEST") == "1":
 			_eco_research_selftest()
 		_hover_selftest()
+		if OS.get_environment("COMBAT_STATS_TEST") == "1":
+			_combat_stats_selftest()
 		if OS.get_environment("NEWHERO") == "1":
 			_newhero_selftest()
 		if OS.get_environment("ARMOR_TEST") == "1":
@@ -485,6 +490,8 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 	var u := Unit.new()
 	units_root.add_child(u)
 	u.setup(key, _defs[key], faction, self, map)
+	if track_hero_combat_stats and u.is_hero and faction == Unit.FACTION_LIANG:
+		_ensure_hero_combat_stat(u.key, u.display_name)
 	if u.ability != "" and _abilities.has(u.ability):
 		u.ability_cd = _abilities[u.ability]["cd"]
 	if economy and tech_hp != 1.0 and faction == Unit.FACTION_LIANG and not u.is_building and not u.is_hero:
@@ -1757,6 +1764,14 @@ func _on_unit_died(u: Unit) -> void:
 		# 按英雄统计歼敌：把这一杀记到「最后一击」的梁山英雄名下。
 		# 用英雄 key 作键（而非 instance_id）→ 英雄阵亡后在聚义厅复活(新实例)仍并入同一条战功，不另起一行。
 		var k: Unit = u._killer
+		if track_hero_combat_stats:
+			var stat_key := _hero_stat_attacker_key(k)
+			if stat_key != "":
+				var stat_name := k.display_name if k != null and is_instance_valid(k) and k.is_hero \
+						else String(_defs.get(stat_key, {}).get("name", stat_key))
+				var combat_rec := _ensure_hero_combat_stat(stat_key, stat_name)
+				combat_rec["kills"] = int(combat_rec["kills"]) + 1
+				hero_combat_stats[stat_key] = combat_rec
 		if k != null and is_instance_valid(k) and k.is_hero and k.faction == Unit.FACTION_LIANG:
 			var rec: Dictionary = hero_kills.get(k.key, {"name": k.display_name, "key": k.key, "n": 0})
 			rec["n"] = int(rec["n"]) + 1
@@ -3631,6 +3646,47 @@ func _hero_kill_tally() -> String:
 		if int(r["n"]) > 0:
 			parts.append("%s 斩 %d" % [r["name"], int(r["n"])])
 	return "    ".join(parts)
+
+
+## 驻守战英雄实时统计。伤害在 Unit.take_damage 减伤/护盾结算后按实际值增量回填，
+## 没有逐帧遍历；召唤物/幻象通过 stat_owner_key 归到召唤英雄。
+func _ensure_hero_combat_stat(hero_key: String, hero_name: String) -> Dictionary:
+	var rec: Dictionary = hero_combat_stats.get(hero_key, {
+		"name": hero_name, "damage": 0.0, "taken": 0.0, "kills": 0})
+	if String(rec.get("name", "")) == "":
+		rec["name"] = hero_name
+	hero_combat_stats[hero_key] = rec
+	return rec
+
+
+func _hero_stat_attacker_key(attacker: Unit) -> String:
+	if attacker == null or not is_instance_valid(attacker) or attacker.faction != Unit.FACTION_LIANG:
+		return ""
+	if attacker.is_hero:
+		return attacker.key
+	return attacker.stat_owner_key
+
+
+func record_hero_combat_damage(victim: Unit, attacker: Unit, amount: float) -> void:
+	if not track_hero_combat_stats or amount <= 0.0:
+		return
+	var attacker_key := _hero_stat_attacker_key(attacker)
+	if attacker_key != "" and victim != null and is_instance_valid(victim) \
+			and victim.faction == Unit.FACTION_GUAN:
+		var attacker_name := attacker.display_name if attacker.is_hero \
+				else String(_defs.get(attacker_key, {}).get("name", attacker_key))
+		var dealt := _ensure_hero_combat_stat(attacker_key, attacker_name)
+		dealt["damage"] = float(dealt["damage"]) + amount
+		hero_combat_stats[attacker_key] = dealt
+	if victim != null and is_instance_valid(victim) and victim.is_hero \
+			and victim.faction == Unit.FACTION_LIANG:
+		var received := _ensure_hero_combat_stat(victim.key, victim.display_name)
+		received["taken"] = float(received["taken"]) + amount
+		hero_combat_stats[victim.key] = received
+
+
+func hero_combat_stat(hero_key: String) -> Dictionary:
+	return hero_combat_stats.get(hero_key, {"damage": 0.0, "taken": 0.0, "kills": 0})
 
 
 ## ---------- 全局逐帧效果 ----------
@@ -7323,6 +7379,7 @@ func _do_summon(caster: Unit, eff: Dictionary, rank: int) -> void:
 		var su := spawn_unit(skey, caster.faction, pos)
 		su.is_summon = true
 		su.summon_kind = skind
+		su.stat_owner_key = caster.key   # 驻守战的召唤物/幻象战绩归召唤英雄
 		if illusion:
 			# 幻象：长得像英雄但不是英雄——不占英雄位、不放技能、不吃英雄增益；半透蓝影标识虚实
 			su.is_hero = false
@@ -8342,6 +8399,77 @@ func _demolish(u: Unit) -> void:
 
 
 ## ---------- 自检 / 截图（headless） ----------
+
+## 驻守战英雄战绩自检（COMBAT_STATS_TEST=1 + SKIRMISH=1）：验证减伤后的实际伤害、
+## 护盾、overkill 截断、召唤物归属、击杀归属、数字缩写和头像右侧三行布局。
+func _combat_stats_selftest() -> void:
+	var saved_tracking := track_hero_combat_stats
+	var saved_stats: Dictionary = hero_combat_stats.duplicate(true)
+	var saved_kills := kills
+	var saved_hero_kills: Dictionary = hero_kills.duplicate(true)
+	var saved_progress: Dictionary = hero_progress.duplicate(true)
+	track_hero_combat_stats = true
+	hero_combat_stats.erase("song_jiang")
+
+	var origin := map.cell_to_world(map.nearest_open(level.camera_start_cell()))
+	var hero := spawn_unit("song_jiang", Unit.FACTION_LIANG, origin)
+	var foe_a := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(56, 0))
+	var foe_b := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(72, 16))
+	var foe_attacker := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(-56, 0))
+	var summon := spawn_unit("tiger_summon", Unit.FACTION_LIANG, origin + Vector2(16, 48))
+	summon.is_summon = true
+	summon.stat_owner_key = hero.key
+
+	# 第一名敌人：50 护盾 + 300 生命。100 后再打 500，统计必须是实际消耗的 350，而非输入 600。
+	foe_a.max_hp = 300.0
+	foe_a.hp = 300.0
+	foe_a._shield = 50.0
+	foe_a.take_damage(100.0, hero)
+	foe_a.take_damage(500.0, hero)
+	# 第二名敌人由召唤物击杀，120 伤害与这一杀都应归宋江。
+	foe_b.max_hp = 120.0
+	foe_b.hp = 120.0
+	foe_b.take_damage(200.0, summon)
+	# 宋江承受 20 护盾 + 80 生命的实际伤害，共 100。
+	hero._shield = 20.0
+	hero.take_damage(100.0, foe_attacker)
+
+	var rec: Dictionary = hero_combat_stat("song_jiang")
+	var damage_ok := absf(float(rec.get("damage", 0.0)) - 470.0) < 0.01
+	var taken_ok := absf(float(rec.get("taken", 0.0)) - 100.0) < 0.01
+	var kills_ok := int(rec.get("kills", 0)) == 2
+	var format_ok := hud._format_combat_stat(999.0) == "999" \
+			and hud._format_combat_stat(1000.0) == "1.0k" \
+			and hud._format_combat_stat(1250.0) == "1.3k" \
+			and hud._format_combat_stat(1000000.0) == "1.0M" \
+			and hud._format_combat_stat(12340000.0) == "12.3M"
+	hud._refresh_hero_bar()
+	var layout_ok := false
+	for child in hud._hero_bar.get_children():
+		if child.get("hero") == hero:
+			layout_ok = bool(child.get("show_combat_stats")) \
+					and child.custom_minimum_size.x >= child.custom_minimum_size.y + 100.0
+			break
+	var all_ok := damage_ok and taken_ok and kills_ok and format_ok and layout_ok
+	print("[combatstats] damage=%.0f/%s taken=%.0f/%s kills=%d/%s format=%s layout=%s ALL=%s" % [
+		float(rec.get("damage", 0.0)), damage_ok, float(rec.get("taken", 0.0)), taken_ok,
+		int(rec.get("kills", 0)), kills_ok, format_ok, layout_ok, all_ok])
+	if OS.get_environment("COMBAT_STATS_KEEP") == "1":
+		return   # 有窗口截图时保留非零样例；进程退出即销毁，不影响存档。
+
+	track_hero_combat_stats = false
+	for probe in [hero, foe_a, foe_b, foe_attacker, summon]:
+		if probe != null and is_instance_valid(probe):
+			units.erase(probe)
+			probe.queue_free()
+	hero_combat_stats = saved_stats
+	kills = saved_kills
+	hero_kills = saved_hero_kills
+	hero_progress = saved_progress
+	track_hero_combat_stats = saved_tracking
+	hud._hero_keys = []
+	hud._refresh_hero_bar()
+
 
 func _ability_selftest() -> void:
 	var heroes := units.filter(func(u) -> bool:
@@ -12341,6 +12469,22 @@ func _newhero_selftest() -> void:
 	wus._physics_process(0.01)
 	var heal_ok := wus.hp > hp_pre_heal - 0.01
 
+	# 武松动画形象统一：待机与行走必须取 attack 同人物的基准立姿，出招也只在同一帧带内切换。
+	var wu_attack_frames: Array = Art.unit_anim_frames("wu_song", "attack")
+	wus._lunge = 0.0
+	wus._cast_t = 0.0
+	wus._move_blend = 0.0
+	var wu_idle_frame: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	wus._move_blend = 1.0
+	var wu_walk_frame: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	wus._lunge = 0.5
+	var wu_attack_frame: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	var wu_anim_ok: bool = not wu_attack_frames.is_empty() \
+			and wu_idle_frame == wu_attack_frames[-1] and wu_walk_frame == wu_attack_frames[-1] \
+			and wu_attack_frames.has(wu_attack_frame)
+	wus._lunge = 0.0
+	wus._move_blend = 0.0
+
 	# 宋江 R 替天行道·仁义（混合被动+主动）→ 群英雄回血(=Q回血量) + 宋江 Q 进入冷却
 	var song := spawn_unit("song_jiang", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(0, -64)))))
 	for i in song.ability_slots.size():
@@ -12552,8 +12696,8 @@ func _newhero_selftest() -> void:
 
 	# hero_cap 是场景规则（驻守默认4，战役/竞技场为0=不限），单独打印但不影响技能链 ALL。
 	var cap_ok := level.hero_cap() == 4
-	var all_ok := blackrain_ok and br_follow_ok and icewall_ok and slow_ok and dragon_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok and immune_ok and absorbed_ok and heal_ok and song_hybrid_ok and song_rally_ok and banner_charge_ok and banner_variant_ok and banner_rank_ok and banner_reduce_ok and loyalty_ok and righteous_ok and overlap_ok and banner_downgrade_ok and aura_restore_ok and banner_exit_ok and summon_despawn_ok and song_fire_ok
-	print("[newhero] blackrain=%s brfollow=%s icewall=%s slowaura=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s absorbed=%s heal=%s songhybrid=%s songrally=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_follow_ok, icewall_ok, slow_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, absorbed_ok, heal_ok, song_hybrid_ok, song_rally_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
+	var all_ok: bool = blackrain_ok and br_follow_ok and icewall_ok and slow_ok and dragon_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok and immune_ok and absorbed_ok and heal_ok and wu_anim_ok and song_hybrid_ok and song_rally_ok and banner_charge_ok and banner_variant_ok and banner_rank_ok and banner_reduce_ok and loyalty_ok and righteous_ok and overlap_ok and banner_downgrade_ok and aura_restore_ok and banner_exit_ok and summon_despawn_ok and song_fire_ok
+	print("[newhero] blackrain=%s brfollow=%s icewall=%s slowaura=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s absorbed=%s heal=%s wu_anim=%s songhybrid=%s songrally=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_follow_ok, icewall_ok, slow_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, absorbed_ok, heal_ok, wu_anim_ok, song_hybrid_ok, song_rally_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
 
 	# 清理：移除召唤物与测试单位，避免污染后续
 	for u in units.duplicate():
