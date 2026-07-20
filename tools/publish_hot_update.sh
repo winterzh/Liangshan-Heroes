@@ -140,14 +140,15 @@ for platform in $PLATFORMS; do
 	base_version="$(update_manifest_value "$manifest" patch_base.version)"
 	patch_name="patch-$base_version-to-$VERSION.pck"
 	patch="$UPDATE_OUT/$platform/$patch_name"
-	scp -i "$SSH_KEY" "$patch" "$REMOTE:$REMOTE_TMP/$patch_name"
+	remote_patch="$platform-$patch_name"   # 同名桌面补丁的纹理压缩可不同，临时区不得互相覆盖
+	scp -i "$SSH_KEY" "$patch" "$REMOTE:$REMOTE_TMP/$remote_patch"
 	scp -i "$SSH_KEY" "$WORK/$platform/manifest.json" "$REMOTE:$REMOTE_TMP/manifest-$platform.json"
 	scp -i "$SSH_KEY" "$WORK/$platform/manifest.sig" "$REMOTE:$REMOTE_TMP/manifest-$platform.sig"
 	patch_sha="$(update_sha256 "$patch")"
 	manifest_sha="$(update_sha256 "$WORK/$platform/manifest.json")"
 	signature_sha="$(update_sha256 "$WORK/$platform/manifest.sig")"
 	ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
-echo '$patch_sha  $REMOTE_TMP/$patch_name' | sha256sum -c -; \
+echo '$patch_sha  $REMOTE_TMP/$remote_patch' | sha256sum -c -; \
 echo '$manifest_sha  $REMOTE_TMP/manifest-$platform.json' | sha256sum -c -; \
 echo '$signature_sha  $REMOTE_TMP/manifest-$platform.sig' | sha256sum -c -"
 done
@@ -155,7 +156,7 @@ ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
 for platform in $PLATFORMS; do \
   base_version=\$(python3 -c \"import json,sys; print(json.load(open(sys.argv[1]))['patch_base']['version'])\" \"$REMOTE_TMP/manifest-\$platform.json\"); \
   patch_name=\"patch-\$base_version-to-$VERSION.pck\"; \
-  install -m 644 \"$REMOTE_TMP/\$patch_name\" \"$UPDATE_REMOTE_WEB_ROOT/\$platform/releases/\$patch_name\"; \
+  install -m 644 \"$REMOTE_TMP/\$platform-\$patch_name\" \"$UPDATE_REMOTE_WEB_ROOT/\$platform/releases/\$patch_name\"; \
   install -m 644 \"$REMOTE_TMP/manifest-\$platform.json\" \"$UPDATE_REMOTE_WEB_ROOT/\$platform/releases/manifest-$VERSION.json\"; \
   install -m 644 \"$REMOTE_TMP/manifest-\$platform.sig\" \"$UPDATE_REMOTE_WEB_ROOT/\$platform/releases/manifest-$VERSION.sig\"; \
 done; \
