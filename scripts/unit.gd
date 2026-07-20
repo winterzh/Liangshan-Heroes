@@ -2847,14 +2847,6 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_real_frames = true
 			var cph := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0) * 0.55   # 只播到挥击中段
 			return ac[int(cph * ac.size()) % ac.size()]
-	# 武松旧素材的 idle / walk / attack 分别画成束发、光头、有髯三张脸。
-	# 以最贴近头像且与 death 同造型的 attack 末帧作唯一基准立姿；行走仍由下方
-	# 程序化步态驱动这张立姿，攻击/施法则播放同一人物的 attack 帧，切状态不再变脸。
-	if ak == "wu_song":
-		var canonical: Array = Art.unit_anim_frames(ak, "attack")
-		if not canonical.is_empty():
-			_real_frames = false
-			return canonical[canonical.size() - 1]
 	var moving := _move_blend > 0.3
 	var state := "walk" if moving else "idle"
 	var frames: Array = Art.unit_anim_frames(ak, state)

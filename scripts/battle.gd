@@ -12469,19 +12469,31 @@ func _newhero_selftest() -> void:
 	wus._physics_process(0.01)
 	var heal_ok := wus.hp > hp_pre_heal - 0.01
 
-	# 武松动画形象统一：待机与行走必须取 attack 同人物的基准立姿，出招也只在同一帧带内切换。
+	# 武松动画形象统一：待机/行走/攻击各有 4 帧，并且状态内确实会切换到不同帧。
+	var wu_idle_frames: Array = Art.unit_anim_frames("wu_song", "idle")
+	var wu_walk_frames: Array = Art.unit_anim_frames("wu_song", "walk")
 	var wu_attack_frames: Array = Art.unit_anim_frames("wu_song", "attack")
 	wus._lunge = 0.0
 	wus._cast_t = 0.0
 	wus._move_blend = 0.0
-	var wu_idle_frame: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	wus._idle_t = 0.0
+	var wu_idle_a: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	wus._idle_t = PI / 1.4
+	var wu_idle_b: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
 	wus._move_blend = 1.0
-	var wu_walk_frame: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
-	wus._lunge = 0.5
-	var wu_attack_frame: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
-	var wu_anim_ok: bool = not wu_attack_frames.is_empty() \
-			and wu_idle_frame == wu_attack_frames[-1] and wu_walk_frame == wu_attack_frames[-1] \
-			and wu_attack_frames.has(wu_attack_frame)
+	wus._anim_t = 0.0
+	var wu_walk_a: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	wus._anim_t = PI
+	var wu_walk_b: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	wus._lunge = 0.99
+	var wu_attack_a: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	wus._lunge = 0.40
+	var wu_attack_b: Texture2D = wus._anim_frame_for_state(Art.unit_texture("wu_song"))
+	var wu_anim_ok: bool = wu_idle_frames.size() == 4 and wu_walk_frames.size() == 4 \
+			and wu_attack_frames.size() == 4 and wu_idle_frames.has(wu_idle_a) \
+			and wu_idle_frames.has(wu_idle_b) and wu_idle_a != wu_idle_b \
+			and wu_walk_frames.has(wu_walk_a) and wu_walk_frames.has(wu_walk_b) and wu_walk_a != wu_walk_b \
+			and wu_attack_frames.has(wu_attack_a) and wu_attack_frames.has(wu_attack_b) and wu_attack_a != wu_attack_b
 	wus._lunge = 0.0
 	wus._move_blend = 0.0
 
