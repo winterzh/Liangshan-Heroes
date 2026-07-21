@@ -343,8 +343,11 @@ const ABILITIES := {
 		"effect": {"kind": "rally", "heal": 42.0, "atk_mult_ranks": [1.30, 1.45, 1.60], "dur": 8.0}},
 	"wu_fire": {"name": "锦囊火计", "cd": 14.0, "targeted": true, "weak_global": true, "radius": 95.0, "color": Color("ff7a2a"),
 		"desc": "火攻：指定处腾起烈焰\n地面燃烧5秒，累计130灼伤", "effect": {"kind": "fire_dot", "dmg": 130.0, "dur": 5.0}},
-	"lin_sweep": {"name": "丈八横扫", "cd": 8.0, "targeted": false, "radius": 100.0, "color": Color("c0a0ff"),
-		"desc": "豹子头怒扫：身边官军\n受{v}伤害并被减速", "effect": {"kind": "smite", "dmg": 25.0, "slow": 0.5, "slow_dur": 3.0}},
+	"lin_sweep": {"name": "回马枪", "cd": 11.0, "cd_ranks": [11.0, 10.0, 9.0], "targeted": false, "radius": 120.0, "color": Color("9fc8ff"),
+		"desc": "架枪2秒，获得35%/45%/55%减伤\n首次近身受击反刺：55/80/105伤害、击退70并眩晕1/1.3/1.6秒",
+		"effect": {"kind": "lin_guard", "dur": 2.0, "reduction_ranks": [0.35, 0.45, 0.55],
+			"counter_radius": 120.0, "counter_dmg_ranks": [55.0, 80.0, 105.0], "counter_push": 70.0,
+			"counter_stun_ranks": [1.0, 1.3, 1.6]}},
 	"hua_shot": {"name": "百步穿杨", "cd": 9.0, "targeted": true, "radius": 48.0, "color": Color("a0e8c0"),
 		"desc": "神箭：对目标处官军\n造成{v}穿透伤害", "effect": {"kind": "smite", "dmg": 50.0}},
 	"chao_rally": {"name": "替天聚义", "cd": 14.0, "targeted": false, "radius": 200.0, "color": Color("ffd24a"),
@@ -454,18 +457,23 @@ const ABILITIES := {
 			"axe_chance": 0.30, "axe_radius": 120.0, "axe_art": "axe"}},
 
 	# ===== DOTA 式英雄技能改版（林冲/花荣/李逵）=====
-	# 林冲 Q·丈八枪破阵：朝指向猛刺一记长矛波，贯穿前方矩形区域
-	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 8.0, "targeted": true, "radius": 260.0, "color": Color("c0a0ff"),
-		"desc": "丈八蛇矛朝指向猛刺\n前方扇形区内官军受 {v} 伤害并减速",
-		"effect": {"kind": "sector_nuke", "dmg": 42.0, "range": 260.0, "arc": 70.0, "slow": 0.5, "slow_dur": 1.6}},
-	# 林冲 E·禁军教头·猎杀（被动）：更克骑兵，且打骑兵 30% 概率吸血 80%
-	"lin_predator": {"name": "禁军教头·猎骑", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("c8e0ff"),
-		"desc": "被动·专破马军\n克骑兵伤害 +0.3/0.6/0.9（满级 1.9×）；攻击 35% 几率\n按 90%/120%/150% 伤害吸血（打骑兵满额、非骑兵半额）",
-		"effect": {"kind": "passive", "atk_add": 3.0, "bonus_cav": 0.3, "cav_ls_chance": 0.35, "cav_ls_frac_ranks": [0.90, 1.20, 1.50]}},
-	# 林冲 R·时空封印（虚空大）：范围内时间停滞，敌军定身 10 秒
-	"lin_chrono": {"name": "时空封印", "cd": 40.0, "targeted": true, "radius": 200.0, "color": Color("a070ff"),
-		"desc": "撕裂时空：指定处结成封印立场\n域内官军时间停滞 10 秒（封印范围随等级扩大）",
-		"effect": {"kind": "chrono", "dur": 10.0, "radius_ranks": [130.0, 165.0, 200.0]}},
+	# 林冲 Q：窄直线破阵。普通兵被推退，骑兵/武将不退、改为露出破绽（削甲）。
+	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 8.0, "targeted": true, "radius": 300.0, "color": Color("c0a0ff"),
+		"desc": "300射程窄线贯穿，造成45/65/85伤害\n普通兵击退60/80/100；骑兵与武将削甲2/4/6，持续5秒",
+		"effect": {"kind": "line_nuke", "dmg_ranks": [45.0, 65.0, 85.0], "len": 300.0, "width": 72.0,
+			"lin_break": true, "push_ranks": [60.0, 80.0, 100.0], "def_down_ranks": [2.0, 4.0, 6.0], "def_down_dur": 5.0}},
+	# 林冲 E：稳定枪势替代随机吸血；骑兵每刀叠两层，保留鲜明克骑定位。
+	"lin_predator": {"name": "八十万禁军教头", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("c8e0ff"),
+		"desc": "被动：攻击+3/6/9；连续攻击同一目标叠枪势（4秒，最多3层）\n满层本次攻击+35/55/75伤害，并按实际伤害35%/45%/55%回血；骑兵每击叠2层",
+		"effect": {"kind": "passive", "atk_add": 3.0, "lin_spear": true, "stack_dur": 4.0, "max_stacks": 3,
+			"bonus_ranks": [35.0, 55.0, 75.0], "heal_frac_ranks": [0.35, 0.45, 0.55], "cavalry_stacks": 2}},
+	# 林冲 R：只点敌将；目标在点将持续期内死亡即结算，不要求林冲亲自补刀。
+	"lin_chrono": {"name": "豹子头·点将", "cd": 22.0, "cd_ranks": [22.0, 20.0, 18.0], "targeted": true,
+		"target": "unit", "unit_team": "enemy", "combat_only": true, "hero_only": true, "radius": 0.0, "color": Color("ffd06a"),
+		"desc": "520范围只点敌方武将，突进单挑5/6/7秒\n林冲减伤30%/40%/50%、攻速+40%/60%/80%；目标期间死亡则回血30%/40%/50%并刷新Q/W",
+		"effect": {"kind": "lin_duel", "cast_range": 520.0, "dur_ranks": [5.0, 6.0, 7.0],
+			"reduction_ranks": [0.30, 0.40, 0.50], "atkspeed_ranks": [1.40, 1.60, 1.80],
+			"heal_pct_ranks": [0.30, 0.40, 0.50], "dash_gap": 34.0}},
 	# 花荣 Q·凌空闪：闪现落地后进入 5 秒身法强化，不再造成沿途范围伤害
 	"hua_blink": {"name": "凌空闪·穿云箭", "cd": 9.0, "targeted": true, "radius": 330.0, "color": Color("a0e8c0"),
 		"desc": "闪现至落点；落地后 5 秒内获得 30%/60%/90% 闪避\n并提升 30%/40%/50% 移动速度",
@@ -1159,6 +1167,11 @@ static func ability_levels(aid: String) -> String:
 			var fr: Array = eff.get("cav_ls_frac_ranks", [])
 			if fr.size() == 3:
 				ps += "打骑%d%%几率吸血%d/%d/%d%%" % [int(float(eff.get("cav_ls_chance", 0.0)) * 100.0), int(float(fr[0]) * 100.0), int(float(fr[1]) * 100.0), int(float(fr[2]) * 100.0)]
+			if bool(eff.get("lin_spear", false)):
+				var lb: Array = eff.get("bonus_ranks", [35, 55, 75])
+				var lh: Array = eff.get("heal_frac_ranks", [0.35, 0.45, 0.55])
+				ps += "同目标3层触发+%d/%d/%d伤·按实际伤害回%d/%d/%d%%·骑兵每击2层　" % [
+					int(lb[0]), int(lb[1]), int(lb[2]), int(float(lh[0]) * 100.0), int(float(lh[1]) * 100.0), int(float(lh[2]) * 100.0)]
 			var apr2: Array = eff.get("aura_power_ranks", [])
 			if apr2.size() == 3:
 				ps += "攻击光环×%.2f/%.2f/%.2f　" % [float(apr2[0]), float(apr2[1]), float(apr2[2])]
@@ -1172,11 +1185,37 @@ static func ability_levels(aid: String) -> String:
 			return "移速+%d%% / %ss(固定)" % [int(round((float(eff.get("speed_mult", 1.0)) - 1.0) * 100.0)), str(eff.get("dur", 7.0))]
 		"debuff":
 			return "减速%d%%+降攻 / %ss(固定)" % [int(float(eff.get("slow", 0.0)) * 100.0), str(eff.get("dur", 0.0))]
+		"line_nuke":
+			if bool(eff.get("lin_break", false)):
+				var ld: Array = eff.get("dmg_ranks", [45, 65, 85])
+				var lp: Array = eff.get("push_ranks", [60, 80, 100])
+				var la: Array = eff.get("def_down_ranks", [2, 4, 6])
+				return "伤%d/%d/%d·线长%d宽%d·普通兵推%d/%d/%d·骑兵/武将削甲%d/%d/%d" % [
+					int(ld[0]), int(ld[1]), int(ld[2]), int(eff.get("len", 300)), int(eff.get("width", 72)),
+					int(lp[0]), int(lp[1]), int(lp[2]), int(la[0]), int(la[1]), int(la[2])]
+			return "贯穿伤害 %s%s" % [_l3a(float(eff.get("dmg", 0.0))), extra]
 		"chrono":
 			if eff.has("radius_ranks"):
 				var rr: Array = eff["radius_ranks"]
 				return "定身%ss · 范围 %d/%d/%d" % [str(eff.get("dur", 10.0)), int(rr[0]), int(rr[1]), int(rr[2])]
 			return "定身 %ss(固定)" % str(eff.get("dur", 10.0))
+		"lin_guard":
+			var lr: Array = eff.get("reduction_ranks", [0.35, 0.45, 0.55])
+			var lcd: Array = eff.get("counter_dmg_ranks", [55, 80, 105])
+			var ls: Array = eff.get("counter_stun_ranks", [1.0, 1.3, 1.6])
+			return "架枪%ss·减伤%d/%d/%d%%·首次近身反刺%d/%d/%d伤·晕%s/%s/%ss" % [
+				str(eff.get("dur", 2.0)), int(float(lr[0]) * 100.0), int(float(lr[1]) * 100.0), int(float(lr[2]) * 100.0),
+				int(lcd[0]), int(lcd[1]), int(lcd[2]), str(ls[0]), str(ls[1]), str(ls[2])]
+		"lin_duel":
+			var ldu: Array = eff.get("dur_ranks", [5, 6, 7])
+			var ldr: Array = eff.get("reduction_ranks", [0.30, 0.40, 0.50])
+			var las: Array = eff.get("atkspeed_ranks", [1.40, 1.60, 1.80])
+			var lhp: Array = eff.get("heal_pct_ranks", [0.30, 0.40, 0.50])
+			return "只点敌将·%d范围·%d/%d/%ds·减伤%d/%d/%d%%·攻速+%d/%d/%d%%·阵亡回%d/%d/%d%%并刷新Q/W" % [
+				int(eff.get("cast_range", 520)), int(ldu[0]), int(ldu[1]), int(ldu[2]),
+				int(float(ldr[0]) * 100.0), int(float(ldr[1]) * 100.0), int(float(ldr[2]) * 100.0),
+				int((float(las[0]) - 1.0) * 100.0), int((float(las[1]) - 1.0) * 100.0), int((float(las[2]) - 1.0) * 100.0),
+				int(float(lhp[0]) * 100.0), int(float(lhp[1]) * 100.0), int(float(lhp[2]) * 100.0)]
 		"self_buff":
 			return "攻+%s　吸血%d%%/%ss(固定)" % [_l3a(float(eff.get("atk_add", 0.0))), int(float(eff.get("lifesteal", 0.0)) * 100.0), str(eff.get("dur", 5.0))]
 		"orbit_axes":

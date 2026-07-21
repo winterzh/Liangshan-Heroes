@@ -127,12 +127,22 @@ var temp_lifesteal := 0.0
 var _temp_lifesteal_t := 0.0
 var cav_ls_chance := 0.0    # 林冲被动·猎骑：击中骑兵触发吸血的概率
 var cav_ls_frac := 0.0      # 触发时按伤害多少比例吸血
+# 林冲 W·回马枪：减伤沿用通用多来源池；这里仅记录 2 秒内尚未触发的首次近身反刺。
+var _lin_guard_t := 0.0
+var _lin_guard_rank := 0
+var _lin_guard_used := false
+# 林冲 E·枪势：同一目标连续普攻叠层，骑兵每击两层；满层当刀结算额外伤害与实际伤害回血。
+var lin_spear_rank := 0
+var _lin_spear_target_id := 0
+var _lin_spear_stacks := 0
+var _lin_spear_t := 0.0
 var _buff_glow := 0.0       # 受增益时的金色辉光
 # 召唤物：到期自动消散（>0 时倒计时，归零即消失）。is_summon 标记（不计人口、攻击表演）
 var is_summon := false
 var summon_kind := ""       # "tiger"/"dragon" → 驱动专属绘制
 var _summon_ttl := 0.0      # >0 = 限时召唤物剩余存活；0 = 永久（虎）
 var stat_owner_key := ""    # 驻守战统计归属：召唤物/幻象的伤害与击杀计入召唤英雄 key
+var stat_ability_id := ""   # 由主动召唤技产生时记录技能 id；召唤物后续普攻归到该主动技能
 # 三碗不过岗（武松 W）：移动/攻速在 [lo,hi] 间随机波动，按 _drunk_reroll 周期重掷
 var _drunk_t := 0.0
 var _drunk_lo := 1.0
@@ -207,6 +217,7 @@ var _charge_t := 0.0        # 蓄力倒计时（>0 原地不动）
 var _charge_dash := 0.0     # 冲刺剩余时长（>0 高速平移）
 var _charge_dir := Vector2.ZERO
 var _charge_dmg := 0.0
+var _charge_ability_id := ""
 var _charge_slow := 0.0
 var _charge_slow_dur := 0.0
 var _charge_width := 50.0
@@ -732,13 +743,17 @@ func recently_hit() -> bool:
 	return _hit_recent_t > 0.0
 
 
-func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction := false) -> void:
+func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction := false,
+		damage_ability_id := "") -> void:
 	if hp <= 0.0:
 		return
 	if _pending_build:
 		return   # 工地虚影：尚未真正起建（工人未到），不可被攻击——「走过去再开始建造」后才挨打
 	if garrisoned:
 		return   # 驻军中：藏在建筑里受庇护，免疫伤害（飞行中的箭/范围技能也打不到；建筑被毁才弹出）
+	if _track_combat_stats and damage_ability_id == "" and from != null and is_instance_valid(from) \
+			and from.stat_ability_id != "":
+		damage_ability_id = from.stat_ability_id
 	var hp_before := hp
 	var shield_absorbed := 0.0
 	# DOTA 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
@@ -764,15 +779,24 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if _track_combat_stats and effective_damage > 0.0:
 		var attacker_relevant := from != null and is_instance_valid(from) \
 				and from.faction == FACTION_LIANG and (from.is_hero or from.stat_owner_key != "")
+		attacker_relevant = attacker_relevant or damage_ability_id != ""
 		var victim_relevant := is_hero and faction == FACTION_LIANG
 		if attacker_relevant or victim_relevant:
-			battle.record_hero_combat_damage(self, from, effective_damage)
+			battle.record_hero_combat_damage(self, from, effective_damage, damage_ability_id)
 	# 李逵 Q 的承伤口径：实际扣盾/扣血仍按减伤后值；被该状态拦下的部分额外计入李逵承伤。
 	# 敌方输出仍只记 effective_damage，避免同一笔免伤同时虚增输出数据。
 	var mitigated := maxf(0.0, before_reduction - maxf(0.0, d + shield_absorbed))
 	if _track_combat_stats and _stats_mitigation_t > 0.0 and mitigated > 0.0 \
 			and is_hero and faction == FACTION_LIANG:
 		battle.record_hero_combat_mitigation(self, mitigated)
+	# 回马枪只响应 120 范围内第一次真正造成伤害的敌方攻击。减伤已在本次伤害前生效；
+	# 反刺在本次受击后立即结算，致命一击不会让已经倒下的林冲继续反击。
+	if hp > 0.0 and effective_damage > 0.0 and _lin_guard_t > 0.0 and not _lin_guard_used \
+			and from != null and is_instance_valid(from) and from.hp > 0.0 and from.faction != faction \
+			and position.distance_to(from.position) <= 120.0 + radius + from.radius:
+		_lin_guard_used = true
+		if battle != null and battle.has_method("trigger_lin_guard"):
+			battle.trigger_lin_guard(self, from, _lin_guard_rank)
 	_flash = 0.30 if crit else 0.18
 	_combat_cool = 6.0
 	if from != null and is_instance_valid(from) and from.faction != faction:
@@ -996,6 +1020,16 @@ func _phys_body(delta: float) -> void:
 			_drunk_god_cleave = 0.0
 	if _stats_mitigation_t > 0.0:
 		_stats_mitigation_t = maxf(0.0, _stats_mitigation_t - delta)
+	if _lin_guard_t > 0.0:
+		_lin_guard_t = maxf(0.0, _lin_guard_t - delta)
+		if _lin_guard_t <= 0.0:
+			_lin_guard_rank = 0
+			_lin_guard_used = false
+	if _lin_spear_t > 0.0:
+		_lin_spear_t = maxf(0.0, _lin_spear_t - delta)
+		if _lin_spear_t <= 0.0:
+			_lin_spear_target_id = 0
+			_lin_spear_stacks = 0
 	# 护甲削减计时
 	if _def_down_t > 0.0:
 		_def_down_t -= delta
@@ -1708,6 +1742,11 @@ func _deal_hit() -> void:
 	var crit := not t.is_building and not t.is_resource and randf() < clampf((0.25 if is_hero else 0.12) + crit_chance_bonus, 0.0, 1.0)
 	if crit:
 		dmg *= 1.8 + crit_mult_bonus
+	# 林冲 E：命中且未被物免挡下才叠枪势；满层额外伤害不吃本次暴击倍率，但仍受目标护甲。
+	var lin_spear: Dictionary = {}
+	if not is_ranged and not t.is_phys_immune():
+		lin_spear = _advance_lin_spear(t)
+		dmg += float(lin_spear.get("bonus", 0.0))
 	# 目标防御值：每点 +5% 等效血量 → 伤害 ÷(1+0.05·防御)。仅普通攻击在此减；技能走 take_damage 不经过这里。
 	# 护甲削减（双戒刀）：有效防御 = 防御 − _def_down
 	var eff_def := maxf(0.0, t.defense - t._def_down)
@@ -1725,12 +1764,19 @@ func _deal_hit() -> void:
 			battle.spawn_impact(t.position, false)
 		Sfx.play(_attack_sfx_name(), -8.0, 0.14, 60)
 	else:
-		t.take_damage(dmg, self, crit)
+		var lin_pool_before := maxf(0.0, t.hp) + maxf(0.0, t._shield)
+		t.take_damage(dmg, self, crit, false, stat_ability_id)
+		var lin_actual := maxf(0.0, lin_pool_before - maxf(0.0, t.hp) - maxf(0.0, t._shield))
+		if bool(lin_spear.get("proc", false)) and lin_actual > 0.0:
+			heal(lin_actual * float(lin_spear.get("heal_frac", 0.0)), self)
+			_buff_glow = 1.0
+		if not lin_spear.is_empty() and battle.has_method("spawn_lin_spear_stack"):
+			battle.spawn_lin_spear_stack(self, t, int(lin_spear.get("stacks", 0)), bool(lin_spear.get("proc", false)))
 		if wu_god_hit and _drunk_god_cleave > 0.0 and battle.has_method("spawn_wu_cleave"):
 			battle.spawn_wu_cleave(self, t, _drunk_god_cleave)
 		# 攻击携带（orb/被动）：额外纯伤 / 减速 / 几率眩晕
 		if on_hit_dmg > 0.0:
-			t.take_damage(on_hit_dmg, self)
+			t.take_damage(on_hit_dmg, self, false, false, stat_ability_id)
 		if on_hit_slow > 0.0:
 			t.apply_slow(on_hit_slow, on_hit_slow_dur)
 		if bash_chance > 0.0 and not t.is_building and not t.is_resource and randf() < bash_chance:
@@ -2256,6 +2302,7 @@ func _recompute_hero_stats() -> void:
 	var add_cav := 0.0
 	cav_ls_chance = 0.0
 	cav_ls_frac = 0.0
+	lin_spear_rank = 0
 	atkspeed_mult = 1.0
 	crit_chance_bonus = 0.0
 	crit_mult_bonus = 0.0
@@ -2302,6 +2349,8 @@ func _recompute_hero_stats() -> void:
 					cav_ls_frac = float(fr[clampi(int(s["rank"]) - 1, 0, fr.size() - 1)])
 				else:
 					cav_ls_frac = float(eff.get("cav_ls_frac", 0.0))
+			if bool(eff.get("lin_spear", false)):
+				lin_spear_rank = int(s["rank"])
 	var frac := (hp / max_hp) if max_hp > 0.0 else 1.0
 	# 英雄生命只吃「基地(聚义厅)·时代科技」(hero_tech_hp，约+10%)，不吃兵营的坚铠——折进重算保持持久
 	var tech_hp_f: float = float(battle.hero_tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
@@ -2391,6 +2440,44 @@ func heal(amount: float, healer: Unit = null) -> float:
 	return effective
 
 
+## 林冲 W·回马枪：架枪期间减伤，并等待第一次 120 范围内的有效受击触发反刺。
+func start_lin_guard(rank: int, dur: float, reduction: float) -> void:
+	_lin_guard_rank = clampi(rank, 1, 3)
+	_lin_guard_t = maxf(0.0, dur)
+	_lin_guard_used = false
+	apply_damage_reduction(reduction, dur, -500000 - int(get_instance_id()))
+	_buff_glow = 1.0
+	queue_redraw()
+
+
+## 林冲 E·枪势叠层。返回本次额外伤害、回血比例及演出所需层数；空表表示被动未学或目标不合法。
+func _advance_lin_spear(t: Unit) -> Dictionary:
+	if lin_spear_rank <= 0 or t == null or not is_instance_valid(t) or t.is_building or t.is_resource or t.is_captive:
+		return {}
+	var eff: Dictionary = Defs.ABILITIES.get("lin_predator", {}).get("effect", {})
+	var tid := int(t.get_instance_id())
+	if _lin_spear_t <= 0.0 or _lin_spear_target_id != tid:
+		_lin_spear_target_id = tid
+		_lin_spear_stacks = 0
+	var add := int(eff.get("cavalry_stacks", 2)) if t.is_cavalry else 1
+	_lin_spear_stacks += add
+	_lin_spear_t = float(eff.get("stack_dur", 4.0))
+	var maximum := maxi(1, int(eff.get("max_stacks", 3)))
+	var proc := _lin_spear_stacks >= maximum
+	var out := {"proc": proc, "bonus": 0.0, "heal_frac": 0.0, "stacks": mini(_lin_spear_stacks, maximum)}
+	if proc:
+		var bonuses: Array = eff.get("bonus_ranks", [35.0, 55.0, 75.0])
+		var heals: Array = eff.get("heal_frac_ranks", [0.35, 0.45, 0.55])
+		var ri := clampi(lin_spear_rank - 1, 0, 2)
+		out["bonus"] = float(bonuses[mini(ri, bonuses.size() - 1)]) if not bonuses.is_empty() else 0.0
+		out["heal_frac"] = float(heals[mini(ri, heals.size() - 1)]) if not heals.is_empty() else 0.0
+		out["stacks"] = 0
+		_lin_spear_target_id = 0
+		_lin_spear_stacks = 0
+		_lin_spear_t = 0.0
+	return out
+
+
 func apply_temp_atk(mult: float, dur: float) -> void:
 	temp_atk = mult
 	_temp_atk_t = dur
@@ -2408,11 +2495,12 @@ func apply_temp_atk_add(add: float, dur: float) -> void:
 
 ## 发动冲锋（李逵 W）：蓄力 windup 秒后，朝 dir 高速冲 dist 像素，撞翻沿途敌人。
 func _begin_charge(dir: Vector2, dmg: float, windup: float, dist: float, width: float, slow: float, slow_dur: float,
-		phys_immune := false) -> void:
+		phys_immune := false, damage_ability_id := "") -> void:
 	if dir.length() < 0.01:
 		dir = Vector2(-1.0 if face_left else 1.0, 0.0)
 	_charge_dir = dir.normalized()
 	_charge_dmg = dmg
+	_charge_ability_id = damage_ability_id
 	_charge_t = windup
 	_charge_dash = maxf(0.18, dist / 560.0)   # 冲刺时长：约 560px/s
 	_charge_width = width
@@ -2451,7 +2539,7 @@ func _do_charge_step(delta: float) -> void:
 				_charge_hit.append(u)
 				if _charge_slow > 0.0:
 					u.apply_slow(_charge_slow, _charge_slow_dur)
-				u.take_damage(_charge_dmg, self)
+				u.take_damage(_charge_dmg, self, false, false, _charge_ability_id)
 				if battle.has_method("spawn_impact"):
 					battle.spawn_impact(u.position, true)
 	_charge_dash = maxf(0.0, _charge_dash - delta)

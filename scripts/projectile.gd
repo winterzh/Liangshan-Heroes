@@ -6,6 +6,7 @@ var target: Unit = null
 var shooter: Unit = null
 var dmg := 8.0
 var crit := false
+var damage_ability_id := ""  # 主动召唤物的远程普攻归到召唤技能；普通箭为空
 var speed := 420.0
 var _dir := Vector2.RIGHT
 var _life := 3.0
@@ -22,6 +23,7 @@ func setup(p_shooter: Unit, p_target: Unit, p_dmg: float, p_crit := false) -> vo
 	target = p_target
 	dmg = p_dmg
 	crit = p_crit
+	damage_ability_id = p_shooter.stat_ability_id if p_shooter != null and is_instance_valid(p_shooter) else ""
 	if is_instance_valid(target):
 		_dir = (target.position - position).normalized()
 		_dist0 = maxf(position.distance_to(target.position), 1.0)
@@ -68,7 +70,7 @@ func _physics_process(delta: float) -> void:
 		if target.is_phys_immune():   # 武松醉神 / 李逵冲锋：远程普攻同样被物免挡下
 			target.absorb_physical_damage(dmg, s)
 		else:
-			target.take_damage(dmg, s, crit)
+			target.take_damage(dmg, s, crit, false, damage_ability_id)
 			if on_slow_dur > 0.0 and is_instance_valid(target):   # 拒马：命中减速
 				target.apply_slow(on_slow_mult, on_slow_dur)
 			if s != null and not target.garrisoned:   # 远程命中也吸血（与近战一致）
@@ -86,7 +88,7 @@ func _physics_process(delta: float) -> void:
 					if u.is_phys_immune():
 						u.absorb_physical_damage(dmg, s)
 					else:
-						u.take_damage(dmg, s)
+						u.take_damage(dmg, s, false, false, damage_ability_id)
 						if on_slow_dur > 0.0:   # 溅射范围内也吃减速
 							u.apply_slow(on_slow_mult, on_slow_dur)
 			s.battle.spawn_impact(tp, true)

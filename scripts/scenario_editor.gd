@@ -31,7 +31,7 @@ const UNIT_SCHEMA := [
 const ABILITY_SCHEMA := [
 	["name", "名称", "str"], ["cd", "冷却", "float"], ["radius", "范围", "int"],
 	["targeted", "指向(点地放)", "bool"], ["weak_global", "弱托管全屏", "bool"], ["passive", "被动", "bool"],
-	["effect.kind", "效果类型", "enum:smite|rally|haste|fire_dot|self_buff|summon|debuff|drag|passive|sector_nuke|blink_shot|charge|orbit_axes|chrono|black_rain|ice_wall|slow_aura|drunk_buff|drunk_god|weapon_toggle|path"],
+	["effect.kind", "效果类型", "enum:smite|rally|haste|fire_dot|self_buff|summon|debuff|drag|passive|sector_nuke|blink_shot|charge|orbit_axes|chrono|black_rain|ice_wall|slow_aura|drunk_buff|drunk_god|lin_guard|lin_duel|weapon_toggle|path"],
 	["effect.dmg", "伤害", "int"], ["effect.heal", "治疗", "int"], ["effect.dur", "持续", "float"],
 	["effect.slow", "减速(0-1)", "float"], ["effect.slow_dur", "减速时长", "float"], ["effect.stun", "眩晕", "float"],
 	["effect.self_atk", "自身攻×", "float"], ["effect.self_dur", "自增时长", "float"], ["effect.lifesteal", "吸血", "float"],

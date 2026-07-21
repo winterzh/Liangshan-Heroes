@@ -78,6 +78,7 @@ var _end_root: ColorRect
 var _end_title: Label
 var _end_sub: Label
 var _end_tally: Label     # 各路好汉战功（按英雄歼敌排行）
+var _end_tally_scroll: ScrollContainer
 var _end_next: Button
 
 var _pause_root: ColorRect
@@ -1671,14 +1672,21 @@ func _build_end() -> void:
 	_end_sub.add_theme_font_size_override("font_size", 20)
 	vbox.add_child(_end_sub)
 
-	# 各路好汉战绩：驻守战逐将列出击杀/伤害/承伤/治疗，居中可折行。
+	# 各路好汉战绩：驻守战逐将列出总战绩与主动技能伤害；英雄多时在固定高度内滚动。
+	_end_tally_scroll = ScrollContainer.new()
+	_end_tally_scroll.custom_minimum_size = Vector2(920, 360)
+	_end_tally_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_end_tally_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vbox.add_child(_end_tally_scroll)
+
 	_end_tally = Label.new()
-	_end_tally.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_end_tally.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_end_tally.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_end_tally.custom_minimum_size = Vector2(820, 0)
-	_end_tally.add_theme_font_size_override("font_size", 17)
+	_end_tally.custom_minimum_size = Vector2(880, 0)
+	_end_tally.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_end_tally.add_theme_font_size_override("font_size", 16)
 	_end_tally.add_theme_color_override("font_color", Color("ffd866"))
-	vbox.add_child(_end_tally)
+	_end_tally_scroll.add_child(_end_tally)
 
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 14)
@@ -1840,6 +1848,7 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 	_end_sub.text = "%s\n此役歼灭敌军 %d 人。" % [line, kills]
 	_end_tally.text = ("⚔ 各路好汉战绩 ⚔\n" + hero_tally) if hero_tally != "" else ""
 	_end_tally.visible = hero_tally != ""
+	_end_tally_scroll.visible = hero_tally != ""
 	_end_next.visible = victory and has_next
 	_end_root.visible = true
 
@@ -2189,6 +2198,7 @@ class CmdButton extends Control:
 			"weapon_toggle": "换武", "drag": "拖拽", "fissure": "地裂", "echo": "回响", "orbit_axes": "环刃",
 			"hua_pin_target": "五连射", "hua_snipe": "狙杀",
 		"drunk_buff": "醉拳", "drunk_god": "醉神", "slow_aura": "减速环", "ice_wall": "冰墙", "debuff": "削弱",
+		"lin_guard": "反刺", "lin_duel": "点将",
 	}
 
 	## 点将悬浮卡：某英雄 4 技能速览——每行「Q/W/E/R 技能名〔类别〕」。非英雄/无 abilities → 空串。
@@ -2468,7 +2478,8 @@ class HeroSlotButton extends Control:
 	const ICON_TOKENS := {
 			"hua_shot": "bow", "hua_rain": "rain", "hua_pin": "pin", "hua_eye": "eye", "hua_blade": "snipe",
 		"song_rally": "banner", "song_banner": "banner", "song_fire": "fire", "song_lead": "star",
-		"lin_sweep": "blade", "lin_charge": "spear", "lin_storm": "blade", "lin_drill": "star",
+		"lin_thrust": "spear", "lin_sweep": "k_shield", "lin_predator": "star", "lin_chrono": "spear",
+		"lin_charge": "spear", "lin_storm": "blade", "lin_drill": "star",
 		"li_berserk": "axe", "li_whirl": "axe", "li_rage": "axe", "li_brawn": "star",
 		"wu_fire": "fire", "gongsun_thunder": "thunder", "bai_drug": "drug", "zhang_drag": "wave",
 	}
@@ -2484,7 +2495,7 @@ class HeroSlotButton extends Control:
 		"rally": "banner", "heal_wave": "k_heal", "summon": "k_summon", "ward": "k_summon",
 		"chrono": "k_clock", "slow_aura": "wave", "debuff": "k_skull", "hex": "k_skull",
 			"weapon_toggle": "saber", "drag": "wave", "drunk_buff": "drug", "drunk_god": "drug", "orbit_axes": "axe",
-			"hua_pin_target": "pin", "hua_snipe": "snipe",
+			"hua_pin_target": "pin", "hua_snipe": "snipe", "lin_guard": "k_shield", "lin_duel": "spear",
 		"channel": "k_aim", "invis": "k_ghost", "transform": "k_beast",
 	}
 
