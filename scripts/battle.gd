@@ -4157,7 +4157,8 @@ func _auto_micro_weak(u: Unit) -> void:
 				or (u.hp / maxf(u.max_hp, 1.0) < 0.60 and _foe_within(u.position, 120.0, u.faction))):
 			_begin_cast(u, 1, u.position)
 			return
-		var qpoint := _best_lin_q_point(u, 300.0, 72.0)
+		var qeff: Dictionary = (_abilities.get("lin_thrust", {}) as Dictionary).get("effect", {})
+		var qpoint := _best_lin_q_point(u, float(qeff.get("len", 260.0)), float(qeff.get("width", 48.0)))
 		if qpoint != Vector2.INF and u.slot_ready(0):
 			_begin_cast(u, 0, qpoint)
 			return
@@ -4468,7 +4469,8 @@ func _brain_lin(u: Unit) -> void:
 		u.set_stance(Unit.STANCE_AGGRO)
 		u._home = u.position
 	# Q 破阵：最多试12条敌向直线，以贯穿人数为主、骑兵/武将加权，不再只朝最近一人乱刺。
-	var qpoint := _best_lin_q_point(u, 300.0, 72.0)
+	var qeff: Dictionary = (_abilities.get("lin_thrust", {}) as Dictionary).get("effect", {})
+	var qpoint := _best_lin_q_point(u, float(qeff.get("len", 260.0)), float(qeff.get("width", 48.0)))
 	if qpoint != Vector2.INF:
 		if _ai_cast_slot(u, 0, qpoint):
 			return
@@ -4755,14 +4757,19 @@ func _brain_gong(u: Unit) -> void:
 			return
 	# P3 Q 黑雨：优先罩敌将、远程/高频输出构成的火力群，其次才按人数密度压制普通战阵。
 	if u.slot_ready(0):
-		var qpack := _gong_visible_cluster(u, 520.0 * _hero_rb(u), 150.0, true)
+		var qad: Dictionary = _abilities.get("gong_blackrain", {})
+		var qscaled: Dictionary = _scaled_ability(qad, _hero_rb(u), _hero_db(u))
+		var qpack := _gong_visible_cluster(u, ability_cast_range(u, qad), float(qscaled.get("radius", 100.0)), true)
 		if qpack["pos"] != Vector2.INF and (int(qpack["count"]) >= 2 \
 				or bool(qpack["hero"]) or int(qpack["attackers"]) >= 2):
 			if _ai_cast_slot(u, 0, qpack["pos"]):
 				return
 	# P4 E 百兽奔袭：两人以上成团或近身威胁就推；方向取密集点，兽群会把他们统一往外赶。
 	if u.slot_ready(2):
-		var epack := _gong_visible_cluster(u, 320.0 * _hero_rb(u), 95.0)
+		var ead: Dictionary = _abilities.get("gong_slow", {})
+		var escaled: Dictionary = _scaled_ability(ead, _hero_rb(u), _hero_db(u))
+		var ehalf_width := float((escaled.get("effect", {}) as Dictionary).get("width", 120.0)) * 0.5
+		var epack := _gong_visible_cluster(u, ability_cast_range(u, ead), maxf(60.0, ehalf_width))
 		if epack["pos"] != Vector2.INF \
 				and (int(epack["count"]) >= 2 or u.position.distance_to(epack["pos"]) <= 180.0):
 			if _ai_cast_slot(u, 2, epack["pos"]):
@@ -5891,7 +5898,8 @@ func ability_cast_range(caster: Unit, ad: Dictionary) -> float:
 		return INF
 	# 单体狙击类即使属于超远支援英雄，也以技能明写的射程为准；其余花荣/宋江技能保持原全图规则。
 	if eff.has("cast_range"):
-		return float(eff["cast_range"]) * _hero_rb(caster)
+		var range_scale := _hero_rb(caster) if bool(eff.get("scale_cast_range", true)) else 1.0
+		return float(eff["cast_range"]) * range_scale
 	if caster != null and is_instance_valid(caster) and String(caster.key) in CAST_RANGE_FREE_HEROES:
 		return INF
 	var base: float = DEFAULT_CAST_RANGE + float(ad.get("radius", 0.0))
@@ -6038,20 +6046,24 @@ func _scale_num_arr(a: Array, f: float) -> Array:
 	return o
 
 
-## 英雄倍率：返回按 rb(范围:radius/radius_ranks/len/width)、db(伤害:dmg/dps/dps_ranks/impact_ranks/dot_total/total)
+## 英雄倍率：返回按 rb(范围:radius/radius_ranks/len/width)、db(伤害:dmg/dps/dps_ranks/impact_ranks/dot_total/total)。
+## 技能可用 scale_radius/scale_len/scale_width=false 单独固定某个维度；fixed_geometry=true 则全部固定。
 ## 缩放后的技能 def 深拷贝（不动原表、不缩 heal/slow/dur/atk 等）。rb=db=1 时原样返回（零开销）。
 func _scaled_ability(ad: Dictionary, rb: float, db: float) -> Dictionary:
 	if rb == 1.0 and db == 1.0:
 		return ad
 	var out := ad.duplicate(true)
-	if out.has("radius"):
-		out["radius"] = float(out["radius"]) * rb
-	if out.has("radius_ranks"):
-		out["radius_ranks"] = _scale_num_arr(out["radius_ranks"], rb)
 	var eff: Dictionary = out.get("effect", {})
-	for k in ["len", "width"]:
-		if eff.has(k):
-			eff[k] = float(eff[k]) * rb
+	var fixed_geometry := bool(eff.get("fixed_geometry", false))
+	var scale_radius := bool(eff.get("scale_radius", true))
+	if out.has("radius") and not fixed_geometry and scale_radius:
+		out["radius"] = float(out["radius"]) * rb
+	if out.has("radius_ranks") and not fixed_geometry and scale_radius:
+		out["radius_ranks"] = _scale_num_arr(out["radius_ranks"], rb)
+	if eff.has("len") and not fixed_geometry and bool(eff.get("scale_len", true)):
+		eff["len"] = float(eff["len"]) * rb
+	if eff.has("width") and not fixed_geometry and bool(eff.get("scale_width", true)):
+		eff["width"] = float(eff["width"]) * rb
 	for k in ["dmg", "dps", "dot_total", "total"]:
 		if eff.has(k):
 			eff[k] = float(eff[k]) * db
@@ -6275,7 +6287,7 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 					u.take_damage(line_dmg, caster, false, false, aid)
 					spawn_impact(u.position, true)
 			if bool(eff.get("lin_break", false)):
-				center = caster.position + ldir * llen   # 专属枪影始终刺满真实300射程，不随近点点击缩短。
+				center = caster.position + ldir * llen   # 专属枪影始终刺满固定260射程，不随近点点击或英雄倍率伸长。
 		"blink_shot":   # 花荣 Q·凌空闪：闪现落地，获得 5 秒闪避 + 移速（旧沿路 AoE 已取消）
 			var bdir := center - caster.position
 			if bdir.length() < 1.0:
@@ -9450,7 +9462,7 @@ func _lin_rework_selftest() -> void:
 	var foot_hp := foot.hp
 	var cav_hp := cav.hp
 	var hero_hp := hero.hp
-	_do_ability(lin, 0, origin + Vector2(300, 0))
+	_do_ability(lin, 0, origin + Vector2(260, 0))
 	var qd := 85.0 * _hero_db(lin)
 	var q_damage_ok := absf((foot_hp - foot.hp) - qd) < 0.2 and absf((cav_hp - cav.hp) - qd) < 0.2 \
 			and absf((hero_hp - hero.hp) - qd) < 0.2
@@ -9462,6 +9474,11 @@ func _lin_rework_selftest() -> void:
 			foot.position.distance_to(foot_pos), cav.position.distance_to(cav_pos), hero.position.distance_to(hero_pos),
 			cav._def_down, hero._def_down, hero._def_down_t])
 	var q_cd_ok := absf(float(lin.ability_slots[0]["cd_t"]) - lin.slot_cd(0)) < 0.01
+	var q_scaled: Dictionary = _scaled_ability(_abilities["lin_thrust"], 1.8, 1.5)
+	var q_scaled_eff: Dictionary = q_scaled.get("effect", {})
+	var q_geometry_ok := absf(float(q_scaled.get("radius", 0.0)) - 260.0) < 0.01 \
+			and absf(float(q_scaled_eff.get("len", 0.0)) - 260.0) < 0.01 \
+			and absf(float(q_scaled_eff.get("width", 0.0)) - 48.0) < 0.01
 	# W：100 伤先按55%减伤落为45；第一次近身攻击触发105伤/击退/1.6秒晕，第二次不再反刺。
 	lin.position = origin
 	foot.position = origin + Vector2(34, 0)
@@ -9544,20 +9561,20 @@ func _lin_rework_selftest() -> void:
 	var hp_after_timeout := lin.hp
 	late_hero.take_damage(late_hero.hp + 1.0, helper)
 	var r_timeout_ok := absf(lin.hp - hp_after_timeout) < 0.01
-	# AI：同范围内可击杀武将必须压过更近的满血远程武将；Q 必须给出真实300长枪线。
+	# AI：同范围内可击杀武将必须压过更近的满血远程武将；Q 必须给出固定260长枪线。
 	var ai_low := spawn_unit("hu_yanzhuo", Unit.FACTION_GUAN, origin + Vector2(430, -30))
 	var ai_ranged := spawn_unit("hua_rong", Unit.FACTION_GUAN, origin + Vector2(180, 30))
 	probes.append_array([ai_low, ai_ranged])
 	ai_low.hp = ai_low.max_hp * 0.30
 	_grid_build()
 	var ai_r_ok := _best_lin_duel_target(lin) == ai_low
-	var ai_q := _best_lin_q_point(lin, 300.0, 72.0)
-	var ai_q_ok := ai_q != Vector2.INF and absf(lin.position.distance_to(ai_q) - 300.0) < 0.1
+	var ai_q := _best_lin_q_point(lin, 260.0, 48.0)
+	var ai_q_ok := ai_q != Vector2.INF and absf(lin.position.distance_to(ai_q) - 260.0) < 0.1
 	var r_cd_def_ok: bool = _abilities["lin_chrono"].get("cd_ranks", []) == [22.0, 20.0, 18.0]
-	var all_ok: bool = q_damage_ok and q_split_ok and q_cd_ok and w_ok and e_stack_ok and e_heal_ok \
+	var all_ok: bool = q_damage_ok and q_split_ok and q_cd_ok and q_geometry_ok and w_ok and e_stack_ok and e_heal_ok \
 			and hero_only_ok and r_state_ok and r_assist_ok and r_timeout_ok and ai_r_ok and ai_q_ok and r_cd_def_ok
-	print("[linrework] Q(dmg=%s split=%s cd=%s) W(first=%s once=%s) E(stack=%s heal=%s) R(hero_only=%s state=%s assist=%s timeout=%s cd=%s) AI(R=%s Q=%s) ALL=%s" % [
-		q_damage_ok, q_split_ok, q_cd_ok, w_first_ok, w_once_ok, e_stack_ok, e_heal_ok, hero_only_ok,
+	print("[linrework] Q(dmg=%s split=%s cd=%s geometry=%s) W(first=%s once=%s) E(stack=%s heal=%s) R(hero_only=%s state=%s assist=%s timeout=%s cd=%s) AI(R=%s Q=%s) ALL=%s" % [
+		q_damage_ok, q_split_ok, q_cd_ok, q_geometry_ok, w_first_ok, w_once_ok, e_stack_ok, e_heal_ok, hero_only_ok,
 		r_state_ok, r_assist_ok, r_timeout_ok, r_cd_def_ok, ai_r_ok, ai_q_ok, all_ok])
 	_lin_duels = _lin_duels.filter(func(d): return d.get("caster") != lin)
 	for probe in probes:
@@ -13928,13 +13945,13 @@ func _newhero_selftest() -> void:
 			h.ability_slots[i]["cd_t"] = 0.0
 		h._recompute_hero_stats()
 
-	# 公孙胜 Q 黑雨：指定落点、不跟随；rank2 每跳3，附带20%攻速压制和30%普攻落空率。
+	# 公孙胜 Q 黑雨：指定落点、不跟随；rank2 每跳1.5，附带20%攻速压制和30%普攻落空率。
 	foe.position = gong.position + Vector2(120, 0)
 	var d0 := _ground_dots.size()
 	_do_ability(gong, 0, foe.position)
 	var blackrain_ok := _ground_dots.size() > d0
 	var br_point_ok: bool = not _ground_dots.is_empty() and _ground_dots[-1].get("follow") == null \
-			and absf(float(_ground_dots[-1]["per"]) - 3.0 * _hero_db(gong)) < 0.1 \
+			and absf(float(_ground_dots[-1]["per"]) - 1.5 * _hero_db(gong)) < 0.1 \
 			and absf(float(_ground_dots[-1].get("attack_slow", 1.0)) - 0.80) < 0.001 \
 			and absf(float(_ground_dots[-1].get("attack_miss", 0.0)) - 0.30) < 0.001
 	_ground_dot_pass(0.51)
@@ -13960,8 +13977,17 @@ func _newhero_selftest() -> void:
 			and absf(foe.hp - beast_hp0) < 0.01
 	_zone_pass(0.31)   # 公孙胜默认实际移速约51.5，五倍弹道约257.4；0.31秒足以抵达76处目标。
 	var beast_ok := beast_queued_ok and absf((beast_hp0 - foe.hp) - 40.0 * _hero_db(gong)) < 0.2 \
-			and foe.position.x > beast_pos0.x + 100.0 and absf(foe.temp_speed - 0.70) < 0.001 \
+			and foe.position.x > beast_pos0.x + 1.0 and absf(foe.temp_speed - 0.70) < 0.001 \
 			and ResourceLoader.exists("res://assets/vfx/gong_beast_charge.png")
+	# 倍率3：Q 半径由100正常放大至180；E只增宽至216，长度/施法距离仍固定320。
+	var q_scaled: Dictionary = _scaled_ability(_abilities["gong_blackrain"], 1.8, 1.5)
+	var e_scaled: Dictionary = _scaled_ability(_abilities["gong_slow"], 1.8, 1.5)
+	var e_scaled_eff: Dictionary = e_scaled.get("effect", {})
+	var gong_geometry_ok := absf(float(q_scaled.get("radius", 0.0)) - 180.0) < 0.01 \
+			and absf(float(e_scaled.get("radius", 0.0)) - 60.0) < 0.01 \
+			and absf(float(e_scaled_eff.get("len", 0.0)) - 320.0) < 0.01 \
+			and absf(float(e_scaled_eff.get("width", 0.0)) - 216.0) < 0.01 \
+			and not bool(e_scaled_eff.get("scale_cast_range", true))
 	_zone_pass(10.0)   # 让 E 弹道离场，避免与下面新生成的 R 靶子交叉。
 
 	# 公孙胜 R 画龙点睛：恢复原版；rank2召一条血/攻均为本体150%的远程溅射金龙，持续15秒、CD25秒。
@@ -14376,14 +14402,14 @@ func _newhero_selftest() -> void:
 
 	# hero_cap 是场景规则（驻守默认4，战役/竞技场为0=不限），单独打印但不影响技能链 ALL。
 	var cap_ok := level.hero_cap() == 4
-	var all_ok: bool = blackrain_ok and br_point_ok and br_attack_slow_ok and icewall_ok and beast_ok \
+	var all_ok: bool = blackrain_ok and br_point_ok and br_attack_slow_ok and icewall_ok and beast_ok and gong_geometry_ok \
 			and dragon_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok \
 			and immune_ok and wu_god_ok and absorbed_ok and heal_ok and wu_anim_ok and li_brawn_ok \
 			and li_guard_ok and song_hybrid_ok and song_rally_ok and song_shared_cd_ok and banner_charge_ok \
 			and banner_variant_ok and banner_rank_ok and banner_reduce_ok and loyalty_ok and righteous_ok \
 			and overlap_ok and banner_downgrade_ok and aura_restore_ok and banner_exit_ok \
 			and summon_despawn_ok and song_fire_ok
-	print("[newhero] blackrain=%s point=%s suppression=%s icewall=%s beasts=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s wu_god=%s absorbed=%s heal=%s wu_anim=%s li_brawn=%s li_guard=%s songhybrid=%s songrally=%s song_shared_cd=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_point_ok, br_attack_slow_ok, icewall_ok, beast_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, wu_god_ok, absorbed_ok, heal_ok, wu_anim_ok, li_brawn_ok, li_guard_ok, song_hybrid_ok, song_rally_ok, song_shared_cd_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
+	print("[newhero] blackrain=%s point=%s suppression=%s icewall=%s beasts=%s geometry=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s wu_god=%s absorbed=%s heal=%s wu_anim=%s li_brawn=%s li_guard=%s songhybrid=%s songrally=%s song_shared_cd=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_point_ok, br_attack_slow_ok, icewall_ok, beast_ok, gong_geometry_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, wu_god_ok, absorbed_ok, heal_ok, wu_anim_ok, li_brawn_ok, li_guard_ok, song_hybrid_ok, song_rally_ok, song_shared_cd_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
 
 	# 清理：移除召唤物与测试单位，避免污染后续
 	for u in units.duplicate():

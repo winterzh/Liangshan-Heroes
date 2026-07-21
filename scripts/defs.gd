@@ -458,9 +458,10 @@ const ABILITIES := {
 
 	# ===== DOTA 式英雄技能改版（林冲/花荣/李逵）=====
 	# 林冲 Q：窄直线破阵。普通兵被推退，骑兵/武将不退、改为露出破绽（削甲）。
-	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 8.0, "targeted": true, "radius": 300.0, "color": Color("c0a0ff"),
-		"desc": "300射程窄线贯穿，造成45/65/85伤害\n普通兵击退60/80/100；骑兵与武将削甲2/4/6，持续5秒",
-		"effect": {"kind": "line_nuke", "dmg_ranks": [45.0, 65.0, 85.0], "len": 300.0, "width": 72.0,
+	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 8.0, "targeted": true, "radius": 260.0, "color": Color("c0a0ff"),
+		"desc": "固定260射程窄线贯穿，造成45/65/85伤害\n普通兵击退60/80/100；骑兵与武将削甲2/4/6，持续5秒",
+		"effect": {"kind": "line_nuke", "dmg_ranks": [45.0, 65.0, 85.0], "len": 260.0, "width": 48.0,
+			"fixed_geometry": true,
 			"lin_break": true, "push_ranks": [60.0, 80.0, 100.0], "def_down_ranks": [2.0, 4.0, 6.0], "def_down_dur": 5.0}},
 	# 林冲 E：稳定枪势替代随机吸血；骑兵每刀叠两层，保留鲜明克骑定位。
 	"lin_predator": {"name": "八十万禁军教头", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("c8e0ff"),
@@ -497,10 +498,10 @@ const ABILITIES := {
 	# ===== 入云龙·公孙胜 =====
 	# Q·黑雨：低伤害压制天气；核心是压低攻速并令普攻概率落空，与宋江纯伤害地火分工。
 	"gong_blackrain": {"name": "黑雨", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true,
-		"radius": 170.0, "color": Color("6a4fb0"),
-		"desc": "指定战阵降下黑雨，持续 6/7/8 秒\n每秒 4/6/8 伤害，降低敌军 15%/20%/25% 攻速\n并使其普攻有 20%/30%/40% 概率落空",
+		"radius": 100.0, "color": Color("6a4fb0"),
+		"desc": "指定战阵降下半径 100 的黑雨，持续 6/7/8 秒\n每秒 2/3/4 伤害，降低敌军 15%/20%/25% 攻速\n并使其普攻有 20%/30%/40% 概率落空",
 		"effect": {"kind": "black_rain", "follow": false, "cast_range": 520.0,
-			"dps_ranks": [4.0, 6.0, 8.0], "dur_ranks": [6.0, 7.0, 8.0],
+			"dps_ranks": [2.0, 3.0, 4.0], "dur_ranks": [6.0, 7.0, 8.0],
 			"attack_slow_ranks": [0.85, 0.80, 0.75], "attack_miss_ranks": [0.20, 0.30, 0.40]}},
 	# W·冰墙：墙长、伤害与留场时间均随等级成长；撞上墙线的敌军会被重度减速。
 	"gong_icewall": {"name": "冰墙", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0],
@@ -512,8 +513,9 @@ const ABILITIES := {
 	# E·百兽奔袭：机制仍是直线击退控场，表现改为复用一张猛兽素材组成兽群冲锋。
 	"gong_slow": {"name": "百兽奔袭", "cd": 12.0, "cd_ranks": [12.0, 10.0, 8.0],
 		"targeted": true, "radius": 60.0, "color": Color("c98245"),
-		"desc": "召来兽群沿直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n弹道速度为施法时自身移速的 500%",
+		"desc": "召来兽群沿固定 320 长直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n英雄倍率只增加宽度；弹道速度为施法时自身移速的 500%",
 		"effect": {"kind": "beast_stampede", "cast_range": 320.0, "len": 320.0, "width": 120.0,
+			"scale_radius": false, "scale_len": false, "scale_cast_range": false,
 			"dmg_ranks": [25.0, 40.0, 55.0], "push_ranks": [120.0, 150.0, 180.0],
 			"slow": 0.70, "slow_dur": 2.0, "beast_count": 7, "proj_speed_mult": 5.0}},
 	# R·画龙点睛：恢复原版召龙及原数值；金龙远程吐火并带 50 范围溅射。
