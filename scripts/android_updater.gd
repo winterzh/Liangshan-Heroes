@@ -10,10 +10,10 @@ signal update_available(version: String, size_bytes: int)
 signal full_update_required(version: String)
 signal update_ready(version: String)
 
-const BOOTSTRAP_VERSION := 2
-const PACKAGE_VERSION_NAME := "1.6"
-const PACKAGE_VERSION_CODE := 13
-const BASE_CONTENT_VERSION := "1.6"
+const BOOTSTRAP_VERSION := 3
+const PACKAGE_VERSION_NAME := "1.7"
+const PACKAGE_VERSION_CODE := 14
+const BASE_CONTENT_VERSION := "1.7"
 
 # 旧补丁脚本和专项测试可能仍读取这两个名字，不能删除。
 const APK_VERSION_NAME := PACKAGE_VERSION_NAME
@@ -70,7 +70,10 @@ var _download_tmp_path := ""
 func _init() -> void:
 	platform_id = _detect_platform()
 	architecture = _detect_architecture()
-	enabled = platform_id != "" and (OS.has_feature("standalone") or _is_update_test())
+	# Godot 4.6 导出模板并不保证提供 `standalone` feature tag；v1.6 因此把
+	# 真实 EXE/APP/APK 的更新器全部关掉了。`editor` 只存在编辑器可执行文件，
+	# 所以反向判断才能稳定区分导出程序与本地编辑调试。专项测试仍可显式绕过。
+	enabled = platform_id != "" and (not OS.has_feature("editor") or _is_update_test())
 	if not enabled:
 		return
 	_update_dir = ANDROID_UPDATE_DIR if platform_id == "android" else DESKTOP_UPDATE_ROOT.path_join(platform_id)

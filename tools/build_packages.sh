@@ -68,6 +68,22 @@ mv /tmp/liangshan_arm64_bin "$BIN"
 chmod +x "$BIN"
 /usr/bin/codesign --force --deep --sign - --timestamp=none "$APP"
 
+echo "== 真实导出程序更新引导自检 =="
+# 不设 CONTENT_UPDATE_TEST：这里必须走真实导出程序的启用条件。
+# v1.6 就是因为专项测试开关绕过了错误的 feature tag 判断才漏检。
+UPDATER_SMOKE_HOME="$(mktemp -d /tmp/liangshan_updater_smoke.XXXXXX)"
+if ! HOME="$UPDATER_SMOKE_HOME" CONTENT_UPDATE_NO_AUTO=1 \
+	"$BIN" --headless --quit-after 120 > /tmp/liangshan_updater_bootstrap.log 2>&1; then
+	rm -rf "$UPDATER_SMOKE_HOME"
+	update_die "真实导出程序无法启动（见 /tmp/liangshan_updater_bootstrap.log）"
+fi
+UPDATER_SMOKE_DIR="$UPDATER_SMOKE_HOME/Library/Application Support/Godot/app_userdata/水浒英雄传：八幕战役/content_updates/macos"
+if [ ! -d "$UPDATER_SMOKE_DIR" ]; then
+	rm -rf "$UPDATER_SMOKE_HOME"
+	update_die "真实导出程序未启用内容更新引导器"
+fi
+rm -rf "$UPDATER_SMOKE_HOME"
+
 echo "== macOS DMG =="
 STAGE="$(mktemp -d /tmp/liangshan_dmg.XXXXXX)"
 trap 'rm -rf "$STAGE"' EXIT

@@ -8,7 +8,7 @@
 - `vX.X.X`：当前完整版发布线上的三端差异内容包，不创建新安装包。
 - 所有发布都要先提交、推送、创建 tag。脚本要求工作区完全干净（包括未跟踪文件）且 HEAD 精确等于 tag。
 
-`v1.6` 是桌面端第一个含更新引导器的完整包。v1.5.2 Windows/macOS 无法自行下载差异包，用户必须首先安装 v1.6 完整包。因此 v1.6 桌面清单的 `patch` 为 `null`；真正可下载的三端差异 PCK 从 v1.6.1 开始。
+`v1.7` 是当前完整基线，修复了 v1.6 导出程序错用 `standalone` feature tag 而未启动更新器的问题。Windows/macOS 用户必须先安装 v1.7 完整包，之后才能正常接收 v1.7.x 差异 PCK。v1.7 桌面基线清单的 `patch` 为 `null`。
 
 ## 平台通道
 
@@ -28,24 +28,24 @@
 4. 构建三端完整包与基线：
 
    ```bash
-   bash tools/build_packages.sh 1.6
+   bash tools/build_packages.sh 1.7
    ```
 
-5. 创建 GitHub Release，上传 `LiangshanHeroes-v1.6.exe/.dmg/.apk`。
+5. 创建 GitHub Release，上传 `LiangshanHeroes-v1.7.exe/.dmg/.apk`。
 6. 公网三包可下载后，发布签名基线：
 
    ```bash
-   bash tools/publish_update_baseline.sh 1.6 "更新说明"
+   bash tools/publish_update_baseline.sh 1.7 "更新说明"
    ```
 
 构建脚本会写入 `build/updates/build-source.json`。发布脚本重新计算三个完整包和三个基线 PCK 的大小/SHA-256，并要求其提交与 tag 完全一致，避免误发 `build/` 中的旧产物。
 
 ## 小版本流程
 
-提交、推送并创建 `v1.6.1` tag 后：
+提交、推送并创建 `v1.7.1` tag 后：
 
 ```bash
-bash tools/publish_hot_update.sh 1.6.1 "更新说明"
+bash tools/publish_hot_update.sh 1.7.1 "更新说明"
 ```
 
 脚本会从三端固定基线生成累计差异包，上传版本化文件，公网回读验签/验哈希，最后一起切换三端 stable。
@@ -86,7 +86,7 @@ bash tools/publish_hot_update.sh 1.6.1 "更新说明"
 ## 发布后验证
 
 1. 三端 stable 的 `content_version`、`platform`、`architecture` 与预期一致，且签名有效。
-2. v1.6 Windows/macOS 显示“已是最新”；Android 旧包可获取累计补丁。
-3. v1.6.1 模拟清单在三端都能完成检查、下载、哈希校验、保存和重启装载。
+2. v1.7 Windows/macOS 真实导出程序会主动请求 stable 清单，并显示“已是最新”；Android 旧包可获取累计补丁。
+3. v1.7.1 模拟清单在三端都能完成检查、下载、哈希校验、保存和重启装载。
 4. 将 Android 清单提供给 Windows/macOS，或修改架构字段，客户端必须明确拒绝。
 5. 服务器公网回读的补丁/完整 APK 大小和 SHA-256 与本地一致。
