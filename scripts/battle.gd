@@ -13305,9 +13305,9 @@ func _newhero_selftest() -> void:
 	_grid.clear()
 	_do_ability(gong, 2, foe.position)
 	var beast_queued_ok := not _gong_lines.is_empty() \
-			and absf(float(_gong_lines[-1]["speed"]) - gong.current_move_speed() * 1.5) < 0.01 \
+			and absf(float(_gong_lines[-1]["speed"]) - gong.current_move_speed() * 5.0) < 0.01 \
 			and absf(foe.hp - beast_hp0) < 0.01
-	_zone_pass(1.2)   # rank2 公孙胜实际移速约 51.5，弹道约 77.2；1.2 秒足以抵达 76 处目标。
+	_zone_pass(0.31)   # 公孙胜默认实际移速约51.5，五倍弹道约257.4；0.31秒足以抵达76处目标。
 	var beast_ok := beast_queued_ok and absf((beast_hp0 - foe.hp) - 40.0 * _hero_db(gong)) < 0.2 \
 			and foe.position.x > beast_pos0.x + 100.0 and absf(foe.temp_speed - 0.70) < 0.001 \
 			and ResourceLoader.exists("res://assets/vfx/gong_beast_charge.png")

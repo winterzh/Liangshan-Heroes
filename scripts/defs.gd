@@ -504,10 +504,10 @@ const ABILITIES := {
 	# E·百兽奔袭：机制仍是直线击退控场，表现改为复用一张猛兽素材组成兽群冲锋。
 	"gong_slow": {"name": "百兽奔袭", "cd": 12.0, "cd_ranks": [12.0, 10.0, 8.0],
 		"targeted": true, "radius": 60.0, "color": Color("c98245"),
-		"desc": "召来兽群沿直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n弹道速度为施法时自身移速的 150%",
+		"desc": "召来兽群沿直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n弹道速度为施法时自身移速的 500%",
 		"effect": {"kind": "beast_stampede", "cast_range": 320.0, "len": 320.0, "width": 120.0,
 			"dmg_ranks": [25.0, 40.0, 55.0], "push_ranks": [120.0, 150.0, 180.0],
-			"slow": 0.70, "slow_dur": 2.0, "beast_count": 7, "proj_speed_mult": 1.5}},
+			"slow": 0.70, "slow_dur": 2.0, "beast_count": 7, "proj_speed_mult": 5.0}},
 	# R·画龙点睛：恢复原版召龙及原数值；金龙远程吐火并带 50 范围溅射。
 	"gong_dragon": {"name": "画龙点睛", "cd": 25.0, "targeted": false, "radius": 0.0, "color": Color("ffd24a"),
 		"desc": "大招·点睛唤龙\n召一条远程吐火金龙助战（血/攻为本体 100%/150%/200%）\n吐火带小范围溅射·持续 15 秒",
