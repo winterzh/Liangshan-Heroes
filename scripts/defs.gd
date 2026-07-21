@@ -52,7 +52,7 @@ const UNITS := {
 		"hero": true, "aura": "atk", "aura_r": 180, "aura_p": 1.25, "radius": 13, "ability": "chao_rally"},
 	"gongsun_sheng": {"name": "公孙胜", "hp": 165, "atk": 12, "cd": 1.2, "range": 200, "speed": 78,
 		"ranged": true, "hero": true, "aura": "speed", "aura_r": 175, "aura_p": 1.15, "radius": 12, "ability": "gongsun_thunder",
-		"proj_kind": "fireball",
+		"proj_kind": "fireball", "hero_cd_step": 0.10,
 		"abilities": ["gong_blackrain", "gong_icewall", "gong_slow", "gong_dragon"],
 		"hero_trainable": true, "pop": 3, "cost_gold": 168, "cost_wood": 56, "train_time": 40.0, "trained_at": "hall", "min_age": 1, "dota": "Invoker"},
 	"liu_tang": {"name": "刘唐", "hp": 210, "atk": 22, "cd": 0.8, "range": 26, "speed": 86, "hero": true, "radius": 13, "ability": "liu_cleave", "abilities": ["liu_tang_q", "liu_tang_w", "liu_tang_e", "liu_tang_r"], "dota": "Bloodseeker", "hero_trainable": true, "pop": 3, "cost_gold": 175, "cost_wood": 34, "train_time": 40, "trained_at": "hall", "min_age": 1},
@@ -499,8 +499,9 @@ const ABILITIES := {
 	# Q·黑雨：低伤害压制天气；核心是压低攻速并令普攻概率落空，与宋江纯伤害地火分工。
 	"gong_blackrain": {"name": "黑雨", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true,
 		"radius": 100.0, "color": Color("6a4fb0"),
-		"desc": "指定战阵降下半径 100 的黑雨，持续 6/7/8 秒\n每秒 2/3/4 伤害，降低敌军 15%/20%/25% 攻速\n并使其普攻有 20%/30%/40% 概率落空",
+		"desc": "指定战阵降下黑雨，基础半径 100（倍率3为120），持续 6/7/8 秒\n每秒 2/3/4 伤害，降低敌军 15%/20%/25% 攻速\n并使其普攻有 20%/30%/40% 概率落空",
 		"effect": {"kind": "black_rain", "follow": false, "cast_range": 520.0,
+			"radius_growth": 0.25, "cast_range_growth": 0.25,
 			"dps_ranks": [2.0, 3.0, 4.0], "dur_ranks": [6.0, 7.0, 8.0],
 			"attack_slow_ranks": [0.85, 0.80, 0.75], "attack_miss_ranks": [0.20, 0.30, 0.40]}},
 	# W·冰墙：墙长、伤害与留场时间均随等级成长；撞上墙线的敌军会被重度减速。
@@ -513,9 +514,9 @@ const ABILITIES := {
 	# E·百兽奔袭：机制仍是直线击退控场，表现改为复用一张猛兽素材组成兽群冲锋。
 	"gong_slow": {"name": "百兽奔袭", "cd": 12.0, "cd_ranks": [12.0, 10.0, 8.0],
 		"targeted": true, "radius": 60.0, "color": Color("c98245"),
-		"desc": "召来兽群沿固定 320 长直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n英雄倍率只增加宽度；弹道速度为施法时自身移速的 500%",
+		"desc": "召来兽群沿固定 320 长直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n英雄倍率只小幅增加宽度（倍率3为168）；弹道速度为自身移速的 500%",
 		"effect": {"kind": "beast_stampede", "cast_range": 320.0, "len": 320.0, "width": 120.0,
-			"scale_radius": false, "scale_len": false, "scale_cast_range": false,
+			"scale_radius": false, "scale_len": false, "scale_cast_range": false, "width_growth": 0.50,
 			"dmg_ranks": [25.0, 40.0, 55.0], "push_ranks": [120.0, 150.0, 180.0],
 			"slow": 0.70, "slow_dur": 2.0, "beast_count": 7, "proj_speed_mult": 5.0}},
 	# R·画龙点睛：恢复原版召龙及原数值；金龙远程吐火并带 50 范围溅射。

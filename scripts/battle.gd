@@ -5898,7 +5898,8 @@ func ability_cast_range(caster: Unit, ad: Dictionary) -> float:
 		return INF
 	# 单体狙击类即使属于超远支援英雄，也以技能明写的射程为准；其余花荣/宋江技能保持原全图规则。
 	if eff.has("cast_range"):
-		var range_scale := _hero_rb(caster) if bool(eff.get("scale_cast_range", true)) else 1.0
+		var range_scale := _range_growth_scale(_hero_rb(caster), float(eff.get("cast_range_growth", 1.0))) \
+				if bool(eff.get("scale_cast_range", true)) else 1.0
 		return float(eff["cast_range"]) * range_scale
 	if caster != null and is_instance_valid(caster) and String(caster.key) in CAST_RANGE_FREE_HEROES:
 		return INF
@@ -6046,8 +6047,14 @@ func _scale_num_arr(a: Array, f: float) -> Array:
 	return o
 
 
+## 把通用范围倍率 rb 的“额外成长部分”按技能压缩；1=完整成长，0=固定基础范围。
+func _range_growth_scale(rb: float, growth: float) -> float:
+	return 1.0 + maxf(0.0, rb - 1.0) * maxf(0.0, growth)
+
+
 ## 英雄倍率：返回按 rb(范围:radius/radius_ranks/len/width)、db(伤害:dmg/dps/dps_ranks/impact_ranks/dot_total/total)。
-## 技能可用 scale_radius/scale_len/scale_width=false 单独固定某个维度；fixed_geometry=true 则全部固定。
+## 技能可用 scale_radius/scale_len/scale_width=false 单独固定某维；也可用 radius/len/width_growth 压缩额外成长。
+## fixed_geometry=true 则全部固定。
 ## 缩放后的技能 def 深拷贝（不动原表、不缩 heal/slow/dur/atk 等）。rb=db=1 时原样返回（零开销）。
 func _scaled_ability(ad: Dictionary, rb: float, db: float) -> Dictionary:
 	if rb == 1.0 and db == 1.0:
@@ -6056,14 +6063,15 @@ func _scaled_ability(ad: Dictionary, rb: float, db: float) -> Dictionary:
 	var eff: Dictionary = out.get("effect", {})
 	var fixed_geometry := bool(eff.get("fixed_geometry", false))
 	var scale_radius := bool(eff.get("scale_radius", true))
+	var radius_rb := _range_growth_scale(rb, float(eff.get("radius_growth", 1.0)))
 	if out.has("radius") and not fixed_geometry and scale_radius:
-		out["radius"] = float(out["radius"]) * rb
+		out["radius"] = float(out["radius"]) * radius_rb
 	if out.has("radius_ranks") and not fixed_geometry and scale_radius:
-		out["radius_ranks"] = _scale_num_arr(out["radius_ranks"], rb)
+		out["radius_ranks"] = _scale_num_arr(out["radius_ranks"], radius_rb)
 	if eff.has("len") and not fixed_geometry and bool(eff.get("scale_len", true)):
-		eff["len"] = float(eff["len"]) * rb
+		eff["len"] = float(eff["len"]) * _range_growth_scale(rb, float(eff.get("len_growth", 1.0)))
 	if eff.has("width") and not fixed_geometry and bool(eff.get("scale_width", true)):
-		eff["width"] = float(eff["width"]) * rb
+		eff["width"] = float(eff["width"]) * _range_growth_scale(rb, float(eff.get("width_growth", 1.0)))
 	for k in ["dmg", "dps", "dot_total", "total"]:
 		if eff.has(k):
 			eff[k] = float(eff[k]) * db
@@ -13979,15 +13987,23 @@ func _newhero_selftest() -> void:
 	var beast_ok := beast_queued_ok and absf((beast_hp0 - foe.hp) - 40.0 * _hero_db(gong)) < 0.2 \
 			and foe.position.x > beast_pos0.x + 1.0 and absf(foe.temp_speed - 0.70) < 0.001 \
 			and ResourceLoader.exists("res://assets/vfx/gong_beast_charge.png")
-	# 倍率3：Q 半径由100正常放大至180；E只增宽至216，长度/施法距离仍固定320。
+	# 倍率3平衡：Q 半径120/施法距离624；E只增宽至168，长度/施法距离固定320；技能CD仅缩短20%。
 	var q_scaled: Dictionary = _scaled_ability(_abilities["gong_blackrain"], 1.8, 1.5)
 	var e_scaled: Dictionary = _scaled_ability(_abilities["gong_slow"], 1.8, 1.5)
+	var q_scaled_eff: Dictionary = q_scaled.get("effect", {})
 	var e_scaled_eff: Dictionary = e_scaled.get("effect", {})
-	var gong_geometry_ok := absf(float(q_scaled.get("radius", 0.0)) - 180.0) < 0.01 \
+	var gong_geometry_ok := absf(float(q_scaled.get("radius", 0.0)) - 120.0) < 0.01 \
+			and absf(520.0 * _range_growth_scale(1.8, float(q_scaled_eff.get("cast_range_growth", 1.0))) - 624.0) < 0.01 \
 			and absf(float(e_scaled.get("radius", 0.0)) - 60.0) < 0.01 \
 			and absf(float(e_scaled_eff.get("len", 0.0)) - 320.0) < 0.01 \
-			and absf(float(e_scaled_eff.get("width", 0.0)) - 216.0) < 0.01 \
+			and absf(float(e_scaled_eff.get("width", 0.0)) - 168.0) < 0.01 \
 			and not bool(e_scaled_eff.get("scale_cast_range", true))
+	var q_dps3: Array = q_scaled_eff.get("dps_ranks", [])
+	var gong_balance_ok := absf(gong.hero_cd_mult_for_n(3.0) - 0.80) < 0.001 \
+			and absf(12.0 * gong.hero_cd_mult_for_n(3.0) - 9.60) < 0.01 \
+			and absf(8.0 * gong.hero_cd_mult_for_n(3.0) - 6.40) < 0.01 \
+			and absf(25.0 * gong.hero_cd_mult_for_n(3.0) - 20.0) < 0.01 \
+			and q_dps3.size() == 3 and absf(float(q_dps3[2]) - 6.0) < 0.01
 	_zone_pass(10.0)   # 让 E 弹道离场，避免与下面新生成的 R 靶子交叉。
 
 	# 公孙胜 R 画龙点睛：恢复原版；rank2召一条血/攻均为本体150%的远程溅射金龙，持续15秒、CD25秒。
@@ -14402,14 +14418,15 @@ func _newhero_selftest() -> void:
 
 	# hero_cap 是场景规则（驻守默认4，战役/竞技场为0=不限），单独打印但不影响技能链 ALL。
 	var cap_ok := level.hero_cap() == 4
-	var all_ok: bool = blackrain_ok and br_point_ok and br_attack_slow_ok and icewall_ok and beast_ok and gong_geometry_ok \
+	var all_ok: bool = blackrain_ok and br_point_ok and br_attack_slow_ok and icewall_ok and beast_ok \
+			and gong_geometry_ok and gong_balance_ok \
 			and dragon_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok \
 			and immune_ok and wu_god_ok and absorbed_ok and heal_ok and wu_anim_ok and li_brawn_ok \
 			and li_guard_ok and song_hybrid_ok and song_rally_ok and song_shared_cd_ok and banner_charge_ok \
 			and banner_variant_ok and banner_rank_ok and banner_reduce_ok and loyalty_ok and righteous_ok \
 			and overlap_ok and banner_downgrade_ok and aura_restore_ok and banner_exit_ok \
 			and summon_despawn_ok and song_fire_ok
-	print("[newhero] blackrain=%s point=%s suppression=%s icewall=%s beasts=%s geometry=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s wu_god=%s absorbed=%s heal=%s wu_anim=%s li_brawn=%s li_guard=%s songhybrid=%s songrally=%s song_shared_cd=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_point_ok, br_attack_slow_ok, icewall_ok, beast_ok, gong_geometry_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, wu_god_ok, absorbed_ok, heal_ok, wu_anim_ok, li_brawn_ok, li_guard_ok, song_hybrid_ok, song_rally_ok, song_shared_cd_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
+	print("[newhero] blackrain=%s point=%s suppression=%s icewall=%s beasts=%s geometry=%s balance=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s wu_god=%s absorbed=%s heal=%s wu_anim=%s li_brawn=%s li_guard=%s songhybrid=%s songrally=%s song_shared_cd=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_point_ok, br_attack_slow_ok, icewall_ok, beast_ok, gong_geometry_ok, gong_balance_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, wu_god_ok, absorbed_ok, heal_ok, wu_anim_ok, li_brawn_ok, li_guard_ok, song_hybrid_ok, song_rally_ok, song_shared_cd_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
 
 	# 清理：移除召唤物与测试单位，避免污染后续
 	for u in units.duplicate():

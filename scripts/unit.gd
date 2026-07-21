@@ -2157,6 +2157,12 @@ func slot_cast_sequence(i: int) -> int:
 	return maxi(0, int(ability_slots[i].get("cast_seq", 0)))
 
 
+## 指定倍率下的技能冷却系数。绝大多数英雄每档缩短20%；公孙胜等纯控场英雄可在单位表降低成长。
+func hero_cd_mult_for_n(n: float) -> float:
+	var step := clampf(float(setup_def.get("hero_cd_step", 0.20)), 0.0, 0.40)
+	return maxf(0.20, 1.0 - (clampf(n, 1.0, 3.0) - 1.0) * step)
+
+
 func _slot_cd(i: int) -> float:
 	if i < 0 or i >= ability_slots.size():
 		return 0.0
@@ -2166,7 +2172,7 @@ func _slot_cd(i: int) -> float:
 	# 冷却可随技能等级缩短（cd_ranks: [1级,2级,3级]），否则用固定 cd
 	var cr: Array = ad.get("cd_ranks", [])
 	var base: float = float(cr[clampi(int(ability_slots[i]["rank"]), 1, cr.size()) - 1]) if cr.size() > 0 else float(ad.get("cd", 0.0))
-	return base * (1.0 - (hero_boost_n() - 1.0) * 0.2)   # 英雄倍率：CD 线性缩短(推荐)，n2=-20%、n3=-40%(=60%)
+	return base * hero_cd_mult_for_n(hero_boost_n())
 
 
 func slot_ready(i: int) -> bool:
