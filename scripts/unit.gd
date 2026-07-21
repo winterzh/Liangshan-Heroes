@@ -152,6 +152,9 @@ var _def_down := 0.0
 var _def_down_t := 0.0
 # 致盲（武松 E·双戒刀附带）：>0 时本单位攻击必失（不结算伤害、不吸血）
 var _blind_t := 0.0
+# 概率障目（公孙胜 Q·黑雨）：与“攻击必失”的完全致盲分开计时，避免两种强度互相覆盖。
+var _attack_miss_chance := 0.0
+var _attack_miss_t := 0.0
 # 通用减速光环：每帧由 _aura_pass 写入；<1 = 受敌方减速光环影响。slow_aura_r>0 时自身画光环环
 var aura_slow := 1.0
 var slow_aura_r := 0.0
@@ -1001,6 +1004,11 @@ func _phys_body(delta: float) -> void:
 	# 致盲计时（武松 E）：期间攻击必失
 	if _blind_t > 0.0:
 		_blind_t -= delta
+	# 概率障目计时（公孙胜 Q）：只影响普攻命中率，离开雨区后很快恢复。
+	if _attack_miss_t > 0.0:
+		_attack_miss_t -= delta
+		if _attack_miss_t <= 0.0:
+			_attack_miss_chance = 0.0
 	# DOTA 原语计时：护盾 / 沉默 / 临时攻速
 	if _shield_t > 0.0:
 		_shield_t -= delta
@@ -1654,6 +1662,12 @@ func _deal_hit() -> void:
 	_consume_hua_locked_attack(t)
 	# 致盲（武松 E·双戒刀）：本单位攻击必失——不结算伤害、不发射弹丸、不吸血，仅一记落空火花
 	if _blind_t > 0.0:
+		if battle != null and battle.has_method("spawn_impact"):
+			battle.spawn_impact(t.position + Vector2(0, -4), false)
+		Sfx.play(_attack_sfx_name(), -11.0, 0.2, 45)
+		return
+	# 黑雨障目：按当前概率令这次普攻落空；技能伤害不受影响。
+	if _attack_miss_t > 0.0 and randf() < _attack_miss_chance:
 		if battle != null and battle.has_method("spawn_impact"):
 			battle.spawn_impact(t.position + Vector2(0, -4), false)
 		Sfx.play(_attack_sfx_name(), -11.0, 0.2, 45)
@@ -2556,6 +2570,13 @@ func apply_blind(dur: float) -> void:
 	_buff_glow = 0.6
 
 
+## 概率障目：chance 为 0~1；同一时刻只取更高概率，雨区每跳短暂刷新持续时间。
+func apply_attack_miss_chance(chance: float, dur: float) -> void:
+	_attack_miss_chance = maxf(_attack_miss_chance, clampf(chance, 0.0, 1.0))
+	_attack_miss_t = maxf(_attack_miss_t, dur)
+	_buff_glow = 0.35
+
+
 func is_blinded() -> bool:
 	return _blind_t > 0.0
 
@@ -2757,6 +2778,7 @@ func dispel(hostile: bool) -> void:
 		_dmg_amp = 0.0; _dmg_amp_t = 0.0
 		_taunt_t = 0.0; _taunt_src = null
 		_blind_t = 0.0
+		_attack_miss_chance = 0.0; _attack_miss_t = 0.0
 		_attack_speed_slow = 1.0; _attack_speed_slow_t = 0.0
 		if temp_speed < 1.0:
 			temp_speed = 1.0; _temp_speed_t = 0.0   # 只清减速（加速归驱散）

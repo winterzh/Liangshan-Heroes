@@ -487,13 +487,13 @@ const ABILITIES := {
 		"effect": {"kind": "self_buff", "atk_add": 30.0, "lifesteal": 1.5, "dur": 5.0}},
 
 	# ===== 入云龙·公孙胜 =====
-	# Q·黑雨：远程控场雨区，持续侵蚀并压低敌军攻速。
+	# Q·黑雨：低伤害压制天气；核心是压低攻速并令普攻概率落空，与宋江纯伤害地火分工。
 	"gong_blackrain": {"name": "黑雨", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true,
 		"radius": 170.0, "color": Color("6a4fb0"),
-		"desc": "指定战阵降下黑雨，持续 6/7/8 秒\n每秒 18/24/30 伤害，并降低敌军 15%/20%/25% 攻速",
+		"desc": "指定战阵降下黑雨，持续 6/7/8 秒\n每秒 4/6/8 伤害，降低敌军 15%/20%/25% 攻速\n并使其普攻有 20%/30%/40% 概率落空",
 		"effect": {"kind": "black_rain", "follow": false, "cast_range": 520.0,
-			"dps_ranks": [18.0, 24.0, 30.0], "dur_ranks": [6.0, 7.0, 8.0],
-			"attack_slow_ranks": [0.85, 0.80, 0.75]}},
+			"dps_ranks": [4.0, 6.0, 8.0], "dur_ranks": [6.0, 7.0, 8.0],
+			"attack_slow_ranks": [0.85, 0.80, 0.75], "attack_miss_ranks": [0.20, 0.30, 0.40]}},
 	# W·冰墙：墙长、伤害与留场时间均随等级成长；撞上墙线的敌军会被重度减速。
 	"gong_icewall": {"name": "冰墙", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0],
 		"targeted": true, "radius": 60.0, "color": Color("9fd8ff"),
@@ -504,16 +504,15 @@ const ABILITIES := {
 	# E·百兽奔袭：机制仍是直线击退控场，表现改为复用一张猛兽素材组成兽群冲锋。
 	"gong_slow": {"name": "百兽奔袭", "cd": 12.0, "cd_ranks": [12.0, 10.0, 8.0],
 		"targeted": true, "radius": 60.0, "color": Color("c98245"),
-		"desc": "召来兽群沿直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒",
+		"desc": "召来兽群沿直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n弹道速度为施法时自身移速的 150%",
 		"effect": {"kind": "beast_stampede", "cast_range": 320.0, "len": 320.0, "width": 120.0,
 			"dmg_ranks": [25.0, 40.0, 55.0], "push_ranks": [120.0, 150.0, 180.0],
-			"slow": 0.70, "slow_dur": 2.0, "beast_count": 7}},
-	# R·画龙点睛：真龙沿指向贯阵，不再留下常驻召唤物。
-	"gong_dragon": {"name": "画龙点睛", "cd": 40.0, "cd_ranks": [40.0, 35.0, 30.0],
-		"targeted": true, "radius": 65.0, "color": Color("ffd24a"),
-		"desc": "点睛唤出真龙贯穿长阵，造成 120/190/260 伤害\n沿线敌军眩晕 1/1.5/2 秒",
-		"effect": {"kind": "dragon_line", "cast_range": 650.0, "len": 650.0, "width": 130.0,
-			"dmg_ranks": [120.0, 190.0, 260.0], "stun_ranks": [1.0, 1.5, 2.0]}},
+			"slow": 0.70, "slow_dur": 2.0, "beast_count": 7, "proj_speed_mult": 1.5}},
+	# R·画龙点睛：恢复原版召龙及原数值；金龙远程吐火并带 50 范围溅射。
+	"gong_dragon": {"name": "画龙点睛", "cd": 25.0, "targeted": false, "radius": 0.0, "color": Color("ffd24a"),
+		"desc": "大招·点睛唤龙\n召一条远程吐火金龙助战（血/攻为本体 100%/150%/200%）\n吐火带小范围溅射·持续 15 秒",
+		"effect": {"kind": "summon", "unit": "dragon_summon", "count": 1, "summon_kind": "dragon", "copy_caster": true,
+			"copy_mult": [1.0, 1.5, 2.0], "dur": 15.0}},
 
 	# ===== 行者·武松 =====
 	# Q·驱使猛虎：场上最多一虎，重放会替换旧虎；血量与攻击分别继承武松。
@@ -1214,10 +1213,6 @@ static func ability_levels(aid: String) -> String:
 			var bp: Array = eff.get("push_ranks", [0, 0, 0])
 			return "伤害%d/%d/%d·推退%d/%d/%d·减速%d%%" % [int(bd[0]), int(bd[1]), int(bd[2]),
 				int(bp[0]), int(bp[1]), int(bp[2]), int(round((1.0 - float(eff.get("slow", 1.0))) * 100.0))]
-		"dragon_line":
-			var dd: Array = eff.get("dmg_ranks", [0, 0, 0])
-			var ds: Array = eff.get("stun_ranks", [0, 0, 0])
-			return "贯阵伤害%d/%d/%d·眩晕%s/%s/%ss" % [int(dd[0]), int(dd[1]), int(dd[2]), str(ds[0]), str(ds[1]), str(ds[2])]
 		"weapon_toggle":
 			return "切近战/远程·近战吸血/击 20-40/30-50/40-60%"
 		"drunk_buff":

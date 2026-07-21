@@ -145,6 +145,7 @@ var _hua_snipe_dots: Array = [] # 花荣 R 敌将单体百分比流血：{target
 var _chrono_zones: Array = []  # 时空封印立场：{pos,r,foe,t}——每帧把域内敌军续晕（林冲 R）
 var _orbit_zones: Array = []   # 双斧回旋扫伤区：{caster,foe,r,t,tick,tick_t,dmg,slow,slow_dur}（李逵 Q）
 var _meteor_zones: Array = []  # 天降陨石滚动区：{pos,dir,remain,hw,foe,caster,impact,dps,dot_dur,hit,trail}（宋江 W）
+var _gong_lines: Array = []    # 公孙胜 E 行进兽群：按施法瞬间自身实际移速×倍率推进，沿途逐个命中
 var _ice_walls: Array = []     # 冰墙阻挡：{cells:[Vector2i],t}——到期解锁格子（公孙胜 W）
 var _wards: Array = []          # 立桩/旗阵：治疗、攻击、毒桩及忠义旗（减伤+忠回血/义攻速）
 var _ward_serial := 0           # 忠义旗光环来源编号：让重叠旗按来源独立到期并正确降档
@@ -4136,7 +4137,7 @@ func _learn_order(h: Unit) -> Array:
 		"song_jiang": return [1, 2, last, 0]   # 忠义双旗(song_banner, W=1) 优先 → 火攻(E=2) → 大招 → Q
 		"hua_rong": return [1, last, 2, 0]      # W 先稳清线；能学 R 就抢，随后单体 E，Q 最后
 		"lin_chong": return [2, last, 0, 1]     # 猎骑被动(lin_predator, E=2) 优先
-		"gongsun_sheng": return [last, 0, 2, 1] # 抢真龙贯阵，其次黑雨/百兽控场，冰墙最后补
+		"gongsun_sheng": return [last, 0, 2, 1] # 抢召龙，其次黑雨/百兽控场，冰墙最后补
 	var o := [last]                             # 其它英雄照旧：先抢大招，再 Q/W/E
 	for i in range(maxi(0, last)):
 		o.append(i)
@@ -4529,9 +4530,10 @@ func _brain_hua(u: Unit) -> void:
 	_ai_push_into_range(u, nf, u.atk_range - 20.0)
 
 
-## 公孙胜托管只按本方真实可见敌情选落点：返回可达范围内的最密集点、人数，以及该团是否含敌将。
-func _gong_visible_cluster(u: Unit, reach: float, sample_r: float) -> Dictionary:
-	var best := {"pos": Vector2.INF, "count": 0, "hero": false}
+## 公孙胜托管只按本方真实可见敌情选落点。prefer_attackers=true 时额外偏向敌将、远程和高频输出者，
+## 供黑雨选择“最值得压制的火力群”；百兽仍以纯密度/距离为主。
+func _gong_visible_cluster(u: Unit, reach: float, sample_r: float, prefer_attackers := false) -> Dictionary:
+	var best := {"pos": Vector2.INF, "count": 0, "hero": false, "attackers": 0, "pressure": 0.0}
 	var best_score := -INF
 	for anchor in units:
 		if not (is_instance_valid(anchor) and anchor.faction != u.faction and anchor.hp > 0.0):
@@ -4541,20 +4543,28 @@ func _gong_visible_cluster(u: Unit, reach: float, sample_r: float) -> Dictionary
 			continue
 		var count := 0
 		var has_hero := false
+		var attackers := 0
+		var pressure := 0.0
 		for foe in units_near(anchor.position, sample_r):
 			if is_instance_valid(foe) and foe.faction != u.faction and foe.hp > 0.0 and not foe.is_building \
 					and not foe.is_resource and not foe.garrisoned and not foe.is_captive \
 					and anchor.position.distance_to(foe.position) <= sample_r and target_visible_to(u, foe):
 				count += 1
 				has_hero = has_hero or foe.is_hero
+				pressure += minf(80.0, foe.atk / maxf(foe.atk_cd, 0.25))
+				if foe.is_hero or foe.is_ranged or foe.atk >= 18.0 or foe.atk_cd <= 0.90:
+					attackers += 1
 		var score := float(count) * 100.0 + (70.0 if has_hero else 0.0) - u.position.distance_to(anchor.position) * 0.015
+		if prefer_attackers:
+			score += pressure * 2.0 + float(attackers) * 65.0 + (120.0 if has_hero else 0.0)
 		if score > best_score:
 			best_score = score
-			best = {"pos": anchor.position, "count": count, "hero": has_hero}
+			best = {"pos": anchor.position, "count": count, "hero": has_hero,
+				"attackers": attackers, "pressure": pressure}
 	return best
 
 
-## 公孙胜·法师：黑雨压制密集战阵、冰墙分割道路、百兽奔袭推开冲脸者、真龙贯穿高价值长阵。
+## 公孙胜·法师：黑雨压制敌方主力火力、冰墙分割道路、百兽奔袭推开冲脸者、画龙点睛召龙助战。
 ## 全托管时与其他英雄共用动态分路；这里只负责法师自身保命、控场优先级和后排站位。
 func _brain_gong(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
@@ -4580,16 +4590,16 @@ func _brain_gong(u: Unit) -> void:
 	elif u.stance == Unit.STANCE_PASSIVE:
 		u.set_stance(Unit.STANCE_AGGRO)   # 脱离威胁、血也够 → 恢复远程索敌
 		u._home = u.position
-	# P2 R 画龙点睛：敌将优先；否则至少贯穿一团三人，避免把长 CD 浪费在单个杂兵。
-	if u.slot_ready(3):
-		var rpack := _gong_visible_cluster(u, 650.0 * _hero_rb(u), 90.0)
-		if rpack["pos"] != Vector2.INF and (bool(rpack["hero"]) or int(rpack["count"]) >= 3):
-			if _ai_cast_slot(u, 3, rpack["pos"]):
-				return
-	# P3 Q 黑雨：投到 520 内最密集处持续压攻速，不再要求公孙胜本人贴近敌群。
+	# P2 R 画龙点睛：有效战斗已经进入 720 范围且本人没有存活金龙时召唤；不会提前刷新尚在作战的龙。
+	if u.slot_ready(3) and _count_owned_summons(u, "dragon") <= 0 \
+			and nf != Vector2.INF and d_near <= 720.0:
+		if _ai_cast_slot(u, 3, u.position):
+			return
+	# P3 Q 黑雨：优先罩敌将、远程/高频输出构成的火力群，其次才按人数密度压制普通战阵。
 	if u.slot_ready(0):
-		var qpack := _gong_visible_cluster(u, 520.0 * _hero_rb(u), 150.0)
-		if qpack["pos"] != Vector2.INF and int(qpack["count"]) >= 2:
+		var qpack := _gong_visible_cluster(u, 520.0 * _hero_rb(u), 150.0, true)
+		if qpack["pos"] != Vector2.INF and (int(qpack["count"]) >= 2 \
+				or bool(qpack["hero"]) or int(qpack["attackers"]) >= 2):
 			if _ai_cast_slot(u, 0, qpack["pos"]):
 				return
 	# P4 E 百兽奔袭：两人以上成团或近身威胁就推；方向取密集点，兽群会把他们统一往外赶。
@@ -6189,13 +6199,13 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 			var br_follow: Unit = caster if bool(eff.get("follow", false)) else null
 			var br_center: Vector2 = caster.position if br_follow != null else center
 			var br_attack_slow := float(_pick(eff["attack_slow_ranks"], rank)) if eff.has("attack_slow_ranks") else 1.0
-			_spawn_black_rain(br_center, r, br_dps * br_dur, br_dur, caster, foe, br_follow, br_attack_slow)
+			var br_attack_miss := float(_pick(eff["attack_miss_ranks"], rank)) if eff.has("attack_miss_ranks") else 0.0
+			_spawn_black_rain(br_center, r, br_dps * br_dur, br_dur, caster, foe, br_follow,
+				br_attack_slow, br_attack_miss)
 		"ice_wall":   # 公孙胜 W·冰墙：少量伤害 + 阻隔敌军移动
 			_do_ice_wall(caster, eff, sc, rank, center, foe, ad["color"])
 		"beast_stampede":   # 公孙胜 E·百兽奔袭：直线击退判定，单张猛兽贴图错列复用成兽群
 			_do_beast_stampede(caster, eff, sc, rank, center, foe)
-		"dragon_line":   # 公孙胜 R·画龙点睛：真龙沿指向贯穿长阵
-			_do_dragon_line(caster, eff, sc, rank, center, foe)
 		"drunk_buff":   # 武松 W·三碗不过岗：移动/攻速随机波动
 			caster.start_drunk(float(_pick(eff.get("lo", [0.9]), rank)), float(_pick(eff.get("hi", [1.3]), rank)), float(eff.get("dur", 30.0)))
 		"drunk_god":   # 武松 R·醉神大闹快活林：物免 + 每击加攻 + 结束转血
@@ -6386,6 +6396,40 @@ func _zone_pass(delta: float) -> void:
 				var dd: float = float(z["dot_dur"])
 				_spawn_ground_fire(mp, mhw, float(z["dps"]) * dd, dd, src if is_instance_valid(src) else null, mfoe)
 		_meteor_zones = _meteor_zones.filter(func(z): return float(z["remain"]) > 0.0)
+	# 公孙胜 E：兽群头部按真实速度扫过路径；伤害与推退只在兽群抵达目标时结算。
+	if not _gong_lines.is_empty():
+		for z in _gong_lines:
+			var remain: float = float(z["length"]) - float(z["traveled"])
+			var step_g: float = minf(float(z["speed"]) * delta, remain)
+			if step_g <= 0.0:
+				continue
+			var dir_g: Vector2 = z["dir"]
+			var sweep_start: Vector2 = Vector2(z["origin"]) + dir_g * float(z["traveled"])
+			z["traveled"] = float(z["traveled"]) + step_g
+			var sweep_mid := sweep_start + dir_g * step_g * 0.5
+			var hw_g: float = float(z["half_width"])
+			var foe_g: int = int(z["foe"])
+			var hit_g: Dictionary = z["hit"]
+			var src = z["caster"]
+			for u in units_near(sweep_mid, step_g * 0.5 + hw_g + 40.0):
+				if not (is_instance_valid(u) and u.faction == foe_g and u.hp > 0.0):
+					continue
+				if u.is_building or u.is_resource or u.garrisoned or u.is_captive \
+						or hit_g.has(u.get_instance_id()):
+					continue
+				if not _in_capsule(sweep_start, dir_g, step_g, hw_g + u.radius, u.position):
+					continue
+				hit_g[u.get_instance_id()] = true
+				var desired: Vector2 = u.position + dir_g * float(z["push"])
+				var landing := desired
+				if not map.is_open_world(landing):
+					landing = map.cell_to_world(map.nearest_open(map.world_to_cell(desired)))
+				if map.is_open_world(landing):
+					u.position = landing
+				u.apply_slow(float(z["slow"]), float(z["slow_dur"]))
+				u.take_damage(float(z["dmg"]), src if is_instance_valid(src) else null)
+				spawn_impact(u.position, true)
+		_gong_lines = _gong_lines.filter(func(z): return float(z["traveled"]) < float(z["length"]))
 
 
 ## 宋江 W·天降陨石：宋江脸前召落陨石朝指向滚出，建立滚动伤害区（碾过冲击 + 过处地火 DOT）。
@@ -7800,8 +7844,8 @@ func despawn_summon(u: Unit) -> void:
 
 ## 黑雨 DOT（公孙胜 Q）：机制同地火，黑紫演出。
 func _spawn_black_rain(center: Vector2, r: float, total: float, dur: float, caster: Unit, foe: int,
-		follow: Unit = null, attack_slow := 1.0) -> void:
-	_add_ground_dot(center, r, total, dur, caster, foe, follow, attack_slow)
+		follow: Unit = null, attack_slow := 1.0, attack_miss := 0.0) -> void:
+	_add_ground_dot(center, r, total, dur, caster, foe, follow, attack_slow, attack_miss)
 	var fx := BlackRainFx.new()
 	fx.position = center
 	fx.rad = r
@@ -7852,7 +7896,7 @@ func _do_ice_wall(caster: Unit, eff: Dictionary, sc: float, rank: int, center: V
 	shake(2.5, wc)
 
 
-## 公孙胜 E·百兽奔袭：判定是一条从施法者向指向延伸的直线走廊；兽群只是同一次结算的视觉表现。
+## 公孙胜 E·百兽奔袭：兽群以施法瞬间公孙胜实际移速的指定倍率前进，沿途逐个结算。
 ## 每个敌人至多命中一次，统一沿奔袭方向推退，避免七张复用贴图被误算成七段伤害。
 func _do_beast_stampede(caster: Unit, eff: Dictionary, sc: float, rank: int, center: Vector2, foe: int) -> int:
 	var dir := center - caster.position
@@ -7863,66 +7907,20 @@ func _do_beast_stampede(caster: Unit, eff: Dictionary, sc: float, rank: int, cen
 	var half_width := float(eff.get("width", 120.0)) * 0.5
 	var dmg := float(_pick(eff["dmg_ranks"], rank)) if eff.has("dmg_ranks") else float(eff.get("dmg", 0.0)) * sc
 	var push := float(_pick(eff["push_ranks"], rank)) if eff.has("push_ranks") else float(eff.get("push", 120.0))
-	var hit_count := 0
-	for u in units_near(caster.position + dir * llen * 0.5, llen * 0.6 + half_width):
-		if not (is_instance_valid(u) and u.faction == foe and u.hp > 0.0):
-			continue
-		if u.is_building or u.is_resource or u.garrisoned or u.is_captive:
-			continue
-		if not _in_capsule(caster.position, dir, llen, half_width + u.radius, u.position):
-			continue
-		var desired: Vector2 = u.position + dir * push
-		var landing: Vector2 = desired
-		if not map.is_open_world(landing):
-			landing = map.cell_to_world(map.nearest_open(map.world_to_cell(desired)))
-		if map.is_open_world(landing):
-			u.position = landing
-		u.apply_slow(float(eff.get("slow", 0.70)), float(eff.get("slow_dur", 2.0)))
-		if dmg > 0.0:
-			u.take_damage(dmg, caster)
-		spawn_impact(u.position, true)
-		hit_count += 1
+	var travel_speed := maxf(caster.current_move_speed() * float(eff.get("proj_speed_mult", 1.5)), 1.0)
+	_gong_lines.append({"kind": "beast", "origin": caster.position, "dir": dir, "length": llen,
+		"traveled": 0.0, "speed": travel_speed, "half_width": half_width, "foe": foe,
+		"caster": caster, "dmg": dmg, "push": push, "slow": float(eff.get("slow", 0.70)),
+		"slow_dur": float(eff.get("slow_dur", 2.0)), "hit": {}})
 	var bfx := BeastStampedeFx.new()
 	bfx.position = caster.position
 	bfx.dir = dir
 	bfx.length = llen
+	bfx.travel_speed = travel_speed
 	bfx.count = maxi(1, int(eff.get("beast_count", 7)))
 	fx_root.add_child(bfx)
 	shake(4.0, caster.position + dir * llen * 0.5)
-	return hit_count
-
-
-## 公孙胜 R·画龙点睛：真龙贯穿固定宽度长阵，伤害/眩晕按等级明确取值。
-func _do_dragon_line(caster: Unit, eff: Dictionary, sc: float, rank: int, center: Vector2, foe: int) -> int:
-	var dir := center - caster.position
-	if dir.length() < 1.0:
-		dir = Vector2(-1.0 if caster.face_left else 1.0, 0.0)
-	dir = dir.normalized()
-	var llen := float(eff.get("len", 650.0))
-	var half_width := float(eff.get("width", 130.0)) * 0.5
-	var dmg := float(_pick(eff["dmg_ranks"], rank)) if eff.has("dmg_ranks") else float(eff.get("dmg", 0.0)) * sc
-	var stun := float(_pick(eff["stun_ranks"], rank)) if eff.has("stun_ranks") else float(eff.get("stun", 1.0))
-	var hit_count := 0
-	for u in units_near(caster.position + dir * llen * 0.5, llen * 0.6 + half_width):
-		if not (is_instance_valid(u) and u.faction == foe and u.hp > 0.0):
-			continue
-		if u.is_building or u.is_resource or u.garrisoned or u.is_captive:
-			continue
-		if not _in_capsule(caster.position, dir, llen, half_width + u.radius, u.position):
-			continue
-		u.take_damage(dmg, caster)
-		u.apply_stun(stun)
-		spawn_impact(u.position, true)
-		hit_count += 1
-	var dfx := DragonLineFx.new()
-	dfx.position = caster.position
-	dfx.dir = dir
-	dfx.length = llen
-	var dragon_frames: Array = Art.unit_anim_frames("dragon_summon", "attack")
-	dfx.tex = dragon_frames[0] if not dragon_frames.is_empty() else Art.unit_texture("dragon_summon")
-	fx_root.add_child(dfx)
-	shake(6.0, caster.position + dir * llen * 0.5)
-	return hit_count
+	return 0
 
 
 func _cell_has_unit(wp: Vector2) -> bool:
@@ -7946,11 +7944,12 @@ func _ice_wall_pass(delta: float) -> void:
 
 ## 仅登记地面 DOT 伤害区（无演出）：供 fire/黑雨/箭雨续伤等共用。
 func _add_ground_dot(center: Vector2, r: float, total: float, dur: float, caster: Unit, foe: int,
-		follow: Unit = null, attack_slow := 1.0) -> void:
+		follow: Unit = null, attack_slow := 1.0, attack_miss := 0.0) -> void:
 	var tick := 0.5
 	var ticks := maxi(1, int(round(dur / tick)))
 	_ground_dots.append({
-		"pos": center, "r": r, "foe": foe, "caster": caster, "follow": follow, "attack_slow": attack_slow,
+		"pos": center, "r": r, "foe": foe, "caster": caster, "follow": follow,
+		"attack_slow": attack_slow, "attack_miss": attack_miss,
 		"t": dur, "tick_t": tick, "tick": tick, "per": total / float(ticks)})
 
 
@@ -7990,11 +7989,14 @@ func _ground_dot_pass(delta: float) -> void:
 			var foe2: int = int(d["foe"])
 			var per: float = float(d["per"])
 			var attack_slow: float = float(d.get("attack_slow", 1.0))
+			var attack_miss: float = float(d.get("attack_miss", 0.0))
 			for u in units:
 				if is_instance_valid(u) and u.faction == foe2 and u.hp > 0.0 and not u.garrisoned \
 						and not u.is_resource and fpos.distance_to(u.position) <= fr:
 					if attack_slow < 1.0:
 						u.apply_attack_speed_slow(attack_slow, float(d["tick"]) + 0.12)
+					if attack_miss > 0.0:
+						u.apply_attack_miss_chance(attack_miss, float(d["tick"]) + 0.12)
 					u.take_damage(per, src)
 	_ground_dots = _ground_dots.filter(func(d): return float(d["t"]) > 0.0)
 
@@ -10948,7 +10950,7 @@ class Overlay extends Node2D:
 		var fill := Color(col.r, col.g, col.b, 0.14)
 		var edge := Color(col.r, col.g, col.b, 0.85)
 		# 方向型（直线/扇形）：须有施法者作为起点
-		if caster != null and is_instance_valid(caster) and kind in ["line_nuke", "blink_shot", "charge", "sector_nuke", "beast_stampede", "dragon_line"]:
+		if caster != null and is_instance_valid(caster) and kind in ["line_nuke", "blink_shot", "charge", "sector_nuke", "beast_stampede"]:
 			var origin: Vector2 = caster.position
 			var dirv := lp - origin
 			if dirv.length() < 1.0:
@@ -12835,12 +12837,14 @@ class IceWallFx extends TimedFx:
 class BeastStampedeFx extends TimedFx:
 	var dir := Vector2.RIGHT
 	var length := 320.0
+	var travel_speed := 120.0
 	var count := 7
 	var tex: Texture2D = preload("res://assets/vfx/gong_beast_charge.png")
 	var _pack: Array = []
 
 	func _ready() -> void:
-		dur = 0.86
+		# 150 是兽群前后错列的行进余量；每只兽在世界坐标里都保持同一恒定速度。
+		dur = (length + 150.0) / maxf(travel_speed, 1.0)
 		t = dur
 		var n := maxi(1, count)
 		for i in range(n):
@@ -12851,14 +12855,14 @@ class BeastStampedeFx extends TimedFx:
 				"size": 72.0 + float((i * 11) % 13)})
 
 	func _draw() -> void:
-		var p := clampf((dur - t) / maxf(dur, 0.01), 0.0, 1.0)
-		var eased := 1.0 - pow(1.0 - p, 2.0)
+		var elapsed := clampf(dur - t, 0.0, dur)
 		var perp := Vector2(-dir.y, dir.x)
 		var screen_dir := GameMap.ISO.basis_xform(dir)
 		var face := -1.0 if screen_dir.x < 0.0 else 1.0
 		for i in range(_pack.size()):
 			var beast: Dictionary = _pack[i]
-			var travel := eased * (length + 150.0) - 70.0 - float(beast["delay"])
+			# 领头兽与真实判定头部同位；其余兽只按距离向后错列，不改变各自速度。
+			var travel := elapsed * travel_speed - float(beast["delay"])
 			if travel < -90.0 or travel > length + 70.0:
 				continue
 			var local_w := dir * travel + perp * float(beast["side"])
@@ -12871,39 +12875,6 @@ class BeastStampedeFx extends TimedFx:
 			draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(0.0, Vector2(face, 1.0), 0.0, screen))
 			draw_texture_rect(tex, Rect2(Vector2(-sz * 0.5, -sz * 0.5), Vector2(sz, sz)), false,
 				Color(1.0, 1.0, 1.0, fade))
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-
-
-## 公孙胜 R·画龙点睛：一条真龙沿贯阵方向飞掠，并以三道淡影强调冲击路径。
-class DragonLineFx extends TimedFx:
-	var dir := Vector2.RIGHT
-	var length := 650.0
-	var tex: Texture2D = null
-
-	func _ready() -> void:
-		dur = 0.78
-		t = dur
-
-	func _draw() -> void:
-		var p := clampf((dur - t) / maxf(dur, 0.01), 0.0, 1.0)
-		var fly := 1.0 - pow(1.0 - p, 2.0)
-		var screen_dir := GameMap.ISO.basis_xform(dir)
-		var face := -1.0 if screen_dir.x < 0.0 else 1.0
-		draw_set_transform_matrix(GameMap.ISO_INV)
-		for j in range(4):
-			var q := clampf(fly - float(j) * 0.07, 0.0, 1.0)
-			var local_w := dir * (q * length)
-			var screen := GameMap.ISO.basis_xform(local_w) + Vector2(0, -28.0)
-			var alpha := (0.92 if j == 0 else 0.20 - float(j) * 0.035) * clampf(t / 0.18, 0.0, 1.0)
-			if tex != null:
-				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(0.0, Vector2(face, 1.0), 0.0, screen))
-				draw_texture_rect(tex, Rect2(Vector2(-58, -58), Vector2(116, 116)), false,
-					Color(1.0, 0.91 + float(j) * 0.02, 0.48, alpha))
-			else:
-				draw_set_transform_matrix(GameMap.ISO_INV)
-				draw_circle(screen, 20.0, Color(1.0, 0.82, 0.25, alpha))
-		draw_set_transform_matrix(GameMap.ISO_INV)
-		draw_line(Vector2.ZERO, GameMap.ISO.basis_xform(dir * length), Color(1.0, 0.75, 0.18, 0.28 * (1.0 - p)), 5.0)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
@@ -13306,16 +13277,18 @@ func _newhero_selftest() -> void:
 			h.ability_slots[i]["cd_t"] = 0.0
 		h._recompute_hero_stats()
 
-	# 公孙胜 Q 黑雨：指定落点、不跟随；rank2 每跳12，并附带20%攻速压制。
+	# 公孙胜 Q 黑雨：指定落点、不跟随；rank2 每跳3，附带20%攻速压制和30%普攻落空率。
 	foe.position = gong.position + Vector2(120, 0)
 	var d0 := _ground_dots.size()
 	_do_ability(gong, 0, foe.position)
 	var blackrain_ok := _ground_dots.size() > d0
 	var br_point_ok: bool = not _ground_dots.is_empty() and _ground_dots[-1].get("follow") == null \
-			and absf(float(_ground_dots[-1]["per"]) - 12.0 * _hero_db(gong)) < 0.6 \
-			and absf(float(_ground_dots[-1].get("attack_slow", 1.0)) - 0.80) < 0.001
+			and absf(float(_ground_dots[-1]["per"]) - 3.0 * _hero_db(gong)) < 0.1 \
+			and absf(float(_ground_dots[-1].get("attack_slow", 1.0)) - 0.80) < 0.001 \
+			and absf(float(_ground_dots[-1].get("attack_miss", 0.0)) - 0.30) < 0.001
 	_ground_dot_pass(0.51)
-	var br_attack_slow_ok := gong.position.distance_to(foe.position) <= 300.0 and foe._attack_speed_slow <= 0.801
+	var br_attack_slow_ok := gong.position.distance_to(foe.position) <= 300.0 and foe._attack_speed_slow <= 0.801 \
+			and absf(foe._attack_miss_chance - 0.30) < 0.001 and foe._attack_miss_t > 0.0
 
 	# 公孙胜 W 冰墙：rank2 增长为180、持续6秒，并锁住实际格子。
 	gong.ability_slots[1]["cd_t"] = 0.0
@@ -13331,21 +13304,29 @@ func _newhero_selftest() -> void:
 	var beast_pos0 := foe.position
 	_grid.clear()
 	_do_ability(gong, 2, foe.position)
-	var beast_ok := absf((beast_hp0 - foe.hp) - 40.0 * _hero_db(gong)) < 0.2 \
+	var beast_queued_ok := not _gong_lines.is_empty() \
+			and absf(float(_gong_lines[-1]["speed"]) - gong.current_move_speed() * 1.5) < 0.01 \
+			and absf(foe.hp - beast_hp0) < 0.01
+	_zone_pass(1.2)   # rank2 公孙胜实际移速约 51.5，弹道约 77.2；1.2 秒足以抵达 76 处目标。
+	var beast_ok := beast_queued_ok and absf((beast_hp0 - foe.hp) - 40.0 * _hero_db(gong)) < 0.2 \
 			and foe.position.x > beast_pos0.x + 100.0 and absf(foe.temp_speed - 0.70) < 0.001 \
 			and ResourceLoader.exists("res://assets/vfx/gong_beast_charge.png")
+	_zone_pass(10.0)   # 让 E 弹道离场，避免与下面新生成的 R 靶子交叉。
 
-	# 公孙胜 R 画龙点睛：不再召唤常驻龙；rank2贯阵伤190并眩晕1.5秒。
+	# 公孙胜 R 画龙点睛：恢复原版；rank2召一条血/攻均为本体150%的远程溅射金龙，持续15秒、CD25秒。
 	gong.ability_slots[3]["cd_t"] = 0.0
-	var dragon_line_foe := spawn_unit("guan_dao", Unit.FACTION_GUAN, gong.position + Vector2(180, 0))
-	dragon_line_foe.max_hp = 9999.0; dragon_line_foe.hp = 9999.0
-	var dragon_hp0 := dragon_line_foe.hp
 	var dragons0 := count_alive(Unit.FACTION_LIANG, "dragon_summon")
-	_grid.clear()
-	_do_ability(gong, 3, dragon_line_foe.position)
-	var dragon_line_ok := absf((dragon_hp0 - dragon_line_foe.hp) - 190.0 * _hero_db(gong)) < 0.2 \
-			and absf(dragon_line_foe._stun_t - 1.5) < 0.05 \
-			and count_alive(Unit.FACTION_LIANG, "dragon_summon") == dragons0
+	_do_ability(gong, 3, gong.position)
+	var dragon: Unit = null
+	for gu in units:
+		if is_instance_valid(gu) and gu.key == "dragon_summon" and gu.hp > 0.0 \
+				and gu.is_summon and gu.summon_kind == "dragon" and gu.stat_owner_key == gong.key:
+			dragon = gu
+			break
+	var dragon_ok := dragon != null and count_alive(Unit.FACTION_LIANG, "dragon_summon") == dragons0 + 1 \
+			and absf(dragon.max_hp - gong.max_hp * 1.50) < 1.0 \
+			and absf(dragon.atk - gong.atk * 1.50) < 0.5 and absf(dragon._summon_ttl - 15.0) < 0.1 \
+			and absf(float(gong._slot_def(3).get("cd", 0.0)) - 25.0) < 0.01
 
 	# 武松 Q 驱使猛虎：rank2仅一虎，血/攻继承110%/120%，16秒后消散；重放替换旧虎。
 	_do_ability(wus, 0, wus.position)
@@ -13417,9 +13398,7 @@ func _newhero_selftest() -> void:
 	var heal_ok := wus.hp > hp_pre_heal - 0.01 and wus._drunk_god_stacks == 0 \
 			and absf(wus._drunk_god_bonus_per_hit) < 0.001
 
-	# 后续忠义旗测试需要一只召唤物验证“小兵/召唤物减伤”，显式造测试龙，不再冒充公孙胜 R 产物。
-	var dragon := spawn_unit("dragon_summon", Unit.FACTION_LIANG, gong.position + Vector2(32, 0))
-	dragon.is_summon = true; dragon.summon_kind = "dragon"; dragon.stat_owner_key = gong.key
+	# 后续忠义旗测试直接复用公孙胜 R 召出的金龙，验证“小兵/召唤物减伤”。
 
 	# 武松动画形象统一：待机/行走/攻击各有 4 帧，并且状态内确实会切换到不同帧。
 	var wu_idle_frames: Array = Art.unit_anim_frames("wu_song", "idle")
@@ -13747,17 +13726,17 @@ func _newhero_selftest() -> void:
 	# hero_cap 是场景规则（驻守默认4，战役/竞技场为0=不限），单独打印但不影响技能链 ALL。
 	var cap_ok := level.hero_cap() == 4
 	var all_ok: bool = blackrain_ok and br_point_ok and br_attack_slow_ok and icewall_ok and beast_ok \
-			and dragon_line_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok \
+			and dragon_ok and tigers_ok and drunk_ok and defdown_ok and blind_ok and miss_ok \
 			and immune_ok and wu_god_ok and absorbed_ok and heal_ok and wu_anim_ok and li_brawn_ok \
 			and li_guard_ok and song_hybrid_ok and song_rally_ok and song_shared_cd_ok and banner_charge_ok \
 			and banner_variant_ok and banner_rank_ok and banner_reduce_ok and loyalty_ok and righteous_ok \
 			and overlap_ok and banner_downgrade_ok and aura_restore_ok and banner_exit_ok \
 			and summon_despawn_ok and song_fire_ok
-	print("[newhero] blackrain=%s point=%s atkslow=%s icewall=%s beasts=%s dragon_line=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s wu_god=%s absorbed=%s heal=%s wu_anim=%s li_brawn=%s li_guard=%s songhybrid=%s songrally=%s song_shared_cd=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_point_ok, br_attack_slow_ok, icewall_ok, beast_ok, dragon_line_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, wu_god_ok, absorbed_ok, heal_ok, wu_anim_ok, li_brawn_ok, li_guard_ok, song_hybrid_ok, song_rally_ok, song_shared_cd_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
+	print("[newhero] blackrain=%s point=%s suppression=%s icewall=%s beasts=%s dragon=%s tigers=%s drunk=%s defdown=%s blind=%s miss=%s immune=%s wu_god=%s absorbed=%s heal=%s wu_anim=%s li_brawn=%s li_guard=%s songhybrid=%s songrally=%s song_shared_cd=%s banner(charge=%s variant=%s rank=%s reduce=%s loyalty=%s righteous=%s overlap=%s downgrade=%s aura_restore=%s exit=%s despawn=%s) songfire=%s cap=%s ALL=%s" % [blackrain_ok, br_point_ok, br_attack_slow_ok, icewall_ok, beast_ok, dragon_ok, tigers_ok, drunk_ok, defdown_ok, blind_ok, miss_ok, immune_ok, wu_god_ok, absorbed_ok, heal_ok, wu_anim_ok, li_brawn_ok, li_guard_ok, song_hybrid_ok, song_rally_ok, song_shared_cd_ok, banner_charge_ok, banner_variant_ok, banner_rank_ok, banner_reduce_ok, loyalty_ok, righteous_ok, overlap_ok, banner_downgrade_ok, aura_restore_ok, banner_exit_ok, summon_despawn_ok, song_fire_ok, cap_ok, all_ok])
 
 	# 清理：移除召唤物与测试单位，避免污染后续
 	for u in units.duplicate():
-		if is_instance_valid(u) and (u.key == "dragon_summon" or u.key == "tiger_summon" or u == foe or u == gong or u == wus or u == lik or u == axe_near_a or u == axe_near_b or u == axe_far or u == song or u == banner_troop or u == dragon_line_foe or u == cleave_primary or u == cleave_side):
+		if is_instance_valid(u) and (u.key == "dragon_summon" or u.key == "tiger_summon" or u == foe or u == gong or u == wus or u == lik or u == axe_near_a or u == axe_near_b or u == axe_far or u == song or u == banner_troop or u == cleave_primary or u == cleave_side):
 			u.take_damage(u.hp + 1.0, null, false, true)
 	economy = _eco_was
 
@@ -13963,7 +13942,7 @@ func _automicro_selftest() -> void:
 	for i in [0, 1, 2]:
 		wu.ability_slots[i]["cd_t"] = 0.0
 
-	# ───── S1c 公孙胜全托管：敌将优先R、密集阵优先Q、残血贴脸先E兽群推开。─────
+	# ───── S1c 公孙胜全托管：交战无龙才R、Q优先压敌方主力火力、残血贴脸先E兽群推开。─────
 	for f in foes:
 		f.position = park
 	gong.position = origin
@@ -13975,16 +13954,29 @@ func _automicro_selftest() -> void:
 	_pending_casts.clear()
 	_brain_gong(gong)
 	var gong_r_ok := _pending_has(gong, 3)
+	# 真正召出本人金龙后，即便强制把 R 冷却清零，托管也不能提前刷新这条仍在作战的龙。
+	_pending_casts.clear()
+	gong._cast_t = 0.0
+	_do_ability(gong, 3, gong.position)
+	gong.ability_slots[3]["cd_t"] = 0.0
+	_brain_gong(gong)
+	var gong_r_hold_ok := not _pending_has(gong, 3) and _count_owned_summons(gong, "dragon") == 1
+	for gs in units.duplicate():
+		if is_instance_valid(gs) and gs.is_summon and gs.summon_kind == "dragon" and gs.stat_owner_key == gong.key:
+			despawn_summon(gs)
+	_pending_casts.clear()
 	gong._cast_t = 0.0
 	gong.ability_slots[3]["cd_t"] = 99.0
 	gong.ability_slots[1]["cd_t"] = 99.0
 	gong.ability_slots[2]["cd_t"] = 99.0
-	ehero.position = park
-	ecav.position = gong.position + Vector2(390, 0)
-	emel.position = gong.position + Vector2(420, 22)
+	# 一名敌将的输出威胁应压过另一侧两个普通兵：黑雨定位是封锁主力火力，不再只机械数人头。
+	ehero.position = gong.position + Vector2(390, 0)
+	ecav.position = gong.position + Vector2(-390, 0)
+	emel.position = gong.position + Vector2(-420, 22)
 	_pending_casts.clear()
 	_brain_gong(gong)
-	var gong_q_ok := _pending_has(gong, 0)
+	var gong_q_lp := _pending_lp(gong, 0)
+	var gong_q_ok := _pending_has(gong, 0) and gong_q_lp.distance_to(ehero.position) < 35.0
 	gong._cast_t = 0.0
 	gong.ability_slots[0]["cd_t"] = 99.0
 	gong.ability_slots[2]["cd_t"] = 0.0
@@ -13994,7 +13986,7 @@ func _automicro_selftest() -> void:
 	_pending_casts.clear()
 	_brain_gong(gong)
 	var gong_e_ok := _pending_has(gong, 2)
-	var gong_ai_ok := gong_r_ok and gong_q_ok and gong_e_ok
+	var gong_ai_ok := gong_r_ok and gong_r_hold_ok and gong_q_ok and gong_e_ok
 	gong.hp = gong.max_hp
 	gong._cast_t = 0.0
 	gong.set_stance(Unit.STANCE_AGGRO)
@@ -14269,8 +14261,8 @@ func _automicro_selftest() -> void:
 			and gong_ai_ok and lin_focus_ok and hua_blink_ok and retreat_ok and ult_ok and song_mutex_ok \
 			and learn_prio_ok and lr_cast_ok and weak_banner_ok and banner_density_ok and banner_spread_ok \
 			and banner_hold_ok and banner_idle_ok and engage_ok and focus_ok
-	print("[automicro] helpers=%s tigergate=%s weaktiger=%s tigerhold=%s wuult=%s gong(R=%s Q=%s E=%s) linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s banner(strong=%s weak=%s density=%s spread=%s hold=%s idle=%s) fire=%s hua=%s lr=%s engage(farW=%s)=%s focus=%s ALL=%s" % [
-		helpers_ok, tiger_gate_ok, weak_tiger_ok, tiger_hold_ok, wu_ult_ok, gong_r_ok, gong_q_ok, gong_e_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_banner_cast, weak_banner_ok, banner_density_ok, banner_spread_ok, banner_hold_ok, banner_idle_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, focus_ok, all_ok])
+	print("[automicro] helpers=%s tigergate=%s weaktiger=%s tigerhold=%s wuult=%s gong(R=%s Rhold=%s Q=%s E=%s) linfocus=%s huablink=%s retreat=%s liult=%s songmutex=%s learnprio=%s banner(strong=%s weak=%s density=%s spread=%s hold=%s idle=%s) fire=%s hua=%s lr=%s engage(farW=%s)=%s focus=%s ALL=%s" % [
+		helpers_ok, tiger_gate_ok, weak_tiger_ok, tiger_hold_ok, wu_ult_ok, gong_r_ok, gong_r_hold_ok, gong_q_ok, gong_e_ok, lin_focus_ok, hua_blink_ok, retreat_ok, ult_ok, song_mutex_ok, learn_prio_ok, song_banner_cast, weak_banner_ok, banner_density_ok, banner_spread_ok, banner_hold_ok, banner_idle_ok, song_fire_cast, hua_rain_cast, lr_cast_ok, hua_far_w, engage_ok, focus_ok, all_ok])
 
 	# 清理：移除本测试 spawn 的英雄/敌兵/召唤物，避免污染后续 skirmish
 	for u in units.duplicate():
