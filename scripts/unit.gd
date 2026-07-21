@@ -140,15 +140,19 @@ var _drunk_hi := 1.0
 var _drunk_reroll := 0.0
 var _drunk_move := 1.0      # 当前随机移动倍率
 var _drunk_atk := 1.0       # 当前随机攻速倍率
-# 醉神大闹快活林（武松 R）：物理免疫 + 结束时把期间所受物理伤害的 50% 转化为回血
+# 醉神大闹快活林（武松 R）：物理免疫 + 有效普攻叠攻/分裂 + 结束转血
 var _phys_immune_t := 0.0
 var _absorbed_phys := 0.0   # 物免期间被普通攻击「挡下」的累计伤害
+var _drunk_god_bonus_per_hit := 0.0
+var _drunk_god_stacks := 0
+var _drunk_god_max_stacks := 5
+var _drunk_god_cleave := 0.0
 # 护甲削减（武松 E·双戒刀）：临时降低目标防御
 var _def_down := 0.0
 var _def_down_t := 0.0
 # 致盲（武松 E·双戒刀附带）：>0 时本单位攻击必失（不结算伤害、不吸血）
 var _blind_t := 0.0
-# 减速光环（公孙胜 E）：每帧由 _aura_pass 写入；<1 = 受敌方减速光环影响。slow_aura_r>0 时自身画光环环
+# 通用减速光环：每帧由 _aura_pass 写入；<1 = 受敌方减速光环影响。slow_aura_r>0 时自身画光环环
 var aura_slow := 1.0
 var slow_aura_r := 0.0
 # ===== DOTA 式新原语状态（护盾/沉默/攻速/暴击/闪避/攻击携带）=====
@@ -171,6 +175,8 @@ var _form_backup: Dictionary = {} # 进入变身前的原始 atk_cd/base_speed/r
 var _order_serial := 0      # 指令序号：每次 _enqueue +1（walk-cast 用它检测「玩家又下了新令」即让路）
 var temp_atkspeed := 1.0    # 临时攻速倍率（>1 出手更快），_attack 并入 _cd
 var _temp_atkspeed_t := 0.0
+var _attack_speed_slow := 1.0   # 敌方攻速压制（<1）；与自身攻速增益相乘，黑雨等控制不会被增益池吃掉
+var _attack_speed_slow_t := 0.0
 var _aura_atkspeed := 1.0   # 义旗等区域攻速光环；与普通限时攻速取较高者，不相乘
 var _aura_atkspeed_sources: Dictionary = {}   # source_id → {mult,t}，重叠旗独立到期并正确降档
 # 被动衍生（_recompute_hero_stats 每次先重置再按已学被动累加）
@@ -925,9 +931,15 @@ func _phys_body(delta: float) -> void:
 	var regen := 0.0
 	if faction == FACTION_LIANG and _combat_cool <= 0.0:
 		regen += 2.5
-	regen += _passive_regen()    # 被动回血（如宋江·仁义）：战斗中也生效
+	var passive_regen := _passive_regen()
+	regen += passive_regen    # 被动回血（如宋江·仁义）：战斗中也生效
 	if regen > 0.0 and hp < max_hp:
+		var hp_before_regen := hp
 		hp = minf(max_hp, hp + regen * delta)
+		# 只把英雄被动产生的份额计入治疗；通用脱战补给不算英雄战绩。
+		if _track_combat_stats and passive_regen > 0.0 and battle != null:
+			var effective_regen := hp - hp_before_regen
+			battle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)
 		queue_redraw()
 
 	# 技能冷却/充能（各槽）与临时增益计时
@@ -973,9 +985,12 @@ func _phys_body(delta: float) -> void:
 		_phys_immune_t -= delta
 		if _phys_immune_t <= 0.0:
 			if _absorbed_phys > 0.0:
-				heal(_absorbed_phys * 0.5)
+				heal(_absorbed_phys * 0.5, self)
 				_buff_glow = 1.0
 			_absorbed_phys = 0.0
+			_drunk_god_bonus_per_hit = 0.0
+			_drunk_god_stacks = 0
+			_drunk_god_cleave = 0.0
 	if _stats_mitigation_t > 0.0:
 		_stats_mitigation_t = maxf(0.0, _stats_mitigation_t - delta)
 	# 护甲削减计时
@@ -1038,6 +1053,10 @@ func _phys_body(delta: float) -> void:
 		_temp_atkspeed_t -= delta
 		if _temp_atkspeed_t <= 0.0:
 			temp_atkspeed = 1.0
+	if _attack_speed_slow_t > 0.0:
+		_attack_speed_slow_t -= delta
+		if _attack_speed_slow_t <= 0.0:
+			_attack_speed_slow = 1.0
 	if not _aura_atkspeed_sources.is_empty():
 		for source_id in _aura_atkspeed_sources.keys():
 			var aura_state: Dictionary = _aura_atkspeed_sources[source_id]
@@ -1592,7 +1611,7 @@ func _attack() -> void:
 	if _invis_t > 0.0:
 		_invis_strike_pending = _invis_strike_bonus   # 破隐突袭：这一击兑现加成
 		_break_invis()
-	_cd = atk_cd / maxf(_drunk_atk * maxf(temp_atkspeed, _aura_atkspeed) * atkspeed_mult, 0.1)   # 普通攻速与区域攻速取高值，再乘醉酒/被动
+	_cd = atk_cd / maxf(_drunk_atk * maxf(temp_atkspeed, _aura_atkspeed) * atkspeed_mult * _attack_speed_slow, 0.1)   # 增益取高值，再乘醉酒/被动与敌方攻速压制
 	_combat_cool = 6.0
 	_lunge = 1.0
 	_lunge_dir = (_target.position - position).normalized()
@@ -1646,7 +1665,14 @@ func _deal_hit() -> void:
 			battle.spawn_impact(t.position + Vector2(0, -4), false)
 		Sfx.play(_attack_sfx_name(), -10.0, 0.2, 55)
 		return
-	var dmg := atk * buff_atk * temp_atk + temp_atk_add
+	# 武松 R：只有真正能落到活体战斗单位上的近战普攻才叠层；致盲、闪避、物免和建筑均不叠。
+	# 先叠后算，所以当前这一刀立即吃到新增攻击，随后分裂也沿用同一层数。
+	var wu_god_hit := key == "wu_song" and _phys_immune_t > 0.0 and not is_ranged \
+			and not t.is_building and not t.is_resource and not t.is_captive and not t.is_phys_immune()
+	if wu_god_hit:
+		_drunk_god_stacks = mini(_drunk_god_max_stacks, _drunk_god_stacks + 1)
+		_buff_glow = 1.0
+	var dmg := atk * buff_atk * temp_atk + temp_atk_add + _drunk_god_bonus_per_hit * float(_drunk_god_stacks)
 	if _invis_strike_pending > 0.0:
 		dmg += _invis_strike_pending   # 破隐第一击加成（隐身潜行后突袭）
 		_invis_strike_pending = 0.0
@@ -1686,6 +1712,8 @@ func _deal_hit() -> void:
 		Sfx.play(_attack_sfx_name(), -8.0, 0.14, 60)
 	else:
 		t.take_damage(dmg, self, crit)
+		if wu_god_hit and _drunk_god_cleave > 0.0 and battle.has_method("spawn_wu_cleave"):
+			battle.spawn_wu_cleave(self, t, _drunk_god_cleave)
 		# 攻击携带（orb/被动）：额外纯伤 / 减速 / 几率眩晕
 		if on_hit_dmg > 0.0:
 			t.take_damage(on_hit_dmg, self)
@@ -1695,10 +1723,10 @@ func _deal_hit() -> void:
 			t.apply_stun(bash_dur)
 		var ls := lifesteal_frac()
 		if ls > 0.0:
-			heal(dmg * ls)
+			heal(dmg * ls, self)
 		# 林冲·猎骑被动：打骑兵 cav_ls_chance 几率额外吸血 cav_ls_frac×伤害
 		if cav_ls_chance > 0.0 and not t.is_building and not t.is_resource and randf() < cav_ls_chance:
-			heal(dmg * (cav_ls_frac if t.is_cavalry else cav_ls_frac * 0.5))   # 打骑兵满额、非骑兵半额
+			heal(dmg * (cav_ls_frac if t.is_cavalry else cav_ls_frac * 0.5), self)   # 打骑兵满额、非骑兵半额
 			_buff_glow = 1.0
 		if battle.has_method("spawn_impact"):
 			battle.spawn_impact(t.position, _swing_kind == WK.AXE or crit)
@@ -1710,7 +1738,7 @@ func _deal_hit() -> void:
 func secondary_basic_damage_against(t: Unit) -> float:
 	if t == null or not is_instance_valid(t):
 		return 0.0
-	var dmg := atk * buff_atk * temp_atk + temp_atk_add
+	var dmg := atk * buff_atk * temp_atk + temp_atk_add + _drunk_god_bonus_per_hit * float(_drunk_god_stacks)
 	if t.is_cavalry:
 		dmg *= bonus_vs_cav
 	if not t.is_building and not t.is_resource:
@@ -2334,12 +2362,19 @@ func start_ability_cd() -> void:
 	slot_start_cd(0)
 
 
-func heal(amount: float) -> void:
-	if hp <= 0.0:
-		return
+func heal(amount: float, healer: Unit = null) -> float:
+	if hp <= 0.0 or amount <= 0.0:
+		return 0.0
+	var hp_before := hp
 	hp = minf(max_hp, hp + amount)
+	var effective := hp - hp_before
+	if effective <= 0.0:
+		return 0.0
+	if _track_combat_stats and healer != null and battle != null:
+		battle.record_hero_combat_healing(self, healer, effective)
 	_buff_glow = 0.6
 	queue_redraw()
+	return effective
 
 
 func apply_temp_atk(mult: float, dur: float) -> void:
@@ -2483,11 +2518,14 @@ func start_drunk(lo: float, hi: float, dur: float) -> void:
 	_buff_glow = 1.0
 
 
-## 醉神大闹快活林（武松 R）：dur 秒物理免疫 + 每击 +bonus 平攻；结束把挡下物理伤害 50% 转血。
-func start_drunk_god(bonus: float, dur: float) -> void:
+## 醉神大闹快活林（武松 R）：物免期间每次有效平攻叠 bonus（最多 max_stacks）并触发分裂。
+func start_drunk_god(bonus: float, dur: float, cleave := 0.0, max_stacks := 5) -> void:
 	_phys_immune_t = dur
 	_absorbed_phys = 0.0
-	apply_temp_atk_add(bonus, dur)
+	_drunk_god_bonus_per_hit = bonus
+	_drunk_god_stacks = 0
+	_drunk_god_max_stacks = maxi(1, max_stacks)
+	_drunk_god_cleave = clampf(cleave, 0.0, 1.5)
 	_buff_glow = 1.0
 
 
@@ -2719,8 +2757,20 @@ func dispel(hostile: bool) -> void:
 		_dmg_amp = 0.0; _dmg_amp_t = 0.0
 		_taunt_t = 0.0; _taunt_src = null
 		_blind_t = 0.0
+		_attack_speed_slow = 1.0; _attack_speed_slow_t = 0.0
 		if temp_speed < 1.0:
 			temp_speed = 1.0; _temp_speed_t = 0.0   # 只清减速（加速归驱散）
+	queue_redraw()
+
+
+## 宋江 R 的定向解控：只清说明中承诺的四项，不顺带移除缴械、易伤、嘲讽、致盲等其他减益。
+func cleanse_command_control() -> void:
+	_stun_t = 0.0
+	_root_t = 0.0
+	_silence_t = 0.0
+	if temp_speed < 1.0:
+		temp_speed = 1.0
+		_temp_speed_t = 0.0
 	queue_redraw()
 
 
@@ -2746,6 +2796,13 @@ func apply_atkspeed(mult: float, dur: float) -> void:
 	temp_atkspeed = maxf(temp_atkspeed, mult)
 	_temp_atkspeed_t = maxf(_temp_atkspeed_t, dur)
 	_buff_glow = 0.6
+
+
+## 攻速减益独立于增益池：黑雨中即使身上有义旗/狂攻，也会在最终出手速度上正确相乘。
+func apply_attack_speed_slow(mult: float, dur: float) -> void:
+	_attack_speed_slow = minf(_attack_speed_slow, clampf(mult, 0.1, 1.0))
+	_attack_speed_slow_t = maxf(_attack_speed_slow_t, dur)
+	_buff_glow = maxf(_buff_glow, 0.35)
 
 
 ## 区域攻速光环：同一来源刷新，多来源取最高倍率；高阶旗到期后自动降到仍生效的低阶旗。

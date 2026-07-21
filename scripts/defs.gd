@@ -339,7 +339,8 @@ const TRAPS := {
 #              / debuff(减速+削攻于敌) / drag(拖入水+伤害) / path(交给关卡处理)
 const ABILITIES := {
 	"song_rally": {"name": "替天行道", "cd": 12.0, "targeted": false, "radius": 300.0, "color": Color("ffd24a"),
-		"desc": "号令群雄：周围梁山兵\n回血{v}、攻击+60%（8秒）·范围加大", "effect": {"kind": "rally", "heal": 42.0, "atk_mult": 1.6, "dur": 8.0}},
+		"desc": "号令群雄：周围梁山兵\n回血{v}、攻击+30%/45%/60%（8秒）\n施放后 R 主动进入12秒关联冷却（R 被动仍常驻）",
+		"effect": {"kind": "rally", "heal": 42.0, "atk_mult_ranks": [1.30, 1.45, 1.60], "dur": 8.0}},
 	"wu_fire": {"name": "锦囊火计", "cd": 14.0, "targeted": true, "weak_global": true, "radius": 95.0, "color": Color("ff7a2a"),
 		"desc": "火攻：指定处腾起烈焰\n地面燃烧5秒，累计130灼伤", "effect": {"kind": "fire_dot", "dmg": 130.0, "dur": 5.0}},
 	"lin_sweep": {"name": "丈八横扫", "cd": 8.0, "targeted": false, "radius": 100.0, "color": Color("c0a0ff"),
@@ -405,17 +406,19 @@ const ABILITIES := {
 	# 宋江：指挥支援
 	"song_banner": {"name": "忠义双旗", "cd": 10.0, "max_charges": 2, "charge_recovery": 10.0, "targeted": true,
 		"weak_global": true, "radius": 130.0, "color": Color("ffd24a"),
-		"desc": "2点能量，每10秒恢复1点；依次插下蓝色「忠」旗与黄色「义」旗\n两旗均持续 5/7/9 秒：英雄减伤 20%/30%/40%，小兵与召唤物减伤 50%/70%/90%\n忠旗每秒回血 20/25/30；义旗攻速 +50%/+70%/+90%",
+		"desc": "2点能量，每10秒恢复1点；依次插下蓝色「忠」旗与黄色「义」旗\n两旗均持续 5/7/9 秒：英雄减伤 20%/30%/40%，小兵与召唤物减伤 50%/65%/80%\n忠旗每秒回血 20/25/30；义旗攻速 +50%/+70%/+90%",
 		"effect": {"kind": "ward", "ward_mode": "banner", "ward_style": "banner", "ward_radius": 130.0,
 			"dur_ranks": [5.0, 7.0, 9.0], "hero_reduction_ranks": [0.20, 0.30, 0.40],
-			"troop_reduction_ranks": [0.50, 0.70, 0.90], "heal_ranks": [20.0, 25.0, 30.0],
+			"troop_reduction_ranks": [0.50, 0.65, 0.80], "heal_ranks": [20.0, 25.0, 30.0],
 			"atkspeed_ranks": [1.50, 1.70, 1.90], "banner_variants": ["loyalty", "righteous"], "pulse": 1.0}},
 	"song_fire": {"name": "火攻连营", "cd": 11.0, "targeted": true, "weak_global": true, "radius": 100.0, "color": Color("ff7a2a"),
 		"desc": "指定处腾起烈焰\n地面每秒 20 灼伤，持续 5/8/10 秒(随等级)",
 		"effect": {"kind": "fire_dot", "dps": 20.0, "dur_ranks": [5.0, 8.0, 10.0], "dmg": 100.0, "dur": 5.0}},
-	"song_lead": {"name": "替天行道·仁义", "passive": true, "cd": 25.0, "targeted": false, "radius": 170.0, "color": Color("ffd24a"),
-		"desc": "被动·仁义之名：攻击+3 / 生命+50 / 每秒回血3 / 常驻全军移速光环 +5%/10%/15%(随本技能等级)\n仗义疏财：宋江在场，全军击杀赏金 +25%\n主动·号令众将：所有友方英雄回血(=Q回血量)，宋江 Q 同时转入冷却",
-		"effect": {"kind": "passive", "atk_add": 3.0, "hp_add": 50.0, "regen": 3.0, "speed_aura_ranks": [1.05, 1.10, 1.15], "active_kind": "rally_heroes"}},
+	"song_lead": {"name": "替天行道·仁义", "passive": true, "cd": 25.0, "cd_ranks": [25.0, 22.0, 19.0], "targeted": false, "radius": 170.0, "color": Color("ffd24a"),
+		"desc": "被动·仁义之名：攻击+3 / 生命+50 / 每秒回血3 / 常驻全军移速光环 +5%/10%/15%(随本技能等级)\n仗义疏财：宋江在场，全军击杀赏金 +25%\n主动·号令众将：全图友方英雄回血 90/140/190，并清除减速、定身、眩晕和沉默；施放后 Q 进入12秒冷却",
+		"effect": {"kind": "passive", "atk_add": 3.0, "hp_add": 50.0, "regen": 3.0,
+			"speed_aura_ranks": [1.05, 1.10, 1.15], "active_kind": "rally_heroes",
+			"active_heal_ranks": [90.0, 140.0, 190.0], "cleanse_command_control": true}},
 	# 林冲：近战突击
 	"lin_charge": {"name": "豹影冲锋", "cd": 7.0, "targeted": false, "radius": 92.0, "color": Color("e0a24a"),
 		"desc": "豹影突进：身边官军\n受 {v} 伤害减速；自身攻击+40%（5秒）", "effect": {"kind": "smite", "dmg": 23.0, "slow": 0.6, "slow_dur": 1.5, "self_atk": 1.4, "self_dur": 5.0}},
@@ -484,42 +487,56 @@ const ABILITIES := {
 		"effect": {"kind": "self_buff", "atk_add": 30.0, "lifesteal": 1.5, "dur": 5.0}},
 
 	# ===== 入云龙·公孙胜 =====
-	# Q·黑雨：指定处落下一片黑雨，持续 DOT（数值 = 宋江火攻原伤害 110 的 60% = 66，持续 10 秒）
-	"gong_blackrain": {"name": "黑雨", "cd": 18.0, "targeted": false, "radius": 180.0, "color": Color("6a4fb0"),
-		"desc": "以己为心招来漫天黑雨随身移动\n每秒 20/22/25 黑蚀伤害·持续 6/6/8 秒(随等级)",
-		"effect": {"kind": "black_rain", "follow": true, "dps_ranks": [20.0, 22.0, 25.0], "dur_ranks": [6.0, 6.0, 8.0], "dmg": 120.0, "dur": 6.0}},
-	# W·冰墙：朝指向竖起一道冰墙，少量伤害并阻隔敌军移动
-	"gong_icewall": {"name": "冰墙", "cd": 16.0, "targeted": true, "radius": 60.0, "color": Color("9fd8ff"),
-		"desc": "朝指向凝出一道冰墙\n沿墙官军受 {v} 伤害减速，墙体阻断去路 5 秒",
-		"effect": {"kind": "ice_wall", "dmg": 20.0, "range": 175.0, "len": 150.0, "dur": 5.0}},
-	# E·罡风减速（被动光环）：附近敌军移速降低，10%/20%/30% 随等级
-	"gong_slow": {"name": "罡风·减速光环", "passive": true, "cd": 0.0, "targeted": false, "radius": 165.0, "color": Color("8fd3ff"),
-		"desc": "被动·罡风缠身\n附近官军移速 −10%/−20%/−30%（随等级）",
-		"effect": {"kind": "slow_aura", "slow": 0.10}},
-	# R·画龙点睛：召唤一条金龙参战（血/攻同公孙胜），持续 15 秒
-	"gong_dragon": {"name": "画龙点睛", "cd": 25.0, "targeted": false, "radius": 0.0, "color": Color("ffd24a"),
-		"desc": "大招·点睛唤龙\n召一条远程吐火金龙助战（血/攻为本体 100%/150%/200%）\n吐火带小范围溅射·持续 15 秒",
-		"effect": {"kind": "summon", "unit": "dragon_summon", "count": 1, "summon_kind": "dragon", "copy_caster": true,
-			"copy_mult": [1.0, 1.5, 2.0], "dur": 15.0}},
+	# Q·黑雨：远程控场雨区，持续侵蚀并压低敌军攻速。
+	"gong_blackrain": {"name": "黑雨", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true,
+		"radius": 170.0, "color": Color("6a4fb0"),
+		"desc": "指定战阵降下黑雨，持续 6/7/8 秒\n每秒 18/24/30 伤害，并降低敌军 15%/20%/25% 攻速",
+		"effect": {"kind": "black_rain", "follow": false, "cast_range": 520.0,
+			"dps_ranks": [18.0, 24.0, 30.0], "dur_ranks": [6.0, 7.0, 8.0],
+			"attack_slow_ranks": [0.85, 0.80, 0.75]}},
+	# W·冰墙：墙长、伤害与留场时间均随等级成长；撞上墙线的敌军会被重度减速。
+	"gong_icewall": {"name": "冰墙", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0],
+		"targeted": true, "radius": 60.0, "color": Color("9fd8ff"),
+		"desc": "朝指向凝出冰墙，伤害 20/35/50\n墙长 150/180/210，阻路 5/6/7 秒；命中减速 50% 持续 2 秒",
+		"effect": {"kind": "ice_wall", "dmg_ranks": [20.0, 35.0, 50.0], "range": 210.0,
+			"len_ranks": [150.0, 180.0, 210.0], "dur_ranks": [5.0, 6.0, 7.0],
+			"slow": 0.50, "slow_dur": 2.0}},
+	# E·百兽奔袭：机制仍是直线击退控场，表现改为复用一张猛兽素材组成兽群冲锋。
+	"gong_slow": {"name": "百兽奔袭", "cd": 12.0, "cd_ranks": [12.0, 10.0, 8.0],
+		"targeted": true, "radius": 60.0, "color": Color("c98245"),
+		"desc": "召来兽群沿直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒",
+		"effect": {"kind": "beast_stampede", "cast_range": 320.0, "len": 320.0, "width": 120.0,
+			"dmg_ranks": [25.0, 40.0, 55.0], "push_ranks": [120.0, 150.0, 180.0],
+			"slow": 0.70, "slow_dur": 2.0, "beast_count": 7}},
+	# R·画龙点睛：真龙沿指向贯阵，不再留下常驻召唤物。
+	"gong_dragon": {"name": "画龙点睛", "cd": 40.0, "cd_ranks": [40.0, 35.0, 30.0],
+		"targeted": true, "radius": 65.0, "color": Color("ffd24a"),
+		"desc": "点睛唤出真龙贯穿长阵，造成 120/190/260 伤害\n沿线敌军眩晕 1/1.5/2 秒",
+		"effect": {"kind": "dragon_line", "cast_range": 650.0, "len": 650.0, "width": 130.0,
+			"dmg_ranks": [120.0, 190.0, 260.0], "stun_ranks": [1.0, 1.5, 2.0]}},
 
 	# ===== 行者·武松 =====
-	# Q·驱使猛虎：召出两只猛虎（血/攻为骑兵基准的 70%/100%/130%，硬编码）
-	"wu_tigers": {"name": "驱使猛虎", "cd": 22.0, "targeted": false, "radius": 0.0, "color": Color("e8a23c"),
-		"desc": "啸聚山林·唤出两只猛虎助战\n血/攻随等级 70%/100%/130%",
-		"effect": {"kind": "summon", "unit": "tiger_summon", "count": 2, "summon_kind": "tiger",
-			"hp": [105.0, 150.0, 195.0], "atk": [11.0, 15.0, 20.0]}},
-	# W·三碗不过岗：饮酒，移动/攻速随机波动 30 秒
-	"wu_wine": {"name": "三碗不过岗", "cd": 50.0, "targeted": false, "radius": 0.0, "color": Color("ffcf66"),
-		"desc": "大碗饮酒·醉态飘忽\n30 秒内移动/攻速随机起落（随等级浮动更大）",
-		"effect": {"kind": "drunk_buff", "lo": [0.9, 0.7, 0.7], "hi": [1.3, 1.5, 1.8], "dur": 30.0}},
+	# Q·驱使猛虎：场上最多一虎，重放会替换旧虎；血量与攻击分别继承武松。
+	"wu_tigers": {"name": "驱使猛虎", "cd": 20.0, "cd_ranks": [20.0, 18.0, 16.0],
+		"targeted": false, "radius": 0.0, "color": Color("e8a23c"),
+		"desc": "召出一只猛虎助战 16 秒，重放替换旧虎\n生命为本体 80%/110%/140%，攻击为本体 90%/120%/150%",
+		"effect": {"kind": "summon", "unit": "tiger_summon", "count": 1, "summon_kind": "tiger",
+			"copy_caster": true, "copy_hp_mult": [0.80, 1.10, 1.40], "copy_atk_mult": [0.90, 1.20, 1.50],
+			"replace_existing": true, "dur": 16.0}},
+	# W·三碗不过岗：保留醉酒的正负随机收益，缩短冷却并固定持续 20 秒。
+	"wu_wine": {"name": "三碗不过岗", "cd": 30.0, "targeted": false, "radius": 0.0, "color": Color("ffcf66"),
+		"desc": "大碗饮酒·醉态飘忽\n20 秒内移动/攻速独立随机起落（随等级浮动更大）",
+		"effect": {"kind": "drunk_buff", "lo": [0.9, 0.7, 0.7], "hi": [1.3, 1.5, 1.8], "dur": 20.0}},
 	# E·双镔铁戒刀：横扫周围少量伤害并削甲 2/4/6
 	"wu_blades": {"name": "双镔铁戒刀", "cd": 10.0, "targeted": false, "radius": 110.0, "color": Color("cdd6df"),
 		"desc": "双刀横扫·周围官军受 {v} 伤害\n削甲 2/4/6 并致盲 3 秒（攻击必失）",
 		"effect": {"kind": "smite", "dmg": 36.0, "def_down": [2.0, 4.0, 6.0], "def_down_dur": 8.0, "blind": 3.0}},
-	# R·醉神大闹快活林：物理免疫 20 秒，每击 +10/20/30 攻，结束把所受物理伤害 50% 转血
-	"wu_drunkgod": {"name": "醉神大闹快活林", "cd": 50.0, "targeted": false, "radius": 0.0, "color": Color("ffce4a"),
-		"desc": "大招·醉神附体\n20 秒物理免疫，每击 +10/20/30 攻\n结束时所受物理伤害 50% 转为回血",
-		"effect": {"kind": "drunk_god", "bonus": [10.0, 20.0, 30.0], "dur": 20.0}},
+	# R·醉神大闹快活林：物免期间每次有效平攻叠攻，并让该次平攻向主目标身后分裂。
+	"wu_drunkgod": {"name": "醉神大闹快活林", "cd": 40.0, "cd_ranks": [40.0, 35.0, 30.0],
+		"targeted": false, "radius": 0.0, "color": Color("ffce4a"),
+		"desc": "物理免疫 8/10/12 秒；每次有效普攻 +10/12/15 攻，最多 5 层\n普攻附带 50%/65%/80% 分裂；结束时挡下伤害的 50% 转为回血",
+		"effect": {"kind": "drunk_god", "bonus": [10.0, 12.0, 15.0], "dur_ranks": [8.0, 10.0, 12.0],
+			"max_stacks": 5, "cleave_ranks": [0.50, 0.65, 0.80]}},
 
 	# ===== 驻守战·官军地方大将 技能（敌方用；全部复用现有 effect kind，名号官军化）=====
 	"jd_lance": {"name": "节度横扫", "cd": 9.0, "targeted": false, "radius": 118.0, "color": Color("d0a050"),
@@ -1183,7 +1200,24 @@ static func ability_levels(aid: String) -> String:
 				return "每秒 %s · 持续 %s" % [dps_s, dur_s]
 			return "%ss累计 %s" % [str(eff.get("dur", 5.0)), _l3a(float(eff.get("dmg", 0.0)))]
 		"ice_wall":
-			return "墙伤 %s　阻挡%ss%s" % [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("dur", 5.0)), extra]
+			var iw_dmg := _l3a(float(eff.get("dmg", 0.0)))
+			if eff.has("dmg_ranks"):
+				var idr: Array = eff["dmg_ranks"]
+				iw_dmg = "%d/%d/%d" % [int(idr[0]), int(idr[1]), int(idr[2])]
+			var iw_dur := "%ss" % str(eff.get("dur", 5.0))
+			if eff.has("dur_ranks"):
+				var idu: Array = eff["dur_ranks"]
+				iw_dur = "%d/%d/%ds" % [int(idu[0]), int(idu[1]), int(idu[2])]
+			return "墙伤 %s　阻挡%s%s" % [iw_dmg, iw_dur, extra]
+		"beast_stampede":
+			var bd: Array = eff.get("dmg_ranks", [0, 0, 0])
+			var bp: Array = eff.get("push_ranks", [0, 0, 0])
+			return "伤害%d/%d/%d·推退%d/%d/%d·减速%d%%" % [int(bd[0]), int(bd[1]), int(bd[2]),
+				int(bp[0]), int(bp[1]), int(bp[2]), int(round((1.0 - float(eff.get("slow", 1.0))) * 100.0))]
+		"dragon_line":
+			var dd: Array = eff.get("dmg_ranks", [0, 0, 0])
+			var ds: Array = eff.get("stun_ranks", [0, 0, 0])
+			return "贯阵伤害%d/%d/%d·眩晕%s/%s/%ss" % [int(dd[0]), int(dd[1]), int(dd[2]), str(ds[0]), str(ds[1]), str(ds[2])]
 		"weapon_toggle":
 			return "切近战/远程·近战吸血/击 20-40/30-50/40-60%"
 		"drunk_buff":
@@ -1192,11 +1226,19 @@ static func ability_levels(aid: String) -> String:
 			return "移/攻速随机 ×%.1f~%.1f / ×%.1f~%.1f / ×%.1f~%.1f　%ss" % [float(lo[0]), float(hi[0]), float(lo[1]), float(hi[1]), float(lo[2]), float(hi[2]), str(eff.get("dur", 30.0))]
 		"drunk_god":
 			var bo: Array = eff.get("bonus", [10.0, 20.0, 30.0])
-			return "物免%ss·每击+%d/%d/%d攻·结束伤害50%%转血" % [str(eff.get("dur", 20.0)), int(bo[0]), int(bo[1]), int(bo[2])]
+			var gd: Array = eff.get("dur_ranks", [eff.get("dur", 20.0), eff.get("dur", 20.0), eff.get("dur", 20.0)])
+			var gc: Array = eff.get("cleave_ranks", [0.0, 0.0, 0.0])
+			return "物免%s/%s/%ss·每击+%d/%d/%d攻(最多%d层)·分裂%d/%d/%d%%·结束伤害50%%转血" % [
+				str(gd[0]), str(gd[1]), str(gd[2]), int(bo[0]), int(bo[1]), int(bo[2]), int(eff.get("max_stacks", 5)),
+				int(float(gc[0]) * 100.0), int(float(gc[1]) * 100.0), int(float(gc[2]) * 100.0)]
 		"summon":
 			if bool(eff.get("copy_caster", false)):
 				var mtxt := "血/攻同本体"
-				if eff.has("copy_mult"):
+				if eff.has("copy_hp_mult") or eff.has("copy_atk_mult"):
+					var hm: Array = eff.get("copy_hp_mult", [1.0, 1.0, 1.0])
+					var am: Array = eff.get("copy_atk_mult", [1.0, 1.0, 1.0])
+					mtxt = "血=本体%d/%d/%d%%·攻=本体%d/%d/%d%%" % [int(float(hm[0]) * 100.0), int(float(hm[1]) * 100.0), int(float(hm[2]) * 100.0), int(float(am[0]) * 100.0), int(float(am[1]) * 100.0), int(float(am[2]) * 100.0)]
+				elif eff.has("copy_mult"):
 					var cm: Array = eff["copy_mult"]
 					mtxt = "血/攻=本体%d/%d/%d%%" % [int(float(cm[0]) * 100.0), int(float(cm[1]) * 100.0), int(float(cm[2]) * 100.0)]
 				var dtxt := "%ds" % int(float(eff.get("dur", 10.0)))
@@ -1219,7 +1261,7 @@ static func ability_levels(aid: String) -> String:
 				_durw = "%d/%d/%d" % [int(_drw[0]), int(_drw[1]), int(_drw[2])]
 			if _mode == "banner":
 				var _hrr: Array = eff.get("hero_reduction_ranks", [0.2, 0.3, 0.4])
-				var _trr: Array = eff.get("troop_reduction_ranks", [0.5, 0.7, 0.9])
+				var _trr: Array = eff.get("troop_reduction_ranks", [0.5, 0.65, 0.8])
 				var _bhr: Array = eff.get("heal_ranks", [20.0, 25.0, 30.0])
 				var _bar: Array = eff.get("atkspeed_ranks", [1.5, 1.7, 1.9])
 				return "2点充能/10秒回1点·英雄减伤%d/%d/%d%%·兵/召减伤%d/%d/%d%%·忠回%d/%d/%d/s·义攻速+%d/%d/%d%%·存%ss" % [

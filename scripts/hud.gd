@@ -1671,12 +1671,12 @@ func _build_end() -> void:
 	_end_sub.add_theme_font_size_override("font_size", 20)
 	vbox.add_child(_end_sub)
 
-	# 各路好汉战功（按英雄歼敌排行）：金黄一行，居中可折行
+	# 各路好汉战绩：驻守战逐将列出击杀/伤害/承伤/治疗，居中可折行。
 	_end_tally = Label.new()
 	_end_tally.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_end_tally.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_end_tally.custom_minimum_size = Vector2(560, 0)
-	_end_tally.add_theme_font_size_override("font_size", 18)
+	_end_tally.custom_minimum_size = Vector2(820, 0)
+	_end_tally.add_theme_font_size_override("font_size", 17)
 	_end_tally.add_theme_color_override("font_color", Color("ffd866"))
 	vbox.add_child(_end_tally)
 
@@ -1838,7 +1838,7 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 	_end_title.text = "旗开得胜！" if victory else "功败垂成……"
 	_end_title.add_theme_color_override("font_color", Color("ffd866") if victory else Color("ff7766"))
 	_end_sub.text = "%s\n此役歼灭敌军 %d 人。" % [line, kills]
-	_end_tally.text = ("⚔ 各路好汉战功 ⚔\n" + hero_tally) if hero_tally != "" else ""
+	_end_tally.text = ("⚔ 各路好汉战绩 ⚔\n" + hero_tally) if hero_tally != "" else ""
 	_end_tally.visible = hero_tally != ""
 	_end_next.visible = victory and has_next
 	_end_root.visible = true

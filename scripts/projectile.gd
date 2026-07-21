@@ -74,7 +74,7 @@ func _physics_process(delta: float) -> void:
 			if s != null and not target.garrisoned:   # 远程命中也吸血（与近战一致）
 				var ls: float = s.lifesteal_frac()
 				if ls > 0.0:
-					s.heal(dmg * ls)
+					s.heal(dmg * ls, s)
 		# 小范围溅射（金龙吐火）：对命中点附近的其余敌人也造成同等伤害
 		if splash > 0.0 and s != null and is_instance_valid(s) and s.battle != null:
 			for u in s.battle.units_near(tp, splash + 40.0):
