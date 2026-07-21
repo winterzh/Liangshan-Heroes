@@ -120,6 +120,8 @@ var temp_atk_add := 0.0     # 临时「平攻加成」（李逵暴走 +30 攻击
 var _temp_atk_add_t := 0.0
 var temp_speed := 1.0
 var _temp_speed_t := 0.0
+var _temp_move_boost := 1.0   # 独立于减速的限时移速增益（花荣 Q），两者相乘才不会互相覆盖
+var _temp_move_boost_t := 0.0
 var _stun_t := 0.0          # 眩晕（踩地板控制）剩余时长：>0 时本帧不移动/不攻击/不索敌
 var temp_lifesteal := 0.0
 var _temp_lifesteal_t := 0.0
@@ -176,6 +178,8 @@ var atkspeed_mult := 1.0    # 被动攻速倍率
 var crit_chance_bonus := 0.0
 var crit_mult_bonus := 0.0  # 暴击倍率加成（叠加在基础 ×1.8 之上）
 var evasion := 0.0          # 闪避概率（被攻击时整下闪开）
+var _temp_evasion := 0.0    # 限时闪避（花荣 Q）；与被动闪避相加后封顶 95%
+var _temp_evasion_t := 0.0
 var bash_chance := 0.0      # 攻击附带眩晕概率
 var bash_dur := 0.0
 var on_hit_slow := 0.0      # 攻击附带减速（orb）
@@ -188,6 +192,7 @@ var _dmg_amp_t := 0.0
 var _damage_reduction := 0.0
 var _damage_reduction_t := 0.0
 var _damage_reduction_sources: Dictionary = {}   # source_id → {amount,t}，高阶旗离开后可正确降到仍生效的低阶旗
+var _stats_mitigation_t := 0.0   # >0 时减伤挡下的数值也计入本英雄「承伤」（李逵 Q）
 # 冲锋（李逵 W·矢量单击）：蓄力→猛冲，沿途撞伤。窗口期独立于普通状态机。
 var _charge_t := 0.0        # 蓄力倒计时（>0 原地不动）
 var _charge_dash := 0.0     # 冲刺剩余时长（>0 高速平移）
@@ -197,6 +202,10 @@ var _charge_slow := 0.0
 var _charge_slow_dur := 0.0
 var _charge_width := 50.0
 var _charge_hit: Array = [] # 本次冲刺已撞过的单位（每人只撞一次）
+var _charge_phys_immune := false   # 李逵 W：蓄力+冲刺窗口物理免疫；不复用武松物免转血
+# 花荣 E·五连珠：接下来五次平攻锁定该目标并无视攻击距离；玩家下新命令仍可主动打断。
+var _hua_lock_target: Unit = null
+var _hua_lock_shots := 0
 const HERO_MAX_LEVEL := 12   # 满级 12 → 共 12 技能点（4 技能 ×3 级，可全点满）
 
 var _state := ST_IDLE
@@ -379,6 +388,7 @@ func order_stop() -> void:
 	_queue.clear()
 	_patrolling = false
 	_target = null
+	_clear_hua_lock()
 	_resume_amove = false
 	_chase_intent = CHASE_AUTO
 	_group_cap = 0.0
@@ -410,6 +420,7 @@ func order_patrol(pos: Vector2) -> void:
 	passive = false
 	_patrol_a = position
 	_patrol_b = pos
+	_clear_hua_lock()
 	_home = position
 	_has_home = true
 	_patrolling = true
@@ -455,6 +466,7 @@ func _enqueue(o: Dictionary, queued: bool) -> void:
 	passive = false
 	_patrolling = false   # 任何新明确指令都终止巡逻
 	if not queued:
+		_clear_hua_lock()   # 新的立即指令覆盖 E 的三箭锁定；Shift 排队不打断当前三箭
 		_queue.clear()
 		_begin_order(o)
 	else:
@@ -723,6 +735,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	# DOTA 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
 	if _dmg_amp > 0.0 and d > 0.0:
 		d *= 1.0 + _dmg_amp
+	var before_reduction := maxf(0.0, d)
 	# 护阵减伤作用于普攻和技能等一切伤害；先结算易伤、再按最高减伤折算，随后才由护盾吸收。
 	if not ignore_reduction and _damage_reduction > 0.0 and d > 0.0:
 		d *= 1.0 - clampf(_damage_reduction, 0.0, 0.95)
@@ -745,6 +758,12 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 		var victim_relevant := is_hero and faction == FACTION_LIANG
 		if attacker_relevant or victim_relevant:
 			battle.record_hero_combat_damage(self, from, effective_damage)
+	# 李逵 Q 的承伤口径：实际扣盾/扣血仍按减伤后值；被该状态拦下的部分额外计入李逵承伤。
+	# 敌方输出仍只记 effective_damage，避免同一笔免伤同时虚增输出数据。
+	var mitigated := maxf(0.0, before_reduction - maxf(0.0, d + shield_absorbed))
+	if _track_combat_stats and _stats_mitigation_t > 0.0 and mitigated > 0.0 \
+			and is_hero and faction == FACTION_LIANG:
+		battle.record_hero_combat_mitigation(self, mitigated)
 	_flash = 0.30 if crit else 0.18
 	_combat_cool = 6.0
 	if from != null and is_instance_valid(from) and from.faction != faction:
@@ -925,6 +944,14 @@ func _phys_body(delta: float) -> void:
 		_temp_speed_t -= delta
 		if _temp_speed_t <= 0.0:
 			temp_speed = 1.0
+	if _temp_move_boost_t > 0.0:
+		_temp_move_boost_t -= delta
+		if _temp_move_boost_t <= 0.0:
+			_temp_move_boost = 1.0
+	if _temp_evasion_t > 0.0:
+		_temp_evasion_t -= delta
+		if _temp_evasion_t <= 0.0:
+			_temp_evasion = 0.0
 	if _temp_lifesteal_t > 0.0:
 		_temp_lifesteal_t -= delta
 		if _temp_lifesteal_t <= 0.0:
@@ -949,6 +976,8 @@ func _phys_body(delta: float) -> void:
 				heal(_absorbed_phys * 0.5)
 				_buff_glow = 1.0
 			_absorbed_phys = 0.0
+	if _stats_mitigation_t > 0.0:
+		_stats_mitigation_t = maxf(0.0, _stats_mitigation_t - delta)
 	# 护甲削减计时
 	if _def_down_t > 0.0:
 		_def_down_t -= delta
@@ -1043,6 +1072,13 @@ func _phys_body(delta: float) -> void:
 			or _target._invis_t > 0.0 \
 			or (battle != null and battle.has_method("target_visible_to") and not battle.target_visible_to(self, _target))):
 		_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击
+	if _hua_lock_target != null and (not is_instance_valid(_hua_lock_target) or _hua_lock_target.hp <= 0.0 \
+			or _hua_lock_target.garrisoned or _hua_lock_target._invis_t > 0.0):
+		_clear_hua_lock()
+	# 施放其他技能会暂时清掉普通攻击目标；技能结束后若 E 的连珠箭尚未打完，就继续优先射原目标。
+	if _target == null and hua_lock_active() and (battle == null or not battle.has_method("target_visible_to") \
+			or battle.target_visible_to(self, _hua_lock_target)):
+		_begin_attack(_hua_lock_target, false)
 
 	# 引导施法（凌振轰天连炮等）：定身、不索敌/不移动/不普攻，逐 tick 结算由 battle._channel_pass 负责。
 	# 计时递减已在上面 timer 段完成；被眩晕/沉默/拖走时 _break_channel 会清零本状态。
@@ -1218,6 +1254,7 @@ func _do_chase(delta: float) -> void:
 		else:
 			_done_order()
 		return
+	var hua_locked := has_hua_locked_attack(_target)
 	# 牵引距离：进攻=320 远追；守备=150 短追；据守=只在攻击范围内（绝不挪）
 	var leash := 320.0
 	if stance == STANCE_DEFEND:
@@ -1226,7 +1263,7 @@ func _do_chase(delta: float) -> void:
 		leash = atk_range + radius + 18.0
 	# 玩家单位（或任何非进攻姿态单位）追击过远则脱离、回防，防止被引离阵地
 	# 例外：托管(auto_micro)且进攻姿态的英雄不受牵引——主动压上交战、退守交给托管大脑
-	if _chase_intent == CHASE_AUTO and _has_home and not _resume_amove and not (auto_micro and stance == STANCE_AGGRO) \
+	if not hua_locked and _chase_intent == CHASE_AUTO and _has_home and not _resume_amove and not (auto_micro and stance == STANCE_AGGRO) \
 			and (faction == FACTION_LIANG or stance != STANCE_AGGRO) \
 			and position.distance_to(_home) > leash:
 		_target = null
@@ -1236,7 +1273,7 @@ func _do_chase(delta: float) -> void:
 		return
 	var d := position.distance_to(_target.position)
 	var reach := atk_range + radius + _target.radius
-	if d <= reach:
+	if d <= reach or hua_locked:
 		_chase_t = 0.0   # 已进攻击范围（咬住了）：追击计时清零
 		_face_dir(_target.position - position)
 		if _cd <= 0.0:
@@ -1594,6 +1631,8 @@ func _deal_hit() -> void:
 	# 近战伤害点到来前目标已经脱离武器范围，则这一刀落空；避免隔着数个身位“粘住”命中。
 	if not is_ranged and position.distance_to(t.position) > atk_range + radius + t.radius + 8.0:
 		return
+	# E 锁定的是「接下来五次普攻」而非五次命中：箭一旦撒放，即使被致盲/闪避也消耗一发。
+	_consume_hua_locked_attack(t)
 	# 致盲（武松 E·双戒刀）：本单位攻击必失——不结算伤害、不发射弹丸、不吸血，仅一记落空火花
 	if _blind_t > 0.0:
 		if battle != null and battle.has_method("spawn_impact"):
@@ -1601,7 +1640,8 @@ func _deal_hit() -> void:
 		Sfx.play(_attack_sfx_name(), -11.0, 0.2, 45)
 		return
 	# 闪避（被动）：目标有几率整下闪开普攻（建筑/资源不闪）
-	if t.evasion > 0.0 and not t.is_building and not t.is_resource and randf() < t.evasion:
+	var target_evasion := t.current_evasion()
+	if target_evasion > 0.0 and not t.is_building and not t.is_resource and randf() < target_evasion:
 		if battle != null and battle.has_method("spawn_impact"):
 			battle.spawn_impact(t.position + Vector2(0, -4), false)
 		Sfx.play(_attack_sfx_name(), -10.0, 0.2, 55)
@@ -1633,13 +1673,14 @@ func _deal_hit() -> void:
 	var eff_def := maxf(0.0, t.defense - t._def_down)
 	if eff_def > 0.0:
 		dmg /= (1.0 + 0.05 * eff_def)
+	# 李逵 E·蛮力：每次有效普攻只掷一次概率；飞斧自身直接结算伤害，不会递归触发本被动。
+	_try_li_brawn_axes()
 	if is_ranged:
 		battle.spawn_projectile(self, t, dmg, crit, float(setup_def.get("splash", 0.0)))
 		Sfx.play(_attack_sfx_name(), -5.0, 0.14, 95)
-	elif t._phys_immune_t > 0.0:
+	elif t.is_phys_immune():
 		# 醉神·物理免疫：普通攻击被挡下，累计转血量；不结算伤害、不吸血
-		t._absorbed_phys += dmg
-		t._buff_glow = 1.0
+		t.absorb_physical_damage(dmg, self)
 		if battle.has_method("spawn_impact"):
 			battle.spawn_impact(t.position, false)
 		Sfx.play(_attack_sfx_name(), -8.0, 0.14, 60)
@@ -1662,6 +1703,45 @@ func _deal_hit() -> void:
 		if battle.has_method("spawn_impact"):
 			battle.spawn_impact(t.position, _swing_kind == WK.AXE or crit)
 		Sfx.play(_attack_sfx_name(), -4.0, 0.14, 75)
+
+
+## 一次不含暴击/破隐、但包含兵种相克与目标护甲的普通攻击伤害。
+## 李逵「蛮力」飞斧对每个目标分别调用，避免拿主目标的骑兵/护甲系数套给整圈敌人。
+func secondary_basic_damage_against(t: Unit) -> float:
+	if t == null or not is_instance_valid(t):
+		return 0.0
+	var dmg := atk * buff_atk * temp_atk + temp_atk_add
+	if t.is_cavalry:
+		dmg *= bonus_vs_cav
+	if not t.is_building and not t.is_resource:
+		dmg *= _counter_mult(t)
+	if t.key == "arrow_tower" and setup_def.has("vs_tower"):
+		dmg *= float(setup_def["vs_tower"])
+	if t.is_building and setup_def.has("vs_building"):
+		dmg *= float(setup_def["vs_building"])
+	if t.is_hero and setup_def.has("vs_hero"):
+		dmg *= float(setup_def["vs_hero"])
+	var eff_def := maxf(0.0, t.defense - t._def_down)
+	if eff_def > 0.0:
+		dmg /= (1.0 + 0.05 * eff_def)
+	return dmg
+
+
+## 李逵「蛮力」飞斧判定。proc_roll 仅供确定性自检注入；正常攻击传 -1 使用随机数。
+func _try_li_brawn_axes(proc_roll := -1.0):
+	if battle == null or not battle.has_method("spawn_li_brawn_axes"):
+		return null
+	for i in ability_slots.size():
+		var s: Dictionary = ability_slots[i]
+		if String(s.get("id", "")) != "li_brawn" or int(s.get("rank", 0)) <= 0:
+			continue
+		var eff: Dictionary = _slot_def(i).get("effect", {})
+		var chance := float(eff.get("axe_chance", 0.0))
+		var roll := randf() if proc_roll < 0.0 else proc_roll
+		if chance > 0.0 and roll < chance:
+			return battle.spawn_li_brawn_axes(self, float(eff.get("axe_radius", 120.0)), String(eff.get("axe_art", "axe")))
+		return null
+	return null
 
 
 ## 兵种相克环：枪克骑、骑克远、远克步、步克枪（克者攻击 +10%，被克者 −10%）。
@@ -1791,7 +1871,12 @@ func _target_score(u: Unit, d: float) -> float:
 func current_move_speed(at := Vector2.INF) -> float:
 	var p: Vector2 = position if at == Vector2.INF else at
 	var terrain := map.speed_mult_at(p, faction) if map != null else 1.0
-	return base_speed * buff_speed * temp_speed * _drunk_move * aura_slow * MOVE_SCALE * terrain
+	return base_speed * buff_speed * temp_speed * _temp_move_boost * _drunk_move * aura_slow * MOVE_SCALE * terrain
+
+
+## 当前普攻闪避率：被动与限时身法相加，统一从这里读取，避免临时效果污染英雄永久属性重算。
+func current_evasion() -> float:
+	return clampf(evasion + _temp_evasion, 0.0, 0.95)
 
 
 func _follow_path(delta: float) -> bool:
@@ -2273,7 +2358,8 @@ func apply_temp_atk_add(add: float, dur: float) -> void:
 
 
 ## 发动冲锋（李逵 W）：蓄力 windup 秒后，朝 dir 高速冲 dist 像素，撞翻沿途敌人。
-func _begin_charge(dir: Vector2, dmg: float, windup: float, dist: float, width: float, slow: float, slow_dur: float) -> void:
+func _begin_charge(dir: Vector2, dmg: float, windup: float, dist: float, width: float, slow: float, slow_dur: float,
+		phys_immune := false) -> void:
 	if dir.length() < 0.01:
 		dir = Vector2(-1.0 if face_left else 1.0, 0.0)
 	_charge_dir = dir.normalized()
@@ -2283,6 +2369,7 @@ func _begin_charge(dir: Vector2, dmg: float, windup: float, dist: float, width: 
 	_charge_width = width
 	_charge_slow = slow
 	_charge_slow_dur = slow_dur
+	_charge_phys_immune = phys_immune
 	_charge_hit.clear()
 	_target = null
 	_state = ST_IDLE
@@ -2333,6 +2420,58 @@ func apply_slow(mult: float, dur: float) -> void:
 	_temp_speed_t = dur
 
 
+## 花荣 Q：移速强化与敌方减速分槽保存，落地后即使中减速也按「强化×减速」正确叠算。
+func apply_move_boost(mult: float, dur: float) -> void:
+	_temp_move_boost = maxf(_temp_move_boost, mult)
+	_temp_move_boost_t = maxf(_temp_move_boost_t, dur)
+	_buff_glow = maxf(_buff_glow, 0.7)
+
+
+## 花荣 Q：限时闪避只影响普攻，持续时间与永久被动分开。
+func apply_temp_evasion(chance: float, dur: float) -> void:
+	_temp_evasion = maxf(_temp_evasion, chance)
+	_temp_evasion_t = maxf(_temp_evasion_t, dur)
+	_buff_glow = maxf(_buff_glow, 0.7)
+
+
+## 花荣 E：建立五箭单体锁定，并立刻把普通攻击目标切到被钉住者。
+func start_hua_lock(t: Unit, shots := 5) -> void:
+	if t == null or not is_instance_valid(t) or t.hp <= 0.0 or t.is_building or t.is_resource:
+		return
+	_hua_lock_target = t
+	_hua_lock_shots = maxi(0, shots)
+	if _hua_lock_shots > 0:
+		_begin_attack(t, false)
+
+
+func hua_lock_active() -> bool:
+	return _hua_lock_shots > 0 and _hua_lock_target != null and is_instance_valid(_hua_lock_target) \
+			and _hua_lock_target.hp > 0.0 and not _hua_lock_target.garrisoned
+
+
+func has_hua_locked_attack(t: Unit) -> bool:
+	return hua_lock_active() and t == _hua_lock_target
+
+
+func _consume_hua_locked_attack(t: Unit) -> void:
+	if not has_hua_locked_attack(t):
+		return
+	_hua_lock_shots = maxi(0, _hua_lock_shots - 1)
+	if _hua_lock_shots > 0:
+		return
+	var beyond_normal_range := position.distance_to(t.position) > atk_range + radius + t.radius
+	_clear_hua_lock()
+	# 最后一箭仍由 _deal_hit 的局部目标继续发出；若目标在常规射程外，发完即停止，不追半张地图。
+	if beyond_normal_range and _target == t:
+		_target = null
+		_state = ST_IDLE
+
+
+func _clear_hua_lock() -> void:
+	_hua_lock_target = null
+	_hua_lock_shots = 0
+
+
 ## 三碗不过岗（武松 W）：dur 秒内移动/攻速在 [lo,hi] 间随机波动，立即先掷一次。
 func start_drunk(lo: float, hi: float, dur: float) -> void:
 	_drunk_lo = lo
@@ -2353,7 +2492,18 @@ func start_drunk_god(bonus: float, dur: float) -> void:
 
 
 func is_phys_immune() -> bool:
-	return _phys_immune_t > 0.0
+	return _phys_immune_t > 0.0 or (_charge_phys_immune and (_charge_t > 0.0 or _charge_dash > 0.0))
+
+
+## 普攻/物理弹道命中物免时的统一入口：武松累计转血；所有英雄都可把拦下值计入承伤。
+func absorb_physical_damage(amount: float, from: Unit = null) -> void:
+	if amount <= 0.0:
+		return
+	if _phys_immune_t > 0.0:   # 只有武松 R 的计时物免在结束时转化50%回血；李逵冲锋不回血。
+		_absorbed_phys += amount
+	_buff_glow = 1.0
+	if _track_combat_stats and is_hero and faction == FACTION_LIANG:
+		battle.record_hero_combat_mitigation(self, amount)
 
 
 ## 护甲削减（武松 E·双戒刀）：amount 点防御，dur 秒。
@@ -2412,10 +2562,17 @@ func apply_damage_reduction(amount: float, dur: float, source_id: int = 0) -> vo
 	_buff_glow = maxf(_buff_glow, 0.55)
 
 
+## 带「拦下伤害也计承伤」口径的减伤（李逵 Q）；减伤数值仍走通用多来源取最高逻辑。
+func apply_counted_damage_reduction(amount: float, dur: float, source_id: int = 0) -> void:
+	apply_damage_reduction(amount, dur, source_id)
+	_stats_mitigation_t = maxf(_stats_mitigation_t, dur)
+
+
 func clear_damage_reduction() -> void:
 	_damage_reduction_sources.clear()
 	_damage_reduction = 0.0
 	_damage_reduction_t = 0.0
+	_stats_mitigation_t = 0.0
 
 
 func _refresh_damage_reduction() -> void:
@@ -2914,7 +3071,7 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO, slow_aura_r, 0.0, TAU, 40, Color(0.5, 0.8, 1.0, 0.18 + 0.10 * pulse), 2.0)
 		draw_circle(Vector2.ZERO, slow_aura_r, Color(0.4, 0.7, 1.0, 0.05))
 	# 醉神·物理免疫（武松 R）：金色护体环
-	if _phys_immune_t > 0.0 and not _dying:
+	if is_phys_immune() and not _dying:
 		var sp := 0.6 + 0.4 * sin(_idle_t * 7.0)
 		draw_arc(Vector2.ZERO, radius + 6.0, 0.0, TAU, 28, Color(1.0, 0.82, 0.3, 0.85 * sp), 3.0)
 	# 易伤（樊瑞 W·摄魂咒）：脚下暗红咒环 + 体表裂纹红光 + 头顶下垂的摄魂符，标识「受伤大增」

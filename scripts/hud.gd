@@ -2185,8 +2185,9 @@ class CmdButton extends Control:
 		"swap": "换位", "blink": "闪现", "charge": "冲锋", "channel": "引导", "invis": "隐身", "transform": "变身",
 		"summon": "召唤", "ward": "立桩", "shield": "护盾", "rally": "鼓舞", "haste": "加速", "heal_wave": "治疗",
 		"passive": "被动", "chrono": "定身", "fire_dot": "灼烧", "fire_line": "火线", "black_rain": "黑雨",
-		"global_nuke": "全图", "chain_nuke": "连锁", "atkspeed": "狂暴", "self_buff": "自强", "knockback": "击退",
-		"weapon_toggle": "换武", "drag": "拖拽", "fissure": "地裂", "echo": "回响", "orbit_axes": "环刃",
+			"global_nuke": "全图", "chain_nuke": "连锁", "atkspeed": "狂暴", "self_buff": "自强", "knockback": "击退",
+			"weapon_toggle": "换武", "drag": "拖拽", "fissure": "地裂", "echo": "回响", "orbit_axes": "环刃",
+			"hua_pin_target": "五连射", "hua_snipe": "狙杀",
 		"drunk_buff": "醉拳", "drunk_god": "醉神", "slow_aura": "减速环", "ice_wall": "冰墙", "debuff": "削弱",
 	}
 
@@ -2465,7 +2466,7 @@ class HeroSlotButton extends Control:
 
 	# 技能 id → 矢量图标种类。花荣神射四式各有专属图标；其余英雄按招式归类，整张命令卡都图标化。
 	const ICON_TOKENS := {
-		"hua_shot": "bow", "hua_rain": "rain", "hua_pin": "pin", "hua_eye": "eye", "hua_blade": "saber",
+			"hua_shot": "bow", "hua_rain": "rain", "hua_pin": "pin", "hua_eye": "eye", "hua_blade": "snipe",
 		"song_rally": "banner", "song_banner": "banner", "song_fire": "fire", "song_lead": "star",
 		"lin_sweep": "blade", "lin_charge": "spear", "lin_storm": "blade", "lin_drill": "star",
 		"li_berserk": "axe", "li_whirl": "axe", "li_rage": "axe", "li_brawn": "star",
@@ -2482,7 +2483,8 @@ class HeroSlotButton extends Control:
 		"shield": "k_shield", "ice_wall": "k_shield", "self_buff": "star", "passive": "star",
 		"rally": "banner", "heal_wave": "k_heal", "summon": "k_summon", "ward": "k_summon",
 		"chrono": "k_clock", "slow_aura": "wave", "debuff": "k_skull", "hex": "k_skull",
-		"weapon_toggle": "saber", "drag": "wave", "drunk_buff": "drug", "drunk_god": "drug", "orbit_axes": "axe",
+			"weapon_toggle": "saber", "drag": "wave", "drunk_buff": "drug", "drunk_god": "drug", "orbit_axes": "axe",
+			"hua_pin_target": "pin", "hua_snipe": "snipe",
 		"channel": "k_aim", "invis": "k_ghost", "transform": "k_beast",
 	}
 
@@ -2664,6 +2666,14 @@ class HeroSlotButton extends Control:
 				draw_colored_polygon(PackedVector2Array([Vector2(cx + 18, cy), Vector2(cx + 11, cy - 4.5), Vector2(cx + 11, cy + 4.5)]), ink)
 				draw_line(Vector2(cx - 11, cy), Vector2(cx - 16, cy - 4), ac, 1.6)
 				draw_line(Vector2(cx - 11, cy), Vector2(cx - 16, cy + 4), ac, 1.6)
+			"snipe":   # 百步穿杨：贯穿靶心的长箭，区别于旧“拔刀换武”图标
+				draw_arc(Vector2(cx + 6, cy), 12.0, 0.0, TAU, 24, ac, 2.2)
+				draw_arc(Vector2(cx + 6, cy), 5.0, 0.0, TAU, 18, ink, 1.5)
+				draw_line(Vector2(cx - 18, cy), Vector2(cx + 17, cy), ink, 2.6)
+				draw_colored_polygon(PackedVector2Array([Vector2(cx + 20, cy), Vector2(cx + 12, cy - 5), Vector2(cx + 12, cy + 5)]), ink)
+				for sa in [0.0, PI * 0.5, PI, PI * 1.5]:
+					var sd := Vector2(cos(sa), sin(sa))
+					draw_line(Vector2(cx + 6, cy) + sd * 14.0, Vector2(cx + 6, cy) + sd * 18.0, ac, 1.6)
 			"rain":  # 箭雨：三支斜向下落的箭
 				for i in range(3):
 					var ox := (float(i) - 1.0) * 11.0 + 2.0
@@ -2681,6 +2691,8 @@ class HeroSlotButton extends Control:
 				var dd := (Vector2(cx + 15, cy + 6) - Vector2(cx - 17, cy - 6)).normalized()
 				var op := dd.orthogonal()
 				draw_colored_polygon(PackedVector2Array([Vector2(cx + 15, cy + 6) + dd * 5.0, Vector2(cx + 15, cy + 6) - dd * 3.5 + op * 4.0, Vector2(cx + 15, cy + 6) - dd * 3.5 - op * 4.0]), ink)
+				for i in range(5):
+					draw_circle(Vector2(cx - 12.0 + float(i) * 6.0, cy - 15.0), 1.8, ac)
 			"eye":   # 小李广（神射被动）：靶心
 				draw_arc(Vector2(cx, cy), 14.0, 0.0, TAU, 26, ac, 2.0)
 				draw_arc(Vector2(cx, cy), 8.0, 0.0, TAU, 20, ink, 1.6)

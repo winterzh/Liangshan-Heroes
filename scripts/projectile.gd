@@ -65,9 +65,8 @@ func _physics_process(delta: float) -> void:
 	_spin += delta * 7.0
 	if position.distance_to(tp) <= maxf(step, target.radius + 6.0):
 		var s := shooter if (shooter != null and is_instance_valid(shooter)) else null
-		if target._phys_immune_t > 0.0:   # 醉神·物理免疫：远程普攻也被挡下，累计转血
-			target._absorbed_phys += dmg
-			target._buff_glow = 1.0
+		if target.is_phys_immune():   # 武松醉神 / 李逵冲锋：远程普攻同样被物免挡下
+			target.absorb_physical_damage(dmg, s)
 		else:
 			target.take_damage(dmg, s, crit)
 			if on_slow_dur > 0.0 and is_instance_valid(target):   # 拒马：命中减速
@@ -84,9 +83,8 @@ func _physics_process(delta: float) -> void:
 				if u.faction == s.faction or u.is_resource or u.garrisoned:
 					continue
 				if tp.distance_to(u.position) <= splash + u.radius:
-					if u._phys_immune_t > 0.0:
-						u._absorbed_phys += dmg
-						u._buff_glow = 1.0
+					if u.is_phys_immune():
+						u.absorb_physical_damage(dmg, s)
 					else:
 						u.take_damage(dmg, s)
 						if on_slow_dur > 0.0:   # 溅射范围内也吃减速
