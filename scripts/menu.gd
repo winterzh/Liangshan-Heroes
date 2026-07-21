@@ -115,21 +115,41 @@ void fragment() {
 	col.add_child(_mk_module("📖  英雄图鉴", "108 将 · 立绘 / 技能 / 生平", Color("ff9a6a"), func() -> void: get_tree().change_scene_to_file.call_deferred("res://scenes/codex.tscn")))
 	col.add_child(_mk_module("🛠  更多", "关卡编辑器 · 设置", Color("c0a0ff"), _show_more))
 
-	# 版本号（右下角·低调灰）
+	# 当前生效内容版本：右下角常驻、保持足够对比度，方便玩家报错时直接查看。
+	# 安装过热更新时显示 1.6.4 这类内容版本，而不是仍然显示完整包的 1.6。
+	var ver_panel := PanelContainer.new()
+	ver_panel.name = "VersionBadge"
+	ver_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ver_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	ver_panel.offset_left = -238.0
+	ver_panel.offset_top = -54.0
+	ver_panel.offset_right = -16.0
+	ver_panel.offset_bottom = -12.0
+	var ver_bg := StyleBoxFlat.new()
+	ver_bg.bg_color = Color(0.055, 0.075, 0.11, 0.90)
+	ver_bg.border_color = Color(0.38, 0.48, 0.60, 0.72)
+	ver_bg.set_border_width_all(1)
+	ver_bg.set_corner_radius_all(8)
+	ver_bg.content_margin_left = 14.0
+	ver_bg.content_margin_right = 14.0
+	ver_bg.content_margin_top = 6.0
+	ver_bg.content_margin_bottom = 6.0
+	ver_panel.add_theme_stylebox_override("panel", ver_bg)
+	add_child(ver_panel)
+
 	var ver := Label.new()
-	ver.text = "v" + Campaign.VERSION
+	var content_version := Campaign.VERSION
 	if AndroidUpdater.enabled:
-		ver.text = "v" + AndroidUpdater.display_version()
-	ver.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	ver.offset_left = -150.0
-	ver.offset_top = -36.0
-	ver.offset_right = -16.0
-	ver.offset_bottom = -12.0
-	ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		content_version = String(AndroidUpdater.active_content_version)
+		if content_version == "":
+			content_version = Campaign.VERSION
+	ver.text = "当前版本  v%s" % content_version
+	ver.tooltip_text = "完整安装包 v%s · 当前内容 v%s" % [Campaign.VERSION, content_version]
+	ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ver.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	ver.add_theme_font_size_override("font_size", 16)
-	ver.add_theme_color_override("font_color", Color("6a7686"))
-	add_child(ver)
+	ver.add_theme_font_size_override("font_size", 17)
+	ver.add_theme_color_override("font_color", Color("c6d3e1"))
+	ver_panel.add_child(ver)
 
 	if AndroidUpdater.enabled:
 		_update_label = Label.new()
