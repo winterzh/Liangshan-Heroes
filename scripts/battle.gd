@@ -11674,21 +11674,32 @@ func _artshot(dir: String, center: Vector2i) -> void:
 	return
 
 
-## 信息抽屉视觉自检（INFO_UI_TEST_DIR=/path）：各拍一张折叠/展开图；TOUCH_UI=1 可验证移动端无键位段。
+## 信息抽屉视觉自检（INFO_UI_TEST_DIR=/path）：拍折叠/展开/操作提示图；
+## 同时验证物品栏位于右下按钮下方，TOUCH_UI=1 时键盘操作提示始终隐藏。
 func _info_ui_selftest(dir: String) -> void:
 	if DisplayServer.get_name() == "headless":
 		print("[infoui] skipped: headless display has no viewport texture")
 		return
 	DirAccess.make_dir_recursive_absolute(dir)
+	var old_show_help := Settings.show_control_help
 	if hud._intro_root != null:
 		hud._intro_root.visible = false
+	# 选中一名己方英雄，让物品栏参与真实布局校验。
+	var test_heroes := units.filter(func(u) -> bool:
+		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_hero and u.hp > 0.0)
+	if not test_heroes.is_empty():
+		_set_selection([test_heroes[0]])
 	hud.show_message("官军探马杀到——头一拨人马已近寨门！", 8.0)
 	hud.show_message("科技研究正在等待生产队列排空", 8.0)
+	Settings.show_control_help = false
+	hud._update_control_help_visibility()
 	hud._set_info_expanded(false)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	print("[infoui] help visible=%s rect=%s toggle=%s panel=%s" % [
-		hud._control_help.visible, hud._control_help.get_global_rect(),
+	var inventory_below_toggle := hud._inventory_dock.get_parent() == hud._info_dock \
+		and hud._inventory_dock.get_global_rect().position.y >= hud._info_toggle.get_global_rect().end.y
+	print("[infoui] collapsed help=%s inventory_below_toggle=%s inventory=%s toggle=%s panel=%s" % [
+		hud._control_help_panel.visible, inventory_below_toggle, hud._inventory_dock.get_global_rect(),
 		hud._info_toggle.get_global_rect(), hud._info_panel.get_global_rect()])
 	RenderingServer.force_draw(false)
 	get_viewport().get_texture().get_image().save_png("%s/info_collapsed.png" % dir)
@@ -11697,8 +11708,50 @@ func _info_ui_selftest(dir: String) -> void:
 	await get_tree().process_frame
 	RenderingServer.force_draw(false)
 	get_viewport().get_texture().get_image().save_png("%s/info_expanded.png" % dir)
-	# 折叠即时消息契约：第 4 条顶掉最旧条，每条 3 秒后离场。
+	# 在抽屉中打开操作提示，先验证展开态不重叠，再验证折叠后位于即时消息上方。
+	Settings.show_control_help = true
+	hud._update_control_help_visibility()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var expanded_help_rect := hud._control_help_panel.get_global_rect()
+	var expanded_panel_rect := hud._info_panel.get_global_rect()
+	var help_above_drawer := not hud._control_help_panel.visible \
+		or expanded_help_rect.end.y <= expanded_panel_rect.position.y + 1.0
+	print("[infoui] help_above_drawer=%s help=%s drawer=%s" % [
+		help_above_drawer, expanded_help_rect, expanded_panel_rect])
+	RenderingServer.force_draw(false)
+	get_viewport().get_texture().get_image().save_png("%s/info_expanded_help_on.png" % dir)
 	hud._set_info_expanded(false)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var help_rect := hud._control_help_panel.get_global_rect()
+	var toast_rect := hud.msg_box.get_global_rect()
+	var help_above_toasts := help_rect.end.y <= toast_rect.position.y + 1.0
+	var help_contract := hud._control_help_panel.visible == not hud.touch_ui \
+		and hud._control_help_toggle.visible == not hud.touch_ui
+	print("[infoui] help_contract=%s help_above_toasts=%s help=%s toasts=%s" % [
+		help_contract, help_above_toasts, help_rect, toast_rect])
+	RenderingServer.force_draw(false)
+	get_viewport().get_texture().get_image().save_png("%s/info_help_on.png" % dir)
+	# 触屏/窄屏还要单独拍一张 3×2 物品弹窗；宽屏的 6×1 已在其他图中常驻显示。
+	if hud._inventory_toggle.visible:
+		hud._inventory_popup_open = true
+		hud._layout_inventory()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var popup_rect := hud._inventory_popup.get_global_rect()
+		var action_rect := Rect2()
+		var avoids_touch_actions := true
+		if hud._touch_actions != null and hud._touch_actions.visible:
+			action_rect = hud._touch_actions.get_global_rect()
+			avoids_touch_actions = not popup_rect.intersects(action_rect)
+		print("[infoui] inventory_avoids_touch_actions=%s popup=%s actions=%s" % [
+			avoids_touch_actions, popup_rect, action_rect])
+		RenderingServer.force_draw(false)
+		get_viewport().get_texture().get_image().save_png("%s/info_inventory_popup.png" % dir)
+		hud._inventory_popup_open = false
+		hud._layout_inventory()
+	# 折叠即时消息契约：第 4 条顶掉最旧条，每条 3 秒后离场。
 	hud._clear_info_toasts()
 	for i in range(4):
 		hud._show_info_toast("__toast_probe_%d__" % i)
@@ -11709,6 +11762,8 @@ func _info_ui_selftest(dir: String) -> void:
 		if String(child.get_meta("info_text", "")).begins_with("__toast_probe_"):
 			probe_alive = true
 			break
+	Settings.show_control_help = old_show_help
+	hud._update_control_help_visibility()
 	print("[infoui] toast_cap3=%s expires_3s=%s" % [cap3, not probe_alive])
 	print("[infoui] touch=%s saved=%s" % [hud.touch_ui, dir])
 

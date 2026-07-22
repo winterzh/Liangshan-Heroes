@@ -46,9 +46,11 @@ var _grid_keys: Array = []
 var _skill_keys: Array = []
 var _panel_accum := 0.0
 var _control_help: Label
+var _control_help_panel: PanelContainer
+var _control_help_toggle: CheckButton
 var _info_dock: VBoxContainer
 
-# 英雄物品栏：宽屏内嵌 3×2；触屏/窄屏折叠为按钮，点开同一套 3×2 浮层。
+# 英雄物品栏：宽屏在右下信息按钮下方内嵌 6×1；触屏/窄屏折叠为按钮，点开 3×2 浮层。
 var _inventory_dock: VBoxContainer
 var _inventory_title: Label
 var _inventory_inline: PanelContainer
@@ -192,6 +194,7 @@ func _ready() -> void:
 	_build_arena_buttons()
 	_build_fps_label()   # 最后建→置于最上层，覆盖各遮罩始终可见
 	get_viewport().size_changed.connect(_layout_inventory)
+	get_viewport().size_changed.connect(_layout_info_panel)
 	refresh_inventory()
 
 
@@ -937,33 +940,6 @@ func _build_bottom_panel() -> void:
 	_info_stats.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_child(_info_stats)
 
-	_inventory_dock = VBoxContainer.new()
-	_inventory_dock.custom_minimum_size = Vector2(166, 0)
-	_inventory_dock.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_inventory_dock.add_theme_constant_override("separation", 2)
-	hbox.add_child(_inventory_dock)
-	_inventory_title = Label.new()
-	_inventory_title.text = "物品"
-	_inventory_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_inventory_title.add_theme_font_size_override("font_size", 12)
-	_inventory_title.add_theme_color_override("font_color", Color("d8c38d"))
-	_inventory_dock.add_child(_inventory_title)
-	_inventory_inline = PanelContainer.new()
-	_inventory_inline.add_theme_stylebox_override("panel", _inventory_panel_style())
-	_inventory_dock.add_child(_inventory_inline)
-	_inventory_grid = _make_inventory_grid(false)
-	_inventory_inline.add_child(_inventory_grid)
-	_inventory_toggle = Button.new()
-	_inventory_toggle.text = "▦ 物品"
-	_inventory_toggle.custom_minimum_size = Vector2(84, 76)
-	_inventory_toggle.focus_mode = Control.FOCUS_NONE
-	_inventory_toggle.add_theme_font_size_override("font_size", 17)
-	_inventory_toggle.tooltip_text = "打开当前英雄的六格物品栏"
-	_inventory_toggle.pressed.connect(func() -> void:
-		_inventory_popup_open = not _inventory_popup_open
-		_layout_inventory())
-	_inventory_dock.add_child(_inventory_toggle)
-
 	# 命令卡（英雄技能 / 工人建造 / 生产训练）。GridContainer：生产建筑设多列→训练按钮分两排，
 	# 其余设大列数→单排。get_index 顺序不变，键盘 Q/W/E/R 经 train_menu/build_menu 索引派发，不受影响。
 	_skill_bar = GridContainer.new()
@@ -998,23 +974,68 @@ func _build_bottom_panel() -> void:
 	info_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hbox.add_child(info_spacer)
 
-	# 最右固定信息区：「展开/收起」按钮由 _build_info_panel 插到第一行，操作说明在下。
+	# 最右固定区：「展开/收起」按钮由 _build_info_panel 插到第一行，英雄物品栏紧随其下。
 	_info_dock = VBoxContainer.new()
 	_info_dock.custom_minimum_size = Vector2(330, 0)
 	_info_dock.add_theme_constant_override("separation", 3)
 	_info_dock.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	hbox.add_child(_info_dock)
+
+	_inventory_dock = VBoxContainer.new()
+	_inventory_dock.custom_minimum_size = Vector2(304, 0)
+	_inventory_dock.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_inventory_dock.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_inventory_dock.add_theme_constant_override("separation", 2)
+	_info_dock.add_child(_inventory_dock)
+	_inventory_title = Label.new()
+	_inventory_title.text = "英雄物品"
+	_inventory_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_inventory_title.add_theme_font_size_override("font_size", 11)
+	_inventory_title.add_theme_color_override("font_color", Color("d8c38d"))
+	_inventory_dock.add_child(_inventory_title)
+	_inventory_inline = PanelContainer.new()
+	_inventory_inline.add_theme_stylebox_override("panel", _inventory_panel_style())
+	_inventory_dock.add_child(_inventory_inline)
+	_inventory_grid = _make_inventory_grid(false)
+	_inventory_inline.add_child(_inventory_grid)
+	_inventory_toggle = Button.new()
+	_inventory_toggle.text = "▦ 物品"
+	_inventory_toggle.custom_minimum_size = Vector2(92, 70)
+	_inventory_toggle.focus_mode = Control.FOCUS_NONE
+	_inventory_toggle.add_theme_font_size_override("font_size", 17)
+	_inventory_toggle.tooltip_text = "打开当前英雄的六格物品栏"
+	_inventory_toggle.pressed.connect(func() -> void:
+		_inventory_popup_open = not _inventory_popup_open
+		_layout_inventory())
+	_inventory_dock.add_child(_inventory_toggle)
+
+	# 操作提示不再常驻底栏；按信息抽屉里的开关显示为右下纯文字，避免挤占命令区。
+	_control_help_panel = PanelContainer.new()
+	_control_help_panel.visible = false
+	_control_help_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_control_help_panel.z_index = 88
+	var help_sb := StyleBoxFlat.new()
+	help_sb.bg_color = Color.TRANSPARENT
+	help_sb.border_color = Color.TRANSPARENT
+	help_sb.set_border_width_all(0)
+	help_sb.content_margin_left = 0
+	help_sb.content_margin_right = 0
+	help_sb.content_margin_top = 0
+	help_sb.content_margin_bottom = 0
+	_control_help_panel.add_theme_stylebox_override("panel", help_sb)
+	add_child(_control_help_panel)
 	_control_help = Label.new()
+	_control_help.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_control_help.text = _key_help_text()
-	_control_help.add_theme_font_size_override("font_size", 10)
-	_control_help.add_theme_color_override("font_color", Color(0.62, 0.63, 0.60))
+	_control_help.add_theme_font_size_override("font_size", 11)
+	_control_help.add_theme_color_override("font_color", Color(0.91, 0.91, 0.85))
+	_control_help.add_theme_color_override("font_outline_color", Color(0.025, 0.025, 0.02, 0.98))
+	_control_help.add_theme_constant_override("outline_size", 4)
 	_control_help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_control_help.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	_control_help.clip_text = true
-	_control_help.custom_minimum_size = Vector2(0, 94)
+	_control_help.custom_minimum_size = Vector2(388, 104)
 	_control_help.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_control_help.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_info_dock.add_child(_control_help)
+	_control_help_panel.add_child(_control_help)
 
 
 func _inventory_panel_style() -> StyleBoxFlat:
@@ -1032,7 +1053,7 @@ func _inventory_panel_style() -> StyleBoxFlat:
 
 func _make_inventory_grid(popup: bool) -> GridContainer:
 	var grid := GridContainer.new()
-	grid.columns = 3
+	grid.columns = 3 if popup else 6
 	grid.add_theme_constant_override("h_separation", 3)
 	grid.add_theme_constant_override("v_separation", 3)
 	for i in range(HeroInventory.SLOT_COUNT):
@@ -1040,7 +1061,7 @@ func _make_inventory_grid(popup: bool) -> GridContainer:
 		slot_btn.hud = self
 		slot_btn.slot = i
 		slot_btn.popup_size = popup
-		slot_btn.custom_minimum_size = Vector2(58, 58) if popup else Vector2(50, 50)
+		slot_btn.custom_minimum_size = Vector2(58, 58) if popup else Vector2(46, 48)
 		grid.add_child(slot_btn)
 	return grid
 
@@ -1087,7 +1108,7 @@ func _layout_inventory() -> void:
 		and _inventory_hero.inventory != null
 	_inventory_dock.visible = has_hero
 	var narrow := touch_ui or get_viewport().get_visible_rect().size.x < 1400.0
-	_inventory_dock.custom_minimum_size.x = 92.0 if narrow else 166.0
+	_inventory_dock.custom_minimum_size.x = 92.0 if narrow else 304.0
 	_inventory_title.visible = has_hero and not narrow
 	_inventory_inline.visible = has_hero and not narrow
 	_inventory_toggle.visible = has_hero and narrow
@@ -1104,6 +1125,11 @@ func _layout_inventory() -> void:
 	var x := clampf(anchor.position.x + anchor.size.x * 0.5 - popup_size.x * 0.5,
 		8.0, maxf(8.0, vp.x - popup_size.x - 8.0))
 	var y := maxf(8.0, anchor.position.y - popup_size.y - 8.0)
+	# 移动端右下还有一排战斗按钮：物品弹窗要整体越过它，不能挡住攻击/停止/姿态/拆除。
+	if touch_ui and _touch_actions != null and _touch_actions.visible:
+		var action_rect := _touch_actions.get_global_rect()
+		y = minf(y, action_rect.position.y - popup_size.y - 8.0)
+		y = maxf(8.0, y)
 	_inventory_popup.position = Vector2(x, y)
 	_inventory_popup.size = popup_size
 
@@ -1181,7 +1207,7 @@ func _build_info_panel() -> void:
 	log_title.add_theme_color_override("font_color", Color("a9e34b"))
 	root.add_child(log_title)
 	_info_scroll = ScrollContainer.new()
-	_info_scroll.custom_minimum_size = Vector2(390, 214)
+	_info_scroll.custom_minimum_size = Vector2(390, 184)
 	_info_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_info_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	_info_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1196,7 +1222,20 @@ func _build_info_panel() -> void:
 	_info_log.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_info_scroll.add_child(_info_log)
 
-	# 按钮插入底栏最右区域的第一行，正好坐在操作说明上方。
+	_control_help_toggle = CheckButton.new()
+	_control_help_toggle.text = "在主界面显示操作提示"
+	_control_help_toggle.tooltip_text = "显示在右下角即时信息的上方；移动端不显示键盘操作提示"
+	_control_help_toggle.focus_mode = Control.FOCUS_NONE
+	_control_help_toggle.add_theme_font_size_override("font_size", 14)
+	_control_help_toggle.add_theme_color_override("font_color", Color("d8c38d"))
+	_control_help_toggle.button_pressed = Settings.show_control_help
+	_control_help_toggle.toggled.connect(func(on: bool) -> void:
+		Settings.show_control_help = on
+		Settings.save()
+		_update_control_help_visibility())
+	root.add_child(_control_help_toggle)
+
+	# 按钮插入底栏最右区域的第一行，英雄物品栏紧随其下。
 	_info_toggle = Button.new()
 	_info_toggle.focus_mode = Control.FOCUS_NONE
 	_info_toggle.custom_minimum_size = Vector2(0, 31)
@@ -1242,13 +1281,43 @@ func _update_info_toggle() -> void:
 
 
 func _update_info_panel_mode() -> void:
-	if _control_help != null:
-		_control_help.visible = not touch_ui
 	if _info_dock != null:
 		_info_dock.custom_minimum_size.x = 132.0 if touch_ui else 330.0
 	if _info_log != null:
 		_info_log.add_theme_font_size_override("font_size", 16 if touch_ui else 13)
+	_update_control_help_visibility()
 	_update_info_toggle()
+
+
+func _update_control_help_visibility() -> void:
+	if _control_help_toggle != null:
+		_control_help_toggle.visible = not touch_ui
+		_control_help_toggle.set_pressed_no_signal(Settings.show_control_help)
+	if _control_help_panel != null:
+		_control_help_panel.visible = not touch_ui and Settings.show_control_help
+	_layout_control_help_panel()
+
+
+func _layout_control_help_panel() -> void:
+	if _control_help_panel == null:
+		return
+	var safe_right := 0.0
+	if touch_ui and _touch_built:
+		var sa := DisplayServer.get_display_safe_area()
+		var ws := DisplayServer.window_get_size()
+		safe_right = maxf(0.0, float(ws.x - (sa.position.x + sa.size.x)))
+	var right_gap := 12.0 + safe_right
+	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0)
+	# 折叠时越过最多三条即时消息；展开时越过整个信息抽屉。
+	var lift := 284.0 if _info_expanded else 188.0
+	var width := 420.0
+	# 文字会随按键名称换行，必须用实际最小高度，否则会向下撑开并压住第一条即时消息。
+	var height := maxf(118.0, _control_help_panel.get_combined_minimum_size().y)
+	_control_help_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	_control_help_panel.offset_right = -right_gap
+	_control_help_panel.offset_left = -right_gap - width
+	_control_help_panel.offset_bottom = -bottom_gap - lift
+	_control_help_panel.offset_top = -bottom_gap - lift - height
 
 
 func _layout_info_panel() -> void:
@@ -1275,6 +1344,7 @@ func _layout_info_panel() -> void:
 	msg_box.offset_left = -right_gap - width
 	msg_box.offset_bottom = -bottom_gap
 	msg_box.offset_top = -bottom_gap - 180.0
+	_layout_control_help_panel()
 
 
 func _append_info_message(text: String) -> void:
@@ -1395,11 +1465,12 @@ func _refresh_info_log() -> void:
 
 func _key_help_text() -> String:
 	var ck := Settings.command_key_labels()
-	return "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s选闲置 Ctrl/Shift+数字编队\n%s回基地 Esc菜单" % [
+	var ik := Settings.item_key_labels()
+	return "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s物品\n%s选闲置 Ctrl/Shift+数字编队\n%s回基地 Esc菜单" % [
 		Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"),
 		Settings.key_label("patrol"), Settings.key_label("stance"), Settings.key_label("auto"),
 		Settings.key_label("demolish"), "/".join(ck), Settings.key_label("subgroup"),
-		Settings.key_label("idle_worker"), Settings.key_label("alert")]
+		"/".join(ik), Settings.key_label("idle_worker"), Settings.key_label("alert")]
 
 
 func _on_keybinds_changed() -> void:

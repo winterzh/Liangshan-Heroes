@@ -35,6 +35,7 @@ var show_cooldown := true    # 技能冷却倒计时数字
 var show_command_queue := true # 选中单位的当前路径/Shift队列
 var show_target_lines := true  # 选中单位攻击目标线
 var show_range_rings := true   # 活动单位/建筑的攻击范围圈
+var show_control_help := false # 战斗右下角操作提示；默认关闭，需要时从信息抽屉开启
 
 
 func _ready() -> void:
@@ -88,6 +89,7 @@ func save() -> void:
 	c.set_value("show", "command_queue", show_command_queue)
 	c.set_value("show", "target_lines", show_target_lines)
 	c.set_value("show", "range_rings", show_range_rings)
+	c.set_value("show", "control_help", show_control_help)
 	c.save(PATH)
 
 
@@ -118,6 +120,7 @@ func _load() -> void:
 	show_command_queue = bool(c.get_value("show", "command_queue", show_command_queue))
 	show_target_lines = bool(c.get_value("show", "target_lines", show_target_lines))
 	show_range_rings = bool(c.get_value("show", "range_rings", show_range_rings))
+	show_control_help = bool(c.get_value("show", "control_help", show_control_help))
 
 
 func key_for(action: String) -> int:
