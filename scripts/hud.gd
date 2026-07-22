@@ -1672,7 +1672,7 @@ func _build_end() -> void:
 	_end_sub.add_theme_font_size_override("font_size", 20)
 	vbox.add_child(_end_sub)
 
-	# 各路好汉战绩：驻守战逐将列出总战绩与主动技能伤害；英雄多时在固定高度内滚动。
+	# 各路好汉战绩：逐将列出总战绩、主动技能及显式统计的伤害型被动；英雄多时固定高度滚动。
 	_end_tally_scroll = ScrollContainer.new()
 	_end_tally_scroll.custom_minimum_size = Vector2(920, 360)
 	_end_tally_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL

@@ -52,7 +52,7 @@ const UNITS := {
 		"hero": true, "aura": "atk", "aura_r": 180, "aura_p": 1.25, "radius": 13, "ability": "chao_rally"},
 	"gongsun_sheng": {"name": "公孙胜", "hp": 165, "atk": 12, "cd": 1.2, "range": 200, "speed": 78,
 		"ranged": true, "hero": true, "aura": "speed", "aura_r": 175, "aura_p": 1.15, "radius": 12, "ability": "gongsun_thunder",
-		"proj_kind": "fireball", "hero_cd_step": 0.10,
+		"proj_kind": "fireball",
 		"abilities": ["gong_blackrain", "gong_icewall", "gong_slow", "gong_dragon"],
 		"hero_trainable": true, "pop": 3, "cost_gold": 168, "cost_wood": 56, "train_time": 40.0, "trained_at": "hall", "min_age": 1, "dota": "Invoker"},
 	"liu_tang": {"name": "刘唐", "hp": 210, "atk": 22, "cd": 0.8, "range": 26, "speed": 86, "hero": true, "radius": 13, "ability": "liu_cleave", "abilities": ["liu_tang_q", "liu_tang_w", "liu_tang_e", "liu_tang_r"], "dota": "Bloodseeker", "hero_trainable": true, "pop": 3, "cost_gold": 175, "cost_wood": 34, "train_time": 40, "trained_at": "hall", "min_age": 1},
@@ -451,14 +451,14 @@ const ABILITIES := {
 		"desc": "旋身狂砍·刀旋如风\n身边官军受 {v} 伤害", "effect": {"kind": "smite", "dmg": 28.0, "self_atk": 1.3, "self_dur": 4.0}},
 	"li_rage": {"name": "嗜血狂斩", "cd": 8.0, "targeted": false, "radius": 95.0, "color": Color("ff3322"),
 		"desc": "血溅四方：身边官军受 {v} 伤害\n自身嗜血回血（6秒）", "effect": {"kind": "smite", "dmg": 23.0, "self_atk": 1.3, "self_dur": 6.0, "self_lifesteal": 0.5, "self_lifesteal_dur": 6.0}},
-	"li_brawn": {"name": "蛮力", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("ff7766"),
+	"li_brawn": {"name": "蛮力", "passive": true, "stats_damage": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("ff7766"),
 		"desc": "被动·黑铁筋骨\n生命+、攻击吸血；普攻50%概率\n向120范围所有官军各投一斧（普攻伤害）",
 		"effect": {"kind": "passive", "hp_add": 120.0, "lifesteal": 0.15, "atk_add": 2.0,
 			"axe_chance": 0.50, "axe_radius": 120.0, "axe_art": "axe"}},
 
 	# ===== DOTA 式英雄技能改版（林冲/花荣/李逵）=====
 	# 林冲 Q：窄直线破阵。普通兵被推退，骑兵/武将不退、改为露出破绽（削甲）。
-	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 9.0, "targeted": true, "radius": 260.0, "color": Color("c0a0ff"),
+	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 10.8, "targeted": true, "radius": 260.0, "color": Color("c0a0ff"),
 		"desc": "固定260射程窄线贯穿，造成45/65/85伤害\n普通兵击退60/80/100；骑兵与武将削甲2/4/6，持续5秒",
 		"effect": {"kind": "line_nuke", "dmg_ranks": [45.0, 65.0, 85.0], "len": 260.0, "width": 48.0,
 			"fixed_geometry": true,
@@ -513,7 +513,7 @@ const ABILITIES := {
 			"len_ranks": [150.0, 180.0, 210.0], "dur_ranks": [5.0, 6.0, 7.0],
 			"slow": 0.50, "slow_dur": 2.0}},
 	# E·百兽奔袭：机制仍是直线击退控场，表现改为复用一张猛兽素材组成兽群冲锋。
-	"gong_slow": {"name": "百兽奔袭", "cd": 12.0, "cd_ranks": [12.0, 10.0, 8.0],
+	"gong_slow": {"name": "百兽奔袭", "cd": 16.0, "cd_ranks": [16.0, 16.0, 16.0],
 		"targeted": true, "radius": 60.0, "color": Color("c98245"),
 		"desc": "召来兽群沿固定 320 长直线奔袭，造成 25/40/55 伤害\n将敌军推退 120/150/180，并减速 30% 持续 2 秒\n英雄倍率只小幅增加宽度（倍率3为168）；弹道速度为自身移速的 500%",
 		"effect": {"kind": "beast_stampede", "cast_range": 320.0, "len": 320.0, "width": 120.0,

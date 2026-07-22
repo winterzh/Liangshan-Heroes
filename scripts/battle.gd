@@ -3858,7 +3858,8 @@ func hero_combat_stat(hero_key: String) -> Dictionary:
 		"damage": 0.0, "taken": 0.0, "healing": 0.0, "kills": 0, "skill_damage": {}})
 
 
-## 纯被动不进入结算技能栏；像宋江 R 这样同时带主动部分的混合被动仍算主动技能。
+## 纯被动默认不进入结算技能栏；混合主动技能，或显式声明 stats_damage 的伤害型被动除外。
+## stats_damage 只开放技能栏位；具体哪些伤害归入该技能，仍由命中处传入 ability_id 决定。
 func _is_active_ability(aid: String) -> bool:
 	if _active_ability_cache.has(aid):
 		return bool(_active_ability_cache[aid])
@@ -3867,7 +3868,8 @@ func _is_active_ability(aid: String) -> bool:
 		return false
 	var ad: Dictionary = _abilities[aid]
 	var active := not bool(ad.get("passive", false)) \
-			or (ad.get("effect", {}) as Dictionary).has("active_kind")
+			or (ad.get("effect", {}) as Dictionary).has("active_kind") \
+			or bool(ad.get("stats_damage", false))
 	_active_ability_cache[aid] = active
 	return active
 
@@ -9300,6 +9302,33 @@ func _combat_stats_selftest() -> void:
 	var mitigation_ok := absf(tank_hp_after_reduction - 950.0) < 0.01 \
 			and absf(tank.hp - 950.0) < 0.01 \
 			and absf(float(hero_combat_stat("li_kui").get("taken", 0.0)) - 180.0) < 0.01
+	# 李逵 E 飞斧：散射伤害进入 E 明细；随后模拟一次不带 ability_id 的普攻，必须只增加总伤害。
+	var brawn_target := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(-16, 140))
+	brawn_target.max_hp = 1000.0
+	brawn_target.hp = 1000.0
+	brawn_target.defense = 0.0
+	tank.ability_slots[2]["rank"] = 1
+	tank.position = origin + Vector2(-16, 64)
+	foe_attacker.position = origin + Vector2(500, 500)
+	_grid.clear()
+	var brawn_expected := tank.secondary_basic_damage_against(brawn_target)
+	var brawn_damage0 := float(hero_combat_stat("li_kui").get("damage", 0.0))
+	var brawn_fx = tank._try_li_brawn_axes(0.0)
+	if brawn_fx != null:
+		brawn_fx.resolve_hits()
+	var brawn_scatter_rec: Dictionary = hero_combat_stat("li_kui")
+	var brawn_scatter_skill: Dictionary = brawn_scatter_rec.get("skill_damage", {})
+	var brawn_scatter_ok := brawn_fx != null \
+			and absf(float(brawn_scatter_rec.get("damage", 0.0)) - brawn_damage0 - brawn_expected) < 0.01 \
+			and absf(float(brawn_scatter_skill.get("li_brawn", 0.0)) - brawn_expected) < 0.01
+	var brawn_basic := 13.0
+	brawn_target.take_damage(brawn_basic, tank)
+	var brawn_rec: Dictionary = hero_combat_stat("li_kui")
+	var brawn_skill: Dictionary = brawn_rec.get("skill_damage", {})
+	var brawn_stats_ok := brawn_fx != null \
+			and brawn_scatter_ok \
+			and absf(float(brawn_rec.get("damage", 0.0)) - brawn_damage0 - brawn_expected - brawn_basic) < 0.01 \
+			and absf(float(brawn_skill.get("li_brawn", 0.0)) - brawn_expected) < 0.01
 	# 宋江自疗实际恢复80；归属宋江的召唤物再给李逵回50；随后满血过量治疗不得增加统计。
 	hero.heal(999.0, hero)
 	tank.heal(999.0, summon)
@@ -9329,19 +9358,20 @@ func _combat_stats_selftest() -> void:
 	var tally_ok := end_tally.contains("宋江") and end_tally.contains("击杀 2") \
 			and end_tally.contains("伤害 470") and end_tally.contains("承伤 100") \
 			and end_tally.contains("治疗 130") and end_tally.contains("李逵") \
-			and end_tally.contains("E 火攻连营　220") and end_tally.contains("R 替天行道·仁义　0")
-	var all_ok := damage_ok and taken_ok and kills_ok and healing_ok and skills_ok and mitigation_ok \
+			and end_tally.contains("E 火攻连营　220") and end_tally.contains("R 替天行道·仁义　0") \
+			and end_tally.contains("E 蛮力　%s" % _format_end_combat_stat(brawn_expected))
+	var all_ok := damage_ok and taken_ok and kills_ok and healing_ok and skills_ok and mitigation_ok and brawn_stats_ok \
 			and format_ok and layout_ok and tally_ok
-	print("[combatstats] damage=%.0f/%s taken=%.0f/%s healing=%.0f/%s kills=%d/%s skills=%s mitigation=%s summon_owner=%s format=%s layout=%s tally=%s ALL=%s" % [
+	print("[combatstats] damage=%.0f/%s taken=%.0f/%s healing=%.0f/%s kills=%d/%s skills=%s mitigation=%s brawn=%s summon_owner=%s format=%s layout=%s tally=%s ALL=%s" % [
 		float(rec.get("damage", 0.0)), damage_ok, float(rec.get("taken", 0.0)), taken_ok,
 		float(rec.get("healing", 0.0)), healing_ok, int(rec.get("kills", 0)), kills_ok,
-		skills_ok, mitigation_ok, damage_ok and kills_ok and healing_ok, format_ok, layout_ok, tally_ok, all_ok])
+		skills_ok, mitigation_ok, brawn_stats_ok, damage_ok and kills_ok and healing_ok, format_ok, layout_ok, tally_ok, all_ok])
 	if OS.get_environment("COMBAT_STATS_KEEP") == "1":
 		hud.show_end(true, "驻守战结算界面测试", kills, false, end_tally)
 		return   # 有窗口截图时保留非零样例；进程退出即销毁，不影响存档。
 
 	track_hero_combat_stats = false
-	for probe in [hero, foe_a, foe_b, foe_attacker, summon, tank]:
+	for probe in [hero, foe_a, foe_b, foe_attacker, summon, tank, brawn_target]:
 		if probe != null and is_instance_valid(probe):
 			units.erase(probe)
 			probe.queue_free()
@@ -9486,7 +9516,8 @@ func _lin_rework_selftest() -> void:
 		print("[linrework-debug] Q move foot=%.1f cav=%.1f hero=%.1f def cav=%.1f hero=%.1f t=%.2f" % [
 			foot.position.distance_to(foot_pos), cav.position.distance_to(cav_pos), hero.position.distance_to(hero_pos),
 			cav._def_down, hero._def_down, hero._def_down_t])
-	var q_cd_ok := absf(float(lin.ability_slots[0]["cd_t"]) - lin.slot_cd(0)) < 0.01
+	var q_cd_ok := absf(float(lin.ability_slots[0]["cd_t"]) - lin.slot_cd(0)) < 0.01 \
+			and absf(float(_abilities["lin_thrust"].get("cd", 0.0)) - 10.8) < 0.01
 	var q_scaled: Dictionary = _scaled_ability(_abilities["lin_thrust"], 1.8, 1.5)
 	var q_scaled_eff: Dictionary = q_scaled.get("effect", {})
 	var q_geometry_ok := absf(float(q_scaled.get("radius", 0.0)) - 260.0) < 0.01 \
@@ -13316,24 +13347,25 @@ class OrbitAxesFx extends TimedFx:
 		super._process(delta)
 
 	func _draw() -> void:
-		draw_set_transform_matrix(GameMap.ISO_INV)
 		var env := clampf((dur - t) / 0.2, 0.0, 1.0) * clampf(t / 0.25, 0.0, 1.0)
 		var orbit := rad * 0.66
 		for k in range(2):
 			var a := _spin + float(k) * PI
 			var c := Vector2(cos(a), sin(a)) * orbit
-			# 旋飞拖影
+			# 轨道属于逻辑地面：保留父节点的等距投影，屏幕上应是椭圆而不是正圆。
 			for j in range(5):
 				var aj := a - float(j) * 0.16
 				var cj := Vector2(cos(aj), sin(aj)) * orbit
 				draw_circle(cj, 4.0, Color(col.r, col.g, col.b, env * 0.16 * (1.0 - float(j) / 5.0)))
 			if tex != null:
-				# 手绘板斧贴图：斧刃朝切线方向随轨道公转 + 自旋（李逵 Q 专属演出）
-				var rot := a + PI * 0.5 + _spin * 1.5
-				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(rot, Vector2.ONE, 0.0, c))
+				# 斧子中心沿地面椭圆运动，但贴图本身抵消投影保持直立清晰。
+				var tangent_screen := GameMap.ISO * Vector2(-sin(a), cos(a))
+				var rot := tangent_screen.angle() + _spin * 1.5
+				var screen_c := GameMap.ISO * c
+				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(rot, Vector2.ONE, 0.0, screen_c))
 				var ts := 34.0
 				draw_texture_rect(tex, Rect2(Vector2(-ts * 0.5, -ts * 0.5), Vector2(ts, ts)), false, Color(1, 1, 1, env))
-				draw_set_transform_matrix(GameMap.ISO_INV)
+				draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 			else:
 				# 斧柄
 				var hub := c * 0.34
@@ -13346,7 +13378,6 @@ class OrbitAxesFx extends TimedFx:
 				draw_polyline(blade, Color(1, 1, 1, env * 0.8), 1.2)
 		# 地面旋风环
 		draw_arc(Vector2.ZERO, orbit, 0.0, TAU, 28, Color(col.r, col.g, col.b, env * 0.35), 2.0)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 ## 李逵 E·蛮力：一节点批量绘制/结算本次触发的所有飞斧，密集战斗也不会按目标数创建 Node。
@@ -13380,7 +13411,8 @@ class LiBrawnAxesFx extends Node2D:
 			if target.is_phys_immune():
 				target.absorb_physical_damage(dmg, src)
 			else:
-				target.take_damage(dmg, src)
+				# 只有散射斧显式归入 E；触发它的那次普通攻击仍沿用无 ability_id 的普攻统计。
+				target.take_damage(dmg, src, false, false, "li_brawn")
 			if game != null and is_instance_valid(game):
 				game.spawn_impact(target.position, true)
 		queue_free()
@@ -14016,10 +14048,12 @@ func _newhero_selftest() -> void:
 			and absf(float(e_scaled_eff.get("width", 0.0)) - 168.0) < 0.01 \
 			and not bool(e_scaled_eff.get("scale_cast_range", true))
 	var q_dps3: Array = q_scaled_eff.get("dps_ranks", [])
-	var gong_balance_ok := absf(gong.hero_cd_mult_for_n(3.0) - 0.80) < 0.001 \
-			and absf(12.0 * gong.hero_cd_mult_for_n(3.0) - 9.60) < 0.01 \
-			and absf(8.0 * gong.hero_cd_mult_for_n(3.0) - 6.40) < 0.01 \
-			and absf(25.0 * gong.hero_cd_mult_for_n(3.0) - 20.0) < 0.01 \
+	var e_cd_ranks: Array = _abilities["gong_slow"].get("cd_ranks", [])
+	var gong_balance_ok := absf(gong.hero_cd_mult_for_n(3.0) - 0.60) < 0.001 \
+			and absf(12.0 * gong.hero_cd_mult_for_n(3.0) - 7.20) < 0.01 \
+			and e_cd_ranks == [16.0, 16.0, 16.0] \
+			and absf(16.0 * gong.hero_cd_mult_for_n(3.0) - 9.60) < 0.01 \
+			and absf(25.0 * gong.hero_cd_mult_for_n(3.0) - 15.0) < 0.01 \
 			and q_dps3.size() == 3 and absf(float(q_dps3[2]) - 6.0) < 0.01
 	_zone_pass(10.0)   # 让 E 弹道离场，避免与下面新生成的 R 靶子交叉。
 
