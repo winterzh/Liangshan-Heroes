@@ -35,6 +35,7 @@ var aura := ""              # "atk" / "speed"
 var aura_radius := 170.0
 var aura_power := 1.0
 var radius := 11.0
+var visual_scale := 1.0       # 只放大立绘、不改变碰撞；武松双虎用它做得明显大于人物
 var aggro_range := 200.0
 
 var battle = null           # Battle（不加类型注解避免循环引用）
@@ -150,13 +151,12 @@ var _drunk_hi := 1.0
 var _drunk_reroll := 0.0
 var _drunk_move := 1.0      # 当前随机移动倍率
 var _drunk_atk := 1.0       # 当前随机攻速倍率
-# 醉神大闹快活林（武松 R）：物理免疫 + 有效普攻叠攻/分裂 + 结束转血
+# 醉神大闹快活林（武松 R）：学会后常驻分裂；主动时物理免疫 + 有效普攻叠攻 + 结束转血
 var _phys_immune_t := 0.0
 var _absorbed_phys := 0.0   # 物免期间被普通攻击「挡下」的累计伤害
 var _drunk_god_bonus_per_hit := 0.0
 var _drunk_god_stacks := 0
 var _drunk_god_max_stacks := 5
-var _drunk_god_cleave := 0.0
 # 护甲削减（武松 E·双戒刀）：临时降低目标防御
 var _def_down := 0.0
 var _def_down_t := 0.0
@@ -331,6 +331,7 @@ func setup(p_key: String, def: Dictionary, p_faction: int, p_battle, p_map: Game
 	aura_power = float(def.get("aura_p", 1.0))
 	ability = String(def.get("ability", ""))
 	radius = float(def.get("radius", 13.0 if is_hero else 11.0))
+	visual_scale = maxf(0.25, float(def.get("visual_scale", 1.0)))
 	build_time = float(def.get("build_time", 0))
 	# 防御塔=带攻击的建筑：也要索敌；资源点/纯建筑不索敌
 	aggro_range = maxf(200.0, atk_range + 50.0) if (not is_building or atk > 0.0) else 0.0
@@ -1017,7 +1018,6 @@ func _phys_body(delta: float) -> void:
 			_absorbed_phys = 0.0
 			_drunk_god_bonus_per_hit = 0.0
 			_drunk_god_stacks = 0
-			_drunk_god_cleave = 0.0
 	if _stats_mitigation_t > 0.0:
 		_stats_mitigation_t = maxf(0.0, _stats_mitigation_t - delta)
 	if _lin_guard_t > 0.0:
@@ -1713,10 +1713,12 @@ func _deal_hit() -> void:
 			battle.spawn_impact(t.position + Vector2(0, -4), false)
 		Sfx.play(_attack_sfx_name(), -10.0, 0.2, 55)
 		return
-	# 武松 R：只有真正能落到活体战斗单位上的近战普攻才叠层；致盲、闪避、物免和建筑均不叠。
-	# 先叠后算，所以当前这一刀立即吃到新增攻击，随后分裂也沿用同一层数。
-	var wu_god_hit := key == "wu_song" and _phys_immune_t > 0.0 and not is_ranged \
+	# 武松 R：学会后，有效近战普攻常驻分裂；主动期间才叠攻击层数。
+	# 先叠后算，所以主动期当前这一刀立即吃到新增攻击，分裂也沿用同一层数。
+	var wu_cleave := _wu_passive_cleave_fraction()
+	var wu_cleave_hit := key == "wu_song" and wu_cleave > 0.0 and not is_ranged \
 			and not t.is_building and not t.is_resource and not t.is_captive and not t.is_phys_immune()
+	var wu_god_hit := wu_cleave_hit and _phys_immune_t > 0.0
 	if wu_god_hit:
 		_drunk_god_stacks = mini(_drunk_god_max_stacks, _drunk_god_stacks + 1)
 		_buff_glow = 1.0
@@ -1772,8 +1774,8 @@ func _deal_hit() -> void:
 			_buff_glow = 1.0
 		if not lin_spear.is_empty() and battle.has_method("spawn_lin_spear_stack"):
 			battle.spawn_lin_spear_stack(self, t, int(lin_spear.get("stacks", 0)), bool(lin_spear.get("proc", false)))
-		if wu_god_hit and _drunk_god_cleave > 0.0 and battle.has_method("spawn_wu_cleave"):
-			battle.spawn_wu_cleave(self, t, _drunk_god_cleave)
+		if wu_cleave_hit and battle.has_method("spawn_wu_cleave"):
+			battle.spawn_wu_cleave(self, t, wu_cleave)
 		# 攻击携带（orb/被动）：额外纯伤 / 减速 / 几率眩晕
 		if on_hit_dmg > 0.0:
 			t.take_damage(on_hit_dmg, self, false, false, stat_ability_id)
@@ -1813,6 +1815,23 @@ func secondary_basic_damage_against(t: Unit) -> float:
 	if eff_def > 0.0:
 		dmg /= (1.0 + 0.05 * eff_def)
 	return dmg
+
+
+## 武松 R 的常驻分裂比例。R 仍是可主动施放的混合技能，因此按已学等级即时读取，
+## 不依赖主动是否处于持续期，也无需把 R 伪装成 passive 槽。
+func _wu_passive_cleave_fraction() -> float:
+	if key != "wu_song":
+		return 0.0
+	for i in ability_slots.size():
+		var s: Dictionary = ability_slots[i]
+		if String(s.get("id", "")) != "wu_drunkgod" or int(s.get("rank", 0)) <= 0:
+			continue
+		var eff: Dictionary = _slot_def(i).get("effect", {})
+		var ranks: Array = eff.get("cleave_ranks", [])
+		if ranks.is_empty():
+			return 0.0
+		return clampf(float(ranks[clampi(int(s["rank"]) - 1, 0, ranks.size() - 1)]), 0.0, 1.5)
+	return 0.0
 
 
 ## 李逵「蛮力」飞斧判定。proc_roll 仅供确定性自检注入；正常攻击传 -1 使用随机数。
@@ -2626,14 +2645,14 @@ func start_drunk(lo: float, hi: float, dur: float) -> void:
 	_buff_glow = 1.0
 
 
-## 醉神大闹快活林（武松 R）：物免期间每次有效平攻叠 bonus（最多 max_stacks）并触发分裂。
-func start_drunk_god(bonus: float, dur: float, cleave := 0.0, max_stacks := 5) -> void:
+## 醉神大闹快活林（武松 R）主动：物免期间每次有效平攻叠 bonus（最多 max_stacks）。
+## 分裂是学会 R 后的常驻被动，由 _wu_passive_cleave_fraction 独立读取。
+func start_drunk_god(bonus: float, dur: float, max_stacks := 5) -> void:
 	_phys_immune_t = dur
 	_absorbed_phys = 0.0
 	_drunk_god_bonus_per_hit = bonus
 	_drunk_god_stacks = 0
 	_drunk_god_max_stacks = maxi(1, max_stacks)
-	_drunk_god_cleave = clampf(cleave, 0.0, 1.5)
 	_buff_glow = 1.0
 
 
@@ -3011,7 +3030,7 @@ func _screen_dir(d: Vector2) -> Vector2:
 
 ## 直立精灵绘制 + 全部程序化动画（行走步态、待机呼吸、攻击突刺·劈砍、死亡倒地）
 func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
-	var s := radius * 3.7
+	var s := radius * 3.7 * visual_scale
 	var off := Vector2.ZERO
 	var ang := 0.0
 	var sx := -1.0 if face_left else 1.0
@@ -3314,7 +3333,7 @@ func _draw() -> void:
 	if is_building:
 		bar_y = -radius * 1.9
 	elif as_sprite:
-		bar_y = -radius * 3.3
+		bar_y = -radius * 3.3 * visual_scale
 	else:
 		bar_y = -radius - 9.0
 

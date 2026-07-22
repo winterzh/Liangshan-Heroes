@@ -4177,7 +4177,7 @@ func _auto_micro_weak(u: Unit) -> void:
 			continue   # 林冲 Q/W/R 已按新版枪线、架枪、仅敌将目标处理。
 		if String(eff.get("kind", "")) == "summon":
 			if String(u.key) == "wu_song" and String(eff.get("summon_kind", "")) == "tiger" \
-					and _count_owned_summons(u, "tiger") > 0:
+					and _count_owned_summons(u, "tiger") >= maxi(1, int(eff.get("count", 1))):
 				continue
 			if fp != Vector2.INF:
 				_begin_cast(u, i, u.position)
@@ -4561,7 +4561,7 @@ func _brain_li(u: Unit) -> void:
 	if fp != Vector2.INF and d > 90.0 and d <= 210.0:
 		if _ai_cast_slot(u, 1, fp):
 			return
-	# Q 双斧回旋：身边有敌即开（紧跟冲锋落点最佳）
+	# Q 双斧回旋：定位为冲阵减伤，紧跟 W 冲锋落点开出5秒减伤，再靠蛮力高频群斧普攻。
 	if _foe_within(u.position, 120.0, u.faction):
 		if _ai_cast_slot(u, 0, u.position):
 			return
@@ -4574,14 +4574,14 @@ func _brain_li(u: Unit) -> void:
 	_engage_focus(u, fp)
 
 
-## 武松·行者：召虎(CD一好就放) → 被围开 R 醉神（物免转血保命+反打）→ E 横扫。残血没大招才避战回撤。
+## 武松·行者：R 分裂学会即常驻；被围主动开 R 取物免/叠攻/转血，再配合 E 横扫。残血没大招才避战回撤。
 func _brain_wu(u: Unit) -> void:
 	if not is_instance_valid(u) or u.hp <= 0.0:
 		return
 	var frac := u.hp / u.max_hp
 	var fp := _nearest_foe_pos(u.position, u.faction)
 	var melee_near := _foe_count_within(u.position, 160.0, u.faction, false, true)
-	# P1 残血：有大开大（短时物免+叠攻分裂+结束转血=保命兼反打），否则更低再避战回撤
+	# P1 残血：有大开大（短时物免+叠攻+结束转血=保命兼反打），否则更低再避战回撤
 	if frac <= 0.35:
 		if u.slot_ready(3):
 			if _ai_cast_slot(u, 3, u.position):
@@ -4600,15 +4600,17 @@ func _brain_wu(u: Unit) -> void:
 	_ai_push_into_range(u, fp, 90.0)
 	# P3 放招
 	# R 醉神大闹快活林（进攻开大）：①贴身交战(≤180)或被围就开；②看对面人多(防区内≥3)且自己血不满 →
-	# 先开大再扎进人堆。物免+每击叠攻/分裂是武松核心强势期，别苛求条件否则放不出。
+	# 先开大再扎进人堆。分裂已经常驻，主动的物免+每击叠攻仍是核心强势期，别苛求条件否则放不出。
 	if u.slot_ready(3):
 		var crowd := _foe_count_within(u.position, 240.0, u.faction, false, false)
 		# 被围(身边≥2近战)就开；或「对面人多(防区内≥3)且血不满」→ 先开再扎进人堆。单个杂兵不浪费大招。
 		if melee_near >= 2 or (frac < 0.92 and crowd >= 3):
 			if _ai_cast_slot(u, 3, u.position):
 				return   # 开完大招：下一拍 P2 推进会自动扎进最近人堆（此处别下移动令，免得打断施法）
-	# Q 驱使猛虎：同一武松场上只留一虎；虎消散后再补，避免无意义地提前刷新寿命。
-	if fp != Vector2.INF and _count_owned_summons(u, "tiger") <= 0:
+	# Q 驱使猛虎：维持技能声明的双虎上限；少一只且CD已好就整组替换，绝不超过两只。
+	var tiger_eff: Dictionary = (_abilities.get("wu_tigers", {}) as Dictionary).get("effect", {})
+	var tiger_cap := maxi(1, int(tiger_eff.get("count", 1)))
+	if fp != Vector2.INF and _count_owned_summons(u, "tiger") < tiger_cap:
 		if _ai_cast_slot(u, 0, u.position):
 			return
 	# E 双戒刀横扫（削甲+致盲）
@@ -4774,11 +4776,12 @@ func _brain_gong(u: Unit) -> void:
 				and (int(epack["count"]) >= 2 or u.position.distance_to(epack["pos"]) <= 180.0):
 			if _ai_cast_slot(u, 2, epack["pos"]):
 				return
-	# P5 W 冰墙进攻：拦截冲脸骑兵
+	# P5 W 冰墙进攻：利用与 E 一致的320施法距离，提前截断冲锋骑兵，而不是等其贴脸才放。
 	if u.slot_ready(1) and threat != null and threat.is_cavalry \
-			and u.position.distance_to(threat.position) <= 220.0:
+			and u.position.distance_to(threat.position) <= 300.0:
 		var awy2 := (u.position - threat.position).normalized()
-		if _ai_cast_slot(u, 1, u.position - awy2 * 120.0):
+		var wall_step := clampf(u.position.distance_to(threat.position) * 0.65, 120.0, 260.0)
+		if _ai_cast_slot(u, 1, u.position - awy2 * wall_step):
 			return
 	# P6 站位：太近则后撤一点；够不着且血健康 → 攻击移动压进普通攻击射程。
 	if d_near < 160.0 and threat != null:
@@ -5883,7 +5886,8 @@ func toggle_hero_melee(hero) -> void:
 
 ## 指向技能施法距离：点目标 AoE 不再全图可放。基础 380px + 技能自身半径（越大的招允许放得越远），
 ## effect.cast_range 可显式覆写。豁免（返回 INF=全图）：global_nuke 全图轰本来就是设计；
-## 宋江/花荣定位就是超视距支援（保持全图）；blink/charge/blink_shot/ice_wall 自带射程/长度自限。
+## 宋江/花荣定位就是超视距支援（保持全图）；blink/charge/blink_shot/ice_wall 默认由自身长度限制，
+## 但 effect.cast_range 可显式覆盖默认豁免（公孙胜冰墙用它让预览、走近施法和实际落墙距离一致）。
 ## 钳制沿「施法者→点击点」射线收短：方向型技能（line/fissure/fire_line 等）方向不变，行为零差异。
 const DEFAULT_CAST_RANGE := 380.0
 const CAST_RANGE_EXEMPT := ["global_nuke", "blink", "charge", "blink_shot", "ice_wall"]
@@ -5894,13 +5898,13 @@ func ability_cast_range(caster: Unit, ad: Dictionary) -> float:
 		return INF
 	var eff: Dictionary = ad.get("effect", {})
 	var kind := String(eff.get("active_kind", eff.get("kind", "")))
-	if kind in CAST_RANGE_EXEMPT:
-		return INF
-	# 单体狙击类即使属于超远支援英雄，也以技能明写的射程为准；其余花荣/宋江技能保持原全图规则。
+	# 显式射程优先于种类豁免：既可限制单体狙击，也可让自带长度的冰墙拥有所见即所得的施法环。
 	if eff.has("cast_range"):
 		var range_scale := _range_growth_scale(_hero_rb(caster), float(eff.get("cast_range_growth", 1.0))) \
 				if bool(eff.get("scale_cast_range", true)) else 1.0
 		return float(eff["cast_range"]) * range_scale
+	if kind in CAST_RANGE_EXEMPT:
+		return INF
 	if caster != null and is_instance_valid(caster) and String(caster.key) in CAST_RANGE_FREE_HEROES:
 		return INF
 	var base: float = DEFAULT_CAST_RANGE + float(ad.get("radius", 0.0))
@@ -6363,7 +6367,8 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 				"tick": float(eff.get("tick", 0.5)), "tick_t": float(eff.get("tick", 0.5)),
 				"dmg": float(eff["dmg"]) * sc, "slow": float(eff.get("slow", 0.0)), "slow_dur": float(eff.get("slow_dur", 1.0))})
 			if float(eff.get("self_reduction", 0.0)) > 0.0:
-				caster.apply_counted_damage_reduction(float(eff["self_reduction"]), orbit_dur, -int(caster.get_instance_id()))
+				caster.apply_counted_damage_reduction(float(eff["self_reduction"]),
+					float(eff.get("self_reduction_dur", orbit_dur)), -int(caster.get_instance_id()))
 			var oax := OrbitAxesFx.new()
 			oax.target = caster
 			oax.rad = r
@@ -6451,10 +6456,9 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 			_do_beast_stampede(caster, eff, sc, rank, center, foe)
 		"drunk_buff":   # 武松 W·三碗不过岗：移动/攻速随机波动
 			caster.start_drunk(float(_pick(eff.get("lo", [0.9]), rank)), float(_pick(eff.get("hi", [1.3]), rank)), float(eff.get("dur", 30.0)))
-		"drunk_god":   # 武松 R·醉神大闹快活林：物免 + 每击加攻 + 结束转血
+		"drunk_god":   # 武松 R·醉神大闹快活林主动：物免 + 每击加攻 + 结束转血；分裂为已学即常驻
 			var god_dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 20.0))
-			var god_cleave := float(_pick(eff["cleave_ranks"], rank)) if eff.has("cleave_ranks") else 0.0
-			caster.start_drunk_god(float(_pick(eff.get("bonus", [10.0]), rank)), god_dur, god_cleave,
+			caster.start_drunk_god(float(_pick(eff.get("bonus", [10.0]), rank)), god_dur,
 				int(eff.get("max_stacks", 5)))
 		"blink":   # DOTA·闪现：朝落点闪现(限 dist)，落点可带小范围伤
 			center = _do_blink(caster, eff, sc, center, r, foe, snap, ad)
@@ -8078,6 +8082,7 @@ func _do_summon(caster: Unit, eff: Dictionary, rank: int) -> void:
 		su.summon_kind = skind
 		su.stat_owner_key = caster.key   # 驻守战的召唤物/幻象战绩归召唤英雄
 		su.stat_ability_id = String(eff.get("_ability_id", ""))
+		su.visual_scale = maxf(0.25, float(eff.get("visual_scale", 1.0)))
 		if illusion:
 			# 幻象：长得像英雄但不是英雄——不占英雄位、不放技能、不吃英雄增益；半透蓝影标识虚实
 			su.is_hero = false
@@ -13509,14 +13514,17 @@ class IceWallFx extends TimedFx:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
-## 公孙胜 E·百兽奔袭：一张透明猛兽贴图错列、错时复用，单节点批量绘制整群以控制开销。
+## 公孙胜 E·百兽奔袭：四帧野猪奔跑图错列、错时复用，单节点批量绘制整群以控制开销。
 class BeastStampedeFx extends TimedFx:
 	var dir := Vector2.RIGHT
 	var length := 320.0
 	var travel_speed := 120.0
 	var count := 7
-	var tex: Texture2D = preload("res://assets/vfx/gong_beast_charge.png")
+	var tex: Texture2D = preload("res://assets/vfx/gong_beast_charge_run.png")
 	var _pack: Array = []
+	const FRAME_SIZE := Vector2(256.0, 256.0)
+	const FRAME_POS := [Vector2(0.0, 0.0), Vector2(256.0, 0.0), Vector2(0.0, 256.0), Vector2(256.0, 256.0)]
+	const FRAME_BOB := [-2.0, 1.5, 0.0, -1.0]
 
 	func _ready() -> void:
 		# 150 是兽群前后错列的行进余量；每只兽在世界坐标里都保持同一恒定速度。
@@ -13542,15 +13550,18 @@ class BeastStampedeFx extends TimedFx:
 			if travel < -90.0 or travel > length + 70.0:
 				continue
 			var local_w := dir * travel + perp * float(beast["side"])
-			var screen := GameMap.ISO.basis_xform(local_w) + Vector2(0, -18.0 - float(i % 2) * 2.0)
+			# 各兽错开约0.65帧，避免七只野猪机械地同时换腿；约10fps足以看清冲刺步态。
+			var frame_i := int(floor(elapsed * 10.0 + float(i) * 0.65)) % 4
+			var screen := GameMap.ISO.basis_xform(local_w) \
+					+ Vector2(0, -18.0 - float(i % 2) * 2.0 + float(FRAME_BOB[frame_i]))
 			var sz := float(beast["size"])
 			var fade := clampf((travel + 90.0) / 70.0, 0.0, 1.0) * clampf((length + 70.0 - travel) / 80.0, 0.0, 1.0)
 			# 兽蹄尘点和兽体都在一个节点内批绘；七只兽不会产生七套 _process。
 			draw_set_transform_matrix(GameMap.ISO_INV)
 			draw_circle(screen + Vector2(-face * sz * 0.24, 19.0), 7.0, Color(0.45, 0.31, 0.18, 0.18 * fade))
 			draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(0.0, Vector2(face, 1.0), 0.0, screen))
-			draw_texture_rect(tex, Rect2(Vector2(-sz * 0.5, -sz * 0.5), Vector2(sz, sz)), false,
-				Color(1.0, 1.0, 1.0, fade))
+			draw_texture_rect_region(tex, Rect2(Vector2(-sz * 0.5, -sz * 0.5), Vector2(sz, sz)),
+				Rect2(FRAME_POS[frame_i], FRAME_SIZE), Color(1.0, 1.0, 1.0, fade))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
@@ -13973,7 +13984,7 @@ func _newhero_selftest() -> void:
 	var icewall_ok := _ice_walls.size() > w0 and not _ice_walls.is_empty() and not (_ice_walls[-1]["cells"] as Array).is_empty() \
 			and absf(float(_ice_walls[-1]["t"]) - 6.0) < 0.1
 
-	# 公孙胜 E 百兽奔袭：一条走廊只命中一次，rank2伤40、推150、减速30%；复用兽图已实际载入。
+	# 公孙胜 E 百兽奔袭：一条走廊只命中一次，rank2伤40、推150、减速30%；四帧奔跑兽图已实际载入。
 	gong.ability_slots[2]["cd_t"] = 0.0
 	foe.max_hp = 9999.0; foe.hp = 9999.0; foe.position = gong.position + Vector2(76, 0)
 	var beast_hp0 := foe.hp
@@ -13986,14 +13997,20 @@ func _newhero_selftest() -> void:
 	_zone_pass(0.31)   # 公孙胜默认实际移速约51.5，五倍弹道约257.4；0.31秒足以抵达76处目标。
 	var beast_ok := beast_queued_ok and absf((beast_hp0 - foe.hp) - 40.0 * _hero_db(gong)) < 0.2 \
 			and foe.position.x > beast_pos0.x + 1.0 and absf(foe.temp_speed - 0.70) < 0.001 \
-			and ResourceLoader.exists("res://assets/vfx/gong_beast_charge.png")
-	# 倍率3平衡：Q 半径120/施法距离624；E只增宽至168，长度/施法距离固定320；技能CD仅缩短20%。
+			and ResourceLoader.exists("res://assets/vfx/gong_beast_charge_run.png")
+	# 倍率3平衡与施法距离匹配：Q 400→480、W固定320、E固定320；Q半径120，E只增宽至168。
 	var q_scaled: Dictionary = _scaled_ability(_abilities["gong_blackrain"], 1.8, 1.5)
+	var w_scaled: Dictionary = _scaled_ability(_abilities["gong_icewall"], 1.8, 1.5)
 	var e_scaled: Dictionary = _scaled_ability(_abilities["gong_slow"], 1.8, 1.5)
 	var q_scaled_eff: Dictionary = q_scaled.get("effect", {})
+	var w_scaled_eff: Dictionary = w_scaled.get("effect", {})
 	var e_scaled_eff: Dictionary = e_scaled.get("effect", {})
 	var gong_geometry_ok := absf(float(q_scaled.get("radius", 0.0)) - 120.0) < 0.01 \
-			and absf(520.0 * _range_growth_scale(1.8, float(q_scaled_eff.get("cast_range_growth", 1.0))) - 624.0) < 0.01 \
+			and absf(400.0 * _range_growth_scale(1.8, float(q_scaled_eff.get("cast_range_growth", 1.0))) - 480.0) < 0.01 \
+			and absf(float(w_scaled_eff.get("cast_range", 0.0)) - 320.0) < 0.01 \
+			and absf(float(w_scaled_eff.get("range", 0.0)) - 320.0) < 0.01 \
+			and not bool(w_scaled_eff.get("scale_cast_range", true)) \
+			and absf(ability_cast_range(gong, _abilities["gong_icewall"]) - 320.0) < 0.01 \
 			and absf(float(e_scaled.get("radius", 0.0)) - 60.0) < 0.01 \
 			and absf(float(e_scaled_eff.get("len", 0.0)) - 320.0) < 0.01 \
 			and absf(float(e_scaled_eff.get("width", 0.0)) - 168.0) < 0.01 \
@@ -14021,26 +14038,26 @@ func _newhero_selftest() -> void:
 			and absf(dragon.atk - gong.atk * 1.50) < 0.5 and absf(dragon._summon_ttl - 15.0) < 0.1 \
 			and absf(float(gong._slot_def(3).get("cd", 0.0)) - 25.0) < 0.01
 
-	# 武松 Q 驱使猛虎：rank2仅一虎，血/攻继承110%/120%，16秒后消散；重放替换旧虎。
+	# 武松 Q 驱使猛虎：rank2双虎，每只为旧版单虎75%生命/70%攻击，即本体82.5%/84%；重放整组替换。
 	_do_ability(wus, 0, wus.position)
-	var first_tiger: Unit = null
-	var owned_tigers := 0
+	var first_tigers: Array = []
 	for u in units:
 		if is_instance_valid(u) and u.key == "tiger_summon" and u.hp > 0.0 and u.stat_owner_key == wus.key:
-			owned_tigers += 1
-			first_tiger = u
-	var tiger_stat_ok := first_tiger != null and absf(first_tiger.max_hp - wus.max_hp * 1.10) < 1.0 \
-			and absf(first_tiger.atk - wus.atk * 1.20) < 0.5 and absf(first_tiger._summon_ttl - 16.0) < 0.1
+			first_tigers.append(u)
+	var tiger_stat_ok := first_tigers.size() == 2
+	for tiger in first_tigers:
+		tiger_stat_ok = tiger_stat_ok and absf(tiger.max_hp - wus.max_hp * 0.825) < 1.0 \
+				and absf(tiger.atk - wus.atk * 0.84) < 0.5 and absf(tiger._summon_ttl - 16.0) < 0.1 \
+				and absf(tiger.visual_scale - 1.25) < 0.01
 	wus.ability_slots[0]["cd_t"] = 0.0
 	_do_ability(wus, 0, wus.position)
-	var replacement: Unit = null
-	var owned_after := 0
+	var replacement_tigers: Array = []
 	for u in units:
 		if is_instance_valid(u) and u.key == "tiger_summon" and u.hp > 0.0 and u.stat_owner_key == wus.key:
-			owned_after += 1
-			replacement = u
-	var tigers_ok := owned_tigers == 1 and tiger_stat_ok and owned_after == 1 and replacement != first_tiger \
-			and first_tiger != null and first_tiger.hp <= 0.0
+			replacement_tigers.append(u)
+	var old_pair_gone := first_tigers.all(func(tiger): return is_instance_valid(tiger) and tiger.hp <= 0.0)
+	var tigers_ok := tiger_stat_ok and replacement_tigers.size() == 2 and old_pair_gone \
+			and replacement_tigers.all(func(tiger): return not first_tigers.has(tiger))
 
 	# 武松 W 三碗不过岗：CD30、持续20秒，正负随机区间保持原值。
 	wus.ability_slots[1]["cd_t"] = 0.0
@@ -14062,25 +14079,38 @@ func _newhero_selftest() -> void:
 	foe._deal_hit()
 	var miss_ok := absf(gong.hp - gh) < 0.01
 
-	# 武松 R 醉神：rank2物免10秒、每次有效平攻+12（最多5层）、65%分裂，结束转血。
-	wus.ability_slots[3]["cd_t"] = 0.0
-	_do_ability(wus, 3, wus.position)
-	var immune_ok := absf(wus._phys_immune_t - 10.0) < 0.1 and absf(wus._drunk_god_cleave - 0.65) < 0.001
+	# 武松 R 醉神：rank2一经学会便常驻65%分裂；主动提供10秒物免、每次有效平攻+12（最多5层），结束转血。
+	var passive_cleave_ok := absf(wus._wu_passive_cleave_fraction() - 0.65) < 0.001
 	var cleave_primary := spawn_unit("guan_dao", Unit.FACTION_GUAN, wus.position + Vector2(34, 0))
 	var cleave_side := spawn_unit("guan_dao", Unit.FACTION_GUAN, wus.position + Vector2(78, 8))
 	for cu in [cleave_primary, cleave_side]:
 		cu.max_hp = 9999.0; cu.hp = 9999.0; cu.defense = 0.0; cu.set_stance(Unit.STANCE_PASSIVE)
 	_grid.clear()
+	# 未开主动时先砍一刀：能分裂，但不能叠主动攻击层数。
+	var passive_hp0 := cleave_side.hp
+	wus._pending_target = cleave_primary
+	wus._pending_done = false
+	wus._deal_hit()
+	var passive_expect := wus.secondary_basic_damage_against(cleave_side) * 0.65
+	passive_cleave_ok = passive_cleave_ok and wus._drunk_god_stacks == 0 \
+			and absf((passive_hp0 - cleave_side.hp) - passive_expect) < 0.2
+	# 开主动后再砍：仍然分裂，并且这一刀立即吃到第1层加攻。
+	wus.ability_slots[3]["cd_t"] = 0.0
+	_do_ability(wus, 3, wus.position)
+	var immune_ok := absf(wus._phys_immune_t - 10.0) < 0.1
 	var cleave_hp0 := cleave_side.hp
 	wus._pending_target = cleave_primary
 	wus._pending_done = false
 	wus._deal_hit()
 	var cleave_expect := wus.secondary_basic_damage_against(cleave_side) * 0.65
-	var wu_god_ok := wus._drunk_god_stacks == 1 \
+	var wu_god_ok := passive_cleave_ok and wus._drunk_god_stacks == 1 \
 			and absf((cleave_hp0 - cleave_side.hp) - cleave_expect) < 0.2
 	wus.hp = wus.max_hp * 0.5
 	var hp_before := wus.hp
-	foe._blind_t = 0.0   # 清掉前面 E 致盲（否则 foe 必失，挡不到伤害无法验证物免吸收）
+	# 清掉前面 E 致盲与黑雨30%落空（否则随机空刀，物免吸收自检会有30%概率误报失败）。
+	foe._blind_t = 0.0
+	foe._attack_miss_t = 0.0
+	foe._attack_miss_chance = 0.0
 	foe._pending_target = wus
 	foe._pending_done = false
 	foe._deal_hit()
@@ -14089,7 +14119,8 @@ func _newhero_selftest() -> void:
 	wus._phys_immune_t = 0.0001
 	wus._physics_process(0.01)
 	var heal_ok := wus.hp > hp_pre_heal - 0.01 and wus._drunk_god_stacks == 0 \
-			and absf(wus._drunk_god_bonus_per_hit) < 0.001
+			and absf(wus._drunk_god_bonus_per_hit) < 0.001 \
+			and absf(wus._wu_passive_cleave_fraction() - 0.65) < 0.001
 
 	# 后续忠义旗测试直接复用公孙胜 R 召出的金龙，验证“小兵/召唤物减伤”。
 
@@ -14121,7 +14152,7 @@ func _newhero_selftest() -> void:
 	wus._lunge = 0.0
 	wus._move_blend = 0.0
 
-	# 李逵 E 蛮力：30% 配置正确；一次触发向120内每个敌人各飞一斧，圈外不命中，伤害按各目标普攻独立计算。
+	# 李逵 E 蛮力：50% 配置正确；一次触发向120内每个敌人各飞一斧，圈外不命中，伤害按各目标普攻独立计算。
 	foe.position = lik.position + Vector2(500, 0)
 	var axe_near_a := spawn_unit("guan_dao", Unit.FACTION_GUAN, lik.position + Vector2(36, 0))
 	var axe_near_b := spawn_unit("guan_qi", Unit.FACTION_GUAN, lik.position + Vector2(92, 0))
@@ -14133,14 +14164,14 @@ func _newhero_selftest() -> void:
 		au.set_stance(Unit.STANCE_PASSIVE)
 	_grid.clear()   # 上面直接摆坐标；清空间缓存让 units_near 本次回退全表精确扫描。
 	var brawn_eff: Dictionary = lik._slot_def(2).get("effect", {})
-	var brawn_cfg_ok := absf(float(brawn_eff.get("axe_chance", 0.0)) - 0.30) < 0.001 \
+	var brawn_cfg_ok := absf(float(brawn_eff.get("axe_chance", 0.0)) - 0.50) < 0.001 \
 			and absf(float(brawn_eff.get("axe_radius", 0.0)) - 120.0) < 0.01
 	var expect_a := lik.secondary_basic_damage_against(axe_near_a)
 	var expect_b := lik.secondary_basic_damage_against(axe_near_b)
 	var hp_a0 := axe_near_a.hp
 	var hp_b0 := axe_near_b.hp
 	var hp_far0 := axe_far.hp
-	var axe_fx = lik._try_li_brawn_axes(0.0)   # 强制本次随机值命中30%门槛，生产路径仍传默认随机。
+	var axe_fx = lik._try_li_brawn_axes(0.49)   # 49%随机值验证新50%门槛；生产路径仍传默认随机。
 	var axe_targets_ok := axe_fx != null
 	var axe_art_ok := false
 	if axe_fx != null:
@@ -14157,13 +14188,15 @@ func _newhero_selftest() -> void:
 	var brawn_damage_ok := absf((hp_a0 - axe_near_a.hp) - expect_a) < 0.1 \
 			and absf((hp_b0 - axe_near_b.hp) - expect_b) < 0.1 and absf(axe_far.hp - hp_far0) < 0.01
 	var li_brawn_ok := brawn_cfg_ok and axe_targets_ok and axe_art_ok and brawn_damage_ok
-	# 李逵 Q：整个3秒回旋窗50%减伤；W：从1秒蓄力开始至冲锋结束物理免疫，且不累计武松式转血。
+	# 李逵 Q：回旋伤害降至旧值30%，50%减伤延长到5秒；W从蓄力开始至冲锋结束物理免疫。
 	lik.clear_damage_reduction()
 	lik.max_hp = 1000.0
 	lik.hp = 1000.0
 	lik.ability_slots[0]["cd_t"] = 0.0
 	_do_ability(lik, 0, lik.position)
-	var li_axes_guard_ok := absf(lik._damage_reduction - 0.50) < 0.001 and lik._stats_mitigation_t > 2.9
+	var qeff_now: Dictionary = lik._slot_def(0).get("effect", {})
+	var li_axes_guard_ok := absf(float(qeff_now.get("dmg", 0.0)) - 4.8) < 0.001 \
+			and absf(lik._damage_reduction - 0.50) < 0.001 and lik._stats_mitigation_t > 4.9
 	lik.take_damage(100.0, null)
 	li_axes_guard_ok = li_axes_guard_ok and absf(lik.hp - 950.0) < 0.1
 	_orbit_zones = _orbit_zones.filter(func(z): return z.get("caster") != lik)
@@ -14606,7 +14639,7 @@ func _automicro_selftest() -> void:
 	_pending_casts.clear()
 	_auto_micro_weak(wu)
 	var weak_tiger_ok := _pending_has(wu, 0)
-	# 已有本人的虎时不提前刷新；队友同种虎不参与这条上限判断。
+	# 已有本人的完整双虎时不提前刷新；队友同种虎不参与这条上限判断。
 	wu._cast_t = 0.0
 	_pending_casts.clear()
 	wu.ability_slots[0]["cd_t"] = 0.0
@@ -14614,7 +14647,7 @@ func _automicro_selftest() -> void:
 	wu.ability_slots[0]["cd_t"] = 0.0
 	emel.position = wu.position + Vector2(150, 0)
 	_brain_wu(wu)
-	var tiger_hold_ok := not _pending_has(wu, 0) and _count_owned_summons(wu, "tiger") == 1
+	var tiger_hold_ok := not _pending_has(wu, 0) and _count_owned_summons(wu, "tiger") == 2
 	for summon in units.duplicate():
 		if is_instance_valid(summon) and summon.is_summon and summon.stat_owner_key == wu.key:
 			despawn_summon(summon)

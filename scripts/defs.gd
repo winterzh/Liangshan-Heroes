@@ -452,13 +452,13 @@ const ABILITIES := {
 	"li_rage": {"name": "嗜血狂斩", "cd": 8.0, "targeted": false, "radius": 95.0, "color": Color("ff3322"),
 		"desc": "血溅四方：身边官军受 {v} 伤害\n自身嗜血回血（6秒）", "effect": {"kind": "smite", "dmg": 23.0, "self_atk": 1.3, "self_dur": 6.0, "self_lifesteal": 0.5, "self_lifesteal_dur": 6.0}},
 	"li_brawn": {"name": "蛮力", "passive": true, "cd": 0.0, "targeted": false, "radius": 0.0, "color": Color("ff7766"),
-		"desc": "被动·黑铁筋骨\n生命+、攻击吸血；普攻30%概率\n向120范围所有官军各投一斧（普攻伤害）",
+		"desc": "被动·黑铁筋骨\n生命+、攻击吸血；普攻50%概率\n向120范围所有官军各投一斧（普攻伤害）",
 		"effect": {"kind": "passive", "hp_add": 120.0, "lifesteal": 0.15, "atk_add": 2.0,
-			"axe_chance": 0.30, "axe_radius": 120.0, "axe_art": "axe"}},
+			"axe_chance": 0.50, "axe_radius": 120.0, "axe_art": "axe"}},
 
 	# ===== DOTA 式英雄技能改版（林冲/花荣/李逵）=====
 	# 林冲 Q：窄直线破阵。普通兵被推退，骑兵/武将不退、改为露出破绽（削甲）。
-	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 8.0, "targeted": true, "radius": 260.0, "color": Color("c0a0ff"),
+	"lin_thrust": {"name": "丈八·破阵突刺", "cd": 9.0, "targeted": true, "radius": 260.0, "color": Color("c0a0ff"),
 		"desc": "固定260射程窄线贯穿，造成45/65/85伤害\n普通兵击退60/80/100；骑兵与武将削甲2/4/6，持续5秒",
 		"effect": {"kind": "line_nuke", "dmg_ranks": [45.0, 65.0, 85.0], "len": 260.0, "width": 48.0,
 			"fixed_geometry": true,
@@ -482,9 +482,9 @@ const ABILITIES := {
 			"evasion_ranks": [0.30, 0.60, 0.90], "move_ranks": [1.30, 1.40, 1.50]}},
 	# 李逵 Q·双斧回旋：两柄板斧绕身旋飞，持续扫伤减速
 	"li_axes": {"name": "双斧回旋", "cd": 9.0, "targeted": false, "radius": 120.0, "color": Color("ff7744"),
-		"desc": "两柄板斧绕身旋飞 3 秒，自身减伤50%\n身边官军反复受 {v} 伤害并被减速",
-		"effect": {"kind": "orbit_axes", "dmg": 16.0, "slow": 0.5, "slow_dur": 1.0, "dur": 3.0, "tick": 0.5,
-			"self_reduction": 0.50, "orbit_art": "axe"}},
+		"desc": "两柄板斧绕身旋飞 3 秒，仅造成少量伤害并减速\n自身获得50%减伤，持续5秒；配合蛮力冲入敌阵普攻",
+		"effect": {"kind": "orbit_axes", "dmg": 4.8, "slow": 0.5, "slow_dur": 1.0, "dur": 3.0, "tick": 0.5,
+			"self_reduction": 0.50, "self_reduction_dur": 5.0, "orbit_art": "axe"}},
 	# 李逵 W·莽撞冲锋（矢量·单击方向）：原地蓄力 1 秒，朝指向猛冲，撞伤沿途
 	"li_charge": {"name": "莽撞冲锋", "cd": 11.0, "targeted": true, "radius": 210.0, "color": Color("ff9a3a"),
 		"desc": "选定方向蓄力 1 秒后猛冲，期间物理免疫\n撞翻沿途官军，受 {v} 伤害并减速",
@@ -499,16 +499,17 @@ const ABILITIES := {
 	# Q·黑雨：低伤害压制天气；核心是压低攻速并令普攻概率落空，与宋江纯伤害地火分工。
 	"gong_blackrain": {"name": "黑雨", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0], "targeted": true,
 		"radius": 100.0, "color": Color("6a4fb0"),
-		"desc": "指定战阵降下黑雨，基础半径 100（倍率3为120），持续 6/7/8 秒\n每秒 2/3/4 伤害，降低敌军 15%/20%/25% 攻速\n并使其普攻有 20%/30%/40% 概率落空",
-		"effect": {"kind": "black_rain", "follow": false, "cast_range": 520.0,
+		"desc": "400距离内指定战阵降下黑雨（倍率3施法距离480），基础半径100（倍率3为120），持续6/7/8秒\n每秒2/3/4伤害，降低敌军15%/20%/25%攻速，并使其普攻有20%/30%/40%概率落空",
+		"effect": {"kind": "black_rain", "follow": false, "cast_range": 400.0,
 			"radius_growth": 0.25, "cast_range_growth": 0.25,
 			"dps_ranks": [2.0, 3.0, 4.0], "dur_ranks": [6.0, 7.0, 8.0],
 			"attack_slow_ranks": [0.85, 0.80, 0.75], "attack_miss_ranks": [0.20, 0.30, 0.40]}},
 	# W·冰墙：墙长、伤害与留场时间均随等级成长；撞上墙线的敌军会被重度减速。
 	"gong_icewall": {"name": "冰墙", "cd": 16.0, "cd_ranks": [16.0, 14.0, 12.0],
 		"targeted": true, "radius": 60.0, "color": Color("9fd8ff"),
-		"desc": "朝指向凝出冰墙，伤害 20/35/50\n墙长 150/180/210，阻路 5/6/7 秒；命中减速 50% 持续 2 秒",
-		"effect": {"kind": "ice_wall", "dmg_ranks": [20.0, 35.0, 50.0], "range": 210.0,
+		"desc": "320距离内朝指向凝出冰墙，伤害20/35/50\n墙长150/180/210，阻路5/6/7秒；命中减速50%持续2秒",
+		"effect": {"kind": "ice_wall", "cast_range": 320.0, "scale_cast_range": false,
+			"dmg_ranks": [20.0, 35.0, 50.0], "range": 320.0,
 			"len_ranks": [150.0, 180.0, 210.0], "dur_ranks": [5.0, 6.0, 7.0],
 			"slow": 0.50, "slow_dur": 2.0}},
 	# E·百兽奔袭：机制仍是直线击退控场，表现改为复用一张猛兽素材组成兽群冲锋。
@@ -526,13 +527,13 @@ const ABILITIES := {
 			"copy_mult": [1.0, 1.5, 2.0], "dur": 15.0}},
 
 	# ===== 行者·武松 =====
-	# Q·驱使猛虎：场上最多一虎，重放会替换旧虎；血量与攻击分别继承武松。
+	# Q·驱使猛虎：场上最多双虎，重放整组替换；每只为旧版单虎生命的75%、攻击的70%。
 	"wu_tigers": {"name": "驱使猛虎", "cd": 20.0, "cd_ranks": [20.0, 18.0, 16.0],
 		"targeted": false, "radius": 0.0, "color": Color("e8a23c"),
-		"desc": "召出一只猛虎助战 16 秒，重放替换旧虎\n生命为本体 80%/110%/140%，攻击为本体 90%/120%/150%",
-		"effect": {"kind": "summon", "unit": "tiger_summon", "count": 1, "summon_kind": "tiger",
-			"copy_caster": true, "copy_hp_mult": [0.80, 1.10, 1.40], "copy_atk_mult": [0.90, 1.20, 1.50],
-			"replace_existing": true, "dur": 16.0}},
+		"desc": "召出两只大型猛虎助战 16 秒，重放整组替换\n每只生命为本体 60%/82.5%/105%，攻击为本体 63%/84%/105%",
+		"effect": {"kind": "summon", "unit": "tiger_summon", "count": 2, "summon_kind": "tiger",
+			"copy_caster": true, "copy_hp_mult": [0.60, 0.825, 1.05], "copy_atk_mult": [0.63, 0.84, 1.05],
+			"visual_scale": 1.25, "replace_existing": true, "dur": 16.0}},
 	# W·三碗不过岗：保留醉酒的正负随机收益，缩短冷却并固定持续 20 秒。
 	"wu_wine": {"name": "三碗不过岗", "cd": 30.0, "targeted": false, "radius": 0.0, "color": Color("ffcf66"),
 		"desc": "大碗饮酒·醉态飘忽\n20 秒内移动/攻速独立随机起落（随等级浮动更大）",
@@ -541,10 +542,10 @@ const ABILITIES := {
 	"wu_blades": {"name": "双镔铁戒刀", "cd": 10.0, "targeted": false, "radius": 110.0, "color": Color("cdd6df"),
 		"desc": "双刀横扫·周围官军受 {v} 伤害\n削甲 2/4/6 并致盲 3 秒（攻击必失）",
 		"effect": {"kind": "smite", "dmg": 36.0, "def_down": [2.0, 4.0, 6.0], "def_down_dur": 8.0, "blind": 3.0}},
-	# R·醉神大闹快活林：物免期间每次有效平攻叠攻，并让该次平攻向主目标身后分裂。
+	# R·醉神大闹快活林：学会后普攻常驻分裂；主动期间物免、每次有效平攻叠攻并在结束时转血。
 	"wu_drunkgod": {"name": "醉神大闹快活林", "cd": 40.0, "cd_ranks": [40.0, 35.0, 30.0],
 		"targeted": false, "radius": 0.0, "color": Color("ffce4a"),
-		"desc": "物理免疫 8/10/12 秒；每次有效普攻 +10/12/15 攻，最多 5 层\n普攻附带 50%/65%/80% 分裂；结束时挡下伤害的 50% 转为回血",
+		"desc": "被动：学会后普攻常驻 50%/65%/80% 分裂\n主动：物理免疫 8/10/12 秒；每次有效普攻 +10/12/15 攻，最多5层；结束时挡下伤害的50%转为回血",
 		"effect": {"kind": "drunk_god", "bonus": [10.0, 12.0, 15.0], "dur_ranks": [8.0, 10.0, 12.0],
 			"max_stacks": 5, "cleave_ranks": [0.50, 0.65, 0.80]}},
 
@@ -1222,7 +1223,11 @@ static func ability_levels(aid: String) -> String:
 		"self_buff":
 			return "攻+%s　吸血%d%%/%ss(固定)" % [_l3a(float(eff.get("atk_add", 0.0))), int(float(eff.get("lifesteal", 0.0)) * 100.0), str(eff.get("dur", 5.0))]
 		"orbit_axes":
-			return "每跳 %s ×%ss" % [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("dur", 3.0))]
+			var orbit_text := "每跳 %s ×%ss" % [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("dur", 3.0))]
+			if float(eff.get("self_reduction", 0.0)) > 0.0:
+				orbit_text += "·减伤%d%%/%ss" % [int(float(eff["self_reduction"]) * 100.0),
+					str(eff.get("self_reduction_dur", eff.get("dur", 3.0)))]
+			return orbit_text
 		"drag":
 			return "拖入水 %s" % _l3a(float(eff.get("dmg", 0.0)))
 		"fire_dot", "black_rain":
@@ -1265,9 +1270,9 @@ static func ability_levels(aid: String) -> String:
 			var bo: Array = eff.get("bonus", [10.0, 20.0, 30.0])
 			var gd: Array = eff.get("dur_ranks", [eff.get("dur", 20.0), eff.get("dur", 20.0), eff.get("dur", 20.0)])
 			var gc: Array = eff.get("cleave_ranks", [0.0, 0.0, 0.0])
-			return "物免%s/%s/%ss·每击+%d/%d/%d攻(最多%d层)·分裂%d/%d/%d%%·结束伤害50%%转血" % [
-				str(gd[0]), str(gd[1]), str(gd[2]), int(bo[0]), int(bo[1]), int(bo[2]), int(eff.get("max_stacks", 5)),
-				int(float(gc[0]) * 100.0), int(float(gc[1]) * 100.0), int(float(gc[2]) * 100.0)]
+			return "被动分裂%d/%d/%d%%·主动物免%s/%s/%ss·每击+%d/%d/%d攻(最多%d层)·结束挡伤50%%转血" % [
+				int(float(gc[0]) * 100.0), int(float(gc[1]) * 100.0), int(float(gc[2]) * 100.0),
+				str(gd[0]), str(gd[1]), str(gd[2]), int(bo[0]), int(bo[1]), int(bo[2]), int(eff.get("max_stacks", 5))]
 		"summon":
 			if bool(eff.get("copy_caster", false)):
 				var mtxt := "血/攻同本体"
