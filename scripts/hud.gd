@@ -30,6 +30,7 @@ var _res_idle: Button     # 闲置喽啰徽标：显示闲置数，点击轮流�
 
 # 底部指挥面板
 var minimap: Minimap
+var _bottom_margin: MarginContainer
 var _port_tex: TextureRect
 var _port_fallback: ColorRect
 var _port_char: Label
@@ -102,6 +103,7 @@ var _arena_troops_btn: Button   # 竞技场·主界面「出兵」（仅竞技�
 var _arena_random_btn: Button   # 竞技场·主界面「随机刷兵+英雄」
 var _autocam_on := false
 var _autocam_pulse := 0.0
+var _responsive_layout_revision := 0
 
 # 触屏布局：屏上操作栏 + 编队 chips（手机/网页或收到首个触摸事件时启用）
 var touch_ui := false
@@ -193,9 +195,9 @@ func _ready() -> void:
 	_build_autocam_badge()
 	_build_arena_buttons()
 	_build_fps_label()   # 最后建→置于最上层，覆盖各遮罩始终可见
-	get_viewport().size_changed.connect(_layout_inventory)
-	get_viewport().size_changed.connect(_layout_info_panel)
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	refresh_inventory()
+	_apply_safe_area()
 
 
 func setup(p_battle) -> void:
@@ -361,29 +363,97 @@ func _build_touch_controls() -> void:
 
 	_build_skill_rail()
 
-	# 安全区（刘海/圆角）：把贴边控件按左右内缩量推开；桌面无内缩=无操作。屏幕尺寸变了重算一次。
-	get_viewport().size_changed.connect(_apply_safe_area)
+	# 安全区（刘海/圆角/系统手势条）由统一布局入口处理。
 	_apply_safe_area()
 
 
-func _apply_safe_area() -> void:
-	if not _touch_built:
-		return
-	var sa := DisplayServer.get_display_safe_area()
+## 折叠屏展开/合拢时，窗口尺寸和系统安全区可能不在同一帧完成更新。
+## 先立即排一次，再等两帧以最终数据收敛，修复 Pura X 类设备切屏后 HUD 跳位。
+func _on_viewport_size_changed() -> void:
+	_responsive_layout_revision += 1
+	var revision := _responsive_layout_revision
+	_apply_safe_area()
+	_settle_layout_after_resize(revision)
+
+
+func _settle_layout_after_resize(revision: int) -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if revision == _responsive_layout_revision and is_inside_tree():
+		_apply_safe_area()
+
+
+## DisplayServer 给的是屏幕物理像素，Control offset 用的是 canvas_items 拉伸后的逻辑画布单位。
+## 返回 Vector4(left, top, right, bottom)。测试可用 LIANGSHAN_HUD_SAFE_AREA_TEST=wsW,wsH,x,y,w,h 注入物理安全区。
+func _logical_safe_insets() -> Vector4:
+	if not touch_ui:
+		return Vector4(0, 0, 0, 0)
+	var vp := get_viewport().get_visible_rect().size
 	var ws := DisplayServer.window_get_size()
-	var left := maxf(0.0, float(sa.position.x))
-	var right := maxf(0.0, float(ws.x - (sa.position.x + sa.size.x)))
-	if _touch_groups != null:
-		_touch_groups.offset_left = 12.0 + left
-	if _touch_actions != null:
-		_touch_actions.offset_right = -12.0 - right
-	if _menu_btn != null:
-		_menu_btn.offset_right = -12.0 - right
-	if _skill_rail != null:
-		_skill_rail.offset_right = -10.0 - right
-	if _res_bar != null:
-		_res_bar.offset_left = 10.0 + left
+	var window_pos := DisplayServer.window_get_position()
+	var sa := DisplayServer.get_display_safe_area()
+	var injected := OS.get_environment("LIANGSHAN_HUD_SAFE_AREA_TEST")
+	if injected != "":
+		var parts := injected.split(",")
+		if parts.size() == 6:
+			ws = Vector2i(int(parts[0]), int(parts[1]))
+			window_pos = Vector2i.ZERO
+			sa = Rect2i(int(parts[2]), int(parts[3]), int(parts[4]), int(parts[5]))
+	if ws.x <= 0 or ws.y <= 0 or vp.x <= 0.0 or vp.y <= 0.0 or sa.size.x <= 0 or sa.size.y <= 0:
+		return Vector4(0, 0, 0, 0)
+	var window_end := window_pos + ws
+	var safe_end := sa.position + sa.size
+	var inner_left := maxi(window_pos.x, sa.position.x)
+	var inner_top := maxi(window_pos.y, sa.position.y)
+	var inner_right := mini(window_end.x, safe_end.x)
+	var inner_bottom := mini(window_end.y, safe_end.y)
+	var inner_w := inner_right - inner_left
+	var inner_h := inner_bottom - inner_top
+	if inner_w <= 0 or inner_h <= 0:
+		return Vector4(0, 0, 0, 0)
+	var left_px := float(inner_left - window_pos.x)
+	var top_px := float(inner_top - window_pos.y)
+	var right_px := float(window_end.x - inner_right)
+	var bottom_px := float(window_end.y - inner_bottom)
+	# 折叠切换中若读到上一块屏的旧安全区，可见区会小得异常。
+	# 这种数据宁可暂时当作无刘海，也不能把整套 HUD 推到对角。
+	var coverage_x := float(inner_w) / float(ws.x)
+	var coverage_y := float(inner_h) / float(ws.y)
+	var implausible := coverage_x < 0.65 or coverage_y < 0.65 \
+		or left_px > float(ws.x) * 0.20 or right_px > float(ws.x) * 0.20 \
+		or top_px > float(ws.y) * 0.20 or bottom_px > float(ws.y) * 0.20
+	if implausible:
+		return Vector4(0, 0, 0, 0)
+	return Vector4(
+		left_px * vp.x / float(ws.x),
+		top_px * vp.y / float(ws.y),
+		right_px * vp.x / float(ws.x),
+		bottom_px * vp.y / float(ws.y))
+
+
+func _apply_safe_area() -> void:
+	var safe := _logical_safe_insets()
+	if _touch_built:
+		if _touch_groups != null:
+			_touch_groups.offset_left = 12.0 + safe.x
+			_touch_groups.offset_bottom = -166.0 - safe.w
+		if _touch_actions != null:
+			_touch_actions.offset_right = -12.0 - safe.z
+			_touch_actions.offset_bottom = -166.0 - safe.w
+		if _menu_btn != null:
+			_menu_btn.offset_right = -12.0 - safe.z
+			_menu_btn.offset_top = 10.0 + safe.y
+		if _skill_rail != null:
+			_skill_rail.offset_right = -10.0 - safe.z
+			_skill_rail.offset_top = 70.0 + safe.y
+		if _res_bar != null:
+			_res_bar.offset_left = 10.0 + safe.x
+			_res_bar.offset_top = 8.0 + safe.y
+	if _bottom_margin != null:
+		_bottom_margin.add_theme_constant_override("margin_left", int(round(10.0 + safe.x)))
+		_bottom_margin.add_theme_constant_override("margin_right", int(round(10.0 + safe.z)))
 	_layout_info_panel()
+	_layout_inventory()
 	_layout_hero_bar()
 	_position_fps()   # 安全区变化(横屏/刘海) → FPS 跟随菜单键
 
@@ -615,19 +685,10 @@ func _layout_hero_bar() -> void:
 	if n == 0:
 		return
 	# 一律在「逻辑视口坐标」里排布（canvas_items 拉伸后的空间，与控件 offset 同系）。
-	# 安全区(DisplayServer)是物理/屏幕像素，直接当逻辑偏移会在 Retina/多显示器/刘海/桌面菜单栏下把英雄栏顶出画面——
-	# 桌面不吃安全区(left=top=0)，仅触屏按 物理→逻辑 比例内缩。修「AI友好/桌面下左侧英雄栏莫名不见」。
 	var vp := get_viewport().get_visible_rect().size
-	var left := 0.0
-	var top := 0.0
-	if touch_ui:
-		var ws := DisplayServer.window_get_size()
-		var sa := DisplayServer.get_display_safe_area()
-		if ws.x > 0 and ws.y > 0:
-			left = maxf(0.0, float(sa.position.x)) * vp.x / float(ws.x)
-			top = maxf(0.0, float(sa.position.y)) * vp.y / float(ws.y)
-	var band_top := 52.0 + top                      # 让位给左上资源条
-	var band_bottom := vp.y - 250.0                 # 让位给左下编队 chips（用逻辑视口高，别用物理窗口高）
+	var safe := _logical_safe_insets()
+	var band_top := 52.0 + safe.y                   # 让位给左上资源条
+	var band_bottom := vp.y - 250.0 - safe.w        # 让位给左下编队 chips
 	var band_h := maxf(120.0, band_bottom - band_top)
 	var sep := 8.0
 	var cols := 1
@@ -640,7 +701,7 @@ func _layout_hero_bar() -> void:
 			break
 	chip = clampf(chip, 40.0, 72.0)
 	_hero_bar.columns = cols
-	_hero_bar.offset_left = 8.0 + left
+	_hero_bar.offset_left = 8.0 + safe.x
 	_hero_bar.offset_top = band_top
 	for ch in _hero_bar.get_children():
 		# 驻守战在头像右侧留三行小字；其他模式继续使用原方形头像。
@@ -778,10 +839,13 @@ func _position_tip() -> void:
 		return
 	var sz := _tip_panel.size
 	var vp := get_viewport().get_visible_rect().size
-	var x := clampf(_tip_anchor.position.x + _tip_anchor.size.x * 0.5 - sz.x * 0.5, 8.0, maxf(8.0, vp.x - sz.x - 8.0))
+	var safe := _logical_safe_insets()
+	var x := clampf(_tip_anchor.position.x + _tip_anchor.size.x * 0.5 - sz.x * 0.5,
+		8.0 + safe.x, maxf(8.0 + safe.x, vp.x - safe.z - sz.x - 8.0))
 	var y := _tip_anchor.position.y - sz.y - 8.0
-	if y < 8.0:
+	if y < 8.0 + safe.y:
 		y = _tip_anchor.end.y + 8.0
+	y = minf(y, maxf(8.0 + safe.y, vp.y - safe.w - sz.y - 8.0))
 	_tip_panel.position = Vector2(x, y)
 
 
@@ -849,16 +913,16 @@ func _build_bottom_panel() -> void:
 	panel.add_theme_stylebox_override("panel", sb)
 	add_child(panel)
 
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_bottom", 8)
-	panel.add_child(margin)
+	_bottom_margin = MarginContainer.new()
+	_bottom_margin.add_theme_constant_override("margin_left", 10)
+	_bottom_margin.add_theme_constant_override("margin_right", 10)
+	_bottom_margin.add_theme_constant_override("margin_top", 8)
+	_bottom_margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(_bottom_margin)
 
 	var hbox := HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 16)
-	margin.add_child(hbox)
+	_bottom_margin.add_child(hbox)
 
 	minimap = Minimap.new()
 	hbox.add_child(minimap)
@@ -1120,16 +1184,17 @@ func _layout_inventory() -> void:
 		return
 	_inventory_popup.reset_size()
 	var vp := get_viewport().get_visible_rect().size
+	var safe := _logical_safe_insets()
 	var anchor := _inventory_toggle.get_global_rect()
 	var popup_size := _inventory_popup.get_combined_minimum_size()
 	var x := clampf(anchor.position.x + anchor.size.x * 0.5 - popup_size.x * 0.5,
-		8.0, maxf(8.0, vp.x - popup_size.x - 8.0))
-	var y := maxf(8.0, anchor.position.y - popup_size.y - 8.0)
+		8.0 + safe.x, maxf(8.0 + safe.x, vp.x - safe.z - popup_size.x - 8.0))
+	var y := maxf(8.0 + safe.y, anchor.position.y - popup_size.y - 8.0)
 	# 移动端右下还有一排战斗按钮：物品弹窗要整体越过它，不能挡住攻击/停止/姿态/拆除。
 	if touch_ui and _touch_actions != null and _touch_actions.visible:
 		var action_rect := _touch_actions.get_global_rect()
 		y = minf(y, action_rect.position.y - popup_size.y - 8.0)
-		y = maxf(8.0, y)
+		y = maxf(8.0 + safe.y, y)
 	_inventory_popup.position = Vector2(x, y)
 	_inventory_popup.size = popup_size
 
@@ -1301,13 +1366,9 @@ func _update_control_help_visibility() -> void:
 func _layout_control_help_panel() -> void:
 	if _control_help_panel == null:
 		return
-	var safe_right := 0.0
-	if touch_ui and _touch_built:
-		var sa := DisplayServer.get_display_safe_area()
-		var ws := DisplayServer.window_get_size()
-		safe_right = maxf(0.0, float(ws.x - (sa.position.x + sa.size.x)))
-	var right_gap := 12.0 + safe_right
-	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0)
+	var safe := _logical_safe_insets()
+	var right_gap := 12.0 + safe.z
+	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0) + safe.w
 	# 折叠时越过最多三条即时消息；展开时越过整个信息抽屉。
 	var lift := 284.0 if _info_expanded else 188.0
 	var width := 420.0
@@ -1323,14 +1384,10 @@ func _layout_control_help_panel() -> void:
 func _layout_info_panel() -> void:
 	if _info_panel == null or _info_toggle == null:
 		return
-	var safe_right := 0.0
-	if touch_ui and _touch_built:
-		var sa := DisplayServer.get_display_safe_area()
-		var ws := DisplayServer.window_get_size()
-		safe_right = maxf(0.0, float(ws.x - (sa.position.x + sa.size.x)))
-	var right_gap := 12.0 + safe_right
+	var safe := _logical_safe_insets()
+	var right_gap := 12.0 + safe.z
 	# 展开面板向上弹出；触屏再多让出一排拇指操作键。
-	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0)
+	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0) + safe.w
 	var width := 430.0 if touch_ui else 420.0
 	var height := 276.0
 	_info_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -1816,13 +1873,9 @@ func _position_fps() -> void:
 	_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	if touch_ui:
-		var right := 0.0
-		if _touch_built:
-			var sa := DisplayServer.get_display_safe_area()
-			var ws := DisplayServer.window_get_size()
-			right = maxf(0.0, float(ws.x - (sa.position.x + sa.size.x)))
-		_fps_label.offset_right = -128.0 - right   # 菜单键(右距12+宽104)左边再留 12px 间隙
-		_fps_label.offset_top = 22.0               # 与菜单键(顶10高52)中线对齐
+		var safe := _logical_safe_insets()
+		_fps_label.offset_right = -128.0 - safe.z   # 菜单键(右距12+宽104)左边再留 12px 间隙
+		_fps_label.offset_top = 22.0 + safe.y        # 与菜单键(顶10高52)中线对齐
 		_fps_label.add_theme_font_size_override("font_size", 20)
 	else:
 		_fps_label.offset_right = -14.0            # 桌面：右上角

@@ -11696,8 +11696,27 @@ func _info_ui_selftest(dir: String) -> void:
 	hud._set_info_expanded(false)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	var viewport_size := get_viewport().get_visible_rect().size
+	var safe := hud._logical_safe_insets()
+	var safe_rect := Rect2(Vector2(safe.x, safe.y),
+		Vector2(viewport_size.x - safe.x - safe.z, viewport_size.y - safe.y - safe.w))
+	var rect_in_safe := func(rect: Rect2) -> bool:
+		return rect.position.x >= safe_rect.position.x - 1.0 \
+			and rect.position.y >= safe_rect.position.y - 1.0 \
+			and rect.end.x <= safe_rect.end.x + 1.0 \
+			and rect.end.y <= safe_rect.end.y + 1.0
+	var collapsed_controls: Array = [hud._info_toggle, hud._inventory_dock, hud._menu_btn,
+		hud._touch_actions, hud._touch_groups, hud._hero_bar, hud._skill_rail]
+	var collapsed_in_safe := true
+	for control in collapsed_controls:
+		if control != null and control.is_visible_in_tree():
+			collapsed_in_safe = collapsed_in_safe and rect_in_safe.call(control.get_global_rect())
+	var layout_all := collapsed_in_safe
 	var inventory_below_toggle := hud._inventory_dock.get_parent() == hud._info_dock \
 		and hud._inventory_dock.get_global_rect().position.y >= hud._info_toggle.get_global_rect().end.y
+	layout_all = layout_all and inventory_below_toggle
+	print("[infoui] viewport=%s window=%s logical_safe=%s safe_rect=%s collapsed_in_safe=%s" % [
+		viewport_size, DisplayServer.window_get_size(), safe, safe_rect, collapsed_in_safe])
 	print("[infoui] collapsed help=%s inventory_below_toggle=%s inventory=%s toggle=%s panel=%s" % [
 		hud._control_help_panel.visible, inventory_below_toggle, hud._inventory_dock.get_global_rect(),
 		hud._info_toggle.get_global_rect(), hud._info_panel.get_global_rect()])
@@ -11706,6 +11725,9 @@ func _info_ui_selftest(dir: String) -> void:
 	hud._set_info_expanded(true)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	var expanded_in_safe: bool = bool(rect_in_safe.call(hud._info_panel.get_global_rect()))
+	layout_all = layout_all and expanded_in_safe
+	print("[infoui] expanded_in_safe=%s" % expanded_in_safe)
 	RenderingServer.force_draw(false)
 	get_viewport().get_texture().get_image().save_png("%s/info_expanded.png" % dir)
 	# 在抽屉中打开操作提示，先验证展开态不重叠，再验证折叠后位于即时消息上方。
@@ -11717,6 +11739,7 @@ func _info_ui_selftest(dir: String) -> void:
 	var expanded_panel_rect := hud._info_panel.get_global_rect()
 	var help_above_drawer := not hud._control_help_panel.visible \
 		or expanded_help_rect.end.y <= expanded_panel_rect.position.y + 1.0
+	layout_all = layout_all and help_above_drawer
 	print("[infoui] help_above_drawer=%s help=%s drawer=%s" % [
 		help_above_drawer, expanded_help_rect, expanded_panel_rect])
 	RenderingServer.force_draw(false)
@@ -11729,6 +11752,7 @@ func _info_ui_selftest(dir: String) -> void:
 	var help_above_toasts := help_rect.end.y <= toast_rect.position.y + 1.0
 	var help_contract := hud._control_help_panel.visible == not hud.touch_ui \
 		and hud._control_help_toggle.visible == not hud.touch_ui
+	layout_all = layout_all and help_above_toasts and help_contract
 	print("[infoui] help_contract=%s help_above_toasts=%s help=%s toasts=%s" % [
 		help_contract, help_above_toasts, help_rect, toast_rect])
 	RenderingServer.force_draw(false)
@@ -11745,8 +11769,11 @@ func _info_ui_selftest(dir: String) -> void:
 		if hud._touch_actions != null and hud._touch_actions.visible:
 			action_rect = hud._touch_actions.get_global_rect()
 			avoids_touch_actions = not popup_rect.intersects(action_rect)
+		var popup_in_safe: bool = bool(rect_in_safe.call(popup_rect))
+		layout_all = layout_all and avoids_touch_actions and popup_in_safe
 		print("[infoui] inventory_avoids_touch_actions=%s popup=%s actions=%s" % [
 			avoids_touch_actions, popup_rect, action_rect])
+		print("[infoui] inventory_popup_in_safe=%s" % popup_in_safe)
 		RenderingServer.force_draw(false)
 		get_viewport().get_texture().get_image().save_png("%s/info_inventory_popup.png" % dir)
 		hud._inventory_popup_open = false
@@ -11764,7 +11791,9 @@ func _info_ui_selftest(dir: String) -> void:
 			break
 	Settings.show_control_help = old_show_help
 	hud._update_control_help_visibility()
+	layout_all = layout_all and cap3 and not probe_alive
 	print("[infoui] toast_cap3=%s expires_3s=%s" % [cap3, not probe_alive])
+	print("[infoui] layout_all=%s" % layout_all)
 	print("[infoui] touch=%s saved=%s" % [hud.touch_ui, dir])
 
 
