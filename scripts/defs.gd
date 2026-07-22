@@ -334,6 +334,14 @@ const TRAPS := {
 		"color": Color("ff7a2a"), "effect": {"kind": "fire", "total": 150.0, "dur": 6.0, "radius": 95.0}},
 }
 
+# 物品注册表（第一版保持为空）：未来商店/掉落只需向这里加入数据，不改英雄或 HUD。
+# 字段约定：
+# name/desc/color/icon/max_stack；stats 固定属性；stats_pct 百分比属性；
+# active={target:self|point|unit, unit_team, range, radius, cooldown, cast_time, consume, effect={...}}；
+# passive={unique_group,power,stats,stats_pct,triggers={on_attack/on_hit/on_damaged/on_kill/
+# low_hp/periodic:{...}}}，也可用 passive 数组组合多个被动。
+const ITEMS := {}
+
 # 技能定义：name,cd,targeted,radius,color,desc(UI), 以及 effect(数据化结算描述)。
 # effect.kind: rally(治疗+攻击buff队友) / haste(队友移速) / smite(范围伤敌,可附slow,可cav加成,可self自身buff)
 #              / debuff(减速+削攻于敌) / drag(拖入水+伤害) / path(交给关卡处理)

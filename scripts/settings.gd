@@ -8,6 +8,8 @@ const DEFAULT_KEYBINDS := {
 	"amove": KEY_A, "stop": KEY_S, "hold": KEY_H, "patrol": KEY_P,
 	"stance": KEY_G, "auto": KEY_T,
 	"command_0": KEY_Q, "command_1": KEY_W, "command_2": KEY_E, "command_3": KEY_R,
+	"item_0": KEY_Z, "item_1": KEY_X, "item_2": KEY_C,
+	"item_3": KEY_V, "item_4": KEY_B, "item_5": KEY_N,
 	"alert": KEY_SPACE, "select_army": KEY_F2, "subgroup": KEY_TAB,
 	"idle_worker": KEY_PERIOD, "demolish": KEY_DELETE,
 }
@@ -132,6 +134,18 @@ func key_label(action: String) -> String:
 
 func command_key_labels() -> Array:
 	return [key_label("command_0"), key_label("command_1"), key_label("command_2"), key_label("command_3")]
+
+
+func item_key_labels() -> Array:
+	return [key_label("item_0"), key_label("item_1"), key_label("item_2"),
+		key_label("item_3"), key_label("item_4"), key_label("item_5")]
+
+
+func item_slot_for_event(event: InputEventKey) -> int:
+	for i in range(6):
+		if key_matches(event, "item_%d" % i):
+			return i
+	return -1
 
 
 func can_bind_key(key: int) -> bool:

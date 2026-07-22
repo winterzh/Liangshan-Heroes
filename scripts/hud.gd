@@ -48,6 +48,17 @@ var _panel_accum := 0.0
 var _control_help: Label
 var _info_dock: VBoxContainer
 
+# 英雄物品栏：宽屏内嵌 3×2；触屏/窄屏折叠为按钮，点开同一套 3×2 浮层。
+var _inventory_dock: VBoxContainer
+var _inventory_title: Label
+var _inventory_inline: PanelContainer
+var _inventory_grid: GridContainer
+var _inventory_toggle: Button
+var _inventory_popup: PanelContainer
+var _inventory_popup_grid: GridContainer
+var _inventory_popup_open := false
+var _inventory_hero: Unit = null
+
 # 底栏最右信息区：上方展开/收起，下方桌面操作说明。
 var _info_panel: PanelContainer
 var _info_toggle: Button
@@ -171,6 +182,7 @@ func _ready() -> void:
 	_build_resource_bar()
 	_build_hero_bar()
 	_build_bottom_panel()
+	_build_inventory_popup()
 	_build_info_panel()
 	_build_intro()
 	_build_end()
@@ -179,6 +191,8 @@ func _ready() -> void:
 	_build_autocam_badge()
 	_build_arena_buttons()
 	_build_fps_label()   # 最后建→置于最上层，覆盖各遮罩始终可见
+	get_viewport().size_changed.connect(_layout_inventory)
+	refresh_inventory()
 
 
 func setup(p_battle) -> void:
@@ -187,6 +201,7 @@ func setup(p_battle) -> void:
 	_res_bar.visible = battle != null and battle.economy
 	if OS.has_feature("mobile") or OS.has_feature("web") or OS.get_environment("TOUCH_UI") == "1":
 		set_touch_ui(true)   # 手机/网页（或 TOUCH_UI=1 桌面预览）：启用触屏布局；PC 上否则等首个触摸事件
+	refresh_inventory()
 
 
 ## 启用/刷新触屏布局（由 battle 收到首个触摸事件、或移动端启动时调用）
@@ -199,6 +214,7 @@ func set_touch_ui(v: bool) -> void:
 	_position_fps()   # 触屏布局启用 → FPS 移到菜单键左侧
 	_update_info_panel_mode()
 	_layout_info_panel()
+	refresh_inventory()
 
 
 ## 手机上字太小 → 把「进图就看到」的关键文字整体放大：顶部目标条、剧情对话、开战钮、
@@ -921,6 +937,33 @@ func _build_bottom_panel() -> void:
 	_info_stats.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_child(_info_stats)
 
+	_inventory_dock = VBoxContainer.new()
+	_inventory_dock.custom_minimum_size = Vector2(166, 0)
+	_inventory_dock.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_inventory_dock.add_theme_constant_override("separation", 2)
+	hbox.add_child(_inventory_dock)
+	_inventory_title = Label.new()
+	_inventory_title.text = "物品"
+	_inventory_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_inventory_title.add_theme_font_size_override("font_size", 12)
+	_inventory_title.add_theme_color_override("font_color", Color("d8c38d"))
+	_inventory_dock.add_child(_inventory_title)
+	_inventory_inline = PanelContainer.new()
+	_inventory_inline.add_theme_stylebox_override("panel", _inventory_panel_style())
+	_inventory_dock.add_child(_inventory_inline)
+	_inventory_grid = _make_inventory_grid(false)
+	_inventory_inline.add_child(_inventory_grid)
+	_inventory_toggle = Button.new()
+	_inventory_toggle.text = "▦ 物品"
+	_inventory_toggle.custom_minimum_size = Vector2(84, 76)
+	_inventory_toggle.focus_mode = Control.FOCUS_NONE
+	_inventory_toggle.add_theme_font_size_override("font_size", 17)
+	_inventory_toggle.tooltip_text = "打开当前英雄的六格物品栏"
+	_inventory_toggle.pressed.connect(func() -> void:
+		_inventory_popup_open = not _inventory_popup_open
+		_layout_inventory())
+	_inventory_dock.add_child(_inventory_toggle)
+
 	# 命令卡（英雄技能 / 工人建造 / 生产训练）。GridContainer：生产建筑设多列→训练按钮分两排，
 	# 其余设大列数→单排。get_index 顺序不变，键盘 Q/W/E/R 经 train_menu/build_menu 索引派发，不受影响。
 	_skill_bar = GridContainer.new()
@@ -972,6 +1015,143 @@ func _build_bottom_panel() -> void:
 	_control_help.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_control_help.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_info_dock.add_child(_control_help)
+
+
+func _inventory_panel_style() -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.045, 0.04, 0.03, 0.94)
+	sb.border_color = Color(0.46, 0.36, 0.20, 0.92)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(5)
+	sb.content_margin_left = 4
+	sb.content_margin_right = 4
+	sb.content_margin_top = 4
+	sb.content_margin_bottom = 4
+	return sb
+
+
+func _make_inventory_grid(popup: bool) -> GridContainer:
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 3)
+	grid.add_theme_constant_override("v_separation", 3)
+	for i in range(HeroInventory.SLOT_COUNT):
+		var slot_btn := InventorySlotButton.new()
+		slot_btn.hud = self
+		slot_btn.slot = i
+		slot_btn.popup_size = popup
+		slot_btn.custom_minimum_size = Vector2(58, 58) if popup else Vector2(50, 50)
+		grid.add_child(slot_btn)
+	return grid
+
+
+func _build_inventory_popup() -> void:
+	_inventory_popup = PanelContainer.new()
+	_inventory_popup.visible = false
+	_inventory_popup.z_index = 130
+	_inventory_popup.add_theme_stylebox_override("panel", _inventory_panel_style())
+	_inventory_popup_grid = _make_inventory_grid(true)
+	_inventory_popup.add_child(_inventory_popup_grid)
+	add_child(_inventory_popup)
+
+
+func _inventory_display_hero() -> Unit:
+	if battle == null:
+		return null
+	var active = battle.active_unit()
+	if active != null and is_instance_valid(active) and active.is_hero:
+		return active
+	if _sel_ref.size() == 1:
+		var inspected = _sel_ref[0]
+		if inspected != null and is_instance_valid(inspected) and inspected.is_hero:
+			return inspected
+	return null
+
+
+func refresh_inventory() -> void:
+	_inventory_hero = _inventory_display_hero()
+	for grid in [_inventory_grid, _inventory_popup_grid]:
+		if grid == null:
+			continue
+		for child in grid.get_children():
+			if child is InventorySlotButton:
+				child.hero = _inventory_hero
+				child.queue_redraw()
+	_layout_inventory()
+
+
+func _layout_inventory() -> void:
+	if _inventory_dock == null or _inventory_popup == null:
+		return
+	var has_hero := _inventory_hero != null and is_instance_valid(_inventory_hero) \
+		and _inventory_hero.inventory != null
+	_inventory_dock.visible = has_hero
+	var narrow := touch_ui or get_viewport().get_visible_rect().size.x < 1400.0
+	_inventory_dock.custom_minimum_size.x = 92.0 if narrow else 166.0
+	_inventory_title.visible = has_hero and not narrow
+	_inventory_inline.visible = has_hero and not narrow
+	_inventory_toggle.visible = has_hero and narrow
+	if not has_hero or not narrow:
+		_inventory_popup_open = false
+	_inventory_popup.visible = has_hero and narrow and _inventory_popup_open
+	_inventory_toggle.text = ("▾ 收起" if _inventory_popup_open else "▦ 物品")
+	if not _inventory_popup.visible:
+		return
+	_inventory_popup.reset_size()
+	var vp := get_viewport().get_visible_rect().size
+	var anchor := _inventory_toggle.get_global_rect()
+	var popup_size := _inventory_popup.get_combined_minimum_size()
+	var x := clampf(anchor.position.x + anchor.size.x * 0.5 - popup_size.x * 0.5,
+		8.0, maxf(8.0, vp.x - popup_size.x - 8.0))
+	var y := maxf(8.0, anchor.position.y - popup_size.y - 8.0)
+	_inventory_popup.position = Vector2(x, y)
+	_inventory_popup.size = popup_size
+
+
+func _item_tip_data(hero: Unit, slot: int) -> Dictionary:
+	if hero == null or not is_instance_valid(hero) or hero.inventory == null:
+		return {}
+	var item: Dictionary = hero.inventory.slot_item(slot)
+	var idef: Dictionary = hero.inventory.slot_def(slot)
+	if item.is_empty() or idef.is_empty():
+		return {"title": "空物品栏", "body": "可放置主动或被动物品。", "foot": "共 6 格", "color": Color("8f8267")}
+	var lines: Array[String] = []
+	var stat_names := {"hp": "生命", "attack": "攻击", "defense": "防御", "range": "射程",
+		"speed": "移速", "attack_speed": "攻速", "evasion": "闪避", "regen": "每秒回血", "lifesteal": "吸血"}
+	for key_v in (idef.get("stats", {}) as Dictionary):
+		var key := String(key_v)
+		lines.append("%s %+g" % [String(stat_names.get(key, key)), float(idef["stats"][key])])
+	for key_v in (idef.get("stats_pct", {}) as Dictionary):
+		var key := String(key_v)
+		lines.append("%s %+.0f%%" % [String(stat_names.get(key, key)), float(idef["stats_pct"][key]) * 100.0])
+	var desc := String(idef.get("description", idef.get("desc", "")))
+	if desc != "":
+		lines.append(desc)
+	var active: Dictionary = idef.get("active", {})
+	if not active.is_empty():
+		var active_desc := String(active.get("description", active.get("desc", "主动使用")))
+		lines.append("主动：" + active_desc)
+		var detail: Array[String] = []
+		if active.has("cooldown"):
+			detail.append("冷却 %.1fs" % float(active["cooldown"]))
+		if active.has("range"):
+			detail.append("距离 %d" % int(active["range"]))
+		if float(active.get("cast_time", 0.0)) > 0.0:
+			detail.append("施法 %.1fs" % float(active["cast_time"]))
+		if not detail.is_empty():
+			lines.append(" · ".join(detail))
+	var passive_raw = idef.get("passive", [])
+	var passives: Array = [passive_raw] if passive_raw is Dictionary else (passive_raw if passive_raw is Array else [])
+	for passive_v in passives:
+		if passive_v is Dictionary:
+			var passive_desc := String(passive_v.get("description", passive_v.get("desc", "")))
+			if passive_desc != "":
+				lines.append("被动：" + passive_desc)
+	var hotkeys := Settings.item_key_labels()
+	var foot := "只读查看" if hero.faction != Unit.FACTION_LIANG else \
+		("短按使用 · 长按说明/拖动" if touch_ui else "%s 使用 · 拖动换位/转交" % hotkeys[slot])
+	return {"title": String(idef.get("name", item.get("id", "物品"))),
+		"body": "\n".join(lines), "foot": foot, "color": idef.get("color", Color("d9bd75"))}
 
 
 ## 底栏信息抽屉：按钮与操作说明同在最右区域，展开后向上弹出可滚动历史。
@@ -1226,6 +1406,7 @@ func _on_keybinds_changed() -> void:
 	if is_instance_valid(_control_help):
 		_control_help.text = _key_help_text()
 	refresh_command()
+	refresh_inventory()
 
 
 func update_selection_panel(sel: Array) -> void:
@@ -1237,6 +1418,7 @@ func update_selection_panel(sel: Array) -> void:
 	_rebuild_grid()
 	_rebuild_command_card()
 	_refresh_panel()
+	refresh_inventory()
 
 
 ## 情境命令卡（按当前活动单位 active_unit / Tab 子组）：英雄→技能槽；工人→建造；生产建筑→训练
@@ -2871,6 +3053,182 @@ class HeroSlotButton extends Control:
 			accept_event()
 
 
+## 六格英雄物品按钮。桌面按下使用、悬停说明、拖动换位；触屏短按使用、长按说明后可拖动。
+class InventorySlotButton extends Control:
+	var hud = null
+	var hero: Unit = null
+	var slot := 0
+	var popup_size := false
+	var _held := false
+	var _press_ms := 0
+	var _press_pos := Vector2.ZERO
+	var _tip_shown := false
+	var _drag_started := false
+	var _draw_acc := 0.0
+	var _icon_id := ""
+	var _icon_tex: Texture2D = null
+
+	func _init() -> void:
+		mouse_filter = Control.MOUSE_FILTER_STOP
+		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		mouse_entered.connect(_on_hover)
+		mouse_exited.connect(_on_hover_out)
+
+	func _valid_inventory() -> bool:
+		return hero != null and is_instance_valid(hero) and hero.inventory != null
+
+	func _editable() -> bool:
+		return _valid_inventory() and hud != null and hud.battle != null \
+			and hero.faction == Unit.FACTION_LIANG
+
+	func _process(delta: float) -> void:
+		_draw_acc += delta
+		if _draw_acc >= 0.1:
+			_draw_acc = 0.0
+			queue_redraw()
+		if _held and hud != null and hud.touch_ui and not _tip_shown \
+				and Time.get_ticks_msec() - _press_ms >= 400:
+			_tip_shown = true
+			_show_tip()
+
+	func _show_tip() -> void:
+		if hud == null:
+			return
+		var tip: Dictionary = hud._item_tip_data(hero, slot)
+		if tip.is_empty():
+			return
+		hud.show_skill_tip(self, get_global_rect(), String(tip.get("title", "物品")),
+			String(tip.get("body", "")), String(tip.get("foot", "")), tip.get("color", Color("d9bd75")))
+
+	func _on_hover() -> void:
+		if hud != null and not hud.touch_ui:
+			_show_tip()
+
+	func _on_hover_out() -> void:
+		if hud != null and (not hud.touch_ui or not _held):
+			hud.hide_skill_tip(self)
+
+	func _execute() -> void:
+		if not _editable() or hero.inventory.slot_item(slot).is_empty():
+			return
+		if hero.inventory.is_active(slot):
+			hud.battle.cast_item(hero, slot, true)
+		else:
+			_show_tip()
+
+	func _drag_payload() -> Dictionary:
+		return {"kind": "hero_item", "hero": hero, "slot": slot}
+
+	func _drag_preview() -> Control:
+		var label := Label.new()
+		var idef: Dictionary = hero.inventory.slot_def(slot) if _valid_inventory() else {}
+		label.text = String(idef.get("name", "物品"))
+		label.custom_minimum_size = Vector2(78, 34)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 14)
+		label.add_theme_color_override("font_color", idef.get("color", Color("ffe9a8")))
+		return label
+
+	func _get_drag_data(_at_position: Vector2):
+		if hud == null or hud.touch_ui or not _editable() or hero.inventory.slot_item(slot).is_empty():
+			return null
+		_drag_started = true
+		set_drag_preview(_drag_preview())
+		return _drag_payload()
+
+	func _can_drop_data(_at_position: Vector2, data) -> bool:
+		return _editable() and data is Dictionary and String(data.get("kind", "")) == "hero_item" \
+			and data.get("hero") == hero and int(data.get("slot", -1)) != slot
+
+	func _drop_data(_at_position: Vector2, data) -> void:
+		if _can_drop_data(_at_position, data):
+			hud.battle.swap_hero_items(hero, int(data.get("slot", -1)), slot)
+			hud.refresh_inventory()
+
+	func _gui_input(event: InputEvent) -> void:
+		if not (event is InputEventMouseButton or event is InputEventMouseMotion):
+			return
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_held = true
+				_press_ms = Time.get_ticks_msec()
+				_press_pos = event.position
+				_tip_shown = false
+				_drag_started = false
+			else:
+				_held = false
+				if _tip_shown:
+					hud.hide_skill_tip(self)
+					_tip_shown = false
+				elif not _drag_started:
+					_execute()
+			accept_event()
+		elif event is InputEventMouseMotion and _held and hud != null and hud.touch_ui \
+				and not _drag_started and Time.get_ticks_msec() - _press_ms >= 350 \
+				and _press_pos.distance_to(event.position) > 12.0 \
+				and _editable() and not hero.inventory.slot_item(slot).is_empty():
+			_drag_started = true
+			hud.hide_skill_tip(self)
+			force_drag(_drag_payload(), _drag_preview())
+			accept_event()
+
+	func _draw() -> void:
+		var rect := Rect2(Vector2.ZERO, size)
+		draw_rect(rect, Color(0.055, 0.05, 0.04, 0.98))
+		draw_rect(rect.grow(-1.0), Color(0.40, 0.33, 0.21, 0.92), false, 1.5)
+		var f := ThemeDB.fallback_font
+		var hotkeys := Settings.item_key_labels()
+		var item: Dictionary = hero.inventory.slot_item(slot) if _valid_inventory() else {}
+		if item.is_empty():
+			if hud != null and not hud.touch_ui:
+				draw_string(f, Vector2(4, 14), hotkeys[slot], HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.48, 0.43, 0.34))
+			draw_string(f, Vector2(0, size.y * 0.61), str(slot + 1), HORIZONTAL_ALIGNMENT_CENTER,
+				size.x, 15, Color(0.28, 0.25, 0.20))
+			return
+		var idef: Dictionary = hero.inventory.slot_def(slot)
+		var item_id := String(item.get("id", ""))
+		var col: Color = idef.get("color", Color("d9bd75"))
+		if item_id != _icon_id:
+			_icon_id = item_id
+			_icon_tex = null
+			var icon_path := String(idef.get("icon", ""))
+			if icon_path != "" and ResourceLoader.exists(icon_path):
+				_icon_tex = load(icon_path)
+		var inner := rect.grow(-4.0)
+		if _icon_tex != null:
+			draw_texture_rect(_icon_tex, inner, false, Color.WHITE if _editable() else Color(0.62, 0.62, 0.62))
+		else:
+			draw_rect(inner, Color(col.r * 0.24, col.g * 0.24, col.b * 0.24, 1.0))
+			draw_circle(inner.get_center(), minf(inner.size.x, inner.size.y) * 0.27, Color(col.r, col.g, col.b, 0.28))
+			draw_string(f, Vector2(inner.position.x, inner.position.y + inner.size.y * 0.66),
+				String(idef.get("name", item_id)).substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER,
+				inner.size.x, 24 if popup_size else 21, col)
+		if hud != null and not hud.touch_ui:
+			draw_rect(Rect2(2, 2, 17, 15), Color(0, 0, 0, 0.72))
+			draw_string(f, Vector2(5, 14), hotkeys[slot], HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("fff0bd"))
+		var mark := "主" if not idef.get("active", {}).is_empty() else "被"
+		draw_rect(Rect2(size.x - 18, 2, 16, 15), Color(0, 0, 0, 0.72))
+		draw_string(f, Vector2(size.x - 16, 14), mark, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, col)
+		var count := int(item.get("count", 1))
+		if count > 1:
+			draw_string(f, Vector2(2, size.y - 4), str(count), HORIZONTAL_ALIGNMENT_RIGHT,
+				size.x - 5, 13, Color.WHITE)
+		var cd := hero.inventory.cooldown_left(item_id)
+		if cd > 0.0:
+			var frac := hero.inventory.cooldown_frac(slot)
+			draw_rect(Rect2(2, 2, size.x - 4, (size.y - 4) * frac), Color(0, 0, 0, 0.66))
+			draw_string(f, Vector2(0, size.y * 0.62), "%.1f" % cd, HORIZONTAL_ALIGNMENT_CENTER,
+				size.x, 16, Color.WHITE)
+		elif hud != null and hud.battle != null and hud.battle.is_item_cast_pending(hero, slot):
+			draw_rect(rect.grow(-2.0), Color(0.18, 0.12, 0.02, 0.58))
+			draw_string(f, Vector2(0, size.y * 0.61), "施", HORIZONTAL_ALIGNMENT_CENTER,
+				size.x, 18, Color("ffd866"))
+		if hud != null and hud.battle != null and hud.battle._item_caster == hero \
+				and hud.battle._item_slot == slot and hud.battle._item_armed != "":
+			draw_rect(rect.grow(-1.0), Color("fff0a0"), false, 3.0)
+
+
 ## 触屏英雄快切 chip（左缘竖排）：点头像 = 选中并居中该英雄（轻操作式随时跳到英雄放招走位）。
 class HeroChip extends Control:
 	var hud = null
@@ -2897,6 +3255,16 @@ class HeroChip extends Control:
 				else:
 					hud.battle.focus_unit(hero)    # 在场英雄 → 选中并居中
 			accept_event()
+
+	func _can_drop_data(_at_position: Vector2, data) -> bool:
+		return hud != null and hud.battle != null and is_instance_valid(hero) \
+			and hero.faction == Unit.FACTION_LIANG and data is Dictionary \
+			and String(data.get("kind", "")) == "hero_item" and data.get("hero") != hero
+
+	func _drop_data(_at_position: Vector2, data) -> void:
+		if _can_drop_data(_at_position, data):
+			hud.battle.transfer_hero_item(data.get("hero"), int(data.get("slot", -1)), hero)
+			hud.refresh_inventory()
 
 	func _draw() -> void:
 		if not is_instance_valid(hero):

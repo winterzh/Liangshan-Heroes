@@ -106,6 +106,7 @@ var ability_cd := 0.0       # 冷却时长（槽0）
 var _ability_t := 0.0       # 当前剩余冷却（槽0，兼容用）
 # 英雄技能槽（多技能 + 经典RTS式升级）：[{id, rank, cd_t, passive}]
 var ability_slots: Array = []
+var inventory: HeroInventory = null   # 六格单局物品栏；非英雄保持 null，空栏零事件开销
 var _hero_leveled := false  # 自由模式英雄：经验升级 + 技能点学习
 var hero_level := 1
 var hero_xp := 0.0
@@ -114,6 +115,8 @@ var auto_micro := false      # 托管：自动放招 + 自动加点 + 走位/退
 var _ai_dest := Vector2.INF  # 托管移动去抖：上次下发的移动落点（同向不重发，免得每次决策都重算路径、朝向抖）
 var _base_atk := 0.0
 var _base_hp := 0.0
+var _base_speed := 0.0
+var _base_defense := 0.0
 # 技能临时增益
 var temp_atk := 1.0
 var _temp_atk_t := 0.0
@@ -340,7 +343,10 @@ func setup(p_key: String, def: Dictionary, p_faction: int, p_battle, p_map: Game
 	_track_combat_stats = p_battle != null and bool(p_battle.get("track_hero_combat_stats"))
 	_base_atk = atk
 	_base_hp = max_hp
+	_base_speed = base_speed
+	_base_defense = defense
 	if is_hero:
+		inventory = HeroInventory.new(self)
 		_init_ability_slots(def)
 
 
@@ -738,6 +744,7 @@ func leave_garrison() -> void:
 
 
 var _killer: Unit = null   # 最后一击的攻击者（战后按英雄统计歼敌）
+var _killer_source_id := ""   # 最后一击来源；item: 前缀用于物品明细归因
 
 ## 最近是否被敌方击中（托管磁滞：被打后扩大防区/搜索范围）。
 func recently_hit() -> bool:
@@ -777,6 +784,12 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	var hp_damage := minf(hp_before, maxf(0.0, d))
 	var effective_damage := shield_absorbed + hp_damage
 	hp -= d
+	if effective_damage > 0.0 and battle != null and is_hero and inventory != null:
+		battle.trigger_item_event(self, "on_damaged", {"attacker": from, "damage": effective_damage,
+			"source_id": damage_ability_id})
+		if hp > 0.0 and hp / maxf(max_hp, 1.0) <= 0.35:
+			battle.trigger_item_event(self, "low_hp", {"attacker": from, "damage": effective_damage,
+				"source_id": damage_ability_id})
 	if _track_combat_stats and effective_damage > 0.0:
 		var attacker_relevant := from != null and is_instance_valid(from) \
 				and from.faction == FACTION_LIANG and (from.is_hero or from.stat_owner_key != "")
@@ -835,6 +848,9 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if hp <= 0.0:
 		hp = 0.0
 		_killer = from if (from != null and is_instance_valid(from)) else null
+		_killer_source_id = damage_ability_id
+		if inventory != null and battle != null:
+			battle.trigger_item_event(self, "on_death", {"attacker": from, "source_id": damage_ability_id})
 		# 英雄/建筑倒下时给一记屏震，强调份量
 		if battle != null and (is_hero or is_building):
 			battle.shake(5.0 if is_building else 4.0, position)
@@ -972,6 +988,8 @@ func _phys_body(delta: float) -> void:
 
 	# 技能冷却/充能（各槽）与临时增益计时
 	_tick_ability_slots(delta)
+	if inventory != null:
+		inventory.tick(delta)
 	if _temp_atk_t > 0.0:
 		_temp_atk_t -= delta
 		if _temp_atk_t <= 0.0:
@@ -1660,6 +1678,8 @@ func _attack() -> void:
 	_swing_kind = _weapon_kind()
 	_pending_target = _target
 	_pending_done = false
+	if inventory != null and battle != null:
+		battle.trigger_item_event(self, "on_attack", {"target": _target})
 	match _swing_kind:
 		WK.SPEAR:
 			_swing_speed = 2.8; _hit_at = 0.45   # 突刺（放慢看清，原 4.6）
@@ -1769,6 +1789,8 @@ func _deal_hit() -> void:
 		var lin_pool_before := maxf(0.0, t.hp) + maxf(0.0, t._shield)
 		t.take_damage(dmg, self, crit, false, stat_ability_id)
 		var lin_actual := maxf(0.0, lin_pool_before - maxf(0.0, t.hp) - maxf(0.0, t._shield))
+		if lin_actual > 0.0 and inventory != null and battle != null:
+			battle.trigger_item_event(self, "on_hit", {"target": t, "damage": lin_actual, "crit": crit})
 		if bool(lin_spear.get("proc", false)) and lin_actual > 0.0:
 			heal(lin_actual * float(lin_spear.get("heal_frac", 0.0)), self)
 			_buff_glow = 1.0
@@ -2325,6 +2347,9 @@ func _recompute_hero_stats() -> void:
 	var add_hp := 0.0
 	var add_range := 0.0
 	var add_cav := 0.0
+	var item_mods := inventory.stat_modifiers() if inventory != null else {"flat": {}, "pct": {}}
+	var item_flat: Dictionary = item_mods.get("flat", {})
+	var item_pct: Dictionary = item_mods.get("pct", {})
 	cav_ls_chance = 0.0
 	cav_ls_frac = 0.0
 	lin_spear_rank = 0
@@ -2379,11 +2404,19 @@ func _recompute_hero_stats() -> void:
 	var frac := (hp / max_hp) if max_hp > 0.0 else 1.0
 	# 英雄生命只吃「基地(聚义厅)·时代科技」(hero_tech_hp，约+10%)，不吃兵营的坚铠——折进重算保持持久
 	var tech_hp_f: float = float(battle.hero_tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
-	max_hp = (_base_hp * mult + add_hp) * tech_hp_f * (1.0 + (hero_boost_n() - 1.0) / 3.0)   # 英雄倍率：血量×(1+(n-1)/3)
+	# 物品固定属性放在英雄倍率之后，确保“+100生命”在 1×/3× 都严格只加 100；百分比再乘最终基础值。
+	max_hp = ((_base_hp * mult + add_hp) * tech_hp_f * (1.0 + (hero_boost_n() - 1.0) / 3.0) \
+		+ float(item_flat.get("hp", 0.0))) * (1.0 + float(item_pct.get("hp", 0.0)))
 	hp = clampf(max_hp * frac, 1.0, max_hp)
-	atk = (_base_atk * mult + add_atk) * (1.0 + (hero_boost_n() - 1.0) * 0.1)   # 英雄倍率：攻击力×(1+(n-1)·0.1)，n3=+20%(普攻不宜过高，技能伤害另算)
-	atk_range = float(setup_def.get("range", 24)) + add_range
+	atk = ((_base_atk * mult + add_atk) * (1.0 + (hero_boost_n() - 1.0) * 0.1) \
+		+ float(item_flat.get("attack", 0.0))) * (1.0 + float(item_pct.get("attack", 0.0)))
+	atk_range = (float(setup_def.get("range", 24)) + add_range + float(item_flat.get("range", 0.0))) \
+		* (1.0 + float(item_pct.get("range", 0.0)))
 	bonus_vs_cav = float(setup_def.get("bonus_cav", 1.0)) + add_cav
+	defense = (_base_defense + float(item_flat.get("defense", 0.0))) * (1.0 + float(item_pct.get("defense", 0.0)))
+	base_speed = (_base_speed + float(item_flat.get("speed", 0.0))) * (1.0 + float(item_pct.get("speed", 0.0)))
+	atkspeed_mult *= 1.0 + float(item_pct.get("attack_speed", 0.0))
+	evasion = minf(0.8, evasion + float(item_pct.get("evasion", 0.0)))
 	if melee_mode:                 # 拔刀近战：射程缩为肉搏（即便升被动也维持近战）
 		atk_range = 27.0           # 必须 <28：否则 _weapon_kind/身姿绘制会按「长枪」阈值画成枪而非刀
 	# 变身(transform)：形态修正叠加在基础数值之上——变身期间任何 recompute（升级/学技能）都保持形态加成
@@ -2392,6 +2425,7 @@ func _recompute_hero_stats() -> void:
 		max_hp *= float(_form.get("hp_mult", 1.0))
 		hp = clampf(max_hp * ffrac, 1.0, max_hp)
 		atk *= float(_form.get("atk_mult", 1.0))
+		base_speed *= float(_form.get("speed_mult", 1.0))
 		if _form.has("range"):
 			atk_range = float(_form["range"])
 
@@ -2404,6 +2438,9 @@ func _passive_regen() -> float:
 	for s in ability_slots:
 		if bool(s["passive"]) and int(s["rank"]) > 0:
 			r += float(Defs.ABILITIES.get(s["id"], {}).get("effect", {}).get("regen", 0.0)) * int(s["rank"])
+	if inventory != null:
+		var mods := inventory.stat_modifiers()
+		r += float((mods.get("flat", {}) as Dictionary).get("regen", 0.0))
 	return r
 
 
@@ -2413,6 +2450,9 @@ func lifesteal_frac() -> float:
 	for s in ability_slots:
 		if bool(s["passive"]) and int(s["rank"]) > 0:
 			ls += float(Defs.ABILITIES.get(s["id"], {}).get("effect", {}).get("lifesteal", 0.0))
+	if inventory != null:
+		var mods := inventory.stat_modifiers()
+		ls += float((mods.get("pct", {}) as Dictionary).get("lifesteal", 0.0))
 	if melee_mode:
 		# 花荣·拔刀换刀：近战每次吸血在等级区间内随机 —— 1级20~40% / 2级30~50% / 3级40~60%
 		var wr := 1
@@ -2450,7 +2490,7 @@ func start_ability_cd() -> void:
 	slot_start_cd(0)
 
 
-func heal(amount: float, healer: Unit = null) -> float:
+func heal(amount: float, healer: Unit = null, source_id := "") -> float:
 	if hp <= 0.0 or amount <= 0.0:
 		return 0.0
 	var hp_before := hp
@@ -2459,7 +2499,7 @@ func heal(amount: float, healer: Unit = null) -> float:
 	if effective <= 0.0:
 		return 0.0
 	if _track_combat_stats and healer != null and battle != null:
-		battle.record_hero_combat_healing(self, healer, effective)
+		battle.record_hero_combat_healing(self, healer, effective, source_id)
 	_buff_glow = 0.6
 	queue_redraw()
 	return effective

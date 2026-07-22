@@ -70,7 +70,11 @@ func _physics_process(delta: float) -> void:
 		if target.is_phys_immune():   # 武松醉神 / 李逵冲锋：远程普攻同样被物免挡下
 			target.absorb_physical_damage(dmg, s)
 		else:
+			var before_pool := maxf(0.0, target.hp) + maxf(0.0, target._shield)
 			target.take_damage(dmg, s, crit, false, damage_ability_id)
+			var actual := maxf(0.0, before_pool - maxf(0.0, target.hp) - maxf(0.0, target._shield))
+			if actual > 0.0 and s != null and s.inventory != null and s.battle != null:
+				s.battle.trigger_item_event(s, "on_hit", {"target": target, "damage": actual, "crit": crit})
 			if on_slow_dur > 0.0 and is_instance_valid(target):   # 拒马：命中减速
 				target.apply_slow(on_slow_mult, on_slow_dur)
 			if s != null and not target.garrisoned:   # 远程命中也吸血（与近战一致）

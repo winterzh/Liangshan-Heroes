@@ -9,6 +9,7 @@ enum Phase { INTRO, DEPLOY, FIGHT, END }
 var level: LevelBase
 var _defs := {}
 var _abilities := {}
+var _items := {}
 
 var world: Node2D
 var map: GameMap
@@ -96,11 +97,12 @@ var phase := Phase.INTRO
 var kills := 0
 var hero_kills := {}          # 按英雄统计歼敌：instance_id -> {name, key, n}（战后结算展示）
 var track_hero_combat_stats := false   # 仅驻守/自定义据守启用；其他模式的受击路径只多一次布尔判断
-var hero_combat_stats := {}    # 英雄 key -> {name, damage, taken, healing, kills, skill_damage}，英雄战死重练仍沿用
+var hero_combat_stats := {}    # 英雄 key -> {name, damage, taken, healing, kills, skill_damage, item_stats}，英雄战死重练仍沿用
 var _ability_owner_cache := {} # 主动技能 id -> 英雄 key；供施法者阵亡后仍在跳伤的 DOT 继续正确归属
 var _active_ability_cache := {} # 技能 id -> bool；伤害热路径只在首次遇到该技能时读定义
 var _hero_active_ability_cache := {} # "英雄|技能" -> bool；避免每次范围跳伤都重扫四个技能槽
 var hero_progress := {}        # 英雄战死存档：key -> {level,xp,sp,ranks}（聚义厅重练后恢复，不从1级重来）
+var hero_item_progress := {}   # 所有英雄的物品快照；与等级系统分离，固定技能英雄复活也能恢复
 var lit_cells := {}          # 关卡高亮格（如盘陀路指路）：Vector2i -> 剩余秒
 
 # 经济（自由「遭遇战」模式；战役关卡 economy=false，下列全部不参与）
@@ -168,6 +170,11 @@ const ABILITY_SFX_ID := {
 }
 # （旧 ABILITY_SFX_KIND 共享类型音已废：非 6 将技能全部走 Sfx.play_ability 按 id 播种的专属音）
 var _ability_slot := 0
+var _item_armed := ""         # 待指向主动物品 id（与英雄技能 armed 独立，沉默规则不同）
+var _item_caster: Unit = null
+var _item_slot := 0
+var _pending_item_casts: Array = []
+var _walk_item_casts: Array = []
 var _build_armed := ""        # 待放置的建筑 key（遭遇战建造）
 var _trap_armed := ""         # 待布置的陷阱 key（喽啰 E 子菜单·一次性机关）
 var _worker_cat := ""         # 喽啰命令卡当前分类页：""=根 / "build"建筑 / "tower"塔 / "trap"陷阱
@@ -212,6 +219,7 @@ func _ready() -> void:
 	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense
 	_defs = Defs.UNITS.duplicate(true)
 	_abilities = Defs.ABILITIES.duplicate(true)
+	_items = Defs.ITEMS.duplicate(true)
 	Defs.apply_content_pack(_defs, _abilities)   # 内容包覆盖（res://content/*.json，无则不变）
 	Art.set_runtime_alias({})                    # 清掉上局的运行时借图别名
 	if level.has_method("apply_overrides"):
@@ -308,6 +316,8 @@ func _ready() -> void:
 		if OS.get_environment("ECO_RESEARCH_TEST") == "1":
 			_eco_research_selftest()
 		_hover_selftest()
+		if OS.get_environment("ITEM_TEST") == "1":
+			_item_selftest()
 		if OS.get_environment("COMBAT_STATS_TEST") == "1":
 			_combat_stats_selftest()
 		if OS.get_environment("HUA_REWORK_TEST") == "1":
@@ -500,6 +510,9 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 	var u := Unit.new()
 	units_root.add_child(u)
 	u.setup(key, _defs[key], faction, self, map)
+	if u.is_hero and u.inventory != null and hero_item_progress.has(key):
+		u.inventory.restore(hero_item_progress[key])
+		hero_item_progress.erase(key)
 	if track_hero_combat_stats and u.is_hero and faction == Unit.FACTION_LIANG:
 		_ensure_hero_combat_stat(u.key, u.display_name)
 	if u.ability != "" and _abilities.has(u.ability):
@@ -1093,6 +1106,7 @@ func arm_build(key: String) -> void:
 	if not _defs.get(key, {}).get("buildable", false):
 		return
 	_disarm_ability()
+	_disarm_item()
 	_disarm_amove()
 	_disarm_patrol()
 	_build_armed = key
@@ -1232,6 +1246,7 @@ func arm_trap(key: String) -> void:
 	if not Defs.TRAPS.has(key):
 		return
 	_disarm_ability()
+	_disarm_item()
 	_disarm_amove()
 	_disarm_patrol()
 	_cancel_build()
@@ -1812,6 +1827,14 @@ func _on_start_battle() -> void:
 
 func _on_unit_died(u: Unit) -> void:
 	_resolve_lin_duel_death(u)   # 必须在 units.erase 前判定；助攻/队友补刀同样由目标死亡事件结算。
+	var item_killer: Unit = u._killer
+	if item_killer != null and is_instance_valid(item_killer) and item_killer.faction != u.faction \
+			and item_killer.inventory != null:
+		trigger_item_event(item_killer, "on_kill", {"target": u, "source_id": u._killer_source_id})
+	if String(u._killer_source_id).begins_with("item:"):
+		record_item_kill(item_killer, String(u._killer_source_id).trim_prefix("item:"))
+	if u.is_hero and u.inventory != null:
+		hero_item_progress[u.key] = u.inventory.snapshot()
 	# 战死英雄存档：可培养英雄阵亡时记下等级/经验/技能点/已学技能，重练后恢复（issue：复活变1级）
 	if u.is_hero and u._hero_leveled:
 		hero_progress[u.key] = {
@@ -1821,6 +1844,8 @@ func _on_unit_died(u: Unit) -> void:
 	selection.erase(u)
 	if _ability_caster == u:   # 施法者阵亡：解除指向态，避免光标/预览悬空
 		_disarm_ability()
+	if _item_caster == u:
+		_disarm_item()
 	if u.is_building:
 		unregister_building_footprint(u)   # 摧毁后放开占地（地面恢复可通行）
 		if not u.is_constructing and u.faction == Unit.FACTION_LIANG:   # 只扣玩家人口上限
@@ -1980,6 +2005,8 @@ func _perf_bench_setup(n: int) -> void:
 func _physics_process(delta: float) -> void:
 	if phase == Phase.INTRO:
 		return
+	for snap in hero_item_progress.values():
+		HeroInventory.tick_snapshot(snap, delta)   # 阵亡等待复活时冷却继续按游戏时间流逝
 	var _t := Time.get_ticks_usec() if _prof_on else 0
 	if _prof_on: _prof_frames += 1
 	_grid_build()
@@ -2024,8 +2051,10 @@ func _physics_process(delta: float) -> void:
 	_trail_pass(delta)
 	_bolt_pass(delta)
 	_walk_cast_pass(delta)
+	_walk_item_cast_pass(delta)
 	_channel_pass(delta)
 	_tick_pending_casts()
+	_tick_pending_item_casts()
 	if _prof_on: _t = _pf("zones", _t)
 	level.process(self, delta)
 	if phase == Phase.FIGHT:
@@ -2059,7 +2088,8 @@ func _physics_process(delta: float) -> void:
 func _process(_delta: float) -> void:
 	# 触屏：单指按住原地 ≥350ms → 长按。按在己方可驻军建筑上且选了可动单位 → 驻扎；
 	# 否则进入「框选」态（之后拖动拖出选择框，不再拖地图）。建造选址态(_build_armed)不参与长按。
-	if _dragging and _touch_mode and not _box_mode and not _panning and _build_armed == "" and _ability_armed == "" \
+	if _dragging and _touch_mode and not _box_mode and not _panning and _build_armed == "" \
+			and _ability_armed == "" and _item_armed == "" \
 			and Time.get_ticks_msec() - _press_ms >= 350 and _drag_from.distance_to(_drag_cur) < 16.0:
 		if _garrisonable_at(_drag_from) != null and not _selected_movers().is_empty():
 			_dragging = false
@@ -2069,7 +2099,8 @@ func _process(_delta: float) -> void:
 			overlay.queue_redraw()
 			Sfx.play("click")
 	# 触屏·指向技能瞄准：手指拖到屏幕边缘 → 地图朝该方向自动滚屏（够得着屏外目标；准星仍跟手指、松手即放）
-	if _touch_mode and _dragging and _ability_armed != "" and camera != null and not get_tree().paused:
+	if _touch_mode and _dragging and (_ability_armed != "" or _item_armed != "") \
+			and camera != null and not get_tree().paused:
 		var vs: Vector2 = get_viewport().get_visible_rect().size
 		var sm: Vector2 = get_viewport().get_mouse_position()
 		var bottom: float = vs.y - RTSCamera.PANEL_H   # 底部命令栏之上才算「下边缘」
@@ -3713,6 +3744,7 @@ func _end(victory: bool, line: String) -> void:
 	_disarm_amove()
 	_disarm_patrol()
 	_disarm_ability()
+	_disarm_item()
 	var camp = get_node_or_null("/root/Campaign")
 	if camp != null and victory:
 		camp.on_level_won()
@@ -3760,6 +3792,16 @@ func _hero_end_tally() -> String:
 			var slot_name: String = String(["Q", "W", "E", "R"][slot_i]) if slot_i < 4 else str(slot_i + 1)
 			block += "\n　%s %s　%s" % [slot_name, String(_abilities[aid].get("name", aid)),
 				_format_end_combat_stat(float(skill_damage.get(aid, 0.0)))]
+		var item_stats: Dictionary = r.get("item_stats", {})
+		var item_ids: Array = item_stats.keys()
+		item_ids.sort()
+		for item_id_v in item_ids:
+			var item_id := String(item_id_v)
+			var ir: Dictionary = item_stats[item_id]
+			var item_name := String(ir.get("name", item_def(item_id).get("name", item_id)))
+			block += "\n　物品 %s　伤害 %s　治疗 %s　击杀 %d" % [item_name,
+				_format_end_combat_stat(float(ir.get("damage", 0.0))),
+				_format_end_combat_stat(float(ir.get("healing", 0.0))), int(ir.get("kills", 0))]
 		parts.append(block)
 	return "\n\n".join(parts)
 
@@ -3779,13 +3821,15 @@ func _format_end_combat_stat(value: float) -> String:
 func _ensure_hero_combat_stat(hero_key: String, hero_name: String) -> Dictionary:
 	var rec: Dictionary = hero_combat_stats.get(hero_key, {
 		"name": hero_name, "key": hero_key, "damage": 0.0, "taken": 0.0, "healing": 0.0,
-		"kills": 0, "skill_damage": {}})
+		"kills": 0, "skill_damage": {}, "item_stats": {}})
 	if not rec.has("healing"):
 		rec["healing"] = 0.0
 	if not rec.has("key"):
 		rec["key"] = hero_key
 	if not rec.has("skill_damage"):
 		rec["skill_damage"] = {}
+	if not rec.has("item_stats"):
+		rec["item_stats"] = {}
 	if String(rec.get("name", "")) == "":
 		rec["name"] = hero_name
 	hero_combat_stats[hero_key] = rec
@@ -3818,6 +3862,13 @@ func record_hero_combat_damage(victim: Unit, attacker: Unit, amount: float,
 			var skill_damage: Dictionary = dealt.get("skill_damage", {})
 			skill_damage[damage_ability_id] = float(skill_damage.get(damage_ability_id, 0.0)) + amount
 			dealt["skill_damage"] = skill_damage
+		if String(damage_ability_id).begins_with("item:"):
+			var item_id := String(damage_ability_id).trim_prefix("item:")
+			var item_stats: Dictionary = dealt.get("item_stats", {})
+			var item_rec: Dictionary = item_stats.get(item_id, _new_item_stat(item_id))
+			item_rec["damage"] = float(item_rec.get("damage", 0.0)) + amount
+			item_stats[item_id] = item_rec
+			dealt["item_stats"] = item_stats
 		hero_combat_stats[attacker_key] = dealt
 	if victim != null and is_instance_valid(victim) and victim.is_hero \
 			and victim.faction == Unit.FACTION_LIANG:
@@ -3838,7 +3889,7 @@ func record_hero_combat_mitigation(victim: Unit, amount: float) -> void:
 
 
 ## 记录己方英雄（含归属该英雄的召唤物）对己方活体单位造成的实际有效治疗。
-func record_hero_combat_healing(target: Unit, healer: Unit, amount: float) -> void:
+func record_hero_combat_healing(target: Unit, healer: Unit, amount: float, source_id := "") -> void:
 	if not track_hero_combat_stats or amount <= 0.0 or target == null or not is_instance_valid(target):
 		return
 	if target.faction != Unit.FACTION_LIANG or target.is_building or target.is_resource:
@@ -3850,12 +3901,42 @@ func record_hero_combat_healing(target: Unit, healer: Unit, amount: float) -> vo
 			else String(_defs.get(healer_key, {}).get("name", healer_key))
 	var rec := _ensure_hero_combat_stat(healer_key, healer_name)
 	rec["healing"] = float(rec.get("healing", 0.0)) + amount
+	if String(source_id).begins_with("item:"):
+		var item_id := String(source_id).trim_prefix("item:")
+		var item_stats: Dictionary = rec.get("item_stats", {})
+		var item_rec: Dictionary = item_stats.get(item_id, _new_item_stat(item_id))
+		item_rec["healing"] = float(item_rec.get("healing", 0.0)) + amount
+		item_stats[item_id] = item_rec
+		rec["item_stats"] = item_stats
 	hero_combat_stats[healer_key] = rec
+
+
+func _new_item_stat(item_id: String) -> Dictionary:
+	return {"name": String(item_def(item_id).get("name", item_id)), "damage": 0.0,
+		"healing": 0.0, "kills": 0}
+
+
+func record_item_kill(attacker: Unit, item_id: String) -> void:
+	if not track_hero_combat_stats or attacker == null or not is_instance_valid(attacker) or item_id == "":
+		return
+	var hero_key := _hero_stat_attacker_key(attacker)
+	if hero_key == "":
+		return
+	var hero_name := attacker.display_name if attacker.is_hero \
+		else String(_defs.get(hero_key, {}).get("name", hero_key))
+	var rec := _ensure_hero_combat_stat(hero_key, hero_name)
+	var item_stats: Dictionary = rec.get("item_stats", {})
+	var item_rec: Dictionary = item_stats.get(item_id, _new_item_stat(item_id))
+	item_rec["kills"] = int(item_rec.get("kills", 0)) + 1
+	item_stats[item_id] = item_rec
+	rec["item_stats"] = item_stats
+	hero_combat_stats[hero_key] = rec
 
 
 func hero_combat_stat(hero_key: String) -> Dictionary:
 	return hero_combat_stats.get(hero_key, {
-		"damage": 0.0, "taken": 0.0, "healing": 0.0, "kills": 0, "skill_damage": {}})
+		"damage": 0.0, "taken": 0.0, "healing": 0.0, "kills": 0,
+		"skill_damage": {}, "item_stats": {}})
 
 
 ## 纯被动默认不进入结算技能栏；混合主动技能，或显式声明 stats_damage 的伤害型被动除外。
@@ -5041,7 +5122,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_drag_cur = get_global_mouse_position()
 		if _build_armed != "":
 			overlay.queue_redraw()   # 建造选址：单指拖动只移动虚影，不拖地图
-		elif _ability_armed != "":
+		elif _ability_armed != "" or _item_armed != "":
 			overlay.queue_redraw()   # 技能瞄准：单指拖动只移动准星，不拖地图（松手才放招）
 		elif _box_mode:
 			overlay.queue_redraw()
@@ -5091,6 +5172,18 @@ func _unhandled_input(event: InputEvent) -> void:
 					else:
 						_cast_armed_at(p)
 					return
+				if _item_armed != "":
+					if _touch_mode:
+						_dragging = true
+						_drag_from = p
+						_drag_cur = p
+						_box_mode = false
+						_panning = false
+						_press_ms = Time.get_ticks_msec()
+						overlay.queue_redraw()
+					else:
+						_cast_item_armed_at(p)
+					return
 				if _amove_armed:
 					_order_amove_at(p, event.shift_pressed)
 					_disarm_amove()
@@ -5131,6 +5224,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				elif _ability_armed != "" and _touch_mode:
 					# 触屏：松手 → 在准星(手指当前处)放招（按下后可拖动调整落点/贴边滚屏，松手才结算）
 					_cast_armed_at(p)
+				elif _item_armed != "" and _touch_mode:
+					_cast_item_armed_at(p)
 				elif _trap_armed != "" and _touch_mode:
 					# 触屏：松手 → 在虚影处布置陷阱（无效则保留 armed，可重选址或点「取消」）
 					_try_place_trap(_drag_cur)
@@ -5156,6 +5251,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 			if _ability_armed != "":
 				_disarm_ability()
+				return
+			if _item_armed != "":
+				_disarm_item()
 				return
 			if _amove_armed:
 				_disarm_amove()
@@ -5208,6 +5306,8 @@ func _unhandled_input(event: InputEvent) -> void:
 					hud.toggle_auto_selected()    # T：托管选中英雄（单个 / 编队）
 		elif Settings.key_matches(event, "demolish") or (Settings.key_for("demolish") == KEY_DELETE and kc == KEY_BACKSPACE):
 			delete_selected(event.shift_pressed)   # 拆除选中己方单位/建筑（Mac 上 Delete 即 Backspace；Shift 跳过确认）
+		elif Settings.item_slot_for_event(event) >= 0:
+			use_item_hotkey(Settings.item_slot_for_event(event))
 		elif Settings.key_matches(event, "command_0"):
 			_command_hotkey(0)
 		elif Settings.key_matches(event, "command_1"):
@@ -5320,7 +5420,8 @@ func _ring_cursor(col: Color, glyph: String) -> ImageTexture:
 func _update_hover_cursor() -> void:
 	if DisplayServer.get_name() == "headless" or get_tree().paused:
 		return
-	if _ability_armed != "" or _amove_armed or _patrol_armed or _repair_armed or _garrison_armed or _build_armed != "" or _trap_armed != "":
+	if _ability_armed != "" or _item_armed != "" or _amove_armed or _patrol_armed \
+			or _repair_armed or _garrison_armed or _build_armed != "" or _trap_armed != "":
 		return   # 指向态自管光标
 	var kind := _hover_kind_at(get_global_mouse_position())
 	if kind == _hover_kind:
@@ -5395,6 +5496,7 @@ func arm_amove() -> void:
 		return
 	_disarm_patrol()
 	_disarm_ability()
+	_disarm_item()
 	_cancel_build()
 	_amove_armed = true
 	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
@@ -5420,6 +5522,7 @@ func arm_repair() -> void:
 		msg("先选中农民/工人，再点维修", 1.3)
 		return
 	_disarm_ability()
+	_disarm_item()
 	_cancel_build()
 	_disarm_amove()
 	_disarm_patrol()
@@ -5441,6 +5544,7 @@ func arm_garrison() -> void:
 	if _selected_movers().is_empty():
 		return
 	_disarm_ability()
+	_disarm_item()
 	_cancel_build()
 	_disarm_amove()
 	_disarm_patrol()
@@ -5479,6 +5583,7 @@ func cancel_armed() -> void:
 	_disarm_patrol()
 	_disarm_repair()
 	_disarm_ability()
+	_disarm_item()
 	_disarm_garrison()
 	_cancel_build()
 	_cancel_trap()
@@ -5494,7 +5599,8 @@ func group_size(n: int) -> int:
 
 ## 是否处于待指向态（触屏「取消」键据此显隐）
 func is_armed() -> bool:
-	return _amove_armed or _patrol_armed or _repair_armed or _garrison_armed or _ability_armed != "" or _build_armed != "" or _trap_armed != ""
+	return _amove_armed or _patrol_armed or _repair_armed or _garrison_armed \
+		or _ability_armed != "" or _item_armed != "" or _build_armed != "" or _trap_armed != ""
 
 
 ## 选中并把镜头移到某单位（触屏英雄快切栏：点英雄头像直达）
@@ -5681,7 +5787,330 @@ func _cycle_subgroup() -> void:
 			break
 	_active = order[(ci + 1) % order.size()]
 	_disarm_ability()
+	_disarm_item()
 	_update_sel_label()
+
+
+## ---------- 英雄物品栏 ----------
+
+func item_def(item_id: String) -> Dictionary:
+	return _items.get(item_id, {})
+
+
+func use_item_hotkey(slot: int) -> void:
+	var hero := active_unit()
+	if hero != null and is_instance_valid(hero) and hero.is_hero:
+		cast_item(hero, slot, true)
+
+
+func cast_item(caster: Unit, slot: int, show_blocked := false) -> void:
+	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+			or slot < 0 or slot >= HeroInventory.SLOT_COUNT:
+		return
+	var item: Dictionary = caster.inventory.slot_item(slot)
+	var idef: Dictionary = caster.inventory.slot_def(slot)
+	var active: Dictionary = idef.get("active", {})
+	if item.is_empty() or active.is_empty():
+		return
+	if not caster.inventory.ready(slot):
+		if show_blocked:
+			_show_item_blocked(caster, slot)
+		return
+	_cancel_walk_cast_intents(caster)
+	cancel_armed()
+	var mode := String(active.get("target", "self"))
+	if mode == "point" or mode == "unit":
+		_item_caster = caster
+		_item_armed = String(item.get("id", ""))
+		_item_slot = slot
+		Input.set_default_cursor_shape(Input.CURSOR_CROSS)
+		var hint := "左键选择目标位置"
+		if mode == "unit":
+			hint = "左键点选目标单位（超射程会自动走近）"
+		msg("%s · %s：%s" % [caster.display_name, String(idef.get("name", _item_armed)), hint], 2.2)
+		if overlay != null:
+			overlay.queue_redraw()
+	else:
+		_begin_item_cast(caster, slot, caster.position)
+
+
+func _show_item_blocked(caster: Unit, slot: int) -> void:
+	if hud == null or caster == null or not is_instance_valid(caster) or caster.inventory == null:
+		return
+	var item_id := String(caster.inventory.slot_item(slot).get("id", ""))
+	var idef := item_def(item_id)
+	var text := "暂时无法使用"
+	if caster.inventory.cooldown_left(item_id) > 0.0:
+		text = "物品冷却中（%d秒）" % int(ceil(caster.inventory.cooldown_left(item_id)))
+	elif caster._stun_t > 0.0:
+		text = "眩晕中，无法使用"
+	elif caster.garrisoned:
+		text = "驻军中，无法使用"
+	elif caster._cast_t > 0.0 or caster._channel_t > 0.0:
+		text = "正在施法，无法使用"
+	msg("%s · %s：%s" % [caster.display_name, String(idef.get("name", item_id)), text], 1.3)
+
+
+func _disarm_item() -> void:
+	_item_armed = ""
+	_item_caster = null
+	_item_slot = 0
+	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+	if overlay != null:
+		overlay.queue_redraw()
+
+
+func _cast_item_armed_at(p: Vector2) -> void:
+	var caster := _item_caster
+	var slot := _item_slot
+	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+			or slot < 0 or slot >= HeroInventory.SLOT_COUNT \
+			or String(caster.inventory.slot_item(slot).get("id", "")) != _item_armed \
+			or not caster.inventory.ready(slot):
+		_disarm_item()
+		return
+	var active: Dictionary = caster.inventory.slot_def(slot).get("active", {})
+	var mode := String(active.get("target", "point"))
+	if mode == "unit":
+		var target := _armed_unit_at(p, String(active.get("unit_team", "enemy")))
+		if target == null:
+			msg("请点选一个目标单位（右键取消）", 1.2)
+			return
+		_disarm_item()
+		var rng := item_cast_range(active)
+		if rng != INF and caster.position.distance_to(target.position) > rng:
+			_queue_walk_item(caster, slot, target, Vector2.INF)
+		else:
+			_begin_item_cast(caster, slot, target.position, target)
+		return
+	var point := to_logic(p)
+	_disarm_item()
+	var range := item_cast_range(active)
+	if range != INF and caster.position.distance_to(point) > range:
+		_queue_walk_item(caster, slot, null, point)
+	else:
+		_begin_item_cast(caster, slot, point)
+
+
+func item_cast_range(active: Dictionary) -> float:
+	if not active.has("range"):
+		return INF
+	return maxf(0.0, float(active.get("range", 0.0)))
+
+
+func _begin_item_cast(caster: Unit, slot: int, point: Vector2, target: Unit = null) -> void:
+	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+			or not caster.inventory.ready(slot):
+		return
+	var idef := caster.inventory.slot_def(slot)
+	var active: Dictionary = idef.get("active", {})
+	var windup := maxf(0.0, float(active.get("cast_time", 0.0)))
+	if windup <= 0.0:
+		_do_item_active(caster, slot, point, target)
+		return
+	var col: Color = idef.get("color", Color("d9bd75"))
+	caster.begin_cast_windup(windup, col)
+	_pending_item_casts.append({"caster": caster, "slot": slot, "uid": int(caster.inventory.slot_item(slot).get("uid", 0)),
+		"point": point, "target": target, "serial": caster._cast_serial})
+	Sfx.play("cast", -1.0, 0.05, 70)
+
+
+func _tick_pending_item_casts() -> void:
+	if _pending_item_casts.is_empty():
+		return
+	var keep: Array = []
+	for pc in _pending_item_casts:
+		var caster = pc.get("caster")
+		if caster == null or not is_instance_valid(caster) or caster.hp <= 0.0 or caster.inventory == null:
+			continue
+		if int(pc.get("serial", -1)) != caster._cast_serial:
+			continue
+		if caster._cast_t > 0.0:
+			keep.append(pc)
+			continue
+		var slot: int = caster.inventory.find_uid(int(pc.get("uid", 0)))
+		if slot < 0 or not caster.inventory.ready(slot):
+			continue
+		var target = pc.get("target")
+		if target != null and (not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned):
+			continue
+		_do_item_active(caster, slot, pc.get("point", caster.position), target)
+	_pending_item_casts = keep
+
+
+func is_item_cast_pending(caster: Unit, slot: int) -> bool:
+	if caster == null or not is_instance_valid(caster) or caster.inventory == null:
+		return false
+	var uid := int(caster.inventory.slot_item(slot).get("uid", 0))
+	for pc in _pending_item_casts:
+		if pc.get("caster") == caster and int(pc.get("uid", -1)) == uid \
+				and int(pc.get("serial", -1)) == caster._cast_serial:
+			return true
+	return false
+
+
+func cancel_pending_item_cast(caster: Unit) -> void:
+	if caster == null:
+		return
+	_pending_item_casts = _pending_item_casts.filter(func(pc: Dictionary) -> bool: return pc.get("caster") != caster)
+
+
+func _cancel_walk_cast_intents(caster: Unit) -> void:
+	if caster == null:
+		return
+	_walk_casts = _walk_casts.filter(func(wc: Dictionary) -> bool: return wc.get("c") != caster)
+	_walk_item_casts = _walk_item_casts.filter(func(wc: Dictionary) -> bool: return wc.get("c") != caster)
+
+
+func _do_item_active(caster: Unit, slot: int, point: Vector2, target: Unit = null) -> void:
+	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+			or not caster.inventory.ready(slot):
+		return
+	var item: Dictionary = caster.inventory.slot_item(slot)
+	var item_id := String(item.get("id", ""))
+	var idef := caster.inventory.slot_def(slot)
+	var active: Dictionary = idef.get("active", {})
+	var mode := String(active.get("target", "self"))
+	if mode == "unit" and (target == null or not is_instance_valid(target) or target.hp <= 0.0):
+		return
+	var center := target.position if mode == "unit" else (caster.position if mode == "self" else point)
+	_apply_item_effect_bundle(caster, item_id, active.get("effect", {}), active, center, target, "item:" + item_id)
+	caster.inventory.start_cooldown(slot)
+	if bool(active.get("consume", false)):
+		caster.inventory.consume_one(slot)
+	var radius := float(active.get("radius", 0.0))
+	spawn_impact(center, radius >= 40.0)
+	Sfx.play("cast", -0.8, 0.05, 70)
+	msg("【%s】" % String(idef.get("name", item_id)), 1.5)
+	if hud != null:
+		hud.refresh_inventory()
+
+
+func _apply_item_effect_bundle(caster: Unit, item_id: String, effect_v, spec: Dictionary,
+		center: Vector2, explicit_target: Unit, source_id: String) -> void:
+	var effects: Array = effect_v if effect_v is Array else [effect_v]
+	for ev in effects:
+		if not (ev is Dictionary):
+			continue
+		var effect: Dictionary = ev
+		var targets := _item_effect_targets(caster, effect, spec, center, explicit_target)
+		for target in targets:
+			_apply_item_effect_to(caster, target, effect, source_id)
+		if float(effect.get("reveal", 0.0)) > 0.0:
+			_reveal_fog_at(center, float(effect.get("reveal", 0.0)), float(effect.get("reveal_dur", 4.0)))
+
+
+func _item_effect_targets(caster: Unit, effect: Dictionary, spec: Dictionary, center: Vector2,
+		explicit_target: Unit) -> Array:
+	var selector := String(effect.get("target", ""))
+	if selector == "self":
+		return [caster]
+	if selector == "explicit" and explicit_target != null and is_instance_valid(explicit_target):
+		return [explicit_target]
+	var radius := maxf(0.0, float(effect.get("radius", spec.get("radius", 0.0))))
+	if radius <= 0.0:
+		if explicit_target != null and is_instance_valid(explicit_target):
+			return [explicit_target]
+		return [caster]
+	var team := String(effect.get("team", spec.get("unit_team", "")))
+	if team == "":
+		team = "enemy" if float(effect.get("damage", 0.0)) > 0.0 else "ally"
+	var out: Array = []
+	for unit in units_near(center, radius + 40.0):
+		if not is_instance_valid(unit) or unit.hp <= 0.0 or unit.garrisoned or unit.is_resource:
+			continue
+		if center.distance_to(unit.position) > radius + unit.radius:
+			continue
+		var allied: bool = unit.faction == caster.faction
+		if (team == "ally" and not allied) or (team == "enemy" and allied):
+			continue
+		out.append(unit)
+	return out
+
+
+func _apply_item_effect_to(caster: Unit, target: Unit, effect: Dictionary, source_id: String) -> void:
+	if target == null or not is_instance_valid(target) or target.hp <= 0.0:
+		return
+	var damage := maxf(0.0, float(effect.get("damage", 0.0)))
+	if damage > 0.0 and target.faction != caster.faction:
+		target.take_damage(damage, caster, false, bool(effect.get("ignore_reduction", false)), source_id)
+	var healing := maxf(0.0, float(effect.get("heal", 0.0)))
+	if healing > 0.0 and target.faction == caster.faction:
+		target.heal(healing, caster, source_id)
+	var dur := maxf(0.0, float(effect.get("duration", effect.get("dur", 0.0))))
+	if float(effect.get("shield", 0.0)) > 0.0 and target.faction == caster.faction:
+		target.apply_shield(float(effect["shield"]), dur)
+	if float(effect.get("damage_reduction", 0.0)) > 0.0 and target.faction == caster.faction:
+		target.apply_damage_reduction(float(effect["damage_reduction"]), dur, String(source_id).hash())
+	if float(effect.get("attack_mult", 0.0)) > 0.0 and target.faction == caster.faction:
+		target.apply_temp_atk(float(effect["attack_mult"]), dur)
+	if float(effect.get("attack_add", 0.0)) != 0.0 and target.faction == caster.faction:
+		target.apply_temp_atk_add(float(effect["attack_add"]), dur)
+	if float(effect.get("attack_speed", 0.0)) > 0.0 and target.faction == caster.faction:
+		target.apply_atkspeed(float(effect["attack_speed"]), dur)
+	if float(effect.get("move_speed", 0.0)) > 0.0 and target.faction == caster.faction:
+		target.apply_move_boost(float(effect["move_speed"]), dur)
+	if float(effect.get("lifesteal", 0.0)) > 0.0 and target.faction == caster.faction:
+		target.apply_lifesteal(float(effect["lifesteal"]), dur)
+	if float(effect.get("slow", 0.0)) > 0.0 and target.faction != caster.faction:
+		target.apply_slow(float(effect["slow"]), dur)
+	if float(effect.get("stun", 0.0)) > 0.0 and target.faction != caster.faction:
+		target.apply_stun(float(effect["stun"]))
+	if float(effect.get("root", 0.0)) > 0.0 and target.faction != caster.faction:
+		target.apply_root(float(effect["root"]))
+
+
+## 被动物品事件分发：只在攻击/受击/击杀等既有结算点触发，不做全战场逐帧扫描。
+func trigger_item_event(owner: Unit, event: String, context: Dictionary) -> void:
+	if owner == null or not is_instance_valid(owner) or owner.inventory == null \
+			or (owner.hp <= 0.0 and event != "on_death"):
+		return
+	for rec_v in owner.inventory.event_passives(event):
+		var rec: Dictionary = rec_v
+		var passive: Dictionary = rec.get("passive", {})
+		var effect_v = rec.get("effect", {})
+		var trigger: Dictionary = effect_v if effect_v is Dictionary else {}
+		var uid := int(rec.get("uid", 0))
+		if not owner.inventory.proc_ready(uid, event):
+			continue
+		if randf() > clampf(float(trigger.get("chance", passive.get("chance", 1.0))), 0.0, 1.0):
+			continue
+		if float(trigger.get("hp_below", 0.0)) > 0.0 \
+				and owner.hp / maxf(owner.max_hp, 1.0) > float(trigger["hp_below"]):
+			continue
+		var explicit_target: Unit = null
+		var selector := String(trigger.get("target", ""))
+		if selector == "attacker":
+			explicit_target = context.get("attacker")
+		elif selector == "self":
+			explicit_target = owner
+		else:
+			explicit_target = context.get("target")
+			if explicit_target == null and float(trigger.get("damage", 0.0)) <= 0.0:
+				explicit_target = owner
+		var center := explicit_target.position if explicit_target != null and is_instance_valid(explicit_target) else owner.position
+		var source := "item_passive:" + String(rec.get("item_id", ""))
+		# 先占用触发锁再结算效果，避免双方反伤类物品在同一调用栈里互相递归。
+		var proc_cd := maxf(0.001, float(trigger.get("cooldown",
+			trigger.get("interval", passive.get("cooldown", 0.0)))))
+		owner.inventory.start_proc_cooldown(uid, event, proc_cd)
+		_apply_item_effect_bundle(owner, String(rec.get("item_id", "")), effect_v, trigger, center, explicit_target, source)
+
+
+func swap_hero_items(hero: Unit, from_slot: int, to_slot: int) -> bool:
+	return hero != null and is_instance_valid(hero) and hero.inventory != null \
+		and hero.inventory.swap_slots(from_slot, to_slot)
+
+
+func transfer_hero_item(from_hero: Unit, slot: int, to_hero: Unit) -> bool:
+	if from_hero == null or to_hero == null or not is_instance_valid(from_hero) or not is_instance_valid(to_hero) \
+			or from_hero == to_hero or from_hero.faction != Unit.FACTION_LIANG \
+			or to_hero.faction != Unit.FACTION_LIANG or from_hero.inventory == null or to_hero.inventory == null:
+		return false
+	var ok := from_hero.inventory.transfer_slot(slot, to_hero.inventory)
+	if not ok:
+		msg("%s 的物品栏已满" % to_hero.display_name, 1.3)
+	return ok
 
 
 func cast_ability(caster: Unit, slot := 0, show_blocked := false) -> void:
@@ -5691,9 +6120,11 @@ func cast_ability(caster: Unit, slot := 0, show_blocked := false) -> void:
 		if show_blocked:
 			_show_cast_blocked(caster, slot)
 		return
+	_cancel_walk_cast_intents(caster)
 	var aid: String = caster.ability_slots[slot]["id"]
 	var ad: Dictionary = _abilities[aid]
 	if ad["targeted"]:
+		_disarm_item()
 		_disarm_amove()
 		_disarm_patrol()
 		_cancel_build()
@@ -5860,9 +6291,11 @@ func _disarm_ability() -> void:
 
 
 func cancel_pending_cast(caster: Unit) -> void:
-	if caster == null or _pending_casts.is_empty():
+	if caster == null:
 		return
-	_pending_casts = _pending_casts.filter(func(pc: Dictionary) -> bool: return pc.get("caster") != caster)
+	if not _pending_casts.is_empty():
+		_pending_casts = _pending_casts.filter(func(pc: Dictionary) -> bool: return pc.get("caster") != caster)
+	cancel_pending_item_cast(caster)
 
 
 ## HUD 查询：某个技能是否正在抬手待结算。这与 cd_t 是两个独立状态，不能把抬手误画成「冷却 0」。
@@ -6963,6 +7396,67 @@ func _bolt_pass(delta: float) -> void:
 			if fx != null and is_instance_valid(fx):
 				fx.queue_free()
 	_bolts = keep
+
+
+## ───────────────── 走近使用物品（与技能同一套玩家意图规则）─────────────────
+func _queue_walk_item(caster: Unit, slot: int, tgt: Unit, point: Vector2) -> void:
+	if caster == null or not is_instance_valid(caster) or caster.inventory == null:
+		return
+	var uid := int(caster.inventory.slot_item(slot).get("uid", 0))
+	if uid <= 0:
+		return
+	for wc in _walk_item_casts:
+		if wc.get("c") == caster:
+			wc["uid"] = uid
+			wc["tgt"] = tgt
+			wc["point"] = point
+			wc["serial"] = -1
+			wc["t"] = 0.0
+			wc["age"] = 0.0
+			return
+	_walk_item_casts.append({"c": caster, "uid": uid, "tgt": tgt, "point": point,
+		"serial": -1, "t": 0.0, "age": 0.0})
+	if hud != null:
+		hud.show_message("超出物品使用距离——正在接近…", 1.4)
+
+
+func _walk_item_cast_pass(delta: float) -> void:
+	if _walk_item_casts.is_empty():
+		return
+	var keep: Array = []
+	for wc in _walk_item_casts:
+		var caster = wc.get("c")
+		var target = wc.get("tgt")
+		if caster == null or not is_instance_valid(caster) or caster.hp <= 0.0 or caster.inventory == null:
+			continue
+		if target != null and (not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned):
+			continue
+		var slot: int = caster.inventory.find_uid(int(wc.get("uid", 0)))
+		if slot < 0 or not caster.inventory.ready(slot):
+			continue
+		if int(wc.get("serial", -1)) >= 0 and caster._order_serial != int(wc["serial"]):
+			continue
+		wc["age"] = float(wc.get("age", 0.0)) + delta
+		if float(wc["age"]) > 15.0:
+			if caster.faction == Unit.FACTION_LIANG:
+				msg("无法接近物品使用位置，命令已取消", 1.5)
+			continue
+		var active: Dictionary = caster.inventory.slot_def(slot).get("active", {})
+		var range := item_cast_range(active)
+		var cast_pos: Vector2 = target.position if target != null else wc.get("point", Vector2.INF)
+		if cast_pos == Vector2.INF:
+			continue
+		if range == INF or caster.position.distance_to(cast_pos) <= range:
+			_begin_item_cast(caster, slot, cast_pos, target)
+			continue
+		wc["t"] = float(wc.get("t", 0.0)) - delta
+		if float(wc["t"]) <= 0.0:
+			wc["t"] = 0.4
+			caster.order_move(cast_pos)
+			wc["serial"] = caster._order_serial
+			caster.manual_order_active = true
+		keep.append(wc)
+	_walk_item_casts = keep
 
 
 ## ───────────────── 走近施法（DOTA式）─────────────────
@@ -9629,6 +10123,102 @@ func _lin_rework_selftest() -> void:
 	fog = saved_fog
 
 
+## 物品系统确定性自检（ITEM_TEST=1）：覆盖六格、堆叠、唯一被动、同名共享 CD、
+## 换位/转交、死亡快照计时，以及主动伤害/治疗/击杀的独立统计。
+func _item_selftest() -> void:
+	var saved_items: Dictionary = _items.duplicate(true)
+	var saved_tracking := track_hero_combat_stats
+	var saved_stats: Dictionary = hero_combat_stats.duplicate(true)
+	var saved_kills := kills
+	var saved_hero_kills: Dictionary = hero_kills.duplicate(true)
+	var saved_selection: Array = selection.duplicate()
+	_items = {
+		"test_bomb": {"name": "试炼雷", "color": Color("ff9b62"), "stats": {"attack": 5.0},
+			"active": {"target": "unit", "unit_team": "enemy", "range": 300.0, "cooldown": 10.0,
+				"description": "对单体造成伤害", "effect": {"target": "explicit", "damage": 60.0}}},
+		"test_heal": {"name": "试炼药", "color": Color("75dfa0"),
+			"active": {"target": "self", "cooldown": 8.0, "effect": {"target": "self", "heal": 40.0}}},
+		"test_low": {"name": "旧护符", "passive": {"unique_group": "test_guard", "power": 1.0,
+			"stats": {"defense": 2.0}}},
+		"test_high": {"name": "新护符", "passive": {"unique_group": "test_guard", "power": 2.0,
+			"stats": {"defense": 6.0}, "triggers": {"on_damaged": {"target": "self", "heal": 10.0,
+				"cooldown": 3.0}}}},
+		"test_stack": {"name": "试炼符", "max_stack": 3, "stats": {"hp": 4.0}},
+	}
+	track_hero_combat_stats = true
+	var origin := map.cell_to_world(map.nearest_open(level.camera_start_cell() + Vector2i(9, 9)))
+	var hero := spawn_unit("song_jiang", Unit.FACTION_LIANG, origin)
+	var receiver := spawn_unit("lin_chong", Unit.FACTION_LIANG, origin + Vector2(80, 0))
+	hero_combat_stats.erase(hero.key)
+	hero_combat_stats.erase(receiver.key)
+	var base_atk := hero.atk
+	var base_def := hero.defense
+	var added_ok := hero.inventory.put_item(0, "test_bomb") \
+		and hero.inventory.put_item(1, "test_bomb") \
+		and hero.inventory.put_item(2, "test_low") \
+		and hero.inventory.put_item(3, "test_high") \
+		and hero.inventory.put_item(4, "test_stack", 3) \
+		and hero.inventory.put_item(5, "test_heal")
+	var stats_ok := absf(hero.atk - base_atk - 10.0) < 0.01 \
+		and absf(hero.defense - base_def - 6.0) < 0.01
+	var before_full: Array = hero.inventory.slots.duplicate(true)
+	var full_ok := hero.inventory.add_item("test_heal") == 1 and hero.inventory.slots == before_full
+	hero.inventory.start_cooldown(0)
+	var shared_cd_ok := absf(hero.inventory.cooldown_left("test_bomb") - 10.0) < 0.01 \
+		and not hero.inventory.ready(1)
+	var snap: Dictionary = hero.inventory.snapshot()
+	HeroInventory.tick_snapshot(snap, 3.0)
+	var snapshot_ok := absf(float((snap.get("cooldowns", {}) as Dictionary).get("test_bomb", 0.0)) - 7.0) < 0.01
+	var swap_ok := hero.inventory.swap_slots(4, 5) \
+		and String(hero.inventory.slot_item(4).get("id", "")) == "test_heal"
+	var stack_uid := int(hero.inventory.slot_item(5).get("uid", 0))
+	var transfer_ok := transfer_hero_item(hero, 5, receiver) \
+		and hero.inventory.slot_item(5).is_empty() \
+		and int(receiver.inventory.slot_item(0).get("uid", 0)) == stack_uid \
+		and int(receiver.inventory.slot_item(0).get("count", 0)) == 3
+	# 主动伤害击杀：同名物品进入共享 CD；主动来源单列，不混入技能栏。
+	hero.inventory.cooldowns.clear()
+	var foe := spawn_unit("guan_dao", Unit.FACTION_GUAN, origin + Vector2(120, 0))
+	foe.max_hp = 50.0
+	foe.hp = 50.0
+	foe.defense = 0.0
+	_do_item_active(hero, 0, foe.position, foe)
+	# 主动治疗 40 + 唯一被动事件治疗 10；被动只进英雄治疗总量，不进主动道具明细。
+	hero.hp = hero.max_hp - 50.0
+	_do_item_active(hero, 4, hero.position, hero)
+	trigger_item_event(hero, "on_damaged", {"attacker": null})
+	var rec: Dictionary = hero_combat_stat(hero.key)
+	var item_stats: Dictionary = rec.get("item_stats", {})
+	var bomb_rec: Dictionary = item_stats.get("test_bomb", {})
+	var heal_rec: Dictionary = item_stats.get("test_heal", {})
+	var combat_ok := absf(float(rec.get("damage", 0.0)) - 50.0) < 0.01 \
+		and absf(float(rec.get("healing", 0.0)) - 50.0) < 0.01 \
+		and absf(float(bomb_rec.get("damage", 0.0)) - 50.0) < 0.01 \
+		and int(bomb_rec.get("kills", 0)) == 1 \
+		and absf(float(heal_rec.get("healing", 0.0)) - 40.0) < 0.01
+	var tally := _hero_end_tally()
+	var tally_ok := tally.contains("物品 试炼雷") and tally.contains("伤害 50") \
+		and tally.contains("物品 试炼药") and tally.contains("治疗 40")
+	var all_ok := added_ok and stats_ok and full_ok and shared_cd_ok and snapshot_ok \
+		and swap_ok and transfer_ok and combat_ok and tally_ok
+	print("[item] add=%s stats=%s full=%s shared_cd=%s snapshot=%s swap=%s transfer=%s combat=%s tally=%s ALL=%s" % [
+		added_ok, stats_ok, full_ok, shared_cd_ok, snapshot_ok, swap_ok, transfer_ok, combat_ok, tally_ok, all_ok])
+	if OS.get_environment("ITEM_TEST_KEEP") == "1":
+		_set_selection([hero])
+		hud.refresh_inventory()
+		return
+	for probe in [hero, receiver]:
+		if probe != null and is_instance_valid(probe):
+			units.erase(probe)
+			probe.queue_free()
+	_items = saved_items
+	track_hero_combat_stats = saved_tracking
+	hero_combat_stats = saved_stats
+	kills = saved_kills
+	hero_kills = saved_hero_kills
+	_set_selection(saved_selection.filter(func(u): return is_instance_valid(u) and u.hp > 0.0))
+
+
 func _ability_selftest() -> void:
 	var heroes := units.filter(func(u) -> bool:
 		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.ability != "")
@@ -11382,6 +11972,8 @@ class Overlay extends Node2D:
 		if b._ability_armed != "":
 			# 预览也按英雄倍率放大范围，所见即所得
 			_draw_cast_indicator(b._scaled_ability(b.ability_def(b._ability_armed), b._hero_rb(b._ability_caster), b._hero_db(b._ability_caster)))
+		if b._item_armed != "":
+			_draw_item_indicator()
 		# 建造放置预览：占地框（绿=可建 / 红=不可）
 		if b._build_armed != "":
 			var bhalf: int = b.building_footprint_half(b._build_armed)
@@ -11427,6 +12019,29 @@ class Overlay extends Node2D:
 			draw_polyline(pts + PackedVector2Array([pts[0]]), tcol, 2.0)
 			var tmk: Color = td.get("color", Color("ffaa44"))
 			draw_circle(tctr, 6.0, Color(tmk.r, tmk.g, tmk.b, 0.9))
+
+	func _draw_item_indicator() -> void:
+		var caster = b._item_caster
+		if caster == null or not is_instance_valid(caster) or caster.inventory == null:
+			return
+		var slot: int = caster.inventory.find_uid(int(caster.inventory.slot_item(b._item_slot).get("uid", 0)))
+		if slot < 0:
+			return
+		var idef: Dictionary = caster.inventory.slot_def(slot)
+		var active: Dictionary = idef.get("active", {})
+		var col: Color = idef.get("color", Color("d9bd75"))
+		var ref: Vector2 = b._drag_cur if b._touch_mode and b._dragging else get_global_mouse_position()
+		var center: Vector2 = b.to_logic(ref)
+		var mode := String(active.get("target", "point"))
+		if mode == "self":
+			center = caster.position
+		var radius := maxf(10.0, float(active.get("radius", 28.0)))
+		_draw_world_ring(center, radius, Color(col.r, col.g, col.b, 0.9), Color(col.r, col.g, col.b, 0.14))
+		var cast_range: float = b.item_cast_range(active)
+		if cast_range != INF:
+			_draw_world_ring(caster.position, cast_range, Color(col.r, col.g, col.b, 0.25), Color(0, 0, 0, 0))
+		draw_arc(ref, 4.0, 0.0, TAU, 16, Color(col.r, col.g, col.b, 0.95), 2.0)
+
 
 	func _draw_selected_orders() -> void:
 		for u in b.selection:

@@ -286,6 +286,9 @@ func _keybind_grid() -> Control:
 		["切换姿态", "stance"], ["英雄托管", "auto"],
 		["命令槽 1", "command_0"], ["命令槽 2", "command_1"],
 		["命令槽 3", "command_2"], ["命令槽 4", "command_3"],
+		["物品槽 1", "item_0"], ["物品槽 2", "item_1"],
+		["物品槽 3", "item_2"], ["物品槽 4", "item_3"],
+		["物品槽 5", "item_4"], ["物品槽 6", "item_5"],
 		["告警/基地", "alert"], ["全选军队", "select_army"],
 		["切子编组", "subgroup"], ["闲置工人", "idle_worker"],
 		["拆除", "demolish"],
@@ -338,11 +341,13 @@ func _refresh_key_buttons() -> void:
 
 func _keybind_text() -> String:
 	var command_keys := Settings.command_key_labels()
+	var item_keys := Settings.item_key_labels()
 	var lines := [
 		"编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入",
 		"%s 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头" % Settings.key_label("select_army"),
 		"%s 攻击移动　%s 停止　%s 原地据守　%s 巡逻　%s 切换姿态" % [Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"), Settings.key_label("patrol"), Settings.key_label("stance")],
 		"%s 英雄技能/命令　F1/F3-F8 按头像选英雄" % " / ".join(command_keys),
+		"%s 当前英雄物品栏" % " / ".join(item_keys),
 		"%s 跳最近告警/回起始视角　%s 子编组　%s 切闲置工人" % [Settings.key_label("alert"), Settings.key_label("subgroup"), Settings.key_label("idle_worker")],
 		"%s 拆除　Esc 菜单 / 取消" % Settings.key_label("demolish"),
 		"镜头：方向键平移　+ / − 或滚轮 缩放　中键拖拽",
