@@ -11697,10 +11697,12 @@ func _info_ui_selftest(dir: String) -> void:
 			var cell := map.nearest_open(base + Vector2i(-3, i - 3))
 			spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))
 		print("[infoui] six_hero_fixture=%d" % liang_heroes().size())
-	# 选中一名己方英雄，让物品栏参与真实布局校验。
+	# 默认选中英雄让物品栏参与校验；真机空选区问题用 INFO_UI_NO_SELECTION=1 复现。
 	var test_heroes := units.filter(func(u) -> bool:
 		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_hero and u.hp > 0.0)
-	if not test_heroes.is_empty():
+	if OS.get_environment("INFO_UI_NO_SELECTION") == "1":
+		_set_selection([])
+	elif not test_heroes.is_empty():
 		_set_selection([test_heroes[0]])
 	if hud.touch_ui:
 		hud._refresh_skill_rail()
@@ -11725,7 +11727,14 @@ func _info_ui_selftest(dir: String) -> void:
 	var collapsed_in_safe := true
 	for control in collapsed_controls:
 		if control != null and control.is_visible_in_tree():
-			collapsed_in_safe = collapsed_in_safe and rect_in_safe.call(control.get_global_rect())
+			var control_rect: Rect2 = control.get_global_rect()
+			# 空选区时英雄栏/技能轨是零尺寸占位，不构成可见布局，也不应因旧 position 判失败。
+			if control_rect.size.x <= 0.0 or control_rect.size.y <= 0.0:
+				continue
+			var control_in_safe: bool = bool(rect_in_safe.call(control_rect))
+			collapsed_in_safe = collapsed_in_safe and control_in_safe
+			if not control_in_safe:
+				print("[infoui] outside_safe=%s rect=%s" % [control.get_class(), control_rect])
 	var layout_all := collapsed_in_safe
 	if hud.touch_ui:
 		var skill_contract: Dictionary = hud._skill_rail_contract()
@@ -11740,7 +11749,8 @@ func _info_ui_selftest(dir: String) -> void:
 			avoidance_contract.get("avoids", false), avoidance_contract.get("collisions", []),
 			avoidance_contract.get("rect", Rect2())])
 	var inventory_below_toggle := hud._inventory_dock.get_parent() == hud._info_dock \
-		and hud._inventory_dock.get_global_rect().position.y >= hud._info_toggle.get_global_rect().end.y
+		and (not hud._inventory_dock.is_visible_in_tree() \
+			or hud._inventory_dock.get_global_rect().position.y >= hud._info_toggle.get_global_rect().end.y)
 	layout_all = layout_all and inventory_below_toggle
 	print("[infoui] viewport=%s window=%s logical_safe=%s safe_rect=%s collapsed_in_safe=%s" % [
 		viewport_size, DisplayServer.window_get_size(), safe, safe_rect, collapsed_in_safe])
@@ -11752,6 +11762,21 @@ func _info_ui_selftest(dir: String) -> void:
 	hud._set_info_expanded(true)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	# 模拟部分 Android 在字体/窗口稳定后把独立 Control 再次重置到左上角；HUD 应在低频校验中自愈。
+	if OS.get_environment("INFO_UI_LATE_LAYOUT_RESET") == "1":
+		hud._info_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		hud._info_panel.position = Vector2.ZERO
+		if hud._info_dock.get_parent() == hud:
+			hud._info_dock.set_anchors_preset(Control.PRESET_TOP_LEFT)
+			hud._info_dock.position = Vector2.ZERO
+		await get_tree().create_timer(0.35).timeout
+		await get_tree().process_frame
+		var late_layout_recovered := hud._info_panel.get_global_rect().position.x > viewport_size.x * 0.5 \
+			and hud._info_toggle.get_global_rect().position.x > viewport_size.x * 0.5
+		layout_all = layout_all and late_layout_recovered
+		print("[infoui] late_layout_recovered=%s panel=%s toggle=%s" % [
+			late_layout_recovered, hud._info_panel.get_global_rect(),
+			hud._info_toggle.get_global_rect()])
 	var expanded_in_safe: bool = bool(rect_in_safe.call(hud._info_panel.get_global_rect()))
 	layout_all = layout_all and expanded_in_safe
 	print("[infoui] expanded_in_safe=%s" % expanded_in_safe)

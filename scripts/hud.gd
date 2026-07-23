@@ -51,6 +51,7 @@ var _control_help: Label
 var _control_help_panel: PanelContainer
 var _control_help_toggle: CheckButton
 var _info_dock: VBoxContainer
+var _info_dock_reserve: Control
 
 # 英雄物品栏：宽屏在右下信息按钮下方内嵌 6×1；触屏/窄屏折叠为按钮，点开 3×2 浮层。
 var _inventory_dock: VBoxContainer
@@ -219,10 +220,13 @@ func set_touch_ui(v: bool) -> void:
 	if v and not _touch_built:
 		_build_touch_controls()
 		_apply_touch_fonts()
+	if v:
+		_ensure_touch_info_dock_overlay()
 	_refresh_touch_controls()
 	_position_fps()   # 触屏布局启用 → FPS 移到菜单键左侧
 	_update_info_panel_mode()
 	_layout_info_panel()
+	_layout_info_dock()
 	refresh_inventory()
 
 
@@ -469,6 +473,7 @@ func _apply_safe_area() -> void:
 		_bottom_margin.add_theme_constant_override("margin_right", int(round(10.0 + safe.z)))
 		_bottom_margin.add_theme_constant_override("margin_bottom", int(round(8.0 + safe.w)))
 	_layout_info_panel()
+	_layout_info_dock()
 	_layout_inventory()
 	_layout_hero_bar()
 	_layout_skill_rail()
@@ -984,6 +989,10 @@ func _process(delta: float) -> void:
 		_panel_accum = 0.0
 		if touch_ui and _current_safe_layout_signature() != _safe_layout_signature:
 			_apply_safe_area()
+		elif touch_ui:
+			# Android 厂商字体/窗口可能在首帧之后再次整理 Control；低频重申关键矩形，防止锚点回到左上。
+			_layout_info_panel()
+			_layout_info_dock()
 		_layout_hero_bar()   # 兜底重排（窗口缩放时；桌面端 _apply_safe_area 不跑）
 		if _fps_label != null:
 			var fps := int(round(Engine.get_frames_per_second()))
@@ -1459,10 +1468,53 @@ func _update_info_toggle() -> void:
 func _update_info_panel_mode() -> void:
 	if _info_dock != null:
 		_info_dock.custom_minimum_size.x = 132.0 if touch_ui else 330.0
+	if _info_dock_reserve != null:
+		_info_dock_reserve.custom_minimum_size.x = 132.0 if touch_ui else 330.0
 	if _info_log != null:
 		_info_log.add_theme_font_size_override("font_size", 16 if touch_ui else 13)
 	_update_control_help_visibility()
 	_update_info_toggle()
+	_layout_info_dock()
+
+
+## 触屏把最右信息区从底栏 HBox 中取出，单独钉在安全区内；原位置留等宽占位，命令卡不会钻到其下方。
+## 部分 Android 机型会在字体/窗口稳定后重排 HBox，直接把信息区挤出屏幕，独立浮层可避开该时序。
+func _ensure_touch_info_dock_overlay() -> void:
+	if not touch_ui or _info_dock == null or _info_dock.get_parent() == self:
+		return
+	var old_parent := _info_dock.get_parent() as Control
+	if old_parent == null:
+		return
+	var old_index := _info_dock.get_index()
+	_info_dock_reserve = Control.new()
+	_info_dock_reserve.name = "InfoDockReserve"
+	_info_dock_reserve.custom_minimum_size = Vector2(132, 0)
+	_info_dock_reserve.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	old_parent.add_child(_info_dock_reserve)
+	old_parent.move_child(_info_dock_reserve, old_index)
+	old_parent.remove_child(_info_dock)
+	add_child(_info_dock)
+	_info_dock.z_index = 20
+	_info_dock.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_layout_info_dock()
+
+
+## 移动端底栏右侧信息按钮/物品栏使用逻辑视口绝对坐标，不依赖厂商晚到的 Container 排版。
+func _layout_info_dock() -> void:
+	if _info_dock == null or not touch_ui or _info_dock.get_parent() != self:
+		return
+	var vp := get_viewport().get_visible_rect().size
+	var safe := _logical_safe_insets()
+	var width := 132.0
+	var panel_top := vp.y - safe.w - RTSCamera.PANEL_H
+	var dock_height := maxf(31.0, _info_dock.get_combined_minimum_size().y)
+	var max_height := maxf(31.0, RTSCamera.PANEL_H - 27.0)
+	dock_height = minf(dock_height, max_height)
+	var x := vp.x - safe.z - 10.0 - width
+	var y := panel_top + 18.0
+	_info_dock.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_info_dock.position = Vector2(x, y)
+	_info_dock.size = Vector2(width, dock_height)
 
 
 func _update_control_help_visibility() -> void:
@@ -1501,17 +1553,19 @@ func _layout_info_panel() -> void:
 	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0) + safe.w
 	var width := 430.0 if touch_ui else 420.0
 	var height := 276.0
-	_info_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	_info_panel.offset_right = -right_gap
-	_info_panel.offset_left = -right_gap - width
-	_info_panel.offset_bottom = -bottom_gap
-	_info_panel.offset_top = -bottom_gap - height
+	var vp := get_viewport().get_visible_rect().size
+	var panel_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - height),
+		Vector2(width, height))
+	# 绝对矩形比 BottomRight 锚点更能抵抗 Android 首帧之后的字体/窗口二次排版。
+	_info_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_info_panel.position = panel_rect.position
+	_info_panel.size = panel_rect.size
 	# 折叠态即时消息：靠右、贴着底栏上沿，最多三条向上滚动。
-	msg_box.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	msg_box.offset_right = -right_gap
-	msg_box.offset_left = -right_gap - width
-	msg_box.offset_bottom = -bottom_gap
-	msg_box.offset_top = -bottom_gap - 180.0
+	var toast_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - 180.0),
+		Vector2(width, 180.0))
+	msg_box.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	msg_box.position = toast_rect.position
+	msg_box.size = toast_rect.size
 	_layout_control_help_panel()
 	_layout_skill_rail()
 
