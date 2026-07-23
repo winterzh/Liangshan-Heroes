@@ -11689,6 +11689,8 @@ func _info_ui_selftest(dir: String) -> void:
 		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_hero and u.hp > 0.0)
 	if not test_heroes.is_empty():
 		_set_selection([test_heroes[0]])
+	if hud.touch_ui:
+		hud._refresh_skill_rail()
 	hud.show_message("官军探马杀到——头一拨人马已近寨门！", 8.0)
 	hud.show_message("科技研究正在等待生产队列排空", 8.0)
 	Settings.show_control_help = false
@@ -11712,6 +11714,13 @@ func _info_ui_selftest(dir: String) -> void:
 		if control != null and control.is_visible_in_tree():
 			collapsed_in_safe = collapsed_in_safe and rect_in_safe.call(control.get_global_rect())
 	var layout_all := collapsed_in_safe
+	if hud.touch_ui:
+		var skill_contract: Dictionary = hud._skill_rail_contract()
+		layout_all = layout_all and bool(skill_contract.get("all_slots", false)) \
+			and bool(skill_contract.get("passives_read_only", false))
+		print("[infoui] skill_rail_all_slots=%s passives_read_only=%s actual=%d expected=%d" % [
+			skill_contract.get("all_slots", false), skill_contract.get("passives_read_only", false),
+			int(skill_contract.get("actual", 0)), int(skill_contract.get("expected", 0))])
 	var inventory_below_toggle := hud._inventory_dock.get_parent() == hud._info_dock \
 		and hud._inventory_dock.get_global_rect().position.y >= hud._info_toggle.get_global_rect().end.y
 	layout_all = layout_all and inventory_below_toggle
