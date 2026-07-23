@@ -125,6 +125,8 @@ var _hero_bar: GridContainer
 var _hero_keys: Array = []
 var _skill_rail: VBoxContainer   # 右缘常驻技能轨（每英雄一行，免选直放）
 var _skill_rail_keys: Array = []
+const SKILL_RAIL_AVOID_GAP := 8.0
+var _touch_action_layout_signature := ""
 var _intro_btn: Button
 var _menu_btn: Button      # 触屏屏上「菜单」键（右上角）：等同安卓返回键，呼出暂停菜单
 var _eject_float: Button   # 桌面：选中有驻军建筑时浮在面板上方的「出击」键（命令卡挤不下时的可靠入口）
@@ -456,9 +458,6 @@ func _apply_safe_area() -> void:
 		if _menu_btn != null:
 			_menu_btn.offset_right = -12.0 - safe.z
 			_menu_btn.offset_top = 10.0 + safe.y
-		if _skill_rail != null:
-			_skill_rail.offset_right = -10.0 - safe.z
-			_skill_rail.offset_top = 70.0 + safe.y
 		if _res_bar != null:
 			_res_bar.offset_left = 10.0 + safe.x
 			_res_bar.offset_top = 8.0 + safe.y
@@ -472,6 +471,7 @@ func _apply_safe_area() -> void:
 	_layout_info_panel()
 	_layout_inventory()
 	_layout_hero_bar()
+	_layout_skill_rail()
 	_position_fps()   # 安全区变化(横屏/刘海) → FPS 跟随菜单键
 	_safe_layout_signature = _current_safe_layout_signature()
 
@@ -502,6 +502,7 @@ func _mk_action_btn(text: String, col: Color, cb: Callable) -> Button:
 func _refresh_touch_controls() -> void:
 	if not touch_ui or _touch_actions == null or battle == null:
 		return
+	var actions_were_visible := _touch_actions.visible
 	var sel: Array = battle.selection
 	var has_mover := false
 	for u in sel:
@@ -514,6 +515,8 @@ func _refresh_touch_controls() -> void:
 	# 驻军建筑被选中时也亮出操作栏（让「出击」可点）
 	var garrisoned_bld: bool = au != null and au.is_building and not au.passengers.is_empty()
 	_touch_actions.visible = has_mover or battle.is_armed() or garrisoned_bld
+	if actions_were_visible != _touch_actions.visible:
+		_layout_skill_rail()
 	_touch_groups.visible = true
 	if _act_amove != null:
 		_act_amove.visible = not placing
@@ -550,6 +553,13 @@ func _refresh_touch_controls() -> void:
 				all_on = false
 				break
 		_act_allauto.text = "🚫取消托管军" if all_on else "🪄托管军"
+	var action_layout_signature := "%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+		_touch_actions.visible, _act_amove.visible, _act_stop.visible, _act_stance.visible,
+		_act_delete.visible, _act_cancel.visible, _act_eject.visible, _act_auto.visible,
+		_act_allauto.visible]
+	if action_layout_signature != _touch_action_layout_signature:
+		_touch_action_layout_signature = action_layout_signature
+		call_deferred("_layout_skill_rail")
 
 
 ## 托管「当前选中的英雄」：选 1 个=单托管；框选/编队多个=整队托管。（PC 热键 T，移动端「托管」按钮）
@@ -650,6 +660,66 @@ func _refresh_skill_rail() -> void:
 			_skill_rail.add_child(row)
 		else:
 			row.queue_free()
+	# Container 的新最小尺寸会在本帧末稳定；先排一次，再延后一拍以六英雄真实高度复排。
+	_layout_skill_rail()
+	call_deferred("_layout_skill_rail")
+
+
+## 技能轨需要避让的右侧浮层。只有实际可见的控件才参与，避免三英雄等常规场景无故左移。
+func _skill_rail_visible_blockers() -> Array:
+	var out: Array = []
+	var candidates := [
+		{"name": "info_panel", "control": _info_panel},
+		{"name": "toasts", "control": msg_box},
+		{"name": "touch_actions", "control": _touch_actions},
+		{"name": "inventory_popup", "control": _inventory_popup},
+	]
+	for entry in candidates:
+		var control = entry["control"]
+		if control != null and is_instance_valid(control) and control.is_visible_in_tree():
+			out.append(entry)
+	return out
+
+
+## 右上技能轨动态避让：默认贴右；英雄较多且纵向碰到信息/消息/操作区时整体向左。
+## 不缩小按钮，保证手机和平板上的点按面积与被动技能可读性。
+func _layout_skill_rail() -> void:
+	if not touch_ui or _skill_rail == null or not is_instance_valid(_skill_rail):
+		return
+	var vp := get_viewport().get_visible_rect().size
+	var safe := _logical_safe_insets()
+	var rail_size := _skill_rail.get_combined_minimum_size()
+	rail_size.x = maxf(rail_size.x, _skill_rail.size.x)
+	rail_size.y = maxf(rail_size.y, _skill_rail.size.y)
+	var top := 70.0 + safe.y
+	var rail_right := vp.x - safe.z - 10.0
+	_skill_rail.offset_top = top
+	if rail_size.x <= 0.0 or rail_size.y <= 0.0:
+		_skill_rail.offset_right = rail_right - vp.x
+		return
+	var rail_rect := Rect2(Vector2(rail_right - rail_size.x, top), rail_size)
+	for entry in _skill_rail_visible_blockers():
+		var blocker := (entry["control"] as Control).get_global_rect()
+		if rail_rect.grow(SKILL_RAIL_AVOID_GAP).intersects(blocker):
+			rail_right = minf(rail_right, blocker.position.x - SKILL_RAIL_AVOID_GAP)
+			rail_rect.position.x = rail_right - rail_size.x
+	# 极窄画布宁可保留安全区内的点按区域；回归契约会报告仍无法消除的交叉。
+	var min_right := safe.x + rail_size.x + SKILL_RAIL_AVOID_GAP
+	rail_right = maxf(min_right, rail_right)
+	_skill_rail.offset_right = rail_right - vp.x
+
+
+## 视觉回归契约：技能轨必须在安全区内，且与当前所有右侧浮层保持避让间距。
+func _skill_rail_avoidance_contract() -> Dictionary:
+	if _skill_rail == null or not _skill_rail.is_visible_in_tree():
+		return {"avoids": true, "collisions": PackedStringArray(), "rect": Rect2()}
+	var rail_rect := _skill_rail.get_global_rect()
+	var collisions := PackedStringArray()
+	for entry in _skill_rail_visible_blockers():
+		var blocker := (entry["control"] as Control).get_global_rect()
+		if rail_rect.grow(SKILL_RAIL_AVOID_GAP - 0.5).intersects(blocker):
+			collisions.append(String(entry["name"]))
+	return {"avoids": collisions.is_empty(), "collisions": collisions, "rect": rail_rect}
 
 
 ## 视觉回归钩子：确认移动端技能轨没有再漏掉纯被动，且纯被动都处于只读态。
@@ -1220,6 +1290,7 @@ func _layout_inventory() -> void:
 	_inventory_popup.visible = has_hero and narrow and _inventory_popup_open
 	_inventory_toggle.text = ("▾ 收起" if _inventory_popup_open else "▦ 物品")
 	if not _inventory_popup.visible:
+		_layout_skill_rail()
 		return
 	_inventory_popup.reset_size()
 	var vp := get_viewport().get_visible_rect().size
@@ -1236,6 +1307,7 @@ func _layout_inventory() -> void:
 		y = maxf(8.0 + safe.y, y)
 	_inventory_popup.position = Vector2(x, y)
 	_inventory_popup.size = popup_size
+	_layout_skill_rail()
 
 
 func _item_tip_data(hero: Unit, slot: int) -> Dictionary:
@@ -1441,6 +1513,7 @@ func _layout_info_panel() -> void:
 	msg_box.offset_bottom = -bottom_gap
 	msg_box.offset_top = -bottom_gap - 180.0
 	_layout_control_help_panel()
+	_layout_skill_rail()
 
 
 func _append_info_message(text: String) -> void:
@@ -1500,6 +1573,7 @@ func _show_info_toast(text: String) -> void:
 	row.add_child(label)
 	msg_box.add_child(row)
 	msg_box.visible = true
+	_layout_skill_rail()
 	_arm_info_toast(row, true)
 
 
@@ -1530,12 +1604,14 @@ func _remove_info_toast(row: Control, kill_tween := true) -> void:
 		msg_box.remove_child(row)
 	row.queue_free()
 	msg_box.visible = msg_box.get_child_count() > 0 and not _info_expanded
+	_layout_skill_rail()
 
 
 func _clear_info_toasts() -> void:
 	for child in msg_box.get_children():
 		_remove_info_toast(child)
 	msg_box.visible = false
+	_layout_skill_rail()
 
 
 func _scroll_info_to_bottom() -> void:

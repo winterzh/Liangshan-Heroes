@@ -11675,7 +11675,7 @@ func _artshot(dir: String, center: Vector2i) -> void:
 
 
 ## 信息抽屉视觉自检（INFO_UI_TEST_DIR=/path）：拍折叠/展开/操作提示图；
-## 同时验证物品栏位于右下按钮下方，TOUCH_UI=1 时键盘操作提示始终隐藏。
+## INFO_UI_SIX_HEROES=1 时补齐六英雄，验证技能轨会避让信息、消息、物品和操作区。
 func _info_ui_selftest(dir: String) -> void:
 	if DisplayServer.get_name() == "headless":
 		print("[infoui] skipped: headless display has no viewport texture")
@@ -11684,6 +11684,19 @@ func _info_ui_selftest(dir: String) -> void:
 	var old_show_help := Settings.show_control_help
 	if hud._intro_root != null:
 		hud._intro_root.visible = false
+	if OS.get_environment("INFO_UI_SIX_HEROES") == "1":
+		# 各剧情关初始英雄不同；测试夹具先归一化，避免原英雄叠加成 7～8 行，偏离60关上限。
+		for u in units.duplicate():
+			if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_hero and u.hp > 0.0:
+				units.erase(u)
+				u.queue_free()
+		await get_tree().process_frame
+		var base := level.camera_start_cell()
+		for i in range(ECO_HERO_ORDER.size()):
+			var key: String = ECO_HERO_ORDER[i]
+			var cell := map.nearest_open(base + Vector2i(-3, i - 3))
+			spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))
+		print("[infoui] six_hero_fixture=%d" % liang_heroes().size())
 	# 选中一名己方英雄，让物品栏参与真实布局校验。
 	var test_heroes := units.filter(func(u) -> bool:
 		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_hero and u.hp > 0.0)
@@ -11716,11 +11729,16 @@ func _info_ui_selftest(dir: String) -> void:
 	var layout_all := collapsed_in_safe
 	if hud.touch_ui:
 		var skill_contract: Dictionary = hud._skill_rail_contract()
+		var avoidance_contract: Dictionary = hud._skill_rail_avoidance_contract()
 		layout_all = layout_all and bool(skill_contract.get("all_slots", false)) \
-			and bool(skill_contract.get("passives_read_only", false))
+			and bool(skill_contract.get("passives_read_only", false)) \
+			and bool(avoidance_contract.get("avoids", false))
 		print("[infoui] skill_rail_all_slots=%s passives_read_only=%s actual=%d expected=%d" % [
 			skill_contract.get("all_slots", false), skill_contract.get("passives_read_only", false),
 			int(skill_contract.get("actual", 0)), int(skill_contract.get("expected", 0))])
+		print("[infoui] skill_rail_avoids_collapsed=%s collisions=%s rect=%s" % [
+			avoidance_contract.get("avoids", false), avoidance_contract.get("collisions", []),
+			avoidance_contract.get("rect", Rect2())])
 	var inventory_below_toggle := hud._inventory_dock.get_parent() == hud._info_dock \
 		and hud._inventory_dock.get_global_rect().position.y >= hud._info_toggle.get_global_rect().end.y
 	layout_all = layout_all and inventory_below_toggle
@@ -11737,6 +11755,12 @@ func _info_ui_selftest(dir: String) -> void:
 	var expanded_in_safe: bool = bool(rect_in_safe.call(hud._info_panel.get_global_rect()))
 	layout_all = layout_all and expanded_in_safe
 	print("[infoui] expanded_in_safe=%s" % expanded_in_safe)
+	if hud.touch_ui:
+		var expanded_avoidance: Dictionary = hud._skill_rail_avoidance_contract()
+		layout_all = layout_all and bool(expanded_avoidance.get("avoids", false))
+		print("[infoui] skill_rail_avoids_expanded=%s collisions=%s rect=%s" % [
+			expanded_avoidance.get("avoids", false), expanded_avoidance.get("collisions", []),
+			expanded_avoidance.get("rect", Rect2())])
 	RenderingServer.force_draw(false)
 	get_viewport().get_texture().get_image().save_png("%s/info_expanded.png" % dir)
 	# 在抽屉中打开操作提示，先验证展开态不重叠，再验证折叠后位于即时消息上方。
@@ -11779,10 +11803,15 @@ func _info_ui_selftest(dir: String) -> void:
 			action_rect = hud._touch_actions.get_global_rect()
 			avoids_touch_actions = not popup_rect.intersects(action_rect)
 		var popup_in_safe: bool = bool(rect_in_safe.call(popup_rect))
-		layout_all = layout_all and avoids_touch_actions and popup_in_safe
+		var popup_avoidance: Dictionary = hud._skill_rail_avoidance_contract()
+		layout_all = layout_all and avoids_touch_actions and popup_in_safe \
+			and bool(popup_avoidance.get("avoids", false))
 		print("[infoui] inventory_avoids_touch_actions=%s popup=%s actions=%s" % [
 			avoids_touch_actions, popup_rect, action_rect])
 		print("[infoui] inventory_popup_in_safe=%s" % popup_in_safe)
+		print("[infoui] skill_rail_avoids_inventory=%s collisions=%s rect=%s" % [
+			popup_avoidance.get("avoids", false), popup_avoidance.get("collisions", []),
+			popup_avoidance.get("rect", Rect2())])
 		RenderingServer.force_draw(false)
 		get_viewport().get_texture().get_image().save_png("%s/info_inventory_popup.png" % dir)
 		hud._inventory_popup_open = false
