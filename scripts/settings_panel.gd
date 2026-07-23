@@ -306,10 +306,13 @@ func _keybind_grid() -> Control:
 		grid.add_child(label)
 		var action := String(spec[1])
 		var button := Button.new()
-		button.text = Settings.key_label(action)
+		button.text = _key_label_compat(action)
 		button.custom_minimum_size = Vector2(86, 34)
-		button.tooltip_text = "点击后按下新键；冲突键会自动交换"
-		button.pressed.connect(_begin_key_capture.bind(action, button))
+		var legacy_item_key := action.begins_with("item_") and not Settings.has_method("item_key_labels")
+		button.disabled = legacy_item_key
+		button.tooltip_text = "旧安卓基础包固定使用 Z/X/C/V/B/N" if legacy_item_key else "点击后按下新键；冲突键会自动交换"
+		if not legacy_item_key:
+			button.pressed.connect(_begin_key_capture.bind(action, button))
 		grid.add_child(button)
 		_key_buttons[action] = button
 	return grid
@@ -325,7 +328,7 @@ func _begin_key_capture(action: String, button: Button) -> void:
 
 func _finish_key_capture() -> void:
 	if _capture_action != "" and is_instance_valid(_capture_button):
-		_capture_button.text = Settings.key_label(_capture_action)
+		_capture_button.text = _key_label_compat(_capture_action)
 	_capture_action = ""
 	_capture_button = null
 
@@ -334,14 +337,14 @@ func _refresh_key_buttons() -> void:
 	for action in _key_buttons:
 		var button: Button = _key_buttons[action]
 		if is_instance_valid(button):
-			button.text = Settings.key_label(action)
+			button.text = _key_label_compat(action)
 	if is_instance_valid(_key_overview):
 		_key_overview.text = _keybind_text()
 
 
 func _keybind_text() -> String:
 	var command_keys := Settings.command_key_labels()
-	var item_keys := Settings.item_key_labels()
+	var item_keys := _item_key_labels_compat()
 	var lines := [
 		"编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入",
 		"%s 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头" % Settings.key_label("select_army"),
@@ -353,3 +356,19 @@ func _keybind_text() -> String:
 		"镜头：方向键平移　+ / − 或滚轮 缩放　中键拖拽",
 	]
 	return "\n".join(lines)
+
+
+func _item_key_labels_compat() -> Array:
+	if Settings.has_method("item_key_labels"):
+		var labels = Settings.call("item_key_labels")
+		if labels is Array and labels.size() >= 6:
+			return labels
+	return ["Z", "X", "C", "V", "B", "N"]
+
+
+func _key_label_compat(action: String) -> String:
+	if action.begins_with("item_") and not Settings.has_method("item_key_labels"):
+		var slot := action.trim_prefix("item_").to_int()
+		var labels := _item_key_labels_compat()
+		return String(labels[slot]) if slot >= 0 and slot < labels.size() else ""
+	return Settings.key_label(action)

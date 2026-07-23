@@ -5099,6 +5099,15 @@ func _separation_pass(_delta: float) -> void:
 
 ## ---------- 选取与指挥 ----------
 
+## 旧安卓 APK 的 Settings Autoload 在内容补丁挂载前已经实例化，没有 1.6 新增的物品键位接口。
+## 热更新继续沿用固定默认键，避免按键事件调用不存在的方法。
+func _item_slot_for_event_compat(event: InputEventKey) -> int:
+	if Settings.has_method("item_slot_for_event"):
+		return int(Settings.call("item_slot_for_event", event))
+	var legacy_keys := [KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N]
+	return legacy_keys.find(event.keycode)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	# 开战(FIGHT)之前一律不接收对单位的操作：旁白/布阵/结算阶段不能选取或指挥单位。
 	# （镜头平移缩放在 RTSCamera 里另行处理，「开战」按钮是 HUD 控件，二者不受影响。）
@@ -5270,6 +5279,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_issue_order(p, event.shift_pressed)
 	elif event is InputEventKey and event.pressed and not event.echo:
 		var kc: int = event.keycode
+		var item_slot := _item_slot_for_event_compat(event)
 		var num := -1
 		if kc >= KEY_0 and kc <= KEY_9:
 			num = kc - KEY_0
@@ -5306,8 +5316,8 @@ func _unhandled_input(event: InputEvent) -> void:
 					hud.toggle_auto_selected()    # T：托管选中英雄（单个 / 编队）
 		elif Settings.key_matches(event, "demolish") or (Settings.key_for("demolish") == KEY_DELETE and kc == KEY_BACKSPACE):
 			delete_selected(event.shift_pressed)   # 拆除选中己方单位/建筑（Mac 上 Delete 即 Backspace；Shift 跳过确认）
-		elif Settings.item_slot_for_event(event) >= 0:
-			use_item_hotkey(Settings.item_slot_for_event(event))
+		elif item_slot >= 0:
+			use_item_hotkey(item_slot)
 		elif Settings.key_matches(event, "command_0"):
 			_command_hotkey(0)
 		elif Settings.key_matches(event, "command_1"):
@@ -11681,7 +11691,7 @@ func _info_ui_selftest(dir: String) -> void:
 		print("[infoui] skipped: headless display has no viewport texture")
 		return
 	DirAccess.make_dir_recursive_absolute(dir)
-	var old_show_help := Settings.show_control_help
+	var old_show_help := hud._show_control_help_enabled()
 	if hud._intro_root != null:
 		hud._intro_root.visible = false
 	if OS.get_environment("INFO_UI_SIX_HEROES") == "1":
@@ -11708,7 +11718,7 @@ func _info_ui_selftest(dir: String) -> void:
 		hud._refresh_skill_rail()
 	hud.show_message("官军探马杀到——头一拨人马已近寨门！", 8.0)
 	hud.show_message("科技研究正在等待生产队列排空", 8.0)
-	Settings.show_control_help = false
+	hud._set_show_control_help_enabled(false)
 	hud._update_control_help_visibility()
 	hud._set_info_expanded(false)
 	await get_tree().process_frame
@@ -11789,7 +11799,7 @@ func _info_ui_selftest(dir: String) -> void:
 	RenderingServer.force_draw(false)
 	get_viewport().get_texture().get_image().save_png("%s/info_expanded.png" % dir)
 	# 在抽屉中打开操作提示，先验证展开态不重叠，再验证折叠后位于即时消息上方。
-	Settings.show_control_help = true
+	hud._set_show_control_help_enabled(true)
 	hud._update_control_help_visibility()
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -11852,7 +11862,7 @@ func _info_ui_selftest(dir: String) -> void:
 		if String(child.get_meta("info_text", "")).begins_with("__toast_probe_"):
 			probe_alive = true
 			break
-	Settings.show_control_help = old_show_help
+	hud._set_show_control_help_enabled(old_show_help)
 	hud._update_control_help_visibility()
 	layout_all = layout_all and cap3 and not probe_alive
 	print("[infoui] toast_cap3=%s expires_3s=%s" % [cap3, not probe_alive])

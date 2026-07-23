@@ -72,6 +72,7 @@ var _info_log: Label
 var _info_expanded := false
 var _info_unread := 0
 var _message_log: Array = []
+var _legacy_show_control_help := false
 
 # 悬浮技能说明（鼠标移到命令卡/技能图标上即时浮现一张说明卡）
 var _tip_panel: PanelContainer
@@ -1358,7 +1359,7 @@ func _item_tip_data(hero: Unit, slot: int) -> Dictionary:
 			var passive_desc := String(passive_v.get("description", passive_v.get("desc", "")))
 			if passive_desc != "":
 				lines.append("被动：" + passive_desc)
-	var hotkeys := Settings.item_key_labels()
+	var hotkeys := _item_key_labels_compat()
 	var foot := "只读查看" if hero.faction != Unit.FACTION_LIANG else \
 		("短按使用 · 长按说明/拖动" if touch_ui else "%s 使用 · 拖动换位/转交" % hotkeys[slot])
 	return {"title": String(idef.get("name", item.get("id", "物品"))),
@@ -1413,10 +1414,9 @@ func _build_info_panel() -> void:
 	_control_help_toggle.focus_mode = Control.FOCUS_NONE
 	_control_help_toggle.add_theme_font_size_override("font_size", 14)
 	_control_help_toggle.add_theme_color_override("font_color", Color("d8c38d"))
-	_control_help_toggle.button_pressed = Settings.show_control_help
+	_control_help_toggle.button_pressed = _show_control_help_enabled()
 	_control_help_toggle.toggled.connect(func(on: bool) -> void:
-		Settings.show_control_help = on
-		Settings.save()
+		_set_show_control_help_enabled(on)
 		_update_control_help_visibility())
 	root.add_child(_control_help_toggle)
 
@@ -1518,11 +1518,12 @@ func _layout_info_dock() -> void:
 
 
 func _update_control_help_visibility() -> void:
+	var show_help := _show_control_help_enabled()
 	if _control_help_toggle != null:
 		_control_help_toggle.visible = not touch_ui
-		_control_help_toggle.set_pressed_no_signal(Settings.show_control_help)
+		_control_help_toggle.set_pressed_no_signal(show_help)
 	if _control_help_panel != null:
-		_control_help_panel.visible = not touch_ui and Settings.show_control_help
+		_control_help_panel.visible = not touch_ui and show_help
 	_layout_control_help_panel()
 
 
@@ -1691,12 +1692,45 @@ func _refresh_info_log() -> void:
 
 func _key_help_text() -> String:
 	var ck := Settings.command_key_labels()
-	var ik := Settings.item_key_labels()
+	var ik := _item_key_labels_compat()
 	return "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s物品\n%s选闲置 Ctrl/Shift+数字编队\n%s回基地 Esc菜单" % [
 		Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"),
 		Settings.key_label("patrol"), Settings.key_label("stance"), Settings.key_label("auto"),
 		Settings.key_label("demolish"), "/".join(ck), Settings.key_label("subgroup"),
 		"/".join(ik), Settings.key_label("idle_worker"), Settings.key_label("alert")]
+
+
+## 安卓内容补丁在 APK 启动后才挂载；旧 APK 的 Settings Autoload 已经实例化，不能假定
+## 它拥有后来新增的物品键位和操作提示字段。所有新 HUD 接口都从这里做能力检测，
+## 避免 _build_bottom_panel/_build_info_panel 中途报错后留下左上角的半成品面板。
+func _item_key_labels_compat() -> Array:
+	if Settings.has_method("item_key_labels"):
+		var labels = Settings.call("item_key_labels")
+		if labels is Array and labels.size() >= 6:
+			return labels
+	return ["Z", "X", "C", "V", "B", "N"]
+
+
+func _settings_has_property(property_name: StringName) -> bool:
+	for property in Settings.get_property_list():
+		if StringName(property.get("name", "")) == property_name:
+			return true
+	return false
+
+
+func _show_control_help_enabled() -> bool:
+	if _settings_has_property(&"show_control_help"):
+		return bool(Settings.get("show_control_help"))
+	return _legacy_show_control_help
+
+
+func _set_show_control_help_enabled(on: bool) -> void:
+	if _settings_has_property(&"show_control_help"):
+		Settings.set("show_control_help", on)
+		Settings.save()
+	else:
+		# 旧 APK 没有可持久化字段；本次运行仍保持开关行为，移动端始终会隐藏键盘提示。
+		_legacy_show_control_help = on
 
 
 func _on_keybinds_changed() -> void:
@@ -3475,7 +3509,7 @@ class InventorySlotButton extends Control:
 		draw_rect(rect, Color(0.055, 0.05, 0.04, 0.98))
 		draw_rect(rect.grow(-1.0), Color(0.40, 0.33, 0.21, 0.92), false, 1.5)
 		var f := ThemeDB.fallback_font
-		var hotkeys := Settings.item_key_labels()
+		var hotkeys: Array = hud._item_key_labels_compat() if hud != null else ["Z", "X", "C", "V", "B", "N"]
 		var item: Dictionary = hero.inventory.slot_item(slot) if _valid_inventory() else {}
 		if item.is_empty():
 			if hud != null and not hud.touch_ui:
