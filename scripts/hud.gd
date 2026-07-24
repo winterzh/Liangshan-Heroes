@@ -1215,6 +1215,7 @@ func _build_bottom_panel() -> void:
 	_control_help.add_theme_color_override("font_outline_color", Color(0.025, 0.025, 0.02, 0.98))
 	_control_help.add_theme_constant_override("outline_size", 4)
 	_control_help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_control_help.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_control_help.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	_control_help.custom_minimum_size = Vector2(388, 104)
 	_control_help.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1524,25 +1525,27 @@ func _update_control_help_visibility() -> void:
 		_control_help_toggle.set_pressed_no_signal(show_help)
 	if _control_help_panel != null:
 		_control_help_panel.visible = not touch_ui and show_help
-	_layout_control_help_panel()
+	# 操作提示是右下方最靠底的一层；开关变化时同步让消息/信息抽屉向上避让。
+	if _info_panel != null:
+		_layout_info_panel()
+	else:
+		_layout_control_help_panel()
 
 
 func _layout_control_help_panel() -> void:
 	if _control_help_panel == null:
 		return
 	var safe := _logical_safe_insets()
-	var right_gap := 12.0 + safe.z
+	var right_gap := 8.0 + safe.z
 	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0) + safe.w
-	# 折叠时越过最多三条即时消息；展开时越过整个信息抽屉。
-	var lift := 284.0 if _info_expanded else 188.0
 	var width := 420.0
-	# 文字会随按键名称换行，必须用实际最小高度，否则会向下撑开并压住第一条即时消息。
+	# 固定贴右、贴近底栏；消息和展开信息由 _layout_info_panel() 向上避让它。
 	var height := maxf(118.0, _control_help_panel.get_combined_minimum_size().y)
 	_control_help_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 	_control_help_panel.offset_right = -right_gap
 	_control_help_panel.offset_left = -right_gap - width
-	_control_help_panel.offset_bottom = -bottom_gap - lift
-	_control_help_panel.offset_top = -bottom_gap - lift - height
+	_control_help_panel.offset_bottom = -bottom_gap
+	_control_help_panel.offset_top = -bottom_gap - height
 
 
 func _layout_info_panel() -> void:
@@ -1555,14 +1558,17 @@ func _layout_info_panel() -> void:
 	var width := 430.0 if touch_ui else 420.0
 	var height := 276.0
 	var vp := get_viewport().get_visible_rect().size
-	var panel_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - height),
+	var help_lift := 0.0
+	if _control_help_panel != null and _control_help_panel.visible:
+		help_lift = maxf(118.0, _control_help_panel.get_combined_minimum_size().y) + 8.0
+	var panel_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - help_lift - height),
 		Vector2(width, height))
 	# 绝对矩形比 BottomRight 锚点更能抵抗 Android 首帧之后的字体/窗口二次排版。
 	_info_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_info_panel.position = panel_rect.position
 	_info_panel.size = panel_rect.size
-	# 折叠态即时消息：靠右、贴着底栏上沿，最多三条向上滚动。
-	var toast_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - 180.0),
+	# 折叠态即时消息：靠右，操作提示开启时位于其上方，最多三条向上滚动。
+	var toast_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - help_lift - 180.0),
 		Vector2(width, 180.0))
 	msg_box.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	msg_box.position = toast_rect.position

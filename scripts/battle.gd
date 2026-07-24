@@ -11805,11 +11805,11 @@ func _info_ui_selftest(dir: String) -> void:
 	await get_tree().process_frame
 	var expanded_help_rect := hud._control_help_panel.get_global_rect()
 	var expanded_panel_rect := hud._info_panel.get_global_rect()
-	var help_above_drawer := not hud._control_help_panel.visible \
-		or expanded_help_rect.end.y <= expanded_panel_rect.position.y + 1.0
-	layout_all = layout_all and help_above_drawer
-	print("[infoui] help_above_drawer=%s help=%s drawer=%s" % [
-		help_above_drawer, expanded_help_rect, expanded_panel_rect])
+	var drawer_above_help := not hud._control_help_panel.visible \
+		or expanded_panel_rect.end.y <= expanded_help_rect.position.y + 1.0
+	layout_all = layout_all and drawer_above_help
+	print("[infoui] drawer_above_help=%s help=%s drawer=%s" % [
+		drawer_above_help, expanded_help_rect, expanded_panel_rect])
 	RenderingServer.force_draw(false)
 	get_viewport().get_texture().get_image().save_png("%s/info_expanded_help_on.png" % dir)
 	hud._set_info_expanded(false)
@@ -11817,12 +11817,13 @@ func _info_ui_selftest(dir: String) -> void:
 	await get_tree().process_frame
 	var help_rect := hud._control_help_panel.get_global_rect()
 	var toast_rect := hud.msg_box.get_global_rect()
-	var help_above_toasts := help_rect.end.y <= toast_rect.position.y + 1.0
+	var toasts_above_help := not hud._control_help_panel.visible \
+		or toast_rect.end.y <= help_rect.position.y + 1.0
 	var help_contract := hud._control_help_panel.visible == not hud.touch_ui \
 		and hud._control_help_toggle.visible == not hud.touch_ui
-	layout_all = layout_all and help_above_toasts and help_contract
-	print("[infoui] help_contract=%s help_above_toasts=%s help=%s toasts=%s" % [
-		help_contract, help_above_toasts, help_rect, toast_rect])
+	layout_all = layout_all and toasts_above_help and help_contract
+	print("[infoui] help_contract=%s toasts_above_help=%s help=%s toasts=%s" % [
+		help_contract, toasts_above_help, help_rect, toast_rect])
 	RenderingServer.force_draw(false)
 	get_viewport().get_texture().get_image().save_png("%s/info_help_on.png" % dir)
 	# 触屏/窄屏还要单独拍一张 3×2 物品弹窗；宽屏的 6×1 已在其他图中常驻显示。
