@@ -171,12 +171,12 @@ var _attack_miss_t := 0.0
 # 通用减速光环：每帧由 _aura_pass 写入；<1 = 受敌方减速光环影响。slow_aura_r>0 时自身画光环环
 var aura_slow := 1.0
 var slow_aura_r := 0.0
-# ===== DOTA 式新原语状态（护盾/沉默/攻速/暴击/闪避/攻击携带）=====
+# ===== 技能新原语状态（护盾/沉默/攻速/暴击/闪避/攻击携带）=====
 var _shield := 0.0          # 护盾吸收池：take_damage 先扣盾再扣血
 var _shield_t := 0.0        # 护盾剩余时长（到点清盾）
 var _silence_t := 0.0       # 沉默：>0 时不可主动施法（被动不受影响）
-var _root_t := 0.0          # 缠绕：>0 时不能移动，但可以攻击/施法（DOTA root）
-var _disarm_t := 0.0        # 缴械：>0 时不能普攻，但可以移动/施法（DOTA disarm）
+var _root_t := 0.0          # 缠绕：>0 时不能移动，但可以攻击/施法（root）
+var _disarm_t := 0.0        # 缴械：>0 时不能普攻，但可以移动/施法（disarm）
 var _taunt_t := 0.0         # 嘲讽：>0 时被迫攻击 _taunt_src（无视原目标/玩家指令/AI），优先级低于眩晕
 var _taunt_src: Unit = null
 var _channel_t := 0.0       # 引导施法：>0 时定身、不索敌/不普攻（battle._channel_pass 逐 tick 结算）；被眩晕/沉默打断
@@ -764,14 +764,14 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 		damage_ability_id = from.stat_ability_id
 	var hp_before := hp
 	var shield_absorbed := 0.0
-	# DOTA 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
+	# 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
 	if _dmg_amp > 0.0 and d > 0.0:
 		d *= 1.0 + _dmg_amp
 	var before_reduction := maxf(0.0, d)
 	# 护阵减伤作用于普攻和技能等一切伤害；先结算易伤、再按最高减伤折算，随后才由护盾吸收。
 	if not ignore_reduction and _damage_reduction > 0.0 and d > 0.0:
 		d *= 1.0 - clampf(_damage_reduction, 0.0, 0.95)
-	# DOTA 护盾：先扣吸收盾，剩余才扣血（盾扣空即失效）
+	# 护盾：先扣吸收盾，剩余才扣血（盾扣空即失效）
 	if _shield > 0.0 and d > 0.0:
 		var _ab: float = minf(_shield, d)
 		shield_absorbed = _ab
@@ -1061,7 +1061,7 @@ func _phys_body(delta: float) -> void:
 		_attack_miss_t -= delta
 		if _attack_miss_t <= 0.0:
 			_attack_miss_chance = 0.0
-	# DOTA 原语计时：护盾 / 沉默 / 临时攻速
+	# 技能原语计时：护盾 / 沉默 / 临时攻速
 	if _shield_t > 0.0:
 		_shield_t -= delta
 		if _shield_t <= 0.0:
@@ -2113,7 +2113,7 @@ func _init_ability_slots(def: Dictionary) -> void:
 	ability_slots.clear()
 	_hero_leveled = battle != null and battle.economy
 	# 关卡指定的英雄初始技能等级：>0 且有 4 技能组 ⇒ 一出场满配该等级、无需加点。
-	# 战役默认 2(换上对应 DOTA 英雄的 4 技能)、竞技场 3(满级随便放)、1v1/驻守战 0(走原经验加点)。
+	# 战役默认 2(换上对应英雄的 4 技能)、竞技场 3(满级随便放)、1v1/驻守战 0(走原经验加点)。
 	var start_rank := 2
 	if battle != null and battle.level != null and battle.level.has_method("hero_start_rank"):
 		start_rank = int(battle.level.hero_start_rank())
@@ -2369,7 +2369,7 @@ func _recompute_hero_stats() -> void:
 			add_hp += float(eff.get("hp_add", 0.0)) * int(s["rank"])
 			add_range += float(eff.get("range_add", 0.0)) * int(s["rank"])
 			add_cav += float(eff.get("bonus_cav", 0.0)) * int(s["rank"])
-			# DOTA 被动衍生：攻速 / 暴击 / 闪避 / 攻击携带眩晕·减速·纯伤
+			# 被动衍生：攻速 / 暴击 / 闪避 / 攻击携带眩晕·减速·纯伤
 			atkspeed_mult += float(eff.get("atkspeed_add", 0.0)) * int(s["rank"])
 			crit_chance_bonus += float(eff.get("crit_chance", 0.0)) * int(s["rank"])
 			crit_mult_bonus += float(eff.get("crit_mult", 0.0)) * int(s["rank"])
@@ -2751,7 +2751,7 @@ func apply_stun(dur: float) -> void:
 		_queue_animated_redraw()
 
 
-## DOTA 护盾：给一层吸收盾（取较大者，dur 秒后清盾）。
+## 护盾：给一层吸收盾（取较大者，dur 秒后清盾）。
 func apply_shield(amount: float, dur: float) -> void:
 	_shield = maxf(_shield, amount)
 	_shield_t = maxf(_shield_t, dur)
@@ -2796,7 +2796,7 @@ func _refresh_damage_reduction() -> void:
 		_damage_reduction_t = maxf(_damage_reduction_t, float(state["t"]))
 
 
-## DOTA 沉默：dur 秒内不可主动施法（被动不受影响）。
+## 沉默：dur 秒内不可主动施法（被动不受影响）。
 func apply_silence(dur: float) -> void:
 	var entering := _silence_t <= 0.0
 	_silence_t = maxf(_silence_t, dur)
@@ -2808,7 +2808,7 @@ func apply_silence(dur: float) -> void:
 		_queue_animated_redraw()
 
 
-## DOTA 缠绕(root)：dur 秒内不能移动，但可以攻击/施法——与眩晕互补的软控。
+## 缠绕(root)：dur 秒内不能移动，但可以攻击/施法——与眩晕互补的软控。
 func apply_root(dur: float) -> void:
 	var entering := _root_t <= 0.0
 	_root_t = maxf(_root_t, dur)
@@ -2818,7 +2818,7 @@ func apply_root(dur: float) -> void:
 		_queue_animated_redraw()
 
 
-## DOTA 缴械(disarm)：dur 秒内不能普攻，但可以移动/施法——克制物理核心的软控。
+## 缴械(disarm)：dur 秒内不能普攻，但可以移动/施法——克制物理核心的软控。
 func apply_disarm(dur: float) -> void:
 	var entering := _disarm_t <= 0.0
 	_disarm_t = maxf(_disarm_t, dur)
@@ -2843,7 +2843,7 @@ func _break_channel() -> void:
 		queue_redraw()
 
 
-## DOTA 主动隐身：dur 秒内不可被索敌/指向（己方半透可见）；破隐首击带 strike_bonus 纯伤。
+## 主动隐身：dur 秒内不可被索敌/指向（己方半透可见）；破隐首击带 strike_bonus 纯伤。
 func apply_invis(dur: float, strike_bonus: float) -> void:
 	_invis_t = maxf(_invis_t, dur)
 	_invis_strike_bonus = strike_bonus
@@ -2859,7 +2859,7 @@ func _break_invis() -> void:
 		queue_redraw()
 
 
-## DOTA 变身(transform)：dur 秒内换到临时形态——按 form 表改攻/攻速/移速/体型/染色（到期还原）。
+## 变身(transform)：dur 秒内换到临时形态——按 form 表改攻/攻速/移速/体型/染色（到期还原）。
 ## 无贴图版：靠染色(modulate)+体型(radius)+数值区分形态；atk/hp/射程修正在 _recompute_hero_stats 末尾叠加。
 func apply_form(form: Dictionary, dur: float) -> void:
 	if _form_t <= 0.0:   # 仅首次进入变身时备份原值（重复施放不叠备份）
@@ -2897,7 +2897,7 @@ func _end_form() -> void:
 	queue_redraw()
 
 
-## DOTA 变形术(hex)：dur 秒内沉默+缴械+大幅减速（组合软控·可反击），并显示"小猪替身"视觉。
+## 变形术(hex)：dur 秒内沉默+缴械+大幅减速（组合软控·可反击），并显示"小猪替身"视觉。
 func apply_hex(dur: float) -> void:
 	_hex_t = maxf(_hex_t, dur)
 	apply_silence(dur)
@@ -2906,7 +2906,7 @@ func apply_hex(dur: float) -> void:
 	queue_redraw()
 
 
-## DOTA 驱散/净化：hostile=true 清自身增益（樊瑞驱敌方 buff）；false 清自身减益（安道全神医解控）。
+## 驱散/净化：hostile=true 清自身增益（樊瑞驱敌方 buff）；false 清自身减益（安道全神医解控）。
 ## buff_atk/aura_slow 由 _aura_pass 每帧重算，清了会立即回填，故不在此处理。
 func dispel(hostile: bool) -> void:
 	if hostile:
@@ -2949,7 +2949,7 @@ func cleanse_command_control() -> void:
 	queue_redraw()
 
 
-## DOTA 嘲讽(taunt)：dur 秒内被迫攻击 src（无视原目标/玩家指令/AI 大脑）。优先级低于眩晕。
+## 嘲讽(taunt)：dur 秒内被迫攻击 src（无视原目标/玩家指令/AI 大脑）。优先级低于眩晕。
 func apply_taunt(src: Unit, dur: float) -> void:
 	_taunt_t = maxf(_taunt_t, dur)
 	_taunt_src = src
@@ -2959,14 +2959,14 @@ func apply_taunt(src: Unit, dur: float) -> void:
 	queue_redraw()
 
 
-## DOTA 易伤：dur 秒内受到的伤害放大 (1+amp) 倍（取较强者）。樊瑞 W·摄魂咒。
+## 易伤：dur 秒内受到的伤害放大 (1+amp) 倍（取较强者）。樊瑞 W·摄魂咒。
 func apply_dmg_amp(amp: float, dur: float) -> void:
 	_dmg_amp = maxf(_dmg_amp, amp)
 	_dmg_amp_t = maxf(_dmg_amp_t, dur)
 	queue_redraw()
 
 
-## DOTA 攻速狂暴：临时攻速倍率（>1 出手更快），取较大者。
+## 攻速狂暴：临时攻速倍率（>1 出手更快），取较大者。
 func apply_atkspeed(mult: float, dur: float) -> void:
 	temp_atkspeed = maxf(temp_atkspeed, mult)
 	_temp_atkspeed_t = maxf(_temp_atkspeed_t, dur)
@@ -3279,7 +3279,7 @@ func _draw() -> void:
 		draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
 	if _buff_glow > 0.0:
 		draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
-	# DOTA 被动/自身增益的持续视觉（只在状态激活时画、粒子≤3，兵海友好）
+	# 被动/自身增益的持续视觉（只在状态激活时画、粒子≤3，兵海友好）
 	if _shield > 0.0 and not _dying:
 		# 护盾泡：身体外一圈淡蓝半透椭圆 + 搏动高光弧（take_damage 先扣此盾）
 		var shp := 0.55 + 0.45 * sin(_idle_t * 4.0)

@@ -17,9 +17,9 @@ const IMPACTS := [
 
 
 func _init() -> void:
-	_make_sheet(PROJECTILES, "res://assets/fx_dota_projectiles.png", true)
-	_make_sheet(IMPACTS, "res://assets/fx_dota_impacts.png", false)
-	print("[generate_dota_fx] wrote %d projectile cells and %d impact cells" % [PROJECTILES.size(), IMPACTS.size()])
+	_make_sheet(PROJECTILES, "res://assets/fx_ability_projectiles.png", true)
+	_make_sheet(IMPACTS, "res://assets/fx_ability_impacts.png", false)
+	print("[generate_ability_fx] wrote %d projectile cells and %d impact cells" % [PROJECTILES.size(), IMPACTS.size()])
 	quit()
 
 

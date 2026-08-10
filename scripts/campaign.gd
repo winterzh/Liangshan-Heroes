@@ -1,7 +1,7 @@
 extends Node
 ## 战役进度管理（Autoload "Campaign"）：关卡注册表、当前关、解锁进度、存档。
 
-const VERSION := "1.7"   # 完整包版本；三端内容更新状态由 AndroidUpdater 统一显示
+const VERSION := "1.8"   # 完整包版本；三端内容更新状态由 AndroidUpdater 统一显示
 
 const LEVELS := [
 	{"id": "level1", "title": "智取生辰纲", "sub": "黄泥冈·七星聚义", "script": "res://scripts/levels/level1_huangnigang.gd"},
@@ -26,7 +26,7 @@ var current := 0
 var unlocked := 1
 var skirmish := false       # 启动自由「遭遇战」模式而非战役关卡
 var skirmish_ai := false    # 启动「AI 对战」1v1 模式
-var arena := false          # 启动「竞技场」沙盒模式（DOTA 改版技能试演场：自由点将+刷敌）
+var arena := false          # 启动「竞技场」沙盒模式：自由点将+刷敌
 var custom_defense := false # 启动「自定义据守」模式（用 custom_config）
 var custom_config := {}     # 自定义据守的配置（编辑器产出 / 存档读入）
 var scenario := false       # 启动「数据驱动自定义关卡」（用 scenario_data，见 scenario.gd）

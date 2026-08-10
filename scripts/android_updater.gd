@@ -11,9 +11,9 @@ signal full_update_required(version: String)
 signal update_ready(version: String)
 
 const BOOTSTRAP_VERSION := 3
-const PACKAGE_VERSION_NAME := "1.7"
-const PACKAGE_VERSION_CODE := 14
-const BASE_CONTENT_VERSION := "1.7"
+const PACKAGE_VERSION_NAME := "1.8"
+const PACKAGE_VERSION_CODE := 15
+const BASE_CONTENT_VERSION := "1.8"
 
 # 旧补丁脚本和专项测试可能仍读取这两个名字，不能删除。
 const APK_VERSION_NAME := PACKAGE_VERSION_NAME

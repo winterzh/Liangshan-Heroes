@@ -38,11 +38,11 @@ func hero_cap() -> int: return 0           # 英雄总数上限（0=不限）；
 func threat_gates() -> Array: return []    # 敌方固定出兵门（格坐标）；驻守战覆写 → 托管分路防守/陷阱布来路
 func fog_enabled() -> bool: return false   # 战争迷雾（默认关，战役不受影响）
 func start_age() -> int: return 3          # 起始时代：默认 3=全解锁(不分代，据守/战役不受影响)；1v1 覆写为 1 走三代进阶
-# 竞技场沙盒专用：聚义厅「点将」列出全部 108 将(DOTA 改版 kit)；即时成军。默认关——
-# 故 1v1/驻守战 不受 DOTA 改版影响（仍只有原 6 个可训练英雄）。
-func uses_dota_roster() -> bool: return false
+# 竞技场沙盒专用：聚义厅「点将」列出全部 108 将；即时成军。默认关——
+# 故 1v1/驻守战仍只有原 6 个可训练英雄。
+func uses_full_roster() -> bool: return false
 func arena_instant_train() -> bool: return false
 # 英雄初始技能等级：>0 ⇒ 有 4 技能组者一出场就满配该等级(无需经验加点)。
-# 默认 2：战役/剧情(非经济)的英雄换上「对应 DOTA 英雄的 4 技能(2 级)」。
-# 经济模式 1v1/驻守战覆写为 0 ⇒ 仍走原来的「升级学技能」(不受 DOTA 改版影响)；竞技场覆写为 3(满级随便放)。
+# 默认 2：战役/剧情(非经济)的英雄直接使用专属 4 技能组(2 级)。
+# 经济模式 1v1/驻守战覆写为 0 ⇒ 仍走原来的「升级学技能」；竞技场覆写为 3(满级随便放)。
 func hero_start_rank() -> int: return 2

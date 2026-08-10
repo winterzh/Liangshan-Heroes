@@ -49,7 +49,7 @@ func _ability_sfx_selftest() -> void:
 
 
 ## 技能专属音：按技能 id 播种合成（同主题不同技能音高/层次/节奏皆异），懒生成缓存。
-## theme 取 DotaVisuals 写入的视觉主题（fire/ice/...），缺省按 kind 推断；kind 叠加施法类型动机（弹道/光环/位移…）。
+## theme 取 AbilityVisuals 写入的视觉主题（fire/ice/...），缺省按 kind 推断；kind 叠加施法类型动机（弹道/光环/位移…）。
 func play_ability(aid: String, theme: String, kind: String, vol_db := 0.0) -> void:
 	if not enabled:
 		return
@@ -253,7 +253,7 @@ func _norm(buf: PackedFloat32Array, target := 0.55) -> PackedFloat32Array:
 	return buf
 
 
-## kind → 主题兜底（无 DotaVisuals 主题的技能：自定义关卡/内容包/旧 kit）
+## kind → 主题兜底（无 AbilityVisuals 主题的技能：自定义关卡/内容包/旧 kit）
 const _KIND_THEME := {
 	"fire_dot": "fire", "fire_line": "fire", "fire_trail": "fire", "black_rain": "fire",
 	"ice_wall": "ice", "chrono": "ice", "heal_wave": "holy", "shield": "holy",

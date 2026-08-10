@@ -168,7 +168,7 @@ const ABILITY_SFX_ID := {
 	"lin_thrust": "sk_thrust", "lin_sweep": "sk_sweep",
 	"song_rally": "sk_rally", "song_fire": "sk_fire", "song_banner": "sk_rally",
 }
-# （旧 ABILITY_SFX_KIND 共享类型音已废：非 6 将技能全部走 Sfx.play_ability 按 id 播种的专属音）
+# （旧共享类型音已废：非 6 将技能全部走 Sfx.play_ability 按 id 播种的专属音）
 var _ability_slot := 0
 var _item_armed := ""         # 待指向主动物品 id（与英雄技能 armed 独立，沉默规则不同）
 var _item_caster: Unit = null
@@ -224,9 +224,9 @@ func _ready() -> void:
 	Art.set_runtime_alias({})                    # 清掉上局的运行时借图别名
 	if level.has_method("apply_overrides"):
 		level.apply_overrides(_defs, _abilities)   # 关卡级覆盖（场景编辑器：仅本场景的单位/技能改动）
-	var dv := DotaVisuals.apply(_defs, _abilities)  # 108将 DOTA 批量视觉语义；跳过驻守战玩家 6 将
-	if OS.get_environment("DOTA_VIS_AUDIT") == "1":
-		print("[dota_visuals] heroes=%d abilities=%d visuals=%d" % [int(dv.get("heroes", 0)), int(dv.get("abilities", 0)), int(dv.get("visuals", 0))])
+	var dv := AbilityVisuals.apply(_defs, _abilities)  # 为 108 将的技能补齐视觉语义；跳过驻守战玩家 6 将
+	if OS.get_environment("ABILITY_VIS_AUDIT") == "1":
+		print("[ability_visuals] heroes=%d abilities=%d visuals=%d" % [int(dv.get("heroes", 0)), int(dv.get("abilities", 0)), int(dv.get("visuals", 0))])
 
 	economy = level.economy_enabled()
 	if economy:
@@ -338,8 +338,8 @@ func _ready() -> void:
 			_towertrap_selftest()
 		if OS.get_environment("FINAL_CLEANUP_TEST") == "1":
 			_final_cleanup_selftest()
-		if OS.get_environment("DOTACAST") == "1":
-			_dota_cast_selftest()
+		if OS.get_environment("ABILITY_CAST_TEST") == "1":
+			_ability_cast_selftest()
 		if OS.get_environment("REWORK_TEST") == "1":
 			_rework_selftest()
 		if OS.get_environment("KIT2_TEST") == "1":
@@ -697,7 +697,7 @@ func spawn_li_brawn_axes(caster: Unit, effect_radius: float, art := "axe"):
 	fx.hits = hits
 	fx.tex = Art.item_texture(art)
 	if fx.tex == null:
-		fx.tex = Art.dota_projectile_texture(art)
+		fx.tex = Art.ability_projectile_texture(art)
 	fx_root.add_child(fx)
 	Sfx.play("sk_axes", -8.0, 0.1, 55)
 	return fx
@@ -818,7 +818,7 @@ func can_afford(g: int, w: int) -> bool:
 
 ## 竞技场沙盒（资源近乎无限）→ 命令卡上隐藏金/木花费（信息噪声）。1v1/驻守/战役仍照常显示。
 func train_cost_hidden() -> bool:
-	return level != null and level.has_method("uses_dota_roster") and level.uses_dota_roster()
+	return level != null and level.has_method("uses_full_roster") and level.uses_full_roster()
 
 
 func spend(g: int, w: int) -> bool:
@@ -1403,9 +1403,9 @@ func train_menu(bld: Unit) -> Array:
 		else:
 			workers.append({"kind": "train", "key": key, "label": String(d.get("name", key)),
 				"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": false})
-	# 竞技场沙盒：把全部 108 将(DOTA 改版 kit)动态列入点将菜单；并加「刷敌」键。
-	# 1v1/驻守战 level.uses_dota_roster()==false → 不进此分支 → 仍只有原 6 个可训练英雄(原样不变)。
-	if level != null and level.has_method("uses_dota_roster") and level.uses_dota_roster():
+	# 竞技场沙盒：把全部 108 将的新版技能组动态列入点将菜单；并加「刷敌」键。
+	# 1v1/驻守战 level.uses_full_roster()==false → 不进此分支 → 仍只有原 6 个可训练英雄(原样不变)。
+	if level != null and level.has_method("uses_full_roster") and level.uses_full_roster():
 		var seen := {}
 		for h in heroes:
 			seen[String(h["key"])] = true
@@ -1427,7 +1427,7 @@ func train_menu(bld: Unit) -> Array:
 		out.append_array(heroes)
 		return out
 	# 竞技场 108 将太多 → 分类二级菜单（天罡/地煞上/地煞下）：根页选类、类内再分页（复用编辑器 7ac8ab5 思路）
-	if level != null and level.has_method("uses_dota_roster") and level.uses_dota_roster():
+	if level != null and level.has_method("uses_full_roster") and level.uses_full_roster():
 		return _hall_cat_menu(bld, out, heroes)
 	# 非竞技场（保留原扁平分页，虽当前 heroes≤6 走不到这里）
 	var pages := int(ceil(float(heroes.size()) / float(PAGE)))
@@ -6270,7 +6270,7 @@ func _cast_armed_at(p: Vector2) -> void:
 		_disarm_ability()
 		var rng := ability_cast_range(caster, ad)
 		if rng != INF and caster.position.distance_to(tu.position) > rng:
-			_queue_walk_cast(caster, slot, tu)   # 超出射程：走近了自动放（DOTA式）
+			_queue_walk_cast(caster, slot, tu)   # 超出射程：走近了自动放
 		else:
 			_begin_cast(caster, slot, tu.position, tu)
 		return
@@ -6571,7 +6571,7 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 	var eff: Dictionary = ad.get("effect", {})
 	# 伤害事件随效果携带来源技能；延迟弹道/DOT 也可沿原记录准确归因，无需逐帧反查。
 	eff["_ability_id"] = aid
-	# 单体指向（target:"unit"）：抬手期间跟踪目标（DOTA式），结算时以目标当前位置为落点；
+	# 单体指向（target:"unit"）：抬手期间跟踪目标，结算时以目标当前位置为落点；
 	# 目标在抬手途中阵亡/驻入 → 取消施放（不进 CD 不白费）。AI 的目标兜底解析在 _begin_cast。
 	if tgt != null and (not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned):
 		tgt = null
@@ -6823,7 +6823,7 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 				var oa := String(eff["orbit_art"])
 				oax.tex = Art.item_texture(oa)   # 手绘环绕物（李逵板斧等旧图）
 				if oax.tex == null:
-					oax.tex = Art.dota_projectile_texture(oa)   # DOTA 批量视觉新图集
+					oax.tex = Art.ability_projectile_texture(oa)   # 批量技能视觉图集
 			fx_root.add_child(oax)
 		"chrono":   # 林冲 R·时空封印：域内敌军定身；10Hz 续控，避免数百目标每物理帧重复完整重绘
 			var cr := r
@@ -6905,27 +6905,27 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 			var god_dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 20.0))
 			caster.start_drunk_god(float(_pick(eff.get("bonus", [10.0]), rank)), god_dur,
 				int(eff.get("max_stacks", 5)))
-		"blink":   # DOTA·闪现：朝落点闪现(限 dist)，落点可带小范围伤
+		"blink":   # 闪现：朝落点闪现(限 dist)，落点可带小范围伤
 			center = _do_blink(caster, eff, sc, center, r, foe, snap, ad)
-		"channel":   # DOTA·引导：定身逐 tick 轰击落点区域（凌振轰天连炮）；被眩晕/沉默即止
+		"channel":   # 引导：定身逐 tick 轰击落点区域（凌振轰天连炮）；被眩晕/沉默即止
 			_begin_channel(caster, center, eff, sc, rank, ad)
-		"invis":   # DOTA·主动隐身：自身隐入（不可被索敌/指向），攻击/施法破隐，破隐首击带加成
+		"invis":   # 主动隐身：自身隐入（不可被索敌/指向），攻击/施法破隐，破隐首击带加成
 			caster.apply_invis(float(eff.get("dur", 8.0)), float(eff.get("strike_bonus", 0.0)) * sc)
-		"transform":   # DOTA·变身：临时换形态（燕顺狼形/朱仝龙形）——换攻/攻速/移速/体型/染色，到期还原
+		"transform":   # 变身：临时换形态（燕顺狼形/朱仝龙形）——换攻/攻速/移速/体型/染色，到期还原
 			caster.apply_form(eff.get("form", {}), float(eff.get("dur", 15.0)))
-		"pull":   # DOTA·钩拉：沿一线把敌人拖向施法者
+		"pull":   # 钩拉：沿一线把敌人拖向施法者
 			_do_pull(caster, eff, sc, center, r, foe, snap)
-		"knockback":   # DOTA·击退：推离落点 + 伤害
+		"knockback":   # 击退：推离落点 + 伤害
 			_do_knockback(caster, eff, sc, center, r, foe, snap)
-		"global_nuke":   # DOTA·全图轰击(或仅敌方英雄)
+		"global_nuke":   # 全图轰击(或仅敌方英雄)
 			_do_global_nuke(caster, eff, sc, foe, snap)
-		"chain_nuke":   # DOTA·弹射闪电：逐跳衰减
+		"chain_nuke":   # 弹射闪电：逐跳衰减
 			_do_chain_nuke(caster, eff, sc, center, foe, snap, ad)
-		"shield":   # DOTA·护盾：自身/范围友军吸收盾
+		"shield":   # 护盾：自身/范围友军吸收盾
 			_do_shield(caster, eff, sc, r, ally, snap)
-		"atkspeed":   # DOTA·攻速狂暴：自身/范围友军提速
+		"atkspeed":   # 攻速狂暴：自身/范围友军提速
 			_do_atkspeed(caster, eff, r, ally, snap)
-		"bolt":   # DOTA·单体弹：默认追踪弹（飞向目标单位）；homing:false 变体为非追踪直线弹（可走位躲开）
+		"bolt":   # 单体弹：默认追踪弹（飞向目标单位）；homing:false 变体为非追踪直线弹（可走位躲开）
 			if bool(eff.get("homing", true)):
 				var bolt_t: Unit = tgt
 				if bolt_t == null or not is_instance_valid(bolt_t) or bolt_t.hp <= 0.0:
@@ -6934,25 +6934,25 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 					_spawn_bolt(caster, bolt_t, ad, eff, sc, rank)
 			else:
 				_spawn_bolt_line(caster, center, ad, eff, sc, rank)   # 直线弹按施法瞬间落点方向飞出
-		"hook":   # DOTA·钩镰（方向技）：钩头贯线飞出，钩中第一个敌人拖回身前，链条全程可见
+		"hook":   # 钩镰（方向技）：钩头贯线飞出，钩中第一个敌人拖回身前，链条全程可见
 			_spawn_hook(caster, center, ad, eff, sc, rank)
-		"swap":   # DOTA·换位（单体指向·敌我皆可点）：与目标瞬间互换位置
+		"swap":   # 换位（单体指向·敌我皆可点）：与目标瞬间互换位置
 			var swap_t: Unit = tgt
 			if swap_t == null or not is_instance_valid(swap_t) or swap_t.hp <= 0.0:
 				swap_t = _nearest_foe_unit(center, caster.faction)
 			if swap_t != null and not swap_t.is_building:
 				_do_swap(caster, swap_t, ad, eff, sc, rank)
-		"ward":   # DOTA·立桩：在落点插一根「桩」，原地持续脉冲（治疗友军 / 连珠射敌 / 毒射减速）
+		"ward":   # 立桩：在落点插一根「桩」，原地持续脉冲（治疗友军 / 连珠射敌 / 毒射减速）
 			_do_ward(caster, eff, rank, center, ally, foe, ad, slot)
-		"fissure":   # DOTA·裂地：一线贯穿伤+晕，并沿线裂出一道阻路实墙（鲁智深 Q）
+		"fissure":   # 裂地：一线贯穿伤+晕，并沿线裂出一道阻路实墙（鲁智深 Q）
 			_do_fissure(caster, eff, sc, center, foe, snap, ad)
-		"echo":   # DOTA·回音重踏：敌越密，每个目标受创越重（鲁智深 R）
+		"echo":   # 回音重踏：敌越密，每个目标受创越重（鲁智深 R）
 			_do_echo(caster, eff, sc, center, r, foe, snap)
-		"heal_wave":   # DOTA·影波：一道波纹在敌我间往复弹跳——灼伤敌、抚愈友（安道全 E）
+		"heal_wave":   # 影波：一道波纹在敌我间往复弹跳——灼伤敌、抚愈友（安道全 E）
 			_do_heal_wave(caster, eff, sc, center, ally, foe, snap, ad)
-		"fire_line":   # DOTA·一线长焰：沿指向铺一条直线地火（解珍 R）
+		"fire_line":   # 一线长焰：沿指向铺一条直线地火（解珍 R）
 			_do_fire_line(caster, eff, rank, center, foe)
-		"fire_trail":   # DOTA·火径：随身移动，沿途不断在脚下落地火（魏定国 E）
+		"fire_trail":   # 火径：随身移动，沿途不断在脚下落地火（魏定国 E）
 			var ft_dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 6.0))
 			var ft_dps := float(_pick(eff["dps_ranks"], rank)) if eff.has("dps_ranks") else float(eff.get("dps", 16.0))
 			_fire_trails.append({"caster": caster, "ability_id": aid, "t": ft_dur, "drop_t": 0.0, "drop": float(eff.get("drop", 0.3)),
@@ -6969,12 +6969,12 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 	if eff.has("dot_total"):   # 普通技附带地面持续伤害（如箭雨钉地续伤），不挂火焰演出，沿用本招演出
 		_add_ground_dot(center, r, float(eff["dot_total"]) * sc, float(eff.get("dot_dur", 3.0)), caster, foe,
 			null, 1.0, 0.0, aid)
-	# DOTA 批量视觉优先替换默认大光环；没有 visual 的旧技能仍走 smite 分流/通用冲击波。
-	var _dota_visual_replaces := _spawn_dota_visual_fx(caster, center, r, ad, eff, cast_kind)
+	# 批量技能视觉优先替换默认大光环；没有 visual 的旧技能仍走 smite 分流/通用冲击波。
+	var _ability_visual_replaces := _spawn_ability_visual_fx(caster, center, r, ad, eff, cast_kind)
 	var _smite_special := false
-	if not _dota_visual_replaces:
+	if not _ability_visual_replaces:
 		_smite_special = String(eff.get("kind", "")) == "smite" and _spawn_smite_variant_fx(center, r, eff, ad)
-	if not _dota_visual_replaces and not _smite_special and cast_kind not in ["sector_nuke", "hua_pin_target", "hua_snipe", "lin_guard", "lin_duel"]:   # 单体/架枪专属演出不画 AoE 大光环
+	if not _ability_visual_replaces and not _smite_special and cast_kind not in ["sector_nuke", "hua_pin_target", "hua_snipe", "lin_guard", "lin_duel"]:   # 单体/架枪专属演出不画 AoE 大光环
 		_spawn_ability_fx(center, r, ad["color"])
 	_spawn_hero_skill_fx(aid, caster, center, ad)   # 英雄专属华丽演出（花荣箭雨/神箭…）
 	if cast_kind != "invis" and caster._invis_t > 0.0:
@@ -7179,7 +7179,7 @@ func _do_meteor(caster: Unit, eff: Dictionary, rank: int, center: Vector2, foe: 
 	shake(5.0, start)
 
 
-## ===== DOTA 式新原语结算（闪现/钩拉/击退/全图/弹射/护盾/攻速）=====
+## ===== 新技能原语结算（闪现/钩拉/击退/全图/弹射/护盾/攻速）=====
 ## 闪现：朝落点闪现(限 dist)，落点可带小范围伤；返回闪现后中心(供演出落点)。
 func _do_blink(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array, ad: Dictionary) -> Vector2:
 	var from := caster.position
@@ -7391,7 +7391,7 @@ func _bolt_pass(delta: float) -> void:
 						if float(heff.get("dmg", 0.0)) > 0.0:
 							v.take_damage(float(heff["dmg"]) * float(b["sc"]), caster, false, false,
 								String(heff.get("_ability_id", "")))
-						# 拖行无视地形（Pudge式）——落点校正到最近可站格，别把人塞进建筑/水里
+						# 拖行无视地形（钩索拖行）——落点校正到最近可站格，别把人塞进建筑/水里
 						v.position = map.cell_to_world(map.nearest_open(map.world_to_cell(v.position)))
 						spawn_impact(v.position, true)
 						alive = false
@@ -7469,7 +7469,7 @@ func _walk_item_cast_pass(delta: float) -> void:
 	_walk_item_casts = keep
 
 
-## ───────────────── 走近施法（DOTA式）─────────────────
+## ───────────────── 走近施法 ─────────────────
 ## 单体技能点了超射程的目标 → 自动朝目标走，一进射程就自动施放。
 ## 玩家中途下达任何新指令（_order_serial 变化）即取消；目标/技能失效也取消。
 func _queue_walk_cast(caster: Unit, slot: int, tgt: Unit) -> void:
@@ -8047,15 +8047,15 @@ func _spawn_smite_variant_fx(center: Vector2, r: float, eff: Dictionary, ad: Dic
 	return true
 
 
-## 108将 DOTA 批量视觉层：按 DotaVisuals 写入的 visual 字段生成弹体/符文/命中/扫线演出。
+## 108 将批量技能视觉层：按 AbilityVisuals 写入的 visual 字段生成弹体/符文/命中/扫线演出。
 ## 这里只管表现，不延迟既有结算，避免改变竞技场外 AI/关卡节奏。
-func _spawn_dota_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dictionary, eff: Dictionary, cast_kind: String) -> bool:
+func _spawn_ability_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dictionary, eff: Dictionary, cast_kind: String) -> bool:
 	var visual: Dictionary = ad.get("visual", {})
 	if visual.is_empty():
 		return false
 	var delivery := String(visual.get("delivery", "impact"))
 	var theme := String(visual.get("theme", "stone"))
-	var col := _dota_visual_color(theme, ad.get("color", Color.WHITE))
+	var col := _ability_visual_color(theme, ad.get("color", Color.WHITE))
 	var projectile := String(visual.get("projectile", "stone"))
 	var impact := String(visual.get("impact", "dust_ring"))
 	var start := caster.position + Vector2(0, -10)
@@ -8064,25 +8064,25 @@ func _spawn_dota_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dictiona
 		"projectile", "thrown", "lob":
 			if cast_kind != "bolt":
 				if start.distance_to(target) > 18.0:
-					var pfx := DotaProjectileFx.new()
+					var pfx := AbilityProjectileFx.new()
 					pfx.position = start
 					pfx.end_w = target
 					pfx.col = col
-					pfx.tex = Art.dota_projectile_texture(projectile)
-					pfx.impact_tex = Art.dota_impact_texture(impact)
+					pfx.tex = Art.ability_projectile_texture(projectile)
+					pfx.impact_tex = Art.ability_impact_texture(impact)
 					pfx.lob = delivery == "lob"
 					fx_root.add_child(pfx)
 				else:
-					_spawn_dota_impact_node(target, r, col, impact, "impact")
+					_spawn_ability_impact_node(target, r, col, impact, "impact")
 		"beam":
-			var bfx := DotaBeamFx.new()
+			var bfx := AbilityBeamFx.new()
 			bfx.position = target
 			bfx.start_w = start
 			bfx.end_w = target
 			bfx.col = col
 			fx_root.add_child(bfx)
 		"sweep":
-			var sw := DotaSweepFx.new()
+			var sw := AbilitySweepFx.new()
 			sw.position = caster.position
 			sw.end_w = target
 			sw.rad = r
@@ -8090,7 +8090,7 @@ func _spawn_dota_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dictiona
 			fx_root.add_child(sw)
 		"chain":
 			if cast_kind != "hook":
-				var cfx := DotaBeamFx.new()
+				var cfx := AbilityBeamFx.new()
 				cfx.position = target
 				cfx.start_w = start
 				cfx.end_w = target
@@ -8099,7 +8099,7 @@ func _spawn_dota_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dictiona
 				fx_root.add_child(cfx)
 		"dash":
 			if cast_kind != "blink":
-				var dfx := DotaBeamFx.new()
+				var dfx := AbilityBeamFx.new()
 				dfx.position = target
 				dfx.start_w = caster.position
 				dfx.end_w = target
@@ -8107,27 +8107,27 @@ func _spawn_dota_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dictiona
 				dfx.dash = true
 				fx_root.add_child(dfx)
 		"aura":
-			_spawn_dota_impact_node(caster.position, r, col, impact, "aura")
+			_spawn_ability_impact_node(caster.position, r, col, impact, "aura")
 		"rune", "manifest", "roar", "impact":
-			_spawn_dota_impact_node(target, r, col, impact, delivery)
+			_spawn_ability_impact_node(target, r, col, impact, delivery)
 		_:
-			_spawn_dota_impact_node(target, r, col, impact, "impact")
+			_spawn_ability_impact_node(target, r, col, impact, "impact")
 	return bool(visual.get("replace_default", true))
 
 
-func _spawn_dota_impact_node(pos: Vector2, r: float, col: Color, style: String, mode: String) -> void:
-	var fx := DotaImpactFx.new()
+func _spawn_ability_impact_node(pos: Vector2, r: float, col: Color, style: String, mode: String) -> void:
+	var fx := AbilityImpactFx.new()
 	fx.position = pos
 	fx.rad = maxf(42.0, r)
 	fx.col = col
-	fx.tex = Art.dota_impact_texture(style)
+	fx.tex = Art.ability_impact_texture(style)
 	fx.mode = mode
 	fx_root.add_child(fx)
 	if mode != "aura" and mode != "rune":   # 增益光环/符文域不震屏——放招频繁，逢法必抖会让镜头一直发颤
 		shake(clampf(r / 18.0, 1.2, 4.0), pos)
 
 
-func _dota_visual_color(theme: String, fallback: Color) -> Color:
+func _ability_visual_color(theme: String, fallback: Color) -> Color:
 	var tc := fallback
 	match theme:
 		"hammer", "stone":
@@ -8923,7 +8923,7 @@ const ABILITY_FX := {
 	"zhang_drag": "water", "bai_drug": "poison",
 	"hua_rain": "arrow_rain", "hua_shot": "arrow_shot",
 	"zhang_stone": "stone",
-	# DOTA 改版：lin_thrust 长枪波 / li_charge 莽冲(复用 charge) / li_fury 暴走(复用 blood)。
+	# 技能改版：lin_thrust 长枪波 / li_charge 莽冲(复用 charge) / li_fury 暴走(复用 blood)。
 	# 林冲回马枪/点将、花荣凌空闪、李逵回旋的主演出在 _do_ability 内直接生成，不走这里。
 	"lin_thrust": "thrust", "li_charge": "charge", "li_fury": "blood",
 	# 新英雄：公孙胜 / 武松。黑雨·冰墙·兽群·真龙线的主演出在 _do_ability 内直接生成。
@@ -8931,7 +8931,7 @@ const ABILITY_FX := {
 }
 
 
-## 英雄专属技能演出：在通用冲击波之上叠一层「招式」动画。按 ABILITY_FX 主题分派。
+## 英雄专属技能演出：在通用冲击波之上叠一层「招式」动画。按技能主题分派。
 func _spawn_hero_skill_fx(aid: String, caster: Unit, center: Vector2, ad: Dictionary) -> void:
 	var col: Color = ad.get("color", Color.WHITE)
 	var rad: float = float(ad.get("radius", 90.0))
@@ -10576,11 +10576,11 @@ func _rework_selftest() -> void:
 		print("[rework] FAIL: %s" % ", ".join(fail))
 
 
-## headless 自检（DOTACAST=1 + SKIRMISH=1）：逐一生成每个 DOTA 英雄、升满 4 技能、
+## headless 自检（ABILITY_CAST_TEST=1 + SKIRMISH=1）：逐一生成每个可训练英雄、升满 4 技能、
 ## 朝靶子结算每个技能，确认 _do_ability 不会因缺字段/坏数据崩。跑完打印 OK 即全部通过。
-func _dota_cast_selftest() -> void:
+func _ability_cast_selftest() -> void:
 	if map == null:
-		print("[dota] no map"); return
+		print("[ability] no map"); return
 	var base: Vector2i = map.nearest_open(Vector2i(20, 20))
 	var foes: Array = []
 	for i in range(6):
@@ -10630,18 +10630,18 @@ func _dota_cast_selftest() -> void:
 				has_back = true
 		_hall_cat = ""
 		_hall_page = 0
-		print("[dota] hall cat_menu: root_cats=%d tiangang_trains=%d back=%s (want 3/2/true)" % [root_cats, cat_trains, str(has_back)])
+		print("[ability] hall cat_menu: root_cats=%d tiangang_trains=%d back=%s (want 3/2/true)" % [root_cats, cat_trains, str(has_back)])
 	# 渲染每个技能的「悬浮说明 + 1/2/3级速览」——覆盖 ability_levels/ability_desc 路径(此前漏测，def_down 标量曾在此崩)
 	for aid in Defs.ABILITIES.keys():
 		var _t1 := Defs.ability_levels(String(aid))
 		var _t2 := Defs.ability_desc(String(aid), 3)
-	print("[dota] tooltip render OK: %d abilities" % Defs.ABILITIES.size())
+	print("[ability] tooltip render OK: %d abilities" % Defs.ABILITIES.size())
 	if level != null and level.has_method("arena_spawn_troops"):
 		var e0 := enemies_alive()
 		arena_spawn_troops()
 		arena_spawn_random()
-		print("[dota] arena_spawn OK: enemies %d→%d" % [e0, enemies_alive()])
-	print("[dota] cast_selftest OK: heroes=%d casts=%d (no crash)" % [nh, ncast])
+		print("[ability] arena_spawn OK: enemies %d→%d" % [e0, enemies_alive()])
+	print("[ability] cast_selftest OK: heroes=%d casts=%d (no crash)" % [nh, ncast])
 
 
 ## headless 自检：选一个工人造一座兵营，验证建造链路
@@ -13726,7 +13726,7 @@ class BoltFx extends Node2D:
 		elif art != "":
 			tex = Art.item_texture(art)
 			if tex == null:
-				tex = Art.dota_projectile_texture(art)
+				tex = Art.ability_projectile_texture(art)
 		if tex != null:
 			var ts := 34.0 if chain else 28.0
 			var spin := sin(_t * 6.0) * 0.25   # 飞行中轻微摇摆
@@ -13739,8 +13739,8 @@ class BoltFx extends Node2D:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
-## DOTA 批量技能：一次性投掷/抛射演出（不参与命中判定；真实结算仍由 _do_ability 当帧完成）。
-class DotaProjectileFx extends TimedFx:
+## 批量技能：一次性投掷/抛射演出（不参与命中判定；真实结算仍由 _do_ability 当帧完成）。
+class AbilityProjectileFx extends TimedFx:
 	var end_w := Vector2.ZERO
 	var col := Color(0.85, 0.85, 1.0)
 	var tex: Texture2D = null
@@ -13847,8 +13847,8 @@ class BuildingCollapseFx extends TimedFx:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
-## DOTA 批量技能：符文、命中、变身、吼叫、光环等落点演出。
-class DotaImpactFx extends TimedFx:
+## 批量技能：符文、命中、变身、吼叫、光环等落点演出。
+class AbilityImpactFx extends TimedFx:
 	var rad := 90.0
 	var col := Color(0.85, 0.85, 1.0)
 	var tex: Texture2D = null
@@ -13903,8 +13903,8 @@ class DotaImpactFx extends TimedFx:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
-## DOTA 批量技能：直线光束/链条/冲刺轨迹。
-class DotaBeamFx extends TimedFx:
+## 批量技能：直线光束/链条/冲刺轨迹。
+class AbilityBeamFx extends TimedFx:
 	var start_w := Vector2.ZERO
 	var end_w := Vector2.ZERO
 	var col := Color(0.85, 0.85, 1.0)
@@ -13947,8 +13947,8 @@ class DotaBeamFx extends TimedFx:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
-## DOTA 批量技能：扇形/震击/横扫类演出。
-class DotaSweepFx extends TimedFx:
+## 批量技能：扇形/震击/横扫类演出。
+class AbilitySweepFx extends TimedFx:
 	var end_w := Vector2.ZERO
 	var rad := 90.0
 	var col := Color(0.85, 0.85, 1.0)

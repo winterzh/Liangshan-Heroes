@@ -1,5 +1,5 @@
 extends LevelBase
-## 竞技场·沙盒（DOTA 改版技能试演场）：
+## 竞技场·沙盒（百八好汉技能试演场）：
 ## 资源无限、即时成军、英雄一出场即满配 4 技能(rank3) —— 在聚义厅「点将」选任意 108 将出战，
 ## 自由放 Q/W/E/R；主界面两枚按钮「出兵 / 随机」各刷 50 兵 + 1 名随机敌将(自动放招)对练。
 
@@ -28,7 +28,7 @@ func map_base() -> int: return T.GRASS
 func camera_start_cell() -> Vector2i: return Vector2i(24, 24)
 
 func economy_enabled() -> bool: return true
-func uses_dota_roster() -> bool: return true       # 聚义厅点将列全部 108 将
+func uses_full_roster() -> bool: return true       # 聚义厅点将列全部 108 将
 func arena_instant_train() -> bool: return true     # 即时成军（沙盒不等训练）
 func hero_start_rank() -> int: return 0             # 英雄出场 1 级(经验加点)：刷敌练级、边打边学技能
 func start_gold() -> int: return 999999

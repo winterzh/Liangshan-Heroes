@@ -17,4 +17,4 @@
 3. [`TESTING.md`](TESTING.md)：当前测试入口、可靠 gate、已知不稳定 smoke。
 
 不要按旧待办清单重复实现 §1-§4。新增技能 kind 时仍遵守三件套：`_do_ability` 分支、`Defs.ability_levels`
-tooltip 分支、KIT2/DOTACAST 覆盖。
+tooltip 分支、KIT2/ABILITY_CAST_TEST 覆盖。

@@ -1,6 +1,6 @@
 # 技能系统 V2 —— 三轴解耦设计（基础设施版）
 
-> 目标：108 将对标 DOTA，不是为了"补 108 套特效"，而是把技能系统做成**可长期迭代的基础资产库**。
+> 目标：让 108 将覆盖完整的技能设计空间，不是为了“补 108 套特效”，而是把技能系统做成**可长期迭代的基础资产库**。
 > 本文档是设计+落地手册：已实现的部分标 ✅（含 file:func 锚点），未实现的部分是路线图，任何后续
 > 会话（或 Opus handover）可直接按锚点续做。
 >
@@ -13,7 +13,7 @@
 旧模型只有一根轴：`effect.kind`（36 种），并且**瞄准方式被压扁成一个布尔**（`targeted: true`=点地，
 false=以自身为圆心）。这导致：
 
-- 设计空间 = kind 数量，而 DOTA 的设计空间 = 瞄准 × 递送 × 效果 的**笛卡尔积**；
+- 旧设计空间约等于 kind 数量，而新系统的设计空间 = 瞄准 × 递送 × 效果 的**笛卡尔积**；
 - smite（点地圆 AoE + 伤害 + 若干控制）成为万能容器 → 129/428 槽是 smite、27 个英雄 kit 完全同构；
 - 每种 kind 的控制/减益结算是复制粘贴的 if 堆 → 新效果（如缠绕）要改 N 处；
 - 没有单体指向、没有弹道飞行时间、没有引导、没有以单位为对象的位移（钩/换位/推）。
@@ -33,7 +33,7 @@ false=以自身为圆心）。这导致：
 **落地锚点**：
 - `battle.cast_ability`（待指向提示分支）→ `battle._cast_armed_at`（`target=="unit"` 时用
   `_armed_unit_at(p, team)` 解析单位；点空地保持待指向态）→ `_begin_cast(caster, slot, lp, tgt)`。
-- **走近施法（DOTA式）** ✅：目标超射程 → `_queue_walk_cast` 入队，`_walk_cast_pass`（0.4s 节流追点）
+- **走近施法** ✅：目标超射程 → `_queue_walk_cast` 入队，`_walk_cast_pass`（0.4s 节流追点）
   自动接近、进射程即施放；玩家下任何新指令（`unit._order_serial` 变化）立即让路取消。
 - **抬手跟踪** ✅：`_pending_casts` 条目带 `tgt`，`_do_ability` 结算时取目标**当前**位置；
   目标抬手途中阵亡 → 单体技能取消且**不进 CD**。
@@ -70,8 +70,8 @@ root（缠绕：不能移动可反击）✅新 / disarm（缴械：不能普攻�
 | kind | 轴组合 | 样板 | 说明 |
 |---|---|---|---|
 | `bolt` | unit × 追踪弹 × 骑手 | 扈三娘 W 红锦套索 | 单体指向控制/爆发的通用容器 |
-| `hook` | 方向 × hook 弹 × 骑手 | 彭玘 Q 钩镰拖钩 | 真·Pudge 钩：链条可见、拖回身前 |
-| `swap` | unit(any) × 瞬发 | 扈三娘 R 乾坤挪移 | 换敌入阵/换友脱险，VS 签名 |
+| `hook` | 方向 × hook 弹 × 骑手 | 彭玘 Q 钩镰拖钩 | 可见链条钩：链条可见、拖回身前 |
+| `swap` | unit(any) × 瞬发 | 扈三娘 R 乾坤挪移 | 换敌入阵/换友脱险，敌我换位签名 |
 
 ## 2. 数据 schema 备忘（defs.gd）
 
@@ -86,8 +86,8 @@ root（缠绕：不能移动可反击）✅新 / disarm（缴械：不能普攻�
         "cast_range": 480}}                    # 施法距离覆写（省略=380+radius；宋江/花荣/global 豁免）
 ```
 
-⚠️ 生成块 `__DOTA_GEN_ABIL_START/END` 内的手工修改（含本次样板）会被盲目重跑 codegen 覆盖——
-重跑前必须把手工条目摘出来（同 dota-rework-108 的备忘）。
+⚠️ 生成块 `__ABILITY_GEN_ABIL_START/END` 内的手工修改（含本次样板）会被盲目重跑 codegen 覆盖——
+重跑前必须把手工条目摘出来（同 ability-rework-108 的备忘）。
 
 ## 3. 本次接线的内容（✅）
 
@@ -95,7 +95,7 @@ root（缠绕：不能移动可反击）✅新 / disarm（缴械：不能普攻�
 - 扈三娘 W `bolt` 红锦套索（游戏第一个单体指向技能）、R `swap` 乾坤挪移（unit_team:any）
 - 时迁 Q 绊索：slow → `root` 1.2s（骑手经 line_nuke 生效的证明）
 - 呼延灼 Q：stun 1.6 → stun 0.8 + `disarm` 2.5（双鞭打脱兵器）
-- 三套孤儿 kit 接线：呼延灼/凌振/单廷圭 换上已生成的 4 技能组（DOTACAST 428→432）
+- 三套孤儿 kit 接线：呼延灼/凌振/单廷圭 换上已生成的 4 技能组（ABILITY_CAST_TEST 428→432）
 
 ## 4. 去同质化路线图（P2 已完成，其余按收益排序）
 
@@ -144,10 +144,10 @@ charge（宣赞郡马冲撞/欧鹏金翅掠袭）、chain_nuke（单廷圭圣水
 | 选测 | 环境门 | 覆盖 |
 |---|---|---|
 | KIT2 6/6 | `ARENA=1 KIT2_TEST=1` | bolt 命中+骑手 / swap 换位 / hook 拖回 / root 定身 / disarm 禁手 / walk-cast |
-| DOTACAST | `ARENA=1 DOTACAST=1` | 108 将 432 施放无崩溃 + 468 tooltip 渲染 |
+| ABILITY_CAST_TEST | `ARENA=1 ABILITY_CAST_TEST=1` | 108 将 432 施放无崩溃 + 468 tooltip 渲染 |
 | REWORK 10/10 | `ARENA=1 REWORK_TEST=1` | 第一批 10 技能机制 |
 | TOWERTRAP 19/19 | `SKIRMISH=1 TOWERTRAP_TEST=1` | 塔/陷阱/经济策略/倍率/分路/手动保护 |
 | AUTOMICRO 13/13 | `AUTOMICRO=1` | 托管脑 |
 
 新 kind 上线守则：①`_do_ability` 加分支时同步给 `Defs.ability_levels` 加 tooltip 分支（防 P0）；
-②跑一遍 DOTACAST（无目标点施法必须安全降级）；③KIT2 加一条断言。
+②跑一遍 ABILITY_CAST_TEST（无目标点施法必须安全降级）；③KIT2 加一条断言。

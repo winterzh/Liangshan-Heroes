@@ -86,16 +86,16 @@ const ITEM_CELLS := {
 	"axe": Vector2i(0, 0), "poison": Vector2i(1, 0), "ice": Vector2i(0, 1), "dark": Vector2i(1, 1),
 }
 
-# DOTA 竞技场批量技能视觉 4x4 图集。由 tools/generate_dota_fx.gd 生成，缺图仍走程序化兜底。
-const DOTA_PROJECTILES_SHEET := "res://assets/fx_dota_projectiles.png"
-const DOTA_IMPACTS_SHEET := "res://assets/fx_dota_impacts.png"
-const DOTA_PROJECTILE_CELLS := {
+# 竞技场批量技能视觉 4x4 图集。由 tools/generate_ability_fx.gd 生成，缺图仍走程序化兜底。
+const ABILITY_PROJECTILES_SHEET := "res://assets/fx_ability_projectiles.png"
+const ABILITY_IMPACTS_SHEET := "res://assets/fx_ability_impacts.png"
+const ABILITY_PROJECTILE_CELLS := {
 	"hammer": Vector2i(0, 0), "axe": Vector2i(1, 0), "stone": Vector2i(2, 0), "dagger": Vector2i(3, 0),
 	"arrow": Vector2i(0, 1), "spear": Vector2i(1, 1), "fire_orb": Vector2i(2, 1), "ice_shard": Vector2i(3, 1),
 	"poison_vial": Vector2i(0, 2), "thunder_orb": Vector2i(1, 2), "shadow_orb": Vector2i(2, 2), "water_drop": Vector2i(3, 2),
 	"rune": Vector2i(0, 3), "claw": Vector2i(1, 3), "chain": Vector2i(2, 3), "banner": Vector2i(3, 3),
 }
-const DOTA_IMPACT_CELLS := {
+const ABILITY_IMPACT_CELLS := {
 	"ground_crack": Vector2i(0, 0), "heavy_slam": Vector2i(1, 0), "fire_burst": Vector2i(2, 0), "ice_burst": Vector2i(3, 0),
 	"poison_splash": Vector2i(0, 1), "thunder_hit": Vector2i(1, 1), "blood_hit": Vector2i(2, 1), "dust_ring": Vector2i(3, 1),
 	"shadow_burst": Vector2i(0, 2), "water_splash": Vector2i(1, 2), "holy_flash": Vector2i(2, 2), "leaf_snare": Vector2i(3, 2),
@@ -262,8 +262,8 @@ var _traps_tex: Texture2D
 var _wards_tex: Texture2D
 var _kit2_tex: Texture2D
 var _items_tex: Texture2D
-var _dota_projectiles_tex: Texture2D
-var _dota_impacts_tex: Texture2D
+var _ability_projectiles_tex: Texture2D
+var _ability_impacts_tex: Texture2D
 var _tower_tex := {}   # 塔 key -> 3x3 朝向贴图(或 null)，惰性加载
 var _cache := {}
 var _terrain_img: Image
@@ -303,8 +303,8 @@ func _ready() -> void:
 	_wards_tex = _try_load(WARDS_SHEET)
 	_kit2_tex = _try_load(KIT2_SHEET)
 	_items_tex = _try_load(ITEMS_SHEET)
-	_dota_projectiles_tex = _try_load(DOTA_PROJECTILES_SHEET)
-	_dota_impacts_tex = _try_load(DOTA_IMPACTS_SHEET)
+	_ability_projectiles_tex = _try_load(ABILITY_PROJECTILES_SHEET)
+	_ability_impacts_tex = _try_load(ABILITY_IMPACTS_SHEET)
 
 
 func _try_load(path: String) -> Texture2D:
@@ -421,18 +421,18 @@ func item_texture(style: String) -> Texture2D:
 	return _atlas(_items_tex, ITEM_CELLS[style], 2, "item_" + style)
 
 
-## DOTA 竞技场批量技能弹体贴图。style 见 DOTA_PROJECTILE_CELLS；无图返回 null。
-func dota_projectile_texture(style: String) -> Texture2D:
-	if _dota_projectiles_tex == null or not DOTA_PROJECTILE_CELLS.has(style):
+## 竞技场批量技能弹体贴图。style 见 ABILITY_PROJECTILE_CELLS；无图返回 null。
+func ability_projectile_texture(style: String) -> Texture2D:
+	if _ability_projectiles_tex == null or not ABILITY_PROJECTILE_CELLS.has(style):
 		return null
-	return _atlas(_dota_projectiles_tex, DOTA_PROJECTILE_CELLS[style], 4, "dproj_" + style)
+	return _atlas(_ability_projectiles_tex, ABILITY_PROJECTILE_CELLS[style], 4, "aproj_" + style)
 
 
-## DOTA 竞技场批量技能命中贴图。style 见 DOTA_IMPACT_CELLS；无图返回 null。
-func dota_impact_texture(style: String) -> Texture2D:
-	if _dota_impacts_tex == null or not DOTA_IMPACT_CELLS.has(style):
+## 竞技场批量技能命中贴图。style 见 ABILITY_IMPACT_CELLS；无图返回 null。
+func ability_impact_texture(style: String) -> Texture2D:
+	if _ability_impacts_tex == null or not ABILITY_IMPACT_CELLS.has(style):
 		return null
-	return _atlas(_dota_impacts_tex, DOTA_IMPACT_CELLS[style], 4, "dimp_" + style)
+	return _atlas(_ability_impacts_tex, ABILITY_IMPACT_CELLS[style], 4, "aimp_" + style)
 
 
 func building_texture(key: String) -> Texture2D:

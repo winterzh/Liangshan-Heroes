@@ -1,6 +1,6 @@
-class_name DotaVisuals
+class_name AbilityVisuals
 extends RefCounted
-## 批量给 108 将 DOTA 技能补视觉语义。跳过驻守战玩家 6 将，避免改动他们的竞技场/驻守手感。
+## 批量给 108 将的技能补齐视觉语义。跳过驻守战玩家 6 将，避免改动他们的竞技场/驻守手感。
 ## 这里只给本场 _abilities 副本加 visual / bolt_art / orbit_art 字段，不直接改 Defs 常量。
 
 const EXCLUDED_HEROES := {
@@ -124,21 +124,22 @@ static func _visual_for(kind: String, theme: String, ad: Dictionary, eff: Dictio
 
 
 static func _hero_theme(key: String, d: Dictionary) -> String:
-	var txt := "%s %s %s" % [key, String(d.get("name", "")), String(d.get("dota", ""))]
+	# 只依据本作英雄名、单位 key 和技能语义选择视觉主题，不保留外部作品角色对照表。
+	var txt := "%s %s" % [key, String(d.get("name", ""))]
 	if _has(txt, ["斧", "axe", "berserker"]): return "axe"
-	if _has(txt, ["锤", "hammer", "sven", "tiny"]): return "hammer"
-	if _has(txt, ["石", "山", "地", "earth", "shaker", "tusk"]): return "stone"
-	if _has(txt, ["枪", "矛", "spear", "lancer", "mars"]): return "spear"
-	if _has(txt, ["箭", "弓", "sniper", "drow", "clinkz", "wind"]): return "arrow"
-	if _has(txt, ["刀", "剑", "blade", "jugger", "riki", "slark"]): return "blade"
-	if _has(txt, ["火", "焰", "炮", "fire", "lina", "bat", "phoenix", "gyrocopter"]): return "fire"
-	if _has(txt, ["雷", "电", "storm", "razor", "zeus"]): return "thunder"
-	if _has(txt, ["冰", "寒", "霜", "水", "浪", "潮", "river", "morph", "kunkka", "lich", "winter"]): return "water"
-	if _has(txt, ["毒", "瘴", "venom", "viper", "poison"]): return "poison"
-	if _has(txt, ["魂", "黑", "暗", "影", "梦", "shadow", "bane", "spectre", "night"]): return "shadow"
-	if _has(txt, ["医", "安道全", "heal", "omni", "oracle", "dazzle"]): return "holy"
-	if _has(txt, ["虎", "龙", "狼", "兽", "lycan", "dragon", "beast", "ursa"]): return "beast"
-	if _has(txt, ["索", "钩", "链", "网", "pudge", "shaman"]): return "chain"
+	if _has(txt, ["锤", "hammer"]): return "hammer"
+	if _has(txt, ["石", "山", "地", "earth"]): return "stone"
+	if _has(txt, ["枪", "矛", "spear", "lancer"]): return "spear"
+	if _has(txt, ["箭", "弓", "arrow", "wind"]): return "arrow"
+	if _has(txt, ["刀", "剑", "blade"]): return "blade"
+	if _has(txt, ["火", "焰", "炮", "fire"]): return "fire"
+	if _has(txt, ["雷", "电", "storm", "thunder"]): return "thunder"
+	if _has(txt, ["冰", "寒", "霜", "水", "浪", "潮", "river", "winter"]): return "water"
+	if _has(txt, ["毒", "瘴", "venom", "poison"]): return "poison"
+	if _has(txt, ["魂", "黑", "暗", "影", "梦", "shadow", "night"]): return "shadow"
+	if _has(txt, ["医", "安道全", "heal", "holy"]): return "holy"
+	if _has(txt, ["虎", "龙", "狼", "兽", "dragon", "beast"]): return "beast"
+	if _has(txt, ["索", "钩", "链", "网", "chain"]): return "chain"
 	if _has(txt, ["宋", "军", "令", "banner", "commander"]): return "command"
 	return ["stone", "blade", "fire", "water", "shadow", "thunder"][abs(hash(key)) % 6]
 

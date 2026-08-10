@@ -105,7 +105,7 @@ void fragment() {
 	col.add_child(_mk_module("📜  剧情模式", "八幕战役 · 替天行道，从智取生辰纲到三败高太尉", Color("ffd866"), _show_story))
 	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", Color("a9e34b"), _show_defense, true))
 	col.add_child(_mk_module("⚔  1v1 对战", "对称经济 · 真实造兵造房，三种胜利条件、三档 AI", Color("8fd3ff"), _show_1v1))
-	col.add_child(_mk_module("🏟  竞技场", "DOTA 改版试演场 · 自由点将放技能、一键刷敌（仅此模式启用新技能组）", Color("ff7a4a"), func() -> void:
+	col.add_child(_mk_module("🏟  竞技场", "百八好汉技能试演场 · 自由点将放技能、一键刷敌", Color("ff7a4a"), func() -> void:
 		Campaign.arena = true
 		Campaign.skirmish = false
 		Campaign.skirmish_ai = false

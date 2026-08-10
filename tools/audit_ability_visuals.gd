@@ -12,7 +12,7 @@ const EXCLUDE := {
 func _init() -> void:
 	var defs := Defs.UNITS.duplicate(true)
 	var abilities := Defs.ABILITIES.duplicate(true)
-	var applied := DotaVisuals.apply(defs, abilities)
+	var applied := AbilityVisuals.apply(defs, abilities)
 	var heroes: Array = []
 	var targets: Array = []
 	var kinds := {}
@@ -42,7 +42,7 @@ func _init() -> void:
 	targets.sort()
 	var ks: Array = kinds.keys()
 	ks.sort()
-	print("[dota_visual_audit] heroes=%d excluded=%d targets=%d abilities=%d visuals=%d excluded_visuals=%d applied=%s" % [
+	print("[ability_visual_audit] heroes=%d excluded=%d targets=%d abilities=%d visuals=%d excluded_visuals=%d applied=%s" % [
 		heroes.size(), EXCLUDE.size(), targets.size(), target_abilities, visual_count, excluded_visuals, str(applied)])
 	for k in ks:
 		print("  %-14s %d" % [String(k), int(kinds[k])])
