@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "kind": "li_kui_jiangzhou_native_alpha_fixed_rect_production_provenance",
+  "created_at": "2026-09-03T01:17:22.655954+08:00",
+  "variant": "li_kui_jiangzhou",
+  "states": [
+    "idle",
+    "walk",
+    "attack",
+    "hurt",
+    "down"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "frame_count": 20,
+  "source_generation_conversation": "https://chatgpt.com/c/6a985486-6cc8-83e9-b173-e8a1b797e746",
+  "web_native_alpha": true,
+  "alpha_cleanup_performed": false,
+  "candidate_manifest": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/candidate_manifest.json",
+  "candidate_manifest_sha256": "bc5511035aed74f099f43e7626c3c5870eedf18c6bd5ae68cfa63261b7dc5d0b",
+  "candidate_preview": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/runtime_size_fringe_preview.png",
+  "candidate_preview_sha256": "d25621d940fd5d5cc23fa1bbb3479f5c650387d88c32f8ba765c3e2bc2d0f010",
+  "manual_visual_review": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/manual_visual_review.json",
+  "manual_visual_review_sha256": "1dc91fe85f5a3c56edfdefb4b720d37860835eb3bb21b63303e88657017d0164",
+  "manual_visual_review_passed": true,
+  "backup_path": "implementation_20260902/li_kui_jiangzhou_direction4_production_backup_20260903_011700",
+  "backup_manifest": "implementation_20260902/li_kui_jiangzhou_direction4_production_backup_20260903_011700/backup_manifest.json",
+  "backup_manifest_sha256": "06786999dafc2b76bfadfa3f357c54c60c79b3f53a6c83a3fd4d0853514a591c",
+  "allowed_local_operations": [
+    "continuous source rectangle crop",
+    "batch-uniform proportional scale",
+    "transparent padding",
+    "PNG format encoding",
+    "byte-identical production copy"
+  ],
+  "forbidden_operations_used": [],
+  "sources": [
+    {
+      "action": "idle",
+      "source_file": "li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_sha256": "2ca9a04cdf4246f97cf0daaed87399143297b1490b01717eae59391fb6b45d6e",
+      "source_mode": "RGBA",
+      "source_size": [
+        2098,
+        749
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/01_li_kui_jiangzhou_idle_1x4.txt",
+      "prompt_sha256": "136ae3382af8fccce409ab07e13b2c2a13ab2d38128f57ab4a4e95cfe551c958",
+      "fixed_cell_x_boundaries": [
+        0,
+        531,
+        1070,
+        1595,
+        2098
+      ]
+    },
+    {
+      "action": "walk",
+      "source_file": "li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_sha256": "5ee7c0508b4c09a90aaf469b456a6882284fe4710b8f6ee0517095dd75232fec",
+      "source_mode": "RGBA",
+      "source_size": [
+        2048,
+        768
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/02_li_kui_jiangzhou_walk_1x4.txt",
+      "prompt_sha256": "3ccf46f397fe332ccdc902f629c48044f45370a7bae7610c4d7048ac331e9ec3",
+      "fixed_cell_x_boundaries": [
+        0,
+        519,
+        1060,
+        1570,
+        2048
+      ]
+    },
+    {
+      "action": "attack",
+      "source_file": "li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_sha256": "39b297d2bcf217fce90c19f36aaae514c3f3033cb2b9b690340d4b79021767da",
+      "source_mode": "RGBA",
+      "source_size": [
+        2048,
+        768
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/03_li_kui_jiangzhou_attack_1x4.txt",
+      "prompt_sha256": "e6587d53d14e910c58e351174c499670533c49ecf0fedfa3d1f1d193d38232b3",
+      "fixed_cell_x_boundaries": [
+        0,
+        526,
+        994,
+        1514,
+        2048
+      ]
+    },
+    {
+      "action": "hurt",
+      "source_file": "li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_sha256": "0d023f2907fc4f9398b1a6feab7ba54cdfd848150c7f33d25aec64cd6ffef58b",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/04_li_kui_jiangzhou_hurt_1x4.txt",
+      "prompt_sha256": "4f59762e9721a870d534881bbf58a28a183bdcdd5ee4e14db522844cdc4609c5",
+      "fixed_cell_x_boundaries": [
+        0,
+        566,
+        1104,
+        1673,
+        2172
+      ]
+    },
+    {
+      "action": "down",
+      "source_file": "li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_sha256": "27129937ba2c346ec2fc3078c065bbe37c3f8f08e06da0dfbfaa084d8e60f8e3",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/05_li_kui_jiangzhou_down_1x4.txt",
+      "prompt_sha256": "e0bd241d05584749ab6564d490e64c87b2109d8257206997f1c5308cd0ea232c",
+      "fixed_cell_x_boundaries": [
+        0,
+        566,
+        1110,
+        1602,
+        2172
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "se",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_idle_se.png",
+      "sha256": "eeb9bd5a44e125a5e9b3e495cf909682df67ea1ad2c3fab89612779f8c586720",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_se.png",
+      "candidate_sha256": "eeb9bd5a44e125a5e9b3e495cf909682df67ea1ad2c3fab89612779f8c586720",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "sw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_idle_sw.png",
+      "sha256": "1eb0be2b3d84bbf171d8201b2a355033b2ef806dc6b6d190c3d0c87aab6d1d67",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_sw.png",
+      "candidate_sha256": "1eb0be2b3d84bbf171d8201b2a355033b2ef806dc6b6d190c3d0c87aab6d1d67",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "ne",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_idle_ne.png",
+      "sha256": "a83d51038434b5dd59a5739a7dd206bfc0bb1fdfa268f3ad7480e419abe3dadf",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_ne.png",
+      "candidate_sha256": "a83d51038434b5dd59a5739a7dd206bfc0bb1fdfa268f3ad7480e419abe3dadf",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "nw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_idle_nw.png",
+      "sha256": "87f2750bdf91672fbea17dacec58b461267f57e9763d8b8fa77f679691b8ed4b",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_nw.png",
+      "candidate_sha256": "87f2750bdf91672fbea17dacec58b461267f57e9763d8b8fa77f679691b8ed4b",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "se",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_walk_se.png",
+      "sha256": "782d08030baa129deef0b76d146270b852690639a49e899c7190153512490c3e",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_se.png",
+      "candidate_sha256": "782d08030baa129deef0b76d146270b852690639a49e899c7190153512490c3e",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "sw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_walk_sw.png",
+      "sha256": "fa3511cb2f4b03f46c56e0ea13fa7d371e025d0fd8398ffab2eebb2399ff3f17",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_sw.png",
+      "candidate_sha256": "fa3511cb2f4b03f46c56e0ea13fa7d371e025d0fd8398ffab2eebb2399ff3f17",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "ne",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_walk_ne.png",
+      "sha256": "bc2f193fb74f34b02daa0d488ef6205e8ffcb3554de34d71f9b5ab9d12882d07",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_ne.png",
+      "candidate_sha256": "bc2f193fb74f34b02daa0d488ef6205e8ffcb3554de34d71f9b5ab9d12882d07",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "nw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_walk_nw.png",
+      "sha256": "b95634ed33c218efd93212f7f220a35a841d11d24afee6b5cc62c78e69b18573",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_nw.png",
+      "candidate_sha256": "b95634ed33c218efd93212f7f220a35a841d11d24afee6b5cc62c78e69b18573",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "se",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_attack_se.png",
+      "sha256": "6cef1a6e056c4140b21d31b1b43910a4331ccdf0655b1163eca6c62200a504f4",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_se.png",
+      "candidate_sha256": "6cef1a6e056c4140b21d31b1b43910a4331ccdf0655b1163eca6c62200a504f4",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "sw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_attack_sw.png",
+      "sha256": "de773716b0432c04d6c2b2327a86a6b1e3e5cb3261166c4c1c0069477ddf47df",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_sw.png",
+      "candidate_sha256": "de773716b0432c04d6c2b2327a86a6b1e3e5cb3261166c4c1c0069477ddf47df",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "ne",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_attack_ne.png",
+      "sha256": "975010f6cf5894d7c3ad650d299cce8f81631816570fba5eed510d562804f203",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_ne.png",
+      "candidate_sha256": "975010f6cf5894d7c3ad650d299cce8f81631816570fba5eed510d562804f203",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "nw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_attack_nw.png",
+      "sha256": "88aee545b2ba8d9d56af9722a0cb8b2d8bb69da9a8d0276590ce85500a5991d1",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_nw.png",
+      "candidate_sha256": "88aee545b2ba8d9d56af9722a0cb8b2d8bb69da9a8d0276590ce85500a5991d1",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "se",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_hurt_se.png",
+      "sha256": "aff34b375e4a1474ed2fb40de050b929cc87656439c96b40a7d6abc06b48c151",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_se.png",
+      "candidate_sha256": "aff34b375e4a1474ed2fb40de050b929cc87656439c96b40a7d6abc06b48c151",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "sw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_hurt_sw.png",
+      "sha256": "5b9ea4564f01b960cafc7ce9c0ea0427f6eefde65ff343bde3b36e973505d4eb",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_sw.png",
+      "candidate_sha256": "5b9ea4564f01b960cafc7ce9c0ea0427f6eefde65ff343bde3b36e973505d4eb",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "ne",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_hurt_ne.png",
+      "sha256": "56104394fc4e8aa938ec0f190522f9108f026ef6e4df528bf3e86f65dd5e799e",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_ne.png",
+      "candidate_sha256": "56104394fc4e8aa938ec0f190522f9108f026ef6e4df528bf3e86f65dd5e799e",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "nw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_hurt_nw.png",
+      "sha256": "232473d60b47b76fc7eaddd8f705b5e0cec10f08178bd6ac080334a4a307a1d4",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_nw.png",
+      "candidate_sha256": "232473d60b47b76fc7eaddd8f705b5e0cec10f08178bd6ac080334a4a307a1d4",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "se",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_down_se.png",
+      "sha256": "503b55976f33cbff91c9132fbc918478243fc03d6a109fbeea0a0a1706aec2db",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_se.png",
+      "candidate_sha256": "503b55976f33cbff91c9132fbc918478243fc03d6a109fbeea0a0a1706aec2db",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "sw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_down_sw.png",
+      "sha256": "bacae24078cbbccc7cdcfa436df9891f248fcbe3c2035777c4cc4234dc8b1318",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_sw.png",
+      "candidate_sha256": "bacae24078cbbccc7cdcfa436df9891f248fcbe3c2035777c4cc4234dc8b1318",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "ne",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_down_ne.png",
+      "sha256": "dc4c2a91c7c7e036fccbccd454850c64090c7c00b6cca91d13ba1417bf4a6e63",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_ne.png",
+      "candidate_sha256": "dc4c2a91c7c7e036fccbccd454850c64090c7c00b6cca91d13ba1417bf4a6e63",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "nw",
+      "path": "assets/campaign/anim/li_kui_jiangzhou_down_nw.png",
+      "sha256": "4a2755b0a196271622ee6efb137ed60364df35e4ed747735ee173ab6f74fe5d2",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_nw.png",
+      "candidate_sha256": "4a2755b0a196271622ee6efb137ed60364df35e4ed747735ee173ab6f74fe5d2",
+      "copy_is_byte_identical_to_candidate": true
+    }
+  ],
+  "portrait": {
+    "path": "assets/campaign/portraits/li_kui_jiangzhou.png",
+    "sha256": "eeb9bd5a44e125a5e9b3e495cf909682df67ea1ad2c3fab89612779f8c586720",
+    "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_portrait.png",
+    "candidate_sha256": "eeb9bd5a44e125a5e9b3e495cf909682df67ea1ad2c3fab89612779f8c586720",
+    "copy_is_byte_identical_to_candidate": true
+  },
+  "protected_generic_li_kui_sha256": {
+    "assets/anim/li_kui_idle_se.png": "af2ff8e0a1f18340453d2d5f2cf7d62ddaed327fc284ace2e46d711b91aeeb15",
+    "assets/anim/li_kui_idle_sw.png": "32cee4b3c2c2f9cdd5f9c1d158dd14540a6a34bfc614243e93482d884a981c83",
+    "assets/anim/li_kui_idle_ne.png": "e5117bed6ecda5c9bdc530f1a0af2f1761c4039705f0965348ef7994b6e4795c",
+    "assets/anim/li_kui_idle_nw.png": "562217f728f9ac15189a32741cdbe55d3d32ff116d301012befef399f76ec416",
+    "assets/anim/li_kui_walk_se.png": "22e1ac386ab6dbe98517d0c107c0d4fbfe3a08f510020aa281c3eecbd5c87e78",
+    "assets/anim/li_kui_walk_sw.png": "214dab9e13bc1bac7a27f4aabd3f22a405b17e0505c928d48c1574fb55466a38",
+    "assets/anim/li_kui_walk_ne.png": "e2b86b42e8bef86f3ad17e1bd1bb325006bb8aaa776f2fd23d56a2a89affcb63",
+    "assets/anim/li_kui_walk_nw.png": "e91baad1f2eb453c5a3c2d7d00525f4d020cd3907844734098be6677a78c004d",
+    "assets/anim/li_kui_attack_se.png": "5be56185527cf44a785104ee101be8e1bbfda132c78571fe76ab9ff3c7859f71",
+    "assets/anim/li_kui_attack_sw.png": "95641ded2cbf7c78697f43bf54b63513730dfc30b0a68792795d17f4747f8cc5",
+    "assets/anim/li_kui_attack_ne.png": "2f324e4f38f69db76a3c80f6a58077ba3191ca7915bf09f1668698fa6459190c",
+    "assets/anim/li_kui_attack_nw.png": "a2f3ec94ba9cc8e9967cd3022e6b276f4a2597cc67d1c3e96506e963936419b6",
+    "assets/anim/li_kui_hurt_se.png": "e99834fa6200b94c30ee68a202464708735ffc7cb908c8002afb42a48c9c71a7",
+    "assets/anim/li_kui_hurt_sw.png": "586da5e190b6b4f0266d2393b3c68dd5e0a6de8f5897ca2c1f7064752aeed62e",
+    "assets/anim/li_kui_hurt_ne.png": "1660954f4dc11c59b1a69ae1192e44ea91a3ed60f1b43406d7a5abe325ebc091",
+    "assets/anim/li_kui_hurt_nw.png": "f259e35a45906c6cb84d13e914dff6427c17d12c2600b907f3484854035b7346",
+    "assets/anim/li_kui_down_se.png": "9cd36da8d3c557a33ce91517c8aebf9a357a6a8f445fd60112ea62ee8b2571de",
+    "assets/anim/li_kui_down_sw.png": "b80b6e5977d0fa5dd152c3cf0f400d40bc143a57754ab5c2a624576a9806a089",
+    "assets/anim/li_kui_down_ne.png": "541e8b59f8813993c36aa93130b6e9a25f548bb30b0dfe45e192a6cea9513a06",
+    "assets/anim/li_kui_down_nw.png": "fc7b9aedb055da9521d3f7fd33088f19d804d6f8f545df38640a21dae6bd90fc"
+  },
+  "runtime_route": {
+    "campaign_scope": "level2 Jiangzhou deploy assigns art_variant=li_kui_jiangzhou only to unit key li_kui",
+    "other_modes": "generic li_kui assets remain separate and hash-locked",
+    "ordinary_states": "idle/walk/attack/hurt/down resolve through CampaignArt.animation_path",
+    "down_original_boundary": "free-play defeat state only; not presented as the chapter 40 or 41 outcome"
+  },
+  "steam_modified_or_exported": false
+}

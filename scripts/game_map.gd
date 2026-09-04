@@ -52,9 +52,121 @@ var base_fill := T.GRASS
 var grid := PackedInt32Array()
 var astar := AStarGrid2D.new()
 var astar_guan := AStarGrid2D.new()
+var astar_water := AStarGrid2D.new()
+# 静态陆路导航只记录烘焙时的天然地形，不随建筑占地改变。
+# 官军动态路线失败时用它判断“地图本来有路，只是被玩家建筑封住”。
+var astar_static := AStarGrid2D.new()
+var astar_static_guan := AStarGrid2D.new()
 var _base_solid := PackedByteArray()
 var _block_count := PackedInt32Array()
+var _navigation_revision := 0
 var decor: Array = []   # [tex_key, Vector2i cell, float size]，由关卡设置
+var sample_scenery: Node2D = null  # 第5关局部视觉样板；不参与格子、寻路或经济逻辑。
+var height_field: RefCounted = null
+var environment_style: String = ""
+var natural_surface_enabled := false
+# Retains ArrayMesh resources emitted by TerrainDrawBatch for the lifetime of
+# the current CanvasItem draw command. CanvasItem stores the mesh RID, not a
+# script-owned RefCounted reference, so a local-only batch can be freed before
+# the renderer consumes it.
+var _terrain_draw_cache: RefCounted = null
+
+# 自然地表只改变最终着色，不改变逻辑格、碰撞、寻路权重或高度场。
+# 贴图权重在格心之间连续插值，shader 将可见过渡收窄到 12—24 逻辑像素，
+# 并以固定种子的低频位移打散笔直的 32px 格边。
+const NATURAL_SURFACE_BLEND_MIN_PX := 12.0
+const NATURAL_SURFACE_BLEND_MAX_PX := 24.0
+const NATURAL_SURFACE_WARP_PX := 5.0
+const NATURAL_SURFACE_SEED := 5088120
+const SURFACE_GRASS := 0
+const SURFACE_DRY := 1
+const SURFACE_WET := 2
+const SURFACE_HARD := 3
+const SURFACE_FIELD := 4
+const SURFACE_CLASS_COUNT := 5
+
+
+func height_at(p: Vector2) -> float:
+	return height_field.at(p) if height_field != null else 0.0
+
+
+func ground_basis(p: Vector2) -> Transform2D:
+	# 地面阴影沿当前位置坡面倾斜；不改变人物自身的直立绘制。
+	var dx := (height_at(p + Vector2(8, 0)) - height_at(p - Vector2(8, 0))) / 16.0
+	var dy := (height_at(p + Vector2(0, 8)) - height_at(p - Vector2(0, 8))) / 16.0
+	return Transform2D(Vector2(1.0 - dx, -dx), Vector2(-dy, 1.0 - dy), Vector2.ZERO)
+
+
+func project(p: Vector2) -> Vector2:
+	return ISO * p - Vector2(0, height_at(p))
+
+
+func unproject(screen: Vector2) -> Vector2:
+	var flat := ISO_INV * screen
+	if height_field == null:
+		return flat
+	# 沿(1,1)求唯一交点；高度场坡度受限，投影不折叠。
+	var low := 0.0
+	var high: float = height_field.MAX_HEIGHT
+	for i in range(20):
+		var mid := (low + high) * 0.5
+		if mid < height_at(flat + Vector2.ONE * mid):
+			low = mid
+		else:
+			high = mid
+	return flat + Vector2.ONE * ((low + high) * 0.5)
+
+
+func sync_render_position(node: Node2D) -> void:
+	# 仅改RenderingServer绘制变换，Node2D.position仍是原来的寻路坐标。
+	var tr := node.transform
+	var elevation := height_at(node.position)
+	var previous: float = node.get_meta("render_height", 0.0)
+	if elevation == 0.0 and previous == 0.0:
+		return
+	tr.origin -= Vector2.ONE * elevation
+	RenderingServer.canvas_item_set_transform(node.get_canvas_item(), tr)
+	if elevation != previous:
+		node.set_meta("render_height", elevation)
+
+
+static func projected_delta(node: Node2D, delta: Vector2) -> Vector2:
+	# 跨高低地的特效端点也走战场的同一投影；其他关卡等价于原ISO。
+	var ancestor: Node = node.get_parent()
+	while ancestor != null:
+		if ancestor.has_method("to_screen"):
+			return ancestor.to_screen(node.position + delta) - ancestor.to_screen(node.position)
+		ancestor = ancestor.get_parent()
+	return ISO.basis_xform(delta)
+
+
+func enable_liangshan_sample() -> void:
+	if sample_scenery != null or OS.get_environment("LIANGSHAN_VISUAL_BASELINE") == "1":
+		return
+	natural_surface_enabled = OS.get_environment("CAMPAIGN_NATURAL_TERRAIN") != "0"
+	if OS.get_environment("LIANGSHAN_FLAT_SAMPLE") != "1":
+		height_field = load("res://scripts/liangshan_height.gd").new()
+		height_field.build(w, h, grid)
+	sample_scenery = load("res://scripts/liangshan_scenery.gd").new()
+	add_child(sample_scenery)
+	sample_scenery.setup(self)
+	queue_redraw()
+
+
+func enable_campaign_environment(id: String) -> void:
+	var config = load("res://scripts/campaign_environment.gd")
+	if sample_scenery != null or not config.enabled(id): return
+	config.decorate(self,id)
+	# 黄泥冈与梁山样板验收后扩展到全部战役；环境变量保留单次旧材质回退。
+	natural_surface_enabled = OS.get_environment("CAMPAIGN_NATURAL_TERRAIN") != "0"
+	if OS.get_environment("CAMPAIGN_FLAT")!="1":
+		height_field = load("res://scripts/campaign_height.gd").new()
+		height_field.style = id
+		height_field.build(w,h,grid)
+	sample_scenery = load("res://scripts/campaign_scenery.gd").new()
+	add_child(sample_scenery)
+	sample_scenery.setup(self)
+	queue_redraw()
 
 
 func init_map(p_w: int, p_h: int, p_theme: String, p_base: int) -> void:
@@ -125,7 +237,7 @@ func scatter(of_type: int, into: int, density: int, seed_mix: int = 0) -> void:
 ## ---------- 寻路烘焙 ----------
 
 func bake() -> void:
-	for nav in [astar, astar_guan]:
+	for nav in [astar, astar_guan, astar_water, astar_static, astar_static_guan]:
 		nav.region = Rect2i(0, 0, w, h)
 		nav.cell_size = Vector2(CELL, CELL)
 		nav.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
@@ -138,15 +250,23 @@ func bake() -> void:
 		for x in range(w):
 			var id := Vector2i(x, y)
 			var info: Dictionary = INFO[t_at(x, y)]
+			astar_water.set_point_solid(id, t_at(x, y) != T.WATER)
+			# AStarGrid2D.update() is a no-op when dimensions are unchanged.
+			# Explicitly restore both open and blocked cells when a map is rebaked.
+			astar.set_point_solid(id, bool(info["solid"]))
+			astar_guan.set_point_solid(id, bool(info["solid"]))
+			astar_static.set_point_solid(id, bool(info["solid"]))
+			astar_static_guan.set_point_solid(id, bool(info["solid"]))
 			if info["solid"]:
-				astar.set_point_solid(id, true)
-				astar_guan.set_point_solid(id, true)
 				_base_solid[idx(x, y)] = 1
 			else:
 				var sl: float = info["sl"]
 				var sg: float = info["sg"]
 				astar.set_point_weight_scale(id, clampf(1.4 / maxf(sl, 0.2), 1.0, 4.0))
 				astar_guan.set_point_weight_scale(id, clampf(1.4 / maxf(sg, 0.2), 1.0, 4.0))
+				astar_static.set_point_weight_scale(id, clampf(1.4 / maxf(sl, 0.2), 1.0, 4.0))
+				astar_static_guan.set_point_weight_scale(id, clampf(1.4 / maxf(sg, 0.2), 1.0, 4.0))
+	_navigation_revision += 1
 	queue_redraw()
 
 
@@ -158,38 +278,38 @@ func cell_to_world(c: Vector2i) -> Vector2:
 	return Vector2(c.x * CELL + CELL * 0.5, c.y * CELL + CELL * 0.5)
 
 
-func is_open_cell(c: Vector2i) -> bool:
+func is_open_cell(c: Vector2i, profile: String = "land") -> bool:
 	if c.x < 0 or c.y < 0 or c.x >= w or c.y >= h:
 		return false
-	return not astar.is_point_solid(c)
+	return not (astar_water if profile == "water" else astar).is_point_solid(c)
 
 
-func is_open_world(p: Vector2) -> bool:
-	return is_open_cell(world_to_cell(p))
+func is_open_world(p: Vector2, profile: String = "land") -> bool:
+	return p.x >= 0 and p.y >= 0 and p.x < w * CELL and p.y < h * CELL and is_open_cell(world_to_cell(p), profile)
 
 
-func nearest_open(c: Vector2i) -> Vector2i:
+func nearest_open(c: Vector2i, profile: String = "land") -> Vector2i:
 	c = Vector2i(clampi(c.x, 0, w - 1), clampi(c.y, 0, h - 1))
-	if is_open_cell(c):
+	if is_open_cell(c, profile):
 		return c
-	for r in range(1, 12):
+	for r in range(1, maxi(w, h)):
 		for dy in range(-r, r + 1):
 			for dx in range(-r, r + 1):
 				if maxi(absi(dx), absi(dy)) != r:
 					continue
 				var n := c + Vector2i(dx, dy)
-				if is_open_cell(n):
+				if is_open_cell(n, profile):
 					return n
-	return c
+	return Vector2i(-1, -1)
 
 
 ## 从 target 周边开放格里选“朝 origin 最近”的一格。攻击/采集建筑时各单位走自己最近的一侧，
 ## 不再全部挤向扫描顺序固定的左上角。
-func nearest_open_from(target: Vector2i, origin: Vector2i) -> Vector2i:
+func nearest_open_from(target: Vector2i, origin: Vector2i, profile: String = "land") -> Vector2i:
 	target = Vector2i(clampi(target.x, 0, w - 1), clampi(target.y, 0, h - 1))
-	if is_open_cell(target):
+	if is_open_cell(target, profile):
 		return target
-	for r in range(1, 12):
+	for r in range(1, maxi(w, h)):
 		var best := Vector2i(-1, -1)
 		var best_d := INF
 		for dy in range(-r, r + 1):
@@ -197,7 +317,7 @@ func nearest_open_from(target: Vector2i, origin: Vector2i) -> Vector2i:
 				if maxi(absi(dx), absi(dy)) != r:
 					continue
 				var n := target + Vector2i(dx, dy)
-				if not is_open_cell(n):
+				if not is_open_cell(n, profile):
 					continue
 				var d := Vector2(n).distance_squared_to(Vector2(origin))
 				if d < best_d:
@@ -205,33 +325,105 @@ func nearest_open_from(target: Vector2i, origin: Vector2i) -> Vector2i:
 					best = n
 		if best.x >= 0:
 			return best
-	return target
+	return Vector2i(-1, -1)
 
 
-func find_path(from_w: Vector2, to_w: Vector2, faction := 0) -> PackedVector2Array:
-	var a := nearest_open(world_to_cell(from_w))
+func find_path(from_w: Vector2, to_w: Vector2, faction := 0, profile: String = "land") -> PackedVector2Array:
+	var a := nearest_open(world_to_cell(from_w), profile)
 	var target_cell := world_to_cell(to_w)
-	var b := nearest_open_from(target_cell, a)
+	var b := nearest_open_from(target_cell, a, profile)
 	var out := PackedVector2Array()
-	if a == b:
-		out.append(to_w if target_cell == b and is_open_world(to_w) else cell_to_world(b))
+	if a.x < 0 or b.x < 0 or not is_open_world(from_w, profile):
 		return out
-	var nav := astar if faction == 0 else astar_guan
+	if a == b:
+		out.append(to_w if target_cell == b and is_open_world(to_w, profile) else cell_to_world(b))
+		return out
+	var nav := astar_water if profile == "water" else (astar if faction == 0 else astar_guan)
 	var ids := nav.get_id_path(a, b)
 	if ids.is_empty():
 		return out   # 不可达就明确失败；单位状态机负责结束/重试，绝不伪造穿墙直线
 	for i in range(1, ids.size()):
 		out.append(cell_to_world(ids[i]))
-	var smooth := _smooth_path(from_w, out)
-	if target_cell == b and is_open_world(to_w) and not smooth.is_empty():
+	var smooth := _smooth_path(from_w, out, profile)
+	if target_cell == b and is_open_world(to_w, profile) and not smooth.is_empty():
 		var prev := from_w if smooth.size() == 1 else smooth[smooth.size() - 2]
-		if _segment_open(prev, to_w):
+		if _segment_open(prev, to_w, profile):
 			smooth[smooth.size() - 1] = to_w
 	return smooth
 
 
+func navigation_revision() -> int:
+	return _navigation_revision
+
+
+func is_dynamic_blocked(c: Vector2i) -> bool:
+	return c.x >= 0 and c.y >= 0 and c.x < w and c.y < h \
+		and _base_solid[idx(c.x, c.y)] == 0 and _block_count[idx(c.x, c.y)] > 0
+
+
+func _static_open(c: Vector2i, faction := 0) -> bool:
+	if c.x < 0 or c.y < 0 or c.x >= w or c.y >= h:
+		return false
+	return not (astar_static if faction == 0 else astar_static_guan).is_point_solid(c)
+
+
+func _nearest_static_open(c: Vector2i, faction := 0) -> Vector2i:
+	c = Vector2i(clampi(c.x, 0, w - 1), clampi(c.y, 0, h - 1))
+	if _static_open(c, faction):
+		return c
+	for r in range(1, maxi(w, h)):
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				if maxi(absi(dx), absi(dy)) != r:
+					continue
+				var n := c + Vector2i(dx, dy)
+				if _static_open(n, faction):
+					return n
+	return Vector2i(-1, -1)
+
+
+func _nearest_static_open_from(target: Vector2i, origin: Vector2i, faction := 0) -> Vector2i:
+	target = Vector2i(clampi(target.x, 0, w - 1), clampi(target.y, 0, h - 1))
+	if _static_open(target, faction):
+		return target
+	for r in range(1, maxi(w, h)):
+		var best := Vector2i(-1, -1)
+		var best_d := INF
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				if maxi(absi(dx), absi(dy)) != r:
+					continue
+				var n := target + Vector2i(dx, dy)
+				if not _static_open(n, faction):
+					continue
+				var d := Vector2(n).distance_squared_to(Vector2(origin))
+				if d < best_d:
+					best_d = d
+					best = n
+		if best.x >= 0:
+			return best
+	return Vector2i(-1, -1)
+
+
+## 返回忽略动态建筑后的静态地形格路线。仅供堵路识别/异常恢复使用，
+## 正常移动仍必须走 find_path，不能借此穿过建筑。
+func find_static_cell_path(from_w: Vector2, to_w: Vector2, faction := 0, profile: String = "land") -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	if profile != "land":
+		return out
+	var a := _nearest_static_open(world_to_cell(from_w), faction)
+	var b := _nearest_static_open_from(world_to_cell(to_w), a, faction)
+	if a.x < 0 or b.x < 0:
+		return out
+	var nav := astar_static if faction == 0 else astar_static_guan
+	var ids := nav.get_id_path(a, b)
+	for id in ids:
+		out.append(Vector2i(id))
+	return out
+
+
 ## AStar 保证可达；这里把相邻同向/可直达路点合并，减少单位沿网格折线左右摆。
-func _smooth_path(from_w: Vector2, raw: PackedVector2Array) -> PackedVector2Array:
+func _smooth_path(from_w: Vector2, raw: PackedVector2Array, profile: String = "land") -> PackedVector2Array:
 	if raw.size() <= 2:
 		return raw
 	var out := PackedVector2Array()
@@ -241,7 +433,7 @@ func _smooth_path(from_w: Vector2, raw: PackedVector2Array) -> PackedVector2Arra
 		var best := i
 		# 直连窗口封顶 +14 格：全量回看是 O(n²) 段采样，长路/迷宫地形批量重寻路时会掉帧；14 格已够拉直大多数折线
 		for j in range(mini(raw.size() - 1, i + 14), i - 1, -1):
-			if _segment_open(anchor, raw[j]):
+			if _segment_open(anchor, raw[j], profile):
 				best = j
 				break
 		out.append(raw[best])
@@ -253,7 +445,9 @@ func _smooth_path(from_w: Vector2, raw: PackedVector2Array) -> PackedVector2Arra
 ## 线段可直达判定：Amanatides-Woo 网格遍历——走线段真正扫过的每一格，斜穿格角时两侧邻格都查。
 ## 之前按 0.45 格步长采样会漏掉贴角的实心格 → 平滑出「穿墙线」，单位每帧移动(2~3px)又过不去，
 ## 表现为撞上建筑原地来回抖动（用户反馈）。精确遍历后平滑绝不产出被封线段。
-func _segment_open(a: Vector2, b: Vector2) -> bool:
+func _segment_open(a: Vector2, b: Vector2, profile: String = "land") -> bool:
+	if not is_open_world(a, profile) or not is_open_world(b, profile):
+		return false
 	var c := world_to_cell(a)
 	var cb := world_to_cell(b)
 	if c == cb:
@@ -276,7 +470,7 @@ func _segment_open(a: Vector2, b: Vector2) -> bool:
 	while (c.x != cb.x or c.y != cb.y) and guard < 512:
 		guard += 1
 		if absf(tmx - tmy) < 0.0001:   # 恰好穿过格角：斜向两侧任一实心即视为堵（防贴角穿缝）
-			if not is_open_cell(Vector2i(c.x + sx, c.y)) or not is_open_cell(Vector2i(c.x, c.y + sy)):
+			if not is_open_cell(Vector2i(c.x + sx, c.y), profile) or not is_open_cell(Vector2i(c.x, c.y + sy), profile):
 				return false
 			c.x += sx
 			c.y += sy
@@ -288,22 +482,28 @@ func _segment_open(a: Vector2, b: Vector2) -> bool:
 		else:
 			c.y += sy
 			tmy += tdy
-		if not is_open_cell(c):
+		if not is_open_cell(c, profile):
 			return false
 	return true
 
 
 ## 建造占地：把 (2*half+1)² 范围内格子在寻路网格里设/清 solid（建筑挡路）
 func block_footprint(c: Vector2i, half: int, solid: bool) -> void:
+	var changed := false
 	for dy in range(-half, half + 1):
 		for dx in range(-half, half + 1):
 			var n := c + Vector2i(dx, dy)
 			if n.x >= 0 and n.y >= 0 and n.x < w and n.y < h:
 				var i := idx(n.x, n.y)
-				_block_count[i] = maxi(0, _block_count[i] + (1 if solid else -1))
+				var before := _block_count[i]
+				_block_count[i] = maxi(0, before + (1 if solid else -1))
+				changed = changed or before != _block_count[i]
 				var blocked := _base_solid[i] == 1 or _block_count[i] > 0
 				astar.set_point_solid(n, blocked)
 				astar_guan.set_point_solid(n, blocked)
+				astar_water.set_point_solid(n, t_at(n.x, n.y) != T.WATER or _block_count[i] > 0)
+	if changed:
+		_navigation_revision += 1
 
 
 ## 该范围能否建造：全部在界内且当前可通行（非水/崖/已占建筑）
@@ -324,7 +524,9 @@ func t_world(p: Vector2) -> int:
 
 
 ## 地形移速倍率（按阵营）
-func speed_mult_at(p: Vector2, faction: int) -> float:
+func speed_mult_at(p: Vector2, faction: int, profile: String = "land") -> float:
+	if profile == "water":
+		return 1.0 if is_open_world(p, profile) else 0.0
 	var info: Dictionary = INFO[t_world(p)]
 	return info["sl"] if faction == Unit.FACTION_LIANG else info["sg"]
 
@@ -332,11 +534,117 @@ func speed_mult_at(p: Vector2, faction: int) -> float:
 ## ---------- 渲染 ----------
 
 const TILE_SPAN := 8
+const TerrainDrawBatch := preload("res://scripts/terrain_draw_batch.gd")
 
+
+## Stop forced movement at the first wall or shoreline, rather than snapping across it.
+func limit_displacement(origin: Vector2, desired: Vector2, profile: String = "land") -> Vector2:
+	if _segment_open(origin, desired, profile): return desired
+	var steps := maxi(1, int(ceil(origin.distance_to(desired) / 8.0)))
+	var legal := origin
+	for i in range(1, steps + 1):
+		var point := origin.lerp(desired, float(i) / steps)
+		if not _segment_open(legal, point, profile): break
+		legal = point
+	return legal
 
 func _blend_color(t: int) -> Color:
 	var info: Dictionary = INFO[t]
 	return Art.terrain_avg_color(info["tex"], Color(info["color"]))
+
+
+func natural_surface_class_at(x: int, y: int) -> int:
+	var terrain := t_at(x, y)
+	# 城墙、庄墙、台阶和码头属于人工结构；先锁定硬质地面，再处理普通地貌。
+	if natural_hard_edge_cell(x, y):
+		return SURFACE_HARD
+	# 建筑占地只负责阻挡；视觉地基继承周围地面，避免每座屋舍留下 3x3 方框。
+	if terrain == T.HALL:
+		terrain = _nearest_non_hall_terrain(x, y)
+	# 城镇主路用泥土类材质从广场/街坊中读出来；城市本身仍保持平地。
+	if terrain == T.ROAD and environment_style in ["level2", "level7", "level8"]:
+		return SURFACE_DRY
+	match terrain:
+		T.DRYHILL:
+			return SURFACE_DRY
+		T.WATER, T.SHORE, T.MARSH, T.REEDS:
+			return SURFACE_WET
+		T.ROAD, T.PLAZA, T.TOWN, T.DOCK:
+			return SURFACE_HARD
+		T.FIELD:
+			return SURFACE_FIELD
+	return SURFACE_GRASS
+
+
+func _nearest_non_hall_terrain(x: int, y: int) -> int:
+	for radius in range(1, 5):
+		var counts := {}
+		for dy in range(-radius, radius + 1):
+			for dx in range(-radius, radius + 1):
+				if maxi(absi(dx), absi(dy)) != radius:
+					continue
+				var terrain := t_at(x + dx, y + dy)
+				if terrain == T.HALL or terrain == T.WATER:
+					continue
+				counts[terrain] = int(counts.get(terrain, 0)) + 1
+		if not counts.is_empty():
+			var best := T.GRASS
+			var best_count := -1
+			for terrain in counts:
+				var count: int = counts[terrain]
+				if count > best_count or (count == best_count and int(terrain) < best):
+					best = int(terrain)
+					best_count = count
+			return best
+	return T.GRASS
+
+
+func natural_hard_edge_cell(x: int, y: int) -> bool:
+	# 只保护人工结构的几何边：码头、桥面、台阶和明确登记的庄墙/城墙基线。
+	# 山路、林缘、院地、普通岸坡不得进入白名单，否则会恢复方格轮廓。
+	return t_at(x, y) == T.DOCK or _is_authored_wall_base(x, y) or _is_authored_step_base(x, y)
+
+
+func natural_surface_maps() -> Dictionary:
+	var weights := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var land := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var class_counts := [0, 0, 0, 0, 0]
+	var protected_cells := 0
+	for y in range(h):
+		for x in range(w):
+			var terrain := t_at(x, y)
+			var surface_class := natural_surface_class_at(x, y)
+			class_counts[surface_class] += 1
+			var packed := Color(0, 0, 0, 0)
+			match surface_class:
+				SURFACE_GRASS: packed.r = 1.0
+				SURFACE_DRY: packed.g = 1.0
+				SURFACE_WET: packed.b = 1.0
+				SURFACE_HARD: packed.a = 1.0
+				# FIELD 是第五类：RGBA 全零，shader 用 1-sum(RGBA) 还原。
+			weights.set_pixel(x, y, packed)
+			# 显式关闭自然地表时沿用旧岸线保护（ROAD/DOCK），便于同局回退比较；
+			# 启用后只保留人工结构白名单，普通道路和地貌边缘继续自然过渡。
+			var protected := natural_hard_edge_cell(x, y) if natural_surface_enabled \
+				else terrain in [T.ROAD, T.DOCK]
+			if natural_surface_enabled and not protected:
+				for side in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+					var neighbour_protected := natural_hard_edge_cell(x + side.x, y + side.y) \
+						if natural_surface_enabled else t_at(x + side.x, y + side.y) in [T.ROAD, T.DOCK]
+					if neighbour_protected:
+						protected = true
+						break
+			if protected:
+				protected_cells += 1
+			land.set_pixel(x, y, Color(0.0 if terrain == T.WATER else 1.0,
+				1.0 if protected else 0.0, 0.0, 1.0))
+	var weight_hash := weights.get_data().hex_encode().sha256_text()
+	var land_hash := land.get_data().hex_encode().sha256_text()
+	return {"weights": weights, "land": land, "class_counts": class_counts,
+		"protected_cells": protected_cells, "weight_sha256": weight_hash,
+		"land_sha256": land_hash, "blend_min_px": NATURAL_SURFACE_BLEND_MIN_PX,
+		"blend_max_px": NATURAL_SURFACE_BLEND_MAX_PX, "warp_px": NATURAL_SURFACE_WARP_PX,
+		"seed": NATURAL_SURFACE_SEED}
 
 
 func _near_lower_water(x: int, y: int) -> bool:
@@ -345,26 +653,63 @@ func _near_lower_water(x: int, y: int) -> bool:
 
 
 func _draw() -> void:
+	# 战役原来每格交替提交贴图与纯色色罩，导致数千次材质/纹理批次切换。
+	# 对照采样可设CAMPAIGN_TERRAIN_BATCH=0；自由模式始终保留原提交顺序。
+	var terrain_batch: RefCounted = TerrainDrawBatch.new() if sample_scenery != null and OS.get_environment("CAMPAIGN_TERRAIN_BATCH") != "0" else null
 	for y in range(h):
 		for x in range(w):
 			var t := t_at(x, y)
 			var info: Dictionary = INFO[t]
 			var rect := Rect2(x * CELL, y * CELL, CELL, CELL)
 			var key: String = info["tex"]
+			var ground_tint := Color.WHITE
+			if sample_scenery != null and t == T.DRYHILL:
+				# v6院地复用土路纹理，不能把DRYHILL图中的土坡画进平整院落。
+				key = "road"
+				ground_tint = Color(0.80,0.79,0.71)
+			if sample_scenery != null and t == T.FOREST:
+				# 树冠由独立的直立树木绘制，这里只保留林下地面。
+				key = "grass2"
+				ground_tint = Color(0.68, 0.76, 0.63)
 			var hv := (x * 31 + y * 17 + x * y) % 15
 			if (t == T.GRASS or t == T.HALL) and hv % 3 == 0:
 				key = "grass2"
 			elif t == T.MARSH:
 				key = "marsh" if (hv == 0 and not _near_lower_water(x, y)) else "shore"
+			if sample_scenery != null and t in [T.CLIFF, T.DOCK]:
+				# 样板台地/码头由场景层画连续立面和木板，不重复铺整张物件图。
+				key = "grass2" if t == T.CLIFF else "road"
+				if t == T.CLIFF and (x<10 or y<27):
+					key = "shore"
+					ground_tint = Color(0.72,0.72,0.65)
+			if not environment_style.is_empty():
+				# 野林、村庄、城市各用自己的地面，梁山v7保持原配置。
+				if t in [T.GRASS,T.PLAIN]: key = "grass2"
+				if t == T.HALL: key = "plaza"; ground_tint = Color(0.83,0.82,0.76)
+				if t == T.TOWN: ground_tint = Color(0.77,0.77,0.68)
+				if t in [T.MARSH,T.REEDS]: key = "shore"; ground_tint = Color(0.73,0.78,0.65)
+				if t == T.CLIFF:
+					key = "grass2" if environment_style in ["level1","level6"] else "plain"
+					ground_tint = Color(0.67,0.72,0.59)
+				if t == T.REEDS and environment_style in ["level1","level6"]:
+					key = "grass2"; ground_tint = Color(0.66,0.72,0.58)
+				if t == T.DRYHILL:
+					key = "plain"; ground_tint = Color(0.89,0.81,0.62) if environment_style=="level1" else Color(0.81,0.80,0.67)
+				if t == T.CLIFF and _is_authored_wall_base(x,y):
+					# 庄墙/城墙的CLIFF只承担不可通行标记；基底画夯土，墙由Stockade承担。
+					key = "road"; ground_tint = Color(0.72,0.67,0.54)
 			var tex: Texture2D = Art.terrain_texture(key)
 			if tex != null:
 				var at := tex as AtlasTexture
 				# 地基(T.HALL)虽 solid，渲染上当草地无缝铺，避免营前出现一块突兀方块
-				if at != null and (not bool(info["solid"]) or t == T.HALL):
+				if at != null and (not bool(info["solid"]) or t == T.HALL or sample_scenery != null):
 					var sub := at.region.size / float(TILE_SPAN)
 					var src := Rect2(at.region.position
 						+ Vector2(float(posmod(x, TILE_SPAN)), float(posmod(y, TILE_SPAN))) * sub, sub)
-					draw_texture_rect_region(at.atlas, rect, src)
+					if terrain_batch != null:
+						terrain_batch.add_region(at.atlas,rect,src,ground_tint)
+					else:
+						draw_texture_rect_region(at.atlas, rect, src, ground_tint)
 				else:
 					var rot := 0 if (t == T.ROAD or info["solid"]) else (x * 7 + y * 13 + x * y) % 4
 					if rot == 0:
@@ -386,8 +731,31 @@ func _draw() -> void:
 						var oy := float((x * 19 + y * 23 + k * 7) % 18) + 8.0
 						draw_line(rect.position + Vector2(ox, oy + 6), rect.position + Vector2(ox, oy - 4), rc, 1.5)
 
-	_draw_blends()
+			if sample_scenery != null and not natural_surface_enabled:
+				# 压低地面细纹的对比度，留出人物和建筑轮廓。
+				var tint := Color.TRANSPARENT
+				if not environment_style.is_empty() and t in [T.TOWN,T.HALL,T.FIELD]:
+					tint = Color(0.36,0.35,0.26,0.34)
+				elif t in [T.GRASS, T.FOREST, T.HALL, T.CLIFF] or (environment_style!="" and t==T.PLAIN):
+					tint = Color(0.25, 0.30, 0.15, 0.43)
+				elif t in [T.MARSH, T.REEDS]:
+					tint = Color(0.25, 0.29, 0.19, 0.30)
+				elif t in [T.ROAD, T.PLAZA]:
+					tint = Color(0.39, 0.34, 0.24, 0.25)
+				if tint.a > 0.0:
+					if terrain_batch != null: terrain_batch.add_tint(rect,tint)
+					else: draw_rect(rect,tint)
 
+	if terrain_batch != null:
+		terrain_batch.flush(self)
+		_terrain_draw_cache = terrain_batch
+	else:
+		_terrain_draw_cache = null
+	if not natural_surface_enabled:
+		_draw_blends()
+
+	if sample_scenery != null:
+		return  # 样板装饰使用独立节点，与人物共享屏幕深度排序。
 	for d in decor:
 		var dtex: Texture2D = Art.terrain_texture(d[0])
 		if dtex != null:
@@ -398,6 +766,21 @@ func _draw() -> void:
 			draw_set_transform_matrix(tr)
 			draw_texture_rect(dtex, Rect2(-s * 0.5, -s * 0.8, s, s), false)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+func _is_authored_wall_base(x: int, y: int) -> bool:
+	if environment_style == "level3":
+		return (x in [19,20] and y>=14 and y<43) or (x>=18 and x<54 and y in [8,9,46,47])
+	if environment_style == "level8":
+		var outer := (x in [7,52] and y>=4 and y<=39) or (y in [4,39] and x>=7 and x<=52)
+		var jail := (x in [15,21] and y>=13 and y<=20) or (y in [13,20] and x>=15 and x<=21)
+		return outer or jail
+	return false
+
+
+func _is_authored_step_base(x: int, y: int) -> bool:
+	# 江州州衙正门的三层台阶；只锁台基层，不把相连街道重新方格化。
+	return environment_style == "level2" and x>=27 and x<=33 and y>=7 and y<=9
 
 
 const BLEND_W := 11.0

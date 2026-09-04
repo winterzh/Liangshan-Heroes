@@ -1,0 +1,1018 @@
+{
+  "schema_version": 1,
+  "kind": "lu_zhishen_rescue_direction4_production_provenance",
+  "created_at": "2026-09-02T13:33:52.331976+08:00",
+  "variant": "lu_zhishen_rescue",
+  "states": [
+    "idle",
+    "walk",
+    "attack",
+    "hurt",
+    "down"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "frame_count": 20,
+  "source_generation_conversation": "https://chatgpt.com/c/6a97a202-ee68-83ea-af84-947950d3c312",
+  "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97acd9-6240-83ea-b207-7aa4ef10b26f",
+  "web_input_archive_sha256": "99a541680737ecbad3be9a09c0515fe97796a2375666525530edca1b82e03883",
+  "web_download_archive_sha256": "4cd8a28bcf2c9441a8995048510b4bf6a8826e3414eab528b016b208421b9d96",
+  "exact_alpha_verification": "qa/lu_zhishen_web_exact_alpha15_20260902/verification.json",
+  "exact_alpha_verification_sha256": "022065d44bb2d4e1d0cbef67720d8ee9372253e07dd0738d209534e85c0e3f6b",
+  "candidate_manifest": "qa/lu_zhishen_1x4_candidate_pipeline_alpha15_exact_20260902/candidate_manifest.json",
+  "candidate_manifest_sha256": "be0c9d6d9630a75048f5a6d57f6e3b57ab1d0650e5e917d04ce82ee0928a808e",
+  "candidate_preview": "qa/lu_zhishen_1x4_candidate_pipeline_alpha15_exact_20260902/runtime_size_fringe_preview.png",
+  "candidate_preview_sha256": "7268ad02213a026dda0f7659dff7d2c76486b5ae84a0b05c93223d51be5d7065",
+  "allowed_operations": [
+    "continuous source rectangle crop",
+    "batch-uniform proportional scale",
+    "transparent padding",
+    "byte-identical production copy"
+  ],
+  "forbidden_operations_used": [],
+  "sources": [
+    {
+      "action": "idle",
+      "raw_file": "lu_zhishen_rescue_idle_20260902_attempt1_staff_corrected.png",
+      "raw_sha256": "76fbe56b1c94ec08d9625f26e45df60983782946ddf50fa8c54bb08dd5058b2a",
+      "cleaned_file": "lu_zhishen_rescue_idle_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "cleaned_sha256": "a59024f97e83300ad29532d5a24739c90680cb5a9ffdf5af60ee8b998fe443e6",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2173,
+        724
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97a202-ee68-83ea-af84-947950d3c312",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97acd9-6240-83ea-b207-7aa4ef10b26f",
+      "base_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_idle_isolated_4dir.txt",
+      "base_prompt_sha256": "19185ac4b7c2f4262f8af4f3fe75e739dc84e96d2d844c6fcf194754c3db2f25",
+      "correction_prompt": null,
+      "correction_prompt_sha256": null,
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_alpha15_zip_exact_web_python.txt",
+      "exact_alpha_prompt_sha256": "cb2e30fa6341ff244dffd819787c59e7f34a1bbbe663b1fe35b3d725cfbe044c",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "walk",
+      "raw_file": "lu_zhishen_rescue_walk_20260902_attempt2_true_alpha.png",
+      "raw_sha256": "353244eb36040c964d5bd53c20641dda04ff0b66d7b0ff70597067b85e9040e9",
+      "cleaned_file": "lu_zhishen_rescue_walk_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "cleaned_sha256": "edc1e88b399e7c15a5f1356d7ad2d23beaa16f6d64ef70081c17b24546d595e5",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2172,
+        724
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97a202-ee68-83ea-af84-947950d3c312",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97acd9-6240-83ea-b207-7aa4ef10b26f",
+      "base_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_walk_isolated_4dir.txt",
+      "base_prompt_sha256": "ec6a333d822fd88ff72c058f0f4f96e60fa004f64d53ac6ef38aa0da23e12abc",
+      "correction_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_walk_attempt2_true_alpha.txt",
+      "correction_prompt_sha256": "c486c10cf382cbe8468da1f889c12c7c613285beac898ff178668151ccceb73f",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_alpha15_zip_exact_web_python.txt",
+      "exact_alpha_prompt_sha256": "cb2e30fa6341ff244dffd819787c59e7f34a1bbbe663b1fe35b3d725cfbe044c",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "attack",
+      "raw_file": "lu_zhishen_rescue_attack_20260902_attempt1_staff_corrected.png",
+      "raw_sha256": "f36edafb44447a858ca62bec0a61407cf5d991ec25ca4b9b46ee1cf3c4d8eda0",
+      "cleaned_file": "lu_zhishen_rescue_attack_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "cleaned_sha256": "ebad642cc149aee24706423c253f7317ce5cdad1c675680b855e0a16b37ea0a1",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2172,
+        724
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97a202-ee68-83ea-af84-947950d3c312",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97acd9-6240-83ea-b207-7aa4ef10b26f",
+      "base_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_attack_isolated_4dir.txt",
+      "base_prompt_sha256": "94fe55b9758ebbe9bdad1bcc7e175a2512f582a4f1131cde5b950fadc58c3f14",
+      "correction_prompt": null,
+      "correction_prompt_sha256": null,
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_alpha15_zip_exact_web_python.txt",
+      "exact_alpha_prompt_sha256": "cb2e30fa6341ff244dffd819787c59e7f34a1bbbe663b1fe35b3d725cfbe044c",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "hurt",
+      "raw_file": "lu_zhishen_rescue_hurt_20260902_attempt1_staff_corrected.png",
+      "raw_sha256": "e9f27feac0fe9dab655e84f3d445a02058d7267a69d45ec0a884eba5390caa8e",
+      "cleaned_file": "lu_zhishen_rescue_hurt_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "cleaned_sha256": "f2a5a66a708bf7d504132a89f952163f96c9451c12e00c3d0ad8ddad7d91a6ae",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2172,
+        724
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97a202-ee68-83ea-af84-947950d3c312",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97acd9-6240-83ea-b207-7aa4ef10b26f",
+      "base_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_hurt_isolated_4dir.txt",
+      "base_prompt_sha256": "53098d3a1f6474da78bfa730e3d12b651198a4f94708ffd1d1c962f33dbdd0c9",
+      "correction_prompt": null,
+      "correction_prompt_sha256": null,
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_alpha15_zip_exact_web_python.txt",
+      "exact_alpha_prompt_sha256": "cb2e30fa6341ff244dffd819787c59e7f34a1bbbe663b1fe35b3d725cfbe044c",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "down",
+      "raw_file": "lu_zhishen_rescue_down_20260902_attempt2_true_alpha.png",
+      "raw_sha256": "74359238365ea3e2629fad57092729b97caf0cce96c9956e76560b9df1aea5d4",
+      "cleaned_file": "lu_zhishen_rescue_down_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "cleaned_sha256": "7ac81dcf3c810809d458e6742bdc2a3fc5624d0786a47f4469ecb432c9497a73",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2172,
+        724
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97a202-ee68-83ea-af84-947950d3c312",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97acd9-6240-83ea-b207-7aa4ef10b26f",
+      "base_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_down_isolated_4dir.txt",
+      "base_prompt_sha256": "2d4373ed3550d0a0b2c00888f2e6b53732d0b42afbb1134c9288e3f23b880e54",
+      "correction_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_down_attempt2_true_alpha.txt",
+      "correction_prompt_sha256": "5414fb70d5ee8b861b1df1dca9d47318a8d298293fbff5c32d378256ba300269",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v3/corrections/lu_zhishen_alpha15_zip_exact_web_python.txt",
+      "exact_alpha_prompt_sha256": "cb2e30fa6341ff244dffd819787c59e7f34a1bbbe663b1fe35b3d725cfbe044c",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    }
+  ],
+  "outputs": [
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "idle",
+      "direction": "se",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_idle_se.png",
+      "sha256": "fb27cdaa9249e3cbd6111fe6e07ba3ea3aea39ad7c61c5f83db6df5a700a8942",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_idle_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "a59024f97e83300ad29532d5a24739c90680cb5a9ffdf5af60ee8b998fe443e6",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        548,
+        724
+      ],
+      "source_rect_xyxy": [
+        37,
+        78,
+        536,
+        654
+      ],
+      "source_anchor_xy": [
+        441,
+        651
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2625250501002004,
+        0.2621527777777778
+      ],
+      "resized_size": [
+        131,
+        151
+      ],
+      "paste_xy": [
+        22,
+        60
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "idle",
+      "direction": "sw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_idle_sw.png",
+      "sha256": "895e7ed37c3f8b5a8c15e661082fbc514ad16244f82a892228a64de748267dd0",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_idle_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "a59024f97e83300ad29532d5a24739c90680cb5a9ffdf5af60ee8b998fe443e6",
+      "source_cell_rect_xyxy": [
+        548,
+        0,
+        1134,
+        724
+      ],
+      "source_rect_xyxy": [
+        560,
+        87,
+        1100,
+        642
+      ],
+      "source_anchor_xy": [
+        1027,
+        639
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26296296296296295,
+        0.26306306306306304
+      ],
+      "resized_size": [
+        142,
+        146
+      ],
+      "paste_xy": [
+        5,
+        65
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "idle",
+      "direction": "ne",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_idle_ne.png",
+      "sha256": "e808aeac4225e40b0b3f2695222a8a8a201b5b4a54a190864e937c1286a4dd7c",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_idle_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "a59024f97e83300ad29532d5a24739c90680cb5a9ffdf5af60ee8b998fe443e6",
+      "source_cell_rect_xyxy": [
+        1134,
+        0,
+        1658,
+        724
+      ],
+      "source_rect_xyxy": [
+        1169,
+        84,
+        1649,
+        644
+      ],
+      "source_anchor_xy": [
+        1217,
+        641
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2625,
+        0.2625
+      ],
+      "resized_size": [
+        126,
+        147
+      ],
+      "paste_xy": [
+        115,
+        64
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "idle",
+      "direction": "nw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_idle_nw.png",
+      "sha256": "8cc818b7ccc8b84601d215acb70cafd709921f2ab288e19de51140c24020451e",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_idle_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "a59024f97e83300ad29532d5a24739c90680cb5a9ffdf5af60ee8b998fe443e6",
+      "source_cell_rect_xyxy": [
+        1658,
+        0,
+        2173,
+        724
+      ],
+      "source_rect_xyxy": [
+        1668,
+        79,
+        2160,
+        656
+      ],
+      "source_anchor_xy": [
+        1789,
+        653
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2621951219512195,
+        0.2616984402079723
+      ],
+      "resized_size": [
+        129,
+        151
+      ],
+      "paste_xy": [
+        96,
+        60
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "walk",
+      "direction": "se",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_walk_se.png",
+      "sha256": "9d28785725a8810343c7023fa195adc5138e092539d97b1890b248bcc8811b76",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_walk_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "edc1e88b399e7c15a5f1356d7ad2d23beaa16f6d64ef70081c17b24546d595e5",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        550,
+        724
+      ],
+      "source_rect_xyxy": [
+        74,
+        82,
+        516,
+        674
+      ],
+      "source_anchor_xy": [
+        391,
+        671
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26244343891402716,
+        0.26182432432432434
+      ],
+      "resized_size": [
+        116,
+        155
+      ],
+      "paste_xy": [
+        45,
+        56
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "walk",
+      "direction": "sw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_walk_sw.png",
+      "sha256": "59727e1672d19e789ea15734747bada327e9b598e3c0b03d6e4c0fce519e3367",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_walk_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "edc1e88b399e7c15a5f1356d7ad2d23beaa16f6d64ef70081c17b24546d595e5",
+      "source_cell_rect_xyxy": [
+        550,
+        0,
+        1112,
+        724
+      ],
+      "source_rect_xyxy": [
+        584,
+        85,
+        1086,
+        668
+      ],
+      "source_anchor_xy": [
+        710,
+        665
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26294820717131473,
+        0.2624356775300172
+      ],
+      "resized_size": [
+        132,
+        153
+      ],
+      "paste_xy": [
+        95,
+        58
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "walk",
+      "direction": "ne",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_walk_ne.png",
+      "sha256": "414dcd0512a63ce62d1b5b69be11fe9d5cf5c85e1037377933b007ad2dc3d546",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_walk_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "edc1e88b399e7c15a5f1356d7ad2d23beaa16f6d64ef70081c17b24546d595e5",
+      "source_cell_rect_xyxy": [
+        1112,
+        0,
+        1625,
+        724
+      ],
+      "source_rect_xyxy": [
+        1138,
+        85,
+        1605,
+        667
+      ],
+      "source_anchor_xy": [
+        1263,
+        664
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2633832976445396,
+        0.26288659793814434
+      ],
+      "resized_size": [
+        123,
+        153
+      ],
+      "paste_xy": [
+        95,
+        58
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "walk",
+      "direction": "nw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_walk_nw.png",
+      "sha256": "39eb806f9795cb2ae3bbc02f77d322bf6c6b117f845c6112118ddbfa916055bd",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_walk_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "edc1e88b399e7c15a5f1356d7ad2d23beaa16f6d64ef70081c17b24546d595e5",
+      "source_cell_rect_xyxy": [
+        1625,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1645,
+        80,
+        2133,
+        665
+      ],
+      "source_anchor_xy": [
+        1967,
+        662
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26229508196721313,
+        0.26324786324786326
+      ],
+      "resized_size": [
+        128,
+        154
+      ],
+      "paste_xy": [
+        44,
+        57
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "attack",
+      "direction": "se",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_attack_se.png",
+      "sha256": "5395021799934e1eb05c1385a5162dbb4e771931c84fa2084dcf5f8b9ea8b0d4",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_attack_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "ebad642cc149aee24706423c253f7317ce5cdad1c675680b855e0a16b37ea0a1",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        552,
+        724
+      ],
+      "source_rect_xyxy": [
+        8,
+        115,
+        522,
+        628
+      ],
+      "source_anchor_xy": [
+        447,
+        625
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26264591439688717,
+        0.2631578947368421
+      ],
+      "resized_size": [
+        135,
+        135
+      ],
+      "paste_xy": [
+        13,
+        76
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "attack",
+      "direction": "sw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_attack_sw.png",
+      "sha256": "dd30786d2142e8f1db2d5bbb97b01bc72f959da89735220e7b9a98c403a10c74",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_attack_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "ebad642cc149aee24706423c253f7317ce5cdad1c675680b855e0a16b37ea0a1",
+      "source_cell_rect_xyxy": [
+        552,
+        0,
+        1108,
+        724
+      ],
+      "source_rect_xyxy": [
+        581,
+        113,
+        1098,
+        616
+      ],
+      "source_anchor_xy": [
+        633,
+        613
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26305609284332687,
+        0.2624254473161034
+      ],
+      "resized_size": [
+        136,
+        132
+      ],
+      "paste_xy": [
+        114,
+        79
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "attack",
+      "direction": "ne",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_attack_ne.png",
+      "sha256": "a6380716725a51d7e3e65207d786eaddf99a22007a68d9567855c7f8b651d8b4",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_attack_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "ebad642cc149aee24706423c253f7317ce5cdad1c675680b855e0a16b37ea0a1",
+      "source_cell_rect_xyxy": [
+        1108,
+        0,
+        1638,
+        724
+      ],
+      "source_rect_xyxy": [
+        1119,
+        155,
+        1628,
+        625
+      ],
+      "source_anchor_xy": [
+        1438,
+        622
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2632612966601179,
+        0.26170212765957446
+      ],
+      "resized_size": [
+        134,
+        123
+      ],
+      "paste_xy": [
+        44,
+        88
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "attack",
+      "direction": "nw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_attack_nw.png",
+      "sha256": "62d0900fe76a0df7de5cfd6891e7f3dec3637a70f5e5181f35c9d25d8d265cf2",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_attack_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "ebad642cc149aee24706423c253f7317ce5cdad1c675680b855e0a16b37ea0a1",
+      "source_cell_rect_xyxy": [
+        1638,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1647,
+        136,
+        2167,
+        630
+      ],
+      "source_anchor_xy": [
+        1777,
+        626
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26346153846153847,
+        0.2631578947368421
+      ],
+      "resized_size": [
+        137,
+        130
+      ],
+      "paste_xy": [
+        94,
+        81
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "hurt",
+      "direction": "se",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_hurt_se.png",
+      "sha256": "9f57aa39ab6fe1a4ba1f5c37f38d5ee0d513e52b883cd32fe96eaf4e8ae0b2d2",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_hurt_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "f2a5a66a708bf7d504132a89f952163f96c9451c12e00c3d0ad8ddad7d91a6ae",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        530,
+        724
+      ],
+      "source_rect_xyxy": [
+        14,
+        52,
+        493,
+        610
+      ],
+      "source_anchor_xy": [
+        139,
+        607
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2630480167014614,
+        0.2616487455197133
+      ],
+      "resized_size": [
+        126,
+        146
+      ],
+      "paste_xy": [
+        95,
+        65
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "hurt",
+      "direction": "sw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_hurt_sw.png",
+      "sha256": "d58ed07fcf9a6bdbff9baaa4fddfd2df2b228f3d2adb7386f99a76ca92892bb1",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_hurt_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "f2a5a66a708bf7d504132a89f952163f96c9451c12e00c3d0ad8ddad7d91a6ae",
+      "source_cell_rect_xyxy": [
+        530,
+        0,
+        1085,
+        724
+      ],
+      "source_rect_xyxy": [
+        567,
+        80,
+        1019,
+        606
+      ],
+      "source_anchor_xy": [
+        655,
+        603
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26327433628318586,
+        0.2623574144486692
+      ],
+      "resized_size": [
+        119,
+        138
+      ],
+      "paste_xy": [
+        105,
+        73
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "hurt",
+      "direction": "ne",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_hurt_ne.png",
+      "sha256": "f134b4d9b536f1a66ee043ac62565f5a6bcadbf35bb02a0ece36cf7650084288",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_hurt_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "f2a5a66a708bf7d504132a89f952163f96c9451c12e00c3d0ad8ddad7d91a6ae",
+      "source_cell_rect_xyxy": [
+        1085,
+        0,
+        1661,
+        724
+      ],
+      "source_rect_xyxy": [
+        1151,
+        71,
+        1628,
+        590
+      ],
+      "source_anchor_xy": [
+        1521,
+        587
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2620545073375262,
+        0.26204238921001927
+      ],
+      "resized_size": [
+        125,
+        136
+      ],
+      "paste_xy": [
+        31,
+        75
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "hurt",
+      "direction": "nw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_hurt_nw.png",
+      "sha256": "b002357c9119ec29f6a5ad9b9cd08cbba022be5f06854248dfb89088c1d01130",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_hurt_20260902_attempt1_staff_corrected_alpha15_exact_clean.png",
+      "source_sha256": "f2a5a66a708bf7d504132a89f952163f96c9451c12e00c3d0ad8ddad7d91a6ae",
+      "source_cell_rect_xyxy": [
+        1661,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1694,
+        80,
+        2157,
+        612
+      ],
+      "source_anchor_xy": [
+        1998,
+        609
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2634989200863931,
+        0.2631578947368421
+      ],
+      "resized_size": [
+        122,
+        140
+      ],
+      "paste_xy": [
+        48,
+        71
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "down",
+      "direction": "se",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_down_se.png",
+      "sha256": "0fc7c56f57bb3604fd7ae63a57c2e854dfd0c00dbb358b09c3a2f11f1e3c5659",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_down_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "7ac81dcf3c810809d458e6742bdc2a3fc5624d0786a47f4469ecb432c9497a73",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        535,
+        724
+      ],
+      "source_rect_xyxy": [
+        31,
+        165,
+        447,
+        602
+      ],
+      "source_anchor_xy": [
+        364,
+        599
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2620192307692308,
+        0.2631578947368421
+      ],
+      "resized_size": [
+        109,
+        115
+      ],
+      "paste_xy": [
+        41,
+        96
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "down",
+      "direction": "sw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_down_sw.png",
+      "sha256": "4097f7ffddce5cb0677e3462ce45ebd91bed506d07c56cf6b539c63748ca1bea",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_down_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "7ac81dcf3c810809d458e6742bdc2a3fc5624d0786a47f4469ecb432c9497a73",
+      "source_cell_rect_xyxy": [
+        535,
+        0,
+        1112,
+        724
+      ],
+      "source_rect_xyxy": [
+        623,
+        181,
+        1076,
+        601
+      ],
+      "source_anchor_xy": [
+        755,
+        598
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26269315673289184,
+        0.2619047619047619
+      ],
+      "resized_size": [
+        119,
+        110
+      ],
+      "paste_xy": [
+        93,
+        101
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "down",
+      "direction": "ne",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_down_ne.png",
+      "sha256": "264b0d357ade1fe63282bce75cd09f513cae39eef4d55f18a23103181d88b726",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_down_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "7ac81dcf3c810809d458e6742bdc2a3fc5624d0786a47f4469ecb432c9497a73",
+      "source_cell_rect_xyxy": [
+        1112,
+        0,
+        1665,
+        724
+      ],
+      "source_rect_xyxy": [
+        1147,
+        183,
+        1635,
+        572
+      ],
+      "source_anchor_xy": [
+        1617,
+        569
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.26229508196721313,
+        0.2622107969151671
+      ],
+      "resized_size": [
+        128,
+        102
+      ],
+      "paste_xy": [
+        5,
+        109
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "lu_zhishen_rescue",
+      "state": "down",
+      "direction": "nw",
+      "path": "assets/campaign/anim/lu_zhishen_rescue_down_nw.png",
+      "sha256": "d40cb6f140e1593a1672c110cd44ce1ea84e6a9b54afcd72a45739205dc0ff46",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "lu_zhishen_rescue_down_20260902_attempt2_true_alpha_alpha15_exact_clean.png",
+      "source_sha256": "7ac81dcf3c810809d458e6742bdc2a3fc5624d0786a47f4469ecb432c9497a73",
+      "source_cell_rect_xyxy": [
+        1665,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1695,
+        203,
+        2095,
+        647
+      ],
+      "source_anchor_xy": [
+        2078,
+        644
+      ],
+      "batch_uniform_requested_scale": 0.26251063829787236,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2625,
+        0.2635135135135135
+      ],
+      "resized_size": [
+        105,
+        117
+      ],
+      "paste_xy": [
+        27,
+        94
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    }
+  ],
+  "portrait": {
+    "path": "assets/campaign/portraits/lu_zhishen_rescue.png",
+    "sha256": "fb27cdaa9249e3cbd6111fe6e07ba3ea3aea39ad7c61c5f83db6df5a700a8942",
+    "byte_identical_source": "assets/campaign/anim/lu_zhishen_rescue_idle_se.png"
+  },
+  "runtime_route": {
+    "ordinary_states": "idle/walk/attack/hurt/down resolve through CampaignArt.animation_path",
+    "intercept": "lu_zhishen_rescue/intercept explicitly aliases to the exact same-direction attack asset",
+    "death": "not supplied and never aliases to down",
+    "free_modes": "variant-empty lu_zhishen keeps generic assets and portrait"
+  },
+  "steam_modified_or_exported": false
+}

@@ -5,6 +5,7 @@ extends Node
 const RATE := 22050
 const POOL := 10
 const GUARD := 64   # 重采样越界读护卫帧（见 music.gd 同名说明）：WAV 尾部补静音，避免读到未映射页硬崩
+const SHUTDOWN_DRAIN_MSEC := 120
 
 var _bank := {}                 # name -> AudioStreamWAV
 var _players: Array = []
@@ -12,6 +13,7 @@ var _next := 0
 var _last := {}                 # name -> 上次播放 ticks（节流）
 var enabled := true
 var user_vol := 1.0    # 设置·音效音量（0..1，不依赖音频总线）
+var _shutting_down := false
 
 
 func _ready() -> void:
@@ -23,6 +25,30 @@ func _ready() -> void:
 		_players.append(p)
 	if OS.get_environment("SFX_TEST") == "1":
 		_ability_sfx_selftest()
+
+
+func shutdown() -> void:
+	if _shutting_down:
+		return
+	_shutting_down = true
+	enabled = false
+	var had_playback := false
+	for player in _players:
+		if player is AudioStreamPlayer and is_instance_valid(player):
+			had_playback = had_playback or player.playing or player.stream != null
+			player.stop()
+			player.stream = null
+			player.free()
+	_players.clear()
+	_bank.clear()
+	_last.clear()
+	_next = 0
+	if had_playback:
+		OS.delay_msec(SHUTDOWN_DRAIN_MSEC)
+
+
+func _exit_tree() -> void:
+	shutdown()
 
 
 ## 技能专属音自检（SFX_TEST=1）：跨主题/类型合成样例，验证可生成、响度归一、同主题不同 id 波形确实有别。
@@ -51,7 +77,7 @@ func _ability_sfx_selftest() -> void:
 ## 技能专属音：按技能 id 播种合成（同主题不同技能音高/层次/节奏皆异），懒生成缓存。
 ## theme 取 AbilityVisuals 写入的视觉主题（fire/ice/...），缺省按 kind 推断；kind 叠加施法类型动机（弹道/光环/位移…）。
 func play_ability(aid: String, theme: String, kind: String, vol_db := 0.0) -> void:
-	if not enabled:
+	if _shutting_down or not enabled:
 		return
 	var key := "ab_" + aid
 	if not _bank.has(key):
@@ -61,7 +87,7 @@ func play_ability(aid: String, theme: String, kind: String, vol_db := 0.0) -> vo
 
 ## 播放：vol_db 增益，pitch 轻微随机，min_gap_ms 节流（同名）
 func play(name: String, vol_db := 0.0, pitch_var := 0.06, min_gap_ms := 55) -> void:
-	if not enabled or not _bank.has(name):
+	if _shutting_down or not enabled or not _bank.has(name) or _players.is_empty():
 		return
 	var now := Time.get_ticks_msec()
 	if _last.get(name, -9999) + min_gap_ms > now:
@@ -101,7 +127,7 @@ func _build_bank() -> void:
 	_bank["atk_crossbow"] = _wav(_mix(_tone(240.0, 0.04, 0.16, 30.0, "square"), _noise(0.025, 0.17, 55.0))) # 弩·机括
 	_bank["atk_mace"]     = _wav(_mix(_tone(190.0, 0.12, 0.28, 10.0), _tone(380.0, 0.07, 0.15, 16.0)))      # 双鞭·金铁
 	_bank["atk_fist"]     = _wav(_mix(_tone(120.0, 0.06, 0.24, 22.0), _noise(0.035, 0.12, 46.0)))           # 拳·闷击
-	_bank["atk_staff"]    = _wav(_mix(_tone(260.0, 0.05, 0.20, 28.0, "tri"), _noise(0.03, 0.10, 42.0)))     # 禅杖/棍·木响
+	_bank["atk_staff"]    = _wav(_mix(_tone(205.0, 0.09, 0.24, 13.0, "tri"), _tone(410.0, 0.06, 0.13, 18.0, "tri"))) # 浑铁禅杖·金铁重响
 	_bank["atk_catapult"] = _wav(_mix(_tone(95.0, 0.18, 0.30, 8.0, "saw"), _noise(0.09, 0.18, 13.0)))       # 投石·发射轰
 	# —— 按技能种类区分的施法音 —— （battle._ability_sfx 选取）
 	_bank["sk_smite"]  = _wav(_mix(_tone(520.0, 0.06, 0.20, 18.0, "tri"), _noise(0.05, 0.16, 22.0)))        # 落雷/打击

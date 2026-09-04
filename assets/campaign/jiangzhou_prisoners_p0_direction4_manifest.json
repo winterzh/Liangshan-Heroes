@@ -1,0 +1,688 @@
+{
+  "schema_version": 2,
+  "kind": "jiangzhou_prisoners_exact_web_cleanup_fixed_grid_four_frame_production_provenance",
+  "created_at": "2026-09-03T12:56:38.544415+08:00",
+  "campaign_level": 2,
+  "scene_context": "jiangzhou_execution_ground_bound_and_post_rescue",
+  "novel_context_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回",
+  "novel_basis": "120-chapter edition chapter 40: Dai Zong is put in a cangue; both prisoners are bound, hair glued into goose-pear tufts and given red paper flowers; executioners open the cangues just before beheading; both are carried away and later recover at Bailong Temple",
+  "user_constraint": "cangue hand placement should visibly pass through hand holes; a best-effort compromise was allowed but the adopted front-quarter cells meet the stronger requirement",
+  "candidate_manifest": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/candidate_manifest.json",
+  "candidate_manifest_sha256": "24EEC1540168CD2575A592CE6265620D6A310DEB3AC15A7262CCED1548463525",
+  "manual_visual_review": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/manual_visual_review.json",
+  "manual_visual_review_sha256": "E64E766E23ACBE6EC36E45F69ED7BDAB3ADD3E72F0134BA1D97B71759B81DA94",
+  "backup_manifest": "Liangshan-Heroes/qa/jiangzhou_prisoners_p0_direction4_production_20260903/backup_preexisting_runtime_assets/backup_manifest.json",
+  "backup_manifest_sha256": "3434F03C3818AB562B652EE21CF81D93A151C013152DD23DEB0BD8C8C84B8EBB",
+  "source_audit": "implementation_20260902/jiangzhou_prisoners_p0_source/README.md",
+  "source_audit_sha256": "2DDB1B1629963B9772A438E45A0D55928B730BE562A29C37526541F79BEE943E",
+  "base_cleanup_verification": "implementation_20260902/jiangzhou_prisoners_p0_source/web_alpha_cleanup_verification.json",
+  "base_cleanup_verification_sha256": "ACC232ACF3BDF2C896C28D199028387A3806C48EE952F1999FFEC0BC992A52AB",
+  "walk_cleanup_verification": "implementation_20260902/jiangzhou_prisoners_p0_source/web_walk4_alpha_cleanup_verification.json",
+  "walk_cleanup_verification_sha256": "C0D549DDABC9DADAE89BA4AEF8AAF66F6D69DBB6EB824FDA437B60ADCDF08AFA",
+  "sources": [
+    {
+      "character": "song_jiang",
+      "bound_variant": "song_jiang_bound",
+      "rescued_variant": "song_jiang_rescued",
+      "shared_uniform_scale_across_base_and_walk_sources": 0.6012269938650306,
+      "base": {
+        "prompt_path": "implementation_20260902/jiangzhou_prisoners_p0_source/01_song_jiang_bound_rescued_walk_4x4.txt",
+        "prompt_sha256": "3FE75B7BFA6F9E012DEFD718CE906A5B93A65F835F9C8A9663F35D3F5F6E79F4",
+        "raw_path": "implementation_20260902/jiangzhou_prisoners_p0_source/song_jiang_bound_rescued_walk_4x4_v2_raw.png",
+        "raw_sha256": "77B82F441620BC1F80EEBB6C3EDCE2EADB0D417E6CC2D0F73AE47EE5AF6BF867",
+        "cleaned_path": "implementation_20260902/jiangzhou_prisoners_p0_source/web_alpha15_cleaned_from_web/song_jiang_bound_rescued_walk_4x4_v2_alpha15_exact.png",
+        "cleaned_sha256": "E125DD1F3BDF4D1BFDC88B5B5A51D1294CA07439EC635480F0A020AB2F8F4EB8",
+        "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-843daf01-bf92-4917-8124-b3f47f2b3d2b.png",
+        "source_size": [
+          1207,
+          1303
+        ],
+        "source_mode": "RGBA",
+        "fixed_x_boundaries": [
+          0,
+          302,
+          604,
+          905,
+          1207
+        ],
+        "fixed_y_boundaries": [
+          0,
+          326,
+          652,
+          977,
+          1303
+        ]
+      },
+      "walk": {
+        "prompt_path": "implementation_20260902/jiangzhou_prisoners_p0_source/03_song_jiang_rescued_walk_4x4.txt",
+        "prompt_sha256": "13B577F57A49236E80ED2E79951BEE92D0466E1CA2AE50F0E57967E6C0AF12C3",
+        "raw_path": "implementation_20260902/jiangzhou_prisoners_p0_source/song_jiang_walk_4x4_v2_raw.png",
+        "raw_sha256": "AD60404A3229A1808BFE6B48BEFBB0868C1F17865B6A8EBBB5D79DDCF1DD801F",
+        "cleaned_path": "implementation_20260902/jiangzhou_prisoners_p0_source/web_walk4_alpha15_cleaned_from_web/song_jiang_walk_4x4_v2_alpha15_exact.png",
+        "cleaned_sha256": "43294359CFF81E89EB2FD2013058FB27E4B5DF7C7BAC00E26931F68E0FA7342B",
+        "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-3fee5dde-ea55-4792-8e25-f30981f46aac.png",
+        "source_size": [
+          1254,
+          1254
+        ],
+        "source_mode": "RGBA",
+        "fixed_x_boundaries": [
+          0,
+          314,
+          627,
+          940,
+          1254
+        ],
+        "continuous_y_ranges": [
+          [
+            0,
+            324
+          ],
+          [
+            324,
+            633
+          ],
+          [
+            633,
+            944
+          ],
+          [
+            944,
+            1254
+          ]
+        ],
+        "manual_continuous_rect_y_starts": {
+          "walk_1": {
+            "sw": 327,
+            "ne": 331,
+            "nw": 338
+          },
+          "walk_2": {
+            "ne": 643,
+            "nw": 653
+          }
+        }
+      }
+    },
+    {
+      "character": "dai_zong",
+      "bound_variant": "dai_zong_bound",
+      "rescued_variant": "dai_zong_rescued",
+      "shared_uniform_scale_across_base_and_walk_sources": 0.6343042071197411,
+      "base": {
+        "prompt_path": "implementation_20260902/jiangzhou_prisoners_p0_source/02_dai_zong_bound_rescued_walk_4x4.txt",
+        "prompt_sha256": "A6B1D037A09DD27411892F7A9312437D652E18F108B16F0D2C584F15D7725157",
+        "raw_path": "implementation_20260902/jiangzhou_prisoners_p0_source/dai_zong_bound_rescued_walk_4x4_v3_raw.png",
+        "raw_sha256": "4AE2CBF2609E4DEE81D2755A319D536A894E73AA20ECFFA4E5215EF922C927FF",
+        "cleaned_path": "implementation_20260902/jiangzhou_prisoners_p0_source/web_alpha15_cleaned_from_web/dai_zong_bound_rescued_walk_4x4_v3_alpha15_exact.png",
+        "cleaned_sha256": "CFF90AEE6CF8BF8D50855240CCA5615A03FBDDDB0D706813D2E918B3FF3D7105",
+        "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-04439634-e5e6-4ba1-b127-f0d01df9ffae.png",
+        "source_size": [
+          1254,
+          1254
+        ],
+        "source_mode": "RGBA",
+        "fixed_x_boundaries": [
+          0,
+          314,
+          627,
+          940,
+          1254
+        ],
+        "fixed_y_boundaries": [
+          0,
+          314,
+          627,
+          940,
+          1254
+        ]
+      },
+      "walk": {
+        "prompt_path": "implementation_20260902/jiangzhou_prisoners_p0_source/04_dai_zong_rescued_walk_4x4.txt",
+        "prompt_sha256": "56CB1258DC04CCDA56286486AC5544F490829ACCF519669FD6AA5D04E5C1E58C",
+        "raw_path": "implementation_20260902/jiangzhou_prisoners_p0_source/dai_zong_walk_4x4_v2_raw.png",
+        "raw_sha256": "3BCC830C1690C21706DCBDD61B3F4A6E64C5C3D524515FB708135A30D74D752A",
+        "cleaned_path": "implementation_20260902/jiangzhou_prisoners_p0_source/web_walk4_alpha15_cleaned_from_web/dai_zong_walk_4x4_v2_alpha15_exact.png",
+        "cleaned_sha256": "B23AA98F16E81F4632D0DB1A0BFBFF7094D032DEAD219FEB2567CD7D5D4EF81D",
+        "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-0b475dbb-251c-48e0-9965-bfc7722ddfd3.png",
+        "source_size": [
+          1297,
+          1212
+        ],
+        "source_mode": "RGBA",
+        "fixed_x_boundaries": [
+          0,
+          324,
+          648,
+          973,
+          1297
+        ],
+        "continuous_y_ranges": [
+          [
+            0,
+            319
+          ],
+          [
+            319,
+            624
+          ],
+          [
+            624,
+            924
+          ],
+          [
+            924,
+            1212
+          ]
+        ],
+        "manual_continuous_rect_y_starts": {
+          "walk_1": {
+            "nw": 327
+          },
+          "walk_2": {
+            "ne": 629
+          },
+          "walk_3": {
+            "ne": 929
+          }
+        }
+      }
+    }
+  ],
+  "web_alpha_cleanup_performed": true,
+  "web_alpha_cleanup_rule": "alpha<=15 -> RGBA(0,0,0,0); alpha>15 -> byte-identical RGBA",
+  "web_cleanup_conversation_urls": [
+    "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+    "https://chatgpt.com/c/6a98fa22-6638-83ea-bfb1-693b1607bd4c"
+  ],
+  "local_alpha_cleanup_performed": false,
+  "fixed_grid_and_continuous_rect_crop": true,
+  "shared_uniform_proportional_scale_per_character_across_sources": true,
+  "transparent_padding": true,
+  "masking_or_connected_component_isolation_performed": false,
+  "mirroring_or_repainting_performed": false,
+  "rescued_walk_frames_per_direction": 4,
+  "target_footline_y": 210,
+  "animation_file_count": 24,
+  "portrait_file_count": 4,
+  "production_file_count": 28,
+  "outputs": [
+    {
+      "kind": "animation",
+      "variant": "song_jiang_bound",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_bound_idle_se.png",
+      "candidate_sha256": "A4B1221608B0837D5D40A7B1C5E0D875F6DFCEC916560C62F88484AE9EF53673",
+      "production_path": "assets/campaign/anim/song_jiang_bound_idle_se.png",
+      "production_sha256": "A4B1221608B0837D5D40A7B1C5E0D875F6DFCEC916560C62F88484AE9EF53673",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_idle_se.png",
+      "candidate_sha256": "07F55EE2635913B3FA5A7A39E538B202FF80171B4ED9BF0F4A5D86E7B1F9BFA8",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_idle_se.png",
+      "production_sha256": "07F55EE2635913B3FA5A7A39E538B202FF80171B4ED9BF0F4A5D86E7B1F9BFA8",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "walk",
+      "direction": "se",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_walk_se.png",
+      "candidate_sha256": "3FAA4F6B79FD086C8C8AF447CB276202C988A2C4835DB45EA46D2D88D0415F55",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_walk_se.png",
+      "production_sha256": "3FAA4F6B79FD086C8C8AF447CB276202C988A2C4835DB45EA46D2D88D0415F55",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_bound",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_bound_idle_sw.png",
+      "candidate_sha256": "1636120FBF51F16B4010012D64353C757A5F37819CC1B0F9F34C8A2B5DF51AE3",
+      "production_path": "assets/campaign/anim/song_jiang_bound_idle_sw.png",
+      "production_sha256": "1636120FBF51F16B4010012D64353C757A5F37819CC1B0F9F34C8A2B5DF51AE3",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_idle_sw.png",
+      "candidate_sha256": "7E5A1D90376D14CEC9C1C1721928BAFFDDC6A42B44F3638ACD41F1C872465FBB",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_idle_sw.png",
+      "production_sha256": "7E5A1D90376D14CEC9C1C1721928BAFFDDC6A42B44F3638ACD41F1C872465FBB",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "walk",
+      "direction": "sw",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_walk_sw.png",
+      "candidate_sha256": "46480C634D054192DFEFFBD9787CC9CF66D2EB37A63619827D018BB96603F1AC",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_walk_sw.png",
+      "production_sha256": "46480C634D054192DFEFFBD9787CC9CF66D2EB37A63619827D018BB96603F1AC",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_bound",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_bound_idle_ne.png",
+      "candidate_sha256": "43E901B3CC551DA76014805852F43FDB21EE428825C40691F65C28352EA58BE0",
+      "production_path": "assets/campaign/anim/song_jiang_bound_idle_ne.png",
+      "production_sha256": "43E901B3CC551DA76014805852F43FDB21EE428825C40691F65C28352EA58BE0",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_idle_ne.png",
+      "candidate_sha256": "F256224C94696BA3E32BD921EF06B647887E2DC6164887B0B701D641F215D1B4",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_idle_ne.png",
+      "production_sha256": "F256224C94696BA3E32BD921EF06B647887E2DC6164887B0B701D641F215D1B4",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "walk",
+      "direction": "ne",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_walk_ne.png",
+      "candidate_sha256": "3A6A9209BCF9A38631944586632F88B39D3855CE621C995711D97AB899E3C343",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_walk_ne.png",
+      "production_sha256": "3A6A9209BCF9A38631944586632F88B39D3855CE621C995711D97AB899E3C343",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_bound",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_bound_idle_nw.png",
+      "candidate_sha256": "64A758DCAA70975D433016E99FACC07E0D4B50703C245F962D6ED5F4C5B14368",
+      "production_path": "assets/campaign/anim/song_jiang_bound_idle_nw.png",
+      "production_sha256": "64A758DCAA70975D433016E99FACC07E0D4B50703C245F962D6ED5F4C5B14368",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_idle_nw.png",
+      "candidate_sha256": "F8EFEBD8AA4DC1B85717725A42A620DFE5529504048505478E34C567C3FD4B20",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_idle_nw.png",
+      "production_sha256": "F8EFEBD8AA4DC1B85717725A42A620DFE5529504048505478E34C567C3FD4B20",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "song_jiang_rescued",
+      "state": "walk",
+      "direction": "nw",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_walk_nw.png",
+      "candidate_sha256": "C837F446928F68D4F07C129E0A3044F698706247D159BDF52656EBC33BFDAF44",
+      "production_path": "assets/campaign/anim/song_jiang_rescued_walk_nw.png",
+      "production_sha256": "C837F446928F68D4F07C129E0A3044F698706247D159BDF52656EBC33BFDAF44",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "portrait",
+      "variant": "song_jiang_bound",
+      "state": null,
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_bound_portrait.png",
+      "candidate_sha256": "A4B1221608B0837D5D40A7B1C5E0D875F6DFCEC916560C62F88484AE9EF53673",
+      "production_path": "assets/campaign/portraits/song_jiang_bound.png",
+      "production_sha256": "A4B1221608B0837D5D40A7B1C5E0D875F6DFCEC916560C62F88484AE9EF53673",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "portrait",
+      "variant": "song_jiang_rescued",
+      "state": null,
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/song_jiang_rescued_portrait.png",
+      "candidate_sha256": "07F55EE2635913B3FA5A7A39E538B202FF80171B4ED9BF0F4A5D86E7B1F9BFA8",
+      "production_path": "assets/campaign/portraits/song_jiang_rescued.png",
+      "production_sha256": "07F55EE2635913B3FA5A7A39E538B202FF80171B4ED9BF0F4A5D86E7B1F9BFA8",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_bound",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_bound_idle_se.png",
+      "candidate_sha256": "96348A7DB5D7326E50382FC5E2170E270AED474E2A2F25FEF8F4DAF3BCEE29EB",
+      "production_path": "assets/campaign/anim/dai_zong_bound_idle_se.png",
+      "production_sha256": "96348A7DB5D7326E50382FC5E2170E270AED474E2A2F25FEF8F4DAF3BCEE29EB",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_idle_se.png",
+      "candidate_sha256": "306BEDDEC8AF4887FAA3C254C5469691D030647DC489790983DD86DBF7B1886A",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_idle_se.png",
+      "production_sha256": "306BEDDEC8AF4887FAA3C254C5469691D030647DC489790983DD86DBF7B1886A",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "walk",
+      "direction": "se",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_walk_se.png",
+      "candidate_sha256": "82F2D4804440B298E471831ABAECA16FE7A91DDBD73C2C5002FF61C4521D9784",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_walk_se.png",
+      "production_sha256": "82F2D4804440B298E471831ABAECA16FE7A91DDBD73C2C5002FF61C4521D9784",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_bound",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_bound_idle_sw.png",
+      "candidate_sha256": "08F10254FEE32CD6D2D715A3A2B2A890F8954FF220123B5A9E7E653FC1D8FAF1",
+      "production_path": "assets/campaign/anim/dai_zong_bound_idle_sw.png",
+      "production_sha256": "08F10254FEE32CD6D2D715A3A2B2A890F8954FF220123B5A9E7E653FC1D8FAF1",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_idle_sw.png",
+      "candidate_sha256": "BEC6A4CD2930149895065D1B61F2E6A41F012F153DD802EAB277069980940C2E",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_idle_sw.png",
+      "production_sha256": "BEC6A4CD2930149895065D1B61F2E6A41F012F153DD802EAB277069980940C2E",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "walk",
+      "direction": "sw",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_walk_sw.png",
+      "candidate_sha256": "E1F2F6D375F03E67ED072F4071D1AD037824AF7A4FC8F125CD55322878368827",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_walk_sw.png",
+      "production_sha256": "E1F2F6D375F03E67ED072F4071D1AD037824AF7A4FC8F125CD55322878368827",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_bound",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_bound_idle_ne.png",
+      "candidate_sha256": "A09A9A38F487A8835BBD6309363FA8E5A617754592917A2896D36A9EBEF0053F",
+      "production_path": "assets/campaign/anim/dai_zong_bound_idle_ne.png",
+      "production_sha256": "A09A9A38F487A8835BBD6309363FA8E5A617754592917A2896D36A9EBEF0053F",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_idle_ne.png",
+      "candidate_sha256": "0BE477B2CBA5A78ADABD764214349A68132F38BDE19085B00B1F2F55B62A5F6A",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_idle_ne.png",
+      "production_sha256": "0BE477B2CBA5A78ADABD764214349A68132F38BDE19085B00B1F2F55B62A5F6A",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "walk",
+      "direction": "ne",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_walk_ne.png",
+      "candidate_sha256": "FB77519B8790CF79F9F76D51C865AD6A140F9E100865E8D2E2E9FF5FEF47D44B",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_walk_ne.png",
+      "production_sha256": "FB77519B8790CF79F9F76D51C865AD6A140F9E100865E8D2E2E9FF5FEF47D44B",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_bound",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_bound_idle_nw.png",
+      "candidate_sha256": "26D45DD1383C4C21BC6971E5BE91B708F3A9DCDE67C8432372AAAE532C62DCD4",
+      "production_path": "assets/campaign/anim/dai_zong_bound_idle_nw.png",
+      "production_sha256": "26D45DD1383C4C21BC6971E5BE91B708F3A9DCDE67C8432372AAAE532C62DCD4",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_idle_nw.png",
+      "candidate_sha256": "4F3702AAB54F944C353204E2BA01417B24CA32F6CD76B1D3858585594DB8D40A",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_idle_nw.png",
+      "production_sha256": "4F3702AAB54F944C353204E2BA01417B24CA32F6CD76B1D3858585594DB8D40A",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "animation",
+      "variant": "dai_zong_rescued",
+      "state": "walk",
+      "direction": "nw",
+      "frame_count": 4,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_walk_nw.png",
+      "candidate_sha256": "8FDA22237465FE1041BA87257FD076956AF17FA2FE3C7C9261CD324489579CAD",
+      "production_path": "assets/campaign/anim/dai_zong_rescued_walk_nw.png",
+      "production_sha256": "8FDA22237465FE1041BA87257FD076956AF17FA2FE3C7C9261CD324489579CAD",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "portrait",
+      "variant": "dai_zong_bound",
+      "state": null,
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_bound_portrait.png",
+      "candidate_sha256": "96348A7DB5D7326E50382FC5E2170E270AED474E2A2F25FEF8F4DAF3BCEE29EB",
+      "production_path": "assets/campaign/portraits/dai_zong_bound.png",
+      "production_sha256": "96348A7DB5D7326E50382FC5E2170E270AED474E2A2F25FEF8F4DAF3BCEE29EB",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "kind": "portrait",
+      "variant": "dai_zong_rescued",
+      "state": null,
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/jiangzhou_prisoners_p0_direction4_candidate_pipeline_20260903/outputs/dai_zong_rescued_portrait.png",
+      "candidate_sha256": "306BEDDEC8AF4887FAA3C254C5469691D030647DC489790983DD86DBF7B1886A",
+      "production_path": "assets/campaign/portraits/dai_zong_rescued.png",
+      "production_sha256": "306BEDDEC8AF4887FAA3C254C5469691D030647DC489790983DD86DBF7B1886A",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "steam_modified_or_exported": false
+}

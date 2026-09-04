@@ -8,13 +8,16 @@ const LEVELS := [
 	{"id": "level2", "title": "江州劫法场", "sub": "浔阳江畔·限时劫法场", "script": "res://scripts/levels/level2_jiangzhou.gd"},
 	{"id": "level3", "title": "三打祝家庄", "sub": "独龙冈·盘陀路", "script": "res://scripts/levels/level3_zhujiazhuang.gd"},
 	{"id": "level4", "title": "大破连环马", "sub": "钩镰枪法·专砍马腿", "script": "res://scripts/levels/level4_lianhuanma.gd"},
-	{"id": "level5", "title": "梁山泊保卫战", "sub": "三败高太尉·终战", "script": "res://scripts/levels/level5_liangshan.gd"},
+	{"id": "level5", "title": "三败高太尉", "sub": "三败高太尉·终战", "script": "res://scripts/levels/level5_liangshan.gd"},
 	{"id": "level6", "title": "大闹野猪林", "sub": "花和尚禅杖·救林冲", "script": "res://scripts/levels/level6_yezhulin.gd"},
 	{"id": "level7", "title": "醉打蒋门神", "sub": "快活林·无三不过望", "script": "res://scripts/levels/level7_kuaihuolin.gd"},
-	{"id": "level8", "title": "东昌府·飞石", "sub": "没羽箭张清·水擒招安", "script": "res://scripts/levels/level8_dongchangfu.gd"},
+	{"id": "level8", "title": "智取大名府", "sub": "元宵灯市·开门劫牢", "script": "res://scripts/levels/level8_dongchangfu.gd"},
 ]
 
+const STORY_ORDER := ["level6", "level1", "level7", "level2", "level3", "level4", "level8", "level5"]
+
 const SAVE_PATH := "user://campaign.cfg"
+const SAVE_SCHEMA := 2
 
 const SKIRMISH_SCRIPT := "res://scripts/levels/skirmish.gd"
 const SKIRMISH_AI_SCRIPT := "res://scripts/levels/skirmish_ai.gd"
@@ -24,6 +27,7 @@ const ARENA_SCRIPT := "res://scripts/levels/arena.gd"
 
 var current := 0
 var unlocked := 1
+var records: Dictionary = {} # stable level id -> best base clear / same-run original-story result
 var skirmish := false       # 启动自由「遭遇战」模式而非战役关卡
 var skirmish_ai := false    # 启动「AI 对战」1v1 模式
 var arena := false          # 启动「竞技场」沙盒模式：自由点将+刷敌
@@ -151,12 +155,91 @@ func make_level() -> LevelBase:
 
 
 func has_next() -> bool:
-	return current + 1 < LEVELS.size() and implemented(current + 1)
+	return next_index() >= 0 and implemented(next_index())
 
 
-func on_level_won() -> void:
+func on_level_won(result: Dictionary = {}) -> Dictionary:
 	unlocked = maxi(unlocked, current + 2)
+	var level_id := String(LEVELS[current].id) if current >= 0 and current < LEVELS.size() else ""
+	if result.is_empty():
+		result = {"core_cleared":true,"story_complete":false,"story_done":0,"story_total":0,
+			"done_ids":[],"contract_version":1}
+	return record_level_result(level_id, result)
+
+
+func record_level_result(level_id: String, result: Dictionary) -> Dictionary:
+	if index_for_id(level_id) < 0 or not bool(result.get("core_cleared", false)):
+		return {"accepted":false,"new_story_seal":false}
+	var old: Dictionary = _normalize_record(records.get(level_id, {}))
+	var record := old.duplicate(true)
+	var was_story_complete := bool(old.story_complete)
+	var run_total := maxi(0, int(result.get("story_total", 0)))
+	var run_done := clampi(int(result.get("story_done", 0)), 0, run_total)
+	var run_complete := bool(result.get("story_complete", false)) and run_total > 0 and run_done == run_total
+	var run_ids := _string_ids(result.get("done_ids", []))
+	record.cleared = true
+	record.story_complete = was_story_complete or run_complete
+	record.contract_version = maxi(int(old.contract_version), maxi(1, int(result.get("contract_version", 1))))
+	# Keep the exact goal set from one best run. Never union separate runs: doing so
+	# could fabricate an original-story completion that never happened in one battle.
+	if run_done > int(old.best_done) or (int(old.story_total) == 0 and run_total > 0) or (run_complete and not was_story_complete):
+		record.best_done = run_done
+		record.story_total = run_total
+		record.best_goal_ids = run_ids
+	records[level_id] = _normalize_record(record)
 	_save()
+	var response: Dictionary = records[level_id].duplicate(true)
+	response.accepted = true
+	response.new_story_seal = run_complete and not was_story_complete
+	return response
+
+
+func level_record(level_id: String) -> Dictionary:
+	return _normalize_record(records.get(level_id, {})).duplicate(true)
+
+
+func has_story_seal(level_id: String) -> bool:
+	return bool(level_record(level_id).story_complete)
+
+
+func _empty_record() -> Dictionary:
+	return {"cleared":false,"story_complete":false,"best_done":0,"story_total":0,
+		"best_goal_ids":[],"contract_version":1}
+
+
+func _normalize_record(raw_value: Variant) -> Dictionary:
+	var out := _empty_record()
+	if not raw_value is Dictionary:
+		return out
+	var raw: Dictionary = raw_value
+	out.cleared = bool(raw.get("cleared", false))
+	out.story_complete = bool(raw.get("story_complete", false))
+	out.best_done = maxi(0, int(raw.get("best_done", 0)))
+	out.story_total = maxi(out.best_done, int(raw.get("story_total", raw.get("best_total", 0))))
+	out.best_goal_ids = _string_ids(raw.get("best_goal_ids", []))
+	out.contract_version = maxi(1, int(raw.get("contract_version", 1)))
+	return out
+
+
+func _string_ids(value: Variant) -> Array[String]:
+	var out: Array[String] = []
+	if value is Array or value is PackedStringArray:
+		for item in value:
+			var goal_id := String(item).strip_edges()
+			if goal_id != "" and not out.has(goal_id): out.append(goal_id)
+	return out
+
+
+func _normalized_records(raw_value: Variant) -> Dictionary:
+	var out: Dictionary = {}
+	if not raw_value is Dictionary:
+		return out
+	var raw: Dictionary = raw_value
+	for info in LEVELS:
+		var level_id := String(info.id)
+		if raw.has(level_id):
+			out[level_id] = _normalize_record(raw[level_id])
+	return out
 
 
 func save_prefs() -> void:
@@ -164,8 +247,15 @@ func save_prefs() -> void:
 
 
 func _save() -> void:
+	if OS.get_environment("CAMPAIGN_QA") == "1":
+		return
 	var cfg := ConfigFile.new()
+	# Preserve unknown sections/keys from prior or newer builds instead of
+	# reconstructing campaign.cfg and silently discarding them.
+	cfg.load(SAVE_PATH)
+	cfg.set_value("progress", "schema", SAVE_SCHEMA)
 	cfg.set_value("progress", "unlocked", unlocked)
+	cfg.set_value("progress", "records", records)
 	cfg.set_value("pref", "ai_difficulty", ai_difficulty)
 	cfg.set_value("pref", "victory_mode", victory_mode)
 	cfg.set_value("pref", "scale_on", scale_on)
@@ -181,6 +271,7 @@ func _load() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(SAVE_PATH) == OK:
 		unlocked = maxi(1, int(cfg.get_value("progress", "unlocked", 1)))
+		records = _normalized_records(cfg.get_value("progress", "records", {}))
 		ai_difficulty = String(cfg.get_value("pref", "ai_difficulty", ai_difficulty))
 		victory_mode = String(cfg.get_value("pref", "victory_mode", victory_mode))
 		scale_on = bool(cfg.get_value("pref", "scale_on", scale_on))
@@ -189,3 +280,23 @@ func _load() -> void:
 		hero_mult_touched = bool(cfg.get_value("pref", "hero_mult_touched", hero_mult_touched))
 		defense_rand_waves = clampi(int(cfg.get_value("pref", "defense_rand_waves", defense_rand_waves)), 1, 999)
 		defense_interval = clampf(float(cfg.get_value("pref", "defense_interval", defense_interval)), 1.0, 600.0)
+
+
+func index_for_id(level_id: String) -> int:
+	for i in range(LEVELS.size()):
+		if LEVELS[i].id == level_id:
+			return i
+	return -1
+
+func story_indices() -> Array:
+	var out: Array = []
+	for level_id in STORY_ORDER:
+		out.append(index_for_id(level_id))
+	return out
+
+func story_number(index: int) -> int:
+	return STORY_ORDER.find(LEVELS[index].id) + 1
+
+func next_index() -> int:
+	var order := story_number(current)
+	return index_for_id(STORY_ORDER[order]) if order < STORY_ORDER.size() else -1

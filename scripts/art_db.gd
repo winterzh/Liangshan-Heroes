@@ -1,4 +1,5 @@
 extends Node
+const CampaignArt := preload("res://scripts/campaign_art.gd")
 ## 美术资源管理（Autoload: Art）。
 ## 把 Imagen 生成的整张图集放进 assets/ 即自动切片使用；缺图时返回 null，
 ## 单位/地块会用代码绘制的占位图形代替，随时可以无缝换皮。
@@ -269,6 +270,7 @@ var _cache := {}
 var _terrain_img: Image
 var _avg_cache := {}
 var _anim_cache := {}
+var _generic_directional_path_cache := {}
 
 
 func _ready() -> void:
@@ -321,6 +323,7 @@ var _content_tex := {}
 # 运行时美术别名（场景编辑器「新建单位」时让新 key 借用某现有单位的贴图/动画）。
 # 仅本场战斗有效；Battle 每局开场先清空，再由 scenario.apply_overrides 填入。
 var _runtime_alias := {}
+var environment_buildings: Dictionary = {}
 
 func set_runtime_alias(d: Dictionary) -> void:
 	_runtime_alias = d if d != null else {}
@@ -370,7 +373,21 @@ const SPRITE_ALIAS := {}
 ## HUD 选区图标/面板头像统一取图：脸→走图→建筑→物件→地形，并先过别名表。
 ## 全空才返回 null（此时调用方画占位首字，而非黄圈）。这条链覆盖建筑/资源/特殊单位，
 ## 是消灭「黄色圈圈头像」的单一来源。
-func avatar_texture(key: String) -> Texture2D:
+func avatar_texture(key: String, variant := "") -> Texture2D:
+	if not variant.is_empty():
+		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
+		if not bound_owner.is_empty():
+			if key != bound_owner: return null
+			variant = ""
+		else:
+			var generic_object := CampaignArt.generic_object_alias(variant)
+			if not generic_object.is_empty():
+				if key != generic_object: return null
+				return terrain_texture(generic_object)
+	if not variant.is_empty():
+		var variant_tex := _campaign_texture(CampaignArt.still_path(variant))
+		if variant_tex != null: return variant_tex
+	if environment_buildings.has(key): return terrain_texture(environment_buildings[key])
 	var rk: String = ART_ALIAS.get(key, key)
 	var t := portrait_texture(rk)
 	if t == null: t = unit_texture(rk)
@@ -380,12 +397,35 @@ func avatar_texture(key: String) -> Texture2D:
 	return t
 
 
-func unit_texture(key: String) -> Texture2D:
+func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
+	if not variant.is_empty():
+		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
+		if not bound_owner.is_empty():
+			if key != bound_owner: return null
+			variant = ""
+		else:
+			var generic_object := CampaignArt.generic_object_alias(variant)
+			if not generic_object.is_empty():
+				if key != generic_object: return null
+				return terrain_texture(generic_object)
+	if not variant.is_empty():
+		# 旧两参调用继续以SE作为静态预览；世界内绘制会显式传当前方向。
+		var variant_direction: String = "se" if direction.is_empty() else direction
+		if variant_direction in CampaignArt.DIRECTIONS:
+			var variant_frames := unit_anim_frames(key, "idle", variant_direction, variant)
+			if not variant_frames.is_empty() and campaign_variant_has_direction(variant, variant_direction):
+				return variant_frames[0]
+		var variant_tex := _campaign_texture(CampaignArt.still_path(variant))
+		if variant_tex != null: return variant_tex
 	key = _ra(key)                     # 运行时别名（场景新建单位借图）
 	var ov := _content_override(key)   # 内容包覆盖优先
 	if ov != null:
 		return ov
 	key = SPRITE_ALIAS.get(key, key)   # 无专属走图的将领/兵种借同型官军立绘
+	if direction in CampaignArt.DIRECTIONS and unit_anim_uses_directional_source(key, "idle", direction):
+		var directional_idle := unit_anim_frames(key, "idle", direction)
+		if not directional_idle.is_empty():
+			return directional_idle[0]
 	if _units_tex != null and UNIT_CELLS.has(key):
 		return _atlas(_units_tex, UNIT_CELLS[key], 4, "u_" + key)
 	if _units2_tex != null and UNIT2_CELLS.has(key):
@@ -394,7 +434,7 @@ func unit_texture(key: String) -> Texture2D:
 		return _atlas(_units3_tex, UNIT3_CELLS[key], 4, "u3_" + key)
 	# 回退：仅有逐帧行走图、无静态图集格的单位（喽啰、梁山马军）取走循环「立定帧」当图标，
 	# 否则 HUD 头像/选择栏会画成占位圆圈。世界内渲染不受影响（那里始终用动画帧、从不用此回退）。
-	var wf := unit_anim_frames(key, "walk")
+	var wf := unit_anim_frames(key, "walk", direction if direction in CampaignArt.DIRECTIONS else "")
 	if not wf.is_empty():
 		return wf[1 % wf.size()]
 	return null
@@ -436,6 +476,7 @@ func ability_impact_texture(style: String) -> Texture2D:
 
 
 func building_texture(key: String) -> Texture2D:
+	if environment_buildings.has(key): return terrain_texture(environment_buildings[key])
 	key = _ra(key)                     # 运行时别名
 	var ov := _content_override(key)   # 内容包覆盖优先
 	if ov != null:
@@ -546,13 +587,73 @@ func portrait_texture(key: String) -> Texture2D:
 
 ## 逐帧动画图集接口（混合动画的“逐帧”一侧）。
 ## 约定：assets/anim/<key>_<state>.png 为一条横向帧带（每帧为正方形），state ∈ idle/walk/attack。
-## 文件存在则返回各帧 AtlasTexture，否则返回空数组（Unit 退回程序化动画）。
-func unit_anim_frames(key: String, state: String) -> Array:
+## 四向资源使用 assets/anim/<key>_<state>_<se|sw|ne|nw>.png；旧无方向文件仍作为兼容回退。
+## 选图顺序为：精确四向动作 > 旧同动作帧带 > 同方向idle。这样不会用一张
+## 四向站姿遮住本来存在的走路/攻击动画；只有真正没有该动作时才保持四向站姿。
+func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
+	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
+		return []
+	if not variant.is_empty():
+		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
+		if not bound_owner.is_empty():
+			if key != bound_owner: return []
+			variant = ""
+	if not variant.is_empty():
+		# 战役variant必须给出合法方向；不再把空/非法方向悄悄改成SE。
+		if direction not in CampaignArt.DIRECTIONS:
+			return []
+		var variant_path := CampaignArt.animation_path(variant, state, direction)
+		if not variant_path.is_empty():
+			var variant_cache_key := "campaign|%s|%s|%s" % [variant, state, direction]
+			if _anim_cache.has(variant_cache_key): return _anim_cache[variant_cache_key]
+			var variant_tex := _campaign_texture(variant_path)
+			# 剧情NPC只有有依据的姿态时，保持本期造型，不能切回后期武器/甲胄。
+			# 终态语义必须隔离：down/death 缺图时继续查同名旧素材或交给绘制层
+			# 做程序化终态，不能用站姿冒充，更不能互相借图。
+			if variant_tex == null and state not in ["idle", "death", "down"]:
+				variant_tex = _campaign_texture(CampaignArt.animation_path(variant, "idle", direction))
+			if variant_tex != null:
+				var result: Array = []
+				var frame_size := variant_tex.get_height()
+				if frame_size > 0 and variant_tex.get_width() % frame_size == 0:
+					for i in range(variant_tex.get_width() / frame_size):
+						var frame := AtlasTexture.new()
+						frame.atlas = variant_tex
+						frame.region = Rect2(i * frame_size, 0, frame_size, frame_size)
+						result.append(frame)
+				_anim_cache[variant_cache_key] = result
+				return result
 	key = _ra(key)                     # 运行时别名（场景新建单位借动画）
 	key = SPRITE_ALIAS.get(key, key)   # 无专属走图的将领/兵种借同型官军逐帧
-	var ck := key + "_" + state
+	var directional_ck := ""
+	if direction in CampaignArt.DIRECTIONS:
+		directional_ck = "unit|%s|%s|%s" % [key, state, direction]
+		if _anim_cache.has(directional_ck):
+			return _anim_cache[directional_ck]
+		var directional_path := _resolve_generic_directional_path(key, state, direction)
+		var directional_tex: Texture2D = load(directional_path) if not directional_path.is_empty() else null
+		if directional_tex != null:
+			var directional_frames := _slice_anim_strip(directional_tex)
+			_anim_cache[directional_ck] = directional_frames
+			return directional_frames
+	var ck := "legacy|%s|%s" % [key, state]
 	if _anim_cache.has(ck):
-		return _anim_cache[ck]
+		var cached_legacy: Array = _anim_cache[ck]
+		if not cached_legacy.is_empty():
+			if not directional_ck.is_empty():
+				_anim_cache[directional_ck] = cached_legacy
+			return cached_legacy
+		# 旧动作确认不存在后，继续查同方向 idle 的最后回退。
+		if not directional_ck.is_empty() and state not in ["idle", "death", "down"]:
+			var cached_idle_path := _resolve_generic_directional_path(key, "idle", direction)
+			var cached_idle_tex: Texture2D = load(cached_idle_path) if not cached_idle_path.is_empty() else null
+			if cached_idle_tex != null:
+				var cached_idle_frames := _slice_anim_strip(cached_idle_tex)
+				_anim_cache[directional_ck] = cached_idle_frames
+				return cached_idle_frames
+		if not directional_ck.is_empty():
+			_anim_cache[directional_ck] = cached_legacy
+		return cached_legacy
 	var frames: Array = []
 	var path := "res://assets/anim/%s_%s.png" % [key, state]
 	if ResourceLoader.exists(path):
@@ -565,7 +666,158 @@ func unit_anim_frames(key: String, state: String) -> Array:
 			at.region = Rect2(i * h, 0, h, h)
 			frames.append(at)
 	_anim_cache[ck] = frames
+	if not directional_ck.is_empty():
+		if not frames.is_empty():
+			_anim_cache[directional_ck] = frames
+			return frames
+		# 精确四向与旧同动作都缺失时，才允许四向 idle 作为最后回退。
+		# death/down 仍严格隔离，不允许站立姿态冒充终态。
+		if state not in ["idle", "death", "down"]:
+			var idle_path := _resolve_generic_directional_path(key, "idle", direction)
+			var idle_tex: Texture2D = load(idle_path) if not idle_path.is_empty() else null
+			if idle_tex != null:
+				var idle_frames := _slice_anim_strip(idle_tex)
+				_anim_cache[directional_ck] = idle_frames
+				return idle_frames
+		# 定向负查也落缓存；绝大多数旧素材不会因此每帧重复访问ResourceLoader。
+		_anim_cache[directional_ck] = frames
 	return frames
+
+
+func _generic_directional_path(key: String, state: String, direction: String) -> String:
+	if direction not in CampaignArt.DIRECTIONS:
+		return ""
+	return "res://assets/anim/%s_%s_%s.png" % [key, state, direction]
+
+
+func _resolve_generic_directional_path(key: String, state: String, direction: String) -> String:
+	if direction not in CampaignArt.DIRECTIONS:
+		return ""
+	var cache_key := "%s|%s|%s" % [key, state, direction]
+	if _generic_directional_path_cache.has(cache_key):
+		return String(_generic_directional_path_cache[cache_key])
+	var path := _generic_directional_path(key, state, direction)
+	if not ResourceLoader.exists(path):
+		path = ""
+	_generic_directional_path_cache[cache_key] = path
+	return path
+
+
+func _slice_anim_strip(tex: Texture2D) -> Array:
+	var frames: Array = []
+	if tex == null or tex.get_height() <= 0:
+		return frames
+	var h := tex.get_height()
+	var n := maxi(1, int(round(float(tex.get_width()) / float(h))))
+	for i in range(n):
+		var at := AtlasTexture.new()
+		at.atlas = tex
+		at.region = Rect2(i * h, 0, h, h)
+		frames.append(at)
+	return frames
+
+
+## 与 unit_anim_frames 使用同一选择顺序，只回答最终帧是否来自真实方向文件。
+## 绘制层据此决定是否允许旧式水平镜像。
+func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
+	if direction not in CampaignArt.DIRECTIONS:
+		return false
+	if not variant.is_empty():
+		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
+		if not bound_owner.is_empty():
+			if key != bound_owner: return false
+			variant = ""
+	if not variant.is_empty():
+		var variant_path := CampaignArt.animation_path(variant, state, direction)
+		if not variant_path.is_empty():
+			if ResourceLoader.exists(variant_path):
+				return true
+			if state not in ["idle", "death", "down"] \
+					and ResourceLoader.exists(CampaignArt.animation_path(variant, "idle", direction)):
+				return true
+	key = _ra(key)
+	key = SPRITE_ALIAS.get(key, key)
+	# 必须与 unit_anim_frames 的实际选图顺序一致，否则绘制层会错把旧动作
+	# 当成四向图禁止镜像，或把四向图再次水平翻转。
+	if not _resolve_generic_directional_path(key, state, direction).is_empty():
+		return true
+	var legacy_ck := "legacy|%s|%s" % [key, state]
+	if _anim_cache.has(legacy_ck):
+		var legacy_frames: Array = _anim_cache[legacy_ck]
+		if not legacy_frames.is_empty():
+			return false
+	elif ResourceLoader.exists("res://assets/anim/%s_%s.png" % [key, state]):
+		return false
+	return state not in ["idle", "death", "down"] \
+		and not _resolve_generic_directional_path(key, "idle", direction).is_empty()
+
+
+var _campaign_tex_cache: Dictionary = {}
+
+func _campaign_texture(path: String) -> Texture2D:
+	if path.is_empty(): return null
+	if _campaign_tex_cache.has(path): return _campaign_tex_cache[path]
+	# 不缓存不存在的文件：开发期新增图导入后可以立即被下一次查询发现。
+	if not ResourceLoader.exists(path): return null
+	var tex := load(path) as Texture2D
+	if tex != null: _campaign_tex_cache[path] = tex
+	return tex
+
+func campaign_variant_has_direction(variant: String, direction: String) -> bool:
+	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
+		return false
+	var path := CampaignArt.animation_path(variant, "idle", direction)
+	return not path.is_empty() and ResourceLoader.exists(path)
+
+## 精确动作存在判断；复用纹理缓存，绝不以idle回退冒充双人动作。
+func campaign_variant_has_animation(variant: String, state: String, direction: String) -> bool:
+	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS: return false
+	var path := CampaignArt.animation_path(variant, state, direction)
+	var texture := _campaign_texture(path)
+	return texture != null and texture.get_height() > 0 and texture.get_width() % texture.get_height() == 0
+
+func _campaign_object_directional_texture(key: String, state: String, direction: String) -> Texture2D:
+	if direction not in CampaignArt.DIRECTIONS:
+		return null
+	var texture := _campaign_texture(CampaignArt.object_direction_path(key, state, direction))
+	if texture != null:
+		return texture
+	# 高俅座船拆出专用美术前，继续继承原官船资源，避免旧存档/缺图显示断裂。
+	if key == "gao_flagship":
+		return _campaign_texture(CampaignArt.object_direction_path("official_warship", state, direction))
+	return null
+
+
+## 方向资源可选：缺图时严格走旧的状态资源，保证既有战役和旧素材不变。
+func campaign_object_texture(key: String, state := "default", direction := "") -> Texture2D:
+	var directional := _campaign_object_directional_texture(key, state, direction)
+	if directional != null:
+		return directional
+	var legacy := _campaign_texture(CampaignArt.object_path(key, state))
+	if legacy != null:
+		return legacy
+	# 新增船型可以只提供真四向资源。旧调用没有传方向时固定取 SE，
+	# 仅作为旧接口的稳定预览，不把普通官船或水平镜像当成该船型。
+	if direction.is_empty() and key in ["official_vanguard"]:
+		var default_directional := _campaign_object_directional_texture(key, state, "se")
+		if default_directional != null:
+			return default_directional
+	if key == "gao_flagship":
+		return _campaign_texture(CampaignArt.object_path("official_warship", state))
+	return null
+
+
+## 只在实际加载到单独方向文件时才允许绘制层关闭旧式左右镜像。
+func campaign_object_uses_directional_source(key: String, state := "default", direction := "") -> bool:
+	return _campaign_object_directional_texture(key, state, direction) != null
+
+
+## 只看该 object key 自己的真四向文件；不把 Art 的兼容回退误当成可安全写旗文的资源。
+## official_vanguard 与 gao_flagship 都必须有自己的文件，普通官船不能借它们的旗文。
+func campaign_object_has_exact_directional_source(key: String, state := "default", direction := "") -> bool:
+	if direction not in CampaignArt.DIRECTIONS:
+		return false
+	return _campaign_texture(CampaignArt.object_direction_path(key, state, direction)) != null
 
 
 ## 某地形贴图的平均色（地形过渡混合与小地图用）；无图时返回 fallback

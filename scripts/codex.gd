@@ -66,9 +66,10 @@ func _unhandled_input(e: InputEvent) -> void:
 
 
 func _ready() -> void:
+	theme = UITheme.shared()
 	_touch = OS.has_feature("mobile") or OS.has_feature("web") or OS.get_environment("TOUCH_UI") == "1"
 	var bg := ColorRect.new()
-	bg.color = Color(0.07, 0.06, 0.05)
+	bg.color = UITheme.INK
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
@@ -80,7 +81,7 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = "📖  英雄图鉴 · 水浒英雄传"
 	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", Color("ffd866"))
+	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	top.add_child(title)
 	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(sp)
 	var back := Button.new()
@@ -158,14 +159,14 @@ func _ready() -> void:
 
 	_name_lbl = Label.new()
 	_name_lbl.add_theme_font_size_override("font_size", 34)
-	_name_lbl.add_theme_color_override("font_color", Color("ffe9a8"))
+	_name_lbl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	detail.add_child(_name_lbl)
 	_sub_lbl = Label.new()
 	_sub_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_sub_lbl.custom_minimum_size = Vector2(660, 0)
 	_sub_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_sub_lbl.add_theme_font_size_override("font_size", 17)
-	_sub_lbl.add_theme_color_override("font_color", Color("c8b890"))
+	_sub_lbl.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	detail.add_child(_sub_lbl)
 
 	# 三大图：头像 / 移动 / 攻击
@@ -179,14 +180,14 @@ func _ready() -> void:
 	# 技能数值（仅有技能组的英雄显示）
 	_abil_title = Label.new()
 	_abil_title.add_theme_font_size_override("font_size", 20)
-	_abil_title.add_theme_color_override("font_color", Color("ffd866"))
+	_abil_title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	detail.add_child(_abil_title)
 	_abil_lbl = Label.new()
 	_abil_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_abil_lbl.custom_minimum_size = Vector2(660, 0)
 	_abil_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_abil_lbl.add_theme_font_size_override("font_size", 16)
-	_abil_lbl.add_theme_color_override("font_color", Color(0.84, 0.9, 0.78))
+	_abil_lbl.add_theme_color_override("font_color", UITheme.PAPER)
 	detail.add_child(_abil_lbl)
 
 	var bio_head := HBoxContainer.new()
@@ -195,7 +196,7 @@ func _ready() -> void:
 	var bd_title := Label.new()
 	bd_title.text = "生平"
 	bd_title.add_theme_font_size_override("font_size", 20)
-	bd_title.add_theme_color_override("font_color", Color("ffd866"))
+	bd_title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	bio_head.add_child(bd_title)
 	var more := Button.new()
 	more.text = "详细 ▸"
@@ -208,7 +209,7 @@ func _ready() -> void:
 	_bio_lbl.custom_minimum_size = Vector2(640, 0)
 	_bio_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_bio_lbl.add_theme_font_size_override("font_size", 19)
-	_bio_lbl.add_theme_color_override("font_color", Color(0.92, 0.88, 0.78))
+	_bio_lbl.add_theme_color_override("font_color", UITheme.PAPER)
 	detail.add_child(_bio_lbl)
 
 	_build_lore_overlay()
@@ -330,7 +331,7 @@ func _add_group(list: VBoxContainer, title: String, keys: Array) -> void:
 	var hd := Label.new()
 	hd.text = "【%s】%d" % [title, keys.size()]
 	hd.add_theme_font_size_override("font_size", 18 if _touch else 15)
-	hd.add_theme_color_override("font_color", Color("9fd0e8"))
+	hd.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
 	list.add_child(hd)
 	for k in keys:
 		var b := Button.new()
@@ -361,7 +362,7 @@ func _img_col(parent: HBoxContainer, cap: String) -> AnimBox:
 	lb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lb.custom_minimum_size = Vector2(232, 0)
 	lb.add_theme_font_size_override("font_size", 16)
-	lb.add_theme_color_override("font_color", Color("c8b890"))
+	lb.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	col.add_child(lb)
 	return box
 

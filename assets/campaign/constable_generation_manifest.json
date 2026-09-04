@@ -1,0 +1,96 @@
+{
+  "mode": "built-in image_gen only; no API/CLI fallback",
+  "purpose": "Remove Dong Chao and Xue Ba legacy world-sprite triangle placeholders in episode level6 without changing free-mode art.",
+  "baseline": {
+    "strips": 172,
+    "frames": 288,
+    "objects": 22,
+    "portraits": 18
+  },
+  "current": {
+    "strips": 188,
+    "frames": 312,
+    "objects": 22,
+    "portraits": 20
+  },
+  "prompts": {
+    "dong_chao": "One stocky broad-shouldered Chinese Song-dynasty escort constable DONG CHAO, middle-aged slightly older weathered square face, stern narrow eyes, full short coarse black-brown beard and moustache, simple dark brown cloth headwrap (no helmet or officer wingedhat). Wearing plain coarse BROWN cross-collar knee-length public-service robe, muted tan neckcloth, simple dark leather belt, charcoal loose trousers, beige calfwrappings and straw sandals. Broad earthy brown silhouette. Carry one plain hardwood water-fire staff, short shoulder-height stick with slight worn dark ends, no spearhead. On prison escort duty on a forest road. Use case: historical-scene. Asset type: transparent 2D RTS character atlas for Water Margin. Exactly 3 COLUMNS x 4 ROWS, twelve separate complete full-body figures. Every ROW is ONE fixed isometric viewing direction: row1 SOUTHEAST front facing lower RIGHT, row2 SOUTHWEST front facing lower LEFT, row3 NORTHEAST back facing upper RIGHT (nose at right head edge), row4 NORTHWEST back facing upper LEFT (nose at LEFT head edge). Northwest must clearly show the back and left profile, never repeat northeast. Column1 idle: feet planted, watching prisoner. Column2 WALK contact pose with LEFT leg stepping forward and RIGHT leg trailing. Column3 WALK opposite contact pose with RIGHT leg stepping forward and LEFT leg trailing. The two walking columns have visibly opposite leading legs and supporting feet, believable short normal strides and weight transfer, no high knees, no identical pose bobbing. Keep fixed body proportions and camera per row. Plain historical water-fire staff means an unadorned wooden constable's staff, absolutely NO literal fire or water or magic. Hold it near vertical/slanted just beside body so staff stays within full body silhouette height, both hands/feet complete. Realistic hand-painted late-1990s isometric RTS style, muted earthy fabric and readable light/shade, orthographic 2:1 camera. Consistent person identity in all12sprites. Equal squarecells, generous clear transparent gutters, centered horizontally, soles at y82%, constant human height70%cell, head and staff wholly insidecell. Transparent background PNG, genuine RGBA alpha=0 outside figures. No floor, shadows, scenery, grid lines, labels, text, Chinese lettering, border, crest, watermark, armor, horse, glowing effects or floating accessories. Ideally1536x2048.",
+    "xue_ba": "One lean wiry Chinese Song-dynasty escort constable XUE BA, older gaunt angular face, sharp narrow eyes, thin dark moustache and narrow pointed chinbeard with a few grey hairs, simple grey-brown cloth headwrap (no helmet or wingedhat). Wearing plain coarse CHARCOAL GREY cross-collar knee-length public-service robe, muted grey-beige neckcloth, simple dark leather belt, darkgrey loose trousers, beige calfwrappings and straw sandals. Distinct narrow grey silhouette. Carry one plain hardwood water-fire staff, short shoulder-height stick with slight worn dark ends, no spearhead. On prison escort duty on a forest road. Use case: historical-scene. Asset type: transparent 2D RTS character atlas for Water Margin. Exactly 3 COLUMNS x 4 ROWS, twelve separate complete full-body figures. Every ROW is ONE fixed isometric viewing direction: row1 SOUTHEAST front facing lower RIGHT, row2 SOUTHWEST front facing lower LEFT, row3 NORTHEAST back facing upper RIGHT (nose at right head edge), row4 NORTHWEST back facing upper LEFT (nose at LEFT head edge). Northwest must clearly show the back and left profile, never repeat northeast. Column1 idle: feet planted, watching prisoner. Column2 WALK contact pose with LEFT leg stepping forward and RIGHT leg trailing. Column3 WALK opposite contact pose with RIGHT leg stepping forward and LEFT leg trailing. The two walking columns have visibly opposite leading legs and supporting feet, believable short normal strides and weight transfer, no high knees, no identical pose bobbing. Keep fixed body proportions and camera per row. Plain historical water-fire staff means an unadorned wooden constable's staff, absolutely NO literal fire or water or magic. Hold it near vertical/slanted just beside body so staff stays within full body silhouette height, both hands/feet complete. Realistic hand-painted late-1990s isometric RTS style, muted earthy fabric and readable light/shade, orthographic 2:1 camera. Consistent person identity in all12sprites. Equal squarecells, generous clear transparent gutters, centered horizontally, soles at y82%, constant human height70%cell, head and staff wholly insidecell. Transparent background PNG, genuine RGBA alpha=0 outside figures. No floor, shadows, scenery, grid lines, labels, text, Chinese lettering, border, crest, watermark, armor, horse, glowing effects or floating accessories. Ideally1536x2048.",
+    "dong_passing": "TRANSPARENT PNG, exactly FOUR full-body sprites of one brown-robed stocky Chinese Song-dynasty constable Dong Chao in a single 2x2 sheet. ONE precise WALKING PASSING pose per direction: his RIGHT thigh almost vertical directly beneath torso, right knee modestly bent forward, RIGHT FOOT suspended a few centimetres above ground beside the opposite ankle; LEFT LEG nearly straight supports his weight. BOTH LEGS CLOSE TOGETHER below the body, clearly NOT a wide contact stride. Foot-lift small, not high knee. His simple shoulder-height hardwood staff held upright at right side. First sprite top-left true SE front lowerRIGHT; second top-right true SW front lowerLEFT; third bottom-left true NE back upperRIGHT; fourth bottom-right true NW back upperLEFT nose at LEFT edge. Four different camera angles with matching grounded walking pose. Character stocky, square weathered adult Chinese face, thick short black-brown beard/moustache, plain brown cloth headwrap with black hairknot, coarse muted BROWN crosscollar knee-length robe, tan rolled cuffs, dark sash belt, charcoal loose trousers, beige calfwraps and strawshoes. No armor or horse. Realistic handpainted isometric RTS, muted earthy palette, orthographic 2:1. Whole body and plain wooden stick in each squarecell, generous transparent gaps, fixed scale and anchor soles82%, center50%. ActualRGBA alpha0 outsidefigures, no opaquecheckerboard, floor, shadows, text, letters, gridlines, borders or scenery. Need specifically passing/narrowfeet poses, not the long wide identical strides of a contact-pose sprite. Ideally1024x1024.",
+    "xue_correction": "TRANSPARENT PNG production atlas: 2 COLUMNS x4ROWS, eight fullbody sprites of Xue Ba, a lean wiry older Chinese constable with angular gaunt face, narrow eyes, thin black moustache and narrow pointed chinbeard, dark grey-brown cloth headwrap, plain coarse CHARCOAL-GREY crosscollar knee-length public-service robe, simplebrown sash/belt, darkgrey trousers, beige calfwraps and strawshoes, carrying a plain shoulder-height wooden staff. EveryROW onefixedcamera: row1 southeast front looking LOWER RIGHT; row2 southwest front looking LOWER LEFT, nose distinctly on LEFT edge of face, BOTH sprites face left; row3 northeast back looking UPPER RIGHT, nose on right edge; row4 northwest back looking UPPER LEFT, nose on LEFT edge. Column1 idle standing feetplanted. Column2 WALK PASSING pose: one leg bearsweight almoststraight underbody, other knee onlyslightly bent and lifted foot just aboveground beside supportingankle; BOTH FEET CLOSE together directlyunderbody, narrower leg silhouette than idle. Slightweightshift, not a wide stride. Keep constantperson and fixedscale, truefourviews, no mirroring. Staff heldupright besidebody. Realistic handpainted2D RTS, orthographic2:1isometric, subduedearthytextile, crisp cutout. Wholefigure and staff fullyinsideequal squarecell with widetransparentgutters; soles at82%,center50%, height70%cell. Genuine transparentRGBA outsidefigures, no opaquecheckerboard, scenery, ground, shadows, grid, text, letters, border, armor, horse, flames or magic. Ideally1024x2048.",
+    "xue_contact": "TRANSPARENT PNG. Exactly FOUR fullbody sprites in 2x2 grid, same lean wiry Chinese Song constable Xue Ba with angular older face, thin moustache/small pointedchinbeard, black hairknot, dark grey clothheadwrap. Wearing plain CHARCOAL GREY coarse crosscollar robe reaching justbelowknees, simple broad brown clothsash tiedfront, greybaggy trousers, beige calfwraps and strawshoes. Hold one plain shoulder-height wooden staff upright at own rightside. A distinct WALK STRIDE CONTACT pose in all4views, FRONT leg extended one short step forwards and REAR leg extended backwards with heelraised, legs apart forming a visible inverted V below tunic, realistic grounded ordinarywalk not highknees. TopLEFT sprite is SOUTHEAST FRONT view walking towards lowerRIGHT. TopRIGHT is SOUTHWEST FRONT view walking towards lowerLEFT; his face and nose point LEFT, his hips/chest directed downleft, wholebody same direction. BottomLEFT is NORTHEAST BACK view walking upperRIGHT, backofrobe and rightprofile. BottomRIGHT is NORTHWEST BACK view walking upperLEFT, backofrobe and leftprofile. Everyperson fullbodyinsideequal squarecell, fixedscale and orthographic2:1isometriccamera, soles82%,center50%, wide emptygutters. Consistentperson andcloth, handpaintedrealisticRTS mutedclothbrownandgrey. Genuine alpha0 transparent background. No ground, shadows, scenery, text, labels, grids, borders, armor, horses, fires, magic, weaponsotherthanplainwoodstaff. Four clearly different front/back camera views; especially TOP RIGHT points LEFT, BOTTOM RIGHT BACK points LEFT. Ideally1024x1024.",
+    "dong_hand_consistency": "TRANSPARENT PNG with exactly TWO fullbody sprites sidebyside of the same stocky broad Chinese Song-era constable Dong Chao. Brown clothheadwrap with blackhairknot, broad stern face, thick short black-brown beard/moustache, plain coarse mutedBROWN crosscollar knee-length robe with TAN innercollar and cuffs, darkcloth sash, charcoal loose trousers, beige calfwraps and strawshoes, one plain shoulder-height hardwood staff. Staff is ON THE LEFT SIDE OF THE IMAGE IN BOTH CELLS, positioned to the LEFT of torso, held upright by the hand on the leftedge of silhouette. Absolutely no staff on the right. LEFTCELL: southeast FRONT view facinglowerRIGHT, WALK STRIDE/contact, onefoot planted a shortstepforward towardlowerright and othertrails raised behind, visible invertedVlegs; holdswoodstaff upright at SCREEN LEFT of his torso (matching a left-side stick while facingfront). RIGHTCELL: NORTHWEST BACK view facingupperLEFT, nose atLEFTedge, a WALK PASSING pose, bothlegsclosetogether underbody, onefootjustlifting beside supportingankle, staffupright at SCREEN LEFT of his body, same side as his visible left-edge arm. Showbackofrobe. Keepbody/stickwhollyinsideboth squarecells, fixedscale, centered50%,soles82%, widegaps, consistenthandpaintedrealisticRTS orthographic2:1isometriccamera. Real alpha0 transparency outsidefigures. No shadows, ground, scenery, text, grids, borders, magic, armor, horse or weaponbesidesplainstick. Ideally1536x768. Mainrequirement staff remains on SCREEN LEFT in BOTH figures, not behindrightshoulder.",
+    "xue_nw_hand_consistency": "TRANSPARENT PNG of ONE fullbody Xue Ba game sprite, NORTHWEST BACK view, headnosepointsUPPERLEFT, showsBACKofrobe andLEFTprofile. Lean wiry olderChinese man angularface, thinmoustache smallpointedchinbeard, darkgrey clothheadwrap with blackhairknot, plain CHARCOAL GREY coarse crosscollar kneelengthrobe, brownclothsash, greypants, beigecalfwraps, strawshoes. Walking contact/stride pose with legsapart, leadingfootsteps towardupperLEFT, trailingfootback towardlowerright, believablegroundedstep and oneheelraised, no highknees. Holds a plain shoulder-height WOODEN STAFF upright on SCREEN LEFT side of his body; shaft clearly LEFT of leftedgeofrobe, visiblygrippedby left-edge hand. No staff at SCREEN RIGHT, no secondstaff. This leftside placement essential to match existinganimation. Realistic handpaintedmuted RTS orthographic2:1isometriccamera, plain Songdynasty escortconstable, no armorhorse. Wholebody andwoodstickcomplete with widepadding, centered50%,feet82%, humanheight70%canvas, canvas1024square. True RGBA alpha0 outsidefigure; no ground, shadow, scenery, text, borders, grid or magic."
+  },
+  "selected": {
+    "dong_chao_escort.png": {
+      "prompt": "dong_chao",
+      "use": "four directional idle; original contact column used only SW/NE/NW; SE replaced to keep staff hand consistent"
+    },
+    "dong_chao_passing.png": {
+      "prompt": "dong_passing",
+      "use": "passing step SE/SW/NE; NW replaced to keep staff hand consistent"
+    },
+    "xue_ba_escort.png": {
+      "prompt": "xue_correction",
+      "use": "four directional idle and narrow passing-step views; southwest body and face are left-facing"
+    },
+    "xue_ba_contact.png": {
+      "prompt": "xue_contact",
+      "use": "contact step SE/SW/NE; NW replaced to keep staff hand consistent"
+    },
+    "dong_chao_hand_consistent.png": {
+      "prompt": "dong_hand_consistency",
+      "use": "left cell SE contact, right cell NW passing; staff screen-left to match adjacent frames and idle"
+    },
+    "xue_ba_nw_contact.png": {
+      "prompt": "xue_nw_hand_consistency",
+      "use": "NW contact; staff screen-left to match idle and passing"
+    }
+  },
+  "excluded": [
+    {
+      "generated_file": "exec-7ebcb009-736f-4a76-9f4a-6f0a3b6424b9.png",
+      "prompt": "xue_ba",
+      "reason": "Two walking columns too similar and southwest face direction uncertain; not copied or used."
+    }
+  ],
+  "processing": "Original PNGs copied byte-for-byte. Python reads alpha/bounding boxes and writes JSON only. Godot slices original cells, uses one fixed scale per source sheet, aligns soles (.5,.82), concatenates the painted contact and passing poses. No mirrored views, repaint, background removal, single-pose translation or crossfade synthesis.",
+  "quality_boundary": "Two-frame contact/passing walk is deliberately sparse, with actual different leg positions but no full left/right four-phase cycle, attack/hurt/down animation or polished transition continuity. Independently generated supplemental cloth folds vary slightly. Four directional idle poses, same-variant portraits. Jiangzhou ordinary civilian crowd not generated; existing named hero sprites cannot substitute.",
+  "evidence": [
+    "constable_source_analysis.json",
+    "slice_manifest.json",
+    "slice_qa.json",
+    "contract_qa.json",
+    "motion_contract_qa.json"
+  ],
+  "runtime_screenshot_before": "qa/campaign_story_visual/level6_assisted_1280.png",
+  "visual_qa": {
+    "checked": "Generated sources and normalized SE/NW Dong, SW/NW Xue strips and both portraits; actual alpha analysis rejects no selected sources. Brown backdrop RGB in Dong correction has alpha=0 outside figures; not an opaque matte. Staff placement and genuine leg motion reviewed, no automatic hash claim of smoothness.",
+    "shape_limits": "Different generated sheets retain slight cloth-fold and shoulder-width changes; sparse two-frame walk. No complete opposing-stride cycle or attack set."
+  },
+  "validation": {
+    "generic_checks": 72,
+    "generic_passed": true,
+    "motion_checks": 74,
+    "motion_passed": true,
+    "directory_png_counts": {
+      "anim": 188,
+      "objects": 22,
+      "portraits": 20
+    },
+    "inventory": {
+      "frames": 312,
+      "objects": 22,
+      "strips": 188,
+      "variants": 20
+    },
+    "logs": [
+      "qa/campaign_art_constables_slice.log",
+      "qa/campaign_art_constables_import.log",
+      "qa/campaign_art_constables_contract.log",
+      "qa/campaign_art_constables_motion_contract.log"
+    ],
+    "runtime_boundary": "root owns final level6 graphical integration validation after independent Damingfu performance sampling; no graphics engine run in this art subtask"
+  }
+}

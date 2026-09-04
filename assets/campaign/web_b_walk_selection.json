@@ -1,0 +1,510 @@
+{
+  "sources": {
+    "web_merchants_b_walk_v1": {
+      "file": "web_merchants_b_walk_v1.png",
+      "prompt_file": "web_prompts_20260831/06_merchants_b_walk.txt",
+      "conversation_url": "https://chatgpt.com/c/6a95745c-d0bc-83ea-8eee-c2471fb47f0d",
+      "review": "Only selected single stride poses. Repeated neighbouring original rows are not counted as animation phases. Ruan Xiaoer uses source row2 to avoid top-edge hat uncertainty."
+    },
+    "web_merchants_b_passing_v1": {
+      "file": "web_merchants_b_passing_v1.png",
+      "prompt_file": "web_prompts_20260831/08_merchants_b_walk_passing.txt",
+      "conversation_url": "https://chatgpt.com/c/6a95745c-d0bc-83ea-8eee-c2471fb47f0d",
+      "review": "Partial source accepted only for individually intact selected bodies. Ruan7 NW and Bai NW are visibly merged at alpha>99 and forbidden; first row is superseded by separate Ruan2 passing. No anatomy splitting or padded hat repair."
+    },
+    "web_ruan_xiaoer_passing_v2": {
+      "file": "web_ruan_xiaoer_passing_v2.png",
+      "prompt_file": "web_prompts_20260831/12_ruan_xiaoer_passing_fix.txt",
+      "conversation_url": "https://chatgpt.com/c/6a95745c-d0bc-83ea-8eee-c2471fb47f0d",
+      "review": "Independent view accepted full headwrap and feet, 2x2 genuine SE/SW/NE/NW, cloth identity and drawn close-foot passing posture."
+    },
+    "web_ruan7_bai_nw_passing_v2": {
+      "file": "web_ruan7_bai_nw_passing_v2.png",
+      "prompt_file": "web_prompts_20260831/14_ruan7_bai_nw_passing_fix.txt",
+      "conversation_url": "https://chatgpt.com/c/6a95745c-d0bc-83ea-8eee-c2471fb47f0d",
+      "review": "Independent view accepted two separate full NW figures, left Ruan7 and right Bai, actual back-left facing with passing feet. No shared pixel bridge; replaces rejected merged NW bodies in B passing sheet."
+    }
+  },
+  "artifacts": [
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "se",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            77,
+            235,
+            146,
+            229
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_ruan_xiaoer_passing_v2",
+          "body_box": [
+            190,
+            61,
+            297,
+            534
+          ],
+          "scale": 0.35,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "sw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            274,
+            234,
+            149,
+            229
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_ruan_xiaoer_passing_v2",
+          "body_box": [
+            762,
+            69,
+            294,
+            535
+          ],
+          "scale": 0.35,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "ne",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            496,
+            238,
+            140,
+            226
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_ruan_xiaoer_passing_v2",
+          "body_box": [
+            214,
+            673,
+            277,
+            495
+          ],
+          "scale": 0.35,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "nw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            683,
+            237,
+            137,
+            225
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_ruan_xiaoer_passing_v2",
+          "body_box": [
+            775,
+            681,
+            285,
+            505
+          ],
+          "scale": 0.35,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "se",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            81,
+            458,
+            142,
+            233
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            106,
+            328,
+            152,
+            300
+          ],
+          "scale": 0.62,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "sw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            273,
+            458,
+            145,
+            233
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            400,
+            328,
+            157,
+            303
+          ],
+          "scale": 0.62,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "ne",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            497,
+            462,
+            138,
+            231
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            724,
+            329,
+            158,
+            299
+          ],
+          "scale": 0.62,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "nw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            691,
+            461,
+            132,
+            230
+          ],
+          "scale": 0.8,
+          "pose_review": "Single intact forward stride; another similar source row explicitly excluded as duplicate phase."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            1004,
+            327,
+            154,
+            294
+          ],
+          "scale": 0.62,
+          "pose_review": "Independently generated close-foot passing posture, both feet and head complete."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "se",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            73,
+            909,
+            139,
+            222
+          ],
+          "scale": 0.78,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            104,
+            630,
+            151,
+            280
+          ],
+          "scale": 0.62,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "sw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            285,
+            908,
+            138,
+            224
+          ],
+          "scale": 0.78,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            409,
+            631,
+            153,
+            285
+          ],
+          "scale": 0.62,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "ne",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            494,
+            904,
+            130,
+            228
+          ],
+          "scale": 0.78,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            721,
+            632,
+            152,
+            278
+          ],
+          "scale": 0.62,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "nw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            690,
+            904,
+            133,
+            228
+          ],
+          "scale": 0.78,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_ruan7_bai_nw_passing_v2",
+          "body_box": [
+            160,
+            255,
+            330,
+            620
+          ],
+          "scale": 0.28,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "se",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            78,
+            1342,
+            129,
+            209
+          ],
+          "scale": 0.9,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            99,
+            910,
+            152,
+            322
+          ],
+          "scale": 0.59,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "sw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            287,
+            1342,
+            129,
+            208
+          ],
+          "scale": 0.9,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            410,
+            910,
+            153,
+            328
+          ],
+          "scale": 0.59,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "ne",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            500,
+            1348,
+            118,
+            208
+          ],
+          "scale": 0.9,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_merchants_b_passing_v1",
+          "body_box": [
+            726,
+            913,
+            144,
+            318
+          ],
+          "scale": 0.59,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "nw",
+      "motion_scope": "Two separately drawn stride/passing key poses, not a full four-phase alternate-leg gait.",
+      "frames": [
+        {
+          "source": "web_merchants_b_walk_v1",
+          "body_box": [
+            695,
+            1347,
+            116,
+            209
+          ],
+          "scale": 0.9,
+          "pose_review": "One complete low stride. Similar neighbouring source row not counted as separate step."
+        },
+        {
+          "source": "web_ruan7_bai_nw_passing_v2",
+          "body_box": [
+            814,
+            286,
+            295,
+            640
+          ],
+          "scale": 0.295,
+          "pose_review": "Independent passing: feet together under hips. NW from separate complete source, never split merged original bodies."
+        }
+      ]
+    }
+  ]
+}

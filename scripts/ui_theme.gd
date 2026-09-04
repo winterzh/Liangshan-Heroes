@@ -1,0 +1,152 @@
+class_name UITheme
+extends RefCounted
+## 全项目 UI 视觉基线：深墨、旧纸、暗木、哑铜、少量朱砂。
+## 只负责控件外观，不改变控件尺寸、数据、交互或玩法状态色。
+
+const INK := Color("17130f")
+const INK_SOFT := Color("211a14")
+const WOOD := Color("3a2c20")
+const WOOD_LIGHT := Color("4a3828")
+const COPPER := Color("88704a")
+const COPPER_LIGHT := Color("b6925a")
+const PAPER := Color("efe7d3")
+const PAPER_MUTED := Color("b9aa88")
+const PAPER_DARK := Color("d6c7a0")
+const VERMILION := Color("9e382f")
+const COMPLETE := Color("5e914f")
+const WARNING := Color("b07b39")
+const DANGER := Color("a34538")
+
+const PANEL := Color(0.09, 0.07, 0.055, 0.96)
+const PANEL_SOFT := Color(0.15, 0.115, 0.08, 0.96)
+const PANEL_DISABLED := Color(0.075, 0.064, 0.052, 0.88)
+
+static var _shared_theme: Theme
+
+
+static func shared() -> Theme:
+	if _shared_theme == null:
+		_shared_theme = _build_theme()
+	return _shared_theme
+
+
+static func apply_canvas_layer(layer: CanvasLayer) -> void:
+	var common := shared()
+	for child in layer.get_children():
+		if child is Control:
+			(child as Control).theme = common
+
+
+static func panel_style(bg := PANEL, border := COPPER, width := 1, radius := 3) -> StyleBoxFlat:
+	return _box(bg, border, width, radius, Vector4(10, 7, 10, 7))
+
+
+static func paper_style() -> StyleBoxFlat:
+	var style := _box(Color("d9ccb0"), Color("684b2c"), 2, 2, Vector4(18, 14, 18, 14))
+	style.shadow_color = Color(0, 0, 0, 0.52)
+	style.shadow_size = 10
+	return style
+
+
+static func _box(bg: Color, border: Color, width: int, radius: int, margins: Vector4) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = bg
+	style.border_color = border
+	style.set_border_width_all(width)
+	style.set_corner_radius_all(radius)
+	style.content_margin_left = margins.x
+	style.content_margin_top = margins.y
+	style.content_margin_right = margins.z
+	style.content_margin_bottom = margins.w
+	return style
+
+
+static func _build_theme() -> Theme:
+	var t := Theme.new()
+	t.default_font = ThemeDB.fallback_font
+	t.default_font_size = 15
+
+	# 通用文字层级。
+	t.set_color("font_color", "Label", PAPER)
+	t.set_color("font_shadow_color", "Label", Color(0, 0, 0, 0.72))
+	t.set_constant("shadow_offset_x", "Label", 1)
+	t.set_constant("shadow_offset_y", "Label", 1)
+	t.set_color("font_color", "RichTextLabel", PAPER)
+	t.set_color("default_color", "RichTextLabel", PAPER)
+
+	# 深墨面板与低调哑铜描边。
+	var panel := panel_style()
+	t.set_stylebox("panel", "Panel", panel)
+	t.set_stylebox("panel", "PanelContainer", panel)
+	t.set_stylebox("panel", "PopupPanel", panel)
+	var tooltip := panel_style(Color(0.055, 0.043, 0.033, 0.985), COPPER_LIGHT, 1, 3)
+	tooltip.shadow_color = Color(0, 0, 0, 0.55)
+	tooltip.shadow_size = 6
+	t.set_stylebox("panel", "TooltipPanel", tooltip)
+	t.set_color("font_color", "TooltipLabel", PAPER)
+	t.set_font_size("font_size", "TooltipLabel", 14)
+
+	# 所有普通按钮共享同一轮廓，只让功能状态色在局部覆盖。
+	var button_normal := _box(INK_SOFT, COPPER, 1, 3, Vector4(12, 7, 12, 7))
+	var button_hover := _box(WOOD, COPPER_LIGHT, 1, 3, Vector4(12, 7, 12, 7))
+	var button_pressed := _box(Color("120e0b"), PAPER_DARK, 1, 3, Vector4(12, 8, 12, 6))
+	var button_disabled := _box(PANEL_DISABLED, Color(0.28, 0.24, 0.19, 0.65), 1, 3, Vector4(12, 7, 12, 7))
+	var button_focus := _box(Color(0, 0, 0, 0), COPPER_LIGHT, 1, 3, Vector4(12, 7, 12, 7))
+	for kind in ["Button", "OptionButton", "MenuButton"]:
+		t.set_stylebox("normal", kind, button_normal)
+		t.set_stylebox("hover", kind, button_hover)
+		t.set_stylebox("pressed", kind, button_pressed)
+		t.set_stylebox("hover_pressed", kind, button_pressed)
+		t.set_stylebox("disabled", kind, button_disabled)
+		t.set_stylebox("focus", kind, button_focus)
+		t.set_color("font_color", kind, PAPER)
+		t.set_color("font_hover_color", kind, Color("fff3d6"))
+		t.set_color("font_pressed_color", kind, PAPER_DARK)
+		t.set_color("font_disabled_color", kind, Color(0.48, 0.43, 0.35, 0.9))
+		t.set_color("font_focus_color", kind, PAPER)
+
+	# 输入区保持暗底，不出现默认亮蓝控件。
+	var input_normal := _box(Color("16110d"), Color("5f4b32"), 1, 2, Vector4(9, 6, 9, 6))
+	var input_focus := _box(Color("1f1812"), COPPER_LIGHT, 1, 2, Vector4(9, 6, 9, 6))
+	var input_read_only := _box(PANEL_DISABLED, Color("413526"), 1, 2, Vector4(9, 6, 9, 6))
+	for kind in ["LineEdit", "TextEdit"]:
+		t.set_stylebox("normal", kind, input_normal)
+		t.set_stylebox("focus", kind, input_focus)
+		t.set_stylebox("read_only", kind, input_read_only)
+		t.set_color("font_color", kind, PAPER)
+		t.set_color("font_uneditable_color", kind, PAPER_MUTED)
+		t.set_color("font_placeholder_color", kind, Color(0.62, 0.56, 0.46, 0.72))
+		t.set_color("caret_color", kind, PAPER_DARK)
+		t.set_color("selection_color", kind, Color(0.55, 0.40, 0.22, 0.58))
+
+	for kind in ["CheckButton", "CheckBox"]:
+		t.set_color("font_color", kind, PAPER)
+		t.set_color("font_hover_color", kind, Color("fff3d6"))
+		t.set_color("font_pressed_color", kind, PAPER_DARK)
+		t.set_color("font_disabled_color", kind, Color(0.48, 0.43, 0.35, 0.9))
+
+	# 列表、树与进度条。
+	var list_panel := _box(Color(0.055, 0.043, 0.033, 0.88), Color("4d3d2a"), 1, 2, Vector4(5, 5, 5, 5))
+	for kind in ["ItemList", "Tree"]:
+		t.set_stylebox("panel", kind, list_panel)
+		t.set_color("font_color", kind, PAPER)
+		t.set_color("font_selected_color", kind, Color("fff3d6"))
+		t.set_color("guide_color", kind, Color(0.42, 0.34, 0.24, 0.5))
+	var progress_bg := _box(Color("120e0b"), Color("4d3d2a"), 1, 2, Vector4.ZERO)
+	var progress_fill := _box(COPPER, COPPER_LIGHT, 0, 2, Vector4.ZERO)
+	t.set_stylebox("background", "ProgressBar", progress_bg)
+	t.set_stylebox("fill", "ProgressBar", progress_fill)
+	t.set_color("font_color", "ProgressBar", PAPER)
+
+	# 滚动条避免使用默认蓝色高亮。
+	var scroll := _box(Color(0.10, 0.08, 0.06, 0.68), Color(0, 0, 0, 0), 0, 2, Vector4.ZERO)
+	var grab := _box(COPPER, COPPER, 0, 2, Vector4.ZERO)
+	var grab_hover := _box(COPPER_LIGHT, COPPER_LIGHT, 0, 2, Vector4.ZERO)
+	var grab_pressed := _box(PAPER_DARK, PAPER_DARK, 0, 2, Vector4.ZERO)
+	for kind in ["VScrollBar", "HScrollBar"]:
+		t.set_stylebox("scroll", kind, scroll)
+		t.set_stylebox("grabber", kind, grab)
+		t.set_stylebox("grabber_highlight", kind, grab_hover)
+		t.set_stylebox("grabber_pressed", kind, grab_pressed)
+
+	return t

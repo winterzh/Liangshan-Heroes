@@ -121,7 +121,7 @@ const UNITS := {
 
 	# ---- 第6关 大闹野猪林（鲁智深救林冲）----
 	"lu_zhishen": {"name": "鲁智深", "hp": 540, "atk": 28, "cd": 0.78, "range": 30, "speed": 86,
-		"hero": true, "radius": 14, "ability": "lu_sweep", "abilities": ["lu_zhishen_q", "lu_zhishen_w", "lu_zhishen_e", "lu_zhishen_r"], "hero_trainable": true, "pop": 3, "cost_gold": 190, "cost_wood": 55, "train_time": 40, "trained_at": "hall", "min_age": 1},
+		"hero": true, "radius": 14, "weapon_profile": "iron_staff", "ability": "lu_sweep", "abilities": ["lu_zhishen_q", "lu_zhishen_w", "lu_zhishen_e", "lu_zhishen_r"], "hero_trainable": true, "pop": 3, "cost_gold": 190, "cost_wood": 55, "train_time": 40, "trained_at": "hall", "min_age": 1},
 	"lin_chong_bound": {"name": "林冲", "hp": 240, "atk": 0, "building": true, "radius": 13, "captive": true},
 	"dong_chao": {"name": "董超", "hp": 150, "atk": 14, "cd": 0.95, "range": 26, "speed": 70, "radius": 11, "elite_guard": true},
 	"xue_ba": {"name": "薛霸", "hp": 150, "atk": 14, "cd": 0.95, "range": 26, "speed": 70, "radius": 11, "elite_guard": true},
@@ -162,6 +162,9 @@ const UNITS := {
 		"noncombat": true, "res_kind": "gold", "res_amount": 6000},
 	"tree": {"name": "林木", "hp": 100000, "atk": 0, "building": true, "radius": 13,
 		"noncombat": true, "res_kind": "wood", "res_amount": 1800},
+	# 梁山据守战的既有寨门：本体由 liangshan_entrance 绘制，这里只提供可攻击生命与 5×5 封口占地。
+	# 不是玩家可建建筑；被官军攻破后释放门洞，避免“有墙却能直接穿门”。
+	"stockade_gate": {"name": "寨门", "hp": 1350, "atk": 0, "building": true, "radius": 48, "sight": 0},
 
 	# 可建造建筑：buildable=true，cost_gold/cost_wood/build_time；produces/provides_pop/drop_off
 	"barracks": {"name": "兵营", "hp": 900, "atk": 0, "building": true, "radius": 30, "buildable": true, "build_order": 1,
@@ -399,7 +402,7 @@ const ABILITIES := {
 
 	# ---- 第6关 大闹野猪林：鲁智深 ----
 	"lu_sweep": {"name": "禅杖横扫", "cd": 8.0, "targeted": false, "radius": 120.0, "color": Color("e0c25a"),
-		"desc": "花和尚抡铁禅杖横扫\n身边官军受 36 伤害打懵；自身狂禅+45%",
+		"desc": "花和尚抡浑铁禅杖横扫\n身边官军受 36 伤害打懵；自身狂禅+45%",
 		"effect": {"kind": "smite", "dmg": 36.0, "slow": 0.35, "slow_dur": 2.5, "self_atk": 1.45, "self_dur": 6.0}},
 	# ---- 第7关 醉打蒋门神：武松 / 蒋门神 ----
 	"wu_kick": {"name": "玉环步·鸳鸯脚", "cd": 7.0, "targeted": false, "radius": 108.0, "color": Color("c8b0e8"),

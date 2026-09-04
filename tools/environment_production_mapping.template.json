@@ -1,0 +1,2508 @@
+{
+  "schema_version": 1,
+  "kind": "web_chatgpt_environment_production_mapping",
+  "batch_manifest_sha256": "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf",
+  "static_self_check_sha256": "f8e562d4aeebbd64519acf83ecfb54385742b3d7f89dd72684149a953386aa77",
+  "status": "runtime_router_785_pass_69_consumers_ready_69_source_pngs_missing",
+  "mapping_rule": "All 69 runtime targets and exact consumer states are bound. integration_ready proves current consumer source SHA and exact file-line evidence; all 69 target PNGs are still missing, so no new art is actually drawn before a separately reviewed web-source commit.",
+  "runtime_router_contract": {
+    "router_path": "scripts/campaign_environment_art.gd",
+    "router_sha256": "b0e45b065f6e5d867a12da5beb6bb17f3c6fb968a7d58b29c35316e2e7cc1b9d",
+    "static_contract_path": "tools/campaign_environment_art_static_contract.py",
+    "static_contract_sha256": "69d7d21562ffcd177afce194670f0099bced4940e4f83802669d11925611967a",
+    "report_path": "qa/environment_runtime_router_20260902/report.json",
+    "report_sha256": "16dda6894bfc1bb54584ac90180de2227d6df6a34174192a6638fd8068405f43",
+    "report_passed_checks": 785
+  },
+  "archive_root": "qa/environment_art_intake/archive",
+  "provenance_target": "qa/environment_art_intake/environment_web_provenance.json",
+  "batches": [
+    {
+      "id": "surface_dry_earth",
+      "logical_code_targets": [
+        "GameMap natural surface class: dry",
+        "campaign_environment.gd level1/level4/level6"
+      ],
+      "mode": "copy_exact_source_png",
+      "output_id": "surface_dry_earth",
+      "target": "assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+      "level_scope": [
+        "level1",
+        "level4",
+        "level6"
+      ],
+      "route_scope": "shared_surface_class",
+      "reuse_policy": "shared_surface_with_declared_campaign_usage",
+      "resolver": "CampaignEnvironmentArt.surface",
+      "route_key": "surface_dry_earth",
+      "integration_ready": true,
+      "integration_evidence": [
+        "scripts/campaign_environment_art.gd",
+        "tools/campaign_environment_art_static_contract.py",
+        "qa/environment_runtime_router_20260902/report.json#785/785",
+        "scripts/liangshan_scenery.gd:151: \"surface_dry_earth\":[\"surface_dry_texture\",\"use_surface_dry_texture\"],",
+        "scripts/liangshan_scenery.gd:159: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+        "scripts/liangshan_coast.gdshader:19: uniform bool use_surface_dry_texture = false;"
+      ]
+    },
+    {
+      "id": "surface_forest_earth",
+      "logical_code_targets": [
+        "GameMap natural surface class: forest",
+        "campaign_scenery.gd tree/reed decoration"
+      ],
+      "mode": "copy_exact_source_png",
+      "output_id": "surface_forest_earth",
+      "target": "assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+      "level_scope": [
+        "level1",
+        "level3",
+        "level5",
+        "level6",
+        "level7"
+      ],
+      "route_scope": "shared_surface_class",
+      "reuse_policy": "shared_surface_with_declared_campaign_usage",
+      "resolver": "CampaignEnvironmentArt.surface",
+      "route_key": "surface_forest_earth",
+      "integration_ready": true,
+      "integration_evidence": [
+        "scripts/campaign_environment_art.gd",
+        "tools/campaign_environment_art_static_contract.py",
+        "qa/environment_runtime_router_20260902/report.json#785/785",
+        "scripts/liangshan_scenery.gd:150: \"surface_forest_earth\":[\"surface_forest_texture\",\"use_surface_forest_texture\"],",
+        "scripts/liangshan_scenery.gd:159: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+        "scripts/liangshan_coast.gdshader:18: uniform bool use_surface_forest_texture = false;"
+      ]
+    },
+    {
+      "id": "huangnigang_objects",
+      "logical_code_targets": [
+        "level1_huangnigang.gd: jujube_cart",
+        "CampaignArt: jujube_load",
+        "CampaignArt: tribute_load",
+        "CampaignArt: wine_buckets",
+        "CampaignArt: wine_bowls",
+        "campaign_environment.gd level1 tree/market_stall"
+      ],
+      "mode": "fixed_grid_cell_uniform_scale_transparent_pad",
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "label": "老油松",
+          "output_id": "level1_huangnigang_pine_old",
+          "target": "assets/campaign/environment/level1/huangnigang_pine_old.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_pine_old",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:209: result.append(scoped_object(Vector2i(20,17),112.0,\"huangnigang_pine_old\",\"tree\",0.82,true,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "label": "双主干高油松",
+          "output_id": "level1_huangnigang_pine_double",
+          "target": "assets/campaign/environment/level1/huangnigang_pine_double.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_pine_double",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:210: result.append(scoped_object(Vector2i(25,18),112.0,\"huangnigang_pine_double\",\"tree\",0.82,true,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "label": "年轻倾斜油松",
+          "output_id": "level1_huangnigang_pine_young_lean",
+          "target": "assets/campaign/environment/level1/huangnigang_pine_young_lean.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_pine_young_lean",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:211: result.append(scoped_object(Vector2i(30,19),112.0,\"huangnigang_pine_young_lean\",\"tree\",0.82,true,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "label": "七把倚树朴刀",
+          "output_id": "level1_huangnigang_seven_pudao",
+          "target": "assets/campaign/environment/level1/huangnigang_seven_pudao.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_seven_pudao",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:214: result.append(scoped_object(Vector2i(20,17),94.0,\"huangnigang_seven_pudao\",\"\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "label": "江州车一号-满枣筐",
+          "output_id": "level1_huangnigang_jujube_cart_01",
+          "target": "assets/campaign/environment/level1/jujube_cart_01.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_01",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:380: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:381: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:379: for i in range(JUJUBE_CART_CELLS.size()):"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "label": "江州车二号-半满与布包",
+          "output_id": "level1_huangnigang_jujube_cart_02",
+          "target": "assets/campaign/environment/level1/jujube_cart_02.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_02",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:380: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:381: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:379: for i in range(JUJUBE_CART_CELLS.size()):"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "label": "江州车三号-双筐",
+          "output_id": "level1_huangnigang_jujube_cart_03",
+          "target": "assets/campaign/environment/level1/jujube_cart_03.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_03",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:380: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:381: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:379: for i in range(JUJUBE_CART_CELLS.size()):"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "label": "江州车四号-草席绑扎",
+          "output_id": "level1_huangnigang_jujube_cart_04",
+          "target": "assets/campaign/environment/level1/jujube_cart_04.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_04",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:380: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:381: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:379: for i in range(JUJUBE_CART_CELLS.size()):"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "label": "江州车五号-窄车高筐",
+          "output_id": "level1_huangnigang_jujube_cart_05",
+          "target": "assets/campaign/environment/level1/jujube_cart_05.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_05",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:380: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:381: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:379: for i in range(JUJUBE_CART_CELLS.size()):"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "label": "江州车六号-宽车低筐",
+          "output_id": "level1_huangnigang_jujube_cart_06",
+          "target": "assets/campaign/environment/level1/jujube_cart_06.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_06",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:380: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:381: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:379: for i in range(JUJUBE_CART_CELLS.size()):"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "label": "江州车七号-斜筐绑绳",
+          "output_id": "level1_huangnigang_jujube_cart_07",
+          "target": "assets/campaign/environment/level1/jujube_cart_07.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_07",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:380: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:381: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:379: for i in range(JUJUBE_CART_CELLS.size()):"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "label": "干灌木、茅草与风化小石",
+          "output_id": "level1_huangnigang_dry_verge",
+          "target": "assets/campaign/environment/level1/huangnigang_dry_verge.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_dry_verge",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:215: result.append(scoped_object(Vector2i(34,22),86.0,\"huangnigang_dry_verge\",\"\",0.82,false,false))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "label": "枣筐与扁担",
+          "output_id": "level1_huangnigang_jujube_load",
+          "target": "assets/campaign/environment/level1/jujube_load.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_load",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:402: b.show_campaign_environment_art(id(),\"jujube_load\",\"jujube_load\",",
+            "scripts/battle.gd:16097: var texture := CampaignEnvironmentArt.object(active_level_id,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "label": "生辰纲纲担",
+          "output_id": "level1_huangnigang_tribute_load",
+          "target": "assets/campaign/environment/level1/tribute_load.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "tribute_load",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:148: bundle.set_meta(\"campaign_environment_route\",\"tribute_load\")",
+            "scripts/unit.gd:3944: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "label": "白胜双桶酒担",
+          "output_id": "level1_huangnigang_wine_buckets",
+          "target": "assets/campaign/environment/level1/wine_buckets.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "wine_buckets",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:237: b.show_campaign_environment_art(id(),\"wine_buckets\",\"wine_buckets\",",
+            "scripts/battle.gd:16097: var texture := CampaignEnvironmentArt.object(active_level_id,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "label": "酒瓮、酒碗与木瓢",
+          "output_id": "level1_huangnigang_wine_bowls_scoop",
+          "target": "assets/campaign/environment/level1/wine_bowls_scoop.png",
+          "level_scope": [
+            "level1"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "wine_bowls",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level1_huangnigang.gd:239: b.show_campaign_environment_art(id(),\"wine_bowls\",\"wine_bowls\",",
+            "scripts/battle.gd:16097: var texture := CampaignEnvironmentArt.object(active_level_id,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        }
+      ]
+    },
+    {
+      "id": "surface_wet_bank",
+      "logical_code_targets": [
+        "GameMap natural surface class: wet_bank",
+        "liangshan_coast.gdshader",
+        "liangshan_scenery.gd bank/reed cache"
+      ],
+      "mode": "copy_exact_source_png",
+      "output_id": "surface_wet_bank",
+      "target": "assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+      "level_scope": [
+        "level2",
+        "level4",
+        "level5"
+      ],
+      "route_scope": "shared_surface_class",
+      "reuse_policy": "shared_surface_with_declared_campaign_usage",
+      "resolver": "CampaignEnvironmentArt.surface",
+      "route_key": "surface_wet_bank",
+      "integration_ready": true,
+      "integration_evidence": [
+        "scripts/campaign_environment_art.gd",
+        "tools/campaign_environment_art_static_contract.py",
+        "qa/environment_runtime_router_20260902/report.json#785/785",
+        "scripts/liangshan_scenery.gd:152: \"surface_wet_bank\":[\"surface_wet_texture\",\"use_surface_wet_texture\"],",
+        "scripts/liangshan_scenery.gd:159: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+        "scripts/liangshan_coast.gdshader:20: uniform bool use_surface_wet_texture = false;"
+      ]
+    },
+    {
+      "id": "surface_compacted_stone",
+      "logical_code_targets": [
+        "GameMap natural surface class: compacted_stone",
+        "campaign_environment.gd HALL/TOWN/PLAZA protection"
+      ],
+      "mode": "copy_exact_source_png",
+      "output_id": "surface_compacted_stone",
+      "target": "assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+      "level_scope": [
+        "level2",
+        "level5",
+        "level7",
+        "level8"
+      ],
+      "route_scope": "shared_surface_class",
+      "reuse_policy": "shared_surface_with_declared_campaign_usage",
+      "resolver": "CampaignEnvironmentArt.surface",
+      "route_key": "surface_compacted_stone",
+      "integration_ready": true,
+      "integration_evidence": [
+        "scripts/campaign_environment_art.gd",
+        "tools/campaign_environment_art_static_contract.py",
+        "qa/environment_runtime_router_20260902/report.json#785/785",
+        "scripts/liangshan_scenery.gd:153: \"surface_compacted_stone\":[\"surface_hard_texture\",\"use_surface_hard_texture\"],",
+        "scripts/liangshan_scenery.gd:159: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+        "scripts/liangshan_coast.gdshader:21: uniform bool use_surface_hard_texture = false;"
+      ]
+    },
+    {
+      "id": "liangshan_objects_buildings",
+      "logical_code_targets": [
+        "liangshan_layout.gd: DOCK/GATE/HALL_APPROACH",
+        "liangshan_entrance.gd",
+        "liangshan_scenery.gd: reeds/tree/tower/banner",
+        "level5_liangshan.gd: hall/decor"
+      ],
+      "mode": "fixed_grid_cell_uniform_scale_transparent_pad",
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "label": "短疏芦苇",
+          "output_id": "level5_liangshan_reeds_short",
+          "target": "assets/campaign/environment/level5/reeds_short.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_short",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:228: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:230: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:227: if _routed_reed_count<4:"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "label": "高窄芦苇",
+          "output_id": "level5_liangshan_reeds_tall",
+          "target": "assets/campaign/environment/level5/reeds_tall.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_tall",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:228: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:230: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:227: if _routed_reed_count<4:"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "label": "风压芦苇",
+          "output_id": "level5_liangshan_reeds_bent",
+          "target": "assets/campaign/environment/level5/reeds_bent.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_bent",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:228: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:230: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:227: if _routed_reed_count<4:"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "label": "枯黄穗芦苇",
+          "output_id": "level5_liangshan_reeds_seeded",
+          "target": "assets/campaign/environment/level5/reeds_seeded.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_seeded",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:228: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:230: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:227: if _routed_reed_count<4:"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "label": "临水老柳",
+          "output_id": "level5_liangshan_willow_old",
+          "target": "assets/campaign/environment/level5/willow_old.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "willow_old",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:51: var tree_routes := [\"tree_broad\",\"tree_young\",\"willow_old\"]",
+            "scripts/liangshan_scenery.gd:53: var routed_tree := EnvironmentArt.object(level_id,tree_route)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "label": "厚冠阔叶树",
+          "output_id": "level5_liangshan_tree_broad",
+          "target": "assets/campaign/environment/level5/tree_broad.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "tree_broad",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:51: var tree_routes := [\"tree_broad\",\"tree_young\",\"willow_old\"]",
+            "scripts/liangshan_scenery.gd:53: var routed_tree := EnvironmentArt.object(level_id,tree_route)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "label": "年轻窄冠杂木",
+          "output_id": "level5_liangshan_tree_young",
+          "target": "assets/campaign/environment/level5/tree_young.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "tree_young",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:51: var tree_routes := [\"tree_broad\",\"tree_young\",\"willow_old\"]",
+            "scripts/liangshan_scenery.gd:53: var routed_tree := EnvironmentArt.object(level_id,tree_route)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "label": "左下至右上窄木栈桥",
+          "output_id": "level5_liangshan_dock_straight",
+          "target": "assets/campaign/environment/level5/dock_straight.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "dock_straight",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_entrance.gd:20: _dock_straight_texture=EnvironmentArt.object(\"level5\",\"dock_straight\")"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "label": "左下至右上入寨的T形码头头部",
+          "output_id": "level5_liangshan_dock_head",
+          "target": "assets/campaign/environment/level5/dock_head_t.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "dock_head_t",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_entrance.gd:21: _dock_head_texture=EnvironmentArt.object(\"level5\",\"dock_head_t\")"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "label": "山寨哨楼",
+          "output_id": "level5_liangshan_watchtower",
+          "target": "assets/campaign/environment/level5/watchtower.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "watchtower",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_scenery.gd:100: var tex := EnvironmentArt.object(level_id,\"watchtower\")",
+            "scripts/liangshan_scenery.gd:101: if tex==null: tex=Art.terrain_texture(\"tower\")"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "label": "木寨栅墙",
+          "output_id": "level5_liangshan_stockade",
+          "target": "assets/campaign/environment/level5/stockade_segment.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "stockade_segment",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_entrance.gd:19: _stockade_texture=EnvironmentArt.object(\"level5\",\"stockade_segment\")"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "label": "左下至右上敞开主寨门",
+          "output_id": "level5_liangshan_main_gate",
+          "target": "assets/campaign/environment/level5/main_gate.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "main_gate",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/liangshan_entrance.gd:36: var main_gate_texture := EnvironmentArt.object(\"level5\",\"main_gate\")",
+            "scripts/liangshan_entrance.gd:37: var gate_rect = EnvironmentArt.calibrated_text_rect(\"object\",\"level5\",\"main_gate\","
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "label": "山寨议事正厅",
+          "output_id": "level5_liangshan_hall",
+          "target": "assets/campaign/environment/level5/zhongyi_hall.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "zhongyi_hall",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level5_liangshan.gd:102: hall.set_meta(\"campaign_environment_route\",\"zhongyi_hall\")",
+            "scripts/unit.gd:3944: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "label": "堂前西侧无字暗红旗",
+          "output_id": "level5_zhongyi_hall_standard_west_blank",
+          "target": "assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.static_flag",
+          "route_key": "zhongyi_hall_standard_west",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level5_liangshan.gd:697: [\"banner\", Vector2i(14, 33), 52.0, \"zhongyi_hall_standard_west\"],",
+            "scripts/liangshan_scenery.gd:75: var candidate := EnvironmentArt.static_flag(level_id,String(d[3]))",
+            "scripts/liangshan_scenery.gd:76: var measured = EnvironmentArt.calibrated_text_rect(\"static_flag\",level_id,"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "label": "堂前东侧无字暗红旗",
+          "output_id": "level5_zhongyi_hall_standard_east_blank",
+          "target": "assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.static_flag",
+          "route_key": "zhongyi_hall_standard_east",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level5_liangshan.gd:696: [\"banner\", Vector2i(18, 33), 52.0, \"zhongyi_hall_standard_east\"],",
+            "scripts/liangshan_scenery.gd:75: var candidate := EnvironmentArt.static_flag(level_id,String(d[3]))",
+            "scripts/liangshan_scenery.gd:76: var measured = EnvironmentArt.calibrated_text_rect(\"static_flag\",level_id,"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "label": "山顶无字杏黄旗",
+          "output_id": "level5_liangshan_hilltop_standard_blank",
+          "target": "assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "level_scope": [
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.static_flag",
+          "route_key": "liangshan_hilltop_standard",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level5_liangshan.gd:699: [\"banner\", Vector2i(10, 15), 64.0, \"liangshan_hilltop_standard\"],",
+            "scripts/liangshan_scenery.gd:75: var candidate := EnvironmentArt.static_flag(level_id,String(d[3]))",
+            "scripts/liangshan_scenery.gd:76: var measured = EnvironmentArt.calibrated_text_rect(\"static_flag\",level_id,"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        }
+      ]
+    },
+    {
+      "id": "surface_field",
+      "logical_code_targets": [
+        "GameMap natural surface class: field",
+        "campaign_environment.gd level3/level8"
+      ],
+      "mode": "copy_exact_source_png",
+      "output_id": "surface_field",
+      "target": "assets/campaign/environment/shared/surfaces/surface_field.png",
+      "level_scope": [
+        "level3",
+        "level8"
+      ],
+      "route_scope": "shared_surface_class",
+      "reuse_policy": "shared_surface_with_declared_campaign_usage",
+      "resolver": "CampaignEnvironmentArt.surface",
+      "route_key": "surface_field",
+      "integration_ready": true,
+      "integration_evidence": [
+        "scripts/campaign_environment_art.gd",
+        "tools/campaign_environment_art_static_contract.py",
+        "qa/environment_runtime_router_20260902/report.json#785/785",
+        "scripts/liangshan_scenery.gd:154: \"surface_field\":[\"surface_field_texture\",\"use_surface_field_texture\"],",
+        "scripts/liangshan_scenery.gd:159: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+        "scripts/liangshan_coast.gdshader:22: uniform bool use_surface_field_texture = false;"
+      ]
+    },
+    {
+      "id": "surface_overlays",
+      "logical_code_targets": [
+        "CampaignEnvironmentArt.overlay(active_level_id, route_key); each cell has an explicit future production path and allowed campaign level scope"
+      ],
+      "mode": "fixed_grid_cell_uniform_scale_transparent_pad",
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "label": "断续浅车辙",
+          "output_id": "campaign_overlay_shallow_cart_ruts",
+          "target": "assets/campaign/environment/shared/overlays/shallow_cart_ruts.png",
+          "level_scope": [
+            "level1",
+            "level4",
+            "level6",
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "shallow_cart_ruts",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:26: scoped_overlay(Vector2i(34,20),88.0,\"shallow_cart_ruts\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "label": "零散脚印压痕",
+          "output_id": "campaign_overlay_scattered_footprints",
+          "target": "assets/campaign/environment/shared/overlays/scattered_footprints.png",
+          "level_scope": [
+            "level1",
+            "level2",
+            "level3",
+            "level4",
+            "level5",
+            "level6",
+            "level7",
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "scattered_footprints",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:27: scoped_overlay(Vector2i(27,21),68.0,\"scattered_footprints\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "label": "被踩乱的浅泥纹",
+          "output_id": "campaign_overlay_trampled_mud",
+          "target": "assets/campaign/environment/shared/overlays/trampled_mud.png",
+          "level_scope": [
+            "level2",
+            "level3",
+            "level4",
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "trampled_mud",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:35: scoped_overlay(Vector2i(29,22),70.0,\"trampled_mud\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "label": "担脚与木轮压痕",
+          "output_id": "campaign_overlay_pole_wheel_marks",
+          "target": "assets/campaign/environment/shared/overlays/pole_wheel_marks.png",
+          "level_scope": [
+            "level1",
+            "level2",
+            "level7",
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "pole_wheel_marks",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:28: scoped_overlay(Vector2i(12,20),54.0,\"pole_wheel_marks\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "label": "稀疏圆钝碎石",
+          "output_id": "campaign_overlay_rounded_stones",
+          "target": "assets/campaign/environment/shared/overlays/rounded_stones.png",
+          "level_scope": [
+            "level1",
+            "level4",
+            "level6"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "rounded_stones",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:29: scoped_overlay(Vector2i(38,18),48.0,\"rounded_stones\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "label": "细砂砾与小土块",
+          "output_id": "campaign_overlay_gravel_clods",
+          "target": "assets/campaign/environment/shared/overlays/gravel_clods.png",
+          "level_scope": [
+            "level1",
+            "level3",
+            "level4",
+            "level6",
+            "level7",
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "gravel_clods",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:30: scoped_overlay(Vector2i(31,17),52.0,\"gravel_clods\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "label": "风化片石",
+          "output_id": "campaign_overlay_weathered_slabs",
+          "target": "assets/campaign/environment/shared/overlays/weathered_slabs.png",
+          "level_scope": [
+            "level2",
+            "level5",
+            "level7",
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "weathered_slabs",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:37: scoped_overlay(Vector2i(34,18),50.0,\"weathered_slabs\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "label": "旧砖石碎片",
+          "output_id": "campaign_overlay_old_brick_fragments",
+          "target": "assets/campaign/environment/shared/overlays/old_brick_fragments.png",
+          "level_scope": [
+            "level2",
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "old_brick_fragments",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:38: scoped_overlay(Vector2i(25,20),48.0,\"old_brick_fragments\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "label": "松针与枯叶",
+          "output_id": "campaign_overlay_pine_needles_leaves",
+          "target": "assets/campaign/environment/shared/overlays/pine_needles_leaves.png",
+          "level_scope": [
+            "level1",
+            "level6"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "pine_needles_leaves",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:31: scoped_overlay(Vector2i(24,16),66.0,\"pine_needles_leaves\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "label": "细枝与树皮",
+          "output_id": "campaign_overlay_twigs_bark",
+          "target": "assets/campaign/environment/shared/overlays/twigs_bark.png",
+          "level_scope": [
+            "level3",
+            "level5",
+            "level6",
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "twigs_bark",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:45: scoped_overlay(Vector2i(16,18),54.0,\"twigs_bark\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "label": "细根与苔点",
+          "output_id": "campaign_overlay_roots_moss",
+          "target": "assets/campaign/environment/shared/overlays/roots_moss.png",
+          "level_scope": [
+            "level3",
+            "level5",
+            "level6"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "roots_moss",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:46: scoped_overlay(Vector2i(15,34),54.0,\"roots_moss\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "label": "干草与落叶",
+          "output_id": "campaign_overlay_dry_grass_leaves",
+          "target": "assets/campaign/environment/shared/overlays/dry_grass_leaves.png",
+          "level_scope": [
+            "level1",
+            "level3",
+            "level4",
+            "level7",
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "dry_grass_leaves",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:32: scoped_overlay(Vector2i(16,22),58.0,\"dry_grass_leaves\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "label": "压平芦叶",
+          "output_id": "campaign_overlay_flattened_reeds",
+          "target": "assets/campaign/environment/shared/overlays/flattened_reeds.png",
+          "level_scope": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "flattened_reeds",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:39: scoped_overlay(Vector2i(17,45),64.0,\"flattened_reeds\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "label": "稀疏湿草",
+          "output_id": "campaign_overlay_sparse_wet_grass",
+          "target": "assets/campaign/environment/shared/overlays/sparse_wet_grass.png",
+          "level_scope": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "sparse_wet_grass",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:40: scoped_overlay(Vector2i(20,46),62.0,\"sparse_wet_grass\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "label": "低矮水生植物",
+          "output_id": "campaign_overlay_low_aquatic_plants",
+          "target": "assets/campaign/environment/shared/overlays/low_aquatic_plants.png",
+          "level_scope": [
+            "level2",
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "low_aquatic_plants",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:41: scoped_overlay(Vector2i(10,48),60.0,\"low_aquatic_plants\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "label": "泥点与浅湿痕",
+          "output_id": "campaign_overlay_mud_spots_wet_marks",
+          "target": "assets/campaign/environment/shared/overlays/mud_spots_wet_marks.png",
+          "level_scope": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "shared_source_with_explicit_level_gate",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "mud_spots_wet_marks",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:42: scoped_overlay(Vector2i(22,45),52.0,\"mud_spots_wet_marks\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        }
+      ]
+    },
+    {
+      "id": "town_village_objects",
+      "logical_code_targets": [
+        "CampaignArt: roadside_tavern/heyang_tavern",
+        "CampaignArt: cuiyun_tower default/signal",
+        "CampaignEnvironmentArt.object: level3 zhujiazhuang_main_gate/zhujiazhuang_hall",
+        "CampaignEnvironmentArt.object: level8 daming_shop_house",
+        "campaign_environment.gd level3/level7/level8"
+      ],
+      "mode": "fixed_grid_cell_uniform_scale_transparent_pad",
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "label": "快活林沿路酒肆A",
+          "output_id": "level7_kuaihuolin_roadside_tavern_a",
+          "target": "assets/campaign/environment/level7/roadside_tavern_a.png",
+          "level_scope": [
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_a",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:3944: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "label": "快活林沿路酒肆B",
+          "output_id": "level7_kuaihuolin_roadside_tavern_b",
+          "target": "assets/campaign/environment/level7/roadside_tavern_b.png",
+          "level_scope": [
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_b",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:3944: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "label": "快活林沿路酒肆C",
+          "output_id": "level7_kuaihuolin_roadside_tavern_c",
+          "target": "assets/campaign/environment/level7/roadside_tavern_c.png",
+          "level_scope": [
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_c",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:3944: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "label": "快活林沿路酒肆D",
+          "output_id": "level7_kuaihuolin_roadside_tavern_d",
+          "target": "assets/campaign/environment/level7/roadside_tavern_d.png",
+          "level_scope": [
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_d",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:3944: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "label": "快活林主酒楼",
+          "output_id": "level7_kuaihuolin_main_tavern",
+          "target": "assets/campaign/environment/level7/main_tavern.png",
+          "level_scope": [
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "kuaihuolin_main_tavern",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:226: result.append(scoped_object(Vector2i(49,17),154.0,\"kuaihuolin_main_tavern\",\"town_house\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "label": "快活林独立无字酒望",
+          "output_id": "level7_kuaihuolin_wine_sign",
+          "target": "assets/campaign/environment/level7/heyang_wine_sign_blank.png",
+          "level_scope": [
+            "level7"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "heyang_wine_sign",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level7_kuaihuolin.gd:143: sign.set_meta(\"campaign_environment_route\",\"heyang_wine_sign\")",
+            "scripts/unit.gd:3948: var normalized = CampaignEnvironmentArt.calibrated_text_rect(\"object\","
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "label": "翠云楼未举火",
+          "output_id": "level8_daming_cuiyun_tower_default",
+          "target": "assets/campaign/environment/level8/cuiyun_tower_default.png",
+          "level_scope": [
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "cuiyun_tower",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:187: result.append(scoped_object(d[1],d[2],\"cuiyun_tower\",\"cuiyun_tower\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "label": "翠云楼举火",
+          "output_id": "level8_daming_cuiyun_tower_signal",
+          "target": "assets/campaign/environment/level8/cuiyun_tower_signal.png",
+          "level_scope": [
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "cuiyun_tower",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level8_dongchangfu.gd:276: if b.map.sample_scenery != null: b.map.sample_scenery.set_story_object_state(\"cuiyun_tower\",\"signal\")",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)",
+            "scripts/campaign_scenery.gd:269: var fallback_key := explicit_environment_fallback(sprite)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "signal"
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "label": "元宵灯市摊",
+          "output_id": "level8_daming_lantern_stall",
+          "target": "assets/campaign/environment/level8/lantern_stall.png",
+          "level_scope": [
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "lantern_stall",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_scenery.gd:58: and _add_direct_campaign_object(stall_position,d[2],\"lantern_stall\",\"\",0.82,false,true)):",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "label": "大名府临街铺屋",
+          "output_id": "level8_daming_shop_house",
+          "target": "assets/campaign/environment/level8/shop_house.png",
+          "level_scope": [
+            "level8"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "daming_shop_house",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:234: result.append(scoped_object(house[0],154.0,\"daming_shop_house\",\"town_house\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "label": "祝家庄庄门",
+          "output_id": "level3_zhujiazhuang_main_gate",
+          "target": "assets/campaign/environment/level3/zhujiazhuang_main_gate.png",
+          "level_scope": [
+            "level3"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "zhujiazhuang_main_gate",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/levels/level3_zhujiazhuang.gd:617: target.set_meta(\"campaign_environment_route\",\"zhujiazhuang_main_gate\")",
+            "scripts/unit.gd:3944: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 3,
+          "column": 4,
+          "label": "祝家庄祠堂或议事厅",
+          "output_id": "level3_zhujiazhuang_hall",
+          "target": "assets/campaign/environment/level3/zhujiazhuang_hall.png",
+          "level_scope": [
+            "level3"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "zhujiazhuang_hall",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:232: result.append(scoped_object(house[0],154.0,\"zhujiazhuang_hall\",\"zhu_hall\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:107: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 1,
+          "label": "不规则低土埂",
+          "output_id": "level3_zhujiazhuang_field_edge_bank",
+          "target": "assets/campaign/environment/level3/field_edge_bank.png",
+          "level_scope": [
+            "level3"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_bank",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:47: scoped_overlay(Vector2i(27,28),58.0,\"field_edge_bank\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "label": "低作物残茬边带",
+          "output_id": "level3_zhujiazhuang_field_edge_stubble",
+          "target": "assets/campaign/environment/level3/field_edge_stubble.png",
+          "level_scope": [
+            "level3"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_stubble",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:48: scoped_overlay(Vector2i(13,18),58.0,\"field_edge_stubble\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "label": "浅排水沟",
+          "output_id": "level3_zhujiazhuang_field_edge_ditch",
+          "target": "assets/campaign/environment/level3/field_edge_ditch.png",
+          "level_scope": [
+            "level3"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_ditch",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:49: scoped_overlay(Vector2i(16,30),64.0,\"field_edge_ditch\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        },
+        {
+          "row": 4,
+          "column": 4,
+          "label": "田边矮柳杂草小石",
+          "output_id": "level3_zhujiazhuang_field_edge_willow",
+          "target": "assets/campaign/environment/level3/field_edge_willow.png",
+          "level_scope": [
+            "level3"
+          ],
+          "route_scope": "campaign_level_only",
+          "reuse_policy": "level_scoped_only",
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_willow",
+          "integration_ready": true,
+          "integration_evidence": [
+            "scripts/campaign_environment_art.gd",
+            "tools/campaign_environment_art_static_contract.py",
+            "qa/environment_runtime_router_20260902/report.json#785/785",
+            "scripts/campaign_environment.gd:50: scoped_overlay(Vector2i(13,40),58.0,\"field_edge_willow\"),",
+            "scripts/campaign_scenery.gd:133: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ],
+          "canvas_size": [
+            512,
+            512
+          ],
+          "scaled_size": [
+            512,
+            512
+          ],
+          "offset": [
+            0,
+            0
+          ],
+          "state": "default"
+        }
+      ]
+    }
+  ]
+}

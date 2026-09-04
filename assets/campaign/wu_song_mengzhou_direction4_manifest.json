@@ -1,0 +1,1019 @@
+{
+  "schema_version": 1,
+  "kind": "wu_song_mengzhou_direction4_production_provenance",
+  "created_at": "2026-09-02T14:11:07.776873+08:00",
+  "variant": "wu_song_mengzhou",
+  "states": [
+    "idle",
+    "walk",
+    "attack",
+    "hurt",
+    "down"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "frame_count": 20,
+  "source_generation_conversations": [
+    "https://chatgpt.com/c/6a97b18d-1254-83ea-83d1-9082e8c3d727",
+    "https://chatgpt.com/c/6a97b5fe-34cc-83e9-bcc3-bec983a80629"
+  ],
+  "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97b8bb-b8a8-83ea-bb53-31da6a87b4ce",
+  "web_input_archive_sha256": "29d2e519e35520b338176b4f07b2d8517f4d7904b9cb78a3adb29026254001cb",
+  "web_download_archive_sha256": "37f43b22191575f9fdf3fdcd2acf8b5c72edd58dfe4364bbc2fa7f37cad7ffc6",
+  "exact_alpha_verification": "qa/wu_song_mengzhou_alpha_audit_20260902/web_exact_verification.json",
+  "exact_alpha_verification_sha256": "8696b63007454993b701dcf86a1c350f1c153f0f39194e1663f0babe22da2874",
+  "candidate_manifest": "qa/wu_song_mengzhou_1x4_candidate_pipeline_alpha15_exact_20260902/candidate_manifest.json",
+  "candidate_manifest_sha256": "7ec6e4b75b047645fcad96064bd567c741800596bc579b841e6b4e77560b0096",
+  "candidate_preview": "qa/wu_song_mengzhou_1x4_candidate_pipeline_alpha15_exact_20260902/runtime_size_fringe_preview.png",
+  "candidate_preview_sha256": "9ad3fae2d2ae228e3487c55d99720973c14b32ea2cadf92413f64b99bd6c78d6",
+  "allowed_operations": [
+    "continuous source rectangle crop",
+    "batch-uniform proportional scale",
+    "transparent padding",
+    "byte-identical production copy"
+  ],
+  "forbidden_operations_used": [],
+  "original_evidence": {
+    "chapter_28": "https://zh.wikisource.org/zh-hans/水滸傳_(70回本)/第28回",
+    "chapter_29": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第029回",
+    "dabo_definition": "https://www.zdic.net/hans/褡膊",
+    "attire": "万字头巾、土色布衫、红绢褡膊只系腰间、脸上小膏药遮金印、腿絣护膝、八搭麻鞋；赤手空拳",
+    "signature_action": "玉环步接鸳鸯脚；本批 attack 取转身后的第二脚高踢",
+    "adaptation_boundary": "hurt/down 是玩法所需非致死状态，不声称是原著中蒋门神击倒武松的情节"
+  },
+  "sources": [
+    {
+      "action": "idle",
+      "raw_file": "wu_song_mengzhou_idle_20260902_attempt5_fresh_reference.png",
+      "raw_sha256": "73dab6cb36e26d6111d0b6b288672f929a479599eb44ecad365499a9737d25f5",
+      "cleaned_file": "wu_song_mengzhou_idle_20260902_attempt5_fresh_reference_alpha15_exact_clean.png",
+      "cleaned_sha256": "de31ce02501abf441af5deb375845250aa9e864b337911a3353fdaaa14cc75d8",
+      "mode": "RGBA",
+      "size": [
+        1828,
+        860
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97b18d-1254-83ea-83d1-9082e8c3d727",
+      "prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_idle_attempt5_fresh_reference.txt",
+      "prompt_sha256": "2d5aebc1c00d18fd060834b97794c04dcd751493f379d643d6763507d7f2a93e",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97b8bb-b8a8-83ea-bb53-31da6a87b4ce",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_alpha15_exact_web_cleanup.txt",
+      "exact_alpha_prompt_sha256": "95ae5fe6fada692f6a378017360c9f15ed46b497da10a081590748d0554bd854",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "walk",
+      "raw_file": "wu_song_mengzhou_walk_20260902_attempt4_original_knee_alpha.png",
+      "raw_sha256": "e83b4316feb9d0e856ba458dea1b7ee081d2a552f30778e407031e1fc432e99f",
+      "cleaned_file": "wu_song_mengzhou_walk_20260902_attempt4_original_knee_alpha_alpha15_exact_clean.png",
+      "cleaned_sha256": "d9c4199da2d2fbf0c868841458a7fbb27e30f130292f981e7007051ae9057079",
+      "mode": "RGBA",
+      "size": [
+        2092,
+        752
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97b18d-1254-83ea-83d1-9082e8c3d727",
+      "prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_walk_attempt4_original_knee_alpha.txt",
+      "prompt_sha256": "8590a8d47055f4abfc5227c8f958a8426e3b0848c91181c3b9813705fc391369",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97b8bb-b8a8-83ea-bb53-31da6a87b4ce",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_alpha15_exact_web_cleanup.txt",
+      "exact_alpha_prompt_sha256": "95ae5fe6fada692f6a378017360c9f15ed46b497da10a081590748d0554bd854",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "attack",
+      "raw_file": "wu_song_mengzhou_attack_20260902_attempt1_yuhuan_yuanyang.png",
+      "raw_sha256": "2c5292f1426a74f32a2ce6168663b74b911ac106011a5affb5799e1ff16bff09",
+      "cleaned_file": "wu_song_mengzhou_attack_20260902_attempt1_yuhuan_yuanyang_alpha15_exact_clean.png",
+      "cleaned_sha256": "f0f3edf3e54d7589a8c1704ebd8b38ba03f60b5d42886726aafe127ef02e5f3e",
+      "mode": "RGBA",
+      "size": [
+        2109,
+        746
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97b18d-1254-83ea-83d1-9082e8c3d727",
+      "prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_attack_attempt1_fresh_reference.txt",
+      "prompt_sha256": "83c473bec2edd1ef55d05befdbc11ed07bac0075c02b54fdeb070d27f660b0e2",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97b8bb-b8a8-83ea-bb53-31da6a87b4ce",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_alpha15_exact_web_cleanup.txt",
+      "exact_alpha_prompt_sha256": "95ae5fe6fada692f6a378017360c9f15ed46b497da10a081590748d0554bd854",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "hurt",
+      "raw_file": "wu_song_mengzhou_hurt_20260902_attempt3_new_session_reference.png",
+      "raw_sha256": "0338f983cca97dc10206fb0015a9b60a1801f8b1b54ed855c2020ca49f257355",
+      "cleaned_file": "wu_song_mengzhou_hurt_20260902_attempt3_new_session_reference_alpha15_exact_clean.png",
+      "cleaned_sha256": "e72939eab2f94e05e6ffe4586d841e485827e56667ab66d4fcbeb4b4ecc5c8e0",
+      "mode": "RGBA",
+      "size": [
+        2182,
+        721
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97b5fe-34cc-83e9-bcc3-bec983a80629",
+      "prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_hurt_attempt3_new_session_reference.txt",
+      "prompt_sha256": "f3ef9f6b4cea92f4655f3218da6a8a0d00224ce31424b728671ef8d8f4745865",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97b8bb-b8a8-83ea-bb53-31da6a87b4ce",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_alpha15_exact_web_cleanup.txt",
+      "exact_alpha_prompt_sha256": "95ae5fe6fada692f6a378017360c9f15ed46b497da10a081590748d0554bd854",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "down",
+      "raw_file": "wu_song_mengzhou_down_20260902_attempt1_fresh_reference.png",
+      "raw_sha256": "c0b9970882e72b9ee675f76b882118f0e6f608826b28799ab0916920dee7de53",
+      "cleaned_file": "wu_song_mengzhou_down_20260902_attempt1_fresh_reference_alpha15_exact_clean.png",
+      "cleaned_sha256": "c2d81874c3f3c471adde9f1213fea12a085e894fa3a0c1f7598a17fdab2830fc",
+      "mode": "RGBA",
+      "size": [
+        2109,
+        746
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97b18d-1254-83ea-83d1-9082e8c3d727",
+      "prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_down_attempt1_fresh_reference.txt",
+      "prompt_sha256": "fe71471299fd93627a42f2aee43f2238e3d752c461d7e7b2f70d508f22274df7",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97b8bb-b8a8-83ea-bb53-31da6a87b4ce",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v4/corrections/wu_song_alpha15_exact_web_cleanup.txt",
+      "exact_alpha_prompt_sha256": "95ae5fe6fada692f6a378017360c9f15ed46b497da10a081590748d0554bd854",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    }
+  ],
+  "outputs": [
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "idle",
+      "direction": "se",
+      "path": "assets/campaign/anim/wu_song_mengzhou_idle_se.png",
+      "sha256": "978d04e888356a84d6f40356b3419f0dc3c1733f56f01a3477d90ca2463ddd7c",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_idle_20260902_attempt5_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "de31ce02501abf441af5deb375845250aa9e864b337911a3353fdaaa14cc75d8",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        467,
+        860
+      ],
+      "source_rect_xyxy": [
+        47,
+        43,
+        437,
+        800
+      ],
+      "source_anchor_xy": [
+        389,
+        797
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25384615384615383,
+        0.2536327608982827
+      ],
+      "resized_size": [
+        99,
+        192
+      ],
+      "paste_xy": [
+        41,
+        19
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "idle",
+      "direction": "sw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_idle_sw.png",
+      "sha256": "6ff03eb30f2dcefd530cb9eac9ce9d5702154f750dfae02d65962871b5cb3e1e",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_idle_20260902_attempt5_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "de31ce02501abf441af5deb375845250aa9e864b337911a3353fdaaa14cc75d8",
+      "source_cell_rect_xyxy": [
+        467,
+        0,
+        926,
+        860
+      ],
+      "source_rect_xyxy": [
+        497,
+        42,
+        888,
+        774
+      ],
+      "source_anchor_xy": [
+        535,
+        771
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2531969309462916,
+        0.2527322404371585
+      ],
+      "resized_size": [
+        99,
+        185
+      ],
+      "paste_xy": [
+        118,
+        26
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "idle",
+      "direction": "ne",
+      "path": "assets/campaign/anim/wu_song_mengzhou_idle_ne.png",
+      "sha256": "9b4bc4d87c5e3c3432fbd2d317f742d8d8e5c8c1f82f68839361bfa48758d33a",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_idle_20260902_attempt5_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "de31ce02501abf441af5deb375845250aa9e864b337911a3353fdaaa14cc75d8",
+      "source_cell_rect_xyxy": [
+        926,
+        0,
+        1376,
+        860
+      ],
+      "source_rect_xyxy": [
+        963,
+        51,
+        1328,
+        801
+      ],
+      "source_anchor_xy": [
+        1225,
+        798
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25205479452054796,
+        0.25333333333333335
+      ],
+      "resized_size": [
+        92,
+        190
+      ],
+      "paste_xy": [
+        62,
+        21
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "idle",
+      "direction": "nw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_idle_nw.png",
+      "sha256": "f1d03479cedea7db80e1a6caff00b2d9d2a4ddfd9caca92eab4ebb9ba937c5e9",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_idle_20260902_attempt5_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "de31ce02501abf441af5deb375845250aa9e864b337911a3353fdaaa14cc75d8",
+      "source_cell_rect_xyxy": [
+        1376,
+        0,
+        1828,
+        860
+      ],
+      "source_rect_xyxy": [
+        1423,
+        48,
+        1778,
+        805
+      ],
+      "source_anchor_xy": [
+        1494,
+        802
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2535211267605634,
+        0.2536327608982827
+      ],
+      "resized_size": [
+        90,
+        192
+      ],
+      "paste_xy": [
+        110,
+        19
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "walk",
+      "direction": "se",
+      "path": "assets/campaign/anim/wu_song_mengzhou_walk_se.png",
+      "sha256": "a2c7bedfd16a62fe995ca3f62dabd9d8abb0feecfa311e8298f91622b37571e0",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_walk_20260902_attempt4_original_knee_alpha_alpha15_exact_clean.png",
+      "source_sha256": "d9c4199da2d2fbf0c868841458a7fbb27e30f130292f981e7007051ae9057079",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        508,
+        752
+      ],
+      "source_rect_xyxy": [
+        52,
+        2,
+        450,
+        734
+      ],
+      "source_anchor_xy": [
+        302,
+        731
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2537688442211055,
+        0.2527322404371585
+      ],
+      "resized_size": [
+        101,
+        185
+      ],
+      "paste_xy": [
+        65,
+        26
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "walk",
+      "direction": "sw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_walk_sw.png",
+      "sha256": "4798b0ee5881bd36d1d8bfb7d7775326ed27dcce30b8ce9583ad77b3aeb4b34e",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_walk_20260902_attempt4_original_knee_alpha_alpha15_exact_clean.png",
+      "source_sha256": "d9c4199da2d2fbf0c868841458a7fbb27e30f130292f981e7007051ae9057079",
+      "source_cell_rect_xyxy": [
+        508,
+        0,
+        1066,
+        752
+      ],
+      "source_rect_xyxy": [
+        565,
+        6,
+        959,
+        725
+      ],
+      "source_anchor_xy": [
+        704,
+        722
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25380710659898476,
+        0.25312934631432543
+      ],
+      "resized_size": [
+        100,
+        182
+      ],
+      "paste_xy": [
+        93,
+        29
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "walk",
+      "direction": "ne",
+      "path": "assets/campaign/anim/wu_song_mengzhou_walk_ne.png",
+      "sha256": "abe97458d8ce2d0656804ed4b26daeeb101898bc18bdf3ab6326dd4c3c1bb7c4",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_walk_20260902_attempt4_original_knee_alpha_alpha15_exact_clean.png",
+      "source_sha256": "d9c4199da2d2fbf0c868841458a7fbb27e30f130292f981e7007051ae9057079",
+      "source_cell_rect_xyxy": [
+        1066,
+        0,
+        1618,
+        752
+      ],
+      "source_rect_xyxy": [
+        1174,
+        6,
+        1561,
+        723
+      ],
+      "source_anchor_xy": [
+        1284,
+        720
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2532299741602067,
+        0.25383542538354253
+      ],
+      "resized_size": [
+        98,
+        182
+      ],
+      "paste_xy": [
+        100,
+        29
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "walk",
+      "direction": "nw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_walk_nw.png",
+      "sha256": "bb77ef3e87b177dbef16511ef5315baf4ff35e1980d41003fc2f130359154765",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_walk_20260902_attempt4_original_knee_alpha_alpha15_exact_clean.png",
+      "source_sha256": "d9c4199da2d2fbf0c868841458a7fbb27e30f130292f981e7007051ae9057079",
+      "source_cell_rect_xyxy": [
+        1618,
+        0,
+        2092,
+        752
+      ],
+      "source_rect_xyxy": [
+        1674,
+        6,
+        2046,
+        729
+      ],
+      "source_anchor_xy": [
+        1932,
+        726
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25268817204301075,
+        0.25311203319502074
+      ],
+      "resized_size": [
+        94,
+        183
+      ],
+      "paste_xy": [
+        63,
+        28
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "attack",
+      "direction": "se",
+      "path": "assets/campaign/anim/wu_song_mengzhou_attack_se.png",
+      "sha256": "d17c6311ad4f7161aeaf981071f76f07a48bad9875ada5e47aa8c6c6176c7fc4",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_attack_20260902_attempt1_yuhuan_yuanyang_alpha15_exact_clean.png",
+      "source_sha256": "f0f3edf3e54d7589a8c1704ebd8b38ba03f60b5d42886726aafe127ef02e5f3e",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        554,
+        746
+      ],
+      "source_rect_xyxy": [
+        9,
+        7,
+        535,
+        713
+      ],
+      "source_anchor_xy": [
+        296,
+        709
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25285171102661597,
+        0.2535410764872521
+      ],
+      "resized_size": [
+        133,
+        179
+      ],
+      "paste_xy": [
+        55,
+        32
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "attack",
+      "direction": "sw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_attack_sw.png",
+      "sha256": "f3918640e4d3aae62a0f146d844e5c5020e325b34641394c933c50f548dbf94f",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_attack_20260902_attempt1_yuhuan_yuanyang_alpha15_exact_clean.png",
+      "source_sha256": "f0f3edf3e54d7589a8c1704ebd8b38ba03f60b5d42886726aafe127ef02e5f3e",
+      "source_cell_rect_xyxy": [
+        554,
+        0,
+        1056,
+        746
+      ],
+      "source_rect_xyxy": [
+        574,
+        7,
+        1054,
+        721
+      ],
+      "source_anchor_xy": [
+        788,
+        717
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25416666666666665,
+        0.2535014005602241
+      ],
+      "resized_size": [
+        122,
+        181
+      ],
+      "paste_xy": [
+        74,
+        30
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "attack",
+      "direction": "ne",
+      "path": "assets/campaign/anim/wu_song_mengzhou_attack_ne.png",
+      "sha256": "5b6f9d4fe7ea2cbe858eda009f256ff503560f883e5d475e4005756ec53cc3e1",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_attack_20260902_attempt1_yuhuan_yuanyang_alpha15_exact_clean.png",
+      "source_sha256": "f0f3edf3e54d7589a8c1704ebd8b38ba03f60b5d42886726aafe127ef02e5f3e",
+      "source_cell_rect_xyxy": [
+        1056,
+        0,
+        1594,
+        746
+      ],
+      "source_rect_xyxy": [
+        1057,
+        21,
+        1577,
+        711
+      ],
+      "source_anchor_xy": [
+        1311,
+        708
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25384615384615383,
+        0.2536231884057971
+      ],
+      "resized_size": [
+        132,
+        175
+      ],
+      "paste_xy": [
+        64,
+        36
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "attack",
+      "direction": "nw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_attack_nw.png",
+      "sha256": "9dc4c936c1e6f5925343cd413f885599ab914ca0ca680fed3d6113d135dbaa96",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_attack_20260902_attempt1_yuhuan_yuanyang_alpha15_exact_clean.png",
+      "source_sha256": "f0f3edf3e54d7589a8c1704ebd8b38ba03f60b5d42886726aafe127ef02e5f3e",
+      "source_cell_rect_xyxy": [
+        1594,
+        0,
+        2109,
+        746
+      ],
+      "source_rect_xyxy": [
+        1612,
+        33,
+        2099,
+        725
+      ],
+      "source_anchor_xy": [
+        1860,
+        722
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25256673511293637,
+        0.25289017341040465
+      ],
+      "resized_size": [
+        123,
+        175
+      ],
+      "paste_xy": [
+        65,
+        36
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "hurt",
+      "direction": "se",
+      "path": "assets/campaign/anim/wu_song_mengzhou_hurt_se.png",
+      "sha256": "e2ca34699cd05757621072d193f765eb9e5ff2b0a70c3005b7c4a7f406f4489d",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_hurt_20260902_attempt3_new_session_reference_alpha15_exact_clean.png",
+      "source_sha256": "e72939eab2f94e05e6ffe4586d841e485827e56667ab66d4fcbeb4b4ecc5c8e0",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        564,
+        721
+      ],
+      "source_rect_xyxy": [
+        12,
+        10,
+        541,
+        686
+      ],
+      "source_anchor_xy": [
+        106,
+        682
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2533081285444234,
+        0.2529585798816568
+      ],
+      "resized_size": [
+        134,
+        171
+      ],
+      "paste_xy": [
+        104,
+        40
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "hurt",
+      "direction": "sw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_hurt_sw.png",
+      "sha256": "83992319c3ff1f69924fc9cd4dd399778c3c6087d0388200f94a110192632fc6",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_hurt_20260902_attempt3_new_session_reference_alpha15_exact_clean.png",
+      "source_sha256": "e72939eab2f94e05e6ffe4586d841e485827e56667ab66d4fcbeb4b4ecc5c8e0",
+      "source_cell_rect_xyxy": [
+        564,
+        0,
+        1119,
+        721
+      ],
+      "source_rect_xyxy": [
+        586,
+        12,
+        1112,
+        700
+      ],
+      "source_anchor_xy": [
+        628,
+        697
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25285171102661597,
+        0.25290697674418605
+      ],
+      "resized_size": [
+        133,
+        174
+      ],
+      "paste_xy": [
+        117,
+        37
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "hurt",
+      "direction": "ne",
+      "path": "assets/campaign/anim/wu_song_mengzhou_hurt_ne.png",
+      "sha256": "24dbbcf1bca71d6f85cc7121f99ce7281630594524cabec57e2cc299330cae45",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_hurt_20260902_attempt3_new_session_reference_alpha15_exact_clean.png",
+      "source_sha256": "e72939eab2f94e05e6ffe4586d841e485827e56667ab66d4fcbeb4b4ecc5c8e0",
+      "source_cell_rect_xyxy": [
+        1119,
+        0,
+        1677,
+        721
+      ],
+      "source_rect_xyxy": [
+        1126,
+        46,
+        1615,
+        701
+      ],
+      "source_anchor_xy": [
+        1519,
+        698
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25357873210633947,
+        0.2534351145038168
+      ],
+      "resized_size": [
+        124,
+        166
+      ],
+      "paste_xy": [
+        28,
+        45
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "hurt",
+      "direction": "nw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_hurt_nw.png",
+      "sha256": "1ba7e889970d1b50701058e09d6605220a8a2d29c5af2f2d52d390de410d16ed",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_hurt_20260902_attempt3_new_session_reference_alpha15_exact_clean.png",
+      "source_sha256": "e72939eab2f94e05e6ffe4586d841e485827e56667ab66d4fcbeb4b4ecc5c8e0",
+      "source_cell_rect_xyxy": [
+        1677,
+        0,
+        2182,
+        721
+      ],
+      "source_rect_xyxy": [
+        1739,
+        49,
+        2170,
+        694
+      ],
+      "source_anchor_xy": [
+        1779,
+        691
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2529002320185615,
+        0.2527131782945736
+      ],
+      "resized_size": [
+        109,
+        163
+      ],
+      "paste_xy": [
+        118,
+        48
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "down",
+      "direction": "se",
+      "path": "assets/campaign/anim/wu_song_mengzhou_down_se.png",
+      "sha256": "db64ba8cb56f7641a5b6758175ff1836e28a5d2db2e43984a10e3c6a50e9ab66",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_down_20260902_attempt1_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "c2d81874c3f3c471adde9f1213fea12a085e894fa3a0c1f7598a17fdab2830fc",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        568,
+        746
+      ],
+      "source_rect_xyxy": [
+        14,
+        168,
+        563,
+        592
+      ],
+      "source_anchor_xy": [
+        440,
+        589
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25318761384335153,
+        0.25235849056603776
+      ],
+      "resized_size": [
+        139,
+        107
+      ],
+      "paste_xy": [
+        20,
+        104
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "down",
+      "direction": "sw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_down_sw.png",
+      "sha256": "ddff2f4ba3ecd91f5013d90078088dc851dba4ea101bda6eef61a340d6a569d0",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_down_20260902_attempt1_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "c2d81874c3f3c471adde9f1213fea12a085e894fa3a0c1f7598a17fdab2830fc",
+      "source_cell_rect_xyxy": [
+        568,
+        0,
+        1070,
+        746
+      ],
+      "source_rect_xyxy": [
+        574,
+        168,
+        1048,
+        598
+      ],
+      "source_anchor_xy": [
+        859,
+        595
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.25316455696202533,
+        0.2534883720930233
+      ],
+      "resized_size": [
+        120,
+        109
+      ],
+      "paste_xy": [
+        56,
+        102
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "down",
+      "direction": "ne",
+      "path": "assets/campaign/anim/wu_song_mengzhou_down_ne.png",
+      "sha256": "f8e1667290b81c3ef2b1138306586a0cf5c78e4b2490c9dc482f702cf6aa41c7",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_down_20260902_attempt1_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "c2d81874c3f3c471adde9f1213fea12a085e894fa3a0c1f7598a17fdab2830fc",
+      "source_cell_rect_xyxy": [
+        1070,
+        0,
+        1615,
+        746
+      ],
+      "source_rect_xyxy": [
+        1091,
+        180,
+        1606,
+        528
+      ],
+      "source_anchor_xy": [
+        1542,
+        525
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2524271844660194,
+        0.25287356321839083
+      ],
+      "resized_size": [
+        130,
+        88
+      ],
+      "paste_xy": [
+        14,
+        123
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "wu_song_mengzhou",
+      "state": "down",
+      "direction": "nw",
+      "path": "assets/campaign/anim/wu_song_mengzhou_down_nw.png",
+      "sha256": "b54e644471d0c1d5affb265616c8667de24561b00a369f0bfa57f5b0ea4069a1",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "wu_song_mengzhou_down_20260902_attempt1_fresh_reference_alpha15_exact_clean.png",
+      "source_sha256": "c2d81874c3f3c471adde9f1213fea12a085e894fa3a0c1f7598a17fdab2830fc",
+      "source_cell_rect_xyxy": [
+        1615,
+        0,
+        2109,
+        746
+      ],
+      "source_rect_xyxy": [
+        1624,
+        215,
+        2100,
+        527
+      ],
+      "source_anchor_xy": [
+        1833,
+        524
+      ],
+      "batch_uniform_requested_scale": 0.25338509316770186,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2542016806722689,
+        0.2532051282051282
+      ],
+      "resized_size": [
+        121,
+        79
+      ],
+      "paste_xy": [
+        75,
+        132
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    }
+  ],
+  "portrait": {
+    "path": "assets/campaign/portraits/wu_song_mengzhou.png",
+    "sha256": "978d04e888356a84d6f40356b3419f0dc3c1733f56f01a3477d90ca2463ddd7c",
+    "byte_identical_source": "assets/campaign/anim/wu_song_mengzhou_idle_se.png"
+  },
+  "runtime_route": {
+    "ordinary_states": "idle/walk/attack/hurt/down resolve by variant, state, and exact direction",
+    "signature_kick": "cast windup faces the nearest in-range foe and uses same-direction attack high-kick art",
+    "death": "not supplied and never aliases to down",
+    "free_modes": "variant-empty wu_song keeps generic art, portrait, and arena abilities"
+  },
+  "steam_modified_or_exported": false
+}

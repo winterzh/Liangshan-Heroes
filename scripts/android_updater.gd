@@ -162,7 +162,8 @@ func open_full_apk() -> void:
 
 
 func quit_for_restart() -> void:
-	get_tree().quit()
+	# 更新已经落盘；仅把进程退出延后约三帧，让全局合成音频先释放。
+	AppLifecycle.request_quit("android_update_restart")
 
 
 func display_version() -> String:

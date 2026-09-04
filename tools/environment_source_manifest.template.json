@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "web_chatgpt_environment_sources",
+  "instructions": "Add one entry per downloaded batch. Partial sample batches are allowed. See environment_web_art_intake.README.md for required provenance and human_review fields.",
+  "entry_templates": {
+    "opaque_tileable_surface": {
+      "id": "<frozen batch id>",
+      "source_png": "<downloaded PNG path>",
+      "source_sha256": "<exact 64-character lowercase SHA-256>",
+      "size": [2048, 2048],
+      "conversation_url": "https://chatgpt.com/c/<stable conversation id>",
+      "prompt_sha256": "<exact prompt_sha256 from the frozen batch>",
+      "decision": "<adopt or reject>",
+      "reason": "<concrete adoption or rejection reason>",
+      "human_review": {
+        "reviewed_at": "<ISO-8601 date and time>",
+        "notes": "<what was checked>",
+        "three_by_three_wrap_has_no_visible_seam_vignette_hotspot_or_directional_band": false,
+        "no_forbidden_scene_content": false,
+        "gameplay_zoom_100_and_150_readable": false,
+        "prompt_specific_acceptance_confirmed": false
+      }
+    },
+    "transparent_atlas_4x4": {
+      "id": "<frozen batch id>",
+      "source_png": "<downloaded PNG path>",
+      "source_sha256": "<exact 64-character lowercase SHA-256>",
+      "size": [2048, 2048],
+      "conversation_url": "https://chatgpt.com/c/<stable conversation id>",
+      "prompt_sha256": "<exact prompt_sha256 from the frozen batch>",
+      "decision": "<adopt or reject>",
+      "reason": "<concrete adoption or rejection reason>",
+      "human_review": {
+        "reviewed_at": "<ISO-8601 date and time>",
+        "notes": "<what was checked>",
+        "cell_map_and_scale_confirmed": false,
+        "whole_cell_rectangles_only_confirmed": false,
+        "no_mirror_repaint_synthesis_mask_or_pixel_clear_needed": false,
+        "no_forbidden_base_shadow_text_watermark_or_modern_content": false,
+        "isometric_scale_silhouette_and_anchor_confirmed": false,
+        "prompt_specific_acceptance_confirmed": false
+      }
+    }
+  },
+  "entries": []
+}

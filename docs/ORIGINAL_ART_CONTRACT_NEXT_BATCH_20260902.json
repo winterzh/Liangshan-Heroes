@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-02",
+  "status": "audit_complete_generation_blocked_until_p0_resolved",
+  "scope": "next_web_chatgpt_campaign_art_batch",
+  "authority_order": [
+    "explicit_primary_text",
+    "gameplay_safety_and_story_outcome",
+    "conservative_unsourced_design",
+    "old_prompt_or_reference_image"
+  ],
+  "labels": {
+    "explicit": "原文明写",
+    "conservative": "保守设计，原文未明写",
+    "forbidden": "与原文冲突或会造成身份误读",
+    "gameplay_compression": "玩法需要，不得宣称为原著事件"
+  },
+  "sources": [
+    {
+      "id": "wm100_ch008",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(100回本)/第008回",
+      "supports": ["lin_chong_cangue_tattoo_back_wounds_scarred_feet", "dong_chao_xue_ba_identity", "water_fire_staff", "bound_hands_feet_and_cangue", "xue_ba_overhead_strike"]
+    },
+    {
+      "id": "wm100_ch009",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(100回本)/第009回",
+      "supports": ["lu_zhishen_intercept", "escorts_spared", "lu_lifts_lin_after_cutting_rope", "escorts_support_lin_out_of_forest"]
+    },
+    {
+      "id": "wm100_ch029",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(100回本)/第029回",
+      "supports": ["jiang_menshen_height_and_skill", "white_cloth_shirt", "fly_whisk_pre_fight", "purple_flesh_green_veins_yellow_beard"]
+    },
+    {
+      "id": "wm120_ch029",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第029回",
+      "supports": ["jiang_menshen_unarmed_fight", "kicked_abdomen_and_forehead", "falls_backward", "alive_begging_on_ground"]
+    },
+    {
+      "id": "wm120_ch030",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第030回",
+      "supports": ["jiang_menshen_survives", "three_terms", "nonfatal_facial_injury"]
+    },
+    {
+      "id": "wm120_ch038",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第038回",
+      "supports": ["li_kui_black_large_man_red_eyes", "two_plate_axes", "checkered_cloth_after_removing_shirt"]
+    },
+    {
+      "id": "wm120_ch040",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回",
+      "supports": ["li_kui_bare_at_execution_ground", "two_plate_axes", "leaps_from_tea_house", "attacks_executioners_first"]
+    },
+    {
+      "id": "wm120_ch041",
+      "url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第041回",
+      "supports": ["li_kui_bare_with_plate_axes_at_bailong", "song_jiang_and_dai_zong_embark"]
+    }
+  ],
+  "global_generation_contract": {
+    "generator": "signed_in_web_chatgpt_only",
+    "local_allowed": ["crop", "uniform_scale", "transparent_padding", "import"],
+    "local_forbidden": ["mirror", "paint_over", "redraw_direction", "invent_missing_costume_or_weapon"],
+    "image": ["true_rgba", "transparent_background", "no_ground", "no_baked_shadow", "no_text", "no_watermark"],
+    "directions": ["se", "sw", "ne", "nw"],
+    "identity_acceptance_precedes_geometry_acceptance": true,
+    "old_reference_may_override_text": false
+  },
+  "contracts": [
+    {
+      "variant": "jiang_menshen_fists",
+      "explicit": [
+        "jiang_zhong_approx_nine_chi_tall",
+        "white_cloth_shirt_in_kuaihuolin_scene",
+        "purple_brown_flesh_with_visible_green_veins",
+        "yellow_beard_and_round glaring_eyes",
+        "unarmed_after_dropping_fly_whisk",
+        "falls_backward_then_begs_alive_on_ground",
+        "survives_and_accepts_three_terms"
+      ],
+      "conservative": [
+        "plain_dark_tied_hair",
+        "dark_wide_trousers_and_plain_cloth_shoes",
+        "human_proportions_not_bodybuilder",
+        "minor_forehead_blood_optional"
+      ],
+      "forbidden": [
+        "rust_brown_sleeveless_outer_jacket",
+        "black_beard_replacing_yellow_beard",
+        "boxing_gloves_or_armor",
+        "fly_whisk_as_combat_weapon",
+        "modern_boxing_guard_as_primary_identity_pose",
+        "kneeling_surrender_replacing_backward_fall",
+        "death_pose_or_blood_pool"
+      ],
+      "gameplay_compression": [
+        "four_direction_idle_walk_attack_hurt_down",
+        "heavy_punch_and_rush_boss_tells"
+      ],
+      "outcome": "subdued_alive"
+    },
+    {
+      "variant": "dong_chao_escort",
+      "explicit": ["escort_officer", "water_fire_staff", "survives_original_route", "supports_lin_chong_out_of_forest"],
+      "conservative": ["broad_body_brown_plain_uniform_for_game_identity", "plain_straight_continuous_wood_like_staff"],
+      "forbidden": ["sword", "spear", "axe", "mace", "separate_knobbed_or_spiked_head", "heavy_general_armor", "death_on_original_route"],
+      "gameplay_compression": ["attack_hurt_down_are_free_route_only", "attack_is_controlled_staff_strike_not_primary_text_event"],
+      "outcome": "alive_on_original_route_subdued_only_on_free_route"
+    },
+    {
+      "variant": "xue_ba_escort",
+      "explicit": ["escort_officer", "water_fire_staff", "two_hand_overhead_strike_at_lin_chong", "survives_original_route", "supports_lin_chong_out_of_forest"],
+      "conservative": ["thin_body_gray_plain_uniform_for_game_identity", "plain_straight_continuous_wood_like_staff"],
+      "forbidden": ["sword", "spear", "axe", "mace", "separate_knobbed_or_spiked_head", "heavy_general_armor", "death_on_original_route"],
+      "gameplay_compression": ["hurt_down_are_free_route_only"],
+      "outcome": "alive_on_original_route_subdued_only_on_free_route"
+    },
+    {
+      "variant": "lin_chong_prisoner",
+      "explicit": [
+        "small_illegible_facial_tattoo_mark",
+        "twenty_back_lashes",
+        "seven_and_half_jin_round_head_iron_leaf_protective_cangue_with_seal",
+        "scalded_blistered_feet",
+        "new_straw_shoes_with_hemp_ears_and_cords"
+      ],
+      "conservative": ["worn_gray_blue_robe", "plain_black_headcloth", "narrow_moustache_for_game_continuity"],
+      "forbidden": ["injured_arm", "ordinary_cloth_shoes_replacing_straw_shoes", "weapon", "combat_attack_pose"],
+      "gameplay_compression": ["readable_limp_and_weight_shift_at_small_scale"]
+    },
+    {
+      "variant": "lin_chong_bound",
+      "explicit": ["hands_feet_and_cangue_all_tied", "bound_to_tree", "cangue_remains_visible", "scalded_feet_and_back_wounds"],
+      "conservative": ["upright_living_pine_trunk_or_alignment_with_level_pine"],
+      "forbidden": ["missing_cangue", "hands_only_tied", "cut_stump", "injured_arm", "attack_walk_hurt_down_animation_set"],
+      "gameplay_compression": ["single_directional_story_idle_is_sufficient"]
+    },
+    {
+      "variant": "lin_chong_escort",
+      "explicit": ["lu_zhishen_briefly_lifts_lin_after_cutting_rope", "dong_chao_and_xue_ba_support_lin_out_of_forest"],
+      "conservative": ["worn_gray_blue_robe", "limping_pose"],
+      "forbidden": ["injured_arm", "claiming_long_lu_zhishen_assist_as_primary_text", "combat_attack_pose"],
+      "gameplay_compression": ["lu_and_lin_pair_allowed_only_as_brief_lift_or_explicitly_labeled_adaptation"]
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "explicit": ["black_large_coarse_man", "red_eyes_in_poem", "bare_upper_body_and_bare_appearance", "two_separate_plate_axes", "leaps_to_attack_executioners", "remains_bare_with_axes_at_bailong"],
+      "conservative": ["minimal_checkered_waist_cloth_and_short_lower_covering_for_rating", "plain_iron_plate_axe_heads_with_wood_handles"],
+      "forbidden": ["black_brown_upper_tunic", "fur_vest", "robe", "armor", "single_axe", "double_headed_axe", "fantasy_runes", "overwriting_generic_li_kui_in_other_modes"],
+      "gameplay_compression": ["modesty_covering", "hurt_and_down_are_gameplay_only"],
+      "route_scope": ["level2_jiangzhou_execution_ground", "level2_bailong_retreat"]
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "JM-01",
+      "severity": "P0",
+      "location": "../implementation_20260902/prompt_drafts_v4/jiang_menshen_fists_*_1x4.txt:3",
+      "issue": "brown_sleeveless_black_beard_fighter_conflicts_with_white_shirt_yellow_beard",
+      "action": "block_entire_v4_jiang_set_and_rewrite_character_block"
+    },
+    {
+      "id": "JM-02",
+      "severity": "P0",
+      "location": "../implementation_20260902/prompt_drafts_v4/jiang_menshen_fists_attack_1x4.txt:5",
+      "issue": "modern_boxing_guard_is_unsourced",
+      "action": "replace_with_plain_rushing_or_feinting_unarmed_action"
+    },
+    {
+      "id": "JM-03",
+      "severity": "P0",
+      "location": "../implementation_20260902/prompt_drafts_v4/jiang_menshen_fists_down_1x4.txt:5",
+      "issue": "kneeling_surrender_conflicts_with_backward_fall_and_ground_begging",
+      "action": "replace_down_pose"
+    },
+    {
+      "id": "LC-01",
+      "severity": "P0",
+      "location": "../implementation_20260902/prompt_drafts_v3/yezhulin_main_idle_4dir.txt:16; ../implementation_20260902/prompt_drafts_v3/yezhulin_story_poses_4dir.txt:14",
+      "issue": "invented_injured_arm",
+      "action": "remove_arm_injury_and_show_feet_and_back_wounds"
+    },
+    {
+      "id": "LC-02",
+      "severity": "P0",
+      "location": "../implementation_20260902/prompt_drafts_v3/yezhulin_main_idle_4dir.txt:14-15; assets/campaign/source/lin_chong_story.png",
+      "issue": "bound_state_missing_cangue_and_tree_reads_as_stump",
+      "action": "rewrite_contract_and_reject_old_bound_row"
+    },
+    {
+      "id": "LC-03",
+      "severity": "P1",
+      "location": "assets/campaign/anim/lin_chong_bound_{attack,walk,hurt,down}_*.png",
+      "issue": "meaningless_story_actions_present_in_production_directory",
+      "action": "audit_and_isolate_runtime_routing_in_later_code_batch"
+    },
+    {
+      "id": "LC-04",
+      "severity": "P1",
+      "location": "scripts/levels/level6_yezhulin.gd:39,181-192",
+      "issue": "long_lu_zhishen_assist_is_presented_as_original_reward",
+      "action": "route_continuous_support_to_escorts_or_label_as_gameplay_compression"
+    },
+    {
+      "id": "DX-01",
+      "severity": "P1",
+      "location": "../implementation_20260902/prompt_drafts_v3/episode_fighters_*_4dir.txt:14-15",
+      "issue": "body_color_uniform_and_wood_material_are_conservative_not_explicit",
+      "action": "preserve_conservative_label_and_harden_water_fire_staff_identity"
+    },
+    {
+      "id": "DX-02",
+      "severity": "P1",
+      "location": "assets/campaign/source/dong_chao_escort.png; assets/campaign/source/xue_ba_escort.png",
+      "issue": "rounded_end_can_read_as_mace_at_game_scale",
+      "action": "require_continuous_plain_staff_without_separate_head"
+    },
+    {
+      "id": "DX-03",
+      "severity": "P1",
+      "location": "../implementation_20260902/prompt_drafts_v3/episode_fighters_attack_4dir.txt:14; ../implementation_20260902/prompt_drafts_v3/episode_fighters_down_4dir.txt:14-15",
+      "issue": "dong_attack_and_both_down_states_are_free_route_only",
+      "action": "tag_gameplay_only_and_never_call_original_route"
+    },
+    {
+      "id": "LK-01",
+      "severity": "P0",
+      "location": "assets/anim/li_kui_*; scripts/levels/level2_jiangzhou.gd",
+      "issue": "generic_dressed_li_kui_is_used_in_jiangzhou_without_variant_override",
+      "action": "create_and_route_campaign_only_li_kui_jiangzhou"
+    },
+    {
+      "id": "LK-02",
+      "severity": "P1",
+      "location": "../implementation_20260902/prompt_drafts_v2/sample_heroes_idle_4x4.txt:9",
+      "issue": "generic_black_brown_clothing_and_large_axes_must_not_seed_jiangzhou_variant",
+      "action": "write_new_prompt_from_primary_text_contract"
+    },
+    {
+      "id": "JM-04",
+      "severity": "P1",
+      "location": "scripts/levels/level7_kuaihuolin.gd:297-336",
+      "issue": "heavy_punch_and_rush_are_gameplay_mechanics_without_move_level_primary_text_support",
+      "action": "retain_only_as_labeled_gameplay_compression"
+    }
+  ],
+  "reviewed_hashes": {
+    "assets/campaign/source/jiang_menshen_fists.png": "89778CAAEE0D3BC6EC903545DEEE27BBDCBE90CEDE7BD695A7E270848DF53E0B",
+    "assets/campaign/source/lin_chong_story.png": "A4AACF7FBA894F437357C2C26714679BFCAC87AFBD326E3B036586096ECEA80B",
+    "assets/campaign/source/dong_chao_escort.png": "718735ACDDD2D8FF28C566064F9281799FA2B8BFE98BB2D726D849345DAC02CE",
+    "assets/campaign/source/xue_ba_escort.png": "3842F8129D134CC29B571C9F6BF72B626600CC5947828293761D20A6E11DFE98",
+    "assets/anim/li_kui_idle_se.png": "AF2FF8E0A1F18340453D2D5F2CF7D62DDAED327FC284ACE2E46D711B91AEEB15"
+  },
+  "generation_gate": {
+    "blocking_conflicts": ["JM-01", "JM-02", "JM-03", "LC-01", "LC-02", "LK-01"],
+    "required_before_generation": [
+      "rewrite_prompts_from_contract",
+      "independent_text_review_of_prompts",
+      "record_web_session_url_and_full_prompt",
+      "record_source_sha256_and_accept_or_reject_reason"
+    ]
+  },
+  "mutation_boundary": {
+    "production_code_changed": false,
+    "png_changed": false,
+    "steam_directory_changed": false,
+    "documents_added": [
+      "docs/ORIGINAL_ART_CONTRACT_NEXT_BATCH_20260902.md",
+      "docs/ORIGINAL_ART_CONTRACT_NEXT_BATCH_20260902.json"
+    ]
+  }
+}

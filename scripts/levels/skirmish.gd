@@ -1,15 +1,27 @@
 extends LevelBase
 ## 自由「遭遇战」模式（经营养成 + 英雄成长）。
-## Phase 0 地基：开放地图 + 聚义厅基地 + 起始喽啰/资源 + 金矿/树林资源点 + 资源条/人口。
+## 梁山泊据守：原著地貌压缩为水泊、港汊、芦苇滩、林峦三关与忠义堂前平地。
 ## 采集、建造、生产、英雄祭坛/升级、Tab 子组、敌军波次将在后续阶段逐步接入。
 
 const T := GameMap.T
-const HALL := Vector2i(16, 46)
-const GOLD := Vector2i(1, 32)   # 聚义厅左上方·拉到地图左缘——农民单程步行约 9.5 秒（受左缘所限，已是「左上」方向可达最远）
-# 聚义厅在地图左侧(16,46)，官军一律自「右侧」三条分路压来——绝不从左/后方出现：
-const GATE_A := Vector2i(62, 40)   # 正东（右缘·与基地同高）
-const GATE_B := Vector2i(62, 26)   # 东北（右上·避开右上角水泊）
-const GATE_C := Vector2i(50, 62)   # 东南（右下）
+const Layout := preload("res://scripts/liangshan_layout.gd")
+const Landscape := preload("res://scripts/liangshan_environment.gd")
+const HALL := Vector2i(18, 30)
+const HILLTOP_FLAG := Vector2i(18, 23)
+const GOLD := Vector2i(7, 35)
+const TREE_GROVE_WEST := [
+	Vector2i(8, 23), Vector2i(10, 23), Vector2i(12, 24), Vector2i(9, 25),
+	Vector2i(11, 26), Vector2i(8, 27), Vector2i(13, 27), Vector2i(11, 29),
+]
+const TREE_GROVE_REAR := [
+	Vector2i(10, 32), Vector2i(12, 32), Vector2i(13, 33), Vector2i(9, 34),
+	Vector2i(11, 35), Vector2i(13, 36), Vector2i(10, 37), Vector2i(12, 38),
+]
+# 原著到第八十回明确写成：水泊四面芦苇烟水，旱路只有山前新筑大路。
+# 据守战因此保留一路陆军进山，并把另两路解释为鸭嘴滩、金沙滩登陆后的岸军。
+const GATE_A := Vector2i(18, 1)    # 山前大路：经林中山道进入寨侧
+const GATE_B := Vector2i(32, 32)   # 鸭嘴滩：东港登陆，经东山关入寨
+const GATE_C := Vector2i(18, 50)   # 金沙滩：主码头登陆，经山前关入寨
 const GATES := [GATE_A, GATE_B, GATE_C]
 
 # 官军围剿波次（30 波·步步紧逼）：t=距上一波秒数，groups=[key, 数量, 门(0=东/1=北/2=西)]
@@ -84,24 +96,26 @@ var _wave_t := 0.0
 var _wave_spawned := false
 var _started := false
 var _final_cleanup_last_alive := -1
+var _final_cleanup_last_hp := -1.0
+var _final_cleanup_positions := {}
 var _final_cleanup_quiet := 0.0
 var _final_cleanup_tick := 0.0
 var _final_cleanup_active := false
 
-const FINAL_CLEANUP_LOW_COUNT := 12
 const FINAL_CLEANUP_LOW_QUIET := 8.0
-const FINAL_CLEANUP_FORCE_QUIET := 24.0
 const FINAL_CLEANUP_STEP := 2.0
 
 
 func id() -> String: return "skirmish"
-func title() -> String: return "遭遇战"
-func subtitle() -> String: return "自由经营 · 据守聚义厅"
-func map_w() -> int: return 64
-func map_h() -> int: return 64
+func title() -> String: return "驻守战"
+func subtitle() -> String: return "水泊三关 · 据守忠义堂"
+func map_w() -> int: return 60
+func map_h() -> int: return 60
 func map_theme() -> String: return "marsh"
-func map_base() -> int: return T.GRASS
-func camera_start_cell() -> Vector2i: return Vector2i(22, 44)
+func map_base() -> int: return T.WATER
+# 等距画面的屏幕水平由 x-y 决定；(23,35)与忠义堂(18,30)同为-12，
+# 因而堂、主路正好落在可玩区水平中线，而不是按网格x误判居中。
+func camera_start_cell() -> Vector2i: return Vector2i(23, 35)
 
 func economy_enabled() -> bool: return true
 func hero_start_rank() -> int: return 0   # 驻守战：英雄仍走原来的经验升级学技能
@@ -111,39 +125,57 @@ func base_pop_cap() -> int: return 20
 func hero_cap() -> int: return int(Campaign.defense_hero_cap)   # 驻守战英雄上限（菜单选：默认 4 / 60关 6）
 func fog_enabled() -> bool: return true
 func threat_gates() -> Array: return GATES   # 官军固定三门来路 → 托管分路防守/陷阱布走廊
+func auto_start_after_intro() -> bool: return true
 
 func deploy_hint() -> String:
-	return "自由经营：用喽啰采金/伐木、建造营寨、在聚义厅训练英雄。妥当后点「开战」迎击官军。"
+	return "自由经营：剧情结束即进入 120 秒备战，可立即采金伐木、整军建寨；两座寨门可承伤和修理，官军破门后才会涌入。"
 
 
 func intro_lines() -> Array:
 	return [
-		{"who": "旁白", "key": "narrator", "text": "梁山新立，百废待兴。聚义厅前金矿、林木皆备——遣喽啰采办钱粮，招兵买马，再练就几员上将，方能与官军长久周旋。"},
-		{"who": "军令", "key": "narrator", "text": "【据守·三十波】聚义厅居西，官军将自右侧东、东北、东南三路轮番杀来，一波紧似一波，更有栾廷玉、呼延灼、蒋门神、史文恭等地方名将压阵。建寨练兵、升将守关——守满三十波，梁山方可立稳！"},
+		{"who": "旁白", "key": "narrator", "text": "梁山泊外芦苇烟水、港汊纵横；由金沙滩上岸，穿林过三关，才到忠义堂前的一片平地。遣喽啰采办钱粮，招兵买马，凭水泊与关隘长久周旋。"},
+		{"who": "军令", "key": "narrator", "text": "【据守·三十波】官军一路由山前新筑大路进兵，两路乘船抢登鸭嘴滩、金沙滩。一波紧似一波，更有栾廷玉、呼延灼、史文恭等敌将压阵。守山路、扼滩头、护住忠义堂！"},
 	]
 
 
 func paint_map(map: GameMap) -> void:
-	# 右上角一片水泊 + 沼泽芦苇
-	map.fill_ellipse(Vector2(52, 12), 15, 11, T.WATER)
-	map.fill_ellipse(Vector2(45, 20), 4, 3, T.MARSH, [T.GRASS])
-	map.scatter(T.MARSH, T.REEDS, 5)
-	# 树林（伐木处）
-	map.fill_ellipse(Vector2(24, 52), 4, 3, T.FOREST, [T.GRASS])
-	map.fill_ellipse(Vector2(10, 38), 3, 3, T.FOREST, [T.GRASS])
-	map.fill_ellipse(Vector2(34, 40), 3, 2, T.FOREST, [T.GRASS])
-	# 聚义厅地基
+	map.set_meta("liangshan_rts_court", true)
+	# 原著没有直写堂门罗盘方向；按“山前南路三关→忠义堂前”的中轴关系，
+	# 并采用传统正殿坐北朝南，驻守战把 +Y 约定为南，堂门朝南面向山前关。
+	map.set_meta("zhongyi_hall_facing_cardinal", "south")
+	map.set_meta("zhongyi_hall_front_vector", Vector2i(0, 1))
+	# 先给寨心留出可经营的平地，再由共同梁山地貌写入外圈水泊、芦汊、林峦和岩脊。
+	# COMBAT_GROUND 会保留这块非规则腹地，不会把经济模式压成只能沿一条窄路建造。
+	map.fill_ellipse(Vector2(20, 30), 19, 16, T.MARSH)
+	map.fill_ellipse(Vector2(20, 30), 14, 11, T.GRASS)
+	map.scatter(T.MARSH, T.REEDS, 6)
+	map.fill_ellipse(Vector2(14, 24), 3, 2, T.FOREST, [T.GRASS])
+	map.fill_ellipse(Vector2(13, 37), 3, 2, T.FOREST, [T.GRASS])
+	map.fill_ellipse(Vector2(25, 22), 2, 2, T.FOREST, [T.GRASS])
+	Landscape.paint(map)
+	Layout.paint(map)
+	# 第八十回所说的山前新筑大路；其余两路只从滩头登陆，不再跨水铺直线土路。
+	map.paint_path([Vector2(18, 0), Vector2(18, 6), Vector2(21, 11), Vector2(19, 17),
+		Vector2(23, 22), Vector2(29, 29), Vector2(GATE_B.x, GATE_B.y)], 1, T.ROAD)
+	# 忠义堂地基；厅、寨门、木墙、码头由共同视觉系统按同一坐标绘制。
 	for y in range(HALL.y - 1, HALL.y + 2):
 		for x in range(HALL.x - 1, HALL.x + 2):
 			map.set_cell_t(x, y, T.HALL)
 
 
 func decorate(map: GameMap) -> void:
+	# 驻守战复用已经校准过的梁山泊第五关环境素材，但不改变关卡ID或战役进度。
+	map.set_meta("liangshan_art_level_id", "level5")
 	map.decor = [
-		["banner", Vector2i(18, 48), 52.0], ["banner", Vector2i(14, 44), 52.0],
-		["rocks", Vector2i(29, 45), 48.0], ["rocks", Vector2i(25, 48), 48.0],
-		["boat", Vector2i(46, 16), 56.0],
+		["banner", Vector2i(18, 33), 220.0, "zhongyi_hall_standard_east"],
+		["banner", Vector2i(14, 33), 220.0, "zhongyi_hall_standard_west"],
+		# 杏黄“替天行道”旗在山顶、忠义堂后方且位于寨墙以内；不再孤悬寨外。
+		["banner", HILLTOP_FLAG, 220.0, "liangshan_hilltop_standard"],
+		["boat", Vector2i(13, 49), 68.0], ["boat", Vector2i(20, 50), 68.0],
+		["boat", Vector2i(37, 31), 58.0], ["boat", Vector2i(34, 53), 52.0],
+		["rocks", Vector2i(7, 23), 128.0], ["rocks", Vector2i(26, 12), 128.0],
 	]
+	map.enable_liangshan_sample()
 
 
 ## 子类(自定义据守)可覆写这些钩子改波次/投石车/数值；据守本体返回原值，行为不变。
@@ -256,32 +288,48 @@ func _apply_overrides(_b) -> void: pass
 func deploy(b) -> void:
 	_apply_overrides(b)   # 自定义据守：在任何 spawn 前把数值覆盖合并进 b._defs/_abilities
 	hall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)
+	hall.display_name = "忠义堂"
+	hall.set_meta("campaign_environment_route", "zhongyi_hall")
+	hall.set_meta("campaign_environment_state", "default")
+	hall.set_meta("campaign_environment_text_surface_id", "level5_hall_plaque")
+	hall.set_meta("campaign_environment_runtime_text", "忠义堂")
+	hall.set_meta("campaign_environment_static_visual", true)
 	var gm: Unit = b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)
 	# 60 关·史诗：六将全程升级/研究/造兵，默认 6000 储量撑不到后期 → 金矿储量放宽到 18000
 	if gm != null and (int(Campaign.defense_waves) >= 60 or Campaign.defense_random):
 		gm.res_left = 18000.0
-	# 林木资源点（伐木处）
-	for c in [Vector2i(23, 51), Vector2i(25, 52), Vector2i(24, 53), Vector2i(26, 51),
-			Vector2i(10, 37), Vector2i(11, 39), Vector2i(9, 38), Vector2i(33, 40), Vector2i(35, 40)]:
+	# 两片木材林团收在寨内西侧经济区，不再压住北路转东山关的敌军来路。
+	# 树干各占一个导航格，树被砍完后才释放通道。
+	for c in TREE_GROVE_WEST + TREE_GROVE_REAR:
 		b.spawn_at("tree", Unit.FACTION_LIANG, c)
-	# 基地正上方近处小树林（6 棵）——缩短伐木往返，配合「优先采离基地最近的木头」
-	for c in [Vector2i(13, 42), Vector2i(15, 42), Vector2i(17, 42), Vector2i(14, 43), Vector2i(16, 43), Vector2i(18, 43)]:
-		b.spawn_at("tree", Unit.FACTION_LIANG, c)
-	for c in [Vector2i(19, 44), Vector2i(20, 45), Vector2i(19, 46), Vector2i(20, 47), Vector2i(21, 45)]:
+	# 山前关、东山关都是有生命值的实体寨门。五格门洞被完整封住，官军必须先破门；
+	# 其视觉仍由 LiangshanEntrance 统一绘制，避免叠一座通用建筑。
+	for spec in [["main", Layout.gate_for(b.map), "山前关寨门"],
+			["east", Layout.east_gate_for(b.map), "东山关寨门"]]:
+		var gate: Unit = b.spawn_at("stockade_gate", Unit.FACTION_LIANG, spec[1])
+		if gate != null:
+			gate.display_name = String(spec[2])
+			gate.set_meta("liangshan_gate_id", String(spec[0]))
+			gate.set_meta("scene_visual_only", true)
+	for c in [Vector2i(17, 35), Vector2i(18, 36), Vector2i(19, 35), Vector2i(17, 37), Vector2i(19, 37)]:
 		b.spawn_at("lou_luo", Unit.FACTION_LIANG, c)
-	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(18, 49))
-	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(20, 49))
+	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(17, 39))
+	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(19, 39))
 
 
 func on_start(b) -> void:
-	# 起始喽啰自动采办（3 采金、2 伐木）——经典RTS式开局
+	if _started:
+		return
+	# 单金矿只容一人实地开采：开局 1 金 4 木，且只下这一次命令。
 	var workers: Array = []
 	for u in b.units:
 		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG:
 			workers.append(u)
 	for i in range(workers.size()):
-		var kind := "gold" if i < 3 else "wood"
+		var kind := "gold" if i == 0 else "wood"
 		var node = b.nearest_resource(workers[i].position, kind)
+		if node == null:
+			node = b.nearest_resource(workers[i].position, "")
 		if node != null:
 			workers[i].order_gather(node)
 	b.msg("喽啰开始采办钱粮——采金伐木，扩充寨势。", 4.0)
@@ -291,6 +339,8 @@ func on_start(b) -> void:
 	_wave_spawned = false
 	_started = true
 	_final_cleanup_last_alive = -1
+	_final_cleanup_last_hp = -1.0
+	_final_cleanup_positions.clear()
 	_final_cleanup_quiet = 0.0
 	_final_cleanup_tick = 0.0
 	_final_cleanup_active = false
@@ -298,7 +348,7 @@ func on_start(b) -> void:
 
 func process(b, delta: float) -> void:
 	if hall == null or not is_instance_valid(hall) or hall.hp <= 0.0:
-		b.lose("聚义厅被攻破，杏黄旗倒下了……")
+		b.lose("忠义堂被攻破，杏黄旗倒下了……")
 		return
 	if not _started:
 		return
@@ -317,26 +367,35 @@ func process(b, delta: float) -> void:
 			# 末波也已出，且场上敌人尽灭 → 守住了
 			b.win("官军围剿一波波尽数瓦解——梁山大寨，固若金汤！")
 			return
-		if not b._full_auto():
+		# 手动/托管共用的末波监测：每 2 秒看一次敌军数量、总生命和位置。
+		# 任一项真有推进就重置；连续 8 秒全无进展才显形/修路，手动模式也不会卡结算。
+		_final_cleanup_tick -= delta
+		if _final_cleanup_tick > 0.0:
 			return
-		# 全托管末波扫尾：正常交战仍在减员时不介入；只处理少量残敌长期不减，
-		# 或任何数量异常停滞很久的情况。这样不会把刚刷出的末波直接变成“开全图”。
-		if alive != _final_cleanup_last_alive:
-			_final_cleanup_last_alive = alive
-			_final_cleanup_quiet = 0.0
-		else:
-			_final_cleanup_quiet += delta
-		if not _final_cleanup_active:
-			_final_cleanup_active = (alive <= FINAL_CLEANUP_LOW_COUNT and _final_cleanup_quiet >= FINAL_CLEANUP_LOW_QUIET) \
-				or _final_cleanup_quiet >= FINAL_CLEANUP_FORCE_QUIET
-			if _final_cleanup_active:
-				b.msg("末波久未见动静，哨骑正搜寻残敌……", 4.0)
-				_final_cleanup_tick = 0.0
+		_final_cleanup_tick = FINAL_CLEANUP_STEP
+		var total_hp := 0.0
+		var positions := {}
+		var moved := false
+		for e in b.units:
+			if not (is_instance_valid(e) and e.faction == Unit.FACTION_GUAN and e.hp > 0.0 \
+					and not e.is_building and e.story_outcome == ""):
+				continue
+			total_hp += e.hp
+			var eid: int = e.get_instance_id()
+			positions[eid] = e.position
+			if _final_cleanup_positions.has(eid) and e.position.distance_to(_final_cleanup_positions[eid]) > 32.0:
+				moved = true
+		var progressed := _final_cleanup_last_alive < 0 or alive != _final_cleanup_last_alive \
+			or (_final_cleanup_last_hp >= 0.0 and total_hp < _final_cleanup_last_hp - 0.5) or moved
+		_final_cleanup_last_alive = alive
+		_final_cleanup_last_hp = total_hp
+		_final_cleanup_positions = positions
+		_final_cleanup_quiet = 0.0 if progressed else _final_cleanup_quiet + FINAL_CLEANUP_STEP
+		if not _final_cleanup_active and _final_cleanup_quiet >= FINAL_CLEANUP_LOW_QUIET:
+			_final_cleanup_active = true
+			b.msg("末波连续 8 秒无进展，哨骑已标出残敌并修复其进攻路线……", 4.0)
 		if _final_cleanup_active:
-			_final_cleanup_tick -= delta
-			if _final_cleanup_tick <= 0.0:
-				_final_cleanup_tick = FINAL_CLEANUP_STEP
-				b.final_wave_cleanup()
+			b.final_wave_cleanup()
 
 
 func _spawn_wave(b, i: int) -> void:
@@ -390,10 +449,26 @@ func _is_hero_key(key: String) -> bool:
 
 
 func top_status(b) -> String:
-	var nxt := ""
 	var total := _waves().size()
+	var phase := "整军备战"
 	if _started and _wave < total:
-		nxt = " ｜ 下一波 %d 秒" % int(ceil(maxf(_wave_t, 0.0)))
-	return "遭遇战 已出 %d/%d 波%s ｜ 金 %d 木 %d 人口 %d/%d ｜ 聚义厅 %d%%" % [
-		_wave, total, nxt, b.gold, b.wood, b.used_pop(), b.pop_cap,
-		int(hall.hp / hall.max_hp * 100.0) if (hall != null and is_instance_valid(hall)) else 0]
+		phase = "%d秒·%s" % [int(ceil(maxf(_wave_t, 0.0))), _next_attack_lanes()]
+	elif _started:
+		phase = "清剿残敌"
+	return "忠义堂防线 ｜ %d/%d波 ｜ %s ｜ 堂%d%% ｜ 敌%d" % [
+		_wave, total, phase,
+		int(hall.hp / hall.max_hp * 100.0) if (hall != null and is_instance_valid(hall)) else 0,
+		b.enemies_alive()]
+
+
+func _next_attack_lanes() -> String:
+	var ws := _waves()
+	if _wave < 0 or _wave >= ws.size():
+		return "三路"
+	var lane_names := ["山前大路", "鸭嘴滩", "金沙滩"]
+	var lanes: Array[String] = []
+	for g in ws[_wave].get("groups", []):
+		var lane: String = lane_names[clampi(int(g[2]), 0, lane_names.size() - 1)]
+		if lane not in lanes:
+			lanes.append(lane)
+	return "/".join(lanes)
