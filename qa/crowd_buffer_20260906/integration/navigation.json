@@ -1,0 +1,396 @@
+{
+	"comparisons": 81000,
+	"cpu_timing": {
+		"median_optimized_us": 167146,
+		"median_reference_us": 275217,
+		"optimized_over_reference": 0.607324402198992,
+		"scope": "100000 short segment queries per window in frozen authored level3 collision grid, not game FPS",
+		"windows": [
+			{
+				"implementation": "reference",
+				"microseconds": 275217,
+				"open_results": 79490,
+				"queries": 100000
+			},
+			{
+				"implementation": "optimized",
+				"microseconds": 168032,
+				"open_results": 79490,
+				"queries": 100000
+			},
+			{
+				"implementation": "optimized",
+				"microseconds": 153104,
+				"open_results": 79490,
+				"queries": 100000
+			},
+			{
+				"implementation": "reference",
+				"microseconds": 282351,
+				"open_results": 79490,
+				"queries": 100000
+			},
+			{
+				"implementation": "reference",
+				"microseconds": 268752,
+				"open_results": 79490,
+				"queries": 100000
+			},
+			{
+				"implementation": "optimized",
+				"microseconds": 167146,
+				"open_results": 79490,
+				"queries": 100000
+			}
+		]
+	},
+	"crowd": {
+		"cases": 18,
+		"fixture": "Synthetic 200 enemies plus six heroes; three spacings and phases; stagger threshold explicitly injected; exact Vector2 equality.",
+		"units": 206
+	},
+	"endpoint_precision": {
+		"comparisons": 182817,
+		"layouts": 3,
+		"scope": "Float32 predecessor/exact/successor at every tile boundary; three profiles and three short-segment offsets."
+	},
+	"failures": [],
+	"mode_checks": [
+		{
+			"name": "frozen old function hash matches",
+			"passed": true
+		},
+		{
+			"name": "reference compiles against unchanged map helpers",
+			"passed": true
+		},
+		{
+			"name": "same open cell",
+			"passed": true
+		},
+		{
+			"name": "same blocked cell",
+			"passed": true
+		},
+		{
+			"name": "diagonal corner blocked on both sides",
+			"passed": true
+		},
+		{
+			"name": "exact tile edge reaches wall",
+			"passed": true
+		},
+		{
+			"name": "negative endpoint",
+			"passed": true
+		},
+		{
+			"name": "right map boundary",
+			"passed": true
+		},
+		{
+			"name": "bottom map boundary",
+			"passed": true
+		},
+		{
+			"name": "inclusive top left boundary",
+			"passed": true
+		},
+		{
+			"name": "infinite endpoint",
+			"passed": true
+		},
+		{
+			"name": "NaN endpoint",
+			"passed": true
+		},
+		{
+			"name": "water passage",
+			"passed": true
+		},
+		{
+			"name": "land cannot traverse water",
+			"passed": true
+		},
+		{
+			"name": "ship cannot traverse land",
+			"passed": true
+		},
+		{
+			"name": "open dynamic passage before blocking",
+			"passed": true
+		},
+		{
+			"name": "new dynamic blocker is seen immediately",
+			"passed": true
+		},
+		{
+			"name": "removed dynamic blocker opens passage immediately",
+			"passed": true
+		},
+		{
+			"name": "synthetic boundaries and obstacles matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "float32 neighbors of every grid line agree on 1x1 map",
+			"passed": true
+		},
+		{
+			"name": "float32 neighbors of every grid line agree on 7x5 map",
+			"passed": true
+		},
+		{
+			"name": "float32 neighbors of every grid line agree on 65x33 map",
+			"passed": true
+		},
+		{
+			"name": "same-cell direct navigation mutation starts open",
+			"passed": true
+		},
+		{
+			"name": "direct AStar blocking affects the very next query",
+			"passed": true
+		},
+		{
+			"name": "direct AStar unblocking affects the very next query",
+			"passed": true
+		},
+		{
+			"name": "water navigation uses its own live grid",
+			"passed": true
+		},
+		{
+			"name": "water reblocking leaves land passage open",
+			"passed": true
+		},
+		{
+			"name": "same-size map rebake updates endpoint blocking",
+			"passed": true
+		},
+		{
+			"name": "same-size map rebake restores open endpoint",
+			"passed": true
+		},
+		{
+			"name": "all grid-edge precision fixtures completed",
+			"passed": true
+		},
+		{
+			"name": "level1 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "level2 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "level3 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "paired CPU windows return equal counts",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "level4 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "level5 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "level6 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "level7 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "level8 matches frozen reference for land water and fallback profiles",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=0.65 phase=0 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=0.65 phase=0 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=0.65 phase=1 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=0.65 phase=1 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=0.65 phase=2 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=0.65 phase=2 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.0 phase=0 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.0 phase=0 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.0 phase=1 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.0 phase=1 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.0 phase=2 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.0 phase=2 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.7 phase=0 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.7 phase=0 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.7 phase=1 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.7 phase=1 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.7 phase=2 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "crowd exact positions spacing=1.7 phase=2 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "all dense crowd and stagger fixtures actually ran",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "all eight chapters and boundary grid comparisons completed",
+			"passed": true
+		},
+		{
+			"name": "player campaign save bytes unchanged",
+			"passed": true
+		}
+	],
+	"passed": true,
+	"reference": {
+		"path": "res://tools/contracts/navigation/segment_before_66d27aa.txt",
+		"sha256": "dd28da8a1749a230b76428a88ec7ee70d86d438973a18bd95d53fb74b66d6ab1"
+	},
+	"samples": [
+		{
+			"comparisons": 9000,
+			"label": "synthetic boundaries and obstacles",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level1",
+			"level_script": "res://scripts/levels/level1_huangnigang_short.gd",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level2",
+			"level_script": "res://scripts/levels/level2_jiangzhou_rts.gd",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level3",
+			"level_script": "res://scripts/levels/level3_zhujiazhuang_rts.gd",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level4",
+			"level_script": "res://scripts/levels/level4_lianhuanma_rts.gd",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level5",
+			"level_script": "res://scripts/levels/level5_gao_rts.gd",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level6",
+			"level_script": "res://scripts/levels/level6_yezhulin.gd",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level7",
+			"level_script": "res://scripts/levels/level7_kuaihuolin_short.gd",
+			"mismatches": 0
+		},
+		{
+			"comparisons": 9000,
+			"label": "level8",
+			"level_script": "res://scripts/levels/level8_daming_rts.gd",
+			"mismatches": 0
+		}
+	]
+}

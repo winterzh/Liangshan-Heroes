@@ -221,9 +221,11 @@ func _add_wall(a: Vector2,z: Vector2,height_override := 0.0) -> void:
 		var wall = CityWall.new() if _style=="level8" else Stockade.new()
 		# 庄园是护庄寨栅，不把反复拉高的木墙画成断崖台地。
 		# 城市使用砖土墙体，庄园复用木寨栅；与逻辑墙格一致。
-		wall.height_scale = 68.0 if _style=="level3" else 108.0
+		# Match the gate's flank stakes, not the height of its roof canvas.
+		wall.height_scale = 52.0 if _style=="level3" else 108.0
 		if height_override>0.0: wall.height_scale=height_override
 		if _style=="level3":
+			wall.self_modulate=Color(0.76,0.78,0.76)
 			# Explicitly reuse the unlettered timber panel in wooden compounds.
 			# Stone city walls keep their own renderer and source scope.
 			wall.campaign_texture=CampaignEnvironmentArt.object(_style,"stockade_segment")

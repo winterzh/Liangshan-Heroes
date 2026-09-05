@@ -30,3 +30,7 @@ $godotExe = (Get-Content -LiteralPath .\godot.local.txt -Raw).Trim()
 结果写 `.godot/crowd_buffer_qa/`，成功退出0。旧 `tools/crowd_separation_qa.gd` 入口仍默认使用 `before_3a218f0.txt`；新增参考/输出/追加夹具接口供缓冲验证继承，旧冻结文件不覆盖。新参考为 `tools/contracts/separation/before_4589c85.txt`。
 
 [本批QA](../qa/crowd_buffer_20260906/README.md)记录当前输入、原日志、计时与实际回归；测量尽量安排在没有其他Godot实例时。源码启动方式不变。
+
+## 寨墙修正整合
+
+缓冲提交 `7990eab` 已与另一任务 `d5dd97a` 整合，保留寨墙高度/色调与门侧协调的修正。五份共同文档/规则自动合并，16个非冲突远端文件字节保持。合并后重新执行缓冲85项、端点69项、实际寻路23项和墙体几何46项，共223项通过；原证据不覆盖，新输入与结果见 [integration](../qa/crowd_buffer_20260906/integration/README.md)。

@@ -1,6 +1,13 @@
+## 2026-09-06 门墙衔接增量
+
+- `docs/WALL_JOIN_POLISH_20260906.md`：祝家庄栅顶与色调校准、适用范围及复现。
+- `qa/wall_join_polish_20260906/`：同机位前后截图、最终墙体/接应日志与关键输入收据。
+
 # 水浒项目目录索引
 
 密集分离：`scripts/crowd_separation.gd`、`tools/crowd_buffer_qa.gd`、`docs/CROWD_BUFFER_20260906.md`；当前旧函数在 `tools/contracts/separation/before_4589c85.txt`，审核证据 `qa/crowd_buffer_20260906/`，临时输出 `.godot/crowd_buffer_qa/`。
+
+密集分离与寨墙修正的223项整合报告及独立输入收据在 `qa/crowd_buffer_20260906/integration/`。
 
 端点转换：`docs/SEGMENT_ENDPOINT_20260906.md`、`tools/segment_endpoint_qa.gd`；增量旧函数在 `tools/contracts/navigation/segment_before_66d27aa.txt`，审核证据在 `qa/segment_endpoint_20260906/`，重跑输出 `.godot/segment_endpoint_qa/`。
 
