@@ -1,5 +1,7 @@
 # 水浒项目目录索引
 
+2026-09-06 黄泥冈当前短篇新增：`scripts/levels/level1_huangnigang_short.gd`、`tools/huangnigang_short_test.gd`、`tools/huangnigang_short_ui_test.gd`、`docs/HUANGNIGANG_SHORT_20260906.md`、`qa/huangnigang_short_20260906/`。原生透明纲担在 `assets/campaign/objects/tribute_load_alpha_20260906_default.png`，原输出即生产字节；完整提示词与来源在 `tools/contracts/huangnigang_tribute_20260906/`，旧环境图及历史69项清单不覆盖。
+
 地表透明缝：`docs/TERRAIN_ALPHA_SEAMS_20260906.md`、`tools/terrain_alpha_seam_probe.gd` 与 `tools/terrain_alpha_seam_qa.gd`；旧shader原字节固定在 `tools/contracts/terrain_seams/`（`.gdignore`），审核证据在 `qa/terrain_alpha_seams_20260906/`，临时结果在 `.godot/terrain_seam_probe/`、`.godot/terrain_alpha_seam_qa/`。
 
 田地增量：生产图 `assets/campaign/environment/shared/surfaces/surface_field.png`；独立来源在 `tools/contracts/environment/field_20260906/`（原图/提示词/接入/固定SHA审核增量，含 `.gdignore`）。`tools/environment_field_render_qa.gd` 为真实两关对照；`docs/ENVIRONMENT_FIELD_20260906.md` 和 `qa/environment_field_20260906/` 保存说明、证据及失败尝试。

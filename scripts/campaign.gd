@@ -4,7 +4,7 @@ extends Node
 const VERSION := "1.8"   # 完整包版本；三端内容更新状态由 AndroidUpdater 统一显示
 
 const LEVELS := [
-	{"id": "level1", "title": "智取生辰纲", "sub": "黄泥冈·七星聚义", "script": "res://scripts/levels/level1_huangnigang.gd"},
+	{"id": "level1", "title": "智取生辰纲", "sub": "三人酒计·分队夺纲", "script": "res://scripts/levels/level1_huangnigang_short.gd"},
 	{"id": "level2", "title": "江州劫法场", "sub": "有限补给·分路劫救", "script": "res://scripts/levels/level2_jiangzhou_rts.gd"},
 	{"id": "level3", "title": "三打祝家庄", "sub": "扎营扩军·断援攻城", "script": "res://scripts/levels/level3_zhujiazhuang_rts.gd"},
 	{"id": "level4", "title": "大破连环马", "sub": "扎营练枪·断粮破骑", "script": "res://scripts/levels/level4_lianhuanma_rts.gd"},

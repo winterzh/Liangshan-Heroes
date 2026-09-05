@@ -3415,14 +3415,31 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 	var carried_key := "tribute_load" if has_meta("carrying_tribute") else ("wine_buckets" if wine_overlay else "")
 	if carried_key != "":
 		# 黄泥冈任务物件走关卡隔离路由；源图缺失时保留原有 CampaignArt。
-		var carried := CampaignEnvironmentArt.object(_active_campaign_level_id(),carried_key)
-		if carried == null: carried = Art.campaign_object_texture(carried_key)
-		if carried != null: draw_texture_rect(carried,Rect2(-s*0.45,-s*0.44,s*0.95,s*0.70),false,tint)
+		var carried := _campaign_carried_texture(carried_key)
+		if carried != null:
+			var carried_rect:=Rect2(-s*0.45,-s*0.44,s*0.95,s*0.70)
+			if carried_key=="tribute_load" and _active_campaign_level_id()=="level1" and setup_def.has("campaign_tribute_object"):
+				# The new square source places its pole at shoulder height and keeps
+				# its original proportions; the parcels hang above the carrier's feet.
+				carried_rect=Rect2(-s*0.425,-s*0.72,s*0.85,s*0.85)
+			draw_texture_rect(carried,carried_rect,false,tint)
 	if not _dying and _lunge > 0.0 and _should_draw_programmatic_swing_fx():
 		_draw_swing_fx()
 	draw_set_transform_matrix(GameMap.ISO_INV)
 	if not _dying and _cast_t > 0.0:
 		_draw_cast_glow()
+
+
+func _campaign_carried_texture(carried_key: String) -> Texture2D:
+	# The current Huangnigang chapter explicitly opts into a native-alpha sprite.
+	# Other chapters and ordinary units keep their existing scoped/default art.
+	if carried_key=="tribute_load" and _active_campaign_level_id()=="level1":
+		var replacement := String(setup_def.get("campaign_tribute_object",""))
+		if not replacement.is_empty():
+			var texture := Art.campaign_object_texture(replacement)
+			if texture!=null: return texture
+	var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(),carried_key)
+	return texture if texture!=null else Art.campaign_object_texture(carried_key)
 
 
 ## 动态旗文须同时命中单位、物件和需要时的剧情 context；普通船和冒用 object key 的单位均为空。
@@ -4062,7 +4079,7 @@ func _draw_building() -> void:
 		# 视觉尺寸与「建造预览虚影」完全一致（GameMap.building_visual_px）——预览多大、建好就多大，
 		# 不再出现「预览很大、落成缩水」的落差。
 		var s := GameMap.building_visual_px(GameMap.footprint_half_for(radius))
-		if art_variant in ["tribute_load", "wine_buckets", "jujube_load", "wine_bowls"]: s=62.0
+		if art_variant in ["tribute_load", "tribute_load_alpha_20260906", "wine_buckets", "jujube_load", "wine_bowls"]: s=62.0
 		var foot := 0.82 if art_variant!="" else 0.78
 		if scoped_tex!=null:
 			foot=float(get_meta("campaign_environment_foot",foot))
