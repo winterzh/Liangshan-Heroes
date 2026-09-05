@@ -27,6 +27,8 @@ def main() -> int:
             target = fixture / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / relative, target)
+        field_sources = Path("tools/contracts/environment/field_20260906")
+        shutil.copytree(ROOT / field_sources, fixture / field_sources)
 
         def cli(tool: str, expected: int, *args: str) -> dict:
             # Deliberately run from a directory other than the fixture root.
@@ -64,10 +66,41 @@ def main() -> int:
         assert route["basis_kind"] == "retained_production_mapping" and route["consumer_ready_total"] == 69
         checks.append("copied_checkout_without_git_or_office_directory_runs_from_other_cwd")
         report = audit(1)
-        assert report["routes_passed"] and report["production_integrity_passed"] and report["counts"]["verified_production_hashes"] == 36
-        assert not report["passed"] and not report["provenance_complete"] and report["counts"]["missing_production"] == 33
-        assert len(report["production"]) == 69 and len(report["gaps"]) == 253
-        checks.append("route_pass_and_36_hashes_do_not_hide_33_missing_outputs_or_source_gaps")
+        assert report["routes_passed"] and report["production_integrity_passed"] and report["counts"]["verified_production_hashes"] == 37
+        assert not report["passed"] and not report["provenance_complete"] and report["counts"]["missing_production"] == 32
+        assert len(report["production"]) == 69 and len(report["gaps"]) == 249
+        checks.append("route_pass_and_37_hashes_do_not_hide_32_missing_outputs_or_source_gaps")
+        from environment_art_audit import reviewed_entries
+        historical = json.loads((fixture / "tools/contracts/environment/inventory_20260906.json").read_text(encoding="utf-8"))
+        current = reviewed_entries(fixture, historical)
+        assert [e for e in current if e["output_id"] != "surface_field"] == [e for e in historical["entries"] if e["output_id"] != "surface_field"]
+        field_result = next(e for e in report["production"] if e["output_id"] == "surface_field")
+        assert field_result["production_status"] == "matches_reviewed_addition" and field_result["source_status"] == "matches_reviewed_source_records"
+        checks.append("one_reviewed_addition_preserves_all_other_68_historical_entries")
+        reviewed = fixture / field_sources / "review.json"
+        reviewed_bytes = reviewed.read_bytes()
+        try:
+            reviewed.write_bytes(reviewed_bytes + b"\n")
+            assert "field review SHA256 mismatch" in cli("environment_art_audit.py", 2)["error"]
+            checks.append("field_review_digest_is_independently_pinned")
+            reviewed.unlink()
+            assert cli("environment_art_audit.py", 2)["passed"] is False
+            checks.append("missing_field_review_cannot_implicitly_approve_production")
+        finally:
+            reviewed.write_bytes(reviewed_bytes)
+        for filename in ("original.png", "prompt.txt", "intake.json"):
+            relative = (field_sources / filename).as_posix()
+            original = (fixture / relative).read_bytes()
+            changed_file(relative, original + b"drift", 2, "source_sha256_mismatch")
+            checks.append("field_" + filename + "_byte_drift_rejected")
+            try:
+                (fixture / relative).unlink()
+                missing = audit(1)
+                assert any(g["code"] == "missing_source_file" and g["path"] == relative for g in missing["gaps"])
+                assert next(e for e in missing["production"] if e["output_id"] == "surface_field")["source_status"] == "incomplete"
+                checks.append("field_" + filename + "_missing_source_not_marked_complete")
+            finally:
+                (fixture / relative).write_bytes(original)
         mapped = fixture / "tools/environment_production_mapping.template.json"
         original_mapping = mapped.read_bytes()
         try:
@@ -116,7 +149,8 @@ def main() -> int:
             checks.append("unmapped_production_png_is_rejected")
         finally:
             extra.unlink()
-        new_target = fixture / "assets/campaign/environment/shared/surfaces/surface_field.png"
+        new_target = fixture / "assets/campaign/environment/shared/overlays/shallow_cart_ruts.png"
+        new_target.parent.mkdir(parents=True, exist_ok=True)
         try:
             new_target.write_bytes(original_png)
             assert any(e["code"] == "unreviewed_production_png" for e in audit(2)["errors"])
@@ -202,6 +236,13 @@ def main() -> int:
         assert "unsafe" in cli("environment_map_clamped_contract.py", 2, *map_args)["error"]
         checks.append("historical_absolute_source_paths_require_explicit_relocation")
         map_args += ("--evidence-map", str(relocation_path))
+        field_path = fixture / "assets/campaign/environment/shared/surfaces/surface_field.png"
+        field_bytes = field_path.read_bytes()
+        assert not cli("environment_map_clamped_contract.py", 1, *map_args)["contract_passed"]
+        checks.append("new_field_is_not_a_pass_of_the_historical_four_surface_install")
+        # The next positive fixture represents the old four-surface snapshot only.
+        # Remove this new addition in the disposable fixture, never in production.
+        field_path.unlink()
         assert cli("environment_map_clamped_contract.py", 0, *map_args)["contract_passed"]
         checks.append("explicit_relative_relocation_preserves_evidence_and_reruns_current_routes")
         install["entries"][0]["raw_sha256"] = "0" * 64
@@ -218,6 +259,7 @@ def main() -> int:
         write_report(relocation_path, relocation)
         assert "unsafe" in cli("environment_map_clamped_contract.py", 2, *map_args)["error"]
         checks.append("explicit_relocation_still_rejects_directory_escape")
+        field_path.write_bytes(field_bytes)
         result = cli("environment_web_art_intake.py", 2, "--source-manifest", str(fixture / "missing_sources.json"))
         assert result["committed"] is False and "tools" in result["error"] and "implementation_20260902" not in result["error"]
         checks.append("intake_default_uses_repo_local_legacy_location_and_refuses_missing_evidence")

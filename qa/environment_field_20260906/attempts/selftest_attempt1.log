@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "E:\ChatGPT\水浒-art-validation\tools\environment_validation_selftest.py", line 154, in main
+    new_target.write_bytes(original_png)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python39\lib\pathlib.py", line 1275, in write_bytes
+    with self.open(mode='wb') as f:
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python39\lib\pathlib.py", line 1252, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python39\lib\pathlib.py", line 1120, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: 'E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_obd6qvq4\\assets\\campaign\\environment\\shared\\overlays\\shallow_cart_ruts.png'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\ChatGPT\水浒-art-validation\tools\environment_validation_selftest.py", line 274, in <module>
+    raise SystemExit(main())
+  File "E:\ChatGPT\水浒-art-validation\tools\environment_validation_selftest.py", line 158, in main
+    new_target.unlink()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python39\lib\pathlib.py", line 1354, in unlink
+    self._accessor.unlink(self)
+FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_obd6qvq4\\assets\\campaign\\environment\\shared\\overlays\\shallow_cart_ruts.png'

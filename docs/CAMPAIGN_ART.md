@@ -1,5 +1,7 @@
 # 战役专用美术交接
 
+2026-09-06：补入祝家庄/大名府田地整图，内置imagegen生成原生1254×1254 RGB，生产逐字节复制；新原图、完整提示词和接入记录另存固定SHA的审核增量。两关44项真实渲染检查通过；原69项目录保持原样，当前37张匹配、32张缺图，整体来源审计仍不完整。详见 [本次田地说明](ENVIRONMENT_FIELD_20260906.md) 与 [QA](../qa/environment_field_20260906/README.md)。
+
 2026-09-05 全库四向新增请求：本机实际盘点164个可移动定义，通用四向idle24；当前英雄/驻守缺口、完整逐key清单及首批试制见 [全库四向状态](CHARACTER_DIRECTION4_20260905.md)。本轮内置image_gen的两张候选均为RGB棋盘背景，未达到透明要求，**没有安装新角色图**；不覆盖下文已验收资源，不把试制或剧情变体计成通用四向完成。
 
 2026-08-31。此前批次使用内置 image_gen 实际生成并接入，未调用 API/CLI 付费后备；用户后续明确要求改用网页ChatGPT，新增网页批次由主任务操作浏览器，独立切片记录如下。源图保存在 `assets/campaign/source/`，该目录有 `.gdignore`，运行时只用 `anim/`、`objects/`、`portraits/`。完整提示词、淘汰原因见 `assets/campaign/generation_manifest.json`；后续人物补帧见其引用的 `motion_generation_manifest.json` 和 `constable_generation_manifest.json`。

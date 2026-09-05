@@ -1,5 +1,9 @@
 # 水浒英雄传本地源码
 
+## 2026-09-06 田地资源接入
+
+重开“三打祝家庄”或“智取大名府”会加载新田地整图；其他关卡不加载。新增 `tools/environment_field_render_qa.gd`：完成Godot导入后，以本机配置的 `$godotExe --path . --script res://tools/environment_field_render_qa.gd` 运行真实渲染对照，结果在 `.godot/environment_field_qa/`。当前专项44项、路由790/794项、隔离反例40项通过；环境审计现为37张匹配、32张缺图、249项缺口，仍预期退出1。新原图/提示词/接入记录与历史缺口分别保留，见 [说明](ENVIRONMENT_FIELD_20260906.md) 和 [QA](../qa/environment_field_20260906/README.md)。
+
 ## 2026-09-06 江州有限补给救援入口
 
 重新运行 `Play.cmd`，选择“江州劫法场”并重开，将加载 `level2_jiangzhou_rts.gd`。西街、江边接应营共用190金120木，沿用普通刀枪弓骑的费用与训练时间；两处补给棚可夺。150秒内先打倒两名刽子手，再分别救人、清退路、下令登船；护卫在岸边断后，让出旗标附近通道。二人都上船后，点击“开船通关”，也可先完成白龙庙相会与六人撤回。
@@ -10,7 +14,7 @@
 
 环境检查已改为仓库内输入，可从任意目录使用脚本绝对路径运行。入口：`python -X utf8 -B tools/campaign_environment_art_static_contract.py`（路由）、`python -X utf8 -B tools/environment_art_audit.py`（生产与来源）、`python -X utf8 -B tools/environment_validation_selftest.py`（隔离反例）。Python3.9+；审计需要Pillow，旧接入工具另需NumPy。
 
-默认结果写入被忽略的 `.godot/environment_validation/`。当前静态790项、运行794项通过，36个现有PNG哈希一致；全69目标仍有33个缺图，原提示词/原图/接入证据未恢复，因此整体审计退出1，不能当成功。旧接入自测缺冻结输入时退出2并标明0项执行。
+默认结果写入被忽略的 `.godot/environment_validation/`。最初修复批为36张匹配、33张缺图；田地增量后为37张匹配、32张缺图。历史原提示词/原图/接入证据尚未恢复，因此整体审计退出1，不能当成功。旧接入自测缺冻结输入时退出2并标明0项执行。
 
 已在 `f930cdb` 的全新Git检出中复验：没有缓存或本机路径文件，28/28输入哈希一致、30项隔离自测通过，六个入口从外部cwd运行符合预期，检出前后均无未提交修改。收据见本批QA的 `clean_checkout.json`。
 

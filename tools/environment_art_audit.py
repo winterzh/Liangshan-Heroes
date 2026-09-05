@@ -17,6 +17,26 @@ from environment_validation_common import ROOT, MAPPING, MAPPING_SHA256, contain
 
 INVENTORY = Path("tools/contracts/environment/inventory_20260906.json")
 INVENTORY_SHA256 = "72453ce8cfb37f435582463bc7d97d69ca13967caef3adc493c3cc6bc95fec32"
+FIELD_REVIEW = Path("tools/contracts/environment/field_20260906/review.json")
+FIELD_REVIEW_SHA256 = "d1cc45c19702cbf05f90e45a3348987c15b13ed051576ab8f90abef49e0309e7"
+
+
+def reviewed_entries(repo: Path, inventory: dict) -> list:
+    """Apply one explicitly reviewed addition without rewriting the old inventory."""
+    review_path = repo / FIELD_REVIEW
+    if sha256(review_path) != FIELD_REVIEW_SHA256:
+        raise ValueError("field review SHA256 mismatch; new artwork requires an independent review")
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    if review["base_inventory_sha256"] != INVENTORY_SHA256:
+        raise ValueError("field review refers to a different historical inventory")
+    addition = review["entry"]
+    original = next(e for e in inventory["entries"] if e["output_id"] == "surface_field")
+    if original["production_baseline"]["sha256"] is not None:
+        raise ValueError("field review cannot replace an already accepted asset")
+    for field in original.keys() - {"production_baseline", "source_evidence"}:
+        if addition[field] != original[field]:
+            raise ValueError(f"field review changes an existing route: {field}")
+    return [addition if e["output_id"] == "surface_field" else e for e in inventory["entries"]]
 
 
 def run(repo: Path, output: Path, inventory_path: Path | None = None) -> dict:
@@ -32,7 +52,7 @@ def run(repo: Path, output: Path, inventory_path: Path | None = None) -> dict:
         raise ValueError("retained production mapping SHA256 mismatch")
     mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
     expected = [cell for batch in mapping["batches"] for cell in batch.get("cells", [batch])]
-    entries = inventory["entries"]
+    entries = reviewed_entries(repo, inventory)
     if len(entries) != 69 or len({e["path"] for e in entries}) != 69:
         raise ValueError("inventory must cover 69 distinct environment targets")
     by_id = {e["output_id"]: e for e in entries}
@@ -57,7 +77,7 @@ def run(repo: Path, output: Path, inventory_path: Path | None = None) -> dict:
                   "source_status": "incomplete"}
         if not path.is_file():
             gaps.append({"code": "missing_production_png", "path": entry["path"], "output_id": entry["output_id"]})
-            if baseline["status"] == "tracked":
+            if baseline["sha256"]:
                 errors.append({"code": "tracked_production_deleted", "path": entry["path"]})
         else:
             present += 1
@@ -74,7 +94,7 @@ def run(repo: Path, output: Path, inventory_path: Path | None = None) -> dict:
                     png.load()
                     if png.format != "PNG" or list(png.size) != baseline["png_size"]:
                         raise ValueError(f"invalid production PNG dimensions/format: {entry['path']}")
-                result["production_status"] = "matches_committed_baseline"
+                result["production_status"] = "matches_reviewed_addition" if baseline["status"] == "reviewed_addition" else "matches_committed_baseline"
                 verified += 1
         source_issue_count = len(gaps) + len(errors)
         for component in ("original_png", "prompt_file", "intake_record"):
@@ -125,9 +145,10 @@ def run(repo: Path, output: Path, inventory_path: Path | None = None) -> dict:
               "exit_code": 0 if passed else 2 if errors else 1,
               "scope": "all 69 mapped environment targets; no visual/performance/release approval",
               "inventory_sha256": sha256(inventory_path), "mapping_sha256": sha256(mapping_path),
+              "reviewed_additions": [{"path": FIELD_REVIEW.as_posix(), "sha256": FIELD_REVIEW_SHA256, "output_id": "surface_field"}],
               "baseline_commit": inventory["baseline_commit"],
               "routes_passed": route_report["passed"], "route_checks": len(route_report["checks"]),
-              "production_integrity_passed": verified == sum(e["production_baseline"]["status"] == "tracked" for e in entries)
+              "production_integrity_passed": verified == sum(bool(e["production_baseline"]["sha256"]) for e in entries)
                   and not any(e["code"] in {"tracked_production_deleted", "unreviewed_production_png", "production_sha256_mismatch", "unmapped_production_png"} for e in errors),
               "production_complete": present == len(entries) and verified == len(entries),
               "provenance_complete": not any(g["code"] != "missing_production_png" for g in gaps) and not errors,
