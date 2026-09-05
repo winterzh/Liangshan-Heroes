@@ -2,6 +2,10 @@
 
 端点转换：`docs/SEGMENT_ENDPOINT_20260906.md`、`tools/segment_endpoint_qa.gd`；增量旧函数在 `tools/contracts/navigation/segment_before_66d27aa.txt`，审核证据在 `qa/segment_endpoint_20260906/`，重跑输出 `.godot/segment_endpoint_qa/`。
 
+端点优化与快活林整合的175项报告及独立输入收据位于 `qa/segment_endpoint_20260906/integration/`，不覆盖两批原报告。
+
+2026-09-06 快活林当前入口：`scripts/levels/level7_kuaihuolin_short.gd`；验证 `tools/kuaihuolin_short_test.gd`、`kuaihuolin_short_boundaries.gd`、`kuaihuolin_short_ui_test.gd`，旧深度工具为当前边界兼容入口。说明 `docs/KUAIHUOLIN_SHORT_20260906.md`，证据 `qa/kuaihuolin_short_20260906/`，临时输出 `.godot/kuaihuolin_short/`。
+
 拥挤分离：`docs/CROWD_SEPARATION_20260906.md`、`tools/crowd_separation_qa.gd`；冻结旧函数在 `tools/contracts/separation/`（`.gdignore`），审核证据在 `qa/crowd_separation_20260906/`，重跑输出 `.godot/crowd_separation_qa/`。
 
 路径检查：`docs/SEGMENT_NAVIGATION_20260906.md`、`tools/segment_navigation_qa.gd`、`tools/rts_collision_profile.gd`；旧函数参考在 `tools/contracts/navigation/`，本批证据在 `qa/segment_navigation_20260906/`，重跑输出 `.godot/segment_navigation_qa/`。

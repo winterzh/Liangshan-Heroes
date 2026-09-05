@@ -29,3 +29,7 @@ $env:RTS_TEST_OUT = 'res://.godot/segment_endpoint_qa'
 成功均退出0，输出在 `.godot/segment_endpoint_qa/`。旧 `tools/segment_navigation_qa.gd` 入口仍默认对照 `7fbdc3a`；仅抽出参考选择和输出位置方法供新增验证继承，并在结果中记录参考路径/SHA，未替换旧冻结文件。
 
 [本批QA](../qa/segment_endpoint_20260906/README.md)保留报告、实机窗口、日志与源码/证据哈希。函数计时尽量安排在没有其他Godot实例时；跨电脑应重测，当前结果不等于长时间实战或发行性能合格。
+
+## 快活林整合
+
+优化提交 `042e615` 已合入另一任务 `bc30ec0` 的当前快活林短篇。五处顶部文档/换行冲突保留双方新增内容，61个非冲突远端文件字节保持。合并后正常1倍的酒路/直接挑战/站桩52项、快活林边界31项、端点69项/263,817条和实际寻路23项全部通过，共175项；仍保持原分离位置。原报告保留，新增输入和证据在 [integration](../qa/segment_endpoint_20260906/integration/README.md)。

@@ -4,6 +4,16 @@
 
 地图线段检查省去已验证端点的重复夹取和边界调用，直接读取实时导航网格；动态障碍即时生效。新增 `tools/segment_endpoint_qa.gd`，headless输出 `.godot/segment_endpoint_qa/`；69项/263,817条对照及23项实际寻路通过。旧路径验证入口及冻结参考保留。函数计时改善不表示整场帧率合格，详见 [说明](SEGMENT_ENDPOINT_20260906.md)。
 
+已与快活林 `bc30ec0` 整合，`KH_CASE=all`、`KH_SPEED=1` 正常速度三路线及边界/端点/实际寻路共175项通过；[整合证据](../qa/segment_endpoint_20260906/integration/README.md)另存，原快活林和原端点报告保留。
+
+收尾以正常合并保留本地快活林 `da1ff6a` 和远端拥挤分离 `66d27aa`；五个顶部冲突保留双方段落，18个无冲突远端文件Git字节保持。原68输入/36证据按本地提交核对，合入后再跑快活林三路线/边界及路径/拥挤专项179条PASS；见 [集成收据](../qa/kuaihuolin_short_20260906/integration/README.md)。没有把本批计时作为性能达标。
+
+## 2026-09-06 快活林当前短篇
+
+重新运行 `Play.cmd` 并重开“醉打蒋门神”，载入 `level7_kuaihuolin_short.gd`。可择店饮酒或直接挑战，官道上可选无伤练步；W后右键换位，避开重拳/真实冲撞后趁破绽E近身反击，施恩需由玩家保护并带回酒店。
+
+验证入口：`tools/kuaihuolin_short_test.gd`（`KH_CASE=wine|direct|standing|all`，实际指令）；`kuaihuolin_short_boundaries.gd`（独立边界/实际重打与跨模式）；`kuaihuolin_short_ui_test.gd`（非headless两尺寸四阶段）。旧 `campaign_kuaihuolin_depth_test.gd` 转到当前边界工具。临时输出 `.godot/kuaihuolin_short/`；[规则](KUAIHUOLIN_SHORT_20260906.md)、[冻结QA](../qa/kuaihuolin_short_20260906/README.md)。本批无新PNG或导出包，角色/来源及发行缺口未关闭。
+
 ## 2026-09-06 拥挤分离
 
 分离循环复用单位属性并减少位置写回，保留原处理顺序与碰撞规则。新入口 `tools/crowd_separation_qa.gd` 用Godot headless运行，输出 `.godot/crowd_separation_qa/`；38项/59,328次位置对照一致，函数配对耗时下降12.8%/15.2%，不等于整场战斗FPS增幅。当前拥挤压力仍未达预算。复现及现有寻路/关卡回归命令见 [说明](CROWD_SEPARATION_20260906.md)。
