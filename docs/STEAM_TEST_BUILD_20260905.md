@@ -47,7 +47,7 @@ SteamPipe 实际上传脚本是同目录 `app_build_5088120_test.vdf`，没有 S
 
 只需在已打开的 Steamworks 确认框中完成 `25136463 -> default` 的确认，不要再次上传生成重复构建。完成后刷新分支并用 SteamCMD 隔离回下载到 `<server_verify>/Liangshan_5088120`，设置 `LIANGSHAN_SERVER_DOWNLOAD`、`LIANGSHAN_UPLOAD_EXE` 后运行 `qa/steam_test_build_20260905/verify_server_download.py`，核对 appmanifest、EXE 哈希和独立启动。最后更新本记录、构建收据和 GitHub 同步文档。
 
-本轮代码、生产素材、必要来源链与测试工具已推送 GitHub `codex/sync-20260905-stable`，提交 `863fcf0a1546c6ee7b5026db4bd4c5486a4ef61a`，PR #1；远端 main 未改，未合并。
+本轮代码、生产素材、必要来源链与测试工具已推送 GitHub `codex/sync-20260905-stable`，提交 `863fcf0a1546c6ee7b5026db4bd4c5486a4ef61a`；项目文档及成品证据追加提交 `77d6d6cc477b828fc58300e5e30147a948dfcf55` 已远端回读。PR #1 标题/正文也已更新并通过官方 API 回读一致；远端 main 未改，未合并。
 
 ## 未覆盖项
 
