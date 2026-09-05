@@ -4,6 +4,16 @@
 
 移动/软分离的线段检查复用端点格子和同格阻挡结果。专项58项、跨八关81,000条旧新对照及原寻路23项通过；本机函数配对耗时降低27.7%，拥挤实机帧率仍待继续优化。`tools/segment_navigation_qa.gd` 用Godot headless运行，输出 `.godot/segment_navigation_qa/`；真实渲染热点诊断为 `tools/rts_collision_profile.gd`。详见 [复现说明](SEGMENT_NAVIGATION_20260906.md)。
 
+已整合另一任务 `2d22c37` 的黄泥冈短篇；在当前入口复跑路径58/81,000对照、黄泥冈54和寻路23项全部通过，合并后输入哈希及独立报告在本批QA `integration/`。
+
+## 2026-09-06 黄泥冈当前短篇
+
+重新运行 `Play.cmd` 并重开“智取生辰纲”，加载 `level1_huangnigang_short.gd`。押队上冈时布置商客；刘唐试酒引目，吴用和白胜可以提前到乙桶配合。三担任选同伴同时搬走，其他幸存者由你收拢。新版原生透明纲担已接入本关；新素材按正常启动入口导入，角色四向与商客服装仍未验收完成。
+
+当前测试为 `tools/huangnigang_short_test.gd`，`HNS_CASE=all`跑两条路线及边界；`HNS_VISUAL=1`配合非headless保存实机，`HNS_SIZE=1280`选择小窗口。详细 [玩法与验证](HUANGNIGANG_SHORT_20260906.md)、[QA](../qa/huangnigang_short_20260906/README.md)。旧黄泥冈深度/搬运/酒计/美术工具验证旧流程，不能替代当前入口。木墙本轮重新出图核对，使用源码启动并重开关卡才能加载现有修正。
+
+合并后的版本也包含暂停重开/返回/退出确认。黄泥冈边界、滚动布局及实际暂停菜单已交叉复验，详见本批QA `integration/`；章节进度仍不等于战斗中段快照。
+
 ## 2026-09-06 暂停操作
 
 暂停菜单的重开、返回与退出现在先显示本局不保存的提示，取消后仍停留在暂停菜单；Esc 或安卓返回键先取消确认，再按一次继续。已有章节记录保留，尚无中途战斗快照。专项入口 `tools/pause_menu_qa.gd` 使用本机Godot实际渲染运行，输出 `.godot/pause_menu_qa/`，55项通过。见 [实现/复现](PAUSE_MENU_20260906.md) 和 [证据](../qa/pause_menu_20260906/README.md)。

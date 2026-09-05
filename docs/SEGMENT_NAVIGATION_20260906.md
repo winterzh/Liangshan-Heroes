@@ -35,3 +35,9 @@ $env:RTS_TEST_OUT = 'res://.godot/segment_navigation_qa'
 真实渲染诊断入口 `tools/rts_collision_profile.gd` 继承现有RTS探针；不加headless/fixed-fps，使用 `PERF_DEFENSE=1`、`RTS_PROFILE_BENCH=200`、`PERF_OUT=res://.godot/rts_profile_stress.json`，输出13秒预热/采样中的10秒窗口。运行前确认没有其他Godot实例；这是明确的合成压力布局。
 
 [已审核QA](../qa/segment_navigation_20260906/README.md)保留成功日志、结果和源码/证据哈希。初次冻结函数提取及夹具编译失败已修正，不计入成功报告。
+
+## 合入黄泥冈后的复验
+
+本地优化提交 `83c6417` 已与另一任务的 `2d22c37` 整合。4份交接文档顶部冲突保留双方新增内容，74个非冲突远端文件逐字节保持，生产地图优化与原提交一致。Godot导入后仅恢复了经字节核对的1,168个换行差异，没有夹带导入噪声。
+
+在新 `level1_huangnigang_short.gd` 入口下重跑：路径专项58项/81,000条全部一致；黄泥冈实际酒计、强夺及边界54项通过；实际寻路回归23项通过。新一组函数配对中位439873→301559微秒，下降31.4%，与前一组约28%的改进方向一致。原批与整合后报告分别保留，整合收据在QA的 `integration/`，不以整局FPS提升表述此结果。
