@@ -352,7 +352,7 @@ static func draw_unit(unit, death_f: float, fallback_texture: Texture2D = null, 
 		var foot := 0.78 if unit.is_building else 0.82
 		var pair_origin: Vector2 = (unit.story_assist_partner.position - unit.position) * 0.5 if unit.story_assistance_active() else Vector2.ZERO
 		draw_cast(unit, tex, Rect2(-size * 0.5, -size * foot, size, size), pair_origin, 0.25 * opacity,
-			not unit.is_building and unit.face_left and not directional, ground)
+			bool(unit.get_meta("building_visual_mirror",false)) if unit.is_building else unit.face_left and not directional, ground)
 	unit.draw_set_transform_matrix(Transform2D.IDENTITY)
 
 

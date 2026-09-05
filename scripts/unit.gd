@@ -295,6 +295,7 @@ var _hit_recent_t := 0.0 # 最近被敌方击中计时（托管磁滞：被打�
 # 并在 _giveup_t 秒内不再重新锁定该目标(_giveup_id)，免得脑子立刻又把它锁回来一路追死。
 var _chase_t := 0.0        # 当前目标「出范围追击」的累计时长（进入攻击范围即清零）
 var _chase_last_id := 0    # 上一次 _do_chase 处理的目标 id（用于换目标时清零 _chase_t）
+var _chase_best_distance := INF # Reset the give-up clock while actually closing on the target.
 var _giveup_id := 0        # 刚放弃的目标 instance_id
 var _giveup_t := 0.0       # 放弃冷却剩余：>0 时本单位拒绝再锁定 _giveup_id
 const CHASE_GIVEUP := 2.2       # 出范围连续追击上限(秒)：超时仍够不着 → 放弃改打就近
@@ -1341,6 +1342,11 @@ func _phys_body(delta: float) -> void:
 					_repath = 0.0
 					_idle_push_t = 0.0
 					_state = ST_CHASE
+				elif stance == STANCE_DEFEND and _has_home and _amove_dest == Vector2.ZERO and position.distance_to(_home) > 30.0:
+					# A target that escapes/gives up can end a chase directly in idle.
+					# Defensive guards still return home; explicit Stop resets this
+					# anchor and Hold Position never enters this branch.
+					_begin_move(_home)
 				elif faction == FACTION_GUAN and _amove_dest != Vector2.ZERO and battle != null:
 					# 进攻方呆住看门狗：没目标却停在原地超 2.5s → 重新攻击移动压向聚义厅，半路遇我方单位就接着打
 					_idle_push_t += delta
@@ -1456,6 +1462,7 @@ func _do_chase(delta: float) -> void:
 	if _target != null and _target.get_instance_id() != _chase_last_id:
 		_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置
 		_chase_t = 0.0
+		_chase_best_distance = INF
 	if _target == null:
 		_chase_t = 0.0
 		# 玩家点名目标结束后直接完成该命令并接下一条队列，不绕回旧驻守点。
@@ -1496,6 +1503,7 @@ func _do_chase(delta: float) -> void:
 	var reach := atk_range + radius + _target.radius
 	if d <= reach or hua_locked:
 		_chase_t = 0.0   # 已进攻击范围（咬住了）：追击计时清零
+		_chase_best_distance = d
 		_face_dir(_target.position - position)
 		if _cd <= 0.0:
 			_attack()
@@ -1507,6 +1515,11 @@ func _do_chase(delta: float) -> void:
 		# 追不上判定：连续追同一目标却始终够不着 → 超时放手（对方更快则更早放弃），
 		# 拉黑该目标 GIVEUP_COOLDOWN 秒并就近重新索敌，免得一路追死/被旁敌砍死。
 		_chase_t += delta
+		# A faster unit standing still is still catchable. Only time without
+		# meaningful closing progress counts toward abandoning this pursuit.
+		if d < _chase_best_distance - 12.0:
+			_chase_best_distance = d
+			_chase_t = 0.0
 		var can_give_up := (_chase_intent == CHASE_AUTO or _chase_intent == CHASE_AMOVE) and not _chasing_path_blocker
 		var cap: float = CHASE_GIVEUP_FAST if _target.current_move_speed() > current_move_speed() + 1.0 else CHASE_GIVEUP
 		# 玩家点名攻击不因“目标更快”自行改令；只有目标连续不可达才结束，避免永远撞墙。
@@ -2142,6 +2155,8 @@ func _acquire(range_override := -1.0, closest_first := false) -> void:
 		if score > best_s:
 			best = u
 			best_s = score
+	if best != _target:
+		_chase_best_distance = INF # Reacquiring the same intruder after returning is a fresh pursuit.
 	_target = best
 
 
@@ -4032,7 +4047,12 @@ func _draw_building() -> void:
 		var static_campaign_visual := scoped_tex!=null \
 			and bool(get_meta("campaign_environment_static_visual",false))
 		if not static_campaign_visual:
+			# A wall-facing gate can mirror its authored isometric axis without
+			# rotating the roof, collision footprint, health bar or name.
+			if bool(get_meta("building_visual_mirror",false)):
+				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(Vector2(-1,0),Vector2(0,1),Vector2.ZERO))
 			draw_texture_rect(tex, Rect2(-s * 0.5, -s * foot, s, s), false, tint)
+			draw_set_transform_matrix(GameMap.ISO_INV)
 		if key=="tavern" and battle.map.environment_style=="level7":
 			# 酒望有自己的布幌，不再仅靠普通民居和悬浮名字辨认。
 			var pole := Vector2(-s*0.42,-s*0.10)

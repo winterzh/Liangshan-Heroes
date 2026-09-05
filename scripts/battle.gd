@@ -6641,7 +6641,7 @@ func is_cast_pending(caster: Unit, slot: int) -> bool:
 	if caster == null or not is_instance_valid(caster):
 		return false
 	for pc in _pending_casts:
-		if pc.get("caster") == caster and int(pc.get("slot", -1)) == slot \
+		if pc.get("caster") == caster and (slot < 0 or int(pc.get("slot", -1)) == slot) \
 				and int(pc.get("serial", -1)) == caster._cast_serial:
 			return true
 	return false
@@ -6700,7 +6700,9 @@ func _begin_cast(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 	if is_instance_valid(caster) and (caster.story_outcome != "" or caster.is_captive): return
 	if caster == null or not is_instance_valid(caster):
 		return
-	if caster._cast_t > 0.0:                # 已在抬手中：忽略重复触发
+	# AI decisions run before pending casts settle. When windup just reached
+	# zero, replacing its serial here would cancel that spell forever.
+	if caster._cast_t > 0.0 or is_cast_pending(caster, -1):
 		return
 	var aid: String = caster.ability_slots[slot]["id"]
 	var ad: Dictionary = _abilities.get(aid, {})

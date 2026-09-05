@@ -6,6 +6,7 @@ var checks := 0
 var orders := 0
 var buildings_started := 0
 var units_queued := 0
+var units_queued_by_key := {}
 var route := "contracts"
 var out_dir := "res://qa/zhujiazhuang_rts_20260905"
 var build_cells := [Vector2i(49,36),Vector2i(50,41),Vector2i(60,29),Vector2i(48,45),Vector2i(55,13),Vector2i(60,14),Vector2i(47,14)]
@@ -101,7 +102,9 @@ func _economy(b) -> void:
 		elif building.key == "siege_workshop":
 			var siege: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.key in ["siege_ram","siege_cata"])
 			if siege.size() < 3: key = "siege_ram" if siege.size() < 2 else "siege_cata"
-		if key != "" and b.queue_train(building,key,false): units_queued += 1
+		if key != "" and b.queue_train(building,key,false):
+			units_queued += 1
+			units_queued_by_key[key] = int(units_queued_by_key.get(key,0)) + 1
 	for hero in b.units:
 		if not alive(hero) or hero.faction != 0 or not hero.is_hero: continue
 		for i in range(4):
@@ -164,6 +167,7 @@ func _contracts(b) -> void:
 
 func _play(b) -> void:
 	var l = b.level
+	var entrance_towers: Array = b.units.filter(func(u): return alive(u) and u.faction == 1 and u.key == "arrow_tower")
 	var target_stage := "north"
 	var mobilized := false
 	var rescuer = null
@@ -194,14 +198,31 @@ func _play(b) -> void:
 			if route == "inside":
 				_click(b,army,Vector2i(25,18),true)
 				_action(b,l.sun,"zhu_rts_inside")
-				if l.inside_open: target_stage = "manor"
+				if l.inside_open: target_stage = "tower"
 			else:
 				if alive(l.gate) and l.gate.visible:
 					b.select_members(army,false)
 					b._issue_order(b.to_screen(l.gate.position),false)
 					orders += 1
 				else: _click(b,army,Vector2i(25,28),true)
-				if l.main_breached: target_stage = "manor"
+				if l.main_breached: target_stage = "tower"
+		elif target_stage == "tower":
+			# Player strategy: clear the entrance's real tower before attacking the
+			# manor, rather than walking the entire army past a live fortification.
+			var tower_cells: Array = [Vector2i(17,16),Vector2i(17,26)] if route == "inside" else [Vector2i(17,26)]
+			var towers: Array = []
+			var tower_cell: Vector2i = tower_cells[0]
+			for candidate_cell in tower_cells:
+				towers = b.units.filter(func(u): return alive(u) and u.faction == 1 and u.key == "arrow_tower" and b.map.world_to_cell(u.position) == candidate_cell)
+				if not towers.is_empty():
+					tower_cell = candidate_cell
+					break
+			if towers.is_empty(): target_stage = "manor"
+			elif towers[0].visible:
+				b.select_members(army,false)
+				b._issue_order(b.to_screen(towers[0].position),false)
+				orders += 1
+			else: _click(b,army,tower_cell,true)
 		elif target_stage == "manor":
 			if alive(l.enemy_base) and l.enemy_base.visible:
 				b.select_members(army,false)
@@ -210,7 +231,10 @@ func _play(b) -> void:
 			else: _click(b,army,Vector2i(10,26),true)
 			if l.manor_fallen: target_stage = "rescue"
 		elif target_stage == "rescue":
-			if not alive(rescuer): rescuer = army[0]
+			if not alive(rescuer):
+				var rescuers: Array = army.filter(func(u): return u.key in l.FIELD_ACTORS)
+				if rescuers.is_empty(): continue
+				rescuer = rescuers[0] # Siege engines cannot perform the prisoner interaction.
 			_click(b,army.filter(func(u): return u != rescuer),Vector2i(14,31),true)
 			_action(b,rescuer,"zhu_rts_rescue")
 			if l.prisoners_freed: target_stage = "return"
@@ -221,9 +245,11 @@ func _play(b) -> void:
 	check(b.mission.has_event("zhu_victory") and b.phase == b.Phase.END,route+" route wins through live economy/combat and explicit return")
 	check(buildings_started >= 2 and units_queued >= 6,"route uses construction and normal troop production")
 	check(l.expansion_secured and l.supply_cut,"route takes expansion and cuts reinforcement source")
+	var towers_destroyed: int = entrance_towers.filter(func(u): return not alive(u)).size()
+	check(towers_destroyed > 0 and units_queued_by_key.get("siege_cata",0) > 0,"route recruits siege and clears a defended entrance tower")
 	if route == "direct": check(l.main_breached and not l.inside_open,"direct route needs no inside agent")
 	else: check(l.inside_open and entered_with_main_intact,"inside route enters manor while main gate remains intact")
-	play_metrics = {"game_seconds":l.elapsed,"stage":target_stage,"orders":orders,"buildings_started":buildings_started,"units_queued":units_queued,"ai_trained":l.ai_trained,"raids_sent":l.raids_sent,"entered_with_main_intact":entered_with_main_intact,"events":b.mission.events.keys(),"result":b.mission.result_snapshot(b.mission.has_event("zhu_victory"))}
+	play_metrics = {"game_seconds":l.elapsed,"stage":target_stage,"orders":orders,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"towers_destroyed":towers_destroyed,"ai_trained":l.ai_trained,"raids_sent":l.raids_sent,"entered_with_main_intact":entered_with_main_intact,"events":b.mission.events.keys(),"result":b.mission.result_snapshot(b.mission.has_event("zhu_victory"))}
 
 func _mode_regression() -> void:
 	for mode in ["skirmish","skirmish_ai"]:
@@ -244,6 +270,7 @@ func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")
 	AudioServer.set_bus_mute(0,true)
 	if OS.get_environment("RTS_TEST_ROUTE") != "": route = OS.get_environment("RTS_TEST_ROUTE")
+	if OS.get_environment("RTS_TEST_OUT") != "": out_dir = OS.get_environment("RTS_TEST_OUT")
 	var b = await _start()
 	Engine.time_scale = 4.0
 	if route == "contracts": await _contracts(b)

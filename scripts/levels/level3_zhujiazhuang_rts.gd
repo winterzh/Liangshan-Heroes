@@ -70,12 +70,12 @@ func campaign_story_goals() -> Array:
 		{"id":"zhu_seven", "label":"七名被囚好汉全部撤回前营", "required_events":["zhu_seven_safe"], "forbidden_events":["zhu_prisoner_lost"]},
 	]
 func deploy_hint() -> String:
-	return "先选喽啰采金伐木、建民居和兵营。北面资源区可扩张，南面外营是来袭兵源；正面可用撞车攻门，也可让孙立接应内应。营地与部队跨阶段保留。"
+	return "先采金伐木、建民居扩军。北面资源可扩张，南营是来袭兵源；守军会迎敌回防，两个入口均有箭楼。可用投石车远拆箭楼、步兵护送撞车攻门，也可由孙立开偏门。"
 func intro_lines() -> Array:
 	return [
 		{"who":"旁白", "key":"narrator", "text":"时迁等好汉陷在祝家庄。宋江在独龙冈东侧扎下前营，准备探清盘陀路、拔除外围，再攻庄救人。"},
 		{"who":"宋江", "key":"song_jiang", "text":"先安营整军。北面有钱粮可取，南面庄客营不断来援；先夺哪处，由战局决定。"},
-		{"who":"军令", "key":"narrator", "text":"工人采集金木，兵营补充刀枪弓马，攻城作坊制造撞车与投石车。攻破大营后救时迁回营；保住宋江与前营。"},
+		{"who":"军令", "key":"narrator", "text":"两处庄门都有护庄箭楼，投石车可在箭楼射程外拆除，步兵保护器械。工人采集金木、兵营持续补兵；攻破大营后救时迁回营，保住宋江与前营。"},
 	]
 
 func apply_overrides(defs: Dictionary, _abilities: Dictionary) -> void:
@@ -113,7 +113,10 @@ func _alive(u) -> bool:
 
 func _guard(b, key: String, cell: Vector2i) -> Unit:
 	var u: Unit = b.spawn_at(key, Unit.FACTION_GUAN, cell)
-	u.order_hold_position()
+	# Guard the post by engaging nearby intruders and returning after a short chase.
+	# Hold Position only attacks enemies already in melee reach and made these
+	# defenders spectators while two heroes dismantled the whole manor.
+	u.set_stance(Unit.STANCE_DEFEND)
 	return u
 
 func _resource(b, key: String, cell: Vector2i, faction: int, amount: float) -> Unit:
@@ -136,9 +139,16 @@ func deploy(b) -> void:
 	for spec in [["zhu_keke",Vector2i(36,18)],["zhu_keke",Vector2i(38,18)],["zhu_gong",Vector2i(33,16)]]:
 		resource_guards.append(_guard(b,spec[0],spec[1]))
 	gate = b.spawn_at("zhu_gate",1,MAIN_GATE)
-	gate.display_name = "祝家庄正门 · 可用器械攻破"
+	gate.display_name = "祝家庄正门"
+	gate.set_meta("building_visual_mirror",true)
 	side_gate = b.spawn_at("zhu_gate",1,SIDE_GATE)
-	side_gate.display_name = "祝家庄偏门 · 孙立可接应内应"
+	side_gate.display_name = "祝家庄偏门"
+	side_gate.set_meta("building_visual_mirror",true)
+	# Existing shared towers cover both entrances. Catapults can outrange them;
+	# melee defenders protect the towers, making an escorted siege force useful.
+	for c in [Vector2i(17,26),Vector2i(17,16)]:
+		var tower: Unit = b.spawn_at("arrow_tower",1,c)
+		tower.display_name = "护庄箭楼"
 	outpost = b.spawn_at("barracks",1,OUTPOST)
 	outpost.display_name = "庄客外营 · 拆除可断援"
 	_guard(b,"zhu_keke",Vector2i(39,39))

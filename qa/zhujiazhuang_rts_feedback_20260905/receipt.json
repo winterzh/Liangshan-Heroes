@@ -1,0 +1,349 @@
+{
+  "created_utc": "2026-09-05T08:09:40.380749+00:00",
+  "base_commit": "28ad7d7be761a8c1b64f821d84c876e43ddf74af",
+  "branch": "codex/sync-20260905-stable",
+  "godot": "4.6.3.stable.official.7d41c59c4",
+  "final_checks": {
+    "guards": 19,
+    "hero_direct": 2,
+    "hero_inside": 2,
+    "direct": 5,
+    "inside": 5,
+    "contracts": 39,
+    "core": 68
+  },
+  "screenshots": 4,
+  "all_final_passed": true,
+  "limits": "Automated gameplay and labelled fixtures. Not human difficulty/fun or expert low-unit strategy acceptance. Listed inputs only.",
+  "route_metrics": {
+    "hero_direct": {
+      "buildings_started": 0,
+      "enemy_trained": 0,
+      "game_seconds": 24.0666666666666,
+      "inside_open": false,
+      "lin_hp": 0.0,
+      "main_breached": false,
+      "manor_fallen": false,
+      "raids_sent": 0,
+      "scope": "Two heroes receive attack orders and normal skill learning; no spell-use/kiting optimization. Opening four troops stay at camp. Not proof against every expert strategy.",
+      "song_hp": 202.833333333332,
+      "stage": "gate",
+      "units_queued": 0
+    },
+    "hero_inside": {
+      "buildings_started": 0,
+      "enemy_trained": 0,
+      "game_seconds": 26.8666666666666,
+      "inside_open": false,
+      "lin_hp": 44.8592592592592,
+      "main_breached": false,
+      "manor_fallen": false,
+      "raids_sent": 0,
+      "scope": "Two heroes receive attack orders and normal skill learning; no spell-use/kiting optimization. Opening four troops stay at camp. Not proof against every expert strategy.",
+      "song_hp": 0.0,
+      "stage": "outpost",
+      "units_queued": 0
+    },
+    "direct": {
+      "ai_trained": 9,
+      "buildings_started": 6,
+      "entered_with_main_intact": false,
+      "events": [
+        "zhu_resource_secured",
+        "zhu_supply_cut",
+        "zhu_hu_captured",
+        "zhu_gate_breached",
+        "zhu_manor_fallen",
+        "action:zhu_rts:zhu_rts_rescue",
+        "zhu_prisoners_freed",
+        "action:zhu_rts:zhu_rts_finish",
+        "zhu_seven_safe",
+        "zhu_victory"
+      ],
+      "game_seconds": 313.333333333321,
+      "orders": 172,
+      "raids_sent": 1,
+      "result": {
+        "contract_version": 2,
+        "core_cleared": true,
+        "core_goal": "摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。",
+        "done_ids": [
+          "zhu_capture",
+          "zhu_seven"
+        ],
+        "goals": [
+          {
+            "id": "zhu_capture",
+            "label": "生擒扈三娘，仍按敌将看押",
+            "note": "",
+            "reason": "",
+            "state": "done"
+          },
+          {
+            "id": "zhu_inside",
+            "label": "孙立内应，打开偏门",
+            "note": "",
+            "reason": "本局未完成",
+            "state": "missed"
+          },
+          {
+            "id": "zhu_seven",
+            "label": "七名被囚好汉全部撤回前营",
+            "note": "",
+            "reason": "",
+            "state": "done"
+          }
+        ],
+        "missed_ids": [
+          "zhu_inside"
+        ],
+        "pending_ids": [],
+        "story_complete": false,
+        "story_done": 2,
+        "story_total": 3
+      },
+      "stage": "return",
+      "towers_destroyed": 1,
+      "units_queued": 34,
+      "units_queued_by_key": {
+        "hua_rong": 1,
+        "liang_dao": 8,
+        "liang_gong": 14,
+        "liang_qiang": 6,
+        "siege_cata": 3,
+        "siege_ram": 2
+      }
+    },
+    "inside": {
+      "ai_trained": 11,
+      "buildings_started": 5,
+      "entered_with_main_intact": true,
+      "events": [
+        "zhu_resource_secured",
+        "zhu_supply_cut",
+        "zhu_hu_captured",
+        "action:zhu_rts:zhu_rts_inside",
+        "zhu_gate_opened",
+        "zhu_manor_fallen",
+        "zhu_gate_breached",
+        "action:zhu_rts:zhu_rts_rescue",
+        "zhu_prisoners_freed",
+        "zhu_seven_safe",
+        "action:zhu_rts:zhu_rts_finish",
+        "zhu_victory"
+      ],
+      "game_seconds": 395.999999999983,
+      "orders": 239,
+      "raids_sent": 1,
+      "result": {
+        "contract_version": 2,
+        "core_cleared": true,
+        "core_goal": "摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。",
+        "done_ids": [
+          "zhu_capture",
+          "zhu_inside",
+          "zhu_seven"
+        ],
+        "goals": [
+          {
+            "id": "zhu_capture",
+            "label": "生擒扈三娘，仍按敌将看押",
+            "note": "",
+            "reason": "",
+            "state": "done"
+          },
+          {
+            "id": "zhu_inside",
+            "label": "孙立内应，打开偏门",
+            "note": "",
+            "reason": "",
+            "state": "done"
+          },
+          {
+            "id": "zhu_seven",
+            "label": "七名被囚好汉全部撤回前营",
+            "note": "",
+            "reason": "",
+            "state": "done"
+          }
+        ],
+        "missed_ids": [],
+        "pending_ids": [],
+        "story_complete": true,
+        "story_done": 3,
+        "story_total": 3
+      },
+      "stage": "return",
+      "towers_destroyed": 2,
+      "units_queued": 45,
+      "units_queued_by_key": {
+        "hua_rong": 2,
+        "liang_dao": 11,
+        "liang_gong": 18,
+        "liang_qiang": 9,
+        "siege_cata": 3,
+        "siege_ram": 2
+      }
+    }
+  },
+  "inputs": [
+    {
+      "path": "project.godot",
+      "sha256_normalized_lf": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "sha256_normalized_lf": "ba11efa231069da76283d62f212374add4fc8f590ccb283281510741788d0171"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256_normalized_lf": "d37cf893cee7239a26e3efc30ea9264212ab7549740928d02767f6b07688297e"
+    },
+    {
+      "path": "scripts/world_shadow.gd",
+      "sha256_normalized_lf": "d88e15c8fff8f45526f34746177efbf362bce730e05cee3323a0944a58b6687f"
+    },
+    {
+      "path": "scripts/defs.gd",
+      "sha256_normalized_lf": "a2f9a9fe9a669829871c0bcb9fd9295b451e8b9744993deb4f007ab1d80607fb"
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "sha256_normalized_lf": "9c6ae7f9405bb9cce39ef98987923fc8e214fd9dfb991a79b4dfd2d27266481d"
+    },
+    {
+      "path": "scripts/campaign.gd",
+      "sha256_normalized_lf": "1fab12825a049a7dcaf66cbce9d052bc06e464f01f0297e4dd90885923e248f1"
+    },
+    {
+      "path": "scripts/campaign_mission.gd",
+      "sha256_normalized_lf": "94831bcb9215ee349ee866c8e58a1e90a716911c8ad475184da141357b1493ee"
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "sha256_normalized_lf": "a7364e57aa3970991ed17f6f56f4350f896938efebf03da23b28312a59abdf80"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256_normalized_lf": "30d7f75694bab7de8d33b5885005f654efbf951c4244d2917fca1753735c29aa"
+    },
+    {
+      "path": "tools/zhujiazhuang_rts_test.gd",
+      "sha256_normalized_lf": "665ea0255a8f47d8f44d7e024b9d1932d19adf83e8c86e764429f977d4697a33"
+    },
+    {
+      "path": "tools/zhujiazhuang_rts_feedback_test.gd",
+      "sha256_normalized_lf": "800375a8f24f518bf04288de0fec68d6337065b58aaabd8f67b43c242ef5f81d"
+    },
+    {
+      "path": "tools/zhujiazhuang_rts_gate_visual.gd",
+      "sha256_normalized_lf": "2a168ede474a54da41c57d6e24a739bc7315b3d247ff7b6472bed899ea79725b"
+    },
+    {
+      "path": "tools/campaign_core_test.gd",
+      "sha256_normalized_lf": "28d8508d554ad5757f805553c4bdeef1e94b8760af87f262e3c848da37171331"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/contracts.json",
+      "bytes": 126,
+      "sha256": "81f7faf10c402f3a88c184ea2bec37ac6153a175aff390922e465a22249355ee"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/contracts_console.log",
+      "bytes": 2259,
+      "sha256": "db97cdbaaeb6648f572f5640ccb342ea0f0f412e927fbd44733a33bdc884f125"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/core_console.log",
+      "bytes": 4098,
+      "sha256": "537aadf71463c85a8bccf65d34254e856ea0c9b2b4e1a496de6e2650a9e5ced7"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/direct.json",
+      "bytes": 1647,
+      "sha256": "47766b85f928aec0cabd04ce70301b4c07710ef7a0fff1cc1b1657375cc6315f"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/direct_console.log",
+      "bytes": 2210,
+      "sha256": "1b3130609e9b72b45d60eb3dfccfad5b06fd2a68bafafd81612d1578987eb821"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/guards.json",
+      "bytes": 91,
+      "sha256": "d9254d18a6146ba5c808164fa6a6deb5ce300a037f220bca1a8cfff5b77adf0e"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/guards_before.json",
+      "bytes": 436,
+      "sha256": "7731a8a416f21ed3bacf8bcb9c6aee414a28810a708dd974e1781155ccd3b554"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/guards_before_console.log",
+      "bytes": 1278,
+      "sha256": "868c8e19ca63c367f9e5c70879e00c6cae9cd6d4a7dd52b0a400234591037564"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/guards_console.log",
+      "bytes": 1830,
+      "sha256": "0436433d032bc2918eae414e4944913acbea84e288e2b114085b8b581d7917e5"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/hero_direct.json",
+      "bytes": 542,
+      "sha256": "71cdad89e7f5083a63b7763c5507812624fa329936750c81e6645e5fb88c0e39"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/hero_direct_console.log",
+      "bytes": 730,
+      "sha256": "c94bd12a20e7c9bbd001899afef7309dc03560236dd1ba9e5decef07e699cc5c"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/hero_inside.json",
+      "bytes": 545,
+      "sha256": "32d5d1bf9ee19602ed9852c61aa8e1de6ac5f46931fb88a0425943ee1ade5cd7"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/hero_inside_console.log",
+      "bytes": 733,
+      "sha256": "8694ed59c20cc868c4d6c7782ff1e7219a5dcc36524e66c798c04076be525a62"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/inside.json",
+      "bytes": 1685,
+      "sha256": "68aadedf66eca6ed710eabed642519cdccc25eab8fa3cff6333d0b545c1f51d4"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/inside_console.log",
+      "bytes": 2379,
+      "sha256": "76e1c181d0d1fba5f9d66e6a883b9c84b9ad5326215cf35708cd5d7d89c6c5dc"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/main_gate_aligned.png",
+      "bytes": 1175893,
+      "sha256": "bb60a08e223eb016df91d209ddc18f3c8096c173da0b84fbf9762013021113da"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/main_gate_original_axis.png",
+      "bytes": 1171759,
+      "sha256": "186905add9212cf880da5b333c22ba078501e8f6ac3f5822e49683f84a988d1f"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/side_gate_aligned.png",
+      "bytes": 1253906,
+      "sha256": "73a7022d2fde2b0db66e1af6db259746b438bd24e7c41ad301288f2ce712b0bc"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/side_gate_original_axis.png",
+      "bytes": 1253475,
+      "sha256": "00b18408e514d02b60c885bde7f1222f310f47189df8f28747bd4f09588f7d04"
+    },
+    {
+      "path": "qa/zhujiazhuang_rts_feedback_20260905/visual_console.log",
+      "bytes": 573,
+      "sha256": "8215b75371aabbfb558776ca6d5a40b93a1959d6f1d9d20ee31bd765ff0a1a02"
+    }
+  ]
+}

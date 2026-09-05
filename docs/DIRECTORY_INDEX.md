@@ -16,6 +16,8 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `scripts/levels/level3_zhujiazhuang_rts.gd`：当前祝家庄菜单入口；旧 `level3_zhujiazhuang.gd` 保留作原流程参考。
 - `tools/zhujiazhuang_rts_test.gd`、`tools/zhujiazhuang_rts_visual.gd`：场内回归、真实自动路线与图形检查。
 - `qa/zhujiazhuang_rts_20260905/`：本轮验证结果、图形截图与文件收据。
+- `tools/zhujiazhuang_rts_feedback_test.gd`、`tools/zhujiazhuang_rts_gate_visual.gd`：守军接敌/施法回归、双英雄冲关对照及寨门轴向截图。
+- `qa/zhujiazhuang_rts_feedback_20260905/`：试玩问题复现与修复后的路线、守军和门体对照记录；不覆盖初版样板证据。
 
 ## 2026-09-05 测试上传与 GitHub 接入
 
