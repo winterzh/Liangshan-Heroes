@@ -92,7 +92,10 @@ func setup(game_map: GameMap) -> void:
 			[Vector2(52,4),Vector2(52,39)],[Vector2(7,39),Vector2(28,39)],
 			[Vector2(32,39),Vector2(32.5,39)],[Vector2(33.5,39),Vector2(52,39)]]:
 			_add_wall(segment[0],segment[1])
-		_add_passage(Vector2i(33,39),"偏门")
+		if bool(_map.get_meta("campaign_city_wicket_sealed",false)):
+			_add_wall(Vector2(32.5,39),Vector2(33.5,39))
+		else:
+			_add_passage(Vector2i(33,39),"偏门")
 		for segment in [[Vector2(15,13),Vector2(21,13)],[Vector2(15,13),Vector2(15,20)],
 			[Vector2(21,13),Vector2(21,20)],[Vector2(15,20),Vector2(18.5,20)],[Vector2(19.5,20),Vector2(21,20)]]:
 			_add_wall(segment[0],segment[1],62.0)

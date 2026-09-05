@@ -83,6 +83,7 @@ func _run() -> void:
 	check(b.mission._status.text.contains("孙立已阵亡") and b.phase==b.Phase.FIGHT,"dead Sun explains siege alternative and campaign continues")
 	await _dispose(b)
 	var folder: String="res://qa/zhujiazhuang_gate_contact_20260905"
+	if not OS.get_environment("RTS_TEST_OUT").is_empty(): folder=OS.get_environment("RTS_TEST_OUT")
 	DirAccess.make_dir_recursive_absolute(folder)
 	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":failures.is_empty(),"failures":failures,"evidence":evidence,"fixture":"enemy simulation paused for input tests; not combat balance evidence"},"\t"))
 	print("[gate-contact] ",checks," checks, failures ",failures)

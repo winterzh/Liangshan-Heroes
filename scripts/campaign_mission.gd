@@ -336,6 +336,20 @@ func add_action(action_id: String, label: String, cell: Vector2i, actors: Array,
 	if not show_button:
 		_status.text = "没有自动寻路按钮；选中人物后右键场景标记即可行动。"
 
+## Pure location button: no task registration, selection, movement or timer.
+func add_map_locator(label: String, cell: Vector2i) -> Button:
+	var button := Button.new()
+	button.text="查看 · "+label
+	button.custom_minimum_size.y=32
+	button.add_theme_font_size_override("font_size",15)
+	button.tooltip_text="只定位地图；选人和移动仍由玩家指挥。"
+	button.pressed.connect(func():
+		if battle.phase!=battle.Phase.FIGHT: return
+		battle.center_camera_cell(cell)
+		_status.text="已定位："+label+"。此按钮只移动镜头，请自行选人下令。")
+	_buttons.add_child(button)
+	return button
+
 func update_action_actors(action_id: String, actor_keys: Array) -> void:
 	if not actions.has(action_id):
 		return

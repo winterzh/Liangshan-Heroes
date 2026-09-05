@@ -11,7 +11,10 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/home_setup_20260905/`：本机接续日志、动作检查报告和主菜单截图。
 - `.godot/`：本机导入缓存及临时验证文件，不入库。
 - `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`：当前 Git 开发进度和跨电脑启动说明。
-- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄、连环马已进入样板，其余六关后续实施。
+- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄、连环马、大名府已进入样板，其余五关后续实施。
+- `docs/DAMING_RTS_20260905.md`、`scripts/levels/level8_daming_rts.gd`：大名府当前入口、经营/潜入/火号/护送说明；旧level8脚本保留地图来源。
+- `tools/daming_rts_test.gd`、`tools/daming_infiltration_test.gd`、`tools/ranged_firing_path_test.gd`、`tools/daming_rts_visual.gd`：两条实战、输入边界、隔墙远程接近和图形验证。
+- `qa/daming_rts_20260905/`：本轮结果、失败尝试、截图与输入哈希收据，包含其他关卡回归的独立子目录。
 - `docs/LIANHUANMA_RTS_20260905.md`、`scripts/levels/level4_lianhuanma_rts.gd`：当前连环马菜单入口、持续经营/反骑/辎重营与教场说明；旧level4脚本保留作历史参考。
 - `tools/lianhuanma_rts_test.gd`、`tools/lianhuanma_drill_test.gd`、`tools/lianhuanma_rts_visual.gd`：本关边界、两条实战、教场输入及图形验证。
 - `qa/lianhuanma_rts_20260905/`：最终182项、三张图、输入哈希；attempts保留失败尝试，不属于最终通过项。
@@ -22,7 +25,7 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/zhujiazhuang_rts_20260905/`：本轮验证结果、图形截图与文件收据。
 - `tools/zhujiazhuang_rts_feedback_test.gd`、`tools/zhujiazhuang_rts_gate_visual.gd`：守军接敌/施法回归、双英雄冲关对照及寨门轴向截图。
 - `qa/zhujiazhuang_rts_feedback_20260905/`：试玩问题复现与修复后的路线、守军和门体对照记录；不覆盖初版样板证据。
-- `scripts/campaign_gate_visual.gd`：按原图墙脚锚定门墙连接与阴影，仅本关两个门启用。
+- `scripts/campaign_gate_visual.gd`：按原图墙脚锚定门墙连接与阴影；祝家庄两门和大名府南门分别显式配置，大名府另有关闭门扇。
 - `tools/zhujiazhuang_gate_contact_test.gd`、`tools/zhujiazhuang_gate_contact_visual.gd`：群选接应回归与门墙/开门图形检查。
 - `qa/zhujiazhuang_gate_contact_20260905/`：本轮门墙、接应、路线与跨模式QA。
 - `tools/character_direction4_inventory.gd`、`docs/CHARACTER_DIRECTION4_20260905.md`：全库角色四向清单生成与制作状态。

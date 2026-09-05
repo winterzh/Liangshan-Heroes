@@ -1,0 +1,16 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Vulkan 1.4.351 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 3070 Ti
+
+[daming-play] t=0 phase=outpost spies=admit army=7 cover=[true, true, true] gate=false fire=false prison=false rescued=false hall=1500.0
+[daming-play] t=60 phase=gate_tower spies=ready army=5 cover=[true, true, true] gate=false fire=false prison=true rescued=false hall=1500.0
+[daming-play] t=120 phase=gate_tower spies=ready army=5 cover=[true, true, true] gate=false fire=false prison=true rescued=false hall=1500.0
+[daming-play] t=180 phase=prison_tower spies=ready army=11 cover=[false, true, true] gate=true fire=true prison=true rescued=false hall=1500.0
+[rts] PASS signal route wins using real economy and battle
+[rts] PASS route uses construction and paid army/siege production
+[rts] PASS camp survives without phase redeployment
+[rts] PASS same two prisoners actually reach exit alive
+[rts] PASS route cuts paid outside reinforcement source
+[rts] PASS infiltration signal allows intact gate to open
+[rts] PASS live signal route completes all three story contracts
+[rts] PASS all expected route assertions executed
+[daming-rts] {"checks":8,"failures":[],"metrics":{"ai_trained":2,"buildings_started":4,"camp_hp":1500.0,"events":["action:daming_rts:daming_admit","daming_prison_admitted","daming_post_0","action:daming_rts:daming_fire","daming_inner_ready","daming_fire_lit","action:daming_rts:daming_gate","daming_response_arrived","daming_gate_opened","action:daming_rts:daming_rescue","daming_inner_unlock","daming_prisoners_freed","daming_shi_safe","daming_pursuit","daming_post_1","daming_lu_safe","daming_victory"],"game_seconds":225.0,"orders":179,"phase":"extract","prisoner_hp":[360.0,230.0],"result":{"contract_version":2,"core_cleared":true,"core_goal":"守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。","done_ids":["daming_infiltration","daming_signal","daming_response"],"goals":[{"id":"daming_infiltration","label":"柴进、乐和乔装入牢，时迁按分工举火","note":"","reason":"","state":"done"},{"id":"daming_signal","label":"翠云火号发动里应外合","note":"","reason":"","state":"done"},{"id":"daming_response","label":"鲁智深或武松夺门，牢中内应开枷","note":"","reason":"","state":"done"}],"missed_ids":[],"pending_ids":[],"story_complete":true,"story_done":3,"story_total":3},"skill_orders":18,"spy_phase":"ready","units_queued":21,"units_queued_by_key":{"liang_dao":2,"liang_gong":9,"liang_qiang":2,"lou_luo":6,"siege_cata":2}},"passed":true,"route":"signal","scope":"automated actual economy and combat; not human fun acceptance"}

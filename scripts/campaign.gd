@@ -11,7 +11,7 @@ const LEVELS := [
 	{"id": "level5", "title": "三败高太尉", "sub": "三败高太尉·终战", "script": "res://scripts/levels/level5_liangshan.gd"},
 	{"id": "level6", "title": "大闹野猪林", "sub": "花和尚禅杖·救林冲", "script": "res://scripts/levels/level6_yezhulin.gd"},
 	{"id": "level7", "title": "醉打蒋门神", "sub": "快活林·无三不过望", "script": "res://scripts/levels/level7_kuaihuolin.gd"},
-	{"id": "level8", "title": "智取大名府", "sub": "元宵灯市·开门劫牢", "script": "res://scripts/levels/level8_dongchangfu.gd"},
+	{"id": "level8", "title": "智取大名府", "sub": "城外经营·翠云楼火号", "script": "res://scripts/levels/level8_daming_rts.gd"},
 ]
 
 const STORY_ORDER := ["level6", "level1", "level7", "level2", "level3", "level4", "level8", "level5"]

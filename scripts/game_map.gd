@@ -356,6 +356,24 @@ func navigation_revision() -> int:
 	return _navigation_revision
 
 
+## Ranged fallback only: reaching the target tile is unnecessary if a legal
+## reachable endpoint is already in weapon range. Ordinary movement still
+## rejects partial paths, and this never smooths through a wall or shoreline.
+func find_firing_path(from_w: Vector2, target_w: Vector2, reach: float, faction := 0, profile := "land") -> PackedVector2Array:
+	var out := PackedVector2Array()
+	if reach<=0 or not is_open_world(from_w,profile): return out
+	var a := world_to_cell(from_w)
+	var b := nearest_open_from(world_to_cell(target_w),a,profile)
+	if b.x<0: return out
+	var nav := astar_water if profile=="water" else astar if faction==0 else astar_guan
+	# b is deliberately open: partial queries against solid destinations can
+	# cause exceptionally long searches in AStarGrid2D.
+	var ids := nav.get_id_path(a,b,true)
+	if ids.is_empty() or cell_to_world(ids[-1]).distance_to(target_w)>reach-4.0: return out
+	for i in range(1,ids.size()): out.append(cell_to_world(ids[i]))
+	return _smooth_path(from_w,out,profile)
+
+
 func is_dynamic_blocked(c: Vector2i) -> bool:
 	return c.x >= 0 and c.y >= 0 and c.x < w and c.y < h \
 		and _base_solid[idx(c.x, c.y)] == 0 and _block_count[idx(c.x, c.y)] > 0

@@ -1541,6 +1541,8 @@ func _do_chase(delta: float) -> void:
 		if _repath <= 0.0:
 			_repath = 0.4
 			_path = map.find_path(position, _target.position, faction, movement_profile)
+			if _path.is_empty() and is_ranged:
+				_path = map.find_firing_path(position,_target.position,reach,faction,movement_profile)
 			_path_i = 0
 		_follow_path(delta)
 
@@ -4053,6 +4055,7 @@ func _draw_building() -> void:
 				var gate_transform := preload("res://scripts/campaign_gate_visual.gd").source_transform(self, tex.get_size())
 				draw_set_transform_matrix(GameMap.ISO_INV * gate_transform)
 				draw_texture_rect(tex, Rect2(Vector2.ZERO, tex.get_size()), false, tint)
+				preload("res://scripts/campaign_gate_visual.gd").draw_closed_leaf(self,tex.get_size(),tint)
 			elif bool(get_meta("building_visual_mirror",false)):
 				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(Vector2(-1,0),Vector2(0,1),Vector2.ZERO))
 				draw_texture_rect(tex, Rect2(-s * 0.5, -s * foot, s, s), false, tint)

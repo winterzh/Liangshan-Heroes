@@ -1,0 +1,47 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[rts] PASS campaign level4 menu loads the persistent RTS level
+[rts] PASS real economy and opening population are consistent
+[rts] PASS hook soldiers have explicit paid recruitment
+[rts] PASS shared combat/economy unchanged: liang_dao
+[rts] PASS shared combat/economy unchanged: liang_qiang
+[rts] PASS shared combat/economy unchanged: liang_gong
+[rts] PASS shared combat/economy unchanged: liang_ma
+[rts] PASS shared combat/economy unchanged: caltrop_tower
+[rts] PASS shared combat/economy unchanged: arrow_tower
+[rts] PASS shared combat/economy unchanged: siege_cata
+[rts] PASS hook combat definition unchanged: hp
+[rts] PASS hook combat definition unchanged: atk
+[rts] PASS hook combat definition unchanged: cd
+[rts] PASS hook combat definition unchanged: range
+[rts] PASS hook combat definition unchanged: speed
+[rts] PASS hook combat definition unchanged: bonus_cav
+[rts] PASS all twelve finite riders exist from deployment
+[rts] PASS strategic destination reachable: (29, 21)
+[rts] PASS strategic destination reachable: (30, 41)
+[rts] PASS strategic destination reachable: (44, 12)
+[rts] PASS strategic destination reachable: (44, 49)
+[rts] PASS strategic destination reachable: (54, 30)
+[rts] PASS strategic destination reachable: (16, 45)
+[rts] PASS workers gather and unload both resources
+[rts] PASS player can place a population building
+[rts] PASS worker finishes house and adds population
+[rts] PASS hook recruitment debits actual gold
+[rts] PASS paid hook soldier appears after real training time
+[rts] PASS unfunded supply posts cannot spawn escorts
+[rts] PASS both live supply posts pay for escorts
+[rts] PASS raiding source delays unsent north riders and records result
+[rts] PASS destroyed supply post stops only its own future escorts
+[rts] PASS destroyed supply cannot erase or duplicate launched riders
+[rts] PASS two destroyed posts end escort production
+[rts] PASS nearby linked riders receive formation protection
+[rts] PASS isolated rider loses linked protection
+[rts] PASS one effective hook soldier cannot break a rider
+[hook-contract] hp=198.36 broken=true terrain=3 hooks=2 target=@Node2D@263:<Node2D#97710508226> state=3
+[rts] PASS two actual hook attackers break and damage an impeded rider
+[rts] PASS defeating riders alone neither wins nor resets the camp
+[rts] PASS mid-campaign hall loss ends in defeat
+[rts] PASS hook recruitment overrides do not leak to defense
+[rts] PASS chapter barracks menu does not leak to defense
+[rts] PASS all expected route assertions executed
+[lhm-rts] {"checks":43,"failures":[],"metrics":{},"passed":true,"route":"contracts","scope":"isolated boundary fixtures"}

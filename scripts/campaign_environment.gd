@@ -200,7 +200,7 @@ static func decorate(map: GameMap,id: String) -> void:
 		result.append(["story_sign",Vector2i(10,46),70.0,"扈家庄"])
 		result.append(["story_sign",Vector2i(21,24),76.0,"祝家庄"])
 	if id=="level8":
-		result.append(["story_sign",Vector2i(30,40),78.0,"大名府"])
+		result.append(["story_sign",map.get_meta("campaign_city_sign_cell",Vector2i(30,40)),78.0,"大名府"])
 		for cell in [Vector2i(27,12),Vector2i(33,20),Vector2i(27,27),Vector2i(34,33)]:
 			result.append(["market_stall",cell,64.0,"lantern"])
 			result.append(["crowd",cell+Vector2i(1,1),0.0,cell.y])

@@ -1,0 +1,108 @@
+extends "res://tools/zhujiazhuang_rts_test.gd"
+## Isolated guards/positions test actual player dispatch, cancel/retry and timers.
+## Frozen enemies and fixture placement are not evidence of campaign difficulty.
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1")
+	AudioServer.set_bus_mute(0,true)
+	var b=await _start("",7)
+	Engine.time_scale=4
+	var l=b.level
+	var buttons: Array=b.mission._buttons.get_children().filter(func(n): return n is Button and n.text.contains("蔡福家"))
+	var scout_start: Vector2=l.scout.position
+	b.select_members([l.scout],false)
+	buttons[0].pressed.emit()
+	check(b.selection==[l.scout] and l.scout.position==scout_start and not l.scout.mission_order_active,"safehouse locator preserves selection and issues no movement")
+	check(b.mission.actions.size()==2 and b.mission.active_action_id=="","pure location button does not create an accidental mission task")
+	for u in b.units:
+		if u.faction==1:
+			u.set_physics_process(false)
+			if not u.is_building: u.position=b.map.cell_to_world(Vector2i(48,19))
+	var guard=l.reserve[0]
+	l.chai.position=b.map.cell_to_world(l.SAFEHOUSE)
+	guard.position=l.chai.position+Vector2(50,0)
+	await _wait(1)
+	check(l.chai._invis_t>0 and l.chai.get_meta("daming_suspicion")>0,"brief guard proximity raises suspicion without instant reveal")
+	guard.position+=Vector2(300,0)
+	await _wait(1.5)
+	check(l.chai._invis_t>0 and l.chai.get_meta("daming_suspicion")==0,"leaving patrol before deadline restores cover margin")
+	guard.position=l.chai.position+Vector2(50,0)
+	await _wait(3)
+	check(l.chai._invis_t<=0 and not l.chai.get_meta("daming_covered"),"continuous close inspection reveals spy through actual timer")
+	await _wait(3.5)
+	check(l.chai._invis_t<=0,"safehouse cannot restore cover with a nearby enemy")
+	guard.position=b.map.cell_to_world(Vector2i(48,19))
+	await _wait(1.5)
+	l.chai.position+=Vector2(200,0)
+	await _wait(0.5)
+	l.chai.position=b.map.cell_to_world(l.SAFEHOUSE)
+	await _wait(2)
+	check(l.chai._invis_t<=0,"leaving safehouse cancels partial recovery")
+	await _wait(1.5)
+	check(l.chai._invis_t>0 and l.chai.get_meta("daming_covered"),"three unguarded seconds restore disguise for retry")
+	l.chai.position=b.map.cell_to_world(l.PRISON_CHECK+Vector2i(0,1))
+	l.yue.position=b.map.cell_to_world(l.SAFEHOUSE)
+	_action(b,l.chai,"daming_admit")
+	await _wait(4)
+	check(not l.prison_open and not b.mission.actions.daming_admit.done,"lone Chai Jin fails admission with retry still available")
+	l.yue.position=b.map.cell_to_world(l.PRISON_CHECK+Vector2i(1,0))
+	_action(b,l.chai,"daming_admit")
+	await _wait(4)
+	check(l.prison_open and b.mission.has_event("daming_prison_admitted"),"fresh player order admits both agents through real prison gate")
+	_click(b,[l.chai,l.yue],l.PRISON_INSIDE)
+	await _wait(7)
+	check(l._inside_prison(b,l.chai) and l._inside_prison(b,l.yue),"both agents physically enter prison interior")
+	check(not l.rescued and not b.mission.actions.daming_rescue.done,"ordinary interior gathering order cannot accidentally unlock prisoners")
+	l.scout.position=b.map.cell_to_world(l.FIRE_CELL+Vector2i(0,1))
+	_action(b,l.scout,"daming_fire")
+	await _wait(1)
+	check(b.mission.active_action_id=="daming_fire" and not l.signaled,"fire requires a real timed action")
+	b.select_members([l.scout],false)
+	b._order_hold_position()
+	await _wait(2)
+	check(not l.signaled and b.mission.active_action_id=="","new Hold command cancels fire without automatic resumption")
+	var reserve_ids: Array=l.reserve.map(func(u): return u.get_instance_id())
+	_action(b,l.scout,"daming_fire")
+	await _wait(3.5)
+	check(l.signaled and l.signal_left>85 and b.mission.has_event("daming_inner_ready"),"fresh order lights fire and starts real 90-second window")
+	check(l.reserve.map(func(u): return u.get_instance_id())==reserve_ids and l.reserve.size()==6,"signal dispatches the same finite six-person reserve")
+	check(l.scout._invis_t<=0,"lighting fire actually breaks scout concealment")
+	for pair in [[b.find_unit("lu_zhishen"),Vector2i(0,1)],[b.find_unit("wu_song"),Vector2i(1,1)],[l.strategist,Vector2i(-1,1)]]:
+		pair[0].order_stop()
+		pair[0].position=b.map.cell_to_world(l.GATE_APPROACH+pair[1])
+	_action(b,b.find_unit("lu_zhishen"),"daming_gate")
+	await _wait(4)
+	check(l.gate_open and not b.mission.has_event("daming_gate_breached"),"field commander with two companions opens intact gate by player order")
+	check(not b.mission.actions.daming_gate.marker.visible,"completed gate task removes its marker")
+	var original_prisoners: Array=[l.lu,l.shi]
+	_action(b,l.chai,"daming_rescue")
+	await _wait(6)
+	check(l.rescued and b.mission.has_event("daming_inner_unlock"),"inner agent really holds at locks and frees prisoners")
+	var lu_pos: Vector2=l.lu.position
+	var shi_pos: Vector2=l.shi.position
+	await _wait(2)
+	check(l.lu.position==lu_pos and l.shi.position==shi_pos,"freed prisoners remain still until player orders movement")
+	check([l.lu,l.shi]==original_prisoners and [l.lu,l.shi].all(func(u): return u.faction==0 and u.is_noncombat and not u.is_captive and u.atk==0 and u.ability_slots.is_empty()),"same prisoners become controllable noncombat wounded without combat abilities")
+	check(l.lu.art_variant=="daming_rescued_lu_junyi" and l.shi.art_variant=="daming_rescued_shi_xiu","rescued art preserves story-specific wounded identities")
+	_click(b,[l.lu],l.EXIT_CELL)
+	for i in range(80):
+		await _wait(0.5)
+		if l.lu.story_outcome=="retreated": break
+	check(l.lu.story_outcome=="retreated" and l.shi.story_outcome=="" and b.phase==b.Phase.FIGHT,"one actual evacuee alone cannot complete two-person objective")
+	check(l.pursuit_warned and l.pursuit_sent and l.pursuit.size()==6,"leaving prison sends existing pursuit after warning and timer")
+	_click(b,[l.shi],l.EXIT_CELL)
+	for i in range(80):
+		await _wait(0.5)
+		if b.phase==b.Phase.END: break
+	check(b.phase==b.Phase.END and b.mission.has_event("daming_victory"),"second original prisoner must physically reach exit for victory")
+	check(b.mission.result_snapshot(true).story_complete,"ordered spy/field/escort chain completes all story conditions")
+	await _dispose(b)
+	b=await _start("",7)
+	b.level.hall.take_damage(99999,b.level.posts[0],true,true)
+	check(b.phase==b.Phase.END and not b.mission.has_event("daming_victory"),"camp destruction fails core objective immediately")
+	await _dispose(b)
+	Engine.time_scale=1
+	check(checks==28,"all expected infiltration assertions executed")
+	var folder="res://qa/daming_rts_20260905"
+	DirAccess.make_dir_recursive_absolute(folder)
+	FileAccess.open(folder+"/infiltration.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":failures.is_empty(),"failures":failures,"scope":"isolated placement and frozen guards; actual input and timers"},"\t"))
+	quit(0 if failures.is_empty() else 1)

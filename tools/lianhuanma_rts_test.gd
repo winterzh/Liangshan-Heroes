@@ -9,6 +9,7 @@ func _run() -> void:
 	route=OS.get_environment("LHMR_TEST")
 	if route=="": route="contracts"
 	out_dir="res://qa/lianhuanma_rts_20260905"
+	if not OS.get_environment("RTS_TEST_OUT").is_empty(): out_dir=OS.get_environment("RTS_TEST_OUT")
 	build_cells=[Vector2i(5,28),Vector2i(5,35),Vector2i(12,36),Vector2i(17,36),Vector2i(12,23),Vector2i(16,24),Vector2i(9,43),Vector2i(20,34)]
 	var b=await _start("",3)
 	Engine.time_scale=4

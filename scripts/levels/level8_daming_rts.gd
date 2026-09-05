@@ -1,0 +1,379 @@
+extends LevelBase
+## A persistent field camp and a simultaneous infiltration inside the existing city.
+## The signal diverts a finite reserve and pauses one paid reinforcement source.
+const T := GameMap.T
+const CAMP := Vector2i(31,57)
+const SOUTH_GATE := Vector2i(30,39)
+const GATE_APPROACH := Vector2i(30,43)
+const WICKET := Vector2i(33,39)
+const SAFEHOUSE := Vector2i(24,28)
+const PRISON_DOOR := Vector2i(19,20)
+const PRISON_CHECK := Vector2i(19,24)
+const PRISON_INSIDE := Vector2i(18,18)
+const JAIL_ACTION := Vector2i(19,15) # Separate opening locks from the south waiting area.
+const FIRE_CELL := Vector2i(35,16)
+const TOWER_CELL := Vector2i(37,15)
+const OUTPOST := Vector2i(13,46)
+const CITY_POST := Vector2i(37,27)
+const ENEMY_HQ := Vector2i(44,8)
+const EXIT_CELL := Vector2i(30,49)
+const SPY_KEYS := ["shi_qian","chai_jin","yue_he"]
+const FIELD_KEYS := ["wu_yong","lu_zhishen","wu_song","hua_rong","liang_dao","liang_qiang","liang_gong","liang_ma"]
+const RESCUERS := ["chai_jin","yue_he","shi_qian","wu_yong","lu_zhishen","wu_song","hua_rong","liang_dao","liang_qiang","liang_gong","liang_ma"]
+var hall: Unit
+var strategist: Unit
+var scout: Unit
+var chai: Unit
+var yue: Unit
+var gate: Unit
+var lu: Unit
+var shi: Unit
+var enemy_hq: Unit
+var posts: Array[Unit]=[]
+var towers: Array[Unit]=[]
+var spies: Array[Unit]=[]
+var workers: Array[Unit]=[]
+var enemy_workers: Array[Unit]=[]
+var reserve: Array[Unit]=[]
+var pursuit: Array[Unit]=[]
+var escorts: Array[Unit]=[]
+var gate_open := false
+var prison_open := false
+var rescued := false
+var signaled := false
+var signal_left := 0.0
+var reserve_returned := false
+var elapsed := 0.0
+var strategy_t := 0.0
+var train_t := 115.0
+var ai_trained := 0
+var ai_spent_gold := 0
+var ai_spent_wood := 0
+var pursuit_warned := false
+var pursuit_sent := false
+var pursuit_t := 15.0
+var phase_title := ""
+
+func id() -> String: return "level8"
+func title() -> String: return "智取大名府"
+func subtitle() -> String: return "城外经营·翠云举火·接应劫牢"
+func economy_enabled() -> bool: return true
+func start_gold() -> int: return 300
+func start_wood() -> int: return 200
+func base_pop_cap() -> int: return 24
+func start_age() -> int: return 3
+func hero_start_rank() -> int: return 0
+func hero_cap() -> int: return 7 # Three spies plus up to four field commanders.
+func fog_enabled() -> bool: return true
+func map_w() -> int: return 60
+func map_h() -> int: return 66
+func map_theme() -> String: return "town"
+func map_base() -> int: return T.GRASS
+func camera_start_cell() -> Vector2i: return CAMP
+func campaign_core_goal() -> String: return "守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。"
+func story_contract_version() -> int: return 2
+func campaign_story_goals() -> Array:
+	return [
+		{"id":"daming_infiltration","label":"柴进、乐和乔装入牢，时迁按分工举火","required_events":["daming_prison_admitted","daming_inner_ready","daming_fire_lit"],"forbidden_events":["daming_gate_breached","daming_prison_breached"]},
+		{"id":"daming_signal","label":"翠云火号发动里应外合","required_events":["daming_fire_lit","daming_gate_opened"],"forbidden_events":["daming_gate_breached"]},
+		{"id":"daming_response","label":"鲁智深或武松夺门，牢中内应开枷","required_events":["daming_response_arrived","daming_inner_unlock"],"forbidden_events":["daming_early_unlock","daming_prison_breached"]},
+	]
+func deploy_hint() -> String:
+	return "外军开局即可采集、造兵与攻城。内应先在牢前会合入牢，再由时迁举火，可调开六名机动守军并暂停城内补兵90秒；强攻也能救人。两名伤员必须由玩家带到城外接应地。"
+func intro_lines() -> Array:
+	return [
+		{"who":"旁白","key":"narrator","text":"元宵将至，宋江留山调养，吴用领军在大名府南面扎营。时迁已越墙带火种入城；蔡福已替柴进、乐和换好公人旧衣，三人分头接应。"},
+		{"who":"吴用","key":"wu_yong","text":"外军经营练兵，可先拆西侧外营，断掉来袭。时迁举火会调走城中机动军，抓住机会接近南门；也可护器械直接攻门，切勿忘了前营。"},
+		{"who":"时迁","key":"shi_qian","text":"柴进、乐和先到牢前会合，进内院等候。我再到翠云楼举火。乔装可避寻常索敌，贴着巡守久留或动手施法都会露馅；甩开追兵可退回蔡福家重整装束。"},
+		{"who":"军令","key":"narrator","text":"鲁智深、武松带兵接南门，军队清牢前、拆牢区箭楼，再由内应开枷。卢俊义、石秀获救后不参战，选中二人沿退路走到城外接应地；不必杀光全城。"},
+	]
+func apply_overrides(defs: Dictionary,_abilities: Dictionary) -> void:
+	defs.hall.produces=["lou_luo","wu_yong","lu_zhishen","wu_song","hua_rong"]
+	for key in SPY_KEYS+["lu_junyi","shi_xiu"]:
+		defs[key].hero_trainable=false
+		defs[key].pop=0
+func paint_map(map: GameMap) -> void:
+	load("res://scripts/levels/level8_dongchangfu.gd").new().paint_map(map)
+	map.fill_rect(3,45,54,21,T.GRASS)
+	map.paint_path([Vector2(CAMP),Vector2(EXIT_CELL),Vector2(GATE_APPROACH)],2,T.ROAD)
+	map.paint_path([Vector2(26,55),Vector2(18,51),Vector2(OUTPOST)],1,T.ROAD)
+	map.fill_ellipse(Vector2(7,57),5,5,T.FOREST)
+	map.fill_ellipse(Vector2(51,59),5,5,T.FOREST)
+	map.set_meta("campaign_city_sign_cell",Vector2i(26,43))
+	map.set_meta("campaign_city_wicket_sealed",true)
+func decorate(map: GameMap) -> void:
+	load("res://scripts/levels/level8_dongchangfu.gd").new().decorate(map)
+	map.decor.append_array([["banner",CAMP+Vector2i(-3,1),90.0],["story_sign",SAFEHOUSE,66.0,"蔡福家"],["story_sign",EXIT_CELL,64.0,"接应地"]])
+func alive(u) -> bool: return is_instance_valid(u) and u.hp>0 and u.story_outcome==""
+func _effective(u) -> bool: return alive(u) and not u.is_captive and not u.garrisoned and u._stun_t<=0 and u._disarm_t<=0
+func _near(b,u,cell: Vector2i,radius: float) -> bool: return alive(u) and u.position.distance_to(b.map.cell_to_world(cell))<=radius
+func _guard(b,key: String,cell: Vector2i) -> Unit:
+	var u: Unit=b.spawn_at(key,1,cell)
+	u.set_stance(Unit.STANCE_DEFEND)
+	return u
+func _resource(b,key: String,cell: Vector2i,amount: float) -> Unit:
+	var u: Unit=b.spawn_at(key,0,cell)
+	u.res_left=amount
+	return u
+func _cover(u) -> void:
+	u.apply_invis(99999,0)
+	u.modulate.a=0.85
+	u.set_meta("daming_covered",true)
+	u.set_meta("daming_suspicion",0.0)
+	u.set_meta("daming_recover",0.0)
+	u.display_name=u.setup_def.name+"·乔装"
+	u.set_stance(Unit.STANCE_PASSIVE)
+func deploy(b) -> void:
+	hall=b.spawn_at("hall",0,CAMP)
+	hall.display_name="梁山前营"
+	b.spawn_at("barracks",0,Vector2i(24,58))
+	strategist=b.spawn_at("wu_yong",0,Vector2i(29,54))
+	b.spawn_at("lu_zhishen",0,Vector2i(30,52))
+	b.spawn_at("wu_song",0,Vector2i(32,52))
+	for i in range(4): b.spawn_at("liang_qiang" if i<2 else "liang_gong",0,Vector2i(29+i,51))
+	for i in range(6): workers.append(b.spawn_at("lou_luo",0,Vector2i(26+i,61)))
+	for c in [Vector2i(21,63),Vector2i(37,63)]: _resource(b,"gold_mine",c,2800)
+	for c in [Vector2i(21,54),Vector2i(20,58),Vector2i(41,58),Vector2i(39,54)]: _resource(b,"tree",c,1600)
+	_resource(b,"gold_mine",Vector2i(8,47),4500)
+	_resource(b,"tree",Vector2i(8,51),2500)
+	scout=b.spawn_at("shi_qian",0,Vector2i(46,29))
+	chai=b.spawn_at("chai_jin",0,SAFEHOUSE+Vector2i(1,0))
+	yue=b.spawn_at("yue_he",0,SAFEHOUSE+Vector2i(2,1))
+	scout.art_variant="shi_qian_lantern"
+	chai.art_variant="chai_jin_officer"
+	yue.art_variant="yue_he_officer"
+	spies=[scout,chai,yue]
+	for u in spies: _cover(u)
+	gate=b.spawn_at("zhu_gate",1,SOUTH_GATE)
+	gate.display_name="大名府南门"
+	gate.art_variant="daming_south_gate"
+	gate.set_meta("campaign_gate_wall_span",Vector2(-128,0))
+	gate.set_meta("campaign_gate_visual_height",256.0)
+	gate.set_meta("campaign_gate_source_left",Vector2(0.22,0.822))
+	gate.set_meta("campaign_gate_source_right",Vector2(0.943,0.635))
+	gate.set_meta("campaign_gate_closed_leaf",true)
+	b.map.block_footprint(WICKET,0,true)
+	b.map.block_footprint(PRISON_DOOR,0,true)
+	lu=b.spawn_at("lu_junyi",2,Vector2i(18,16))
+	shi=b.spawn_at("shi_xiu",2,Vector2i(19,16))
+	for u in [lu,shi]:
+		u.is_captive=true
+		u.is_noncombat=true
+		u.base_speed=0
+		u.atk=0
+		u.ability=""
+		u.ability_slots.clear()
+		u.set_stance(Unit.STANCE_PASSIVE)
+		u.art_variant="daming_bound_"+u.key
+	for cell in [OUTPOST,CITY_POST]:
+		var post: Unit=b.spawn_at("barracks",1,cell)
+		post.display_name="城西外营" if cell==OUTPOST else "城内巡防营"
+		posts.append(post)
+	enemy_hq=b.spawn_at("hall",1,ENEMY_HQ)
+	enemy_hq.display_name="留守大营"
+	for i in range(2):
+		var node=_resource(b,"gold_mine",Vector2i(47+i*3,8),2000)
+		var worker: Unit=b.spawn_at("lou_luo",1,Vector2i(47+i*3,11))
+		worker.set_meta("daming_mine",node)
+		enemy_workers.append(worker)
+	for c in [Vector2i(26,36),Vector2i(23,19)]:
+		var tower: Unit=b.spawn_at("arrow_tower",1,c)
+		tower.display_name="南门箭楼" if c.y==36 else "牢区箭楼"
+		towers.append(tower)
+	for c in [Vector2i(29,42),Vector2i(31,42),Vector2i(28,34),Vector2i(31,33),Vector2i(16,23),Vector2i(22,23),Vector2i(11,44),Vector2i(15,44)]: _guard(b,"guan_dao",c)
+	for c in [Vector2i(26,33),Vector2i(24,22),Vector2i(12,43)]: _guard(b,"guan_gong",c)
+	for i in range(6): reserve.append(_guard(b,"guan_dao" if i<4 else "guan_gong",Vector2i(30+i%3,26+i/3)))
+	for i in range(6): pursuit.append(_guard(b,"guan_dao" if i<4 else "guan_gong",Vector2i(40+i%3,11+i/3)))
+func on_start(b) -> void:
+	b.faction_res[1]={"gold":160.0,"wood":240.0}
+	for i in range(workers.size()):
+		var node=b.nearest_free_gold(workers[i].position,null,workers[i]) if i<3 else b.nearest_resource(workers[i].position,"wood")
+		if node!=null: workers[i].order_gather(node)
+	for u in enemy_workers: u.order_gather(u.get_meta("daming_mine"))
+	b.mission.begin("daming_rts","两线筹备 · 经营与潜入","城外练兵备器械；柴进、乐和同到牢前受验后入内院，时迁择机举火。先拆西外营可保后路。")
+	b.mission.add_action("daming_admit","柴进、乐和：牢前受验",PRISON_CHECK,["chai_jin"],1.5,64)
+	b.mission.add_actor_locator("daming_admit","chai_jin")
+	b.mission.add_action("daming_fire","时迁：翠云楼举火",FIRE_CELL,["shi_qian"],2,64)
+	b.mission.add_actor_locator("daming_fire","shi_qian")
+	b.mission.add_map_locator("蔡福家 · 重整乔装",SAFEHOUSE)
+	b.lit_cells[OUTPOST]=20
+	b.lit_cells[EXIT_CELL]=20
+	b.msg("城外军队可立即出击与经营；约115秒后两处营地开始付费补军。内应举火提供90秒进攻机会，不会免费生出接应军。",9)
+func _retry(b,action_id: String,text: String) -> void:
+	var a: Dictionary=b.mission.actions[action_id]
+	a.done=false
+	a.button.disabled=false
+	if is_instance_valid(a.get("actor_button")): a.actor_button.disabled=false
+	a.marker.show()
+	b.mission.set_status(text)
+func _hide_action(b,action_id: String) -> void:
+	if not b.mission.actions.has(action_id): return
+	var a: Dictionary=b.mission.actions[action_id]
+	a.done=true
+	a.marker.hide()
+	a.button.hide()
+	if is_instance_valid(a.get("actor_button")): a.actor_button.hide()
+func _inside_prison(b,u) -> bool:
+	if not _effective(u): return false
+	var c: Vector2i=b.map.world_to_cell(u.position)
+	return c.x>15 and c.x<21 and c.y>13 and c.y<20
+func _guarded(b,cell: Vector2i,radius: float) -> bool:
+	return b.units.any(func(u): return _effective(u) and u.faction==1 and not u.is_resource and _near(b,u,cell,radius) and b.map._segment_open(u.position,b.map.cell_to_world(cell)))
+func _add_rescue(b) -> void:
+	b.mission.add_action("daming_rescue","牢内：开枷救出二人",JAIL_ACTION,RESCUERS,3,64)
+func _open_prison(b,breached: bool) -> void:
+	if prison_open: return
+	prison_open=true
+	b.map.block_footprint(PRISON_DOOR,0,false)
+	if breached: b.mission.mark("daming_prison_breached","外军打通牢前，强开牢院；内应路线未完成，核心营救可继续")
+	else: b.mission.mark("daming_prison_admitted","蔡福安排的公人身份受验通过，柴进与乐和可入牢就位")
+	_hide_action(b,"daming_admit")
+	_add_rescue(b)
+func _open_gate(b,breached: bool) -> void:
+	if gate_open: return
+	gate_open=true
+	if alive(gate):
+		b.unregister_building_footprint(gate)
+		gate.resolve_story("retreated")
+	if breached: b.mission.mark("daming_gate_breached","梁山直接攻破南门，未按火号夺门；仍可劫牢救人")
+	else: b.mission.mark("daming_response_arrived","鲁智深或武松带军夺下南门，接应火号")
+	b.mission.mark("daming_gate_opened","南门已开，军队和器械由玩家调入，前营继续经营")
+	_hide_action(b,"daming_gate")
+	b.mission.set_objective("军队清开牢前与箭楼，入牢救出卢俊义、石秀；撤到城外接应地即可完成营救。")
+func on_mission_action(b,action_id: String,actor) -> void:
+	match action_id:
+		"daming_admit":
+			if not _effective(chai) or not _effective(yue) or chai._invis_t<=0 or yue._invis_t<=0 or not _near(b,yue,PRISON_CHECK,128):
+				_retry(b,action_id,"柴进、乐和须同时到牢前且仍有乔装；暴露者甩开追兵后退到蔡福家，可恢复掩护再试。")
+				return
+			_open_prison(b,false)
+			b.mission.set_status("牢门已放行；手动带柴进、乐和进入内院，然后由时迁举火。外军可继续准备。")
+		"daming_fire":
+			if not _inside_prison(b,chai) or not _inside_prison(b,yue) or scout._invis_t<=0:
+				_retry(b,action_id,"举火要有牢中接应：柴进、乐和仍须在内院，时迁须甩开盘查。可等待外军准备好再举火。")
+				return
+			signaled=true
+			signal_left=90
+			b.mission.mark("daming_inner_ready","柴进、乐和在真实牢院内接应")
+			b.mission.mark("daming_fire_lit","时迁点燃翠云楼；机动守军被调往救火，城内补兵暂停90秒")
+			if b.map.sample_scenery!=null: b.map.sample_scenery.set_story_object_state("cuiyun_tower","signal")
+			for u in reserve:
+				if alive(u): u.order_move(b.map.cell_to_world(TOWER_CELL+Vector2i(1,4)))
+			scout._break_invis()
+			_hide_action(b,"daming_fire")
+			if not gate_open: b.mission.add_action("daming_gate","鲁智深或武松：带军夺门",GATE_APPROACH,["lu_zhishen","wu_song"],2,64)
+			b.msg("火号已起！城内补兵暂停90秒，机动守军北去。清门前抵抗，鲁智深或武松带兵右键夺门标记；时迁由玩家自行撤开。",8)
+		"daming_gate":
+			var crew: int=b.units.filter(func(u): return _effective(u) and u.faction==0 and not u.is_noncombat and u.key in FIELD_KEYS and _near(b,u,GATE_APPROACH,180)).size()
+			if _guarded(b,GATE_APPROACH,150) or crew<3:
+				_retry(b,action_id,"门前仍有抵抗，或接应人手不足。清门前守军，鲁智深/武松与至少两名战友到场再夺门。")
+				return
+			_open_gate(b,false)
+		"daming_rescue":
+			if not prison_open or _guarded(b,JAIL_ACTION,120):
+				_retry(b,action_id,"牢院未通或近处仍有守军，先带军清开牢前再开枷。")
+				return
+			if rescued: return
+			rescued=true
+			if not signaled: b.mission.mark("daming_early_unlock","先开枷后举火，核心营救仍可继续")
+			if actor in [chai,yue] and _inside_prison(b,chai) and _inside_prison(b,yue): b.mission.mark("daming_inner_unlock","柴进、乐和在牢内开枷救出二人")
+			for u in [lu,shi]:
+				u.faction=0
+				u.is_captive=false
+				u.is_hero=false
+				u.base_speed=68
+				u.art_variant="daming_rescued_"+u.key
+				u.queue_redraw()
+			if b.map.sample_scenery!=null: b.map.sample_scenery.set_story_object_state("prison_gate","open")
+			b.mission.mark("daming_prisoners_freed","卢俊义、石秀已脱枷；两名伤员仍由玩家选中并护送，不自动走路")
+			_hide_action(b,"daming_rescue")
+			b.mission.add_map_locator("城外接应地 · 二人撤离",EXIT_CELL)
+			b.mission.set_objective("选中卢俊义与石秀，带兵护送到城外接应地；途中失去任何一人即失败，不必扫清全城。")
+func _cover_tick(b,delta: float) -> void:
+	for u in spies:
+		if not alive(u): continue
+		var close: bool=b.units.any(func(e): return _effective(e) and e.faction==1 and not e.is_building and not e.is_worker and u.position.distance_to(e.position)<68 and b.map._segment_open(u.position,e.position))
+		if bool(u.get_meta("daming_covered")):
+			var suspicion: float=clampf(float(u.get_meta("daming_suspicion"))+(delta if close else -delta),0,2.5)
+			u.set_meta("daming_suspicion",suspicion)
+			if suspicion>=2.5: u._break_invis()
+			if u._invis_t<=0:
+				u.set_meta("daming_covered",false)
+				u.display_name=u.setup_def.name+"·暴露"
+				b.msg(u.setup_def.name+"暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。",5)
+		elif _near(b,u,SAFEHOUSE,88) and not _guarded(b,SAFEHOUSE,170):
+			u.set_meta("daming_recover",float(u.get_meta("daming_recover"))+delta)
+			if float(u.get_meta("daming_recover"))>=3: _cover(u); b.msg(u.setup_def.name+"已在蔡福家恢复乔装。",4)
+		else: u.set_meta("daming_recover",0.0)
+func _support_tick(b,delta: float) -> void:
+	if not alive(enemy_hq): return
+	train_t-=delta
+	if train_t>0: return
+	train_t=38
+	escorts=escorts.filter(func(u): return alive(u))
+	for lane in range(2):
+		if escorts.size()>=12: break
+		if not alive(posts[lane]) or (lane==1 and signal_left>0): continue
+		var key: String="guan_gong" if ai_trained%3==2 else "guan_dao"
+		var cost: Dictionary=b._defs.liang_gong if key=="guan_gong" else b._defs.liang_dao
+		if not b.faction_spend(1,int(cost.cost_gold),int(cost.cost_wood)): continue
+		var u=_guard(b,key,(OUTPOST if lane==0 else CITY_POST)+Vector2i(-3,1))
+		u.set_meta("source_lane",lane)
+		u.order_amove(hall.position if lane==0 else b.map.cell_to_world(PRISON_CHECK))
+		escorts.append(u)
+		ai_trained+=1
+		ai_spent_gold+=int(cost.cost_gold)
+		ai_spent_wood+=int(cost.cost_wood)
+func process(b,delta: float) -> void:
+	if not alive(hall): return
+	elapsed+=delta
+	_support_tick(b,delta)
+	signal_left=maxf(0,signal_left-delta)
+	strategy_t-=delta
+	if strategy_t>0: return
+	strategy_t=0.25
+	_cover_tick(b,0.25)
+	if signaled and signal_left<=0 and not reserve_returned:
+		reserve_returned=true
+		for u in reserve:
+			if alive(u): u.order_amove(b.map.cell_to_world(PRISON_CHECK))
+		b.msg("救火调动结束，机动守军正赶回牢前；城内营恢复付费补兵。",6)
+	if gate_open and not prison_open and not _guarded(b,PRISON_CHECK,160):
+		if b.units.any(func(u): return _effective(u) and u.faction==0 and u.key in FIELD_KEYS and _near(b,u,PRISON_CHECK,70)):
+			_open_prison(b,true)
+			b.msg("外军已控制牢前，牢院通道打开；选一名好汉进入牢内开枷，其余军队守住退路。",6)
+	if rescued:
+		if not pursuit_warned and ([lu,shi].any(func(u): return alive(u) and b.map.world_to_cell(u.position).y>=24)):
+			pursuit_warned=true
+			b.lit_cells[ENEMY_HQ]=20
+			b.msg("二人已出牢区，北面留守队正在集结，15秒后追向南门！这些兵开局就在大营，可提前截断。",7)
+		if pursuit_warned and not pursuit_sent:
+			pursuit_t-=0.25
+			if pursuit_t<=0:
+				pursuit_sent=true
+				for u in pursuit:
+					if alive(u): u.order_amove(b.map.cell_to_world(Vector2i(30,30))); u.order_amove(b.map.cell_to_world(EXIT_CELL),true)
+				b.mission.mark("daming_pursuit","现存留守队开始追击，未新增或复生敌军")
+		for record in [[lu,"daming_lu_safe"],[shi,"daming_shi_safe"]]:
+			var u=record[0]
+			if alive(u) and gate_open and _near(b,u,EXIT_CELL,130) and b.map.world_to_cell(u.position).y>=45:
+				u.resolve_story("retreated")
+				b.mission.mark(record[1],u.setup_def.name+"已活着抵达城外接应地")
+		if b.mission.has_event("daming_lu_safe") and b.mission.has_event("daming_shi_safe"):
+			b.mission.mark("daming_victory","两名获救者生还，梁山前营守住")
+			b.win("卢俊义、石秀已一同活着出城，营救完成！城外经营、城内行动与护送战果按本局记录结算。")
+	var new_title: String="护送 · 二人活着出城" if rescued else "入城 · 清牢前救人" if gate_open else "火号 · 夺门接应" if signaled else "两线筹备 · 经营与潜入"
+	if new_title!=phase_title: phase_title=new_title; b.mission.set_title(new_title)
+func on_unit_died(b,u) -> void:
+	if u==hall: b.lose("梁山前营失守，接应与后勤被切断。可重开并留兵保护营地。")
+	elif u==lu or u==shi: b.lose(u.setup_def.name+"在营救途中阵亡；二人必须活着抵达接应地。")
+	elif u==gate: _open_gate(b,true)
+	elif u in posts: b.mission.mark("daming_post_%d"%posts.find(u),u.display_name+"已毁，该处停止后续补军，已出场部队仍在")
+	elif u==enemy_hq: b.mission.mark("daming_hq_fallen","留守大营已毁，两处补军停止；已经在场的留守队仍须提防")
+	elif u in spies:
+		if u==scout and not signaled: b.mission.block_action("daming_fire","时迁阵亡，火号无法办理；外军可直接击破南门继续营救。")
+		if u in [chai,yue]:
+			if not prison_open: b.mission.block_action("daming_admit","牢中内应不齐，外军可清开牢前强入。")
+			if not signaled: b.mission.block_action("daming_fire","牢中内应不齐，火号路线不可用；仍可正面攻门救人。")
+func top_status(_b) -> String:
+	return "大名府 · 前营经营 / 城内行动 · 乔装%d/3 · 火号%s · 二囚%s"%[spies.filter(func(u): return alive(u) and u._invis_t>0).size(),"%d秒"%ceili(signal_left) if signal_left>0 else "已过" if signaled else "待起","已解枷" if rescued else "待救"]
