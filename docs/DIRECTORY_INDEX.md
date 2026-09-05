@@ -1,5 +1,7 @@
 # 水浒项目目录索引
 
+暂停操作：`docs/PAUSE_MENU_20260906.md`、`tools/pause_menu_qa.gd`；最终证据在 `qa/pause_menu_20260906/`，重跑输出在 `.godot/pause_menu_qa/`。
+
 地表透明缝：`docs/TERRAIN_ALPHA_SEAMS_20260906.md`、`tools/terrain_alpha_seam_probe.gd` 与 `tools/terrain_alpha_seam_qa.gd`；旧shader原字节固定在 `tools/contracts/terrain_seams/`（`.gdignore`），审核证据在 `qa/terrain_alpha_seams_20260906/`，临时结果在 `.godot/terrain_seam_probe/`、`.godot/terrain_alpha_seam_qa/`。
 
 田地增量：生产图 `assets/campaign/environment/shared/surfaces/surface_field.png`；独立来源在 `tools/contracts/environment/field_20260906/`（原图/提示词/接入/固定SHA审核增量，含 `.gdignore`）。`tools/environment_field_render_qa.gd` 为真实两关对照；`docs/ENVIRONMENT_FIELD_20260906.md` 和 `qa/environment_field_20260906/` 保存说明、证据及失败尝试。
