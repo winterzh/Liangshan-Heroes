@@ -1,0 +1,78 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[rts] PASS north starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS north follows its route through actual movement
+[rts] PASS north intercepts using an actual right-click action
+[rts] PASS north reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[rts] PASS stopping one selected companion stops the whole escort
+[rts] PASS escort companions remain within the existing 96-unit spacing bound during rest_stop
+[rts] PASS north gives one real order for four-person rest
+[rts] PASS rest counts only when the real party arrives
+[rts] PASS escort companions remain within the existing 96-unit spacing bound during leave_forest
+[rts] PASS north gives a separate real exit order
+[rts] PASS north escorts the living party to victory
+[yf-party] north [["lu_zhishen", (2, 20), 0, 5], ["lin_chong", (4, 20), 0, 6], ["dong_chao", (4, 21), 0, 4], ["xue_ba", (4, 19), 0, 4]]
+[rts] PASS north completes all three optional story goals
+[rts] PASS south starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS south follows its route through actual movement
+[rts] PASS south intercepts using an actual right-click action
+[rts] PASS south reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[rts] FAIL escort companions remain within the existing 96-unit spacing bound during rest_stop
+[rts] PASS south gives one real order for four-person rest
+[rts] PASS rest counts only when the real party arrives
+[rts] PASS escort companions remain within the existing 96-unit spacing bound during leave_forest
+[rts] PASS south gives a separate real exit order
+[rts] PASS south escorts the living party to victory
+[yf-party] south [["lu_zhishen", (2, 20), 0, 4], ["lin_chong", (4, 20), 0, 4], ["dong_chao", (4, 21), 0, 3], ["xue_ba", (4, 19), 0, 3]]
+[rts] PASS south completes all three optional story goals
+[rts] PASS late starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS falling behind leaves a real final rescue window
+[rts] PASS late intercepts using an actual right-click action
+[rts] PASS late reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[rts] FAIL escort companions remain within the existing 96-unit spacing bound during leave_forest
+[rts] PASS late gives a separate real exit order
+[rts] PASS late escorts the living party to victory
+[yf-party] late [["lu_zhishen", (2, 20), 0, 2], ["lin_chong", (4, 20), 0, 2], ["dong_chao", (4, 21), 0, 2], ["xue_ba", (4, 19), 0, 2]]
+[rts] PASS late direct exit does not fabricate rest credit
+[rts] PASS force starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS early force subdues both actual guards, returns to prisoner and frees him locally
+[rts] PASS force reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[rts] PASS escort companions remain within the existing 96-unit spacing bound during leave_forest
+[yf-timeout] leave_forest 3  group=[["lu_zhishen", (2, 20), 0, 0, 1, 1], ["lin_chong", (4, 21), 0, 0, 1, 0], ["dong_chao", (4, 21), 0, 0, 1, 1], ["xue_ba", (4, 19), 0, 0, 1, 1]]
+[rts] FAIL force gives a separate real exit order
+[rts] FAIL force escorts the living party to victory
+[yf-party] force [["lu_zhishen", (2, 20), 0, 5], ["lin_chong", (4, 21), 0, 2], ["dong_chao", (4, 21), 0, 3], ["xue_ba", (4, 19), 0, 3]]
+[rts] PASS force direct exit does not fabricate rest credit
+[rts] PASS no input eventually fails after the visible rescue deadline
+[rts] PASS defeat offers one actual restart button
+[rts] PASS actual restart reloads fresh chapter state
+[rts] PASS falling behind is an actionable warning, not instant failure
+[rts] PASS returning before the pine checkpoint restores a real shadow route
+[rts] PASS first close approach warns before full exposure
+[rts] PASS retreat from first warning sheds suspicion
+[rts] PASS defeating guards remotely cannot free a distant prisoner
+[rts] PASS untying preserves the actual prisoner location
+[rts] PASS finishing care does not teleport people into formation
+[rts] PASS unrequested script movement is still rejected after the route authorization fix
+[rts] PASS incomplete rest is retryable and gives no premature healing
+[rts] PASS survivors can leave without pretending a dead guard survived
+[rts] PASS Lu death after rescue clearly fails instead of leaving impossible escort
+[rts] PASS skirmish retains its normal combat Lin Chong
+[rts] PASS skirmish_ai retains its normal combat Lin Chong
+[yezhulin-short-result] 70 checks; failures=["escort companions remain within the existing 96-unit spacing bound during rest_stop", "escort companions remain within the existing 96-unit spacing bound during leave_forest", "force gives a separate real exit order", "force escorts the living party to victory"]

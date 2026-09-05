@@ -1,0 +1,65 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[rts] PASS north starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS north follows its route through actual movement
+[rts] PASS north intercepts using an actual right-click action
+[rts] PASS north reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[rts] PASS stopping one selected companion stops the whole escort
+[rts] PASS north gives one real order for four-person rest
+[rts] PASS rest counts only when the real party arrives
+[rts] PASS north gives a separate real exit order
+[rts] PASS north escorts the living party to victory
+[yf-party] north [["lu_zhishen", (3, 20), 1, 5], ["lin_chong", (7, 20), 0, 6], ["dong_chao", (6, 21), 1, 4], ["xue_ba", (6, 19), 1, 4]]
+[rts] PASS north completes all three optional story goals
+[rts] PASS south starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS south follows its route through actual movement
+[rts] PASS south intercepts using an actual right-click action
+[rts] PASS south reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[rts] PASS south gives one real order for four-person rest
+[rts] PASS rest counts only when the real party arrives
+[rts] PASS south gives a separate real exit order
+[rts] PASS south escorts the living party to victory
+[yf-party] south [["lu_zhishen", (3, 20), 1, 4], ["lin_chong", (7, 20), 0, 4], ["dong_chao", (6, 21), 1, 3], ["xue_ba", (6, 19), 1, 3]]
+[rts] PASS south completes all three optional story goals
+[rts] PASS late starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS falling behind leaves a real final rescue window
+[rts] PASS late intercepts using an actual right-click action
+[rts] PASS late reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[rts] PASS late gives a separate real exit order
+[rts] PASS late escorts the living party to victory
+[yf-party] late [["lu_zhishen", (3, 20), 1, 2], ["lin_chong", (7, 20), 0, 2], ["dong_chao", (5, 20), 1, 2], ["xue_ba", (6, 19), 1, 2]]
+[rts] PASS late direct exit does not fabricate rest credit
+[rts] PASS force starts the actual short chapter without smoke driver
+[rts] PASS selection shortcut selects without walking
+[rts] PASS early force subdues both actual guards, returns to prisoner and frees him locally
+[rts] PASS force reaches player-controlled escort
+[rts] PASS wounded Lin cannot fight or grant combat auras
+[rts] PASS rest and direct group exit are available together
+[rts] PASS rescued party waits without invented movement
+[yf-timeout] leave_forest 3  group=[["lu_zhishen", (7, 20), 1, 3, 0, 1], ["lin_chong", (9, 21), 1, 3, 0, 1], ["dong_chao", (9, 19), 1, 3, 0, 1], ["xue_ba", (9, 20), 1, 3, 0, 1]]
+[rts] FAIL force gives a separate real exit order
+[rts] PASS force escorts the living party to victory
+[yf-party] force [["lu_zhishen", (4, 20), 1, 5], ["lin_chong", (7, 21), 0, 2], ["dong_chao", (7, 19), 1, 3], ["xue_ba", (6, 20), 1, 3]]
+[rts] PASS force direct exit does not fabricate rest credit
+[rts] PASS no input eventually fails after the visible rescue deadline
+[rts] PASS defeating guards remotely cannot free a distant prisoner
+[rts] PASS untying preserves the actual prisoner location
+[rts] PASS finishing care does not teleport people into formation
+[rts] PASS incomplete rest is retryable and gives no premature healing
+[rts] PASS survivors can leave without pretending a dead guard survived
+[rts] PASS Lu death clearly fails instead of leaving impossible escort
+[rts] PASS skirmish retains its normal combat Lin Chong
+[rts] PASS skirmish_ai retains its normal combat Lin Chong
+[yezhulin-short-result] 57 checks; failures=["force gives a separate real exit order"]
