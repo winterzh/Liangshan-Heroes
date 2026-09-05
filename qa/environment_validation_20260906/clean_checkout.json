@@ -1,0 +1,169 @@
+{
+  "tested_commit": "f930cdb382d7b7f5583afb39c74af35df0d2539d",
+  "clean_before": true,
+  "clean_after": true,
+  "godot_cache_existed_before": false,
+  "godot_local_config_present": false,
+  "run_cwd_was_outside_checkout": true,
+  "receipt_inputs_checked": 28,
+  "receipt_mismatches": [],
+  "commands": [
+    {
+      "script": "tools/campaign_environment_art_static_contract.py",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "report": {
+        "passed": true,
+        "basis_kind": "retained_production_mapping",
+        "manifest_cells": 64,
+        "object_route_keys": 40,
+        "object_state_paths": 41,
+        "overlay_route_keys": 20,
+        "static_flag_route_keys": 3,
+        "surface_paths": 5,
+        "consumer_ready_manifest_cells": 64,
+        "consumer_ready_surfaces": 5,
+        "consumer_ready_total": 69,
+        "missing_source_resources_expected_before_web_intake": 33,
+        "checks": 790
+      }
+    },
+    {
+      "script": "tools/environment_art_audit.py",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "report": {
+        "passed": false,
+        "status": "incomplete_evidence",
+        "exit_code": 1,
+        "routes_passed": true,
+        "production_integrity_passed": true,
+        "production_complete": false,
+        "provenance_complete": false,
+        "counts": {
+          "targets": 69,
+          "present": 36,
+          "verified_production_hashes": 36,
+          "missing_production": 33,
+          "errors": 0,
+          "gaps": 253
+        }
+      }
+    },
+    {
+      "script": "tools/environment_validation_selftest.py",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "report": {
+        "passed": true,
+        "scope": "validator_behavior_and_portability_not_art_acceptance",
+        "checks": 30,
+        "results": [
+          "copied_checkout_without_git_or_office_directory_runs_from_other_cwd",
+          "route_pass_and_36_hashes_do_not_hide_33_missing_outputs_or_source_gaps",
+          "missing_mapping_is_structured_failure",
+          "malformed_mapping_is_structured_failure",
+          "mapping_digest_cannot_be_silently_rebaselined",
+          "production_inventory_digest_is_independently_pinned",
+          "wrong_level_scope_fails_against_retained_mapping",
+          "wrong_runtime_output_path_is_rejected",
+          "wrong_runtime_state_is_rejected",
+          "production_png_byte_drift_is_rejected",
+          "deletion_of_previously_tracked_png_is_an_error",
+          "unmapped_production_png_is_rejected",
+          "new_output_requires_independent_reviewed_baseline",
+          "traversal_absolute_drive_and_backslash_paths_rejected",
+          "report_cannot_overwrite_production_assets",
+          "report_cannot_overwrite_historical_qa",
+          "explicit_missing_frozen_manifest_fails_closed",
+          "report_cannot_overwrite_an_explicit_route_basis",
+          "substitute_historical_manifest_is_not_accepted_as_original",
+          "environment_web_art_intake_selftest_reports_blocked_not_passed",
+          "environment_surface_candidate_normalize_selftest_reports_blocked_not_passed",
+          "map_clamped_legacy_reports_each_missing_input",
+          "map_report_cannot_overwrite_install_evidence",
+          "historical_absolute_source_paths_require_explicit_relocation",
+          "explicit_relative_relocation_preserves_evidence_and_reruns_current_routes",
+          "relocation_does_not_bypass_original_source_hash_check",
+          "stale_green_report_cannot_substitute_for_current_route_evidence",
+          "explicit_relocation_still_rejects_directory_escape",
+          "intake_default_uses_repo_local_legacy_location_and_refuses_missing_evidence",
+          "all_failure_injections_restore_original_fixture_state"
+        ]
+      }
+    },
+    {
+      "script": "tools/environment_web_art_intake_selftest.py",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "passed": true,
+      "report": {
+        "kind": "environment_intake_selftest",
+        "tests_executed": 0,
+        "passed": false,
+        "status": "blocked_missing_or_invalid_evidence",
+        "errors": [
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation-check2\\tools\\contracts\\environment\\legacy\\environment_batch_manifest.json",
+            "expected_sha256": "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
+          },
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation-check2\\tools\\contracts\\environment\\legacy\\static_self_check.json",
+            "expected_sha256": "f8e562d4aeebbd64519acf83ecfb54385742b3d7f89dd72684149a953386aa77"
+          },
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation-check2\\qa\\environment_runtime_router_20260902\\report.json",
+            "expected_sha256": "16dda6894bfc1bb54584ac90180de2227d6df6a34174192a6638fd8068405f43"
+          }
+        ]
+      }
+    },
+    {
+      "script": "tools/environment_surface_candidate_normalize_selftest.py",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "passed": true,
+      "report": {
+        "kind": "environment_surface_normalize_selftest",
+        "tests_executed": 0,
+        "passed": false,
+        "status": "blocked_missing_or_invalid_evidence",
+        "errors": [
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation-check2\\tools\\contracts\\environment\\legacy\\environment_batch_manifest.json",
+            "expected_sha256": "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
+          },
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation-check2\\tools\\contracts\\environment\\legacy\\static_self_check.json",
+            "expected_sha256": "f8e562d4aeebbd64519acf83ecfb54385742b3d7f89dd72684149a953386aa77"
+          }
+        ]
+      }
+    },
+    {
+      "script": "tools/environment_map_clamped_contract.py",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "passed": true,
+      "report": {
+        "passed": false,
+        "status": "blocked_missing_historical_evidence",
+        "missing_inputs": [
+          "E:\\ChatGPT\\水浒-art-validation-check2\\qa\\environment_map_clamped_20260902\\install_manifest.json"
+        ],
+        "scope": "historical_map_clamped_contract",
+        "checks_executed": 0
+      }
+    }
+  ],
+  "passed": true,
+  "scope": "tool portability and expected failure semantics; production provenance remains incomplete"
+}

@@ -21,4 +21,6 @@ Godot首次干净导入退出0，未发现脚本或解析错误。本次没有�
 
 首次真实Git干净检出中，六条命令的退出码全部符合预期，27/28输入字节一致；`.gitattributes`自身被Windows转换为CRLF，收据因此正确判失败。为它也显式固定LF后重新检出验证。首次失败记录见 [换行失败收据](attempts/clean_checkout_line_endings.json)。
 
-复现命令与退出码见 [说明](../../docs/ENVIRONMENT_VALIDATION_PORTABILITY_20260906.md)。干净Git检出验证与最终推送收据在收尾核对后另附；本目录的历史文件不会被日常重跑覆盖。
+最终从提交 `f930cdb382d7b7f5583afb39c74af35df0d2539d` 新建干净Git检出：运行前无Godot缓存、无godot.local.txt，28/28收据输入逐字节匹配，从检出外cwd执行六条命令，退出码分别0/1/0/2/2/2，隔离自测30项通过；执行前后Git工作区都干净。见 [clean_checkout.json](clean_checkout.json)。随后的收尾提交仅补这份验收与文档，不改验证工具或生产输入。
+
+复现命令与退出码见 [说明](../../docs/ENVIRONMENT_VALIDATION_PORTABILITY_20260906.md)。本目录历史文件不会被日常重跑覆盖；最终远端同步SHA以本任务实际回读为准。

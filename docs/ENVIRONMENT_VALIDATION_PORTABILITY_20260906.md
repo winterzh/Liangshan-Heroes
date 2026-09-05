@@ -57,6 +57,6 @@ $env:ENVIRONMENT_QA_REPORT='res://.godot/environment_validation/runtime.json'
 
 ## 验证与交付
 
-本轮报告、自测、Godot运行结果及输入哈希保存在 [QA](../qa/environment_validation_20260906/README.md)。冻结输入通过 `.gitattributes` 保持精确字节；新的干净检出会再次验证哈希与入口。旧记录保留原样，并在相关说明中标明当前缺口。
+本轮报告、自测、Godot运行结果及输入哈希保存在 [QA](../qa/environment_validation_20260906/README.md)。冻结输入通过 `.gitattributes` 保持精确字节；从 `f930cdb` 新建的无缓存干净检出已验证28/28输入哈希、30项隔离自测及六个入口的预期退出码，执行前后工作区干净。旧记录保留原样，并在相关说明中标明当前缺口。
 
 后续恢复原件时逐文件审核并同步必要来源证据。不要把所有 QA/source 文件当缓存删除，也不要仅更新哈希以使工具变绿。角色四向、真人画面评价、性能和发行验收分别跟进。
