@@ -306,6 +306,25 @@ func set_objective(text: String) -> void:
 func set_status(text: String) -> void:
 	_status.text = text
 
+var _scroll: ScrollContainer
+var _scroll_content: VBoxContainer
+## Optional long objective list: keep title/core and live action feedback fixed.
+## The middle story/locator list scrolls within the space above command cards.
+func enable_scrolling() -> void:
+	if _scroll!=null: return
+	var box: VBoxContainer=_panel.get_child(0)
+	_scroll=ScrollContainer.new()
+	_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	_scroll.follow_focus=true
+	_scroll_content=VBoxContainer.new()
+	_scroll_content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	for child in [_story,_objective,_buttons]:
+		box.remove_child(child)
+		_scroll_content.add_child(child)
+	_scroll.add_child(_scroll_content)
+	box.add_child(_scroll)
+	box.move_child(_scroll,2)
+
 func add_action(action_id: String, label: String, cell: Vector2i, actors: Array, duration := 1.0, reach := 96.0, click_reach := 48.0, show_button := true) -> void:
 	if actions.has(action_id):
 		return
@@ -588,6 +607,11 @@ func tick(delta: float) -> void:
 	if not _panel.visible:
 		return
 	_panel.position = battle.hud.campaign_objective_position()
+	if _scroll!=null:
+		var bottom: float=battle.hud._bottom_panel.get_global_rect().position.y
+		var fixed: float=_title.get_combined_minimum_size().y+_core.get_combined_minimum_size().y+_status.get_combined_minimum_size().y+40
+		var available: float=maxf(80,bottom-_panel.position.y-fixed-12)
+		_scroll.custom_minimum_size=Vector2(278,minf(available,_scroll_content.get_combined_minimum_size().y))
 	_panel.reset_size()
 	elapsed += delta
 	total_game_seconds += delta

@@ -168,7 +168,7 @@ func _run() -> void:
 	if slope_mark!=null:
 		slope_mark._process(slope_mark.lifetime)
 		await process_frame
-	var ship=b.level.fleet[0]
+	var ship=b.find_unit("ruan_xiaoer_boat")
 	check(not b._unit_leaves_death_remains(b.level.hall) and not b._unit_leaves_death_remains(ship),
 		"buildings and water units are excluded from character remains")
 	source.is_summon=true
@@ -190,7 +190,7 @@ func _run() -> void:
 	check(b.map.is_open_world(ship.position,"water"),"real ship movement stays on water")
 	b.eject_from_buildings(ship)
 	check(b.map.is_open_world(ship.position,"water"),"building ejection retains water profile")
-	var spots=b._formation_targets([ship,b.level.fleet[1]],destination)
+	var spots=b._formation_targets([ship,b.find_unit("ruan_xiaowu_boat")],destination)
 	check(spots.all(func(p): return b.map.is_open_world(p,"water")),"ship formation targets remain on water")
 	b.mission.begin("qa","交互复位测试","同一事件只结算一次")
 	b.mission.mark("persist","事件应跨阶段保留")

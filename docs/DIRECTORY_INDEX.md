@@ -1,6 +1,6 @@
 # 水浒项目目录索引
 
-更新日期：2026-09-05（Asia/Shanghai）。
+更新日期：2026-09-06（Asia/Hong_Kong）。
 
 ## Git checkout 目录（家里接续）
 
@@ -12,10 +12,13 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `.godot/`：本机导入缓存及临时验证文件，不入库。
 - `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`：当前 Git 开发进度和跨电脑启动说明。
 - `docs/WALL_AND_NAVAL_FOUNDATION_20260906.md`：木墙脚点修正与限定关卡启用的造船底层说明。
-- `scripts/naval_production.gd`、`tools/naval_production_test.gd`、`tools/naval_production_visual.gd`：泊位、岸边施工、付费下水及取消/重建验证；目前仅测试启用船坞。
+- `scripts/naval_production.gd`、`tools/naval_production_test.gd`、`tools/naval_production_visual.gd`：泊位、岸边施工、付费下水及取消/重建验证；高俅当前入口显式启用船坞，驻守不启用。
 - `tools/wall_alignment_test.gd`、`tools/wall_alignment_visual.gd`、`tools/rts_performance_probe.gd`：墙脚/门接缝/遮挡与实机对照，正常1倍短窗性能采样。
 - `qa/wall_naval_20260906/`：本批墙与船坞的通过日志、失败尝试、前后图和输入哈希。
-- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄、连环马、大名府已进入样板，其余五关后续实施。
+- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄、连环马、大名府、高俅已进入样板，其余四关后续实施。
+- `docs/GAO_RTS_20260906.md`、`scripts/levels/level5_gao_rts.gd`：当前高俅入口、持续水陆经营、火攻接应和实际押俘回堂。
+- `tools/gao_rts_test.gd`、`tools/gao_capture_test.gd`、`tools/gao_rts_play.gd`、`tools/gao_rts_visual.gd`：经济/来源/结局边界，真实两路线与图形/长任务列表验证。
+- `qa/gao_rts_20260906/`：高俅最终结果、失败尝试、两尺寸图、实战图和输入哈希；受控夹具与实战分别记录。
 - `docs/DAMING_RTS_20260905.md`、`scripts/levels/level8_daming_rts.gd`：大名府当前入口、经营/潜入/火号/护送说明；旧level8脚本保留地图来源。
 - `tools/daming_rts_test.gd`、`tools/daming_infiltration_test.gd`、`tools/ranged_firing_path_test.gd`、`tools/daming_rts_visual.gd`：两条实战、输入边界、隔墙远程接近和图形验证。
 - `qa/daming_rts_20260905/`：本轮结果、失败尝试、截图与输入哈希收据，包含其他关卡回归的独立子目录。

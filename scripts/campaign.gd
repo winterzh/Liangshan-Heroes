@@ -8,7 +8,7 @@ const LEVELS := [
 	{"id": "level2", "title": "江州劫法场", "sub": "浔阳江畔·限时劫法场", "script": "res://scripts/levels/level2_jiangzhou.gd"},
 	{"id": "level3", "title": "三打祝家庄", "sub": "扎营扩军·断援攻城", "script": "res://scripts/levels/level3_zhujiazhuang_rts.gd"},
 	{"id": "level4", "title": "大破连环马", "sub": "扎营练枪·断粮破骑", "script": "res://scripts/levels/level4_lianhuanma_rts.gd"},
-	{"id": "level5", "title": "三败高太尉", "sub": "三败高太尉·终战", "script": "res://scripts/levels/level5_liangshan.gd"},
+	{"id": "level5", "title": "三败高太尉", "sub": "经营水寨·水陆协同", "script": "res://scripts/levels/level5_gao_rts.gd"},
 	{"id": "level6", "title": "大闹野猪林", "sub": "花和尚禅杖·救林冲", "script": "res://scripts/levels/level6_yezhulin.gd"},
 	{"id": "level7", "title": "醉打蒋门神", "sub": "快活林·无三不过望", "script": "res://scripts/levels/level7_kuaihuolin.gd"},
 	{"id": "level8", "title": "智取大名府", "sub": "城外经营·翠云楼火号", "script": "res://scripts/levels/level8_daming_rts.gd"},

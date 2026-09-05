@@ -1,5 +1,5 @@
 extends "res://tools/zhujiazhuang_rts_test.gd"
-## Integration fixture for the shared naval economy before chapter opt-in.
+## Integration fixture for shared naval economy, including current chapter opt-in.
 ## Uses real build/queue/rally/cancel/repair commands and elapsed game time.
 ## Terrain, budgets and blocked berths below are deliberate boundary fixtures.
 var Naval
@@ -19,7 +19,7 @@ func _run() -> void:
 	var b=await _start("",4)
 	Engine.time_scale=4
 	Naval=load("res://scripts/naval_production.gd")
-	check(not b._defs.has("shipyard") and not b.economy,"existing Gao chapter remains unchanged until RTS opt-in")
+	check(b._defs.has("shipyard") and b.economy,"Gao campaign explicitly enables the naval economy")
 	b.clear_campaign_section()
 	b.level=load("res://scripts/level_base.gd").new()
 	b.mission.begin("naval_fixture","船坞验证","受控场地：真实建造与付费下水")
@@ -163,7 +163,7 @@ func _run() -> void:
 		check(not b._defs.has("shipyard") and not b._defs.has("liangshan_warship"),mode+" does not inherit scoped naval definitions")
 		await _dispose(b)
 	b=await _start("",4)
-	check(not b._defs.has("shipyard") and not b.economy and b.level.id()=="level5","restarting Gao restores its original chapter without fixture economy")
+	check(b._defs.has("shipyard") and b.economy and b.level.id()=="level5" and b.level.produced==[0,0],"restarting Gao restores fresh chapter economy without fixture state")
 	await _finish(b)
 
 func _finish(b) -> void:

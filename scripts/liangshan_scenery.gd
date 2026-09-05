@@ -115,7 +115,7 @@ func setup(game_map: GameMap) -> void:
 		var hall_tex := EnvironmentArt.object(level_id,"zhongyi_hall")
 		var hall_metrics := EnvironmentArt.calibrated_visual_metrics("object",level_id,"zhongyi_hall")
 		if hall_tex!=null and not hall_metrics.is_empty():
-			var hall_p := _map.cell_to_world(HALL_CELL)
+			var hall_p := _map.cell_to_world(_map.get_meta("liangshan_hall_cell",HALL_CELL))
 			var hall_size := GameMap.building_visual_px(GameMap.footprint_half_for(58.0))
 			var hall_foot := float(hall_metrics.get("foot",0.78))
 			var hall_sprite := _add_sprite(hall_tex,hall_p,hall_size,hall_foot,false)
