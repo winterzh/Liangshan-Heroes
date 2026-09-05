@@ -2,6 +2,10 @@
 
 记录日期：2026-09-05（Asia/Shanghai）。
 
+## 最新设计事项：八关趣味重做（草案）
+
+用户反馈战役枯燥。已按现有源码整理 [八关趣味重做方案](CAMPAIGN_FUN_REWORK_20260905.md)：减少指定人物到点读条，增加分队、合击、清晰敌方意图与失误补救，建议先做江州和连环马样板。该文档是暂以小队战术为主的设计建议，未实现或通过趣味验收，未更改本页下述可运行版本。公共任务系统目前仍只支持一个现场办理者；任何并行交互须新增实现并验证。
+
 ## Git checkout 启动与家里接续（2026-09-05）
 
 本节是 GitHub 克隆版的当前启动说明。家里目录为 `E:\ChatGPT\水浒`，`project.godot` 直接位于该目录；交接文件是 `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`、`docs/DIRECTORY_INDEX.md`。下文办公室历史记录中的 `Liangshan-Heroes/` 前缀在 Git checkout 中应去掉，外层交接文档应改查 `docs/`。仓库外的 `implementation_*`、旧 QA、导出包和未推送修改不会自动来到家里，不能把缺失文件视为已同步。
