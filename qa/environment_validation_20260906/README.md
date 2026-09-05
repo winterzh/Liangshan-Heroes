@@ -19,4 +19,6 @@ Godot首次干净导入退出0，未发现脚本或解析错误。本次没有�
 
 第一次新增map-clamped正向夹具少写了原合同要求的 `steam_written: false` 和 `release_approved: false`，导致47/48。补齐夹具，保留合同要求，最终全部通过。失败输出保存在 [attempts](attempts/missing_fixture_flags.log)，不计入最终通过结果。
 
+首次真实Git干净检出中，六条命令的退出码全部符合预期，27/28输入字节一致；`.gitattributes`自身被Windows转换为CRLF，收据因此正确判失败。为它也显式固定LF后重新检出验证。首次失败记录见 [换行失败收据](attempts/clean_checkout_line_endings.json)。
+
 复现命令与退出码见 [说明](../../docs/ENVIRONMENT_VALIDATION_PORTABILITY_20260906.md)。干净Git检出验证与最终推送收据在收尾核对后另附；本目录的历史文件不会被日常重跑覆盖。
