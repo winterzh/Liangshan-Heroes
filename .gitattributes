@@ -1,4 +1,7 @@
 # Frozen evidence must retain exact bytes on both Windows and other systems.
+scripts/crowd_separation.gd text eol=lf
+tools/crowd_buffer_qa.gd text eol=lf
+qa/crowd_buffer_20260906/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/segment_endpoint_qa.gd text eol=lf
 qa/segment_endpoint_20260906/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 qa/kuaihuolin_short_20260906/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

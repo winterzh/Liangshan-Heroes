@@ -5382,6 +5382,11 @@ func _separation_pass(_delta: float) -> void:
 	# 分离是软约束：常规规模逐帧；超过 320 名机动单位后分三组轮询（每组 20Hz）。
 	# 位移/攻击仍是 60Hz，这里只给每对重叠单位隔几帧做一次位置校正。
 	_sep_phase = (_sep_phase + 1) % 3
+	# Buffering wins for dense medium crowds. Keep the direct
+	# path for sparse/small groups and the phased path above 320 movers.
+	if _mob_count >= 64 and _mob_count <= 320 and _mob_grid.size() * 2 < _mob_count:
+		preload("res://scripts/crowd_separation.gd").solve(units, _mob_grid, map, GRID_CELL)
+		return
 	var stagger := _mob_count > 320
 	for a: Unit in units:
 		if a.is_building or a.is_resource or a.hp <= 0.0 or a.garrisoned or a.story_outcome != "":

@@ -4,6 +4,15 @@ const REFERENCE_SHA := "f9dd340873d58ffe803d2793f388dbd98ebf8ee144dec8e523cee5b8
 var position_comparisons := 0
 var sequential_steps := 0
 
+func _reference_spec() -> Dictionary:
+	return {"path":REFERENCE,"sha256":REFERENCE_SHA}
+
+func _output_path() -> String:
+	return "res://.godot/crowd_separation_qa"
+
+func _extra_cases(_battle, _reference) -> void:
+	pass
+
 func _positions(units: Array) -> Array:
 	return units.map(func(u): return u.position)
 
@@ -21,13 +30,14 @@ func _reset_fields(units: Array, fields: Array) -> void:
 
 func _timed(target, units: Array, positions: Array) -> Dictionary:
 	var elapsed := 0
-	for i in range(80):
+	var calls := 800 if units.size() <= 64 else 80
+	for i in range(calls):
 		_restore(units,positions)
 		target._sep_phase=0
 		var started := Time.get_ticks_usec()
 		target._separation_pass(1.0/60.0)
 		elapsed+=Time.get_ticks_usec()-started
-	return {"calls":80,"microseconds":elapsed}
+	return {"calls":calls,"microseconds":elapsed}
 
 func _benchmark(b, old, units: Array, positions: Array, label: String) -> void:
 	_restore(units,positions)
@@ -43,21 +53,24 @@ func _benchmark(b, old, units: Array, positions: Array, label: String) -> void:
 	var before:=[];var after:=[]
 	for sample in samples: (before if sample.implementation=="reference" else after).append(sample.microseconds)
 	before.sort();after.sort()
-	report.samples.append({"label":label,"units":units.size(),"windows":samples,"median_reference_us":before[1],"median_optimized_us":after[1],"optimized_over_reference":float(after[1])/before[1]})
+	var phase_counts := [0,0,0]
+	for u in units: phase_counts[u.get_instance_id()%3]+=1
+	report.samples.append({"label":label,"units":units.size(),"windows":samples,"median_reference_us":before[1],"median_optimized_us":after[1],"optimized_over_reference":float(after[1])/before[1],"sampled_phase":1,"phase_populations":phase_counts,"grid_buckets":b._mob_grid.size()})
 
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")
 	AudioServer.set_bus_mute(0,true)
-	output=ProjectSettings.globalize_path("res://.godot/crowd_separation_qa")
+	output=ProjectSettings.globalize_path(_output_path())
 	DirAccess.make_dir_recursive_absolute(output)
 	var saved_before:=_save_hash()
-	check(FileAccess.get_sha256(REFERENCE)==REFERENCE_SHA,"frozen separation reference hash matches")
+	var reference:=_reference_spec()
+	check(FileAccess.get_sha256(reference.path)==reference.sha256,"frozen separation reference hash matches")
 	if not failures.is_empty(): quit(2);return
 	var b=await _start("level7",true)
 	b._perf_bench_setup(200);b._prof_on=false
 	b.process_mode=Node.PROCESS_MODE_DISABLED
 	var reference_script:=GDScript.new()
-	reference_script.source_code="extends \"res://scripts/battle.gd\"\n"+FileAccess.get_file_as_string(REFERENCE)
+	reference_script.source_code="extends \"res://scripts/battle.gd\"\n"+FileAccess.get_file_as_string(reference.path)
 	check(reference_script.reload()==OK,"frozen reference compiles after actual Battle startup")
 	if not failures.is_empty(): quit(2);return
 	var old=reference_script.new()
@@ -112,13 +125,15 @@ func _run() -> void:
 	_benchmark(b,old,units,sparse,"spread_206")
 	check(completed==32 and sequential_steps==288 and units.size()==206,"all regular stagger and edge fixtures completed")
 	check(report.samples.size()==2,"both paired timing workloads completed")
+	await _extra_cases(b,old)
 	old.free()
 	await _dispose(b,true)
 	check(_save_hash()==saved_before,"player campaign save bytes unchanged")
-	report["scope"]="Frozen old solver vs optimized solver on the same 206 actual Units, 32 explicitly synthetic fixtures with nine consecutive steps each; timings exclude position reset/grid setup; not live game FPS."
+	report["scope"]="Base fixtures: frozen old solver vs optimized solver on the same 206 actual Units, 32 explicitly synthetic fixtures with nine consecutive steps each; timings exclude external position reset/grid setup but include all internal solver work; not live game FPS."
+	report["reference"]=reference
 	report["position_comparisons"]=position_comparisons
 	report["sequential_steps"]=sequential_steps
 	report["passed"]=failures.is_empty();report["failures"]=failures
 	FileAccess.open(output.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
-	print("[crowd-separation-summary] ",JSON.stringify({"checks":report.mode_checks.size(),"positions":position_comparisons,"steps":sequential_steps,"passed":failures.is_empty(),"samples":report.samples}))
+	print("[crowd-separation-summary] ",JSON.stringify({"checks":report.mode_checks.size(),"positions":position_comparisons,"steps":sequential_steps,"passed":failures.is_empty(),"sample_count":report.samples.size()}))
 	quit(0 if failures.is_empty() else 1)

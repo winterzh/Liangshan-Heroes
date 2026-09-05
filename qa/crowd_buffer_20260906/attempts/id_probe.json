@@ -1,0 +1,241 @@
+{
+	"failures": [],
+	"mode_checks": [
+		{
+			"name": "frozen separation reference hash matches",
+			"passed": true
+		},
+		{
+			"name": "frozen reference compiles after actual Battle startup",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: moving spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: moving spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: moving spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: moving spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: idle spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: idle spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: idle spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: idle spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: mixed_water spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: mixed_water spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: mixed_water spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: mixed_water spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: gold_workers spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: gold_workers spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: gold_workers spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: gold_workers spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: fractional_radii spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: fractional_radii spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: fractional_radii spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: fractional_radii spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: same_position spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: same_position spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: same_position spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: same_position spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: reversed_order spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: reversed_order spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: reversed_order spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: reversed_order spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: stale_grid spacing=0.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: stale_grid spacing=0.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: stale_grid spacing=1.7 stagger=false",
+			"passed": true
+		},
+		{
+			"name": "nine consecutive exact steps: stale_grid spacing=1.7 stagger=true",
+			"passed": true
+		},
+		{
+			"name": "all regular stagger and edge fixtures completed",
+			"passed": true
+		},
+		{
+			"name": "both paired timing workloads completed",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "player campaign save bytes unchanged",
+			"passed": true
+		}
+	],
+	"passed": true,
+	"position_comparisons": 59328,
+	"samples": [
+		{
+			"label": "dense_206",
+			"median_optimized_us": 387286,
+			"median_reference_us": 388590,
+			"optimized_over_reference": 0.996644278030829,
+			"units": 206,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 388590
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 388879
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 355100
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 372389
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 391207
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 387286
+				}
+			]
+		},
+		{
+			"label": "spread_206",
+			"median_optimized_us": 106822,
+			"median_reference_us": 108205,
+			"optimized_over_reference": 0.987218705235433,
+			"units": 206,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 111870
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 106338
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 106822
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 108205
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 105137
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 114011
+				}
+			]
+		}
+	],
+	"scope": "Frozen old solver vs optimized solver on the same 206 actual Units, 32 explicitly synthetic fixtures with nine consecutive steps each; timings exclude position reset/grid setup; not live game FPS.",
+	"sequential_steps": 288
+}
