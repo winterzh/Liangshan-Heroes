@@ -543,7 +543,7 @@ func _notification(what: int) -> void:
 		_release_custom_cursor_resources()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		if hud != null and hud._pause_root != null and hud._pause_root.visible:
-			_close_pause()
+			hud.pause_back()
 		else:
 			_open_pause()
 

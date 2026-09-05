@@ -6,6 +6,12 @@
 
 当前测试为 `tools/huangnigang_short_test.gd`，`HNS_CASE=all`跑两条路线及边界；`HNS_VISUAL=1`配合非headless保存实机，`HNS_SIZE=1280`选择小窗口。详细 [玩法与验证](HUANGNIGANG_SHORT_20260906.md)、[QA](../qa/huangnigang_short_20260906/README.md)。旧黄泥冈深度/搬运/酒计/美术工具验证旧流程，不能替代当前入口。木墙本轮重新出图核对，使用源码启动并重开关卡才能加载现有修正。
 
+合并后的版本也包含暂停重开/返回/退出确认。黄泥冈边界、滚动布局及实际暂停菜单已交叉复验，详见本批QA `integration/`；章节进度仍不等于战斗中段快照。
+
+## 2026-09-06 暂停操作
+
+暂停菜单的重开、返回与退出现在先显示本局不保存的提示，取消后仍停留在暂停菜单；Esc 或安卓返回键先取消确认，再按一次继续。已有章节记录保留，尚无中途战斗快照。专项入口 `tools/pause_menu_qa.gd` 使用本机Godot实际渲染运行，输出 `.godot/pause_menu_qa/`，55项通过。见 [实现/复现](PAUSE_MENU_20260906.md) 和 [证据](../qa/pause_menu_20260906/README.md)。
+
 ## 2026-09-06 自然地表细缝修复
 
 提交 `a851bb0` 已在专用干净Git检出上核对42项输入与41份证据，并从外部目录复跑三个Python入口，预期退出0/1/0；没有Godot资源导入缓存，执行后仍无未提交文件。收据见地表QA的 `checkout_verification.json`。

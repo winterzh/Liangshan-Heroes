@@ -100,6 +100,14 @@ var _end_tally_scroll: ScrollContainer
 var _end_next: Button
 
 var _pause_root: ColorRect
+var _pause_options: VBoxContainer
+var _pause_confirm: VBoxContainer
+var _pause_confirm_title: Label
+var _pause_confirm_text: Label
+var _pause_confirm_button: Button
+var _pause_cancel_button: Button
+var _pause_resume_button: Button
+var _pause_pending_action := ""
 
 # AI友好模式·自动镜头按钮：左下角（全员托管后出现，点一下开/关自动镜头；开启时呼吸闪烁）
 var _autocam_btn: Button
@@ -2471,6 +2479,7 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 ## 暂停菜单（Esc 呼出）：继续 / 重打 / 返回主菜单 / 退出
 func _build_pause() -> void:
 	_pause_root = ColorRect.new()
+	_pause_root.z_index = 300  # Above battle toasts, inventory and skill tips.
 	_pause_root.color = Color(0.06, 0.05, 0.035, 0.95)   # 暂停菜单：近不透明暖深底，文字清晰
 	_pause_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_pause_root.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -2485,6 +2494,7 @@ func _build_pause() -> void:
 	vb.add_theme_constant_override("separation", 14)
 	vb.alignment = BoxContainer.ALIGNMENT_CENTER
 	cc.add_child(vb)
+	_pause_options = vb
 
 	var t := Label.new()
 	t.text = "暂停"
@@ -2493,13 +2503,17 @@ func _build_pause() -> void:
 	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	vb.add_child(t)
 
-	for spec in [["继续 (Esc)", resume_game], ["重新开始本局", restart], ["返回主菜单", to_menu], ["退出游戏", quit_game]]:
+	for spec in [["继续 (Esc)", "resume"], ["重新开始本局", "restart"], ["返回主菜单", "menu"], ["退出游戏", "quit"]]:
 		var b := Button.new()
 		b.text = String(spec[0])
 		b.add_theme_font_size_override("font_size", 22)
 		b.custom_minimum_size = Vector2(240, 48)
-		var sig: Signal = spec[1]
-		b.pressed.connect(func() -> void: sig.emit())
+		var action := String(spec[1])
+		if action == "resume":
+			_pause_resume_button = b
+			b.pressed.connect(func() -> void: resume_game.emit())
+		else:
+			b.pressed.connect(func() -> void: _request_pause_action(action))
 		vb.add_child(b)
 
 	# 设置（与主菜单同一套面板）：先收起暂停菜单，关闭设置后再弹回；HUD 为 ALWAYS，暂停态可操作
@@ -2526,20 +2540,84 @@ func _build_pause() -> void:
 			fsb.text = "⛶ 退出全屏 (F11)" if scr.is_fullscreen() else "⛶ 全屏 (F11)")
 	vb.add_child(fsb)
 
+	_pause_confirm = VBoxContainer.new()
+	_pause_confirm.custom_minimum_size.x = 360.0
+	_pause_confirm.add_theme_constant_override("separation", 18)
+	_pause_confirm.hide()
+	cc.add_child(_pause_confirm)
+	_pause_confirm_title = Label.new()
+	_pause_confirm_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pause_confirm_title.add_theme_font_size_override("font_size", 30)
+	_pause_confirm.add_child(_pause_confirm_title)
+	_pause_confirm_text = Label.new()
+	_pause_confirm_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_pause_confirm_text.custom_minimum_size.x = 360.0
+	_pause_confirm_text.add_theme_font_size_override("font_size", 20)
+	_pause_confirm.add_child(_pause_confirm_text)
+	_pause_cancel_button = Button.new()
+	_pause_cancel_button.text = "取消 · 留在本局 (Esc)"
+	_pause_cancel_button.custom_minimum_size.y = 48.0
+	_pause_cancel_button.add_theme_font_size_override("font_size", 22)
+	_pause_cancel_button.pressed.connect(show_pause)
+	_pause_confirm.add_child(_pause_cancel_button)
+	_pause_confirm_button = Button.new()
+	_pause_confirm_button.custom_minimum_size.y = 48.0
+	_pause_confirm_button.add_theme_font_size_override("font_size", 22)
+	_pause_confirm_button.pressed.connect(_confirm_pause_action)
+	_pause_confirm.add_child(_pause_confirm_button)
+
+
+func _request_pause_action(action: String) -> void:
+	if not _pause_root.visible or not action in ["restart", "menu", "quit"]: return
+	_pause_pending_action = action
+	_pause_confirm_title.text = {"restart": "重新开始本局？", "menu": "返回主菜单？", "quit": "退出游戏？"}[action]
+	_pause_confirm_button.text = {"restart": "确认重新开始", "menu": "确认返回主菜单", "quit": "确认退出游戏"}[action]
+	_pause_confirm_text.text = "本局的战斗进度不会保存，之后需从本局开头重新开始。"
+	if battle != null and battle.level.id().begins_with("level"):
+		_pause_confirm_text.text += "\n\n已获得的章节解锁和通关记录会保留。"
+	_pause_options.hide()
+	_pause_confirm.show()
+	# Opening the question never focuses the destructive action.
+	_pause_cancel_button.grab_focus()
+
+
+func _confirm_pause_action() -> void:
+	if not _pause_root.visible or not _pause_confirm.visible: return
+	var action := _pause_pending_action
+	_pause_pending_action = ""
+	match action:
+		"restart": restart.emit()
+		"menu": to_menu.emit()
+		"quit": quit_game.emit()
+
+
+func pause_back() -> void:
+	if _pause_confirm.visible:
+		show_pause()
+	else:
+		resume_game.emit()
+
 
 func show_pause() -> void:
+	_pause_pending_action = ""
+	_pause_confirm.hide()
+	_pause_options.show()
 	_pause_root.visible = true
+	_pause_root.move_to_front()  # Also block mouse/touch input to later-created HUD controls.
+	_pause_resume_button.grab_focus()
 
 
 func hide_pause() -> void:
+	_pause_pending_action = ""
+	_pause_confirm.hide()
 	_pause_root.visible = false
 
 
 func _input(event: InputEvent) -> void:
-	# 暂停态下 Esc 直接继续（HUD 始终处理，盖过被暂停的战斗输入）
+	# Esc first cancels a pending departure, then resumes from the pause menu.
 	if _pause_root != null and _pause_root.visible \
 			and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
-		resume_game.emit()
+		pause_back()
 		get_viewport().set_input_as_handled()
 
 
