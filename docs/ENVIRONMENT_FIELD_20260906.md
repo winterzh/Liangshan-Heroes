@@ -33,3 +33,5 @@ python -X utf8 -B tools/environment_validation_selftest.py
 ```
 
 审计预期退出1、隔离自测0、画面对照0；最后一项必须使用真实渲染器，并检查日志无 `SCRIPT ERROR` / `ERROR:`。报告与临时图片在 `.godot/environment_field_qa/`，已审核证据和失败尝试见 [本批QA](../qa/environment_field_20260906/README.md)。本批只同步源码和必要资源，没有导出或发布。
+
+田地提交 `591479d` 已从全新无缓存Git检出复验：27项输入和24份证据字节匹配，静态/审计/自测退出码0/1/0，检出前后干净。另合入已发布野猪林 `fe70c4e`，保留双方文档并在合并源码上重跑44项画面、790/794项路由及40项自测；33个非冲突远端文件保持原内容。合并后29项输入及结果在QA的 `integration/receipt.json` 独立记录，初次快照保留原样。

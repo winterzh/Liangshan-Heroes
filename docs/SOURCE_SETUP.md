@@ -2,7 +2,15 @@
 
 ## 2026-09-06 田地资源接入
 
+本批 `591479d` 无缓存干净检出通过27项输入/24份证据哈希与三个入口复现；收尾合入野猪林 `fe70c4e` 后重跑专项44、路由790/794与隔离40项，结果仍通过。原检出收据与合并后证据分别保存在田地QA的 `clean_checkout.json`、`integration/`。
+
 重开“三打祝家庄”或“智取大名府”会加载新田地整图；其他关卡不加载。新增 `tools/environment_field_render_qa.gd`：完成Godot导入后，以本机配置的 `$godotExe --path . --script res://tools/environment_field_render_qa.gd` 运行真实渲染对照，结果在 `.godot/environment_field_qa/`。当前专项44项、路由790/794项、隔离反例40项通过；环境审计现为37张匹配、32张缺图、249项缺口，仍预期退出1。新原图/提示词/接入记录与历史缺口分别保留，见 [说明](ENVIRONMENT_FIELD_20260906.md) 和 [QA](../qa/environment_field_20260906/README.md)。
+
+## 2026-09-06 野猪林短篇入口
+
+重新运行 `Play.cmd`，在战役菜单选择“大闹野猪林”并重开。先选鲁智深，右键林边地面跟随；跟丢仍可赶到松树补救。拦棍后四人等玩家指挥，可直接结队出林或歇脚完成演义目标；S可整队停下，任务按钮只定位。实际提前强救需要制住解差并回到林冲身旁，人物不再瞬移整队。
+
+`YF_CASE=all`运行 `tools/yezhulin_short_test.gd`；非headless下设`YF_VISUAL=1`可截图，`YF_SIZE=1280`检查小窗口。旧`campaign_yezhulin_depth_test.gd`入口同步转到当前套件，新输出在`.godot/yezhulin_short/`。详见 [规则与限制](YEZHULIN_SHORT_20260906.md)、[QA](../qa/yezhulin_short_20260906/README.md)。
 
 ## 2026-09-06 江州有限补给救援入口
 

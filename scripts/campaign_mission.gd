@@ -631,7 +631,10 @@ func tick(delta: float) -> void:
 	var action: Dictionary = actions[active_action_id]
 	var destination: Vector2 = battle.map.cell_to_world(action.cell)
 	_retry += delta
-	if _actor.position.distance_to(destination) > float(action.reach) or not battle.map._segment_open(_actor.position, destination, _actor.movement_profile):
+	# Some escort actions allow a small collision margin after actual arrival.
+	# New player commands still cancel immediately through on_player_order().
+	var progress_reach: float = float(action.reach) + clampf(float(action.get("settle_margin",0.0)),0.0,16.0)
+	if _actor.position.distance_to(destination) > progress_reach or not battle.map._segment_open(_actor.position, destination, _actor.movement_profile):
 		_progress = 0.0
 		if _retry > 3.0:
 			if bool(_actor.get_meta(AUTO_DISPATCH_META, false)):

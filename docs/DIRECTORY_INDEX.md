@@ -2,6 +2,8 @@
 
 田地增量：生产图 `assets/campaign/environment/shared/surfaces/surface_field.png`；独立来源在 `tools/contracts/environment/field_20260906/`（原图/提示词/接入/固定SHA审核增量，含 `.gdignore`）。`tools/environment_field_render_qa.gd` 为真实两关对照；`docs/ENVIRONMENT_FIELD_20260906.md` 和 `qa/environment_field_20260906/` 保存说明、证据及失败尝试。
 
+野猪林短篇：`docs/YEZHULIN_SHORT_20260906.md`记录当前合同2；`tools/yezhulin_short_test.gd`覆盖实际四路线及独立边界，旧`campaign_yezhulin_depth_test.gd`为兼容入口。临时结果在`.godot/yezhulin_short/`，本批证据在`qa/yezhulin_short_20260906/`。
+
 江州当前入口：`scripts/levels/level2_jiangzhou_rts.gd`，说明 `docs/JIANGZHOU_RTS_20260906.md`；旧 `level2_jiangzhou.gd`保留地图来源。`tools/jiangzhou_rts_test.gd`、`tools/jiangzhou_rts_play.gd`、`tools/jiangzhou_rts_visual.gd`分别验证边界、真实两路线和界面/地图；临时结果在 `.godot/jiangzhou_rts/`，已审核证据在 `qa/jiangzhou_rts_20260906/`。
 
 更新日期：2026-09-06（Asia/Hong_Kong）。
