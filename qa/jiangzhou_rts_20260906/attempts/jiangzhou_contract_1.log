@@ -1,0 +1,41 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+SCRIPT ERROR: Compile Error: Identifier not found: Sfx
+   at: GDScript::reload (res://scripts/unit.gd:989)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://tools/jiangzhou_rts_test.gd:0)
+ERROR: Failed to load script "res://tools/jiangzhou_rts_test.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: Battle.spawn_unit (res://scripts/battle.gd:576)
+   GDScript backtrace (most recent call first):
+       [0] spawn_unit (res://scripts/battle.gd:576)
+       [1] spawn_at (res://scripts/battle.gd:618)
+       [2] deploy (res://scripts/levels/level2_jiangzhou_rts.gd:120)
+       [3] _ready (res://scripts/battle.gd:361)
+       [4] _start (res://tools/zhujiazhuang_rts_test.gd:29)
+       [5] _run (res://tools/jiangzhou_rts_test.gd:19)
+SCRIPT ERROR: Cannot call method 'set_meta' on a null value.
+   at: Battle.spawn_at (res://scripts/battle.gd:620)
+   GDScript backtrace (most recent call first):
+       [0] spawn_at (res://scripts/battle.gd:620)
+       [1] deploy (res://scripts/levels/level2_jiangzhou_rts.gd:120)
+       [2] _ready (res://scripts/battle.gd:361)
+       [3] _start (res://tools/zhujiazhuang_rts_test.gd:29)
+       [4] _run (res://tools/jiangzhou_rts_test.gd:19)
+SCRIPT ERROR: Invalid assignment of property or key 'display_name' with value of type 'String' on a base object of type 'Nil'.
+   at: deploy (res://scripts/levels/level2_jiangzhou_rts.gd:121)
+   GDScript backtrace (most recent call first):
+       [0] deploy (res://scripts/levels/level2_jiangzhou_rts.gd:121)
+       [1] _ready (res://scripts/battle.gd:361)
+       [2] _start (res://tools/zhujiazhuang_rts_test.gd:29)
+       [3] _run (res://tools/jiangzhou_rts_test.gd:19)
+[rts] PASS menu uses limited-supply rescue with compatible chapter ID
+[rts] PASS finite starting purse and fog are enabled
+[rts] PASS emergency chapter has no mining, chopping or automatic income units
+[rts] FAIL both real reinforcement camps share the normal troop roster
+SCRIPT ERROR: Invalid access of index '0' on a base object of type: 'Array[Node2D]'.
+   at: _run (res://tools/jiangzhou_rts_test.gd:26)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/jiangzhou_rts_test.gd:26)
+       [1] _start (res://tools/zhujiazhuang_rts_test.gd:35)

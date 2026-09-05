@@ -1,0 +1,92 @@
+{
+	"checks": 10,
+	"failures": [],
+	"metrics": {
+		"cache_taken": [
+			true,
+			false
+		],
+		"controller_wait_seconds": 123.0,
+		"enemy_paid_recruits": 3,
+		"enemy_spent_gold": 74,
+		"enemy_spent_wood": 30,
+		"events": [
+			"action:jiangzhou_rts:south_lane",
+			"south_lane",
+			"action:jiangzhou_rts:west_street",
+			"west_street",
+			"jiangzhou_li_first",
+			"action:jiangzhou_rts:cache_0",
+			"cache_0",
+			"execution_halted",
+			"action:jiangzhou_rts:free_song",
+			"free_song",
+			"action:jiangzhou_rts:free_dai",
+			"free_dai",
+			"jiangzhou_rear_pursuit",
+			"bailong",
+			"action:jiangzhou_rts:rally_dock",
+			"rally_dock",
+			"action:jiangzhou_rts:board_song",
+			"board_song",
+			"action:jiangzhou_rts:board_dai",
+			"board_dai",
+			"jiangzhou_named_survive",
+			"all_embarked"
+		],
+		"game_seconds": 125.799999999998,
+		"max_ordinary_troops": 18,
+		"orders": 329,
+		"paid_recruits": 15,
+		"result": {
+			"contract_version": 2,
+			"core_cleared": true,
+			"core_goal": "150秒内打倒两名刽子手，分别救出宋江、戴宗，护送二人活着登船，再下令开船。无需杀光官军。",
+			"done_ids": [
+				"li_kui_first",
+				"free_both",
+				"bailong_meeting",
+				"named_survive"
+			],
+			"goals": [
+				{
+					"id": "li_kui_first",
+					"label": "两路就位后，由李逵排头打断行刑",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "free_both",
+					"label": "在法场分别救下宋江、戴宗",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "bailong_meeting",
+					"label": "护送二人到白龙庙，与水军相会",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "named_survive",
+					"label": "六名具名好汉全部活着撤回码头",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				}
+			],
+			"missed_ids": [],
+			"pending_ids": [],
+			"story_complete": true,
+			"story_done": 4,
+			"story_total": 4
+		},
+		"skills": 8
+	},
+	"passed": true,
+	"route": "story",
+	"scope": "real player commands, money, queue time and combat; automated full-state planning, not human fun acceptance"
+}

@@ -1,5 +1,7 @@
 # 水浒项目目录索引
 
+江州当前入口：`scripts/levels/level2_jiangzhou_rts.gd`，说明 `docs/JIANGZHOU_RTS_20260906.md`；旧 `level2_jiangzhou.gd`保留地图来源。`tools/jiangzhou_rts_test.gd`、`tools/jiangzhou_rts_play.gd`、`tools/jiangzhou_rts_visual.gd`分别验证边界、真实两路线和界面/地图；临时结果在 `.godot/jiangzhou_rts/`，已审核证据在 `qa/jiangzhou_rts_20260906/`。
+
 更新日期：2026-09-06（Asia/Hong_Kong）。
 
 ## Git checkout 目录（家里接续）
@@ -18,7 +20,7 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `scripts/naval_production.gd`、`tools/naval_production_test.gd`、`tools/naval_production_visual.gd`：泊位、岸边施工、付费下水及取消/重建验证；高俅当前入口显式启用船坞，驻守不启用。
 - `tools/wall_alignment_test.gd`、`tools/wall_alignment_visual.gd`、`tools/rts_performance_probe.gd`：墙脚/门接缝/遮挡与实机对照，正常1倍短窗性能采样。
 - `qa/wall_naval_20260906/`：本批墙与船坞的通过日志、失败尝试、前后图和输入哈希。
-- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄、连环马、大名府、高俅已进入样板，其余四关后续实施。
+- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄、连环马、大名府、高俅及江州补给关已有样板，三个短篇后续实施。
 - `docs/GAO_RTS_20260906.md`、`scripts/levels/level5_gao_rts.gd`：当前高俅入口、持续水陆经营、火攻接应和实际押俘回堂。
 - `tools/gao_rts_test.gd`、`tools/gao_capture_test.gd`、`tools/gao_rts_play.gd`、`tools/gao_rts_visual.gd`：经济/来源/结局边界，真实两路线与图形/长任务列表验证。
 - `qa/gao_rts_20260906/`：高俅最终结果、失败尝试、两尺寸图、实战图和输入哈希；受控夹具与实战分别记录。

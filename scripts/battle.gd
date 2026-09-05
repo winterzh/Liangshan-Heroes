@@ -1945,6 +1945,7 @@ func on_unit_trained(bld: Unit, key: String) -> bool:
 	if cell==Vector2i(-1,-1): return false
 	var u := spawn_unit(key, bld.faction, map.cell_to_world(cell))
 	if u==null: return false
+	level.on_unit_trained(self,u,bld)
 	# 战死英雄重练 → 恢复原等级/技能（不从 1 级重来）
 	if u.is_hero and u._hero_leveled and hero_progress.has(key):
 		var pr: Dictionary = hero_progress[key]

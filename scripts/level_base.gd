@@ -26,6 +26,7 @@ func deploy(_b) -> void: pass                       # 部署初始我军（及�
 # 流程
 func on_start(_b) -> void: pass                     # 点「开战」后：启动波次/计时器
 func process(_b, _delta: float) -> void: pass       # FIGHT 阶段每帧自定义机制 + 胜负判定
+func on_unit_trained(_b, _unit, _building) -> void: pass # Chapter-specific orders for freshly paid recruits.
 func on_unit_died(_b, _u) -> void: pass             # 单位阵亡钩子（统计英雄存活、营救判定等）
 func on_unit_resolved(_b, _u, _outcome: String) -> void: pass
 func on_mission_action(_b, _action_id: String, _actor) -> void: pass

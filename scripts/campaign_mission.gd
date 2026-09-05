@@ -510,7 +510,7 @@ func _start_action(action_id: String, candidate, dispatch: bool) -> void:
 	_refresh_marker_captions()
 
 func _valid_action_actor(u, action: Dictionary) -> bool:
-	if not is_instance_valid(u) or u.hp <= 0 or u.faction != Unit.FACTION_LIANG or u.is_captive or u.garrisoned or u.story_outcome != "":
+	if not is_instance_valid(u) or u.hp <= 0 or u.faction != Unit.FACTION_LIANG or u.is_summon or u.is_captive or u.garrisoned or u.story_outcome != "":
 		return false
 	return action.actors.is_empty() or action.actors.has(u.key)
 

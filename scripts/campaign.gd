@@ -5,7 +5,7 @@ const VERSION := "1.8"   # 完整包版本；三端内容更新状态由 Android
 
 const LEVELS := [
 	{"id": "level1", "title": "智取生辰纲", "sub": "黄泥冈·七星聚义", "script": "res://scripts/levels/level1_huangnigang.gd"},
-	{"id": "level2", "title": "江州劫法场", "sub": "浔阳江畔·限时劫法场", "script": "res://scripts/levels/level2_jiangzhou.gd"},
+	{"id": "level2", "title": "江州劫法场", "sub": "有限补给·分路劫救", "script": "res://scripts/levels/level2_jiangzhou_rts.gd"},
 	{"id": "level3", "title": "三打祝家庄", "sub": "扎营扩军·断援攻城", "script": "res://scripts/levels/level3_zhujiazhuang_rts.gd"},
 	{"id": "level4", "title": "大破连环马", "sub": "扎营练枪·断粮破骑", "script": "res://scripts/levels/level4_lianhuanma_rts.gd"},
 	{"id": "level5", "title": "三败高太尉", "sub": "经营水寨·水陆协同", "script": "res://scripts/levels/level5_gao_rts.gd"},
