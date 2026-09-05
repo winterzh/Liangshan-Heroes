@@ -43,7 +43,6 @@ uniform float natural_warp_px = 5.0;
 uniform float natural_seed = 2648.0;
 uniform vec4 scene_tint : source_color = vec4(1.0);
 varying vec2 ground_position;
-varying float primitive_alpha;
 
 
 float hash21(vec2 p) {
@@ -128,7 +127,6 @@ vec3 natural_material(vec2 mask_uv, vec2 tile_uv, vec2 map_uv, float transition_
 
 void vertex() {
 	ground_position = VERTEX;
-	primitive_alpha = COLOR.a;
 	if (height_enabled) {
 		vec2 uv = (ground_position / 32.0 + vec2(0.5)) / (map_size + vec2(1.0));
 		float h = texture(height_map, uv).r * elevation_scale;
@@ -138,12 +136,6 @@ void vertex() {
 
 
 void fragment() {
-	// Natural terrain owns the full ground quad. The legacy atlas is only a
-	// fallback color source: its transparent gutters must not cut holes in a
-	// routed surface. Keep primitive/CanvasItem opacity, including actual fades.
-	if (natural_surface_enabled) {
-		COLOR.a = primitive_alpha;
-	}
 	vec2 cell = ground_position / 32.0;
 	vec2 world_size = map_size * 32.0;
 	vec2 center_uv = (floor(cell) + vec2(0.5)) / map_size;

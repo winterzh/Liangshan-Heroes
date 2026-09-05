@@ -1,5 +1,9 @@
 # 水浒英雄传本地源码
 
+## 2026-09-06 自然地表细缝修复
+
+重开关卡会加载修复后的自然地表shader，旧atlas的透明边缘不再截断整图地面。新增 `tools/terrain_alpha_seam_probe.gd`、`tools/terrain_alpha_seam_qa.gd`，用本机Godot非headless运行；输出位于 `.godot/terrain_seam_probe/` 与 `.godot/terrain_alpha_seam_qa/`。八关86项实机/透明度、90项地形契约通过；没有改变生产图片、寻路或任务逻辑。复现命令与范围见 [说明](TERRAIN_ALPHA_SEAMS_20260906.md)、[QA](../qa/terrain_alpha_seams_20260906/README.md)。
+
 ## 2026-09-06 田地资源接入
 
 本批 `591479d` 无缓存干净检出通过27项输入/24份证据哈希与三个入口复现；收尾合入野猪林 `fe70c4e` 后重跑专项44、路由790/794与隔离40项，结果仍通过。原检出收据与合并后证据分别保存在田地QA的 `clean_checkout.json`、`integration/`。

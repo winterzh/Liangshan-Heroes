@@ -1,5 +1,10 @@
 # Frozen evidence must retain exact bytes on both Windows and other systems.
 .gitattributes text eol=lf
+scripts/liangshan_coast.gdshader text eol=lf
+tools/terrain_alpha_seam_qa.gd text eol=lf
+tools/terrain_alpha_seam_probe.gd text eol=lf
+tools/contracts/terrain_seams/** -text
+qa/terrain_alpha_seams_20260906/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/environment_production_mapping.template.json -text
 tools/contracts/environment/** -text
 qa/environment_validation_20260906/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

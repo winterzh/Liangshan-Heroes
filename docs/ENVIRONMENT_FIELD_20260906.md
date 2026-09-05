@@ -1,5 +1,7 @@
 # 祝家庄与大名府田地地表
 
+后续更新：本批观察到的旧atlas斜向细缝已用独立shader改动修复，见 [地表透明缝](TERRAIN_ALPHA_SEAMS_20260906.md)。下文与原QA保留田地接入当时的事实，源图/提示词/审核增量字节未变。
+
 2026-09-06，从 `f0818c1` 独立制作并验证。新增 `assets/campaign/environment/shared/surfaces/surface_field.png`，沿用已有路由，仅祝家庄 level3 与大名府 level8 加载。关卡脚本、战斗逻辑、地形格、碰撞、高度和着色器均未改动。
 
 ## 素材与来源
