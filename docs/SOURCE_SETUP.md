@@ -2,15 +2,15 @@
 
 记录日期：2026-09-05（Asia/Shanghai）。
 
-## 最新收尾：四向/阵亡修复测试包已上传，待网页确认
+## 最新收尾：四向/阵亡修复测试包已生效
 
 Steam 新 BuildID `25136463` 上传成功，Windows Depot `5088121` manifest `7280684617482783161`；成品 `278,050,128` 字节、SHA-256 `B333E117755C0A33FBBC5731FD3768514A68FCE21C5E45DC730F38DD138BBFC1`。八关 8/8、驻守硬伤 9/9、末波清理 12/12、成品 PCK 四向/死亡 90/90 与 1280×720 图形两张均完成。没有真人 30 波或长时性能结论。
 
-Steamworks 原生“设置上线”确认尚需用户完成，SteamCMD 最新 public/default 仍为 `25121101`；不能说新包已能从“开始游戏”获得。不要重新上传，只需确认 `25136463 -> default`，随后按 `Liangshan-Heroes/docs/STEAM_TEST_BUILD_20260905.md` 隔离回下载、核对哈希与启动。中英文更新说明已写好，未新发社区公告。
+用户确认后，SteamCMD 执行 `+app_info_update 1 +app_info_print 5088120` 已回读 public/default 为 `25136463`，`timeupdated=1788581012`，分支切换已生效。服务器隔离回下载已验证 `StateFlags=4`、`UpdateResult=0`、`buildid=TargetBuildID=25136463`，manifest、EXE 大小与 SHA-256 均和上传包一致；独立主菜单启动退出码 0、错误 0。本机 Steam 客户端当前仍为旧 `25121101`，需要客户端下载更新，这不是服务端阻塞；本机新包启动未计为通过。不要重新上传或重复切换。中英文更新说明已写好，未新发社区公告。
 
 GitHub 接入已跨任务核实：用户授权目标为 `winterzh/Liangshan-Heroes` 的 `codex/sync-20260905-stable` 分支及 PR #1。代码/生产素材/来源链/测试工具本轮提交 `863fcf0a1546c6ee7b5026db4bd4c5486a4ef61a` 已推送并回读；main 未改、未合并。本文后部“尚未确认目标仓库”是接入信息尚未汇合时的历史记录，不再作为当前阻塞。共享源目录仍非 Git，使用独立 checkout 精确同步。
 
-以下 9 月 4 日 default 记录目前仍有效；`25136463` 确认切换后再更新，不提前覆盖：
+以下为 9 月 4 日历史 default 快照，已由上方 `25136463` 替代；保留当时的包体与验证记录：
 
 > 当前 Steam Windows `default` 快照：BuildID `25121101`、Depot `5088121`、manifest `6833015574013725084`。上传包、SteamCMD 服务器回下载 EXE 和本机 Steam 库 EXE 均为 `287,328,240` 字节，SHA-256 `2F0C5786B368BD9F2C4A56893F1AB5872511B72DCB84BC96D667C3075F4295F6`；本机已从 Steam 入口启动验证。这是跨设备测试构建，不是正式发行；完整证据见 `Liangshan-Heroes/docs/STEAM_TEST_BUILD_20260904.md`。
 
@@ -62,7 +62,7 @@ GitHub 接入已跨任务核实：用户授权目标为 `winterzh/Liangshan-Hero
 - 环境提示词静态自检已由旧51/51更新为502/502。环境生产路由69/69 consumer-ready，静态合同785/785、运行合同758/758、八关固定机位32/32、六模式100/100；这只证明消费者接线，生产PNG仍为0/69。当前环境报告SHA-256为`16dda6894bfc1bb54584ac90180de2227d6df6a34174192a6638fd8068405f43`，映射模板SHA-256为`af1204a50a865096be47917440a36c67d9290f295fd5ee1ac2f8e000b1d441f1`。
 - 该历史轮次真四向严格覆盖为13/347，至少还需84张网页版图集，即首批10张和后续74张。首批接入门禁自检63/63，其中18/18为拒绝类负例；`wu_song_mengzhou`须按快活林时期单独制作，通用武松素材不能计入。该轮覆盖报告、首批清单和冻结注册表SHA-256依次为`beb882b32b85af6d2e6157700659f8242c297375943036dd5d9feee8c0f81f50`、`22a6f8ae5d57ea67020fc2dacca5c6331f49613cd96acfb893f2a1cc416e6b20`、`e2b37a4062d275b5a7b7b4084cf61491d4b179a611372bc5f3cdcd0ab4761bb2`。原著文案与旗号复核为72/72。
 - 终章水战自由路线已修复：诱船前五艘官船被玩家全灭时转入`gao_first_direct`基础路线，死船不再触发`fleet_in_ambush`。`qa/fleet_edge_fix_20260902`边界11/11通过，关联复测共165项；该结果不替代真人终章试玩。
-- 90秒模式切换短测完成28次切换，但不具备正式验收资格；30分钟soak尚未运行。音频退出重复验证9/9及完整矩阵8/8均为零泄漏。两份音频改前备份与四向重切片备份已移到源码仓库外的`<workspace>/implementation_20260902/`，仓库内`implementation_20260902`现无子目录；清理后编辑器重跑无嵌套工程扫描警告。没有真人节奏、平衡和点选试玩，也没有Android真机生命周期验证。
+- 90秒模式切换短测完成28次切换，但不具备正式验收资格；30分钟soak尚未运行。音频退出重复验证9/9及完整矩阵8/8均为零泄漏。两份音频改前备份与四向重切片备份已移到源码仓库外的`<workspace>\implementation_20260902\`，仓库内`implementation_20260902`现无子目录；清理后编辑器重跑无嵌套工程扫描警告。没有真人节奏、平衡和点选试玩，也没有Android真机生命周期验证。
 - 综合门禁`qa/final_local_gate_20260902`为本地代码94/94 PASS、发布门禁FAIL，报告SHA-256为`f23d0068a3c9d846086f538a9d2fa14f6b76e8d7365cb48c583cfaa49a6bb3f7`。物理白名单工具自测9/9通过；dry-run统计1,954个文件、181,242,837字节，但环境0/69、四向13/347，`commit_ready=false`。未建立候选、导出EXE、修改Steam发布目录、上传或发布公告。
 - 该历史轮次网页端发送仍等待动作时确认，69张环境PNG及84张人物/兵种四向网页图集尚未生成；后续实际进度以上节为准。战役美术至今仍未完整覆盖，也不能进入发布阶段。
 
@@ -74,7 +74,7 @@ GitHub 接入已跨任务核实：用户授权目标为 `winterzh/Liangshan-Hero
 
 ## 当前开发状态：2026-09-02 真四向来源门禁
 
-严格覆盖合同 `Liangshan-Heroes/tools/campaign_direction4_coverage_audit.py` 已按八关实际部署列出 347 个唯一“人物/战役变体/状态”。当前 `qa/campaign_direction4_coverage_20260902/report.json` 只认可 13 项（3.746%）：原有 9 项加上从具备完整透明分隔带的旧网页原图无损重切出的喽啰、梁山朴刀、长枪、弓手 idle。该重切片只做整格矩形裁切、按行等比缩放和透明补边，未镜像、补画或清除格内像素；改前文件在源码仓库外的 `<workspace>/implementation_20260902/pre_grid_reslice_core_liangshan_20260902/`。
+严格覆盖合同 `Liangshan-Heroes/tools/campaign_direction4_coverage_audit.py` 已按八关实际部署列出 347 个唯一“人物/战役变体/状态”。当前 `qa/campaign_direction4_coverage_20260902/report.json` 只认可 13 项（3.746%）：原有 9 项加上从具备完整透明分隔带的旧网页原图无损重切出的喽啰、梁山朴刀、长枪、弓手 idle。该重切片只做整格矩形裁切、按行等比缩放和透明补边，未镜像、补画或清除格内像素；改前文件在源码仓库外的 `<workspace>\implementation_20260902\pre_grid_reslice_core_liangshan_20260902\`。
 
 仍有 71 项现存文件因旧处理来源不合规、263 项缺失或方向不全，理论最少需 84 张四行网页图。首批八类样板固定为林冲、鲁智深、武松、李逵及梁山朴刀手、官军刀盾兵、钩镰枪手、连环甲马，共 10 张 `idle/walk/attack/hurt/down`。网页端尚未发送本批提示词，Godot 尚未重新导入这些重切片；Steam 发布目录和 default 构建未改。
 
@@ -88,7 +88,7 @@ GitHub 接入已跨任务核实：用户授权目标为 `winterzh/Liangshan-Hero
 
 下一批战役美术以`Liangshan-Heroes/docs/CAMPAIGN_ART_REQUIREMENTS_20260902.md`为实际任务单：它从八关脚本列出被引用人物、variant、船只、物件、`captured/subdued/unconscious/retreated/embarked`等非致死结算，以及每项需要的通用或剧情动作。只读合同工具`Liangshan-Heroes/tools/campaign_art_requirements_audit.py`已连续两次生成相同的静态报告SHA-256 `E1B6BF993E7B97BEE2B09202BE93B0BF39D07F8A706BCF03C5C0CE63FEEF3772`；它不运行Godot、不生成图片，不替代编辑器导入、1280×720视觉QA或真人试玩。
 
-`<workspace>/_archive/baselines/art_requirements_baseline_20260902_024451/source_material_mixed_sha256.json`记录02:55:40的2,116项源码/素材SHA-256，内容索引为`8bdef790c99dcdb69138741fa432c4e319d1a0142ae53355631d8112079b5a72`。该清单在地表/阴影和`art_db.gd`的并发改动期间建立，故为“并发后稳定混合态”而非开工前备份；不得据此声称保留了改前`art_db.gd`。当前素材计数须按范围读：普通四向manifest为6源/96输出，四向物件manifest为4源/48输出，网页批次为16源/129 artifact，运行目录为campaign anim 300、objects 72、portraits 36 PNG。早期的80输出与188/312/22/20是历史批次数字，未被重写为当前总数。
+`<workspace>\_archive/baselines/art_requirements_baseline_20260902_024451\source_material_mixed_sha256.json`记录02:55:40的2,116项源码/素材SHA-256，内容索引为`8bdef790c99dcdb69138741fa432c4e319d1a0142ae53355631d8112079b5a72`。该清单在地表/阴影和`art_db.gd`的并发改动期间建立，故为“并发后稳定混合态”而非开工前备份；不得据此声称保留了改前`art_db.gd`。当前素材计数须按范围读：普通四向manifest为6源/96输出，四向物件manifest为4源/48输出，网页批次为16源/129 artifact，运行目录为campaign anim 300、objects 72、portraits 36 PNG。早期的80输出与188/312/22/20是历史批次数字，未被重写为当前总数。
 
 本轮不修改Steam发布目录、EXE、导出物或平台资料，未上传。网页图只在下一批实际生成后按原图、提示词、对话地址、SHA、裁切与各类验收证据另行记录。
 
@@ -111,7 +111,7 @@ v8历史证据在 `_archive/campaign_history/campaign_environment_v8_20260831/` 
 - 上游仓库：https://github.com/winterzh/Liangshan-Heroes
 - 下载时 main 提交：`0109b6f32349765746b080ba06298c249ba6db7d`。
 - 提交时间：2026-08-10 09:56:00 UTC；提交说明：移除第三方游戏引用并发布 v1.8。
-- 本地源码：`<workspace>/Liangshan-Heroes`。
+- 本地源码：`<workspace>\Liangshan-Heroes`。
 - Godot 入口：`Liangshan-Heroes\project.godot`。
 - 主场景：`Liangshan-Heroes\scenes\menu.tscn`。
 - 主要代码：`Liangshan-Heroes\scripts`，原始副本含39个`.gd`文件；后续样板新增源码见各轮对比报告。
@@ -123,7 +123,7 @@ v8历史证据在 `_archive/campaign_history/campaign_environment_v8_20260831/` 
 
 - ZIP 共 1,014 个条目（含目录），CRC 检查通过。
 - 解压出 1,005 个原始文件；Godot 导入后逐文件 SHA-256 对比，无缺失、无变化。
-- Godot：`<godot_install>/Godot_v4.6.3-stable_win64_console.exe`。
+- Godot：`<godot_install>\Godot_v4.6.3-stable_win64_console.exe`。
 - 已执行 `--headless --path <本地源码> --import`，退出码 0。
 - `_logs/godot-import.log` 中未发现 error / warning / failed / parse / 错误 / 警告匹配。
 - `.godot` 是本地导入生成的缓存，原始源码未修改。
@@ -133,7 +133,7 @@ v8历史证据在 `_archive/campaign_history/campaign_environment_v8_20260831/` 
 
 用 Godot 4.6.3 编辑器选择导入上述 `project.godot`，按 F5 可启动项目。下载阶段仅完成无界面导入验证；后续视觉样板的实际运行记录见下节。
 
-Steam 发布目录为 `<steamworks_workspace>/Liangshan_5088120`。`2026-09-01` 的 BuildID `25051529` 是历史发布基线；当前 Windows `default` 已于 `2026-09-04` 更新为 BuildID `25121101`、manifest `6833015574013725084`，服务器回下载 EXE 的 SHA-256 为 `2F0C5786B368BD9F2C4A56893F1AB5872511B72DCB84BC96D667C3075F4295F6`。本轮没有处理 macOS，没有修改价格、折扣、发行日期、AI 披露、评级、商店素材或语言，也没有点击 `Release App`。完整边界以 Steam 工作区的 `PROJECT_STATUS.md`、`PROJECT_HANDOFF.md` 和本源码的 `docs/STEAM_TEST_BUILD_20260904.md` 为准。
+Steam 发布目录为 `<steamworks_workspace>`。`2026-09-01` 的 BuildID `25051529` 是历史发布基线；当前 Windows `default` 已于 `2026-09-04` 更新为 BuildID `25121101`、manifest `6833015574013725084`，服务器回下载 EXE 的 SHA-256 为 `2F0C5786B368BD9F2C4A56893F1AB5872511B72DCB84BC96D667C3075F4295F6`。本轮没有处理 macOS，没有修改价格、折扣、发行日期、AI 披露、评级、商店素材或语言，也没有点击 `Release App`。完整边界以 Steam 工作区的 `PROJECT_STATUS.md`、`PROJECT_HANDOFF.md` 和本源码的 `docs/STEAM_TEST_BUILD_20260904.md` 为准。
 
 继续开发前阅读源码 README 和 docs 中的相关设计、完成记录；`docs/TODO_HANDOVER.md` 是历史归档。工作区新增源码与 Steam 发行工作区应保持区分。
 

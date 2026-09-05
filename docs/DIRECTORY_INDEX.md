@@ -5,9 +5,10 @@
 ## 2026-09-05 测试上传与 GitHub 接入
 
 - `Liangshan-Heroes/qa/steam_test_build_20260905/`：本轮冻结输入清单、成品专项、Steam 上传与 GitHub 同步收据。
-- `Liangshan-Heroes/docs/STEAM_TEST_BUILD_20260905.md`：构建 `25136463` 已上传，但 default 网页确认/远端回下载待完成；不要把该包与仍生效的 `25121101` 混淆。
+- `Liangshan-Heroes/docs/STEAM_TEST_BUILD_20260905.md`：构建 `25136463` 已成为 public/default，SteamCMD 强制刷新回读确认；远端回下载和客户端状态分别记录，不再把旧 `25121101` 当作当前包。
+- `<server_verify>`：本轮服务器隔离回下载验证目录，appmanifest、EXE 哈希与主菜单启动已通过，证据为 `Liangshan-Heroes/qa/steam_test_build_20260905/server_download_verified.json`；不是玩家 Steam 库或开发主目录。
 - `<frozen_project_snapshot>`：2364 文件独立只读测试输入快照；不是新的开发主目录。
-- `<steam_build>/windows`：仅一份可上传的游戏 EXE；禁止上传开发工程、QA 或凭据。
+- `<steam_build>\windows`：仅一份可上传的游戏 EXE；禁止上传开发工程、QA 或凭据。
 - `<fresh_clone>`：本轮 GitHub 同步专用 checkout；开发工程仍保持原位置。目标分支 `codex/sync-20260905-stable`、PR #1，代码/素材提交 `863fcf0` 已回读，main 未变。
 - 上一轮临时 Git index 混合状态不作同步依据；没有删除或搬动任何现有工程。
 

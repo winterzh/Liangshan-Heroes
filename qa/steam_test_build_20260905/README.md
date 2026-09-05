@@ -1,6 +1,6 @@
 # 2026-09-05 Steam Windows 测试构建证据
 
-当前上传 BuildID `25136463`，manifest `7280684617482783161`；全部本地成品短测已通过。default 原生网页确认需要用户完成，SteamCMD 最后刷新仍为 `25121101`，新 default 回下载尚未执行。
+当前 public/default BuildID `25136463`，manifest `7280684617482783161`；全部本地成品短测已通过。用户确认后，SteamCMD 强制更新应用信息已回读 `25136463`，`timeupdated=1788581012`。新 default 隔离回下载、哈希和独立主菜单启动复核均已通过；本机 Steam 客户端检查仍为旧 `25121101`，需要客户端下载更新，不是服务端阻塞，本机新包启动未计为通过。
 
 - `build_test_snapshot.py` / `test_snapshot.json`：独立测试快照、2364 文件及完整哈希。不是正式发行门禁放行。
 - `test_snapshot_verified.json`：源码与快照导出后再次逐文件校验。
@@ -11,9 +11,9 @@
 - `steam_upload_app.log` / `steam_upload_depot.log`：Steam 返回的新 BuildID 与 manifest。
 - `package_direction_contract.gd` / `package_direction_contract.json` / `package_direction_contract_clean.log`：同版本引擎挂载成品内嵌 PCK 的 90 项契约，64 资源、48 动作单元全部通过；不是发行 EXE 执行外部脚本。
 - `package_visual_capture.gd` / `visual/`：成品 PCK 的主菜单、驻守战两张 1280×720 Vulkan 截图与机器报告。主代理已目检；首轮长 APPDATA 的缓存失败证据保留，短路径重跑无错误。
-- `verify_server_download.py`：用户确认 default 之后的隔离服务器回下载检查入口，目前未运行。
+- `verify_server_download.py` / `server_download_verified.json`：default 隔离回下载复核已通过；`StateFlags=4`、`UpdateResult=0`、`buildid=TargetBuildID=25136463`，manifest 与 EXE 大小/哈希一致，独立 release EXE 无界面主菜单退出 0、错误 0。与本机 Steam 客户端状态分开记录。
 - `github_sync_push_receipt_20260905.json`：代码/美术增量提交 `863fcf0` 已回读确认，main 未改。
 
-GitHub 副本不保留本机绝对路径。运行 `run_package_smoke.py` 前设置 `LIANGSHAN_TEST_EXE`，可选设置 `LIANGSHAN_TEST_DATA`；运行 `verify_server_download.py` 前设置 `LIANGSHAN_SERVER_DOWNLOAD`、`LIANGSHAN_UPLOAD_EXE`，可选设置 `LIANGSHAN_SERVER_TEST_DATA`。报告中的 `<...>` 为公开副本路径占位符，不改变测试结果、构建哈希或 Steam 状态。
-
 机器测试、固定机位人工目检、真人连续游玩必须分别记录。尚无真人 30 波或长时性能结论。完整状态以 `docs/STEAM_TEST_BUILD_20260905.md` 和最终构建收据为准。
+
+本机客户端补查：通过正常 `steam.exe -applaunch 5088120` 短启动后，仍为 `buildid=TargetBuildID=25121101`、旧包 SHA-256 `2F0C5786B368BD9F2C4A56893F1AB5872511B72DCB84BC96D667C3075F4295F6`；日志错误 0 不计为新包通过。游戏已自动退出，未重启/关闭 Steam 或覆盖安装文件。服务端交付已完成，客户端须刷新并下载更新。
