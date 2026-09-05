@@ -1,0 +1,13 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[rts-play] t=1 stage=north army=5 g=124 w=102 pop=16/20 buildings=1 gate_hp=1600.0
+[rts-play] t=62 stage=north army=9 g=151 w=316 pop=22/30 buildings=3 gate_hp=1600.0
+[rts-play] t=122 stage=north army=13 g=466 w=323 pop=30/30 buildings=4 gate_hp=1600.0
+[rts-play] t=183 stage=outpost army=19 g=673 w=243 pop=41/50 buildings=5 gate_hp=1600.0
+[rts-play] t=243 stage=manor army=22 g=995 w=266 pop=44/60 buildings=6 gate_hp=1396.0
+[rts-play] t=304 stage=return army=26 g=1236 w=256 pop=46/60 buildings=6 gate_hp=0
+[rts] PASS inside route wins through live economy/combat and explicit return
+[rts] PASS route uses construction and normal troop production
+[rts] PASS route takes expansion and cuts reinforcement source
+[rts] PASS inside route enters manor while main gate remains intact
+[rts-result] {"checks":4,"failures":[],"metrics":{"ai_trained":8,"buildings_started":6,"entered_with_main_intact":true,"events":["zhu_resource_secured","zhu_supply_cut","zhu_hu_captured","action:zhu_rts:zhu_rts_inside","zhu_gate_opened","zhu_manor_fallen","action:zhu_rts:zhu_rts_rescue","zhu_prisoners_freed","zhu_gate_breached","zhu_seven_safe","action:zhu_rts:zhu_rts_finish","zhu_victory"],"game_seconds":313.466666666654,"orders":185,"raids_sent":1,"result":{"contract_version":2,"core_cleared":true,"core_goal":"摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。","done_ids":["zhu_capture","zhu_inside","zhu_seven"],"goals":[{"id":"zhu_capture","label":"生擒扈三娘，仍按敌将看押","note":"","reason":"","state":"done"},{"id":"zhu_inside","label":"孙立内应，打开偏门","note":"","reason":"","state":"done"},{"id":"zhu_seven","label":"七名被囚好汉全部撤回前营","note":"","reason":"","state":"done"}],"missed_ids":[],"pending_ids":[],"story_complete":true,"story_done":3,"story_total":3},"stage":"return","units_queued":32},"passed":true,"route":"inside","scope":"automated live gameplay; not human fun acceptance"}

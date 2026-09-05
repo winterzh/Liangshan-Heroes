@@ -83,8 +83,9 @@ func setup(game_map: GameMap) -> void:
 		if d[0] not in ["boat","dock","bridge"]:
 			_ground_shadows.append({"p":p,"tex":tex,"s":d[2],"foot":0.82,"alpha":0.18})
 	if _style=="level3":
-		for segment in [[Vector2(20,14),Vector2(20,26)],[Vector2(20,30),Vector2(20,43)],
-			[Vector2(18,9),Vector2(54,9)],[Vector2(18,47),Vector2(54,47)]]:
+		var default_walls := [[Vector2(20,14),Vector2(20,26)],[Vector2(20,30),Vector2(20,43)],
+			[Vector2(18,9),Vector2(54,9)],[Vector2(18,47),Vector2(54,47)]]
+		for segment in game_map.get_meta("campaign_wall_segments",default_walls):
 			_add_wall(segment[0],segment[1])
 	if _style=="level8":
 		for segment in [[Vector2(7,4),Vector2(52,4)],[Vector2(7,4),Vector2(7,39)],

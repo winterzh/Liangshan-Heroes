@@ -294,6 +294,11 @@ func begin(new_id: String, title: String, text: String) -> void:
 	set_objective(text)
 	_status.text = "任务按钮只定位现场；请自行选人并右键目标标记。"
 
+## Change the heading while ongoing economy, actions and their progress continue.
+func set_title(text: String) -> void:
+	stage_title = text
+	_title.text = text
+
 func set_objective(text: String) -> void:
 	objective = text
 	_objective.text = text

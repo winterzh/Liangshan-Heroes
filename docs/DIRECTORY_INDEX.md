@@ -11,7 +11,11 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/home_setup_20260905/`：本机接续日志、动作检查报告和主菜单截图。
 - `.godot/`：本机导入缓存及临时验证文件，不入库。
 - `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`：当前 Git 开发进度和跨电脑启动说明。
-- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：复用驻守经营与军队的八关 RTS 设计修订、官方游戏参考、源码接入清单及祝家庄样板规格；尚未实现。
+- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄已进入样板，其余关卡后续实施。
+- `docs/ZHUJIAZHUANG_RTS_20260905.md`：祝家庄 RTS 样板玩法、实现边界及验证入口。
+- `scripts/levels/level3_zhujiazhuang_rts.gd`：当前祝家庄菜单入口；旧 `level3_zhujiazhuang.gd` 保留作原流程参考。
+- `tools/zhujiazhuang_rts_test.gd`、`tools/zhujiazhuang_rts_visual.gd`：场内回归、真实自动路线与图形检查。
+- `qa/zhujiazhuang_rts_20260905/`：本轮验证结果、图形截图与文件收据。
 
 ## 2026-09-05 测试上传与 GitHub 接入
 

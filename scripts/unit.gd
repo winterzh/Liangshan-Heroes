@@ -1568,6 +1568,11 @@ func _do_gather(delta: float) -> void:
 			_done_order()
 		return
 	var reach := _gather_node.radius + radius + 6.0
+	if _gather_node.res_kind == "wood" and bool(_gather_node.get_meta("resource_footprint",false)):
+		# A solid tree tile makes navigation end at a neighbouring cell centre,
+		# including diagonals. The old 29px reach could never reach that 32px tile
+		# (45px diagonally), leaving workers repathing forever without chopping.
+		reach = maxf(reach, float(GameMap.CELL) * sqrt(2.0) + radius + 2.0)
 	if position.distance_to(_gather_node.position) <= reach:
 		# 金矿独占：矿口已有人开采 → 先就近改采别的空金矿，没有就在矿口排队等候（不计 tick）
 		if _gather_node.res_kind == "gold" and _gather_node.gold_busy(self):
