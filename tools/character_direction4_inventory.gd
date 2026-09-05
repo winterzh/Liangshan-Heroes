@@ -1,5 +1,5 @@
 extends "res://tools/skirmish_direction4_contract_test.gd"
-## Complete production registry inventory. Exact files only: a borrowed source,
+## Complete production registry inventory. Exact PNG/SpriteFrames only: a borrowed source,
 ## single facing animation or directional idle fallback is not a new action.
 func _run() -> void:
 	var art=root.get_node("Art")
@@ -21,8 +21,9 @@ func _run() -> void:
 			var dirs: Array=[]
 			var paths: Array=[]
 			for direction in CA.DIRECTIONS:
-				var path: String="res://assets/anim/%s_%s_%s.png" % [key,state,direction]
-				if ResourceLoader.exists(path): dirs.append(direction); paths.append(path)
+				var path: String=art._resolve_generic_directional_path(key,state,direction)
+				if not art._load_generic_directional_frames(path).is_empty():
+					dirs.append(direction); paths.append(path)
 			entry.directions[state]=dirs
 			entry.source_paths[state]=paths
 			if dirs.size()==4: totals[state+"_four"]+=1
@@ -33,7 +34,8 @@ func _run() -> void:
 	rows.sort_custom(func(a,z):
 		if a.defense_enemy_instances!=z.defense_enemy_instances: return a.defense_enemy_instances>z.defense_enemy_instances
 		return a.key<z.key)
-	var folder: String="res://qa/character_direction4_inventory_20260905"
+	var folder: String=OS.get_environment("DIRECTION4_INVENTORY_OUT")
+	if folder.is_empty(): folder="res://.godot/character_direction4_inventory"
 	DirAccess.make_dir_recursive_absolute(folder)
 	FileAccess.open(folder+"/inventory.json",FileAccess.WRITE).store_string(JSON.stringify({"totals":totals,"units":rows,"scope":"All mobile definitions including transport, siege and summons; campaign costume variants are separate and not counted as generic combat art."},"\t")+"\n")
 	var f=FileAccess.open(folder+"/inventory.csv",FileAccess.WRITE)

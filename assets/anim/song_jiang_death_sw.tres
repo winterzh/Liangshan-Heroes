@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/idle_sw.png" id="idle_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/fall_sw.png" id="fall_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/down_atlas.png" id="down_atlas"]
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("idle_sw")
+region = Rect2(0, 0, 221, 256)
+margin = Rect2(53.0, 35.5, 106, 71)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-19.711835, -16.907813)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_sw"]
+atlas = ExtResource("fall_sw")
+region = Rect2(0, 0, 256, 170)
+margin = Rect2(21.5, 64.5, 43, 129)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-4.5, 26.285469)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="down_sw"]
+atlas = ExtResource("down_atlas")
+region = Rect2(256, 0, 256, 163)
+margin = Rect2(5.5, 52.0, 11, 104)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-2.666667, 43.727109)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_sw")},
+{"duration": 1.0, "texture": SubResource("fall_sw")},
+{"duration": 1.0, "texture": SubResource("down_sw")},
+{"duration": 1.0, "texture": SubResource("down_sw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

@@ -588,7 +588,8 @@ func portrait_texture(key: String) -> Texture2D:
 
 ## 逐帧动画图集接口（混合动画的“逐帧”一侧）。
 ## 约定：assets/anim/<key>_<state>.png 为一条横向帧带（每帧为正方形），state ∈ idle/walk/attack。
-## 四向资源使用 assets/anim/<key>_<state>_<se|sw|ne|nw>.png；旧无方向文件仍作为兼容回退。
+## 四向资源使用 assets/anim/<key>_<state>_<se|sw|ne|nw>.png；也接受同名
+## SpriteFrames .tres（default 动画，正方形 Texture2D 帧）。PNG 优先，旧无方向文件兼容回退。
 ## 选图顺序为：精确四向动作 > 旧同动作帧带 > 同方向idle。这样不会用一张
 ## 四向站姿遮住本来存在的走路/攻击动画；只有真正没有该动作时才保持四向站姿。
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
@@ -632,9 +633,8 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 		if _anim_cache.has(directional_ck):
 			return _anim_cache[directional_ck]
 		var directional_path := _resolve_generic_directional_path(key, state, direction)
-		var directional_tex: Texture2D = load(directional_path) if not directional_path.is_empty() else null
-		if directional_tex != null:
-			var directional_frames := _slice_anim_strip(directional_tex)
+		var directional_frames := _load_generic_directional_frames(directional_path)
+		if not directional_frames.is_empty():
 			SkirmishFrameAlignment.annotate(directional_frames, key, state, direction)
 			_anim_cache[directional_ck] = directional_frames
 			return directional_frames
@@ -648,9 +648,8 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 		# 旧动作确认不存在后，继续查同方向 idle 的最后回退。
 		if not directional_ck.is_empty() and state not in ["idle", "death", "down"]:
 			var cached_idle_path := _resolve_generic_directional_path(key, "idle", direction)
-			var cached_idle_tex: Texture2D = load(cached_idle_path) if not cached_idle_path.is_empty() else null
-			if cached_idle_tex != null:
-				var cached_idle_frames := _slice_anim_strip(cached_idle_tex)
+			var cached_idle_frames := _load_generic_directional_frames(cached_idle_path)
+			if not cached_idle_frames.is_empty():
 				SkirmishFrameAlignment.annotate(cached_idle_frames, key, "idle", direction)
 				_anim_cache[directional_ck] = cached_idle_frames
 				return cached_idle_frames
@@ -677,9 +676,8 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 		# death/down 仍严格隔离，不允许站立姿态冒充终态。
 		if state not in ["idle", "death", "down"]:
 			var idle_path := _resolve_generic_directional_path(key, "idle", direction)
-			var idle_tex: Texture2D = load(idle_path) if not idle_path.is_empty() else null
-			if idle_tex != null:
-				var idle_frames := _slice_anim_strip(idle_tex)
+			var idle_frames := _load_generic_directional_frames(idle_path)
+			if not idle_frames.is_empty():
 				SkirmishFrameAlignment.annotate(idle_frames, key, "idle", direction)
 				_anim_cache[directional_ck] = idle_frames
 				return idle_frames
@@ -702,9 +700,32 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 		return String(_generic_directional_path_cache[cache_key])
 	var path := _generic_directional_path(key, state, direction)
 	if not ResourceLoader.exists(path):
-		path = ""
+		# Native transparent cutouts retain their original pixels. SpriteFrames
+		# resources provide frame order and AtlasTexture padding at draw time.
+		path = path.get_basename() + ".tres"
+		if not ResourceLoader.exists(path):
+			path = ""
+		elif _load_generic_directional_frames(path).is_empty():
+			path = ""
 	_generic_directional_path_cache[cache_key] = path
 	return path
+
+
+func _load_generic_directional_frames(path: String) -> Array:
+	if path.is_empty():
+		return []
+	var source: Resource = load(path)
+	if source is Texture2D:
+		return _slice_anim_strip(source)
+	if source is SpriteFrames and source.has_animation(&"default"):
+		var frames: Array = []
+		for i in range(source.get_frame_count(&"default")):
+			var frame: Texture2D = source.get_frame_texture(&"default", i)
+			if frame == null or frame.get_height() <= 0 or frame.get_width() != frame.get_height():
+				return []
+			frames.append(frame)
+		return frames
+	return []
 
 
 func _slice_anim_strip(tex: Texture2D) -> Array:

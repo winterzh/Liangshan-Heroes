@@ -7,8 +7,8 @@ extends SceneTree
 ## action precedence are contract failures.
 
 const CA := preload("res://scripts/campaign_art.gd")
-const REPORT_DIR := "res://qa/skirmish_direction4_20260904"
-const REPORT_PATH := REPORT_DIR + "/report.json"
+var REPORT_DIR := "res://.godot/skirmish_direction4_contract" if OS.get_environment("DIRECTION4_CONTRACT_OUT").is_empty() else OS.get_environment("DIRECTION4_CONTRACT_OUT")
+var REPORT_PATH := REPORT_DIR + "/report.json"
 const ANIM_DIR := "res://assets/anim"
 const FULL_DIRECTION_STATES := ["idle", "walk", "attack", "hurt", "down"]
 const LEGACY_PRECEDENCE_STATES := ["walk", "attack", "hurt", "down", "death"]
@@ -119,6 +119,23 @@ func _derive_default_trainable_roster(definitions: Dictionary) -> Dictionary:
 	return {"producers":producers, "producer_keys":producer_keys}
 
 
+func _direction_file(key: String, state: String, direction: String) -> String:
+	var png := ANIM_DIR.path_join("%s_%s_%s.png" % [key,state,direction])
+	var frames := png.get_basename()+".tres"
+	return frames if not FileAccess.file_exists(png) and FileAccess.file_exists(frames) else png
+
+
+func _matches_exact_resource(path: String, frames: Array) -> bool:
+	if frames.is_empty(): return false
+	if path.ends_with(".png"): return _frame_source(frames[0])==path
+	var source = load(path)
+	if not source is SpriteFrames or not source.has_animation(&"default"): return false
+	if source.get_frame_count(&"default")!=frames.size(): return false
+	for i in range(frames.size()):
+		if frames[i]!=source.get_frame_texture(&"default",i): return false
+	return true
+
+
 func _state_audit(art: Node, key: String, state: String) -> Dictionary:
 	var physical_directions: Array[String] = []
 	var resource_directions: Array[String] = []
@@ -130,7 +147,7 @@ func _state_audit(art: Node, key: String, state: String) -> Dictionary:
 	var import_mismatches: Array = []
 	for raw_direction in CA.DIRECTIONS:
 		var direction := String(raw_direction)
-		var expected := ANIM_DIR.path_join("%s_%s_%s.png" % [key, state, direction])
+		var expected := _direction_file(key,state,direction)
 		var physical_exists := FileAccess.file_exists(expected)
 		var resource_exists := ResourceLoader.exists(expected)
 		if physical_exists:
@@ -151,7 +168,7 @@ func _state_audit(art: Node, key: String, state: String) -> Dictionary:
 		var directional: bool = bool(art.unit_anim_uses_directional_source(key, state, direction, ""))
 		selected_sources[direction] = selected
 		directional_flags[direction] = directional
-		if resource_exists and selected == expected and directional:
+		if resource_exists and _matches_exact_resource(expected,frames) and directional:
 			runtime_exact_directions.append(direction)
 		elif resource_exists:
 			routing_mismatches.append({
@@ -188,7 +205,7 @@ func _legacy_precedence_audit(art: Node, key: String) -> Dictionary:
 			continue
 		for raw_direction in CA.DIRECTIONS:
 			var direction := String(raw_direction)
-			var exact_path := ANIM_DIR.path_join("%s_%s_%s.png" % [key, state, direction])
+			var exact_path := _direction_file(key,state,direction)
 			# Exact directional actions correctly take priority over legacy actions;
 			# this contract concerns the fallback case only.
 			if ResourceLoader.exists(exact_path):

@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/idle_ne.png" id="idle_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/fall_ne.png" id="fall_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/down_atlas.png" id="down_atlas"]
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle_ne")
+region = Rect2(0, 0, 236, 256)
+margin = Rect2(42.0, 32.0, 84, 64)
+filter_clip = true
+metadata/draw_offset_px = Vector2(10.086307, -13.241379)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_ne"]
+atlas = ExtResource("fall_ne")
+region = Rect2(0, 0, 256, 170)
+margin = Rect2(21.5, 64.5, 43, 129)
+filter_clip = true
+metadata/draw_offset_px = Vector2(21.333333, 27.115547)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="down_ne"]
+atlas = ExtResource("down_atlas")
+region = Rect2(0, 163, 256, 178)
+margin = Rect2(5.5, 44.5, 11, 89)
+filter_clip = true
+metadata/draw_offset_px = Vector2(6.333333, 54.383359)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_ne")},
+{"duration": 1.0, "texture": SubResource("fall_ne")},
+{"duration": 1.0, "texture": SubResource("down_ne")},
+{"duration": 1.0, "texture": SubResource("down_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

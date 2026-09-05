@@ -1,0 +1,83 @@
+"""Author resources/import settings only. Never modify or re-encode bitmap pixels."""
+from pathlib import Path
+from PIL import Image
+import json, shutil, subprocess, re, math, hashlib
+root=Path(__file__).resolve().parents[1]
+stage=root/'.godot/song_jiang_direction4'
+jobs={j['key']:j for j in json.loads((stage/'generation_jobs_all.json').read_text(encoding='utf-8'))}
+recipe=json.loads((stage/'pose_recipe.json').read_text(encoding='utf-8'))
+scratch=stage/'import_project'
+godot=(root/'godot.local.txt').read_text().strip()
+sources={}
+for key,entry in recipe['sources'].items():
+    src=Path(jobs[entry['job']]['output_path'])
+    im=Image.open(src)
+    assert im.mode=='RGBA',(key,im.mode)
+    a=im.getchannel('A'); zero=a.histogram()[0]/(im.width*im.height)
+    assert zero>.35,(key,zero)
+    path='assets/characters/song_jiang_direction4_20260906/'+key+'.png'
+    dst=root/path;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst)
+    imp=scratch/path;imp.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,imp)
+    if Path(str(dst)+'.import').exists(): shutil.copyfile(str(dst)+'.import',str(imp)+'.import')
+    sources[key]={'path':path,'job':entry['job'],'native_size':list(im.size),'sha256':hashlib.sha256(src.read_bytes()).hexdigest(),'alpha_zero_fraction':zero,'visible_bbox':a.point(lambda v:255 if v>15 else 0).getbbox(),'import_limit':entry['limit']}
+def run(args,log):
+    result=subprocess.run([godot,'--headless','--path',str(scratch),*args],capture_output=True,text=True,encoding='utf-8',errors='replace')
+    (stage/log).write_text(result.stdout+'\n'+result.stderr,encoding='utf-8')
+    assert result.returncode==0 and 'SCRIPT ERROR' not in result.stderr,(result.returncode,result.stderr)
+    return result.stdout
+# Isolated import avoids touching unrelated project sidecars.
+run(['--editor','--import'],'texture_import_initial.log')
+for key,s in sources.items():
+    p=scratch/(s['path']+'.import');data=p.read_text(encoding='utf-8')
+    data=re.sub(r'process/size_limit=\d+',f"process/size_limit={s['import_limit']}",data)
+    data=data.replace('mipmaps/generate=false','mipmaps/generate=true')
+    p.write_text(data,encoding='utf-8',newline='\n')
+    # Godot's fast startup scan may reuse same-second metadata timestamps.
+    # Invalidate only these selected scratch texture caches, never source files.
+    cache=scratch/re.search(r'path="res://([^\"]+)"',data).group(1)
+    for candidate in [cache,cache.with_suffix('.md5')]:
+        assert candidate.resolve().parent==(scratch/'.godot/imported').resolve()
+        assert candidate.suffix in ['.ctex','.md5']
+        candidate.unlink(missing_ok=True)
+run(['--editor','--import'],'texture_import_final.log')
+probe='extends SceneTree\nfunc _initialize() -> void:\n\tvar sizes={}\n'
+for key,s in sources.items():
+    probe+=f'\tvar t_{key}=load("res://{s["path"]}")\n\tsizes["{key}"]=[t_{key}.get_width(),t_{key}.get_height()]\n'
+probe+='\tprint("SIZES ",JSON.stringify(sizes))\n\tquit()\n'
+(scratch/'probe.gd').write_text(probe,encoding='utf-8')
+out=run(['--script','res://probe.gd'],'texture_size.log')
+sizes=json.loads(next(line[6:] for line in out.splitlines() if line.startswith('SIZES ')))
+assert all(max(sizes[k])<=s['import_limit'] for k,s in sources.items()),sizes
+for key,s in sources.items():
+    s['imported_size']=sizes[key]
+    meta=scratch/(s['path']+'.import');shutil.copyfile(meta,root/(s['path']+'.import'))
+    imported=re.search(r'path="res://([^\"]+)"',meta.read_text()).group(1)
+    shutil.copyfile(scratch/imported,root/imported)
+poses={}
+for key,p in recipe['poses'].items():
+    s=sources[p['source']];sx=s['imported_size'][0]/s['native_size'][0];sy=s['imported_size'][1]/s['native_size'][1]
+    raw=p.get('region',[0,0,*s['native_size']]);x,y,w,h=raw
+    # Fixed atlas sampling; the native PNG remains byte-identical.
+    ix,iy=round(x*sx),round(y*sy);iw,ih=round((x+w)*sx)-ix,round((y+h)*sy)-iy
+    size=max(math.ceil(p['virtual_size']*sy),iw,ih)
+    left=(size-iw)/2;top=(size-ih)/2
+    pivot=[p['pivot'][0]*sx-ix,p['pivot'][1]*sy-iy]
+    offset=[size*.5-left-pivot[0],size*.82-top-pivot[1]]
+    poses[key]={**p,'region_raw':raw,'region':[ix,iy,iw,ih],'virtual_size_imported':size,'margin':[left,top,size-iw,size-ih],'draw_offset_px':offset}
+def numbers(values):return ', '.join(str(round(v,6)) for v in values)
+resources=[]
+for direction in ['se','sw','ne','nw']:
+    for state,order in recipe['states'].items():
+        pose_keys=[v+'_'+direction for v in order];unique=list(dict.fromkeys(pose_keys))
+        source_keys=list(dict.fromkeys(poses[k]['source'] for k in unique))
+        txt=f'[gd_resource type="SpriteFrames" load_steps={len(source_keys)+len(unique)+1} format=3]\n\n'
+        for key in source_keys:txt+=f'[ext_resource type="Texture2D" path="res://{sources[key]["path"]}" id="{key}"]\n\n'
+        for key in unique:
+            p=poses[key]
+            txt+=f'[sub_resource type="AtlasTexture" id="{key}"]\natlas = ExtResource("{p["source"]}")\nregion = Rect2({numbers(p["region"])})\nmargin = Rect2({numbers(p["margin"])})\nfilter_clip = true\nmetadata/draw_offset_px = Vector2({numbers(p["draw_offset_px"])})\nmetadata/authored_direction4 = true\n\n'
+        frames=',\n'.join('{"duration": 1.0, "texture": SubResource("'+key+'")}' for key in pose_keys)
+        txt+='[resource]\nanimations = [{\n"frames": [\n'+frames+'\n],\n"loop": '+('false' if state=='death' else 'true')+',\n"name": &"default",\n"speed": 4.0\n}]\n'
+        path=f'assets/anim/song_jiang_{state}_{direction}.tres';(root/path).write_text(txt,encoding='utf-8',newline='\n');resources.append(path)
+manifest={'character':'song_jiang','method':'Codex built-in imagegen; selected native RGBA PNG bytes retained. Godot import scaling, fixed AtlasTexture sampling and placement metadata only.','states':recipe['states'],'sources':sources,'poses':poses,'resources':resources}
+(stage/'production_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'sources':len(sources),'poses':len(poses),'resources':len(resources),'sizes':sizes}))

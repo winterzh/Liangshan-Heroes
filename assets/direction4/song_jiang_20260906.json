@@ -1,0 +1,981 @@
+{
+  "character": "song_jiang",
+  "method": "Codex built-in imagegen; selected native RGBA PNG bytes retained. Godot import scaling, fixed AtlasTexture sampling and placement metadata only.",
+  "states": {
+    "idle": [
+      "idle"
+    ],
+    "walk": [
+      "idle",
+      "walk"
+    ],
+    "attack": [
+      "idle",
+      "attack",
+      "idle"
+    ],
+    "death": [
+      "idle",
+      "fall",
+      "down",
+      "down"
+    ]
+  },
+  "sources": {
+    "idle_se": {
+      "path": "assets/characters/song_jiang_direction4_20260906/idle_se.png",
+      "job": "se_alpha2",
+      "native_size": [
+        1239,
+        1270
+      ],
+      "sha256": "a58a62a5759ba64aea21c0a6966ac0ead77ccb9aa239bf10f90f86a69fc6b4b5",
+      "alpha_zero_fraction": 0.6220485151220504,
+      "visible_bbox": [
+        55,
+        1,
+        1152,
+        1247
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        249,
+        256
+      ]
+    },
+    "idle_sw": {
+      "path": "assets/characters/song_jiang_direction4_20260906/idle_sw.png",
+      "job": "sw_alpha2",
+      "native_size": [
+        1166,
+        1349
+      ],
+      "sha256": "6ad7d5c389c9efafc36426e15f9d6144c5321e28f70c2d9701f186bf0e972acb",
+      "alpha_zero_fraction": 0.6119703687503735,
+      "visible_bbox": [
+        0,
+        6,
+        1044,
+        1320
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        221,
+        256
+      ]
+    },
+    "idle_ne": {
+      "path": "assets/characters/song_jiang_direction4_20260906/idle_ne.png",
+      "job": "ne_alpha",
+      "native_size": [
+        1205,
+        1305
+      ],
+      "sha256": "cd1284e46bd80da1b336e0beeab2f8f5f1987f128072fbf16caae953cf2457c9",
+      "alpha_zero_fraction": 0.6673687222778653,
+      "visible_bbox": [
+        260,
+        6,
+        1132,
+        1294
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        236,
+        256
+      ]
+    },
+    "idle_nw": {
+      "path": "assets/characters/song_jiang_direction4_20260906/idle_nw.png",
+      "job": "nw_body_alpha",
+      "native_size": [
+        1222,
+        1287
+      ],
+      "sha256": "5eb5d82d908126279cda05c3f5b8880061736ee2a426b1e2d7a3a48f9cf4858e",
+      "alpha_zero_fraction": 0.6956967382499297,
+      "visible_bbox": [
+        221,
+        6,
+        1052,
+        1273
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        243,
+        256
+      ]
+    },
+    "walk_atlas": {
+      "path": "assets/characters/song_jiang_direction4_20260906/walk_atlas.png",
+      "job": "walk_step_alpha",
+      "native_size": [
+        1312,
+        1199
+      ],
+      "sha256": "e85dccd81f2a4f8e4b5062582d001b747c6bec9fe72f4922f0ae09fdfe84ac78",
+      "alpha_zero_fraction": 0.7016555971439614,
+      "visible_bbox": [
+        79,
+        8,
+        1250,
+        1164
+      ],
+      "import_limit": 512,
+      "imported_size": [
+        512,
+        467
+      ]
+    },
+    "walk_sw": {
+      "path": "assets/characters/song_jiang_direction4_20260906/walk_sw.png",
+      "job": "walk_sw_alpha",
+      "native_size": [
+        1141,
+        1378
+      ],
+      "sha256": "ed096712546c6242b0685057befd3f4ba4e3fbb4f218510887496f0858daaf2b",
+      "alpha_zero_fraction": 0.6628139194987209,
+      "visible_bbox": [
+        0,
+        5,
+        1044,
+        1340
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        211,
+        256
+      ]
+    },
+    "attack_se": {
+      "path": "assets/characters/song_jiang_direction4_20260906/attack_se.png",
+      "job": "attack_se_alpha2",
+      "native_size": [
+        1218,
+        1291
+      ],
+      "sha256": "369ab9ddb96c9260945dd450bc8db9da560f1a590959e7643610f1a2160fb6fc",
+      "alpha_zero_fraction": 0.6270034176228252,
+      "visible_bbox": [
+        49,
+        2,
+        1212,
+        1288
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        241,
+        256
+      ]
+    },
+    "attack_sw": {
+      "path": "assets/characters/song_jiang_direction4_20260906/attack_sw.png",
+      "job": "attack_sw_alpha",
+      "native_size": [
+        1182,
+        1331
+      ],
+      "sha256": "6c162bfb361bd070a1fbd58cc9d196dd64d26119a8a60b5fdd4b21aec32ed40c",
+      "alpha_zero_fraction": 0.6183352592925945,
+      "visible_bbox": [
+        4,
+        6,
+        1180,
+        1287
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        227,
+        256
+      ]
+    },
+    "attack_ne": {
+      "path": "assets/characters/song_jiang_direction4_20260906/attack_ne.png",
+      "job": "attack_ne_alpha2",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "7d43e1557d4f8b4a9d18b6a4380d48da2546fdbd153cb342395c56e4355d0f9b",
+      "alpha_zero_fraction": 0.7578131357828776,
+      "visible_bbox": [
+        293,
+        7,
+        1344,
+        1013
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        256,
+        170
+      ]
+    },
+    "attack_nw": {
+      "path": "assets/characters/song_jiang_direction4_20260906/attack_nw.png",
+      "job": "attack_nw_alpha",
+      "native_size": [
+        1224,
+        1285
+      ],
+      "sha256": "d407e5aa58983c544d4c76f16e51d17dd335c0962c19d512e69a9ccc4ce30935",
+      "alpha_zero_fraction": 0.7278121105770453,
+      "visible_bbox": [
+        160,
+        8,
+        1054,
+        1254
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        243,
+        256
+      ]
+    },
+    "fall_se": {
+      "path": "assets/characters/song_jiang_direction4_20260906/fall_se.png",
+      "job": "death_fall_se",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "1fe066729c086eea2416b46232c69245bca9e332df5fbc252244a8734b6ac98a",
+      "alpha_zero_fraction": 0.5564587910970052,
+      "visible_bbox": [
+        81,
+        25,
+        1463,
+        1010
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        256,
+        170
+      ]
+    },
+    "fall_sw": {
+      "path": "assets/characters/song_jiang_direction4_20260906/fall_sw.png",
+      "job": "death_fall_sw",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "0e2511209cb043ec3486534a5ce7153974e1f56cbb73d87ad08a11632c4e466a",
+      "alpha_zero_fraction": 0.5590324401855469,
+      "visible_bbox": [
+        82,
+        10,
+        1389,
+        1016
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        256,
+        170
+      ]
+    },
+    "fall_ne": {
+      "path": "assets/characters/song_jiang_direction4_20260906/fall_ne.png",
+      "job": "death_fall_ne_alpha",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "fcfa5cc76e277d6bdbe327e0a12a4484ece8679fab12b016fd3644fd3e450e52",
+      "alpha_zero_fraction": 0.6371402740478516,
+      "visible_bbox": [
+        78,
+        5,
+        1461,
+        1024
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        256,
+        170
+      ]
+    },
+    "fall_nw": {
+      "path": "assets/characters/song_jiang_direction4_20260906/fall_nw.png",
+      "job": "death_fall_nw_alpha",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "3ee9c5f61bf28985f8018523399e9fc679864643f0d71406ff317ed9bd6b5bff",
+      "alpha_zero_fraction": 0.6073703765869141,
+      "visible_bbox": [
+        65,
+        6,
+        1489,
+        1024
+      ],
+      "import_limit": 256,
+      "imported_size": [
+        256,
+        170
+      ]
+    },
+    "down_atlas": {
+      "path": "assets/characters/song_jiang_direction4_20260906/down_atlas.png",
+      "job": "death_down_alpha",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "5aade76e8bbce7029faecfeb4b9e3d3eb37b95b3b5180cefa75faefe7b230330",
+      "alpha_zero_fraction": 0.5641498565673828,
+      "visible_bbox": [
+        12,
+        63,
+        1533,
+        980
+      ],
+      "import_limit": 512,
+      "imported_size": [
+        512,
+        341
+      ]
+    }
+  },
+  "poses": {
+    "idle_se": {
+      "source": "idle_se",
+      "pivot": [
+        776,
+        1180
+      ],
+      "virtual_size": 1552,
+      "region_raw": [
+        0,
+        0,
+        1239,
+        1270
+      ],
+      "region": [
+        0,
+        0,
+        249,
+        256
+      ],
+      "virtual_size_imported": 313,
+      "margin": [
+        32.0,
+        28.5,
+        64,
+        57
+      ],
+      "draw_offset_px": [
+        -31.451573849878912,
+        -9.698267716535469
+      ]
+    },
+    "idle_sw": {
+      "source": "idle_sw",
+      "pivot": [
+        687,
+        1315
+      ],
+      "virtual_size": 1723,
+      "region_raw": [
+        0,
+        0,
+        1166,
+        1349
+      ],
+      "region": [
+        0,
+        0,
+        221,
+        256
+      ],
+      "virtual_size_imported": 327,
+      "margin": [
+        53.0,
+        35.5,
+        106,
+        71
+      ],
+      "draw_offset_px": [
+        -19.71183533447683,
+        -16.907813194959232
+      ]
+    },
+    "idle_ne": {
+      "source": "idle_ne",
+      "pivot": [
+        551,
+        1242
+      ],
+      "virtual_size": 1627,
+      "region_raw": [
+        0,
+        0,
+        1205,
+        1305
+      ],
+      "region": [
+        0,
+        0,
+        236,
+        256
+      ],
+      "virtual_size_imported": 320,
+      "margin": [
+        42.0,
+        32.0,
+        84,
+        64
+      ],
+      "draw_offset_px": [
+        10.086307053941908,
+        -13.241379310344854
+      ]
+    },
+    "idle_nw": {
+      "source": "idle_nw",
+      "pivot": [
+        521,
+        1214
+      ],
+      "virtual_size": 1590,
+      "region_raw": [
+        0,
+        0,
+        1222,
+        1287
+      ],
+      "region": [
+        0,
+        0,
+        243,
+        256
+      ],
+      "virtual_size_imported": 317,
+      "margin": [
+        37.0,
+        30.5,
+        74,
+        61
+      ],
+      "draw_offset_px": [
+        17.896890343698857,
+        -12.039409479409471
+      ]
+    },
+    "walk_se": {
+      "source": "walk_atlas",
+      "region": [
+        0,
+        0,
+        273,
+        218
+      ],
+      "pivot": [
+        349,
+        528
+      ],
+      "virtual_size": 710,
+      "region_raw": [
+        0,
+        0,
+        700,
+        560
+      ],
+      "virtual_size_imported": 277,
+      "margin": [
+        2.0,
+        29.5,
+        4,
+        59
+      ],
+      "draw_offset_px": [
+        0.30487804878049474,
+        -8.011376146789019
+      ]
+    },
+    "walk_ne": {
+      "source": "walk_atlas",
+      "region": [
+        0,
+        218,
+        273,
+        249
+      ],
+      "pivot": [
+        346,
+        1120
+      ],
+      "virtual_size": 727,
+      "region_raw": [
+        0,
+        560,
+        700,
+        639
+      ],
+      "virtual_size_imported": 284,
+      "margin": [
+        5.5,
+        17.5,
+        11,
+        35
+      ],
+      "draw_offset_px": [
+        1.4756097560975547,
+        -2.8501918265221207
+      ]
+    },
+    "walk_nw": {
+      "source": "walk_atlas",
+      "region": [
+        273,
+        218,
+        239,
+        249
+      ],
+      "pivot": [
+        1030,
+        1106
+      ],
+      "virtual_size": 711,
+      "region_raw": [
+        700,
+        560,
+        612,
+        639
+      ],
+      "virtual_size_imported": 277,
+      "margin": [
+        19.0,
+        14.0,
+        38,
+        28
+      ],
+      "draw_offset_px": [
+        -9.45121951219511,
+        0.3626855713093846
+      ]
+    },
+    "walk_sw": {
+      "source": "walk_sw",
+      "pivot": [
+        637,
+        1258
+      ],
+      "virtual_size": 1660,
+      "region_raw": [
+        0,
+        0,
+        1141,
+        1378
+      ],
+      "region": [
+        0,
+        0,
+        211,
+        256
+      ],
+      "virtual_size_imported": 309,
+      "margin": [
+        49.0,
+        26.5,
+        98,
+        53
+      ],
+      "draw_offset_px": [
+        -12.297546012269947,
+        -6.82682148040638
+      ]
+    },
+    "attack_se": {
+      "source": "attack_se",
+      "pivot": [
+        567,
+        1166
+      ],
+      "virtual_size": 1770,
+      "region_raw": [
+        0,
+        0,
+        1218,
+        1291
+      ],
+      "region": [
+        0,
+        0,
+        241,
+        256
+      ],
+      "virtual_size_imported": 351,
+      "margin": [
+        55.0,
+        47.5,
+        110,
+        95
+      ],
+      "draw_offset_px": [
+        8.310344827586206,
+        9.106986831913218
+      ]
+    },
+    "attack_sw": {
+      "source": "attack_sw",
+      "pivot": [
+        720,
+        1180
+      ],
+      "virtual_size": 1740,
+      "region_raw": [
+        0,
+        0,
+        1182,
+        1331
+      ],
+      "region": [
+        0,
+        0,
+        227,
+        256
+      ],
+      "virtual_size_imported": 335,
+      "margin": [
+        54.0,
+        39.5,
+        108,
+        79
+      ],
+      "draw_offset_px": [
+        -24.774111675126903,
+        8.242824943651357
+      ]
+    },
+    "attack_ne": {
+      "source": "attack_ne",
+      "pivot": [
+        671,
+        950
+      ],
+      "virtual_size": 1536,
+      "region_raw": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "region": [
+        0,
+        0,
+        256,
+        170
+      ],
+      "virtual_size_imported": 256,
+      "margin": [
+        0.0,
+        43.0,
+        0,
+        86
+      ],
+      "draw_offset_px": [
+        16.16666666666667,
+        9.205156249999987
+      ]
+    },
+    "attack_nw": {
+      "source": "attack_nw",
+      "pivot": [
+        707,
+        1170
+      ],
+      "virtual_size": 1520,
+      "region_raw": [
+        0,
+        0,
+        1224,
+        1285
+      ],
+      "region": [
+        0,
+        0,
+        243,
+        256
+      ],
+      "virtual_size_imported": 303,
+      "margin": [
+        30.0,
+        23.5,
+        60,
+        47
+      ],
+      "draw_offset_px": [
+        -18.860294117647044,
+        -8.12949416342417
+      ]
+    },
+    "fall_se": {
+      "source": "fall_se",
+      "pivot": [
+        790,
+        930
+      ],
+      "virtual_size": 1800,
+      "region_raw": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "region": [
+        0,
+        0,
+        256,
+        170
+      ],
+      "virtual_size_imported": 299,
+      "margin": [
+        21.5,
+        64.5,
+        43,
+        129
+      ],
+      "draw_offset_px": [
+        -3.666666666666657,
+        26.28546874999998
+      ]
+    },
+    "fall_sw": {
+      "source": "fall_sw",
+      "pivot": [
+        795,
+        930
+      ],
+      "virtual_size": 1800,
+      "region_raw": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "region": [
+        0,
+        0,
+        256,
+        170
+      ],
+      "virtual_size_imported": 299,
+      "margin": [
+        21.5,
+        64.5,
+        43,
+        129
+      ],
+      "draw_offset_px": [
+        -4.5,
+        26.28546874999998
+      ]
+    },
+    "fall_ne": {
+      "source": "fall_ne",
+      "pivot": [
+        640,
+        925
+      ],
+      "virtual_size": 1800,
+      "region_raw": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "region": [
+        0,
+        0,
+        256,
+        170
+      ],
+      "virtual_size_imported": 299,
+      "margin": [
+        21.5,
+        64.5,
+        43,
+        129
+      ],
+      "draw_offset_px": [
+        21.333333333333343,
+        27.11554687499998
+      ]
+    },
+    "fall_nw": {
+      "source": "fall_nw",
+      "pivot": [
+        890,
+        935
+      ],
+      "virtual_size": 1800,
+      "region_raw": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "region": [
+        0,
+        0,
+        256,
+        170
+      ],
+      "virtual_size_imported": 299,
+      "margin": [
+        21.5,
+        64.5,
+        43,
+        129
+      ],
+      "draw_offset_px": [
+        -20.333333333333314,
+        25.45539062499998
+      ]
+    },
+    "down_se": {
+      "source": "down_atlas",
+      "region": [
+        0,
+        0,
+        256,
+        163
+      ],
+      "pivot": [
+        365,
+        355
+      ],
+      "virtual_size": 800,
+      "region_raw": [
+        0,
+        0,
+        768,
+        490
+      ],
+      "virtual_size_imported": 267,
+      "margin": [
+        5.5,
+        52.0,
+        11,
+        104
+      ],
+      "draw_offset_px": [
+        6.333333333333343,
+        48.7222265625
+      ]
+    },
+    "down_sw": {
+      "source": "down_atlas",
+      "region": [
+        256,
+        0,
+        256,
+        163
+      ],
+      "pivot": [
+        1160,
+        370
+      ],
+      "virtual_size": 800,
+      "region_raw": [
+        768,
+        0,
+        768,
+        490
+      ],
+      "virtual_size_imported": 267,
+      "margin": [
+        5.5,
+        52.0,
+        11,
+        104
+      ],
+      "draw_offset_px": [
+        -2.6666666666666288,
+        43.727109375
+      ]
+    },
+    "down_ne": {
+      "source": "down_atlas",
+      "region": [
+        0,
+        163,
+        256,
+        178
+      ],
+      "pivot": [
+        365,
+        850
+      ],
+      "virtual_size": 800,
+      "region_raw": [
+        0,
+        490,
+        768,
+        534
+      ],
+      "virtual_size_imported": 267,
+      "margin": [
+        5.5,
+        44.5,
+        11,
+        89
+      ],
+      "draw_offset_px": [
+        6.333333333333343,
+        54.383359375
+      ]
+    },
+    "down_nw": {
+      "source": "down_atlas",
+      "region": [
+        256,
+        163,
+        256,
+        178
+      ],
+      "pivot": [
+        1160,
+        850
+      ],
+      "virtual_size": 800,
+      "region_raw": [
+        768,
+        490,
+        768,
+        534
+      ],
+      "virtual_size_imported": 267,
+      "margin": [
+        5.5,
+        44.5,
+        11,
+        89
+      ],
+      "draw_offset_px": [
+        -2.6666666666666288,
+        54.383359375
+      ]
+    }
+  },
+  "resources": [
+    "assets/anim/song_jiang_idle_se.tres",
+    "assets/anim/song_jiang_walk_se.tres",
+    "assets/anim/song_jiang_attack_se.tres",
+    "assets/anim/song_jiang_death_se.tres",
+    "assets/anim/song_jiang_idle_sw.tres",
+    "assets/anim/song_jiang_walk_sw.tres",
+    "assets/anim/song_jiang_attack_sw.tres",
+    "assets/anim/song_jiang_death_sw.tres",
+    "assets/anim/song_jiang_idle_ne.tres",
+    "assets/anim/song_jiang_walk_ne.tres",
+    "assets/anim/song_jiang_attack_ne.tres",
+    "assets/anim/song_jiang_death_ne.tres",
+    "assets/anim/song_jiang_idle_nw.tres",
+    "assets/anim/song_jiang_walk_nw.tres",
+    "assets/anim/song_jiang_attack_nw.tres",
+    "assets/anim/song_jiang_death_nw.tres"
+  ]
+}

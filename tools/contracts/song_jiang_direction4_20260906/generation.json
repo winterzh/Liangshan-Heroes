@@ -1,0 +1,789 @@
+{
+  "method": "Codex built-in imagegen",
+  "session": "01a06fce-5775-7931-8752-609cc32da2b5",
+  "original_reference": {
+    "path": "qa/character_direction4_inventory_20260905/candidates/song_jiang.png",
+    "sha256": "4bcecbd60d9f2c6ef4c88c3a45c47925ee32d9962be76de4e4deff69a2fab469",
+    "scope": "Existing project image used for identity. This record does not reconstruct its earlier provenance."
+  },
+  "jobs": [
+    {
+      "key": "idle",
+      "prompt": "Use case: identity-preserve.\nCreate ONE production character sprite atlas for the existing Chinese Song-dynasty RTS hero Song Jiang, using the attached image strictly as his identity, clothes, weapon and painted game-art reference.\nOutput an actual RGBA PNG on a TRANSPARENT background. All empty space must have alpha=0. No rendered checkerboard, no gray/white/black canvas, no background layer, no floor, no cast ground shadow, no glow or border. Keep just the four figures.\nLayout: a square atlas with exactly FOUR equal square cells, 2 columns by 2 rows. No lines or labels. Each cell contains one full-body standing idle pose of the SAME man at identical scale. Keep every figure and sword inside its own cell with generous clear margins, and both soles near 82% of cell height.\nCamera fixed at about 30 degrees down for a 2:1 isometric RTS.\nTop-left cell: facing southeast / down-right, FRONT and rightward facing clearly visible.\nTop-right cell: facing southwest / down-left, FRONT and leftward facing clearly visible.\nBottom-left cell: facing northeast / up-right, BACK of head and back of robe visible, face mostly hidden.\nBottom-right cell: facing northwest / up-left, BACK of head and back of robe visible, face mostly hidden.\nThese are four genuine rotated views, not repeated front views. Rotate head, chest, pelvis, knees and boots consistently. Never merely mirror the sprite: preserve his anatomical right hand holding his straight silver Chinese sword in every view, and left hand empty.\nIdentity lock: adult stocky Chinese man, black beard and moustache, long black hair tied in topknot with small gold crown, ornate ochre-gold long robe with dark brocade borders, black draped scarf around shoulders, dark belt with round gold fittings and muted teal sash at the hip, dark trousers and black boots with gold trim. Keep the same costume construction and ornaments, not a new emperor, no armor, no horse.\nSword lowered in a relaxed ready idle stance. Similar restrained hand-painted historical RTS detail to the reference, strong silhouette at small game scale. Soft upper-left lighting consistent across the atlas. No extra weapons, no symbols, no text, no UI, no scenery.",
+      "references": [
+        "original"
+      ],
+      "native_output": "exec-725cf0d7-d26a-4cc4-bb0f-8a4178fb978e.png",
+      "sha256": "af9ca9cab5867d481a426f6db8317c94e0dc4cbf68646608f959e84410561b26",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "fix",
+      "prompt": "Edit target: the attached four-view Song Jiang sprite atlas. Keep the 2 by 2 layout, the same four camera/body directions, same face, gold robe, black shoulder scarf, belt, boots and crown, same painted style and figure scale.\nCorrect the mistaken mirrored handedness in the RIGHT COLUMN ONLY. In the top-right FRONT-facing-left figure, move the sword into his anatomical RIGHT hand (the hand on the LEFT side of that figure on the page); his other hand must be empty. Put his teal hip sash on the RIGHT side of the front-facing figure, the same anatomical side as the top-left view. In the bottom-right BACK-facing-left figure, move the sword into his anatomical RIGHT hand (the hand on the RIGHT side of that figure on the page); the left hand must be empty, and teal sash stays on his anatomical LEFT hip. Do NOT flip either entire figure: keep him looking left, including his head, torso and feet.\nPreserve the LEFT COLUMN poses and handedness.\nAlso remove ALL of the painted checkerboard behind and around the four figures and all background. Output a square PNG with a genuinely transparent alpha channel around every silhouette, including between limbs and swords. Do NOT paint a checkerboard or a solid-color background; the actual output alpha must be zero there. Keep complete figures and swords inside their own cells with clear padding, no clipping. No text, labels, borders, floor, ground shadow, UI or extra objects. This is a production character atlas intended for direct compositing onto an RTS terrain map.",
+      "references": [
+        "idle"
+      ],
+      "native_output": "exec-33ea42ef-f63d-413f-a1e5-8884d7a2037a.png",
+      "sha256": "e982e48b67ec2e34fc2aa151d4467f04a5af1117533db722627d1a149b971c02",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "nw",
+      "prompt": "Edit the attached existing game character into ONE northwest-facing sprite: rotate the same man to show his BACK, facing toward the upper-left corner of the page. Show the back of his head, black shoulder scarf and ochre-gold brocade robe, with only a sliver of his left cheek. His black boots also point toward upper-left. Keep his original gold crown, tied black hair, gold belt, left-hip teal sash, black boots, realistic proportions and hand-painted historical RTS style. Keep the straight silver Chinese sword in his anatomical RIGHT hand; in this BACK view that sword-bearing hand is on the RIGHT side of the figure on the page. The other hand is empty. Full body, relaxed ready standing pose, fixed elevated 30 degree game camera, no horse, no armor.\nRemove ALL background and the old gray ground shadow. Output a square PNG with a genuinely transparent alpha channel around the silhouette, including between the sword, robe and legs. Do NOT paint a checkerboard or a solid-color background; the actual output alpha must be zero there. Center the entire intact character with generous transparent padding, no clipping. No text, labels, borders, floor, shadow plane, other people, or additional props. This is a production sprite intended to be composited directly onto an RTS terrain map.",
+      "references": [
+        "original"
+      ],
+      "native_output": "exec-3e9e0a4c-3399-4c2c-9898-1ea6562a1db5.png",
+      "sha256": "bef5255f97df4e7431c9dedc12f068135627c489f8e6149c75cee936282d7b0d",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/nw.png",
+      "note": "Rejected as a NW pose: body still faces NE. Retained only as an identity reference for later generation."
+    },
+    {
+      "key": "nw_alpha",
+      "prompt": "Remove the background from this image. Return the exact complete single character as a transparent PNG cutout with an actual alpha channel. Remove every white and gray checkerboard square, including all spaces around the sword and between the legs. Preserve the man's back-facing pose, right-hand sword, body, boots, gold robe, black scarf, crown, scale and colors. No added background, checkerboard, shadow, floor, text or decoration. The empty space must be truly transparent.",
+      "references": [
+        "nw"
+      ],
+      "native_output": "exec-d7782c8e-1341-45e5-8723-e6288b406299.png",
+      "sha256": "612192e261261f79b146735ba9518e2aa8b561f78eb4515f7264a34891d2e10f",
+      "size": [
+        1234,
+        1275
+      ],
+      "mode": "RGBA",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/nw_alpha.png",
+      "note": "Rejected as a NW pose: body still faces NE. Retained only as an identity reference for later generation."
+    },
+    {
+      "key": "sw",
+      "prompt": "Create ONE full-body character sprite of the SAME Song Jiang shown in the references. Reference 1 defines his FRONT face and costume; reference 2 shows the SAME costume from behind. Keep his ochre-gold brocade long robe, black shoulder scarf, small gold crown, topknot, black beard and mustache, dark gold-fitted belt, muted teal sash at his anatomical left hip, black boots and straight silver Chinese sword. No armor or horse.\nThis single view is SOUTHWEST: he stands facing diagonally down and LEFT on the page, with his FRONT chest and face visible. Turn his whole head, chest, pelvis, knees and boots leftward consistently, elevated 30 degree isometric game camera. His sword is in his anatomical RIGHT hand, which is the hand on the LEFT side of his body in this FRONT view; the sword points down-left. His hand on the RIGHT side of the page is empty, beside his teal left-hip sash. Do not mirror his costume or hand assignment.\nRelaxed ready idle stance. Match the restrained painted historical RTS style and proportions. Centered full figure, no clipping, generous padding. Single isolated transparent PNG cutout. No background, floor, cast shadow, checkerboard, text, labels or other objects.",
+      "references": [
+        "original",
+        "nw_alpha"
+      ],
+      "native_output": "exec-3da85873-39d1-4f9e-887b-abbc5a1c2744.png",
+      "sha256": "176c96e1f03c09aeac2f0853d26ca4d0fda47a00723615e7435682bb04504ef3",
+      "size": [
+        1196,
+        1315
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/sw.png",
+      "note": ""
+    },
+    {
+      "key": "sw_alpha",
+      "prompt": "Remove the background from this image. Return the exact complete single character as a transparent PNG cutout with an actual alpha channel. Remove every white and gray checkerboard square, including all spaces around the sword and between the legs. Preserve the man's front-facing-left pose, right-hand sword, body, boots, gold robe, black scarf, crown, scale and colors. No added background, checkerboard, shadow, floor, text or decoration. The empty space must be truly transparent.",
+      "references": [
+        "sw"
+      ],
+      "native_output": "exec-4cbb7cc5-e77e-4710-871a-db25973be811.png",
+      "sha256": "511318591ab73f18dac65277ebc580567b624608aa6b55a2bff8d4580a174e1b",
+      "size": [
+        1197,
+        1314
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "sw_alpha2",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的左转正面姿势、右手持剑、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "sw"
+      ],
+      "native_output": "exec-183d0166-c356-4301-ab23-fcc06b3c75ac.png",
+      "sha256": "6ad7d5c389c9efafc36426e15f9d6144c5321e28f70c2d9701f186bf0e972acb",
+      "size": [
+        1166,
+        1349
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/idle_sw.png",
+      "note": ""
+    },
+    {
+      "key": "ne",
+      "prompt": "把参考图中的同一个宋江，整体转成朝向画面右上方的背面三分之四视角（NE），作为等距RTS角色走图。镜头俯视约30度。后脑、黑色披巾背面、金色长袍背面朝向镜头，只露少量右侧脸；身体、腰、双膝、双脚都跟随朝向右上，不能只转头。保持人物身份、金色发冠、黑胡子、黑色披巾、黑金腰带、金色纹样长袍、黑靴、左腰青绿色腰巾完全一致。直刃长剑仍由人物解剖学上的右手握持，也就是背视人物画面右侧的手，左手空着，不要左右镜像人物来换方向。完整全身，闲置持剑站姿，剑尖斜向下，身体与上一张大小比例相同。写实手绘中国古代RTS风格。画面只出现一个人，不要文字、场景、地板、阴影、边框。四周留足透明空白，整个剑和双脚均不得裁出画面。透明背景PNG。",
+      "references": [
+        "nw_alpha"
+      ],
+      "native_output": "exec-14a83ee2-3d00-4813-a125-057cbb900fa6.png",
+      "sha256": "c658e6552bbfa7b95ca2a310c841f117dc2c7cdfaca783f760b4696fb27d918f",
+      "size": [
+        1240,
+        1269
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/ne.png",
+      "note": ""
+    },
+    {
+      "key": "nw_body",
+      "prompt": "Generate ONE NEW VIEW of this exact Song Jiang character: show his LEFT BACK QUARTER, the camera looking past his LEFT shoulder at the back of his robe. He is facing away from the camera toward the UPPER LEFT corner of the image (NW).\nThis must be a physical turn of the ENTIRE BODY, not a head turn. In the new silhouette his LEFT shoulder and LEFT sleeve on the LEFT side of the page are NEAR the camera and visibly LARGER. His RIGHT shoulder, RIGHT arm, and RIGHT hand on the RIGHT side of the page are FARTHER from the camera and partly occluded by the body. The far right hand still holds his straight silver sword; the larger near left hand must remain EMPTY. Do not put the sword in the near left hand. The teal sash is on the near left hip. Both feet and knees point toward upper-left; show his boot heels to the camera, with toes extending toward the LEFT, not the right.\nKeep the same adult Chinese male identity, black hair topknot with small gold crown, black scarf, gold brocade long robe, black and gold belt, teal sash, dark trousers and black boots, proportions and painted RTS art style. No armor, no horse. Elevated isometric game camera, full body and whole sword in frame, generous padding. No text, labels, background objects, floor or shadow. Single character isolated on transparent background.",
+      "references": [
+        "ne"
+      ],
+      "native_output": "exec-63a68d7d-3960-431c-89d6-0934d7c1af76.png",
+      "sha256": "66877fd4dabd63b9729b672d24879df4ce5863c5599f3b475fd94b75d43f65c8",
+      "size": [
+        1239,
+        1269
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/nw_body.png",
+      "note": ""
+    },
+    {
+      "key": "ne_alpha",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的右上背向姿势、右手持剑、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "ne"
+      ],
+      "native_output": "exec-1a88bd97-0a67-4c84-82a9-04ccf1c6e7cc.png",
+      "sha256": "cd1284e46bd80da1b336e0beeab2f8f5f1987f128072fbf16caae953cf2457c9",
+      "size": [
+        1205,
+        1305
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/idle_ne.png",
+      "note": ""
+    },
+    {
+      "key": "nw_body_alpha",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的左上背向，左臂在近处且空手，远处右手持剑姿势、右手持剑、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "nw_body"
+      ],
+      "native_output": "exec-5bdca1ab-62d0-4fd1-be0c-0e663c9a8ada.png",
+      "sha256": "5eb5d82d908126279cda05c3f5b8880061736ee2a426b1e2d7a3a48f9cf4858e",
+      "size": [
+        1222,
+        1287
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/idle_nw.png",
+      "note": ""
+    },
+    {
+      "key": "se",
+      "prompt": "Generate ONE NEW VIEW of this exact Song Jiang: a FRONT three-quarter view facing toward the LOWER RIGHT of the page (SE), elevated 30 degree isometric RTS camera.\nTurn his entire body, face, chest, pelvis, knees and boots toward down-right, not just his head. His anatomical LEFT shoulder/sleeve, on the RIGHT side of the figure on the page, is nearer and larger; his right shoulder/arm, on the LEFT side of the page, is farther. His anatomical RIGHT hand (on the LEFT side of the front-view figure) still holds the straight silver sword, angled down-left. The other hand is empty. His teal sash remains on his anatomical LEFT hip, on the RIGHT side of this front view. Do NOT mirror his weapon or costume.\nKeep the exact same gold crown and black topknot, adult Chinese face, moustache and beard, black shoulder scarf, ochre-gold patterned long robe, black and gold belt, dark trousers and black boots, painted historical game-art style and proportions. Full body, relaxed standing idle stance, complete blade and boots inside the canvas, generous clear margins, only one figure. No armor, horse, scenery, floor, shadow, text, label or border. Transparent PNG cutout.",
+      "references": [
+        "sw_alpha2"
+      ],
+      "native_output": "exec-c4e11bfa-d2b0-449e-85a1-b65e166b2d36.png",
+      "sha256": "4a6314ada491787201ce4e6df7ecd29035be19779e0785651896563d41812552",
+      "size": [
+        1164,
+        1351
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "se_alpha",
+      "prompt": "请把参考图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。保留他现在朝向画面右下方（SE）的正面姿势、脸朝右、右手持剑、左手空着、金色长袍、黑色披巾、青绿腰巾、腰带和发冠。删除人物周围和脚底旧的灰色阴影与底色，不要重新画棋盘格，不要加地板或新背景。必须保留完整剑尖、双脚与头冠。只做透明去背景，绝不要左右镜像或转动人物。",
+      "references": [
+        "original"
+      ],
+      "native_output": "exec-f47da9b2-0a94-4f3e-9eed-8ec1fa4550ee.png",
+      "sha256": "632bdce10d1ca4d826aa2e9432a4ba0ded16f78953cb9549a512fdf7fa816778",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/se_alpha.png",
+      "note": ""
+    },
+    {
+      "key": "se_alpha2",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的右下正面姿势、右手持剑、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "se_alpha"
+      ],
+      "native_output": "exec-631f5c71-4019-459b-8247-eb7927c39111.png",
+      "sha256": "a58a62a5759ba64aea21c0a6966ac0ead77ccb9aa239bf10f90f86a69fc6b4b5",
+      "size": [
+        1239,
+        1270
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/idle_se.png",
+      "note": ""
+    },
+    {
+      "key": "walk_step",
+      "prompt": "Create ONE walking-pose sprite atlas for this SAME Song Jiang character. Use the FOUR attached views as exact references, in order SE, SW, NE, NW. Do not redesign his costume or swap his sword hand.\nOutput a square atlas of exactly four equal cells in a 2 by 2 layout, with one complete figure in each cell, no labels or dividers:\ntop-left = SE, FRONT facing down-right, matching reference 1;\ntop-right = SW, FRONT facing down-left, matching reference 2;\nbottom-left = NE, BACK facing up-right, matching reference 3;\nbottom-right = NW, BACK facing up-left, matching reference 4.\nEach figure is NOW TAKING A CLEAR WALKING STEP in its existing direction. His left knee advances and the left boot reaches forward along that direction; his right leg extends behind with the heel visibly raised. Show actual leg separation and changed knees/boots and moving hem folds, not the same standing silhouette translated or tilted. Keep his torso relatively upright, head with body direction, and lowered straight sword in his anatomical RIGHT hand throughout. On both front views that right hand is on the left side of the page within the cell; on back views it is on the right. Near LEFT arm stays empty in NW. Muted teal sash remains on anatomical LEFT hip.\nSame adult Chinese man, black topknot and small gold crown, black scarf, gold brocade long robe, black/gold belt and black boots as the references. Consistent figure height, proportions, dark ochre-gold color and hand-painted historical RTS style. Fixed 30 degree elevated isometric camera. Keep head, body, entire sword and both boots INSIDE each separate cell with generous clear margins. No duplicated idle poses, no mirror flipping, no horse, no armor, no scenery, no ground shadow, no text or UI. Transparent background PNG.",
+      "references": [
+        "se_alpha2",
+        "sw_alpha2",
+        "ne_alpha",
+        "nw_body_alpha"
+      ],
+      "native_output": "exec-129d2637-16bc-40f6-bd39-5bc3f191bf70.png",
+      "sha256": "1e13da075d5a93f9023e81c4bd1f9ab35bbdf9d07f87f445a1160119fb018bfb",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/walk_step.png",
+      "note": ""
+    },
+    {
+      "key": "walk_step_alpha",
+      "prompt": "请把这张图中四格里的四个人物全部完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG，保留原本2×2位置和排列。棋盘格是要删除的背景，不要重新画棋盘格。保留每个人的朝向、迈步姿态、武器、服装、颜色和细节，包括全部双脚和完整剑尖。不要合并或遗漏任何一个人，不要重画人物，只做去背景。",
+      "references": [
+        "walk_step"
+      ],
+      "native_output": "exec-52aeef77-7f19-4633-a18b-c6f05e45babc.png",
+      "sha256": "e85dccd81f2a4f8e4b5062582d001b747c6bec9fe72f4922f0ae09fdfe84ac78",
+      "size": [
+        1312,
+        1199
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/walk_atlas.png",
+      "note": "Only SE, NE and NW cells are used. Wrong-handed SW cell is excluded and replaced by a separate native cutout."
+    },
+    {
+      "key": "walk_sw",
+      "prompt": "保持参考图中同一个宋江的朝向和持剑手，改成迈步中的一帧：他仍正面朝画面左下方（SW），右手是画面左侧握剑的手，画面右侧的左手保持空手，青绿色腰巾仍在左腰（画面右侧）。不要转身、不要镜像、不要把剑换手。左腿向左下方迈出，另一腿落在身后，后脚脚跟抬起，必须有清楚的膝盖、双脚和衣摆动作变化，不是平移站姿。保持全身比例、金色发冠、黑发和胡须、黑披巾、金纹长袍、黑金腰带、黑靴与现有写实手绘RTS风格，长剑仍放低。俯视30度游戏镜头。只画一个完整角色和整把剑，头冠、双脚和剑尖不得裁切。四周留足空白，透明背景PNG，不要文字、地面、阴影或场景。",
+      "references": [
+        "sw_alpha2"
+      ],
+      "native_output": "exec-8c0953c1-eed5-4974-b974-57108607d631.png",
+      "sha256": "bd1bcdc5967cc6f88332ebde1d3818c17bd61fa86b806e53693afe4dfac933a9",
+      "size": [
+        1178,
+        1335
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/walk_sw.png",
+      "note": ""
+    },
+    {
+      "key": "walk_sw_alpha",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的左下正面迈步姿势、画面左手侧握剑、另一只手空着、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "walk_sw"
+      ],
+      "native_output": "exec-7ce18f0f-2d9c-459c-b7f5-16f6cf7b160e.png",
+      "sha256": "ed096712546c6242b0685057befd3f4ba4e3fbb4f218510887496f0858daaf2b",
+      "size": [
+        1141,
+        1378
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/walk_sw.png",
+      "note": ""
+    },
+    {
+      "key": "attack",
+      "prompt": "Create ONE attack-pose atlas for this SAME Song Jiang character using the four attached idle directions SE, SW, NE, NW as exact identity and directional references. Four equal cells in a 2 by 2 square atlas: top-left SE FRONT down-right, top-right SW FRONT down-left, bottom-left NE BACK up-right, bottom-right NW BACK up-left. In each view he executes a strong sword CUT FORWARD into his facing direction, with the straight silver Chinese sword held in his anatomical RIGHT hand, right arm actively extended across his front at chest height, left empty hand balancing behind. Make the actual sword and arm pose unmistakably different from the lowered-sword idle pose; bent front knee, weight shifted forward, small torso turn appropriate to a strike. Maintain the genuine front/back body orientations, no mirrored hand swap. Particularly SW must use his right shoulder/arm, not the left arm. Teal sash stays at his anatomical left hip.\nLock the gold crown, black topknot and beard, black shoulder scarf, dark ochre-gold brocade long robe, black/gold belt, dark trousers and black/gold boots. Keep restrained painted historical RTS style, same scale and 30 degree elevated isometric camera. Every figure, both boots and entire extended sword must fit INSIDE its cell, with generous empty margins, no overlap between cells. No sword trails, motion lines, magical effects, text, labels, border, scenery, floor or shadows. Transparent PNG background.",
+      "references": [
+        "se_alpha2",
+        "sw_alpha2",
+        "ne_alpha",
+        "nw_body_alpha"
+      ],
+      "native_output": "exec-17967828-af08-429c-abab-0bc941f1f181.png",
+      "sha256": "f3b812f21cafac97684100146088de688897bcdea7f7ef611c57a8724672447a",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/attack.png",
+      "note": ""
+    },
+    {
+      "key": "attack_alpha",
+      "prompt": "请把这张图中四格里的四个人物全部完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG，保留原本2×2位置和排列。棋盘格是要删除的背景，不要重新画棋盘格。保留每个人的朝向、挥剑姿势、武器、服装和颜色，包括全部双脚和完整剑尖。不要合并或遗漏任何一个人，不要重画人物，只做去背景。",
+      "references": [
+        "attack"
+      ],
+      "native_output": "exec-88e38892-881a-4c2a-b46c-47a43ea487e0.png",
+      "sha256": "8a121e35594dd02ebc4e87dee5a5a1815571b3ec2f483da09fdb94b7c0f287ee",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "attack_sw",
+      "prompt": "把图中的同一个宋江改成向左前方挥剑击中的动作帧。他仍正面朝左下方（SW），身体、脸和前腿都朝左下。用人物的右手持剑，也就是参考图画面左侧握剑的那只手。右臂向画面左前方伸出，整把直刃长剑向画面左侧伸展，在胸部高度完成横斩，剑尖必须指向左边，不要指向右边。人物的左手（画面右侧）保持空手向后平衡，青绿腰巾在画面右腰。左前腿弯曲，后腿撑住，有真实挥击和衣摆变化。绝不镜像、不换持剑手，不要只转头。保持金发冠、黑披巾、金纹长袍、黑金腰带、黑靴、同一面容和手绘RTS画风。俯视30度，全身和全剑均在画内，四周留空。只一个角色，透明背景PNG，不要剑气、轨迹、文字、地面、阴影、场景或边框。",
+      "references": [
+        "sw_alpha2"
+      ],
+      "native_output": "exec-9fc5f371-d4a2-4745-be86-8104dd7cf709.png",
+      "sha256": "71a14838b39c324e060a4d3cf2494d5afa453f4c81880169b69ff5a69558d7fc",
+      "size": [
+        1154,
+        1363
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/attack_sw.png",
+      "note": ""
+    },
+    {
+      "key": "attack_nw",
+      "prompt": "把图中的同一个宋江改成向左上前方斩击的动作帧，保持这张图的左上背向（NW），镜头看到背部和较近的左肩、左臂，绝不能镜像。他用远处的右手持剑，也就是参考图画面右侧握剑的那只手：右臂抬到右肩上方，手在头部右上侧，长剑向左上斜出，剑刃从头顶上方经过并朝向左上方目标。较近的左臂（画面左侧）始终空手向外平衡。必须画成右手举剑，不能把剑放到较近的左手。身体、前腿朝向左上，膝盖弯曲重心前移，衣摆有挥击变化。保持同一个人、金冠黑发、黑色披巾、金纹长袍、黑金腰带、左腰青绿巾、黑靴和手绘RTS画风。俯视30度，完整全身与整剑，四周留充足空白，只一个角色。透明背景PNG，无地面、阴影、特效、轨迹、文字、边框或场景。",
+      "references": [
+        "nw_body_alpha"
+      ],
+      "native_output": "exec-7587384a-e3b4-49a0-84a4-e921c8c0de01.png",
+      "sha256": "5a53571ae149cb03bd55f872e4d4d5a9d5cd3f5a6d1aac58a53279bc8e95e4d7",
+      "size": [
+        1222,
+        1287
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/attack_nw.png",
+      "note": ""
+    },
+    {
+      "key": "attack_alpha2",
+      "prompt": "请把图中四格的四个人物完整抠出来，删除全部棋盘格背景，输出真正带透明 alpha 通道的 PNG。保留四人原有2×2排列、姿势、金色衣服和长剑。只做去背景。不要画黑色背景、白色背景、金色光晕、阴影或发光效果。人物之间和周围全部透明。",
+      "references": [
+        "attack"
+      ],
+      "native_output": "exec-5ed31eac-08d4-44a3-a4ba-4a83f47c954d.png",
+      "sha256": "3aa0e9b692301cb53da6356a9fde6b6c0b1836b8db8b08b00cb9e1a822f0494f",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "attack_sw_alpha",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物、向左刺出的完整长剑、动作和衣服。只做去背景，不要重画人物，不要黑色背景或光晕。",
+      "references": [
+        "attack_sw"
+      ],
+      "native_output": "exec-a9b4da1b-095c-4e28-b960-99ce498303d0.png",
+      "sha256": "6c162bfb361bd070a1fbd58cc9d196dd64d26119a8a60b5fdd4b21aec32ed40c",
+      "size": [
+        1182,
+        1331
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/attack_sw.png",
+      "note": ""
+    },
+    {
+      "key": "attack_nw_alpha",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物、举过头顶的完整长剑、动作和衣服。只做去背景，不要重画人物，不要黑色背景或光晕。",
+      "references": [
+        "attack_nw"
+      ],
+      "native_output": "exec-16bb1e0b-621f-4eff-8b44-bf9e8846dbf2.png",
+      "sha256": "d407e5aa58983c544d4c76f16e51d17dd335c0962c19d512e69a9ccc4ce30935",
+      "size": [
+        1224,
+        1285
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/attack_nw.png",
+      "note": ""
+    },
+    {
+      "key": "death_fall",
+      "prompt": "Create ONE 2x2 four-direction character sprite atlas of the SAME Song Jiang from the four provided gold-robed references. Painted realistic ancient-Chinese isometric RTS art, identical face, gold brocade robe, black scarf, gold crown, teal left sash and black boots. TRUE TRANSPARENT RGBA BACKGROUND, no checkerboard painted in pixels, no ground, no glow, no labels. Exactly four complete isolated figures with generous transparent gutters. Top-left SE front facing down-right; top-right SW front facing down-left; bottom-left NE rear facing up-right; bottom-right NW rear facing up-left. Rotate the entire torso, hips and legs, not just the head. Keep body proportions and costume consistent. No gore. Sword may be dropped beside the right hand. ACTION: collapsing from defeat, intermediate falling pose. Each figure has one knee on the ground, other leg giving way, torso hunched about 45 degrees, head lowered, right arm releasing the sword. Distinct from idle or combat lunge; clear loss of balance. Every figure points along its assigned isometric direction. Show full crown through boots and complete dropped sword, no cropping. Four anatomically coherent genuine kneeling/collapsing poses, no squeezed standing artwork.",
+      "references": [
+        "se_alpha2",
+        "sw_alpha2",
+        "ne_alpha",
+        "nw_body_alpha"
+      ],
+      "native_output": "exec-03241728-6ef7-410f-8d16-f8b9fbaa39ab.png",
+      "sha256": "2a31613417a656641ab972a09451323989cb8d197b6d31fd73e3af171796942d",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/death_fall.png",
+      "note": ""
+    },
+    {
+      "key": "death_down",
+      "prompt": "Create ONE 2x2 four-direction character sprite atlas of the SAME Song Jiang from the four provided gold-robed references. Painted realistic ancient-Chinese isometric RTS art, identical face, gold brocade robe, black scarf, gold crown, teal left sash and black boots. TRUE TRANSPARENT RGBA BACKGROUND, no checkerboard painted in pixels, no ground, no glow, no labels. Exactly four complete isolated figures with generous transparent gutters. Top-left SE front facing down-right; top-right SW front facing down-left; bottom-left NE rear facing up-right; bottom-right NW rear facing up-left. Rotate the entire torso, hips and legs, not just the head. Keep body proportions and costume consistent. No gore. Sword may be dropped beside the right hand. ACTION: final defeated body fully lying motionless on its side on the implied ground plane. Hips, shoulder and legs all at ground level; absolutely no standing or upright kneeling. Legs relaxed and partly bent. Headward body axis follows assigned direction: SE head lower-right feet upper-left, SW head lower-left feet upper-right, NE head upper-right feet lower-left with back visible, NW head upper-left feet lower-right with back visible. Full body length and limbs; the gold robe lies naturally along the body, not a tiny heap. Sword rests separately near right hand. No puddles, no ground shadows, no blood. Identical crown and attire in all four views.",
+      "references": [
+        "se_alpha2",
+        "sw_alpha2",
+        "ne_alpha",
+        "nw_body_alpha"
+      ],
+      "native_output": "exec-f5dace89-914f-44c3-b3bc-d4fbf3564122.png",
+      "sha256": "efb4a346113ef5babfdfb8e4c74af8896e77b2f8b3b87c77c97ffc57be75b248",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/death_down.png",
+      "note": ""
+    },
+    {
+      "key": "attack_alpha3",
+      "prompt": "把图中四个人物抠出来，保留原位置。棋盘格背景彻底删除，背景全部透明。输出有真正 alpha 透明通道的 PNG，只去背景。",
+      "references": [
+        "attack_alpha2"
+      ],
+      "native_output": "exec-3c3becc8-de04-4a9e-9b11-eefa55250005.png",
+      "sha256": "f6f2e6b13c103845fc0652e04e767be17ed68626db4b1845dfe54fc9d69f9af1",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "death_fall_alpha",
+      "prompt": "把图中四个倒下的人物和各自旁边的剑完整抠出来，保留原来的2×2位置，背景全部透明。删除棋盘格，输出真正带 alpha 通道的 PNG。只去背景，不重画人物。",
+      "references": [
+        "death_fall"
+      ],
+      "native_output": "exec-6d8261a9-9e7c-4b29-a4ac-aebb9103adf0.png",
+      "sha256": "d3f7fcc1ff0825386ef42d355e6564bfb0338a286e656bd50a546a6df962e6ef",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "death_down_alpha",
+      "prompt": "把四个躺倒的人物和旁边的剑完整抠出来，保留原来的2×2位置。棋盘格全部删除，背景全部透明。输出真正带 alpha 通道的 PNG，只去背景，不重画人物。",
+      "references": [
+        "death_down"
+      ],
+      "native_output": "exec-f7cd298b-54e4-47d9-840a-9a67ddd5d342.png",
+      "sha256": "5aade76e8bbce7029faecfeb4b9e3d3eb37b95b3b5180cefa75faefe7b230330",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/down_atlas.png",
+      "note": "RGBA has hidden RGB background colors under alpha=0. Godot composition is the authoritative transparency check; image preview can ignore alpha."
+    },
+    {
+      "key": "attack_se_alpha",
+      "prompt": "只保留参考图左上角那个朝右下挥剑的宋江，其他三个全部去掉。将这个人物和完整长剑抠出来，输出一张人物居中、背景完全透明、带真正 alpha 通道的 PNG。棋盘格必须删除。人物姿势、右手持剑和衣服保持不变，不要添加任何背景或光晕。",
+      "references": [
+        "attack"
+      ],
+      "native_output": "exec-036fe60a-accc-4b77-8297-98df242cbf60.png",
+      "sha256": "543e79ec047720eea11ce44d0cb4ff8221889df146d568287018c147f5234b1f",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/attack_se_alpha.png",
+      "note": ""
+    },
+    {
+      "key": "attack_ne_alpha",
+      "prompt": "只保留参考图左下角那个背朝镜头、朝右上刺剑的宋江，其他三个全部去掉。将这个人物和完整长剑抠出来，输出一张人物居中、背景完全透明、带真正 alpha 通道的 PNG。棋盘格必须删除。人物姿势、右手持剑和衣服保持不变，不要添加任何背景或光晕。",
+      "references": [
+        "attack"
+      ],
+      "native_output": "exec-c68eacb6-8103-414f-b434-7b2937188fe1.png",
+      "sha256": "040d1461866b1296b4a171aeda64e80e87ea9d82c2b57d839100debd64b1a4a9",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/attack_ne_alpha.png",
+      "note": ""
+    },
+    {
+      "key": "death_fall_alpha2",
+      "prompt": "请把这张图中四格里的四个人物全部完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG，保留原本2×2位置和排列。棋盘格是要删除的背景，不要重新画棋盘格。保留每个人的朝向、跪倒姿态、武器、服装、颜色和细节，包括全部双脚和完整剑尖。不要合并或遗漏任何一个人，不要重画人物，只做去背景。",
+      "references": [
+        "death_fall"
+      ],
+      "native_output": "exec-f1e9e567-6d30-45e0-b0fa-1369b23d1664.png",
+      "sha256": "bb178488264d5d3d3101d23189a5fd435b491d84eac0a8a87155a526fe2b15f7",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "attack_se_alpha2",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的姿势、右手持剑、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "attack_se_alpha"
+      ],
+      "native_output": "exec-f9c54200-70ab-4fea-a4aa-40422f3f1939.png",
+      "sha256": "369ab9ddb96c9260945dd450bc8db9da560f1a590959e7643610f1a2160fb6fc",
+      "size": [
+        1218,
+        1291
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/attack_se.png",
+      "note": ""
+    },
+    {
+      "key": "attack_ne_alpha2",
+      "prompt": "请把这张图中的宋江完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的姿势、右手持剑、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "attack_ne_alpha"
+      ],
+      "native_output": "exec-aa35c247-8839-414f-bf38-d2e4d0338a9d.png",
+      "sha256": "7d43e1557d4f8b4a9d18b6a4380d48da2546fdbd153cb342395c56e4355d0f9b",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/attack_ne.png",
+      "note": ""
+    },
+    {
+      "key": "death_down_se",
+      "prompt": "只保留参考图左上角那一个躺倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的躺倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_down"
+      ],
+      "native_output": "exec-d9a7f992-4fdd-42f7-8d26-2462b14ffab3.png",
+      "sha256": "50727e9fbf1bd919c1c174efeef76809e871f62871d586868e0bae743736402a",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "death_down_sw",
+      "prompt": "只保留参考图右上角那一个躺倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的躺倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_down"
+      ],
+      "native_output": "exec-2ecef583-23b9-4f0c-a6ac-4530828fe3fa.png",
+      "sha256": "80a9ad9315db4d7b449e7d2d8532c635f08492c447ab716779d3d2011df6012c",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "death_down_ne",
+      "prompt": "只保留参考图左下角那一个躺倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的躺倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_down"
+      ],
+      "native_output": "exec-dfb2ca10-210d-4382-b766-ee624fe7665a.png",
+      "sha256": "75701e9a7f865f0db996994ac8d38f630596ca9f8046189b2f0a23a013b67921",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "death_down_nw",
+      "prompt": "只保留参考图右下角那一个躺倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的躺倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_down"
+      ],
+      "native_output": "exec-442178eb-98d6-442a-82d6-e146831481ee.png",
+      "sha256": "5e51983cda603590a778519157fc0f70f108d3a5f56d7518a8643d610ecc366b",
+      "size": [
+        1452,
+        1083
+      ],
+      "mode": "RGB",
+      "status": "not selected",
+      "repository_path": null,
+      "note": ""
+    },
+    {
+      "key": "death_fall_se",
+      "prompt": "只保留参考图右上角那一个跪倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的跪倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_fall"
+      ],
+      "native_output": "exec-2d40625f-6fb2-4893-9920-e5162b1edc0c.png",
+      "sha256": "1fe066729c086eea2416b46232c69245bca9e332df5fbc252244a8734b6ac98a",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/fall_se.png",
+      "note": ""
+    },
+    {
+      "key": "death_fall_sw",
+      "prompt": "只保留参考图左上角那一个跪倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的跪倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_fall"
+      ],
+      "native_output": "exec-087bcbe9-81c2-4904-82e8-9181ea19a2ae.png",
+      "sha256": "0e2511209cb043ec3486534a5ce7153974e1f56cbb73d87ad08a11632c4e466a",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/fall_sw.png",
+      "note": ""
+    },
+    {
+      "key": "death_fall_ne",
+      "prompt": "只保留参考图左下角那一个跪倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的跪倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_fall"
+      ],
+      "native_output": "exec-38afae71-4874-46c8-aabb-7dd5620583d2.png",
+      "sha256": "525a86e1e334361569611eac6c88ff739bf91dae885c6fd82e2785e81c163336",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/death_fall_ne.png",
+      "note": ""
+    },
+    {
+      "key": "death_fall_nw",
+      "prompt": "只保留参考图右下角那一个跪倒的宋江和他旁边的剑，其他三个去掉。请把这个人物和剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保持这个人的跪倒姿势、衣服、颜色和细节，包括完整身体和剑尖，只做去背景。",
+      "references": [
+        "death_fall"
+      ],
+      "native_output": "exec-117858bf-ed2b-4a38-b535-b35a4ef0f87d.png",
+      "sha256": "98c3d91934d5b2ce781289d6055cd82ee52b8ff9b0812cfbe4672467af6172d9",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "status": "generation reference only",
+      "repository_path": "tools/contracts/song_jiang_direction4_20260906/references/death_fall_nw.png",
+      "note": ""
+    },
+    {
+      "key": "death_fall_nw_alpha",
+      "prompt": "请把这张图中的宋江和旁边的剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的跪倒姿势、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "death_fall_nw"
+      ],
+      "native_output": "exec-742becba-24c6-4e08-a556-7380af63a575.png",
+      "sha256": "3ee9c5f61bf28985f8018523399e9fc679864643f0d71406ff317ed9bd6b5bff",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/fall_nw.png",
+      "note": ""
+    },
+    {
+      "key": "death_fall_ne_alpha",
+      "prompt": "请把这张图中的宋江和旁边的剑完整抠出来，背景全部透明，输出带真正 alpha 通道的 PNG。棋盘格是要删除的背景，不要重新画棋盘格。保留人物的跪倒姿势、服装、颜色和细节，包括双脚和完整剑尖。只做去背景，不要重画人物。",
+      "references": [
+        "death_fall_ne"
+      ],
+      "native_output": "exec-bd00582c-74b2-40fd-9cec-7c9400cdd230.png",
+      "sha256": "fcfa5cc76e277d6bdbe327e0a12a4484ece8679fab12b016fd3644fd3e450e52",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "status": "selected production source",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/fall_ne.png",
+      "note": ""
+    }
+  ]
+}

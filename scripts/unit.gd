@@ -334,7 +334,7 @@ var _dust: Array = []      # 脚步扬尘 [{x,y,t}]
 const MOVE_SCALE := 0.66      # 全局移动速度系数：放慢行军节奏（不影响任何「走时」/冷却，那些走真实秒）
 const DEATH_DUR := 1.4   # 死亡动画时长（秒）：放慢倒地，看清逐帧（原 0.7 太快）
 const DUST_DUR := 0.36
-# These four units have complete, authored four-direction attack strips. Their
+# These units have authored four-direction attack frames. Their
 # body motion and weapon pose already live in the bitmap, so the legacy whole-
 # sprite swing and procedural weapon trail must not be layered on top.
 const AUTHORED_DIRECTION4_ATTACK_KEYS := {
@@ -342,6 +342,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"guan_gong": true,
 	"guan_jingqi": true,
 	"guan_qi": true,
+	"song_jiang": true,
 }
 
 

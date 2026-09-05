@@ -1,3 +1,9 @@
+## 2026-09-06 宋江四向首批
+
+通过 `Play.cmd` 重新启动并重开关卡，现有缓存检查会处理新PNG导入。驻守及使用通用宋江的战役会加载四向金袍站立、迈步、出剑与倒地，江州绑缚/获救服装继续独立。新资源为PNG原图配合SpriteFrames `.tres`；不需要重新生成图片或配置外部图像API。
+
+新增 `tools/song_jiang_direction4_qa.gd`、`tools/song_jiang_direction4_sources.py`；`SJ_VISUAL=1`用实际Vulkan保存动作矩阵，Python+Pillow只读检查来源。全库盘点与驻守路由工具现在识别PNG/TRES，默认输出忽略的 `.godot/`，不覆盖历史QA。命令、输出变量及250/195/8/257/46/22项结果见[说明](SONG_JIANG_DIRECTION4_20260906.md)。当前仅新增宋江，未完成全库或可售验收。
+
 ## 2026-09-06 芦苇网格验证
 
 `tools/reed_mesh_qa.gd` 使用headless，输出 `.godot/reed_mesh_qa/`；`tools/reed_mesh_render_probe.gd` 使用真实渲染，输出 `.godot/reed_mesh_render_probe/`。198项网格、14项渲染及98项树冠回归通过。源码启动配置不变，完整命令与冻结计时限制见 [说明](REED_MESH_20260906.md)。

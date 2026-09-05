@@ -1,3 +1,10 @@
+## 2026-09-06 宋江四向
+
+- `assets/characters/song_jiang_direction4_20260906/`：15张原生透明生产图及Godot导入设置；`assets/anim/song_jiang_*_<方向>.tres`：16个排帧资源。
+- `assets/direction4/song_jiang_20260906.json`：生产采样/对齐/导入清单；`tools/contracts/song_jiang_direction4_20260906/`：真实提示词、来源链、参考图及资源配置过程。
+- `tools/song_jiang_direction4_qa.gd`、`tools/song_jiang_direction4_sources.py`：实际动作与只读来源验证；`qa/song_jiang_direction4_20260906/`：最终证据。
+- `docs/SONG_JIANG_DIRECTION4_20260906.md`：当前内容和复现；全库与驻守审计新增TRES识别并默认写入 `.godot/`。
+
 ## 2026-09-06 芦苇重建增量
 
 - `tools/reed_mesh_qa.gd` / `tools/reed_mesh_render_probe.gd`：八关网格、查询计数和真实渲染配对。
