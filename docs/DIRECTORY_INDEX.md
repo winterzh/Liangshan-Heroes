@@ -11,7 +11,7 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/home_setup_20260905/`：本机接续日志、动作检查报告和主菜单截图。
 - `.godot/`：本机导入缓存及临时验证文件，不入库。
 - `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`：当前 Git 开发进度和跨电脑启动说明。
-- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：用户枯燥反馈对应的八关玩法设计草案、江州样板规格与验证要求；尚未实现。
+- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：复用驻守经营与军队的八关 RTS 设计修订、官方游戏参考、源码接入清单及祝家庄样板规格；尚未实现。
 
 ## 2026-09-05 测试上传与 GitHub 接入
 
