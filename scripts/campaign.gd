@@ -10,7 +10,7 @@ const LEVELS := [
 	{"id": "level4", "title": "大破连环马", "sub": "扎营练枪·断粮破骑", "script": "res://scripts/levels/level4_lianhuanma_rts.gd"},
 	{"id": "level5", "title": "三败高太尉", "sub": "经营水寨·水陆协同", "script": "res://scripts/levels/level5_gao_rts.gd"},
 	{"id": "level6", "title": "大闹野猪林", "sub": "花和尚禅杖·救林冲", "script": "res://scripts/levels/level6_yezhulin.gd"},
-	{"id": "level7", "title": "醉打蒋门神", "sub": "快活林·无三不过望", "script": "res://scripts/levels/level7_kuaihuolin.gd"},
+	{"id": "level7", "title": "醉打蒋门神", "sub": "择酒练步·诱招反击", "script": "res://scripts/levels/level7_kuaihuolin_short.gd"},
 	{"id": "level8", "title": "智取大名府", "sub": "城外经营·翠云楼火号", "script": "res://scripts/levels/level8_daming_rts.gd"},
 ]
 

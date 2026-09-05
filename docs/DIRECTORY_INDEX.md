@@ -1,5 +1,7 @@
 # 水浒项目目录索引
 
+2026-09-06 快活林当前入口：`scripts/levels/level7_kuaihuolin_short.gd`；验证 `tools/kuaihuolin_short_test.gd`、`kuaihuolin_short_boundaries.gd`、`kuaihuolin_short_ui_test.gd`，旧深度工具为当前边界兼容入口。说明 `docs/KUAIHUOLIN_SHORT_20260906.md`，证据 `qa/kuaihuolin_short_20260906/`，临时输出 `.godot/kuaihuolin_short/`。
+
 路径检查：`docs/SEGMENT_NAVIGATION_20260906.md`、`tools/segment_navigation_qa.gd`、`tools/rts_collision_profile.gd`；旧函数参考在 `tools/contracts/navigation/`，本批证据在 `qa/segment_navigation_20260906/`，重跑输出 `.godot/segment_navigation_qa/`。
 
 2026-09-06 黄泥冈当前短篇新增：`scripts/levels/level1_huangnigang_short.gd`、`tools/huangnigang_short_test.gd`、`tools/huangnigang_short_ui_test.gd`、`docs/HUANGNIGANG_SHORT_20260906.md`、`qa/huangnigang_short_20260906/`。原生透明纲担在 `assets/campaign/objects/tribute_load_alpha_20260906_default.png`，原输出即生产字节；完整提示词与来源在 `tools/contracts/huangnigang_tribute_20260906/`，旧环境图及历史69项清单不覆盖。

@@ -1,5 +1,11 @@
 # 水浒英雄传本地源码
 
+## 2026-09-06 快活林当前短篇
+
+重新运行 `Play.cmd` 并重开“醉打蒋门神”，载入 `level7_kuaihuolin_short.gd`。可择店饮酒或直接挑战，官道上可选无伤练步；W后右键换位，避开重拳/真实冲撞后趁破绽E近身反击，施恩需由玩家保护并带回酒店。
+
+验证入口：`tools/kuaihuolin_short_test.gd`（`KH_CASE=wine|direct|standing|all`，实际指令）；`kuaihuolin_short_boundaries.gd`（独立边界/实际重打与跨模式）；`kuaihuolin_short_ui_test.gd`（非headless两尺寸四阶段）。旧 `campaign_kuaihuolin_depth_test.gd` 转到当前边界工具。临时输出 `.godot/kuaihuolin_short/`；[规则](KUAIHUOLIN_SHORT_20260906.md)、[冻结QA](../qa/kuaihuolin_short_20260906/README.md)。本批无新PNG或导出包，角色/来源及发行缺口未关闭。
+
 ## 2026-09-06 路径检查
 
 移动/软分离的线段检查复用端点格子和同格阻挡结果。专项58项、跨八关81,000条旧新对照及原寻路23项通过；本机函数配对耗时降低27.7%，拥挤实机帧率仍待继续优化。`tools/segment_navigation_qa.gd` 用Godot headless运行，输出 `.godot/segment_navigation_qa/`；真实渲染热点诊断为 `tools/rts_collision_profile.gd`。详见 [复现说明](SEGMENT_NAVIGATION_20260906.md)。

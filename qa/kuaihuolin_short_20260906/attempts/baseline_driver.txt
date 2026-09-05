@@ -1,0 +1,23 @@
+extends "res://tools/zhujiazhuang_rts_test.gd"
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1")
+	AudioServer.set_bus_mute(0,true)
+	var b=await _start("",6)
+	b.set_physics_process(false); b.set_process(false)
+	for u in b.units: u.set_physics_process(false)
+	var l=b.level
+	l.wu.position=l.menshen.position+Vector2(-40,0)
+	l._open_showdown(b,false)
+	b.mission.mark("dodge_heavy","baseline explicit stale-opening fixture")
+	l.exposed_left=0
+	l.on_ability(b,l.wu,"mengzhou_step",l.wu.position)
+	l.on_ability(b,l.wu,"mengzhou_kick",l.wu.position)
+	var false_signature: bool=b.mission.has_event("mengzhou_signature")
+	l.special_index=1; l.fist_cd=0; l.fist_windup=0
+	l.process(b,0.01)
+	var before: Vector2=l.menshen.position
+	l.process(b,1.4)
+	var report={"baseline":"2d22c37","fixture":"frozen old chapter; stale dodge injected; no actual skill dispatch","signature_without_current_opening_or_movement":false_signature,"rush_boss_displacement":l.menshen.position.distance_to(before),"kind":l.special_kind}
+	FileAccess.open("res://.godot/kh_baseline.json",FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
+	print("[kh-baseline] ",report)
+	await _dispose(b); quit(0)
