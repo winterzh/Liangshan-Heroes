@@ -1,7 +1,7 @@
 """Strictly validate and atomically ingest Web ChatGPT environment artwork.
 
-The reviewed prompt contract lives outside the repository in
-``../implementation_20260902/environment_prompt_drafts_v2``.  This command
+The reviewed prompt contract is restored under
+``tools/contracts/environment/legacy`` (or supplied with --batch-manifest). This command
 does not open a browser, generate artwork, run Godot, or infer missing
 production routes.
 
@@ -36,14 +36,11 @@ from urllib.parse import urlsplit
 import numpy as np
 from PIL import Image
 
+from environment_validation_common import LEGACY_BATCH
+
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_BATCH_MANIFEST = (
-    ROOT.parent
-    / "implementation_20260902"
-    / "environment_prompt_drafts_v2"
-    / "environment_batch_manifest.json"
-)
+DEFAULT_BATCH_MANIFEST = ROOT / LEGACY_BATCH
 DEFAULT_MAPPING_MANIFEST = ROOT / "tools/environment_production_mapping.template.json"
 FROZEN_BATCH_MANIFEST_SHA256 = (
     "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"

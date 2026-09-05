@@ -5,7 +5,9 @@
 
 工具锁定的提示词合同是：
 
-`../implementation_20260902/environment_prompt_drafts_v2/environment_batch_manifest.json`
+`tools/contracts/environment/legacy/environment_batch_manifest.json`（或显式传 `--batch-manifest`）。
+
+2026-09-06跨电脑核查：本checkout缺原清单、原自检及九份提示词，生产接入仍会拒绝。两个旧自测会返回退出2、0项执行，不能按PASS处理。当前路由验证使用独立保留的生产映射；它不能替代原提示词合同。恢复方式与整体审计见 [跨电脑说明](../docs/ENVIRONMENT_VALIDATION_PORTABILITY_20260906.md)，下文785项为历史证据。
 
 当前冻结版本为 schema v2，SHA-256 是 `162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf`。同目录 `static_self_check.json` 的 SHA-256 是 `f8e562d4aeebbd64519acf83ecfb54385742b3d7f89dd72684149a953386aa77`，结果为 502/502 PASS、0 个 legacy `code_targets`。工具会同时锁定这两个文件。四张图集的 64 个格子都已逐格声明 `output_id`、`output_path`、`level_scope`、`route_scope`、`reuse_policy`、resolver、route key 和状态，导入映射不得改写这些字段。
 

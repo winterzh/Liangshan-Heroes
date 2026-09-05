@@ -11,10 +11,14 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 from PIL import Image
+
+import campaign_environment_art_static_contract as route_contract
+from environment_validation_common import MAPPING, contained_path, report_target, write_report
 
 
 SURFACES = (
@@ -29,6 +33,11 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def resolve_evidence_path(repo: Path, value: str, relocations: dict[str, str]) -> Path:
+    """Explicit relocation preserves original evidence bytes and hashes."""
+    return contained_path(repo, relocations.get(value, value))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
@@ -40,18 +49,39 @@ def main() -> int:
     parser.add_argument(
         "--router-report",
         type=Path,
-        default=Path("qa/environment_map_clamped_20260902/runtime_router_current.json"),
+        help="optional previous report; must match freshly checked current route inputs",
     )
+    parser.add_argument("--evidence-map", type=Path, help="JSON map from historical evidence paths to repo-relative restored paths")
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("qa/environment_map_clamped_20260902/map_clamped_contract.json"),
+        default=Path(".godot/environment_validation/map_clamped_legacy.json"),
     )
     args = parser.parse_args()
     repo = args.repo.resolve()
     manifest_path = args.install_manifest if args.install_manifest.is_absolute() else repo / args.install_manifest
-    router_report_path = args.router_report if args.router_report.is_absolute() else repo / args.router_report
-    output_path = args.output if args.output.is_absolute() else repo / args.output
+    router_report_path = (args.router_report if args.router_report.is_absolute() else repo / args.router_report) if args.router_report else None
+    output_path = report_target(repo, args.output)
+    generated_outputs = {output_path, (output_path.parent / "map_clamped_router.json").resolve()}
+    if output_path.name == "map_clamped_router.json":
+        raise ValueError("output must not use the reserved auxiliary router report name")
+    if generated_outputs.intersection({p.resolve() for p in (manifest_path, router_report_path) if p is not None}):
+        raise ValueError("output may not overwrite an input manifest or router report")
+
+    missing = [str(path) for path in (manifest_path, router_report_path) if path is not None and not path.is_file()]
+    if missing:
+        failure = {"passed": False, "status": "blocked_missing_historical_evidence", "missing_inputs": missing,
+                   "scope": "historical_map_clamped_contract", "checks_executed": 0}
+        write_report(output_path, failure)
+        print(json.dumps(failure, ensure_ascii=False))
+        return 2
+
+    evidence_map_path = (args.evidence_map if args.evidence_map.is_absolute() else repo / args.evidence_map) if args.evidence_map else None
+    if evidence_map_path and evidence_map_path.resolve() in generated_outputs:
+        raise ValueError("output may not overwrite the evidence relocation map")
+    relocations = json.loads(evidence_map_path.read_text(encoding="utf-8")) if evidence_map_path else {}
+    if not isinstance(relocations, dict) or any(not isinstance(k, str) or not isinstance(v, str) for k, v in relocations.items()):
+        raise ValueError("evidence map must contain historical-path to repository-relative-path strings")
 
     checks: list[dict[str, Any]] = []
 
@@ -68,12 +98,14 @@ def main() -> int:
 
     for surface in SURFACES:
         entry = entries[surface]
-        target = repo / entry["target"]
-        report_path = Path(entry["normalization_report"])
-        candidate = Path(entry["candidate_png"])
+        target = contained_path(repo, entry["target"])
+        report_path = resolve_evidence_path(repo, entry["normalization_report"], relocations)
+        candidate = resolve_evidence_path(repo, entry["candidate_png"], relocations)
         report = json.loads(report_path.read_text(encoding="utf-8"))
         normalization = report["normalization"]
-        raw = Path(report["source"]["raw_png"])
+        raw = resolve_evidence_path(repo, report["source"]["raw_png"], relocations)
+        if generated_outputs.intersection({target, report_path, candidate, raw}):
+            raise ValueError("output may not overwrite validated source, candidate or normalization evidence")
         source_rect = normalization["single_square_crop"]["source_rectangle"]
         raw_size = report["source"]["raw_size"]
         forbidden = normalization["forbidden_operations_performed"]
@@ -137,11 +169,14 @@ def main() -> int:
           '"sampling_mode":"map_clamped" if enabled else "atlas_tile_uv"' in scenery
           and '"repeat_enabled":false if enabled else true' in scenery)
 
-    router = json.loads(router_report_path.read_text(encoding="utf-8"))
-    check("current_router_contract_785_pass", router.get("passed") is True
-          and router.get("counts", {}).get("checks") == 785
-          and router.get("counts", {}).get("missing_source_resources_expected_before_web_intake") == 65,
-          router.get("counts"))
+    # Re-execute the full current route contract. Historical 785/65 counters
+    # are not evidence about today's source or resource completeness.
+    router = route_contract.run(repo, repo / MAPPING, output_path.parent / "map_clamped_router.json")
+    check("current_router_contract_pass", router["passed"] and all(c["passed"] for c in router["checks"]), router["counts"])
+    if router_report_path:
+        supplied = json.loads(router_report_path.read_text(encoding="utf-8"))
+        check("supplied_router_report_matches_current_inputs",
+              all(supplied.get(key) == router[key] for key in ("router_sha256", "consumer_file_sha256", "checks", "counts")))
 
     report_out = {
         "schema_version": 1,
@@ -154,8 +189,10 @@ def main() -> int:
         "inputs": {
             "install_manifest": str(manifest_path),
             "install_manifest_sha256": sha256(manifest_path),
-            "router_report": str(router_report_path),
-            "router_report_sha256": sha256(router_report_path),
+            "router_report": str(output_path.parent / "map_clamped_router.json"),
+            "router_report_sha256": sha256(output_path.parent / "map_clamped_router.json"),
+            "evidence_map": str(evidence_map_path) if evidence_map_path else None,
+            "evidence_map_sha256": sha256(evidence_map_path) if evidence_map_path else None,
             "shader": str(shader_path),
             "shader_sha256": sha256(shader_path),
             "scenery": str(scenery_path),
@@ -170,4 +207,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        print(json.dumps({"passed": False, "status": "invalid_or_missing_historical_input", "error": str(error)}, ensure_ascii=False), file=sys.stderr)
+        raise SystemExit(2)

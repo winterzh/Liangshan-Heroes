@@ -1,0 +1,5461 @@
+{
+  "passed": true,
+  "scope": "source_only_no_godot_no_bitmap_generation",
+  "basis_kind": "retained_production_mapping",
+  "historical_manifest_verified": false,
+  "provenance_verified": false,
+  "resource_completeness_verified": false,
+  "manifest_path": "E:\\ChatGPT\\水浒-art-validation\\tools\\environment_production_mapping.template.json",
+  "manifest_sha256": "af1204a50a865096be47917440a36c67d9290f295fd5ee1ac2f8e000b1d441f1",
+  "router_path": "E:\\ChatGPT\\水浒-art-validation\\scripts\\campaign_environment_art.gd",
+  "router_sha256": "1675505867196726572f04f8913614f704739ea07a7c7f4d1c65dcee88791b93",
+  "consumer_file_sha256": {
+    "scripts/battle.gd": "3bd25d26e8fae31af1345d9239eb570ec68f4a9997e01f091f6dae33efa05780",
+    "scripts/campaign_environment.gd": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+    "scripts/campaign_scenery.gd": "96fb8a5a0e8aa284c1c7cdc19ec627dc67d56d1e8da43e7b95921276ee6f55f4",
+    "scripts/campaign_flag_overlay.gd": "f609d5772f4e676f4f38f51b1026a1174341b1ebaf25fb64d2561da76dbb6720",
+    "scripts/liangshan_scenery.gd": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+    "scripts/liangshan_entrance.gd": "5d073a1f75366685e39796180c72844eed770304735027cbc6454df9b96abd1d",
+    "scripts/liangshan_stockade.gd": "69adc35f014d93d96936e9d59d8fd45350aa44d6ed1ba5af61ddefdf1b731a3c",
+    "scripts/liangshan_gate.gd": "1ce05b65e1694ccbc04f786b1ca8f3c721ca82ff58fa30ff28bb508038f399a7",
+    "scripts/liangshan_coast.gdshader": "ab948b5a115cefd9ed4e1b61e7b20b530b472a3016ba3306b1ff6cf85abb192e",
+    "scripts/unit.gd": "24d79654f8c142f146c5fb8ffc8339f49e7fbd1558b9ec60ae563ecbf9ef944e",
+    "scripts/levels/level1_huangnigang.gd": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+    "scripts/levels/level3_zhujiazhuang.gd": "85dbddeb19e450364303cf1c833baceb2eb8ded6b4dccf8db74fab7a32217475",
+    "scripts/levels/level5_liangshan.gd": "c406a026bdbd7465c9a6c8056f028d7ea2648d31a420c7020d7e508b6dc71396",
+    "scripts/levels/level7_kuaihuolin.gd": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+    "scripts/levels/level8_dongchangfu.gd": "3171c1819884e706c5d271b04c7b32238ea6c4b469ed93190495104248197839"
+  },
+  "counts": {
+    "manifest_cells": 64,
+    "object_route_keys": 40,
+    "object_state_paths": 41,
+    "overlay_route_keys": 20,
+    "static_flag_route_keys": 3,
+    "surface_paths": 5,
+    "consumer_ready_manifest_cells": 64,
+    "consumer_ready_surfaces": 5,
+    "consumer_ready_total": 69,
+    "missing_source_resources_expected_before_web_intake": 33,
+    "checks": 790
+  },
+  "missing_source_resources": [
+    {
+      "resolver": "object",
+      "route_key": "cuiyun_tower",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level8/cuiyun_tower_default.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "cuiyun_tower",
+      "state": "signal",
+      "path": "res://assets/campaign/environment/level8/cuiyun_tower_signal.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "daming_shop_house",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level8/shop_house.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "heyang_wine_sign",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level7/heyang_wine_sign_blank.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "kuaihuolin_main_tavern",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level7/main_tavern.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "lantern_stall",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level8/lantern_stall.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "roadside_tavern_a",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level7/roadside_tavern_a.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "roadside_tavern_b",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level7/roadside_tavern_b.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "roadside_tavern_c",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level7/roadside_tavern_c.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "roadside_tavern_d",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level7/roadside_tavern_d.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "zhujiazhuang_hall",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level3/zhujiazhuang_hall.png"
+    },
+    {
+      "resolver": "object",
+      "route_key": "zhujiazhuang_main_gate",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level3/zhujiazhuang_main_gate.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "dry_grass_leaves",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/dry_grass_leaves.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "field_edge_bank",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level3/field_edge_bank.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "field_edge_ditch",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level3/field_edge_ditch.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "field_edge_stubble",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level3/field_edge_stubble.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "field_edge_willow",
+      "state": "default",
+      "path": "res://assets/campaign/environment/level3/field_edge_willow.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "flattened_reeds",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/flattened_reeds.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "gravel_clods",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/gravel_clods.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "low_aquatic_plants",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/low_aquatic_plants.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "mud_spots_wet_marks",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/mud_spots_wet_marks.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "old_brick_fragments",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/old_brick_fragments.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "pine_needles_leaves",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/pine_needles_leaves.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "pole_wheel_marks",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/pole_wheel_marks.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "roots_moss",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/roots_moss.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "rounded_stones",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/rounded_stones.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "scattered_footprints",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/scattered_footprints.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "shallow_cart_ruts",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/shallow_cart_ruts.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "sparse_wet_grass",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/sparse_wet_grass.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "trampled_mud",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/trampled_mud.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "twigs_bark",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/twigs_bark.png"
+    },
+    {
+      "resolver": "overlay",
+      "route_key": "weathered_slabs",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/overlays/weathered_slabs.png"
+    },
+    {
+      "resolver": "surface",
+      "route_key": "surface_field",
+      "state": "default",
+      "path": "res://assets/campaign/environment/shared/surfaces/surface_field.png"
+    }
+  ],
+  "checks": [
+    {
+      "name": "retained_mapping_sha256",
+      "passed": true,
+      "detail": "af1204a50a865096be47917440a36c67d9290f295fd5ee1ac2f8e000b1d441f1"
+    },
+    {
+      "name": "retained_mapping_has_64_cells",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "router_embeds_same_manifest_sha",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "stockade_frozen_scope_before_reuse",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "stockade_reuse_accepted_source",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object_route_table_exact",
+      "passed": true,
+      "detail": {
+        "expected": 40,
+        "actual": 40
+      }
+    },
+    {
+      "name": "object:cuiyun_tower:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:signal:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:cuiyun_tower:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:daming_shop_house:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_head_t:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:dock_straight:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:heyang_wine_sign:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_dry_verge:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_double:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_old:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_pine_young_lean:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:huangnigang_seven_pudao:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_01:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_02:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_03:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_04:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_05:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_06:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_cart_07:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:jujube_load:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:kuaihuolin_main_tavern:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:lantern_stall:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:main_gate:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_bent:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_seeded:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_short:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:reeds_tall:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_a:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_b:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_c:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:roadside_tavern_d:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:stockade_segment:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_broad:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tree_young:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:tribute_load:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:watchtower:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:willow_old:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_bowls:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:wine_buckets:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhongyi_hall:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_hall:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:zhujiazhuang_main_gate:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object:unknown_route_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay_route_table_exact",
+      "passed": true,
+      "detail": {
+        "expected": 20,
+        "actual": 20
+      }
+    },
+    {
+      "name": "overlay:dry_grass_leaves:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:dry_grass_leaves:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_bank:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_ditch:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_stubble:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:field_edge_willow:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:flattened_reeds:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:gravel_clods:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:low_aquatic_plants:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:mud_spots_wet_marks:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:old_brick_fragments:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pine_needles_leaves:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:pole_wheel_marks:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:roots_moss:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:rounded_stones:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:scattered_footprints:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:shallow_cart_ruts:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:sparse_wet_grass:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:trampled_mud:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:twigs_bark:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:weathered_slabs:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay:unknown_route_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag_route_table_exact",
+      "passed": true,
+      "detail": {
+        "expected": 3,
+        "actual": 3
+      }
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:liangshan_hilltop_standard:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_east:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:not_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:production_path_root",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:default:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:zhongyi_hall_standard_west:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag:unknown_route_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "five_surface_targets_exact",
+      "passed": true,
+      "detail": {
+        "surface_compacted_stone": {
+          "levels": [
+            "level2",
+            "level5",
+            "level7",
+            "level8"
+          ],
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"
+        },
+        "surface_dry_earth": {
+          "levels": [
+            "level1",
+            "level4",
+            "level6"
+          ],
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png"
+        },
+        "surface_field": {
+          "levels": [
+            "level3",
+            "level8"
+          ],
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_field.png"
+        },
+        "surface_forest_earth": {
+          "levels": [
+            "level1",
+            "level3",
+            "level5",
+            "level6",
+            "level7"
+          ],
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png"
+        },
+        "surface_wet_bank": {
+          "levels": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png"
+        }
+      }
+    },
+    {
+      "name": "surface_target_paths_unique",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface_interface_requires_level",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface_path_requires_level",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_compacted_stone:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_dry_earth:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_field:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_forest_earth:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level1:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level2:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level3:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level4:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level5:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level6:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level7:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:level8:scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "surface:surface_wet_bank:unknown_level_rejected",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "text_rect_ids_exact",
+      "passed": true,
+      "detail": [
+        "level3_zhujiazhuang_gate_plaque",
+        "level3_zhujiazhuang_hall_plaque",
+        "level5_hall_plaque",
+        "level5_main_gate_plaque",
+        "level7_heyang_wine_sign",
+        "level7_main_tavern_plaque",
+        "level8_shop_house_plaque",
+        "liangshan_hilltop_standard",
+        "zhongyi_hall_standard_east",
+        "zhongyi_hall_standard_west"
+      ]
+    },
+    {
+      "name": "accepted_level5_text_rects_exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "other_text_rects_stay_unmeasured",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "text_rect_sha_ids_exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "accepted_level5_text_shas_exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "other_text_rect_shas_stay_empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "text_rect_lookup_is_source_sha_bound",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "visual_metrics_are_source_sha_bound",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "resource_exists_guard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "object_requires_level",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlay_requires_level",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_flag_requires_level",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "router_does_not_call_artdb",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "scenery_inherits_scoped_router",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "scenery_object_lookup_uses_active_style",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "scenery_overlay_lookup_uses_active_style",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state_change_stays_scoped",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "lantern_stall_level8_route_registered",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "explicit_legacy_fallback_only",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "state_fallback_never_infers_story_key",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "cuiyun_default_consumer_present",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "cuiyun_signal_consumer_present",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "config_uses_dedicated_markers",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "configured_object_routes_registered",
+      "passed": true,
+      "detail": [
+        "cuiyun_tower",
+        "daming_shop_house",
+        "huangnigang_dry_verge",
+        "huangnigang_pine_double",
+        "huangnigang_pine_old",
+        "huangnigang_pine_young_lean",
+        "huangnigang_seven_pudao",
+        "kuaihuolin_main_tavern",
+        "lantern_stall",
+        "zhujiazhuang_hall"
+      ]
+    },
+    {
+      "name": "configured_overlay_routes_registered",
+      "passed": true,
+      "detail": [
+        "dry_grass_leaves",
+        "field_edge_bank",
+        "field_edge_ditch",
+        "field_edge_stubble",
+        "field_edge_willow",
+        "flattened_reeds",
+        "gravel_clods",
+        "low_aquatic_plants",
+        "mud_spots_wet_marks",
+        "old_brick_fragments",
+        "pine_needles_leaves",
+        "pole_wheel_marks",
+        "roots_moss",
+        "rounded_stones",
+        "scattered_footprints",
+        "shallow_cart_ruts",
+        "sparse_wet_grass",
+        "trampled_mud",
+        "twigs_bark",
+        "weathered_slabs"
+      ]
+    },
+    {
+      "name": "configured_routes_never_use_global_alias",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "consumer_routes_exact",
+      "passed": true,
+      "detail": [
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_pine_old",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/huangnigang_pine_old.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment level1 marker -> CampaignScenery scoped object",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:209: result.append(scoped_object(Vector2i(20,17),112.0,\"huangnigang_pine_old\",\"tree\",0.82,true,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_pine_double",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/huangnigang_pine_double.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment level1 marker -> CampaignScenery scoped object",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:210: result.append(scoped_object(Vector2i(25,18),112.0,\"huangnigang_pine_double\",\"tree\",0.82,true,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_pine_young_lean",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/huangnigang_pine_young_lean.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment level1 marker -> CampaignScenery scoped object",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:211: result.append(scoped_object(Vector2i(30,19),112.0,\"huangnigang_pine_young_lean\",\"tree\",0.82,true,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_seven_pudao",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/huangnigang_seven_pudao.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment level1 marker -> CampaignScenery scoped object",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:214: result.append(scoped_object(Vector2i(20,17),94.0,\"huangnigang_seven_pudao\",\"\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_01",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_cart_01.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1._place_jujube_carts exact slot-index route",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:377: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:378: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:376: for i in range(JUJUBE_CART_CELLS.size()):"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_02",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_cart_02.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1._place_jujube_carts exact slot-index route",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:377: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:378: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:376: for i in range(JUJUBE_CART_CELLS.size()):"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_03",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_cart_03.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1._place_jujube_carts exact slot-index route",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:377: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:378: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:376: for i in range(JUJUBE_CART_CELLS.size()):"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_04",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_cart_04.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1._place_jujube_carts exact slot-index route",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:377: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:378: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:376: for i in range(JUJUBE_CART_CELLS.size()):"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_05",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_cart_05.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1._place_jujube_carts exact slot-index route",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:377: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:378: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:376: for i in range(JUJUBE_CART_CELLS.size()):"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_06",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_cart_06.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1._place_jujube_carts exact slot-index route",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:377: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:378: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:376: for i in range(JUJUBE_CART_CELLS.size()):"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_cart_07",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_cart_07.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1._place_jujube_carts exact slot-index route",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:377: var route_key := \"jujube_cart_%02d\" % (i+1)",
+            "scripts/levels/level1_huangnigang.gd:378: var texture := EnvironmentArt.object(id(),route_key)",
+            "scripts/levels/level1_huangnigang.gd:376: for i in range(JUJUBE_CART_CELLS.size()):"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "huangnigang_dry_verge",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/huangnigang_dry_verge.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment level1 marker -> CampaignScenery scoped object",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:215: result.append(scoped_object(Vector2i(34,22),86.0,\"huangnigang_dry_verge\",\"\",0.82,false,false))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "jujube_load",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/jujube_load.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1 story prop -> Battle.show_campaign_environment_art",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:399: b.show_campaign_environment_art(id(),\"jujube_load\",\"jujube_load\",",
+            "scripts/battle.gd:16640: var texture := CampaignEnvironmentArt.object(active_level_id,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "tribute_load",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/tribute_load.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1 bundle Unit -> Unit._campaign_environment_texture",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:148: bundle.set_meta(\"campaign_environment_route\",\"tribute_load\")",
+            "scripts/unit.gd:4124: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "wine_buckets",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/wine_buckets.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1 story prop -> Battle.show_campaign_environment_art",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:236: b.show_campaign_environment_art(id(),\"wine_buckets\",\"wine_buckets\",",
+            "scripts/battle.gd:16640: var texture := CampaignEnvironmentArt.object(active_level_id,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "wine_bowls",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level1/wine_bowls_scoop.png",
+          "level_scope": [
+            "level1"
+          ],
+          "consumer_file": "scripts/levels/level1_huangnigang.gd",
+          "consumer_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+          "consumer_symbol": "Level1 story prop -> Battle.show_campaign_environment_art",
+          "consumer_evidence": [
+            "scripts/levels/level1_huangnigang.gd:238: b.show_campaign_environment_art(id(),\"wine_bowls\",\"wine_bowls\",",
+            "scripts/battle.gd:16640: var texture := CampaignEnvironmentArt.object(active_level_id,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_short",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/reeds_short.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery four bounded reed anchors over retained batch",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:267: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:269: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:266: if _routed_reed_count<4:"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_tall",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery four bounded reed anchors over retained batch",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:267: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:269: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:266: if _routed_reed_count<4:"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_bent",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery four bounded reed anchors over retained batch",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:267: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:269: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:266: if _routed_reed_count<4:"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "reeds_seeded",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery four bounded reed anchors over retained batch",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:267: var routes := [\"reeds_short\",\"reeds_tall\",\"reeds_bent\",\"reeds_seeded\"]",
+            "scripts/liangshan_scenery.gd:269: var routed := EnvironmentArt.object(_active_campaign_level_id(),route_key)",
+            "scripts/liangshan_scenery.gd:266: if _routed_reed_count<4:"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "willow_old",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/willow_old.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery deterministic tree variant",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:58: var tree_routes := [\"tree_broad\",\"tree_young\",\"willow_old\"]",
+            "scripts/liangshan_scenery.gd:60: var routed_tree := EnvironmentArt.object(level_id,tree_route)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "tree_broad",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/tree_broad.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery deterministic tree variant",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:58: var tree_routes := [\"tree_broad\",\"tree_young\",\"willow_old\"]",
+            "scripts/liangshan_scenery.gd:60: var routed_tree := EnvironmentArt.object(level_id,tree_route)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "tree_young",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/tree_young.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery deterministic tree variant",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:58: var tree_routes := [\"tree_broad\",\"tree_young\",\"willow_old\"]",
+            "scripts/liangshan_scenery.gd:60: var routed_tree := EnvironmentArt.object(level_id,tree_route)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "dock_straight",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/dock_straight.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_entrance.gd",
+          "consumer_sha256": "5d073a1f75366685e39796180c72844eed770304735027cbc6454df9b96abd1d",
+          "consumer_symbol": "LiangshanEntrance optional structural replacement with legacy fallback",
+          "consumer_evidence": [
+            "scripts/liangshan_entrance.gd:30: _dock_straight_texture=EnvironmentArt.object(\"level5\",\"dock_straight\")"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "dock_head_t",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_entrance.gd",
+          "consumer_sha256": "5d073a1f75366685e39796180c72844eed770304735027cbc6454df9b96abd1d",
+          "consumer_symbol": "LiangshanEntrance optional structural replacement with legacy fallback",
+          "consumer_evidence": [
+            "scripts/liangshan_entrance.gd:31: _dock_head_texture=EnvironmentArt.object(\"level5\",\"dock_head_t\")"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "watchtower",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/watchtower.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery guard-post replacement",
+          "consumer_evidence": [
+            "scripts/liangshan_scenery.gd:131: var tex := EnvironmentArt.object(level_id,\"watchtower\")",
+            "scripts/liangshan_scenery.gd:133: if tex==null or tower_metrics.is_empty(): tex=Art.terrain_texture(\"tower\")"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "stockade_segment",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_entrance.gd",
+          "consumer_sha256": "5d073a1f75366685e39796180c72844eed770304735027cbc6454df9b96abd1d",
+          "consumer_symbol": "LiangshanEntrance optional structural replacement with legacy fallback",
+          "consumer_evidence": [
+            "scripts/liangshan_entrance.gd:28: _stockade_texture=EnvironmentArt.object(\"level5\",\"stockade_segment\")"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "main_gate",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/main_gate.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/liangshan_entrance.gd",
+          "consumer_sha256": "5d073a1f75366685e39796180c72844eed770304735027cbc6454df9b96abd1d",
+          "consumer_symbol": "LiangshanEntrance optional structural replacement with legacy fallback",
+          "consumer_evidence": [
+            "scripts/liangshan_entrance.gd:59: var main_gate_texture := EnvironmentArt.object(\"level5\",\"main_gate\")",
+            "scripts/liangshan_entrance.gd:61: var gate_rect = EnvironmentArt.calibrated_text_rect(\"object\",\"level5\",\"main_gate\","
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "zhongyi_hall",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/levels/level5_liangshan.gd",
+          "consumer_sha256": "c406a026bdbd7465c9a6c8056f028d7ea2648d31a420c7020d7e508b6dc71396",
+          "consumer_symbol": "Level5 hall Unit -> Unit._campaign_environment_texture",
+          "consumer_evidence": [
+            "scripts/levels/level5_liangshan.gd:102: hall.set_meta(\"campaign_environment_route\",\"zhongyi_hall\")",
+            "scripts/unit.gd:4124: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.static_flag",
+          "route_key": "zhongyi_hall_standard_west",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/levels/level5_liangshan.gd",
+          "consumer_sha256": "c406a026bdbd7465c9a6c8056f028d7ea2648d31a420c7020d7e508b6dc71396",
+          "consumer_symbol": "Level5.decorate -> LiangshanScenery.setup blank flag + source-bound text",
+          "consumer_evidence": [
+            "scripts/levels/level5_liangshan.gd:702: [\"banner\", Vector2i(14, 33), 220.0, \"zhongyi_hall_standard_west\"],",
+            "scripts/liangshan_scenery.gd:85: var candidate := EnvironmentArt.static_flag(level_id,String(d[3]))",
+            "scripts/liangshan_scenery.gd:86: var measured = EnvironmentArt.calibrated_text_rect(\"static_flag\",level_id,"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.static_flag",
+          "route_key": "zhongyi_hall_standard_east",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/levels/level5_liangshan.gd",
+          "consumer_sha256": "c406a026bdbd7465c9a6c8056f028d7ea2648d31a420c7020d7e508b6dc71396",
+          "consumer_symbol": "Level5.decorate -> LiangshanScenery.setup blank flag + source-bound text",
+          "consumer_evidence": [
+            "scripts/levels/level5_liangshan.gd:701: [\"banner\", Vector2i(18, 33), 220.0, \"zhongyi_hall_standard_east\"],",
+            "scripts/liangshan_scenery.gd:85: var candidate := EnvironmentArt.static_flag(level_id,String(d[3]))",
+            "scripts/liangshan_scenery.gd:86: var measured = EnvironmentArt.calibrated_text_rect(\"static_flag\",level_id,"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.static_flag",
+          "route_key": "liangshan_hilltop_standard",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "level_scope": [
+            "level5"
+          ],
+          "consumer_file": "scripts/levels/level5_liangshan.gd",
+          "consumer_sha256": "c406a026bdbd7465c9a6c8056f028d7ea2648d31a420c7020d7e508b6dc71396",
+          "consumer_symbol": "Level5.decorate -> LiangshanScenery.setup blank flag + source-bound text",
+          "consumer_evidence": [
+            "scripts/levels/level5_liangshan.gd:704: [\"banner\", Vector2i(10, 15), 220.0, \"liangshan_hilltop_standard\"],",
+            "scripts/liangshan_scenery.gd:85: var candidate := EnvironmentArt.static_flag(level_id,String(d[3]))",
+            "scripts/liangshan_scenery.gd:86: var measured = EnvironmentArt.calibrated_text_rect(\"static_flag\",level_id,"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "shallow_cart_ruts",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/shallow_cart_ruts.png",
+          "level_scope": [
+            "level1",
+            "level4",
+            "level6",
+            "level7"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:26: scoped_overlay(Vector2i(34,20),88.0,\"shallow_cart_ruts\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "scattered_footprints",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/scattered_footprints.png",
+          "level_scope": [
+            "level1",
+            "level2",
+            "level3",
+            "level4",
+            "level5",
+            "level6",
+            "level7",
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:27: scoped_overlay(Vector2i(27,21),68.0,\"scattered_footprints\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "trampled_mud",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/trampled_mud.png",
+          "level_scope": [
+            "level2",
+            "level3",
+            "level4",
+            "level5"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:35: scoped_overlay(Vector2i(29,22),70.0,\"trampled_mud\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "pole_wheel_marks",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/pole_wheel_marks.png",
+          "level_scope": [
+            "level1",
+            "level2",
+            "level7",
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:28: scoped_overlay(Vector2i(12,20),54.0,\"pole_wheel_marks\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "rounded_stones",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/rounded_stones.png",
+          "level_scope": [
+            "level1",
+            "level4",
+            "level6"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:29: scoped_overlay(Vector2i(38,18),48.0,\"rounded_stones\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "gravel_clods",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/gravel_clods.png",
+          "level_scope": [
+            "level1",
+            "level3",
+            "level4",
+            "level6",
+            "level7",
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:30: scoped_overlay(Vector2i(31,17),52.0,\"gravel_clods\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "weathered_slabs",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/weathered_slabs.png",
+          "level_scope": [
+            "level2",
+            "level5",
+            "level7",
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:37: scoped_overlay(Vector2i(34,18),50.0,\"weathered_slabs\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "old_brick_fragments",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/old_brick_fragments.png",
+          "level_scope": [
+            "level2",
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:38: scoped_overlay(Vector2i(25,20),48.0,\"old_brick_fragments\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "pine_needles_leaves",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/pine_needles_leaves.png",
+          "level_scope": [
+            "level1",
+            "level6"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:31: scoped_overlay(Vector2i(24,16),66.0,\"pine_needles_leaves\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "twigs_bark",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/twigs_bark.png",
+          "level_scope": [
+            "level3",
+            "level5",
+            "level6",
+            "level7"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:45: scoped_overlay(Vector2i(16,18),54.0,\"twigs_bark\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "roots_moss",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/roots_moss.png",
+          "level_scope": [
+            "level3",
+            "level5",
+            "level6"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:46: scoped_overlay(Vector2i(15,34),54.0,\"roots_moss\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "dry_grass_leaves",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/dry_grass_leaves.png",
+          "level_scope": [
+            "level1",
+            "level3",
+            "level4",
+            "level7",
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:32: scoped_overlay(Vector2i(16,22),58.0,\"dry_grass_leaves\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "flattened_reeds",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/flattened_reeds.png",
+          "level_scope": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:39: scoped_overlay(Vector2i(17,45),64.0,\"flattened_reeds\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "sparse_wet_grass",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/sparse_wet_grass.png",
+          "level_scope": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:40: scoped_overlay(Vector2i(20,46),62.0,\"sparse_wet_grass\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "low_aquatic_plants",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/low_aquatic_plants.png",
+          "level_scope": [
+            "level2",
+            "level5"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:41: scoped_overlay(Vector2i(10,48),60.0,\"low_aquatic_plants\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "mud_spots_wet_marks",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/shared/overlays/mud_spots_wet_marks.png",
+          "level_scope": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:42: scoped_overlay(Vector2i(22,45),52.0,\"mud_spots_wet_marks\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_a",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level7/roadside_tavern_a.png",
+          "level_scope": [
+            "level7"
+          ],
+          "consumer_file": "scripts/levels/level7_kuaihuolin.gd",
+          "consumer_sha256": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+          "consumer_symbol": "Level7 TAVERN_CELLS exact index route -> Unit",
+          "consumer_evidence": [
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:4124: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_b",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level7/roadside_tavern_b.png",
+          "level_scope": [
+            "level7"
+          ],
+          "consumer_file": "scripts/levels/level7_kuaihuolin.gd",
+          "consumer_sha256": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+          "consumer_symbol": "Level7 TAVERN_CELLS exact index route -> Unit",
+          "consumer_evidence": [
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:4124: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_c",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level7/roadside_tavern_c.png",
+          "level_scope": [
+            "level7"
+          ],
+          "consumer_file": "scripts/levels/level7_kuaihuolin.gd",
+          "consumer_sha256": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+          "consumer_symbol": "Level7 TAVERN_CELLS exact index route -> Unit",
+          "consumer_evidence": [
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:4124: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "roadside_tavern_d",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level7/roadside_tavern_d.png",
+          "level_scope": [
+            "level7"
+          ],
+          "consumer_file": "scripts/levels/level7_kuaihuolin.gd",
+          "consumer_sha256": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+          "consumer_symbol": "Level7 TAVERN_CELLS exact index route -> Unit",
+          "consumer_evidence": [
+            "scripts/levels/level7_kuaihuolin.gd:133: tv.set_meta(\"campaign_environment_route\",\"roadside_tavern_%s\" % [\"a\",\"b\",\"c\",\"d\"][index])",
+            "scripts/unit.gd:4124: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "kuaihuolin_main_tavern",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level7/main_tavern.png",
+          "level_scope": [
+            "level7"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment level7 main-tavern marker -> CampaignScenery",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:226: result.append(scoped_object(Vector2i(49,17),154.0,\"kuaihuolin_main_tavern\",\"town_house\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "heyang_wine_sign",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level7/heyang_wine_sign_blank.png",
+          "level_scope": [
+            "level7"
+          ],
+          "consumer_file": "scripts/levels/level7_kuaihuolin.gd",
+          "consumer_sha256": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+          "consumer_symbol": "Level7 sign Unit with source-bound runtime text",
+          "consumer_evidence": [
+            "scripts/levels/level7_kuaihuolin.gd:143: sign.set_meta(\"campaign_environment_route\",\"heyang_wine_sign\")",
+            "scripts/unit.gd:4134: var normalized = CampaignEnvironmentArt.calibrated_text_rect(\"object\","
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "cuiyun_tower",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level8/cuiyun_tower_default.png",
+          "level_scope": [
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment level8 default marker -> CampaignScenery",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:187: result.append(scoped_object(d[1],d[2],\"cuiyun_tower\",\"cuiyun_tower\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "cuiyun_tower",
+          "state": "signal",
+          "output_path": "res://assets/campaign/environment/level8/cuiyun_tower_signal.png",
+          "level_scope": [
+            "level8"
+          ],
+          "consumer_file": "scripts/levels/level8_dongchangfu.gd",
+          "consumer_sha256": "3171c1819884e706c5d271b04c7b32238ea6c4b469ed93190495104248197839",
+          "consumer_symbol": "Level8 signal event -> CampaignScenery.set_story_object_state",
+          "consumer_evidence": [
+            "scripts/levels/level8_dongchangfu.gd:274: if b.map.sample_scenery != null: b.map.sample_scenery.set_story_object_state(\"cuiyun_tower\",\"signal\")",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)",
+            "scripts/campaign_scenery.gd:286: var fallback_key := explicit_environment_fallback(sprite)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "lantern_stall",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level8/lantern_stall.png",
+          "level_scope": [
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_scenery.gd",
+          "consumer_sha256": "96fb8a5a0e8aa284c1c7cdc19ec627dc67d56d1e8da43e7b95921276ee6f55f4",
+          "consumer_symbol": "CampaignScenery level8 lantern-stall direct scoped object",
+          "consumer_evidence": [
+            "scripts/campaign_scenery.gd:59: and _add_direct_campaign_object(stall_position,d[2],\"lantern_stall\",\"\",0.82,false,true)):",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "daming_shop_house",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level8/shop_house.png",
+          "level_scope": [
+            "level8"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment dedicated level marker -> CampaignScenery",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:234: result.append(scoped_object(house[0],154.0,\"daming_shop_house\",\"town_house\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "zhujiazhuang_main_gate",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level3/zhujiazhuang_main_gate.png",
+          "level_scope": [
+            "level3"
+          ],
+          "consumer_file": "scripts/levels/level3_zhujiazhuang.gd",
+          "consumer_sha256": "85dbddeb19e450364303cf1c833baceb2eb8ded6b4dccf8db74fab7a32217475",
+          "consumer_symbol": "Level3 gate Unit -> Unit._campaign_environment_texture",
+          "consumer_evidence": [
+            "scripts/levels/level3_zhujiazhuang.gd:619: target.set_meta(\"campaign_environment_route\",\"zhujiazhuang_main_gate\")",
+            "scripts/unit.gd:4124: var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.object",
+          "route_key": "zhujiazhuang_hall",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level3/zhujiazhuang_hall.png",
+          "level_scope": [
+            "level3"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment dedicated level marker -> CampaignScenery",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:232: result.append(scoped_object(house[0],154.0,\"zhujiazhuang_hall\",\"zhu_hall\",0.82,false,true))",
+            "scripts/campaign_scenery.gd:118: var texture := EnvironmentArt.object(_style,route_key,state)"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_bank",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level3/field_edge_bank.png",
+          "level_scope": [
+            "level3"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:47: scoped_overlay(Vector2i(27,28),58.0,\"field_edge_bank\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_stubble",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level3/field_edge_stubble.png",
+          "level_scope": [
+            "level3"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:48: scoped_overlay(Vector2i(13,18),58.0,\"field_edge_stubble\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_ditch",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level3/field_edge_ditch.png",
+          "level_scope": [
+            "level3"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:49: scoped_overlay(Vector2i(16,30),64.0,\"field_edge_ditch\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        },
+        {
+          "resolver": "CampaignEnvironmentArt.overlay",
+          "route_key": "field_edge_willow",
+          "state": "default",
+          "output_path": "res://assets/campaign/environment/level3/field_edge_willow.png",
+          "level_scope": [
+            "level3"
+          ],
+          "consumer_file": "scripts/campaign_environment.gd",
+          "consumer_sha256": "eecf571d0c0c2e14b85ea93f54238ce70a8cc841726f848763408cf16efcf438",
+          "consumer_symbol": "CampaignEnvironment.overlay_layout -> CampaignScenery._add_campaign_environment_overlay",
+          "consumer_evidence": [
+            "scripts/campaign_environment.gd:50: scoped_overlay(Vector2i(13,40),58.0,\"field_edge_willow\"),",
+            "scripts/campaign_scenery.gd:144: var texture := EnvironmentArt.overlay(_style,str(d[3]))"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "surface_consumers_exact",
+      "passed": true,
+      "detail": [
+        {
+          "surface_key": "surface_compacted_stone",
+          "level_scope": [
+            "level2",
+            "level5",
+            "level7",
+            "level8"
+          ],
+          "output_path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery._setup_coast_material -> liangshan_coast shader",
+          "fallback_evidence": [
+            "scripts/liangshan_scenery.gd:187: \"surface_compacted_stone\":[\"surface_hard_texture\",\"use_surface_hard_texture\"],",
+            "scripts/liangshan_scenery.gd:193: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+            "scripts/liangshan_coast.gdshader:21: uniform bool use_surface_hard_texture = false;"
+          ]
+        },
+        {
+          "surface_key": "surface_dry_earth",
+          "level_scope": [
+            "level1",
+            "level4",
+            "level6"
+          ],
+          "output_path": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery._setup_coast_material -> liangshan_coast shader",
+          "fallback_evidence": [
+            "scripts/liangshan_scenery.gd:185: \"surface_dry_earth\":[\"surface_dry_texture\",\"use_surface_dry_texture\"],",
+            "scripts/liangshan_scenery.gd:193: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+            "scripts/liangshan_coast.gdshader:19: uniform bool use_surface_dry_texture = false;"
+          ]
+        },
+        {
+          "surface_key": "surface_field",
+          "level_scope": [
+            "level3",
+            "level8"
+          ],
+          "output_path": "res://assets/campaign/environment/shared/surfaces/surface_field.png",
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery._setup_coast_material -> liangshan_coast shader",
+          "fallback_evidence": [
+            "scripts/liangshan_scenery.gd:188: \"surface_field\":[\"surface_field_texture\",\"use_surface_field_texture\"],",
+            "scripts/liangshan_scenery.gd:193: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+            "scripts/liangshan_coast.gdshader:22: uniform bool use_surface_field_texture = false;"
+          ]
+        },
+        {
+          "surface_key": "surface_forest_earth",
+          "level_scope": [
+            "level1",
+            "level3",
+            "level5",
+            "level6",
+            "level7"
+          ],
+          "output_path": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery._setup_coast_material -> liangshan_coast shader",
+          "fallback_evidence": [
+            "scripts/liangshan_scenery.gd:184: \"surface_forest_earth\":[\"surface_forest_texture\",\"use_surface_forest_texture\"],",
+            "scripts/liangshan_scenery.gd:193: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+            "scripts/liangshan_coast.gdshader:18: uniform bool use_surface_forest_texture = false;"
+          ]
+        },
+        {
+          "surface_key": "surface_wet_bank",
+          "level_scope": [
+            "level2",
+            "level4",
+            "level5"
+          ],
+          "output_path": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "consumer_file": "scripts/liangshan_scenery.gd",
+          "consumer_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+          "consumer_symbol": "LiangshanScenery._setup_coast_material -> liangshan_coast shader",
+          "fallback_evidence": [
+            "scripts/liangshan_scenery.gd:186: \"surface_wet_bank\":[\"surface_wet_texture\",\"use_surface_wet_texture\"],",
+            "scripts/liangshan_scenery.gd:193: var routed: Texture2D = EnvironmentArt.surface(active_level_id,surface_key)",
+            "scripts/liangshan_coast.gdshader:20: uniform bool use_surface_wet_texture = false;"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "all_69_consumer_ready",
+      "passed": true,
+      "detail": {
+        "atlas_cells": 64,
+        "surfaces": 5
+      }
+    }
+  ]
+}

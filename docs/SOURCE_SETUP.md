@@ -1,5 +1,13 @@
 # 水浒英雄传本地源码
 
+## 2026-09-06 环境美术验证入口
+
+环境检查已改为仓库内输入，可从任意目录使用脚本绝对路径运行。入口：`python -X utf8 -B tools/campaign_environment_art_static_contract.py`（路由）、`python -X utf8 -B tools/environment_art_audit.py`（生产与来源）、`python -X utf8 -B tools/environment_validation_selftest.py`（隔离反例）。Python3.9+；审计需要Pillow，旧接入工具另需NumPy。
+
+默认结果写入被忽略的 `.godot/environment_validation/`。当前静态790项、运行794项通过，36个现有PNG哈希一致；全69目标仍有33个缺图，原提示词/原图/接入证据未恢复，因此整体审计退出1，不能当成功。旧接入自测缺冻结输入时退出2并标明0项执行。
+
+冻结输入位置为 `tools/contracts/environment/`，旧原件恢复位置为其中的 `legacy/`；`.gitattributes` 保持精确字节，不能只改哈希掩盖缺口。历史文件中的办公室路径可通过明确的仓库内相对路径映射迁移，来源哈希要求保留。详见 [当前说明](ENVIRONMENT_VALIDATION_PORTABILITY_20260906.md)、[QA](../qa/environment_validation_20260906/README.md)。下方历史785项及来源清单记录不表示本机完整历史验收通过。
+
 ## 2026-09-06 高俅持续水陆经营入口
 
 重新运行 `Play.cmd`，选择“三败高太尉”并重开，会加载 `level5_gao_rts.gd`。同一营寨采金伐木、训练岸军，在南岸定位处造船坞，付费补船抗三批水陆主力；拆两处补给源可断援。可打停座船后直接“收兵通关”，或提前准备火船与接应船，之后凿船、水上接俘并由岸军实际押回堂前。长任务列表可滚动，定位按钮仍需配合玩家选人和右键现场办理。详见 [高俅实现](GAO_RTS_20260906.md) 与 [本轮QA](../qa/gao_rts_20260906/README.md)。

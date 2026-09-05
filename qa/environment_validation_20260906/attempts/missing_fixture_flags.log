@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "E:\ChatGPT\水浒-art-validation\tools\environment_validation_selftest.py", line 223, in <module>
+    raise SystemExit(main())
+  File "E:\ChatGPT\水浒-art-validation\tools\environment_validation_selftest.py", line 195, in main
+    assert cli("environment_map_clamped_contract.py", 0, *map_args)["contract_passed"]
+  File "E:\ChatGPT\水浒-art-validation\tools\environment_validation_selftest.py", line 44, in cli
+    raise AssertionError(f"{tool}: expected exit {expected}, got {process.returncode}: {process.stdout} {process.stderr} {details}")
+AssertionError: environment_map_clamped_contract.py: expected exit 0, got 1: {"contract_passed": false, "checks": 48, "passed": 47, "failed": 1, "output": "E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_r2bw5j6a\\.godot\\environment_validation\\map_clamped_legacy.json"}
+  [{'name': 'installer_did_not_write_steam_or_approve_release', 'passed': False, 'evidence': None}]

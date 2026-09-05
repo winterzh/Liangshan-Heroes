@@ -10,13 +10,12 @@ import tempfile
 
 from PIL import Image
 
+from environment_validation_common import LEGACY_BATCH, legacy_preflight
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL = ROOT / "tools/environment_surface_candidate_normalize.py"
-BATCH_MANIFEST = (
-    ROOT.parent
-    / "implementation_20260902/environment_prompt_drafts_v2/environment_batch_manifest.json"
-)
+BATCH_MANIFEST = ROOT / LEGACY_BATCH
 
 
 def sha256(path: Path) -> str:
@@ -41,6 +40,10 @@ def run(arguments: list[str], expected: int) -> dict:
 
 
 def main() -> int:
+    preflight = legacy_preflight(ROOT)
+    if not preflight["passed"]:
+        print(json.dumps({"kind": "environment_surface_normalize_selftest", "tests_executed": 0, **preflight}, ensure_ascii=False))
+        return 2
     batch_data = json.loads(BATCH_MANIFEST.read_text(encoding="utf-8"))
     batch = next(item for item in batch_data["send_order"] if item["id"] == "surface_dry_earth")
     checks: list[str] = []

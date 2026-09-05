@@ -16,15 +16,12 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
+from environment_validation_common import LEGACY_BATCH, legacy_preflight
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL = ROOT / "tools/environment_web_art_intake.py"
-BATCH_MANIFEST = (
-    ROOT.parent
-    / "implementation_20260902"
-    / "environment_prompt_drafts_v2"
-    / "environment_batch_manifest.json"
-)
+BATCH_MANIFEST = ROOT / LEGACY_BATCH
 MAPPING_TEMPLATE = ROOT / "tools/environment_production_mapping.template.json"
 
 
@@ -93,6 +90,10 @@ def run_cli(arguments: list[str], expected: int) -> dict:
 
 
 def main() -> int:
+    preflight = legacy_preflight(ROOT, require_router_report=True)
+    if not preflight["passed"]:
+        print(json.dumps({"kind": "environment_intake_selftest", "tests_executed": 0, **preflight}, ensure_ascii=False))
+        return 2
     batch_data = json.loads(BATCH_MANIFEST.read_text(encoding="utf-8"))
     module = load_module()
     checks: list[str] = []

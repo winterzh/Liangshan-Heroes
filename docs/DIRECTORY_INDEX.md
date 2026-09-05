@@ -10,6 +10,9 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `tools/resolve_godot.ps1`：共享 Godot 4.6.3 路径解析；`godot.local.txt` 为每台电脑独立配置，不入库。
 - `qa/home_setup_20260905/`：本机接续日志、动作检查报告和主菜单截图。
 - `.godot/`：本机导入缓存及临时验证文件，不入库。
+- `tools/environment_art_audit.py`、`tools/environment_validation_selftest.py`、`tools/environment_validation_common.py`：环境生产/来源审计、隔离反例与跨电脑路径处理。
+- `tools/contracts/environment/`：生产字节与来源缺口清单；`legacy/`记录待恢复历史原件及哈希，固定证据不按缓存处理。
+- `docs/ENVIRONMENT_VALIDATION_PORTABILITY_20260906.md`、`qa/environment_validation_20260906/`：本轮入口、缺口、验证记录和输入收据。
 - `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`：当前 Git 开发进度和跨电脑启动说明。
 - `docs/WALL_AND_NAVAL_FOUNDATION_20260906.md`：木墙脚点修正与限定关卡启用的造船底层说明。
 - `scripts/naval_production.gd`、`tools/naval_production_test.gd`、`tools/naval_production_visual.gd`：泊位、岸边施工、付费下水及取消/重建验证；高俅当前入口显式启用船坞，驻守不启用。

@@ -1,0 +1,14 @@
+# Frozen evidence must retain exact bytes on both Windows and other systems.
+tools/environment_production_mapping.template.json -text
+tools/contracts/environment/** -text
+qa/environment_validation_20260906/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Keep the newly maintained validators reproducible across checkout settings.
+tools/campaign_environment_art_static_contract.py text eol=lf
+tools/environment_validation_common.py text eol=lf
+tools/environment_art_audit.py text eol=lf
+tools/environment_validation_selftest.py text eol=lf
+tools/environment_map_clamped_contract.py text eol=lf
+tools/environment_web_art_intake.py text eol=lf
+tools/environment_web_art_intake_selftest.py text eol=lf
+tools/environment_surface_candidate_normalize_selftest.py text eol=lf

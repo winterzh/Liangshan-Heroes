@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Source-only contract for the frozen campaign environment-art router.
+"""Source-only contract for the campaign environment-art router.
 
 This deliberately does not start Godot and does not require any generated PNG.
-It proves route identity, state and path parity with the frozen schema-v2
-manifest, plus explicitly documented runtime reuse. Visual acceptance remains
-a separate gate.
+It proves route identity, state and path parity with the retained, SHA-bound
+production mapping (or explicitly restored frozen schema-v2 manifest), plus
+documented runtime reuse. Original-source and visual acceptance are separate.
 """
 
 from __future__ import annotations
@@ -13,11 +13,22 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
+from environment_validation_common import MAPPING, MAPPING_SHA256, contained_path, report_target, write_report
+
 
 EXPECTED_MANIFEST_SHA256 = "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
+# IDs retained in the initial Git router (b534fd3), independently of the
+# runtime file being checked. This is a route baseline, not recovered prompts.
+EXPECTED_TEXT_SURFACE_IDS = [
+    "level3_zhujiazhuang_gate_plaque", "level3_zhujiazhuang_hall_plaque",
+    "level5_hall_plaque", "level5_main_gate_plaque", "level7_heyang_wine_sign",
+    "level7_main_tavern_plaque", "level8_shop_house_plaque",
+    "liangshan_hilltop_standard", "zhongyi_hall_standard_west", "zhongyi_hall_standard_east",
+]
 LEVEL_IDS = tuple(f"level{i}" for i in range(1, 9))
 FORBIDDEN_GLOBAL_ALIASES = {"town_house", "zhu_hall", "zhu_gate", "roadside_tavern", "tree", "banner"}
 EXPECTED_SURFACES = {
@@ -93,6 +104,32 @@ def _manifest_routes(manifest: dict[str, Any]) -> tuple[dict[str, Any], set[str]
     return routes, text_surfaces
 
 
+def load_route_basis(path: Path) -> tuple[dict[str, Any], str]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    digest = _sha256(path)
+    if data.get("schema_version") == 2:
+        if digest != EXPECTED_MANIFEST_SHA256:
+            raise ValueError(f"frozen manifest SHA256 mismatch: {digest}")
+        return data, "original_frozen_manifest"
+    if data.get("kind") != "web_chatgpt_environment_production_mapping" or digest != MAPPING_SHA256:
+        raise ValueError(f"route mapping is not the retained SHA-bound baseline: {digest}")
+    if data.get("batch_manifest_sha256") != EXPECTED_MANIFEST_SHA256:
+        raise ValueError("retained mapping references a different historical manifest")
+    batches = []
+    for batch in data["batches"]:
+        cells = []
+        for cell in batch.get("cells", []):
+            # Read the independent retained mapping, never the current router.
+            contained_path(path.parent.parent, cell["target"])
+            cells.append({
+                "output_path": "res://" + cell["target"], "level_scope": cell["level_scope"],
+                "state": cell.get("state", "default"),
+                "route": {"resolver": cell["resolver"], "route_key": cell["route_key"]},
+            })
+        batches.append({"cell_routes": cells})
+    return {"send_order": batches, "runtime_text_rect_contract": {"flag_markers": EXPECTED_TEXT_SURFACE_IDS}}, "retained_production_mapping"
+
+
 def _gd_route_path(table: dict[str, Any], level_id: str, route_key: str, state: str = "default") -> str:
     record = table.get(route_key)
     if not level_id or not route_key or record is None or level_id not in record["levels"]:
@@ -107,7 +144,7 @@ def run(repo: Path, manifest_path: Path, report_path: Path) -> dict[str, Any]:
         checks.append({"name": name, "passed": bool(passed), "detail": detail})
 
     manifest_sha = _sha256(manifest_path)
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest, basis_kind = load_route_basis(manifest_path)
     router_path = repo / "scripts" / "campaign_environment_art.gd"
     router_source = router_path.read_text(encoding="utf-8")
     scenery_source = (repo / "scripts" / "campaign_scenery.gd").read_text(encoding="utf-8")
@@ -129,8 +166,12 @@ def run(repo: Path, manifest_path: Path, report_path: Path) -> dict[str, Any]:
     }
     consumer_sha256 = {rel: _sha256(repo / rel) for rel in consumer_rel_paths}
 
-    check("frozen_manifest_sha256", manifest_sha == EXPECTED_MANIFEST_SHA256, manifest_sha)
-    check("schema_v2", manifest.get("schema_version") == 2, manifest.get("schema_version"))
+    if basis_kind == "original_frozen_manifest":
+        check("frozen_manifest_sha256", manifest_sha == EXPECTED_MANIFEST_SHA256, manifest_sha)
+        check("schema_v2", manifest.get("schema_version") == 2, manifest.get("schema_version"))
+    else:
+        check("retained_mapping_sha256", manifest_sha == MAPPING_SHA256, manifest_sha)
+        check("retained_mapping_has_64_cells", sum(len(b["cell_routes"]) for b in manifest["send_order"]) == 64)
     check(
         "router_embeds_same_manifest_sha",
         f'const FROZEN_MANIFEST_SHA256 := "{EXPECTED_MANIFEST_SHA256}"' in router_source,
@@ -454,6 +495,10 @@ def run(repo: Path, manifest_path: Path, report_path: Path) -> dict[str, Any]:
     report = {
         "passed": passed,
         "scope": "source_only_no_godot_no_bitmap_generation",
+        "basis_kind": basis_kind,
+        "historical_manifest_verified": basis_kind == "original_frozen_manifest",
+        "provenance_verified": False,
+        "resource_completeness_verified": False,
         "manifest_path": str(manifest_path.resolve()),
         "manifest_sha256": manifest_sha,
         "router_path": str(router_path.resolve()),
@@ -475,8 +520,7 @@ def run(repo: Path, manifest_path: Path, report_path: Path) -> dict[str, Any]:
         "missing_source_resources": missing_resources,
         "checks": checks,
     }
-    report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_report(report_path, report)
     return report
 
 
@@ -486,23 +530,32 @@ def main() -> int:
     parser.add_argument(
         "--manifest",
         type=Path,
-        default=Path(__file__).resolve().parents[2]
-        / "implementation_20260902"
-        / "environment_prompt_drafts_v2"
-        / "environment_batch_manifest.json",
+        default=MAPPING,
+        help="repo-relative retained mapping, or an explicitly restored original frozen manifest",
     )
     parser.add_argument(
         "--report",
         type=Path,
-        default=Path(__file__).resolve().parents[1]
-        / "qa"
-        / "environment_runtime_router_20260902"
-        / "report.json",
+        default=Path(".godot/environment_validation/router.json"),
     )
     args = parser.parse_args()
-    report = run(args.repo.resolve(), args.manifest.resolve(), args.report.resolve())
-    print(json.dumps({"passed": report["passed"], **report["counts"]}, ensure_ascii=False))
-    return 0 if report["passed"] else 1
+    repo = args.repo.resolve()
+    output = None
+    try:
+        output = report_target(repo, args.report)
+        manifest = args.manifest if args.manifest.is_absolute() else repo / args.manifest
+        if output == manifest.resolve():
+            output = None
+            raise ValueError("report may not overwrite the route basis input")
+        report = run(repo, manifest.resolve(), output)
+        print(json.dumps({"passed": report["passed"], "basis_kind": report["basis_kind"], **report["counts"]}, ensure_ascii=False))
+        return 0 if report["passed"] else 1
+    except (OSError, ValueError, KeyError, TypeError, AssertionError) as error:
+        report = {"passed": False, "status": "invalid_or_missing_input", "error": str(error), "scope": "source_only_no_godot_no_bitmap_generation"}
+        if output is not None:
+            write_report(output, report)
+        print(json.dumps(report, ensure_ascii=False), file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

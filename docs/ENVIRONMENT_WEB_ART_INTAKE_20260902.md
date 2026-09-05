@@ -1,5 +1,7 @@
 # 环境网页美术接入门禁
 
+2026-09-06核查：本checkout未带原批次清单、自检、九份提示词与旧路由报告，旧完整接入验收当前不能复跑。默认路径已迁到仓库内 `tools/contracts/environment/legacy/`，原SHA和来源门槛保留。缺原件的自测退出2、0项执行，不计通过。当前独立路由及来源缺口审计见 [跨电脑说明](ENVIRONMENT_VALIDATION_PORTABILITY_20260906.md)；以下为历史实现与结果。
+
 本批只实现来源验收和原子导入工具，没有生成或接入任何新环境图片，也没有运行 Godot。
 
 依据是冻结的 `environment_batch_manifest.json` schema v2，SHA-256：

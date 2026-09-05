@@ -1,0 +1,67 @@
+{
+  "scope": "historical_full_tests_not_executed",
+  "results": [
+    {
+      "script": "tools/environment_web_art_intake_selftest.py",
+      "exit_code": 2,
+      "report": {
+        "kind": "environment_intake_selftest",
+        "tests_executed": 0,
+        "passed": false,
+        "status": "blocked_missing_or_invalid_evidence",
+        "errors": [
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation\\tools\\contracts\\environment\\legacy\\environment_batch_manifest.json",
+            "expected_sha256": "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
+          },
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation\\tools\\contracts\\environment\\legacy\\static_self_check.json",
+            "expected_sha256": "f8e562d4aeebbd64519acf83ecfb54385742b3d7f89dd72684149a953386aa77"
+          },
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation\\qa\\environment_runtime_router_20260902\\report.json",
+            "expected_sha256": "16dda6894bfc1bb54584ac90180de2227d6df6a34174192a6638fd8068405f43"
+          }
+        ]
+      }
+    },
+    {
+      "script": "tools/environment_surface_candidate_normalize_selftest.py",
+      "exit_code": 2,
+      "report": {
+        "kind": "environment_surface_normalize_selftest",
+        "tests_executed": 0,
+        "passed": false,
+        "status": "blocked_missing_or_invalid_evidence",
+        "errors": [
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation\\tools\\contracts\\environment\\legacy\\environment_batch_manifest.json",
+            "expected_sha256": "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
+          },
+          {
+            "code": "missing_historical_input",
+            "path": "E:\\ChatGPT\\水浒-art-validation\\tools\\contracts\\environment\\legacy\\static_self_check.json",
+            "expected_sha256": "f8e562d4aeebbd64519acf83ecfb54385742b3d7f89dd72684149a953386aa77"
+          }
+        ]
+      }
+    },
+    {
+      "script": "tools/environment_map_clamped_contract.py",
+      "exit_code": 2,
+      "report": {
+        "passed": false,
+        "status": "blocked_missing_historical_evidence",
+        "missing_inputs": [
+          "E:\\ChatGPT\\水浒-art-validation\\qa\\environment_map_clamped_20260902\\install_manifest.json"
+        ],
+        "scope": "historical_map_clamped_contract",
+        "checks_executed": 0
+      }
+    }
+  ]
+}
