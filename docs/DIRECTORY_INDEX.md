@@ -2,6 +2,16 @@
 
 更新日期：2026-09-05（Asia/Shanghai）。
 
+## Git checkout 目录（家里接续）
+
+Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scripts/`、`scenes/`、`tools/` 和 `qa/` 直接位于根下，交接文档统一在 `docs/`。下文“根目录约定”和迁移映射记录的是办公室外层工作区，不能照此在 clone 内再建立 `Liangshan-Heroes/`。
+
+- `Play.cmd`、`tools/run_local.ps1`：源码游戏、编辑器及导入入口。
+- `tools/resolve_godot.ps1`：共享 Godot 4.6.3 路径解析；`godot.local.txt` 为每台电脑独立配置，不入库。
+- `qa/home_setup_20260905/`：本机接续日志、动作检查报告和主菜单截图。
+- `.godot/`：本机导入缓存及临时验证文件，不入库。
+- `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`：当前 Git 开发进度和跨电脑启动说明。
+
 ## 2026-09-05 测试上传与 GitHub 接入
 
 - `Liangshan-Heroes/qa/steam_test_build_20260905/`：本轮冻结输入清单、成品专项、Steam 上传与 GitHub 同步收据。

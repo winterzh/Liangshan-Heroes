@@ -1,8 +1,9 @@
 param(
-    [string]$Godot = 'C:\Users\rsb\Desktop\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe'
+    [string]$Godot = ''
 )
 
 $ErrorActionPreference = 'Stop'
+$Godot = & (Join-Path $PSScriptRoot 'resolve_godot.ps1') -GodotPath $Godot
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $outputDir = Join-Path $projectRoot 'qa\audio_shutdown_20260902'
 New-Item -ItemType Directory -Path $outputDir -Force | Out-Null

@@ -1,5 +1,7 @@
 # 音频退出生命周期修复与验证（2026-09-02）
 
+2026-09-05 启动适配：`tools/run_audio_shutdown_regression.ps1` 通过 `tools/resolve_godot.ps1` 获取 Godot 4.6.3，仍接受显式 `-Godot` 参数，也支持 `GODOT_PATH` / 根目录 `godot.local.txt`。运行前可执行 `tools/run_local.ps1 -Mode import`。以下是原批次音频证据；家里接续未重跑完整八案音频矩阵。
+
 ## 问题与根因
 
 旧版退出日志会稳定出现 `AudioStreamWAV` 2 个、`AudioStreamPlaybackWAV` 2 个、ObjectDB 泄漏警告和 `Master` 孤儿引用。数量与 `Music` 常驻节点中同时播放的 calm、battle 两个 `AudioStreamPlayer` 对应。

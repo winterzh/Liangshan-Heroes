@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$GodotPath = 'C:\Users\rsb\Desktop\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe',
+    [string]$GodotPath = '',
 
     [Parameter()]
     [string]$ProjectPath = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path,
@@ -22,6 +22,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$GodotPath = & (Join-Path $PSScriptRoot 'resolve_godot.ps1') -GodotPath $GodotPath
 $reportName = 'campaign_mode_soak.json'
 $logName = 'godot_console.log'
 $readmeName = 'README.md'

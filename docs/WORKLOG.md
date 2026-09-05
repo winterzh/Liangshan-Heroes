@@ -1,5 +1,13 @@
 # 水浒本地开发记录
 
+## 2026-09-05 家里 Git 接续与可移植启动
+
+- 家里 `E:\ChatGPT\水浒` 起初只有空 Git 仓库，无未提交内容。连接既有 origin 后取回 `codex/sync-20260905-stable`，接续基线 `513ee33`；首次默认 TLS 拉取中断，单次使用 OpenSSL/HTTP 1.1 重试成功，未关闭证书校验或修改全局 Git 配置。
+- 工程位于 checkout 根目录，交接文档位于 `docs/`。补充 `Play.cmd`、`tools/run_local.ps1` 和 `tools/resolve_godot.ps1`，使用本机忽略文件、环境变量或显式参数定位 Godot 4.6.3，复用既有增量导入。音频和模式切换回归入口不再写死办公室路径；AGENTS、README、目录索引和使用文档同步更新。
+- Godot 4.6.3 首次导入、无界面主菜单、Vulkan/Forward+ 主菜单均退出 0，1280×720 图已目检，设备为 RTX 3070 Ti。核心 68 项通过，四向路由合同通过，四种官军 48 个动作方向单元通过；PowerShell 解析、路径优先级、无效路径拒绝及 Windows PowerShell 5.1 启动检查通过。原始日志和可复查范围见 `qa/home_setup_20260905/README.md`。
+- 导入导致的已有 `.import` 换行改写已还原；新生成的 139 个导入/UID sidecar 仅在本机 `.git/info/exclude` 精确排除。缓存、机器路径及既有历史 QA 的重跑改写不纳入本轮提交。未改玩法或美术，未导出或操作 Steam。
+- 后续优先项仍为四向与环境素材缺口、旧阴影测试地图前提、真人八关/30 波和长时稳定性。Git 提交本身不证明远端已同步，实际推送和回读 SHA 以本轮最终回复为准；只使用原分支和 PR #1。
+
 ## 2026-09-05 Steam 四向与阵亡表现测试包上线（default 已确认）
 
 已从当前已验证输入冻结2364文件并导出Windows单EXE，输入双端哈希复验一致；SteamPipe Preview只映射EXE，上传成功生成BuildID `25136463` / Windows Depot `5088121` / manifest `7280684617482783161`。包大小278,050,128字节，SHA-256 `B333E117755C0A33FBBC5731FD3768514A68FCE21C5E45DC730F38DD138BBFC1`。

@@ -1,12 +1,12 @@
 # 水浒英雄传：八幕战役
 
-一款水浒题材的 2D 等距即时战略（Godot 4.6）。当前目录以 **2026-09-04 Steam Windows default BuildID 25121101** 对应源码为基线，并另含尚未上传的驻守战四向与死亡血迹本地增量；源码目录本身不是可上传发行包。八关已补路线、阵位、编组、时机和可补救失败，并在同一份源码上完成自动回归；常规15–25分钟内容节奏、配角完整动画、30波真人手动通关和长时性能仍未验收，不能称全案完成或正式发行候选。当前 Windows 跨设备测试构建的导出、SteamPipe、服务器回下载与边界见 [2026-09-04 测试构建记录](docs/STEAM_TEST_BUILD_20260904.md)，历史发布与回滚证据见 [2026-09-01 发布记录](docs/STEAM_RELEASE_20260901.md)，玩法细节见 [本批游戏性记录](docs/CAMPAIGN_GAMEPLAY_DEPTH_20260901.md)、[实施记录](docs/CAMPAIGN_IMPLEMENTATION.md)、[美术清单](docs/CAMPAIGN_ART.md)、[运行验证](docs/CAMPAIGN_RUNTIME_QA.md) 与 [节奏待办](docs/CAMPAIGN_PACING.md)。
+一款水浒题材的 2D 等距即时战略（Godot 4.6.3）。本分支已包含八关主线、自由通关、自主指挥，以及 2026-09-05 驻守战四向与死亡表现修复。常规15–25分钟内容节奏、配角完整动画、30波真人手动通关和长时性能仍未验收。此前 Windows 测试构建记录见 [2026-09-05 测试构建记录](docs/STEAM_TEST_BUILD_20260905.md)；家里接续仅验证源码启动，没有执行 Steam 发布。当前进度见 [开发记录](docs/WORKLOG.md)，玩法、素材与验收范围见 [实施记录](docs/CAMPAIGN_IMPLEMENTATION.md)、[美术清单](docs/CAMPAIGN_ART.md)、[运行验证](docs/CAMPAIGN_RUNTIME_QA.md) 与 [节奏待办](docs/CAMPAIGN_PACING.md)。
 
 最新网页ChatGPT批次已补黄泥冈八人商客造型、七辆枣车、白胜肩挑酒、四类城镇百姓，以及大名府两人被缚/获救和步行；八关文案另按原著复核。网页来源、实机证据与尚存改编差异见 [本批交付记录](docs/WEB_CHATGPT_ART_DELIVERY.md)。
 
-最新未上传增量修复普通四向资源回退：缺少四向行走/攻击时继续播放原有动作，不再以四向待机图造成滑行。驻守战新增官军火枪手四向待机，默认30波敌军的四向待机实例覆盖为709/778（91.131%）；死亡残留增加0.35秒延迟、四向倒地偏移、36像素近距合并和兵种语义选择，攻城器械不再留下人形血迹。证据见 [四向QA](qa/skirmish_direction4_20260904/README.md) 与 [死亡残留QA](qa/skirmish_death_remains_20260904/README.md)。
+四种高频官军已接入首批四向 walk/attack/death，最新修复包括 SW 弓手朝向、逐帧对齐、骑兵枪术、死亡阴影和血迹/残骸比例。默认30波敌军的四向待机实例覆盖为709/778（91.131%），不能等同完整动作覆盖。历史修复范围见 [四向修复 QA](qa/skirmish_direction4_fix_20260905/README.md)，本机复跑见 [家里接续 QA](qa/home_setup_20260905/README.md)。
 
-双击上级目录 `Play-Campaign-Rework.cmd` 运行本机Godot源码版，或在Godot 4.6.3导入 `project.godot` 后按F5运行项目。默认画布1280×720。选“剧情模式”，八关仍全部可选。其他关卡仍可用左上任务按钮派遣；首关野猪林已改为剧情队伍自行前进、玩家手动操作鲁智深，不再显示代走按钮。
+Git checkout 的工程入口就在根目录 `project.godot`。首次将 Godot 4.6.3 EXE 路径写入本机 `godot.local.txt`，以后双击根目录 `Play.cmd`；也可在 Godot 编辑器导入工程后按 F5。路径优先级、编辑器及导入命令见 [源码启动说明](docs/SOURCE_SETUP.md)。默认画布1280×720，剧情八关全部可选。任务栏只定位现场，玩家自行选人和右键下令；野猪林救人后四人相送也由玩家指挥。
 
 | 原著顺序 | 关卡 / 兼容ID | 本地实现的主链 |
 |---|---|---|

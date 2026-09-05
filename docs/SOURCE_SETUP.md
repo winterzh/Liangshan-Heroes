@@ -2,6 +2,26 @@
 
 记录日期：2026-09-05（Asia/Shanghai）。
 
+## Git checkout 启动与家里接续（2026-09-05）
+
+本节是 GitHub 克隆版的当前启动说明。家里目录为 `E:\ChatGPT\水浒`，`project.godot` 直接位于该目录；交接文件是 `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`、`docs/DIRECTORY_INDEX.md`。下文办公室历史记录中的 `Liangshan-Heroes/` 前缀在 Git checkout 中应去掉，外层交接文档应改查 `docs/`。仓库外的 `implementation_*`、旧 QA、导出包和未推送修改不会自动来到家里，不能把缺失文件视为已同步。
+
+本机已验证 Godot `4.6.3.stable.official.7d41c59c4`。首次配置：在工程根目录创建 UTF-8 文本 `godot.local.txt`，只写 Godot EXE 的完整路径，不加引号。该文件被 Git 忽略，办公室和家里各自维护。也可通过 `GODOT_PATH` 或脚本的 `-GodotPath` 参数指定。优先级为显式参数、环境变量、本机文本、PATH；选定路径无效或版本不是 4.6.3 时明确报错。
+
+```powershell
+# 在 checkout 根目录运行；配置好 godot.local.txt 后也可双击 Play.cmd。
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local.ps1 -Mode editor
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local.ps1 -Mode import
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local.ps1 -Reimport
+```
+
+入口按脚本位置定位工程，支持中文和空格路径；首次启动自动导入资源，缓存完整时直接启动。原 `ensure_import_cache.ps1` 继续负责增量导入。模式切换与音频退出回归脚本也共用 `tools/resolve_godot.ps1`，已有显式路径参数仍可使用。家里本轮日志与主菜单截图见 [接续 QA](../qa/home_setup_20260905/README.md)，只证明本机启动和所列回归，未作长时性能或完整通关验收。
+
+两机交替先检查 `git status --short --branch`。确认工作区干净、分支正确且无本地分叉后执行 `git pull --ff-only origin codex/sync-20260905-stable`；有本地修改时先核对，不自动覆盖或藏起修改。收尾按文件白名单提交并 `git push origin HEAD:codex/sync-20260905-stable`，再回读远端 SHA。继续使用 PR #1，不合并 main，不执行 Steam 发布。
+
+接续基线为远端 `513ee3369726acb92dd9d464eabb6ec235f527b2`。八关主线、自由通关及自主指挥已接入，四种高频官军四向动作和死亡表现修复已在库。待办：剩余四向与环境美术、旧阴影夹具的地图前提、真人逐关/30 波试玩、30 分钟稳定性及平衡验收。历史报告中的严格状态覆盖 `109/347` 未在本轮重新审计，不作为本机新测数字。
+
 ## 最新收尾：四向/阵亡修复测试包已生效
 
 Steam 新 BuildID `25136463` 上传成功，Windows Depot `5088121` manifest `7280684617482783161`；成品 `278,050,128` 字节、SHA-256 `B333E117755C0A33FBBC5731FD3768514A68FCE21C5E45DC730F38DD138BBFC1`。八关 8/8、驻守硬伤 9/9、末波清理 12/12、成品 PCK 四向/死亡 90/90 与 1280×720 图形两张均完成。没有真人 30 波或长时性能结论。

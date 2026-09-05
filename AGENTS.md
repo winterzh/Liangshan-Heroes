@@ -2,7 +2,7 @@
 
 ## 每轮开发完成后的同步（用户要求，2026-09-05）
 
-- 完成代码或素材修改后，运行对应验证，并同步更新项目文件与文档：根目录 `WORKLOG.md`、`SOURCE_SETUP.md`，以及本次涉及的项目内设计/实现说明和 QA 记录。目录变化时更新 `DIRECTORY_INDEX.md`；启动方式或使用方式变化时更新项目 README。
+- 完成代码或素材修改后，运行对应验证，并同步更新项目文件与文档：`WORKLOG.md`、`SOURCE_SETUP.md`，以及本次涉及的项目内设计/实现说明和 QA 记录。Git checkout 中这些交接文件统一位于 `docs/`；办公室外层工作区仍使用其原有位置。目录变化时更新 `DIRECTORY_INDEX.md`；启动方式或使用方式变化时更新项目 README。
 - 在用户确认并配置好的 GitHub 仓库与分支上，每轮开发收尾提交并推送本轮已验证的代码、生产资源及相关文档，不等用户每次重复提醒。只读检查没有文件变化时，不创建空提交。
 - 推送前检查仓库身份、分支、远端变化、待提交差异、文件大小和敏感内容。共享磁盘上其他任务的未完成修改不得混入；不得执行全盘 `git add`、强推、覆盖远端或重写历史。
 - 不上传凭据、私钥、签名配置、Steam 登录/缓存、玩家存档、Godot 缓存、导出安装包、无关截图和历史备份。被当前生产清单或验证工具依赖的美术来源/证据不能简单当缓存排除；确认同步范围，必要时安排受控存储并保留来源链。
@@ -14,4 +14,10 @@
 
 2026-09-05 跨任务核实：用户已在“接收 GitHub 协作邀请并更新”任务明确授权同步，`gaojing-ops` 已取得 `https://github.com/winterzh/Liangshan-Heroes.git` 协作权限。
 已确认目标为 `codex/sync-20260905-stable` 分支及 PR `https://github.com/winterzh/Liangshan-Heroes/pull/1`，初次稳定快照提交为 `b534fd36687403cc3bba06a1161ec8eb4950dc11`。继续增量推送此分支，不自行合并或直接推 main。
-外层水浒目录及 `Liangshan-Heroes/` 仍是共享非 Git 工作区。同步时使用独立 Git checkout 和逐文件白名单，先核对远端与正在进行的任务；不直接复用其他任务留下的临时 Git index，不创建公开仓库或上传本地全部文件。每轮实际远端 SHA 以当轮收据为准。
+办公室原始外层水浒目录及 `Liangshan-Heroes/` 是共享非 Git 工作区，须使用独立 Git checkout 和逐文件白名单同步。家里通过 Git 获取的目录本身就是 checkout，根目录直接包含 `project.godot`；在该 checkout 开发即可，不再嵌套克隆一份。两种环境都须先核对远端与正在进行的任务，不直接复用其他任务留下的临时 Git index，不创建公开仓库或上传本地全部文件。每轮实际远端 SHA 以当轮收据为准。
+
+## 两台电脑交替
+
+开始前检查 `git status --short --branch` 并确认目标分支，工作区干净且本地未分叉时才 `git pull --ff-only origin codex/sync-20260905-stable`。有未提交修改或分叉时先核对来源，不自动 stash、reset 或覆盖。离开前验证、更新文档、按文件提交并推送；避免两台电脑同时修改同一批文件。
+
+本机 Godot 路径写入被忽略的 `godot.local.txt`，或通过 `GODOT_PATH` / 启动脚本参数提供。不要把本机路径写死进公共启动脚本。完整入口见 `docs/SOURCE_SETUP.md`。
