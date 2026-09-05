@@ -1,0 +1,298 @@
+extends LevelBase
+## Persistent counter-cavalry campaign. All twelve linked riders are present at
+## deployment; supply posts pay for ordinary escorts, never replace the twelve.
+const T := GameMap.T
+const CAMP := Vector2i(10,30)
+const ENEMY_CAMP := Vector2i(54,30)
+const NORTH_POST := Vector2i(44,12)
+const SOUTH_POST := Vector2i(44,49)
+const LANES := [Vector2i(29,21),Vector2i(30,41)]
+const RIDER_POSTS := [Vector2i(52,20),Vector2i(52,42)]
+const DRILL := Vector2i(16,45)
+const DRILL_ENTRY := Vector2i(21,45)
+const LINK_SOURCE := 4705
+const HOOK_KEYS := ["gou_lian","xu_ning"]
+var hall: Unit
+var song: Unit
+var xu: Unit
+var hu: Unit
+var han: Unit
+var enemy_base: Unit
+var dummy: Unit
+var riders: Array[Unit]=[]
+var posts: Array[Unit]=[]
+var workers: Array[Unit]=[]
+var enemy_workers: Array[Unit]=[]
+var enemy_nodes: Array[Unit]=[]
+var escorts: Array[Unit]=[]
+var waves := [{"time":150.0,"warned":false,"sent":false},{"time":270.0,"warned":false,"sent":false}]
+var elapsed := 0.0
+var strategy_t := 0.0
+var escort_t := 55.0
+var ai_trained := 0
+var ai_spent_gold := 0
+var ai_spent_wood := 0
+var broken_count := 0
+var lhm_killed := 0
+var manor_fallen := false
+var drill_entered := false
+var drill_withdrew := false
+var drill_coordinated := false
+var drill_complete := false
+var drill_lure: Unit
+var drill_lure_origin := Vector2.ZERO
+var phase_title := ""
+
+func id() -> String: return "level4"
+func title() -> String: return "大破连环马"
+func subtitle() -> String: return "扎营练枪·断粮破骑·反攻主阵"
+func economy_enabled() -> bool: return true
+func start_gold() -> int: return 300
+func start_wood() -> int: return 200
+func base_pop_cap() -> int: return 24
+func start_age() -> int: return 3
+func hero_start_rank() -> int: return 0
+func hero_cap() -> int: return 4
+func fog_enabled() -> bool: return true
+func map_w() -> int: return 64
+func map_h() -> int: return 60
+func map_theme() -> String: return "plain"
+func map_base() -> int: return T.GRASS
+func camera_start_cell() -> Vector2i: return CAMP
+func campaign_core_goal() -> String:
+	return "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。"
+func story_contract_version() -> int: return 2
+func campaign_story_goals() -> Array:
+	return [
+		{"id":"lhm_training","label":"教场诱骑撤步，徐宁与钩镰手协同下钩","required_events":["lhm_drill_complete"]},
+		{"id":"lhm_hooks","label":"十二骑均先由钩镰枪破阵","required_events":["lhm_all_hook_broken"],"forbidden_events":["lhm_direct_break"]},
+		{"id":"lhm_han","label":"生擒韩滔","required_events":["lhm_han_captured"]},
+		{"id":"lhm_hu","label":"呼延灼败走青州","required_events":["lhm_hu_fled"]},
+	]
+func deploy_hint() -> String:
+	return "兵营可练钩镰枪手，搭配弓手与拒马迎骑。甲马靠近同伴时有连环护阵；引到草林或减速后，由两名钩镰手近身配合破阵。北、南辎重营付钱补充护军，拆掉可断援并延缓尚未出发的骑队。"
+func intro_lines() -> Array:
+	return [
+		{"who":"旁白","key":"narrator","text":"时迁盗甲、汤隆招师，徐宁已到梁山传授钩镰枪法。呼延灼的十二骑甲马分屯两路，官军辎重营仍在补充护军。"},
+		{"who":"徐宁","key":"xu_ning","text":"枪手须有同伴照应，逼近受阻的马队下钩。可先在南面教场练引骑撤步；也可直接练兵布阵，莫让弓手和工人独自迎马。"},
+		{"who":"宋江","key":"song_jiang","text":"先经营中军。北、南草林可伏兵，外侧辎重营可断援；守住冲锋后再反攻，营地和已经打下的战果都留在这里。"},
+	]
+func apply_overrides(defs: Dictionary, _abilities: Dictionary) -> void:
+	defs.hall.produces=["lou_luo","song_jiang","xu_ning","lin_chong","hua_rong"]
+	defs.barracks.produces=["liang_dao","liang_qiang","liang_gong","liang_ma","gou_lian"]
+	# The shared hook soldier had no economic fields; combat stats stay shared.
+	var recruitment := {"pop":2,"cost_gold":36,"cost_wood":24,"train_time":20.0,"trained_at":"barracks","min_age":1}
+	for field in recruitment: defs.gou_lian[field]=recruitment[field]
+	defs["hook_training_dummy"]={"name":"教场演练骑","hp":120,"atk":0,"speed":60,"cavalry":true,"radius":13,"defeat_outcome":"subdued","art_variant":"hook_training_dummy","pop":0}
+func paint_map(map: GameMap) -> void:
+	map.fill_rect(0,0,64,60,T.GRASS)
+	map.fill_rect(24,10,34,42,T.PLAIN)
+	for lane in LANES:
+		map.fill_ellipse(Vector2(lane),8,7,T.MARSH)
+		map.fill_ellipse(Vector2(lane),6,5,T.REEDS)
+	map.paint_path([Vector2(CAMP),Vector2(20,28),Vector2(34,29),Vector2(ENEMY_CAMP)],2,T.ROAD)
+	map.paint_path([Vector2(13,27),Vector2(25,17),Vector2(36,15),Vector2(NORTH_POST)],1,T.ROAD)
+	map.paint_path([Vector2(14,35),Vector2(24,45),Vector2(36,48),Vector2(SOUTH_POST)],1,T.ROAD)
+	map.fill_ellipse(Vector2(7,9),7,6,T.FOREST)
+	map.fill_ellipse(Vector2(26,53),7,4,T.FOREST)
+	map.fill_rect(3,21,16,17,T.GRASS)
+	map.fill_rect(12,43,11,6,T.PLAIN)
+func decorate(map: GameMap) -> void:
+	map.decor=[["banner",CAMP+Vector2i(-2,0),80.0],["banner",ENEMY_CAMP+Vector2i(2,-1),80.0],["forest",Vector2i(25,9),42.0],["rocks",Vector2i(36,31),40.0]]
+func alive(u) -> bool: return is_instance_valid(u) and u.hp>0 and u.story_outcome==""
+func _guard(b,key: String,cell: Vector2i) -> Unit:
+	var u: Unit=b.spawn_at(key,1,cell)
+	u.set_stance(Unit.STANCE_DEFEND)
+	return u
+func _resource(b,key: String,cell: Vector2i,amount: float) -> Unit:
+	var u: Unit=b.spawn_at(key,0,cell)
+	u.res_left=amount
+	return u
+func deploy(b) -> void:
+	hall=b.spawn_at("hall",0,CAMP)
+	hall.display_name="梁山中军"
+	b.spawn_at("barracks",0,Vector2i(8,36))
+	song=b.spawn_at("song_jiang",0,Vector2i(14,29))
+	xu=b.spawn_at("xu_ning",0,Vector2i(15,31))
+	for i in range(6): workers.append(b.spawn_at("lou_luo",0,Vector2i(5+i,25)))
+	for i in range(6): b.spawn_at(["gou_lian","gou_lian","liang_qiang","liang_qiang","liang_gong","liang_gong"][i],0,Vector2i(17+i%3,28+i/3))
+	for cell in [Vector2i(5,20),Vector2i(10,20)]: _resource(b,"gold_mine",cell,2400)
+	for cell in [Vector2i(5,39),Vector2i(8,41),Vector2i(12,40),Vector2i(3,33)]: _resource(b,"tree",cell,1500)
+	for cell in [Vector2i(36,10),Vector2i(38,51)]: _resource(b,"gold_mine",cell,4500)
+	for cell in [Vector2i(33,10),Vector2i(35,52)]: _resource(b,"tree",cell,1800)
+	enemy_base=b.spawn_at("hall",1,ENEMY_CAMP)
+	enemy_base.display_name="官军大营"
+	for cell in [NORTH_POST,SOUTH_POST]:
+		var post: Unit=b.spawn_at("barracks",1,cell)
+		post.display_name="北路辎重营" if cell==NORTH_POST else "南路辎重营"
+		posts.append(post)
+		for i in range(3): _guard(b,"guan_dao" if i<2 else "guan_gong",cell+Vector2i(-3,i*2-2))
+	for lane in range(2):
+		for i in range(6):
+			var u: Unit=_guard(b,"lian_huan_ma",RIDER_POSTS[lane]+Vector2i(i/3,(i%3-1)*2))
+			u.set_meta("wave_group",lane)
+			u.set_meta("formation_broken",false)
+			u.set_meta("wave_state","waiting")
+			riders.append(u)
+	hu=_guard(b,"hu_yanzhuo",Vector2i(51,29))
+	hu.defeat_outcome="retreated"
+	han=_guard(b,"han_tao",Vector2i(50,33))
+	han.defeat_outcome="captured"
+	for cell in [Vector2i(49,26),Vector2i(49,35)]: _guard(b,"guan_gong",cell)
+	for cell in [Vector2i(58,24),Vector2i(58,37)]:
+		enemy_nodes.append(_resource(b,"gold_mine",cell,1800))
+	for i in range(2): enemy_workers.append(b.spawn_at("lou_luo",1,Vector2i(58,27+i*7)))
+func on_start(b) -> void:
+	b.faction_res[1]={"gold":160.0,"wood":240.0}
+	for i in range(workers.size()):
+		var node=b.nearest_free_gold(workers[i].position,null,workers[i]) if i<3 else b.nearest_resource(workers[i].position,"wood")
+		if node!=null: workers[i].order_gather(node)
+	for i in range(enemy_workers.size()): enemy_workers[i].order_gather(enemy_nodes[i])
+	b.mission.begin("lhm_rts","扎营 · 枪阵迎骑","经营前营、兵营补充钩镰与弓手；两路草林可迎骑，北南辎重营可断援。教场演练可选。")
+	b.mission.add_action("lhm_drill_reset","摆好教场演练骑（可选）",DRILL+Vector2i(-2,0),["xu_ning"],1,64)
+	b.mission.add_actor_locator("lhm_drill_reset","xu_ning")
+	for cell in [LANES[0],LANES[1],NORTH_POST,SOUTH_POST]: b.lit_cells[cell]=20.0
+	b.msg("首队甲马约150秒后沿北草林进军，后队约270秒走南路。兵营已能训练钩镰手；派军争辎重营可断护军并延迟该路骑队。",10)
+func on_mission_action(b,action_id: String,_actor) -> void:
+	if action_id!="lhm_drill_reset" or drill_complete: return
+	xu=_actor # A normally re-recruited Xu Ning can still teach after a loss.
+	if is_instance_valid(dummy): dummy.queue_free(); b.units.erase(dummy)
+	dummy=b.spawn_at("hook_training_dummy",1,DRILL_ENTRY)
+	dummy.passive=true
+	dummy.set_stance(Unit.STANCE_PASSIVE)
+	drill_lure=null
+	drill_entered=false
+	drill_withdrew=false
+	drill_coordinated=false
+	var action: Dictionary=b.mission.actions.lhm_drill_reset
+	action.done=false
+	action.button.disabled=false
+	action.actor_button.disabled=false
+	action.marker.show()
+	b.mission.set_status("教场：先让一名非钩镰单位靠近演练骑，再退到两名枪手身后；让徐宁与钩镰手近身击倒它。可随时重摆。")
+func _drill_tick(b) -> void:
+	if not alive(dummy) or drill_complete: return
+	if not drill_entered:
+		for u in b.units:
+			if alive(u) and u.faction==0 and not u.is_building and not u.is_worker and u.key not in HOOK_KEYS and u.position.distance_to(dummy.position)<80:
+				drill_lure=u
+				drill_lure_origin=u.position
+				drill_entered=true
+				dummy.order_move(b.map.cell_to_world(DRILL))
+				b.msg("演练骑已入道：诱敌手退到教场西侧、枪手身后，徐宁与一名钩镰手再上前合击。",5)
+				break
+	elif alive(drill_lure) and not drill_withdrew and drill_lure.position.x<float(DRILL.x-1)*32 \
+			and drill_lure.position.distance_to(drill_lure_origin)>80 and drill_lure.position.distance_to(dummy.position)>128:
+		drill_withdrew=true
+		b.msg("诱敌手已经退开，可以协同下钩。",4)
+	if drill_withdrew and not drill_coordinated:
+		var attackers: Array=_hook_team(b,dummy).filter(func(u): return u._target==dummy and u.position.distance_to(dummy.position)<=u.atk_range+u.radius+dummy.radius+8)
+		drill_coordinated=attackers.has(xu) and attackers.any(func(u): return u.key=="gou_lian")
+func _hook_team(b,rider) -> Array:
+	return b.units.filter(func(u): return alive(u) and u.faction==0 and u.key in HOOK_KEYS and not u.garrisoned and not u.is_captive and u._stun_t<=0 and u._disarm_t<=0 and u.position.distance_to(rider.position)<=96 and b.map._segment_open(u.position,rider.position,u.movement_profile))
+func _rider_tick(b) -> void:
+	for u in riders:
+		if not alive(u) or bool(u.get_meta("formation_broken",false)): continue
+		var neighbors: int=riders.filter(func(other): return other!=u and alive(other) and not bool(other.get_meta("formation_broken",false)) and other.position.distance_to(u.position)<150).size()
+		if neighbors>0: u.apply_damage_reduction(0.5,1.25,LINK_SOURCE)
+		else: u._damage_reduction_sources.erase(LINK_SOURCE); u._refresh_damage_reduction()
+		var terrain: int=b.map.t_world(u.position)
+		var impeded: bool=terrain in [T.REEDS,T.MARSH] or u.temp_speed<0.8
+		var hooks: Array=_hook_team(b,u)
+		if impeded and hooks.size()>=2 and hooks.any(func(h): return h._target==u and h.position.distance_to(u.position)<=h.atk_range+u.radius+h.radius+8):
+			u.set_meta("formation_broken",true)
+			u.set_meta("wave_state","broken")
+			u._damage_reduction_sources.erase(LINK_SOURCE)
+			u._refresh_damage_reduction()
+			u.apply_slow(0.45,4)
+			broken_count+=1
+			b.show_story_art("broken_cavalry",u.position,72,1.5)
+			b.mission.mark("lhm_break_%d"%broken_count,"钩镰协同破开第%d骑连环阵"%broken_count)
+	if broken_count==12: b.mission.mark("lhm_all_hook_broken","十二骑均被钩镰枪协同破阵")
+func _send_wave(b,lane: int) -> void:
+	waves[lane].sent=true
+	for u in riders:
+		if alive(u) and int(u.get_meta("wave_group"))==lane:
+			u.set_meta("wave_state","charging")
+			u.order_amove(b.map.cell_to_world(LANES[lane]))
+			u.order_amove(hall.position,true)
+	b.msg(("北路" if lane==0 else "南路")+"甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。",7)
+func _support_tick(b,delta: float) -> void:
+	if not alive(enemy_base): return
+	escort_t-=delta
+	if escort_t>0: return
+	escort_t=28
+	escorts=escorts.filter(func(u): return alive(u))
+	if escorts.size()>=12: return
+	for lane in range(2):
+		if escorts.size()>=12: break
+		if not alive(posts[lane]): continue
+		var key: String="guan_gong" if ai_trained%3==2 else "guan_dao"
+		var cost: Dictionary=b._defs.liang_gong if key=="guan_gong" else b._defs.liang_dao
+		if not b.faction_spend(1,int(cost.cost_gold),int(cost.cost_wood)): continue
+		var u: Unit=_guard(b,key,(NORTH_POST if lane==0 else SOUTH_POST)+Vector2i(-3,0))
+		u.set_meta("source_lane",lane)
+		u.order_amove(b.map.cell_to_world(LANES[lane]))
+		u.order_amove(hall.position,true)
+		escorts.append(u)
+		ai_trained+=1
+		ai_spent_gold+=int(cost.cost_gold)
+		ai_spent_wood+=int(cost.cost_wood)
+func process(b,delta: float) -> void:
+	if not alive(hall) or not alive(song): return
+	elapsed+=delta
+	_support_tick(b,delta)
+	strategy_t-=delta
+	if strategy_t>0: return
+	strategy_t=0.25
+	_drill_tick(b)
+	_rider_tick(b)
+	for lane in range(2):
+		if waves[lane].sent: continue
+		if elapsed>=float(waves[lane].time)-25 and not waves[lane].warned:
+			waves[lane].warned=true
+			b.lit_cells[RIDER_POSTS[lane]]=30.0
+			b.msg(("北路" if lane==0 else "南路")+"甲马正在集结，约25秒后出发。",6)
+		if elapsed>=float(waves[lane].time): _send_wave(b,lane)
+	var new_title: String="反攻 · 拔除官军大营" if lhm_killed>=12 else "迎骑 · 经营与两路作战"
+	if new_title!=phase_title: phase_title=new_title; b.mission.set_title(phase_title)
+	if manor_fallen:
+		for u in riders:
+			if alive(u): b.lit_cells[b.map.world_to_cell(u.position)]=2.0
+	if manor_fallen and lhm_killed>=12:
+		if alive(hu): hu.resolve_story("retreated")
+		b.mission.mark("lhm_victory","十二骑连环马与官军大营均已解除，中军守住")
+		b.win("官军大营已破，十二骑连环马尽数击溃；梁山中军守住。呼延灼败走青州。")
+func on_unit_died(b,u) -> void:
+	if u==hall or u==song:
+		b.lose("%s失守。可重开本局，先补枪兵、拒马与人口，再安排两路防守。"%u.display_name)
+	elif u in riders:
+		lhm_killed+=1
+		if not bool(u.get_meta("formation_broken",false)): b.mission.mark("lhm_direct_break","部分甲马由正面兵力击溃，未先协同钩破阵")
+	elif u==enemy_base:
+		manor_fallen=true
+		b.mission.mark("lhm_manor_fallen","官军大营已毁，护军停止补充；残余甲马位置已标明")
+	elif u==xu and not drill_complete:
+		b.msg("徐宁阵亡，教场暂缺教头；可在中军重新招募后继续演练，现有钩镰兵仍可作战。",7)
+	elif u in posts:
+		var lane: int=posts.find(u)
+		if not waves[lane].sent: waves[lane].time+=45.0; waves[lane].warned=false
+		b.mission.mark("lhm_supply_%d"%lane,("北路" if lane==0 else "南路")+"辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场")
+func on_unit_resolved(b,u,outcome: String) -> void:
+	if u==han and outcome=="captured": b.mission.mark("lhm_han_captured","韩滔被生擒，仍按敌将看押")
+	elif u==hu and outcome=="retreated": b.mission.mark("lhm_hu_fled","呼延灼骑踢雪乌骓败走青州")
+	elif u==dummy:
+		if drill_entered and drill_withdrew and drill_coordinated and _hook_team(b,u).size()>=2 and alive(xu) and xu.position.distance_to(u.position)<=96:
+			drill_complete=true
+			b.mission.mark("lhm_drill_complete","徐宁与钩镰手在诱骑撤步后共同下钩，教场演练完成")
+			var action: Dictionary=b.mission.actions.lhm_drill_reset
+			action.done=true
+			action.button.disabled=true
+			action.actor_button.disabled=true
+			action.marker.hide()
+		else: b.msg("演练骑倒得过早或搭档不齐；可重新摆骑，再试诱入、退开、两人下钩。",6)
+func top_status(_b) -> String:
+	var wave_text: Array[String]=[]
+	for lane in range(2):
+		wave_text.append(("北" if lane==0 else "南")+("已出击" if waves[lane].sent else "%d秒"%maxi(0,ceili(float(waves[lane].time)-elapsed))))
+	return "连环马 · 击溃%d/12 · 钩破%d/12 · %s · 辎重营%d/2"%[lhm_killed,broken_count," / ".join(wave_text),posts.filter(func(u): return alive(u)).size()]

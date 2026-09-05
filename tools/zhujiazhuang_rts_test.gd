@@ -263,7 +263,7 @@ func _mode_regression() -> void:
 		await _dispose(b)
 	for index in [0,1,3,4,5,6,7]:
 		var b = await _start("",index)
-		check(b.level.id() == "level%d"%(index+1) and not b.economy and b.units.size() > 0,"other chapter startup: level%d"%(index+1))
+		check(b.level.id() == "level%d"%(index+1) and b.economy == (index==3) and b.units.size() > 0,"other chapter startup and expected economy: level%d"%(index+1))
 		await _dispose(b)
 
 func _run() -> void:

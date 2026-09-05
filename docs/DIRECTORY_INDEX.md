@@ -11,7 +11,11 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/home_setup_20260905/`：本机接续日志、动作检查报告和主菜单截图。
 - `.godot/`：本机导入缓存及临时验证文件，不入库。
 - `docs/WORKLOG.md`、`docs/SOURCE_SETUP.md`：当前 Git 开发进度和跨电脑启动说明。
-- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄已进入样板，其余关卡后续实施。
+- `docs/CAMPAIGN_FUN_REWORK_20260905.md`：八关总体设计与官方参考；祝家庄、连环马已进入样板，其余六关后续实施。
+- `docs/LIANHUANMA_RTS_20260905.md`、`scripts/levels/level4_lianhuanma_rts.gd`：当前连环马菜单入口、持续经营/反骑/辎重营与教场说明；旧level4脚本保留作历史参考。
+- `tools/lianhuanma_rts_test.gd`、`tools/lianhuanma_drill_test.gd`、`tools/lianhuanma_rts_visual.gd`：本关边界、两条实战、教场输入及图形验证。
+- `qa/lianhuanma_rts_20260905/`：最终182项、三张图、输入哈希；attempts保留失败尝试，不属于最终通过项。
+- `docs/RELEASE_READINESS_20260905.md`：首个可售版本的当前证据、缺口与后续验收，未宣称已经达到发行质量。
 - `docs/ZHUJIAZHUANG_RTS_20260905.md`：祝家庄 RTS 样板玩法、实现边界及验证入口。
 - `scripts/levels/level3_zhujiazhuang_rts.gd`：当前祝家庄菜单入口；旧 `level3_zhujiazhuang.gd` 保留作原流程参考。
 - `tools/zhujiazhuang_rts_test.gd`、`tools/zhujiazhuang_rts_visual.gd`：场内回归、真实自动路线与图形检查。
