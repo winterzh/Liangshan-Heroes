@@ -348,6 +348,13 @@ static func draw_unit(unit, death_f: float, fallback_texture: Texture2D = null, 
 	unit.draw_set_transform_matrix(Transform2D.IDENTITY)
 	var tex := _unit_texture(unit, fallback_texture)
 	if tex != null and not unit.is_bound_person():
+		if preload("res://scripts/campaign_gate_visual.gd").enabled(unit):
+			var tr := preload("res://scripts/campaign_gate_visual.gd").source_transform(unit, tex.get_size(), CAST_SHEAR)
+			tr.origin += CAST_OFFSET
+			unit.draw_set_transform_matrix(ground * GameMap.ISO_INV * tr)
+			unit.draw_texture_rect(tex, Rect2(Vector2.ZERO, tex.get_size()), false, Color(0.03,0.06,0.04,0.25 * opacity))
+			unit.draw_set_transform_matrix(Transform2D.IDENTITY)
+			return
 		var size: float = GameMap.building_visual_px(GameMap.footprint_half_for(unit.radius)) if unit.is_building else unit.radius * 3.7 * unit.visual_scale
 		var foot := 0.78 if unit.is_building else 0.82
 		var pair_origin: Vector2 = (unit.story_assist_partner.position - unit.position) * 0.5 if unit.story_assistance_active() else Vector2.ZERO

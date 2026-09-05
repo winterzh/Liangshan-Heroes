@@ -353,8 +353,70 @@ func focus_action(action_id: String) -> bool:
 	if action.done:
 		return false
 	battle.center_camera_cell(action.cell)
-	_status.text = "已定位：%s。请自行选人并右键场景标记。" % action.label
+	_status.text = String(action.get("blocked_reason", ""))
+	if _status.text.is_empty():
+		_status.text = "已定位：%s。选中%s后右键旗标，停留%s秒。" % [action.label, _actor_labels(action.actors), str(action.duration)]
 	return true
+
+## Locator only: select and show the required actor without issuing any order.
+func add_actor_locator(action_id: String, actor_key: String) -> void:
+	var button := Button.new()
+	button.text = "选中 · %s" % _actor_labels([actor_key])
+	button.tooltip_text = "选中并定位人物；随后右键任务旗标，才会前往接应。"
+	button.pressed.connect(func():
+		for u in battle.units:
+			if is_instance_valid(u) and u.key == actor_key and _valid_action_actor(u, actions[action_id]):
+				battle.select_single(u, false)
+				battle.center_camera_cell(battle.map.world_to_cell(u.position))
+				_status.text = "已选中%s；右键%d号旗标办理%s。" % [u.display_name, actions[action_id].marker.number, actions[action_id].label]
+				return
+		_status.text = "所需人物无法行动：%s。" % _actor_labels([actor_key]))
+	_buttons.add_child(button)
+	actions[action_id]["actor_button"] = button
+
+func block_action(action_id: String, reason: String) -> void:
+	if not actions.has(action_id) or actions[action_id].done: return
+	var action: Dictionary = actions[action_id]
+	if action.get("blocked_reason", "") == reason: return
+	action["blocked_reason"] = reason
+	if active_action_id == action_id: on_player_order(_actor)
+	if is_instance_valid(action.button):
+		action.button.text = "无法办理 · %s" % action.label
+		action.button.tooltip_text = reason
+	if is_instance_valid(action.get("actor_button")): action.actor_button.disabled = true
+	action.marker.hide()
+	_status.text = reason
+
+## Called only for a real non-queued ground move. The selected actor must reach
+## the task center, rather than an outlying formation slot. No unselected unit
+## is recruited and no move/attack/hold intent is synthesized by the mission.
+func prepare_manual_move(movers: Array, target: Vector2) -> Dictionary:
+	var nearest := ""
+	var best := INF
+	for action_id in actions:
+		var action: Dictionary = actions[action_id]
+		if action.done: continue
+		var distance: float = target.distance_to(battle.map.cell_to_world(action.cell))
+		if distance <= float(action.click_reach) and distance < best:
+			nearest = String(action_id)
+			best = distance
+	if nearest.is_empty(): return {}
+	var action: Dictionary = actions[nearest]
+	if not String(action.get("blocked_reason", "")).is_empty():
+		_status.text = action.blocked_reason
+		return {}
+	var destination: Vector2 = battle.map.cell_to_world(action.cell)
+	var candidate = null
+	best = INF
+	for u in movers:
+		if _valid_action_actor(u, action) and u.position.distance_squared_to(destination) < best:
+			candidate = u
+			best = u.position.distance_squared_to(destination)
+	if candidate == null:
+		_status.text = "需要%s：请选中该人物，再右键%d号旗标。" % [_actor_labels(action.actors), action.marker.number]
+		return {}
+	_status.text = "%s正在前往%d号旗标；到场停留%s秒办理。" % [candidate.display_name, action.marker.number, str(action.duration)]
+	return {"actor":candidate, "target":destination}
 
 func _refresh_marker_captions() -> void:
 	for action_id in actions:
@@ -368,7 +430,7 @@ func request_action(action_id: String) -> bool:
 	if battle.phase != battle.Phase.FIGHT or not actions.has(action_id):
 		return false
 	var action: Dictionary = actions[action_id]
-	if action.done or active_action_id == action_id:
+	if action.done or not String(action.get("blocked_reason", "")).is_empty() or active_action_id == action_id:
 		return false
 	var destination: Vector2 = battle.map.cell_to_world(action.cell)
 	var candidate = null
@@ -459,7 +521,7 @@ func _try_manual_action() -> bool:
 	var best_actor_distance := INF
 	for action_id in actions:
 		var action: Dictionary = actions[action_id]
-		if action.done:
+		if action.done or not String(action.get("blocked_reason", "")).is_empty():
 			continue
 		var destination: Vector2 = battle.map.cell_to_world(action.cell)
 		for u in battle.units:
@@ -559,6 +621,7 @@ func tick(delta: float) -> void:
 	action.done = true
 	if is_instance_valid(action.button):
 		action.button.disabled = true
+	if is_instance_valid(action.get("actor_button")): action.actor_button.disabled = true
 	action.marker.hide()
 	active_action_id = ""
 	_actor = null

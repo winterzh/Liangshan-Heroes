@@ -1,5 +1,7 @@
 # 战役专用美术交接
 
+2026-09-05 全库四向新增请求：本机实际盘点164个可移动定义，通用四向idle24；当前英雄/驻守缺口、完整逐key清单及首批试制见 [全库四向状态](CHARACTER_DIRECTION4_20260905.md)。本轮内置image_gen的两张候选均为RGB棋盘背景，未达到透明要求，**没有安装新角色图**；不覆盖下文已验收资源，不把试制或剧情变体计成通用四向完成。
+
 2026-08-31。此前批次使用内置 image_gen 实际生成并接入，未调用 API/CLI 付费后备；用户后续明确要求改用网页ChatGPT，新增网页批次由主任务操作浏览器，独立切片记录如下。源图保存在 `assets/campaign/source/`，该目录有 `.gdignore`，运行时只用 `anim/`、`objects/`、`portraits/`。完整提示词、淘汰原因见 `assets/campaign/generation_manifest.json`；后续人物补帧见其引用的 `motion_generation_manifest.json` 和 `constable_generation_manifest.json`。
 
 ## 2026-09-02 图鉴素材复用复核

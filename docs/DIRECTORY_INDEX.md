@@ -18,6 +18,11 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/zhujiazhuang_rts_20260905/`：本轮验证结果、图形截图与文件收据。
 - `tools/zhujiazhuang_rts_feedback_test.gd`、`tools/zhujiazhuang_rts_gate_visual.gd`：守军接敌/施法回归、双英雄冲关对照及寨门轴向截图。
 - `qa/zhujiazhuang_rts_feedback_20260905/`：试玩问题复现与修复后的路线、守军和门体对照记录；不覆盖初版样板证据。
+- `scripts/campaign_gate_visual.gd`：按原图墙脚锚定门墙连接与阴影，仅本关两个门启用。
+- `tools/zhujiazhuang_gate_contact_test.gd`、`tools/zhujiazhuang_gate_contact_visual.gd`：群选接应回归与门墙/开门图形检查。
+- `qa/zhujiazhuang_gate_contact_20260905/`：本轮门墙、接应、路线与跨模式QA。
+- `tools/character_direction4_inventory.gd`、`docs/CHARACTER_DIRECTION4_20260905.md`：全库角色四向清单生成与制作状态。
+- `qa/character_direction4_inventory_20260905/`：逐key缺口和首批被拒收候选；候选目录不属于生产素材。
 
 ## 2026-09-05 测试上传与 GitHub 接入
 

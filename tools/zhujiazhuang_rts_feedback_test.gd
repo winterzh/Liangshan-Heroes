@@ -95,6 +95,7 @@ func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")
 	AudioServer.set_bus_mute(0,true)
 	out_dir = "res://qa/zhujiazhuang_rts_feedback_20260905"
+	if not OS.get_environment("RTS_TEST_OUT").is_empty(): out_dir = OS.get_environment("RTS_TEST_OUT")
 	route = OS.get_environment("RTS_FEEDBACK_TEST")
 	if route == "": route = "guards"
 	if route == "guards":

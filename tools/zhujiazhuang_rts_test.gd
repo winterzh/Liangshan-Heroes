@@ -209,7 +209,7 @@ func _play(b) -> void:
 		elif target_stage == "tower":
 			# Player strategy: clear the entrance's real tower before attacking the
 			# manor, rather than walking the entire army past a live fortification.
-			var tower_cells: Array = [Vector2i(17,16),Vector2i(17,26)] if route == "inside" else [Vector2i(17,26)]
+			var tower_cells: Array = [Vector2i(17,20),Vector2i(17,30)] if route == "inside" else [Vector2i(17,30)]
 			var towers: Array = []
 			var tower_cell: Vector2i = tower_cells[0]
 			for candidate_cell in tower_cells:

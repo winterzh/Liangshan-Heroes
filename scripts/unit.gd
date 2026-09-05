@@ -4049,9 +4049,15 @@ func _draw_building() -> void:
 		if not static_campaign_visual:
 			# A wall-facing gate can mirror its authored isometric axis without
 			# rotating the roof, collision footprint, health bar or name.
-			if bool(get_meta("building_visual_mirror",false)):
+			if preload("res://scripts/campaign_gate_visual.gd").enabled(self):
+				var gate_transform := preload("res://scripts/campaign_gate_visual.gd").source_transform(self, tex.get_size())
+				draw_set_transform_matrix(GameMap.ISO_INV * gate_transform)
+				draw_texture_rect(tex, Rect2(Vector2.ZERO, tex.get_size()), false, tint)
+			elif bool(get_meta("building_visual_mirror",false)):
 				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(Vector2(-1,0),Vector2(0,1),Vector2.ZERO))
-			draw_texture_rect(tex, Rect2(-s * 0.5, -s * foot, s, s), false, tint)
+				draw_texture_rect(tex, Rect2(-s * 0.5, -s * foot, s, s), false, tint)
+			else:
+				draw_texture_rect(tex, Rect2(-s * 0.5, -s * foot, s, s), false, tint)
 			draw_set_transform_matrix(GameMap.ISO_INV)
 		if key=="tavern" and battle.map.environment_style=="level7":
 			# 酒望有自己的布幌，不再仅靠普通民居和悬浮名字辨认。

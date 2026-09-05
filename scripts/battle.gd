@@ -9679,6 +9679,10 @@ func _issue_order(p: Vector2, queued := false) -> void:
 		return
 	var lp := to_logic(p)
 	var targets := _formation_targets(movers, lp, 30.0, _formation_origin(movers, queued))
+	if not queued and mission != null:
+		var task_movers: Array = movers.filter(func(u): return not u.is_worker or (node == null and rep == null))
+		var task_move: Dictionary = mission.prepare_manual_move(task_movers, lp)
+		if not task_move.is_empty(): targets[movers.find(task_move.actor)] = task_move.target
 	var move_cap := _group_speed_cap(movers)
 	var repaired := false
 	var ground_movers: Array = []

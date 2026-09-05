@@ -140,13 +140,14 @@ func deploy(b) -> void:
 		resource_guards.append(_guard(b,spec[0],spec[1]))
 	gate = b.spawn_at("zhu_gate",1,MAIN_GATE)
 	gate.display_name = "祝家庄正门"
-	gate.set_meta("building_visual_mirror",true)
+	gate.set_meta("campaign_gate_wall_span",Vector2(0,128))
 	side_gate = b.spawn_at("zhu_gate",1,SIDE_GATE)
 	side_gate.display_name = "祝家庄偏门"
-	side_gate.set_meta("building_visual_mirror",true)
+	side_gate.set_meta("campaign_gate_wall_span",Vector2(0,128))
 	# Existing shared towers cover both entrances. Catapults can outrange them;
 	# melee defenders protect the towers, making an escorted siege force useful.
-	for c in [Vector2i(17,26),Vector2i(17,16)]:
+	# Offset along the inner wall so roofs do not overlap the gatehouse.
+	for c in [Vector2i(17,30),Vector2i(17,20)]:
 		var tower: Unit = b.spawn_at("arrow_tower",1,c)
 		tower.display_name = "护庄箭楼"
 	outpost = b.spawn_at("barracks",1,OUTPOST)
@@ -195,8 +196,10 @@ func _introduce_sun(b) -> void:
 	sent_sun = true
 	sun = b.spawn_at("sun_li",0,Vector2i(52,25))
 	sun.order_hold_position()
-	b.mission.add_action("zhu_rts_inside","孙立：接应内应开偏门",INNER_CONTACT,["sun_li"],5.0,64.0)
-	b.msg("孙立带来内应消息：可由北路到偏门接应；也可继续准备器械强攻正门。",7.0)
+	b.mission.add_action("zhu_rts_inside","接应内应，打开偏门",INNER_CONTACT,["sun_li"],5.0,64.0)
+	b.mission.add_actor_locator("zhu_rts_inside","sun_li")
+	if not _alive(side_gate): b.mission.block_action("zhu_rts_inside","偏门已被攻破，无需再接应；可直接入庄救人。")
+	b.msg("孙立已到前营。点“选中·孙立”，再右键3号旗标；到场停留5秒即可接应开偏门。",9.0)
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	match action_id:
@@ -329,6 +332,9 @@ func on_unit_died(b, u) -> void:
 		b.mission.mark("zhu_gate_breached","正门已被攻破，军队可直接入庄")
 	elif u == side_gate:
 		b.mission.mark("zhu_side_breached","偏门被强攻攻破")
+		b.mission.block_action("zhu_rts_inside","偏门已被攻破，无需再接应；可直接入庄救人。")
+	elif u == sun:
+		b.mission.block_action("zhu_rts_inside","孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。")
 	elif u == enemy_base:
 		manor_fallen = true
 		b.mission.mark("zhu_manor_fallen","祝家庄大营已毁，敌军停止补兵；护送时迁回前营即可收军")
