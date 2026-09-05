@@ -1,0 +1,57 @@
+GitHub increment source map - 2026-09-05
+
+Remote: https://github.com/winterzh/Liangshan-Heroes.git
+Branch: codex/sync-20260905-stable
+Base commit: b534fd36687403cc3bba06a1161ec8eb4950dc11
+
+All copies preserve the repository-relative path and file bytes:
+
+  $WORKSPACE_ROOT/<relative path> -> $FRESH_CLONE_ROOT/<relative path>
+
+The local absolute workspace and temporary-clone paths are intentionally not
+stored in this public receipt.
+
+Required production and provenance set (259 files)
+
+  assets/anim/guan_{dao,gong,jingqi,qi}_{walk,attack,death}_{se,sw,ne,nw}.png
+    -> same path (48 files)
+  matching assets/anim/*.png.import -> same path (48 files)
+  assets/anim/guan_gong_idle_sw.png -> same path (1 file)
+  assets/direction4/skirmish_top4_actions_direction4_manifest.json -> same path
+  assets/direction4/skirmish_archer_sw_revision_20260905.json -> same path
+  scripts/{art_db,battle,defs,unit,world_shadow}.gd -> same path (5 files)
+  scripts/skirmish_frame_alignment.gd{,.uid} -> same path (2 files)
+  selected tools tests/audits -> same path (10 files)
+  docs/STEAM_TEST_UPDATE_20260905{,_ENGLISH}.txt -> same path (2 files)
+  manifest-derived QA provenance dependencies -> same path (141 files):
+    qa/skirmish_direction4_actions_20260905/{pipeline_config.json,commit_approval.json}
+    qa/skirmish_direction4_actions_20260905/staging/ (114 exact manifest-bound files)
+    qa/skirmish_direction4_actions_20260905/source/ (19 selected source-chain files)
+    qa/skirmish_direction4_fix_20260905/archer_before/ (4 exact files)
+    qa/skirmish_direction4_fix_20260905/source/ (2 exact files)
+
+Curated documentation and compact QA set (30 files)
+
+  docs/CAMPAIGN_ART.md -> same path
+  qa/skirmish_direction4_actions_20260905/README.md and selected compact
+    test/review JSON and helper sources -> same paths (8 files)
+  qa/skirmish_direction4_recheck_20260905/{README.md,runtime_probe.gd,
+    runtime_observations.json} -> same paths (3 files)
+  qa/skirmish_direction4_fix_20260905/README.md, blood notes, six test
+    scripts and ten compact JSON reports -> same paths (18 files)
+
+Sync receipts (2 files)
+
+  qa/steam_test_build_20260905/github_sync_source_map_20260905.txt -> same path
+  qa/steam_test_build_20260905/github_sync_precommit_receipt_20260905.json -> same path
+
+Expected first increment: 291 paths total. The copy and staging step must reject
+any missing path, duplicate path, unexpected extra path, symlink, secret pattern,
+or file at least 50 MiB. Never use git add -A on the shared workspace.
+
+Explicit exclusions
+
+  .godot/, __pycache__/, *.pyc, generated logs, screenshots, rejected contact
+  sheets, multi-megabyte coverage snapshots, old failure artifacts, Steam VDFs,
+  export/package snapshots, docs/STEAM_TEST_BUILD_20260905.md and
+  qa/steam_test_build_20260905/README.md.

@@ -1,5 +1,6 @@
 extends Node
 const CampaignArt := preload("res://scripts/campaign_art.gd")
+const SkirmishFrameAlignment := preload("res://scripts/skirmish_frame_alignment.gd")
 ## 美术资源管理（Autoload: Art）。
 ## 把 Imagen 生成的整张图集放进 assets/ 即自动切片使用；缺图时返回 null，
 ## 单位/地块会用代码绘制的占位图形代替，随时可以无缝换皮。
@@ -634,6 +635,7 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 		var directional_tex: Texture2D = load(directional_path) if not directional_path.is_empty() else null
 		if directional_tex != null:
 			var directional_frames := _slice_anim_strip(directional_tex)
+			SkirmishFrameAlignment.annotate(directional_frames, key, state, direction)
 			_anim_cache[directional_ck] = directional_frames
 			return directional_frames
 	var ck := "legacy|%s|%s" % [key, state]
@@ -649,6 +651,7 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 			var cached_idle_tex: Texture2D = load(cached_idle_path) if not cached_idle_path.is_empty() else null
 			if cached_idle_tex != null:
 				var cached_idle_frames := _slice_anim_strip(cached_idle_tex)
+				SkirmishFrameAlignment.annotate(cached_idle_frames, key, "idle", direction)
 				_anim_cache[directional_ck] = cached_idle_frames
 				return cached_idle_frames
 		if not directional_ck.is_empty():
@@ -677,6 +680,7 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 			var idle_tex: Texture2D = load(idle_path) if not idle_path.is_empty() else null
 			if idle_tex != null:
 				var idle_frames := _slice_anim_strip(idle_tex)
+				SkirmishFrameAlignment.annotate(idle_frames, key, "idle", direction)
 				_anim_cache[directional_ck] = idle_frames
 				return idle_frames
 		# 定向负查也落缓存；绝大多数旧素材不会因此每帧重复访问ResourceLoader。

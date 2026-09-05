@@ -31,7 +31,8 @@ const UNITS := {
 		"pop": 1, "cost_gold": 24, "cost_wood": 14, "train_time": 16.0, "trained_at": "barracks"},
 	"guan_dao": {"name": "官军刀盾兵", "hp": 85, "atk": 9, "cd": 1.0, "range": 24, "speed": 64},
 	"guan_gong": {"name": "官军弓手", "hp": 55, "atk": 7, "cd": 1.4, "range": 165, "speed": 64, "ranged": true, "radius": 10},
-	"guan_qi": {"name": "官军骑兵", "hp": 200, "atk": 13, "cd": 1.0, "range": 26, "speed": 112, "cavalry": true, "radius": 13},
+	"guan_qi": {"name": "官军骑兵", "hp": 200, "atk": 13, "cd": 1.0, "range": 26, "speed": 112,
+		"cavalry": true, "radius": 13, "weapon_profile": "spear"},
 	"gao_qiu": {"name": "高俅", "hp": 1830, "atk": 51, "cd": 0.8, "range": 30, "speed": 95,
 		"hero": true, "cavalry": true, "aura": "atk", "aura_r": 200, "aura_p": 1.2, "radius": 15,
 		"ability": "guan_charge",
@@ -117,7 +118,8 @@ const UNITS := {
 
 	# ---- 第5关 可选增强 ----
 	"guan_zhanchuan": {"name": "官军战船", "hp": 220, "atk": 14, "cd": 1.8, "range": 200, "speed": 70, "ranged": true, "radius": 16},
-	"guan_jingqi": {"name": "官军精骑", "hp": 175, "atk": 16, "cd": 0.9, "range": 26, "speed": 100, "cavalry": true, "radius": 13},
+	"guan_jingqi": {"name": "官军精骑", "hp": 175, "atk": 16, "cd": 0.9, "range": 26, "speed": 100,
+		"cavalry": true, "radius": 13, "weapon_profile": "spear"},
 
 	# ---- 第6关 大闹野猪林（鲁智深救林冲）----
 	"lu_zhishen": {"name": "鲁智深", "hp": 540, "atk": 28, "cd": 0.78, "range": 30, "speed": 86,

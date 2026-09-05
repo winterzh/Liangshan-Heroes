@@ -1,0 +1,995 @@
+{
+  "schema_version": 1,
+  "kind": "skirmish_direction4_semantic_anchors",
+  "coordinate_contract": "All coordinates are absolute pixels in the 1254x1254 cleaned source atlas. manual_source_rect is half-open [x0,y0,x1,y1].",
+  "review_method": "Assistant manually inspected full atlases plus coordinate and lower-contact zoom sheets. Each contact point was selected semantically, then independently checked for alpha evidence within radius 3. Rectangles were reviewed around each complete 8-connected figure and checked for pairwise non-overlap and zero uncovered visible alpha pixels.",
+  "anchor_evidence_radius_px": 3,
+  "reviewed_entry_count": 64,
+  "qa_overviews": [
+    "qa_walk_step_reviewed.png",
+    "qa_attack_strike_reviewed.png",
+    "qa_death_fall_reviewed.png",
+    "qa_death_down_reviewed.png",
+    "anchor_review/"
+  ],
+  "known_tight_margins": [
+    {
+      "pose": "walk_step",
+      "unit": "guan_jingqi",
+      "direction": "ne",
+      "edge": "bottom",
+      "transparent_margin_px": 3,
+      "reason": "Only 7 transparent pixels separate this figure from the next visual row; the adjacent rectangle retains 4px."
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_jingqi",
+      "direction": "se",
+      "edge": "right",
+      "transparent_margin_px": 3,
+      "reason": "Only 7 transparent pixels separate this figure from the next visual column; the adjacent rectangle retains 4px."
+    }
+  ],
+  "entries": [
+    {
+      "pose": "walk_step",
+      "unit": "guan_dao",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 154,
+      "source_y_px": 287,
+      "manual_source_rect": {
+        "x0": 46,
+        "y0": 35,
+        "x1": 267,
+        "y1": 294
+      },
+      "review_note": "目视复核行进姿态中实际承重靴底接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_dao",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 460,
+      "source_y_px": 291,
+      "manual_source_rect": {
+        "x0": 339,
+        "y0": 36,
+        "x1": 568,
+        "y1": 298
+      },
+      "review_note": "目视复核行进姿态中实际承重靴底接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_dao",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 755,
+      "source_y_px": 295,
+      "manual_source_rect": {
+        "x0": 705,
+        "y0": 41,
+        "x1": 926,
+        "y1": 302
+      },
+      "review_note": "目视复核行进姿态中实际承重靴底接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_dao",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1109,
+      "source_y_px": 296,
+      "manual_source_rect": {
+        "x0": 1006,
+        "y0": 35,
+        "x1": 1222,
+        "y1": 303
+      },
+      "review_note": "目视复核行进姿态中实际承重靴底接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_gong",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 193,
+      "source_y_px": 570,
+      "manual_source_rect": {
+        "x0": 110,
+        "y0": 323,
+        "x1": 292,
+        "y1": 577
+      },
+      "review_note": "目视复核行进姿态中实际承重靴底接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 427,
+      "source_y_px": 573,
+      "manual_source_rect": {
+        "x0": 398,
+        "y0": 325,
+        "x1": 599,
+        "y1": 580
+      },
+      "review_note": "目视复核行进姿态中实际承重靴底接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_gong",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 780,
+      "source_y_px": 573,
+      "manual_source_rect": {
+        "x0": 699,
+        "y0": 321,
+        "x1": 899,
+        "y1": 580
+      },
+      "review_note": "目视复核行进姿态中实际承重靴底接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_gong",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1099,
+      "source_y_px": 551,
+      "manual_source_rect": {
+        "x0": 990,
+        "y0": 321,
+        "x1": 1176,
+        "y1": 567
+      },
+      "review_note": "目视选择直立承重靴底；右侧抬起靴虽在画面更低但未作为接地点。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_jingqi",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 188,
+      "source_y_px": 900,
+      "manual_source_rect": {
+        "x0": 38,
+        "y0": 586,
+        "x1": 340,
+        "y1": 907
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_jingqi",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 414,
+      "source_y_px": 898,
+      "manual_source_rect": {
+        "x0": 358,
+        "y0": 589,
+        "x1": 642,
+        "y1": 905
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_jingqi",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 750,
+      "source_y_px": 903,
+      "manual_source_rect": {
+        "x0": 660,
+        "y0": 586,
+        "x1": 952,
+        "y1": 911
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。 源图与下一行仅7px透明间隔，本框下边保留3px、下一框上边保留4px。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_jingqi",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1131,
+      "source_y_px": 904,
+      "manual_source_rect": {
+        "x0": 967,
+        "y0": 588,
+        "x1": 1218,
+        "y1": 911
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_qi",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 211,
+      "source_y_px": 1214,
+      "manual_source_rect": {
+        "x0": 31,
+        "y0": 920,
+        "x1": 343,
+        "y1": 1222
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_qi",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 436,
+      "source_y_px": 1218,
+      "manual_source_rect": {
+        "x0": 353,
+        "y0": 918,
+        "x1": 609,
+        "y1": 1225
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_qi",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 742,
+      "source_y_px": 1208,
+      "manual_source_rect": {
+        "x0": 663,
+        "y0": 911,
+        "x1": 949,
+        "y1": 1215
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "walk_step",
+      "unit": "guan_qi",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1148,
+      "source_y_px": 1210,
+      "manual_source_rect": {
+        "x0": 983,
+        "y0": 911,
+        "x1": 1233,
+        "y1": 1217
+      },
+      "review_note": "目视复核行进姿态中实际承重马蹄接地点；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_dao",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 239,
+      "source_y_px": 296,
+      "manual_source_rect": {
+        "x0": 85,
+        "y0": 55,
+        "x1": 264,
+        "y1": 303
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_dao",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 535,
+      "source_y_px": 296,
+      "manual_source_rect": {
+        "x0": 354,
+        "y0": 57,
+        "x1": 553,
+        "y1": 303
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_dao",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 798,
+      "source_y_px": 284,
+      "manual_source_rect": {
+        "x0": 694,
+        "y0": 50,
+        "x1": 933,
+        "y1": 291
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_dao",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1168,
+      "source_y_px": 292,
+      "manual_source_rect": {
+        "x0": 1010,
+        "y0": 53,
+        "x1": 1238,
+        "y1": 300
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_gong",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 217,
+      "source_y_px": 595,
+      "manual_source_rect": {
+        "x0": 74,
+        "y0": 328,
+        "x1": 284,
+        "y1": 602
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 428,
+      "source_y_px": 586,
+      "manual_source_rect": {
+        "x0": 395,
+        "y0": 329,
+        "x1": 555,
+        "y1": 594
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_gong",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 713,
+      "source_y_px": 587,
+      "manual_source_rect": {
+        "x0": 698,
+        "y0": 318,
+        "x1": 881,
+        "y1": 594
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_gong",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1157,
+      "source_y_px": 593,
+      "manual_source_rect": {
+        "x0": 1012,
+        "y0": 311,
+        "x1": 1176,
+        "y1": 600
+      },
+      "review_note": "目视复核攻击姿态中着地靴底；选择承重脚而非武器末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_jingqi",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 188,
+      "source_y_px": 907,
+      "manual_source_rect": {
+        "x0": 30,
+        "y0": 612,
+        "x1": 314,
+        "y1": 914
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_jingqi",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 475,
+      "source_y_px": 913,
+      "manual_source_rect": {
+        "x0": 324,
+        "y0": 619,
+        "x1": 605,
+        "y1": 921
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_jingqi",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 733,
+      "source_y_px": 911,
+      "manual_source_rect": {
+        "x0": 649,
+        "y0": 607,
+        "x1": 932,
+        "y1": 918
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_jingqi",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1140,
+      "source_y_px": 908,
+      "manual_source_rect": {
+        "x0": 950,
+        "y0": 618,
+        "x1": 1241,
+        "y1": 917
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_qi",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 244,
+      "source_y_px": 1208,
+      "manual_source_rect": {
+        "x0": 37,
+        "y0": 936,
+        "x1": 338,
+        "y1": 1215
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_qi",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 434,
+      "source_y_px": 1215,
+      "manual_source_rect": {
+        "x0": 339,
+        "y0": 935,
+        "x1": 600,
+        "y1": 1222
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_qi",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 731,
+      "source_y_px": 1211,
+      "manual_source_rect": {
+        "x0": 659,
+        "y0": 933,
+        "x1": 935,
+        "y1": 1218
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "attack_strike",
+      "unit": "guan_qi",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1146,
+      "source_y_px": 1214,
+      "manual_source_rect": {
+        "x0": 954,
+        "y0": 929,
+        "x1": 1231,
+        "y1": 1221
+      },
+      "review_note": "目视复核攻击姿态中着地马蹄；选择承重蹄而非武器或披风末端。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_dao",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 139,
+      "source_y_px": 313,
+      "manual_source_rect": {
+        "x0": 27,
+        "y0": 127,
+        "x1": 290,
+        "y1": 321
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_dao",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 538,
+      "source_y_px": 312,
+      "manual_source_rect": {
+        "x0": 373,
+        "y0": 125,
+        "x1": 607,
+        "y1": 320
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_dao",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 753,
+      "source_y_px": 320,
+      "manual_source_rect": {
+        "x0": 665,
+        "y0": 128,
+        "x1": 914,
+        "y1": 328
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_dao",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1146,
+      "source_y_px": 306,
+      "manual_source_rect": {
+        "x0": 996,
+        "y0": 117,
+        "x1": 1236,
+        "y1": 316
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_gong",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 65,
+      "source_y_px": 564,
+      "manual_source_rect": {
+        "x0": 49,
+        "y0": 373,
+        "x1": 275,
+        "y1": 572
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 595,
+      "source_y_px": 545,
+      "manual_source_rect": {
+        "x0": 367,
+        "y0": 381,
+        "x1": 611,
+        "y1": 553
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_gong",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 679,
+      "source_y_px": 572,
+      "manual_source_rect": {
+        "x0": 664,
+        "y0": 372,
+        "x1": 904,
+        "y1": 580
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_gong",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1229,
+      "source_y_px": 575,
+      "manual_source_rect": {
+        "x0": 1010,
+        "y0": 379,
+        "x1": 1243,
+        "y1": 583
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地靴部；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_jingqi",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 215,
+      "source_y_px": 880,
+      "manual_source_rect": {
+        "x0": 9,
+        "y0": 627,
+        "x1": 326,
+        "y1": 888
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。 与同排下一格仅7px透明间隔，本框右边保留3px、下一框左边保留4px。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_jingqi",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 490,
+      "source_y_px": 880,
+      "manual_source_rect": {
+        "x0": 326,
+        "y0": 638,
+        "x1": 632,
+        "y1": 888
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_jingqi",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 716,
+      "source_y_px": 895,
+      "manual_source_rect": {
+        "x0": 644,
+        "y0": 626,
+        "x1": 915,
+        "y1": 903
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_jingqi",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1229,
+      "source_y_px": 890,
+      "manual_source_rect": {
+        "x0": 967,
+        "y0": 625,
+        "x1": 1248,
+        "y1": 898
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_qi",
+      "direction": "se",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 228,
+      "source_y_px": 1208,
+      "manual_source_rect": {
+        "x0": 21,
+        "y0": 945,
+        "x1": 322,
+        "y1": 1216
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_qi",
+      "direction": "sw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 432,
+      "source_y_px": 1221,
+      "manual_source_rect": {
+        "x0": 334,
+        "y0": 935,
+        "x1": 622,
+        "y1": 1229
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_qi",
+      "direction": "ne",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 681,
+      "source_y_px": 1205,
+      "manual_source_rect": {
+        "x0": 633,
+        "y0": 952,
+        "x1": 919,
+        "y1": 1213
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_fall",
+      "unit": "guan_qi",
+      "direction": "nw",
+      "measurement_kind": "foot_or_hoof",
+      "source_x_px": 1176,
+      "source_y_px": 1205,
+      "manual_source_rect": {
+        "x0": 976,
+        "y0": 940,
+        "x1": 1246,
+        "y1": 1213
+      },
+      "review_note": "目视复核倒落过渡姿态当前最低着地马蹄；不是由 alpha 外框底边自动推定。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_dao",
+      "direction": "se",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 252,
+      "source_y_px": 240,
+      "manual_source_rect": {
+        "x0": 15,
+        "y0": 99,
+        "x1": 300,
+        "y1": 248
+      },
+      "review_note": "目视选择随尸体落地的盾牌下沿接触点；未使用弯刀尖端。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_dao",
+      "direction": "sw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 531,
+      "source_y_px": 220,
+      "manual_source_rect": {
+        "x0": 355,
+        "y0": 103,
+        "x1": 572,
+        "y1": 253
+      },
+      "review_note": "目视选择随尸体落地的盾牌下沿接触点；未使用更低的弯刀刃。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_dao",
+      "direction": "ne",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 748,
+      "source_y_px": 261,
+      "manual_source_rect": {
+        "x0": 658,
+        "y0": 99,
+        "x1": 924,
+        "y1": 269
+      },
+      "review_note": "目视选择倒地尸体伸展靴底的最低接触点；未使用兵器。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_dao",
+      "direction": "nw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 1155,
+      "source_y_px": 261,
+      "manual_source_rect": {
+        "x0": 971,
+        "y0": 96,
+        "x1": 1236,
+        "y1": 269
+      },
+      "review_note": "目视选择倒地尸体伸展靴底的最低接触点；未使用兵器。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_gong",
+      "direction": "se",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 230,
+      "source_y_px": 485,
+      "manual_source_rect": {
+        "x0": 26,
+        "y0": 380,
+        "x1": 283,
+        "y1": 552
+      },
+      "review_note": "目视选择俯卧尸体右手/前臂接触点；刻意忽略更低的弓身。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 500,
+      "source_y_px": 510,
+      "manual_source_rect": {
+        "x0": 337,
+        "y0": 372,
+        "x1": 581,
+        "y1": 532
+      },
+      "review_note": "目视选择俯卧尸体手部接触点；刻意忽略更低的弓身。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_gong",
+      "direction": "ne",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 750,
+      "source_y_px": 558,
+      "manual_source_rect": {
+        "x0": 659,
+        "y0": 374,
+        "x1": 911,
+        "y1": 566
+      },
+      "review_note": "目视选择倒地尸体伸展靴底接触点；未使用弓梢。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_gong",
+      "direction": "nw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 1170,
+      "source_y_px": 560,
+      "manual_source_rect": {
+        "x0": 977,
+        "y0": 378,
+        "x1": 1235,
+        "y1": 569
+      },
+      "review_note": "目视选择倒地尸体伸展靴底接触点；未使用弓梢。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_jingqi",
+      "direction": "se",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 185,
+      "source_y_px": 810,
+      "manual_source_rect": {
+        "x0": 19,
+        "y0": 638,
+        "x1": 304,
+        "y1": 860
+      },
+      "review_note": "目视选择倒地马头/口鼻与地面的接触点；未使用更低的枪刃或缨。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_jingqi",
+      "direction": "sw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 520,
+      "source_y_px": 810,
+      "manual_source_rect": {
+        "x0": 336,
+        "y0": 639,
+        "x1": 615,
+        "y1": 854
+      },
+      "review_note": "目视选择倒地马头/口鼻与地面的接触点；未使用更低的枪刃或缨。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_jingqi",
+      "direction": "ne",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 768,
+      "source_y_px": 860,
+      "manual_source_rect": {
+        "x0": 650,
+        "y0": 652,
+        "x1": 930,
+        "y1": 869
+      },
+      "review_note": "目视选择倒地骑手靴部接触点；未使用长枪。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_jingqi",
+      "direction": "nw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 1068,
+      "source_y_px": 838,
+      "manual_source_rect": {
+        "x0": 954,
+        "y0": 648,
+        "x1": 1239,
+        "y1": 846
+      },
+      "review_note": "目视选择倒地骑手手部接触点；未使用长枪。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_qi",
+      "direction": "se",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 240,
+      "source_y_px": 1125,
+      "manual_source_rect": {
+        "x0": 19,
+        "y0": 956,
+        "x1": 297,
+        "y1": 1184
+      },
+      "review_note": "目视选择倒地骑手手部接触点；未使用更低的枪刃或缨。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_qi",
+      "direction": "sw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 458,
+      "source_y_px": 1120,
+      "manual_source_rect": {
+        "x0": 334,
+        "y0": 955,
+        "x1": 616,
+        "y1": 1184
+      },
+      "review_note": "目视选择倒地马头/口鼻接触点；未使用更低的枪刃或缨。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_qi",
+      "direction": "ne",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 744,
+      "source_y_px": 1173,
+      "manual_source_rect": {
+        "x0": 646,
+        "y0": 960,
+        "x1": 930,
+        "y1": 1181
+      },
+      "review_note": "目视选择倒地骑手靴部接触点；未使用长枪。"
+    },
+    {
+      "pose": "death_down",
+      "unit": "guan_qi",
+      "direction": "nw",
+      "measurement_kind": "lowest_contact",
+      "source_x_px": 1093,
+      "source_y_px": 1177,
+      "manual_source_rect": {
+        "x0": 952,
+        "y0": 963,
+        "x1": 1236,
+        "y1": 1185
+      },
+      "review_note": "目视选择倒地骑手靴部接触点；未使用长枪。"
+    }
+  ]
+}

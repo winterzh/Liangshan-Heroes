@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "kind": "skirmish_archer_sw_visual_revision",
+  "status": "committed",
+  "conversation": "https://chatgpt.com/c/6a9aa67d-22a0-83e9-aeb6-0237a7882356",
+  "source": {
+    "file": "qa/skirmish_direction4_fix_20260905/source/archer_sw_idle_step_raw.png",
+    "sha256": "d3997a9bfe85df420800ec0c45aa3ee0a63cf61d7f49d3045978d2747db468b9"
+  },
+  "prompt": {
+    "file": "qa/skirmish_direction4_fix_20260905/source/01_archer_sw_prompt.txt",
+    "sha256": "819c6177b46f3de45df42fd65dfc26490a49afab99eabb837ed6c75ec56dc556"
+  },
+  "base_action_manifest_sha256": "5f3ec9c6ab3c44ebd5183e64201322581e99c7206bd45eb86a32307449369f9c",
+  "processing": "two equal source halves; complete alpha bounding crop; shared scale; virtual ground pivot; unmasked RGBA placement; exact strip assembly; no reflection, alpha clearing, repaint or color correction",
+  "placements": {
+    "idle": {
+      "crop_in_half": [
+        156,
+        23,
+        849,
+        856
+      ],
+      "half_x": 0,
+      "virtual_ground_pivot_in_half": [
+        510,
+        799
+      ],
+      "scale": 0.297719087635054,
+      "paste_xy": [
+        23,
+        4
+      ],
+      "fit_shift_xy_px": [
+        0,
+        25
+      ],
+      "alpha_bbox": [
+        73,
+        38,
+        202,
+        245
+      ]
+    },
+    "walk_step": {
+      "crop_in_half": [
+        106,
+        122,
+        788,
+        829
+      ],
+      "half_x": 887,
+      "virtual_ground_pivot_in_half": [
+        463,
+        810
+      ],
+      "scale": 0.297719087635054,
+      "paste_xy": [
+        22,
+        5
+      ],
+      "fit_shift_xy_px": [
+        0,
+        0
+      ],
+      "alpha_bbox": [
+        22,
+        14,
+        199,
+        212
+      ]
+    }
+  },
+  "outputs": [
+    {
+      "target": "guan_gong_idle_sw.png",
+      "state": "idle",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "before_sha256": "e846831dbc685245565653fd3331ba8bd3ce0784317da512c0ba7426dd8f4959",
+      "sha256": "0e74c3212bbb367761c1168220b994bb3877389bb9f5d0b426138e56e4046a5d",
+      "frame_count": 1
+    },
+    {
+      "target": "guan_gong_walk_sw.png",
+      "state": "walk",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "before_sha256": "4c74e451d29943a921aabe1b963deae1ce0f8ece93a2d2cd10ee5e6b942c316f",
+      "sha256": "db00a3e890d79666c5c80457b914c87864f30bb6f9df1debe4f4f99a6841d017",
+      "frame_count": 2
+    },
+    {
+      "target": "guan_gong_attack_sw.png",
+      "state": "attack",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "before_sha256": "7269d75e9ce926427f35006c4a6f20afb7c3524d889939d9e67109c7ce783c5a",
+      "sha256": "73b720e0b9cd0863c4b87f306324480782192d9dbfebb246aab8e36bf2a5dc27",
+      "frame_count": 3
+    },
+    {
+      "target": "guan_gong_death_sw.png",
+      "state": "death",
+      "unit": "guan_gong",
+      "direction": "sw",
+      "before_sha256": "257d3003b5c88d0fbb5c5b59f278eba992384d24e2f7fa47744f16428fafd611",
+      "sha256": "1c837628be88591cc8948f5b0fc09ee66df4199dcac1ae44eed14f574847d843",
+      "frame_count": 4
+    }
+  ],
+  "visual_review": "Assistant reviewed left-facing nose/chest/boots in both poses; not user visual approval",
+  "retained_frames": "attack strike and death fall/down remain byte-identical RGBA to original strips"
+}

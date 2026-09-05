@@ -331,6 +331,15 @@ var _dust: Array = []      # 脚步扬尘 [{x,y,t}]
 const MOVE_SCALE := 0.66      # 全局移动速度系数：放慢行军节奏（不影响任何「走时」/冷却，那些走真实秒）
 const DEATH_DUR := 1.4   # 死亡动画时长（秒）：放慢倒地，看清逐帧（原 0.7 太快）
 const DUST_DUR := 0.36
+# These four units have complete, authored four-direction attack strips. Their
+# body motion and weapon pose already live in the bitmap, so the legacy whole-
+# sprite swing and procedural weapon trail must not be layered on top.
+const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"guan_dao": true,
+	"guan_gong": true,
+	"guan_jingqi": true,
+	"guan_qi": true,
+}
 
 
 func setup(p_key: String, def: Dictionary, p_faction: int, p_battle, p_map: GameMap) -> void:
@@ -1077,6 +1086,10 @@ func _phys_body(delta: float) -> void:
 		return
 	if _dying:
 		_death_t += delta
+		# A lethal hit sets the same short white flash as any other hit. Death used
+		# to return before the normal decay below, leaving all 1.4 seconds tinted.
+		if _flash > 0.0:
+			_flash = maxf(0.0, _flash - delta)
 		_queue_animated_redraw()
 		if _death_t >= DEATH_DUR:
 			queue_free()
@@ -2069,6 +2082,8 @@ func _weapon_kind() -> int:
 	var weapon_profile := String(setup_def.get("weapon_profile", ""))
 	if weapon_profile == "iron_staff" or key == "lu_zhishen":
 		_weapon = WK.IRON_STAFF
+	elif weapon_profile == "spear":
+		_weapon = WK.SPEAR
 	elif key == "wu_song":
 		_weapon = WK.SWORD
 	elif key == "lian_huan_ma":
@@ -3310,8 +3325,9 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			off.x += fwd * sin(_anim_t * 0.5) * 2.0 * mb
 		off += _flinch                                        # 受击退缩
 		if _lunge > 0.0:                                      # 武器化挥击
-			# 有真·逐帧攻击时，挥击动作已画进帧里 → 压低程序化突刺位移/旋转，避免与帧内动作叠加成双重抖动
-			var swdamp := 0.25 if _real_frames else 1.0
+			# 本批完整四向攻击已经画入身体和武器运动，禁止再移动/旋转整张图。
+			# 其他旧逐帧仍保留原有 25% 次级运动，程序图继续使用完整运动。
+			var swdamp := _programmatic_swing_scale()
 			off += _swing_offset() * swdamp
 			ang += _swing_rot() * swdamp
 		if _cast_t > 0.0:                                     # 施法抬手：起身后仰蓄势，结算瞬间回落=「放招」
@@ -3331,6 +3347,10 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 		sy = 1.0
 	draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off))
 	var srect := Rect2(-s * 0.5, -s * 0.82, s, s)
+	# Art may attach a QA-approved per-frame compensation in native texture
+	# pixels. Apply it only to the painted rectangle: physics, selection and the
+	# unit's logical position remain unchanged. Unknown/legacy frames use zero.
+	srect.position += _frame_draw_offset(frame, s)
 	# 暗色描边：四方各偏移画成半透黑剪影，叠出轮廓 → 单位从草地/背景里清晰跳出（提升可读性）
 	if not _dying and not _ultra_mass_visuals():
 		var ow := 1.7
@@ -3357,7 +3377,7 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 		var carried := CampaignEnvironmentArt.object(_active_campaign_level_id(),carried_key)
 		if carried == null: carried = Art.campaign_object_texture(carried_key)
 		if carried != null: draw_texture_rect(carried,Rect2(-s*0.45,-s*0.44,s*0.95,s*0.70),false,tint)
-	if not _dying and _lunge > 0.0:
+	if not _dying and _lunge > 0.0 and _should_draw_programmatic_swing_fx():
 		_draw_swing_fx()
 	draw_set_transform_matrix(GameMap.ISO_INV)
 	if not _dying and _cast_t > 0.0:
@@ -3384,6 +3404,33 @@ func _campaign_flag_route(for_render := false) -> Dictionary:
 	if for_render and not _frame_directional:
 		return {}
 	return route
+
+
+func _frame_draw_offset(frame: Texture2D, drawn_size: float) -> Vector2:
+	if frame == null or frame.get_height() <= 0:
+		return Vector2.ZERO
+	var offset_meta: Variant = frame.get_meta("draw_offset_px", Vector2.ZERO)
+	if not offset_meta is Vector2:
+		return Vector2.ZERO
+	return (offset_meta as Vector2) * (drawn_size / float(frame.get_height()))
+
+
+## Only the currently promoted four-direction batch owns its complete attack
+## silhouette. Scope this narrowly so legacy/campaign-variant animations keep
+## their established secondary motion and effects.
+func _authored_direction4_attack_active() -> bool:
+	return _lunge > 0.0 and _real_frames and _frame_directional \
+		and art_variant.is_empty() and AUTHORED_DIRECTION4_ATTACK_KEYS.has(key)
+
+
+func _programmatic_swing_scale() -> float:
+	if _authored_direction4_attack_active():
+		return 0.0
+	return 0.25 if _real_frames else 1.0
+
+
+func _should_draw_programmatic_swing_fx() -> bool:
+	return not _authored_direction4_attack_active()
 
 
 ## 挥击位移（直立空间）：按武器类型给不同的起手—出招曲线

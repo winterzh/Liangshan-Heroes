@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "kind": "skirmish_direction4_semantic_anchor_review",
+  "status": "pass_with_two_documented_tight_margins",
+  "review_scope": {
+    "poses": [
+      "walk_step",
+      "attack_strike",
+      "death_fall",
+      "death_down"
+    ],
+    "units": [
+      "guan_dao",
+      "guan_gong",
+      "guan_jingqi",
+      "guan_qi"
+    ],
+    "directions": [
+      "se",
+      "sw",
+      "ne",
+      "nw"
+    ],
+    "entry_count": 64
+  },
+  "anchors": {
+    "file": "semantic_anchors.json",
+    "sha256": "906faa9f5d7301ac7deaaa0370efbf654bd1e1d7a74a77caa3fb9c51e6476aad",
+    "unique_keys": 64,
+    "inside_manual_source_rect": 64,
+    "radius_3_alpha_evidence": 64,
+    "minimum_radius_3_max_alpha": 244,
+    "dedicated_pipeline_extract_manual_source_cells": "pass"
+  },
+  "sources": [
+    {
+      "pose": "walk_step",
+      "file": "official_top4_walk_step_4x4_alpha15.png",
+      "sha256": "ed588924d506ad52574ec2a9abb88e38409eff50e3b0bb74b590417e7129f557",
+      "manual_rectangles": 16,
+      "owned_visible_alpha_pixels": 446034,
+      "uncovered_visible_alpha_pixels": 0,
+      "overlap_pixels": 0,
+      "overlap_pairs": 0
+    },
+    {
+      "pose": "attack_strike",
+      "file": "official_top4_attack_strike_4x4_alpha15.png",
+      "sha256": "18f5adc553908a57d321a17f479596080c98bacf5b092e34b9f9c7d8f8706b60",
+      "manual_rectangles": 16,
+      "owned_visible_alpha_pixels": 400941,
+      "uncovered_visible_alpha_pixels": 0,
+      "overlap_pixels": 0,
+      "overlap_pairs": 0
+    },
+    {
+      "pose": "death_fall",
+      "file": "official_top4_death_fall_4x4_alpha15.png",
+      "sha256": "f0ffe3141de5acd0669a894db5196a0ad7ead51f0e99fc8fbc2f68a671dd0267",
+      "manual_rectangles": 16,
+      "owned_visible_alpha_pixels": 437262,
+      "uncovered_visible_alpha_pixels": 0,
+      "overlap_pixels": 0,
+      "overlap_pairs": 0
+    },
+    {
+      "pose": "death_down",
+      "file": "official_top4_death_down_4x4_alpha15.png",
+      "sha256": "26ec3200c19f3366916c30c67b1dbd0de00f1c837d6f42eddebbd931285ff97c",
+      "manual_rectangles": 16,
+      "owned_visible_alpha_pixels": 406573,
+      "uncovered_visible_alpha_pixels": 0,
+      "overlap_pixels": 0,
+      "overlap_pairs": 0
+    }
+  ],
+  "visual_overviews": [
+    {
+      "file": "qa_walk_step_reviewed.png",
+      "sha256": "70a0a0545fce98ae802576c3f8c50ded5143221a7857cff8d1682e0b9e75d059"
+    },
+    {
+      "file": "qa_attack_strike_reviewed.png",
+      "sha256": "322ea0a319cc61902c1830fc514afea80dd518cd7cbff181d4a53390a8eae52c"
+    },
+    {
+      "file": "qa_death_fall_reviewed.png",
+      "sha256": "eeb2d9f0341a1d0134ed35825e52e7a0cf3ab5c80fc08cc67629a2117c118145"
+    },
+    {
+      "file": "qa_death_down_reviewed.png",
+      "sha256": "55dc1e24e7b546d1c235c1b21e74688f5b73f426c29c12cee301d1cbe3519400"
+    }
+  ],
+  "manual_findings": {
+    "row_order": "guan_dao, guan_gong, guan_jingqi, guan_qi confirmed in all four atlases",
+    "column_order": "se, sw, ne, nw confirmed by front/back and left/right facing in all four atlases",
+    "identity_or_direction_swaps_found": [],
+    "nominal_grid_crossings": "walk_step, attack_strike and death_fall do not provide three 24px full-atlas separator columns; manual per-object rectangles are required",
+    "tight_margins": [
+      {
+        "pose": "walk_step",
+        "unit": "guan_jingqi",
+        "direction": "ne",
+        "edge": "bottom",
+        "transparent_margin_px": 3,
+        "adjacent_margin_px": 4,
+        "visible_alpha_omission": 0
+      },
+      {
+        "pose": "death_fall",
+        "unit": "guan_jingqi",
+        "direction": "se",
+        "edge": "right",
+        "transparent_margin_px": 3,
+        "adjacent_margin_px": 4,
+        "visible_alpha_omission": 0
+      }
+    ],
+    "semantic_exceptions_reviewed": [
+      "walk_step guan_gong/nw uses the straight planted boot instead of the visually lower raised boot",
+      "death_down archers use body hand, forearm or boot contacts instead of lower bow curves",
+      "death_down mounted se/sw cells use horse muzzle or rider contact instead of lower spear blades and tassels",
+      "death_down guan_dao/sw uses the attached shield contact instead of the lower sword blade"
+    ]
+  },
+  "production_art_modified": false
+}

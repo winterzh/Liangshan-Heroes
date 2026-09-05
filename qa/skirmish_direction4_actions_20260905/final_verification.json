@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "batch_id": "skirmish_top4_direction4_actions_20260905",
+  "passed": true,
+  "production": {
+    "manifest": "res://assets/direction4/skirmish_top4_actions_direction4_manifest.json",
+    "manifest_sha256": "5f3ec9c6ab3c44ebd5183e64201322581e99c7206bd45eb86a32307449369f9c",
+    "transaction": "res://qa/skirmish_direction4_actions_20260905/checkpoints/20260905T022914_626f20ea28/journal.json",
+    "transaction_state": "COMMITTED",
+    "output_count": 48,
+    "hash_mismatch_count": 0,
+    "godot_editor_import_exit_code": 0
+  },
+  "action_contract": {
+    "report": "res://qa/skirmish_direction4_actions_20260905/action_contract.json",
+    "log": "res://qa/skirmish_direction4_actions_20260905/action_contract_after_commit.log",
+    "checks": 257,
+    "accepted_cells": 48,
+    "expected_cells": 48,
+    "failures": 0,
+    "fallback_is_failure": true
+  },
+  "runtime_visual": {
+    "report": "res://qa/skirmish_direction4_actions_20260905/runtime_visual/report.json",
+    "capture": "res://qa/skirmish_direction4_actions_20260905/runtime_visual/action_matrix_1920x1080.png",
+    "capture_sha256": "95ad6890c1abf53d0428a80f7141947475e5380f6f9a05fd8f55f95de7d16182",
+    "accepted_cells": 48,
+    "expected_cells": 48,
+    "renderer": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "viewport": [1920, 1080]
+  },
+  "regressions": {
+    "direction4": {
+      "log": "res://qa/skirmish_direction4_20260904/direction4_regression_after_top4.log",
+      "checks": 67,
+      "failures": 0
+    },
+    "real_unit_direction4_visual": {
+      "log": "res://qa/skirmish_direction4_20260904/runtime_visual_after_top4.log",
+      "checks": 191,
+      "failures": 0,
+      "renderer": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "viewport": [1280, 720]
+    },
+    "campaign_core": {
+      "log": "res://qa/skirmish_death_remains_20260904/campaign_core_after_top4.log",
+      "checks": 68,
+      "failures": 0
+    },
+    "death_remains_headless": {
+      "log": "res://qa/skirmish_death_remains_20260904/test_headless_after_top4.log",
+      "checks": 21,
+      "failures": 0
+    },
+    "death_remains_visual": {
+      "log": "res://qa/skirmish_death_remains_20260904/test_visual_after_top4.log",
+      "checks": 22,
+      "failures": 0,
+      "screenshot": "res://qa/skirmish_death_remains_20260904/skirmish_death_remains_1280.png"
+    }
+  },
+  "coverage": {
+    "report": "res://qa/skirmish_direction4_actions_20260905/campaign_direction4_coverage_after_commit.json",
+    "accepted_exact_unique_rows": 109,
+    "unique_art_state_rows": 347,
+    "coverage_percent_unique_rows": 31.412,
+    "previous_accepted_exact_unique_rows": 100,
+    "newly_accepted_exact_unique_rows": 9,
+    "full_five_state_skirmish_gate_passed": false,
+    "note": "The batch adds exact walk, attack and death for four high-frequency official unit keys. Hurt and the remaining lower-priority roster are outside this batch."
+  },
+  "review_boundary": {
+    "assistant_visual_qa": true,
+    "user_visual_approval": false,
+    "human_30_wave_playtest": false,
+    "performance_test": false,
+    "steam_exported": false,
+    "steamworks_directory_modified": false,
+    "steam_uploaded": false
+  }
+}

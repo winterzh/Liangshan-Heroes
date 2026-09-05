@@ -1,0 +1,283 @@
+{
+  "check_count": 28,
+  "checks": [
+    {
+      "detail": {
+
+      },
+      "name": "real skirmish reaches the playable fight phase",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "semantic probe units use real production definitions",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "ranged deaths are mostly blood with rare shield-arrow debris",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "spear deaths are mostly blood with rare broken-spears",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "armored infantry is mostly blood with rare armor debris",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "spear cavalry is mostly blood with rare matching broken-spears",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "ordinary light troops are mostly blood with rare cloth debris",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "camels and elephants drop only the compact blood trace",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "ordinary production selection never emits the fallen banner or bone cells",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "infantry and cavalry both use the restrained atlas with radius-calibrated traces",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "non-character, story, summon, water and building deaths leave no human remains",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "all four directions retain provenance while traces stay on the logical foot point",
+      "passed": true
+    },
+    {
+      "detail": {
+        "fade_duration": 0.2,
+        "ramp_alpha_at_036": 0.0500000000000003
+      },
+      "name": "mark stays hidden for 0.35 seconds then fades in over a short bounded ramp",
+      "passed": true
+    },
+    {
+      "detail": {
+        "death_duration": 1.4,
+        "reveal_delay": 0.35
+      },
+      "name": "blood reveal matches the first-frame boundary of a four-frame death strip",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "a real lethal signal captures direction and creates one initially hidden trace",
+      "passed": true
+    },
+    {
+      "detail": {
+        "after_death": {
+          "capacity": 128,
+          "cast_instances": 8,
+          "contact_instances": 8,
+          "draw_submissions": 1,
+          "exists": true,
+          "retained_dying_units": 1,
+          "retained_dying_visible": 1,
+          "shapes_per_instance": 2
+        },
+        "baseline": {
+          "capacity": 128,
+          "cast_instances": 8,
+          "contact_instances": 8,
+          "draw_submissions": 1,
+          "exists": true,
+          "retained_dying_units": 0,
+          "retained_dying_visible": 0,
+          "shapes_per_instance": 2
+        },
+        "retained_opacity": 1.0
+      },
+      "name": "death shadow stays in the render-only batch without rejoining combat units",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "trace begins its fade-in after frame one while the remaining death frames still play",
+      "passed": true
+    },
+    {
+      "detail": {
+        "batch": {
+          "capacity": 128,
+          "cast_instances": 8,
+          "contact_instances": 8,
+          "draw_submissions": 1,
+          "exists": true,
+          "retained_dying_units": 1,
+          "retained_dying_visible": 1,
+          "shapes_per_instance": 2
+        },
+        "death_fraction": 0.257142857142857,
+        "retained_opacity": 0.742857142857143
+      },
+      "name": "render-only death shadow remains submitted while its opacity progresses",
+      "passed": true
+    },
+    {
+      "detail": {
+        "capacity": 128,
+        "cast_instances": 8,
+        "contact_instances": 8,
+        "draw_submissions": 1,
+        "exists": true,
+        "retained_dying_units": 1,
+        "retained_dying_visible": 1,
+        "shapes_per_instance": 2
+      },
+      "name": "death shadow remains submitted until the final instant of the death strip",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "the Unit is freed after its death strip while the ground trace persists",
+      "passed": true
+    },
+    {
+      "detail": {
+        "capacity": 128,
+        "cast_instances": 7,
+        "contact_instances": 7,
+        "draw_submissions": 1,
+        "exists": true,
+        "retained_dying_units": 0,
+        "retained_dying_visible": 0,
+        "shapes_per_instance": 2
+      },
+      "name": "death shadow retention prunes itself when the body node is freed",
+      "passed": true
+    },
+    {
+      "detail": {
+        "capacity": 128,
+        "cast_instances": 7,
+        "contact_instances": 7,
+        "draw_submissions": 1,
+        "exists": true,
+        "retained_dying_units": 0,
+        "retained_dying_visible": 0,
+        "shapes_per_instance": 2
+      },
+      "name": "an early-freed retained body is pruned without leaving a stale shadow reference",
+      "passed": true
+    },
+    {
+      "detail": {
+        "after": {
+          "capacity": 128,
+          "cast_instances": 7,
+          "contact_instances": 7,
+          "draw_submissions": 1,
+          "exists": true,
+          "retained_dying_units": 0,
+          "retained_dying_visible": 0,
+          "shapes_per_instance": 2
+        },
+        "before": {
+          "capacity": 128,
+          "cast_instances": 8,
+          "contact_instances": 8,
+          "draw_submissions": 1,
+          "exists": true,
+          "retained_dying_units": 1,
+          "retained_dying_visible": 1,
+          "shapes_per_instance": 2
+        }
+      },
+      "name": "explicit section cleanup removes retained submissions in the same frame",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "a real death within 36px refreshes and deepens the existing mark",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "a death outside the 36px merge radius creates a separate mark",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "every production frame has a positive scale and explicit anchor correction",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "blood and equipment categories use independently reduced visual scales",
+      "passed": true
+    },
+    {
+      "detail": {
+
+      },
+      "name": "normal and lightweight lifetime/fade/cap contracts remain unchanged",
+      "passed": true
+    }
+  ],
+  "equipment_comparison": [],
+  "equipment_screenshot": "",
+  "failures": [],
+  "headless": true,
+  "human_playtest": false,
+  "passed": true,
+  "performance_test": false,
+  "scope": "Real skirmish Battle helpers, production atlas, semantic weighting, direction provenance with foot-point placement, lethal-signal ordering, render-only fading death shadows, four-frame death timing, delayed reveal ramp, persistent post-strip traces, nearby merge, per-category frame calibration and unchanged lifetime/cap/exclusion contracts.",
+  "screenshot": ""
+}

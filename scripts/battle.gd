@@ -1,6 +1,7 @@
 class_name Battle
 extends Node2D
 const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
+const WorldShadow := preload("res://scripts/world_shadow.gd")
 ## 通用战斗运行器：加载一个 LevelBase 关卡，提供地图/单位/相机/HUD 与全部通用系统
 ## （框选指挥、攻击移动、英雄技能、编队、光环、芦苇隐蔽、分离避让、动画）。
 ## 关卡专属内容（地图布局、部署、波次、机制、胜负）由 level 钩子驱动。
@@ -98,17 +99,18 @@ const DEATH_REMAINS_LITE_CAP := 24
 # A fresh mark appears only after the body has started falling. Nearby deaths
 # refresh one ground trace instead of stacking identical props at a choke.
 const DEATH_REMAINS_REVEAL_DELAY := 0.35
+const DEATH_REMAINS_REVEAL_FADE := 0.20
 const DEATH_REMAINS_MERGE_DISTANCE := 36.0
 # The web atlas also has two bone-heavy cells. Ordinary battlefield deaths use
 # only restrained fresh blood/equipment cells; the fallen banner (6) is no
 # longer a generic troop result and remains available only to authored scenery.
 const DEATH_REMAINS_SAFE_FRAMES := [0, 1, 2, 3, 5]
 const DEATH_REMAINS_FRAME_SCALE := {
-	0: 1.00, # compact blood and dust
-	1: 0.90, # long broken spear
-	2: 0.96, # helmet and bracer
-	3: 0.92, # shield fragments and arrows
-	5: 0.90, # staff, shoe and cloth
+	0: 0.65, # compact blood and dust
+	1: 0.45, # long broken spear
+	2: 0.25, # helmet and bracer
+	3: 0.38, # shield fragments and arrows
+	5: 0.30, # staff, shoe and cloth
 }
 # Pixel offsets compensate for the different painted alpha bounds inside each
 # 256px cell. They move the artwork only; no bitmap is mirrored or redrawn.
@@ -1989,6 +1991,10 @@ func _on_unit_died(u: Unit) -> void:
 			"level": u.hero_level, "xp": u.hero_xp, "sp": u.skill_points,
 			"ranks": u.ability_slots.map(func(s: Dictionary) -> int: return int(s["rank"]))}
 	units.erase(u)
+	# The combat registry forgets the victim first, while its Node stays alive for
+	# the 1.4 second death strip. Retain only its render-side shadow in the shared
+	# batch; never put a dead unit back into targeting/pathfinding.
+	WorldShadow.retain_dying_shadow(self, u)
 	selection.erase(u)
 	if _ability_caster == u:   # 施法者阵亡：解除指向态，避免光标/预览悬空
 		_disarm_ability()
@@ -2101,17 +2107,6 @@ func _death_remains_texture() -> Texture2D:
 	return _death_remains_atlas
 
 
-## Four stable screen quadrants already drive Unit animation. A struck fighter
-## falls a short distance opposite that facing; keeping this lookup in logical
-## space makes the offset follow the isometric map without mirroring artwork.
-func _death_remains_fall_vector(direction: String) -> Vector2:
-	match direction:
-		"sw": return Vector2(0.0, -1.0)
-		"ne": return Vector2(0.0, 1.0)
-		"nw": return Vector2(1.0, 0.0)
-		_: return Vector2(-1.0, 0.0) # se and invalid fallback
-
-
 ## Most ordinary deaths leave only a modest blood/dust trace. Equipment is a
 ## deterministic one-in-six accent and must match the victim's broad role.
 ## Large beasts never drop a human helmet, banner or weapon bundle.
@@ -2152,8 +2147,11 @@ func _spawn_death_remains(u: Unit):
 	var death_direction := String(u.animation_direction)
 	if death_direction not in ["se", "sw", "ne", "nw"]:
 		death_direction = "se"
-	var fall_offset := _death_remains_fall_vector(death_direction) \
-		* clampf(u.radius * 0.48, 4.0, 8.0)
+	# The four-direction death strips have per-pose fit shifts that runtime does
+	# not yet consume. A generic direction offset disagreed with several visible
+	# body landing points, so keep the ground trace at the unit's logical foot.
+	# Captured direction remains metadata for a future authored anchor table.
+	var fall_offset := Vector2.ZERO
 	var mark_position := u.position + fall_offset
 	_death_remains_serial += 1
 	# Production calls this helper from a real hp<=0 death. The old core cap
@@ -2186,7 +2184,8 @@ func _spawn_death_remains(u: Unit):
 	mark.configure(_death_remains_texture(), frame, clampf(u.radius * 5.2, 48.0, 78.0),
 		map.ground_basis(mark_position), remains_life, remains_fade,
 		DEATH_REMAINS_REVEAL_DELAY, float(DEATH_REMAINS_FRAME_SCALE.get(frame, 1.0)),
-		DEATH_REMAINS_FRAME_ANCHOR.get(frame, Vector2.ZERO), death_direction, fall_offset)
+		DEATH_REMAINS_FRAME_ANCHOR.get(frame, Vector2.ZERO), death_direction, fall_offset,
+		DEATH_REMAINS_REVEAL_FADE)
 	mark.expired.connect(_on_death_remains_expired)
 	fx_root.add_child(mark)
 	map.sync_render_position(mark)
@@ -13881,6 +13880,7 @@ class DeathRemains extends Node2D:
 	var lifetime := 45.0
 	var fade_duration := 8.0
 	var reveal_delay := 0.35
+	var reveal_fade_duration := 0.20
 	var age := 0.0
 	var merge_count := 1
 	var frame_index := 0
@@ -13894,7 +13894,8 @@ class DeathRemains extends Node2D:
 
 	func configure(atlas: Texture2D, frame: int, size: float, ground: Transform2D,
 			life: float, fade: float, delay := 0.35, scale := 1.0,
-			anchor := Vector2.ZERO, direction := "se", death_offset := Vector2.ZERO) -> void:
+			anchor := Vector2.ZERO, direction := "se", death_offset := Vector2.ZERO,
+			reveal_fade := 0.20) -> void:
 		frame_index = clampi(frame, 0, 7)
 		visual_size = size
 		frame_scale = maxf(0.1, scale)
@@ -13906,6 +13907,7 @@ class DeathRemains extends Node2D:
 		remaining = lifetime
 		fade_duration = clampf(fade, 0.1, lifetime)
 		reveal_delay = clampf(delay, 0.0, lifetime)
+		reveal_fade_duration = clampf(reveal_fade, 0.01, lifetime)
 		age = 0.0
 		merge_count = 1
 		frame_texture = null
@@ -13925,6 +13927,9 @@ class DeathRemains extends Node2D:
 	func is_revealed() -> bool:
 		return age >= reveal_delay
 
+	func reveal_alpha() -> float:
+		return clampf((age - reveal_delay) / reveal_fade_duration, 0.0, 1.0)
+
 	func refresh_from_merge() -> void:
 		remaining = lifetime
 		merge_count = mini(merge_count + 1, 6)
@@ -13941,6 +13946,10 @@ class DeathRemains extends Node2D:
 			return
 		if not was_revealed and is_revealed():
 			queue_redraw()
+		# Redraw only for the brief reveal ramp; after it reaches full opacity the
+		# capped group returns to being static until its final lifetime fade.
+		if is_revealed() and age <= reveal_delay + reveal_fade_duration:
+			queue_redraw()
 		# The first 37 seconds are a static CanvasItem. Only the final fade needs
 		# redraws, keeping a capped group cheap in large fights.
 		if remaining <= fade_duration:
@@ -13949,7 +13958,8 @@ class DeathRemains extends Node2D:
 	func _draw() -> void:
 		if not is_revealed():
 			return
-		var alpha := clampf(remaining / fade_duration, 0.0, 1.0) if remaining <= fade_duration else 1.0
+		var life_alpha := clampf(remaining / fade_duration, 0.0, 1.0) if remaining <= fade_duration else 1.0
+		var alpha := minf(reveal_alpha(), life_alpha)
 		var depth := maxf(0.80, 1.0 - float(merge_count - 1) * 0.04)
 		if frame_texture != null:
 			# The web cells are already painted in 2:1 isometric perspective. Undo
@@ -16623,6 +16633,7 @@ func clear_campaign_section() -> void:
 			u.process_mode = Node.PROCESS_MODE_DISABLED
 			u.queue_free()
 	units.clear()
+	WorldShadow.clear_dying_shadows(self)
 	for effect in fx_root.get_children():
 		effect.process_mode = Node.PROCESS_MODE_DISABLED
 		effect.queue_free()

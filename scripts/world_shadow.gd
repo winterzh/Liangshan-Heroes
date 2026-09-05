@@ -44,6 +44,8 @@ class ShadowBatch extends Node2D:
 	var paired_multimesh: MultiMesh
 	var capacity := 0
 	var active_count := 0
+	var retained_dying_units: Array = []
+	var retained_dying_visible := 0
 
 	func setup(p_battle) -> void:
 		battle = p_battle
@@ -137,6 +139,8 @@ void fragment() {
 	func _process(_delta: float) -> void:
 		if battle == null or not is_instance_valid(battle) or not WorldShadow._enabled:
 			active_count = 0
+			retained_dying_visible = 0
+			retained_dying_units.clear()
 			if paired_multimesh != null:
 				paired_multimesh.visible_instance_count = 0
 			return
@@ -144,35 +148,66 @@ void fragment() {
 
 	func _update_visible_units() -> void:
 		var candidates: Array = battle.get("units")
+		if not retained_dying_units.is_empty():
+			# Prune in place: ordinary frames allocate nothing, and even a mass-death
+			# frame does not create a replacement Array in this render hot path.
+			for retained_index in range(retained_dying_units.size() - 1, -1, -1):
+				var retained = retained_dying_units[retained_index]
+				if retained == null or not is_instance_valid(retained) \
+						or retained.is_queued_for_deletion() \
+						or retained.battle != battle or not WorldShadow._uses_batch(retained) \
+						or retained.hp > 0.0 or not bool(retained._dying):
+					retained_dying_units.remove_at(retained_index)
 		# Capacity is persistent and grows in powers of two. Reserving the whole
 		# unit list is safe even when it contains buildings, resources, or dead
 		# entries, and avoids performing the expensive visibility/terrain test
 		# twice for every moving unit each rendered frame.
-		_resize(candidates.size())
+		_resize(candidates.size() + retained_dying_units.size())
 		var index := 0
 		for unit in candidates:
-			if not WorldShadow._batch_eligible(unit, battle):
-				continue
-			var opacity := WorldShadow._unit_opacity(unit, WorldShadow._death_fraction(unit))
-			if opacity <= 0.001:
-				continue
-			var ground: Transform2D = WorldShadow._ground_basis(unit)
-			var radius: float = unit.radius * 0.9
-			# This is the same small walk-step contraction formerly applied in
-			# Unit._draw(), now calculated once in the shared batch.
-			var lift: float = maxf(0.0, -cos(unit._anim_t * 2.0)) * float(unit._move_blend)
-			radius *= 1.0 - 0.12 * lift
-			opacity *= 1.0 - 0.10 * lift
-			var origin := WorldShadow._render_origin(unit)
-			# Unit nodes receive `ground` as a local draw transform. The batch is
-			# directly below Battle.world, so compose origin + slope exactly once.
-			# The shader then reconstructs both former local transforms, including
-			# the cast's ISO inverse, from one instance color and transform.
-			paired_multimesh.set_instance_transform_2d(index, Transform2D(0.0, origin) * ground)
-			paired_multimesh.set_instance_color(index, Color(radius / RADIUS_ENCODING_SCALE, opacity, 0.0, 1.0))
-			index += 1
+			index = _write_unit_shadow(unit, index)
+		var living_visible := index
+		for unit in retained_dying_units:
+			index = _write_unit_shadow(unit, index)
+		retained_dying_visible = index - living_visible
 		active_count = index
 		paired_multimesh.visible_instance_count = active_count
+
+	func _write_unit_shadow(unit, index: int) -> int:
+		if not WorldShadow._batch_eligible(unit, battle):
+			return index
+		var opacity := WorldShadow._unit_opacity(unit, WorldShadow._death_fraction(unit))
+		if opacity <= 0.001:
+			return index
+		var ground: Transform2D = WorldShadow._ground_basis(unit)
+		var radius: float = unit.radius * 0.9
+		# This is the same small walk-step contraction formerly applied in
+		# Unit._draw(), now calculated once in the shared batch.
+		var lift: float = maxf(0.0, -cos(unit._anim_t * 2.0)) * float(unit._move_blend)
+		radius *= 1.0 - 0.12 * lift
+		opacity *= 1.0 - 0.10 * lift
+		var origin := WorldShadow._render_origin(unit)
+		# Unit nodes receive `ground` as a local draw transform. The batch is
+		# directly below Battle.world, so compose origin + slope exactly once.
+		# The shader then reconstructs both former local transforms, including
+		# the cast's ISO inverse, from one instance color and transform.
+		paired_multimesh.set_instance_transform_2d(index, Transform2D(0.0, origin) * ground)
+		paired_multimesh.set_instance_color(index, Color(radius / RADIUS_ENCODING_SCALE, opacity, 0.0, 1.0))
+		return index + 1
+
+	func retain_dying_unit(unit) -> void:
+		if not WorldShadow._uses_batch(unit) or unit.battle != battle or unit in retained_dying_units:
+			return
+		retained_dying_units.append(unit)
+
+	func clear_retained_dying_units() -> void:
+		# Retained submissions are appended after live units. Shrink the visible
+		# prefix immediately so a section transition cannot show one ghost frame.
+		active_count = maxi(0, active_count - retained_dying_visible)
+		if paired_multimesh != null:
+			paired_multimesh.visible_instance_count = active_count
+		retained_dying_units.clear()
+		retained_dying_visible = 0
 
 	func summary() -> Dictionary:
 		return {
@@ -180,6 +215,8 @@ void fragment() {
 			"capacity": capacity,
 			"contact_instances": active_count,
 			"cast_instances": active_count,
+			"retained_dying_units": retained_dying_units.size(),
+			"retained_dying_visible": retained_dying_visible,
 			"shapes_per_instance": 2,
 			"draw_submissions": 1,
 		}
@@ -200,16 +237,46 @@ static func ensure_batch(battle: Node) -> void:
 	world.add_child(batch)
 
 
-static func batch_summary(battle: Node) -> Dictionary:
-	if battle == null or not is_instance_valid(battle):
-		return {"exists": false, "contact_instances": 0, "cast_instances": 0, "draw_submissions": 0}
+static func retain_dying_shadow(battle: Node, unit) -> void:
+	# Rendering-only retention: the victim remains absent from battle.units, so
+	# targeting, navigation, selection and victory counting still forget it at
+	# the lethal event.
+	if not _enabled or battle == null or not is_instance_valid(battle) \
+			or not _uses_batch(unit):
+		return
+	ensure_batch(battle)
 	var world: Node = battle.get("world")
 	if world == null or not is_instance_valid(world):
-		return {"exists": false, "contact_instances": 0, "cast_instances": 0, "draw_submissions": 0}
+		return
+	var batch := world.get_node_or_null(String(BATCH_NODE_NAME))
+	if batch != null and batch.has_method("retain_dying_unit"):
+		batch.retain_dying_unit(unit)
+
+
+static func clear_dying_shadows(battle: Node) -> void:
+	if battle == null or not is_instance_valid(battle):
+		return
+	var world: Node = battle.get("world")
+	if world == null or not is_instance_valid(world):
+		return
+	var batch := world.get_node_or_null(String(BATCH_NODE_NAME))
+	if batch != null and batch.has_method("clear_retained_dying_units"):
+		batch.clear_retained_dying_units()
+
+
+static func batch_summary(battle: Node) -> Dictionary:
+	if battle == null or not is_instance_valid(battle):
+		return {"exists": false, "contact_instances": 0, "cast_instances": 0,
+			"retained_dying_units": 0, "retained_dying_visible": 0, "draw_submissions": 0}
+	var world: Node = battle.get("world")
+	if world == null or not is_instance_valid(world):
+		return {"exists": false, "contact_instances": 0, "cast_instances": 0,
+			"retained_dying_units": 0, "retained_dying_visible": 0, "draw_submissions": 0}
 	var node := world.get_node_or_null(String(BATCH_NODE_NAME))
 	if node != null and node.has_method("summary"):
 		return node.summary()
-	return {"exists": false, "contact_instances": 0, "cast_instances": 0, "draw_submissions": 0}
+	return {"exists": false, "contact_instances": 0, "cast_instances": 0,
+		"retained_dying_units": 0, "retained_dying_visible": 0, "draw_submissions": 0}
 
 
 static func route_summary(battle: Node) -> Dictionary:

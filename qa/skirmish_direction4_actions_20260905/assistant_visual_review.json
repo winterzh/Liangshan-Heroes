@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "skirmish_direction4_action_assistant_visual_review",
+  "batch_id": "skirmish_top4_direction4_actions_20260905",
+  "reviewed_at": "2026-09-05T02:26:55+08:00",
+  "reviewer": "Codex assistant",
+  "user_visual_approval": false,
+  "implementation_authorization": "The user explicitly instructed implementation with: 干",
+  "candidate_manifest": {
+    "file": "staging/candidate_manifest.json",
+    "sha256": "c704e9659320ebd47707bef3ef883dcd8f1918ed0dc309aaefc17dbb642d0651"
+  },
+  "candidate_contact_sheet": {
+    "file": "staging/candidate_contact_sheet.png",
+    "sha256": "91883013d682860a61804d48955df863c864db42ea5dfcc87c7af3a1ec013b03",
+    "cells_reviewed": 48
+  },
+  "decision": "approved_for_local_production_integration",
+  "checks": {
+    "unit_identity_consistent": true,
+    "row_order_correct": true,
+    "direction_order_se_sw_ne_nw_correct": true,
+    "walk_attack_death_readable": true,
+    "obvious_clipping_found": false,
+    "cross_cell_contamination_found": false,
+    "idle_to_walk_size_jump_found": false,
+    "walk_to_idle_height_ratio_min": 0.95959595959596,
+    "walk_to_idle_height_ratio_max": 1.03571428571429,
+    "preferred_ratio_failures": 0,
+    "walk_attack_max_canvas_fit_shift_px": 19,
+    "death_max_canvas_fit_shift_px": 57
+  },
+  "notes": [
+    "The first mechanically valid candidate was rejected because all new poses appeared too small relative to existing idle frames.",
+    "The approved candidate derives one world scale per unit from existing idle height versus the four walk source heights; the same scale is then used for every new pose of that unit.",
+    "Death poses use a minimal within-canvas translation when required, instead of shrinking the entire action set.",
+    "This is assistant visual QA for local integration. It is not user visual approval, a human playtest, performance acceptance, or Steam release approval."
+  ],
+  "steam_modified_or_exported": false
+}

@@ -1,0 +1,179 @@
+{
+  "schema_version": 2,
+  "kind": "skirmish_direction4_action_batch",
+  "batch_id": "skirmish_top4_direction4_actions_20260905",
+  "scope": "production",
+  "units": [
+    "guan_dao",
+    "guan_gong",
+    "guan_jingqi",
+    "guan_qi"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "canvas": {
+    "size_px": 256,
+    "max_content_width_px": 248,
+    "max_content_height_px": 248,
+    "anchor_target_x_px": 128,
+    "anchor_target_y_px": 210,
+    "margin_px": 4,
+    "max_walk_attack_fit_shift_px": 20
+  },
+  "source_layout": {
+    "mode": "manual_source_rects_v2",
+    "minimum_source_size_px": 1024,
+    "rect_edge_transparent_clearance_px": 3,
+    "anchor_evidence_radius_px": 3,
+    "subject_group_join_gap_px": 32,
+    "minimum_subject_alpha_pixels": 128
+  },
+  "paths": {
+    "staging_dir": "qa/skirmish_direction4_actions_20260905/staging",
+    "production_root": "assets/anim",
+    "commit_manifest": "assets/direction4/skirmish_top4_actions_direction4_manifest.json",
+    "checkpoint_root": "qa/skirmish_direction4_actions_20260905/checkpoints",
+    "approval_receipt": "qa/skirmish_direction4_actions_20260905/commit_approval.json"
+  },
+  "source_approval": {
+    "browser_cleaned_sources_confirmed": true,
+    "note": "Set true only after the four browser-side Pillow cleanup attachments and their reported hashes are confirmed."
+  },
+  "anchors_file": "qa/skirmish_direction4_actions_20260905/source/semantic_anchors.json",
+  "anchors_sha256": "906faa9f5d7301ac7deaaa0370efbf654bd1e1d7a74a77caa3fb9c51e6476aad",
+  "sources": [
+    {
+      "pose": "walk_step",
+      "file": "qa/skirmish_direction4_actions_20260905/source/official_top4_walk_step_4x4_alpha15.png",
+      "sha256": "ed588924d506ad52574ec2a9abb88e38409eff50e3b0bb74b590417e7129f557",
+      "raw_generated_file": "qa/skirmish_direction4_actions_20260905/source/official_top4_walk_step_4x4_raw.png",
+      "raw_generated_sha256": "18c6b484cac4a1b36339dba7092096939a737d81f57730f9d071b65685c19001",
+      "prompt_file": "qa/skirmish_direction4_actions_20260905/source/01_walk_pose_prompt.txt",
+      "prompt_sha256": "951d2af46dc397729fb5c5709a38ceb84b1a89eb1a4de426a071870e67a99a81",
+      "conversation": "https://chatgpt.com/c/6a9aa67d-22a0-83e9-aeb6-0237a7882356",
+      "rows": ["guan_dao", "guan_gong", "guan_jingqi", "guan_qi"],
+      "columns": ["se", "sw", "ne", "nw"],
+      "browser_cleanup": {
+        "method": "browser_python_pillow_alpha_le_15_rgba_zero",
+        "prompt_file": "qa/skirmish_direction4_actions_20260905/source/05_exact_alpha_cleanup_prompt.txt",
+        "prompt_sha256": "2215a986f5b9cb84d1a63e0c8ff47860c3ccabc0e3750f43f1b1b95ce9c676c9",
+        "confirmed": true,
+        "input_role": "web_upload_canonical",
+        "browser_upload_reencoded": true,
+        "exactness_basis": "web_upload_canonical",
+        "input_file": "qa/skirmish_direction4_actions_20260905/source/web_upload_canonical/official_top4_walk_step_4x4_web_upload.png",
+        "input_sha256": "3195036abc613f0a7ca7772afcfc6b4f7c47db3bbce57d8f99f9a976a47fa694",
+        "output_sha256": "ed588924d506ad52574ec2a9abb88e38409eff50e3b0bb74b590417e7129f557",
+        "cleared_pixel_count": 96646,
+        "verification_file": "qa/skirmish_direction4_actions_20260905/source/alpha_cleanup_verification.json",
+        "verification_sha256": "6002cd5ccaaa463fef2bed1987632d35af5198479091dbd233f14bd172f478a2"
+      }
+    },
+    {
+      "pose": "attack_strike",
+      "file": "qa/skirmish_direction4_actions_20260905/source/official_top4_attack_strike_4x4_alpha15.png",
+      "sha256": "18f5adc553908a57d321a17f479596080c98bacf5b092e34b9f9c7d8f8706b60",
+      "raw_generated_file": "qa/skirmish_direction4_actions_20260905/source/official_top4_attack_strike_4x4_raw.png",
+      "raw_generated_sha256": "98256faba2b7d5c2c01368495b81d0ec32c141c0472c5b33720937fff71efe04",
+      "prompt_file": "qa/skirmish_direction4_actions_20260905/source/02_attack_pose_prompt.txt",
+      "prompt_sha256": "1caa7e5d0a5ec2d5cd0e4f270139d286169fe8a10b6ab4bef27e72a22eb73f30",
+      "conversation": "https://chatgpt.com/c/6a9aa67d-22a0-83e9-aeb6-0237a7882356",
+      "rows": ["guan_dao", "guan_gong", "guan_jingqi", "guan_qi"],
+      "columns": ["se", "sw", "ne", "nw"],
+      "browser_cleanup": {
+        "method": "browser_python_pillow_alpha_le_15_rgba_zero",
+        "prompt_file": "qa/skirmish_direction4_actions_20260905/source/05_exact_alpha_cleanup_prompt.txt",
+        "prompt_sha256": "2215a986f5b9cb84d1a63e0c8ff47860c3ccabc0e3750f43f1b1b95ce9c676c9",
+        "confirmed": true,
+        "input_role": "web_upload_canonical",
+        "browser_upload_reencoded": true,
+        "exactness_basis": "web_upload_canonical",
+        "input_file": "qa/skirmish_direction4_actions_20260905/source/web_upload_canonical/official_top4_attack_strike_4x4_web_upload.png",
+        "input_sha256": "cdc191910677996d5aecbaba486001fcd72e8f13e28b7e8692f85e5c88645c51",
+        "output_sha256": "18f5adc553908a57d321a17f479596080c98bacf5b092e34b9f9c7d8f8706b60",
+        "cleared_pixel_count": 95269,
+        "verification_file": "qa/skirmish_direction4_actions_20260905/source/alpha_cleanup_verification.json",
+        "verification_sha256": "6002cd5ccaaa463fef2bed1987632d35af5198479091dbd233f14bd172f478a2"
+      }
+    },
+    {
+      "pose": "death_fall",
+      "file": "qa/skirmish_direction4_actions_20260905/source/official_top4_death_fall_4x4_alpha15.png",
+      "sha256": "f0ffe3141de5acd0669a894db5196a0ad7ead51f0e99fc8fbc2f68a671dd0267",
+      "raw_generated_file": "qa/skirmish_direction4_actions_20260905/source/official_top4_death_fall_4x4_raw.png",
+      "raw_generated_sha256": "64865f3efda6c4e9fdbb7b93bfdf2e44c2fd8e39d4ab8f9c462f59a0fe19994e",
+      "prompt_file": "qa/skirmish_direction4_actions_20260905/source/03_death_pose_prompt.txt",
+      "prompt_sha256": "ef2a82852b589a13809c5190e2cc24470f9b7b4070eb487b7d72ee98109f8a42",
+      "conversation": "https://chatgpt.com/c/6a9aa67d-22a0-83e9-aeb6-0237a7882356",
+      "rows": ["guan_dao", "guan_gong", "guan_jingqi", "guan_qi"],
+      "columns": ["se", "sw", "ne", "nw"],
+      "browser_cleanup": {
+        "method": "browser_python_pillow_alpha_le_15_rgba_zero",
+        "prompt_file": "qa/skirmish_direction4_actions_20260905/source/05_exact_alpha_cleanup_prompt.txt",
+        "prompt_sha256": "2215a986f5b9cb84d1a63e0c8ff47860c3ccabc0e3750f43f1b1b95ce9c676c9",
+        "confirmed": true,
+        "input_role": "web_upload_canonical",
+        "browser_upload_reencoded": true,
+        "exactness_basis": "web_upload_canonical",
+        "input_file": "qa/skirmish_direction4_actions_20260905/source/web_upload_canonical/official_top4_death_fall_4x4_web_upload.png",
+        "input_sha256": "57d3659602fc31cdd6a87c071ad681062556830fcadc2365f01a3269bc30cc46",
+        "output_sha256": "f0ffe3141de5acd0669a894db5196a0ad7ead51f0e99fc8fbc2f68a671dd0267",
+        "cleared_pixel_count": 77393,
+        "verification_file": "qa/skirmish_direction4_actions_20260905/source/alpha_cleanup_verification.json",
+        "verification_sha256": "6002cd5ccaaa463fef2bed1987632d35af5198479091dbd233f14bd172f478a2"
+      }
+    },
+    {
+      "pose": "death_down",
+      "file": "qa/skirmish_direction4_actions_20260905/source/official_top4_death_down_4x4_alpha15.png",
+      "sha256": "26ec3200c19f3366916c30c67b1dbd0de00f1c837d6f42eddebbd931285ff97c",
+      "raw_generated_file": "qa/skirmish_direction4_actions_20260905/source/official_top4_death_down_4x4_raw.png",
+      "raw_generated_sha256": "93afca93d62fec9086b6389e196efc24129742627537af2449a174a27558f338",
+      "prompt_file": "qa/skirmish_direction4_actions_20260905/source/04_death_down_prompt.txt",
+      "prompt_sha256": "90c3cd244d2d5a917995f39e8d12313c388c46fd1b03d722065d465a5e4ec40d",
+      "conversation": "https://chatgpt.com/c/6a9aa67d-22a0-83e9-aeb6-0237a7882356",
+      "rows": ["guan_dao", "guan_gong", "guan_jingqi", "guan_qi"],
+      "columns": ["se", "sw", "ne", "nw"],
+      "browser_cleanup": {
+        "method": "browser_python_pillow_alpha_le_15_rgba_zero",
+        "prompt_file": "qa/skirmish_direction4_actions_20260905/source/05_exact_alpha_cleanup_prompt.txt",
+        "prompt_sha256": "2215a986f5b9cb84d1a63e0c8ff47860c3ccabc0e3750f43f1b1b95ce9c676c9",
+        "confirmed": true,
+        "input_role": "web_upload_canonical",
+        "browser_upload_reencoded": true,
+        "exactness_basis": "web_upload_canonical",
+        "input_file": "qa/skirmish_direction4_actions_20260905/source/web_upload_canonical/official_top4_death_down_4x4_web_upload.png",
+        "input_sha256": "ca1fb0cc7d5aea4b5efc08b4ea0017ea02d8f1027de14e996ce328eef8bb60d8",
+        "output_sha256": "26ec3200c19f3366916c30c67b1dbd0de00f1c837d6f42eddebbd931285ff97c",
+        "cleared_pixel_count": 162957,
+        "verification_file": "qa/skirmish_direction4_actions_20260905/source/alpha_cleanup_verification.json",
+        "verification_sha256": "6002cd5ccaaa463fef2bed1987632d35af5198479091dbd233f14bd172f478a2"
+      }
+    }
+  ],
+  "idle_inputs": [
+    {"unit": "guan_dao", "direction": "se", "file": "assets/anim/guan_dao_idle_se.png", "sha256": "d4dd0f52d574200f4c69d37341caa2003396c4069713413c5dfd92aa70174460"},
+    {"unit": "guan_dao", "direction": "sw", "file": "assets/anim/guan_dao_idle_sw.png", "sha256": "09c5a60294d79b6ecd6953d417552e1ec06fa86ddeebb8a760e7422f6f7a04e8"},
+    {"unit": "guan_dao", "direction": "ne", "file": "assets/anim/guan_dao_idle_ne.png", "sha256": "1e92bb4de0fe14a85c252ed9bf115e415a6bd4a2dc2deae0a559f75574c14794"},
+    {"unit": "guan_dao", "direction": "nw", "file": "assets/anim/guan_dao_idle_nw.png", "sha256": "c6d0110191845f681b67a47df87f2d3ab9433663791b4008094eeb8a50d6415d"},
+    {"unit": "guan_gong", "direction": "se", "file": "assets/anim/guan_gong_idle_se.png", "sha256": "f902e3ed067ed8f74cf6712447319c5f76f813eca7a990b426c7829a704a01ac"},
+    {"unit": "guan_gong", "direction": "sw", "file": "assets/anim/guan_gong_idle_sw.png", "sha256": "e846831dbc685245565653fd3331ba8bd3ce0784317da512c0ba7426dd8f4959"},
+    {"unit": "guan_gong", "direction": "ne", "file": "assets/anim/guan_gong_idle_ne.png", "sha256": "7a21bcebd634e69f858aae304d7de379ae32e7b7b868810049167b624a422ac0"},
+    {"unit": "guan_gong", "direction": "nw", "file": "assets/anim/guan_gong_idle_nw.png", "sha256": "9561a5f20a801c4fc9c29bcdc473f9d828f8086d152327181f10de42e6180e6e"},
+    {"unit": "guan_jingqi", "direction": "se", "file": "assets/anim/guan_jingqi_idle_se.png", "sha256": "382b8d7aa079f3a9b8902e7ee2a15ab29d648777d02a803597b66aa27be30d68"},
+    {"unit": "guan_jingqi", "direction": "sw", "file": "assets/anim/guan_jingqi_idle_sw.png", "sha256": "8bcd08d76c931ba501c3e9a66cf2c274b9c3fac0cdcff757b50c58c136e98790"},
+    {"unit": "guan_jingqi", "direction": "ne", "file": "assets/anim/guan_jingqi_idle_ne.png", "sha256": "ba95ebf62bef3a2b4b9d4703d11376a13e0446f8deae643e33557e68a065061f"},
+    {"unit": "guan_jingqi", "direction": "nw", "file": "assets/anim/guan_jingqi_idle_nw.png", "sha256": "7446959274696b4dca1339e8342ca4ad20364e2725aadaf977e0c6784a0ff82e"},
+    {"unit": "guan_qi", "direction": "se", "file": "assets/anim/guan_qi_idle_se.png", "sha256": "8b2fb7522018edcc112edfc654e1b00b56ee4706ff83666e4a39cbe4417586fc"},
+    {"unit": "guan_qi", "direction": "sw", "file": "assets/anim/guan_qi_idle_sw.png", "sha256": "73c1bbfdbca91743103c9e2f4bf409ab853be9714ba82a840a05001619973d3b"},
+    {"unit": "guan_qi", "direction": "ne", "file": "assets/anim/guan_qi_idle_ne.png", "sha256": "797e877eb4fd637ad6e39d4189610542891697b623eca7acc13ef42f7aba2df7"},
+    {"unit": "guan_qi", "direction": "nw", "file": "assets/anim/guan_qi_idle_nw.png", "sha256": "c7c7a25b684192b5711b58bcef81c7cbb3e282fbbe76f71ca27ff3241fe90c8d"}
+  ],
+  "collision_policy": {
+    "expected_existing_sha256": {}
+  }
+}

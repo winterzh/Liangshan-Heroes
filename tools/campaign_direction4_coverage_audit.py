@@ -15,7 +15,7 @@ import math
 import re
 import struct
 from collections import Counter, defaultdict
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 
@@ -217,6 +217,1124 @@ def png_dimensions(path: Path) -> tuple[int, int] | None:
 def _manifest_output_path(base: str, value: str) -> str:
     value = value.replace("\\", "/")
     return value if value.startswith("assets/") else f"{base.rstrip('/')}/{value.lstrip('/')}"
+
+
+SKIRMISH_ACTION_MANIFEST_REL = "assets/direction4/skirmish_top4_actions_direction4_manifest.json"
+SKIRMISH_ACTION_UNITS = ("guan_dao", "guan_gong", "guan_jingqi", "guan_qi")
+SKIRMISH_ACTION_POSES = ("walk_step", "attack_strike", "death_fall", "death_down")
+SKIRMISH_ACTION_ANCHOR_KIND = {
+    "walk_step": "foot_or_hoof",
+    "attack_strike": "foot_or_hoof",
+    "death_fall": "foot_or_hoof",
+    "death_down": "lowest_contact",
+}
+SKIRMISH_ACTION_RECIPES = {
+    "walk": ("idle", "walk_step"),
+    "attack": ("idle", "attack_strike", "idle"),
+    "death": ("idle", "death_fall", "death_down", "death_down"),
+}
+SKIRMISH_ARCHER_SW_REVISION_REL = "assets/direction4/skirmish_archer_sw_revision_20260905.json"
+SKIRMISH_ARCHER_SW_SOURCE_REL = "qa/skirmish_direction4_fix_20260905/source/archer_sw_idle_step_raw.png"
+SKIRMISH_ARCHER_SW_PROMPT_REL = "qa/skirmish_direction4_fix_20260905/source/01_archer_sw_prompt.txt"
+SKIRMISH_ARCHER_SW_BACKUP_REL = "qa/skirmish_direction4_fix_20260905/archer_before"
+SKIRMISH_ARCHER_SW_TARGETS = tuple(
+    f"guan_gong_{state}_sw.png" for state in ("idle", "walk", "attack", "death")
+)
+SKIRMISH_ARCHER_SW_ACTION_TARGETS = frozenset(SKIRMISH_ARCHER_SW_TARGETS[1:])
+SKIRMISH_ARCHER_SW_PROCESSING = (
+    "two equal source halves; complete alpha bounding crop; shared scale; virtual ground pivot; "
+    "unmasked RGBA placement; exact strip assembly; no reflection, alpha clearing, repaint or color correction"
+)
+SKIRMISH_ARCHER_SW_VISUAL_REVIEW = (
+    "Assistant reviewed left-facing nose/chest/boots in both poses; not user visual approval"
+)
+SKIRMISH_ARCHER_SW_RETAINED = (
+    "attack strike and death fall/down remain byte-identical RGBA to original strips"
+)
+SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+
+
+def _is_sha256(value: Any) -> bool:
+    return isinstance(value, str) and SHA256_RE.fullmatch(value) is not None
+
+
+def _canonical_json_sha256(value: Any) -> str:
+    payload = (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _json_object(path: Path) -> dict[str, Any] | None:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, UnicodeError):
+        return None
+    return value if isinstance(value, dict) else None
+
+
+def _relative_parts(value: Any) -> tuple[str, ...] | None:
+    """Accept canonical project/stage-relative POSIX paths only."""
+    if not isinstance(value, str) or not value or "\\" in value or re.match(r"^[A-Za-z]:", value):
+        return None
+    pure = PurePosixPath(value)
+    if pure.is_absolute() or any(part in ("", ".", "..") for part in pure.parts):
+        return None
+    return pure.parts
+
+
+def _safe_relative_path(root: Path, value: Any, *, base: Path | None = None) -> Path | None:
+    parts = _relative_parts(value)
+    if parts is None:
+        return None
+    root_resolved = root.resolve()
+    base_resolved = (base or root).resolve()
+    try:
+        base_resolved.relative_to(root_resolved)
+        candidate = base_resolved.joinpath(*parts).resolve()
+        candidate.relative_to(base_resolved)
+        candidate.relative_to(root_resolved)
+    except (OSError, ValueError):
+        return None
+    return candidate
+
+
+def _verified_relative_file(
+    root: Path,
+    value: Any,
+    expected_sha256: Any,
+    *,
+    base: Path | None = None,
+) -> Path | None:
+    if not _is_sha256(expected_sha256):
+        return None
+    path = _safe_relative_path(root, value, base=base)
+    if path is None or not path.is_file() or path.is_symlink():
+        return None
+    try:
+        return path if sha256(path) == expected_sha256 else None
+    except OSError:
+        return None
+
+
+def _verified_override_file(root: Path, path: Any, expected_sha256: Any) -> Path | None:
+    """Verify a fixed local historical copy without accepting a redirected path."""
+    if not isinstance(path, Path) or not _is_sha256(expected_sha256):
+        return None
+    try:
+        path.resolve().relative_to(root.resolve())
+    except (OSError, ValueError):
+        return None
+    if not path.is_file() or path.is_symlink():
+        return None
+    try:
+        return path if sha256(path) == expected_sha256 else None
+    except OSError:
+        return None
+
+
+def _config_path(root: Path, value: Any) -> Path | None:
+    """Resolve a config path while still requiring it to remain in the project."""
+    if not isinstance(value, str) or not value:
+        return None
+    raw = Path(value)
+    try:
+        candidate = raw.resolve() if raw.is_absolute() else (root / raw).resolve()
+        candidate.relative_to(root.resolve())
+    except (OSError, ValueError):
+        return None
+    return candidate
+
+
+def _native_rgba_png_dimensions(path: Path) -> tuple[int, int] | None:
+    """Read only the PNG contract fields needed by this static audit."""
+    try:
+        header = path.read_bytes()[:33]
+    except OSError:
+        return None
+    if (
+        len(header) < 33
+        or header[:8] != b"\x89PNG\r\n\x1a\n"
+        or struct.unpack(">I", header[8:12])[0] != 13
+        or header[12:16] != b"IHDR"
+        or header[24] != 8
+        or header[25] != 6
+        or header[26:29] != b"\x00\x00\x00"
+    ):
+        return None
+    width, height = struct.unpack(">II", header[16:24])
+    return (width, height) if width > 0 and height > 0 else None
+
+
+def _positive_int(value: Any) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value > 0
+
+
+def _nonnegative_int(value: Any) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+
+def _rect(value: Any) -> tuple[int, int, int, int] | None:
+    if isinstance(value, dict) and set(value) == {"x0", "y0", "x1", "y1"}:
+        value = [value["x0"], value["y0"], value["x1"], value["y1"]]
+    if not isinstance(value, list) or len(value) != 4 or any(not _nonnegative_int(part) for part in value):
+        return None
+    x0, y0, x1, y1 = value
+    return (x0, y0, x1, y1) if x0 < x1 and y0 < y1 else None
+
+
+def _int_pair(value: Any) -> tuple[int, int] | None:
+    if not isinstance(value, list) or len(value) != 2 or any(not isinstance(part, int) or isinstance(part, bool) for part in value):
+        return None
+    return value[0], value[1]
+
+
+def _rectangles_overlap(first: tuple[int, int, int, int], second: tuple[int, int, int, int]) -> bool:
+    return max(first[0], second[0]) < min(first[2], second[2]) and max(first[1], second[1]) < min(first[3], second[3])
+
+
+def _exact_keyed_records(
+    value: Any,
+    expected: set[tuple[str, ...]],
+    fields: tuple[str, ...],
+) -> dict[tuple[str, ...], dict[str, Any]] | None:
+    if not isinstance(value, list) or len(value) != len(expected):
+        return None
+    result: dict[tuple[str, ...], dict[str, Any]] = {}
+    for row in value:
+        if not isinstance(row, dict):
+            return None
+        key = tuple(str(row.get(field, "")) for field in fields)
+        if key not in expected or key in result:
+            return None
+        result[key] = row
+    return result if set(result) == expected else None
+
+
+def _valid_skirmish_action_chain(
+    root: Path,
+    manifest_path: Path,
+    production: dict[str, Any],
+    *,
+    production_file_overrides: dict[str, Path] | None = None,
+) -> bool:
+    """Verify the complete reviewed-source-to-production chain for all 48 strips.
+
+    This intentionally has no partial-success mode.  A batch with one missing or
+    drifting source, prompt, anchor, approval, staged strip, or production strip
+    is provenance-incomplete as a whole.
+    """
+    overrides = production_file_overrides or {}
+    if set(overrides) - set(SKIRMISH_ARCHER_SW_TARGETS):
+        return False
+    units = SKIRMISH_ACTION_UNITS
+    directions = DIRECTIONS
+    poses = SKIRMISH_ACTION_POSES
+    recipes = SKIRMISH_ACTION_RECIPES
+    expected_outputs = {(unit, state, direction) for unit in units for direction in directions for state in recipes}
+    expected_anchors = {(pose, unit, direction) for pose in poses for unit in units for direction in directions}
+    expected_idles = {(unit, direction) for unit in units for direction in directions}
+
+    if (
+        production.get("schema_version") != 2
+        or production.get("kind") != "skirmish_direction4_action_production_manifest"
+        or not isinstance(production.get("batch_id"), str)
+        or not production["batch_id"].strip()
+        or not isinstance(production.get("committed_at"), str)
+        or not production["committed_at"].strip()
+        or not isinstance(production.get("transaction_id"), str)
+        or not production["transaction_id"].strip()
+        or production.get("steam_modified_or_exported") is not False
+    ):
+        return False
+    batch_id = production["batch_id"]
+
+    production_outputs = _exact_keyed_records(production.get("outputs"), expected_outputs, ("unit", "state", "direction"))
+    if production_outputs is None:
+        return False
+    for (unit, state, direction), row in production_outputs.items():
+        target = f"{unit}_{state}_{direction}.png"
+        if row.get("target") != target or row.get("recipe") != list(recipes[state]) or not _is_sha256(row.get("sha256")):
+            return False
+
+    candidate_ref = production.get("candidate_manifest")
+    if not isinstance(candidate_ref, dict):
+        return False
+    candidate_path = _verified_relative_file(root, candidate_ref.get("file"), candidate_ref.get("sha256"))
+    candidate = _json_object(candidate_path) if candidate_path is not None else None
+    if candidate is None:
+        return False
+    candidate_file_sha = candidate_ref["sha256"]
+    self_hash = candidate.get("stage_manifest_sha256")
+    candidate_without_self = {key: value for key, value in candidate.items() if key != "stage_manifest_sha256"}
+    if (
+        candidate.get("schema_version") != 2
+        or candidate.get("kind") != "skirmish_direction4_action_candidate_manifest"
+        or candidate.get("batch_id") != batch_id
+        or candidate.get("scope") != "production"
+        or candidate.get("steam_modified_or_exported") is not False
+        or candidate.get("production_written") is not False
+        or not isinstance(candidate.get("staged_at"), str)
+        or not candidate["staged_at"].strip()
+        or not _is_sha256(self_hash)
+        or _canonical_json_sha256(candidate_without_self) != self_hash
+    ):
+        return False
+    stage_root = candidate_path.parent
+
+    config_ref = candidate.get("config")
+    if not isinstance(config_ref, dict):
+        return False
+    config_path = _verified_relative_file(root, config_ref.get("file"), config_ref.get("sha256"))
+    config = _json_object(config_path) if config_path is not None else None
+    if (
+        config is None
+        or config.get("schema_version") != 2
+        or config.get("kind") != "skirmish_direction4_action_batch"
+        or config.get("batch_id") != batch_id
+        or config.get("scope") != "production"
+        or config.get("units") != list(units)
+        or config.get("directions") != list(directions)
+    ):
+        return False
+    config_paths = config.get("paths")
+    if not isinstance(config_paths, dict):
+        return False
+
+    approval_ref = production.get("approval_receipt")
+    if not isinstance(approval_ref, dict):
+        return False
+    approval_path = _verified_relative_file(root, approval_ref.get("file"), approval_ref.get("sha256"))
+    approval = _json_object(approval_path) if approval_path is not None else None
+    if (
+        approval is None
+        or approval.get("schema_version") != 1
+        or approval.get("kind") != "skirmish_direction4_action_commit_approval"
+        or approval.get("batch_id") != batch_id
+        or approval.get("approved") is not True
+        or approval.get("stage_manifest_sha256") != candidate_file_sha
+        or not isinstance(approval.get("approved_by"), str)
+        or not approval["approved_by"].strip()
+        or not isinstance(approval.get("approved_at"), str)
+        or not approval["approved_at"].strip()
+        or not isinstance(approval.get("visual_review_note"), str)
+        or not approval["visual_review_note"].strip()
+        or approval_ref.get("approved_by") != approval.get("approved_by")
+        or approval_ref.get("approved_at") != approval.get("approved_at")
+    ):
+        return False
+
+    if (
+        _config_path(root, config_paths.get("staging_dir")) != stage_root.resolve()
+        or _config_path(root, config_paths.get("production_root")) != (root / "assets/anim").resolve()
+        or _config_path(root, config_paths.get("commit_manifest")) != manifest_path.resolve()
+        or _config_path(root, config_paths.get("approval_receipt")) != approval_path.resolve()
+        or config.get("source_approval", {}).get("browser_cleaned_sources_confirmed") is not True
+    ):
+        return False
+
+    anchors_ref = candidate.get("semantic_anchors")
+    if not isinstance(anchors_ref, dict):
+        return False
+    anchors_path = _verified_relative_file(root, anchors_ref.get("file"), anchors_ref.get("sha256"))
+    anchors_document = _json_object(anchors_path) if anchors_path is not None else None
+    if (
+        anchors_document is None
+        or anchors_document.get("schema_version") not in (1, 2)
+        or anchors_document.get("kind") != "skirmish_direction4_semantic_anchors"
+        or anchors_ref.get("schema_version") != anchors_document.get("schema_version")
+        or anchors_ref.get("count") != 64
+        or anchors_ref.get("fallback_used") is not False
+        or _config_path(root, config.get("anchors_file")) != anchors_path.resolve()
+        or config.get("anchors_sha256") != anchors_ref.get("sha256")
+        or production.get("semantic_anchors") != anchors_ref
+    ):
+        return False
+    anchor_rows = _exact_keyed_records(anchors_document.get("entries"), expected_anchors, ("pose", "unit", "direction"))
+    if anchor_rows is None:
+        return False
+
+    canvas = candidate.get("canvas")
+    layout = candidate.get("source_layout")
+    canvas_keys = (
+        "size_px", "max_content_width_px", "max_content_height_px",
+        "anchor_target_x_px", "anchor_target_y_px", "margin_px",
+        "max_walk_attack_fit_shift_px",
+    )
+    layout_keys = (
+        "minimum_source_size_px", "rect_edge_transparent_clearance_px",
+        "anchor_evidence_radius_px", "subject_group_join_gap_px",
+        "minimum_subject_alpha_pixels",
+    )
+    if (
+        not isinstance(canvas, dict)
+        or canvas.get("size_px") != 256
+        or any(not _positive_int(canvas.get(key)) for key in canvas_keys)
+        or canvas.get("margin_px") != 4
+        or canvas.get("anchor_target_x_px") != 128
+        or canvas.get("anchor_target_y_px") != 210
+        or canvas.get("max_walk_attack_fit_shift_px") != 20
+        or canvas.get("max_content_width_px") != canvas["size_px"] - 2 * canvas["margin_px"]
+        or canvas.get("max_content_height_px") != canvas["size_px"] - 2 * canvas["margin_px"]
+        or canvas.get("max_walk_attack_fit_shift_px") > canvas["max_content_width_px"]
+        or not isinstance(config.get("canvas"), dict)
+        or any(config["canvas"].get(key) != canvas.get(key) for key in canvas_keys)
+        or not isinstance(layout, dict)
+        or layout.get("mode") != "manual_source_rects_v2"
+        or any(not _nonnegative_int(layout.get(key)) for key in layout_keys)
+        or layout.get("rect_edge_transparent_clearance_px", 0) < 1
+        or layout.get("minimum_subject_alpha_pixels", 0) < 1
+        or not isinstance(config.get("source_layout"), dict)
+        or config["source_layout"].get("mode") != layout.get("mode")
+        or any(config["source_layout"].get(key) != layout.get(key) for key in layout_keys)
+    ):
+        return False
+
+    candidate_sources = _exact_keyed_records(candidate.get("sources"), {(pose,) for pose in poses}, ("pose",))
+    config_sources = _exact_keyed_records(config.get("sources"), {(pose,) for pose in poses}, ("pose",))
+    if candidate_sources is None or config_sources is None or production.get("source_chain") != candidate.get("sources"):
+        return False
+    source_dimensions: dict[str, tuple[int, int]] = {}
+    cleanup_verification_documents: dict[Path, dict[str, Any]] = {}
+    for pose in poses:
+        source = candidate_sources[(pose,)]
+        configured = config_sources[(pose,)]
+        source_path = _verified_relative_file(root, source.get("file"), source.get("sha256"))
+        raw_generated_path = _verified_relative_file(root, source.get("raw_generated_file"), source.get("raw_generated_sha256"))
+        source_size = _native_rgba_png_dimensions(source_path) if source_path is not None else None
+        raw_generated_size = _native_rgba_png_dimensions(raw_generated_path) if raw_generated_path is not None else None
+        prompt = source.get("prompt")
+        cleanup = source.get("browser_cleanup")
+        configured_cleanup = configured.get("browser_cleanup")
+        if not isinstance(prompt, dict) or not isinstance(cleanup, dict) or not isinstance(configured_cleanup, dict):
+            return False
+        prompt_path = _verified_relative_file(root, prompt.get("file"), prompt.get("sha256"))
+        cleanup_input_path = _verified_relative_file(root, cleanup.get("input_file"), cleanup.get("input_sha256"))
+        cleanup_input_size = _native_rgba_png_dimensions(cleanup_input_path) if cleanup_input_path is not None else None
+        cleanup_prompt_path = _verified_relative_file(root, cleanup.get("prompt_file"), cleanup.get("prompt_sha256"))
+        cleanup_verification_path = _verified_relative_file(root, cleanup.get("verification_file"), cleanup.get("verification_sha256"))
+        configured_source_path = _config_path(root, configured.get("file"))
+        configured_raw_path = _config_path(root, configured.get("raw_generated_file"))
+        configured_prompt_path = _config_path(root, configured.get("prompt_file"))
+        configured_cleanup_input_path = _config_path(root, configured_cleanup.get("input_file"))
+        configured_cleanup_prompt_path = _config_path(root, configured_cleanup.get("prompt_file"))
+        configured_cleanup_verification_path = _config_path(root, configured_cleanup.get("verification_file"))
+        reviewed_source_root = (root / "qa/skirmish_direction4_actions_20260905/source").resolve()
+        canonical_input_root = (reviewed_source_root / "web_upload_canonical").resolve()
+        expected_verification_path = (reviewed_source_root / "alpha_cleanup_verification.json").resolve()
+        try:
+            raw_generated_path.relative_to(reviewed_source_root) if raw_generated_path is not None else None
+            cleanup_input_path.relative_to(canonical_input_root) if cleanup_input_path is not None else None
+        except ValueError:
+            return False
+        if (
+            source_path is None
+            or raw_generated_path is None
+            or cleanup_input_path is None
+            or source_size is None
+            or raw_generated_size != source_size
+            or cleanup_input_size != source_size
+            or prompt_path is None
+            or cleanup_prompt_path is None
+            or cleanup_verification_path is None
+            or cleanup_verification_path.resolve() != expected_verification_path
+            or len({source_path.resolve(), raw_generated_path.resolve(), cleanup_input_path.resolve()}) != 3
+            or source.get("raw_generated_sha256") == cleanup.get("input_sha256")
+            or source.get("width") != source_size[0]
+            or source.get("height") != source_size[1]
+            or source_size[0] != source_size[1]
+            or source_size[0] < layout["minimum_source_size_px"]
+            or source.get("png_contract") != "single-frame native 8-bit PNG color type 6 RGBA"
+            or source.get("rows") != list(units)
+            or source.get("columns") != list(directions)
+            or not isinstance(source.get("layout"), str)
+            or "manual_source_rect" not in source["layout"]
+            or not isinstance(source.get("visible_pixel_ownership"), str)
+            or "Every source alpha>0 pixel" not in source["visible_pixel_ownership"]
+            or not isinstance(source.get("conversation"), str)
+            or not source["conversation"].startswith("https://chatgpt.com/c/")
+            or "?" in source["conversation"]
+            or cleanup.get("method") != "browser_python_pillow_alpha_le_15_rgba_zero"
+            or cleanup.get("confirmed") is not True
+            or cleanup.get("input_role") != "web_upload_canonical"
+            or cleanup.get("browser_upload_reencoded") is not True
+            or cleanup.get("exactness_basis") != "web_upload_canonical"
+            or cleanup.get("output_sha256") != source.get("sha256")
+            or not _nonnegative_int(cleanup.get("cleared_pixel_count"))
+            or configured_source_path != source_path.resolve()
+            or configured.get("sha256") != source.get("sha256")
+            or configured_raw_path != raw_generated_path.resolve()
+            or configured.get("raw_generated_sha256") != source.get("raw_generated_sha256")
+            or configured_prompt_path != prompt_path.resolve()
+            or configured.get("prompt_sha256") != prompt.get("sha256")
+            or configured.get("conversation") != source.get("conversation")
+            or configured.get("rows") != source.get("rows")
+            or configured.get("columns") != source.get("columns")
+            or configured_cleanup.get("method") != cleanup.get("method")
+            or configured_cleanup.get("confirmed") is not True
+            or configured_cleanup.get("input_role") != cleanup.get("input_role")
+            or configured_cleanup.get("browser_upload_reencoded") is not True
+            or configured_cleanup.get("exactness_basis") != cleanup.get("exactness_basis")
+            or configured_cleanup_input_path != cleanup_input_path.resolve()
+            or configured_cleanup.get("input_sha256") != cleanup.get("input_sha256")
+            or configured_cleanup.get("output_sha256") != cleanup.get("output_sha256")
+            or configured_cleanup.get("cleared_pixel_count") != cleanup.get("cleared_pixel_count")
+            or configured_cleanup_prompt_path != cleanup_prompt_path.resolve()
+            or configured_cleanup.get("prompt_sha256") != cleanup.get("prompt_sha256")
+            or configured_cleanup_verification_path != cleanup_verification_path.resolve()
+            or configured_cleanup.get("verification_sha256") != cleanup.get("verification_sha256")
+        ):
+            return False
+
+        verification = cleanup_verification_documents.get(cleanup_verification_path)
+        if verification is None:
+            verification = _json_object(cleanup_verification_path)
+            if verification is None:
+                return False
+            cleanup_verification_documents[cleanup_verification_path] = verification
+        provenance_note = verification.get("provenance_note")
+        verification_results = _exact_keyed_records(verification.get("results"), {(item,) for item in poses}, ("pose",))
+        if (
+            verification.get("schema_version") != 1
+            or verification.get("kind") != "browser_alpha_cleanup_verification"
+            or verification.get("passed") is not True
+            or verification.get("method") != cleanup.get("method")
+            or verification.get("conversation") != source.get("conversation")
+            or not isinstance(provenance_note, str)
+            or "re-encoded" not in provenance_note
+            or "web_upload_canonical" not in provenance_note
+            or verification_results is None
+        ):
+            return False
+        verified = verification_results[(pose,)]
+        verified_raw = _verified_relative_file(
+            root,
+            verified.get("raw_generated_file"),
+            verified.get("raw_generated_sha256"),
+            base=cleanup_verification_path.parent,
+        )
+        verified_input = _verified_relative_file(
+            root,
+            verified.get("input_file"),
+            verified.get("input_sha256"),
+            base=cleanup_verification_path.parent,
+        )
+        verified_output = _verified_relative_file(
+            root,
+            verified.get("output_file"),
+            verified.get("output_sha256"),
+            base=cleanup_verification_path.parent,
+        )
+        if (
+            verified_raw != raw_generated_path
+            or verified_input != cleanup_input_path
+            or verified_output != source_path
+            or verified.get("changed_pixels") != cleanup.get("cleared_pixel_count")
+            or verified.get("alpha_gt_15_mismatch_pixels") != 0
+            or verified.get("alpha_le_15_output_nonzero_pixels") != 0
+        ):
+            return False
+        source_dimensions[pose] = source_size
+
+    rectangles_by_pose: dict[str, list[tuple[int, int, int, int]]] = {pose: [] for pose in poses}
+    anchor_map: dict[tuple[str, str, str], dict[str, Any]] = {}
+    for key, row in anchor_rows.items():
+        pose, _unit, _direction = key
+        manual = _rect(row.get("manual_source_rect"))
+        width, height = source_dimensions[pose]
+        x = row.get("source_x_px")
+        y = row.get("source_y_px")
+        if (
+            row.get("measurement_kind") != SKIRMISH_ACTION_ANCHOR_KIND[pose]
+            or manual is None
+            or not _nonnegative_int(x)
+            or not _nonnegative_int(y)
+            or not isinstance(row.get("review_note"), str)
+            or not row["review_note"].strip()
+            or manual[2] > width
+            or manual[3] > height
+            or not (manual[0] <= x < manual[2] and manual[1] <= y < manual[3])
+            or any(_rectangles_overlap(manual, prior) for prior in rectangles_by_pose[pose])
+        ):
+            return False
+        rectangles_by_pose[pose].append(manual)
+        anchor_map[key] = row
+
+    config_idles = _exact_keyed_records(config.get("idle_inputs"), expected_idles, ("unit", "direction"))
+    candidate_idles = _exact_keyed_records(candidate.get("idle_inputs"), expected_idles, ("unit", "direction"))
+    if config_idles is None or candidate_idles is None:
+        return False
+    idle_map: dict[tuple[str, str], dict[str, Any]] = {}
+    for key, row in candidate_idles.items():
+        configured = config_idles[key]
+        unit, direction = key
+        target = f"{unit}_idle_{direction}.png"
+        declared_path = _safe_relative_path(root, row.get("file"))
+        override_path = overrides.get(target)
+        path = (
+            _verified_override_file(root, override_path, row.get("sha256"))
+            if override_path is not None
+            else _verified_relative_file(root, row.get("file"), row.get("sha256"))
+        )
+        configured_path = _config_path(root, configured.get("file"))
+        if (
+            path is None
+            or _native_rgba_png_dimensions(path) != (256, 256)
+            or not _is_sha256(row.get("pixel_sha256"))
+            or (
+                override_path is None
+                and configured_path != path.resolve()
+            )
+            or (
+                override_path is not None
+                and (
+                    declared_path != (root / "assets" / "anim" / target).resolve()
+                    or configured_path != declared_path
+                )
+            )
+            or configured.get("sha256") != row.get("sha256")
+        ):
+            return False
+        idle_map[key] = row
+
+    normalized = _exact_keyed_records(candidate.get("normalized_poses"), expected_anchors, ("pose", "unit", "direction"))
+    if normalized is None:
+        return False
+    pose_map: dict[tuple[str, str, str], dict[str, Any]] = {}
+    unit_scales: dict[str, float] = {}
+    unit_scale_metadata: dict[str, tuple[float, float, float]] = {}
+    for key, row in normalized.items():
+        pose, unit, _direction = key
+        anchor = anchor_map[key]
+        staged_expected = f"poses/{pose}/{unit}_{pose}_{key[2]}.png"
+        path = _verified_relative_file(root, row.get("staged_file"), row.get("sha256"), base=stage_root)
+        manual = _rect(row.get("manual_source_rect"))
+        source_rect = _rect(row.get("source_rect"))
+        semantic = row.get("semantic_anchor")
+        scale = row.get("uniform_scale_for_unit_all_actions")
+        reference_scale = row.get("reference_scale")
+        fit_limit = row.get("all_pose_canvas_fit_scale_limit")
+        fit_limited_scale = row.get("fit_limited_scale")
+        resized_size = _int_pair(row.get("resized_size"))
+        desired_paste = _int_pair(row.get("desired_paste_xy"))
+        paste = _int_pair(row.get("paste_xy"))
+        fit_shift = _int_pair(row.get("fit_shift_xy_px"))
+        placed_anchor = _int_pair(row.get("placed_anchor_xy_px"))
+        semantic_fit_shift = _int_pair(semantic.get("fit_shift_xy_px")) if isinstance(semantic, dict) else None
+        semantic_placed = _int_pair(semantic.get("placed_xy_px")) if isinstance(semantic, dict) else None
+        target_xy = (canvas["anchor_target_x_px"], canvas["anchor_target_y_px"])
+        scale_values = (reference_scale, fit_limit, fit_limited_scale, scale)
+        if (
+            path is None
+            or row.get("staged_file") != staged_expected
+            or _native_rgba_png_dimensions(path) != (256, 256)
+            or not _is_sha256(row.get("pixel_sha256"))
+            or not _is_sha256(row.get("source_crop_pixel_sha256"))
+            or manual != _rect(anchor.get("manual_source_rect"))
+            or source_rect is None
+            or not (manual[0] <= source_rect[0] < source_rect[2] <= manual[2])
+            or not (manual[1] <= source_rect[1] < source_rect[3] <= manual[3])
+            or not _positive_int(row.get("owned_alpha_pixels"))
+            or row.get("subject_group_count") != 1
+            or not isinstance(scale, (int, float))
+            or isinstance(scale, bool)
+            or scale <= 0
+            or any(not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0 for value in scale_values)
+            or fit_limited_scale != min(reference_scale, fit_limit)
+            or scale != fit_limited_scale
+            or row.get("reference_scale_basis") != "median of four same-direction existing-idle alpha-bbox heights divided by walk_step source alpha-bbox heights"
+            or row.get("resize_filter") != "Pillow.Image.Resampling.LANCZOS"
+            or resized_size is None
+            or resized_size[0] <= 0
+            or resized_size[1] <= 0
+            or resized_size[0] > canvas["max_content_width_px"]
+            or resized_size[1] > canvas["max_content_height_px"]
+            or desired_paste is None
+            or paste is None
+            or fit_shift is None
+            or placed_anchor is None
+            or fit_shift != (paste[0] - desired_paste[0], paste[1] - desired_paste[1])
+            or not (canvas["margin_px"] <= paste[0] <= canvas["size_px"] - canvas["margin_px"] - resized_size[0])
+            or not (canvas["margin_px"] <= paste[1] <= canvas["size_px"] - canvas["margin_px"] - resized_size[1])
+            or placed_anchor != (target_xy[0] + fit_shift[0], target_xy[1] + fit_shift[1])
+            or (pose in ("walk_step", "attack_strike") and max(abs(fit_shift[0]), abs(fit_shift[1])) > canvas["max_walk_attack_fit_shift_px"])
+            or not isinstance(semantic, dict)
+            or semantic.get("measurement_kind") != anchor.get("measurement_kind")
+            or semantic.get("source_xy_px") != [anchor.get("source_x_px"), anchor.get("source_y_px")]
+            or semantic.get("review_note") != anchor.get("review_note")
+            or semantic.get("target_xy_px") != [canvas["anchor_target_x_px"], canvas["anchor_target_y_px"]]
+            or semantic_fit_shift != fit_shift
+            or semantic_placed != placed_anchor
+        ):
+            return False
+        if unit in unit_scales and unit_scales[unit] != scale:
+            return False
+        unit_scales[unit] = float(scale)
+        metadata = (float(reference_scale), float(fit_limit), float(fit_limited_scale))
+        if unit in unit_scale_metadata and unit_scale_metadata[unit] != metadata:
+            return False
+        unit_scale_metadata[unit] = metadata
+        pose_map[key] = row
+
+    candidate_strips = _exact_keyed_records(candidate.get("strips"), expected_outputs, ("unit", "state", "direction"))
+    if candidate_strips is None:
+        return False
+    for key, strip in candidate_strips.items():
+        unit, state, direction = key
+        recipe = recipes[state]
+        target = f"{unit}_{state}_{direction}.png"
+        staged_expected = f"strips/{target}"
+        staged_path = _verified_relative_file(root, strip.get("staged_file"), strip.get("sha256"), base=stage_root)
+        production_row = production_outputs[key]
+        production_path = overrides.get(target, root / "assets" / "anim" / target)
+        frames = strip.get("frames")
+        if (
+            staged_path is None
+            or strip.get("staged_file") != staged_expected
+            or strip.get("target_file") != target
+            or strip.get("recipe") != list(recipe)
+            or strip.get("frame_count") != len(recipe)
+            or strip.get("size") != [256 * len(recipe), 256]
+            or _native_rgba_png_dimensions(staged_path) != (256 * len(recipe), 256)
+            or not _is_sha256(strip.get("pixel_sha256"))
+            or not isinstance(frames, list)
+            or len(frames) != len(recipe)
+            or production_row.get("sha256") != strip.get("sha256")
+            or _verified_override_file(root, production_path, strip.get("sha256")) is None
+            or _native_rgba_png_dimensions(production_path) != (256 * len(recipe), 256)
+        ):
+            return False
+        for frame_name, frame in zip(recipe, frames):
+            if not isinstance(frame, dict) or frame.get("kind") != frame_name:
+                return False
+            expected_frame = idle_map[(unit, direction)] if frame_name == "idle" else pose_map[(frame_name, unit, direction)]
+            expected_file = expected_frame["file"] if frame_name == "idle" else expected_frame["staged_file"]
+            if (
+                frame.get("file") != expected_file
+                or frame.get("sha256") != expected_frame.get("sha256")
+                or frame.get("pixel_sha256") != expected_frame.get("pixel_sha256")
+            ):
+                return False
+
+    counts = candidate.get("counts")
+    if not isinstance(counts, dict) or any(counts.get(key) != value for key, value in {
+        "source_atlases": 4,
+        "semantic_anchors": 64,
+        "normalized_poses": 64,
+        "production_strips": 48,
+        "candidate_contact_sheets": 1,
+    }.items()):
+        return False
+    contact = candidate.get("candidate_contact_sheet")
+    if not isinstance(contact, dict):
+        return False
+    contact_path = _verified_relative_file(root, contact.get("file"), contact.get("sha256"), base=stage_root)
+    if (
+        contact_path is None
+        or contact.get("qa_only") is not True
+        or not _is_sha256(contact.get("pixel_sha256"))
+        or not isinstance(contact.get("size"), list)
+        or len(contact["size"]) != 2
+        or tuple(contact["size"]) != _native_rgba_png_dimensions(contact_path)
+        or not isinstance(contact.get("coverage"), str)
+        or not contact["coverage"].strip()
+    ):
+        return False
+
+    snapshot = candidate.get("target_snapshot")
+    expected_targets = {f"{unit}_{state}_{direction}.png" for unit, state, direction in expected_outputs}
+    if not isinstance(snapshot, dict) or set(snapshot) != expected_targets:
+        return False
+    for target, row in snapshot.items():
+        if not isinstance(row, dict) or not isinstance(row.get("exists"), bool) or not isinstance(row.get("already_identical"), bool):
+            return False
+        if row["exists"]:
+            if not _is_sha256(row.get("sha256")):
+                return False
+        elif row.get("sha256") is not None or row["already_identical"]:
+            return False
+
+    comparisons = _exact_keyed_records(candidate.get("idle_walk_alpha_bbox_comparison"), expected_idles, ("unit", "direction"))
+    if comparisons is None:
+        return False
+    for key, row in comparisons.items():
+        idle = row.get("idle")
+        walk = row.get("walk_step")
+        idle_size = _int_pair(idle.get("size")) if isinstance(idle, dict) else None
+        walk_size = _int_pair(walk.get("size")) if isinstance(walk, dict) else None
+        height_ratio = row.get("walk_to_idle_height_ratio")
+        width_ratio = row.get("walk_to_idle_width_ratio")
+        reference_scale, fit_limit, fit_limited_scale = unit_scale_metadata[key[0]]
+        if (
+            idle_size is None
+            or walk_size is None
+            or min(*idle_size, *walk_size) <= 0
+            or not isinstance(height_ratio, (int, float))
+            or not isinstance(width_ratio, (int, float))
+            or not math.isclose(height_ratio, walk_size[1] / idle_size[1], rel_tol=0.0, abs_tol=1e-12)
+            or not math.isclose(width_ratio, walk_size[0] / idle_size[0], rel_tol=0.0, abs_tol=1e-12)
+            or row.get("preferred_height_ratio_range") != [0.9, 1.1]
+            or row.get("hard_height_ratio_range") != [0.85, 1.15]
+            or row.get("preferred_height_ratio_passed") is not (0.9 <= height_ratio <= 1.1)
+            or row.get("hard_height_ratio_passed") is not True
+            or not 0.85 <= height_ratio <= 1.15
+            or row.get("reference_scale") != reference_scale
+            or row.get("all_pose_canvas_fit_scale_limit") != fit_limit
+            or row.get("fit_limited_scale") != fit_limited_scale
+            or row.get("uniform_scale_for_unit_all_actions") != unit_scales[key[0]]
+            or not isinstance(row.get("gate"), str)
+            or "Hard 0.85-1.15" not in row["gate"]
+        ):
+            return False
+
+    tool = candidate.get("tool")
+    contract = candidate.get("processing_contract")
+    contract_text = "\n".join(contract) if isinstance(contract, list) and all(isinstance(item, str) for item in contract) else ""
+    if (
+        not isinstance(tool, dict)
+        or not isinstance(tool.get("file"), str)
+        or not _is_sha256(tool.get("sha256"))
+        or not isinstance(tool.get("python"), str)
+        or not tool["python"]
+        or not isinstance(tool.get("pillow"), str)
+        or not tool["pillow"]
+        or production.get("processing_contract") != contract
+        or "never converted, mirrored, rotated, masked, threshold-cropped, cleared, repainted, or supplemented" not in contract_text
+        or "manual_source_rect" not in contract_text
+        or "complete alpha>0 bbox" not in contract_text
+        or "reference scale is the median" not in contract_text
+        or "fit-limited world scale" not in contract_text
+        or "canvas.max_walk_attack_fit_shift_px" not in contract_text
+        or "walk=idle+walk_step; attack=idle+attack_strike+idle; death=idle+death_fall+death_down+death_down" not in contract_text
+    ):
+        return False
+    return True
+
+
+def _archer_sw_backup_overrides(root: Path) -> dict[str, Path]:
+    backup_root = root / SKIRMISH_ARCHER_SW_BACKUP_REL
+    return {target: backup_root / target for target in SKIRMISH_ARCHER_SW_TARGETS}
+
+
+def _base_archer_sw_hashes(root: Path, production: dict[str, Any]) -> dict[str, str] | None:
+    """Read the four pre-revision hashes from the already-validated base chain."""
+    expected_outputs = {
+        (unit, state, direction)
+        for unit in SKIRMISH_ACTION_UNITS
+        for direction in DIRECTIONS
+        for state in SKIRMISH_ACTION_RECIPES
+    }
+    production_outputs = _exact_keyed_records(
+        production.get("outputs"), expected_outputs, ("unit", "state", "direction")
+    )
+    candidate_ref = production.get("candidate_manifest")
+    if production_outputs is None or not isinstance(candidate_ref, dict):
+        return None
+    candidate_path = _verified_relative_file(root, candidate_ref.get("file"), candidate_ref.get("sha256"))
+    candidate = _json_object(candidate_path) if candidate_path is not None else None
+    expected_idles = {(unit, direction) for unit in SKIRMISH_ACTION_UNITS for direction in DIRECTIONS}
+    candidate_idles = (
+        _exact_keyed_records(candidate.get("idle_inputs"), expected_idles, ("unit", "direction"))
+        if candidate is not None
+        else None
+    )
+    if candidate_idles is None:
+        return None
+    hashes = {
+        "guan_gong_idle_sw.png": candidate_idles[("guan_gong", "sw")].get("sha256"),
+    }
+    for state in ("walk", "attack", "death"):
+        hashes[f"guan_gong_{state}_sw.png"] = production_outputs[("guan_gong", state, "sw")].get("sha256")
+    return hashes if all(_is_sha256(value) for value in hashes.values()) else None
+
+
+def _load_rgba_png(path: Path, expected_size: tuple[int, int]) -> Any | None:
+    """Decode a PNG read-only, retaining exact RGBA samples for strip checks."""
+    if _native_rgba_png_dimensions(path) != expected_size:
+        return None
+    try:
+        from PIL import Image
+
+        with Image.open(path) as opened:
+            if opened.format != "PNG" or opened.mode != "RGBA" or opened.size != expected_size:
+                return None
+            opened.load()
+            return opened.copy()
+    except (ImportError, OSError, ValueError):
+        return None
+
+
+def _valid_skirmish_archer_sw_revision(
+    root: Path,
+    revision_path: Path,
+    base_manifest_path: Path,
+    production: dict[str, Any],
+) -> bool:
+    """Verify the four-file SW archer patch and reconstruct every output pixel.
+
+    The old 48-strip chain is verified separately against immutable backups.
+    This gate then proves the new two-pose source, prompt, exact target scope,
+    before hashes, placement math, retained old frames, and live output pixels.
+    """
+    if not revision_path.is_file() or revision_path.is_symlink():
+        return False
+    revision = _json_object(revision_path)
+    expected_top_keys = {
+        "schema_version",
+        "kind",
+        "status",
+        "conversation",
+        "source",
+        "prompt",
+        "base_action_manifest_sha256",
+        "processing",
+        "placements",
+        "outputs",
+        "visual_review",
+        "retained_frames",
+    }
+    if (
+        revision is None
+        or set(revision) != expected_top_keys
+        or revision.get("schema_version") != 1
+        or revision.get("kind") != "skirmish_archer_sw_visual_revision"
+        or revision.get("status") != "committed"
+        or not isinstance(revision.get("conversation"), str)
+        or re.fullmatch(r"https://chatgpt\.com/c/[0-9a-f-]{36}", revision["conversation"]) is None
+        or revision.get("processing") != SKIRMISH_ARCHER_SW_PROCESSING
+        or revision.get("visual_review") != SKIRMISH_ARCHER_SW_VISUAL_REVIEW
+        or revision.get("retained_frames") != SKIRMISH_ARCHER_SW_RETAINED
+        or revision.get("base_action_manifest_sha256") != sha256(base_manifest_path)
+    ):
+        return False
+
+    source_ref = revision.get("source")
+    prompt_ref = revision.get("prompt")
+    if (
+        not isinstance(source_ref, dict)
+        or set(source_ref) != {"file", "sha256"}
+        or source_ref.get("file") != SKIRMISH_ARCHER_SW_SOURCE_REL
+        or not isinstance(prompt_ref, dict)
+        or set(prompt_ref) != {"file", "sha256"}
+        or prompt_ref.get("file") != SKIRMISH_ARCHER_SW_PROMPT_REL
+    ):
+        return False
+    source_path = _verified_relative_file(root, source_ref.get("file"), source_ref.get("sha256"))
+    prompt_path = _verified_relative_file(root, prompt_ref.get("file"), prompt_ref.get("sha256"))
+    if source_path is None or prompt_path is None:
+        return False
+    try:
+        prompt_text = prompt_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError):
+        return False
+    if not prompt_text.strip() or "SW" not in prompt_text or "RGBA" not in prompt_text:
+        return False
+
+    expected_before = _base_archer_sw_hashes(root, production)
+    backup_root = root / SKIRMISH_ARCHER_SW_BACKUP_REL
+    if expected_before is None or not backup_root.is_dir() or backup_root.is_symlink():
+        return False
+    try:
+        backup_entries = list(backup_root.iterdir())
+    except OSError:
+        return False
+    if {entry.name for entry in backup_entries} != set(SKIRMISH_ARCHER_SW_TARGETS):
+        return False
+    backups = _archer_sw_backup_overrides(root)
+    for target, backup in backups.items():
+        if _verified_override_file(root, backup, expected_before[target]) is None:
+            return False
+
+    output_rows = _exact_keyed_records(
+        revision.get("outputs"), {(target,) for target in SKIRMISH_ARCHER_SW_TARGETS}, ("target",)
+    )
+    if output_rows is None:
+        return False
+    state_frames = {"idle": 1, "walk": 2, "attack": 3, "death": 4}
+    for target in SKIRMISH_ARCHER_SW_TARGETS:
+        state = target.removeprefix("guan_gong_").removesuffix("_sw.png")
+        row = output_rows[(target,)]
+        if (
+            set(row) != {
+                "target", "state", "unit", "direction", "before_sha256", "sha256", "frame_count"
+            }
+            or row.get("state") != state
+            or row.get("unit") != "guan_gong"
+            or row.get("direction") != "sw"
+            or row.get("before_sha256") != expected_before[target]
+            or not _is_sha256(row.get("sha256"))
+            or row.get("frame_count") != state_frames[state]
+        ):
+            return False
+
+    source = _load_rgba_png(source_path, (1774, 887))
+    old_attack = _load_rgba_png(backups["guan_gong_attack_sw.png"], (768, 256))
+    old_death = _load_rgba_png(backups["guan_gong_death_sw.png"], (1024, 256))
+    if source is None or old_attack is None or old_death is None:
+        return False
+    try:
+        from PIL import Image
+
+        cells = (source.crop((0, 0, 887, 887)), source.crop((887, 0, 1774, 887)))
+        bboxes = tuple(cell.getchannel("A").getbbox() for cell in cells)
+        if any(bbox is None for bbox in bboxes):
+            return False
+        scale = min(
+            198 / 653,
+            *(248 / max(bbox[2] - bbox[0], bbox[3] - bbox[1]) for bbox in bboxes),
+        )
+        normalized: dict[str, Any] = {}
+        expected_placements: dict[str, dict[str, Any]] = {}
+        for pose, cell, bbox, pivot, half_x in zip(
+            ("idle", "walk_step"), cells, bboxes, ((510, 799), (463, 810)), (0, 887)
+        ):
+            body = cell.crop(bbox)
+            resized = body.resize(
+                (round(body.width * scale), round(body.height * scale)), Image.Resampling.LANCZOS
+            )
+            desired = (
+                128 - round((pivot[0] - bbox[0]) * scale),
+                210 - round((pivot[1] - bbox[1]) * scale),
+            )
+            paste_xy = (
+                max(4, min(desired[0], 252 - resized.width)),
+                max(4, min(desired[1], 252 - resized.height)),
+            )
+            canvas = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
+            canvas.paste(resized, paste_xy)
+            alpha_bbox = canvas.getchannel("A").getbbox()
+            if alpha_bbox is None:
+                return False
+            normalized[pose] = canvas
+            expected_placements[pose] = {
+                "crop_in_half": list(bbox),
+                "half_x": half_x,
+                "virtual_ground_pivot_in_half": list(pivot),
+                "scale": scale,
+                "paste_xy": list(paste_xy),
+                "fit_shift_xy_px": [paste_xy[0] - desired[0], paste_xy[1] - desired[1]],
+                "alpha_bbox": list(alpha_bbox),
+            }
+        if revision.get("placements") != expected_placements:
+            return False
+
+        idle = normalized["idle"]
+        expected_frames = {
+            "idle": [idle],
+            "walk": [idle, normalized["walk_step"]],
+            "attack": [idle, old_attack.crop((256, 0, 512, 256)), idle],
+            "death": [idle]
+            + [old_death.crop((index * 256, 0, (index + 1) * 256, 256)) for index in range(1, 4)],
+        }
+        for state, frames in expected_frames.items():
+            target = f"guan_gong_{state}_sw.png"
+            expected_strip = Image.new("RGBA", (256 * len(frames), 256), (0, 0, 0, 0))
+            for index, frame in enumerate(frames):
+                expected_strip.paste(frame, (index * 256, 0))
+            live_path = root / "assets" / "anim" / target
+            row = output_rows[(target,)]
+            actual_strip = _load_rgba_png(live_path, expected_strip.size)
+            if (
+                actual_strip is None
+                or sha256(live_path) != row.get("sha256")
+                or actual_strip.tobytes() != expected_strip.tobytes()
+            ):
+                return False
+    except (OSError, ValueError, TypeError):
+        return False
+    return True
+
+
+def skirmish_action_provenance_index(
+    root: Path = ROOT,
+    rel: str = SKIRMISH_ACTION_MANIFEST_REL,
+) -> dict[str, dict[str, Any]]:
+    """Return action-strip provenance, never accepting files without their chain."""
+    manifest_path = root / rel
+    if not manifest_path.is_file() or manifest_path.is_symlink():
+        return {}
+    production = _json_object(manifest_path)
+    if production is None:
+        return {}
+    expected = {
+        (unit, state, direction)
+        for unit in SKIRMISH_ACTION_UNITS
+        for direction in DIRECTIONS
+        for state in SKIRMISH_ACTION_RECIPES
+    }
+    declared: dict[str, dict[str, Any]] = {}
+    outputs = production.get("outputs")
+    if isinstance(outputs, list):
+        for row in outputs:
+            if not isinstance(row, dict):
+                continue
+            key = (str(row.get("unit", "")), str(row.get("state", "")), str(row.get("direction", "")))
+            if key not in expected:
+                continue
+            unit, state, direction = key
+            target = f"{unit}_{state}_{direction}.png"
+            if row.get("target") == target:
+                declared[f"assets/anim/{target}"] = row
+    if not declared:
+        return {}
+    revision_path = root / SKIRMISH_ARCHER_SW_REVISION_REL
+    revision_present = revision_path.exists() or revision_path.is_symlink()
+    overrides = _archer_sw_backup_overrides(root) if revision_present else None
+    try:
+        complete = _valid_skirmish_action_chain(
+            root,
+            manifest_path,
+            production,
+            production_file_overrides=overrides,
+        )
+        revision_complete = (
+            complete
+            and revision_present
+            and _valid_skirmish_archer_sw_revision(root, revision_path, manifest_path, production)
+        )
+    except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError, struct.error):
+        complete = False
+        revision_complete = False
+    source_id = str(production.get("batch_id", ""))
+    result: dict[str, dict[str, Any]] = {}
+    for out_path in declared:
+        target = out_path.removeprefix("assets/anim/")
+        is_revised_action = revision_present and target in SKIRMISH_ARCHER_SW_ACTION_TARGETS
+        compliant = revision_complete if is_revised_action else complete
+        result[out_path] = {
+            "tracked": True,
+            "manifest": SKIRMISH_ARCHER_SW_REVISION_REL if is_revised_action else rel,
+            "kind": "skirmish_archer_sw_visual_revision"
+            if is_revised_action
+            else "skirmish_direction4_action_production_manifest",
+            "source_id": "skirmish_archer_sw_revision_20260905" if is_revised_action else source_id,
+            "provenance_compliant": compliant,
+            "reason": (
+                "archer_sw_source_prompt_backup_base_chain_and_exact_strip_pixels_verified"
+                if is_revised_action and compliant
+                else "base_action_chain_or_archer_sw_revision_incomplete"
+                if is_revised_action
+                else "browser_generated_alpha_cleaned_manual_rect_uniform_scale_transparent_padding_chain_verified"
+                if compliant
+                else "source_provenance_or_production_hash_incomplete"
+            ),
+        }
+    if revision_present:
+        # Idle is not one of the base action manifest's 48 strips, but the same
+        # four-target revision replaces it and every revised strip starts from
+        # this exact frame.  Publish it only through the already-strict revision
+        # gate so it cannot fall back to the now-stale original idle manifest.
+        result["assets/anim/guan_gong_idle_sw.png"] = {
+            "tracked": True,
+            "manifest": SKIRMISH_ARCHER_SW_REVISION_REL,
+            "kind": "skirmish_archer_sw_visual_revision",
+            "source_id": "skirmish_archer_sw_revision_20260905",
+            "provenance_compliant": revision_complete,
+            "reason": (
+                "archer_sw_source_prompt_backup_base_chain_and_exact_strip_pixels_verified"
+                if revision_complete
+                else "base_action_chain_or_archer_sw_revision_incomplete"
+            ),
+        }
+    return result
 
 
 def provenance_index() -> dict[str, dict[str, Any]]:
@@ -1416,6 +2534,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
     daming_lu_rescued_p0_manifest("assets/campaign/daming_lu_rescued_p0_direction4_manifest.json")
     jiangzhou_prisoners_p0_manifest("assets/campaign/jiangzhou_prisoners_p0_direction4_manifest.json")
     yezhulin_remaining_p0_manifest("assets/campaign/yezhulin_remaining_p0_direction4_manifest.json")
+    result.update(skirmish_action_provenance_index())
     return result
 
 
@@ -1537,7 +2656,7 @@ def build_report() -> dict[str, Any]:
     flat: list[dict[str, Any]] = []
     input_hashes: dict[str, str] = {}
 
-    for rel in ["scripts/campaign.gd", "scripts/campaign_art.gd", "scripts/art_db.gd", "scripts/unit.gd", "assets/direction4/manifest.json", "assets/direction4/campaign_object_manifest.json", "assets/campaign/web_art_manifest.json", "assets/campaign/lu_zhishen_rescue_direction4_manifest.json", "assets/campaign/wu_song_mengzhou_direction4_manifest.json", "assets/campaign/jiang_menshen_fists_direction4_manifest.json", "assets/campaign/lin_chong_p0_direction4_manifest.json", "assets/campaign/li_kui_jiangzhou_direction4_manifest.json", "assets/campaign/gao_flagship_direction4_manifest.json", "assets/campaign/gao_qiu_captured_direction4_manifest.json", "assets/campaign/huangnigang_p0_direction4_manifest.json", "assets/direction4/lianhuanma_p0_direction4_manifest.json", "assets/campaign/daming_prisoners_rect_rebuild_direction4_manifest.json", "assets/campaign/ordinary_officials_p0_direction4_manifest.json", "assets/campaign/daming_lu_rescued_p0_direction4_manifest.json", "assets/campaign/jiangzhou_prisoners_p0_direction4_manifest.json", "assets/campaign/yezhulin_remaining_p0_direction4_manifest.json"]:
+    for rel in ["scripts/campaign.gd", "scripts/campaign_art.gd", "scripts/art_db.gd", "scripts/unit.gd", "assets/direction4/manifest.json", "assets/direction4/campaign_object_manifest.json", SKIRMISH_ACTION_MANIFEST_REL, "assets/campaign/web_art_manifest.json", "assets/campaign/lu_zhishen_rescue_direction4_manifest.json", "assets/campaign/wu_song_mengzhou_direction4_manifest.json", "assets/campaign/jiang_menshen_fists_direction4_manifest.json", "assets/campaign/lin_chong_p0_direction4_manifest.json", "assets/campaign/li_kui_jiangzhou_direction4_manifest.json", "assets/campaign/gao_flagship_direction4_manifest.json", "assets/campaign/gao_qiu_captured_direction4_manifest.json", "assets/campaign/huangnigang_p0_direction4_manifest.json", "assets/direction4/lianhuanma_p0_direction4_manifest.json", "assets/campaign/daming_prisoners_rect_rebuild_direction4_manifest.json", "assets/campaign/ordinary_officials_p0_direction4_manifest.json", "assets/campaign/daming_lu_rescued_p0_direction4_manifest.json", "assets/campaign/jiangzhou_prisoners_p0_direction4_manifest.json", "assets/campaign/yezhulin_remaining_p0_direction4_manifest.json"]:
         path = ROOT / rel
         if path.exists():
             input_hashes[rel] = sha256(path)
