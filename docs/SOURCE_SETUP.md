@@ -1,5 +1,9 @@
 # 水浒英雄传本地源码
 
+## 2026-09-06 端点转换验证
+
+地图线段检查省去已验证端点的重复夹取和边界调用，直接读取实时导航网格；动态障碍即时生效。新增 `tools/segment_endpoint_qa.gd`，headless输出 `.godot/segment_endpoint_qa/`；69项/263,817条对照及23项实际寻路通过。旧路径验证入口及冻结参考保留。函数计时改善不表示整场帧率合格，详见 [说明](SEGMENT_ENDPOINT_20260906.md)。
+
 ## 2026-09-06 拥挤分离
 
 分离循环复用单位属性并减少位置写回，保留原处理顺序与碰撞规则。新入口 `tools/crowd_separation_qa.gd` 用Godot headless运行，输出 `.godot/crowd_separation_qa/`；38项/59,328次位置对照一致，函数配对耗时下降12.8%/15.2%，不等于整场战斗FPS增幅。当前拥挤压力仍未达预算。复现及现有寻路/关卡回归命令见 [说明](CROWD_SEPARATION_20260906.md)。

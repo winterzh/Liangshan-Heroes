@@ -469,13 +469,16 @@ func _segment_open(a: Vector2, b: Vector2, profile: String = "land") -> bool:
 	if not (a.x >= 0 and a.y >= 0 and a.x < w * CELL and a.y < h * CELL \
 			and b.x >= 0 and b.y >= 0 and b.x < w * CELL and b.y < h * CELL):
 		return false
-	var c := world_to_cell(a)
-	var cb := world_to_cell(b)
-	if not is_open_cell(c, profile):
+	# Bounds above imply finite non-negative coordinates: truncation equals floor,
+	# and endpoint cells need neither clamping nor another bounds check.
+	var c := Vector2i(a / float(CELL))
+	var cb := Vector2i(b / float(CELL))
+	var nav := astar_water if profile == "water" else astar
+	if nav.is_point_solid(c):
 		return false
 	if c == cb:
 		return true
-	if not is_open_cell(cb, profile):
+	if nav.is_point_solid(cb):
 		return false
 	var dx := b.x - a.x
 	var dy := b.y - a.y

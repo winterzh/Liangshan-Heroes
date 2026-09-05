@@ -4,6 +4,12 @@ const SNAPSHOT_SHA := "b056f62669523d9c1e22e81c37f03da1e48840d94dcbc451f486043f7
 var reference_script: GDScript
 var comparisons := 0
 
+func _snapshot_spec() -> Dictionary:
+	return {"path":SNAPSHOT,"sha256":SNAPSHOT_SHA}
+
+func _output_path() -> String:
+	return "res://.godot/segment_navigation_qa"
+
 func _reference(map):
 	var old = reference_script.new()
 	old.w = map.w; old.h = map.h
@@ -126,14 +132,15 @@ func _crowd_equivalence() -> void:
 
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")
-	output = ProjectSettings.globalize_path("res://.godot/segment_navigation_qa")
+	output = ProjectSettings.globalize_path(_output_path())
 	DirAccess.make_dir_recursive_absolute(output)
 	AudioServer.set_bus_mute(0,true)
 	var save_before := _save_hash()
-	check(FileAccess.get_sha256(SNAPSHOT) == SNAPSHOT_SHA, "frozen old function hash matches")
+	var snapshot := _snapshot_spec()
+	check(FileAccess.get_sha256(snapshot.path) == snapshot.sha256, "frozen old function hash matches")
 	if not failures.is_empty(): quit(2); return
 	reference_script = GDScript.new()
-	reference_script.source_code = "extends \"res://scripts/game_map.gd\"\n" + FileAccess.get_file_as_string(SNAPSHOT)
+	reference_script.source_code = "extends \"res://scripts/game_map.gd\"\n" + FileAccess.get_file_as_string(snapshot.path)
 	# Compile after autoloads are ready, without changing reference function bytes.
 	check(reference_script.reload() == OK, "reference compiles against unchanged map helpers")
 	if not failures.is_empty(): quit(2); return
@@ -153,6 +160,7 @@ func _run() -> void:
 	report["passed"] = failures.is_empty()
 	report["comparisons"] = comparisons
 	report["failures"] = failures
+	report["reference"] = snapshot
 	FileAccess.open(output.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
 	print("[segment-navigation-summary] ",JSON.stringify({"checks":report.mode_checks.size(),"comparisons":comparisons,"passed":failures.is_empty(),"cpu_timing":report.cpu_timing}))
 	quit(0 if failures.is_empty() else 1)

@@ -1,5 +1,7 @@
 # 水浒项目目录索引
 
+端点转换：`docs/SEGMENT_ENDPOINT_20260906.md`、`tools/segment_endpoint_qa.gd`；增量旧函数在 `tools/contracts/navigation/segment_before_66d27aa.txt`，审核证据在 `qa/segment_endpoint_20260906/`，重跑输出 `.godot/segment_endpoint_qa/`。
+
 拥挤分离：`docs/CROWD_SEPARATION_20260906.md`、`tools/crowd_separation_qa.gd`；冻结旧函数在 `tools/contracts/separation/`（`.gdignore`），审核证据在 `qa/crowd_separation_20260906/`，重跑输出 `.godot/crowd_separation_qa/`。
 
 路径检查：`docs/SEGMENT_NAVIGATION_20260906.md`、`tools/segment_navigation_qa.gd`、`tools/rts_collision_profile.gd`；旧函数参考在 `tools/contracts/navigation/`，本批证据在 `qa/segment_navigation_20260906/`，重跑输出 `.godot/segment_navigation_qa/`。
