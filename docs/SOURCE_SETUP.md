@@ -1,3 +1,7 @@
+## 2026-09-06 芦苇网格验证
+
+`tools/reed_mesh_qa.gd` 使用headless，输出 `.godot/reed_mesh_qa/`；`tools/reed_mesh_render_probe.gd` 使用真实渲染，输出 `.godot/reed_mesh_render_probe/`。198项网格、14项渲染及98项树冠回归通过。源码启动配置不变，完整命令与冻结计时限制见 [说明](REED_MESH_20260906.md)。
+
 ## 2026-09-06 树冠遮挡验证
 
 新增 `tools/canopy_visibility_qa.gd`，headless输出 `.godot/canopy_visibility_qa/`，98项/1,965次RGBA与旧循环完全一致。复用单位投影而保留原遮挡节拍；实际渲染与压力入口见 [说明](CANOPY_VISIBILITY_20260906.md)。源码启动无需新增配置，完整帧率预算仍待优化。

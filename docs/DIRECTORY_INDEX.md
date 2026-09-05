@@ -1,3 +1,10 @@
+## 2026-09-06 芦苇重建增量
+
+- `tools/reed_mesh_qa.gd` / `tools/reed_mesh_render_probe.gd`：八关网格、查询计数和真实渲染配对。
+- `tools/contracts/reeds/`：4e4665c旧函数、固定哈希和来源。
+- `docs/REED_MESH_20260906.md`：实现、复现与限制。
+- `qa/reed_mesh_20260906/`：原结果、树冠回归、渲染/战斗窗口、七机位及收据；重跑结果在 `.godot/`。
+
 ## 2026-09-06 树冠遮挡增量
 
 - `tools/canopy_visibility_qa.gd`：八关真实场景、边界及旧新配对验证。

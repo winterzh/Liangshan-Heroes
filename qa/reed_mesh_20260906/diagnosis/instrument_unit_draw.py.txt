@@ -1,0 +1,22 @@
+from pathlib import Path
+import re,subprocess
+p=Path('scripts/unit.gd');original=p.read_bytes()
+assert original.replace(b'\r\n',b'\n')==subprocess.check_output(['git','show','HEAD:scripts/unit.gd']).replace(b'\r\n',b'\n')
+Path('scratchpad/unit_draw_base.gd.txt').write_bytes(original)
+s=original.decode();methods=['_draw','_draw_sprite_animated','_anim_frame_for_state','_draw_swing_fx','_draw_star','_draw_building','_campaign_environment_texture','_frame_draw_offset','_rest_frame']
+for method in methods:
+ pattern=re.compile(r'^func '+method+r'\(([^\r\n]*)\) -> (\w+):',re.M)
+ def wrap(m):
+  args,result=m.groups();names=[arg.strip().split(':')[0] for arg in args.split(',')] if args else []
+  impl='_unit_probe'+method
+  body='func '+method+'('+args+') -> '+result+':\n\tvar started := Time.get_ticks_usec()\n\t'
+  body+=('var value: '+result+' = ' if result!='void' else '')+impl+'('+','.join(names)+')\n'
+  body+='\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+method+'",started)\n'
+  if result!='void': body+='\treturn value\n'
+  return body+'\n\nfunc '+impl+'('+args+') -> '+result+':'
+ s,n=pattern.subn(wrap,s);assert n==1,(method,n)
+for label,line in {'static_texture':'\tvar tex: Texture2D = Art.unit_texture(key, art_variant, animation_direction)','has_walk':'\tvar has_walk := not Art.unit_anim_frames(_anim_key(), "walk", animation_direction, art_variant).is_empty()'}.items():
+ pattern=re.compile('^'+re.escape(line)+r'\r?$',re.M)
+ replacement='\tvar '+label+'_start := Time.get_ticks_usec()\n'+line+'\n\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+label+'",'+label+'_start)'
+ s,n=pattern.subn(lambda m:replacement,s);assert n==1,(label,n)
+p.write_bytes(s.encode())
