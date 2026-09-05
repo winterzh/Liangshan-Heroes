@@ -18,7 +18,7 @@
 
 ## 验证与边界
 
-`tools/kuaihuolin_short_test.gd` 使用实际选人、右键、任务办理与技能施放，关闭smoke，未改血、摆位或注入通关。`KH_CASE=wine|direct|standing|all`；`KH_VISUAL=1`配合非headless保存实战截图。完整酒路、直接挑战和不主动躲招的对照分别记录时间、最低生命、出招、位移与演义结果。
+`tools/kuaihuolin_short_test.gd` 使用实际选人、右键、任务办理与技能施放，关闭smoke，未改血、摆位或注入通关。`KH_CASE=wine|direct|standing|all`；默认4倍执行，可设 `KH_SPEED=1` 按正常速度复验；`KH_VISUAL=1`配合非headless保存实战截图。酒路/直接挑战须实际胜利并完成当前拳路；不主动躲招的站桩对照允许实际战败，必须正常结束且不能伪造退店或核心成功。
 
 `tools/kuaihuolin_short_boundaries.gd` 明确注入阶段、位置、冷却及伤害边界；共享技能结算、冲锋移动、实际死亡和重打按钮仍真实执行。覆盖旧窗口、原地W、踢空、1血留命、墙/水阻挡、重复饮酒、练步、施恩接店、重开及驻守/竞技场定义隔离。旧 `campaign_kuaihuolin_depth_test.gd` 转到此入口，历史报告保留。`tools/kuaihuolin_short_ui_test.gd` 单列1280×720/1440×900四阶段的滚动与定位夹具；冻结场景显式刷新HUD，不把静态截图说成实战。
 

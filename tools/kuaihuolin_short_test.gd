@@ -7,6 +7,7 @@ var visual:=false
 var cast_counts:={}
 var charge_travel:=0.0
 var min_hp:=INF
+var execution_speed:=4.0
 
 func _until(predicate: Callable,seconds: float) -> bool:
 	var t:=0.0
@@ -93,9 +94,13 @@ func _live(name: String) -> void:
 				screenshots[l.special_kind]=true
 				await _shot(b,name+"_"+l.special_kind+"_tell")
 			await _cast(b,1)
-			var direction: Vector2=l.menshen.position.direction_to(l.wu.position)
-			var destination: Vector2=l.menshen.position+direction.orthogonal()*86
-			if l.special_kind=="rush": destination=l.wu.position+direction.orthogonal()*110
+			# The rush direction was locked at its tell, before Wu's cast finishes.
+			# Read that line, and use the other side when a real obstacle blocks it.
+			var direction: Vector2=l.rush_from.direction_to(l.rush_end) if l.special_kind=="rush" else l.menshen.position.direction_to(l.wu.position)
+			var origin: Vector2=l.wu.position if l.special_kind=="rush" else l.menshen.position
+			var offset: Vector2=direction.orthogonal()*(110 if l.special_kind=="rush" else 86)
+			var destination: Vector2=origin+offset
+			if not b.map._segment_open(l.wu.position,destination,"land"): destination=origin-offset
 			_move(b,l.wu,destination)
 		elif l.fist_windup<=0 and not l.charge_running:
 			if l.exposed_left>0 and name!="standing":
@@ -113,7 +118,8 @@ func _live(name: String) -> void:
 				if attack_wait<=0:
 					_attack(b); attack_wait=0.7
 		await _wait(0.1); t+=0.1; attack_wait-=0.1
-	check(l.st==l.RETURN_SHOP and l.menshen.story_outcome=="subdued",name+" actual combat subdues Menshen alive")
+	var standing_loss: bool=name=="standing" and l.wu.hp<=0 and b.phase==b.Phase.END and not l.victory
+	check((l.st==l.RETURN_SHOP and l.menshen.story_outcome=="subdued") or standing_loss,name+" reaches a real combat outcome (standing control may lose)")
 	if name!="standing":
 		check(l.heavy_dodges>0 and l.rush_dodges>0,name+" actually avoids both distinct specials")
 		check(charge_travel>100,name+" boss visibly travels through an actual charge")
@@ -124,8 +130,11 @@ func _live(name: String) -> void:
 		await _shot(b,name+"_subdued")
 		check(await _action_done(b,l.wu,"terms"),name+" player chooses and speaks the three terms")
 		check(await _action_done(b,l.shi,"restore_shop"),name+" Shi En actually returns and takes over the shop")
-	check(l.victory and b.phase==b.Phase.END,name+" actual chapter ends in victory")
-	var result: Dictionary=b.mission.result_snapshot(true)
+	elif standing_loss:
+		check(not b.mission.has_event("terms"),"defeated standing control cannot speak terms")
+		check(not b.mission.has_event("restore_shop"),"defeated standing control cannot restore the shop")
+	check(b.phase==b.Phase.END and (l.victory or standing_loss),name+" explicitly ends without a timeout or fabricated result")
+	var result: Dictionary=b.mission.result_snapshot(l.victory)
 	if name=="wine": check(result.story_complete,"wine route earns all four optional story goals")
 	else: check(not result.story_complete,"direct route does not invent optional wine/provocation credit")
 	var row:={"route":name,"game_seconds":b.mission.total_game_seconds,"orders":orders,"casts":cast_counts,"drinks":l.drunk,"min_hp":min_hp,"final_hp":l.wu.hp,"heavy_dodges":l.heavy_dodges,"rush_dodges":l.rush_dodges,"charge_travel":charge_travel,"counter_hits":l.counter_hits,"victory":l.victory,"events":b.mission.events.keys(),"result":result}
@@ -143,9 +152,10 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(folder)
 	if visual:
 		root.size=Vector2i(1440,900); DisplayServer.window_set_size(root.size)
-	Engine.time_scale=4
+	if not OS.get_environment("KH_SPEED").is_empty(): execution_speed=clampf(float(OS.get_environment("KH_SPEED")),1,4)
+	Engine.time_scale=execution_speed
 	for name in ["wine","direct","standing"]:
 		if selected in ["all",name]: await _live(name)
-	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures,"cases":cases,"scope":"Real commands and actual combat; not human pacing, fun or performance acceptance."},"\t"))
+	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures,"time_scale":execution_speed,"cases":cases,"scope":"Real commands and actual combat; not human pacing, fun or performance acceptance."},"\t"))
 	print("[kuaihuolin-short] ",checks," checks; failures=",failures)
 	quit(0 if failures.is_empty() and checks>0 else 1)
