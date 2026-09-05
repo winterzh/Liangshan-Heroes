@@ -1,0 +1,41 @@
+extends "res://tools/rts_performance_probe.gd"
+const Metrics=preload("res://scratchpad/phase_metrics.gd")
+var physics_started := 0
+var process_started := 0
+var physics_cost := 0
+var process_cost := 0
+var physics_calls := 0
+var process_calls := 0
+
+class Tail extends Node:
+	var probe
+	func _physics_process(_delta: float) -> void:
+		if probe.physics_started>0:
+			probe.physics_cost+=Time.get_ticks_usec()-probe.physics_started
+			probe.physics_calls+=1
+	func _process(_delta: float) -> void:
+		if probe.process_started>0:
+			probe.process_cost+=Time.get_ticks_usec()-probe.process_started
+			probe.process_calls+=1
+
+func sample(b,label: String) -> Dictionary:
+	b._perf_bench_setup(200);b._prof_on=false
+	var tail:=Tail.new();tail.probe=self
+	var names:=tail.get_property_list().map(func(p):return String(p.name))
+	assert(names.has("process_physics_priority"))
+	tail.process_physics_priority=1000000;tail.process_priority=1000000
+	root.add_child(tail)
+	physics_frame.connect(func():physics_started=Time.get_ticks_usec())
+	process_frame.connect(func():process_started=Time.get_ticks_usec())
+	await _wait(3)
+	Metrics.reset();physics_cost=0;process_cost=0;physics_calls=0;process_calls=0
+	var times: Array[float]=[]
+	var started:=Time.get_ticks_usec();var previous:=started
+	while Time.get_ticks_usec()-started<10000000:
+		await RenderingServer.frame_post_draw
+		var now:=Time.get_ticks_usec()
+		times.append(float(now-previous)/1000.0);previous=now
+	var sorted:=times.duplicate();sorted.sort()
+	var result:={"label":label,"frames":times.size(),"physics_calls":physics_calls,"process_calls":process_calls,"wall_seconds":float(Time.get_ticks_usec()-started)/1000000.0,"physics_total_us":physics_cost,"process_total_us":process_cost,"script_us":Metrics.times.duplicate(),"script_calls":Metrics.counts.duplicate(),"p95_ms":sorted[ceili(sorted.size()*0.95)-1],"raw_frame_ms":times,"unit_count":b.units.size()}
+	tail.queue_free()
+	return result

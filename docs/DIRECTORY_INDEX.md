@@ -1,3 +1,10 @@
+## 2026-09-06 树冠遮挡增量
+
+- `tools/canopy_visibility_qa.gd`：八关真实场景、边界及旧新配对验证。
+- `tools/contracts/canopy/`：2b14c2a旧循环、固定哈希和来源说明。
+- `docs/CANOPY_VISIBILITY_20260906.md`：实现、复现和性能限制。
+- `qa/canopy_visibility_20260906/`：98项报告、阶段诊断、七机位画面、最终压力窗口与收据；重跑输出在 `.godot/`。
+
 ## 2026-09-06 门墙衔接增量
 
 - `docs/WALL_JOIN_POLISH_20260906.md`：祝家庄栅顶与色调校准、适用范围及复现。

@@ -639,18 +639,29 @@ func _process(delta: float) -> void:
 		return
 	_visibility_tick = 0.0
 	_refresh_fog_visibility()
+	_refresh_canopy_visibility()
+
+
+func _refresh_canopy_visibility() -> void:
+	# Reuse one projection per eligible unit for this synchronous visibility pass.
+	# Nothing is cached across ticks, so movement, fog and depth changes stay live.
+	if _trees.is_empty() and _guard_posts.is_empty():
+		return
+	var bodies: Array[Rect2] = []
+	var depths := PackedInt32Array()
+	for unit in _battle.units:
+		if not is_instance_valid(unit) or unit.hp <= 0 or unit.is_building or not unit.visible:
+			continue
+		bodies.append(Rect2(_map.project(unit.position) + Vector2(-12, -38), Vector2(24, 40)))
+		depths.append(unit.z_index)
 	for tree in _trees + _guard_posts:
 		var fade := false
 		var tree_screen := _map.project(tree.position)
 		var canopy := Rect2(tree_screen + Vector2(-tree.size * 0.37, -tree.size * 0.87), Vector2(tree.size * 0.74, tree.size * 0.82))
-		for unit in _battle.units:
-			if not is_instance_valid(unit) or unit.hp <= 0 or unit.is_building or not unit.visible:
+		for i in range(bodies.size()):
+			if depths[i] >= tree.z_index:
 				continue
-			if unit.z_index >= tree.z_index:
-				continue
-			var feet: Vector2 = _map.project(unit.position)
-			var body := Rect2(feet + Vector2(-12, -38), Vector2(24, 40))
-			if canopy.intersects(body):
+			if canopy.intersects(bodies[i]):
 				fade = true
 				break
 		var alpha := 0.40 if fade else 1.0
