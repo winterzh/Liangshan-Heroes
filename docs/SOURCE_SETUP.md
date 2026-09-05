@@ -1,5 +1,9 @@
 # 水浒英雄传本地源码
 
+## 2026-09-06 路径检查
+
+移动/软分离的线段检查复用端点格子和同格阻挡结果。专项58项、跨八关81,000条旧新对照及原寻路23项通过；本机函数配对耗时降低27.7%，拥挤实机帧率仍待继续优化。`tools/segment_navigation_qa.gd` 用Godot headless运行，输出 `.godot/segment_navigation_qa/`；真实渲染热点诊断为 `tools/rts_collision_profile.gd`。详见 [复现说明](SEGMENT_NAVIGATION_20260906.md)。
+
 ## 2026-09-06 暂停操作
 
 暂停菜单的重开、返回与退出现在先显示本局不保存的提示，取消后仍停留在暂停菜单；Esc 或安卓返回键先取消确认，再按一次继续。已有章节记录保留，尚无中途战斗快照。专项入口 `tools/pause_menu_qa.gd` 使用本机Godot实际渲染运行，输出 `.godot/pause_menu_qa/`，55项通过。见 [实现/复现](PAUSE_MENU_20260906.md) 和 [证据](../qa/pause_menu_20260906/README.md)。

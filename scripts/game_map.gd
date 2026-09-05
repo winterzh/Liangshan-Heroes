@@ -464,12 +464,19 @@ func _smooth_path(from_w: Vector2, raw: PackedVector2Array, profile: String = "l
 ## 之前按 0.45 格步长采样会漏掉贴角的实心格 → 平滑出「穿墙线」，单位每帧移动(2~3px)又过不去，
 ## 表现为撞上建筑原地来回抖动（用户反馈）。精确遍历后平滑绝不产出被封线段。
 func _segment_open(a: Vector2, b: Vector2, profile: String = "land") -> bool:
-	if not is_open_world(a, profile) or not is_open_world(b, profile):
+	# Separation and movement often query sub-cell segments. Validate the bounds
+	# once, then reuse endpoint cells instead of converting each endpoint twice.
+	if not (a.x >= 0 and a.y >= 0 and a.x < w * CELL and a.y < h * CELL \
+			and b.x >= 0 and b.y >= 0 and b.x < w * CELL and b.y < h * CELL):
 		return false
 	var c := world_to_cell(a)
 	var cb := world_to_cell(b)
+	if not is_open_cell(c, profile):
+		return false
 	if c == cb:
 		return true
+	if not is_open_cell(cb, profile):
+		return false
 	var dx := b.x - a.x
 	var dy := b.y - a.y
 	var sx := 1 if dx > 0.0 else -1

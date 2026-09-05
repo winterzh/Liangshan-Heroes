@@ -1,5 +1,7 @@
 # 水浒项目目录索引
 
+路径检查：`docs/SEGMENT_NAVIGATION_20260906.md`、`tools/segment_navigation_qa.gd`、`tools/rts_collision_profile.gd`；旧函数参考在 `tools/contracts/navigation/`，本批证据在 `qa/segment_navigation_20260906/`，重跑输出 `.godot/segment_navigation_qa/`。
+
 暂停操作：`docs/PAUSE_MENU_20260906.md`、`tools/pause_menu_qa.gd`；最终证据在 `qa/pause_menu_20260906/`，重跑输出在 `.godot/pause_menu_qa/`。
 
 地表透明缝：`docs/TERRAIN_ALPHA_SEAMS_20260906.md`、`tools/terrain_alpha_seam_probe.gd` 与 `tools/terrain_alpha_seam_qa.gd`；旧shader原字节固定在 `tools/contracts/terrain_seams/`（`.gdignore`），审核证据在 `qa/terrain_alpha_seams_20260906/`，临时结果在 `.godot/terrain_seam_probe/`、`.godot/terrain_alpha_seam_qa/`。
