@@ -2,6 +2,8 @@
 
 ## 2026-09-06 自然地表细缝修复
 
+提交 `a851bb0` 已在专用干净Git检出上核对42项输入与41份证据，并从外部目录复跑三个Python入口，预期退出0/1/0；没有Godot资源导入缓存，执行后仍无未提交文件。收据见地表QA的 `checkout_verification.json`。
+
 重开关卡会加载修复后的自然地表shader，旧atlas的透明边缘不再截断整图地面。新增 `tools/terrain_alpha_seam_probe.gd`、`tools/terrain_alpha_seam_qa.gd`，用本机Godot非headless运行；输出位于 `.godot/terrain_seam_probe/` 与 `.godot/terrain_alpha_seam_qa/`。八关86项实机/透明度、90项地形契约通过；没有改变生产图片、寻路或任务逻辑。复现命令与范围见 [说明](TERRAIN_ALPHA_SEAMS_20260906.md)、[QA](../qa/terrain_alpha_seams_20260906/README.md)。
 
 ## 2026-09-06 田地资源接入
