@@ -5391,8 +5391,11 @@ func _separation_pass(_delta: float) -> void:
 			continue
 		var a_mv := a._state == Unit.ST_MOVE or a._state == Unit.ST_AMOVE or a._state == Unit.ST_CHASE
 		var a_phase := _gold_phasing(a)
-		var cx := int(floor(a.position.x / GRID_CELL))
-		var cy := int(floor(a.position.y / GRID_CELL))
+		var a_pos := a.position
+		var a_radius := a.radius
+		var a_profile := a.movement_profile
+		var cx := int(floor(a_pos.x / GRID_CELL))
+		var cy := int(floor(a_pos.y / GRID_CELL))
 		# 所有机动单位半径 <=20，两身体的分离距离 < GRID_CELL，查 3×3 桶足够。
 		for gy in range(cy - 1, cy + 2):
 			for gx in range(cx - 1, cx + 2):
@@ -5401,13 +5404,14 @@ func _separation_pass(_delta: float) -> void:
 					continue
 				var bucket: Array = bucket_v
 				for b: Unit in bucket:
-					if b.get_instance_id() <= aid or b.story_outcome != "" or b.movement_profile != a.movement_profile:
+					if b.get_instance_id() <= aid or b.story_outcome != "" or b.movement_profile != a_profile:
 						continue   # 每对只处理一次；同时跳过自身
 					if a_phase and _gold_phasing(b):
 						continue
-					var diff := a.position - b.position
+					var b_pos := b.position
+					var diff := a_pos - b_pos
 					var d2 := diff.length_squared()
-					var min_d := a.radius + b.radius + 2.0
+					var min_d := a_radius + b.radius + 2.0
 					if d2 >= min_d * min_d or d2 <= 0.0001:
 						continue
 					var d := sqrt(d2)
@@ -5420,12 +5424,16 @@ func _separation_pass(_delta: float) -> void:
 						aw = 0.15; bw = 0.85
 					var dirn := diff / d
 					var overlap := min_d - d
-					var ap := a.position + dirn * overlap * aw
-					var bp := b.position - dirn * overlap * bw
-					if map._segment_open(a.position, ap, a.movement_profile):
-						a.position = ap
-					if map._segment_open(b.position, bp, b.movement_profile):
+					var ap := a_pos + dirn * overlap * aw
+					var bp := b_pos - dirn * overlap * bw
+					if map._segment_open(a_pos, ap, a_profile):
+						a_pos = ap
+					if map._segment_open(b_pos, bp, a_profile):
 						b.position = bp
+		# All candidate IDs are greater than aid, so none can read a as b while
+		# this outer iteration is running. Publish its final transform once.
+		if a.position != a_pos:
+			a.position = a_pos
 
 
 ## ---------- 选取与指挥 ----------

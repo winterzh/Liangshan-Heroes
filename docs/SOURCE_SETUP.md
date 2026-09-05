@@ -1,5 +1,9 @@
 # 水浒英雄传本地源码
 
+## 2026-09-06 拥挤分离
+
+分离循环复用单位属性并减少位置写回，保留原处理顺序与碰撞规则。新入口 `tools/crowd_separation_qa.gd` 用Godot headless运行，输出 `.godot/crowd_separation_qa/`；38项/59,328次位置对照一致，函数配对耗时下降12.8%/15.2%，不等于整场战斗FPS增幅。当前拥挤压力仍未达预算。复现及现有寻路/关卡回归命令见 [说明](CROWD_SEPARATION_20260906.md)。
+
 ## 2026-09-06 路径检查
 
 移动/软分离的线段检查复用端点格子和同格阻挡结果。专项58项、跨八关81,000条旧新对照及原寻路23项通过；本机函数配对耗时降低27.7%，拥挤实机帧率仍待继续优化。`tools/segment_navigation_qa.gd` 用Godot headless运行，输出 `.godot/segment_navigation_qa/`；真实渲染热点诊断为 `tools/rts_collision_profile.gd`。详见 [复现说明](SEGMENT_NAVIGATION_20260906.md)。
