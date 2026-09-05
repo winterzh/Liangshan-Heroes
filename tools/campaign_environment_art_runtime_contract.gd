@@ -111,7 +111,10 @@ func _run() -> void:
 	var passed := checks.all(func(item): return bool(item.passed))
 	var report := {"passed":passed,"manifest_sha256":EnvironmentArt.FROZEN_MANIFEST_SHA256,
 		"checks":checks.size(),"results":checks}
-	var file := FileAccess.open(REPORT_PATH,FileAccess.WRITE)
+	var report_path := OS.get_environment("ENVIRONMENT_QA_REPORT")
+	if report_path.is_empty(): report_path=REPORT_PATH
+	DirAccess.make_dir_recursive_absolute(report_path.get_base_dir())
+	var file := FileAccess.open(report_path,FileAccess.WRITE)
 	if file!=null: file.store_string(JSON.stringify(report,"\t")+"\n")
 	print("[campaign-environment-art] %d/%d %s" % [checks.filter(func(item): return bool(item.passed)).size(),checks.size(),"PASS" if passed else "FAIL"])
 	quit(0 if passed else 1)

@@ -2,8 +2,9 @@
 """Source-only contract for the frozen campaign environment-art router.
 
 This deliberately does not start Godot and does not require any generated PNG.
-It proves route identity, state, path and level-scope parity with the frozen
-schema-v2 manifest. Visual/source acceptance remains a separate gate.
+It proves route identity, state and path parity with the frozen schema-v2
+manifest, plus explicitly documented runtime reuse. Visual acceptance remains
+a separate gate.
 """
 
 from __future__ import annotations
@@ -136,6 +137,15 @@ def run(repo: Path, manifest_path: Path, report_path: Path) -> dict[str, Any]:
     )
 
     expected_routes, expected_text_surfaces = _manifest_routes(manifest)
+    # 2026-09-06: the unlettered accepted timber panel is reused by Zhu's
+    # wooden boundary. Preserve every original source path and other scope;
+    # this is a single deliberate consumer addition, not a wildcard fallback.
+    stockade = expected_routes["object"]["stockade_segment"]
+    check("stockade_frozen_scope_before_reuse", stockade["levels"] == ["level5"])
+    stockade["levels"] = ["level3", "level5"]
+    reuse_source = repo / "assets/campaign/environment/level5/stockade_segment.png"
+    check("stockade_reuse_accepted_source", reuse_source.is_file() and _sha256(reuse_source) ==
+          "e1f807ef74b32a7bd16bc14705a1436938b6942da34018f96294d11a834a0c44")
     actual_routes = {
         "object": _constant(router_source, "OBJECT_ROUTES"),
         "overlay": _constant(router_source, "OVERLAY_ROUTES"),

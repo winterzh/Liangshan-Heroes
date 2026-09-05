@@ -602,6 +602,7 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 	u.died.connect(_on_unit_died)
 	u.story_resolved.connect(_on_unit_story_resolved)
 	units.append(u)
+	if u.is_building: configure_production_berth(u)
 	return u
 
 
@@ -1265,8 +1266,8 @@ func _try_place_building(p: Vector2) -> void:
 	var d: Dictionary = _defs.get(key, {})
 	var cell := map.world_to_cell(to_logic(p))
 	var half := building_footprint_half(key)
-	if not map.area_buildable(cell, half):
-		msg("此处无法建造（地形不平或已被占用）", 1.5)
+	if not building_terrain_valid(key,cell):
+		msg("船坞须建在岸上，外侧留出开阔水面" if bool(d.get("requires_shore",false)) else "此处无法建造（地形不平或已被占用）", 1.5)
 		return
 	if _building_overlap(cell, half):
 		msg("太靠近其它建筑了，不能压在上面", 1.5)
@@ -1787,6 +1788,10 @@ func cancel_train(bld: Unit, index: int) -> void:
 	var d: Dictionary = _defs.get(key, {})
 	add_resources(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0)))   # 退还花费
 	bld._train_queue.remove_at(index)
+	if index==0:
+		bld.production_blocked=false
+		bld._production_retry=0.0
+		bld._train_t=0.0
 	if index == 0 and not bld._train_queue.is_empty():   # 撤的是正在训练的 → 计时重置到新队首
 		bld._train_t = train_time_for(bld._train_queue[0])
 	Sfx.play("order")
@@ -1910,10 +1915,36 @@ func on_research_done(bld: Unit, key: String) -> void:
 		hud.refresh_command()
 
 
-func on_unit_trained(bld: Unit, key: String) -> void:
+func building_terrain_valid(key: String, cell: Vector2i) -> bool:
+	var half := building_footprint_half(key)
+	if not map.area_buildable(cell,half): return false
+	return not bool(_defs.get(key,{}).get("requires_shore",false)) \
+		or preload("res://scripts/naval_production.gd").berth(map,cell,half)!=Vector2i(-1,-1)
+
+
+func building_visual_texture(key: String) -> Texture2D:
+	var art_key := String(_defs.get(key,{}).get("building_art_key",key))
+	var texture := Art.building_texture(art_key)
+	return texture if texture!=null else Art.terrain_texture(art_key)
+
+
+func configure_production_berth(bld: Unit) -> void:
+	if bool(bld.setup_def.get("requires_shore",false)):
+		bld.set_meta("production_berth",preload("res://scripts/naval_production.gd").berth(map,map.world_to_cell(bld.position),building_footprint_half(bld.key)))
+
+
+func production_exit_cell(bld: Unit, key: String) -> Vector2i:
+	if String(_defs.get(key,{}).get("movement_profile","land"))=="water":
+		return preload("res://scripts/naval_production.gd").exit_cell(self,bld,_defs[key])
 	var half := building_footprint_half(bld.key)
-	var c := map.world_to_cell(bld.position) + Vector2i(half + 1, half + 1)
-	var u := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(c)))
+	return map.nearest_open(map.world_to_cell(bld.position)+Vector2i(half+1,half+1))
+
+
+func on_unit_trained(bld: Unit, key: String) -> bool:
+	var cell := production_exit_cell(bld,key)
+	if cell==Vector2i(-1,-1): return false
+	var u := spawn_unit(key, bld.faction, map.cell_to_world(cell))
+	if u==null: return false
 	# 战死英雄重练 → 恢复原等级/技能（不从 1 级重来）
 	if u.is_hero and u._hero_leveled and hero_progress.has(key):
 		var pr: Dictionary = hero_progress[key]
@@ -1933,10 +1964,10 @@ func on_unit_trained(bld: Unit, key: String) -> void:
 				node = rn
 		if node != null:
 			u.order_gather(node)
-			return
+			return true
 		if bld.has_rally:
 			u.order_move(bld.rally)
-			return
+			return true
 		# 无集结点：自动去采当前较缺的那种资源（经典RTS式新村民不闲置）
 		var want := "gold" if gold <= wood else "wood"
 		var auto := nearest_resource(u.position, want)
@@ -1948,6 +1979,7 @@ func on_unit_trained(bld: Unit, key: String) -> void:
 		u.order_move(bld.rally)
 	elif ai_friendly and int(Settings.auto_micro_level) >= 3 and not u.is_hero:
 		u.order_amove(_eco_frontline())   # 全托管：新练的兵自动 A 移到防御前线（边走边打）
+	return true
 
 
 ## ---------- 主循环 ----------
@@ -12683,7 +12715,7 @@ class Overlay extends Node2D:
 			var bref: Vector2 = b._drag_cur if b._touch_mode else get_global_mouse_position()
 			var bcell: Vector2i = b.map.world_to_cell(b.to_logic(bref))
 			var bdef: Dictionary = b._defs.get(b._build_armed, {})
-			var bok: bool = b.map.area_buildable(bcell, bhalf) and not b._building_overlap(bcell, bhalf) \
+			var bok: bool = b.building_terrain_valid(b._build_armed,bcell) and not b._building_overlap(bcell, bhalf) \
 				and not b._resource_overlap(bcell, bhalf) \
 				and b.can_afford(int(bdef.get("cost_gold", 0)), int(bdef.get("cost_wood", 0)))
 			var cc := float(GameMap.CELL)
@@ -12695,7 +12727,7 @@ class Overlay extends Node2D:
 			var bcol := Color(0.4, 1.0, 0.5) if bok else Color(1.0, 0.35, 0.3)
 			draw_colored_polygon(quad, Color(bcol.r, bcol.g, bcol.b, 0.22))
 			# 半透「建筑虚影」：直接在选址处画出这座建筑的样子（经典RTS式放置预览）
-			var btex: Texture2D = Art.building_texture(b._build_armed)
+			var btex: Texture2D = b.building_visual_texture(b._build_armed)
 			if btex != null:
 				var ctr: Vector2 = b.to_screen(Vector2((float(bcell.x) + 0.5) * cc, (float(bcell.y) + 0.5) * cc))
 				var gs := GameMap.building_visual_px(bhalf)

@@ -82,6 +82,7 @@ func _run() -> void:
 	Engine.time_scale=1
 	check(checks==22,"all expected ranged navigation assertions executed")
 	var folder="res://qa/daming_rts_20260905"
+	if not OS.get_environment("RTS_TEST_OUT").is_empty(): folder=OS.get_environment("RTS_TEST_OUT")
 	DirAccess.make_dir_recursive_absolute(folder)
 	FileAccess.open(folder+"/ranged.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":failures.is_empty(),"failures":failures,"metrics":play_metrics,"scope":"isolated navigation and input fixtures"},"\t"))
 	quit(0 if failures.is_empty() else 1)

@@ -2081,9 +2081,9 @@ func _refresh_panel() -> void:
 		elif prim.setup_def.has("produces"):
 			var q: int = prim._train_queue.size()
 			if q > 0:
-				_info_stats.text = "队列 %d · 剩 %d 秒 · 右键设集结点" % [q, int(ceil(prim._train_t))]
+				_info_stats.text = "队列 %d · %s，请清开出口" % [q,prim.production_wait_label()] if prim.production_blocked else "队列 %d · 剩 %d 秒 · 右键设集结点" % [q, int(ceil(prim._train_t))]
 			else:
-				_info_stats.text = "右键设集结点 · 资源上=自动采"
+				_info_stats.text = "右键水面设集结点 · 留出下水口" if bool(prim.setup_def.get("requires_shore",false)) else "右键设集结点 · 资源上=自动采"
 		elif prim.atk > 0.0:
 			_info_stats.text = "箭楼 · 攻 %d  射程 %d  自动御敌" % [int(prim.atk), int(prim.atk_range)]
 		else:
@@ -2973,7 +2973,7 @@ class CmdButton extends Control:
 		elif kind == "train":
 			var bld = spec.get("bld", null)
 			if is_instance_valid(bld) and not bld._train_queue.is_empty():
-				info = "队列%d 剩%ds" % [bld._train_queue.size(), int(ceil(bld._train_t))]
+				info = bld.production_wait_label()+"·清出口" if bld.production_blocked else "队列%d 剩%ds" % [bld._train_queue.size(), int(ceil(bld._train_t))]
 		elif kind == "research":
 			var rb = spec.get("bld", null)
 			if is_instance_valid(rb) and rb._research_key != "":
@@ -2981,7 +2981,7 @@ class CmdButton extends Control:
 		elif kind == "cancel_train":
 			var cb = spec.get("bld", null)
 			if int(spec.get("index", -1)) == 0 and is_instance_valid(cb):
-				info = "训练中 剩%ds·点撤" % int(ceil(cb._train_t))
+				info = cb.production_wait_label()+"·点撤" if cb.production_blocked else "训练中 剩%ds·点撤" % int(ceil(cb._train_t))
 			else:
 				info = "排队·点撤单"
 		# 撤单图标：右上角红 × 角标，提示「点我取消」

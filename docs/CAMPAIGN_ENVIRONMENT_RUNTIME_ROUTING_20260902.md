@@ -1,5 +1,7 @@
 # 战役环境美术关卡隔离路由
 
+2026-09-06 用途扩展：无字 `stockade_segment` 原图按墙脚两端校准后用于梁山两轴，并明确允许祝家庄 `level3` 复用；PNG、alpha及原生产路径不变，其他关卡无该权限。下面“只用于一种方向”的说明是历史行为，已被本次修正替代。静态合同仅增加这一项有源SHA校验的用途差异；794项运行路由和相对基线路由表比对见 [新QA](../qa/wall_naval_20260906/README.md)。本机没有历史冻结清单原文件，未声称完整静态合同重跑通过。
+
 冻结依据为 `implementation_20260902/environment_prompt_drafts_v2/environment_batch_manifest.json`，SHA-256 是 `162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf`。本轮没有生成、修改或导入位图，也没有向 `ArtDB` 增加全局键。
 
 `scripts/campaign_environment_art.gd` 提供四个严格限域入口：

@@ -1,5 +1,7 @@
 # 水浒英雄传：八幕战役
 
+2026-09-06：再次修正祝家庄、梁山和驻守战的歪墙本体，统一墙脚、立柱与转角。重新运行 `Play.cmd` 并重开关卡载入；[查看对照与QA](qa/wall_naval_20260906/README.md)。岸边造船底层也已验证，高俅新RTS尚未接入菜单，见 [本批说明](docs/WALL_AND_NAVAL_FOUNDATION_20260906.md)。
+
 一款水浒题材的 2D 等距即时战略（Godot 4.6.3）。本分支已包含八关主线、自由通关、自主指挥，以及 2026-09-05 驻守战四向与死亡表现修复。常规15–25分钟内容节奏、配角完整动画、30波真人手动通关和长时性能仍未验收。此前 Windows 测试构建记录见 [2026-09-05 测试构建记录](docs/STEAM_TEST_BUILD_20260905.md)；家里接续仅验证源码启动，没有执行 Steam 发布。当前进度见 [开发记录](docs/WORKLOG.md)，玩法、素材与验收范围见 [实施记录](docs/CAMPAIGN_IMPLEMENTATION.md)、[美术清单](docs/CAMPAIGN_ART.md)、[运行验证](docs/CAMPAIGN_RUNTIME_QA.md) 与 [节奏待办](docs/CAMPAIGN_PACING.md)。
 
 最新网页ChatGPT批次已补黄泥冈八人商客造型、七辆枣车、白胜肩挑酒、四类城镇百姓，以及大名府两人被缚/获救和步行；八关文案另按原著复核。网页来源、实机证据与尚存改编差异见 [本批交付记录](docs/WEB_CHATGPT_ART_DELIVERY.md)。

@@ -97,6 +97,8 @@ var passengers: Array = []     # 仅建筑：当前驻军单位列表
 var garrison_cap := 0          # 仅建筑：驻军容量
 # 生产（建筑训练队列）+ 集结点
 var _train_queue: Array = []
+var production_blocked := false
+var _production_retry := 0.0
 var _train_t := 0.0
 var rally := Vector2.ZERO
 var has_rally := false
@@ -1763,13 +1765,30 @@ func advance_build(delta: float) -> void:
 		queue_redraw()
 
 
-## 建筑生产：队列逐个训练，完成即生成（送往集结点）
+func production_wait_label() -> String:
+	var water := not _train_queue.is_empty() and battle!=null \
+		and String(battle._defs.get(_train_queue[0],{}).get("movement_profile","land"))=="water"
+	return "等待下水" if water else "等待出口"
+
+
+## 建筑生产：完成且出口可用时才出队；堵口的成船仍可取消并退费。
 func _production_tick(delta: float) -> void:
-	_train_t -= delta
+	if battle==null: return
+	if production_blocked:
+		_production_retry-=delta
+		if _production_retry>0: return
+	_train_t = maxf(0.0,_train_t-delta)
 	if _train_t <= 0.0:
-		var key: String = _train_queue.pop_front()
-		if battle != null:
-			battle.on_unit_trained(self, key)
+		var key: String = _train_queue[0]
+		if not battle.on_unit_trained(self,key):
+			if not production_blocked and faction==FACTION_LIANG:
+				battle.msg(display_name+"："+production_wait_label()+"，请清开出口；取消队列可退资源。",4)
+			production_blocked=true
+			_production_retry=0.5
+			return
+		production_blocked=false
+		_production_retry=0.0
+		_train_queue.pop_front()
 		if not _train_queue.is_empty():
 			_train_t = battle.train_time_for(_train_queue[0])
 
@@ -4024,6 +4043,7 @@ func _draw_building() -> void:
 	# 按建筑自身 key 找专属美术：遭遇战建筑在 buildings；treasure_cart 在 units3；其余在 terrain
 	var scoped_tex: Texture2D = _campaign_environment_texture()
 	var tex: Texture2D = Art.unit_texture(key, art_variant, animation_direction) if art_variant != "" else Art.building_texture(key)
+	if setup_def.has("building_art_key"): tex=battle.building_visual_texture(key)
 	if setup_def.has("campaign_object"):
 		var prop := Art.campaign_object_texture(String(setup_def.campaign_object))
 		if prop != null: tex = prop

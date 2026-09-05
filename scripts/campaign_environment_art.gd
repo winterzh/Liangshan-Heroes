@@ -242,6 +242,7 @@ const OBJECT_ROUTES: Dictionary = {
 	},
 	"stockade_segment": {
 		"levels": [
+			"level3",
 			"level5"
 		],
 		"paths": {

@@ -129,7 +129,7 @@ func _setup_stockade() -> void:
 	# 直线分段沿新布局的不可走边界布置，不再画圆弧花园栅栏。
 	for ridge in _bank_ridges:
 		for i in range(ridge.size()-1):
-			var spacing := 3.2 if _rts_layout else 1.7
+			var spacing := 3.2
 			var steps := maxi(1,ceili(ridge[i].distance_to(ridge[i+1])/spacing))
 			for j in range(steps):
 				var a: Vector2 = ridge[i].lerp(ridge[i+1],float(j)/steps)*GameMap.CELL
@@ -143,9 +143,10 @@ func _add_wall(a: Vector2,b: Vector2) -> void:
 	if _rts_layout:
 		wall.height_scale=88.0
 	wall.set_meta("fog_clearance_px",wall.height_scale)
-	# The accepted stockade source has one real isometric orientation. Apply it
-	# only to matching screen diagonals; the perpendicular ridge keeps legacy art.
-	if not _rts_layout and _stockade_texture!=null and wall.end_local.x*wall.end_local.y<0.0:
+	# Both axes use the same accepted timber source with its two real foot
+	# anchors. The renderer handles the axis; no differently stretched strips
+	# meet at the corner, and no image is edited or replaced.
+	if _stockade_texture!=null:
 		wall.campaign_texture=_stockade_texture
 		wall.campaign_route="stockade_segment"
 		wall.campaign_visible_bbox=_stockade_metrics.get("visible_bbox_xywh",[])

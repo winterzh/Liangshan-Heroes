@@ -214,15 +214,21 @@ func _add_story_sign(p: Vector2,size: float,label: String) -> void:
 	_sprites.append(sign)
 
 func _add_wall(a: Vector2,z: Vector2,height_override := 0.0) -> void:
-	var n := int(ceil(a.distance_to(z)/1.7))
+	var n := int(ceil(a.distance_to(z)/(1.7 if _style=="level8" else 3.0)))
 	for i in range(n):
 		var from: Vector2 = (a.lerp(z,float(i)/n)+Vector2(0.5,0.5))*32
 		var to: Vector2 = (a.lerp(z,float(i+1)/n)+Vector2(0.5,0.5))*32
 		var wall = CityWall.new() if _style=="level8" else Stockade.new()
 		# 庄园是护庄寨栅，不把反复拉高的木墙画成断崖台地。
 		# 城市使用砖土墙体，庄园复用木寨栅；与逻辑墙格一致。
-		wall.height_scale = 78.0 if _style=="level3" else 108.0
+		wall.height_scale = 68.0 if _style=="level3" else 108.0
 		if height_override>0.0: wall.height_scale=height_override
+		if _style=="level3":
+			# Explicitly reuse the unlettered timber panel in wooden compounds.
+			# Stone city walls keep their own renderer and source scope.
+			wall.campaign_texture=CampaignEnvironmentArt.object(_style,"stockade_segment")
+			wall.campaign_route="stockade_segment"
+			wall.set_meta("campaign_environment_route","stockade_segment")
 		wall.position = from
 		wall.end_local = _map.project(to)-_map.project(from)
 		wall.z_as_relative = false
