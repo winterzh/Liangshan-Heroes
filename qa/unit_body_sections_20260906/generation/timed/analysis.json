@@ -1,0 +1,148 @@
+{
+  "analysis_valid": true,
+  "mode": "timed",
+  "all_measurement": {
+    "physics_steps": 602,
+    "body_calls": 113644,
+    "body_total_us": 2549396,
+    "section_total_us": {
+      "lifecycle_building_death_us": 232498,
+      "status_timers_us": 426516,
+      "target_state_movement_us": 1467132,
+      "tail_animation_hit_watchdog_us": 423250
+    },
+    "section_mean_us_per_physics_step": {
+      "lifecycle_building_death_us": 386.2093023255814,
+      "status_timers_us": 708.4983388704319,
+      "target_state_movement_us": 2437.0963455149504,
+      "tail_animation_hit_watchdog_us": 703.0730897009967
+    },
+    "section_mean_us_per_body_call": {
+      "lifecycle_building_death_us": 2.0458449192214285,
+      "status_timers_us": 3.7530885924465878,
+      "target_state_movement_us": 12.909894055119496,
+      "tail_animation_hit_watchdog_us": 3.7243497236985674
+    },
+    "share_of_observed_body": {
+      "lifecycle_building_death_us": 0.09119728751437596,
+      "status_timers_us": 0.167300803798233,
+      "target_state_movement_us": 0.5754821926448461,
+      "tail_animation_hit_watchdog_us": 0.16601971604254498
+    },
+    "exit_counts": {
+      "lifecycle_building_death_us": 20466,
+      "status_timers_us": 0,
+      "target_state_movement_us": 314,
+      "tail_animation_hit_watchdog_us": 92864
+    }
+  },
+  "first_up_to_600_steps": {
+    "physics_steps": 600,
+    "body_calls": 113369,
+    "body_total_us": 2545710,
+    "section_total_us": {
+      "lifecycle_building_death_us": 231902,
+      "status_timers_us": 425593,
+      "target_state_movement_us": 1465550,
+      "tail_animation_hit_watchdog_us": 422665
+    },
+    "section_mean_us_per_physics_step": {
+      "lifecycle_building_death_us": 386.50333333333333,
+      "status_timers_us": 709.3216666666667,
+      "target_state_movement_us": 2442.5833333333335,
+      "tail_animation_hit_watchdog_us": 704.4416666666667
+    },
+    "section_mean_us_per_body_call": {
+      "lifecycle_building_death_us": 2.045550370912683,
+      "status_timers_us": 3.7540509310305286,
+      "target_state_movement_us": 12.927255246143126,
+      "tail_animation_hit_watchdog_us": 3.7282237648739955
+    },
+    "share_of_observed_body": {
+      "lifecycle_building_death_us": 0.09109521508734301,
+      "status_timers_us": 0.16718047224546392,
+      "target_state_movement_us": 0.575694010708211,
+      "tail_animation_hit_watchdog_us": 0.16603030195898197
+    },
+    "exit_counts": {
+      "lifecycle_building_death_us": 20385,
+      "status_timers_us": 0,
+      "target_state_movement_us": 314,
+      "tail_animation_hit_watchdog_us": 92670
+    }
+  },
+  "first600_complete": true,
+  "presentations": 238,
+  "over_100ms_presentations": 9,
+  "largest_frames": [
+    {
+      "process_id": 5046,
+      "frame_us": 159716,
+      "physics_steps": 8,
+      "body_calls": 1832,
+      "body_total_us": 46354
+    },
+    {
+      "process_id": 5043,
+      "frame_us": 134631,
+      "physics_steps": 8,
+      "body_calls": 1832,
+      "body_total_us": 50740
+    },
+    {
+      "process_id": 5042,
+      "frame_us": 132895,
+      "physics_steps": 7,
+      "body_calls": 1603,
+      "body_total_us": 49467
+    },
+    {
+      "process_id": 5047,
+      "frame_us": 128887,
+      "physics_steps": 8,
+      "body_calls": 1832,
+      "body_total_us": 48159
+    },
+    {
+      "process_id": 5045,
+      "frame_us": 126940,
+      "physics_steps": 7,
+      "body_calls": 1603,
+      "body_total_us": 37316
+    },
+    {
+      "process_id": 5044,
+      "frame_us": 121630,
+      "physics_steps": 8,
+      "body_calls": 1832,
+      "body_total_us": 45303
+    },
+    {
+      "process_id": 5041,
+      "frame_us": 120640,
+      "physics_steps": 6,
+      "body_calls": 1374,
+      "body_total_us": 46777
+    },
+    {
+      "process_id": 5040,
+      "frame_us": 119960,
+      "physics_steps": 6,
+      "body_calls": 1374,
+      "body_total_us": 31841
+    }
+  ],
+  "same_clock_m1_frame_links_verified": true,
+  "entry_exit_partition_conservation_verified": true,
+  "normal_fps_available": false,
+  "acceptance_eligible": false,
+  "performance_claim": false,
+  "scope": "Four coarse spans of the complete original Unit._phys_body, aggregated per physics step; original _physics_process story-partner tail excluded",
+  "overhead": "Timed callbacks use 2+reached_boundaries clock reads; start precedes begin bookkeeping, each cut bookkeeping enters its following span, finish bookkeeping is excluded. Both modes retain wrapper/cuts/counters and frame/step clocks. No estimated subtraction.",
+  "next_action": "Review measured section costs; do not infer product speedup or subtract independent clockless trajectory.",
+  "sources": {
+    "m1_10s.json": "4d621dd16f9d353ab19370e8c029b5fc88be5fe168d47c4c0f5d47276f9fd354",
+    "report.json": "38d04281566c0cdbe7e28d5c3f9a6a04213ac06cef03c8b8939257bb5ee61fcc"
+  },
+  "analyzer_sha256": "d1ecbda7d4195eb0713b63007a61463b8ea8ebd42a7166c9c44f805458564b6c"
+}

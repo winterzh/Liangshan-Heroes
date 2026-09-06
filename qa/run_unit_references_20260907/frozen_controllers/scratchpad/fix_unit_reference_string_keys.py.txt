@@ -1,0 +1,93 @@
+import datetime
+import difflib
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+base = ROOT / 'scratchpad/run_unit_references/fix_string_keys'
+base.mkdir(exist_ok=False)
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+def save(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes((json.dumps(value, ensure_ascii=False, indent=2)+'\n').encode('utf-8'))
+assert not (ROOT / '.godot/redraw_rejection_source.lock').exists()
+names = ['scratchpad/run_unit_references/unit_references.gd', 'scratchpad/run_unit_references/qa_driver.gd',
+         'scratchpad/run_unit_references/pins.json', 'scratchpad/run_resume_adapters_qa.contract.json']
+original = {name:(ROOT/name).read_bytes() for name in names}
+assert sha(original[names[0]]) == 'daadf3dea45a49aadc60b3f9a700c8d20d8f0cb30607da5de0c543391b3864a2'
+assert sha(original[names[1]]) == '5d8fa28414e5a7a3c25df920fda482c76659f99fdddbf0f5016656e919d22994'
+assert sha(original[names[2]]) == 'fee24be85072c3d445c3a7fbfdf1f66d1f43461a35a9e1885ffb105c31d4a46c'
+assert sha(original[names[3]]) == '99776134b263839a9efa2cbf386dbf236757863b2d406194fb45101dd167e75b'
+sealed = []
+for name,raw in original.items():
+    target = base/'before'/name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(raw)
+    sealed.append({'source':name,'copy':target.relative_to(ROOT).as_posix(),'bytes':len(raw),'sha256':sha(raw)})
+failure = ROOT/'scratchpad/run_unit_references/runs/20260906T155758109217Z'
+for path in sorted(failure.glob('*')):
+    if path.is_file():
+        raw = path.read_bytes()
+        target = base/'diagnostic_failure'/path.name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+        sealed.append({'source':path.relative_to(ROOT).as_posix(),'copy':target.relative_to(ROOT).as_posix(),'bytes':len(raw),'sha256':sha(raw)})
+save(base/'seal.json', {'schema':1,'files':sealed,'failed_run':failure.relative_to(ROOT).as_posix(),'original_failed':True})
+text = original[names[0]].decode('utf-8')
+for key in ['pos','group_cap','explicit','target','_queue']:
+    before = 'result.'+key+' = '
+    assert text.count(before) == 1
+    text = text.replace(before, 'result["'+key+'"] = ')
+text = text.replace('\tresult["_queue"] = orders', '\t# New transport keys must be String; dot assignment inserts StringName.\n\tresult["_queue"] = orders')
+candidate = {names[0]:text.encode('utf-8')}
+text = original[names[1]].decode('utf-8')
+marker = 'func _notice(_unit) -> void: callbacks += 1\n'
+helper = '''func _string_keys(value: Variant) -> bool:
+	if typeof(value) == TYPE_DICTIONARY:
+		for key in value:
+			if typeof(key) != TYPE_STRING or not _string_keys(value[key]): return false
+	elif typeof(value) == TYPE_ARRAY:
+		for item in value:
+			if not _string_keys(item): return false
+	return true
+'''
+assert text.count(marker)==1
+text = text.replace(marker,helper+marker)
+marker = '\tvar subject = _unit()\n'
+regression = '''	var dot_fixture: Dictionary = {}
+	dot_fixture._queue = []
+	check(typeof(dot_fixture.keys()[0]) == TYPE_STRING_NAME,"actual empty Dictionary dot write creates StringName key","fixture")
+	var dot_rejection: Dictionary = codec.encode(dot_fixture)
+	check(not dot_rejection.ok and dot_rejection.code == "UNSUPPORTED_TYPE" and dot_rejection.path == "$/key0","strict codec still rejects dot-created StringName key","rejection")
+'''
+assert text.count(marker)==1
+text = text.replace(marker,regression+marker)
+marker = '\tif not default_validation.ok: return\n'
+text = text.replace(marker,marker+'\tcheck(_string_keys(default_validation.references),"default reference output uses String keys recursively")\n',1)
+marker = '\tif not checked.ok: return\n'
+assert text.count(marker)==1
+text = text.replace(marker,marker+'\tcheck(_string_keys(checked.references),"all seven order kinds and reference tags use String keys recursively")\n')
+candidate[names[1]] = text.encode('utf-8')
+pins = json.loads(original[names[2]])
+for name in names[:2]:
+    raw = candidate[name]
+    pins['draft_files'][Path(name).name] = {'bytes':len(raw),'raw_sha256':sha(raw),'lf_sha256':sha(raw.replace(b'\r\n',b'\n'))}
+pins['status'] = 'STRING_KEY_FIX_CANDIDATE_NOT_RUN'
+pins['diagnostic_failure_run'] = failure.relative_to(ROOT).as_posix()
+pins['diagnostic_failure_code_path'] = ['CODEC_UNSUPPORTED_TYPE','$/key16']
+pins['candidate_scope'] = 'Five explicit String key writes; keep strict codec, values adapter and all original checks unchanged; add four key-type regression assertions.'
+candidate[names[2]] = (json.dumps(pins,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
+contract = json.loads(original[names[3]])
+contract['suites']['unit-references']['pins_raw_sha256'] = sha(candidate[names[2]])
+candidate[names[3]] = (json.dumps(contract,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
+changes,patch = [],[]
+for name in names:
+    path = base/'candidate'/name
+    path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_bytes(candidate[name])
+    changes.append({'target':name,'before_sha256':sha(original[name]),'after_sha256':sha(candidate[name]),'bytes':len(candidate[name])})
+    patch.extend(difflib.unified_diff(original[name].decode().splitlines(keepends=True),candidate[name].decode().splitlines(keepends=True),fromfile='a/'+name,tofile='b/'+name))
+(base/'changes.patch').write_bytes(''.join(patch).encode())
+save(base/'manifest.json', {'schema':1,'changes':changes,'source_semantic_scope':'five new Dictionary transport key writes','production_changed':False,'applied':False,'godot_run':False})
+print(json.dumps({'prepared':len(changes),'base':str(base)}))

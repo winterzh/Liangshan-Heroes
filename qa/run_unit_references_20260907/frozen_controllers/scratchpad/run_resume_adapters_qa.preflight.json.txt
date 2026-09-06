@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "controller_raw_sha256": "1e11fe77f7fde4d088c71e4e0cf97c6c3278b4690821baf01cd883e23607d573",
+  "contract_raw_sha256": "411fd47e474a6a4b1f99ee58fd2ee2efe5269400deb570d36c57873bcf201c8c",
+  "godot_run": false,
+  "gdscript_parse_verified": false,
+  "project_copy": false,
+  "synthetic_reports_only": true,
+  "python_ast_valid": true,
+  "preflights": [
+    {
+      "suite": "unit-references",
+      "argv": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+        "-X",
+        "utf8",
+        "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\run_resume_adapters_qa.py",
+        "--suite",
+        "unit-references"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"suite\": \"unit-references\", \"preflight\": true, \"frozen_files\": 12, \"godot_run\": false, \"project_copy\": false, \"writes\": false}\n",
+      "stderr": ""
+    },
+    {
+      "suite": "inventory",
+      "argv": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+        "-X",
+        "utf8",
+        "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\run_resume_adapters_qa.py",
+        "--suite",
+        "inventory"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"suite\": \"inventory\", \"preflight\": true, \"frozen_files\": 7, \"godot_run\": false, \"project_copy\": false, \"writes\": false}\n",
+      "stderr": ""
+    }
+  ],
+  "validator_cases": [
+    {
+      "suite": "unit-references",
+      "case": "synthetic complete report accepted",
+      "passed": true,
+      "synthetic_not_engine_evidence": true
+    },
+    {
+      "suite": "unit-references",
+      "case": "wrong PID",
+      "rejected": true,
+      "reason": "Report PID mismatch",
+      "passed": true
+    },
+    {
+      "suite": "unit-references",
+      "case": "escaped actual user",
+      "rejected": true,
+      "reason": "Actual user:// escaped private profile",
+      "passed": true
+    },
+    {
+      "suite": "unit-references",
+      "case": "missing final critical case",
+      "rejected": true,
+      "reason": "Incomplete real QA sequence: no restoration, expiration replay or ObjectID gameplay migration claimed",
+      "passed": true
+    },
+    {
+      "suite": "unit-references",
+      "case": "source drift",
+      "rejected": true,
+      "reason": "Reference runtime source mismatch",
+      "passed": true
+    },
+    {
+      "suite": "unit-references",
+      "case": "false restore claim",
+      "rejected": true,
+      "reason": "False restore/cross-process claim",
+      "passed": true
+    },
+    {
+      "suite": "inventory",
+      "case": "synthetic complete report accepted",
+      "passed": true,
+      "synthetic_not_engine_evidence": true
+    },
+    {
+      "suite": "inventory",
+      "case": "wrong PID",
+      "rejected": true,
+      "reason": "Report PID mismatch",
+      "passed": true
+    },
+    {
+      "suite": "inventory",
+      "case": "escaped actual user",
+      "rejected": true,
+      "reason": "Actual user:// escaped private profile",
+      "passed": true
+    },
+    {
+      "suite": "inventory",
+      "case": "missing final critical case",
+      "rejected": true,
+      "reason": "Incomplete real QA sequence: all positive and rejected cases avoid owner or effect callbacks",
+      "passed": true
+    },
+    {
+      "suite": "inventory",
+      "case": "source drift",
+      "rejected": true,
+      "reason": "Inventory runtime source mismatch",
+      "passed": true
+    },
+    {
+      "suite": "inventory",
+      "case": "false restore claim",
+      "rejected": true,
+      "reason": "Unsupported Inventory scope marked complete: assignment_restore_implemented",
+      "passed": true
+    },
+    {
+      "suite": "common",
+      "case": "changed controller contract",
+      "rejected": true,
+      "reason": "Controller changed",
+      "passed": true
+    },
+    {
+      "suite": "common",
+      "case": "changed frozen lifecycle",
+      "rejected": true,
+      "reason": "Frozen lifecycle helper changed",
+      "passed": true
+    }
+  ],
+  "preflight_count": 2,
+  "synthetic_validator_case_count": 14,
+  "all_checks_passed": true,
+  "scope": "Two actual read-only Python preflights plus 14 in-memory controller validator cases and Python AST; no Godot or adapter functional execution."
+}

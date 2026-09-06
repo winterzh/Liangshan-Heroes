@@ -1,0 +1,277 @@
+extends SceneTree
+## Draft: run once using the root checkout and a verified private user profile.
+## Runtime loads occur after Autoload initialization; no Unit enters the tree.
+const CONTENT := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+const SUBJECT_ID := "9007199254740993"
+const TARGET_ID := "9223372036854775807"
+const SOURCE_FILES := ["project.godot","scripts/unit.gd","scripts/run_state_value_codec.gd",
+	"scratchpad/run_unit_state_adapter/unit_values.gd","scratchpad/run_unit_references/unit_references.gd",
+	"scratchpad/run_unit_references/qa_driver.gd"]
+var checks: Array = []
+var failures: Array = []
+var nodes: Array = []
+var manifest: Dictionary
+var unit_script: GDScript
+var codec
+var adapter
+var registry: Dictionary
+var callbacks := 0
+
+func _initialize() -> void: _run.call_deferred()
+func check(passed: bool, label: String, group := "behavior") -> void:
+	checks.append({"label":label,"passed":passed,"group":group})
+	if not passed: failures.append(label)
+func _notice(_unit) -> void: callbacks += 1
+func _story_notice(_unit,_outcome) -> void: callbacks += 1
+func _unit():
+	var result = unit_script.new()
+	nodes.append(result)
+	return result
+func _cleanup() -> void:
+	registry.clear()
+	for node in nodes:
+		if is_instance_valid(node): node.free()
+	nodes.clear()
+func _hop(record: Dictionary) -> Dictionary:
+	var parser := JSON.new()
+	check(parser.parse(JSON.stringify(record,"",false)) == OK,"real JSON parse", "json")
+	return parser.data if parser.data is Dictionary else {}
+func _repack(record: Dictionary, mutate: Callable) -> Dictionary:
+	var decoded: Dictionary = codec.decode(record.references)
+	check(decoded.ok,"negative fixture decodes original finite tree", "fixture")
+	if not decoded.ok: return {}
+	mutate.call(decoded.value)
+	var encoded: Dictionary = codec.encode(decoded.value)
+	check(encoded.ok,"negative fixture encodes finite tree", "fixture")
+	if not encoded.ok: return {}
+	var result := record.duplicate(true)
+	result.references = encoded.value
+	return _hop(result)
+func _reject(record: Dictionary, code: String, label: String) -> void:
+	var result: Dictionary = adapter.validate_record(record,registry,SUBJECT_ID,CONTENT)
+	check(not result.ok and result.code == code and not result.has("references") and not result.has("record") and not result.restore_ready,label,"rejection")
+func _capture_reject(subject, supplied: Variant, code: String, label: String) -> void:
+	var result: Dictionary = adapter.capture_references(subject,supplied,CONTENT)
+	check(not result.ok and result.code == code and not result.has("record") and not result.restore_ready,label,"rejection")
+
+func _cases() -> void:
+	var subject = _unit()
+	var target = _unit()
+	var corpse = _unit()
+	var expired = _unit()
+	var unregistered = _unit()
+	corpse.hp = 0.0
+	registry = {subject:SUBJECT_ID,target:TARGET_ID,corpse:"3"}
+	subject.died.connect(_notice)
+	subject.story_resolved.connect(_story_notice)
+	subject.appearance_changed.connect(_notice)
+	var altered_source := GDScript.new()
+	altered_source.source_code = "extends Node2D\n"
+	var references_script: GDScript = adapter.get_script()
+	var values_script: GDScript = load("res://scratchpad/run_unit_state_adapter/unit_values.gd")
+	var mismatch = references_script.new(altered_source,codec.get_script(),values_script)
+	var refused: Dictionary = mismatch.capture_references(subject,registry,CONTENT)
+	check(not refused.ok and refused.code == "SOURCE_CONTRACT","changed Unit source rejected before explicit property access","rejection")
+	mismatch = references_script.new(unit_script,codec.get_script(),altered_source)
+	refused = mismatch.capture_unit(subject,registry,CONTENT)
+	check(not refused.ok and refused.code == "SOURCE_CONTRACT","changed value adapter source rejected before combined capture","rejection")
+	check(subject.get_script() == unit_script and not subject.is_inside_tree(),"actual production Unit remains outside simulation tree")
+	var defaults: Dictionary = adapter.capture_unit(subject,registry,CONTENT)
+	check(defaults.ok and not defaults.restore_ready,"default values plus reference layer capture")
+	if not defaults.ok: return
+	var default_validation: Dictionary = adapter.validate_unit_record(_hop(defaults.record),registry,SUBJECT_ID,CONTENT)
+	check(default_validation.ok and default_validation.values.size() == 243 and default_validation.references.size() == 17,"combined 243 native values and 17 reference/order fields validate")
+	if not default_validation.ok: return
+	for field in adapter.DIRECT_FIELDS:
+		check(default_validation.references[field] == {"state":"none"},"default none: "+field)
+	check(default_validation.references._gold_waiters.is_empty() and default_validation.references.passengers.is_empty() and default_validation.references._queue.is_empty(),"three empty arrays remain empty")
+	check(default_validation.coverage.combined_declared_fields == 258 and default_validation.coverage.deferred_fields.size() == 9 and default_validation.coverage.omitted_visual_fields.size() == 5,"272 declaration partition remains complete and explicitly partial")
+
+	# Fixture assignment is explicit/fixed. Never call order/setup/damage or tick.
+	for field in adapter.DIRECT_FIELDS: subject.set(field,target)
+	subject._gold_waiters = [target,corpse,target]
+	subject.passengers = [corpse,target,corpse]
+	var every_field: Dictionary = adapter.capture_references(subject,registry,CONTENT)
+	check(every_field.ok,"all sixteen current reference fields capture real registered Units")
+	if not every_field.ok: return
+	var every_checked: Dictionary = adapter.validate_record(_hop(every_field.record),registry,SUBJECT_ID,CONTENT)
+	check(every_checked.ok,"all sixteen reference fields survive JSON")
+	if not every_checked.ok: return
+	for field in adapter.DIRECT_FIELDS:
+		check(every_checked.references[field] == {"state":"entity","id":TARGET_ID},"registered live identity: "+field)
+	check(every_checked.references._gold_waiters == [{"state":"entity","id":TARGET_ID},{"state":"entity","id":"3"},{"state":"entity","id":TARGET_ID}],"mine waiter order and duplicate multiplicity retained")
+	check(every_checked.references.passengers == [{"state":"entity","id":"3"},{"state":"entity","id":TARGET_ID},{"state":"entity","id":"3"}],"passenger order and duplicate multiplicity retained")
+	check(not every_checked.coverage.graph_validated,"structurally representable duplicates do not claim valid ownership graph")
+
+	subject.story_assist_partner = null
+	subject.story_assist_owner = null
+	subject._pending_target = expired
+	subject._killer = corpse
+	subject._gold_waiters = [expired,target,null,expired,target]
+	subject.passengers = [target,expired,null,corpse,expired]
+	subject._queue = [
+		{"kind":"move","pos":Vector2(10.25,-20.5),"group_cap":0.0},
+		{"kind":"amove","pos":Vector2(30.5,40.25),"group_cap":82.125},
+		{"kind":"attack","target":target,"explicit":true},
+		{"kind":"gather","target":target},
+		{"kind":"build","target":target},
+		{"kind":"repair","target":corpse},
+		{"kind":"garrison","target":target},
+		{"kind":"attack","target":target,"explicit":true},
+		{"kind":"attack","target":expired,"explicit":false},
+		{"kind":"gather","target":null}]
+	expired.free()
+	check(typeof(subject._pending_target) == TYPE_OBJECT and not is_instance_valid(subject._pending_target),"fixture retains a truly freed Object Variant")
+	seed(874211)
+	var expected_rng := randi()
+	seed(874211)
+	var captured: Dictionary = adapter.capture_unit(subject,registry,CONTENT)
+	check(captured.ok,"values plus expired/reference/order mixture capture")
+	if not captured.ok: return
+	var combined := _hop(captured.record)
+	var checked: Dictionary = adapter.validate_unit_record(combined,registry,SUBJECT_ID,CONTENT)
+	check(checked.ok,"values plus references validate after actual JSON parse")
+	if not checked.ok: return
+	check(randi() == expected_rng,"capture/validation/codec does not consume gameplay RNG")
+	check(callbacks == 0,"capture and validate emit no Unit death/story/appearance signals")
+	check(checked.references.story_assist_partner == {"state":"none"} and checked.references._pending_target == {"state":"expired"},"none and truly freed direct reference remain distinct")
+	check(checked.references._killer == {"state":"entity","id":"3"},"valid corpse is entity regardless of zero HP")
+	check(checked.entity_id == SUBJECT_ID and checked.references._target.id == TARGET_ID,"64 bit stable IDs stay exact decimal Strings beyond JSON safe integers")
+	check(checked.references._gold_waiters == [{"state":"expired"},{"state":"entity","id":TARGET_ID},{"state":"none"},{"state":"expired"},{"state":"entity","id":TARGET_ID}],"waiter stale prefix and repeated expired slots are not swept")
+	check(checked.references.passengers == [{"state":"entity","id":TARGET_ID},{"state":"expired"},{"state":"none"},{"state":"entity","id":"3"},{"state":"expired"}],"passenger stale/none slots and array size remain exact")
+	check(checked.references._queue.size() == 10,"all queued commands retain original count")
+	var kinds: Array = []
+	for order in checked.references._queue: kinds.append(order.kind)
+	check(kinds == ["move","amove","attack","gather","build","repair","garrison","attack","attack","gather"],"all seven known order kinds and repeated command order remain exact")
+	check(checked.references._queue[0].pos == Vector2(10.25,-20.5) and typeof(checked.references._queue[0].group_cap) == TYPE_FLOAT and checked.references._queue[1].group_cap == 82.125,"movement Vector2 and float cap retain exact types and values")
+	check(checked.references._queue[2] == checked.references._queue[7] and checked.references._queue[2].explicit and not checked.references._queue[8].explicit,"duplicate attack orders and explicit bool remain intact")
+	check(checked.references._queue[8].target == {"state":"expired"} and checked.references._queue[9].target == {"state":"none"},"queued expired and none target remain distinct")
+	var again: Dictionary = adapter.capture_unit(subject,registry,CONTENT)
+	check(again.ok and JSON.stringify(again.record,"",false) == JSON.stringify(captured.record,"",false),"all captured values and references remain byte-equivalent without cleanup or orders")
+	check(subject._gold_waiters.size() == 5 and typeof(subject._gold_waiters[0]) == TYPE_OBJECT and not is_instance_valid(subject._gold_waiters[0]) and subject._queue.size() == 10,"actual input containers and freed Variants remain untouched")
+	checked.references._gold_waiters.clear()
+	checked.references._queue[0].pos = Vector2.ZERO
+	check(subject._gold_waiters.size() == 5 and subject._queue[0].pos == Vector2(10.25,-20.5),"decoded output containers do not alias source arrays or orders")
+
+	var record: Dictionary = combined.references
+	var replacement_subject = _unit()
+	var replacement_target = _unit()
+	var replacement_corpse = _unit()
+	var replacements: Dictionary = {replacement_subject:SUBJECT_ID,replacement_target:TARGET_ID,replacement_corpse:"3"}
+	var remapped: Dictionary = adapter.validate_record(record,replacements,SUBJECT_ID,CONTENT)
+	check(remapped.ok and remapped.references._target.id == TARGET_ID and replacement_subject._target == null,"caller can validate against distinct shells with same stable IDs without assigning them (same PID only)")
+
+	_capture_reject(subject,{subject:SUBJECT_ID,target:SUBJECT_ID},"REGISTRY_DUPLICATE_ID","duplicate stable IDs rejected")
+	_capture_reject(subject,{subject:"01"},"REGISTRY_ID","noncanonical decimal IDs rejected")
+	_capture_reject(subject,{subject:1},"REGISTRY_ID","numeric ID coercion rejected")
+	_capture_reject(subject,{subject:"9223372036854775808"},"REGISTRY_ID","ID outside signed 64 bit positive domain rejected")
+	_capture_reject(subject,{subject:SUBJECT_ID,expired:"4"},"REGISTRY_OBJECT","freed object in live registry rejected")
+	_capture_reject(subject,{"fake":SUBJECT_ID},"REGISTRY_OBJECT","string key cannot stand in for actual Unit registry object")
+	_capture_reject(subject,{target:TARGET_ID},"SUBJECT_UNREGISTERED","unregistered subject rejected")
+	_capture_reject(expired,registry,"UNIT_UNAVAILABLE","freed subject rejected")
+	var wrong := Node2D.new()
+	nodes.append(wrong)
+	_capture_reject(subject,{subject:SUBJECT_ID,wrong:"7"},"REGISTRY_UNIT_TYPE","wrong live class in registry rejected")
+	subject._target = unregistered
+	_capture_reject(subject,registry,"REFERENCE_UNREGISTERED","unregistered live direct target cannot become none or expired")
+	subject._target = target
+	subject._queue.append({"kind":"attack","target":unregistered,"explicit":true})
+	_capture_reject(subject,registry,"REFERENCE_UNREGISTERED","unregistered live queued target rejected")
+	subject._queue.pop_back()
+	subject._gold_waiters.append(wrong)
+	_capture_reject(subject,registry,"REFERENCE_UNIT_TYPE","wrong live reference array class rejected")
+	subject._gold_waiters.pop_back()
+	subject._gold_waiters.append(7)
+	_capture_reject(subject,registry,"REFERENCE_TYPE","primitive array entry rejected")
+	subject._gold_waiters.pop_back()
+	var saved_waiters: Array = subject._gold_waiters
+	subject._gold_waiters = []
+	subject._gold_waiters.resize(adapter.MAX_ARRAY_ITEMS+1)
+	_capture_reject(subject,registry,"REFERENCE_ARRAY","reference array budget refuses before codec")
+	subject._gold_waiters = saved_waiters
+	var saved_orders: Array = subject._queue
+	subject._queue = []
+	subject._queue.resize(adapter.MAX_ORDERS+1)
+	_capture_reject(subject,registry,"ORDER_QUEUE","order queue budget refuses before codec")
+	subject._queue = saved_orders
+
+	_reject(_repack(record,func(v): v.erase("_killer")),"REFERENCE_FIELDS","missing explicit reference field rejected")
+	_reject(_repack(record,func(v): v["future_reference"]={"state":"none"}),"REFERENCE_FIELDS","unknown reference field rejected")
+	_reject(_repack(record,func(v): v._target={"state":"entity","id":"8"}),"REFERENCE_UNKNOWN_ID","unregistered wire entity ID rejected")
+	_reject(_repack(record,func(v): v._target={"state":"expired","id":TARGET_ID}),"REFERENCE_TAG","expired tag cannot smuggle a guessed old ID")
+	_reject(_repack(record,func(v): v._target={"state":"none","extra":true}),"REFERENCE_TAG","none tag has exact shape")
+	_reject(_repack(record,func(v): v._target={"state":"unknown"}),"REFERENCE_TAG","unknown reference state rejected")
+	_reject(_repack(record,func(v): v._target={"state":"entity","id":17}),"REFERENCE_TAG","wire entity ID must remain String")
+	_reject(_repack(record,func(v): v._gold_waiters={}),"REFERENCE_ARRAY","array cannot be replaced by unordered dictionary")
+	_reject(_repack(record,func(v): v._queue[0].erase("group_cap")),"ORDER_FIELDS","missing known producer field does not use gameplay default")
+	_reject(_repack(record,func(v): v._queue[2].erase("explicit")),"ORDER_FIELDS","missing attack explicit flag rejected")
+	_reject(_repack(record,func(v): v._queue[2].explicit=1),"ORDER_EXPLICIT","attack bool is not coerced from integer")
+	_reject(_repack(record,func(v): v._queue[0].pos=[1.0,2.0]),"ORDER_POSITION","move requires actual finite Vector2 codec value")
+	_reject(_repack(record,func(v): v._queue[0].group_cap=1),"ORDER_GROUP_CAP","cap requires float, not integer coercion")
+	_reject(_repack(record,func(v): v._queue[0].kind="patrol"),"ORDER_KIND","unknown queue kind rejected rather than silently skipped")
+	_reject(_repack(record,func(v): v._queue[0]["unknown"]=0),"ORDER_FIELDS","extra order field rejected")
+	var changed := record.duplicate(true)
+	changed.entity_id = TARGET_ID
+	_reject(changed,"SUBJECT_ID","record cannot be selected under different subject ID")
+	changed = record.duplicate(true)
+	changed.unit_source_lf = "0".repeat(64)
+	_reject(changed,"UNIT_SOURCE","different pinned Unit source rejected")
+	changed = record.duplicate(true)
+	changed.content_fingerprint = "b".repeat(64)
+	_reject(changed,"CONTENT_FINGERPRINT","different content fingerprint rejected")
+	var invalid_values := combined.duplicate(true)
+	invalid_values.values.erase("values")
+	var combined_rejection: Dictionary = adapter.validate_unit_record(invalid_values,registry,SUBJECT_ID,CONTENT)
+	check(not combined_rejection.ok and combined_rejection.code == "VALUES_RECORD_FIELDS" and not combined_rejection.has("references"),"successful references cannot hide rejected values or expose partial combined output","rejection")
+	subject.hp = NAN
+	combined_rejection = adapter.capture_unit(subject,registry,CONTENT)
+	check(not combined_rejection.ok and combined_rejection.code == "VALUES_NON_FINITE" and not combined_rejection.has("record"),"combined capture still enforces frozen value adapter","rejection")
+	subject.hp = 100.0
+	check(not adapter.coverage().restore_ready and not adapter.coverage().expired_restore_policy_implemented and not adapter.coverage().stable_id_gameplay_migrated,"no restoration, expiration replay or ObjectID gameplay migration claimed")
+
+func _run() -> void:
+	var manifest_path := OS.get_environment("UNIT_REFERENCES_QA_MANIFEST")
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+	if not parsed is Dictionary: push_error("Unit references QA requires private manifest"); quit(2); return
+	manifest = parsed
+	for field in ["run_id","run_dir","private_user","report","source_sha256"]:
+		if not manifest.has(field): push_error("Unit references QA missing manifest field"); quit(2); return
+	for field in ["run_id","run_dir","private_user","report"]:
+		if typeof(manifest[field]) != TYPE_STRING or manifest[field].is_empty(): push_error("Unit references QA invalid manifest String"); quit(2); return
+	var run_dir := String(manifest.run_dir).replace("\\","/").simplify_path().trim_suffix("/")
+	var report_path := String(manifest.report).replace("\\","/").simplify_path()
+	if not run_dir.begins_with(ProjectSettings.globalize_path("res://scratchpad/run_unit_references/runs/").replace("\\","/")) or report_path != run_dir+"/report.json":
+		push_error("Unit references report must remain in its new scratchpad run"); quit(2); return
+	check(ProjectSettings.globalize_path("user://").replace("\\","/").trim_suffix("/") == String(manifest.private_user).replace("\\","/").trim_suffix("/"),"parent-isolated actual profile","environment")
+	check(typeof(manifest.source_sha256) == TYPE_DICTIONARY and manifest.source_sha256.size() == SOURCE_FILES.size(),"exact six runtime source entries","source")
+	if typeof(manifest.source_sha256) != TYPE_DICTIONARY: quit(2); return
+	for name in SOURCE_FILES:
+		check(manifest.source_sha256.has(name) and FileAccess.get_sha256("res://"+name) == manifest.source_sha256.get(name,""),"runtime source "+name,"source")
+	if failures.is_empty():
+		unit_script = load("res://scripts/unit.gd")
+		var codec_script: GDScript = load("res://scripts/run_state_value_codec.gd")
+		var values_script: GDScript = load("res://scratchpad/run_unit_state_adapter/unit_values.gd")
+		var references_script: GDScript = load("res://scratchpad/run_unit_references/unit_references.gd")
+		check(unit_script != null and codec_script != null and values_script != null and references_script != null,"real Unit and exact runtime scripts load")
+		if failures.is_empty():
+			codec = codec_script.new()
+			adapter = references_script.new(unit_script,codec_script,values_script)
+			_cases()
+	_cleanup()
+	for name in SOURCE_FILES:
+		check(FileAccess.get_sha256("res://"+name) == manifest.source_sha256.get(name,""),"source unchanged "+name,"source")
+	var groups: Dictionary = {}
+	for item in checks: groups[item.group] = int(groups.get(item.group,0))+1
+	var report := {"schema":1,"run_id":manifest.run_id,"process_id":OS.get_process_id(),"manifest_sha256":FileAccess.get_sha256(manifest_path),
+		"checks":checks,"failures":failures,"passed":not checks.is_empty() and failures.is_empty(),"check_groups":groups,
+		"actual_user_dir":ProjectSettings.globalize_path("user://"),"source_sha256":manifest.source_sha256,"coverage":adapter.coverage() if adapter != null else {},
+		"restore_ready":false,"battle_resume_tested":false,"cross_process_id_continuity_tested":false}
+	var file := FileAccess.open(report_path,FileAccess.WRITE)
+	if file == null: push_error("Unit references report open failed"); quit(2); return
+	var written: bool = file.store_string(JSON.stringify(report,"\t")+"\n")
+	file.flush()
+	var write_error := file.get_error()
+	file.close()
+	if not written or write_error != OK: push_error("Unit references report write failed"); quit(2); return
+	print("[unit-references] checks=",checks.size()," failures=",failures.size())
+	quit(0 if report.passed else 1)

@@ -1,0 +1,207 @@
+extends RefCounted
+## Explicit transport/validation draft. Never applies references to a Unit.
+## Registry: actual, valid Unit object -> caller-owned stable decimal String ID.
+const SCHEMA := "unit_references_v1"
+const COMBINED_SCHEMA := "unit_values_and_references_v1"
+const UNIT_SOURCE_LF := "f4382456b8c619cbb86c40cd8a9ed6ea9f171ba0a8a90c191538f689176d49ee"
+const CODEC_SOURCE_LF := "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+const VALUES_SOURCE_LF := "36674708d2aeb77392d6a58893d490914a31ec92617e7dc02380e00eb462c257"
+const MAX_ENTITIES := 4096
+const MAX_ARRAY_ITEMS := 4096
+const MAX_ORDERS := 4096
+const MAX_ID := "9223372036854775807"
+const DIRECT_FIELDS := ["story_assist_partner","story_assist_owner","_gold_miner","_gather_node","_drop",
+	"_build_site","garrison_holder","_garrison_dest","rally_node","_taunt_src","_hua_lock_target","_target","_pending_target","_killer"]
+const ARRAY_FIELDS := ["_gold_waiters","passengers"]
+const FIELDS := ["story_assist_partner","story_assist_owner","_gold_miner","_gold_waiters","_gather_node","_drop",
+	"_build_site","garrison_holder","_garrison_dest","passengers","rally_node","_taunt_src","_hua_lock_target","_target","_pending_target","_killer","_queue"]
+const DEFERRED := ["_lin_spear_target_id","_aura_atkspeed_sources","_damage_reduction_sources","_charge_hit","_chase_last_id","_giveup_id","battle","map","inventory"]
+var _unit_script: GDScript
+var _codec
+var _values
+var _source_ok := false
+
+func _init(unit_script: GDScript, codec_script: GDScript, values_script: GDScript) -> void:
+	_unit_script = unit_script
+	if unit_script == null or codec_script == null or values_script == null: return
+	if unit_script.source_code.replace("\r\n","\n").sha256_text() != UNIT_SOURCE_LF: return
+	if codec_script.source_code.replace("\r\n","\n").sha256_text() != CODEC_SOURCE_LF: return
+	if values_script.source_code.replace("\r\n","\n").sha256_text() != VALUES_SOURCE_LF: return
+	if not unit_script.can_instantiate() or not codec_script.can_instantiate() or not values_script.can_instantiate(): return
+	_codec = codec_script.new()
+	_values = values_script.new(unit_script, codec_script)
+	_source_ok = _codec != null and _values != null
+
+func _fail(code: String, path := "") -> Dictionary:
+	return {"ok":false,"code":code,"path":path,"restore_ready":false}
+
+func coverage() -> Dictionary:
+	return {"declared_fields":272,"captured_declared_values":241,"direct_reference_fields":14,"ordered_reference_arrays":2,
+		"known_order_queue_fields":1,"combined_declared_fields":258,"inherited_values":["position","modulate"],
+		"deferred_fields":DEFERRED.duplicate(),"omitted_visual_fields":["_real_frames","_frame_directional","_animated_redraw_t","_queued_redraw_frame","_dust"],
+		"restore_ready":false,"references_transport_only":true,"graph_validated":false,"metadata_capture_implemented":false,
+		"business_definition_validated":false,"stable_id_gameplay_migrated":false,"expired_restore_policy_implemented":false}
+
+func _fields(value: Dictionary, names: Array) -> bool:
+	if value.size() != names.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in names: return false
+	return true
+
+func _fingerprint(value: Variant) -> bool:
+	if typeof(value) != TYPE_STRING or value.length() != 64: return false
+	for i in range(value.length()):
+		var c: int = value.unicode_at(i)
+		if not (c >= 48 and c <= 57) and not (c >= 97 and c <= 102): return false
+	return true
+
+func _id(value: Variant) -> bool:
+	if typeof(value) != TYPE_STRING or value.is_empty() or value.length() > MAX_ID.length(): return false
+	if value.unicode_at(0) < 49 or value.unicode_at(0) > 57: return false
+	for i in range(1, value.length()):
+		var c: int = value.unicode_at(i)
+		if c < 48 or c > 57: return false
+	return value.length() < MAX_ID.length() or value <= MAX_ID
+
+func _registry(registry: Variant) -> Dictionary:
+	if typeof(registry) != TYPE_DICTIONARY or registry.is_empty() or registry.size() > MAX_ENTITIES: return _fail("REGISTRY_SHAPE")
+	var ids: Dictionary = {}
+	for object in registry:
+		# A queued deletion is still live, but this draft requires the caller's
+		# snapshot barrier to finish deletion before building its registry.
+		if typeof(object) != TYPE_OBJECT or not is_instance_valid(object): return _fail("REGISTRY_OBJECT")
+		if object.get_script() != _unit_script: return _fail("REGISTRY_UNIT_TYPE")
+		if object.is_queued_for_deletion(): return _fail("REGISTRY_PENDING_DELETE")
+		var entity_id: Variant = registry[object]
+		if not _id(entity_id): return _fail("REGISTRY_ID")
+		if ids.has(entity_id): return _fail("REGISTRY_DUPLICATE_ID")
+		ids[entity_id] = true
+	return {"ok":true,"ids":ids}
+
+func _tag(value: Variant, registry: Dictionary, path: String) -> Dictionary:
+	# Do not compare to null first: freed Object Variants must retain expired.
+	if typeof(value) == TYPE_NIL: return {"ok":true,"value":{"state":"none"}}
+	if typeof(value) != TYPE_OBJECT: return _fail("REFERENCE_TYPE", path)
+	if not is_instance_valid(value): return {"ok":true,"value":{"state":"expired"}}
+	if value.get_script() != _unit_script: return _fail("REFERENCE_UNIT_TYPE", path)
+	if not registry.has(value): return _fail("REFERENCE_UNREGISTERED", path)
+	return {"ok":true,"value":{"state":"entity","id":registry[value]}}
+
+func _check_tag(value: Variant, ids: Dictionary, path: String) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY or not value.has("state") or typeof(value.state) != TYPE_STRING: return _fail("REFERENCE_TAG", path)
+	match value.state:
+		"none", "expired":
+			if not _fields(value,["state"]): return _fail("REFERENCE_TAG", path)
+		"entity":
+			if not _fields(value,["state","id"]) or not _id(value.id): return _fail("REFERENCE_TAG", path)
+			if not ids.has(value.id): return _fail("REFERENCE_UNKNOWN_ID", path)
+		_: return _fail("REFERENCE_TAG", path)
+	return {"ok":true}
+
+func _read_explicit(unit) -> Dictionary:
+	return {"story_assist_partner":unit.story_assist_partner,"story_assist_owner":unit.story_assist_owner,
+		"_gold_miner":unit._gold_miner,"_gold_waiters":unit._gold_waiters,"_gather_node":unit._gather_node,"_drop":unit._drop,
+		"_build_site":unit._build_site,"garrison_holder":unit.garrison_holder,"_garrison_dest":unit._garrison_dest,
+		"passengers":unit.passengers,"rally_node":unit.rally_node,"_taunt_src":unit._taunt_src,"_hua_lock_target":unit._hua_lock_target,
+		"_target":unit._target,"_pending_target":unit._pending_target,"_killer":unit._killer,"_queue":unit._queue}
+
+func _order(order: Variant, registry_or_ids: Dictionary, capturing: bool, path: String) -> Dictionary:
+	if typeof(order) != TYPE_DICTIONARY or not order.has("kind") or typeof(order.kind) != TYPE_STRING: return _fail("ORDER_SHAPE", path)
+	var result: Dictionary = {"kind":order.kind}
+	match order.kind:
+		"move", "amove":
+			if not _fields(order,["kind","pos","group_cap"]): return _fail("ORDER_FIELDS", path)
+			if typeof(order.pos) != TYPE_VECTOR2 or not order.pos.is_finite(): return _fail("ORDER_POSITION", path)
+			if typeof(order.group_cap) != TYPE_FLOAT or not is_finite(order.group_cap): return _fail("ORDER_GROUP_CAP", path)
+			result.pos = order.pos
+			result.group_cap = order.group_cap
+		"attack", "gather", "build", "repair", "garrison":
+			var names: Array = ["kind","target","explicit"] if order.kind == "attack" else ["kind","target"]
+			if not _fields(order, names): return _fail("ORDER_FIELDS", path)
+			if order.kind == "attack":
+				if typeof(order.explicit) != TYPE_BOOL: return _fail("ORDER_EXPLICIT", path)
+				result.explicit = order.explicit
+			var tagged: Dictionary = _tag(order.target, registry_or_ids, path+".target") if capturing else _check_tag(order.target, registry_or_ids, path+".target")
+			if not tagged.ok: return tagged
+			result.target = tagged.value if capturing else order.target.duplicate(true)
+		_: return _fail("ORDER_KIND", path)
+	return {"ok":true,"value":result}
+
+func _references(values: Variant, registry_or_ids: Dictionary, capturing: bool) -> Dictionary:
+	if typeof(values) != TYPE_DICTIONARY or not _fields(values,FIELDS): return _fail("REFERENCE_FIELDS")
+	var result: Dictionary = {}
+	for field in DIRECT_FIELDS:
+		var tagged: Dictionary = _tag(values[field], registry_or_ids, field) if capturing else _check_tag(values[field], registry_or_ids, field)
+		if not tagged.ok: return tagged
+		result[field] = tagged.value if capturing else values[field].duplicate(true)
+	for field in ARRAY_FIELDS:
+		if typeof(values[field]) != TYPE_ARRAY or values[field].size() > MAX_ARRAY_ITEMS: return _fail("REFERENCE_ARRAY", field)
+		var entries: Array = []
+		for i in range(values[field].size()):
+			var path := "%s[%d]" % [field,i]
+			var tagged: Dictionary = _tag(values[field][i], registry_or_ids, path) if capturing else _check_tag(values[field][i], registry_or_ids, path)
+			if not tagged.ok: return tagged
+			# Never deduplicate, sort or sweep stale passengers/waiters here.
+			entries.append(tagged.value if capturing else values[field][i].duplicate(true))
+		result[field] = entries
+	if typeof(values._queue) != TYPE_ARRAY or values._queue.size() > MAX_ORDERS: return _fail("ORDER_QUEUE")
+	var orders: Array = []
+	for i in range(values._queue.size()):
+		var checked := _order(values._queue[i], registry_or_ids, capturing, "_queue[%d]" % i)
+		if not checked.ok: return checked
+		orders.append(checked.value)
+	result._queue = orders
+	return {"ok":true,"values":result}
+
+func capture_references(unit, registry: Variant, content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _fail("SOURCE_CONTRACT")
+	if typeof(unit) != TYPE_OBJECT or not is_instance_valid(unit): return _fail("UNIT_UNAVAILABLE")
+	if unit.get_script() != _unit_script or unit.is_queued_for_deletion(): return _fail("UNIT_TYPE")
+	if not _fingerprint(content_fingerprint): return _fail("CONTENT_FINGERPRINT")
+	var checked := _registry(registry)
+	if not checked.ok: return checked
+	if not registry.has(unit): return _fail("SUBJECT_UNREGISTERED")
+	var captured := _references(_read_explicit(unit), registry, true)
+	if not captured.ok: return captured
+	# The finite codec budgets all 17 fields together, retaining Vector2/float
+	# types and decimal IDs through actual JSON; no Object enters this codec.
+	var encoded: Dictionary = _codec.encode(captured.values)
+	if not encoded.ok: return _fail("CODEC_"+String(encoded.code),String(encoded.get("path","")))
+	return {"ok":true,"code":"REFERENCES_CAPTURED","record":{"schema":SCHEMA,"unit_source_lf":UNIT_SOURCE_LF,
+		"content_fingerprint":content_fingerprint,"entity_id":registry[unit],"references":encoded.value},"coverage":coverage(),"restore_ready":false}
+
+func validate_record(record: Variant, registry: Variant, expected_entity_id: String, expected_content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _fail("SOURCE_CONTRACT")
+	if typeof(record) != TYPE_DICTIONARY or not _fields(record,["schema","unit_source_lf","content_fingerprint","entity_id","references"]): return _fail("RECORD_FIELDS")
+	if typeof(record.schema) != TYPE_STRING or record.schema != SCHEMA: return _fail("SCHEMA")
+	if typeof(record.unit_source_lf) != TYPE_STRING or record.unit_source_lf != UNIT_SOURCE_LF: return _fail("UNIT_SOURCE")
+	if not _fingerprint(expected_content_fingerprint) or not _fingerprint(record.content_fingerprint) or record.content_fingerprint != expected_content_fingerprint: return _fail("CONTENT_FINGERPRINT")
+	if not _id(expected_entity_id) or not _id(record.entity_id) or record.entity_id != expected_entity_id: return _fail("SUBJECT_ID")
+	var checked := _registry(registry)
+	if not checked.ok: return checked
+	if not checked.ids.has(expected_entity_id): return _fail("SUBJECT_UNREGISTERED")
+	var decoded: Dictionary = _codec.decode(record.references)
+	if not decoded.ok: return _fail("CODEC_"+String(decoded.code),String(decoded.get("path","")))
+	var refs := _references(decoded.value, checked.ids, false)
+	if not refs.ok: return refs
+	return {"ok":true,"code":"REFERENCES_VALIDATED","references":refs.values,"entity_id":expected_entity_id,"coverage":coverage(),"restore_ready":false}
+
+func capture_unit(unit, registry: Variant, content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _fail("SOURCE_CONTRACT")
+	var values: Dictionary = _values.capture_values(unit, content_fingerprint)
+	if not values.ok: return _fail("VALUES_"+String(values.code),String(values.get("field","")))
+	var refs := capture_references(unit, registry, content_fingerprint)
+	if not refs.ok: return refs
+	return {"ok":true,"code":"PARTIAL_UNIT_CAPTURED","record":{"schema":COMBINED_SCHEMA,"values":values.record,"references":refs.record},
+		"coverage":coverage(),"restore_ready":false}
+
+func validate_unit_record(record: Variant, registry: Variant, expected_entity_id: String, expected_content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _fail("SOURCE_CONTRACT")
+	if typeof(record) != TYPE_DICTIONARY or not _fields(record,["schema","values","references"]): return _fail("COMBINED_FIELDS")
+	if typeof(record.schema) != TYPE_STRING or record.schema != COMBINED_SCHEMA: return _fail("COMBINED_SCHEMA")
+	var values: Dictionary = _values.validate_record(record.values, expected_content_fingerprint)
+	if not values.ok: return _fail("VALUES_"+String(values.code),String(values.get("field","")))
+	var refs := validate_record(record.references, registry, expected_entity_id, expected_content_fingerprint)
+	if not refs.ok: return refs
+	return {"ok":true,"code":"PARTIAL_UNIT_VALIDATED","values":values.values,"references":refs.references,"entity_id":expected_entity_id,
+		"coverage":coverage(),"restore_ready":false}

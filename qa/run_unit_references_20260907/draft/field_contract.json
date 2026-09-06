@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "status": "draft_not_engine_tested",
+  "unit_source_lf": "f4382456b8c619cbb86c40cd8a9ed6ea9f171ba0a8a90c191538f689176d49ee",
+  "source_declared_fields": 272,
+  "captured_values_previous_layer": 241,
+  "reference_fields": 16,
+  "known_order_queue_fields": 1,
+  "combined_declared_fields": 258,
+  "deferred_fields": [
+    "_lin_spear_target_id",
+    "_aura_atkspeed_sources",
+    "_damage_reduction_sources",
+    "_charge_hit",
+    "_chase_last_id",
+    "_giveup_id",
+    "battle",
+    "map",
+    "inventory"
+  ],
+  "visual_omissions": 5,
+  "inherited_value_fields": [
+    "position",
+    "modulate"
+  ],
+  "restore_ready": false,
+  "graph_validated": false,
+  "fields": [
+    {
+      "field": "story_assist_partner",
+      "declaration_line": 34,
+      "shape": "reference",
+      "source_consumption": "unit.gd:4036-4042",
+      "semantics": "Mutual partner relation; graph/chapter rules deferred."
+    },
+    {
+      "field": "story_assist_owner",
+      "declaration_line": 35,
+      "shape": "reference",
+      "source_consumption": "unit.gd:4047",
+      "semantics": "Owner back-pointer; graph/chapter rules deferred."
+    },
+    {
+      "field": "_gold_miner",
+      "declaration_line": 74,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1575-1581",
+      "semantics": "Gameplay self-check clears stale occupancy; transport does not."
+    },
+    {
+      "field": "_gold_waiters",
+      "declaration_line": 75,
+      "shape": "ordered_references",
+      "source_consumption": "unit.gd:1582-1591,1627",
+      "semantics": "FIFO; only invalid prefix swept in gameplay; preserve duplicates and stale slots."
+    },
+    {
+      "field": "_gather_node",
+      "declaration_line": 77,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1595-1642",
+      "semantics": "Resource fallback belongs to simulation."
+    },
+    {
+      "field": "_drop",
+      "declaration_line": 78,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1656-1695",
+      "semantics": "Dropoff fallback belongs to simulation."
+    },
+    {
+      "field": "_build_site",
+      "declaration_line": 90,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1701-1745",
+      "semantics": "Build/repair task advancement belongs to simulation."
+    },
+    {
+      "field": "garrison_holder",
+      "declaration_line": 94,
+      "shape": "reference",
+      "source_consumption": "unit.gd:826-859",
+      "semantics": "Two-way holder/passengers graph validation deferred."
+    },
+    {
+      "field": "_garrison_dest",
+      "declaration_line": 95,
+      "shape": "reference",
+      "source_consumption": "unit.gd:789-841",
+      "semantics": "Destination and capacity checks must not be invoked by capture."
+    },
+    {
+      "field": "passengers",
+      "declaration_line": 96,
+      "shape": "ordered_references",
+      "source_consumption": "unit.gd:828,1087,1847",
+      "semantics": "Normal insertion avoids duplicates; each entry consumes capacity and participates in heal/fire. Preserve order and multiplicity; graph validity deferred."
+    },
+    {
+      "field": "rally_node",
+      "declaration_line": 105,
+      "shape": "reference",
+      "source_consumption": "battle.gd:1964-1981",
+      "semantics": "New-worker resource preference then fallback; do not rerun spawn/rally."
+    },
+    {
+      "field": "_taunt_src",
+      "declaration_line": 208,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1232,1346",
+      "semantics": "Timer controls forced live target; transport does not clear."
+    },
+    {
+      "field": "_hua_lock_target",
+      "declaration_line": 257,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1314,2894",
+      "semantics": "Gameplay visibility/lock-shot state controls use."
+    },
+    {
+      "field": "_target",
+      "declaration_line": 266,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1310,1481",
+      "semantics": "Normal physics clears invalid targets before chase; transport retains none/expired."
+    },
+    {
+      "field": "_pending_target",
+      "declaration_line": 317,
+      "shape": "reference",
+      "source_consumption": "unit.gd:1913-1930",
+      "semantics": "Pending-hit callback marks done before checking target; no settlement during capture."
+    },
+    {
+      "field": "_killer",
+      "declaration_line": 862,
+      "shape": "reference",
+      "source_consumption": "unit.gd:971",
+      "semantics": "Valid zero-HP corpse remains entity."
+    },
+    {
+      "field": "_queue",
+      "declaration_line": 76,
+      "shape": "known_order_queue",
+      "source_consumption": "unit.gd:446-543,585-602,635-655",
+      "semantics": "Seven known producer shapes; ordered repeated commands retained; reject missing fields instead of applying consumer defaults."
+    }
+  ],
+  "order_shapes": {
+    "move": [
+      "kind",
+      "pos",
+      "group_cap"
+    ],
+    "amove": [
+      "kind",
+      "pos",
+      "group_cap"
+    ],
+    "attack": [
+      "kind",
+      "target",
+      "explicit"
+    ],
+    "gather": [
+      "kind",
+      "target"
+    ],
+    "build": [
+      "kind",
+      "target"
+    ],
+    "repair": [
+      "kind",
+      "target"
+    ],
+    "garrison": [
+      "kind",
+      "target"
+    ]
+  }
+}

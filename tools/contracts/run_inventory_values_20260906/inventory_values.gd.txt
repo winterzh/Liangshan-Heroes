@@ -1,0 +1,132 @@
+extends RefCounted
+## Five explicit HeroInventory value fields only. No applying, item APIs or owner reads.
+const SCHEMA := "inventory_values_v1"
+const INVENTORY_SOURCE_LF := "b7fa741fc4a208606d6de724164eda57252aa38800893817d39e279dc429a097"
+const CODEC_SOURCE_LF := "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+const VALUE_FIELDS := ["slots", "cooldowns", "proc_cooldowns", "_uid_seq", "_periodic_acc"]
+const SLOT_COUNT := 6
+const PERIODIC_STEP := 0.25
+const MAX_ID_CHARS := 128
+const MAX_EVENT_CHARS := 128
+const MAX_PROC_KEYS := 256
+var _inventory_script: GDScript
+var _codec
+var _source_ok := false
+
+func _init(inventory_script: GDScript, codec_script: GDScript) -> void:
+	_inventory_script = inventory_script
+	if inventory_script == null or codec_script == null: return
+	if inventory_script.source_code.replace("\r\n", "\n").sha256_text() != INVENTORY_SOURCE_LF: return
+	if codec_script.source_code.replace("\r\n", "\n").sha256_text() != CODEC_SOURCE_LF: return
+	if not inventory_script.can_instantiate() or not codec_script.can_instantiate(): return
+	_codec = codec_script.new()
+	_source_ok = _codec != null
+
+func _failure(code: String, field := "") -> Dictionary:
+	return {"ok": false, "code": code, "field": field, "restore_ready": false}
+
+func coverage() -> Dictionary:
+	return {"declared_fields": 6, "captured_declared_values": 5,
+		"value_fields": VALUE_FIELDS.duplicate(), "deferred_fields": ["owner"],
+		"local_value_fields_complete": true, "owner_reference_encoded": false,
+		"business_item_definitions_validated": false, "global_item_uid_allocator_restored": false,
+		"battle_effects_or_sources_restored": false, "restore_ready": false}
+
+func _fields(value: Dictionary, expected: Array) -> bool:
+	if value.size() != expected.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in expected: return false
+	return true
+
+func _fingerprint(value: String) -> bool:
+	if value.length() != 64: return false
+	for index in range(value.length()):
+		var point: int = value.unicode_at(index)
+		if not (point >= 48 and point <= 57) and not (point >= 97 and point <= 102): return false
+	return true
+
+func _remaining(value: Variant) -> bool:
+	return typeof(value) == TYPE_FLOAT and is_finite(value) and value > 0.0
+
+func _check_values(values: Dictionary) -> Dictionary:
+	if not _fields(values, VALUE_FIELDS): return _failure("VALUE_FIELDS")
+	if typeof(values.slots) != TYPE_ARRAY or values.slots.size() != SLOT_COUNT:
+		return _failure("SLOT_SHAPE", "slots")
+	var held_ids: Dictionary = {}
+	var held_uid_text: Dictionary = {}
+	for index in range(SLOT_COUNT):
+		var item: Variant = values.slots[index]
+		var field: String = "slots[%d]" % index
+		if typeof(item) != TYPE_DICTIONARY: return _failure("ITEM_SHAPE", field)
+		if item.is_empty(): continue
+		if not _fields(item, ["id", "count", "uid"]): return _failure("ITEM_FIELDS", field)
+		if typeof(item.id) != TYPE_STRING or item.id.is_empty() or item.id.length() > MAX_ID_CHARS:
+			return _failure("ITEM_ID", field)
+		if typeof(item.count) != TYPE_INT or item.count <= 0: return _failure("ITEM_COUNT", field)
+		if typeof(item.uid) != TYPE_INT or item.uid <= 0: return _failure("ITEM_UID", field)
+		# Do not derive UID from the current owner or compare UID against _uid_seq:
+		# transfer_slot preserves another owner's UID without raising receiver seq.
+		var uid_text: String = str(item.uid)
+		if held_uid_text.has(uid_text): return _failure("DUPLICATE_UID", field)
+		held_uid_text[uid_text] = true
+		held_ids[item.id] = true
+	if typeof(values.cooldowns) != TYPE_DICTIONARY or values.cooldowns.size() > SLOT_COUNT:
+		return _failure("COOLDOWN_SHAPE", "cooldowns")
+	for key in values.cooldowns:
+		if typeof(key) != TYPE_STRING or not held_ids.has(key):
+			return _failure("COOLDOWN_ITEM", "cooldowns")
+		if not _remaining(values.cooldowns[key]): return _failure("COOLDOWN_VALUE", "cooldowns")
+	if typeof(values.proc_cooldowns) != TYPE_DICTIONARY or values.proc_cooldowns.size() > MAX_PROC_KEYS:
+		return _failure("PROC_SHAPE", "proc_cooldowns")
+	for key in values.proc_cooldowns:
+		if typeof(key) != TYPE_STRING or key.length() > 20 + 1 + MAX_EVENT_CHARS:
+			return _failure("PROC_KEY", "proc_cooldowns")
+		var colon: int = key.find(":")
+		if colon <= 0 or colon == key.length() - 1 or key.find(":", colon + 1) >= 0:
+			return _failure("PROC_KEY", "proc_cooldowns")
+		# Match an already checked exact decimal int64; never parse through float.
+		if not held_uid_text.has(key.left(colon)): return _failure("PROC_UID", "proc_cooldowns")
+		if key.length() - colon - 1 > MAX_EVENT_CHARS: return _failure("PROC_KEY", "proc_cooldowns")
+		if not _remaining(values.proc_cooldowns[key]): return _failure("PROC_VALUE", "proc_cooldowns")
+	if typeof(values._uid_seq) != TYPE_INT or values._uid_seq < 0:
+		return _failure("UID_SEQUENCE", "_uid_seq")
+	if typeof(values._periodic_acc) != TYPE_FLOAT or not is_finite(values._periodic_acc) \
+			or values._periodic_acc < 0.0 or values._periodic_acc >= PERIODIC_STEP:
+		return _failure("PERIODIC_PHASE", "_periodic_acc")
+	return {"ok": true}
+
+func capture_values(inventory: Variant, content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if not _fingerprint(content_fingerprint): return _failure("CONTENT_FINGERPRINT")
+	if typeof(inventory) != TYPE_OBJECT or not is_instance_valid(inventory):
+		return _failure("INVENTORY_INSTANCE")
+	if inventory.get_script() != _inventory_script: return _failure("INVENTORY_INSTANCE")
+	# Read all five fields explicitly. No snapshot(), restore(), definitions,
+	# duplication-before-limits, object dumping, owner access or effect execution.
+	var values: Dictionary = {"slots": inventory.slots, "cooldowns": inventory.cooldowns,
+		"proc_cooldowns": inventory.proc_cooldowns, "_uid_seq": inventory._uid_seq,
+		"_periodic_acc": inventory._periodic_acc}
+	var checked: Dictionary = _check_values(values)
+	if not checked.ok: return checked
+	var encoded: Dictionary = _codec.encode(values)
+	if not encoded.ok: return _failure("CODEC_" + String(encoded.code), String(encoded.path))
+	return {"ok": true, "record": {"schema": SCHEMA, "inventory_source_lf": INVENTORY_SOURCE_LF,
+		"content_fingerprint": content_fingerprint, "values": encoded.value},
+		"coverage": coverage(), "restore_ready": false}
+
+func validate_record(record: Variant, content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if not _fingerprint(content_fingerprint): return _failure("CONTENT_FINGERPRINT")
+	if typeof(record) != TYPE_DICTIONARY or not _fields(record, ["schema", "inventory_source_lf", "content_fingerprint", "values"]):
+		return _failure("RECORD_FIELDS")
+	if typeof(record.schema) != TYPE_STRING or record.schema != SCHEMA: return _failure("SCHEMA")
+	if typeof(record.inventory_source_lf) != TYPE_STRING or record.inventory_source_lf != INVENTORY_SOURCE_LF:
+		return _failure("SOURCE_CONTRACT")
+	if typeof(record.content_fingerprint) != TYPE_STRING or record.content_fingerprint != content_fingerprint:
+		return _failure("CONTENT_FINGERPRINT")
+	var decoded: Dictionary = _codec.decode(record.values)
+	if not decoded.ok: return _failure("CODEC_" + String(decoded.code), String(decoded.path))
+	if typeof(decoded.value) != TYPE_DICTIONARY: return _failure("VALUE_FIELDS")
+	var checked: Dictionary = _check_values(decoded.value)
+	if not checked.ok: return checked
+	return {"ok": true, "values": decoded.value, "coverage": coverage(), "restore_ready": false}

@@ -1,3 +1,10 @@
+## 2026-09-07 Unit 局部恢复数据与四段诊断
+
+- `docs/RUN_UNIT_REFERENCES_20260907.md`、`qa/run_unit_references_20260907/`：14 直接引用、两个数组、七类命令队列；原两次失败、五键修复、162 条实测与原路径复现说明。
+- `docs/RUN_INVENTORY_VALUES_20260907.md`、`qa/run_inventory_values_20260906/`、`tools/contracts/run_inventory_values_20260906/`：HeroInventory 五个局部声明值、155 条实测、精确旧 controller/helper 与源合同。
+- `qa/unit_body_sections_20260906/`：冻结源 11 文件、插桩/反向还原、导入/两场原始 M1 和逐步报告、分析及 100 组独立审阅条件；结果追加到 `docs/PHYSICS_COST_20260906.md`。
+- 所有草稿以忽略目录或文本名归档；不包含玩家数据、引擎缓存/程序、实际私有工程或导出安装包。新增说明不改变启动入口。
+
 ## 2026-09-06 R01 与续玩基础值模块
 
 - `scripts/run_state_value_codec.gd`：已受测、无 Autoload 的显式基础值编码模块，尚无 Battle 调用方。

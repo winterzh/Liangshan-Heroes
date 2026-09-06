@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "status": "plan_only_not_applied",
+  "parent_generation": "scratchpad/separation_sections_diag/resume_runs/20260906T110413889769Z",
+  "source_base": "4baafc11af55b0e46a57a48e54df181b8c1917a2",
+  "target_private_project": "scratchpad/separation_sections_diag/runs/20260906T104036739951Z/project",
+  "new_generation_root_template": "scratchpad/unit_body_sections_diag/generations/<fresh-UTC>",
+  "changes_in_order": [
+    {
+      "target_in_private_project": "scripts/battle.gd",
+      "operation": "restore_frozen_raw",
+      "expected_before_raw_sha256": "72ddfd2716a85ca2adda81b3d6d9a19e43ee63fa34f303a58b25e8261c40727a",
+      "before_must_be_absent": false,
+      "payload": {
+        "path": "scratchpad/separation_sections_diag/frozen/scripts__battle.gd",
+        "bytes": 758638,
+        "raw_sha256": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4",
+        "lf_sha256": "784373eede18a82c24fc50a6e36a42b6c20516bf439cf200fe5be7d239db6e2c"
+      },
+      "expected_after_raw_sha256": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4"
+    },
+    {
+      "target_in_private_project": "scripts/crowd_separation.gd",
+      "operation": "restore_frozen_raw",
+      "expected_before_raw_sha256": "19fde3994424acf3f41962df7ddd9fe73cbbe91247a8bc01df7d0e7318bda4fe",
+      "before_must_be_absent": false,
+      "payload": {
+        "path": "scratchpad/separation_sections_diag/frozen/scripts__crowd_separation.gd",
+        "bytes": 5786,
+        "raw_sha256": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b",
+        "lf_sha256": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b"
+      },
+      "expected_after_raw_sha256": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b"
+    },
+    {
+      "target_in_private_project": "scripts/unit.gd",
+      "operation": "replace_raw_variant",
+      "expected_before_raw_sha256": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+      "before_must_be_absent": false,
+      "payload": {
+        "path": "scratchpad/unit_body_sections_diag/generated/unit_instrumented.raw.gd.txt",
+        "bytes": 198559,
+        "raw_sha256": "443e082699992d63e1a8f7eb905905ad86a4a63e6b06e5842c06c6a41c61d676",
+        "lf_sha256": "28df828dadad3102581ec84d1b712925fd8a3e72f8a3047709d8309b7d34796c"
+      },
+      "expected_after_raw_sha256": "443e082699992d63e1a8f7eb905905ad86a4a63e6b06e5842c06c6a41c61d676"
+    },
+    {
+      "target_in_private_project": "scratchpad/unit_body_sections_diag/generated/driver.gd",
+      "operation": "add_new",
+      "expected_before_raw_sha256": null,
+      "before_must_be_absent": true,
+      "payload": {
+        "path": "scratchpad/unit_body_sections_diag/generated/driver.gd",
+        "bytes": 10667,
+        "raw_sha256": "9a3d0b019d83404396c88b8def35743a01492ad531bf5faffffcac75b4bc4491",
+        "lf_sha256": "9a3d0b019d83404396c88b8def35743a01492ad531bf5faffffcac75b4bc4491"
+      },
+      "expected_after_raw_sha256": "9a3d0b019d83404396c88b8def35743a01492ad531bf5faffffcac75b4bc4491"
+    },
+    {
+      "target_in_private_project": "scratchpad/unit_body_sections_diag/generated/ledger.gd",
+      "operation": "add_new",
+      "expected_before_raw_sha256": null,
+      "before_must_be_absent": true,
+      "payload": {
+        "path": "scratchpad/unit_body_sections_diag/generated/ledger.gd",
+        "bytes": 8391,
+        "raw_sha256": "eb9a3c1e38e9da184db83e6d6df73bd056788217d2a64e02987cc7fbac12008b",
+        "lf_sha256": "eb9a3c1e38e9da184db83e6d6df73bd056788217d2a64e02987cc7fbac12008b"
+      },
+      "expected_after_raw_sha256": "eb9a3c1e38e9da184db83e6d6df73bd056788217d2a64e02987cc7fbac12008b"
+    }
+  ],
+  "retained_old_probe_paths": [
+    "scratchpad/separation_sections_diag/generated/driver.gd",
+    "scratchpad/separation_sections_diag/generated/driver.gd.uid",
+    "scratchpad/separation_sections_diag/generated/ledger.gd",
+    "scratchpad/separation_sections_diag/generated/ledger.gd.uid"
+  ],
+  "new_source_uid_allowlist": {
+    "scratchpad/unit_body_sections_diag/generated/driver.gd.uid": "scratchpad/unit_body_sections_diag/generated/driver.gd",
+    "scratchpad/unit_body_sections_diag/generated/ledger.gd.uid": "scratchpad/unit_body_sections_diag/generated/ledger.gd"
+  },
+  "existing_uids_must_remain_exact": [
+    "scripts/battle.gd.uid",
+    "scripts/unit.gd.uid",
+    "scripts/crowd_separation.gd.uid"
+  ],
+  "expected_source_count_before_import": 3304,
+  "expected_source_count_after_import_if_both_new_uids_created": 3306,
+  "project_godot_and_public_m1_three_tools_unchanged": true,
+  "copy_unit_draft_gdignore": false,
+  "new_autoload_required": false,
+  "sample_modes": [
+    "timed",
+    "clockless"
+  ],
+  "seconds_each": 10,
+  "case": "defense200",
+  "camera": "fixed",
+  "formal_performance_window": false,
+  "mutation_requires_fresh_shared_lock_and_no_actual_godot_process": true,
+  "restore_and_candidate_sources_all_present": true,
+  "remaining_execution_gates": [
+    "Fresh full source/cache qualification or explicitly limited inherited-manifest claim; not performed by this plan.",
+    "Actual private-project incremental import/GDScript compile; new source UIDs and non-shader cache deltas must be recorded before freeze.",
+    "Actual timed/clockless engine lifecycle, reports, same-clock reconciliation and player guard."
+  ]
+}

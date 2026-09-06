@@ -1,0 +1,285 @@
+extends SceneTree
+## Root supplies an isolated profile and owns the real process/lock; no runner here.
+const CONTENT_FIXTURE := "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+const SOURCE_PATHS := ["scripts/hero_inventory.gd", "scripts/defs.gd", "scripts/run_state_value_codec.gd",
+	"scratchpad/run_inventory_state/inventory_values.gd", "scratchpad/run_inventory_state/qa_driver.gd"]
+
+class BattleProbe extends RefCounted:
+	var calls := 0
+	var hud = null
+	func item_def(_id: String) -> Dictionary:
+		calls += 1
+		return {}
+	func trigger_item_event(_owner, _event, _context) -> void: calls += 1
+
+class OwnerProbe extends RefCounted:
+	var calls := 0
+	var battle = BattleProbe.new()
+	func _recompute_hero_stats() -> void: calls += 1
+	func queue_redraw() -> void: calls += 1
+	func _to_string() -> String:
+		calls += 1
+		return "must not stringify owner"
+	func _get_property_list() -> Array[Dictionary]:
+		calls += 1
+		return []
+
+var checks: Array = []
+var failures: Array = []
+var inventory_script: GDScript
+var adapter
+var codec
+var source_before: Dictionary = {}
+
+func _initialize() -> void: _run.call_deferred()
+
+func check(ok: bool, label: String) -> void:
+	checks.append({"label": label, "passed": ok})
+	if not ok: failures.append(label)
+
+func _normalize(path: String) -> String:
+	return path.replace("\\", "/").simplify_path().trim_suffix("/")
+
+func _source_pins() -> Dictionary:
+	var result: Dictionary = {}
+	for path in SOURCE_PATHS:
+		result[path] = FileAccess.get_sha256("res://" + path)
+		check(result[path].length() == 64, "source raw SHA exists: " + path)
+	return result
+
+func _hop(record: Dictionary) -> Dictionary:
+	var parser := JSON.new()
+	var error: int = parser.parse(JSON.stringify(record, "", false))
+	check(error == OK and typeof(parser.data) == TYPE_DICTIONARY, "record crosses real JSON syntax")
+	return parser.data if error == OK and typeof(parser.data) == TYPE_DICTIONARY else {}
+
+func _repack(record: Dictionary, mutate: Callable) -> Dictionary:
+	var decoded: Dictionary = codec.decode(record.values)
+	check(decoded.ok, "negative fixture starts from actual decoded values")
+	if not decoded.ok: return {}
+	mutate.call(decoded.value)
+	var encoded: Dictionary = codec.encode(decoded.value)
+	check(encoded.ok, "negative fixture encoded with real value codec")
+	if not encoded.ok: return {}
+	var changed: Dictionary = record.duplicate(true)
+	changed.values = encoded.value
+	return _hop(changed)
+
+func _reject(record: Variant, code: String, label: String) -> void:
+	var result: Dictionary = adapter.validate_record(record, CONTENT_FIXTURE)
+	check(not result.ok and result.code == code and not result.has("values") and not result.has("record") \
+		and result.restore_ready == false, label)
+
+func _cases() -> void:
+	var inventory = inventory_script.new()
+	check(inventory.get_script() == inventory_script, "real production HeroInventory instance")
+	var initial: Dictionary = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	check(initial.ok and initial.restore_ready == false, "constructor state captured with incomplete-restore status")
+	if not initial.ok: return
+	var initial_checked: Dictionary = adapter.validate_record(_hop(initial.record), CONTENT_FIXTURE)
+	check(initial_checked.ok and initial_checked.values.size() == 5, "all five local declaration fields validated")
+	if not initial_checked.ok: return
+	check(initial_checked.values.slots == [{}, {}, {}, {}, {}, {}] and initial_checked.values.cooldowns.is_empty() \
+		and initial_checked.values.proc_cooldowns.is_empty(), "constructor has exactly six empty slots and empty cooldown maps")
+	check(typeof(initial_checked.values._uid_seq) == TYPE_INT and initial_checked.values._uid_seq == 0 \
+		and typeof(initial_checked.values._periodic_acc) == TYPE_FLOAT and initial_checked.values._periodic_acc == 0.0,
+		"constructor UID sequence and periodic phase types retained")
+	check(initial.coverage.deferred_fields == ["owner"] and initial.coverage.local_value_fields_complete \
+		and not initial.coverage.owner_reference_encoded and not initial.coverage.business_item_definitions_validated \
+		and not initial.coverage.global_item_uid_allocator_restored and not initial.coverage.battle_effects_or_sources_restored,
+		"complete local values never imply owner definitions UID allocation effects or restore support")
+
+	# Fixture assignment only, not an implementation of applying a loaded save.
+	# Never purchase/put/add/swap/transfer/use/tick/snapshot/restore/recompute here.
+	var owner_probe := OwnerProbe.new()
+	inventory.owner = owner_probe
+	inventory.slots = [{"id": "qa_tonic", "count": 3, "uid": 9007199254740993}, {},
+		{"id": "qa_blade", "count": 1, "uid": 19}, {"id": "qa_tonic", "count": 2, "uid": 7001}, {},
+		{"id": "qa_shield", "count": 1, "uid": 9223372036854775807}]
+	inventory.cooldowns = {"qa_blade": 12.125, "qa_tonic": 0.5}
+	inventory.proc_cooldowns = {"19:on_hit": 0.125, "9007199254740993:periodic": 0.24975,
+		"9223372036854775807:on_damaged": 2.75}
+	inventory._uid_seq = 0 # A receiving inventory need not have allocated transferred UIDs.
+	inventory._periodic_acc = 0.24975
+	var before_slots: Array = inventory.slots.duplicate(true)
+	var before_cooldowns: Dictionary = inventory.cooldowns.duplicate(true)
+	var before_procs: Dictionary = inventory.proc_cooldowns.duplicate(true)
+	seed(817345)
+	var expected_random: int = randi()
+	seed(817345)
+	var captured: Dictionary = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	check(captured.ok, "non-default six-slot positions item counts shared CDs proc CDs and phase captured")
+	if not captured.ok: return
+	var checked: Dictionary = adapter.validate_record(_hop(captured.record), CONTENT_FIXTURE)
+	check(checked.ok, "real JSON non-default inventory record validated")
+	if not checked.ok: return
+	check(randi() == expected_random, "capture JSON hop and validation consume no gameplay RNG")
+	check(checked.values.slots == before_slots and checked.values.slots[1].is_empty() and checked.values.slots[4].is_empty(),
+		"sparse six-slot order counts duplicate item IDs and exact int64 UIDs preserved")
+	check(typeof(checked.values.slots[0].uid) == TYPE_INT and checked.values.slots[0].uid == 9007199254740993 \
+		and checked.values.slots[5].uid == 9223372036854775807, "UIDs never pass through JSON float")
+	check(checked.values.cooldowns.keys() == ["qa_blade", "qa_tonic"] \
+		and checked.values.proc_cooldowns.keys() == ["19:on_hit", "9007199254740993:periodic", "9223372036854775807:on_damaged"],
+		"cooldown Dictionary iteration order retained")
+	check(checked.values._uid_seq == 0 and checked.values._periodic_acc == 0.24975,
+		"transferred-style UIDs and near-boundary periodic phase are not regenerated")
+	var reencoded: Dictionary = codec.encode(checked.values)
+	check(reencoded.ok and JSON.stringify(reencoded.value, "", false) == JSON.stringify(captured.record.values, "", false),
+		"all local value types bits and ordering canonically re-encode after JSON")
+	check(inventory.slots == before_slots and inventory.cooldowns == before_cooldowns \
+		and inventory.proc_cooldowns == before_procs and inventory._uid_seq == 0 and inventory._periodic_acc == 0.24975,
+		"capture and validation leave actual inventory unchanged")
+	checked.values.slots[0].count = 99
+	checked.values.cooldowns.qa_blade = 99.0
+	check(inventory.slots[0].count == 3 and inventory.cooldowns.qa_blade == 12.125, "decoded containers do not alias the live inventory")
+	check(owner_probe.calls == 0 and owner_probe.battle.calls == 0, "no owner recompute redraw object dump item definition or periodic effect callback")
+
+	inventory.slots[1] = {"id": "qa_unknown_definition", "count": 17, "uid": 100001}
+	inventory.slots[4] = {"id": "qa_another", "count": 1, "uid": 100002}
+	inventory._uid_seq = 9007199254740993
+	var full: Dictionary = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	var full_checked: Dictionary = adapter.validate_record(_hop(full.record), CONTENT_FIXTURE) if full.ok else {"ok": false}
+	check(full.ok and full_checked.ok and full_checked.values.slots.size() == 6 \
+		and full_checked.values._uid_seq == 9007199254740993, "full six slots and exact large sequence survive JSON")
+	check(full.ok and not full.coverage.business_item_definitions_validated and owner_probe.battle.calls == 0,
+		"item definition and max-stack compatibility explicitly deferred without lookups")
+	inventory.slots = before_slots.duplicate(true)
+	inventory._uid_seq = 0
+
+	var fields_missing: Dictionary = captured.record.duplicate(true)
+	fields_missing.erase("schema")
+	_reject(fields_missing, "RECORD_FIELDS", "missing wrapper field refused")
+	var fields_extra: Dictionary = captured.record.duplicate(true)
+	fields_extra["owner"] = "fake entity"
+	_reject(fields_extra, "RECORD_FIELDS", "unexpected wrapper owner refused")
+	var wrong: Dictionary = captured.record.duplicate(true)
+	wrong.schema = "inventory_values_v2"
+	_reject(wrong, "SCHEMA", "unknown schema refused")
+	wrong = captured.record.duplicate(true)
+	wrong.inventory_source_lf = "0".repeat(64)
+	_reject(wrong, "SOURCE_CONTRACT", "wrong inventory source refused")
+	wrong = captured.record.duplicate(true)
+	wrong.content_fingerprint = "a".repeat(64)
+	_reject(wrong, "CONTENT_FINGERPRINT", "caller content fingerprint mismatch refused")
+	_reject(_repack(captured.record, func(v): v.erase("_periodic_acc")), "VALUE_FIELDS", "old snapshot missing periodic phase refused")
+	_reject(_repack(captured.record, func(v): v["owner"] = null), "VALUE_FIELDS", "extra local field refused")
+	_reject(_repack(captured.record, func(v): v.slots.pop_back()), "SLOT_SHAPE", "five-slot truncation refused")
+	_reject(_repack(captured.record, func(v): v.slots.append({})), "SLOT_SHAPE", "seventh slot refused")
+	_reject(_repack(captured.record, func(v): v.slots[0] = 1), "ITEM_SHAPE", "non-Dictionary item refused")
+	_reject(_repack(captured.record, func(v): v.slots[0]["charges"] = 1), "ITEM_FIELDS", "extra item member refused")
+	_reject(_repack(captured.record, func(v): v.slots[0].id = ""), "ITEM_ID", "empty item ID refused")
+	_reject(_repack(captured.record, func(v): v.slots[0].count = 0), "ITEM_COUNT", "zero item count refused")
+	_reject(_repack(captured.record, func(v): v.slots[0].count = 3.0), "ITEM_COUNT", "float item count refused")
+	_reject(_repack(captured.record, func(v): v.slots[0].uid = 9007199254740992.0), "ITEM_UID", "float UID refused rather than guessed")
+	_reject(_repack(captured.record, func(v): v.slots[0].uid = -1), "ITEM_UID", "negative UID refused")
+	_reject(_repack(captured.record, func(v): v.slots[2].uid = v.slots[0].uid), "DUPLICATE_UID", "duplicate local item UID refused")
+	_reject(_repack(captured.record, func(v): v.cooldowns["not_held"] = 1.0), "COOLDOWN_ITEM", "orphan shared cooldown refused")
+	_reject(_repack(captured.record, func(v): v.cooldowns.qa_tonic = 1), "COOLDOWN_VALUE", "integer cooldown refused without conversion")
+	_reject(_repack(captured.record, func(v): v.cooldowns.qa_tonic = 0.0), "COOLDOWN_VALUE", "zero expired cooldown entry refused at stable boundary")
+	_reject(_repack(captured.record, func(v): v.proc_cooldowns["019:on_hit"] = 1.0), "PROC_UID", "noncanonical UID text refused")
+	_reject(_repack(captured.record, func(v): v.proc_cooldowns["20:on_hit"] = 1.0), "PROC_UID", "orphan proc UID refused")
+	_reject(_repack(captured.record, func(v): v.proc_cooldowns["19:"] = 1.0), "PROC_KEY", "empty proc event refused")
+	_reject(_repack(captured.record, func(v): v.proc_cooldowns["19:on:hit"] = 1.0), "PROC_KEY", "ambiguous proc key refused")
+	_reject(_repack(captured.record, func(v): v.proc_cooldowns["19:on_hit"] = -1.0), "PROC_VALUE", "negative proc cooldown refused")
+	_reject(_repack(captured.record, func(v): v._uid_seq = -1), "UID_SEQUENCE", "negative allocation sequence refused")
+	_reject(_repack(captured.record, func(v): v._uid_seq = 1.0), "UID_SEQUENCE", "float sequence refused")
+	_reject(_repack(captured.record, func(v): v._periodic_acc = -0.01), "PERIODIC_PHASE", "negative periodic phase refused")
+	_reject(_repack(captured.record, func(v): v._periodic_acc = 0.25), "PERIODIC_PHASE", "unreduced phase at threshold refused")
+	_reject(_repack(captured.record, func(v): v.slots[0].id = "x".repeat(129)), "ITEM_ID", "item identifier bound enforced")
+	_reject(_repack(captured.record, func(v): v.proc_cooldowns["19:" + "x".repeat(129)] = 1.0), "PROC_KEY", "proc event identifier bound enforced")
+	inventory.proc_cooldowns = {}
+	for index in range(256): inventory.proc_cooldowns["19:event_%d" % index] = 1.0
+	var bounded: Dictionary = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	var bounded_checked: Dictionary = adapter.validate_record(_hop(bounded.record), CONTENT_FIXTURE) if bounded.ok else {"ok": false}
+	check(bounded.ok and bounded_checked.ok and bounded_checked.values.proc_cooldowns.size() == 256,
+		"exact bounded proc-map shape crosses real JSON")
+	inventory.proc_cooldowns["19:one_more"] = 1.0
+	var over_limit: Dictionary = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	check(not over_limit.ok and over_limit.code == "PROC_SHAPE", "proc-map width rejected before traversal and encoding")
+	inventory.proc_cooldowns = before_procs.duplicate(true)
+
+	inventory._periodic_acc = INF
+	var rejected: Dictionary = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	check(not rejected.ok and rejected.code == "PERIODIC_PHASE" and not rejected.has("record"), "infinite live phase refused before serialization")
+	inventory._periodic_acc = 0.24975
+	inventory.cooldowns.qa_blade = NAN
+	rejected = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	check(not rejected.ok and rejected.code == "COOLDOWN_VALUE", "NaN live cooldown refused")
+	inventory.cooldowns = before_cooldowns.duplicate(true)
+	inventory.slots[0].id = owner_probe
+	rejected = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	check(not rejected.ok and rejected.code == "ITEM_ID", "Object inside slot refused without invoking its methods")
+	inventory.slots = before_slots.duplicate(true)
+	wrong = captured.record.duplicate(true)
+	wrong.values = owner_probe
+	_reject(wrong, "CODEC_TAG_SHAPE", "malicious Object tag refused without JSON stringify")
+
+	var other := Node.new()
+	rejected = adapter.capture_values(other, CONTENT_FIXTURE)
+	check(not rejected.ok and rejected.code == "INVENTORY_INSTANCE", "different live object refused before member reads")
+	other.free()
+	rejected = adapter.capture_values(other, CONTENT_FIXTURE)
+	check(not rejected.ok and rejected.code == "INVENTORY_INSTANCE", "freed subject refused before typed inventory access")
+	var dead_owner := Node.new()
+	inventory.owner = dead_owner
+	dead_owner.free()
+	var expired_owner_capture: Dictionary = adapter.capture_values(inventory, CONTENT_FIXTURE)
+	check(expired_owner_capture.ok and not expired_owner_capture.coverage.owner_reference_encoded,
+		"expired owner explicitly remains deferred rather than restored or dereferenced")
+	inventory.owner = owner_probe
+	var changed_script := GDScript.new()
+	changed_script.source_code = "extends RefCounted\n"
+	var adapter_script: GDScript = adapter.get_script()
+	var mismatch = adapter_script.new(changed_script, codec.get_script())
+	rejected = mismatch.capture_values(inventory, CONTENT_FIXTURE)
+	check(not rejected.ok and rejected.code == "SOURCE_CONTRACT", "changed source contract rejected before member reads")
+	check(owner_probe.calls == 0 and owner_probe.battle.calls == 0, "all positive and rejected cases avoid owner or effect callbacks")
+
+func _run() -> void:
+	var expected_user: String = OS.get_environment("INVENTORY_QA_EXPECTED_USER_DIR")
+	if expected_user.is_empty() or _normalize(expected_user) != _normalize(OS.get_user_data_dir()):
+		push_error("Inventory QA requires the root-owned exact private user directory")
+		quit(2)
+		return
+	source_before = _source_pins()
+	inventory_script = load("res://scripts/hero_inventory.gd") as GDScript
+	var codec_script: GDScript = load("res://scripts/run_state_value_codec.gd") as GDScript
+	var adapter_script: GDScript = load("res://scratchpad/run_inventory_state/inventory_values.gd") as GDScript
+	check(inventory_script != null and codec_script != null and adapter_script != null, "real inventory codec and draft scripts loaded")
+	if inventory_script == null or codec_script == null or adapter_script == null:
+		quit(2)
+		return
+	codec = codec_script.new()
+	adapter = adapter_script.new(inventory_script, codec_script)
+	_cases()
+	var source_after: Dictionary = _source_pins()
+	check(source_before == source_after, "five runtime source files unchanged")
+	var report: Dictionary = {"schema": 1, "passed": not checks.is_empty() and failures.is_empty(),
+		"checks": checks, "check_count": checks.size(), "failures": failures,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"engine": Engine.get_version_info(), "source_raw_sha256": source_before,
+		"real_inventory_object": true, "capture_validate_only": true, "owner_is_test_probe": true,
+		"assignment_restore_implemented": false, "business_definitions_validated": false,
+		"global_item_uid_allocator_restored": false, "battle_resume_tested": false}
+	var output: String = OS.get_environment("INVENTORY_QA_OUT")
+	if not output.is_empty():
+		var resolved: String = _normalize(ProjectSettings.globalize_path(output))
+		if not resolved.begins_with(_normalize(OS.get_user_data_dir()) + "/") or FileAccess.file_exists(resolved):
+			push_error("Inventory QA output must be a new file within the supplied private user directory")
+			quit(2)
+			return
+		var file := FileAccess.open(resolved, FileAccess.WRITE)
+		if file == null:
+			push_error("Cannot create inventory QA report")
+			quit(2)
+			return
+		var stored: bool = file.store_string(JSON.stringify(report, "\t", false) + "\n")
+		file.flush()
+		var error: int = file.get_error()
+		file.close()
+		if not stored or error != OK:
+			push_error("Incomplete inventory QA report write")
+			quit(2)
+			return
+	print("[inventory-state QA] " + JSON.stringify(report, "", false))
+	quit(0 if report.passed else 1)

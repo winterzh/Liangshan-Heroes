@@ -1,0 +1,468 @@
+# 标准 30 波驻守续玩：可实施 schema 清单（只读草稿）
+
+2026-09-06。在 `E:\ChatGPT\水浒-art-validation` 先读 `scratchpad/save_resume_architecture_review.md`，再核查源码。没有运行 Godot、执行 Git、修改生产或正式文档；只交付本草稿。下述接口名称是建议，尚未实现或验收。行号是本次源位置，根任务并行工作可能使行号漂移，文末另列精确字段索引和 LF 源摘要。
+
+## 可以开工的结论
+
+标准驻守最小完整状态必须包括建筑与树、经济工作链、玩家六将及波次敌将所有可达技能、普通弹道、延迟飞斧、阵亡复活账本、物品 CD/触发锁、迷雾、寻路阻挡、命令与定时器，以及影响结果的缓存和稳定排序。只有波间空场能保存不能称为这个用户目标完成。
+
+首个公开合同建议固定 `level_id=skirmish`、经典 30 波、`defense_random=false`、`defense_hero_cap=4`、`scale_on=false`、`ai_friendly=false`、FIGHT。普通设置中的英雄/全军托管、队形、速度仍会改变，须保存本局实际值，不能把 AI 友好关闭理解为所有自动控制关闭。标准驻守继承 `LevelBase.start_age()=3`（`scripts/level_base.gd:50`），不能照 Battle 声明默认值 1 重建。
+
+比前一份架构评审新确认的四个缺口：
+
+- **稳定 ID 参与玩法排序。** `Battle._separation_pass:5426–5444` 用 ObjectID 取模分组及大小比较；`crowd_separation.gd:47,95–97` 也按 ObjectID 配对；末波回填 `battle.gd:2671–2673` 用其计算落点。多建筑训练同队列择优 `1771`、英雄分路 `3630` 同样按 ID 排序。仅重接指针仍会改变跨进程结果。分配永不复用的稳定 entity_id，并覆盖这些玩法用途；不能用当前存活数组下标。纯视觉 `unit.gd:1052` 的重绘节拍可保留本机计数。
+- **堵路缓存有语义。** `_blocker_cache` 命中不花额度，但每物理帧最多 8 次新查询 (`battle.gd:679–703,2320`)。读档清空会让后续单位得到 null 并改变路径，须保存有效导航版本的条目，或先完成并证明等价的预算机制重构。
+- **分路缓存包含旧态。** `_eco_lane_runtime_state:3742–3751` 按引擎物理帧/AI_TICK 保留约 0.27 秒结果，重算会提前换分路。改持久局内 tick，并保存 lanes/pressure/hero refs/assignments 和当前有效周期。不能因为名字叫 cache 就丢弃。
+- **null 不等于已释放目标。** `_tick_pending_casts:6841–6845` 遇原本非空但无效目标取消，null 却代表无目标施法；统一编码 null 可能错误结算。引用协议区分 `none/entity/expired`，每种队列按原消费语义无副作用规范化，不能随意造虚拟活单位，也不能因常见一帧过期队列长期禁止保存。
+
+## 文件、类型、范围合同
+
+建议顶层 `magic,schema_version,level_id,level_state_version,run_id,saved_at_utc,gameplay_content_fingerprint,payload_bytes,payload_sha256,payload`。payload 固定区块为 `run_options,clocks_rng,map_state,battle_state,units,registry_order,authoritative_fx,level_state,view_state,checks`。不反射整对象、不保存 Resource/Callable/Node、不执行存档携带脚本路径。
+
+实体/物品/效果 ID、RNG seed/state 等 64 位整数用十进制字符串。Vector2/Vector2i/Color/PackedArray 用明确标签或固定长度数组；向量/整数键字典保存有序 entry 数组。INF 只允许 `_ai_dest`、`mission_order_target`、walk_cast.point、`_chase_best_distance` 等明确哨兵，非法浮点不默默改 0。迷雾 PackedFloat32 按原精度还原，普通浮点保留足够有效位。
+
+内容指纹包含玩法代码合同、有效 `_defs/_abilities/_items`、全局 Defs 表（英雄被动仍直接读 `Defs.ABILITIES`，`unit.gd:2612,2685`；陷阱直接读 `Defs.TRAPS`，`battle.gd:1442`；基础护甲等也来自 Defs）、标准波表和地图规则。纯文档/机器路径不决定兼容性。首版内容不兼容就保留文件并提示，不用新定义默改旧局。标准合同拒绝自定义脚本/未知效果；生产仍用显式字段白名单，附录的声明索引仅用于人工/开发审计。
+
+## Battle 与标准关卡字段
+
+| 区块 | 保存字段及源位置 | 派生和限制 |
+| --- | --- | --- |
+| 模式 | Campaign `skirmish:31,skirmish_ai:32,arena:33,custom_defense:34,scenario:36,defense_waves:40,defense_hero_cap:41,defense_random:43,ai_friendly:46,scale_on:49`；Settings `game_speed:22,auto_micro_level:24,formation_mode:25` | 用于当前局，加载失败恢复旧菜单上下文；不写 campaign.cfg 成绩/偏好。scale_off 下倍率显示值可保留，但禁止生效。 |
+| 身份/节拍 | 新增 run_id/next_entity_id/next_item_uid/next_effect_id、gameplay RNG seed/state、局内 physical_tick；Battle `_ai_spawn_serial:42,_ai_tick_frame:43,_sep_phase:86,_stealth_acc:133,_ecast_acc:134,_last_hb:51,_mission_order_token_seq:9662` | Time 和 Engine 总帧不可跨进程恢复，玩法用途改局内计数。 |
+| 经济 | `gold:156,wood:157,pop_cap:158,current_age:159,_tech_done:163,tech_atk:164,tech_hp:165,hero_tech_atk:168,hero_tech_hp:169,tech_gather:170` | 不重新累计建筑人口/扣训练费；used_pop() 仅存校验值。 |
+| 战功/复活 | `kills:143,hero_kills:144,hero_combat_stats:146,hero_progress:150,hero_item_progress:151` | hero_kills 实际键为英雄 key (`2077–2080`)，声明注释 instance_id 已过时。死后库存 CD 在 `2319–2322` 独立继续 tick。 |
+| 敌经济/全托管经营 | `faction_res:160,faction_gather_mult:161,_eco_t:44,_eco_last_wood:45,_eco_wood_stall:46,_eco_trap_cd:47,_eco_trap_lane:48` | 标准合同私池为空，AI 友好关闭不运行自动经营 (`2343`)；首版要求这些条件/默认值，不能开放后静默丢值。单英雄托管分路仍需保存。 |
+| 行为缓存 | `_blocker_cache:81,_blocker_cache_revision:82,_blocker_query_budget:83,_eco_lane_cache_bucket:49,_eco_lane_cache:50` | 堵路键改 `{from_cell,to_cell,navigation_revision}`，值含 null 命中；分路存当前有效周期。重建导航后对齐版本，不能意外过期。 |
+| 迷雾 | `fog:173,_vision:174,_sight_now:175,_reveal_t:176,_fog_t:180,lit_cells:152` | 60×60 数组校验；从数组重画 Image，不调用会扣侦察计时的 _fog_pass。Unit.fog_visible 保留。 |
+| 注册/顺序 | `units:73` 有序 ID、units_root 中仍在倒地期的非活跃 Unit 及相对顺序、fx_root 权威弹道/飞斧相对顺序 | 同拍伤害/归因依赖调用顺序，不能仅无序字典。暂停屏障排空 deferred 删除后取样。 |
+| 关卡 | `skirmish.gd:93–103` 的 hall、_wave、_wave_t、_wave_spawned、_started、_final_cleanup_last_alive、_last_hp、_positions、_quiet、_tick、_active；另 `_wavelist_cache` | hall 强引用且存活；_wave 是已派波数 0..30；重叠波在场敌军逐个保存。标准 WAVES 可由内容指纹派生，存 hash 校验。清理位置字典键转稳定 ID。不重跑 120 秒备战。 |
+
+地图保存 `w,h,theme,base_fill,grid` (`game_map.gd:47–52`) 与静态环境合同/meta。`bake:239` 重建五套 AStar、base_solid 和权重并清 block_count；随后根据实体足迹和持续墙登记一次。`_block_count` 存校验值，不独立恢复后再叠加登记；`_navigation_revision:62` 与缓存版本一起恢复。合法现场可能有单位站在后来盖起的阻挡附近，load 不得 nearest_open 悄悄搬人，后续交原 eject 计时处理。
+
+匹配版本的 paint/decorate 可重建静态布景，但生成后覆盖保存 grid，再 bake。标准地图 meta 要恢复/重建 `liangshan_rts_court,zhongyi_hall_facing_cardinal,zhongyi_hall_front_vector,liangshan_art_level_id`。高度/环境样本走一致内容合同，不靠全局 RNG 重掷。
+
+## Unit 状态分组与接口约束
+
+文末“Unit 精确字段索引”穷举本次全部顶层 var 并给每个字段源行和处理类别。首版建议保留有效定义/数值或明确 per-instance delta，而非仅存 key，因为召唤、幻象、敌将技能和变身会改变实例。所有临时攻击/速度/攻速/护盾/控制/隐身/醉态/变身/伤害池的**值和剩余计时同时保存**。派生数值可保存为断言；未证明纯派生前不应删除。
+
+- `ability_slots` 元素实际是 `{id,rank,cd_t,passive,charges,recharge_t,cast_seq}` (`unit.gd:2382–2384`)，不能只有 rank/CD。
+- `_queue` 有序格式：move/amove `{kind,pos,group_cap}`；attack `{kind,target,explicit}`；gather/build/repair/garrison `{kind,target}`，来源 `unit.gd:445–543`。恢复字段，不调用 order_* 或 _enqueue，避免清凭证、打断施法、改序号。
+- `_path/_path_i` 保存并检查结构、数值；旧路径穿过刚出现障碍本来合法，不能“修正”为新路径，改变有限重寻时序。
+- 金矿 `_gold_miner/_gold_waiters` 和工人采矿状态一致，保持等待顺序。驻军 holder/passengers 双向一致。未开工 `_pending_build=true` 不封路；`advance_build:1770–1785` 首锤封格/设 HP、完工发回调，不能用于加载已有进度。
+- `_train_queue` 是 key 字符串列表；`production_blocked=true,_train_t=0` 是已付费完成待出口 (`1795–1814`)，不得重扣费、清队列或立即重生单位。
+- 标准驻守 meta 白名单：`fcell,fhalf,footprint_blocked,resource_footprint,production_berth,liangshan_gate_id,scene_visual_only,final_cleanup_pos,final_cleanup_stall`，以及忠义堂 `campaign_environment_route/state/text_surface_id/runtime_text/static_visual`。足点/屋顶透明/材质绘制缓存可重建。未知非默认剧情 meta 必须报告，不能悄悄排除后宣称完整。
+
+## 物品、阵亡镜像与重算
+
+HeroInventory 保存 `slots:10,cooldowns:11,proc_cooldowns:12,_uid_seq:13,_periodic_acc:14`。slots 固定六格，每格 `{id,count,uid}`；同名物品共享 CD，proc key 为 uid:event。`snapshot:306` 漏了 _periodic_acc，会丢 0.5 秒周期触发相位 (`220–230`)。`_new_uid:46–49` 当前是 ObjectID×1000+局部序列，需改 Battle 全局单调 item UID。
+
+`restore:311` 在 320/334 会通知重算和刷新 HUD，不能直接作无副作用载入。新增 silent/batched restore：先装 Battle 科技和有效定义，再装成长/技能/库存，计算一次可派生数值后核对，最后写保存 HP 和临时状态。`_recompute_hero_stats:2655` 会把 HP clamp 至至少 1，倒地尸体不能借重算复活；动态覆盖敌将/召唤不能被模板重算覆盖。
+
+阵亡英雄的 hero_item_progress 与尚在倒地期 Unit.inventory 可含同一批 UID 的**退休快照别名**。活跃可交易容器（活英雄/待复活账本）的 UID 唯一，退休副本允许镜像，不能把它当两份物品或错误拒绝普通死亡帧。库存 CD 以复活账本继续走时，死体库存不再 tick。`trigger_item_event:6477–6478` 阻止死体非 on_death 事件；load 不重播 on_death。
+
+## 持续效果实际字段
+
+所有数组保持顺序，每项增加 effect_id。引用用 Unit 适配器；eff/ad/effect 保存已解析数据及实例覆盖/归因，不能只查新模板。下列行号均在 scripts/battle.gd。
+
+| 数组/类型 | 权威字段 | 创建位置/特殊要求 |
+| --- | --- | --- |
+| _ground_dots | pos,r,foe,caster,follow,attack_slow,attack_miss,ability_id,t,tick_t,tick,per | 9178–9181；follow 失效按原消费保留当前落点。 |
+| _hua_snipe_dots | target,caster,ability_id,t,tick_t,tick,pct,ticks_left | 7109–7111；不能重新按 t/tick 取整。 |
+| _lin_duels | caster,target,t,heal_pct | 7290–7291；load 不重触死亡奖励。 |
+| _chrono_zones | pos,r,foe,t,tick,tick_t | 7253–7254；tick/tick_t 在声明注释中遗漏但实际存在。 |
+| _orbit_zones | caster,foe,ability_id,r,t,tick,tick_t,dmg,slow,slow_dur | 7232–7234；独立 Unit 减伤源一并恢复，不重新 apply。 |
+| _meteor_zones | pos,dir,remain,speed,hw,foe,caster,ability_id,impact,dps,dot_dur,hit,trail | 7585–7589；hit 键转稳定 ID；trail 决定下一处实际地火。 |
+| _gong_lines | kind,origin,dir,length,traveled,speed,half_width,foe,caster,ability_id,dmg,push,slow,slow_dur,hit | 9138–9142；speed 是施法瞬间值，不按当前减速重算。 |
+| _ice_walls | cells,t | 8275/9115；重叠计数逐项登记。当前未保存视觉类别/方向，需补描述。 |
+| _wards | pos,r,t,pulse,pulse_t,aura_t,mode,ally,foe,caster,ability_id,heal,dmg,atkspeed,banner_kind,slow,slow_dur,hero_reduction,troop_reduction,aura_id,col | 8152–8158；_ward_serial 全局保存，aura_id 为效果源而非 Unit。 |
+| _fire_trails | caster,ability_id,t,drop_t,drop,dps,dot_dur,r,foe | 7380–7381；drop_t 决定后续铺火。 |
+| _bolts:bolt | mode,pos,tgt,speed,eff,sc,rank,caster | 7660–7662；fx 另建。 |
+| _bolts:bolt_line/hook_out | 上项去 tgt，加 dir,traveled,len,width | 7677–7698；方向锁定。 |
+| _bolts:hook_drag | hook_out 字段及 victim | victim 在 7797–7798 后加；不能重放初始眩晕/伤害。 |
+| _walk_casts | c,slot,tgt,point,serial,t,age | 7910/7924；point=INF、serial=-1 可合法。 |
+| _walk_item_casts | c,uid,tgt,point,serial,t,age | 7853–7854；绑定 uid 而非槽位。 |
+| _channels | caster,center,eff,sc,rank,r,tick,tick_t,ad | 7974–7975；寿命由 Unit._channel_t/_channel_dur 保存。 |
+| _pending_casts | caster,slot,lp,tgt,serial | 6816；与 Unit._cast_t/_cast_serial 配对。 |
+| _pending_item_casts | caster,slot,uid,point,target,serial | 6325–6326；目标名实际为 target。 |
+| _traps | key,pos,trigger_r,arm_t,effect,owner | 1451–1454；owner 明确为阵营 int，签名在 1441，不是 Unit 引用；不再调用扣费布置。 |
+
+补建轻量显示描述，不整体 dump fx_root：冰墙条目无法区分 earth crack/ice wall，Meteor 缺原轨迹总长，Hua 瞄准/流血标记、Orbit、Ward、黑雨/地火没有完备 Node 引用。效果创建时记 `visual_kind,visual_content_key,color,origin/dir/total_extent,full_duration` 等最小值；load 用只绘画工厂及保存剩余时间重建主体/范围，不调用技能结算。不必存粒子随机数组、尘土、飘字、屏震。
+
+独立 Projectile (`scripts/projectile.gd:5–19`) 保存 `position,target,shooter,dmg,crit,damage_ability_id,speed,_dir,_life,kind,splash,on_slow_mult,on_slow_dur,_dist0,_spin`。setup:22 会重新取方向/初距/类型/life并掷视觉随机，不能用于 load。_dist0/_spin 虽只画面但便宜且保飞行高度连续；Projectile 在 fx_root，不在 _bolts (`battle.gd:804–811`)。
+
+LiBrawnAxesFx (`battle.gd:14977–15011`) 保存 `position,caster,hits[{target,dmg}],dur,elapsed,resolved`；game 绑定新 Battle，tex 按来源 key 读。elapsed 由 **_process** 走时，达到 dur 才结算，不能只冻结 physics。已 resolved/queued_free 节点在屏障后剔除；每把未结算斧只打一遍。不要为续玩顺手迁到 physics，那会改变玩法时序，须另验。
+
+## 引用与来源池细节
+
+`_giveup_id,_chase_last_id,_lin_spear_target_id` 转稳定实体引用；_charge_hit 为有序实体集合；Meteor/Beast hit 是“历史已命中”，目标已完全释放也保留 tombstone ID，不要求所有历史命中 ID 仍有实体。ID 永不复用。
+
+`_damage_reduction_sources` 混合源：0默认源、正数 ward serial、-ObjectID（orbit，7237）、-500000-ObjectID（Lin guard，unit:2758）、-600000-ObjectID（duel，7286）。编码 `{kind,entity_id/effect_id}`，条目值为 `{amount,t}`；攻速池为 `{mult,t}`。恢复时生成约定运行键或统一结构，不能猜每个整数都是节点。
+
+强关系缺失（hall/有效驻军/矿位）拒绝，普通失效攻击目标/短期队列按各消费者规则处理。仍存在 1.4 秒倒地节点可作 projectile shooter/DOT caster，在其寿命内参与归因，不能加载即删光；它不进入 active registry，不重发 died/story 信号。快照屏障必须区分“仍存在的终态”和“已经 queue_free 待释放”。
+
+## 可派生状态、UI 和恢复顺序
+
+可重建空间 grid/mob_grid/body_grid、focus_counts、技能归属查找缓存、渲染矩形/LOD预算/性能计数器、Image/Texture/RID/材质、光标、纯死亡地面装饰及绘制 stamps。必须在第一次输入/效果查询前做纯构建，不调用完整 Battle tick。_grid_build 同时更新视觉和计数，宜拆纯接口。_res_block_cache 在下一物理帧过期；用局内 tick 表明期限，明确恢复后首个 physics 前输入的处理，不能任意保留旧引擎 frame。
+
+view_state 保存 selection 有序 ID、active/inspect、groups、camera_locs、相机 position/zoom，以及自动镜头启用/目标/停留（Battle:27–34）。worker/hall 页面、HUD.message_log（hud:74）、抽屉展开可作为便利项。Unit selected/is_active/inspected/group_nums 由一份 UI 权威重建。画质/音量/键位沿当前用户设置；本局 game_speed/auto_micro_level/formation_mode 临时恢复，不自动写偏好文件。
+
+清除未提交的拖框/按住、armed 技能/物品/建造、二次拆除、触摸壁钟、相机拖动和双击时间；已进入 queue/walk/pending 的指令全部保留。
+
+| 当前入口 | 可复用 | 必须隔离 |
+| --- | --- | --- |
+| Battle._ready:263 | 有效定义、world/map/容器/camera/HUD/环境外壳 | 经济初值，343重置托管，364 deploy，417时速/418剧情，以及369–435所有 SMOKE/PERF/截图自测钩子。resume 必须提前明确分支。 |
+| Unit.setup:352 | 定义赋值、battle/map、显示注册 | 405–407新库存/技能/重算；拆定义初始化和运行绑定。 |
+| spawn_unit/spawn_at:578/615 | 抽创建节点、普通信号连线 | 坐标纠正、消费复活库存、科技满血、AI serial推进、active append/封格。 |
+| GameMap.bake:239 | 导航重建 | 清阻挡/增加版本须与恢复计数/缓存协调。 |
+| _on_start_battle:2007、Skirmish.on_start | 不作为恢复入口 | 工人默认命令、120秒备战、波次/清理状态归零、新局消息。 |
+| Inventory.snapshot/restore:306/311 | 明确slots/CD形状 | 补周期相位，静默恢复，禁提前重算和HUD通知。 |
+| HUD暂停、_close_pause/_goto_menu | UI风格、继续/返回 | 保存失败仍 paused。现 quit_game lambda 先解暂停再退出，失败不能走它。 |
+
+具体恢复顺序：
+
+1. 完整读取、版本/尺寸/摘要/类型/引用校验；暂不改变菜单、全局旗标、原槽。
+2. 建明确 resume context，从第一步即禁候选场景 process/physics；暂存 Campaign/Settings/Art 旧上下文以便失败回滚。
+3. 准备匹配定义/地图，覆盖 grid、bake，按原顺序创建所有活体/终态空壳，固定 ID/原位置，禁普通 spawn/训练。
+4. 先写 Battle 经济/科技/复活账本，再写 Unit 定义/成长/库存/技能，最后临时有效数值、HP、命令、终态；禁事件/通知。
+5. 第二遍连接全部引用、历史命中/来源池、效果、hall、选择/组；校验双向关系/UID/账本。
+6. 足迹/树/墙登记一次，核对 block_count；还原导航版本/堵路缓存、局内 tick/分路缓存和迷雾，纯构建空间索引。
+7. 建效果主体/范围、HUD/相机，连普通信号但不发事件；最后恢复 gameplay RNG state；核对规范化摘要，显示恢复后暂停 UI。
+8. 成功提交才替换菜单；玩家继续才启用模拟。失败释放半场景、恢复 Campaign/Settings/Art 上下文，原文件保留。
+
+快照屏障冻结 Battle/Unit/Projectile/**LiBrawnAxesFx process**，排空当前回调、deferred 删除及业务回调；复制期间禁新命令/卖物品/设置改变/重启。HUD 为 ALWAYS (`hud.gd:148`)，只保留协调器必要 UI。不可用一帧模拟来“清理”队列。A/B 对照在相同合法屏障和相同 physics/process步序；正常渲染另证可玩，不能声称跨机器逐帧完全复现。
+
+## 文件故障原子性
+
+建议 user://run_continue_v1.json，temp和受控上一份backup同目录，只有一个用户继续槽。完整编码→写temp→flush/close→回读并全部验证→替换正式槽。每步检查错误，不能先删旧槽再写新槽。平台如有原子 replace 则使用并核对；若双rename，必须定义启动恢复规则，并用各步进程中止测试证明能选择最近已验证版本，不能相信只因文件名是 .json 就完整。
+
+- 权限拒绝、磁盘满、短写、回读坏摘要、replace失败：旧槽字节保持或可恢复，战斗仍暂停且不退出。
+- 截断、未知schema/内容、重复ID、缺失强引用、未知效果：留菜单与原文件，不生成半局、不写旧成绩。
+- 保存中继续/退出/再次保存、并发双加载：协调器明确单飞事务；失败可重试。
+- 读取成功不消费槽；相同run_id正常胜负才清槽，新开局不主动覆盖，明确再次保存才替换。
+- 时间戳只显示，退出期间不推进波次/CD/库存；玩家槽/temp/backup不进Git。
+
+## 分批实现与验收
+
+| 批次 | 实现范围 | 必须证明 | 尚未完成 |
+| --- | --- | --- | --- |
+| M3.1 | 稳定ID/玩法RNG/局内tick、分离排序、缓存期限 | 新局固定seed行为等价，身份及取模全部覆盖，视觉开关不消费玩法RNG | 无用户存档功能；模拟流改动另留性能基线。 |
+| M3.2 | explicit codec/store/完整校验/文件事务 | 64位/INF/向量键往返；每个故障步骤旧槽不丢 | 尚未恢复Battle。 |
+| M3.3 | 纯建场、地图/Unit/经济/波次/库存/行为缓存 | 跨进程半建/虚影/堵出口/带货/排矿/驻军/死体复活前后摘要一致 | 效果覆盖前只内部QA，不能称完成续玩。 |
+| M3.4 | 所有短期战斗/持续效果/箭弹/飞斧/显示描述 | 同屏待命中/抬手/飞弹/DOT/墙/旗，A原局/B新PID同序只打一遍、随机与proc连续；图形主体可辨 | 真人/长期多次保存仍待验。 |
+| M3.5 | 菜单继续、暂停保存退出、槽生命期 | 真实付费指令保存，原PID退出，新PID继续可完成余下30波；末波8秒清理、重复保存、坏槽回退 | 仅驻守合同完成，祝家庄/其他关卡另批。 |
+
+最少 fixture：近战 pending_done=false、充能回复中、物品周期0.49秒、dead shooter箭在飞、未结算飞斧、醉态随机中、不同到期重叠旗、兽群hit含已释放敌人、钩拽中、墙重叠树/建筑、堵路缓存已命中且预算耗尽、>320分离相位、AI分路缓存中点、首末波倒计时阈值、训练已完成待出口、首锤前工地、带货/排矿、死英雄与同UID退休库存镜像。
+
+证据要有前后不同PID、源/定义指纹、原存档字节SHA、规范化摘要及继续事件序列；同一Battle导出再灌回不是跨进程验收。本文没有声称这些实现或测试已有可用版本。
+
+## Unit exact field index
+
+S = explicit authoritative scalar/value. R/I/J use the adapters described above. A = recomputable only after effective definition/skills/items are present; preserve a verification snapshot first. V = inexpensive visual continuity. D/C/X/P are not silently serialized as arbitrary objects. Node2D.position is additional required data (not a declared var below).
+
+| Field | Source | Policy |
+| --- | --- | --- |
+| `defeat_outcome` | `scripts/unit.gd:20` | P standard-contract default; assert no chapter state |
+| `story_outcome` | `scripts/unit.gd:21` | P standard-contract default; assert no chapter state |
+| `movement_profile` | `scripts/unit.gd:22` | S preserve current value |
+| `art_variant` | `scripts/unit.gd:23` | V retained cheap visual continuity |
+| `animation_direction` | `scripts/unit.gd:29` | V retained cheap visual continuity |
+| `_direction_candidate` | `scripts/unit.gd:30` | V retained cheap visual continuity |
+| `_direction_votes` | `scripts/unit.gd:31` | V retained cheap visual continuity |
+| `_story_pose_t` | `scripts/unit.gd:32` | P standard-contract default; assert no chapter state |
+| `_pose_previous_variant` | `scripts/unit.gd:33` | P standard-contract default; assert no chapter state |
+| `story_assist_partner` | `scripts/unit.gd:34` | P standard-contract default; assert no chapter state |
+| `story_assist_owner` | `scripts/unit.gd:35` | P standard-contract default; assert no chapter state |
+| `key` | `scripts/unit.gd:37` | S preserve current value |
+| `display_name` | `scripts/unit.gd:38` | S preserve current value |
+| `faction` | `scripts/unit.gd:39` | S preserve current value |
+| `max_hp` | `scripts/unit.gd:40` | S preserve current value |
+| `hp` | `scripts/unit.gd:41` | S preserve current value |
+| `atk` | `scripts/unit.gd:42` | S preserve current value |
+| `atk_cd` | `scripts/unit.gd:43` | S preserve current value |
+| `atk_range` | `scripts/unit.gd:44` | S preserve current value |
+| `base_speed` | `scripts/unit.gd:45` | S preserve current value |
+| `is_ranged` | `scripts/unit.gd:46` | S preserve current value |
+| `can_melee_switch` | `scripts/unit.gd:47` | S preserve current value |
+| `melee_mode` | `scripts/unit.gd:48` | S preserve current value |
+| `is_cavalry` | `scripts/unit.gd:49` | S preserve current value |
+| `bonus_vs_cav` | `scripts/unit.gd:50` | S preserve current value |
+| `defense` | `scripts/unit.gd:51` | S preserve current value |
+| `is_hero` | `scripts/unit.gd:52` | S preserve current value |
+| `is_building` | `scripts/unit.gd:53` | S preserve current value |
+| `is_captive` | `scripts/unit.gd:54` | P standard-contract default; assert no chapter state |
+| `is_objective` | `scripts/unit.gd:55` | S preserve current value |
+| `is_noncombat` | `scripts/unit.gd:56` | S preserve current value |
+| `setup_def` | `scripts/unit.gd:57` | J explicit nested shape |
+| `aura` | `scripts/unit.gd:58` | S preserve current value |
+| `aura_radius` | `scripts/unit.gd:59` | S preserve current value |
+| `aura_power` | `scripts/unit.gd:60` | S preserve current value |
+| `radius` | `scripts/unit.gd:61` | S preserve current value |
+| `visual_scale` | `scripts/unit.gd:62` | S preserve current value |
+| `aggro_range` | `scripts/unit.gd:63` | S preserve current value |
+| `battle` | `scripts/unit.gd:65` | X bind new runtime or dedicated inventory adapter |
+| `map` | `scripts/unit.gd:66` | X bind new runtime or dedicated inventory adapter |
+| `_track_combat_stats` | `scripts/unit.gd:67` | D rebuild and verify; no gameplay tick |
+| `is_worker` | `scripts/unit.gd:70` | S preserve current value |
+| `is_resource` | `scripts/unit.gd:71` | S preserve current value |
+| `res_kind` | `scripts/unit.gd:72` | S preserve current value |
+| `res_left` | `scripts/unit.gd:73` | S preserve current value |
+| `_gold_miner` | `scripts/unit.gd:74` | R entity reference / ordered references |
+| `_gold_waiters` | `scripts/unit.gd:75` | R entity reference / ordered references |
+| `_queue` | `scripts/unit.gd:76` | J explicit nested shape |
+| `_gather_node` | `scripts/unit.gd:77` | R entity reference / ordered references |
+| `_drop` | `scripts/unit.gd:78` | R entity reference / ordered references |
+| `_carry_kind` | `scripts/unit.gd:79` | S preserve current value |
+| `_carry_amt` | `scripts/unit.gd:80` | S preserve current value |
+| `_gather_t` | `scripts/unit.gd:81` | S preserve current value |
+| `is_constructing` | `scripts/unit.gd:86` | S preserve current value |
+| `_pending_build` | `scripts/unit.gd:87` | S preserve current value |
+| `build_progress` | `scripts/unit.gd:88` | S preserve current value |
+| `build_time` | `scripts/unit.gd:89` | S preserve current value |
+| `_build_site` | `scripts/unit.gd:90` | R entity reference / ordered references |
+| `garrisoned` | `scripts/unit.gd:93` | S preserve current value |
+| `garrison_holder` | `scripts/unit.gd:94` | R entity reference / ordered references |
+| `_garrison_dest` | `scripts/unit.gd:95` | R entity reference / ordered references |
+| `passengers` | `scripts/unit.gd:96` | R entity reference / ordered references |
+| `garrison_cap` | `scripts/unit.gd:97` | S preserve current value |
+| `_train_queue` | `scripts/unit.gd:99` | S preserve current value |
+| `production_blocked` | `scripts/unit.gd:100` | S preserve current value |
+| `_production_retry` | `scripts/unit.gd:101` | S preserve current value |
+| `_train_t` | `scripts/unit.gd:102` | S preserve current value |
+| `rally` | `scripts/unit.gd:103` | S preserve current value |
+| `has_rally` | `scripts/unit.gd:104` | S preserve current value |
+| `rally_node` | `scripts/unit.gd:105` | R entity reference / ordered references |
+| `rally_kind` | `scripts/unit.gd:106` | S preserve current value |
+| `_repair_g` | `scripts/unit.gd:107` | S preserve current value |
+| `_repair_w` | `scripts/unit.gd:108` | S preserve current value |
+| `_research_key` | `scripts/unit.gd:109` | S preserve current value |
+| `_research_t` | `scripts/unit.gd:110` | S preserve current value |
+| `selected` | `scripts/unit.gd:112` | D rebuild and verify; no gameplay tick |
+| `is_active` | `scripts/unit.gd:113` | D rebuild and verify; no gameplay tick |
+| `inspected` | `scripts/unit.gd:114` | D rebuild and verify; no gameplay tick |
+| `fog_visible` | `scripts/unit.gd:115` | V retained cheap visual continuity |
+| `passive` | `scripts/unit.gd:116` | S preserve current value |
+| `stance` | `scripts/unit.gd:117` | S preserve current value |
+| `_hold_order_active` | `scripts/unit.gd:118` | S preserve current value |
+| `_hold_prev_stance` | `scripts/unit.gd:119` | S preserve current value |
+| `_patrol_a` | `scripts/unit.gd:120` | S preserve current value |
+| `_patrol_b` | `scripts/unit.gd:121` | S preserve current value |
+| `_patrolling` | `scripts/unit.gd:122` | S preserve current value |
+| `hidden_in_reeds` | `scripts/unit.gd:123` | S preserve current value |
+| `buff_atk` | `scripts/unit.gd:124` | S preserve current value |
+| `buff_speed` | `scripts/unit.gd:125` | S preserve current value |
+| `face_left` | `scripts/unit.gd:126` | V retained cheap visual continuity |
+| `group_nums` | `scripts/unit.gd:127` | D rebuild and verify; no gameplay tick |
+| `ability` | `scripts/unit.gd:130` | S preserve current value |
+| `ability_cd` | `scripts/unit.gd:131` | S preserve current value |
+| `_ability_t` | `scripts/unit.gd:132` | S preserve current value |
+| `ability_slots` | `scripts/unit.gd:134` | J explicit nested shape |
+| `inventory` | `scripts/unit.gd:135` | X bind new runtime or dedicated inventory adapter |
+| `_hero_leveled` | `scripts/unit.gd:136` | S preserve current value |
+| `hero_level` | `scripts/unit.gd:137` | S preserve current value |
+| `hero_xp` | `scripts/unit.gd:138` | S preserve current value |
+| `skill_points` | `scripts/unit.gd:139` | S preserve current value |
+| `auto_micro` | `scripts/unit.gd:140` | S preserve current value |
+| `ai_tick_phase` | `scripts/unit.gd:141` | S preserve current value |
+| `_ai_dest` | `scripts/unit.gd:142` | S preserve current value |
+| `_base_atk` | `scripts/unit.gd:143` | S preserve current value |
+| `_base_hp` | `scripts/unit.gd:144` | S preserve current value |
+| `_base_speed` | `scripts/unit.gd:145` | S preserve current value |
+| `_base_defense` | `scripts/unit.gd:146` | S preserve current value |
+| `temp_atk` | `scripts/unit.gd:148` | S preserve current value |
+| `_temp_atk_t` | `scripts/unit.gd:149` | S preserve current value |
+| `temp_atk_add` | `scripts/unit.gd:150` | S preserve current value |
+| `_temp_atk_add_t` | `scripts/unit.gd:151` | S preserve current value |
+| `temp_speed` | `scripts/unit.gd:152` | S preserve current value |
+| `_temp_speed_t` | `scripts/unit.gd:153` | S preserve current value |
+| `_temp_move_boost` | `scripts/unit.gd:154` | S preserve current value |
+| `_temp_move_boost_t` | `scripts/unit.gd:155` | S preserve current value |
+| `_stun_t` | `scripts/unit.gd:156` | S preserve current value |
+| `temp_lifesteal` | `scripts/unit.gd:157` | S preserve current value |
+| `_temp_lifesteal_t` | `scripts/unit.gd:158` | S preserve current value |
+| `cav_ls_chance` | `scripts/unit.gd:159` | A recomputable stats; retain snapshot and verify first |
+| `cav_ls_frac` | `scripts/unit.gd:160` | A recomputable stats; retain snapshot and verify first |
+| `_lin_guard_t` | `scripts/unit.gd:162` | S preserve current value |
+| `_lin_guard_rank` | `scripts/unit.gd:163` | S preserve current value |
+| `_lin_guard_used` | `scripts/unit.gd:164` | S preserve current value |
+| `lin_spear_rank` | `scripts/unit.gd:166` | A recomputable stats; retain snapshot and verify first |
+| `_lin_spear_target_id` | `scripts/unit.gd:167` | I stable identity / source adapter |
+| `_lin_spear_stacks` | `scripts/unit.gd:168` | S preserve current value |
+| `_lin_spear_t` | `scripts/unit.gd:169` | S preserve current value |
+| `_buff_glow` | `scripts/unit.gd:170` | V retained cheap visual continuity |
+| `is_summon` | `scripts/unit.gd:172` | S preserve current value |
+| `summon_kind` | `scripts/unit.gd:173` | S preserve current value |
+| `_summon_ttl` | `scripts/unit.gd:174` | S preserve current value |
+| `stat_owner_key` | `scripts/unit.gd:175` | S preserve current value |
+| `stat_ability_id` | `scripts/unit.gd:176` | S preserve current value |
+| `_drunk_t` | `scripts/unit.gd:178` | S preserve current value |
+| `_drunk_lo` | `scripts/unit.gd:179` | S preserve current value |
+| `_drunk_hi` | `scripts/unit.gd:180` | S preserve current value |
+| `_drunk_reroll` | `scripts/unit.gd:181` | S preserve current value |
+| `_drunk_move` | `scripts/unit.gd:182` | S preserve current value |
+| `_drunk_atk` | `scripts/unit.gd:183` | S preserve current value |
+| `_phys_immune_t` | `scripts/unit.gd:185` | S preserve current value |
+| `_absorbed_phys` | `scripts/unit.gd:186` | S preserve current value |
+| `_drunk_god_bonus_per_hit` | `scripts/unit.gd:187` | S preserve current value |
+| `_drunk_god_stacks` | `scripts/unit.gd:188` | S preserve current value |
+| `_drunk_god_max_stacks` | `scripts/unit.gd:189` | S preserve current value |
+| `_def_down` | `scripts/unit.gd:191` | S preserve current value |
+| `_def_down_t` | `scripts/unit.gd:192` | S preserve current value |
+| `_blind_t` | `scripts/unit.gd:194` | S preserve current value |
+| `_attack_miss_chance` | `scripts/unit.gd:196` | S preserve current value |
+| `_attack_miss_t` | `scripts/unit.gd:197` | S preserve current value |
+| `aura_slow` | `scripts/unit.gd:199` | S preserve current value |
+| `slow_aura_r` | `scripts/unit.gd:200` | S preserve current value |
+| `_shield` | `scripts/unit.gd:202` | S preserve current value |
+| `_shield_t` | `scripts/unit.gd:203` | S preserve current value |
+| `_silence_t` | `scripts/unit.gd:204` | S preserve current value |
+| `_root_t` | `scripts/unit.gd:205` | S preserve current value |
+| `_disarm_t` | `scripts/unit.gd:206` | S preserve current value |
+| `_taunt_t` | `scripts/unit.gd:207` | S preserve current value |
+| `_taunt_src` | `scripts/unit.gd:208` | R entity reference / ordered references |
+| `_channel_t` | `scripts/unit.gd:209` | S preserve current value |
+| `_channel_dur` | `scripts/unit.gd:210` | S preserve current value |
+| `_invis_t` | `scripts/unit.gd:211` | S preserve current value |
+| `_invis_strike_bonus` | `scripts/unit.gd:212` | S preserve current value |
+| `_invis_strike_pending` | `scripts/unit.gd:213` | S preserve current value |
+| `_hex_t` | `scripts/unit.gd:214` | S preserve current value |
+| `_form_t` | `scripts/unit.gd:215` | S preserve current value |
+| `_form` | `scripts/unit.gd:216` | J explicit nested shape |
+| `_form_backup` | `scripts/unit.gd:217` | J explicit nested shape |
+| `_order_serial` | `scripts/unit.gd:218` | S preserve current value |
+| `temp_atkspeed` | `scripts/unit.gd:219` | S preserve current value |
+| `_temp_atkspeed_t` | `scripts/unit.gd:220` | S preserve current value |
+| `_attack_speed_slow` | `scripts/unit.gd:221` | S preserve current value |
+| `_attack_speed_slow_t` | `scripts/unit.gd:222` | S preserve current value |
+| `_aura_atkspeed` | `scripts/unit.gd:223` | S preserve current value |
+| `_aura_atkspeed_sources` | `scripts/unit.gd:224` | I stable identity / source adapter |
+| `atkspeed_mult` | `scripts/unit.gd:226` | A recomputable stats; retain snapshot and verify first |
+| `crit_chance_bonus` | `scripts/unit.gd:227` | A recomputable stats; retain snapshot and verify first |
+| `crit_mult_bonus` | `scripts/unit.gd:228` | A recomputable stats; retain snapshot and verify first |
+| `evasion` | `scripts/unit.gd:229` | A recomputable stats; retain snapshot and verify first |
+| `_temp_evasion` | `scripts/unit.gd:230` | S preserve current value |
+| `_temp_evasion_t` | `scripts/unit.gd:231` | S preserve current value |
+| `bash_chance` | `scripts/unit.gd:232` | A recomputable stats; retain snapshot and verify first |
+| `bash_dur` | `scripts/unit.gd:233` | A recomputable stats; retain snapshot and verify first |
+| `on_hit_slow` | `scripts/unit.gd:234` | A recomputable stats; retain snapshot and verify first |
+| `on_hit_slow_dur` | `scripts/unit.gd:235` | A recomputable stats; retain snapshot and verify first |
+| `on_hit_dmg` | `scripts/unit.gd:236` | A recomputable stats; retain snapshot and verify first |
+| `_dmg_amp` | `scripts/unit.gd:238` | S preserve current value |
+| `_dmg_amp_t` | `scripts/unit.gd:239` | S preserve current value |
+| `_damage_reduction` | `scripts/unit.gd:241` | S preserve current value |
+| `_damage_reduction_t` | `scripts/unit.gd:242` | S preserve current value |
+| `_damage_reduction_sources` | `scripts/unit.gd:243` | I stable identity / source adapter |
+| `_stats_mitigation_t` | `scripts/unit.gd:244` | S preserve current value |
+| `_charge_t` | `scripts/unit.gd:246` | S preserve current value |
+| `_charge_dash` | `scripts/unit.gd:247` | S preserve current value |
+| `_charge_dir` | `scripts/unit.gd:248` | S preserve current value |
+| `_charge_dmg` | `scripts/unit.gd:249` | S preserve current value |
+| `_charge_ability_id` | `scripts/unit.gd:250` | S preserve current value |
+| `_charge_slow` | `scripts/unit.gd:251` | S preserve current value |
+| `_charge_slow_dur` | `scripts/unit.gd:252` | S preserve current value |
+| `_charge_width` | `scripts/unit.gd:253` | S preserve current value |
+| `_charge_hit` | `scripts/unit.gd:254` | I stable identity / source adapter |
+| `_charge_phys_immune` | `scripts/unit.gd:255` | S preserve current value |
+| `_hua_lock_target` | `scripts/unit.gd:257` | R entity reference / ordered references |
+| `_hua_lock_shots` | `scripts/unit.gd:258` | S preserve current value |
+| `_state` | `scripts/unit.gd:261` | S preserve current value |
+| `_path` | `scripts/unit.gd:262` | S preserve current value |
+| `_path_i` | `scripts/unit.gd:263` | S preserve current value |
+| `_amove_dest` | `scripts/unit.gd:264` | S preserve current value |
+| `_resume_amove` | `scripts/unit.gd:265` | S preserve current value |
+| `_target` | `scripts/unit.gd:266` | R entity reference / ordered references |
+| `_chase_intent` | `scripts/unit.gd:267` | S preserve current value |
+| `_group_cap` | `scripts/unit.gd:268` | S preserve current value |
+| `_home` | `scripts/unit.gd:269` | S preserve current value |
+| `_has_home` | `scripts/unit.gd:270` | S preserve current value |
+| `_cd` | `scripts/unit.gd:271` | S preserve current value |
+| `_repath` | `scripts/unit.gd:272` | S preserve current value |
+| `_acq_t` | `scripts/unit.gd:273` | S preserve current value |
+| `_flash` | `scripts/unit.gd:274` | V retained cheap visual continuity |
+| `_muzzle_t` | `scripts/unit.gd:275` | V retained cheap visual continuity |
+| `_tower_aim` | `scripts/unit.gd:276` | V retained cheap visual continuity |
+| `_tower_aim_hold` | `scripts/unit.gd:277` | V retained cheap visual continuity |
+| `_stuck_t` | `scripts/unit.gd:278` | S preserve current value |
+| `_idle_push_t` | `scripts/unit.gd:279` | S preserve current value |
+| `_blocker_check_t` | `scripts/unit.gd:280` | S preserve current value |
+| `_chasing_path_blocker` | `scripts/unit.gd:281` | S preserve current value |
+| `_eject_t` | `scripts/unit.gd:282` | S preserve current value |
+| `_block_rp` | `scripts/unit.gd:283` | S preserve current value |
+| `_burn_t` | `scripts/unit.gd:284` | V retained cheap visual continuity |
+| `manual_order_t` | `scripts/unit.gd:285` | S preserve current value |
+| `manual_order_active` | `scripts/unit.gd:286` | S preserve current value |
+| `mission_order_active` | `scripts/unit.gd:288` | S preserve current value |
+| `mission_order_arrival_t` | `scripts/unit.gd:289` | S preserve current value |
+| `mission_order_target` | `scripts/unit.gd:290` | S preserve current value |
+| `mission_order_token` | `scripts/unit.gd:291` | S preserve current value |
+| `_move_retry` | `scripts/unit.gd:292` | S preserve current value |
+| `_move_retry_pos` | `scripts/unit.gd:293` | S preserve current value |
+| `_last_pos` | `scripts/unit.gd:294` | S preserve current value |
+| `_combat_cool` | `scripts/unit.gd:295` | S preserve current value |
+| `_hit_recent_t` | `scripts/unit.gd:296` | S preserve current value |
+| `_chase_t` | `scripts/unit.gd:299` | S preserve current value |
+| `_chase_last_id` | `scripts/unit.gd:300` | I stable identity / source adapter |
+| `_chase_best_distance` | `scripts/unit.gd:301` | S preserve current value |
+| `_giveup_id` | `scripts/unit.gd:302` | I stable identity / source adapter |
+| `_giveup_t` | `scripts/unit.gd:303` | S preserve current value |
+| `_stepped` | `scripts/unit.gd:309` | C discard render cache |
+| `_move_blend` | `scripts/unit.gd:310` | V retained cheap visual continuity |
+| `_anim_t` | `scripts/unit.gd:311` | V retained cheap visual continuity |
+| `_lunge` | `scripts/unit.gd:312` | S preserve current value |
+| `_lunge_dir` | `scripts/unit.gd:313` | S preserve current value |
+| `_swing_kind` | `scripts/unit.gd:314` | S preserve current value |
+| `_swing_speed` | `scripts/unit.gd:315` | S preserve current value |
+| `_hit_at` | `scripts/unit.gd:316` | S preserve current value |
+| `_pending_target` | `scripts/unit.gd:317` | R entity reference / ordered references |
+| `_pending_done` | `scripts/unit.gd:318` | S preserve current value |
+| `_flinch` | `scripts/unit.gd:319` | V retained cheap visual continuity |
+| `_gather_anim_t` | `scripts/unit.gd:320` | V retained cheap visual continuity |
+| `_harvest_pulse` | `scripts/unit.gd:321` | V retained cheap visual continuity |
+| `_cast_t` | `scripts/unit.gd:322` | S preserve current value |
+| `_cast_dur` | `scripts/unit.gd:323` | S preserve current value |
+| `_cast_color` | `scripts/unit.gd:324` | S preserve current value |
+| `_cast_serial` | `scripts/unit.gd:325` | S preserve current value |
+| `_weapon` | `scripts/unit.gd:326` | C discard render cache |
+| `_idle_t` | `scripts/unit.gd:327` | V retained cheap visual continuity |
+| `_real_frames` | `scripts/unit.gd:328` | C discard render cache |
+| `_frame_directional` | `scripts/unit.gd:329` | C discard render cache |
+| `_animated_redraw_t` | `scripts/unit.gd:330` | C discard render cache |
+| `_queued_redraw_frame` | `scripts/unit.gd:331` | C discard render cache |
+| `_dying` | `scripts/unit.gd:332` | S preserve current value |
+| `_death_t` | `scripts/unit.gd:333` | S preserve current value |
+| `_death_lean` | `scripts/unit.gd:334` | S preserve current value |
+| `_dust` | `scripts/unit.gd:335` | C discard render cache |
+| `_killer` | `scripts/unit.gd:862` | R entity reference / ordered references |
+| `_killer_source_id` | `scripts/unit.gd:863` | S preserve current value |
+
+## Standard level exact declaration index
+
+| Field | Source |
+| --- | --- |
+| `hall` | `scripts/levels/skirmish.gd:93` |
+| `_wave` | `scripts/levels/skirmish.gd:94` |
+| `_wave_t` | `scripts/levels/skirmish.gd:95` |
+| `_wave_spawned` | `scripts/levels/skirmish.gd:96` |
+| `_started` | `scripts/levels/skirmish.gd:97` |
+| `_final_cleanup_last_alive` | `scripts/levels/skirmish.gd:98` |
+| `_final_cleanup_last_hp` | `scripts/levels/skirmish.gd:99` |
+| `_final_cleanup_positions` | `scripts/levels/skirmish.gd:100` |
+| `_final_cleanup_quiet` | `scripts/levels/skirmish.gd:101` |
+| `_final_cleanup_tick` | `scripts/levels/skirmish.gd:102` |
+| `_final_cleanup_active` | `scripts/levels/skirmish.gd:103` |
+| `_wavelist_cache` | `scripts/levels/skirmish.gd:182` |
+
+## Source LF fingerprints
+
+Read-only source snapshot; no Godot or Git verification was run. Line references may move as sibling work continues.
+
+| Source | SHA256 normalized UTF-8 LF |
+| --- | --- |
+| `scripts/battle.gd` | `784373eede18a82c24fc50a6e36a42b6c20516bf439cf200fe5be7d239db6e2c` |
+| `scripts/unit.gd` | `c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec` |
+| `scripts/projectile.gd` | `bb8d4b708772048557e080843c35ef1c83d1f4dc3c81e03772a085d113af3859` |
+| `scripts/hero_inventory.gd` | `b7fa741fc4a208606d6de724164eda57252aa38800893817d39e279dc429a097` |
+| `scripts/levels/skirmish.gd` | `66d404456c045ef42114caa0f1f534f537098eff02b73f4b680f0b3546950794` |
+| `scripts/game_map.gd` | `35a31084088e8665790b9bc940054d05a96f7e995ecfcd28796d2b6fad63800a` |
+| `scripts/crowd_separation.gd` | `3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b` |
+| `scripts/settings.gd` | `93ffcc801149744cc9b0eed35b1bfd0769b5f25ac8f80cdbb7865997b5ef646c` |
+| `scripts/level_base.gd` | `85ab169499f6b6a5e5089f9103ada60ea72cbef6938ed38148477a4ee3f5eb2e` |

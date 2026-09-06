@@ -1,3 +1,11 @@
+## 2026-09-07 Unit 引用、物品栏与主体诊断
+
+正常游戏启动方式保持；当前仍无可用的“保存退出/继续本局”。[Unit 引用](RUN_UNIT_REFERENCES_20260907.md)和[物品栏](RUN_INVENTORY_VALUES_20260907.md)仅为经过实机采集/验证的草稿，原代码分别封存于 `qa/run_unit_references_20260907/` 和 `tools/contracts/run_inventory_values_20260906/`。按各归档 README 恢复精确原路径和版本后才预检/串行复验；不要直接从归档运行、覆盖其他工作或修改旧 pins 消除来源错误。
+
+两套均复用同一受控启动流程：实际非 console Godot、全新私有 APPDATA/LOCALAPPDATA/TEMP/TMP、来源/真实玩家保护和共用锁。Inventory 冻结的是它实际运行时的旧 controller contract，Unit refs 是五键修复后的 contract；各自按原文复现，不混用。两次 Unit refs 失败仍保留。Inventory 只显式复制其 QA report，未复制 profile。
+
+`qa/unit_body_sections_20260906/` 保存冻结 4baafc1 的四段计时与独立复算；本机原私有容器已进入新的生成代，不能再次套用分离诊断旧身份。复现边界见该归档 README，不能把计时插桩版当普通性能版本。真实生产 Unit/Battle/codec 在本批均未改动。
+
 ## 2026-09-06 恢复候选与值模块复现
 
 `scripts/run_state_value_codec.gd` 是新增基础模块，正常启动方式不变，尚未出现“继续本局”或生产 Battle 调用。被测原文、341 项当前验收和旧 NUL 诊断说明见[值模块](RUN_STATE_VALUES_20260906.md)。`tools/contracts/run_state_values_20260906/` 封存三份原文；按其 README 恢复原名到一个全新、被忽略的小私有项目，QA 所需名字是 `value_codec.gd`，不是生产的 `run_state_value_codec.gd`。源 raw SHA、实际 PID/user://、日志及退出必须全部核对。

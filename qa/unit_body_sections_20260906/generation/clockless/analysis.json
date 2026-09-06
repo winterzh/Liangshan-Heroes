@@ -1,0 +1,148 @@
+{
+  "analysis_valid": true,
+  "mode": "clockless",
+  "all_measurement": {
+    "physics_steps": 603,
+    "body_calls": 112628,
+    "body_total_us": null,
+    "section_total_us": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "section_mean_us_per_physics_step": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "section_mean_us_per_body_call": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "share_of_observed_body": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "exit_counts": {
+      "lifecycle_building_death_us": 21981,
+      "status_timers_us": 0,
+      "target_state_movement_us": 314,
+      "tail_animation_hit_watchdog_us": 90333
+    }
+  },
+  "first_up_to_600_steps": {
+    "physics_steps": 600,
+    "body_calls": 112244,
+    "body_total_us": null,
+    "section_total_us": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "section_mean_us_per_physics_step": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "section_mean_us_per_body_call": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "share_of_observed_body": {
+      "lifecycle_building_death_us": null,
+      "status_timers_us": null,
+      "target_state_movement_us": null,
+      "tail_animation_hit_watchdog_us": null
+    },
+    "exit_counts": {
+      "lifecycle_building_death_us": 21824,
+      "status_timers_us": 0,
+      "target_state_movement_us": 314,
+      "tail_animation_hit_watchdog_us": 90106
+    }
+  },
+  "first600_complete": true,
+  "presentations": 301,
+  "over_100ms_presentations": 7,
+  "largest_frames": [
+    {
+      "process_id": 5303,
+      "frame_us": 114404,
+      "physics_steps": 5,
+      "body_calls": 1145,
+      "body_total_us": null
+    },
+    {
+      "process_id": 5304,
+      "frame_us": 111619,
+      "physics_steps": 7,
+      "body_calls": 1603,
+      "body_total_us": null
+    },
+    {
+      "process_id": 5307,
+      "frame_us": 110277,
+      "physics_steps": 7,
+      "body_calls": 1603,
+      "body_total_us": null
+    },
+    {
+      "process_id": 5301,
+      "frame_us": 103595,
+      "physics_steps": 5,
+      "body_calls": 1145,
+      "body_total_us": null
+    },
+    {
+      "process_id": 5295,
+      "frame_us": 102109,
+      "physics_steps": 5,
+      "body_calls": 1145,
+      "body_total_us": null
+    },
+    {
+      "process_id": 5305,
+      "frame_us": 101387,
+      "physics_steps": 7,
+      "body_calls": 1603,
+      "body_total_us": null
+    },
+    {
+      "process_id": 5306,
+      "frame_us": 100516,
+      "physics_steps": 6,
+      "body_calls": 1374,
+      "body_total_us": null
+    },
+    {
+      "process_id": 5297,
+      "frame_us": 93199,
+      "physics_steps": 5,
+      "body_calls": 1145,
+      "body_total_us": null
+    }
+  ],
+  "same_clock_m1_frame_links_verified": true,
+  "entry_exit_partition_conservation_verified": true,
+  "normal_fps_available": false,
+  "acceptance_eligible": false,
+  "performance_claim": false,
+  "scope": "Four coarse spans of the complete original Unit._phys_body, aggregated per physics step; original _physics_process story-partner tail excluded",
+  "overhead": "Timed callbacks use 2+reached_boundaries clock reads; start precedes begin bookkeeping, each cut bookkeeping enters its following span, finish bookkeeping is excluded. Both modes retain wrapper/cuts/counters and frame/step clocks. No estimated subtraction.",
+  "next_action": "Review measured section costs; do not infer product speedup or subtract independent clockless trajectory.",
+  "sources": {
+    "m1_10s.json": "c996c73832949310829d80ff7fef29ea96dbdd0c43fdb0b3045e3ca5c33d9337",
+    "report.json": "106b7c686d6651db57913420260885fcd820314d56ef58296fd9f7cfdcaf036c"
+  },
+  "analyzer_sha256": "d1ecbda7d4195eb0713b63007a61463b8ea8ebd42a7166c9c44f805458564b6c"
+}

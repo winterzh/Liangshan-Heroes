@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "status": "ACTUAL_GODOT_QA_PASSED_INDEPENDENT_EVIDENCE_REVIEW",
+  "run_id": "20260906T154102953512Z",
+  "evidence_review_godot_runs": 0,
+  "evidence_review_production_writes": 0,
+  "complete": true,
+  "process_id": 42016,
+  "exit_code": 0,
+  "child_exit_confirmed": true,
+  "lock_released": true,
+  "actual_user_dir": "E:/ChatGPT/水浒-art-validation/scratchpad/run_inventory_state/runs/20260906T154102953512Z/private_profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役",
+  "engine": {
+    "major": 4,
+    "minor": 6,
+    "patch": 3,
+    "hex": 263683,
+    "status": "stable",
+    "build": "official",
+    "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+    "timestamp": 0,
+    "string": "4.6.3-stable (official)"
+  },
+  "check_count": 155,
+  "source_hash_checks": 10,
+  "aggregate_source_unchanged_checks": 1,
+  "other_checks_as_runner_reports": 145,
+  "other_checks_excluding_all_source_checks": 144,
+  "count_note": "155 assertion rows = 10 per-file source-hash checks + 1 aggregate source-unchanged check + 144 remaining rows. The latter include repeated real-JSON and negative-fixture helper assertions, not 144 independent test cases.",
+  "key_functional_checks": [
+    "real production HeroInventory instance",
+    "all five local declaration fields validated",
+    "non-default six-slot positions item counts shared CDs proc CDs and phase captured",
+    "real JSON non-default inventory record validated",
+    "capture JSON hop and validation consume no gameplay RNG",
+    "decoded containers do not alias the live inventory",
+    "old snapshot missing periodic phase refused",
+    "duplicate local item UID refused",
+    "proc-map width rejected before traversal and encoding",
+    "expired owner explicitly remains deferred rather than restored or dereferenced",
+    "all positive and rejected cases avoid owner or effect callbacks"
+  ],
+  "all_check_rows_passed": true,
+  "stdout_report_semantic_match": true,
+  "stdout_report_marker_count": 1,
+  "strict_log_diagnostics": [],
+  "source_pins_match_live_five_runtime_files": true,
+  "original_pins_and_preparation_unchanged": true,
+  "original_readme_and_gdignore_unchanged": true,
+  "source_snapshot": {
+    "files": 2713,
+    "combined_sha256": "f12de07498b7074dd1c8fb0edf0bde9bdc5f0dfad5b95d850624b32e2a65fa20",
+    "ledger_hash_recomputed": true,
+    "full_live_source_rehash_in_this_review": false,
+    "scope_note": "This review rechecks the five pinned runtime files and two support files, and recomputes the stored source ledger digest. Full 2713-file before/after equality is the actual controller receipt evidence, not a fresh whole-tree hash in this review."
+  },
+  "protected_player_before_after_equal_in_receipt": true,
+  "runtime_sources": {
+    "scripts/hero_inventory.gd": {
+      "bytes": 11132,
+      "raw_sha256": "1dd9a3b2fec0a5fc1ed2546e7bc842719a60f2cd251897434564702c01419de5",
+      "lf_sha256": "b7fa741fc4a208606d6de724164eda57252aa38800893817d39e279dc429a097"
+    },
+    "scripts/defs.gd": {
+      "bytes": 218233,
+      "raw_sha256": "4cb4fa2288235aff117d7373794f335b5cc5092bf8fad5fd416d0f7dc5c1b155",
+      "lf_sha256": "a2f9a9fe9a669829871c0bcb9fd9295b451e8b9744993deb4f007ab1d80607fb"
+    },
+    "scripts/run_state_value_codec.gd": {
+      "bytes": 12091,
+      "raw_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "lf_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+    },
+    "scratchpad/run_inventory_state/inventory_values.gd": {
+      "bytes": 7483,
+      "raw_sha256": "fca23b17fe15e7f8276e76cf06abb7883d56ff39a69d56a51e77c83b26eea85b",
+      "lf_sha256": "fca23b17fe15e7f8276e76cf06abb7883d56ff39a69d56a51e77c83b26eea85b"
+    },
+    "scratchpad/run_inventory_state/qa_driver.gd": {
+      "bytes": 17914,
+      "raw_sha256": "de67e16ac67bd9e1dea269a64196d694fe3eb24e8627f0229575312f9ea72c87",
+      "lf_sha256": "de67e16ac67bd9e1dea269a64196d694fe3eb24e8627f0229575312f9ea72c87"
+    }
+  },
+  "evidence_files": [
+    {
+      "source": "scratchpad/run_inventory_state/runs/20260906T154102953512Z/receipt.json",
+      "bytes": 5422,
+      "sha256": "b3817e0d5b3b4bc41f65b556b09cec0154653c893fd57c0b18f92b2325aea044"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/runs/20260906T154102953512Z/process_receipt.json",
+      "bytes": 816,
+      "sha256": "e0617cd0736b6ed6b605e936d0203258c3fb8955934d38d701b63c6d7e228c53"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/runs/20260906T154102953512Z/process.log",
+      "bytes": 12243,
+      "sha256": "d126d1869292196524c86c2a5df6efd221cbbd7ba8d1d42b120480c76c7dc137"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/runs/20260906T154102953512Z/configuration.json",
+      "bytes": 4216,
+      "sha256": "f64bfd185270cecc5493a88a4ba7a2f5ff609ab9b94e4115d48503ce59243dad"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/runs/20260906T154102953512Z/manifest.json",
+      "bytes": 1065,
+      "sha256": "3180197c59b63b67b2a8ef5f5af280cb17a2ec5884e4ef74e7e7a3ca9ff1faa1"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/runs/20260906T154102953512Z/sources.json",
+      "bytes": 323765,
+      "sha256": "5353088b41902781546b2e075a8cde7c1437b21b0134a7a379cd6edbce457105"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/runs/20260906T154102953512Z/private_profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/inventory_report.json",
+      "bytes": 14737,
+      "sha256": "7e1a2095dba83bbd3944743a115e22f1bb7a08baa0570bd8d48435618a679461"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/pins.json",
+      "bytes": 2623,
+      "sha256": "659b507d4813f5a9b54058e1645e6bde24233071cc82381815c42de309c8bc78"
+    },
+    {
+      "source": "scratchpad/run_inventory_state/preparation_receipt.json",
+      "bytes": 1205,
+      "sha256": "1b9bf1a86ad9172f35edea40825e8b3422ddd0c86a81888e8568de56853ad030"
+    }
+  ],
+  "scope": {
+    "real_inventory_object": true,
+    "owner_is_test_probe": true,
+    "explicit_local_values": [
+      "slots",
+      "cooldowns",
+      "proc_cooldowns",
+      "_uid_seq",
+      "_periodic_acc"
+    ],
+    "fixed_slot_count": 6,
+    "capture_validate_only": true,
+    "real_json_roundtrip": true,
+    "apply_restore": false,
+    "owner_reference_restored": false,
+    "business_item_definitions_validated": false,
+    "global_item_uid_allocator_restored": false,
+    "effects_or_sources_restored": false,
+    "battle_resume_tested": false,
+    "disk_store_integrated": false,
+    "cross_process_resume_tested": false,
+    "performance_acceptance": false
+  },
+  "preparation_history_note": "pins.json, preparation_receipt.json, and README.md retain the original not-yet-run preparation text and bytes. This later summary records actual QA; historical preparation has not been rewritten.",
+  "archive_privacy_boundary": "Only the exact inventory_report.json from this run private_profile is allowed, mapped to runs/<run_id>/report.json. No private_profile directory, other profile files, player saves, project copies, fixtures, cache or engine binaries are included."
+}

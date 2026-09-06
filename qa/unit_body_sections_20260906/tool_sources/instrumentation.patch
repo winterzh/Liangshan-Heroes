@@ -1,0 +1,49 @@
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -1067,7 +1067,22 @@
+ 	return battle != null and battle._lite_fx and not selected and not is_hero and not is_building and not is_resource
+ 
+ 
++const _UnitBodySectionsDiag = preload("res://scratchpad/unit_body_sections_diag/generated/ledger.gd")
++
+ func _phys_body(delta: float) -> void:
++	var __uds_collect: bool = _UnitBodySectionsDiag.active
++	var __uds_started: int = 0
++	var __uds_token: int = -1
++	if __uds_collect:
++		if _UnitBodySectionsDiag.timed: __uds_started = Time.get_ticks_usec()
++		__uds_token = _UnitBodySectionsDiag.begin_body(__uds_started)
++	_unit_body_sections_original(delta)
++	if __uds_collect:
++		var __uds_ended: int = Time.get_ticks_usec() if _UnitBodySectionsDiag.timed else 0
++		_UnitBodySectionsDiag.end_body(__uds_token, __uds_started, __uds_ended)
++
++
++func _unit_body_sections_original(delta: float) -> void:
+ 	if _story_pose_t > 0.0:
+ 		_story_pose_t -= delta
+ 		if _story_pose_t <= 0.0:
+@@ -1117,6 +1132,7 @@
+ 		return
+ 	if garrisoned:
+ 		return   # 驻军中：藏在建筑里，停止一切活动（移动/索敌/动画）
++	_UnitBodySectionsDiag.section(1) # UNIT_BODY_SECTIONS_MARK
+ 	_cd = maxf(0.0, _cd - delta)
+ 	if _flash > 0.0:
+ 		_flash = maxf(0.0, _flash - delta)
+@@ -1301,6 +1317,7 @@
+ 
+ 	# 星际/红警式硬占位兜底：机动单位若被「放」进建筑占地（出生/钩拽/闪现/直点建筑中心），
+ 	# 弹出到占地外沿。寻路层本就把占地当 solid（走不进）；这里只兜传送类落点。10Hz 限流。
++	_UnitBodySectionsDiag.section(2) # UNIT_BODY_SECTIONS_MARK
+ 	_eject_t -= delta
+ 	if _eject_t <= 0.0:
+ 		_eject_t = 0.1
+@@ -1430,6 +1447,7 @@
+ 				_do_garrison(delta)
+ 
+ 	# 动画状态推进：步频随移速，骑兵更快；停下时平滑收势
++	_UnitBodySectionsDiag.section(3) # UNIT_BODY_SECTIONS_MARK
+ 	_move_blend = move_toward(_move_blend, 1.0 if _stepped else 0.0, delta * 6.0)
+ 	_stepped = false
+ 	_idle_t += delta

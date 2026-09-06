@@ -1,0 +1,30 @@
+from pathlib import Path
+import argparse
+import json
+from archive_polish_m2c import Archive, ROOT
+
+parser = argparse.ArgumentParser(description='Archive this completed Unit-body generation, excluding private user data and caches.')
+parser.add_argument('--apply', action='store_true')
+args = parser.parse_args()
+archive = Archive('unit_body_sections_20260906', args.apply)
+base = ROOT / 'scratchpad/unit_body_sections_diag'
+archive.tree(base.relative_to(ROOT), 'tool_sources', tools=True, images=False)
+for name in ['frozen', 'generated', 'reuse_plan']:
+    directory = base / name
+    archive.tree(directory.relative_to(ROOT), 'tool_sources/' + name, recursive=True, tools=True, images=False)
+    # Exact raw/LF text outputs are explicitly included; tree only includes GD/JSON etc.
+    for path in sorted(directory.rglob('*.txt')):
+        archive.add(path.relative_to(ROOT), 'tool_sources/' + name + '/' + path.relative_to(directory).as_posix())
+generation = base / 'generations/20260906T153209698572Z'
+receipt = json.loads((generation / 'receipt.json').read_bytes())
+analysis = json.loads((generation / 'analysis_receipt.json').read_bytes())
+assert receipt['complete'] and receipt['lock_released'] and analysis['both_analysis_valid']
+archive.tree(generation.relative_to(ROOT), 'generation', recursive=True, tools=True, images=False)
+pins = json.loads((base / 'pins.json').read_bytes())
+import hashlib
+for row in pins['source_contract'].values():
+    source = Path(row['frozen_path'])
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == row['raw_sha256']
+    archive.add(source.relative_to(ROOT), 'frozen_source_contract/' + source.name + '.txt')
+archive.add('scratchpad/archive_unit_body_sections.py', 'archive_controller.py.txt')
+print(json.dumps(archive.finish(), ensure_ascii=False))

@@ -1,0 +1,411 @@
+func _phys_body(delta: float) -> void:
+	if _story_pose_t > 0.0:
+		_story_pose_t -= delta
+		if _story_pose_t <= 0.0:
+			art_variant = _pose_previous_variant
+			remove_meta("story_pose")
+			_request_redraw()
+	if story_outcome != "" or is_captive:
+		return
+	_animated_redraw_t = maxf(0.0, _animated_redraw_t - delta)
+	if is_building:
+		if hp <= 0.0:
+			return   # 已被摧毁的建筑：停止一切活动（节点随后由主控释放；自检直接置 hp=0 时也安全）
+		if not is_resource and not is_constructing and hp < max_hp * 0.65:
+			_burn_t += delta   # 受损起火：驱动火苗/浓烟动画（仅受损建筑每帧重绘，常态零开销）
+			_queue_animated_redraw()
+		if not passengers.is_empty():
+			for pg in passengers:   # 驻军缓慢回血（经典RTS式）
+				if is_instance_valid(pg) and pg.hp > 0.0 and pg.hp < pg.max_hp:
+					pg.hp = minf(pg.max_hp, pg.hp + 9.0 * delta)
+		if atk > 0.0 and not is_resource and not is_constructing:
+			_tower_tick(delta)   # 防御塔（箭楼）固定索敌射击
+		if not is_constructing and not _train_queue.is_empty():
+			_production_tick(delta)
+		elif not is_constructing and _research_key != "":
+			_research_t -= delta
+			if _research_t <= 0.0:
+				var rk := _research_key
+				_research_key = ""
+				if battle != null:
+					battle.on_research_done(self, rk)
+		# 建筑/资源点动画时钟：炊烟·资源被采摇晃（建筑物理在此 return，不走下面的 _idle_t）
+		if is_resource or _has_smoke():
+			_idle_t += delta
+			if _harvest_pulse > 0.0:
+				_harvest_pulse = maxf(0.0, _harvest_pulse - delta * 2.0)
+			_queue_animated_redraw()
+		return
+	if _dying:
+		_death_t += delta
+		# A lethal hit sets the same short white flash as any other hit. Death used
+		# to return before the normal decay below, leaving all 1.4 seconds tinted.
+		if _flash > 0.0:
+			_flash = maxf(0.0, _flash - delta)
+		_queue_animated_redraw()
+		if _death_t >= DEATH_DUR:
+			queue_free()
+		return
+	if garrisoned:
+		return   # 驻军中：藏在建筑里，停止一切活动（移动/索敌/动画）
+	_cd = maxf(0.0, _cd - delta)
+	if _flash > 0.0:
+		_flash = maxf(0.0, _flash - delta)
+		_queue_animated_redraw(0.08, _flash <= 0.0)
+
+	# 梁山兵熟悉水泊、补给充足，脱战 6 秒后缓慢回血；官军远征无此待遇
+	_combat_cool = maxf(0.0, _combat_cool - delta)
+	_hit_recent_t = maxf(0.0, _hit_recent_t - delta)
+	var regen := 0.0
+	if faction == FACTION_LIANG and _combat_cool <= 0.0:
+		regen += 2.5
+	var passive_regen := _passive_regen()
+	regen += passive_regen    # 被动回血（如宋江·仁义）：战斗中也生效
+	if regen > 0.0 and hp < max_hp:
+		var hp_before_regen := hp
+		hp = minf(max_hp, hp + regen * delta)
+		# 只把英雄被动产生的份额计入治疗；通用脱战补给不算英雄战绩。
+		if _track_combat_stats and passive_regen > 0.0 and battle != null:
+			var effective_regen := hp - hp_before_regen
+			battle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)
+		_request_redraw()
+
+	# 技能冷却/充能（各槽）与临时增益计时
+	_tick_ability_slots(delta)
+	if inventory != null:
+		inventory.tick(delta)
+	if _temp_atk_t > 0.0:
+		_temp_atk_t -= delta
+		if _temp_atk_t <= 0.0:
+			temp_atk = 1.0
+	if _temp_atk_add_t > 0.0:
+		_temp_atk_add_t -= delta
+		if _temp_atk_add_t <= 0.0:
+			temp_atk_add = 0.0
+	if _temp_speed_t > 0.0:
+		_temp_speed_t -= delta
+		if _temp_speed_t <= 0.0:
+			temp_speed = 1.0
+	if _temp_move_boost_t > 0.0:
+		_temp_move_boost_t -= delta
+		if _temp_move_boost_t <= 0.0:
+			_temp_move_boost = 1.0
+	if _temp_evasion_t > 0.0:
+		_temp_evasion_t -= delta
+		if _temp_evasion_t <= 0.0:
+			_temp_evasion = 0.0
+	if _temp_lifesteal_t > 0.0:
+		_temp_lifesteal_t -= delta
+		if _temp_lifesteal_t <= 0.0:
+			temp_lifesteal = 0.0
+	# 三碗不过岗：醉酒期间周期性重掷移动/攻速倍率（醉态飘忽）
+	if _drunk_t > 0.0:
+		_drunk_t -= delta
+		_drunk_reroll -= delta
+		if _drunk_reroll <= 0.0:
+			_drunk_reroll = 1.4
+			_drunk_move = randf_range(_drunk_lo, _drunk_hi)
+			_drunk_atk = randf_range(_drunk_lo, _drunk_hi)
+			_buff_glow = maxf(_buff_glow, 0.5)
+		if _drunk_t <= 0.0:
+			_drunk_move = 1.0
+			_drunk_atk = 1.0
+	# 醉神：物免倒计时；结束瞬间把期间挡下物理伤害的 50% 转化为回血
+	if _phys_immune_t > 0.0:
+		_phys_immune_t -= delta
+		if _phys_immune_t <= 0.0:
+			if _absorbed_phys > 0.0:
+				heal(_absorbed_phys * 0.5, self)
+				_buff_glow = 1.0
+			_absorbed_phys = 0.0
+			_drunk_god_bonus_per_hit = 0.0
+			_drunk_god_stacks = 0
+	if _stats_mitigation_t > 0.0:
+		_stats_mitigation_t = maxf(0.0, _stats_mitigation_t - delta)
+	if _lin_guard_t > 0.0:
+		_lin_guard_t = maxf(0.0, _lin_guard_t - delta)
+		if _lin_guard_t <= 0.0:
+			_lin_guard_rank = 0
+			_lin_guard_used = false
+	if _lin_spear_t > 0.0:
+		_lin_spear_t = maxf(0.0, _lin_spear_t - delta)
+		if _lin_spear_t <= 0.0:
+			_lin_spear_target_id = 0
+			_lin_spear_stacks = 0
+	# 护甲削减计时
+	if _def_down_t > 0.0:
+		_def_down_t -= delta
+		if _def_down_t <= 0.0:
+			_def_down = 0.0
+	# 致盲计时（武松 E）：期间攻击必失
+	if _blind_t > 0.0:
+		_blind_t -= delta
+	# 概率障目计时（公孙胜 Q）：只影响普攻命中率，离开雨区后很快恢复。
+	if _attack_miss_t > 0.0:
+		_attack_miss_t -= delta
+		if _attack_miss_t <= 0.0:
+			_attack_miss_chance = 0.0
+	# 技能原语计时：护盾 / 沉默 / 临时攻速
+	if _shield_t > 0.0:
+		_shield_t -= delta
+		if _shield_t <= 0.0:
+			_shield = 0.0
+	if _silence_t > 0.0:
+		_silence_t = maxf(0.0, _silence_t - delta)
+	if _root_t > 0.0:
+		_root_t = maxf(0.0, _root_t - delta)
+		_queue_animated_redraw(0.08, _root_t <= 0.0)
+	if _disarm_t > 0.0:
+		_disarm_t = maxf(0.0, _disarm_t - delta)
+		_queue_animated_redraw(0.08, _disarm_t <= 0.0)
+	if _taunt_t > 0.0:
+		_taunt_t = maxf(0.0, _taunt_t - delta)
+		if _taunt_t <= 0.0 or _taunt_src == null or not is_instance_valid(_taunt_src) or _taunt_src.hp <= 0.0:
+			_taunt_t = 0.0
+			_taunt_src = null
+			if _chase_intent == CHASE_FORCED:
+				_chase_intent = CHASE_AUTO
+		_queue_animated_redraw(0.08, _taunt_t <= 0.0)
+	if _channel_t > 0.0:
+		_channel_t = maxf(0.0, _channel_t - delta)
+		_queue_animated_redraw(0.08, _channel_t <= 0.0)
+	if _invis_t > 0.0:
+		_invis_t = maxf(0.0, _invis_t - delta)
+		if _invis_t <= 0.0:
+			modulate.a = 1.0   # 隐身自然结束 → 现形（_stealth_pass 下一帧亦会校正）
+		_queue_animated_redraw(0.08, _invis_t <= 0.0)
+	if _hex_t > 0.0:
+		_hex_t = maxf(0.0, _hex_t - delta)
+		_queue_animated_redraw(0.08, _hex_t <= 0.0)
+	if _form_t > 0.0:
+		_form_t = maxf(0.0, _form_t - delta)
+		if _form_t <= 0.0:
+			_end_form()   # 变身到期 → 还原形态
+		_queue_animated_redraw(0.08, _form_t <= 0.0)
+	if _dmg_amp_t > 0.0:
+		_dmg_amp_t -= delta
+		if _dmg_amp_t <= 0.0:
+			_dmg_amp = 0.0
+	if not _damage_reduction_sources.is_empty():
+		for source_id in _damage_reduction_sources.keys():
+			var state: Dictionary = _damage_reduction_sources[source_id]
+			state["t"] = float(state["t"]) - delta
+			if float(state["t"]) <= 0.0:
+				_damage_reduction_sources.erase(source_id)
+		_refresh_damage_reduction()
+	if _temp_atkspeed_t > 0.0:
+		_temp_atkspeed_t -= delta
+		if _temp_atkspeed_t <= 0.0:
+			temp_atkspeed = 1.0
+	if _attack_speed_slow_t > 0.0:
+		_attack_speed_slow_t -= delta
+		if _attack_speed_slow_t <= 0.0:
+			_attack_speed_slow = 1.0
+	if not _aura_atkspeed_sources.is_empty():
+		for source_id in _aura_atkspeed_sources.keys():
+			var aura_state: Dictionary = _aura_atkspeed_sources[source_id]
+			aura_state["t"] = float(aura_state["t"]) - delta
+			if float(aura_state["t"]) <= 0.0:
+				_aura_atkspeed_sources.erase(source_id)
+		_refresh_aura_atkspeed()
+	# 限时召唤物：寿命到 → 消散
+	if _summon_ttl > 0.0:
+		_summon_ttl -= delta
+		if _summon_ttl <= 0.0 and not _dying and hp > 0.0:
+			_summon_ttl = 0.0
+			if battle != null and battle.has_method("despawn_summon"):
+				battle.despawn_summon(self)
+	if _buff_glow > 0.0:
+		_buff_glow = maxf(0.0, _buff_glow - delta)
+		_queue_animated_redraw(0.08, _buff_glow <= 0.0)
+	if _giveup_t > 0.0:
+		_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标
+	if _blocker_check_t > 0.0:
+		_blocker_check_t = maxf(0.0, _blocker_check_t - delta)
+	if manual_order_t > 0.0:
+		manual_order_t = maxf(0.0, manual_order_t - delta)
+	if mission_order_arrival_t > 0.0:
+		mission_order_arrival_t = maxf(0.0, mission_order_arrival_t - delta)
+		if mission_order_arrival_t <= 0.0:
+			mission_order_target = Vector2.INF
+			mission_order_token = 0
+
+	# 星际/红警式硬占位兜底：机动单位若被「放」进建筑占地（出生/钩拽/闪现/直点建筑中心），
+	# 弹出到占地外沿。寻路层本就把占地当 solid（走不进）；这里只兜传送类落点。10Hz 限流。
+	_eject_t -= delta
+	if _eject_t <= 0.0:
+		_eject_t = 0.1
+		if not is_building and not garrisoned and hp > 0.0 and battle != null:
+			battle.eject_from_buildings(self)
+
+	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned or _target.story_outcome != "" \
+			or _target._invis_t > 0.0 \
+			or (battle != null and battle.has_method("target_visible_to") and not battle.target_visible_to(self, _target))):
+		_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击
+	if _hua_lock_target != null and (not is_instance_valid(_hua_lock_target) or _hua_lock_target.hp <= 0.0 \
+			or _hua_lock_target.garrisoned or _hua_lock_target.story_outcome != "" or _hua_lock_target._invis_t > 0.0):
+		_clear_hua_lock()
+	# 施放其他技能会暂时清掉普通攻击目标；技能结束后若 E 的连珠箭尚未打完，就继续优先射原目标。
+	if _target == null and hua_lock_active() and (battle == null or not battle.has_method("target_visible_to") \
+			or battle.target_visible_to(self, _hua_lock_target)):
+		_begin_attack(_hua_lock_target, false)
+
+	# 引导施法（凌振轰天连炮等）：定身、不索敌/不移动/不普攻，逐 tick 结算由 battle._channel_pass 负责。
+	# 计时递减已在上面 timer 段完成；被眩晕/沉默/拖走时 _break_channel 会清零本状态。
+	if _channel_t > 0.0:
+		_stepped = false
+		_queue_animated_redraw()
+		return
+
+	# 普通施法抬手是正式动作状态：定身、停攻、停索敌；归零后的技能结算由 Battle 下一物理帧完成。
+	if _cast_t > 0.0:
+		_cast_t = maxf(0.0, _cast_t - delta)
+		_stepped = false
+		_queue_animated_redraw(0.08, _cast_t <= 0.0)
+		return
+
+	# 冲锋窗口（李逵 W）：优先于普通状态机。蓄力期原地，冲刺期高速平移撞伤。
+	if _charge_t > 0.0 or _charge_dash > 0.0:
+		_do_charge_step(delta)
+		return
+
+	if _stun_t > 0.0:
+		_stun_t = maxf(0.0, _stun_t - delta)   # 眩晕（踩地板）：呆立，本帧不索敌/不移动/不攻击
+		_queue_animated_redraw(0.08, _stun_t <= 0.0)
+	else:
+		# 嘲讽(taunt)：dur 内强制锁定并攻击 _taunt_src，压过玩家指令与 AI 大脑（仅上面的眩晕能盖过）
+		if _taunt_t > 0.0 and _taunt_src != null and is_instance_valid(_taunt_src) and _taunt_src.hp > 0.0 and _target != _taunt_src:
+			_target = _taunt_src
+			_chase_intent = CHASE_FORCED
+			_state = ST_CHASE
+		match _state:
+			ST_IDLE:
+				if not passive and not is_worker:   # 工人不主动索敌（经典RTS式村民）
+					_acq_t -= delta
+					if _acq_t <= 0.0:
+						_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12
+						_acquire()
+				if _target != null:
+					_chase_intent = CHASE_AUTO
+					if not _has_home:
+						_home = position
+						_has_home = true
+					_repath = 0.0
+					_idle_push_t = 0.0
+					_state = ST_CHASE
+				elif stance == STANCE_DEFEND and _has_home and _amove_dest == Vector2.ZERO and position.distance_to(_home) > 30.0:
+					# A target that escapes/gives up can end a chase directly in idle.
+					# Defensive guards still return home; explicit Stop resets this
+					# anchor and Hold Position never enters this branch.
+					_begin_move(_home)
+				elif faction == FACTION_GUAN and _amove_dest != Vector2.ZERO and battle != null:
+					# 进攻方呆住看门狗：没目标却停在原地超 2.5s → 重新攻击移动压向聚义厅，半路遇我方单位就接着打
+					_idle_push_t += delta
+					if _idle_push_t > 2.5:
+						_idle_push_t = 0.0
+						var hall = battle.main_base(FACTION_LIANG)
+						var dest: Vector2 = hall.position if (hall != null and is_instance_valid(hall)) else _amove_dest
+						order_amove(dest)
+			ST_MOVE:
+				if _follow_path(delta):
+					# 路径提前耗尽但离目的地还远（被挤出路线/跳点吃光路径导致截断）→ 重新寻路续走。
+					# 与 ST_AMOVE 同款兜底；否则半路转 IDLE 被待机索敌勾走，表现为「走一半回头打两下」。
+					if position.distance_to(_move_retry_pos) > 24.0:
+						_move_retry = 0   # 有实际推进 → 重置计数（长途拥挤行军允许多次重寻）
+					if _has_home and position.distance_to(_home) > 70.0 and _move_retry < 3:
+						_move_retry += 1
+						_move_retry_pos = position
+						var mh := _home
+						_begin_move(mh)
+					else:
+						_done_order()
+			ST_AMOVE:
+				if _target == null:
+					# A 移动时收紧索敌半径，但保留足够侧翼宽度；否则往一个方向 A 地板时，
+					# 侧边敌人擦身接敌却没进窄扫描圈，会表现成“接敌但不打”。
+					# 限流 ~8 次/秒：兵海里大量「无目标 A 移动」单位每帧重扫，是索敌开销的最大头。
+					_acq_t -= delta
+					if (battle != null and battle._no_opt) or _acq_t <= 0.0:
+						_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12
+						_acquire(maxf(atk_range + radius + 56.0, 180.0), true)
+				if _target != null:
+					_resume_amove = true
+					_chase_intent = CHASE_AMOVE
+					_repath = 0.0
+					_state = ST_CHASE
+				elif _follow_path(delta):
+					# 路径走完但离目的地还远（被挤出路线/目的地不可达）→ 有限重寻。
+					# 原逻辑会在空路径时每物理帧重跑 A*；末波几个卡墙残兵就能把帧率压垮。
+					var engaged_blocker := position.distance_to(_amove_dest) > 70.0 and _try_attack_path_blocker()
+					if engaged_blocker:
+						pass
+					elif position.distance_to(_move_retry_pos) > 24.0:
+						_move_retry = 0
+					if not engaged_blocker and position.distance_to(_amove_dest) > 70.0 and _move_retry < 3:
+						_move_retry += 1
+						_move_retry_pos = position
+						_begin_amove(_amove_dest)
+					elif not engaged_blocker:
+						_done_order()
+			ST_CHASE:
+				_do_chase(delta)
+			ST_GATHER:
+				_do_gather(delta)
+			ST_RETURN:
+				_do_return(delta)
+			ST_BUILD:
+				_do_build(delta)
+			ST_REPAIR:
+				_do_repair(delta)
+			ST_GARRISON:
+				_do_garrison(delta)
+
+	# 动画状态推进：步频随移速，骑兵更快；停下时平滑收势
+	_move_blend = move_toward(_move_blend, 1.0 if _stepped else 0.0, delta * 6.0)
+	_stepped = false
+	_idle_t += delta
+	if _move_blend > 0.01:
+		var prev := _anim_t
+		# 步频与「实际移速」(含 MOVE_SCALE 减速) 挂钩：腿不再比身体快、不再刨地（原来没乘 MOVE_SCALE→偏快）
+		_anim_t += delta * (13.0 if is_cavalry else 9.5) * MOVE_SCALE * (base_speed / 72.0)
+		# 每半个步频相位 = 一次落脚 → 扬尘
+		if floori(_anim_t / PI) != floori(prev / PI):
+			_spawn_dust()
+		_queue_motion_redraw()
+	if not _dust.is_empty():
+		for d in _dust:
+			d.t -= delta
+		_dust = _dust.filter(func(d): return d.t > 0.0)
+		_request_redraw()
+	if _lunge > 0.0:
+		var prev_l := _lunge
+		_lunge = maxf(0.0, _lunge - delta * _swing_speed)
+		if not _pending_done and prev_l > _hit_at and _lunge <= _hit_at:
+			_deal_hit()
+		_request_redraw()
+	if _flinch != Vector2.ZERO:
+		_flinch = _flinch.move_toward(Vector2.ZERO, delta * 90.0)
+		_queue_animated_redraw(0.08, _flinch == Vector2.ZERO)
+	# 卡死看门狗：移动状态下长时间原地不动 → 强制重新寻路/跳过路点
+	if _state != ST_IDLE:
+		if position.distance_to(_last_pos) < 2.0:
+			_stuck_t += delta
+			if _stuck_t > 1.5:
+				_stuck_t = 0.0
+				match _state:
+					ST_AMOVE:
+						_begin_amove(_amove_dest)
+					ST_MOVE:
+						# 整体重寻而非跳点：跳点会把路径吃光、半路「视为到达」转 IDLE（回头打的引信）
+						if _has_home:
+							var wh := _home
+							_begin_move(wh)
+						else:
+							_path_i = mini(_path_i + 1, _path.size())
+					ST_CHASE, ST_GATHER, ST_RETURN:
+						_repath = 0.0
+		else:
+			_stuck_t = 0.0
+		_last_pos = position
+
+

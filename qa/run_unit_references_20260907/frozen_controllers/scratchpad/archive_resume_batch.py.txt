@@ -1,0 +1,64 @@
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from archive_polish_m2c import Archive, ROOT
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--apply', action='store_true')
+args = parser.parse_args()
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+
+# Inventory is an explicit reviewed plan including exactly one QA report from a
+# private profile. Never recursively traverse that profile.
+plan_path = ROOT/'scratchpad/run_inventory_state/archive_whitelist.json'
+plan_raw = plan_path.read_bytes()
+assert sha(plan_raw) == 'b987435a07ab68124fa7d8edb00847f290e8127b948170f1074f34756fc127bf'
+plan = json.loads(plan_raw)
+seen = set()
+for row in plan['files']:
+    source,target = ROOT/row['source'], ROOT/row['destination']
+    assert ROOT in source.resolve().parents and ROOT in target.resolve().parents
+    assert row['destination'].casefold() not in seen
+    seen.add(row['destination'].casefold())
+    for path in [source,target]+list(source.parents)+list(target.parents):
+        if path.exists():
+            assert not path.is_symlink() and not getattr(path.lstat(),'st_file_attributes',0)&0x400
+    raw = source.read_bytes()
+    assert len(raw)==row['bytes'] and sha(raw)==row['sha256']
+    if target.exists(): assert target.read_bytes()==raw
+for row in plan['files']:
+    target = ROOT/row['destination']
+    if args.apply and not target.exists():
+        target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_bytes((ROOT/row['source']).read_bytes())
+if args.apply:
+    target = ROOT/'qa/run_inventory_values_20260906/integration_plan.json'
+    if target.exists(): assert target.read_bytes()==plan_raw
+    else: target.write_bytes(plan_raw)
+
+refs = Archive('run_unit_references_20260907',args.apply)
+base = ROOT/'scratchpad/run_unit_references'
+receipt = json.loads((base/'runs/20260906T160052202189Z/receipt.json').read_bytes())
+assert receipt['complete'] and receipt['lock_released'] and receipt['checks']==162
+refs.tree(base.relative_to(ROOT), 'draft', tools=True, images=False)
+refs.add((base/'.gdignore').relative_to(ROOT), 'draft/.gdignore')
+for folder in ['runs','fix_default','fix_string_keys']:
+    refs.tree((base/folder).relative_to(ROOT), folder, recursive=True, tools=True, images=False)
+    # Candidate trees are exact small sources, normally excluded by Archive.
+    for path in sorted((base/folder/'candidate').rglob('*')):
+        if path.is_file():
+            assert path.suffix in {'.gd','.txt','.json'}
+            refs.add(path.relative_to(ROOT), folder+'/candidate/'+path.relative_to(base/folder/'candidate').as_posix()+('.txt' if path.suffix=='.gd' else ''))
+pins = json.loads((base/'pins.json').read_bytes())
+for name,row in pins['source_files'].items():
+    source = ROOT/name
+    assert sha(source.read_bytes())==row['raw_sha256']
+    refs.add(name, 'frozen_dependencies/'+name+'.txt')
+for name in ['scratchpad/run_resume_adapters_qa.py','scratchpad/run_resume_adapters_qa.contract.json',
+             'scratchpad/run_resume_adapters_qa.preflight.json','scratchpad/run_unit_state_adapter/run_qa.py',
+             'tools/run_reduced_effects_qa.py','tools/run_polish_performance.py',
+             'scratchpad/apply_unit_refs_diagnostic.py','scratchpad/fix_unit_reference_string_keys.py',
+             'scratchpad/archive_resume_batch.py']:
+    refs.add(name,'frozen_controllers/'+name+'.txt')
+print(json.dumps({'inventory_plan_files':len(plan['files']),'inventory_bytes':plan['total_bytes'],'references':refs.finish(),'applied':args.apply}))

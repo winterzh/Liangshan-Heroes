@@ -1,0 +1,171 @@
+{
+  "base": "4baafc11af55b0e46a57a48e54df181b8c1917a2",
+  "source_origin": "read-only existing separation_sections_diag/frozen files; never live Unit",
+  "unit_raw_variant": {
+    "source_raw_sha256": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+    "source_lf_sha256": "c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec",
+    "result_raw_sha256": "443e082699992d63e1a8f7eb905905ad86a4a63e6b06e5842c06c6a41c61d676",
+    "original_method_raw_sha256": "6e79c478368e5a5be48e3e788b5ba9e6b9aa59e347e40e111cc01be21c7ff9e4",
+    "original_method_lf_sha256": "b79a928df35d1754bb44e0cdbd60450f0cfc175b1f5806ae41f08b2ab72cc839",
+    "original_method_lines": [
+      1070,
+      1480
+    ],
+    "insertions": [
+      {
+        "index": 1,
+        "label": "status_timers",
+        "anchor": "\t_cd = maxf(0.0, _cd - delta)",
+        "original_line": 1120,
+        "inserted_utf8": "\t_UnitBodySectionsDiag.section(1) # UNIT_BODY_SECTIONS_MARK\n"
+      },
+      {
+        "index": 2,
+        "label": "target_state_movement",
+        "anchor": "\t_eject_t -= delta",
+        "original_line": 1304,
+        "inserted_utf8": "\t_UnitBodySectionsDiag.section(2) # UNIT_BODY_SECTIONS_MARK\n"
+      },
+      {
+        "index": 3,
+        "label": "tail_animation_hit_watchdog",
+        "anchor": "\t_move_blend = move_toward(_move_blend, 1.0 if _stepped else 0.0, delta * 6.0)",
+        "original_line": 1433,
+        "inserted_utf8": "\t_UnitBodySectionsDiag.section(3) # UNIT_BODY_SECTIONS_MARK\n"
+      }
+    ],
+    "outer_returns_by_section": [
+      5,
+      0,
+      3,
+      0
+    ],
+    "inverse_restores_every_original_byte": true,
+    "one_original_call_in_wrapper": true,
+    "original_outer_physics_process_unchanged": true
+  },
+  "unit_lf_variant": {
+    "source_raw_sha256": "c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec",
+    "source_lf_sha256": "c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec",
+    "result_raw_sha256": "28df828dadad3102581ec84d1b712925fd8a3e72f8a3047709d8309b7d34796c",
+    "original_method_raw_sha256": "b79a928df35d1754bb44e0cdbd60450f0cfc175b1f5806ae41f08b2ab72cc839",
+    "original_method_lf_sha256": "b79a928df35d1754bb44e0cdbd60450f0cfc175b1f5806ae41f08b2ab72cc839",
+    "original_method_lines": [
+      1070,
+      1480
+    ],
+    "insertions": [
+      {
+        "index": 1,
+        "label": "status_timers",
+        "anchor": "\t_cd = maxf(0.0, _cd - delta)",
+        "original_line": 1120,
+        "inserted_utf8": "\t_UnitBodySectionsDiag.section(1) # UNIT_BODY_SECTIONS_MARK\n"
+      },
+      {
+        "index": 2,
+        "label": "target_state_movement",
+        "anchor": "\t_eject_t -= delta",
+        "original_line": 1304,
+        "inserted_utf8": "\t_UnitBodySectionsDiag.section(2) # UNIT_BODY_SECTIONS_MARK\n"
+      },
+      {
+        "index": 3,
+        "label": "tail_animation_hit_watchdog",
+        "anchor": "\t_move_blend = move_toward(_move_blend, 1.0 if _stepped else 0.0, delta * 6.0)",
+        "original_line": 1433,
+        "inserted_utf8": "\t_UnitBodySectionsDiag.section(3) # UNIT_BODY_SECTIONS_MARK\n"
+      }
+    ],
+    "outer_returns_by_section": [
+      5,
+      0,
+      3,
+      0
+    ],
+    "inverse_restores_every_original_byte": true,
+    "one_original_call_in_wrapper": true,
+    "original_outer_physics_process_unchanged": true
+  },
+  "m1_driver": {
+    "original_run_sha256": "0490d86b0cd7ce4d3069dd6b1c7905b6ee8da0bde9323df9b0e03f85ba7bcc24",
+    "observer_hooks": 5,
+    "inverse_restores_exact_m1_run": true,
+    "setup_warmup_loop_sample_anchors_unchanged": true
+  },
+  "generated_sha256": {
+    "unit_instrumented.raw.gd.txt": "443e082699992d63e1a8f7eb905905ad86a4a63e6b06e5842c06c6a41c61d676",
+    "unit_instrumented.lf.gd.txt": "28df828dadad3102581ec84d1b712925fd8a3e72f8a3047709d8309b7d34796c",
+    "driver.gd": "9a3d0b019d83404396c88b8def35743a01492ad531bf5faffffcac75b4bc4491",
+    "ledger.gd": "eb9a3c1e38e9da184db83e6d6df73bd056788217d2a64e02987cc7fbac12008b",
+    "original_phys_body.gd.txt": "6e79c478368e5a5be48e3e788b5ba9e6b9aa59e347e40e111cc01be21c7ff9e4"
+  },
+  "patch_sha256": "8ca88257a10a2e43b67377a881dc195c3e5b6b29fa5c85d7c1b951d5edf77dd2",
+  "source_contract": {
+    "scripts/battle.gd": {
+      "raw_sha256": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4",
+      "lf_sha256": "784373eede18a82c24fc50a6e36a42b6c20516bf439cf200fe5be7d239db6e2c",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\scripts__battle.gd"
+    },
+    "scripts/unit.gd": {
+      "raw_sha256": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+      "lf_sha256": "c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\scripts__unit.gd"
+    },
+    "scripts/settings.gd": {
+      "raw_sha256": "69f1f361833955731745cc5c4e1448f2822b9fc2bb20cb739c4abf356acf1c75",
+      "lf_sha256": "93ffcc801149744cc9b0eed35b1bfd0769b5f25ac8f80cdbb7865997b5ef646c",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\scripts__settings.gd"
+    },
+    "scripts/campaign.gd": {
+      "raw_sha256": "791f9ba312c2380fabc72fc1c2a377bce4d82dac4ba7ff9f64f1caacaa05808f",
+      "lf_sha256": "922c826c6f49e869a1fdb4bf3702ec3865fca3f8c060b11be06a778d6aa320f2",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\scripts__campaign.gd"
+    },
+    "tools/polish_performance_probe.gd": {
+      "raw_sha256": "04a47115c8cd05670b465086653491466fdae99f6fadf9c41c40379aee0c1407",
+      "lf_sha256": "04a47115c8cd05670b465086653491466fdae99f6fadf9c41c40379aee0c1407",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\tools__polish_performance_probe.gd"
+    },
+    "tools/zhujiazhuang_rts_test.gd": {
+      "raw_sha256": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+      "lf_sha256": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\tools__zhujiazhuang_rts_test.gd"
+    },
+    "tools/run_polish_performance.py": {
+      "raw_sha256": "5d4e3b0295c540af90053d2f953a9189ca1cb2da4276641b4c091cde63c59abc",
+      "lf_sha256": "5d4e3b0295c540af90053d2f953a9189ca1cb2da4276641b4c091cde63c59abc",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\tools__run_polish_performance.py"
+    },
+    "project.godot": {
+      "raw_sha256": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32",
+      "lf_sha256": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\project.godot"
+    },
+    "scripts/crowd_separation.gd": {
+      "raw_sha256": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b",
+      "lf_sha256": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\scripts__crowd_separation.gd"
+    },
+    "scripts/game_map.gd": {
+      "raw_sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+      "lf_sha256": "35a31084088e8665790b9bc940054d05a96f7e995ecfcd28796d2b6fad63800a",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\scripts__game_map.gd"
+    },
+    "scripts/android_updater.gd": {
+      "raw_sha256": "739aae0cd81886292588bda2977971816c0ca035451fbc0be1ebfd924dee48ea",
+      "lf_sha256": "739aae0cd81886292588bda2977971816c0ca035451fbc0be1ebfd924dee48ea",
+      "frozen_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\separation_sections_diag\\frozen\\scripts__android_updater.gd"
+    }
+  },
+  "container_mutation_plan": [
+    "Restore prior separation-instrumented scripts/battle.gd and scripts/crowd_separation.gd to frozen 4baafc1, if that private container is selected",
+    "Replace only exact pinned raw/LF scripts/unit.gd with corresponding instrumented artifact",
+    "Add scratchpad/unit_body_sections_diag/generated/driver.gd and ledger.gd",
+    "Do not modify prior reports/receipts/source manifests, live source, settings, campaign, Art, Sfx, public probes or engine configuration"
+  ],
+  "source_restored_sha256": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+  "godot_run": false,
+  "git_run": false,
+  "live_source_mutated": false
+}

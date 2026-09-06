@@ -1,0 +1,410 @@
+{
+  "schema": 1,
+  "status": "ACTUAL_ENGINE_QA_PASS_CAPTURE_VALIDATE_ONLY",
+  "reviewed_at_utc": "2026-09-06T16:10:49.119800+00:00",
+  "reviewer": "independent bounded offline evidence review",
+  "current_run_id": "20260906T160052202189Z",
+  "actual_engine_qa": {
+    "passed": true,
+    "checks": 162,
+    "source_hash_checks": 12,
+    "other_checks_including_helpers": 150,
+    "check_groups": {
+      "behavior": 61,
+      "environment": 1,
+      "fixture": 31,
+      "json": 18,
+      "rejection": 38,
+      "source": 13
+    },
+    "unique_check_labels": 117,
+    "repeated_helper_labels": {
+      "real JSON parse": 18,
+      "negative fixture decodes original finite tree": 15,
+      "negative fixture encodes finite tree": 15
+    },
+    "key_functional_checks": 12,
+    "key_functional_labels": [
+      "changed Unit source rejected before explicit property access",
+      "actual production Unit remains outside simulation tree",
+      "combined 243 native values and 17 reference/order fields validate",
+      "fixture retains a truly freed Object Variant",
+      "none and truly freed direct reference remain distinct",
+      "mine waiter order and duplicate multiplicity retained",
+      "passenger order and duplicate multiplicity retained",
+      "all seven known order kinds and repeated command order remain exact",
+      "capture/validation/codec does not consume gameplay RNG",
+      "unregistered live direct target cannot become none or expired",
+      "combined capture still enforces frozen value adapter",
+      "no restoration, expiration replay or ObjectID gameplay migration claimed"
+    ],
+    "four_added_key_regressions": [
+      "actual empty Dictionary dot write creates StringName key",
+      "strict codec still rejects dot-created StringName key",
+      "default reference output uses String keys recursively",
+      "all seven order kinds and reference tags use String keys recursively"
+    ],
+    "all_key_and_regression_labels_present_exactly_once": true,
+    "process_id": 42344,
+    "exit_code": 0,
+    "child_exit_confirmed": true,
+    "timed_out": false,
+    "wall_seconds": 4.10899999999674,
+    "engine_version_from_log": "4.6.3.stable.official.7d41c59c4",
+    "engine_raw_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "log_decoding_error": null,
+    "matched_errors": [],
+    "complete": true,
+    "lock_released": true
+  },
+  "history": [
+    {
+      "run_id": "20260906T153930613198Z",
+      "checks": 19,
+      "passed_checks": 18,
+      "failed_checks": 1,
+      "passed": false,
+      "failures": [
+        "default values plus reference layer capture"
+      ],
+      "process_id": 11812,
+      "exit_code": 1,
+      "complete": false,
+      "lock_released": true,
+      "report_raw_sha256": "d166465dc12bbacfe433d2cf798da69127734d3011c2822949f30f96b1128368",
+      "diagnostic_default_capture": null,
+      "original_artifacts_preserved": true
+    },
+    {
+      "run_id": "20260906T155758109217Z",
+      "checks": 19,
+      "passed_checks": 18,
+      "failed_checks": 1,
+      "passed": false,
+      "failures": [
+        "default values plus reference layer capture"
+      ],
+      "process_id": 39892,
+      "exit_code": 1,
+      "complete": false,
+      "lock_released": true,
+      "report_raw_sha256": "0defac0de69b22e71d0223be0aea405092dd1e0fd94fce25a836e5f5caa72b3f",
+      "diagnostic_default_capture": {
+        "code": "CODEC_UNSUPPORTED_TYPE",
+        "field": "",
+        "ok": false,
+        "path": "$/key16",
+        "restore_ready": false,
+        "stage": "default_capture"
+      },
+      "original_artifacts_preserved": true
+    },
+    {
+      "run_id": "20260906T160052202189Z",
+      "checks": 162,
+      "passed_checks": 162,
+      "failed_checks": 0,
+      "passed": true,
+      "failures": [],
+      "process_id": 42344,
+      "exit_code": 0,
+      "complete": true,
+      "lock_released": true,
+      "report_raw_sha256": "77fd54681b80a8264b1bebb7fdb6aa4e121bfd8dd32d1cdb433c1cdfc030c377",
+      "diagnostic_default_capture": {
+        "code": "PARTIAL_UNIT_CAPTURED",
+        "field": "",
+        "ok": true,
+        "path": "",
+        "restore_ready": false,
+        "stage": "default_capture"
+      },
+      "original_artifacts_preserved": true
+    }
+  ],
+  "fix_causality": {
+    "original_code_not_recorded": true,
+    "diagnostic_code": "CODEC_UNSUPPORTED_TYPE",
+    "diagnostic_path": "$/key16",
+    "top_level_key_index16_is_queue_by_fixed_insertion_order": true,
+    "five_new_transport_key_writes": [
+      "pos",
+      "group_cap",
+      "explicit",
+      "target",
+      "_queue"
+    ],
+    "adapter_changed_lines": [
+      116,
+      117,
+      123,
+      126,
+      154
+    ],
+    "before_adapter_raw_sha256": "daadf3dea45a49aadc60b3f9a700c8d20d8f0cb30607da5de0c543391b3864a2",
+    "after_adapter_raw_sha256": "93d6b750c4aa76fc18eafc4dd1321c2dc6ff02728e1ee80f9327300e8f48284b",
+    "five_replacements_plus_one_comment_reconstruct_exact_source": true,
+    "patch_matches_four_file_before_candidate_diffs": true,
+    "sealed_copies_application_and_current_hashes_match": true,
+    "diagnostic_kept_original_assertion_lines": true,
+    "fix_qa_only_adds_lines": true,
+    "strict_codec_changed": false,
+    "old_values_adapter_changed": false,
+    "production_unit_changed": false
+  },
+  "source_and_isolation": {
+    "saved_production_source_manifests_identical_across_three_runs": true,
+    "source_file_count": 2713,
+    "source_combined_sha256": "f12de07498b7074dd1c8fb0edf0bde9bdc5f0dfad5b95d850624b32e2a65fa20",
+    "combined_hash_independently_recomputed_from_saved_rows_directories_presence": true,
+    "full_resource_rehash_by_reviewer": false,
+    "full_pre_post_source_guard_basis": "Frozen controller performs full pre/post equality; each saved run receipt reports source_unchanged=true. Reviewer compared saved manifests and rehashed bounded small pinned source/support files only.",
+    "source_unchanged_recorded": true,
+    "runtime_sources": {
+      "project.godot": "5f60d39f4817f3428c82c29004cc8bd4314e89ef322728c79266ee08dd63793c",
+      "scratchpad/run_unit_references/qa_driver.gd": "7e276ed001d7ab67a48f47112ab816011c4f0b5469b0b421cfcd3fd653c43e36",
+      "scratchpad/run_unit_references/unit_references.gd": "93d6b750c4aa76fc18eafc4dd1321c2dc6ff02728e1ee80f9327300e8f48284b",
+      "scratchpad/run_unit_state_adapter/unit_values.gd": "818ec0912fdb52843538e7a870409995e3c6c387663d31aa4de6247bc9eb1c4c",
+      "scripts/run_state_value_codec.gd": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "scripts/unit.gd": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc"
+    },
+    "runtime_manifest_configuration_report_pins_and_small_current_files_match": true,
+    "controller_contract_raw_sha256": "757f80a7a051253a198b70f76196467ac7ed8d6d71b1091687bdfb1d2df99b97",
+    "controller_raw_sha256": "1e11fe77f7fde4d088c71e4e0cf97c6c3278b4690821baf01cd883e23607d573",
+    "lifecycle_raw_sha256": "ad12b2b4caff9a90d0712031372be6cedb50b869fcc97d2dc02aee11842c7b34",
+    "private_user_verified_equal_to_actual_user_dir": true,
+    "private_user_under_current_run_private_profile": true,
+    "private_environment_keys_set_before_launch": [
+      "APPDATA",
+      "LOCALAPPDATA",
+      "TEMP",
+      "TMP"
+    ],
+    "custom_user_directory_refused_by_guard": true,
+    "real_player_saved_before_after_signatures_equal": true,
+    "player_or_private_profile_content_read_by_reviewer": false,
+    "process_report_pid_equals_owned_child_pid": true,
+    "report_raw_sha256": "77fd54681b80a8264b1bebb7fdb6aa4e121bfd8dd32d1cdb433c1cdfc030c377",
+    "manifest_raw_sha256": "3f9062773f5241cbf3c8469b62cc8644154bcd3e4d312220a4686a2f7d2cde06",
+    "log_raw_sha256": "387cbc30750666b1065e80eb13483d2f3c9c041882e9fc142a240e183c07e7bf"
+  },
+  "coverage": {
+    "business_definition_validated": false,
+    "captured_declared_values": 241,
+    "combined_declared_fields": 258,
+    "declared_fields": 272,
+    "deferred_fields": [
+      "_lin_spear_target_id",
+      "_aura_atkspeed_sources",
+      "_damage_reduction_sources",
+      "_charge_hit",
+      "_chase_last_id",
+      "_giveup_id",
+      "battle",
+      "map",
+      "inventory"
+    ],
+    "direct_reference_fields": 14,
+    "expired_restore_policy_implemented": false,
+    "graph_validated": false,
+    "inherited_values": [
+      "position",
+      "modulate"
+    ],
+    "known_order_queue_fields": 1,
+    "metadata_capture_implemented": false,
+    "omitted_visual_fields": [
+      "_real_frames",
+      "_frame_directional",
+      "_animated_redraw_t",
+      "_queued_redraw_frame",
+      "_dust"
+    ],
+    "ordered_reference_arrays": 2,
+    "references_transport_only": true,
+    "restore_ready": false,
+    "stable_id_gameplay_migrated": false
+  },
+  "boundaries": {
+    "restore_ready": false,
+    "production_integrated": false,
+    "references_transport_only": true,
+    "validation_requires_actual_valid_unit_object_to_stable_string_id_registry": true,
+    "pure_id_registry_supported": false,
+    "stable_id_allocation_or_persistence_implemented": false,
+    "same_pid_replacement_shell_validation_tested": true,
+    "references_assigned_to_replacement_shells": false,
+    "cross_process_id_continuity_tested": false,
+    "battle_resume_tested": false,
+    "metadata_capture_implemented": false,
+    "business_definition_validated": false,
+    "graph_validated": false,
+    "stable_id_gameplay_migrated": false,
+    "expired_restore_policy_implemented": false,
+    "units_entered_simulation_tree": false,
+    "performance_claim": false,
+    "production_acceptance_claim": false
+  },
+  "independent_review": {
+    "accepted": true,
+    "blocking_findings": [],
+    "bounded_condition_count": 102,
+    "conditions_passed": 102,
+    "conditions_failed": 0,
+    "automated_verification_unique_small_input_files": 71,
+    "automated_verification_unique_input_bytes": 3123620,
+    "verification_groups": [
+      "three-run rows/groups/status consistency",
+      "manifest/source/private-user/PID/log linkage",
+      "saved production source equality and combined hashes",
+      "original and diagnostic seals",
+      "exact five-write repair and four-file patch",
+      "applied/current/frozen source identity",
+      "all old QA assertion preservation",
+      "four new regressions and twelve key labels",
+      "162/12/150 counts and duplicate helper labels",
+      "controller lifecycle and public guard source pins",
+      "2713-file saved source receipt metadata",
+      "partial coverage and false boundaries"
+    ],
+    "godot_run_by_reviewer": false,
+    "full_resource_rehash_by_reviewer": false,
+    "tested_sources_modified_by_reviewer": false,
+    "official_docs_or_qa_modified_by_reviewer": false,
+    "review_outputs_only": [
+      "scratchpad/run_unit_references/evidence_review.md",
+      "scratchpad/run_unit_references/current_qa_summary.json"
+    ]
+  },
+  "historical_status_note": "README, field_contract and pins retain their pre-run status strings because they are frozen tested inputs. This additive summary records the subsequent actual QA pass without rewriting failed evidence or granting restore readiness.",
+  "artifact_hashes": {
+    "runs/20260906T153930613198Z/configuration.json": {
+      "bytes": 4244,
+      "raw_sha256": "1600b667da64788c12a00c6120cc2a8daf7471dfe860f695c12215115f5dc6c9"
+    },
+    "runs/20260906T153930613198Z/manifest.json": {
+      "bytes": 1175,
+      "raw_sha256": "daaeb6fa189dd67f5dac8e88321a7547341a7fad43ba1d9fe53aefe1bead742c"
+    },
+    "runs/20260906T153930613198Z/process.log": {
+      "bytes": 115,
+      "raw_sha256": "be023b8adc9ded3c9a3dbb0ec9d8742e9556754e417abe8db2920cc534b953e1"
+    },
+    "runs/20260906T153930613198Z/process_receipt.json": {
+      "bytes": 822,
+      "raw_sha256": "9f26bdc2202e96d9bf11392a9812a8eff1a91e66d7edf8fe37f96801dc2beda2"
+    },
+    "runs/20260906T153930613198Z/receipt.json": {
+      "bytes": 5863,
+      "raw_sha256": "87c380643fe1b43db6c4c72c81facc921464d89351794df6eaf3d0b9aa19da63"
+    },
+    "runs/20260906T153930613198Z/report.json": {
+      "bytes": 4366,
+      "raw_sha256": "d166465dc12bbacfe433d2cf798da69127734d3011c2822949f30f96b1128368"
+    },
+    "runs/20260906T153930613198Z/sources.json": {
+      "bytes": 323765,
+      "raw_sha256": "5353088b41902781546b2e075a8cde7c1437b21b0134a7a379cd6edbce457105"
+    },
+    "runs/20260906T155758109217Z/configuration.json": {
+      "bytes": 4244,
+      "raw_sha256": "babc53684d126a99897350364e28b8531aa79c826e45aad5cb6bbb8aadf9c082"
+    },
+    "runs/20260906T155758109217Z/manifest.json": {
+      "bytes": 1175,
+      "raw_sha256": "8e8d286319475efe19f12ead2f041432f1c53c69fb9e4dd4c95945b5d56603c5"
+    },
+    "runs/20260906T155758109217Z/process.log": {
+      "bytes": 115,
+      "raw_sha256": "be023b8adc9ded3c9a3dbb0ec9d8742e9556754e417abe8db2920cc534b953e1"
+    },
+    "runs/20260906T155758109217Z/process_receipt.json": {
+      "bytes": 822,
+      "raw_sha256": "738837bca0975451fc9955fc98ee8e197f1c66c818f64b9c423d7feb67438467"
+    },
+    "runs/20260906T155758109217Z/receipt.json": {
+      "bytes": 6206,
+      "raw_sha256": "9cf275ad267f0b696058c4587f19107cc9d42fbd8d7b11a76789e0a8420bb0fa"
+    },
+    "runs/20260906T155758109217Z/report.json": {
+      "bytes": 4864,
+      "raw_sha256": "0defac0de69b22e71d0223be0aea405092dd1e0fd94fce25a836e5f5caa72b3f"
+    },
+    "runs/20260906T155758109217Z/sources.json": {
+      "bytes": 323765,
+      "raw_sha256": "5353088b41902781546b2e075a8cde7c1437b21b0134a7a379cd6edbce457105"
+    },
+    "runs/20260906T160052202189Z/configuration.json": {
+      "bytes": 4244,
+      "raw_sha256": "95904d018403219485c38ac8ad6a69673a4e9beb1c259e31a32b05717be2ba1f"
+    },
+    "runs/20260906T160052202189Z/manifest.json": {
+      "bytes": 1175,
+      "raw_sha256": "3f9062773f5241cbf3c8469b62cc8644154bcd3e4d312220a4686a2f7d2cde06"
+    },
+    "runs/20260906T160052202189Z/process.log": {
+      "bytes": 116,
+      "raw_sha256": "387cbc30750666b1065e80eb13483d2f3c9c041882e9fc142a240e183c07e7bf"
+    },
+    "runs/20260906T160052202189Z/process_receipt.json": {
+      "bytes": 821,
+      "raw_sha256": "a0fadbf285e19902e7d96698029c60fcd703d5563b79793ab95ed044b5994882"
+    },
+    "runs/20260906T160052202189Z/receipt.json": {
+      "bytes": 7173,
+      "raw_sha256": "f72f69fde0c5d2a702b7c31fae5ba1807a3ae0d4efcbccf06f32bc1c39b699fc"
+    },
+    "runs/20260906T160052202189Z/report.json": {
+      "bytes": 20783,
+      "raw_sha256": "77fd54681b80a8264b1bebb7fdb6aa4e121bfd8dd32d1cdb433c1cdfc030c377"
+    },
+    "runs/20260906T160052202189Z/sources.json": {
+      "bytes": 323765,
+      "raw_sha256": "5353088b41902781546b2e075a8cde7c1437b21b0134a7a379cd6edbce457105"
+    },
+    "fix_string_keys/changes.patch": {
+      "bytes": 7476,
+      "raw_sha256": "49b33acc25a87a3bc96e0de8accc6e0af88559246d96445147880f0956ac5dc1"
+    },
+    "fix_string_keys/seal.json": {
+      "bytes": 3490,
+      "raw_sha256": "28c07e24a15154b70c9e694f19e1877f67eebe86c1fae2d2d8a27c170db0b90b"
+    },
+    "fix_string_keys/manifest.json": {
+      "bytes": 1298,
+      "raw_sha256": "e5345c644bb1d530c5c428d4da414bd2c53a98ffbbf18203e441488cf6a62a68"
+    },
+    "fix_string_keys/application_receipt.json": {
+      "bytes": 1242,
+      "raw_sha256": "5c05141877ad4dfaace772009b3d6b58a08574d09115aacf7c6deb9d0f0e48c9"
+    },
+    "fix_default/seal.json": {
+      "bytes": 3865,
+      "raw_sha256": "2bd93b0a7f7357e29192ddcb4168bf6646032f447fe989342c44230c4a3ce25c"
+    },
+    "fix_default/application_receipt.json": {
+      "bytes": 1377,
+      "raw_sha256": "b493ab736e71269e53c96086f7629700849d0336ea9137704c04cd2d75887a0d"
+    },
+    "unit_references.gd": {
+      "bytes": 13658,
+      "raw_sha256": "93d6b750c4aa76fc18eafc4dd1321c2dc6ff02728e1ee80f9327300e8f48284b"
+    },
+    "qa_driver.gd": {
+      "bytes": 22289,
+      "raw_sha256": "7e276ed001d7ab67a48f47112ab816011c4f0b5469b0b421cfcd3fd653c43e36"
+    },
+    "pins.json": {
+      "bytes": 4303,
+      "raw_sha256": "c030e51bc286329eafed22230d0c567cfeb299acccf9dd995134bde472feb85d"
+    },
+    "field_contract.json": {
+      "bytes": 5265,
+      "raw_sha256": "371ed953547edc18ee9f8d306ecddabf0e8e1840eedd8beb9f8f83191ad6ecb5"
+    },
+    "evidence_review.md": {
+      "bytes": 5913,
+      "raw_sha256": "bddc2d4e83679850a54ef7565ae49604a7eab3e75519223a2e3d89204da24862"
+    }
+  }
+}

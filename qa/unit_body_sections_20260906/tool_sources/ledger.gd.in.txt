@@ -1,0 +1,179 @@
+extends RefCounted
+## Diagnostic only. No instances, per-unit rows, RNG or measured-loop allocations.
+const STEP_CAP := 8192
+const FRAME_CAP := 32768
+const STEP_WIDTH := 23
+const PRESENT_WIDTH := 7
+const PROCESS_WIDTH := 3
+static var steps := PackedInt64Array()
+static var presents := PackedInt64Array()
+static var processes := PackedInt64Array()
+static var spans := PackedInt64Array()
+static var reaches := PackedInt64Array()
+static var exits := PackedInt64Array()
+static var timed := false
+static var active := false
+static var measuring := false
+static var step_open := false
+static var overflow := false
+static var errors := 0
+static var step_count := 0
+static var present_count := 0
+static var process_count := 0
+static var tick := 0
+static var physics_id := -1
+static var process_id := -1
+static var physics_boundary_us := 0
+static var physics_boundary_id := -1
+static var step_observer_us := 0
+static var step_signal_us := 0
+static var body_starts := 0
+static var body_completions := 0
+static var body_total_us := 0
+static var depth := 0
+static var current_section := -1
+static var last_us := 0
+static var current_token := 0
+static var start_anchor := {}
+static var end_anchor := {}
+static var previous_present_us := 0
+static var previous_step_count := 0
+
+static func prepare(mode: String) -> void:
+	timed = mode == "timed"
+	steps.resize(STEP_CAP * STEP_WIDTH)
+	presents.resize(FRAME_CAP * PRESENT_WIDTH)
+	processes.resize(FRAME_CAP * PROCESS_WIDTH)
+	spans.resize(4); reaches.resize(4); exits.resize(4)
+	active = true
+
+static func physics_boundary() -> void:
+	if not active: return
+	physics_boundary_us = Time.get_ticks_usec()
+	physics_boundary_id = Engine.get_physics_frames()
+
+static func process_boundary() -> void:
+	if not active or not measuring: return
+	if process_count >= FRAME_CAP:
+		overflow = true; return
+	var offset := process_count * PROCESS_WIDTH
+	processes[offset] = Time.get_ticks_usec()
+	processes[offset+1] = Engine.get_process_frames()
+	processes[offset+2] = Engine.get_physics_frames()
+	process_count += 1
+
+static func open_step(m1_tick: int) -> void:
+	if not active: return
+	if step_open or depth != 0 or m1_tick != step_count + 1: errors += 1
+	tick = m1_tick
+	physics_id = Engine.get_physics_frames()
+	process_id = Engine.get_process_frames()
+	step_observer_us = Time.get_ticks_usec()
+	step_signal_us = physics_boundary_us
+	if physics_id != physics_boundary_id: errors += 1
+	body_starts = 0; body_completions = 0; body_total_us = 0
+	spans.fill(0); reaches.fill(0); exits.fill(0)
+	step_open = true
+
+static func begin_body(started_us: int) -> int:
+	depth += 1
+	if not active or not step_open or depth != 1 or Engine.get_physics_frames() != physics_id:
+		errors += 1; return -1
+	body_starts += 1; current_token += 1
+	current_section = 0; last_us = started_us; reaches[0] += 1
+	return current_token
+
+static func section(next_section: int) -> void:
+	if not active: return
+	if not step_open or depth != 1 or next_section != current_section + 1 or next_section > 3:
+		errors += 1; return
+	# One timestamp closes the old span and opens the new one. Bookkeeping below
+	# is charged to the next span; it is not subtracted as an estimated overhead.
+	var now := Time.get_ticks_usec() if timed else 0
+	if timed:
+		if now < last_us: errors += 1
+		spans[current_section] += now - last_us
+	last_us = now; current_section = next_section; reaches[next_section] += 1
+
+static func end_body(token: int, started_us: int, ended_us: int) -> void:
+	# A nested/invalid entry never overwrites the accepted outer section state.
+	if token < 0:
+		depth -= 1; return
+	if depth != 1 or token != current_token or not step_open or current_section < 0 or current_section > 3:
+		errors += 1; depth -= 1; return
+	if timed:
+		if ended_us < last_us or last_us < started_us: errors += 1
+		spans[current_section] += ended_us - last_us
+		body_total_us += ended_us - started_us
+	exits[current_section] += 1; body_completions += 1; depth -= 1
+
+static func close_step(at_presentation: bool) -> void:
+	if not step_open: return
+	step_open = false
+	var collected_id := Engine.get_physics_frames()
+	if collected_id != physics_id + (0 if at_presentation else 1): errors += 1
+	if depth != 0 or body_starts <= 0 or body_starts != body_completions: errors += 1
+	if reaches[0] != body_starts or exits[3] != reaches[3]: errors += 1
+	for index in 3:
+		if reaches[index] - reaches[index+1] != exits[index]: errors += 1
+	# The pinned middle timer section has no outer return statement.
+	if exits[1] != 0: errors += 1
+	var partition := spans[0] + spans[1] + spans[2] + spans[3]
+	if timed and partition != body_total_us: errors += 1
+	if step_count >= STEP_CAP:
+		overflow = true; return
+	var offset := step_count * STEP_WIDTH
+	steps[offset] = tick; steps[offset+1] = physics_id; steps[offset+2] = process_id
+	steps[offset+3] = step_signal_us; steps[offset+4] = step_observer_us
+	steps[offset+5] = collected_id; steps[offset+6] = Time.get_ticks_usec()
+	steps[offset+7] = body_starts; steps[offset+8] = body_completions
+	steps[offset+9] = body_total_us if timed else -1
+	for index in 4:
+		steps[offset+10+index] = spans[index] if timed else -1
+		steps[offset+14+index] = reaches[index]
+		steps[offset+18+index] = exits[index]
+	steps[offset+22] = body_total_us - partition if timed else -1
+	step_count += 1
+
+static func begin_measurement(now: int, m1_tick: int) -> void:
+	close_step(true)
+	start_anchor = {"us":now,"m1_tick":m1_tick,"physics_id":Engine.get_physics_frames(),"process_id":Engine.get_process_frames(),"step_count":step_count}
+	previous_present_us = now; previous_step_count = step_count; measuring = true
+
+static func presented(now: int, m1_tick: int) -> void:
+	close_step(true)
+	if not measuring: errors += 1; return
+	if present_count >= FRAME_CAP:
+		overflow = true; return
+	var offset := present_count * PRESENT_WIDTH
+	presents[offset] = previous_present_us; presents[offset+1] = now
+	presents[offset+2] = Engine.get_process_frames(); presents[offset+3] = Engine.get_physics_frames()
+	presents[offset+4] = m1_tick; presents[offset+5] = previous_step_count; presents[offset+6] = step_count
+	previous_present_us = now; previous_step_count = step_count; present_count += 1
+
+static func end_measurement(now: int, m1_tick: int) -> void:
+	close_step(true)
+	end_anchor = {"us":now,"m1_tick":m1_tick,"physics_id":Engine.get_physics_frames(),"process_id":Engine.get_process_frames(),"step_count":step_count}
+	measuring = false
+
+static func _rows(data: PackedInt64Array, count: int, width: int) -> Array:
+	var output := []
+	for index in range(count):
+		var row := []
+		for column in range(width): row.append(data[index*width+column])
+		output.append(row)
+	return output
+
+static func report() -> Dictionary:
+	return {"schema":1,"timed":timed,"valid":errors==0 and not overflow,"errors":errors,"overflow":overflow,
+		"m1_start":start_anchor,"m1_end":end_anchor,"step_count":step_count,"presentation_count":present_count,
+		"step_columns":["m1_tick","physics_id","process_id","physics_signal_us","observer_us","collection_physics_id","collected_us","body_starts","body_completions","body_total_us","lifecycle_building_death_us","status_timers_us","target_state_movement_us","tail_animation_hit_watchdog_us","reached_lifecycle","reached_status","reached_target","reached_tail","exited_lifecycle","exited_status","exited_target","exited_tail","partition_delta_us"],
+		"steps":_rows(steps,step_count,STEP_WIDTH),
+		"presentation_columns":["start_us","end_us","process_id","physics_id","m1_tick","step_begin_index","step_end_index"],
+		"presentations":_rows(presents,present_count,PRESENT_WIDTH),
+		"process_columns":["signal_us","process_id","physics_id"],"processes":_rows(processes,process_count,PROCESS_WIDTH),
+		"clock":"same Time.get_ticks_usec for physics/process signals, original M1 frame timestamps and body spans",
+		"scope":"Four coarse spans of the complete original Unit._phys_body, aggregated per physics step; original _physics_process story-partner tail excluded",
+		"overhead":"Timed callbacks use 2+reached_boundaries clock reads; start precedes begin bookkeeping, each cut bookkeeping enters its following span, finish bookkeeping is excluded. Both modes retain wrapper/cuts/counters and frame/step clocks. No estimated subtraction.",
+		"clockless_costs":"-1 means unavailable, never zero",
+		"rng_added":false,"extra_nodes":0,"per_unit_rows":false,"acceptance_eligible":false,"performance_claim":false}

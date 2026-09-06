@@ -1,0 +1,37 @@
+import datetime
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+base = ROOT / 'scratchpad/run_unit_references/fix_default'
+sha = lambda data: hashlib.sha256(data).hexdigest()
+manifest = json.loads((base / 'candidate_manifest.json').read_bytes())
+seal_raw = (base / 'seal.json').read_bytes()
+assert sha(seal_raw) == manifest['seal_raw_sha256']
+seal = json.loads(seal_raw)
+assert not (ROOT / '.godot/redraw_rejection_source.lock').exists()
+for group in ['original_files', 'failure_files']:
+    for row in seal[group].values():
+        raw = (ROOT / row['archive']).read_bytes()
+        assert len(raw) == row['bytes'] and sha(raw) == row['raw_sha256']
+for row in manifest['changes']:
+    target, candidate = ROOT / row['target'], ROOT / row['candidate']
+    assert ROOT in target.resolve().parents and ROOT in candidate.resolve().parents
+    for path in [target, candidate] + list(target.parents) + list(candidate.parents):
+        if path.exists():
+            assert not path.is_symlink() and not getattr(path.lstat(), 'st_file_attributes', 0) & 0x400
+    raw = candidate.read_bytes()
+    assert len(raw) == row['after_bytes'] and sha(raw) == row['after_raw_sha256']
+    assert sha(target.read_bytes()) == row['before_raw_sha256']
+assert sha((ROOT / 'scratchpad/run_unit_references/unit_references.gd').read_bytes()) == manifest['unchanged_adapter_raw_sha256']
+assert sha((ROOT / 'scratchpad/run_resume_adapters_qa.py').read_bytes()) == manifest['unchanged_controller_raw_sha256']
+for row in manifest['changes']:
+    target = ROOT / row['target']
+    target.write_bytes((ROOT / row['candidate']).read_bytes())
+    assert sha(target.read_bytes()) == row['after_raw_sha256']
+receipt = {'schema': 1, 'applied_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+           'changes': manifest['changes'], 'seal_verified': True, 'adapter_semantics_changed': False,
+           'original_failure_unchanged': True, 'godot_run': False}
+(base / 'application_receipt.json').write_bytes((json.dumps(receipt, indent=2) + '\n').encode())
+print(json.dumps({'applied': len(manifest['changes']), 'diagnostic_only': True}))

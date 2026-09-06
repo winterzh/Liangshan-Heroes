@@ -1,0 +1,134 @@
+--- a/scratchpad/run_unit_references/unit_references.gd
++++ b/scratchpad/run_unit_references/unit_references.gd
+@@ -113,17 +113,17 @@
+ 			if not _fields(order,["kind","pos","group_cap"]): return _fail("ORDER_FIELDS", path)
+ 			if typeof(order.pos) != TYPE_VECTOR2 or not order.pos.is_finite(): return _fail("ORDER_POSITION", path)
+ 			if typeof(order.group_cap) != TYPE_FLOAT or not is_finite(order.group_cap): return _fail("ORDER_GROUP_CAP", path)
+-			result.pos = order.pos
+-			result.group_cap = order.group_cap
++			result["pos"] = order.pos
++			result["group_cap"] = order.group_cap
+ 		"attack", "gather", "build", "repair", "garrison":
+ 			var names: Array = ["kind","target","explicit"] if order.kind == "attack" else ["kind","target"]
+ 			if not _fields(order, names): return _fail("ORDER_FIELDS", path)
+ 			if order.kind == "attack":
+ 				if typeof(order.explicit) != TYPE_BOOL: return _fail("ORDER_EXPLICIT", path)
+-				result.explicit = order.explicit
++				result["explicit"] = order.explicit
+ 			var tagged: Dictionary = _tag(order.target, registry_or_ids, path+".target") if capturing else _check_tag(order.target, registry_or_ids, path+".target")
+ 			if not tagged.ok: return tagged
+-			result.target = tagged.value if capturing else order.target.duplicate(true)
++			result["target"] = tagged.value if capturing else order.target.duplicate(true)
+ 		_: return _fail("ORDER_KIND", path)
+ 	return {"ok":true,"value":result}
+ 
+@@ -150,7 +150,8 @@
+ 		var checked := _order(values._queue[i], registry_or_ids, capturing, "_queue[%d]" % i)
+ 		if not checked.ok: return checked
+ 		orders.append(checked.value)
+-	result._queue = orders
++	# New transport keys must be String; dot assignment inserts StringName.
++	result["_queue"] = orders
+ 	return {"ok":true,"values":result}
+ 
+ func capture_references(unit, registry: Variant, content_fingerprint: String) -> Dictionary:
+--- a/scratchpad/run_unit_references/qa_driver.gd
++++ b/scratchpad/run_unit_references/qa_driver.gd
+@@ -26,6 +26,14 @@
+ 	# Only transport status, never stringify records, registries or Objects.
+ 	result_evidence.append({"stage":stage,"ok":result.get("ok",false),"code":result.get("code",""),
+ 		"path":result.get("path",""),"field":result.get("field",""),"restore_ready":result.get("restore_ready",false)})
++func _string_keys(value: Variant) -> bool:
++	if typeof(value) == TYPE_DICTIONARY:
++		for key in value:
++			if typeof(key) != TYPE_STRING or not _string_keys(value[key]): return false
++	elif typeof(value) == TYPE_ARRAY:
++		for item in value:
++			if not _string_keys(item): return false
++	return true
+ func _notice(_unit) -> void: callbacks += 1
+ func _story_notice(_unit,_outcome) -> void: callbacks += 1
+ func _unit():
+@@ -60,6 +68,11 @@
+ 	check(not result.ok and result.code == code and not result.has("record") and not result.restore_ready,label,"rejection")
+ 
+ func _cases() -> void:
++	var dot_fixture: Dictionary = {}
++	dot_fixture._queue = []
++	check(typeof(dot_fixture.keys()[0]) == TYPE_STRING_NAME,"actual empty Dictionary dot write creates StringName key","fixture")
++	var dot_rejection: Dictionary = codec.encode(dot_fixture)
++	check(not dot_rejection.ok and dot_rejection.code == "UNSUPPORTED_TYPE" and dot_rejection.path == "$/key0","strict codec still rejects dot-created StringName key","rejection")
+ 	var subject = _unit()
+ 	var target = _unit()
+ 	var corpse = _unit()
+@@ -89,6 +102,7 @@
+ 	_record_result("default_validate",default_validation)
+ 	check(default_validation.ok and default_validation.values.size() == 243 and default_validation.references.size() == 17,"combined 243 native values and 17 reference/order fields validate")
+ 	if not default_validation.ok: return
++	check(_string_keys(default_validation.references),"default reference output uses String keys recursively")
+ 	for field in adapter.DIRECT_FIELDS:
+ 		check(default_validation.references[field] == {"state":"none"},"default none: "+field)
+ 	check(default_validation.references._gold_waiters.is_empty() and default_validation.references.passengers.is_empty() and default_validation.references._queue.is_empty(),"three empty arrays remain empty")
+@@ -143,6 +157,7 @@
+ 	_record_result("mixed_validate",checked)
+ 	check(checked.ok,"values plus references validate after actual JSON parse")
+ 	if not checked.ok: return
++	check(_string_keys(checked.references),"all seven order kinds and reference tags use String keys recursively")
+ 	check(randi() == expected_rng,"capture/validation/codec does not consume gameplay RNG")
+ 	check(callbacks == 0,"capture and validate emit no Unit death/story/appearance signals")
+ 	check(checked.references.story_assist_partner == {"state":"none"} and checked.references._pending_target == {"state":"expired"},"none and truly freed direct reference remain distinct")
+--- a/scratchpad/run_unit_references/pins.json
++++ b/scratchpad/run_unit_references/pins.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": 1,
+-  "status": "DIAGNOSTIC_CANDIDATE_NOT_RUN_ORIGINAL_QA_FAILED_19_CHECKS",
++  "status": "STRING_KEY_FIX_CANDIDATE_NOT_RUN",
+   "source_files": {
+     "scripts/unit.gd": {
+       "bytes": 197790,
+@@ -45,14 +45,14 @@
+       "lf_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+     },
+     "unit_references.gd": {
+-      "bytes": 13570,
+-      "raw_sha256": "daadf3dea45a49aadc60b3f9a700c8d20d8f0cb30607da5de0c543391b3864a2",
+-      "lf_sha256": "daadf3dea45a49aadc60b3f9a700c8d20d8f0cb30607da5de0c543391b3864a2"
++      "bytes": 13658,
++      "raw_sha256": "93d6b750c4aa76fc18eafc4dd1321c2dc6ff02728e1ee80f9327300e8f48284b",
++      "lf_sha256": "93d6b750c4aa76fc18eafc4dd1321c2dc6ff02728e1ee80f9327300e8f48284b"
+     },
+     "qa_driver.gd": {
+-      "bytes": 21355,
+-      "raw_sha256": "5d8fa28414e5a7a3c25df920fda482c76659f99fdddbf0f5016656e919d22994",
+-      "lf_sha256": "5d8fa28414e5a7a3c25df920fda482c76659f99fdddbf0f5016656e919d22994"
++      "bytes": 22289,
++      "raw_sha256": "7e276ed001d7ab67a48f47112ab816011c4f0b5469b0b421cfcd3fd653c43e36",
++      "lf_sha256": "7e276ed001d7ab67a48f47112ab816011c4f0b5469b0b421cfcd3fd653c43e36"
+     },
+     "README.md": {
+       "bytes": 7859,
+@@ -87,5 +87,11 @@
+   "restore_ready": false,
+   "failed_original_run": "scratchpad/run_unit_references/runs/20260906T153930613198Z",
+   "failed_original_report_raw_sha256": "d166465dc12bbacfe433d2cf798da69127734d3011c2822949f30f96b1128368",
+-  "diagnostic_scope": "QA status evidence only; adapter implementation unchanged; original failure remains failed"
++  "diagnostic_scope": "QA status evidence only; adapter implementation unchanged; original failure remains failed",
++  "diagnostic_failure_run": "scratchpad/run_unit_references/runs/20260906T155758109217Z",
++  "diagnostic_failure_code_path": [
++    "CODEC_UNSUPPORTED_TYPE",
++    "$/key16"
++  ],
++  "candidate_scope": "Five explicit String key writes; keep strict codec, values adapter and all original checks unchanged; add four key-type regression assertions."
+ }
+--- a/scratchpad/run_resume_adapters_qa.contract.json
++++ b/scratchpad/run_resume_adapters_qa.contract.json
+@@ -4,7 +4,7 @@
+   "lifecycle_raw_sha256": "ad12b2b4caff9a90d0712031372be6cedb50b869fcc97d2dc02aee11842c7b34",
+   "suites": {
+     "unit-references": {
+-      "pins_raw_sha256": "fee24be85072c3d445c3a7fbfdf1f66d1f43461a35a9e1885ffb105c31d4a46c",
++      "pins_raw_sha256": "c030e51bc286329eafed22230d0c567cfeb299acccf9dd995134bde472feb85d",
+       "entry": "res://scratchpad/run_unit_references/qa_driver.gd"
+     },
+     "inventory": {

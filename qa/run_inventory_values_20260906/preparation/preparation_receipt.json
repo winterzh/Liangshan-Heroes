@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "status": "STATIC_PREPARATION_ONLY",
+  "pins": {
+    "bytes": 2623,
+    "raw_sha256": "659b507d4813f5a9b54058e1645e6bde24233071cc82381815c42de309c8bc78",
+    "lf_sha256": "659b507d4813f5a9b54058e1645e6bde24233071cc82381815c42de309c8bc78"
+  },
+  "checks": [
+    "Exact six Inventory declarations aligned: five explicit values and owner deferred.",
+    "Inventory LF and value codec raw/LF source hashes match frozen constants.",
+    "Adapter has unique methods and exactly one whole-tree encode/decode per respective API.",
+    "Adapter code has no owner read, live assignment, item/gameplay/restore/reflection/RNG/IO calls.",
+    "QA uses actual production Inventory loaded after initialization and real JSON syntax.",
+    "QA startup has no direct Autoload/global HeroInventory/Defs symbols or Variant-derived := locals.",
+    "QA requires exact externally supplied private user path; optional output remains below it."
+  ],
+  "check_count": 7,
+  "limitations": "Static text checks are not a Godot parser or runtime result. Actual check count and engine logs await the root-controlled run.",
+  "godot_runs": 0,
+  "production_writes": 0,
+  "existing_qa_writes": 0,
+  "git_run": false
+}

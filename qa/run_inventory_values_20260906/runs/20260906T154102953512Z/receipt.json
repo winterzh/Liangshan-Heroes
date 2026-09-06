@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "suite": "inventory",
+  "complete": true,
+  "lock_released": true,
+  "godot_run": true,
+  "source_mutations": false,
+  "project_copy": false,
+  "restore_ready": false,
+  "protected_player_before": {
+    "settings": "absent",
+    "campaign": "e53e068321329011e38df0613595f86f64ba2aba4120e5955d321c07ad2f2b60",
+    "screen": "absent"
+  },
+  "controller_contract": {
+    "schema": 1,
+    "controller_raw_sha256": "1e11fe77f7fde4d088c71e4e0cf97c6c3278b4690821baf01cd883e23607d573",
+    "lifecycle_raw_sha256": "ad12b2b4caff9a90d0712031372be6cedb50b869fcc97d2dc02aee11842c7b34",
+    "suites": {
+      "unit-references": {
+        "pins_raw_sha256": "e3f296e5c894547ba0a178903fb79ee0247ec2c45a0d684d4a9afcc06f1b8d37",
+        "entry": "res://scratchpad/run_unit_references/qa_driver.gd"
+      },
+      "inventory": {
+        "pins_raw_sha256": "659b507d4813f5a9b54058e1645e6bde24233071cc82381815c42de309c8bc78",
+        "entry": "res://scratchpad/run_inventory_state/qa_driver.gd"
+      }
+    },
+    "mode": "selected frozen suite; root checkout; new private APPDATA LOCALAPPDATA TEMP TMP; one headless child; shared lock",
+    "default": "read-only frozen source preflight; no Godot process query or launch",
+    "runtime_guards": "current public run_reduced_effects_qa.py plus verified environment source snapshot",
+    "suite_sources_not_relocked": true,
+    "project_copy": false,
+    "godot_run": false,
+    "restore_ready": false
+  },
+  "controller_contract_raw_sha256": "411fd47e474a6a4b1f99ee58fd2ee2efe5269400deb570d36c57873bcf201c8c",
+  "suite_pins": {
+    "schema": 1,
+    "status": "FROZEN_PREPARED_NOT_GODOT_RUN",
+    "runtime_sources": {
+      "scripts/hero_inventory.gd": {
+        "bytes": 11132,
+        "raw_sha256": "1dd9a3b2fec0a5fc1ed2546e7bc842719a60f2cd251897434564702c01419de5",
+        "lf_sha256": "b7fa741fc4a208606d6de724164eda57252aa38800893817d39e279dc429a097"
+      },
+      "scripts/defs.gd": {
+        "bytes": 218233,
+        "raw_sha256": "4cb4fa2288235aff117d7373794f335b5cc5092bf8fad5fd416d0f7dc5c1b155",
+        "lf_sha256": "a2f9a9fe9a669829871c0bcb9fd9295b451e8b9744993deb4f007ab1d80607fb"
+      },
+      "scripts/run_state_value_codec.gd": {
+        "bytes": 12091,
+        "raw_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+        "lf_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+      },
+      "scratchpad/run_inventory_state/inventory_values.gd": {
+        "bytes": 7483,
+        "raw_sha256": "fca23b17fe15e7f8276e76cf06abb7883d56ff39a69d56a51e77c83b26eea85b",
+        "lf_sha256": "fca23b17fe15e7f8276e76cf06abb7883d56ff39a69d56a51e77c83b26eea85b"
+      },
+      "scratchpad/run_inventory_state/qa_driver.gd": {
+        "bytes": 17914,
+        "raw_sha256": "de67e16ac67bd9e1dea269a64196d694fe3eb24e8627f0229575312f9ea72c87",
+        "lf_sha256": "de67e16ac67bd9e1dea269a64196d694fe3eb24e8627f0229575312f9ea72c87"
+      }
+    },
+    "support_files": {
+      ".gdignore": {
+        "bytes": 1,
+        "raw_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+        "lf_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      "README.md": {
+        "bytes": 8051,
+        "raw_sha256": "e2955c5ba5b7bf31b7c255ed4a76d89393703687eed86bf6af82ae3128e6408e",
+        "lf_sha256": "e2955c5ba5b7bf31b7c255ed4a76d89393703687eed86bf6af82ae3128e6408e"
+      }
+    },
+    "inventory_declared_fields": [
+      "owner",
+      "slots",
+      "cooldowns",
+      "proc_cooldowns",
+      "_uid_seq",
+      "_periodic_acc"
+    ],
+    "captured_values": [
+      "slots",
+      "cooldowns",
+      "proc_cooldowns",
+      "_uid_seq",
+      "_periodic_acc"
+    ],
+    "deferred_fields": [
+      "owner"
+    ],
+    "entry": "res://scratchpad/run_inventory_state/qa_driver.gd",
+    "required_environment": [
+      "INVENTORY_QA_EXPECTED_USER_DIR"
+    ],
+    "optional_environment": [
+      "INVENTORY_QA_OUT (new path under private actual user directory)"
+    ],
+    "scope": {
+      "capture_validate_only": true,
+      "apply_restore": false,
+      "business_item_definitions_validated": false,
+      "global_uid_allocator_restored": false,
+      "battle_resume_tested": false
+    },
+    "gdscript_parsed_or_run": false,
+    "new_runner_created": false,
+    "production_modified": false
+  },
+  "lifecycle_raw_sha256": "ad12b2b4caff9a90d0712031372be6cedb50b869fcc97d2dc02aee11842c7b34",
+  "engine_raw_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "process_id": 42016,
+  "exit_code": 0,
+  "source_combined_sha256": "f12de07498b7074dd1c8fb0edf0bde9bdc5f0dfad5b95d850624b32e2a65fa20",
+  "source_files": 2713,
+  "report_path": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\run_inventory_state\\runs\\20260906T154102953512Z\\private_profile\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\inventory_report.json",
+  "report_raw_sha256": "7e1a2095dba83bbd3944743a115e22f1bb7a08baa0570bd8d48435618a679461",
+  "manifest_raw_sha256": "3180197c59b63b67b2a8ef5f5af280cb17a2ec5884e4ef74e7e7a3ca9ff1faa1",
+  "checks": 155,
+  "source_hash_checks": 10,
+  "other_checks": 145,
+  "check_groups": null,
+  "key_functional_checks": 11,
+  "source_unchanged": true,
+  "protected_player_after": {
+    "settings": "absent",
+    "campaign": "e53e068321329011e38df0613595f86f64ba2aba4120e5955d321c07ad2f2b60",
+    "screen": "absent"
+  }
+}
