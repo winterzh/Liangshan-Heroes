@@ -1,0 +1,356 @@
+extends SceneTree
+## One real initialized standard Battle stays as a paused installation fixture.
+## New Unit and Level objects come from JSON. Battle/Map/RNG are NOT restored.
+const VERSION := "standard_level_smoke_v1"
+var checks: Array = []
+var failures: Array = []
+var contexts: Array = []
+var detached_units: Array = []
+var manifest: Dictionary = {}
+var report_path: String = ""
+var manifest_ready: bool = false
+var battle: Variant = null
+var factory: Variant = null
+var graph_factory: Variant = null
+var unit_factory: Variant = null
+var codec: Variant = null
+var unit_script: Script
+var level_script: Script
+var installed_graphs: int = 0
+var full_battles_created: int = 0
+var observations: Dictionary = {}
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	if not passed: failures.append(label)
+	return passed
+
+func _ok(label: String, result: Dictionary) -> bool:
+	checks.append({"label": label, "passed": result.get("ok") == true, "code": result.get("code", ""), "field": result.get("field", "")})
+	if result.get("ok") != true:
+		failures.append(label)
+		return false
+	return true
+
+func _source_guard(label: String) -> void:
+	for path: String in manifest.source_sha256:
+		_check(label + " " + path, FileAccess.get_sha256(path) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for context: Variant in contexts: context.dispose()
+	contexts.clear()
+	for unit: Variant in detached_units:
+		if is_instance_valid(unit) and unit.get_parent() == null: unit.free()
+	if is_instance_valid(battle): battle.queue_free()
+	await process_frame
+	await process_frame
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var report: Dictionary = {"suite": "defense-level", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failures.is_empty() and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failures.size(),
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}), "full_battles_created": full_battles_created,
+		"installed_graphs": installed_graphs, "observations": observations, "battle_resume_tested": false,
+		"scope": "Standard Level and full real Unit graph JSON only. One paused complete Battle/Map/Defs fixture reused, initial start path called once. Wave groups and attack-move intent compared; global RNG, random spawn coordinates, complete Battle and Map recovery not tested. Final wave index and replacement enemy are explicit boundary fixtures, not thirty waves played."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[defense-level QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _configure_standard() -> void:
+	var campaign: Node = root.get_node("Campaign")
+	for key: String in ["skirmish_ai", "arena", "scenario", "custom_defense", "scale_on", "ai_friendly", "defense_random"]:
+		campaign.set(key, false)
+	campaign.set("skirmish", true)
+	campaign.set("defense_waves", 30)
+	campaign.set("defense_hero_cap", 4)
+	root.get_node("Settings").set("auto_micro_level", 0)
+	root.get_node("Settings").set("game_speed", 1.0)
+	AudioServer.set_bus_mute(0, true)
+
+func _snapshot(label: String) -> Dictionary:
+	var registry: Dictionary = {}
+	for index in range(battle.units_root.get_child_count()):
+		registry[battle.units_root.get_child(index)] = str(index + 1)
+	var captured: Dictionary = graph_factory.capture(battle, registry, VERSION)
+	if not _ok(label + " capture full real Unit graph", captured): return {"ok": false}
+	contexts.append(captured.identity)
+	var identity: Variant = captured.identity
+	var level_result: Dictionary = factory.capture(battle.level, VERSION, registry,
+		func(value: Variant) -> Dictionary: return identity.encode_identity("_chase_last_id", value))
+	if not _ok(label + " capture original Level", level_result): return {"ok": false}
+	var wire: Variant = JSON.parse_string(JSON.stringify({"units": captured.value, "level": level_result.record}))
+	var known: Dictionary = {}
+	for entity_id: String in wire.units.root_order: known[entity_id] = true
+	var checked: Dictionary = factory.validate(wire.level, VERSION, known,
+		func(value: Variant) -> Dictionary: return identity.validate_identity("_chase_last_id", value))
+	if not _ok(label + " validate actual JSON", checked): return {"ok": false}
+	return {"ok": true, "wire": wire, "known": known, "identity": identity, "payload": checked.value,
+		"ai_serial_fixture": battle._ai_spawn_serial, "map_fixture": _map_signature(), "gold_fixture": battle.gold, "wood_fixture": battle.wood}
+
+func _map_signature() -> Array:
+	return [battle.map.grid.to_byte_array().hex_encode(), battle.map._block_count.to_byte_array().hex_encode(), battle.map._navigation_revision]
+
+func _install(label: String, snapshot: Dictionary) -> Dictionary:
+	# Prepare while old entities still exist. This function is the explicit test
+	# commit fixture; the Level factory neither deletes nor installs any entities.
+	var prepared: Dictionary = graph_factory.prepare(snapshot.wire.units, VERSION, battle, battle.map)
+	if not _ok(label + " prepare new detached real Unit graph", prepared): return {"ok": false}
+	contexts.append(prepared.identity)
+	detached_units.append_array(prepared.units_in_root_order)
+	var identity: Variant = prepared.identity
+	var restored: Dictionary = factory.restore(snapshot.wire.level, VERSION, prepared.id_to_unit,
+		func(value: Variant) -> Dictionary: return identity.validate_identity("_chase_last_id", value),
+		func(value: Variant) -> Dictionary: return identity.decode_identity("_chase_last_id", value))
+	if not _ok(label + " restore new Level using same pending identity graph", restored): return {"ok": false}
+	var clean_shells: bool = true
+	for unit: Variant in prepared.units_in_root_order:
+		clean_shells = clean_shells and unit.get_script() == unit_script and not unit.is_inside_tree() and unit.get_parent() == null and unit.process_mode == Node.PROCESS_MODE_DISABLED and unit.is_blocking_signals()
+	_check(label + " all new Units remain detached disabled before commit", clean_shells)
+	_check(label + " new hall is a mapped new Unit and no deploy or start occurred", restored.level.get_script() == level_script and restored.level != battle.level and restored.level.hall != battle.level.hall and restored.level.hall == prepared.id_to_unit[snapshot.payload.hall] and not restored.deploy_or_start_called)
+	if not failures.is_empty(): return {"ok": false}
+	identity.release_tombstones()
+	battle.selection.clear()
+	battle._grid.clear()
+	battle.units = []
+	battle.level = null
+	for old: Node in battle.units_root.get_children():
+		old.set_block_signals(true)
+		battle.units_root.remove_child(old)
+		old.free()
+	# Only this root scalar changed while the reference branch spawned enemies.
+	# Restoring it here is fixture reset, not a Level factory responsibility.
+	battle._ai_spawn_serial = snapshot.ai_serial_fixture
+	battle.level = restored.level
+	battle.units = prepared.active_units
+	for unit: Variant in prepared.units_in_root_order:
+		unit.died.connect(battle._on_unit_died)
+		unit.story_resolved.connect(battle._on_unit_story_resolved)
+		battle.units_root.add_child(unit)
+	var activated: bool = true
+	for row: Dictionary in prepared.activation_plan:
+		activated = activated and unit_factory.activate(row.unit, row.activation).get("ok") == true
+	_check(label + " real Units attach and activate under held pause", activated and paused and battle.process_mode == Node.PROCESS_MODE_DISABLED)
+	installed_graphs += 1
+	var recaptured: Dictionary = graph_factory.capture(battle, prepared.object_to_id, VERSION, identity)
+	_check(label + " all JSON Unit values references and inventory survive installation", recaptured.get("ok") == true and recaptured.value == snapshot.wire.units)
+	var recaptured_level: Dictionary = factory.capture(battle.level, VERSION, prepared.object_to_id,
+		func(value: Variant) -> Dictionary: return identity.encode_identity("_chase_last_id", value))
+	_check(label + " Level values and canonical sampling identities recapture exactly", recaptured_level.get("ok") == true and recaptured_level.record == snapshot.wire.level)
+	_check(label + " retained map and resources did not change during installation", _map_signature() == snapshot.map_fixture and battle.gold == snapshot.gold_fixture and battle.wood == snapshot.wood_fixture)
+	return {"ok": failures.is_empty(), "prepared": prepared}
+
+func _wave_observation() -> Dictionary:
+	var counts: Dictionary = {}
+	var intent: bool = true
+	var target: Vector2 = battle.map.cell_to_world(level_script.HALL)
+	for unit: Variant in battle.units:
+		if unit.faction != 1 or unit.hp <= 0.0 or unit.is_building: continue
+		counts[unit.key] = int(counts.get(unit.key, 0)) + 1
+		intent = intent and unit._state == unit_script.ST_AMOVE and unit._amove_dest.distance_to(target) <= 100.0
+	return {"wave": battle.level._wave, "timer": battle.level._wave_t, "counts": counts, "attack_move_intent": intent}
+
+func _bad_record(payload: Dictionary, source_record: Dictionary) -> Dictionary:
+	var record: Dictionary = source_record.duplicate(true)
+	record["payload"] = codec.encode(payload).value
+	return record
+
+func _negative_cases(snapshot: Dictionary) -> void:
+	var identity: Variant = snapshot.identity
+	var validate_id: Callable = func(value: Variant) -> Dictionary: return identity.validate_identity("_chase_last_id", value)
+	var bad: Dictionary = snapshot.payload.duplicate(true)
+	bad.values["_started"] = false
+	_check("unstarted Level rejected", factory.validate(_bad_record(bad, snapshot.wire.level), VERSION, snapshot.known, validate_id).get("code") == "STARTED_STANDARD_RUN_REQUIRED")
+	bad = snapshot.payload.duplicate(true)
+	bad.values._wavelist_cache[0]["t"] = 119.0
+	_check("noncanonical thirty-wave cache rejected", factory.validate(_bad_record(bad, snapshot.wire.level), VERSION, snapshot.known, validate_id).get("code") == "STANDARD_THIRTY_WAVES_REQUIRED")
+	bad = snapshot.payload.duplicate(true)
+	bad.values["_wave_t"] = -0.25
+	_check("invalid partial countdown rejected", factory.validate(_bad_record(bad, snapshot.wire.level), VERSION, snapshot.known, validate_id).get("code") == "WAVE_TIMER_RANGE")
+	bad = snapshot.payload.duplicate(true)
+	bad["hall"] = "999999"
+	_check("unknown hall stable ID rejected", factory.validate(_bad_record(bad, snapshot.wire.level), VERSION, snapshot.known, validate_id).get("code") == "HALL_REFERENCE")
+	bad = snapshot.payload.duplicate(true)
+	bad.values["extra"] = 0
+	_check("unknown Level value rejected", factory.validate(_bad_record(bad, snapshot.wire.level), VERSION, snapshot.known, validate_id).get("code") == "VALUE_FIELDS")
+	_check("trusted version mismatch rejected", factory.validate(snapshot.wire.level, "different_content", snapshot.known, validate_id).get("code") == "CONTENT_VERSION")
+
+func _run() -> void:
+	var path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		await _finish(true)
+		return
+	manifest = data
+	for key: String in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			await _finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		await _finish(true)
+		return
+	for source_path: Variant in manifest.source_sha256:
+		if typeof(source_path) != TYPE_STRING or typeof(manifest.source_sha256[source_path]) != TYPE_STRING:
+			_check("host source entry", false)
+			await _finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		await _finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_check("host disables unrelated smoke item and Steam hooks", OS.get_environment("SMOKE_TEST") == "0" and OS.get_environment("ITEM_TEST") == "0" and OS.get_environment("STEAM_DISABLED") == "1")
+	_source_guard("source before")
+	if not failures.is_empty():
+		await _finish(true)
+		return
+	_configure_standard()
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	unit_script = load("res://scripts/unit.gd")
+	level_script = load("res://scripts/levels/skirmish.gd")
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var inventory_script: Script = load("res://scripts/hero_inventory.gd")
+	var unit_state_script: Script = load("res://scripts/run_unit_state.gd")
+	var identity_script: Script = load("res://scripts/run_graph_identity.gd")
+	var graph_script: Script = load("res://scripts/run_unit_graph.gd")
+	var level_state_script: Script = load("res://scratchpad/run_defense_level_state/level_state.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	codec = codec_script.new()
+	factory = level_state_script.new(codec_script, level_script, unit_script)
+	unit_factory = unit_state_script.new(codec_script, unit_script, inventory_script)
+	graph_factory = graph_script.new(unit_state_script, identity_script, codec_script, unit_script, inventory_script, battle_script, map_script)
+	paused = true
+	var scene: PackedScene = load("res://scenes/main.tscn")
+	battle = scene.instantiate()
+	full_battles_created += 1
+	root.add_child(battle)
+	current_scene = battle
+	await process_frame
+	battle.hud._intro_root.hide()
+	battle._on_intro_done() # Standard auto-start invokes on_start once, source only.
+	battle.process_mode = Node.PROCESS_MODE_DISABLED
+	_check("one actual standard Battle starts canonical thirty waves", battle.economy and battle.level.get_script() == level_script and battle.phase == battle_script.Phase.FIGHT and battle.level._started and battle.level._wave_t == 120.0 and battle.level._wavelist_cache.size() == 30)
+	var workers: Array = []
+	for unit: Variant in battle.units:
+		if unit.is_worker and unit.faction == 0: workers.append(unit)
+	var initial_gather: bool = workers.size() == 5
+	for unit: Variant in workers: initial_gather = initial_gather and unit._state == unit_script.ST_GATHER
+	_check("source start issued actual initial gather orders", initial_gather)
+	if not failures.is_empty():
+		await _finish(true)
+		return
+	workers[0].order_stop() # Real later player command must survive, never re-gather.
+	battle.level.process(battle, 17.25)
+	_check("source countdown advanced without simulating economy", battle.level._wave_t == 102.75 and battle.level._wave == 0 and battle.enemies_alive() == 0 and workers[0]._state == unit_script.ST_IDLE and battle.gold == 250 and battle.wood == 150)
+	var partial: Dictionary = _snapshot("partial")
+	if not partial.ok:
+		await _finish(true)
+		return
+	var stopped_id: String = partial.wire.units.root_order[battle.units_root.get_children().find(workers[0])]
+	_negative_cases(partial)
+	battle.level.process(battle, 102.5)
+	_check("original countdown does not spawn early", battle.level._wave_t == 0.25 and battle.enemies_alive() == 0)
+	battle.level.process(battle, 0.5)
+	var expected: Dictionary = _wave_observation()
+	_check("original process actually spawns the exact first wave", expected.wave == 1 and expected.timer == 32.0 and expected.counts == {"guan_dao": 6, "guan_gong": 3, "siege_cata": 1} and expected.attack_move_intent)
+	if not failures.is_empty():
+		await _finish(true)
+		return
+	var installed: Dictionary = _install("partial", partial)
+	if not installed.ok:
+		await _finish(true)
+		return
+	_check("restore preserves player Stop and does not reissue gather", installed.prepared.id_to_unit[stopped_id]._state == unit_script.ST_IDLE and battle.level._wave_t == 102.75 and battle.enemies_alive() == 0)
+	await process_frame
+	_check("paused installed Level does not advance itself", battle.level._wave_t == 102.75 and battle.enemies_alive() == 0)
+	battle.level.process(battle, 102.5)
+	_check("restored countdown does not spawn early", battle.level._wave_t == 0.25 and battle.enemies_alive() == 0)
+	battle.level.process(battle, 0.5)
+	var actual: Dictionary = _wave_observation()
+	_check("restored original process spawns same groups and next countdown once", actual == expected)
+	battle.level.process(battle, 0.125)
+	_check("post-spawn timer continues without duplicate wave", battle.level._wave == 1 and battle.level._wave_t == 31.875 and battle.enemies_alive() == 10)
+	observations["wave_reference"] = expected
+	observations["wave_restored"] = actual
+	# This sets only the branch boundary, not 30 simulated waves. All sampling
+	# history below is produced by the real Level.process, never fake ticks.
+	battle.level._wave = 30
+	battle.level._wave_t = 0.0
+	battle.level.process(battle, 0.1)
+	battle.level.process(battle, 2.0)
+	battle.level.process(battle, 2.0)
+	battle.level.process(battle, 0.75)
+	_check("actual final sampling reaches quiet four and fractional next tick", battle.level._final_cleanup_quiet == 4.0 and battle.level._final_cleanup_tick == 1.25 and battle.level._final_cleanup_positions.size() == 10 and not battle.level._final_cleanup_active)
+	# Equal-count/equal-health replacement between sampling instants creates a
+	# genuine retired prior-sample ID. Explicit fixture removal, not a death test.
+	var removed: Variant = battle.find_unit("guan_dao")
+	var retired_id: int = removed.get_instance_id()
+	var replace_at: Vector2 = removed.position
+	var replace_hp: float = removed.hp
+	battle.units.erase(removed)
+	battle.units_root.remove_child(removed)
+	removed.free()
+	var replacement: Variant = battle.spawn_unit("guan_dao", 1, replace_at)
+	replacement.hp = replace_hp
+	replacement.order_stop()
+	var final_sample: Dictionary = _snapshot("cleanup")
+	if not final_sample.ok:
+		await _finish(true)
+		return
+	var retired_count: int = 0
+	for row: Dictionary in final_sample.payload.cleanup_positions:
+		if row.target.kind == "retired": retired_count += 1
+	_check("real previous sample retains one retired and nine entity IDs", retired_count == 1 and final_sample.payload.cleanup_positions.size() == 10)
+	var final_bad: Dictionary = final_sample.payload.duplicate(true)
+	final_bad.cleanup_positions.append(final_bad.cleanup_positions[0].duplicate(true))
+	var fi: Variant = final_sample.identity
+	_check("duplicate cleanup identity rejected", factory.validate(_bad_record(final_bad, final_sample.wire.level), VERSION, final_sample.known, func(value: Variant) -> Dictionary: return fi.validate_identity("_chase_last_id", value)).get("code") == "DUPLICATE_POSITION_ID")
+	final_bad = final_sample.payload.duplicate(true)
+	final_bad.cleanup_positions[0]["target"] = "not_a_token"
+	_check("malformed identity is rejected before calling trusted callback", factory.validate(_bad_record(final_bad, final_sample.wire.level), VERSION, final_sample.known, func(_value: Variant) -> Dictionary: return {"ok": true}).get("code") == "POSITION_ID")
+	var false_callback: Callable = func(_value: Variant) -> Variant: return null
+	_check("malformed callback result rejects without runtime cast", factory.validate(final_sample.wire.level, VERSION, final_sample.known, false_callback).get("code") == "IDENTITY_RESULT")
+	battle.level.process(battle, 0.5)
+	_check("reference sampling keeps quiet until remaining tick expires", battle.level._final_cleanup_quiet == 4.0 and battle.level._final_cleanup_tick == 0.75)
+	battle.level.process(battle, 0.75)
+	var expected_quiet: float = battle.level._final_cleanup_quiet
+	_check("reference unchanged population extends quiet without reset", expected_quiet == 6.0 and not battle.level._final_cleanup_active)
+	installed = _install("cleanup", final_sample)
+	if not installed.ok:
+		await _finish(true)
+		return
+	_check("restored sample remaps retired native ID without losing quiet", not battle.level._final_cleanup_positions.has(retired_id) and battle.level._final_cleanup_positions.size() == 10 and battle.level._final_cleanup_quiet == 4.0 and battle.level._final_cleanup_tick == 1.25)
+	battle.level.process(battle, 0.5)
+	_check("restored fractional cleanup tick does not sample early", battle.level._final_cleanup_quiet == 4.0 and battle.level._final_cleanup_tick == 0.75)
+	battle.level.process(battle, 0.75)
+	_check("restored original sample extends the same quiet timer", battle.level._final_cleanup_quiet == expected_quiet and not battle.level._final_cleanup_active)
+	# Position lookup must use new ObjectIDs; otherwise this real movement would
+	# be missed and stale quiet would trigger cleanup on the following sample.
+	var moved: Variant = battle.find_unit("guan_gong")
+	moved.position += Vector2(40.0, 0.0)
+	battle.level.process(battle, 2.0)
+	_check("remapped sample detects actual movement and resets quiet", battle.level._final_cleanup_quiet == 0.0 and not battle.level._final_cleanup_active)
+	for _index in range(3): battle.level.process(battle, 2.0)
+	_check("six quiet seconds do not trigger early cleanup", battle.level._final_cleanup_quiet == 6.0 and not battle.level._final_cleanup_active)
+	battle.level.process(battle, 2.0)
+	var actual_cleanup: bool = true
+	for enemy: Variant in battle.units:
+		if enemy.faction == 1 and enemy.hp > 0.0: actual_cleanup = actual_cleanup and enemy.has_meta("final_cleanup_pos")
+	_check("eight actual quiet seconds invoke real Battle cleanup", battle.level._final_cleanup_quiet == 8.0 and battle.level._final_cleanup_active and actual_cleanup)
+	observations["cleanup"] = {"saved_quiet": 4.0, "saved_tick": 1.25, "reference_next_quiet": expected_quiet, "retired_rows": retired_count, "final_quiet": battle.level._final_cleanup_quiet, "active": battle.level._final_cleanup_active}
+	await _finish()

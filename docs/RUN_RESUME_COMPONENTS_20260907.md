@@ -102,3 +102,17 @@ meteor有序hit使用真实identity目标域entity/retired token，映射新正�
 25组原_zone_pass/_ward_pass与真实Unit _physics_process计时对照证明旧陨石目标不重击、新目标仅一次、地火第10/20步按余程生成、守卫脉冲相位保持，忠旗到期降到仍有效义旗并逐来源TTL清空；空数组不重授。下次真实建桩使用serial6，不复用旧1–5。Unit局部值和既有来源池由夹具独立提供，非完整Unit恢复组合。
 
 MeteorFx/WardFx等既存视觉仍需保存life、t/dur、style及私有动画/随机字段，不能重新_ready生成替代原状态。本批只证明两数组、真实消费者和Unit计时，未验收旧视觉重建、RNG隔离、一般未来实体分配、其余8数组、整局跨进程继续或菜单/PCK。后续标准驻守关卡草稿不在本批；M3整局未完成。
+
+## 第13组件：标准驻守 Level 与完整 Unit 图安装
+
+[run_defense_level_state.gd](../scripts/run_defense_level_state.gd) SHA256 `5cb83ac01cddcdab0865434caa5e0de5ec8e5d1f28a746c657dc745e7ca4aa91`，与原型同字节。覆盖标准skirmish全部12个声明状态：10个值字段（含30波cache）、hall和末波采样身份；只接受已started的经典30波原表。注入可信版本与固定Script，不动态load存档路径、不读源GD或调用_waves/on_start/deploy。
+
+原型 `20260906T203250821538Z`（PID37800）和正式 `20260906T204006999300Z`（PID34732）各253项=200源码前后+53功能/入口，均exit0、完整/源码/玩家保护/锁释放true。每轮100运行源码完整映射，实际入口在manifest中，报告/stdout/PID/user与SHA一致。正式重验同矩阵，不新增场景。
+
+每轮只初始化一个真实Battle，通过原启动下达五工人采集后给一人Stop。剩余102.75秒时保存完整Unit图和Level，经JSON→UnitGraph.prepare→同一开放identity下Level.restore，根夹具再释放旧Unit、连接原died/story回调、按保存顺序挂接激活。完整Unit值/库存/引用与Level回捕一致；Stop不被重发采集覆盖，余时不提前，原process实际生成6刀兵/3弓兵/1投石车并进入下一波32秒，继续推进不重复。
+
+末波显式设置wave30作为边界，未实际打完30波；真实采样保存quiet4/tick1.25。显式移除敌军、实际spawn同位置/血量替代者，旧采样含1retired+9entity；第二次Unit+Level安装保留这些身份与余拍，quiet到点同参考分支增至6，再因真实40px移动归零，真实四拍累计8秒才触发Battle.final_wave_cleanup。该替代不是击杀/奖励验收。
+
+两次安装复用同一个Battle/Map/Defs容器，金木与地图grid/block_count/revision保持；_ai_spawn_serial由夹具保存值回设。全局RNG未迁移/重seed，兵组与攻击移动意图匹配不等于随机坐标/精确路径重演。身份解码途中失败应丢弃私有上下文，全部系统绑定后才释放墓碑；此单层结果不能代替完整根事务。
+
+[归档](../qa/run_defense_level_20260907/README.md)保留原pins/preparation/README及晋级脚本。正式pins的driver字节数仍为原型22,071，实际22,056；其rawSHA及运行manifest正确，source index按实际值记录并单列描述差异，不将整轮改为失败。未测试Battle/地图整体恢复、全部效果与既存视觉、退出重启、菜单/磁盘/PCK；权威数组仍9/17，施法流程候选与后续RNG工作未计入，本批后M3整局仍未完成。

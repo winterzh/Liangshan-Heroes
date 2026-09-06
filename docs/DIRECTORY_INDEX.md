@@ -1,3 +1,9 @@
+## 2026-09-07 标准驻守关卡恢复及证据
+
+- `scripts/run_defense_level_state.gd`：第13恢复组件，已启动经典30波skirmish的12声明状态；hall/末波采样接共享Unit身份图。
+- `qa/run_defense_level_20260907/`：原型/正式各253项、各100运行源码映射，原始收据/日志/摘要、模块/driver/runner/pins及晋级脚本来源；精确复用旧Battle/Map等字节。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)区分同Battle容器内两次Unit+Level安装与完整Battle恢复；记录首波/末波实证及正式pins字节数描述差异，不含私有profile/PCK/玩家内容。
+
 ## 2026-09-07 陨石与守卫模块及证据
 
 - `scripts/run_meteor_wards_state.gd`：第12恢复组件，只含meteor/wards；命中身份走目标域，根负责精确ward_serial与Unit来源池。

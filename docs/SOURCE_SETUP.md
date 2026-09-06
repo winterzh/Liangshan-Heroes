@@ -1,3 +1,9 @@
+## 2026-09-07 标准30波关卡恢复复现
+
+新增 `scripts/run_defense_level_state.gd`，只接受已启动经典30波原表；原型及正式各253项同矩阵通过。[归档](../qa/run_defense_level_20260907/README.md)按两轮各100源码映射保留driver/runner/pins、原准备文档与promote_defense_level.py，旧依赖按SHA复用。正式pins的driver bytes未从22,071更新为实际22,056，但固定SHA和真实入口均正确；原文保留，source index使用实际字节数。
+
+独立完整相容checkout按source index恢复缺失忽略路径；已有文件只核对、不覆盖。入口 `python scratchpad/run_defense_level_production_qa/run_smoke.py --godot "<实际Godot路径>"`，不带 `--run` 仅预检，实际执行追加 `--run`，保持共同锁、新私有用户目录及新run。外层先UnitGraph.prepare，再以同一开放identity恢复Level，全部图完成后统一释放墓碑、安装/启用；不调用on_start/deploy重建。正常游戏入口不变，本实测保留既有Battle/Map，不是磁盘/退出重启续玩。
+
 ## 2026-09-07 陨石与守卫复现
 
 新增第12恢复模块 `scripts/run_meteor_wards_state.gd`，原型与正式路径各54项同矩阵通过。[归档](../qa/run_meteor_wards_20260907/README.md)保留两轮原文、模块/driver/runner、准备README及精确复用依赖；实际绑定需要真实identity目标域、已恢复的根ward_serial及Unit来源池，任何bind失败丢弃整份私有事务，全图绑定后统一释放墓碑。

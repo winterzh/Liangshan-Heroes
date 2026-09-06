@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "formal_component_ordinal": 13,
+  "module_sha256": "5cb83ac01cddcdab0865434caa5e0de5ec8e5d1f28a746c657dc745e7ca4aa91",
+  "runs": [
+    {
+      "run_id": "20260906T203250821538Z",
+      "kind": "prototype",
+      "suite": "defense-level",
+      "complete": true,
+      "process_id": 37800,
+      "exit_code": 0,
+      "check_count": 253,
+      "source_before_after_checks": 200,
+      "other_checks": 53,
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "child_exit_confirmed": true,
+      "report_sha256": "cc0865f4042a04c33abc3ca112c15a67201713ce25c3cfb58db7d0888dc5c056",
+      "full_source_file_count": 2869,
+      "full_battles_created": 1,
+      "installed_graphs": 2,
+      "scope": "Standard Level and full real Unit graph JSON only. One paused complete Battle/Map/Defs fixture reused, initial start path called once. Wave groups and attack-move intent compared; global RNG, random spawn coordinates, complete Battle and Map recovery not tested. Final wave index and replacement enemy are explicit boundary fixtures, not thirty waves played.",
+      "observations": {
+        "cleanup": {
+          "active": true,
+          "final_quiet": 8.0,
+          "reference_next_quiet": 6.0,
+          "retired_rows": 1,
+          "saved_quiet": 4.0,
+          "saved_tick": 1.25
+        },
+        "wave_reference": {
+          "attack_move_intent": true,
+          "counts": {
+            "guan_dao": 6,
+            "guan_gong": 3,
+            "siege_cata": 1
+          },
+          "timer": 32.0,
+          "wave": 1
+        },
+        "wave_restored": {
+          "attack_move_intent": true,
+          "counts": {
+            "guan_dao": 6,
+            "guan_gong": 3,
+            "siege_cata": 1
+          },
+          "timer": 32.0,
+          "wave": 1
+        }
+      }
+    },
+    {
+      "run_id": "20260906T204006999300Z",
+      "kind": "formal_path",
+      "suite": "defense-level",
+      "complete": true,
+      "process_id": 34732,
+      "exit_code": 0,
+      "check_count": 253,
+      "source_before_after_checks": 200,
+      "other_checks": 53,
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "child_exit_confirmed": true,
+      "report_sha256": "821d4b9159247e077e678cba6b3a980976b9fa3ddbb82e1ac362e3281974cbc3",
+      "full_source_file_count": 2870,
+      "full_battles_created": 1,
+      "installed_graphs": 2,
+      "scope": "Standard Level and full real Unit graph JSON only. One paused complete Battle/Map/Defs fixture reused, initial start path called once. Wave groups and attack-move intent compared; global RNG, random spawn coordinates, complete Battle and Map recovery not tested. Final wave index and replacement enemy are explicit boundary fixtures, not thirty waves played.",
+      "observations": {
+        "cleanup": {
+          "active": true,
+          "final_quiet": 8.0,
+          "reference_next_quiet": 6.0,
+          "retired_rows": 1,
+          "saved_quiet": 4.0,
+          "saved_tick": 1.25
+        },
+        "wave_reference": {
+          "attack_move_intent": true,
+          "counts": {
+            "guan_dao": 6,
+            "guan_gong": 3,
+            "siege_cata": 1
+          },
+          "timer": 32.0,
+          "wave": 1
+        },
+        "wave_restored": {
+          "attack_move_intent": true,
+          "counts": {
+            "guan_dao": 6,
+            "guan_gong": 3,
+            "siege_cata": 1
+          },
+          "timer": 32.0,
+          "wave": 1
+        }
+      }
+    }
+  ],
+  "same_suite_repeated_through_formal_path": true,
+  "level_declared_fields_covered": 12,
+  "canonical_started_thirty_wave_only": true,
+  "full_battle_containers_per_run": 1,
+  "new_unit_graph_and_level_installations_per_run": 2,
+  "battle_map_defs_container_retained": true,
+  "map_and_economy_unchanged_during_install": true,
+  "global_rng_reseeded_or_restored": false,
+  "random_spawn_coordinate_equivalence_tested": false,
+  "final_wave_index_explicit_fixture": true,
+  "thirty_waves_actually_played": false,
+  "retired_sampling_id_tested": true,
+  "real_movement_resets_quiet_tested": true,
+  "real_eight_second_cleanup_tested": true,
+  "complete_battle_resume_tested": false,
+  "complete_map_restore_tested": false,
+  "exit_restart_continuation_tested": false,
+  "pck_export_tested": false,
+  "menu_continue_tested": false,
+  "unrun_cast_flow_and_later_rng_work_excluded": true,
+  "original_pins_byte_count_discrepancies": [
+    {
+      "run_id": "20260906T204006999300Z",
+      "source_path": "scratchpad/run_defense_level_production_qa/driver.gd",
+      "original_pins_bytes": 22071,
+      "actual_bytes": 22056,
+      "actual_sha256": "b7519b6c2a55e4991b536ff21fdd724525eeba76f7342b4cac3621db785e7f0f",
+      "classification": "stale descriptive byte count only; runtime SHA and execution identity match",
+      "historical_pins_preserved": true
+    }
+  ]
+}
