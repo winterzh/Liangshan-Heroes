@@ -1,3 +1,11 @@
+## 2026-09-06 持续打磨首批
+
+- `docs/POLISH_ROADMAP_20260906.md`：完整路线、指标、当前里程碑及持续目标结束条件。
+- `docs/POLISH_BASELINE_20260906.md`、`qa/polish_baseline_20260906/`：测试入口修复、15个60秒基线、原始分段/图像/日志和失败记录；QA目录排除Godot扫描。
+- `docs/PLAYTEST_CHECKLIST_20260906.md`：至少三名首次玩家、八关、驻守、续玩、动作和两电脑验收，真人结果全部待测。
+- `tools/run_polish_performance.py`、`tools/polish_performance_probe.gd`：串行真实渲染、来源与环境受控的统计采样。
+- `tools/analyze_polish_performance.py`：全部10秒墙钟分段诊断；临时输出位于忽略目录 `.godot/polish_performance/`。
+
 ## 2026-09-06 Steam Windows 更新证据
 
 - `docs/STEAM_UPDATE_20260906.md`：PR合并、冻结源、包身份、验证范围与Steam实际状态入口。

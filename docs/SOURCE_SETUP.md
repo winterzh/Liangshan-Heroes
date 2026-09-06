@@ -1,3 +1,9 @@
+## 2026-09-06 持续打磨与性能测量
+
+完整后续路线已保存到[POLISH_ROADMAP](POLISH_ROADMAP_20260906.md)。本批新增 `tools/run_polish_performance.py` 与 `tools/polish_performance_probe.gd`：Python3.9以上标准库，Godot仍从 `--godot`、`GODOT_PATH` 或本机忽略的 `godot.local.txt` 提供。真实渲染串行运行，每组至少3次60秒；输出在 `.godot/polish_performance/`，不能边测边改源或并发运行Godot。
+
+`python tools/run_polish_performance.py --cases economy defense200 zhu_contact gao_contact --camera fixed --repeats 3 --seconds 60`；自动镜头另用 `--cases defense200 --camera auto`。分段诊断：`python tools/analyze_polish_performance.py <输出目录>`。短预检必须显式 `--allow-short`，不算正式基线。详细条件、旧入口修复、未达性能门槛及15个窗口证据见[本批说明](POLISH_BASELINE_20260906.md)。普通Play.cmd启动不变。
+
 ## 2026-09-06 Steam公告交接
 
 当前default仍为Build25149197；对应[更新公告](UPDATE_ANNOUNCEMENT_20260906.md)已公开发布，事件708907988310558226。qa/steam_update_20260906/announcement_receipt.json记录发布、语言和关联构建，PUBLISH_STATUS.json已同步公告状态。源码启动和本机Godot配置不变，接续开发时保留这份交接记录。

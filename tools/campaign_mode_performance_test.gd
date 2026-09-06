@@ -1,6 +1,8 @@
 extends SceneTree
 ## Modes are checked in a headless process. Performance requires an actual renderer.
-## Performance fixtures invoke authored stage deployment; they are not playthrough evidence.
+## Performance fixtures use current RTS deployments and actual combat orders.
+## Zhu gets labelled ordinary reinforcements; Gao's first existing wave is sent
+## early. Neither fixture is a paid-production or complete playthrough test.
 const CAMPAIGN_KIT := ["mengzhou_punch","mengzhou_step","mengzhou_kick","mengzhou_breath"]
 const ARENA_KIT := ["wu_tigers","wu_wine","wu_blades","wu_drunkgod"]
 const DIRECTIONS := ["se","sw","ne","nw"]
@@ -22,6 +24,7 @@ func _save_hash() -> String:
 func _start(id: String, arena := false):
 	var c = root.get_node("Campaign")
 	c.arena=arena; c.skirmish=false; c.skirmish_ai=false; c.custom_defense=false; c.scenario=false
+	c.scale_on=false; c.ai_friendly=false
 	c.current=c.index_for_id(id)
 	seed(5088120)
 	var b=load("res://scenes/main.tscn").instantiate()
@@ -64,7 +67,7 @@ func _check_land_move(b,u,label: String) -> void:
 	for point in u._path:
 		path_valid=path_valid and b.map.is_open_world(point,"land")
 	for i in range(150):
-		await process_frame
+		await physics_frame
 		if u.position.distance_to(start)>35.0: break
 	check(u.movement_profile=="land" and path_valid and u.position.distance_to(start)>20.0 and b.map.is_open_world(u.position,"land"),label+" actual land movement")
 	u.order_stop()
@@ -117,18 +120,104 @@ func _counts(b) -> Dictionary:
 	var active := 0
 	var shown := 0
 	var in_view := 0
+	var attacking := 0
 	for u in b.units:
 		if not is_instance_valid(u): continue
 		total+=1
 		if u.hp>0 and u.story_outcome=="" and not u.is_building and not u.is_resource:
 			active+=1
+			if u._lunge>0.0: attacking+=1 # Both melee and ranged attacks use the production swing window.
 			if u.visible and u.is_visible_in_tree(): shown+=1
 			if u.visible and u.is_visible_in_tree() and b.unit_visual_active(u.position): in_view+=1
-	return {"scene_units":total,"active_units":active,"visible_nodes":shown,"in_camera_activity_region":in_view}
+	return {"scene_units":total,"active_units":active,"visible_nodes":shown,"in_camera_activity_region":in_view,"attacking_units":attacking}
 func _camera(b,cell: Vector2i,zoom: float) -> void:
 	b.camera.set_process(false)
+	b.camera.set_process_unhandled_input(false)
+	b.camera._user_input_t=1.0e12
+	b.camera.offset=Vector2.ZERO; b.camera.rotation=0.0; b.camera._shake=0.0
 	b.camera.position=b.to_screen(b.map.cell_to_world(cell)); b.camera.zoom=Vector2.ONE*zoom
 	b.camera.force_update_scroll()
+
+func _combatant(u) -> bool:
+	return is_instance_valid(u) and u.hp>0.0 and u.story_outcome=="" and not u.is_building and not u.is_resource and not u.is_worker and not u.is_noncombat
+
+func _injured(group: Array) -> bool:
+	return group.any(func(u): return is_instance_valid(u) and u.hp<u.max_hp)
+
+func _injured_near(group: Array,point: Vector2,radius: float) -> bool:
+	return group.any(func(u): return is_instance_valid(u) and u.hp<u.max_hp and u.position.distance_to(point)<=radius)
+
+func _fixture_order(b,army: Array,cell: Vector2i) -> void:
+	b.select_members(army,false)
+	b.minimap_order(b.map.cell_to_world(cell),true)
+
+func _prepare_zhu(b) -> bool:
+	var current_level: bool=b.level.get_script().resource_path.ends_with("level3_zhujiazhuang_rts.gd")
+	check(current_level,"Zhu fixture enters current persistent RTS chapter")
+	if not current_level: return false
+	var initial: Dictionary=_counts(b)
+	# Keep the defeat-critical commander at the authored camp. The old fixture
+	# sent Song Jiang alone ahead of the formation and ended during the window.
+	var commander_origin: Vector2=b.level.song.position
+	b.level.song.order_hold_position()
+	var army: Array=b.units.filter(func(u): return _combatant(u) and u.faction==0 and u.key!="song_jiang")
+	var reinforcement_cells: Array=[]
+	for i in range(20):
+		var cell: Vector2i=b.map.nearest_open(b.level.MAIN_GATE+Vector2i(5+i%4,-3+i/4),"land")
+		var u=b.spawn_at("liang_gong" if i%3==2 else "liang_qiang",0,cell)
+		army.append(u)
+		reinforcement_cells.append([u.key,cell.x,cell.y])
+	var gate_hp: float=b.level.gate.hp
+	var gate_point: Vector2=b.level.gate.position
+	_fixture_order(b,army,b.level.MAIN_GATE)
+	Engine.time_scale=4.0
+	var deadline:=Time.get_ticks_msec()+60000
+	while b.phase==b.Phase.FIGHT and Time.get_ticks_msec()<deadline:
+		if _injured_near(army,gate_point,240.0) or not is_instance_valid(b.level.gate) or b.level.gate.hp<gate_hp: break
+		await physics_frame
+	Engine.time_scale=1.0
+	var contacted: bool=_injured_near(army,gate_point,240.0) or not is_instance_valid(b.level.gate) or b.level.gate.hp<gate_hp
+	var ready: bool=contacted and b.phase==b.Phase.FIGHT
+	report["zhu_rts_fixture"]={"scope":"current authored combat troops plus 20 explicitly spawned ordinary reinforcements attack main gate; Song Jiang holds at camp; live enemies, economy and damage; not paid production or a complete route",
+		"level_script":b.level.get_script().resource_path,"initial":initial,"at_contact":_counts(b),
+		"contact_seen":contacted,"phase":int(b.phase),"stage":b.level.stage,"setup_time_scale":4.0,"ready":ready,
+		"ordinary_reinforcement_cells":reinforcement_cells,"commander_hold_position":[commander_origin.x,commander_origin.y],
+		"gate_hp_before":gate_hp,"gate_hp_at_contact":b.level.gate.hp if is_instance_valid(b.level.gate) else 0.0,
+		"army_at_contact":army.filter(func(u): return is_instance_valid(u)).map(func(u): return {"key":u.key,"hp":u.hp,"max_hp":u.max_hp,"distance_to_gate":u.position.distance_to(gate_point)})}
+	check(ready,"Zhu ordinary reinforcement fixture reaches actual gate combat before sample")
+	return ready
+
+func _prepare_gao(b) -> bool:
+	var current_level: bool=b.level.get_script().resource_path.ends_with("level5_gao_rts.gd")
+	check(current_level,"Gao fixture enters current persistent RTS chapter")
+	if not current_level: return false
+	var initial: Dictionary=_counts(b)
+	var land: Array=b.units.filter(func(u): return _combatant(u) and u.faction==0 and u.movement_profile=="land" and u.key!="song_jiang")
+	var water: Array=b.units.filter(func(u): return _combatant(u) and u.faction==0 and u.movement_profile=="water" and u.key!="liu_tang_fireboat")
+	_fixture_order(b,land,b.level.LAND_FRONT)
+	_fixture_order(b,water,b.level.SEA_FRONT)
+	# Current authoring already deploys all expeditions. Dispatch the first one
+	# early without creating units, changing prices, pausing AI or bypassing damage.
+	b.level._send_wave(b,0)
+	var observed_land: Array=land+b.level.land_groups[0]
+	var observed_water: Array=water+b.level.water_groups[0]
+	Engine.time_scale=4.0
+	var deadline:=Time.get_ticks_msec()+60000
+	var land_contact := false
+	var water_contact := false
+	while b.phase==b.Phase.FIGHT and Time.get_ticks_msec()<deadline:
+		land_contact=land_contact or _injured(observed_land)
+		water_contact=water_contact or _injured(observed_water)
+		if land_contact and water_contact: break
+		await physics_frame
+	Engine.time_scale=1.0
+	var ready: bool=land_contact and water_contact and b.phase==b.Phase.FIGHT
+	report["gao_rts_fixture"]={"scope":"first authored existing expedition dispatched early with _send_wave; player armies attack-move to both fronts; not natural wave timing or a complete route",
+		"level_script":b.level.get_script().resource_path,"initial":initial,"at_contact":_counts(b),
+		"land_contact_seen":land_contact,"water_contact_seen":water_contact,"phase":int(b.phase),
+		"first_wave_sent":b.level.waves[0].sent,"elapsed_simulation_seconds":b.level.elapsed,"setup_time_scale":4.0,"ready":ready}
+	check(ready,"Gao current land and water forces both reach actual combat before sample")
+	return ready
 func _report_p95(report_path: String, label: String) -> float:
 	if report_path.is_empty(): return -1.0
 	var path := report_path
@@ -160,6 +249,7 @@ func _sample(b,label: String) -> void:
 	var intervals: Array[float]=[]
 	var draw_calls: Array[float]=[]
 	var ended_during_sample := false
+	var attacking_frames := 0
 	var start := Time.get_ticks_usec()
 	var previous := start
 	while Time.get_ticks_usec()-start<10000000:
@@ -168,7 +258,9 @@ func _sample(b,label: String) -> void:
 		intervals.append(float(now-previous)/1000.0)
 		previous=now
 		draw_calls.append(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
-		var count: int=_counts(b).active_units
+		var frame_counts: Dictionary=_counts(b)
+		var count: int=frame_counts.active_units
+		if frame_counts.attacking_units>0: attacking_frames+=1
 		highest=maxi(highest,count); lowest=mini(lowest,count)
 		ended_during_sample=ended_during_sample or b.phase!=b.Phase.FIGHT
 	var sorted: Array=intervals.duplicate(); sorted.sort()
@@ -179,7 +271,7 @@ func _sample(b,label: String) -> void:
 	var shadow_off_p95 := _shadow_off_p95(label)
 	var shadow_module=load("res://scripts/world_shadow.gd")
 	var result={"label":label,"headless":false,"viewport":str(root.size),"wall_seconds":float(previous-start)/1000000.0,
-		"frames":intervals.size(),"initial":initial,"final":_counts(b),"active_peak":highest,"active_min":lowest,
+		"frames":intervals.size(),"initial":initial,"final":_counts(b),"active_peak":highest,"active_min":lowest,"frames_with_attacking_units":attacking_frames,
 		"average_frame_ms":mean,"p95_frame_ms":p95,"p95_gate_ms":P95_FRAME_MS_LIMIT,"p99_frame_ms":p99,"p99_gate_ms":P99_FRAME_MS_LIMIT,
 		"historical_confirmed_p95_frame_ms":historical_p95,"p95_delta_from_confirmed_ms":p95-historical_p95 if historical_p95>=0.0 else null,
 		"shadow_off_p95_frame_ms":shadow_off_p95,"p95_shadow_off_ratio":p95/shadow_off_p95 if shadow_off_p95>0.0 else null,
@@ -192,6 +284,7 @@ func _sample(b,label: String) -> void:
 	var compact: Dictionary=result.duplicate(); compact.erase("frame_intervals_ms")
 	print("[render-sample] ",JSON.stringify(compact))
 	check(not ended_during_sample and result.mean_draw_calls>0,label+" measured ten seconds of live rendered battle")
+	check(attacking_frames>0,label+" attack swings actually occur inside measured window")
 	check(p95<=P95_FRAME_MS_LIMIT,label+" P95 frame time <= %.1f ms"%P95_FRAME_MS_LIMIT)
 	check(p99<=P99_FRAME_MS_LIMIT,label+" P99 frame time <= %.1f ms"%P99_FRAME_MS_LIMIT)
 	check(historical_p95>=0.0,label+" has confirmed P95 baseline")
@@ -219,37 +312,14 @@ func _performance_check() -> void:
 		"shadow_off_baseline":OS.get_environment("CAMPAIGN_SHADOW_OFF_BASELINE"),
 		"requires_shadow_off_when_enabled":true}
 	var b=await _start("level3")
-	b.level._third_day(b)
-	report["zhu_authored_deployment"]=_counts(b)
-	b._smoke=true
-	Engine.time_scale=4.0
-	var deadline:=Time.get_ticks_msec()+30000
-	while b.level.stage!="assault" and b.phase!=b.Phase.END and Time.get_ticks_msec()<deadline:
-		await process_frame
-	b._smoke=false; Engine.time_scale=1.0
-	check(b.level.stage=="assault","Zhu performance fixture reaches authored third assault through prisoner and gate actions")
-	_camera(b,Vector2i(29,29),0.8)
-	await _sample(b,"zhu_authored_assault")
+	if await _prepare_zhu(b):
+		_camera(b,b.level.MAIN_GATE,0.8)
+		await _sample(b,"zhu_rts_gate_contact")
 	await _dispose(b)
 	b=await _start("level5")
-	# `_start_land` now deploys the second water-fire act. The authored land
-	# fixture begins after that act's closure, where the real land_ambush mission
-	# action exists and summons its ordinary northern force.
-	b.level._start_land_closure(b)
-	b.mission.request_action("land_ambush")
-	Engine.time_scale=4.0
-	deadline=Time.get_ticks_msec()+20000
-	while not b.level.land_started and b.phase!=b.Phase.END and Time.get_ticks_msec()<deadline:
-		await process_frame
-	report["liangshan_authored_deployment"]=_counts(b)
-	# Wait for the authored northern force to approach the real defenders, not a static crowd.
-	deadline=Time.get_ticks_msec()+20000
-	while not b.units.any(func(u): return is_instance_valid(u) and not u.is_building and u.hp<u.max_hp) and b.phase!=b.Phase.END and Time.get_ticks_msec()<deadline:
-		await process_frame
-	Engine.time_scale=1.0
-	check(b.level.land_started and b.phase==b.Phase.FIGHT,"Liangshan performance fixture reaches authored land battle")
-	_camera(b,Vector2i(23,23),0.8)
-	await _sample(b,"liangshan_authored_land_battle")
+	if await _prepare_gao(b):
+		_camera(b,Vector2i(35,37),0.8)
+		await _sample(b,"gao_rts_land_water_contact")
 	await _dispose(b)
 	if OS.get_environment("CAMPAIGN_RUNTIME_STRESS")=="1":
 		b=await _start("level7",true)
@@ -276,7 +346,9 @@ func _run() -> void:
 	AudioServer.set_bus_mute(0,true)
 	var only:=OS.get_environment("CAMPAIGN_RUNTIME_ONLY")
 	if only!="performance": await _mode_check()
-	if only=="performance": await _performance_check()
+	if only=="performance":
+		await _performance_check()
+		check(report.samples.size()==(3 if OS.get_environment("CAMPAIGN_RUNTIME_STRESS")=="1" else 2),"all requested performance samples actually completed")
 	if only!="performance": check(report.mode_checks.size()==23,"all 23 mode assertions actually executed")
 	root.get_node("Campaign").save_prefs()
 	check(_save_hash()==saved_before,"CAMPAIGN_QA leaves campaign progress bytes unchanged")

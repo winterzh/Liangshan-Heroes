@@ -1,0 +1,705 @@
+{
+	"failures": [],
+	"mode_checks": [
+		{
+			"name": "campaign uses Mengzhou appearance and four fist skills",
+			"passed": true
+		},
+		{
+			"name": "campaign HUD portrait uses same variant",
+			"passed": true
+		},
+		{
+			"name": "campaign attack cache is keyed by se",
+			"passed": true
+		},
+		{
+			"name": "campaign attack cache is keyed by sw",
+			"passed": true
+		},
+		{
+			"name": "campaign attack cache is keyed by ne",
+			"passed": true
+		},
+		{
+			"name": "campaign attack cache is keyed by nw",
+			"passed": true
+		},
+		{
+			"name": "four attack directions contain distinct bitmap pixels",
+			"passed": true
+		},
+		{
+			"name": "campaign first actual land movement",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "arena constructs its own sandbox scene",
+			"passed": true
+		},
+		{
+			"name": "arena recruits Wu Song through normal training queue",
+			"passed": true
+		},
+		{
+			"name": "arena training creates Wu Song",
+			"passed": true
+		},
+		{
+			"name": "arena restores original appearance and four original skills",
+			"passed": true
+		},
+		{
+			"name": "arena HUD portrait does not reuse Mengzhou portrait",
+			"passed": true
+		},
+		{
+			"name": "arena animation uses legacy cache despite warmed campaign cache",
+			"passed": true
+		},
+		{
+			"name": "arena has no captured state or old cooldown",
+			"passed": true
+		},
+		{
+			"name": "arena actual land movement",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "returning campaign restores identical portrait, direction caches, skills and ranks",
+			"passed": true
+		},
+		{
+			"name": "returning campaign has fresh state and cooldowns",
+			"passed": true
+		},
+		{
+			"name": "mode overrides did not mutate global definitions",
+			"passed": true
+		},
+		{
+			"name": "campaign return actual land movement",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "all 23 mode assertions actually executed",
+			"passed": true
+		},
+		{
+			"name": "CAMPAIGN_QA leaves campaign progress bytes unchanged",
+			"passed": true
+		}
+	],
+	"mode_snapshots": [
+		{
+			"ability_table_has_mengzhou": true,
+			"animations": {
+				"attack|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "91af1d77866ba1a8551abd1f0e1a3ddcb1c1a77c3b6330b80b2dee4d9e367bc7",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_ne.png"
+					}
+				},
+				"attack|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "e76fa3c7f8b5d35794bbe91ab2e9b7c1997de54b7f29298f0506fbf11d17c7eb",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_nw.png"
+					}
+				},
+				"attack|se": {
+					"count": 1,
+					"first": {
+						"pixels": "6f2dd97b7f23d0e92195dc4401c2f51ff702911d84166100056ad2a08c5306b2",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_se.png"
+					}
+				},
+				"attack|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "49823d05f7edf596ff56368a19059481797f3a261d90f182d4ce4fc81c479f94",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_sw.png"
+					}
+				},
+				"down|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "4979ae9cffbd219fd7ce2d0983ed1cece6d1df671ed6c60a2e65ee0351780997",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_ne.png"
+					}
+				},
+				"down|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "d894f8b114a67608366ca7568002a7a0c5b01699d22c5fe9f656c0da5dbc813b",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_nw.png"
+					}
+				},
+				"down|se": {
+					"count": 1,
+					"first": {
+						"pixels": "53e27ada0cd2b2666113c3e60cf555a8ea0200e792914d3fef05afc11fb3ae31",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_se.png"
+					}
+				},
+				"down|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "ef5d41e5b114aec3ad2daab54765c7bbe998de1448b6d71b489228dfca571c0a",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_sw.png"
+					}
+				},
+				"hurt|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "0e082ae116f6b9f070a179ea0c61e8cdb2affa8039d17f9ea791c1e3d154ef6f",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_ne.png"
+					}
+				},
+				"hurt|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "c18fd2a13ecc8a9ef2340a04a8b71dc6b2508cfc525f9cff5f34c7e3a225103a",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_nw.png"
+					}
+				},
+				"hurt|se": {
+					"count": 1,
+					"first": {
+						"pixels": "295764badad6a1cffbadef99012172b642647091dfe6ab6e93d42b2772418a35",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_se.png"
+					}
+				},
+				"hurt|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "e45bd0dd0babbff09fe438cdb82577de5b442dbab7b65ddf81261d18f1d34105",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_sw.png"
+					}
+				},
+				"idle|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "19c88b2837cbe6a4cc0abcf776715b5a5a587c7204fa78281c00c2b36e8938e8",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_ne.png"
+					}
+				},
+				"idle|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "ca6b6ce62b953a0cfae54f38259c9a30b5ae124f8534abd5b3506eb13a79b0a6",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_nw.png"
+					}
+				},
+				"idle|se": {
+					"count": 1,
+					"first": {
+						"pixels": "48a9c4f67026fc766474816f045cb60d0798b19dc1e738e4d083b6380e062bf9",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_se.png"
+					}
+				},
+				"idle|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "0fbb91959411b4cdacdccb51ffb832bb052a1ee82d08a6b3f49a2baa61bc4e94",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_sw.png"
+					}
+				},
+				"walk|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "a4a2ff442ca9283102d7c60a5b6e0c44915fb0977f58171e2e67912316d73576",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_ne.png"
+					}
+				},
+				"walk|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "455daa476c14a4630489f5c40ef0a859086e2361cb6c24cd14c4b30e08e348dd",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_nw.png"
+					}
+				},
+				"walk|se": {
+					"count": 1,
+					"first": {
+						"pixels": "3be3b3b4f5bae8aaa3e9397dab33399b1c85fe9c63ddf127b2e122497b704e80",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_se.png"
+					}
+				},
+				"walk|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "94c1924a71ebbe2e93624f8445d8ab4b7efcd4e3d4beed8b6db8f2aa21e01590",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_sw.png"
+					}
+				}
+			},
+			"mode": "level7",
+			"movement": "land",
+			"portrait": {
+				"pixels": "48a9c4f67026fc766474816f045cb60d0798b19dc1e738e4d083b6380e062bf9",
+				"region": "",
+				"size": "(256.0, 256.0)",
+				"source": "res://assets/campaign/portraits/wu_song_mengzhou.png"
+			},
+			"ranks": [
+				2,
+				2,
+				2,
+				2
+			],
+			"skills": [
+				"mengzhou_punch",
+				"mengzhou_step",
+				"mengzhou_kick",
+				"mengzhou_breath"
+			],
+			"variant": "wu_song_mengzhou"
+		},
+		{
+			"ability_table_has_mengzhou": false,
+			"animations": {
+				"attack|ne": {
+					"count": 4,
+					"first": {
+						"pixels": "6e30fd7f996adbbc97742efe9dc249858e49d2581f56b2b51acad86d31aee3ae",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_attack.png"
+					}
+				},
+				"attack|nw": {
+					"count": 4,
+					"first": {
+						"pixels": "6e30fd7f996adbbc97742efe9dc249858e49d2581f56b2b51acad86d31aee3ae",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_attack.png"
+					}
+				},
+				"attack|se": {
+					"count": 4,
+					"first": {
+						"pixels": "6e30fd7f996adbbc97742efe9dc249858e49d2581f56b2b51acad86d31aee3ae",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_attack.png"
+					}
+				},
+				"attack|sw": {
+					"count": 4,
+					"first": {
+						"pixels": "6e30fd7f996adbbc97742efe9dc249858e49d2581f56b2b51acad86d31aee3ae",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_attack.png"
+					}
+				},
+				"down|ne": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"down|nw": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"down|se": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"down|sw": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"hurt|ne": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"hurt|nw": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"hurt|se": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"hurt|sw": {
+					"count": 0,
+					"first": {
+						"missing": true
+					}
+				},
+				"idle|ne": {
+					"count": 4,
+					"first": {
+						"pixels": "1b9f4ef1cc79177c5a5052137588d147dcf2f9a7cce611ca055260894b600d25",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_idle.png"
+					}
+				},
+				"idle|nw": {
+					"count": 4,
+					"first": {
+						"pixels": "1b9f4ef1cc79177c5a5052137588d147dcf2f9a7cce611ca055260894b600d25",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_idle.png"
+					}
+				},
+				"idle|se": {
+					"count": 4,
+					"first": {
+						"pixels": "1b9f4ef1cc79177c5a5052137588d147dcf2f9a7cce611ca055260894b600d25",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_idle.png"
+					}
+				},
+				"idle|sw": {
+					"count": 4,
+					"first": {
+						"pixels": "1b9f4ef1cc79177c5a5052137588d147dcf2f9a7cce611ca055260894b600d25",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_idle.png"
+					}
+				},
+				"walk|ne": {
+					"count": 4,
+					"first": {
+						"pixels": "fa5f875bc03f0a046962d3d0b146da077647791646d3cb75bd09c5403f608249",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_walk.png"
+					}
+				},
+				"walk|nw": {
+					"count": 4,
+					"first": {
+						"pixels": "fa5f875bc03f0a046962d3d0b146da077647791646d3cb75bd09c5403f608249",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_walk.png"
+					}
+				},
+				"walk|se": {
+					"count": 4,
+					"first": {
+						"pixels": "fa5f875bc03f0a046962d3d0b146da077647791646d3cb75bd09c5403f608249",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_walk.png"
+					}
+				},
+				"walk|sw": {
+					"count": 4,
+					"first": {
+						"pixels": "fa5f875bc03f0a046962d3d0b146da077647791646d3cb75bd09c5403f608249",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/anim/wu_song_walk.png"
+					}
+				}
+			},
+			"mode": "arena",
+			"movement": "land",
+			"portrait": {
+				"pixels": "695b5277869c36a21e9f7761487937542f890a6ff86f554d842bcd0e9a6f3b81",
+				"region": "[P: (400.0, 800.0), S: (400.0, 400.0)]",
+				"size": "(400.0, 400.0)",
+				"source": "res://assets/portraits_sheet.png"
+			},
+			"ranks": [
+				0,
+				0,
+				0,
+				0
+			],
+			"skills": [
+				"wu_tigers",
+				"wu_wine",
+				"wu_blades",
+				"wu_drunkgod"
+			],
+			"variant": ""
+		},
+		{
+			"ability_table_has_mengzhou": true,
+			"animations": {
+				"attack|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "91af1d77866ba1a8551abd1f0e1a3ddcb1c1a77c3b6330b80b2dee4d9e367bc7",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_ne.png"
+					}
+				},
+				"attack|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "e76fa3c7f8b5d35794bbe91ab2e9b7c1997de54b7f29298f0506fbf11d17c7eb",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_nw.png"
+					}
+				},
+				"attack|se": {
+					"count": 1,
+					"first": {
+						"pixels": "6f2dd97b7f23d0e92195dc4401c2f51ff702911d84166100056ad2a08c5306b2",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_se.png"
+					}
+				},
+				"attack|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "49823d05f7edf596ff56368a19059481797f3a261d90f182d4ce4fc81c479f94",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_attack_sw.png"
+					}
+				},
+				"down|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "4979ae9cffbd219fd7ce2d0983ed1cece6d1df671ed6c60a2e65ee0351780997",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_ne.png"
+					}
+				},
+				"down|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "d894f8b114a67608366ca7568002a7a0c5b01699d22c5fe9f656c0da5dbc813b",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_nw.png"
+					}
+				},
+				"down|se": {
+					"count": 1,
+					"first": {
+						"pixels": "53e27ada0cd2b2666113c3e60cf555a8ea0200e792914d3fef05afc11fb3ae31",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_se.png"
+					}
+				},
+				"down|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "ef5d41e5b114aec3ad2daab54765c7bbe998de1448b6d71b489228dfca571c0a",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_down_sw.png"
+					}
+				},
+				"hurt|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "0e082ae116f6b9f070a179ea0c61e8cdb2affa8039d17f9ea791c1e3d154ef6f",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_ne.png"
+					}
+				},
+				"hurt|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "c18fd2a13ecc8a9ef2340a04a8b71dc6b2508cfc525f9cff5f34c7e3a225103a",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_nw.png"
+					}
+				},
+				"hurt|se": {
+					"count": 1,
+					"first": {
+						"pixels": "295764badad6a1cffbadef99012172b642647091dfe6ab6e93d42b2772418a35",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_se.png"
+					}
+				},
+				"hurt|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "e45bd0dd0babbff09fe438cdb82577de5b442dbab7b65ddf81261d18f1d34105",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_hurt_sw.png"
+					}
+				},
+				"idle|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "19c88b2837cbe6a4cc0abcf776715b5a5a587c7204fa78281c00c2b36e8938e8",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_ne.png"
+					}
+				},
+				"idle|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "ca6b6ce62b953a0cfae54f38259c9a30b5ae124f8534abd5b3506eb13a79b0a6",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_nw.png"
+					}
+				},
+				"idle|se": {
+					"count": 1,
+					"first": {
+						"pixels": "48a9c4f67026fc766474816f045cb60d0798b19dc1e738e4d083b6380e062bf9",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_se.png"
+					}
+				},
+				"idle|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "0fbb91959411b4cdacdccb51ffb832bb052a1ee82d08a6b3f49a2baa61bc4e94",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_idle_sw.png"
+					}
+				},
+				"walk|ne": {
+					"count": 1,
+					"first": {
+						"pixels": "a4a2ff442ca9283102d7c60a5b6e0c44915fb0977f58171e2e67912316d73576",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_ne.png"
+					}
+				},
+				"walk|nw": {
+					"count": 1,
+					"first": {
+						"pixels": "455daa476c14a4630489f5c40ef0a859086e2361cb6c24cd14c4b30e08e348dd",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_nw.png"
+					}
+				},
+				"walk|se": {
+					"count": 1,
+					"first": {
+						"pixels": "3be3b3b4f5bae8aaa3e9397dab33399b1c85fe9c63ddf127b2e122497b704e80",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_se.png"
+					}
+				},
+				"walk|sw": {
+					"count": 1,
+					"first": {
+						"pixels": "94c1924a71ebbe2e93624f8445d8ab4b7efcd4e3d4beed8b6db8f2aa21e01590",
+						"region": "[P: (0.0, 0.0), S: (256.0, 256.0)]",
+						"size": "(256.0, 256.0)",
+						"source": "res://assets/campaign/anim/wu_song_mengzhou_walk_sw.png"
+					}
+				}
+			},
+			"mode": "level7",
+			"movement": "land",
+			"portrait": {
+				"pixels": "48a9c4f67026fc766474816f045cb60d0798b19dc1e738e4d083b6380e062bf9",
+				"region": "",
+				"size": "(256.0, 256.0)",
+				"source": "res://assets/campaign/portraits/wu_song_mengzhou.png"
+			},
+			"ranks": [
+				2,
+				2,
+				2,
+				2
+			],
+			"skills": [
+				"mengzhou_punch",
+				"mengzhou_step",
+				"mengzhou_kick",
+				"mengzhou_breath"
+			],
+			"variant": "wu_song_mengzhou"
+		}
+	],
+	"passed": true,
+	"samples": [],
+	"save_hash_after": "a635c742269e98a81a1d1bfa0149ac90bd34293af2740c7075090ff88cda49c1",
+	"save_hash_before": "a635c742269e98a81a1d1bfa0149ac90bd34293af2740c7075090ff88cda49c1"
+}

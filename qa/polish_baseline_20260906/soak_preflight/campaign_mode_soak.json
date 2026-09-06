@@ -1,0 +1,2290 @@
+{
+  "acceptance_eligible": false,
+  "actual_seconds": 123.906614,
+  "baseline": {
+    "cycle": 0,
+    "elapsed_seconds": 4E-06,
+    "level_id": "",
+    "mode": "idle",
+    "phase": -1,
+    "process_memory": {
+      "peak_working_set_bytes": 448192512.0,
+      "private_bytes": 737656832.0,
+      "query_ok": true,
+      "source": "powershell Get-Process for this Godot PID",
+      "virtual_bytes": 9257938944.0,
+      "working_set_bytes": 406929408.0
+    },
+    "resources": {
+      "draw_calls": 0.0,
+      "godot_static_bytes": 60507610.0,
+      "godot_static_peak_bytes": 118913972.0,
+      "node_count": 21.0,
+      "object_count": 1591.0,
+      "orphan_node_count": 0.0,
+      "render_buffer_bytes": 0.0,
+      "render_objects": 0.0,
+      "render_primitives": 0.0,
+      "render_texture_bytes": 0.0,
+      "render_video_bytes": 0.0,
+      "resource_count": 54.0
+    },
+    "root_child_count": 8,
+    "scene_count": 0,
+    "units": {
+      "alive_units": 0,
+      "buildings": 0,
+      "guan": 0,
+      "liang": 0,
+      "mobile_units": 0,
+      "resources": 0,
+      "scene_units": 0,
+      "visible": 0
+    }
+  },
+  "campaign_save": {
+    "after": {
+      "exists": true,
+      "sha256": "a635c742269e98a81a1d1bfa0149ac90bd34293af2740c7075090ff88cda49c1",
+      "size_bytes": 371
+    },
+    "before": {
+      "exists": true,
+      "sha256": "a635c742269e98a81a1d1bfa0149ac90bd34293af2740c7075090ff88cda49c1",
+      "size_bytes": 371
+    },
+    "unchanged": true
+  },
+  "checks": [
+    {
+      "detail": "Windows",
+      "name": "soak refuses a headless display",
+      "passed": true
+    },
+    {
+      "detail": "vulkan 1.4.351 / forward_plus",
+      "name": "soak uses Vulkan forward_plus",
+      "passed": true
+    },
+    {
+      "detail": "(1280, 720)",
+      "name": "viewport is exactly 1280x720",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"level1\",\"expected\":\"level1\",\"nodes\":true,\"phase\":2}",
+      "name": "campaign constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"normal authored Huangnigang convoy march\",\"passed\":true}",
+      "name": "campaign/level1 accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":555.784057617188,\"moved_units\":15,\"passed\":true,\"physics_steps\":488,\"removed_units\":0}",
+      "name": "campaign/level1 executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "campaign transition 1 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"arena\",\"expected\":\"arena\",\"nodes\":true,\"phase\":2}",
+      "name": "arena constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"authored arena troop button\",\"passed\":true,\"spawned\":50}",
+      "name": "arena/arena accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":655.651123046875,\"moved_units\":50,\"passed\":true,\"physics_steps\":476,\"removed_units\":0}",
+      "name": "arena/arena executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "arena transition 2 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"skirmish\",\"expected\":\"skirmish\",\"nodes\":true,\"phase\":2}",
+      "name": "skirmish constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"expire first defense timer; normal process spawns wave\",\"passed\":true}",
+      "name": "skirmish/skirmish accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"enemies_alive\":10,\"max_distance\":220.773315429688,\"moved_units\":5,\"passed\":true,\"physics_steps\":482,\"removed_units\":0,\"wave\":1}",
+      "name": "skirmish/skirmish executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "skirmish transition 3 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"skirmish_ai\",\"expected\":\"skirmish_ai\",\"nodes\":true,\"phase\":2}",
+      "name": "skirmish_ai constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"official opening soldiers attack-move; workers keep gathering\",\"ordered\":3,\"passed\":true}",
+      "name": "skirmish_ai/skirmish_ai accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":341.786407470703,\"moved_units\":15,\"passed\":true,\"physics_steps\":481,\"removed_units\":0}",
+      "name": "skirmish_ai/skirmish_ai executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "skirmish_ai transition 4 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"custom_defense\",\"expected\":\"custom_defense\",\"nodes\":true,\"phase\":2}",
+      "name": "custom_defense constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"expire first defense timer; normal process spawns wave\",\"passed\":true}",
+      "name": "custom_defense/custom_defense accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"enemies_alive\":10,\"max_distance\":225.020599365234,\"moved_units\":5,\"passed\":true,\"physics_steps\":481,\"removed_units\":0,\"wave\":1}",
+      "name": "custom_defense/custom_defense executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "custom_defense transition 5 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"level5\",\"expected\":\"level5\",\"nodes\":true,\"phase\":2}",
+      "name": "campaign constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"select Ruan Xiaoqi and right-click gao_lure_side marker\",\"actor\":\"ruan_xiaoqi_boat\",\"passed\":true,\"task\":\"gao_lure_side\"}",
+      "name": "campaign/level5 accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":2,\"first_wave_sent\":true,\"lure_started\":true,\"max_distance\":262.659881591797,\"moved_units\":17,\"passed\":true,\"physics_steps\":444,\"removed_units\":0,\"task_actor_distance\":262.659881591797,\"task_done\":true}",
+      "name": "campaign/level5 executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "campaign transition 6 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"level1\",\"expected\":\"level1\",\"nodes\":true,\"phase\":2}",
+      "name": "campaign constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"normal authored Huangnigang convoy march\",\"passed\":true}",
+      "name": "campaign/level1 accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":487.154174804688,\"moved_units\":15,\"passed\":true,\"physics_steps\":422,\"removed_units\":0}",
+      "name": "campaign/level1 executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "campaign transition 7 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"arena\",\"expected\":\"arena\",\"nodes\":true,\"phase\":2}",
+      "name": "arena constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"authored arena troop button\",\"passed\":true,\"spawned\":50}",
+      "name": "arena/arena accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":689.662231445313,\"moved_units\":50,\"passed\":true,\"physics_steps\":480,\"removed_units\":0}",
+      "name": "arena/arena executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "arena transition 8 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"skirmish\",\"expected\":\"skirmish\",\"nodes\":true,\"phase\":2}",
+      "name": "skirmish constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"expire first defense timer; normal process spawns wave\",\"passed\":true}",
+      "name": "skirmish/skirmish accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"enemies_alive\":10,\"max_distance\":225.818786621094,\"moved_units\":5,\"passed\":true,\"physics_steps\":480,\"removed_units\":0,\"wave\":1}",
+      "name": "skirmish/skirmish executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "skirmish transition 9 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"skirmish_ai\",\"expected\":\"skirmish_ai\",\"nodes\":true,\"phase\":2}",
+      "name": "skirmish_ai constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"official opening soldiers attack-move; workers keep gathering\",\"ordered\":3,\"passed\":true}",
+      "name": "skirmish_ai/skirmish_ai accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":341.803314208984,\"moved_units\":15,\"passed\":true,\"physics_steps\":481,\"removed_units\":0}",
+      "name": "skirmish_ai/skirmish_ai executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "skirmish_ai transition 10 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"custom_defense\",\"expected\":\"custom_defense\",\"nodes\":true,\"phase\":2}",
+      "name": "custom_defense constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"expire first defense timer; normal process spawns wave\",\"passed\":true}",
+      "name": "custom_defense/custom_defense accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"enemies_alive\":10,\"max_distance\":225.818786621094,\"moved_units\":5,\"passed\":true,\"physics_steps\":480,\"removed_units\":0,\"wave\":1}",
+      "name": "custom_defense/custom_defense executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "custom_defense transition 11 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"level5\",\"expected\":\"level5\",\"nodes\":true,\"phase\":2}",
+      "name": "campaign constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"select Ruan Xiaoqi and right-click gao_lure_side marker\",\"actor\":\"ruan_xiaoqi_boat\",\"passed\":true,\"task\":\"gao_lure_side\"}",
+      "name": "campaign/level5 accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":2,\"first_wave_sent\":true,\"lure_started\":true,\"max_distance\":262.659881591797,\"moved_units\":19,\"passed\":true,\"physics_steps\":481,\"removed_units\":0,\"task_actor_distance\":262.659881591797,\"task_done\":true}",
+      "name": "campaign/level5 executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "campaign transition 12 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"level1\",\"expected\":\"level1\",\"nodes\":true,\"phase\":2}",
+      "name": "campaign constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"normal authored Huangnigang convoy march\",\"passed\":true}",
+      "name": "campaign/level1 accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":557.843994140625,\"moved_units\":15,\"passed\":true,\"physics_steps\":480,\"removed_units\":0}",
+      "name": "campaign/level1 executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "campaign transition 13 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"actual\":\"arena\",\"expected\":\"arena\",\"nodes\":true,\"phase\":2}",
+      "name": "arena constructs expected level and enters normal FIGHT",
+      "passed": true
+    },
+    {
+      "detail": "{\"action\":\"authored arena troop button\",\"passed\":true,\"spawned\":50}",
+      "name": "arena/arena accepts a current authored activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"damaged_units\":0,\"max_distance\":659.80615234375,\"moved_units\":50,\"passed\":true,\"physics_steps\":475,\"removed_units\":0}",
+      "name": "arena/arena executes live simulation activity",
+      "passed": true
+    },
+    {
+      "detail": "{\"camera\":true,\"hud\":true,\"level\":true,\"map\":true,\"mission\":true,\"passed\":true,\"sample_unit\":true,\"scene\":true,\"units_root\":true,\"world\":true}",
+      "name": "arena transition 14 releases scene and key nodes",
+      "passed": true
+    },
+    {
+      "detail": "{\"after\":{\"exists\":true,\"sha256\":\"a635c742269e98a81a1d1bfa0149ac90bd34293af2740c7075090ff88cda49c1\",\"size_bytes\":371},\"before\":{\"exists\":true,\"sha256\":\"a635c742269e98a81a1d1bfa0149ac90bd34293af2740c7075090ff88cda49c1\",\"size_bytes\":371}}",
+      "name": "campaign.cfg existence and bytes remain unchanged",
+      "passed": true
+    },
+    {
+      "detail": "0",
+      "name": "all once-per-minute Windows process-memory probes succeeded",
+      "passed": true
+    },
+    {
+      "detail": "transitions=14",
+      "name": "every constructed scene passed key-node release checks",
+      "passed": true
+    },
+    {
+      "detail": "3",
+      "name": "campaign:level1 was built and normally started",
+      "passed": true
+    },
+    {
+      "detail": "3",
+      "name": "arena:arena was built and normally started",
+      "passed": true
+    },
+    {
+      "detail": "2",
+      "name": "skirmish:skirmish was built and normally started",
+      "passed": true
+    },
+    {
+      "detail": "2",
+      "name": "skirmish_ai:skirmish_ai was built and normally started",
+      "passed": true
+    },
+    {
+      "detail": "2",
+      "name": "custom_defense:custom_defense was built and normally started",
+      "passed": true
+    },
+    {
+      "detail": "2",
+      "name": "campaign:level5 was built and normally started",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":657809408.0,\"end_delta_from_warm\":10031104.0,\"monotonic_growth_detected\":false,\"peak\":692613120.0,\"recovered_from_peak\":34803712.0,\"recovery_passed\":true,\"tolerance\":134217728.0,\"trend\":{\"decreases\":0,\"first\":648630272.0,\"flat\":1,\"increases\":1,\"last\":657809408.0,\"near_monotonic\":false,\"net\":9179136.0,\"samples\":3},\"warm_baseline\":647778304.0}",
+      "name": "working_set_bytes returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":0,\"first\":648630272.0,\"flat\":1,\"increases\":1,\"last\":657809408.0,\"near_monotonic\":false,\"net\":9179136.0,\"samples\":3}",
+      "name": "working_set_bytes has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":1274667008.0,\"end_delta_from_warm\":10571776.0,\"monotonic_growth_detected\":false,\"peak\":1274667008.0,\"recovered_from_peak\":0.0,\"recovery_passed\":true,\"tolerance\":134217728.0,\"trend\":{\"decreases\":0,\"first\":1264586752.0,\"flat\":1,\"increases\":1,\"last\":1274667008.0,\"near_monotonic\":false,\"net\":10080256.0,\"samples\":3},\"warm_baseline\":1264095232.0}",
+      "name": "private_bytes returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":0,\"first\":1264586752.0,\"flat\":1,\"increases\":1,\"last\":1274667008.0,\"near_monotonic\":false,\"net\":10080256.0,\"samples\":3}",
+      "name": "private_bytes has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":170953359.0,\"end_delta_from_warm\":2645632.0,\"monotonic_growth_detected\":false,\"peak\":171387759.0,\"recovered_from_peak\":434400.0,\"recovery_passed\":true,\"tolerance\":67108864.0,\"trend\":{\"decreases\":0,\"first\":167896135.0,\"flat\":6,\"increases\":1,\"last\":171027019.0,\"near_monotonic\":false,\"net\":3130884.0,\"samples\":8},\"warm_baseline\":168307727.0}",
+      "name": "godot_static_bytes returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":0,\"first\":167896135.0,\"flat\":6,\"increases\":1,\"last\":171027019.0,\"near_monotonic\":false,\"net\":3130884.0,\"samples\":8}",
+      "name": "godot_static_bytes has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":2201.0,\"end_delta_from_warm\":28.0,\"monotonic_growth_detected\":false,\"peak\":2214.0,\"recovered_from_peak\":13.0,\"recovery_passed\":true,\"tolerance\":512.0,\"trend\":{\"decreases\":0,\"first\":2173.0,\"flat\":6,\"increases\":1,\"last\":2213.0,\"near_monotonic\":false,\"net\":40.0,\"samples\":8},\"warm_baseline\":2173.0}",
+      "name": "object_count returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":0,\"first\":2173.0,\"flat\":6,\"increases\":1,\"last\":2213.0,\"near_monotonic\":false,\"net\":40.0,\"samples\":8}",
+      "name": "object_count has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":170.0,\"end_delta_from_warm\":0.0,\"monotonic_growth_detected\":false,\"peak\":170.0,\"recovered_from_peak\":0.0,\"recovery_passed\":true,\"tolerance\":128.0,\"trend\":{\"decreases\":0,\"first\":170.0,\"flat\":7,\"increases\":0,\"last\":170.0,\"near_monotonic\":false,\"net\":0.0,\"samples\":8},\"warm_baseline\":170.0}",
+      "name": "resource_count returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":0,\"first\":170.0,\"flat\":7,\"increases\":0,\"last\":170.0,\"near_monotonic\":false,\"net\":0.0,\"samples\":8}",
+      "name": "resource_count has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":21.0,\"end_delta_from_warm\":0.0,\"monotonic_growth_detected\":false,\"peak\":21.0,\"recovered_from_peak\":0.0,\"recovery_passed\":true,\"tolerance\":32.0,\"trend\":{\"decreases\":0,\"first\":21.0,\"flat\":7,\"increases\":0,\"last\":21.0,\"near_monotonic\":false,\"net\":0.0,\"samples\":8},\"warm_baseline\":21.0}",
+      "name": "node_count returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":0,\"first\":21.0,\"flat\":7,\"increases\":0,\"last\":21.0,\"near_monotonic\":false,\"net\":0.0,\"samples\":8}",
+      "name": "node_count has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":0.0,\"end_delta_from_warm\":0.0,\"monotonic_growth_detected\":false,\"peak\":0.0,\"recovered_from_peak\":0.0,\"recovery_passed\":true,\"tolerance\":2.0,\"trend\":{\"decreases\":0,\"first\":0.0,\"flat\":7,\"increases\":0,\"last\":0.0,\"near_monotonic\":false,\"net\":0.0,\"samples\":8},\"warm_baseline\":0.0}",
+      "name": "orphan_node_count returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":0,\"first\":0.0,\"flat\":7,\"increases\":0,\"last\":0.0,\"near_monotonic\":false,\"net\":0.0,\"samples\":8}",
+      "name": "orphan_node_count has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":239495168.0,\"end_delta_from_warm\":-64043520.0,\"monotonic_growth_detected\":false,\"peak\":306422272.0,\"recovered_from_peak\":66927104.0,\"recovery_passed\":true,\"tolerance\":33554432.0,\"trend\":{\"decreases\":4,\"first\":275556352.0,\"flat\":0,\"increases\":3,\"last\":239605760.0,\"near_monotonic\":false,\"net\":-35950592.0,\"samples\":8},\"warm_baseline\":303538688.0}",
+      "name": "render_texture_bytes returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":4,\"first\":275556352.0,\"flat\":0,\"increases\":3,\"last\":239605760.0,\"near_monotonic\":false,\"net\":-35950592.0,\"samples\":8}",
+      "name": "render_texture_bytes has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":8076940.0,\"end_delta_from_warm\":-2411840.0,\"monotonic_growth_detected\":false,\"peak\":10797524.0,\"recovered_from_peak\":2720584.0,\"recovery_passed\":true,\"tolerance\":67108864.0,\"trend\":{\"decreases\":2,\"first\":8807248.0,\"flat\":3,\"increases\":2,\"last\":8410044.0,\"near_monotonic\":false,\"net\":-397204.0,\"samples\":8},\"warm_baseline\":10488780.0}",
+      "name": "render_buffer_bytes returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":2,\"first\":8807248.0,\"flat\":3,\"increases\":2,\"last\":8410044.0,\"near_monotonic\":false,\"net\":-397204.0,\"samples\":8}",
+      "name": "render_buffer_bytes has no sustained monotonic growth above tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"end\":328316800.0,\"end_delta_from_warm\":-66468432.0,\"monotonic_growth_detected\":false,\"peak\":397676736.0,\"recovered_from_peak\":69359936.0,\"recovery_passed\":true,\"tolerance\":67108864.0,\"trend\":{\"decreases\":4,\"first\":365110768.0,\"flat\":0,\"increases\":3,\"last\":328760640.0,\"near_monotonic\":false,\"net\":-36350128.0,\"samples\":8},\"warm_baseline\":394785232.0}",
+      "name": "render_video_bytes returns within warm-baseline tolerance",
+      "passed": true
+    },
+    {
+      "detail": "{\"decreases\":4,\"first\":365110768.0,\"flat\":0,\"increases\":3,\"last\":328760640.0,\"near_monotonic\":false,\"net\":-36350128.0,\"samples\":8}",
+      "name": "render_video_bytes has no sustained monotonic growth above tolerance",
+      "passed": true
+    }
+  ],
+  "completed_at": "2026-09-06 15:03:08",
+  "cycles_started": 3,
+  "dwell_seconds": 8.0,
+  "end_snapshot": {
+    "cycle": 3,
+    "elapsed_seconds": 123.635777,
+    "level_id": "",
+    "mode": "final_cleanup",
+    "phase": -1,
+    "process_memory": {
+      "peak_working_set_bytes": 692613120.0,
+      "private_bytes": 1274667008.0,
+      "query_ok": true,
+      "source": "powershell Get-Process for this Godot PID",
+      "virtual_bytes": 9823862784.0,
+      "working_set_bytes": 657809408.0
+    },
+    "resources": {
+      "draw_calls": 0.0,
+      "godot_static_bytes": 170953359.0,
+      "godot_static_peak_bytes": 265818256.0,
+      "node_count": 21.0,
+      "object_count": 2201.0,
+      "orphan_node_count": 0.0,
+      "render_buffer_bytes": 8076940.0,
+      "render_objects": 0.0,
+      "render_primitives": 0.0,
+      "render_texture_bytes": 239495168.0,
+      "render_video_bytes": 328316800.0,
+      "resource_count": 170.0
+    },
+    "root_child_count": 8,
+    "scene_count": 0,
+    "units": {
+      "alive_units": 0,
+      "buildings": 0,
+      "guan": 0,
+      "liang": 0,
+      "mobile_units": 0,
+      "resources": 0,
+      "scene_units": 0,
+      "visible": 0
+    }
+  },
+  "failures": [],
+  "minute_samples": [
+    {
+      "average_draw_calls": 960.460010415892,
+      "average_frame_ms": 4.44518614686406,
+      "bucket_seconds": 60.001423,
+      "cycle": 2,
+      "elapsed_seconds": 60.001425,
+      "level_id": "level1",
+      "minute": 1,
+      "mode": "campaign",
+      "p95_frame_ms": 13.21,
+      "p99_frame_ms": 19.248,
+      "partial": false,
+      "peak_draw_calls": 3392.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 682835968.0,
+        "private_bytes": 1264586752.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 9832251392.0,
+        "working_set_bytes": 648630272.0
+      },
+      "rendered_frames": 13441,
+      "resources": {
+        "draw_calls": 736.0,
+        "godot_static_bytes": 175185907.0,
+        "godot_static_peak_bytes": 265818256.0,
+        "node_count": 216.0,
+        "object_count": 2605.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 8804896.0,
+        "render_objects": 4275.0,
+        "render_primitives": 20895.0,
+        "render_texture_bytes": 275556352.0,
+        "render_video_bytes": 365108416.0,
+        "resource_count": 178.0
+      },
+      "root_child_count": 9,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 25,
+        "buildings": 3,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 22,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      },
+      "worst_frame_ms": 3213.843
+    },
+    {
+      "average_draw_calls": 891.692402870577,
+      "average_frame_ms": 3.6969006434051,
+      "bucket_seconds": 59.998671,
+      "cycle": 3,
+      "elapsed_seconds": 120.000097,
+      "level_id": "arena",
+      "minute": 2,
+      "mode": "arena",
+      "p95_frame_ms": 11.763,
+      "p99_frame_ms": 17.313,
+      "partial": false,
+      "peak_draw_calls": 3362.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 692613120.0,
+        "private_bytes": 1274667008.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 9823862784.0,
+        "working_set_bytes": 657809408.0
+      },
+      "rendered_frames": 16164,
+      "resources": {
+        "draw_calls": 267.0,
+        "godot_static_bytes": 177436462.0,
+        "godot_static_peak_bytes": 265818256.0,
+        "node_count": 209.0,
+        "object_count": 2575.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 8522940.0,
+        "render_objects": 3493.0,
+        "render_primitives": 9986.0,
+        "render_texture_bytes": 239605760.0,
+        "render_video_bytes": 328873536.0,
+        "resource_count": 170.0
+      },
+      "root_child_count": 9,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      },
+      "worst_frame_ms": 665.919
+    },
+    {
+      "average_draw_calls": 268.632262474368,
+      "average_frame_ms": 2.14362064251538,
+      "bucket_seconds": 3.371406,
+      "cycle": 3,
+      "elapsed_seconds": 123.371501,
+      "level_id": "",
+      "minute": 3,
+      "mode": "final_cleanup",
+      "p95_frame_ms": 6.724,
+      "p99_frame_ms": 8.933,
+      "partial": true,
+      "peak_draw_calls": 306.0,
+      "phase": -1,
+      "process_memory": {
+        "peak_working_set_bytes": 692613120.0,
+        "private_bytes": 1274667008.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 9823862784.0,
+        "working_set_bytes": 657809408.0
+      },
+      "rendered_frames": 1463,
+      "resources": {
+        "draw_calls": 0.0,
+        "godot_static_bytes": 170986871.0,
+        "godot_static_peak_bytes": 265818256.0,
+        "node_count": 21.0,
+        "object_count": 2201.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 8076940.0,
+        "render_objects": 0.0,
+        "render_primitives": 0.0,
+        "render_texture_bytes": 239495168.0,
+        "render_video_bytes": 328316800.0,
+        "resource_count": 170.0
+      },
+      "root_child_count": 8,
+      "scene_count": 0,
+      "units": {
+        "alive_units": 0,
+        "buildings": 0,
+        "guan": 0,
+        "liang": 0,
+        "mobile_units": 0,
+        "resources": 0,
+        "scene_units": 0,
+        "visible": 0
+      },
+      "worst_frame_ms": 26.316
+    }
+  ],
+  "performance": {
+    "complete_minute_buckets": 2,
+    "max_minute_p95_ms": 13.21,
+    "max_minute_p99_ms": 19.248,
+    "p95_limit_ms": 16.7,
+    "p99_limit_ms": 33.3,
+    "peak_draw_calls": 3392.0,
+    "worst_frame_ms": 3213.843
+  },
+  "renderer": {
+    "adapter": "NVIDIA GeForce RTX 3070 Ti",
+    "api": "1.4.351",
+    "display": "Windows",
+    "driver": "vulkan",
+    "godot": {
+      "build": "official",
+      "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+      "hex": 263683,
+      "major": 4,
+      "minor": 6,
+      "patch": 3,
+      "status": "stable",
+      "string": "4.6.3-stable (official)",
+      "timestamp": 0
+    },
+    "method": "forward_plus",
+    "vendor": "NVIDIA",
+    "vsync": 0
+  },
+  "requested_seconds": 120.0,
+  "route": [
+    {
+      "level_id": "level1",
+      "mode": "campaign"
+    },
+    {
+      "level_id": "arena",
+      "mode": "arena"
+    },
+    {
+      "level_id": "skirmish",
+      "mode": "skirmish"
+    },
+    {
+      "level_id": "skirmish_ai",
+      "mode": "skirmish_ai"
+    },
+    {
+      "level_id": "custom_defense",
+      "mode": "custom_defense"
+    },
+    {
+      "level_id": "level5",
+      "mode": "campaign"
+    }
+  ],
+  "route_visits": {
+    "arena:arena": 3,
+    "campaign:level1": 3,
+    "campaign:level5": 2,
+    "custom_defense:custom_defense": 2,
+    "skirmish:skirmish": 2,
+    "skirmish_ai:skirmish_ai": 2
+  },
+  "runtime_checks_passed": true,
+  "scope": "Real renderer lifecycle, frame, resource and release evidence. No human playtest, pacing or balance conclusion.",
+  "stability": {
+    "godot_static_bytes": {
+      "end": 170953359.0,
+      "end_delta_from_warm": 2645632.0,
+      "monotonic_growth_detected": false,
+      "peak": 171387759.0,
+      "recovered_from_peak": 434400.0,
+      "recovery_passed": true,
+      "tolerance": 67108864.0,
+      "trend": {
+        "decreases": 0,
+        "first": 167896135.0,
+        "flat": 6,
+        "increases": 1,
+        "last": 171027019.0,
+        "near_monotonic": false,
+        "net": 3130884.0,
+        "samples": 8
+      },
+      "warm_baseline": 168307727.0
+    },
+    "node_count": {
+      "end": 21.0,
+      "end_delta_from_warm": 0.0,
+      "monotonic_growth_detected": false,
+      "peak": 21.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 32.0,
+      "trend": {
+        "decreases": 0,
+        "first": 21.0,
+        "flat": 7,
+        "increases": 0,
+        "last": 21.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 8
+      },
+      "warm_baseline": 21.0
+    },
+    "object_count": {
+      "end": 2201.0,
+      "end_delta_from_warm": 28.0,
+      "monotonic_growth_detected": false,
+      "peak": 2214.0,
+      "recovered_from_peak": 13.0,
+      "recovery_passed": true,
+      "tolerance": 512.0,
+      "trend": {
+        "decreases": 0,
+        "first": 2173.0,
+        "flat": 6,
+        "increases": 1,
+        "last": 2213.0,
+        "near_monotonic": false,
+        "net": 40.0,
+        "samples": 8
+      },
+      "warm_baseline": 2173.0
+    },
+    "orphan_node_count": {
+      "end": 0.0,
+      "end_delta_from_warm": 0.0,
+      "monotonic_growth_detected": false,
+      "peak": 0.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 2.0,
+      "trend": {
+        "decreases": 0,
+        "first": 0.0,
+        "flat": 7,
+        "increases": 0,
+        "last": 0.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 8
+      },
+      "warm_baseline": 0.0
+    },
+    "private_bytes": {
+      "end": 1274667008.0,
+      "end_delta_from_warm": 10571776.0,
+      "monotonic_growth_detected": false,
+      "peak": 1274667008.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 134217728.0,
+      "trend": {
+        "decreases": 0,
+        "first": 1264586752.0,
+        "flat": 1,
+        "increases": 1,
+        "last": 1274667008.0,
+        "near_monotonic": false,
+        "net": 10080256.0,
+        "samples": 3
+      },
+      "warm_baseline": 1264095232.0
+    },
+    "render_buffer_bytes": {
+      "end": 8076940.0,
+      "end_delta_from_warm": -2411840.0,
+      "monotonic_growth_detected": false,
+      "peak": 10797524.0,
+      "recovered_from_peak": 2720584.0,
+      "recovery_passed": true,
+      "tolerance": 67108864.0,
+      "trend": {
+        "decreases": 2,
+        "first": 8807248.0,
+        "flat": 3,
+        "increases": 2,
+        "last": 8410044.0,
+        "near_monotonic": false,
+        "net": -397204.0,
+        "samples": 8
+      },
+      "warm_baseline": 10488780.0
+    },
+    "render_texture_bytes": {
+      "end": 239495168.0,
+      "end_delta_from_warm": -64043520.0,
+      "monotonic_growth_detected": false,
+      "peak": 306422272.0,
+      "recovered_from_peak": 66927104.0,
+      "recovery_passed": true,
+      "tolerance": 33554432.0,
+      "trend": {
+        "decreases": 4,
+        "first": 275556352.0,
+        "flat": 0,
+        "increases": 3,
+        "last": 239605760.0,
+        "near_monotonic": false,
+        "net": -35950592.0,
+        "samples": 8
+      },
+      "warm_baseline": 303538688.0
+    },
+    "render_video_bytes": {
+      "end": 328316800.0,
+      "end_delta_from_warm": -66468432.0,
+      "monotonic_growth_detected": false,
+      "peak": 397676736.0,
+      "recovered_from_peak": 69359936.0,
+      "recovery_passed": true,
+      "tolerance": 67108864.0,
+      "trend": {
+        "decreases": 4,
+        "first": 365110768.0,
+        "flat": 0,
+        "increases": 3,
+        "last": 328760640.0,
+        "near_monotonic": false,
+        "net": -36350128.0,
+        "samples": 8
+      },
+      "warm_baseline": 394785232.0
+    },
+    "resource_count": {
+      "end": 170.0,
+      "end_delta_from_warm": 0.0,
+      "monotonic_growth_detected": false,
+      "peak": 170.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 128.0,
+      "trend": {
+        "decreases": 0,
+        "first": 170.0,
+        "flat": 7,
+        "increases": 0,
+        "last": 170.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 8
+      },
+      "warm_baseline": 170.0
+    },
+    "working_set_bytes": {
+      "end": 657809408.0,
+      "end_delta_from_warm": 10031104.0,
+      "monotonic_growth_detected": false,
+      "peak": 692613120.0,
+      "recovered_from_peak": 34803712.0,
+      "recovery_passed": true,
+      "tolerance": 134217728.0,
+      "trend": {
+        "decreases": 0,
+        "first": 648630272.0,
+        "flat": 1,
+        "increases": 1,
+        "last": 657809408.0,
+        "near_monotonic": false,
+        "net": 9179136.0,
+        "samples": 3
+      },
+      "warm_baseline": 647778304.0
+    }
+  },
+  "started_at": "2026-09-06 15:01:04",
+  "transition_count": 14,
+  "transitions": [
+    {
+      "activation": {
+        "action": "normal authored Huangnigang convoy march",
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 555.784057617188,
+        "moved_units": 15,
+        "passed": true,
+        "physics_steps": 488,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 3488.543,
+      "cycle": 1,
+      "expected_level_id": "level1",
+      "index": 1,
+      "level_id": "level1",
+      "live_seconds": 8.001417,
+      "mode": "campaign",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 1,
+        "elapsed_seconds": 11.852061,
+        "level_id": "level1",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 154094876.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 1922.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 6688928.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 242348032.0,
+          "render_video_bytes": 327686976.0,
+          "resource_count": 112.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 25,
+        "buildings": 3,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 22,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      },
+      "units_at_start": {
+        "alive_units": 25,
+        "buildings": 3,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 22,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      }
+    },
+    {
+      "activation": {
+        "action": "authored arena troop button",
+        "passed": true,
+        "spawned": 50
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 655.651123046875,
+        "moved_units": 50,
+        "passed": true,
+        "physics_steps": 476,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 240.759,
+      "cycle": 1,
+      "expected_level_id": "arena",
+      "index": 2,
+      "level_id": "arena",
+      "live_seconds": 8.00374,
+      "mode": "arena",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 1,
+        "elapsed_seconds": 20.104943,
+        "level_id": "arena",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 157180532.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2004.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 6312892.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 213213184.0,
+          "render_video_bytes": 298173760.0,
+          "resource_count": 131.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      },
+      "units_at_start": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      }
+    },
+    {
+      "activation": {
+        "action": "expire first defense timer; normal process spawns wave",
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "enemies_alive": 10,
+        "max_distance": 220.773315429688,
+        "moved_units": 5,
+        "passed": true,
+        "physics_steps": 482,
+        "removed_units": 0,
+        "wave": 1
+      },
+      "build_and_start_ms": 1345.487,
+      "cycle": 1,
+      "expected_level_id": "skirmish",
+      "index": 3,
+      "level_id": "skirmish",
+      "live_seconds": 8.005153,
+      "mode": "skirmish",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 1,
+        "elapsed_seconds": 29.475349,
+        "level_id": "skirmish",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 162307448.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2058.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 10726964.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 284486144.0,
+          "render_video_bytes": 375972304.0,
+          "resource_count": 140.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "units_at_start": {
+        "alive_units": 27,
+        "buildings": 20,
+        "guan": 0,
+        "liang": 27,
+        "mobile_units": 7,
+        "resources": 0,
+        "scene_units": 27,
+        "visible": 27
+      }
+    },
+    {
+      "activation": {
+        "action": "official opening soldiers attack-move; workers keep gathering",
+        "ordered": 3,
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 341.786407470703,
+        "moved_units": 15,
+        "passed": true,
+        "physics_steps": 481,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 231.238,
+      "cycle": 1,
+      "expected_level_id": "skirmish_ai",
+      "index": 4,
+      "level_id": "skirmish_ai",
+      "live_seconds": 8.00072,
+      "mode": "skirmish_ai",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 1,
+        "elapsed_seconds": 37.716722,
+        "level_id": "skirmish_ai",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 163252811.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2067.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 8573340.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 218079232.0,
+          "render_video_bytes": 307398928.0,
+          "resource_count": 141.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 43,
+        "buildings": 26,
+        "guan": 11,
+        "liang": 32,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 43,
+        "visible": 32
+      },
+      "units_at_start": {
+        "alive_units": 42,
+        "buildings": 26,
+        "guan": 10,
+        "liang": 32,
+        "mobile_units": 16,
+        "resources": 0,
+        "scene_units": 42,
+        "visible": 32
+      }
+    },
+    {
+      "activation": {
+        "action": "expire first defense timer; normal process spawns wave",
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "enemies_alive": 10,
+        "max_distance": 225.020599365234,
+        "moved_units": 5,
+        "passed": true,
+        "physics_steps": 481,
+        "removed_units": 0,
+        "wave": 1
+      },
+      "build_and_start_ms": 756.971,
+      "cycle": 1,
+      "expected_level_id": "custom_defense",
+      "index": 5,
+      "level_id": "custom_defense",
+      "live_seconds": 8.003703,
+      "mode": "custom_defense",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 1,
+        "elapsed_seconds": 46.501516,
+        "level_id": "custom_defense",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 165362161.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2069.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 10741196.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 284879360.0,
+          "render_video_bytes": 376379760.0,
+          "resource_count": 143.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "units_at_start": {
+        "alive_units": 27,
+        "buildings": 20,
+        "guan": 0,
+        "liang": 27,
+        "mobile_units": 7,
+        "resources": 0,
+        "scene_units": 27,
+        "visible": 27
+      }
+    },
+    {
+      "activation": {
+        "action": "select Ruan Xiaoqi and right-click gao_lure_side marker",
+        "actor": "ruan_xiaoqi_boat",
+        "passed": true,
+        "task": "gao_lure_side"
+      },
+      "activity": {
+        "damaged_units": 2,
+        "first_wave_sent": true,
+        "lure_started": true,
+        "max_distance": 262.659881591797,
+        "moved_units": 17,
+        "passed": true,
+        "physics_steps": 444,
+        "removed_units": 0,
+        "task_actor_distance": 262.659881591797,
+        "task_done": true
+      },
+      "build_and_start_ms": 1239.158,
+      "cycle": 1,
+      "expected_level_id": "level5",
+      "index": 6,
+      "level_id": "level5",
+      "live_seconds": 8.00921,
+      "mode": "campaign",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 1,
+        "elapsed_seconds": 55.768201,
+        "level_id": "level5",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 168303591.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2173.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 10488780.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 303538688.0,
+          "render_video_bytes": 394785232.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 69,
+        "buildings": 15,
+        "guan": 37,
+        "liang": 32,
+        "mobile_units": 54,
+        "resources": 0,
+        "scene_units": 69,
+        "visible": 36
+      },
+      "units_at_start": {
+        "alive_units": 69,
+        "buildings": 15,
+        "guan": 37,
+        "liang": 32,
+        "mobile_units": 54,
+        "resources": 0,
+        "scene_units": 69,
+        "visible": 35
+      }
+    },
+    {
+      "activation": {
+        "action": "normal authored Huangnigang convoy march",
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 487.154174804688,
+        "moved_units": 15,
+        "passed": true,
+        "physics_steps": 422,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 398.971,
+      "cycle": 2,
+      "expected_level_id": "level1",
+      "index": 7,
+      "level_id": "level1",
+      "live_seconds": 8.000857,
+      "mode": "campaign",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 2,
+        "elapsed_seconds": 64.431125,
+        "level_id": "level1",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 167896135.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2173.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 8807248.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 275556352.0,
+          "render_video_bytes": 365110768.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 25,
+        "buildings": 3,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 22,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      },
+      "units_at_start": {
+        "alive_units": 25,
+        "buildings": 3,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 22,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      }
+    },
+    {
+      "activation": {
+        "action": "authored arena troop button",
+        "passed": true,
+        "spawned": 50
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 689.662231445313,
+        "moved_units": 50,
+        "passed": true,
+        "physics_steps": 480,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 113.491,
+      "cycle": 2,
+      "expected_level_id": "arena",
+      "index": 8,
+      "level_id": "arena",
+      "live_seconds": 8.000879,
+      "mode": "arena",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 2,
+        "elapsed_seconds": 72.553675,
+        "level_id": "arena",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 168036943.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2172.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 8410044.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 236722176.0,
+          "render_video_bytes": 325877056.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      },
+      "units_at_start": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      }
+    },
+    {
+      "activation": {
+        "action": "expire first defense timer; normal process spawns wave",
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "enemies_alive": 10,
+        "max_distance": 225.818786621094,
+        "moved_units": 5,
+        "passed": true,
+        "physics_steps": 480,
+        "removed_units": 0,
+        "wave": 1
+      },
+      "build_and_start_ms": 675.628,
+      "cycle": 2,
+      "expected_level_id": "skirmish",
+      "index": 9,
+      "level_id": "skirmish",
+      "live_seconds": 8.003765,
+      "mode": "skirmish",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 2,
+        "elapsed_seconds": 81.253072,
+        "level_id": "skirmish",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 168087891.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2172.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 10797524.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 303538688.0,
+          "render_video_bytes": 395095408.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "units_at_start": {
+        "alive_units": 27,
+        "buildings": 20,
+        "guan": 0,
+        "liang": 27,
+        "mobile_units": 7,
+        "resources": 0,
+        "scene_units": 27,
+        "visible": 27
+      }
+    },
+    {
+      "activation": {
+        "action": "official opening soldiers attack-move; workers keep gathering",
+        "ordered": 3,
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 341.803314208984,
+        "moved_units": 15,
+        "passed": true,
+        "physics_steps": 481,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 153.171,
+      "cycle": 2,
+      "expected_level_id": "skirmish_ai",
+      "index": 10,
+      "level_id": "skirmish_ai",
+      "live_seconds": 8.00008,
+      "mode": "skirmish_ai",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 2,
+        "elapsed_seconds": 89.415643,
+        "level_id": "skirmish_ai",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 168205287.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2172.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 8570988.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 236738560.0,
+          "render_video_bytes": 326055904.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 43,
+        "buildings": 26,
+        "guan": 11,
+        "liang": 32,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 43,
+        "visible": 32
+      },
+      "units_at_start": {
+        "alive_units": 42,
+        "buildings": 26,
+        "guan": 10,
+        "liang": 32,
+        "mobile_units": 16,
+        "resources": 0,
+        "scene_units": 42,
+        "visible": 32
+      }
+    },
+    {
+      "activation": {
+        "action": "expire first defense timer; normal process spawns wave",
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "enemies_alive": 10,
+        "max_distance": 225.818786621094,
+        "moved_units": 5,
+        "passed": true,
+        "physics_steps": 480,
+        "removed_units": 0,
+        "wave": 1
+      },
+      "build_and_start_ms": 659.538,
+      "cycle": 2,
+      "expected_level_id": "custom_defense",
+      "index": 11,
+      "level_id": "custom_defense",
+      "live_seconds": 8.000396,
+      "mode": "custom_defense",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 2,
+        "elapsed_seconds": 98.100706,
+        "level_id": "custom_defense",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 168214975.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2172.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 10726964.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 303538688.0,
+          "render_video_bytes": 395024848.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "units_at_start": {
+        "alive_units": 27,
+        "buildings": 20,
+        "guan": 0,
+        "liang": 27,
+        "mobile_units": 7,
+        "resources": 0,
+        "scene_units": 27,
+        "visible": 27
+      }
+    },
+    {
+      "activation": {
+        "action": "select Ruan Xiaoqi and right-click gao_lure_side marker",
+        "actor": "ruan_xiaoqi_boat",
+        "passed": true,
+        "task": "gao_lure_side"
+      },
+      "activity": {
+        "damaged_units": 2,
+        "first_wave_sent": true,
+        "lure_started": true,
+        "max_distance": 262.659881591797,
+        "moved_units": 19,
+        "passed": true,
+        "physics_steps": 481,
+        "removed_units": 0,
+        "task_actor_distance": 262.659881591797,
+        "task_done": true
+      },
+      "build_and_start_ms": 731.354,
+      "cycle": 2,
+      "expected_level_id": "level5",
+      "index": 12,
+      "level_id": "level5",
+      "live_seconds": 8.002402,
+      "mode": "campaign",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 2,
+        "elapsed_seconds": 106.855595,
+        "level_id": "level5",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 171246067.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2214.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 10496700.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 306422272.0,
+          "render_video_bytes": 397676736.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 69,
+        "buildings": 15,
+        "guan": 37,
+        "liang": 32,
+        "mobile_units": 54,
+        "resources": 0,
+        "scene_units": 69,
+        "visible": 36
+      },
+      "units_at_start": {
+        "alive_units": 69,
+        "buildings": 15,
+        "guan": 37,
+        "liang": 32,
+        "mobile_units": 54,
+        "resources": 0,
+        "scene_units": 69,
+        "visible": 35
+      }
+    },
+    {
+      "activation": {
+        "action": "normal authored Huangnigang convoy march",
+        "passed": true
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 557.843994140625,
+        "moved_units": 15,
+        "passed": true,
+        "physics_steps": 480,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 343.123,
+      "cycle": 3,
+      "expected_level_id": "level1",
+      "index": 13,
+      "level_id": "level1",
+      "live_seconds": 8.000581,
+      "mode": "campaign",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 3,
+        "elapsed_seconds": 115.211558,
+        "level_id": "level1",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 171387759.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2214.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 8739040.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 278439936.0,
+          "render_video_bytes": 367926144.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 25,
+        "buildings": 3,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 22,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      },
+      "units_at_start": {
+        "alive_units": 25,
+        "buildings": 3,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 22,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      }
+    },
+    {
+      "activation": {
+        "action": "authored arena troop button",
+        "passed": true,
+        "spawned": 50
+      },
+      "activity": {
+        "damaged_units": 0,
+        "max_distance": 659.80615234375,
+        "moved_units": 50,
+        "passed": true,
+        "physics_steps": 475,
+        "removed_units": 0
+      },
+      "build_and_start_ms": 145.605,
+      "cycle": 3,
+      "expected_level_id": "arena",
+      "index": 14,
+      "level_id": "arena",
+      "live_seconds": 8.000915,
+      "mode": "arena",
+      "normal_start_passed": true,
+      "phase_at_end": 2,
+      "post_cleanup": {
+        "cycle": 3,
+        "elapsed_seconds": 123.367213,
+        "level_id": "arena",
+        "mode": "cleanup",
+        "phase": -1,
+        "resources": {
+          "draw_calls": 0.0,
+          "godot_static_bytes": 171027019.0,
+          "godot_static_peak_bytes": 265818256.0,
+          "node_count": 21.0,
+          "object_count": 2213.0,
+          "orphan_node_count": 0.0,
+          "render_buffer_bytes": 8410044.0,
+          "render_objects": 0.0,
+          "render_primitives": 0.0,
+          "render_texture_bytes": 239605760.0,
+          "render_video_bytes": 328760640.0,
+          "resource_count": 170.0
+        },
+        "root_child_count": 8,
+        "scene_count": 0,
+        "units": {
+          "alive_units": 0,
+          "buildings": 0,
+          "guan": 0,
+          "liang": 0,
+          "mobile_units": 0,
+          "resources": 0,
+          "scene_units": 0,
+          "visible": 0
+        }
+      },
+      "release": {
+        "camera": true,
+        "hud": true,
+        "level": true,
+        "map": true,
+        "mission": true,
+        "passed": true,
+        "sample_unit": true,
+        "scene": true,
+        "units_root": true,
+        "world": true
+      },
+      "units_at_end": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      },
+      "units_at_start": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      }
+    }
+  ],
+  "viewport": [
+    1280,
+    720
+  ],
+  "visits": {
+    "arena": 3,
+    "campaign": 5,
+    "custom_defense": 2,
+    "skirmish": 2,
+    "skirmish_ai": 2
+  },
+  "warm_baseline": {
+    "cycle": 1,
+    "elapsed_seconds": 55.768393,
+    "level_id": "",
+    "mode": "warm_cleanup",
+    "phase": -1,
+    "process_memory": {
+      "peak_working_set_bytes": 678359040.0,
+      "private_bytes": 1264095232.0,
+      "query_ok": true,
+      "source": "powershell Get-Process for this Godot PID",
+      "virtual_bytes": 9807085568.0,
+      "working_set_bytes": 647778304.0
+    },
+    "resources": {
+      "draw_calls": 0.0,
+      "godot_static_bytes": 168307727.0,
+      "godot_static_peak_bytes": 265818256.0,
+      "node_count": 21.0,
+      "object_count": 2173.0,
+      "orphan_node_count": 0.0,
+      "render_buffer_bytes": 10488780.0,
+      "render_objects": 0.0,
+      "render_primitives": 0.0,
+      "render_texture_bytes": 303538688.0,
+      "render_video_bytes": 394785232.0,
+      "resource_count": 170.0
+    },
+    "root_child_count": 8,
+    "scene_count": 0,
+    "units": {
+      "alive_units": 0,
+      "buildings": 0,
+      "guan": 0,
+      "liang": 0,
+      "mobile_units": 0,
+      "resources": 0,
+      "scene_units": 0,
+      "visible": 0
+    }
+  },
+  "process_exit": {
+    "exit_code": 0,
+    "warnings_count": 0,
+    "warning_lines": [],
+    "console_log": "E:\\ChatGPT\\水浒-art-validation\\.godot\\polish_soak_preflight_20260906\\godot_console.log",
+    "post_processed_at": "2026-09-06T15:03:08"
+  },
+  "exit_warning_status": "no matched exit warning",
+  "passed": false
+}

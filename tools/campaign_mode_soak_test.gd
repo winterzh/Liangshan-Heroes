@@ -42,6 +42,7 @@ var _minute_samples: Array = []
 var _transitions: Array = []
 var _cleanup_samples: Array = []
 var _visit_counts := {}
+var _route_visit_counts := {}
 var _report := {}
 var _output_dir := ""
 var _duration_seconds := DEFAULT_DURATION_SECONDS
@@ -287,6 +288,11 @@ func _configure_mode(fixture: Dictionary) -> void:
 	campaign.scenario_data = {}
 	campaign.ai_friendly = false
 	campaign.scale_on = false
+	campaign.ai_difficulty = "normal"
+	campaign.victory_mode = "conquest"
+	campaign.defense_waves = 30
+	campaign.defense_hero_cap = 4
+	campaign.defense_random = false
 	var mode := String(fixture.mode)
 	if mode == "campaign":
 		campaign.current = campaign.index_for_id(String(fixture.level_id))
@@ -296,34 +302,91 @@ func _configure_mode(fixture: Dictionary) -> void:
 		campaign.custom_config = {"name": "稳定性据守"}
 
 
-func _activate_live_mode(battle, mode: String) -> String:
-	# Exercise authored mode actions so a successful lifecycle cannot be an idle
-	# main scene with no game work. Campaign levels keep their normal story start.
+func _activate_live_mode(battle, mode: String) -> Dictionary:
+	# Use current authored actions and player orders. The defense fixture expires
+	# only the first wave timer; the ordinary level.process owns wave progression.
 	match mode:
 		"arena":
+			var before: int = battle.enemies_alive()
 			battle.level.arena_spawn_troops(battle)
-			return "authored arena troop button"
+			var spawned: int = battle.enemies_alive() - before
+			return {"passed": spawned == 50, "action": "authored arena troop button", "spawned": spawned}
 		"skirmish", "custom_defense":
-			if battle.level.has_method("_spawn_wave"):
-				battle.level._spawn_wave(battle, 0)
-				battle.level._wave = 1
-				battle.level._wave_t = 9999.0
-				return "authored first defense wave"
+			var ready: bool = battle.level._started and battle.level._wave == 0
+			if ready: battle.level._wave_t = 0.0
+			return {"passed": ready, "action": "expire first defense timer; normal process spawns wave"}
 		"skirmish_ai":
 			var target = battle.level.hall
 			var ordered := 0
 			if target != null and is_instance_valid(target):
 				for unit in battle.units:
 					if is_instance_valid(unit) and unit.faction == 1 and not unit.is_building \
-							and not unit.is_resource and unit.hp > 0.0:
+							and not unit.is_resource and not unit.is_worker and unit.hp > 0.0:
 						unit.order_amove(target.position)
 						ordered += 1
-			return "official opening force attack-move count=%d" % ordered
+			return {"passed": ordered > 0, "action": "official opening soldiers attack-move; workers keep gathering", "ordered": ordered}
 		"campaign":
-			if String(battle.level.id()) == "level5" and battle.level.fleet.size() > 0:
-				battle.level.on_mission_action(battle, "lure", battle.level.fleet[0])
-				return "authored level5 main-harbour lure"
-	return "normal authored on_start"
+			if String(battle.level.id()) == "level5":
+				var actor = battle.find_unit("ruan_xiaoqi_boat")
+				var action_id := "gao_lure_side"
+				var ready: bool = is_instance_valid(actor) and actor.hp > 0.0 \
+					and battle.mission != null and battle.mission.actions.has(action_id)
+				if not ready:
+					return {"passed": false, "action": "current level5 side-harbour player task", "reason": "actor or task missing"}
+				var destination: Vector2 = battle.map.cell_to_world(battle.mission.actions[action_id].cell)
+				battle._set_selection([actor])
+				battle._issue_order(battle.to_screen(destination))
+				return {"passed": actor.mission_order_active and actor.mission_order_target.distance_to(destination) < 1.0,
+					"action": "select Ruan Xiaoqi and right-click gao_lure_side marker", "actor": actor.key, "task": action_id}
+			if String(battle.level.id()) == "level1":
+				return {"passed": battle.level.st == battle.level.MARCH and not battle.level.convoy.is_empty(),
+					"action": "normal authored Huangnigang convoy march"}
+	return {"passed": false, "action": "unsupported fixture"}
+
+
+func _activity_snapshot(battle) -> Dictionary:
+	# Store values and instance IDs, not Node references that would mask release.
+	var units := {}
+	for unit in battle.units:
+		if is_instance_valid(unit) and unit.hp > 0.0 and not unit.is_building and not unit.is_resource:
+			units[unit.get_instance_id()] = {"position": unit.position, "hp": unit.hp}
+	return {"units": units, "physics_frame": Engine.get_physics_frames()}
+
+
+func _activity_evidence(battle, initial: Dictionary) -> Dictionary:
+	var moved := 0
+	var damaged := 0
+	var dead_or_removed: int = initial.units.size()
+	var max_distance := 0.0
+	for unit in battle.units:
+		if not is_instance_valid(unit) or not initial.units.has(unit.get_instance_id()): continue
+		dead_or_removed -= 1
+		var before: Dictionary = initial.units[unit.get_instance_id()]
+		var distance: float = unit.position.distance_to(before.position)
+		max_distance = maxf(max_distance, distance)
+		if distance > 1.0: moved += 1
+		if unit.hp < float(before.hp): damaged += 1
+	var physics_steps: int = Engine.get_physics_frames() - int(initial.physics_frame)
+	var evidence := {"physics_steps": physics_steps, "moved_units": moved, "damaged_units": damaged,
+		"removed_units": dead_or_removed, "max_distance": max_distance,
+		"passed": physics_steps > 0 and (moved > 0 or damaged > 0 or dead_or_removed > 0)}
+	if String(battle.level.id()) in ["skirmish", "custom_defense"]:
+		evidence["wave"] = battle.level._wave
+		evidence["enemies_alive"] = battle.enemies_alive()
+		evidence.passed = evidence.passed and battle.level._wave >= 1 and battle.enemies_alive() > 0
+	elif String(battle.level.id()) == "level5":
+		var actor = battle.find_unit("ruan_xiaoqi_boat")
+		var actor_distance := 0.0
+		if is_instance_valid(actor) and initial.units.has(actor.get_instance_id()):
+			actor_distance = actor.position.distance_to(initial.units[actor.get_instance_id()].position)
+		evidence["task_actor_distance"] = actor_distance
+		evidence["lure_started"] = battle.level.lure_started
+		evidence["task_done"] = bool(battle.mission.actions.gao_lure_side.done)
+		evidence["first_wave_sent"] = bool(battle.level.waves[0].sent)
+		# The regular six-second dwell may end while the boat is still en route;
+		# report completion separately instead of claiming the lure was completed.
+		evidence.passed = evidence.passed and actor_distance > 1.0
+	return evidence
 
 
 func _release_cursor_textures(battle) -> void:
@@ -403,6 +466,7 @@ func _run_fixture(fixture: Dictionary) -> void:
 		and battle.camera != null and battle.units_root != null
 	var start_ok: bool = String(battle.level.id()) == expected_id and battle.phase == battle.Phase.FIGHT and nodes_ok
 	var activation := _activate_live_mode(battle, mode)
+	var activity_start := _activity_snapshot(battle)
 	var transition := {
 		"index": _transitions.size() + 1,
 		"cycle": _cycle,
@@ -417,14 +481,21 @@ func _run_fixture(fixture: Dictionary) -> void:
 	_check(start_ok, "%s constructs expected level and enters normal FIGHT" % mode, JSON.stringify({
 		"actual": battle.level.id(), "expected": expected_id, "phase": int(battle.phase), "nodes": nodes_ok,
 	}))
+	_check(bool(activation.passed), "%s/%s accepts a current authored activity" % [mode, expected_id], JSON.stringify(activation))
 	_visit_counts[mode] = int(_visit_counts.get(mode, 0)) + 1
+	var route_key := mode + ":" + expected_id
+	_route_visit_counts[route_key] = int(_route_visit_counts.get(route_key, 0)) + 1
 	var live_started := Time.get_ticks_usec()
-	var live_deadline := mini(_end_usec, live_started + int(_dwell_seconds * 1_000_000.0))
+	# Complete the dwell of every started fixture, even at the overall deadline.
+	# A truncated last scene cannot provide a meaningful activity/release sample.
+	var live_deadline := live_started + int(_dwell_seconds * 1_000_000.0)
 	while Time.get_ticks_usec() < live_deadline:
 		await _render_tick()
 	transition["live_seconds"] = float(Time.get_ticks_usec() - live_started) / 1_000_000.0
 	transition["phase_at_end"] = int(battle.phase)
 	transition["units_at_end"] = _unit_counts()
+	transition["activity"] = _activity_evidence(battle, activity_start)
+	_check(bool(transition.activity.passed), "%s/%s executes live simulation activity" % [mode, expected_id], JSON.stringify(transition.activity))
 	await _dispose_battle(battle, transition)
 	_transitions.append(transition)
 	print("[soak-transition] ", JSON.stringify({
@@ -663,8 +734,9 @@ func _run() -> void:
 	}))
 	_check(_process_probe_failures == 0, "all once-per-minute Windows process-memory probes succeeded", str(_process_probe_failures))
 	_check(not _transitions.is_empty() and _transitions.all(func(item): return bool(item.release.passed)), "every constructed scene passed key-node release checks", "transitions=%d" % _transitions.size())
-	for mode in ["campaign", "arena", "skirmish", "skirmish_ai", "custom_defense"]:
-		_check(int(_visit_counts.get(mode, 0)) > 0, mode + " was built and normally started", str(_visit_counts.get(mode, 0)))
+	for fixture in ROUTE:
+		var route_key := String(fixture.mode) + ":" + String(fixture.level_id)
+		_check(int(_route_visit_counts.get(route_key, 0)) > 0, route_key + " was built and normally started", str(_route_visit_counts.get(route_key, 0)))
 	var performance := _performance_summary()
 	var actual_seconds := float(Time.get_ticks_usec() - _start_usec) / 1_000_000.0
 	if _acceptance_eligible:
@@ -699,6 +771,7 @@ func _run() -> void:
 		"route": ROUTE,
 		"cycles_started": _cycle,
 		"visits": _visit_counts,
+		"route_visits": _route_visit_counts,
 		"transition_count": _transitions.size(),
 		"transitions": _transitions,
 		"minute_samples": _minute_samples,
