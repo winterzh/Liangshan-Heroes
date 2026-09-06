@@ -1,3 +1,9 @@
+## 2026-09-07 运行时 RNG 模块与独立包证据
+
+- `scripts/run_gameplay_rng.gd`：第9个正式恢复组件，独立原生随机流与可信内容版本；恢复不依赖原始`.gd`源码，不迁移Battle调用。
+- `qa/run_gameplay_rng_runtime_20260907/`：源码writer161/reader47，原PCK失败，R1及正式资源路径各24/33检查；保留报告/log/来源玩家摘要、合成handoff、模块/driver/runner/pins、模板和精确旧依赖引用。PCK、私有工程/profile、玩家文件、缓存不入档。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)单列独立PCK七种子各64结果续接边界；原内部24项true不能掩盖writer退出2，正式路径重复矩阵不新增场景，M3整局仍待完成。
+
 ## 2026-09-07 Unit 顺序图模块与证据
 
 - `scripts/run_unit_graph.gd`：完整Unit sibling/root顺序、独立active顺序、dying节点及全图引用恢复组合；prepare只返回计划、开放identity和活tombstones，不安装Battle数组。

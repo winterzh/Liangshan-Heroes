@@ -1,0 +1,176 @@
+extends Node
+## Compiled-pack-only smoke. All paths are trusted fixed resources or host-owned QA files.
+const Rng = preload("res://scratchpad/run_gameplay_rng_runtime/gameplay_rng.gd")
+const Codec = preload("res://scripts/run_state_value_codec.gd")
+const CONTENT_VERSION := "rng-runtime-fixture-v1"
+const SEEDS := [0, 1, -1, -9223372036854775807 - 1, 9223372036854775807, 9007199254740993, -9007199254740993]
+const SOURCE_PATHS := ["res://scripts/run_state_value_codec.gd", "res://scratchpad/run_gameplay_rng_runtime/gameplay_rng.gd", "res://pck_driver.gd"]
+const FIELDS := ["run_id", "run_dir", "stage", "private_user", "report", "engine_binary_sha256", "pack_path", "pack_sha256", "handoff_sha256", "writer_report_sha256"]
+var checks: Array = []
+var failures: Array = []
+var manifest: Dictionary = {}
+var codec = Codec.new()
+var handoff_sha := ""
+
+func _ready() -> void: _run.call_deferred()
+
+func check(ok: bool, label: String) -> void:
+	checks.append({"label": label, "passed": ok})
+	if not ok: failures.append(label)
+
+func _normal(path: String) -> String:
+	return path.replace("\\", "/").simplify_path().trim_suffix("/")
+
+func _read(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return {"ok": false}
+	var size: int = file.get_length()
+	if size <= 0 or size > 1048576:
+		file.close()
+		return {"ok": false}
+	var raw: PackedByteArray = file.get_buffer(size)
+	file.close()
+	var value: String = raw.get_string_from_utf8()
+	if raw.size() != size or value.to_utf8_buffer() != raw: return {"ok": false}
+	var parser := JSON.new()
+	if parser.parse(value) != OK or typeof(parser.data) != TYPE_DICTIONARY: return {"ok": false}
+	return {"ok": true, "value": parser.data}
+
+func _write(path: String, value: Dictionary) -> bool:
+	if FileAccess.file_exists(path): return false
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null: return false
+	file.store_string(JSON.stringify(value, "", false) + "\n")
+	file.flush()
+	var error: int = file.get_error()
+	file.close()
+	var again: Dictionary = _read(path)
+	return error == OK and again.ok and again.value == value
+
+func _draw(stream, index: int) -> Dictionary:
+	match index % 4:
+		0: return stream.draw_randi()
+		1: return stream.draw_randf()
+		2: return stream.draw_randi_range(-2147483648, 2147483647)
+		_: return stream.draw_randf_range(-70.0, 70.0)
+
+func _native(stream: RandomNumberGenerator, index: int) -> Variant:
+	match index % 4:
+		0: return stream.randi()
+		1: return stream.randf()
+		2: return stream.randi_range(-2147483648, 2147483647)
+		_: return stream.randf_range(-70.0, 70.0)
+
+func _writer() -> bool:
+	var rows: Array = []
+	for index in range(SEEDS.size()):
+		var stream = Rng.new(CONTENT_VERSION)
+		var native := RandomNumberGenerator.new()
+		native.seed = SEEDS[index]
+		var started: Dictionary = stream.start(SEEDS[index], manifest.engine_binary_sha256)
+		check(started.ok, "compiled writer accepts signed seed " + str(index))
+		if not started.ok: return false
+		var matches := true
+		for step in range(17 + index):
+			var actual: Dictionary = _draw(stream, step)
+			matches = matches and actual.ok and codec.encode(actual.value).value == codec.encode(_native(native, step)).value
+		var saved: Dictionary = stream.capture()
+		if not saved.ok: return false
+		var suffix: Array = []
+		for step in range(17 + index, 17 + index + 64):
+			var actual: Dictionary = _draw(stream, step)
+			matches = matches and actual.ok and codec.encode(actual.value).value == codec.encode(_native(native, step)).value
+			suffix.append(actual.value)
+		var ending: Dictionary = stream.capture()
+		check(matches and codec.decode(ending.record).value.state == native.state, "compiled writer matches native bits and final state " + str(index))
+		rows.append({"checkpoint": saved.record, "suffix": suffix, "end": ending.record})
+	var packet: Dictionary = codec.encode({"run_id": manifest.run_id, "writer_pid": OS.get_process_id(), "content_version": CONTENT_VERSION,
+		"pack_sha256": manifest.pack_sha256, "rows": rows})
+	var path: String = _normal(manifest.run_dir) + "/handoff.json"
+	check(packet.ok and failures.is_empty() and _write(path, packet.value), "compiled writer persists exact tagged JSON")
+	if not failures.is_empty(): return false
+	handoff_sha = FileAccess.get_sha256(path)
+	return true
+
+func _reader() -> bool:
+	var base: String = _normal(manifest.run_dir)
+	handoff_sha = FileAccess.get_sha256(base + "/handoff.json")
+	var writer: Dictionary = _read(base + "/writer_report.json")
+	var input: Dictionary = _read(base + "/handoff.json")
+	check(writer.ok and input.ok and handoff_sha == manifest.handoff_sha256 \
+		and FileAccess.get_sha256(base + "/writer_report.json") == manifest.writer_report_sha256, "compiled reader consumes host-pinned writer artifacts")
+	if not failures.is_empty(): return false
+	var decoded: Dictionary = codec.decode(input.value)
+	if not decoded.ok: return false
+	var packet: Dictionary = decoded.value
+	check(packet.run_id == manifest.run_id and packet.writer_pid == writer.value.process_id and packet.writer_pid != OS.get_process_id() \
+		and writer.value.passed == true and writer.value.complete == true and writer.value.stage == "writer" \
+		and packet.pack_sha256 == manifest.pack_sha256 and packet.content_version == CONTENT_VERSION and packet.rows.size() == 7,
+		"compiled reader requires a completed distinct writer with the same pack")
+	if not failures.is_empty(): return false
+	for index in range(SEEDS.size()):
+		var item: Dictionary = packet.rows[index]
+		var stream = Rng.new(CONTENT_VERSION)
+		var restored: Dictionary = stream.restore(item.checkpoint, manifest.engine_binary_sha256)
+		check(restored.ok and stream.capture().record == item.checkpoint, "compiled reader restores complete checkpoint " + str(index))
+		if not restored.ok: return false
+		var actual: Array = []
+		var visual := RandomNumberGenerator.new()
+		visual.seed = 911 + index
+		for step in range(17 + index, 17 + index + 64):
+			randi()
+			randf()
+			visual.randi()
+			var value: Dictionary = _draw(stream, step)
+			if not value.ok: return false
+			actual.append(value.value)
+		check(codec.encode(actual).value == codec.encode(item.suffix).value and stream.capture().record == item.end,
+			"compiled reader matches 64 mixed values and final state despite unrelated noise " + str(index))
+		var other = Rng.new(CONTENT_VERSION + "-other")
+		var refused: Dictionary = other.restore(item.checkpoint, manifest.engine_binary_sha256)
+		check(not refused.ok and refused.code == "COMPAT_MISMATCH" and not other.capture().ok, "compiled save cannot supply its own trusted content version " + str(index))
+	return failures.is_empty()
+
+func _run() -> void:
+	var manifest_path: String = _normal(OS.get_environment("GAMEPLAY_RNG_PCK_MANIFEST"))
+	var loaded: Dictionary = _read(manifest_path)
+	if not loaded.ok or loaded.value.size() != FIELDS.size():
+		get_tree().quit(2)
+		return
+	manifest = loaded.value
+	for key in manifest:
+		if typeof(key) != TYPE_STRING or key not in FIELDS or typeof(manifest[key]) != TYPE_STRING:
+			get_tree().quit(2)
+			return
+	var manifest_sha: String = FileAccess.get_sha256(manifest_path)
+	var base: String = _normal(manifest.run_dir)
+	var actual_user: String = _normal(OS.get_user_data_dir())
+	check(manifest.stage in ["writer", "reader"] and base.is_absolute_path() and base.get_file() == manifest.run_id \
+		and manifest_path == base + "/" + manifest.stage + "_manifest.json" and _normal(manifest.report) == base + "/" + manifest.stage + "_report.json" \
+		and not FileAccess.file_exists(manifest.report), "compiled stage paths are fresh and inside this run")
+	check(actual_user == _normal(manifest.private_user) and actual_user.begins_with(base + "/private_profile/" + manifest.stage + "/"), "compiled stage uses its private user directory")
+	check(_normal(manifest.pack_path) == base + "/runtime.pck" and FileAccess.get_sha256(manifest.pack_path) == manifest.pack_sha256 \
+		and manifest.pack_sha256.length() == 64, "compiled stage reads the host-pinned pack bytes")
+	check(FileAccess.get_sha256(OS.get_executable_path()) == manifest.engine_binary_sha256, "compiled stage measures its actual executable bytes")
+	for path in SOURCE_PATHS:
+		check(not FileAccess.file_exists(path) and ResourceLoader.exists(path) and load(path) is Script, "compiled resource loads without original source file " + path)
+	check((manifest.stage == "writer" and manifest.handoff_sha256.is_empty() and manifest.writer_report_sha256.is_empty() \
+		and not FileAccess.file_exists(base + "/handoff.json")) or (manifest.stage == "reader" and manifest.handoff_sha256.length() == 64 \
+		and manifest.writer_report_sha256.length() == 64), "compiled writer and reader input ownership is explicit")
+	var complete := false
+	if failures.is_empty(): complete = _writer() if manifest.stage == "writer" else _reader()
+	check(FileAccess.get_sha256(manifest_path) == manifest_sha and FileAccess.get_sha256(manifest.pack_path) == manifest.pack_sha256,
+		"compiled stage leaves manifest and pack bytes unchanged")
+	if manifest.stage == "reader":
+		check(FileAccess.get_sha256(base + "/handoff.json") == manifest.handoff_sha256 \
+			and FileAccess.get_sha256(base + "/writer_report.json") == manifest.writer_report_sha256, "compiled reader preserves writer inputs")
+	var report: Dictionary = {"suite": "gameplay-rng-runtime-pck", "stage": manifest.stage, "run_id": manifest.run_id,
+		"process_id": OS.get_process_id(), "actual_user_dir": actual_user, "engine_binary_sha256": manifest.engine_binary_sha256,
+		"engine": Engine.get_version_info(), "content_version": CONTENT_VERSION, "pack_sha256": manifest.pack_sha256,
+		"manifest_sha256": manifest_sha, "handoff_sha256": handoff_sha, "checks": checks, "check_count": checks.size(), "failures": failures,
+		"complete": complete and failures.is_empty(), "passed": complete and failures.is_empty(), "production_rng_migrated": false, "battle_resume_tested": false}
+	if not _write(manifest.report, report):
+		get_tree().quit(2)
+		return
+	print("[gameplay-rng-runtime-pck QA] " + JSON.stringify(report, "", false))
+	get_tree().quit(0 if report.passed else 1)

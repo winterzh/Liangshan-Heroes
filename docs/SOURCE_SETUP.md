@@ -1,3 +1,9 @@
+## 2026-09-07 运行时 RNG 与 PCK 复现
+
+新增第9个正式恢复组件`scripts/run_gameplay_rng.gd`；源码208条与R1/正式资源路径PCK各57条通过，原PCK报告守护失败单列。[运行时RNG归档](../qa/run_gameplay_rng_runtime_20260907/README.md)按run保留driver/runner/pins、模块、导出模板和来源映射；旧RNG的source-only历史原文不改写。当前正常游戏入口不变，Battle随机调用尚未迁移。
+
+在独立相容checkout按source index恢复缺失忽略路径，已有源码只核对、不覆盖。源码入口为`python scratchpad/run_gameplay_rng_runtime/run_qa.py --godot "<实际Godot路径>"`；正式PCK入口为`python scratchpad/run_gameplay_rng_production_qa/run_pck.py --godot "<实际Godot路径>"`。不带`--run`仅预检，实际执行追加`--run`并使用独占引擎、新私有用户目录和新run；导出模板/固定helper见归档。PCK和profile不入档，不为此模块生成UID而额外启动编辑器。独立PCK夹具通过不代表整局或菜单续玩可用。
+
 ## 2026-09-07 Unit 图恢复复现
 
 新增正式`scripts/run_unit_graph.gd`，原型与正式路径各73条真实图检查通过，两份runner要求实际入口必须在manifest中。按[Unit图QA](../qa/run_unit_graph_20260907/README.md)的source index恢复缺失忽略路径，保留原pins/README准备状态；已有源码只核对、不覆盖。正式入口为`python scratchpad/run_unit_graph_production_qa/run_smoke.py --godot "<实际Godot路径>" --suite unit-graph`，不带`--run`仅预检；实际执行追加`--run`，保持共同锁、新私有用户目录和新run，不直接运行归档`.gd.txt`。

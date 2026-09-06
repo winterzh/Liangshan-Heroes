@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "formal_module_sha256": "7705f9e054f3cf4e422623b280dea3bebc1ec4509f768ed8094078f0123d7e45",
+  "formal_restore_component_number": 9,
+  "runs": [
+    {
+      "run_id": "20260906T193936497244Z",
+      "kind": "source",
+      "complete": true,
+      "classification": "complete",
+      "stages": [
+        {
+          "stage": "writer",
+          "process_id": 7728,
+          "exit_code": 0,
+          "check_count": 161,
+          "report_sha256": "31936122e3604d7b737b95a354a54760283392a4c535062c648bd4c334daf998",
+          "stdout_validated": true
+        },
+        {
+          "stage": "reader",
+          "process_id": 36120,
+          "exit_code": 0,
+          "check_count": 47,
+          "report_sha256": "1c5c5df1725e57d4304ff0140a0832bd6f86302815b21054d7c26575ecf84cc6",
+          "stdout_validated": true
+        }
+      ],
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "pack_sha256": null,
+      "pack_bytes": null,
+      "pack_archived": false,
+      "source_file_count": 2865
+    },
+    {
+      "run_id": "20260906T194037811287Z",
+      "kind": "pck_original_failed",
+      "complete": false,
+      "classification": "failed_report_persistence_guard",
+      "stages": [
+        {
+          "stage": "writer",
+          "process_id": 29188,
+          "exit_code": 2,
+          "check_count": 24,
+          "report_sha256": "bdc06ec459544db860eacd884346c35e87e0e48012717ea739c310817338f78a",
+          "stdout_validated": false
+        }
+      ],
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "pack_sha256": "b31d014c98b5a97739073c8e105b309133ee549775d9713d3a6a9565d8193203",
+      "pack_bytes": 24288,
+      "pack_archived": false,
+      "source_file_count": 2865
+    },
+    {
+      "run_id": "20260906T195011243688Z",
+      "kind": "pck_r1",
+      "complete": true,
+      "classification": "complete",
+      "stages": [
+        {
+          "stage": "writer",
+          "process_id": 20224,
+          "exit_code": 0,
+          "check_count": 24,
+          "report_sha256": "aa79fe60b4cc07bf34b80a5bed43325b5e9d52224d5cde653e354c804577e0d8",
+          "stdout_validated": true
+        },
+        {
+          "stage": "reader",
+          "process_id": 41908,
+          "exit_code": 0,
+          "check_count": 33,
+          "report_sha256": "1d4de13dc5ddc9064661ab78674725c1e706948e8eb8b19378ba4091198d96e3",
+          "stdout_validated": true
+        }
+      ],
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "pack_sha256": "54a8ba8ec47e2adaa52c3ff4fd0cf1fd88259c6266672de65540d2b711f97042",
+      "pack_bytes": 24336,
+      "pack_archived": false,
+      "source_file_count": 2865
+    },
+    {
+      "run_id": "20260906T195239912542Z",
+      "kind": "pck_formal",
+      "complete": true,
+      "classification": "complete",
+      "stages": [
+        {
+          "stage": "writer",
+          "process_id": 1400,
+          "exit_code": 0,
+          "check_count": 24,
+          "report_sha256": "39f0799ed9c7b443b171023b83291a17810eea72bebcc9bc2460134f564a7b73",
+          "stdout_validated": true
+        },
+        {
+          "stage": "reader",
+          "process_id": 2596,
+          "exit_code": 0,
+          "check_count": 33,
+          "report_sha256": "528af38290204baf397c6f5f93cdbd618aea025c67f9fa59de55eaedc74cfcc7",
+          "stdout_validated": true
+        }
+      ],
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "pack_sha256": "401c1dd1e28a488e39ef778b18ba9a2997e6970bc25b4b061c2a427c39d691d5",
+      "pack_bytes": 24240,
+      "pack_archived": false,
+      "source_file_count": 2866
+    }
+  ],
+  "source_checks": {
+    "writer": 161,
+    "reader": 47,
+    "total": 208
+  },
+  "pck_checks_per_successful_run": {
+    "writer": 24,
+    "reader": 33,
+    "total": 57
+  },
+  "pck_formal_repeats_same_matrix": true,
+  "independent_seed_count": 7,
+  "mixed_suffix_values_per_seed": 64,
+  "mixed_suffix_values_total": 448,
+  "historical_failure": {
+    "run_id": "20260906T194037811287Z",
+    "export_exit_code": 0,
+    "writer_exit_code": 2,
+    "writer_inner_report_passed": true,
+    "writer_check_rows_all_true": 24,
+    "stdout_missing": true,
+    "reader_not_started": true,
+    "complete": false,
+    "reason": "Old _write required native Dictionary equality after JSON report roundtrip; report persisted but guard returned false before stdout. R1 checks exact bytes and successful parse; RNG comparisons unchanged. Engine metadata StringName keys versus parsed String keys explain why native key identity is unsuitable; no RNG assertion failure was observed."
+  },
+  "production_rng_calls_migrated": false,
+  "battle_resume_tested": false,
+  "whole_game_pck_resume_tested": false,
+  "menu_continue_tested": false,
+  "uid_batch_excluded": true,
+  "packs_private_projects_profiles_and_player_contents_excluded": true
+}

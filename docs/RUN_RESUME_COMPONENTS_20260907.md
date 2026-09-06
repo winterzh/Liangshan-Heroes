@@ -70,3 +70,13 @@ Map/Scenery v2 已将运行时依赖原始源码摘要的条件改为由外层�
 prepare不赋值Battle数组，不挂接、连接系统信号或激活；成功返回两份顺序、新图和同一份仍开放的identity，以及仍存活的typed tombstones，`tombstones_released=false`。外层必须先通过该identity完成所有Battle/FX/整数图绑定，再统一`identity.release_tombstones()`、安装顺序与监听并激活。测试证明后续未见的retired目标/来源仍能绑定，显式外层finish后引用才成为真实已释放对象。后续保存保留同一identity；它不是全局实体/物品UID或tick分配器。
 
 原型`20260906T192949868331Z`（PID41376）及正式`20260906T193154174815Z`（PID33580）各73条通过，含20来源前后与53其余；两轮实际command入口及driver SHA与manifest完全对应，exit0、源码/玩家保护和锁释放通过。[Unit图归档](../qa/run_unit_graph_20260907/README.md)保留原准备pins/README，不将“尚未运行”历史改写。相同组件复验不新增场景；不运行Battle._ready/部署，不证明经济/效果/磁盘恢复、整局失败原子性、全局UID/tick、跨进程Battle、菜单UI或PCK验收。
+
+## 第9组件：运行时玩法 RNG 与独立 PCK
+
+[run_gameplay_rng.gd](../scripts/run_gameplay_rng.gd)与runtime原型同字节，SHA256为`7705f9e054f3cf4e422623b280dea3bebc1ec4509f768ed8094078f0123d7e45`。构造时由外层注入可信content_version，兼容校验继续约束引擎/平台和模块、codec合同；不让存档自证版本，不依赖导出后不可读的原始`.gd`哈希，保留原seed后state恢复顺序及独立原生随机调用。
+
+源码run`20260906T193936497244Z`的writer161/reader47通过；PCK R1`20260906T195011243688Z`（PID20224/41908）与正式资源路径`20260906T195239912542Z`（PID1400/2596）各writer24/reader33通过。三份原始`.gd`不可读而编译资源可加载，七种有符号种子各64个后续混合值及终态跨进程一致，不受无关全局随机噪声影响。实际PID/user、stdout、manifest、handoff/报告哈希及源码/玩家保护均核对；正式路径重验同一57项矩阵，不新增独立场景。
+
+原PCK`20260906T194037811287Z`导出exit0，writer虽落盘24项true且内部complete=true，报告Dictionary复读守护仍令其exit2，stdout缺失、reader未启动；整轮失败原文保留。R1只改_write为精确落盘字节加parse成功，其余driver和RNG判断保持。[运行时RNG归档](../qa/run_gameplay_rng_runtime_20260907/README.md)保留旧/新driver、runner/pins、模板及精确复用依赖，不保存PCK、私有工程/profile或玩家文件。
+
+该模块是第9个正式恢复组件，但未迁移Battle随机调用，也未接RunSession、整局跨进程持续战斗、菜单或整游戏PCK续玩。本批独立夹具PCK合同不替代M3整局验收，后续其他生产变动不纳入其历史源集。
