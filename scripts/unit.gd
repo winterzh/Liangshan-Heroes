@@ -2173,7 +2173,8 @@ func _acquire(range_override := -1.0, closest_first := false) -> void:
 	var best: Unit = null
 	var best_s := -INF
 	# 只在网格邻近格里找(按警戒/据守半径粗筛)——不再每帧全表扫描，是兵海索敌卡顿的主因之一。
-	for u in battle.units_near(position, range_cap):
+	var candidates: Array = battle.enemy_candidates_near(position, range_cap, faction) if battle.has_method("enemy_candidates_near") else battle.units_near(position, range_cap)
+	for u in candidates:
 		# 资源点（金矿/林木）不是攻击目标——否则敌人冲过来一直砍树；
 		# 被绑缚待救者（captive）亦非攻击目标——否则刽子手会在救援前先把人砍死。
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \

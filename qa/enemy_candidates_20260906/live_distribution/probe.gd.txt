@@ -1,0 +1,10 @@
+extends "res://tools/rts_performance_probe.gd"
+const Metrics=preload("res://scratchpad/enemy_live_metrics.gd")
+func sample(b,label: String) -> Dictionary:
+	b._perf_bench_setup(200);b._prof_on=false
+	await _wait(3)
+	Metrics.enabled=true
+	var started:=Time.get_ticks_usec()
+	await _wait(10)
+	Metrics.enabled=false
+	return {"label":label,"wall_seconds":float(Time.get_ticks_usec()-started)/1000000.0,"counts":Metrics.counts,"unit_count":b.units.size(),"note":"Instrumented query distribution only; each row is calls, raw entries, returned opponents."}

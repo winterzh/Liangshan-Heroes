@@ -5354,6 +5354,26 @@ func units_near(pos: Vector2, radius: float) -> Array:
 	return out
 
 
+## Collect only valid instances of other factions, preserving grid/bucket order.
+## Faction is read on every query; capture/conversion and edited grids are immediate.
+func enemy_candidates_near(pos: Vector2, radius: float, faction: int) -> Array:
+	var out: Array = []
+	if _grid.is_empty():
+		for u in units:
+			if is_instance_valid(u) and u.faction != faction: out.append(u)
+		return out
+	var rr := int(ceil(radius / GRID_CELL))
+	var cx := int(floor(pos.x / GRID_CELL))
+	var cy := int(floor(pos.y / GRID_CELL))
+	for gy in range(cy - rr, cy + rr + 1):
+		for gx in range(cx - rr, cx + rr + 1):
+			var bucket: Variant = _grid.get(Vector2i(gx, gy))
+			if bucket == null: continue
+			for u in bucket:
+				if is_instance_valid(u) and u.faction != faction: out.append(u)
+	return out
+
+
 ## 轻量身体阻挡：敌对机动单位不能互相穿身；友军仍交给软分离，避免大编队堵死。
 func can_unit_step(mover: Unit, next: Vector2) -> bool:
 	if mover == null or not is_instance_valid(mover):

@@ -1,0 +1,41 @@
+from pathlib import Path
+import subprocess,re,json,hashlib,os,collections
+saved={p:Path(p).read_bytes() for p in ['scripts/unit.gd','scripts/battle.gd']}
+for p,raw in saved.items():assert raw.replace(b'\r\n',b'\n')==subprocess.check_output(['git','show','HEAD:'+p]).replace(b'\r\n',b'\n')
+try:
+ s=saved['scripts/unit.gd'].decode().replace('\r\n','\n')
+ start=s.index('func _phys_body(');end=s.index('func _do_chase(',start);part=s[start:end]
+ marker='\t_cd = maxf(0.0, _cd - delta)';assert part.count(marker)==1
+ part=part.replace(marker,'\tvar section_started := Time.get_ticks_usec()\n'+marker)
+ markers=[('base_regen','\t_tick_ability_slots(delta)'),('abilities_inventory','\tif _temp_atk_t > 0.0:'),('basic_buffs','\tif _drunk_t > 0.0:'),('status_effects','\tif _giveup_t > 0.0:'),('order_timers','\t_eject_t -= delta'),('ejection','\tif _target != null and (not is_instance_valid(_target)'),('target_validation','\t# 引导施法（凌振轰天连炮等）'),('priority_actions','\tif _stun_t > 0.0:'),('state_action','\t# 动画状态推进：'),('animation','\t# 卡死看门狗：')]
+ for label,marker in markers:
+  assert part.count(marker)==1,(label,part.count(marker))
+  part=part.replace(marker,'\tpreload("res://scratchpad/phase_metrics.gd").add_time("section_'+label+'",section_started)\n\tsection_started=Time.get_ticks_usec()\n'+marker)
+ part=part.rstrip()+'\n\tpreload("res://scratchpad/phase_metrics.gd").add_time("section_watchdog",section_started)\n\n\n'
+ s=s[:start]+part+s[end:];Path('scripts/unit.gd').write_bytes(s.encode())
+ for name,methods in [('scripts/unit.gd',['_queue_motion_redraw','_queue_animated_redraw']),('scripts/battle.gd',['unit_visual_active'])]:
+  p=Path(name);s=p.read_text(encoding='utf8')
+  for method in methods:
+   pattern=re.compile(r'^func '+method+r'\(([^\r\n]*)\) -> ([^:\r\n]+):',re.M)
+   def replace(m):
+    args,result=m.groups();names=[arg.strip().split(':')[0] for arg in args.split(',')] if args else []
+    impl='_sections_probe_'+method
+    body='func '+method+'('+args+') -> '+result+':\n\tvar started := Time.get_ticks_usec()\n\t'
+    body+=('var value: '+result+' = ' if result!='void' else '')+impl+'('+','.join(names)+')\n'
+    body+='\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+p.stem+method+'",started)\n'
+    if result!='void':body+='\treturn value\n'
+    return body+'\nfunc '+impl+'('+args+') -> '+result+':'
+   s,n=pattern.subn(replace,s);assert n==1
+  p.write_bytes(s.encode())
+ env=os.environ.copy();env['PERF_DEFENSE']='1';env['PERF_OUT']='res://.godot/unit_sections_profile.json'
+ exe=Path(r'E:\ChatGPT\水浒\godot.local.txt').read_text(encoding='utf8').strip()
+ with Path('scratchpad/unit-sections-profile.log').open('wb') as stream:r=subprocess.run([exe,'--path','.','--script','res://scratchpad/frame_spike_render_probe.gd'],env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=120)
+ assert r.returncode==0
+ assert not re.search(r'SCRIPT ERROR|^ERROR:|\bFAIL\b',Path('scratchpad/unit-sections-profile.log').read_text(encoding='utf8'),re.M)
+ Path('.godot/unit_sections_rows.json').write_bytes(Path('.godot/frame_spikes_render_rows.json').read_bytes())
+finally:
+ for p,raw in saved.items():Path(p).write_bytes(raw);assert Path(p).read_bytes()==raw
+ Path('scratchpad/unit_sections_restoration.json').write_text(json.dumps({'restored':True,'raw_sha256':{p:hashlib.sha256(raw).hexdigest() for p,raw in saved.items()}},indent=2),encoding='utf8')
+times=collections.Counter();calls=collections.Counter()
+for row in json.loads(Path('.godot/unit_sections_rows.json').read_text(encoding='utf8')):times.update(row['times_us']);calls.update(row['calls'])
+for label,total in times.most_common():print(label,total,calls[label],round(total/calls[label],3))

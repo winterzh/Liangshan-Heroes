@@ -1,0 +1,8 @@
+extends RefCounted
+static var times := {}
+static var counts := {}
+static func add_time(label: String, started: int) -> void:
+	times[label]=int(times.get(label,0))+Time.get_ticks_usec()-started
+	counts[label]=int(counts.get(label,0))+1
+static func reset() -> void:
+	times.clear();counts.clear()

@@ -1,0 +1,22 @@
+from pathlib import Path
+import os, subprocess, re, json, hashlib
+p=Path('scripts/battle.gd');raw=p.read_bytes()
+try:
+ s=raw.decode().replace('\r\n','\n');start=s.index('func enemy_candidates_near(');end=s.index('func can_unit_step(',start)
+ part=s[start:end].replace('\tvar out: Array = []','\tvar out: Array = []\n\tvar raw_entries := 0')
+ part=part.replace('\t\treturn out','\t\tpreload("res://scratchpad/enemy_live_metrics.gd").observe(units.size(),out.size(),faction)\n\t\treturn out')
+ part=part.replace('\t\t\tfor u in bucket:','\t\t\traw_entries+=bucket.size()\n\t\t\tfor u in bucket:')
+ part=part.replace('\n\treturn out','\n\tpreload("res://scratchpad/enemy_live_metrics.gd").observe(raw_entries,out.size(),faction)\n\treturn out')
+ p.write_bytes((s[:start]+part+s[end:]).encode())
+ env=os.environ.copy()
+ for key in ['PERF_MODE','PERF_LEVEL','PERF_CELL']:env.pop(key,None)
+ env.update(PERF_DEFENSE='1',PERF_OUT='res://.godot/enemy_live_distribution.json')
+ exe=Path(r'E:\ChatGPT\水浒\godot.local.txt').read_text(encoding='utf8').strip()
+ with Path('scratchpad/enemy-live-probe.log').open('wb') as log:
+  result=subprocess.run([exe,'--path','.','--script','res://scratchpad/enemy_live_probe.gd'],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=120)
+ assert result.returncode==0
+ assert not re.search(r'SCRIPT ERROR|^ERROR:|\bFAIL\b',Path('scratchpad/enemy-live-probe.log').read_text(encoding='utf8'),re.M)
+finally:
+ p.write_bytes(raw)
+ Path('scratchpad/enemy_live_restoration.json').write_text(json.dumps({'restored':p.read_bytes()==raw,'raw_sha256':hashlib.sha256(raw).hexdigest()},indent=2),encoding='utf8')
+print(Path('.godot/enemy_live_distribution.json').read_text(encoding='utf8'))

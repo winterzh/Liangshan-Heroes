@@ -1,3 +1,8 @@
+## 2026-09-06 索敌候选增量
+
+- `tools/enemy_candidates_qa.gd`、`tools/contracts/enemy_candidates/`：查询顺序/实时阵营/完整目标行为与旧方法冻结参考。
+- `docs/ENEMY_CANDIDATES_20260906.md`、`qa/enemy_candidates_20260906/`：450 项验证、正常压力、实际查询分布、初步诊断和原始来源收据。
+
 ## 2026-09-06 重绘帧号增量
 
 - `tools/redraw_stamp_qa.gd`、`tools/redraw_stamp_timing.gd`：旧/新请求方法的真实渲染生命周期与物理回调耗时。

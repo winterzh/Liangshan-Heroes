@@ -1,0 +1,8 @@
+extends RefCounted
+static var enabled := false
+static var counts := {}
+static func observe(raw: int, enemies: int, faction: int) -> void:
+	if not enabled: return
+	var key := str(faction)+":"+("empty" if raw==0 else ("friendly_only" if enemies==0 else ("enemy_only" if enemies==raw else "mixed")))
+	var row: Array=counts.get(key,[0,0,0])
+	row[0]+=1;row[1]+=raw;row[2]+=enemies;counts[key]=row
