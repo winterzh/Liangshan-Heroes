@@ -1,0 +1,310 @@
+{
+	"actual_replay": {
+		"exact": true,
+		"scope": "Same actual Unit and real movement/path/reacquisition methods, restored to identical per-step state. Attack cooldown held to avoid mutating shared targets; target movement/buff changes controlled. Not damage or campaign completion evidence.",
+		"steps": 720,
+		"targets_unchanged": true
+	},
+	"dispatch": {
+		"comparisons": 5829,
+		"optimized_speed_reads": 684,
+		"reference_speed_reads": 11644,
+		"scope": "Full frozen method on the same Unit; action endpoints intercepted to compare state and dispatch. Exact speed override for IEEE boundaries, real terrain/speed functions in separate fixtures."
+	},
+	"failures": [],
+	"mode_checks": [
+		{
+			"name": "frozen complete 69125b3 chase function hash matches",
+			"passed": true
+		},
+		{
+			"name": "frozen complete chase method compiles with spy=true",
+			"passed": true
+		},
+		{
+			"name": "frozen complete chase method compiles with spy=false",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=0 blocker=false",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=0 blocker=true",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=1 blocker=false",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=1 blocker=true",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=2 blocker=false",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=2 blocker=true",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=3 blocker=false",
+			"passed": true
+		},
+		{
+			"name": "all time/speed IEEE64 boundaries and paths agree intent=3 blocker=true",
+			"passed": true
+		},
+		{
+			"name": "actual terrain/faction/profile and buffs agree land faction=0",
+			"passed": true
+		},
+		{
+			"name": "actual terrain/faction/profile and buffs agree land faction=1",
+			"passed": true
+		},
+		{
+			"name": "actual terrain/faction/profile and buffs agree water faction=0",
+			"passed": true
+		},
+		{
+			"name": "actual terrain/faction/profile and buffs agree water faction=1",
+			"passed": true
+		},
+		{
+			"name": "actual terrain/faction/profile and buffs agree unsupported faction=0",
+			"passed": true
+		},
+		{
+			"name": "actual terrain/faction/profile and buffs agree unsupported faction=1",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: progress",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: new_target",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: explicit_missing",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: auto_missing",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: amove_missing",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: hold",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: leash",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: hero_leash_exempt",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: hua_locked",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: in_range",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: passive",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: worker",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: resume_amove",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: forced",
+			"passed": true
+		},
+		{
+			"name": "complete branch action sequence agrees: path_blocker",
+			"passed": true
+		},
+		{
+			"name": "unnecessary speed/terrain reads are actually removed",
+			"passed": true
+		},
+		{
+			"name": "real movement/path/reacquisition state replay intent=0",
+			"passed": true
+		},
+		{
+			"name": "real movement/path/reacquisition state replay intent=1",
+			"passed": true
+		},
+		{
+			"name": "real movement/path/reacquisition state replay intent=2",
+			"passed": true
+		},
+		{
+			"name": "real movement/path/reacquisition state replay intent=3",
+			"passed": true
+		},
+		{
+			"name": "720 actual Unit chase steps compared without action stubs",
+			"passed": true
+		},
+		{
+			"name": "actual replay never changes shared target health between paired runs",
+			"passed": true
+		},
+		{
+			"name": "timed full method includes actual legal movement: early_auto",
+			"passed": true
+		},
+		{
+			"name": "timed full method includes actual legal movement: explicit",
+			"passed": true
+		},
+		{
+			"name": "timed full method includes actual legal movement: window_slow",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "player campaign save bytes unchanged",
+			"passed": true
+		}
+	],
+	"passed": true,
+	"samples": [
+		{
+			"after_over_before": 0.743634790022348,
+			"label": "early_auto",
+			"median_after_us": 57567,
+			"median_before_us": 77413,
+			"windows": [
+				{
+					"calls": 6000,
+					"microseconds": 77413,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 60533,
+					"reference": false
+				},
+				{
+					"calls": 6000,
+					"microseconds": 56570,
+					"reference": false
+				},
+				{
+					"calls": 6000,
+					"microseconds": 74543,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 81876,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 57567,
+					"reference": false
+				}
+			]
+		},
+		{
+			"after_over_before": 0.668009535160906,
+			"label": "explicit",
+			"median_after_us": 56046,
+			"median_before_us": 83900,
+			"windows": [
+				{
+					"calls": 6000,
+					"microseconds": 83900,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 59412,
+					"reference": false
+				},
+				{
+					"calls": 6000,
+					"microseconds": 54554,
+					"reference": false
+				},
+				{
+					"calls": 6000,
+					"microseconds": 84975,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 76050,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 56046,
+					"reference": false
+				}
+			]
+		},
+		{
+			"after_over_before": 1.04799251144787,
+			"label": "window_slow",
+			"median_after_us": 82848,
+			"median_before_us": 79054,
+			"windows": [
+				{
+					"calls": 6000,
+					"microseconds": 77286,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 82848,
+					"reference": false
+				},
+				{
+					"calls": 6000,
+					"microseconds": 85746,
+					"reference": false
+				},
+				{
+					"calls": 6000,
+					"microseconds": 79054,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 79748,
+					"reference": true
+				},
+				{
+					"calls": 6000,
+					"microseconds": 80766,
+					"reference": false
+				}
+			]
+		}
+	]
+}

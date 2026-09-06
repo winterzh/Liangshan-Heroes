@@ -1,0 +1,41 @@
+[
+  {
+    "label": "crowd",
+    "exit_code": 0,
+    "error_matches": 0,
+    "script": "tools/crowd_neighbor_qa.gd",
+    "headless": true,
+    "environment_overrides": {}
+  },
+  {
+    "label": "walls",
+    "exit_code": 0,
+    "error_matches": 0,
+    "script": "tools/wall_visibility_qa.gd",
+    "headless": false,
+    "environment_overrides": {}
+  },
+  {
+    "label": "costume",
+    "exit_code": 0,
+    "error_matches": 0,
+    "script": "tools/campaign_terminal_costume_qa.gd",
+    "headless": false,
+    "environment_overrides": {
+      "TERMINAL_COSTUME_VISUAL": "1",
+      "TERMINAL_COSTUME_OUT": "res://.godot/grid_build_costume"
+    }
+  },
+  {
+    "label": "stress",
+    "exit_code": 0,
+    "error_matches": 0,
+    "script": "tools/unit_redraw_stress.gd",
+    "headless": false,
+    "environment_overrides": {
+      "PERF_DEFENSE": "1",
+      "PERF_OUT": "res://.godot/grid_build_stress.json",
+      "REDRAW_SCREENSHOT": "res://.godot/grid_build_stress.png"
+    }
+  }
+]

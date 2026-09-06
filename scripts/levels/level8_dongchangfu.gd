@@ -1,282 +1,824 @@
 extends LevelBase
-## 第8关·东昌府·飞石没羽箭（招安张清）。梁山打东昌府，守将「没羽箭」张清飞石打将，
-## 一连打翻十数员梁山好汉，硬攻不得。宋江用浪里白条张顺的水军之计——把张清诱到水边，
-## 一把掀下水去活捉上岸；宋公明亲解其缚，以义气相待，张清感佩来归，飞石神技自此归于梁山。
-## 机制：张清飞石专打头领（命中=伤害+重眩落马）。硬拼会被逐个打懵——须把张清杀到力怯，
-## 再把他逼到水边，张顺一掀活捉=招安入伙=胜。
-
+## 第66回：八路集中南门为地图压缩；宋江留山。三名内应实际穿过核验门洞。
 const T := GameMap.T
-
-const YAMEN := Vector2i(30, 11)         # 东昌府衙（北）
-const LIANG_ENTRY := Vector2i(36, 48)   # 梁山军自东南入场
-const WATER_EDGE := Vector2i(20, 31)    # 水边诱擒点（张清力怯后退至此）
-const LAKE_C := Vector2i(10, 31)        # 西侧大湖中心
-
-const STONE_CD := 2.1                   # 飞石间隔（秒，受 time_scale 缩放）
-const STONE_DMG := 78.0
-const STONE_RANGE := 360.0              # 飞石射程（逻辑像素）
-const WEARY_FRAC := 0.40                # 张清力怯阈值（残血比例）
-const CAPTURE_R := 130.0                # 水边活捉判定半径
-
-var zq: Unit = null                     # 张清（先为敌将，后招安）
-var song: Unit = null
-var captured := false
-var weary := false
-var weary_t := 0.0                      # 力怯后计时（逼水边失败的兜底）
-var move_retry := 0.0                   # 驱赶张清往水边的节流计时
-var barrage_t := 0.0
-var coda_t := -1.0
-var hit_count := 0                      # 被飞石打懵的好汉人次（顶栏战报）
+const SOUTH_GATE := Vector2i(30,39)
+const WICKET := Vector2i(33,39)
+const CITY_CHECK := Vector2i(33,42)
+const CITY_INSIDE := Vector2i(33,36)
+const DISGUISE_CELL := Vector2i(38,47)
+const OFFICER_CELL := Vector2i(23,28)
+const PRISON_DOOR := Vector2i(19,20)
+const PRISON_CHECK := Vector2i(19,24)
+const PRISON_INSIDE := Vector2i(18,18)
+const FIRE_CELL := Vector2i(35,16)
+const TOWER_CELL := Vector2i(37,15)
+const JAIL_CELL := Vector2i(17,16)
+const JAIL_ACTION := Vector2i(19,19)
+const EXIT_CELL := Vector2i(30,48)
+const CACHE_CELL := Vector2i(43,28)
+const EAST_ALLEY := Vector2i(43,18)
+const CROWD_CELL := Vector2i(44,30)
+const PEOPLE_CELL := Vector2i(43,31)
+const PEOPLE_SAFE := Vector2i(49,31)
+const MAIN_STREET_CELL := Vector2i(30,31)
+const JAIL_LINE_CELL := Vector2i(20,24)
+const ESCORT_KEYS := ["lu_zhishen","wu_song","liang_qiang","liang_gong"]
+var stage := "approach"
+var scout: Unit
+var strategist: Unit
+var gate: Unit
+var lu: Unit
+var shi: Unit
+var chai: Unit
+var yue: Unit
+var guards: Array = []
+var patrols: Array = []
+var outside_army: Array = []
+var civilians: Array = []
+var alarm := 0.0
+var alarmed := false
+var scout_cover := false
+var officer_cover := false
+var wicket_open := false
+var prison_door_open := false
+var rescued := false
+var gate_open := false
+var reinforcements_sent := false
 var smoke_t := 0.0
-
+var fire_fx_t := 0.0
+var patrol_t := 0.0
+var street_secured := false
+var jail_secured := false
+var first_pressure_line := ""
+var street_pressure_debt := false
+var jail_pressure_debt := false
+var street_loss_t := 0.0
+var jail_loss_t := 0.0
+var street_recoveries := 0
+var jail_recoveries := 0
+var people_timing := ""
+var open_assault := false
+var prison_breached := false
 
 func id() -> String: return "level8"
-func title() -> String: return "东昌府·飞石"
-func subtitle() -> String: return "没羽箭张清·水擒招安"
+func title() -> String: return "智取大名府"
+func subtitle() -> String: return "元宵潜入·翠云火号·里应外合"
+func campaign_core_goal() -> String: return "救出卢俊义、石秀并让二人活着出城。可以潜入，也可以公开攻城劫牢。"
+func story_contract_version() -> int: return 1
+func campaign_story_goals() -> Array:
+	return [
+		{"id":"daming_infiltration","label":"时迁潜入，柴进、乐和由蔡福换装入牢","required_events":["daming_city_entered","daming_officer_cover","daming_chai_positioned","daming_yue_positioned"],"forbidden_events":["daming_open_assault"]},
+		{"id":"daming_signal","label":"牢中内应就位后，时迁点燃翠云楼火号","required_events":["daming_fire_lit"],"forbidden_events":["daming_signal_missed"]},
+		{"id":"daming_response","label":"鲁智深、武松从南门接应劫牢","required_events":["daming_gate_opened","daming_prisoners_freed"],"forbidden_events":["daming_gate_breached","daming_prison_breached"]},
+	]
 func map_w() -> int: return 60
 func map_h() -> int: return 52
 func map_theme() -> String: return "town"
 func map_base() -> int: return T.GRASS
-func camera_start_cell() -> Vector2i: return Vector2i(30, 32)
+func camera_start_cell() -> Vector2i: return Vector2i(35,43)
 func deploy_hint() -> String:
-	return "守将没羽箭张清的飞石专打头领，一石一个、连打十数将——切莫一窝蜂硬冲送脸！先稳住阵脚、合力把张清杀到力怯（残血），他便往西边水泊退去。趁势把他逼到水边，让浪里白条张顺一把掀下水去活捉上岸——擒住张清、以义招安入伙=胜。"
-
-
+	return "原著路线是时迁越墙潜入，柴进、乐和由蔡福换装引入牢中；本关合并为侧门潜入。可依翠云楼火号里应外合，也可公开攻门。无论如何，卢俊义、石秀都要活着出城。"
 func intro_lines() -> Array:
 	return [
-		{"who": "旁白", "key": "narrator", "text": "梁山兵马围打东昌府。城中守将『没羽箭』张清，生得一手飞石绝技——袖中石子百发百中，专打头脸。两军阵前，张清连珠飞石，一连打翻梁山十五员战将，众好汉一时无人近得了身。"},
-		{"who": "张清", "key": "zhang_qing", "text": "量你这伙草寇，也敢来撼东昌府？看我袖中石子！一个一个，都与我落马来！"},
-		{"who": "宋江", "key": "song_jiang", "text": "张清飞石如此了得，硬拼徒折好汉。——传我将令：诱他到水泊边上，教浪里白条张顺水中接应。这般英雄，正该收归山寨，断不可伤他性命！"},
-		{"who": "军令", "key": "narrator", "text": "【水擒招安】张清飞石专打头领（中者受伤+落马重眩）。合力把张清杀到力怯，他便往西水边退；趁势把他逼到水泊边，张顺一掀活捉=招安入伙=胜。宋江阵亡或好汉尽墨=败。"},
-	]
-
+		{"who":"旁白","key":"narrator","text":"上元将近，大名府张灯结彩。宋江背疮渐愈，仍在山寨调养；吴用代领军马，派众好汉潜入城中，营救卢俊义与石秀。"},
+		{"who":"时迁","key":"shi_qian","text":"我先越墙入城，元宵夜上翠云楼举火。柴大官人、乐和兄弟另去蔡福家，由他换旧衣、引入牢中接应。"},
+		{"who":"吴用","key":"wu_yong","text":"以翠云楼火起为号。鲁智深、武松守住南门，接应牢里的兄弟；卢员外与石秀，务必一同救出！"},
+		{"who":"军令","key":"narrator","text":"入城后分头行事，莫在巡守跟前久留。若身份受疑，先退到衣帽点或混入灯市人群，甩开盘查后再去办事。"}]
 
 func paint_map(map: GameMap) -> void:
-	# 西侧一片大水泊（活捉之处）+ 沿岸滩涂
-	map.fill_ellipse(Vector2(LAKE_C.x, LAKE_C.y), 11, 13, T.WATER)
-	map.fill_rect(0, 18, 6, 26, T.WATER, [T.GRASS])
-	map.fill_ellipse(Vector2(19, 31), 5, 6, T.SHORE, [T.WATER])
-	map.fill_ellipse(Vector2(LAKE_C.x, 18), 8, 3, T.SHORE, [T.WATER])
-	# 东昌府城：北部一片城镇砖地 + 府衙广场
-	map.fill_rect(18, 4, 26, 12, T.TOWN)
-	map.fill_ellipse(Vector2(YAMEN.x, YAMEN.y), 7, 4, T.PLAZA)
-	# 城南旷野（两军对阵的开阔地）
-	map.fill_ellipse(Vector2(32, 32), 12, 9, T.FIELD)
-	# 入城大道：东南入场 → 旷野 → 府衙
-	map.paint_path([Vector2(LIANG_ENTRY.x, LIANG_ENTRY.y), Vector2(34, 40), Vector2(32, 30), Vector2(30, 20), Vector2(YAMEN.x, YAMEN.y)], 1, T.ROAD)
-	# 水边小径（诱擒点）
-	map.paint_path([Vector2(32, 32), Vector2(26, 31), Vector2(WATER_EDGE.x, WATER_EDGE.y)], 1, T.ROAD)
-
+	map.fill_rect(0,0,60,52,T.FIELD)
+	map.fill_rect(7,4,46,36,T.TOWN)
+	map.fill_rect(7,4,46,1,T.CLIFF)
+	map.fill_rect(7,4,1,36,T.CLIFF)
+	map.fill_rect(52,4,1,36,T.CLIFF)
+	for x in range(7,53):
+		if (x < 29 or x > 31) and x != WICKET.x: map.set_cell_t(x,39,T.CLIFF)
+	map.paint_path([Vector2(30,49),Vector2(30,39),Vector2(30,10)],1,T.ROAD)
+	map.paint_path([Vector2(33,43),Vector2(33,34)],0,T.ROAD)
+	map.paint_path([Vector2(14,25),Vector2(45,25)],1,T.ROAD)
+	map.paint_path([Vector2(19,19),Vector2(19,25),Vector2(30,25)],1,T.ROAD)
+	map.paint_path([Vector2(30,20),Vector2(35,20),Vector2(35,16)],1,T.ROAD)
+	map.paint_path([Vector2(43,33),Vector2(43,28),Vector2(43,20),Vector2(35,20)],1,T.ROAD)
+	map.fill_ellipse(Vector2(37,20),5,3,T.PLAZA)
+	map.fill_ellipse(Vector2(19,19),4,3,T.PLAZA)
+	for c in [Vector2i(13,11),Vector2i(24,11),Vector2i(45,11),Vector2i(12,30),Vector2i(23,32),Vector2i(45,35)]: map.fill_rect(c.x-1,c.y-1,3,3,T.HALL)
+	map.fill_rect(36,14,3,3,T.HALL)
+	map.fill_rect(15,13,7,1,T.CLIFF)
+	map.fill_rect(15,13,1,8,T.CLIFF)
+	map.fill_rect(21,13,1,8,T.CLIFF)
+	map.fill_rect(15,20,7,1,T.CLIFF)
+	map.set_cell_t(19,20,T.ROAD)
+	map.fill_rect(16,14,2,3,T.HALL)
 
 func decorate(map: GameMap) -> void:
-	map.decor = [
-		["town_house", Vector2i(22, 7), 58.0], ["town_house", Vector2i(38, 7), 58.0],
-		["town_house", Vector2i(24, 14), 52.0], ["town_house", Vector2i(37, 14), 52.0],
-		["dock", Vector2i(WATER_EDGE.x - 1, WATER_EDGE.y + 2), 56.0],
-		["rocks", Vector2i(46, 36), 46.0], ["rocks", Vector2i(50, 24), 44.0],
-	]
-
+	map.decor = [["town_house",Vector2i(13,11),92.0],["town_house",Vector2i(24,11),94.0],
+		["town_house",Vector2i(45,11),96.0],["town_house",Vector2i(12,30),98.0],
+		["town_house",Vector2i(23,32),88.0],["town_house",Vector2i(45,35),96.0],
+		["cuiyun_tower",TOWER_CELL,184.0],["zhu_hall",JAIL_CELL,124.0],["prison_gate",PRISON_DOOR,90.0],
+		["banner",Vector2i(28,43),74.0],["banner",Vector2i(32,43),74.0]]
 
 func deploy(b) -> void:
-	var B: Battle = b
-	# 梁山军：宋江率林冲、花荣、李逵、浪里白条张顺 + 步骑
-	song = B.spawn_at("song_jiang", Unit.FACTION_LIANG, LIANG_ENTRY)
-	B.spawn_at("lin_chong", Unit.FACTION_LIANG, LIANG_ENTRY + Vector2i(-1, 0))
-	B.spawn_at("hua_rong", Unit.FACTION_LIANG, LIANG_ENTRY + Vector2i(1, 0))
-	B.spawn_at("li_kui", Unit.FACTION_LIANG, LIANG_ENTRY + Vector2i(0, 1))
-	B.spawn_at("zhang_shun", Unit.FACTION_LIANG, LIANG_ENTRY + Vector2i(-1, 1))
-	for c in [Vector2i(2, 1), Vector2i(-2, 1), Vector2i(2, -1), Vector2i(-2, -1)]:
-		B.spawn_at("liang_dao", Unit.FACTION_LIANG, LIANG_ENTRY + c)
-	for c in [Vector2i(0, 2), Vector2i(1, 2), Vector2i(-1, 2)]:
-		B.spawn_at("liang_gong", Unit.FACTION_LIANG, LIANG_ENTRY + c)
-	for c in [Vector2i(3, 0), Vector2i(-3, 0)]:
-		B.spawn_at("liang_ma", Unit.FACTION_LIANG, LIANG_ENTRY + c)
-	# 东昌府：府衙 + 张清（守将）+ 龚旺、丁得孙 + 城防官军
-	B.spawn_at("dongchang_yamen", Unit.FACTION_GUAN, YAMEN)
-	zq = B.spawn_at("zhang_qing", Unit.FACTION_GUAN, Vector2i(30, 26))
-	zq.ability = ""   # 飞石由关卡逻辑驱动远程打将（招安后再给玩家版以技能形态）
-	B.spawn_at("gong_wang", Unit.FACTION_GUAN, Vector2i(27, 24))
-	B.spawn_at("ding_desun", Unit.FACTION_GUAN, Vector2i(33, 24))
-	for c in [Vector2i(24, 20), Vector2i(28, 20), Vector2i(32, 20), Vector2i(36, 20), Vector2i(26, 17), Vector2i(34, 17)]:
-		B.spawn_at("guan_dao", Unit.FACTION_GUAN, c)
-	for c in [Vector2i(25, 15), Vector2i(30, 14), Vector2i(35, 15), Vector2i(30, 17)]:
-		B.spawn_at("guan_gong", Unit.FACTION_GUAN, c)
-	for c in [Vector2i(22, 22), Vector2i(38, 22), Vector2i(30, 22)]:
-		B.spawn_at("guan_qi", Unit.FACTION_GUAN, c)
+	open_assault = false
+	prison_breached = false
+	scout = b.spawn_at("shi_qian",Unit.FACTION_LIANG,Vector2i(36,48))
+	chai = b.spawn_at("chai_jin",Unit.FACTION_LIANG,Vector2i(37,48))
+	yue = b.spawn_at("yue_he",Unit.FACTION_LIANG,Vector2i(38,48))
+	for u in [scout,chai,yue]: _quiet_actor(u)
+	gate = b.spawn_at("zhu_gate",Unit.FACTION_GUAN,SOUTH_GATE)
+	gate.display_name = "大名府南门"
+	gate.art_variant = "daming_south_gate"
+	gate.defeat_outcome = "subdued"
+	gate.apply_shield(100000.0,99999.0)
+	b.map.block_footprint(WICKET,0,true)
+	b.map.block_footprint(PRISON_DOOR,0,true)
+	lu = b.spawn_at("lu_junyi",Unit.FACTION_LIANG,Vector2i(18,16))
+	shi = b.spawn_at("shi_xiu",Unit.FACTION_LIANG,Vector2i(19,16))
+	_bind_prisoner(lu)
+	_bind_prisoner(shi)
+	strategist = b.spawn_at("wu_yong",Unit.FACTION_LIANG,Vector2i(26,48))
+	outside_army.append(strategist)
+	outside_army.append(b.spawn_at("lu_zhishen",Unit.FACTION_LIANG,Vector2i(29,47)))
+	outside_army.append(b.spawn_at("wu_song",Unit.FACTION_LIANG,Vector2i(31,47)))
+	for i in range(8): outside_army.append(b.spawn_at("liang_qiang" if i%2==0 else "liang_gong",Unit.FACTION_LIANG,Vector2i(27+i%4,49+i/4)))
+	# Same finite army is present from deployment; the fire signal only releases its orders.
+	for u in outside_army:
+		u.set_meta("waiting_name",u.display_name)
+		u.set_meta("waiting_ability",u.ability)
+		u.set_meta("waiting_slots",u.ability_slots.duplicate(true))
+		_quiet_actor(u)
+		u.display_name += "·待火号"
+		u.set_physics_process(false)
+	# Four patrols, two gate guards, six jail / street guards: twelve in total before pursuit.
+	for entry in [[Vector2i(38,28),Vector2i(38,23)],[Vector2i(40,26),Vector2i(40,21)],
+		[Vector2i(32,27),Vector2i(32,22)],[Vector2i(27,26),Vector2i(27,21)]]:
+		var u = _guard(b,"guan_dao",entry[0])
+		u.set_meta("patrol_route",entry)
+		u.set_meta("patrol_leg",1)
+		patrols.append(u)
+	for c in [Vector2i(29,42),Vector2i(31,42),Vector2i(17,23),Vector2i(20,23),Vector2i(29,30),Vector2i(32,32)]:
+		var u = _guard(b,"guan_dao",c)
+		if c == Vector2i(17,23): u.set_meta("admission_post",Vector2i(17,25))
+		if c == Vector2i(20,23): u.set_meta("admission_post",Vector2i(17,23))
+	for c in [Vector2i(24,23),Vector2i(34,27)]: _guard(b,"guan_gong",c)
+	for i in range(3):
+		var u = b.spawn_at("lou_luo",Unit.FACTION_LIANG,Vector2i(42+i,31))
+		_quiet_actor(u)
+		u.display_name = ["灯市店户","避兵老者","城中百姓"][i]
+		u.is_worker = false
+		u.is_noncombat = true
+		u.atk = 0.0
+		civilians.append(u)
 
+func _quiet_actor(u: Unit) -> void:
+	u.order_stop()
+	u.passive = true
+	u.stance = Unit.STANCE_PASSIVE
+	u.ability = ""
+	u.ability_slots.clear()
+
+func _guard(b,key: String,c: Vector2i) -> Unit:
+	var u = b.spawn_at(key,Unit.FACTION_GUAN,c)
+	_quiet_actor(u)
+	guards.append(u)
+	return u
 
 func on_start(b) -> void:
-	var B: Battle = b
-	captured = false
-	weary = false
-	barrage_t = 2.0
-	coda_t = -1.0
-	hit_count = 0
-	B.msg("张清当阵立马，袖中石子蓄势待发——切莫一窝蜂硬冲！把他杀到力怯，再逼到水边！", 5.0)
+	b.mission.begin("daming_approach","元宵将至·城外换装","时迁先在城外换上灯客装束，再去南门东侧小门受验。柴进、乐和随行，外军候着火号。若衣帽不全被退回，换妥后可再次受验。")
+	b.mission.add_action("daming_lantern_disguise","时迁：备灯客身份",DISGUISE_CELL,["shi_qian"],1.2,48.0)
+	b.mission.add_action("daming_city_check","时迁：侧门受验",CITY_CHECK,["shi_qian"],1.2,48.0)
+	b.mission.add_action("daming_open_assault","吴用：公开攻城（放弃潜入印）",Vector2i(26,48),["wu_yong"],0.6,48.0)
 
+func on_mission_action(b, action_id: String, actor) -> void:
+	match action_id:
+		"daming_open_assault":
+			_start_open_assault(b,"吴用改令公开攻城")
+		"daming_lantern_disguise":
+			scout_cover = true
+			scout.art_variant = "shi_qian_lantern"
+			b.mission.mark("daming_lantern_cover","时迁备齐灯客身份，柴进、乐和随行")
+			b.mission.set_objective("到南门东侧小门受验，放行后带柴进、乐和一同入城。")
+		"daming_city_check":
+			if not scout_cover:
+				b.mission.mark("daming_city_identity_failed","侧门核验未过：没有灯客身份，守军令来人退回")
+				_retry_action(b,action_id,"装束不合，守军不肯放行。先去城外换装点，再回来受验。")
+				return
+			_set_wicket(b,true)
+			b.mission.mark("daming_city_admitted","侧门核验通过，放行三名内应")
+			stage = "city_cross"
+			b.mission.begin("daming_city_cross","侧门已开·三人入城","让时迁、柴进、乐和都穿过侧门，在门内集合。外军继续等火号，南门正门仍关闭。")
+			b.mission.add_action("daming_city_cross","时迁：门内会齐",CITY_INSIDE,["shi_qian"],0.6,32.0)
+			b.mission.set_status("侧门已经放行；请玩家分别命时迁、柴进、乐和入城。")
+		"daming_city_cross":
+			if not _party_inside_city(b):
+				_retry_action(b,action_id,"柴进、乐和尚未穿门；让两人走到门内集合点，再点会齐。")
+				return
+			_set_wicket(b,false)
+			b.mission.mark("daming_city_entered","三名内应已穿门入城，侧门重新关闭")
+			stage = "infiltrate"
+			b.mission.begin("daming_infiltrate","灯市潜行·牢外乔装","时迁取火种；柴进、乐和在衣帽点会齐，换公人衣帽与文书，再去牢外受验。巡守往返，停留过近会警觉。")
+			b.mission.add_action("daming_fire_cache","时迁：取火种",CACHE_CELL,["shi_qian"],1.5,24.0)
+			b.mission.add_action("daming_officer_disguises","柴进：会齐乐和换装",OFFICER_CELL,["chai_jin"],1.2,48.0)
+			b.mission.add_action("daming_prison_check","柴进：牢外受验",PRISON_CHECK,["chai_jin"],1.2,48.0)
+		"daming_fire_cache":
+			b.mission.mark("daming_fire_ready","时迁备齐翠云楼火号用物")
+			_maybe_signal_stage(b)
+		"daming_officer_disguises":
+			if not _near(b,yue,OFFICER_CELL,128.0):
+				_retry_action(b,action_id,"乐和尚未到衣帽点，先让他走近柴进，再一同换装。")
+				return
+			officer_cover = true
+			chai.art_variant = "chai_jin_officer"
+			yue.art_variant = "yue_he_officer"
+			b.mission.mark("daming_officer_cover","柴进、乐和备齐公人衣帽和核验文书")
+			b.mission.set_objective("请玩家命柴进、乐和一同到牢外核验。时迁的火种和两名牢中内应，缺一不可。")
+		"daming_prison_check":
+			if not officer_cover or not _near(b,yue,PRISON_CHECK,144.0):
+				b.mission.mark("daming_prison_identity_failed","牢外核验未过：身份文书不全，或同行公人未到场")
+				_retry_action(b,action_id,"先由柴进、乐和同到衣帽点换装，再让两人到牢外核验；补齐后可再试。")
+				return
+			_set_prison_door(b,true)
+			for u in guards:
+				if _effective(u) and u.has_meta("admission_post"): u.order_move(b.map.cell_to_world(u.get_meta("admission_post")))
+			b.mission.mark("daming_prison_admitted","牢外核验通过，两名公人可经牢门进入内院")
+			stage = "gaol_entry"
+			b.mission.begin("daming_gaol_entry","核验已过·进牢就位","柴进、乐和分别走过牢门，在囚室外就位；现在不能开枷。时迁若尚未取火种，先补齐。")
+			b.mission.add_action("daming_chai_inside","柴进：入牢就位",PRISON_INSIDE,["chai_jin"],0.6,24.0)
+			b.mission.add_action("daming_yue_inside","乐和：入牢就位",PRISON_INSIDE+Vector2i(2,0),["yue_he"],0.6,24.0)
+			if not b.mission.has_event("daming_fire_ready"): b.mission.add_action("daming_fire_cache","时迁：取火种",CACHE_CELL,["shi_qian"],1.5,24.0)
+			if alarmed: _add_cover_actions(b)
+		"daming_chai_inside":
+			b.mission.mark("daming_chai_positioned","柴进已入牢院，守在囚室外")
+			_maybe_signal_stage(b)
+		"daming_yue_inside":
+			b.mission.mark("daming_yue_positioned","乐和已入牢院，与柴进会合")
+			_maybe_signal_stage(b)
+		"daming_east_alley":
+			b.mission.mark("daming_alley_reached","时迁沿东巷绕过灯市中央巡守，到达翠云楼东侧")
+		"daming_crowd_cover":
+			_restore_cover(b)
+			b.mission.mark("daming_crowd_cover_used","时迁利用灯市人群甩开盘查，这处掩护只用一次")
+		"daming_recover_cover":
+			_restore_cover(b)
+			_retry_action(b,action_id,"已甩开盘查。避开巡守，继续备火与牢中接应。")
+		"daming_signal":
+			if not _jail_infiltrators_ready(b):
+				b.mission.mark("daming_inner_party_missing","举火受阻：牢中内应已经离开岗位")
+				_retry_action(b,action_id,"柴进、乐和必须在举火时仍留牢院；先让离岗者重新入牢就位，再举火。")
+				b.mission.add_action("daming_chai_inside","柴进：返回牢内就位",PRISON_INSIDE,["chai_jin"],0.6,24.0)
+				b.mission.add_action("daming_yue_inside","乐和：返回牢内就位",PRISON_INSIDE+Vector2i(2,0),["yue_he"],0.6,24.0)
+				return
+			if alarmed or not scout_cover:
+				_retry_action(b,action_id,"守军仍在跟踪时迁，不能当面举火。先到灯市或衣帽点甩开盘查，再回来。")
+				_add_cover_actions(b)
+				return
+			if b.map.sample_scenery != null: b.map.sample_scenery.set_story_object_state("cuiyun_tower","signal")
+			b.mission.mark("daming_fire_lit","翠云楼火起，已就位的内应和城外军同时响应")
+			stage = "gate"
+			_deploy_response(b)
+			if is_instance_valid(gate): gate._shield = 0.0
+			b.mission.begin("daming_gate","火号已起·压住南门","吴用领外军向南门推进。先击败或晕眩、缴械门前守军，再由鲁智深或武松夺门；门前须有至少两名可作战的接应者。")
+			b.mission.add_action("daming_open_gate","鲁智深：夺门接应",Vector2i(30,42),["lu_zhishen","wu_song"],1.5,48.0)
+		"daming_open_gate":
+			if _guards_control(b,Vector2i(30,42),160.0):
+				b.mission.mark("daming_gate_blocked","夺门受阻：门前仍有未受控制的官军")
+				_retry_action(b,action_id,"门前官军仍在抵抗。先击败他们，或使其晕眩、缴械，再点夺门。")
+				return
+			if _response_count(b) < 2:
+				b.mission.mark("daming_response_missing","夺门受阻：门前接应人手不足")
+				_retry_action(b,action_id,"门前至少需要两名可战接应者；让外军走近南门，再执行夺门。")
+				return
+			_open_south_gate(b,open_assault)
+		"daming_secure_street":
+			_stabilize_pressure_line(b,"street",action_id)
+		"daming_secure_jail":
+			_stabilize_pressure_line(b,"jail",action_id)
+		"daming_unlock":
+			if not _prisoners_alive():
+				b.lose("卢俊义、石秀未能一同生还，劫牢失败。")
+				return
+			if first_pressure_line != "" and not _pressure_lines_ready(b):
+				b.mission.mark("daming_unlock_lines_blocked","接应线已有一处失控，开枷后没有安全撤离通道")
+				_retry_action(b,action_id,"先恢复主街与牢前两条接应线，再开枷；当前局面仍可补救。")
+				_add_pressure_actions(b)
+				return
+			if _guards_control(b,PRISON_CHECK,210.0) or _guards_control(b,JAIL_ACTION,144.0):
+				b.mission.mark("daming_jail_blocked","解枷受阻：牢区仍有未受控制的官军")
+				_retry_action(b,action_id,"守军仍把持牢前通道。先击败他们，或使其晕眩、缴械，再解枷；当心卢俊义、石秀受伤。")
+				return
+			rescued = true
+			if b.map.sample_scenery != null: b.map.sample_scenery.set_story_object_state("prison_gate","open")
+			_release_prisoner(lu)
+			_release_prisoner(shi)
+			b.mission.mark("daming_prisoners_freed","柴进与乐和救出卢俊义、石秀")
+			stage = "extract"
+			b.mission.begin("daming_extract","两线护送·二人活着出城","主街与牢前都须稳住，才能分别护卢俊义、石秀出城。追兵经过主街会令它重新失控；先护百姓可把追兵由5人减为2人，追兵出动后不再减少。")
+			_add_pressure_actions(b)
+			if not b.mission.has_event("daming_people_escorting") and not b.mission.has_event("daming_people_lost"):
+				b.mission.add_action("daming_spare_people","可选：吴用护送百姓",PEOPLE_CELL,["wu_yong"],1.0,64.0)
+			b.mission.add_action("daming_lu_exit","卢俊义：护送出城",EXIT_CELL,["lu_junyi"],1.0,48.0)
+			b.mission.add_action("daming_shi_exit","石秀：护送出城",EXIT_CELL,["shi_xiu"],1.0,48.0)
+		"daming_spare_people":
+			if _guards_control(b,PEOPLE_CELL,180.0):
+				b.mission.mark("daming_people_route_blocked","追兵或守军控制东巷口，吴用无法让百姓穿过交战线")
+				_retry_action(b,action_id,"灯市退路仍有官军，先控制这段街巷，再护百姓离开。")
+				return
+			if people_timing == "":
+				people_timing = "late" if reinforcements_sent else ("early" if not rescued else "before_pursuit")
+				if people_timing == "early" and not street_secured:
+					street_pressure_debt = true
+					_refresh_pressure_action_label(b,"street")
+					b.mission.mark("daming_people_early_tradeoff","吴用先去护民，主街少了统筹；稳主街需要三名接应者同时到位")
+				b.mission.mark("daming_people_timing_"+people_timing,
+					"追兵已经出动，护民不再减少追兵" if people_timing == "late" else ("解枷前先护百姓，吴用暂离两线" if people_timing == "early" else "二囚尚未离开牢区，仍赶得及减少追兵"))
+			b.mission.mark("daming_people_escorting","吴用传令止杀，三名百姓沿东巷撤离")
+			for u in civilians:
+				if _effective(u): u.order_move(b.map.cell_to_world(PEOPLE_SAFE))
+		"daming_lu_exit":
+			if not open_assault and not _pressure_lines_ready(b):
+				_block_escape_for_pressure(b,action_id)
+				return
+			if actor == lu and rescued and gate_open and _prisoners_alive():
+				lu.resolve_story("retreated")
+				b.mission.mark("daming_lu_safe","卢俊义活着撤出大名府")
+		"daming_shi_exit":
+			if not open_assault and not _pressure_lines_ready(b):
+				_block_escape_for_pressure(b,action_id)
+				return
+			if actor == shi and rescued and gate_open and _prisoners_alive():
+				shi.resolve_story("retreated")
+				b.mission.mark("daming_shi_safe","石秀活着撤出大名府")
+
+func _set_wicket(b,opened: bool) -> void:
+	if wicket_open == opened: return
+	wicket_open = opened
+	b.map.block_footprint(WICKET,0,not opened)
+func _set_prison_door(b,opened: bool) -> void:
+	if prison_door_open == opened: return
+	prison_door_open = opened
+	b.map.block_footprint(PRISON_DOOR,0,not opened)
+func _party_inside_city(b) -> bool:
+	for u in [scout,chai,yue]:
+		if not _near(b,u,CITY_INSIDE,128.0) or b.map.world_to_cell(u.position).y > 37: return false
+		if not b.map._segment_open(u.position,b.map.cell_to_world(CITY_INSIDE)): return false
+	return true
+func _jail_infiltrators_ready(b) -> bool:
+	for u in [chai,yue]:
+		if not _effective(u): return false
+		var c: Vector2i = b.map.world_to_cell(u.position)
+		if c.x <= 15 or c.x >= 21 or c.y <= 13 or c.y >= 20: return false
+	return true
+func _near(b,u,cell: Vector2i,distance: float) -> bool:
+	return _effective(u) and u.position.distance_to(b.map.cell_to_world(cell)) <= distance
+func _effective(u) -> bool:
+	return is_instance_valid(u) and u.hp > 0.0 and u.story_outcome == "" and not u.is_captive and not u.garrisoned
+func _can_control(u) -> bool:
+	return _effective(u) and not u.is_noncombat and u._stun_t <= 0.0 and u._disarm_t <= 0.0
+func _guards_control(b,cell: Vector2i,distance: float) -> bool:
+	for u in b.units:
+		if _can_control(u) and u.faction == Unit.FACTION_GUAN and not u.is_building and _near(b,u,cell,distance): return true
+	return false
+func _response_count(b) -> int:
+	var count := 0
+	for u in outside_army:
+		if _can_control(u) and u.key in ESCORT_KEYS and _near(b,u,Vector2i(30,42),220.0): count += 1
+	return count
+
+func _response_count_at(b,cell: Vector2i,distance := 220.0) -> int:
+	var count := 0
+	for u in outside_army:
+		if _can_control(u) and _near(b,u,cell,distance): count += 1
+	return count
+
+func _pressure_required(line: String) -> int:
+	return 3 if (street_pressure_debt if line == "street" else jail_pressure_debt) else 2
+
+func _pressure_cell(line: String) -> Vector2i:
+	return MAIN_STREET_CELL if line == "street" else JAIL_LINE_CELL
+
+func _pressure_contested(b,line: String) -> bool:
+	return _guards_control(b,_pressure_cell(line),180.0 if line == "street" else 210.0)
+
+func _add_pressure_actions(b) -> void:
+	if not street_secured:
+		_restore_or_add_pressure_action(b,"street")
+	if not jail_secured:
+		_restore_or_add_pressure_action(b,"jail")
+
+func _restore_or_add_pressure_action(b,line: String) -> void:
+	var action_id := "daming_secure_"+line
+	if b.mission.actions.has(action_id):
+		var action: Dictionary = b.mission.actions[action_id]
+		_refresh_pressure_action_label(b,line)
+		if action.done:
+			action.done = false
+			action.button.disabled = false
+			action.marker.show()
+			b.mission._refresh_marker_captions()
+		return
+	b.mission.add_action(action_id,
+		"接应军：%s（%d人）"%[("稳住主街" if line == "street" else "控住牢前"),_pressure_required(line)],
+		_pressure_cell(line),ESCORT_KEYS,1.2,56.0)
+
+func _refresh_pressure_action_label(b,line: String) -> void:
+	var action_id := "daming_secure_"+line
+	if not b.mission.actions.has(action_id): return
+	var action: Dictionary = b.mission.actions[action_id]
+	var label_text := "接应军：%s（%d人）"%[("稳住主街" if line == "street" else "控住牢前"),_pressure_required(line)]
+	action.label = label_text
+	var number := 1
+	for id in b.mission.actions:
+		if id == action_id: break
+		number += 1
+	action.button.text = "%d · %s"%[number,label_text]
+
+func _stabilize_pressure_line(b,line: String,action_id: String) -> void:
+	var cell := _pressure_cell(line)
+	if _pressure_contested(b,line):
+		b.mission.mark("daming_%s_line_contested"%line,"%s仍有未受控制的官军"%("主街" if line == "street" else "牢前"))
+		_retry_action(b,action_id,"先击败、晕眩或缴械这条线上的官军，再调接应者到位。")
+		return
+	var required := _pressure_required(line)
+	var present := _response_count_at(b,cell)
+	if present < required:
+		b.mission.mark("daming_%s_manpower_short"%line,"%s人手不足：需要%d名，当前%d名"%[("主街" if line == "street" else "牢前"),required,present])
+		_retry_action(b,action_id,"这条线需要%d名可战接应者同时在场；从另一线调人后可重试。"%required)
+		return
+	var was_recovery := street_recoveries > 0 if line == "street" else jail_recoveries > 0
+	if line == "street":
+		street_secured = true
+		street_loss_t = 0.0
+	else:
+		jail_secured = true
+		jail_loss_t = 0.0
+	if first_pressure_line == "":
+		first_pressure_line = line
+		if line == "street":
+			jail_pressure_debt = true
+			_refresh_pressure_action_label(b,"jail")
+		else:
+			street_pressure_debt = true
+			_refresh_pressure_action_label(b,"street")
+		b.mission.mark("daming_%s_first"%line,
+			"先稳主街，牢前守军趁隙收紧；控牢前须三名接应者" if line == "street" else "先控牢前，主街守军趁隙收紧；稳主街须三名接应者")
+	b.mission.mark("daming_%s_line_recovered"%line if was_recovery else "daming_%s_line_secured"%line,
+		"%s已重新稳住"%("主街" if line == "street" else "牢前") if was_recovery else "%s已有接应军实际驻住"%("主街" if line == "street" else "牢前"))
+	if street_secured and jail_secured:
+		b.mission.mark("daming_both_lines_secured","主街与牢前两条接应线均已稳住；仍须防追兵重新冲开主街")
+
+func _pressure_lines_ready(b) -> bool:
+	return street_secured and jail_secured and not _pressure_contested(b,"street") and not _pressure_contested(b,"jail")
+
+func _block_escape_for_pressure(b,action_id: String) -> void:
+	b.mission.mark("daming_escape_line_blocked","接应线失控，不能把二囚送入敌军控制的街口")
+	_retry_action(b,action_id,"主街与牢前必须同时稳住。先恢复失控线，再继续护送；已经救出的二人仍可补救。")
+	_add_pressure_actions(b)
+
+func _tick_pressure_lines(b,delta: float) -> void:
+	if not b.mission.has_event("daming_fire_lit") or stage not in ["rescue","extract"]: return
+	street_loss_t = street_loss_t+delta if street_secured and _pressure_contested(b,"street") else 0.0
+	jail_loss_t = jail_loss_t+delta if jail_secured and _pressure_contested(b,"jail") else 0.0
+	if street_secured and street_loss_t >= 1.5:
+		street_secured = false
+		street_loss_t = 0.0
+		street_recoveries += 1
+		b.mission.mark("daming_street_line_lost","追兵或恢复战力的守军冲开主街，二囚撤离暂时受阻")
+		_add_pressure_actions(b)
+	if jail_secured and jail_loss_t >= 1.5:
+		jail_secured = false
+		jail_loss_t = 0.0
+		jail_recoveries += 1
+		b.mission.mark("daming_jail_line_lost","牢前守军重新集结，二囚撤离暂时受阻")
+		_add_pressure_actions(b)
+func _maybe_signal_stage(b) -> void:
+	if not b.mission.has_event("daming_fire_ready") or not b.mission.has_event("daming_chai_positioned") or not b.mission.has_event("daming_yue_positioned"): return
+	if not _jail_infiltrators_ready(b): return
+	stage = "signal"
+	b.mission.begin("daming_signal","内应就位·翠云楼火号","柴进、乐和已在牢内。时迁可先沿东巷绕过中央巡守，再折向翠云楼放火；直接横穿灯市容易暴露。")
+	b.mission.add_action("daming_east_alley","时迁：沿东巷绕巡守",EAST_ALLEY,["shi_qian"],0.5,32.0)
+	b.mission.add_action("daming_signal","时迁：翠云楼放火",FIRE_CELL,["shi_qian"],2.0,64.0)
+	if alarmed: _add_cover_actions(b)
+func _retry_action(b,action_id: String,reason: String) -> void:
+	if b.mission.actions.has(action_id):
+		var action: Dictionary = b.mission.actions[action_id]
+		action.done = false
+		action.button.disabled = false
+		action.marker.show()
+		b.mission._refresh_marker_captions()
+	b.mission.set_objective(reason)
+	b.msg(reason,4.0)
+
+func _miss_story(b,goal_id: String,reason: String) -> void:
+	if b.mission.has_method("miss_story_goal"):
+		b.mission.miss_story_goal(goal_id,reason)
+
+func _complete_story(b,goal_id: String,note: String) -> void:
+	if b.mission.has_method("complete_story_goal"):
+		b.mission.complete_story_goal(goal_id,note)
+
+func _start_open_assault(b,reason: String) -> void:
+	if open_assault or stage not in ["approach","city_cross","infiltrate","gaol_entry","signal","gate","rescue"]: return
+	var fire_already_lit: bool = b.mission.has_event("daming_fire_lit")
+	open_assault = true
+	if fire_already_lit:
+		b.mission.mark("daming_late_breach",reason+"；火号仍有效，余部改以强攻补上中断的牢内接应")
+		_miss_story(b,"daming_response","牢中接应中断，改由到场好汉强开牢门")
+	else:
+		b.mission.mark("daming_open_assault",reason+"；潜入任务改为公开攻门")
+		b.mission.mark("daming_signal_missed","公开攻城没有以翠云楼火号发动接应")
+		_miss_story(b,"daming_infiltration","改走公开攻城，没有完成元宵潜入分工")
+		_miss_story(b,"daming_signal","没有以牢中内应就位后的翠云楼火号起事")
+	if gate_open or stage == "rescue":
+		stage = "rescue"
+		b.mission.begin("daming_rescue_free","火号已应·强开牢院","南门接应仍然有效，但牢内分工已经中断。清开牢前守军后，任一到场好汉都可攻开牢门与枷锁；主街驻守和护民只改变风险。")
+		if _effective(strategist): b.mission.add_action("daming_spare_people","可选：吴用先护百姓",PEOPLE_CELL,["wu_yong"],1.0,64.0)
+		return
+	stage = "gate"
+	_deploy_response(b)
+	if is_instance_valid(gate): gate._shield = 0.0
+	b.mission.begin("daming_open_assault","公开攻城·破门劫牢" if not fire_already_lit else "火号已起·强攻补位","击退南门守军后可以由鲁智深、武松攻门，也可直接击破城门。入城清开牢前守军，任何到场好汉都可强开牢门。")
+	b.mission.add_action("daming_open_gate","鲁智深或武松：攻开南门",Vector2i(30,42),["lu_zhishen","wu_song"],1.2,48.0)
+
+func _open_south_gate(b,breached: bool) -> void:
+	if gate_open: return
+	gate_open = true
+	if is_instance_valid(gate):
+		b.unregister_building_footprint(gate)
+		if gate.story_outcome == "": gate.resolve_story("retreated")
+		gate.visible = false
+	if breached:
+		b.mission.mark("daming_gate_breached","梁山以公开攻城夺下南门")
+		_miss_story(b,"daming_response","没有按翠云火号由鲁智深、武松秘密接应")
+	else:
+		b.mission.mark("daming_response_arrived","接应军赶到南门，压住守门官军")
+	b.mission.mark("daming_gate_opened","南门接应通道已打开")
+	stage = "rescue"
+	b.mission.begin("daming_rescue_free" if breached else "daming_rescue",
+		"公开劫牢·清开牢前" if breached else "两线接应·劫牢开枷",
+		"南门已破。清开牢前守军后，任一到场好汉可强开牢门；主街与牢前驻守只影响风险，不再锁死撤离。" if breached else "同一支接应军要分守主街与牢前。可以先稳主街，或先控牢前；先稳一边会让另一边收紧，须多留一名可战接应者。两线失控会阻断二囚撤离。")
+	if not breached: _add_pressure_actions(b)
+	if _effective(chai) or _effective(yue):
+		b.mission.add_action("daming_unlock","柴进或乐和：开枷救人",JAIL_ACTION,["chai_jin","yue_he"],1.5,48.0)
+	if _effective(strategist): b.mission.add_action("daming_spare_people","可选：吴用先护百姓",PEOPLE_CELL,["wu_yong"],1.0,64.0)
+	b.mission.set_status("南门已经打开。城外接应军全部交还玩家控制，请自行分守主街和牢前。")
+
+func _release_prisoners_free(b,actor) -> void:
+	if rescued or not _prisoners_alive(): return
+	rescued = true
+	prison_breached = true
+	if b.map.sample_scenery != null: b.map.sample_scenery.set_story_object_state("prison_gate","open")
+	_release_prisoner(lu)
+	_release_prisoner(shi)
+	b.mission.mark("daming_prison_breached","%s强开牢门与枷锁，救出卢俊义、石秀"%actor.display_name)
+	b.mission.mark("daming_prisoners_freed","卢俊义、石秀已被救出")
+	_miss_story(b,"daming_response","没有由柴进、乐和按牢中接应开枷")
+	stage = "extract"
+	b.mission.begin("daming_extract_free","自由撤离·二人活着出城","卢俊义、石秀可从已打开的南门自行撤离。清街、护民会降低风险，但不再是出城门锁。")
+	b.mission.add_action("daming_lu_exit","卢俊义：撤出城外",EXIT_CELL,["lu_junyi"],1.0,48.0)
+	b.mission.add_action("daming_shi_exit","石秀：撤出城外",EXIT_CELL,["shi_xiu"],1.0,48.0)
+	if _effective(strategist): b.mission.add_action("daming_spare_people","可选：吴用护送百姓",PEOPLE_CELL,["wu_yong"],1.0,64.0)
+
+func _open_assault_tick(b) -> void:
+	if not open_assault and stage in ["approach","city_cross","infiltrate","gaol_entry","signal"] \
+		and b.mission.active_action_id not in ["daming_city_check","daming_city_cross","daming_prison_check"]:
+		for actor in b.units:
+			if not _effective(actor) or actor.faction != Unit.FACTION_LIANG or actor.is_building: continue
+			if actor.position.distance_to(b.map.cell_to_world(SOUTH_GATE)) <= 70.0:
+				_start_open_assault(b,"梁山人马自行逼近南门")
+				break
+	if not open_assault or stage != "rescue": return
+	if not prison_door_open:
+		for actor in b.units:
+			if not _can_control(actor) or actor.faction != Unit.FACTION_LIANG or actor.is_building: continue
+			if actor.position.distance_to(b.map.cell_to_world(PRISON_CHECK)) <= 86.0 and not _guards_control(b,PRISON_CHECK,180.0):
+				_set_prison_door(b,true)
+				prison_breached = true
+				b.mission.mark("daming_prison_breached","梁山攻开牢门，进入牢院")
+				_miss_story(b,"daming_response","公开攻破牢门，没有完成柴进、乐和乔装入牢")
+				break
+	if prison_door_open and not rescued:
+		for actor in b.units:
+			if not _can_control(actor) or actor.faction != Unit.FACTION_LIANG or actor.is_building: continue
+			if actor.position.distance_to(b.map.cell_to_world(JAIL_ACTION)) <= 76.0 and not _guards_control(b,JAIL_ACTION,144.0):
+				_release_prisoners_free(b,actor)
+				break
+
+func _auto_extract_free(b) -> void:
+	if not open_assault or stage != "extract" or not rescued: return
+	for record in [[lu,"daming_lu_safe","卢俊义"],[shi,"daming_shi_safe","石秀"]]:
+		var actor = record[0]
+		if not is_instance_valid(actor) or actor.hp <= 0.0 or actor.story_outcome != "": continue
+		if b.map.world_to_cell(actor.position).y >= 40:
+			actor.resolve_story("retreated")
+			b.mission.mark(record[1],"%s活着撤出大名府"%record[2])
+func _add_cover_actions(b) -> void:
+	if not b.mission.has_event("daming_crowd_cover_used"): b.mission.add_action("daming_crowd_cover","时迁：混入灯市人群",CROWD_CELL,["shi_qian"],1.0,48.0)
+	b.mission.add_action("daming_recover_cover","时迁：退回衣帽点掩护",OFFICER_CELL,["shi_qian"],1.2,48.0)
+func _restore_cover(b) -> void:
+	alarm = 0.0
+	alarmed = false
+	scout_cover = true
+	b.mission.mark("daming_identity_recovered","时迁甩开巡守，暂时隐住了行迹")
+	for u in patrols:
+		if _effective(u):
+			_quiet_actor(u)
+			u.order_move(b.map.cell_to_world(u.get_meta("patrol_route")[0]))
+	if b.mission.actions.has("daming_east_alley"):
+		_retry_action(b,"daming_east_alley","已摆脱盘查；从东巷重新接近翠云楼，不要横穿巡守。")
+	b.mission.set_objective("已摆脱盘查。避开往返巡守，继续备火与牢中接应。")
+func _deploy_response(b) -> void:
+	for u in outside_army:
+		if not _effective(u): continue
+		u.set_physics_process(true)
+		u.display_name = u.get_meta("waiting_name")
+		u.ability = u.get_meta("waiting_ability")
+		u.ability_slots = u.get_meta("waiting_slots").duplicate(true)
+		u.stance = Unit.STANCE_DEFEND
+		u.order_stop()
+	for u in guards:
+		if _effective(u):
+			u.passive = false
+			u.stance = Unit.STANCE_DEFEND
+			u.order_hold_position()
+	for u in [chai,yue]: _quiet_actor(u)
+func _bind_prisoner(u: Unit) -> void:
+	_quiet_actor(u)
+	u.is_captive = true
+	u.is_noncombat = true
+	u.base_speed = 0.0
+	u.atk = 0.0
+	u.art_variant = "daming_bound_"+u.key
+func _release_prisoner(u: Unit) -> void:
+	u.is_captive = false
+	u.is_noncombat = true
+	u.base_speed = 68.0
+	u.stance = Unit.STANCE_PASSIVE
+	u.passive = true
+	u.art_variant = "daming_rescued_"+u.key
+	u.queue_redraw()
+func _prisoners_alive() -> bool:
+	return is_instance_valid(lu) and lu.hp > 0.0 and is_instance_valid(shi) and shi.hp > 0.0
+
+func _tick_infiltration(b,delta: float) -> void:
+	patrol_t -= delta
+	if not alarmed and patrol_t <= 0.0:
+		patrol_t = 0.8
+		for u in patrols:
+			if not _effective(u): continue
+			var route: Array = u.get_meta("patrol_route")
+			var leg: int = u.get_meta("patrol_leg")
+			if _near(b,u,route[leg],32.0):
+				leg = 1-leg
+				u.set_meta("patrol_leg",leg)
+			if u._state == Unit.ST_IDLE: u.order_move(b.map.cell_to_world(route[leg]))
+	if stage not in ["infiltrate","gaol_entry","signal"] or alarmed: return
+	var watched := false
+	for u in patrols:
+		if _near(b,u,b.map.world_to_cell(scout.position),86.0) and b.map._segment_open(u.position,scout.position): watched = true
+	alarm = clampf(alarm+delta if watched else alarm-delta*0.8,0.0,2.0)
+	if alarm >= 2.0:
+		alarmed = true
+		scout_cover = false
+		b.mission.mark("daming_alarm","巡守持续近距离盘查，时迁的灯客身份引起怀疑")
+		b.msg("巡守盯上了时迁，不能当面举火！先到灯市人群或衣帽点甩开跟踪。",5.0)
+		_add_cover_actions(b)
+		for u in patrols:
+			if _effective(u):
+				u.stance = Unit.STANCE_AGGRO
+				u.order_attack(scout)
 
 func process(b, delta: float) -> void:
-	var B: Battle = b
-	if B._smoke:
-		_smoke_drive(B, delta)
-
-	# 招安成功后的尾声（让玩家看一眼张清归队），数秒后判胜
-	if coda_t >= 0.0:
-		coda_t -= delta
-		if coda_t <= 0.0:
-			B.win("宋公明亲解其缚，置酒相待。张清感梁山义气，纳头便拜，愿效犬马——没羽箭的飞石神技，自此归于梁山泊！东昌府下。")
+	if not _prisoners_alive():
+		b.lose("卢俊义或石秀在营救途中遇害。两人都活着出城，才算完成劫牢。")
 		return
-
-	if not is_instance_valid(song) or song.hp <= 0.0:
-		B.lose("宋公明中乱军身陷重围，主帅有失，东昌府前功亏一篑……")
-		return
-	if B.count_alive(Unit.FACTION_LIANG) == 0:
-		B.lose("梁山好汉被张清飞石一一打翻，阵脚大溃……")
-		return
-
-	if is_instance_valid(zq) and zq.faction == Unit.FACTION_GUAN and zq.hp > 0.0:
-		_run_barrage(B, delta)
-		# 力怯：杀到残血 → 往西水边退去，露出活捉之机
-		if not weary and zq.hp <= zq.max_hp * WEARY_FRAC:
-			weary = true
-			weary_t = 0.0
-			move_retry = 0.0
-			B.msg("张清气力不加，拨马往西边水泊退去——快逼上去，教张顺把他掀下水！", 4.5)
-		if weary:
-			weary_t += delta
-			# 持续把他往水边赶（节流下发，免得每帧重发打断寻路；被打会解除 passive，故反复设回）
-			move_retry -= delta
-			if move_retry <= 0.0:
-				move_retry = 0.8
-				zq.passive = true
-				zq.order_move(B.map.cell_to_world(WATER_EDGE))
-			# 活捉条件：逼到水边 / 力竭过久 / 残血将殁（兜底：绝不让他被打死而卡死流程）
-			var at_water := zq.position.distance_to(B.map.cell_to_world(WATER_EDGE)) < CAPTURE_R or _near_water(B, zq.position)
-			if at_water or weary_t > 14.0 or zq.hp <= zq.max_hp * 0.18:
-				_capture(B)
-
-
-func _run_barrage(b, delta: float) -> void:
-	var B: Battle = b
-	barrage_t -= delta
-	if barrage_t > 0.0:
-		return
-	barrage_t = STONE_CD
-	var tgt := _pick_barrage_target(B)
-	if tgt == null:
-		return
-	# 飞石打将：飞射的石子（伤害随箭矢结算）+ 命中即落马重眩
-	B.spawn_projectile(zq, tgt, STONE_DMG)
-	tgt.apply_slow(0.07, 1.6)        # 落马·几近定身
-	tgt.apply_temp_atk(0.4, 1.6)     # 被打懵·攻击大降
-	B.spawn_impact(tgt.position + Vector2(0, -8), true)
-	B.shake(3.0, tgt.position)
-	hit_count += 1
-	if hit_count <= 6 or hit_count % 3 == 0:
-		B.msg("飞石！%s 被没羽箭一石打懵，跌撞落马！" % tgt.display_name, 1.6)
-
-
-func _pick_barrage_target(b) -> Unit:
-	var B: Battle = b
-	var best: Unit = null
-	var best_score := -1.0
-	for u in B.units_of(Unit.FACTION_LIANG):
-		if not is_instance_valid(u) or u.is_building or u.garrisoned or u.hp <= 0.0:
-			continue
-		var d := zq.position.distance_to(u.position)
-		if d > STONE_RANGE:
-			continue
-		# 专打头领：英雄优先（高权重），其次就近
-		var score := (1000.0 if u.is_hero else 0.0) + (STONE_RANGE - d)
-		if score > best_score:
-			best_score = score
-			best = u
-	return best
-
-
-func _near_water(b, p: Vector2) -> bool:
-	var B: Battle = b
-	var c := B.map.world_to_cell(p)
-	for dy in range(-2, 3):
-		for dx in range(-2, 3):
-			if B.map.t_at(c.x + dx, c.y + dy) == T.WATER:
-				return true
-	return false
-
-
-func _capture(b) -> void:
-	var B: Battle = b
-	captured = true
-	var sp: Vector2 = zq.position
-	if is_instance_valid(zq):
-		zq.queue_free()
-		B.units.erase(zq)
-	# 招安：在水边生成可控的张清（带飞石技能，归玩家所用）
-	var ally := B.spawn_unit("zhang_qing", Unit.FACTION_LIANG, sp + Vector2(8, -4))
-	ally._buff_glow = 1.0
-	ally.queue_redraw()
-	B.spawn_impact(sp, true)
-	B.shake(5.0, sp)
-	Sfx.play("cast", 0.0, 0.05, 120)
-	# 守军见主将被擒，纷纷夺路（士气崩、战力大减）
-	for u in B.units_of(Unit.FACTION_GUAN):
-		if is_instance_valid(u) and not u.is_building:
-			u.apply_temp_atk(0.5, 999.0)
-			u.apply_slow(0.7, 999.0)
-	B.msg("浪里白条水中一掀，没羽箭张清落入水泊，被生擒上岸！", 5.0)
-	coda_t = 4.0
-
-
-func on_unit_died(b, u) -> void:
-	if u == song:
-		b.lose("宋公明殁于东昌府前，主帅有失，大军溃散……")
-	elif u == zq and not captured:
-		# 兜底：万一张清被一击打殁（未及活捉），按「打翻擒下」处理，决不卡死流程
-		_capture_at(b, u.position)
-
-
-func _capture_at(b, pos: Vector2) -> void:
-	var B: Battle = b
-	if captured:
-		return
-	captured = true
-	zq = null
-	var ally := B.spawn_unit("zhang_qing", Unit.FACTION_LIANG, pos + Vector2(8, -4))
-	ally._buff_glow = 1.0
-	ally.queue_redraw()
-	for u in B.units_of(Unit.FACTION_GUAN):
-		if is_instance_valid(u) and not u.is_building:
-			u.apply_temp_atk(0.5, 999.0)
-			u.apply_slow(0.7, 999.0)
-	B.msg("张清被打翻在地，梁山好汉一拥而上生擒活捉！宋公明亲解其缚，以礼相待——没羽箭来归！", 5.0)
-	coda_t = 4.0
-
-
-func top_status(b) -> String:
-	var B: Battle = b
-	if captured:
-		return "东昌府·招安 | 张清入伙！没羽箭归于梁山 | 歼敌 %d" % B.kills
-	if is_instance_valid(zq) and zq.hp > 0.0:
-		var pct := int(100.0 * zq.hp / maxf(zq.max_hp, 1.0))
-		var ph := "力怯·逼向水边活捉！" if weary else "硬拼必折将·杀到力怯"
-		return "东昌府·飞石 | 张清 %d%%（%s）| 被飞石打懵 %d 人次 | 歼敌 %d" % [pct, ph, hit_count, B.kills]
-	return "东昌府·飞石 | 歼敌 %d" % B.kills
-
-
-# ---- 冒烟自测：合力围张清 → 杀到力怯逼水边 → 活捉招安 ----
-func _smoke_drive(b, delta: float) -> void:
-	var B: Battle = b
-	smoke_t -= delta
-	if smoke_t > 0.0:
-		return
-	smoke_t = 1.5
-	if captured:
-		return
-	var focus: Vector2
-	if is_instance_valid(zq) and zq.hp > 0.0:
-		focus = zq.position
+	_open_assault_tick(b)
+	_auto_extract_free(b)
+	if not b.mission.has_event("daming_fire_lit") and not open_assault: _tick_infiltration(b,delta)
 	else:
-		focus = B.map.cell_to_world(YAMEN)
-	for u in B.units_of(Unit.FACTION_LIANG):
-		if is_instance_valid(u) and not u.is_building:
-			u.order_amove(focus)
+		if b.mission.has_event("daming_fire_lit"):
+			fire_fx_t -= delta
+			if fire_fx_t <= 0.0:
+				fire_fx_t = 2.0
+				b.spawn_impact(b.map.cell_to_world(TOWER_CELL),true)
+	_tick_pressure_lines(b,delta)
+	if b.mission.has_event("daming_people_escorting") and not b.mission.has_event("daming_civilians_spared") and not b.mission.has_event("daming_people_lost"):
+		var all_safe := true
+		for u in civilians:
+			if not is_instance_valid(u) or u.hp <= 0.0:
+				b.mission.mark("daming_people_lost","百姓撤离有人遇害，可选护民未完成")
+				all_safe = false
+				break
+			if not _near(b,u,PEOPLE_SAFE,96.0): all_safe = false
+		if all_safe:
+			for u in civilians: u.resolve_story("retreated")
+			b.mission.mark("daming_civilians_spared","三名百姓已撤入东巷；追兵已出动，仍须护住退路。" if reinforcements_sent else "三名百姓已撤入东巷，稍后的追兵减为两人。")
+	if stage == "extract":
+		# Exactly one finite pursuit, triggered by the prisoners' real advance, never an endless timer.
+		if not reinforcements_sent and (b.map.world_to_cell(lu.position).y >= 28 or b.map.world_to_cell(shi.position).y >= 28):
+			reinforcements_sent = true
+			var count := 2 if b.mission.has_event("daming_civilians_spared") else 5
+			b.spawn_group("guan_dao",count,Unit.FACTION_GUAN,Vector2i(39,27),b.map.cell_to_world(Vector2i(30,33)),1)
+			b.mission.mark("daming_pursuit","退路赶来%s名追兵！护住卢俊义、石秀，向南门撤离。"%count)
+	if b.mission.has_event("daming_lu_safe") and b.mission.has_event("daming_shi_safe"):
+		b.mission.mark("daming_victory","两名获救者均已活着出城")
+		if b.mission.has_event("daming_gate_breached"):
+			b.win("梁山公开攻开南门与牢院，护送卢俊义、石秀一同活着出城。营救已经完成；潜入、火号与牢中接应是否合于原著，另按演义印结算。")
+		elif prison_breached:
+			b.win("翠云楼火号与南门接应已经完成；牢内接应中断后，余部强开牢院，仍护送卢俊义、石秀一同活着出城。核心营救完成，牢中接应演义印未成。")
+		else:
+			b.win("翠云楼火起，城内城外同时响应。柴进、乐和救出牢中二人，鲁智深、武松打通南门；卢俊义与石秀终于脱险，随军回山。")
+		return
+	if b._smoke: _smoke_drive(b,delta)
+
+func on_unit_died(b,u) -> void:
+	if u == lu or u == shi:
+		b.lose("%s阵亡，两名囚犯已不可能一同生还出城。"%u.display_name)
+	elif u == scout and not b.mission.has_event("daming_fire_lit"):
+		b.mission.mark("daming_signal_missed","时迁未能完成翠云楼火号")
+		_miss_story(b,"daming_signal","时迁未能完成翠云楼火号")
+		_start_open_assault(b,"时迁失去战力，接应军改走公开攻城")
+	elif not rescued and (u == chai or u == yue):
+		if not b.mission.has_event("daming_fire_lit"):
+			_miss_story(b,"daming_infiltration","%s未能完成乔装入牢"%u.display_name)
+		_miss_story(b,"daming_response","牢中接应不全，改由外军强开牢门")
+		_start_open_assault(b,"牢中内应不全，接应军改走公开攻城")
+	elif u == strategist:
+		b.mission.mark("daming_strategist_lost","吴用失去战力，护民战功与接应调度风险上升")
+		_start_open_assault(b,"吴用失去战力，现存人马自行强攻救人")
+
+func on_unit_resolved(b,u,outcome: String) -> void:
+	if u == gate and outcome in ["subdued","destroyed"] and not gate_open:
+		open_assault = true
+		if b.mission.has_event("daming_fire_lit"):
+			b.mission.mark("daming_late_breach","翠云楼火号已起，梁山随后直接击破大名府南门")
+		else:
+			b.mission.mark("daming_open_assault","梁山直接击破大名府南门")
+			b.mission.mark("daming_signal_missed","南门先被强攻，翠云楼火号不再作为发动条件")
+			_miss_story(b,"daming_infiltration","改走公开攻城，没有完成元宵潜入分工")
+			_miss_story(b,"daming_signal","没有以翠云楼火号发动接应")
+		_deploy_response(b)
+		_open_south_gate(b,true)
+func top_status(b) -> String:
+	var names := {"approach":"城外换装","city_cross":"三人入城","infiltrate":"灯市潜行","gaol_entry":"乔装入牢","signal":"待举火","gate":"南门接应","rescue":"劫牢解枷","extract":"护送出城"}
+	var street_text := "稳" if street_secured and not _pressure_contested(b,"street") else ("争" if street_secured else "待")
+	var jail_text := "稳" if jail_secured and not _pressure_contested(b,"jail") else ("争" if jail_secured else "待")
+	return "智取大名府 | %s | 警觉%d%% | 主街%s·牢前%s | 二囚须生还"%[names.get(stage,stage),int(alarm*50.0),street_text,jail_text]
+
+func _smoke_drive(b,delta: float) -> void:
+	smoke_t -= delta
+	if smoke_t > 0.0: return
+	smoke_t = 1.0
+	if stage == "city_cross":
+		for u in [chai,yue]:
+			if b.map.world_to_cell(u.position).y > 37: u.order_move(b.map.cell_to_world(CITY_INSIDE))
+	if stage == "infiltrate":
+		if not officer_cover: yue.order_move(b.map.cell_to_world(OFFICER_CELL))
+		elif not b.mission.has_event("daming_prison_admitted"): yue.order_move(b.map.cell_to_world(PRISON_CHECK+Vector2i(1,0)))
+	if stage in ["gate","rescue","extract"]:
+		var focus: Vector2 = b.map.cell_to_world(Vector2i(30,42))
+		if stage == "rescue":
+			if not street_secured: focus = b.map.cell_to_world(MAIN_STREET_CELL)
+			elif not jail_secured: focus = b.map.cell_to_world(JAIL_LINE_CELL)
+			else: focus = b.map.cell_to_world(PRISON_CHECK)
+		if stage == "extract":
+			if not street_secured: focus = b.map.cell_to_world(MAIN_STREET_CELL)
+			elif not jail_secured: focus = b.map.cell_to_world(JAIL_LINE_CELL)
+			elif not b.mission.has_event("daming_civilians_spared") and not b.mission.has_event("daming_people_lost"): focus = b.map.cell_to_world(PEOPLE_CELL)
+			else: focus = lu.position if not b.mission.has_event("daming_lu_safe") else shi.position
+		for u in outside_army:
+			if _effective(u) and u.key in ESCORT_KEYS and b.mission._actor != u: u.order_amove(focus)
+		if stage == "extract" and b.mission._actor != strategist and (b.mission.has_event("daming_civilians_spared") or b.mission.has_event("daming_people_lost")):
+			strategist.order_move(focus)
+	if b.mission.active_action_id != "": return
+	if alarmed and stage in ["infiltrate","gaol_entry","signal"]:
+		_add_cover_actions(b)
+		b.mission.request_action("daming_crowd_cover" if not b.mission.has_event("daming_crowd_cover_used") else "daming_recover_cover")
+		return
+	match stage:
+		"approach": b.mission.request_action("daming_city_check" if scout_cover else "daming_lantern_disguise")
+		"city_cross": b.mission.request_action("daming_city_cross")
+		"infiltrate":
+			if not b.mission.has_event("daming_fire_ready"): b.mission.request_action("daming_fire_cache")
+			elif not officer_cover: b.mission.request_action("daming_officer_disguises")
+			else: b.mission.request_action("daming_prison_check")
+		"gaol_entry":
+			if not b.mission.has_event("daming_chai_positioned"): b.mission.request_action("daming_chai_inside")
+			elif not b.mission.has_event("daming_yue_positioned"): b.mission.request_action("daming_yue_inside")
+			else: b.mission.request_action("daming_fire_cache")
+		"signal": b.mission.request_action("daming_signal" if bool(b.mission.actions.daming_east_alley.done) else "daming_east_alley")
+		"gate":
+			if not _guards_control(b,Vector2i(30,42),160.0) and _response_count(b) >= 2: b.mission.request_action("daming_open_gate")
+		"rescue":
+			if not street_secured:
+				if not _pressure_contested(b,"street") and _response_count_at(b,MAIN_STREET_CELL) >= _pressure_required("street"): b.mission.request_action("daming_secure_street")
+			elif not jail_secured:
+				if not _pressure_contested(b,"jail") and _response_count_at(b,JAIL_LINE_CELL) >= _pressure_required("jail"): b.mission.request_action("daming_secure_jail")
+			elif not _guards_control(b,PRISON_CHECK,210.0) and not _guards_control(b,JAIL_ACTION,144.0): b.mission.request_action("daming_unlock")
+		"extract":
+			if not street_secured:
+				if not _pressure_contested(b,"street") and _response_count_at(b,MAIN_STREET_CELL) >= _pressure_required("street"): b.mission.request_action("daming_secure_street")
+			elif not jail_secured:
+				if not _pressure_contested(b,"jail") and _response_count_at(b,JAIL_LINE_CELL) >= _pressure_required("jail"): b.mission.request_action("daming_secure_jail")
+			elif not b.mission.has_event("daming_people_escorting") and not b.mission.has_event("daming_people_lost"): b.mission.request_action("daming_spare_people")
+			elif not b.mission.has_event("daming_civilians_spared") and not b.mission.has_event("daming_people_lost"): pass
+			elif not b.mission.has_event("daming_lu_safe"): b.mission.request_action("daming_lu_exit")
+			elif not b.mission.has_event("daming_shi_safe"): b.mission.request_action("daming_shi_exit")

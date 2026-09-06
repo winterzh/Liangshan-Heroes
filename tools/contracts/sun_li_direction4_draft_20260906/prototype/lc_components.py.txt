@@ -1,0 +1,34 @@
+"""Read-only alpha connected-component bounds. Does not save or modify images."""
+from pathlib import Path
+from PIL import Image
+import json,sys
+def components(path):
+ im=Image.open(path);assert im.mode=='RGBA'
+ raw=im.getchannel('A').tobytes();width,height=im.size
+ parent=[];boxes=[];areas=[]
+ def find(i):
+  while parent[i]!=i:parent[i]=parent[parent[i]];i=parent[i]
+  return i
+ previous=[]
+ for y in range(height):
+  current=[];x=0;p=0
+  while x<width:
+   if raw[y*width+x]<=15:x+=1;continue
+   start=x
+   while x<width and raw[y*width+x]>15:x+=1
+   end=x;label=len(parent);parent.append(label);boxes.append([start,y,end,y+1]);areas.append(end-start)
+   while p<len(previous) and previous[p][1]<start:p+=1
+   k=p
+   while k<len(previous) and previous[k][0]<=end:
+    other=find(previous[k][2]);own=find(label)
+    if own!=other:
+     parent[own]=other
+     boxes[other]=[min(boxes[own][0],boxes[other][0]),min(boxes[own][1],boxes[other][1]),max(boxes[own][2],boxes[other][2]),max(boxes[own][3],boxes[other][3])]
+     areas[other]+=areas[own]
+    k+=1
+   current.append((start,end,label))
+  previous=current
+ groups=sorted([{'area':areas[i],'bbox':boxes[i]} for i in range(len(parent)) if find(i)==i and areas[i]>30],key=lambda p:-p['area'])
+ return {'path':str(path),'mode':im.mode,'size':im.size,'components':groups}
+if __name__=='__main__':
+ for path in sys.argv[1:]:print(json.dumps(components(path)))

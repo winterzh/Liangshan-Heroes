@@ -1,0 +1,662 @@
+{
+  "status": "draft_not_loaded_by_game",
+  "method": "built-in image_gen, native output bytes retained without pixel editing",
+  "character": "sun_li",
+  "reference_inputs": {
+    "original": {
+      "path": "qa/character_direction4_inventory_20260905/candidates/sun_li.png",
+      "sha256": "ba422bfb75e0be0759069068cbf5eef2e1018783187f65edce5ea8ead2201b71",
+      "role": "existing identity reference"
+    },
+    "mounted_reference": {
+      "path": "assets/anim/guan_qi_idle_se.png",
+      "sha256": "8b2fb7522018edcc112edfc654e1b00b56ee4706ff83666e4a39cbe4417586fc",
+      "role": "existing mounted camera and scale reference"
+    },
+    "guide_walk_se": {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/pose_guides/walk_se.png",
+      "sha256": "4de5b1062afa5efa52348477ef3466569d1a501588ae7d383336b5f043ad0e83"
+    },
+    "guide_walk_sw": {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/pose_guides/walk_sw.png",
+      "sha256": "a6bae0431ab7c69f028563aaa4dcffd38142eeb3ceb668a06a1eab0de03e7714"
+    },
+    "guide_walk_ne": {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/pose_guides/walk_ne.png",
+      "sha256": "65d3d1158dcace1203426f6f75ed8d551ce540369c018a54be5cf7f536534468"
+    },
+    "guide_walk_nw": {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/pose_guides/walk_nw.png",
+      "sha256": "d86f4fb13f36d568f77c44eb5900c56bb6020e9cfcc01503f29e627a4f11e394"
+    },
+    "guide_idle_nw": {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/pose_guides/idle_nw.png",
+      "sha256": "c658b5e8947bd4edb84c7a8c4698881fef4cacc6dda4c5725b05032346acfe6b"
+    },
+    "guide_windup_sw": {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/pose_guides/windup_sw.png",
+      "sha256": "cac7719f069de439409ebbe7ba099ee58f9cc0d219da58a9c1c98d2153a75fd9"
+    },
+    "guide_strike_nw": {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/pose_guides/strike_nw.png",
+      "sha256": "4fa97c9b295fdfaa0134cec9ab1d6c581db2fcba086edc9f2652b5839bd2752f"
+    }
+  },
+  "generator_artifacts": [
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/prototype/sl_pose_guide.gd.txt",
+      "sha256": "3bdf5b3729e5f2f4e2f647c1ea8414ba641d95f8971cb0f722a5063f084259ad"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/prototype/lc_pose_guide.gd.txt",
+      "sha256": "620c15a7c0833d47989c6283ac54ee175f6aed4d7cf142559b3fd84027b683a5"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/prototype/sl_build_import.py.txt",
+      "sha256": "a38afa9631cdd23f861a19f269ae36295e7b8a20d8b23dac836063a258547b37"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/prototype/lc_components.py.txt",
+      "sha256": "98cf48d6da425d6be86dfe182de42128fc34f3a75a92f8ecadfbab9741ee7cb1"
+    }
+  ],
+  "unfinished_qa": {
+    "path": "tools/contracts/sun_li_direction4_draft_20260906/prototype/sun_li_direction4_qa.gd.txt",
+    "sha256": "ccef2b189abbf218155db0b920aea4ba4bff15f22eba0180b7b67195b91a5f9d"
+  },
+  "jobs": [
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/master_se.png",
+      "sha256": "562c42b2a4dddd1a4351efde88eaeca29369560abcbbfa28f96a3ea9a7c1db99",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "master_se",
+      "prompt": "Create ONE production game sprite, an entirely new mounted Sun Li for a historical Chinese Song-dynasty isometric RTS. The FIRST reference supplies Sun Li's facial identity, dark iron helmet silhouette, dark gold-trimmed lamellar armor, brown under-robe, sturdy build, and back-carried bow/quiver. The SECOND reference supplies ONLY the horse-and-rider scale and high 3/4 isometric camera angle; do NOT copy that soldier's face, spear or costume.\nOutput actual RGBA PNG with TRANSPARENT empty background, alpha zero; no backdrop, checkerboard, ground plane, cast shadow, text or border. One complete horse and one rider, centered with generous transparent margins. Full hooves, ears, tail, rider's helmet and weapon tip inside the canvas. Hand-painted realistic classic RTS game art, restrained dark brown/black/gold palette, clear small-scale silhouette, soft upper-left lighting.\nSun Li now rides a solid BLACK warhorse (black mane and tail, natural dark highlights, no white socks or face blaze). Plain dark brown Chinese saddle, muted brown saddle cloth, leather bridle and stirrups. Horse faces SOUTHEAST toward screen LOWER RIGHT, its front and rightward-facing side visible, consistent 30-degree downward viewing camera. Horse calm, all four correct anatomical legs distinct in a grounded standing pose. Rider seated naturally astride saddle, exactly two arms/two legs, boots resting in stirrups.\nIdentity: mature Chinese officer, stern square face, short black beard and moustache, dark iron helmet with the same small crossed upward projections as the first reference, black/oiled iron armor edged in muted gold, brown robe skirt and belt, bow and quiver secured diagonally on his back. No Japanese samurai styling, no cape hiding the horse anatomy.\nWeapon correction: his anatomical RIGHT hand grips ONE rigid bamboo-node iron mace (Chinese gangbian): a solid straight black steel rod about the length of his forearm plus upper arm, eight raised ring-shaped nodes along the shaft, small gold handle, rounded BLUNT tip. It is NOT a flexible whip, rope, chain, curved bow, sword, axe or spear. Right hand holds the mace diagonally downward toward the lower right in a relaxed guard, fully visible outside the horse body. His anatomical LEFT hand holds the reins at saddle height. Keep these two separate hand functions obvious. No extra hand, duplicate weapon, dangling chain or polearm. The only bow is strapped on the BACK.",
+      "references": [
+        "original",
+        "mounted_reference"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/se_poses.png",
+      "sha256": "6baf7af400646ccca209ba00932f42af6a1c4cf1b8acb8523a1774026c8560a2",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "se_poses",
+      "prompt": "Generate ONE production sprite atlas for the SAME mounted Sun Li shown in the reference. Retain his exact mature face, short beard, dark iron helmet with two SMALL upward projections, black lamellar armor with muted gold edges, brown under-robe/skirt, black boots, back-carried bow/quiver, black horse, dark brown tack and saddle cloth. His only held weapon is ONE SHORT RIGID NODED IRON MACE, a solid straight black rod with ring nodes and blunt tip, held in his anatomical RIGHT hand. His LEFT hand controls reins. No flexible rope or chain whip, no sword or polearm. Exactly one rider and one horse in each pose.\nDIRECTION FOR EVERY POSE: SOUTHEAST, lower-right on the screen. Front and anatomical RIGHT flank of horse and rider visible. Mace in the right near hand; left far hand controls reins.\nFixed elevated 30-degree isometric game camera, hand-painted classic RTS style matching the reference. Horse is black, no white markings. Keep rider-to-horse proportions and body scale IDENTICAL across poses; do not enlarge the smaller fallen figures to fill cells.\nLAYOUT: 2 columns by 4 rows, EIGHT full mounted-unit poses, read left to right then top to bottom. Large equal cells and generous clear blank gaps. Whole horse, rider, ears, hooves, tail, all weapons fit safely inside their own cell; no touching the frame edge or neighboring pose. Uniform scale and neutral upper-left lighting. Output real RGBA PNG, truly TRANSPARENT background alpha=0. Do not paint checkerboard, background, ground, cast shadow, motion streaks, impact sparks, text, labels, guides or borders.\nPose 1: IDLE. Rider upright in saddle, mace low in right-hand guard, left hand reins. Horse standing with four grounded legs.\nPose 2: WALK A, a slow horse trot, front LEFT and rear RIGHT legs reaching forward, the opposite diagonal pair trailing. Rider sitting low and steady, hands retain their roles, mace held low.\nPose 3: WALK B, opposite diagonal of the horse's trot: front RIGHT and rear LEFT legs reaching forward, opposite diagonal pair trailing. Genuinely change the horse legs, not just duplicate pose 2 or shift the entire bitmap. Rider steady, mace low.\nPose 4: ATTACK WINDUP. Horse plants its feet; rider turns shoulders slightly, raises his RIGHT hand and rigid mace high behind his right shoulder for a forceful diagonal downward club strike. Left hand holds reins at saddle. Exactly two arms.\nPose 5: ATTACK IMPACT. Same planted horse and scale. Rider leans forward and drives the RIGHT-hand rigid mace down/forward at an enemy just ahead on the facing diagonal. Mace is now extended near horse head height, different from both idle and windup. Left hand still reins. No enemy or effects drawn.\nPose 6: HURT. Rider recoils in the saddle, torso twists backward, right hand still grips mace, left reins. Horse dips neck and braces, remains standing and alive.\nPose 7: FALL. Horse is collapsing to its side with knees folded, rider falling off that same side beside the saddle; a coherent single mounted unit in mid-collapse. Keep both full bodies intact and visible, same anatomy and size. No gore, no extra horse or rider.\nPose 8: DOWN. Horse lies fully on its side with four legs naturally folded/extended on the ground, rider lies motionless beside the saddle, his rigid mace on the ground near his right hand. Both bodies same scale as earlier poses, no floating rider, no missing horse, no gore.\nAll eight poses must keep the requested facing. All four horse legs and two human arms/legs must attach plausibly; reins only in left hand, short rigid mace only in right. Do not mirror to fake facing.",
+      "references": [
+        "master_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/sw_poses.png",
+      "sha256": "a7f4a88d6753851622a93cc135b5592cfeb5cb027f52c106063ddae19662618c",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "sw_poses",
+      "prompt": "Generate ONE production sprite atlas for the SAME mounted Sun Li shown in the reference. Retain his exact mature face, short beard, dark iron helmet with two SMALL upward projections, black lamellar armor with muted gold edges, brown under-robe/skirt, black boots, back-carried bow/quiver, black horse, dark brown tack and saddle cloth. His only held weapon is ONE SHORT RIGID NODED IRON MACE, a solid straight black rod with ring nodes and blunt tip, held in his anatomical RIGHT hand. His LEFT hand controls reins. No flexible rope or chain whip, no sword or polearm. Exactly one rider and one horse in each pose.\nDIRECTION FOR EVERY POSE: SOUTHWEST, lower-left on the screen. Front and anatomical LEFT flank of horse and rider visible. The LEFT NEAR arm holds ONLY the reins. The RIGHT FAR arm alone holds the steel mace: let the far forearm extend forward beside the horse's withers so its mace silhouette appears on the far side near the horse's head. During windup the right far arm rises above the shoulder. Never put the mace in the near left hand. This is a rotated view, never a mirrored SE image.\nFixed elevated 30-degree isometric game camera, hand-painted classic RTS style matching the reference. Horse is black, no white markings. Keep rider-to-horse proportions and body scale IDENTICAL across poses; do not enlarge the smaller fallen figures to fill cells.\nLAYOUT: 2 columns by 4 rows, EIGHT full mounted-unit poses, read left to right then top to bottom. Large equal cells and generous clear blank gaps. Whole horse, rider, ears, hooves, tail, all weapons fit safely inside their own cell; no touching the frame edge or neighboring pose. Uniform scale and neutral upper-left lighting. Output real RGBA PNG, truly TRANSPARENT background alpha=0. Do not paint checkerboard, background, ground, cast shadow, motion streaks, impact sparks, text, labels, guides or borders.\nPose 1: IDLE. Rider upright in saddle, mace low in right-hand guard, left hand reins. Horse standing with four grounded legs.\nPose 2: WALK A, a slow horse trot, front LEFT and rear RIGHT legs reaching forward, the opposite diagonal pair trailing. Rider sitting low and steady, hands retain their roles, mace held low.\nPose 3: WALK B, opposite diagonal of the horse's trot: front RIGHT and rear LEFT legs reaching forward, opposite diagonal pair trailing. Genuinely change the horse legs, not just duplicate pose 2 or shift the entire bitmap. Rider steady, mace low.\nPose 4: ATTACK WINDUP. Horse plants its feet; rider turns shoulders slightly, raises his RIGHT hand and rigid mace high behind his right shoulder for a forceful diagonal downward club strike. Left hand holds reins at saddle. Exactly two arms.\nPose 5: ATTACK IMPACT. Same planted horse and scale. Rider leans forward and drives the RIGHT-hand rigid mace down/forward at an enemy just ahead on the facing diagonal. Mace is now extended near horse head height, different from both idle and windup. Left hand still reins. No enemy or effects drawn.\nPose 6: HURT. Rider recoils in the saddle, torso twists backward, right hand still grips mace, left reins. Horse dips neck and braces, remains standing and alive.\nPose 7: FALL. Horse is collapsing to its side with knees folded, rider falling off that same side beside the saddle; a coherent single mounted unit in mid-collapse. Keep both full bodies intact and visible, same anatomy and size. No gore, no extra horse or rider.\nPose 8: DOWN. Horse lies fully on its side with four legs naturally folded/extended on the ground, rider lies motionless beside the saddle, his rigid mace on the ground near his right hand. Both bodies same scale as earlier poses, no floating rider, no missing horse, no gore.\nAll eight poses must keep the requested facing. All four horse legs and two human arms/legs must attach plausibly; reins only in left hand, short rigid mace only in right. Do not mirror to fake facing.",
+      "references": [
+        "master_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/ne_poses.png",
+      "sha256": "98469a356a6fb9d3bb1016014a4a69207aa42589f55d670166d37d5cb9e17b93",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "ne_poses",
+      "prompt": "Generate ONE production sprite atlas for the SAME mounted Sun Li shown in the reference. Retain his exact mature face, short beard, dark iron helmet with two SMALL upward projections, black lamellar armor with muted gold edges, brown under-robe/skirt, black boots, back-carried bow/quiver, black horse, dark brown tack and saddle cloth. His only held weapon is ONE SHORT RIGID NODED IRON MACE, a solid straight black rod with ring nodes and blunt tip, held in his anatomical RIGHT hand. His LEFT hand controls reins. No flexible rope or chain whip, no sword or polearm. Exactly one rider and one horse in each pose.\nDIRECTION FOR EVERY POSE: NORTHEAST, upper-right on the screen. BACK of rider's helmet, bow/quiver, back armor and horse's hindquarters are visible; horse's muzzle points away toward upper-right. Camera sees the anatomical LEFT flank from behind. Rider's anatomical RIGHT arm holds the mace and LEFT arm reins. Rotate the torso, saddle, rump, legs and head together; no front chest facing the viewer.\nFixed elevated 30-degree isometric game camera, hand-painted classic RTS style matching the reference. Horse is black, no white markings. Keep rider-to-horse proportions and body scale IDENTICAL across poses; do not enlarge the smaller fallen figures to fill cells.\nLAYOUT: 2 columns by 4 rows, EIGHT full mounted-unit poses, read left to right then top to bottom. Large equal cells and generous clear blank gaps. Whole horse, rider, ears, hooves, tail, all weapons fit safely inside their own cell; no touching the frame edge or neighboring pose. Uniform scale and neutral upper-left lighting. Output real RGBA PNG, truly TRANSPARENT background alpha=0. Do not paint checkerboard, background, ground, cast shadow, motion streaks, impact sparks, text, labels, guides or borders.\nPose 1: IDLE. Rider upright in saddle, mace low in right-hand guard, left hand reins. Horse standing with four grounded legs.\nPose 2: WALK A, a slow horse trot, front LEFT and rear RIGHT legs reaching forward, the opposite diagonal pair trailing. Rider sitting low and steady, hands retain their roles, mace held low.\nPose 3: WALK B, opposite diagonal of the horse's trot: front RIGHT and rear LEFT legs reaching forward, opposite diagonal pair trailing. Genuinely change the horse legs, not just duplicate pose 2 or shift the entire bitmap. Rider steady, mace low.\nPose 4: ATTACK WINDUP. Horse plants its feet; rider turns shoulders slightly, raises his RIGHT hand and rigid mace high behind his right shoulder for a forceful diagonal downward club strike. Left hand holds reins at saddle. Exactly two arms.\nPose 5: ATTACK IMPACT. Same planted horse and scale. Rider leans forward and drives the RIGHT-hand rigid mace down/forward at an enemy just ahead on the facing diagonal. Mace is now extended near horse head height, different from both idle and windup. Left hand still reins. No enemy or effects drawn.\nPose 6: HURT. Rider recoils in the saddle, torso twists backward, right hand still grips mace, left reins. Horse dips neck and braces, remains standing and alive.\nPose 7: FALL. Horse is collapsing to its side with knees folded, rider falling off that same side beside the saddle; a coherent single mounted unit in mid-collapse. Keep both full bodies intact and visible, same anatomy and size. No gore, no extra horse or rider.\nPose 8: DOWN. Horse lies fully on its side with four legs naturally folded/extended on the ground, rider lies motionless beside the saddle, his rigid mace on the ground near his right hand. Both bodies same scale as earlier poses, no floating rider, no missing horse, no gore.\nAll eight poses must keep the requested facing. All four horse legs and two human arms/legs must attach plausibly; reins only in left hand, short rigid mace only in right. Do not mirror to fake facing.",
+      "references": [
+        "master_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/nw_poses.png",
+      "sha256": "588999a008c8c24cb4f9eed708336da7056fe83986f9fd2576315f3525791c11",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "nw_poses",
+      "prompt": "Generate ONE production sprite atlas for the SAME mounted Sun Li shown in the reference. Retain his exact mature face, short beard, dark iron helmet with two SMALL upward projections, black lamellar armor with muted gold edges, brown under-robe/skirt, black boots, back-carried bow/quiver, black horse, dark brown tack and saddle cloth. His only held weapon is ONE SHORT RIGID NODED IRON MACE, a solid straight black rod with ring nodes and blunt tip, held in his anatomical RIGHT hand. His LEFT hand controls reins. No flexible rope or chain whip, no sword or polearm. Exactly one rider and one horse in each pose.\nDIRECTION FOR EVERY POSE: NORTHWEST, upper-left on the screen. BACK of rider's helmet, bow/quiver, back armor and horse's hindquarters are visible; horse's muzzle points away toward upper-left. Camera sees the anatomical RIGHT flank from behind. Rider's anatomical RIGHT arm holds the mace and LEFT arm reins. Rotate the torso, saddle, rump, legs and head together; no front chest facing the viewer.\nFixed elevated 30-degree isometric game camera, hand-painted classic RTS style matching the reference. Horse is black, no white markings. Keep rider-to-horse proportions and body scale IDENTICAL across poses; do not enlarge the smaller fallen figures to fill cells.\nLAYOUT: 2 columns by 4 rows, EIGHT full mounted-unit poses, read left to right then top to bottom. Large equal cells and generous clear blank gaps. Whole horse, rider, ears, hooves, tail, all weapons fit safely inside their own cell; no touching the frame edge or neighboring pose. Uniform scale and neutral upper-left lighting. Output real RGBA PNG, truly TRANSPARENT background alpha=0. Do not paint checkerboard, background, ground, cast shadow, motion streaks, impact sparks, text, labels, guides or borders.\nPose 1: IDLE. Rider upright in saddle, mace low in right-hand guard, left hand reins. Horse standing with four grounded legs.\nPose 2: WALK A, a slow horse trot, front LEFT and rear RIGHT legs reaching forward, the opposite diagonal pair trailing. Rider sitting low and steady, hands retain their roles, mace held low.\nPose 3: WALK B, opposite diagonal of the horse's trot: front RIGHT and rear LEFT legs reaching forward, opposite diagonal pair trailing. Genuinely change the horse legs, not just duplicate pose 2 or shift the entire bitmap. Rider steady, mace low.\nPose 4: ATTACK WINDUP. Horse plants its feet; rider turns shoulders slightly, raises his RIGHT hand and rigid mace high behind his right shoulder for a forceful diagonal downward club strike. Left hand holds reins at saddle. Exactly two arms.\nPose 5: ATTACK IMPACT. Same planted horse and scale. Rider leans forward and drives the RIGHT-hand rigid mace down/forward at an enemy just ahead on the facing diagonal. Mace is now extended near horse head height, different from both idle and windup. Left hand still reins. No enemy or effects drawn.\nPose 6: HURT. Rider recoils in the saddle, torso twists backward, right hand still grips mace, left reins. Horse dips neck and braces, remains standing and alive.\nPose 7: FALL. Horse is collapsing to its side with knees folded, rider falling off that same side beside the saddle; a coherent single mounted unit in mid-collapse. Keep both full bodies intact and visible, same anatomy and size. No gore, no extra horse or rider.\nPose 8: DOWN. Horse lies fully on its side with four legs naturally folded/extended on the ground, rider lies motionless beside the saddle, his rigid mace on the ground near his right hand. Both bodies same scale as earlier poses, no floating rider, no missing horse, no gore.\nAll eight poses must keep the requested facing. All four horse legs and two human arms/legs must attach plausibly; reins only in left hand, short rigid mace only in right. Do not mirror to fake facing.",
+      "references": [
+        "master_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/master_sw.png",
+      "sha256": "b480ed08b0f6019167170e08e78990d5e14dc984b6ea7dfaba83d89cbe1685ae",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "master_sw",
+      "prompt": "把这一人一马完整旋转到西南方向：马头和骑手鼻尖一起朝画面左下方，镜头看到马和骑手的左侧面及部分正面。必须画出真实另一侧，不能只是水平翻图。骑手左手在靠近镜头的一侧握缰绳；右手在远侧握那根硬直的黑色竹节钢鞭，鞭向左下方伸出。头、胸、骨盆、马鞍、四条马腿都跟着转向左下。保留同一张脸、黑铁甲金边、棕袍、双尖铁盔、背后弓箭、黑马、棕色马具。只画这一个完整站立骑手和一匹站立黑马，等距游戏俯视角，四蹄接地。四周宽裕留白。去掉背景，真正透明背景RGBA PNG，无地面，无投影，无棋盘格。",
+      "references": [
+        "master_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/se_alpha.png",
+      "sha256": "944a75f405c24902ce63545aeff406f8d79bad0fefe64d2cd41af7073595f678",
+      "mode": "RGBA",
+      "native_size": [
+        1233,
+        1275
+      ],
+      "alpha_zero_fraction": 0.7032876930171906,
+      "key": "se_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留这八个人马姿势、大小、位置、间距、朝向、衣甲、四条马腿和双手武器。不要改变画面内容，只去掉棋盘格背景，不要地面和投影。",
+      "references": [
+        "se_poses"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/ne_alpha.png",
+      "sha256": "afb441f616bd782df5bef25fdcee0a393b9a7a2288daba39dc18d58b23c2269b",
+      "mode": "RGBA",
+      "native_size": [
+        1214,
+        1295
+      ],
+      "alpha_zero_fraction": 0.7294479464166449,
+      "key": "ne_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留这八个人马姿势、大小、位置、间距、朝向、衣甲、四条马腿和双手武器。不要改变画面内容，只去掉棋盘格背景，不要地面和投影。",
+      "references": [
+        "ne_poses"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/sw_rotated_poses.png",
+      "sha256": "ffd10da7bdcf84708099f63be5cd1aef35f062d74ba365bc7af2897d9bb5fdcf",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "sw_rotated_poses",
+      "prompt": "Generate ONE production sprite atlas for the SAME mounted Sun Li shown in the reference. Retain his exact mature face, short beard, dark iron helmet with two SMALL upward projections, black lamellar armor with muted gold edges, brown under-robe/skirt, black boots, back-carried bow/quiver, black horse, dark brown tack and saddle cloth. His only held weapon is ONE SHORT RIGID NODED IRON MACE, a solid straight black rod with ring nodes and blunt tip, held in his anatomical RIGHT hand. His LEFT hand controls reins. No flexible rope or chain whip, no sword or polearm. Exactly one rider and one horse in each pose.\nDIRECTION FOR EVERY POSE: SOUTHWEST, lower-left on the screen. Front and anatomical LEFT flank of horse and rider visible. The LEFT NEAR arm holds ONLY the reins. The RIGHT FAR arm alone holds the steel mace: let the far forearm extend forward beside the horse's withers so its mace silhouette appears on the far side near the horse's head. During windup the right far arm rises above the shoulder. Never put the mace in the near left hand. This is a rotated view, never a mirrored SE image.\nFixed elevated 30-degree isometric game camera, hand-painted classic RTS style matching the reference. Horse is black, no white markings. Keep rider-to-horse proportions and body scale IDENTICAL across poses; do not enlarge the smaller fallen figures to fill cells.\nLAYOUT: 2 columns by 4 rows, EIGHT full mounted-unit poses, read left to right then top to bottom. Large equal cells and generous clear blank gaps. Whole horse, rider, ears, hooves, tail, all weapons fit safely inside their own cell; no touching the frame edge or neighboring pose. Uniform scale and neutral upper-left lighting. Output real RGBA PNG, truly TRANSPARENT background alpha=0. Do not paint checkerboard, background, ground, cast shadow, motion streaks, impact sparks, text, labels, guides or borders.\nPose 1: IDLE. Rider upright in saddle, mace low in right-hand guard, left hand reins. Horse standing with four grounded legs.\nPose 2: WALK A, a slow horse trot, front LEFT and rear RIGHT legs reaching forward, the opposite diagonal pair trailing. Rider sitting low and steady, hands retain their roles, mace held low.\nPose 3: WALK B, opposite diagonal of the horse's trot: front RIGHT and rear LEFT legs reaching forward, opposite diagonal pair trailing. Genuinely change the horse legs, not just duplicate pose 2 or shift the entire bitmap. Rider steady, mace low.\nPose 4: ATTACK WINDUP. Horse plants its feet; rider turns shoulders slightly, raises his RIGHT hand and rigid mace high behind his right shoulder for a forceful diagonal downward club strike. Left hand holds reins at saddle. Exactly two arms.\nPose 5: ATTACK IMPACT. Same planted horse and scale. Rider leans forward and drives the RIGHT-hand rigid mace down/forward at an enemy just ahead on the facing diagonal. Mace is now extended near horse head height, different from both idle and windup. Left hand still reins. No enemy or effects drawn.\nPose 6: HURT. Rider recoils in the saddle, torso twists backward, right hand still grips mace, left reins. Horse dips neck and braces, remains standing and alive.\nPose 7: FALL. Horse is collapsing to its side with knees folded, rider falling off that same side beside the saddle; a coherent single mounted unit in mid-collapse. Keep both full bodies intact and visible, same anatomy and size. No gore, no extra horse or rider.\nPose 8: DOWN. Horse lies fully on its side with four legs naturally folded/extended on the ground, rider lies motionless beside the saddle, his rigid mace on the ground near his right hand. Both bodies same scale as earlier poses, no floating rider, no missing horse, no gore.\nAll eight poses must keep the requested facing. All four horse legs and two human arms/legs must attach plausibly; reins only in left hand, short rigid mace only in right. Do not mirror to fake facing.\n最重要：严格保留此参考里朝左下的方向和两只手的任务，不能又转回朝右。",
+      "references": [
+        "master_sw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_se.png",
+      "sha256": "ccec544783523899d67eccc2f0e1ee735548b0eb19595bf22a7ae8f6b51dfe0b",
+      "mode": "RGB",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "walk_pair_se",
+      "prompt": "第一张是准确姿势和左右肢体的三维参照，第二张只提供同一个孙立、黑马、黑铁金边甲、棕袍、双尖铁盔、背后弓箭、棕色马具的外观。把三维参照重画成与第二张一致的精细手绘等距RTS游戏美术。不是画木偶或色块。三维图红色代表左侧肢体、蓝色代表右侧肢体；成图全部恢复人物和马匹的正常配色，不保留红蓝色。固定俯视角，保留第一个参照的朝向、四条马腿接点和双手职责。骑手右手持唯一的硬直竹节钢鞭，左手握缰绳。不要软鞭、长枪或刀剑。真正透明RGBA背景，无地面投影或棋盘格，宽裕空白边距，不能切断马蹄/马尾/武器。\n一张横幅图，只画两个完整人马，分别严格采用第一图左边和右边的两种马的对角换步姿势：前左/后右与前右/后左轮换。两个骑手相同大小、同样低手持鞭，只换马的步态。两个人马之间留很宽透明间距。两个人马都朝右下。",
+      "references": [
+        "guide_walk_se",
+        "master_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_sw.png",
+      "sha256": "6beeae9d5014df561ab79620ee02284d143d8474acc2c6517902e155906ad352",
+      "mode": "RGB",
+      "native_size": [
+        1717,
+        916
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "walk_pair_sw",
+      "prompt": "第一张是准确姿势和左右肢体的三维参照，第二张只提供同一个孙立、黑马、黑铁金边甲、棕袍、双尖铁盔、背后弓箭、棕色马具的外观。把三维参照重画成与第二张一致的精细手绘等距RTS游戏美术。不是画木偶或色块。三维图红色代表左侧肢体、蓝色代表右侧肢体；成图全部恢复人物和马匹的正常配色，不保留红蓝色。固定俯视角，保留第一个参照的朝向、四条马腿接点和双手职责。骑手右手持唯一的硬直竹节钢鞭，左手握缰绳。不要软鞭、长枪或刀剑。真正透明RGBA背景，无地面投影或棋盘格，宽裕空白边距，不能切断马蹄/马尾/武器。\n一张横幅图，只画两个完整人马，分别严格采用第一图左边和右边的两种马的对角换步姿势：前左/后右与前右/后左轮换。两个骑手相同大小、同样低手持鞭，只换马的步态。两个人马之间留很宽透明间距。两个人马都朝左下，近侧左手缰绳、远侧右手钢鞭。",
+      "references": [
+        "guide_walk_sw",
+        "master_sw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_ne.png",
+      "sha256": "1de77cfb1f66b84de1830ef45688bdb693e43ecf84d394f0a1f781562de829a0",
+      "mode": "RGB",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "walk_pair_ne",
+      "prompt": "第一张是准确姿势和左右肢体的三维参照，第二张只提供同一个孙立、黑马、黑铁金边甲、棕袍、双尖铁盔、背后弓箭、棕色马具的外观。把三维参照重画成与第二张一致的精细手绘等距RTS游戏美术。不是画木偶或色块。三维图红色代表左侧肢体、蓝色代表右侧肢体；成图全部恢复人物和马匹的正常配色，不保留红蓝色。固定俯视角，保留第一个参照的朝向、四条马腿接点和双手职责。骑手右手持唯一的硬直竹节钢鞭，左手握缰绳。不要软鞭、长枪或刀剑。真正透明RGBA背景，无地面投影或棋盘格，宽裕空白边距，不能切断马蹄/马尾/武器。\n一张横幅图，只画两个完整人马，分别严格采用第一图左边和右边的两种马的对角换步姿势：前左/后右与前右/后左轮换。两个骑手相同大小、同样低手持鞭，只换马的步态。两个人马之间留很宽透明间距。两个人马都背向镜头朝右上，露后脑、背甲、弓箭和马臀。",
+      "references": [
+        "guide_walk_ne",
+        "master_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_nw.png",
+      "sha256": "175c64479c803b4f4bce7e8dc2bf95e4a7904cdcf6761086126815e27b26708b",
+      "mode": "RGB",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "walk_pair_nw",
+      "prompt": "第一张是准确姿势和左右肢体的三维参照，第二张只提供同一个孙立、黑马、黑铁金边甲、棕袍、双尖铁盔、背后弓箭、棕色马具的外观。把三维参照重画成与第二张一致的精细手绘等距RTS游戏美术。不是画木偶或色块。三维图红色代表左侧肢体、蓝色代表右侧肢体；成图全部恢复人物和马匹的正常配色，不保留红蓝色。固定俯视角，保留第一个参照的朝向、四条马腿接点和双手职责。骑手右手持唯一的硬直竹节钢鞭，左手握缰绳。不要软鞭、长枪或刀剑。真正透明RGBA背景，无地面投影或棋盘格，宽裕空白边距，不能切断马蹄/马尾/武器。\n一张横幅图，只画两个完整人马，分别严格采用第一图左边和右边的两种马的对角换步姿势：前左/后右与前右/后左轮换。两个骑手相同大小、同样低手持鞭，只换马的步态。两个人马之间留很宽透明间距。两个人马都背向镜头朝左上，露后脑、背甲、弓箭和马臀。近侧左手只握缰绳，右手钢鞭在远侧被身体遮挡是正确的，不可凭空放到近侧左手。",
+      "references": [
+        "guide_walk_nw",
+        "master_sw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/master_nw.png",
+      "sha256": "0601aaf8fc76f02837f423651d6a6204f67d65b64a89bcb33189f158e9a0bfbc",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "master_nw",
+      "prompt": "第一张是准确姿势和左右肢体的三维参照，第二张只提供同一个孙立、黑马、黑铁金边甲、棕袍、双尖铁盔、背后弓箭、棕色马具的外观。把三维参照重画成与第二张一致的精细手绘等距RTS游戏美术。不是画木偶或色块。三维图红色代表左侧肢体、蓝色代表右侧肢体；成图全部恢复人物和马匹的正常配色，不保留红蓝色。固定俯视角，保留第一个参照的朝向、四条马腿接点和双手职责。骑手右手持唯一的硬直竹节钢鞭，左手握缰绳。不要软鞭、长枪或刀剑。真正透明RGBA背景，无地面投影或棋盘格，宽裕空白边距，不能切断马蹄/马尾/武器。\n只画一个完整站立人马。严格采用第一图的背面朝左上姿势，不能露出前胸。近侧可见的左手只能握缰绳；右手和钢鞭在远侧被骑手和马身遮挡，允许看不到钢鞭，不可为了展示武器把它换到左手。四蹄着地，宽裕透明边距。",
+      "references": [
+        "guide_idle_nw",
+        "master_sw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/windup_sw.png",
+      "sha256": "ce0ba0402f84e614cd2a1d59258c574d721bb836213feb5230e2464025e1696c",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "windup_sw",
+      "prompt": "第一张是准确姿势和左右肢体的三维参照，第二张只提供同一个孙立、黑马、黑铁金边甲、棕袍、双尖铁盔、背后弓箭、棕色马具的外观。把三维参照重画成与第二张一致的精细手绘等距RTS游戏美术。不是画木偶或色块。三维图红色代表左侧肢体、蓝色代表右侧肢体；成图全部恢复人物和马匹的正常配色，不保留红蓝色。固定俯视角，保留第一个参照的朝向、四条马腿接点和双手职责。骑手右手持唯一的硬直竹节钢鞭，左手握缰绳。不要软鞭、长枪或刀剑。真正透明RGBA背景，无地面投影或棋盘格，宽裕空白边距，不能切断马蹄/马尾/武器。\n只画一个完整人马。严格采用第一图朝左下的蓄力举鞭姿势：远侧的蓝色右臂高举到头部后上方，近侧红色左手保持握缰绳。人物两臂不可交换。钢鞭只有一根，在高举的右手里。马保持四蹄站稳，骑手坐鞍。武器顶端保留充分透明边距。",
+      "references": [
+        "guide_windup_sw",
+        "master_sw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_se_alpha.png",
+      "sha256": "34505d484fe4aa54211cee80a9544a5f327a790b449c6c9be67f13defc856882",
+      "mode": "RGB",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "walk_pair_se_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。另外只修正左边人马的马腿：靠近镜头的前腿要高抬屈膝，蹄子离地；另一前腿伸直承重。右边人马保持近侧前腿向前伸直的姿势不变，让两张成为明显不同的迈步阶段。骑手与武器完全不改。",
+      "references": [
+        "walk_pair_se"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_sw_alpha.png",
+      "sha256": "f817bd3de241ad0d72724306bf96b3424828796c23489e60b1f704e728c3937b",
+      "mode": "RGBA",
+      "native_size": [
+        1726,
+        911
+      ],
+      "alpha_zero_fraction": 0.6706572050374399,
+      "key": "walk_pair_sw_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。",
+      "references": [
+        "walk_pair_sw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_ne_alpha.png",
+      "sha256": "1b8be675524ea212eac4016496e937efe04ddd69106345ab3dee404332f50c33",
+      "mode": "RGBA",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "alpha_zero_fraction": 0.6902408599853516,
+      "key": "walk_pair_ne_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。",
+      "references": [
+        "walk_pair_ne"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_nw_alpha.png",
+      "sha256": "477243943f18d82494aeae935bfe9b40ae10d4a55c181ab0ac34a4ecab7cbfd9",
+      "mode": "RGBA",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "alpha_zero_fraction": 0.6794096628824869,
+      "key": "walk_pair_nw_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。",
+      "references": [
+        "walk_pair_nw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/master_nw_alpha.png",
+      "sha256": "0f2099c189ad735735bc079aa537d599a084d1aef3cda32e1d16f00fd23511b8",
+      "mode": "RGBA",
+      "native_size": [
+        1214,
+        1295
+      ],
+      "alpha_zero_fraction": 0.6612799195995243,
+      "key": "master_nw_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。",
+      "references": [
+        "master_nw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/windup_sw_alpha.png",
+      "sha256": "c81bb14f5f9eb17b859cc326626c29e9e537bf19616d8392d64f6897bb8566f3",
+      "mode": "RGBA",
+      "native_size": [
+        1234,
+        1275
+      ],
+      "alpha_zero_fraction": 0.7325293164267328,
+      "key": "windup_sw_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。",
+      "references": [
+        "windup_sw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/sw_rotated_poses_alpha.png",
+      "sha256": "1ec105e107776ecf4d9a9a3d23c53b705b78cd3b36f32b48ad69794f94b63c42",
+      "mode": "RGBA",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "alpha_zero_fraction": 0.6087665557861328,
+      "key": "sw_rotated_poses_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。",
+      "references": [
+        "sw_rotated_poses"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/nw_poses_alpha.png",
+      "sha256": "f5cf1790e369379b99f51b1c172751d52aa6d1d2985a359e35aec6ae7649ee35",
+      "mode": "RGBA",
+      "native_size": [
+        1234,
+        1275
+      ],
+      "alpha_zero_fraction": 0.7389754345822608,
+      "key": "nw_poses_alpha",
+      "prompt": "去掉背景，输出真正透明背景RGBA PNG。保留所有人马的姿势、尺寸、朝向、衣甲、手中武器、位置和宽阔间距，不裁掉任何部位。不画地面、投影或棋盘格。",
+      "references": [
+        "nw_poses"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/walk_pair_se_transparent.png",
+      "sha256": "3f889c69d80108ed5d1049134ba35c0c5a910257f7228d9d0bfbb19a0222021d",
+      "mode": "RGBA",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "alpha_zero_fraction": 0.7011553446451823,
+      "key": "walk_pair_se_transparent",
+      "prompt": "去掉棋盘格，输出真正透明背景RGBA PNG，空白alpha=0。只移除背景，不改变这两个人马的姿态、间距、大小或位置，不画任何地面或阴影。完整保留人马、武器、马尾、马蹄。",
+      "references": [
+        "walk_pair_se_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/sw_spaced_alpha.png",
+      "sha256": "49a780adc5a8012dcaf0dae823396b94ec37aee410f598d004059acb7c53a290",
+      "mode": "RGB",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "sw_spaced_alpha",
+      "prompt": "仅修正排版与透明背景：保持这八个人马姿态、朝向、左右手、装备和身体比例不变，缩小并重新排列在严格2列4行的八个独立格内，格与格之间留至少80像素透明空隙。每个人马、武器、马尾和马蹄完整保留在自己的格里，所有部位离画布边缘至少50像素。倒地的马和人保持原比例并完整。真实RGBA透明PNG，空白alpha=0，不要棋盘格，不要光晕、阴影、地面。",
+      "references": [
+        "sw_rotated_poses_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/nw_spaced_alpha.png",
+      "sha256": "8f9251a96bb8ceb3d14ebe39a94c4cd99ab34f13f8cfeac9ac5a8a11097e37e7",
+      "mode": "RGB",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "nw_spaced_alpha",
+      "prompt": "仅修正排版与透明背景：保持这八个人马姿态、朝向、左右手、装备和身体比例不变，缩小并重新排列在严格2列4行的八个独立格内，格与格之间留至少80像素透明空隙。每个人马、武器、马尾和马蹄完整保留在自己的格里，所有部位离画布边缘至少50像素。倒地的马和人保持原比例并完整。真实RGBA透明PNG，空白alpha=0，不要棋盘格，不要光晕、阴影、地面。",
+      "references": [
+        "nw_poses_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/master_nw_margin.png",
+      "sha256": "4ffb272f2eda23623fbee0affc077a0657c7c8fdacbbd815416751357040f6f9",
+      "mode": "RGB",
+      "native_size": [
+        1204,
+        1306
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "master_nw_margin",
+      "prompt": "只修正留白：将整个人马等比缩小到当前约80%，居中放在真正透明RGBA PNG画布，四周至少10%透明边距。完整保留头盔两根翎尖、马尾、马蹄、武器和原有姿势、朝向、装备、身体比例。不添加阴影、地面、棋盘格或光晕。",
+      "references": [
+        "master_nw_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/windup_sw_margin.png",
+      "sha256": "cb0b8dc36153bde2dc8c76ee68d539b83aef3c9e1bcb253e6546af24e7a50808",
+      "mode": "RGB",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "windup_sw_margin",
+      "prompt": "只修正留白：将整个人马等比缩小到当前约80%，居中放在真正透明RGBA PNG画布，四周至少10%透明边距。完整保留举起的钢鞭尖端、头盔、马尾、马蹄和原有右手举鞭左手持缰的姿势、朝向、装备、身体比例。不添加阴影、地面、棋盘格或光晕。",
+      "references": [
+        "windup_sw_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/strike_nw.png",
+      "sha256": "156dc800b140f9159a83af9cb655173458370f508a4d59c018eb8f1651fe5e74",
+      "mode": "RGBA",
+      "native_size": [
+        1214,
+        1295
+      ],
+      "alpha_zero_fraction": 0.6765986273399782,
+      "key": "strike_nw",
+      "prompt": "Create one transparent RGBA isometric game sprite. FIRST image is a 3D anatomical pose/camera guide: blue is the rider's anatomical RIGHT arm striking forward with a rigid mace on the FAR side of the horse, red is his LEFT arm holding reins on the NEAR side. Copy that arm placement and rear NORTHWEST camera exactly; do not paint guide colors. SECOND image supplies Sun Li's exact black horse, dark gold trimmed iron armor, brown robe, helmet, back bow/quiver and painterly style. Render him leaning forward to strike toward screen upper left with the mace in his RIGHT FAR hand; LEFT NEAR hand stays holding reins at saddle height, no left handed strike. Horse fully visible and grounded, rider seated. True alpha zero empty backdrop, generous 10 percent transparent margins around all anatomy and weapon, no floor/shadow/halo/checkerboard.",
+      "references": [
+        "guide_strike_nw",
+        "master_nw"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/se_spaced.png",
+      "sha256": "4ce46dce2a2180b029674cd762312ec8e42964e06a27ef7fa5832b58bfb5dc75",
+      "mode": "RGB",
+      "native_size": [
+        1122,
+        1402
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "se_spaced",
+      "prompt": "只调整排版：把每个人马连同完整武器缩小到现在的60%，各自居中于2列4行的格子中，八个动作之间必须有宽阔透明间隔，每格四周至少60像素空白。不要放大填满画布。保持这八个人马原来的姿态、服装、朝向和持械手。保持真正透明背景，输出RGBA PNG。",
+      "references": [
+        "se_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/ne_spaced.png",
+      "sha256": "92c261d55010da4747f369d8f3ba2ca29233427c2d98bc37fe1a5543f66260a3",
+      "mode": "RGB",
+      "native_size": [
+        1211,
+        1299
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "ne_spaced",
+      "prompt": "只调整排版：把每个人马连同完整武器缩小到现在的60%，各自居中于2列4行的格子中，八个动作之间必须有宽阔透明间隔，每格四周至少60像素空白。不要放大填满画布。保持这八个人马原来的姿态、服装、朝向和持械手。保持真正透明背景，输出RGBA PNG。",
+      "references": [
+        "ne_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/sw_spaced_alpha_clear.png",
+      "sha256": "49ee36db10d78507a7c8d990bbf728c7b84cac9a39db6fcf3d4d4e692658e009",
+      "mode": "RGBA",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "alpha_zero_fraction": 0.7089633941650391,
+      "key": "sw_spaced_alpha_clear",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持原来的人马大小、位置和宽阔间距。不放大，不裁切。",
+      "references": [
+        "sw_spaced_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/nw_spaced_alpha_clear.png",
+      "sha256": "5df117871a16c7dcaead9b162eef097a6d8544d2dcabf35050f2d68e29ed2800",
+      "mode": "RGBA",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "alpha_zero_fraction": 0.7774022420247396,
+      "key": "nw_spaced_alpha_clear",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持原来的人马大小、位置和宽阔间距。不放大，不裁切。",
+      "references": [
+        "nw_spaced_alpha"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/master_nw_margin_clear.png",
+      "sha256": "940137ebcc930be69b0404de047478dfb537c1cbf99cfa04bf33055d2fe78178",
+      "mode": "RGBA",
+      "native_size": [
+        1224,
+        1285
+      ],
+      "alpha_zero_fraction": 0.6966620889600976,
+      "key": "master_nw_margin_clear",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持原来的人马大小、位置和宽阔间距。不放大，不裁切。",
+      "references": [
+        "master_nw_margin"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/windup_sw_margin_clear.png",
+      "sha256": "1001b186b352adbb86cfaf82a5f6767f32fcb3ece58163fa8ef3d4d51de8a23c",
+      "mode": "RGBA",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "alpha_zero_fraction": 0.7479001803479265,
+      "key": "windup_sw_margin_clear",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持原来的人马大小、位置和宽阔间距。不放大，不裁切。",
+      "references": [
+        "windup_sw_margin"
+      ],
+      "status": "candidate_not_approved"
+    },
+    {
+      "path": "tools/contracts/sun_li_direction4_draft_20260906/images/strike_nw_rod.png",
+      "sha256": "4ec70673437553a11a0bfb9e9fc27c40d23e913e0c966f4ed7fee946777b2fbb",
+      "mode": "RGB",
+      "native_size": [
+        1213,
+        1296
+      ],
+      "alpha_zero_fraction": 0,
+      "key": "strike_nw_rod",
+      "prompt": "只修正手中武器：删掉钢鞭顶端的大刺球，把武器换为完整笔直的竹节钢鞭，即等粗黑色金属杆、八个细环形竹节、末端钝平小圆头，没有大球、锤头、刀刃或尖刺。保持原右手向左上伸出的攻击姿势，左手持缰，黑马和人姿势服装完全不变。整个人马等比缩小到原80%，四周留下透明边距，保留真正透明RGBA PNG，完整马尾马蹄武器不裁切，不画背景或地面。",
+      "references": [
+        "strike_nw"
+      ],
+      "status": "candidate_not_approved"
+    }
+  ],
+  "production_manifest": null,
+  "production_resources": [],
+  "remaining": [
+    "Select visually approved native RGBA; RGB checkerboards are not usable.",
+    "Review right-hand weapon and left-hand reins, facing and horse gait.",
+    "Atlas poses overlap in some candidates; author and audit independent sampling rectangles.",
+    "Author ground pivots and body scales, import selected sources, build 20 SpriteFrames and activate authored attacks.",
+    "Run real Sun Li movement, damage, summons, death and contact QA before calling the character complete."
+  ]
+}

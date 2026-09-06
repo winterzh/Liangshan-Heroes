@@ -72,10 +72,15 @@ var _eu_key := ""
 
 
 func _ready() -> void:
+	theme = UITheme.shared()
 	_cfg = ScenarioStore.default_scenario()
 	_refresh_unit_keys()
 	_rebuild_map_model()
 	_build()
+
+
+func _exit_tree() -> void:
+	_dispose_map_model()
 
 
 ## 重算可放置/可入波的单位 key（含本场景自定义/覆盖的单位）。单位编辑后调用以刷新各处下拉。
@@ -161,12 +166,19 @@ func _process(delta: float) -> void:
 
 func _rebuild_map_model() -> void:
 	var m: Dictionary = _cfg.get("map", {})
+	_dispose_map_model()
 	_map = GameMap.new()
 	_map.init_map(int(m.get("w", 48)), int(m.get("h", 48)), String(m.get("theme", "marsh")), _t(m.get("base", "GRASS")))
 	# 把已有 terrain 指令光栅化进工作格（复用 scenario.gd 的解释器），这样旧关也能再编辑
 	var sc = load("res://scripts/levels/scenario.gd").new()
 	sc.data = _cfg
 	sc.paint_map(_map)
+
+
+func _dispose_map_model() -> void:
+	if is_instance_valid(_map):
+		_map.free()
+	_map = null
 
 
 func _t(v) -> int:
@@ -200,7 +212,7 @@ func _build() -> void:
 	for c in get_children():
 		c.queue_free()
 	var bg := ColorRect.new()
-	bg.color = Color("191510")
+	bg.color = UITheme.INK
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
@@ -217,7 +229,7 @@ func _build() -> void:
 	var ttl := Label.new()
 	ttl.text = "场景编辑器"
 	ttl.add_theme_font_size_override("font_size", 22)
-	ttl.add_theme_color_override("font_color", Color("ffe9a8"))
+	ttl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	top.add_child(ttl)
 	var nl := Label.new(); nl.text = "  关名："; top.add_child(nl)
 	_name_edit = LineEdit.new()
@@ -233,11 +245,11 @@ func _build() -> void:
 		var p := ScenarioStore.save(_cfg)
 		_show_toast("已保存：" + p if p != "" else "保存失败")))
 	var mod := _btn("📋 已改单位", _show_modified_units)
-	mod.add_theme_color_override("font_color", Color("87cefa"))
+	mod.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
 	mod.tooltip_text = "查看/编辑本关改过或自定义的单位"
 	top.add_child(mod)
 	var play := _btn("▶ 试玩", _playtest)
-	play.add_theme_color_override("font_color", Color("9fe06f"))
+	play.add_theme_color_override("font_color", UITheme.COMPLETE)
 	top.add_child(play)
 	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(sp)
 	top.add_child(_btn("返回菜单", func() -> void:
@@ -279,7 +291,7 @@ func _build() -> void:
 	# Toast
 	_toast = Label.new()
 	_toast.add_theme_font_size_override("font_size", 16)
-	_toast.add_theme_color_override("font_color", Color("ffe9a8"))
+	_toast.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	_toast.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	_toast.offset_bottom = -6; _toast.offset_top = -34
 	_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -290,14 +302,14 @@ func _build() -> void:
 func _build_tools(left: VBoxContainer) -> void:
 	var hint := Label.new()
 	hint.text = "工具"
-	hint.add_theme_color_override("font_color", Color("ffd866"))
+	hint.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	left.add_child(hint)
 	for t in [["选择/改单位", "select"], ["刷地形", "terrain"], ["放单位", "unit"], ["放装饰", "decor"], ["放增援", "reinforce"], ["出兵口", "gate"], ["镜头起点", "camera"], ["擦除", "erase"]]:
 		var key: String = t[1]
 		var b := _btn(t[0], func() -> void: tool = key; _refresh_tool_panel())
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		if key == "select":
-			b.add_theme_color_override("font_color", Color("87cefa"))
+			b.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
 		left.add_child(b)
 	left.add_child(HSeparator.new())
 	_tool_panel = VBoxContainer.new()
@@ -320,14 +332,14 @@ func _refresh_tool_panel() -> void:
 		c.queue_free()
 	match tool:
 		"select":
-			var l := Label.new(); l.text = "选择 / 改单位"; l.add_theme_color_override("font_color", Color("87cefa")); _tool_panel.add_child(l)
+			var l := Label.new(); l.text = "选择 / 改单位"; l.add_theme_color_override("font_color", UITheme.COPPER_LIGHT); _tool_panel.add_child(l)
 			var tip := Label.new()
 			tip.text = "双击地图上已放置的单位\n→ 编辑它的属性 / 技能。\n右栏波次里点单位旁「✎」同理。\n只有改过的单位会被写入本关，\n其余单位保持默认。改动仅本图生效。"
 			tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			tip.add_theme_font_size_override("font_size", 12); tip.add_theme_color_override("font_color", Color("b8c4d4"))
 			_tool_panel.add_child(tip)
 		"terrain":
-			var l := Label.new(); l.text = "地形"; l.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(l)
+			var l := Label.new(); l.text = "地形"; l.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(l)
 			var grid := GridContainer.new(); grid.columns = 2; _tool_panel.add_child(grid)
 			for tn in TERRAINS:
 				var sw := Button.new()
@@ -346,16 +358,16 @@ func _refresh_tool_panel() -> void:
 			bsl.value_changed.connect(func(v: float) -> void: brush = int(v))
 			_tool_panel.add_child(bsl)
 		"unit":
-			var fl := Label.new(); fl.text = "阵营"; fl.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(fl)
+			var fl := Label.new(); fl.text = "阵营"; fl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(fl)
 			var fb := HBoxContainer.new(); _tool_panel.add_child(fb)
 			for f in [["梁山", "LIANG"], ["官军", "GUAN"]]:
 				var fk: String = f[1]
 				var fbtn := _btn(f[0], func() -> void: cur_faction = fk; _show_toast("阵营：" + String(f[0])))
 				fb.add_child(fbtn)
-			var ul := Label.new(); ul.text = "单位（先选类·再点单位）"; ul.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(ul)
+			var ul := Label.new(); ul.text = "单位（先选类·再点单位）"; ul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(ul)
 			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("单位：" + nm))
 		"decor":
-			var dl := Label.new(); dl.text = "装饰物（纯美观）"; dl.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(dl)
+			var dl := Label.new(); dl.text = "装饰物（纯美观）"; dl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(dl)
 			var dgrid := GridContainer.new(); dgrid.columns = 2; _tool_panel.add_child(dgrid)
 			for dk in DECOR_KEYS:
 				var dkk: String = dk
@@ -368,20 +380,20 @@ func _refresh_tool_panel() -> void:
 			dsl.value_changed.connect(func(v: float) -> void: cur_decor_size = v)
 			_tool_panel.add_child(dsl)
 		"reinforce":
-			var rl := Label.new(); rl.text = "波次增援（影响战局）"; rl.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(rl)
+			var rl := Label.new(); rl.text = "波次增援（影响战局）"; rl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(rl)
 			var nwaves: int = maxi(1, _cfg.get("waves", []).size())
 			_tool_panel.add_child(_spin_row("放入第几波", clampi(cur_rf_wave, 1, nwaves), 1, nwaves, func(v: int) -> void: cur_rf_wave = v))
 			var rfb := HBoxContainer.new(); _tool_panel.add_child(rfb)
 			for f in [["梁山", "LIANG"], ["官军", "GUAN"]]:
 				var fk: String = f[1]
 				rfb.add_child(_btn(f[0], func() -> void: cur_rf_faction = fk; _show_toast("增援阵营：" + String(f[0]))))
-			var rul := Label.new(); rul.text = "援军单位（先选类·再点单位）"; rul.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(rul)
+			var rul := Label.new(); rul.text = "援军单位（先选类·再点单位）"; rul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(rul)
 			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("援军：" + nm))
 			var rtip := Label.new(); rtip.text = "点地图把该单位放进第 N 波的增援；该波触发时刷出"
 			rtip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; rtip.add_theme_font_size_override("font_size", 11)
 			_tool_panel.add_child(rtip)
 		"gate":
-			var gl := Label.new(); gl.text = "出兵口编号"; gl.add_theme_color_override("font_color", Color("ffd866")); _tool_panel.add_child(gl)
+			var gl := Label.new(); gl.text = "出兵口编号"; gl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(gl)
 			for g in GATE_NAMES:
 				var gk: String = g
 				var gb := _btn("口 " + g, func() -> void: cur_gate = gk; _show_toast("放置出兵口：" + gk))
@@ -477,7 +489,7 @@ func _rebuild_waves() -> void:
 		var panel := PanelContainer.new()
 		var pv := VBoxContainer.new(); pv.add_theme_constant_override("separation", 2); panel.add_child(pv)
 		var hdr := HBoxContainer.new(); pv.add_child(hdr)
-		var hl := Label.new(); hl.text = "第 %d 波" % (wi + 1); hl.add_theme_color_override("font_color", Color("ffd866")); hdr.add_child(hl)
+		var hl := Label.new(); hl.text = "第 %d 波" % (wi + 1); hl.add_theme_color_override("font_color", UITheme.PAPER_DARK); hdr.add_child(hl)
 		var wid := wi
 		hdr.add_child(_mini_spin("延时", float(wave.get("delay", 9.0)), 0, 120, func(v: int) -> void: (_cfg["waves"][wid] as Dictionary)["delay"] = float(v)))
 		var delb := _btn("删波", func() -> void: (_cfg["waves"] as Array).remove_at(wid); _rebuild_waves())
@@ -509,7 +521,7 @@ func _rebuild_waves() -> void:
 			var rf: Dictionary = wave["reinforce"]
 			var rfn: int = rf.get("units", []).size()
 			var rrow := HBoxContainer.new(); pv.add_child(rrow)
-			var rlbl := Label.new(); rlbl.text = "增援 %d 人" % rfn; rlbl.add_theme_color_override("font_color", Color("9fe06f")); rrow.add_child(rlbl)
+			var rlbl := Label.new(); rlbl.text = "增援 %d 人" % rfn; rlbl.add_theme_color_override("font_color", UITheme.COMPLETE); rrow.add_child(rlbl)
 			rrow.add_child(_btn("清空", func() -> void: (_cfg["waves"][wid] as Dictionary).erase("reinforce"); _rebuild_waves()))
 			var rmsg := LineEdit.new(); rmsg.text = String(rf.get("msg", "")); rmsg.placeholder_text = "增援提示语（如：伏兵杀到！）"
 			rmsg.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -739,7 +751,7 @@ func _edit_unit(key: String) -> void:
 	var pw := _popup_window("编辑单位：%s (%s)" % [_uname(key), key], 560, 640)
 	_eu_root = pw["root"]
 	var top := HBoxContainer.new(); (pw["body"] as Control).add_child(top)
-	var hint := Label.new(); hint.text = "改动仅对本关生效"; hint.add_theme_color_override("font_color", Color("9fe06f"))
+	var hint := Label.new(); hint.text = "改动仅对本关生效"; hint.add_theme_color_override("font_color", UITheme.COMPLETE)
 	hint.add_theme_font_size_override("font_size", 12); hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(hint)
 	top.add_child(_btn("复制为新单位", _eu_clone))
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -945,7 +957,7 @@ func _popup_window(title_text: String, w: float, h: float, host: Node = null) ->
 	bar.add_child(bh)
 	var tl := Label.new(); tl.text = "▦  " + title_text
 	tl.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tl.add_theme_font_size_override("font_size", 17); tl.add_theme_color_override("font_color", Color("ffe9a8"))
+	tl.add_theme_font_size_override("font_size", 17); tl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	bh.add_child(tl)
 	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sp.mouse_filter = Control.MOUSE_FILTER_IGNORE; bh.add_child(sp)
@@ -961,7 +973,7 @@ func _popup_window(title_text: String, w: float, h: float, host: Node = null) ->
 
 func _head(t: String) -> Label:
 	var l := Label.new(); l.text = "— " + t + " —"
-	l.add_theme_font_size_override("font_size", 15); l.add_theme_color_override("font_color", Color("ffd866"))
+	l.add_theme_font_size_override("font_size", 15); l.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	return l
 
 

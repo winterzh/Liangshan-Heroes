@@ -1,0 +1,60 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[rts] PASS Gao campaign explicitly enables the naval economy
+[rts] PASS shore yard appears in worker build menu only after opt-in
+[rts] PASS yard and build preview reuse the existing dock artwork
+[rts] PASS inland footprint rejects missing berth
+[rts] PASS water footprint rejects land construction
+[rts] PASS shore footprint and collision envelope fit
+[rts] PASS invalid placement spends nothing
+[rts] PASS actual build command spends 100 gold and 100 wood
+[rts] PASS yard starts as an unfinished construction site
+[rts] PASS fixed berth recorded on the water side
+[rts] PASS unfinished yard cannot train
+[rts] PASS worker walks to site and spends real construction time
+[rts] PASS worker completes yard without fixture advance_build
+[rts] PASS finished footprint blocks land while leaving berth open
+[rts] PASS launch uses water berth instead of nearest land
+[rts] PASS player right-click sets water rally
+[rts] PASS ship order spends 90 gold and 65 wood
+[rts] PASS paid queued ship reserves three population
+[rts] PASS ship is not created before training finishes
+[rts] PASS ship launches after 28 seconds
+[rts] PASS trained ship occupies legal water
+[rts] PASS ship follows real rally movement after launch
+[rts] PASS population transfers from queue to live ship exactly once
+[rts] PASS completion does not charge a second time
+[rts] PASS blocked outlet cannot use distant open water
+[rts] PASS blocked exit may retain a paid production order
+[rts] PASS second paid order queues normally
+[rts] PASS completed head stays at zero and preserves following order
+[rts] PASS blocked production loses neither a ship nor population reservation
+[rts] PASS selected yard explains blocked berth instead of a stuck countdown
+[rts] PASS cancelling tail refunds only tail and preserves ready head
+[rts] PASS retries do not duplicate ships or refunds
+[rts] PASS clearing berth launches completed ship within retry interval
+[rts] PASS exactly one retained ship appears after obstruction clears
+[rts] PASS new order after resumed production is accepted
+[rts] PASS cancelling ready head clears blocked state
+[rts] PASS ready-head cancellation refunds once and frees population
+[rts] PASS next order starts full duration instead of reusing completion
+[rts] PASS live boats occupying all slipway cells also hold production
+[rts] PASS clearing parked boats restores outlet
+[rts] PASS worker repairs shore yard through player order and pays repair materials
+[rts] PASS yard queues a ship before destruction boundary
+[rts] PASS destroyed yard releases footprint and no longer reserves queued population
+[rts] PASS destroyed producer cannot emit its unfinished ship later
+[rts] PASS worker can rebuild on the released original footprint
+[rts] PASS replacement completes with a fresh berth and empty queue
+[rts] PASS berth follows shoreline axis (0, 1)
+[rts] PASS berth follows shoreline axis (1, 0)
+[rts] PASS berth follows shoreline axis (0, -1)
+[rts] PASS berth follows shoreline axis (-1, 0)
+[rts] PASS collision envelope cannot extend beyond map boundary
+[rts] PASS land production retains a legal land exit
+[rts] PASS shared land queue still accepts ordinary spear cost
+[rts] PASS ordinary land troop completes after naval queue changes
+[rts] PASS skirmish does not inherit scoped naval definitions
+[rts] PASS skirmish_ai does not inherit scoped naval definitions
+[rts] PASS restarting Gao restores fresh chapter economy without fixture state
+[naval-production] 57 checks, failures=0

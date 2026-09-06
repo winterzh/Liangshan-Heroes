@@ -1,14 +1,38 @@
 class_name Unit
 extends Node2D
+const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 ## 单位：梁山好汉 / 官军。有图集贴图就用贴图，否则绘制占位图形。
+
+const CampaignArt := preload("res://scripts/campaign_art.gd")
+const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
+const WorldShadow := preload("res://scripts/world_shadow.gd")
 
 enum { FACTION_LIANG = 0, FACTION_GUAN = 1 }
 enum { ST_IDLE, ST_MOVE, ST_AMOVE, ST_CHASE, ST_GATHER, ST_RETURN, ST_BUILD, ST_REPAIR, ST_GARRISON }
 enum { STANCE_AGGRO, STANCE_DEFEND, STANCE_HOLD, STANCE_PASSIVE }   # 进攻=追击/守备=守阵/据守=原地/避战=不索敌不还手
 enum { CHASE_AUTO, CHASE_AMOVE, CHASE_EXPLICIT, CHASE_FORCED }
-enum WK { SWORD, SPEAR, AXE, BOW }   # 武器类型 → 不同攻击动作
+enum WK { SWORD, SPEAR, AXE, BOW, FIST, IRON_STAFF }   # FIST is a per-campaign unarmed style; IRON_STAFF is Lu Zhishen's iron Buddhist staff.
 
 signal died(unit)
+signal story_resolved(unit, outcome: String)
+signal appearance_changed(unit)
+
+var defeat_outcome := ""
+var story_outcome := ""
+var movement_profile := "land"
+var art_variant := "":
+	set(value):
+		if art_variant == value: return
+		art_variant = value
+		_request_redraw()
+		appearance_changed.emit(self)
+var animation_direction := "se"
+var _direction_candidate := "se"
+var _direction_votes := 0
+var _story_pose_t := 0.0
+var _pose_previous_variant := ""
+var story_assist_partner: Unit
+var story_assist_owner: Unit
 
 var key := ""
 var display_name := ""
@@ -73,6 +97,8 @@ var passengers: Array = []     # 仅建筑：当前驻军单位列表
 var garrison_cap := 0          # 仅建筑：驻军容量
 # 生产（建筑训练队列）+ 集结点
 var _train_queue: Array = []
+var production_blocked := false
+var _production_retry := 0.0
 var _train_t := 0.0
 var rally := Vector2.ZERO
 var has_rally := false
@@ -112,6 +138,7 @@ var hero_level := 1
 var hero_xp := 0.0
 var skill_points := 0
 var auto_micro := false      # 托管：自动放招 + 自动加点 + 走位/退守/索敌（per-unit 开关，PC/移动端通用）
+var ai_tick_phase := 0  # Assigned by Battle from successful mobile-unit spawn order.
 var _ai_dest := Vector2.INF  # 托管移动去抖：上次下发的移动落点（同向不重发，免得每次决策都重算路径、朝向抖）
 var _base_atk := 0.0
 var _base_hp := 0.0
@@ -250,11 +277,18 @@ var _tower_aim := Vector2i(1, 1)   # 防御塔当前朝向格(8 向图)；目标
 var _tower_aim_hold := 0.0  # 朝向保持计时：>0 时即便暂无目标也维持上次开火方向
 var _stuck_t := 0.0
 var _idle_push_t := 0.0     # 进攻方(官军)呆住计时：闲置太久没目标 → 重新攻击移动压向聚义厅
+var _blocker_check_t := 0.0  # 堵路建筑解析限流：单位最快每 0.5 秒问一次
+var _chasing_path_blocker := false
 var _eject_t := 0.0         # 建筑占地弹出检查限流（10Hz）：兜传送类落点落进占地
 var _block_rp := 0.0        # 撞封格重寻节流：路径被新建筑截断时最多每 0.45s 重寻一次
 var _burn_t := 0.0          # 建筑受损起火动画计时（血量<65% 起火苗，<35% 大火浓烟）
 var manual_order_t := 0.0   # 手动指令保护期(秒)：>0 时托管 AI 不得覆盖玩家刚下的指令
 var manual_order_active := false # 手动指令链未完成前，托管不得因固定超时抢回控制
+# 任务交互意图与普通手动指令分开：只有实际解析为移动的右键才会写入目标点；攻击、停驻、巡逻和脚本移动都不会触发任务区。
+var mission_order_active := false
+var mission_order_arrival_t := 0.0
+var mission_order_target := Vector2.INF
+var mission_order_token := 0
 var _move_retry := 0        # ST_MOVE/ST_AMOVE 路径耗尽重寻计数：同一地点反复重寻视为目的地不可达
 var _move_retry_pos := Vector2.ZERO
 var _last_pos := Vector2.ZERO
@@ -264,6 +298,7 @@ var _hit_recent_t := 0.0 # 最近被敌方击中计时（托管磁滞：被打�
 # 并在 _giveup_t 秒内不再重新锁定该目标(_giveup_id)，免得脑子立刻又把它锁回来一路追死。
 var _chase_t := 0.0        # 当前目标「出范围追击」的累计时长（进入攻击范围即清零）
 var _chase_last_id := 0    # 上一次 _do_chase 处理的目标 id（用于换目标时清零 _chase_t）
+var _chase_best_distance := INF # Reset the give-up clock while actually closing on the target.
 var _giveup_id := 0        # 刚放弃的目标 instance_id
 var _giveup_t := 0.0       # 放弃冷却剩余：>0 时本单位拒绝再锁定 _giveup_id
 const CHASE_GIVEUP := 2.2       # 出范围连续追击上限(秒)：超时仍够不着 → 放弃改打就近
@@ -291,7 +326,9 @@ var _cast_serial := 0       # 每次起手/打断递增；Battle 用它淘汰同
 var _weapon := -1          # 缓存武器类型
 var _idle_t := 0.0         # 待机呼吸相位（恒进）
 var _real_frames := false  # 当前状态是否在播放真·逐帧（用于压低程序化叠加）
+var _frame_directional := false # 当前实际帧是否来自四向资源；false时才允许旧素材水平镜像
 var _animated_redraw_t := 0.0 # 兵海时受击/状态/死亡动画的重绘节流；移动动画仍逐帧
+var _queued_redraw_frame := -1
 var _dying := false        # 死亡动画进行中（已脱离战斗，待倒地淡出后释放）
 var _death_t := 0.0
 var _death_lean := 1.0     # 倒地方向（屏幕左右）
@@ -299,10 +336,24 @@ var _dust: Array = []      # 脚步扬尘 [{x,y,t}]
 const MOVE_SCALE := 0.66      # 全局移动速度系数：放慢行军节奏（不影响任何「走时」/冷却，那些走真实秒）
 const DEATH_DUR := 1.4   # 死亡动画时长（秒）：放慢倒地，看清逐帧（原 0.7 太快）
 const DUST_DUR := 0.36
+# These units have authored four-direction attack frames. Their
+# body motion and weapon pose already live in the bitmap, so the legacy whole-
+# sprite swing and procedural weapon trail must not be layered on top.
+const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"guan_dao": true,
+	"guan_gong": true,
+	"guan_jingqi": true,
+	"guan_qi": true,
+	"song_jiang": true,
+	"lin_chong": true,
+}
 
 
 func setup(p_key: String, def: Dictionary, p_faction: int, p_battle, p_map: GameMap) -> void:
 	key = p_key
+	movement_profile = String(def.get("movement_profile", "land"))
+	art_variant = String(def.get("art_variant", ""))
+	defeat_outcome = String(def.get("defeat_outcome", ""))
 	display_name = def.get("name", p_key)
 	faction = p_faction
 	max_hp = float(def.get("hp", 100))
@@ -340,6 +391,11 @@ func setup(p_key: String, def: Dictionary, p_faction: int, p_battle, p_map: Game
 	aggro_range = maxf(200.0, atk_range + 50.0) if (not is_building or atk > 0.0) else 0.0
 	battle = p_battle
 	map = p_map
+	# Mobile units and heroes share one two-submission terrain-shadow batch owned
+	# by Battle.world. Buildings/resources keep their authored texture outlines
+	# through the local draw route below.
+	if not is_building and not is_resource:
+		WorldShadow.ensure_batch(battle)
 	_track_combat_stats = p_battle != null and bool(p_battle.get("track_hero_combat_stats"))
 	_base_atk = atk
 	_base_hp = max_hp
@@ -368,21 +424,21 @@ func set_selected(v: bool) -> void:
 		selected = v
 		if not v:
 			is_active = false
-		queue_redraw()
+		_request_redraw()
 
 
 ## 查看高亮：被「查看」的敌方单位画红圈（区别于己方绿圈），只读不可下令。
 func set_inspected(v: bool) -> void:
 	if inspected != v:
 		inspected = v
-		queue_redraw()
+		_request_redraw()
 
 
 ## 活动单位高亮：Tab/命令面板当前指向的那个（编队里多于一个时才标，便于「确定是哪个」）
 func set_active(v: bool) -> void:
 	if is_active != v:
 		is_active = v
-		queue_redraw()
+		_request_redraw()
 
 
 ## 公开指令入口：Shift 排队（queued=true 追加队列，否则清空队列立即执行）。
@@ -410,6 +466,7 @@ func order_gather(node: Unit, queued := false) -> void:
 func order_stop() -> void:
 	if is_building:
 		return
+	clear_mission_order_intent()
 	_cancel_hold_order()
 	cancel_cast_windup()
 	_queue.clear()
@@ -440,8 +497,11 @@ func order_hold_position() -> void:
 
 ## 巡逻：在当前位置与 pos 之间用「攻击移动」来回，沿途交战（用于 P 键）
 func order_patrol(pos: Vector2) -> void:
+	if is_captive or story_outcome != "":
+		return
 	if is_building or is_worker:
 		return
+	clear_mission_order_intent()
 	_cancel_hold_order()
 	_queue.clear()
 	passive = false
@@ -483,9 +543,29 @@ func order_garrison(bld: Unit, queued := false) -> void:
 	_enqueue({"kind": "garrison", "target": bld}, queued)
 
 
+func clear_mission_order_intent() -> void:
+	mission_order_active = false
+	mission_order_arrival_t = 0.0
+	mission_order_target = Vector2.INF
+	mission_order_token = 0
+
+
+func stamp_mission_order_intent(target: Vector2, token: int) -> void:
+	clear_mission_order_intent()
+	mission_order_target = target
+	mission_order_token = token
+	# 同格点击或不可达路径可能在 order_move 内同步收尾；仍只留一张短凭证，
+	# 避免一个永不结束的 active 意图日后被脚本位移误用。
+	if _state == ST_IDLE and _queue.is_empty():
+		mission_order_arrival_t = 0.35
+	else:
+		mission_order_active = true
+
+
 func _enqueue(o: Dictionary, queued: bool) -> void:
-	if is_building:
+	if is_building or is_captive or story_outcome != "":
 		return
+	clear_mission_order_intent()
 	_cancel_hold_order()
 	# 普通指令会打断尚未结算的施法抬手；不允许移动后技能仍从原地“幽灵施放”。
 	cancel_cast_windup()
@@ -510,6 +590,11 @@ func _done_order() -> void:
 		_begin_amove(far)   # _begin_amove 不改 _patrolling，循环保持
 		return
 	if _queue.is_empty():
+		# Unit 先收完路径，CampaignMission 再在下一帧检查。仅移动右键的专用
+		# 任务意图获得短到达凭证；普通攻击/停驻留下的 AI 保护戳不能触发剧情。
+		if mission_order_active:
+			mission_order_arrival_t = maxf(mission_order_arrival_t, 0.35)
+			mission_order_active = false
 		manual_order_t = 0.0   # 手动指令自然执行完毕 → 立即解除托管保护，AI 无缝接管
 		manual_order_active = false
 		_state = ST_IDLE
@@ -568,17 +653,20 @@ func _begin_order(o: Dictionary) -> void:
 
 # —— 原始指令（不动队列；供内部重发/回防/续采复用）——
 func _begin_move(pos: Vector2) -> void:
+	if is_captive or story_outcome != "":
+		return
 	if is_building:
 		return
 	if _lunge > 0.0 and _pending_done:
 		_lunge = 0.0   # 命中后的后摇可被移动取消，提升走A响应；未命中前仍不能白嫖伤害
 	_target = null
+	_chasing_path_blocker = false
 	_resume_amove = false
 	_chase_intent = CHASE_AUTO
 	_group_cap = 0.0   # 每次新移动默认解除队伍限速；成队移动时由 _apply_group_cap 在下令后重设
 	_home = pos
 	_has_home = true
-	_path = map.find_path(position, pos, faction)
+	_path = map.find_path(position, pos, faction, movement_profile)
 	_path_i = 0
 	_state = ST_MOVE
 
@@ -587,6 +675,7 @@ func _begin_attack(t: Unit, explicit := false) -> void:
 	if is_building or t == null:
 		return
 	_target = t
+	_chasing_path_blocker = false
 	_resume_amove = false
 	_chase_intent = CHASE_EXPLICIT if explicit else CHASE_AUTO
 	_repath = 0.0
@@ -596,18 +685,45 @@ func _begin_attack(t: Unit, explicit := false) -> void:
 
 
 func _begin_amove(pos: Vector2) -> void:
+	if is_captive or story_outcome != "":
+		return
 	if is_building:
 		return
 	if _lunge > 0.0 and _pending_done:
 		_lunge = 0.0
 	_target = null
+	_chasing_path_blocker = false
 	_amove_dest = pos
 	_resume_amove = false
 	_chase_intent = CHASE_AMOVE
 	_group_cap = 0.0   # 同 _begin_move：默认解除限速，成队由 _apply_group_cap 重设
-	_path = map.find_path(position, pos, faction)
+	_path = map.find_path(position, pos, faction, movement_profile)
 	_path_i = 0
 	_state = ST_AMOVE
+
+
+func _try_attack_path_blocker() -> bool:
+	if faction != FACTION_GUAN or movement_profile != "land" or battle == null or _blocker_check_t > 0.0:
+		return false
+	_blocker_check_t = 0.5
+	var blocker: Unit = battle.resolve_path_blocker(self, _amove_dest, true)
+	if blocker == null or not is_instance_valid(blocker) or blocker.hp <= 0.0:
+		return false
+	engage_path_blocker(blocker)
+	return true
+
+
+func engage_path_blocker(blocker: Unit) -> void:
+	if blocker == null or not is_instance_valid(blocker) or blocker.hp <= 0.0:
+		return
+	_target = blocker
+	_resume_amove = true
+	_chasing_path_blocker = true
+	_chase_intent = CHASE_AMOVE
+	_repath = 0.0
+	_path = PackedVector2Array()
+	_path_i = 0
+	_state = ST_CHASE
 
 
 func _begin_gather(node: Unit) -> void:
@@ -624,7 +740,7 @@ func _begin_gather(node: Unit) -> void:
 		_begin_return()
 	else:
 		_repath = 0.0
-		_path = map.find_path(position, node.position, faction)
+		_path = map.find_path(position, node.position, faction, movement_profile)
 		_path_i = 0
 		_state = ST_GATHER
 
@@ -635,7 +751,7 @@ func _begin_return() -> void:
 		_done_order()   # 无卸货点（聚义厅/仓库都没了）：收工待命，避免空转
 		return
 	_repath = 0.0
-	_path = map.find_path(position, _drop.position, faction)
+	_path = map.find_path(position, _drop.position, faction, movement_profile)
 	_path_i = 0
 	_state = ST_RETURN
 
@@ -649,7 +765,7 @@ func _begin_build(site: Unit) -> void:
 	_group_cap = 0.0
 	_build_site = site
 	_repath = 0.0
-	_path = map.find_path(position, site.position, faction)
+	_path = map.find_path(position, site.position, faction, movement_profile)
 	_path_i = 0
 	_state = ST_BUILD
 
@@ -665,7 +781,7 @@ func _begin_repair(bld: Unit) -> void:
 	_repair_g = 0.0
 	_repair_w = 0.0
 	_repath = 0.0
-	_path = map.find_path(position, bld.position, faction)
+	_path = map.find_path(position, bld.position, faction, movement_profile)
 	_path_i = 0
 	_state = ST_REPAIR
 
@@ -680,7 +796,7 @@ func _begin_garrison(bld: Unit) -> void:
 	_resume_amove = false
 	_garrison_dest = bld
 	_repath = 0.0
-	_path = map.find_path(position, bld.position, faction)
+	_path = map.find_path(position, bld.position, faction, movement_profile)
 	_path_i = 0
 	_state = ST_GARRISON
 
@@ -701,7 +817,7 @@ func _do_garrison(delta: float) -> void:
 		_repath -= delta
 		if _repath <= 0.0 or _path_i >= _path.size():
 			_repath = 0.5
-			_path = map.find_path(position, bld.position, faction)
+			_path = map.find_path(position, bld.position, faction, movement_profile)
 			_path_i = 0
 		_follow_path(delta)
 
@@ -736,7 +852,7 @@ func leave_garrison() -> void:
 	visible = true
 	if bld != null and is_instance_valid(bld):
 		bld.passengers.erase(self)
-		var cell := map.nearest_open(map.world_to_cell(bld.position) + Vector2i(randi_range(-2, 2), int(bld.get_meta("fhalf", 1)) + 1))
+		var cell := map.nearest_open(map.world_to_cell(bld.position) + Vector2i(randi_range(-2, 2), int(bld.get_meta("fhalf", 1)) + 1), movement_profile)
 		position = map.cell_to_world(cell)
 		if battle != null:
 			battle.on_garrison_changed(bld)
@@ -753,7 +869,9 @@ func recently_hit() -> bool:
 
 func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction := false,
 		damage_ability_id := "") -> void:
-	if hp <= 0.0:
+	if hp <= 0.0 or story_outcome != "":
+		return
+	if is_instance_valid(from) and from.story_outcome != "":
 		return
 	if _pending_build:
 		return   # 工地虚影：尚未真正起建（工人未到），不可被攻击——「走过去再开始建造」后才挨打
@@ -784,6 +902,9 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	var hp_damage := minf(hp_before, maxf(0.0, d))
 	var effective_damage := shield_absorbed + hp_damage
 	hp -= d
+	if hp <= 0.0 and defeat_outcome != "":
+		resolve_story(defeat_outcome)
+		return
 	if effective_damage > 0.0 and battle != null and is_hero and inventory != null:
 		battle.trigger_item_event(self, "on_damaged", {"attacker": from, "damage": effective_damage,
 			"source_id": damage_ability_id})
@@ -830,7 +951,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if from != null and is_instance_valid(from):
 		var fd := _screen_dir(position - from.position)
 		_flinch = fd * 4.0
-	queue_redraw()
+	_request_redraw()
 	# 被打就还手（仅限当前没有目标的战斗单位）
 	if not is_building and from != null and is_instance_valid(from) \
 			and from.hp > 0.0 and from.faction != faction:
@@ -866,7 +987,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 			# 资源点（金矿/林木）保留旧染暗表现（枯竭另走 deplete_resource）。
 			if is_resource:
 				modulate = Color(0.45, 0.4, 0.38)
-				queue_redraw()
+				_request_redraw()
 		else:
 			# 进入死亡动画：朝受击反方向倒地、淡出后再释放
 			Sfx.play("death", -6.0, 0.12, 110)
@@ -877,7 +998,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 			if from != null and is_instance_valid(from):
 				ddir = position - from.position
 			_death_lean = 1.0 if (ddir.x - ddir.y) >= 0.0 else -1.0
-			queue_redraw()
+			_request_redraw()
 
 
 func _physics_process(delta: float) -> void:
@@ -888,6 +1009,27 @@ func _physics_process(delta: float) -> void:
 		battle._unit_proc_us += Time.get_ticks_usec() - __t0
 	else:
 		_phys_body(delta)
+	# This chapter has only two paired actors. Either actor changing position, dying or
+	# attacking must invalidate BOTH canvas command lists, even if the other is idle.
+	if is_instance_valid(story_assist_partner) or is_instance_valid(story_assist_owner):
+		_request_redraw()
+		if is_instance_valid(story_assist_partner): story_assist_partner._request_redraw()
+		if is_instance_valid(story_assist_owner): story_assist_owner._request_redraw()
+
+
+func _request_redraw() -> void:
+	# Catch-up physics ticks each flush deferred CanvasItem draws. Combine those
+	# requests before the next process pass so the canvas sees the final state.
+	# Non-physics input/UI requests keep the usual immediate queueing behavior.
+	if not is_inside_tree() or not Engine.is_in_physics_frame():
+		queue_redraw()
+		return
+	# Catch-up physics ticks share the process frame counter. The one-shot
+	# connection is consumed after those ticks, before the next counter value.
+	var frame := Engine.get_process_frames()
+	if frame != _queued_redraw_frame:
+		_queued_redraw_frame = frame
+		get_tree().process_frame.connect(queue_redraw, CONNECT_ONE_SHOT)
 
 
 func _queue_animated_redraw(interval := 0.08, force := false) -> void:
@@ -897,7 +1039,7 @@ func _queue_animated_redraw(interval := 0.08, force := false) -> void:
 		if _animated_redraw_t > 0.0:
 			return
 		_animated_redraw_t = interval
-	queue_redraw()
+	_request_redraw()
 
 
 func _queue_motion_redraw() -> void:
@@ -909,9 +1051,9 @@ func _queue_motion_redraw() -> void:
 			var stride := 3 if battle._mob_count > 500 else 2
 			if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:
 				return
-			queue_redraw()
+			_request_redraw()
 			return
-	queue_redraw()
+	_request_redraw()
 
 
 func _mass_visuals() -> bool:
@@ -927,6 +1069,14 @@ func _mass_status_visuals() -> bool:
 
 
 func _phys_body(delta: float) -> void:
+	if _story_pose_t > 0.0:
+		_story_pose_t -= delta
+		if _story_pose_t <= 0.0:
+			art_variant = _pose_previous_variant
+			remove_meta("story_pose")
+			_request_redraw()
+	if story_outcome != "" or is_captive:
+		return
 	_animated_redraw_t = maxf(0.0, _animated_redraw_t - delta)
 	if is_building:
 		if hp <= 0.0:
@@ -958,6 +1108,10 @@ func _phys_body(delta: float) -> void:
 		return
 	if _dying:
 		_death_t += delta
+		# A lethal hit sets the same short white flash as any other hit. Death used
+		# to return before the normal decay below, leaving all 1.4 seconds tinted.
+		if _flash > 0.0:
+			_flash = maxf(0.0, _flash - delta)
 		_queue_animated_redraw()
 		if _death_t >= DEATH_DUR:
 			queue_free()
@@ -984,7 +1138,7 @@ func _phys_body(delta: float) -> void:
 		if _track_combat_stats and passive_regen > 0.0 and battle != null:
 			var effective_regen := hp - hp_before_regen
 			battle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)
-		queue_redraw()
+		_request_redraw()
 
 	# 技能冷却/充能（各槽）与临时增益计时
 	_tick_ability_slots(delta)
@@ -1136,8 +1290,15 @@ func _phys_body(delta: float) -> void:
 		_queue_animated_redraw(0.08, _buff_glow <= 0.0)
 	if _giveup_t > 0.0:
 		_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标
+	if _blocker_check_t > 0.0:
+		_blocker_check_t = maxf(0.0, _blocker_check_t - delta)
 	if manual_order_t > 0.0:
 		manual_order_t = maxf(0.0, manual_order_t - delta)
+	if mission_order_arrival_t > 0.0:
+		mission_order_arrival_t = maxf(0.0, mission_order_arrival_t - delta)
+		if mission_order_arrival_t <= 0.0:
+			mission_order_target = Vector2.INF
+			mission_order_token = 0
 
 	# 星际/红警式硬占位兜底：机动单位若被「放」进建筑占地（出生/钩拽/闪现/直点建筑中心），
 	# 弹出到占地外沿。寻路层本就把占地当 solid（走不进）；这里只兜传送类落点。10Hz 限流。
@@ -1147,12 +1308,12 @@ func _phys_body(delta: float) -> void:
 		if not is_building and not garrisoned and hp > 0.0 and battle != null:
 			battle.eject_from_buildings(self)
 
-	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned \
+	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned or _target.story_outcome != "" \
 			or _target._invis_t > 0.0 \
 			or (battle != null and battle.has_method("target_visible_to") and not battle.target_visible_to(self, _target))):
 		_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击
 	if _hua_lock_target != null and (not is_instance_valid(_hua_lock_target) or _hua_lock_target.hp <= 0.0 \
-			or _hua_lock_target.garrisoned or _hua_lock_target._invis_t > 0.0):
+			or _hua_lock_target.garrisoned or _hua_lock_target.story_outcome != "" or _hua_lock_target._invis_t > 0.0):
 		_clear_hua_lock()
 	# 施放其他技能会暂时清掉普通攻击目标；技能结束后若 E 的连珠箭尚未打完，就继续优先射原目标。
 	if _target == null and hua_lock_active() and (battle == null or not battle.has_method("target_visible_to") \
@@ -1202,6 +1363,11 @@ func _phys_body(delta: float) -> void:
 					_repath = 0.0
 					_idle_push_t = 0.0
 					_state = ST_CHASE
+				elif stance == STANCE_DEFEND and _has_home and _amove_dest == Vector2.ZERO and position.distance_to(_home) > 30.0:
+					# A target that escapes/gives up can end a chase directly in idle.
+					# Defensive guards still return home; explicit Stop resets this
+					# anchor and Hold Position never enters this branch.
+					_begin_move(_home)
 				elif faction == FACTION_GUAN and _amove_dest != Vector2.ZERO and battle != null:
 					# 进攻方呆住看门狗：没目标却停在原地超 2.5s → 重新攻击移动压向聚义厅，半路遇我方单位就接着打
 					_idle_push_t += delta
@@ -1240,13 +1406,16 @@ func _phys_body(delta: float) -> void:
 				elif _follow_path(delta):
 					# 路径走完但离目的地还远（被挤出路线/目的地不可达）→ 有限重寻。
 					# 原逻辑会在空路径时每物理帧重跑 A*；末波几个卡墙残兵就能把帧率压垮。
-					if position.distance_to(_move_retry_pos) > 24.0:
+					var engaged_blocker := position.distance_to(_amove_dest) > 70.0 and _try_attack_path_blocker()
+					if engaged_blocker:
+						pass
+					elif position.distance_to(_move_retry_pos) > 24.0:
 						_move_retry = 0
-					if position.distance_to(_amove_dest) > 70.0 and _move_retry < 3:
+					if not engaged_blocker and position.distance_to(_amove_dest) > 70.0 and _move_retry < 3:
 						_move_retry += 1
 						_move_retry_pos = position
 						_begin_amove(_amove_dest)
-					else:
+					elif not engaged_blocker:
 						_done_order()
 			ST_CHASE:
 				_do_chase(delta)
@@ -1277,13 +1446,13 @@ func _phys_body(delta: float) -> void:
 		for d in _dust:
 			d.t -= delta
 		_dust = _dust.filter(func(d): return d.t > 0.0)
-		queue_redraw()
+		_request_redraw()
 	if _lunge > 0.0:
 		var prev_l := _lunge
 		_lunge = maxf(0.0, _lunge - delta * _swing_speed)
 		if not _pending_done and prev_l > _hit_at and _lunge <= _hit_at:
 			_deal_hit()
-		queue_redraw()
+		_request_redraw()
 	if _flinch != Vector2.ZERO:
 		_flinch = _flinch.move_toward(Vector2.ZERO, delta * 90.0)
 		_queue_animated_redraw(0.08, _flinch == Vector2.ZERO)
@@ -1314,6 +1483,7 @@ func _do_chase(delta: float) -> void:
 	if _target != null and _target.get_instance_id() != _chase_last_id:
 		_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置
 		_chase_t = 0.0
+		_chase_best_distance = INF
 	if _target == null:
 		_chase_t = 0.0
 		# 玩家点名目标结束后直接完成该命令并接下一条队列，不绕回旧驻守点。
@@ -1354,6 +1524,7 @@ func _do_chase(delta: float) -> void:
 	var reach := atk_range + radius + _target.radius
 	if d <= reach or hua_locked:
 		_chase_t = 0.0   # 已进攻击范围（咬住了）：追击计时清零
+		_chase_best_distance = d
 		_face_dir(_target.position - position)
 		if _cd <= 0.0:
 			_attack()
@@ -1365,11 +1536,18 @@ func _do_chase(delta: float) -> void:
 		# 追不上判定：连续追同一目标却始终够不着 → 超时放手（对方更快则更早放弃），
 		# 拉黑该目标 GIVEUP_COOLDOWN 秒并就近重新索敌，免得一路追死/被旁敌砍死。
 		_chase_t += delta
-		var can_give_up := _chase_intent == CHASE_AUTO or _chase_intent == CHASE_AMOVE
-		var cap: float = CHASE_GIVEUP_FAST if _target.current_move_speed() > current_move_speed() + 1.0 else CHASE_GIVEUP
+		# A faster unit standing still is still catchable. Only time without
+		# meaningful closing progress counts toward abandoning this pursuit.
+		if d < _chase_best_distance - 12.0:
+			_chase_best_distance = d
+			_chase_t = 0.0
+		var can_give_up := (_chase_intent == CHASE_AUTO or _chase_intent == CHASE_AMOVE) and not _chasing_path_blocker
+		# Speed only affects the early give-up window; avoid terrain reads otherwise.
+		var timed_out := can_give_up and _chase_t >= CHASE_GIVEUP_FAST and (
+			_chase_t >= CHASE_GIVEUP or _target.current_move_speed() > current_move_speed() + 1.0)
 		# 玩家点名攻击不因“目标更快”自行改令；只有目标连续不可达才结束，避免永远撞墙。
 		var unreachable_explicit := _chase_intent == CHASE_EXPLICIT and _path.is_empty() and _chase_t >= 3.5
-		if (can_give_up and _chase_t >= cap) or unreachable_explicit:
+		if timed_out or unreachable_explicit:
 			_giveup_id = _target.get_instance_id()
 			_giveup_t = GIVEUP_COOLDOWN
 			_target = null
@@ -1385,7 +1563,9 @@ func _do_chase(delta: float) -> void:
 		_repath -= delta
 		if _repath <= 0.0:
 			_repath = 0.4
-			_path = map.find_path(position, _target.position, faction)
+			_path = map.find_path(position, _target.position, faction, movement_profile)
+			if _path.is_empty() and is_ranged:
+				_path = map.find_firing_path(position,_target.position,reach,faction,movement_profile)
 			_path_i = 0
 		_follow_path(delta)
 
@@ -1418,7 +1598,7 @@ func _do_gather(delta: float) -> void:
 		if n != null:
 			_gather_node = n
 			_repath = 0.0
-			_path = map.find_path(position, n.position, faction)
+			_path = map.find_path(position, n.position, faction, movement_profile)
 			_path_i = 0
 		elif _carry_amt > 0.0:
 			_begin_return()
@@ -1426,6 +1606,11 @@ func _do_gather(delta: float) -> void:
 			_done_order()
 		return
 	var reach := _gather_node.radius + radius + 6.0
+	if _gather_node.res_kind == "wood" and bool(_gather_node.get_meta("resource_footprint",false)):
+		# A solid tree tile makes navigation end at a neighbouring cell centre,
+		# including diagonals. The old 29px reach could never reach that 32px tile
+		# (45px diagonally), leaving workers repathing forever without chopping.
+		reach = maxf(reach, float(GameMap.CELL) * sqrt(2.0) + radius + 2.0)
 	if position.distance_to(_gather_node.position) <= reach:
 		# 金矿独占：矿口已有人开采 → 先就近改采别的空金矿，没有就在矿口排队等候（不计 tick）
 		if _gather_node.res_kind == "gold" and _gather_node.gold_busy(self):
@@ -1433,7 +1618,7 @@ func _do_gather(delta: float) -> void:
 			if other != null and other != _gather_node:
 				_gather_node = other
 				_repath = 0.0
-				_path = map.find_path(position, other.position, faction)
+				_path = map.find_path(position, other.position, faction, movement_profile)
 				_path_i = 0
 			else:
 				_face_dir(_gather_node.position - position)   # 排队：面向矿口待命
@@ -1462,7 +1647,7 @@ func _do_gather(delta: float) -> void:
 		_repath -= delta
 		if _repath <= 0.0 or _path_i >= _path.size():
 			_repath = 0.5
-			_path = map.find_path(position, _gather_node.position, faction)
+			_path = map.find_path(position, _gather_node.position, faction, movement_profile)
 			_path_i = 0
 		_follow_path(delta)
 
@@ -1475,7 +1660,7 @@ func _do_return(delta: float) -> void:
 			_done_order()
 			return
 		_repath = 0.0
-		_path = map.find_path(position, _drop.position, faction)
+		_path = map.find_path(position, _drop.position, faction, movement_profile)
 		_path_i = 0
 	# 卸货点占地已封路，工人只能停在外圈。触及半径必须按占地（而非视觉 radius）算，
 	# 否则小占地的卸货点（如仓库 radius 20，封 3×3 格）外圈站位离中心 ~2.8 格 ≈ 90px，
@@ -1507,7 +1692,7 @@ func _do_return(delta: float) -> void:
 		_repath -= delta
 		if _repath <= 0.0 or _path_i >= _path.size():
 			_repath = 0.5
-			_path = map.find_path(position, _drop.position, faction)
+			_path = map.find_path(position, _drop.position, faction, movement_profile)
 			_path_i = 0
 		_follow_path(delta)
 
@@ -1529,7 +1714,7 @@ func _do_build(delta: float) -> void:
 		_repath -= delta
 		if _repath <= 0.0 or _path_i >= _path.size():
 			_repath = 0.5
-			_path = map.find_path(position, _build_site.position, faction)
+			_path = map.find_path(position, _build_site.position, faction, movement_profile)
 			_path_i = 0
 		_follow_path(delta)
 
@@ -1565,7 +1750,7 @@ func _do_repair(delta: float) -> void:
 				_finish_worker_task()   # 没钱修了 → 回去采集攒资源
 				return
 		bld.hp = minf(bld.max_hp, bld.hp + dh)
-		bld.queue_redraw()
+		bld._request_redraw()
 		if bld.hp >= bld.max_hp:
 			_build_site = null
 			_finish_worker_task()
@@ -1573,7 +1758,7 @@ func _do_repair(delta: float) -> void:
 		_repath -= delta
 		if _repath <= 0.0 or _path_i >= _path.size():
 			_repath = 0.5
-			_path = map.find_path(position, bld.position, faction)
+			_path = map.find_path(position, bld.position, faction, movement_profile)
 			_path_i = 0
 		_follow_path(delta)
 
@@ -1588,26 +1773,43 @@ func advance_build(delta: float) -> void:
 		if battle != null and battle.has_method("register_building_footprint"):
 			battle.register_building_footprint(self)
 		hp = max_hp * 0.1
-		queue_redraw()
+		_request_redraw()
 	build_progress += delta
 	hp = max_hp * clampf(0.1 + 0.9 * build_progress / maxf(build_time, 0.1), 0.1, 1.0)
-	queue_redraw()
+	_request_redraw()
 	if build_progress >= build_time:
 		is_constructing = false
 		build_progress = build_time
 		hp = max_hp
 		if battle != null:
 			battle.on_building_complete(self)
-		queue_redraw()
+		_request_redraw()
 
 
-## 建筑生产：队列逐个训练，完成即生成（送往集结点）
+func production_wait_label() -> String:
+	var water := not _train_queue.is_empty() and battle!=null \
+		and String(battle._defs.get(_train_queue[0],{}).get("movement_profile","land"))=="water"
+	return "等待下水" if water else "等待出口"
+
+
+## 建筑生产：完成且出口可用时才出队；堵口的成船仍可取消并退费。
 func _production_tick(delta: float) -> void:
-	_train_t -= delta
+	if battle==null: return
+	if production_blocked:
+		_production_retry-=delta
+		if _production_retry>0: return
+	_train_t = maxf(0.0,_train_t-delta)
 	if _train_t <= 0.0:
-		var key: String = _train_queue.pop_front()
-		if battle != null:
-			battle.on_unit_trained(self, key)
+		var key: String = _train_queue[0]
+		if not battle.on_unit_trained(self,key):
+			if not production_blocked and faction==FACTION_LIANG:
+				battle.msg(display_name+"："+production_wait_label()+"，请清开出口；取消队列可退资源。",4)
+			production_blocked=true
+			_production_retry=0.5
+			return
+		production_blocked=false
+		_production_retry=0.0
+		_train_queue.pop_front()
 		if not _train_queue.is_empty():
 			_train_t = battle.train_time_for(_train_queue[0])
 
@@ -1619,7 +1821,7 @@ func _tower_tick(delta: float) -> void:
 	_cd = maxf(0.0, _cd - delta)
 	_muzzle_t = maxf(0.0, _muzzle_t - delta)
 	_tower_aim_hold = maxf(0.0, _tower_aim_hold - delta)
-	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned \
+	if _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned or _target.story_outcome != "" \
 			or _target._invis_t > 0.0 or position.distance_to(_target.position) > atk_range + 60.0 \
 			or (battle != null and battle.has_method("target_visible_to") and not battle.target_visible_to(self, _target))):
 		_target = null
@@ -1655,7 +1857,7 @@ func _tower_acquire_hero() -> void:
 	var cap: float = maxf(aggro_range, atk_range)
 	for u in battle.units_near(position, cap):
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
-				or not u.is_hero or u.garrisoned or u.is_captive:
+				or not u.is_hero or u.garrisoned or u.story_outcome != "" or u.is_captive:
 			continue
 		var d: float = position.distance_to(u.position)
 		if d <= cap and d < best_d:
@@ -1666,6 +1868,9 @@ func _tower_acquire_hero() -> void:
 
 ## 发起一次攻击：起手挥击动画，伤害延后到挥击命中瞬间结算（含起手预备）
 func _attack() -> void:
+	if story_outcome != "" or is_captive or not is_instance_valid(_target) or _target.story_outcome != "":
+		return
+	_face_dir(_target.position - position, true)
 	if _disarm_t > 0.0:
 		return   # 缴械：出不了手（可移动/施法；_cd 不重置，解除后立刻能打）
 	if _invis_t > 0.0:
@@ -1685,11 +1890,13 @@ func _attack() -> void:
 			_swing_speed = 2.8; _hit_at = 0.45   # 突刺（放慢看清，原 4.6）
 		WK.AXE:
 			_swing_speed = 1.8; _hit_at = 0.35   # 大斧抡砸·命中靠后（放慢，原 2.7）
+		WK.IRON_STAFF:
+			_swing_speed = 1.9; _hit_at = 0.38   # 浑铁禅杖横扫·重而不作刀斧劈砍
 		WK.BOW:
 			_swing_speed = 1.9; _hit_at = 0.42   # 张弓→撒放（放慢，原 2.9）
 		_:
 			_swing_speed = 2.1; _hit_at = 0.48   # 劈砍（放慢看清，原 3.6）
-	queue_redraw()
+	_request_redraw()
 
 
 ## 纯表演挥击（采集砍凿等）：只播挥击动作，不结算伤害（_pending_done=true 跳过 _deal_hit）。
@@ -1700,14 +1907,14 @@ func _begin_cosmetic_swing(logic_dir: Vector2) -> void:
 	_pending_done = true
 	_swing_speed = 2.2   # 采集砍凿：放慢看清（与攻击同步）
 	_hit_at = 0.5
-	queue_redraw()
+	_request_redraw()
 
 
 ## 挥击命中瞬间：结算伤害 / 放箭 + 命中火花
 func _deal_hit() -> void:
 	_pending_done = true
 	var t := _pending_target
-	if t == null or not is_instance_valid(t) or t.hp <= 0.0:
+	if story_outcome != "" or t == null or not is_instance_valid(t) or t.hp <= 0.0 or t.story_outcome != "":
 		return
 	# 近战伤害点到来前目标已经脱离武器范围，则这一刀落空；避免隔着数个身位“粘住”命中。
 	if not is_ranged and position.distance_to(t.position) > atk_range + radius + t.radius + 8.0:
@@ -1813,7 +2020,7 @@ func _deal_hit() -> void:
 			heal(dmg * (cav_ls_frac if t.is_cavalry else cav_ls_frac * 0.5), self)   # 打骑兵满额、非骑兵半额
 			_buff_glow = 1.0
 		if battle.has_method("spawn_impact"):
-			battle.spawn_impact(t.position, _swing_kind == WK.AXE or crit)
+			battle.spawn_impact(t.position, _swing_kind in [WK.AXE, WK.IRON_STAFF] or crit)
 		Sfx.play(_attack_sfx_name(), -4.0, 0.14, 75)
 
 
@@ -1917,18 +2124,33 @@ func _attack_sfx_name() -> String:
 		"jiang_menshen": return "atk_fist"    # 赤手
 		"lu_zhishen": return "atk_staff"      # 禅杖
 	match _weapon_kind():
+		WK.FIST: return "atk_fist"
 		WK.SPEAR: return "atk_spear"
 		WK.AXE: return "atk_axe"
+		WK.IRON_STAFF: return "atk_staff"
 		WK.BOW: return "atk_bow"
 		_: return "atk_sword"
 
 
 func _weapon_kind() -> int:
+	if art_variant in ["wu_song_mengzhou", "jiang_menshen_fists"]: return WK.FIST
 	if _weapon >= 0:
 		return _weapon
-	if is_ranged:
+	# Authored weapon contracts take priority over attack-range inference.  The
+	# key fallback keeps older saved/custom definitions compatible when they do
+	# not yet carry weapon_profile.
+	var weapon_profile := String(setup_def.get("weapon_profile", ""))
+	if weapon_profile == "iron_staff" or key == "lu_zhishen":
+		_weapon = WK.IRON_STAFF
+	elif weapon_profile == "spear":
+		_weapon = WK.SPEAR
+	elif key == "wu_song":
+		_weapon = WK.SWORD
+	elif key == "lian_huan_ma":
+		_weapon = WK.SPEAR
+	elif is_ranged:
 		_weapon = WK.BOW
-	elif key == "li_kui" or key == "lu_zhishen":
+	elif key == "li_kui":
 		_weapon = WK.AXE
 	elif atk_range >= 28.0:
 		_weapon = WK.SPEAR
@@ -1951,11 +2173,16 @@ func _acquire(range_override := -1.0, closest_first := false) -> void:
 	var best: Unit = null
 	var best_s := -INF
 	# 只在网格邻近格里找(按警戒/据守半径粗筛)——不再每帧全表扫描，是兵海索敌卡顿的主因之一。
-	for u in battle.units_near(position, range_cap):
+	var candidates: Array = battle.enemy_candidates_near(position, range_cap, faction) if battle.has_method("enemy_candidates_near") else battle.units_near(position, range_cap)
+	for u in candidates:
 		# 资源点（金矿/林木）不是攻击目标——否则敌人冲过来一直砍树；
 		# 被绑缚待救者（captive）亦非攻击目标——否则刽子手会在救援前先把人砍死。
 		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
-				or u.is_resource or u.garrisoned or u.is_captive or u._pending_build or chase_blocked(u):
+				or u.is_resource or u.garrisoned or u.story_outcome != "" or u.is_captive or u._pending_build or chase_blocked(u):
+			continue
+		# 战役目标物可被玩家明确集火或受真实范围伤害，但不得被闲置单位自动当成下一个敌人。
+		# 黄泥冈纲担用此规则避免护卫倒下后，夺纲好汉自行砍坏必须带走的任务物件。
+		if bool(u.get_meta("campaign_no_auto_target", false)):
 			continue
 		if u._invis_t > 0.0:
 			continue   # 主动隐身：完全不可索敌（出手/施法才现形）
@@ -1971,6 +2198,8 @@ func _acquire(range_override := -1.0, closest_first := false) -> void:
 		if score > best_s:
 			best = u
 			best_s = score
+	if best != _target:
+		_chase_best_distance = INF # Reacquiring the same intruder after returning is a fresh pursuit.
 	_target = best
 
 
@@ -1999,7 +2228,7 @@ func _target_score(u: Unit, d: float) -> float:
 
 func current_move_speed(at := Vector2.INF) -> float:
 	var p: Vector2 = position if at == Vector2.INF else at
-	var terrain := map.speed_mult_at(p, faction) if map != null else 1.0
+	var terrain := map.speed_mult_at(p, faction, movement_profile) if map != null else 1.0
 	return base_speed * buff_speed * temp_speed * _temp_move_boost * _drunk_move * aura_slow * MOVE_SCALE * terrain
 
 
@@ -2026,13 +2255,13 @@ func _follow_path(delta: float) -> bool:
 	if dist <= arrive:
 		if _path_i >= _path.size() - 1:
 			# 终点被敌方身体占住时视作已到邻接位，不把最后几像素硬吸进对方体内。
-			if map.is_open_world(wp) and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, wp)):
+			if map._segment_open(position, wp, movement_profile) and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, wp)):
 				position = wp
 		_path_i += 1
 		return _path_i >= _path.size()
 	var next := position + dir / dist * step
 	_face_dir(dir)
-	var next_map_open := map.is_open_world(next)
+	var next_map_open := map._segment_open(position, next, movement_profile)
 	var next_body_open: bool = next_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, next))
 	if next_body_open:
 		position = next
@@ -2042,8 +2271,8 @@ func _follow_path(delta: float) -> bool:
 		# 动态单位不在 AStar 里，反复重寻同一条静态路径只会制造 CPU 峰值，交给分离和卡死看门狗即可。
 		var nx := Vector2(next.x, position.y)
 		var ny := Vector2(position.x, next.y)
-		var nx_map_open := absf(dir.x) > 0.5 and map.is_open_world(nx)
-		var ny_map_open := absf(dir.y) > 0.5 and map.is_open_world(ny)
+		var nx_map_open := absf(dir.x) > 0.5 and map._segment_open(position, nx, movement_profile)
+		var ny_map_open := absf(dir.y) > 0.5 and map._segment_open(position, ny, movement_profile)
 		var nx_body_open: bool = nx_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, nx))
 		var ny_body_open: bool = ny_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, ny))
 		if nx_body_open:
@@ -2056,22 +2285,37 @@ func _follow_path(delta: float) -> bool:
 			_block_rp -= delta
 			if _block_rp <= 0.0:
 				_block_rp = 0.45   # 重寻节流：封死路段最多每 0.45s 重算一次
-				_path = map.find_path(position, _path[_path.size() - 1], faction)
+				_path = map.find_path(position, _path[_path.size() - 1], faction, movement_profile)
 				_path_i = 0
 	return false
 
 
 const FACE_FLIP_MIN := 7.0   # 翻面磁滞带：要改朝向必须明确朝反方向超过此屏幕横向量，
                              # 否则目标在正上/正下方(sdx≈0)时微小抖动会让单位左右摇头
-func _face_dir(d: Vector2) -> void:
+func _face_dir(d: Vector2, force := false) -> void:
+	var redraw_needed := false
+	# 所有可移动人物都持续记录四象限；即使当前仍用旧素材，之后换成剧情variant也能保持朝向。
+	if not is_building and base_speed > 0.0:
+		if not force and (_lunge > 0.0 or _cast_t > 0.0):
+			return
+		if d.length_squared() < (0.000001 if force else 4.0):
+			return
+		var desired := CampaignArt.direction_from_delta(d, animation_direction)
+		if desired != _direction_candidate:
+			_direction_candidate = desired
+			_direction_votes = 0
+		_direction_votes += 1
+		if force or _direction_votes >= 4:
+			if animation_direction != desired:
+				animation_direction = desired
+				redraw_needed = true
 	var sdx := d.x - d.y  # 等距投影下屏幕横向 = 逻辑 x - 逻辑 y
 	var f := sdx < 0.0
-	if f == face_left:
-		return
-	if absf(sdx) < FACE_FLIP_MIN:   # 反向但不够明确 → 维持当前朝向（消除摇头）
-		return
-	face_left = f
-	queue_redraw()
+	if f != face_left and (force or absf(sdx) >= FACE_FLIP_MIN):
+		face_left = f
+		redraw_needed = true
+	if redraw_needed:
+		_request_redraw()
 
 
 ## ---------- 技能接口（多槽 + 经典RTS式升级）----------
@@ -2217,6 +2461,7 @@ func _slot_cd(i: int) -> float:
 
 
 func slot_ready(i: int) -> bool:
+	if story_outcome != "" or is_captive: return false
 	if i < 0 or i >= ability_slots.size():
 		return false
 	var s: Dictionary = ability_slots[i]
@@ -2268,7 +2513,7 @@ func slot_start_cd(i: int) -> void:
 	else:
 		ability_slots[i]["cd_t"] = _slot_cd(i)
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 ## 升级门槛：当前 rank→下一级需达英雄等级。普通技能 [1,3,5]；
@@ -2295,7 +2540,7 @@ func learn(i: int) -> void:
 		ability_slots[i]["cast_seq"] = 0
 	if bool(ability_slots[i]["passive"]):
 		_recompute_hero_stats()
-	queue_redraw()
+	_request_redraw()
 
 
 ## 战死英雄在聚义厅重练后恢复原有等级/经验/技能点/已学技能（不再从 1 级重来）。
@@ -2335,7 +2580,7 @@ func gain_xp(amount: float) -> void:
 		_buff_glow = 1.0
 		if battle != null and battle.has_method("spawn_levelup"):
 			battle.spawn_levelup(position)
-	queue_redraw()
+	_request_redraw()
 
 
 ## 重算英雄属性：基础 ×等级成长 + 已学被动加成
@@ -2474,7 +2719,7 @@ func toggle_melee() -> void:
 	_recompute_hero_stats()      # 内部按 melee_mode 决定射程
 	aggro_range = maxf(200.0, atk_range + 50.0)
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 # 兼容旧单技能接口（= 槽0）
@@ -2501,7 +2746,7 @@ func heal(amount: float, healer: Unit = null, source_id := "") -> float:
 	if _track_combat_stats and healer != null and battle != null:
 		battle.record_hero_combat_healing(self, healer, effective, source_id)
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 	return effective
 
 
@@ -2512,7 +2757,7 @@ func start_lin_guard(rank: int, dur: float, reduction: float) -> void:
 	_lin_guard_used = false
 	apply_damage_reduction(reduction, dur, -500000 - int(get_instance_id()))
 	_buff_glow = 1.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 林冲 E·枪势叠层。返回本次额外伤害、回血比例及演出所需层数；空表表示被动未学或目标不合法。
@@ -2547,7 +2792,7 @@ func apply_temp_atk(mult: float, dur: float) -> void:
 	temp_atk = mult
 	_temp_atk_t = dur
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 ## 临时「平攻加成」（+N 攻击，与乘区 temp_atk 叠加）：李逵暴走用。
@@ -2555,7 +2800,7 @@ func apply_temp_atk_add(add: float, dur: float) -> void:
 	temp_atk_add = add
 	_temp_atk_add_t = dur
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 ## 发动冲锋（李逵 W）：蓄力 windup 秒后，朝 dir 高速冲 dist 像素，撞翻沿途敌人。
@@ -2576,8 +2821,8 @@ func _begin_charge(dir: Vector2, dmg: float, windup: float, dist: float, width: 
 	_target = null
 	_state = ST_IDLE
 	_queue.clear()
-	_face_dir(_charge_dir)
-	queue_redraw()
+	_face_dir(_charge_dir, true)
+	_request_redraw()
 
 
 ## 冲锋逐帧：蓄力期原地待命；冲刺期沿 dir 平移，扫到的敌人各撞一次。
@@ -2585,12 +2830,12 @@ func _do_charge_step(delta: float) -> void:
 	if _charge_t > 0.0:
 		_charge_t = maxf(0.0, _charge_t - delta)
 		_face_dir(_charge_dir)
-		queue_redraw()
+		_request_redraw()
 		return
 	# 冲刺中：高速平移（受阻则停），撞伤沿途敌人
 	var step := _charge_dir * 560.0 * delta
 	var np := position + step
-	if map != null and map.is_open_world(np):
+	if map != null and map._segment_open(position, np, movement_profile):
 		position = np
 		_stepped = true
 	else:
@@ -2598,7 +2843,7 @@ func _do_charge_step(delta: float) -> void:
 	if battle != null:
 		for u in battle.units:
 			if not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
-					or u.is_resource or u.garrisoned or _charge_hit.has(u):
+					or u.is_resource or u.garrisoned or u.story_outcome != "" or _charge_hit.has(u):
 				continue
 			if position.distance_to(u.position) <= _charge_width * 0.5 + u.radius:
 				_charge_hit.append(u)
@@ -2608,7 +2853,7 @@ func _do_charge_step(delta: float) -> void:
 				if battle.has_method("spawn_impact"):
 					battle.spawn_impact(u.position, true)
 	_charge_dash = maxf(0.0, _charge_dash - delta)
-	queue_redraw()
+	_request_redraw()
 
 
 func apply_lifesteal(frac: float, dur: float) -> void:
@@ -2648,7 +2893,7 @@ func start_hua_lock(t: Unit, shots := 5) -> void:
 
 func hua_lock_active() -> bool:
 	return _hua_lock_shots > 0 and _hua_lock_target != null and is_instance_valid(_hua_lock_target) \
-			and _hua_lock_target.hp > 0.0 and not _hua_lock_target.garrisoned
+			and _hua_lock_target.hp > 0.0 and not _hua_lock_target.garrisoned and _hua_lock_target.story_outcome == ""
 
 
 func has_hua_locked_attack(t: Unit) -> bool:
@@ -2746,7 +2991,7 @@ func apply_stun(dur: float) -> void:
 		_target = null
 		cancel_cast_windup()
 		_break_channel()   # 眩晕必断引导
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -2756,7 +3001,7 @@ func apply_shield(amount: float, dur: float) -> void:
 	_shield = maxf(_shield, amount)
 	_shield_t = maxf(_shield_t, dur)
 	_buff_glow = 1.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 区域护阵减伤：同一来源刷新，多个来源只取当前最高比例；来源到期后会正确降档。
@@ -2803,7 +3048,7 @@ func apply_silence(dur: float) -> void:
 	if entering:
 		cancel_cast_windup()
 		_break_channel()   # 沉默必断引导
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -2813,7 +3058,7 @@ func apply_root(dur: float) -> void:
 	var entering := _root_t <= 0.0
 	_root_t = maxf(_root_t, dur)
 	if entering:
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -2823,7 +3068,7 @@ func apply_disarm(dur: float) -> void:
 	var entering := _disarm_t <= 0.0
 	_disarm_t = maxf(_disarm_t, dur)
 	if entering:
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -2833,14 +3078,14 @@ func _begin_channel_state(dur: float) -> void:
 	_channel_t = dur
 	_channel_dur = dur
 	_target = null   # 放下当前目标，就地引导
-	queue_redraw()
+	_request_redraw()
 
 
 ## 引导被打断（眩晕/沉默/被拖走）：立即中止——battle._channel_pass 下一帧发现 _channel_t<=0 即停止结算。
 func _break_channel() -> void:
 	if _channel_t > 0.0:
 		_channel_t = 0.0
-		queue_redraw()
+		_request_redraw()
 
 
 ## 主动隐身：dur 秒内不可被索敌/指向（己方半透可见）；破隐首击带 strike_bonus 纯伤。
@@ -2848,7 +3093,7 @@ func apply_invis(dur: float, strike_bonus: float) -> void:
 	_invis_t = maxf(_invis_t, dur)
 	_invis_strike_bonus = strike_bonus
 	modulate.a = 0.35
-	queue_redraw()
+	_request_redraw()
 
 
 ## 破隐（攻击/施法即现形）：清隐身，并把破隐加成挂到下一击（由 _deal_hit 兑现）。
@@ -2856,7 +3101,7 @@ func _break_invis() -> void:
 	if _invis_t > 0.0:
 		_invis_t = 0.0
 		modulate.a = 1.0
-		queue_redraw()
+		_request_redraw()
 
 
 ## 变身(transform)：dur 秒内换到临时形态——按 form 表改攻/攻速/移速/体型/染色（到期还原）。
@@ -2879,7 +3124,7 @@ func apply_form(form: Dictionary, dur: float) -> void:
 		modulate = Color(tc.r, tc.g, tc.b, modulate.a)
 	_recompute_hero_stats()   # 让 atk/血量/射程叠加 form 修正
 	_buff_glow = 1.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 变身到期：从备份还原体型/攻速/移速/染色，清形态并重算（recompute 此时不再叠 form 修正）。
@@ -2894,7 +3139,7 @@ func _end_form() -> void:
 	_form_t = 0.0
 	if is_hero:
 		_recompute_hero_stats()
-	queue_redraw()
+	_request_redraw()
 
 
 ## 变形术(hex)：dur 秒内沉默+缴械+大幅减速（组合软控·可反击），并显示"小猪替身"视觉。
@@ -2903,7 +3148,7 @@ func apply_hex(dur: float) -> void:
 	apply_silence(dur)
 	apply_disarm(dur)
 	apply_slow(0.35, dur)   # 变形期间步履蹒跚
-	queue_redraw()
+	_request_redraw()
 
 
 ## 驱散/净化：hostile=true 清自身增益（樊瑞驱敌方 buff）；false 清自身减益（安道全神医解控）。
@@ -2935,7 +3180,7 @@ func dispel(hostile: bool) -> void:
 		_attack_speed_slow = 1.0; _attack_speed_slow_t = 0.0
 		if temp_speed < 1.0:
 			temp_speed = 1.0; _temp_speed_t = 0.0   # 只清减速（加速归驱散）
-	queue_redraw()
+	_request_redraw()
 
 
 ## 宋江 R 的定向解控：只清说明中承诺的四项，不顺带移除缴械、易伤、嘲讽、致盲等其他减益。
@@ -2946,7 +3191,7 @@ func cleanse_command_control() -> void:
 	if temp_speed < 1.0:
 		temp_speed = 1.0
 		_temp_speed_t = 0.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 嘲讽(taunt)：dur 秒内被迫攻击 src（无视原目标/玩家指令/AI 大脑）。优先级低于眩晕。
@@ -2956,14 +3201,14 @@ func apply_taunt(src: Unit, dur: float) -> void:
 	if src != null and is_instance_valid(src):
 		order_attack(src)   # 立刻转火
 		_chase_intent = CHASE_FORCED
-	queue_redraw()
+	_request_redraw()
 
 
 ## 易伤：dur 秒内受到的伤害放大 (1+amp) 倍（取较强者）。樊瑞 W·摄魂咒。
 func apply_dmg_amp(amp: float, dur: float) -> void:
 	_dmg_amp = maxf(_dmg_amp, amp)
 	_dmg_amp_t = maxf(_dmg_amp_t, dur)
-	queue_redraw()
+	_request_redraw()
 
 
 ## 攻速狂暴：临时攻速倍率（>1 出手更快），取较大者。
@@ -3036,6 +3281,7 @@ func _draw_cast_glow() -> void:
 ## 施法抬手：开始一段蓄势（dur 秒），期间播放抬手姿+蓄能辉光；归零后由 battle 触发技能结算。
 func begin_cast_windup(dur: float, col: Color) -> void:
 	# 施法替换当前移动/攻击命令并清队列；完成后原地待命，再由玩家或托管下新令。
+	clear_mission_order_intent()
 	_queue.clear()
 	_patrolling = false
 	_target = null
@@ -3050,7 +3296,7 @@ func begin_cast_windup(dur: float, col: Color) -> void:
 	_cast_t = dur
 	_cast_dur = maxf(dur, 0.001)
 	_cast_color = col
-	queue_redraw()
+	_request_redraw()
 
 
 func cancel_cast_windup() -> void:
@@ -3060,7 +3306,7 @@ func cancel_cast_windup() -> void:
 	_cast_t = 0.0
 	if battle != null and battle.has_method("cancel_pending_cast"):
 		battle.cancel_pending_cast(self)
-	queue_redraw()
+	_request_redraw()
 
 
 ## 逻辑方向 → 直立(屏幕)空间方向，用于攻击突刺/劈砍朝向
@@ -3070,16 +3316,39 @@ func _screen_dir(d: Vector2) -> Vector2:
 
 ## 直立精灵绘制 + 全部程序化动画（行走步态、待机呼吸、攻击突刺·劈砍、死亡倒地）
 func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
+	if story_assistance_hidden(): return
 	var s := radius * 3.7 * visual_scale
 	var off := Vector2.ZERO
 	var ang := 0.0
-	var sx := -1.0 if face_left else 1.0
+	var sx_scale := 1.0
 	var sy := 1.0
 	var frame := tex
+	_frame_directional = false
 
-	if _dying:
-		var df: Array = Art.unit_anim_frames(_anim_key(), "death")
+	if movement_profile == "water" and setup_def.has("campaign_object"):
+		var ship_key := String(setup_def.campaign_object)
+		var ship_state := String(get_meta("ship_state", "default"))
+		var ship_frame := Art.campaign_object_texture(ship_key, ship_state, animation_direction)
+		if ship_frame != null: frame = ship_frame
+		_frame_directional = Art.campaign_object_uses_directional_source(ship_key, ship_state, animation_direction)
+		off.y = sin(_idle_t * 1.4) * 1.2 if story_outcome == "" else 0.0
+	elif story_outcome != "":
+		var down: Array = Art.unit_anim_frames(_anim_key(), "down", animation_direction, art_variant)
+		if not down.is_empty():
+			_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "down", animation_direction, art_variant)
+			frame = down[-1]
+		elif story_outcome == "unconscious":
+			frame = _rest_frame(tex)
+			ang = 1.42
+			off.y = radius * 0.4
+		else:
+			frame = _rest_frame(tex)
+			sy = 0.70
+			off.y = radius * 0.15
+	elif _dying:
+		var df: Array = Art.unit_anim_frames(_anim_key(), "death", animation_direction, art_variant)
 		if not df.is_empty():
+			_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "death", animation_direction, art_variant)
 			# 真·死亡逐帧：按死亡进度播一遍、末帧定格在地；后 30% 才淡出（先看清倒地、再消失），不叠程序化倾倒
 			_real_frames = true
 			frame = df[mini(int(death_f * df.size()), df.size() - 1)]
@@ -3108,7 +3377,7 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 		# 触地压缩 / 腾空拉伸（squash & stretch）
 		var sq := (plant - 0.45) * mb * fdamp
 		sy = (1.0 - sq * 0.16) + breath
-		sx *= (1.0 + sq * 0.11)
+		sx_scale *= (1.0 + sq * 0.11)
 		# 重心左右换步 + 躯干侧倾（每步幅一次）
 		off.x += sin(_anim_t) * 1.7 * gallop * mb * fdamp
 		ang += sin(_anim_t) * 0.06 * mb * fdamp
@@ -3119,8 +3388,9 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			off.x += fwd * sin(_anim_t * 0.5) * 2.0 * mb
 		off += _flinch                                        # 受击退缩
 		if _lunge > 0.0:                                      # 武器化挥击
-			# 有真·逐帧攻击时，挥击动作已画进帧里 → 压低程序化突刺位移/旋转，避免与帧内动作叠加成双重抖动
-			var swdamp := 0.25 if _real_frames else 1.0
+			# 本批完整四向攻击已经画入身体和武器运动，禁止再移动/旋转整张图。
+			# 其他旧逐帧仍保留原有 25% 次级运动，程序图继续使用完整运动。
+			var swdamp := _programmatic_swing_scale()
 			off += _swing_offset() * swdamp
 			ang += _swing_rot() * swdamp
 		if _cast_t > 0.0:                                     # 施法抬手：起身后仰蓄势，结算瞬间回落=「放招」
@@ -3131,8 +3401,22 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			ang += fwd * -0.16 * lift * k                      # 略后仰
 			sy += 0.07 * lift * k                              # 上扬拉伸
 
+	var sx := (-1.0 if face_left and not _frame_directional else 1.0) * sx_scale
+	if story_assistance_active():
+		# The pair atlas is anchored between both feet. Keep both real units selectable.
+		off = map.project((position+story_assist_partner.position)*0.5)-map.project(position)
+		ang = 0.0
+		sx = 1.0
+		sy = 1.0
 	draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off))
-	var srect := Rect2(-s * 0.5, -s * 0.82, s, s)
+	# A fallen rider beside its horse can exceed the standing frame's square.
+	# Keep the authored body scale while retaining the same physical ground pivot.
+	var drawn_size := s * _frame_draw_scale(frame)
+	var srect := Rect2(-drawn_size * 0.5, -drawn_size * 0.82, drawn_size, drawn_size)
+	# Art may attach a QA-approved per-frame compensation in native texture
+	# pixels. Apply it only to the painted rectangle: physics, selection and the
+	# unit's logical position remain unchanged. Unknown/legacy frames use zero.
+	srect.position += _frame_draw_offset(frame, drawn_size)
 	# 暗色描边：四方各偏移画成半透黑剪影，叠出轮廓 → 单位从草地/背景里清晰跳出（提升可读性）
 	if not _dying and not _ultra_mass_visuals():
 		var ow := 1.7
@@ -3145,11 +3429,99 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			draw_texture_rect(frame, Rect2(srect.position + Vector2(0, ow), srect.size), false, ocol)
 			draw_texture_rect(frame, Rect2(srect.position + Vector2(0, -ow), srect.size), false, ocol)
 	draw_texture_rect(frame, srect, false, tint)
-	if not _dying and _lunge > 0.0:
+	var flag_route := _campaign_flag_route(true)
+	if not flag_route.is_empty():
+		var flag_object := String(flag_route.get("object_key", ""))
+		CampaignFlagOverlay.draw_dynamic_unit(self, key, flag_object, String(get_meta("campaign_flag_context", "")),
+			String(get_meta("ship_state", "default")), animation_direction, s,
+			Art.campaign_object_has_exact_directional_source(flag_object, String(get_meta("ship_state", "default")), animation_direction), tint.a)
+	# 肩挑姿态已经画入两桶；只有精确动作缺失时才保留旧物件回退，避免四只桶。
+	var wine_overlay := bool(get_meta("carrying_wine", false)) and _campaign_wine_carry_state().is_empty()
+	var carried_key := "tribute_load" if has_meta("carrying_tribute") else ("wine_buckets" if wine_overlay else "")
+	if carried_key != "":
+		# 黄泥冈任务物件走关卡隔离路由；源图缺失时保留原有 CampaignArt。
+		var carried := _campaign_carried_texture(carried_key)
+		if carried != null:
+			var carried_rect:=Rect2(-s*0.45,-s*0.44,s*0.95,s*0.70)
+			if carried_key=="tribute_load" and _active_campaign_level_id()=="level1" and setup_def.has("campaign_tribute_object"):
+				# The new square source places its pole at shoulder height and keeps
+				# its original proportions; the parcels hang above the carrier's feet.
+				carried_rect=Rect2(-s*0.425,-s*0.72,s*0.85,s*0.85)
+			draw_texture_rect(carried,carried_rect,false,tint)
+	if not _dying and _lunge > 0.0 and _should_draw_programmatic_swing_fx():
 		_draw_swing_fx()
 	draw_set_transform_matrix(GameMap.ISO_INV)
 	if not _dying and _cast_t > 0.0:
 		_draw_cast_glow()
+
+
+func _campaign_carried_texture(carried_key: String) -> Texture2D:
+	# The current Huangnigang chapter explicitly opts into a native-alpha sprite.
+	# Other chapters and ordinary units keep their existing scoped/default art.
+	if carried_key=="tribute_load" and _active_campaign_level_id()=="level1":
+		var replacement := String(setup_def.get("campaign_tribute_object",""))
+		if not replacement.is_empty():
+			var texture := Art.campaign_object_texture(replacement)
+			if texture!=null: return texture
+	var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(),carried_key)
+	return texture if texture!=null else Art.campaign_object_texture(carried_key)
+
+
+## 动态旗文须同时命中单位、物件和需要时的剧情 context；普通船和冒用 object key 的单位均为空。
+func _campaign_flag_object_key() -> String:
+	return String(_campaign_flag_route().get("object_key", ""))
+
+
+func _campaign_flag_route(for_render := false) -> Dictionary:
+	if movement_profile != "water" or not setup_def.has("campaign_object"):
+		return {}
+	var object_key := String(setup_def.campaign_object)
+	var context := String(get_meta("campaign_flag_context", ""))
+	var route := CampaignArt.dynamic_flag_route(key, object_key, context)
+	if route.is_empty():
+		return {}
+	var state := String(get_meta("ship_state", "default"))
+	if bool(route.get("require_exact_directional_art", false)) \
+			and not Art.campaign_object_has_exact_directional_source(object_key, state, animation_direction):
+		return {}
+	if for_render and not _frame_directional:
+		return {}
+	return route
+
+
+func _frame_draw_scale(frame: Texture2D) -> float:
+	if frame == null: return 1.0
+	var scale_meta: Variant = frame.get_meta("draw_scale", 1.0)
+	if not (scale_meta is float or scale_meta is int): return 1.0
+	var value := float(scale_meta)
+	return value if is_finite(value) and value >= 0.25 and value <= 4.0 else 1.0
+
+
+func _frame_draw_offset(frame: Texture2D, drawn_size: float) -> Vector2:
+	if frame == null or frame.get_height() <= 0:
+		return Vector2.ZERO
+	var offset_meta: Variant = frame.get_meta("draw_offset_px", Vector2.ZERO)
+	if not offset_meta is Vector2:
+		return Vector2.ZERO
+	return (offset_meta as Vector2) * (drawn_size / float(frame.get_height()))
+
+
+## Only the currently promoted four-direction batch owns its complete attack
+## silhouette. Scope this narrowly so legacy/campaign-variant animations keep
+## their established secondary motion and effects.
+func _authored_direction4_attack_active() -> bool:
+	return _lunge > 0.0 and _real_frames and _frame_directional \
+		and art_variant.is_empty() and AUTHORED_DIRECTION4_ATTACK_KEYS.has(key)
+
+
+func _programmatic_swing_scale() -> float:
+	if _authored_direction4_attack_active():
+		return 0.0
+	return 0.25 if _real_frames else 1.0
+
+
+func _should_draw_programmatic_swing_fx() -> bool:
+	return not _authored_direction4_attack_active()
 
 
 ## 挥击位移（直立空间）：按武器类型给不同的起手—出招曲线
@@ -3163,6 +3535,8 @@ func _swing_offset() -> Vector2:
 			return sd * (15.0 * thrust - 2.0 * anticip)
 		WK.AXE:
 			return sd * (10.0 * thrust - 7.0 * anticip) + Vector2(0.0, -9.0 * anticip + 4.0 * thrust)
+		WK.IRON_STAFF:
+			return sd * (9.0 * thrust - 6.0 * anticip) + Vector2(0.0, -6.0 * anticip + 3.0 * thrust)
 		WK.BOW:
 			return sd * (-5.0 * (anticip + thrust * 0.4))         # 张弓后拉
 		_:
@@ -3177,6 +3551,8 @@ func _swing_rot() -> float:
 	match _swing_kind:
 		WK.AXE:
 			return dir * 0.30 * thrust
+		WK.IRON_STAFF:
+			return dir * 0.24 * thrust
 		WK.SWORD:
 			return dir * 0.18 * thrust
 		_:
@@ -3196,6 +3572,20 @@ func _draw_swing_fx() -> void:
 				var spread := 1.25 if _swing_kind == WK.AXE else 1.0
 				draw_arc(Vector2(dir * radius * 1.3, -radius * 1.3), rad, base - spread, base + spread, 18,
 					Color(1, 1, 1, a * 0.85), 4.0 if _swing_kind == WK.AXE else 3.0)
+		WK.IRON_STAFF:
+			if _lunge > 0.05 and _lunge < 0.70:
+				var a := clampf(sin(ph * PI), 0.0, 1.0)
+				var center := Vector2(dir * radius * 0.7, -radius * 1.15)
+				var base := 0.0 if dir > 0.0 else PI
+				draw_arc(center, radius * 1.5, base - 1.12, base + 1.12, 20,
+					Color(0.82, 0.70, 0.36, a * 0.68), 3.5)
+				var staff_dir := Vector2(cos(base + dir * (ph - 0.5) * 1.4), sin(base + dir * (ph - 0.5) * 1.4))
+				var tail := center - staff_dir * radius * 0.75
+				var head := center + staff_dir * radius * 0.95
+				draw_line(tail, head, Color(0.10, 0.11, 0.12, a * 0.8), 6.5)
+				draw_line(tail, head, Color(0.58, 0.62, 0.64, a * 0.82), 3.0)
+				draw_circle(tail, 3.5, Color(0.76, 0.65, 0.32, a * 0.85))
+				draw_circle(head, 4.0, Color(0.76, 0.65, 0.32, a * 0.85))
 		WK.SPEAR:
 			if _lunge > 0.1 and _lunge < 0.7:
 				var a := sin(ph * PI)
@@ -3206,39 +3596,82 @@ func _draw_swing_fx() -> void:
 
 ## 当前精灵动画用的美术 key：花荣拔刀近战时切到「<key>_melee」走刀版本（无此美术则回退原 key）。
 func _anim_key() -> String:
-	if melee_mode and can_melee_switch and not Art.unit_anim_frames(key + "_melee", "walk").is_empty():
+	if melee_mode and can_melee_switch and not Art.unit_anim_frames(key + "_melee", "walk", animation_direction, art_variant).is_empty():
 		return key + "_melee"
 	return key
+
+
+## 同一白胜造型的肩挑动作。精确检查不能把普通idle回退误判成挑酒素材。
+func _campaign_wine_carry_state() -> String:
+	if art_variant != "hn_bai_sheng" or not bool(get_meta("carrying_wine", false)) or _dying or story_outcome != "":
+		return ""
+	var state := "carry_walk" if _move_blend > 0.3 else "carry_idle"
+	return state if Art.campaign_variant_has_animation(art_variant, state, animation_direction) else ""
 
 
 ## 逐帧动画接口：若 assets/anim/<key>_<state>.png 存在则播放帧，否则返回单张立绘。
 ## 帧数任意：attack 随挥击进度播一遍，walk 按步幅相位均匀映射整条带，idle 缓慢循环。
 func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
+	_frame_directional = false
+	if story_assistance_active():
+		var assisted: Array = Art.unit_anim_frames(key,"assisted",animation_direction,art_variant)
+		if not assisted.is_empty():
+			_real_frames = true
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "assisted", animation_direction, art_variant)
+			var phase := fposmod(_anim_t,TAU)/TAU if _move_blend>0.3 else 0.0
+			return assisted[int(phase*assisted.size())%assisted.size()]
+	var carry_state := _campaign_wine_carry_state()
+	if not carry_state.is_empty():
+		var carried_frames: Array = Art.unit_anim_frames(key, carry_state, animation_direction, art_variant)
+		if not carried_frames.is_empty():
+			_real_frames = true
+			_frame_directional = Art.unit_anim_uses_directional_source(key, carry_state, animation_direction, art_variant)
+			var carry_phase := fposmod(_anim_t, TAU) / TAU if _move_blend > 0.3 else 0.0
+			return carried_frames[int(carry_phase * carried_frames.size()) % carried_frames.size()]
+	if String(get_meta("story_pose", "")) == "intercept":
+		var intercept: Array = Art.unit_anim_frames(key, "intercept", animation_direction, art_variant)
+		if not intercept.is_empty():
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "intercept", animation_direction, art_variant)
+			return intercept[0]
+	if String(get_meta("story_pose", "")) in ["windup", "rush_windup"] \
+			and art_variant == "jiang_menshen_fists":
+		var windup: Array = Art.unit_anim_frames(key, "attack", animation_direction, art_variant)
+		if not windup.is_empty():
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, art_variant)
+			return windup[0]
 	var ak := _anim_key()
+	if _flinch.length_squared() > 1.0:
+		var hurt: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, art_variant)
+		if not hurt.is_empty():
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, art_variant)
+			return hurt[0]
 	# 出招优先：若有 attack 帧带就同步挥击进度播放
 	if _lunge > 0.0:
 		# 采矿/采集时：优先用专属「采矿」帧带（如喽啰挥锄凿地），无则退回攻击帧
 		if _state == ST_GATHER:
-			var gf: Array = Art.unit_anim_frames(ak, "gather")
+			var gf: Array = Art.unit_anim_frames(ak, "gather", animation_direction, art_variant)
 			if not gf.is_empty():
 				_real_frames = true
+				_frame_directional = Art.unit_anim_uses_directional_source(ak, "gather", animation_direction, art_variant)
 				var gph := clampf(1.0 - _lunge, 0.0, 0.999)
 				return gf[int(gph * gf.size()) % gf.size()]
-		var af: Array = Art.unit_anim_frames(ak, "attack")
+		var af: Array = Art.unit_anim_frames(ak, "attack", animation_direction, art_variant)
 		if not af.is_empty():
 			_real_frames = true
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, art_variant)
 			var ph := clampf(1.0 - _lunge, 0.0, 0.999)       # 0→1 一遍挥击
 			return af[int(ph * af.size()) % af.size()]
 	# 施法抬手：借用攻击帧带做「抬手蓄势」姿（不结算伤害），停在挥击中段=举起待发
 	if _cast_t > 0.0:
-		var ac: Array = Art.unit_anim_frames(ak, "attack")
+		var ac: Array = Art.unit_anim_frames(ak, "attack", animation_direction, art_variant)
 		if not ac.is_empty():
 			_real_frames = true
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, art_variant)
 			var cph := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0) * 0.55   # 只播到挥击中段
 			return ac[int(cph * ac.size()) % ac.size()]
 	var moving := _move_blend > 0.3
 	var state := "walk" if moving else "idle"
-	var frames: Array = Art.unit_anim_frames(ak, state)
+	var frames: Array = Art.unit_anim_frames(ak, state, animation_direction, art_variant)
 	if frames.is_empty() and not moving:
 		# 无专门 idle 帧时，用走循环里「双腿并拢」的过渡帧当静止姿，
 		# 确保静止与行走是同一套美术（否则会和旧静态图集立绘的大小/画风对不上 → 起停跳变）
@@ -3247,8 +3680,10 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 		return rf
 	if frames.is_empty():
 		_real_frames = false
+		_frame_directional = false
 		return fallback
 	_real_frames = true
+	_frame_directional = Art.unit_anim_uses_directional_source(ak, state, animation_direction, art_variant)
 	var n := frames.size()
 	var t := (fposmod(_anim_t, TAU) / TAU) if moving else (fposmod(_idle_t * 1.4, TAU) / TAU)
 	return frames[int(t * n) % n]
@@ -3256,24 +3691,50 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 
 ## 静止姿：有走循环帧时取「双腿并拢」过渡帧（idle/死亡共用，保证全程一套美术），否则退回静态立绘
 func _rest_frame(fallback: Texture2D) -> Texture2D:
-	var wf: Array = Art.unit_anim_frames(_anim_key(), "walk")
+	var wf: Array = Art.unit_anim_frames(_anim_key(), "walk", animation_direction, art_variant)
 	if not wf.is_empty():
+		_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "walk", animation_direction, art_variant)
 		return wf[1 % wf.size()]
+	_frame_directional = false
 	return fallback
 
 
+func _building_shadow_texture(visible_texture: Texture2D, scoped_texture: Texture2D) -> Texture2D:
+	# Gate feet describe the displayed variant. Falling back to the old atlas
+	# here would cast a different silhouette through the new source anchors.
+	if preload("res://scripts/campaign_gate_visual.gd").enabled(self) and not art_variant.is_empty() and visible_texture!=null:
+		return visible_texture
+	if scoped_texture!=null: return scoped_texture
+	var texture: Texture2D=Art.building_texture(key)
+	return texture if texture!=null else Art.terrain_texture(key)
+
+
 func _draw() -> void:
-	var tex: Texture2D = Art.unit_texture(key)
+	var tex: Texture2D = Art.unit_texture(key, art_variant, animation_direction)
+	if setup_def.has("campaign_object"):
+		var prop := Art.campaign_object_texture(String(setup_def.campaign_object), String(get_meta("ship_state", "default")), animation_direction)
+		if prop != null:
+			tex = prop
+	var scoped_environment_tex := _campaign_environment_texture()
+	if scoped_environment_tex != null:
+		tex = scoped_environment_tex
 
+	if story_outcome in ["embarked", "retreated"]:
+		return
 	var death_f := clampf(_death_t / DEATH_DUR, 0.0, 1.0) if _dying else 0.0
-
-	# 地面层（逻辑空间直接绘制 → 被等距变换压成贴地椭圆）：投影 + 扬尘 + 增益辉光 + 选择圈
-	if is_building:
-		draw_circle(Vector2(0, 6), radius * 0.85, Color(0, 0, 0, 0.20))
-	elif not _ultra_mass_visuals():
-		var lift := maxf(0.0, -cos(_anim_t * 2.0)) * _move_blend   # 腾空时影子收缩
-		var ssc := radius * 0.95 * (1.0 - 0.16 * lift)
-		draw_circle(Vector2(2, 3), ssc, Color(0, 0, 0, (0.25 - 0.06 * lift) * (1.0 - death_f)))
+	# 普通单位和英雄已由 WorldShadowBatch 统一提交两次 MultiMesh 绘制；
+	# 只让建筑/资源保留逐节点的纹理轮廓投影。这样兵海不会再为每个 Unit
+	# 追加 CanvasItem 阴影命令，同时仍保持每个活动单位的接触影与右下投影。
+	# A static campaign building can delegate its bitmap and single shared shadow
+	# to the map scenery layer while this Unit retains collision, health and text.
+	# This is opt-in metadata; every ordinary building keeps the existing route.
+	if (is_building or is_resource) and not bool(get_meta("campaign_environment_static_visual",false)):
+		var shadow_tex := tex
+		if is_building:
+			shadow_tex = _building_shadow_texture(tex,scoped_environment_tex)
+		# `_draw_sprite_animated` caches the actual source direction; reusing it
+		# avoids a second Art/ResourceLoader query for the remaining sparse route.
+		WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)
 	for d in _dust:
 		var da: float = d.t / DUST_DUR
 		draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
@@ -3357,7 +3818,7 @@ func _draw() -> void:
 
 	# 没有静态图集格、但放了逐帧走循环的单位（喽啰、梁山马军）也要走精灵绘制，
 	# 否则会卡在占位符——_anim_frame_for_state 在 tex 为 null 时用走循环帧当静止/行走姿。
-	var has_walk := not Art.unit_anim_frames(_anim_key(), "walk").is_empty()
+	var has_walk := not Art.unit_anim_frames(_anim_key(), "walk", animation_direction, art_variant).is_empty()
 	var as_sprite := not is_building and (tex != null or has_walk)
 	var tint := Color(1.4, 1.2, 1.1) if _flash > 0.0 else Color.WHITE
 	if _hex_t > 0.0 and not is_building and not _dying:
@@ -3392,7 +3853,14 @@ func _draw() -> void:
 			draw_string(f, Vector2(-50.0, gy), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color("9fe8b0"))
 
 	# 极端兵海下满血普通单位省略血条；受伤/英雄/选中单位仍完整显示，减少每帧上千次矩形绘制。
-	if hp > 0.0 and Settings.show_healthbars and (not _mass_visuals() or hp < max_hp - 0.5):
+	if story_outcome != "":
+		var status_text := story_label()
+		if not is_hero and not is_building and not inspected and movement_profile!="water":
+			status_text = {"unconscious":"昏", "subdued":"服", "captured":"俘"}.get(story_outcome,status_text)
+		draw_string(ThemeDB.fallback_font, Vector2(-45,bar_y+12), status_text, HORIZONTAL_ALIGNMENT_CENTER, 90, 13, Color(0.96,0.83,0.53))
+	if is_bound_person():
+		for rope_y in [-22,-19]: draw_line(Vector2(-7,rope_y),Vector2(7,rope_y),Color(0.65,0.48,0.27),1.7)
+	if hp > 0.0 and story_outcome == "" and Settings.show_healthbars and (not _mass_visuals() or hp < max_hp - 0.5):
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
 		var bh := 5.0 if (is_hero or is_building) else 4.0
 		var frac := clampf(hp / max_hp, 0.0, 1.0)
@@ -3565,7 +4033,37 @@ func _draw_tower_barrel() -> void:
 		draw_circle(muzzle + sd * 4.0, 2.5 + 3.0 * fl, Color(fc.r, fc.g, fc.b, 0.6 * fl))
 
 
+func story_assistance_active() -> bool:
+	if art_variant!="lin_chong_escort" or String(get_meta("story_pose",""))!="assisted": return false
+	if not is_instance_valid(story_assist_partner) or hp<=0.0 or story_outcome!="" or is_captive or garrisoned: return false
+	if story_assist_partner.hp<=0.0 or story_assist_partner.story_outcome!="" or story_assist_partner.is_captive or story_assist_partner.garrisoned: return false
+	if _lunge>0.0 or _cast_t>0.0 or story_assist_partner._lunge>0.0 or story_assist_partner._cast_t>0.0: return false
+	if position.distance_to(story_assist_partner.position)>70.0 or map==null: return false
+	if not map._segment_open(position,story_assist_partner.position,movement_profile): return false
+	# Exact availability, never an idle fallback that would hide the helper accidentally.
+	return Art.has_method("campaign_variant_has_animation") and bool(Art.call("campaign_variant_has_animation",art_variant,"assisted",animation_direction))
+
+func story_assistance_hidden() -> bool:
+	return is_instance_valid(story_assist_owner) and story_assist_owner.story_assist_partner==self and story_assist_owner.story_assistance_active()
+
+func is_bound_person() -> bool:
+	# Static mission objects also use captive to reject combat orders.
+	# Only actual people receive ropes and the human-size rendering branch.
+	return is_captive and (is_hero or key.ends_with("_bound"))
+
+
 func _draw_building() -> void:
+	# 某些关卡建筑由场景层绘制完整外观（例如梁山寨门）；Unit 只保留生命值、名字、受击与寻路占地。
+	# 提前返回只跳过建筑本体，调用方后续仍会绘制名字和血条。
+	if bool(get_meta("scene_visual_only", false)):
+		return
+	# 关卡把俘虏标为building仅为定身/任务判定；外观仍是被缚的人。
+	if is_bound_person() and battle.map.environment_style!="":
+		var captive_tex := Art.unit_texture(key.trim_suffix("_bound"), art_variant, animation_direction)
+		if captive_tex!=null:
+			draw_texture_rect(captive_tex,Rect2(-31,-53,62,62),false,Color(0.84,0.83,0.78))
+			for y in [-24,-21]: draw_line(Vector2(-8,y),Vector2(8,y),Color(0.60,0.44,0.24),2.0)
+		return
 	if is_resource:
 		_draw_resource_node()
 		return
@@ -3600,19 +4098,62 @@ func _draw_building() -> void:
 			_draw_build_progress()
 		return
 	# 按建筑自身 key 找专属美术：遭遇战建筑在 buildings；treasure_cart 在 units3；其余在 terrain
-	var tex: Texture2D = Art.building_texture(key)
+	var scoped_tex: Texture2D = _campaign_environment_texture()
+	var tex: Texture2D = Art.unit_texture(key, art_variant, animation_direction) if art_variant != "" else Art.building_texture(key)
+	if setup_def.has("building_art_key"): tex=battle.building_visual_texture(key)
+	if setup_def.has("campaign_object"):
+		var prop := Art.campaign_object_texture(String(setup_def.campaign_object))
+		if prop != null: tex = prop
 	if tex == null:
-		tex = Art.unit_texture(key)
+		tex = Art.unit_texture(key, art_variant, animation_direction)
 	if tex == null:
 		tex = Art.terrain_texture(key)
 	if tex == null:
 		tex = Art.terrain_texture("hall")
+	# The explicit scoped route wins only when its accepted file exists. All
+	# legacy fallbacks above stay untouched while Web source files are absent.
+	if scoped_tex != null: tex = scoped_tex
 	var tint := (Color(0.5, 0.72, 1.0, 0.34) if _pending_build else Color(0.62, 0.66, 0.78, 0.82)) if is_constructing else Color.WHITE
+	tint.a *= float(get_meta("environment_roof_alpha",1.0))
 	if tex != null:
 		# 视觉尺寸与「建造预览虚影」完全一致（GameMap.building_visual_px）——预览多大、建好就多大，
 		# 不再出现「预览很大、落成缩水」的落差。
 		var s := GameMap.building_visual_px(GameMap.footprint_half_for(radius))
-		draw_texture_rect(tex, Rect2(-s * 0.5, -s * 0.78, s, s), false, tint)
+		if art_variant in ["tribute_load", "tribute_load_alpha_20260906", "wine_buckets", "jujube_load", "wine_bowls"]: s=62.0
+		var foot := 0.82 if art_variant!="" else 0.78
+		if scoped_tex!=null:
+			foot=float(get_meta("campaign_environment_foot",foot))
+		var static_campaign_visual := scoped_tex!=null \
+			and bool(get_meta("campaign_environment_static_visual",false))
+		if not static_campaign_visual:
+			# A wall-facing gate can mirror its authored isometric axis without
+			# rotating the roof, collision footprint, health bar or name.
+			if preload("res://scripts/campaign_gate_visual.gd").enabled(self):
+				var gate_transform := preload("res://scripts/campaign_gate_visual.gd").source_transform(self, tex.get_size())
+				draw_set_transform_matrix(GameMap.ISO_INV * gate_transform)
+				draw_texture_rect(tex, Rect2(Vector2.ZERO, tex.get_size()), false, preload("res://scripts/campaign_gate_visual.gd").source_tint(self,tint))
+				preload("res://scripts/campaign_gate_visual.gd").draw_closed_leaf(self,tex.get_size(),tint)
+			elif bool(get_meta("building_visual_mirror",false)):
+				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(Vector2(-1,0),Vector2(0,1),Vector2.ZERO))
+				draw_texture_rect(tex, Rect2(-s * 0.5, -s * foot, s, s), false, tint)
+			else:
+				draw_texture_rect(tex, Rect2(-s * 0.5, -s * foot, s, s), false, tint)
+			draw_set_transform_matrix(GameMap.ISO_INV)
+		if key=="tavern" and battle.map.environment_style=="level7":
+			# 酒望有自己的布幌，不再仅靠普通民居和悬浮名字辨认。
+			var pole := Vector2(-s*0.42,-s*0.10)
+			draw_line(pole,pole+Vector2(0,-63),Color(0.32,0.24,0.14,tint.a),3)
+			draw_line(pole+Vector2(0,-61),pole+Vector2(24,-61),Color(0.32,0.24,0.14,tint.a),3)
+			draw_rect(Rect2(pole+Vector2(4,-60),Vector2(22,35)),Color(0.88,0.80,0.61,tint.a))
+			draw_string(ThemeDB.fallback_font,pole+Vector2(5,-34),"酒",HORIZONTAL_ALIGNMENT_LEFT,-1,21,Color(0.28,0.16,0.10,tint.a))
+		if key=="signboard" and battle.map.environment_style=="level7" and scoped_tex==null:
+			# 终点酒肉店按原著店名落牌，作为“丁字口大酒店”的叙事锚点。
+			var board := Rect2(-s*0.42,-s*0.77,s*0.84,25.0)
+			draw_rect(board,Color(0.28,0.17,0.10,tint.a))
+			draw_rect(board,Color(0.72,0.55,0.30,tint.a),false,2.0)
+			draw_string(ThemeDB.fallback_font,Vector2(board.position.x,-s*0.58),"河阳风月",HORIZONTAL_ALIGNMENT_CENTER,board.size.x,15,Color(0.96,0.86,0.61,tint.a))
+		if scoped_tex!=null:
+			_draw_campaign_environment_runtime_text(s,foot,tint.a)
 		if not is_constructing and _has_smoke():
 			_draw_smoke(s)
 		if not is_constructing and hp < max_hp * 0.65:
@@ -3621,6 +4162,55 @@ func _draw_building() -> void:
 			_draw_build_progress()
 		return
 	_draw_building_fallback()
+
+
+## Unit/building consumers opt in with campaign_environment_route. The current
+## battle id is still passed to the resolver, so the same unit key in arena or a
+## different chapter cannot see campaign-only art.
+func _active_campaign_level_id() -> String:
+	if battle != null and battle.level != null and battle.level.has_method("id"):
+		return String(battle.level.id())
+	return ""
+
+
+func _campaign_environment_texture() -> Texture2D:
+	remove_meta("campaign_environment_foot")
+	var route_key := String(get_meta("campaign_environment_route", ""))
+	if route_key.is_empty(): return null
+	var state := String(get_meta("campaign_environment_state", "default"))
+	var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)
+	if texture==null: return null
+	var registered_metrics: Dictionary = CampaignEnvironmentArt.VISUAL_CALIBRATIONS.get("object",{})
+	if registered_metrics.has(route_key):
+		var metrics := CampaignEnvironmentArt.calibrated_visual_metrics("object",
+			_active_campaign_level_id(),route_key,state)
+		if metrics.is_empty(): return null
+		set_meta("campaign_environment_foot",float(metrics.get("foot",0.78)))
+	var text_surface_id := String(get_meta("campaign_environment_text_surface_id",""))
+	if not text_surface_id.is_empty():
+		var normalized = CampaignEnvironmentArt.calibrated_text_rect("object",
+			_active_campaign_level_id(),route_key,state,text_surface_id)
+		if normalized==null: return null
+		set_meta("campaign_environment_text_rect",normalized)
+	return texture
+
+
+func _draw_campaign_environment_runtime_text(visual_size: float, foot: float, alpha: float) -> void:
+	var label := String(get_meta("campaign_environment_runtime_text",""))
+	if label.is_empty(): return
+	var normalized = get_meta("campaign_environment_text_rect",null)
+	if not normalized is Array or normalized.size()!=4: return
+	var origin := Vector2(-visual_size*0.5,-visual_size*foot)
+	var rect := Rect2(origin+Vector2(float(normalized[0]),float(normalized[1]))*visual_size,
+		Vector2(float(normalized[2]),float(normalized[3]))*visual_size)
+	if rect.size.x<1.0 or rect.size.y<1.0: return
+	var font_size := maxi(8,int(minf(rect.size.y*0.72,rect.size.x/maxf(label.length(),1)*1.55)))
+	var baseline := rect.position.y+(rect.size.y+font_size)*0.5-1.0
+	var ink := Color(0.92,0.82,0.58,alpha)
+	draw_string_outline(ThemeDB.fallback_font,Vector2(rect.position.x,baseline),label,
+		HORIZONTAL_ALIGNMENT_CENTER,int(rect.size.x),font_size,maxi(1,int(font_size*0.1)),Color(0.05,0.04,0.03,alpha*0.9))
+	draw_string(ThemeDB.fallback_font,Vector2(rect.position.x,baseline),label,
+		HORIZONTAL_ALIGNMENT_CENTER,int(rect.size.x),font_size,ink)
 
 
 ## 建筑受损起火（屏幕空间，紧随建筑贴图同一变换）：血量<65% 两处火苗；<35% 三处大火+滚滚浓烟。
@@ -3733,3 +4323,41 @@ func _draw_building_fallback() -> void:
 	# 杏黄旗
 	draw_line(Vector2(30, -44), Vector2(30, -70), Color("6b5536"), 2.0)
 	draw_colored_polygon(PackedVector2Array([Vector2(30, -70), Vector2(52, -64), Vector2(30, -56)]), Color("e6b84c"))
+
+
+## Atomic story resolution: no death signal, rewards, corpse fade or subsequent damage.
+func resolve_story(outcome: String) -> bool:
+	if story_outcome != "" or _dying or (hp <= 0.0 and defeat_outcome == ""):
+		return false
+	if outcome not in ["unconscious", "subdued", "captured", "retreated", "embarked"]:
+		return false
+	story_outcome = outcome
+	hp = maxf(1.0, hp)
+	order_stop()
+	_pending_target = null
+	_pending_done = true
+	_lunge = 0.0
+	_cast_t = 0.0
+	_stepped = false
+	_move_blend = 0.0
+	passive = true
+	stance = STANCE_PASSIVE
+	selected = false
+	if outcome in ["embarked", "retreated"]:
+		visible = false
+	_request_redraw()
+	story_resolved.emit(self, outcome)
+	return true
+
+
+func story_label() -> String:
+	if movement_profile=="water" and story_outcome=="subdued":
+		return {"damaged":"已停航","flooding":"正在进水","disabled":"已沉陷"}.get(String(get_meta("ship_state","")),"已停航")
+	return {"unconscious":"昏迷", "subdued":"已制服", "captured":"已被擒", "retreated":"已撤离", "embarked":"已登船"}.get(story_outcome, "")
+
+func play_story_pose(pose: String, variant: String, duration := 2.0) -> void:
+	if _story_pose_t <= 0.0: _pose_previous_variant = art_variant
+	art_variant = variant
+	set_meta("story_pose", pose)
+	_story_pose_t = duration
+	_request_redraw()

@@ -1,0 +1,51 @@
+func _follow_path(delta: float) -> bool:
+	if _root_t > 0.0:
+		_stepped = false
+		return false   # 缠绕：原地定身（不吃掉路点、不算到达），可照常攻击/施法
+	if _path_i >= _path.size():
+		return true
+	var wp := _path[_path_i]
+	var dir := wp - position
+	var dist := dir.length()
+	var sp := current_move_speed()
+	if _group_cap > 0.0 and (_state == ST_MOVE or _state == ST_AMOVE):
+		sp = minf(sp, _group_cap)   # _group_cap 是下令时队伍最慢成员的实际速度上限
+	var step := sp * delta
+	# 中间路点到达半径放宽：被挤开时不必精确踩点（精确踩点会和挤开逻辑互相拉锯）
+	var arrive := maxf(step, 4.0) if _path_i >= _path.size() - 1 else 14.0
+	if dist <= arrive:
+		if _path_i >= _path.size() - 1:
+			# 终点被敌方身体占住时视作已到邻接位，不把最后几像素硬吸进对方体内。
+			if map._segment_open(position, wp, movement_profile) and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, wp)):
+				position = wp
+		_path_i += 1
+		return _path_i >= _path.size()
+	var next := position + dir / dist * step
+	_face_dir(dir)
+	var next_map_open := map._segment_open(position, next, movement_profile)
+	var next_body_open: bool = next_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, next))
+	if next_body_open:
+		position = next
+		_stepped = true
+	else:
+		# 静态封格与动态身体分开处理：都先贴边滑；只有建筑/地形真封路才重算 AStar。
+		# 动态单位不在 AStar 里，反复重寻同一条静态路径只会制造 CPU 峰值，交给分离和卡死看门狗即可。
+		var nx := Vector2(next.x, position.y)
+		var ny := Vector2(position.x, next.y)
+		var nx_map_open := absf(dir.x) > 0.5 and map._segment_open(position, nx, movement_profile)
+		var ny_map_open := absf(dir.y) > 0.5 and map._segment_open(position, ny, movement_profile)
+		var nx_body_open: bool = nx_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, nx))
+		var ny_body_open: bool = ny_map_open and (battle == null or not battle.has_method("can_unit_step") or battle.can_unit_step(self, ny))
+		if nx_body_open:
+			position = nx
+			_stepped = true
+		elif ny_body_open:
+			position = ny
+			_stepped = true
+		elif not next_map_open or (not nx_map_open and not ny_map_open):
+			_block_rp -= delta
+			if _block_rp <= 0.0:
+				_block_rp = 0.45   # 重寻节流：封死路段最多每 0.45s 重算一次
+				_path = map.find_path(position, _path[_path.size() - 1], faction, movement_profile)
+				_path_i = 0
+	return false

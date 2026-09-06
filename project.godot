@@ -16,9 +16,13 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="水浒英雄传：八幕战役"
 run/main_scene="res://scenes/menu.tscn"
-config/features=PackedStringArray("4.6")
-config/icon="res://icon.png"
 config/quit_on_go_back=false
+config/features=PackedStringArray("4.6")
+config/icon="res://assets/ui/app_icon_256.png"
+boot_splash/bg_color=Color(0.055, 0.047, 0.039, 1)
+boot_splash/image="res://assets/ui/boot_splash.png"
+boot_splash/fullsize=true
+boot_splash/use_filter=true
 
 [autoload]
 
@@ -28,26 +32,21 @@ Campaign="*res://scripts/campaign.gd"
 Settings="*res://scripts/settings.gd"
 Sfx="*res://scripts/sfx.gd"
 Music="*res://scripts/music.gd"
+AppLifecycle="*res://scripts/app_lifecycle.gd"
 Screen="*res://scripts/screen.gd"
 
 [display]
 
-window/size/viewport_width=1600
-window/size/viewport_height=900
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation="sensor_landscape"
 
-[input_devices]
-
-pointing/emulate_mouse_from_touch=true
-pointing/emulate_touch_from_mouse=false
-
 [rendering]
 
-renderer/rendering_method="forward_plus"
-renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 textures/canvas_textures/default_texture_filter=2
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/msaa_2d=2
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

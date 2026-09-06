@@ -1,0 +1,37 @@
+from pathlib import Path
+import re,subprocess,json
+root=Path(__file__).resolve().parents[1]
+targets={
+ 'scripts/battle.gd':{'_physics_process':'battle_physics','_process':'battle_process','_draw':'battle_draw'},
+ 'scripts/unit.gd':{'_physics_process':'unit_physics','_draw':'unit_draw'},
+ 'scripts/projectile.gd':{'_physics_process':'projectile_physics','_draw':'projectile_draw'},
+ 'scripts/world_shadow.gd':{'_process':'shadow_process'},
+ 'scripts/liangshan_scenery.gd':{'_process':'liangshan_process','_sync_elevated_nodes':'liangshan_elevation','_refresh_fog_visibility':'liangshan_fog'},
+ 'scripts/campaign_scenery.gd':{'_process':'campaign_scenery_process'},
+ 'scripts/hud.gd':{'_process':'hud_process'},
+ 'scripts/rts_camera.gd':{'_process':'camera_process'},
+}
+counts={}
+for name,methods in targets.items():
+ p=root/name;b=p.read_bytes()
+ assert b.replace(b'\r\n',b'\n')==subprocess.check_output(['git','show','HEAD:'+name],cwd=root).replace(b'\r\n',b'\n'),name
+ (root/'scratchpad'/('frame_base_'+p.name+'.txt')).write_bytes(b)
+ text=b.decode('utf-8')
+ for method,label in methods.items():
+  pattern=re.compile(r'^(\t*)func '+re.escape(method)+r'\(([^\r\n]*)\) -> void:',re.M)
+  occurrence=[0]
+  def replace(m):
+   occurrence[0]+=1
+   impl="_frame_probe"+method+"_"+str(occurrence[0])
+   indent,args=m.groups()
+   names=[part.strip().split(':')[0].strip() for part in args.split(',')] if args else []
+   wrapper=indent+'func '+method+'('+args+') -> void:\n'
+   wrapper+=indent+'\tvar frame_probe_start := Time.get_ticks_usec()\n'
+   wrapper+=indent+'\t'+impl+'('+','.join(names)+')\n'
+   wrapper+=indent+'\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+label+'",frame_probe_start)\n\n\n'
+   return wrapper+indent+'func '+impl+'('+args+') -> void:'
+  text,n=pattern.subn(replace,text);assert n>0,(name,method)
+  counts[label]=n
+ p.write_bytes(text.encode('utf-8'))
+(root/'scratchpad/frame_probe_methods.json').write_bytes((json.dumps(counts,indent=2)+'\n').encode())
+print(json.dumps(counts))

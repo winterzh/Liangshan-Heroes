@@ -1,0 +1,478 @@
+{
+	"mode_checks": [
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		}
+	],
+	"samples": [
+		{
+			"label": "dense_6",
+			"median_optimized_us": 2609,
+			"median_reference_us": 1718,
+			"optimized_over_reference": 1.5186263096624,
+			"units": 6,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 1718
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 2675
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 2609
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 1679
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 1863
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 2365
+				}
+			]
+		},
+		{
+			"label": "spread_6",
+			"median_optimized_us": 2148,
+			"median_reference_us": 1447,
+			"optimized_over_reference": 1.48445058742225,
+			"units": 6,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 1440
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 2088
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 2148
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 1447
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 2297
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 3330
+				}
+			]
+		},
+		{
+			"label": "dense_30",
+			"median_optimized_us": 18403,
+			"median_reference_us": 17680,
+			"optimized_over_reference": 1.04089366515837,
+			"units": 30,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 17680
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 18403
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 20232
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 19079
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 17360
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 16646
+				}
+			]
+		},
+		{
+			"label": "spread_30",
+			"median_optimized_us": 10362,
+			"median_reference_us": 9869,
+			"optimized_over_reference": 1.04995440267504,
+			"units": 30,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 9869
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 11531
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 10157
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 14310
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 9568
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 10362
+				}
+			]
+		},
+		{
+			"label": "dense_64",
+			"median_optimized_us": 51345,
+			"median_reference_us": 61284,
+			"optimized_over_reference": 0.837820638339534,
+			"units": 64,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 60510
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 60530
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 51124
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 61620
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 61284
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 51345
+				}
+			]
+		},
+		{
+			"label": "spread_64",
+			"median_optimized_us": 26760,
+			"median_reference_us": 27077,
+			"optimized_over_reference": 0.988292646895889,
+			"units": 64,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 27051
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 26886
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 26689
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 27077
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 33090
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 26760
+				}
+			]
+		},
+		{
+			"label": "dense_128",
+			"median_optimized_us": 145673,
+			"median_reference_us": 197491,
+			"optimized_over_reference": 0.737618423118016,
+			"units": 128,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 209544
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 138698
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 150064
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 189938
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 197491
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 145673
+				}
+			]
+		},
+		{
+			"label": "spread_128",
+			"median_optimized_us": 58241,
+			"median_reference_us": 70916,
+			"optimized_over_reference": 0.821267414969823,
+			"units": 128,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 70916
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 65002
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 54356
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 63526
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 76581
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 58241
+				}
+			]
+		},
+		{
+			"label": "dense_326",
+			"median_optimized_us": 183423,
+			"median_reference_us": 188044,
+			"optimized_over_reference": 0.975425964136053,
+			"units": 326,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 188044
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 210303
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 183423
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 182323
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 222296
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 182947
+				}
+			]
+		},
+		{
+			"label": "spread_326",
+			"median_optimized_us": 82168,
+			"median_reference_us": 60493,
+			"optimized_over_reference": 1.35830591969319,
+			"units": 326,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 72474
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 92383
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 79257
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 56496
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 60493
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 82168
+				}
+			]
+		},
+		{
+			"label": "dense_506",
+			"median_optimized_us": 283660,
+			"median_reference_us": 287904,
+			"optimized_over_reference": 0.98525897521396,
+			"units": 506,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 303244
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 286334
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 283660
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 287904
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 285840
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 263047
+				}
+			]
+		},
+		{
+			"label": "spread_506",
+			"median_optimized_us": 137237,
+			"median_reference_us": 92494,
+			"optimized_over_reference": 1.48373948580448,
+			"units": 506,
+			"windows": [
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 89730
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 125053
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 137237
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 93529
+				},
+				{
+					"calls": 80,
+					"implementation": "reference",
+					"microseconds": 92494
+				},
+				{
+					"calls": 80,
+					"implementation": "optimized",
+					"microseconds": 153569
+				}
+			]
+		}
+	]
+}

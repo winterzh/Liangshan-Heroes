@@ -1,0 +1,29 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[runtime-check] PASS complete old and candidate acquire compile
+[runtime-check] PASS query candidate compiles
+[prof] bench(def): 58 敌 vs 6 英雄
+[runtime-check] PASS same selected target count=64 faction=0
+[runtime-check] PASS same selected target count=64 faction=1
+SCRIPT ERROR: Trying to assign invalid previously freed instance.
+   at: _start_convoy (res://scripts/levels/level1_huangnigang.gd:675)
+   GDScript backtrace (most recent call first):
+       [0] _start_convoy (res://scripts/levels/level1_huangnigang.gd:675)
+       [1] on_start (res://scripts/levels/level1_huangnigang_short.gd:43)
+       [2] _on_start_battle (res://scripts/battle.gd:2014)
+       [3] _perf_bench_setup (res://scripts/battle.gd:2295)
+       [4] _run (res://scratchpad/enemy_query_probe.gd:24)
+[prof] bench(def): 200 敌 vs 6 英雄
+[runtime-check] PASS same selected target count=206 faction=0
+[runtime-check] PASS same selected target count=206 faction=1
+SCRIPT ERROR: Trying to assign invalid previously freed instance.
+   at: _start_convoy (res://scripts/levels/level1_huangnigang.gd:675)
+   GDScript backtrace (most recent call first):
+       [0] _start_convoy (res://scripts/levels/level1_huangnigang.gd:675)
+       [1] on_start (res://scripts/levels/level1_huangnigang_short.gd:43)
+       [2] _on_start_battle (res://scripts/battle.gd:2014)
+       [3] _perf_bench_setup (res://scripts/battle.gd:2295)
+       [4] _run (res://scratchpad/enemy_query_probe.gd:24)
+[prof] bench(def): 500 敌 vs 6 英雄
+[runtime-check] PASS same selected target count=506 faction=0
+[runtime-check] PASS same selected target count=506 faction=1

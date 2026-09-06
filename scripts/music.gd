@@ -9,6 +9,7 @@ const BASE_DB := -15.0       # 音乐整体增益（压低，绝不盖过音效�
 const FADE := 1.6            # 情绪交叉淡变时长（秒）
 const GAP := 1.4             # 曲间静默（秒）：一曲终了稍作停顿再起下一首
 const STYLES := 4            # 每种情绪的曲目数
+const SHUTDOWN_DRAIN_MSEC := 120  # 给独立音频线程至少数个混音周期释放 playback
 
 # 五声音阶频率（C 宫）：低八度根音 + 旋律音
 const ROOT := [130.81, 146.83, 164.81, 196.00, 220.00]            # C3 D3 E3 G3 A3
@@ -28,6 +29,7 @@ var _tracks := {"calm": [], "battle": []}   # 情绪 -> Array[AudioStreamWAV]（
 var _last_idx := {"calm": -1, "battle": -1} # 上一首索引（避免连续重复）
 var _gap := {"calm": 0.0, "battle": 0.0}    # 曲间停顿计时
 var _thr: Thread = null
+var _shutting_down := false
 
 
 func _ready() -> void:
@@ -54,9 +56,36 @@ func _ready() -> void:
 	set_mood("calm", true)
 
 
-func _exit_tree() -> void:
+func shutdown() -> void:
+	if _shutting_down:
+		return
+	_shutting_down = true
+	enabled = false
+	set_process(false)
+	# 先断开正在播放的两路，给音频后端尽早释放 playback；再等待仅负责
+	# 生成 PackedFloat32Array 的后台线程。延迟回调由 _shutting_down 拦截。
+	var had_playback := false
+	for player in [_p_calm, _p_battle]:
+		if player is AudioStreamPlayer and is_instance_valid(player):
+			had_playback = had_playback or player.playing or player.stream != null
+			player.stop()
+			player.stream = null
+			# 只断流仍可能让音频线程短暂持有 AudioStreamPlaybackWAV；退出后
+			# 播放器不再复用，立即销毁节点可同步结束其后端所有权。
+			player.free()
+	_p_calm = null
+	_p_battle = null
 	if _thr != null and _thr.is_started():
 		_thr.wait_to_finish()
+	_thr = null
+	_tracks = {"calm": [], "battle": []}
+	_gap = {"calm": 0.0, "battle": 0.0}
+	if had_playback:
+		OS.delay_msec(SHUTDOWN_DRAIN_MSEC)
+
+
+func _exit_tree() -> void:
+	shutdown()
 
 
 ## 后台合成其余曲目：每首用独立 RNG，结果经 call_deferred 回主线程入库（PackedFloat32Array 跨线程按值拷贝，安全）
@@ -69,10 +98,14 @@ func _bg_build() -> void:
 
 
 func _add_track_buf(mood_key: String, buf: PackedFloat32Array) -> void:
+	if _shutting_down:
+		return
 	_add_track(mood_key, buf)
 
 
 func _add_track(mood_key: String, buf: PackedFloat32Array) -> void:
+	if _shutting_down:
+		return
 	_seam_fade(buf)
 	_tracks[mood_key].append(_wav(buf))
 
@@ -103,6 +136,8 @@ func _mk_player() -> AudioStreamPlayer:
 
 ## 轮播：从该情绪曲库随机挑下一首（多于 1 首时避开上一首），装载播放
 func _play_next(mood_key: String) -> void:
+	if _shutting_down:
+		return
 	var arr: Array = _tracks[mood_key]
 	if arr.is_empty():
 		return
@@ -159,6 +194,8 @@ func set_user_vol(v: float) -> void:
 
 ## 切换情绪："calm" / "battle"。instant=立即生效（无淡变，开局/回菜单用）
 func set_mood(m: String, instant := false) -> void:
+	if _shutting_down:
+		return
 	if m != "calm" and m != "battle":
 		return
 	_mood = m
@@ -175,6 +212,8 @@ func mood() -> String:
 
 
 func set_enabled(on: bool) -> void:
+	if _shutting_down:
+		return
 	enabled = on
 
 

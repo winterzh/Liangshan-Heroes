@@ -1,0 +1,33 @@
+extends "res://tools/rts_performance_probe.gd"
+const Metrics=preload("res://scratchpad/phase_metrics.gd")
+var physics_started := 0
+var process_started := 0
+class Tail extends Node:
+	var probe
+	func _physics_process(_delta: float) -> void:
+		if probe.physics_started>0: Metrics.add_time("physics_all",probe.physics_started)
+	func _process(_delta: float) -> void:
+		if probe.process_started>0: Metrics.add_time("process_all",probe.process_started)
+
+func sample(b,label: String) -> Dictionary:
+	b._perf_bench_setup(200);b._prof_on=false
+	RenderingServer.viewport_set_measure_render_time(root.get_viewport_rid(),true)
+	var tail:=Tail.new();tail.probe=self
+	tail.process_physics_priority=1000000;tail.process_priority=1000000
+	root.add_child(tail)
+	physics_frame.connect(func():physics_started=Time.get_ticks_usec())
+	process_frame.connect(func():process_started=Time.get_ticks_usec())
+	await _wait(3)
+	Metrics.reset()
+	var rows:=[];var times: Array[float]=[]
+	var started:=Time.get_ticks_usec();var previous:=started
+	while Time.get_ticks_usec()-started<10000000:
+		await RenderingServer.frame_post_draw
+		var now:=Time.get_ticks_usec();var elapsed:=float(now-previous)/1000.0;previous=now
+		times.append(elapsed)
+		rows.append({"frame_ms":elapsed,"unit_count":b.units.size(),"time_scale":Engine.time_scale,"physics_hz":Engine.physics_ticks_per_second,"render_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(root.get_viewport_rid()),"render_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(root.get_viewport_rid()),"render_setup_ms":RenderingServer.get_frame_setup_time_cpu(),"times_us":Metrics.times.duplicate(),"calls":Metrics.counts.duplicate()})
+		Metrics.reset()
+	var sorted:=times.duplicate();sorted.sort()
+	FileAccess.open("res://.godot/frame_spikes_render_rows.json",FileAccess.WRITE).store_string(JSON.stringify(rows,"\t"))
+	tail.queue_free()
+	return {"label":label,"frames":times.size(),"p95_ms":sorted[ceili(sorted.size()*0.95)-1],"rows_file":"res://.godot/frame_spikes_render_rows.json","raw_frame_ms":times,"wall_seconds":float(Time.get_ticks_usec()-started)/1000000.0}

@@ -1,0 +1,27 @@
+from pathlib import Path
+import os, subprocess, hashlib, json
+names=['campaign_scenery','liangshan_entrance','liangshan_stockade','unit']
+saved={}
+def norm(b):return b.replace(b'\r\n',b'\n')
+for name in names:
+    p=Path('scripts/'+name+'.gd');raw=p.read_bytes()
+    assert norm(raw)==norm(subprocess.check_output(['git','show',':'+p.as_posix()])),name
+    saved[p]=raw
+records=[]
+try:
+    for p in saved:
+        old=subprocess.check_output(['git','show','5eb6e020e98d8cb95aea8af2e9ded647341dd52b:'+p.as_posix()])
+        p.write_bytes(old)
+        records.append({'path':p.as_posix(),'tested_lf_sha256':hashlib.sha256(norm(old)).hexdigest(),'restored_raw_sha256':hashlib.sha256(saved[p]).hexdigest()})
+    env=os.environ.copy();env['PERF_DEFENSE']='1'
+    env['PERF_OUT']='res://.godot/wall_visibility_merged/stress_local_control.json'
+    env['REDRAW_SCREENSHOT']='res://.godot/wall_visibility_merged/stress_local_control.png'
+    exe=Path(r'E:\ChatGPT\水浒\godot.local.txt').read_text(encoding='utf8').strip()
+    with Path('scratchpad/wall-visibility-control.log').open('wb') as out:
+        result=subprocess.run([exe,'--path','.','--script','res://tools/unit_redraw_stress.gd'],env=env,stdout=out,stderr=subprocess.STDOUT)
+    assert result.returncode==0,result.returncode
+finally:
+    for p,raw in saved.items():p.write_bytes(raw)
+    for p,raw in saved.items():assert p.read_bytes()==raw
+    Path('scratchpad/wall_pressure_control_restore.json').write_bytes((json.dumps({'control_commit':'5eb6e020e98d8cb95aea8af2e9ded647341dd52b','all_merged_sources_restored_exactly':True,'files':records},indent=2)+'\n').encode())
+print(Path('.godot/wall_visibility_merged/stress_local_control.json').read_text(encoding='utf8')[:1600])

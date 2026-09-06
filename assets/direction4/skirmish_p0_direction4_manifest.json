@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "kind": "skirmish_direction4_production_adoption",
+  "created_at": "2026-09-04T19:31:00+08:00",
+  "scope": "First four-direction production art addition for the default 30-wave skirmish roster.",
+  "browser_generation": {
+    "provider": "ChatGPT in Codex in-app browser",
+    "conversation_url": "https://chatgpt.com/c/6a9aa67d-22a0-83e9-aeb6-0237a7882356",
+    "references": [
+      {
+        "path": "assets/anim/guan_musket_walk.png",
+        "sha256": "fcdd60b85cc5b07c64ab8f31ff961d80cba54a73728d0a593c0b43e1985284cd"
+      },
+      {
+        "path": "assets/anim/guan_musket_attack.png",
+        "sha256": "1b292cecce2331916fef0cf57a1530754f7169cf531f1f5dd857907abae186b3"
+      }
+    ],
+    "prompts": [
+      {
+        "path": "qa/skirmish_direction4_20260904/source/guan_musket_idle_base_prompt.txt",
+        "sha256": "9328f6b359e52c1a539f432d95fe3ddf1b45b79dc587e17b0f3825605f2debc9"
+      },
+      {
+        "path": "qa/skirmish_direction4_20260904/source/guan_musket_idle_correction_prompts.txt",
+        "sha256": "9ba737463116be413449b03c36b698709009da055a07b477f66ef199ca079b46"
+      }
+    ],
+    "rejected_sources": [
+      {
+        "path": "qa/skirmish_direction4_20260904/source/guan_musket_idle_4dir_browser.png",
+        "sha256": "d217d080793b5414cdeb34591eb8c3f8f752d5e5b13fffcc5d0c34abb5595a96",
+        "reason": "2x2 layout did not match the reviewed single-row intake and contained low-alpha boundary noise."
+      },
+      {
+        "path": "qa/skirmish_direction4_20260904/source/guan_musket_idle_4dir_row_browser.png",
+        "sha256": "f1d8936360eec1f10335054e4c6cd92a09275a8bea27df988c442db40339b866",
+        "reason": "The one-row layout was usable, but the character drifted into a red-black Japanese samurai design."
+      }
+    ],
+    "accepted_raw_source": {
+      "path": "qa/skirmish_direction4_20260904/source/guan_musket_idle_4dir_row_song_browser.png",
+      "sha256": "1c2fb77585d0388de9c41fcc4decfe21da93b149a0e40749a47ba39dc55fc228",
+      "size": [2172, 724],
+      "mode": "RGBA"
+    },
+    "alpha15_cleaned_source": {
+      "path": "qa/skirmish_direction4_20260904/source/guan_musket_idle_1x4_alpha15_cleaned.png",
+      "sha256": "76fbc4272489b2d59a5f95c4c7c4db8850bd7cd199c69f8e81ae94239fd423bb",
+      "operation_location": "ChatGPT in-browser Python/Pillow",
+      "rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 RGBA pixel remains byte-identical",
+      "reported_changed_pixels": 29736,
+      "local_recheck": {
+        "same_shape": true,
+        "alpha_gt15_rgba_mismatch_pixels": 0,
+        "alpha_le15_output_nonzero_pixels": 0,
+        "changed_pixels": 29736
+      }
+    }
+  },
+  "local_candidate_pipeline": {
+    "allowed_operations": [
+      "fixed rectangular whole-unit crop",
+      "uniform whole-unit resize",
+      "transparent padding",
+      "byte-for-byte production copy"
+    ],
+    "forbidden_operations_used": [],
+    "spec": {
+      "path": "qa/skirmish_direction4_20260904/source/guan_musket_idle_fixed_row_rect.json",
+      "sha256": "86bad6bf8f26308c85f85020754542f48ff61dcf8684d77981c08ab0f33657c3"
+    },
+    "candidate_manifest": {
+      "path": "qa/skirmish_direction4_20260904/candidate/guan_musket_idle_manifest.json",
+      "sha256": "b65d0ad8cc695f6af320e8190a264ad9912239097cbfd685076f30607deb7612"
+    },
+    "component_qa": {
+      "large_visible_bodies": 4,
+      "complete_bodies_retained": 4,
+      "foreign_large_visible_pixels": 0,
+      "crop_edges_above_alpha15": 0,
+      "exact_horizontal_flip_pairs": 0
+    }
+  },
+  "adoption": {
+    "unit": "guan_musket",
+    "state": "idle",
+    "directions": ["se", "sw", "ne", "nw"],
+    "assistant_visual_review": true,
+    "user_visual_approval": false,
+    "production_assets_modified": true,
+    "previous_targets_existed": false,
+    "outputs": [
+      {
+        "path": "assets/anim/guan_musket_idle_se.png",
+        "sha256": "becad03a117e721674ea154e0963cf10909543602bdee5665aab18f6c659e7c3"
+      },
+      {
+        "path": "assets/anim/guan_musket_idle_sw.png",
+        "sha256": "711a14c9b5d70f4d1a77a1be20cba01c12f3162d8a3d7a6f6225e923d6cfed99"
+      },
+      {
+        "path": "assets/anim/guan_musket_idle_ne.png",
+        "sha256": "b0b2cec2db26bf3ad62c7e208602beac380837480efc356d2b8ffe123db04484"
+      },
+      {
+        "path": "assets/anim/guan_musket_idle_nw.png",
+        "sha256": "efea3655369b2763721e76ef0923378734b2d7323822efcb6a0d267224884ac0"
+      }
+    ]
+  },
+  "limits": {
+    "states_added": ["idle"],
+    "states_not_added": ["walk", "attack", "hurt", "down", "death"],
+    "human_playtest": false,
+    "performance_test": false,
+    "steam_modified": false
+  }
+}

@@ -1,0 +1,14 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[rts-play] t=1 stage=north army=5 g=124 w=102 pop=16/20 buildings=1 gate_hp=1600.0
+[rts-play] t=62 stage=north army=9 g=151 w=316 pop=22/30 buildings=3 gate_hp=1600.0
+[rts-play] t=122 stage=north army=13 g=476 w=323 pop=30/30 buildings=4 gate_hp=1600.0
+[rts-play] t=183 stage=outpost army=17 g=673 w=238 pop=39/50 buildings=5 gate_hp=1600.0
+[rts-play] t=243 stage=tower army=18 g=885 w=191 pop=36/60 buildings=6 gate_hp=0
+[rts-play] t=304 stage=return army=12 g=1004 w=101 pop=32/60 buildings=6 gate_hp=0
+[rts] PASS direct route wins through live economy/combat and explicit return
+[rts] PASS route uses construction and normal troop production
+[rts] PASS route takes expansion and cuts reinforcement source
+[rts] PASS route recruits siege and clears a defended entrance tower
+[rts] PASS direct route needs no inside agent
+[rts-result] {"checks":5,"failures":[],"metrics":{"ai_trained":9,"buildings_started":6,"entered_with_main_intact":false,"events":["zhu_resource_secured","zhu_supply_cut","zhu_hu_captured","zhu_gate_breached","zhu_manor_fallen","action:zhu_rts:zhu_rts_rescue","zhu_prisoners_freed","action:zhu_rts:zhu_rts_finish","zhu_seven_safe","zhu_victory"],"game_seconds":313.333333333321,"orders":172,"raids_sent":1,"result":{"contract_version":2,"core_cleared":true,"core_goal":"摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。","done_ids":["zhu_capture","zhu_seven"],"goals":[{"id":"zhu_capture","label":"生擒扈三娘，仍按敌将看押","note":"","reason":"","state":"done"},{"id":"zhu_inside","label":"孙立内应，打开偏门","note":"","reason":"本局未完成","state":"missed"},{"id":"zhu_seven","label":"七名被囚好汉全部撤回前营","note":"","reason":"","state":"done"}],"missed_ids":["zhu_inside"],"pending_ids":[],"story_complete":false,"story_done":2,"story_total":3},"stage":"return","towers_destroyed":1,"units_queued":34,"units_queued_by_key":{"hua_rong":1,"liang_dao":8,"liang_gong":14,"liang_qiang":6,"siege_cata":3,"siege_ram":2}},"passed":true,"route":"direct","scope":"automated live gameplay; not human fun acceptance"}

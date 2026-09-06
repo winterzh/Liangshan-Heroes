@@ -1,0 +1,4897 @@
+{
+  "schema_version": 1,
+  "pipeline": "campaign-object-direction4",
+  "sources": {
+    "web_direction4_gao_flagship_states_v1": {
+      "file": "assets/direction4/source/web_direction4_gao_flagship_states_v1.png",
+      "sha256": "100167a3d616d47cb0220270fb73440e7dffb594fc5cf964960a5e9a299c1e66",
+      "size": [
+        1254,
+        1254
+      ],
+      "generation": "Web ChatGPT",
+      "conversation_url": "https://chatgpt.com/c/6a969358-3ccc-83ea-abc7-8315b127487c",
+      "prompt_file": "assets/direction4/web_prompts_20260901/gao_flagship_states_4x4.txt",
+      "prompt_sha256": "04f732013dadb0e94c6100c7b5e1070be90ed1ba7c9da2b82a53ca7fda03c868",
+      "review": "Visual review: four rows are one high-command sea-loach ship in default, damaged, flooding and disabled states; all sixteen show a legible single-character 帅 command flag, four true hull orientations, no water or background.",
+      "layout": {
+        "rows": [
+          {
+            "key": "gao_flagship",
+            "state": "default"
+          },
+          {
+            "key": "gao_flagship",
+            "state": "damaged"
+          },
+          {
+            "key": "gao_flagship",
+            "state": "flooding"
+          },
+          {
+            "key": "gao_flagship",
+            "state": "disabled"
+          }
+        ],
+        "directions": [
+          "se",
+          "sw",
+          "ne",
+          "nw"
+        ]
+      },
+      "minimum_detached_component_pixels": 40,
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    "web_direction4_water_battle_ships_corrected_retry_v1": {
+      "file": "assets/direction4/source/web_direction4_water_battle_ships_corrected_retry_v1.png",
+      "sha256": "2b747c492feaa3caeff4e6890eb86e77e7e80f561ce01f82d867a2b4973fa65f",
+      "size": [
+        1254,
+        1254
+      ],
+      "generation": "Web ChatGPT",
+      "conversation_url": "https://chatgpt.com/c/6a969358-3ccc-83ea-abc7-8315b127487c",
+      "prompt_file": "assets/direction4/web_prompts_20260901/ship_states_4x4_corrected_flags_retry.txt",
+      "prompt_sha256": "63536f06c898634b18cc718b086d1d578ed6519c1f44837f70b089d5f5fc8912",
+      "review": "Reviewed 2026-09-01: transparent 4x4 source with complete unlettered signal flags only; no invented faction text. Rows match Liangshan default plus generic first- and second-battle official default/damaged/flooding. Four columns show distinct ship orientations; verified transparent seams before crop.",
+      "layout": {
+        "rows": [
+          {
+            "key": "liangshan_boat",
+            "state": "default"
+          },
+          {
+            "key": "official_warship",
+            "state": "default"
+          },
+          {
+            "key": "official_warship",
+            "state": "damaged"
+          },
+          {
+            "key": "official_warship",
+            "state": "flooding"
+          }
+        ],
+        "directions": [
+          "se",
+          "sw",
+          "ne",
+          "nw"
+        ]
+      },
+      "minimum_detached_component_pixels": 40,
+      "extraction_layout": "grid",
+      "grid_seam_policy": {
+        "alpha_threshold": 6,
+        "minimum_gap": 8,
+        "search_fraction": 0.22,
+        "geometry": "Three full-height vertical seams, then three full-width horizontal seams within each isolated source column."
+      },
+      "retained_pixels": "Whole source cells divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention."
+    },
+    "web_direction4_official_vanguard_states_v1": {
+      "file": "assets/direction4/source/web_direction4_official_vanguard_states_v1.png",
+      "sha256": "4a22f80ee7f42414ed8651c00e6f7e09cdf60723f771cfd7f1d2a64f80176f87",
+      "size": [
+        1254,
+        1254
+      ],
+      "generation": "Web ChatGPT",
+      "conversation_url": "https://chatgpt.com/c/6a969358-3ccc-83ea-abc7-8315b127487c",
+      "prompt_file": "assets/direction4/web_prompts_20260901/official_vanguard_states_4x4_retry.txt",
+      "prompt_sha256": "626ff02a81751ce6d4bd93f7f97dffde3abf9dab7c4c6354bead0ac8cd7d6ea8",
+      "review": "Reviewed 2026-09-01: Web ChatGPT transparent 4x4 source for the Chapter 80 Qiu Yue, Xu Jing and Mei Zhan vanguard headship. All sixteen slots show one distinct large sea-loach official ship with two blank red embroidered flags, no visible text or watermark; default, damaged, flooding and disabled states are legible. Human visual review checked that the four hull orientations are distinct and that the flagship lacks the High Qiu command standard.",
+      "layout": {
+        "rows": [
+          {
+            "key": "official_vanguard",
+            "state": "default"
+          },
+          {
+            "key": "official_vanguard",
+            "state": "damaged"
+          },
+          {
+            "key": "official_vanguard",
+            "state": "flooding"
+          },
+          {
+            "key": "official_vanguard",
+            "state": "disabled"
+          }
+        ],
+        "directions": [
+          "se",
+          "sw",
+          "ne",
+          "nw"
+        ]
+      },
+      "minimum_detached_component_pixels": 40,
+      "extraction_layout": "grid",
+      "grid_seam_policy": {
+        "alpha_threshold": 6,
+        "minimum_gap": 8,
+        "search_fraction": 0.22,
+        "geometry": "Three full-height vertical seams, then three full-width horizontal seams within each isolated source column."
+      },
+      "retained_pixels": "Whole source cells divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention."
+    },
+    "web_direction4_official_vanguard_states_v3": {
+      "file": "assets/direction4/source/web_direction4_official_vanguard_states_v3.png",
+      "sha256": "ade7510db70be9fc2fb0dc8f4442855cf3b3d921d9beb09d65f810a18bf50fd0",
+      "size": [
+        1254,
+        1254
+      ],
+      "generation": "Web ChatGPT",
+      "conversation_url": "https://chatgpt.com/c/6a96b875-8320-83ea-80ad-57f1790022b9",
+      "prompt_file": "assets/direction4/web_prompts_20260901/official_vanguard_states_4x4_v3.txt",
+      "prompt_sha256": "1270e91a308ca1282a63cc33f1e004b1d0d54ce925c3bdaf3fc75a93ac0dd180",
+      "review": "Reviewed 2026-09-01: Web ChatGPT transparent 4x4 source for the Chapter 80 Qiu Yue, Xu Jing and Mei Zhan vanguard headship. All sixteen slots show one official large sea-loach vanguard ship in true SE, SW, NE and NW orientations and default, damaged, flooding and disabled states. Each ship has two blank, large, upright red embroidered banner panels at bow and stern, fully outside the sail silhouette with enough unoccluded plain cloth for a seven-character vertical overlay; no visible text, watermark or command standard. Grid seam audit passed before formal extraction.",
+      "layout": {
+        "rows": [
+          {
+            "key": "official_vanguard",
+            "state": "default"
+          },
+          {
+            "key": "official_vanguard",
+            "state": "damaged"
+          },
+          {
+            "key": "official_vanguard",
+            "state": "flooding"
+          },
+          {
+            "key": "official_vanguard",
+            "state": "disabled"
+          }
+        ],
+        "directions": [
+          "se",
+          "sw",
+          "ne",
+          "nw"
+        ]
+      },
+      "minimum_detached_component_pixels": 40,
+      "extraction_layout": "grid",
+      "grid_seam_policy": {
+        "alpha_threshold": 6,
+        "minimum_gap": 8,
+        "search_fraction": 0.22,
+        "geometry": "Three full-height vertical seams, then three full-width horizontal seams within each isolated source column."
+      },
+      "retained_pixels": "Whole source cells divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention."
+    }
+  },
+  "outputs": [
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "se",
+      "output": "assets/campaign/objects/gao_flagship_default_se.png",
+      "sha256": "87dc42f17529d7636aa858585420bf66209998b7345ae953b5c7048e81d2a732",
+      "source_component": {
+        "ids": [
+          5
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 39386,
+        "row": 0,
+        "column": 0,
+        "region": [
+          14,
+          8,
+          289,
+          264
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        289,
+        264
+      ],
+      "row_scale": 1.516245487364621,
+      "output_size": [
+        438,
+        400
+      ],
+      "paste_xy": [
+        37,
+        20
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "sw",
+      "output": "assets/campaign/objects/gao_flagship_default_sw.png",
+      "sha256": "eac4be61ad90386a88d3301214d4577ef775134e8b4dd44ea3dc33a29aa6e4fb",
+      "source_component": {
+        "ids": [
+          2
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 39917,
+        "row": 0,
+        "column": 1,
+        "region": [
+          325,
+          5,
+          289,
+          277
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        289,
+        277
+      ],
+      "row_scale": 1.516245487364621,
+      "output_size": [
+        438,
+        420
+      ],
+      "paste_xy": [
+        37,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "ne",
+      "output": "assets/campaign/objects/gao_flagship_default_ne.png",
+      "sha256": "e58fb076a2b79e8b085d41857bd1b585e711c2031d9dad7668568f8bf0619819",
+      "source_component": {
+        "ids": [
+          7
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 34210,
+        "row": 0,
+        "column": 2,
+        "region": [
+          658,
+          16,
+          254,
+          265
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        254,
+        265
+      ],
+      "row_scale": 1.516245487364621,
+      "output_size": [
+        385,
+        402
+      ],
+      "paste_xy": [
+        64,
+        18
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "nw",
+      "output": "assets/campaign/objects/gao_flagship_default_nw.png",
+      "sha256": "0ede11df4d3275280a32cac759f6eae4dae7966b38b409d424cd26292924aa3b",
+      "source_component": {
+        "ids": [
+          4
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 36979,
+        "row": 0,
+        "column": 3,
+        "region": [
+          976,
+          7,
+          272,
+          273
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        272,
+        273
+      ],
+      "row_scale": 1.516245487364621,
+      "output_size": [
+        412,
+        414
+      ],
+      "paste_xy": [
+        50,
+        6
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "se",
+      "output": "assets/campaign/objects/gao_flagship_damaged_se.png",
+      "sha256": "1fe9c530efaed2cdb690055bdb70a39a06fac0431929c37a11d4d46fb42fee0c",
+      "source_component": {
+        "ids": [
+          418
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 42683,
+        "row": 1,
+        "column": 0,
+        "region": [
+          12,
+          301,
+          293,
+          276
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        293,
+        276
+      ],
+      "row_scale": 1.4893617021276595,
+      "output_size": [
+        436,
+        411
+      ],
+      "paste_xy": [
+        38,
+        9
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "sw",
+      "output": "assets/campaign/objects/gao_flagship_damaged_sw.png",
+      "sha256": "5eba3df9af24e56ee7faf4de588252c7af31ab10586417386646ddbee0f6410c",
+      "source_component": {
+        "ids": [
+          421
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 40121,
+        "row": 1,
+        "column": 1,
+        "region": [
+          331,
+          307,
+          292,
+          282
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        292,
+        282
+      ],
+      "row_scale": 1.4893617021276595,
+      "output_size": [
+        435,
+        420
+      ],
+      "paste_xy": [
+        38,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "ne",
+      "output": "assets/campaign/objects/gao_flagship_damaged_ne.png",
+      "sha256": "c5752798e7d68262d55cfaad958821d04ea00dcae2f8291affe33ab4165f470f",
+      "source_component": {
+        "ids": [
+          423
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 37773,
+        "row": 1,
+        "column": 2,
+        "region": [
+          639,
+          312,
+          272,
+          267
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        272,
+        267
+      ],
+      "row_scale": 1.4893617021276595,
+      "output_size": [
+        405,
+        398
+      ],
+      "paste_xy": [
+        54,
+        22
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "nw",
+      "output": "assets/campaign/objects/gao_flagship_damaged_nw.png",
+      "sha256": "3865a63924e66230327e5525085f977adb5d4f8be7933e2165c761ee24620ac1",
+      "source_component": {
+        "ids": [
+          420
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 40420,
+        "row": 1,
+        "column": 3,
+        "region": [
+          968,
+          305,
+          280,
+          276
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        280,
+        276
+      ],
+      "row_scale": 1.4893617021276595,
+      "output_size": [
+        417,
+        411
+      ],
+      "paste_xy": [
+        48,
+        9
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "se",
+      "output": "assets/campaign/objects/gao_flagship_flooding_se.png",
+      "sha256": "105b562a85e18dafa037aed152309896177c4d927709b0407187e4db8eb1beeb",
+      "source_component": {
+        "ids": [
+          1010
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 40785,
+        "row": 2,
+        "column": 0,
+        "region": [
+          10,
+          615,
+          293,
+          266
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        293,
+        266
+      ],
+      "row_scale": 1.476510067114094,
+      "output_size": [
+        433,
+        393
+      ],
+      "paste_xy": [
+        40,
+        27
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "sw",
+      "output": "assets/campaign/objects/gao_flagship_flooding_sw.png",
+      "sha256": "80c6845c11a121240faac999f54674a427717ba80f320e9291ec67767d329dca",
+      "source_component": {
+        "ids": [
+          1014
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 39026,
+        "row": 2,
+        "column": 1,
+        "region": [
+          326,
+          628,
+          298,
+          265
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        298,
+        265
+      ],
+      "row_scale": 1.476510067114094,
+      "output_size": [
+        440,
+        391
+      ],
+      "paste_xy": [
+        36,
+        29
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "ne",
+      "output": "assets/campaign/objects/gao_flagship_flooding_ne.png",
+      "sha256": "8a5e360a078838ba2604aeec283633f609dd75e0037f9c8f185d500cc6f8f97d",
+      "source_component": {
+        "ids": [
+          1019
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 36029,
+        "row": 2,
+        "column": 2,
+        "region": [
+          646,
+          634,
+          267,
+          259
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        267,
+        259
+      ],
+      "row_scale": 1.476510067114094,
+      "output_size": [
+        394,
+        382
+      ],
+      "paste_xy": [
+        59,
+        38
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "nw",
+      "output": "assets/campaign/objects/gao_flagship_flooding_nw.png",
+      "sha256": "9873970c5ea95bda07645b04f63093e99b742232f064858b8c90108c9d135c06",
+      "source_component": {
+        "ids": [
+          1012
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 38540,
+        "row": 2,
+        "column": 3,
+        "region": [
+          969,
+          619,
+          279,
+          269
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        279,
+        269
+      ],
+      "row_scale": 1.476510067114094,
+      "output_size": [
+        412,
+        397
+      ],
+      "paste_xy": [
+        50,
+        23
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "se",
+      "output": "assets/campaign/objects/gao_flagship_disabled_se.png",
+      "sha256": "505ac0b351a05274258c190758b88b933b361cd7ffaacf61329e25d04696cdb5",
+      "source_component": {
+        "ids": [
+          1457
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 43476,
+        "row": 3,
+        "column": 0,
+        "region": [
+          14,
+          923,
+          289,
+          275
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        289,
+        275
+      ],
+      "row_scale": 1.4965986394557824,
+      "output_size": [
+        433,
+        412
+      ],
+      "paste_xy": [
+        40,
+        8
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "sw",
+      "output": "assets/campaign/objects/gao_flagship_disabled_sw.png",
+      "sha256": "77e45477a85f52b04d26b2309386550240c64657b64a63f479b2aba60d9072f9",
+      "source_component": {
+        "ids": [
+          1462
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 42801,
+        "row": 3,
+        "column": 1,
+        "region": [
+          328,
+          925,
+          294,
+          278
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        294,
+        278
+      ],
+      "row_scale": 1.4965986394557824,
+      "output_size": [
+        440,
+        416
+      ],
+      "paste_xy": [
+        36,
+        4
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "ne",
+      "output": "assets/campaign/objects/gao_flagship_disabled_ne.png",
+      "sha256": "a91089276777deedbe7c02701886bb43d093c1e64a606c320bcd116e8d3760eb",
+      "source_component": {
+        "ids": [
+          1463
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 38817,
+        "row": 3,
+        "column": 2,
+        "region": [
+          644,
+          925,
+          267,
+          277
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        267,
+        277
+      ],
+      "row_scale": 1.4965986394557824,
+      "output_size": [
+        400,
+        415
+      ],
+      "paste_xy": [
+        56,
+        5
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "nw",
+      "output": "assets/campaign/objects/gao_flagship_disabled_nw.png",
+      "sha256": "135a1520abed44f4627b0e220acb326c5d516a67d9032b649854b7c229c77800",
+      "source_component": {
+        "ids": [
+          1473
+        ],
+        "detached_ids": [],
+        "alpha_pixels": 40119,
+        "row": 3,
+        "column": 3,
+        "region": [
+          967,
+          933,
+          286,
+          267
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        286,
+        267
+      ],
+      "row_scale": 1.4965986394557824,
+      "output_size": [
+        428,
+        400
+      ],
+      "paste_xy": [
+        42,
+        20
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "retained_pixels": "Crop, uniform scale and transparent padding only; no mirroring, repainting, filling, or pixel invention."
+    },
+    {
+      "key": "liangshan_boat",
+      "state": "default",
+      "direction": "se",
+      "output": "assets/campaign/objects/liangshan_boat_default_se.png",
+      "sha256": "705b6638a3f153b88d6f68631a1c13f556c8ab40a8e4654a5e33d609ca32da4b",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 23283,
+        "row": 0,
+        "column": 0,
+        "region": [
+          45,
+          55,
+          271,
+          245
+        ]
+      },
+      "source_alpha_bounds": [
+        45,
+        55,
+        316,
+        300
+      ],
+      "row_scale": 1.3793103448275863,
+      "output_size": [
+        374,
+        338
+      ],
+      "paste_xy": [
+        69,
+        82
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        0,
+        316,
+        300
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 266,
+            "end": 334,
+            "gap": 68,
+            "center": 300.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 576,
+            "end": 624,
+            "gap": 48,
+            "center": 600.0,
+            "max_alpha": 2,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 868,
+            "end": 930,
+            "gap": 62,
+            "center": 899.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "liangshan_boat",
+      "state": "default",
+      "direction": "sw",
+      "output": "assets/campaign/objects/liangshan_boat_default_sw.png",
+      "sha256": "d246ff6510ce2997250543f28a1b245b642c88ab0ea2169e4609ec1c580dcaac",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 24405,
+        "row": 0,
+        "column": 1,
+        "region": [
+          316,
+          17,
+          319,
+          287
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        17,
+        319,
+        304
+      ],
+      "row_scale": 1.3793103448275863,
+      "output_size": [
+        440,
+        396
+      ],
+      "paste_xy": [
+        36,
+        24
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        316,
+        0,
+        320,
+        308
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 269,
+            "end": 346,
+            "gap": 77,
+            "center": 307.5,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 585,
+            "end": 636,
+            "gap": 51,
+            "center": 610.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 873,
+            "end": 934,
+            "gap": 61,
+            "center": 903.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "liangshan_boat",
+      "state": "default",
+      "direction": "ne",
+      "output": "assets/campaign/objects/liangshan_boat_default_ne.png",
+      "sha256": "fb99e5c0a1c282aa45134e03d50dd6faf5d846998ac5850f1d02ce89dcd6b78b",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 18412,
+        "row": 0,
+        "column": 2,
+        "region": [
+          670,
+          39,
+          281,
+          281
+        ]
+      },
+      "source_alpha_bounds": [
+        34,
+        39,
+        315,
+        320
+      ],
+      "row_scale": 1.3793103448275863,
+      "output_size": [
+        388,
+        388
+      ],
+      "paste_xy": [
+        62,
+        32
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        636,
+        0,
+        315,
+        320
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 351,
+            "gap": 63,
+            "center": 319.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 596,
+            "end": 632,
+            "gap": 36,
+            "center": 614.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 877,
+            "end": 919,
+            "gap": 42,
+            "center": 898.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "liangshan_boat",
+      "state": "default",
+      "direction": "nw",
+      "output": "assets/campaign/objects/liangshan_boat_default_nw.png",
+      "sha256": "949a56eccad761050d4ba3bbe914af7acb9176e96e53358e63a59203f77cf269",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 22885,
+        "row": 0,
+        "column": 3,
+        "region": [
+          955,
+          19,
+          277,
+          270
+        ]
+      },
+      "source_alpha_bounds": [
+        4,
+        19,
+        281,
+        289
+      ],
+      "row_scale": 1.3793103448275863,
+      "output_size": [
+        382,
+        372
+      ],
+      "paste_xy": [
+        65,
+        48
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        951,
+        0,
+        303,
+        308
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 286,
+            "end": 329,
+            "gap": 43,
+            "center": 307.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 586,
+            "end": 625,
+            "gap": 39,
+            "center": 605.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 882,
+            "end": 926,
+            "gap": 44,
+            "center": 904.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "default",
+      "direction": "se",
+      "output": "assets/campaign/objects/official_warship_default_se.png",
+      "sha256": "b376dbac82753bc75dea77828113302e4537a77e0ee59f35b8a9143cf2e4e123",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 35773,
+        "row": 1,
+        "column": 0,
+        "region": [
+          0,
+          300,
+          316,
+          300
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        316,
+        300
+      ],
+      "row_scale": 1.3924050632911393,
+      "output_size": [
+        440,
+        418
+      ],
+      "paste_xy": [
+        36,
+        2
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        300,
+        316,
+        300
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 266,
+            "end": 334,
+            "gap": 68,
+            "center": 300.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 576,
+            "end": 624,
+            "gap": 48,
+            "center": 600.0,
+            "max_alpha": 2,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 868,
+            "end": 930,
+            "gap": 62,
+            "center": 899.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "default",
+      "direction": "sw",
+      "output": "assets/campaign/objects/official_warship_default_sw.png",
+      "sha256": "251231f59d6bd432d0598e352f1b0ec0074eb17b734b5fbc0bd016d157b294c0",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 35394,
+        "row": 1,
+        "column": 1,
+        "region": [
+          316,
+          308,
+          311,
+          297
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        311,
+        297
+      ],
+      "row_scale": 1.3924050632911393,
+      "output_size": [
+        433,
+        414
+      ],
+      "paste_xy": [
+        40,
+        6
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        316,
+        308,
+        320,
+        302
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 269,
+            "end": 346,
+            "gap": 77,
+            "center": 307.5,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 585,
+            "end": 636,
+            "gap": 51,
+            "center": 610.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 873,
+            "end": 934,
+            "gap": 61,
+            "center": 903.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "default",
+      "direction": "ne",
+      "output": "assets/campaign/objects/official_warship_default_ne.png",
+      "sha256": "3fba66f66a45398bd9fcaa5af1a0ed9f760a0bb8d9d2ec499c5d1e1f62a1e8d1",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 30454,
+        "row": 1,
+        "column": 2,
+        "region": [
+          660,
+          320,
+          283,
+          294
+        ]
+      },
+      "source_alpha_bounds": [
+        24,
+        0,
+        307,
+        294
+      ],
+      "row_scale": 1.3924050632911393,
+      "output_size": [
+        394,
+        409
+      ],
+      "paste_xy": [
+        59,
+        11
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        636,
+        320,
+        315,
+        294
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 351,
+            "gap": 63,
+            "center": 319.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 596,
+            "end": 632,
+            "gap": 36,
+            "center": 614.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 877,
+            "end": 919,
+            "gap": 42,
+            "center": 898.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "default",
+      "direction": "nw",
+      "output": "assets/campaign/objects/official_warship_default_nw.png",
+      "sha256": "bfb55183a5abaf2f1820087a0ce33d82bcdd7c2a64d413a963b1769a5de6e21a",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 34856,
+        "row": 1,
+        "column": 3,
+        "region": [
+          953,
+          312,
+          281,
+          293
+        ]
+      },
+      "source_alpha_bounds": [
+        2,
+        4,
+        283,
+        297
+      ],
+      "row_scale": 1.3924050632911393,
+      "output_size": [
+        391,
+        408
+      ],
+      "paste_xy": [
+        60,
+        12
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        951,
+        308,
+        303,
+        298
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 286,
+            "end": 329,
+            "gap": 43,
+            "center": 307.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 586,
+            "end": 625,
+            "gap": 39,
+            "center": 605.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 882,
+            "end": 926,
+            "gap": 44,
+            "center": 904.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "damaged",
+      "direction": "se",
+      "output": "assets/campaign/objects/official_warship_damaged_se.png",
+      "sha256": "0a1d2d444364778ebdf95d614bbbfc8d630e5356623a4958992048ff16fb435c",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 35452,
+        "row": 2,
+        "column": 0,
+        "region": [
+          0,
+          600,
+          316,
+          291
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        316,
+        291
+      ],
+      "row_scale": 1.375,
+      "output_size": [
+        434,
+        400
+      ],
+      "paste_xy": [
+        39,
+        20
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        600,
+        316,
+        299
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 266,
+            "end": 334,
+            "gap": 68,
+            "center": 300.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 576,
+            "end": 624,
+            "gap": 48,
+            "center": 600.0,
+            "max_alpha": 2,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 868,
+            "end": 930,
+            "gap": 62,
+            "center": 899.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "damaged",
+      "direction": "sw",
+      "output": "assets/campaign/objects/official_warship_damaged_sw.png",
+      "sha256": "8e237354c99ea6fd4e948f871013d52544575ac74b848c02a7014e2f0ba18e79",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 34400,
+        "row": 2,
+        "column": 1,
+        "region": [
+          316,
+          614,
+          320,
+          266
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        4,
+        320,
+        270
+      ],
+      "row_scale": 1.375,
+      "output_size": [
+        440,
+        366
+      ],
+      "paste_xy": [
+        36,
+        54
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        316,
+        610,
+        320,
+        294
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 269,
+            "end": 346,
+            "gap": 77,
+            "center": 307.5,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 585,
+            "end": 636,
+            "gap": 51,
+            "center": 610.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 873,
+            "end": 934,
+            "gap": 61,
+            "center": 903.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "damaged",
+      "direction": "ne",
+      "output": "assets/campaign/objects/official_warship_damaged_ne.png",
+      "sha256": "ce2dec79d15208320be29d686a7aa2e559c8479b94ecf19cf948cf28c01fbba1",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 32570,
+        "row": 2,
+        "column": 2,
+        "region": [
+          636,
+          614,
+          297,
+          278
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        297,
+        278
+      ],
+      "row_scale": 1.375,
+      "output_size": [
+        408,
+        382
+      ],
+      "paste_xy": [
+        52,
+        38
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        636,
+        614,
+        315,
+        284
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 351,
+            "gap": 63,
+            "center": 319.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 596,
+            "end": 632,
+            "gap": 36,
+            "center": 614.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 877,
+            "end": 919,
+            "gap": 42,
+            "center": 898.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "damaged",
+      "direction": "nw",
+      "output": "assets/campaign/objects/official_warship_damaged_nw.png",
+      "sha256": "f42b91a826813b0a1315f28d69ae148fe7e0ecdde7493a4f1706a0c8fb13001d",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 34819,
+        "row": 2,
+        "column": 3,
+        "region": [
+          982,
+          606,
+          248,
+          298
+        ]
+      },
+      "source_alpha_bounds": [
+        31,
+        0,
+        279,
+        298
+      ],
+      "row_scale": 1.375,
+      "output_size": [
+        341,
+        410
+      ],
+      "paste_xy": [
+        86,
+        10
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        951,
+        606,
+        303,
+        298
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 286,
+            "end": 329,
+            "gap": 43,
+            "center": 307.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 586,
+            "end": 625,
+            "gap": 39,
+            "center": 605.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 882,
+            "end": 926,
+            "gap": 44,
+            "center": 904.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "flooding",
+      "direction": "se",
+      "output": "assets/campaign/objects/official_warship_flooding_se.png",
+      "sha256": "5a123721e7d15ac4e32160769cbfc0cf388c999fa1dcabe2a3299921234e9062",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 35102,
+        "row": 3,
+        "column": 0,
+        "region": [
+          0,
+          911,
+          316,
+          343
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        12,
+        316,
+        355
+      ],
+      "row_scale": 1.1965811965811965,
+      "output_size": [
+        378,
+        410
+      ],
+      "paste_xy": [
+        67,
+        10
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        899,
+        316,
+        355
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 266,
+            "end": 334,
+            "gap": 68,
+            "center": 300.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 576,
+            "end": 624,
+            "gap": 48,
+            "center": 600.0,
+            "max_alpha": 2,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 868,
+            "end": 930,
+            "gap": 62,
+            "center": 899.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "flooding",
+      "direction": "sw",
+      "output": "assets/campaign/objects/official_warship_flooding_sw.png",
+      "sha256": "4a4b83d5de3d6f214e38d38075c67a6ed133e329089e0a1518ba753c8074e6e3",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 34509,
+        "row": 3,
+        "column": 1,
+        "region": [
+          317,
+          911,
+          302,
+          343
+        ]
+      },
+      "source_alpha_bounds": [
+        1,
+        7,
+        303,
+        350
+      ],
+      "row_scale": 1.1965811965811965,
+      "output_size": [
+        361,
+        410
+      ],
+      "paste_xy": [
+        76,
+        10
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        316,
+        904,
+        320,
+        350
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 269,
+            "end": 346,
+            "gap": 77,
+            "center": 307.5,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 585,
+            "end": 636,
+            "gap": 51,
+            "center": 610.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 873,
+            "end": 934,
+            "gap": 61,
+            "center": 903.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "flooding",
+      "direction": "ne",
+      "output": "assets/campaign/objects/official_warship_flooding_ne.png",
+      "sha256": "a0a047da7e196e4457defea29edf011bb4d51e0d48e07779bf461ce9b11c6e2e",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 31740,
+        "row": 3,
+        "column": 2,
+        "region": [
+          654,
+          903,
+          297,
+          351
+        ]
+      },
+      "source_alpha_bounds": [
+        18,
+        5,
+        315,
+        356
+      ],
+      "row_scale": 1.1965811965811965,
+      "output_size": [
+        355,
+        420
+      ],
+      "paste_xy": [
+        78,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        636,
+        898,
+        315,
+        356
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 351,
+            "gap": 63,
+            "center": 319.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 596,
+            "end": 632,
+            "gap": 36,
+            "center": 614.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 877,
+            "end": 919,
+            "gap": 42,
+            "center": 898.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "official_warship",
+      "state": "flooding",
+      "direction": "nw",
+      "output": "assets/campaign/objects/official_warship_flooding_nw.png",
+      "sha256": "5f520a7d71eac57ddfe1f3d9b47ede9937f001a713b53090421d98e30200de78",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 33015,
+        "row": 3,
+        "column": 3,
+        "region": [
+          951,
+          907,
+          274,
+          347
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        3,
+        274,
+        350
+      ],
+      "row_scale": 1.1965811965811965,
+      "output_size": [
+        328,
+        415
+      ],
+      "paste_xy": [
+        92,
+        5
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        951,
+        904,
+        303,
+        350
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 280,
+            "end": 353,
+            "gap": 73,
+            "center": 316.5,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 589,
+            "end": 684,
+            "gap": 95,
+            "center": 636.5,
+            "max_alpha": 6,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 904,
+            "end": 998,
+            "gap": 94,
+            "center": 951.0,
+            "max_alpha": 4,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 286,
+            "end": 329,
+            "gap": 43,
+            "center": 307.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 586,
+            "end": 625,
+            "gap": 39,
+            "center": 605.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 882,
+            "end": 926,
+            "gap": 44,
+            "center": 904.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "default",
+      "direction": "se",
+      "output": "assets/campaign/objects/official_vanguard_default_se.png",
+      "sha256": "a050046afaa4bd8dbca43daa1a77f02121fd0abc39c66c4549c6c7b64bc1ffde",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 50099,
+        "row": 0,
+        "column": 0,
+        "region": [
+          0,
+          0,
+          318,
+          302
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        318,
+        302
+      ],
+      "row_scale": 1.3592233009708738,
+      "output_size": [
+        432,
+        410
+      ],
+      "paste_xy": [
+        40,
+        10
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        0,
+        318,
+        311
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 292,
+            "end": 330,
+            "gap": 38,
+            "center": 311.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 606,
+            "end": 639,
+            "gap": 33,
+            "center": 622.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 915,
+            "end": 949,
+            "gap": 34,
+            "center": 932.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "default",
+      "direction": "sw",
+      "output": "assets/campaign/objects/official_vanguard_default_sw.png",
+      "sha256": "3dca9c94ae0cffe296a9bcc56f9edd1ab0a29d5f4b5a03d77deba19fddf5d1e0",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 50036,
+        "row": 0,
+        "column": 1,
+        "region": [
+          318,
+          0,
+          311,
+          309
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        311,
+        309
+      ],
+      "row_scale": 1.3592233009708738,
+      "output_size": [
+        423,
+        420
+      ],
+      "paste_xy": [
+        44,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        318,
+        0,
+        311,
+        309
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 298,
+            "end": 320,
+            "gap": 22,
+            "center": 309.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 635,
+            "gap": 27,
+            "center": 621.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 922,
+            "end": 952,
+            "gap": 30,
+            "center": 937.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "default",
+      "direction": "ne",
+      "output": "assets/campaign/objects/official_vanguard_default_ne.png",
+      "sha256": "0dd0e131c65d863c7a72461f9d938aa109ceabcb6db1d4bf47c89816fda71c18",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 51498,
+        "row": 0,
+        "column": 2,
+        "region": [
+          632,
+          10,
+          313,
+          300
+        ]
+      },
+      "source_alpha_bounds": [
+        3,
+        10,
+        316,
+        310
+      ],
+      "row_scale": 1.3592233009708738,
+      "output_size": [
+        425,
+        408
+      ],
+      "paste_xy": [
+        44,
+        12
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        629,
+        0,
+        316,
+        310
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 296,
+            "end": 324,
+            "gap": 28,
+            "center": 310.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 613,
+            "end": 634,
+            "gap": 21,
+            "center": 623.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 918,
+            "end": 945,
+            "gap": 27,
+            "center": 931.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "default",
+      "direction": "nw",
+      "output": "assets/campaign/objects/official_vanguard_default_nw.png",
+      "sha256": "672d6606239657560ec73e11186672eeb8fd89375603aa297291698309c2f993",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 49656,
+        "row": 0,
+        "column": 3,
+        "region": [
+          945,
+          16,
+          299,
+          284
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        16,
+        299,
+        300
+      ],
+      "row_scale": 1.3592233009708738,
+      "output_size": [
+        406,
+        386
+      ],
+      "paste_xy": [
+        53,
+        34
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        945,
+        0,
+        309,
+        314
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 294,
+            "end": 334,
+            "gap": 40,
+            "center": 314.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 656,
+            "gap": 48,
+            "center": 632.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 914,
+            "end": 950,
+            "gap": 36,
+            "center": 932.0,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "damaged",
+      "direction": "se",
+      "output": "assets/campaign/objects/official_vanguard_damaged_se.png",
+      "sha256": "1d20b26b06ac02fb11cccdc42779d7223d75d4e02e647859a1c08652a86f9090",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 50853,
+        "row": 1,
+        "column": 0,
+        "region": [
+          0,
+          312,
+          318,
+          310
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        1,
+        318,
+        311
+      ],
+      "row_scale": 1.34185303514377,
+      "output_size": [
+        427,
+        416
+      ],
+      "paste_xy": [
+        42,
+        4
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        311,
+        318,
+        311
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 292,
+            "end": 330,
+            "gap": 38,
+            "center": 311.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 606,
+            "end": 639,
+            "gap": 33,
+            "center": 622.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 915,
+            "end": 949,
+            "gap": 34,
+            "center": 932.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "damaged",
+      "direction": "sw",
+      "output": "assets/campaign/objects/official_vanguard_damaged_sw.png",
+      "sha256": "227057423aaace1dd86dfa15e3e922baecf79bdd6538fcf125fd4baf51848c8a",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 48431,
+        "row": 1,
+        "column": 1,
+        "region": [
+          318,
+          309,
+          311,
+          313
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        311,
+        313
+      ],
+      "row_scale": 1.34185303514377,
+      "output_size": [
+        417,
+        420
+      ],
+      "paste_xy": [
+        48,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        318,
+        309,
+        311,
+        313
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 298,
+            "end": 320,
+            "gap": 22,
+            "center": 309.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 635,
+            "gap": 27,
+            "center": 621.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 922,
+            "end": 952,
+            "gap": 30,
+            "center": 937.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "damaged",
+      "direction": "ne",
+      "output": "assets/campaign/objects/official_vanguard_damaged_ne.png",
+      "sha256": "d52a149eef27a7290116592455d407e24a16af0a01083e02593be440da39590c",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 52140,
+        "row": 1,
+        "column": 2,
+        "region": [
+          630,
+          310,
+          315,
+          307
+        ]
+      },
+      "source_alpha_bounds": [
+        1,
+        0,
+        316,
+        307
+      ],
+      "row_scale": 1.34185303514377,
+      "output_size": [
+        423,
+        412
+      ],
+      "paste_xy": [
+        44,
+        8
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        629,
+        310,
+        316,
+        314
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 296,
+            "end": 324,
+            "gap": 28,
+            "center": 310.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 613,
+            "end": 634,
+            "gap": 21,
+            "center": 623.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 918,
+            "end": 945,
+            "gap": 27,
+            "center": 931.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "damaged",
+      "direction": "nw",
+      "output": "assets/campaign/objects/official_vanguard_damaged_nw.png",
+      "sha256": "329750d2cc7892d00ec65f31bfa18af368c8e63d2e171d47247ce3d2704e0336",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 50020,
+        "row": 1,
+        "column": 3,
+        "region": [
+          945,
+          322,
+          294,
+          301
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        8,
+        294,
+        309
+      ],
+      "row_scale": 1.34185303514377,
+      "output_size": [
+        395,
+        404
+      ],
+      "paste_xy": [
+        58,
+        16
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        945,
+        314,
+        309,
+        318
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 294,
+            "end": 334,
+            "gap": 40,
+            "center": 314.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 656,
+            "gap": 48,
+            "center": 632.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 914,
+            "end": 950,
+            "gap": 36,
+            "center": 932.0,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "flooding",
+      "direction": "se",
+      "output": "assets/campaign/objects/official_vanguard_flooding_se.png",
+      "sha256": "8f0d8a220b6fb4560f7652868607447c1c52f26197e21b0a5861c3ba9110b56a",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 47811,
+        "row": 2,
+        "column": 0,
+        "region": [
+          0,
+          622,
+          318,
+          307
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        318,
+        307
+      ],
+      "row_scale": 1.3333333333333333,
+      "output_size": [
+        424,
+        409
+      ],
+      "paste_xy": [
+        44,
+        11
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        622,
+        318,
+        310
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 292,
+            "end": 330,
+            "gap": 38,
+            "center": 311.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 606,
+            "end": 639,
+            "gap": 33,
+            "center": 622.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 915,
+            "end": 949,
+            "gap": 34,
+            "center": 932.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "flooding",
+      "direction": "sw",
+      "output": "assets/campaign/objects/official_vanguard_flooding_sw.png",
+      "sha256": "fafa89316c44177b2411ceb0d022df2b8c9347e50a0756bbdcbde6ee2990fd53",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 47417,
+        "row": 2,
+        "column": 1,
+        "region": [
+          318,
+          622,
+          311,
+          315
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        311,
+        315
+      ],
+      "row_scale": 1.3333333333333333,
+      "output_size": [
+        415,
+        420
+      ],
+      "paste_xy": [
+        48,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        318,
+        622,
+        311,
+        315
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 298,
+            "end": 320,
+            "gap": 22,
+            "center": 309.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 635,
+            "gap": 27,
+            "center": 621.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 922,
+            "end": 952,
+            "gap": 30,
+            "center": 937.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "flooding",
+      "direction": "ne",
+      "output": "assets/campaign/objects/official_vanguard_flooding_ne.png",
+      "sha256": "0690d1b8580bd7e96896df9e4fa8377a2f5117501c763b55349f2dc79a9ee927",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 45898,
+        "row": 2,
+        "column": 2,
+        "region": [
+          630,
+          628,
+          315,
+          297
+        ]
+      },
+      "source_alpha_bounds": [
+        1,
+        4,
+        316,
+        301
+      ],
+      "row_scale": 1.3333333333333333,
+      "output_size": [
+        420,
+        396
+      ],
+      "paste_xy": [
+        46,
+        24
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        629,
+        624,
+        316,
+        308
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 296,
+            "end": 324,
+            "gap": 28,
+            "center": 310.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 613,
+            "end": 634,
+            "gap": 21,
+            "center": 623.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 918,
+            "end": 945,
+            "gap": 27,
+            "center": 931.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "flooding",
+      "direction": "nw",
+      "output": "assets/campaign/objects/official_vanguard_flooding_nw.png",
+      "sha256": "b049fa0436adb7b09bce7e8ca28c64a40fe1708adf1782b3a7f568dc961bb9c1",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 45123,
+        "row": 2,
+        "column": 3,
+        "region": [
+          945,
+          632,
+          308,
+          300
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        308,
+        300
+      ],
+      "row_scale": 1.3333333333333333,
+      "output_size": [
+        411,
+        400
+      ],
+      "paste_xy": [
+        50,
+        20
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        945,
+        632,
+        309,
+        300
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 294,
+            "end": 334,
+            "gap": 40,
+            "center": 314.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 656,
+            "gap": 48,
+            "center": 632.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 914,
+            "end": 950,
+            "gap": 36,
+            "center": 932.0,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "disabled",
+      "direction": "se",
+      "output": "assets/campaign/objects/official_vanguard_disabled_se.png",
+      "sha256": "57f337980a2d864259b1a4ccf97cf66c767e68b392c66e51f90c512c5354940b",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 48238,
+        "row": 3,
+        "column": 0,
+        "region": [
+          0,
+          933,
+          318,
+          321
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        1,
+        318,
+        322
+      ],
+      "row_scale": 1.3043478260869565,
+      "output_size": [
+        415,
+        419
+      ],
+      "paste_xy": [
+        48,
+        1
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        0,
+        932,
+        318,
+        322
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 292,
+            "end": 330,
+            "gap": 38,
+            "center": 311.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 606,
+            "end": 639,
+            "gap": 33,
+            "center": 622.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 1",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 915,
+            "end": 949,
+            "gap": 34,
+            "center": 932.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 1 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 0
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "disabled",
+      "direction": "sw",
+      "output": "assets/campaign/objects/official_vanguard_disabled_sw.png",
+      "sha256": "ba2e86f18b20558fbe10f4331ddf2bcc99971c6ff376c8e3d2362faa4604954b",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 45926,
+        "row": 3,
+        "column": 1,
+        "region": [
+          318,
+          937,
+          311,
+          317
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        311,
+        317
+      ],
+      "row_scale": 1.3043478260869565,
+      "output_size": [
+        406,
+        413
+      ],
+      "paste_xy": [
+        53,
+        7
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        318,
+        937,
+        311,
+        317
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 298,
+            "end": 320,
+            "gap": 22,
+            "center": 309.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 635,
+            "gap": 27,
+            "center": 621.5,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 2",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 922,
+            "end": 952,
+            "gap": 30,
+            "center": 937.0,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 2 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 1
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "disabled",
+      "direction": "ne",
+      "output": "assets/campaign/objects/official_vanguard_disabled_ne.png",
+      "sha256": "5e745db0c110925c6493487fa93d0007eb92563d7f093f35152e4efc772573a2",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 46031,
+        "row": 3,
+        "column": 2,
+        "region": [
+          630,
+          932,
+          315,
+          322
+        ]
+      },
+      "source_alpha_bounds": [
+        1,
+        0,
+        316,
+        322
+      ],
+      "row_scale": 1.3043478260869565,
+      "output_size": [
+        411,
+        420
+      ],
+      "paste_xy": [
+        50,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        629,
+        932,
+        316,
+        322
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 296,
+            "end": 324,
+            "gap": 28,
+            "center": 310.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 613,
+            "end": 634,
+            "gap": 21,
+            "center": 623.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 3",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 918,
+            "end": 945,
+            "gap": 27,
+            "center": 931.5,
+            "max_alpha": 5,
+            "criterion": "Every full horizontal row in source column 3 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 2
+      }
+    },
+    {
+      "key": "official_vanguard",
+      "state": "disabled",
+      "direction": "nw",
+      "output": "assets/campaign/objects/official_vanguard_disabled_nw.png",
+      "sha256": "ccc1962c7110eec7e098a163a16940eec120856507cb9eeadec7f8764b58d68a",
+      "source_component": {
+        "ids": [],
+        "detached_ids": [],
+        "alpha_pixels": 48407,
+        "row": 3,
+        "column": 3,
+        "region": [
+          945,
+          932,
+          295,
+          322
+        ]
+      },
+      "source_alpha_bounds": [
+        0,
+        0,
+        295,
+        322
+      ],
+      "row_scale": 1.3043478260869565,
+      "output_size": [
+        385,
+        420
+      ],
+      "paste_xy": [
+        64,
+        0
+      ],
+      "canvas_size": [
+        512,
+        512
+      ],
+      "anchor": [
+        0.5,
+        0.82
+      ],
+      "layout": "grid",
+      "retained_pixels": "Whole source cell divided only by audited transparent seams, then crop, uniform scale and transparent padding; no masking, mirroring, repainting, filling, or pixel invention.",
+      "source_cell": [
+        945,
+        932,
+        309,
+        322
+      ],
+      "selected_seams": {
+        "vertical": [
+          {
+            "axis": "vertical column",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 288,
+            "end": 347,
+            "gap": 59,
+            "center": 317.5,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 611,
+            "end": 647,
+            "gap": 36,
+            "center": 629.0,
+            "max_alpha": 3,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "vertical column",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 916,
+            "end": 974,
+            "gap": 58,
+            "center": 945.0,
+            "max_alpha": 5,
+            "criterion": "Every full vertical column in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "horizontal": [
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 1,
+            "nominal": 313.5,
+            "start": 294,
+            "end": 334,
+            "gap": 40,
+            "center": 314.0,
+            "max_alpha": 3,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 2,
+            "nominal": 627.0,
+            "start": 608,
+            "end": 656,
+            "gap": 48,
+            "center": 632.0,
+            "max_alpha": 4,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          },
+          {
+            "axis": "horizontal row in source column 4",
+            "boundary": 3,
+            "nominal": 940.5,
+            "start": 914,
+            "end": 950,
+            "gap": 36,
+            "center": 932.0,
+            "max_alpha": 6,
+            "criterion": "Every full horizontal row in source column 4 in the selected continuous band has alpha <= 6"
+          }
+        ],
+        "source_column": 3
+      }
+    }
+  ]
+}

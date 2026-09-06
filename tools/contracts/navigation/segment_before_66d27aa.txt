@@ -1,0 +1,47 @@
+func _segment_open(a: Vector2, b: Vector2, profile: String = "land") -> bool:
+	# Separation and movement often query sub-cell segments. Validate the bounds
+	# once, then reuse endpoint cells instead of converting each endpoint twice.
+	if not (a.x >= 0 and a.y >= 0 and a.x < w * CELL and a.y < h * CELL \
+			and b.x >= 0 and b.y >= 0 and b.x < w * CELL and b.y < h * CELL):
+		return false
+	var c := world_to_cell(a)
+	var cb := world_to_cell(b)
+	if not is_open_cell(c, profile):
+		return false
+	if c == cb:
+		return true
+	if not is_open_cell(cb, profile):
+		return false
+	var dx := b.x - a.x
+	var dy := b.y - a.y
+	var sx := 1 if dx > 0.0 else -1
+	var sy := 1 if dy > 0.0 else -1
+	var tmx := INF
+	var tdx := INF
+	if absf(dx) > 0.0001:
+		tmx = (float((c.x + (1 if sx > 0 else 0)) * CELL) - a.x) / dx
+		tdx = float(CELL) / absf(dx)
+	var tmy := INF
+	var tdy := INF
+	if absf(dy) > 0.0001:
+		tmy = (float((c.y + (1 if sy > 0 else 0)) * CELL) - a.y) / dy
+		tdy = float(CELL) / absf(dy)
+	var guard := 0
+	while (c.x != cb.x or c.y != cb.y) and guard < 512:
+		guard += 1
+		if absf(tmx - tmy) < 0.0001:   # 恰好穿过格角：斜向两侧任一实心即视为堵（防贴角穿缝）
+			if not is_open_cell(Vector2i(c.x + sx, c.y), profile) or not is_open_cell(Vector2i(c.x, c.y + sy), profile):
+				return false
+			c.x += sx
+			c.y += sy
+			tmx += tdx
+			tmy += tdy
+		elif tmx < tmy:
+			c.x += sx
+			tmx += tdx
+		else:
+			c.y += sy
+			tmy += tdy
+		if not is_open_cell(c, profile):
+			return false
+	return true

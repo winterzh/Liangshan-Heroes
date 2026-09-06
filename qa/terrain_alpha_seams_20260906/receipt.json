@@ -1,0 +1,357 @@
+{
+  "created": "2026-09-06",
+  "base_commit": "661e8d13e0bdf80d16e54a757b2be48f447e4cc2",
+  "scope": "Eight-line natural terrain shader alpha fix; production PNG and gameplay data unchanged",
+  "checks": {
+    "real_render": 86,
+    "natural_contract": 90,
+    "static_routes": 790,
+    "runtime_routes": 794,
+    "isolated_selftest": 40
+  },
+  "audit_expected_exit": 1,
+  "audit_counts": {
+    "targets": 69,
+    "present": 37,
+    "verified_production_hashes": 37,
+    "missing_production": 32,
+    "errors": 0,
+    "gaps": 249
+  },
+  "source_inputs": {
+    ".gitattributes": {
+      "sha256": "9ef9a3d112407ca53c8796fc132e76c075fb49164b495d65c5d1beaa37b5b9b7",
+      "bytes": 1534
+    },
+    "project.godot": {
+      "sha256": "5f60d39f4817f3428c82c29004cc8bd4314e89ef322728c79266ee08dd63793c",
+      "bytes": 1519
+    },
+    "scripts/liangshan_coast.gdshader": {
+      "sha256": "579f6fbf74dba401cf83b876f7fa320a9b1b573a02215b7015fd7e14a5fab76a",
+      "bytes": 9662
+    },
+    "scripts/game_map.gd": {
+      "sha256": "9650f7b95d9dcefb0601e546eb5c10f30a72488619f6b989087bf05b5e84cc1f",
+      "bytes": 33796
+    },
+    "scripts/liangshan_scenery.gd": {
+      "sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+      "bytes": 33717
+    },
+    "scripts/terrain_draw_batch.gd": {
+      "sha256": "2ced48b78f9f98f84804274731acde2b54ac8c80f65871c968550051dd136802",
+      "bytes": 5374
+    },
+    "scripts/campaign_environment_art.gd": {
+      "sha256": "1675505867196726572f04f8913614f704739ea07a7c7f4d1c65dcee88791b93",
+      "bytes": 22073
+    },
+    "scripts/campaign.gd": {
+      "sha256": "ee2178aa912f8d715896a4d7028e114965bbe0c9b37d590883b380cccbad875e",
+      "bytes": 13698
+    },
+    "scripts/campaign_mission.gd": {
+      "sha256": "1a8ce047fe3c208db113be6e53fc56c6587cf9234ebb260ef47af9e548973de1",
+      "bytes": 28144
+    },
+    "scripts/battle.gd": {
+      "sha256": "ade01d41ef108c22ecd1041327b1238c1589ba1b208d7c048bc8cdfc3f1f0fe7",
+      "bytes": 756794
+    },
+    "tools/terrain_alpha_seam_qa.gd": {
+      "sha256": "d1af19e21e719b89bbfa4e1a5fc4593aa46de2274eedc5db93d4f84bac8d3a1a",
+      "bytes": 8530
+    },
+    "tools/terrain_alpha_seam_probe.gd": {
+      "sha256": "78c99cd4e35c2d3c3d018b2781bf6a2730abb4122658e9acd8d0da50a4a89a38",
+      "bytes": 3228
+    },
+    "tools/natural_terrain_contract.gd": {
+      "sha256": "beb4da7f3385c6088634de154ebb6523f2b5708f75335fa487b935f18ed8d045",
+      "bytes": 9886
+    },
+    "tools/environment_field_render_qa.gd": {
+      "sha256": "7deb96c022bc1da63ecbc6a2e88aa7215d1062b941bcf73fb1e4169c8a38c11b",
+      "bytes": 5735
+    },
+    "tools/campaign_mode_performance_test.gd": {
+      "sha256": "9f514148cda1499148bb3a7daa24d4e732c47aa33f2b5aa4379922e34ee22308",
+      "bytes": 16825
+    },
+    "tools/campaign_environment_art_static_contract.py": {
+      "sha256": "eb635e42622e5a65189455e40b7ae4fe2b353593fdac02538687f08cc7b17402",
+      "bytes": 31272
+    },
+    "tools/campaign_environment_art_runtime_contract.gd": {
+      "sha256": "18557c215e07c6b2bc8fb9aefa0257ff63bae38743f70429c0171bfaa72b1368",
+      "bytes": 7133
+    },
+    "tools/environment_art_audit.py": {
+      "sha256": "a74cf96decb008b65df4d4b358f7071b8b46091d0c824c8333dbb37d4fee1cc2",
+      "bytes": 11059
+    },
+    "tools/environment_validation_selftest.py": {
+      "sha256": "32175eaa41c43cc39168eeb1c6cb949779be1de04eec208dc11ea3b665ab3134",
+      "bytes": 17847
+    },
+    "tools/environment_validation_common.py": {
+      "sha256": "9bad14a7ae96dc4bc55405f380c99502ceb189791663546e31e69d3ad6d5a554",
+      "bytes": 3666
+    },
+    "tools/environment_production_mapping.template.json": {
+      "sha256": "af1204a50a865096be47917440a36c67d9290f295fd5ee1ac2f8e000b1d441f1",
+      "bytes": 94165
+    },
+    "tools/contracts/environment/inventory_20260906.json": {
+      "sha256": "72453ce8cfb37f435582463bc7d97d69ca13967caef3adc493c3cc6bc95fec32",
+      "bytes": 64843
+    },
+    "tools/contracts/environment/field_20260906/review.json": {
+      "sha256": "d1cc45c19702cbf05f90e45a3348987c15b13ed051576ab8f90abef49e0309e7",
+      "bytes": 1576
+    },
+    "tools/contracts/terrain_seams/before_661e8d1.gdshader": {
+      "sha256": "5719a11adb1504b7b9b0ab9edbd713e9eb588a3916e6e101e597cebc4e1adabf",
+      "bytes": 9311
+    },
+    "scripts/levels/arena.gd": {
+      "sha256": "146ad503b96e81384e277ede74cca2cc891da9c17882a586707c3e6c3c3bc1b0",
+      "bytes": 5647
+    },
+    "scripts/levels/custom_defense.gd": {
+      "sha256": "20830cc7d01160c77c5eb31bc86689e7d3d9ace6bd2e701b80a20ebe874c6ae8",
+      "bytes": 1999
+    },
+    "scripts/levels/level1_huangnigang.gd": {
+      "sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+      "bytes": 49769
+    },
+    "scripts/levels/level2_jiangzhou.gd": {
+      "sha256": "250a51cfdd623c923c84c317094fdb44fe8623944a64a041cbba516b4cb3271b",
+      "bytes": 30394
+    },
+    "scripts/levels/level2_jiangzhou_rts.gd": {
+      "sha256": "0cd6e8aa730431184e48f4480f88b7dfc4391952331f23748582bc6ab7ba28a8",
+      "bytes": 21116
+    },
+    "scripts/levels/level3_zhujiazhuang.gd": {
+      "sha256": "85dbddeb19e450364303cf1c833baceb2eb8ded6b4dccf8db74fab7a32217475",
+      "bytes": 43361
+    },
+    "scripts/levels/level3_zhujiazhuang_rts.gd": {
+      "sha256": "22d6f96ea182131cf4f03f40ab657545d9f22048b42c391f761f1e913918fa85",
+      "bytes": 18294
+    },
+    "scripts/levels/level4_lianhuanma.gd": {
+      "sha256": "43b7572160958e44bb62dccedb94782b7063e9397de25204c8a67b18160452ef",
+      "bytes": 36272
+    },
+    "scripts/levels/level4_lianhuanma_rts.gd": {
+      "sha256": "9f466cb1c0e9e5fca676347a2bc21d75bfb9bd7165a1ee761da78fe547f848ed",
+      "bytes": 16641
+    },
+    "scripts/levels/level5_gao_rts.gd": {
+      "sha256": "f6f00af10b9526ab70ea497f9f87f2c99fb58a768695131ac555e0978c8e4bb3",
+      "bytes": 24788
+    },
+    "scripts/levels/level5_liangshan.gd": {
+      "sha256": "c406a026bdbd7465c9a6c8056f028d7ea2648d31a420c7020d7e508b6dc71396",
+      "bytes": 45372
+    },
+    "scripts/levels/level6_yezhulin.gd": {
+      "sha256": "f90a881ccc6b9a3409bb5df10c9edb12d56667ebb6a550ba80a5e2b3b57205e8",
+      "bytes": 32038
+    },
+    "scripts/levels/level7_kuaihuolin.gd": {
+      "sha256": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+      "bytes": 22275
+    },
+    "scripts/levels/level8_daming_rts.gd": {
+      "sha256": "f1c8aacaf524c9a881a0d5ef0e530f52cd7c091485694001693e9af41f818911",
+      "bytes": 21783
+    },
+    "scripts/levels/level8_dongchangfu.gd": {
+      "sha256": "3171c1819884e706c5d271b04c7b32238ea6c4b469ed93190495104248197839",
+      "bytes": 46714
+    },
+    "scripts/levels/scenario.gd": {
+      "sha256": "453c14078cbe6d50e4df391e30faaba8f9fece198b3ae5a47a71329e984bfcb6",
+      "bytes": 11881
+    },
+    "scripts/levels/skirmish.gd": {
+      "sha256": "0150ff3ec4c02afcb131f349834ff1487678275e39a894bb042c71318d6411d6",
+      "bytes": 24623
+    },
+    "scripts/levels/skirmish_ai.gd": {
+      "sha256": "5c44952de5bdc1d729beab785afe3cb5b73e2ca9beda1ba596bfba6ea5c8315c",
+      "bytes": 31905
+    }
+  },
+  "evidence": {
+    "audit.json": {
+      "sha256": "bb3161c87b88b7997cdd55a865b627619610df70028b058afeed1cdd5ee5bb2d",
+      "bytes": 80079
+    },
+    "diagnosis/atlas_alpha.png": {
+      "sha256": "ddb9b0a11cfd6d4c70ffe6229bfd6ccea2e1817ad2659b6cd24b2fcff0e12d96",
+      "bytes": 7968
+    },
+    "diagnosis/report.json": {
+      "sha256": "931b12e070a71ef54dad5ff51458fcf255517989dbb33d9ae87872c3359ddecf",
+      "bytes": 1407
+    },
+    "diagnosis/scene_after.png": {
+      "sha256": "7f548c24cdbb6fc8d0706f0647b45aa6155b586a807afee3ab0908f77175e36f",
+      "bytes": 1480247
+    },
+    "diagnosis/scene_before.png": {
+      "sha256": "c0d71dc34cbab67a52f182d8738f3362bc6c53988fd8e804dd6bd729b494797a",
+      "bytes": 1487281
+    },
+    "diagnosis/terrain_after.png": {
+      "sha256": "451817b3eba7bd1ba4689141c22d0b5707852904a2f9765ef0df291827b632bc",
+      "bytes": 1227844
+    },
+    "diagnosis/terrain_before.png": {
+      "sha256": "5ff71eec6a3e5df40b60d3714f995d97d7a16612667f88f8b5c6f4a6867d3b5f",
+      "bytes": 1241482
+    },
+    "level1_100_after.png": {
+      "sha256": "83719ba71aa7d8cd4130cd2c4021ca6c8abf4517fef63838fbdc30ceba728038",
+      "bytes": 1666653
+    },
+    "level1_100_before.png": {
+      "sha256": "c90fd6541342410b2b6d6c6978d27178c139cbc0f751ca8543833861674ce60f",
+      "bytes": 1671529
+    },
+    "level2_100_after.png": {
+      "sha256": "4ae8b2baeec66af6442686d467e054f07ef0d03612cbd0b738c15f917a319a24",
+      "bytes": 1733384
+    },
+    "level2_100_before.png": {
+      "sha256": "e2a395f9e4970fb33d390e98f2d86fe21e70020a382fa06d8fb12af0537c516a",
+      "bytes": 1735695
+    },
+    "level3_100_after.png": {
+      "sha256": "f881ca7ea41b5905a92415dbe398139c92c8bbe29aabfe3192e4ba406bb546b3",
+      "bytes": 1615504
+    },
+    "level3_100_before.png": {
+      "sha256": "c19775fe6277417d6799ee0b5226b79ca123645b647aa3a75b1ddff4a880d8c4",
+      "bytes": 1622988
+    },
+    "level3_150_after.png": {
+      "sha256": "f03299fb5b80ad4a34bac74224d970a3efea25c352dbbfecb9b1555475ca5afc",
+      "bytes": 1480181
+    },
+    "level3_150_before.png": {
+      "sha256": "fefb54294f755ff968af7ae3458be7c5aa88d18e400660e7e2f50d549be2027d",
+      "bytes": 1487302
+    },
+    "level4_100_after.png": {
+      "sha256": "d487354f57dc4a2bb8d70780d7b00c1223310ee51a95d7c6fc2c104f36c237aa",
+      "bytes": 1680173
+    },
+    "level4_100_before.png": {
+      "sha256": "599770922b12ec8cc3987809b55fc818b67da9ddcaf2041690baa4e866377223",
+      "bytes": 1684531
+    },
+    "level5_100_after.png": {
+      "sha256": "758554ce25e74fe16cf3d1fda9a61506a3f73b69fa35a51bcd45f87f9be246ff",
+      "bytes": 1671738
+    },
+    "level5_100_before.png": {
+      "sha256": "93e3db53cfd8fc71d2dd4e1a78cb9ceaa168f1212429e9bb495acbfbe9c4edea",
+      "bytes": 1677821
+    },
+    "level6_100_after.png": {
+      "sha256": "f5c81b87b707721c4870d2eb167163d1bfe7ace78463548a54972e3fd88fa32b",
+      "bytes": 1588284
+    },
+    "level6_100_before.png": {
+      "sha256": "ca692236e2cf62c3ca8aeeaa81179abf48d12f78fd954d1a948ba109700cb8c9",
+      "bytes": 1595282
+    },
+    "level7_100_after.png": {
+      "sha256": "c80398cacb9e27fa0ed8d1e93da1ccaeeed29bb40182170d415bbee3030cdffe",
+      "bytes": 1736250
+    },
+    "level7_100_before.png": {
+      "sha256": "5bd9613765fa0f5e50cc55193e565f5e0f5ee8a531d91a6726ad50e7e0ae442e",
+      "bytes": 1742247
+    },
+    "level8_100_after.png": {
+      "sha256": "80b65d6e42dad36b6c95c79760bf6554c0bd1e1e11f89fd8709977f39ded572d",
+      "bytes": 1342524
+    },
+    "level8_100_before.png": {
+      "sha256": "4812eb1db898b1a8f9136168c053db8e2e2c61c46f11d531786b630508892317",
+      "bytes": 1349423
+    },
+    "level8_150_after.png": {
+      "sha256": "6afbe32735b32c1350bd23536be059036e095b92f22f13cf4a29e3edf891a37e",
+      "bytes": 1126370
+    },
+    "level8_150_before.png": {
+      "sha256": "912c52b7adb662062eaf4c904bfe00cd524dfd2ef758dbec5f594c2a6aef6029",
+      "bytes": 1133600
+    },
+    "natural_contract.json": {
+      "sha256": "b5907617d3c89e47323dafbb268fbf5b17cd195b2c0c34636cee3ce9ee6c4ce4",
+      "bytes": 31623
+    },
+    "pixel_analysis.json": {
+      "sha256": "f19a6c0429ebebe3c9bbdb69b8876d33f936cf27f91770e0e4805d653672f096",
+      "bytes": 2124
+    },
+    "render.json": {
+      "sha256": "a2a977bd1d4e8c852f08ea71e981e4b8713ccdc172f63d638058324aba1ebe89",
+      "bytes": 22329
+    },
+    "router.json": {
+      "sha256": "603140e8da7f9419675d34fe3651d813e41133ddccd0dfab7398e4ec3dd3d6da",
+      "bytes": 169867
+    },
+    "runtime_routes.json": {
+      "sha256": "e968c473675142b04b2e074de62a4d457d782e200dbb5a88eb97431c4ab99b15",
+      "bytes": 98637
+    },
+    "selftest.json": {
+      "sha256": "841acf40cb047dfd78e0ecc6b50191d082537e36ae394ae49768bdea7edf3b57",
+      "bytes": 2509
+    },
+    "synthetic_after.png": {
+      "sha256": "dd49d212eb6e56cb32c5fa45fd4c3fa057f4d262fe2bcfc703c9478f1795fa1f",
+      "bytes": 500
+    },
+    "synthetic_before.png": {
+      "sha256": "3da64d18daebe989cbbda60f954dd2c63cdf512463fa3e7bd13c1c6f3aa236ea",
+      "bytes": 469
+    },
+    "synthetic_faded.png": {
+      "sha256": "47a40637a90c85fa9df87f690ca3564f3ec52f947317c1480c81dad0801e58c3",
+      "bytes": 259
+    },
+    "terrain_alpha_natural.log": {
+      "sha256": "666ed6a73b01178e697fbad21098f3e431796d6f7326c16304f9b3bf112f11a7",
+      "bytes": 8162
+    },
+    "terrain_alpha_probe_final.log": {
+      "sha256": "e67444624ee81050eff0ec603e26e2e5ab0668b77d190bf2e75ab52f0323c1e2",
+      "bytes": 363
+    },
+    "terrain_alpha_routes.log": {
+      "sha256": "51573059bc9d38a6f0dc304d9830c73db322789047f2f2a27faa0be15a610436",
+      "bytes": 116
+    },
+    "terrain_alpha_seam_qa.log": {
+      "sha256": "1d93bb1758b447401f0057425025fc363a7b80d18b868165c6b7ba48fb169ea8",
+      "bytes": 5915
+    },
+    "terrain_alpha_selftest.log": {
+      "sha256": "1c1390374dbb4d9d30c2c05e8c0ee8a788c67dc46867f3a9f1827c5fa9aa9542",
+      "bytes": 2289
+    }
+  }
+}

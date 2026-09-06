@@ -1,0 +1,229 @@
+{
+  "created": "2026-09-06",
+  "base_commit": "f0818c1c657d054a8aed903a38128be82bad2651",
+  "scope": "One field production PNG and review/validation/docs; no gameplay/shader changes, export or release",
+  "unchanged_prior_production_pngs": 36,
+  "checks": {
+    "render": 44,
+    "runtime_routes": 794,
+    "static_routes": 790,
+    "isolated_selftest": 40
+  },
+  "audit_expected_exit": 1,
+  "audit_counts": {
+    "targets": 69,
+    "present": 37,
+    "verified_production_hashes": 37,
+    "missing_production": 32,
+    "errors": 0,
+    "gaps": 249
+  },
+  "source_inputs": {
+    ".gitattributes": {
+      "sha256": "4298d97099ba9a4a48ada91d55cfc42c68a4566f2499e4a155c3bc7ba075b4ee",
+      "bytes": 1155
+    },
+    "project.godot": {
+      "sha256": "5f60d39f4817f3428c82c29004cc8bd4314e89ef322728c79266ee08dd63793c",
+      "bytes": 1519
+    },
+    "scripts/campaign.gd": {
+      "sha256": "ee2178aa912f8d715896a4d7028e114965bbe0c9b37d590883b380cccbad875e",
+      "bytes": 13698
+    },
+    "scripts/battle.gd": {
+      "sha256": "ade01d41ef108c22ecd1041327b1238c1589ba1b208d7c048bc8cdfc3f1f0fe7",
+      "bytes": 756794
+    },
+    "scripts/game_map.gd": {
+      "sha256": "9650f7b95d9dcefb0601e546eb5c10f30a72488619f6b989087bf05b5e84cc1f",
+      "bytes": 33796
+    },
+    "scripts/campaign_environment_art.gd": {
+      "sha256": "1675505867196726572f04f8913614f704739ea07a7c7f4d1c65dcee88791b93",
+      "bytes": 22073
+    },
+    "scripts/liangshan_scenery.gd": {
+      "sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5",
+      "bytes": 33717
+    },
+    "scripts/liangshan_coast.gdshader": {
+      "sha256": "ab948b5a115cefd9ed4e1b61e7b20b530b472a3016ba3306b1ff6cf85abb192e",
+      "bytes": 9515
+    },
+    "scripts/levels/level3_zhujiazhuang_rts.gd": {
+      "sha256": "22d6f96ea182131cf4f03f40ab657545d9f22048b42c391f761f1e913918fa85",
+      "bytes": 18294
+    },
+    "scripts/levels/level8_daming_rts.gd": {
+      "sha256": "f1c8aacaf524c9a881a0d5ef0e530f52cd7c091485694001693e9af41f818911",
+      "bytes": 21783
+    },
+    "scripts/levels/level8_dongchangfu.gd": {
+      "sha256": "3171c1819884e706c5d271b04c7b32238ea6c4b469ed93190495104248197839",
+      "bytes": 46714
+    },
+    "tools/campaign_mode_performance_test.gd": {
+      "sha256": "9f514148cda1499148bb3a7daa24d4e732c47aa33f2b5aa4379922e34ee22308",
+      "bytes": 16825
+    },
+    "tools/environment_field_render_qa.gd": {
+      "sha256": "7deb96c022bc1da63ecbc6a2e88aa7215d1062b941bcf73fb1e4169c8a38c11b",
+      "bytes": 5735
+    },
+    "tools/environment_art_audit.py": {
+      "sha256": "a74cf96decb008b65df4d4b358f7071b8b46091d0c824c8333dbb37d4fee1cc2",
+      "bytes": 11059
+    },
+    "tools/environment_validation_selftest.py": {
+      "sha256": "32175eaa41c43cc39168eeb1c6cb949779be1de04eec208dc11ea3b665ab3134",
+      "bytes": 17847
+    },
+    "tools/campaign_environment_art_static_contract.py": {
+      "sha256": "eb635e42622e5a65189455e40b7ae4fe2b353593fdac02538687f08cc7b17402",
+      "bytes": 31272
+    },
+    "tools/campaign_environment_art_runtime_contract.gd": {
+      "sha256": "18557c215e07c6b2bc8fb9aefa0257ff63bae38743f70429c0171bfaa72b1368",
+      "bytes": 7133
+    },
+    "tools/environment_validation_common.py": {
+      "sha256": "9bad14a7ae96dc4bc55405f380c99502ceb189791663546e31e69d3ad6d5a554",
+      "bytes": 3666
+    },
+    "tools/environment_map_clamped_contract.py": {
+      "sha256": "2a0de2273d8588c5a83dbc2ba6f2402762a6d80000a60d2db7fc18e7c9d6dd7c",
+      "bytes": 11836
+    },
+    "tools/environment_production_mapping.template.json": {
+      "sha256": "af1204a50a865096be47917440a36c67d9290f295fd5ee1ac2f8e000b1d441f1",
+      "bytes": 94165
+    },
+    "tools/contracts/environment/inventory_20260906.json": {
+      "sha256": "72453ce8cfb37f435582463bc7d97d69ca13967caef3adc493c3cc6bc95fec32",
+      "bytes": 64843
+    },
+    "assets/campaign/environment/shared/surfaces/surface_field.png": {
+      "sha256": "e1c570c01304fb9c3ad4cc7f0ffde0ab81aaed1d7b3ba15498b417f76439b7d0",
+      "bytes": 3514068
+    },
+    "assets/campaign/environment/shared/surfaces/surface_field.png.import": {
+      "sha256": "be1c00f4258bbdebd770c1f8e385592cf86daf2f2d47b23ba4d2f7f839d1c72b",
+      "bytes": 987
+    },
+    "tools/contracts/environment/field_20260906/original.png": {
+      "sha256": "e1c570c01304fb9c3ad4cc7f0ffde0ab81aaed1d7b3ba15498b417f76439b7d0",
+      "bytes": 3514068
+    },
+    "tools/contracts/environment/field_20260906/prompt.txt": {
+      "sha256": "d6d7b8fb20acc17c518ad27f36b24a78a14a77be33e38d886712130e63d7a3ed",
+      "bytes": 1177
+    },
+    "tools/contracts/environment/field_20260906/intake.json": {
+      "sha256": "4d4e14f9b80d298cc86056843ba6b7c13086383dee75d64768bd3022086cf827",
+      "bytes": 2185
+    },
+    "tools/contracts/environment/field_20260906/review.json": {
+      "sha256": "d1cc45c19702cbf05f90e45a3348987c15b13ed051576ab8f90abef49e0309e7",
+      "bytes": 1576
+    }
+  },
+  "evidence": {
+    "attempts/render_attempt1_parse.log": {
+      "sha256": "9eb85838a3e433925571f5cdb28629a3d9cdc04516b203e642ca4b64ffc92a35",
+      "bytes": 514
+    },
+    "attempts/render_attempt2_compile.log": {
+      "sha256": "4e8a85ef6ee927eed0d6b01e26c8b8460a61cbf82bbe6958018fbb2a2d6d8c03",
+      "bytes": 3563
+    },
+    "attempts/selftest_attempt1.log": {
+      "sha256": "7e6f503eea916b71f7f1c6623f05748e357135074f7349d940a8fe833cf1cb6a",
+      "bytes": 1631
+    },
+    "audit.json": {
+      "sha256": "bb3161c87b88b7997cdd55a865b627619610df70028b058afeed1cdd5ee5bb2d",
+      "bytes": 80079
+    },
+    "level3_100_after.png": {
+      "sha256": "23f25c6dca77272dc3844601d5da549a47bbcd0cb6676bd240623d13f4064432",
+      "bytes": 1622956
+    },
+    "level3_100_before.png": {
+      "sha256": "c397d21240233bc6252665093abde2e9f2bd3eb827f7ebcf563cd89d347baaf5",
+      "bytes": 1772661
+    },
+    "level3_100_restored.png": {
+      "sha256": "c397d21240233bc6252665093abde2e9f2bd3eb827f7ebcf563cd89d347baaf5",
+      "bytes": 1772661
+    },
+    "level3_150_after.png": {
+      "sha256": "c0d71dc34cbab67a52f182d8738f3362bc6c53988fd8e804dd6bd729b494797a",
+      "bytes": 1487281
+    },
+    "level3_150_before.png": {
+      "sha256": "56c7e43668d71327f310699ef7964322cb98f16c75d29585e192c2e7ebb70d78",
+      "bytes": 1706753
+    },
+    "level3_150_restored.png": {
+      "sha256": "56c7e43668d71327f310699ef7964322cb98f16c75d29585e192c2e7ebb70d78",
+      "bytes": 1706753
+    },
+    "level8_100_after.png": {
+      "sha256": "5a2fd0e3fc1151e894cf1e97602967c3a5082f074cfa47e30ecbaf831cfa8270",
+      "bytes": 1349424
+    },
+    "level8_100_before.png": {
+      "sha256": "a69c468adeec12c7caac943fa45f1a05c3e3515693a3c0c2f559a135d8b33d6d",
+      "bytes": 1515534
+    },
+    "level8_100_restored.png": {
+      "sha256": "a69c468adeec12c7caac943fa45f1a05c3e3515693a3c0c2f559a135d8b33d6d",
+      "bytes": 1515534
+    },
+    "level8_150_after.png": {
+      "sha256": "912c52b7adb662062eaf4c904bfe00cd524dfd2ef758dbec5f594c2a6aef6029",
+      "bytes": 1133600
+    },
+    "level8_150_before.png": {
+      "sha256": "7e70487981c22a584c28bade07b904f1c0b6f4e5dac8326d6fe1aa45637a0a08",
+      "bytes": 1305795
+    },
+    "level8_150_restored.png": {
+      "sha256": "7e70487981c22a584c28bade07b904f1c0b6f4e5dac8326d6fe1aa45637a0a08",
+      "bytes": 1305795
+    },
+    "pixel_comparison.json": {
+      "sha256": "2f6e2ea10d29b7da1143dbd223518e6546a13aced8059ecbaf237d7f616d4816",
+      "bytes": 990
+    },
+    "render.json": {
+      "sha256": "3a701bbf9012dd3e71bcef73d8d982444509fedc4037c506f007ba35d85caf9b",
+      "bytes": 9925
+    },
+    "render.log": {
+      "sha256": "999eb8b22dea2fa89672c0208a7d3fe55db71f5d71db96c03f25287ab1c51855",
+      "bytes": 3127
+    },
+    "router.json": {
+      "sha256": "6e6119f997ae066bff8a4894a42b3fbbabf247fd801e4a4b499429f8df259b4e",
+      "bytes": 169867
+    },
+    "runtime_routes.json": {
+      "sha256": "e968c473675142b04b2e074de62a4d457d782e200dbb5a88eb97431c4ab99b15",
+      "bytes": 98637
+    },
+    "runtime_routes.log": {
+      "sha256": "51573059bc9d38a6f0dc304d9830c73db322789047f2f2a27faa0be15a610436",
+      "bytes": 116
+    },
+    "selftest.json": {
+      "sha256": "841acf40cb047dfd78e0ecc6b50191d082537e36ae394ae49768bdea7edf3b57",
+      "bytes": 2509
+    },
+    "selftest.log": {
+      "sha256": "1c1390374dbb4d9d30c2c05e8c0ee8a788c67dc46867f3a9f1827c5fa9aa9542",
+      "bytes": 2289
+    }
+  }
+}

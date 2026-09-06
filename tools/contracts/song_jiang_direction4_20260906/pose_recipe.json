@@ -1,0 +1,288 @@
+{
+  "sources": {
+    "idle_se": {
+      "job": "se_alpha2",
+      "limit": 256
+    },
+    "idle_sw": {
+      "job": "sw_alpha2",
+      "limit": 256
+    },
+    "idle_ne": {
+      "job": "ne_alpha",
+      "limit": 256
+    },
+    "idle_nw": {
+      "job": "nw_body_alpha",
+      "limit": 256
+    },
+    "walk_atlas": {
+      "job": "walk_step_alpha",
+      "limit": 512
+    },
+    "walk_sw": {
+      "job": "walk_sw_alpha",
+      "limit": 256
+    },
+    "attack_se": {
+      "job": "attack_se_alpha2",
+      "limit": 256
+    },
+    "attack_sw": {
+      "job": "attack_sw_alpha",
+      "limit": 256
+    },
+    "attack_ne": {
+      "job": "attack_ne_alpha2",
+      "limit": 256
+    },
+    "attack_nw": {
+      "job": "attack_nw_alpha",
+      "limit": 256
+    },
+    "fall_se": {
+      "job": "death_fall_se",
+      "limit": 256
+    },
+    "fall_sw": {
+      "job": "death_fall_sw",
+      "limit": 256
+    },
+    "fall_ne": {
+      "job": "death_fall_ne_alpha",
+      "limit": 256
+    },
+    "fall_nw": {
+      "job": "death_fall_nw_alpha",
+      "limit": 256
+    },
+    "down_atlas": {
+      "job": "death_down_alpha",
+      "limit": 512
+    }
+  },
+  "poses": {
+    "idle_se": {
+      "source": "idle_se",
+      "pivot": [
+        776,
+        1180
+      ],
+      "virtual_size": 1552
+    },
+    "idle_sw": {
+      "source": "idle_sw",
+      "pivot": [
+        687,
+        1315
+      ],
+      "virtual_size": 1723
+    },
+    "idle_ne": {
+      "source": "idle_ne",
+      "pivot": [
+        551,
+        1242
+      ],
+      "virtual_size": 1627
+    },
+    "idle_nw": {
+      "source": "idle_nw",
+      "pivot": [
+        521,
+        1214
+      ],
+      "virtual_size": 1590
+    },
+    "walk_se": {
+      "source": "walk_atlas",
+      "region": [
+        0,
+        0,
+        700,
+        560
+      ],
+      "pivot": [
+        349,
+        528
+      ],
+      "virtual_size": 710
+    },
+    "walk_ne": {
+      "source": "walk_atlas",
+      "region": [
+        0,
+        560,
+        700,
+        639
+      ],
+      "pivot": [
+        346,
+        1120
+      ],
+      "virtual_size": 727
+    },
+    "walk_nw": {
+      "source": "walk_atlas",
+      "region": [
+        700,
+        560,
+        612,
+        639
+      ],
+      "pivot": [
+        1030,
+        1106
+      ],
+      "virtual_size": 711
+    },
+    "walk_sw": {
+      "source": "walk_sw",
+      "pivot": [
+        637,
+        1258
+      ],
+      "virtual_size": 1660
+    },
+    "attack_se": {
+      "source": "attack_se",
+      "pivot": [
+        567,
+        1166
+      ],
+      "virtual_size": 1770
+    },
+    "attack_sw": {
+      "source": "attack_sw",
+      "pivot": [
+        720,
+        1180
+      ],
+      "virtual_size": 1740
+    },
+    "attack_ne": {
+      "source": "attack_ne",
+      "pivot": [
+        671,
+        950
+      ],
+      "virtual_size": 1536
+    },
+    "attack_nw": {
+      "source": "attack_nw",
+      "pivot": [
+        707,
+        1170
+      ],
+      "virtual_size": 1520
+    },
+    "fall_se": {
+      "source": "fall_se",
+      "pivot": [
+        790,
+        930
+      ],
+      "virtual_size": 1800
+    },
+    "fall_sw": {
+      "source": "fall_sw",
+      "pivot": [
+        795,
+        930
+      ],
+      "virtual_size": 1800
+    },
+    "fall_ne": {
+      "source": "fall_ne",
+      "pivot": [
+        640,
+        925
+      ],
+      "virtual_size": 1800
+    },
+    "fall_nw": {
+      "source": "fall_nw",
+      "pivot": [
+        890,
+        935
+      ],
+      "virtual_size": 1800
+    },
+    "down_se": {
+      "source": "down_atlas",
+      "region": [
+        0,
+        0,
+        768,
+        490
+      ],
+      "pivot": [
+        365,
+        355
+      ],
+      "virtual_size": 800
+    },
+    "down_sw": {
+      "source": "down_atlas",
+      "region": [
+        768,
+        0,
+        768,
+        490
+      ],
+      "pivot": [
+        1160,
+        370
+      ],
+      "virtual_size": 800
+    },
+    "down_ne": {
+      "source": "down_atlas",
+      "region": [
+        0,
+        490,
+        768,
+        534
+      ],
+      "pivot": [
+        365,
+        850
+      ],
+      "virtual_size": 800
+    },
+    "down_nw": {
+      "source": "down_atlas",
+      "region": [
+        768,
+        490,
+        768,
+        534
+      ],
+      "pivot": [
+        1160,
+        850
+      ],
+      "virtual_size": 800
+    }
+  },
+  "states": {
+    "idle": [
+      "idle"
+    ],
+    "walk": [
+      "idle",
+      "walk"
+    ],
+    "attack": [
+      "idle",
+      "attack",
+      "idle"
+    ],
+    "death": [
+      "idle",
+      "fall",
+      "down",
+      "down"
+    ]
+  }
+}

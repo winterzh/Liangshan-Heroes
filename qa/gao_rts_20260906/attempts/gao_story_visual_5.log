@@ -1,0 +1,26 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Vulkan 1.4.351 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 3070 Ti
+
+[gao-play] t=0 story=lure army=7 fleet=2 land=[4, 6, 8] sea=[3, 5, 6] flagship=2100.0 g=206 w=146 pop=36/44 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (38, 47)], ["ruan_xiaowu_boat", 950.0, (40, 50)]]
+[gao-play] t=60 story=lure army=10 fleet=2 land=[4, 6, 8] sea=[3, 5, 6] flagship=2100.0 g=313 w=305 pop=42/44 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (39, 44)], ["ruan_xiaowu_boat", 950.0, (39, 46)]]
+[gao-play] t=120 story=lure army=9 fleet=4 land=[0, 0, 8] sea=[3, 5, 6] flagship=2100.0 g=108 w=237 pop=47/64 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (39, 44)], ["ruan_xiaowu_boat", 950.0, (40, 46)]]
+[gao-play] t=180 story=fire army=11 fleet=4 land=[0, 0, 8] sea=[0, 5, 6] flagship=2100.0 g=227 w=192 pop=51/74 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 500.928571428578, (29, 53)], ["ruan_xiaowu_boat", 483.833333333335, (30, 52)]]
+[gao-play] t=240 story=fire army=10 fleet=5 land=[0, 0, 5] sea=[0, 5, 6] flagship=2100.0 g=333 w=237 pop=51/74 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 659.428571428546, (29, 53)], ["ruan_xiaowu_boat", 642.333333333309, (30, 52)]]
+[gao-play] t=300 story=fire army=11 fleet=7 land=[0, 0, 4] sea=[0, 5, 6] flagship=2100.0 g=294 w=282 pop=56/74 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 816.261904761844, (29, 53)], ["ruan_xiaowu_boat", 799.166666666606, (30, 52)]]
+[gao-play] t=360 story=fire army=12 fleet=9 land=[0, 0, 0] sea=[0, 2, 6] flagship=2100.0 g=422 w=356 pop=60/74 hall=1500.0
+[gao-story] active= fire=false smallboat=[232.0, (38, 40)] escorts=[["ruan_xiaoer_boat", 926.928571428485, (38, 42)], ["ruan_xiaowu_boat", "lost"]]
+[rts] FAIL fire opportunity lost during actual battle; abort failed story route
+[rts] FAIL story wins through actual construction, production and combat
+[rts] PASS story builds economy and pays for at least three replacement warships
+[rts] PASS story preserves original camp across three expeditions
+[rts] FAIL story defeats all core land/water forces and disables flagship
+[rts] FAIL live story route performs fire attack and extracts both escort ships
+[rts] FAIL live story route carries prisoner by water then escorts him to hall
+[rts] FAIL live story route completes all four story goals
+[gao-play-result] {"checks":8,"failures":["fire opportunity lost during actual battle; abort failed story route","story wins through actual construction, production and combat","story defeats all core land/water forces and disables flagship","live story route performs fire attack and extracts both escort ships","live story route carries prisoner by water then escorts him to hall","live story route completes all four story goals"],"metrics":{"buildings_started":5,"camp_hp":1500.0,"enemy_paid_produced":[10,4],"enemy_spent_gold":607,"enemy_spent_wood":358,"events":["action:gao_rts:gao_lure_main","action:gao_rts:gao_wind","gongsun_wind","action:gao_rts:gao_prepare","liu_tang_fire_leader","fireboat_prepared","gao_land_post_destroyed","gao_land_cleared","action:gao_rts:gao_fire_1","gao_escaped"],"game_seconds":408.0,"orders":664,"result":{"contract_version":3,"core_cleared":false,"core_goal":"守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。","done_ids":[],"goals":[{"id":"gao_lure","label":"阮小七引活官船进入港汊伏区","note":"","reason":"官船在入伏区前已被击退；基础通关不受影响。","state":"missed"},{"id":"gao_fire","label":"公孙胜祭风、刘唐登船举火，护两艘接应船撤离","note":"","reason":"接应船损失，可继续用普通舰队正面作战。","state":"missed"},{"id":"gao_land","label":"击退岸军并拔除山前补给营","note":"","reason":"","state":"pending"},{"id":"gao_capture","label":"封港凿船、水上接俘、返航后实际押至忠义堂","note":"","reason":"本局已偏离“封港凿船、水上接俘、返航后实际押至忠义堂”的原著条件","state":"missed"}],"missed_ids":["gao_lure","gao_fire","gao_capture"],"pending_ids":["gao_land"],"story_complete":false,"story_done":0,"story_total":4},"skill_orders":12,"story_phase":"fire","units_queued":58,"units_queued_by_key":{"liang_dao":15,"liang_gong":12,"liang_qiang":16,"liangshan_warship":12,"lou_luo":3}},"passed":false,"route":"story","scope":"actual economy and combat controlled through player commands; automated, not human fun acceptance"}

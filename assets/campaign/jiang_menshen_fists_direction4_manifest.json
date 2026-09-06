@@ -1,0 +1,1019 @@
+{
+  "schema_version": 1,
+  "kind": "jiang_menshen_fists_direction4_production_provenance",
+  "created_at": "2026-09-02T16:08:34.628384+08:00",
+  "variant": "jiang_menshen_fists",
+  "states": [
+    "idle",
+    "walk",
+    "attack",
+    "hurt",
+    "down"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "frame_count": 20,
+  "source_generation_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+  "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+  "web_input_archive_sha256": "e121f2445427c74c9e1ceba6ee6655019a297a30066048e02e6d796a3e33eaa7",
+  "web_download_archive_sha256": "20164510657fa813f5173251ddee0671ab88e3f6acff3b9ef361f82976273f75",
+  "exact_alpha_verification": "qa/jiang_menshen_web_candidates_20260902/web_output_verification.json",
+  "exact_alpha_verification_sha256": "6bd8eeacf28ada1c8b05c8436a1b45e65e4c9261c6cb4d43ff708b1730b3c251",
+  "candidate_manifest": "qa/jiang_menshen_direction4_candidate_pipeline_20260902/candidate_manifest.json",
+  "candidate_manifest_sha256": "2e148c33ed2029c800fd88ec7a91c8a988f5026ee4dd36c6fd1ed12147257f63",
+  "candidate_preview": "qa/jiang_menshen_direction4_candidate_pipeline_20260902/runtime_size_fringe_preview.png",
+  "candidate_preview_sha256": "269b48a6a97a61108fabb121db90d97416224745b5ba477be387d07b80702d48",
+  "allowed_operations": [
+    "continuous source rectangle crop",
+    "batch-uniform proportional scale",
+    "transparent padding",
+    "byte-identical production copy"
+  ],
+  "forbidden_operations_used": [],
+  "sources": [
+    {
+      "action": "idle",
+      "raw_file": "jiang_menshen_fists_idle_20260902_attempt3_native_alpha.png",
+      "raw_sha256": "49ea5b55ab8a1bf190c56ff21d4bc19e09700c144bf9ce9b37530da20857c2e9",
+      "cleaned_file": "jiang_menshen_fists_idle_20260902_attempt3_native_alpha_alpha15_exact_clean.png",
+      "cleaned_sha256": "460621953edbe37e95a10c043cce8dc06afcc5c158a6034c9da665c0e59eb193",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        1976,
+        796
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "base_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_idle_1x4.txt",
+      "base_prompt_sha256": "f7f8bdc653d24825d703c10b9ffd1e227ccaee0984896d7e627328b730cf5aac",
+      "correction_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_idle_attempt3_native_alpha.txt",
+      "correction_prompt_sha256": "df418523fd4f44bb29fb135c3498d0e6bb7af089bb4427a91d2cfca58a526818",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_alpha15_exact_web_cleanup.py",
+      "exact_alpha_prompt_sha256": "2e66a7f88911f86cfa7e577b758fa497d9bf9e307094d23bb10046399253c11e",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "walk",
+      "raw_file": "jiang_menshen_fists_walk_20260902_attempt1_native_alpha.png",
+      "raw_sha256": "1f1a4b1b40482e3df5db5f0cb9485a0b17625699cf9e8a7a3d99f0b043b93975",
+      "cleaned_file": "jiang_menshen_fists_walk_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "cleaned_sha256": "6be00ddf5ccf9c150a02f39c43b6c24f33bcae371a3c8a71fc59941b6346a800",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2110,
+        745
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "base_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_walk_1x4.txt",
+      "base_prompt_sha256": "452ef74aae04263886db9c245b2d2ed2e6f5ae00318b10d62c78a8ae491be552",
+      "correction_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_walk_attempt1_native_alpha.txt",
+      "correction_prompt_sha256": "ebc361a53f5837ee2a295e9b762503ebf510590205e113dead29262b602324ec",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_alpha15_exact_web_cleanup.py",
+      "exact_alpha_prompt_sha256": "2e66a7f88911f86cfa7e577b758fa497d9bf9e307094d23bb10046399253c11e",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "attack",
+      "raw_file": "jiang_menshen_fists_attack_20260902_attempt1_native_alpha.png",
+      "raw_sha256": "881bf68de4436137afd42462eea7184fee694836a2d641119dc897a93199f09e",
+      "cleaned_file": "jiang_menshen_fists_attack_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "cleaned_sha256": "6ef818fbc976d85004b42a627db864f32abdc97abc04d28c8e8b4e759f9b4174",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2109,
+        745
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "base_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_attack_1x4.txt",
+      "base_prompt_sha256": "38d1c89120eb64f5cfce1a596e963074dc5f0f629b7bfe021077c1d04fd95848",
+      "correction_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_attack_attempt1_native_alpha.txt",
+      "correction_prompt_sha256": "9869d554264ee42e764e81e330ac112207149d259778442bb18c934adf3e7154",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_alpha15_exact_web_cleanup.py",
+      "exact_alpha_prompt_sha256": "2e66a7f88911f86cfa7e577b758fa497d9bf9e307094d23bb10046399253c11e",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "hurt",
+      "raw_file": "jiang_menshen_fists_hurt_20260902_attempt3_edit_attack.png",
+      "raw_sha256": "32faeb3f9cdc67f34e5a2deae36eb6cba59a2d4bb43beaebea2a932fd3afacf0",
+      "cleaned_file": "jiang_menshen_fists_hurt_20260902_attempt3_edit_attack_alpha15_exact_clean.png",
+      "cleaned_sha256": "5e94cecc4b77fe668480bd6a11abb2a09a99b76c577247fb89ee0f20b1c5a3f1",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2110,
+        745
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "base_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_hurt_1x4.txt",
+      "base_prompt_sha256": "3993ca64432f821c4b4d36552da1e6d6f65b180ae65d202c3bc4a4411f79a093",
+      "correction_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_hurt_attempt3_edit_attack.txt",
+      "correction_prompt_sha256": "bdd77180de9c83e38937371d277ce24a1f636ccdcf6e34102f174c890e9921ae",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_alpha15_exact_web_cleanup.py",
+      "exact_alpha_prompt_sha256": "2e66a7f88911f86cfa7e577b758fa497d9bf9e307094d23bb10046399253c11e",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    },
+    {
+      "action": "down",
+      "raw_file": "jiang_menshen_fists_down_20260902_attempt3_safe_margin_edit.png",
+      "raw_sha256": "9615496df3a2861b8e41308366d7ddbb53a224bf28571b745d29e932413d4c62",
+      "cleaned_file": "jiang_menshen_fists_down_20260902_attempt3_safe_margin_edit_alpha15_exact_clean.png",
+      "cleaned_sha256": "713a4a199b391fe3e6ee0be2d14f5188622df6169cd9087baa3158a20a93ee25",
+      "cleaned_mode": "RGBA",
+      "cleaned_size": [
+        2109,
+        746
+      ],
+      "source_generation_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "exact_alpha_cleanup_conversation": "https://chatgpt.com/c/6a97c467-f7f4-83ea-b9f2-f9a67c3d9b0c",
+      "base_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_down_1x4.txt",
+      "base_prompt_sha256": "16c38e2bdd8122863f275d446caa5176cd58c96462e187a68b5eeb3f7eb0da07",
+      "correction_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_fists_down_attempt3_safe_margin_edit.txt",
+      "correction_prompt_sha256": "a7d53f7ac73bc233911c955159299661265b5f8d41d53b083181a574862023ee",
+      "exact_alpha_prompt": "implementation_20260902/prompt_drafts_v5/jiang_menshen_alpha15_exact_web_cleanup.py",
+      "exact_alpha_prompt_sha256": "2e66a7f88911f86cfa7e577b758fa497d9bf9e307094d23bb10046399253c11e",
+      "exact_alpha_rule": "alpha <= 15 becomes RGBA 0,0,0,0; every alpha > 15 pixel remains byte-identical"
+    }
+  ],
+  "outputs": [
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "idle",
+      "direction": "se",
+      "path": "assets/campaign/anim/jiang_menshen_fists_idle_se.png",
+      "sha256": "b6f07ba6c367bc1dbc0f57dbb3661b135bee7e1b54aba9ab3333334e94f7689d",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_idle_20260902_attempt3_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "460621953edbe37e95a10c043cce8dc06afcc5c158a6034c9da665c0e59eb193",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        494,
+        796
+      ],
+      "source_rect_xyxy": [
+        44,
+        81,
+        432,
+        741
+      ],
+      "source_anchor_xy": [
+        387,
+        738
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2912371134020619,
+        0.28939393939393937
+      ],
+      "resized_size": [
+        113,
+        191
+      ],
+      "paste_xy": [
+        28,
+        20
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "idle",
+      "direction": "sw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_idle_sw.png",
+      "sha256": "c1fe60901a974f6eed8e147909be8b7cb589f23638260682dd881f78a7b7db94",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_idle_20260902_attempt3_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "460621953edbe37e95a10c043cce8dc06afcc5c158a6034c9da665c0e59eb193",
+      "source_cell_rect_xyxy": [
+        494,
+        0,
+        980,
+        796
+      ],
+      "source_rect_xyxy": [
+        556,
+        80,
+        946,
+        739
+      ],
+      "source_anchor_xy": [
+        598,
+        736
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28974358974358977,
+        0.2898330804248862
+      ],
+      "resized_size": [
+        113,
+        191
+      ],
+      "paste_xy": [
+        116,
+        20
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "idle",
+      "direction": "ne",
+      "path": "assets/campaign/anim/jiang_menshen_fists_idle_ne.png",
+      "sha256": "7fdb4107d5a284d52769ccf565601614b53633b7cc810ab2429b20c1350954fd",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_idle_20260902_attempt3_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "460621953edbe37e95a10c043cce8dc06afcc5c158a6034c9da665c0e59eb193",
+      "source_cell_rect_xyxy": [
+        980,
+        0,
+        1494,
+        796
+      ],
+      "source_rect_xyxy": [
+        1015,
+        104,
+        1443,
+        740
+      ],
+      "source_anchor_xy": [
+        1122,
+        736
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2897196261682243,
+        0.2893081761006289
+      ],
+      "resized_size": [
+        124,
+        184
+      ],
+      "paste_xy": [
+        97,
+        27
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "idle",
+      "direction": "nw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_idle_nw.png",
+      "sha256": "fcfb7cb5f0859797900b6a7d95b39c6ec04b4ad24036b2a32149e61e5dfab9a0",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_idle_20260902_attempt3_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "460621953edbe37e95a10c043cce8dc06afcc5c158a6034c9da665c0e59eb193",
+      "source_cell_rect_xyxy": [
+        1494,
+        0,
+        1976,
+        796
+      ],
+      "source_rect_xyxy": [
+        1545,
+        95,
+        1945,
+        741
+      ],
+      "source_anchor_xy": [
+        1848,
+        737
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.29,
+        0.2894736842105263
+      ],
+      "resized_size": [
+        116,
+        187
+      ],
+      "paste_xy": [
+        40,
+        24
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "walk",
+      "direction": "se",
+      "path": "assets/campaign/anim/jiang_menshen_fists_walk_se.png",
+      "sha256": "594dd136da665b379054d9c1a4c5e76c7cede7638b0761d2d66a58d13822941b",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_walk_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6be00ddf5ccf9c150a02f39c43b6c24f33bcae371a3c8a71fc59941b6346a800",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        512,
+        745
+      ],
+      "source_rect_xyxy": [
+        48,
+        67,
+        419,
+        671
+      ],
+      "source_anchor_xy": [
+        189,
+        668
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.29110512129380056,
+        0.2897350993377483
+      ],
+      "resized_size": [
+        108,
+        175
+      ],
+      "paste_xy": [
+        87,
+        36
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "walk",
+      "direction": "sw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_walk_sw.png",
+      "sha256": "42b456a58b7ac4999d03353f3b324715d2c41351b745bb172c880d0e6fe721fe",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_walk_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6be00ddf5ccf9c150a02f39c43b6c24f33bcae371a3c8a71fc59941b6346a800",
+      "source_cell_rect_xyxy": [
+        512,
+        0,
+        1044,
+        745
+      ],
+      "source_rect_xyxy": [
+        605,
+        73,
+        1002,
+        690
+      ],
+      "source_anchor_xy": [
+        843,
+        687
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28967254408060455,
+        0.2901134521880065
+      ],
+      "resized_size": [
+        115,
+        179
+      ],
+      "paste_xy": [
+        59,
+        32
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "walk",
+      "direction": "ne",
+      "path": "assets/campaign/anim/jiang_menshen_fists_walk_ne.png",
+      "sha256": "5ede155d3970812a5b045aaa6555d6f9e3e893e82921b82a7b91a2c31243ecc2",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_walk_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6be00ddf5ccf9c150a02f39c43b6c24f33bcae371a3c8a71fc59941b6346a800",
+      "source_cell_rect_xyxy": [
+        1044,
+        0,
+        1599,
+        745
+      ],
+      "source_rect_xyxy": [
+        1087,
+        89,
+        1529,
+        698
+      ],
+      "source_anchor_xy": [
+        1424,
+        694
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2895927601809955,
+        0.29064039408866993
+      ],
+      "resized_size": [
+        128,
+        177
+      ],
+      "paste_xy": [
+        30,
+        34
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "walk",
+      "direction": "nw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_walk_nw.png",
+      "sha256": "e724c59da69bfe78a2e3d73ce271cde106a791c3984d5d51962a834f93b1da40",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_walk_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6be00ddf5ccf9c150a02f39c43b6c24f33bcae371a3c8a71fc59941b6346a800",
+      "source_cell_rect_xyxy": [
+        1599,
+        0,
+        2110,
+        745
+      ],
+      "source_rect_xyxy": [
+        1669,
+        83,
+        2074,
+        697
+      ],
+      "source_anchor_xy": [
+        1758,
+        694
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28888888888888886,
+        0.2899022801302932
+      ],
+      "resized_size": [
+        117,
+        178
+      ],
+      "paste_xy": [
+        102,
+        33
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "attack",
+      "direction": "se",
+      "path": "assets/campaign/anim/jiang_menshen_fists_attack_se.png",
+      "sha256": "ca7aa6df7a8be350e1cae4265c97676b1c3c1672e6e4ecf30228456a19142d9f",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_attack_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6ef818fbc976d85004b42a627db864f32abdc97abc04d28c8e8b4e759f9b4174",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        516,
+        745
+      ],
+      "source_rect_xyxy": [
+        36,
+        90,
+        457,
+        666
+      ],
+      "source_anchor_xy": [
+        111,
+        663
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28978622327790976,
+        0.2899305555555556
+      ],
+      "resized_size": [
+        122,
+        167
+      ],
+      "paste_xy": [
+        106,
+        44
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "attack",
+      "direction": "sw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_attack_sw.png",
+      "sha256": "62d31e64246b811d5666bba23aa0c321e8cb077bc396446aff322394e36130f1",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_attack_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6ef818fbc976d85004b42a627db864f32abdc97abc04d28c8e8b4e759f9b4174",
+      "source_cell_rect_xyxy": [
+        516,
+        0,
+        1060,
+        745
+      ],
+      "source_rect_xyxy": [
+        574,
+        92,
+        1039,
+        672
+      ],
+      "source_anchor_xy": [
+        616,
+        669
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2903225806451613,
+        0.2896551724137931
+      ],
+      "resized_size": [
+        135,
+        168
+      ],
+      "paste_xy": [
+        116,
+        43
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "attack",
+      "direction": "ne",
+      "path": "assets/campaign/anim/jiang_menshen_fists_attack_ne.png",
+      "sha256": "e6cbb338f58ddc4f62fd2870018e31a441e747f6d177eba55a7910591d4151b8",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_attack_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6ef818fbc976d85004b42a627db864f32abdc97abc04d28c8e8b4e759f9b4174",
+      "source_cell_rect_xyxy": [
+        1060,
+        0,
+        1616,
+        745
+      ],
+      "source_rect_xyxy": [
+        1082,
+        121,
+        1593,
+        683
+      ],
+      "source_anchor_xy": [
+        1503,
+        680
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2896281800391389,
+        0.2900355871886121
+      ],
+      "resized_size": [
+        148,
+        163
+      ],
+      "paste_xy": [
+        6,
+        48
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "attack",
+      "direction": "nw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_attack_nw.png",
+      "sha256": "487f388dd980af2142730dbe4d3ae02ba91a187336498d98040f3d61dcbb75b7",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_attack_20260902_attempt1_native_alpha_alpha15_exact_clean.png",
+      "source_sha256": "6ef818fbc976d85004b42a627db864f32abdc97abc04d28c8e8b4e759f9b4174",
+      "source_cell_rect_xyxy": [
+        1616,
+        0,
+        2109,
+        745
+      ],
+      "source_rect_xyxy": [
+        1638,
+        118,
+        2087,
+        672
+      ],
+      "source_anchor_xy": [
+        1963,
+        668
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.289532293986637,
+        0.29061371841155237
+      ],
+      "resized_size": [
+        130,
+        161
+      ],
+      "paste_xy": [
+        34,
+        50
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "hurt",
+      "direction": "se",
+      "path": "assets/campaign/anim/jiang_menshen_fists_hurt_se.png",
+      "sha256": "128534aaa84c8236ab82f9de7054783a5777c9950e479a57c1dbc107bac5f9cd",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_hurt_20260902_attempt3_edit_attack_alpha15_exact_clean.png",
+      "source_sha256": "5e94cecc4b77fe668480bd6a11abb2a09a99b76c577247fb89ee0f20b1c5a3f1",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        544,
+        745
+      ],
+      "source_rect_xyxy": [
+        71,
+        112,
+        478,
+        653
+      ],
+      "source_anchor_xy": [
+        108,
+        650
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28992628992628994,
+        0.2902033271719039
+      ],
+      "resized_size": [
+        118,
+        157
+      ],
+      "paste_xy": [
+        117,
+        54
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "hurt",
+      "direction": "sw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_hurt_sw.png",
+      "sha256": "836c93e4ab115ccdfe65ceb57a1a8b85522e9ec7d058709d46d2ea4fa4903873",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_hurt_20260902_attempt3_edit_attack_alpha15_exact_clean.png",
+      "source_sha256": "5e94cecc4b77fe668480bd6a11abb2a09a99b76c577247fb89ee0f20b1c5a3f1",
+      "source_cell_rect_xyxy": [
+        544,
+        0,
+        1102,
+        745
+      ],
+      "source_rect_xyxy": [
+        610,
+        113,
+        1019,
+        673
+      ],
+      "source_anchor_xy": [
+        652,
+        670
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.29095354523227385,
+        0.2892857142857143
+      ],
+      "resized_size": [
+        119,
+        162
+      ],
+      "paste_xy": [
+        116,
+        49
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "hurt",
+      "direction": "ne",
+      "path": "assets/campaign/anim/jiang_menshen_fists_hurt_ne.png",
+      "sha256": "b15744beac9779e54d91d866cc047603e47bc6b26ea0536469c38b66091d87b0",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_hurt_20260902_attempt3_edit_attack_alpha15_exact_clean.png",
+      "source_sha256": "5e94cecc4b77fe668480bd6a11abb2a09a99b76c577247fb89ee0f20b1c5a3f1",
+      "source_cell_rect_xyxy": [
+        1102,
+        0,
+        1604,
+        745
+      ],
+      "source_rect_xyxy": [
+        1184,
+        107,
+        1544,
+        665
+      ],
+      "source_anchor_xy": [
+        1295,
+        662
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28888888888888886,
+        0.2903225806451613
+      ],
+      "resized_size": [
+        104,
+        162
+      ],
+      "paste_xy": [
+        96,
+        49
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "hurt",
+      "direction": "nw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_hurt_nw.png",
+      "sha256": "36760de552c866cf1d23e27189ae1ef6ff43ebb2d1c8483fac12ebd9ecc1603b",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_hurt_20260902_attempt3_edit_attack_alpha15_exact_clean.png",
+      "source_sha256": "5e94cecc4b77fe668480bd6a11abb2a09a99b76c577247fb89ee0f20b1c5a3f1",
+      "source_cell_rect_xyxy": [
+        1604,
+        0,
+        2110,
+        745
+      ],
+      "source_rect_xyxy": [
+        1664,
+        123,
+        2035,
+        669
+      ],
+      "source_anchor_xy": [
+        1948,
+        666
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.29110512129380056,
+        0.2893772893772894
+      ],
+      "resized_size": [
+        108,
+        158
+      ],
+      "paste_xy": [
+        45,
+        53
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "down",
+      "direction": "se",
+      "path": "assets/campaign/anim/jiang_menshen_fists_down_se.png",
+      "sha256": "333d676ed8a268e92b80266770070c189bb8e3e6d60bdb8d44fb94059db2970d",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_down_20260902_attempt3_safe_margin_edit_alpha15_exact_clean.png",
+      "source_sha256": "713a4a199b391fe3e6ee0be2d14f5188622df6169cd9087baa3158a20a93ee25",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        564,
+        746
+      ],
+      "source_rect_xyxy": [
+        62,
+        198,
+        541,
+        561
+      ],
+      "source_anchor_xy": [
+        275,
+        558
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.29018789144050106,
+        0.2892561983471074
+      ],
+      "resized_size": [
+        139,
+        105
+      ],
+      "paste_xy": [
+        66,
+        106
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "down",
+      "direction": "sw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_down_sw.png",
+      "sha256": "fe8c96033ec4a79f9813f6f120ebebbe8a92e33609492d6550656bf4644b9743",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_down_20260902_attempt3_safe_margin_edit_alpha15_exact_clean.png",
+      "source_sha256": "713a4a199b391fe3e6ee0be2d14f5188622df6169cd9087baa3158a20a93ee25",
+      "source_cell_rect_xyxy": [
+        564,
+        0,
+        1057,
+        746
+      ],
+      "source_rect_xyxy": [
+        586,
+        181,
+        1024,
+        594
+      ],
+      "source_anchor_xy": [
+        812,
+        590
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2899543378995434,
+        0.29055690072639223
+      ],
+      "resized_size": [
+        127,
+        120
+      ],
+      "paste_xy": [
+        62,
+        91
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "down",
+      "direction": "ne",
+      "path": "assets/campaign/anim/jiang_menshen_fists_down_ne.png",
+      "sha256": "8c933799435d3de3b07d66f3751b72b62d6b1ee3a7d626a0a202601a9c6d0413",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_down_20260902_attempt3_safe_margin_edit_alpha15_exact_clean.png",
+      "source_sha256": "713a4a199b391fe3e6ee0be2d14f5188622df6169cd9087baa3158a20a93ee25",
+      "source_cell_rect_xyxy": [
+        1057,
+        0,
+        1582,
+        746
+      ],
+      "source_rect_xyxy": [
+        1090,
+        224,
+        1551,
+        575
+      ],
+      "source_anchor_xy": [
+        1172,
+        572
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.29067245119305857,
+        0.2905982905982906
+      ],
+      "resized_size": [
+        134,
+        102
+      ],
+      "paste_xy": [
+        104,
+        109
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    },
+    {
+      "variant": "jiang_menshen_fists",
+      "state": "down",
+      "direction": "nw",
+      "path": "assets/campaign/anim/jiang_menshen_fists_down_nw.png",
+      "sha256": "c94ef8f82180dce06a1f9c29de0943a0e8094a55b1f557939a8e7f68d9dfcfae",
+      "copy_is_byte_identical_to_candidate": true,
+      "source_file": "jiang_menshen_fists_down_20260902_attempt3_safe_margin_edit_alpha15_exact_clean.png",
+      "source_sha256": "713a4a199b391fe3e6ee0be2d14f5188622df6169cd9087baa3158a20a93ee25",
+      "source_cell_rect_xyxy": [
+        1582,
+        0,
+        2109,
+        746
+      ],
+      "source_rect_xyxy": [
+        1614,
+        205,
+        2063,
+        548
+      ],
+      "source_anchor_xy": [
+        1978,
+        545
+      ],
+      "batch_uniform_requested_scale": 0.2900118483412322,
+      "actual_scale_xy_after_integer_rounding": [
+        0.289532293986637,
+        0.2886297376093295
+      ],
+      "resized_size": [
+        130,
+        99
+      ],
+      "paste_xy": [
+        23,
+        112
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ]
+    }
+  ],
+  "portrait": {
+    "path": "assets/campaign/portraits/jiang_menshen_fists.png",
+    "sha256": "b6f07ba6c367bc1dbc0f57dbb3661b135bee7e1b54aba9ab3333334e94f7689d",
+    "byte_identical_source": "assets/campaign/anim/jiang_menshen_fists_idle_se.png"
+  },
+  "runtime_route": {
+    "ordinary_states": "idle/walk/attack/hurt/down resolve through CampaignArt.animation_path",
+    "subdued": "level7 resolves the living subdued outcome to the same-direction down asset",
+    "hurt": "left-foot abdomen hit stays alive and resolves to the same-direction hurt asset",
+    "death": "not supplied by this campaign batch and never aliases to down",
+    "free_modes": "generic jiang_menshen assets and portrait remain separate from this campaign variant"
+  },
+  "steam_modified_or_exported": false
+}

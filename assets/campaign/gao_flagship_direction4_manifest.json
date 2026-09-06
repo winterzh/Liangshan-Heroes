@@ -1,0 +1,409 @@
+{
+  "schema_version": 1,
+  "kind": "gao_flagship_native_alpha_transparent_gutter_production_provenance",
+  "created_at": "2026-09-03T03:27:11.891534+08:00",
+  "key": "gao_flagship",
+  "states": [
+    "default",
+    "damaged",
+    "flooding",
+    "disabled"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "frame_count": 16,
+  "source_generation_conversation": "https://chatgpt.com/c/6a9867f8-96ac-83e9-bf07-2e5db6603722",
+  "web_native_alpha": true,
+  "alpha_cleanup_performed": false,
+  "candidate_manifest": "qa/gao_flagship_direction4_candidate_pipeline_20260903/candidate_manifest.json",
+  "candidate_manifest_sha256": "ceee5a7f38d058adffd0127e082ee18bb43eb4e0dafb19b39e553f8bd0183714",
+  "candidate_preview": "qa/gao_flagship_direction4_candidate_pipeline_20260903/runtime_size_fringe_preview.png",
+  "candidate_preview_sha256": "76a90be4cffa0f0e280406763e58c45aaa3ff208d4f225e3851b05cf329a3a97",
+  "manual_visual_review": "qa/gao_flagship_direction4_candidate_pipeline_20260903/manual_visual_review.json",
+  "manual_visual_review_sha256": "876ecdc0b1d1790309009b2ea89b031e6b87f84b0b57f3bea38eae79a4fd8489",
+  "manual_visual_review_passed": true,
+  "backup_path": "implementation_20260902/gao_qiu_p0_direction4_production_backup_20260903_032000",
+  "backup_manifest": "implementation_20260902/gao_qiu_p0_direction4_production_backup_20260903_032000/backup_manifest.json",
+  "backup_manifest_sha256": "97cd6a63c5355c4de84c8c55c1ed8348697e30c7bd42192826db3022d360c7ca",
+  "allowed_local_operations": [
+    "full-height transparent-gutter cell division",
+    "continuous source rectangle crop",
+    "batch-uniform proportional scale",
+    "transparent padding",
+    "PNG format encoding",
+    "byte-identical production copy"
+  ],
+  "forbidden_operations_used": [],
+  "sources": [
+    {
+      "state": "default",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_default_1x4.png",
+      "source_sha256": "8293ffe5c8688695346e13ccec87b592b8c0b569a0c22b7217da1356ef2382c8",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/01_gao_flagship_default_1x4.txt",
+      "prompt_sha256": "28b2e029a9ce4d0fb89e4d77f83924a9f666235413b419b99b21ddf3a57523cc",
+      "fixed_cell_x_boundaries": [
+        0,
+        509,
+        1082,
+        1649,
+        2172
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 464,
+          "end_x_exclusive": 554,
+          "width": 90,
+          "chosen_boundary_x": 509
+        },
+        {
+          "start_x_inclusive": 952,
+          "end_x_exclusive": 1213,
+          "width": 261,
+          "chosen_boundary_x": 1082
+        },
+        {
+          "start_x_inclusive": 1620,
+          "end_x_exclusive": 1678,
+          "width": 58,
+          "chosen_boundary_x": 1649
+        }
+      ]
+    },
+    {
+      "state": "damaged",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_damaged_1x4.png",
+      "source_sha256": "eaa17d17014863d98e759d07abe6ef6efa8d10c062e2d9599077e85f0fc0a17c",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/02_gao_flagship_damaged_1x4.txt",
+      "prompt_sha256": "04148f97df9997df9965aaf6bcd57bd82128096044c62cedda943cdee2f49334",
+      "fixed_cell_x_boundaries": [
+        0,
+        508,
+        1081,
+        1654,
+        2172
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 470,
+          "end_x_exclusive": 546,
+          "width": 76,
+          "chosen_boundary_x": 508
+        },
+        {
+          "start_x_inclusive": 962,
+          "end_x_exclusive": 1200,
+          "width": 238,
+          "chosen_boundary_x": 1081
+        },
+        {
+          "start_x_inclusive": 1639,
+          "end_x_exclusive": 1670,
+          "width": 31,
+          "chosen_boundary_x": 1654
+        }
+      ]
+    },
+    {
+      "state": "flooding",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_flooding_1x4.png",
+      "source_sha256": "666d8bdf62799a721b013625edf9fc2510970f1fe5b7cc2f3eb638dc32674f1e",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/03_gao_flagship_flooding_1x4.txt",
+      "prompt_sha256": "bad8cb087119b303a8f5c5a175efe0ce3543e370dadfa135db754ce4fb5c2781",
+      "fixed_cell_x_boundaries": [
+        0,
+        501,
+        1091,
+        1660,
+        2172
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 450,
+          "end_x_exclusive": 553,
+          "width": 103,
+          "chosen_boundary_x": 501
+        },
+        {
+          "start_x_inclusive": 977,
+          "end_x_exclusive": 1205,
+          "width": 228,
+          "chosen_boundary_x": 1091
+        },
+        {
+          "start_x_inclusive": 1638,
+          "end_x_exclusive": 1682,
+          "width": 44,
+          "chosen_boundary_x": 1660
+        }
+      ]
+    },
+    {
+      "state": "disabled",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_disabled_1x4.png",
+      "source_sha256": "ab54804bdf6bbe6c65cd4721b51b1265ac00a1cbdd25a954d4594a775c815b72",
+      "source_mode": "RGBA",
+      "source_size": [
+        2170,
+        725
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/04_gao_flagship_disabled_1x4.txt",
+      "prompt_sha256": "f65f75580cc64b1bfb32063f22f7280928a059023d1342cbb8dff7046de0401c",
+      "fixed_cell_x_boundaries": [
+        0,
+        519,
+        1079,
+        1637,
+        2170
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 495,
+          "end_x_exclusive": 544,
+          "width": 49,
+          "chosen_boundary_x": 519
+        },
+        {
+          "start_x_inclusive": 992,
+          "end_x_exclusive": 1166,
+          "width": 174,
+          "chosen_boundary_x": 1079
+        },
+        {
+          "start_x_inclusive": 1620,
+          "end_x_exclusive": 1655,
+          "width": 35,
+          "chosen_boundary_x": 1637
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "se",
+      "path": "assets/campaign/objects/gao_flagship_default_se.png",
+      "sha256": "78f249672f767fa6394889a4934fba032f5f8d382ef32c8cee751360b0c4068d",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_se.png",
+      "candidate_sha256": "78f249672f767fa6394889a4934fba032f5f8d382ef32c8cee751360b0c4068d",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "sw",
+      "path": "assets/campaign/objects/gao_flagship_default_sw.png",
+      "sha256": "cf56ca8a262b2767d06b6acf04d89401cbe5cbcfee4469b8e54f44358e6410af",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_sw.png",
+      "candidate_sha256": "cf56ca8a262b2767d06b6acf04d89401cbe5cbcfee4469b8e54f44358e6410af",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "ne",
+      "path": "assets/campaign/objects/gao_flagship_default_ne.png",
+      "sha256": "44a8af6cfe9a18a9b1a0250b3b7ffde38f8c093be4452b1741f59642cfd5256b",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_ne.png",
+      "candidate_sha256": "44a8af6cfe9a18a9b1a0250b3b7ffde38f8c093be4452b1741f59642cfd5256b",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "nw",
+      "path": "assets/campaign/objects/gao_flagship_default_nw.png",
+      "sha256": "1cb257d34c69e661e524156ba4d913574234d0584721b0f69981a7ed8ce56167",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_nw.png",
+      "candidate_sha256": "1cb257d34c69e661e524156ba4d913574234d0584721b0f69981a7ed8ce56167",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "se",
+      "path": "assets/campaign/objects/gao_flagship_damaged_se.png",
+      "sha256": "5e92de02b62a384190b7e4deb99d7a343a1a76a8d6aba3859ecfbc0da239c346",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_se.png",
+      "candidate_sha256": "5e92de02b62a384190b7e4deb99d7a343a1a76a8d6aba3859ecfbc0da239c346",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "sw",
+      "path": "assets/campaign/objects/gao_flagship_damaged_sw.png",
+      "sha256": "f46def80d22bff9fe9d0d11012b299bd647ad9bcf1993e9f584496148945bd7c",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_sw.png",
+      "candidate_sha256": "f46def80d22bff9fe9d0d11012b299bd647ad9bcf1993e9f584496148945bd7c",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "ne",
+      "path": "assets/campaign/objects/gao_flagship_damaged_ne.png",
+      "sha256": "a1ec72d9185ce75236e2ca3498ceb8f5329764040736c5f85b7280e5919d5817",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_ne.png",
+      "candidate_sha256": "a1ec72d9185ce75236e2ca3498ceb8f5329764040736c5f85b7280e5919d5817",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "nw",
+      "path": "assets/campaign/objects/gao_flagship_damaged_nw.png",
+      "sha256": "321c86132d7b10bf9a0b0d8fdab757b2bb5fc041ac910330a3f52642a2d48333",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_nw.png",
+      "candidate_sha256": "321c86132d7b10bf9a0b0d8fdab757b2bb5fc041ac910330a3f52642a2d48333",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "se",
+      "path": "assets/campaign/objects/gao_flagship_flooding_se.png",
+      "sha256": "812a41df85803c2dad702f6f5f11373722dab631cb8509112d60ee9f5e062626",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_se.png",
+      "candidate_sha256": "812a41df85803c2dad702f6f5f11373722dab631cb8509112d60ee9f5e062626",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "sw",
+      "path": "assets/campaign/objects/gao_flagship_flooding_sw.png",
+      "sha256": "1a89a647c389729f8ad2c7a171586e3101242782e038f5ca45e21b5ad775e06e",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_sw.png",
+      "candidate_sha256": "1a89a647c389729f8ad2c7a171586e3101242782e038f5ca45e21b5ad775e06e",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "ne",
+      "path": "assets/campaign/objects/gao_flagship_flooding_ne.png",
+      "sha256": "0d7c9e652b87be11fd515193c50398cfab0bab9d126181ad9695e1752c4c3d82",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_ne.png",
+      "candidate_sha256": "0d7c9e652b87be11fd515193c50398cfab0bab9d126181ad9695e1752c4c3d82",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "nw",
+      "path": "assets/campaign/objects/gao_flagship_flooding_nw.png",
+      "sha256": "c538523e248fa89b08fd937d182e89a24987b64657f2bf6b9ce9572c3eaef13d",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_nw.png",
+      "candidate_sha256": "c538523e248fa89b08fd937d182e89a24987b64657f2bf6b9ce9572c3eaef13d",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "se",
+      "path": "assets/campaign/objects/gao_flagship_disabled_se.png",
+      "sha256": "c73f7ba702ceb0bef45350bbc1f702220e43335fd6e9a12a0ec4425b5285a2ee",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_se.png",
+      "candidate_sha256": "c73f7ba702ceb0bef45350bbc1f702220e43335fd6e9a12a0ec4425b5285a2ee",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "sw",
+      "path": "assets/campaign/objects/gao_flagship_disabled_sw.png",
+      "sha256": "981595f25ddbe20dad8d2d5a6014ec74733276d0e4b1e0ccc480cfc0ae913976",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_sw.png",
+      "candidate_sha256": "981595f25ddbe20dad8d2d5a6014ec74733276d0e4b1e0ccc480cfc0ae913976",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "ne",
+      "path": "assets/campaign/objects/gao_flagship_disabled_ne.png",
+      "sha256": "fa7473e4c7aa9d857024dbdea457d5d3894a4a35627ceddfecb3ba31c7d5b9a3",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_ne.png",
+      "candidate_sha256": "fa7473e4c7aa9d857024dbdea457d5d3894a4a35627ceddfecb3ba31c7d5b9a3",
+      "copy_is_byte_identical_to_candidate": true
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "nw",
+      "path": "assets/campaign/objects/gao_flagship_disabled_nw.png",
+      "sha256": "f02dc76685da18ca4fde11bf9077d49edb4a20e177c63a032d4cd5d79dc1952d",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_nw.png",
+      "candidate_sha256": "f02dc76685da18ca4fde11bf9077d49edb4a20e177c63a032d4cd5d79dc1952d",
+      "copy_is_byte_identical_to_candidate": true
+    }
+  ],
+  "runtime_route": {
+    "campaign_scope": "level5 chapter80 Gao flagship object only",
+    "required_context": "chapter80_gao_flagship",
+    "flag_rule": "web cloth stays blank; runtime draws only the single 帅 glyph inside audited blank-cloth rectangles",
+    "ordinary_official_ships": "no campaign flag text route"
+  },
+  "original_boundary": "Chapter 80 large sea-loach command ship; drilling from below progresses default to damaged to flooding to disabled. All web flag cloth remains blank for runtime-only 帅 overlay.",
+  "steam_modified_or_exported": false
+}

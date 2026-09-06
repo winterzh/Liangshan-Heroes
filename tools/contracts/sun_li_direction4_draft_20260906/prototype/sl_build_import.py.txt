@@ -1,0 +1,45 @@
+"""Import accepted native PNGs only; no bitmap edits or re-encoding."""
+from pathlib import Path
+from PIL import Image
+import json,hashlib,re,shutil,subprocess,sys
+root=Path(__file__).resolve().parents[1];stage=root/'.godot/sun_li_direction4'
+scratch=stage/'import_project';scratch.mkdir(exist_ok=True)
+(scratch/'project.godot').write_text('config_version=5\n[application]\nconfig/name="Sun sprite import"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n',encoding='utf-8')
+jobs={j['key']:j for j in json.loads((stage/'jobs.json').read_text(encoding='utf-8'))}
+godot=(root/'godot.local.txt').read_text().strip();records={}
+for d in sys.argv[1:]:
+ recipe=json.loads((stage/(d+'_pose_recipe.json')).read_text(encoding='utf-8'));entry=recipe['source']
+ source=Path(re.search(r'as (C:\\[^\n]+\.png) by default',jobs[entry['job']]['output_hint']).group(1))
+ im=Image.open(source);assert im.mode=='RGBA'
+ alpha=im.getchannel('A');zero=alpha.histogram()[0]/(im.width*im.height);assert zero>.35
+ path=entry['path'];target=root/path;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+ copied=scratch/path;copied.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,copied)
+ if Path(str(target)+'.import').exists():shutil.copyfile(str(target)+'.import',str(copied)+'.import')
+ records[d]={'path':path,'job':entry['job'],'native_size':list(im.size),'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'alpha_zero_fraction':zero,'import_limit':entry['limit'],'full_atlas':entry['full_atlas']}
+def run(args,name):
+ result=subprocess.run([godot,'--headless','--path',str(scratch),*args],capture_output=True,text=True,encoding='utf-8',errors='replace')
+ (stage/name).write_text(result.stdout+'\n'+result.stderr,encoding='utf-8')
+ assert result.returncode==0 and 'SCRIPT ERROR' not in result.stderr,result.stderr
+ return result.stdout
+run(['--editor','--import'],'import_initial.log')
+for d,s in records.items():
+ p=scratch/(s['path']+'.import');text=p.read_text(encoding='utf-8')
+ text=re.sub(r'process/size_limit=\d+',f"process/size_limit={s['import_limit']}",text).replace('mipmaps/generate=false','mipmaps/generate=true')
+ p.write_text(text,encoding='utf-8',newline='\n')
+ cache=scratch/re.search(r'path="res://([^\"]+)"',text).group(1)
+ for candidate in [cache,cache.with_suffix('.md5')]:
+  assert candidate.resolve().parent==(scratch/'.godot/imported').resolve()
+  candidate.unlink(missing_ok=True)
+run(['--editor','--import'],'import_final.log')
+probe='extends SceneTree\nfunc _initialize() -> void:\n\tvar sizes={}\n'
+for d,s in records.items():probe+=f'\tvar t_{d}=load("res://{s["path"]}")\n\tsizes["{d}"]=[t_{d}.get_width(),t_{d}.get_height()]\n'
+probe+='\tprint("SIZES ",JSON.stringify(sizes))\n\tquit()\n'
+(scratch/'probe.gd').write_text(probe,encoding='utf-8')
+text=run(['--script','res://probe.gd'],'import_sizes.log');sizes=json.loads(next(x[6:] for x in text.splitlines() if x.startswith('SIZES ')))
+for d,s in records.items():
+ s['imported_size']=sizes[d];assert max(sizes[d])<=s['import_limit']
+ p=scratch/(s['path']+'.import');shutil.copyfile(p,root/(s['path']+'.import'))
+ cache=re.search(r'path="res://([^\"]+)"',p.read_text(encoding='utf-8')).group(1)
+ shutil.copyfile(scratch/cache,root/cache)
+ (stage/(d+'_source.json')).write_text(json.dumps(s,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'sources':len(records),'actual_imported_sizes':sizes}))

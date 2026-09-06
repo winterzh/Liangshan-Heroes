@@ -1,0 +1,87 @@
+func _do_chase(delta: float) -> void:
+	if _target != null and _target.get_instance_id() != _chase_last_id:
+		_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置
+		_chase_t = 0.0
+		_chase_best_distance = INF
+	if _target == null:
+		_chase_t = 0.0
+		# 玩家点名目标结束后直接完成该命令并接下一条队列，不绕回旧驻守点。
+		if _chase_intent == CHASE_EXPLICIT or _chase_intent == CHASE_FORCED:
+			_chase_intent = CHASE_AUTO
+			_done_order()
+			return
+		# 自动接敌目标没了：A 移动继续前进，普通警戒接敌回驻守点。
+		if _resume_amove:
+			_begin_amove(_amove_dest)
+		elif _chase_intent == CHASE_AUTO and _has_home and position.distance_to(_home) > 30.0:
+			var h := _home
+			_begin_move(h)
+			_home = h
+		elif is_worker and _gather_node != null and is_instance_valid(_gather_node) and _gather_node.res_left > 0.0:
+			_begin_gather(_gather_node)   # 工人反击退敌后续采
+		else:
+			_done_order()
+		return
+	var hua_locked := has_hua_locked_attack(_target)
+	# 牵引距离：进攻=320 远追；守备=150 短追；据守=只在攻击范围内（绝不挪）
+	var leash := 320.0
+	if stance == STANCE_DEFEND:
+		leash = 150.0
+	elif stance == STANCE_HOLD:
+		leash = atk_range + radius + 18.0
+	# 玩家单位（或任何非进攻姿态单位）追击过远则脱离、回防，防止被引离阵地
+	# 例外：托管(auto_micro)且进攻姿态的英雄不受牵引——主动压上交战、退守交给托管大脑
+	if not hua_locked and _chase_intent == CHASE_AUTO and _has_home and not _resume_amove and not (auto_micro and stance == STANCE_AGGRO) \
+			and (faction == FACTION_LIANG or stance != STANCE_AGGRO) \
+			and position.distance_to(_home) > leash:
+		_target = null
+		var h2 := _home
+		_begin_move(h2)
+		_home = h2
+		return
+	var d := position.distance_to(_target.position)
+	var reach := atk_range + radius + _target.radius
+	if d <= reach or hua_locked:
+		_chase_t = 0.0   # 已进攻击范围（咬住了）：追击计时清零
+		_chase_best_distance = d
+		_face_dir(_target.position - position)
+		if _cd <= 0.0:
+			_attack()
+	elif stance == STANCE_HOLD and _chase_intent != CHASE_EXPLICIT and _chase_intent != CHASE_FORCED:
+		# 据守：目标跑出攻击范围就放手，原地不动，不追
+		_target = null
+		_done_order()
+	else:
+		# 追不上判定：连续追同一目标却始终够不着 → 超时放手（对方更快则更早放弃），
+		# 拉黑该目标 GIVEUP_COOLDOWN 秒并就近重新索敌，免得一路追死/被旁敌砍死。
+		_chase_t += delta
+		# A faster unit standing still is still catchable. Only time without
+		# meaningful closing progress counts toward abandoning this pursuit.
+		if d < _chase_best_distance - 12.0:
+			_chase_best_distance = d
+			_chase_t = 0.0
+		var can_give_up := (_chase_intent == CHASE_AUTO or _chase_intent == CHASE_AMOVE) and not _chasing_path_blocker
+		var cap: float = CHASE_GIVEUP_FAST if _target.current_move_speed() > current_move_speed() + 1.0 else CHASE_GIVEUP
+		# 玩家点名攻击不因“目标更快”自行改令；只有目标连续不可达才结束，避免永远撞墙。
+		var unreachable_explicit := _chase_intent == CHASE_EXPLICIT and _path.is_empty() and _chase_t >= 3.5
+		if (can_give_up and _chase_t >= cap) or unreachable_explicit:
+			_giveup_id = _target.get_instance_id()
+			_giveup_t = GIVEUP_COOLDOWN
+			_target = null
+			_chase_t = 0.0
+			if can_give_up and not passive and not is_worker and stance != STANCE_PASSIVE:
+				_acquire()   # 立刻改打就近威胁（_acquire 会跳过刚拉黑的目标）
+			if _target == null:
+				if _resume_amove:
+					_begin_amove(_amove_dest)
+				else:
+					_done_order()
+			return
+		_repath -= delta
+		if _repath <= 0.0:
+			_repath = 0.4
+			_path = map.find_path(position, _target.position, faction, movement_profile)
+			if _path.is_empty() and is_ranged:
+				_path = map.find_firing_path(position,_target.position,reach,faction,movement_profile)
+			_path_i = 0
+		_follow_path(delta)

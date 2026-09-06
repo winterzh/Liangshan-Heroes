@@ -12,6 +12,7 @@ var _unit_filter := ""           # 单位分页搜索过滤（按名）
 
 
 func _ready() -> void:
+	theme = UITheme.shared()
 	_cfg = CustomConfig.default_config()
 	for k in _cfg["units"]:
 		_combat_keys.append(k)
@@ -21,7 +22,7 @@ func _ready() -> void:
 
 func _build() -> void:
 	var bg := ColorRect.new()
-	bg.color = Color("1b1712")
+	bg.color = UITheme.INK
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
@@ -38,7 +39,7 @@ func _build() -> void:
 	var ttl := Label.new()
 	ttl.text = "关卡编辑器 · 自定义据守"
 	ttl.add_theme_font_size_override("font_size", 22)
-	ttl.add_theme_color_override("font_color", Color("ffe9a8"))
+	ttl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	top.add_child(ttl)
 	var nl := Label.new(); nl.text = "  配置名："; top.add_child(nl)
 	_name_edit = LineEdit.new()
@@ -75,7 +76,7 @@ func _build() -> void:
 	scroll.add_child(_body)
 
 	_toast = Label.new()
-	_toast.add_theme_color_override("font_color", Color("9fe8b0"))
+	_toast.add_theme_color_override("font_color", UITheme.COMPLETE)
 	root.add_child(_toast)
 
 	_rebuild()
@@ -294,7 +295,7 @@ func _lbl(text: String, w := 0) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 14)
-	l.add_theme_color_override("font_color", Color("cfc4a8"))
+	l.add_theme_color_override("font_color", UITheme.PAPER)
 	if w > 0:
 		l.custom_minimum_size = Vector2(w, 0)
 	return l
@@ -304,7 +305,7 @@ func _hdr(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 16)
-	l.add_theme_color_override("font_color", Color("ffd866"))
+	l.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	return l
 
 
@@ -344,7 +345,7 @@ func _show_load() -> void:
 	var t := Label.new()
 	t.text = "读取配置" if not saved.is_empty() else "没有已保存的配置"
 	t.add_theme_font_size_override("font_size", 22)
-	t.add_theme_color_override("font_color", Color("ffe9a8"))
+	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	box.add_child(t)
 	for name in saved:
 		var nm: String = name
@@ -385,7 +386,7 @@ func _show_share() -> void:
 	var t := Label.new()
 	t.text = "分享码 —— 点「复制」发给好友，对方「导入码」粘贴即可载入此据守设计"
 	t.add_theme_font_size_override("font_size", 18)
-	t.add_theme_color_override("font_color", Color("ffe9a8"))
+	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	box.add_child(t)
 	var code := Marshalls.utf8_to_base64(JSON.stringify(_cfg))
 	var te := TextEdit.new()
@@ -412,7 +413,7 @@ func _show_import() -> void:
 	var t := Label.new()
 	t.text = "导入码 —— 把好友给的分享码粘贴到下框，点「导入」"
 	t.add_theme_font_size_override("font_size", 18)
-	t.add_theme_color_override("font_color", Color("ffe9a8"))
+	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	box.add_child(t)
 	var te := TextEdit.new()
 	te.placeholder_text = "在此粘贴分享码…"

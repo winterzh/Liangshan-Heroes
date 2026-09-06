@@ -10,9 +10,9 @@ signal resume_game
 signal quit_game
 
 const SPEAKER_COLORS := {
-	"宋江": Color("ffd866"), "吴用": Color("8fd3ff"), "林冲": Color("c0a0ff"),
-	"花荣": Color("a0e8c0"), "高俅": Color("ff8866"), "旁白": Color("cccccc"),
-	"军令": Color("a9e34b"),
+	"宋江": UITheme.PAPER_DARK, "吴用": UITheme.COPPER_LIGHT, "林冲": UITheme.WARNING,
+	"花荣": UITheme.COMPLETE, "高俅": UITheme.DANGER, "旁白": UITheme.PAPER,
+	"军令": UITheme.COMPLETE,
 }
 
 var top_label: Label
@@ -73,6 +73,7 @@ var _info_expanded := false
 var _info_unread := 0
 var _message_log: Array = []
 var _legacy_show_control_help := false
+const INFO_LOG_CAP := 50
 
 # 悬浮技能说明（鼠标移到命令卡/技能图标上即时浮现一张说明卡）
 var _tip_panel: PanelContainer
@@ -99,6 +100,14 @@ var _end_tally_scroll: ScrollContainer
 var _end_next: Button
 
 var _pause_root: ColorRect
+var _pause_options: VBoxContainer
+var _pause_confirm: VBoxContainer
+var _pause_confirm_title: Label
+var _pause_confirm_text: Label
+var _pause_confirm_button: Button
+var _pause_cancel_button: Button
+var _pause_resume_button: Button
+var _pause_pending_action := ""
 
 # AI友好模式·自动镜头按钮：左下角（全员托管后出现，点一下开/关自动镜头；开启时呼吸闪烁）
 var _autocam_btn: Button
@@ -142,9 +151,21 @@ func _ready() -> void:
 
 	top_label = Label.new()
 	top_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	top_label.offset_left = 170.0
+	top_label.offset_right = -128.0
 	top_label.offset_top = 8.0
+	top_label.offset_bottom = 42.0
 	top_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_style_label(top_label, 19)
+	top_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_style_label(top_label, 18)
+	var top_sb := StyleBoxFlat.new()
+	top_sb.bg_color = Color(UITheme.INK_SOFT, 0.90)
+	top_sb.border_color = Color(UITheme.COPPER, 0.78)
+	top_sb.set_border_width_all(1)
+	top_sb.set_corner_radius_all(5)
+	top_sb.content_margin_left = 12
+	top_sb.content_margin_right = 12
+	top_label.add_theme_stylebox_override("normal", top_sb)
 	add_child(top_label)
 
 	msg_box = VBoxContainer.new()
@@ -177,12 +198,12 @@ func _ready() -> void:
 	_eject_float.focus_mode = Control.FOCUS_NONE
 	_eject_float.add_theme_font_size_override("font_size", 20)
 	var ejs := StyleBoxFlat.new()
-	ejs.bg_color = Color(0.10, 0.20, 0.30, 0.96)
-	ejs.border_color = Color("6fb0e0")
-	ejs.set_border_width_all(2)
-	ejs.set_corner_radius_all(8)
+	ejs.bg_color = Color(UITheme.WOOD, 0.96)
+	ejs.border_color = UITheme.COPPER_LIGHT
+	ejs.set_border_width_all(1)
+	ejs.set_corner_radius_all(4)
 	_eject_float.add_theme_stylebox_override("normal", ejs)
-	_eject_float.add_theme_color_override("font_color", Color(0.85, 0.95, 1.0))
+	_eject_float.add_theme_color_override("font_color", UITheme.PAPER)
 	_eject_float.visible = false
 	_eject_float.pressed.connect(func() -> void:
 		if battle != null and battle.active_unit() != null:
@@ -201,6 +222,7 @@ func _ready() -> void:
 	_build_autocam_badge()
 	_build_arena_buttons()
 	_build_fps_label()   # 最后建→置于最上层，覆盖各遮罩始终可见
+	UITheme.apply_canvas_layer(self)
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	refresh_inventory()
 	_apply_safe_area()
@@ -210,9 +232,13 @@ func setup(p_battle) -> void:
 	battle = p_battle
 	minimap.battle = p_battle
 	_res_bar.visible = battle != null and battle.economy
+	# 经济模式左上有资源条，军情横幅让出其真实占位；战役模式则保持居中宽幅。
+	top_label.offset_left = 322.0 if battle != null and battle.economy else 170.0
 	if OS.has_feature("mobile") or OS.has_feature("web") or OS.get_environment("TOUCH_UI") == "1":
 		set_touch_ui(true)   # 手机/网页（或 TOUCH_UI=1 桌面预览）：启用触屏布局；PC 上否则等首个触摸事件
 	refresh_inventory()
+	_layout_top_status()
+	call_deferred("_layout_top_status")
 
 
 ## 启用/刷新触屏布局（由 battle 收到首个触摸事件、或移动端启动时调用）
@@ -229,13 +255,16 @@ func set_touch_ui(v: bool) -> void:
 	_layout_info_panel()
 	_layout_info_dock()
 	refresh_inventory()
+	_layout_top_status()
+	call_deferred("_layout_top_status")
 
 
 ## 手机上字太小 → 把「进图就看到」的关键文字整体放大：顶部目标条、剧情对话、开战钮、
 ## 资源条、面板标题、战报、结算。桌面端从不调用 → 零影响。
 func _apply_touch_fonts() -> void:
 	if top_label != null:
-		top_label.add_theme_font_size_override("font_size", 26)
+		# 横屏军情必须与资源条、菜单同排；18px 在 1280 逻辑宽仍清晰且不互压。
+		top_label.add_theme_font_size_override("font_size", 18)
 	if _intro_name != null:
 		_intro_name.add_theme_font_size_override("font_size", 30)
 	if _intro_text != null:
@@ -321,12 +350,12 @@ func _build_touch_controls() -> void:
 	allb.focus_mode = Control.FOCUS_NONE
 	allb.add_theme_font_size_override("font_size", 20)
 	var asb := StyleBoxFlat.new()
-	asb.bg_color = Color(0.14, 0.18, 0.10, 0.95)
-	asb.border_color = Color("9fe06f")
-	asb.set_border_width_all(2)
-	asb.set_corner_radius_all(8)
+	asb.bg_color = Color(UITheme.INK_SOFT, 0.95)
+	asb.border_color = UITheme.COMPLETE
+	asb.set_border_width_all(1)
+	asb.set_corner_radius_all(4)
 	allb.add_theme_stylebox_override("normal", asb)
-	allb.add_theme_color_override("font_color", Color(0.86, 1.0, 0.8))
+	allb.add_theme_color_override("font_color", UITheme.COMPLETE)
 	allb.pressed.connect(func() -> void:
 		if battle != null: battle.select_all_army())
 	_touch_groups.add_child(allb)
@@ -337,12 +366,12 @@ func _build_touch_controls() -> void:
 	_act_allauto.focus_mode = Control.FOCUS_NONE
 	_act_allauto.add_theme_font_size_override("font_size", 18)
 	var aasb := StyleBoxFlat.new()
-	aasb.bg_color = Color(0.16, 0.12, 0.22, 0.95)
-	aasb.border_color = Color("b89af0")
-	aasb.set_border_width_all(2)
-	aasb.set_corner_radius_all(8)
+	aasb.bg_color = Color(UITheme.INK_SOFT, 0.95)
+	aasb.border_color = UITheme.COPPER
+	aasb.set_border_width_all(1)
+	aasb.set_corner_radius_all(4)
 	_act_allauto.add_theme_stylebox_override("normal", aasb)
-	_act_allauto.add_theme_color_override("font_color", Color(0.9, 0.84, 1.0))
+	_act_allauto.add_theme_color_override("font_color", UITheme.PAPER)
 	_act_allauto.pressed.connect(_toggle_all_auto)
 	_touch_groups.add_child(_act_allauto)
 
@@ -357,15 +386,15 @@ func _build_touch_controls() -> void:
 	_menu_btn.focus_mode = Control.FOCUS_NONE
 	_menu_btn.add_theme_font_size_override("font_size", 22)
 	var msb := StyleBoxFlat.new()
-	msb.bg_color = Color(0.12, 0.10, 0.07, 0.95)
-	msb.border_color = Color(0.62, 0.5, 0.3)
-	msb.set_border_width_all(2)
-	msb.set_corner_radius_all(8)
+	msb.bg_color = Color(UITheme.INK_SOFT, 0.95)
+	msb.border_color = UITheme.COPPER
+	msb.set_border_width_all(1)
+	msb.set_corner_radius_all(4)
 	_menu_btn.add_theme_stylebox_override("normal", msb)
 	var msb2 := msb.duplicate()
-	msb2.bg_color = Color(0.22, 0.18, 0.12, 1.0)
+	msb2.bg_color = UITheme.WOOD
 	_menu_btn.add_theme_stylebox_override("pressed", msb2)
-	_menu_btn.add_theme_color_override("font_color", Color(1, 0.94, 0.8))
+	_menu_btn.add_theme_color_override("font_color", UITheme.PAPER)
 	_menu_btn.pressed.connect(func() -> void:
 		if battle != null: battle._open_pause())
 	add_child(_menu_btn)
@@ -478,8 +507,22 @@ func _apply_safe_area() -> void:
 	_layout_inventory()
 	_layout_hero_bar()
 	_layout_skill_rail()
+	_layout_top_status()
 	_position_fps()   # 安全区变化(横屏/刘海) → FPS 跟随菜单键
 	_safe_layout_signature = _current_safe_layout_signature()
+
+
+## 顶部军情条始终避让左侧资源与右侧菜单/FPS；字体或窗口二次排版后也可重复调用。
+func _layout_top_status() -> void:
+	if top_label == null:
+		return
+	var safe := _logical_safe_insets()
+	var left := 170.0 + safe.x
+	if battle != null and battle.economy and _res_bar != null and _res_bar.visible:
+		var res_w := maxf(_res_bar.size.x, _res_bar.get_combined_minimum_size().x)
+		left = maxf(322.0 + safe.x, _res_bar.position.x + res_w + 8.0)
+	top_label.offset_left = left
+	top_label.offset_right = -128.0 - safe.z
 
 
 func _mk_action_btn(text: String, col: Color, cb: Callable) -> Button:
@@ -587,6 +630,7 @@ func toggle_auto_selected() -> void:
 		if h.auto_micro:
 			h.manual_order_active = false
 			h.manual_order_t = 0.0
+			h.clear_mission_order_intent()
 			h.set_stance(Unit.STANCE_AGGRO)
 	show_message("%s %d 名英雄托管" % ["关闭" if any_on else "开启", hs.size()], 1.2)
 
@@ -608,6 +652,7 @@ func _toggle_all_auto() -> void:
 		if h.auto_micro:
 			h.manual_order_active = false
 			h.manual_order_t = 0.0
+			h.clear_mission_order_intent()
 			h.set_stance(Unit.STANCE_AGGRO)
 	show_message("%s全军托管（%d 名英雄）" % ["开启" if not all_on else "关闭", hs.size()], 1.2)
 
@@ -620,7 +665,7 @@ func _build_skill_rail() -> void:
 	_skill_rail.offset_right = -10.0
 	_skill_rail.offset_top = 70.0
 	_skill_rail.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	_skill_rail.add_theme_constant_override("separation", 6)
+	_skill_rail.add_theme_constant_override("separation", 4)
 	_skill_rail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_skill_rail)
 
@@ -649,7 +694,7 @@ func _refresh_skill_rail() -> void:
 		av.expand_mode = TextureRect.EXPAND_IGNORE_SIZE   # 否则 TextureRect 会撑到原图尺寸（巨幅头像）
 		av.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		av.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		av.texture = Art.avatar_texture(h.key)
+		av.texture = Art.avatar_texture(h.key, h.art_variant)
 		av.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(av)
 		var any := false
@@ -823,6 +868,15 @@ func _layout_hero_bar() -> void:
 
 
 ## 英雄战绩紧凑数字：1000 起用 k，100 万起用 M，k/M 固定保留 1 位小数。
+func campaign_objective_position() -> Vector2:
+	# The hero rail may grow to two or three columns after a chapter redeployment.
+	# Use its actual/minimum logical width, not a fixed one-column offset.
+	var left := 84.0
+	if is_instance_valid(_hero_bar) and _hero_bar.get_child_count() > 0:
+		left = maxf(left, _hero_bar.position.x + maxf(_hero_bar.size.x, _hero_bar.get_combined_minimum_size().x) + 12.0)
+	return Vector2(left, 78.0 + _logical_safe_insets().y)
+
+
 func _format_combat_stat(value: float) -> String:
 	var safe := maxf(0.0, value)
 	if safe >= 1000000.0:
@@ -842,9 +896,9 @@ func _build_resource_bar() -> void:
 	_res_bar.offset_top = 8.0
 	_res_bar.visible = false
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0.10, 0.075, 0.05, 0.92)
-	sb.border_color = Color(0.52, 0.40, 0.22)
-	sb.set_border_width_all(2)
+	sb.bg_color = Color(UITheme.PANEL, 0.94)
+	sb.border_color = UITheme.COPPER
+	sb.set_border_width_all(1)
 	sb.set_corner_radius_all(4)
 	sb.content_margin_left = 12
 	sb.content_margin_right = 12
@@ -857,7 +911,7 @@ func _build_resource_bar() -> void:
 	_res_bar.add_child(hb)
 	_res_gold = _res_label(hb, Color("ffd24a"))
 	_res_wood = _res_label(hb, Color("b6883f"))
-	_res_pop = _res_label(hb, Color("9fd0e8"))
+	_res_pop = _res_label(hb, UITheme.PAPER_MUTED)
 	# 闲置喽啰徽标（可点）：有闲置工人时高亮，点击轮流跳选（. 键同效）
 	_res_idle = Button.new()
 	_res_idle.flat = true
@@ -892,10 +946,10 @@ func _build_skill_tip() -> void:
 	_tip_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_tip_panel.z_index = 200
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0.06, 0.07, 0.10, 0.97)
-	sb.border_color = Color("ffd866")
-	sb.set_border_width_all(2)
-	sb.set_corner_radius_all(6)
+	sb.bg_color = Color(UITheme.INK_SOFT, 0.97)
+	sb.border_color = UITheme.COPPER
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(4)
 	sb.content_margin_left = 12
 	sb.content_margin_right = 12
 	sb.content_margin_top = 9
@@ -912,13 +966,13 @@ func _build_skill_tip() -> void:
 	vb.add_child(_tip_title)
 	_tip_body = Label.new()
 	_tip_body.add_theme_font_size_override("font_size", 14)
-	_tip_body.add_theme_color_override("font_color", Color(0.86, 0.88, 0.82))
+	_tip_body.add_theme_color_override("font_color", UITheme.PAPER)
 	_tip_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_tip_body.custom_minimum_size = Vector2(236, 0)
 	vb.add_child(_tip_body)
 	_tip_foot = Label.new()
 	_tip_foot.add_theme_font_size_override("font_size", 12)
-	_tip_foot.add_theme_color_override("font_color", Color("a9e34b"))
+	_tip_foot.add_theme_color_override("font_color", UITheme.COMPLETE)
 	vb.add_child(_tip_foot)
 	add_child(_tip_panel)
 
@@ -930,7 +984,7 @@ func show_skill_tip(owner, anchor: Rect2, title: String, body: String, foot: Str
 	_tip_owner = owner
 	_tip_anchor = anchor
 	_tip_title.text = title
-	_tip_title.add_theme_color_override("font_color", col if col.a > 0.0 else Color("ffd866"))
+	_tip_title.add_theme_color_override("font_color", col if col.a > 0.0 else UITheme.PAPER_DARK)
 	_tip_body.text = body
 	_tip_foot.text = foot
 	_tip_foot.visible = foot != ""
@@ -1007,7 +1061,7 @@ func _process(delta: float) -> void:
 			_res_pop.text = "人口 %d / %d" % [up, battle.pop_cap]
 			# 人口已满 → 标红提示（该造民居/聚义厅扩人口了）
 			_res_pop.add_theme_color_override("font_color",
-				Color("ff7a6a") if up >= battle.pop_cap and battle.pop_cap > 0 else Color("9fd0e8"))
+				UITheme.DANGER if up >= battle.pop_cap and battle.pop_cap > 0 else UITheme.PAPER_MUTED)
 			# 闲置喽啰徽标
 			var idle := 0
 			for u in battle.units:
@@ -1026,9 +1080,9 @@ func _build_bottom_panel() -> void:
 	_bottom_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	_bottom_panel.offset_top = -RTSCamera.PANEL_H
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0.10, 0.075, 0.05, 0.96)
-	sb.border_color = Color(0.52, 0.40, 0.22)
-	sb.border_width_top = 3
+	sb.bg_color = Color(UITheme.PANEL, 0.97)
+	sb.border_color = UITheme.COPPER
+	sb.border_width_top = 2
 	_bottom_panel.add_theme_stylebox_override("panel", sb)
 	add_child(_bottom_panel)
 
@@ -1072,7 +1126,7 @@ func _build_bottom_panel() -> void:
 	var fsb := StyleBoxFlat.new()
 	fsb.bg_color = Color(0, 0, 0, 0)
 	fsb.set_border_width_all(3)
-	fsb.border_color = Color(1.0, 0.84, 0.26, 0.98)
+	fsb.border_color = Color(UITheme.COPPER_LIGHT, 0.98)
 	fsb.set_corner_radius_all(2)
 	_port_frame.add_theme_stylebox_override("panel", fsb)
 	_port_frame.visible = false
@@ -1109,7 +1163,7 @@ func _build_bottom_panel() -> void:
 	hbox.add_child(info)
 	_info_name = Label.new()
 	_info_name.add_theme_font_size_override("font_size", 22)
-	_info_name.add_theme_color_override("font_color", Color("ffd866"))
+	_info_name.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	_info_name.custom_minimum_size = Vector2(248, 0)
 	info.add_child(_info_name)
 	_info_hp = Label.new()
@@ -1118,7 +1172,7 @@ func _build_bottom_panel() -> void:
 	info.add_child(_info_hp)
 	_info_stats = Label.new()
 	_info_stats.add_theme_font_size_override("font_size", 13)
-	_info_stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
+	_info_stats.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	_info_stats.custom_minimum_size = Vector2(248, 0)
 	_info_stats.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_child(_info_stats)
@@ -1372,10 +1426,10 @@ func _build_info_panel() -> void:
 	_info_panel = PanelContainer.new()
 	_info_panel.z_index = 90
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0.055, 0.06, 0.07, 0.96)
-	sb.border_color = Color(0.48, 0.40, 0.25, 0.95)
-	sb.set_border_width_all(2)
-	sb.set_corner_radius_all(8)
+	sb.bg_color = Color(UITheme.INK_SOFT, 0.97)
+	sb.border_color = Color(UITheme.COPPER, 0.95)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(4)
 	sb.content_margin_left = 10
 	sb.content_margin_right = 10
 	sb.content_margin_top = 6
@@ -1391,7 +1445,7 @@ func _build_info_panel() -> void:
 	var log_title := Label.new()
 	log_title.text = "最近消息"
 	log_title.add_theme_font_size_override("font_size", 13)
-	log_title.add_theme_color_override("font_color", Color("a9e34b"))
+	log_title.add_theme_color_override("font_color", UITheme.COMPLETE)
 	root.add_child(log_title)
 	_info_scroll = ScrollContainer.new()
 	_info_scroll.custom_minimum_size = Vector2(390, 184)
@@ -1403,7 +1457,7 @@ func _build_info_panel() -> void:
 	_info_log = Label.new()
 	_info_log.custom_minimum_size = Vector2(390, 0)
 	_info_log.add_theme_font_size_override("font_size", 13)
-	_info_log.add_theme_color_override("font_color", Color(0.82, 0.84, 0.80))
+	_info_log.add_theme_color_override("font_color", UITheme.PAPER)
 	_info_log.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_info_log.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	_info_log.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1427,16 +1481,16 @@ func _build_info_panel() -> void:
 	_info_toggle.custom_minimum_size = Vector2(0, 31)
 	_info_toggle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_info_toggle.add_theme_font_size_override("font_size", 14)
-	_info_toggle.add_theme_color_override("font_color", Color("f1d38a"))
-	_info_toggle.add_theme_color_override("font_hover_color", Color("fff0bd"))
+	_info_toggle.add_theme_color_override("font_color", UITheme.PAPER_DARK)
+	_info_toggle.add_theme_color_override("font_hover_color", UITheme.PAPER)
 	var tsb := StyleBoxFlat.new()
-	tsb.bg_color = Color(0.13, 0.105, 0.07, 0.98)
-	tsb.border_color = Color(0.52, 0.40, 0.22)
+	tsb.bg_color = Color(UITheme.INK_SOFT, 0.98)
+	tsb.border_color = UITheme.COPPER
 	tsb.set_border_width_all(1)
-	tsb.set_corner_radius_all(6)
+	tsb.set_corner_radius_all(3)
 	_info_toggle.add_theme_stylebox_override("normal", tsb)
 	var thover := tsb.duplicate()
-	thover.bg_color = Color(0.22, 0.17, 0.10, 1.0)
+	thover.bg_color = UITheme.WOOD
 	_info_toggle.add_theme_stylebox_override("hover", thover)
 	_info_toggle.add_theme_stylebox_override("pressed", thover)
 	_info_toggle.pressed.connect(func() -> void: _set_info_expanded(not _info_expanded))
@@ -1462,15 +1516,17 @@ func _set_info_expanded(v: bool) -> void:
 func _update_info_toggle() -> void:
 	if _info_toggle == null:
 		return
-	var badge := " (%d)" % _info_unread if _info_unread > 0 and not _info_expanded else ""
+	var unread_text := "%d+" % INFO_LOG_CAP if _info_unread >= INFO_LOG_CAP else str(_info_unread)
+	var badge := " (%s)" % unread_text if _info_unread > 0 and not _info_expanded else ""
 	_info_toggle.text = ("▼ 收起信息" if _info_expanded else "▲ 展开信息") + badge
 
 
 func _update_info_panel_mode() -> void:
+	var compact_dock := touch_ui or get_viewport().get_visible_rect().size.x < 1400.0
 	if _info_dock != null:
-		_info_dock.custom_minimum_size.x = 132.0 if touch_ui else 330.0
+		_info_dock.custom_minimum_size.x = 132.0 if compact_dock else 330.0
 	if _info_dock_reserve != null:
-		_info_dock_reserve.custom_minimum_size.x = 132.0 if touch_ui else 330.0
+		_info_dock_reserve.custom_minimum_size.x = 132.0 if compact_dock else 330.0
 	if _info_log != null:
 		_info_log.add_theme_font_size_override("font_size", 16 if touch_ui else 13)
 	_update_control_help_visibility()
@@ -1584,15 +1640,28 @@ func _append_info_message(text: String) -> void:
 		_message_log[-1]["count"] = int(_message_log[-1].get("count", 1)) + 1
 	else:
 		_message_log.append({"text": text, "count": 1})
-	if _message_log.size() > 50:
+	if _message_log.size() > INFO_LOG_CAP:
 		_message_log.pop_front()
-	if not _info_expanded:
-		_info_unread = mini(99, _info_unread + 1)
+	var quiet_observer_message := _is_quiet_ai_observer_message(text)
+	if not _info_expanded and not quiet_observer_message:
+		_info_unread = mini(INFO_LOG_CAP, _info_unread + 1)
 		_show_info_toast(text)
 	_refresh_info_log()
 	_update_info_toggle()
 	if _info_expanded:
 		_scroll_info_to_bottom()
+
+
+## 全托管观战会由多名英雄同时放招；技能名仍写入完整战报，但不再抢占即时提示和未读徽标。
+## 波次、科技、建筑、遇袭等带正文的消息保持原显示，不会漏掉需要玩家注意的战况。
+func _is_quiet_ai_observer_message(text: String) -> bool:
+	if battle == null or not battle.has_method("_full_auto") or not bool(battle.call("_full_auto")):
+		return false
+	var clean := text.strip_edges()
+	if not clean.begins_with("【"):
+		return false
+	var close := clean.find("】")
+	return close == clean.length() - 1 or clean.contains("剩余能量")
 
 
 func _show_info_toast(text: String) -> void:
@@ -1606,7 +1675,9 @@ func _show_info_toast(text: String) -> void:
 				label.text = "%s  ×%d" % [text, count]
 			_arm_info_toast(child, false)
 			return
-	while msg_box.get_child_count() >= 3:
+	var toast_cap := 2 if battle != null and battle.has_method("_full_auto") \
+			and bool(battle.call("_full_auto")) else 3
+	while msg_box.get_child_count() >= toast_cap:
 		_remove_info_toast(msg_box.get_child(0))
 
 	var row := PanelContainer.new()
@@ -1647,9 +1718,11 @@ func _arm_info_toast(row: Control, fade_in: bool) -> void:
 	row.set_meta("toast_tween", tw)
 	if fade_in:
 		tw.tween_property(row, "modulate:a", 1.0, 0.15)
-		tw.tween_interval(2.60)
+		tw.tween_interval(1.60 if battle != null and battle.has_method("_full_auto") \
+				and bool(battle.call("_full_auto")) else 2.60)
 	else:
-		tw.tween_interval(2.75)
+		tw.tween_interval(1.75 if battle != null and battle.has_method("_full_auto") \
+				and bool(battle.call("_full_auto")) else 2.75)
 	tw.tween_property(row, "modulate:a", 0.0, 0.25)
 	tw.tween_callback(func() -> void: _remove_info_toast(row, false))
 
@@ -1888,7 +1961,7 @@ func _rebuild_queue_bar(bld) -> void:
 	var title := Label.new()
 	title.text = "生产队列  %d" % bld._train_queue.size()
 	title.add_theme_font_size_override("font_size", 13)
-	title.add_theme_color_override("font_color", Color("ffd866"))
+	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	_queue_bar.add_child(title)
 	var grid := GridContainer.new()
 	grid.columns = 8   # 队列过长时自动换行，不再挤成一长条
@@ -1992,7 +2065,7 @@ func _refresh_panel() -> void:
 			if u.is_hero:
 				prim = u
 				break
-	var ptex: Texture2D = Art.avatar_texture(prim.key)
+	var ptex: Texture2D = Art.avatar_texture(prim.key, prim.art_variant)
 	if ptex != null:
 		_port_tex.texture = ptex
 		_port_tex.visible = true
@@ -2016,9 +2089,9 @@ func _refresh_panel() -> void:
 		elif prim.setup_def.has("produces"):
 			var q: int = prim._train_queue.size()
 			if q > 0:
-				_info_stats.text = "队列 %d · 剩 %d 秒 · 右键设集结点" % [q, int(ceil(prim._train_t))]
+				_info_stats.text = "队列 %d · %s，请清开出口" % [q,prim.production_wait_label()] if prim.production_blocked else "队列 %d · 剩 %d 秒 · 右键设集结点" % [q, int(ceil(prim._train_t))]
 			else:
-				_info_stats.text = "右键设集结点 · 资源上=自动采"
+				_info_stats.text = "右键水面设集结点 · 留出下水口" if bool(prim.setup_def.get("requires_shore",false)) else "右键设集结点 · 资源上=自动采"
 		elif prim.atk > 0.0:
 			_info_stats.text = "箭楼 · 攻 %d  射程 %d  自动御敌" % [int(prim.atk), int(prim.atk_range)]
 		else:
@@ -2083,9 +2156,9 @@ func _position_fps() -> void:
 	_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	if touch_ui:
 		var safe := _logical_safe_insets()
-		_fps_label.offset_right = -128.0 - safe.z   # 菜单键(右距12+宽104)左边再留 12px 间隙
-		_fps_label.offset_top = 22.0 + safe.y        # 与菜单键(顶10高52)中线对齐
-		_fps_label.add_theme_font_size_override("font_size", 20)
+		_fps_label.offset_right = -14.0 - safe.z    # 菜单下方独立一行，避免与军情横幅争宽
+		_fps_label.offset_top = 68.0 + safe.y
+		_fps_label.add_theme_font_size_override("font_size", 16)
 	else:
 		_fps_label.offset_right = -14.0            # 桌面：右上角
 		_fps_label.offset_top = 12.0
@@ -2165,6 +2238,9 @@ func _build_end() -> void:
 	_end_root.color = Color(0.06, 0.05, 0.035, 0.93)   # 结算：近不透明暖深底
 	_end_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_end_root.mouse_filter = Control.MOUSE_FILTER_STOP
+	# Mission panels are attached to the HUD after it is built. Keep settlement
+	# above those late children so objectives and notifications cannot cover it.
+	_end_root.z_index = 300
 	_end_root.visible = false
 	add_child(_end_root)
 
@@ -2211,7 +2287,7 @@ func _build_end() -> void:
 	_end_next = Button.new()
 	_end_next.text = "下一关 ▸"
 	_end_next.add_theme_font_size_override("font_size", 20)
-	_end_next.pressed.connect(func() -> void: to_menu.emit())
+	_end_next.pressed.connect(func() -> void: battle.next_campaign_chapter())
 	row.add_child(_end_next)
 
 	var rbtn := Button.new()
@@ -2242,6 +2318,10 @@ func _show_intro_line() -> void:
 	_intro_name.add_theme_color_override("font_color", color)
 	_intro_text.text = String(line.get("text", ""))
 	var tex: Texture2D = Art.portrait_texture(String(line.get("key", "narrator")))
+	if battle != null:
+		var actor = battle.find_unit(String(line.get("key", "narrator")))
+		if is_instance_valid(actor) and actor.art_variant != "":
+			tex = Art.avatar_texture(actor.key, actor.art_variant)
 	if tex != null:
 		_intro_port_tex.texture = tex
 		_intro_port_tex.visible = true
@@ -2264,6 +2344,10 @@ func _advance_intro() -> void:
 
 func show_deploy() -> void:
 	start_btn.visible = true
+
+
+func hide_deploy() -> void:
+	start_btn.visible = false
 
 
 func _on_start_pressed() -> void:
@@ -2292,13 +2376,13 @@ func _build_autocam_badge() -> void:
 	_autocam_btn.visible = false
 	for st in ["normal", "hover", "pressed"]:
 		var sb := StyleBoxFlat.new()
-		sb.bg_color = Color(0.07, 0.12, 0.16, 0.92) if st == "normal" else Color(0.12, 0.20, 0.26, 0.96)
-		sb.border_color = Color("5fd0e0")
-		sb.set_border_width_all(2)
-		sb.set_corner_radius_all(8)
+		sb.bg_color = Color(UITheme.INK_SOFT, 0.93) if st == "normal" else Color(UITheme.WOOD, 0.97)
+		sb.border_color = UITheme.COPPER_LIGHT
+		sb.set_border_width_all(1)
+		sb.set_corner_radius_all(4)
 		_autocam_btn.add_theme_stylebox_override(st, sb)
-	_autocam_btn.add_theme_color_override("font_color", Color(0.74, 0.94, 1.0))
-	_autocam_btn.add_theme_color_override("font_hover_color", Color(0.88, 0.98, 1.0))
+	_autocam_btn.add_theme_color_override("font_color", UITheme.PAPER)
+	_autocam_btn.add_theme_color_override("font_hover_color", UITheme.PAPER_DARK)
 	_autocam_btn.text = "🎥 自动镜头"
 	_autocam_btn.pressed.connect(func() -> void:
 		if battle != null and battle.has_method("toggle_autocam"):
@@ -2352,15 +2436,39 @@ func set_autocam_button(show: bool, on: bool) -> void:
 		return
 	_autocam_btn.text = "🎬 自动镜头·开" if on else "🎥 自动镜头"
 	_autocam_btn.add_theme_color_override("font_color",
-		Color(0.78, 1.0, 0.84) if on else Color(0.74, 0.94, 1.0))
+		UITheme.COMPLETE if on else UITheme.PAPER)
 	if not on:
 		_autocam_btn.modulate.a = 1.0
 
 
-func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "") -> void:
+func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "", campaign_result: Dictionary = {}) -> void:
 	_end_title.text = "旗开得胜！" if victory else "功败垂成……"
-	_end_title.add_theme_color_override("font_color", Color("ffd866") if victory else Color("ff7766"))
-	_end_sub.text = "%s\n此役歼灭敌军 %d 人。" % [line, kills]
+	_end_title.add_theme_color_override("font_color", UITheme.PAPER_DARK if victory else UITheme.DANGER)
+	var campaign_line := ""
+	if not campaign_result.is_empty():
+		campaign_line = "\n基础通关：%s" % ("完成" if victory else "未完成")
+		var total := int(campaign_result.get("story_total", 0))
+		if total > 0:
+			campaign_line += "\n演义复现：%d/%d" % [int(campaign_result.get("story_done", 0)), total]
+			if bool(campaign_result.get("story_complete", false)):
+				campaign_line += " · %s" % ("首次获得演义印" if bool(campaign_result.get("new_story_seal", false)) else "演义印已收录")
+			elif victory:
+				campaign_line += " · 演义印未收录（可重打补齐）"
+				var missed_labels: Array[String] = []
+				var result_goals: Variant = campaign_result.get("goals", [])
+				if result_goals is Array:
+					for raw_goal in result_goals:
+						if raw_goal is Dictionary and String(raw_goal.get("state", "")) == "missed":
+							var missed_label := String(raw_goal.get("label", "")).strip_edges()
+							if missed_label != "": missed_labels.append(missed_label)
+				if not missed_labels.is_empty():
+					# Keep settlement compact beside the fixed-height battle report. One
+					# concrete missing goal plus the remaining count is enough to guide replay.
+					var preview: Array[String] = missed_labels.slice(0, 1)
+					campaign_line += "\n待补演义：" + "；".join(preview)
+					if missed_labels.size() > preview.size():
+						campaign_line += "；另%d项" % (missed_labels.size() - preview.size())
+	_end_sub.text = "%s\n此役歼灭敌军 %d 人。%s" % [line, kills, campaign_line]
 	_end_tally.text = ("⚔ 各路好汉战绩 ⚔\n" + hero_tally) if hero_tally != "" else ""
 	_end_tally.visible = hero_tally != ""
 	_end_tally_scroll.visible = hero_tally != ""
@@ -2371,6 +2479,7 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 ## 暂停菜单（Esc 呼出）：继续 / 重打 / 返回主菜单 / 退出
 func _build_pause() -> void:
 	_pause_root = ColorRect.new()
+	_pause_root.z_index = 300  # Above battle toasts, inventory and skill tips.
 	_pause_root.color = Color(0.06, 0.05, 0.035, 0.95)   # 暂停菜单：近不透明暖深底，文字清晰
 	_pause_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_pause_root.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -2385,21 +2494,26 @@ func _build_pause() -> void:
 	vb.add_theme_constant_override("separation", 14)
 	vb.alignment = BoxContainer.ALIGNMENT_CENTER
 	cc.add_child(vb)
+	_pause_options = vb
 
 	var t := Label.new()
 	t.text = "暂停"
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t.add_theme_font_size_override("font_size", 46)
-	t.add_theme_color_override("font_color", Color("ffd866"))
+	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	vb.add_child(t)
 
-	for spec in [["继续 (Esc)", resume_game], ["重新开始本局", restart], ["返回主菜单", to_menu], ["退出游戏", quit_game]]:
+	for spec in [["继续 (Esc)", "resume"], ["重新开始本局", "restart"], ["返回主菜单", "menu"], ["退出游戏", "quit"]]:
 		var b := Button.new()
 		b.text = String(spec[0])
 		b.add_theme_font_size_override("font_size", 22)
 		b.custom_minimum_size = Vector2(240, 48)
-		var sig: Signal = spec[1]
-		b.pressed.connect(func() -> void: sig.emit())
+		var action := String(spec[1])
+		if action == "resume":
+			_pause_resume_button = b
+			b.pressed.connect(func() -> void: resume_game.emit())
+		else:
+			b.pressed.connect(func() -> void: _request_pause_action(action))
 		vb.add_child(b)
 
 	# 设置（与主菜单同一套面板）：先收起暂停菜单，关闭设置后再弹回；HUD 为 ALWAYS，暂停态可操作
@@ -2426,20 +2540,84 @@ func _build_pause() -> void:
 			fsb.text = "⛶ 退出全屏 (F11)" if scr.is_fullscreen() else "⛶ 全屏 (F11)")
 	vb.add_child(fsb)
 
+	_pause_confirm = VBoxContainer.new()
+	_pause_confirm.custom_minimum_size.x = 360.0
+	_pause_confirm.add_theme_constant_override("separation", 18)
+	_pause_confirm.hide()
+	cc.add_child(_pause_confirm)
+	_pause_confirm_title = Label.new()
+	_pause_confirm_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pause_confirm_title.add_theme_font_size_override("font_size", 30)
+	_pause_confirm.add_child(_pause_confirm_title)
+	_pause_confirm_text = Label.new()
+	_pause_confirm_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_pause_confirm_text.custom_minimum_size.x = 360.0
+	_pause_confirm_text.add_theme_font_size_override("font_size", 20)
+	_pause_confirm.add_child(_pause_confirm_text)
+	_pause_cancel_button = Button.new()
+	_pause_cancel_button.text = "取消 · 留在本局 (Esc)"
+	_pause_cancel_button.custom_minimum_size.y = 48.0
+	_pause_cancel_button.add_theme_font_size_override("font_size", 22)
+	_pause_cancel_button.pressed.connect(show_pause)
+	_pause_confirm.add_child(_pause_cancel_button)
+	_pause_confirm_button = Button.new()
+	_pause_confirm_button.custom_minimum_size.y = 48.0
+	_pause_confirm_button.add_theme_font_size_override("font_size", 22)
+	_pause_confirm_button.pressed.connect(_confirm_pause_action)
+	_pause_confirm.add_child(_pause_confirm_button)
+
+
+func _request_pause_action(action: String) -> void:
+	if not _pause_root.visible or not action in ["restart", "menu", "quit"]: return
+	_pause_pending_action = action
+	_pause_confirm_title.text = {"restart": "重新开始本局？", "menu": "返回主菜单？", "quit": "退出游戏？"}[action]
+	_pause_confirm_button.text = {"restart": "确认重新开始", "menu": "确认返回主菜单", "quit": "确认退出游戏"}[action]
+	_pause_confirm_text.text = "本局的战斗进度不会保存，之后需从本局开头重新开始。"
+	if battle != null and battle.level.id().begins_with("level"):
+		_pause_confirm_text.text += "\n\n已获得的章节解锁和通关记录会保留。"
+	_pause_options.hide()
+	_pause_confirm.show()
+	# Opening the question never focuses the destructive action.
+	_pause_cancel_button.grab_focus()
+
+
+func _confirm_pause_action() -> void:
+	if not _pause_root.visible or not _pause_confirm.visible: return
+	var action := _pause_pending_action
+	_pause_pending_action = ""
+	match action:
+		"restart": restart.emit()
+		"menu": to_menu.emit()
+		"quit": quit_game.emit()
+
+
+func pause_back() -> void:
+	if _pause_confirm.visible:
+		show_pause()
+	else:
+		resume_game.emit()
+
 
 func show_pause() -> void:
+	_pause_pending_action = ""
+	_pause_confirm.hide()
+	_pause_options.show()
 	_pause_root.visible = true
+	_pause_root.move_to_front()  # Also block mouse/touch input to later-created HUD controls.
+	_pause_resume_button.grab_focus()
 
 
 func hide_pause() -> void:
+	_pause_pending_action = ""
+	_pause_confirm.hide()
 	_pause_root.visible = false
 
 
 func _input(event: InputEvent) -> void:
-	# 暂停态下 Esc 直接继续（HUD 始终处理，盖过被暂停的战斗输入）
+	# Esc first cancels a pending departure, then resumes from the pause menu.
 	if _pause_root != null and _pause_root.visible \
 			and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
-		resume_game.emit()
+		pause_back()
 		get_viewport().set_input_as_handled()
 
 
@@ -2451,6 +2629,10 @@ class Minimap extends Control:
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(132, 132)
+		clip_contents = true
+
+	func viewport_frame_mode() -> String:
+		return "axis_aligned_rect"
 
 	func _process(delta: float) -> void:
 		_accum += delta
@@ -2500,11 +2682,19 @@ class Minimap extends Control:
 			draw_rect(Rect2(p - Vector2(1.5, 1.5), Vector2(3, 3)), col)
 		var cam: Camera2D = battle.camera
 		var vp: Vector2 = get_viewport().get_visible_rect().size / cam.zoom.x
-		var pts := PackedVector2Array()
+		var minp := Vector2(INF, INF)
+		var maxp := Vector2(-INF, -INF)
 		for corner in [Vector2(-0.5, -0.5), Vector2(0.5, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, -0.5)]:
 			var sp: Vector2 = cam.position + corner * vp
-			pts.append(battle.to_logic(sp) / ws * size)
-		draw_polyline(pts, Color(1, 1, 1, 0.75), 1.0)
+			var mp: Vector2 = battle.to_logic(sp) / ws * size
+			minp = minp.min(mp)
+			maxp = maxp.max(mp)
+		# 等距视口反算到逻辑地图原本是菱形；小地图里用其轴对齐包围框表达，
+		# 更像RTS常见的“当前屏幕区域”，也不会误读成歪掉的正方形。
+		minp = minp.clamp(Vector2.ZERO, size)
+		maxp = maxp.clamp(Vector2.ZERO, size)
+		if maxp.x > minp.x and maxp.y > minp.y:
+			draw_rect(Rect2(minp, maxp - minp), Color(1, 1, 1, 0.78), false, 1.4)
 		# 遭袭告警：红框闪烁 + 红点
 		if battle._alert_t > 0.0:
 			var fl := 0.5 + 0.5 * sin(battle._alert_t * 18.0)
@@ -2557,7 +2747,7 @@ class UnitIcon extends Control:
 			return
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.06, 0.05, 0.04))
 		# 统一取图链（脸→走图→建筑→物件→地形+别名）：建筑/资源/特殊单位都能拿到图，消灭黄圈
-		var tex: Texture2D = Art.avatar_texture(unit.key)
+		var tex: Texture2D = Art.avatar_texture(unit.key, unit.art_variant)
 		if tex != null:
 			draw_texture_rect(tex, Rect2(3, 1, size.x - 6, size.y - 9), false)
 		else:
@@ -2861,7 +3051,7 @@ class CmdButton extends Control:
 		elif kind == "train":
 			var bld = spec.get("bld", null)
 			if is_instance_valid(bld) and not bld._train_queue.is_empty():
-				info = "队列%d 剩%ds" % [bld._train_queue.size(), int(ceil(bld._train_t))]
+				info = bld.production_wait_label()+"·清出口" if bld.production_blocked else "队列%d 剩%ds" % [bld._train_queue.size(), int(ceil(bld._train_t))]
 		elif kind == "research":
 			var rb = spec.get("bld", null)
 			if is_instance_valid(rb) and rb._research_key != "":
@@ -2869,7 +3059,7 @@ class CmdButton extends Control:
 		elif kind == "cancel_train":
 			var cb = spec.get("bld", null)
 			if int(spec.get("index", -1)) == 0 and is_instance_valid(cb):
-				info = "训练中 剩%ds·点撤" % int(ceil(cb._train_t))
+				info = cb.production_wait_label()+"·点撤" if cb.production_blocked else "训练中 剩%ds·点撤" % int(ceil(cb._train_t))
 			else:
 				info = "排队·点撤单"
 		# 撤单图标：右上角红 × 角标，提示「点我取消」
@@ -3000,6 +3190,37 @@ class HeroSlotButton extends Control:
 		"wu_fire": "fire", "gongsun_thunder": "thunder", "bai_drug": "drug", "zhang_drag": "wave",
 	}
 
+	# 驻守战六名核心英雄的手绘技能图。未覆盖的 108 将技能继续走下方矢量图标回退，
+	# 因此升级视觉不改变原有技能注册表，也不会让其他英雄出现空白按钮。
+	const ART_ICON_PATHS := {
+		"song_rally": "res://assets/ui/skills_v2/song_rally_v2.png",
+		"song_banner": "res://assets/ui/skills_v2/song_banner_v2.png",
+		"song_fire": "res://assets/ui/skills_v2/song_fire_v2.png",
+		"song_lead": "res://assets/ui/skills_v2/song_lead_v2.png",
+		"lin_thrust": "res://assets/ui/skills_v2/lin_thrust_v2.png",
+		"lin_sweep": "res://assets/ui/skills_v2/lin_sweep_v2.png",
+		"lin_predator": "res://assets/ui/skills_v2/lin_predator_v2.png",
+		"lin_chrono": "res://assets/ui/skills_v2/lin_chrono_v2.png",
+		"hua_blink": "res://assets/ui/skills_v2/hua_blink_v2.png",
+		"hua_rain": "res://assets/ui/skills_v2/hua_rain_v2.png",
+		"hua_pin": "res://assets/ui/skills_v2/hua_pin_v2.png",
+		"hua_blade": "res://assets/ui/skills_v2/hua_blade_v2.png",
+		"li_axes": "res://assets/ui/skills_v2/li_axes_v2.png",
+		"li_charge": "res://assets/ui/skills_v2/li_charge_v2.png",
+		"li_brawn": "res://assets/ui/skills_v2/li_brawn_v2.png",
+		"li_fury": "res://assets/ui/skills_v2/li_fury_v2.png",
+		"gong_blackrain": "res://assets/ui/skills_v2/gong_blackrain_v2.png",
+		"gong_icewall": "res://assets/ui/skills_v2/gong_icewall_v2.png",
+		"gong_slow": "res://assets/ui/skills_v2/gong_slow_v2.png",
+		"gong_dragon": "res://assets/ui/skills_v2/gong_dragon_v2.png",
+		"wu_tigers": "res://assets/ui/skills_v2/wu_tigers_v2.png",
+		"wu_wine": "res://assets/ui/skills_v2/wu_wine_v2.png",
+		"wu_blades": "res://assets/ui/skills_v2/wu_blades_v2.png",
+		"wu_drunkgod": "res://assets/ui/skills_v2/wu_drunkgod_v2.png",
+	}
+	var _art_icon_id := ""
+	var _art_icon_tex: Texture2D = null
+
 	# 按效果 kind 回退的技能图标：400+ 生成技能没有专属 token 时用它，避免一律「名称首字」（信息噪声）。
 	const KIND_ICON := {
 		"smite": "k_burst", "line_nuke": "spear", "sector_nuke": "spear", "fissure": "k_burst", "echo": "k_burst", "knockback": "k_burst",
@@ -3026,7 +3247,7 @@ class HeroSlotButton extends Control:
 		if is_instance_valid(hero) and slot < hero.slot_count():
 			queue_redraw()
 		mouse_default_cursor_shape = Control.CURSOR_ARROW if display_only else Control.CURSOR_POINTING_HAND
-		custom_minimum_size = (Vector2(78, 94) if compact else Vector2(88, 104)) if (hud != null and hud.touch_ui) else Vector2(76, 88)   # 触屏放大易点；右侧技能轨也放大易点
+		custom_minimum_size = (Vector2(78, 78) if compact else Vector2(88, 104)) if (hud != null and hud.touch_ui) else Vector2(76, 88)   # 六英雄技能轨压进战场可用高度；主图仍保留 50px
 		# 触屏：长按 ≥400ms 弹技能说明（替代失效的鼠标 hover；松手不施放）。瞄准中不弹说明。
 		if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
 			_tip_shown = true
@@ -3089,21 +3310,27 @@ class HeroSlotButton extends Control:
 		var big: bool = hud != null and hud.touch_ui
 		var ir: Rect2
 		if compact:
-			ir = Rect2(10, 6, 58, 58)       # 右侧技能轨：图标 58²，居中且不溢出 78×94 边框
+			ir = Rect2(14, 4, 50, 50) if big else Rect2(10, 6, 58, 58)
 		elif big:
 			ir = Rect2(14, 6, 60, 60)
 		else:
 			ir = Rect2(12, 5, 52, 52)
 		var ds := ir.size.x / 52.0
-		draw_rect(ir, col.darkened(0.15) if learned else col.darkened(0.55))
-		var token := String(ICON_TOKENS.get(String(s["id"]), ""))
-		if token == "":   # 无专属图标 → 按 effect.kind 回退到通用类别图标（400+ 生成技能免一律首字）
-			token = String(KIND_ICON.get(String(ad.get("effect", {}).get("kind", "")), ""))
-		if token != "":
-			_draw_ability_icon(token, ir, col, learned)
+		var ability_id := String(s["id"])
+		var art_tex := _ability_art_icon(ability_id)
+		if art_tex != null:
+			draw_rect(ir, Color(0.055, 0.045, 0.035, 1.0))
+			draw_texture_rect(art_tex, ir, false, Color(1, 1, 1, 1.0 if learned else 0.46))
 		else:
-			draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.71), nm.substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(30 * ds),
-				Color(1, 1, 1, 0.94) if learned else Color(0.85, 0.85, 0.85, 0.6))
+			draw_rect(ir, col.darkened(0.15) if learned else col.darkened(0.55))
+			var token := String(ICON_TOKENS.get(ability_id, ""))
+			if token == "":   # 无专属图标 → 按 effect.kind 回退到通用类别图标（400+ 生成技能免一律首字）
+				token = String(KIND_ICON.get(String(ad.get("effect", {}).get("kind", "")), ""))
+			if token != "":
+				_draw_ability_icon(token, ir, col, learned)
+			else:
+				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.71), nm.substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(30 * ds),
+					Color(1, 1, 1, 0.94) if learned else Color(0.85, 0.85, 0.85, 0.6))
 		# 被动角标
 		if passive:
 			draw_string(f, Vector2(ir.position.x, ir.position.y + 13.0 * ds), "被动", HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(11 * ds), Color(0.78, 0.92, 0.78))
@@ -3139,7 +3366,7 @@ class HeroSlotButton extends Control:
 		elif rank == 0 and not passive:
 			draw_rect(ir, Color(0, 0, 0, 0.36))
 		# 名称（y 随按钮高度）
-		var nm_fs: int = 14 if compact else (15 if big else 13)
+		var nm_fs: int = 12 if compact and big else (14 if compact else (15 if big else 13))
 		draw_string(f, Vector2(3, size.y - 19), nm, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, nm_fs, Color("ffd866") if learned else Color(0.6, 0.55, 0.45))
 		# 底行状态：未冷却时显示该技能（当前等级）的冷却秒数——让玩家随时看到「CD 多少」
 		var st := ""
@@ -3157,7 +3384,7 @@ class HeroSlotButton extends Control:
 			st = "常驻" if learned else "被动·未学"
 		elif hero.can_learn(slot):
 			st = "可学 +"
-		draw_string(f, Vector2(3, size.y - 4), st, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (12 if compact else 13) if big else 11, Color(0.82, 0.86, 0.72))
+		draw_string(f, Vector2(3, size.y - 4), st, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (10 if compact else 13) if big else 11, Color(0.82, 0.86, 0.72))
 		var _touch: bool = big
 		# 热键键帽（触屏隐藏，手机无键盘）
 		if hotkey != "" and not passive and not _touch:
@@ -3174,6 +3401,16 @@ class HeroSlotButton extends Control:
 			var pf := (18 if compact else 28) if _touch else 18
 			draw_string(f, Vector2(pc.x - 11, pc.y + pf * 0.34), "+", HORIZONTAL_ALIGNMENT_CENTER, 24, pf, Color(0.95, 1, 0.95))
 		draw_rect(Rect2(Vector2.ZERO, size), col if learned else Color(0.35, 0.3, 0.22), false, 1.5)
+
+	func _ability_art_icon(ability_id: String) -> Texture2D:
+		if ability_id == _art_icon_id:
+			return _art_icon_tex
+		_art_icon_id = ability_id
+		_art_icon_tex = null
+		var path := String(ART_ICON_PATHS.get(ability_id, ""))
+		if path != "":
+			_art_icon_tex = load(path) as Texture2D
+		return _art_icon_tex
 
 	## 在徽记方块内画矢量技能图标。token 见 ICON_TOKENS；ink=亮描线，ac=技能色描线（未学则压暗）。
 	func _draw_ability_icon(token: String, ir: Rect2, col: Color, lit: bool) -> void:
@@ -3572,10 +3809,22 @@ class HeroChip extends Control:
 	var hero: Unit = null
 	var show_combat_stats := false
 	var _redraw_accum := 0.0
+	var _last_drawn_art_variant := ""
+	var _last_drawn_portrait_path := ""
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(72, 72)
 		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+	func _ready() -> void:
+		if is_instance_valid(hero):
+			hero.appearance_changed.connect(_on_appearance_changed)
+
+	func _on_appearance_changed(changed: Unit) -> void:
+		# 解枷、乔装等事件立即换头像；血条与战绩仍保留10Hz常规刷新。
+		queue_redraw()
+		if hud != null and hud._sel_ref.has(changed):
+			hud._refresh_panel()
 
 	func _process(delta: float) -> void:
 		# 头像原本每帧重绘；战绩/血条 10Hz 已足够实时，大幅减少文字排版与绘制调用。
@@ -3619,7 +3868,9 @@ class HeroChip extends Control:
 			border = Color(0.42, 0.85, 0.48)   # 托管中：绿描边
 		draw_rect(avatar_rect, border, false, 4.0 if (sel or garr or hero.auto_micro) else 3.0)
 		var ir := Rect2(3, 3, avatar_w - 6, size.y - 15)
-		var tex: Texture2D = Art.avatar_texture(hero.key)   # 脸→走图→…回退，公孙胜无专属头像时也有图（不画空白首字）
+		var tex: Texture2D = Art.avatar_texture(hero.key, hero.art_variant)   # 脸→走图→…回退，公孙胜无专属头像时也有图（不画空白首字）
+		_last_drawn_art_variant = hero.art_variant
+		_last_drawn_portrait_path = tex.resource_path if tex != null else ""
 		if tex != null:
 			draw_texture_rect(tex, ir, false, Color(0.55, 0.6, 0.85) if garr else Color.WHITE)
 		else:

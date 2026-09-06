@@ -1,0 +1,102 @@
+{
+  "revision_id": "web_bai_portrait_atlas_ownership_20260831",
+  "status": "contract_passed_and_normalized_portrait_visually_reviewed",
+  "authorization": "Parent explicitly authorized only portraits/hn_bai_sheng.png after runtime review of an opaque foreign golden arc; no other image changes authorized.",
+  "allowed_output": "portraits/hn_bai_sheng.png",
+  "before_sha256": "794d3a32eb8945c146ae0274dc8ce9258dc5f14368fcdedca302b103a1a63990",
+  "after_sha256": "f8cc1f4068ba1bc93e9be71b8046fc48cd3cca134d824fa77844d56b75bf917c",
+  "history": {
+    "portraits/hn_bai_sheng.png": {
+      "file": "source/history/web_bai_portrait_fix_20260831/hn_bai_sheng.png",
+      "sha256": "794d3a32eb8945c146ae0274dc8ce9258dc5f14368fcdedca302b103a1a63990"
+    },
+    "web_art_manifest.json": {
+      "file": "source/history/web_bai_portrait_fix_20260831/web_art_manifest.json",
+      "sha256": "f29afdfa5593909568bfe95df54cdf6fcb0f85aca3282f4b0af618722598ba70"
+    },
+    "web_art_slice_qa.json": {
+      "file": "source/history/web_bai_portrait_fix_20260831/web_art_slice_qa.json",
+      "sha256": "4a9958c6fb7068a370fa7122afd9c28dbb00ca5520d0f3a1774955ddfb0cc529"
+    },
+    "web_art_contract_qa.json": {
+      "file": "source/history/web_bai_portrait_fix_20260831/web_art_contract_qa.json",
+      "sha256": "48009c3c3dad0306ec940fa56b6417181c0b427e2a5c5b0aa21fb5ab2d350072"
+    },
+    "web_carry_prior_pngs.json": {
+      "file": "source/history/web_bai_portrait_fix_20260831/web_carry_prior_pngs.json",
+      "sha256": "4c3140ae05a3cae1e5ae88031064b28c5a3bcd2287ab8d1c94c778f473a05aeb"
+    }
+  },
+  "runtime_snapshot": {
+    "file": "source/history/web_bai_portrait_fix_20260831/runtime_png_sha256.json",
+    "sha256": "616078de3ec4d6f4425f9de2f3f71be0222b515e97828fd20e9fe0a1e314a402",
+    "count": 359
+  },
+  "before_defect": {
+    "alpha_threshold": 8,
+    "pixels": 389,
+    "max_alpha": 255,
+    "bbox_end": [
+      15,
+      10,
+      60,
+      21
+    ],
+    "attribution": "Foot pixels from the preceding Ruan Xiaoqi SE row leaked into the raw rectangular head crop."
+  },
+  "source": {
+    "id": "web_merchants_b_idle_v1",
+    "file": "source/web_merchants_b_idle_v1.png",
+    "sha256": "81a2b5322c352a2455d5236c7d1e04ed512291048e0318a6643fb756ed0b8696",
+    "primary_component_id": 14,
+    "primary_bbox_xywh": [
+      97,
+      917,
+      145,
+      317
+    ],
+    "portrait_region_unchanged": [
+      95,
+      915,
+      149,
+      152
+    ],
+    "portrait_scale_unchanged": 1.5526315789473684
+  },
+  "method": "Only original source RGBA attributed to Bai Sheng is copied by the normal Godot atlas slicer; same source face/hat/clothes, same crop and scale. No painting, erasing, recoloring or reconstructed hat.",
+  "historical_carry_fact": "The archived 1419-check carry report proved all 351 pre-carry PNGs unchanged before this later explicit one-portrait correction. Its frozen baseline is not rewritten.",
+  "other_runtime_pngs_unchanged": 358,
+  "visual_review": {
+    "same_source_face_clothes_and_complete_hat": true,
+    "foreign_golden_shoe_absent": true,
+    "no_other_portrait_edited": true,
+    "runtime_composite": "Root/early will verify after final import; no GPU run by art task."
+  },
+  "independent_qa": {
+    "checks": 1454,
+    "passed": true,
+    "portrait_alpha_gt8_main": {
+      "pixels": 32181,
+      "bbox_end": [
+        14,
+        12,
+        241,
+        246
+      ],
+      "max_alpha": 255
+    },
+    "largest_secondary": {
+      "pixels": 7,
+      "bbox_end": [
+        182,
+        200,
+        188,
+        202
+      ],
+      "max_alpha": 20
+    },
+    "all_16_portraits_reviewed": "No other substantial foreign entity found. Secondary low-alpha fringes retained, not erased.",
+    "original_main_alpha_gt8_pixels": 32181,
+    "original_main_rgba_changed_pixels": 0
+  }
+}

@@ -1,0 +1,42 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lin_chong_direction4_20260906/sw.png" id="sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lin_chong_direction4_20260906/sw_walk.png" id="sw_walk"]
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("sw")
+region = Rect2(10, 7, 176, 189)
+margin = Rect2(29.5, 23.0, 59, 46)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-28.0, -11.3)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_a_sw"]
+atlas = ExtResource("sw_walk")
+region = Rect2(6, 43, 214, 252)
+margin = Rect2(53.0, 34.0, 106, 68)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-30.09316, -11.047805)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_b_sw"]
+atlas = ExtResource("sw_walk")
+region = Rect2(252, 43, 245, 250)
+margin = Rect2(37.5, 35.0, 75, 70)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-22.425081, -11.715122)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_sw")},
+{"duration": 1.0, "texture": SubResource("walk_a_sw")},
+{"duration": 1.0, "texture": SubResource("idle_sw")},
+{"duration": 1.0, "texture": SubResource("walk_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

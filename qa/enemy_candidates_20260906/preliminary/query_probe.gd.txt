@@ -1,0 +1,39 @@
+extends "res://tools/chase_speed_qa.gd"
+func _timed_query(u,reference: bool,origin: Vector2,faction: int) -> int:
+	var elapsed:=0
+	for i in range(4000):
+		u.position=origin;u.faction=faction;u._target=null;u._chase_best_distance=INF
+		var start:=Time.get_ticks_usec()
+		if reference:u._old_acquire()
+		else:u._new_acquire()
+		elapsed+=Time.get_ticks_usec()-start
+	return elapsed
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true)
+	var b=await _start("level7",true);b.process_mode=Node.PROCESS_MODE_DISABLED
+	var unit_script:=GDScript.new()
+	unit_script.source_code='extends "res://scripts/unit.gd"\n'+FileAccess.get_file_as_string("res://scratchpad/acquire_reference_bf3e1a6.txt").replace('func _acquire(','func _old_acquire(')+FileAccess.get_file_as_string("res://scratchpad/acquire_candidate.txt").replace('func _acquire(','func _new_acquire(')
+	check(unit_script.reload()==OK,"complete old and candidate acquire compile")
+	var query_script:=GDScript.new();query_script.source_code='extends "res://scripts/battle.gd"\n'+FileAccess.get_file_as_string("res://scratchpad/enemy_query_candidate.txt")
+	check(query_script.reload()==OK,"query candidate compiles")
+	if not failures.is_empty():quit(2);return
+	var query=query_script.new();query.map=b.map;query.fog=false
+	var u=_unit(b,unit_script,0);u.battle=query;u.aggro_range=240;u.stance=u.STANCE_AGGRO
+	var samples:=[]
+	for count in [64,206,506]:
+		b._perf_bench_setup(count-6);await process_frame
+		b._grid_build();query.units=b.units;query._grid=b._grid;query._focus_counts=b._focus_counts
+		var origin: Vector2=b.units.filter(func(x):return not x.is_building and not x.is_resource and x.faction==1)[0].position
+		for faction in [0,1]:
+			u.position=origin;u.faction=faction;u._target=null;u._old_acquire();var expected=u._target
+			u._target=null;u._new_acquire();check(u._target==expected,"same selected target count="+str(count)+" faction="+str(faction))
+			_timed_query(u,true,origin,faction);_timed_query(u,false,origin,faction)
+			var windows:=[];var before:=[];var after:=[]
+			for old_first in [true,false,true]:
+				for reference in ([true,false] if old_first else [false,true]):
+					var elapsed:=_timed_query(u,reference,origin,faction)
+					windows.append({"reference":reference,"us":elapsed,"calls":4000});(before if reference else after).append(elapsed)
+			before.sort();after.sort();samples.append({"units":count,"faction":faction,"windows":windows,"before_us":before[1],"after_us":after[1],"ratio":float(after[1])/before[1],"all_candidates":query.units_near(origin,240).size(),"opponents":query.enemy_candidates_near(origin,240,faction).size()})
+	FileAccess.open("res://.godot/enemy_query_probe.json",FileAccess.WRITE).store_string(JSON.stringify({"samples":samples,"failures":failures},"\t"))
+	u.free();query.free();await _dispose(b)
+	quit(0 if failures.is_empty() else 1)

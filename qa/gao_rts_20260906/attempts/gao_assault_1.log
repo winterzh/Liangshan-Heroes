@@ -1,0 +1,12 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[gao-play] t=0 story=lure army=9 fleet=3 land=[4, 6, 8] sea=[3, 5, 6] flagship=2100.0 g=206 w=146 pop=36/44 hall=1500.0
+[gao-play] t=60 story=lure army=9 fleet=3 land=[3, 0, 0] sea=[3, 5, 6] flagship=2100.0 g=318 w=280 pop=39/44 hall=1500.0
+[gao-play] t=120 story=lure army=12 fleet=5 land=[0, 0, 0] sea=[3, 5, 6] flagship=2100.0 g=186 w=225 pop=48/64 hall=1500.0
+[gao-play] t=180 story=lure army=20 fleet=6 land=[0, 0, 0] sea=[0, 5, 5] flagship=2100.0 g=262 w=167 pop=59/74 hall=1500.0
+[gao-play] t=240 story=lure army=22 fleet=8 land=[0, 0, 0] sea=[0, 5, 1] flagship=2100.0 g=640 w=297 pop=67/74 hall=1500.0
+[rts] PASS assault wins through actual construction, production and combat
+[rts] PASS assault builds economy and pays for at least three replacement warships
+[rts] PASS assault preserves original camp across three expeditions
+[rts] PASS assault defeats all core land/water forces and disables flagship
+[gao-play-result] {"checks":4,"failures":[],"metrics":{"buildings_started":5,"camp_hp":1500.0,"enemy_paid_produced":[3,4],"enemy_spent_gold":434,"enemy_spent_wood":290,"events":["gao_land_cleared","gao_land_post_destroyed","gao_sea_post_destroyed","flagship_disabled","gao_basic_victory"],"game_seconds":300.0,"orders":310,"result":{"contract_version":3,"core_cleared":true,"core_goal":"守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。","done_ids":["gao_land"],"goals":[{"id":"gao_lure","label":"阮小七引活官船进入港汊伏区","note":"","reason":"本局未完成","state":"missed"},{"id":"gao_fire","label":"公孙胜祭风、刘唐登船举火，护两艘接应船撤离","note":"","reason":"接应船损失，可继续用普通舰队正面作战。","state":"missed"},{"id":"gao_land","label":"击退岸军并拔除山前补给营","note":"","reason":"","state":"done"},{"id":"gao_capture","label":"封港凿船、水上接俘、返航后实际押至忠义堂","note":"","reason":"本局未完成","state":"missed"}],"missed_ids":["gao_lure","gao_fire","gao_capture"],"pending_ids":[],"story_complete":false,"story_done":1,"story_total":4},"skill_orders":15,"story_phase":"lure","units_queued":29,"units_queued_by_key":{"liang_dao":6,"liang_gong":6,"liang_qiang":4,"liangshan_warship":10,"lou_luo":3}},"passed":true,"route":"assault","scope":"actual economy and combat controlled through player commands; automated, not human fun acceptance"}

@@ -1,0 +1,132 @@
+{
+  "base_commit": "57e2512db918498f2950c7669cd2bf6863e2265e",
+  "integrated_before_final_qa": "5457de797678889ce606abb9468a2a994f634d51",
+  "original_reference": {
+    "path": "qa/wall_join_polish_20260906/after/zhu_close.png",
+    "sha256": "77aaf1011804979c8e5ce0abfc7269007e082cbe3a59ca1805e76811d756e9d7"
+  },
+  "jobs": [
+    {
+      "key": "gate",
+      "tool": "built-in image_gen.imagegen",
+      "prompt": {
+        "path": "tools/contracts/zhu_gate_native_20260906/prompt.txt",
+        "sha256": "d4ce3973ceefe221f30a6e67f2e57e194abe6e652704229ce13b7b70b763ecb8"
+      },
+      "references": [
+        {
+          "path": "qa/wall_join_polish_20260906/after/zhu_close.png",
+          "sha256": "77aaf1011804979c8e5ce0abfc7269007e082cbe3a59ca1805e76811d756e9d7"
+        }
+      ],
+      "output": {
+        "path": "tools/contracts/zhu_gate_native_20260906/gate.png",
+        "sha256": "0630d63643c1cf4bd1cc66499f000864851fe1e8fb4ccfee9538a8d56f7ba431"
+      },
+      "native_file": "exec-18175e16-f49c-4f9f-bed4-5b4500d0820d.png",
+      "mode": "RGB",
+      "size": [
+        1536,
+        1024
+      ],
+      "status": "RGB checkerboard, not used in game"
+    },
+    {
+      "key": "alpha_attempt",
+      "tool": "built-in image_gen.imagegen",
+      "prompt": {
+        "path": "tools/contracts/zhu_gate_native_20260906/alpha_prompt.txt",
+        "sha256": "30d8c33173467300c86cab222d4a5353accd40671c7ec86abe246f2eb44fd7ce"
+      },
+      "references": [
+        {
+          "path": "tools/contracts/zhu_gate_native_20260906/gate.png",
+          "sha256": "0630d63643c1cf4bd1cc66499f000864851fe1e8fb4ccfee9538a8d56f7ba431"
+        }
+      ],
+      "output": {
+        "path": "tools/contracts/zhu_gate_native_20260906/alpha_attempt.png",
+        "sha256": "e45ed9e3fd25396cc6e5bfe07d71b506505826de9af3cb20394cb92b68f45e3d"
+      },
+      "native_file": "exec-5838635a-7d03-44c0-8bbf-4c01244ba876.png",
+      "mode": "RGB",
+      "size": [
+        1536,
+        1024
+      ],
+      "status": "RGB checkerboard, not used in game"
+    },
+    {
+      "key": "alpha_clipped",
+      "tool": "built-in image_gen.imagegen",
+      "prompt": {
+        "path": "tools/contracts/zhu_gate_native_20260906/alpha2_prompt.txt",
+        "sha256": "ae855c52250e63eb2ccecc8eda52f47887e025305d7e3a8601b5f36f6cc5d9a8"
+      },
+      "references": [
+        {
+          "path": "tools/contracts/zhu_gate_native_20260906/alpha_attempt.png",
+          "sha256": "e45ed9e3fd25396cc6e5bfe07d71b506505826de9af3cb20394cb92b68f45e3d"
+        }
+      ],
+      "output": {
+        "path": "tools/contracts/zhu_gate_native_20260906/alpha_clipped.png",
+        "sha256": "067e49cc86d0fa333c332f49c86810a71c91fdbe01aa8a96141eb9f0d58c4caf"
+      },
+      "native_file": "exec-1bc4d40e-d254-487c-9a41-4d893d953c1a.png",
+      "mode": "RGBA",
+      "size": [
+        1536,
+        1024
+      ],
+      "status": "RGBA but silhouette touches image edges, not used in game"
+    },
+    {
+      "key": "final",
+      "tool": "built-in image_gen.imagegen",
+      "prompt": {
+        "path": "tools/contracts/zhu_gate_native_20260906/padding_prompt.txt",
+        "sha256": "c91078a5807f1e75eaff40e4f245fc59bede76cf852b826bc00269ff3b92e5c8"
+      },
+      "references": [
+        {
+          "path": "tools/contracts/zhu_gate_native_20260906/alpha_clipped.png",
+          "sha256": "067e49cc86d0fa333c332f49c86810a71c91fdbe01aa8a96141eb9f0d58c4caf"
+        }
+      ],
+      "output": {
+        "path": "assets/campaign/objects/zhu_gate_native_20260906_default.png",
+        "sha256": "570b6fe33ed6c731dbc85cea7efb92d06b7b44cf11c960c3f30f1ac11ce04300"
+      },
+      "native_file": "exec-93edb31c-359d-4453-bdeb-dd665dcf2460.png",
+      "mode": "RGBA",
+      "size": [
+        1536,
+        1024
+      ],
+      "status": "Selected native RGBA; composed and reviewed in Godot"
+    }
+  ],
+  "production": {
+    "path": "assets/campaign/objects/zhu_gate_native_20260906_default.png",
+    "sha256": "570b6fe33ed6c731dbc85cea7efb92d06b7b44cf11c960c3f30f1ac11ce04300"
+  },
+  "image_processing": "Native bytes copied unchanged. Godot standard import limits to 512 and generates mipmaps. Source geometry and texture-only tint are runtime drawing configuration; no local PNG re-encoding.",
+  "feet_native_pixels": {
+    "north": [
+      1322,
+      647
+    ],
+    "south": [
+      230,
+      935
+    ]
+  },
+  "visual_height": 180,
+  "texture_tint": [
+    0.6,
+    0.7,
+    0.83,
+    1
+  ]
+}

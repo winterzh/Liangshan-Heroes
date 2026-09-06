@@ -1,0 +1,19 @@
+extends "res://tools/rts_performance_probe.gd"
+static var chase_sites := 0
+static var speed_windows := 0
+static var speed_reads := 0
+
+static func observe(can_give_up: bool, time: float, fast: float, normal: float) -> void:
+	chase_sites+=1
+	if can_give_up and time>=fast and time<normal:speed_windows+=1
+
+func sample(b,_label: String) -> Dictionary:
+	b._perf_bench_setup(200);b._prof_on=false
+	await _wait(3)
+	chase_sites=0;speed_windows=0;speed_reads=0
+	var physics_start:=Engine.get_physics_frames();var started:=Time.get_ticks_usec()
+	await _wait(10)
+	return {"chase_decision_sites":chase_sites,"speed_relevant_sites":speed_windows,"actual_all_speed_reads":speed_reads,
+		"legacy_cap_speed_reads_on_same_observed_states":chase_sites*2,"current_cap_speed_reads_on_same_observed_states":speed_windows*2,
+		"physics_steps":Engine.get_physics_frames()-physics_start,"wall_seconds":float(Time.get_ticks_usec()-started)/1000000.0,
+		"scope":"Actual live battle counter only, with temporary Unit call-site instrumentation. Legacy reads derived from its unconditional two reads per observed site; not a separately replayed old battle or normal FPS measurement."}

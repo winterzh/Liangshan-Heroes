@@ -1,0 +1,56 @@
+func _separation_pass(_delta: float) -> void:
+	# 分离是软约束：常规规模逐帧；超过 320 名机动单位后分三组轮询（每组 20Hz）。
+	# 位移/攻击仍是 60Hz，这里只给每对重叠单位隔几帧做一次位置校正。
+	_sep_phase = (_sep_phase + 1) % 3
+	var stagger := _mob_count > 320
+	for a: Unit in units:
+		if a.is_building or a.is_resource or a.hp <= 0.0 or a.garrisoned or a.story_outcome != "":
+			continue
+		var aid := a.get_instance_id()
+		if stagger and aid % 3 != _sep_phase:
+			continue
+		var a_mv := a._state == Unit.ST_MOVE or a._state == Unit.ST_AMOVE or a._state == Unit.ST_CHASE
+		var a_phase := _gold_phasing(a)
+		var a_pos := a.position
+		var a_radius := a.radius
+		var a_profile := a.movement_profile
+		var cx := int(floor(a_pos.x / GRID_CELL))
+		var cy := int(floor(a_pos.y / GRID_CELL))
+		# 所有机动单位半径 <=20，两身体的分离距离 < GRID_CELL，查 3×3 桶足够。
+		for gy in range(cy - 1, cy + 2):
+			for gx in range(cx - 1, cx + 2):
+				var bucket_v: Variant = _mob_grid.get(Vector2i(gx, gy))
+				if bucket_v == null:
+					continue
+				var bucket: Array = bucket_v
+				for b: Unit in bucket:
+					if b.get_instance_id() <= aid or b.story_outcome != "" or b.movement_profile != a_profile:
+						continue   # 每对只处理一次；同时跳过自身
+					if a_phase and _gold_phasing(b):
+						continue
+					var b_pos := b.position
+					var diff := a_pos - b_pos
+					var d2 := diff.length_squared()
+					var min_d := a_radius + b.radius + 2.0
+					if d2 >= min_d * min_d or d2 <= 0.0001:
+						continue
+					var d := sqrt(d2)
+					var b_mv := b._state == Unit.ST_MOVE or b._state == Unit.ST_AMOVE or b._state == Unit.ST_CHASE
+					var aw := 0.5
+					var bw := 0.5
+					if a_mv and not b_mv:
+						aw = 0.85; bw = 0.15
+					elif b_mv and not a_mv:
+						aw = 0.15; bw = 0.85
+					var dirn := diff / d
+					var overlap := min_d - d
+					var ap := a_pos + dirn * overlap * aw
+					var bp := b_pos - dirn * overlap * bw
+					if map._segment_open(a_pos, ap, a_profile):
+						a_pos = ap
+					if map._segment_open(b_pos, bp, a_profile):
+						b.position = bp
+		# All candidate IDs are greater than aid, so none can read a as b while
+		# this outer iteration is running. Publish its final transform once.
+		if a.position != a_pos:
+			a.position = a_pos

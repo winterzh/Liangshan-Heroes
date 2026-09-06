@@ -1,0 +1,16 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[rts-play] t=1 stage=north army=5 g=124 w=102 pop=16/20 buildings=1 gate_hp=1600.0
+[rts-play] t=62 stage=north army=9 g=151 w=316 pop=22/30 buildings=3 gate_hp=1600.0
+[rts-play] t=122 stage=north army=13 g=476 w=313 pop=30/30 buildings=4 gate_hp=1600.0
+[rts-play] t=183 stage=outpost army=17 g=673 w=238 pop=39/50 buildings=5 gate_hp=1600.0
+[rts-play] t=243 stage=tower army=12 g=1028 w=306 pop=32/50 buildings=5 gate_hp=1490.8
+[rts-play] t=304 stage=manor army=9 g=967 w=151 pop=27/50 buildings=5 gate_hp=0
+[rts-play] t=364 stage=manor army=8 g=632 w=45 pop=28/50 buildings=5 gate_hp=0
+[rts-play] t=425 stage=return army=8 g=344 w=35 pop=24/50 buildings=5 gate_hp=0
+[rts] PASS inside route wins through live economy/combat and explicit return
+[rts] PASS route uses construction and normal troop production
+[rts] PASS route takes expansion and cuts reinforcement source
+[rts] PASS route recruits siege and clears a defended entrance tower
+[rts] PASS inside route enters manor while main gate remains intact
+[rts-result] {"checks":5,"failures":[],"metrics":{"ai_trained":14,"buildings_started":5,"entered_with_main_intact":true,"events":["zhu_resource_secured","zhu_supply_cut","zhu_hu_captured","action:zhu_rts:zhu_rts_inside","zhu_gate_opened","zhu_gate_breached","zhu_manor_fallen","action:zhu_rts:zhu_rts_rescue","zhu_prisoners_freed","zhu_seven_safe","action:zhu_rts:zhu_rts_finish","zhu_victory"],"game_seconds":442.466666666647,"orders":251,"raids_sent":1,"result":{"contract_version":2,"core_cleared":true,"core_goal":"摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。","done_ids":["zhu_capture","zhu_inside","zhu_seven"],"goals":[{"id":"zhu_capture","label":"生擒扈三娘，仍按敌将看押","note":"","reason":"","state":"done"},{"id":"zhu_inside","label":"孙立内应，打开偏门","note":"","reason":"","state":"done"},{"id":"zhu_seven","label":"七名被囚好汉全部撤回前营","note":"","reason":"","state":"done"}],"missed_ids":[],"pending_ids":[],"story_complete":true,"story_done":3,"story_total":3},"stage":"return","towers_destroyed":2,"units_queued":52,"units_queued_by_key":{"hua_rong":3,"liang_dao":12,"liang_gong":20,"liang_qiang":11,"siege_cata":4,"siege_ram":2}},"passed":true,"route":"inside","scope":"automated live gameplay; not human fun acceptance"}

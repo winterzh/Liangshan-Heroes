@@ -1,0 +1,49 @@
+extends "res://tools/grid_build_qa.gd"
+
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true)
+	var campaign=root.get_node("Campaign");campaign.current=7
+	for key in ["skirmish","skirmish_ai","arena","scenario","custom_defense","scale_on","ai_friendly"]:campaign.set(key,false)
+	campaign.skirmish=true;root.get_node("Settings").auto_micro_level=0;seed(5088120)
+	var b=load("res://scenes/main.tscn").instantiate();root.add_child(b);current_scene=b;await process_frame
+	b.hud._intro_root.hide();b._on_intro_done();b._on_start_battle();b.process_mode=Node.PROCESS_MODE_DISABLED
+	b._perf_bench_setup(200);b._prof_on=false;await process_frame
+	var original:=FileAccess.get_file_as_string(REFERENCE)
+	var source:=FileAccess.get_file_as_string("res://scripts/battle.gd")
+	var current:=source.substr(source.find("func _grid_build()"))
+	current=current.substr(0,current.find("func unit_visual_active"))
+	var projection:=original.replace("\t\tvar render_visible:","\t\tvar screen_pos := to_screen(u.position)\n\t\tvar render_visible:")
+	projection=projection.replace("_unit_draw_rect.has_point(to_screen(u.position))","_unit_draw_rect.has_point(screen_pos)")
+	projection=projection.replace("u.visible = render_visible\n","u.visible = render_visible\n\t\t\tscreen_pos = to_screen(u.position)\n")
+	projection=projection.replace("int(to_screen(u.position).y)","int(screen_pos.y)")
+	var typed:=original
+	var combined:=projection
+	for entry in [["_mob_grid","\t\t\t"],["body_grid","\t\t\t"],["_grid","\t\t"]]:
+		var key: String=entry[0];var indent: String=entry[1]
+		var old_line:=indent+"\t"+key+"[k].append(u)"
+		var new_line:=indent+"\tvar bucket: Array = "+key+"[k]\n"+indent+"\tbucket.append(u)"
+		typed=typed.replace(old_line,new_line);combined=combined.replace(old_line,new_line)
+	var candidates:=[]
+	for entry in [["original",original],["current",current],["projection",projection],["typed_buckets",typed],["combined",combined]]:
+		var script:=GDScript.new();script.source_code='extends "res://scripts/battle.gd"\nfunc _ready() -> void: pass\n'+entry[1]
+		check(script.reload()==OK,"variant compiles "+entry[0])
+		var target=script.new();target.process_mode=Node.PROCESS_MODE_DISABLED;root.add_child(target)
+		_copy_context(b,target);candidates.append({"label":entry[0],"target":target})
+	var results:=[]
+	for revealed in [false,true]:
+		if revealed:
+			for u in b.units:u.fog_visible=true
+		for item in candidates:_time(item.target)
+		for round in range(6):
+			var order: Array=candidates.duplicate()
+			if round%2==1:order.reverse()
+			for item in order:
+				var us:=_time(item.target)
+				results.append({"label":item.label,"revealed":revealed,"round":round,"us":us,"calls":200})
+	FileAccess.open("res://.godot/grid_variants.json",FileAccess.WRITE).store_string(JSON.stringify(results,"\t"))
+	for revealed in [false,true]:
+		for item in candidates:
+			var values: Array=results.filter(func(r):return r.label==item.label and r.revealed==revealed).map(func(r):return r.us);values.sort()
+			print("[grid-variant] ",item.label," revealed=",revealed," median=",(values[2]+values[3])/2.0)
+	for item in candidates:item.target.free()
+	await _dispose(b);quit()

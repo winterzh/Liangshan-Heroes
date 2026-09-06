@@ -1,0 +1,533 @@
+{
+  "checks": [
+    {
+      "details": null,
+      "name": "production Unit/Battle/Defs scripts instantiate",
+      "passed": true
+    },
+    {
+      "details": [],
+      "name": "all test-only animation proxies install",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_se.png",
+        "expected": "res://assets/anim/qa_direction4_walk_se.png",
+        "frames": 2
+      },
+      "name": "exact directional walk loads se",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "directional cache is stable se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_sw.png",
+        "expected": "res://assets/anim/qa_direction4_walk_sw.png",
+        "frames": 2
+      },
+      "name": "exact directional walk loads sw",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "directional cache is stable sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_ne.png",
+        "expected": "res://assets/anim/qa_direction4_walk_ne.png",
+        "frames": 2
+      },
+      "name": "exact directional walk loads ne",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "directional cache is stable ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_nw.png",
+        "expected": "res://assets/anim/qa_direction4_walk_nw.png",
+        "frames": 2
+      },
+      "name": "exact directional walk loads nw",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "directional cache is stable nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "hashes": {
+          "ne": 25596598,
+          "nw": 608844677,
+          "se": 3295208418,
+          "sw": 278494333
+        },
+        "sources": {
+          "ne": "res://assets/anim/qa_direction4_walk_ne.png",
+          "nw": "res://assets/anim/qa_direction4_walk_nw.png",
+          "se": "res://assets/anim/qa_direction4_walk_se.png",
+          "sw": "res://assets/anim/qa_direction4_walk_sw.png"
+        }
+      },
+      "name": "directional cache entries stay separated",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_attack.png",
+        "expected": "res://assets/anim/qa_direction4_attack.png"
+      },
+      "name": "legacy action wins over directional idle se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_attack.png",
+        "expected": "res://assets/anim/qa_direction4_attack.png"
+      },
+      "name": "legacy action wins over directional idle sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_attack.png",
+        "expected": "res://assets/anim/qa_direction4_attack.png"
+      },
+      "name": "legacy action wins over directional idle ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_attack.png",
+        "expected": "res://assets/anim/qa_direction4_attack.png"
+      },
+      "name": "legacy action wins over directional idle nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_idle_se.png",
+        "expected": "res://assets/anim/qa_direction4_idle_se.png"
+      },
+      "name": "missing all action art keeps same-direction idle se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_idle_sw.png",
+        "expected": "res://assets/anim/qa_direction4_idle_sw.png"
+      },
+      "name": "missing all action art keeps same-direction idle sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_idle_ne.png",
+        "expected": "res://assets/anim/qa_direction4_idle_ne.png"
+      },
+      "name": "missing all action art keeps same-direction idle ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_idle_nw.png",
+        "expected": "res://assets/anim/qa_direction4_idle_nw.png"
+      },
+      "name": "missing all action art keeps same-direction idle nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_death.png",
+        "expected": "res://assets/anim/qa_direction4_death.png"
+      },
+      "name": "legacy death survives directional idle se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_death.png",
+        "expected": "res://assets/anim/qa_direction4_death.png"
+      },
+      "name": "legacy death survives directional idle sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_death.png",
+        "expected": "res://assets/anim/qa_direction4_death.png"
+      },
+      "name": "legacy death survives directional idle ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_death.png",
+        "expected": "res://assets/anim/qa_direction4_death.png"
+      },
+      "name": "legacy death survives directional idle nw",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "legacy two-argument animation signature still loads",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_legacy_walk.png",
+        "expected": "res://assets/anim/qa_direction4_legacy_walk.png"
+      },
+      "name": "legacy undirected animation fallback se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_legacy_walk.png",
+        "expected": "res://assets/anim/qa_direction4_legacy_walk.png"
+      },
+      "name": "legacy undirected animation fallback sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_legacy_walk.png",
+        "expected": "res://assets/anim/qa_direction4_legacy_walk.png"
+      },
+      "name": "legacy undirected animation fallback ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_legacy_walk.png",
+        "expected": "res://assets/anim/qa_direction4_legacy_walk.png"
+      },
+      "name": "legacy undirected animation fallback nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_se.png",
+        "expected": "res://assets/anim/qa_direction4_walk_se.png",
+        "frame_directional": true
+      },
+      "name": "Unit marks exact four-direction frame as non-mirrored se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_sw.png",
+        "expected": "res://assets/anim/qa_direction4_walk_sw.png",
+        "frame_directional": true
+      },
+      "name": "Unit marks exact four-direction frame as non-mirrored sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_ne.png",
+        "expected": "res://assets/anim/qa_direction4_walk_ne.png",
+        "frame_directional": true
+      },
+      "name": "Unit marks exact four-direction frame as non-mirrored ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_walk_nw.png",
+        "expected": "res://assets/anim/qa_direction4_walk_nw.png",
+        "frame_directional": true
+      },
+      "name": "Unit marks exact four-direction frame as non-mirrored nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_legacy_walk.png",
+        "frame_directional": false
+      },
+      "name": "Unit keeps legacy undirected frame eligible for horizontal mirror",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_hurt_se.png",
+        "expected": "res://assets/anim/qa_direction4_hurt_se.png",
+        "frame_directional": true
+      },
+      "name": "generic Unit selects exact directional hurt se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_hurt_sw.png",
+        "expected": "res://assets/anim/qa_direction4_hurt_sw.png",
+        "frame_directional": true
+      },
+      "name": "generic Unit selects exact directional hurt sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_hurt_ne.png",
+        "expected": "res://assets/anim/qa_direction4_hurt_ne.png",
+        "frame_directional": true
+      },
+      "name": "generic Unit selects exact directional hurt ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/anim/qa_direction4_hurt_nw.png",
+        "expected": "res://assets/anim/qa_direction4_hurt_nw.png",
+        "frame_directional": true
+      },
+      "name": "generic Unit selects exact directional hurt nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "expected": "SWORD",
+        "weapon_kind": 0
+      },
+      "name": "generic wu_song keeps blade weapon profile",
+      "passed": true
+    },
+    {
+      "details": {
+        "expected": "FIST",
+        "weapon_kind": 4
+      },
+      "name": "wu_song_mengzhou remains fist weapon profile",
+      "passed": true
+    },
+    {
+      "details": {
+        "expected": "SPEAR",
+        "weapon_kind": 1
+      },
+      "name": "lian_huan_ma uses spear weapon profile",
+      "passed": true
+    },
+    {
+      "details": {
+        "expected": "SWORD",
+        "weapon_kind": 0
+      },
+      "name": "unrelated melee unit keeps range-derived sword profile",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_attack_se.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_attack_se.png"
+      },
+      "name": "Jiang rush_windup uses exact attack start se",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "Jiang windup keeps exact attack start se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_idle_se.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_idle_se.png"
+      },
+      "name": "unrelated Jiang story pose stays idle se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/wu_song_mengzhou_idle_se.png"
+      },
+      "name": "rush_windup does not affect another variant se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_attack_sw.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_attack_sw.png"
+      },
+      "name": "Jiang rush_windup uses exact attack start sw",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "Jiang windup keeps exact attack start sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_idle_sw.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_idle_sw.png"
+      },
+      "name": "unrelated Jiang story pose stays idle sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/wu_song_mengzhou_idle_sw.png"
+      },
+      "name": "rush_windup does not affect another variant sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_attack_ne.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_attack_ne.png"
+      },
+      "name": "Jiang rush_windup uses exact attack start ne",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "Jiang windup keeps exact attack start ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_idle_ne.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_idle_ne.png"
+      },
+      "name": "unrelated Jiang story pose stays idle ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/wu_song_mengzhou_idle_ne.png"
+      },
+      "name": "rush_windup does not affect another variant ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_attack_nw.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_attack_nw.png"
+      },
+      "name": "Jiang rush_windup uses exact attack start nw",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "Jiang windup keeps exact attack start nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/jiang_menshen_fists_idle_nw.png",
+        "expected": "res://assets/campaign/anim/jiang_menshen_fists_idle_nw.png"
+      },
+      "name": "unrelated Jiang story pose stays idle nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "res://assets/campaign/anim/wu_song_mengzhou_idle_nw.png"
+      },
+      "name": "rush_windup does not affect another variant nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "failed": {
+
+        },
+        "tested_count": 164
+      },
+      "name": "every ordinary movable unit updates all four directions",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "se",
+        "lunge": 1.0
+      },
+      "name": "attack windup locks direction se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "sw",
+        "lunge": 1.0
+      },
+      "name": "attack windup locks direction sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "ne",
+        "lunge": 1.0
+      },
+      "name": "attack windup locks direction ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "nw",
+        "lunge": 1.0
+      },
+      "name": "attack windup locks direction nw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "se",
+        "cast_t": 0.75
+      },
+      "name": "cast windup locks direction se",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "sw",
+        "cast_t": 0.75
+      },
+      "name": "cast windup locks direction sw",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "ne",
+        "cast_t": 0.75
+      },
+      "name": "cast windup locks direction ne",
+      "passed": true
+    },
+    {
+      "details": {
+        "actual": "nw",
+        "cast_t": 0.75
+      },
+      "name": "cast windup locks direction nw",
+      "passed": true
+    },
+    {
+      "details": null,
+      "name": "temporary assets/anim proxies are removed",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "fixture_directory": "res://qa/direction4_20260901/fixtures",
+  "ordinary_movable_count": 164,
+  "ordinary_movable_failures": {
+
+  },
+  "passed": true,
+  "production_source_files_persistently_modified": false,
+  "temporary_assets_anim_proxy_cleanup": true
+}

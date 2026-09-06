@@ -11,6 +11,7 @@ var _key_overview: Label
 
 
 func _ready() -> void:
+	theme = UITheme.shared()
 	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停态(Esc 菜单)下仍可操作
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -19,7 +20,7 @@ func _ready() -> void:
 
 func _build() -> void:
 	var bg := ColorRect.new()
-	bg.color = Color(0.06, 0.05, 0.035, 0.96)
+	bg.color = Color(UITheme.INK, 0.97)
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(bg)
@@ -35,7 +36,7 @@ func _build() -> void:
 	var title := Label.new()
 	title.text = "⚙  设置"
 	title.add_theme_font_size_override("font_size", 32)
-	title.add_theme_color_override("font_color", Color("ffe9a8"))
+	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 
@@ -112,7 +113,7 @@ func _build() -> void:
 	_key_overview = Label.new()
 	_key_overview.text = _keybind_text()
 	_key_overview.add_theme_font_size_override("font_size", 14)
-	_key_overview.add_theme_color_override("font_color", Color("b8c4d4"))
+	_key_overview.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	p.add_child(_key_overview)
 
 	var back := Button.new()
@@ -159,7 +160,7 @@ func _head(parent: VBoxContainer, title: String) -> void:
 	var l := Label.new()
 	l.text = title
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("ffd866"))
+	l.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	parent.add_child(l)
 
 
@@ -170,7 +171,7 @@ func _row(parent: VBoxContainer, label_text: String, control: Control) -> void:
 	l.text = label_text
 	l.custom_minimum_size = Vector2(150, 0)
 	l.add_theme_font_size_override("font_size", 16)
-	l.add_theme_color_override("font_color", Color("c8d2de"))
+	l.add_theme_color_override("font_color", UITheme.PAPER)
 	hb.add_child(l)
 	hb.add_child(control)
 	parent.add_child(hb)
@@ -190,7 +191,7 @@ func _slider(value: float, lo: float, hi: float, cb: Callable) -> Control:
 	var vl := Label.new()
 	vl.custom_minimum_size = Vector2(56, 0)
 	vl.add_theme_font_size_override("font_size", 15)
-	vl.add_theme_color_override("font_color", Color("ffe9a8"))
+	vl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	vl.text = ("%d%%" % int(round(value * 100.0))) if hi <= 1.0 else ("%.1f×" % value)
 	hb.add_child(vl)
 	sl.value_changed.connect(func(v: float) -> void:
@@ -204,7 +205,7 @@ func _note(text: String) -> Control:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 12)
-	l.add_theme_color_override("font_color", Color("7c8a9c"))
+	l.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.custom_minimum_size = Vector2(360, 0)
 	return l
@@ -233,24 +234,24 @@ func _num(value: float, lo: float, hi: float, step: float, cb: Callable) -> Cont
 ## 分段单选按钮的醒目配色：选中=金底深字(粗边)，未选=暗底灰字。让「当前选中项」一眼可辨。
 func _style_seg(b: Button) -> void:
 	var norm := StyleBoxFlat.new()
-	norm.bg_color = Color(0.15, 0.14, 0.11)
-	norm.set_corner_radius_all(7)
+	norm.bg_color = UITheme.INK_SOFT
+	norm.set_corner_radius_all(3)
 	norm.set_border_width_all(1)
-	norm.border_color = Color(0.34, 0.31, 0.24)
+	norm.border_color = UITheme.COPPER
 	var sel := StyleBoxFlat.new()
-	sel.bg_color = Color("ffcf3f")          # 选中：醒目金黄
-	sel.set_corner_radius_all(7)
-	sel.set_border_width_all(2)
-	sel.border_color = Color("fff3c8")
+	sel.bg_color = UITheme.PAPER_DARK
+	sel.set_corner_radius_all(3)
+	sel.set_border_width_all(1)
+	sel.border_color = UITheme.COPPER_LIGHT
 	b.add_theme_stylebox_override("normal", norm)
 	b.add_theme_stylebox_override("hover", norm)
 	b.add_theme_stylebox_override("pressed", sel)
 	b.add_theme_stylebox_override("hover_pressed", sel)
 	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	b.add_theme_color_override("font_color", Color("aa9f8c"))            # 未选：暗灰字
-	b.add_theme_color_override("font_hover_color", Color("e6dcc4"))
-	b.add_theme_color_override("font_pressed_color", Color("241a06"))    # 选中：深色压金底
-	b.add_theme_color_override("font_hover_pressed_color", Color("241a06"))
+	b.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
+	b.add_theme_color_override("font_hover_color", UITheme.PAPER)
+	b.add_theme_color_override("font_pressed_color", UITheme.INK)
+	b.add_theme_color_override("font_hover_pressed_color", UITheme.INK)
 
 
 ## 分段单选：[[显示文字, 值], ...]，高亮 current 对应项；点击互斥高亮并回调。
@@ -302,7 +303,7 @@ func _keybind_grid() -> Control:
 		label.text = String(spec[0])
 		label.custom_minimum_size = Vector2(100, 34)
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.add_theme_color_override("font_color", Color("c8d2de"))
+		label.add_theme_color_override("font_color", UITheme.PAPER)
 		grid.add_child(label)
 		var action := String(spec[1])
 		var button := Button.new()

@@ -1,0 +1,92 @@
+{
+	"checks": 7,
+	"failures": [],
+	"metrics": {
+		"ai_trained": 4,
+		"buildings_started": 6,
+		"camp_hp": 1500.0,
+		"events": [
+			"lhm_supply_0",
+			"lhm_supply_1",
+			"lhm_break_1",
+			"lhm_break_2",
+			"lhm_break_3",
+			"lhm_direct_break",
+			"lhm_break_4",
+			"lhm_break_5",
+			"lhm_break_6",
+			"lhm_break_7",
+			"lhm_break_8",
+			"lhm_break_9",
+			"lhm_hu_fled",
+			"lhm_han_captured",
+			"lhm_manor_fallen",
+			"lhm_victory"
+		],
+		"game_seconds": 352.5,
+		"hook_broken": 9,
+		"orders": 266,
+		"result": {
+			"contract_version": 2,
+			"core_cleared": true,
+			"core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+			"done_ids": [
+				"lhm_han",
+				"lhm_hu"
+			],
+			"goals": [
+				{
+					"id": "lhm_training",
+					"label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+					"note": "",
+					"reason": "本局未完成",
+					"state": "missed"
+				},
+				{
+					"id": "lhm_hooks",
+					"label": "十二骑均先由钩镰枪破阵",
+					"note": "",
+					"reason": "本局已偏离“十二骑均先由钩镰枪破阵”的原著条件",
+					"state": "missed"
+				},
+				{
+					"id": "lhm_han",
+					"label": "生擒韩滔",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "lhm_hu",
+					"label": "呼延灼败走青州",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				}
+			],
+			"missed_ids": [
+				"lhm_training",
+				"lhm_hooks"
+			],
+			"pending_ids": [],
+			"story_complete": false,
+			"story_done": 2,
+			"story_total": 4
+		},
+		"riders_defeated": 12,
+		"skill_orders": 22,
+		"song_hp": 280.0,
+		"units_queued": 44,
+		"units_queued_by_key": {
+			"gou_lian": 14,
+			"liang_dao": 6,
+			"liang_gong": 8,
+			"liang_qiang": 7,
+			"lou_luo": 7,
+			"siege_ram": 2
+		}
+	},
+	"passed": true,
+	"route": "raid",
+	"scope": "automated actual economy/combat, not human fun acceptance"
+}

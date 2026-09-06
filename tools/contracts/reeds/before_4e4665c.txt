@@ -1,0 +1,28 @@
+extends "res://scripts/liangshan_scenery.gd"
+
+func _build_reed_mesh() -> void:
+	# 合为一个静态线网格。数千条抗锯齿Canvas线段会产生大量绘制开销。
+	var vertices := PackedVector3Array()
+	var colors := PackedColorArray()
+	for group in [[_reed_stems,_reed_stem_anchors,Color(0.40,0.43,0.25,0.9)],
+		[_reed_leaves,_reed_leaf_anchors,Color(0.39,0.46,0.26,0.8)],
+		[_reed_heads,_reed_head_anchors,Color(0.58,0.53,0.36,0.9)]]:
+		var points: PackedVector2Array = group[0]
+		var anchors: PackedVector2Array = group[1]
+		for i in range(points.size()):
+			var p: Vector2 = points[i]
+			var color: Color = group[2]
+			if _fog_visibility_ready() and not _fog_anchor_revealed(anchors[i],28.0):
+				color.a = 0.0
+			vertices.append(Vector3(p.x,p.y,0))
+			colors.append(color)
+	if vertices.is_empty():
+		return
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_COLOR] = colors
+	_reed_mesh = ArrayMesh.new()
+	_reed_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES,arrays)
+	_reed_visibility_signature = _current_reed_visibility_signature()
+	queue_redraw()

@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "kind": "environment_map_clamped_candidate_contract",
+  "scope": "local_candidate_only_no_visual_approval_no_release_no_steam",
+  "passed": false,
+  "counts": {
+    "checks": 48,
+    "passed": 47,
+    "failed": 1
+  },
+  "checks": [
+    {
+      "name": "exact_four_installed_surface_candidates",
+      "passed": true,
+      "evidence": [
+        "surface_compacted_stone",
+        "surface_dry_earth",
+        "surface_forest_earth",
+        "surface_wet_bank"
+      ]
+    },
+    {
+      "name": "field_remains_atlas_fallback",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "installer_did_not_write_steam_or_approve_release",
+      "passed": false,
+      "evidence": null
+    },
+    {
+      "name": "surface_dry_earth_raw_sha_matches",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_dry_earth_candidate_target_bytes_identical",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_dry_earth_opaque_2048_rgba",
+      "passed": true,
+      "evidence": {
+        "mode": "RGBA",
+        "size": [
+          2048,
+          2048
+        ],
+        "alpha_extrema": [
+          255,
+          255
+        ]
+      }
+    },
+    {
+      "name": "surface_dry_earth_whole_source_no_crop",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_dry_earth_only_whole_image_normalization",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_dry_earth_map_clamped_overrides_repeat_requirement_only",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_dry_earth_web_prompt_provenance_bound",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_forest_earth_raw_sha_matches",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_forest_earth_candidate_target_bytes_identical",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_forest_earth_opaque_2048_rgba",
+      "passed": true,
+      "evidence": {
+        "mode": "RGBA",
+        "size": [
+          2048,
+          2048
+        ],
+        "alpha_extrema": [
+          255,
+          255
+        ]
+      }
+    },
+    {
+      "name": "surface_forest_earth_whole_source_no_crop",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_forest_earth_only_whole_image_normalization",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_forest_earth_map_clamped_overrides_repeat_requirement_only",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_forest_earth_web_prompt_provenance_bound",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_wet_bank_raw_sha_matches",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_wet_bank_candidate_target_bytes_identical",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_wet_bank_opaque_2048_rgba",
+      "passed": true,
+      "evidence": {
+        "mode": "RGBA",
+        "size": [
+          2048,
+          2048
+        ],
+        "alpha_extrema": [
+          255,
+          255
+        ]
+      }
+    },
+    {
+      "name": "surface_wet_bank_whole_source_no_crop",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_wet_bank_only_whole_image_normalization",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_wet_bank_map_clamped_overrides_repeat_requirement_only",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_wet_bank_web_prompt_provenance_bound",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_compacted_stone_raw_sha_matches",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_compacted_stone_candidate_target_bytes_identical",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_compacted_stone_opaque_2048_rgba",
+      "passed": true,
+      "evidence": {
+        "mode": "RGBA",
+        "size": [
+          2048,
+          2048
+        ],
+        "alpha_extrema": [
+          255,
+          255
+        ]
+      }
+    },
+    {
+      "name": "surface_compacted_stone_whole_source_no_crop",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_compacted_stone_only_whole_image_normalization",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_compacted_stone_map_clamped_overrides_repeat_requirement_only",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "surface_compacted_stone_web_prompt_provenance_bound",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_forest_sampler_repeat_disabled",
+      "passed": true,
+      "evidence": "uniform sampler2D surface_forest_texture : filter_linear_mipmap_anisotropic, repeat_disable;"
+    },
+    {
+      "name": "shader_forest_has_no_direct_tile_uv_sample",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_dry_sampler_repeat_disabled",
+      "passed": true,
+      "evidence": "uniform sampler2D surface_dry_texture : filter_linear_mipmap_anisotropic, repeat_disable;"
+    },
+    {
+      "name": "shader_dry_has_no_direct_tile_uv_sample",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_wet_sampler_repeat_disabled",
+      "passed": true,
+      "evidence": "uniform sampler2D surface_wet_texture : filter_linear_mipmap_anisotropic, repeat_disable;"
+    },
+    {
+      "name": "shader_wet_has_no_direct_tile_uv_sample",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_hard_sampler_repeat_disabled",
+      "passed": true,
+      "evidence": "uniform sampler2D surface_hard_texture : filter_linear_mipmap_anisotropic, repeat_disable;"
+    },
+    {
+      "name": "shader_hard_has_no_direct_tile_uv_sample",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_field_sampler_repeat_disabled",
+      "passed": true,
+      "evidence": "uniform sampler2D surface_field_texture : filter_linear_mipmap_anisotropic, repeat_disable;"
+    },
+    {
+      "name": "shader_field_has_no_direct_tile_uv_sample",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_clamps_map_uv_to_half_texel",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_map_uv_uses_world_size",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_map_warp_is_centered_and_bounded_to_two_pixels",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_legacy_atlas_keeps_repeat_tile_uv",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "shader_skips_only_exact_zero_weight_surface_reads",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "runtime_metadata_distinguishes_map_and_atlas_sampling",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "current_router_contract_pass",
+      "passed": true,
+      "evidence": {
+        "manifest_cells": 64,
+        "object_route_keys": 40,
+        "object_state_paths": 41,
+        "overlay_route_keys": 20,
+        "static_flag_route_keys": 3,
+        "surface_paths": 5,
+        "consumer_ready_manifest_cells": 64,
+        "consumer_ready_surfaces": 5,
+        "consumer_ready_total": 69,
+        "missing_source_resources_expected_before_web_intake": 33,
+        "checks": 790
+      }
+    }
+  ],
+  "inputs": {
+    "install_manifest": "E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_r2bw5j6a\\scratchpad\\map_fixture\\install.json",
+    "install_manifest_sha256": "ff682eb14cf8d5239c0fcbd10989a39daa43a15b791a230c81d9e8621ee5d930",
+    "router_report": "E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_r2bw5j6a\\.godot\\environment_validation\\map_clamped_router.json",
+    "router_report_sha256": "a3f39cba3948efde5146ba855298e8b02b92541ec994452229ea7d637a9c4fab",
+    "evidence_map": "E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_r2bw5j6a\\scratchpad\\map_fixture\\relocations.json",
+    "evidence_map_sha256": "f163cb29543d698c03441d9f133585457c71d41dd7566dd38f37e6e04bc54dbf",
+    "shader": "E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_r2bw5j6a\\scripts\\liangshan_coast.gdshader",
+    "shader_sha256": "ab948b5a115cefd9ed4e1b61e7b20b530b472a3016ba3306b1ff6cf85abb192e",
+    "scenery": "E:\\ChatGPT\\水浒-art-validation\\.godot\\environment_validation\\isolated_r2bw5j6a\\scripts\\liangshan_scenery.gd",
+    "scenery_sha256": "442d2888aa6cbc191940499a1b8e63d33470b550673910db3f95452ca3867ff5"
+  }
+}

@@ -1,0 +1,42 @@
+func _acquire(range_override := -1.0, closest_first := false) -> void:
+	if aggro_range <= 0.0:
+		return
+	if stance == STANCE_PASSIVE:
+		return   # 避战姿态：完全不主动索敌（撤退/包抄时不被沿途敌人勾住）
+	# 据守姿态：只索取已进入攻击范围的敌人 → 原地开打、绝不挪窝
+	var range_cap := aggro_range
+	if stance == STANCE_HOLD:
+		range_cap = atk_range + radius + 12.0
+	if range_override >= 0.0:
+		range_cap = minf(range_cap, range_override)   # A 移动时收紧索敌：只打路上近处的敌人，不被远处勾走
+	var best: Unit = null
+	var best_s := -INF
+	# 只在网格邻近格里找(按警戒/据守半径粗筛)——不再每帧全表扫描，是兵海索敌卡顿的主因之一。
+	var candidates: Array = battle.enemy_candidates_near(position, range_cap, faction) if battle.has_method("enemy_candidates_near") else battle.units_near(position, range_cap)
+	for u in candidates:
+		# 资源点（金矿/林木）不是攻击目标——否则敌人冲过来一直砍树；
+		# 被绑缚待救者（captive）亦非攻击目标——否则刽子手会在救援前先把人砍死。
+		if u == self or not is_instance_valid(u) or u.faction == faction or u.hp <= 0.0 \
+				or u.is_resource or u.garrisoned or u.story_outcome != "" or u.is_captive or u._pending_build or chase_blocked(u):
+			continue
+		# 战役目标物可被玩家明确集火或受真实范围伤害，但不得被闲置单位自动当成下一个敌人。
+		# 黄泥冈纲担用此规则避免护卫倒下后，夺纲好汉自行砍坏必须带走的任务物件。
+		if bool(u.get_meta("campaign_no_auto_target", false)):
+			continue
+		if u._invis_t > 0.0:
+			continue   # 主动隐身：完全不可索敌（出手/施法才现形）
+		if battle != null and battle.has_method("target_visible_to") and not battle.target_visible_to(self, u):
+			continue
+		var d: float = position.distance_to(u.position)
+		var limit := range_cap
+		if u.hidden_in_reeds:
+			limit = minf(limit, 75.0)  # 芦苇荡里的伏兵很难被发现
+		if d > limit:
+			continue
+		var score := (-d + (24.0 if u == _target else 0.0)) if closest_first else _target_score(u, d)
+		if score > best_s:
+			best = u
+			best_s = score
+	if best != _target:
+		_chase_best_distance = INF # Reacquiring the same intruder after returning is a fresh pursuit.
+	_target = best

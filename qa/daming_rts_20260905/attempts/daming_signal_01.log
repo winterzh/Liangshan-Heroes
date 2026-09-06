@@ -1,0 +1,12 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[daming-play] t=0 phase=outpost spies=admit army=7 cover=[true, true, true] gate=false fire=false prison=false rescued=false hall=1500.0
+[rts] FAIL signal route wins using real economy and battle
+[rts] FAIL route uses construction and paid army/siege production
+[rts] PASS camp survives without phase redeployment
+[rts] FAIL same two prisoners actually reach exit alive
+[rts] FAIL route cuts paid outside reinforcement source
+[rts] FAIL infiltration signal allows intact gate to open
+[rts] FAIL live signal route completes all three story contracts
+[rts] PASS all expected route assertions executed
+[daming-rts] {"checks":8,"failures":["signal route wins using real economy and battle","route uses construction and paid army/siege production","same two prisoners actually reach exit alive","route cuts paid outside reinforcement source","infiltration signal allows intact gate to open","live signal route completes all three story contracts"],"metrics":{"ai_trained":0,"buildings_started":2,"camp_hp":1500.0,"events":["action:daming_rts:daming_admit","daming_prison_admitted","action:daming_rts:daming_rescue","daming_early_unlock","daming_inner_unlock","daming_prisoners_freed"],"game_seconds":20.0,"orders":15,"phase":"outpost","prisoner_hp":[360.0,0.0],"result":{"contract_version":2,"core_cleared":false,"core_goal":"守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。","done_ids":[],"goals":[{"id":"daming_infiltration","label":"柴进、乐和乔装入牢，时迁按分工举火","note":"","reason":"","state":"pending"},{"id":"daming_signal","label":"翠云火号发动里应外合","note":"","reason":"","state":"pending"},{"id":"daming_response","label":"鲁智深或武松夺门，牢中内应开枷","note":"","reason":"本局已偏离“鲁智深或武松夺门，牢中内应开枷”的原著条件","state":"missed"}],"missed_ids":["daming_response"],"pending_ids":["daming_infiltration","daming_signal"],"story_complete":false,"story_done":0,"story_total":3},"skill_orders":0,"spy_phase":"ready","units_queued":4,"units_queued_by_key":{"liang_gong":2,"lou_luo":2}},"passed":false,"route":"signal","scope":"automated actual economy and combat; not human fun acceptance"}

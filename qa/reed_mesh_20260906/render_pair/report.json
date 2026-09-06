@@ -1,0 +1,182 @@
+{
+	"failures": [],
+	"mode_checks": [
+		{
+			"name": "frozen old mesh builder hash matches",
+			"passed": true
+		},
+		{
+			"name": "render reference compiles",
+			"passed": true
+		},
+		{
+			"name": "rendered window retains identical complete surface arrays",
+			"passed": true
+		},
+		{
+			"name": "rendered window retains identical complete surface arrays",
+			"passed": true
+		},
+		{
+			"name": "rendered window retains identical complete surface arrays",
+			"passed": true
+		},
+		{
+			"name": "rendered window retains identical complete surface arrays",
+			"passed": true
+		},
+		{
+			"name": "rendered window retains identical complete surface arrays",
+			"passed": true
+		},
+		{
+			"name": "rendered window retains identical complete surface arrays",
+			"passed": true
+		},
+		{
+			"name": "both implementations complete 36 rendered rebuilds",
+			"passed": true
+		},
+		{
+			"name": "paired render keeps unit positions and fog bytes frozen",
+			"passed": true
+		},
+		{
+			"name": "final production mesh screenshot saved",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "paired render scene released",
+			"passed": true
+		},
+		{
+			"name": "player campaign save bytes unchanged",
+			"passed": true
+		}
+	],
+	"passed": true,
+	"render": {
+		"adapter": "NVIDIA GeForce RTX 3070 Ti",
+		"godot": "4.6.3-stable (official)",
+		"median_optimized_ms": 17.3455,
+		"median_reference_ms": 69.292,
+		"p95_optimized_ms": 21.231,
+		"p95_reference_ms": 79.02,
+		"renderer": "forward_plus",
+		"resolution": [
+			1440,
+			900
+		],
+		"scope": "Each interval starts before synchronous rebuilding and ends at frame_post_draw. Frozen level5, all reeds explored, fog overlay hidden and camera fixed at cell 28,43/zoom0.8. Old mesh is assigned into the same live scenery node. Includes full frame work and submission; it is not a GPU fence, combat FPS or human playthrough.",
+		"vertices": 20720,
+		"windows": [
+			{
+				"frame_ms": [
+					69.122,
+					72.739,
+					70.278,
+					71.582,
+					70.541,
+					75.857,
+					84.708,
+					68.716,
+					69.462,
+					70.215,
+					70.17,
+					69.054
+				],
+				"implementation": "reference"
+			},
+			{
+				"frame_ms": [
+					21.231,
+					20.247,
+					19.439,
+					17.98,
+					18.47,
+					19.576,
+					21.919,
+					17.657,
+					19.033,
+					16.884,
+					17.313,
+					16.323
+				],
+				"implementation": "optimized"
+			},
+			{
+				"frame_ms": [
+					20.963,
+					17.121,
+					15.962,
+					20.658,
+					16.999,
+					16.795,
+					16.851,
+					20.179,
+					15.979,
+					16.043,
+					18.548,
+					17.378
+				],
+				"implementation": "optimized"
+			},
+			{
+				"frame_ms": [
+					65.949,
+					66.492,
+					79.02,
+					71.033,
+					68.433,
+					66.742,
+					78.253,
+					68.26,
+					66.415,
+					67.51,
+					66.384,
+					66.499
+				],
+				"implementation": "reference"
+			},
+			{
+				"frame_ms": [
+					66.847,
+					69.523,
+					71.005,
+					66.959,
+					71.087,
+					73.716,
+					66.903,
+					66.444,
+					67.08,
+					73.274,
+					68.245,
+					72.268
+				],
+				"implementation": "reference"
+			},
+			{
+				"frame_ms": [
+					19.161,
+					21.105,
+					18.129,
+					16.695,
+					17.099,
+					16.629,
+					15.971,
+					16.499,
+					15.832,
+					16.333,
+					16.311,
+					17.495
+				],
+				"implementation": "optimized"
+			}
+		]
+	},
+	"samples": []
+}

@@ -1,0 +1,691 @@
+{
+  "baseline": "68a9430cd9917f0b8b9360e8b82217b8f19d26b6",
+  "production_changes": [
+    "scripts/unit.gd"
+  ],
+  "checks": {
+    "redraw": 62,
+    "pause": 55,
+    "ranged": 23,
+    "yezhulin": 107
+  },
+  "unique_behavior_checks": 247,
+  "timing_integrity_checks": 3,
+  "sources": [
+    {
+      "path": "docs/DIRECTORY_INDEX.md",
+      "sha256_lf": "c6de9f2b2e587b3d34e3fdbfc1926e1f464cca9967e0c33de554a0fafeb784fa"
+    },
+    {
+      "path": "docs/REDRAW_STAMP_20260906.md",
+      "sha256_lf": "fa5aeb21a5f3cf77d7ce03f31d96103f3762052dfb7bc0eb0778b0c51cd9683c"
+    },
+    {
+      "path": "docs/RELEASE_READINESS_20260905.md",
+      "sha256_lf": "3a98191bc289b9da0fc19c2bbbd76052f0c155df545e171d67268ba071d704a7"
+    },
+    {
+      "path": "docs/SOURCE_SETUP.md",
+      "sha256_lf": "7c3ebcddb8fc6e6c47defd7a78cf0d169819acb3f5d4ae704e858a923bca9e18"
+    },
+    {
+      "path": "docs/WORKLOG.md",
+      "sha256_lf": "f8d1f782e9c6a0656e83ab160558f78344ffb9bd8d58cb918e93d950d526851c"
+    },
+    {
+      "path": "project.godot",
+      "sha256_lf": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32"
+    },
+    {
+      "path": "scenes/codex.tscn",
+      "sha256_lf": "67347f1dd2145321886e6022806321c1d48c51b5bf4eb26dd9c60fffc1484dfd"
+    },
+    {
+      "path": "scenes/editor.tscn",
+      "sha256_lf": "1ebb53ee68976d7addc9190fd4a00c590cc763d5228b35a1cde6a85c6ba5f469"
+    },
+    {
+      "path": "scenes/main.tscn",
+      "sha256_lf": "fa745b1734767722158500b04306d596d299cf7bd9fc4532fa7d423737b795bf"
+    },
+    {
+      "path": "scenes/menu.tscn",
+      "sha256_lf": "6b36a5679944e504b4443176db3bc00c02fd85af52a7b6189b82ca5f692151e4"
+    },
+    {
+      "path": "scenes/scenario_editor.tscn",
+      "sha256_lf": "e0c68d4da42c095fa93e751313f95ff636f4a867c19b6004bdf0557d5fff1b92"
+    },
+    {
+      "path": "scripts/ability_visuals.gd",
+      "sha256_lf": "4d980ca87f5269a307ff36c3dbd4733d93aab4c80ac54b41b1438eeecb323ab8"
+    },
+    {
+      "path": "scripts/android_updater.gd",
+      "sha256_lf": "739aae0cd81886292588bda2977971816c0ca035451fbc0be1ebfd924dee48ea"
+    },
+    {
+      "path": "scripts/app_lifecycle.gd",
+      "sha256_lf": "278bb44402fe92d065c63a883e1d6f0e6df9b76ad49a9d55749fddd5a1c2a596"
+    },
+    {
+      "path": "scripts/art_db.gd",
+      "sha256_lf": "acf9a1cc278436bd6aa013816cbe92d33f9fbf5d41c6e9d1bd294e39c5c11c2a"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "sha256_lf": "8de7ac4c375fa8dcacb4368b4de43e4fd0b08f23840398c8500949a84f7cbec2"
+    },
+    {
+      "path": "scripts/bios.gd",
+      "sha256_lf": "138f1a2be1103013f9c299b809182d7ea733f57dbadfc94136cdcc32706f4eed"
+    },
+    {
+      "path": "scripts/campaign.gd",
+      "sha256_lf": "922c826c6f49e869a1fdb4bf3702ec3865fca3f8c060b11be06a778d6aa320f2"
+    },
+    {
+      "path": "scripts/campaign_art.gd",
+      "sha256_lf": "b0e917215def4c76c5c2c6a67058a0167d91e3f69bde83df64def99cccba9b0f"
+    },
+    {
+      "path": "scripts/campaign_art_event.gd",
+      "sha256_lf": "44c7f16dcb511b0de9a7975724fbd0522ce74316c0f8f5296c8fb1f19fb8fa7b"
+    },
+    {
+      "path": "scripts/campaign_city_wall.gd",
+      "sha256_lf": "993767d27b44b9fcbf1dfbd5e48c27c73c0229b321878105ea8c5254f89d6122"
+    },
+    {
+      "path": "scripts/campaign_environment.gd",
+      "sha256_lf": "83f315c2121c5ca29f317312588519da13b2d64f9aac9c9b1c4e24ac7257cfb3"
+    },
+    {
+      "path": "scripts/campaign_environment_art.gd",
+      "sha256_lf": "19b7d0424b2fa9dcf14b4267ad2257457bcaefb7159088d3856cdf65edaa82b2"
+    },
+    {
+      "path": "scripts/campaign_flag_overlay.gd",
+      "sha256_lf": "0975f7b74bfd07175f8ebd78223beadfa058794a57c6654dc7395b03a4148118"
+    },
+    {
+      "path": "scripts/campaign_gate_visual.gd",
+      "sha256_lf": "8e4da265f7cd8cdac782df03f474e2a1edad3ac9557ba54d341fe86803c61ca4"
+    },
+    {
+      "path": "scripts/campaign_height.gd",
+      "sha256_lf": "6d471b42f11787e4ffa71417e9bbe45a830aa53b6a5ea79c954faa11aef8ea4a"
+    },
+    {
+      "path": "scripts/campaign_mission.gd",
+      "sha256_lf": "a4265ac3e12994d0824a1140fd5e0d45fda30460d265850fe4f993841c58a583"
+    },
+    {
+      "path": "scripts/campaign_passage.gd",
+      "sha256_lf": "5c494e1c2715ee013d3b34eaf3d1a1d2a73144581cbce929a444f503e79801bf"
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "sha256_lf": "9ec53538efef52f33e942c43cbe5fa717d277efc6b7c7b06aea527280e83ca28"
+    },
+    {
+      "path": "scripts/codex.gd",
+      "sha256_lf": "2dc073881313ed26e89628748be6a319553c7c75809b2e53ef5d73db43c75c9d"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "sha256_lf": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b"
+    },
+    {
+      "path": "scripts/custom_config.gd",
+      "sha256_lf": "57e2cb92ec21115797e1065c4765a221a5d0d5f9f63506656c1bc0c0edf2f3ea"
+    },
+    {
+      "path": "scripts/defs.gd",
+      "sha256_lf": "a2f9a9fe9a669829871c0bcb9fd9295b451e8b9744993deb4f007ab1d80607fb"
+    },
+    {
+      "path": "scripts/editor.gd",
+      "sha256_lf": "118cfa09b6a95beb5bb0bd9ccb1cf7f4e91a9733c17cf3062e04af6842cbeec3"
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "sha256_lf": "35a31084088e8665790b9bc940054d05a96f7e995ecfcd28796d2b6fad63800a"
+    },
+    {
+      "path": "scripts/hero_inventory.gd",
+      "sha256_lf": "b7fa741fc4a208606d6de724164eda57252aa38800893817d39e279dc429a097"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "sha256_lf": "90a84a3ed017bee07c5933492486de06744b842b6a6f2c8c23f7f23bdd19a553"
+    },
+    {
+      "path": "scripts/level_base.gd",
+      "sha256_lf": "85ab169499f6b6a5e5089f9103ada60ea72cbef6938ed38148477a4ee3f5eb2e"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "sha256_lf": "be28fb2a9ebb9d5670d8a31375e15db39132718e89ed86c1f5bb5608e3a40b64"
+    },
+    {
+      "path": "scripts/levels/custom_defense.gd",
+      "sha256_lf": "5c7577c547c2ca0ce13de8ef4ff0fb48e2bd38e80bb5e38b126211438bba18f3"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "sha256_lf": "63dad8a51347805d5130c66f07c28aa7308820c34f11d0856865703a8c825acb"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang_short.gd",
+      "sha256_lf": "977de70cea8e7e47e652631c3942318f5814934a2289a3bd0ee9a4fe5de4be82"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "sha256_lf": "32e9579727f9046bc001a87c2a625b49294306f20dcb88e63f2fdc7e033d88b8"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "sha256_lf": "deac59250f0ea1b1bb0da035ccc5f94cf58ab9b28c2a17b44af5cd9579acd845"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "sha256_lf": "1c2ea7dcc9262f3010f02b13ca2c31d298526ccd1f6ea8a0ea29e2bfebce3ac1"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256_lf": "2efe7999a6159dc5460e831563f7b95a2a83c0aef00c1d655fb688e34bbec287"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "sha256_lf": "c987c42ba6c8020377d8b904e997446936a1c1665f1bb418608e0679314a5b39"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "sha256_lf": "fedacd256dec2cc0cad4a25bddedaa062ab41fe609d8cda75930e421f3f5bd88"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "sha256_lf": "304be56ce55fbdbba3deefa5323967a1e0586797e9b51f1ea52436cab219aac0"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "sha256_lf": "31448d375b4feb5e02019fea53cb603a94ea22b371d774693118eb2bdd5ba1b3"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "sha256_lf": "8dd10a0610b0d470e717d8c07f299ed20c17dbdc232a1d88f2e45f2ce6283e52"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "sha256_lf": "ee4d14e518a4ad1a05d199a4eaf7a94b42a1c0641e6086e7a2c8f4cbf99ce654"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin_short.gd",
+      "sha256_lf": "8bd7056bd2bf19b49865dc3f7644cf6c03586695ce794ec077edeaa66a93044f"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "sha256_lf": "b7630a6457ea357c8b32202633c8ad1b908e035579f1961a639457ff698b8a0f"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "sha256_lf": "cde49d348d92df81178a923cfd6fce602bcdef3e32b143a06f437c1be5e5ca59"
+    },
+    {
+      "path": "scripts/levels/scenario.gd",
+      "sha256_lf": "cd5b6a0ec12455c04cb537d73c578635c692b738194b2298a302772c79aae732"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "sha256_lf": "66d404456c045ef42114caa0f1f534f537098eff02b73f4b680f0b3546950794"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "sha256_lf": "79247357fc16362335ee0dfe38899cb01d005fca86705dfc5bfd1e8843f4b5bb"
+    },
+    {
+      "path": "scripts/liangshan_entrance.gd",
+      "sha256_lf": "c16796c42f997d4ca903b353c4bb01541a9c4c2e82d115ce941b58d122d91e85"
+    },
+    {
+      "path": "scripts/liangshan_environment.gd",
+      "sha256_lf": "e2319fe25609edb95b21c55bbbd81846a9fdc1b0a592be9854ec4782add3bcd9"
+    },
+    {
+      "path": "scripts/liangshan_gate.gd",
+      "sha256_lf": "416106f84d42e918e3bf2b729d05e11b3d3d87ba90d2d80290ea2664a5873b29"
+    },
+    {
+      "path": "scripts/liangshan_height.gd",
+      "sha256_lf": "7a7a2ef3bfed87cbed2ff256db2ad06eedf15918ade1f8ca9aa2dbe72a192662"
+    },
+    {
+      "path": "scripts/liangshan_layout.gd",
+      "sha256_lf": "2f2165495f63e47682778668b2fc3259d61844a4e01cf0cf49bb2552cbd089e9"
+    },
+    {
+      "path": "scripts/liangshan_scenery.gd",
+      "sha256_lf": "24ff0d84f30874c33a2a16985e66a05ff58be4d683bcd0defca468b5acf9e118"
+    },
+    {
+      "path": "scripts/liangshan_stockade.gd",
+      "sha256_lf": "10932f029b360250edb8d90d3c2827105ccc9ab70c36703d5426a3ea52625e1d"
+    },
+    {
+      "path": "scripts/lore_data.gd",
+      "sha256_lf": "6cf1bf8df784bbe4ccb98c9402af75ca092c4b7e290530fae7d4eeaf6b33655e"
+    },
+    {
+      "path": "scripts/menu.gd",
+      "sha256_lf": "0d4f707099b1001ddc7370096fdf6e60d4fa09e299cc8e4fa70288ccf55346c5"
+    },
+    {
+      "path": "scripts/music.gd",
+      "sha256_lf": "c39eb8ace49502f7b5bf04ab68e6bde52d32043de32d73736e11b71e0a04515f"
+    },
+    {
+      "path": "scripts/naval_production.gd",
+      "sha256_lf": "b0b7819f1e50fb7885488cac23969fe1005a95b2303aef9625de72eb2ad15c2a"
+    },
+    {
+      "path": "scripts/projectile.gd",
+      "sha256_lf": "bb8d4b708772048557e080843c35ef1c83d1f4dc3c81e03772a085d113af3859"
+    },
+    {
+      "path": "scripts/rts_camera.gd",
+      "sha256_lf": "d246af0a7005f18e9d8f31e54b68bd5453343ae69050dff3585ab2d1ee329fd0"
+    },
+    {
+      "path": "scripts/scenario_editor.gd",
+      "sha256_lf": "e5eab1617f61e05a16b5d45cd970b6e044c8f4ceaa44b9ddf311406c4da62a23"
+    },
+    {
+      "path": "scripts/scenario_store.gd",
+      "sha256_lf": "5b4069765f69e08ef1a81894a8668a126ce45ce6590d07cd85cecbe2cfae27ed"
+    },
+    {
+      "path": "scripts/screen.gd",
+      "sha256_lf": "29b21df8f6f63376c245e9d7595efde8403d8e6c1ac1cde4df743cf79c614fbf"
+    },
+    {
+      "path": "scripts/settings.gd",
+      "sha256_lf": "93ffcc801149744cc9b0eed35b1bfd0769b5f25ac8f80cdbb7865997b5ef646c"
+    },
+    {
+      "path": "scripts/settings_panel.gd",
+      "sha256_lf": "1a8f455515bbed7a287eeebb32aded1838356d667633fa728c81e2b0ea42cfca"
+    },
+    {
+      "path": "scripts/sfx.gd",
+      "sha256_lf": "ed3e9e5527b68d47ff02ffc53e75256d1483287dd29f512165c8086c75232f1b"
+    },
+    {
+      "path": "scripts/skirmish_frame_alignment.gd",
+      "sha256_lf": "810fb25bdd5caf7fa0dafe86d3dcf4e9d5a61dde9b7d8413886c52f61b3417c4"
+    },
+    {
+      "path": "scripts/terrain_draw_batch.gd",
+      "sha256_lf": "a4a691f590290298a82c7ab8073485787e8f4454a3f804f3225a97206d5cd9a8"
+    },
+    {
+      "path": "scripts/ui_theme.gd",
+      "sha256_lf": "c05ebb540e0d20b1d00f04f5811d58d11cf7dae92114afe51d24e5ae8e08cfc8"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256_lf": "c306ccd13346fd55c1d1e8861966f8454272fd53b48e1be835d46b96ee06d6bd"
+    },
+    {
+      "path": "scripts/world_shadow.gd",
+      "sha256_lf": "f084388a2b7ee53dbb181d79bdf63cf13c4597e967c1b5ea987f4736ca5e4836"
+    },
+    {
+      "path": "tools/campaign_mode_performance_test.gd",
+      "sha256_lf": "65a08cbad409b020d4323a39db218f46af94698a764f396df6140fae07cc67de"
+    },
+    {
+      "path": "tools/chase_speed_qa.gd",
+      "sha256_lf": "ad51371c77b9f6158baf56c4ef201cdb329b450a9a8d084328ba7f862e79fbcc"
+    },
+    {
+      "path": "tools/contracts/redraw_stamp/.gitattributes",
+      "sha256_lf": "fd13dad2ecae9b5cdde18e56b396b87ce73a5e3d9c05455bb00a1afc2c424106"
+    },
+    {
+      "path": "tools/contracts/redraw_stamp/before_68a9430.txt",
+      "sha256_lf": "9f446ffd3c70c9e7cadd4a30b9080aa0889102f0e25e884b558f65fe975e4588"
+    },
+    {
+      "path": "tools/pause_menu_qa.gd",
+      "sha256_lf": "404ef17b07ef175a477e9f14bef470f5bc71a24d309e6346a8e799e7624fdb0c"
+    },
+    {
+      "path": "tools/ranged_firing_path_test.gd",
+      "sha256_lf": "8920a2662476130201877a6e94199ee17f805b1cc98f221a3396e609d12666d9"
+    },
+    {
+      "path": "tools/redraw_stamp_qa.gd",
+      "sha256_lf": "181cb553b45603d5919cbe5f17accee2aa462aca8fa22605e98bd5b8cfbc1a63"
+    },
+    {
+      "path": "tools/redraw_stamp_timing.gd",
+      "sha256_lf": "5f8ba713f75486b43ab29ecf30d01e719e9f38cb3d79f8ba684e4002dd286826"
+    },
+    {
+      "path": "tools/rts_performance_probe.gd",
+      "sha256_lf": "ec238f3e9641d0096527c686c9226fd257ec0d75ad498c83e9cf26db555f7904"
+    },
+    {
+      "path": "tools/unit_redraw_qa.gd",
+      "sha256_lf": "4d9ceeefb12e974c5eec54822be3e784160dcf02f4227e9ee12cb342e95e7651"
+    },
+    {
+      "path": "tools/unit_redraw_stress.gd",
+      "sha256_lf": "88e9255bb33e936428b90d33523da55592f669d021f514b17cf9801b4cb45e46"
+    },
+    {
+      "path": "tools/yezhulin_short_test.gd",
+      "sha256_lf": "21d7fc961d30e7669ec0fdcd13c6ba483e4261153c6589859a43ea4920f67872"
+    },
+    {
+      "path": "tools/zhujiazhuang_rts_test.gd",
+      "sha256_lf": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a"
+    }
+  ],
+  "evidence": [
+    {
+      "path": ".gdignore",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 90,
+      "sha256": "40c83f13b27522cfe6d2924150d57b102c73c24d4ee889775af78958da3b1fda"
+    },
+    {
+      "path": "control/current_a.json",
+      "bytes": 2977,
+      "sha256": "3f033f23c163e60643582a8a73ea9635a1727a0fcb163960dc62015ee738d7b0"
+    },
+    {
+      "path": "control/current_a.log",
+      "bytes": 790,
+      "sha256": "0d81158fbea43de1bee4816a1300939a7ac3e7bacd3af894dfeaf3771c4b7cfe"
+    },
+    {
+      "path": "control/current_b.json",
+      "bytes": 3052,
+      "sha256": "9793e079cbd901109360c94daf0e0ce364bca69b47241ee85a82672e32481b7f"
+    },
+    {
+      "path": "control/current_b.log",
+      "bytes": 790,
+      "sha256": "9eb8b17a72d8d0603110a4339860830d02541f03aa1a58c41ea78b4e22b9ade2"
+    },
+    {
+      "path": "control/old_a.json",
+      "bytes": 2903,
+      "sha256": "ee253e91925a9a81757b0c2a51f255eb8beca2f1dbde99c7e7051e483e173b23"
+    },
+    {
+      "path": "control/old_a.log",
+      "bytes": 791,
+      "sha256": "1e2cd3e18514c87039baab12a01da573b6b196e4c5f8e93b97b10443e990f5ed"
+    },
+    {
+      "path": "control/old_b.json",
+      "bytes": 3107,
+      "sha256": "77812cf99ca1650b5b19070b7a4bdff1a8b2d270c599e546291cfded24210aab"
+    },
+    {
+      "path": "control/old_b.log",
+      "bytes": 787,
+      "sha256": "35938d7beeee389835aa2015890596cd89833f175f993c7a5ce6149d6d3f6c9f"
+    },
+    {
+      "path": "control/restoration.json",
+      "bytes": 1143,
+      "sha256": "7a3e7ad43cc36aa91b7bb8ba521f65345fc78659cbf1e8c3395d7617a5b27253"
+    },
+    {
+      "path": "control/runner.py.txt",
+      "bytes": 2011,
+      "sha256": "0ec7871189c14842f0814916e28e5a7590c376ff82cee8a185b2033d6e4a06e7"
+    },
+    {
+      "path": "diagnosis/follow_candidate.gd.txt",
+      "bytes": 2697,
+      "sha256": "f3d653bf60bb6fa3fb9fc097a5a19945f57dfb3b450e1c6e8c3ef1f33b318b94"
+    },
+    {
+      "path": "diagnosis/follow_candidate.log",
+      "bytes": 428,
+      "sha256": "059bb79bbca53ebba001df4fc0b55b480196e771cbf8232f59244217c161ea67"
+    },
+    {
+      "path": "diagnosis/follow_candidate_driver.gd.txt",
+      "bytes": 2723,
+      "sha256": "e493010010ba379cf12933194aedf9aff07af55cfbd2d9d3b2e81fe723f9793a"
+    },
+    {
+      "path": "diagnosis/follow_candidate_results.json",
+      "bytes": 2868,
+      "sha256": "fbf2cd31f78b75171d615e828c4393800bca345a91cab1af5cb300771b9e3da6"
+    },
+    {
+      "path": "diagnosis/follow_counter.gd.txt",
+      "bytes": 1280,
+      "sha256": "eef8a48d28c58d467802068f0b214ed157fff22f0b09aacbe87bff0bb0dd1d10"
+    },
+    {
+      "path": "diagnosis/follow_counts.json",
+      "bytes": 534,
+      "sha256": "cdf8239a3a112f8ef661a49a5a3d8cb74eee76c05edd7833fce605b5f3860497"
+    },
+    {
+      "path": "diagnosis/follow_counts.log",
+      "bytes": 691,
+      "sha256": "f9d6316e98815d6a9eeb635c2cbb04a276a7500b5c2af32bfcabb2f2b13cb6bf"
+    },
+    {
+      "path": "diagnosis/follow_reference.gd.txt",
+      "bytes": 2630,
+      "sha256": "a7bc54466378f0023f85168fcfac4a80155aec6c7dabe81d2bd91f2ea9dea9f8"
+    },
+    {
+      "path": "diagnosis/follow_restoration.json",
+      "bytes": 139,
+      "sha256": "f3cd692ebbd846362b6f07ca83c499b8076a14c560db575240be327285efed8d"
+    },
+    {
+      "path": "diagnosis/profile_console.log",
+      "bytes": 543,
+      "sha256": "a43d99b027273c3c0b5b03c74fafc2015bec3134f2289a458070d6ce8e0ede49"
+    },
+    {
+      "path": "diagnosis/profile_driver.gd.txt",
+      "bytes": 2106,
+      "sha256": "e8cacd2e2bf0b5bdd415695470e63ffb43c251ef48beb3b39dae8b8449c3b7fe"
+    },
+    {
+      "path": "diagnosis/profile_metrics.gd.txt",
+      "bytes": 294,
+      "sha256": "2d29edc7f87de810b5bbeda18a99b6c0b3ba987dff592978a2b10f0dc173b58e"
+    },
+    {
+      "path": "diagnosis/profile_rows.json",
+      "bytes": 169916,
+      "sha256": "ff359c80c029e8889e62cfdb98b316eba08ae77f7ad5058fa721531777c81236"
+    },
+    {
+      "path": "diagnosis/profile_runner.py.txt",
+      "bytes": 2805,
+      "sha256": "dc9153948056f9c5271117ada0d5caef29e57d9b1d4a4937caf61ba5330b859b"
+    },
+    {
+      "path": "diagnosis/profile_totals.json",
+      "bytes": 2225,
+      "sha256": "64627bf8a9aaa6c9f661345728bcd51b0feae12aba2e830a25c0ed22c3b0cf51"
+    },
+    {
+      "path": "diagnosis/timeout.json",
+      "bytes": 268,
+      "sha256": "898dceba12bbae9c3b04833c0b131d0db3be9769d5278a2d082e5b5d618cc92e"
+    },
+    {
+      "path": "diagnosis/yezhulin_timeout.log",
+      "bytes": 6533,
+      "sha256": "73322a61d2456ce3b756008183f764dad029cfa10b620241c5ff74f0fb5c9ea8"
+    },
+    {
+      "path": "finish_runner.py.txt",
+      "bytes": 1708,
+      "sha256": "8e98b98b9a5732cbd5fb9de1c49e7eca757a3e51cc424ff25ef852ed5886910a"
+    },
+    {
+      "path": "pause/console.log",
+      "bytes": 3871,
+      "sha256": "3535e91bca0283e209b71ae844b0c8b7f4c0764bec41e453ba171acedfa8782e"
+    },
+    {
+      "path": "pause/report.json",
+      "bytes": 5441,
+      "sha256": "0e07f78541cdb5ff13931d18f6e0a2b9e6b4a7137bf239615cacff0187605337"
+    },
+    {
+      "path": "ranged/console.log",
+      "bytes": 1450,
+      "sha256": "77f9d476b1f11f743f6f3f92b8871613dda54993dec0dde8c01c89af4531f33a"
+    },
+    {
+      "path": "ranged/report.json",
+      "bytes": 217,
+      "sha256": "ebb696f930c508d77b086c4e2ca404facbdf5969eebeb423e7892223632d45f4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2972,
+      "sha256": "6c55560cc2575c3c5f5efe6f65d5b2c24b7755a60f65e5bcd9df21b8bfa5c13f"
+    },
+    {
+      "path": "redraw/attack_current.png",
+      "bytes": 4062,
+      "sha256": "7621d98df1d736bf40ea6d28fe54f1742a40416ca228cf0a21ee8286558c4965"
+    },
+    {
+      "path": "redraw/attack_reference.png",
+      "bytes": 4062,
+      "sha256": "7621d98df1d736bf40ea6d28fe54f1742a40416ca228cf0a21ee8286558c4965"
+    },
+    {
+      "path": "redraw/console.log",
+      "bytes": 6323,
+      "sha256": "46cff9bb98db8930811c262764a6b6bc5eb98797b27da9cebcbd9e771aa695d4"
+    },
+    {
+      "path": "redraw/report.json",
+      "bytes": 57869,
+      "sha256": "56d72981ee784957c9df082553a84a0b16b9b57e4f115ac44dca45e096ffa2fb"
+    },
+    {
+      "path": "runner.py.txt",
+      "bytes": 1836,
+      "sha256": "2b1c196ce1cd08df0b0f4e6c5b6cac3d175c90977090a2fc9e241cad2f81d0a9"
+    },
+    {
+      "path": "runs.json",
+      "bytes": 1320,
+      "sha256": "35850c44b1e017bed3e8ba7dee5f0035784104d0a636993a77f4b068919db269"
+    },
+    {
+      "path": "stress/console.log",
+      "bytes": 861,
+      "sha256": "b7c6117d9ee54e3a792f6738dd141057e608983b4022f73646613c26ed37fc1c"
+    },
+    {
+      "path": "stress/final.json",
+      "bytes": 2811,
+      "sha256": "9b06028500ef94eeeb3ef503adbf0600566c88c0ac0db55ffea071e0c57f43a4"
+    },
+    {
+      "path": "stress/final.png",
+      "bytes": 1230895,
+      "sha256": "34b9bd6c961a3e175f2c86a9563a217d9344b46163963a625e86732abd6b516f"
+    },
+    {
+      "path": "timing/console.log",
+      "bytes": 294,
+      "sha256": "222bdf8a7d401cd2844eb0ec6569c714085288ad5cb2ae740ee1ffeae9b88ec1"
+    },
+    {
+      "path": "timing/report.json",
+      "bytes": 6029,
+      "sha256": "c3e65882f41503e001e0ccd337df15937eaa32390b734be7c7fb72743d1f456c"
+    },
+    {
+      "path": "yezhulin/console.log",
+      "bytes": 7908,
+      "sha256": "0d9da517a890047bb2327c3e2a5e81709917b5eb97feddf3bbfd868ff93ea58c"
+    },
+    {
+      "path": "yezhulin/north_rest.png",
+      "bytes": 1736084,
+      "sha256": "0408e7677840f51b5083a0331c02b363b737c36a8f603fe53226b8455c0f5d5f"
+    },
+    {
+      "path": "yezhulin/report.json",
+      "bytes": 8051,
+      "sha256": "dc9924d11155a4d7e5b65e05321f86ea9870fdce0bf4c47f4f084687af6a88cf"
+    },
+    {
+      "path": "yezhulin/south_rest.png",
+      "bytes": 1736111,
+      "sha256": "41f420b487bbc4a5c4bbaf2edd7b2a3efc80120ae8556e7f442063e947c14677"
+    }
+  ],
+  "normal_combat_control": {
+    "records": [
+      {
+        "label": "old_a",
+        "reference_helper": true,
+        "exit_code": 0,
+        "errors": 0,
+        "fps": 22.3938707975627,
+        "p95_ms": 95.862,
+        "unit_count": 133
+      },
+      {
+        "label": "current_a",
+        "reference_helper": false,
+        "exit_code": 0,
+        "errors": 0,
+        "fps": 23.0649113503627,
+        "p95_ms": 89.434,
+        "unit_count": 126
+      },
+      {
+        "label": "current_b",
+        "reference_helper": false,
+        "exit_code": 0,
+        "errors": 0,
+        "fps": 24.0942992887883,
+        "p95_ms": 78.055,
+        "unit_count": 125
+      },
+      {
+        "label": "old_b",
+        "reference_helper": true,
+        "exit_code": 0,
+        "errors": 0,
+        "fps": 24.5576625896954,
+        "p95_ms": 70.49,
+        "unit_count": 154
+      }
+    ],
+    "source_restored": true,
+    "unit_sha256_raw": "059285c53bce9c70528295ca02ac35aeedd441b35fd7e8abc161516d7d00ac2e",
+    "scope": "Four fresh normal live combats alternating old/current/current/old request helper; the current internal frame field is retained for both. Combat evolution is not frozen; timing observations are not an exact simulation replay."
+  }
+}

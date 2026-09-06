@@ -1,0 +1,41 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lin_chong_direction4_20260906/ne.png" id="ne"]
+
+[sub_resource type="AtlasTexture" id="windup_ne"]
+atlas = ExtResource("ne")
+region = Rect2(332, 220, 136, 159)
+margin = Rect2(29.5, 18.0, 59, 36)
+filter_clip = true
+metadata/draw_offset_px = Vector2(24.0, -9.6)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="thrust_ne"]
+atlas = ExtResource("ne")
+region = Rect2(58, 398, 192, 156)
+margin = Rect2(1.5, 19.5, 3, 39)
+filter_clip = true
+metadata/draw_offset_px = Vector2(26.5, -4.1)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("ne")
+region = Rect2(88, 17, 130, 171)
+margin = Rect2(32.5, 12.0, 65, 24)
+filter_clip = true
+metadata/draw_offset_px = Vector2(26.5, -16.6)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_ne")},
+{"duration": 1.0, "texture": SubResource("windup_ne")},
+{"duration": 1.0, "texture": SubResource("thrust_ne")},
+{"duration": 1.0, "texture": SubResource("thrust_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

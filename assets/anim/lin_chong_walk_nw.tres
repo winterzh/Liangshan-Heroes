@@ -1,0 +1,40 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lin_chong_direction4_20260906/nw.png" id="nw"]
+
+[sub_resource type="AtlasTexture" id="idle_nw"]
+atlas = ExtResource("nw")
+region = Rect2(62, 32, 131, 153)
+margin = Rect2(26.5, 15.5, 53, 31)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-26.0, -10.62)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_a_nw"]
+atlas = ExtResource("nw")
+region = Rect2(316, 32, 127, 154)
+margin = Rect2(28.5, 15.0, 57, 30)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-15.5, -11.12)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_b_nw"]
+atlas = ExtResource("nw")
+region = Rect2(62, 214, 134, 144)
+margin = Rect2(25.0, 20.0, 50, 40)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-22.5, -5.62)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_nw")},
+{"duration": 1.0, "texture": SubResource("walk_a_nw")},
+{"duration": 1.0, "texture": SubResource("idle_nw")},
+{"duration": 1.0, "texture": SubResource("walk_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

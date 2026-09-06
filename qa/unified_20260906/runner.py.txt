@@ -1,0 +1,36 @@
+from pathlib import Path
+import json,subprocess,os,shutil,time,re
+root=Path.cwd();out=root/'.godot/unified_20260906/qa';out.mkdir(parents=True,exist_ok=True)
+godot=(root/'godot.local.txt').read_text().strip();runs=[]
+cases=[
+ ('frame_scale','tools/directional_frame_scale_qa.gd',True,{'FRAME_SCALE_OUT':'res://.godot/unified_20260906/qa/frame_scale'},None),
+ ('enemy','tools/enemy_candidates_qa.gd',False,{},'.godot/enemy_candidates_qa'),
+ ('redraw','tools/redraw_stamp_qa.gd',True,{},'.godot/redraw_stamp_qa'),
+ ('lin_chong','tools/lin_chong_direction4_qa.gd',True,{'LC_VISUAL':'1','LC_QA_OUT':'res://.godot/unified_20260906/qa/lin_chong'},None),
+ ('song_jiang','tools/song_jiang_direction4_qa.gd',False,{'SJ_QA_OUT':'res://.godot/unified_20260906/qa/song_jiang'},None),
+ ('terminal','tools/campaign_terminal_costume_qa.gd',False,{'TERMINAL_COSTUME_OUT':'res://.godot/unified_20260906/qa/terminal'},None),
+ ('wall','tools/wall_alignment_test.gd',False,{},None),
+ ('wall_direction','tools/wall_direction_qa.gd',True,{'WALL_DIRECTION_VISUAL':'1','WALL_DIRECTION_OUT':'res://.godot/unified_20260906/qa/wall_direction'},None),
+ ('gate','tools/zhujiazhuang_gate_art_qa.gd',True,{'GATE_ART_VISUAL':'1','GATE_ART_OUT':'res://.godot/unified_20260906/qa/gate'},None),
+ ('contact','tools/zhujiazhuang_gate_contact_test.gd',False,{'RTS_TEST_OUT':'res://.godot/unified_20260906/qa/contact'},None),
+ ('ranged','tools/ranged_firing_path_test.gd',False,{},None),
+ ('core','tools/campaign_core_test.gd',False,{},None),
+ ('routing','tools/skirmish_direction4_contract_test.gd',False,{'DIRECTION4_CONTRACT_OUT':'res://.godot/unified_20260906/qa/routing/report.json'},None),
+ ('inventory','tools/character_direction4_inventory.gd',False,{'DIRECTION4_INVENTORY_OUT':'res://.godot/unified_20260906/qa/inventory'},None),
+]
+for name,script,visual,extra,copy_from in cases:
+ folder=out/name;folder.mkdir(exist_ok=True);env=os.environ.copy()
+ for key in ['SJ_VISUAL','LC_VISUAL','SL_VISUAL','WALL_DIRECTION_VISUAL','GATE_ART_VISUAL','TERMINAL_COSTUME_VISUAL']:env.pop(key,None)
+ env.update(extra);command=[godot,*([] if visual else ['--headless']),'--path',str(root),'--script','res://'+script]
+ start=time.time()
+ try:p=subprocess.run(command,env=env,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=200)
+ except subprocess.TimeoutExpired as e:
+  (folder/'timeout.json').write_text(json.dumps({'timeout_seconds':200,'script':script}));raise
+ log=p.stdout+'\n'+p.stderr;(folder/'console.log').write_text(log,encoding='utf-8',newline='\n')
+ if copy_from:
+  for path in (root/copy_from).glob('*'):
+   if path.suffix in ['.json','.png']:shutil.copyfile(path,folder/path.name)
+ failed=p.returncode!=0 or any(text in log for text in ['SCRIPT ERROR','Parse Error','ERROR:',' FAIL '])
+ row={'name':name,'script':script,'visual':visual,'environment':extra,'exit_code':p.returncode,'seconds':round(time.time()-start,2),'passed':not failed,'pass_lines':len(re.findall(r'\bPASS\b',log))}
+ runs.append(row);(out/'runs.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps(row),flush=True)
+ if failed:print(log[-7000:],flush=True);raise SystemExit(1)

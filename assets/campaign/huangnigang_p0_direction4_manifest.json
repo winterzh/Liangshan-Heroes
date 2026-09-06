@@ -1,0 +1,1669 @@
+{
+  "schema_version": 1,
+  "kind": "huangnigang_p0_web_alpha_cleaned_fixed_grid_production_provenance",
+  "created_at": "2026-09-03T08:28:20.312097+08:00",
+  "campaign_level": 1,
+  "scene_context": "huangnigang",
+  "novel_basis": [
+    "水浒传第十四回：晁盖、吴用、刘唐形貌",
+    "水浒传第十五回：公孙胜与阮氏三雄形貌",
+    "水浒传第十六回：七客赤膊乘凉、白胜挑酒、七人后持朴刀"
+  ],
+  "candidate_manifest": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/candidate_manifest.json",
+  "candidate_manifest_sha256": "345ee103644064929cc0497e641d1bd95b6fd6f1a8f57c56b14012b6e02e68ae",
+  "manual_visual_review": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/manual_visual_review.json",
+  "manual_visual_review_sha256": "6ab71751e178a9af911172f1bf79f6dc4688ac794a97cddeb458180f6bbeda29",
+  "backup_manifest": "Liangshan-Heroes/qa/huangnigang_p0_direction4_production_20260903/backup_preexisting_runtime_assets/backup_manifest.json",
+  "backup_manifest_sha256": "0c93e2940834ccdbd3b8c86c28c5a49ca79877fe1de96f744831635f35460189",
+  "source_generation_conversations": [
+    "https://chatgpt.com/c/6a987e02-ec40-83ea-a07f-5c05388e4d80",
+    "https://chatgpt.com/c/6a988675-1e50-83ea-9c33-055dc3c70361"
+  ],
+  "source_generation_includes_codex_imagegen": true,
+  "cleanup_conversations": [
+    "https://chatgpt.com/c/6a989a93-eee0-83e9-9a83-fb867920c657",
+    "https://chatgpt.com/c/6a989fb6-e678-83e9-ad25-8a9c7dab2d47",
+    "https://chatgpt.com/c/6a98a0b9-19e4-83e9-9c9e-087a1b0da4ef",
+    "https://chatgpt.com/c/6a98a262-280c-83ea-946c-cb49009fdda5",
+    "https://chatgpt.com/c/6a98a6c5-e2d0-83ea-905d-7262650b55c4",
+    "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+    "https://chatgpt.com/c/6a98acd4-c89c-83e9-8f3a-d8a9575582ef"
+  ],
+  "cleanup_verification": "implementation_20260902/huangnigang_p0_source/web_alpha_cleanup_verification.json",
+  "cleanup_verification_sha256": "ea1e58c2763279f985a7ee16a1b1ca33e618770ee1cdbf174cdab4b3148be704",
+  "web_alpha_cleanup_performed": true,
+  "web_alpha_cleanup_rule": "alpha <= 15 becomes RGBA (0,0,0,0); alpha > 15 remains byte-identical",
+  "local_alpha_cleanup_performed": false,
+  "fixed_grid_continuous_rect_crop": true,
+  "mirroring_or_repainting_performed": false,
+  "production_file_count": 80,
+  "outputs": [
+    {
+      "variant": "hn_chao_gai",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_idle_se.png",
+      "candidate_sha256": "288cdc65f64d9655c7d1603e4bf6023e8199e5c0713b280c11e781fe2cf8d317",
+      "production_path": "assets/campaign/anim/hn_chao_gai_idle_se.png",
+      "production_sha256": "288cdc65f64d9655c7d1603e4bf6023e8199e5c0713b280c11e781fe2cf8d317",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_walk_se.png",
+      "candidate_sha256": "64c7cfd6b6602f238007e67b598239b06e4944a1068b274c5e75b79f6acd8d83",
+      "production_path": "assets/campaign/anim/hn_chao_gai_walk_se.png",
+      "production_sha256": "64c7cfd6b6602f238007e67b598239b06e4944a1068b274c5e75b79f6acd8d83",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_idle_sw.png",
+      "candidate_sha256": "b8f12542528488ebc4b9cdd809a21a2fabdfdf5c43f098ac8880ab9876a20cf9",
+      "production_path": "assets/campaign/anim/hn_chao_gai_idle_sw.png",
+      "production_sha256": "b8f12542528488ebc4b9cdd809a21a2fabdfdf5c43f098ac8880ab9876a20cf9",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_walk_sw.png",
+      "candidate_sha256": "26f21aba6e16a0efa060c1ad8bdf09de90154f8c5a005f4cae6a0c0cce952f54",
+      "production_path": "assets/campaign/anim/hn_chao_gai_walk_sw.png",
+      "production_sha256": "26f21aba6e16a0efa060c1ad8bdf09de90154f8c5a005f4cae6a0c0cce952f54",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_idle_ne.png",
+      "candidate_sha256": "2a9916f25b2d8c591fcf9f4db57954fe98efbafd7e4672eda832a7a0a1486219",
+      "production_path": "assets/campaign/anim/hn_chao_gai_idle_ne.png",
+      "production_sha256": "2a9916f25b2d8c591fcf9f4db57954fe98efbafd7e4672eda832a7a0a1486219",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_walk_ne.png",
+      "candidate_sha256": "a64c8259581cbe42b123fa1e99ab3d72405842c93d78ce86f3b0e57862a4648c",
+      "production_path": "assets/campaign/anim/hn_chao_gai_walk_ne.png",
+      "production_sha256": "a64c8259581cbe42b123fa1e99ab3d72405842c93d78ce86f3b0e57862a4648c",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_idle_nw.png",
+      "candidate_sha256": "376b9525e350eb8414647685bac0d25185911857b602357ff66e2c34fc12bd70",
+      "production_path": "assets/campaign/anim/hn_chao_gai_idle_nw.png",
+      "production_sha256": "376b9525e350eb8414647685bac0d25185911857b602357ff66e2c34fc12bd70",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_walk_nw.png",
+      "candidate_sha256": "63e892146ddd2e43fcbcd162e79f4e4124949a647ae3626acdb92e5df2c1ab4c",
+      "production_path": "assets/campaign/anim/hn_chao_gai_walk_nw.png",
+      "production_sha256": "63e892146ddd2e43fcbcd162e79f4e4124949a647ae3626acdb92e5df2c1ab4c",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_idle_se.png",
+      "candidate_sha256": "9a79f72404acdae9a033e8c70e8bfef7e438cbe26cbe2b8901a23ca4f5d9b2c5",
+      "production_path": "assets/campaign/anim/hn_wu_yong_idle_se.png",
+      "production_sha256": "9a79f72404acdae9a033e8c70e8bfef7e438cbe26cbe2b8901a23ca4f5d9b2c5",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_walk_se.png",
+      "candidate_sha256": "855cb40208cc76f89deef4e3bb387e682875fc8c9080b9a078435e89e3be310a",
+      "production_path": "assets/campaign/anim/hn_wu_yong_walk_se.png",
+      "production_sha256": "855cb40208cc76f89deef4e3bb387e682875fc8c9080b9a078435e89e3be310a",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_idle_sw.png",
+      "candidate_sha256": "be6dfb65f959d40a37c82fb6ec5e8d10d64853e2074f09e4200ba88bf6b1e427",
+      "production_path": "assets/campaign/anim/hn_wu_yong_idle_sw.png",
+      "production_sha256": "be6dfb65f959d40a37c82fb6ec5e8d10d64853e2074f09e4200ba88bf6b1e427",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_walk_sw.png",
+      "candidate_sha256": "a7d21a65c91953e454e8ae1e93db4c75029159af70e214093d18f7c4a90fc328",
+      "production_path": "assets/campaign/anim/hn_wu_yong_walk_sw.png",
+      "production_sha256": "a7d21a65c91953e454e8ae1e93db4c75029159af70e214093d18f7c4a90fc328",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_idle_ne.png",
+      "candidate_sha256": "1e85f9083da21abf1035e5c2f96827151ba6f5ba4d14d9ec9c2ae5265dc2c179",
+      "production_path": "assets/campaign/anim/hn_wu_yong_idle_ne.png",
+      "production_sha256": "1e85f9083da21abf1035e5c2f96827151ba6f5ba4d14d9ec9c2ae5265dc2c179",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_walk_ne.png",
+      "candidate_sha256": "3e957405cc6774aab33d8bb8e0da2ec18f00574c41407b627bfb5833e54761c4",
+      "production_path": "assets/campaign/anim/hn_wu_yong_walk_ne.png",
+      "production_sha256": "3e957405cc6774aab33d8bb8e0da2ec18f00574c41407b627bfb5833e54761c4",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_idle_nw.png",
+      "candidate_sha256": "5c7620e23be41b88f34947b8fbb1edf7e8606243fcc27726c622041421daeeff",
+      "production_path": "assets/campaign/anim/hn_wu_yong_idle_nw.png",
+      "production_sha256": "5c7620e23be41b88f34947b8fbb1edf7e8606243fcc27726c622041421daeeff",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_walk_nw.png",
+      "candidate_sha256": "6ff798bd46203388274d25c634662600482802f62c51a027387e3a85d8b8d98d",
+      "production_path": "assets/campaign/anim/hn_wu_yong_walk_nw.png",
+      "production_sha256": "6ff798bd46203388274d25c634662600482802f62c51a027387e3a85d8b8d98d",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_idle_se.png",
+      "candidate_sha256": "d341e028d90ecdb775805478107475bc86baa4b48f2f7f61a6b5c8b3eb8031ff",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_idle_se.png",
+      "production_sha256": "d341e028d90ecdb775805478107475bc86baa4b48f2f7f61a6b5c8b3eb8031ff",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_walk_se.png",
+      "candidate_sha256": "01f106cac811a5725f5fb1f6db039d4ae0927107f29ce0dae97fe0241a29f816",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_walk_se.png",
+      "production_sha256": "01f106cac811a5725f5fb1f6db039d4ae0927107f29ce0dae97fe0241a29f816",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_idle_sw.png",
+      "candidate_sha256": "bc43c3b37e959d52d354c420adc4704c353e54bee2b7789ff5704894649b2e07",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_idle_sw.png",
+      "production_sha256": "bc43c3b37e959d52d354c420adc4704c353e54bee2b7789ff5704894649b2e07",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_walk_sw.png",
+      "candidate_sha256": "5db546ca5129e38924f8a21b6507578eb302fc6211d667035d095d58cf4287c5",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_walk_sw.png",
+      "production_sha256": "5db546ca5129e38924f8a21b6507578eb302fc6211d667035d095d58cf4287c5",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_idle_ne.png",
+      "candidate_sha256": "4e18f8d62a345ad97754b96902c8e254248bee21bf92d223a41872ab94a90757",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_idle_ne.png",
+      "production_sha256": "4e18f8d62a345ad97754b96902c8e254248bee21bf92d223a41872ab94a90757",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_walk_ne.png",
+      "candidate_sha256": "b9b01cea78d06578bbc95b1f9146bd307da069f60871197ac1195d4c0f486269",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_walk_ne.png",
+      "production_sha256": "b9b01cea78d06578bbc95b1f9146bd307da069f60871197ac1195d4c0f486269",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_idle_nw.png",
+      "candidate_sha256": "afe993827452d3f44c87e83ab948e5ad20c59c71f16825a85ffa31d05057babe",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_idle_nw.png",
+      "production_sha256": "afe993827452d3f44c87e83ab948e5ad20c59c71f16825a85ffa31d05057babe",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_walk_nw.png",
+      "candidate_sha256": "743945b5fc443c447dfd8740462906152918541965fa3471433ea8a13cb60b31",
+      "production_path": "assets/campaign/anim/hn_gongsun_sheng_walk_nw.png",
+      "production_sha256": "743945b5fc443c447dfd8740462906152918541965fa3471433ea8a13cb60b31",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_idle_se.png",
+      "candidate_sha256": "84a43f9efb1a19c6dd3e7c457b58d636723ef31824aa69f1166b9f989738d80b",
+      "production_path": "assets/campaign/anim/hn_liu_tang_idle_se.png",
+      "production_sha256": "84a43f9efb1a19c6dd3e7c457b58d636723ef31824aa69f1166b9f989738d80b",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_walk_se.png",
+      "candidate_sha256": "faafba2960fa68ef2111fb6969f93bffe11eabf8df013793ee2fb91a5f12f454",
+      "production_path": "assets/campaign/anim/hn_liu_tang_walk_se.png",
+      "production_sha256": "faafba2960fa68ef2111fb6969f93bffe11eabf8df013793ee2fb91a5f12f454",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_idle_sw.png",
+      "candidate_sha256": "94cd167d2a69df6ffac22616d3617f76f1a392261ab7d19030a2a4f0c13774eb",
+      "production_path": "assets/campaign/anim/hn_liu_tang_idle_sw.png",
+      "production_sha256": "94cd167d2a69df6ffac22616d3617f76f1a392261ab7d19030a2a4f0c13774eb",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_walk_sw.png",
+      "candidate_sha256": "c4e6ad75106d14f86fadd07a1eeed62f901f1c626bfb86ad337f1dedf0f9f042",
+      "production_path": "assets/campaign/anim/hn_liu_tang_walk_sw.png",
+      "production_sha256": "c4e6ad75106d14f86fadd07a1eeed62f901f1c626bfb86ad337f1dedf0f9f042",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_idle_ne.png",
+      "candidate_sha256": "08da3c834a273b3e0901403df93f97abc9a4f5b9e51ae66ec205a3b711b883a4",
+      "production_path": "assets/campaign/anim/hn_liu_tang_idle_ne.png",
+      "production_sha256": "08da3c834a273b3e0901403df93f97abc9a4f5b9e51ae66ec205a3b711b883a4",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_walk_ne.png",
+      "candidate_sha256": "dee5d52e35578cae6ffb1c704f8c03f713c1e84f7b86bdf95f524cf80b20925a",
+      "production_path": "assets/campaign/anim/hn_liu_tang_walk_ne.png",
+      "production_sha256": "dee5d52e35578cae6ffb1c704f8c03f713c1e84f7b86bdf95f524cf80b20925a",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_idle_nw.png",
+      "candidate_sha256": "7f0e35ed314f1c97f68a994597def988f3e24e84bc6fe7f90a53a5e67ea02796",
+      "production_path": "assets/campaign/anim/hn_liu_tang_idle_nw.png",
+      "production_sha256": "7f0e35ed314f1c97f68a994597def988f3e24e84bc6fe7f90a53a5e67ea02796",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_walk_nw.png",
+      "candidate_sha256": "ec621694a0dec1b54e4ec6abd77d4cf1a867f7dc5e68f57a6161de5a063ae221",
+      "production_path": "assets/campaign/anim/hn_liu_tang_walk_nw.png",
+      "production_sha256": "ec621694a0dec1b54e4ec6abd77d4cf1a867f7dc5e68f57a6161de5a063ae221",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_idle_se.png",
+      "candidate_sha256": "82ca4ed600145b6c16b68522b36c7a352ec849aa91cb35aaa59fee57c917a95a",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_idle_se.png",
+      "production_sha256": "82ca4ed600145b6c16b68522b36c7a352ec849aa91cb35aaa59fee57c917a95a",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_walk_se.png",
+      "candidate_sha256": "2160f0429179d7a7fe0fad5a6c13a90625da9d25439d0471c2becf56cb5b770c",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_walk_se.png",
+      "production_sha256": "2160f0429179d7a7fe0fad5a6c13a90625da9d25439d0471c2becf56cb5b770c",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_idle_sw.png",
+      "candidate_sha256": "27d15dcb30824b7cd91ccc7206db786bc4d596ea9d42977a9329ae52ad42fb04",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_idle_sw.png",
+      "production_sha256": "27d15dcb30824b7cd91ccc7206db786bc4d596ea9d42977a9329ae52ad42fb04",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_walk_sw.png",
+      "candidate_sha256": "78ac946c983d9f27b9416191ee27bad99a2a2f856ddfb85e7fbc702a6eb028f5",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_walk_sw.png",
+      "production_sha256": "78ac946c983d9f27b9416191ee27bad99a2a2f856ddfb85e7fbc702a6eb028f5",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_idle_ne.png",
+      "candidate_sha256": "05ff3b89f6346e69f0823696aec33e3399230be7987351544c9752f7779f70d5",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_idle_ne.png",
+      "production_sha256": "05ff3b89f6346e69f0823696aec33e3399230be7987351544c9752f7779f70d5",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_walk_ne.png",
+      "candidate_sha256": "d1eb67a043a0d7a723c2dfaa8678d72eaf5dd085b99de114e4d146231219b1df",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_walk_ne.png",
+      "production_sha256": "d1eb67a043a0d7a723c2dfaa8678d72eaf5dd085b99de114e4d146231219b1df",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_idle_nw.png",
+      "candidate_sha256": "aa4fc97fe6df1d481f3a7e3d831a3ee073b89dd430779042e4540eafcaa290d3",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_idle_nw.png",
+      "production_sha256": "aa4fc97fe6df1d481f3a7e3d831a3ee073b89dd430779042e4540eafcaa290d3",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_walk_nw.png",
+      "candidate_sha256": "9c7e1960ee3d24d6491177d580615ed76b92af361fc6a94f6686b533bf577521",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoer_walk_nw.png",
+      "production_sha256": "9c7e1960ee3d24d6491177d580615ed76b92af361fc6a94f6686b533bf577521",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_idle_se.png",
+      "candidate_sha256": "0f1e38a2b120c6fc7c3668ceb105146b64b873b16c5ba2c2c0ca3325eb3f88f3",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_idle_se.png",
+      "production_sha256": "0f1e38a2b120c6fc7c3668ceb105146b64b873b16c5ba2c2c0ca3325eb3f88f3",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_walk_se.png",
+      "candidate_sha256": "92a83e9d59ccd6b56fe6f84c9be1dd20278f712367a78da8d7a7316aa1ecb762",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_walk_se.png",
+      "production_sha256": "92a83e9d59ccd6b56fe6f84c9be1dd20278f712367a78da8d7a7316aa1ecb762",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_idle_sw.png",
+      "candidate_sha256": "1a1e59076a8bb712bd4fad97e9d170790b6304df2b2c86d0f5a23ba71f84a0d1",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_idle_sw.png",
+      "production_sha256": "1a1e59076a8bb712bd4fad97e9d170790b6304df2b2c86d0f5a23ba71f84a0d1",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_walk_sw.png",
+      "candidate_sha256": "df65ae4d1a62817d7b89fd8942e2e4142fa6cda167a4fb1840368f78e313e784",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_walk_sw.png",
+      "production_sha256": "df65ae4d1a62817d7b89fd8942e2e4142fa6cda167a4fb1840368f78e313e784",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_idle_ne.png",
+      "candidate_sha256": "d971793e8adb09fb3223ba57eb2228be3f96192f1183330ea7c2792e06b4ba40",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_idle_ne.png",
+      "production_sha256": "d971793e8adb09fb3223ba57eb2228be3f96192f1183330ea7c2792e06b4ba40",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_walk_ne.png",
+      "candidate_sha256": "b9e8cb0f1b2a9fc78ede53cbe7c4c23798665f53c58be0b2c6111f529e13341b",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_walk_ne.png",
+      "production_sha256": "b9e8cb0f1b2a9fc78ede53cbe7c4c23798665f53c58be0b2c6111f529e13341b",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_idle_nw.png",
+      "candidate_sha256": "66d22f067d99ba63f8e0d4430aa0ded3979d4a10862b910a8c16aedbbb73d095",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_idle_nw.png",
+      "production_sha256": "66d22f067d99ba63f8e0d4430aa0ded3979d4a10862b910a8c16aedbbb73d095",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_walk_nw.png",
+      "candidate_sha256": "e1af5986095c5cfbf5c47e9ab2833672516f959cd5b261baa6f740e21c1a56e7",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaowu_walk_nw.png",
+      "production_sha256": "e1af5986095c5cfbf5c47e9ab2833672516f959cd5b261baa6f740e21c1a56e7",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_idle_se.png",
+      "candidate_sha256": "0fe6bd8cdadde53282b35bfeb012da76ef2f2858539a7c8a19638fc19bd361ce",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_idle_se.png",
+      "production_sha256": "0fe6bd8cdadde53282b35bfeb012da76ef2f2858539a7c8a19638fc19bd361ce",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_walk_se.png",
+      "candidate_sha256": "69f80cdd1ebd20221846b2591e9d2a0c45b6a1f8a810d8c625fd3180865eb99c",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_walk_se.png",
+      "production_sha256": "69f80cdd1ebd20221846b2591e9d2a0c45b6a1f8a810d8c625fd3180865eb99c",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_idle_sw.png",
+      "candidate_sha256": "cc56138bd3c984cb78dbe6a58e5494d245a9747c475a644ac6ccdfdd0ffd0525",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_idle_sw.png",
+      "production_sha256": "cc56138bd3c984cb78dbe6a58e5494d245a9747c475a644ac6ccdfdd0ffd0525",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_walk_sw.png",
+      "candidate_sha256": "7f95ffa183827ba3fb8e63c3ccfe065ca1c5ba3655a041693a3a1adda8abef54",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_walk_sw.png",
+      "production_sha256": "7f95ffa183827ba3fb8e63c3ccfe065ca1c5ba3655a041693a3a1adda8abef54",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_idle_ne.png",
+      "candidate_sha256": "d1e88609504a327a15506dd401a7a266e5c4ef43cbbe83e522ad1d4ba0a2af49",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_idle_ne.png",
+      "production_sha256": "d1e88609504a327a15506dd401a7a266e5c4ef43cbbe83e522ad1d4ba0a2af49",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_walk_ne.png",
+      "candidate_sha256": "2b5e49d90d1bcffd8583bdd058c26b4c7078799f5a5c135f4aa406cff2d31a90",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_walk_ne.png",
+      "production_sha256": "2b5e49d90d1bcffd8583bdd058c26b4c7078799f5a5c135f4aa406cff2d31a90",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_idle_nw.png",
+      "candidate_sha256": "ca64f930022fdbf17eb8864860db678b4221777bb72e8968bb11a8be10c5b1b6",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_idle_nw.png",
+      "production_sha256": "ca64f930022fdbf17eb8864860db678b4221777bb72e8968bb11a8be10c5b1b6",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_walk_nw.png",
+      "candidate_sha256": "6cec5bbaeff5c1066d23d0437696a289e0a47377050d5eb54bd4aa2e76ef131c",
+      "production_path": "assets/campaign/anim/hn_ruan_xiaoqi_walk_nw.png",
+      "production_sha256": "6cec5bbaeff5c1066d23d0437696a289e0a47377050d5eb54bd4aa2e76ef131c",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_idle_se.png",
+      "candidate_sha256": "eaebe8c3a157d9f8ec740703a6aca44674fe41b244e0e7f75229c26d8968e11f",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_idle_se.png",
+      "production_sha256": "eaebe8c3a157d9f8ec740703a6aca44674fe41b244e0e7f75229c26d8968e11f",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_walk_se.png",
+      "candidate_sha256": "d88f65e57e7a5c4ff2d49c6e2f49b65e7abb60063a7ac85ab02d406067da8403",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_walk_se.png",
+      "production_sha256": "d88f65e57e7a5c4ff2d49c6e2f49b65e7abb60063a7ac85ab02d406067da8403",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_idle_sw.png",
+      "candidate_sha256": "6e054bded7144d50b81b3c886dc3be1650d089723d4479d47380a9f0ad85ebaa",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_idle_sw.png",
+      "production_sha256": "6e054bded7144d50b81b3c886dc3be1650d089723d4479d47380a9f0ad85ebaa",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_walk_sw.png",
+      "candidate_sha256": "8faa2b7ae5d29427af00b29b6d1ccfede8f67e1d43eb8fe90ffb9ee8194e734b",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_walk_sw.png",
+      "production_sha256": "8faa2b7ae5d29427af00b29b6d1ccfede8f67e1d43eb8fe90ffb9ee8194e734b",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_idle_ne.png",
+      "candidate_sha256": "eb34d7a07b9f6d22b7e2a6915378aaf4f4f7f7b12341e2b836c0b0eed2f0b857",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_idle_ne.png",
+      "production_sha256": "eb34d7a07b9f6d22b7e2a6915378aaf4f4f7f7b12341e2b836c0b0eed2f0b857",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_walk_ne.png",
+      "candidate_sha256": "ceffdb076853b789ccb81f95d4db87af3627b7bcc88a63ef68c97d3ac4e4edbb",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_walk_ne.png",
+      "production_sha256": "ceffdb076853b789ccb81f95d4db87af3627b7bcc88a63ef68c97d3ac4e4edbb",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_idle_nw.png",
+      "candidate_sha256": "8b324c17009a7736e9bcbddfa2284b4a402a71076d0d3d2f6630ba7161c28f56",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_idle_nw.png",
+      "production_sha256": "8b324c17009a7736e9bcbddfa2284b4a402a71076d0d3d2f6630ba7161c28f56",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_walk_nw.png",
+      "candidate_sha256": "ec255c7d5d0ced1f93a15f2f696566826b75eb413ffec2f7421c06fcad2d28ef",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_walk_nw.png",
+      "production_sha256": "ec255c7d5d0ced1f93a15f2f696566826b75eb413ffec2f7421c06fcad2d28ef",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_idle_se.png",
+      "candidate_sha256": "f167995d228fec45dcc3b36def06ebcd96ed809a76e3b925b6b0b669d612d8f0",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_idle_se.png",
+      "production_sha256": "f167995d228fec45dcc3b36def06ebcd96ed809a76e3b925b6b0b669d612d8f0",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_walk_se.png",
+      "candidate_sha256": "97a0e6972d59a704543e60bca1646373530e03fd06abe26e9158413dfd4c6c77",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_walk_se.png",
+      "production_sha256": "97a0e6972d59a704543e60bca1646373530e03fd06abe26e9158413dfd4c6c77",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_idle_sw.png",
+      "candidate_sha256": "132aa163344b63af13c414fc7c0f7b86caf430ea8af4bd61a0ad921f2c76ff02",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_idle_sw.png",
+      "production_sha256": "132aa163344b63af13c414fc7c0f7b86caf430ea8af4bd61a0ad921f2c76ff02",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_walk_sw.png",
+      "candidate_sha256": "8dbd51ffb73ef04420fd35f1c8941ecf56949e873118d48a3c58e04d44f7c72e",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_walk_sw.png",
+      "production_sha256": "8dbd51ffb73ef04420fd35f1c8941ecf56949e873118d48a3c58e04d44f7c72e",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_idle_ne.png",
+      "candidate_sha256": "fadd6ca8bdd78dfcdaca67125209b46bc2a23e52ecb53475dcfca6d3fc457f97",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_idle_ne.png",
+      "production_sha256": "fadd6ca8bdd78dfcdaca67125209b46bc2a23e52ecb53475dcfca6d3fc457f97",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_walk_ne.png",
+      "candidate_sha256": "32832f2c7a3651accef23c8544029b5ee77a1595ce2df4ae107f1d5f7ca179f5",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_walk_ne.png",
+      "production_sha256": "32832f2c7a3651accef23c8544029b5ee77a1595ce2df4ae107f1d5f7ca179f5",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_idle_nw.png",
+      "candidate_sha256": "e3f9e00a90d9d80757817bf05325be67c73a511cc9e6ae6d28622e6292ab3165",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_idle_nw.png",
+      "production_sha256": "e3f9e00a90d9d80757817bf05325be67c73a511cc9e6ae6d28622e6292ab3165",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_carry_walk_nw.png",
+      "candidate_sha256": "f161ec490b338d07318243bdbbad4b69bcad4b2f8a677f1f6837528df9e68b2b",
+      "production_path": "assets/campaign/anim/hn_bai_sheng_carry_walk_nw.png",
+      "production_sha256": "f161ec490b338d07318243bdbbad4b69bcad4b2f8a677f1f6837528df9e68b2b",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_chao_gai",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_chao_gai_portrait.png",
+      "candidate_sha256": "288cdc65f64d9655c7d1603e4bf6023e8199e5c0713b280c11e781fe2cf8d317",
+      "production_path": "assets/campaign/portraits/hn_chao_gai.png",
+      "production_sha256": "288cdc65f64d9655c7d1603e4bf6023e8199e5c0713b280c11e781fe2cf8d317",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_wu_yong",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_wu_yong_portrait.png",
+      "candidate_sha256": "9a79f72404acdae9a033e8c70e8bfef7e438cbe26cbe2b8901a23ca4f5d9b2c5",
+      "production_path": "assets/campaign/portraits/hn_wu_yong.png",
+      "production_sha256": "9a79f72404acdae9a033e8c70e8bfef7e438cbe26cbe2b8901a23ca4f5d9b2c5",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_gongsun_sheng_portrait.png",
+      "candidate_sha256": "d341e028d90ecdb775805478107475bc86baa4b48f2f7f61a6b5c8b3eb8031ff",
+      "production_path": "assets/campaign/portraits/hn_gongsun_sheng.png",
+      "production_sha256": "d341e028d90ecdb775805478107475bc86baa4b48f2f7f61a6b5c8b3eb8031ff",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_liu_tang",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_liu_tang_portrait.png",
+      "candidate_sha256": "84a43f9efb1a19c6dd3e7c457b58d636723ef31824aa69f1166b9f989738d80b",
+      "production_path": "assets/campaign/portraits/hn_liu_tang.png",
+      "production_sha256": "84a43f9efb1a19c6dd3e7c457b58d636723ef31824aa69f1166b9f989738d80b",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoer_portrait.png",
+      "candidate_sha256": "82ca4ed600145b6c16b68522b36c7a352ec849aa91cb35aaa59fee57c917a95a",
+      "production_path": "assets/campaign/portraits/hn_ruan_xiaoer.png",
+      "production_sha256": "82ca4ed600145b6c16b68522b36c7a352ec849aa91cb35aaa59fee57c917a95a",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaowu_portrait.png",
+      "candidate_sha256": "0f1e38a2b120c6fc7c3668ceb105146b64b873b16c5ba2c2c0ca3325eb3f88f3",
+      "production_path": "assets/campaign/portraits/hn_ruan_xiaowu.png",
+      "production_sha256": "0f1e38a2b120c6fc7c3668ceb105146b64b873b16c5ba2c2c0ca3325eb3f88f3",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_ruan_xiaoqi_portrait.png",
+      "candidate_sha256": "0fe6bd8cdadde53282b35bfeb012da76ef2f2858539a7c8a19638fc19bd361ce",
+      "production_path": "assets/campaign/portraits/hn_ruan_xiaoqi.png",
+      "production_sha256": "0fe6bd8cdadde53282b35bfeb012da76ef2f2858539a7c8a19638fc19bd361ce",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "state": "portrait",
+      "direction": "se",
+      "candidate_path": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/outputs/hn_bai_sheng_portrait.png",
+      "candidate_sha256": "eaebe8c3a157d9f8ec740703a6aca44674fe41b244e0e7f75229c26d8968e11f",
+      "production_path": "assets/campaign/portraits/hn_bai_sheng.png",
+      "production_sha256": "eaebe8c3a157d9f8ec740703a6aca44674fe41b244e0e7f75229c26d8968e11f",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "sources": [
+    {
+      "variant": "hn_chao_gai",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_chao_gai_idle_walk_3x4.png",
+      "source_sha256": "0d320b8651215120f7a208f924c7c4e75d06c1aa668f00b9970f73a53d7267f5",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/01_hn_chao_gai_idle_walk_3x4.txt",
+      "prompt_sha256": "0cac4a042fb7fe3ae965d83e1b2c1c2f38abffd52bcba8595bd0b0d4f1dedf5d",
+      "generation_origin": {
+        "kind": "chatgpt_web_generated",
+        "conversation_url": "https://chatgpt.com/c/6a987e02-ec40-83ea-a07f-5c05388e4d80"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_chao_gai_idle_walk_3x4.png",
+      "raw_source_sha256": "00d5a453d96b52ef0c9d2aa19dd598e65176409b1443b605770d7d9c97faf9fd",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a989a93-eee0-83e9-9a83-fb867920c657",
+      "web_cleanup_prompt_sha256": "355A528CDD1728EFF8396C4A1E42D1A3AABB74C20CD29C4F2BDB623D37B3358C",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1448
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_wu_yong",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_wu_yong_idle_walk_3x4.png",
+      "source_sha256": "9175878bc577fea65a17a67b53715460d9f894b4bf9cac2509f30e80d895f1c2",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/02_hn_wu_yong_idle_walk_3x4.txt",
+      "prompt_sha256": "2fdc8065e60bcaa4e7f0d84053c3e0f081ff7c60e6932f083e98bb718d094df9",
+      "generation_origin": {
+        "kind": "chatgpt_web_generated",
+        "conversation_url": "https://chatgpt.com/c/6a987e02-ec40-83ea-a07f-5c05388e4d80"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_wu_yong_idle_walk_3x4.png",
+      "raw_source_sha256": "4ce6b76db98598d47546e36e8256cf492dcbf5e7e0cdff64d4f0b57f51f153d4",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a989fb6-e678-83e9-ad25-8a9c7dab2d47",
+      "web_cleanup_prompt_sha256": "A4FFD21EFC52EBB3970E6863793A060C5FE6765D22551B277A2BEC6437EB8DCF",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1448
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_gongsun_sheng",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_gongsun_sheng_idle_walk_3x4.png",
+      "source_sha256": "53107010e196b70742b7dc2328b7ff4145ef7b17c09adc618eba737db28e3189",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/03_hn_gongsun_sheng_idle_walk_3x4.txt",
+      "prompt_sha256": "42b90e04b122d0ab94925ee810fc0b6bce9684e14762e4de78d91e24dbd2d389",
+      "generation_origin": {
+        "kind": "chatgpt_web_generated",
+        "conversation_url": "https://chatgpt.com/c/6a987e02-ec40-83ea-a07f-5c05388e4d80"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_gongsun_sheng_idle_walk_3x4.png",
+      "raw_source_sha256": "4f8d26ea5c37dafa965000d66087551c82d80a593b8c076f60e67d361c4b4c82",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98a0b9-19e4-83e9-9c9e-087a1b0da4ef",
+      "web_cleanup_prompt_sha256": "12EEFA0F8D4498D6AB7A60BF38D24501A118188E55599B354B3C322C83EAA034",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1448
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_liu_tang",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_liu_tang_idle_walk_v2_3x4.png",
+      "source_sha256": "dc7708c1a0996e4659d6e72c7544aac0ffba17ef2fd54ca2b88196af48b88b4b",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/04b_hn_liu_tang_idle_walk_v2_3x4.txt",
+      "prompt_sha256": "3edb9dbab718ae6c838ad5c2e7fef43f5099d9b871408d530b86f07dec956a7e",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-b02d4a09-364f-43db-9175-ea73606e6d82.png"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_liu_tang_idle_walk_v2_3x4.png",
+      "raw_source_sha256": "b0775ec1b8e5463e47dd6d566de426674b32a5da664409ea8ee1cdb7b70f5aac",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98acd4-c89c-83e9-8f3a-d8a9575582ef",
+      "web_cleanup_prompt_sha256": "CE115EB78379327A86D442C2F363EF59EAECF741366FCDAB52FDED5DDD915EE2",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1448
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_ruan_xiaoer",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_ruan_xiaoer_idle_walk_3x4.png",
+      "source_sha256": "23ebc475b27b413ebf60ee4431a8f6adaed6df163b5cfffdc6b212871e1d10ca",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/05_hn_ruan_xiaoer_idle_walk_3x4.txt",
+      "prompt_sha256": "51d113091db72e68c18807ced8b827a181f464cf602e8c2fe42b2b184d404d47",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-346585ff-3afc-41b5-8996-ef4b988560be.png"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_ruan_xiaoer_idle_walk_3x4.png",
+      "raw_source_sha256": "2a3e9678857ca494ae3e3df0830a8c99cd7d10506b12763d83d89030360457c3",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98a6c5-e2d0-83ea-905d-7262650b55c4",
+      "web_cleanup_prompt_sha256": "E880FA0AD82CB9C6FDA5736254AC0CED743C5D25EEF88BCAD2FA1BF4BCAE5C73",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1448
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_ruan_xiaowu",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_ruan_xiaowu_idle_walk_v2_3x4.png",
+      "source_sha256": "ca5313a66a6f4c1067610aa5abe6404b76e032a74018aa619a47a1744b4e1de2",
+      "source_mode": "RGBA",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/06b_hn_ruan_xiaowu_idle_walk_v2_3x4.txt",
+      "prompt_sha256": "a2e1c50dd6376d3968a4ddb533939f67aef883eb448625fca96abf1e67b98fcb",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-0c66b91d-b770-4374-b20d-bec87983922a.png"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_ruan_xiaowu_idle_walk_v2_3x4.png",
+      "raw_source_sha256": "8ec8bb4ae672744c16ab4b53bfa2c736775bce41f746a12e44af043cfe2c9735",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "web_cleanup_prompt_sha256": "D57AD57310BF9801D79CDAACC80D3A9221C557D73EA8020D13E405E5D30A08BB",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1536
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          341,
+          683,
+          1024
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_ruan_xiaoqi",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_ruan_xiaoqi_idle_walk_v2_3x4.png",
+      "source_sha256": "dbdbef267f43b8c28ea834191a708c601f77fbcab671f65629193cc35c497619",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/07c_hn_ruan_xiaoqi_idle_walk_v2_3x4.txt",
+      "prompt_sha256": "5da60cf6ee2db79985fb923c37de0d253587048227158b1ccc1ae5542abd6107",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-97c13fc6-1cc9-4737-8a7d-2e3e1aa0f218.png"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_ruan_xiaoqi_idle_walk_v2_3x4.png",
+      "raw_source_sha256": "0386f2a412045817b6f06cba671022776aaf3ecd625c46061fbb6862953b96d1",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "web_cleanup_prompt_sha256": "2057D578994A1E9A3E3EE84D1F4A93D1E20C57793C783D85E61B6004A4E28627",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1448
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_bai_sheng",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_bai_sheng_idle_walk_3x4.png",
+      "source_sha256": "4958a3095b8cd62a78b27b459f2990a28278ba3149b4f88a362a9d8528af1c6d",
+      "source_mode": "RGBA",
+      "source_size": [
+        1447,
+        1087
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/08_hn_bai_sheng_idle_walk_3x4.txt",
+      "prompt_sha256": "20fb579033456bc69a938b9eeeca5b4527a677651596066ae2a1d64c18ef1796",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-7218be5d-ea33-4e0b-b105-689b76b8fca3.png"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_bai_sheng_idle_walk_3x4.png",
+      "raw_source_sha256": "5a5d327e8a9dd0c3e13bd0a57d00636fcab441194c467bf10b96f0df1ad8f654",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98a262-280c-83ea-946c-cb49009fdda5",
+      "web_cleanup_prompt_sha256": "6DF6B5D4839AAAA4F608E2536522DADDEDA11987DF668EBE692199C02105C355",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1447
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          725,
+          1087
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    },
+    {
+      "variant": "hn_bai_sheng_carry",
+      "source_path": "implementation_20260902/huangnigang_p0_source/web_hn_bai_sheng_carry_3x4.png",
+      "source_sha256": "54cdb11643f4d41e30ff5df7dab2072bb3d9e5f459d7ab171c3e189719dc4982",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/huangnigang_p0_source/09_hn_bai_sheng_carry_3x4.txt",
+      "prompt_sha256": "ad25995fa06940780c6a43e698888ff6879fcc9d1687dbec5aa2ca7d4edccbff",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-0151d189-7a18-42e0-9b29-bd89c818fefb.png"
+      },
+      "raw_source_path": "implementation_20260902/huangnigang_p0_source/raw_before_web_alpha15_cleanup/web_hn_bai_sheng_carry_3x4.png",
+      "raw_source_sha256": "8aa66d9cb3c15b068a8bff1c475af57aa4042d67f49dc11381553100e38293f4",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98acd4-c89c-83e9-8f3a-d8a9575582ef",
+      "web_cleanup_prompt_sha256": "03581CAED5F550011640FC0233747CF73F42F7964B7DFAA134EB10800120F35F",
+      "exact_cleanup_rule_verified": true,
+      "fixed_safe_window_layout": {
+        "columns": 4,
+        "rows": 3,
+        "x_windows": [
+          [
+            0,
+            352
+          ],
+          [
+            354,
+            760
+          ],
+          [
+            790,
+            1122
+          ],
+          [
+            1128,
+            1448
+          ]
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ],
+        "reason": "Exclude visible neighboring-frame blade overflow while retaining each target in one continuous rectangle."
+      }
+    }
+  ],
+  "steam_modified_or_exported": false
+}

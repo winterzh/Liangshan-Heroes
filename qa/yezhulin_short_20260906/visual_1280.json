@@ -1,0 +1,113 @@
+{
+	"cases": [
+		{
+			"events": [
+				"observe",
+				"shadow_pine",
+				"shadow_route_chosen",
+				"action:intercept:intercept",
+				"intercept",
+				"untie",
+				"tend_feet",
+				"action:escort:rest_stop",
+				"rest_stop",
+				"warn_escorts",
+				"action:escort:leave_forest",
+				"leave_forest",
+				"yezhulin_four_left",
+				"yezhulin_victory"
+			],
+			"hp": [
+				[
+					"lu_zhishen",
+					540.0
+				],
+				[
+					"lin_chong",
+					320.0
+				],
+				[
+					"dong_chao",
+					150.0
+				],
+				[
+					"xue_ba",
+					150.0
+				]
+			],
+			"orders": 5,
+			"result": {
+				"contract_version": 2,
+				"core_cleared": true,
+				"core_goal": "救下林冲，由鲁智深护送他和幸存解差活着走出野猪林。",
+				"done_ids": [
+					"hidden_intercept",
+					"spare_escorts",
+					"care_and_escort"
+				],
+				"goals": [
+					{
+						"id": "hidden_intercept",
+						"label": "暗中跟随，在水火棍落下前现身拦棍",
+						"note": "",
+						"reason": "",
+						"state": "done"
+					},
+					{
+						"id": "spare_escorts",
+						"label": "听林冲求情，留董超、薛霸性命",
+						"note": "",
+						"reason": "",
+						"state": "done"
+					},
+					{
+						"id": "care_and_escort",
+						"label": "林边歇脚后，由玩家编组四人一同出林",
+						"note": "",
+						"reason": "",
+						"state": "done"
+					}
+				],
+				"missed_ids": [],
+				"pending_ids": [],
+				"story_complete": true,
+				"story_done": 3,
+				"story_total": 3
+			},
+			"route": "north",
+			"seconds": 49.3499999999985,
+			"spacing": [
+				{
+					"action": "rest_stop",
+					"assembly_seconds": 0.0,
+					"initial_gap": 95.1636505126953,
+					"max_gap": 95.1636505126953,
+					"path_max_gap": 95.1636505126953,
+					"widest": [
+						0.0,
+						"dong_chao",
+						"(837.0225, 626.3262)",
+						"(927.4414, 656.0)"
+					]
+				},
+				{
+					"action": "leave_forest",
+					"assembly_seconds": 0.0,
+					"initial_gap": 87.5929336547852,
+					"max_gap": 87.5929336547852,
+					"path_max_gap": 87.5929336547852,
+					"widest": [
+						0.0,
+						"lu_zhishen",
+						"(488.0001, 656.0001)",
+						"(575.577, 654.3243)"
+					]
+				}
+			]
+		}
+	],
+	"checks": 26,
+	"failures": [],
+	"passed": true,
+	"scope": "actual player routes; separately labelled injected boundaries, not human fun or performance acceptance"
+}

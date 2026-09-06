@@ -20,14 +20,24 @@ func camera_start_cell() -> Vector2i: return Vector2i(map_w() / 2, map_h() / 2)
 # 剧情与部署
 func intro_lines() -> Array: return []
 func deploy_hint() -> String: return "查看战场形势与兵力部署，点「开战」开始（开战后方可选取、指挥兵马）。"
+func auto_start_after_intro() -> bool: return false
 func deploy(_b) -> void: pass                       # 部署初始我军（及预置敌军/目标）
 
 # 流程
 func on_start(_b) -> void: pass                     # 点「开战」后：启动波次/计时器
 func process(_b, _delta: float) -> void: pass       # FIGHT 阶段每帧自定义机制 + 胜负判定
+func on_unit_trained(_b, _unit, _building) -> void: pass # Chapter-specific orders for freshly paid recruits.
 func on_unit_died(_b, _u) -> void: pass             # 单位阵亡钩子（统计英雄存活、营救判定等）
+func on_unit_resolved(_b, _u, _outcome: String) -> void: pass
+func on_mission_action(_b, _action_id: String, _actor) -> void: pass
 func top_status(_b) -> String: return ""            # 顶栏文字
 func on_ability(_b, _caster, _ability_id: String, _lp: Vector2) -> bool: return false  # 关卡自定义技能(如指路)，处理返回 true
+
+# 战役双层结算。核心目标决定是否通关；演义目标只决定非数值奖励，
+# 不能在公共层把偏离原著直接变成失败。具体关卡可逐步覆写，旧关卡默认无演义印。
+func campaign_core_goal() -> String: return ""
+func campaign_story_goals() -> Array[Dictionary]: return []
+func story_contract_version() -> int: return 1
 
 # 经济/经营（自由「遭遇战」模式）：默认关闭，战役关卡完全不受影响
 func economy_enabled() -> bool: return false

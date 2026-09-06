@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/idle_ne.png" id="idle_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/song_jiang_direction4_20260906/attack_ne.png" id="attack_ne"]
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle_ne")
+region = Rect2(0, 0, 236, 256)
+margin = Rect2(42.0, 32.0, 84, 64)
+filter_clip = true
+metadata/draw_offset_px = Vector2(10.086307, -13.241379)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_ne"]
+atlas = ExtResource("attack_ne")
+region = Rect2(0, 0, 256, 170)
+margin = Rect2(0.0, 43.0, 0, 86)
+filter_clip = true
+metadata/draw_offset_px = Vector2(16.166667, 9.205156)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_ne")},
+{"duration": 1.0, "texture": SubResource("attack_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

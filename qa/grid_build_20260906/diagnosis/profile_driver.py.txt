@@ -1,0 +1,40 @@
+from pathlib import Path
+import os,subprocess,re,shutil,json,collections
+targets={
+ 'scripts/battle.gd':['_physics_process','_process','_grid_build','_separation_pass','_auto_micro_pass','_summon_hunt_pass','_aura_pass','_fog_pass','eject_from_buildings','target_visible_to','can_unit_step','to_screen'],
+ 'scripts/game_map.gd':['find_path','find_firing_path','find_static_cell_path','_smooth_path','_segment_open','speed_mult_at'],
+ 'scripts/unit.gd':['_phys_body','_draw','_do_chase','_follow_path','_acquire','_tick_ability_slots','_passive_regen','current_move_speed','_face_dir','_request_redraw'],
+}
+saved={}
+for name in targets:
+    p=Path(name);original=p.read_bytes()
+    assert original.replace(b'\r\n',b'\n')==subprocess.check_output(['git','show','HEAD:'+name]).replace(b'\r\n',b'\n')
+    saved[p]=original
+try:
+    for p,raw in saved.items():
+        s=raw.decode()
+        for method in targets[p.as_posix()]:
+            pattern=re.compile(r'^func '+re.escape(method)+r'\(([^\r\n]*)\) -> ([^:\r\n]+):',re.M)
+            def replace(m):
+                args,result=m.groups();names=[arg.strip().split(':')[0] for arg in args.split(',')] if args else []
+                impl='_stable_physics_probe_'+method
+                body='func '+method+'('+args+') -> '+result+':\n\tvar started := Time.get_ticks_usec()\n\t'
+                body+=('var value: '+result+' = ' if result!='void' else '')+impl+'('+','.join(names)+')\n'
+                body+='\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+p.stem+method+'",started)\n'
+                if result!='void':body+='\treturn value\n'
+                return body+'\n\nfunc '+impl+'('+args+') -> '+result+':'
+            s,n=pattern.subn(replace,s);assert n==1,(p,method,n)
+        p.write_bytes(s.encode())
+    env=os.environ.copy();env['PERF_DEFENSE']='1';env['PERF_OUT']='res://.godot/stable_physics_profile.json'
+    exe=Path(r'E:\ChatGPT\水浒\godot.local.txt').read_text(encoding='utf8').strip()
+    with Path('scratchpad/stable-physics-profile.log').open('wb') as out:
+        result=subprocess.run([exe,'--path','.','--script','res://scratchpad/frame_spike_render_probe.gd'],env=env,stdout=out,stderr=subprocess.STDOUT,timeout=120)
+    assert result.returncode==0,result.returncode
+    shutil.copyfile('.godot/frame_spikes_render_rows.json','.godot/stable_physics_profile_rows.json')
+finally:
+    for p,raw in saved.items():p.write_bytes(raw)
+    for p,raw in saved.items():assert p.read_bytes()==raw
+rows=json.loads(Path('.godot/stable_physics_profile_rows.json').read_text(encoding='utf8'))
+times=collections.Counter();calls=collections.Counter()
+for row in rows:times.update(row['times_us']);calls.update(row['calls'])
+for label,total in times.most_common():print(label,total,calls[label],round(total/calls[label],3))

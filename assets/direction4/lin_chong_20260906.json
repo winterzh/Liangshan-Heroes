@@ -1,0 +1,1216 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "character": "lin_chong",
+  "sources": {
+    "se": {
+      "path": "assets/characters/lin_chong_direction4_20260906/se.png",
+      "job": "se_spaced_alpha",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "sha256": "e09036504729a1c4d899bd6e9c935db948b9ba765ae053109bfd98cb6bc07c92",
+      "alpha_zero_fraction": 0.7002620697021484,
+      "import_limit": 768,
+      "full_atlas": true,
+      "imported_size": [
+        512,
+        768
+      ]
+    },
+    "sw_windup": {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw_windup.png",
+      "job": "sw_windup_fix",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "8fec14ce9a811c05c9c3e65a74ee3837458953e7eec21f5d792c5cc6e6cd421d",
+      "alpha_zero_fraction": 0.6644153594970703,
+      "import_limit": 384,
+      "full_atlas": true,
+      "imported_size": [
+        384,
+        256
+      ]
+    },
+    "sw": {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw.png",
+      "job": "sw_guard_alpha",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "sha256": "8dcef108eb8ce6c7a755300463f44c3fe7b73859170e57e7d51d8479927c4516",
+      "alpha_zero_fraction": 0.6783638000488281,
+      "import_limit": 768,
+      "full_atlas": false,
+      "imported_size": [
+        512,
+        768
+      ],
+      "unused_regions": [
+        {
+          "region": [
+            574,
+            22,
+            365,
+            384
+          ],
+          "reason": "Replace both walking poses with the opposite-leg reference pair."
+        },
+        {
+          "region": [
+            36,
+            407,
+            345,
+            372
+          ],
+          "reason": "Duplicate leading leg."
+        },
+        {
+          "region": [
+            597,
+            404,
+            378,
+            382
+          ],
+          "reason": "Head faces away from target during windup; replace with a corrected separate pose."
+        }
+      ]
+    },
+    "sw_walk": {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw_walk.png",
+      "job": "sw_walk_pair_alpha",
+      "native_size": [
+        1535,
+        1025
+      ],
+      "sha256": "a31a2dc72f672eb0b6a48d47b5929d132e5717579ba6935973c52dd8a0fe299d",
+      "alpha_zero_fraction": 0.7455075871931358,
+      "import_limit": 512,
+      "full_atlas": true,
+      "imported_size": [
+        512,
+        341
+      ]
+    },
+    "ne": {
+      "path": "assets/characters/lin_chong_direction4_20260906/ne.png",
+      "job": "ne_single_guard",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "sha256": "632171ae6848a457f402f580f4df2f2bdad8570d26e7ff84055e13f26e484bb1",
+      "alpha_zero_fraction": 0.820343017578125,
+      "import_limit": 768,
+      "full_atlas": false,
+      "imported_size": [
+        512,
+        768
+      ],
+      "unused_regions": [
+        {
+          "region": [
+            672,
+            46,
+            268,
+            342
+          ],
+          "reason": "Replaced with the walking pair from a two-stride 3D reference."
+        },
+        {
+          "region": [
+            163,
+            414,
+            244,
+            347
+          ],
+          "reason": "Duplicate leading leg; replace with separately authored opposite walk step."
+        }
+      ]
+    },
+    "ne_walk": {
+      "path": "assets/characters/lin_chong_direction4_20260906/ne_walk.png",
+      "job": "ne_walk_pair_alpha",
+      "native_size": [
+        1586,
+        992
+      ],
+      "sha256": "bcbedb0049d267da8197591a408f5abc78d953bf8e35e90fc224e994e1d21fea",
+      "alpha_zero_fraction": 0.7201311627954278,
+      "import_limit": 512,
+      "full_atlas": true,
+      "imported_size": [
+        512,
+        320
+      ]
+    },
+    "nw": {
+      "path": "assets/characters/lin_chong_direction4_20260906/nw.png",
+      "job": "nw_spaced",
+      "native_size": [
+        1024,
+        1536
+      ],
+      "sha256": "ecb817e72efdcd1880f278debdc74eaeda364b88ef886e94056fe0db9168dbe7",
+      "alpha_zero_fraction": 0.8244915008544922,
+      "import_limit": 768,
+      "full_atlas": true,
+      "imported_size": [
+        512,
+        768
+      ]
+    }
+  },
+  "poses": {
+    "idle_se": {
+      "source": "se",
+      "region_raw": [
+        45,
+        15,
+        428,
+        366
+      ],
+      "pivot": [
+        231,
+        365
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        22,
+        8,
+        214,
+        182
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        10.5,
+        26.5,
+        21,
+        53
+      ],
+      "draw_offset_px": [
+        13.5,
+        -8.300000000000011
+      ]
+    },
+    "walk_a_se": {
+      "source": "se",
+      "region_raw": [
+        644,
+        15,
+        377,
+        375
+      ],
+      "pivot": [
+        782,
+        374
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        322,
+        8,
+        188,
+        187
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        23.5,
+        24.0,
+        47,
+        48
+      ],
+      "draw_offset_px": [
+        25.0,
+        -10.300000000000011
+      ]
+    },
+    "walk_b_se": {
+      "source": "se",
+      "region_raw": [
+        58,
+        415,
+        455,
+        362
+      ],
+      "pivot": [
+        235,
+        763
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        29,
+        208,
+        227,
+        180
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        4.0,
+        27.5,
+        8,
+        55
+      ],
+      "draw_offset_px": [
+        25.0,
+        -8.300000000000011
+      ]
+    },
+    "windup_se": {
+      "source": "se",
+      "region_raw": [
+        634,
+        390,
+        361,
+        390
+      ],
+      "pivot": [
+        790,
+        759
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        317,
+        195,
+        181,
+        195
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        27.0,
+        20.0,
+        54,
+        40
+      ],
+      "draw_offset_px": [
+        12.5,
+        -11.800000000000011
+      ]
+    },
+    "thrust_se": {
+      "source": "se",
+      "region_raw": [
+        72,
+        802,
+        441,
+        303
+      ],
+      "pivot": [
+        224,
+        1083
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        36,
+        401,
+        220,
+        151
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        7.5,
+        42.0,
+        15,
+        84
+      ],
+      "draw_offset_px": [
+        34.0,
+        10.199999999999989
+      ]
+    },
+    "hurt_se": {
+      "source": "se",
+      "region_raw": [
+        643,
+        793,
+        360,
+        322
+      ],
+      "pivot": [
+        826,
+        1092
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        322,
+        396,
+        180,
+        162
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        27.5,
+        36.5,
+        55,
+        73
+      ],
+      "draw_offset_px": [
+        -1.0,
+        6.199999999999989
+      ]
+    },
+    "fall_se": {
+      "source": "se",
+      "region_raw": [
+        47,
+        1157,
+        399,
+        314
+      ],
+      "pivot": [
+        213,
+        1420
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        24,
+        578,
+        199,
+        158
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        18.0,
+        38.5,
+        36,
+        77
+      ],
+      "draw_offset_px": [
+        17.0,
+        22.19999999999999
+      ]
+    },
+    "down_se": {
+      "source": "se",
+      "region_raw": [
+        532,
+        1236,
+        449,
+        260
+      ],
+      "pivot": [
+        769,
+        1388
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        266,
+        618,
+        224,
+        130
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        5.5,
+        52.5,
+        11,
+        105
+      ],
+      "draw_offset_px": [
+        -6.5,
+        64.19999999999999
+      ]
+    },
+    "idle_sw": {
+      "source": "sw",
+      "region_raw": [
+        21,
+        14,
+        352,
+        377
+      ],
+      "pivot": [
+        252,
+        376
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        10,
+        7,
+        176,
+        189
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        29.5,
+        23.0,
+        59,
+        46
+      ],
+      "draw_offset_px": [
+        -28.0,
+        -11.300000000000011
+      ]
+    },
+    "windup_sw": {
+      "source": "sw_windup",
+      "region_raw": [
+        28,
+        1,
+        1483,
+        981
+      ],
+      "pivot": [
+        970,
+        933
+      ],
+      "virtual_size_native": 1550,
+      "region": [
+        7,
+        0,
+        371,
+        246
+      ],
+      "virtual_size_imported": 388,
+      "margin": [
+        8.5,
+        71.0,
+        17,
+        142
+      ],
+      "draw_offset_px": [
+        -50.0,
+        13.909999999999968
+      ]
+    },
+    "thrust_sw": {
+      "source": "sw",
+      "region_raw": [
+        8,
+        798,
+        513,
+        310
+      ],
+      "pivot": [
+        355,
+        1075
+      ],
+      "virtual_size_native": 513,
+      "region": [
+        4,
+        399,
+        256,
+        155
+      ],
+      "virtual_size_imported": 257,
+      "margin": [
+        0.5,
+        51.0,
+        1,
+        102
+      ],
+      "draw_offset_px": [
+        -45.5,
+        21.23999999999998
+      ]
+    },
+    "hurt_sw": {
+      "source": "sw",
+      "region_raw": [
+        548,
+        800,
+        459,
+        330
+      ],
+      "pivot": [
+        902,
+        1105
+      ],
+      "virtual_size_native": 470,
+      "region": [
+        274,
+        400,
+        230,
+        165
+      ],
+      "virtual_size_imported": 235,
+      "margin": [
+        2.5,
+        35.0,
+        5,
+        70
+      ],
+      "draw_offset_px": [
+        -62.0,
+        5.199999999999989
+      ]
+    },
+    "fall_sw": {
+      "source": "sw",
+      "region_raw": [
+        15,
+        1186,
+        486,
+        302
+      ],
+      "pivot": [
+        338,
+        1400
+      ],
+      "virtual_size_native": 486,
+      "region": [
+        8,
+        593,
+        242,
+        151
+      ],
+      "virtual_size_imported": 243,
+      "margin": [
+        0.5,
+        46.0,
+        1,
+        92
+      ],
+      "draw_offset_px": [
+        -40.0,
+        46.25999999999999
+      ]
+    },
+    "down_sw": {
+      "source": "sw",
+      "region_raw": [
+        534,
+        1250,
+        481,
+        239
+      ],
+      "pivot": [
+        760,
+        1370
+      ],
+      "virtual_size_native": 490,
+      "region": [
+        267,
+        625,
+        241,
+        119
+      ],
+      "virtual_size_imported": 245,
+      "margin": [
+        2.0,
+        63.0,
+        4,
+        126
+      ],
+      "draw_offset_px": [
+        7.5,
+        77.89999999999998
+      ]
+    },
+    "walk_a_sw": {
+      "source": "sw_walk",
+      "region_raw": [
+        18,
+        128,
+        643,
+        759
+      ],
+      "pivot": [
+        429,
+        849
+      ],
+      "virtual_size_native": 960,
+      "region": [
+        6,
+        43,
+        214,
+        252
+      ],
+      "virtual_size_imported": 320,
+      "margin": [
+        53.0,
+        34.0,
+        106,
+        68
+      ],
+      "draw_offset_px": [
+        -30.093159609120534,
+        -11.047804878048794
+      ]
+    },
+    "walk_b_sw": {
+      "source": "sw_walk",
+      "region_raw": [
+        755,
+        128,
+        735,
+        753
+      ],
+      "pivot": [
+        1190,
+        848
+      ],
+      "virtual_size_native": 960,
+      "region": [
+        252,
+        43,
+        245,
+        250
+      ],
+      "virtual_size_imported": 320,
+      "margin": [
+        37.5,
+        35.0,
+        75,
+        70
+      ],
+      "draw_offset_px": [
+        -22.42508143322476,
+        -11.715121951219544
+      ]
+    },
+    "idle_ne": {
+      "source": "ne",
+      "region_raw": [
+        177,
+        34,
+        258,
+        342
+      ],
+      "pivot": [
+        253,
+        363
+      ],
+      "virtual_size_native": 390,
+      "region": [
+        88,
+        17,
+        130,
+        171
+      ],
+      "virtual_size_imported": 195,
+      "margin": [
+        32.5,
+        12.0,
+        65,
+        24
+      ],
+      "draw_offset_px": [
+        26.5,
+        -16.600000000000023
+      ]
+    },
+    "walk_a_ne": {
+      "source": "ne_walk",
+      "region_raw": [
+        43,
+        66,
+        761,
+        854
+      ],
+      "pivot": [
+        331,
+        895
+      ],
+      "virtual_size_native": 1100,
+      "region": [
+        14,
+        21,
+        246,
+        276
+      ],
+      "virtual_size_imported": 355,
+      "margin": [
+        54.5,
+        39.5,
+        109,
+        79
+      ],
+      "draw_offset_px": [
+        30.145018915510718,
+        -16.109677419354853
+      ]
+    },
+    "walk_b_ne": {
+      "source": "ne_walk",
+      "region_raw": [
+        887,
+        66,
+        679,
+        852
+      ],
+      "pivot": [
+        1110,
+        893
+      ],
+      "virtual_size_native": 1100,
+      "region": [
+        286,
+        21,
+        220,
+        275
+      ],
+      "virtual_size_imported": 355,
+      "margin": [
+        67.5,
+        40.0,
+        135,
+        80
+      ],
+      "draw_offset_px": [
+        37.66456494325348,
+        -15.96451612903229
+      ]
+    },
+    "windup_ne": {
+      "source": "ne",
+      "region_raw": [
+        664,
+        439,
+        272,
+        319
+      ],
+      "pivot": [
+        752,
+        743
+      ],
+      "virtual_size_native": 390,
+      "region": [
+        332,
+        220,
+        136,
+        159
+      ],
+      "virtual_size_imported": 195,
+      "margin": [
+        29.5,
+        18.0,
+        59,
+        36
+      ],
+      "draw_offset_px": [
+        24.0,
+        -9.600000000000023
+      ]
+    },
+    "thrust_ne": {
+      "source": "ne",
+      "region_raw": [
+        116,
+        796,
+        383,
+        313
+      ],
+      "pivot": [
+        255,
+        1085
+      ],
+      "virtual_size_native": 390,
+      "region": [
+        58,
+        398,
+        192,
+        156
+      ],
+      "virtual_size_imported": 195,
+      "margin": [
+        1.5,
+        19.5,
+        3,
+        39
+      ],
+      "draw_offset_px": [
+        26.5,
+        -4.100000000000023
+      ]
+    },
+    "hurt_ne": {
+      "source": "ne",
+      "region_raw": [
+        660,
+        782,
+        290,
+        321
+      ],
+      "pivot": [
+        786,
+        1080
+      ],
+      "virtual_size_native": 390,
+      "region": [
+        330,
+        391,
+        145,
+        161
+      ],
+      "virtual_size_imported": 195,
+      "margin": [
+        25.0,
+        17.0,
+        50,
+        34
+      ],
+      "draw_offset_px": [
+        9.5,
+        -6.100000000000023
+      ]
+    },
+    "fall_ne": {
+      "source": "ne",
+      "region_raw": [
+        78,
+        1218,
+        378,
+        209
+      ],
+      "pivot": [
+        330,
+        1395
+      ],
+      "virtual_size_native": 390,
+      "region": [
+        39,
+        609,
+        189,
+        105
+      ],
+      "virtual_size_imported": 195,
+      "margin": [
+        3.0,
+        45.0,
+        6,
+        90
+      ],
+      "draw_offset_px": [
+        -31.5,
+        26.399999999999977
+      ]
+    },
+    "down_ne": {
+      "source": "ne",
+      "region_raw": [
+        577,
+        1287,
+        390,
+        144
+      ],
+      "pivot": [
+        790,
+        1378
+      ],
+      "virtual_size_native": 390,
+      "region": [
+        288,
+        644,
+        196,
+        72
+      ],
+      "virtual_size_imported": 196,
+      "margin": [
+        0.0,
+        62.0,
+        0,
+        124
+      ],
+      "draw_offset_px": [
+        -9.0,
+        53.72
+      ]
+    },
+    "idle_nw": {
+      "source": "nw",
+      "region_raw": [
+        124,
+        65,
+        262,
+        305
+      ],
+      "pivot": [
+        307,
+        356
+      ],
+      "virtual_size_native": 368,
+      "region": [
+        62,
+        32,
+        131,
+        153
+      ],
+      "virtual_size_imported": 184,
+      "margin": [
+        26.5,
+        15.5,
+        53,
+        31
+      ],
+      "draw_offset_px": [
+        -26.0,
+        -10.620000000000005
+      ]
+    },
+    "walk_a_nw": {
+      "source": "nw",
+      "region_raw": [
+        632,
+        64,
+        254,
+        307
+      ],
+      "pivot": [
+        790,
+        358
+      ],
+      "virtual_size_native": 368,
+      "region": [
+        316,
+        32,
+        127,
+        154
+      ],
+      "virtual_size_imported": 184,
+      "margin": [
+        28.5,
+        15.0,
+        57,
+        30
+      ],
+      "draw_offset_px": [
+        -15.5,
+        -11.120000000000005
+      ]
+    },
+    "walk_b_nw": {
+      "source": "nw",
+      "region_raw": [
+        124,
+        427,
+        268,
+        289
+      ],
+      "pivot": [
+        303,
+        701
+      ],
+      "virtual_size_native": 368,
+      "region": [
+        62,
+        214,
+        134,
+        144
+      ],
+      "virtual_size_imported": 184,
+      "margin": [
+        25.0,
+        20.0,
+        50,
+        40
+      ],
+      "draw_offset_px": [
+        -22.5,
+        -5.6200000000000045
+      ]
+    },
+    "windup_nw": {
+      "source": "nw",
+      "region_raw": [
+        589,
+        463,
+        329,
+        270
+      ],
+      "pivot": [
+        802,
+        710
+      ],
+      "virtual_size_native": 368,
+      "region": [
+        294,
+        232,
+        165,
+        134
+      ],
+      "virtual_size_imported": 184,
+      "margin": [
+        9.5,
+        25.0,
+        19,
+        50
+      ],
+      "draw_offset_px": [
+        -24.5,
+        2.8799999999999955
+      ]
+    },
+    "thrust_nw": {
+      "source": "nw",
+      "region_raw": [
+        71,
+        800,
+        376,
+        287
+      ],
+      "pivot": [
+        310,
+        1058
+      ],
+      "virtual_size_native": 376,
+      "region": [
+        36,
+        400,
+        188,
+        144
+      ],
+      "virtual_size_imported": 188,
+      "margin": [
+        0.0,
+        22.0,
+        0,
+        44
+      ],
+      "draw_offset_px": [
+        -25.0,
+        3.1599999999999966
+      ]
+    },
+    "hurt_nw": {
+      "source": "nw",
+      "region_raw": [
+        634,
+        806,
+        262,
+        268
+      ],
+      "pivot": [
+        706,
+        1062
+      ],
+      "virtual_size_native": 368,
+      "region": [
+        317,
+        403,
+        131,
+        134
+      ],
+      "virtual_size_imported": 184,
+      "margin": [
+        26.5,
+        25.0,
+        53,
+        50
+      ],
+      "draw_offset_px": [
+        29.5,
+        -2.1200000000000045
+      ]
+    },
+    "fall_nw": {
+      "source": "nw",
+      "region_raw": [
+        81,
+        1162,
+        369,
+        245
+      ],
+      "pivot": [
+        304,
+        1370
+      ],
+      "virtual_size_native": 369,
+      "region": [
+        40,
+        581,
+        185,
+        123
+      ],
+      "virtual_size_imported": 185,
+      "margin": [
+        0.0,
+        31.0,
+        0,
+        62
+      ],
+      "draw_offset_px": [
+        -19.5,
+        16.69999999999999
+      ]
+    },
+    "down_nw": {
+      "source": "nw",
+      "region_raw": [
+        584,
+        1239,
+        371,
+        158
+      ],
+      "pivot": [
+        790,
+        1342
+      ],
+      "virtual_size_native": 371,
+      "region": [
+        292,
+        620,
+        186,
+        78
+      ],
+      "virtual_size_imported": 186,
+      "margin": [
+        0.0,
+        54.0,
+        0,
+        108
+      ],
+      "draw_offset_px": [
+        -10.0,
+        47.51999999999998
+      ]
+    }
+  },
+  "states": {
+    "idle": [
+      "idle"
+    ],
+    "walk": [
+      "idle",
+      "walk_a",
+      "idle",
+      "walk_b"
+    ],
+    "attack": [
+      "windup",
+      "windup",
+      "thrust",
+      "thrust",
+      "idle"
+    ],
+    "hurt": [
+      "hurt"
+    ],
+    "death": [
+      "hurt",
+      "fall",
+      "down",
+      "down"
+    ]
+  },
+  "resources": [
+    "assets/anim/lin_chong_idle_se.tres",
+    "assets/anim/lin_chong_walk_se.tres",
+    "assets/anim/lin_chong_attack_se.tres",
+    "assets/anim/lin_chong_hurt_se.tres",
+    "assets/anim/lin_chong_death_se.tres",
+    "assets/anim/lin_chong_idle_sw.tres",
+    "assets/anim/lin_chong_walk_sw.tres",
+    "assets/anim/lin_chong_attack_sw.tres",
+    "assets/anim/lin_chong_hurt_sw.tres",
+    "assets/anim/lin_chong_death_sw.tres",
+    "assets/anim/lin_chong_idle_ne.tres",
+    "assets/anim/lin_chong_walk_ne.tres",
+    "assets/anim/lin_chong_attack_ne.tres",
+    "assets/anim/lin_chong_hurt_ne.tres",
+    "assets/anim/lin_chong_death_ne.tres",
+    "assets/anim/lin_chong_idle_nw.tres",
+    "assets/anim/lin_chong_walk_nw.tres",
+    "assets/anim/lin_chong_attack_nw.tres",
+    "assets/anim/lin_chong_hurt_nw.tres",
+    "assets/anim/lin_chong_death_nw.tres"
+  ],
+  "notes": [
+    "Native image bytes and alpha are retained. SpriteFrames provide sampling, padding and ground pivots.",
+    "SE/NW use a supported two-hand guard; SW/NE use a right-hand guard. Direction changes use distinct poses, not mirrored bitmaps.",
+    "Repeated poses set timing only. Walk and attack are basic low-frame cycles; not a claim of high-frame animation.",
+    "Explicit campaign costumes keep their separate resources; missing campaign death uses the existing procedural fallback."
+  ]
+}

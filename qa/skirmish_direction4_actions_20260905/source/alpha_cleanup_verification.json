@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "browser_alpha_cleanup_verification",
+  "method": "browser_python_pillow_alpha_le_15_rgba_zero",
+  "conversation": "https://chatgpt.com/c/6a9aa67d-22a0-83e9-aeb6-0237a7882356",
+  "local_verification": "For every pixel, alpha > 15 must remain byte-identical to the browser-upload canonical input; alpha <= 15 must become RGBA(0,0,0,0).",
+  "provenance_note": "The browser upload path re-encoded each generated PNG before cleanup. Therefore exactness is verified against the corresponding browser-upload canonical input retained under web_upload_canonical, while the original generated downloads are retained separately as *_raw.png.",
+  "results": [
+    {
+      "pose": "walk_step",
+      "raw_generated_file": "official_top4_walk_step_4x4_raw.png",
+      "raw_generated_sha256": "18c6b484cac4a1b36339dba7092096939a737d81f57730f9d071b65685c19001",
+      "input_file": "web_upload_canonical/official_top4_walk_step_4x4_web_upload.png",
+      "input_sha256": "3195036abc613f0a7ca7772afcfc6b4f7c47db3bbce57d8f99f9a976a47fa694",
+      "output_file": "official_top4_walk_step_4x4_alpha15.png",
+      "output_sha256": "ed588924d506ad52574ec2a9abb88e38409eff50e3b0bb74b590417e7129f557",
+      "alpha_le_15_pixels": 1126482,
+      "changed_pixels": 96646,
+      "alpha_gt_15_mismatch_pixels": 0,
+      "alpha_le_15_output_nonzero_pixels": 0
+    },
+    {
+      "pose": "attack_strike",
+      "raw_generated_file": "official_top4_attack_strike_4x4_raw.png",
+      "raw_generated_sha256": "98256faba2b7d5c2c01368495b81d0ec32c141c0472c5b33720937fff71efe04",
+      "input_file": "web_upload_canonical/official_top4_attack_strike_4x4_web_upload.png",
+      "input_sha256": "cdc191910677996d5aecbaba486001fcd72e8f13e28b7e8692f85e5c88645c51",
+      "output_file": "official_top4_attack_strike_4x4_alpha15.png",
+      "output_sha256": "18f5adc553908a57d321a17f479596080c98bacf5b092e34b9f9c7d8f8706b60",
+      "alpha_le_15_pixels": 1171575,
+      "changed_pixels": 95269,
+      "alpha_gt_15_mismatch_pixels": 0,
+      "alpha_le_15_output_nonzero_pixels": 0
+    },
+    {
+      "pose": "death_fall",
+      "raw_generated_file": "official_top4_death_fall_4x4_raw.png",
+      "raw_generated_sha256": "64865f3efda6c4e9fdbb7b93bfdf2e44c2fd8e39d4ab8f9c462f59a0fe19994e",
+      "input_file": "web_upload_canonical/official_top4_death_fall_4x4_web_upload.png",
+      "input_sha256": "57d3659602fc31cdd6a87c071ad681062556830fcadc2365f01a3269bc30cc46",
+      "output_file": "official_top4_death_fall_4x4_alpha15.png",
+      "output_sha256": "f0ffe3141de5acd0669a894db5196a0ad7ead51f0e99fc8fbc2f68a671dd0267",
+      "alpha_le_15_pixels": 1135254,
+      "changed_pixels": 77393,
+      "alpha_gt_15_mismatch_pixels": 0,
+      "alpha_le_15_output_nonzero_pixels": 0
+    },
+    {
+      "pose": "death_down",
+      "raw_generated_file": "official_top4_death_down_4x4_raw.png",
+      "raw_generated_sha256": "93afca93d62fec9086b6389e196efc24129742627537af2449a174a27558f338",
+      "input_file": "web_upload_canonical/official_top4_death_down_4x4_web_upload.png",
+      "input_sha256": "ca1fb0cc7d5aea4b5efc08b4ea0017ea02d8f1027de14e996ce328eef8bb60d8",
+      "output_file": "official_top4_death_down_4x4_alpha15.png",
+      "output_sha256": "26ec3200c19f3366916c30c67b1dbd0de00f1c837d6f42eddebbd931285ff97c",
+      "alpha_le_15_pixels": 1165943,
+      "changed_pixels": 162957,
+      "alpha_gt_15_mismatch_pixels": 0,
+      "alpha_le_15_output_nonzero_pixels": 0
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,83 @@
+{
+	"checks": 4,
+	"failures": [],
+	"metrics": {
+		"buildings_started": 5,
+		"camp_hp": 1500.0,
+		"enemy_paid_produced": [
+			10,
+			4
+		],
+		"enemy_spent_gold": 607,
+		"enemy_spent_wood": 358,
+		"events": [
+			"gao_land_cleared",
+			"gao_sea_post_destroyed",
+			"gao_land_post_destroyed",
+			"flagship_disabled",
+			"gao_basic_victory"
+		],
+		"game_seconds": 314.0,
+		"orders": 335,
+		"result": {
+			"contract_version": 3,
+			"core_cleared": true,
+			"core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+			"done_ids": [
+				"gao_land"
+			],
+			"goals": [
+				{
+					"id": "gao_lure",
+					"label": "阮小七引活官船进入港汊伏区",
+					"note": "",
+					"reason": "官船在入伏区前已被击退；基础通关不受影响。",
+					"state": "missed"
+				},
+				{
+					"id": "gao_fire",
+					"label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+					"note": "",
+					"reason": "接应船损失，可继续用普通舰队正面作战。",
+					"state": "missed"
+				},
+				{
+					"id": "gao_land",
+					"label": "击退岸军并拔除山前补给营",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "gao_capture",
+					"label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+					"note": "",
+					"reason": "本局未完成",
+					"state": "missed"
+				}
+			],
+			"missed_ids": [
+				"gao_lure",
+				"gao_fire",
+				"gao_capture"
+			],
+			"pending_ids": [],
+			"story_complete": false,
+			"story_done": 1,
+			"story_total": 4
+		},
+		"skill_orders": 40,
+		"story_phase": "lure",
+		"units_queued": 44,
+		"units_queued_by_key": {
+			"liang_dao": 11,
+			"liang_gong": 9,
+			"liang_qiang": 12,
+			"liangshan_warship": 9,
+			"lou_luo": 3
+		}
+	},
+	"passed": true,
+	"route": "assault",
+	"scope": "actual economy and combat controlled through player commands; automated, not human fun acceptance"
+}

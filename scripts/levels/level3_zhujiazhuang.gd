@@ -1,90 +1,70 @@
 extends LevelBase
-## 第3关·三打祝家庄（独龙冈·盘陀路）。
-## 核心机制【盘陀路】：迷宫外围全是 FOREST 树墙与 CLIFF 壁垒/WATER 水渠，
-## 唯有一条 ROAD 安全小道（遇白杨树拐弯）通往庄门；其余岔口是 ROAD 死巷，
-## 尽头藏 REEDS 隐蔽伏兵。石秀以技能 shi_xiu_path 沿安全路径逐段点亮（金色高亮），
-## 引主力跟进；贸然踏入未点亮的死巷即激活伏兵围攻。
-## 破庄门 + 灭祝家三杰(祝龙/祝虎/祝彪)与铁棒栾廷玉 = 胜；主力折损过半 = 败。
-## 支线：岔口击败一丈青扈三娘触发「归顺」，她回血转入梁山阵营助战。
-
+## 原著47—50回：探路脱围、阵前擒扈三娘、数日后孙立内应。
+## 三次作战重新部署，只保留mission故事标志，不能带着伤兵连续冲庄。
 const T := GameMap.T
-
-# —— 关键坐标（取自规格 key_locations）——
-const DEPLOY_CELL := Vector2i(58, 28)    # 梁山集结区
-const ENTRY_CELL := Vector2i(50, 28)     # 盘陀路入口·白杨岔口一
-const FORK2_CELL := Vector2i(42, 22)     # 白杨岔口二
-const HU_CELL := Vector2i(40, 14)        # 扈三娘遭遇点
-const FORK3_CELL := Vector2i(34, 30)     # 白杨岔口三
-const GATE_CELL := Vector2i(22, 28)      # 祝家庄门
-const COURT_CELL := Vector2i(12, 28)     # 祝家内院
-const AMBUSH_A := Vector2i(50, 33)       # 死巷伏兵A
-const AMBUSH_B := Vector2i(30, 36)       # 死巷伏兵B
-
-# —— 安全路径节点序列（石秀指路按此逐段点亮；含白杨拐点）——
-const SAFE_NODES: Array[Vector2i] = [
-	Vector2i(58, 28), Vector2i(51, 28),               # 入口直廊
-	Vector2i(50, 28), Vector2i(50, 22),               # 岔口一：遇白杨向北拐
-	Vector2i(43, 22), Vector2i(42, 22),               # 抵岔口二
-	Vector2i(42, 23), Vector2i(42, 30),               # 岔口二：遇白杨向南折
-	Vector2i(35, 30), Vector2i(34, 30),               # 抵岔口三
-	Vector2i(34, 29), Vector2i(34, 28),               # 岔口三：遇白杨向西
-	Vector2i(23, 28), Vector2i(22, 28),               # 直抵庄门
-	Vector2i(12, 28),                                 # 入庄·内院
-]
-
-# 每次指路点亮 N 个节点（约 6-8 格）
-const LIT_STEP := 4
-const LIT_DUR := 14.0
-
-# —— 状态 ——
+const DEPLOY_CELL := Vector2i(58, 28)
+const ENTRY_CELL := Vector2i(50, 28)
+const FORK2_CELL := Vector2i(42, 22)
+const HU_CELL := Vector2i(40, 14)
+const FORK3_CELL := Vector2i(34, 30)
+const GATE_CELL := Vector2i(22, 28)
+const COURT_CELL := Vector2i(12, 28)
+const AMBUSH_A := Vector2i(50, 33)
+const AMBUSH_B := Vector2i(30, 36)
+const PRISON_CELL := Vector2i(11, 33)
+const SECOND_SONG_SAFE := Vector2i(56, 32)
+const SECOND_LIN_INTERCEPT := Vector2i(40, 18)
+const SECOND_HUA_COVER := Vector2i(44, 22)
+const SECOND_HANDOFF := Vector2i(57, 27)
+const INNER_GATE_SUPPORT := Vector2i(18, 28)
+const OUTER_RALLY := Vector2i(25, 28)
+const PRISON_RALLY_A := Vector2i(12, 28)
+const PRISON_RALLY_B := Vector2i(15, 31)
+const SAFE_NODES: Array[Vector2i] = [Vector2i(58,28),Vector2i(50,28),Vector2i(50,22),Vector2i(42,22),Vector2i(42,30),Vector2i(34,30),Vector2i(34,28),Vector2i(22,28),Vector2i(12,28)]
+var stage := "scout"
 var gate: Unit
 var shi: Unit
+var song: Unit
+var lin: Unit
+var hua: Unit
 var hu: Unit
-var start_n := 0                # 开战时玩家作战单位基数
-var lit_idx := 0                # 已点亮到的安全节点序号
-var amb_a_fired := false
-var amb_b_fired := false
-var gate_guard_fired := false
-var final_wave := false
-var hu_engaged := false
-var hu_turned := false
-var zhao_dead := false
-var amb_a: Array = []           # 死巷A 伏兵
-var amb_b: Array = []           # 死巷B 伏兵
-var hu_escort: Array = []       # 扈家庄客
-var gate_guards: Array = []     # 壁垒守军
-
-# 冒烟测试推进
-var _sk_t := 0.0                # 指路节流
-var _sk_seg := 0                # 已下令推进到的安全节点
-var _sk_gate_hit := false
-var _sk_final := false
-var _sk_log := 0.0
-
+var sun: Unit
+var gu: Unit
+var prisoners: Array = []
+var prisoner_groups: Array = []
+var second_guards: Array = []
+var second_spears: Array = []
+var smoke_t := 0.0
+var pursuit_sent := false
+var assault_started := false
+var free_scout = null
+var free_second_fight := false
+var free_third_assault := false
 
 func id() -> String: return "level3"
 func title() -> String: return "三打祝家庄"
-func subtitle() -> String: return "独龙冈·盘陀路·里应外合"
+func subtitle() -> String: return "探路脱围·阵前擒将·孙立内应"
+func campaign_core_goal() -> String: return "三次交战后攻破祝家庄；宋江必须存活。认路、生擒、内应均为可选演义目标。"
+func story_contract_version() -> int: return 1
+func campaign_story_goals() -> Array:
+	return [
+		{"id":"zhu_poplar","label":"白杨认路，石秀探庄后带队脱围","required_events":["zhu_route_known","zhu_gate_scouted","zhu_first_withdrawal"],"forbidden_events":["zhu_free_scout"]},
+		{"id":"zhu_capture","label":"三处分守，林冲生擒并押送扈三娘","required_events":["zhu_second_formation","zhu_hu_captured","zhu_hu_departed"],"forbidden_events":["zhu_second_freefight"]},
+		{"id":"zhu_inside","label":"孙立入庄，邹渊、邹润开陷车，孙新换旗后里外合击","required_events":["zhu_sun_entered","zhu_prisoners_freed","zhu_gate_opened","zhu_assault_ordered"],"forbidden_events":["zhu_gate_breached"]},
+		{"id":"zhu_seven","label":"七名被囚好汉全部生还","required_events":["zhu_seven_safe"],"forbidden_events":["zhu_prisoner_lost"]},
+	]
 func map_w() -> int: return 64
 func map_h() -> int: return 56
 func map_theme() -> String: return "village"
 func map_base() -> int: return T.GRASS
-func camera_start_cell() -> Vector2i: return Vector2i(52, 28)
+func camera_start_cell() -> Vector2i: return Vector2i(52,28)
 func deploy_hint() -> String:
-	return "盘陀路凶险：选中石秀按技能『指路·遇白杨转弯』点亮前方一段安全小道（金色高亮），引主力跟着走。切勿擅闯未点亮的岔口死巷——白杨树后尽是庄客冷箭！主力折损过半即败。"
-
-
+	return "三次交战跨日重新部署。按原著可完成石秀认路、林冲擒将、孙立入庄、邹渊邹润救囚和孙新换旗；也可自行侦察、接战或强攻。偏离章法只失对应演义印；扈三娘始终按敌将俘虏处理。"
 func intro_lines() -> Array:
 	return [
-		{"who": "旁白", "key": "narrator", "text": "独龙冈下，三村连环：祝家庄壁垒森严，扈家庄、李家庄为犄角。庄前一片盘陀路——白杨树为记的迷魂小道，纵横如蛛网，走错一步便陷绝地。宋公明前两打折兵损将，至今未能近庄门一步。"},
-		{"who": "石秀", "key": "shi_xiu", "text": "哥哥放心！小弟扮作行脚客，已在庄里盘桓数日，钟离老人说破了关窍——『遇白杨便转弯』，但凡看见白杨树就拐，方是活路；岔道尽是死巷与暗箭。待我在前引路，大军跟定我走的道便万无一失。"},
-		{"who": "吴用", "key": "wu_yong", "text": "石秀兄弟探得明白，这盘陀路便不足惧。我已遣孙立等诈降入庄为内应，只待庄门一破，里应外合。三郎，你专一在前指路，大队莫要贪功乱闯岔口——那白杨树后，藏的全是祝家庄客的冷箭。"},
-		{"who": "宋江", "key": "song_jiang", "text": "好！传我将令：石秀引路在先，长枪手护两翼防祝家马军，弓手随后压阵。先破了庄门，再擒祝氏父子，与晁天王、众兄弟报仇雪恨！"},
-		{"who": "军令", "key": "narrator", "text": "【盘陀路】只有石秀指出的高亮小道安全，岔口踏入死路会惊动伏兵。选中石秀按技能『指路·遇白杨转弯』点亮前方一段安全路径，引主力跟进→破庄门→击败祝家三杰与栾廷玉。主力折损过半即败。"},
-	]
-
-
-# —— 地图：迷宫在外、庄堡在内 ——
+		{"who":"旁白","key":"narrator","text":"时迁陷在祝家庄，宋江领兵来到独龙冈。扈家庄与祝家结亲，随时可能来援；李应却已被祝彪射伤，闭门不出。庄前盘陀路纵横，夜里难辨出路。"},
+		{"who":"石秀","key":"shi_xiu","text":"钟离老人说了，遇着白杨便转弯，才是活路。我先去认清岔口，哥哥且接应着，莫教庄兵截断归路。"},
+		{"who":"军令","key":"narrator","text":"先探清进退道路，保全出营的兄弟。庄门坚固，切莫贸然强攻；寻到内应，方可里外夹击。"}]
 func paint_map(map: GameMap) -> void:
 	# 田埂农田底子（村庄主题）
 	map.fill_rect(0, 0, 64, 56, T.GRASS)
@@ -147,451 +127,689 @@ func decorate(map: GameMap) -> void:
 		["tower", Vector2i(20, 24), 60.0], ["tower", Vector2i(20, 32), 60.0],
 		# 内院祠堂
 		["hall", Vector2i(COURT_CELL.x, COURT_CELL.y - 1), 78.0],
-		["banner", Vector2i(10, 26), 50.0], ["banner", Vector2i(14, 30), 50.0],
+		# 第四十八回庄门一对白旗。两处仅由 level3 marker 取原文，通用 banner 保持无字。
+		["banner", Vector2i(10, 26), 144.0, "zhujiazhuang_gate_chao_standard"],
+		["banner", Vector2i(14, 30), 144.0, "zhujiazhuang_gate_song_standard"],
 		# 死巷标记物（迷惑）
 		["rocks", Vector2i(50, 34), 44.0], ["rocks", Vector2i(30, 37), 44.0],
 		["tent", Vector2i(58, 22), 60.0], ["tent", Vector2i(60, 30), 60.0],
 	]
 
 
-# —— 部署：玩家主力 + 预置隐蔽伏兵 + 庄门 + 庄内据守 ——
 func deploy(b) -> void:
-	var B: Battle = b
-	# 玩家主力（石秀立于队首）
-	shi = B.spawn_at("shi_xiu", Unit.FACTION_LIANG, DEPLOY_CELL + Vector2i(-1, 0))
-	B.spawn_at("lin_chong", Unit.FACTION_LIANG, DEPLOY_CELL + Vector2i(0, -2))
-	B.spawn_at("hua_rong", Unit.FACTION_LIANG, DEPLOY_CELL + Vector2i(1, 2))
-	var qi_cells := [Vector2i(0, -3), Vector2i(1, -3), Vector2i(2, -2), Vector2i(0, 3), Vector2i(1, 3), Vector2i(2, 2)]
-	for c in qi_cells:
-		B.spawn_at("liang_qiang", Unit.FACTION_LIANG, DEPLOY_CELL + c)
-	var dao_cells := [Vector2i(1, -1), Vector2i(1, 0), Vector2i(1, 1), Vector2i(2, -1), Vector2i(2, 0), Vector2i(2, 1)]
-	for c in dao_cells:
-		B.spawn_at("liang_dao", Unit.FACTION_LIANG, DEPLOY_CELL + c)
-	var gong_cells := [Vector2i(3, -2), Vector2i(3, -1), Vector2i(3, 0), Vector2i(3, 1), Vector2i(3, 2), Vector2i(4, 0)]
-	for c in gong_cells:
-		B.spawn_at("liang_gong", Unit.FACTION_LIANG, DEPLOY_CELL + c)
-
-	# 庄门（目标建筑①）——横亘壁垒缺口
-	gate = B.spawn_at("zhu_gate", Unit.FACTION_GUAN, GATE_CELL)
-
-	# —— 死巷伏兵A：reeds 中庄客×3（隐蔽待发）——
-	for c in [Vector2i(0, 0), Vector2i(-1, 0), Vector2i(1, 1)]:
-		var u := B.spawn_at("zhu_keke", Unit.FACTION_GUAN, AMBUSH_A + c)
-		u.passive = true
-		amb_a.append(u)
-	# —— 死巷伏兵B：庄客×2 + 弓手×3（隐蔽待发）——
-	for c in [Vector2i(0, 0), Vector2i(1, -1)]:
-		var u := B.spawn_at("zhu_keke", Unit.FACTION_GUAN, AMBUSH_B + c)
-		u.passive = true
-		amb_b.append(u)
-	for c in [Vector2i(-1, 0), Vector2i(0, 1), Vector2i(1, 1)]:
-		var u := B.spawn_at("zhu_gong", Unit.FACTION_GUAN, AMBUSH_B + c)
-		u.passive = true
-		amb_b.append(u)
-
-	# —— 壁垒守军：庄门两侧庄客×2 + 弓手×2（隐蔽待发，破门前不动）——
-	for c in [Vector2i(-1, -3), Vector2i(-1, 3)]:
-		var u := B.spawn_at("zhu_keke", Unit.FACTION_GUAN, GATE_CELL + c)
-		u.passive = true
-		gate_guards.append(u)
-	for c in [Vector2i(-2, -2), Vector2i(-2, 2)]:
-		var u := B.spawn_at("zhu_gong", Unit.FACTION_GUAN, GATE_CELL + c)
-		u.passive = true
-		gate_guards.append(u)
-
-	# —— 扈三娘遭遇点：一丈青 + 扈家庄客×2（巡弋待触发）——
-	hu = B.spawn_at("hu_sanniang", Unit.FACTION_GUAN, HU_CELL)
-	hu.passive = true
-	for c in [Vector2i(-1, 1), Vector2i(1, 1)]:
-		var u := B.spawn_at("zhu_keke", Unit.FACTION_GUAN, HU_CELL + c)
-		u.passive = true
-		hu_escort.append(u)
-
-	# —— 庄内据守（破门后冲出；先按兵不动）——
-	_deploy_inner(B)
-
-
-func _deploy_inner(b) -> void:
-	var B: Battle = b
-	# 祝家三杰 + 栾廷玉 + 祝朝奉 据守内院
-	for spec in [["luan_tingyu", Vector2i(17, 28)], ["zhu_long", Vector2i(14, 25)],
-			["zhu_hu", Vector2i(14, 31)], ["zhu_biao", Vector2i(10, 28)],
-			["zhu_zhaofeng", Vector2i(11, 28)]]:
-		var u := B.spawn_at(spec[0], Unit.FACTION_GUAN, spec[1])
-		u.passive = true
-	# 祝家马军×4
-	for c in [Vector2i(16, 24), Vector2i(16, 32), Vector2i(13, 23), Vector2i(13, 33)]:
-		var u := B.spawn_at("zhu_qi", Unit.FACTION_GUAN, c)
-		u.passive = true
-	# 庄内守卫庄客×3
-	for c in [Vector2i(15, 27), Vector2i(15, 29), Vector2i(12, 26)]:
-		var u := B.spawn_at("zhu_keke", Unit.FACTION_GUAN, c)
-		u.passive = true
-
+	stage = "scout"
+	free_scout = null
+	free_second_fight = false
+	free_third_assault = false
+	prisoners.clear()
+	prisoner_groups.clear()
+	second_guards.clear()
+	second_spears.clear()
+	pursuit_sent = false
+	assault_started = false
+	shi = b.spawn_at("shi_xiu", Unit.FACTION_LIANG, DEPLOY_CELL)
+	song = b.spawn_at("song_jiang", Unit.FACTION_LIANG, DEPLOY_CELL + Vector2i(1,2))
+	for c in [Vector2i(1,-1),Vector2i(2,1),Vector2i(1,3)]:
+		b.spawn_at("liang_dao",Unit.FACTION_LIANG,DEPLOY_CELL+c)
+	gate = b.spawn_at("zhu_gate",Unit.FACTION_GUAN,GATE_CELL)
+	_configure_gate_environment(gate)
+	gate.defeat_outcome = "subdued"
+	gate.apply_shield(100000.0,99999.0)
 
 func on_start(b) -> void:
-	var B: Battle = b
-	start_n = B.players_alive()      # 21（石秀/林冲/花荣/6长枪/6朴刀/6弓手）
-	lit_idx = 0
-	# 开战即时：点亮第一段安全小道，立路标提示
-	_light_from_shi(B, true)
-	B.msg("石秀立于队首，盘陀路入口的白杨岔口亮起金光——选中石秀施放『指路』，引主力沿高亮小道穿过！切勿擅闯岔口死巷。", 6.5)
+	b.lit_cells.clear()
+	b.mission.begin("zhu_scout","第一打·白杨认路","石秀到白杨岔口辨路；宋江与随军先在营地接应。")
+	b.mission.add_action("zhu_white_poplar","石秀：辨认白杨",FORK2_CELL,["shi_xiu"],2.0)
 
+func on_mission_action(b, action_id: String, _actor) -> void:
+	match action_id:
+		"zhu_white_poplar":
+			b.mission.mark("zhu_route_known","石秀辨清白杨记号与盘陀路")
+			_light_route(b)
+			b.mission.add_action("zhu_recon_gate","石秀：探看庄门",FORK3_CELL,["shi_xiu"],2.0)
+		"zhu_recon_gate":
+			b.mission.mark("zhu_gate_scouted","石秀探到庄前岔口，标出已走过的回营路线")
+			_light_route(b)
+			stage = "withdraw"
+			b.mission.begin("zhu_withdraw","第一打·脱出盘陀路","庄军来追，护石秀返回营地；这次不攻庄门。")
+			b.mission.add_action("zhu_return","石秀：回营报告",DEPLOY_CELL,["shi_xiu"],1.5)
+			pursuit_sent = true
+			b.spawn_group("zhu_keke",4,Unit.FACTION_GUAN,Vector2i(28,28),shi.position,1)
+		"zhu_return":
+			b.mission.mark("zhu_first_withdrawal","第一打探路脱围")
+			stage = "transition"
+			_second_day.call_deferred(b)
+		"zhu_song_safe", "zhu_lin_intercept", "zhu_hua_cover":
+			if stage != "second" or not _mission_action_done(b, action_id): return
+			var role_actor: Unit = {"zhu_song_safe":song, "zhu_lin_intercept":lin, "zhu_hua_cover":hua}[action_id]
+			if _actor != role_actor or not is_instance_valid(role_actor) or role_actor.hp <= 0.0: return
+			var role_text: String = {"zhu_song_safe":"宋江退到东侧安全处，由亲军护住退路", "zhu_lin_intercept":"林冲抢到扈三娘来路前方，截住冲势", "zhu_hua_cover":"花荣在林冲后方张弓掩护，不入近身乱战"}[action_id]
+			b.mission.mark(action_id, role_text)
+			role_actor.order_hold_position()
+			_try_begin_second_fight(b)
+		"zhu_escort_hu":
+			if stage != "send_hu" or _actor != lin or not _mission_action_done(b, action_id): return
+			if not _escort_pair_at_handoff(b):
+				_retry_action(b, action_id, "林冲与扈三娘须一同到营前，不能只让林冲独自回营。")
+				return
+			b.mission.mark("zhu_hu_at_handoff","林冲将扈三娘押到营前，当面交给留守军士")
+			stage = "hu_handoff"
+			b.mission.begin("zhu_hu_handoff","第二打·营前交接","林冲与扈三娘都已到营前。由林冲当面交接，再连夜送往梁山交宋太公看管。")
+			b.mission.add_action("zhu_hu_handoff","林冲：确认营前交接",SECOND_HANDOFF,["lin_chong"],1.2,40.0)
+		"zhu_hu_handoff":
+			if stage != "hu_handoff" or _actor != lin or not _mission_action_done(b, action_id) or not _escort_pair_at_handoff(b): return
+			b.mission.mark("zhu_hu_departed","扈三娘由军士连夜押送梁山，交宋太公看管")
+			if is_instance_valid(hu): hu.hide()
+			stage = "transition"
+			_third_day.call_deferred(b)
+		"zhu_enter_manor":
+			if stage != "infiltrate" or _actor != sun or not _mission_action_done(b, action_id): return
+			b.mission.mark("zhu_sun_entered","孙立把旗号改作“登州兵马提辖孙立”，借同门之谊获准入庄")
+			# A guarded story entrance admits these two guests only. The outside army's gate stays blocked.
+			for spec in [[sun,Vector2i(15,29)],[gu,Vector2i(15,31)]]:
+				var guest: Unit = spec[0]
+				if is_instance_valid(guest) and guest.hp > 0.0:
+					guest.order_stop()
+					guest.position = b.map.cell_to_world(b.map.nearest_open(spec[1],guest.movement_profile))
+					b.map.sync_render_position(guest)
+			stage = "inside"
+			b.mission.begin("zhu_inside","第三打·内外分工","顾大嫂在堂前发出内应信号，邹渊、邹润守监门开陷车；孙立守吊桥接应孙新，宋江在庄外列阵。等七名好汉分两队退到内院，再发总攻。")
+			b.mission.add_action("zhu_free_prisoners","顾大嫂：发出救囚信号",PRISON_CELL+Vector2i(2,0),["gu_dasao"],3.0)
+			b.mission.add_action("zhu_inner_support","孙立：到庄门内侧接应",INNER_GATE_SUPPORT,["sun_li"],1.5,40.0)
+			b.mission.add_action("zhu_outer_position","宋江：率外军在门外占位",OUTER_RALLY,["song_jiang"],1.5,40.0)
+			_refresh_third_objective(b)
+		"zhu_free_prisoners":
+			if stage != "inside" or _actor != gu or not b.mission.has_event("zhu_sun_entered") or not _mission_action_done(b, action_id) or b.mission.has_event("zhu_prisoners_freed"): return
+			prisoner_groups = [prisoners.slice(0,4), prisoners.slice(4,7)]
+			for group_index in range(prisoner_groups.size()):
+				var rally: Vector2i = PRISON_RALLY_A if group_index == 0 else PRISON_RALLY_B
+				var group: Array = prisoner_groups[group_index]
+				for member_index in range(group.size()):
+					var u: Unit = group[member_index]
+					if is_instance_valid(u) and u.hp > 0.0:
+						_release_captive(u)
+				b.lit_cells[rally] = 30.0
+			b.mission.mark("zhu_prisoners_freed","顾大嫂在堂前发出内应信号；邹渊、邹润守监门开陷车，七名好汉已经恢复玩家控制")
+			b.mission.set_status("请玩家把两队获救好汉分别撤到内院东西集结点；系统不会替他们行军。")
+			_refresh_third_objective(b)
+		"zhu_inner_support":
+			if stage != "inside" or _actor != sun or not _mission_action_done(b, action_id): return
+			b.mission.mark("zhu_inner_support_ready","孙立守住吊桥内侧，等孙新在门楼换旗")
+			sun.order_hold_position()
+			if not b.mission.actions.has("zhu_open_gate"):
+				b.mission.add_action("zhu_open_gate","孙立：守桥接应孙新换旗",INNER_GATE_SUPPORT,["sun_li"],2.0,40.0)
+			_refresh_third_objective(b)
+		"zhu_outer_position":
+			if stage != "inside" or _actor != song or not _mission_action_done(b, action_id): return
+			b.mission.mark("zhu_outer_ready","宋江率外军在庄门外列定，暂不抢门")
+			song.order_hold_position()
+			_refresh_third_objective(b)
+		"zhu_open_gate":
+			if stage != "inside" or _actor != sun or not b.mission.has_event("zhu_inner_support_ready") or not _mission_action_done(b, action_id) or b.mission.has_event("zhu_gate_opened"): return
+			b.mission.mark("zhu_gate_opened","孙新在门楼插起原带旗号，孙立守住吊桥接应；宋江尚未下总攻号令")
+			if is_instance_valid(gate):
+				b.unregister_building_footprint(gate)
+				gate.resolve_story("retreated")
+				gate.visible = false
+			if not b.mission.actions.has("zhu_attack_signal"):
+				b.mission.add_action("zhu_attack_signal","宋江：审势发总攻号令",OUTER_RALLY,["song_jiang"],1.2,40.0)
+			_refresh_third_objective(b)
+		"zhu_attack_signal":
+			if stage != "inside" or _actor != song or not _mission_action_done(b, action_id) or b.mission.has_event("zhu_assault_ordered"): return
+			if not _third_signal_ready(b):
+				_restore_third_role_actions(b)
+				_retry_action(b, action_id, "庄内外尚未合拢：两队囚犯都要退到内院，孙立守门内，宋江率军守门外，方可发令。")
+				return
+			b.mission.mark("zhu_assault_ordered","两队获救好汉已经退稳，宋江见内外俱备，下令里外夹攻")
+			_begin_third_assault(b)
 
-# —— 关卡自定义技能：石秀指路（沿安全路径逐段点亮）——
-func on_ability(b, caster, ability_id: String, _lp: Vector2) -> bool:
-	if ability_id != "shi_xiu_path":
-		return false
-	var B: Battle = b
-	_light_from_shi(B, false)
+func _mission_action_done(b, action_id: String) -> bool:
+	return b.mission.actions.has(action_id) and bool(b.mission.actions[action_id].done)
+
+func _retry_action(b, action_id: String, reason: String) -> void:
+	if b.mission.actions.has(action_id):
+		var action: Dictionary = b.mission.actions[action_id]
+		action.done = false
+		action.button.disabled = false
+		action.marker.show()
+		b.mission._refresh_marker_captions()
+	if reason != "":
+		b.mission.set_objective(reason)
+		b.msg(reason,4.0)
+
+func _miss_story(b, goal_id: String, reason: String) -> void:
+	if b.mission.has_method("miss_story_goal"):
+		b.mission.miss_story_goal(goal_id,reason)
+
+func _complete_story(b, goal_id: String, note: String) -> void:
+	if b.mission.has_method("complete_story_goal"):
+		b.mission.complete_story_goal(goal_id,note)
+
+func _living_liang(b) -> Array:
+	return b.units_of(Unit.FACTION_LIANG).filter(func(u):
+		return is_instance_valid(u) and u.hp > 0.0 and u.story_outcome == "" and not u.is_captive and not u.is_building)
+
+func _free_scout_tick(b) -> void:
+	if stage == "scout" and not b.mission.has_event("zhu_gate_scouted"):
+		for actor in _living_liang(b):
+			if actor.position.distance_to(b.map.cell_to_world(FORK3_CELL)) > 92.0 \
+				and actor.position.distance_to(b.map.cell_to_world(GATE_CELL)) > 132.0:
+				continue
+			free_scout = actor
+			actor.set_meta("zhu_free_scout",true)
+			b.mission.mark("zhu_free_scout","%s自行探到庄前；未循白杨记号，仍可带队撤回。"%actor.display_name)
+			_miss_story(b,"zhu_poplar","没有由石秀依白杨记号完成探路脱围")
+			stage = "withdraw"
+			b.mission.begin("zhu_withdraw_free","第一打·自行脱围","侦察已经取得。让任一幸存人马返回东侧营地；走错路只会遭伏，不会判整关失败。")
+			pursuit_sent = true
+			b.spawn_group("zhu_keke",4,Unit.FACTION_GUAN,Vector2i(28,28),actor.position,1)
+			break
+	elif stage == "withdraw" and free_scout != null:
+		var returner = free_scout if is_instance_valid(free_scout) and free_scout.hp > 0.0 else null
+		if returner == null:
+			var survivors := _living_liang(b)
+			if not survivors.is_empty(): returner = survivors[0]
+		if returner != null and returner.position.distance_to(b.map.cell_to_world(DEPLOY_CELL)) <= 112.0:
+			b.mission.mark("zhu_first_withdrawal","第一打侦察人马自行脱围回营")
+			stage = "transition"
+			_second_day.call_deferred(b)
+
+func _start_second_free_fight(b) -> void:
+	if stage != "second" or free_second_fight: return
+	free_second_fight = true
+	b.mission.mark("zhu_second_freefight","梁山自行接战，没有等三处分守同时站稳")
+	_miss_story(b,"zhu_capture","未按宋江退守、林冲拦截、花荣掩护的阵势生擒")
+	b.mission.begin("zhu_second_free","第二打·自行接战","扈家援军已经接战。任何好汉都可制服扈三娘；林冲按原阵势生擒并押送才计演义印。")
+	for actor in [lin,hua]:
+		if is_instance_valid(actor): actor.passive = false; actor.stance = Unit.STANCE_AGGRO
+	if is_instance_valid(song): song.stance = Unit.STANCE_HOLD
+	if is_instance_valid(hu):
+		hu.passive = false; hu.stance = Unit.STANCE_AGGRO
+		var target = lin if is_instance_valid(lin) and lin.hp > 0.0 else (song if is_instance_valid(song) else null)
+		if target != null: hu.order_attack(target)
+	for guard in second_guards:
+		if is_instance_valid(guard): guard.passive = false; guard.stance = Unit.STANCE_AGGRO
+	for spear in second_spears:
+		if is_instance_valid(spear): spear.passive = false; spear.stance = Unit.STANCE_DEFEND
+
+func _second_free_tick(b) -> void:
+	if stage == "second" and not b.mission.has_event("zhu_second_formation") and not free_second_fight:
+		for actor in _living_liang(b):
+			if is_instance_valid(hu) and (hu.hp < hu.max_hp or actor.position.distance_to(hu.position) <= 88.0):
+				_start_second_free_fight(b)
+				break
+	elif stage == "send_hu" and b.mission.active_action_id == "":
+		for actor in _living_liang(b):
+			if actor.position.distance_to(b.map.cell_to_world(SECOND_HANDOFF)) <= 64.0:
+				b.mission.mark("zhu_hu_secured_free","扈三娘作为俘将交给营中军士，未完成林冲同行押送")
+				_miss_story(b,"zhu_capture","未由林冲同行押送并当面交接")
+				if is_instance_valid(hu): hu.hide()
+				stage = "transition"
+				_third_day.call_deferred(b)
+				break
+
+func _start_third_free_assault(b) -> void:
+	if stage != "infiltrate" or free_third_assault: return
+	free_third_assault = true
+	assault_started = true
+	stage = "assault"
+	b.mission.mark("zhu_gate_breached","梁山改从庄门强攻，放弃孙立等人内应、孙新换旗的章法")
+	_miss_story(b,"zhu_inside","没有完成孙立入庄、邹渊邹润救囚、孙新换旗后再发总攻")
+	b.mission.begin("zhu_assault_free","第三打·强攻破庄","庄门可以正面攻破，囚车也可由到场好汉打开。击溃祝氏主力并控制内院即可取胜。")
+	if is_instance_valid(gate): gate._shield = 0.0
+	for key in ["zhu_long","zhu_hu","zhu_biao","luan_tingyu"]:
+		var foe = b.find_unit(key)
+		if foe != null:
+			foe._shield = 0.0
+			foe.passive = false
+			foe.stance = Unit.STANCE_AGGRO
+	for actor in _living_liang(b):
+		actor.passive = false
+		actor.stance = Unit.STANCE_DEFEND
+
+func _third_free_tick(b) -> void:
+	if stage == "infiltrate" and not free_third_assault:
+		# A right-click on the enemy gate is a tactical choice, even if the attacker
+		# cannot stand within the gate centre's 58px radius because the building
+		# footprint and weapon reach stop it outside.  Only a player-stamped attack
+		# target qualifies; scripted combat cannot silently discard the inside route.
+		for actor in _living_liang(b):
+			if (actor.manual_order_active or actor.manual_order_t > 0.0) and actor._target == gate:
+				_start_third_free_assault(b)
+				return
+	if stage == "infiltrate" and not free_third_assault and b.mission.active_action_id != "zhu_enter_manor":
+		for actor in _living_liang(b):
+			if actor.position.distance_to(b.map.cell_to_world(GATE_CELL)) <= 58.0:
+				_start_third_free_assault(b)
+				break
+	if stage != "assault" or not free_third_assault or b.mission.has_event("zhu_prisoners_freed"): return
+	for actor in _living_liang(b):
+		if actor.position.distance_to(b.map.cell_to_world(PRISON_CELL+Vector2i(2,0))) > 80.0: continue
+		prisoner_groups = [prisoners.slice(0,4),prisoners.slice(4,7)]
+		for captive in prisoners:
+			if is_instance_valid(captive) and captive.hp > 0.0:
+				_release_captive(captive)
+				captive.order_hold_position()
+		b.mission.mark("zhu_prisoners_freed","%s强开囚车，七名好汉获得自由"%actor.display_name)
+		break
+
+func _role_at(b, actor, cell: Vector2i, radius := 52.0) -> bool:
+	return is_instance_valid(actor) and actor.hp > 0.0 and actor.story_outcome == "" \
+		and actor.position.distance_to(b.map.cell_to_world(cell)) <= radius \
+		and b.map._segment_open(actor.position,b.map.cell_to_world(cell),actor.movement_profile)
+
+func _try_begin_second_fight(b) -> void:
+	if stage != "second": return
+	for event_id in ["zhu_song_safe","zhu_lin_intercept","zhu_hua_cover"]:
+		if not b.mission.has_event(event_id): return
+	var missing: Array[String] = []
+	if not _role_at(b,song,SECOND_SONG_SAFE): missing.append("zhu_song_safe")
+	if not _role_at(b,lin,SECOND_LIN_INTERCEPT): missing.append("zhu_lin_intercept")
+	if not _role_at(b,hua,SECOND_HUA_COVER): missing.append("zhu_hua_cover")
+	if not missing.is_empty():
+		for action_id in missing: _retry_action(b,action_id,"")
+		b.mission.set_objective("阵形尚未站稳。宋江退到东侧，林冲截在扈三娘来路，花荣留在后方掩护；离位者可重新办理。")
+		return
+	b.mission.mark("zhu_second_formation","宋江退路、林冲拦截与花荣弓箭掩护三处同时就位")
+	b.mission.begin("zhu_second_fight","第二打·拦截擒将","阵形已成：宋江守在安全处；林冲正面截住扈三娘，花荣留在后方以弓箭掩护；枪兵分头挡住两名庄客。")
+	song.passive = true
+	song.stance = Unit.STANCE_HOLD
+	song.order_hold_position()
+	lin.passive = false
+	lin.stance = Unit.STANCE_AGGRO
+	hua.passive = false
+	hua.stance = Unit.STANCE_HOLD
+	hua.order_hold_position()
+	hu.passive = false
+	hu.stance = Unit.STANCE_AGGRO
+	hu.order_attack(lin)
+	for i in range(second_guards.size()):
+		if not is_instance_valid(second_guards[i]): continue
+		var guard: Unit = second_guards[i]
+		guard.passive = false
+		guard.stance = Unit.STANCE_AGGRO
+		if not second_spears.is_empty(): guard.order_attack(second_spears[i % second_spears.size()])
+	for i in range(second_spears.size()):
+		if not is_instance_valid(second_spears[i]): continue
+		var spear: Unit = second_spears[i]
+		spear.passive = false
+		spear.stance = Unit.STANCE_DEFEND
+	b.mission.set_status("扈家援军开始进攻。林冲、花荣和枪兵已交还玩家控制，请自行迎击并保护宋江。")
+
+func _second_capture_ready(b) -> bool:
+	return b.mission.has_event("zhu_second_formation") and _role_at(b,song,SECOND_SONG_SAFE,88.0) \
+		and is_instance_valid(lin) and lin.hp > 0.0 and lin.story_outcome == "" \
+		and is_instance_valid(hua) and hua.hp > 0.0 and hua.story_outcome == "" \
+		and lin.position.distance_to(hu.position) <= 112.0 \
+		and hua.position.distance_to(b.map.cell_to_world(SECOND_HUA_COVER)) <= 104.0
+
+func _escort_hu_tick(b) -> void:
+	if stage != "send_hu": return
+	if not is_instance_valid(lin) or not is_instance_valid(hu) or hu.story_outcome != "captured": return
+	var trail := hu.position - lin.position
+	if trail.length_squared() < 1.0: trail = Vector2(-1,0)
+	var candidate := lin.position + trail.normalized() * 34.0
+	if not b.map.is_open_world(candidate,"land"): candidate = lin.position
+	hu.position = candidate
+	hu.show()
+	b.map.sync_render_position(hu)
+	hu.queue_redraw()
+
+func _escort_pair_at_handoff(b) -> bool:
+	var handoff: Vector2 = b.map.cell_to_world(SECOND_HANDOFF)
+	return is_instance_valid(lin) and lin.hp > 0.0 and lin.story_outcome == "" \
+		and is_instance_valid(hu) and hu.hp > 0.0 and hu.story_outcome == "captured" and hu.visible \
+		and lin.position.distance_to(handoff) <= 56.0 and hu.position.distance_to(handoff) <= 80.0 \
+		and lin.position.distance_to(hu.position) <= 72.0
+
+func _group_at_rally(b, group: Array, rally: Vector2i) -> bool:
+	if group.is_empty(): return false
+	var center: Vector2 = b.map.cell_to_world(rally)
+	for u in group:
+		if not is_instance_valid(u) or u.hp <= 0.0 or u.story_outcome != "" or u.is_captive or u.position.distance_to(center) > 94.0:
+			return false
 	return true
 
+func _prisoner_groups_tick(b) -> void:
+	if stage != "inside" or not b.mission.has_event("zhu_prisoners_freed") or prisoner_groups.size() != 2: return
+	for group_index in range(2):
+		var event_id := "zhu_prison_group_%s_safe" % ("a" if group_index == 0 else "b")
+		var rally: Vector2i = PRISON_RALLY_A if group_index == 0 else PRISON_RALLY_B
+		var group: Array = prisoner_groups[group_index]
+		if not b.mission.has_event(event_id) and _group_at_rally(b,group,rally):
+			for u in group: u.order_hold_position()
+			b.mission.mark(event_id,"获救好汉第%d队已经退到内院" % (group_index+1))
+			_refresh_third_objective(b)
 
-## 以石秀当前位置匹配安全路径序号，点亮其后 N 个节点；同段重复刷新而不前进。
-func _light_from_shi(b, first: bool) -> void:
-	var B: Battle = b
-	var here := 0
-	if not first and is_instance_valid(shi) and shi.hp > 0.0:
-		here = _nearest_node_index(B, shi.position)
-	# 起点取石秀所处节点（或开战的 0），点亮其后 LIT_STEP 段
-	var start_i: int = maxi(here, 0)
-	var end_i: int = mini(start_i + LIT_STEP, SAFE_NODES.size() - 1)
-	lit_idx = maxi(lit_idx, end_i)
-	# 把这段路径上的 road 格逐格点亮（含节点间插值），LIT_DUR 秒高亮
-	for i in range(start_i, end_i):
-		_light_segment(B, SAFE_NODES[i], SAFE_NODES[i + 1])
-	if first:
-		B.msg("【指路·遇白杨转弯】前方一段安全小道已点亮（金色）——引主力跟着走。", 4.0)
-	else:
-		B.msg("【指路·遇白杨转弯】石秀又探明前路，安全小道延伸！", 3.0)
+func _third_signal_ready(b) -> bool:
+	return b.mission.has_event("zhu_gate_opened") and b.mission.has_event("zhu_inner_support_ready") \
+		and b.mission.has_event("zhu_outer_ready") and b.mission.has_event("zhu_prison_group_a_safe") \
+		and b.mission.has_event("zhu_prison_group_b_safe") and _role_at(b,sun,INNER_GATE_SUPPORT,80.0) \
+		and _role_at(b,song,OUTER_RALLY,72.0) and prisoner_groups.size() == 2 \
+		and _group_at_rally(b,prisoner_groups[0],PRISON_RALLY_A) and _group_at_rally(b,prisoner_groups[1],PRISON_RALLY_B)
 
+func _restore_third_role_actions(b) -> void:
+	if not _role_at(b,sun,INNER_GATE_SUPPORT,80.0): _retry_action(b,"zhu_inner_support","")
+	if not _role_at(b,song,OUTER_RALLY,72.0): _retry_action(b,"zhu_outer_position","")
 
-func _light_segment(b, a: Vector2i, c: Vector2i) -> void:
-	var B: Battle = b
-	var steps: int = maxi(absi(c.x - a.x), absi(c.y - a.y))
-	for s in range(steps + 1):
-		var t := float(s) / float(maxi(steps, 1))
-		var cx := int(round(lerpf(a.x, c.x, t)))
-		var cy := int(round(lerpf(a.y, c.y, t)))
-		B.lit_cells[Vector2i(cx, cy)] = LIT_DUR
-		# 点亮区内我方单位获得短时移速指引（+10%）
-		var wp: Vector2 = B.map.cell_to_world(Vector2i(cx, cy))
-		for u in B.units_of(Unit.FACTION_LIANG):
-			if not u.is_building and u.position.distance_to(wp) < 40.0:
-				u.apply_slow(1.1, 4.0)
+func _refresh_third_objective(b) -> void:
+	if stage != "inside": return
+	var statuses := [
+		"顾大嫂策应救囚%s" % ("已办" if b.mission.has_event("zhu_prisoners_freed") else "未办"),
+		"孙立吊桥内侧%s" % ("就位" if b.mission.has_event("zhu_inner_support_ready") else "未就位"),
+		"宋江门外%s" % ("就位" if b.mission.has_event("zhu_outer_ready") else "未就位"),
+		"第一队%s" % ("到内院" if b.mission.has_event("zhu_prison_group_a_safe") else "撤离中"),
+		"第二队%s" % ("到内院" if b.mission.has_event("zhu_prison_group_b_safe") else "撤离中"),
+		"庄门%s" % ("已开" if b.mission.has_event("zhu_gate_opened") else "仍闭")]
+	b.mission.set_objective("；".join(statuses)+"。开门不等于总攻，内外俱备后由宋江发令。")
 
-
-func _nearest_node_index(b, wpos: Vector2) -> int:
-	var B: Battle = b
-	var best := 0
-	var best_d := INF
-	for i in range(SAFE_NODES.size()):
-		var d: float = B.map.cell_to_world(SAFE_NODES[i]).distance_to(wpos)
-		if d < best_d:
-			best_d = d
-			best = i
-	return best
-
-
-func process(b, delta: float) -> void:
-	var B: Battle = b
-
-	# —— 扈三娘归顺：在其阵亡前拦截（take_damage 一旦把 hp 打到 0 会立刻 died，故提前切阵营）——
-	if is_instance_valid(hu) and not hu_turned and hu.faction == Unit.FACTION_GUAN:
-		if hu_engaged and hu.hp <= 70.0:
-			_hu_defect(B)
-
-	# —— 死巷伏兵触发：任一我方单位踏入未点亮的死巷区即激活 ——
-	if not amb_a_fired and _player_near(B, AMBUSH_A, 70.0):
-		_fire_ambush(B, amb_a, AMBUSH_A, "盘陀路岔口直行，白杨树后窜出祝家庄客——『中了埋伏！』")
-		amb_a_fired = true
-	if not amb_b_fired and _player_near(B, AMBUSH_B, 70.0):
-		_fire_ambush(B, amb_b, AMBUSH_B, "走错盘陀路！死巷尽头乱箭齐发，祝家弓手伏兵杀出！")
-		amb_b_fired = true
-
-	# —— 扈三娘遭遇：主力进入遭遇点 ——
-	if not hu_engaged and _player_near(B, HU_CELL, 110.0):
-		_engage_hu(B)
-
-	# —— 抵达庄门前：壁垒守军被惊动 ——
-	if not gate_guard_fired and _player_near(B, GATE_CELL + Vector2i(2, 0), 130.0):
-		_wake_gate_guards(B)
-
-	# —— 破门：庄内三杰与马军杀出（总决战）——
-	if not final_wave and is_instance_valid(gate) and gate.hp <= 0.0:
-		_break_gate(B)
-
-	# —— 冒烟测试：自动指路 + 逐段推进 → 破门 → 灭三杰，走向胜利 ——
-	if B._smoke:
-		_smoke_drive(B, delta)
-
-	# —— 胜负判定 ——
-	if is_instance_valid(gate) and gate.hp <= 0.0 \
-			and not B.hero_alive("zhu_long") and not B.hero_alive("zhu_hu") \
-			and not B.hero_alive("zhu_biao") and not B.hero_alive("luan_tingyu"):
-		B.win("庄门破，三杰诛，栾廷玉授首——三打祝家庄，里应外合，独龙冈盘陀路终告破！")
-		return
-	# 主力折损过半（不含归顺后的扈三娘，避免她拉高基数）
-	if _core_alive(B) < int(start_n / 2.0):
-		B.lose("盘陀路上人马折损过半，伏兵四起，宋公明只得收兵——三打祝家庄，又是一场恶战……")
-
-
-# —— 死巷伏兵激活：取消隐蔽，向闯入者 attack-move ——
-func _fire_ambush(b, mob: Array, gate_cell: Vector2i, line: String) -> void:
-	var B: Battle = b
-	var tgt: Vector2 = B.map.cell_to_world(gate_cell)
-	var intruder := _nearest_player(B, tgt)
-	if intruder != null:
-		tgt = intruder.position
-	for u in mob:
-		if is_instance_valid(u) and u.hp > 0.0:
-			u.passive = false
-			u.order_amove(tgt)
-	B.msg(line, 4.5)
-
-
-func _engage_hu(b) -> void:
-	var B: Battle = b
-	hu_engaged = true
-	var tgt: Vector2 = B.map.cell_to_world(FORK2_CELL)
-	var intruder := _nearest_player(B, B.map.cell_to_world(HU_CELL))
-	if intruder != null:
-		tgt = intruder.position
-	for u in [hu] + hu_escort:
-		if is_instance_valid(u) and u.hp > 0.0:
-			u.passive = false
-			u.order_amove(tgt)
-	B.msg("一丈青扈三娘率扈家庄客拦路杀来！『梁山草寇，敢近独龙冈？』——击败她或可收得一员猛将。", 5.0)
-
-
-func _hu_defect(b) -> void:
-	var B: Battle = b
-	hu_turned = true
-	hu.hp = hu.max_hp                 # 回满血（归顺不死）
-	hu.faction = Unit.FACTION_LIANG   # 切换为梁山阵营
-	hu.passive = false
-	hu._target = null                 # 清空仇恨
-	hu.heal(1.0)                       # 触发金色辉光刷新
-	hu.queue_redraw()
-	B.msg("林冲马到擒来，一丈青力穷归降！扈三娘回马反戈——『愿随头领杀入祝家庄！』双刀马军入伙助战。", 5.5)
-
-
-func _wake_gate_guards(b) -> void:
-	var B: Battle = b
-	gate_guard_fired = true
-	var tgt: Vector2 = B.map.cell_to_world(GATE_CELL + Vector2i(3, 0))
-	for u in gate_guards:
-		if is_instance_valid(u) and u.hp > 0.0:
-			u.passive = false
-			u.order_amove(tgt)
-	B.msg("壁垒守军惊动！庄门两侧弓手居高放箭，庄客列阵阻门——速破庄门，用花荣弓手压制箭楼！", 5.0)
-
-
-func _break_gate(b) -> void:
-	var B: Battle = b
-	final_wave = true
-	var rally: Vector2 = B.map.cell_to_world(GATE_CELL + Vector2i(2, 0))
-	# 破门首波：栾廷玉率三杰与 4 马军杀出反扑（庄客留作后续，避免一拥而上团灭、给玩家节奏）
-	var charge := ["luan_tingyu", "zhu_long", "zhu_hu", "zhu_biao", "zhu_qi"]
-	for u in B.units_of(Unit.FACTION_GUAN):
-		if u.passive and not u.is_building and u.key in charge:
-			u.passive = false
-			u.order_amove(rally + Vector2(randf_range(-50, 50), randf_range(-50, 50)))
-	# 里应外合：孙立等诈降内应在庄中举火策应，梁山军心大振（回血+短时攻击增益），
-	# 复刻「第三打里应外合方破庄」——也给最终决战足够余地。
-	for u in B.units_of(Unit.FACTION_LIANG):
+func _begin_third_assault(b) -> void:
+	stage = "assault"
+	assault_started = true
+	b.mission.begin("zhu_assault","第三打·里应外合","两队获救好汉留在内院，孙立等内应从门内接应，宋江所部由门外攻入；保护七名好汉，合击祝氏主力。")
+	song.passive = false
+	song.stance = Unit.STANCE_DEFEND
+	for group in prisoner_groups:
+		for captive in group:
+			if is_instance_valid(captive): captive.order_hold_position()
+	for u in b.units_of(Unit.FACTION_GUAN):
 		if not u.is_building:
-			u.heal(45.0)
-			u.apply_temp_atk(1.35, 16.0)
-	B.msg("庄门轰然倒塌！庄内火起——孙立等内应反戈策应，里应外合！梁山众兄弟士气大振，杀入庄中。栾廷玉率三杰与马军反扑，总决战！", 6.5)
+			u.passive = false
+			u.stance = Unit.STANCE_AGGRO
+			u.order_amove(b.map.cell_to_world(Vector2i(26,28)))
+	for key in ["zhu_long","zhu_hu","zhu_biao","luan_tingyu"]:
+		var foe = b.find_unit(key)
+		if foe != null: foe._shield = 0.0
+	b.mission.set_status("庄军已经向门楼反扑。外军、内应和获救好汉均由玩家指挥；可分兵守牢、抢门或合击敌将。")
+
+func _clear_section(b) -> void:
+	b.clear_campaign_section()
+	prisoners.clear()
+	prisoner_groups.clear()
+	second_guards.clear()
+	second_spears.clear()
+	shi = null
+	song = null
+	lin = null
+	hua = null
+	hu = null
+	sun = null
+	gu = null
+	gate = null
+	assault_started = false
+func _second_day(b) -> void:
+	_clear_section(b)
+	stage = "second"
+	free_second_fight = false
+	song = b.spawn_at("song_jiang",Unit.FACTION_LIANG,DEPLOY_CELL)
+	lin = b.spawn_at("lin_chong",Unit.FACTION_LIANG,Vector2i(42,21))
+	hua = b.spawn_at("hua_rong",Unit.FACTION_LIANG,Vector2i(43,22))
+	for c in [Vector2i(41,21),Vector2i(42,23),Vector2i(44,22),Vector2i(43,24)]:
+		var spear: Unit = b.spawn_at("liang_qiang",Unit.FACTION_LIANG,c)
+		spear.order_stop()
+		spear.passive = true
+		spear.stance = Unit.STANCE_PASSIVE
+		second_spears.append(spear)
+	hu = b.spawn_at("hu_sanniang",Unit.FACTION_GUAN,HU_CELL)
+	hu.defeat_outcome = "captured"
+	hu.passive = true
+	hu.stance = Unit.STANCE_PASSIVE
+	hu.order_hold_position()
+	for c in [Vector2i(39,15),Vector2i(41,15)]:
+		var guard: Unit = b.spawn_at("zhu_keke",Unit.FACTION_GUAN,c)
+		guard.passive = true
+		guard.stance = Unit.STANCE_PASSIVE
+		guard.order_hold_position()
+		second_guards.append(guard)
+	for actor in [song,lin,hua]:
+		actor.passive = true
+		actor.stance = Unit.STANCE_PASSIVE
+	gate = b.spawn_at("zhu_gate",Unit.FACTION_GUAN,GATE_CELL)
+	_configure_gate_environment(gate)
+	gate.defeat_outcome = "subdued"
+	gate.apply_shield(100000.0,99999.0)
+	b.mission.begin("zhu_second","第二打·分守三处","先让宋江退守东侧安全处，林冲到扈三娘来路正面拦截，花荣留在后方弓箭掩护。三处同时站稳后再交战。")
+	b.mission.add_action("zhu_song_safe","宋江：退到东侧安全处",SECOND_SONG_SAFE,["song_jiang"],1.2,40.0)
+	b.mission.add_action("zhu_lin_intercept","林冲：抢占正面拦截位",SECOND_LIN_INTERCEPT,["lin_chong"],1.2,40.0)
+	b.mission.add_action("zhu_hua_cover","花荣：留后张弓掩护",SECOND_HUA_COVER,["hua_rong"],1.2,40.0)
+	b.msg("【再战祝家庄】扈三娘引庄客来援。林冲上前迎住，众军保护宋江！",6.0)
+
+func _third_day(b) -> void:
+	_clear_section(b)
+	stage = "infiltrate"
+	free_third_assault = false
+	song = b.spawn_at("song_jiang",Unit.FACTION_LIANG,Vector2i(27,28))
+	for spec in [["lin_chong",Vector2i(28,27)],["hua_rong",Vector2i(29,29)],["mu_hong",Vector2i(29,27)]]:
+		b.spawn_at(spec[0],Unit.FACTION_LIANG,spec[1])
+	for i in range(8):
+		b.spawn_at("liang_qiang" if i%2==0 else "liang_gong",Unit.FACTION_LIANG,Vector2i(26+i%4,30+i/4))
+	sun = b.spawn_at("sun_li",Unit.FACTION_LIANG,Vector2i(26,26))
+	gu = b.spawn_at("gu_dasao",Unit.FACTION_LIANG,Vector2i(26,27))
+	sun.stance = Unit.STANCE_PASSIVE
+	gu.stance = Unit.STANCE_PASSIVE
+	for spec in [["shi_xiu",Vector2i(11,33)],["shi_qian",Vector2i(12,34)],["qin_ming",Vector2i(10,33)],["yang_lin",Vector2i(12,33)],["huang_xin",Vector2i(13,34)],["wang_ying",Vector2i(12,35)],["deng_fei",Vector2i(14,34)]]:
+		var u = b.spawn_at(spec[0],Unit.FACTION_LIANG,spec[1])
+		_bind_captive(u)
+		prisoners.append(u)
+	prisoner_groups.clear()
+	gate = b.spawn_at("zhu_gate",Unit.FACTION_GUAN,GATE_CELL)
+	_configure_gate_environment(gate)
+	gate.defeat_outcome = "subdued"
+	gate.apply_shield(100000.0,99999.0)
+	for spec in [["zhu_long",Vector2i(36,24)],["zhu_hu",Vector2i(36,32)],["zhu_biao",Vector2i(40,28)],["luan_tingyu",Vector2i(42,31)]]:
+		var u = b.spawn_at(spec[0],Unit.FACTION_GUAN,spec[1])
+		u.passive = true
+		u.stance = Unit.STANCE_PASSIVE
+		u.apply_shield(100000.0,99999.0)
+	for c in [Vector2i(10,31),Vector2i(13,34),Vector2i(18,26),Vector2i(18,30)]:
+		var u = b.spawn_at("zhu_keke",Unit.FACTION_GUAN,c)
+		u.order_hold_position()
+	b.mission.begin("zhu_infiltrate","数日后·孙立投庄","孙立到庄门报明来意，借与栾廷玉同师学艺的交情入庄。外军暂守庄外，等邹渊、邹润救囚，孙新换旗。")
+	# Keep the admission spot precise.  With the old default 96px reach, Sun Li
+	# already stood inside its trigger radius; a player's explicit attack order on
+	# the nearby manor gate could therefore be consumed as "report identity" before
+	# the unit took a step.  A real move to the marker still works, while an attack
+	# order now remains distinguishable as the free-assault choice.
+	b.mission.add_action("zhu_enter_manor","孙立：报明身份入庄",Vector2i(24,28),["sun_li"],3.0,40.0)
+	b.msg("【数日后·孙立来投】孙立把旗号改作“登州兵马提辖孙立”，假称调任途经此地，来访同门栾廷玉。庄外人马隐住旗号，等候接应。",7.0)
 
 
-# —— 工具 ——
-func _player_near(b, cell: Vector2i, r: float) -> bool:
-	var B: Battle = b
-	var wp: Vector2 = B.map.cell_to_world(cell)
-	for u in B.units_of(Unit.FACTION_LIANG):
-		if not u.is_building and u.position.distance_to(wp) <= r:
-			return true
-	return false
+func _configure_gate_environment(target: Unit) -> void:
+	if target==null: return
+	target.set_meta("campaign_environment_route","zhujiazhuang_main_gate")
+	target.set_meta("campaign_environment_state","default")
 
+func _bind_captive(u: Unit) -> void:
+	u.is_captive = true
+	u.is_noncombat = true
+	u.passive = true
+	u.stance = Unit.STANCE_PASSIVE
+	u.set_meta("free_speed",u.base_speed)
+	u.set_meta("free_atk",u.atk)
+	u.base_speed = 0.0
+	u.atk = 0.0
+	u.ability = ""
+	u.ability_slots.clear()
+	u.art_variant = "bound_"+u.key
 
-func _nearest_player(b, wpos: Vector2) -> Unit:
-	var B: Battle = b
-	var best: Unit = null
-	var best_d := INF
-	for u in B.units_of(Unit.FACTION_LIANG):
-		if u.is_building:
-			continue
-		var d: float = u.position.distance_to(wpos)
-		if d < best_d:
-			best_d = d
-			best = u
-	return best
+func _release_captive(u: Unit) -> void:
+	u.is_captive = false
+	u.is_noncombat = false
+	u.passive = true
+	u.stance = Unit.STANCE_PASSIVE
+	u.base_speed = float(u.get_meta("free_speed",75.0))
+	u.atk = float(u.get_meta("free_atk",20.0))
+	u.art_variant = ""
+	u.queue_redraw()
 
-
-## 初始作战单位（玩家本队，不含归顺后的扈三娘 — 她 key 为 hu_sanniang，单列排除）
-func _core_alive(b) -> int:
-	var B: Battle = b
-	var n := 0
-	for u in B.units_of(Unit.FACTION_LIANG):
-		if u.is_building or u.key == "hu_sanniang":
-			continue
-		n += 1
-	return n
-
-
-# —— 冒烟测试：把关卡推向胜利（拟真：石秀指路→主力沿安全路压向庄门→集火破门→灭三杰）——
-func _smoke_drive(b, delta: float) -> void:
-	var B: Battle = b
-	_sk_log -= delta
-	if _sk_log <= 0.0:
-		_sk_log = 4.0
-		print("[smoke3] core=%d gate=%d guan=%d seg=%d brk=%s hu=%s" % [
-			_core_alive(B), (int(gate.hp) if is_instance_valid(gate) else -1),
-			B.count_alive(Unit.FACTION_GUAN), _sk_seg, final_wave, hu_turned])
-	_sk_t -= delta
-	if _sk_t > 0.0:
-		return
-	_sk_t = 0.8
-
-	# 石秀持续指路（推进高亮 + 给路径上我方移速指引）
-	if is_instance_valid(shi) and shi.hp > 0.0 and shi.ability_ready():
-		B.cast_ability(shi)
-
-	var players: Array = B.units_of(Unit.FACTION_LIANG)
-
-	# 已破门：远程(花荣+弓手)点名优先英雄速杀，近战散开扑入敌群清扫（不抱团，避开栾廷玉横扫 AoE 团灭），
-	# 林冲点名骑将(2x)，技能频放。四目标英雄皆死即胜。
-	if is_instance_valid(gate) and gate.hp <= 0.0:
-		_sk_final = true
-		var focus := _smoke_focus(B)
-		var mass: Vector2 = _enemy_center(B)
-		var lin := B.find_unit("lin_chong")
-		for u in players:
-			if u.is_building:
-				continue
-			if u.is_ranged and focus != null and is_instance_valid(focus):
-				u.order_attack(focus, false, true)    # 剧情点名：持续追击硬目标
-			elif u == lin and focus != null and is_instance_valid(focus):
-				u.order_attack(focus, false, true)    # 林冲咬住目标英雄
-			else:
-				u.order_amove(mass + Vector2(randf_range(-55, 55), randf_range(-55, 55)))  # 步兵散开清扫
-		# 林冲横扫(非指向,自身周围)频放
-		if lin != null and lin.ability_ready():
-			B.cast_ability(lin)
-		# 花荣百步穿杨(指向)直接点名硬目标——170 穿透伤害，加速点掉三杰栾廷玉
-		var hr := B.find_unit("hua_rong")
-		if hr != null and hr.ability_ready() and focus != null and is_instance_valid(focus):
-			B._do_ability(hr, 0, focus.position)
-		return
-
-	# 未破门：若已有单位逼近庄门，全军集火破门（庄门 1600 hp，需持续猛攻）
-	if _sk_gate_hit or _player_near(B, GATE_CELL + Vector2i(2, 0), 170.0):
-		_sk_gate_hit = true
-		if is_instance_valid(gate) and gate.hp > 0.0:
-			for u in players:
-				if not u.is_building:
-						u.order_attack(gate, false, true)
-			# 破门阶段也放技能清壁垒守军、加速破门
-			for hk in ["hua_rong", "lin_chong"]:
-				var h := B.find_unit(hk)
-				if h != null and h.ability_ready():
-					B.cast_ability(h)
-		return
-
-	# 进军：沿安全 ROAD 节点逐段推进（贴着石秀点亮的路走，避开死巷 reeds 伏兵），
-	# 队首抵达当前目标节点就推进到下一节点，最终汇于庄门前。
-	var van: Vector2 = _vanguard_pos(B, players)
-	_sk_seg = _nearest_node_index(B, van)
-	var next_i: int = mini(_sk_seg + 2, SAFE_NODES.size() - 2)   # 看向前方两节点，保持队形跟进
-	var dest: Vector2 = B.map.cell_to_world(SAFE_NODES[next_i])
-	for u in players:
-		if u.is_building:
-			continue
-		u.order_amove(dest + Vector2(randf_range(-26, 26), randf_range(-26, 26)))
-
-
-## 队首（最靠近庄门的我方单位）位置——用于显示推进进度
-func _vanguard_pos(b, players: Array) -> Vector2:
-	var B: Battle = b
-	var gate_w: Vector2 = B.map.cell_to_world(GATE_CELL)
-	var best := DEPLOY_CELL
-	var best_pos: Vector2 = B.map.cell_to_world(DEPLOY_CELL)
-	var best_d := INF
-	for u in players:
-		if u.is_building:
-			continue
-		var d: float = u.position.distance_to(gate_w)
-		if d < best_d:
-			best_d = d
-			best_pos = u.position
-	return best_pos
-
-
-func _enemy_center(b) -> Vector2:
-	var B: Battle = b
-	var sum := Vector2.ZERO
-	var n := 0
-	for u in B.units_of(Unit.FACTION_GUAN):
-		if u.is_building:
-			continue
-		sum += u.position
-		n += 1
-	if n == 0:
-		return B.map.cell_to_world(COURT_CELL)
-	return sum / float(n)
-
-
-func _smoke_focus(b) -> Unit:
-	var B: Battle = b
-	# 优先序：先点掉攻击光环(祝虎)与远程精英(祝彪)削弱敌方持续输出，
-	# 再清骑将祝龙，最后啃硬肉盾栾廷玉——四目标皆为胜利必杀对象。
-	for k in ["zhu_hu", "zhu_biao", "zhu_long", "luan_tingyu"]:
-		var u := B.find_unit(k)
-		if u != null:
-			return u
-	# 四目标皆灭：扫荡残敌（最近优先，加速结束战斗）
-	var best: Unit = null
-	var best_d := INF
-	var ref: Vector2 = B.map.cell_to_world(GATE_CELL)
-	for u in B.units_of(Unit.FACTION_GUAN):
-		if u.is_building:
-			continue
-		var d: float = u.position.distance_to(ref)
-		if d < best_d:
-			best_d = d
-			best = u
-	return best
-
+func on_unit_resolved(b, u, outcome: String) -> void:
+	if u == hu and outcome == "captured" and stage == "second":
+		if not _second_capture_ready(b):
+			b.mission.mark("zhu_hu_captured","扈三娘在乱军中被生擒，仍作为敌将看押")
+			_miss_story(b,"zhu_capture","扈三娘虽被擒，但没有完成林冲三处分守的阵前生擒")
+			for guard in second_guards:
+				if is_instance_valid(guard) and guard.story_outcome == "": guard.resolve_story("retreated")
+			if is_instance_valid(hu): hu.hide()
+			stage = "transition"
+			_third_day.call_deferred(b)
+			return
+		b.mission.mark("zhu_hu_captured","林冲军前擒住扈三娘")
+		for guard in second_guards:
+			if is_instance_valid(guard) and guard.story_outcome == "": guard.resolve_story("retreated")
+		for ally in second_spears + [lin,hua,song]:
+			if is_instance_valid(ally): ally.order_stop()
+		hu.show()
+		stage = "send_hu"
+		b.mission.begin("zhu_send_hu","第二打·押送回营","扈三娘仍是被擒敌将，不归我方作战。让林冲亲自押她走到营前，再当面交给留守军士。")
+		b.mission.add_action("zhu_escort_hu","林冲：押扈三娘到营前",SECOND_HANDOFF,["lin_chong"],2.0,40.0)
+	elif u == gate and outcome in ["subdued","retreated"] and stage == "assault" and free_third_assault:
+		b.unregister_building_footprint(gate)
+		gate.visible = false
+		b.mission.mark("zhu_gate_breached","庄门被正面攻破，外军涌入庄内")
+		_miss_story(b,"zhu_inside","庄门由强攻攻破，没有完成孙立内应、孙新换旗")
 
 func on_unit_died(b, u) -> void:
-	var B: Battle = b
-	if u.faction == Unit.FACTION_GUAN:
-		if u.key == "zhu_zhaofeng" and not zhao_dead:
-			zhao_dead = true
-			B.msg("祝家庄主祝朝奉殁于内院，庄客士气崩溃，四散奔逃！", 4.5)
-		elif u.key == "luan_tingyu":
-			B.msg("铁棒教师栾廷玉力战身亡——祝家庄再无中流砥柱！", 4.0)
-		elif u.key in ["zhu_long", "zhu_hu", "zhu_biao"]:
-			B.msg("%s 授首！祝家三杰又折一员。" % u.display_name, 3.5)
-	else:
-		if u.key == "shi_xiu":
-			B.msg("石秀阵亡！盘陀路再无人指引——大军务必谨守已点亮的高亮小道！", 5.0)
-		elif u.is_hero and u.key != "hu_sanniang":
-			B.msg("%s 阵亡了！" % u.display_name, 4.0)
+	if u == song:
+		b.lose("宋江阵亡，三次攻庄失去统领。")
+	elif u in prisoners:
+		b.mission.mark("zhu_prisoner_lost","被囚好汉有人未能生还")
+		_miss_story(b,"zhu_seven","七名被囚好汉没有全部生还")
+	elif u == shi:
+		_miss_story(b,"zhu_poplar","石秀未能完成白杨认路")
+		if stage == "withdraw" and free_scout == null:
+			# The route information is no longer canonical, but any survivor may still
+			# carry the reconnaissance back and preserve the three-day campaign flow.
+			free_scout = u
+	elif u == lin or u == hua:
+		_miss_story(b,"zhu_capture","阵前生擒所需好汉未能完成任务")
+	elif u == sun or u == gu:
+		_miss_story(b,"zhu_inside","内应人物未能完成入庄救囚")
 
+func process(b, delta: float) -> void:
+	if stage == "transition": return
+	_free_scout_tick(b)
+	_second_free_tick(b)
+	_third_free_tick(b)
+	if stage == "send_hu": _escort_hu_tick(b)
+	if stage == "inside": _prisoner_groups_tick(b)
+	if stage == "assault" and assault_started:
+		var remaining := 0
+		for key in ["zhu_long","zhu_hu","zhu_biao","luan_tingyu"]:
+			if b.hero_alive(key): remaining += 1
+		var gate_down := not is_instance_valid(gate) or gate.story_outcome != "" or not gate.visible
+		if remaining == 0 and gate_down:
+			b.mission.mark("zhu_victory","内外夹攻，祝家庄失守，囚犯获救")
+			var seven_safe := prisoners.size() == 7 and prisoners.all(func(captive): return is_instance_valid(captive) and captive.hp > 0.0 and not captive.is_captive)
+			if seven_safe:
+				b.mission.mark("zhu_seven_safe","七名被囚好汉全部获救生还")
+				_complete_story(b,"zhu_seven","七名被囚好汉全部获救生还")
+			var authored: bool = b.mission.has_event("zhu_assault_ordered") and b.mission.has_event("zhu_gate_opened")
+			if authored:
+				b.win("庄内换旗，庄外合击，祝家庄终于告破。获救者随军回山，扈三娘仍以俘将身份看押。")
+			else:
+				b.win("梁山人马攻破庄门，击溃祝氏主力，占领祝家庄。原著内应章法未必完成，以本局战报为准。")
+			return
+	if b.players_alive() == 0: b.lose("出战人马尽失，此番攻庄失败。")
+	if b._smoke: _smoke_drive(b,delta)
 
-func top_status(b) -> String:
-	var B: Battle = b
-	var heroes := 0
-	for k in ["zhu_long", "zhu_hu", "zhu_biao", "luan_tingyu"]:
-		if B.hero_alive(k):
-			heroes += 1
-	var gate_pct := 0
-	if is_instance_valid(gate):
-		gate_pct = int(gate.hp / gate.max_hp * 100.0)
-	var phase_txt := "盘陀路·指路突进" if not final_wave else "破门·总决战"
-	var hu_txt := " | 一丈青已归顺" if hu_turned else ""
-	return "三打祝家庄 | %s | 庄门 %d%% | 三杰栾廷玉残 %d/4 | 主力 %d/%d%s | 歼敌 %d" % [
-		phase_txt, gate_pct, heroes, _core_alive(B), start_n, hu_txt, B.kills]
+func on_ability(b, _caster, aid: String, _lp: Vector2) -> bool:
+	if aid != "shi_xiu_path": return false
+	if not b.mission.has_event("zhu_route_known"):
+		b.msg("还未辨明白杨记号。先完成认路，才能标出已探明的路线。",3.0)
+		return true
+	_light_route(b)
+	return true
+
+func _light_route(b) -> void:
+	# Never reveal unvisited turns or the interior path, even through Shi Xiu's route skill.
+	var known_segments := 5 if b.mission.has_event("zhu_gate_scouted") else (3 if b.mission.has_event("zhu_route_known") else 0)
+	for i in range(known_segments):
+		var a := SAFE_NODES[i]
+		var c := SAFE_NODES[i+1]
+		var n := maxi(absi(c.x-a.x),absi(c.y-a.y))
+		for j in range(n+1):
+			var p := Vector2(a).lerp(Vector2(c),float(j)/maxf(n,1))
+			b.lit_cells[Vector2i(roundi(p.x),roundi(p.y))] = 999.0
+
+func top_status(_b) -> String:
+	return "三打祝家庄 | %s | 保全领军好汉" % {"scout":"辨认白杨","withdraw":"脱围回营","second":"分位擒将","send_hu":"同行押送","hu_handoff":"营前交接","transition":"数日后","infiltrate":"报明身份入庄","inside":"内外分工","assault":"里应外合"}.get(stage,stage)
+
+func _smoke_drive(b, delta: float) -> void:
+	smoke_t -= delta
+	if smoke_t > 0.0: return
+	smoke_t = 1.5
+	# SMOKE 只负责自动回归。正式玩法中的两队获救者必须由玩家分别编队撤离。
+	if stage == "inside" and b.mission.has_event("zhu_prisoners_freed") and prisoner_groups.size() == 2:
+		for group_index in range(2):
+			var event_id := "zhu_prison_group_%s_safe" % ("a" if group_index == 0 else "b")
+			if b.mission.has_event(event_id): continue
+			var rally: Vector2i = PRISON_RALLY_A if group_index == 0 else PRISON_RALLY_B
+			var rally_world: Vector2 = b.map.cell_to_world(rally)
+			var group: Array = prisoner_groups[group_index]
+			for member_index in range(group.size()):
+				var member: Unit = group[member_index]
+				if is_instance_valid(member) and member.hp > 0.0 and member.story_outcome == "":
+					member.order_move(rally_world + Vector2((member_index % 2) * 20.0, (member_index / 2) * 20.0))
+	if stage in ["scout","withdraw","send_hu","hu_handoff","infiltrate","inside"]:
+		_smoke_action(b)
+	elif stage == "second":
+		if not b.mission.has_event("zhu_second_formation"):
+			_smoke_action(b)
+		elif is_instance_valid(hu) and hu.story_outcome == "":
+			song.order_move(b.map.cell_to_world(SECOND_SONG_SAFE))
+			lin.order_attack(hu)
+			hua.order_hold_position()
+			for i in range(second_spears.size()):
+				var spear: Unit = second_spears[i]
+				if not is_instance_valid(spear): continue
+				var guard: Unit = null
+				if not second_guards.is_empty() and is_instance_valid(second_guards[i % second_guards.size()]):
+					guard = second_guards[i % second_guards.size()]
+				if is_instance_valid(guard) and guard.story_outcome == "": spear.order_attack(guard)
+	elif stage == "assault":
+		for u in b.units_of(Unit.FACTION_LIANG):
+			if u == song or u.is_captive or u in prisoners: continue
+			var target: Unit = null
+			var distance := INF
+			for foe in b.units_of(Unit.FACTION_GUAN):
+				if foe.is_building or foe.story_outcome != "": continue
+				var d: float = u.position.distance_to(foe.position)
+				if d < distance:
+					target = foe
+					distance = d
+			if not is_instance_valid(target): continue
+			u.order_attack(target)
+			for slot in range(u.slot_count()):
+				if not u.slot_ready(slot): continue
+				var aid: String = u.ability_slots[slot]["id"]
+				var ad: Dictionary = b._abilities.get(aid,{})
+				if bool(ad.get("passive",false)): continue
+				# SMOKE 是自动回归驾驶，不得走会盖“玩家改令”戳的公开输入入口。
+				# 直接调用 AI 施法守卫；单体友军技以自身为目标，敌军技才指向当前敌人。
+				var cast_target: Unit = null
+				var cast_pos: Vector2 = u.position
+				if bool(ad.get("targeted", false)):
+					if String(ad.get("target", "point")) == "unit":
+						cast_target = u if String(ad.get("unit_team", "enemy")) == "ally" else target
+						cast_pos = cast_target.position if is_instance_valid(cast_target) else target.position
+					else:
+						cast_pos = target.position
+				b._ai_cast_slot(u, slot, cast_pos, cast_target)
+				break
+
+func _smoke_action(b) -> void:
+	if b.mission.active_action_id != "": return
+	var action_id := ""
+	match stage:
+		"scout": action_id = "zhu_recon_gate" if b.mission.has_event("zhu_route_known") else "zhu_white_poplar"
+		"withdraw": action_id = "zhu_return"
+		"send_hu": action_id = "zhu_escort_hu"
+		"hu_handoff": action_id = "zhu_hu_handoff"
+		"infiltrate": action_id = "zhu_enter_manor"
+		"second":
+			for candidate in ["zhu_song_safe","zhu_lin_intercept","zhu_hua_cover"]:
+				if b.mission.request_action(candidate): return
+		"inside":
+			for candidate in ["zhu_free_prisoners","zhu_inner_support","zhu_outer_position","zhu_open_gate","zhu_attack_signal"]:
+				if b.mission.request_action(candidate): return
+	if action_id != "": b.mission.request_action(action_id)

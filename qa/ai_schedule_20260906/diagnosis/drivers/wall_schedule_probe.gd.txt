@@ -1,0 +1,15 @@
+extends "res://tools/rts_performance_probe.gd"
+func sample(b,label: String) -> Dictionary:
+	b._perf_bench_setup(200);b._prof_on=false
+	var heroes:=[];var phases:={}
+	for u in b.units:
+		if u.is_hero: heroes.append({"key":u.key,"id":u.get_instance_id(),"ai_phase":posmod(-u.get_instance_id(),16),"stable_phase":u.get("ai_tick_phase")})
+		if not u.is_building and not u.is_resource:
+			var phase:=posmod(-u.get_instance_id(),16)
+			phases[phase]=int(phases.get(phase,0))+1
+	var physics_start:=Engine.get_physics_frames()
+	var result: Dictionary=await super.sample(b,label)
+	result["heroes_at_setup"]=heroes;result["mob_phases_at_setup"]=phases
+	result["physics_frame_at_setup"]=physics_start
+	result["camera_zoom"]=str(b.camera.zoom)
+	return result

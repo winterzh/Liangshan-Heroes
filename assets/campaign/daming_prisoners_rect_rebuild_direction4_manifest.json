@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "kind": "daming_prisoners_rectangle_only_production_provenance",
+  "created_at": "2026-09-03T10:49:59.633149+08:00",
+  "campaign_level": 8,
+  "scene_context": "daming_prisoners_and_rescue",
+  "novel_basis": "百二十回本第六十六回牢中囚犯与元宵劫牢获救上下文",
+  "candidate_manifest": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/candidate_manifest.json",
+  "candidate_manifest_sha256": "53282484b40e851357775c51dcb7eee75409a5b9e9c84fa5abc8fe61b6355aa4",
+  "manual_visual_review": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/manual_visual_review.json",
+  "manual_visual_review_sha256": "7157baaf2a9a0b9461af228467243da0b24b1fd3b5557c77e8735eb2c5d9597e",
+  "backup_manifest": "Liangshan-Heroes/qa/daming_prisoners_rect_rebuild_production_20260903/backup_preexisting_runtime_assets/backup_manifest.json",
+  "backup_manifest_sha256": "d5918a7d00869bbf996cb00d08d3aa652573f06f62bae85bb5159e3275aff2c0",
+  "source_audit": "implementation_20260902/daming_prisoners_p0_source/README.md",
+  "source_audit_sha256": "f4a536481f8b1bae7ab9f1f88b5978fd932099626808fc70982cc5b91da1215e",
+  "historical_web_manifest": "assets/campaign/web_art_manifest.json",
+  "historical_web_manifest_sha256": "d56593884e36f5f65a72d1b669e389134fe4a1cf1451445770c971a3fb021a80",
+  "historical_web_qa": "assets/campaign/web_art_slice_qa.json",
+  "historical_web_qa_sha256": "bce983515032d0e289ddf61c03f4726e5787eb20c068125ab667c49ee3cb4437",
+  "local_alpha_cleanup_performed": false,
+  "continuous_rect_crop": true,
+  "transparent_padding": true,
+  "masking_or_connected_component_isolation_performed": false,
+  "mirroring_or_repainting_performed": false,
+  "production_file_count": 16,
+  "sources": [
+    {
+      "source_id": "web_lu_junyi_states_v1",
+      "source_path": "assets/campaign/source/web_lu_junyi_states_v1.png",
+      "source_sha256": "8738cb955c44e4f25bce43cec823860a947bd8367d0106a9dba64bb105020d8f",
+      "source_mode": "RGBA",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "generation_mode": "web ChatGPT",
+      "conversation_url": "https://chatgpt.com/c/6a9577c1-de04-83ea-8c63-bfda073168b1",
+      "prompt_path": "assets/campaign/web_prompts_20260831/09_lu_junyi_full_states.txt",
+      "prompt_sha256": "3fe5d5ff0a9cbf1e495231e38b6d6c5a9f16e7cfb4a13f3ed40b575780e25315",
+      "historical_review": "Text-only web generation, reference upload was blocked and not bypassed. Independent view accepted same mature dark-haired face, long-sleeved pale cloth across bound/free/stride/passing. Only rows3-4 are two key walk poses; rows5-6 not a verified alternate-leg cycle. Native alpha valid despite brown zero-alpha RGB preview."
+    },
+    {
+      "source_id": "web_shi_xiu_states_v1",
+      "source_path": "assets/campaign/source/web_shi_xiu_states_v1.png",
+      "source_sha256": "bd03539ecd79b0cf4429f688be260ed87fd36960129285650fa45bf3d6def0b2",
+      "source_mode": "RGBA",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "generation_mode": "web ChatGPT",
+      "conversation_url": "https://chatgpt.com/c/6a957886-cd94-83ea-9570-5737748b376d",
+      "prompt_path": "assets/campaign/web_prompts_20260831/11_shi_xiu_full_states.txt",
+      "prompt_sha256": "4d5a71e5fafe98b33899f58c28acaeb170c42d0b4bf1dbf2bee97583d1e9f805",
+      "historical_review": "Text-only web generation, reference upload was blocked and not bypassed. Independent view accepted long-sleeved blue-grey Shi outfit, bound/free identity continuity. Original bound NW faces NE and must be replaced by v2b before any runtime build. Only rows3-4 are two key walk poses, not a full four-stage cycle; brown background has zero alpha."
+    },
+    {
+      "source_id": "web_shi_xiu_bound_nw_v2b",
+      "source_path": "assets/campaign/source/web_shi_xiu_bound_nw_v2b.png",
+      "source_sha256": "0b2f6b667972f402a632252b5f77138710663c5f204e50dd0f38ca4188daa7f6",
+      "source_mode": "RGBA",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "generation_mode": "web ChatGPT",
+      "conversation_url": "https://chatgpt.com/c/6a957886-cd94-83ea-9570-5737748b376d",
+      "prompt_path": "assets/campaign/web_prompts_20260831/13_shi_xiu_bound_nw_fix.txt",
+      "prompt_sha256": "75a3f76367ec737b5088c492207e51c8e9d93c2e387f8e5f8694bf92f8b9a802",
+      "historical_review": "Independent view confirmed genuine NW back-left view, blue-grey long sleeves and wooden neck cangue, arms remain in front rather than tied behind. Whole head/feet and native alpha valid. Candidate2b selected; candidate2a rejected for NE view and wrong tied-hands state."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "daming_bound_lu_junyi_idle_se",
+      "variant": "daming_bound_lu_junyi",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_lu_junyi_idle_se.png",
+      "candidate_sha256": "1c6018c0276ea9dd794b6a3a0aa1f7ce4bb8465e52ce09b0b22d0e6fe50ea3ce",
+      "production_path": "assets/campaign/anim/daming_bound_lu_junyi_idle_se.png",
+      "production_sha256": "1c6018c0276ea9dd794b6a3a0aa1f7ce4bb8465e52ce09b0b22d0e6fe50ea3ce",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_bound_lu_junyi_idle_sw",
+      "variant": "daming_bound_lu_junyi",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_lu_junyi_idle_sw.png",
+      "candidate_sha256": "f854e6e4b0814ffaad947683bd0640e10740827dc59fcefe72be2bca648c0a82",
+      "production_path": "assets/campaign/anim/daming_bound_lu_junyi_idle_sw.png",
+      "production_sha256": "f854e6e4b0814ffaad947683bd0640e10740827dc59fcefe72be2bca648c0a82",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_bound_lu_junyi_idle_ne",
+      "variant": "daming_bound_lu_junyi",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_lu_junyi_idle_ne.png",
+      "candidate_sha256": "def73d1b4b58f203967792c9e839ffddd66c5be9b770cc8c7d02655b73c99914",
+      "production_path": "assets/campaign/anim/daming_bound_lu_junyi_idle_ne.png",
+      "production_sha256": "def73d1b4b58f203967792c9e839ffddd66c5be9b770cc8c7d02655b73c99914",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_bound_lu_junyi_idle_nw",
+      "variant": "daming_bound_lu_junyi",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_lu_junyi_idle_nw.png",
+      "candidate_sha256": "5bfc305fb99bab43925472f2a4e15cfbdd884db40870f7fa4cfd99d2480e35aa",
+      "production_path": "assets/campaign/anim/daming_bound_lu_junyi_idle_nw.png",
+      "production_sha256": "5bfc305fb99bab43925472f2a4e15cfbdd884db40870f7fa4cfd99d2480e35aa",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_bound_shi_xiu_idle_se",
+      "variant": "daming_bound_shi_xiu",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_shi_xiu_idle_se.png",
+      "candidate_sha256": "7a7b3355481030a0207c75b0f3547cac91515d757f47c2ababfe8a50593e2e74",
+      "production_path": "assets/campaign/anim/daming_bound_shi_xiu_idle_se.png",
+      "production_sha256": "7a7b3355481030a0207c75b0f3547cac91515d757f47c2ababfe8a50593e2e74",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_bound_shi_xiu_idle_sw",
+      "variant": "daming_bound_shi_xiu",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_shi_xiu_idle_sw.png",
+      "candidate_sha256": "0cde94a030cb41cb9f2a60b0505c2b01f9b886873f17af08fb18dc5ae6e22596",
+      "production_path": "assets/campaign/anim/daming_bound_shi_xiu_idle_sw.png",
+      "production_sha256": "0cde94a030cb41cb9f2a60b0505c2b01f9b886873f17af08fb18dc5ae6e22596",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_bound_shi_xiu_idle_ne",
+      "variant": "daming_bound_shi_xiu",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_shi_xiu_idle_ne.png",
+      "candidate_sha256": "acc98013dd6edc89faa9d2050ffeaa7c8126c2235bf1c77311ebabf9d303c51e",
+      "production_path": "assets/campaign/anim/daming_bound_shi_xiu_idle_ne.png",
+      "production_sha256": "acc98013dd6edc89faa9d2050ffeaa7c8126c2235bf1c77311ebabf9d303c51e",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_bound_shi_xiu_idle_nw",
+      "variant": "daming_bound_shi_xiu",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_bound_shi_xiu_idle_nw.png",
+      "candidate_sha256": "a4b91f97f98fe3d267427cc3c4af1cb64aef89a7853dadadf23180bdd04e475d",
+      "production_path": "assets/campaign/anim/daming_bound_shi_xiu_idle_nw.png",
+      "production_sha256": "a4b91f97f98fe3d267427cc3c4af1cb64aef89a7853dadadf23180bdd04e475d",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_idle_se",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_idle_se.png",
+      "candidate_sha256": "fb9aa0286c2a3b3520db9bd4bc8beaacafe1c65b30a2c4c3a91144b88a34bc15",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_idle_se.png",
+      "production_sha256": "fb9aa0286c2a3b3520db9bd4bc8beaacafe1c65b30a2c4c3a91144b88a34bc15",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_idle_sw",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_idle_sw.png",
+      "candidate_sha256": "2b3ae39ac3c2f0c6d954f7d936d78aa9b1621ef7d6f40282959d8ff63d079850",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_idle_sw.png",
+      "production_sha256": "2b3ae39ac3c2f0c6d954f7d936d78aa9b1621ef7d6f40282959d8ff63d079850",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_idle_ne",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_idle_ne.png",
+      "candidate_sha256": "019e97f0263dcfe22458e95fd5a5572533db16338b8c57497a58657531e6434a",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_idle_ne.png",
+      "production_sha256": "019e97f0263dcfe22458e95fd5a5572533db16338b8c57497a58657531e6434a",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_idle_nw",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_idle_nw.png",
+      "candidate_sha256": "a531b3e45f19f1aad17a5303610c504186dbf9b6506e335952df17d0cb531696",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_idle_nw.png",
+      "production_sha256": "a531b3e45f19f1aad17a5303610c504186dbf9b6506e335952df17d0cb531696",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_walk_se",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "walk",
+      "direction": "se",
+      "frame_count": 2,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_walk_se.png",
+      "candidate_sha256": "007627ec5786807f2df8c8b63dd122be9cd1d6646173f75354e51c16b3bea5a0",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_walk_se.png",
+      "production_sha256": "007627ec5786807f2df8c8b63dd122be9cd1d6646173f75354e51c16b3bea5a0",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_walk_sw",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "walk",
+      "direction": "sw",
+      "frame_count": 2,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_walk_sw.png",
+      "candidate_sha256": "8874b6e88a98f135255e78fdd31fd7a2101d1fe30488ba58c9d334a41f4838fa",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_walk_sw.png",
+      "production_sha256": "8874b6e88a98f135255e78fdd31fd7a2101d1fe30488ba58c9d334a41f4838fa",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_walk_ne",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "walk",
+      "direction": "ne",
+      "frame_count": 2,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_walk_ne.png",
+      "candidate_sha256": "be62a5d93ea3eb711ec118a47885e13d092a29f1e2628744f6b7d7e273e5c2f5",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_walk_ne.png",
+      "production_sha256": "be62a5d93ea3eb711ec118a47885e13d092a29f1e2628744f6b7d7e273e5c2f5",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "id": "daming_rescued_shi_xiu_walk_nw",
+      "variant": "daming_rescued_shi_xiu",
+      "state": "walk",
+      "direction": "nw",
+      "frame_count": 2,
+      "candidate_path": "qa/daming_prisoners_rect_rebuild_candidate_pipeline_20260903/outputs/daming_rescued_shi_xiu_walk_nw.png",
+      "candidate_sha256": "d23211108af5a09f6c820d4b6f88f97134148f56342756753cccc5b36b9cfdf7",
+      "production_path": "assets/campaign/anim/daming_rescued_shi_xiu_walk_nw.png",
+      "production_sha256": "d23211108af5a09f6c820d4b6f88f97134148f56342756753cccc5b36b9cfdf7",
+      "copy_is_byte_identical_to_candidate": true,
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "steam_modified_or_exported": false
+}

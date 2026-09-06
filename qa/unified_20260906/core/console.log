@@ -1,0 +1,72 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[core] PASS story order preserves legacy ID indices
+[core] PASS legacy LEVEL=1
+[core] PASS legacy LEVEL=2
+[core] PASS legacy LEVEL=3
+[core] PASS legacy LEVEL=4
+[core] PASS legacy LEVEL=5
+[core] PASS legacy LEVEL=6
+[core] PASS legacy LEVEL=7
+[core] PASS legacy LEVEL=8
+[core] PASS land only on land
+[core] PASS ships only on water
+[core] PASS world boundaries are not clamped into passability
+[core] PASS smoothing rejects shoreline crossing
+[core] PASS snapped destination stays in land
+[core] PASS snapped destination stays in water
+[core] PASS dynamic footprint blocks ship
+[core] PASS footprint releases water without opening land
+[core] PASS displacement cannot tunnel over water to an open far bank
+[core] PASS published death remains is a square-cell 4x2 atlas
+[core] PASS critical + same-frame hit + real DOT resolves once without death
+[core] PASS capture clears locks and awards no death kill
+[core] PASS captured story outcome creates no death remains
+[core] PASS second outcome cannot replace first
+[core] PASS captured unit rejects commands
+[core] PASS unconscious remains atomic under critical, repeat hit and DOT
+[core] PASS unconscious retains the intended on-map visibility
+[core] PASS unconscious creates no death remains
+[core] PASS subdued remains atomic under critical, repeat hit and DOT
+[core] PASS subdued retains the intended on-map visibility
+[core] PASS subdued creates no death remains
+[core] PASS retreated remains atomic under critical, repeat hit and DOT
+[core] PASS retreated retains the intended on-map visibility
+[core] PASS retreated creates no death remains
+[core] PASS embarked remains atomic under critical, repeat hit and DOT
+[core] PASS embarked retains the intended on-map visibility
+[core] PASS embarked creates no death remains
+[core] PASS bound prisoner cannot walk
+[core] PASS unresolved prisoner can still die
+[core] PASS one real land death creates exactly one remains node
+[core] PASS death remains slices the selected frame from a 4x2 square-cell atlas
+[core] PASS death remains uses restrained deterministic frames, 45s/8s timing and ground z
+[core] PASS death remains binds its draw plane and render height to the terrain at the death position
+[core] PASS repeat damage after death cannot duplicate remains
+[core] PASS death remains stays fully present before the final eight-second fade
+[core] PASS death remains enters its fade only during the final eight seconds
+[core] PASS death remains expires at 45 seconds and immediately leaves the tracking array
+[core] PASS expired death remains is freed without requiring a later unit death
+[core] PASS a real death binds remains to an authored nonzero slope and render height
+[core] PASS buildings and water units are excluded from character remains
+[core] PASS summons are excluded from character remains
+[core] PASS manual Delete keeps its old short mark and creates no death remains
+[core] PASS cross-domain swap cannot put a soldier on water or a ship on land
+[core] PASS knockback cannot put ship ashore
+[core] PASS real ship movement stays on water
+[core] PASS building ejection retains water profile
+[core] PASS ship formation targets remain on water
+[core] PASS UI command path starts interaction
+[core] PASS repeated action ignored
+[core] PASS phase reset clears interactions and retains story log
+[core] PASS per-stage gameplay time and accepted commands survive transition
+[core] PASS repeated ending cannot rewrite or duplicate stage metrics
+[core] PASS death remains cap is the required 48 nodes
+[core] PASS death remains are hard-capped at 48
+[core] PASS death remains cap evicts the oldest node
+[core] PASS ordinary deaths only select restrained fresh blood and equipment frames
+[core] PASS cross-day campaign cleanup removes all death remains and tracking references
+[core] PASS scene reload lifetime frees the remains root with Battle
+[core] PASS a fresh Battle starts with no prior death remains
+[core-result] {"failures":[],"passed":true}
+

@@ -1,0 +1,47 @@
+{
+  "baseline_commit": "7fbdc3a5ce30d4dff0b7c64d11734bcf4e1a5917",
+  "production_scope": [
+    "scripts/game_map.gd:_segment_open"
+  ],
+  "godot": "4.6.3-stable",
+  "source_hash_mode": "UTF-8 text with CRLF normalized to LF",
+  "source_content_sha256": {
+    "scripts/game_map.gd": "8385f11b83c40eeb8360042290098e3b96cd3a6bccb393e7689868893baa67b5",
+    "scripts/battle.gd": "6adc25642e8a010f676a9aeac167142d437d84bb1ee1cc685c480359b3eae6e3",
+    "scripts/unit.gd": "56ccb949c6373faa1a30710c7f4a0e7d7d1fc0954d8f2cb0437063f6573e36d5",
+    "scripts/campaign.gd": "f6cf3a106feac671f97663f750804866ff177b55233c60c3b015cd0c767464e4",
+    "tools/segment_navigation_qa.gd": "247ca5cbc275179499503af552bd290e3cf00ca3735cf46e7c850fe24c2a51d6",
+    "tools/rts_collision_profile.gd": "e917934f715078a429612a1ba0239641dd3c753d1fe54af53c1c24379c8c4d1e",
+    "tools/rts_performance_probe.gd": "ec238f3e9641d0096527c686c9226fd257ec0d75ad498c83e9cf26db555f7904",
+    "tools/ranged_firing_path_test.gd": "8920a2662476130201877a6e94199ee17f805b1cc98f221a3396e609d12666d9",
+    "tools/campaign_mode_performance_test.gd": "65a08cbad409b020d4323a39db218f46af94698a764f396df6140fae07cc67de",
+    "tools/zhujiazhuang_rts_test.gd": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+    "tools/contracts/navigation/segment_before_7fbdc3a.txt": "b056f62669523d9c1e22e81c37f03da1e48840d94dcbc451f486043f7f3fa82a",
+    "project.godot": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32"
+  },
+  "evidence_sha256": {
+    "console.log": "210948cc803014b6cac0ea63fd2f3474e632ba657b9849501c05e75040c88825",
+    "ranged.json": "15b55d9741c0360de84d36b3a2c379aba920de802279a22a07c1f28a11feabf4",
+    "ranged_console.log": "77f9d476b1f11f743f6f3f92b8871613dda54993dec0dde8c01c89af4531f33a",
+    "report.json": "6a463789821daf057fb0aa2fb084e310b5c41a9910527076ad25f70e048ce2a0",
+    "diagnosis/level8_opening.json": "c8469c284bf71f9e9109b8808b7774b2402d2df95bd64f7bd32b68e43fe41dd4",
+    "diagnosis/level8_opening.log": "eafe250bc5c0531d2948d6d0ec8cea4ed482e2b8f578b05b27f8557218deb449",
+    "diagnosis/stress_optimized.json": "c3129b153bef36dca7ce9ce7069f1d24e973be5e88c75fb0129aefc3e1a87752",
+    "diagnosis/stress_optimized.log": "b345831f12f9688db89f9728911bfc11125320cd13aae804d8d3777ec3579806",
+    "diagnosis/stress_reference.json": "a3e15201760a62a5c1adb69588d6c3dc5532f10da8aa95349e7686dfb5be3ada",
+    "diagnosis/stress_reference.log": "74871cf86a4505e96c608fd369879e39d14cf81c1f8669e7a3c793531d9fa278"
+  },
+  "results": {
+    "segment_checks": 58,
+    "segment_comparisons": 81000,
+    "crowd_layouts": 18,
+    "crowd_units": 206,
+    "ranged_checks_including_completion_guard": 23,
+    "paired_optimized_over_reference": 0.723026350273686
+  },
+  "limits": [
+    "Function timings are not frame-rate uplift",
+    "Independent stress windows change combat and automatic camera load; overall frame-time budget still fails",
+    "Synthetic crowd states and stagger threshold are explicit QA fixtures"
+  ]
+}

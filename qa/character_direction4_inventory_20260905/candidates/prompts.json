@@ -1,0 +1,49 @@
+{
+  "tool": "built-in image_gen",
+  "status": "rejected_not_installed",
+  "rows": [
+    "song_jiang",
+    "lin_chong",
+    "sun_li",
+    "hu_sanniang"
+  ],
+  "columns": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "requests": [
+    {
+      "prompt": "Create a production 4x4 sprite atlas on a truly transparent alpha background, 2048x2048 PNG. Use case: stylized-concept, identity-preserving RTS game character turnarounds. Each of 16 equal 512x512 cells contains one complete miniature, including weapon and horse where applicable, with generous transparent margins, no labels or grid lines. Rows top to bottom correspond exactly to the four input identity references: 1 Song Jiang golden robe black beard sword on foot; 2 Lin Chong black lamellar armour long spear on foot; 3 Sun Li dark bronze armour brown skirt, bow and quiver on foot; 4 Hu Sanniang female warrior green armour, twin curved sabres mounted on chestnut horse. Preserve each character's clothing, hair, palette, weapon design, body proportions and existing painterly detailed pixel-friendly Chinese historical RTS style. Columns left to right are true SE front-right three-quarter, SW front-left three-quarter, NE back-right three-quarter, NW back-left three-quarter. Front directions see face/chest; back directions see back of head/back armour/cape, never face. Each is a separately redrawn correct 3D turnaround, NOT mirrored copies; maintain weapon hand and asymmetrical equipment. Same 30 degree elevated isometric camera and neutral combat-ready standing pose in every cell. Body/head/feet orientation must agree. Foot contact centered at cell x256 y420; consistent miniature height across the four views of the same character. No cast shadows, no ground patches, no background colour, no text. Keep all pixels for each character confined to their own cell. The reference images define identity and style only; replace the original facing with the specified directions.",
+      "reference_files": [
+        "song_jiang.png",
+        "lin_chong.png",
+        "sun_li.png",
+        "hu_sanniang.png"
+      ],
+      "output": "candidate_01.png"
+    },
+    {
+      "prompt": "Edit this sprite sheet into a usable transparent PNG. CRITICAL: the gray-and-white checkerboard is an unwanted painted background. Remove it entirely and produce REAL transparent alpha pixels (alpha=0) in all gaps, NOT a picture of a checkerboard. No white or colored rectangle behind the sprites. Keep the same exact 4 rows and 4 columns of character identities. Also FIX TWO INCORRECT DIRECTIONS: in row 1 column 2, Song Jiang must face LEFT and down toward the viewer, front-left three-quarter, showing front of chest and left-facing face. In row 2 column 2, Lin Chong must face LEFT and down toward the viewer, front-left three-quarter, showing chest and a left-facing face. Those two cells currently incorrectly face right, duplicating column 1. Redraw these two cells rotating the entire character and held weapon to face LEFT, keep weapon in anatomically same hand. Keep all other twelve direction views unchanged and all original identities, colours, clothing, detailed historic RTS miniature art. Each cell separate, no overlap. Equal-sized four-by-four cells. Real transparency is mandatory. No shadows, ground or labels.",
+      "reference_files": [
+        "candidate_01.png"
+      ],
+      "output": "candidate_02.png"
+    }
+  ],
+  "validation": {
+    "mode": "RGB",
+    "size": [
+      1254,
+      1254
+    ],
+    "has_alpha": false,
+    "issues": [
+      "Checkerboard baked into both images; do not install as transparent sprites.",
+      "First atlas repeats front directions in first two rows. Second needs further Song Jiang SW body/head/weapon review.",
+      "Direction semantics, identity, padding, foot anchors, animation and in-game rotation have not passed acceptance."
+    ]
+  },
+  "pending": "Explicit user choice requested for local programmatic alpha/crop/anchor processing. No such pixel processing or production replacement performed."
+}

@@ -8,6 +8,7 @@ var _update_overlay: Control
 
 
 func _ready() -> void:
+	theme = UITheme.shared()
 	Engine.time_scale = 1.0   # 回到主菜单复位全局节奏（战斗内放慢到 0.6）
 	Music.set_mood("calm")    # 主菜单/选关时放经营曲
 	if OS.get_environment("SMOKE_TEST") == "1" or OS.get_environment("SCREENSHOT_DIR") != "" \
@@ -21,7 +22,7 @@ func _ready() -> void:
 ## 主菜单按安卓「返回键」=退出游戏（quit_on_go_back 已关，需自己处理；否则按返回毫无反应）
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		get_tree().quit()
+		AppLifecycle.request_quit("menu_back")
 
 
 func _launch() -> void:
@@ -33,26 +34,19 @@ func _launch() -> void:
 # 主菜单：背景 + 标题 + 四个大模块入口
 # ======================================================================
 func _build() -> void:
-	var bg := ColorRect.new()
+	var bg := TextureRect.new()
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color("1a2230")
-	var bgsh := Shader.new()
-	bgsh.code = """
-shader_type canvas_item;
-void fragment() {
-	vec2 uv = UV;
-	vec3 col = mix(vec3(0.10, 0.13, 0.19), vec3(0.035, 0.045, 0.075), uv.y);   // 竖直渐变
-	float g = distance(uv, vec2(0.5, 0.30));
-	col += vec3(0.18, 0.13, 0.05) * smoothstep(0.75, 0.0, g) * 0.55;            // 暖色「灯笼」辉光
-	float v = smoothstep(1.15, 0.40, distance(uv, vec2(0.5)) * 1.30);
-	col *= mix(0.58, 1.0, v);                                                    // 暗角
-	COLOR = vec4(col, 1.0);
-}
-"""
-	var bgmat := ShaderMaterial.new()
-	bgmat.shader = bgsh
-	bg.material = bgmat
+	bg.texture = load("res://assets/ui/boot_splash.png")
+	bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	bg.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
+	var shade := ColorRect.new()
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.035, 0.028, 0.022, 0.72)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
 
 	# 标题/副标题/模块列的竖向档位重排：原来 标题46+字号52 压到 副标题112，
 	# 模块列居中后又顶进副标题区——「主菜单显示错位」。现在三段各留净空、互不侵入。
@@ -62,7 +56,7 @@ void fragment() {
 	title.offset_top = 24.0
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 52)
-	title.add_theme_color_override("font_color", Color("ffd866"))
+	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	add_child(title)
 
 	var sub := Label.new()
@@ -71,7 +65,7 @@ void fragment() {
 	sub.offset_top = 98.0
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub.add_theme_font_size_override("font_size", 18)
-	sub.add_theme_color_override("font_color", Color("a0b0c0"))
+	sub.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	add_child(sub)
 
 	# 全屏切换（右上角，亦可 F11 / Alt+Enter）
@@ -102,18 +96,18 @@ void fragment() {
 	col.add_theme_constant_override("separation", 10)
 	center.add_child(col)
 
-	col.add_child(_mk_module("📜  剧情模式", "八幕战役 · 替天行道，从智取生辰纲到三败高太尉", Color("ffd866"), _show_story))
-	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", Color("a9e34b"), _show_defense, true))
-	col.add_child(_mk_module("⚔  1v1 对战", "对称经济 · 真实造兵造房，三种胜利条件、三档 AI", Color("8fd3ff"), _show_1v1))
-	col.add_child(_mk_module("🏟  竞技场", "百八好汉技能试演场 · 自由点将放技能、一键刷敌", Color("ff7a4a"), func() -> void:
+	col.add_child(_mk_module("📜  剧情模式", "八幕全开放 · 自由通关，依原著完成可收录演义印", UITheme.PAPER_DARK, _show_story))
+	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", UITheme.COMPLETE, _show_defense, true))
+	col.add_child(_mk_module("⚔  1v1 对战", "对称经济 · 真实造兵造房，三种胜利条件、三档 AI", UITheme.COPPER_LIGHT, _show_1v1))
+	col.add_child(_mk_module("🏟  竞技场", "百八好汉技能试演场 · 自由点将放技能、一键刷敌", UITheme.VERMILION, func() -> void:
 		Campaign.arena = true
 		Campaign.skirmish = false
 		Campaign.skirmish_ai = false
 		Campaign.custom_defense = false
 		Campaign.scenario = false
 		_launch()))
-	col.add_child(_mk_module("📖  英雄图鉴", "108 将 · 立绘 / 技能 / 生平", Color("ff9a6a"), func() -> void: get_tree().change_scene_to_file.call_deferred("res://scenes/codex.tscn")))
-	col.add_child(_mk_module("🛠  更多", "关卡编辑器 · 设置", Color("c0a0ff"), _show_more))
+	col.add_child(_mk_module("📖  英雄图鉴", "108 将 · 立绘 / 技能 / 生平", UITheme.WARNING, func() -> void: get_tree().change_scene_to_file.call_deferred("res://scenes/codex.tscn")))
+	col.add_child(_mk_module("🛠  更多", "关卡编辑器 · 设置", UITheme.COPPER, _show_more))
 
 	# 当前生效内容版本：右下角常驻、保持足够对比度，方便玩家报错时直接查看。
 	# 安装过热更新时显示 1.6.4 这类内容版本，而不是仍然显示完整包的 1.6。
@@ -126,10 +120,10 @@ void fragment() {
 	ver_panel.offset_right = -16.0
 	ver_panel.offset_bottom = -12.0
 	var ver_bg := StyleBoxFlat.new()
-	ver_bg.bg_color = Color(0.055, 0.075, 0.11, 0.90)
-	ver_bg.border_color = Color(0.38, 0.48, 0.60, 0.72)
+	ver_bg.bg_color = Color(UITheme.INK_SOFT, 0.92)
+	ver_bg.border_color = Color(UITheme.COPPER, 0.80)
 	ver_bg.set_border_width_all(1)
-	ver_bg.set_corner_radius_all(8)
+	ver_bg.set_corner_radius_all(3)
 	ver_bg.content_margin_left = 14.0
 	ver_bg.content_margin_right = 14.0
 	ver_bg.content_margin_top = 6.0
@@ -143,12 +137,12 @@ void fragment() {
 		content_version = String(AndroidUpdater.active_content_version)
 		if content_version == "":
 			content_version = Campaign.VERSION
-	ver.text = "当前版本  v%s" % content_version
+	ver.text = "战役重做 · 八幕战役（v%s）" % content_version
 	ver.tooltip_text = "完整安装包 v%s · 当前内容 v%s" % [Campaign.VERSION, content_version]
 	ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ver.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ver.add_theme_font_size_override("font_size", 17)
-	ver.add_theme_color_override("font_color", Color("c6d3e1"))
+	ver.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	ver_panel.add_child(ver)
 
 	if AndroidUpdater.enabled:
@@ -177,16 +171,16 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 	btn.add_theme_color_override("font_color", accent)
 	btn.focus_mode = Control.FOCUS_NONE
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color("222d44")
+	sb.bg_color = Color(UITheme.INK_SOFT, 0.95)
 	sb.border_color = accent
-	sb.set_border_width_all(2)
-	sb.set_corner_radius_all(12)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(4)
 	btn.add_theme_stylebox_override("normal", sb)
 	var sbh := sb.duplicate()
-	sbh.bg_color = Color("2d3c5a")
+	sbh.bg_color = Color(UITheme.WOOD, 0.97)
 	btn.add_theme_stylebox_override("hover", sbh)
 	var sbp := sb.duplicate()
-	sbp.bg_color = Color("3a4d72")
+	sbp.bg_color = Color(UITheme.WOOD_LIGHT, 0.98)
 	btn.add_theme_stylebox_override("pressed", sbp)
 	btn.pressed.connect(cb)
 	vb.add_child(btn)
@@ -195,7 +189,7 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 	s.text = subtitle
 	s.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	s.add_theme_font_size_override("font_size", 14)
-	s.add_theme_color_override("font_color", Color("8595a8"))
+	s.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	vb.add_child(s)
 
 	return vb
@@ -229,7 +223,7 @@ func _mk_overlay(title_text: String) -> Array:
 	var title := Label.new()
 	title.text = title_text
 	title.add_theme_font_size_override("font_size", 32)
-	title.add_theme_color_override("font_color", Color("ffe9a8"))
+	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 	# 常驻左上角「返回」：内容再高也永远看得见（底部那颗返回可能被挤出屏外）；Esc 同效
@@ -277,6 +271,13 @@ func _show_story() -> void:
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
 
+	var rule := Label.new()
+	rule.text = "完成核心目标即可通关；依原著完成可选目标，可收录「演义印」"
+	rule.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	rule.add_theme_font_size_override("font_size", 16)
+	rule.add_theme_color_override("font_color", Color("d8c79c"))
+	box.add_child(rule)
+
 	var grid := VBoxContainer.new()
 	grid.alignment = BoxContainer.ALIGNMENT_CENTER
 	grid.add_theme_constant_override("separation", 14)
@@ -293,7 +294,7 @@ func _show_story() -> void:
 		for _k in range(per_row):
 			if i >= n:
 				break
-			row.add_child(_make_card(i))
+			row.add_child(_make_card(Campaign.story_indices()[i]))
 			i += 1
 
 	_add_back(box, overlay)
@@ -321,12 +322,12 @@ func _show_defense() -> void:
 	afb.custom_minimum_size = Vector2(420, 44)
 	afb.add_theme_font_size_override("font_size", 17)
 	afb.text = "🤖 AI友好模式（全自动）：%s" % ("开" if Campaign.ai_friendly else "关")
-	afb.add_theme_color_override("font_color", Color("ffd866") if Campaign.ai_friendly else Color("9fb0c4"))
+	afb.add_theme_color_override("font_color", UITheme.PAPER_DARK if Campaign.ai_friendly else UITheme.PAPER_MUTED)
 	box.add_child(afb)
 	afb.toggled.connect(func(on: bool) -> void:
 		Campaign.ai_friendly = on
 		afb.text = "🤖 AI友好模式（全自动）：%s" % ("开" if on else "关")
-		afb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4")))
+		afb.add_theme_color_override("font_color", UITheme.PAPER_DARK if on else UITheme.PAPER_MUTED))
 	var aftip := Label.new()
 	aftip.text = "（开启=全员英雄自动托管、可开自动镜头观战。和下面的倍率互不影响）"
 	aftip.add_theme_font_size_override("font_size", 13)
@@ -343,7 +344,7 @@ func _show_defense() -> void:
 	scb.custom_minimum_size = Vector2(420, 44)
 	scb.add_theme_font_size_override("font_size", 17)
 	scb.text = "⚖ 改变倍率：%s" % ("开" if Campaign.scale_on else "关")
-	scb.add_theme_color_override("font_color", Color("ffd866") if Campaign.scale_on else Color("9fb0c4"))
+	scb.add_theme_color_override("font_color", UITheme.PAPER_DARK if Campaign.scale_on else UITheme.PAPER_MUTED)
 	box.add_child(scb)
 	var hsp := SpinBox.new()   # 英雄倍率框(先建引用，敌方回调里同步)
 	# 敌方倍率行
@@ -390,7 +391,7 @@ func _show_defense() -> void:
 	scb.toggled.connect(func(on: bool) -> void:
 		Campaign.scale_on = on
 		scb.text = "⚖ 改变倍率：%s" % ("开" if on else "关")
-		scb.add_theme_color_override("font_color", Color("ffd866") if on else Color("9fb0c4"))
+		scb.add_theme_color_override("font_color", UITheme.PAPER_DARK if on else UITheme.PAPER_MUTED)
 		erow.visible = on
 		hrow.visible = on)
 	var sctip := Label.new()
@@ -428,7 +429,7 @@ func _show_defense() -> void:
 	var rndlbl := Label.new()
 	rndlbl.text = "🎲 自定义随机波次（任意波数 · 随机敌军 · 数量随波次增长）"
 	rndlbl.add_theme_font_size_override("font_size", 15)
-	rndlbl.add_theme_color_override("font_color", Color("7ad7ff"))
+	rndlbl.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
 	rndlbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(rndlbl)
 	var rrow := HBoxContainer.new()
@@ -438,7 +439,7 @@ func _show_defense() -> void:
 	var rwl := Label.new()
 	rwl.text = "波次"
 	rwl.add_theme_font_size_override("font_size", 16)
-	rwl.add_theme_color_override("font_color", Color("c8d3e0"))
+	rwl.add_theme_color_override("font_color", UITheme.PAPER)
 	rrow.add_child(rwl)
 	var rwsp := SpinBox.new()
 	rwsp.min_value = 1.0; rwsp.max_value = 999.0; rwsp.step = 1.0
@@ -450,7 +451,7 @@ func _show_defense() -> void:
 	var ril := Label.new()
 	ril.text = "每波间隔(秒)"
 	ril.add_theme_font_size_override("font_size", 16)
-	ril.add_theme_color_override("font_color", Color("c8d3e0"))
+	ril.add_theme_color_override("font_color", UITheme.PAPER)
 	rrow.add_child(ril)
 	var risp := SpinBox.new()
 	risp.min_value = 1.0; risp.max_value = 600.0; risp.step = 1.0
@@ -462,12 +463,12 @@ func _show_defense() -> void:
 	var rtip := Label.new()
 	rtip.text = "（第 1 波固定 120 秒备战；之后每波间隔 = 你填的秒数，越小越急、建议 20~30。数量随波次增长、并受敌方倍率放大）"
 	rtip.add_theme_font_size_override("font_size", 13)
-	rtip.add_theme_color_override("font_color", Color("7c8a9c"))
+	rtip.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	rtip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rtip.custom_minimum_size = Vector2(520, 0)
 	rtip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(rtip)
-	var rbtn := _mk_big_btn("🎲  随机波次 · 开战", Color("7ad7ff"))
+	var rbtn := _mk_big_btn("🎲  随机波次 · 开战", UITheme.COPPER_LIGHT)
 	rbtn.pressed.connect(func() -> void:
 		Campaign.defense_rand_waves = clampi(int(rwsp.value), 1, 999)
 		Campaign.defense_interval = clampf(risp.value, 1.0, 600.0)
@@ -483,7 +484,7 @@ func _show_defense() -> void:
 		_launch())
 	box.add_child(rbtn)
 
-	var cb := _mk_big_btn("📂  加载自定义配置", Color("c0a0ff"))
+	var cb := _mk_big_btn("📂  加载自定义配置", UITheme.COPPER)
 	cb.pressed.connect(func() -> void:
 		overlay.queue_free()
 		_show_custom_picker())
@@ -573,7 +574,7 @@ func _show_more() -> void:
 		get_tree().change_scene_to_file.call_deferred("res://scenes/scenario_editor.tscn"))
 	box.add_child(sed)
 
-	var splay := _mk_big_btn("▶  玩自定义关卡", Color("87cefa"))
+	var splay := _mk_big_btn("▶  玩自定义关卡", UITheme.COPPER_LIGHT)
 	splay.pressed.connect(func() -> void:
 		overlay.queue_free()
 		_show_scenario_picker())
@@ -591,7 +592,7 @@ func _show_more() -> void:
 	box.add_child(st)
 
 	if AndroidUpdater.enabled:
-		var update_btn := _mk_big_btn("↻  检查%s更新" % _update_platform_name(), Color("8fd3ff"))
+		var update_btn := _mk_big_btn("↻  检查%s更新" % _update_platform_name(), UITheme.COPPER_LIGHT)
 		update_btn.pressed.connect(func() -> void:
 			overlay.queue_free()
 			AndroidUpdater.check_now())
@@ -646,7 +647,7 @@ func _show_custom_picker() -> void:
 	var title := Label.new()
 	title.text = "选择自定义据守配置" if not saved.is_empty() else "还没有保存的配置——先去「更多 → 关卡编辑器」做一个并保存"
 	title.add_theme_font_size_override("font_size", 24)
-	title.add_theme_color_override("font_color", Color("ffe9a8"))
+	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 	for name in saved:
@@ -679,10 +680,10 @@ func _make_card(i: int) -> Control:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(200, 250)
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color("2b3a4f") if unlocked else Color("222a36")
-	sb.border_color = Color("ffd866") if unlocked else Color("3a4452")
-	sb.set_border_width_all(2)
-	sb.set_corner_radius_all(6)
+	sb.bg_color = Color(UITheme.INK_SOFT, 0.97) if unlocked else UITheme.PANEL_DISABLED
+	sb.border_color = UITheme.COPPER if unlocked else Color(0.25, 0.22, 0.18, 0.72)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(3)
 	sb.content_margin_left = 14
 	sb.content_margin_right = 14
 	sb.content_margin_top = 16
@@ -694,10 +695,10 @@ func _make_card(i: int) -> Control:
 	panel.add_child(vb)
 
 	var num := Label.new()
-	num.text = "第 %d 幕" % (i + 1)
+	num.text = "第 %d 幕" % Campaign.story_number(i)
 	num.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	num.add_theme_font_size_override("font_size", 16)
-	num.add_theme_color_override("font_color", Color("8fb0d0") if unlocked else Color("55606e"))
+	num.add_theme_color_override("font_color", UITheme.COPPER_LIGHT if unlocked else Color(0.38, 0.34, 0.29))
 	vb.add_child(num)
 
 	var nm := Label.new()
@@ -705,7 +706,7 @@ func _make_card(i: int) -> Control:
 	nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	nm.add_theme_font_size_override("font_size", 24)
-	nm.add_theme_color_override("font_color", Color("ffe9a8") if unlocked else Color("6a7686"))
+	nm.add_theme_color_override("font_color", UITheme.PAPER_DARK if unlocked else Color(0.42, 0.38, 0.32))
 	vb.add_child(nm)
 
 	var ds := Label.new()
@@ -713,8 +714,28 @@ func _make_card(i: int) -> Control:
 	ds.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ds.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ds.add_theme_font_size_override("font_size", 14)
-	ds.add_theme_color_override("font_color", Color("9aa8b8") if unlocked else Color("55606e"))
+	ds.add_theme_color_override("font_color", UITheme.PAPER_MUTED if unlocked else Color(0.38, 0.34, 0.29))
 	vb.add_child(ds)
+
+	var record: Dictionary = Campaign.level_record(String(info["id"]))
+	if bool(record.get("cleared", false)):
+		var cleared := Label.new()
+		cleared.text = "✓ 基础通关"
+		cleared.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cleared.add_theme_font_size_override("font_size", 14)
+		cleared.add_theme_color_override("font_color", UITheme.COMPLETE)
+		vb.add_child(cleared)
+		var seal := Label.new()
+		seal.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		seal.add_theme_font_size_override("font_size", 14)
+		if bool(record.get("story_complete", false)):
+			seal.text = "◆ 演义印已收录"
+			seal.add_theme_color_override("font_color", UITheme.VERMILION)
+		else:
+			var total := int(record.get("story_total", 0))
+			seal.text = "演义复现 %d/%d" % [int(record.get("best_done", 0)), total] if total > 0 else "演义印尚未收录"
+			seal.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
+		vb.add_child(seal)
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -843,7 +864,7 @@ func _on_full_package_update(version: String) -> void:
 	info.add_theme_font_size_override("font_size", 20)
 	info.add_theme_color_override("font_color", Color("ffd0a0"))
 	box.add_child(info)
-	var open := _mk_big_btn("打开完整包下载页", Color("8fd3ff"))
+	var open := _mk_big_btn("打开完整包下载页", UITheme.COPPER_LIGHT)
 	open.pressed.connect(_open_full_update_package)
 	box.add_child(open)
 	_add_back(box, overlay)
