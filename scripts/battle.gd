@@ -5293,15 +5293,18 @@ func _grid_build() -> void:
 	for u in units:
 		if not is_instance_valid(u):
 			continue
+		var screen_pos := to_screen(u.position)
 		var render_visible: bool = u.fog_visible and not u.garrisoned and u.story_outcome not in ["retreated", "embarked"] \
-				and (not _lite_fx or _unit_draw_rect.has_point(to_screen(u.position)))
+				and (not _lite_fx or _unit_draw_rect.has_point(screen_pos))
 		if u.visible != render_visible:
 			if render_visible:
 				u.queue_redraw()
 			u.visible = render_visible
+			# Visibility callbacks may move a unit; retain the post-change depth.
+			screen_pos = to_screen(u.position)
 		# 等距深度序：屏幕深度 = (x+y)（本作 ISO 投影 screen_y=(x+y)/2）。y_sort 的纯 y 轴在斜投影下会排错——
 		# 单位站在建筑东南侧被整个盖住。每帧顺路回填 z_index（含建筑/资源/废墟，靠后=靠前景=盖住身后）。
-		u.z_index = clampi(1 + int(to_screen(u.position).y), 1, 3400)
+		u.z_index = clampi(1 + int(screen_pos.y), 1, 3400)
 		if u.hp <= 0.0 or u.garrisoned or u.story_outcome != "" or u.is_resource:
 			continue   # 资源点(金矿/林木)从不是分离/索敌/光环目标 → 不入网格，免得林边把桶撑大拖慢邻近查询
 		var k := Vector2i(int(floor(u.position.x / GRID_CELL)), int(floor(u.position.y / GRID_CELL)))

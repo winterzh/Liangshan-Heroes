@@ -1,3 +1,9 @@
+## 2026-09-06 网格重建投影增量
+
+- `tools/grid_build_qa.gd`：旧完整函数与现版的网格/层级/可见性/查询及 19 组配对计时。
+- `tools/contracts/grid_build/before_877e713.txt`：旧函数冻结参照。
+- `docs/GRID_BUILD_20260906.md`、`qa/grid_build_20260906/`：实现、741 项最终组合验证、实际压力图、诊断和来源收据。
+
 ## 2026-09-06 战役死亡造型证据
 
 - `tools/campaign_terminal_costume_qa.gd`、`tools/campaign_terminal_visual_unit.gd`：终态来源/缓存隔离、实际致命伤和Unit绘制观察。

@@ -1,0 +1,49 @@
+func _grid_build() -> void:
+	_grid.clear()
+	_mob_grid.clear()
+	_body_grid_liang.clear()
+	_body_grid_guan.clear()
+	_focus_counts.clear()
+	if camera != null:
+		var half: Vector2 = get_viewport().get_visible_rect().size * 0.5 / camera.zoom
+		_unit_draw_rect = Rect2(camera.position - half, half * 2.0).grow(120.0)
+	var mob := 0
+	for u in units:
+		if not is_instance_valid(u):
+			continue
+		var render_visible: bool = u.fog_visible and not u.garrisoned and u.story_outcome not in ["retreated", "embarked"] \
+				and (not _lite_fx or _unit_draw_rect.has_point(to_screen(u.position)))
+		if u.visible != render_visible:
+			if render_visible:
+				u.queue_redraw()
+			u.visible = render_visible
+		# 等距深度序：屏幕深度 = (x+y)（本作 ISO 投影 screen_y=(x+y)/2）。y_sort 的纯 y 轴在斜投影下会排错——
+		# 单位站在建筑东南侧被整个盖住。每帧顺路回填 z_index（含建筑/资源/废墟，靠后=靠前景=盖住身后）。
+		u.z_index = clampi(1 + int(to_screen(u.position).y), 1, 3400)
+		if u.hp <= 0.0 or u.garrisoned or u.story_outcome != "" or u.is_resource:
+			continue   # 资源点(金矿/林木)从不是分离/索敌/光环目标 → 不入网格，免得林边把桶撑大拖慢邻近查询
+		var k := Vector2i(int(floor(u.position.x / GRID_CELL)), int(floor(u.position.y / GRID_CELL)))
+		if not u.is_building:
+			mob += 1
+			if _mob_grid.has(k):
+				_mob_grid[k].append(u)
+			else:
+				_mob_grid[k] = [u]
+			var body_grid: Dictionary = _body_grid_liang if u.faction == Unit.FACTION_LIANG else _body_grid_guan
+			if body_grid.has(k):
+				body_grid[k].append(u)
+			else:
+				body_grid[k] = [u]
+			var ft = u._target   # 目标可能已在同帧释放；先以 Variant 接住，再做实例有效性检查。
+			if ft != null and is_instance_valid(ft):   # 顺路统计「谁被几人锁定」，索敌打分 O(1) 查——别在打分里逐目标扫邻格
+				var fid: int = ft.get_instance_id()
+				_focus_counts[fid] = int(_focus_counts.get(fid, 0)) + 1
+		if _grid.has(k):
+			_grid[k].append(u)
+		else:
+			_grid[k] = [u]
+	_mob_count = mob
+	var lite_threshold := LITE_FX_FULL_AUTO_THRESHOLD if _full_auto() else LITE_FX_MOB_THRESHOLD
+	_lite_fx = mob > lite_threshold
+	_impact_fx_frame = 0
+	_damage_fx_frame = 0

@@ -1,3 +1,7 @@
+## 2026-09-06 网格重建投影检查
+
+新增 `tools/grid_build_qa.gd`，用 `--headless` 输出 `.godot/grid_build_qa/`；142 项专项、整合兵群/墙体/终态服装共 741 项通过。已包含 e211151 服装修复，源码启动方式不变。完整复现见[说明](GRID_BUILD_20260906.md)，本次正常压力 26.67 FPS，性能验收继续保留。
+
 ## 2026-09-06 战役死亡造型
 
 源码启动方式保持。新增 `tools/campaign_terminal_costume_qa.gd`，默认输出 `.godot/campaign_terminal_costume/`；`TERMINAL_COSTUME_VISUAL=1`启用真实渲染，`TERMINAL_COSTUME_OUT`可指定目录。专用终态缺图时保持本期服装，复现旧版换装问题和1,172项回归见[说明](CAMPAIGN_TERMINAL_COSTUME_20260906.md)。林冲待完成候选没有接入生产。
