@@ -1,0 +1,40 @@
+extends "res://.godot/lc_pose_guide.gd"
+## Two physically opposite strides, rendered directly from 3D primitives.
+func rig(parent, alternate: bool) -> void:
+	var gray=Color("454c54");var skin=Color("aa927a");var left=Color("d93830");var right=Color("245cd6")
+	rod(parent,Vector3(0,0.85,0),Vector3(0,1.45,0),0.28,gray)
+	sphere(parent,Vector3(0,1.70,-0.015),0.17,skin)
+	sphere(parent,Vector3(0,1.98,0.01),0.07,Color("262626"))
+	sphere(parent,Vector3(0,1.70,-0.18),0.055,skin)
+	var rh=Vector3(0.42,1.10,-0.32)
+	for arm in [[Vector3(-0.3,1.43,0),Vector3(-0.36,1.11,0.16),Vector3(-0.38,0.89,0.22),left],[Vector3(0.3,1.43,0),Vector3(0.47,1.17,-0.04),rh,right]]:
+		rod(parent,arm[0],arm[1],0.085,arm[3]);rod(parent,arm[1],arm[2],0.07,arm[3]);sphere(parent,arm[2],0.085,arm[3])
+	for side in [-1,1]:
+		var front=side==1 if alternate else side==-1
+		var x=side*0.16;var color=left if side==-1 else right
+		var hip=Vector3(x,0.86,0)
+		var knee=Vector3(x,0.65,-0.33) if front else Vector3(x,0.42,0.17)
+		var foot=Vector3(x,0.20,-0.50) if front else Vector3(x,0.08,0.35)
+		rod(parent,hip,knee,0.105,color);sphere(parent,knee,0.105,color);rod(parent,knee,foot,0.085,color);rod(parent,foot+Vector3(0,0,0.06),foot+Vector3(0,0,-0.16),0.08,color)
+	var direction=Vector3(0,0.1,-1).normalized();var tip=rh+direction*1.1;var tail=rh-direction*0.7
+	rod(parent,tail,tip,0.023,Color("b57625"));rod(parent,tip,tip+direction*0.23,0.044,Color("e0e4e7"))
+
+func _run() -> void:
+	root.size=Vector2i(1600,1000);root.content_scale_size=root.size;DisplayServer.window_set_size(root.size)
+	var world=Node3D.new();root.add_child(world)
+	var env=WorldEnvironment.new();env.environment=Environment.new()
+	env.environment.background_mode=Environment.BG_COLOR;env.environment.background_color=Color("e2e4df")
+	env.environment.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
+	env.environment.ambient_light_color=Color.WHITE;env.environment.ambient_light_energy=0.8;world.add_child(env)
+	var light=DirectionalLight3D.new();light.rotation_degrees=Vector3(-50,-35,0);world.add_child(light)
+	var a=Node3D.new();world.add_child(a);rig(a,false)
+	var b=Node3D.new();world.add_child(b);rig(b,true)
+	var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=3.8;world.add_child(camera)
+	var folder="res://.godot/lin_chong_direction4/two_step_guide";DirAccess.make_dir_recursive_absolute(folder)
+	for view in [["sw",Vector3(-6,5,-6)],["ne",Vector3(6,5,6)]]:
+		var side=Vector3(view[1].z,0,-view[1].x).normalized()
+		a.position=-side*1.25;b.position=side*1.25
+		camera.position=view[1]+Vector3(0,1.0,0);camera.look_at(Vector3(0,1.0,0));camera.current=true
+		await process_frame;await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(folder+"/"+view[0]+".png")
+	quit()

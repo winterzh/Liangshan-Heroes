@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lin_chong_direction4_20260906/ne.png" id="ne"]
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("ne")
+region = Rect2(88, 17, 130, 171)
+margin = Rect2(32.5, 12.0, 65, 24)
+filter_clip = true
+metadata/draw_offset_px = Vector2(26.5, -16.6)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

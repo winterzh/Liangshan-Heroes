@@ -1,3 +1,7 @@
+## 2026-09-06 林冲四向基础动作
+
+拉取后通过既有 `Play.cmd` 进入并重开关卡，启动器会按现有流程补齐Godot导入缓存。7张原生图、20个TRES与清单均在仓库内，不需要再次生成美术。新增 `tools/lin_chong_direction4_qa.gd`（`LC_VISUAL=1`启用实机画面、`LC_QA_OUT`指定目录），默认输出 `.godot/lin_chong_direction4/runtime/`。排帧复核与来源只读审计见[实现](LIN_CHONG_DIRECTION4_20260906.md)；Python来源审计需要Pillow，本机路径仍只在忽略配置中。
+
 ## 2026-09-06 追击速度检查
 
 新增 `tools/chase_speed_qa.gd`，用 `--headless` 输出 `.godot/chase_speed_qa/`；44 项专项、整合实际攻击/AI/兵群共 339 项通过。源码启动方式不变。完整复现与本次 27.88 FPS 限制见[说明](CHASE_SPEED_20260906.md)。

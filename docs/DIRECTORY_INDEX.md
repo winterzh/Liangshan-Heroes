@@ -1,3 +1,11 @@
+## 2026-09-06 林冲四向素材与证据
+
+- `assets/characters/lin_chong_direction4_20260906/`：7张原生RGBA与导入配置。
+- `assets/anim/lin_chong_<动作>_<方向>.tres`：20个基础五状态排帧；`assets/direction4/lin_chong_20260906.json`：来源哈希/实际导入尺寸/区域/脚锚/顺序。
+- `tools/build_directional_spriteframes.py`、`tools/directional_character_sources.py`：通用排帧复核/写入与只读来源审计；`tools/lin_chong_direction4_qa.gd`：资源、实际命令和绘制验证。
+- `tools/contracts/lin_chong_direction4_20260906/`：实际提示词、被采用的原生参考链、三维迈步参考生成代码和姿态配方，`.gdignore`排除常规资源扫描。
+- `docs/LIN_CHONG_DIRECTION4_20260906.md`、`qa/lin_chong_direction4_20260906/`：实现范围、实际截图/回归/全库盘点/输入收据。
+
 ## 2026-09-06 追击速度增量
 
 - `tools/chase_speed_qa.gd`：完整旧/新追击函数的判断、真实移动、速度调用与配对计时。

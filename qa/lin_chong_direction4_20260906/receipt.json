@@ -1,0 +1,915 @@
+{
+  "repository": "https://github.com/winterzh/Liangshan-Heroes.git",
+  "branch": "codex/sync-20260905-stable",
+  "base_commit": "9c19c93496d7c7bfd708bd9bb59fb403f72f3e54",
+  "production_change": "Lin Chong authored attack whitelist and seven native sprite sources, twenty SpriteFrames; no balance changes.",
+  "source_inputs": [
+    {
+      "path": "assets/anim/lin_chong_attack_ne.tres",
+      "workspace_sha256": "d413e64c2bc2a7e2e05b0d089af3520d274329272d721af35ea2aaacd78ed41e",
+      "git_blob": "940eacfac569298c6fb0a8fedd6fc3729fe99570",
+      "repository_sha256": "d413e64c2bc2a7e2e05b0d089af3520d274329272d721af35ea2aaacd78ed41e",
+      "bytes": 1273
+    },
+    {
+      "path": "assets/anim/lin_chong_attack_nw.tres",
+      "workspace_sha256": "5b936a75d91263fb4316c1e5985f8d7ef9853788a32f449e2cff2511ed84608a",
+      "git_blob": "59bbdc37103bcf320e72253a4c0c838636760aa0",
+      "repository_sha256": "5b936a75d91263fb4316c1e5985f8d7ef9853788a32f449e2cff2511ed84608a",
+      "bytes": 1276
+    },
+    {
+      "path": "assets/anim/lin_chong_attack_se.tres",
+      "workspace_sha256": "4474e6e42cc55c8c3cf6848c5113be7914127e91dee2d62d5d6b1bcf98280e1e",
+      "git_blob": "29219c7fa01792048ab9abeb7d3d20bfc87d4ab3",
+      "repository_sha256": "4474e6e42cc55c8c3cf6848c5113be7914127e91dee2d62d5d6b1bcf98280e1e",
+      "bytes": 1273
+    },
+    {
+      "path": "assets/anim/lin_chong_attack_sw.tres",
+      "workspace_sha256": "64f4b0b331796643fe02278e2b11096edfb4bb1c4c1cab387c83239c7da1372d",
+      "git_blob": "b200bcc2e405edadf2ee1f4bc3b4e98334b747b5",
+      "repository_sha256": "64f4b0b331796643fe02278e2b11096edfb4bb1c4c1cab387c83239c7da1372d",
+      "bytes": 1403
+    },
+    {
+      "path": "assets/anim/lin_chong_death_ne.tres",
+      "workspace_sha256": "1d1521057c1f24bb21d9854933f97bc62cf14ec9202e9172022ac825bd695e97",
+      "git_blob": "ddfc41c396c6ed1636c94171e9b79ae41bbacc5d",
+      "repository_sha256": "1d1521057c1f24bb21d9854933f97bc62cf14ec9202e9172022ac825bd695e97",
+      "bytes": 1208
+    },
+    {
+      "path": "assets/anim/lin_chong_death_nw.tres",
+      "workspace_sha256": "268ef9bee8a9b2439d1eab016398b9942db56fa26e384f840d070c645db41c66",
+      "git_blob": "6064964529275137b308fa693fceed61f35d0a58",
+      "repository_sha256": "268ef9bee8a9b2439d1eab016398b9942db56fa26e384f840d070c645db41c66",
+      "bytes": 1211
+    },
+    {
+      "path": "assets/anim/lin_chong_death_se.tres",
+      "workspace_sha256": "d8c5006da1ec2f3ae11d4f7c78320fbfd26d457df4c56b437ba2383e8c18be2f",
+      "git_blob": "a39e7613438fdeec458cb6a2a0725795dc1c94a0",
+      "repository_sha256": "d8c5006da1ec2f3ae11d4f7c78320fbfd26d457df4c56b437ba2383e8c18be2f",
+      "bytes": 1210
+    },
+    {
+      "path": "assets/anim/lin_chong_death_sw.tres",
+      "workspace_sha256": "b1a37a5e2b619ba7856a9dd263efdc61467a3b90d82c2e01ae3d38cda22a043d",
+      "git_blob": "4c82afae47490ccf748b8ff7462ad5d888f5c593",
+      "repository_sha256": "b1a37a5e2b619ba7856a9dd263efdc61467a3b90d82c2e01ae3d38cda22a043d",
+      "bytes": 1206
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_ne.tres",
+      "workspace_sha256": "e8cee1cd86a1ec03c3b021d7b566c8e83e232a542df35474e929d092e3c29208",
+      "git_blob": "1b9343c17a2828907f57901a882f691e6a984817",
+      "repository_sha256": "e8cee1cd86a1ec03c3b021d7b566c8e83e232a542df35474e929d092e3c29208",
+      "bytes": 556
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_nw.tres",
+      "workspace_sha256": "fbeec3a1e40a6a59571201477b17f2a45ab6749e43d358ebb9fa17d51feab72c",
+      "git_blob": "797f7bc718abdf25de320ce2895307a1287961c9",
+      "repository_sha256": "fbeec3a1e40a6a59571201477b17f2a45ab6749e43d358ebb9fa17d51feab72c",
+      "bytes": 558
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_se.tres",
+      "workspace_sha256": "a14c9c0a07e18542bd8e89f9e717efe31cda0cc9da3066c74b946c9ab81e7803",
+      "git_blob": "f6e422f947ba42fcf922b8cd8aa43073758b17ae",
+      "repository_sha256": "a14c9c0a07e18542bd8e89f9e717efe31cda0cc9da3066c74b946c9ab81e7803",
+      "bytes": 556
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_sw.tres",
+      "workspace_sha256": "ce1cc566499e4a0158b150fcb735161cd77915814c841e5e7d2966578868cc94",
+      "git_blob": "60dedb8c3ad4feecccd568da8543a2a87ba33f10",
+      "repository_sha256": "ce1cc566499e4a0158b150fcb735161cd77915814c841e5e7d2966578868cc94",
+      "bytes": 555
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_ne.tres",
+      "workspace_sha256": "82f67dc352c5085e02a99afec3931b96cd17a8136eb0ff2ee56e886dd332be88",
+      "git_blob": "bfd681b99634e974c4e90581783d5fbc1802701e",
+      "repository_sha256": "82f67dc352c5085e02a99afec3931b96cd17a8136eb0ff2ee56e886dd332be88",
+      "bytes": 556
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_nw.tres",
+      "workspace_sha256": "c444607a8d2433662b0eb53038f88ae5355ee70046031aa569d1a4388574a3f8",
+      "git_blob": "4959a5454aa2fd181f3e2fc4aa86c6f71e0f1958",
+      "repository_sha256": "c444607a8d2433662b0eb53038f88ae5355ee70046031aa569d1a4388574a3f8",
+      "bytes": 558
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_se.tres",
+      "workspace_sha256": "54b6d07772a49cf8a44f033dcb6f1713360fd824d743a2e43c87867ad2b62857",
+      "git_blob": "95a08a808155907b3c37566aaafb2ab4feff5cd8",
+      "repository_sha256": "54b6d07772a49cf8a44f033dcb6f1713360fd824d743a2e43c87867ad2b62857",
+      "bytes": 554
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_sw.tres",
+      "workspace_sha256": "8a89744adcd87350ee64a49502b287656830319bc0b390f1fd1836a37769db4f",
+      "git_blob": "2778a135339fc1cf1e36c459bcda80762379fab3",
+      "repository_sha256": "8a89744adcd87350ee64a49502b287656830319bc0b390f1fd1836a37769db4f",
+      "bytes": 556
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_ne.tres",
+      "workspace_sha256": "c8e5ba63c3f46829e656e1a79c9a587673fc3b93641cc3ed98c2850a9eea50b5",
+      "git_blob": "fb50efbfcf4f2127c1d3f71289c467d12ca5ef32",
+      "repository_sha256": "c8e5ba63c3f46829e656e1a79c9a587673fc3b93641cc3ed98c2850a9eea50b5",
+      "bytes": 1368
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_nw.tres",
+      "workspace_sha256": "27219d29436168b27cc48142f765a24ea727add82f6dae6ec4f2de18c1a6bb32",
+      "git_blob": "b749838c718db1a3aa3b996ea78afff5e9096a2f",
+      "repository_sha256": "27219d29436168b27cc48142f765a24ea727add82f6dae6ec4f2de18c1a6bb32",
+      "bytes": 1223
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_se.tres",
+      "workspace_sha256": "afb2c3898091e7d8666f26de06697dcfd9b0f24fa56a2f06a0ab351dacee7779",
+      "git_blob": "44f914f68582a3761b531fdc1d67e5c58224e68d",
+      "repository_sha256": "afb2c3898091e7d8666f26de06697dcfd9b0f24fa56a2f06a0ab351dacee7779",
+      "bytes": 1212
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_sw.tres",
+      "workspace_sha256": "6fdca24d9703f46fec7e5098ca8f74d36bef767573c800e7ecb11e9242158033",
+      "git_blob": "fe65856f21cbd1d58aefc02fa3b8c85f73c6887c",
+      "repository_sha256": "6fdca24d9703f46fec7e5098ca8f74d36bef767573c800e7ecb11e9242158033",
+      "bytes": 1367
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/ne.png",
+      "workspace_sha256": "632171ae6848a457f402f580f4df2f2bdad8570d26e7ff84055e13f26e484bb1",
+      "git_blob": "77af5ea58ab5cd4354115be4d39352e0a1b18d2d",
+      "repository_sha256": "632171ae6848a457f402f580f4df2f2bdad8570d26e7ff84055e13f26e484bb1",
+      "bytes": 1761946
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/ne.png.import",
+      "workspace_sha256": "34b3f2d2317ab24c16e576867632b2097cf6c2b763399543e91295a81dc193c9",
+      "git_blob": "9084d093893c4bbda2c82ac467fb30812392c4b6",
+      "repository_sha256": "34b3f2d2317ab24c16e576867632b2097cf6c2b763399543e91295a81dc193c9",
+      "bytes": 959
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/ne_walk.png",
+      "workspace_sha256": "bcbedb0049d267da8197591a408f5abc78d953bf8e35e90fc224e994e1d21fea",
+      "git_blob": "5985ef810b9298660ad8ee142e4add56da8ac295",
+      "repository_sha256": "bcbedb0049d267da8197591a408f5abc78d953bf8e35e90fc224e994e1d21fea",
+      "bytes": 1126222
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/ne_walk.png.import",
+      "workspace_sha256": "30721f71bd6f3f69fbf8d6b3a30a8641cf6176aa172136f23818b44221056abf",
+      "git_blob": "512d2a02db77e2142321be4f04db7f441df71e93",
+      "repository_sha256": "30721f71bd6f3f69fbf8d6b3a30a8641cf6176aa172136f23818b44221056abf",
+      "bytes": 974
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/nw.png",
+      "workspace_sha256": "ecb817e72efdcd1880f278debdc74eaeda364b88ef886e94056fe0db9168dbe7",
+      "git_blob": "531bc0ab4f06c26a0c8736ea87c5d81d916c812c",
+      "repository_sha256": "ecb817e72efdcd1880f278debdc74eaeda364b88ef886e94056fe0db9168dbe7",
+      "bytes": 1774532
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/nw.png.import",
+      "workspace_sha256": "b2e6a3922267a14903d9e96f316f4a1b9d4a6cffb3c58b17a8a23684967dbaa0",
+      "git_blob": "9969a43c9147b42844303c470b8f5366b77f2b56",
+      "repository_sha256": "b2e6a3922267a14903d9e96f316f4a1b9d4a6cffb3c58b17a8a23684967dbaa0",
+      "bytes": 959
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/se.png",
+      "workspace_sha256": "e09036504729a1c4d899bd6e9c935db948b9ba765ae053109bfd98cb6bc07c92",
+      "git_blob": "487a34844ff0e5786cd68ce18a2213a8660e0a2e",
+      "repository_sha256": "e09036504729a1c4d899bd6e9c935db948b9ba765ae053109bfd98cb6bc07c92",
+      "bytes": 2109265
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/se.png.import",
+      "workspace_sha256": "ff1c31ca5031b2a012abe1065c8014e026af0161997d74947271c3e9e021a22d",
+      "git_blob": "f487ad27e4d487acb617b716d57676e7aa801e8f",
+      "repository_sha256": "ff1c31ca5031b2a012abe1065c8014e026af0161997d74947271c3e9e021a22d",
+      "bytes": 959
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw.png",
+      "workspace_sha256": "8dcef108eb8ce6c7a755300463f44c3fe7b73859170e57e7d51d8479927c4516",
+      "git_blob": "f69fa556a9e552d2404e69c7c4f12cd491541cb4",
+      "repository_sha256": "8dcef108eb8ce6c7a755300463f44c3fe7b73859170e57e7d51d8479927c4516",
+      "bytes": 2214652
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw.png.import",
+      "workspace_sha256": "3e25a2aa41d930c8d637bf2ea4543076f9bc9d38c7ee7c75e8dd90414d6b0faa",
+      "git_blob": "8727a77cf23db42a89b4110c25d3129b91fcb371",
+      "repository_sha256": "3e25a2aa41d930c8d637bf2ea4543076f9bc9d38c7ee7c75e8dd90414d6b0faa",
+      "bytes": 959
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw_walk.png",
+      "workspace_sha256": "a31a2dc72f672eb0b6a48d47b5929d132e5717579ba6935973c52dd8a0fe299d",
+      "git_blob": "17bc2f406b605b0d5ea3a07fe0b0e3712662dfc9",
+      "repository_sha256": "a31a2dc72f672eb0b6a48d47b5929d132e5717579ba6935973c52dd8a0fe299d",
+      "bytes": 1037971
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw_walk.png.import",
+      "workspace_sha256": "15740eeecdebbb4685537887ac8a93f5e57b3e8ccdbb55ac1c48a9c8a0afd491",
+      "git_blob": "b95491d74247e06565c0044edaf052d48c1ea4df",
+      "repository_sha256": "15740eeecdebbb4685537887ac8a93f5e57b3e8ccdbb55ac1c48a9c8a0afd491",
+      "bytes": 974
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw_windup.png",
+      "workspace_sha256": "8fec14ce9a811c05c9c3e65a74ee3837458953e7eec21f5d792c5cc6e6cd421d",
+      "git_blob": "6e4b631a840875a7d89877f2ab1f1a2327c54b98",
+      "repository_sha256": "8fec14ce9a811c05c9c3e65a74ee3837458953e7eec21f5d792c5cc6e6cd421d",
+      "bytes": 2099599
+    },
+    {
+      "path": "assets/characters/lin_chong_direction4_20260906/sw_windup.png.import",
+      "workspace_sha256": "ee93c4c5767ea89d98687492c9f14a15111dd970cc878a85f9dd2e969469f2e6",
+      "git_blob": "671c28d1c914f602d1416720d1c3f91c35d72bd3",
+      "repository_sha256": "ee93c4c5767ea89d98687492c9f14a15111dd970cc878a85f9dd2e969469f2e6",
+      "bytes": 980
+    },
+    {
+      "path": "assets/direction4/lin_chong_20260906.json",
+      "workspace_sha256": "3fc7e0281f923cca06bc4f9e0b1a4bdab724026da6ad3e826f7902144b8879e9",
+      "git_blob": "ae2e8c92e6e3d799305c8478b701f444d07d36c3",
+      "repository_sha256": "3fc7e0281f923cca06bc4f9e0b1a4bdab724026da6ad3e826f7902144b8879e9",
+      "bytes": 21378
+    },
+    {
+      "path": "docs/CHARACTER_DIRECTION4_20260905.md",
+      "workspace_sha256": "570bfa844bbd7a57616d88c6cf73a11ffc2b33ea75912212062ac64ecc169196",
+      "git_blob": "3deaa4e7f91ae5ee1779166c9cbf9886d181f502",
+      "repository_sha256": "96c6722ade07d625d5e7dd51dfde7c365f03ed5b3e5b792aedd2b9b8672c7bc5",
+      "bytes": 5335
+    },
+    {
+      "path": "docs/DIRECTORY_INDEX.md",
+      "workspace_sha256": "46c964087e003c9fbbdf39b2ac705ba04cf2f25a20ffd9e72cc163bd3589d1a1",
+      "git_blob": "1e4c3fc7dcae0c59f70769f1800d48ed228dcff5",
+      "repository_sha256": "9a8a6bf4700904edcdc7d60c2d42a3eb988b9b17b1eb56e8d5fdc7421280a514",
+      "bytes": 20532
+    },
+    {
+      "path": "docs/LIN_CHONG_DIRECTION4_20260906.md",
+      "workspace_sha256": "c7b0269abd2c2adc1af45e88c138696c015618c6fcb46beecf29da5f7179b29c",
+      "git_blob": "96c63f3b01c4fd9c2fb4d1204319e2c056f2b771",
+      "repository_sha256": "c7b0269abd2c2adc1af45e88c138696c015618c6fcb46beecf29da5f7179b29c",
+      "bytes": 5001
+    },
+    {
+      "path": "docs/RELEASE_READINESS_20260905.md",
+      "workspace_sha256": "772d0d6db48b44b0b793b06d5bd5bb506a4b7a90b50f6482c4594575186f07e3",
+      "git_blob": "8e51eb6255b5b938db35f3debe0bfe3059ce57d8",
+      "repository_sha256": "f0596829fe888c6eed107e18e8f845c92d47352a025c81d714079a4c3ff56492",
+      "bytes": 12249
+    },
+    {
+      "path": "docs/SOURCE_SETUP.md",
+      "workspace_sha256": "1d39d91bfc16f6ca9835ff0ba8b1a0a28729cef124bf31142fb54e7f05a66d86",
+      "git_blob": "8463268d84a28faaf89a9e4789f0d5eb7636c6f7",
+      "repository_sha256": "670cb15cbfb2a2599511878503405feb4e1cc6175af8bff585a08411bdc0e398",
+      "bytes": 72070
+    },
+    {
+      "path": "docs/WORKLOG.md",
+      "workspace_sha256": "b93fae58ea262f211f4a22a69925b0eaa0f17c9336f8bd1d44ec9c23696e238f",
+      "git_blob": "dc8098d5e09c5919e088b7ddf3bc132fbd1188cd",
+      "repository_sha256": "41b7db7027da4428b426ac6b1bfbc3bd31e83e59965e49a4c2a7a1fad9f8c97a",
+      "bytes": 178915
+    },
+    {
+      "path": "project.godot",
+      "workspace_sha256": "5f60d39f4817f3428c82c29004cc8bd4314e89ef322728c79266ee08dd63793c",
+      "git_blob": "5d245d1af42c1ea6002f5d30f222d169bc7063ff",
+      "repository_sha256": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32",
+      "bytes": 1467
+    },
+    {
+      "path": "qa/character_direction4_inventory_20260905/candidates/lin_chong.png",
+      "workspace_sha256": "6bd17c3a98f03d77ab0c19587a2b07079951eaf68e27cf38db7a1168cf1fdc1a",
+      "git_blob": "0019ffdd49c0474cfef65e52f463e9c96d2b564b",
+      "repository_sha256": "6bd17c3a98f03d77ab0c19587a2b07079951eaf68e27cf38db7a1168cf1fdc1a",
+      "bytes": 102331
+    },
+    {
+      "path": "scripts/art_db.gd",
+      "workspace_sha256": "40c9479302613f7175f1ff18ac0ca6d35516bd8a1adf369db78198a83a84203c",
+      "git_blob": "5cd0e54af967c3a46fe22068d86eef5e099c6795",
+      "repository_sha256": "acf9a1cc278436bd6aa013816cbe92d33f9fbf5d41c6e9d1bd294e39c5c11c2a",
+      "bytes": 42619
+    },
+    {
+      "path": "scripts/battle.gd",
+      "workspace_sha256": "ebe45f8c5517c6beb73cc7e6b55edb3008444b0e9ef4da0fd4a4286925dbe556",
+      "git_blob": "ba1cd26a1ac5ce10a3c186b5518c90f436c66367",
+      "repository_sha256": "ebe45f8c5517c6beb73cc7e6b55edb3008444b0e9ef4da0fd4a4286925dbe556",
+      "bytes": 757860
+    },
+    {
+      "path": "scripts/campaign_art.gd",
+      "workspace_sha256": "dfcbef879857d7676ad6f024a639c288d28dd477f896149e943a892a8c10443e",
+      "git_blob": "9c04dab677274b259fab32fc19898d27eee2d72f",
+      "repository_sha256": "dfcbef879857d7676ad6f024a639c288d28dd477f896149e943a892a8c10443e",
+      "bytes": 14226
+    },
+    {
+      "path": "scripts/campaign_gate_visual.gd",
+      "workspace_sha256": "8e4da265f7cd8cdac782df03f474e2a1edad3ac9557ba54d341fe86803c61ca4",
+      "git_blob": "d56bc28ae280fb23294da3e5b0017ec71cb8fe26",
+      "repository_sha256": "8e4da265f7cd8cdac782df03f474e2a1edad3ac9557ba54d341fe86803c61ca4",
+      "bytes": 3489
+    },
+    {
+      "path": "scripts/defs.gd",
+      "workspace_sha256": "4cb4fa2288235aff117d7373794f335b5cc5092bf8fad5fd416d0f7dc5c1b155",
+      "git_blob": "8fb7ad8253dceba93f33cf0f26edbe48c07ddac2",
+      "repository_sha256": "a2f9a9fe9a669829871c0bcb9fd9295b451e8b9744993deb4f007ab1d80607fb",
+      "bytes": 216874
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "workspace_sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+      "git_blob": "48cd8fe5c53ee18bebd7d314f9945908b8037fb9",
+      "repository_sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+      "bytes": 34327
+    },
+    {
+      "path": "scripts/liangshan_stockade.gd",
+      "workspace_sha256": "1df1216f54c2e95392735422c737adbd795fc401cc18344faafa1de05513ec17",
+      "git_blob": "bb6a9dddd3b264900e5e12b0418b64324e2d4a89",
+      "repository_sha256": "1df1216f54c2e95392735422c737adbd795fc401cc18344faafa1de05513ec17",
+      "bytes": 3432
+    },
+    {
+      "path": "scripts/unit.gd",
+      "workspace_sha256": "ea2cf50a4dcc39188be2473d1f10fd0094ffb67de5d5bc4dfa41d0d7cf50358a",
+      "git_blob": "7b3476ab47263dc41d07ad89cf08d8a5e1a0797e",
+      "repository_sha256": "ea2cf50a4dcc39188be2473d1f10fd0094ffb67de5d5bc4dfa41d0d7cf50358a",
+      "bytes": 196911
+    },
+    {
+      "path": "tools/build_directional_spriteframes.py",
+      "workspace_sha256": "da136d72a85f5f6b10fa97c698e60b1a422336deb8373a40126e39044fb36f09",
+      "git_blob": "c3a8eaf4d0a0b290ae250e5e9e20df9654abeecf",
+      "repository_sha256": "da136d72a85f5f6b10fa97c698e60b1a422336deb8373a40126e39044fb36f09",
+      "bytes": 4580
+    },
+    {
+      "path": "tools/campaign_art_contract.gd",
+      "workspace_sha256": "f79dac7832b51a92e40f5f1562c0b52f39e5ce9e77eea0eee8a976bfb1f29108",
+      "git_blob": "32153d151c92828eb244ecc0ddc0affc23060f06",
+      "repository_sha256": "2599161e8a38c95d80ac0b894293c7e383c1bedab9a91053a3a6e4d71dc962cf",
+      "bytes": 12345
+    },
+    {
+      "path": "tools/campaign_terminal_costume_qa.gd",
+      "workspace_sha256": "a9dcbc2a103c500032945c1de605624606f8f94b1042a111c9225795b041c75c",
+      "git_blob": "be10b1a8399c19d8c41e76610a1e260388665efe",
+      "repository_sha256": "a9dcbc2a103c500032945c1de605624606f8f94b1042a111c9225795b041c75c",
+      "bytes": 7322
+    },
+    {
+      "path": "tools/campaign_terminal_visual_unit.gd",
+      "workspace_sha256": "cd0abedfcae5c89bcf52c51fcb9749f4f71f2eb56910c3e7762450d65b19405d",
+      "git_blob": "6b462f71d4358dfa013c8dfba4f73d3b9a8bdccc",
+      "repository_sha256": "cd0abedfcae5c89bcf52c51fcb9749f4f71f2eb56910c3e7762450d65b19405d",
+      "bytes": 421
+    },
+    {
+      "path": "tools/character_direction4_inventory.gd",
+      "workspace_sha256": "e07fa09d5a37445144c22268f62ed1135eddebc9aaba82a61c1e4af6241da17e",
+      "git_blob": "e7eb13edb8a45325200cb974d80e995f3753c6df",
+      "repository_sha256": "e07fa09d5a37445144c22268f62ed1135eddebc9aaba82a61c1e4af6241da17e",
+      "bytes": 3050
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/.gdignore",
+      "workspace_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "repository_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/.gitattributes",
+      "workspace_sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "git_blob": "4f7fc3ef1406bfab189a4a14744c344f36d77d9a",
+      "repository_sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "bytes": 29
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/README.md",
+      "workspace_sha256": "7d1283a2bcbd9eebce673c94fd9965d573f5ab47318086c38e28cc4c4d3e7117",
+      "git_blob": "b5e76d9748ec05dbea6ad3141ae19f9c2afa3f02",
+      "repository_sha256": "7d1283a2bcbd9eebce673c94fd9965d573f5ab47318086c38e28cc4c4d3e7117",
+      "bytes": 1820
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/generation.json",
+      "workspace_sha256": "962dca1b2a27e5abd503821385d84523860487f34f18dbf4f82cf6741efe9a3b",
+      "git_blob": "d89a9cd10bc81cd44101fa6da3fa4ff1b11bc430",
+      "repository_sha256": "962dca1b2a27e5abd503821385d84523860487f34f18dbf4f82cf6741efe9a3b",
+      "bytes": 48012
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/lc_pose_guide.gd.txt",
+      "workspace_sha256": "620c15a7c0833d47989c6283ac54ee175f6aed4d7cf142559b3fd84027b683a5",
+      "git_blob": "313d4a4316f0c9f67caf5c0d76dd8510c9749daf",
+      "repository_sha256": "620c15a7c0833d47989c6283ac54ee175f6aed4d7cf142559b3fd84027b683a5",
+      "bytes": 3173
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/lc_two_step_guide.gd.txt",
+      "workspace_sha256": "7ad6e749c824d8c921f5891f559c090edd82dfa8f30918b0d33faed78b8dc18d",
+      "git_blob": "25b5aac8a3f27fa9c159f5a71061c947fbb03bc2",
+      "repository_sha256": "7ad6e749c824d8c921f5891f559c090edd82dfa8f30918b0d33faed78b8dc18d",
+      "bytes": 2777
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/pose_recipe.json",
+      "workspace_sha256": "17c708e0d64d7b2ae77d48101da69100ebd250604ee27404c8651674197f2573",
+      "git_blob": "4bc53df39dcffda3762ba6c6892c2668c06b0dd1",
+      "repository_sha256": "17c708e0d64d7b2ae77d48101da69100ebd250604ee27404c8651674197f2573",
+      "bytes": 9221
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/ne_walk_pair.png",
+      "workspace_sha256": "bdc115401267aac00efdc32898784941ccda9a6f3c9a0d4ebe88a06b90559ab6",
+      "git_blob": "f44d372fec5a06751016576bfd0bb625205825f7",
+      "repository_sha256": "bdc115401267aac00efdc32898784941ccda9a6f3c9a0d4ebe88a06b90559ab6",
+      "bytes": 1261631
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/nw.png",
+      "workspace_sha256": "1d49dcc2447155760f6ab66070dd880640acd825942a0a62f503ec916016abb7",
+      "git_blob": "044fee1a9d04ed3aa06954aa839b114c9ad2e374",
+      "repository_sha256": "1d49dcc2447155760f6ab66070dd880640acd825942a0a62f503ec916016abb7",
+      "bytes": 1413002
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/nw_alpha.png",
+      "workspace_sha256": "90a985772241dc9b2dde41dfe4104d8b5b2894852a1590ba35b7dc0d5e9e2b86",
+      "git_blob": "6641c00ecd4dbd1aab4e14b989e625fdf3888307",
+      "repository_sha256": "90a985772241dc9b2dde41dfe4104d8b5b2894852a1590ba35b7dc0d5e9e2b86",
+      "bytes": 2225185
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/nw_layout.png",
+      "workspace_sha256": "b6dd5cd85bb64940b94b172f667f52ddad092f2748cc6c861a2cad2bac95e9df",
+      "git_blob": "2e8259ee899905ccc76f9e0008e4f19ccb0adc49",
+      "repository_sha256": "b6dd5cd85bb64940b94b172f667f52ddad092f2748cc6c861a2cad2bac95e9df",
+      "bytes": 1593531
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/nw_layout_alpha.png",
+      "workspace_sha256": "e0288c693dcb7144fd35c2d246b37ec962db66e63376179bb493ab5e24642aa9",
+      "git_blob": "df53a97d1aac15fecdfd8079d9691dc45e64926a",
+      "repository_sha256": "e0288c693dcb7144fd35c2d246b37ec962db66e63376179bb493ab5e24642aa9",
+      "bytes": 2088753
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/se.png",
+      "workspace_sha256": "6a74b23c152eb710e8f503277740055062850005cdea539ef7eea785c0af0aa1",
+      "git_blob": "4d2253abfd1b088728d279d06dfd460afdc32966",
+      "repository_sha256": "6a74b23c152eb710e8f503277740055062850005cdea539ef7eea785c0af0aa1",
+      "bytes": 1546300
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/se_alpha.png",
+      "workspace_sha256": "37e244fcdb6403469c674075f50914492a63ead3a7aabf09dee4269ac8f66ee7",
+      "git_blob": "62625ef62fcb751da2b20365103bd24d061ae0e5",
+      "repository_sha256": "37e244fcdb6403469c674075f50914492a63ead3a7aabf09dee4269ac8f66ee7",
+      "bytes": 1560925
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/se_alpha2.png",
+      "workspace_sha256": "64842e1a4bd1b4a558e9580cdc85c084e13c6d958091592068b03f53a0e19f0a",
+      "git_blob": "e66095d8ace714a7c720387ffa5106b27c340059",
+      "repository_sha256": "64842e1a4bd1b4a558e9580cdc85c084e13c6d958091592068b03f53a0e19f0a",
+      "bytes": 2489741
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/se_layout.png",
+      "workspace_sha256": "f28c89a0955a0358943b42bd6be6ebb1fe65b1bc5eacfed5e16e8f830e2de79b",
+      "git_blob": "7e07ff81bbcad76974f03a343f38eefcc491ac7a",
+      "repository_sha256": "f28c89a0955a0358943b42bd6be6ebb1fe65b1bc5eacfed5e16e8f830e2de79b",
+      "bytes": 1623980
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/se_layout_alpha.png",
+      "workspace_sha256": "6fd81485f5868c9e5d1cfeedfd2f96bdd3b6a0f28e624375888f521f20e9bc07",
+      "git_blob": "13f3916149a2e026ba66397a880517d331b3965c",
+      "repository_sha256": "6fd81485f5868c9e5d1cfeedfd2f96bdd3b6a0f28e624375888f521f20e9bc07",
+      "bytes": 2357794
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/se_spaced.png",
+      "workspace_sha256": "97faf2dff9aa1ef07b3d82a7231a5e29948ec309619306d1f106b35974a2257e",
+      "git_blob": "be9de71b158ab2c7b95d6bcbe678d743dba9e592",
+      "repository_sha256": "97faf2dff9aa1ef07b3d82a7231a5e29948ec309619306d1f106b35974a2257e",
+      "bytes": 1445326
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/sw_guard_heads.png",
+      "workspace_sha256": "1a5801d7ad51b56d2470fc5f813bc1acf7e6eaf09290bd7148e7e9f73d052bf9",
+      "git_blob": "fbc3b49a4c74153134cf2486bbc2879bcb5b6080",
+      "repository_sha256": "1a5801d7ad51b56d2470fc5f813bc1acf7e6eaf09290bd7148e7e9f73d052bf9",
+      "bytes": 2231972
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/sw_single_guard.png",
+      "workspace_sha256": "d091f237286ad585cc95046f1206a5e2bc5de8f835cbca52c134abb5b7afed07",
+      "git_blob": "6d598884644a98a436a476ddbcb68352d8157eed",
+      "repository_sha256": "d091f237286ad585cc95046f1206a5e2bc5de8f835cbca52c134abb5b7afed07",
+      "bytes": 2093527
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/sw_walk_pair.png",
+      "workspace_sha256": "ab8c22c991d9d672c549d1659336305d04ccb36f36839a79407616bafe0ad6cf",
+      "git_blob": "8dd1bc5f548c1bc79cf2fc5d569e2930d354a580",
+      "repository_sha256": "ab8c22c991d9d672c549d1659336305d04ccb36f36839a79407616bafe0ad6cf",
+      "bytes": 1149708
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/sw_walk_pair_heads.png",
+      "workspace_sha256": "105a3d943129fcb02dc8fd0ec6e34ecc1bfb57e45fb060ef9fb310c327239df6",
+      "git_blob": "9099c540ab8e1fc7a53230a7f6f93b350f399643",
+      "repository_sha256": "105a3d943129fcb02dc8fd0ec6e34ecc1bfb57e45fb060ef9fb310c327239df6",
+      "bytes": 1343527
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/two_step_guide_ne.png",
+      "workspace_sha256": "71258ab940d860ba9bf451a9f6f57d9290457b3401410e07e174bf5db04e0cbe",
+      "git_blob": "a11f975223982afbc0afc6ee7ed4524b24bb20b4",
+      "repository_sha256": "71258ab940d860ba9bf451a9f6f57d9290457b3401410e07e174bf5db04e0cbe",
+      "bytes": 61252
+    },
+    {
+      "path": "tools/contracts/lin_chong_direction4_20260906/references/two_step_guide_sw.png",
+      "workspace_sha256": "eb3062eb3bee95968ee2bf3551610f14e72a91af48d24abe3ba343d48e57c3e1",
+      "git_blob": "f112d6e2157100beb32d2bf138efa8424300e88a",
+      "repository_sha256": "eb3062eb3bee95968ee2bf3551610f14e72a91af48d24abe3ba343d48e57c3e1",
+      "bytes": 63783
+    },
+    {
+      "path": "tools/directional_character_sources.py",
+      "workspace_sha256": "3d3e4af46ed25d793e51d16db9aeb32418f683e1f967d5ad6a02fef1ae0fdc55",
+      "git_blob": "e1565663dff26d532ca380fe740128d0d5f9d4cc",
+      "repository_sha256": "3d3e4af46ed25d793e51d16db9aeb32418f683e1f967d5ad6a02fef1ae0fdc55",
+      "bytes": 6094
+    },
+    {
+      "path": "tools/lin_chong_direction4_qa.gd",
+      "workspace_sha256": "9d91548c81f87e2905672d4e08884b110d63bb1b1ae6f18613a0b9ff19f6f7a5",
+      "git_blob": "df21abc597dc1870de583ea0b548a352601b8c82",
+      "repository_sha256": "9d91548c81f87e2905672d4e08884b110d63bb1b1ae6f18613a0b9ff19f6f7a5",
+      "bytes": 11542
+    },
+    {
+      "path": "tools/skirmish_direction4_contract_test.gd",
+      "workspace_sha256": "b7502cda91f36b42d711d4c30fc43fce690b89ff0619e45f120fa29acec2ff81",
+      "git_blob": "855796f80faca72378f88e06ae1b0a7e5ed016f9",
+      "repository_sha256": "bc23491a56052be548f6c4c2bacf94d3e13ab2f7afe7ff19b163543851f78ff8",
+      "bytes": 20903
+    },
+    {
+      "path": "tools/song_jiang_direction4_qa.gd",
+      "workspace_sha256": "9904739a66a92e3ebc1b36e8a35cf7d451600f12bb1951b000bc2702796ac23b",
+      "git_blob": "597ce8849ac8d40d7428067c303155577fbd9e5f",
+      "repository_sha256": "9904739a66a92e3ebc1b36e8a35cf7d451600f12bb1951b000bc2702796ac23b",
+      "bytes": 9784
+    },
+    {
+      "path": "tools/wall_alignment_test.gd",
+      "workspace_sha256": "42cade33c125d3475429c7c1aa4cac1d3494bce1a4252d6951a17dd25a77b4df",
+      "git_blob": "0c80db373c9d375fd508f8940ad0163d4f8b4b7c",
+      "repository_sha256": "42cade33c125d3475429c7c1aa4cac1d3494bce1a4252d6951a17dd25a77b4df",
+      "bytes": 4736
+    },
+    {
+      "path": "tools/zhujiazhuang_gate_art_qa.gd",
+      "workspace_sha256": "9b929bf10b8a2cb49054cfe3e1959940cf694520f7fd2a23da8ab4ff902c6419",
+      "git_blob": "ec66cd9ec1a1e2ff63dd49d763e7623cb3d17e91",
+      "repository_sha256": "9b929bf10b8a2cb49054cfe3e1959940cf694520f7fd2a23da8ab4ff902c6419",
+      "bytes": 4138
+    },
+    {
+      "path": "tools/zhujiazhuang_gate_contact_test.gd",
+      "workspace_sha256": "e2f412d40f1bb72356dd5f46c790013df9c388da4568b946158408f4de6d7763",
+      "git_blob": "904da67eaa2e7956ee5dbf5d102b27211e134881",
+      "repository_sha256": "e2f412d40f1bb72356dd5f46c790013df9c388da4568b946158408f4de6d7763",
+      "bytes": 5421
+    },
+    {
+      "path": "tools/zhujiazhuang_rts_test.gd",
+      "workspace_sha256": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+      "git_blob": "abc8b9977fc933f0d55b5f472a28fe77c7ce6d32",
+      "repository_sha256": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+      "bytes": 15364
+    }
+  ],
+  "evidence": [
+    {
+      "path": "qa/lin_chong_direction4_20260906/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/.gitattributes",
+      "sha256": "426fb2347e66f8458359c309e3511ebb29b78643bfe6c1387b24cd137b18c88c",
+      "bytes": 76
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/generic_tools_song_regression.json",
+      "sha256": "421a86f9b1bac6472d61e167192c76333a0140002080dbf0ca8040da137ab0b9",
+      "bytes": 22420
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/import_final.log",
+      "sha256": "4a7168a6652f02a7e96861786f551aced82ea67c844f9a2c8e80ecb235683230",
+      "bytes": 3178
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/import_initial.log",
+      "sha256": "7cae48b3b7b6064ea4df389ac34c6b2a7964acbbcd9c30c7f244c121067d3d91",
+      "bytes": 2374
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/import_sizes.log",
+      "sha256": "fca22a2906ac4a13da1b16ee9ae04f01589d213f65ff1cae7b3a54a287e66aec",
+      "bytes": 208
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/integration_chase.json",
+      "sha256": "92cc1367f4d721fbfcf1e43a0cd52e8274a93a492dc69996ba8cc49e7e88b672",
+      "bytes": 3510
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/integration_grid.json",
+      "sha256": "4e19a89f2b23d492f6303a1e1f081c7e3275c9f0e846edbafcabb79f57b020b5",
+      "bytes": 3895
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/native_audit.json",
+      "sha256": "08e269bb76371f831e25e9c5a83579faf61a218c79d9fa4e9a148a9befbd09f4",
+      "bytes": 21976
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/README.md",
+      "sha256": "bfb0414330717e9fff808b624e3e60dc3b162fe182a9aed281efb03ae60b7672",
+      "bytes": 1948
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/campaign_art.json",
+      "sha256": "994b5b36a4e13c53020477cc5b32041dc2b5b2a46e50ab2f1dfa9a4d81d08c4a",
+      "bytes": 15051
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/campaign_art.log",
+      "sha256": "198219ec0db783549d2b739cbb253b9f05d24ab867f236c8b901d3a50012daae",
+      "bytes": 123
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/contact/report.json",
+      "sha256": "f9e1116089555ef9c9f02a5980abf731e77d548fa6b4aeab34385ff54028fd2b",
+      "bytes": 197
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/contact.log",
+      "sha256": "1be37aa3df4825d3b03177b6ad4b0822c3fba0025f01819c58d789872175a409",
+      "bytes": 1371
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/gate/both_wide.png",
+      "sha256": "2fc73d3f2f421f6c31353dadb70d0863f8e9af9813ce922622778788eebfaafa",
+      "bytes": 2331720
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/gate/main_close.png",
+      "sha256": "9812c4313409acf569bb6018c4fc47d6aa3ebb5c883bd4da5ea96705794924ec",
+      "bytes": 1926022
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/gate/report.json",
+      "sha256": "3c16c2f9bf8ada7eaca991f4a4448edd9d19f88abb0c103c5dced4f5cbb255a8",
+      "bytes": 390
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/gate/side_close.png",
+      "sha256": "f31a45985bc8c18b3c13f09b8805d27d7e7152e986ec424cd045b98e28104473",
+      "bytes": 2021629
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/gate.log",
+      "sha256": "959da487a6aa70cb1da8c465b760f14f377d098cfd5fc1d2953fd8ee4a620bb5",
+      "bytes": 1699
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/inventory/inventory.csv",
+      "sha256": "fa0c5e6e2fe385503600219b8dc0a53136980adf964afc0fcc84a4112d4f59ef",
+      "bytes": 5573
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/inventory/inventory.json",
+      "sha256": "d85917e65f9554fb06e4296763ece869256d56a8fe093b16a558094c6135c52b",
+      "bytes": 84010
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/inventory.log",
+      "sha256": "c61904ede6987cff43f6b90040f4cf42a8553130ecd59b0fbbec1dee87bda1bf",
+      "bytes": 293
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/routing/report.json",
+      "sha256": "19be457c30d3ddf92b7fafab97f3c8eb8fd588ddd06213002cfbc9e1a2344169",
+      "bytes": 291270
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/routing.log",
+      "sha256": "4e37aca35258b351a26dfdd975b2ce0b05288f4609106c394d0e66dd0b20edd5",
+      "bytes": 2004
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/runs.json",
+      "sha256": "e5771227d1226ab0b34c9e79d7ffeca07d1945004b4797d48e6e3a24d35e2bd7",
+      "bytes": 1854
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/song/report.json",
+      "sha256": "58bd534e222f4eae4301cf194ce1ee419e4f95ad22a9789b666be9c8564cab7d",
+      "bytes": 4848
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/song.log",
+      "sha256": "6b291e41bf738b02d38b8abde385ab2bfba3a5c9d9255357c5842c60192be25a",
+      "bytes": 10770
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/terminal/costume_matrix.png",
+      "sha256": "657c44c50e1979bf46ae3850ffcda7890afce73adeeb1acea37d672011e837e5",
+      "bytes": 318500
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/terminal/report.json",
+      "sha256": "50208b319c8be070700632759b8a8613530340469237f6975895c23dced2c621",
+      "bytes": 2607
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/terminal.log",
+      "sha256": "8fbfeab8fc9a6d758160605f2d2375e0a8b3619bab5da99ed15df7118ad61c86",
+      "bytes": 20750
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/regressions/wall.log",
+      "sha256": "f25d7658db19a1d0580964bc7296cc3d663bad3c8f48851833d8bf3d78a2fba9",
+      "bytes": 3278
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/runtime/live_melee.png",
+      "sha256": "ba7695832d5a982a7870a1d9f1499bda35c10a7bf34741836bcc3bf0bd783c00",
+      "bytes": 2057156
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/runtime/report.json",
+      "sha256": "783b65f4d6ee94ef0ba25fd9a6cdd6b84614c6104bb0deb092eb1929ea671ef2",
+      "bytes": 8509
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/runtime/unit_pose_matrix.png",
+      "sha256": "6b88b38904d4098d2adb201b4720eac43b022a1f8e10a6a218392ec8131b9ca9",
+      "bytes": 345769
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/runtime_console.log",
+      "sha256": "215abdca4f870b0483c7e13a9b5232880f11c1704c04095df73a63913780d17f",
+      "bytes": 17124
+    },
+    {
+      "path": "qa/lin_chong_direction4_20260906/summary.json",
+      "sha256": "54301a8a2385aae6b3ac8e5d54f7d1691bb01b87f023b541e165d89dfed04c44",
+      "bytes": 856
+    }
+  ],
+  "selected_paths": [
+    "assets/anim/lin_chong_attack_ne.tres",
+    "assets/anim/lin_chong_attack_nw.tres",
+    "assets/anim/lin_chong_attack_se.tres",
+    "assets/anim/lin_chong_attack_sw.tres",
+    "assets/anim/lin_chong_death_ne.tres",
+    "assets/anim/lin_chong_death_nw.tres",
+    "assets/anim/lin_chong_death_se.tres",
+    "assets/anim/lin_chong_death_sw.tres",
+    "assets/anim/lin_chong_hurt_ne.tres",
+    "assets/anim/lin_chong_hurt_nw.tres",
+    "assets/anim/lin_chong_hurt_se.tres",
+    "assets/anim/lin_chong_hurt_sw.tres",
+    "assets/anim/lin_chong_idle_ne.tres",
+    "assets/anim/lin_chong_idle_nw.tres",
+    "assets/anim/lin_chong_idle_se.tres",
+    "assets/anim/lin_chong_idle_sw.tres",
+    "assets/anim/lin_chong_walk_ne.tres",
+    "assets/anim/lin_chong_walk_nw.tres",
+    "assets/anim/lin_chong_walk_se.tres",
+    "assets/anim/lin_chong_walk_sw.tres",
+    "assets/characters/lin_chong_direction4_20260906/ne.png",
+    "assets/characters/lin_chong_direction4_20260906/ne.png.import",
+    "assets/characters/lin_chong_direction4_20260906/ne_walk.png",
+    "assets/characters/lin_chong_direction4_20260906/ne_walk.png.import",
+    "assets/characters/lin_chong_direction4_20260906/nw.png",
+    "assets/characters/lin_chong_direction4_20260906/nw.png.import",
+    "assets/characters/lin_chong_direction4_20260906/se.png",
+    "assets/characters/lin_chong_direction4_20260906/se.png.import",
+    "assets/characters/lin_chong_direction4_20260906/sw.png",
+    "assets/characters/lin_chong_direction4_20260906/sw.png.import",
+    "assets/characters/lin_chong_direction4_20260906/sw_walk.png",
+    "assets/characters/lin_chong_direction4_20260906/sw_walk.png.import",
+    "assets/characters/lin_chong_direction4_20260906/sw_windup.png",
+    "assets/characters/lin_chong_direction4_20260906/sw_windup.png.import",
+    "assets/direction4/lin_chong_20260906.json",
+    "docs/CHARACTER_DIRECTION4_20260905.md",
+    "docs/DIRECTORY_INDEX.md",
+    "docs/LIN_CHONG_DIRECTION4_20260906.md",
+    "docs/RELEASE_READINESS_20260905.md",
+    "docs/SOURCE_SETUP.md",
+    "docs/WORKLOG.md",
+    "qa/lin_chong_direction4_20260906/.gdignore",
+    "qa/lin_chong_direction4_20260906/.gitattributes",
+    "qa/lin_chong_direction4_20260906/README.md",
+    "qa/lin_chong_direction4_20260906/generic_tools_song_regression.json",
+    "qa/lin_chong_direction4_20260906/import_final.log",
+    "qa/lin_chong_direction4_20260906/import_initial.log",
+    "qa/lin_chong_direction4_20260906/import_sizes.log",
+    "qa/lin_chong_direction4_20260906/integration_chase.json",
+    "qa/lin_chong_direction4_20260906/integration_grid.json",
+    "qa/lin_chong_direction4_20260906/native_audit.json",
+    "qa/lin_chong_direction4_20260906/regressions/campaign_art.json",
+    "qa/lin_chong_direction4_20260906/regressions/campaign_art.log",
+    "qa/lin_chong_direction4_20260906/regressions/contact.log",
+    "qa/lin_chong_direction4_20260906/regressions/contact/report.json",
+    "qa/lin_chong_direction4_20260906/regressions/gate.log",
+    "qa/lin_chong_direction4_20260906/regressions/gate/both_wide.png",
+    "qa/lin_chong_direction4_20260906/regressions/gate/main_close.png",
+    "qa/lin_chong_direction4_20260906/regressions/gate/report.json",
+    "qa/lin_chong_direction4_20260906/regressions/gate/side_close.png",
+    "qa/lin_chong_direction4_20260906/regressions/inventory.log",
+    "qa/lin_chong_direction4_20260906/regressions/inventory/inventory.csv",
+    "qa/lin_chong_direction4_20260906/regressions/inventory/inventory.json",
+    "qa/lin_chong_direction4_20260906/regressions/routing.log",
+    "qa/lin_chong_direction4_20260906/regressions/routing/report.json",
+    "qa/lin_chong_direction4_20260906/regressions/runs.json",
+    "qa/lin_chong_direction4_20260906/regressions/song.log",
+    "qa/lin_chong_direction4_20260906/regressions/song/report.json",
+    "qa/lin_chong_direction4_20260906/regressions/terminal.log",
+    "qa/lin_chong_direction4_20260906/regressions/terminal/costume_matrix.png",
+    "qa/lin_chong_direction4_20260906/regressions/terminal/report.json",
+    "qa/lin_chong_direction4_20260906/regressions/wall.log",
+    "qa/lin_chong_direction4_20260906/runtime/live_melee.png",
+    "qa/lin_chong_direction4_20260906/runtime/report.json",
+    "qa/lin_chong_direction4_20260906/runtime/unit_pose_matrix.png",
+    "qa/lin_chong_direction4_20260906/runtime_console.log",
+    "qa/lin_chong_direction4_20260906/summary.json",
+    "scripts/unit.gd",
+    "tools/build_directional_spriteframes.py",
+    "tools/contracts/lin_chong_direction4_20260906/.gdignore",
+    "tools/contracts/lin_chong_direction4_20260906/.gitattributes",
+    "tools/contracts/lin_chong_direction4_20260906/README.md",
+    "tools/contracts/lin_chong_direction4_20260906/generation.json",
+    "tools/contracts/lin_chong_direction4_20260906/lc_pose_guide.gd.txt",
+    "tools/contracts/lin_chong_direction4_20260906/lc_two_step_guide.gd.txt",
+    "tools/contracts/lin_chong_direction4_20260906/pose_recipe.json",
+    "tools/contracts/lin_chong_direction4_20260906/references/ne_walk_pair.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/nw.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/nw_alpha.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/nw_layout.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/nw_layout_alpha.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/se.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/se_alpha.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/se_alpha2.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/se_layout.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/se_layout_alpha.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/se_spaced.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/sw_guard_heads.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/sw_single_guard.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/sw_walk_pair.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/sw_walk_pair_heads.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/two_step_guide_ne.png",
+    "tools/contracts/lin_chong_direction4_20260906/references/two_step_guide_sw.png",
+    "tools/directional_character_sources.py",
+    "tools/lin_chong_direction4_qa.gd"
+  ],
+  "total_selected_bytes": 48834901,
+  "note": "Git blob/repository SHA identifies committed text. Workspace hashes preserve this Windows run; normalized line endings may differ in another checkout. Receipt excludes itself."
+}

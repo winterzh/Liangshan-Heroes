@@ -1,0 +1,438 @@
+{
+  "method": "Built-in image_gen; selected native RGBA copied byte-for-byte. Godot 3D references guide two opposite walking poses. Runtime AtlasTexture metadata only.",
+  "session": "01a06fce-5775-7931-8752-609cc32da2b5",
+  "original_reference": {
+    "path": "qa/character_direction4_inventory_20260905/candidates/lin_chong.png",
+    "sha256": "6bd17c3a98f03d77ab0c19587a2b07079951eaf68e27cf38db7a1168cf1fdc1a"
+  },
+  "jobs": [
+    {
+      "key": "se_spaced_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/se.png",
+      "sha256": "e09036504729a1c4d899bd6e9c935db948b9ba765ae053109bfd98cb6bc07c92",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置和宽阔间距。",
+      "references": [
+        "se_spaced"
+      ]
+    },
+    {
+      "key": "se_spaced",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/se_spaced.png",
+      "sha256": "97faf2dff9aa1ef07b3d82a7231a5e29948ec309619306d1f106b35974a2257e",
+      "prompt": "只调整排版：把每个人物连同完整武器缩小到现在的65%，各自居中于2列4行的格子中，八个动作之间必须有宽阔透明间隔，每格四周至少60像素空白。不要放大填满画布。保持这八个人物原来的姿态、服装、朝向和持械手。保持真正透明背景，输出RGBA PNG。",
+      "references": [
+        "se_layout_alpha"
+      ]
+    },
+    {
+      "key": "se_layout_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/se_layout_alpha.png",
+      "sha256": "6fd81485f5868c9e5d1cfeedfd2f96bdd3b6a0f28e624375888f521f20e9bc07",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。",
+      "references": [
+        "se_layout"
+      ]
+    },
+    {
+      "key": "se_layout",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/se_layout.png",
+      "sha256": "f28c89a0955a0358943b42bd6be6ebb1fe65b1bc5eacfed5e16e8f830e2de79b",
+      "prompt": "修改这张林冲的8动作图集。将八个动作按原来顺序重新排为2列4行的竖版图集。每格约宽512高384，人物必须整体缩小，单个站立人物从头到脚约220像素高；完整长枪和身体都不得触及格边，四周留至少40像素真透明空隙。八格之间的像素绝不重叠。维持原黑色片甲、旧金边、深蓝灰裙甲、高髻、脸、银头木杆红缨长枪。第1格站立、第2格左腿迈步、第3格右腿迈步、第4格收枪蓄力、第5格刺枪、第6格受击、第7格跪倒、第8格侧躺死亡，其他方向不变。第2格抬起画面右侧的腿，第3格必须改抬画面左侧的腿，两条腿的前后关系交换，不要重复同一走路姿势。保持双手握法及全身朝向。枪只一端是长银色枪尖，另一端为小金属尾帽。不要文字、编号、线框、网格、地板或阴影。输出真正透明背景 RGBA PNG，不画任何背景颜色或棋盘格。\n所有动作维持面朝画面右下，右手握后段（画面左侧），左手握枪的前段（画面右侧）。刺枪必须向右下。",
+      "references": [
+        "se_alpha2"
+      ]
+    },
+    {
+      "key": "se_alpha2",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/se_alpha2.png",
+      "sha256": "64842e1a4bd1b4a558e9580cdc85c084e13c6d958091592068b03f53a0e19f0a",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。",
+      "references": [
+        "se_alpha"
+      ]
+    },
+    {
+      "key": "se_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/se_alpha.png",
+      "sha256": "37e244fcdb6403469c674075f50914492a63ead3a7aabf09dee4269ac8f66ee7",
+      "prompt": "去掉棋盘格背景，背景透明，RGBA PNG。原来的四列两行动作图集完整保留，全身与完整长枪不能裁掉，各格之间留空。其他不变。",
+      "references": [
+        "se"
+      ]
+    },
+    {
+      "key": "se",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/se.png",
+      "sha256": "6a74b23c152eb710e8f503277740055062850005cdea539ef7eea785c0af0aa1",
+      "prompt": "制作一个用于水浒等距RTS游戏的林冲动作精灵图集，真正透明背景 RGBA PNG，绝对不要把棋盘格画进图片。参考图只用于人物身份、服装和长枪：黑色头发束成高髻，成熟男子，短须，深黑铁色片甲，旧金色甲边、护肩，深蓝灰布裙甲、护腿、黑靴。精确沿用这种甲胄，不换成袍子、亮银甲、头盔或披风。武器是一根完整的长木杆枪，银色尖枪头、枪头根部小红缨，没有戟刃。右手握后段枪柄，左手握前段，所有姿态持械手绝不对调。写实手绘的经典等距RTS兵人风格，轮廓清楚，细节自然，不过度卡通或塑料金属。\n交付是一张原生透明动作图集，不是游戏截图：4列×2行，共8格，按行阅读。每格人物头部尺寸一致，全身和完整长枪都在自己的格子内；格子之间至少40像素完全透明的间隔，各人物不能重叠、串格或触及画布边缘。不要边框、文字、编号、地面、平台、光圈、阴影或背景光。相同机位俯视约30度，2:1等距视角。画布建议2048×1536，宽横图。\n八格内容严格依次：\n第一行第1格：站立警戒，双手持枪，重心稳定。\n第一行第2格：走路左脚向前迈出、右脚在后，枪正常携行。\n第一行第3格：走路右脚向前迈出、左脚在后，确实和第2格交换腿的迈步姿势，双手握法不换。\n第一行第4格：准备刺枪，后腿屈膝蓄力，枪往身后收，躯干蓄势。\n第二行第1格：刺枪命中瞬间，前腿踏出，身体向目标前倾，两臂把枪尖向目标前送；整根长枪完整且笔直，两手持枪。\n第二行第2格：受击踉跄，身体后仰或收缩，双手仍握枪，不画血液。\n第二行第3格：死亡倒下过程，一膝落地，躯干失去支撑向地面倒去，长枪落低。\n第二行第4格：已经死亡，身体完全侧躺在地面，四肢自然松弛，完整长枪落在身旁。尸体头部尺寸与站姿一致，不把尸体缩成迷你人。\n\n所有8格从头、肩、胸、髋、双脚到枪尖的朝向都统一朝画面右下方（东南，SE），可见正面和人物右侧。刺枪指向画面右下，不能变成朝右平刺。",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "sw_windup_fix",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/sw_windup.png",
+      "sha256": "8fec14ce9a811c05c9c3e65a74ee3837458953e7eec21f5d792c5cc6e6cd421d",
+      "prompt": "提取第二行右边的林冲收枪蓄力姿势为单个人物图，纠正他的头和枪：他正准备向画面左下方刺枪，整张脸和鼻尖必须看向画面左边，右手把长枪收在腰旁，枪尖指向左下，另一只空手向侧面保持平衡。这是收枪准备动作，不能画成刺枪完成。保持原黑色金边甲胄、深蓝裙甲、高发髻、银枪头木杆红缨、双脚张开的弓步。全身和长枪完整，四周留空，真正透明背景RGBA PNG。",
+      "references": [
+        "sw_guard_heads"
+      ]
+    },
+    {
+      "key": "sw_guard_heads",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/sw_guard_heads.png",
+      "sha256": "1a5801d7ad51b56d2470fc5f813bc1acf7e6eaf09290bd7148e7e9f73d052bf9",
+      "prompt": "Change ONLY the HEADS of the standing figure in the TOP LEFT, walking figure in the TOP RIGHT, and winding-up figure in SECOND ROW RIGHT: turn their noses and gaze toward IMAGE LEFT, along the lower-left attack direction. Keep each body, armor, arms, spear, legs, pose and position identical. Do not change any of the other five figures. Preserve genuine RGBA transparency and the full 2-column 4-row layout.",
+      "references": [
+        "sw_single_guard"
+      ]
+    },
+    {
+      "key": "sw_single_guard",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/sw_single_guard.png",
+      "sha256": "d091f237286ad585cc95046f1206a5e2bc5de8f835cbca52c134abb5b7afed07",
+      "prompt": "Use case: stylized-concept. Create a transparent 2-column 4-row game sprite sheet for this Lin Chong in dark iron armor with muted gold borders, navy skirt armor, black high topknot and red-tasseled wooden spear. All eight figures seen from FRONT-LEFT, looking toward lower-left. Use a simple one-handed spear guard: RIGHT hand holds the spear, LEFT hand is empty and free at his left side. Exactly two arms per figure. Reading order: standing on both feet; walking with left leg forward; walking with right leg forward; pulling right spear arm back to prepare a thrust; lunging and thrusting the spear straight toward lower-left; recoiling from a hit; collapsing to the ground; lying dead on his side with spear flat beside body. The two walk poses must exchange which leg is in front. Face and gaze always toward lower-left. Keep every complete spear and body isolated, small within its own cell, huge transparent gutters. Genuine transparent RGBA, no checkerboard, no background, no shadows, no text.",
+      "references": [
+        "original",
+        "se_spaced_alpha"
+      ]
+    },
+    {
+      "key": "sw_guard_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/sw.png",
+      "sha256": "8dcef108eb8ce6c7a755300463f44c3fe7b73859170e57e7d51d8479927c4516",
+      "prompt": "去掉所有背景和光晕，真正透明背景RGBA PNG。保持八个人物的姿势、大小、位置和宽阔间距。",
+      "references": [
+        "sw_guard_heads"
+      ]
+    },
+    {
+      "key": "sw_walk_pair_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/sw_walk.png",
+      "sha256": "a31a2dc72f672eb0b6a48d47b5929d132e5717579ba6935973c52dd8a0fe299d",
+      "prompt": "去掉背景，真正透明背景RGBA PNG。保留两个不同的走路姿势，头朝左，人物大小和宽阔间距保持。",
+      "references": [
+        "sw_walk_pair_heads"
+      ]
+    },
+    {
+      "key": "sw_walk_pair_heads",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/sw_walk_pair_heads.png",
+      "sha256": "105a3d943129fcb02dc8fd0ec6e34ecc1bfb57e45fb060ef9fb310c327239df6",
+      "prompt": "只改两个人物的头：两张脸和鼻尖必须一起转向画面左边，注视左下方枪尖方向，不能朝右看。身体、双手、长枪、两种不同的腿部姿势、衣甲、位置、间距全部保持。去掉背景，输出真正透明背景RGBA PNG。",
+      "references": [
+        "sw_walk_pair"
+      ]
+    },
+    {
+      "key": "sw_walk_pair",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/sw_walk_pair.png",
+      "sha256": "ab8c22c991d9d672c549d1659336305d04ccb36f36839a79407616bafe0ad6cf",
+      "prompt": "Use case: sketch-to-render. Paint the TWO mannequin poses in image 1 as TWO full-body Lin Chong game sprites in the costume of image 2: charcoal lamellar armor, muted gold trim, navy skirt armor, black high topknot, red-tasseled wooden spear. COPY THE EXACT LEG POSES FROM IMAGE 1. Red limbs are anatomical LEFT; blue limbs RIGHT. In the LEFT figure, RED LEFT leg advances and BLUE RIGHT leg trails. In the RIGHT figure, BLUE RIGHT leg advances and RED LEFT leg trails. These are opposite walking steps. Keep hip, knee, boot and hand positions exactly as the guide, including occlusion where legs cross in projection. Replace ALL red/blue guide colors with the real dark armor and boots; no mannequin parts remain. The same right hand holds the spear in both poses, left hand empty. Both bodies and faces point lower-left, showing their FRONTS. Two figures only, side by side, generous empty spacing and complete spears. True transparent RGBA background, no glow, ground, shadows, words or checkerboard.",
+      "references": [
+        "two_step_guide_sw",
+        "original"
+      ]
+    },
+    {
+      "key": "two_step_guide_sw",
+      "method": "godot_3d_pose_reference",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/two_step_guide_sw.png",
+      "sha256": "eb3062eb3bee95968ee2bf3551610f14e72a91af48d24abe3ba343d48e57c3e1",
+      "prompt": "",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/lin_chong_direction4_20260906/lc_two_step_guide.gd.txt",
+          "sha256": "7ad6e749c824d8c921f5891f559c090edd82dfa8f30918b0d33faed78b8dc18d"
+        },
+        {
+          "path": "tools/contracts/lin_chong_direction4_20260906/lc_pose_guide.gd.txt",
+          "sha256": "620c15a7c0833d47989c6283ac54ee175f6aed4d7cf142559b3fd84027b683a5"
+        }
+      ]
+    },
+    {
+      "key": "ne_single_guard",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/ne.png",
+      "sha256": "632171ae6848a457f402f580f4df2f2bdad8570d26e7ff84055e13f26e484bb1",
+      "prompt": "Use case: stylized-concept. Create a transparent 2-column 4-row game sprite sheet for this Lin Chong in dark iron armor with muted gold borders, navy skirt armor, black high topknot and red-tasseled wooden spear. All eight figures seen from BACK-RIGHT, looking toward upper-right. Use a simple one-handed spear guard: RIGHT hand holds the spear, LEFT hand is empty and free at his left side. Exactly two arms per figure; no hand or arm crossing over his back. Reading order: standing on both feet; walking with left leg forward; walking with right leg forward; pulling right spear arm back to prepare a thrust; lunging and thrusting the spear straight toward upper-right; recoiling from a hit; collapsing to the ground; lying dead face-down with spear flat beside body. The two walk poses must exchange which leg is in front. Keep the face pointing upper-right. Keep every complete spear and body isolated, small within its own cell, huge transparent gutters. Genuine transparent RGBA, no checkerboard, no background, no shadows, no text.",
+      "references": [
+        "original",
+        "nw_spaced"
+      ]
+    },
+    {
+      "key": "nw_spaced",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/nw.png",
+      "sha256": "ecb817e72efdcd1880f278debdc74eaeda364b88ef886e94056fe0db9168dbe7",
+      "prompt": "只调整排版：把每个人物连同完整武器缩小到现在的65%，各自居中于2列4行的格子中，八个动作之间必须有宽阔透明间隔，每格四周至少60像素空白。不要放大填满画布。保持这八个人物原来的姿态、服装、朝向和持械手。保持真正透明背景，输出RGBA PNG。",
+      "references": [
+        "nw_layout_alpha"
+      ]
+    },
+    {
+      "key": "nw_layout_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/nw_layout_alpha.png",
+      "sha256": "e0288c693dcb7144fd35c2d246b37ec962db66e63376179bb493ab5e24642aa9",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。",
+      "references": [
+        "nw_layout"
+      ]
+    },
+    {
+      "key": "nw_layout",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/nw_layout.png",
+      "sha256": "b6dd5cd85bb64940b94b172f667f52ddad092f2748cc6c861a2cad2bac95e9df",
+      "prompt": "修改这张林冲的8动作图集。将八个动作按原来顺序重新排为2列4行的竖版图集。每格约宽512高384，人物必须整体缩小，单个站立人物从头到脚约220像素高；完整长枪和身体都不得触及格边，四周留至少40像素真透明空隙。八格之间的像素绝不重叠。维持原黑色片甲、旧金边、深蓝灰裙甲、高髻、脸、银头木杆红缨长枪。第1格站立、第2格左腿迈步、第3格右腿迈步、第4格收枪蓄力、第5格刺枪、第6格受击、第7格跪倒、第8格侧躺死亡，其他方向不变。第2格抬起画面右侧的腿，第3格必须改抬画面左侧的腿，两条腿的前后关系交换，不要重复同一走路姿势。保持双手握法及全身朝向。枪只一端是长银色枪尖，另一端为小金属尾帽。不要文字、编号、线框、网格、地板或阴影。输出真正透明背景 RGBA PNG，不画任何背景颜色或棋盘格。\n所有动作维持背朝镜头、面向画面左上。左手握靠近枪头的前段，右手握靠近腰部的后段。刺枪必须向左上。",
+      "references": [
+        "nw_alpha"
+      ]
+    },
+    {
+      "key": "nw_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/nw_alpha.png",
+      "sha256": "90a985772241dc9b2dde41dfe4104d8b5b2894852a1590ba35b7dc0d5e9e2b86",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。",
+      "references": [
+        "nw"
+      ]
+    },
+    {
+      "key": "nw",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/nw.png",
+      "sha256": "1d49dcc2447155760f6ab66070dd880640acd825942a0a62f503ec916016abb7",
+      "prompt": "制作一个用于水浒等距RTS游戏的林冲动作精灵图集，真正透明背景 RGBA PNG，绝对不要把棋盘格画进图片。参考图只用于人物身份、服装和长枪：黑色头发束成高髻，成熟男子，短须，深黑铁色片甲，旧金色甲边、护肩，深蓝灰布裙甲、护腿、黑靴。精确沿用这种甲胄，不换成袍子、亮银甲、头盔或披风。武器是一根完整的长木杆枪，银色尖枪头、枪头根部小红缨，没有戟刃。右手握后段枪柄，左手握前段，所有姿态持械手绝不对调。写实手绘的经典等距RTS兵人风格，轮廓清楚，细节自然，不过度卡通或塑料金属。\n交付是一张原生透明动作图集，不是游戏截图：4列×2行，共8格，按行阅读。每格人物头部尺寸一致，全身和完整长枪都在自己的格子内；格子之间至少40像素完全透明的间隔，各人物不能重叠、串格或触及画布边缘。不要边框、文字、编号、地面、平台、光圈、阴影或背景光。相同机位俯视约30度，2:1等距视角。画布建议2048×1536，宽横图。\n八格内容严格依次：\n第一行第1格：站立警戒，双手持枪，重心稳定。\n第一行第2格：走路左脚向前迈出、右脚在后，枪正常携行。\n第一行第3格：走路右脚向前迈出、左脚在后，确实和第2格交换腿的迈步姿势，双手握法不换。\n第一行第4格：准备刺枪，后腿屈膝蓄力，枪往身后收，躯干蓄势。\n第二行第1格：刺枪命中瞬间，前腿踏出，身体向目标前倾，两臂把枪尖向目标前送；整根长枪完整且笔直，两手持枪。\n第二行第2格：受击踉跄，身体后仰或收缩，双手仍握枪，不画血液。\n第二行第3格：死亡倒下过程，一膝落地，躯干失去支撑向地面倒去，长枪落低。\n第二行第4格：已经死亡，身体完全侧躺在地面，四肢自然松弛，完整长枪落在身旁。尸体头部尺寸与站姿一致，不把尸体缩成迷你人。\n\n所有8格从头、肩、背、髋、双脚到枪尖的朝向都统一朝画面左上方（西北，NW），主要看见背甲和左后侧，只能有一点侧脸。整个人背向镜头，臀部与脚尖也指向左上，不能只转头或回头看镜头。真实重画此视角，不镜像其它图，右手仍握枪柄后段、左手在前段。刺枪指向画面左上。\n额外注意：从背面看，解剖学左手才握近枪头的前段，右手握近尾端。图中不能由右肩伸出的右臂去握最靠近枪头的位置。左右迈步必须是相反的一前一后脚，不可两格都抬同一条腿。",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "ne_walk_pair_alpha",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/ne_walk.png",
+      "sha256": "bcbedb0049d267da8197591a408f5abc78d953bf8e35e90fc224e994e1d21fea",
+      "prompt": "去掉背景，真正透明背景RGBA PNG。保留两个人物不同的腿部姿势、人物大小和宽阔间距，不改变任何造型。",
+      "references": [
+        "ne_walk_pair"
+      ]
+    },
+    {
+      "key": "ne_walk_pair",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/ne_walk_pair.png",
+      "sha256": "bdc115401267aac00efdc32898784941ccda9a6f3c9a0d4ebe88a06b90559ab6",
+      "prompt": "Use case: sketch-to-render. Paint the TWO mannequin poses in image 1 as TWO full-body Lin Chong game sprites in the costume of image 2: charcoal lamellar armor, muted gold trim, navy skirt armor, black high topknot, red-tasseled wooden spear. COPY THE EXACT LEG POSES FROM IMAGE 1. Red limbs are anatomical LEFT; blue limbs RIGHT. In the LEFT figure, RED LEFT leg advances and BLUE RIGHT leg trails. In the RIGHT figure, BLUE RIGHT leg advances and RED LEFT leg trails. These are opposite walking steps. Keep hip, knee, boot and hand positions exactly as the guide, including occlusion where legs cross in projection. Replace ALL red/blue guide colors with the real dark armor and boots; no mannequin parts remain. The same right hand holds the spear in both poses, left hand empty. Both bodies and faces point upper-right, showing their BACKS. Two figures only, side by side, generous empty spacing and complete spears. True transparent RGBA background, no glow, ground, shadows, words or checkerboard.",
+      "references": [
+        "two_step_guide_ne",
+        "original"
+      ]
+    },
+    {
+      "key": "two_step_guide_ne",
+      "method": "godot_3d_pose_reference",
+      "repository_path": "tools/contracts/lin_chong_direction4_20260906/references/two_step_guide_ne.png",
+      "sha256": "71258ab940d860ba9bf451a9f6f57d9290457b3401410e07e174bf5db04e0cbe",
+      "prompt": "",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/lin_chong_direction4_20260906/lc_two_step_guide.gd.txt",
+          "sha256": "7ad6e749c824d8c921f5891f559c090edd82dfa8f30918b0d33faed78b8dc18d"
+        },
+        {
+          "path": "tools/contracts/lin_chong_direction4_20260906/lc_pose_guide.gd.txt",
+          "sha256": "620c15a7c0833d47989c6283ac54ee175f6aed4d7cf142559b3fd84027b683a5"
+        }
+      ]
+    },
+    {
+      "key": "ne",
+      "sha256": "70773407a4ada40caf308cae2f5ec77baa1ca64f05c97f06cc6b9aba895f9efe",
+      "repository_path": null,
+      "prompt": "制作一个用于水浒等距RTS游戏的林冲动作精灵图集，真正透明背景 RGBA PNG，绝对不要把棋盘格画进图片。参考图只用于人物身份、服装和长枪：黑色头发束成高髻，成熟男子，短须，深黑铁色片甲，旧金色甲边、护肩，深蓝灰布裙甲、护腿、黑靴。精确沿用这种甲胄，不换成袍子、亮银甲、头盔或披风。武器是一根完整的长木杆枪，银色尖枪头、枪头根部小红缨，没有戟刃。右手握后段枪柄，左手握前段，所有姿态持械手绝不对调。写实手绘的经典等距RTS兵人风格，轮廓清楚，细节自然，不过度卡通或塑料金属。\n交付是一张原生透明动作图集，不是游戏截图：4列×2行，共8格，按行阅读。每格人物头部尺寸一致，全身和完整长枪都在自己的格子内；格子之间至少40像素完全透明的间隔，各人物不能重叠、串格或触及画布边缘。不要边框、文字、编号、地面、平台、光圈、阴影或背景光。相同机位俯视约30度，2:1等距视角。画布建议2048×1536，宽横图。\n八格内容严格依次：\n第一行第1格：站立警戒，双手持枪，重心稳定。\n第一行第2格：走路左脚向前迈出、右脚在后，枪正常携行。\n第一行第3格：走路右脚向前迈出、左脚在后，确实和第2格交换腿的迈步姿势，双手握法不换。\n第一行第4格：准备刺枪，后腿屈膝蓄力，枪往身后收，躯干蓄势。\n第二行第1格：刺枪命中瞬间，前腿踏出，身体向目标前倾，两臂把枪尖向目标前送；整根长枪完整且笔直，两手持枪。\n第二行第2格：受击踉跄，身体后仰或收缩，双手仍握枪，不画血液。\n第二行第3格：死亡倒下过程，一膝落地，躯干失去支撑向地面倒去，长枪落低。\n第二行第4格：已经死亡，身体完全侧躺在地面，四肢自然松弛，完整长枪落在身旁。尸体头部尺寸与站姿一致，不把尸体缩成迷你人。\n\n所有8格从头、肩、背、髋、双脚到枪尖的朝向都统一朝画面右上方（东北，NE），主要看见背甲和右后侧，只能有一点侧脸。整个人背向镜头，不能只转头，不能让胸口正对镜头。刺枪指向画面右上。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw",
+      "sha256": "d98e086489729365672332f4b4bbe455ae28da0261725165fe6596d6a0708720",
+      "repository_path": null,
+      "prompt": "制作一个用于水浒等距RTS游戏的林冲动作精灵图集，真正透明背景 RGBA PNG，绝对不要把棋盘格画进图片。参考图只用于人物身份、服装和长枪：黑色头发束成高髻，成熟男子，短须，深黑铁色片甲，旧金色甲边、护肩，深蓝灰布裙甲、护腿、黑靴。精确沿用这种甲胄，不换成袍子、亮银甲、头盔或披风。武器是一根完整的长木杆枪，银色尖枪头、枪头根部小红缨，没有戟刃。右手握后段枪柄，左手握前段，所有姿态持械手绝不对调。写实手绘的经典等距RTS兵人风格，轮廓清楚，细节自然，不过度卡通或塑料金属。\n交付是一张原生透明动作图集，不是游戏截图：4列×2行，共8格，按行阅读。每格人物头部尺寸一致，全身和完整长枪都在自己的格子内；格子之间至少40像素完全透明的间隔，各人物不能重叠、串格或触及画布边缘。不要边框、文字、编号、地面、平台、光圈、阴影或背景光。相同机位俯视约30度，2:1等距视角。画布建议2048×1536，宽横图。\n八格内容严格依次：\n第一行第1格：站立警戒，双手持枪，重心稳定。\n第一行第2格：走路左脚向前迈出、右脚在后，枪正常携行。\n第一行第3格：走路右脚向前迈出、左脚在后，确实和第2格交换腿的迈步姿势，双手握法不换。\n第一行第4格：准备刺枪，后腿屈膝蓄力，枪往身后收，躯干蓄势。\n第二行第1格：刺枪命中瞬间，前腿踏出，身体向目标前倾，两臂把枪尖向目标前送；整根长枪完整且笔直，两手持枪。\n第二行第2格：受击踉跄，身体后仰或收缩，双手仍握枪，不画血液。\n第二行第3格：死亡倒下过程，一膝落地，躯干失去支撑向地面倒去，长枪落低。\n第二行第4格：已经死亡，身体完全侧躺在地面，四肢自然松弛，完整长枪落在身旁。尸体头部尺寸与站姿一致，不把尸体缩成迷你人。\n\n所有8格从头、肩、胸、髋、双脚到枪尖的朝向都统一朝画面左下方（西南，SW），可见正面和人物左侧。真实重画此视角，绝不水平镜像参考图，右手仍在枪柄后端、左手在前段。刺枪指向画面左下。\n额外注意：从背面看，解剖学左手才握近枪头的前段，右手握近尾端。图中不能由右肩伸出的右臂去握最靠近枪头的位置。左右迈步必须是相反的一前一后脚，不可两格都抬同一条腿。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_fix",
+      "sha256": "044127dcb99d347a96783089a51c392f2f2ff0813c2089f92830979a7fb75968",
+      "repository_path": null,
+      "prompt": "保持这张图的八格布局、身份、衣服、朝向和全部姿态。只修两点：所有持枪姿态中，必须是解剖学左手握靠近枪头的前段，右手握靠近枪尾的后段；右臂屈肘往后，左臂在前。现在这张背面图把右手放在前段了，需要真正改手臂姿态，不能镜像人物或长枪。其次，把第一行第3格改成右脚在前、左脚向后蹬地的迈步，与第2格左脚在前形成相反步态。不要改变头肩背髋和脚尖均朝右上NE的方向。不要新增格子。每格之间留够间隔，武器不能串格。输出真正透明背景 RGBA PNG，无棋盘格、无阴影。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_alpha",
+      "sha256": "a409aca63bac178db43347c4d2c816652ea24ec7ac9503657a34fed54ea0b5ae",
+      "repository_path": null,
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_alpha",
+      "sha256": "c1cd3fe1e97e30a6e0289010c9c57b863c541d07ef8610e3a182b1bc7154b12d",
+      "repository_path": null,
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_layout",
+      "sha256": "edeaabc7d21e41dc9a68c4e13da962094fd116fb334b28a09353b500f52ed3c0",
+      "repository_path": null,
+      "prompt": "修改这张林冲的8动作图集。将八个动作按原来顺序重新排为2列4行的竖版图集。每格约宽512高384，人物必须整体缩小，单个站立人物从头到脚约220像素高；完整长枪和身体都不得触及格边，四周留至少40像素真透明空隙。八格之间的像素绝不重叠。维持原黑色片甲、旧金边、深蓝灰裙甲、高髻、脸、银头木杆红缨长枪。第1格站立、第2格左腿迈步、第3格右腿迈步、第4格收枪蓄力、第5格刺枪、第6格受击、第7格跪倒、第8格侧躺死亡，其他方向不变。第2格抬起画面右侧的腿，第3格必须改抬画面左侧的腿，两条腿的前后关系交换，不要重复同一走路姿势。保持双手握法及全身朝向。枪只一端是长银色枪尖，另一端为小金属尾帽。不要文字、编号、线框、网格、地板或阴影。输出真正透明背景 RGBA PNG，不画任何背景颜色或棋盘格。\n修正全部动作握枪手：必须左手握靠近枪头的前段，右手握靠近腰部的后段。当前参考SW图的前后手错误，不要保留这种错误。两只手都握住枪，不让一手悬空。所有动作面朝画面左下；刺枪向左下。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_layout",
+      "sha256": "e9784a1d546d8d89cf761f654c023992662d800ffddd47fc83a07a21f7986692",
+      "repository_path": null,
+      "prompt": "修改这张林冲的8动作图集。将八个动作按原来顺序重新排为2列4行的竖版图集。每格约宽512高384，人物必须整体缩小，单个站立人物从头到脚约220像素高；完整长枪和身体都不得触及格边，四周留至少40像素真透明空隙。八格之间的像素绝不重叠。维持原黑色片甲、旧金边、深蓝灰裙甲、高髻、脸、银头木杆红缨长枪。第1格站立、第2格左腿迈步、第3格右腿迈步、第4格收枪蓄力、第5格刺枪、第6格受击、第7格跪倒、第8格侧躺死亡，其他方向不变。第2格抬起画面右侧的腿，第3格必须改抬画面左侧的腿，两条腿的前后关系交换，不要重复同一走路姿势。保持双手握法及全身朝向。枪只一端是长银色枪尖，另一端为小金属尾帽。不要文字、编号、线框、网格、地板或阴影。输出真正透明背景 RGBA PNG，不画任何背景颜色或棋盘格。\n修正全部动作握枪手：必须左手握靠近枪头的前段，右手握靠近腰部的后段。当前参考NE图的右臂前伸是错误，必须重画！从背面看，左肩在画面左边，左臂越过身前握住前段，允许左臂部分被身体挡住。右手应留在人物右腰旁握枪后段，右臂不得伸向枪头。所有动作背朝镜头，面向画面右上；刺枪向右上。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_identity",
+      "sha256": "4def9df292a97980a76ba45153c0d54b86d9049a68f264b313d1dba80ff9c30c",
+      "repository_path": null,
+      "prompt": "参考图只用作林冲身份、黑金片甲、深蓝灰裙甲、高髻、银头红缨长枪和正确双手握法的参考。画一张单独全身林冲站立持枪精灵，不是图集。将相机绕角色换到下面指定角度，保持人物解剖学左手握前段、右手握后段不变，绝不通过镜像换角度。每只手都能沿手臂追溯到正确肩膀；枪只有一根，完整不出画布。经典2:1等距RTS手绘兵人，俯视30度，真实透明背景RGBA，无地面无阴影，四周留白15%。\n目标朝向：人物整体面向画面左下，可见胸甲和前侧，枪尖指向左下。左臂从人物左肩（画面右侧的肩）横跨胸前伸向枪尖握前段；右臂从画面左侧的右肩弯曲，右手留在右腰附近握枪后段。近枪头的手必须连接到人物左肩。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_identity",
+      "sha256": "49ddb1f6f12ec2832e51f689e20eb5f65c2e14258b0a8c6cff516858aab3794a",
+      "repository_path": null,
+      "prompt": "参考图只用作林冲身份、黑金片甲、深蓝灰裙甲、高髻、银头红缨长枪和正确双手握法的参考。画一张单独全身林冲站立持枪精灵，不是图集。将相机绕角色换到下面指定角度，保持人物解剖学左手握前段、右手握后段不变，绝不通过镜像换角度。每只手都能沿手臂追溯到正确肩膀；枪只有一根，完整不出画布。经典2:1等距RTS手绘兵人，俯视30度，真实透明背景RGBA，无地面无阴影，四周留白15%。\n目标朝向：人物整体面向画面右上，主要看见完整背甲和右后侧；枪尖指向右上。左臂从画面左侧的左肩越过身前握枪前段，左臂可被躯干挡住但左手出现在枪杆前部；右手留在画面右腰握后段。右肘弯曲向后，右臂绝不向枪头伸直。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_identity_fix",
+      "sha256": "96b164bea640083e4e28f304ba8296e9f33d3bac077ac79edb57c45f05a43f6c",
+      "repository_path": null,
+      "prompt": "修改人物的上身转向和两条手臂。身体、脸、双脚仍整体朝画面左下，但相机应看见人物自身左侧：左肩和左臂靠近观者，右臂处于远侧。让人物自身左手握住靠近红缨枪头的前段，右手在右腰握后段。现在图里握枪前段的是右手，这个错误必须改掉。右臂大部分可以被胸甲挡住，只露出右腰后方的右手。左臂从人物左肩伸到画面左下的前手位置，左前臂跨过胸前。保持原黑金片甲、深蓝灰裙甲、高髻、长枪、全身比例和完整武器。只画这一名人物，真实透明背景RGBA，不要网格。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_identity_fix",
+      "sha256": "150e20033421298c004874407bf478fcbd66498e55cc786e0a98059d65ef8b3e",
+      "repository_path": null,
+      "prompt": "修正这名林冲的双手和长枪位置。保留背面朝镜头、身体脸脚整体朝右上的方向、黑金片甲与全身比例。长枪必须在人物胸前的远侧，绝不横穿背部！枪尾位于画面右下、人物右腰旁，不能在画面左下；右手在右腰握枪尾，右肘弯曲贴腰。左手从被身体挡住的左臂伸出来，在更高的画面右上握住枪杆前段；靠枪头的是左手。枪尖朝右上，枪杆在身体右侧接近竖直的斜线上。删除当前那条向右上伸直的右臂，改成弯曲贴右腰。保持长枪完整不裁断，一名人物，透明背景RGBA，不要网格。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_guided",
+      "sha256": "7b28289f5e2ee28217add17e63fd02ba6e5ce83c509fbbd901f37e663cf06dc3",
+      "repository_path": null,
+      "prompt": "Create ONE full-body isometric RTS sprite of Lin Chong. Image 1 is a 3D anatomy/pose guide: preserve its camera, body facing, spear line, and the EXACT shoulder-elbow-hand connections. The RED arm is the anatomical LEFT arm and holds the FRONT of the spear. The BLUE arm is the anatomical RIGHT arm and holds the REAR at the waist. The far arm is naturally partly occluded by the torso; do not swap the arms or bring the wrong hand forward. Replace the mannequin completely with the character from Image 2: mature Chinese man, high black topknot, moustache, black lamellar armor with old gold edging, dark navy skirt armor, black boots, long brown spear with silver head and red tassel. Image 2 supplies costume and identity ONLY, not pose or camera. Both colored arms must become normal matching dark armor, no red/blue armor. Keep the whole person and entire spear inside the canvas with ample empty margin. Classic hand-painted isometric game sprite, no ground, no cast shadow, no text. Truly transparent RGBA PNG.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_guided",
+      "sha256": "14ffc5f831cb0efa6b4950b2ddf7e72137e73f474c3346d69a3eb45c1eee7c91",
+      "repository_path": null,
+      "prompt": "Create ONE full-body isometric RTS sprite of Lin Chong. Image 1 is a 3D anatomy/pose guide: preserve its camera, body facing, spear line, and the EXACT shoulder-elbow-hand connections. The RED arm is the anatomical LEFT arm and holds the FRONT of the spear. The BLUE arm is the anatomical RIGHT arm and holds the REAR at the waist. The far arm is naturally partly occluded by the torso; do not swap the arms or bring the wrong hand forward. Replace the mannequin completely with the character from Image 2: mature Chinese man, high black topknot, moustache, black lamellar armor with old gold edging, dark navy skirt armor, black boots, long brown spear with silver head and red tassel. Image 2 supplies costume and identity ONLY, not pose or camera. Both colored arms must become normal matching dark armor, no red/blue armor. Keep the whole person and entire spear inside the canvas with ample empty margin. Classic hand-painted isometric game sprite, no ground, no cast shadow, no text. Truly transparent RGBA PNG.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_guided_head",
+      "sha256": "9986e16d3ed07739328e8f40060ca0df2047f55eaa69bb92724a4d5312d86a96",
+      "repository_path": null,
+      "prompt": "Change ONLY the head and gaze: turn his entire head to face down-left, looking along the spear toward its silver tip. His nose must point to image LEFT, not image right. Keep the exact body, armor, legs, spear and both arms/hands unchanged. Preserve genuine transparent RGBA background.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_guided_clear",
+      "sha256": "3c1ca561065bbacd0b28a3945378b8cbbfe11d70e3f2d6c6924b0d7ef29f02d0",
+      "repository_path": null,
+      "prompt": "Paint a finished hand-painted isometric RTS character ON THIS EXACT POSE. This mannequin is shown from the back, facing screen upper-right. Its translucent torso lets you see the entire LEFT arm in red crossing IN FRONT of the torso to the high forward grip. The RIGHT arm in blue folds down beside the right hip to the low rear grip. Keep EVERY shoulder, elbow, hand and spear at these exact projected positions. Cover the torso with opaque BACK armor, correctly occluding the middle of the far LEFT arm. The near right elbow stays low at the waist, never raised! Replace ALL mannequin colors with Lin Chong: mature Chinese man, moustache, black high topknot, charcoal-black lamellar armor with muted old-gold borders, dark navy skirt armor, dark boots; long brown wooden spear with silver head and red tassel. Head and nose face right, showing only a sliver of his right cheek; no look over the left shoulder. No red or blue sleeves, no diagram labels, no background. Genuine transparent RGBA sprite with the whole body and complete spear.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_actions_guided",
+      "sha256": "8e6767230e23e15bdd8f8180a1e92bfacbce501a2c84333b5a2ab4fbfca20ccd",
+      "repository_path": null,
+      "prompt": "Create an 8-pose isometric game sprite atlas of this EXACT Lin Chong, preserving the armor, face, high topknot, spear and anatomical handedness. 2 columns by 4 rows on a tall transparent canvas. Each isolated full-body pose including COMPLETE spear fits within its own cell, with very generous empty spacing. Characters small, about 220px tall in each 512x384 cell. Always face screen DOWN-LEFT, including head and gaze. Near LEFT arm reaches to the forward spear grip; far RIGHT hand holds rear grip by abdomen. Row1: neutral grounded idle; walk lifting LEFT leg. Row2: walk lifting RIGHT leg (clearly opposite foot from row1); pull spear back winding up. Row3: deep forward spear THRUST aiming down-left; recoil from being hit. Row4: collapsing onto one knee; fully dead lying on the side on the ground, spear laid beside corpse. Exactly two arms per figure. Long silver spear tip only on forward end, red tassel, small rear endcap. Consistent body scale and costume across all 8. Pure true transparent RGBA background, no checkerboard, no ground, no drawn shadow, no labels or borders.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_arms_occlusion",
+      "sha256": "a184cab20a1addb412b781a85fd702235158b93e1ca1a838f6052deb80cd985f",
+      "repository_path": null,
+      "prompt": "Correct this character's anatomy. He is seen from the BACK-RIGHT, facing upper-right. The current outstretched high arm incorrectly appears to grow from his near RIGHT shoulder, creating two right arms. REMOVE that entire horizontal high upper arm and elbow. The near RIGHT shoulder must connect ONLY to the bent low arm and the rear hand at his hip. His LEFT shoulder is on the far, screen-left side of his back. His left upper arm crosses in FRONT of his chest and must be completely hidden behind his opaque torso. Show only a small part of the LEFT wrist and the left HAND at the upper-forward spear grip, emerging beyond the far/front outline of his body. Exactly TWO arms and TWO hands with physically correct occlusion. Preserve the armor, spear, face, posture and true transparent background. Keep the full spear tip within the canvas with generous empty margin.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_walk_opposite",
+      "sha256": "ae3452ea2ce7e2e1ae307ca00867a703c18b6c137f5c6d7f1c505dc9ab4daf3b",
+      "repository_path": null,
+      "prompt": "Draw ONE isolated Lin Chong sprite in the same black-gold armor and back-right view, facing upper-right. This is the OPPOSITE WALK STEP to the reference: his LEFT leg (far side, emerging on image left) is advanced toward upper-right and firmly planted ahead; his RIGHT leg (near side, emerging on image right) trails behind toward lower-left, with its heel lifted. Clearly put the nearer right foot BEHIND the farther left foot. RIGHT hand holds the red-tasseled spear pointed upper-right; empty LEFT hand swings freely. Two legs, two arms, same full costume. Full body and complete spear, generous margin, genuine transparent RGBA background, no shadow or glow.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_walk_opposite",
+      "sha256": "36e30bbf80fed8ea2c13c086a5ff1b1fa869233f5ac423a77ee1156e07993c3e",
+      "repository_path": null,
+      "prompt": "Draw ONE isolated Lin Chong sprite in the same black-gold armor, viewed from FRONT-LEFT, looking lower-left. This is the OPPOSITE WALK STEP to the reference: his LEFT leg (near side, emerging on image right) steps forward diagonally toward lower-left; his RIGHT leg (far side, emerging on image left) stays behind toward upper-right with heel lifted. Clearly exchange which leg is advanced compared with the two walking sprites in the reference. Head and nose look LEFT. RIGHT hand holds the red-tasseled spear pointed lower-left; empty LEFT hand swings freely beside him. Exactly two legs and arms, same full costume. Full body and complete spear, generous margin, genuine transparent RGBA background, no shadow or glow.",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "ne_walk_swap",
+      "sha256": "3367eb6d1fc5640dd9401dce2c0c185fa1857c176ddb89c96192d844975a8463",
+      "repository_path": null,
+      "prompt": "只改两条腿：把当前在画面左下方往后伸的那条腿改为向前抬膝，靴子伸到画面右上方；把当前在画面右方朝前的那条腿改为向后伸，靴子落在画面左下方。双腿的前后位置必须互换，这是走路循环的另一半步，不要保持原来姿势。头、躯干、衣甲、双手、枪和右上方朝向保持不变。真正透明背景 RGBA PNG。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    },
+    {
+      "key": "sw_walk_swap",
+      "sha256": "37a028d127d957c057c41814c847665fdfdda5c26400a893a6d0d1a3e2fec331",
+      "repository_path": null,
+      "prompt": "只改两条腿：把当前在画面左下方朝前迈的那条腿收回到身体后方，靴子放到画面右上方；把当前在画面右方、后面抬着的那条腿伸向前方，靴子放到画面左下方。必须互换两条腿的前后位置，这是走路循环的另一半步，不要保持原来姿势。上半身、头朝左、衣甲、双手和枪保持不变。真正透明背景 RGBA PNG。",
+      "references": [],
+      "note": "Unconsumed candidate; not production or part of its dependency chain."
+    }
+  ]
+}

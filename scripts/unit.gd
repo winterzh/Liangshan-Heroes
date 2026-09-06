@@ -344,6 +344,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"guan_jingqi": true,
 	"guan_qi": true,
 	"song_jiang": true,
+	"lin_chong": true,
 }
 
 
