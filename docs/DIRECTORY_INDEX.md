@@ -1,3 +1,9 @@
+## 2026-09-07 Steam Windows 更新证据
+
+- `docs/STEAM_UPDATE_20260907.md`：本轮已上线Windows包、功能变化、验证范围和Steam状态。
+- `qa/steam_update_20260907/`：逐文件归档、437项资源、11次短测、61项设置复验、3图、原QA失败和发布收据；不含成品、缓存或profile。
+- `.godot/steam_update_20260907/windows/`：仅本地EXE与已校验ZIP，不进入Git。
+
 ## 2026-09-07 迷雾与临时侦察数据
 
 - `docs/RUN_BATTLE_FOG_20260907.md`：五个迷雾值与真实地图宽高、182条实测、完整恢复延期范围。

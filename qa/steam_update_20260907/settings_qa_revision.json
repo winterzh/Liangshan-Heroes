@@ -1,0 +1,9 @@
+{
+  "original_qa_sha256": "18e27a1882640d9853998e23f62cd367e84041eed7310782bed13f54735bb50a",
+  "current_qa_sha256": "c2595658c0274ff912cc6a6c10b135e31bbf1381fc62c46da22644d7b3559682",
+  "current_runner_sha256": "6e4fedfe7f05a9467d2b3a15ebcdba7e3cfec7ba649767f890a736c490aa73e0",
+  "original_failure": "First actual PID28656 exited1 after6 checks: QA incorrectly required OS.get_cmdline_args to retain the consumed --main-pack flag. All original evidence and scripts preserved.",
+  "correction": "Owned Popen command verifies one --main-pack, exact path and no --path; actual QA verifies EXE bytes, production Settings/menu/codec loads and reports remaining arguments separately. Game EXE unchanged.",
+  "validation": "New actual write/read processes passed33+28=61 checks, strict logs, distinct PID, isolated profile, exact settings byte continuity and EXE/player/source guards.",
+  "static_receipt_scope": "44 synthetic/static preparation checks belong to original runner/GD, not this later revision; final revision is supported by the actual two-process result."
+}

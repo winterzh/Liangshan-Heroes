@@ -1,3 +1,7 @@
+## 2026-09-07 Windows 更新成品与复现
+
+Steam default已确认为Build25154403，源443e75e；完整状态见[更新记录](STEAM_UPDATE_20260907.md)。本地EXE和单文件ZIP在忽略目录 `.godot/steam_update_20260907/windows/`；[QA归档](../qa/steam_update_20260907/README.md)提供精确来源和复现步骤。构建助手需恢复到全新忽略目录并使用GODOT_PATH，不覆盖历史产物或沿用旧passed收据。新增设置已验证跨进程保存，整局继续入口仍未实现。
+
 ## 2026-09-07 迷雾局部值复现
 
 正常启动不变，仍没有可用的“继续本局”。迷雾适配只在真实Battle/Map的树外实例上完成采集/验证。说明见[迷雾状态](RUN_BATTLE_FOG_20260907.md)，原文与恢复路径在 `tools/contracts/run_battle_fog_20260907/`，182条实际证据在 `qa/run_battle_fog_20260907/`。

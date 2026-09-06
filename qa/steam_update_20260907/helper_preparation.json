@@ -1,0 +1,44 @@
+{
+  "source_commit": "443e75e887afd76f9569cae17b0527a72408aedc",
+  "prior_receipt": "qa/steam_update_20260906",
+  "files": [
+    {
+      "path": "freeze_snapshot.py",
+      "prior_helper_sha256": "6dd33e068cbde0112258e2d21e025490c955bf5c66084527d82f40a3029b6925",
+      "sha256": "dc7dcd7eb8dfcf9ccfb17512a2c01acca9950d1859128ca56cb7c458592a73ce"
+    },
+    {
+      "path": "build_windows.py",
+      "prior_helper_sha256": "cde4e7349827a6d8053c143b884645c47c5d87937661f69a4a90672b814100e7",
+      "sha256": "d8be903794b52d2774e48848446993967355c1fc70ab392f8a9b6ad20a2f365f"
+    },
+    {
+      "path": "verify_package.py",
+      "prior_helper_sha256": "fe4c0d724e500b291b84c929f49eccec9136a9e957983a43b4002ce4a2ec079c",
+      "sha256": "ceecf0b3bcb5c0a1b4a7fc53859998f27f7e724f00194670141c5c1de2d86116"
+    },
+    {
+      "path": "package_contract.gd",
+      "prior_helper_sha256": "efc800fe6498a5d0c67816af4c9f63192f23ce2835cb81449d242e2e7b6c5627",
+      "sha256": "efc800fe6498a5d0c67816af4c9f63192f23ce2835cb81449d242e2e7b6c5627"
+    },
+    {
+      "path": "prepare_upload_zip.py",
+      "prior_helper_sha256": "d46fa65fd892c70b71ac63a1693c3cf190e81519f1251f2b160f810f58680cec",
+      "sha256": "2cdd8c7a36db4e75123cb95a3f3b528a3216d10049fb141a07da4b07e3fad534"
+    },
+    {
+      "path": "finalize_archive_manifest.py",
+      "prior_helper_sha256": "cb56ca13c3830bf231a1e11ec95f314d57d7a16d0a0332e953f50d8cccb3e69c",
+      "sha256": "cb56ca13c3830bf231a1e11ec95f314d57d7a16d0a0332e953f50d8cccb3e69c"
+    }
+  ],
+  "changes": [
+    "Freeze latest verified stable source",
+    "Use current Python interpreter",
+    "Reject warnings as well as errors",
+    "Pin Godot binary digest",
+    "New ZIP filename and Python 3.9 compatible checksum",
+    "Bind visual review and package verification to exact EXE"
+  ]
+}

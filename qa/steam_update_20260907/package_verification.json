@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "source_commit": "443e75e887afd76f9569cae17b0527a72408aedc",
+  "executable": "E:\\ChatGPT\\水浒-art-validation\\.godot\\steam_update_20260907\\windows\\LiangshanHeroes.exe",
+  "size_bytes": 286992544,
+  "sha256": "dcccc29d6ce880370f43a2d58048e974de7fb65544c2149d84b9abcb7c52b8ae",
+  "steps": [
+    {
+      "name": "contract",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--main-pack",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\steam_update_20260907\\windows\\LiangshanHeroes.exe",
+        "--script",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\steam_update_20260907\\package_contract.gd"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 20.432,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    },
+    {
+      "name": "smoke_driver",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\steam_update_20260907\\run_package_smoke.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 45.722,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    },
+    {
+      "name": "visual",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--main-pack",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\steam_update_20260907\\windows\\LiangshanHeroes.exe",
+        "--rendering-method",
+        "forward_plus",
+        "--rendering-driver",
+        "vulkan",
+        "--script",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\steam_update_20260907\\package_visual_capture.gd"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 13.456,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    }
+  ],
+  "contract_checks": 437,
+  "smoke_cases": 11,
+  "visual_captures": 2,
+  "visual_review_pending": true,
+  "scope": "Short actual release EXE smoke and embedded PCK checks; not full human campaign or 30-wave/long-duration acceptance."
+}
