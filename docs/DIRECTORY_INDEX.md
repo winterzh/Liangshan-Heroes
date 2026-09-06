@@ -1,3 +1,9 @@
+## 2026-09-07 三数组持续效果模块与证据
+
+- `scripts/run_continuous_effect_state.gd`：只恢复`_ground_dots`、`_hua_snipe_dots`、`_lin_duels`的剩余值、顺序与对象引用，按原型同字节晋级。
+- `qa/run_continuous_effects_20260907/`：原型与最终正式各52条证据，首轮正式manifest覆盖缺口、旧runner/修正记录独立保留；包含runner/driver/模块、promotion和精确索引，相同依赖复用已提交QA原字节。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)补充剩余3次地火、4次百分比流血及一次决斗奖励的实证；不覆盖其他14类效果或完整死亡清理，M3整局续玩保持开放。
+
 ## 2026-09-07 飞斧恢复组件与证据
 
 - `scripts/run_li_brawn_axes_state.gd`：真实`Battle.LiBrawnAxesFx`的待结算值、Node状态、有序命中和新对象图恢复；与已通过原型同字节。

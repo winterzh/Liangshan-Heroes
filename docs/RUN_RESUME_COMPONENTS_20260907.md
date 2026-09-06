@@ -54,3 +54,11 @@ Map/Scenery v2 已将运行时依赖原始源码摘要的条件改为由外层�
 原型run`20260906T190607921584Z`（PID5796）和正式路径`20260906T191522544612Z`（PID30268）各46条检查通过，均exit0、来源/玩家前后摘要一致且共同锁释放。每轮16条来源前后与30条其余检查，覆盖真实JSON、暂停绑定、首个已释放目标后的活目标一次命中、新Battle一次impact、重复resolve保护及实际queue-free/退出。同组检查复验不累加为独立场景；[飞斧归档](../qa/run_axes_20260907/README.md)保留原始报告、进程、晋级与精确源码映射。
 
 归档/晋级时既有已同步基线为`9bcda9ef510cab041081d0e2bf23addfe0593d02`；较早原型受测文件仍以其manifest为准，不回写Git归属。本增量未接完整Battle/RunSession，未覆盖其他全部持续效果、整局跨进程续战、菜单或PCK恢复，不改变M3验收要求。
+
+## ground/hua/lin 三数组持续效果增量
+
+[run_continuous_effect_state.gd](../scripts/run_continuous_effect_state.gd)与原型同字节，SHA256为`4b1d6214cd760039110b7154555c06a86ffd8ea9dbeb6ca6da8102e24bb2726d`。仅显式保存`_ground_dots`、`_hua_snipe_dots`、`_lin_duels`的剩余字段、时钟、数组顺序和none/已释放/活对象引用；不重启计时，不在绑定时结算伤害、治疗或奖励，缺失引用及已占用目标数组在赋值前拒绝。
+
+原型`20260906T191947368450Z`（PID40452）及修正后正式`20260906T192639802801Z`（PID40280）各52条通过，其中16来源前后与36其余；exit0、源码/玩家摘要一致、锁释放。真实pass续算剩余3次地火和4次按当前最大生命计算的百分比流血；真实队友击杀后直接调用原决斗死亡消费者，回血、Q/W复位与奖励效果只发生一次，重复回调和奖励后再保存恢复均不重复发奖。[持续效果归档](../qa/run_continuous_effects_20260907/README.md)保留完整两组版本证据。
+
+首轮正式`20260906T192154836197Z`实际运行正式driver，但runtime manifest仍指向原型driver；其52项与exit0原文保留为manifest coverage gap，不改成引擎失败，也不充作正式driver完整版本证明。仅修正runner目录后新增最终run，旧runner和修正记录独立归档。相同组件复验不累加为新场景；本增量不覆盖其他14类效果、完整`_on_unit_died`清理、玩法RNG或Battle/RunSession整局，不改变菜单/PCK及M3验收要求。

@@ -1,0 +1,302 @@
+extends SceneTree
+## Three real Battle continuous-effect arrays; no Battle._ready/deploy.
+## Original DOT passes plus real Unit death -> original duel reward consumer.
+## Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Factory := preload("res://scratchpad/run_effects_resume/continuous_state.gd")
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var report_path: String = ""
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+var observed_steps: Dictionary = {}
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "effects-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}), "observed_steps": observed_steps,
+		"scope": "Only ground/hua/lin arrays; real Battle passes and Unit damage/death, direct original duel-death consumer. Does not test other effects, full _on_unit_died cleanup, gameplay RNG or full Battle resume."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[effects-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	# Scripts are loaded only after Autoload readiness. Every battle/unit below
+	# is its real production Script; no fake method or recompiled source body.
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var codec: Variant = codec_script.new()
+	var factory: Variant = Factory.new(codec_script, battle_script, unit_script)
+	paused = true
+	var world: Node2D = Node2D.new()
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	owned.append(world)
+	root.add_child(world)
+	var original: Variant = battle_script.new()
+	owned.append(original)
+	var old_lin: Variant = _make_unit(unit_script, Vector2(5000.0, 0.0), 0, 100.0, 500.0)
+	var old_hua: Variant = _make_unit(unit_script, Vector2(6000.0, 0.0), 0, 500.0, 500.0)
+	var old_ground: Variant = _make_unit(unit_script, Vector2.ZERO, 1, 500.0, 500.0)
+	var old_bleed: Variant = _make_unit(unit_script, Vector2(1000.0, 0.0), 1, 1000.0, 1000.0)
+	var old_duel: Variant = _make_unit(unit_script, Vector2(2000.0, 0.0), 1, 100.0, 500.0)
+	old_lin.key = "lin_chong"
+	old_hua.key = "hua_rong"
+	old_bleed.is_hero = true
+	old_duel.is_hero = true
+	old_lin.ability_slots = [_slot("lin_charge", 7.0), _slot("lin_sweep", 8.0), _slot("lin_spear", 5.0)]
+	var old_units: Array = [old_lin, old_hua, old_ground, old_bleed, old_duel]
+	for unit in old_units: world.add_child(unit)
+	original.units = old_units
+	var old_follow: Variant = _make_unit(unit_script, Vector2.ZERO, 0, 500.0, 500.0)
+	# The real registration helper creates all current ground keys once; later
+	# restoration only binds serialized records, never registers/casts again.
+	original._add_ground_dot(Vector2.ZERO, 30.0, 40.0, 2.0, null, 1, old_follow, 0.8, 0.3, "song_fire")
+	original._add_ground_dot(Vector2(-500.0, -500.0), 2.0, 12.0, 2.0, old_hua, 1, null, 1.0, 0.0, "secondary_order")
+	old_follow.free()
+	# Match current creator shapes exactly without replaying the burst, dash,
+	# taunt or buff portion of either skill in this effects-only fixture.
+	original._hua_snipe_dots = [{"target": old_bleed, "caster": old_hua, "ability_id": "hua_snipe",
+		"t": 5.0, "tick_t": 1.0, "tick": 1.0, "pct": 0.05, "ticks_left": 5}]
+	original._lin_duels = [{"caster": old_lin, "target": old_duel, "t": 3.4, "heal_pct": 0.3}]
+	original._ground_dot_pass(0.5)
+	original._ground_dot_pass(0.2)
+	original._hua_snipe_dot_pass(1.0)
+	original._hua_snipe_dot_pass(0.4)
+	original._lin_duel_pass(0.4)
+	_check("original real passes already spent one ground and one bleed tick", old_ground.hp == 490.0 and old_bleed.hp == 950.0 and original._hua_snipe_dots[0].ticks_left == 4)
+	_check("ground creator retained all fields and expired follow", original._ground_dots[0].size() == 12 and typeof(original._ground_dots[0].follow) == TYPE_OBJECT and not is_instance_valid(original._ground_dots[0].follow))
+	var object_to_id: Dictionary = {}
+	var known: Dictionary = {}
+	for index in range(old_units.size()):
+		object_to_id[old_units[index]] = str(index + 1)
+		known[str(index + 1)] = true
+	var captured: Dictionary = factory.capture(original, "effects_smoke_v1", object_to_id)
+	if not _ok("capture three actual partially elapsed arrays", captured):
+		_finish(true)
+		return
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	var state: Dictionary = factory.validate(record, "effects_smoke_v1", known)
+	if not _ok("validate real JSON arrays", state):
+		_finish(true)
+		return
+	var before_json: Dictionary = factory.validate(captured.record, "effects_smoke_v1", known)
+	_check("all serialized values types and array order survive JSON", state.arrays == before_json.arrays)
+	_check("ground order none and expired retained", state.arrays._ground_dots[0].ability_id == "song_fire" and state.arrays._ground_dots[1].ability_id == "secondary_order" and state.arrays._ground_dots[0].caster.state == "none" and state.arrays._ground_dots[0].follow.state == "expired")
+	_check("bleed percentage tick count is actual int", typeof(state.arrays._hua_snipe_dots[0].ticks_left) == TYPE_INT and state.arrays._hua_snipe_dots[0].ticks_left == 4 and state.arrays._hua_snipe_dots[0].pct == 0.05)
+	var decoded: Dictionary = codec.decode(record.payload)
+	var invalid_payload: Dictionary = decoded.value.duplicate(true)
+	invalid_payload._hua_snipe_dots[0]["ticks_left"] = 4.0
+	var encoded: Dictionary = codec.encode(invalid_payload)
+	var invalid_record: Dictionary = record.duplicate(true)
+	invalid_record["payload"] = encoded.value
+	var rejected: Dictionary = factory.instantiate(invalid_record, "effects_smoke_v1", known)
+	_check("float tick count rejected before Battle allocation", not rejected.ok and rejected.code == "TICKS_LEFT")
+	invalid_payload = decoded.value.duplicate(true)
+	invalid_payload._lin_duels[0]["unrecognized_reward"] = true
+	encoded = codec.encode(invalid_payload)
+	invalid_record["payload"] = encoded.value
+	rejected = factory.validate(invalid_record, "effects_smoke_v1", known)
+	_check("unknown effect field rejected", not rejected.ok and rejected.code == "ENTRY_FIELDS")
+	var units: Array = []
+	var id_to_unit: Dictionary = {}
+	var new_object_to_id: Dictionary = {}
+	# This module serializes effects only; construct real Unit fixtures with the
+	# already-spent health/cooldown state that the independent Unit layer owns.
+	for index in range(old_units.size()):
+		var old: Variant = old_units[index]
+		var copy: Variant = _make_unit(unit_script, old.position, old.faction, old.hp, old.max_hp)
+		copy.key = old.key
+		copy.is_hero = old.is_hero
+		copy.ability_slots = old.ability_slots.duplicate(true)
+		world.add_child(copy)
+		units.append(copy)
+		id_to_unit[str(index + 1)] = copy
+		new_object_to_id[copy] = str(index + 1)
+	for old in old_units: old.free()
+	original.free()
+	var shell: Dictionary = factory.instantiate(record, "effects_smoke_v1", known)
+	if not _ok("instantiate real Battle without ready", shell):
+		_finish(true)
+		return
+	var battle: Variant = shell.battle
+	owned.append(battle)
+	_check("Battle shell stays detached disabled and signal-blocked", not battle.is_inside_tree() and battle.get_parent() == null and battle.process_mode == Node.PROCESS_MODE_DISABLED and battle.is_blocking_signals())
+	var missing: Dictionary = factory.bind(battle, record, "effects_smoke_v1", id_to_unit)
+	_check("missing live tombstone rejects before any array is assigned", not missing.ok and missing.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED" and battle._ground_dots.is_empty() and battle._hua_snipe_dots.is_empty() and battle._lin_duels.is_empty())
+	var tombstone: Variant = unit_script.new()
+	owned.append(tombstone)
+	if not _ok("bind full ordered arrays with live tombstone", factory.bind(battle, record, "effects_smoke_v1", id_to_unit, tombstone)):
+		_finish(true)
+		return
+	tombstone.free()
+	_check("ground follow stays freed Object and caster stays none", typeof(battle._ground_dots[0].follow) == TYPE_OBJECT and not is_instance_valid(battle._ground_dots[0].follow) and battle._ground_dots[0].caster == null)
+	_check("live caster and target references point to new Unit graph", is_same(battle._hua_snipe_dots[0].caster, units[1]) and is_same(battle._hua_snipe_dots[0].target, units[3]) and is_same(battle._lin_duels[0].caster, units[0]) and is_same(battle._lin_duels[0].target, units[4]))
+	var rebound: Dictionary = factory.capture(battle, "effects_smoke_v1", new_object_to_id)
+	if not _ok("recapture bound arrays before simulation", rebound):
+		_finish(true)
+		return
+	var rebound_state: Dictionary = factory.validate(rebound.record, "effects_smoke_v1", known)
+	_check("bind did not restart any timer or change values", rebound_state.arrays == state.arrays)
+	_check("existing destination arrays cannot be overwritten", not factory.bind(battle, record, "effects_smoke_v1", id_to_unit).ok)
+	var effects: Node2D = Node2D.new()
+	world.add_child(effects)
+	battle.fx_root = effects
+	battle.units = units
+	var lin: Variant = units[0]
+	var hua: Variant = units[1]
+	var ground: Variant = units[2]
+	var bleed: Variant = units[3]
+	var duel: Variant = units[4]
+	_check("restore alone did no damage healing or cooldown reward", lin.hp == 100.0 and ground.hp == 490.0 and bleed.hp == 950.0 and lin.ability_slots[0].cd_t == 7.0 and lin.ability_slots[1].cd_t == 8.0 and effects.get_child_count() == 0)
+	await process_frame
+	_check("paused detached Battle remains unticked", lin.hp == 100.0 and ground.hp == 490.0 and bleed.hp == 950.0 and battle._hua_snipe_dots[0].ticks_left == 4)
+	# Real death signal drives the exact reward consumer used by _on_unit_died;
+	# the rest of _on_unit_died (population, loot, cleanup) is outside this suite.
+	duel.died.connect(battle._resolve_lin_duel_death)
+	battle._lin_duel_pass(0.2)
+	_check("unexpired duel timer advances without granting reward", battle._lin_duels.size() == 1 and lin.hp == 100.0 and lin.ability_slots[0].cd_t == 7.0)
+	duel.take_damage(1000.0, hua)
+	_check("teammate real kill grants one heal and Q W reset", duel.hp == 0.0 and lin.hp == 250.0 and lin.ability_slots[0].cd_t == 0.0 and lin.ability_slots[1].cd_t == 0.0 and lin.ability_slots[2].cd_t == 5.0)
+	_check("duel record consumed and one actual reward effect created", battle._lin_duels.is_empty() and effects.get_child_count() == 1)
+	lin.take_damage(50.0)
+	lin.ability_slots[0]["cd_t"] = 2.0
+	lin.ability_slots[1]["cd_t"] = 3.0
+	battle._resolve_lin_duel_death(duel)
+	_check("duplicate death callback cannot repeat healing or CD reset", lin.hp == 200.0 and lin.ability_slots[0].cd_t == 2.0 and lin.ability_slots[1].cd_t == 3.0 and effects.get_child_count() == 1)
+	# Demonstrate percentage damage uses the target's CURRENT max_hp on future
+	# ticks, not an absolute damage amount reconstructed at save time.
+	bleed.max_hp = 2000.0
+	var ground_hits: int = 0
+	var bleed_hits: int = 0
+	var ground_steps: Array = []
+	var bleed_steps: Array = []
+	for index in range(40):
+		var before_ground: float = ground.hp
+		var before_bleed: float = bleed.hp
+		battle._ground_dot_pass(0.1)
+		battle._hua_snipe_dot_pass(0.1)
+		battle._lin_duel_pass(0.1)
+		if ground.hp != before_ground:
+			ground_hits += 1
+			ground_steps.append({"step": index + 1, "damage": before_ground - ground.hp})
+		if bleed.hp != before_bleed:
+			bleed_hits += 1
+			bleed_steps.append({"step": index + 1, "damage": before_bleed - bleed.hp})
+	_check("ground resumes exactly three remaining damage ticks", ground_hits == 3 and ground.hp == 460.0 and battle._ground_dots.is_empty())
+	_check("expired-follow ground retains original center", ground_steps.size() == 3 and ground_steps[0].damage == 10.0 and ground_steps[1].damage == 10.0 and ground_steps[2].damage == 10.0)
+	_check("ground retains slow and miss effect values", ground._attack_speed_slow == 0.8 and ground._attack_miss_chance == 0.3)
+	_check("bleed resumes exactly four percentage ticks", bleed_hits == 4 and bleed.hp == 550.0 and battle._hua_snipe_dots.is_empty())
+	var all_percentage_hits: bool = true
+	for step in bleed_steps:
+		if step.damage != 100.0: all_percentage_hits = false
+	_check("every remaining bleed uses current max HP", all_percentage_hits and bleed_steps.size() == 4)
+	var exhausted_ground_hp: float = ground.hp
+	var exhausted_bleed_hp: float = bleed.hp
+	battle._ground_dot_pass(1.0)
+	battle._hua_snipe_dot_pass(1.0)
+	_check("exhausted effects cannot deal extra damage", ground.hp == exhausted_ground_hp and bleed.hp == exhausted_bleed_hp and lin.hp == 200.0)
+	var after_capture: Dictionary = factory.capture(battle, "effects_smoke_v1", new_object_to_id)
+	if not _ok("capture after reward and effect exhaustion", after_capture):
+		_finish(true)
+		return
+	var after_record: Variant = JSON.parse_string(JSON.stringify(after_capture.record))
+	var after_shell: Dictionary = factory.instantiate(after_record, "effects_smoke_v1", known)
+	if not _ok("instantiate post-reward snapshot", after_shell):
+		_finish(true)
+		return
+	var after_battle: Variant = after_shell.battle
+	owned.append(after_battle)
+	if not _ok("bind post-reward empty arrays", factory.bind(after_battle, after_record, "effects_smoke_v1", id_to_unit)):
+		_finish(true)
+		return
+	after_battle._resolve_lin_duel_death(duel)
+	_check("saving after reward cannot restore an awardable duel", after_battle._lin_duels.is_empty() and lin.hp == 200.0 and lin.ability_slots[0].cd_t == 2.0 and lin.ability_slots[1].cd_t == 3.0)
+	_check("Battle ready and deployment never ran", not battle.is_inside_tree() and not after_battle.is_inside_tree() and battle.gold == 0 and battle.wood == 0)
+	observed_steps = {"ground": ground_steps, "hua_bleed": bleed_steps}
+	_finish()
+
+func _make_unit(unit_script: Script, at: Vector2, faction: int, hp: float, max_hp: float) -> Variant:
+	var unit: Variant = unit_script.new()
+	owned.append(unit)
+	unit.visible = false
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.position = at
+	unit.faction = faction
+	unit.max_hp = max_hp
+	unit.hp = hp
+	unit.radius = 12.0
+	unit.stance = 3
+	return unit
+
+func _slot(id: String, cooldown: float) -> Dictionary:
+	return {"id": id, "rank": 1, "cd_t": cooldown, "passive": false, "charges": 0, "recharge_t": 0.0, "cast_seq": 0}

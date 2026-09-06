@@ -1,3 +1,9 @@
+## 2026-09-07 三数组持续效果复现
+
+新增正式`scripts/run_continuous_effect_state.gd`，仅处理ground/hua/lin三数组。原型及修正后正式路径各52条通过；首轮正式驱动未被manifest覆盖的原文独立保留，不当作引擎失败或完整版本证明。[持续效果QA](../qa/run_continuous_effects_20260907/README.md)提供最终runner/driver、模块、promotion、历史修正和精确依赖映射。
+
+在独立相容checkout按source index恢复缺失的忽略目录，使用最终修正runner：`python scratchpad/run_effects_production_qa/run_smoke.py --godot "<实际Godot路径>" --suite effects`；不带`--run`仅预检，实际执行追加`--run`并保持新私有用户目录、共同锁和新run。已有文件只核对、不覆盖，不能从归档`.gd.txt`直接启动。正常游戏入口不变，尚未接RunSession整局、菜单或PCK恢复。
+
 ## 2026-09-07 飞斧恢复组件复现
 
 新增正式 `scripts/run_li_brawn_axes_state.gd`，原型与正式路径各46条真实对象检查通过；两轮受测文件分别按manifest精确SHA复现，不把相同检查累加成新场景。[飞斧QA](../qa/run_axes_20260907/README.md)保留runner、driver、factory、晋级收据与依赖映射；未变Battle等原字节明确复用已提交的组件归档。
