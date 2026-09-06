@@ -1033,25 +1033,24 @@ func _request_redraw() -> void:
 
 
 func _queue_animated_redraw(interval := 0.08, force := false) -> void:
-	if battle != null and battle._lite_fx and not battle.unit_visual_active(position):
-		return
-	if not force and battle != null and battle._lite_fx:
-		if _animated_redraw_t > 0.0:
+	if battle != null and battle._lite_fx:
+		if not force and _animated_redraw_t > 0.0:
 			return
-		_animated_redraw_t = interval
+		if not battle.unit_visual_active(position):
+			return
+		if not force:
+			_animated_redraw_t = interval
 	_request_redraw()
 
 
 func _queue_motion_redraw() -> void:
 	if battle != null and battle._lite_fx:
-		if not battle.unit_visual_active(position):
-			return
 		if battle._mob_count > 260 and not selected:
-			# 按 instance_id 把精灵重画均匀摊到不同物理帧，避免几百个单位同帧重画的尖峰。
+			# Keep the existing per-instance cadence; reject before projecting.
 			var stride := 3 if battle._mob_count > 500 else 2
 			if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:
 				return
-			_request_redraw()
+		if not battle.unit_visual_active(position):
 			return
 	_request_redraw()
 

@@ -1,0 +1,173 @@
+extends "res://tools/polish_performance_probe.gd"
+## DRAFT: COUNTERS ONLY. Per-call Dictionary instrumentation materially slows code.
+## This driver deliberately does not collect/report FPS, frame percentiles, or timings.
+const DIAGNOSTIC_META := "_redraw_rejection_diagnostic"
+var diagnostic_population := 206
+var collecting := false
+var diagnostic_trajectory: Array = []
+
+class CounterTick extends Node:
+	var probe
+	func _physics_process(_delta: float) -> void: probe._diagnostic_tick()
+
+func _diagnostic_tick() -> void:
+	if not is_instance_valid(battle_ref): return
+	physics_tick += 1
+	var b = battle_ref
+	if frozen_camera and (b.camera.position != camera_origin or b.camera.zoom != Vector2.ONE or b.camera.offset != Vector2.ZERO or b.camera.rotation != 0.0):
+		camera_violations += 1
+	if b._autocam_active: autocam_active_ticks += 1
+	if camera_mode == "auto" and b.camera.user_controlling(): manual_camera_ticks += 1
+	if collecting and physics_tick % 60 == 0:
+		var row := _state(b)
+		row["mob_count"] = b._mob_count
+		row["cumulative_counts"] = b.get_meta(DIAGNOSTIC_META).duplicate(true)
+		diagnostic_trajectory.append(row)
+
+# Generated verbatim from the pinned baseline fixture, replacing only 200 with
+# diagnostic_population - 6. It creates one fixture, never a second reset/spawn.
+func _new_battle():
+	var camp = root.get_node("Campaign")
+	for key in ["skirmish","skirmish_ai","arena","scenario","custom_defense","scale_on","ai_friendly"]: camp.set(key,false)
+	camp.defense_waves = 30; camp.defense_hero_cap = 4; camp.defense_random = false
+	camp.enemy_mult = 1.0; camp.hero_mult = 1.0; camp.hero_mult_touched = false
+	camp.ai_difficulty = "normal"; camp.victory_mode = "conquest"
+	camp.current = 2 if scenario == "zhu_contact" else (4 if scenario == "gao_contact" else 0)
+	if scenario in ["economy","defense200"]: camp.skirmish = true
+	seed(5088120)
+	var b = load("res://scenes/main.tscn").instantiate()
+	b.process_mode = Node.PROCESS_MODE_DISABLED
+	root.add_child(b); current_scene = b
+	await process_frame
+	b.hud._intro_root.hide(); b._on_intro_done(); b._on_start_battle()
+	seed(5088120) # Explicit fixture-generation origin after scene initialization.
+	if scenario == "defense200": b._perf_bench_setup(diagnostic_population - 6)
+	if scenario == "zhu_contact":
+		# Controlled congestion fixture; not a paid-production/balance/playthrough test.
+		for i in range(72):
+			var cell: Vector2i = b.level.MAIN_GATE + Vector2i(i%9-4,4+i/9)
+			cell = b.map.nearest_open(cell)
+			fixture_units.append(b.spawn_unit(["liang_dao","liang_qiang","liang_gong"][i%3],0,b.map.cell_to_world(cell)))
+		for i in range(4):
+			var cell: Vector2i = b.map.nearest_open(b.level.MAIN_GATE+Vector2i(i*2-3,13))
+			fixture_units.append(b.spawn_unit("siege_ram",0,b.map.cell_to_world(cell)))
+	b._prof_on = false
+	await process_frame # Complete queued fixture-node deletion before simulation starts.
+	b._grid_build()
+	b.camera.zoom = Vector2.ONE; b.camera.rotation = 0.0; b.camera.offset = Vector2.ZERO; b.camera._shake = 0.0
+	var cell: Vector2i = b.level.camera_start_cell()
+	if scenario == "zhu_contact": cell = b.level.MAIN_GATE
+	elif scenario == "gao_contact": cell = b.level.SEA_FRONT
+	b.center_camera_cell(cell); camera_origin = b.camera.position
+	b.camera.set_process_unhandled_input(false)
+	if camera_mode == "fixed":
+		b.camera.set_process(false)
+		b.camera._user_input_t = 1e12; frozen_camera = true
+	else:
+		b.camera._user_input_t = 0.0
+		b._autocam_enabled = true
+	b.camera.force_update_scroll()
+	b.set_process_input(false); b.set_process_unhandled_input(false)
+	return b
+
+
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA", "1")
+	scenario = "defense200" # Reuse the explicit six-managed-hero combat fixture.
+	camera_mode = OS.get_environment("REDRAW_DIAG_CAMERA")
+	diagnostic_population = int(OS.get_environment("REDRAW_DIAG_POPULATION"))
+	seconds = float(OS.get_environment("REDRAW_DIAG_SECONDS"))
+	var output := OS.get_environment("REDRAW_DIAG_OUT")
+	if DisplayServer.get_name() == "headless" or camera_mode not in ["fixed", "auto"] \
+			or diagnostic_population not in [206, 326, 506] or not is_finite(seconds) or seconds < 1.0 or output.is_empty():
+		push_error("Real-renderer diagnostic requires valid population, camera, seconds and output")
+		quit(2)
+		return
+	var before := _prefs_hash()
+	_configure_settings()
+	var music = root.get_node("Music")
+	var audio_start := Time.get_ticks_usec()
+	while Time.get_ticks_usec() - audio_start < 60_000_000 and (music._thr != null and music._thr.is_alive() or music._tracks.calm.size() < 4 or music._tracks.battle.size() < 4):
+		await process_frame
+	check((music._thr == null or not music._thr.is_alive()) and music._tracks.calm.size() == 4 and music._tracks.battle.size() == 4,
+		"counter diagnostic starts after normal audio synthesis")
+	var b = await _new_battle()
+	battle_ref = b
+	check(b._mob_count == diagnostic_population, "requested mobile deployment actually created")
+	var deployed := _state(b)
+	deployed["mob_count"] = b._mob_count
+	var driver := CounterTick.new()
+	driver.probe = self
+	driver.process_physics_priority = -10000
+	root.add_child(driver)
+	var warm_start := Time.get_ticks_usec()
+	b.process_mode = Node.PROCESS_MODE_INHERIT
+	while physics_tick < WARMUP_TICKS and b.phase == b.Phase.FIGHT and Time.get_ticks_usec() - warm_start < 90_000_000:
+		await process_frame
+	check(physics_tick >= WARMUP_TICKS, "counter fixture completed 300 warmup physics ticks")
+	await RenderingServer.frame_post_draw
+	var warm_end_tick := physics_tick
+	var sample_start := _state(b)
+	sample_start["mob_count"] = b._mob_count
+	var auto_at_start := autocam_active_ticks
+	# Nonempty marker enables injected counters. Before this point the original
+	# function bodies run with inert counters; warmup counts do not enter sample.
+	b.set_meta(DIAGNOSTIC_META, {"enabled": true})
+	collecting = true
+	var began := Time.get_ticks_usec()
+	while Time.get_ticks_usec() - began < int(seconds * 1_000_000.0) and b.phase == b.Phase.FIGHT:
+		await RenderingServer.frame_post_draw
+	collecting = false
+	var observed_seconds := float(Time.get_ticks_usec() - began) / 1_000_000.0
+	var counts: Dictionary = b.get_meta(DIAGNOSTIC_META).duplicate(true)
+	b.remove_meta(DIAGNOSTIC_META)
+	counts.erase("enabled")
+	var sample_end := _state(b)
+	sample_end["mob_count"] = b._mob_count
+	var complete: bool = observed_seconds >= seconds and b.phase == b.Phase.FIGHT
+	check(complete, "complete requested counter observation window")
+	check(camera_violations == 0, "fixed transform unchanged during diagnostic")
+	check(Engine.time_scale == 1.0 and Engine.physics_ticks_per_second == 60, "normal physics configuration retained")
+	if camera_mode == "auto":
+		check(autocam_active_ticks > auto_at_start, "automatic camera active inside counter window")
+		check(manual_camera_ticks == 0, "no manual keyboard camera takeover")
+	for kind in ["animated", "motion"]:
+		var calls := int(counts.get(kind + "_calls", 0))
+		var projections := int(counts.get(kind + "_projection_calls", 0))
+		var submitted := int(counts.get(kind + "_request_submissions", 0))
+		var avoided := int(counts.get(kind + ("_avoidable_cooldown" if kind == "animated" else "_avoidable_stride"), 0))
+		check(calls >= projections and projections >= avoided and avoided >= 0 and calls >= submitted and submitted >= 0,
+			kind + " count bounds are consistent")
+	check(int(counts.get("animated_calls", 0)) + int(counts.get("motion_calls", 0)) > 0, "instrumented helpers actually observed")
+	var report := {"schema": 1, "kind": "redraw_rejection_counters_only", "performance_claim": false,
+		"scope": "Per-call probe overhead: no FPS/timing result. Initial population is a deployment, not a maintained population.",
+		"count_semantics": "avoidable_* counts projections that an earlier existing rejection could skip, including currently offscreen calls. request_submissions counts calls to _request_redraw, not actual Canvas draw executions.",
+		"requested_population": diagnostic_population, "requested_enemy_count": diagnostic_population - 6,
+		"camera_mode": camera_mode, "seed": 5088120, "requested_seconds": seconds,
+		"observed_seconds": observed_seconds, "warmup_end_tick": warm_end_tick,
+		"observation_physics_ticks": physics_tick - warm_end_tick, "sample_complete": complete,
+		"deployed": deployed, "sample_start": sample_start, "sample_end": sample_end,
+		"trajectory": diagnostic_trajectory, "counts": counts, "camera_violations": camera_violations,
+		"sample_autocam_active_ticks": autocam_active_ticks - auto_at_start, "manual_camera_ticks": manual_camera_ticks,
+		"renderer": RenderingServer.get_current_rendering_method(), "gpu": RenderingServer.get_video_adapter_name(),
+		"resolution": [root.size.x, root.size.y], "godot": Engine.get_version_info().string}
+	driver.queue_free()
+	battle_ref = null
+	fixture_units.clear()
+	var weak = weakref(b)
+	await _dispose(b)
+	check(weak.get_ref() == null, "counter battle freed")
+	check(_prefs_hash() == before, "player campaign and settings bytes unchanged")
+	report["checks"] = checks
+	report["failures"] = failures
+	report["diagnostic_valid"] = failures.is_empty()
+	var file := FileAccess.open(output, FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot write counter diagnostic report")
+		quit(2)
+		return
+	file.store_string(JSON.stringify(report, "\t"))
+	file.close()
+	print("[redraw-counter-only] ", JSON.stringify({"population": diagnostic_population, "camera": camera_mode,
+		"counts": counts, "diagnostic_valid": failures.is_empty(), "performance_claim": false}))
+	quit(0 if failures.is_empty() else 1)

@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "camera": "fixed",
+      "required_repeats_each": 1,
+      "pairs": [
+        {
+          "repetition": 1,
+          "reference_report": "reference_fixed_1.json",
+          "candidate_report": "candidate_fixed_1.json",
+          "candidate_minus_reference": {
+            "fps": 1.3776747673306797,
+            "p95_ms": -16.900999999999982,
+            "p99_ms": 15.847000000000008
+          }
+        }
+      ],
+      "same_deployment": true,
+      "same_input_plan": true,
+      "reference_median": {
+        "fps": 9.44449000996642,
+        "p95_ms": 158.837,
+        "p99_ms": 158.837
+      },
+      "candidate_median": {
+        "fps": 10.8221647772971,
+        "p95_ms": 141.936,
+        "p99_ms": 174.684
+      },
+      "comparison_eligible": false
+    }
+  ],
+  "comparison_eligible": false,
+  "performance_gate_passed": false,
+  "note": "Statistical comparison eligibility is not a performance gate or deterministic combat equivalence."
+}

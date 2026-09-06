@@ -1,0 +1,105 @@
+{
+  "groups": [
+    {
+      "camera": "fixed",
+      "required_repeats_each": 3,
+      "pairs": [
+        {
+          "repetition": 1,
+          "reference_report": "reference_fixed_1.json",
+          "candidate_report": "candidate_fixed_1.json",
+          "candidate_minus_reference": {
+            "fps": -2.0728543590562936,
+            "p95_ms": -1.2989999999999995,
+            "p99_ms": -2.0470000000000113
+          }
+        },
+        {
+          "repetition": 2,
+          "reference_report": "reference_fixed_2.json",
+          "candidate_report": "candidate_fixed_2.json",
+          "candidate_minus_reference": {
+            "fps": -3.6267189555538124,
+            "p95_ms": -1.7169999999999987,
+            "p99_ms": -2.875
+          }
+        },
+        {
+          "repetition": 3,
+          "reference_report": "reference_fixed_3.json",
+          "candidate_report": "candidate_fixed_3.json",
+          "candidate_minus_reference": {
+            "fps": -0.1967250600511079,
+            "p95_ms": -1.065999999999999,
+            "p99_ms": -0.7079999999999984
+          }
+        }
+      ],
+      "same_deployment": true,
+      "same_input_plan": true,
+      "reference_median": {
+        "fps": 82.9437999509537,
+        "p95_ms": 22.91,
+        "p99_ms": 66.769
+      },
+      "candidate_median": {
+        "fps": 81.7315461368578,
+        "p95_ms": 21.611,
+        "p99_ms": 64.773
+      },
+      "comparison_eligible": true
+    },
+    {
+      "camera": "auto",
+      "required_repeats_each": 3,
+      "pairs": [
+        {
+          "repetition": 1,
+          "reference_report": "reference_auto_1.json",
+          "candidate_report": "candidate_auto_1.json",
+          "candidate_minus_reference": {
+            "fps": 0.6308125069067927,
+            "p95_ms": 0.3290000000000006,
+            "p99_ms": -0.5929999999999964
+          }
+        },
+        {
+          "repetition": 2,
+          "reference_report": "reference_auto_2.json",
+          "candidate_report": "candidate_auto_2.json",
+          "candidate_minus_reference": {
+            "fps": 2.9278763627541906,
+            "p95_ms": -2.625,
+            "p99_ms": -5.643000000000001
+          }
+        },
+        {
+          "repetition": 3,
+          "reference_report": "reference_auto_3.json",
+          "candidate_report": "candidate_auto_3.json",
+          "candidate_minus_reference": {
+            "fps": -7.768775952196293,
+            "p95_ms": 3.439,
+            "p99_ms": 11.104
+          }
+        }
+      ],
+      "same_deployment": true,
+      "same_input_plan": true,
+      "reference_median": {
+        "fps": 84.8962603197329,
+        "p95_ms": 20.752,
+        "p99_ms": 60.483
+      },
+      "candidate_median": {
+        "fps": 86.8783436204647,
+        "p95_ms": 20.1,
+        "p99_ms": 59.89
+      },
+      "comparison_eligible": true
+    }
+  ],
+  "comparison_eligible": true,
+  "performance_gate_passed": false,
+  "note": "Statistical comparison eligibility is not a performance gate or deterministic combat equivalence."
+}

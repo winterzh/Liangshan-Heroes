@@ -1,3 +1,10 @@
+## 2026-09-06 持续打磨 M2B
+
+- `docs/REDRAW_REJECT_20260906.md`：重绘提前拒绝、状态/像素/计时证据、12个正式窗口及未达性能门槛。
+- `tools/prepare_redraw_reject_validation.py`、`tools/redraw_reject_validation_base.gd`、`tools/redraw_reject_qa.gd`、`tools/redraw_reject_timing.gd`：可复用准备/全范围来源复核/真实渲染与函数计时；不改生产源。
+- `tools/contracts/redraw_reject/`：e516c83两段完整旧方法、旧/新方法哈希和命令说明。
+- `qa/redraw_reject_20260906/`：局部诊断、正式重复窗口、最终公共工具复验及单列旧失败；生成诊断代码存为文本，原始字节SHA清单与 `.gdignore` 隔离。
+
 ## 2026-09-06 持续打磨 M2A
 
 - `docs/POLISH_FEEDBACK_20260906.md`：野猪林与祝家庄操作/失败反馈、边界和335项最终结果。

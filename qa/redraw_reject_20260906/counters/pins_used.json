@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "status": "draft prepared; generator and Godot not run",
+  "locked_lf_sha256": {
+    "scripts/unit.gd": "51d2a2a43174bda2f69e39ba56d28b0800e0405fb071464228692c5186f4ea9c",
+    "tools/polish_performance_probe.gd": "04a47115c8cd05670b465086653491466fdae99f6fadf9c41c40379aee0c1407",
+    "tools/run_polish_performance.py": "5d4e3b0295c540af90053d2f953a9189ca1cb2da4276641b4c091cde63c59abc",
+    "tools/zhujiazhuang_rts_test.gd": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a"
+  },
+  "method_sha256": {
+    "_queue_animated_redraw": "2110485d7b6d998fd7d6bff56b582f7e014631b49419b4353cb5a2fd94c23c53",
+    "_queue_motion_redraw": "992f29cb6e768302e7ae4dccf8faaff9c8ce1263ea70bc0bd56830452b26a988"
+  },
+  "frozen_methods": {
+    "_queue_animated_redraw": "func _queue_animated_redraw(interval := 0.08, force := false) -> void:\n\tif battle != null and battle._lite_fx and not battle.unit_visual_active(position):\n\t\treturn\n\tif not force and battle != null and battle._lite_fx:\n\t\tif _animated_redraw_t > 0.0:\n\t\t\treturn\n\t\t_animated_redraw_t = interval\n\t_request_redraw()\n",
+    "_queue_motion_redraw": "func _queue_motion_redraw() -> void:\n\tif battle != null and battle._lite_fx:\n\t\tif not battle.unit_visual_active(position):\n\t\t\treturn\n\t\tif battle._mob_count > 260 and not selected:\n\t\t\t# 按 instance_id 把精灵重画均匀摊到不同物理帧，避免几百个单位同帧重画的尖峰。\n\t\t\tvar stride := 3 if battle._mob_count > 500 else 2\n\t\t\tif get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:\n\t\t\t\treturn\n\t\t\t_request_redraw()\n\t\t\treturn\n\t_request_redraw()\n"
+  }
+}

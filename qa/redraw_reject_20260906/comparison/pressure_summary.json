@@ -1,0 +1,82 @@
+{
+  "groups": [
+    {
+      "camera": "fixed",
+      "variant": "reference",
+      "reports": [
+        "reference_fixed_1.json",
+        "reference_fixed_2.json",
+        "reference_fixed_3.json"
+      ],
+      "first10_median": {
+        "fps": 18.927649954787487,
+        "p95_ms": 101.43,
+        "p99_ms": 164.154
+      },
+      "lowest10_fps_each": [
+        22.041214223764054,
+        17.91684790488618,
+        18.927649954787487
+      ]
+    },
+    {
+      "camera": "fixed",
+      "variant": "candidate",
+      "reports": [
+        "candidate_fixed_1.json",
+        "candidate_fixed_2.json",
+        "candidate_fixed_3.json"
+      ],
+      "first10_median": {
+        "fps": 23.6039099663534,
+        "p95_ms": 91.959,
+        "p99_ms": 127.211
+      },
+      "lowest10_fps_each": [
+        24.26737878706344,
+        22.06968295904887,
+        23.6039099663534
+      ]
+    },
+    {
+      "camera": "auto",
+      "variant": "reference",
+      "reports": [
+        "reference_auto_1.json",
+        "reference_auto_2.json",
+        "reference_auto_3.json"
+      ],
+      "first10_median": {
+        "fps": 24.649406783833065,
+        "p95_ms": 91.599,
+        "p99_ms": 142.262
+      },
+      "lowest10_fps_each": [
+        24.665977676725934,
+        24.649406783833065,
+        23.659747857924753
+      ]
+    },
+    {
+      "camera": "auto",
+      "variant": "candidate",
+      "reports": [
+        "candidate_auto_1.json",
+        "candidate_auto_2.json",
+        "candidate_auto_3.json"
+      ],
+      "first10_median": {
+        "fps": 25.198310829896634,
+        "p95_ms": 96.493,
+        "p99_ms": 114.612
+      },
+      "lowest10_fps_each": [
+        21.70925346709949,
+        30.026892464013578,
+        25.198310829896634
+      ]
+    }
+  ],
+  "performance_gate_passed": false,
+  "note": "All first-ten-second windows after 300 physics warmup steps. Natural attrition, no deterministic combat equivalence. Full 60-second windows and all segments retained."
+}

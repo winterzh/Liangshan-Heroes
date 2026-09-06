@@ -1,3 +1,9 @@
+## 2026-09-06 重绘投影提前排除
+
+本批仅调整 Unit 两处既有拒绝条件的判断顺序，减少不需要重绘时的可见性投影。正常 `Play.cmd` 启动、设置和玩家存档格式不变。12个至少60秒对照已完成，压力前10秒仍未达到持续30 FPS；见[实现与结果](REDRAW_REJECT_20260906.md)。
+
+新增可复用入口 `python tools/prepare_redraw_reject_validation.py`，使用Python3.9以上标准库生成本次来源清单和旧/新对照类，不修改生产源码。按返回路径配置环境后，串行运行 `tools/redraw_reject_qa.gd` 和 `tools/redraw_reject_timing.gd`；两者需要真实Vulkan渲染。完整命令与来源变更后重新prepare要求见[工具说明](../tools/contracts/redraw_reject/README.md)，输出留在忽略的 `.godot/redraw_reject_validation/`。
+
 ## 2026-09-06 野猪林与祝家庄操作反馈
 
 运行现有 `Play.cmd` 并重开关卡加载本批反馈。野猪林停止提示随按键绑定变化；祝家庄救人后可选时迁/获救队伍或查看前营，仍需另下移动命令，任务面板可滚动。没有新增运行依赖。

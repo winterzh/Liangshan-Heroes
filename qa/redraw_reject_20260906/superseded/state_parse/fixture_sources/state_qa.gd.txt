@@ -1,0 +1,142 @@
+extends SceneTree
+## DRAFT helper-state comparison only. No Canvas draw or image-equivalence claim.
+## Frozen old and proposed new methods run on the SAME actual Unit instance,
+## without an await between them, inside the SAME real physics callback.
+var unit
+var adapter
+var checks := 0
+var failures: Array[String] = []
+var phases := {}
+var pairs := 0
+var projection_calls_old := 0
+var projection_calls_candidate := 0
+var ready_for_ticks := false
+var done := false
+
+class BattleAdapter extends RefCounted:
+	var _lite_fx := false
+	var _mob_count := 206
+	var in_view := true
+	var queries := 0
+	func unit_visual_active(_position: Vector2) -> bool:
+		queries += 1
+		return in_view
+
+class PairTick extends Node:
+	var probe
+	func _physics_process(_delta: float) -> void: probe._test_tick()
+
+func _initialize() -> void: _run.call_deferred()
+
+func _check(ok: bool, message: String) -> void:
+	checks += 1
+	if not ok and failures.size() < 24: failures.append(message)
+
+func _same_float(a: float, b: float) -> bool:
+	return (is_nan(a) and is_nan(b)) or a == b
+
+func _prefs() -> Dictionary:
+	var out := {}
+	for path in ["user://campaign.cfg", "user://settings.cfg"]:
+		out[path] = FileAccess.get_sha256(path) if FileAccess.file_exists(path) else "absent"
+	return out
+
+func _one(method: String, timer: float, interval: float, force: bool) -> Dictionary:
+	unit._animated_redraw_t = timer
+	unit._qa_request_count = 0
+	adapter.queries = 0
+	if method.ends_with("animated"):
+		unit.call(method, interval, force)
+	else:
+		unit.call(method)
+	return {"timer": unit._animated_redraw_t, "requests": unit._qa_request_count, "queries": adapter.queries,
+		"position": unit.position, "selected": unit.selected, "physics_frame": Engine.get_physics_frames(),
+		"instance_id": unit.get_instance_id()}
+
+func _pair(kind: String, timer: float, interval: float, force: bool) -> void:
+	var old := _one("_qa_reference_" + kind, timer, interval, force)
+	var candidate := _one("_qa_candidate_" + kind, timer, interval, force)
+	pairs += 1
+	var state_equal := _same_float(float(old.timer), float(candidate.timer)) and old.requests == candidate.requests \
+		and old.position == candidate.position and old.selected == candidate.selected
+	_check(state_equal and old.instance_id == candidate.instance_id and old.physics_frame == candidate.physics_frame,
+		"pair %d %s same-instance/same-tick output mismatch; lite=%s visible=%s mob=%s timer=%s force=%s" %
+		[pairs, kind, adapter._lite_fx, adapter.in_view, adapter._mob_count, timer, force])
+	_check(int(candidate.queries) <= int(old.queries), "candidate adds a visibility query at pair %d" % pairs)
+	projection_calls_old += int(old.queries)
+	projection_calls_candidate += int(candidate.queries)
+	# Explicit externally-visible semantics, beyond comparing two implementations.
+	if unit.battle != null and adapter._lite_fx and not adapter.in_view:
+		_check(old.requests == 0 and _same_float(float(old.timer), timer), "offscreen call must not submit or reset animation timer")
+	if kind == "animated" and force and (unit.battle == null or not adapter._lite_fx or adapter.in_view):
+		_check(old.requests == 1 and _same_float(float(old.timer), timer), "visible force submits once without resetting timer")
+
+func _test_tick() -> void:
+	if not ready_for_ticks or done: return
+	var phase := int(Engine.get_physics_frames()) % 6
+	if phases.has(phase): return
+	phases[phase] = true
+	for with_battle in [false, true]:
+		unit.battle = adapter if with_battle else null
+		for lite in [false, true]:
+			adapter._lite_fx = lite
+			for visible_now in [false, true]:
+				adapter.in_view = visible_now
+				for timer in [-0.1, 0.0, 0.01, 0.08, INF, NAN]:
+					for interval in [-0.1, 0.0, 0.08, 0.2]:
+						for force in [false, true]: _pair("animated", timer, interval, force)
+				for population in [0, 36, 90, 206, 260, 261, 326, 500, 501, 506]:
+					adapter._mob_count = population
+					for selection in [false, true]:
+						unit.selected = selection
+						_pair("motion", 0.04, 0.08, false)
+	if phases.size() == 6: done = true
+
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA", "1")
+	await process_frame # Compile actual Unit only after autoloads exist.
+	var before := _prefs()
+	var music = root.get_node("Music")
+	var started := Time.get_ticks_usec()
+	while Time.get_ticks_usec() - started < 60_000_000 and music._thr != null and music._thr.is_alive():
+		await process_frame
+	_check(music._thr == null or not music._thr.is_alive(), "background synthesis completed before short QA exit")
+	var class_path := OS.get_environment("REDRAW_QA_CLASS")
+	var script = load(class_path)
+	if script == null:
+		push_error("Generated QA Unit class did not compile")
+		quit(2)
+		return
+	unit = script.new() # Real Unit instance; never added to a Battle or Canvas.
+	adapter = BattleAdapter.new()
+	var tested_id: int = unit.get_instance_id()
+	var driver := PairTick.new()
+	driver.probe = self
+	root.add_child(driver)
+	ready_for_ticks = true
+	var deadline := Time.get_ticks_usec() + 30_000_000
+	while not done and Time.get_ticks_usec() < deadline: await process_frame
+	_check(done and phases.size() == 6, "all modulo-2/modulo-3 phases covered on one Unit instance")
+	_check(projection_calls_candidate < projection_calls_old, "fixtures exercise an actual early-rejection query reduction")
+	unit.battle = null
+	unit.free()
+	unit = null
+	adapter = null
+	driver.queue_free()
+	await process_frame
+	_check(_prefs() == before, "campaign and settings files unchanged")
+	var report := {"schema": 1, "kind": "redraw_helper_state_only", "diagnostic_valid": failures.is_empty(),
+		"performance_claim": false, "render_equivalence_verified": false, "source_mutated": false,
+		"scope": "Complete frozen old/candidate helper bodies with request observer, same real Unit/physics tick. Actual Canvas drawing, visibility projection and pixel equivalence are not covered.",
+		"instance_id": tested_id, "physics_modulo_6": phases.keys(), "pairs": pairs, "checks": checks,
+		"visibility_queries_reference": projection_calls_old, "visibility_queries_candidate": projection_calls_candidate,
+		"failures": failures}
+	var file := FileAccess.open(OS.get_environment("REDRAW_DIAG_OUT"), FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot write helper-state report")
+		quit(2)
+		return
+	file.store_string(JSON.stringify(report, "\t"))
+	file.close()
+	print("[redraw-helper-state-only] ", JSON.stringify(report))
+	quit(0 if failures.is_empty() else 1)

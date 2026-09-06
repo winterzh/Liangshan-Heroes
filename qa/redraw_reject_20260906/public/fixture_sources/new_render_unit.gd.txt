@@ -1,0 +1,9 @@
+extends "res://scripts/unit.gd"
+var qa_draws := 0
+var qa_last := {}
+func qa_snapshot() -> Dictionary:
+	return {"idle":_idle_t,"anim":_anim_t,"hp":hp,"direction":animation_direction,"selected":selected,"lunge":_lunge,"death":_death_t,"variant":art_variant,"flash":_flash,"burn":_burn_t}
+func _draw() -> void:
+	qa_draws += 1
+	qa_last = qa_snapshot()
+	super._draw()
