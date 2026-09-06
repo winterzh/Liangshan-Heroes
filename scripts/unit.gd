@@ -24,7 +24,7 @@ var art_variant := "":
 	set(value):
 		if art_variant == value: return
 		art_variant = value
-		queue_redraw()
+		_request_redraw()
 		appearance_changed.emit(self)
 var animation_direction := "se"
 var _direction_candidate := "se"
@@ -421,21 +421,21 @@ func set_selected(v: bool) -> void:
 		selected = v
 		if not v:
 			is_active = false
-		queue_redraw()
+		_request_redraw()
 
 
 ## 查看高亮：被「查看」的敌方单位画红圈（区别于己方绿圈），只读不可下令。
 func set_inspected(v: bool) -> void:
 	if inspected != v:
 		inspected = v
-		queue_redraw()
+		_request_redraw()
 
 
 ## 活动单位高亮：Tab/命令面板当前指向的那个（编队里多于一个时才标，便于「确定是哪个」）
 func set_active(v: bool) -> void:
 	if is_active != v:
 		is_active = v
-		queue_redraw()
+		_request_redraw()
 
 
 ## 公开指令入口：Shift 排队（queued=true 追加队列，否则清空队列立即执行）。
@@ -948,7 +948,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if from != null and is_instance_valid(from):
 		var fd := _screen_dir(position - from.position)
 		_flinch = fd * 4.0
-	queue_redraw()
+	_request_redraw()
 	# 被打就还手（仅限当前没有目标的战斗单位）
 	if not is_building and from != null and is_instance_valid(from) \
 			and from.hp > 0.0 and from.faction != faction:
@@ -984,7 +984,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 			# 资源点（金矿/林木）保留旧染暗表现（枯竭另走 deplete_resource）。
 			if is_resource:
 				modulate = Color(0.45, 0.4, 0.38)
-				queue_redraw()
+				_request_redraw()
 		else:
 			# 进入死亡动画：朝受击反方向倒地、淡出后再释放
 			Sfx.play("death", -6.0, 0.12, 110)
@@ -995,7 +995,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 			if from != null and is_instance_valid(from):
 				ddir = position - from.position
 			_death_lean = 1.0 if (ddir.x - ddir.y) >= 0.0 else -1.0
-			queue_redraw()
+			_request_redraw()
 
 
 func _physics_process(delta: float) -> void:
@@ -1009,9 +1009,21 @@ func _physics_process(delta: float) -> void:
 	# This chapter has only two paired actors. Either actor changing position, dying or
 	# attacking must invalidate BOTH canvas command lists, even if the other is idle.
 	if is_instance_valid(story_assist_partner) or is_instance_valid(story_assist_owner):
+		_request_redraw()
+		if is_instance_valid(story_assist_partner): story_assist_partner._request_redraw()
+		if is_instance_valid(story_assist_owner): story_assist_owner._request_redraw()
+
+
+func _request_redraw() -> void:
+	# Catch-up physics ticks each flush deferred CanvasItem draws. Combine those
+	# requests before the next process pass so the canvas sees the final state.
+	# Non-physics input/UI requests keep the usual immediate queueing behavior.
+	if not is_inside_tree() or not Engine.is_in_physics_frame():
 		queue_redraw()
-		if is_instance_valid(story_assist_partner): story_assist_partner.queue_redraw()
-		if is_instance_valid(story_assist_owner): story_assist_owner.queue_redraw()
+		return
+	var next_frame := get_tree().process_frame
+	if not next_frame.is_connected(queue_redraw):
+		next_frame.connect(queue_redraw, CONNECT_ONE_SHOT)
 
 
 func _queue_animated_redraw(interval := 0.08, force := false) -> void:
@@ -1021,7 +1033,7 @@ func _queue_animated_redraw(interval := 0.08, force := false) -> void:
 		if _animated_redraw_t > 0.0:
 			return
 		_animated_redraw_t = interval
-	queue_redraw()
+	_request_redraw()
 
 
 func _queue_motion_redraw() -> void:
@@ -1033,9 +1045,9 @@ func _queue_motion_redraw() -> void:
 			var stride := 3 if battle._mob_count > 500 else 2
 			if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:
 				return
-			queue_redraw()
+			_request_redraw()
 			return
-	queue_redraw()
+	_request_redraw()
 
 
 func _mass_visuals() -> bool:
@@ -1056,7 +1068,7 @@ func _phys_body(delta: float) -> void:
 		if _story_pose_t <= 0.0:
 			art_variant = _pose_previous_variant
 			remove_meta("story_pose")
-			queue_redraw()
+			_request_redraw()
 	if story_outcome != "" or is_captive:
 		return
 	_animated_redraw_t = maxf(0.0, _animated_redraw_t - delta)
@@ -1120,7 +1132,7 @@ func _phys_body(delta: float) -> void:
 		if _track_combat_stats and passive_regen > 0.0 and battle != null:
 			var effective_regen := hp - hp_before_regen
 			battle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)
-		queue_redraw()
+		_request_redraw()
 
 	# 技能冷却/充能（各槽）与临时增益计时
 	_tick_ability_slots(delta)
@@ -1428,13 +1440,13 @@ func _phys_body(delta: float) -> void:
 		for d in _dust:
 			d.t -= delta
 		_dust = _dust.filter(func(d): return d.t > 0.0)
-		queue_redraw()
+		_request_redraw()
 	if _lunge > 0.0:
 		var prev_l := _lunge
 		_lunge = maxf(0.0, _lunge - delta * _swing_speed)
 		if not _pending_done and prev_l > _hit_at and _lunge <= _hit_at:
 			_deal_hit()
-		queue_redraw()
+		_request_redraw()
 	if _flinch != Vector2.ZERO:
 		_flinch = _flinch.move_toward(Vector2.ZERO, delta * 90.0)
 		_queue_animated_redraw(0.08, _flinch == Vector2.ZERO)
@@ -1730,7 +1742,7 @@ func _do_repair(delta: float) -> void:
 				_finish_worker_task()   # 没钱修了 → 回去采集攒资源
 				return
 		bld.hp = minf(bld.max_hp, bld.hp + dh)
-		bld.queue_redraw()
+		bld._request_redraw()
 		if bld.hp >= bld.max_hp:
 			_build_site = null
 			_finish_worker_task()
@@ -1753,17 +1765,17 @@ func advance_build(delta: float) -> void:
 		if battle != null and battle.has_method("register_building_footprint"):
 			battle.register_building_footprint(self)
 		hp = max_hp * 0.1
-		queue_redraw()
+		_request_redraw()
 	build_progress += delta
 	hp = max_hp * clampf(0.1 + 0.9 * build_progress / maxf(build_time, 0.1), 0.1, 1.0)
-	queue_redraw()
+	_request_redraw()
 	if build_progress >= build_time:
 		is_constructing = false
 		build_progress = build_time
 		hp = max_hp
 		if battle != null:
 			battle.on_building_complete(self)
-		queue_redraw()
+		_request_redraw()
 
 
 func production_wait_label() -> String:
@@ -1876,7 +1888,7 @@ func _attack() -> void:
 			_swing_speed = 1.9; _hit_at = 0.42   # 张弓→撒放（放慢，原 2.9）
 		_:
 			_swing_speed = 2.1; _hit_at = 0.48   # 劈砍（放慢看清，原 3.6）
-	queue_redraw()
+	_request_redraw()
 
 
 ## 纯表演挥击（采集砍凿等）：只播挥击动作，不结算伤害（_pending_done=true 跳过 _deal_hit）。
@@ -1887,7 +1899,7 @@ func _begin_cosmetic_swing(logic_dir: Vector2) -> void:
 	_pending_done = true
 	_swing_speed = 2.2   # 采集砍凿：放慢看清（与攻击同步）
 	_hit_at = 0.5
-	queue_redraw()
+	_request_redraw()
 
 
 ## 挥击命中瞬间：结算伤害 / 放箭 + 命中火花
@@ -2294,7 +2306,7 @@ func _face_dir(d: Vector2, force := false) -> void:
 		face_left = f
 		redraw_needed = true
 	if redraw_needed:
-		queue_redraw()
+		_request_redraw()
 
 
 ## ---------- 技能接口（多槽 + 经典RTS式升级）----------
@@ -2492,7 +2504,7 @@ func slot_start_cd(i: int) -> void:
 	else:
 		ability_slots[i]["cd_t"] = _slot_cd(i)
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 ## 升级门槛：当前 rank→下一级需达英雄等级。普通技能 [1,3,5]；
@@ -2519,7 +2531,7 @@ func learn(i: int) -> void:
 		ability_slots[i]["cast_seq"] = 0
 	if bool(ability_slots[i]["passive"]):
 		_recompute_hero_stats()
-	queue_redraw()
+	_request_redraw()
 
 
 ## 战死英雄在聚义厅重练后恢复原有等级/经验/技能点/已学技能（不再从 1 级重来）。
@@ -2559,7 +2571,7 @@ func gain_xp(amount: float) -> void:
 		_buff_glow = 1.0
 		if battle != null and battle.has_method("spawn_levelup"):
 			battle.spawn_levelup(position)
-	queue_redraw()
+	_request_redraw()
 
 
 ## 重算英雄属性：基础 ×等级成长 + 已学被动加成
@@ -2698,7 +2710,7 @@ func toggle_melee() -> void:
 	_recompute_hero_stats()      # 内部按 melee_mode 决定射程
 	aggro_range = maxf(200.0, atk_range + 50.0)
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 # 兼容旧单技能接口（= 槽0）
@@ -2725,7 +2737,7 @@ func heal(amount: float, healer: Unit = null, source_id := "") -> float:
 	if _track_combat_stats and healer != null and battle != null:
 		battle.record_hero_combat_healing(self, healer, effective, source_id)
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 	return effective
 
 
@@ -2736,7 +2748,7 @@ func start_lin_guard(rank: int, dur: float, reduction: float) -> void:
 	_lin_guard_used = false
 	apply_damage_reduction(reduction, dur, -500000 - int(get_instance_id()))
 	_buff_glow = 1.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 林冲 E·枪势叠层。返回本次额外伤害、回血比例及演出所需层数；空表表示被动未学或目标不合法。
@@ -2771,7 +2783,7 @@ func apply_temp_atk(mult: float, dur: float) -> void:
 	temp_atk = mult
 	_temp_atk_t = dur
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 ## 临时「平攻加成」（+N 攻击，与乘区 temp_atk 叠加）：李逵暴走用。
@@ -2779,7 +2791,7 @@ func apply_temp_atk_add(add: float, dur: float) -> void:
 	temp_atk_add = add
 	_temp_atk_add_t = dur
 	_buff_glow = 0.6
-	queue_redraw()
+	_request_redraw()
 
 
 ## 发动冲锋（李逵 W）：蓄力 windup 秒后，朝 dir 高速冲 dist 像素，撞翻沿途敌人。
@@ -2801,7 +2813,7 @@ func _begin_charge(dir: Vector2, dmg: float, windup: float, dist: float, width: 
 	_state = ST_IDLE
 	_queue.clear()
 	_face_dir(_charge_dir, true)
-	queue_redraw()
+	_request_redraw()
 
 
 ## 冲锋逐帧：蓄力期原地待命；冲刺期沿 dir 平移，扫到的敌人各撞一次。
@@ -2809,7 +2821,7 @@ func _do_charge_step(delta: float) -> void:
 	if _charge_t > 0.0:
 		_charge_t = maxf(0.0, _charge_t - delta)
 		_face_dir(_charge_dir)
-		queue_redraw()
+		_request_redraw()
 		return
 	# 冲刺中：高速平移（受阻则停），撞伤沿途敌人
 	var step := _charge_dir * 560.0 * delta
@@ -2832,7 +2844,7 @@ func _do_charge_step(delta: float) -> void:
 				if battle.has_method("spawn_impact"):
 					battle.spawn_impact(u.position, true)
 	_charge_dash = maxf(0.0, _charge_dash - delta)
-	queue_redraw()
+	_request_redraw()
 
 
 func apply_lifesteal(frac: float, dur: float) -> void:
@@ -2970,7 +2982,7 @@ func apply_stun(dur: float) -> void:
 		_target = null
 		cancel_cast_windup()
 		_break_channel()   # 眩晕必断引导
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -2980,7 +2992,7 @@ func apply_shield(amount: float, dur: float) -> void:
 	_shield = maxf(_shield, amount)
 	_shield_t = maxf(_shield_t, dur)
 	_buff_glow = 1.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 区域护阵减伤：同一来源刷新，多个来源只取当前最高比例；来源到期后会正确降档。
@@ -3027,7 +3039,7 @@ func apply_silence(dur: float) -> void:
 	if entering:
 		cancel_cast_windup()
 		_break_channel()   # 沉默必断引导
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -3037,7 +3049,7 @@ func apply_root(dur: float) -> void:
 	var entering := _root_t <= 0.0
 	_root_t = maxf(_root_t, dur)
 	if entering:
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -3047,7 +3059,7 @@ func apply_disarm(dur: float) -> void:
 	var entering := _disarm_t <= 0.0
 	_disarm_t = maxf(_disarm_t, dur)
 	if entering:
-		queue_redraw()
+		_request_redraw()
 	else:
 		_queue_animated_redraw()
 
@@ -3057,14 +3069,14 @@ func _begin_channel_state(dur: float) -> void:
 	_channel_t = dur
 	_channel_dur = dur
 	_target = null   # 放下当前目标，就地引导
-	queue_redraw()
+	_request_redraw()
 
 
 ## 引导被打断（眩晕/沉默/被拖走）：立即中止——battle._channel_pass 下一帧发现 _channel_t<=0 即停止结算。
 func _break_channel() -> void:
 	if _channel_t > 0.0:
 		_channel_t = 0.0
-		queue_redraw()
+		_request_redraw()
 
 
 ## 主动隐身：dur 秒内不可被索敌/指向（己方半透可见）；破隐首击带 strike_bonus 纯伤。
@@ -3072,7 +3084,7 @@ func apply_invis(dur: float, strike_bonus: float) -> void:
 	_invis_t = maxf(_invis_t, dur)
 	_invis_strike_bonus = strike_bonus
 	modulate.a = 0.35
-	queue_redraw()
+	_request_redraw()
 
 
 ## 破隐（攻击/施法即现形）：清隐身，并把破隐加成挂到下一击（由 _deal_hit 兑现）。
@@ -3080,7 +3092,7 @@ func _break_invis() -> void:
 	if _invis_t > 0.0:
 		_invis_t = 0.0
 		modulate.a = 1.0
-		queue_redraw()
+		_request_redraw()
 
 
 ## 变身(transform)：dur 秒内换到临时形态——按 form 表改攻/攻速/移速/体型/染色（到期还原）。
@@ -3103,7 +3115,7 @@ func apply_form(form: Dictionary, dur: float) -> void:
 		modulate = Color(tc.r, tc.g, tc.b, modulate.a)
 	_recompute_hero_stats()   # 让 atk/血量/射程叠加 form 修正
 	_buff_glow = 1.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 变身到期：从备份还原体型/攻速/移速/染色，清形态并重算（recompute 此时不再叠 form 修正）。
@@ -3118,7 +3130,7 @@ func _end_form() -> void:
 	_form_t = 0.0
 	if is_hero:
 		_recompute_hero_stats()
-	queue_redraw()
+	_request_redraw()
 
 
 ## 变形术(hex)：dur 秒内沉默+缴械+大幅减速（组合软控·可反击），并显示"小猪替身"视觉。
@@ -3127,7 +3139,7 @@ func apply_hex(dur: float) -> void:
 	apply_silence(dur)
 	apply_disarm(dur)
 	apply_slow(0.35, dur)   # 变形期间步履蹒跚
-	queue_redraw()
+	_request_redraw()
 
 
 ## 驱散/净化：hostile=true 清自身增益（樊瑞驱敌方 buff）；false 清自身减益（安道全神医解控）。
@@ -3159,7 +3171,7 @@ func dispel(hostile: bool) -> void:
 		_attack_speed_slow = 1.0; _attack_speed_slow_t = 0.0
 		if temp_speed < 1.0:
 			temp_speed = 1.0; _temp_speed_t = 0.0   # 只清减速（加速归驱散）
-	queue_redraw()
+	_request_redraw()
 
 
 ## 宋江 R 的定向解控：只清说明中承诺的四项，不顺带移除缴械、易伤、嘲讽、致盲等其他减益。
@@ -3170,7 +3182,7 @@ func cleanse_command_control() -> void:
 	if temp_speed < 1.0:
 		temp_speed = 1.0
 		_temp_speed_t = 0.0
-	queue_redraw()
+	_request_redraw()
 
 
 ## 嘲讽(taunt)：dur 秒内被迫攻击 src（无视原目标/玩家指令/AI 大脑）。优先级低于眩晕。
@@ -3180,14 +3192,14 @@ func apply_taunt(src: Unit, dur: float) -> void:
 	if src != null and is_instance_valid(src):
 		order_attack(src)   # 立刻转火
 		_chase_intent = CHASE_FORCED
-	queue_redraw()
+	_request_redraw()
 
 
 ## 易伤：dur 秒内受到的伤害放大 (1+amp) 倍（取较强者）。樊瑞 W·摄魂咒。
 func apply_dmg_amp(amp: float, dur: float) -> void:
 	_dmg_amp = maxf(_dmg_amp, amp)
 	_dmg_amp_t = maxf(_dmg_amp_t, dur)
-	queue_redraw()
+	_request_redraw()
 
 
 ## 攻速狂暴：临时攻速倍率（>1 出手更快），取较大者。
@@ -3275,7 +3287,7 @@ func begin_cast_windup(dur: float, col: Color) -> void:
 	_cast_t = dur
 	_cast_dur = maxf(dur, 0.001)
 	_cast_color = col
-	queue_redraw()
+	_request_redraw()
 
 
 func cancel_cast_windup() -> void:
@@ -3285,7 +3297,7 @@ func cancel_cast_windup() -> void:
 	_cast_t = 0.0
 	if battle != null and battle.has_method("cancel_pending_cast"):
 		battle.cancel_pending_cast(self)
-	queue_redraw()
+	_request_redraw()
 
 
 ## 逻辑方向 → 直立(屏幕)空间方向，用于攻击突刺/劈砍朝向
@@ -4306,7 +4318,7 @@ func resolve_story(outcome: String) -> bool:
 	selected = false
 	if outcome in ["embarked", "retreated"]:
 		visible = false
-	queue_redraw()
+	_request_redraw()
 	story_resolved.emit(self, outcome)
 	return true
 
@@ -4321,4 +4333,4 @@ func play_story_pose(pose: String, variant: String, duration := 2.0) -> void:
 	art_variant = variant
 	set_meta("story_pose", pose)
 	_story_pose_t = duration
-	queue_redraw()
+	_request_redraw()

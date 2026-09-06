@@ -1,0 +1,586 @@
+{
+	"failures": [],
+	"mode_checks": [
+		{
+			"name": "counted Unit compiles direct=true",
+			"passed": true
+		},
+		{
+			"name": "counted Unit compiles direct=false",
+			"passed": true
+		},
+		{
+			"name": "song_jiang walk  identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang walk  final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang walk  one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang walk  direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "song_jiang attack  identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang attack  final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang attack  one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang attack  direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "song_jiang death  identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang death  final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang death  one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang death  direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "song_jiang idle song_jiang_bound identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang idle song_jiang_bound final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang idle song_jiang_bound one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "song_jiang idle song_jiang_bound direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "guan_dao walk  identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "guan_dao walk  final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "guan_dao walk  one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "guan_dao walk  direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "hua_rong attack  identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "hua_rong attack  final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "hua_rong attack  one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "hua_rong attack  direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "arrow_tower burn  identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "arrow_tower burn  final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "arrow_tower burn  one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "arrow_tower burn  direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "tree harvest  identical RGBA pixels after every rendered frame",
+			"passed": true
+		},
+		{
+			"name": "tree harvest  final physics state reaches this rendered frame",
+			"passed": true
+		},
+		{
+			"name": "tree harvest  one combined Unit draw per rendered frame",
+			"passed": true
+		},
+		{
+			"name": "tree harvest  direct baseline reproduces multiple physics draws",
+			"passed": true
+		},
+		{
+			"name": "paused non-physics selection redraws",
+			"passed": true
+		},
+		{
+			"name": "queued physics state still draws when immediately paused",
+			"passed": true
+		},
+		{
+			"name": "hidden then revealed unit has current state",
+			"passed": true
+		},
+		{
+			"name": "detached and reattached unit redraws current state",
+			"passed": true
+		},
+		{
+			"name": "unit freed with queued redraw has no retained signal target",
+			"passed": true
+		},
+		{
+			"name": "out-of-tree invalidation and immediate free complete",
+			"passed": true
+		},
+		{
+			"name": "previous scene, map and units actually freed",
+			"passed": true
+		},
+		{
+			"name": "player save bytes unchanged",
+			"passed": true
+		}
+	],
+	"passed": true,
+	"renderer": "forward_plus",
+	"samples": [
+		{
+			"case": "walk",
+			"combined_draws": 8,
+			"direct_draws": 30,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 3,
+					"physics_ticks": 3
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 3,
+					"physics_ticks": 3
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "song_jiang",
+			"physics_ticks": 30,
+			"variant": ""
+		},
+		{
+			"case": "attack",
+			"combined_draws": 8,
+			"direct_draws": 32,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "song_jiang",
+			"physics_ticks": 32,
+			"variant": ""
+		},
+		{
+			"case": "death",
+			"combined_draws": 8,
+			"direct_draws": 32,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "song_jiang",
+			"physics_ticks": 32,
+			"variant": ""
+		},
+		{
+			"case": "idle",
+			"combined_draws": 8,
+			"direct_draws": 32,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "song_jiang",
+			"physics_ticks": 32,
+			"variant": "song_jiang_bound"
+		},
+		{
+			"case": "walk",
+			"combined_draws": 8,
+			"direct_draws": 32,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "guan_dao",
+			"physics_ticks": 32,
+			"variant": ""
+		},
+		{
+			"case": "attack",
+			"combined_draws": 8,
+			"direct_draws": 32,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "hua_rong",
+			"physics_ticks": 32,
+			"variant": ""
+		},
+		{
+			"case": "burn",
+			"combined_draws": 8,
+			"direct_draws": 32,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "arrow_tower",
+			"physics_ticks": 32,
+			"variant": ""
+		},
+		{
+			"case": "harvest",
+			"combined_draws": 8,
+			"direct_draws": 32,
+			"frame_rows": [
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				},
+				{
+					"combined_draws": 1,
+					"direct_draws": 4,
+					"physics_ticks": 4
+				}
+			],
+			"frames": 8,
+			"key": "tree",
+			"physics_ticks": 32,
+			"variant": ""
+		}
+	],
+	"scope": "Controlled visual states, actual 60Hz physics catch-up and renderer at max_fps 15; pixel equivalence and invalidation cadence, not normal gameplay FPS. Baseline overrides only the scheduling helper with the previous direct queue behavior."
+}

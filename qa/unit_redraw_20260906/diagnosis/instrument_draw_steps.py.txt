@@ -1,0 +1,14 @@
+from pathlib import Path
+import re,subprocess
+for name in ['unit','battle','hud','game_map','liangshan_scenery','liangshan_entrance']:
+ p=Path('scripts/'+name+'.gd');original=p.read_bytes()
+ assert original.replace(b'\r\n',b'\n')==subprocess.check_output(['git','show','HEAD:'+p.as_posix()]).replace(b'\r\n',b'\n'),name
+ Path('scratchpad/draw_steps_base_'+p.name+'.txt').write_bytes(original)
+ s=original.decode();occurrence=[0]
+ def wrap(m):
+  indent=m.group(1);occurrence[0]+=1
+  impl='_draw_steps_probe_'+str(occurrence[0])
+  wrapper=indent+'func _draw() -> void:\n'+indent+'\tvar started := Time.get_ticks_usec()\n'+indent+'\t'+impl+'()\n'+indent+'\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+name+'_draw",started)\n\n\n'
+  return wrapper+indent+'func '+impl+'() -> void:'
+ s,n=re.subn(r'^(\t*)func _draw\(\) -> void:',wrap,s,flags=re.M);assert n>0,name
+ p.write_bytes(s.encode())

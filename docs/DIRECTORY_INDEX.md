@@ -1,3 +1,10 @@
+## 2026-09-06 单位重绘增量
+
+- `tools/unit_redraw_qa.gd`：真实物理追帧、双视口像素和生命周期验证；`tools/unit_redraw_stress.gd`：无计时包装的实战窗口。
+- `tools/contracts/unit_redraw/`：57e2512直接重绘参照及边界说明。
+- `docs/UNIT_REDRAW_20260906.md`：实现、计时限制及复现。
+- `qa/unit_redraw_20260906/`：原始逐帧诊断、42项像素/生命周期、动作/剧情/菜单回归、实战窗口和哈希收据。
+
 ## 2026-09-06 宋江四向
 
 - `assets/characters/song_jiang_direction4_20260906/`：15张原生透明生产图及Godot导入设置；`assets/anim/song_jiang_*_<方向>.tres`：16个排帧资源。
