@@ -1,0 +1,162 @@
+extends SceneTree
+# Run only in a parent-owned isolated project/profile after its Autoloads exist.
+const CONTENT_FIXTURE := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+var checks: Array = []
+var failures: Array = []
+var callbacks := 0
+var adapter
+var codec
+var unit_script: GDScript
+var manifest: Dictionary
+
+func _initialize() -> void: _run.call_deferred()
+func check(ok: bool, label: String) -> void:
+	checks.append({"label":label,"passed":ok})
+	if not ok: failures.append(label)
+func _notice(_unit) -> void: callbacks += 1
+func _story_notice(_unit,_outcome) -> void: callbacks += 1
+func _json_hop(record: Dictionary) -> Dictionary:
+	var parser := JSON.new()
+	check(parser.parse(JSON.stringify(record,"",false)) == OK,"record crosses real JSON syntax")
+	return parser.data if parser.data is Dictionary else {}
+func _repack(record: Dictionary, mutate: Callable) -> Dictionary:
+	var result: Dictionary = codec.decode(record.values)
+	check(result.ok,"negative fixture starts from valid decoded values")
+	if not result.ok: return {}
+	mutate.call(result.value)
+	var encoded: Dictionary = codec.encode(result.value)
+	check(encoded.ok,"negative fixture uses exact real value codec")
+	var altered := record.duplicate(true)
+	altered.values = encoded.value
+	return _json_hop(altered)
+func _reject(record: Dictionary, code: String, label: String) -> void:
+	var result: Dictionary = adapter.validate_record(record,CONTENT_FIXTURE)
+	check(not result.ok and result.code==code and not result.has("values"),label)
+
+func _cases() -> void:
+	var unit = unit_script.new()
+	var altered_source := GDScript.new()
+	altered_source.source_code="extends Node2D\n"
+	var adapter_script: GDScript=adapter.get_script()
+	var mismatch=adapter_script.new(altered_source,codec.get_script())
+	var refused: Dictionary=mismatch.capture_values(unit,CONTENT_FIXTURE)
+	check(not refused.ok and refused.code=="SOURCE_CONTRACT","different/missing Unit declarations refused before explicit access")
+	check(unit.get_script()==unit_script and not unit.is_inside_tree(),"actual production Unit instance without setup or ticking")
+	var captured: Dictionary = adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(captured.ok and not captured.restore_ready,"default actual Unit values captured with explicit incomplete-restore status")
+	if not captured.ok: unit.free(); return
+	var restored: Dictionary = adapter.validate_record(_json_hop(captured.record),CONTENT_FIXTURE)
+	check(restored.ok and restored.values.size()==243,"all 241 declaration values plus two inherited values validated")
+	check(restored.ok and typeof(restored.values._path)==TYPE_PACKED_VECTOR2_ARRAY,"native packed path type restored from explicit Vector2 array")
+	check(restored.ok and restored.values._ai_dest==Vector2.INF and restored.values.mission_order_target==Vector2.INF and restored.values._chase_best_distance==INF,"three default positive-INF sentinels survive finite codec")
+	check(captured.coverage.deferred_fields.size()==26 and captured.coverage.omitted_visual_fields.size()==5 and not captured.coverage.references_encoded,"all other declaration fields have explicit pending/visual category")
+
+	# Raw fixture construction, not a behavioral restore. Do not invoke setup,
+	# orders, recomputation, take_damage or physics to reconstruct saved state.
+	unit.key="lin_chong"; unit.display_name="林冲"
+	unit.hp=87.25; unit.max_hp=412.5; unit._cd=-0.0125
+	unit.position=Vector2(412.25,-128.5); unit.modulate=Color(1.25,0.7,0.2,0.35)
+	unit._path=PackedVector2Array([Vector2(4.5,8.25),Vector2(17.75,29.125)])
+	unit._path_i=1; unit._state=3; unit._chase_intent=2
+	unit._ai_dest=Vector2(600.5,700.25); unit._chase_best_distance=94.125
+	unit._shield=75.5; unit._shield_t=2.25; unit._invis_strike_pending=34.5
+	unit._lunge=0.61; unit._hit_at=0.45; unit._pending_done=false; unit._cast_serial=19
+	unit._weapon=1; unit._stepped=true; unit._order_serial=9007199254740993
+	unit._train_queue=["liang_dao","liang_gong"]; unit._train_t=0.0; unit.production_blocked=true
+	unit.build_time=30.0; unit.build_progress=11.5; unit.is_constructing=true
+	unit.ability_slots=[{"id":"lin_thrust","rank":2,"cd_t":1.125,"passive":false,"charges":1,"recharge_t":4.25,"cast_seq":9007199254740993}]
+	unit._form={"atk_mult":1.5,"hp_mult":1.4,"radius":18.0,"tint":Color(1.2,0.95,0.7)}
+	unit._form_t=7.25; unit._form_backup={"atk_cd":0.8,"base_speed":88.0,"radius":13.0,"mod_r":1.0,"mod_g":1.0,"mod_b":1.0}
+	unit.setup_def={"name":"林冲","hp":320,"abilities":["lin_thrust","lin_sweep"],"custom_value_tree":{"pair":[1,2.5]}}
+	unit.group_nums=[1,3]; unit.selected=true
+	unit.died.connect(_notice); unit.story_resolved.connect(_story_notice); unit.appearance_changed.connect(_notice)
+	seed(719381); var expected_random := randi(); seed(719381)
+	captured=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(captured.ok,"non-default live-state values capture")
+	if not captured.ok: unit.free(); return
+	check(randi()==expected_random and callbacks==0,"capture neither consumes RNG nor emits Unit signals")
+	var record: Dictionary = _json_hop(captured.record)
+	restored=adapter.validate_record(record,CONTENT_FIXTURE)
+	check(restored.ok and callbacks==0,"JSON validation emits no gameplay signals")
+	if not restored.ok: unit.free(); return
+	check(restored.values.hp==87.25 and restored.values.max_hp==412.5 and restored.values._cd==-0.0125,"preserve HP and signed sub-tick cooldown without clamping")
+	check(restored.values._path==unit._path and restored.values._path_i==1 and restored.values.position==unit.position,"preserve exact path, cursor and position without navigation recompute")
+	check(restored.values._weapon==1 and restored.values._stepped and restored.values._lunge==0.61 and not restored.values._pending_done,"pending strike and cached weapon remain explicit values")
+	check(restored.values._order_serial==9007199254740993 and restored.values.ability_slots[0].cast_seq==9007199254740993,"Unit and ability serials preserve int64 beyond JSON float range")
+	check(restored.values._train_queue==["liang_dao","liang_gong"] and restored.values.production_blocked and restored.values._train_t==0.0,"paid completed training queue does not spawn or charge again")
+	check(restored.values._shield==75.5 and restored.values._shield_t==2.25 and restored.values._invis_strike_pending==34.5,"temporary pools, remaining timers and pending strike bonus retained")
+	check(restored.values._form==unit._form and restored.values._form_backup==unit._form_backup and restored.values.modulate==unit.modulate,"form state and original backup/appearance retained without recomputation")
+	var again: Dictionary = adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(again.ok and JSON.stringify(again.record,"",false)==JSON.stringify(captured.record,"",false),"capture and validate leave all captured Unit values unchanged")
+	var detached: Dictionary = restored.values.setup_def
+	detached["name"]="changed decoded copy"
+	check(unit.setup_def.name=="林冲","decoded containers do not alias source Unit definitions")
+
+	var missing := record.duplicate(true); missing.erase("unit_source_lf")
+	_reject(missing,"RECORD_FIELDS","missing record contract rejected")
+	var stale := record.duplicate(true); stale.unit_source_lf="0".repeat(64)
+	_reject(stale,"UNIT_SOURCE","different Unit source rejected")
+	var wrong_content := record.duplicate(true); wrong_content.content_fingerprint="b".repeat(64)
+	_reject(wrong_content,"CONTENT_FINGERPRINT","different caller content contract rejected")
+	_reject(_repack(record,func(v): v.erase("_shield_t")),"VALUE_FIELDS","missing timer never silently defaults")
+	_reject(_repack(record,func(v): v["unknown_runtime_field"]=1),"VALUE_FIELDS","unknown value field rejected")
+	_reject(_repack(record,func(v): v.hp=87),"VALUE_TYPE","integer HP cannot silently replace float field")
+	_reject(_repack(record,func(v): v._state=9),"VALUE_RANGE","unknown state enum rejected")
+	_reject(_repack(record,func(v): v.ability_slots[0].erase("cast_seq")),"ABILITY_SLOT_FIELDS","missing ability cast sequence rejected")
+	_reject(_repack(record,func(v): v._form["unknown_damage"]=2),"FORM_FIELDS","unknown form semantics rejected")
+	_reject(_repack(record,func(v): v._ai_dest={"state":"positive_inf","point":Vector2.ZERO}),"SENTINEL_SHAPE","sentinel has exact field shape")
+	_reject(_repack(record,func(v): v._path=[1,2]),"PATH_SHAPE","packed path cannot coerce scalar points")
+	unit._ai_dest=Vector2(INF,0.0)
+	var invalid: Dictionary=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(not invalid.ok and invalid.code=="SENTINEL_VALUE","partial infinity vector rejected")
+	unit._ai_dest=Vector2.INF; unit._chase_best_distance=-INF
+	invalid=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(not invalid.ok and invalid.code=="SENTINEL_VALUE","negative infinity distance rejected")
+	unit._chase_best_distance=INF; unit.hp=NAN
+	invalid=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(not invalid.ok and invalid.code=="NON_FINITE","ordinary NaN cannot use sentinel channel")
+	unit.hp=87.25; unit.story_outcome="captured"
+	invalid=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(not invalid.ok and invalid.code=="CHAPTER_STATE_UNSUPPORTED","unsupported chapter value state refuses standard contract")
+	unit.story_outcome=""
+	var target = unit_script.new()
+	unit._target=target; unit._queue=[{"kind":"attack","target":target,"explicit":true}]
+	target.free()
+	var refs_pending: Dictionary=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(refs_pending.ok and "_target" in refs_pending.coverage.deferred_fields and "_queue" in refs_pending.coverage.deferred_fields and not refs_pending.restore_ready,"freed references are deferred explicitly, never flattened into null values")
+	unit._target=null; unit._queue.clear()
+	var unexpected := RefCounted.new()
+	unit.setup_def["not_a_value"]=unexpected
+	invalid=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(not invalid.ok and invalid.code=="CODEC_UNSUPPORTED_TYPE","Object in effective definition rejected without serializing it")
+	unit.setup_def.erase("not_a_value")
+	unit.free()
+	invalid=adapter.capture_values(unit,CONTENT_FIXTURE)
+	check(not invalid.ok and invalid.code=="UNIT_UNAVAILABLE","freed subject rejected")
+
+func _run() -> void:
+	var manifest_path := OS.get_environment("UNIT_ADAPTER_QA_MANIFEST")
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+	if not parsed is Dictionary: push_error("Unit adapter QA requires isolated manifest"); quit(2); return
+	manifest=parsed
+	check(ProjectSettings.globalize_path("user://").replace("\\","/").trim_suffix("/")==String(manifest.private_user).replace("\\","/").trim_suffix("/"),"parent-isolated actual profile")
+	for name in manifest.source_sha256: check(FileAccess.get_sha256("res://"+name)==manifest.source_sha256[name],"runtime source "+name)
+	# Runtime loading after Autoload initialization avoids recursive static Unit
+	# compilation before Art/Sfx are available; these are the production classes.
+	unit_script=load("res://scripts/unit.gd")
+	var codec_script: GDScript=load("res://scratchpad/run_state_value_codec/value_codec.gd")
+	var adapter_script: GDScript=load("res://scratchpad/run_unit_state_adapter/unit_values.gd")
+	check(unit_script!=null and codec_script!=null and adapter_script!=null,"real Unit, codec and adapter scripts load")
+	if failures.is_empty():
+		codec=codec_script.new(); adapter=adapter_script.new(unit_script,codec_script)
+		_cases()
+	for name in manifest.source_sha256: check(FileAccess.get_sha256("res://"+name)==manifest.source_sha256[name],"source unchanged "+name)
+	var report := {"schema":1,"run_id":manifest.run_id,"process_id":OS.get_process_id(),"manifest_sha256":FileAccess.get_sha256(manifest_path),
+		"checks":checks,"failures":failures,"passed":not checks.is_empty() and failures.is_empty(),"actual_user_dir":ProjectSettings.globalize_path("user://"),
+		"source_sha256":manifest.source_sha256,"coverage":adapter.coverage() if adapter!=null else {},"restore_ready":false,"battle_resume_tested":false}
+	var file := FileAccess.open(manifest.report,FileAccess.WRITE)
+	if file==null: push_error("Unit adapter QA report open failed"); quit(2); return
+	var written: bool=file.store_string(JSON.stringify(report,"\t")+"\n"); file.flush(); var error := file.get_error(); file.close()
+	if not written or error!=OK: push_error("Unit adapter QA report write failed"); quit(2); return
+	print("[unit-value-adapter] checks=",checks.size()," failures=",failures.size())
+	quit(0 if report.passed else 1)

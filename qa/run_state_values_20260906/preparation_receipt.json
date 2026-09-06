@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "status": "FROZEN_GDSCRIPT_QA_READY_NOT_RUN",
+  "source_files": {
+    "value_codec.gd": {
+      "bytes": 12091,
+      "raw_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "lf_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+    },
+    "qa_driver.gd": {
+      "bytes": 14660,
+      "raw_sha256": "eeb2dbdb200927bcbf436247bd67904fe3195826912742a12d890d7400b61fd6",
+      "lf_sha256": "eeb2dbdb200927bcbf436247bd67904fe3195826912742a12d890d7400b61fd6"
+    },
+    "project.godot": {
+      "bytes": 117,
+      "raw_sha256": "cc4bec295be566e0db2d5d610a86ec7bde6b8bb10cc60d7751c8a3c72b7b8f0c",
+      "lf_sha256": "cc4bec295be566e0db2d5d610a86ec7bde6b8bb10cc60d7751c8a3c72b7b8f0c"
+    },
+    ".gdignore": {
+      "bytes": 1,
+      "raw_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "lf_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "README.md": {
+      "bytes": 6709,
+      "raw_sha256": "52da9eafc1d74d0111e7cacdfc2faf3c744109df8f707367aaad77ed2cd4dbdc",
+      "lf_sha256": "52da9eafc1d74d0111e7cacdfc2faf3c744109df8f707367aaad77ed2cd4dbdc"
+    }
+  },
+  "text_oracle_checks": [
+    "No object loading/dump/reflection/RNG calls in codec",
+    "Codec has no disk or scene API calls",
+    "Codec limits do not stringify/parse arbitrary input before traversal",
+    "Explicit cycle/depth guards are present",
+    "Module method declarations are unique",
+    "Positive QA decodes real JSON parser data",
+    "Independent Python IEEE float/float32 known-byte QA oracles match"
+  ],
+  "text_oracle_check_count": 7,
+  "engine_parse_passed": false,
+  "actual_godot_processes": 0,
+  "production_writes": 0,
+  "git_run": false,
+  "entry": "3 exact files into a new tiny private project, then actual non-console Godot --headless --path <private_project> --script res://qa_driver.gd; root provides shared lock/actual handle/private APPDATA and optional VALUE_CODEC_QA_OUT=res://report.json",
+  "bounds": {
+    "max_depth": 32,
+    "max_nodes": 32768,
+    "json_upper_bound_bytes": 1048576
+  },
+  "scope": "Explicit finite values and standalone opt-in infinity sentinel only; no battle schema/codec adapter/references/object graph/disk persistence"
+}

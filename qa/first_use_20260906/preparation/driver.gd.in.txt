@@ -1,0 +1,10 @@
+extends "res://tools/polish_performance_probe.gd"
+## Draft derivative: inherited fixture/settings/tick logic unchanged.
+## Generated _run retains every M1 statement and only inserts diagnostic hooks.
+
+func _on_tick() -> void:
+	super._on_tick()
+	var diag = root.get_node("FirstUseDiag")
+	diag.fixture_tick = physics_tick
+
+@@RUN_METHOD@@

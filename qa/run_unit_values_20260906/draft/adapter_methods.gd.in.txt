@@ -1,0 +1,191 @@
+const MAX_PATH_POINTS := 4096
+const SCHEMA := "unit_values_v1"
+var _unit_script: GDScript
+var _codec
+var _source_ok := false
+
+func _init(unit_script: GDScript, codec_script: GDScript) -> void:
+	_unit_script = unit_script
+	if unit_script==null or codec_script==null: return
+	# Verify fixed loaded script text once, before any explicit Unit field read.
+	# Source drift therefore refuses cleanly instead of accessing missing fields.
+	if unit_script.source_code.replace("\r\n","\n").sha256_text()!=UNIT_SOURCE_LF: return
+	if codec_script.source_code.replace("\r\n","\n").sha256_text()!=CODEC_SOURCE_LF: return
+	if not unit_script.can_instantiate() or not codec_script.can_instantiate(): return
+	_codec = codec_script.new()
+	_source_ok = _codec!=null
+
+func _failure(code: String, field := "") -> Dictionary:
+	return {"ok":false,"code":code,"field":field,"restore_ready":false}
+
+func coverage() -> Dictionary:
+	return {"declared_fields":DECLARED_COUNT,"captured_declared_values":CAPTURED_DECLARED_COUNT,
+		"inherited_values":["position","modulate"],"deferred_fields":DEFERRED_FIELDS.duplicate(),
+		"omitted_visual_fields":OMITTED_VISUAL_FIELDS.duplicate(),"restore_ready":false,
+		"references_encoded":false,"metadata_capture_implemented":false,"business_definition_validated":false}
+
+func _fields(value: Dictionary, expected: Array) -> bool:
+	if value.size() != expected.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in expected: return false
+	return true
+
+func _fingerprint(value: String) -> bool:
+	if value.length() != 64: return false
+	for index in range(value.length()):
+		var c: int = value.unicode_at(index)
+		if not (c >= 48 and c <= 57) and not (c >= 97 and c <= 102): return false
+	return true
+
+func _finite_number(value: Variant) -> bool:
+	return typeof(value) == TYPE_INT or (typeof(value) == TYPE_FLOAT and is_finite(value))
+
+func _check_values(values: Dictionary) -> Dictionary:
+	if not _fields(values, RULES.keys()): return _failure("VALUE_FIELDS")
+	for field in RULES:
+		var value: Variant = values[field]
+		var rule: String = RULES[field]
+		match rule:
+			"string":
+				if typeof(value) != TYPE_STRING: return _failure("VALUE_TYPE",field)
+			"bool":
+				if typeof(value) != TYPE_BOOL: return _failure("VALUE_TYPE",field)
+			"int":
+				if typeof(value) != TYPE_INT: return _failure("VALUE_TYPE",field)
+				if INT_RANGES.has(field) and (value < INT_RANGES[field][0] or value > INT_RANGES[field][1]): return _failure("VALUE_RANGE",field)
+			"float":
+				if typeof(value) != TYPE_FLOAT: return _failure("VALUE_TYPE",field)
+				if not is_finite(value): return _failure("NON_FINITE",field)
+			"vector2":
+				if typeof(value) != TYPE_VECTOR2: return _failure("VALUE_TYPE",field)
+				if not value.is_finite(): return _failure("NON_FINITE",field)
+			"vector2i":
+				if typeof(value) != TYPE_VECTOR2I: return _failure("VALUE_TYPE",field)
+			"color":
+				if typeof(value) != TYPE_COLOR: return _failure("VALUE_TYPE",field)
+				for component in [value.r,value.g,value.b,value.a]:
+					if not is_finite(component): return _failure("NON_FINITE",field)
+			"vector2_positive_inf_sentinel":
+				if typeof(value) != TYPE_VECTOR2: return _failure("VALUE_TYPE",field)
+				if value != Vector2.INF and not value.is_finite(): return _failure("SENTINEL_VALUE",field)
+			"float_positive_inf_sentinel":
+				if typeof(value) != TYPE_FLOAT: return _failure("VALUE_TYPE",field)
+				if value != INF and (not is_finite(value) or value < 0.0): return _failure("SENTINEL_VALUE",field)
+			"packed_vector2":
+				if typeof(value) != TYPE_PACKED_VECTOR2_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > MAX_PATH_POINTS: return _failure("PATH_LIMIT",field)
+				for point in value:
+					if not point.is_finite(): return _failure("NON_FINITE",field)
+			"string_array":
+				if typeof(value) != TYPE_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > 8: return _failure("TRAIN_QUEUE_LIMIT",field)
+				for key in value:
+					if typeof(key) != TYPE_STRING or key.is_empty(): return _failure("TRAIN_QUEUE_SHAPE",field)
+			"group_array":
+				if typeof(value) != TYPE_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > 32: return _failure("GROUP_LIMIT",field)
+				for index in range(value.size()):
+					if typeof(value[index]) != TYPE_INT: return _failure("GROUP_SHAPE",field)
+					if index > 0 and value[index] <= value[index-1]: return _failure("GROUP_ORDER",field)
+			"definition_values":
+				# Preserve the complete effective definition as bounded values. This
+				# does NOT certify its business keys, cross-references or content ID.
+				if typeof(value) != TYPE_DICTIONARY: return _failure("VALUE_TYPE",field)
+				if value.size() > 512: return _failure("DEFINITION_LIMIT",field)
+				for key in value:
+					if typeof(key) != TYPE_STRING: return _failure("DEFINITION_KEY",field)
+			"ability_slots":
+				if typeof(value) != TYPE_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > 4: return _failure("ABILITY_SLOT_LIMIT",field)
+				for slot in value:
+					if typeof(slot) != TYPE_DICTIONARY or not _fields(slot,["id","rank","cd_t","passive","charges","recharge_t","cast_seq"]): return _failure("ABILITY_SLOT_FIELDS",field)
+					if typeof(slot.id) != TYPE_STRING or slot.id.is_empty() or typeof(slot.passive) != TYPE_BOOL: return _failure("ABILITY_SLOT_TYPE",field)
+					for key in ["rank","charges","cast_seq"]:
+						if typeof(slot[key]) != TYPE_INT or slot[key] < 0: return _failure("ABILITY_SLOT_TYPE",field)
+					if slot.rank > 3: return _failure("ABILITY_SLOT_RANK",field)
+					for key in ["cd_t","recharge_t"]:
+						if typeof(slot[key]) != TYPE_FLOAT or not is_finite(slot[key]) or slot[key] < 0.0: return _failure("ABILITY_SLOT_TIMER",field)
+			"form":
+				if typeof(value) != TYPE_DICTIONARY: return _failure("VALUE_TYPE",field)
+				for key in value:
+					if typeof(key) != TYPE_STRING or key not in ["hp_mult","atk_mult","speed_mult","atk_cd_mult","range","radius","tint"]: return _failure("FORM_FIELDS",field)
+					if key == "tint":
+						if typeof(value[key]) != TYPE_COLOR: return _failure("FORM_TYPE",field)
+					elif not _finite_number(value[key]): return _failure("FORM_TYPE",field)
+			"form_backup":
+				if typeof(value) != TYPE_DICTIONARY: return _failure("VALUE_TYPE",field)
+				if not value.is_empty() and not _fields(value,["atk_cd","base_speed","radius","mod_r","mod_g","mod_b"]): return _failure("FORM_BACKUP_FIELDS",field)
+				for key in value:
+					if typeof(value[key]) != TYPE_FLOAT or not is_finite(value[key]): return _failure("FORM_BACKUP_TYPE",field)
+			_: return _failure("RULE_UNIMPLEMENTED",field)
+	# Standard defense excludes chapter state; references remain the next layer's
+	# responsibility even when current pointers happen to be null.
+	for field in ["defeat_outcome","story_outcome","_pose_previous_variant"]:
+		if values[field] != "": return _failure("CHAPTER_STATE_UNSUPPORTED",field)
+	if values._story_pose_t != 0.0 or values.is_captive: return _failure("CHAPTER_STATE_UNSUPPORTED")
+	if values._path_i < 0: return _failure("VALUE_RANGE","_path_i")
+	return {"ok":true}
+
+func _to_wire(values: Dictionary) -> Dictionary:
+	var wire := values.duplicate(false)
+	var points: Array[Vector2] = []
+	for point in values._path: points.append(point)
+	wire._path = points
+	for field in ["_ai_dest","mission_order_target"]:
+		wire[field] = {"state":"positive_inf"} if values[field] == Vector2.INF else {"state":"finite","point":values[field]}
+	wire._chase_best_distance = {"state":"positive_inf"} if values._chase_best_distance == INF else {"state":"finite","distance":values._chase_best_distance}
+	return wire
+
+func _from_wire(wire: Dictionary) -> Dictionary:
+	if not _fields(wire,RULES.keys()): return _failure("VALUE_FIELDS")
+	if typeof(wire._path) != TYPE_ARRAY or wire._path.size() > MAX_PATH_POINTS: return _failure("PATH_SHAPE","_path")
+	var points: Array[Vector2] = []
+	for point in wire._path:
+		if typeof(point) != TYPE_VECTOR2 or not point.is_finite(): return _failure("PATH_SHAPE","_path")
+		points.append(point)
+	var values := wire.duplicate(false)
+	values._path = PackedVector2Array(points)
+	for field in ["_ai_dest","mission_order_target","_chase_best_distance"]:
+		var tagged: Variant = wire[field]
+		if typeof(tagged) != TYPE_DICTIONARY or not tagged.has("state") or typeof(tagged.state) != TYPE_STRING: return _failure("SENTINEL_SHAPE",field)
+		if tagged.state == "positive_inf":
+			if not _fields(tagged,["state"]): return _failure("SENTINEL_SHAPE",field)
+			values[field] = INF if field == "_chase_best_distance" else Vector2.INF
+		elif tagged.state == "finite":
+			var key := "distance" if field == "_chase_best_distance" else "point"
+			if not _fields(tagged,["state",key]): return _failure("SENTINEL_SHAPE",field)
+			values[field] = tagged[key]
+			if field == "_chase_best_distance":
+				if typeof(values[field]) != TYPE_FLOAT or not is_finite(values[field]) or values[field] < 0.0: return _failure("SENTINEL_VALUE",field)
+			elif typeof(values[field]) != TYPE_VECTOR2 or not values[field].is_finite(): return _failure("SENTINEL_VALUE",field)
+		else: return _failure("SENTINEL_SHAPE",field)
+	return {"ok":true,"values":values}
+
+func capture_values(unit, content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if typeof(unit) != TYPE_OBJECT or not is_instance_valid(unit): return _failure("UNIT_UNAVAILABLE")
+	if unit.get_script() != _unit_script or unit.is_queued_for_deletion(): return _failure("UNIT_TYPE")
+	if not _fingerprint(content_fingerprint): return _failure("CONTENT_FINGERPRINT")
+	var values := _read_explicit(unit)
+	var checked := _check_values(values)
+	if not checked.ok: return checked
+	# One codec invocation budgets the whole Unit value record, not each field.
+	var encoded: Dictionary = _codec.encode(_to_wire(values))
+	if not encoded.ok: return _failure("CODEC_"+String(encoded.code),String(encoded.get("path","")))
+	return {"ok":true,"code":"VALUES_CAPTURED","record":{"schema":SCHEMA,"unit_source_lf":UNIT_SOURCE_LF,
+		"content_fingerprint":content_fingerprint,"values":encoded.value},"coverage":coverage(),"restore_ready":false}
+
+func validate_record(record: Variant, expected_content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if typeof(record) != TYPE_DICTIONARY or not _fields(record,["schema","unit_source_lf","content_fingerprint","values"]): return _failure("RECORD_FIELDS")
+	if typeof(record.schema) != TYPE_STRING or record.schema != SCHEMA: return _failure("SCHEMA")
+	if typeof(record.unit_source_lf) != TYPE_STRING or record.unit_source_lf != UNIT_SOURCE_LF: return _failure("UNIT_SOURCE")
+	if not _fingerprint(expected_content_fingerprint) or typeof(record.content_fingerprint) != TYPE_STRING or record.content_fingerprint != expected_content_fingerprint: return _failure("CONTENT_FINGERPRINT")
+	var decoded: Dictionary = _codec.decode(record.values)
+	if not decoded.ok: return _failure("CODEC_"+String(decoded.code),String(decoded.get("path","")))
+	if typeof(decoded.value) != TYPE_DICTIONARY: return _failure("VALUE_FIELDS")
+	var native := _from_wire(decoded.value)
+	if not native.ok: return native
+	var checked := _check_values(native.values)
+	if not checked.ok: return checked
+	return {"ok":true,"code":"VALUES_VALIDATED","values":native.values,"coverage":coverage(),"restore_ready":false}

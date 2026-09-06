@@ -1,0 +1,275 @@
+extends SceneTree
+## Execute only in this tiny no-Autoload project; parent owns serial process safety.
+class Trap extends RefCounted:
+	var touched := false
+	func _to_string() -> String:
+		touched = true
+		return "must not stringify an object"
+	func _get_property_list() -> Array[Dictionary]:
+		touched = true
+		return []
+
+var codec: Variant
+var checks: Array = []
+var failures: Array = []
+var callable_invoked := false
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+func check(ok: bool, label: String) -> void:
+	checks.append({"label":label,"passed":ok})
+	if not ok: failures.append(label)
+
+func _bits64(value: float) -> String:
+	var raw := PackedByteArray()
+	raw.resize(8)
+	raw.encode_double(0, value)
+	return raw.hex_encode()
+
+func _bits32(value: float) -> String:
+	var raw := PackedByteArray()
+	raw.resize(4)
+	raw.encode_float(0, value)
+	return raw.hex_encode()
+
+func _same(a: Variant, b: Variant) -> bool:
+	if typeof(a) != typeof(b): return false
+	match typeof(a):
+		TYPE_FLOAT: return _bits64(a) == _bits64(b)
+		TYPE_VECTOR2: return _bits64(a.x) == _bits64(b.x) and _bits64(a.y) == _bits64(b.y)
+		TYPE_COLOR: return [_bits32(a.r),_bits32(a.g),_bits32(a.b),_bits32(a.a)] == [_bits32(b.r),_bits32(b.g),_bits32(b.b),_bits32(b.a)]
+		TYPE_PACKED_FLOAT32_ARRAY: return a.to_byte_array() == b.to_byte_array()
+		TYPE_ARRAY:
+			if a.size() != b.size(): return false
+			for index in range(a.size()):
+				if not _same(a[index],b[index]): return false
+			return true
+		TYPE_DICTIONARY:
+			if a.size() != b.size(): return false
+			var a_keys: Array = a.keys()
+			var b_keys: Array = b.keys()
+			for index in range(a_keys.size()):
+				if not _same(a_keys[index],b_keys[index]) or not _same(a[a_keys[index]],b[b_keys[index]]): return false
+			return true
+		_: return a == b
+
+func roundtrip(value: Variant, label: String) -> Dictionary:
+	var encoded: Dictionary = codec.encode(value)
+	check(encoded.ok, label + ": encode")
+	if not encoded.ok: return encoded
+	# Crucially, decode JSON.parse output, not the in-memory encoded Dictionary.
+	var text: String = JSON.stringify(encoded.value, "", false)
+	check(text.to_utf8_buffer().size() <= encoded.json_bytes_upper_bound and encoded.json_bytes_upper_bound <= codec.MAX_BYTES, label + ": JSON bytes within precomputed bound")
+	var parser := JSON.new()
+	check(parser.parse(text) == OK, label + ": real JSON parse")
+	var decoded: Dictionary = codec.decode(parser.data)
+	check(decoded.ok, label + ": strict decode of parsed JSON")
+	if not decoded.ok: return decoded
+	check(_same(value, decoded.value), label + ": exact type, bits and iteration order")
+	var encoded_again: Dictionary = codec.encode(decoded.value)
+	check(encoded_again.ok and JSON.stringify(encoded_again.value,"",false) == text, label + ": canonical re-encode after JSON")
+	return decoded
+
+func reject_decode(tagged: Variant, code: String, label: String, json_hop := true) -> void:
+	var candidate: Variant = tagged
+	if json_hop:
+		var parser := JSON.new()
+		check(parser.parse(JSON.stringify(tagged,"",false)) == OK, label + ": malformed tag survives JSON syntax")
+		candidate = parser.data
+	var result: Dictionary = codec.decode(candidate)
+	check(not result.ok and result.code == code and not result.has("value"), label + ": " + code)
+
+func reject_encode(value: Variant, code: String, label: String) -> void:
+	var result: Dictionary = codec.encode(value)
+	check(not result.ok and result.code == code and not result.has("value"), label)
+
+func _tripwire() -> void:
+	callable_invoked = true
+
+func _run() -> void:
+	if ProjectSettings.get_setting("application/config/name", "") != "RunStateValueCodec Private QA" or root.get_child_count() != 0:
+		push_error("Value codec QA requires its own no-Autoload project")
+		quit(2)
+		return
+	var script: GDScript = load("res://value_codec.gd")
+	if script == null:
+		quit(2)
+		return
+	codec = script.new()
+	var minimum: int = -9223372036854775807 - 1
+	var maximum: int = 9223372036854775807
+	for number in [minimum,maximum,9007199254740993,-9007199254740993,0,1,-1]:
+		roundtrip(number, "int64 " + str(number))
+	check(codec.encode(minimum).value == {"t":"int64","v":"-9223372036854775808"}, "minimum uses exact decimal text")
+	check(codec.encode(9007199254740993).value.v == "9007199254740993", "2^53+1 never becomes a JSON number")
+	roundtrip(null,"null")
+	roundtrip(true,"true")
+	roundtrip(false,"false")
+	roundtrip("梁山\n\"\\\t" + String.chr(0) + "🙂", "Unicode, escaping and literal string NUL")
+	var negative_zero: float = "0000000000000080".hex_decode().decode_double(0)
+	check(_bits64(negative_zero) == "0000000000000080", "negative zero oracle is IEEE sign bit")
+	for number in [negative_zero,0.0,0.1,1.2345678901234567,1e300,1e-300,"0100000000000000".hex_decode().decode_double(0),"ffffffffffffef7f".hex_decode().decode_double(0)]:
+		roundtrip(number,"finite f64 " + _bits64(number))
+	check(codec.encode(0.1).value.v == "9a9999999999b93f", "known IEEE f64 0.1 little-endian oracle")
+	check(codec.encode(negative_zero).value.v == "0000000000000080", "f64 tag preserves -0 bit independently")
+	roundtrip(Vector2(negative_zero,0.1),"Vector2 component precision and sign")
+	roundtrip(Vector2i(-2147483648,2147483647),"Vector2i signed 32-bit boundaries")
+	roundtrip(Color(2.25,negative_zero,0.1,0.5),"Color finite HDR and signed zero")
+	var packed := PackedFloat32Array([0.1,negative_zero,16777217.0])
+	check(packed.to_byte_array().hex_encode() == "cdcccc3d000000800000804b", "known float32 quantization oracle")
+	check(codec.encode(packed).value.v == "cdcccc3d000000800000804b", "packed codec uses original float32 bytes")
+	roundtrip(packed,"PackedFloat32 precision, rounding and -0")
+	roundtrip(PackedFloat32Array(["01000000".hex_decode().decode_float(0),"ffff7f7f".hex_decode().decode_float(0)]),"PackedFloat32 subnormal and largest finite")
+	roundtrip(PackedFloat32Array(),"empty packed array")
+	roundtrip([],"empty Array")
+	roundtrip({},"empty Dictionary")
+	var ordered: Dictionary = {}
+	ordered[Vector2i(7,-3)] = [maximum,minimum]
+	ordered["z_last_alphabetically"] = Vector2(1.5,-2.25)
+	ordered[Vector2(3.25,4.5)] = packed
+	ordered[9007199254740993] = Color(0.1,0.2,0.3,0.4)
+	ordered["a_first_alphabetically"] = {false:null}
+	roundtrip(ordered,"Vector keys and unsorted Dictionary insertion order")
+	var nested_key: Dictionary = {}
+	nested_key[[1,"array-key"]] = "value"
+	roundtrip(nested_key,"supported noncyclic Array key")
+	var shared: Array = [1,2]
+	var alias_result: Dictionary = roundtrip([shared,shared],"shared acyclic containers copied as values")
+	if alias_result.ok: check(not is_same(alias_result.value[0],alias_result.value[1]),"container identity intentionally not restored")
+	for number in [INF,-INF,NAN]:
+		reject_encode(number,"NON_FINITE","ordinary non-finite rejected")
+	reject_encode(Vector2(INF,0),"NON_FINITE","Vector2 infinity rejected")
+	reject_encode(Color(NAN,0,0,1),"NON_FINITE","Color NaN rejected")
+	reject_encode(PackedFloat32Array([0,INF]),"NON_FINITE","packed infinity rejected")
+	for number in [INF,-INF]:
+		var sentinel: Dictionary = codec.encode_infinity(number)
+		var parser := JSON.new()
+		check(sentinel.ok and parser.parse(JSON.stringify(sentinel.value)) == OK,"explicit infinity JSON tag")
+		var restored: Dictionary = codec.decode_infinity(parser.data)
+		check(restored.ok and restored.value == number,"explicit infinity opt-in decode")
+		reject_decode(parser.data,"UNKNOWN_TAG","ordinary decoder does not accept sentinel")
+	check(not codec.encode_infinity(0.0).ok and not codec.encode_infinity(NAN).ok,"sentinel only accepts actual signed infinity")
+	check(not codec.decode_infinity({"t":"inf_sentinel","v":"+","extra":true}).ok,"sentinel exact field set")
+	for text in ["9223372036854775808","-9223372036854775809","9999999999999999999"]:
+		reject_decode({"t":"int64","v":text},"INT64_RANGE","int64 out of range " + text)
+	for text in ["", "+1", "01", "-0", " 1", "1 ", "1.0", "1e3", "--1", "１２"]:
+		reject_decode({"t":"int64","v":text},"INT64_TEXT","noncanonical int64 text")
+	var lossy_parser := JSON.new()
+	check(lossy_parser.parse('{"t":"int64","v":9007199254740993}') == OK,"real JSON untagged numeric parse")
+	reject_decode(lossy_parser.data,"INT64_TEXT","numeric int64 field rejected after parser float conversion",false)
+	for row in [
+		[{"t":"unknown","v":1},"UNKNOWN_TAG"],
+		[{"t":"entity","id":"123"},"UNKNOWN_TAG"],
+		[{"t":"expired"},"UNKNOWN_TAG"],
+		[{"t":"object","v":{"script":"res://must_not_load.gd"}},"UNKNOWN_TAG"],
+		[{"t":"null","v":null},"TAG_FIELDS"],
+		[{"t":"bool","v":true,"extra":0},"TAG_SHAPE"],
+		[{"t":"bool","wrong":true},"TAG_FIELDS"],
+		[{"t":"bool","v":1},"VALUE_TYPE"],
+		[{"t":"string","v":false},"VALUE_TYPE"],
+		[{"t":"f64","v":0.1},"FLOAT_BITS"],
+		[{"t":"f64","v":"000000000000f07f"},"NON_FINITE"],
+		[{"t":"f64","v":"000000000000f87f"},"NON_FINITE"],
+		[{"t":"f64","v":"000000000000F07F"},"FLOAT_BITS"],
+		[{"t":"f64","v":"00"},"FLOAT_BITS"],
+		[{"t":"vector2i","v":["2147483648","0"]},"VECTOR2I_RANGE"],
+		[{"t":"vector2i","v":["0","-2147483649"]},"VECTOR2I_RANGE"],
+		[{"t":"vector2i","v":[1,2]},"INT64_TEXT"],
+		[{"t":"vector2","v":["000000000000f07f","0000000000000000"]},"NON_FINITE"],
+		[{"t":"color_f32","v":["00000000","00000000","00000000"]},"VALUE_TYPE"],
+		[{"t":"packed_f32","v":"0000c07f"},"NON_FINITE"],
+		[{"t":"packed_f32","v":"0000807f"},"NON_FINITE"],
+		[{"t":"packed_f32","v":"xx000000"},"FLOAT_BITS"],
+		[{"t":"packed_f32","v":[]},"FLOAT_BITS"],
+		[{"t":"array","v":{}},"VALUE_TYPE"],
+		[{"t":"dictionary","entries":{}},"VALUE_TYPE"],
+		[{"t":"dictionary","entries":[[{"t":"null"}]]},"ENTRY_SHAPE"]
+	]: reject_decode(row[0],row[1],"strict tag test")
+	for key in [1,Vector2(3.25,4.5),Vector2i(7,-3),"duplicate",null,[1,"same"]]:
+		var tagged_key: Dictionary = codec.encode(key)
+		reject_decode({"t":"dictionary","entries":[[tagged_key.value,{"t":"null"}],[tagged_key.value,{"t":"bool","v":true}]]},"DUPLICATE_KEY","duplicate decoded Dictionary key")
+	var probe: Dictionary = codec.decode({"t":"vector2","v":["9a9999999999b93f","0000000000000000"]})
+	check(probe.ok if _bits64(Vector2(0.1,0).x) == "9a9999999999b93f" else (not probe.ok and probe.code == "VECTOR2_PRECISION"),"Vector2 target precision loss rejects instead of rounding silently")
+	var trap := Trap.new()
+	reject_encode(trap,"UNSUPPORTED_TYPE","Object refused without dump")
+	check(not trap.touched,"Object property list and string conversion never invoked")
+	reject_decode({"t":"bool","v":trap},"VALUE_TYPE","Object inside tag refused without stringify",false)
+	reject_decode(trap,"TAG_SHAPE","Object at decoder root refused",false)
+	reject_encode(Resource.new(),"UNSUPPORTED_TYPE","Resource refused")
+	reject_encode(Callable(self,"_tripwire"),"UNSUPPORTED_TYPE","Callable refused")
+	check(not callable_invoked,"Callable never invoked")
+	var node := Node.new()
+	reject_encode(node,"UNSUPPORTED_TYPE","Node refused")
+	node.free()
+	reject_encode(StringName("not_a_String"),"UNSUPPORTED_TYPE","unlisted StringName not silently coerced")
+	var cycle: Array = []
+	cycle.append(cycle)
+	reject_encode(cycle,"CYCLE","self Array cycle stops inside bounded walker")
+	cycle.clear()
+	var cycle_dict: Dictionary = {}
+	cycle_dict["self"] = cycle_dict
+	reject_encode(cycle_dict,"CYCLE","self Dictionary cycle stops inside bounded walker")
+	cycle_dict.clear()
+	var wire_cycle: Dictionary = {"t":"array","v":[]}
+	wire_cycle.v.append(wire_cycle)
+	reject_decode(wire_cycle,"CYCLE","cyclic tag tree is rejected before JSON",false)
+	wire_cycle.v.clear()
+	var depth_value: Variant = 0
+	for _index in range(codec.MAX_DEPTH): depth_value = [depth_value]
+	roundtrip(depth_value,"exact maximum depth")
+	reject_encode([depth_value],"DEPTH_LIMIT","one beyond maximum encode depth")
+	var depth_wire: Variant = {"t":"int64","v":"0"}
+	for _index in range(codec.MAX_DEPTH + 1): depth_wire = {"t":"array","v":[depth_wire]}
+	reject_decode(depth_wire,"DEPTH_LIMIT","one beyond maximum decode depth")
+	var node_bound := PackedFloat32Array()
+	node_bound.resize(codec.MAX_NODES - 1)
+	roundtrip(node_bound,"exact packed node limit")
+	node_bound.append(0)
+	reject_encode(node_bound,"NODE_LIMIT","packed allocation rejected before exceeding node budget")
+	reject_decode({"t":"packed_f32","v":"00000000".repeat(codec.MAX_NODES)},"NODE_LIMIT","packed decode node bound before bytes allocation")
+	var huge: Array = []
+	huge.resize(codec.MAX_NODES)
+	reject_encode(huge,"NODE_LIMIT","large Array count checked before traversal")
+	reject_decode({"t":"array","v":huge},"NODE_LIMIT","large encoded Array count checked before child validation",false)
+	@warning_ignore("integer_division")
+	var chars: int = (codec.MAX_BYTES - codec.TAG_BYTES) / 6
+	roundtrip("a".repeat(chars),"conservative JSON byte budget boundary")
+	reject_encode("a".repeat(chars + 1),"BYTE_LIMIT","string rejected before JSON stringify")
+	reject_decode({"t":"string","v":"a".repeat(chars + 1)},"BYTE_LIMIT","decoded string byte limit",false)
+	_write_report()
+
+func _write_report() -> void:
+	var raw_pins: Dictionary = {}
+	for name in ["value_codec.gd","qa_driver.gd","project.godot"]:
+		raw_pins[name] = FileAccess.get_sha256("res://" + name)
+		check(raw_pins[name].length() == 64, "source raw SHA exists: " + name)
+	var passed: bool = not checks.is_empty() and failures.is_empty()
+	var report: Dictionary = {"schema":1,"passed":passed,"checks":checks,"failures":failures,"check_count":checks.size(),"nonempty_checks":not checks.is_empty(),
+		"process_id":OS.get_process_id(),"engine":Engine.get_version_info(),"source_raw_sha256":raw_pins,
+		"actual_user_dir":OS.get_user_data_dir(),
+		"real_json_roundtrips":true,"battle_schema_implemented":false,"disk_io_tested":false,
+		"raw_json_parser_policy_implemented":false,"reference_or_alias_restoration":false}
+	var output: String = OS.get_environment("VALUE_CODEC_QA_OUT")
+	if not output.is_empty():
+		var base: String = ProjectSettings.globalize_path("res://").replace("\\","/").trim_suffix("/")
+		var resolved: String = ProjectSettings.globalize_path(output).replace("\\","/").simplify_path()
+		if not resolved.begins_with(base + "/") or FileAccess.file_exists(resolved):
+			push_error("QA report must be a new file below the tiny private project")
+			quit(2)
+			return
+		var file := FileAccess.open(resolved,FileAccess.WRITE)
+		if file == null:
+			push_error("Cannot create codec QA report")
+			quit(2)
+			return
+		var stored: bool = file.store_string(JSON.stringify(report,"\t",false) + "\n")
+		file.flush()
+		var write_error: int = file.get_error()
+		file.close()
+		if not stored or write_error != OK:
+			push_error("Incomplete codec QA report write")
+			quit(2)
+			return
+	print("[value-codec QA] " + JSON.stringify(report,"",false))
+	quit(0 if passed else 1)

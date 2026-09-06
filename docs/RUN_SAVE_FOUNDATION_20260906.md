@@ -41,9 +41,19 @@ M3 已完成一个独立磁盘层草稿的有限验证，并保留实测源码�
 
 [empty_digest_fix/receipt.json](../qa/run_save_store_20260906/empty_digest_fix/receipt.json) 保存修改前 store/runner 原字节摘要及文本。唯一 store 修复是空字节不调用 HashingContext.update，仍调用 finish 得到标准空 SHA；空 payload 继续由 PAYLOAD_SIZE 拒绝。runner 仅同步该 store PIN。当前 49 案例均在修复版本上完成。
 
+## R01：只读候选检查与精确读取
+
+独立 R01 草稿追加 `inspect_recovery()` 与 `read_candidate(candidate_id, inspection_id)`，保留原 store 的完整 12,878 字节前缀。它检查正式槽、pending、previous、锁及未知/隐藏项，以规范目录、路径类型、长度和完整原文件 SHA 形成检查身份；候选身份包含固定叶名和文件 SHA，同内容位于不同叶时身份不同。读取前后重新检查目录并完整验证指定文件，旧身份变化则拒绝，候选不会按 mtime 自动选取。
+
+Godot 4.6.3 的 `20260906T113756778956Z` 实测为 1,625 条断言、0 失败、PID 26940、exit=0，来源、私有 user://、精确退出和共同锁收据匹配。其中 1,232 条为目录快照打开/枚举，257 条为宽目录布置，其余 136 条含来源/布置/行为；这些是断言量。29 次记录调用（18 inspect、11 read）的完整前后快照一致，13 个受检 fixture 最终清单与当时实际磁盘一致；另 1 个 oracle fixture 仅用于生成 B，2 次路径拒绝不在快照 records 中。11 次 read 包括 4 次精确成功、1 次候选不可用、6 次检查身份变化拒绝。原始证据与独立摘要见 [R01 QA](../qa/run_save_recovery_20260906/result_summary.json)。
+
+成功只返回复验 payload，不移动/删除文件、不清锁、不安装正式槽，也没有连接生产路径或 Battle。多次观察相同不提供独占或原子快照，不能排除 ABA；本轮未覆盖实际权限失败、链接/reparse、超大文件或并发变化。原 store 的 49 案例/54 进程阶段/1,233 次断言保持独立，不能转算为 R01 通过。归档仅保留源码文本、报告和收据；原路径恢复规则见 [ARCHIVE_RESTORE](../qa/run_save_recovery_20260906/ARCHIVE_RESTORE.md)。
+
+独立基础值模块 `scripts/run_state_value_codec.gd` 已按受测原字节晋级，完成 341 项真实 JSON 中转及严格拒绝检查；旧 340 项中的 NUL 构造诊断另存。它提供数值/容器编码，尚无生产 Battle/Unit 调用方或完整实体 schema，也未与本磁盘草稿或 R01 接通，见[值模块说明](RUN_STATE_VALUES_20260906.md)。真实Unit值适配草稿另完成77项检查，仍不恢复引用或战场，见[Unit值层](RUN_UNIT_VALUES_20260906.md)。
+
 ## 下一步接入边界
 
-目前没有 Battle 适配、实体 codec、稳定 ID/引用图、RNG/计时器/队列恢复、快照暂停屏障、场景重建、存档兼容迁移或继续按钮。新进程对残留只安全拒绝；没有自动恢复，也不能仅按时间删锁。正常重启证明 writer 已退出后 reader 能读取，不证明同时读写隔离。flush/关闭和精确进程终止测试都不是断电、fsync 或目录持久性保证。
+目前没有生产 Battle 适配、完整实体 schema、稳定 ID/引用图、RNG/计时器/队列恢复、快照暂停屏障、场景重建、存档兼容迁移或继续按钮。原 read_slot 对残留仍返回安全拒绝；R01 可检查/读取候选，但没有自动安装或恢复，也不能仅按时间删锁。正常重启证明 writer 已退出后 reader 能读取，不证明同时读写隔离。flush/关闭和精确进程终止测试都不是断电、fsync 或目录持久性保证。
 
 后续应先确定一个受支持战斗阶段的完整 codec/内容兼容契约、生产受控路径和生命周期，以及各残留状态可重复执行的恢复决策，再在创建场景前完整验证引用图。磁盘草稿的通过不能替代实际战斗跨进程恢复的等价性验证。
 

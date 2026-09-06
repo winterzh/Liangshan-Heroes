@@ -1,0 +1,738 @@
+extends RefCounted
+# Generated explicit fields; runtime never enumerates Node properties.
+const UNIT_SOURCE_LF := "f4382456b8c619cbb86c40cd8a9ed6ea9f171ba0a8a90c191538f689176d49ee"
+const CODEC_SOURCE_LF := "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+const DECLARED_COUNT := 272
+const CAPTURED_DECLARED_COUNT := 241
+const RULES := {
+  "defeat_outcome": "string",
+  "story_outcome": "string",
+  "movement_profile": "string",
+  "art_variant": "string",
+  "animation_direction": "string",
+  "_direction_candidate": "string",
+  "_direction_votes": "int",
+  "_story_pose_t": "float",
+  "_pose_previous_variant": "string",
+  "key": "string",
+  "display_name": "string",
+  "faction": "int",
+  "max_hp": "float",
+  "hp": "float",
+  "atk": "float",
+  "atk_cd": "float",
+  "atk_range": "float",
+  "base_speed": "float",
+  "is_ranged": "bool",
+  "can_melee_switch": "bool",
+  "melee_mode": "bool",
+  "is_cavalry": "bool",
+  "bonus_vs_cav": "float",
+  "defense": "float",
+  "is_hero": "bool",
+  "is_building": "bool",
+  "is_captive": "bool",
+  "is_objective": "bool",
+  "is_noncombat": "bool",
+  "setup_def": "definition_values",
+  "aura": "string",
+  "aura_radius": "float",
+  "aura_power": "float",
+  "radius": "float",
+  "visual_scale": "float",
+  "aggro_range": "float",
+  "_track_combat_stats": "bool",
+  "is_worker": "bool",
+  "is_resource": "bool",
+  "res_kind": "string",
+  "res_left": "float",
+  "_carry_kind": "string",
+  "_carry_amt": "float",
+  "_gather_t": "float",
+  "is_constructing": "bool",
+  "_pending_build": "bool",
+  "build_progress": "float",
+  "build_time": "float",
+  "garrisoned": "bool",
+  "garrison_cap": "int",
+  "_train_queue": "string_array",
+  "production_blocked": "bool",
+  "_production_retry": "float",
+  "_train_t": "float",
+  "rally": "vector2",
+  "has_rally": "bool",
+  "rally_kind": "string",
+  "_repair_g": "float",
+  "_repair_w": "float",
+  "_research_key": "string",
+  "_research_t": "float",
+  "selected": "bool",
+  "is_active": "bool",
+  "inspected": "bool",
+  "fog_visible": "bool",
+  "passive": "bool",
+  "stance": "int",
+  "_hold_order_active": "bool",
+  "_hold_prev_stance": "int",
+  "_patrol_a": "vector2",
+  "_patrol_b": "vector2",
+  "_patrolling": "bool",
+  "hidden_in_reeds": "bool",
+  "buff_atk": "float",
+  "buff_speed": "float",
+  "face_left": "bool",
+  "group_nums": "group_array",
+  "ability": "string",
+  "ability_cd": "float",
+  "_ability_t": "float",
+  "ability_slots": "ability_slots",
+  "_hero_leveled": "bool",
+  "hero_level": "int",
+  "hero_xp": "float",
+  "skill_points": "int",
+  "auto_micro": "bool",
+  "ai_tick_phase": "int",
+  "_ai_dest": "vector2_positive_inf_sentinel",
+  "_base_atk": "float",
+  "_base_hp": "float",
+  "_base_speed": "float",
+  "_base_defense": "float",
+  "temp_atk": "float",
+  "_temp_atk_t": "float",
+  "temp_atk_add": "float",
+  "_temp_atk_add_t": "float",
+  "temp_speed": "float",
+  "_temp_speed_t": "float",
+  "_temp_move_boost": "float",
+  "_temp_move_boost_t": "float",
+  "_stun_t": "float",
+  "temp_lifesteal": "float",
+  "_temp_lifesteal_t": "float",
+  "cav_ls_chance": "float",
+  "cav_ls_frac": "float",
+  "_lin_guard_t": "float",
+  "_lin_guard_rank": "int",
+  "_lin_guard_used": "bool",
+  "lin_spear_rank": "int",
+  "_lin_spear_stacks": "int",
+  "_lin_spear_t": "float",
+  "_buff_glow": "float",
+  "is_summon": "bool",
+  "summon_kind": "string",
+  "_summon_ttl": "float",
+  "stat_owner_key": "string",
+  "stat_ability_id": "string",
+  "_drunk_t": "float",
+  "_drunk_lo": "float",
+  "_drunk_hi": "float",
+  "_drunk_reroll": "float",
+  "_drunk_move": "float",
+  "_drunk_atk": "float",
+  "_phys_immune_t": "float",
+  "_absorbed_phys": "float",
+  "_drunk_god_bonus_per_hit": "float",
+  "_drunk_god_stacks": "int",
+  "_drunk_god_max_stacks": "int",
+  "_def_down": "float",
+  "_def_down_t": "float",
+  "_blind_t": "float",
+  "_attack_miss_chance": "float",
+  "_attack_miss_t": "float",
+  "aura_slow": "float",
+  "slow_aura_r": "float",
+  "_shield": "float",
+  "_shield_t": "float",
+  "_silence_t": "float",
+  "_root_t": "float",
+  "_disarm_t": "float",
+  "_taunt_t": "float",
+  "_channel_t": "float",
+  "_channel_dur": "float",
+  "_invis_t": "float",
+  "_invis_strike_bonus": "float",
+  "_invis_strike_pending": "float",
+  "_hex_t": "float",
+  "_form_t": "float",
+  "_form": "form",
+  "_form_backup": "form_backup",
+  "_order_serial": "int",
+  "temp_atkspeed": "float",
+  "_temp_atkspeed_t": "float",
+  "_attack_speed_slow": "float",
+  "_attack_speed_slow_t": "float",
+  "_aura_atkspeed": "float",
+  "atkspeed_mult": "float",
+  "crit_chance_bonus": "float",
+  "crit_mult_bonus": "float",
+  "evasion": "float",
+  "_temp_evasion": "float",
+  "_temp_evasion_t": "float",
+  "bash_chance": "float",
+  "bash_dur": "float",
+  "on_hit_slow": "float",
+  "on_hit_slow_dur": "float",
+  "on_hit_dmg": "float",
+  "_dmg_amp": "float",
+  "_dmg_amp_t": "float",
+  "_damage_reduction": "float",
+  "_damage_reduction_t": "float",
+  "_stats_mitigation_t": "float",
+  "_charge_t": "float",
+  "_charge_dash": "float",
+  "_charge_dir": "vector2",
+  "_charge_dmg": "float",
+  "_charge_ability_id": "string",
+  "_charge_slow": "float",
+  "_charge_slow_dur": "float",
+  "_charge_width": "float",
+  "_charge_phys_immune": "bool",
+  "_hua_lock_shots": "int",
+  "_state": "int",
+  "_path": "packed_vector2",
+  "_path_i": "int",
+  "_amove_dest": "vector2",
+  "_resume_amove": "bool",
+  "_chase_intent": "int",
+  "_group_cap": "float",
+  "_home": "vector2",
+  "_has_home": "bool",
+  "_cd": "float",
+  "_repath": "float",
+  "_acq_t": "float",
+  "_flash": "float",
+  "_muzzle_t": "float",
+  "_tower_aim": "vector2i",
+  "_tower_aim_hold": "float",
+  "_stuck_t": "float",
+  "_idle_push_t": "float",
+  "_blocker_check_t": "float",
+  "_chasing_path_blocker": "bool",
+  "_eject_t": "float",
+  "_block_rp": "float",
+  "_burn_t": "float",
+  "manual_order_t": "float",
+  "manual_order_active": "bool",
+  "mission_order_active": "bool",
+  "mission_order_arrival_t": "float",
+  "mission_order_target": "vector2_positive_inf_sentinel",
+  "mission_order_token": "int",
+  "_move_retry": "int",
+  "_move_retry_pos": "vector2",
+  "_last_pos": "vector2",
+  "_combat_cool": "float",
+  "_hit_recent_t": "float",
+  "_chase_t": "float",
+  "_chase_best_distance": "float_positive_inf_sentinel",
+  "_giveup_t": "float",
+  "_stepped": "bool",
+  "_move_blend": "float",
+  "_anim_t": "float",
+  "_lunge": "float",
+  "_lunge_dir": "vector2",
+  "_swing_kind": "int",
+  "_swing_speed": "float",
+  "_hit_at": "float",
+  "_pending_done": "bool",
+  "_flinch": "vector2",
+  "_gather_anim_t": "float",
+  "_harvest_pulse": "float",
+  "_cast_t": "float",
+  "_cast_dur": "float",
+  "_cast_color": "color",
+  "_cast_serial": "int",
+  "_weapon": "int",
+  "_idle_t": "float",
+  "_dying": "bool",
+  "_death_t": "float",
+  "_death_lean": "float",
+  "_killer_source_id": "string",
+  "position": "vector2",
+  "modulate": "color"
+}
+const INT_RANGES := {
+  "faction": [
+    0,
+    1
+  ],
+  "stance": [
+    0,
+    3
+  ],
+  "_hold_prev_stance": [
+    0,
+    3
+  ],
+  "_state": [
+    0,
+    8
+  ],
+  "_chase_intent": [
+    0,
+    3
+  ],
+  "_swing_kind": [
+    0,
+    5
+  ],
+  "_weapon": [
+    -1,
+    5
+  ],
+  "hero_level": [
+    1,
+    12
+  ],
+  "ai_tick_phase": [
+    0,
+    15
+  ],
+  "_lin_guard_rank": [
+    0,
+    3
+  ],
+  "lin_spear_rank": [
+    0,
+    3
+  ]
+}
+const DEFERRED_FIELDS := ["story_assist_partner", "story_assist_owner", "battle", "map", "_gold_miner", "_gold_waiters", "_queue", "_gather_node", "_drop", "_build_site", "garrison_holder", "_garrison_dest", "passengers", "rally_node", "inventory", "_lin_spear_target_id", "_taunt_src", "_aura_atkspeed_sources", "_damage_reduction_sources", "_charge_hit", "_hua_lock_target", "_target", "_chase_last_id", "_giveup_id", "_pending_target", "_killer"]
+const OMITTED_VISUAL_FIELDS := ["_animated_redraw_t", "_dust", "_frame_directional", "_queued_redraw_frame", "_real_frames"]
+
+func _read_explicit(unit) -> Dictionary:
+	return {
+		"defeat_outcome":unit.defeat_outcome,
+		"story_outcome":unit.story_outcome,
+		"movement_profile":unit.movement_profile,
+		"art_variant":unit.art_variant,
+		"animation_direction":unit.animation_direction,
+		"_direction_candidate":unit._direction_candidate,
+		"_direction_votes":unit._direction_votes,
+		"_story_pose_t":unit._story_pose_t,
+		"_pose_previous_variant":unit._pose_previous_variant,
+		"key":unit.key,
+		"display_name":unit.display_name,
+		"faction":unit.faction,
+		"max_hp":unit.max_hp,
+		"hp":unit.hp,
+		"atk":unit.atk,
+		"atk_cd":unit.atk_cd,
+		"atk_range":unit.atk_range,
+		"base_speed":unit.base_speed,
+		"is_ranged":unit.is_ranged,
+		"can_melee_switch":unit.can_melee_switch,
+		"melee_mode":unit.melee_mode,
+		"is_cavalry":unit.is_cavalry,
+		"bonus_vs_cav":unit.bonus_vs_cav,
+		"defense":unit.defense,
+		"is_hero":unit.is_hero,
+		"is_building":unit.is_building,
+		"is_captive":unit.is_captive,
+		"is_objective":unit.is_objective,
+		"is_noncombat":unit.is_noncombat,
+		"setup_def":unit.setup_def,
+		"aura":unit.aura,
+		"aura_radius":unit.aura_radius,
+		"aura_power":unit.aura_power,
+		"radius":unit.radius,
+		"visual_scale":unit.visual_scale,
+		"aggro_range":unit.aggro_range,
+		"_track_combat_stats":unit._track_combat_stats,
+		"is_worker":unit.is_worker,
+		"is_resource":unit.is_resource,
+		"res_kind":unit.res_kind,
+		"res_left":unit.res_left,
+		"_carry_kind":unit._carry_kind,
+		"_carry_amt":unit._carry_amt,
+		"_gather_t":unit._gather_t,
+		"is_constructing":unit.is_constructing,
+		"_pending_build":unit._pending_build,
+		"build_progress":unit.build_progress,
+		"build_time":unit.build_time,
+		"garrisoned":unit.garrisoned,
+		"garrison_cap":unit.garrison_cap,
+		"_train_queue":unit._train_queue,
+		"production_blocked":unit.production_blocked,
+		"_production_retry":unit._production_retry,
+		"_train_t":unit._train_t,
+		"rally":unit.rally,
+		"has_rally":unit.has_rally,
+		"rally_kind":unit.rally_kind,
+		"_repair_g":unit._repair_g,
+		"_repair_w":unit._repair_w,
+		"_research_key":unit._research_key,
+		"_research_t":unit._research_t,
+		"selected":unit.selected,
+		"is_active":unit.is_active,
+		"inspected":unit.inspected,
+		"fog_visible":unit.fog_visible,
+		"passive":unit.passive,
+		"stance":unit.stance,
+		"_hold_order_active":unit._hold_order_active,
+		"_hold_prev_stance":unit._hold_prev_stance,
+		"_patrol_a":unit._patrol_a,
+		"_patrol_b":unit._patrol_b,
+		"_patrolling":unit._patrolling,
+		"hidden_in_reeds":unit.hidden_in_reeds,
+		"buff_atk":unit.buff_atk,
+		"buff_speed":unit.buff_speed,
+		"face_left":unit.face_left,
+		"group_nums":unit.group_nums,
+		"ability":unit.ability,
+		"ability_cd":unit.ability_cd,
+		"_ability_t":unit._ability_t,
+		"ability_slots":unit.ability_slots,
+		"_hero_leveled":unit._hero_leveled,
+		"hero_level":unit.hero_level,
+		"hero_xp":unit.hero_xp,
+		"skill_points":unit.skill_points,
+		"auto_micro":unit.auto_micro,
+		"ai_tick_phase":unit.ai_tick_phase,
+		"_ai_dest":unit._ai_dest,
+		"_base_atk":unit._base_atk,
+		"_base_hp":unit._base_hp,
+		"_base_speed":unit._base_speed,
+		"_base_defense":unit._base_defense,
+		"temp_atk":unit.temp_atk,
+		"_temp_atk_t":unit._temp_atk_t,
+		"temp_atk_add":unit.temp_atk_add,
+		"_temp_atk_add_t":unit._temp_atk_add_t,
+		"temp_speed":unit.temp_speed,
+		"_temp_speed_t":unit._temp_speed_t,
+		"_temp_move_boost":unit._temp_move_boost,
+		"_temp_move_boost_t":unit._temp_move_boost_t,
+		"_stun_t":unit._stun_t,
+		"temp_lifesteal":unit.temp_lifesteal,
+		"_temp_lifesteal_t":unit._temp_lifesteal_t,
+		"cav_ls_chance":unit.cav_ls_chance,
+		"cav_ls_frac":unit.cav_ls_frac,
+		"_lin_guard_t":unit._lin_guard_t,
+		"_lin_guard_rank":unit._lin_guard_rank,
+		"_lin_guard_used":unit._lin_guard_used,
+		"lin_spear_rank":unit.lin_spear_rank,
+		"_lin_spear_stacks":unit._lin_spear_stacks,
+		"_lin_spear_t":unit._lin_spear_t,
+		"_buff_glow":unit._buff_glow,
+		"is_summon":unit.is_summon,
+		"summon_kind":unit.summon_kind,
+		"_summon_ttl":unit._summon_ttl,
+		"stat_owner_key":unit.stat_owner_key,
+		"stat_ability_id":unit.stat_ability_id,
+		"_drunk_t":unit._drunk_t,
+		"_drunk_lo":unit._drunk_lo,
+		"_drunk_hi":unit._drunk_hi,
+		"_drunk_reroll":unit._drunk_reroll,
+		"_drunk_move":unit._drunk_move,
+		"_drunk_atk":unit._drunk_atk,
+		"_phys_immune_t":unit._phys_immune_t,
+		"_absorbed_phys":unit._absorbed_phys,
+		"_drunk_god_bonus_per_hit":unit._drunk_god_bonus_per_hit,
+		"_drunk_god_stacks":unit._drunk_god_stacks,
+		"_drunk_god_max_stacks":unit._drunk_god_max_stacks,
+		"_def_down":unit._def_down,
+		"_def_down_t":unit._def_down_t,
+		"_blind_t":unit._blind_t,
+		"_attack_miss_chance":unit._attack_miss_chance,
+		"_attack_miss_t":unit._attack_miss_t,
+		"aura_slow":unit.aura_slow,
+		"slow_aura_r":unit.slow_aura_r,
+		"_shield":unit._shield,
+		"_shield_t":unit._shield_t,
+		"_silence_t":unit._silence_t,
+		"_root_t":unit._root_t,
+		"_disarm_t":unit._disarm_t,
+		"_taunt_t":unit._taunt_t,
+		"_channel_t":unit._channel_t,
+		"_channel_dur":unit._channel_dur,
+		"_invis_t":unit._invis_t,
+		"_invis_strike_bonus":unit._invis_strike_bonus,
+		"_invis_strike_pending":unit._invis_strike_pending,
+		"_hex_t":unit._hex_t,
+		"_form_t":unit._form_t,
+		"_form":unit._form,
+		"_form_backup":unit._form_backup,
+		"_order_serial":unit._order_serial,
+		"temp_atkspeed":unit.temp_atkspeed,
+		"_temp_atkspeed_t":unit._temp_atkspeed_t,
+		"_attack_speed_slow":unit._attack_speed_slow,
+		"_attack_speed_slow_t":unit._attack_speed_slow_t,
+		"_aura_atkspeed":unit._aura_atkspeed,
+		"atkspeed_mult":unit.atkspeed_mult,
+		"crit_chance_bonus":unit.crit_chance_bonus,
+		"crit_mult_bonus":unit.crit_mult_bonus,
+		"evasion":unit.evasion,
+		"_temp_evasion":unit._temp_evasion,
+		"_temp_evasion_t":unit._temp_evasion_t,
+		"bash_chance":unit.bash_chance,
+		"bash_dur":unit.bash_dur,
+		"on_hit_slow":unit.on_hit_slow,
+		"on_hit_slow_dur":unit.on_hit_slow_dur,
+		"on_hit_dmg":unit.on_hit_dmg,
+		"_dmg_amp":unit._dmg_amp,
+		"_dmg_amp_t":unit._dmg_amp_t,
+		"_damage_reduction":unit._damage_reduction,
+		"_damage_reduction_t":unit._damage_reduction_t,
+		"_stats_mitigation_t":unit._stats_mitigation_t,
+		"_charge_t":unit._charge_t,
+		"_charge_dash":unit._charge_dash,
+		"_charge_dir":unit._charge_dir,
+		"_charge_dmg":unit._charge_dmg,
+		"_charge_ability_id":unit._charge_ability_id,
+		"_charge_slow":unit._charge_slow,
+		"_charge_slow_dur":unit._charge_slow_dur,
+		"_charge_width":unit._charge_width,
+		"_charge_phys_immune":unit._charge_phys_immune,
+		"_hua_lock_shots":unit._hua_lock_shots,
+		"_state":unit._state,
+		"_path":unit._path,
+		"_path_i":unit._path_i,
+		"_amove_dest":unit._amove_dest,
+		"_resume_amove":unit._resume_amove,
+		"_chase_intent":unit._chase_intent,
+		"_group_cap":unit._group_cap,
+		"_home":unit._home,
+		"_has_home":unit._has_home,
+		"_cd":unit._cd,
+		"_repath":unit._repath,
+		"_acq_t":unit._acq_t,
+		"_flash":unit._flash,
+		"_muzzle_t":unit._muzzle_t,
+		"_tower_aim":unit._tower_aim,
+		"_tower_aim_hold":unit._tower_aim_hold,
+		"_stuck_t":unit._stuck_t,
+		"_idle_push_t":unit._idle_push_t,
+		"_blocker_check_t":unit._blocker_check_t,
+		"_chasing_path_blocker":unit._chasing_path_blocker,
+		"_eject_t":unit._eject_t,
+		"_block_rp":unit._block_rp,
+		"_burn_t":unit._burn_t,
+		"manual_order_t":unit.manual_order_t,
+		"manual_order_active":unit.manual_order_active,
+		"mission_order_active":unit.mission_order_active,
+		"mission_order_arrival_t":unit.mission_order_arrival_t,
+		"mission_order_target":unit.mission_order_target,
+		"mission_order_token":unit.mission_order_token,
+		"_move_retry":unit._move_retry,
+		"_move_retry_pos":unit._move_retry_pos,
+		"_last_pos":unit._last_pos,
+		"_combat_cool":unit._combat_cool,
+		"_hit_recent_t":unit._hit_recent_t,
+		"_chase_t":unit._chase_t,
+		"_chase_best_distance":unit._chase_best_distance,
+		"_giveup_t":unit._giveup_t,
+		"_stepped":unit._stepped,
+		"_move_blend":unit._move_blend,
+		"_anim_t":unit._anim_t,
+		"_lunge":unit._lunge,
+		"_lunge_dir":unit._lunge_dir,
+		"_swing_kind":unit._swing_kind,
+		"_swing_speed":unit._swing_speed,
+		"_hit_at":unit._hit_at,
+		"_pending_done":unit._pending_done,
+		"_flinch":unit._flinch,
+		"_gather_anim_t":unit._gather_anim_t,
+		"_harvest_pulse":unit._harvest_pulse,
+		"_cast_t":unit._cast_t,
+		"_cast_dur":unit._cast_dur,
+		"_cast_color":unit._cast_color,
+		"_cast_serial":unit._cast_serial,
+		"_weapon":unit._weapon,
+		"_idle_t":unit._idle_t,
+		"_dying":unit._dying,
+		"_death_t":unit._death_t,
+		"_death_lean":unit._death_lean,
+		"_killer_source_id":unit._killer_source_id,
+		"position":unit.position,
+		"modulate":unit.modulate,
+	}
+
+const MAX_PATH_POINTS := 4096
+const SCHEMA := "unit_values_v1"
+var _unit_script: GDScript
+var _codec
+var _source_ok := false
+
+func _init(unit_script: GDScript, codec_script: GDScript) -> void:
+	_unit_script = unit_script
+	if unit_script==null or codec_script==null: return
+	# Verify fixed loaded script text once, before any explicit Unit field read.
+	# Source drift therefore refuses cleanly instead of accessing missing fields.
+	if unit_script.source_code.replace("\r\n","\n").sha256_text()!=UNIT_SOURCE_LF: return
+	if codec_script.source_code.replace("\r\n","\n").sha256_text()!=CODEC_SOURCE_LF: return
+	if not unit_script.can_instantiate() or not codec_script.can_instantiate(): return
+	_codec = codec_script.new()
+	_source_ok = _codec!=null
+
+func _failure(code: String, field := "") -> Dictionary:
+	return {"ok":false,"code":code,"field":field,"restore_ready":false}
+
+func coverage() -> Dictionary:
+	return {"declared_fields":DECLARED_COUNT,"captured_declared_values":CAPTURED_DECLARED_COUNT,
+		"inherited_values":["position","modulate"],"deferred_fields":DEFERRED_FIELDS.duplicate(),
+		"omitted_visual_fields":OMITTED_VISUAL_FIELDS.duplicate(),"restore_ready":false,
+		"references_encoded":false,"metadata_capture_implemented":false,"business_definition_validated":false}
+
+func _fields(value: Dictionary, expected: Array) -> bool:
+	if value.size() != expected.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in expected: return false
+	return true
+
+func _fingerprint(value: String) -> bool:
+	if value.length() != 64: return false
+	for index in range(value.length()):
+		var c: int = value.unicode_at(index)
+		if not (c >= 48 and c <= 57) and not (c >= 97 and c <= 102): return false
+	return true
+
+func _finite_number(value: Variant) -> bool:
+	return typeof(value) == TYPE_INT or (typeof(value) == TYPE_FLOAT and is_finite(value))
+
+func _check_values(values: Dictionary) -> Dictionary:
+	if not _fields(values, RULES.keys()): return _failure("VALUE_FIELDS")
+	for field in RULES:
+		var value: Variant = values[field]
+		var rule: String = RULES[field]
+		match rule:
+			"string":
+				if typeof(value) != TYPE_STRING: return _failure("VALUE_TYPE",field)
+			"bool":
+				if typeof(value) != TYPE_BOOL: return _failure("VALUE_TYPE",field)
+			"int":
+				if typeof(value) != TYPE_INT: return _failure("VALUE_TYPE",field)
+				if INT_RANGES.has(field) and (value < INT_RANGES[field][0] or value > INT_RANGES[field][1]): return _failure("VALUE_RANGE",field)
+			"float":
+				if typeof(value) != TYPE_FLOAT: return _failure("VALUE_TYPE",field)
+				if not is_finite(value): return _failure("NON_FINITE",field)
+			"vector2":
+				if typeof(value) != TYPE_VECTOR2: return _failure("VALUE_TYPE",field)
+				if not value.is_finite(): return _failure("NON_FINITE",field)
+			"vector2i":
+				if typeof(value) != TYPE_VECTOR2I: return _failure("VALUE_TYPE",field)
+			"color":
+				if typeof(value) != TYPE_COLOR: return _failure("VALUE_TYPE",field)
+				for component in [value.r,value.g,value.b,value.a]:
+					if not is_finite(component): return _failure("NON_FINITE",field)
+			"vector2_positive_inf_sentinel":
+				if typeof(value) != TYPE_VECTOR2: return _failure("VALUE_TYPE",field)
+				if value != Vector2.INF and not value.is_finite(): return _failure("SENTINEL_VALUE",field)
+			"float_positive_inf_sentinel":
+				if typeof(value) != TYPE_FLOAT: return _failure("VALUE_TYPE",field)
+				if value != INF and (not is_finite(value) or value < 0.0): return _failure("SENTINEL_VALUE",field)
+			"packed_vector2":
+				if typeof(value) != TYPE_PACKED_VECTOR2_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > MAX_PATH_POINTS: return _failure("PATH_LIMIT",field)
+				for point in value:
+					if not point.is_finite(): return _failure("NON_FINITE",field)
+			"string_array":
+				if typeof(value) != TYPE_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > 8: return _failure("TRAIN_QUEUE_LIMIT",field)
+				for key in value:
+					if typeof(key) != TYPE_STRING or key.is_empty(): return _failure("TRAIN_QUEUE_SHAPE",field)
+			"group_array":
+				if typeof(value) != TYPE_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > 32: return _failure("GROUP_LIMIT",field)
+				for index in range(value.size()):
+					if typeof(value[index]) != TYPE_INT: return _failure("GROUP_SHAPE",field)
+					if index > 0 and value[index] <= value[index-1]: return _failure("GROUP_ORDER",field)
+			"definition_values":
+				# Preserve the complete effective definition as bounded values. This
+				# does NOT certify its business keys, cross-references or content ID.
+				if typeof(value) != TYPE_DICTIONARY: return _failure("VALUE_TYPE",field)
+				if value.size() > 512: return _failure("DEFINITION_LIMIT",field)
+				for key in value:
+					if typeof(key) != TYPE_STRING: return _failure("DEFINITION_KEY",field)
+			"ability_slots":
+				if typeof(value) != TYPE_ARRAY: return _failure("VALUE_TYPE",field)
+				if value.size() > 4: return _failure("ABILITY_SLOT_LIMIT",field)
+				for slot in value:
+					if typeof(slot) != TYPE_DICTIONARY or not _fields(slot,["id","rank","cd_t","passive","charges","recharge_t","cast_seq"]): return _failure("ABILITY_SLOT_FIELDS",field)
+					if typeof(slot.id) != TYPE_STRING or slot.id.is_empty() or typeof(slot.passive) != TYPE_BOOL: return _failure("ABILITY_SLOT_TYPE",field)
+					for key in ["rank","charges","cast_seq"]:
+						if typeof(slot[key]) != TYPE_INT or slot[key] < 0: return _failure("ABILITY_SLOT_TYPE",field)
+					if slot.rank > 3: return _failure("ABILITY_SLOT_RANK",field)
+					for key in ["cd_t","recharge_t"]:
+						if typeof(slot[key]) != TYPE_FLOAT or not is_finite(slot[key]) or slot[key] < 0.0: return _failure("ABILITY_SLOT_TIMER",field)
+			"form":
+				if typeof(value) != TYPE_DICTIONARY: return _failure("VALUE_TYPE",field)
+				for key in value:
+					if typeof(key) != TYPE_STRING or key not in ["hp_mult","atk_mult","speed_mult","atk_cd_mult","range","radius","tint"]: return _failure("FORM_FIELDS",field)
+					if key == "tint":
+						if typeof(value[key]) != TYPE_COLOR: return _failure("FORM_TYPE",field)
+					elif not _finite_number(value[key]): return _failure("FORM_TYPE",field)
+			"form_backup":
+				if typeof(value) != TYPE_DICTIONARY: return _failure("VALUE_TYPE",field)
+				if not value.is_empty() and not _fields(value,["atk_cd","base_speed","radius","mod_r","mod_g","mod_b"]): return _failure("FORM_BACKUP_FIELDS",field)
+				for key in value:
+					if typeof(value[key]) != TYPE_FLOAT or not is_finite(value[key]): return _failure("FORM_BACKUP_TYPE",field)
+			_: return _failure("RULE_UNIMPLEMENTED",field)
+	# Standard defense excludes chapter state; references remain the next layer's
+	# responsibility even when current pointers happen to be null.
+	for field in ["defeat_outcome","story_outcome","_pose_previous_variant"]:
+		if values[field] != "": return _failure("CHAPTER_STATE_UNSUPPORTED",field)
+	if values._story_pose_t != 0.0 or values.is_captive: return _failure("CHAPTER_STATE_UNSUPPORTED")
+	if values._path_i < 0: return _failure("VALUE_RANGE","_path_i")
+	return {"ok":true}
+
+func _to_wire(values: Dictionary) -> Dictionary:
+	var wire := values.duplicate(false)
+	var points: Array[Vector2] = []
+	for point in values._path: points.append(point)
+	wire._path = points
+	for field in ["_ai_dest","mission_order_target"]:
+		wire[field] = {"state":"positive_inf"} if values[field] == Vector2.INF else {"state":"finite","point":values[field]}
+	wire._chase_best_distance = {"state":"positive_inf"} if values._chase_best_distance == INF else {"state":"finite","distance":values._chase_best_distance}
+	return wire
+
+func _from_wire(wire: Dictionary) -> Dictionary:
+	if not _fields(wire,RULES.keys()): return _failure("VALUE_FIELDS")
+	if typeof(wire._path) != TYPE_ARRAY or wire._path.size() > MAX_PATH_POINTS: return _failure("PATH_SHAPE","_path")
+	var points: Array[Vector2] = []
+	for point in wire._path:
+		if typeof(point) != TYPE_VECTOR2 or not point.is_finite(): return _failure("PATH_SHAPE","_path")
+		points.append(point)
+	var values := wire.duplicate(false)
+	values._path = PackedVector2Array(points)
+	for field in ["_ai_dest","mission_order_target","_chase_best_distance"]:
+		var tagged: Variant = wire[field]
+		if typeof(tagged) != TYPE_DICTIONARY or not tagged.has("state") or typeof(tagged.state) != TYPE_STRING: return _failure("SENTINEL_SHAPE",field)
+		if tagged.state == "positive_inf":
+			if not _fields(tagged,["state"]): return _failure("SENTINEL_SHAPE",field)
+			values[field] = INF if field == "_chase_best_distance" else Vector2.INF
+		elif tagged.state == "finite":
+			var key := "distance" if field == "_chase_best_distance" else "point"
+			if not _fields(tagged,["state",key]): return _failure("SENTINEL_SHAPE",field)
+			values[field] = tagged[key]
+			if field == "_chase_best_distance":
+				if typeof(values[field]) != TYPE_FLOAT or not is_finite(values[field]) or values[field] < 0.0: return _failure("SENTINEL_VALUE",field)
+			elif typeof(values[field]) != TYPE_VECTOR2 or not values[field].is_finite(): return _failure("SENTINEL_VALUE",field)
+		else: return _failure("SENTINEL_SHAPE",field)
+	return {"ok":true,"values":values}
+
+func capture_values(unit, content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if typeof(unit) != TYPE_OBJECT or not is_instance_valid(unit): return _failure("UNIT_UNAVAILABLE")
+	if unit.get_script() != _unit_script or unit.is_queued_for_deletion(): return _failure("UNIT_TYPE")
+	if not _fingerprint(content_fingerprint): return _failure("CONTENT_FINGERPRINT")
+	var values := _read_explicit(unit)
+	var checked := _check_values(values)
+	if not checked.ok: return checked
+	# One codec invocation budgets the whole Unit value record, not each field.
+	var encoded: Dictionary = _codec.encode(_to_wire(values))
+	if not encoded.ok: return _failure("CODEC_"+String(encoded.code),String(encoded.get("path","")))
+	return {"ok":true,"code":"VALUES_CAPTURED","record":{"schema":SCHEMA,"unit_source_lf":UNIT_SOURCE_LF,
+		"content_fingerprint":content_fingerprint,"values":encoded.value},"coverage":coverage(),"restore_ready":false}
+
+func validate_record(record: Variant, expected_content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if typeof(record) != TYPE_DICTIONARY or not _fields(record,["schema","unit_source_lf","content_fingerprint","values"]): return _failure("RECORD_FIELDS")
+	if typeof(record.schema) != TYPE_STRING or record.schema != SCHEMA: return _failure("SCHEMA")
+	if typeof(record.unit_source_lf) != TYPE_STRING or record.unit_source_lf != UNIT_SOURCE_LF: return _failure("UNIT_SOURCE")
+	if not _fingerprint(expected_content_fingerprint) or typeof(record.content_fingerprint) != TYPE_STRING or record.content_fingerprint != expected_content_fingerprint: return _failure("CONTENT_FINGERPRINT")
+	var decoded: Dictionary = _codec.decode(record.values)
+	if not decoded.ok: return _failure("CODEC_"+String(decoded.code),String(decoded.get("path","")))
+	if typeof(decoded.value) != TYPE_DICTIONARY: return _failure("VALUE_FIELDS")
+	var native := _from_wire(decoded.value)
+	if not native.ok: return native
+	var checked := _check_values(native.values)
+	if not checked.ok: return checked
+	return {"ok":true,"code":"VALUES_VALIDATED","values":native.values,"coverage":coverage(),"restore_ready":false}

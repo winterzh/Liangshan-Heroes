@@ -1,0 +1,141 @@
+extends RefCounted
+## Private experiment only. Never called from spawn or during a running Battle.
+const DIRECTIONS := ["se","sw","ne","nw"]
+const STATES := ["attack","walk"]
+const MAX_IDENTITIES := 12
+const MAX_REQUESTS := 96
+const MAX_PREPARE_US := 8000000
+const MAX_TEXTURE_GROWTH := 96 * 1024 * 1024
+const MAX_STATIC_GROWTH := 128 * 1024 * 1024
+
+static func runnable_units(b) -> Array:
+	var bad: Array = []
+	var pending: Array[Node] = [b]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		if node is Unit and node.can_process(): bad.append(node.get_instance_id())
+		for child in node.get_children(): pending.append(child)
+	return bad
+
+static func snapshot(b) -> Dictionary:
+	var actors: Array = []
+	for u in b.units:
+		if not is_instance_valid(u):
+			actors.append({"invalid_registry_entry":true}); continue
+		actors.append({"id":u.get_instance_id(),"key":u.key,"variant":u.art_variant,"faction":u.faction,
+			"hp":u.hp,"position":u.position,"state":u._state,"target":u._target.get_instance_id() if is_instance_valid(u._target) else 0,
+			"queue":u._queue.duplicate(true),"path":u._path.duplicate(),"cd":u._cd,
+			"cast_t":u._cast_t,"channel_t":u._channel_t,"stun_t":u._stun_t,"summon_ttl":u._summon_ttl,
+			"anim_t":u._anim_t,"idle_t":u._idle_t,"lunge":u._lunge,"melee_mode":u.melee_mode})
+	return {"battle_id":b.get_instance_id(),"process_mode":b.process_mode,"phase":b.phase,
+		"ai_tick_frame":b._ai_tick_frame,"gold":b.gold,"wood":b.wood,"kills":b.kills,
+		"wave":b.level._wave,"wave_t":b.level._wave_t,"wave_started":b.level._started,
+		"actors":actors}
+
+static func roster(b) -> Array:
+	var identities := {}
+	for u in b.units:
+		if not is_instance_valid(u) or u.is_building or u.is_resource or u.hp <= 0.0: continue
+		var keys: Array = [String(u.key)]
+		# Do not call Unit._anim_key(): it can itself synchronously query Art.
+		# Keep the base fallback, adding only an already-active melee mode key.
+		if u.melee_mode and u.can_melee_switch: keys.append(String(u.key)+"_melee")
+		for key in keys:
+			var identity := JSON.stringify([key,String(u.art_variant)])
+			if not identities.has(identity):
+				identities[identity] = {"key":key,"variant":String(u.art_variant),"hero":bool(u.is_hero)}
+	var result: Array = identities.values()
+	result.sort_custom(func(a: Dictionary,bv: Dictionary) -> bool:
+		if a.hero != bv.hero: return a.hero
+		return JSON.stringify([a.key,a.variant]) < JSON.stringify([bv.key,bv.variant]))
+	return result
+
+static func cache_state(art) -> Dictionary:
+	var animation_keys: Array = art._anim_cache.keys(); animation_keys.sort()
+	var campaign_keys: Array = art._campaign_tex_cache.keys(); campaign_keys.sort()
+	var path_keys: Array = art._generic_directional_path_cache.keys(); path_keys.sort()
+	return {"animation_count":animation_keys.size(),"animation_keys":animation_keys,
+		"campaign_texture_count":campaign_keys.size(),"campaign_texture_keys":campaign_keys,
+		"directional_path_count":path_keys.size(),"directional_path_keys":path_keys,
+		"godot_static_bytes":int(Performance.get_monitor(Performance.MEMORY_STATIC)),
+		"render_texture_bytes":int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)),
+		"resource_count":int(Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT))}
+
+static func difference(after: Array, before: Array) -> Array:
+	var result: Array = []
+	for item in after:
+		if not before.has(item): result.append(item)
+	return result
+
+static func run(b, art, mode: String) -> Dictionary:
+	var result := {"mode":mode,"valid":false,"completed_plan":false,"requests":[],"api_calls":0,
+		"stop_reason":"","simulation_mutated":false,"production_hook_installed":false}
+	if mode not in ["none","current_units"] or not is_instance_valid(b) or b.process_mode != Node.PROCESS_MODE_DISABLED:
+		result.stop_reason = "invalid_mode_or_battle_not_disabled"; return result
+	var runnable := runnable_units(b)
+	if not runnable.is_empty(): result.stop_reason = "runnable_Unit_descendant"; result["runnable_units"] = runnable; return result
+	var before := snapshot(b)
+	var plan := roster(b)
+	result["roster"] = plan
+	result["planned_requests"] = plan.size() * STATES.size() * DIRECTIONS.size()
+	if plan.is_empty() or plan.size() > MAX_IDENTITIES or result.planned_requests > MAX_REQUESTS:
+		result.stop_reason = "finite_roster_budget"; return result
+	var cache_before := cache_state(art)
+	var rows: Array = []
+	var total_api_us := 0
+	var max_api_us := 0
+	var stop_reason := ""
+	var began := Time.get_ticks_usec()
+	if mode == "current_units":
+		for state in STATES:
+			for identity in plan:
+				for direction in DIRECTIONS:
+					if Time.get_ticks_usec()-began >= MAX_PREPARE_US:
+						stop_reason = "wall_budget"; break
+					if int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))-cache_before.render_texture_bytes > MAX_TEXTURE_GROWTH:
+						stop_reason = "texture_growth_budget"; break
+					if int(Performance.get_monitor(Performance.MEMORY_STATIC))-cache_before.godot_static_bytes > MAX_STATIC_GROWTH:
+						stop_reason = "static_growth_budget"; break
+					if b.process_mode != Node.PROCESS_MODE_DISABLED or not runnable_units(b).is_empty():
+						stop_reason = "simulation_became_runnable"; break
+					var started := Time.get_ticks_usec()
+					# Exact original API; no manual alias/path/fallback/cache replacement.
+					var frames: Array = art.unit_anim_frames(identity.key,state,direction,identity.variant)
+					var elapsed := Time.get_ticks_usec()-started
+					total_api_us += elapsed; max_api_us = maxi(max_api_us,elapsed)
+					rows.append({"key":identity.key,"variant":identity.variant,"state":state,"direction":direction,
+						"elapsed_us":elapsed,"frame_count":frames.size()})
+					# One whole original request per rendered frame. This cannot preempt
+					# a single slow synchronous load, and is not a hard frame-time budget.
+					await RenderingServer.frame_post_draw
+				if not stop_reason.is_empty(): break
+			if not stop_reason.is_empty(): break
+	var ended := Time.get_ticks_usec()
+	var cache_after := cache_state(art)
+	# Check the final request too: the soft limits are never a hard per-call cap.
+	if mode == "current_units" and stop_reason.is_empty():
+		if ended-began >= MAX_PREPARE_US: stop_reason = "wall_budget"
+		elif cache_after.render_texture_bytes-cache_before.render_texture_bytes > MAX_TEXTURE_GROWTH: stop_reason = "texture_growth_budget"
+		elif cache_after.godot_static_bytes-cache_before.godot_static_bytes > MAX_STATIC_GROWTH: stop_reason = "static_growth_budget"
+	var after := snapshot(b)
+	result.merge({"api_calls":rows.size(),"requests":rows,"total_api_us":total_api_us,"max_api_us":max_api_us,
+		"prepare_wall_us":ended-began,"cache_before":cache_before,"cache_after":cache_after,
+		"new_animation_keys":difference(cache_after.animation_keys,cache_before.animation_keys),
+		"new_campaign_texture_keys":difference(cache_after.campaign_texture_keys,cache_before.campaign_texture_keys),
+		"new_directional_path_keys":difference(cache_after.directional_path_keys,cache_before.directional_path_keys),
+		"static_bytes_delta":cache_after.godot_static_bytes-cache_before.godot_static_bytes,
+		"texture_bytes_delta":cache_after.render_texture_bytes-cache_before.render_texture_bytes,
+		"resource_count_delta":cache_after.resource_count-cache_before.resource_count,
+		"observed_state_equal":before==after,"simulation_mutated":before!=after,
+		"existing_unit_ids_before":before.actors.map(func(row: Dictionary) -> int: return int(row.get("id",0))),
+		"existing_unit_ids_after":after.actors.map(func(row: Dictionary) -> int: return int(row.get("id",0))),
+		"still_frozen":b.process_mode==Node.PROCESS_MODE_DISABLED and runnable_units(b).is_empty(),
+		"budget":{"max_identities":MAX_IDENTITIES,"max_requests":MAX_REQUESTS,"max_wall_us":MAX_PREPARE_US,
+			"max_texture_growth":MAX_TEXTURE_GROWTH,"max_static_growth":MAX_STATIC_GROWTH,"requests_per_presented_frame":1},
+		"limits":"Synchronous API work can exceed a budget within one request. Memory counters are engine estimates. API times include resource work and frame construction, not pure disk I/O.",
+		"rng_calls_added":false,"unit_identity_assigned_or_overridden":false,
+		"future_object_ids_may_differ":true,"state_check_scope":"Existing Unit identities and the explicit snapshot fields only; not a full combat/RNG equivalence proof."},true)
+	result.stop_reason = stop_reason
+	result.completed_plan = mode=="none" or rows.size()==result.planned_requests
+	result.valid = stop_reason.is_empty() and result.completed_plan and result.observed_state_equal and result.still_frozen
+	return result

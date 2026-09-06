@@ -1,0 +1,163 @@
+extends Node
+## First autoload. No Art/Sfx/Unit/Battle type dependencies during compilation.
+## Clockless control allocates identical buffers and retains the same wrapper paths.
+const EVENT_CAP := 32768
+const EVENT_WIDTH := 11
+const POINT_CAP := 131072
+const POINT_WIDTH := 5
+const STACK_CAP := 128
+const KINDS := ["sfx_cold_play", "sfx_build", "sfx_wav", "art_try_load_attempt", "art_atlas_miss", "art_anim_cache_miss", "art_directional_loader", "art_strip_regions"]
+var clocked := false
+var active := true
+var fixture_tick := 0
+var sfx_context := "startup_bank"
+var stage := 0
+var stage_names: Array[String] = ["autoload_start"]
+var stage_points: Array = []
+var cache_snapshots: Array = []
+var fixture_identity: Array = []
+var scope_errors: Array[String] = []
+var events := PackedInt64Array()
+var labels := PackedStringArray()
+var point_rows := PackedInt64Array()
+var counts := PackedInt64Array()
+var stack := PackedInt32Array()
+var event_used := 0
+var point_used := 0
+var depth := 0
+var overflow := 0
+var start_usec := 0
+var end_usec := 0
+var profile_path := ""
+
+func _init() -> void:
+	events.resize(EVENT_CAP * EVENT_WIDTH)
+	labels.resize(EVENT_CAP)
+	point_rows.resize(POINT_CAP * POINT_WIDTH)
+	counts.resize(KINDS.size())
+	stack.resize(STACK_CAP)
+	clocked = OS.get_environment("FIRST_USE_MODE") == "timed"
+	start_usec = Time.get_ticks_usec()
+	profile_path = OS.get_user_data_dir().replace("\\", "/")
+	var allowed: String = OS.get_environment("FIRST_USE_PROFILE_ROOT").replace("\\", "/").trim_suffix("/") + "/"
+	if allowed == "/" or not (profile_path + "/").begins_with(allowed):
+		# Must precede the production autoloads. No fallback to the normal profile.
+		push_error("First-use profile isolation failed; terminating before production autoloads")
+		OS.kill(OS.get_process_id())
+	stage_points.append([stage, start_usec, 0, Engine.get_physics_frames(), Engine.get_process_frames()])
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	process_physics_priority = -20000
+
+func _ready() -> void:
+	RenderingServer.frame_post_draw.connect(_frame_post_draw)
+
+func _physics_process(_delta: float) -> void:
+	point(0)
+
+func _frame_post_draw() -> void:
+	point(1)
+
+func point(kind: int) -> void:
+	if not active or not clocked: return
+	if point_used >= POINT_CAP:
+		overflow += 1
+		return
+	var offset: int = point_used * POINT_WIDTH
+	point_rows[offset] = Time.get_ticks_usec()
+	point_rows[offset + 1] = kind
+	point_rows[offset + 2] = Engine.get_physics_frames()
+	point_rows[offset + 3] = Engine.get_process_frames()
+	point_rows[offset + 4] = stage
+	point_used += 1
+
+func open_event(kind: int, label: String, input_count: int = -1) -> int:
+	if not active: return -1
+	counts[kind] += 1
+	if not clocked: return -1
+	if event_used >= EVENT_CAP or depth >= STACK_CAP:
+		overflow += 1
+		return -1
+	var ticket: int = event_used
+	var offset: int = ticket * EVENT_WIDTH
+	event_used += 1
+	labels[ticket] = label
+	events[offset] = Time.get_ticks_usec()
+	events[offset + 1] = -1
+	events[offset + 2] = kind
+	events[offset + 3] = stage
+	events[offset + 4] = Engine.get_physics_frames()
+	events[offset + 5] = Engine.get_process_frames()
+	events[offset + 6] = fixture_tick
+	events[offset + 7] = 1 if Engine.is_in_physics_frame() else 0
+	events[offset + 8] = stack[depth - 1] if depth > 0 else -1
+	events[offset + 9] = input_count
+	events[offset + 10] = -1
+	stack[depth] = ticket
+	depth += 1
+	return ticket
+
+func close_event(ticket: int, output_count: int = -1) -> void:
+	if ticket < 0: return
+	var ended: int = Time.get_ticks_usec()
+	if depth <= 0 or stack[depth - 1] != ticket:
+		overflow += 1
+		return
+	depth -= 1
+	events[ticket * EVENT_WIDTH + 1] = ended
+	events[ticket * EVENT_WIDTH + 10] = output_count
+
+func mark_stage(name: String, stamp: int = -1) -> void:
+	stage_names.append(name)
+	stage = stage_names.size() - 1
+	stage_points.append([stage, Time.get_ticks_usec() if stamp < 0 else stamp, fixture_tick, Engine.get_physics_frames(), Engine.get_process_frames()])
+	# Boundary-only metadata; never request an Art frame or Sfx waveform here.
+	var art = get_node_or_null("/root/Art")
+	var sfx = get_node_or_null("/root/Sfx")
+	if art != null and sfx != null:
+		cache_snapshots.append({"stage":stage,"art_anim":art._anim_cache.keys(),"art_regions":art._cache.keys(),"sfx_bank":sfx._bank.keys()})
+
+func capture_fixture(b) -> void:
+	for u in b.units:
+		if not is_instance_valid(u): continue
+		var slots: Array = []
+		for slot in u.ability_slots: slots.append([slot.get("id", ""), slot.get("rank", 0), slot.get("cd_t", 0.0)])
+		fixture_identity.append({"key":u.key,"id":u.get_instance_id(),"faction":u.faction,"position":[u.position.x,u.position.y],"hp":u.hp,"ai_phase":u.ai_tick_phase,"slots":slots})
+	if b._prof_on: scope_errors.append("native one-second print profiler must remain disabled")
+	if b._mob_count > 260: scope_errors.append("unexpected initial mob > 260")
+
+func freeze_capture(stamp: int) -> void:
+	mark_stage("sample_end", stamp)
+	end_usec = stamp
+	active = false
+
+func capture_valid() -> bool:
+	return overflow == 0 and depth == 0 and scope_errors.is_empty()
+
+func export_report() -> Dictionary:
+	var exported_events: Array = []
+	for i in range(event_used):
+		var values: Array = []
+		for j in range(EVENT_WIDTH): values.append(events[i * EVENT_WIDTH + j])
+		values.append(labels[i])
+		exported_events.append(values)
+	var points: Array = []
+	for i in range(point_used):
+		var values: Array = []
+		for j in range(POINT_WIDTH): values.append(point_rows[i * POINT_WIDTH + j])
+		points.append(values)
+	var call_counts: Array = []
+	for value in counts: call_counts.append(value)
+	return {"schema":1,"mode":"timed" if clocked else "clockless", "valid":capture_valid(),
+		"kind_names":KINDS,"counts":call_counts,"events":exported_events,
+		"event_columns":["start_us","end_us","kind","stage","physics_frame","process_frame","fixture_tick","in_physics","parent_event","input_count","output_count","label"],
+		"points":points,"point_columns":["stamp_us","kind_0physics_1postdraw","physics_frame","process_frame","stage"],
+		"stage_names":stage_names,"stage_points":stage_points,"cache_snapshots":cache_snapshots,
+		"fixture_identity":fixture_identity,"profile_path":profile_path,"scope_errors":scope_errors,
+		"capacity_events":EVENT_CAP,"capacity_points":POINT_CAP,"overflow":overflow,"open_depth":depth,
+		"capture_start_us":start_usec,"capture_end_us":end_usec,
+		"notes":["timed and clockless retain identical buffer capacities and production calls",
+		"cold method wrappers include their own nested loader regions; use interval union",
+		"art_try_load_attempt output 0 is a failed/absent lookup, not proven file IO",
+		"anim cache miss includes legacy inline load and negative fallback; not pure disk time",
+		"extra autoload/script allocations and wall clocks perturb IDs/timing; never exact combat replay",
+		"clockless retains boundary/sample clocks but disables per-event/physics/postdraw diagnostic clocks"]}

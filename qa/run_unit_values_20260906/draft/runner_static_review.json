@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "godot_run": false,
+  "source_or_profile_writes": false,
+  "synthetic_in_memory_report_fixtures_only": true,
+  "python_ast_valid": true,
+  "report_refusal_cases": [
+    {
+      "case": "wrong_pid",
+      "rejected": true,
+      "reason": "Report PID/manifest mismatch"
+    },
+    {
+      "case": "wrong_private_user",
+      "rejected": true,
+      "reason": "Actual user:// escaped private profile"
+    },
+    {
+      "case": "source_only_fake_completion",
+      "rejected": true,
+      "reason": "Incomplete real QA sequence: different/missing Unit declarations refused before explicit access"
+    },
+    {
+      "case": "full_restore_overclaim",
+      "rejected": true,
+      "reason": "Value QA cannot claim full restore"
+    }
+  ],
+  "strict_log_patterns_checked": true,
+  "normal_zero_failure_summary_accepted": true,
+  "frozen_adapter_pins_raw_sha256": "6854a97554024c049e21e77803bdf0728107be0dca5e1c3a2ec3f52aa7c89a73",
+  "runner_raw_sha256": "ad12b2b4caff9a90d0712031372be6cedb50b869fcc97d2dc02aee11842c7b34",
+  "runner_contract_raw_sha256": "1b502ffae3faddbca8d6daac914bb8745691d1a63a8159f0bad59b526813fed9",
+  "actual_adapter_qa_passed": false
+}

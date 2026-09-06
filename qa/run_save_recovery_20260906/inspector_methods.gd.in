@@ -1,0 +1,138 @@
+
+# R01: appended read-only candidate inspection. Original store above is unchanged.
+const R01_MAX_ENTRIES := 256
+const R01_MAX_DEPTH := 8
+const R01_MAX_SCAN_BYTES := MAX_FILE_BYTES * 4
+
+func _r01_fail(code: String, detail := "") -> Dictionary:
+	return {"ok":false,"code":code,"detail":detail,"inspection_complete":false,
+		"read_only":true,"recovery_required":true}
+
+func _r01_file(path: String, budget: Dictionary) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return _r01_fail("INSPECTION_IO_FAILED", "File open failed")
+	var size := file.get_length()
+	if size > MAX_FILE_BYTES or budget.bytes + size > R01_MAX_SCAN_BYTES:
+		file.close(); return _r01_fail("INSPECTION_LIMIT", "File/total byte budget exceeded")
+	var raw := PackedByteArray() if size == 0 else file.get_buffer(size)
+	var error: int = file.get_error()
+	file.close()
+	if raw.size() != size or error not in [OK, ERR_FILE_EOF]:
+		return _r01_fail("INSPECTION_IO_FAILED", "Incomplete file read")
+	budget.bytes += size
+	return {"ok":true,"raw":raw,"file_sha256":_digest(raw)}
+
+func _r01_candidate_id(leaf: String, file_sha256: String) -> String:
+	return _digest(JSON.stringify(["r01-candidate-1",leaf,file_sha256]).to_utf8_buffer())
+
+func _r01_walk(relative: String, depth: int, entries: Array, candidates: Array, budget: Dictionary) -> Dictionary:
+	if depth > R01_MAX_DEPTH: return _r01_fail("INSPECTION_LIMIT", "Directory depth exceeded")
+	var path := _directory if relative.is_empty() else _directory.path_join(relative)
+	var dir := DirAccess.open(path)
+	if dir == null: return _r01_fail("INSPECTION_IO_FAILED", "Directory open failed")
+	dir.include_hidden = true
+	dir.include_navigational = false
+	if dir.list_dir_begin() != OK: return _r01_fail("INSPECTION_IO_FAILED", "Directory enumeration failed")
+	var names: Array[String] = []
+	var name := dir.get_next()
+	while not name.is_empty():
+		if name not in [".",".."]:
+			if entries.size() + names.size() >= R01_MAX_ENTRIES:
+				dir.list_dir_end()
+				return _r01_fail("INSPECTION_LIMIT", "Directory entry budget exceeded during enumeration")
+			names.append(name)
+		name = dir.get_next()
+	dir.list_dir_end()
+	names.sort()
+	for leaf in names:
+		if entries.size() >= R01_MAX_ENTRIES: return _r01_fail("INSPECTION_LIMIT", "Directory entry budget exceeded")
+		# Check before opening either a child file or a child directory. On Windows
+		# is_link checks FILE_ATTRIBUTE_REPARSE_POINT, including directory junctions.
+		if dir.is_link(leaf): return _r01_fail("LINK_REFUSED", "Inspection never follows a link")
+		var child := leaf if relative.is_empty() else relative.path_join(leaf)
+		var full := _directory.path_join(child)
+		if dir.dir_exists(leaf):
+			entries.append({"path":child,"kind":"directory"})
+			if child in [SLOT,TEMP,PREVIOUS]:
+				candidates.append({"leaf":child,"available":false,"code":"CANDIDATE_NOT_FILE"})
+			var nested := _r01_walk(child, depth+1, entries, candidates, budget)
+			if not nested.ok: return nested
+		else:
+			var read := _r01_file(full, budget)
+			if not read.ok: return read
+			var raw: PackedByteArray = read.raw
+			entries.append({"path":child,"kind":"file","bytes":str(raw.size()),"file_sha256":read.file_sha256})
+			if child in [SLOT,TEMP,PREVIOUS]:
+				var verdict: Dictionary = _result("FILE_SIZE") if raw.is_empty() else _decode(raw)
+				var candidate := {"leaf":child,"candidate_id":_r01_candidate_id(child,read.file_sha256),
+					"file_sha256":read.file_sha256,"file_bytes":str(raw.size()),"available":verdict.ok,"code":verdict.code}
+				if verdict.ok: candidate["payload_sha256"] = verdict.payload_sha256
+				# No payload or unvalidated business/display fields escape inspection.
+				candidates.append(candidate)
+	return {"ok":true}
+
+func _r01_capture() -> Dictionary:
+	var guarded := _guard()
+	if not guarded.ok: return _r01_fail(guarded.code)
+	if _busy: return _r01_fail("RECOVERY_BUSY", "This store is writing")
+	var entries: Array = []
+	var candidates: Array = []
+	var walked := _r01_walk("",0,entries,candidates,{"bytes":0})
+	if not walked.ok: return walked
+	entries.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.path < b.path)
+	candidates.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.leaf < b.leaf)
+	var identity := {"version":"r01-layout-1","directory":_directory.to_lower(),"entries":entries}
+	var inspection_id := _digest(JSON.stringify(identity,"",true).to_utf8_buffer())
+	var valid_count := 0
+	for candidate in candidates:
+		if candidate.available: valid_count += 1
+	var unknown: Array = []
+	var lock_state := {"kind":"absent","empty":false}
+	for entry in entries:
+		if entry.path == LOCK: lock_state.kind = entry.kind; lock_state.empty = entry.kind == "directory"
+		elif String(entry.path).begins_with(LOCK+"/"): lock_state.empty = false; unknown.append(entry.path)
+		elif entry.path not in [SLOT,TEMP,PREVIOUS]: unknown.append(entry.path)
+	var clean: bool = entries.size()==1 and candidates.size()==1 and candidates[0].leaf==SLOT and candidates[0].available
+	var only_empty_lock: bool = entries.size()==1 and lock_state.kind=="directory" and lock_state.empty
+	var status := "NO_VALID_CANDIDATE"
+	if entries.is_empty() or only_empty_lock: status = "NO_SLOT"
+	elif clean: status = "CLEAN_SLOT"
+	elif valid_count > 1: status = "NEEDS_CHOICE"
+	elif valid_count == 1: status = "CANDIDATE_AVAILABLE"
+	return {"ok":true,"code":status,"inspection_complete":true,"read_only":true,
+		"inspection_id":inspection_id,"directory":_directory,"entries":entries,"candidates":candidates,
+		"unknown_items":unknown,"lock":lock_state,"recovery_required":not entries.is_empty() and not clean,
+		"available_count":valid_count,"exclusive_access_proven":false}
+
+func inspect_recovery() -> Dictionary:
+	var first := _r01_capture()
+	if not first.ok: return first
+	var second := _r01_capture()
+	if not second.ok: return second
+	if first.inspection_id != second.inspection_id or first.candidates != second.candidates:
+		return _r01_fail("INSPECTION_CHANGED", "Directory or candidate validation changed during inspection")
+	return second
+
+func read_candidate(candidate_id: String, inspection_id: String) -> Dictionary:
+	var before := inspect_recovery()
+	if not before.ok: return before
+	if before.inspection_id != inspection_id:
+		return _r01_fail("INSPECTION_CHANGED", "Refresh the full candidate list")
+	var selected: Dictionary = {}
+	for candidate in before.candidates:
+		if candidate.get("candidate_id","") == candidate_id and not candidate_id.is_empty(): selected = candidate
+	if selected.is_empty(): return _r01_fail("CANDIDATE_NOT_FOUND")
+	if not selected.available: return _r01_fail("CANDIDATE_UNAVAILABLE", selected.code)
+	# Leaf comes exclusively from the enumerated fixed S/T/B list, never the caller.
+	var verified := _read_verified(_directory.path_join(selected.leaf))
+	if not verified.ok or verified.file_sha256 != selected.file_sha256:
+		return _r01_fail("INSPECTION_CHANGED", "Selected bytes or validation changed")
+	var after := inspect_recovery()
+	if not after.ok: return after
+	if after.inspection_id != inspection_id or after.candidates != before.candidates:
+		return _r01_fail("INSPECTION_CHANGED", "Directory changed while reading selected candidate")
+	return {"ok":true,"code":"CANDIDATE_READ","payload":verified.payload,
+		"candidate_id":candidate_id,"inspection_id":inspection_id,"leaf":selected.leaf,
+		"file_sha256":verified.file_sha256,"payload_sha256":verified.payload_sha256,
+		"read_only":true,"recovery_required":after.recovery_required,"exclusive_access_proven":false,
+		"slot_installed":false,"lock_cleared":false}

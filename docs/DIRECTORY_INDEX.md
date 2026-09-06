@@ -1,3 +1,17 @@
+## 2026-09-06 R01 与续玩基础值模块
+
+- `scripts/run_state_value_codec.gd`：已受测、无 Autoload 的显式基础值编码模块，尚无 Battle 调用方。
+- `docs/RUN_STATE_VALUES_20260906.md`：类型/位/有界契约、341 项当前验收、旧 NUL 诊断与尚未完成的战斗接入；`docs/RUN_SAVE_FOUNDATION_20260906.md` 追加 R01 范围。
+- `qa/run_save_recovery_20260906/`：R01 草稿原文、1,625 条断言的实际报告/退出收据、29 次快照调用摘要与原路径恢复说明；三份 `.gd` 以 `.gd.txt` 保存。
+- `tools/contracts/run_state_values_20260906/`：值模块/QA/小项目三文件原文、私有恢复名称与 raw pins，不新增公共 runner。
+- `qa/run_state_values_20260906/`：341 项通过的新轮、旧 340 项 Unicode 诊断、修复前驱动、准备/晋级收据与独立摘要。
+- 三个归档根均保留固定 `.gdignore` 与 raw 换行属性，不含私有 project/profile、实际 fixture、玩家数据或 Godot 缓存。
+
+- `docs/FIRST_USE_20260906.md`：首次加载归因、V2完整区间统计和预加载短对照的取舍。
+- `qa/first_use_20260906/`：准备/导入记录、375事件原始报告、同钟V2分析和独立复核，GD与配置按文本封存。
+- `qa/animation_preload_20260906/`：同源none/current_units各10秒原始报告与候选源码；没有生产预加载入口。
+- `docs/RUN_UNIT_VALUES_20260906.md`、`qa/run_unit_values_20260906/`：272声明字段的分类、真实Unit值采集/验证草稿、77项实际QA及恢复原路径说明；尚无战斗恢复赋值。
+
 ## 2026-09-06 续玩基础与分离诊断
 
 - `docs/RUN_SAVE_FOUNDATION_20260906.md`：被测磁盘协议、49案例、历史失败及未接生产的边界。

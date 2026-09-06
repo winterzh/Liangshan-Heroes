@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "passed": true,
+  "checks": [
+    "Python AST prepare.py",
+    "Python AST transforms.py",
+    "Python AST run_entry.py",
+    "Python AST static_checks.py",
+    "Source pin scripts/sfx.gd",
+    "Source pin scripts/art_db.gd",
+    "Source pin tools/polish_performance_probe.gd",
+    "Source pin scripts/unit.gd",
+    "Source pin scripts/battle.gd",
+    "Whole-file inverse scripts/sfx.gd",
+    "Exactly one call per wrapper scripts/sfx.gd",
+    "Whole-file inverse scripts/art_db.gd",
+    "Exactly one call per wrapper scripts/art_db.gd",
+    "Driver placeholders resolved",
+    "Native fixture and warmup called once",
+    "No new random calls in wrappers",
+    "Random-call guard includes range variants",
+    "No new Object allocations in wrappers",
+    "Ignored directory covers nested descendants",
+    "Similar sibling prefix remains a runtime import",
+    "Nested marker cannot negate ancestor ignored directory",
+    "Runtime reference into ignored provenance directory rejected",
+    "Runtime reference to similarly named sibling is not treated as ignored",
+    "Source drift rejects without refreshing pins",
+    "Stub marker LF bytes equal independently reviewed frozen Git blob",
+    "Plan derives exact snapshot and referenced cache only",
+    "Ignored historical remap requires no nonexistent imported cache",
+    "All ignored provenance source files remain in planned copy",
+    "Marker-only CRLF comparison preserves both raw digests and frozen content",
+    "Deleted live frozen ignore marker rejected",
+    "Live frozen marker byte drift rejected",
+    "Frozen marker blob drift rejected",
+    "Ignored remap cannot suppress actual runtime resource import",
+    "Untracked marker cannot bypass missing runtime cache; explicit private reimport required",
+    "Changed live resource records frozen/live/cache evidence and never copies old cache",
+    "Excluded class cache path filtered",
+    "Class declaration proof points to frozen source blob",
+    "Same-path stale class name rejected against frozen source",
+    "Same-path stale class base rejected against frozen source",
+    "Tiny mirror materializes without source write",
+    "Mirrored Unit remains original bytes",
+    "Source Sfx untouched",
+    "Existing mirror refuses overwrite",
+    "Wrong explicit plan acceptance rejected",
+    "Path traversal rejected",
+    "Cache drift after plan rejected",
+    "Failed partial mirror preserved with receipt",
+    "Stale source MD5 remains mismatch and old cache is excluded pending private reimport",
+    "Snapshot symlink rejected",
+    "Pending private import blocks diagnostic entry before process launch",
+    "Completion flag cannot bypass missing newly frozen cache hashes",
+    "Completed import still rejects cache source MD5 different from frozen raw source",
+    "Materialization pins derived class cache raw bytes",
+    "Derived class cache drift rejected by runtime verifier",
+    "Old mirror without derived class cache pin rejected",
+    "Shared lock blocks between-window entry even with no Godot PID",
+    "Occupied shared lock preserved and Popen not called",
+    "KeyboardInterrupt kills/waits actual stub handle",
+    "Confirmed exit releases only owned shared lock",
+    "Failed entry preserves source receipt and failure",
+    "New Godot before actual Popen rejects without spawning",
+    "No child and confirmed idle cleanup releases owned shared lock",
+    "Unconfirmed child is not claimed exited",
+    "Unconfirmed child preserves shared lock and mirror",
+    "Unconfirmed child writes explicit failure receipt"
+  ],
+  "check_count": 65,
+  "method_receipts": {
+    "scripts/sfx.gd": [
+      {
+        "method": "play_ability",
+        "original_method_lf_sha256": "2167050b4b9b6cc1242c901f41dbe5bfbd3bbee58d2956cbab3d0b7d686e2f62",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      },
+      {
+        "method": "_build_ability",
+        "original_method_lf_sha256": "1039bcd54091dc82cdcc38a0c004a70bb6b13b9ad2193d1f29d67df0d06f1dc2",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      },
+      {
+        "method": "_wav",
+        "original_method_lf_sha256": "ce843fa54c007f3f8ff806a84402bd7a1a8a86065fc84d8231821c052457fbf7",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      }
+    ],
+    "scripts/art_db.gd": [
+      {
+        "method": "_try_load",
+        "original_method_lf_sha256": "eaeeae7e5ad52f64f6830584e5924a1e8e8f55ffe25d91535f71745a842cacf8",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      },
+      {
+        "method": "_atlas",
+        "original_method_lf_sha256": "4dede301efdc9d0135e9c9a8cac44d2f6a97b9c9b98e6f387ad64fb1941ab890",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      },
+      {
+        "method": "unit_anim_frames",
+        "original_method_lf_sha256": "c2c4e774e1c5dbc14727f2d718fdb336e198da388a26d7195e10cb9b0cc014a8",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      },
+      {
+        "method": "_load_generic_directional_frames",
+        "original_method_lf_sha256": "ddd02885dbd81307937bf7eaafac221c24b52a0993b4d1e024173afe233b9fd5",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      },
+      {
+        "method": "_slice_anim_strip",
+        "original_method_lf_sha256": "1711fcca9b26785f438d2c1e23ce5d017ab0260b42c21eb85a7a3af83b707b58",
+        "original_call_sites": 1,
+        "body_byte_identical_after_lf_normalization": true,
+        "inverse_transform_verified": true
+      }
+    ]
+  },
+  "stub_fixture_preserved": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\first_use_diag\\stub_3gg3cmvf",
+  "actual_git_processes": 0,
+  "actual_godot_processes": 0,
+  "production_writes": 0,
+  "gdscript_parsed_by_engine": false,
+  "engine_result": "pending explicit one-entry validation"
+}

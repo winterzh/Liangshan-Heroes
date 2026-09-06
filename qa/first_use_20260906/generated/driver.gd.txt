@@ -1,0 +1,119 @@
+extends "res://tools/polish_performance_probe.gd"
+## Draft derivative: inherited fixture/settings/tick logic unchanged.
+## Generated _run retains every M1 statement and only inserts diagnostic hooks.
+
+func _on_tick() -> void:
+	super._on_tick()
+	var diag = root.get_node("FirstUseDiag")
+	diag.fixture_tick = physics_tick
+
+func _run() -> void:
+	var diag = root.get_node("FirstUseDiag")
+	diag.mark_stage("music_wait")
+	OS.set_environment("CAMPAIGN_QA","1")
+	scenario = OS.get_environment("POLISH_CASE")
+	camera_mode = OS.get_environment("POLISH_CAMERA")
+	if camera_mode.is_empty(): camera_mode = "fixed"
+	if not OS.get_environment("POLISH_SECONDS").is_empty(): seconds = float(OS.get_environment("POLISH_SECONDS"))
+	if DisplayServer.get_name()=="headless" or scenario not in CASES or camera_mode not in ["fixed","auto"] or seconds<1.0:
+		push_error("Rendered valid POLISH_CASE/POLISH_CAMERA/POLISH_SECONDS required"); quit(2); return
+	for arg in OS.get_cmdline_args():
+		if arg.begins_with("--fixed-fps"): push_error("Fixed-fps is not a live performance sample"); quit(2); return
+	var prefs_before := _prefs_hash()
+	_configure_settings()
+	var music = root.get_node("Music")
+	var audio_started := Time.get_ticks_usec()
+	while Time.get_ticks_usec()-audio_started < 60000000 and (music._thr != null and music._thr.is_alive() or music._tracks.calm.size()<4 or music._tracks.battle.size()<4):
+		await process_frame
+	var audio_ready: bool = (music._thr == null or not music._thr.is_alive()) and music._tracks.calm.size()==4 and music._tracks.battle.size()==4
+	check(audio_ready,"background music synthesis finished before battle setup")
+	check(Engine.physics_ticks_per_second==60,"production 60Hz physics configuration")
+	diag.mark_stage("fixture_setup")
+	var b = await _new_battle(); battle_ref = b
+	var initial_units := []
+	for u in b.units:
+		if is_instance_valid(u): initial_units.append([u.key,u.faction,u.position.x,u.position.y,u.hp,u.movement_profile])
+	var initial_state := _state(b)
+	diag.capture_fixture(b)
+	var tick_driver := TickDriver.new(); tick_driver.owner_probe = self; tick_driver.process_physics_priority = -10000
+	root.add_child(tick_driver)
+	var warm_start := Time.get_ticks_usec()
+	diag.mark_stage("warmup", warm_start)
+	b.process_mode = Node.PROCESS_MODE_INHERIT
+	while physics_tick < WARMUP_TICKS and b.phase == b.Phase.FIGHT: await process_frame
+	var warm_end_tick := physics_tick
+	diag.mark_stage("warmup_post_process")
+	var warm_wall := float(Time.get_ticks_usec()-warm_start)/1000000.0
+	RenderingServer.viewport_set_measure_render_time(root.get_viewport_rid(),true)
+	await RenderingServer.frame_post_draw
+	var started := Time.get_ticks_usec(); var previous := started; var start_tick := physics_tick
+	diag.mark_stage("sample", started)
+	var raw := []; var process_ms := []; var physics_ms := []; var gpu_ms := []; var render_cpu_ms := []; var draws := []
+	var sample_start := _state(b)
+	var autocam_start := autocam_active_ticks
+	var damage_start := damage_observed.duplicate()
+	while float(Time.get_ticks_usec()-started)/1000000.0 < seconds and b.phase == b.Phase.FIGHT:
+		await RenderingServer.frame_post_draw
+		var now := Time.get_ticks_usec()
+		raw.append(float(now-previous)/1000.0); previous = now
+		process_ms.append(Performance.get_monitor(Performance.TIME_PROCESS)*1000.0)
+		physics_ms.append(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)*1000.0)
+		gpu_ms.append(RenderingServer.viewport_get_measured_render_time_gpu(root.get_viewport_rid()))
+		render_cpu_ms.append(RenderingServer.viewport_get_measured_render_time_cpu(root.get_viewport_rid()))
+		draws.append(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+	var elapsed := float(Time.get_ticks_usec()-started)/1000000.0
+	diag.freeze_capture(started + roundi(elapsed * 1000000.0))
+	var end_state := _state(b)
+	var complete: bool = elapsed >= seconds and b.phase == b.Phase.FIGHT and not raw.is_empty()
+	check(camera_violations==0,"fixed camera transform has no drift")
+	check(Engine.time_scale==1.0 and Engine.physics_ticks_per_second==60,"unmodified simulation speed and frequency")
+	check(not input_log.is_empty() or scenario=="defense200","planned scenario input was issued")
+	var contact_covered := true
+	if scenario in ["defense200","zhu_contact"]: contact_covered = damage_observed[0]+damage_observed[1]>damage_start[0]+damage_start[1]
+	elif scenario == "gao_contact":
+		contact_covered = damage_observed[0]+damage_observed[1]>damage_start[0]+damage_start[1] and damage_observed[2]+damage_observed[3]>damage_start[2]+damage_start[3]
+	if seconds >= 60.0: check(contact_covered,"requested land/water combat actually occurred in sample")
+	if camera_mode == "auto":
+		check(autocam_active_ticks>autocam_start,"automatic camera actually active during sample")
+		check(manual_camera_ticks==0,"automatic camera has no manual keyboard takeover")
+	var report := {"schema":1,"scenario":scenario,"camera_mode":camera_mode,"requested_seconds":seconds,
+		"seed":5088120,"reproducibility":"fixed_seed_fixed_tick_inputs_statistical_not_exact_replay",
+		"known_variance_sources":["audio wall-clock global RNG","render-frame Li Kui axe damage"],
+		"audio_policy":"normal synthesis completed before battle, playback logic active; master muted only","audio_ready":audio_ready,
+		"configured_settings":configured_settings,"keybinds":"production defaults",
+		"fixture_kind":"native economy" if scenario=="economy" else "explicit combat workload fixture, not a chapter playthrough",
+		"initial_units":initial_units,"initial_state":initial_state,"sample_start":sample_start,"sample_end":end_state,
+		"warmup_target_ticks":WARMUP_TICKS,"warmup_end_tick":warm_end_tick,"warmup_wall_seconds":warm_wall,
+		"seconds":elapsed,"frames":raw.size(),"fps":raw.size()/elapsed if elapsed>0 else 0.0,
+		"p95_ms":_percentile(raw,0.95),"p99_ms":_percentile(raw,0.99),"worst_ms":raw.max() if not raw.is_empty() else null,
+		"physics_ticks":physics_tick-start_tick,"simulated_seconds":float(physics_tick-start_tick)/60.0,
+		"raw_frame_ms":raw,"process_monitor_ms":process_ms,"physics_monitor_ms":physics_ms,
+		"render_cpu_ms":render_cpu_ms,"gpu_ms":gpu_ms if gpu_ms.any(func(x):return x>0.0) else null,"draw_calls":draws,
+		"trajectory":trajectory,"inputs":input_log,"camera_violations":camera_violations,
+		"sampled_damage_at_start":damage_start,"sampled_damage_at_end":damage_observed,"contact_covered":contact_covered,"autocam_active_ticks":autocam_active_ticks,
+		"sample_autocam_active_ticks":autocam_active_ticks-autocam_start,"manual_camera_ticks":manual_camera_ticks,
+		"sample_complete":complete,"incomplete_reason":"" if complete else "battle ended or sample shorter than requested",
+		"acceptance_eligible":complete and seconds>=60.0,"time_scale":Engine.time_scale,
+		"physics_hz":Engine.physics_ticks_per_second,"resolution":[root.size.x,root.size.y],
+		"renderer":RenderingServer.get_current_rendering_method(),"gpu":RenderingServer.get_video_adapter_name(),"godot":Engine.get_version_info().string}
+	check(diag.capture_valid(), "first-use buffers and source scope valid")
+	check(seconds == 10.0 and scenario == "defense200" and camera_mode == "fixed", "single 10-second fixed entry scope")
+	var first_use_report: Dictionary = diag.export_report()
+	report["first_use"] = first_use_report
+	report["diagnostic_only"] = true
+	report["acceptance_eligible"] = false
+	var output: String = OS.get_environment("POLISH_OUT")
+	if output.is_empty(): output = "res://.godot/polish_performance_report.json"
+	var shot: String = output.get_basename()+".png"
+	report["screenshot_saved"] = root.get_texture().get_image().save_png(shot)==OK
+	tick_driver.queue_free(); battle_ref = null; fixture_units.clear()
+	var weak = weakref(b)
+	await _dispose(b)
+	check(weak.get_ref()==null,"sample battle actually freed")
+	check(_prefs_hash()==prefs_before,"player campaign and settings files unchanged")
+	report["checks"] = checks; report["failures"] = failures; report["integrity_passed"] = failures.is_empty()
+	report.acceptance_eligible = report.acceptance_eligible and failures.is_empty()
+	FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
+	print("[polish-performance] ",JSON.stringify({"scenario":scenario,"camera":camera_mode,"complete":complete,"seconds":elapsed,"fps":report.fps,"p95_ms":report.p95_ms,"checks":checks,"failures":failures}))
+	quit(0 if failures.is_empty() and complete else 1)
+

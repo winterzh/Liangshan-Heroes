@@ -1,3 +1,15 @@
+## 2026-09-06 恢复候选与值模块复现
+
+`scripts/run_state_value_codec.gd` 是新增基础模块，正常启动方式不变，尚未出现“继续本局”或生产 Battle 调用。被测原文、341 项当前验收和旧 NUL 诊断说明见[值模块](RUN_STATE_VALUES_20260906.md)。`tools/contracts/run_state_values_20260906/` 封存三份原文；按其 README 恢复原名到一个全新、被忽略的小私有项目，QA 所需名字是 `value_codec.gd`，不是生产的 `run_state_value_codec.gd`。源 raw SHA、实际 PID/user://、日志及退出必须全部核对。
+
+R01 草稿与原始证据在 `qa/run_save_recovery_20260906/`。不能从该归档目录直接运行原 Python 入口；须按其 `ARCHIVE_RESTORE.md` 在另一份新 checkout 恢复原本不存在的 `scratchpad/run_save_recovery_v1/`，并先从已有 store contract 恢复其 `scratchpad/run_save_store/` 依赖。目录已存在即停止，不覆盖历史。默认 R01 入口只预检；引擎验证由根任务取得共同锁后以实际非 console Godot 串行执行。
+
+两份 QA 归档及值模块 contract 的 `.gdignore` 与 raw 换行属性已固定；GD/项目配置按文本封存，复现前才恢复原名。无需复制历史私有工程、测试文件、玩家存档或 Godot 缓存。本批不新增公共运行框架。
+
+首次资源使用和预加载候选短对照证据分别在 `qa/first_use_20260906/`、`qa/animation_preload_20260906/`；前者是4baafc1私有插桩，后者是06c2c69源码同源短对照。详见[诊断与取舍](FIRST_USE_20260906.md)。候选没有生产入口，历史脚本依赖当时scratchpad路径，不从归档直接执行。
+
+真实Unit值层草稿及77项实测在 `qa/run_unit_values_20260906/`，按其 `ARCHIVE.md`恢复原路径后才复验；使用当前完整工程和新的私有用户目录，需要正常Autoload，不是三文件空工程。它没有菜单入口或恢复赋值，见[Unit值层说明](RUN_UNIT_VALUES_20260906.md)。
+
 ## 2026-09-06 续玩磁盘草稿与分离诊断
 
 正常启动方式保持。菜单尚无“继续本局”；当前独立磁盘层的49个案例和原始失败见[基础层说明](RUN_SAVE_FOUNDATION_20260906.md)。实测源封存在 `tools/contracts/run_save_store_draft_20260906/`，其runner必须按README恢复到另一份新checkout下、原本不存在且被忽略的 `scratchpad/run_save_store/` 才能复现，不能直接从contracts执行或改路径后当生产存档使用。

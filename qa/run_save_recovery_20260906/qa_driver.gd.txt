@@ -1,0 +1,198 @@
+extends SceneTree
+const A := '{"kind":"r01_fixture","value":"A","text":"梁山\\n继续"}'
+const B := '{"kind":"r01_fixture","value":"B","text":"梁山\\n继续"}'
+var original: GDScript
+var inspected: GDScript
+var checks: Array = []
+var failures: Array = []
+var records: Array = []
+var validator_calls := 0
+var manifest: Dictionary = {}
+var fixtures := ""
+
+func _initialize() -> void: _run.call_deferred()
+func check(ok: bool, label: String) -> void:
+	checks.append({"label":label,"passed":ok})
+	if not ok: failures.append(label)
+func _hash(raw: PackedByteArray) -> String:
+	var hash := HashingContext.new(); hash.start(HashingContext.HASH_SHA256)
+	if not raw.is_empty(): hash.update(raw)
+	return hash.finish().hex_encode()
+func _validator(payload: PackedByteArray, schema: String) -> Dictionary:
+	validator_calls += 1
+	var parser := JSON.new()
+	if schema != "1" or parser.parse(payload.get_string_from_utf8()) != OK: return {"ok":false}
+	var data: Variant = parser.data
+	if not data is Dictionary: return {"ok":false}
+	var fields: Array = data.keys(); fields.sort()
+	if fields != ["kind","text","value"]: return {"ok":false}
+	for field in fields:
+		if not data[field] is String: return {"ok":false}
+	return {"ok":data.kind=="r01_fixture" and data.value in ["A","B"] and data.text=="梁山\n继续"}
+func _write(path: String, raw: PackedByteArray) -> void:
+	var file := FileAccess.open(path,FileAccess.WRITE)
+	check(file!=null,"fixture opens owned file")
+	if file == null: return
+	var stored: bool = file.store_buffer(raw)
+	file.flush(); var error := file.get_error(); file.close()
+	check(stored and error==OK,"fixture closes exact bytes")
+func _case(name: String, seeded := false) -> String:
+	var path := fixtures.path_join(name)
+	check(not DirAccess.dir_exists_absolute(path),"fresh fixture "+name)
+	check(DirAccess.make_dir_absolute(path)==OK,"create fixture "+name)
+	if seeded:
+		var store = original.new(path,_validator)
+		check(store.save_payload(A.to_utf8_buffer()).ok,"original store seeds A "+name)
+	return path
+func _snapshot(path: String, relative := "", result: Dictionary = {}) -> Dictionary:
+	var dir := DirAccess.open(path)
+	check(dir!=null,"snapshot directory readable")
+	if dir==null: return result
+	dir.include_hidden=true; dir.include_navigational=false
+	check(dir.list_dir_begin()==OK,"snapshot enumeration")
+	var name := dir.get_next()
+	while not name.is_empty():
+		var key := name if relative.is_empty() else relative.path_join(name)
+		if dir.current_is_dir():
+			result[key]={"kind":"directory"}; _snapshot(path.path_join(name),key,result)
+		else:
+			var raw := FileAccess.get_file_as_bytes(path.path_join(name))
+			result[key]={"kind":"file","bytes":raw.size(),"sha256":_hash(raw)}
+		name=dir.get_next()
+	dir.list_dir_end()
+	return result
+func _candidate(report: Dictionary, leaf: String) -> Dictionary:
+	for row in report.get("candidates",[]):
+		if row.leaf==leaf: return row
+	check(false,"missing candidate "+leaf); return {}
+func _observe(store, path: String) -> Dictionary:
+	var before := _snapshot(path,"",{})
+	var report: Dictionary = store.inspect_recovery()
+	var after := _snapshot(path,"",{})
+	check(before==after,"inspect changes no files or directories")
+	records.append({"operation":"inspect","directory":path,"before":before,"after":after,"result":report})
+	return report
+func _read(store, path: String, candidate_id: String, inspection_id: String) -> Dictionary:
+	var before := _snapshot(path,"",{})
+	var report: Dictionary = store.read_candidate(candidate_id,inspection_id)
+	var after := _snapshot(path,"",{})
+	check(before==after,"read_candidate changes no files or directories")
+	var safe := report.duplicate(true); safe.erase("payload")
+	records.append({"operation":"read","directory":path,"before":before,"after":after,"result":safe})
+	return report
+func _reject_read(store, path: String, id: String, old: String) -> void:
+	var report := _read(store,path,id,old)
+	check(not report.ok and report.code=="INSPECTION_CHANGED" and not report.has("payload"),"stale full inspection refused")
+
+func _cases() -> void:
+	var path := _case("empty")
+	var store = inspected.new(path,_validator)
+	var report := _observe(store,path)
+	check(report.ok and report.code=="NO_SLOT" and report.candidates.is_empty(),"empty fixture is no slot")
+	check(_observe(store,path).inspection_id==report.inspection_id,"unchanged layout identity stable")
+	path=_case("clean",true); store=inspected.new(path,_validator)
+	var calls := validator_calls; report=_observe(store,path)
+	check(report.ok and report.code=="CLEAN_SLOT" and not report.recovery_required,"clean actual slot recognized")
+	var choice := _candidate(report,"run_continue.json")
+	check(choice.available and not choice.has("payload") and not choice.has("value") and validator_calls>calls,"inspection performs complete validator without business payload leak")
+	var loaded := _read(store,path,choice.candidate_id,report.inspection_id)
+	check(loaded.ok and loaded.payload==A.to_utf8_buffer() and not loaded.slot_installed and not loaded.lock_cleared,"clean selected bytes returned without install")
+	path=_case("empty_lock"); store=inspected.new(path,_validator)
+	check(DirAccess.make_dir_absolute(path.path_join("run_continue.writing"))==OK,"create empty lock")
+	report=_observe(store,path)
+	check(report.ok and report.code=="NO_SLOT" and report.recovery_required and report.lock.empty,"empty lock preserved and not declared cleared")
+	path=_case("slot_lock",true); store=inspected.new(path,_validator)
+	check(DirAccess.make_dir_absolute(path.path_join("run_continue.writing"))==OK,"lock beside valid slot")
+	report=_observe(store,path); choice=_candidate(report,"run_continue.json")
+	loaded=_read(store,path,choice.candidate_id,report.inspection_id)
+	check(report.code=="CANDIDATE_AVAILABLE" and loaded.ok and loaded.recovery_required and DirAccess.dir_exists_absolute(path.path_join("run_continue.writing")),"readable candidate never authorizes clearing a lock")
+	var oracle := _case("oracle_b")
+	check(original.new(oracle,_validator).save_payload(B.to_utf8_buffer()).ok,"B bytes come from unchanged actual store")
+	var b_bytes := FileAccess.get_file_as_bytes(oracle.path_join("run_continue.json"))
+	path=_case("multiple",true); store=inspected.new(path,_validator)
+	var a_bytes := FileAccess.get_file_as_bytes(path.path_join("run_continue.json"))
+	_write(path.path_join("run_continue.pending"),b_bytes); _write(path.path_join("run_continue.previous"),a_bytes)
+	report=_observe(store,path)
+	check(report.code=="NEEDS_CHOICE" and report.available_count==3,"three candidates retain independent identities")
+	var same := _candidate(report,"run_continue.previous"); choice=_candidate(report,"run_continue.json")
+	check(same.file_sha256==choice.file_sha256 and same.candidate_id!=choice.candidate_id,"same bytes at two leaves have different candidate ids")
+	loaded=_read(store,path,same.candidate_id,report.inspection_id)
+	check(loaded.ok and loaded.leaf=="run_continue.previous" and loaded.payload==A.to_utf8_buffer(),"same-content previous selected precisely")
+	choice=_candidate(report,"run_continue.pending"); loaded=_read(store,path,choice.candidate_id,report.inspection_id)
+	check(loaded.ok and loaded.payload==B.to_utf8_buffer(),"pending returns exact independent B")
+	path=_case("invalid",true); store=inspected.new(path,_validator)
+	var envelope: Dictionary = JSON.parse_string(a_bytes.get_string_from_utf8())
+	envelope.payload=envelope.payload.replace("r01_fixture","bad_fixture")
+	var invalid: PackedByteArray=envelope.payload.to_utf8_buffer()
+	envelope.payload_bytes=str(invalid.size()); envelope.payload_sha256=_hash(invalid)
+	_write(path.path_join("run_continue.json"),JSON.stringify(envelope).to_utf8_buffer())
+	envelope=JSON.parse_string(a_bytes.get_string_from_utf8()); envelope.schema_version="2"
+	_write(path.path_join("run_continue.previous"),JSON.stringify(envelope).to_utf8_buffer()); _write(path.path_join("run_continue.pending"),b_bytes)
+	report=_observe(store,path); choice=_candidate(report,"run_continue.json")
+	check(not choice.available and choice.code=="PAYLOAD_REJECTED" and not choice.has("payload_sha256"),"correct SHA but invalid business payload is not available")
+	check(_candidate(report,"run_continue.previous").code=="UNSUPPORTED_SCHEMA" and report.available_count==1,"unknown version retained and refused")
+	loaded=_read(store,path,choice.candidate_id,report.inspection_id)
+	check(not loaded.ok and loaded.code=="CANDIDATE_UNAVAILABLE" and not loaded.has("payload"),"invalid candidate never returns payload")
+	path=_case("bad_bytes"); store=inspected.new(path,_validator)
+	_write(path.path_join("run_continue.json"),PackedByteArray([0xf0,0x28,0x8c,0xbc])); _write(path.path_join("run_continue.pending"),PackedByteArray())
+	envelope=JSON.parse_string(a_bytes.get_string_from_utf8()); envelope.format_version="2"
+	_write(path.path_join("run_continue.previous"),JSON.stringify(envelope).to_utf8_buffer()); report=_observe(store,path)
+	check(report.code=="NO_VALID_CANDIDATE" and _candidate(report,"run_continue.json").code=="FILE_UTF8" and _candidate(report,"run_continue.pending").code=="FILE_SIZE" and _candidate(report,"run_continue.previous").code=="UNSUPPORTED_FORMAT","bad UTF8/empty/unknown format preserve distinct reasons")
+	path=_case("changed",true); store=inspected.new(path,_validator); report=_observe(store,path); choice=_candidate(report,"run_continue.json")
+	_write(path.path_join("run_continue.json"),a_bytes+" ".to_utf8_buffer())
+	_reject_read(store,path,choice.candidate_id,report.inspection_id)
+	var fresh := _observe(store,path)
+	check(_candidate(fresh,"run_continue.json").available and _candidate(fresh,"run_continue.json").candidate_id!=choice.candidate_id,"even semantic-equivalent raw change changes identity")
+	path=_case("unknown",true); store=inspected.new(path,_validator); report=_observe(store,path); choice=_candidate(report,"run_continue.json")
+	_write(path.path_join(".unexpected"),"unknown-A".to_utf8_buffer()); _reject_read(store,path,choice.candidate_id,report.inspection_id)
+	report=_observe(store,path); check(".unexpected" in report.unknown_items,"hidden unknown file included")
+	check(DirAccess.make_dir_recursive_absolute(path.path_join("run_continue.writing/nested"))==OK,"unknown nested lock directory")
+	_write(path.path_join("run_continue.writing/nested/item"),"one".to_utf8_buffer()); _reject_read(store,path,choice.candidate_id,report.inspection_id)
+	report=_observe(store,path)
+	_write(path.path_join("run_continue.writing/nested/item"),"two".to_utf8_buffer()); _reject_read(store,path,choice.candidate_id,report.inspection_id)
+	report=_observe(store,path); check(not report.lock.empty and "run_continue.writing/nested/item" in report.unknown_items,"nested lock content is fingerprinted, not ignored")
+	check(DirAccess.remove_absolute(path.path_join("run_continue.json"))==OK,"owned fixture removes S between observations")
+	_reject_read(store,path,choice.candidate_id,report.inspection_id)
+	var first_path := _case("same_dir_a",true); var second_path := _case("same_dir_b",true)
+	var first_store=inspected.new(first_path,_validator); var second_store=inspected.new(second_path,_validator)
+	var first := _observe(first_store,first_path); var second := _observe(second_store,second_path)
+	choice=_candidate(first,"run_continue.json")
+	check(choice.candidate_id==_candidate(second,"run_continue.json").candidate_id and first.inspection_id!=second.inspection_id,"inspection identity binds actual fixture directory")
+	_reject_read(second_store,second_path,choice.candidate_id,first.inspection_id)
+	path=_case("depth_limit",true); store=inspected.new(path,_validator)
+	var nested := path
+	for index in range(9): nested=nested.path_join("d"+str(index))
+	check(DirAccess.make_dir_recursive_absolute(nested)==OK,"owned deep unknown layout")
+	report=_observe(store,path); check(not report.ok and report.code=="INSPECTION_LIMIT" and not report.has("inspection_id"),"budget failure cannot become a partial usable fingerprint")
+	path=_case("entry_limit"); store=inspected.new(path,_validator)
+	for index in range(257):
+		check(DirAccess.make_dir_absolute(path.path_join("item_"+str(index)))==OK,"owned wide unknown layout item")
+	report=_observe(store,path)
+	check(not report.ok and report.code=="INSPECTION_LIMIT" and not report.has("inspection_id"),"257 direct entries refused during bounded enumeration")
+	store=inspected.new("res://qa",_validator); report=store.inspect_recovery()
+	check(not report.ok and report.code=="INVALID_FIXTURE_PATH","real existing outside-fixture path refused")
+	store=inspected.new(fixtures.path_join("missing"),_validator); report=store.inspect_recovery()
+	check(not report.ok and report.code=="DIRECTORY_MISSING","missing path is an error, not an empty save")
+
+func _run() -> void:
+	var path := OS.get_environment("STORE_QA_MANIFEST")
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary: push_error("R01 manifest missing"); quit(2); return
+	manifest=parsed; fixtures=ProjectSettings.globalize_path("res://scratchpad/run_save_store/fixtures")
+	check(ProjectSettings.globalize_path("user://").replace("\\","/").trim_suffix("/")==String(manifest.private_user).replace("\\","/").trim_suffix("/"),"actual private user directory")
+	check(root.get_child_count()==0,"private project has no Autoloads")
+	for name in manifest.source_sha256: check(FileAccess.get_sha256("res://"+name)==manifest.source_sha256[name],"runtime source "+name)
+	original=load("res://qa/store_original.gd"); inspected=load("res://qa/store_r01.gd")
+	check(original!=null and inspected!=null and original.can_instantiate() and inspected.can_instantiate(),"real original and R01 classes compile")
+	if failures.is_empty(): _cases()
+	for name in manifest.source_sha256: check(FileAccess.get_sha256("res://"+name)==manifest.source_sha256[name],"source unchanged "+name)
+	var output := {"schema":1,"run_id":manifest.run_id,"process_id":OS.get_process_id(),"actual_user_dir":ProjectSettings.globalize_path("user://"),
+		"manifest_sha256":FileAccess.get_sha256(path),"source_sha256":manifest.source_sha256,"checks":checks,"failures":failures,
+		"records":records,"validator_calls":validator_calls,"passed":not checks.is_empty() and failures.is_empty(),
+		"scope":"R01 disk inspection only; no recovery mutations, journal, lock clearance, gameplay codec or Battle resume"}
+	var file := FileAccess.open(manifest.report,FileAccess.WRITE)
+	if file==null: push_error("R01 report open failed"); quit(2); return
+	var saved: bool=file.store_buffer(JSON.stringify(output,"\t").to_utf8_buffer()); file.flush(); var error := file.get_error(); file.close()
+	if not saved or error!=OK: push_error("R01 report write failed"); quit(2); return
+	print("[R01] checks=",checks.size()," failures=",failures.size())
+	quit(0 if output.passed else 1)

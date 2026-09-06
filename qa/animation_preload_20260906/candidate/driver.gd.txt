@@ -1,0 +1,78 @@
+extends "res://tools/polish_performance_probe.gd"
+## Same source and deferred helper load in both fresh-process modes; no production edits.
+## Compile the helper only after Autoloads are ready: its Unit type refers to Art.
+var animation_candidate: GDScript
+const SOURCE_PATHS := ["res://project.godot","res://scripts/art_db.gd","res://scripts/battle.gd","res://scripts/unit.gd",
+	"res://scripts/levels/skirmish.gd","res://scripts/settings.gd","res://scripts/campaign.gd","res://scripts/sfx.gd","res://scripts/music.gd",
+	"res://tools/polish_performance_probe.gd","res://tools/zhujiazhuang_rts_test.gd",
+	"res://scratchpad/animation_load_candidate/driver.gd","res://scratchpad/animation_load_candidate/candidate_helper.gd"]
+var animation_load_mode := ""
+var animation_load_output := ""
+var animation_load_report := {}
+var animation_load_sources := {}
+
+func _animation_source_hashes() -> Dictionary:
+	var result := {}
+	for path in SOURCE_PATHS: result[path] = FileAccess.get_sha256(path)
+	return result
+
+func _initialize() -> void:
+	animation_load_mode = OS.get_environment("ANIM_LOAD_MODE")
+	animation_load_output = OS.get_environment("ANIM_LOAD_OUT")
+	var boundary := ProjectSettings.globalize_path("res://scratchpad/animation_load_candidate/runs/").replace("\\","/").simplify_path().trim_suffix("/")
+	var output := animation_load_output.replace("\\","/").simplify_path()
+	var private_root := OS.get_environment("ANIM_LOAD_USER_ROOT").replace("\\","/").simplify_path().trim_suffix("/")
+	var actual := ProjectSettings.globalize_path("user://").replace("\\","/").simplify_path()
+	if animation_load_mode not in ["none","current_units"] or not output.to_lower().begins_with(boundary.to_lower()+"/") or output.get_file() != "preparation.json" or not private_root.to_lower().begins_with(boundary.to_lower()+"/") or not actual.to_lower().begins_with(private_root.to_lower()+"/"):
+		push_error("Explicit candidate mode/output/private profile required"); quit(2); return
+	animation_load_sources = _animation_source_hashes()
+	for digest in animation_load_sources.values():
+		if String(digest).length() != 64: push_error("Required experiment source is missing"); quit(2); return
+	OS.set_environment("POLISH_CASE","defense200")
+	OS.set_environment("POLISH_CAMERA","fixed")
+	OS.set_environment("POLISH_SECONDS","10")
+	OS.set_environment("POLISH_EFFECTS_QUALITY","standard")
+	OS.set_environment("POLISH_OUT",output.get_base_dir().path_join("m1_10s.json"))
+	super._initialize()
+
+func _new_battle():
+	animation_candidate = load("res://scratchpad/animation_load_candidate/candidate_helper.gd")
+	var b = await super._new_battle()
+	check(b.process_mode==Node.PROCESS_MODE_DISABLED and physics_tick==0,"original complete fixture is disabled before unchanged 300-step warmup")
+	check(animation_candidate.runnable_units(b).is_empty(),"no runnable Unit descendant before preparation")
+	var before := _state(b)
+	animation_load_report = await animation_candidate.run(b,root.get_node("Art"),animation_load_mode)
+	check(animation_load_report.get("valid",false),"finite animation preparation completes with frozen Unit state")
+	check(_state(b)==before and physics_tick==0,"preparation does not advance original M1 state/tick")
+	animation_load_report["m1_before"] = before
+	animation_load_report["m1_after"] = _state(b)
+	animation_load_report["actual_user_dir"] = ProjectSettings.globalize_path("user://")
+	animation_load_report["process_id"] = OS.get_process_id()
+	animation_load_report["report_schema"] = "animation_load_candidate_v1"
+	animation_load_report["valid_scope"] = "Preparation only; final M1 integrity and engine exit must pass separately."
+	animation_load_report["measurement_finished"] = false
+	animation_load_report["engine"] = Engine.get_version_info().string
+	animation_load_report["renderer"] = RenderingServer.get_current_rendering_method()
+	animation_load_report["source_sha256_before"] = animation_load_sources
+	animation_load_report["source_sha256_after_preparation"] = _animation_source_hashes()
+	check(animation_load_sources==animation_load_report.source_sha256_after_preparation,"observed runtime source bytes unchanged through preparation")
+	_write_animation_report()
+	return b
+
+func _write_animation_report() -> void:
+	var file := FileAccess.open(animation_load_output,FileAccess.WRITE)
+	check(file!=null,"animation preparation sidecar opens")
+	if file == null: return
+	var stored: bool = file.store_buffer(JSON.stringify(animation_load_report,"\t").to_utf8_buffer())
+	file.flush(); var error: int = file.get_error(); file.close()
+	check(stored and error==OK,"animation preparation sidecar closes complete bytes")
+
+func _dispose(b) -> void:
+	animation_load_report["measurement_end_cache"] = animation_candidate.cache_state(root.get_node("Art"))
+	animation_load_report["measurement_finished"] = true
+	animation_load_report["source_sha256_after_measurement"] = _animation_source_hashes()
+	check(animation_load_sources==animation_load_report.source_sha256_after_measurement,"observed runtime source bytes unchanged through measurement")
+	animation_load_report["performance_claim"] = false
+	animation_load_report["acceptance_eligible"] = false
+	_write_animation_report()
+	await super._dispose(b)

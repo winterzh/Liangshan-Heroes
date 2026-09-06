@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "MATERIALIZED_PRIVATE_IMPORT_PREPARED_NO_ENGINE",
+  "snapshot": "4baafc11af55b0e46a57a48e54df181b8c1917a2",
+  "copy_plan_sha256": "cb051680f879c5cbf47fd44536c127eddaa1e393ea799afff2d9692c28537ed5",
+  "copy_plan_file_sha256": "0deded7526d48cfcdb1034e7e37bcb9b222514e8f87fb51cb32ce884eb7a0c15",
+  "materialization_receipt_sha256": "6417652d5cb63eeb6b6851f16d7b3a9561b7f7eadbbce0ebaf2c857e5934a777",
+  "mirror": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\first_use_diag\\mirror_cb051680f879_entry01",
+  "private_source_count": 2701,
+  "private_source_bytes": 471459842,
+  "copy_input_bytes": 727659554,
+  "copied_cache_count": 2372,
+  "copied_cache_bytes": 256218148,
+  "import_plan_sha256": "9eb11c177d698e104b9fd4d226e9a687e89b66a8a83848d33faa21568ce38754",
+  "import_plan_file_sha256": "078dfd2710ac7ab112e28870bb1dabc1e831ff4e6847c6e7ce6b98c0123a6bff",
+  "run_entry_change": {
+    "before_sha256": "8fce3951700ca2ebc6469f18ef283f31c06720ef344c7459f91dd1f15bb0cf26",
+    "after_sha256": "7d1ecd339c1622cc780992b43cbd7ba506f672bb3c245e22a5045e202bb4e292",
+    "reason": "Remove HOME/USERPROFILE/TMP/TEMP/XDG overrides; strict enumeration, actual non-console exe, verified post-import pins"
+  },
+  "tools": {
+    "prepare.py": "e89182ad2f169f37e75f636374c39256f33ddfdf5ae8fbc6ee99fcc1119e6a3d",
+    "transforms.py": "d4ded10e01ff9ede1e86a50b306ff4c088dec466a885d77afce0a534f041e736",
+    "run_entry.py": "7d1ecd339c1622cc780992b43cbd7ba506f672bb3c245e22a5045e202bb4e292",
+    "private_import.py": "48a8f79db596142adbd69a90a16c23ded40e13ef5ea3c080eab29630c91ea026",
+    "driver.gd.in": "862309ce018f08bf19e7437c9c876902e23b7dacd89ffce1bea6eff39e304ac4",
+    "ledger.gd.in": "d18c7620a39c360ff11465034c39ba0851e2f142d6382a48f3bd06fd5acbd9ce"
+  },
+  "static_checks": {
+    "original": 65,
+    "import": 33
+  },
+  "missing_uids": {
+    "_first_use/driver.gd.uid": "_first_use/driver.gd",
+    "_first_use/ledger.gd.uid": "_first_use/ledger.gd",
+    "scripts/campaign_gate_visual.gd.uid": "scripts/campaign_gate_visual.gd",
+    "scripts/crowd_separation.gd.uid": "scripts/crowd_separation.gd",
+    "scripts/levels/level2_jiangzhou_rts.gd.uid": "scripts/levels/level2_jiangzhou_rts.gd",
+    "scripts/levels/level4_lianhuanma_rts.gd.uid": "scripts/levels/level4_lianhuanma_rts.gd",
+    "scripts/levels/level5_gao_rts.gd.uid": "scripts/levels/level5_gao_rts.gd",
+    "scripts/levels/level7_kuaihuolin_short.gd.uid": "scripts/levels/level7_kuaihuolin_short.gd",
+    "scripts/levels/level8_daming_rts.gd.uid": "scripts/levels/level8_daming_rts.gd",
+    "scripts/naval_production.gd.uid": "scripts/naval_production.gd",
+    "tools/polish_performance_probe.gd.uid": "tools/polish_performance_probe.gd",
+    "tools/zhujiazhuang_rts_test.gd.uid": "tools/zhujiazhuang_rts_test.gd"
+  },
+  "frozen_import_line_endings": {
+    "files": 1198,
+    "contains_crlf": 0,
+    "lf_only": 1198
+  },
+  "actual_godot_processes": 0,
+  "production_writes": 0,
+  "original_receipts_unchanged": true,
+  "next": "Root reviews separate import plan and runs private_import.py run with accepted NEW SHA and actual non-console Godot executable, bounded 600 seconds, then checks import_receipt and post_import_pins before any timed diagnostic."
+}

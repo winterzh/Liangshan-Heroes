@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "run_id": "20260906T113756778956Z",
+  "independent_read_only_audit_passed": true,
+  "godot_rerun": false,
+  "process": {
+    "pid": 26940,
+    "exit_code": 0,
+    "exit_confirmed": true,
+    "external_termination": false
+  },
+  "checks": 1625,
+  "checks_are_not_independent_features": true,
+  "check_breakdown": {
+    "directory_snapshot_open_and_enumeration": 1232,
+    "entry_limit_fixture_directory_creation": 257,
+    "other_including_sources_setup_and_behavior": 136
+  },
+  "readonly_calls": 29,
+  "recorded_operations": {
+    "inspect": 18,
+    "read": 11
+  },
+  "additional_unrecorded_path_guard_inspections": 2,
+  "final_inspected_fixtures": 13,
+  "setup_only_oracle_fixtures": 1,
+  "validator_calls_reported": 110,
+  "independently_recomputed_complete_inspection_ids": 16,
+  "independently_recomputed_candidate_ids": 19,
+  "actual_fixture_file_count": 18,
+  "actual_fixture_nested_directory_count": 270,
+  "all_29_before_after_equal": true,
+  "all_13_final_snapshots_match_disk": true,
+  "source_pins_match_current_and_private": true,
+  "original_prefix_exact": true,
+  "actual_private_user_path_matches_manifest": true,
+  "manifest_sha256": "9379c8c0718ca82a7f47d1100f1aed4302fd3662bce51123787d967ce589e55d",
+  "report_sha256": "ebf10a1193bc83f8c62197f3783296828342d98d1c94ed434dfbee97e6d5f111",
+  "evidence_raw_sha256": {
+    "manifest.json": "9379c8c0718ca82a7f47d1100f1aed4302fd3662bce51123787d967ce589e55d",
+    "preparation.json": "57c2f361f3364e3790afd75de69e747b9cbca6f197bf626b31df7f0dd95040b4",
+    "receipt.json": "607339dfe71fda09d50cdb507434247d26460b00f0861ed9999d8372684c83a8",
+    "report_process.json": "60ef1fd380fb8a018ec57d3b795691d653fef1e83ebb9479283d686912857eba",
+    "report.json": "ebf10a1193bc83f8c62197f3783296828342d98d1c94ed434dfbee97e6d5f111",
+    "report.log": "e10362bfa7168f18e092c2994448b76faf4f048feebb63c9716c551c7bd5806e"
+  },
+  "fixture_sequence": [
+    {
+      "fixture": "empty",
+      "operation": "inspect",
+      "code": "NO_SLOT"
+    },
+    {
+      "fixture": "empty",
+      "operation": "inspect",
+      "code": "NO_SLOT"
+    },
+    {
+      "fixture": "clean",
+      "operation": "inspect",
+      "code": "CLEAN_SLOT"
+    },
+    {
+      "fixture": "clean",
+      "operation": "read",
+      "code": "CANDIDATE_READ"
+    },
+    {
+      "fixture": "empty_lock",
+      "operation": "inspect",
+      "code": "NO_SLOT"
+    },
+    {
+      "fixture": "slot_lock",
+      "operation": "inspect",
+      "code": "CANDIDATE_AVAILABLE"
+    },
+    {
+      "fixture": "slot_lock",
+      "operation": "read",
+      "code": "CANDIDATE_READ"
+    },
+    {
+      "fixture": "multiple",
+      "operation": "inspect",
+      "code": "NEEDS_CHOICE"
+    },
+    {
+      "fixture": "multiple",
+      "operation": "read",
+      "code": "CANDIDATE_READ"
+    },
+    {
+      "fixture": "multiple",
+      "operation": "read",
+      "code": "CANDIDATE_READ"
+    },
+    {
+      "fixture": "invalid",
+      "operation": "inspect",
+      "code": "CANDIDATE_AVAILABLE"
+    },
+    {
+      "fixture": "invalid",
+      "operation": "read",
+      "code": "CANDIDATE_UNAVAILABLE"
+    },
+    {
+      "fixture": "bad_bytes",
+      "operation": "inspect",
+      "code": "NO_VALID_CANDIDATE"
+    },
+    {
+      "fixture": "changed",
+      "operation": "inspect",
+      "code": "CLEAN_SLOT"
+    },
+    {
+      "fixture": "changed",
+      "operation": "read",
+      "code": "INSPECTION_CHANGED"
+    },
+    {
+      "fixture": "changed",
+      "operation": "inspect",
+      "code": "CLEAN_SLOT"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "inspect",
+      "code": "CLEAN_SLOT"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "read",
+      "code": "INSPECTION_CHANGED"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "inspect",
+      "code": "CANDIDATE_AVAILABLE"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "read",
+      "code": "INSPECTION_CHANGED"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "inspect",
+      "code": "CANDIDATE_AVAILABLE"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "read",
+      "code": "INSPECTION_CHANGED"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "inspect",
+      "code": "CANDIDATE_AVAILABLE"
+    },
+    {
+      "fixture": "unknown",
+      "operation": "read",
+      "code": "INSPECTION_CHANGED"
+    },
+    {
+      "fixture": "same_dir_a",
+      "operation": "inspect",
+      "code": "CLEAN_SLOT"
+    },
+    {
+      "fixture": "same_dir_b",
+      "operation": "inspect",
+      "code": "CLEAN_SLOT"
+    },
+    {
+      "fixture": "same_dir_b",
+      "operation": "read",
+      "code": "INSPECTION_CHANGED"
+    },
+    {
+      "fixture": "depth_limit",
+      "operation": "inspect",
+      "code": "INSPECTION_LIMIT"
+    },
+    {
+      "fixture": "entry_limit",
+      "operation": "inspect",
+      "code": "INSPECTION_LIMIT"
+    }
+  ],
+  "limits": [
+    "No journal, installation, move, deletion, lock clearance, UI, gameplay codec or Battle restoration.",
+    "Equal observations do not establish atomic snapshots, exclusion or absence of ABA.",
+    "No runtime permission failure, link/reparse, very large file or concurrent mutation coverage.",
+    "Fixture snapshots describe path/type/content; they do not assert unchanged access times."
+  ]
+}

@@ -1,0 +1,2712 @@
+{
+  "schema": 1,
+  "unit_lf_sha256": "f4382456b8c619cbb86c40cd8a9ed6ea9f171ba0a8a90c191538f689176d49ee",
+  "source_declared_fields": 272,
+  "handling_counts": {
+    "captured_value": 241,
+    "reference_next_layer": 16,
+    "runtime_relation_next_layer": 3,
+    "order_queue_next_layer": 1,
+    "identity_or_source_next_layer": 6,
+    "visual_cache_omitted": 5
+  },
+  "captured_declared_values": 241,
+  "inherited_values": [
+    "position",
+    "modulate"
+  ],
+  "fields": [
+    {
+      "field": "defeat_outcome",
+      "source_line": 20,
+      "declaration": ":= \"\"",
+      "original_index_category": "P",
+      "handling": "captured_value",
+      "note": "standard-contract default; assert no chapter state",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "story_outcome",
+      "source_line": 21,
+      "declaration": ":= \"\"",
+      "original_index_category": "P",
+      "handling": "captured_value",
+      "note": "standard-contract default; assert no chapter state",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "movement_profile",
+      "source_line": 22,
+      "declaration": ":= \"land\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "art_variant",
+      "source_line": 23,
+      "declaration": ":= \"\":",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "animation_direction",
+      "source_line": 29,
+      "declaration": ":= \"se\"",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_direction_candidate",
+      "source_line": 30,
+      "declaration": ":= \"se\"",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_direction_votes",
+      "source_line": 31,
+      "declaration": ":= 0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_story_pose_t",
+      "source_line": 32,
+      "declaration": ":= 0.0",
+      "original_index_category": "P",
+      "handling": "captured_value",
+      "note": "standard-contract default; assert no chapter state",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_pose_previous_variant",
+      "source_line": 33,
+      "declaration": ":= \"\"",
+      "original_index_category": "P",
+      "handling": "captured_value",
+      "note": "standard-contract default; assert no chapter state",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "story_assist_partner",
+      "source_line": 34,
+      "declaration": ": Unit",
+      "original_index_category": "P",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "story_assist_owner",
+      "source_line": 35,
+      "declaration": ": Unit",
+      "original_index_category": "P",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "key",
+      "source_line": 37,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "display_name",
+      "source_line": 38,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "faction",
+      "source_line": 39,
+      "declaration": ":= FACTION_LIANG",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        1
+      ]
+    },
+    {
+      "field": "max_hp",
+      "source_line": 40,
+      "declaration": ":= 100.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "hp",
+      "source_line": 41,
+      "declaration": ":= 100.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "atk",
+      "source_line": 42,
+      "declaration": ":= 10.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "atk_cd",
+      "source_line": 43,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "atk_range",
+      "source_line": 44,
+      "declaration": ":= 24.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "base_speed",
+      "source_line": 45,
+      "declaration": ":= 70.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "is_ranged",
+      "source_line": 46,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "can_melee_switch",
+      "source_line": 47,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "melee_mode",
+      "source_line": 48,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_cavalry",
+      "source_line": 49,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "bonus_vs_cav",
+      "source_line": 50,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "defense",
+      "source_line": 51,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "is_hero",
+      "source_line": 52,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_building",
+      "source_line": 53,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_captive",
+      "source_line": 54,
+      "declaration": ":= false",
+      "original_index_category": "P",
+      "handling": "captured_value",
+      "note": "standard-contract default; assert no chapter state",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_objective",
+      "source_line": 55,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_noncombat",
+      "source_line": 56,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "setup_def",
+      "source_line": 57,
+      "declaration": ":= {}",
+      "original_index_category": "J",
+      "handling": "captured_value",
+      "note": "explicit nested shape",
+      "rule": "definition_values",
+      "range": "String-keyed Dictionary <=512 top keys; full value tree budgeted, business schema deferred"
+    },
+    {
+      "field": "aura",
+      "source_line": 58,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "aura_radius",
+      "source_line": 59,
+      "declaration": ":= 170.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "aura_power",
+      "source_line": 60,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "radius",
+      "source_line": 61,
+      "declaration": ":= 11.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "visual_scale",
+      "source_line": 62,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "aggro_range",
+      "source_line": 63,
+      "declaration": ":= 200.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "battle",
+      "source_line": 65,
+      "declaration": "= null",
+      "original_index_category": "X",
+      "handling": "runtime_relation_next_layer",
+      "note": "bind new Battle/Map or dedicated HeroInventory adapter; no Resource/Node encoding"
+    },
+    {
+      "field": "map",
+      "source_line": 66,
+      "declaration": ": GameMap = null",
+      "original_index_category": "X",
+      "handling": "runtime_relation_next_layer",
+      "note": "bind new Battle/Map or dedicated HeroInventory adapter; no Resource/Node encoding"
+    },
+    {
+      "field": "_track_combat_stats",
+      "source_line": 67,
+      "declaration": ":= false",
+      "original_index_category": "D",
+      "handling": "captured_value",
+      "note": "rebuild and verify; no gameplay tick",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_worker",
+      "source_line": 70,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_resource",
+      "source_line": 71,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "res_kind",
+      "source_line": 72,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "res_left",
+      "source_line": 73,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_gold_miner",
+      "source_line": 74,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_gold_waiters",
+      "source_line": 75,
+      "declaration": ": Array = []",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_queue",
+      "source_line": 76,
+      "declaration": ": Array = []",
+      "original_index_category": "J",
+      "handling": "order_queue_next_layer",
+      "note": "ordered move/amove/attack/gather/build/repair/garrison shapes; targets need reference protocol"
+    },
+    {
+      "field": "_gather_node",
+      "source_line": 77,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_drop",
+      "source_line": 78,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_carry_kind",
+      "source_line": 79,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_carry_amt",
+      "source_line": 80,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_gather_t",
+      "source_line": 81,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "is_constructing",
+      "source_line": 86,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_pending_build",
+      "source_line": 87,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "build_progress",
+      "source_line": 88,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "build_time",
+      "source_line": 89,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_build_site",
+      "source_line": 90,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "garrisoned",
+      "source_line": 93,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "garrison_holder",
+      "source_line": 94,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_garrison_dest",
+      "source_line": 95,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "passengers",
+      "source_line": 96,
+      "declaration": ": Array = []",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "garrison_cap",
+      "source_line": 97,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_train_queue",
+      "source_line": 99,
+      "declaration": ": Array = []",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string_array",
+      "range": "Array of nonempty String, <=8 training entries"
+    },
+    {
+      "field": "production_blocked",
+      "source_line": 100,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_production_retry",
+      "source_line": 101,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_train_t",
+      "source_line": 102,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "rally",
+      "source_line": 103,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "has_rally",
+      "source_line": 104,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "rally_node",
+      "source_line": 105,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "rally_kind",
+      "source_line": 106,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_repair_g",
+      "source_line": 107,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_repair_w",
+      "source_line": 108,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_research_key",
+      "source_line": 109,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_research_t",
+      "source_line": 110,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "selected",
+      "source_line": 112,
+      "declaration": ":= false",
+      "original_index_category": "D",
+      "handling": "captured_value",
+      "note": "rebuild and verify; no gameplay tick",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "is_active",
+      "source_line": 113,
+      "declaration": ":= false",
+      "original_index_category": "D",
+      "handling": "captured_value",
+      "note": "rebuild and verify; no gameplay tick",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "inspected",
+      "source_line": 114,
+      "declaration": ":= false",
+      "original_index_category": "D",
+      "handling": "captured_value",
+      "note": "rebuild and verify; no gameplay tick",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "fog_visible",
+      "source_line": 115,
+      "declaration": ":= true",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "passive",
+      "source_line": 116,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "stance",
+      "source_line": 117,
+      "declaration": ":= STANCE_AGGRO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        3
+      ]
+    },
+    {
+      "field": "_hold_order_active",
+      "source_line": 118,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_hold_prev_stance",
+      "source_line": 119,
+      "declaration": ":= STANCE_AGGRO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        3
+      ]
+    },
+    {
+      "field": "_patrol_a",
+      "source_line": 120,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_patrol_b",
+      "source_line": 121,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_patrolling",
+      "source_line": 122,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "hidden_in_reeds",
+      "source_line": 123,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "buff_atk",
+      "source_line": 124,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "buff_speed",
+      "source_line": 125,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "face_left",
+      "source_line": 126,
+      "declaration": ":= false",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "group_nums",
+      "source_line": 127,
+      "declaration": ": Array = []",
+      "original_index_category": "D",
+      "handling": "captured_value",
+      "note": "rebuild and verify; no gameplay tick",
+      "rule": "group_array",
+      "range": "Strictly increasing unique int Array, <=32 badges"
+    },
+    {
+      "field": "ability",
+      "source_line": 130,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "ability_cd",
+      "source_line": 131,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_ability_t",
+      "source_line": 132,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "ability_slots",
+      "source_line": 134,
+      "declaration": ": Array = []",
+      "original_index_category": "J",
+      "handling": "captured_value",
+      "note": "explicit nested shape",
+      "rule": "ability_slots",
+      "range": "<=4 slots; exact 7 keys and native member types"
+    },
+    {
+      "field": "inventory",
+      "source_line": 135,
+      "declaration": ": HeroInventory = null",
+      "original_index_category": "X",
+      "handling": "runtime_relation_next_layer",
+      "note": "bind new Battle/Map or dedicated HeroInventory adapter; no Resource/Node encoding"
+    },
+    {
+      "field": "_hero_leveled",
+      "source_line": 136,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "hero_level",
+      "source_line": 137,
+      "declaration": ":= 1",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        1,
+        12
+      ]
+    },
+    {
+      "field": "hero_xp",
+      "source_line": 138,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "skill_points",
+      "source_line": 139,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "auto_micro",
+      "source_line": 140,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "ai_tick_phase",
+      "source_line": 141,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        15
+      ]
+    },
+    {
+      "field": "_ai_dest",
+      "source_line": 142,
+      "declaration": ":= Vector2.INF",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2_positive_inf_sentinel",
+      "range": "Finite Vector2 or exactly Vector2(+INF,+INF)"
+    },
+    {
+      "field": "_base_atk",
+      "source_line": 143,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_base_hp",
+      "source_line": 144,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_base_speed",
+      "source_line": 145,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_base_defense",
+      "source_line": 146,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "temp_atk",
+      "source_line": 148,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_atk_t",
+      "source_line": 149,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "temp_atk_add",
+      "source_line": 150,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_atk_add_t",
+      "source_line": 151,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "temp_speed",
+      "source_line": 152,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_speed_t",
+      "source_line": 153,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_move_boost",
+      "source_line": 154,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_move_boost_t",
+      "source_line": 155,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_stun_t",
+      "source_line": 156,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "temp_lifesteal",
+      "source_line": 157,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_lifesteal_t",
+      "source_line": 158,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "cav_ls_chance",
+      "source_line": 159,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "cav_ls_frac",
+      "source_line": 160,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_lin_guard_t",
+      "source_line": 162,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_lin_guard_rank",
+      "source_line": 163,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        3
+      ]
+    },
+    {
+      "field": "_lin_guard_used",
+      "source_line": 164,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "lin_spear_rank",
+      "source_line": 166,
+      "declaration": ":= 0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "int",
+      "range": [
+        0,
+        3
+      ]
+    },
+    {
+      "field": "_lin_spear_target_id",
+      "source_line": 167,
+      "declaration": ":= 0",
+      "original_index_category": "I",
+      "handling": "identity_or_source_next_layer",
+      "note": "stable entity/effect/tombstone IDs; mixed source namespaces require explicit mapping"
+    },
+    {
+      "field": "_lin_spear_stacks",
+      "source_line": 168,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_lin_spear_t",
+      "source_line": 169,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_buff_glow",
+      "source_line": 170,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "is_summon",
+      "source_line": 172,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "summon_kind",
+      "source_line": 173,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_summon_ttl",
+      "source_line": 174,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "stat_owner_key",
+      "source_line": 175,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "stat_ability_id",
+      "source_line": 176,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_drunk_t",
+      "source_line": 178,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_drunk_lo",
+      "source_line": 179,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_drunk_hi",
+      "source_line": 180,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_drunk_reroll",
+      "source_line": 181,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_drunk_move",
+      "source_line": 182,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_drunk_atk",
+      "source_line": 183,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_phys_immune_t",
+      "source_line": 185,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_absorbed_phys",
+      "source_line": 186,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_drunk_god_bonus_per_hit",
+      "source_line": 187,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_drunk_god_stacks",
+      "source_line": 188,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_drunk_god_max_stacks",
+      "source_line": 189,
+      "declaration": ":= 5",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_def_down",
+      "source_line": 191,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_def_down_t",
+      "source_line": 192,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_blind_t",
+      "source_line": 194,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_attack_miss_chance",
+      "source_line": 196,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_attack_miss_t",
+      "source_line": 197,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "aura_slow",
+      "source_line": 199,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "slow_aura_r",
+      "source_line": 200,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_shield",
+      "source_line": 202,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_shield_t",
+      "source_line": 203,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_silence_t",
+      "source_line": 204,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_root_t",
+      "source_line": 205,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_disarm_t",
+      "source_line": 206,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_taunt_t",
+      "source_line": 207,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_taunt_src",
+      "source_line": 208,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_channel_t",
+      "source_line": 209,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_channel_dur",
+      "source_line": 210,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_invis_t",
+      "source_line": 211,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_invis_strike_bonus",
+      "source_line": 212,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_invis_strike_pending",
+      "source_line": 213,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_hex_t",
+      "source_line": 214,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_form_t",
+      "source_line": 215,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_form",
+      "source_line": 216,
+      "declaration": ": Dictionary = {}",
+      "original_index_category": "J",
+      "handling": "captured_value",
+      "note": "explicit nested shape",
+      "rule": "form",
+      "range": "Known 7 optional keys only; finite numeric or Color tint"
+    },
+    {
+      "field": "_form_backup",
+      "source_line": 217,
+      "declaration": ": Dictionary = {}",
+      "original_index_category": "J",
+      "handling": "captured_value",
+      "note": "explicit nested shape",
+      "rule": "form_backup",
+      "range": "Empty or exact 6 original float fields"
+    },
+    {
+      "field": "_order_serial",
+      "source_line": 218,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "temp_atkspeed",
+      "source_line": 219,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_atkspeed_t",
+      "source_line": 220,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_attack_speed_slow",
+      "source_line": 221,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_attack_speed_slow_t",
+      "source_line": 222,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_aura_atkspeed",
+      "source_line": 223,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_aura_atkspeed_sources",
+      "source_line": 224,
+      "declaration": ": Dictionary = {}",
+      "original_index_category": "I",
+      "handling": "identity_or_source_next_layer",
+      "note": "stable entity/effect/tombstone IDs; mixed source namespaces require explicit mapping"
+    },
+    {
+      "field": "atkspeed_mult",
+      "source_line": 226,
+      "declaration": ":= 1.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "crit_chance_bonus",
+      "source_line": 227,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "crit_mult_bonus",
+      "source_line": 228,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "evasion",
+      "source_line": 229,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_evasion",
+      "source_line": 230,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_temp_evasion_t",
+      "source_line": 231,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "bash_chance",
+      "source_line": 232,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "bash_dur",
+      "source_line": 233,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "on_hit_slow",
+      "source_line": 234,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "on_hit_slow_dur",
+      "source_line": 235,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "on_hit_dmg",
+      "source_line": 236,
+      "declaration": ":= 0.0",
+      "original_index_category": "A",
+      "handling": "captured_value",
+      "note": "recomputable stats; retain snapshot and verify first",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_dmg_amp",
+      "source_line": 238,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_dmg_amp_t",
+      "source_line": 239,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_damage_reduction",
+      "source_line": 241,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_damage_reduction_t",
+      "source_line": 242,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_damage_reduction_sources",
+      "source_line": 243,
+      "declaration": ": Dictionary = {}",
+      "original_index_category": "I",
+      "handling": "identity_or_source_next_layer",
+      "note": "stable entity/effect/tombstone IDs; mixed source namespaces require explicit mapping"
+    },
+    {
+      "field": "_stats_mitigation_t",
+      "source_line": 244,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_charge_t",
+      "source_line": 246,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_charge_dash",
+      "source_line": 247,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_charge_dir",
+      "source_line": 248,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_charge_dmg",
+      "source_line": 249,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_charge_ability_id",
+      "source_line": 250,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    },
+    {
+      "field": "_charge_slow",
+      "source_line": 251,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_charge_slow_dur",
+      "source_line": 252,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_charge_width",
+      "source_line": 253,
+      "declaration": ":= 50.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_charge_hit",
+      "source_line": 254,
+      "declaration": ": Array = []",
+      "original_index_category": "I",
+      "handling": "identity_or_source_next_layer",
+      "note": "stable entity/effect/tombstone IDs; mixed source namespaces require explicit mapping"
+    },
+    {
+      "field": "_charge_phys_immune",
+      "source_line": 255,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_hua_lock_target",
+      "source_line": 257,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_hua_lock_shots",
+      "source_line": 258,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_state",
+      "source_line": 261,
+      "declaration": ":= ST_IDLE",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        8
+      ]
+    },
+    {
+      "field": "_path",
+      "source_line": 262,
+      "declaration": ":= PackedVector2Array()",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "packed_vector2",
+      "range": "PackedVector2Array, <=4096 finite points; no repath"
+    },
+    {
+      "field": "_path_i",
+      "source_line": 263,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_amove_dest",
+      "source_line": 264,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_resume_amove",
+      "source_line": 265,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_target",
+      "source_line": 266,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_chase_intent",
+      "source_line": 267,
+      "declaration": ":= CHASE_AUTO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        3
+      ]
+    },
+    {
+      "field": "_group_cap",
+      "source_line": 268,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_home",
+      "source_line": 269,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_has_home",
+      "source_line": 270,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_cd",
+      "source_line": 271,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_repath",
+      "source_line": 272,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_acq_t",
+      "source_line": 273,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_flash",
+      "source_line": 274,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_muzzle_t",
+      "source_line": 275,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_tower_aim",
+      "source_line": 276,
+      "declaration": ":= Vector2i(1, 1)",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "vector2i",
+      "range": "Native signed int32 components"
+    },
+    {
+      "field": "_tower_aim_hold",
+      "source_line": 277,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_stuck_t",
+      "source_line": 278,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_idle_push_t",
+      "source_line": 279,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_blocker_check_t",
+      "source_line": 280,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_chasing_path_blocker",
+      "source_line": 281,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_eject_t",
+      "source_line": 282,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_block_rp",
+      "source_line": 283,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_burn_t",
+      "source_line": 284,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "manual_order_t",
+      "source_line": 285,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "manual_order_active",
+      "source_line": 286,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "mission_order_active",
+      "source_line": 288,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "mission_order_arrival_t",
+      "source_line": 289,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "mission_order_target",
+      "source_line": 290,
+      "declaration": ":= Vector2.INF",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2_positive_inf_sentinel",
+      "range": "Finite Vector2 or exactly Vector2(+INF,+INF)"
+    },
+    {
+      "field": "mission_order_token",
+      "source_line": 291,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_move_retry",
+      "source_line": 292,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_move_retry_pos",
+      "source_line": 293,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_last_pos",
+      "source_line": 294,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_combat_cool",
+      "source_line": 295,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_hit_recent_t",
+      "source_line": 296,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_chase_t",
+      "source_line": 299,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_chase_last_id",
+      "source_line": 300,
+      "declaration": ":= 0",
+      "original_index_category": "I",
+      "handling": "identity_or_source_next_layer",
+      "note": "stable entity/effect/tombstone IDs; mixed source namespaces require explicit mapping"
+    },
+    {
+      "field": "_chase_best_distance",
+      "source_line": 301,
+      "declaration": ":= INF",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float_positive_inf_sentinel",
+      "range": "Nonnegative finite float or exactly +INF"
+    },
+    {
+      "field": "_giveup_id",
+      "source_line": 302,
+      "declaration": ":= 0",
+      "original_index_category": "I",
+      "handling": "identity_or_source_next_layer",
+      "note": "stable entity/effect/tombstone IDs; mixed source namespaces require explicit mapping"
+    },
+    {
+      "field": "_giveup_t",
+      "source_line": 303,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_stepped",
+      "source_line": 309,
+      "declaration": ":= false",
+      "original_index_category": "C",
+      "handling": "captured_value",
+      "note": "Retain cheap visual continuity; avoid unnecessary state loss.",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_move_blend",
+      "source_line": 310,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_anim_t",
+      "source_line": 311,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_lunge",
+      "source_line": 312,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_lunge_dir",
+      "source_line": 313,
+      "declaration": ":= Vector2.RIGHT",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_swing_kind",
+      "source_line": 314,
+      "declaration": ":= WK.SWORD",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": [
+        0,
+        5
+      ]
+    },
+    {
+      "field": "_swing_speed",
+      "source_line": 315,
+      "declaration": ":= 3.6",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_hit_at",
+      "source_line": 316,
+      "declaration": ":= 0.5",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_pending_target",
+      "source_line": 317,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_pending_done",
+      "source_line": 318,
+      "declaration": ":= true",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_flinch",
+      "source_line": 319,
+      "declaration": ":= Vector2.ZERO",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "vector2",
+      "range": "Finite native Vector2 components"
+    },
+    {
+      "field": "_gather_anim_t",
+      "source_line": 320,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_harvest_pulse",
+      "source_line": 321,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_cast_t",
+      "source_line": 322,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_cast_dur",
+      "source_line": 323,
+      "declaration": ":= 0.001",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_cast_color",
+      "source_line": 324,
+      "declaration": ":= Color(0.82, 0.86, 1.0)",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "color",
+      "range": "Finite float32 components; HDR/negative finite values retained"
+    },
+    {
+      "field": "_cast_serial",
+      "source_line": 325,
+      "declaration": ":= 0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "int",
+      "range": "Exact signed int64"
+    },
+    {
+      "field": "_weapon",
+      "source_line": 326,
+      "declaration": ":= -1",
+      "original_index_category": "C",
+      "handling": "captured_value",
+      "note": "Preserve cache: _weapon_kind chooses next _swing_kind and damage timing; not proven pure draw.",
+      "rule": "int",
+      "range": [
+        -1,
+        5
+      ]
+    },
+    {
+      "field": "_idle_t",
+      "source_line": 327,
+      "declaration": ":= 0.0",
+      "original_index_category": "V",
+      "handling": "captured_value",
+      "note": "retained cheap visual continuity",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_real_frames",
+      "source_line": 328,
+      "declaration": ":= false",
+      "original_index_category": "C",
+      "handling": "visual_cache_omitted",
+      "note": "pure draw cache or dust; never call simulation to rebuild"
+    },
+    {
+      "field": "_frame_directional",
+      "source_line": 329,
+      "declaration": ":= false",
+      "original_index_category": "C",
+      "handling": "visual_cache_omitted",
+      "note": "pure draw cache or dust; never call simulation to rebuild"
+    },
+    {
+      "field": "_animated_redraw_t",
+      "source_line": 330,
+      "declaration": ":= 0.0",
+      "original_index_category": "C",
+      "handling": "visual_cache_omitted",
+      "note": "pure draw cache or dust; never call simulation to rebuild"
+    },
+    {
+      "field": "_queued_redraw_frame",
+      "source_line": 331,
+      "declaration": ":= -1",
+      "original_index_category": "C",
+      "handling": "visual_cache_omitted",
+      "note": "pure draw cache or dust; never call simulation to rebuild"
+    },
+    {
+      "field": "_dying",
+      "source_line": 332,
+      "declaration": ":= false",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "bool",
+      "range": "Exact bool; no numeric coercion"
+    },
+    {
+      "field": "_death_t",
+      "source_line": 333,
+      "declaration": ":= 0.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_death_lean",
+      "source_line": 334,
+      "declaration": ":= 1.0",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "float",
+      "range": "Finite float; signed timer values preserved without clamping"
+    },
+    {
+      "field": "_dust",
+      "source_line": 335,
+      "declaration": ": Array = []",
+      "original_index_category": "C",
+      "handling": "visual_cache_omitted",
+      "note": "pure draw cache or dust; never call simulation to rebuild"
+    },
+    {
+      "field": "_killer",
+      "source_line": 862,
+      "declaration": ": Unit = null",
+      "original_index_category": "R",
+      "handling": "reference_next_layer",
+      "note": "none/entity/expired; ordered arrays retain order; never encode Node/ObjectID"
+    },
+    {
+      "field": "_killer_source_id",
+      "source_line": 863,
+      "declaration": ":= \"\"",
+      "original_index_category": "S",
+      "handling": "captured_value",
+      "note": "preserve current value",
+      "rule": "string",
+      "range": "Exact String; aggregate codec byte budget"
+    }
+  ],
+  "complete_battle_restore": false
+}

@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "attempt_utc": "2026-09-06T10:26:13.856442+00:00",
+  "command": "prepare.py plan",
+  "exit_code": 1,
+  "requested_snapshot": "4baafc1",
+  "expected_frozen_commit": "4baafc11af55b0e46a57a48e54df181b8c1917a2",
+  "plan_created": false,
+  "plan_sha256": null,
+  "validated_total_copy_bytes": null,
+  "error_type": "RuntimeError",
+  "exact_error": "Required regular file missing: E:\\ChatGPT\\水浒-art-validation\\.godot\\imported\\bailong_temple.png-6385502081b3aa895b8f88467e71f809.md5",
+  "traceback_locations": [
+    "prepare.py:291 main",
+    "prepare.py:286 plan",
+    "prepare.py:160 regular(local, ROOT)",
+    "prepare.py:48 require(path.is_file())",
+    "transforms.py:24 raise RuntimeError(message)"
+  ],
+  "missing_files": {
+    ".godot/imported/bailong_temple.png-6385502081b3aa895b8f88467e71f809.md5": true,
+    ".godot/imported/bailong_temple.png-6385502081b3aa895b8f88467e71f809.ctex": true
+  },
+  "source": "assets/campaign/source/bailong_temple.png",
+  "source_bytes": 2114205,
+  "source_and_remap_checks_before_failure": "Git source blob equality and normalized remap equality passed before missing MD5 check",
+  "ignore_file": {
+    "path": "assets/campaign/source/.gdignore",
+    "raw_sha256": "56c571201bc29b9cf4b8308900396ebaaa819699a042c05bd3a9776a81698299",
+    "text": "# 原始生成图与被淘汰候选仅供追溯；运行时只引用规范化的 anim / objects / portraits。\n"
+  },
+  "historical_receipt": "scratchpad/native_sections_diag/runs/20260906T093709848839Z/source_before.json includes assets/campaign/source/.gdignore",
+  "cause": "Planner requires import caches beneath an ignored provenance-source directory containing historical remaps; both target cache and MD5 sidecar are absent. A different normalized object texture cache cannot substitute.",
+  "policy_changed": false,
+  "materialized": false,
+  "godot_run": false,
+  "production_writes": false,
+  "next": "Root decides whether to explicitly exclude frozen .gdignore-covered paths from import-cache requirements while retaining provenance source files; no hash relaxation or automatic change."
+}

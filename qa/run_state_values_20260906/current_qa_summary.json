@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "status": "PASS_VALUE_MODULE_ONLY",
+  "accepted_run": "20260906T143634734025Z",
+  "check_count": 341,
+  "all_report_checks_passed": true,
+  "failures": [],
+  "strict_log_accepted": true,
+  "process_id": 13904,
+  "exit_code": 0,
+  "engine": {
+    "major": 4,
+    "minor": 6,
+    "patch": 3,
+    "hex": 263683,
+    "status": "stable",
+    "build": "official",
+    "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+    "timestamp": 0,
+    "string": "4.6.3-stable (official)"
+  },
+  "engine_binary_raw_sha256_from_receipt": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "actual_user_dir": "E:/ChatGPT/水浒-art-validation/scratchpad/run_state_value_codec/runs/20260906T143634734025Z/private_profile/roaming/Godot/app_userdata/RunStateValueCodec Private QA",
+  "actual_user_dir_matches_private_expected": true,
+  "source_raw_sha256": {
+    "value_codec.gd": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+    "qa_driver.gd": "d555a5032ec967eb1996dc0f005ea32d21e91cef655afc01a40bcea5062be202",
+    "project.godot": "cc4bec295be566e0db2d5d610a86ec7bde6b8bb10cc60d7751c8a3c72b7b8f0c"
+  },
+  "report_raw_sha256": "2f12dd2c795cbefac56dc703b0cd527ee0e207c4684192319ac73b8cea1df505",
+  "independent_readonly_review": {
+    "three_authored_private_report_and_receipt_sources_match": true,
+    "stdout_report_matches_file": true,
+    "private_and_exported_report_bytes_identical": true,
+    "nonempty_named_boolean_checks_verified": true,
+    "strict_diagnostic_pattern": "SCRIPT ERROR|^ERROR:|^WARNING:|\\bFAIL\\b|Unicode parsing error|Parse Error",
+    "unexpected_nonempty_log_lines": [],
+    "old_run_receipts_and_author_preparation_unchanged": true,
+    "reviewer_ran_godot": false
+  },
+  "controller_receipt_observations": {
+    "exit_confirmed": true,
+    "source_unchanged": true,
+    "lock_released": true
+  },
+  "accepted_evidence": {
+    "preparation.json": {
+      "bytes": 798,
+      "raw_sha256": "ea6358219f12e2d248ed57be1d4e9ca74de8451dc6b7686c54d24b43c79d4829",
+      "lf_sha256": "ea6358219f12e2d248ed57be1d4e9ca74de8451dc6b7686c54d24b43c79d4829"
+    },
+    "receipt.json": {
+      "bytes": 1025,
+      "raw_sha256": "677bf28d1b38ebfddb497a067c08f44ba5fde200bb618dd8e612617f1399ba2c",
+      "lf_sha256": "677bf28d1b38ebfddb497a067c08f44ba5fde200bb618dd8e612617f1399ba2c"
+    },
+    "report.json": {
+      "bytes": 32219,
+      "raw_sha256": "2f12dd2c795cbefac56dc703b0cd527ee0e207c4684192319ac73b8cea1df505",
+      "lf_sha256": "2f12dd2c795cbefac56dc703b0cd527ee0e207c4684192319ac73b8cea1df505"
+    },
+    "process.log": {
+      "bytes": 26756,
+      "raw_sha256": "6c6161998befc2b14118c80b321901e92afac2befe77401e05856104c0af906d",
+      "lf_sha256": "9b35dce3d99d52f67560c5b25aafc5c23d8ff90d34f3d5a179e4f073541c3522"
+    }
+  },
+  "superseded_attempt": {
+    "run": "20260906T114114538519Z",
+    "reported_checks": 340,
+    "original_receipt_complete": true,
+    "strict_log_accepted": false,
+    "diagnostic_line": 3,
+    "diagnostic": "Unicode parsing error, some characters were replaced with � (U+FFFD): Unexpected NUL character",
+    "reason": "Pre-codec String.chr(0) constructed an already-replaced string; the former runner missed its Unicode diagnostic.",
+    "old_qa_raw_sha256": "eeb2dbdb200927bcbf436247bd67904fe3195826912742a12d890d7400b61fd6",
+    "preserved_review": "nul_fixture_fix/original_run_review.json",
+    "preserved_qa": "nul_fixture_fix/qa_driver_before.gd.txt",
+    "history_rewritten": false
+  },
+  "production_observation": {
+    "path": "scripts/run_state_value_codec.gd",
+    "exact_tested_bytes": true,
+    "bytes": 12091,
+    "raw_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+    "lf_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+    "reviewer_wrote_production": false
+  },
+  "scope": {
+    "real_json_roundtrip": true,
+    "int64_extremes_and_2pow53_plus1": true,
+    "finite_f64_and_f32_bits_signed_zero": true,
+    "ordered_dictionary_and_duplicate_keys": true,
+    "bounded_cycles_depth_nodes_bytes": true,
+    "malicious_object_rejection_without_invocation": true,
+    "standalone_opt_in_infinity": true,
+    "battle_or_unit_adapter": false,
+    "entity_schema_or_references": false,
+    "raw_json_parser_nul_or_duplicate_member_policy": false,
+    "disk_persistence": false,
+    "battle_restore_or_continue_ui": false
+  },
+  "limits": {
+    "root_depth": 0,
+    "max_depth": 32,
+    "max_charged_nodes": 32768,
+    "max_conservative_compact_json_bytes": 1048576
+  },
+  "historical_preparation_raw_sha256": "10c4c0b9210ae2759b38f68b84e4f6a2d34e31226e396e999d801fbfddad3a7c"
+}
