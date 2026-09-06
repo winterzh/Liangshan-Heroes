@@ -1,0 +1,226 @@
+extends SceneTree
+## Draft; run only after explicit Godot handoff. Autoload-ready dynamic compilation.
+## AXES_BOUNDARY_MODE=original|fixed. Both modes use the same strict assertions.
+const BASE := "res://scratchpad/axes_freed_boundary/"
+var mode := ""
+var output := ""
+var checks := 0
+var failures: Array[String] = []
+var cases: Array = []
+var effect_script: GDScript
+var unit_script: GDScript
+var map_script: GDScript
+var pins: Dictionary = {}
+
+class ImpactRecorder extends Node:
+	var count := 0
+	func spawn_impact(_position: Vector2, _strong: bool) -> void: count += 1
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+func check(ok: bool, label: String) -> void:
+	checks += 1
+	if not ok: failures.append(label)
+	print("[axes-boundary ", mode, "] ", "PASS " if ok else "FAIL ", label)
+
+func _unit(parent: Node, label: String):
+	var u = unit_script.new()
+	u.name = label
+	u.hp = 100.0; u.max_hp = 100.0
+	u.visible = false
+	u.process_mode = Node.PROCESS_MODE_DISABLED
+	u._track_combat_stats = false
+	parent.add_child(u)
+	return u
+
+func _effect(parent: Node):
+	var fx = effect_script.new()
+	parent.add_child(fx)
+	fx.set_process(false)
+	fx.visible = false
+	return fx
+
+func _settle() -> void:
+	await process_frame
+	await process_frame
+
+func _resolve_case(label: String, freed_first: bool, freed_caster: bool, status_skips: bool, immune: bool) -> void:
+	var bucket := Node2D.new(); root.add_child(bucket)
+	var caster = _unit(bucket, "Caster")
+	caster.faction = 1
+	var target = _unit(bucket, "LiveTail")
+	target.position = Vector2(110, 10)
+	var fx = _effect(bucket)
+	var recorder := ImpactRecorder.new(); bucket.add_child(recorder)
+	fx.game = recorder
+	fx.caster = caster
+	var entries: Array = []
+	var skipped: Array = []
+	if freed_first:
+		var ghost = _unit(bucket, "FreedHead")
+		entries.append({"target":ghost,"dmg":7.0})
+		ghost.free()
+	if status_skips:
+		for state in ["dead", "garrisoned", "story"]:
+			var actor = _unit(bucket, state)
+			if state == "dead": actor.hp = 0.0
+			elif state == "garrisoned": actor.garrisoned = true
+			else: actor.story_outcome = "captured"
+			entries.append({"target":actor,"dmg":7.0})
+			skipped.append([actor, actor.hp])
+	if immune: target._phys_immune_t = 2.0
+	entries.append({"target":target,"dmg":11.0})
+	fx.hits = entries
+	if freed_caster: caster.free()
+	var exits := [0]
+	fx.tree_exiting.connect(func(): exits[0] += 1)
+	var handle: WeakRef = weakref(fx)
+	fx.resolve_hits()
+	var first_hp: float = target.hp
+	var first_absorbed: float = target._absorbed_phys
+	var first_impacts: int = recorder.count
+	check(absf(first_hp - (100.0 if immune else 89.0)) < 0.001, label + ": valid tail damage/immune branch")
+	check(first_impacts == 1, label + ": valid tail impact occurs")
+	if immune: check(absf(first_absorbed - 11.0) < 0.001, label + ": physical absorption recorded")
+	for pair in skipped:
+		check(pair[0].hp == pair[1], label + ": skips " + String(pair[0].name))
+	if freed_caster:
+		check(target._target == null and target._hit_recent_t == 0.0, label + ": invalid caster becomes null source")
+	elif not immune:
+		check(target._target == caster, label + ": valid caster source retained")
+	fx.resolve_hits()
+	check(target.hp == first_hp and target._absorbed_phys == first_absorbed and recorder.count == first_impacts,
+		label + ": second resolve does not duplicate damage/impact")
+	var queued: bool = fx.is_queued_for_deletion()
+	check(queued, label + ": effect queued for real deletion")
+	await _settle()
+	var removed: bool = handle.get_ref() == null
+	check(removed and exits[0] == 1, label + ": real tree exit and object release")
+	cases.append({"name":label,"tail_hp":first_hp,"absorbed":first_absorbed,"impacts":first_impacts,"queued":queued,"removed":removed,"tree_exits":exits[0]})
+	# Cleanup follows assertions; an original leaked effect is never called passed.
+	bucket.queue_free()
+	await _settle()
+
+func _automatic_lifetime() -> void:
+	var bucket := Node2D.new(); root.add_child(bucket)
+	var ghost = _unit(bucket, "FreedHead")
+	var target = _unit(bucket, "LiveTail")
+	var fx = _effect(bucket)
+	fx.hits = [{"target":ghost,"dmg":7.0},{"target":target,"dmg":11.0}]
+	ghost.free()
+	var handle: WeakRef = weakref(fx)
+	var exits := [0]
+	fx.tree_exiting.connect(func(): exits[0] += 1)
+	check(absf(fx.dur - 0.36) < 0.00001, "automatic: production duration unchanged")
+	fx.set_process(true)
+	await create_timer(0.70).timeout
+	check(absf(target.hp - 89.0) < 0.001, "automatic: native _process reaches valid tail after freed head")
+	check(handle.get_ref() == null and exits[0] == 1, "automatic: native lifetime actually releases effect")
+	cases.append({"name":"automatic_lifetime","tail_hp":target.hp,"removed":handle.get_ref()==null,"tree_exits":exits[0]})
+	bucket.queue_free()
+	await _settle()
+
+func _draw_view(freed_first: bool) -> Dictionary:
+	var view := SubViewport.new()
+	view.size = Vector2i(256,192)
+	view.transparent_bg = true
+	view.disable_3d = true
+	view.world_2d = World2D.new()
+	view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(view)
+	var world := Node2D.new(); view.add_child(world)
+	world.transform = map_script.ISO
+	view.canvas_transform = Transform2D(0.0, Vector2(64,64))
+	var target = _unit(world, "VisibleEndpoint")
+	target.position = Vector2(110,-10)
+	var fx = _effect(world)
+	fx.visible = true
+	fx.tex = root.get_node("Art").item_texture("axe")
+	fx.elapsed = fx.dur * 0.5
+	fx.hits = [{"target":target,"dmg":11.0}]
+	if freed_first:
+		var ghost = _unit(world, "FreedDrawHead")
+		fx.hits.push_front({"target":ghost,"dmg":7.0})
+		ghost.free()
+	fx.queue_redraw()
+	return {"view":view,"fx":fx,"target":target}
+
+func _visible_pixels(image: Image) -> int:
+	var count := 0
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			if image.get_pixel(x,y).a > 0.02: count += 1
+	return count
+
+func _real_draw() -> void:
+	var clean := _draw_view(false)
+	var boundary := _draw_view(true)
+	check(clean.fx.tex != null and boundary.fx.tex != null, "draw: production axe atlas texture available")
+	# No direct _draw invocation: CanvasItem executes its native render callback.
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	var reference: Image = clean.view.get_texture().get_image()
+	var actual: Image = boundary.view.get_texture().get_image()
+	var clean_pixels := _visible_pixels(reference)
+	var boundary_pixels := _visible_pixels(actual)
+	check(clean_pixels > 0, "draw: real clean Canvas output is nonempty")
+	check(boundary_pixels > 0, "draw: valid tail still renders after freed head")
+	check(reference.get_data() == actual.get_data(), "draw: freed-head output exactly matches clean valid-tail RGBA")
+	check(clean.target.hp == 100.0 and boundary.target.hp == 100.0, "draw: render-only fixture does not resolve damage")
+	check(reference.save_png(output.path_join("draw_clean.png")) == OK, "draw: reference PNG saved")
+	check(actual.save_png(output.path_join("draw_freed_head.png")) == OK, "draw: boundary PNG saved")
+	cases.append({"name":"actual_canvas_draw","clean_pixels":clean_pixels,"boundary_pixels":boundary_pixels,
+		"rgba_equal":reference.get_data()==actual.get_data()})
+	clean.view.queue_free(); boundary.view.queue_free()
+	await _settle()
+
+func _run() -> void:
+	mode = OS.get_environment("AXES_BOUNDARY_MODE")
+	output = OS.get_environment("AXES_BOUNDARY_OUT")
+	if mode not in ["original","fixed"] or output.is_empty() or DisplayServer.get_name() == "headless":
+		push_error("Rendered AXES_BOUNDARY_MODE=original|fixed and explicit output directory required")
+		quit(2); return
+	var allowed: String = ProjectSettings.globalize_path(BASE).replace("\\", "/").trim_suffix("/") + "/"
+	output = ProjectSettings.globalize_path(output).replace("\\", "/").trim_suffix("/")
+	if not (output + "/").begins_with(allowed):
+		push_error("Output must stay under axes_freed_boundary")
+		quit(2); return
+	if FileAccess.file_exists(output.path_join("report.json")):
+		push_error("Refusing to overwrite an earlier report")
+		quit(2); return
+	DirAccess.make_dir_recursive_absolute(output)
+	check(root.get_node_or_null("Art") != null and root.get_node_or_null("Sfx") != null, "production autoloads exist before compilation")
+	pins = JSON.parse_string(FileAccess.get_file_as_string(BASE + "generated/pins.json"))
+	var mode_pin: Dictionary = pins.modes[mode]
+	var path: String = mode_pin.resource
+	check(FileAccess.get_sha256(path) == String(mode_pin.standalone_sha256), "exact extracted effect source digest")
+	if not failures.is_empty(): quit(2); return
+	# Compile only after autoload setup; do not replace global Unit/GameMap identities.
+	unit_script = load("res://scripts/unit.gd")
+	map_script = load("res://scripts/game_map.gd")
+	effect_script = GDScript.new()
+	effect_script.source_code = FileAccess.get_file_as_string(path)
+	var compile_error: int = effect_script.reload()
+	check(compile_error == OK, "runtime extracted class compiles")
+	if compile_error != OK: quit(2); return
+	AudioServer.set_bus_mute(0, true)
+	await _resolve_case("valid_control",false,false,false,false)
+	await _resolve_case("freed_head",true,false,false,false)
+	await _resolve_case("freed_caster",false,true,false,false)
+	await _resolve_case("death_garrison_story",false,false,true,false)
+	await _resolve_case("physical_immunity",false,false,false,true)
+	await _automatic_lifetime()
+	await _real_draw()
+	var passed: bool = failures.is_empty()
+	var report := {"schema":1,"mode":mode,"passed":passed,"checks":checks,"failures":failures,"cases":cases,
+		"source_pin":mode_pin,"frozen_battle_sha256":pins.frozen_battle_lf_sha256,
+		"expected_original_failure":mode=="original","original_failure_counted_as_green":false,
+		"renderer":RenderingServer.get_current_rendering_method(),"godot":Engine.get_version_info().string,
+		"scope":"extracted unmodified class plus exactly two candidate guards; actual Unit, native tree/process/Canvas callbacks",
+		"runtime_context_sha256":{"unit":FileAccess.get_sha256("res://scripts/unit.gd"),"battle":FileAccess.get_sha256("res://scripts/battle.gd"),"art":FileAccess.get_sha256("res://scripts/art_db.gd")},
+		"not_tested":["V2 reduced drawing integration","full battle balance","FPS","texture-null procedural fallback"],
+		"strict_green_requires_external_engine_log_clean":true}
+	FileAccess.open(output.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
+	print("[axes-boundary] mode=",mode," checks=",checks," failures=",failures.size()," passed=",passed)
+	quit(0 if passed else 1)

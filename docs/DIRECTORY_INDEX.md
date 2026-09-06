@@ -1,3 +1,9 @@
+## 2026-09-06 持续打磨 M2C
+
+- `docs/REDUCED_EFFECTS_20260906.md`、`docs/PHYSICS_COST_20260906.md`：可选特效、独立错误修复、同源性能结果与物理热点诊断。
+- `tools/run_reduced_effects_qa.py`、`tools/reduced_effects_qa.gd`、`tools/reduced_effects_ui_qa.gd`、`tools/contracts/reduced_effects/`：可复用私有用户目录行为/GUI/旧Settings入口与冻结旧源。
+- `qa/reduced_effects_20260906/`：公共最终复验、12个正式窗口、图片审阅、原始类缺陷对照、开发失败尝试及来源收据。
+- `qa/physics_cost_20260906/`：完整回调、原生分项、控制/计时配对窗口、实际生成驱动/账本和精确恢复收据。两QA目录均以 `.gdignore` 隔离，归档GD为文本；不含私有玩家文件和引擎缓存。
 ## 2026-09-06 持续打磨 M2B
 
 - `docs/REDRAW_REJECT_20260906.md`：重绘提前拒绝、状态/像素/计时证据、12个正式窗口及未达性能门槛。

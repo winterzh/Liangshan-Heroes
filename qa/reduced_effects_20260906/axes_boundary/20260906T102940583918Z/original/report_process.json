@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64_console.exe",
+    "--path",
+    "E:\\ChatGPT\\水浒-art-validation",
+    "--rendering-method",
+    "forward_plus",
+    "--rendering-driver",
+    "vulkan",
+    "--script",
+    "res://scratchpad/axes_freed_boundary/qa.gd"
+  ],
+  "exit_code": 1,
+  "timed_out": false,
+  "child_pid": 6068,
+  "child_started": true,
+  "child_exit_confirmed": true,
+  "exception": null,
+  "cleanup_error": null,
+  "wall_seconds": 9.187000000005355,
+  "matched_messages": [
+    "SCRIPT ERROR: Trying to assign invalid previously freed instance.",
+    "[axes-boundary original] FAIL freed_head: valid tail damage/immune branch",
+    "[axes-boundary original] FAIL freed_head: valid tail impact occurs",
+    "[axes-boundary original] FAIL freed_head: valid caster source retained",
+    "[axes-boundary original] FAIL freed_head: effect queued for real deletion",
+    "[axes-boundary original] FAIL freed_head: real tree exit and object release",
+    "SCRIPT ERROR: Trying to assign invalid previously freed instance.",
+    "[axes-boundary original] FAIL automatic: native _process reaches valid tail after freed head",
+    "[axes-boundary original] FAIL automatic: native lifetime actually releases effect",
+    "SCRIPT ERROR: Trying to assign invalid previously freed instance.",
+    "[axes-boundary original] FAIL draw: valid tail still renders after freed head",
+    "[axes-boundary original] FAIL draw: freed-head output exactly matches clean valid-tail RGBA"
+  ],
+  "console_log": "report.log",
+  "scope": "counter or helper-state diagnostic only"
+}

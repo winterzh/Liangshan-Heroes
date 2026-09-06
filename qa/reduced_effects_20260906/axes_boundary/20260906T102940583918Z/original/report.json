@@ -1,0 +1,103 @@
+{
+	"cases": [
+		{
+			"absorbed": 0.0,
+			"impacts": 1,
+			"name": "valid_control",
+			"queued": true,
+			"removed": true,
+			"tail_hp": 89.0,
+			"tree_exits": 1
+		},
+		{
+			"absorbed": 0.0,
+			"impacts": 0,
+			"name": "freed_head",
+			"queued": false,
+			"removed": false,
+			"tail_hp": 100.0,
+			"tree_exits": 0
+		},
+		{
+			"absorbed": 0.0,
+			"impacts": 1,
+			"name": "freed_caster",
+			"queued": true,
+			"removed": true,
+			"tail_hp": 89.0,
+			"tree_exits": 1
+		},
+		{
+			"absorbed": 0.0,
+			"impacts": 1,
+			"name": "death_garrison_story",
+			"queued": true,
+			"removed": true,
+			"tail_hp": 89.0,
+			"tree_exits": 1
+		},
+		{
+			"absorbed": 11.0,
+			"impacts": 1,
+			"name": "physical_immunity",
+			"queued": true,
+			"removed": true,
+			"tail_hp": 100.0,
+			"tree_exits": 1
+		},
+		{
+			"name": "automatic_lifetime",
+			"removed": false,
+			"tail_hp": 100.0,
+			"tree_exits": 0
+		},
+		{
+			"boundary_pixels": 0,
+			"clean_pixels": 322,
+			"name": "actual_canvas_draw",
+			"rgba_equal": false
+		}
+	],
+	"checks": 46,
+	"expected_original_failure": true,
+	"failures": [
+		"freed_head: valid tail damage/immune branch",
+		"freed_head: valid tail impact occurs",
+		"freed_head: valid caster source retained",
+		"freed_head: effect queued for real deletion",
+		"freed_head: real tree exit and object release",
+		"automatic: native _process reaches valid tail after freed head",
+		"automatic: native lifetime actually releases effect",
+		"draw: valid tail still renders after freed head",
+		"draw: freed-head output exactly matches clean valid-tail RGBA"
+	],
+	"frozen_battle_sha256": "784373eede18a82c24fc50a6e36a42b6c20516bf439cf200fe5be7d239db6e2c",
+	"godot": "4.6.3-stable (official)",
+	"mode": "original",
+	"not_tested": [
+		"V2 reduced drawing integration",
+		"full battle balance",
+		"FPS",
+		"texture-null procedural fallback"
+	],
+	"original_failure_counted_as_green": false,
+	"passed": false,
+	"renderer": "forward_plus",
+	"runtime_context_sha256": {
+		"art": "e4e250cc7febf53b5b1e46978fb1d266a6e01049c9c93387b8ea7cc060ea739b",
+		"battle": "b6d23aced27f91d7155e1ac996be644fe1d01554feead0dbba931fcc65e5f6a3",
+		"unit": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc"
+	},
+	"schema": 1,
+	"scope": "extracted unmodified class plus exactly two candidate guards; actual Unit, native tree/process/Canvas callbacks",
+	"source_pin": {
+		"class_lf_sha256": "21cc35423a6485dd4271e8da05161552add4d938b501531fe06c2ed0e162de3f",
+		"methods_lf_sha256": {
+			"_draw": "cfcc76f4a31056de0eb02ac7b92e056c809c3548e9340bde25c492f455d322e8",
+			"resolve_hits": "cc223b271a08adf2880493cf97521bf4c8d3a51659901843de2954e4a1d3b66a"
+		},
+		"resource": "res://scratchpad/axes_freed_boundary/generated/original_effect.gd.txt",
+		"standalone_sha256": "611b17e196e5fac8301eae6de27ba6855acb4aba6eca2aa26d5bd1269b451d32"
+	},
+	"strict_green_requires_external_engine_log_clean": true
+}

@@ -1,3 +1,10 @@
+## 2026-09-06 精简特效和公共复验
+
+正常使用 `Play.cmd`，从主菜单“更多 → 设置”或战斗暂停设置滚动到“显示 → 特效细节”，可选标准/精简，默认标准，关闭设置保存。旧配置无需手工迁移。精简保留技能范围和关键命中反馈；关闭战斗设置后仍暂停，继续按钮恢复。实现及未达性能门槛见[本批说明](REDUCED_EFFECTS_20260906.md)。
+
+`python tools/run_reduced_effects_qa.py` 只读预检；加 `--run --suite all` 串行验证真实行为、两个分辨率GUI和独立旧Settings源码副本。释放目标另用 `--run --suite freed-target-boundary`。Python3.9以上标准库，Godot仍由 `--godot`、`GODOT_PATH` 或忽略的 `godot.local.txt` 提供；输出 `.godot/reduced_effects_qa/`，首次副本导入可能耗时数分钟，必须独占引擎。私有用户目录、严格来源检查和超时范围见[工具合同](../tools/contracts/reduced_effects/README.md)。
+
+性能命令增加 `--effects-quality standard|reduced`，默认显式标准；其它固定/自动镜头、三轮60秒条件不变。旧报告未知档位不补猜，新报告必须带已验证的真实档位。辅助物理探针是[诊断证据](PHYSICS_COST_20260906.md)，不是常规游戏启动依赖。
 ## 2026-09-06 重绘投影提前排除
 
 本批仅调整 Unit 两处既有拒绝条件的判断顺序，减少不需要重绘时的可见性投影。正常 `Play.cmd` 启动、设置和玩家存档格式不变。12个至少60秒对照已完成，压力前10秒仍未达到持续30 FPS；见[实现与结果](REDRAW_REJECT_20260906.md)。

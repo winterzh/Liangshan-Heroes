@@ -1,0 +1,308 @@
+extends SceneTree
+## Public real-Viewport input fixture; use tools/run_reduced_effects_qa.py.
+var checks: Array = []
+var failures: Array = []
+var events: Array = []
+var captures: Array = []
+var output := ""
+var stage := ""
+var viewport_size := Vector2i.ZERO
+var manifest: Dictionary = {}
+var initial_saves: Dictionary = {}
+var settings_before: Dictionary = {}
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+func check(ok: bool, label: String) -> bool:
+	checks.append({"label":label,"passed":ok})
+	if not ok: failures.append(label)
+	return ok
+
+func _settle(count := 3) -> void:
+	for i in count: await process_frame
+
+func _hash(path: String) -> String:
+	return FileAccess.get_sha256(path) if FileAccess.file_exists(path) else "absent"
+
+func _saves() -> Dictionary:
+	return {"settings":_hash("user://settings.cfg"),"campaign":_hash("user://campaign.cfg"),"screen":_hash("user://screen.cfg")}
+
+func _preferences() -> Dictionary:
+	var result := {}
+	for key in ["bgm","sfx","muted","game_speed","atmosphere","auto_micro_level","formation_mode","keybinds","edge_scroll","cam_speed","zoom_sens","show_damage","show_healthbars","show_cooldown","show_command_queue","show_target_lines","show_range_rings","show_control_help"]:
+		var value: Variant = root.get_node("Settings").get(key)
+		result[key] = value.duplicate(true) if value is Dictionary else value
+	return result
+
+func _button(node: Node, caption: String, contains := false) -> Button:
+	if node is Button and node.is_visible_in_tree() and (caption in node.text if contains else node.text == caption): return node
+	for child in node.get_children():
+		var found := _button(child, caption, contains)
+		if found != null: return found
+	return null
+
+func _panel(node: Node) -> Control:
+	if node is Control and node.get_script() != null and node.get_script().resource_path == "res://scripts/settings_panel.gd": return node
+	for child in node.get_children():
+		var found := _panel(child)
+		if found != null: return found
+	return null
+
+func _label(node: Node, caption: String) -> Label:
+	if node is Label and node.text == caption: return node
+	for child in node.get_children():
+		var found := _label(child, caption)
+		if found != null: return found
+	return null
+
+func _visible_rect(control: Control) -> Rect2:
+	var result := Rect2(Vector2.ZERO, root.get_visible_rect().size)
+	var ancestor: Node = control.get_parent()
+	while ancestor != null:
+		if ancestor is Control and ancestor.clip_contents:
+			result = result.intersection(ancestor.get_global_rect())
+		ancestor = ancestor.get_parent()
+	return result
+
+func _fits(control: Control) -> bool:
+	return control != null and control.is_visible_in_tree() and _visible_rect(control).encloses(control.get_global_rect())
+
+func _click(button: Button, label: String) -> bool:
+	await _settle()
+	if not check(_fits(button) and not button.disabled, label + " real button is visible, unclipped and enabled"): return false
+	var point := button.get_global_rect().get_center()
+	var path := String(button.get_path())
+	var pressed_count := [0]
+	var observer := func() -> void: pressed_count[0] += 1
+	button.pressed.connect(observer)
+	var motion := InputEventMouseMotion.new()
+	motion.position = point; motion.global_position = point
+	root.push_input(motion, true)
+	for down in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.position = point; event.global_position = point
+		event.button_index = MOUSE_BUTTON_LEFT; event.pressed = down
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if down else 0
+		events.append({"action":label,"type":"mouse_button","down":down,"position":[point.x,point.y],"target":path,"physics_frame":Engine.get_physics_frames()})
+		root.push_input(event, true)
+		await _settle(1)
+	if is_instance_valid(button): button.pressed.disconnect(observer)
+	events.append({"action":label,"type":"observed_pressed_signal","count":pressed_count[0],"target":path})
+	return check(pressed_count[0] == 1, label + " input delivered exactly one real pressed signal")
+
+func _escape(label: String) -> void:
+	for down in [true, false]:
+		var event := InputEventKey.new()
+		event.keycode = KEY_ESCAPE; event.physical_keycode = KEY_ESCAPE
+		event.pressed = down; event.echo = false
+		events.append({"action":label,"type":"key","code":int(KEY_ESCAPE),"down":down,"paused_before":paused})
+		root.push_input(event, true)
+		await _settle(1)
+
+func _scroll_to_effects(panel: Control) -> Control:
+	var label := _label(panel, "特效细节")
+	if not check(label != null, "candidate exposes the effects detail row"): return null
+	var row: Control = label.get_parent()
+	var ancestor: Node = row.get_parent()
+	while ancestor != null and not ancestor is ScrollContainer: ancestor = ancestor.get_parent()
+	if not check(ancestor is ScrollContainer, "effects row belongs to actual scroll container"): return null
+	var scroll: ScrollContainer = ancestor
+	var starting_scroll := scroll.scroll_vertical
+	for attempt in 32:
+		if _fits(row): break
+		var point := scroll.get_global_rect().position + Vector2(20.0, scroll.size.y * 0.5)
+		var motion := InputEventMouseMotion.new(); motion.position = point; motion.global_position = point
+		root.push_input(motion, true)
+		var before := scroll.scroll_vertical
+		var direction := MOUSE_BUTTON_WHEEL_DOWN if row.get_global_rect().get_center().y > scroll.get_global_rect().get_center().y else MOUSE_BUTTON_WHEEL_UP
+		for down in [true, false]:
+			var event := InputEventMouseButton.new()
+			event.position = point; event.global_position = point; event.button_index = direction
+			event.pressed = down; event.factor = 1.0
+			root.push_input(event, true)
+		await _settle(2)
+		events.append({"action":"scroll effects into view","type":"wheel","button":direction,"position":[point.x,point.y],"before":before,"after":scroll.scroll_vertical})
+		if not check(scroll.scroll_vertical != before, "wheel input advances actual scroll offset"): return null
+	if not check(_fits(row) and _fits(label), "effects row and label fully fit scroll clipping rect"): return null
+	check(scroll.scroll_vertical != starting_scroll, "display row reached through real wheel scrolling")
+	return row
+
+func _layer_receipt(control: CanvasItem) -> Dictionary:
+	var z := 0
+	var relative := true
+	var layer := 0
+	var current: Node = control
+	while current != null:
+		if current is CanvasItem and relative:
+			z += current.z_index
+			relative = current.z_as_relative
+		if current is CanvasLayer:
+			layer = current.layer
+			break
+		current = current.get_parent()
+	return {"node":str(control.get_path()), "z_index":control.z_index,
+		"z_as_relative":control.z_as_relative, "effective_z":z, "canvas_layer":layer,
+		"visible":control.is_visible_in_tree()}
+
+func _modal_layers(panel: Control) -> Dictionary:
+	var modal := _layer_receipt(panel)
+	var overlays: Array = []
+	var hud = current_scene.get("hud") if is_instance_valid(current_scene) else null
+	if is_instance_valid(hud):
+		for name in ["msg_box", "_tip_panel"]:
+			var overlay = hud.get(name)
+			if not is_instance_valid(overlay): continue
+			var info := _layer_receipt(overlay)
+			if overlay is Control: info["rect"] = str(overlay.get_global_rect())
+			overlays.append(info)
+			check(modal.canvas_layer > info.canvas_layer or (modal.canvas_layer == info.canvas_layer and modal.effective_z > info.effective_z), "settings modal draws above HUD " + name)
+	return {"modal":modal, "hud_overlays":overlays}
+
+func _capture(panel: Control, row: Control, label: String) -> void:
+	await RenderingServer.frame_post_draw
+	var standard := _button(row, "标准"); var reduced := _button(row, "精简")
+	var back := _button(panel, "←  返回（保存）")
+	check(_fits(standard) and _fits(reduced) and _fits(back), label + " choices and save/back fit viewport and clipping")
+	check(not standard.get_global_rect().intersects(reduced.get_global_rect()), label + " choices do not overlap")
+	check(root.size == viewport_size and root.content_scale_size == viewport_size and DisplayServer.window_get_size() == viewport_size, label + " physical and logical target resolution match")
+	var detail := _label(panel, "特效细节")
+	var required := detail.get_theme_font("font").get_string_size(detail.text, HORIZONTAL_ALIGNMENT_LEFT, -1, detail.get_theme_font_size("font_size"))
+	check(detail.size.x >= required.x and detail.size.y >= required.y, label + " effects caption is not truncated")
+	var file := output.path_join(label + ".png")
+	check(root.get_texture().get_image().save_png(file) == OK, label + " actual rendered screenshot saved")
+	captures.append({"file":file.get_file(),"sha256":_hash(file),"size":[viewport_size.x,viewport_size.y],"row_rect":str(row.get_global_rect()),"clip_rect":str(_visible_rect(row)),"standard_pressed":standard.button_pressed,"reduced_pressed":reduced.button_pressed,"paused":paused,"layers":_modal_layers(panel),"manual_visual_review":"pending"})
+
+func _quality(panel: Control, row: Control, value: String, label: String) -> bool:
+	var target := _button(row, "标准" if value == "standard" else "精简")
+	if not await _click(target, label): return false
+	var standard := _button(row, "标准"); var reduced := _button(row, "精简")
+	check(root.get_node("Settings").get("effects_quality") == value, label + " UI callback changes actual Autoload value")
+	check(standard.button_pressed == (value == "standard") and reduced.button_pressed == (value == "reduced"), label + " exclusive selected appearance follows value")
+	check(_preferences() == settings_before, label + " other preferences unchanged by effects control")
+	await _capture(panel, row, label)
+	return true
+
+func _open_menu_settings() -> Control:
+	if not await _click(_button(current_scene, "更多", true), "menu More"): return null
+	if not await _click(_button(current_scene, "⚙  设置"), "menu Settings"): return null
+	await _settle()
+	var result := _panel(current_scene)
+	check(result != null and not paused, "real menu settings opens while menu remains unpaused")
+	return result
+
+func _menu_flow() -> bool:
+	var menu := current_scene
+	var panel := await _open_menu_settings()
+	if panel == null: return false
+	var row := await _scroll_to_effects(panel)
+	if row == null: return false
+	check(_button(row, "标准").button_pressed == (stage == "write"), "initial displayed selection matches fresh/restarted Autoload")
+	check(_button(row, "精简").button_pressed == (stage == "read"), "reduced selected only in independently restarted reader")
+	if stage == "write":
+		for value in ["reduced", "standard", "reduced"]:
+			if not await _quality(panel, row, value, "menu_" + value + "_" + str(captures.size())): return false
+		if not await _click(_button(panel, "←  返回（保存）"), "menu save/back"): return false
+	else:
+		await _capture(panel, row, "restart_read_reduced")
+		await _escape("menu settings Escape save/back")
+	await _settle()
+	check(_panel(current_scene) == null and current_scene == menu and not paused, "settings closes to same usable unpaused menu")
+	var cfg := ConfigFile.new()
+	check(cfg.load("user://settings.cfg") == OK and cfg.get_value("show", "effects_quality", "") == "reduced", "actual panel close persists reduced to private settings file")
+	var campaign_cfg := ConfigFile.new()
+	check(campaign_cfg.load("user://campaign.cfg") == OK and campaign_cfg.get_value("pref", "ai_difficulty", "") == root.get_node("Campaign").ai_difficulty, "actual panel close also saves private Campaign preferences")
+	return true
+
+func _battle_state(b) -> Dictionary:
+	var units := []
+	for u in b.units:
+		if is_instance_valid(u): units.append([u.get_instance_id(),u.position,u.hp])
+	return {"scene_id":b.get_instance_id(),"phase":b.phase,"units":units,"gold":b.gold,"wood":b.wood,"kills":b.kills}
+
+func _battle_flow() -> bool:
+	if not await _click(_button(current_scene, "竞技场", true), "menu launches actual arena battle"): return false
+	for i in 120:
+		if current_scene != null and current_scene.scene_file_path == "res://scenes/main.tscn": break
+		await process_frame
+	if not check(current_scene != null and current_scene.scene_file_path == "res://scenes/main.tscn", "actual scene transition reaches Battle"): return false
+	var b = current_scene
+	await _settle(8)
+	for i in 16:
+		if not b.hud._intro_root.visible: break
+		if not await _click(_button(b.hud._intro_root, "继续 ▸"), "arena actual intro continue"): return false
+	if b.hud.start_btn.visible:
+		if not await _click(b.hud.start_btn, "arena actual start battle"): return false
+	if not check(b.phase == b.Phase.FIGHT, "live battle starts without calling private start methods"): return false
+	settings_before = _preferences() # Battle legitimately selects its own auto-micro default.
+	await _escape("battle Escape opens pause")
+	if not check(paused and b.hud._pause_root.visible and current_scene == b, "real Escape input pauses the existing battle"): return false
+	var state := _battle_state(b)
+	if not await _click(_button(b.hud._pause_options, "⚙ 设置"), "pause Settings"): return false
+	var panel := _panel(b.hud)
+	if not check(panel != null and paused and not b.hud._pause_root.visible, "pause settings replaces pause menu without resuming simulation"): return false
+	var row := await _scroll_to_effects(panel)
+	if row == null: return false
+	for value in ["standard", "reduced"]:
+		if not await _quality(panel, row, value, "battle_" + value): return false
+		check(paused and _battle_state(b) == state, "battle state remains frozen while changing " + value)
+	await _escape("pause settings Escape saves and returns")
+	await _settle()
+	check(_panel(b.hud) == null and paused and b.hud._pause_root.visible and _battle_state(b) == state, "settings Escape returns to paused battle menu without leaking key to resume")
+	# Exercise the second close path through the actual save/back button as well.
+	if not await _click(_button(b.hud._pause_options, "⚙ 设置"), "pause Settings reopen"): return false
+	panel = _panel(b.hud)
+	if not await _click(_button(panel, "←  返回（保存）"), "pause settings save/back"): return false
+	check(paused and b.hud._pause_root.visible and _battle_state(b) == state, "save/back also restores pause without advancing battle")
+	if not await _click(_button(b.hud._pause_options, "继续 (Esc)"), "pause Continue"): return false
+	check(not paused and current_scene == b and not b.hud._pause_root.visible and Engine.time_scale == float(root.get_node("Settings").game_speed), "Continue resumes the same battle with configured speed")
+	await _escape("battle Escape reopens pause for return")
+	if not await _click(_button(b.hud._pause_options, "返回主菜单"), "pause request menu return"): return false
+	if not check(paused and b.hud._pause_confirm.visible, "menu return still requires its existing confirmation"): return false
+	var old: WeakRef = weakref(b)
+	if not await _click(b.hud._pause_confirm_button, "confirm actual menu return"): return false
+	await _settle(8)
+	check(old.get_ref() == null and current_scene != null and current_scene.scene_file_path == "res://scenes/menu.tscn" and not paused, "confirmed return releases old battle and reaches unpaused menu")
+	return true
+
+func _run() -> void:
+	output = OS.get_environment("REDUCED_EFFECTS_UI_OUT")
+	stage = OS.get_environment("REDUCED_EFFECTS_UI_STAGE")
+	var expected_user := OS.get_environment("REDUCED_EFFECTS_UI_USER_DIR").replace("\\", "/").trim_suffix("/")
+	var actual_user := ProjectSettings.globalize_path("user://").replace("\\", "/").trim_suffix("/")
+	var bounded_root := OS.get_environment("REDUCED_EFFECTS_QA_RUN_ROOT").replace("\\", "/").simplify_path().trim_suffix("/").to_lower() + "/"
+	if bounded_root == "/" or not bounded_root.is_absolute_path() or output.is_empty() or expected_user.is_empty() or not output.replace("\\", "/").simplify_path().to_lower().begins_with(bounded_root) or not actual_user.to_lower().begins_with(bounded_root) or actual_user.to_lower() != expected_user.to_lower() or stage not in ["write", "read"] or DisplayServer.get_name() == "headless":
+		push_error("Rendered GUI fixture requires verified private user directory and explicit stage"); quit(2); return
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(output.path_join("manifest.json")))
+	if not parsed is Dictionary: push_error("Missing reviewed GUI manifest"); quit(2); return
+	manifest = parsed
+	if manifest.get("schema") != 1 or manifest.get("stage") != stage or manifest.get("run_id", "").is_empty() or manifest.get("expected_user_dir", "").to_lower() != actual_user.to_lower(): push_error("Manifest user directory mismatch"); quit(2); return
+	for path in manifest.fixed_source_raw_sha256:
+		if not check(_hash("res://" + path) == manifest.fixed_source_raw_sha256[path], "source pin " + path): _finish(); return
+	viewport_size = Vector2i(int(manifest.resolution[0]), int(manifest.resolution[1]))
+	if not check(viewport_size in [Vector2i(1440,900),Vector2i(1280,720)], "reviewed resolution"): _finish(); return
+	initial_saves = _saves()
+	check(OS.get_environment("CAMPAIGN_QA") != "1", "private GUI run keeps real Campaign save callback enabled")
+	check(initial_saves == manifest.expected_saves, "pre-autoload private save bytes agree with external launcher")
+	check(root.get_node("Settings").get("effects_quality") == ("standard" if stage == "write" else "reduced"), "fresh process loads expected effects quality before any UI action")
+	if not failures.is_empty(): _finish(); return
+	root.size = viewport_size; root.content_scale_size = viewport_size
+	DisplayServer.window_set_size(viewport_size)
+	Engine.max_fps = 60
+	AudioServer.set_bus_mute(0, true) # Keep preference values intact; GUI behavior only.
+	settings_before = _preferences()
+	if not check(change_scene_to_file("res://scenes/menu.tscn") == OK, "load actual production menu scene"): _finish(); return
+	await _settle(8)
+	if not await _menu_flow(): _finish(); return
+	if stage == "write" and not await _battle_flow(): _finish(); return
+	_finish()
+
+func _finish() -> void:
+	for path in manifest.get("fixed_source_raw_sha256", {}):
+		check(_hash("res://" + path) == manifest.fixed_source_raw_sha256[path], "source unchanged after GUI: " + path)
+	var report := {"schema":1,"run_id":manifest.get("run_id", ""),"stage":stage,"checks":checks,"failures":failures,"events":events,"captures":captures,"initial_saves":initial_saves,"final_saves":_saves(),"actual_user_dir":ProjectSettings.globalize_path("user://"),"process_id":OS.get_process_id(),"source_manifest_sha256":_hash(output.path_join("manifest.json")),"godot":Engine.get_version_info().string,"renderer":RenderingServer.get_current_rendering_method(),"gpu":RenderingServer.get_video_adapter_name(),"gui_valid":not checks.is_empty() and failures.is_empty(),"gdscript_executed":true,"visual_review":"pending; screenshots require human or image inspection","performance_claim":false,"scope":"Injected real Viewport mouse/wheel/key events and observed production signals; no native desktop automation or FPS claim."}
+	var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
+	if file == null: push_error("Cannot write bounded GUI report"); quit(2); return
+	file.store_string(JSON.stringify(report, "\t")); file.close()
+	print("[reduced-effects-ui] ", JSON.stringify({"gui_valid":report.gui_valid,"stage":stage,"checks":checks.size(),"captures":captures.size()}))
+	quit(0 if report.gui_valid else 1)

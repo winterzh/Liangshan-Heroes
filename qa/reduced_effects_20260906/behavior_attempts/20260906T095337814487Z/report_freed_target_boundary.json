@@ -1,0 +1,67 @@
+{
+	"actual_user_dir": "E:/ChatGPT/水浒-art-validation/scratchpad/reduced_effects_v2/runs/20260906T095337814487Z/private_roaming/Godot/app_userdata/水浒英雄传：八幕战役",
+	"automated_checks_passed": false,
+	"checks": 28,
+	"draft_tool": true,
+	"failures": [
+		"freed target safely skips and effect cleans up standard",
+		"freed target safely skips and effect cleans up reduced"
+	],
+	"formal_acceptance": false,
+	"full_battle_equivalence": "not_claimed",
+	"manual_readability_review": "not_run",
+	"performance_baseline": false,
+	"prefs_after": {
+		"user://campaign.cfg": {
+			"exists": false,
+			"sha256": ""
+		},
+		"user://settings.cfg": {
+			"exists": false,
+			"sha256": ""
+		}
+	},
+	"prefs_before": {
+		"user://campaign.cfg": {
+			"exists": false,
+			"sha256": ""
+		},
+		"user://settings.cfg": {
+			"exists": false,
+			"sha256": ""
+		}
+	},
+	"render": [],
+	"rng_claim": "same downstream sentinels under fixed callbacks; global RNG state is not directly exposed",
+	"rows": [],
+	"runtime_classes": {
+		"autoloads_ready": true,
+		"instances": "real production scripts; no callback replacements",
+		"nested_effects_checked": 4,
+		"scripts": [
+			"battle",
+			"unit",
+			"game_map",
+			"defs"
+		]
+	},
+	"settings_fixture": {
+		"only_replacement": "const PATH := \"user://settings.cfg\"",
+		"path": "res://scratchpad/reduced_effects_v2/runs/20260906T095337814487Z/settings.cfg",
+		"production_path_sha256": "eb5644054a357a2b4e598332163636add65d667f48c4cea5b9c71f2f5c16a5ce",
+		"source_sha256": "5f71c4b01ae232b03457c2d84d16be913c4ca06080fc7cb863f148a4e03d1c43"
+	},
+	"source_base": {
+		"scripts/battle.gd": "784373eede18a82c24fc50a6e36a42b6c20516bf439cf200fe5be7d239db6e2c",
+		"scripts/settings.gd": "93ffcc801149744cc9b0eed35b1bfd0769b5f25ac8f80cdbb7865997b5ef646c",
+		"scripts/settings_panel.gd": "1a8f455515bbed7a287eeebb32aded1838356d667633fa728c81e2b0ea42cfca",
+		"scripts/unit.gd": "c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec"
+	},
+	"source_candidate": {
+		"scripts/battle.gd": "99700ca09e0e26e33914477775d574dc3ec0ef65cf9677ead8661dbd81152094",
+		"scripts/settings.gd": "eb5644054a357a2b4e598332163636add65d667f48c4cea5b9c71f2f5c16a5ce",
+		"scripts/settings_panel.gd": "b5d95092596ace168ae10efc1e9b1cc9721d1ff36b28be504fd8c0c1b0f58be4",
+		"scripts/unit.gd": "f4382456b8c619cbb86c40cd8a9ed6ea9f171ba0a8a90c191538f689176d49ee"
+	},
+	"stage": "freed_target_boundary"
+}

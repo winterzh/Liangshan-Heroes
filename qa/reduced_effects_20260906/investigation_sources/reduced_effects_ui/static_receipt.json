@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "checks": [
+    "Python source parses",
+    "Nine fixed dependencies match reviewed raw pins",
+    "Real mouse/wheel/key input seams present",
+    "No direct effects assignment or UI/save callback bypass",
+    "Current project default user-directory mapping is unambiguous",
+    "V2 candidate artifact SHA matches scripts/settings.gd",
+    "V2 candidate artifact SHA matches scripts/settings_panel.gd",
+    "V2 candidate artifact SHA matches scripts/battle.gd",
+    "V2 candidate artifact SHA matches scripts/unit.gd",
+    "Reviewed old UI source agrees with V2 base scripts/settings.gd",
+    "Reviewed old UI source agrees with V2 base scripts/settings_panel.gd",
+    "Actual V2 effects row and option captions match GUI selector contract",
+    "Both requested layout sizes are configured",
+    "Private GUI persistence keeps real Campaign save enabled"
+  ],
+  "check_count": 14,
+  "artifacts": {
+    "prepare_and_run.py": {
+      "bytes": 13791,
+      "raw_sha256": "6ab75a4852a538b0fe7518d0e931fdfb25100591cde370791de1c6b98004d893"
+    },
+    "README.md": {
+      "bytes": 7856,
+      "raw_sha256": "01ae87802d1ddb62b35cef97409145f9d6928b89fa41486fc8a06180da7781d8"
+    },
+    "reviewed_sources.json": {
+      "bytes": 2428,
+      "raw_sha256": "440afeddcbd2413f58e597b7428d6e712cbb8e19881905e47e5b75b2daa3dd8e"
+    },
+    "ui_driver.gd.in": {
+      "bytes": 17541,
+      "raw_sha256": "d4dbe7fd6503c04f34bebe7029430d5b2f16b8a0bd78a78a72350919a1c8b993"
+    }
+  },
+  "v2_pins_raw_sha256": "83199280bf4ae7ab557df0601a4dcd957174e18a2dd1fa3e6e32963034459ae4",
+  "godot_run": false,
+  "gdscript_parsed_or_executed": false,
+  "production_mutated": false,
+  "gui_acceptance": false,
+  "visual_review": "not run",
+  "performance_claim": false,
+  "boundary": "Only Python/source/contract checks; no real UI, parser or child lifecycle exercised."
+}

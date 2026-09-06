@@ -1,0 +1,96 @@
+extends "res://tools/polish_performance_probe.gd"
+## Inherit the exact pinned M1 setup/settings/tick observer; override measurement only.
+const Ledger = preload("res://scratchpad/physics_step_diag/generated/ledger.gd")
+
+func _diag_physics_boundary() -> void:
+	Ledger.physics_boundary()
+
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA", "1")
+	scenario = "defense200"
+	camera_mode = OS.get_environment("PHYSICS_STEP_CAMERA")
+	seconds = float(OS.get_environment("PHYSICS_STEP_SECONDS"))
+	var mode := OS.get_environment("PHYSICS_STEP_MODE")
+	var output := OS.get_environment("PHYSICS_STEP_OUT")
+	if DisplayServer.get_name() == "headless" or camera_mode not in ["fixed", "auto"] or seconds not in [10.0, 20.0, 60.0] or mode not in ["timed", "clockless_control"] or output.is_empty():
+		push_error("Rendered physics-step diagnostic requires explicit valid parameters"); quit(2); return
+	for arg in OS.get_cmdline_args():
+		if arg.begins_with("--fixed-fps"):
+			push_error("Fixed-fps is not a valid diagnostic clock"); quit(2); return
+	var prefs_before := _prefs_hash()
+	_configure_settings()
+	Ledger.prepare(mode == "timed")
+	var music = root.get_node("Music")
+	var audio_started := Time.get_ticks_usec()
+	while Time.get_ticks_usec() - audio_started < 60000000 and (music._thr != null and music._thr.is_alive() or music._tracks.calm.size() < 4 or music._tracks.battle.size() < 4):
+		await process_frame
+	var audio_ready: bool = (music._thr == null or not music._thr.is_alive()) and music._tracks.calm.size() == 4 and music._tracks.battle.size() == 4
+	check(audio_ready, "background music synthesis finished before battle setup")
+	check(Engine.physics_ticks_per_second == 60, "production 60 Hz physics configuration")
+	var b = await _new_battle(); battle_ref = b
+	var initial_units := []
+	for u in b.units:
+		if is_instance_valid(u): initial_units.append([u.key,u.faction,u.position.x,u.position.y,u.hp,u.movement_profile])
+	var initial_state := _state(b)
+	var tick_driver := TickDriver.new(); tick_driver.owner_probe = self; tick_driver.process_physics_priority = -10000
+	root.add_child(tick_driver)
+	physics_frame.connect(_diag_physics_boundary)
+	var warm_start := Time.get_ticks_usec()
+	b.process_mode = Node.PROCESS_MODE_INHERIT
+	while physics_tick < WARMUP_TICKS and b.phase == b.Phase.FIGHT: await process_frame
+	var warm_end_tick := physics_tick
+	var warm_wall := float(Time.get_ticks_usec() - warm_start) / 1000000.0
+	RenderingServer.viewport_set_measure_render_time(root.get_viewport_rid(), true)
+	await RenderingServer.frame_post_draw
+	# Preserve the M1 anchor ordering; state acquisition below is part of frame 0.
+	var started := Time.get_ticks_usec(); var start_tick := physics_tick
+	Ledger.start(started)
+	var sample_start := _state(b)
+	var autocam_start := autocam_active_ticks
+	var damage_start := damage_observed.duplicate()
+	while float(Time.get_ticks_usec() - started) / 1000000.0 < seconds and b.phase == b.Phase.FIGHT and not Ledger.overflow:
+		await RenderingServer.frame_post_draw
+		Ledger.presented(Time.get_ticks_usec())
+	Ledger.stop()
+	b.process_mode = Node.PROCESS_MODE_DISABLED
+	physics_frame.disconnect(_diag_physics_boundary)
+	var elapsed := float(Time.get_ticks_usec() - started) / 1000000.0
+	var end_state := _state(b)
+	var complete: bool = elapsed >= seconds and b.phase == b.Phase.FIGHT and Ledger.frame_count > 0
+	check(complete, "requested diagnostic wall-clock window completed")
+	check(warm_end_tick >= WARMUP_TICKS, "at least 300 actual physics warmup steps")
+	check(not Ledger.overflow, "preallocated buffers did not overflow")
+	check(Ledger.callback_frame_mismatches == 0 and Ledger.tick_sequence_errors == 0, "callback and physics boundary frame IDs agree")
+	check(Ledger.step_count == physics_tick - start_tick, "presented groups account for all measured M1 physics ticks")
+	check(camera_violations == 0, "fixed camera transform has no drift")
+	check(Engine.time_scale == 1.0 and Engine.physics_ticks_per_second == 60, "unmodified simulation speed and frequency")
+	if camera_mode == "auto":
+		check(autocam_active_ticks > autocam_start and manual_camera_ticks == 0, "automatic camera active without manual takeover")
+	var report := Ledger.export_rows()
+	report.merge({"schema":1,"scope":"instrumented callback cost ledger only; never normal FPS or acceptance",
+		"mode":mode,"timing_available":mode == "timed","scenario":scenario,"camera_mode":camera_mode,
+		"requested_seconds":seconds,"elapsed_seconds":elapsed,"sample_complete":complete,
+		"acceptance_eligible":false,"performance_claim":false,"seed":5088120,
+		"warmup_target_ticks":WARMUP_TICKS,"warmup_end_tick":warm_end_tick,"warmup_wall_seconds":warm_wall,
+		"initial_units":initial_units,"initial_state":initial_state,"sample_start":sample_start,"sample_end":end_state,
+		"physics_ticks":physics_tick-start_tick,"configured_settings":configured_settings,
+		"actual_auto_micro_level":int(root.get_node("Settings").auto_micro_level),"actual_ai_friendly":b.ai_friendly,
+		"audio_ready":audio_ready,"audio_policy":"same M1 music preparation; normal audio logic active, master muted",
+		"trajectory":trajectory,"inputs":input_log,"sampled_damage_at_start":damage_start,"sampled_damage_at_end":damage_observed,
+		"physics_hz":Engine.physics_ticks_per_second,"time_scale":Engine.time_scale,"resolution":[root.size.x,root.size.y],
+		"renderer":RenderingServer.get_current_rendering_method(),"gpu":RenderingServer.get_video_adapter_name(),"godot":Engine.get_version_info().string,
+		"known_perturbations":["additional shared GDScript resource may shift instance IDs","one wrapper dispatch per callback even in clockless control","timed mode adds two clock reads plus Engine frame read and scalar accumulation per measured callback","preallocated buffers and per-step/per-presentation clock/array writes","inherited M1 TickDriver and periodic trajectory allocations remain","wall-clock audio RNG and render-frame axe damage can change combat as timing changes"],
+		"rng_calls_added":false,"extra_diagnostic_nodes":0,"normal_fps_available":false})
+	tick_driver.queue_free(); battle_ref = null; fixture_units.clear()
+	var weak = weakref(b)
+	await _dispose(b)
+	check(weak.get_ref() == null, "sample battle actually freed")
+	check(_prefs_hash() == prefs_before, "player campaign and settings files unchanged")
+	report["checks"] = checks; report["failures"] = failures
+	report["diagnostic_valid"] = failures.is_empty() and complete
+	var file := FileAccess.open(output, FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot write physics-step diagnostic"); quit(2); return
+	file.store_string(JSON.stringify(report, "\t")); file.close()
+	print("[physics-step-diag] ", JSON.stringify({"mode":mode,"seconds":elapsed,"physics_steps":Ledger.step_count,"presentations":Ledger.frame_count,"valid":report.diagnostic_valid,"performance_claim":false}))
+	quit(0 if report.diagnostic_valid else 1)

@@ -1,6 +1,6 @@
 # 水浒英雄传：八幕战役
 
-后续开发按[持续打磨路线](docs/POLISH_ROADMAP_20260906.md)推进；首批已修复测试入口并建立[固定/自动镜头性能基线](docs/POLISH_BASELINE_20260906.md)。野猪林与祝家庄的[操作和失败反馈](docs/POLISH_FEEDBACK_20260906.md)已更新：诊断保留、停止按键提示、任务滚动及获救队伍手动选择。[重绘局部优化](docs/REDRAW_REJECT_20260906.md)已完成重复对照，压力性能仍未达标。后续继续性能、精简特效、中途续玩和角色动作，[真人验收](docs/PLAYTEST_CHECKLIST_20260906.md)尚待进行。
+后续开发按[持续打磨路线](docs/POLISH_ROADMAP_20260906.md)推进；首批已修复测试入口并建立[固定/自动镜头性能基线](docs/POLISH_BASELINE_20260906.md)。野猪林与祝家庄的[操作和失败反馈](docs/POLISH_FEEDBACK_20260906.md)已更新：诊断保留、停止按键提示、任务滚动及获救队伍手动选择。[重绘局部优化](docs/REDRAW_REJECT_20260906.md)已完成重复对照，压力性能仍未达标。[标准/精简特效](docs/REDUCED_EFFECTS_20260906.md)已加入设置的“显示 → 特效细节”，默认标准；可从主菜单更多或战斗暂停进入。后续继续性能、中途续玩和角色动作，[真人验收](docs/PLAYTEST_CHECKLIST_20260906.md)尚待进行。
 
 **当前统一进度：[PROJECT_STATUS](docs/PROJECT_STATUS.md)**（2026-09-06）。两会话已收尾整合，PR #1 已按用户授权合并到 main；开发分支仍为 `codex/sync-20260905-stable`。八关均有新版实现，仍处于试玩与完善阶段。宋江、林冲四向已接入，孙立仍是保存中的草稿。Steam Windows默认版本已更新为Build25149197，见[交付记录](docs/STEAM_UPDATE_20260906.md)，[简短更新公告](docs/UPDATE_ANNOUNCEMENT_20260906.md)已写好。
 

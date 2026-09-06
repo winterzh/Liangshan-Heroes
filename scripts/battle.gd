@@ -13905,6 +13905,8 @@ class AmbientMotes extends Node2D:
 		queue_redraw()
 
 	func _draw() -> void:
+		if Settings.get("effects_quality") == "reduced":
+			return
 		var vpn := get_viewport()
 		if vpn == null:
 			return   # 场景拆卸时 viewport 可能为 null，跳过本帧绘制，避免崩溃
@@ -14086,10 +14088,13 @@ class HitSpark extends Node2D:
 	func _draw() -> void:
 		var f := clampf(t / dur, 0.0, 1.0)
 		draw_set_transform_matrix(GameMap.ISO_INV)
+		var reduced_fx: bool = Settings.get("effects_quality") == "reduced"
 		var n := 6 if heavy else 4
 		var reach := (16.0 if heavy else 11.0) * (1.3 - 0.3 * f)
 		var col := Color(1.0, 0.95, 0.7, f * 0.9)
 		for i in range(n):
+			if reduced_fx and i % 2 == 1:
+				continue
 			var ang := float(_seed % 17) * 0.3 + i * TAU / n
 			var d := Vector2(cos(ang), sin(ang) * 0.7)
 			draw_line(d * reach * 0.4, d * reach, col, 2.0 if heavy else 1.5)
@@ -14306,10 +14311,11 @@ class GroundFireFx extends TimedFx:
 				draw_colored_polygon(PackedVector2Array([base + Vector2(-wid, 0), base + Vector2(wid, 0), top]), Color(col.r, col.g * 0.7, 0.08, a))
 			if hgt > 6.5:
 				draw_colored_polygon(PackedVector2Array([base + Vector2(-wid * 0.5, -2), base + Vector2(wid * 0.5, -2), top + Vector2(0, 4)]), Color(1.0, 0.88, 0.36, a))
-		for em in _embers:
-			var k := fposmod(elapsed * float(em["spd"]) * 0.02 + float(em["ph"]), 1.0)
-			var epos: Vector2 = em["p"] + Vector2(float(em["drift"]) * k, -float(em["spd"]) * k)
-			draw_circle(epos, 2.2 * (1.0 - k), Color(1.0, 0.7 + 0.2 * (1.0 - k), 0.2, 0.8 * env * (1.0 - k)))
+		if Settings.get("effects_quality") != "reduced":
+			for em in _embers:
+				var k := fposmod(elapsed * float(em["spd"]) * 0.02 + float(em["ph"]), 1.0)
+				var epos: Vector2 = em["p"] + Vector2(float(em["drift"]) * k, -float(em["spd"]) * k)
+				draw_circle(epos, 2.2 * (1.0 - k), Color(1.0, 0.7 + 0.2 * (1.0 - k), 0.2, 0.8 * env * (1.0 - k)))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
@@ -14997,7 +15003,10 @@ class LiBrawnAxesFx extends Node2D:
 		resolved = true
 		var src: Unit = caster if is_instance_valid(caster) else null
 		for hit in hits:
-			var target: Unit = hit.get("target")
+			var target_value: Variant = hit.get("target")
+			if not is_instance_valid(target_value):
+				continue
+			var target: Unit = target_value
 			if not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned or target.story_outcome != "":
 				continue
 			var dmg := float(hit.get("dmg", 0.0))
@@ -15014,7 +15023,10 @@ class LiBrawnAxesFx extends Node2D:
 		var p := clampf(elapsed / maxf(dur, 0.01), 0.0, 1.0)
 		var fly := 1.0 - pow(1.0 - p, 2.0)   # 起手快、入靶稍收，飞斧更有重量感
 		for hit in hits:
-			var target: Unit = hit.get("target")
+			var target_value: Variant = hit.get("target")
+			if not is_instance_valid(target_value):
+				continue
+			var target: Unit = target_value
 			if not is_instance_valid(target) or target.hp <= 0.0:
 				continue
 			var end_screen := GameMap.projected_delta(self, target.position - position)
@@ -15022,7 +15034,7 @@ class LiBrawnAxesFx extends Node2D:
 			var angle := end_screen.angle() + elapsed * 18.0
 			# 短拖尾：同一 Node 内批量画，不额外分配粒子节点。
 			draw_set_transform_matrix(GameMap.ISO_INV)
-			for j in range(3):
+			for j in range(0 if Settings.get("effects_quality") == "reduced" else 3):
 				var q := maxf(0.0, fly - float(j + 1) * 0.06)
 				var trail_pos := end_screen * q + Vector2(0, -sin(q * PI) * 10.0)
 				draw_circle(trail_pos, 3.5 - float(j) * 0.8, Color(1.0, 0.38, 0.18, 0.20 - float(j) * 0.045))

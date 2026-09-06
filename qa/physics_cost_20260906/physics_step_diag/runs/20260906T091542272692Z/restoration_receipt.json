@@ -1,0 +1,51 @@
+{
+  "performance_claim": false,
+  "restored": true,
+  "applied": [
+    "scripts/battle.gd",
+    "scripts/unit.gd"
+  ],
+  "samples": [
+    {
+      "report": "timed_fixed_1.json",
+      "mode": "timed",
+      "camera": "fixed",
+      "repetition": 1,
+      "diagnostic_valid": true,
+      "physics_steps": 606,
+      "presentations": 217,
+      "initial_deployment_sha256": "911ea9a4f5f643789a29b3f5eaf43b353e3e70d59bc87741a69e92c3f2ae1e55"
+    },
+    {
+      "report": "clockless_control_fixed_1.json",
+      "mode": "clockless_control",
+      "camera": "fixed",
+      "repetition": 1,
+      "diagnostic_valid": true,
+      "physics_steps": 600,
+      "presentations": 195,
+      "initial_deployment_sha256": "911ea9a4f5f643789a29b3f5eaf43b353e3e70d59bc87741a69e92c3f2ae1e55"
+    }
+  ],
+  "original_sha256": {
+    "scripts/unit.gd": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+    "scripts/battle.gd": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4"
+  },
+  "instrumented_sha256": {
+    "scripts/battle.gd": "3304435ebf8273d24b08da4b89aefdcda56b6ec1b2696712f947fe2c9d589173",
+    "scripts/unit.gd": "345a643e435c48054a79977ee57a82755055a1e11e848f219013ce139c538c5e"
+  },
+  "exclusive_before_restore": true,
+  "restoration_files": {
+    "scripts/unit.gd": {
+      "backup_verified_final": true,
+      "final_sha256": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+      "restored": true
+    },
+    "scripts/battle.gd": {
+      "backup_verified_final": true,
+      "final_sha256": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4",
+      "restored": true
+    }
+  }
+}

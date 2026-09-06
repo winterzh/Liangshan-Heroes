@@ -1,0 +1,411 @@
+{
+  "schema": 1,
+  "started_utc": "2026-09-06T10:38:59.832006+00:00",
+  "completed_utc": "2026-09-06T10:39:00.864547+00:00",
+  "command": "python scratchpad/reduced_effects_public_static/check.py",
+  "python": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+  "check_script_raw_sha256": "670a287aaa47c4a30883f34d5e395ddd98f55845b67921d37df7d5bfcdd9d5ea",
+  "input_raw_sha256_before": {
+    "tools/run_reduced_effects_qa.py": "1cecf1c3e6bb7c15992e6955fcad67e959cf836a198e9ceca28d744a1a573c0c",
+    "tools/reduced_effects_qa.gd": "2e73d13038aa6fc6464e1e99862df9bcd141e9e38a3c5fa7e34fad1cde7aa81a",
+    "tools/reduced_effects_ui_qa.gd": "3af9ee14aeb5291b41a435a9ac1101661f83fd5037c59d1db82d2c984dfb046e",
+    "tools/contracts/reduced_effects/manifest.json": "6c700f0eccef2d7c840bcca485deb6756ee330120fe5ef0e22c117826cf3476a",
+    "tools/contracts/reduced_effects/settings_legacy.gd.txt": "69f1f361833955731745cc5c4e1448f2822b9fc2bb20cb739c4abf356acf1c75",
+    "scripts/battle.gd": "b6d23aced27f91d7155e1ac996be644fe1d01554feead0dbba931fcc65e5f6a3",
+    "scripts/unit.gd": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc",
+    "scratchpad/reduced_effects_v2/frozen/battle.gd.bin": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4",
+    "scratchpad/reduced_effects_v2/frozen/unit.gd.bin": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+    "scratchpad/reduced_effects_v2/generated/driver.gd": "970df55fd6fe95aa7995bf52365b34ed9f21b1d773cad35e8ca37c1b885900ba",
+    "scratchpad/reduced_effects_ui/ui_driver.gd.in": "c35de571e34def5f220dcc6f28c4727f3a6ca736ef2903c5de3da0f867d6ef20"
+  },
+  "input_raw_sha256_after": {
+    "tools/run_reduced_effects_qa.py": "1cecf1c3e6bb7c15992e6955fcad67e959cf836a198e9ceca28d744a1a573c0c",
+    "tools/reduced_effects_qa.gd": "2e73d13038aa6fc6464e1e99862df9bcd141e9e38a3c5fa7e34fad1cde7aa81a",
+    "tools/reduced_effects_ui_qa.gd": "3af9ee14aeb5291b41a435a9ac1101661f83fd5037c59d1db82d2c984dfb046e",
+    "tools/contracts/reduced_effects/manifest.json": "6c700f0eccef2d7c840bcca485deb6756ee330120fe5ef0e22c117826cf3476a",
+    "tools/contracts/reduced_effects/settings_legacy.gd.txt": "69f1f361833955731745cc5c4e1448f2822b9fc2bb20cb739c4abf356acf1c75",
+    "scripts/battle.gd": "b6d23aced27f91d7155e1ac996be644fe1d01554feead0dbba931fcc65e5f6a3",
+    "scripts/unit.gd": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc",
+    "scratchpad/reduced_effects_v2/frozen/battle.gd.bin": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4",
+    "scratchpad/reduced_effects_v2/frozen/unit.gd.bin": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856",
+    "scratchpad/reduced_effects_v2/generated/driver.gd": "970df55fd6fe95aa7995bf52365b34ed9f21b1d773cad35e8ca37c1b885900ba",
+    "scratchpad/reduced_effects_ui/ui_driver.gd.in": "c35de571e34def5f220dcc6f28c4727f3a6ca736ef2903c5de3da0f867d6ef20"
+  },
+  "cases": [
+    {
+      "name": "source drift: addition",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Source snapshot differs after addition"
+    },
+    {
+      "name": "source drift: deletion",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Source snapshot differs after deletion"
+    },
+    {
+      "name": "source drift: bytes",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Source snapshot differs after bytes"
+    },
+    {
+      "name": "source drift: uid",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Source snapshot differs after uid"
+    },
+    {
+      "name": "required public script missing",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Required source file missing: tools/reduced_effects_ui_qa.gd"
+    },
+    {
+      "name": "required production directory missing",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Required source directory missing: assets"
+    },
+    {
+      "name": "hidden file and existing public UID included",
+      "category": "source_receipts",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "hidden_file_included": true,
+        "existing_public_uid_included": true
+      }
+    },
+    {
+      "name": "directory scan failure is not ignored",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "PermissionError: synthetic unreadable fixture directory"
+    },
+    {
+      "name": "new path during receipt hashing is rejected",
+      "category": "source_receipts",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Source path set changed during hashing"
+    },
+    {
+      "name": "exact three missing-script UID additions",
+      "category": "uid_allowance",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "new_uid_paths": [
+          "tools/contracts/reduced_effects/legacy_settings.gd.uid",
+          "tools/reduced_effects_qa.gd.uid",
+          "tools/reduced_effects_ui_qa.gd.uid"
+        ],
+        "generated_metadata": {
+          "tools/contracts/reduced_effects/legacy_settings.gd.uid": {
+            "raw_sha256": "e53ae69da99369a33ae7ce6c6744598cf4998c514365b56d7323212e724986b5",
+            "source_script": "tools/contracts/reduced_effects/legacy_settings.gd",
+            "source_script_raw_sha256": "006c373933f8e49903c974a70b81864df932f34b72076a11916696e4577e804a"
+          },
+          "tools/reduced_effects_qa.gd.uid": {
+            "raw_sha256": "3969b8e5e6df423cd40586b758e64b977628be8014276988768475c1bdf5333e",
+            "source_script": "tools/reduced_effects_qa.gd",
+            "source_script_raw_sha256": "a798370a11a87208e2b083e668c2e5d14c95f02e214fbd454bc9d4410bf0f52c"
+          },
+          "tools/reduced_effects_ui_qa.gd.uid": {
+            "raw_sha256": "941a6d0921dc5c9489f67ce844cfc7b72d99c4d2c67ec80ba966dea8b17eb744",
+            "source_script": "tools/reduced_effects_ui_qa.gd",
+            "source_script_raw_sha256": "b7eb95398287e4b307e6786f5164a4a47329264d1cdb2f186250785877e165b2"
+          }
+        },
+        "original_source_sha256": "f5f27bd4dd28d717d3b0c12107fa1467bc1d159d0eb2434dd202aab6b8e7a047",
+        "imported_source_sha256": "e85fba5022a4e375dceee3cbda58872f6444f402551ddeaae7e4d75e1b11c6d5"
+      }
+    },
+    {
+      "name": "UID/source change: extra",
+      "category": "uid_allowance",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Import changed sources/old metadata or added an undeclared file"
+    },
+    {
+      "name": "UID/source change: old_uid",
+      "category": "uid_allowance",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Import changed sources/old metadata or added an undeclared file"
+    },
+    {
+      "name": "UID/source change: overflow",
+      "category": "uid_allowance",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Noncanonical or out-of-range generated UID: tools/contracts/reduced_effects/legacy_settings.gd.uid"
+    },
+    {
+      "name": "UID/source change: script",
+      "category": "uid_allowance",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Import changed sources/old metadata or added an undeclared file"
+    },
+    {
+      "name": "complete matching report",
+      "category": "report_validation",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "schema": 1,
+        "stage": "write",
+        "run_id": "fixture_run",
+        "checks": [
+          {
+            "passed": true
+          }
+        ],
+        "failures": [],
+        "gui_valid": true,
+        "source_manifest_sha256": "fixture_manifest"
+      }
+    },
+    {
+      "name": "wrong stage",
+      "category": "report_validation",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Report schema/stage/run provenance mismatch"
+    },
+    {
+      "name": "wrong run",
+      "category": "report_validation",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Report schema/stage/run provenance mismatch"
+    },
+    {
+      "name": "empty checks",
+      "category": "report_validation",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Empty QA checks cannot pass"
+    },
+    {
+      "name": "false check row",
+      "category": "report_validation",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: GUI check rows contradict the success flag"
+    },
+    {
+      "name": "truthy string validity",
+      "category": "report_validation",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: QA checks failed: E:\\ChatGPT\\水浒-art-validation\\scratchpad\\reduced_effects_public_static\\fixtures_gb1_jw1f\\report_19.json"
+    },
+    {
+      "name": "source mismatch",
+      "category": "report_validation",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Report source manifest mismatch"
+    },
+    {
+      "name": "missing process report",
+      "category": "report_validation",
+      "expected": "reject",
+      "passed": true,
+      "observed_exception": "RuntimeError: Missing new process report: E:\\ChatGPT\\水浒-art-validation\\scratchpad\\reduced_effects_public_static\\fixtures_gb1_jw1f\\report_21.json"
+    },
+    {
+      "name": "owned process lifecycle: normal",
+      "category": "mock_process_lifecycle",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "injected_outcome": "normal",
+        "runner_exception": null,
+        "wait_timeouts": [
+          40
+        ],
+        "kill_calls": 0,
+        "child_exit_confirmed": true,
+        "unconfirmed_handle_preserved": false,
+        "matched_messages": []
+      }
+    },
+    {
+      "name": "owned process lifecycle: timeout",
+      "category": "mock_process_lifecycle",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "injected_outcome": "timeout",
+        "runner_exception": "TimeoutExpired",
+        "wait_timeouts": [
+          40,
+          30
+        ],
+        "kill_calls": 1,
+        "child_exit_confirmed": true,
+        "unconfirmed_handle_preserved": false,
+        "matched_messages": []
+      }
+    },
+    {
+      "name": "owned process lifecycle: interrupt",
+      "category": "mock_process_lifecycle",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "injected_outcome": "interrupt",
+        "runner_exception": "KeyboardInterrupt",
+        "wait_timeouts": [
+          40,
+          30
+        ],
+        "kill_calls": 1,
+        "child_exit_confirmed": true,
+        "unconfirmed_handle_preserved": false,
+        "matched_messages": []
+      }
+    },
+    {
+      "name": "owned process lifecycle: unconfirmed",
+      "category": "mock_process_lifecycle",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "injected_outcome": "unconfirmed",
+        "runner_exception": "TimeoutExpired",
+        "wait_timeouts": [
+          40,
+          30
+        ],
+        "kill_calls": 1,
+        "child_exit_confirmed": false,
+        "unconfirmed_handle_preserved": true,
+        "matched_messages": []
+      }
+    },
+    {
+      "name": "owned process lifecycle: script_error",
+      "category": "mock_process_lifecycle",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "injected_outcome": "script_error",
+        "runner_exception": "RuntimeError",
+        "wait_timeouts": [
+          40
+        ],
+        "kill_calls": 0,
+        "child_exit_confirmed": true,
+        "unconfirmed_handle_preserved": false,
+        "matched_messages": [
+          "SCRIPT ERROR: injected fixture failure"
+        ]
+      }
+    },
+    {
+      "name": "production whole-file diff and callback invariance",
+      "category": "readonly_source_review",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "exact_reverse_diff_recovers_both_preimages": true,
+        "visual_categories": 5,
+        "validity_guard_sites": 2,
+        "unchanged_callback_lf_sha256": {
+          "battle._physics_process": "793e4d8d061037d9b0a8132a66804ef0f85f3a137d947526694200f8ce8c16b7",
+          "battle._separation_pass": "690fb2cc7ecbfee56655890ff7335408b8202074bad8999c56627c28d992db4f",
+          "battle.spawn_li_brawn_axes": "83bfe23b3b2d1966652010e174a1307f7fc1bf1cf6e9b90279c81a02fde44423",
+          "battle._spawn_ground_fire_quiet": "d8d1c59a6408393ea9e369b4baef47547f957c5927268307de0994eef16d4f7e",
+          "battle._ground_dot_pass": "d3726d7eabf5cd805cf081d1043aa8a7010199243c28d9301eb8d602dac637b9",
+          "unit._physics_process": "e0dc36da361ac18d089ed06a6f57ff19bb21da0ad5ba938564a851935ad9da2f",
+          "unit._phys_body": "b46b722fd7922c54fa40f60b83b779fce2952b6c051910f62724948825a58c33",
+          "unit.take_damage": "e01e9e59a12147bb817cb4484ab3969265f7abdd4e199051b60d0e460aafbe64",
+          "unit.absorb_physical_damage": "b9b8eefcc578709d69751783268b99e3bba1767ef77e82549a5e5b45ab1a2c4f",
+          "unit._spawn_dust": "14532be9f5fa92629c4ed46dd59de75ea09ae365cc172c610659e3b2bc0f0e72",
+          "unit._queue_animated_redraw": "d5614ef489fc983d5224ba80c4e676852a8d9f13758f5a2dd146841ef47f2025",
+          "unit._queue_motion_redraw": "f726660c9ee78ae1a2398d3855428226162b4e74f6bcb4abf9b134dd4fed64ab",
+          "LiBrawnAxesFx._process": "43440d8966bcaf207d13ffca3cae624c7367b092d942c79d0cd6204f5c941cd2"
+        },
+        "scope": "source identity/invariance, not a new engine execution"
+      }
+    },
+    {
+      "name": "public behavior and GUI callback migration",
+      "category": "readonly_source_review",
+      "expected": "accept",
+      "passed": true,
+      "details": {
+        "callbacks": {
+          "tools/reduced_effects_qa.gd::_settings_cases": "20513b114478759632919f92bffa61126a5f10873d84f57892730613dc440af9",
+          "tools/reduced_effects_qa.gd::_battle_fixture": "54303279e99e24b152e932137cd1e6d523a1f9b4be712841856222429ea76171",
+          "tools/reduced_effects_qa.gd::_unit_fixture": "b7b312acb1c196c1e534e928e394c410cc9298a4dec1430633cdd2712d091b57",
+          "tools/reduced_effects_qa.gd::_unit_state": "7876642064019b8aeec0aaeb34926415598ff7e2496663f38d9629ed7d3e7a81",
+          "tools/reduced_effects_qa.gd::_sentinels": "16efb798d41d914872765db7e86743f10f3b02df9fe8c21f37306900a9f75103",
+          "tools/reduced_effects_qa.gd::_fixed_callbacks": "c9e40fa8bbbc9157c2272ad0861bdd27847d3be63e57b9861921d24fd2e2e899",
+          "tools/reduced_effects_qa.gd::_axes_edges": "fd9b681d48a5365f3864702529d9667e03a9fcd3c0fb632bcd8aa0e2ef71bb4d",
+          "tools/reduced_effects_qa.gd::_freed_target_boundary": "8ddc5e865ce72a33b35a2ded0321851df996fe115f60ee12a2327eaeb217d8e3",
+          "tools/reduced_effects_qa.gd::_render_cases": "b20ee922d0aeaa467d6c864b7cbcc9bb559b87e34b763427bf56047f57db94b9",
+          "tools/reduced_effects_qa.gd::_visual_state": "ff0f06d1399f6a541a5e2990c12339d9c7bfa6a23d7bb0750f4a7e85f8b82654",
+          "tools/reduced_effects_qa.gd::_settings_missing_corrupt_cases": "ab8f8b749fc7bcceeed3265df0fe3adf368b1ed9b1b9fffa62b2f2d1aae38cb5",
+          "tools/reduced_effects_qa.gd::_in_tree_lifecycle_cases": "4f3156ddca9a1a04144c7a60827355294c435fb9a0ae8ddc1390f11fa0b6b0d5",
+          "tools/reduced_effects_qa.gd::_viewport_fixture": "716089e6d0b89169b045c33e164407bf4762b9118bf376f68e8141fe741f2ccd",
+          "tools/reduced_effects_qa.gd::_capture_frozen": "aeaab097ad00e696c5b0f6934f5f88e596a180c7bcdf79ffa73a05ee040d8b7f",
+          "tools/reduced_effects_qa.gd::_pixel_equal": "0638a580783d0a6cf439fefb5a584b6f48ad8c102d6f796f42806e2a71094554",
+          "tools/reduced_effects_qa.gd::_core_mask_agrees": "368eccf61fc4ea6c1cf9738ebe73104095fd1f8577bbfe94521f705078625b70",
+          "tools/reduced_effects_qa.gd::_disk_agrees": "e185277c15e1bc9a4ac278499466e06396c355b9183c77bc8418072f8f3d23d2",
+          "tools/reduced_effects_qa.gd::_critical_feedback_cases": "53ec32ce4a303bc2bff3232916f1ead45d9f3ac2a2f63caacc13823e8429cf23",
+          "tools/reduced_effects_qa.gd::_critical_fire_case": "4d8bec5db912aea974e4d3937946389c3d21cce5d45577c70a3366813a13e01f",
+          "tools/reduced_effects_qa.gd::_critical_axes_case": "8782fb9ddcf17305ec9524d67b23fe8266d0f2bbbeee615a94e0d0ac029f989c",
+          "tools/reduced_effects_ui_qa.gd::_click": "e8c7971761c021efa2d5bfc8636138be112c154d2378d793029a8271a56c2f99",
+          "tools/reduced_effects_ui_qa.gd::_escape": "ba95a6693b981567e4f965658998ab06f181d0ac7710ccc0e34aae178ca398fe",
+          "tools/reduced_effects_ui_qa.gd::_quality": "634cd86f0143bcd9ac53a7d3ec0839405bb5be796c00c4e705d98813cd554122",
+          "tools/reduced_effects_ui_qa.gd::_open_menu_settings": "246786c20b126943bff1cffa3c71d4f15f910aef66bee219bff4f596d3b9d6f1",
+          "tools/reduced_effects_ui_qa.gd::_menu_flow": "5e0b420ecc20fc49d9bd0842a279d11cae006afcdb75d2aeb9e993300aa20513",
+          "tools/reduced_effects_ui_qa.gd::_battle_state": "d7fb47b9bdf38cdbd4bd06187fbc709224ac12273fd5586cb7cb26e656da434c",
+          "tools/reduced_effects_ui_qa.gd::_battle_flow": "87af5039cc82cdec15ddd291078d34c7ff19c9fd1e39d5b9c6fab9151d07939f"
+        },
+        "full_line_comments_only_ignored": true,
+        "not_claimed_identical": [
+          "manifest/path/entry setup",
+          "report metadata",
+          "GUI layer observations"
+        ]
+      }
+    },
+    {
+      "name": "all reviewed project inputs remained exact bytes",
+      "category": "readonly_source_review",
+      "expected": "accept",
+      "passed": true
+    }
+  ],
+  "case_count": 30,
+  "category_counts": {
+    "mock_process_lifecycle": 5,
+    "readonly_source_review": 3,
+    "report_validation": 8,
+    "source_receipts": 9,
+    "uid_allowance": 5
+  },
+  "passed": true,
+  "failed_cases": [],
+  "temporary_fixture_root_removed": true,
+  "real_subprocesses_started": 0,
+  "godot_run": false,
+  "production_or_public_tools_mutated": false,
+  "scope": "Real runner logic against temporary filesystem data and mocked process outcomes. Case count is not gameplay features; engine behavior is covered by separate public runs."
+}

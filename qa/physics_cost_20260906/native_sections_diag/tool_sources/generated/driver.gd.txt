@@ -1,0 +1,117 @@
+extends "res://tools/polish_performance_probe.gd"
+## DRAFT: inherit _run unchanged. Native profiling is instrumentation, never normal FPS.
+const NATIVE_LABELS := ["grid","aura","stealth_ecast","automicro","summon_eco","separation","fog","zones","level_hud"]
+const NATIVE_CAPACITY := 8192
+const NATIVE_WIDTH := 18
+var native_rows := PackedInt64Array()
+var native_count := 0
+var native_pending := false
+var native_done := false
+var native_overflow := false
+var native_errors := 0
+var native_tick := 0
+var native_engine_tick := -1
+var native_process_frame := -1
+var native_step_started_us := 0
+var native_origin_us := 0
+var native_last_collected := 0
+var native_output := ""
+var native_prefs_before := {}
+
+func _initialize() -> void:
+	native_output = OS.get_environment("NATIVE_SECTIONS_OUT")
+	var boundary := ProjectSettings.globalize_path("res://scratchpad/native_sections_diag/runs/").replace("\\", "/")
+	var clean := native_output.replace("\\", "/").simplify_path()
+	if native_output.is_empty() or not clean.to_lower().begins_with(boundary.to_lower()):
+		push_error("Explicit bounded native-profile output required"); quit(2); return
+	# These are the original M1 inputs. Twenty seconds keeps its unchanged report ineligible.
+	OS.set_environment("POLISH_CASE", "defense200")
+	OS.set_environment("POLISH_CAMERA", "fixed")
+	OS.set_environment("POLISH_SECONDS", "20")
+	OS.set_environment("POLISH_OUT", native_output.get_base_dir().path_join("instrumented_m1_20s.json"))
+	native_rows.resize(NATIVE_CAPACITY * NATIVE_WIDTH)
+	super._initialize()
+
+func _new_battle():
+	var b = await super._new_battle()
+	# Parent has completed fixture setup, queued deletions and its _prof_on=false assignment.
+	check(b.process_mode == Node.PROCESS_MODE_DISABLED, "native profiler enabled before original M1 simulation begins")
+	native_prefs_before = _prefs_hash()
+	b._prof.clear(); b._prof_frames = 0; b._unit_proc_us = 0
+	b._prof_print_acc = -1e9
+	b._prof_on = true
+	native_origin_us = Time.get_ticks_usec()
+	return b
+
+func _collect_native(b, final_step: bool) -> void:
+	if not native_pending: return
+	native_pending = false
+	var collected_engine := Engine.get_physics_frames()
+	if not b._prof_on or b._prof_print_acc >= 0.0 or int(b._prof_frames) != 1:
+		native_errors += 1
+	if native_tick != native_last_collected + 1:
+		native_errors += 1
+	if collected_engine != native_engine_tick + (0 if final_step else 1):
+		native_errors += 1
+	native_last_collected = native_tick
+	var mask := 0
+	for i in NATIVE_LABELS.size():
+		if b._prof.has(NATIVE_LABELS[i]): mask |= 1 << i
+	if mask != (1 << NATIVE_LABELS.size()) - 1 or b._prof.size() != NATIVE_LABELS.size() or int(b._unit_proc_us) < 0:
+		native_errors += 1
+	if native_count >= NATIVE_CAPACITY:
+		native_overflow = true
+	else:
+		var base := native_count * NATIVE_WIDTH
+		native_rows[base] = native_tick
+		native_rows[base + 1] = native_engine_tick
+		native_rows[base + 2] = native_process_frame
+		native_rows[base + 3] = native_step_started_us - native_origin_us
+		native_rows[base + 4] = Time.get_ticks_usec() - native_origin_us
+		native_rows[base + 5] = int(b._prof_frames)
+		native_rows[base + 6] = mask
+		native_rows[base + 7] = int(b._unit_proc_us)
+		native_rows[base + 8] = collected_engine
+		for i in NATIVE_LABELS.size():
+			var value := int(b._prof.get(NATIVE_LABELS[i], -1))
+			if value < 0: native_errors += 1
+			native_rows[base + 9 + i] = value
+		native_count += 1
+	# Match the native accumulator's reset semantics. No per-step row Array/dictionary.
+	b._prof.clear(); b._prof_frames = 0; b._unit_proc_us = 0
+
+func _on_tick() -> void:
+	# The inherited driver has priority -10000; previous Battle/Unit callbacks are complete.
+	if not native_done and is_instance_valid(battle_ref):
+		_collect_native(battle_ref, false)
+	super._on_tick()
+	if not native_done and is_instance_valid(battle_ref):
+		native_tick = physics_tick
+		native_engine_tick = Engine.get_physics_frames()
+		native_process_frame = Engine.get_process_frames()
+		native_step_started_us = Time.get_ticks_usec()
+		native_pending = true
+
+func _dispose(b) -> void:
+	# Parent has already cleared battle_ref and queued its TickDriver for deletion.
+	b.process_mode = Node.PROCESS_MODE_DISABLED
+	_collect_native(b, true)
+	native_done = true
+	b._prof_on = false
+	check(not native_overflow, "native profile preallocated buffer did not overflow")
+	check(native_errors == 0, "native profile labels, previous-step sequence and one Battle callback agree")
+	check(native_count == physics_tick and native_count > WARMUP_TICKS, "native profile accounts for all original M1 ticks including the final step")
+	check(_prefs_hash() == native_prefs_before, "native profiler leaves player settings and campaign bytes unchanged")
+	var rows := []
+	for i in native_count:
+		var row := []
+		for column in NATIVE_WIDTH: row.append(native_rows[i * NATIVE_WIDTH + column])
+		rows.append(row)
+	var columns := ["m1_tick","engine_physics_frame_at_start","engine_process_frame_at_start","observed_step_start_us","collected_us","native_prof_frames","label_presence_mask","unit_phys_body_us","engine_physics_frame_at_collection"]
+	columns.append_array(NATIVE_LABELS)
+	var report := {"schema":1,"columns":columns,"rows":rows,"row_count":native_count,"capacity":NATIVE_CAPACITY,"overflow":native_overflow,"native_errors":native_errors,"native_valid":not native_overflow and native_errors == 0 and native_count == physics_tick and native_count > WARMUP_TICKS,"prefs_before":native_prefs_before,"prefs_at_dispose":_prefs_hash(),"scope":"Original M1 _run plus native Battle._pf labels and Unit._phys_body accumulator. Rows include warmup; select measurement rows externally using the unchanged M1 sample_start.tick and physics_ticks.","acceptance_eligible":false,"performance_claim":false,"unit_callback_count":null,"normal_fps_available":false,"boundaries":["Native labels omit leading hero-item work and final profiler/smoke tail","_pf dictionary bookkeeping after its timestamp is charged to the next label, or omitted at the last label","Unit native timing covers _phys_body; story-pair redraw tail is excluded","Per-step dictionary reads/clear and preallocated writes add unmeasured observer cost","Do not add these nested spans to separately measured complete Battle/Unit callbacks","Collector timestamps are not full physics or presentation boundaries"]}
+	var file := FileAccess.open(native_output, FileAccess.WRITE)
+	check(file != null, "native profile sidecar opened")
+	if file != null:
+		file.store_string(JSON.stringify(report, "\t")); file.close()
+	await super._dispose(b)

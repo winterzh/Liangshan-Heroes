@@ -1,0 +1,127 @@
+extends RefCounted
+## Diagnostic only. No instances, Nodes, RNG, per-callback dictionaries or I/O.
+## Packed buffers allocate once before battle creation; scalar totals flush once/tick.
+const STEP_WIDTH := 9
+const FRAME_WIDTH := 8
+const STEP_CAPACITY := 8192
+const FRAME_CAPACITY := 65536
+static var active := false
+static var timing_enabled := true
+static var steps := PackedInt64Array()
+static var frames := PackedInt64Array()
+static var step_count := 0
+static var frame_count := 0
+static var overflow := false
+static var callback_frame_mismatches := 0
+static var tick_sequence_errors := 0
+static var pending := false
+static var origin_us := 0
+static var previous_present_us := 0
+static var first_unpresented_step := 0
+static var current_tick := -1
+static var last_tick := -1
+static var tick_start_us := 0
+static var last_callback_end_us := 0
+static var battle_us := 0
+static var unit_us := 0
+static var battle_calls := 0
+static var unit_calls := 0
+static var tick_process_frame := 0
+
+static func prepare(use_timing: bool) -> void:
+	active = false
+	timing_enabled = use_timing
+	steps.resize(STEP_CAPACITY * STEP_WIDTH)
+	frames.resize(FRAME_CAPACITY * FRAME_WIDTH)
+	step_count = 0; frame_count = 0; first_unpresented_step = 0
+	overflow = false; callback_frame_mismatches = 0; tick_sequence_errors = 0
+	pending = false; current_tick = -1; last_tick = -1
+
+static func start(now: int) -> void:
+	origin_us = now; previous_present_us = now
+	active = true
+
+static func physics_boundary() -> void:
+	if not active: return
+	_flush_tick()
+	current_tick = Engine.get_physics_frames()
+	if last_tick >= 0 and current_tick != last_tick + 1:
+		tick_sequence_errors += 1
+	last_tick = current_tick
+	tick_start_us = Time.get_ticks_usec()
+	tick_process_frame = Engine.get_process_frames()
+	last_callback_end_us = 0
+	battle_us = 0; unit_us = 0; battle_calls = 0; unit_calls = 0
+	pending = true
+
+static func record_battle(tick: int, elapsed_us: int, ended_us: int) -> void:
+	if not pending or tick != current_tick:
+		callback_frame_mismatches += 1
+		return
+	battle_us += elapsed_us; battle_calls += 1
+	last_callback_end_us = ended_us
+
+static func record_unit(tick: int, elapsed_us: int, ended_us: int) -> void:
+	if not pending or tick != current_tick:
+		callback_frame_mismatches += 1
+		return
+	unit_us += elapsed_us; unit_calls += 1
+	last_callback_end_us = ended_us
+
+static func _flush_tick() -> void:
+	if not pending: return
+	pending = false
+	if step_count >= STEP_CAPACITY:
+		overflow = true
+		return
+	var base := step_count * STEP_WIDTH
+	steps[base] = current_tick
+	steps[base + 1] = tick_start_us - origin_us
+	steps[base + 2] = last_callback_end_us - origin_us if timing_enabled and last_callback_end_us > 0 else -1
+	steps[base + 3] = battle_us if timing_enabled else -1
+	steps[base + 4] = unit_us if timing_enabled else -1
+	steps[base + 5] = battle_calls if timing_enabled else -1
+	steps[base + 6] = unit_calls if timing_enabled else -1
+	steps[base + 7] = tick_process_frame
+	steps[base + 8] = frame_count
+	step_count += 1
+
+static func presented(now: int) -> void:
+	if not active: return
+	_flush_tick()
+	if frame_count >= FRAME_CAPACITY:
+		overflow = true
+		return
+	var base := frame_count * FRAME_WIDTH
+	frames[base] = previous_present_us - origin_us
+	frames[base + 1] = now - origin_us
+	frames[base + 2] = Engine.get_process_frames()
+	frames[base + 3] = Engine.get_physics_frames()
+	frames[base + 4] = first_unpresented_step
+	frames[base + 5] = step_count - first_unpresented_step
+	frames[base + 6] = Engine.get_frames_drawn()
+	frames[base + 7] = Time.get_ticks_usec() - now
+	first_unpresented_step = step_count
+	previous_present_us = now
+	frame_count += 1
+
+static func stop() -> void:
+	active = false
+
+static func export_rows() -> Dictionary:
+	# Only after active=false and battle processing disabled. JSON-friendly arrays.
+	var step_rows: Array = []
+	var frame_rows: Array = []
+	for i in step_count:
+		var row: Array = []
+		for column in STEP_WIDTH: row.append(steps[i * STEP_WIDTH + column])
+		step_rows.append(row)
+	for i in frame_count:
+		var row: Array = []
+		for column in FRAME_WIDTH: row.append(frames[i * FRAME_WIDTH + column])
+		frame_rows.append(row)
+	return {"step_columns":["engine_physics_frame","start_us","last_measured_callback_end_us","battle_callback_us","unit_callbacks_us","battle_callback_count","unit_callback_count","engine_process_frame_at_tick","presentation_index"],
+		"frame_columns":["start_us","end_us","engine_process_frame","engine_physics_frame","first_step_index","physics_step_count","engine_frames_drawn","presentation_bookkeeping_us_partial"],
+		"step_rows":step_rows,"frame_rows":frame_rows,"overflow":overflow,
+		"callback_frame_mismatches":callback_frame_mismatches,"tick_sequence_errors":tick_sequence_errors,
+		"step_capacity":STEP_CAPACITY,"frame_capacity":FRAME_CAPACITY}

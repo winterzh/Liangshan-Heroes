@@ -3734,9 +3734,10 @@ func _draw() -> void:
 		# `_draw_sprite_animated` caches the actual source direction; reusing it
 		# avoids a second Art/ResourceLoader query for the remaining sparse route.
 		WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)
-	for d in _dust:
-		var da: float = d.t / DUST_DUR
-		draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
+	if Settings.get("effects_quality") != "reduced":
+		for d in _dust:
+			var da: float = d.t / DUST_DUR
+			draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
 	if _buff_glow > 0.0:
 		draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
 	# 被动/自身增益的持续视觉（只在状态激活时画、粒子≤3，兵海友好）

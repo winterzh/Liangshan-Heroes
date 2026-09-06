@@ -1,0 +1,27 @@
+{
+  "checks": 16,
+  "passed": [
+    "partial_apply fixture target stays inside draft",
+    "partial_apply complete known originals permit lock removal",
+    "partial_apply restores exact original bytes",
+    "damaged_disk_backup fixture target stays inside draft",
+    "damaged_disk_backup complete known originals permit lock removal",
+    "damaged_disk_backup restores exact original bytes",
+    "damaged disk backup is reported while pinned memory bytes restore",
+    "foreign_unit fixture target stays inside draft",
+    "foreign edit is preserved and lock retained",
+    "known owned source restores while conflict copy remains",
+    "unconfirmed_child fixture target stays inside draft",
+    "unconfirmed child prevents restoration and keeps lock",
+    "no source replacement before confirmed child exit",
+    "interrupted_second_restore fixture target stays inside draft",
+    "interrupted second restore keeps lock",
+    "partial restoration is explicit without overwriting remaining source"
+  ],
+  "synthetic_only": true,
+  "godot_run": false,
+  "git_run": false,
+  "production_mutated": false,
+  "os_process_lifecycle_exercised": false,
+  "scope": "real atomic file replacement on bounded synthetic fixtures; injected exclusive guard failures"
+}

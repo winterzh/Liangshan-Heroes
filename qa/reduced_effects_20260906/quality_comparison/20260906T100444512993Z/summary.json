@@ -1,0 +1,74 @@
+{
+  "schema": 2,
+  "groups": [
+    {
+      "camera_mode": "fixed",
+      "samples": 6,
+      "paired_repetitions_complete": true,
+      "same_deployment": true,
+      "same_inputs": true,
+      "same_other_settings": true,
+      "comparison_eligible": true,
+      "standard": {
+        "samples": [
+          "standard_fixed_1.json",
+          "standard_fixed_2.json",
+          "standard_fixed_3.json"
+        ],
+        "median": {
+          "fps": 85.7456255440035,
+          "p95_ms": 20.719,
+          "p99_ms": 63.453
+        }
+      },
+      "reduced": {
+        "samples": [
+          "reduced_fixed_1.json",
+          "reduced_fixed_2.json",
+          "reduced_fixed_3.json"
+        ],
+        "median": {
+          "fps": 86.243396630598,
+          "p95_ms": 20.836,
+          "p99_ms": 57.5
+        }
+      }
+    },
+    {
+      "camera_mode": "auto",
+      "samples": 6,
+      "paired_repetitions_complete": true,
+      "same_deployment": true,
+      "same_inputs": true,
+      "same_other_settings": true,
+      "comparison_eligible": true,
+      "standard": {
+        "samples": [
+          "standard_auto_1.json",
+          "standard_auto_2.json",
+          "standard_auto_3.json"
+        ],
+        "median": {
+          "fps": 84.9301710999627,
+          "p95_ms": 23.229,
+          "p99_ms": 59.956
+        }
+      },
+      "reduced": {
+        "samples": [
+          "reduced_auto_1.json",
+          "reduced_auto_2.json",
+          "reduced_auto_3.json"
+        ],
+        "median": {
+          "fps": 94.3185284683148,
+          "p95_ms": 19.245,
+          "p99_ms": 53.899
+        }
+      }
+    }
+  ],
+  "comparison_eligible": true,
+  "performance_gate_passed": false,
+  "note": "Statistical quality comparison on the same code; acceptance eligibility is not a performance pass. Full wall-clock pressure segments must be analyzed separately."
+}

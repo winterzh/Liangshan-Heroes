@@ -29,6 +29,7 @@ var edge_scroll := true     # 屏幕边缘滚屏
 var cam_speed := 1.0        # 镜头平移速度倍率
 var zoom_sens := 1.0        # 缩放灵敏度
 # —— 显示 ——
+var effects_quality := "standard" # 装饰细节：standard / reduced；不改变技能与战斗逻辑
 var show_damage := true      # 伤害飘字
 var show_healthbars := true  # 血条常显
 var show_cooldown := true    # 技能冷却倒计时数字
@@ -83,6 +84,7 @@ func save() -> void:
 	c.set_value("cam", "edge", edge_scroll)
 	c.set_value("cam", "speed", cam_speed)
 	c.set_value("cam", "zoom", zoom_sens)
+	c.set_value("show", "effects_quality", effects_quality)
 	c.set_value("show", "damage", show_damage)
 	c.set_value("show", "hpbar", show_healthbars)
 	c.set_value("show", "cooldown", show_cooldown)
@@ -114,6 +116,8 @@ func _load() -> void:
 	edge_scroll = bool(c.get_value("cam", "edge", edge_scroll))
 	cam_speed = float(c.get_value("cam", "speed", cam_speed))
 	zoom_sens = float(c.get_value("cam", "zoom", zoom_sens))
+	var saved_effects: Variant = c.get_value("show", "effects_quality", "standard")
+	effects_quality = saved_effects if saved_effects is String and saved_effects in ["standard", "reduced"] else "standard"
 	show_damage = bool(c.get_value("show", "damage", show_damage))
 	show_healthbars = bool(c.get_value("show", "hpbar", show_healthbars))
 	show_cooldown = bool(c.get_value("show", "cooldown", show_cooldown))

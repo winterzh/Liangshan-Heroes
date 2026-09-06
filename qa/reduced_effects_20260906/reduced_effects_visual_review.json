@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "reviewed_at_utc": "2026-09-06T10:34:52.082446+00:00",
+  "reviewer": "Codex root using view_image on the exact local PNGs",
+  "scope": "Selected final public QA screenshots only; not human playtesting, complete visual acceptance, performance or damage proof.",
+  "human_first_time_players": 0,
+  "images": [
+    {
+      "path": ".godot/reduced_effects_qa/20260906T102132031051Z/behavior/critical_fire_reduced.png",
+      "sha256": "7ac6d5ed52d00d5e3870dc270bef1b0f859af51fe5886fa36ad633c21037f718",
+      "observation": "Visible authored flames and ground area retained; numeric core comparison is recorded separately in behavior report.",
+      "reviewed": true
+    },
+    {
+      "path": ".godot/reduced_effects_qa/20260906T102132031051Z/behavior/critical_axes_multi_reduced.png",
+      "sha256": "0e9d6990b7c5212de0361c99f25d83afa623295aec85942cec116c0c828c60bc",
+      "observation": "Three actual textured axes remain visible without decorative trail dots; image alone does not prove damage behavior.",
+      "reviewed": true
+    },
+    {
+      "path": ".godot/reduced_effects_qa/20260906T102132031051Z/gui/1280x720/write/battle_reduced.png",
+      "sha256": "56d182cb018998fda5617576bffbb4cf240e1238a0ec278a5fe7d0c389204b69",
+      "observation": "Reduced selected; label, help and save button readable and within viewport; visible battle toast stays behind dark settings modal. Skill tip was not visible in this frame; its lower z is only separately checked in the hierarchy report.",
+      "reviewed": true
+    },
+    {
+      "path": ".godot/reduced_effects_qa/20260906T102132031051Z/gui/1440x900/write/battle_standard.png",
+      "sha256": "a181d199b1cd8e8c6ad875d8ead06f280a1660a981f7552add1e4df2c38eacd3",
+      "observation": "Standard selected; readable settings and save control; battlefield UI stays behind modal.",
+      "reviewed": true
+    },
+    {
+      "path": ".godot/reduced_effects_qa/20260906T102132031051Z/gui/1440x900/read/restart_read_reduced.png",
+      "sha256": "3328b2cb993d90c4872b53c3a76a1add7b6a643e4ecc63bcae63a35476e73b28",
+      "observation": "Fresh read process shows reduced selection in production menu settings; persistence assertions are separate in GUI report.",
+      "reviewed": true
+    },
+    {
+      "path": ".godot/reduced_effects_qa/20260906T102132031051Z/gui/1280x720/write/menu_reduced_0.png",
+      "sha256": "c335d60f823273f7cc36db6afd86d251842c90f5c2713a77423594ebcceacdaa",
+      "observation": "Reduced selection, explanatory line and save button visible at smaller resolution after real scroll.",
+      "reviewed": true
+    }
+  ]
+}

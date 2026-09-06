@@ -1,0 +1,178 @@
+# DRAFT V2 ONLY. Not applied or parsed. Base Unit retains c8a692bf redraw candidate.
+# {
+#   "schema": 2,
+#   "base_lf_sha256": {
+#     "scripts/settings.gd": "93ffcc801149744cc9b0eed35b1bfd0769b5f25ac8f80cdbb7865997b5ef646c",
+#     "scripts/settings_panel.gd": "1a8f455515bbed7a287eeebb32aded1838356d667633fa728c81e2b0ea42cfca",
+#     "scripts/battle.gd": "784373eede18a82c24fc50a6e36a42b6c20516bf439cf200fe5be7d239db6e2c",
+#     "scripts/unit.gd": "c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec"
+#   },
+#   "base_raw_sha256": {
+#     "scripts/settings.gd": "69f1f361833955731745cc5c4e1448f2822b9fc2bb20cb739c4abf356acf1c75",
+#     "scripts/settings_panel.gd": "29a13de89df1b9fc0cb975eea183ed48350205679a41205914a4d90afc125ef9",
+#     "scripts/battle.gd": "9fe157e49ef18f2ced0b10ee96f893a1f0ded4ce64e6d757e936d4ef4e9e1ee4",
+#     "scripts/unit.gd": "c8310fd12a29858df8f7410dd06d2f1dc51f40f5eedc0e7a6a16599eb5e58856"
+#   },
+#   "candidate_lf_sha256": {
+#     "scripts/settings.gd": "eb5644054a357a2b4e598332163636add65d667f48c4cea5b9c71f2f5c16a5ce",
+#     "scripts/settings_panel.gd": "b5d95092596ace168ae10efc1e9b1cc9721d1ff36b28be504fd8c0c1b0f58be4",
+#     "scripts/battle.gd": "c0b15a40a21c82e9d3138c1289996af3ba381c0437c933df1615c21d4f38d89d",
+#     "scripts/unit.gd": "f4382456b8c619cbb86c40cd8a9ed6ea9f171ba0a8a90c191538f689176d49ee"
+#   },
+#   "legacy_boot_profile": "same candidate files except original pre-field settings.gd; external runner verifies this before Godot",
+#   "redraw_methods_preserved_sha256": {
+#     "_queue_animated_redraw": "9f88db4cccaffd5140038abed32ede68a9fc41555ad36d31cb0ef3215349ce43",
+#     "_queue_motion_redraw": "f3d04c9ebe29ed28d068c86c405f1ba8415c290668315b1c4ee0691bc6b7aa3f"
+#   },
+#   "v1_patch_raw_sha256": "a2eae1eab90a984c6d3cb31b0eb90788ebb7d35a8ade41a86df6a98838dfa202",
+#   "v1_qa_raw_sha256": "cd4fb7a59e81840ffb86f772020392df34ce959a10e67fab98a7ca7bbe47688d",
+#   "safety_helper_raw_sha256": "7983b00449f8d606e4f1be55ca13596239fbc8b47c3894ff3c31da03757835a1",
+#   "startup_dependency_raw_sha256": {
+#     "project.godot": "5f60d39f4817f3428c82c29004cc8bd4314e89ef322728c79266ee08dd63793c",
+#     "tools/run_polish_performance.py": "ede41c7acdf96254bb9725558253dbee5e336019b67bc197bb04d4c0b788c52a",
+#     "scripts/android_updater.gd": "4a67acd65db800749f9ba06a18e5e589eba7b722dcf3e28fd9a77c8e410e55ad"
+#   }
+# }
+diff --git a/scripts/settings.gd b/scripts/settings.gd
+--- a/scripts/settings.gd
++++ b/scripts/settings.gd
+@@ -29,6 +29,7 @@
+ var cam_speed := 1.0        # 镜头平移速度倍率
+ var zoom_sens := 1.0        # 缩放灵敏度
+ # —— 显示 ——
++var effects_quality := "standard" # 装饰细节：standard / reduced；不改变技能与战斗逻辑
+ var show_damage := true      # 伤害飘字
+ var show_healthbars := true  # 血条常显
+ var show_cooldown := true    # 技能冷却倒计时数字
+@@ -83,6 +84,7 @@
+ 	c.set_value("cam", "edge", edge_scroll)
+ 	c.set_value("cam", "speed", cam_speed)
+ 	c.set_value("cam", "zoom", zoom_sens)
++	c.set_value("show", "effects_quality", effects_quality)
+ 	c.set_value("show", "damage", show_damage)
+ 	c.set_value("show", "hpbar", show_healthbars)
+ 	c.set_value("show", "cooldown", show_cooldown)
+@@ -114,6 +116,8 @@
+ 	edge_scroll = bool(c.get_value("cam", "edge", edge_scroll))
+ 	cam_speed = float(c.get_value("cam", "speed", cam_speed))
+ 	zoom_sens = float(c.get_value("cam", "zoom", zoom_sens))
++	var saved_effects: Variant = c.get_value("show", "effects_quality", "standard")
++	effects_quality = saved_effects if saved_effects is String and saved_effects in ["standard", "reduced"] else "standard"
+ 	show_damage = bool(c.get_value("show", "damage", show_damage))
+ 	show_healthbars = bool(c.get_value("show", "hpbar", show_healthbars))
+ 	show_cooldown = bool(c.get_value("show", "cooldown", show_cooldown))
+diff --git a/scripts/settings_panel.gd b/scripts/settings_panel.gd
+--- a/scripts/settings_panel.gd
++++ b/scripts/settings_panel.gd
+@@ -13,6 +13,7 @@
+ func _ready() -> void:
+ 	theme = UITheme.shared()
+ 	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停态(Esc 菜单)下仍可操作
++	z_index = 300  # Keep this modal above battle toasts, inventory and skill tips.
+ 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ 	mouse_filter = Control.MOUSE_FILTER_STOP
+ 	_build()
+@@ -87,6 +88,11 @@
+ 	_row(p, "缩放灵敏度", _slider(Settings.zoom_sens, 0.3, 2.5, func(v: float) -> void: Settings.zoom_sens = v))
+ 
+ 	_head(p, "💬  显示")
++	# Old packaged Settings instances may predate this field; keep standard and hide this row.
++	var effects_value: Variant = Settings.get("effects_quality")
++	if effects_value is String and effects_value in ["standard", "reduced"]:
++		_row(p, "特效细节", _seg([["标准", "standard"], ["精简", "reduced"]], effects_value, func(v) -> void: Settings.set("effects_quality", String(v))))
++		_row(p, "", _note("精简装饰粒子与拖尾，保留技能提示和命中反馈"))
+ 	_row(p, "伤害飘字", _check(Settings.show_damage, func(on: bool) -> void: Settings.show_damage = on))
+ 	_row(p, "血条常显", _check(Settings.show_healthbars, func(on: bool) -> void: Settings.show_healthbars = on))
+ 	_row(p, "技能冷却数字", _check(Settings.show_cooldown, func(on: bool) -> void: Settings.show_cooldown = on))
+diff --git a/scripts/battle.gd b/scripts/battle.gd
+--- a/scripts/battle.gd
++++ b/scripts/battle.gd
+@@ -13905,6 +13905,8 @@
+ 		queue_redraw()
+ 
+ 	func _draw() -> void:
++		if Settings.get("effects_quality") == "reduced":
++			return
+ 		var vpn := get_viewport()
+ 		if vpn == null:
+ 			return   # 场景拆卸时 viewport 可能为 null，跳过本帧绘制，避免崩溃
+@@ -14086,10 +14088,13 @@
+ 	func _draw() -> void:
+ 		var f := clampf(t / dur, 0.0, 1.0)
+ 		draw_set_transform_matrix(GameMap.ISO_INV)
++		var reduced_fx: bool = Settings.get("effects_quality") == "reduced"
+ 		var n := 6 if heavy else 4
+ 		var reach := (16.0 if heavy else 11.0) * (1.3 - 0.3 * f)
+ 		var col := Color(1.0, 0.95, 0.7, f * 0.9)
+ 		for i in range(n):
++			if reduced_fx and i % 2 == 1:
++				continue
+ 			var ang := float(_seed % 17) * 0.3 + i * TAU / n
+ 			var d := Vector2(cos(ang), sin(ang) * 0.7)
+ 			draw_line(d * reach * 0.4, d * reach, col, 2.0 if heavy else 1.5)
+@@ -14306,10 +14311,11 @@
+ 				draw_colored_polygon(PackedVector2Array([base + Vector2(-wid, 0), base + Vector2(wid, 0), top]), Color(col.r, col.g * 0.7, 0.08, a))
+ 			if hgt > 6.5:
+ 				draw_colored_polygon(PackedVector2Array([base + Vector2(-wid * 0.5, -2), base + Vector2(wid * 0.5, -2), top + Vector2(0, 4)]), Color(1.0, 0.88, 0.36, a))
+-		for em in _embers:
+-			var k := fposmod(elapsed * float(em["spd"]) * 0.02 + float(em["ph"]), 1.0)
+-			var epos: Vector2 = em["p"] + Vector2(float(em["drift"]) * k, -float(em["spd"]) * k)
+-			draw_circle(epos, 2.2 * (1.0 - k), Color(1.0, 0.7 + 0.2 * (1.0 - k), 0.2, 0.8 * env * (1.0 - k)))
++		if Settings.get("effects_quality") != "reduced":
++			for em in _embers:
++				var k := fposmod(elapsed * float(em["spd"]) * 0.02 + float(em["ph"]), 1.0)
++				var epos: Vector2 = em["p"] + Vector2(float(em["drift"]) * k, -float(em["spd"]) * k)
++				draw_circle(epos, 2.2 * (1.0 - k), Color(1.0, 0.7 + 0.2 * (1.0 - k), 0.2, 0.8 * env * (1.0 - k)))
+ 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+ 
+ 
+@@ -14997,7 +15003,10 @@
+ 		resolved = true
+ 		var src: Unit = caster if is_instance_valid(caster) else null
+ 		for hit in hits:
+-			var target: Unit = hit.get("target")
++			var target_value: Variant = hit.get("target")
++			if not is_instance_valid(target_value):
++				continue
++			var target: Unit = target_value
+ 			if not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned or target.story_outcome != "":
+ 				continue
+ 			var dmg := float(hit.get("dmg", 0.0))
+@@ -15014,7 +15023,10 @@
+ 		var p := clampf(elapsed / maxf(dur, 0.01), 0.0, 1.0)
+ 		var fly := 1.0 - pow(1.0 - p, 2.0)   # 起手快、入靶稍收，飞斧更有重量感
+ 		for hit in hits:
+-			var target: Unit = hit.get("target")
++			var target_value: Variant = hit.get("target")
++			if not is_instance_valid(target_value):
++				continue
++			var target: Unit = target_value
+ 			if not is_instance_valid(target) or target.hp <= 0.0:
+ 				continue
+ 			var end_screen := GameMap.projected_delta(self, target.position - position)
+@@ -15022,7 +15034,7 @@
+ 			var angle := end_screen.angle() + elapsed * 18.0
+ 			# 短拖尾：同一 Node 内批量画，不额外分配粒子节点。
+ 			draw_set_transform_matrix(GameMap.ISO_INV)
+-			for j in range(3):
++			for j in range(0 if Settings.get("effects_quality") == "reduced" else 3):
+ 				var q := maxf(0.0, fly - float(j + 1) * 0.06)
+ 				var trail_pos := end_screen * q + Vector2(0, -sin(q * PI) * 10.0)
+ 				draw_circle(trail_pos, 3.5 - float(j) * 0.8, Color(1.0, 0.38, 0.18, 0.20 - float(j) * 0.045))
+diff --git a/scripts/unit.gd b/scripts/unit.gd
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -3734,9 +3734,10 @@
+ 		# `_draw_sprite_animated` caches the actual source direction; reusing it
+ 		# avoids a second Art/ResourceLoader query for the remaining sparse route.
+ 		WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)
+-	for d in _dust:
+-		var da: float = d.t / DUST_DUR
+-		draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
++	if Settings.get("effects_quality") != "reduced":
++		for d in _dust:
++			var da: float = d.t / DUST_DUR
++			draw_circle(Vector2(d.x, d.y), 2.5 + 5.0 * (1.0 - da), Color(0.62, 0.56, 0.45, da * 0.4))
+ 	if _buff_glow > 0.0:
+ 		draw_circle(Vector2.ZERO, radius + 7.0, Color(1.0, 0.85, 0.35, _buff_glow * 0.5))
+ 	# 被动/自身增益的持续视觉（只在状态激活时画、粒子≤3，兵海友好）

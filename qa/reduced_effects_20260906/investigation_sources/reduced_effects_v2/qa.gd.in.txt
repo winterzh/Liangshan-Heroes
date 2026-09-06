@@ -1,0 +1,844 @@
+## V2 GENERATED TEMPLATE. Read README; old draft is retained unchanged.
+extends SceneTree
+## DRAFT ONLY: not parsed or run in Godot. Generated under this draft directory;
+## external launcher requires reviewed source application and an exclusive Godot slot.
+## External runner must enforce timeout, fail on script errors, and verify source/prefs
+## receipts even when this script aborts before _finish. No performance claims.
+## Stages (REDUCED_EFFECTS_QA_STAGE): all (default), restart_write, restart_read,
+## freed_target_boundary (separate error-observed probe, not folded into success).
+## restart_write/read MUST be separate Godot processes, in that order.
+## REDUCED_EFFECTS_QA_RENDER=1 requires an actual renderer; never silently skip it.
+## Settings tests run the real Settings source with ONLY its PATH constant redirected
+## to this draft run directory. They do not save through the booted Settings Autoload.
+## Its user:// path is separately isolated before process launch; panel.close is not used.
+## Manual follow-up: menu/pause selection and actual battle warning/readability review;
+## 206/326/506 x fixed/auto performance remains the independent baseline runner's job.
+
+var OUT := ""
+var FIXTURE_SETTINGS := ""
+const BASE_LF_SHA256 := {
+  "scripts/settings.gd": "93ffcc801149744cc9b0eed35b1bfd0769b5f25ac8f80cdbb7865997b5ef646c",
+  "scripts/settings_panel.gd": "1a8f455515bbed7a287eeebb32aded1838356d667633fa728c81e2b0ea42cfca",
+  "scripts/battle.gd": "784373eede18a82c24fc50a6e36a42b6c20516bf439cf200fe5be7d239db6e2c",
+  "scripts/unit.gd": "c8a692bff598b6ac9199d113ccc9ff39ea8943f127012b45fc67ff2cd6c4deec"
+}
+const CANDIDATE_LF_SHA256 := {
+  "scripts/settings.gd": "eb5644054a357a2b4e598332163636add65d667f48c4cea5b9c71f2f5c16a5ce",
+  "scripts/settings_panel.gd": "b5d95092596ace168ae10efc1e9b1cc9721d1ff36b28be504fd8c0c1b0f58be4",
+  "scripts/battle.gd": "c0b15a40a21c82e9d3138c1289996af3ba381c0437c933df1615c21d4f38d89d",
+  "scripts/unit.gd": "f4382456b8c619cbb86c40cd8a9ed6ea9f171ba0a8a90c191538f689176d49ee"
+}
+var failures: Array[String] = []
+var checks := 0
+var report := {"draft_tool": true, "performance_baseline": false,
+	"manual_readability_review": "not_run", "full_battle_equivalence": "not_claimed",
+	"rng_claim": "same downstream sentinels under fixed callbacks; global RNG state is not directly exposed",
+	"rows": [], "render": [], "source_base": BASE_LF_SHA256, "source_candidate": CANDIDATE_LF_SHA256}
+var prefs_before := {}
+var quality_before: Variant = null
+var sfx_before := true
+var stage := "all"
+var settings_fixture_script: GDScript
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func check(ok: bool, label: String) -> void:
+	checks += 1
+	if not ok: failures.append(label)
+
+func _text_lf(path: String) -> String:
+	return FileAccess.get_file_as_string(path).trim_prefix("\ufeff").replace("\r\n", "\n").replace("\r", "\n")
+
+func _bytes_sha(bytes: PackedByteArray) -> String:
+	var h := HashingContext.new()
+	h.start(HashingContext.HASH_SHA256)
+	h.update(bytes)
+	return h.finish().hex_encode()
+
+func _prefs_receipt() -> Dictionary:
+	var values := {}
+	for path in ["user://settings.cfg", "user://campaign.cfg"]:
+		values[path] = {"exists": FileAccess.file_exists(path), "sha256": ""}
+		if FileAccess.file_exists(path):
+			values[path].sha256 = _bytes_sha(FileAccess.get_file_as_bytes(path))
+	return values
+
+func _source_lock() -> bool:
+	var valid := true
+	for path in CANDIDATE_LF_SHA256:
+		var expected: String = BASE_LF_SHA256[path] if stage == "legacy_autoload" and path == "scripts/settings.gd" else CANDIDATE_LF_SHA256[path]
+		var matches := _text_lf("res://" + path).sha256_text() == expected
+		check(matches, "exact candidate LF source " + path)
+		valid = valid and matches
+	return valid
+
+func _run() -> void:
+	if OS.get_environment("QA_ONLY") != "1":
+		push_error("Set QA_ONLY=1 before starting the process; no test work performed")
+		quit(2)
+		return
+	stage = OS.get_environment("REDUCED_EFFECTS_QA_STAGE")
+	if stage.is_empty(): stage = "all"
+	if stage not in ["all", "restart_write", "restart_read", "freed_target_boundary", "legacy_autoload"]:
+		push_error("Unknown QA stage")
+		quit(2)
+		return
+	OUT = OS.get_environment("REDUCED_EFFECTS_QA_OUT")
+	if OUT.is_empty() or not OUT.begins_with("res://scratchpad/reduced_effects_v2/runs/"):
+		push_error("Explicit bounded QA output required"); quit(2); return
+	FIXTURE_SETTINGS = OUT + "/settings.cfg"
+	var user_path := ProjectSettings.globalize_path("user://").replace("\\", "/").simplify_path().trim_suffix("/")
+	var expected_user_root := OS.get_environment("REDUCED_EFFECTS_QA_USER_ROOT").replace("\\", "/").simplify_path().trim_suffix("/")
+	if expected_user_root.is_empty() or not user_path.to_lower().begins_with(expected_user_root.to_lower() + "/"):
+		push_error("External isolated user-root receipt mismatch"); quit(2); return
+	report["actual_user_dir"] = user_path
+	if not _source_lock():
+		push_error("Candidate source lock mismatch; no fixture or settings mutation")
+		quit(2)
+		return
+	prefs_before = _prefs_receipt()
+	quality_before = root.get_node("Settings").get("effects_quality")
+	sfx_before = bool(root.get_node("Sfx").enabled)
+	DirAccess.make_dir_recursive_absolute(OUT)
+	# Let existing audio generation finish before synchronous RNG checks. No audio
+	# calls are removed in production: only this isolated logic fixture disables Sfx.
+	var music = root.get_node("Music")
+	var started := Time.get_ticks_msec()
+	while music._thr != null and music._thr.is_alive():
+		if Time.get_ticks_msec() - started > 60000:
+			check(false, "audio initialization finished within QA deadline")
+			_finish()
+			return
+		await process_frame
+	root.get_node("Sfx").enabled = false
+	if not _load_runtime_scripts():
+		check(false, "runtime production class loading completed")
+		_finish()
+		return
+	if stage == "legacy_autoload":
+		await _legacy_autoload_cases()
+		_finish()
+		return
+	if not _prepare_settings_fixture():
+		_finish()
+		return
+	if stage == "restart_write":
+		_restart_write()
+	elif stage == "restart_read":
+		_restart_read()
+	elif stage == "freed_target_boundary":
+		_freed_target_boundary()
+	else:
+		_settings_missing_corrupt_cases()
+		_settings_cases()
+		for lite in [false, true]:
+			var standard := _fixed_callbacks("standard", lite)
+			var reduced := _fixed_callbacks("reduced", lite)
+			var complete := _complete_callback_state(standard) and _complete_callback_state(reduced)
+			check(complete, "both fixed callback runs reached a complete gameplay/RNG snapshot")
+			if not complete:
+				_finish()
+				return
+			check(standard == reduced, "fixed callbacks exact state/RNG/creation equivalence lite=" + str(lite))
+			report.rows.append({"lite": lite, "standard": standard, "reduced": reduced})
+		_axes_edges()
+		await _in_tree_lifecycle_cases()
+		if OS.get_environment("REDUCED_EFFECTS_QA_RENDER") == "1":
+			if DisplayServer.get_name() == "headless":
+				check(false, "requested actual rendering cannot run headless")
+			else:
+				await _render_cases()
+				await _critical_feedback_cases()
+		else:
+			report["render_status"] = "not_run"
+	_finish()
+
+func _prepare_settings_fixture() -> bool:
+	var original := _text_lf("res://scripts/settings.gd")
+	var marker := 'const PATH := "user://settings.cfg"'
+	check(original.count(marker) == 1, "one explicit Settings PATH seam")
+	if original.count(marker) != 1: return false
+	settings_fixture_script = GDScript.new()
+	settings_fixture_script.source_code = original.replace(marker, 'const PATH := "' + FIXTURE_SETTINGS + '"')
+	var err := settings_fixture_script.reload()
+	check(err == OK, "path-only Settings test copy compiles")
+	report["settings_fixture"] = {"path": FIXTURE_SETTINGS,
+		"source_sha256": settings_fixture_script.source_code.sha256_text(),
+		"production_path_sha256": original.sha256_text(), "only_replacement": marker}
+	return err == OK
+
+func _fresh_settings():
+	var s = settings_fixture_script.new()
+	s._load() # actual production load method, no second mock decoder
+	return s
+
+func _settings_cases() -> void:
+	for value in [null, "unexpected", true, 1, [], "standard", "reduced"]:
+		var config := ConfigFile.new()
+		config.set_value("audio", "bgm", 0.32)
+		config.set_value("game", "atmosphere", false)
+		config.set_value("show", "damage", false)
+		if value != null: config.set_value("show", "effects_quality", value)
+		check(config.save(FIXTURE_SETTINGS) == OK, "write isolated old/invalid settings fixture")
+		var s = _fresh_settings()
+		var expected := "reduced" if value is String and value == "reduced" else "standard"
+		check(s.effects_quality == expected, "old/invalid preference defaults: " + str(value))
+		check(is_equal_approx(s.bgm, 0.32) and not s.atmosphere and not s.show_damage,
+			"unrelated old preferences preserved")
+		s.free()
+	var s = _fresh_settings()
+	s.effects_quality = "reduced"
+	s.cam_speed = 1.7
+	s.show_command_queue = false
+	s.save()
+	s.free()
+	var reread = _fresh_settings()
+	check(reread.effects_quality == "reduced" and is_equal_approx(reread.cam_speed, 1.7)
+		and not reread.show_command_queue, "real save/load through fresh Settings instance")
+	reread.free()
+	# Fresh instance is not called a process restart; separate stages below prove that.
+	report["restart_status"] = "requires_separate_restart_write_and_restart_read"
+
+func _restart_write() -> void:
+	var s = settings_fixture_script.new()
+	s.effects_quality = "reduced"
+	s.bgm = 0.32
+	s.cam_speed = 1.7
+	s.show_damage = false
+	s.save()
+	s.free()
+	_write_json(OUT + "/restart_receipt.json", {"writer_pid": OS.get_process_id(),
+		"settings_sha256": FileAccess.get_sha256(FIXTURE_SETTINGS),
+		"candidate_settings_sha256": CANDIDATE_LF_SHA256["scripts/settings.gd"]})
+	report["restart_status"] = "written_waiting_for_fresh_process"
+
+func _restart_read() -> void:
+	var receipt: Variant = JSON.parse_string(FileAccess.get_file_as_string(OUT + "/restart_receipt.json"))
+	check(receipt is Dictionary, "restart writer receipt exists")
+	if not receipt is Dictionary: return
+	check(int(receipt.get("writer_pid", -1)) != OS.get_process_id(), "fresh OS process for restart read")
+	check(receipt.get("candidate_settings_sha256", "") == CANDIDATE_LF_SHA256["scripts/settings.gd"], "same candidate across restart")
+	check(FileAccess.get_sha256(FIXTURE_SETTINGS) == receipt.get("settings_sha256", ""), "restart reads exact previously saved bytes")
+	var s = _fresh_settings()
+	check(s.effects_quality == "reduced" and is_equal_approx(s.bgm, 0.32)
+		and is_equal_approx(s.cam_speed, 1.7) and not s.show_damage, "fresh process retained new and old preferences")
+	s.free()
+	report["restart_status"] = "checked_in_fresh_process"
+
+func _battle_fixture(lite := false):
+	# Actual Battle methods with no live scene scheduling/map/AI. Keep it outside
+	# the tree; all callbacks are advanced explicitly, so no invisible extra ticks.
+	var b = battle_script.new()
+	b._defs = defs_script.UNITS.duplicate(true)
+	b._abilities = defs_script.ABILITIES.duplicate(true)
+	b.track_hero_combat_stats = true
+	b._lite_fx = lite
+	b.fx_root = Node2D.new()
+	b.add_child(b.fx_root)
+	return b
+
+func _unit_fixture(b, label: String, at: Vector2, faction := 1):
+	var u = unit_script.new()
+	u.key = "li_kui" if faction == 0 else "guan_dao"
+	u.display_name = label
+	u.is_hero = faction == 0
+	u.faction = faction
+	u.position = at
+	u.hp = 500.0
+	u.max_hp = 500.0
+	u.atk = 40.0
+	u.defense = 0.0
+	u.battle = b
+	u._track_combat_stats = true
+	# Inventory intentionally absent: actual damage/armor/stats run; this fixture
+	# makes no claim about item procs, full hero AI, navigation or campaign state.
+	b.add_child(u)
+	b.units.append(u)
+	return u
+
+func _unit_state(u) -> Dictionary:
+	return {"role": u.display_name, "hp": u.hp, "shield": u._shield,
+		"absorb": u._absorbed_phys, "state": u._state, "story": u.story_outcome,
+		"garrisoned": u.garrisoned, "cast": u._cast_t, "stun": u._stun_t,
+		"slots": u.ability_slots.duplicate(true), "queue": u._queue.duplicate(true),
+		"position": [u.position.x, u.position.y], "dust": u._dust.duplicate(true),
+		"target": u._target.display_name if is_instance_valid(u._target) else ""}
+
+func _sentinels() -> Array:
+	var values: Array = []
+	for i in range(16): values.append(randi())
+	return values
+
+func _fixed_callbacks(quality: String, lite: bool) -> Dictionary:
+	root.get_node("Settings").effects_quality = quality
+	seed(60906031)
+	var b = _battle_fixture(lite)
+	var caster = _unit_fixture(b, "caster", Vector2.ZERO, 0)
+	var target = _unit_fixture(b, "target", Vector2(50, 0))
+	var outside = _unit_fixture(b, "outside", Vector2(400, 0))
+	target._shield = 10.0
+	for i in range(5): caster._spawn_dust() # original RNG and bounded dust storage
+	var axes = b.spawn_li_brawn_axes(caster, 100.0)
+	check(axes != null and axes.hits.size() == 1, "real axes spawner selects one in-radius foe")
+	if axes == null:
+		b.free()
+		return {}
+	var axe_id: int = axes.get_instance_id()
+	var state_before := _unit_state(target)
+	axes._process(0.359)
+	check(_unit_state(target) == state_before and not axes.resolved, "axes have no damage before duration")
+	# Switch on the same live axe; never recreate it on a settings change.
+	root.get_node("Settings").effects_quality = "reduced" if quality == "standard" else "standard"
+	axes._process(0.002)
+	check(axes.get_instance_id() == axe_id and axes.resolved and axes.is_queued_for_deletion(), "same axe resolves then queues cleanup")
+	check(is_equal_approx(target.hp, 470.0) and is_zero_approx(target._shield), "40 damage consumes 10 shield then 30 health")
+	var once := _unit_state(target)
+	axes.resolve_hits()
+	check(_unit_state(target) == once, "repeated resolve cannot damage again")
+	root.get_node("Settings").effects_quality = quality
+	b._spawn_ground_fire_quiet(Vector2.ZERO, 100.0, 60.0, 1.0, caster, 1, "song_fire")
+	var fire = b.fx_root.get_child(b.fx_root.get_child_count() - 1)
+	check(_is_script_instance(fire, ground_fire_script), "real quiet ground fire creates visual with DOT")
+	if not _is_script_instance(fire, ground_fire_script):
+		b.free(); return {}
+	fire._ready() # off-tree fixture: invoke the real initializer exactly once
+	for delta in [0.25, 0.25, 0.25, 0.25]:
+		b._ground_dot_pass(delta)
+		fire._process(delta)
+	check(is_equal_approx(target.hp, 410.0) and is_equal_approx(outside.hp, 500.0), "real DOT ticks and radius preserved")
+	check(b._ground_dots.is_empty() and fire.is_queued_for_deletion(), "DOT/visual reach natural expiry")
+	check(is_equal_approx(float(b.hero_combat_stats.get("li_kui", {}).get("skill_damage", {}).get("li_brawn", 0.0)), 40.0), "actual combat statistics retain li_brawn attribution")
+	var value := {"caster": _unit_state(caster), "target": _unit_state(target),
+		"outside": _unit_state(outside), "stats": b.hero_combat_stats.duplicate(true),
+		"flames": fire._flames.duplicate(true), "embers": fire._embers.duplicate(true),
+		"fx_count": b.fx_root.get_child_count(), "rng_after": _sentinels()}
+	b.free() # synchronously frees all off-tree fixture nodes, including queued effects
+	return value
+
+func _axes_edges() -> void:
+	for quality in ["standard", "reduced"]:
+		root.get_node("Settings").effects_quality = quality
+		for edge in ["immune", "dead", "garrisoned", "story", "freed_caster"]:
+			var b = _battle_fixture()
+			var caster = _unit_fixture(b, "caster", Vector2.ZERO, 0)
+			var target = _unit_fixture(b, "target", Vector2(50, 0))
+			var axes = b.spawn_li_brawn_axes(caster, 100.0)
+			check(axes != null, "axes edge fixture spawned " + edge)
+			if axes == null:
+				b.free()
+				continue
+			match edge:
+				"immune": target._phys_immune_t = 1.0
+				"dead": target.hp = 0.0
+				"garrisoned": target.garrisoned = true
+				"story": target.story_outcome = "retreated"
+				"freed_caster": caster.free()
+			var hp_before: float = target.hp
+			axes._process(0.37)
+			check(is_equal_approx(target.hp, hp_before - (40.0 if edge == "freed_caster" else 0.0)), "axes edge health " + quality + " " + edge)
+			if edge == "immune": check(is_equal_approx(target._absorbed_phys, 40.0), "physical immunity absorption preserved")
+			var after := _unit_state(target)
+			axes.resolve_hits()
+			check(after == _unit_state(target), "edge resolves once " + edge)
+			b.free()
+	# The source assigns hit.target to typed Unit before is_instance_valid. Keep
+	# this potentially aborting boundary separate and require stderr inspection.
+	report["freed_target_boundary"] = "requires_separate_error_observed_probe"
+
+func _freed_target_boundary() -> void:
+	for quality in ["standard", "reduced"]:
+		root.get_node("Settings").effects_quality = quality
+		var b = _battle_fixture()
+		var caster = _unit_fixture(b, "caster", Vector2.ZERO, 0)
+		var target = _unit_fixture(b, "freed_target", Vector2(50, 0))
+		var axes = b.spawn_li_brawn_axes(caster, 100.0)
+		check(axes != null, "freed-target fixture spawned")
+		if axes == null:
+			b.free()
+			continue
+		target.free()
+		_write_json(OUT + "/freed_target_before_" + quality + ".json", {"quality": quality, "about_to_call": "actual LiBrawnAxesFx._process(0.37)"})
+		axes._process(0.37)
+		check(axes.resolved and axes.is_queued_for_deletion(), "freed target safely skips and effect cleans up " + quality)
+		b.free()
+	# If this raises, the external runner must retain logs and mark it failed. The
+	# damage method is unchanged in the candidate; investigate/reproduce the old
+	# source separately instead of claiming that the boundary already passed.
+
+func _render_cases() -> void:
+	report["render_status"] = "running"
+	for kind in ["motes", "dust", "impact", "heavy_impact", "fire", "axes"]:
+		var vp := SubViewport.new()
+		vp.size = Vector2i(512, 320)
+		vp.transparent_bg = true
+		vp.disable_3d = true
+		vp.world_2d = World2D.new()
+		vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		root.add_child(vp)
+		var holder := Node2D.new()
+		holder.process_mode = Node.PROCESS_MODE_DISABLED
+		if kind != "motes":
+			holder.transform = map_script.ISO
+			holder.position = Vector2(256, 170)
+		vp.add_child(holder)
+		var fx: Variant = null
+		var target = null
+		match kind:
+			"motes": fx = motes_script.new()
+			"dust":
+				fx = unit_script.new()
+				fx.key = "guan_dao"
+				fx.selected = true
+				fx._dust = [{"x": -25.0, "y": 6.0, "t": unit_script.DUST_DUR * 0.5}]
+			"impact", "heavy_impact":
+				fx = hit_spark_script.new()
+				fx.heavy = kind == "heavy_impact"
+			"fire":
+				fx = ground_fire_script.new()
+				fx.rad = 55.0
+				fx.life = 2.0
+			"axes":
+				fx = axes_script.new()
+				target = unit_script.new()
+				target.position = Vector2(100, 0)
+				fx.hits = [{"target": target, "dmg": 40.0}]
+		seed(60906032)
+		holder.add_child(fx) # actual _ready executes once; ordinary CanvasItem drawing
+		if kind == "fire": fx.t = 1.5
+		if kind == "axes": fx.elapsed = 0.15
+		var id: int = fx.get_instance_id()
+		var before := _visual_state(fx, kind)
+		var images: Array[Image] = []
+		for quality in ["standard", "reduced", "standard"]:
+			root.get_node("Settings").effects_quality = quality
+			fx.queue_redraw()
+			await process_frame
+			await RenderingServer.frame_post_draw
+			var frame := vp.get_texture().get_image()
+			check(not frame.is_empty(), "real viewport pixels " + kind + " " + quality)
+			check(frame.save_png(OUT + "/" + kind + "_" + str(images.size()) + "_" + quality + ".png") == OK, "save actual VFX frame")
+			images.append(frame)
+			check(fx.get_instance_id() == id and _visual_state(fx, kind) == before, "same live instance state unchanged by actual drawing " + kind)
+		var standard_sha := _bytes_sha(images[0].get_data())
+		var reduced_sha := _bytes_sha(images[1].get_data())
+		var restored_sha := _bytes_sha(images[2].get_data())
+		check(standard_sha != reduced_sha, "actual pixels change " + kind)
+		if kind != "motes":
+			check(standard_sha == restored_sha, "standard pixels restore on same frozen instance " + kind)
+		# Motes read wall time: exact restoration is not expected. Reduced must be
+		# empty, while all semantic core effects must retain visible pixels.
+		var reduced_visible := _visible_pixels(images[1])
+		check(reduced_visible == 0 if kind == "motes" else reduced_visible > 0, "reduced visual/core visibility " + kind)
+		report.render.append({"kind": kind, "same_instance_id": id, "standard": standard_sha,
+			"reduced": reduced_sha, "restored": restored_sha, "reduced_visible_pixels": reduced_visible,
+			"manual_readability": "pending"})
+		vp.free()
+		if is_instance_valid(target): target.free()
+	report["render_status"] = "automated_pixel_checks_completed_manual_review_pending"
+
+func _visual_state(fx, kind: String) -> Dictionary:
+	if kind == "dust": return _unit_state(fx)
+	if kind == "motes": return {}
+	if kind == "axes":
+		return {"elapsed": fx.elapsed, "dur": fx.dur, "resolved": fx.resolved,
+			"targets": fx.hits.map(func(hit): return [hit.target.hp, hit.dmg])}
+	if kind == "fire":
+		return {"t": fx.t, "dur": fx.dur, "flames": fx._flames.duplicate(true), "embers": fx._embers.duplicate(true)}
+	return {"t": fx.t, "dur": fx.dur, "heavy": fx.heavy, "seed": fx._seed}
+
+func _visible_pixels(img: Image) -> int:
+	var count := 0
+	for y in range(img.get_height()):
+		for x in range(img.get_width()):
+			if img.get_pixel(x, y).a > 0.002: count += 1
+	return count
+
+func _write_json(path: String, value: Dictionary) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		check(false, "write receipt " + path)
+		return
+	file.store_string(JSON.stringify(value, "\t"))
+	file.close()
+
+func _finish() -> void:
+	if quality_before is String:
+		root.get_node("Settings").set("effects_quality", quality_before)
+	root.get_node("Sfx").enabled = sfx_before
+	_source_lock()
+	check(_prefs_receipt() == prefs_before, "player settings and campaign raw bytes unchanged")
+	report["stage"] = stage
+	report["checks"] = checks
+	report["failures"] = failures
+	report["automated_checks_passed"] = failures.is_empty()
+	report["formal_acceptance"] = false
+	report["prefs_before"] = prefs_before
+	report["prefs_after"] = _prefs_receipt()
+	_write_json(OUT + "/report_" + stage + ".json", report)
+	print("[reduced-effects draft QA] stage=%s checks=%d failures=%d; no performance/complete acceptance claim" % [stage, checks, failures.size()])
+	quit(0 if failures.is_empty() else 1)
+
+
+## V2 additions: actual tree deletion, config failure boundaries, semantic pixel oracles.
+## These are templates, not executed evidence. No gameplay callbacks are mocked.
+
+## Loaded only by deferred _run, after the engine has registered its Autoloads.
+## Keeping project classes out of this driver's static dependency graph matters:
+## Battle/Unit/Map themselves resolve Art and Sfx while compiling.
+var battle_script
+var unit_script
+var map_script
+var defs_script
+var ground_fire_script: GDScript
+var hit_spark_script: GDScript
+var axes_script: GDScript
+var motes_script: GDScript
+
+func _load_runtime_scripts() -> bool:
+	for name in ["Settings", "Sfx", "Art", "Music", "Campaign"]:
+		var node := root.get_node_or_null(NodePath(name))
+		var ready := node != null and node.is_node_ready()
+		check(ready, "Autoload ready before loading real fixture classes: " + name)
+		if not ready: return false
+	var loaded: Dictionary = {}
+	for name in ["battle", "unit", "game_map", "defs"]:
+		var script = load("res://scripts/" + name + ".gd")
+		var valid: bool = script is GDScript and script.can_instantiate()
+		check(valid, "runtime production script can instantiate: " + name)
+		if not valid: return false
+		loaded[name] = script
+	battle_script = loaded.battle
+	unit_script = loaded.unit
+	map_script = loaded.game_map
+	defs_script = loaded.defs
+	var nested: Dictionary = {}
+	for name in ["GroundFireFx", "HitSpark", "LiBrawnAxesFx", "AmbientMotes"]:
+		# GDScript::_get resolves its subclasses separately from ordinary constants.
+		var script = battle_script.get(name)
+		var valid: bool = script is GDScript and script.can_instantiate()
+		check(valid, "real nested Battle effect can instantiate: " + name)
+		if not valid: return false
+		nested[name] = script
+	ground_fire_script = nested.GroundFireFx
+	hit_spark_script = nested.HitSpark
+	axes_script = nested.LiBrawnAxesFx
+	motes_script = nested.AmbientMotes
+	report["runtime_classes"] = {"autoloads_ready":true,
+		"scripts":loaded.keys(), "nested_effects_checked":4,
+		"instances":"real production scripts; no callback replacements"}
+	return true
+
+func _is_script_instance(value, expected: Script) -> bool:
+	# Equivalent to script-class `is`, including subclasses, without an eager
+	# reference to the production inner class while this driver is being parsed.
+	if not is_instance_valid(value) or expected == null: return false
+	var actual: Script = value.get_script()
+	while actual != null:
+		if actual == expected: return true
+		actual = actual.get_base_script()
+	return false
+
+func _complete_callback_state(value: Dictionary) -> bool:
+	for key in ["caster", "target", "outside", "stats", "flames", "embers", "fx_count", "rng_after"]:
+		if not value.has(key): return false
+	for key in ["caster", "target", "outside"]:
+		if not value[key] is Dictionary or not value[key].has("hp"): return false
+	return value.rng_after is Array and value.rng_after.size() == 16 and int(value.fx_count) > 0
+
+func _settings_missing_corrupt_cases() -> void:
+	if FileAccess.file_exists(FIXTURE_SETTINGS):
+		check(DirAccess.remove_absolute(FIXTURE_SETTINGS) == OK, "remove only isolated settings fixture")
+	var fresh = _fresh_settings()
+	check(fresh.effects_quality == "standard" and is_equal_approx(fresh.bgm, 0.8), "missing settings file retains new-instance defaults")
+	check(not FileAccess.file_exists(FIXTURE_SETTINGS), "missing-file load does not create preferences")
+	fresh.free()
+	var file := FileAccess.open(FIXTURE_SETTINGS, FileAccess.WRITE)
+	check(file != null, "create isolated malformed config")
+	if file == null: return
+	file.store_string("[show\neffects_quality=\"reduced\"\nunterminated=\"")
+	file.close()
+	var before := FileAccess.get_sha256(FIXTURE_SETTINGS)
+	var invalid := ConfigFile.new()
+	# These two synchronous loads intentionally cause parser diagnostics. Silence
+	# only this bounded fixture section; no await/render/gameplay callback runs here.
+	var print_errors_before := Engine.print_error_messages
+	check(print_errors_before, "engine diagnostics enabled before damaged-config fixture")
+	Engine.print_error_messages = false
+	var invalid_error := invalid.load(FIXTURE_SETTINGS)
+	fresh = _fresh_settings()
+	Engine.print_error_messages = print_errors_before
+	check(invalid_error == ERR_PARSE_ERROR, "malformed fixture returns exact parse-error code")
+	check(Engine.print_error_messages, "engine diagnostics restored after damaged-config fixture")
+	check(fresh.effects_quality == "standard" and is_equal_approx(fresh.bgm, 0.8), "malformed settings retain new-instance defaults")
+	check(FileAccess.get_sha256(FIXTURE_SETTINGS) == before, "failed config load does not rewrite damaged bytes")
+	fresh.free()
+	report["damaged_config"] = {"error_code":invalid_error,"unchanged_bytes":true,"expected_parser_console_suppression":"two synchronous config loads only; no await; diagnostics restored"}
+	# Subsequent _settings_cases overwrites only this isolated fixture.
+
+func _in_tree_lifecycle_cases() -> void:
+	var results: Array = []
+	for quality in ["standard", "reduced"]:
+		root.get_node("Settings").set("effects_quality", quality)
+		var b = _battle_fixture(true)
+		var caster = _unit_fixture(b, "tree_caster", Vector2.ZERO, 0)
+		var target = _unit_fixture(b, "tree_target", Vector2(25, 0))
+		# Only fx_root enters SceneTree. The Battle never runs _ready/AI/map setup.
+		var fx_holder: Node2D = b.fx_root
+		b.remove_child(fx_holder)
+		fx_holder.process_mode = Node.PROCESS_MODE_DISABLED
+		root.add_child(fx_holder)
+		var exits := [0]
+		for cycle in range(2):
+			var hp_before: float = target.hp
+			check(b._ground_fire_visuals == 0, "ground-fire budget empty before cycle " + str(cycle))
+			b._spawn_ground_fire_quiet(Vector2.ZERO, 55.0, 20.0, 0.5, caster, 1, "song_fire")
+			var fx = fx_holder.get_child(fx_holder.get_child_count() - 1)
+			check(_is_script_instance(fx, ground_fire_script) and fx.is_inside_tree(), "real ground fire enters tree cycle " + str(cycle))
+			if not _is_script_instance(fx, ground_fire_script):
+				fx_holder.free(); b.free(); return
+			check(b._ground_fire_visuals == 1 and is_equal_approx(fx.dur, 0.5), "ready ran once and budget incremented")
+			fx.tree_exited.connect(func() -> void: exits[0] += 1)
+			var ref: WeakRef = weakref(fx)
+			for delta in [0.25, 0.25]:
+				b._ground_dot_pass(delta)
+				fx._process(delta)
+			check(is_equal_approx(target.hp, hp_before - 20.0) and b._ground_dots.is_empty(), "tree fixture DOT completes before visual deletion")
+			check(fx.is_queued_for_deletion(), "real TimedFx schedules deletion")
+			await process_frame
+			await process_frame
+			check(ref.get_ref() == null and exits[0] == cycle + 1, "queue_free completes and tree_exited fires once")
+			check(b._ground_fire_visuals == 0, "real tree_exited callback releases visual budget")
+			# Damage labels may still exist because this holder is deliberately frozen.
+			for child in fx_holder.get_children(): child.queue_free()
+			await process_frame
+			await process_frame
+			check(fx_holder.get_child_count() == 0, "fixture children clean before second generation")
+		results.append({"quality":quality,"exit_count":exits[0],"final_budget":b._ground_fire_visuals,"target_hp":target.hp})
+		fx_holder.free()
+		b.free()
+	check(results.size() == 2 and results[0].exit_count == results[1].exit_count and results[0].target_hp == results[1].target_hp, "two quality modes retain actual exit counts and DOT outcome")
+	report["tree_lifecycle"] = results
+
+func _viewport_fixture() -> Array:
+	var vp := SubViewport.new()
+	vp.size = Vector2i(512, 320)
+	vp.transparent_bg = true
+	vp.disable_3d = true
+	vp.world_2d = World2D.new()
+	vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(vp)
+	var holder := Node2D.new()
+	holder.process_mode = Node.PROCESS_MODE_DISABLED
+	holder.transform = map_script.ISO
+	holder.position = Vector2(256, 170)
+	vp.add_child(holder)
+	return [vp, holder]
+
+func _capture_frozen(vp: SubViewport, fx: CanvasItem, label: String) -> Image:
+	fx.queue_redraw()
+	await process_frame
+	await RenderingServer.frame_post_draw
+	var image := vp.get_texture().get_image()
+	check(not image.is_empty(), "critical feedback viewport has pixels " + label)
+	check(image.save_png(OUT + "/critical_" + label + ".png") == OK, "save critical feedback " + label)
+	return image
+
+func _pixel_equal(a: Color, b: Color, tolerance := 0.01) -> bool:
+	return absf(a.r-b.r) <= tolerance and absf(a.g-b.g) <= tolerance and absf(a.b-b.b) <= tolerance and absf(a.a-b.a) <= tolerance
+
+func _core_mask_agrees(expected: Image, observed: Image, min_alpha := 0.01) -> Dictionary:
+	var pixels := 0
+	var mismatches := 0
+	for y in expected.get_height():
+		for x in expected.get_width():
+			var pixel := expected.get_pixel(x, y)
+			if pixel.a < min_alpha: continue
+			pixels += 1
+			if not _pixel_equal(pixel, observed.get_pixel(x, y)): mismatches += 1
+	return {"core_pixels":pixels,"mismatches":mismatches}
+
+func _disk_agrees(a: Image, b: Image, center: Vector2i, radius: int) -> bool:
+	for y in range(-radius, radius+1):
+		for x in range(-radius, radius+1):
+			if x*x+y*y > radius*radius: continue
+			if not _pixel_equal(a.get_pixel(center.x+x, center.y+y), b.get_pixel(center.x+x, center.y+y)):
+				return false
+	return true
+
+func _roi_visible(img: Image, center: Vector2, half := 21) -> int:
+	var total := 0
+	for y in range(maxi(0, int(center.y)-half), mini(img.get_height(), int(center.y)+half+1)):
+		for x in range(maxi(0, int(center.x)-half), mini(img.get_width(), int(center.x)+half+1)):
+			if img.get_pixel(x,y).a > 0.05: total += 1
+	return total
+
+## Independent semantic oracle: only real Art texture rectangles at the prescribed
+## three target positions/time. It cannot deal damage or alter the tested effect.
+class AxeCoreOracle extends Node2D:
+	var tex: Texture2D
+	var poses: Array[Transform2D] = []
+	var inverse_iso: Transform2D
+	func _draw() -> void:
+		for pose in poses:
+			draw_set_transform_matrix(inverse_iso * pose)
+			draw_texture_rect(tex, Rect2(Vector2(-15, -15), Vector2(30, 30)), false)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+func _critical_feedback_cases() -> void:
+	var spark_rows: Array = []
+	for heavy in [false, true]:
+		var fixture := _viewport_fixture()
+		var vp: SubViewport = fixture[0]
+		var holder: Node2D = fixture[1]
+		var fx = hit_spark_script.new()
+		fx.heavy = heavy
+		holder.add_child(fx)
+		fx.t = fx.dur * 0.75
+		var prefix := "heavy" if heavy else "normal"
+		root.get_node("Settings").set("effects_quality", "standard")
+		var standard := await _capture_frozen(vp, fx, prefix + "_standard")
+		root.get_node("Settings").set("effects_quality", "reduced")
+		var reduced := await _capture_frozen(vp, fx, prefix + "_reduced")
+		root.get_node("Settings").set("effects_quality", "standard")
+		var restored := await _capture_frozen(vp, fx, prefix + "_restored")
+		var center := Vector2i(256,170)
+		var pixel := reduced.get_pixelv(center)
+		check(_disk_agrees(standard,reduced,center,2 if heavy else 1), "white hit center remains equal " + prefix)
+		# Transparent SubViewport readback stores this white circle premultiplied:
+		# f=0.75, authored alpha=f*0.85, so RGBA is ~0.6375, not RGB=1.
+		var expected_alpha: float = clampf(fx.t / fx.dur, 0.0, 1.0) * 0.85
+		var tolerance: float = 1.0 / 255.0
+		check(pixel.a > 0.4 and absf(pixel.a-expected_alpha) <= tolerance and absf(pixel.r-pixel.a) <= tolerance and absf(pixel.g-pixel.a) <= tolerance and absf(pixel.b-pixel.a) <= tolerance, "hit center retains authored white feedback in premultiplied readback " + prefix)
+		check(_bytes_sha(standard.get_data()) == _bytes_sha(restored.get_data()), "spark standard restores on same frozen instance")
+		spark_rows.append({"heavy":heavy,"visible_pixels":_visible_pixels(reduced),"center_alpha":pixel.a,"center_rgba":[pixel.r,pixel.g,pixel.b,pixel.a],"expected_authored_alpha":expected_alpha,"remaining_core_equal":true})
+		vp.free()
+	check(spark_rows[1].visible_pixels > spark_rows[0].visible_pixels, "heavy impact retains a visibly larger footprint")
+	report["critical_hit_centers"] = spark_rows
+	await _critical_fire_case()
+	await _critical_axes_case()
+	report["critical_feedback_status"] = "automated_core_oracles_completed_manual_readability_pending"
+
+func _critical_fire_case() -> void:
+	var fixture := _viewport_fixture()
+	var vp: SubViewport = fixture[0]
+	var holder: Node2D = fixture[1]
+	var fx = ground_fire_script.new()
+	fx.rad = 55.0; fx.life = 2.0
+	seed(60906035)
+	holder.add_child(fx)
+	fx.t = 1.5
+	var before := _visual_state(fx,"fire")
+	var embers: Array = fx._embers
+	root.get_node("Settings").set("effects_quality","standard")
+	var standard := await _capture_frozen(vp,fx,"fire_standard")
+	# Same initialized instance and arrays: suppress only fixture decoration to
+	# obtain the unmodified standard renderer's full flame/ground core as oracle.
+	fx._embers = []
+	var core := await _capture_frozen(vp,fx,"fire_standard_core")
+	fx._embers = embers
+	root.get_node("Settings").set("effects_quality","reduced")
+	var reduced := await _capture_frozen(vp,fx,"fire_reduced")
+	var agreement := _core_mask_agrees(core,reduced)
+	check(agreement.core_pixels > 100 and agreement.mismatches == 0, "reduced fire preserves every flame/ground core pixel")
+	check(_bytes_sha(core.get_data()) == _bytes_sha(reduced.get_data()), "reduced fire equals full standard core without embers")
+	var anchor_rows: Array = []
+	for direction in [Vector2.RIGHT,Vector2.LEFT,Vector2.UP,Vector2.DOWN]:
+		var at: Vector2 = Vector2(256,170) + map_script.ISO.basis_xform(direction * fx.rad * 0.80)
+		var pixel := Vector2i(roundi(at.x),roundi(at.y))
+		var visible := reduced.get_pixelv(pixel).a > 0.02
+		check(visible and _pixel_equal(core.get_pixelv(pixel),reduced.get_pixelv(pixel)), "fire keeps authored-radius ground anchor " + str(direction))
+		anchor_rows.append({"pixel":[pixel.x,pixel.y],"visible":visible})
+	root.get_node("Settings").set("effects_quality","standard")
+	var restored := await _capture_frozen(vp,fx,"fire_restored")
+	check(_bytes_sha(standard.get_data()) == _bytes_sha(restored.get_data()) and _visual_state(fx,"fire") == before, "fire arrays/radius/time and standard pixels restored")
+	report["critical_fire"] = {"radius":fx.rad,"core_agreement":agreement,"ground_anchors":anchor_rows,"manual_boundary_readability":"pending"}
+	vp.free()
+
+func _critical_axes_case() -> void:
+	var fixture := _viewport_fixture()
+	var vp: SubViewport = fixture[0]
+	var holder: Node2D = fixture[1]
+	var fx = axes_script.new()
+	var targets: Array = []
+	for at in [Vector2(100,0),Vector2(-90,50),Vector2(0,-90)]:
+		var unit = unit_script.new()
+		unit.position = at
+		targets.append(unit)
+		fx.hits.append({"target":unit,"dmg":40.0})
+	fx.tex = root.get_node("Art").item_texture("axe")
+	if fx.tex == null: fx.tex = root.get_node("Art").ability_projectile_texture("axe")
+	check(fx.tex != null, "multi-target axes use a real authored Art texture, never silently fallback")
+	if fx.tex == null:
+		fx.free(); vp.free()
+		for unit in targets: unit.free()
+		return
+	holder.add_child(fx)
+	fx.elapsed = 0.15
+	var before := _visual_state(fx,"axes")
+	var id: int = fx.get_instance_id()
+	root.get_node("Settings").set("effects_quality","standard")
+	var standard := await _capture_frozen(vp,fx,"axes_multi_standard")
+	root.get_node("Settings").set("effects_quality","reduced")
+	var reduced := await _capture_frozen(vp,fx,"axes_multi_reduced")
+	var oracle := AxeCoreOracle.new()
+	oracle.tex = fx.tex
+	oracle.inverse_iso = map_script.ISO_INV
+	var centers: Array[Vector2] = []
+	var p: float = fx.elapsed / fx.dur
+	var fly := 1.0 - pow(1.0-p,2.0)
+	for target in targets:
+		var end_screen: Vector2 = map_script.ISO.basis_xform(target.position)
+		var at := end_screen * fly + Vector2(0,-sin(p*PI)*10.0)
+		oracle.poses.append(Transform2D(end_screen.angle()+fx.elapsed*18.0,Vector2.ONE,0.0,at))
+		centers.append(Vector2(256,170)+at)
+	fx.visible = false
+	holder.add_child(oracle)
+	var core := await _capture_frozen(vp,oracle,"axes_multi_authored_core")
+	var agreement := _core_mask_agrees(core,reduced)
+	check(agreement.core_pixels > 30 and agreement.mismatches == 0, "each authored axe core has equal pixels at its target trajectory")
+	check(_bytes_sha(core.get_data()) == _bytes_sha(reduced.get_data()), "reduced multi-target picture equals authored bodies without trails")
+	var per_target: Array = []
+	for index in centers.size():
+		var expected := _roi_visible(core,centers[index])
+		var observed := _roi_visible(reduced,centers[index])
+		check(expected > 5 and expected == observed, "separate real-texture axe body remains visible target " + str(index))
+		per_target.append({"index":index,"screen_center":[centers[index].x,centers[index].y],"core_pixels":expected,"observed_pixels":observed})
+	oracle.visible = false; fx.visible = true
+	root.get_node("Settings").set("effects_quality","standard")
+	var restored := await _capture_frozen(vp,fx,"axes_multi_restored")
+	check(_bytes_sha(standard.get_data()) == _bytes_sha(restored.get_data()) and fx.get_instance_id() == id and _visual_state(fx,"axes") == before, "three-target instance, damage state, trajectory time and standard pixels unchanged")
+	report["critical_axes"] = {"targets":per_target,"core_agreement":agreement,"texture_size":[fx.tex.get_width(),fx.tex.get_height()],"manual_trajectory_readability":"pending"}
+	vp.free()
+	for unit in targets: unit.free()
+
+func _all_label_text(node: Node) -> Array:
+	var labels: Array = []
+	if node is Label: labels.append(node.text)
+	for child in node.get_children(): labels.append_array(_all_label_text(child))
+	return labels
+
+func _legacy_autoload_cases() -> void:
+	# This stage starts a fresh OS process against the ORIGINAL Settings source.
+	# Source hashes are checked externally before class/autoload parsing begins.
+	var settings = root.get_node("Settings")
+	check(settings.get("effects_quality") == null, "actual booted legacy Autoload lacks the new field")
+	var panel = load("res://scripts/settings_panel.gd").new()
+	root.add_child(panel)
+	check(not _all_label_text(panel).has("特效细节"), "legacy Settings hides new preference row")
+	panel.free() # Do not call close/save; menu/pause GUI is a separate task.
+	if DisplayServer.get_name() == "headless":
+		check(false,"legacy startup feedback requires an actual renderer")
+		return
+	var vp := SubViewport.new()
+	vp.size = Vector2i(512,320); vp.transparent_bg = true; vp.disable_3d = true
+	vp.world_2d = World2D.new(); vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(vp)
+	var motes = motes_script.new()
+	motes.process_mode = Node.PROCESS_MODE_DISABLED
+	vp.add_child(motes)
+	var image := await _capture_frozen(vp,motes,"legacy_standard_motes")
+	check(_visible_pixels(image) > 0,"missing field falls back to standard ambient drawing")
+	check(settings.get("effects_quality") == null,"legacy stage does not invent/persist a new Settings field")
+	vp.free()
+	report["legacy_autoload"] = {"fresh_process_pid":OS.get_process_id(),"field_absent":true,"new_row_hidden":true,"standard_fallback_drawn":true,"historical_apk_pck_boot":"still requires platform integration test"}

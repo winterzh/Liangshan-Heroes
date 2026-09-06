@@ -1,0 +1,30 @@
+{
+  "complete": true,
+  "samples": [
+    {
+      "mode": "original",
+      "status": "original_defect_reproduced_strict_failure",
+      "checks": 46,
+      "failures": [
+        "freed_head: valid tail damage/immune branch",
+        "freed_head: valid tail impact occurs",
+        "freed_head: valid caster source retained",
+        "freed_head: effect queued for real deletion",
+        "freed_head: real tree exit and object release",
+        "automatic: native _process reaches valid tail after freed head",
+        "automatic: native lifetime actually releases effect",
+        "draw: valid tail still renders after freed head",
+        "draw: freed-head output exactly matches clean valid-tail RGBA"
+      ],
+      "report": "original\\report.json"
+    },
+    {
+      "mode": "fixed",
+      "status": "fixed_strict_pass",
+      "checks": 46,
+      "failures": [],
+      "report": "fixed\\report.json"
+    }
+  ],
+  "lock_released": true
+}

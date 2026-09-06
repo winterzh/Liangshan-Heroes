@@ -1,0 +1,362 @@
+## V2 additions: actual tree deletion, config failure boundaries, semantic pixel oracles.
+## These are templates, not executed evidence. No gameplay callbacks are mocked.
+
+## Loaded only by deferred _run, after the engine has registered its Autoloads.
+## Keeping project classes out of this driver's static dependency graph matters:
+## Battle/Unit/Map themselves resolve Art and Sfx while compiling.
+var battle_script
+var unit_script
+var map_script
+var defs_script
+var ground_fire_script: GDScript
+var hit_spark_script: GDScript
+var axes_script: GDScript
+var motes_script: GDScript
+
+func _load_runtime_scripts() -> bool:
+	for name in ["Settings", "Sfx", "Art", "Music", "Campaign"]:
+		var node := root.get_node_or_null(NodePath(name))
+		var ready := node != null and node.is_node_ready()
+		check(ready, "Autoload ready before loading real fixture classes: " + name)
+		if not ready: return false
+	var loaded: Dictionary = {}
+	for name in ["battle", "unit", "game_map", "defs"]:
+		var script = load("res://scripts/" + name + ".gd")
+		var valid: bool = script is GDScript and script.can_instantiate()
+		check(valid, "runtime production script can instantiate: " + name)
+		if not valid: return false
+		loaded[name] = script
+	battle_script = loaded.battle
+	unit_script = loaded.unit
+	map_script = loaded.game_map
+	defs_script = loaded.defs
+	var nested: Dictionary = {}
+	for name in ["GroundFireFx", "HitSpark", "LiBrawnAxesFx", "AmbientMotes"]:
+		# GDScript::_get resolves its subclasses separately from ordinary constants.
+		var script = battle_script.get(name)
+		var valid: bool = script is GDScript and script.can_instantiate()
+		check(valid, "real nested Battle effect can instantiate: " + name)
+		if not valid: return false
+		nested[name] = script
+	ground_fire_script = nested.GroundFireFx
+	hit_spark_script = nested.HitSpark
+	axes_script = nested.LiBrawnAxesFx
+	motes_script = nested.AmbientMotes
+	report["runtime_classes"] = {"autoloads_ready":true,
+		"scripts":loaded.keys(), "nested_effects_checked":4,
+		"instances":"real production scripts; no callback replacements"}
+	return true
+
+func _is_script_instance(value, expected: Script) -> bool:
+	# Equivalent to script-class `is`, including subclasses, without an eager
+	# reference to the production inner class while this driver is being parsed.
+	if not is_instance_valid(value) or expected == null: return false
+	var actual: Script = value.get_script()
+	while actual != null:
+		if actual == expected: return true
+		actual = actual.get_base_script()
+	return false
+
+func _complete_callback_state(value: Dictionary) -> bool:
+	for key in ["caster", "target", "outside", "stats", "flames", "embers", "fx_count", "rng_after"]:
+		if not value.has(key): return false
+	for key in ["caster", "target", "outside"]:
+		if not value[key] is Dictionary or not value[key].has("hp"): return false
+	return value.rng_after is Array and value.rng_after.size() == 16 and int(value.fx_count) > 0
+
+func _settings_missing_corrupt_cases() -> void:
+	if FileAccess.file_exists(FIXTURE_SETTINGS):
+		check(DirAccess.remove_absolute(FIXTURE_SETTINGS) == OK, "remove only isolated settings fixture")
+	var fresh = _fresh_settings()
+	check(fresh.effects_quality == "standard" and is_equal_approx(fresh.bgm, 0.8), "missing settings file retains new-instance defaults")
+	check(not FileAccess.file_exists(FIXTURE_SETTINGS), "missing-file load does not create preferences")
+	fresh.free()
+	var file := FileAccess.open(FIXTURE_SETTINGS, FileAccess.WRITE)
+	check(file != null, "create isolated malformed config")
+	if file == null: return
+	file.store_string("[show\neffects_quality=\"reduced\"\nunterminated=\"")
+	file.close()
+	var before := FileAccess.get_sha256(FIXTURE_SETTINGS)
+	var invalid := ConfigFile.new()
+	# These two synchronous loads intentionally cause parser diagnostics. Silence
+	# only this bounded fixture section; no await/render/gameplay callback runs here.
+	var print_errors_before := Engine.print_error_messages
+	check(print_errors_before, "engine diagnostics enabled before damaged-config fixture")
+	Engine.print_error_messages = false
+	var invalid_error := invalid.load(FIXTURE_SETTINGS)
+	fresh = _fresh_settings()
+	Engine.print_error_messages = print_errors_before
+	check(invalid_error == ERR_PARSE_ERROR, "malformed fixture returns exact parse-error code")
+	check(Engine.print_error_messages, "engine diagnostics restored after damaged-config fixture")
+	check(fresh.effects_quality == "standard" and is_equal_approx(fresh.bgm, 0.8), "malformed settings retain new-instance defaults")
+	check(FileAccess.get_sha256(FIXTURE_SETTINGS) == before, "failed config load does not rewrite damaged bytes")
+	fresh.free()
+	report["damaged_config"] = {"error_code":invalid_error,"unchanged_bytes":true,"expected_parser_console_suppression":"two synchronous config loads only; no await; diagnostics restored"}
+	# Subsequent _settings_cases overwrites only this isolated fixture.
+
+func _in_tree_lifecycle_cases() -> void:
+	var results: Array = []
+	for quality in ["standard", "reduced"]:
+		root.get_node("Settings").set("effects_quality", quality)
+		var b = _battle_fixture(true)
+		var caster = _unit_fixture(b, "tree_caster", Vector2.ZERO, 0)
+		var target = _unit_fixture(b, "tree_target", Vector2(25, 0))
+		# Only fx_root enters SceneTree. The Battle never runs _ready/AI/map setup.
+		var fx_holder: Node2D = b.fx_root
+		b.remove_child(fx_holder)
+		fx_holder.process_mode = Node.PROCESS_MODE_DISABLED
+		root.add_child(fx_holder)
+		var exits := [0]
+		for cycle in range(2):
+			var hp_before: float = target.hp
+			check(b._ground_fire_visuals == 0, "ground-fire budget empty before cycle " + str(cycle))
+			b._spawn_ground_fire_quiet(Vector2.ZERO, 55.0, 20.0, 0.5, caster, 1, "song_fire")
+			var fx = fx_holder.get_child(fx_holder.get_child_count() - 1)
+			check(_is_script_instance(fx, ground_fire_script) and fx.is_inside_tree(), "real ground fire enters tree cycle " + str(cycle))
+			if not _is_script_instance(fx, ground_fire_script):
+				fx_holder.free(); b.free(); return
+			check(b._ground_fire_visuals == 1 and is_equal_approx(fx.dur, 0.5), "ready ran once and budget incremented")
+			fx.tree_exited.connect(func() -> void: exits[0] += 1)
+			var ref: WeakRef = weakref(fx)
+			for delta in [0.25, 0.25]:
+				b._ground_dot_pass(delta)
+				fx._process(delta)
+			check(is_equal_approx(target.hp, hp_before - 20.0) and b._ground_dots.is_empty(), "tree fixture DOT completes before visual deletion")
+			check(fx.is_queued_for_deletion(), "real TimedFx schedules deletion")
+			await process_frame
+			await process_frame
+			check(ref.get_ref() == null and exits[0] == cycle + 1, "queue_free completes and tree_exited fires once")
+			check(b._ground_fire_visuals == 0, "real tree_exited callback releases visual budget")
+			# Damage labels may still exist because this holder is deliberately frozen.
+			for child in fx_holder.get_children(): child.queue_free()
+			await process_frame
+			await process_frame
+			check(fx_holder.get_child_count() == 0, "fixture children clean before second generation")
+		results.append({"quality":quality,"exit_count":exits[0],"final_budget":b._ground_fire_visuals,"target_hp":target.hp})
+		fx_holder.free()
+		b.free()
+	check(results.size() == 2 and results[0].exit_count == results[1].exit_count and results[0].target_hp == results[1].target_hp, "two quality modes retain actual exit counts and DOT outcome")
+	report["tree_lifecycle"] = results
+
+func _viewport_fixture() -> Array:
+	var vp := SubViewport.new()
+	vp.size = Vector2i(512, 320)
+	vp.transparent_bg = true
+	vp.disable_3d = true
+	vp.world_2d = World2D.new()
+	vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(vp)
+	var holder := Node2D.new()
+	holder.process_mode = Node.PROCESS_MODE_DISABLED
+	holder.transform = map_script.ISO
+	holder.position = Vector2(256, 170)
+	vp.add_child(holder)
+	return [vp, holder]
+
+func _capture_frozen(vp: SubViewport, fx: CanvasItem, label: String) -> Image:
+	fx.queue_redraw()
+	await process_frame
+	await RenderingServer.frame_post_draw
+	var image := vp.get_texture().get_image()
+	check(not image.is_empty(), "critical feedback viewport has pixels " + label)
+	check(image.save_png(OUT + "/critical_" + label + ".png") == OK, "save critical feedback " + label)
+	return image
+
+func _pixel_equal(a: Color, b: Color, tolerance := 0.01) -> bool:
+	return absf(a.r-b.r) <= tolerance and absf(a.g-b.g) <= tolerance and absf(a.b-b.b) <= tolerance and absf(a.a-b.a) <= tolerance
+
+func _core_mask_agrees(expected: Image, observed: Image, min_alpha := 0.01) -> Dictionary:
+	var pixels := 0
+	var mismatches := 0
+	for y in expected.get_height():
+		for x in expected.get_width():
+			var pixel := expected.get_pixel(x, y)
+			if pixel.a < min_alpha: continue
+			pixels += 1
+			if not _pixel_equal(pixel, observed.get_pixel(x, y)): mismatches += 1
+	return {"core_pixels":pixels,"mismatches":mismatches}
+
+func _disk_agrees(a: Image, b: Image, center: Vector2i, radius: int) -> bool:
+	for y in range(-radius, radius+1):
+		for x in range(-radius, radius+1):
+			if x*x+y*y > radius*radius: continue
+			if not _pixel_equal(a.get_pixel(center.x+x, center.y+y), b.get_pixel(center.x+x, center.y+y)):
+				return false
+	return true
+
+func _roi_visible(img: Image, center: Vector2, half := 21) -> int:
+	var total := 0
+	for y in range(maxi(0, int(center.y)-half), mini(img.get_height(), int(center.y)+half+1)):
+		for x in range(maxi(0, int(center.x)-half), mini(img.get_width(), int(center.x)+half+1)):
+			if img.get_pixel(x,y).a > 0.05: total += 1
+	return total
+
+## Independent semantic oracle: only real Art texture rectangles at the prescribed
+## three target positions/time. It cannot deal damage or alter the tested effect.
+class AxeCoreOracle extends Node2D:
+	var tex: Texture2D
+	var poses: Array[Transform2D] = []
+	var inverse_iso: Transform2D
+	func _draw() -> void:
+		for pose in poses:
+			draw_set_transform_matrix(inverse_iso * pose)
+			draw_texture_rect(tex, Rect2(Vector2(-15, -15), Vector2(30, 30)), false)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+func _critical_feedback_cases() -> void:
+	var spark_rows: Array = []
+	for heavy in [false, true]:
+		var fixture := _viewport_fixture()
+		var vp: SubViewport = fixture[0]
+		var holder: Node2D = fixture[1]
+		var fx = hit_spark_script.new()
+		fx.heavy = heavy
+		holder.add_child(fx)
+		fx.t = fx.dur * 0.75
+		var prefix := "heavy" if heavy else "normal"
+		root.get_node("Settings").set("effects_quality", "standard")
+		var standard := await _capture_frozen(vp, fx, prefix + "_standard")
+		root.get_node("Settings").set("effects_quality", "reduced")
+		var reduced := await _capture_frozen(vp, fx, prefix + "_reduced")
+		root.get_node("Settings").set("effects_quality", "standard")
+		var restored := await _capture_frozen(vp, fx, prefix + "_restored")
+		var center := Vector2i(256,170)
+		var pixel := reduced.get_pixelv(center)
+		check(_disk_agrees(standard,reduced,center,2 if heavy else 1), "white hit center remains equal " + prefix)
+		# Transparent SubViewport readback stores this white circle premultiplied:
+		# f=0.75, authored alpha=f*0.85, so RGBA is ~0.6375, not RGB=1.
+		var expected_alpha: float = clampf(fx.t / fx.dur, 0.0, 1.0) * 0.85
+		var tolerance: float = 1.0 / 255.0
+		check(pixel.a > 0.4 and absf(pixel.a-expected_alpha) <= tolerance and absf(pixel.r-pixel.a) <= tolerance and absf(pixel.g-pixel.a) <= tolerance and absf(pixel.b-pixel.a) <= tolerance, "hit center retains authored white feedback in premultiplied readback " + prefix)
+		check(_bytes_sha(standard.get_data()) == _bytes_sha(restored.get_data()), "spark standard restores on same frozen instance")
+		spark_rows.append({"heavy":heavy,"visible_pixels":_visible_pixels(reduced),"center_alpha":pixel.a,"center_rgba":[pixel.r,pixel.g,pixel.b,pixel.a],"expected_authored_alpha":expected_alpha,"remaining_core_equal":true})
+		vp.free()
+	check(spark_rows[1].visible_pixels > spark_rows[0].visible_pixels, "heavy impact retains a visibly larger footprint")
+	report["critical_hit_centers"] = spark_rows
+	await _critical_fire_case()
+	await _critical_axes_case()
+	report["critical_feedback_status"] = "automated_core_oracles_completed_manual_readability_pending"
+
+func _critical_fire_case() -> void:
+	var fixture := _viewport_fixture()
+	var vp: SubViewport = fixture[0]
+	var holder: Node2D = fixture[1]
+	var fx = ground_fire_script.new()
+	fx.rad = 55.0; fx.life = 2.0
+	seed(60906035)
+	holder.add_child(fx)
+	fx.t = 1.5
+	var before := _visual_state(fx,"fire")
+	var embers: Array = fx._embers
+	root.get_node("Settings").set("effects_quality","standard")
+	var standard := await _capture_frozen(vp,fx,"fire_standard")
+	# Same initialized instance and arrays: suppress only fixture decoration to
+	# obtain the unmodified standard renderer's full flame/ground core as oracle.
+	fx._embers = []
+	var core := await _capture_frozen(vp,fx,"fire_standard_core")
+	fx._embers = embers
+	root.get_node("Settings").set("effects_quality","reduced")
+	var reduced := await _capture_frozen(vp,fx,"fire_reduced")
+	var agreement := _core_mask_agrees(core,reduced)
+	check(agreement.core_pixels > 100 and agreement.mismatches == 0, "reduced fire preserves every flame/ground core pixel")
+	check(_bytes_sha(core.get_data()) == _bytes_sha(reduced.get_data()), "reduced fire equals full standard core without embers")
+	var anchor_rows: Array = []
+	for direction in [Vector2.RIGHT,Vector2.LEFT,Vector2.UP,Vector2.DOWN]:
+		var at: Vector2 = Vector2(256,170) + map_script.ISO.basis_xform(direction * fx.rad * 0.80)
+		var pixel := Vector2i(roundi(at.x),roundi(at.y))
+		var visible := reduced.get_pixelv(pixel).a > 0.02
+		check(visible and _pixel_equal(core.get_pixelv(pixel),reduced.get_pixelv(pixel)), "fire keeps authored-radius ground anchor " + str(direction))
+		anchor_rows.append({"pixel":[pixel.x,pixel.y],"visible":visible})
+	root.get_node("Settings").set("effects_quality","standard")
+	var restored := await _capture_frozen(vp,fx,"fire_restored")
+	check(_bytes_sha(standard.get_data()) == _bytes_sha(restored.get_data()) and _visual_state(fx,"fire") == before, "fire arrays/radius/time and standard pixels restored")
+	report["critical_fire"] = {"radius":fx.rad,"core_agreement":agreement,"ground_anchors":anchor_rows,"manual_boundary_readability":"pending"}
+	vp.free()
+
+func _critical_axes_case() -> void:
+	var fixture := _viewport_fixture()
+	var vp: SubViewport = fixture[0]
+	var holder: Node2D = fixture[1]
+	var fx = axes_script.new()
+	var targets: Array = []
+	for at in [Vector2(100,0),Vector2(-90,50),Vector2(0,-90)]:
+		var unit = unit_script.new()
+		unit.position = at
+		targets.append(unit)
+		fx.hits.append({"target":unit,"dmg":40.0})
+	fx.tex = root.get_node("Art").item_texture("axe")
+	if fx.tex == null: fx.tex = root.get_node("Art").ability_projectile_texture("axe")
+	check(fx.tex != null, "multi-target axes use a real authored Art texture, never silently fallback")
+	if fx.tex == null:
+		fx.free(); vp.free()
+		for unit in targets: unit.free()
+		return
+	holder.add_child(fx)
+	fx.elapsed = 0.15
+	var before := _visual_state(fx,"axes")
+	var id: int = fx.get_instance_id()
+	root.get_node("Settings").set("effects_quality","standard")
+	var standard := await _capture_frozen(vp,fx,"axes_multi_standard")
+	root.get_node("Settings").set("effects_quality","reduced")
+	var reduced := await _capture_frozen(vp,fx,"axes_multi_reduced")
+	var oracle := AxeCoreOracle.new()
+	oracle.tex = fx.tex
+	oracle.inverse_iso = map_script.ISO_INV
+	var centers: Array[Vector2] = []
+	var p: float = fx.elapsed / fx.dur
+	var fly := 1.0 - pow(1.0-p,2.0)
+	for target in targets:
+		var end_screen: Vector2 = map_script.ISO.basis_xform(target.position)
+		var at := end_screen * fly + Vector2(0,-sin(p*PI)*10.0)
+		oracle.poses.append(Transform2D(end_screen.angle()+fx.elapsed*18.0,Vector2.ONE,0.0,at))
+		centers.append(Vector2(256,170)+at)
+	fx.visible = false
+	holder.add_child(oracle)
+	var core := await _capture_frozen(vp,oracle,"axes_multi_authored_core")
+	var agreement := _core_mask_agrees(core,reduced)
+	check(agreement.core_pixels > 30 and agreement.mismatches == 0, "each authored axe core has equal pixels at its target trajectory")
+	check(_bytes_sha(core.get_data()) == _bytes_sha(reduced.get_data()), "reduced multi-target picture equals authored bodies without trails")
+	var per_target: Array = []
+	for index in centers.size():
+		var expected := _roi_visible(core,centers[index])
+		var observed := _roi_visible(reduced,centers[index])
+		check(expected > 5 and expected == observed, "separate real-texture axe body remains visible target " + str(index))
+		per_target.append({"index":index,"screen_center":[centers[index].x,centers[index].y],"core_pixels":expected,"observed_pixels":observed})
+	oracle.visible = false; fx.visible = true
+	root.get_node("Settings").set("effects_quality","standard")
+	var restored := await _capture_frozen(vp,fx,"axes_multi_restored")
+	check(_bytes_sha(standard.get_data()) == _bytes_sha(restored.get_data()) and fx.get_instance_id() == id and _visual_state(fx,"axes") == before, "three-target instance, damage state, trajectory time and standard pixels unchanged")
+	report["critical_axes"] = {"targets":per_target,"core_agreement":agreement,"texture_size":[fx.tex.get_width(),fx.tex.get_height()],"manual_trajectory_readability":"pending"}
+	vp.free()
+	for unit in targets: unit.free()
+
+func _all_label_text(node: Node) -> Array:
+	var labels: Array = []
+	if node is Label: labels.append(node.text)
+	for child in node.get_children(): labels.append_array(_all_label_text(child))
+	return labels
+
+func _legacy_autoload_cases() -> void:
+	# This stage starts a fresh OS process against the ORIGINAL Settings source.
+	# Source hashes are checked externally before class/autoload parsing begins.
+	var settings = root.get_node("Settings")
+	check(settings.get("effects_quality") == null, "actual booted legacy Autoload lacks the new field")
+	var panel = load("res://scripts/settings_panel.gd").new()
+	root.add_child(panel)
+	check(not _all_label_text(panel).has("特效细节"), "legacy Settings hides new preference row")
+	panel.free() # Do not call close/save; menu/pause GUI is a separate task.
+	if DisplayServer.get_name() == "headless":
+		check(false,"legacy startup feedback requires an actual renderer")
+		return
+	var vp := SubViewport.new()
+	vp.size = Vector2i(512,320); vp.transparent_bg = true; vp.disable_3d = true
+	vp.world_2d = World2D.new(); vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(vp)
+	var motes = motes_script.new()
+	motes.process_mode = Node.PROCESS_MODE_DISABLED
+	vp.add_child(motes)
+	var image := await _capture_frozen(vp,motes,"legacy_standard_motes")
+	check(_visible_pixels(image) > 0,"missing field falls back to standard ambient drawing")
+	check(settings.get("effects_quality") == null,"legacy stage does not invent/persist a new Settings field")
+	vp.free()
+	report["legacy_autoload"] = {"fresh_process_pid":OS.get_process_id(),"field_absent":true,"new_row_hidden":true,"standard_fallback_drawn":true,"historical_apk_pck_boot":"still requires platform integration test"}

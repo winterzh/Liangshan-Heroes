@@ -1,0 +1,68 @@
+extends Node2D
+var caster: Unit = null
+var game = null
+var hits: Array = []          # [{target: Unit, dmg: float}]
+var tex: Texture2D = null
+var dur := 0.36
+var elapsed := 0.0
+var resolved := false
+
+func _process(delta: float) -> void:
+	elapsed += delta
+	if elapsed >= dur:
+		resolve_hits()
+		return
+	queue_redraw()
+
+## 命中只造成一次飞斧伤害；不调用普通攻击流程，因此不会递归触发蛮力或附带暴击/攻击特效。
+func resolve_hits() -> void:
+	if resolved:
+		return
+	resolved = true
+	var src: Unit = caster if is_instance_valid(caster) else null
+	for hit in hits:
+		var target_value: Variant = hit.get("target")
+		if not is_instance_valid(target_value):
+			continue
+		var target: Unit = target_value
+		if not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned or target.story_outcome != "":
+			continue
+		var dmg := float(hit.get("dmg", 0.0))
+		if target.is_phys_immune():
+			target.absorb_physical_damage(dmg, src)
+		else:
+			# 只有散射斧显式归入 E；触发它的那次普通攻击仍沿用无 ability_id 的普攻统计。
+			target.take_damage(dmg, src, false, false, "li_brawn")
+		if game != null and is_instance_valid(game):
+			game.spawn_impact(target.position, true)
+	queue_free()
+
+func _draw() -> void:
+	var p := clampf(elapsed / maxf(dur, 0.01), 0.0, 1.0)
+	var fly := 1.0 - pow(1.0 - p, 2.0)   # 起手快、入靶稍收，飞斧更有重量感
+	for hit in hits:
+		var target_value: Variant = hit.get("target")
+		if not is_instance_valid(target_value):
+			continue
+		var target: Unit = target_value
+		if not is_instance_valid(target) or target.hp <= 0.0:
+			continue
+		var end_screen := GameMap.projected_delta(self, target.position - position)
+		var axe_pos := end_screen * fly + Vector2(0, -sin(p * PI) * 10.0)
+		var angle := end_screen.angle() + elapsed * 18.0
+		# 短拖尾：同一 Node 内批量画，不额外分配粒子节点。
+		draw_set_transform_matrix(GameMap.ISO_INV)
+		for j in range(3):
+			var q := maxf(0.0, fly - float(j + 1) * 0.06)
+			var trail_pos := end_screen * q + Vector2(0, -sin(q * PI) * 10.0)
+			draw_circle(trail_pos, 3.5 - float(j) * 0.8, Color(1.0, 0.38, 0.18, 0.20 - float(j) * 0.045))
+		if tex != null:
+			draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(angle, Vector2.ONE, 0.0, axe_pos))
+			draw_texture_rect(tex, Rect2(Vector2(-15, -15), Vector2(30, 30)), false)
+		else:
+			draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(angle, Vector2.ONE, 0.0, axe_pos))
+			draw_line(Vector2(-10, 0), Vector2(8, 0), Color("8b5a32"), 3.0)
+			draw_colored_polygon(PackedVector2Array([Vector2(3, -8), Vector2(12, -5), Vector2(12, 5), Vector2(3, 8)]), Color("d8dce2"))
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+

@@ -13,6 +13,7 @@ var _key_overview: Label
 func _ready() -> void:
 	theme = UITheme.shared()
 	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停态(Esc 菜单)下仍可操作
+	z_index = 300  # Keep this modal above battle toasts, inventory and skill tips.
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_build()
@@ -87,6 +88,11 @@ func _build() -> void:
 	_row(p, "缩放灵敏度", _slider(Settings.zoom_sens, 0.3, 2.5, func(v: float) -> void: Settings.zoom_sens = v))
 
 	_head(p, "💬  显示")
+	# Old packaged Settings instances may predate this field; keep standard and hide this row.
+	var effects_value: Variant = Settings.get("effects_quality")
+	if effects_value is String and effects_value in ["standard", "reduced"]:
+		_row(p, "特效细节", _seg([["标准", "standard"], ["精简", "reduced"]], effects_value, func(v) -> void: Settings.set("effects_quality", String(v))))
+		_row(p, "", _note("精简装饰粒子与拖尾，保留技能提示和命中反馈"))
 	_row(p, "伤害飘字", _check(Settings.show_damage, func(on: bool) -> void: Settings.show_damage = on))
 	_row(p, "血条常显", _check(Settings.show_healthbars, func(on: bool) -> void: Settings.show_healthbars = on))
 	_row(p, "技能冷却数字", _check(Settings.show_cooldown, func(on: bool) -> void: Settings.show_cooldown = on))

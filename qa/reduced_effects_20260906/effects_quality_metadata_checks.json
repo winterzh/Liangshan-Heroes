@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "historical real report retains unknown quality",
+      "passed": true
+    },
+    {
+      "check": "historical real raw-frame segments stay exactly unchanged",
+      "passed": true
+    },
+    {
+      "check": "matching explicit quality accepted",
+      "passed": true
+    },
+    {
+      "check": "reject metadata corruption effects_quality_requested",
+      "passed": true
+    },
+    {
+      "check": "reject metadata corruption effects_quality",
+      "passed": true
+    },
+    {
+      "check": "reject metadata corruption effects_quality_end",
+      "passed": true
+    },
+    {
+      "check": "new schema cannot silently become legacy unknown",
+      "passed": true
+    },
+    {
+      "check": "three matched eligible reports retain eligibility",
+      "passed": true
+    },
+    {
+      "check": "mixed quality or missing verification prevents eligible group {'effects_quality': 'reduced'}",
+      "passed": true
+    },
+    {
+      "check": "mixed quality or missing verification prevents eligible group {'quality_metadata_valid': False}",
+      "passed": true
+    }
+  ],
+  "historical_input": "qa/polish_baseline_20260906/baseline_fixed/defense200_fixed_1.json",
+  "historical_input_sha256": "203059c37a003a0d490390f7650fe8150c6b64cc15d8b5c7c2998d6df65ace24",
+  "godot_run": false,
+  "original_reports_mutated": false
+}
