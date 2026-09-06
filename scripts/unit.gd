@@ -1537,10 +1537,12 @@ func _do_chase(delta: float) -> void:
 			_chase_best_distance = d
 			_chase_t = 0.0
 		var can_give_up := (_chase_intent == CHASE_AUTO or _chase_intent == CHASE_AMOVE) and not _chasing_path_blocker
-		var cap: float = CHASE_GIVEUP_FAST if _target.current_move_speed() > current_move_speed() + 1.0 else CHASE_GIVEUP
+		# Speed only affects the early give-up window; avoid terrain reads otherwise.
+		var timed_out := can_give_up and _chase_t >= CHASE_GIVEUP_FAST and (
+			_chase_t >= CHASE_GIVEUP or _target.current_move_speed() > current_move_speed() + 1.0)
 		# 玩家点名攻击不因“目标更快”自行改令；只有目标连续不可达才结束，避免永远撞墙。
 		var unreachable_explicit := _chase_intent == CHASE_EXPLICIT and _path.is_empty() and _chase_t >= 3.5
-		if (can_give_up and _chase_t >= cap) or unreachable_explicit:
+		if timed_out or unreachable_explicit:
 			_giveup_id = _target.get_instance_id()
 			_giveup_t = GIVEUP_COOLDOWN
 			_target = null

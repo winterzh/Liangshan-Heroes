@@ -1,3 +1,7 @@
+## 2026-09-06 追击速度检查
+
+新增 `tools/chase_speed_qa.gd`，用 `--headless` 输出 `.godot/chase_speed_qa/`；44 项专项、整合实际攻击/AI/兵群共 339 项通过。源码启动方式不变。完整复现与本次 27.88 FPS 限制见[说明](CHASE_SPEED_20260906.md)。
+
 ## 2026-09-06 网格重建投影检查
 
 新增 `tools/grid_build_qa.gd`，用 `--headless` 输出 `.godot/grid_build_qa/`；142 项专项、整合兵群/墙体/终态服装共 741 项通过。已包含 e211151 服装修复，源码启动方式不变。完整复现见[说明](GRID_BUILD_20260906.md)，本次正常压力 26.67 FPS，性能验收继续保留。
