@@ -12,6 +12,8 @@
 
 ## 当前 GitHub 接入状态
 
+2026-09-06：用户本轮明确要求“合并，然后发布”，并确认“更新 Steam”。PR #1 已合并，合并提交为 `37d3e363847ff37177ef62ce8927db5f4a270bc6`，与统一源码 `954ffde683e79fe90656e5acba78692bc5de67b8` 同树；该 PR 已关闭，不能继续当作开放 PR 使用。本次 Steam 更新的实际状态以 `docs/STEAM_UPDATE_20260906.md` 与对应 QA 收据为准。后续开发继续使用既定 stable 分支；本轮授权不扩展为今后自行合并 main 或发布。
+
 2026-09-05 跨任务核实：用户已在“接收 GitHub 协作邀请并更新”任务明确授权同步，`gaojing-ops` 已取得 `https://github.com/winterzh/Liangshan-Heroes.git` 协作权限。
 已确认目标为 `codex/sync-20260905-stable` 分支及 PR `https://github.com/winterzh/Liangshan-Heroes/pull/1`，初次稳定快照提交为 `b534fd36687403cc3bba06a1161ec8eb4950dc11`。继续增量推送此分支，不自行合并或直接推 main。
 办公室原始外层水浒目录及 `Liangshan-Heroes/` 是共享非 Git 工作区，须使用独立 Git checkout 和逐文件白名单同步。家里通过 Git 获取的目录本身就是 checkout，根目录直接包含 `project.godot`；在该 checkout 开发即可，不再嵌套克隆一份。两种环境都须先核对远端与正在进行的任务，不直接复用其他任务留下的临时 Git index，不创建公开仓库或上传本地全部文件。每轮实际远端 SHA 以当轮收据为准。
