@@ -1,0 +1,77 @@
+{
+	"checks": 5,
+	"failures": [],
+	"metrics": {
+		"ai_trained": 9,
+		"buildings_started": 5,
+		"entered_with_main_intact": false,
+		"events": [
+			"zhu_resource_secured",
+			"zhu_supply_cut",
+			"zhu_hu_captured",
+			"zhu_gate_breached",
+			"zhu_manor_fallen",
+			"action:zhu_rts:zhu_rts_rescue",
+			"zhu_prisoners_freed",
+			"zhu_seven_safe",
+			"action:zhu_rts:zhu_rts_finish",
+			"zhu_victory"
+		],
+		"game_seconds": 319.53333333332,
+		"orders": 177,
+		"raids_sent": 1,
+		"result": {
+			"contract_version": 2,
+			"core_cleared": true,
+			"core_goal": "摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。",
+			"done_ids": [
+				"zhu_capture",
+				"zhu_seven"
+			],
+			"goals": [
+				{
+					"id": "zhu_capture",
+					"label": "生擒扈三娘，仍按敌将看押",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "zhu_inside",
+					"label": "孙立内应，打开偏门",
+					"note": "",
+					"reason": "本局未完成",
+					"state": "missed"
+				},
+				{
+					"id": "zhu_seven",
+					"label": "七名被囚好汉全部撤回前营",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				}
+			],
+			"missed_ids": [
+				"zhu_inside"
+			],
+			"pending_ids": [],
+			"story_complete": false,
+			"story_done": 2,
+			"story_total": 3
+		},
+		"stage": "return",
+		"towers_destroyed": 1,
+		"units_queued": 36,
+		"units_queued_by_key": {
+			"hua_rong": 2,
+			"liang_dao": 9,
+			"liang_gong": 13,
+			"liang_qiang": 7,
+			"siege_cata": 3,
+			"siege_ram": 2
+		}
+	},
+	"passed": true,
+	"route": "direct",
+	"scope": "automated live gameplay; not human fun acceptance"
+}

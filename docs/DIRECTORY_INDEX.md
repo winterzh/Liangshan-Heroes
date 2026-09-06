@@ -1,3 +1,9 @@
+## 2026-09-06 持续打磨 M2A
+
+- `docs/POLISH_FEEDBACK_20260906.md`：野猪林与祝家庄操作/失败反馈、边界和335项最终结果。
+- `tools/yezhulin_feedback_qa.gd`、`tools/zhujiazhuang_feedback_qa.gd`：输入、文案、布局及败北专项；临时输出在忽略的 `.godot/`。
+- `qa/polish_feedback_20260906/`：最终报告、日志、截图、逐文件哈希及单列旧QA失败/留图问题；目录排除Godot扫描。
+
 ## 2026-09-06 持续打磨首批
 
 - `docs/POLISH_ROADMAP_20260906.md`：完整路线、指标、当前里程碑及持续目标结束条件。

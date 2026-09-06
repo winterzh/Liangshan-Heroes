@@ -1,0 +1,61 @@
+{
+	"cases": [
+		{
+			"case": "wrong_person",
+			"deadline_advanced": 3.00000000000004,
+			"reason": "需要鲁智深：请选中该人物，再右键1号旗标。",
+			"returned_guidance": "选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。"
+		},
+		{
+			"case": "new_order_and_duration",
+			"events": [
+				"observe",
+				"shadow_pine",
+				"shadow_route_chosen",
+				"action:intercept:intercept",
+				"intercept"
+			],
+			"rescued": true,
+			"stage": "mercy"
+		},
+		{
+			"case": "stop",
+			"deadline_advanced": 2.00000000000002,
+			"reason": "玩家已改令，现场动作取消。",
+			"rescued": false
+		},
+		{
+			"case": "left_range",
+			"deadline_advanced": 2.00000000000002,
+			"reason": "鲁智深离开办理范围；请重新下令到目标标记。",
+			"rescued": false
+		},
+		{
+			"case": "invalid_actor",
+			"deadline_advanced": 2.00000000000002,
+			"reason": "办理中断：人物已无法行动。",
+			"rescued": false
+		},
+		{
+			"case": "blocked_and_stage_reset",
+			"new_status": "选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。",
+			"reason": "边界夹具：此现场暂不可办理。"
+		}
+	],
+	"checks": 54,
+	"completed_cases": 6,
+	"failures": [
+		"hint label matches the real touch control",
+		"all seven behavior fixtures completed without an aborted case"
+	],
+	"passed": false,
+	"save_after": {
+		"campaign": "e53e068321329011e38df0613595f86f64ba2aba4120e5955d321c07ad2f2b60",
+		"settings": "<absent>"
+	},
+	"save_before": {
+		"campaign": "e53e068321329011e38df0613595f86f64ba2aba4120e5955d321c07ad2f2b60",
+		"settings": "<absent>"
+	},
+	"scope": "controlled fixed-step input/feedback boundary fixtures; not a live route, visual or performance acceptance"
+}

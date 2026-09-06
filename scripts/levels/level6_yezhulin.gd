@@ -437,7 +437,8 @@ func _adopt_latest_player_escort_order(b) -> void:
 		escort_orders[unit.get_instance_id()] = unit._order_serial
 		unit.passive = true
 		unit.stance = Unit.STANCE_PASSIVE
-	b.mission.set_status("已接收玩家路线：鲁智深领队，幸存解差照应林冲。按S可让整队停下。")
+	var stop_hint := "点“■停”可让整队停下。" if b.hud.touch_ui else "按%s可让整队停下。" % Settings.key_label("stop")
+	b.mission.set_status("已接收玩家路线：鲁智深领队，幸存解差照应林冲。" + stop_hint)
 
 func _regulate_escort_spacing(b) -> void:
 	var group := _escort_group()
@@ -609,13 +610,13 @@ func _update_help(b) -> void:
 	if b.mission.active_action_id!="": return
 	if st==STALK:
 		if lu not in b.selection:
-			b.mission.set_status("先点选鲁智深，再右键林边地面跟随。顶部提示距离；查看按钮只移镜头。")
+			b.mission.set_guidance("先点选鲁智深，再右键林边地面跟随。顶部提示距离；查看按钮只移镜头。")
 		elif shadow_route=="lost_trail":
-			b.mission.set_status("已跟丢，仍可补救：查看大松树，再右键旁边地面赶去。")
+			b.mission.set_guidance("已跟丢，仍可补救：查看大松树，再右键旁边地面赶去。")
 		else:
-			b.mission.set_status("右键林边地面跟随；贴近会惹人起疑，保持距离。右键解差则提前动手强救。")
+			b.mission.set_guidance("右键林边地面跟随；贴近会惹人起疑，保持距离。右键解差则提前动手强救。")
 	elif st==RESCUE:
-		b.mission.set_status("选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。")
+		b.mission.set_guidance("选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。")
 
 func _story_miss(b, goal_id: String, reason: String) -> void:
 	if b.mission.has_method("miss_story_goal"):

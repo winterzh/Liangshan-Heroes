@@ -1,3 +1,9 @@
+## 2026-09-06 野猪林与祝家庄操作反馈
+
+运行现有 `Play.cmd` 并重开关卡加载本批反馈。野猪林停止提示随按键绑定变化；祝家庄救人后可选时迁/获救队伍或查看前营，仍需另下移动命令，任务面板可滚动。没有新增运行依赖。
+
+专项入口为 `tools/yezhulin_feedback_qa.gd`（可headless）与 `tools/zhujiazhuang_feedback_qa.gd`（必须真实渲染）；用既定本机Godot路径参数 `--path . --script res://tools/<对应脚本>` 运行，输出默认留在忽略的 `.godot/`。完整范围、335项结果和QA夹具限制见[反馈说明](POLISH_FEEDBACK_20260906.md)、[证据](../qa/polish_feedback_20260906/README.md)。启动方式、玩家存档与设置格式不变。
+
 ## 2026-09-06 持续打磨与性能测量
 
 完整后续路线已保存到[POLISH_ROADMAP](POLISH_ROADMAP_20260906.md)。本批新增 `tools/run_polish_performance.py` 与 `tools/polish_performance_probe.gd`：Python3.9以上标准库，Godot仍从 `--godot`、`GODOT_PATH` 或本机忽略的 `godot.local.txt` 提供。真实渲染串行运行，每组至少3次60秒；输出在 `.godot/polish_performance/`，不能边测边改源或并发运行Godot。

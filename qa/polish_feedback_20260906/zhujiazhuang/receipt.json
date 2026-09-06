@@ -1,0 +1,146 @@
+{
+  "status": "final GUI and both current live routes and contact regression passed",
+  "final_checks": 173,
+  "godot": "4.6.3.stable.official.7d41c59c4",
+  "gui_gpu": "NVIDIA GeForce RTX 3070 Ti",
+  "lf_sha256": {
+    "scripts/levels/level3_zhujiazhuang_rts.gd": "4f966f90d79a074f366b6141406c2d5e2b8c45a0510c8b262eb18fff3dec9b63",
+    "scripts/campaign_mission.gd": "2d76dc6fcf4ca9a9658bc7b4eb7b32b82d72dcd198d08ca0240ef634607d014e",
+    "tools/zhujiazhuang_feedback_qa.gd": "8bf6e60a1be1f251680cda241d40271530db98b477ca4c884a0c30abf5aece5b",
+    "tools/zhujiazhuang_rts_test.gd": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+    "tools/zhujiazhuang_gate_contact_test.gd": "e2f412d40f1bb72356dd5f46c790013df9c388da4568b946158408f4de6d7763"
+  },
+  "runs": [
+    {
+      "directory": ".godot/scratchpad/zhu_m2a_gui_01",
+      "report": "report.json",
+      "renderer": "Vulkan Forward+",
+      "checks": 135,
+      "passed": true,
+      "failures": [],
+      "warnings_errors": [],
+      "screenshots": 14,
+      "game_seconds": null
+    },
+    {
+      "directory": ".godot/scratchpad/zhu_m2a_direct_01",
+      "report": "direct.json",
+      "renderer": "headless",
+      "checks": 5,
+      "passed": true,
+      "failures": [],
+      "warnings_errors": [],
+      "screenshots": 0,
+      "game_seconds": 319.53333333332
+    },
+    {
+      "directory": ".godot/scratchpad/zhu_m2a_inside_01",
+      "report": "inside.json",
+      "renderer": "headless",
+      "checks": 5,
+      "passed": true,
+      "failures": [],
+      "warnings_errors": [],
+      "screenshots": 0,
+      "game_seconds": 420.733333333315
+    },
+    {
+      "directory": ".godot/scratchpad/zhu_m2a_gate_01",
+      "report": "report.json",
+      "renderer": "headless",
+      "checks": 22,
+      "passed": true,
+      "failures": [],
+      "warnings_errors": [],
+      "screenshots": 0,
+      "game_seconds": null
+    },
+    {
+      "directory": ".godot/scratchpad/zhu_m2a_gui_02",
+      "report": "report.json",
+      "renderer": "Vulkan Forward+",
+      "checks": 141,
+      "passed": true,
+      "failures": [],
+      "warnings_errors": [],
+      "screenshots": 14,
+      "game_seconds": null
+    },
+    {
+      "directory": ".godot/scratchpad/zhu_m2a_gui_03",
+      "report": "report.json",
+      "renderer": "Vulkan Forward+",
+      "checks": 141,
+      "passed": true,
+      "failures": [],
+      "warnings_errors": [],
+      "screenshots": 14,
+      "game_seconds": null
+    }
+  ],
+  "fixture_corrections": [
+    {
+      "run": "zhu_m2a_gui_01",
+      "assertions_passed": true,
+      "visual_issue": "Fixture froze before normal first-frame fog and top HUD updates; background was black and top HUD still showed preparation. Retained in full.",
+      "fix": "QA alone allows two physics frames and one process frame before freezing; checks fight phase, elapsed time and camp visibility."
+    },
+    {
+      "run": "zhu_m2a_gui_02",
+      "assertions_passed": true,
+      "visual_issue": "Late-layout fixture camera remained over unseen prison fog after isolated group-selection tests. Retained in full.",
+      "fix": "QA alone restores visible camp view and refreshes current top HUD before every stage layout screenshot."
+    }
+  ],
+  "scope": "GUI: actual rendered controls and GUI mouse input with explicit frozen/placed interaction and death fixtures. Routes: current paid economy, troop production, live combat and explicit retreat at existing 4x headless automation. Gate: frozen-enemy input fixture. These are not human experience or performance acceptance.",
+  "production_rules_unchanged": "Patch only adds scrolling and manual selection/location controls after rescue and contextual defeat text. No combat stats, task duration, costs, enemy scheduling, mission completion requirements or movement dispatch changed.",
+  "edited_files": [
+    "scripts/levels/level3_zhujiazhuang_rts.gd",
+    "tools/zhujiazhuang_feedback_qa.gd"
+  ],
+  "not_run": [
+    "retired campaign_manual_orders routes"
+  ],
+  "shared_docs_or_git_modified": false,
+  "final_absolute_artifacts": [
+    {
+      "run": "zhu_m2a_gui_03",
+      "report": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\report.json",
+      "log": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\godot.log",
+      "screenshots": [
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\defeat_hall.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\defeat_shi_captive.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\defeat_shi_rescued.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\defeat_song.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\finish_ready_1280.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\finish_ready_1440.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\rescued_1280.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\rescued_1440.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\side_gate_destroyed_1280.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\side_gate_destroyed_1440.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\start_1280.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\start_1440.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\sun_1280.png",
+        "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gui_03\\sun_1440.png"
+      ]
+    },
+    {
+      "run": "zhu_m2a_direct_01",
+      "report": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_direct_01\\direct.json",
+      "log": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_direct_01\\godot.log",
+      "screenshots": []
+    },
+    {
+      "run": "zhu_m2a_inside_01",
+      "report": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_inside_01\\inside.json",
+      "log": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_inside_01\\godot.log",
+      "screenshots": []
+    },
+    {
+      "run": "zhu_m2a_gate_01",
+      "report": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gate_01\\report.json",
+      "log": "E:\\ChatGPT\\水浒-art-validation\\.godot\\scratchpad\\zhu_m2a_gate_01\\godot.log",
+      "screenshots": []
+    }
+  ]
+}

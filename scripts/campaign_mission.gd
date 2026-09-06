@@ -28,6 +28,8 @@ var _story: Label
 var _objective: Label
 var _buttons: VBoxContainer
 var _status: Label
+var _feedback_text := ""
+var _feedback_left := 0.0
 var _markers: Array = []
 var stage_metrics: Array[Dictionary] = []
 var total_game_seconds := 0.0
@@ -291,6 +293,8 @@ func begin(new_id: String, title: String, text: String) -> void:
 		if is_instance_valid(marker): marker.queue_free()
 	_markers.clear()
 	_title.text = title
+	_feedback_text = ""
+	_feedback_left = 0.0
 	set_objective(text)
 	_status.text = "任务按钮只定位现场；请自行选人并右键目标标记。"
 
@@ -305,6 +309,19 @@ func set_objective(text: String) -> void:
 
 func set_status(text: String) -> void:
 	_status.text = text
+	_feedback_text = ""
+	_feedback_left = 0.0
+
+## Brief explanations outlive periodic help, but never delay an order or progress.
+func set_feedback(text: String, seconds := 2.5) -> void:
+	set_status(text)
+	_feedback_text = text
+	_feedback_left = maxf(0.0, seconds)
+
+func set_guidance(text: String) -> void:
+	if active_action_id != "" or (_feedback_left > 0.0 and _status.text == _feedback_text):
+		return
+	set_status(text)
 
 var _scroll: ScrollContainer
 var _scroll_content: VBoxContainer
@@ -418,7 +435,7 @@ func block_action(action_id: String, reason: String) -> void:
 		action.button.tooltip_text = reason
 	if is_instance_valid(action.get("actor_button")): action.actor_button.disabled = true
 	action.marker.hide()
-	_status.text = reason
+	set_feedback(reason)
 
 ## Called only for a real non-queued ground move. The selected actor must reach
 ## the task center, rather than an outlying formation slot. No unselected unit
@@ -436,7 +453,7 @@ func prepare_manual_move(movers: Array, target: Vector2) -> Dictionary:
 	if nearest.is_empty(): return {}
 	var action: Dictionary = actions[nearest]
 	if not String(action.get("blocked_reason", "")).is_empty():
-		_status.text = action.blocked_reason
+		set_feedback(action.blocked_reason)
 		return {}
 	var destination: Vector2 = battle.map.cell_to_world(action.cell)
 	var candidate = null
@@ -446,7 +463,7 @@ func prepare_manual_move(movers: Array, target: Vector2) -> Dictionary:
 			candidate = u
 			best = u.position.distance_squared_to(destination)
 	if candidate == null:
-		_status.text = "需要%s：请选中该人物，再右键%d号旗标。" % [_actor_labels(action.actors), action.marker.number]
+		set_feedback("需要%s：请选中该人物，再右键%d号旗标。" % [_actor_labels(action.actors), action.marker.number])
 		return {}
 	_status.text = "%s正在前往%d号旗标；到场停留%s秒办理。" % [candidate.display_name, action.marker.number, str(action.duration)]
 	return {"actor":candidate, "target":destination}
@@ -535,7 +552,7 @@ func on_player_order(candidate) -> void:
 	_actor = null
 	_progress = 0.0
 	_retry = 0.0
-	_status.text = "玩家已改令，现场动作取消。"
+	set_feedback("玩家已改令，现场动作取消。")
 	_refresh_marker_captions()
 
 func _consume_mission_order_token(token: int) -> void:
@@ -606,6 +623,8 @@ func tick(delta: float) -> void:
 	_panel.visible = battle.phase == battle.Phase.FIGHT and stage_id != ""
 	if not _panel.visible:
 		return
+	if _feedback_left > 0.0:
+		_feedback_left = maxf(0.0, _feedback_left - delta)
 	_panel.position = battle.hud.campaign_objective_position()
 	if _scroll!=null:
 		var bottom: float=battle.hud._bottom_panel.get_global_rect().position.y
@@ -626,7 +645,7 @@ func tick(delta: float) -> void:
 		_actor = null
 		_progress = 0.0
 		_retry = 0.0
-		_status.text = "办理中断：人物已无法行动。"
+		set_feedback("办理中断：人物已无法行动。")
 		return
 	var action: Dictionary = actions[active_action_id]
 	var destination: Vector2 = battle.map.cell_to_world(action.cell)
@@ -648,7 +667,7 @@ func tick(delta: float) -> void:
 				_actor = null
 				_progress = 0.0
 				_retry = 0.0
-				_status.text = "%s离开办理范围；请重新下令到目标标记。" % interrupted_actor.display_name
+				set_feedback("%s离开办理范围；请重新下令到目标标记。" % interrupted_actor.display_name)
 		return
 	_actor.order_stop()
 	_progress += delta

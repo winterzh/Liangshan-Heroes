@@ -185,6 +185,7 @@ func on_start(b) -> void:
 		if node != null: workers[i].order_gather(node)
 	for i in range(enemy_workers.size()): enemy_workers[i].order_gather(enemy_nodes[i])
 	b.mission.begin("zhu_rts", "第一打 · 扎营探路", "北取资源，南拔外营；兵营补兵、作坊造器械。先侦察，再决定主攻方向。")
+	b.mission.enable_scrolling()
 	b.mission.add_action("zhu_rts_recon","探路：查看外围战场",Vector2i(42,22),FIELD_ACTORS,1.0,64.0)
 	b.mission.add_action("zhu_rts_rescue","救出被囚好汉",PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
 	b.lit_cells[OUTPOST] = 12.0
@@ -237,8 +238,37 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				u.base_speed = 82.0
 				u.art_variant = ""
 				u.queue_redraw()
+			_add_evacuation_controls(b)
 			b.mission.mark("zhu_prisoners_freed","七名好汉脱困，由玩家护送回前营；伤员不参加战斗")
-			b.msg("选中时迁等获救者，右键送回前营。大营仍须攻破；完成时可直接结算或继续护送其余好汉。",8.0)
+			b.msg("可点“选中 · 时迁”或“选中 · 获救队伍”，再右键送回前营；“查看 · 前营”只移镜头。大营仍须攻破，伤员需要战斗部队保护。",8.0)
+
+
+## Rescue controls only select the live evacuees or move the camera. They never
+## issue orders, claim a mission action, or include ordinary troops and heroes.
+func _rescued_members(only_shi_qian := false) -> Array:
+	var candidates: Array = prisoners
+	if only_shi_qian:
+		candidates = [] if prisoners.is_empty() else [prisoners[0]]
+	return candidates.filter(func(u): return _alive(u) and u.faction == Unit.FACTION_LIANG and not u.is_captive and not u.garrisoned)
+
+func _add_evacuation_controls(b) -> void:
+	for only_shi_qian in [true, false]:
+		var button := Button.new()
+		button.text = "选中 · 时迁" if only_shi_qian else "选中 · 获救队伍"
+		button.custom_minimum_size.y = 32
+		button.add_theme_font_size_override("font_size", 15)
+		button.tooltip_text = "只选中并定位获救者；撤离需要你另下右键命令。"
+		button.pressed.connect(func():
+			if b.phase != b.Phase.FIGHT: return
+			var members := _rescued_members(only_shi_qian)
+			if members.is_empty():
+				b.mission.set_status("时迁当前无法行动。" if only_shi_qian else "当前没有可选择的获救者。")
+				return
+			b.select_members(members, false)
+			b.center_camera_cell(b.map.world_to_cell(members[0].position))
+			b.mission.set_status("已选中时迁；请右键下令撤回前营。" if only_shi_qian else "已选中获救队伍；请右键下令撤回前营。"))
+		b.mission._buttons.add_child(button)
+	b.mission.add_map_locator("前营", CAMP)
 
 func _enemy_economy(b, delta: float) -> void:
 	if not _alive(enemy_base): return
@@ -319,8 +349,17 @@ func on_unit_resolved(b, u, outcome: String) -> void:
 		b.mission.mark("zhu_hu_captured","扈三娘被生擒，仍作为敌将看押，不转为我军")
 
 func on_unit_died(b, u) -> void:
-	if u == hall or u == song or (not prisoners.is_empty() and u == prisoners[0]):
-		b.lose("%s失守，本次攻庄失败。可重新部署，调整扩张与防守安排。" % u.display_name)
+	if u == hall:
+		b.lose("前营被攻破，本次攻庄失败。\n留兵回防；选工人右键受损建筑可修理。\n出征前先处理来袭敌军，避免营地失守。")
+		return
+	if u == song:
+		b.lose("宋江阵亡，本次攻庄失败。\n先让普通兵侦察、掩护，再让英雄支援；避免孤军接敌。")
+		return
+	if not prisoners.is_empty() and u == prisoners[0]:
+		if prisoners_freed:
+			b.lose("时迁遇难，本次护送失败。\n先确认撤退路线安全，再让战斗部队护送伤员回前营。\n获救者不会反击，也不会自行撤离。")
+		else:
+			b.lose("时迁遇难，本次营救失败。\n先清理囚徒附近威胁，再由战斗部队掩护救援。\n时迁无法战斗，需要保护。")
 		return
 	if u == outpost:
 		supply_cut = true
