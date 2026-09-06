@@ -1,0 +1,140 @@
+{
+  "complete": true,
+  "created_utc": "2026-09-06T19:50:43.361293+00:00",
+  "source_head": "df7ed189c1b04a501ca6c3d2fe1c45e781231c18",
+  "source_branch": "codex/sync-20260905-stable",
+  "qa_run": ".godot/steam_integration_qa/20260907_034241_c81fc185",
+  "candidate_run": ".godot/steam_candidates/20260907_034452_e661f0ee",
+  "qa_checks": 176,
+  "qa_steps": [
+    {
+      "name": "import",
+      "exit_code": 0,
+      "seconds": 83.32
+    },
+    {
+      "name": "catalog",
+      "exit_code": 0,
+      "seconds": 5.18
+    },
+    {
+      "name": "contracts",
+      "exit_code": 0,
+      "seconds": 7.85
+    }
+  ],
+  "qa_source_files": 2841,
+  "candidate_source_files": 2604,
+  "pck_checks": 65,
+  "candidate_steps": [
+    {
+      "name": "import",
+      "exit_code": 0,
+      "seconds": 71.98
+    },
+    {
+      "name": "export",
+      "exit_code": 0,
+      "seconds": 101.87
+    },
+    {
+      "name": "package",
+      "exit_code": 0,
+      "seconds": 6.65,
+      "errors": []
+    },
+    {
+      "name": "exe_smoke",
+      "exit_code": 0,
+      "seconds": 13.2,
+      "errors": []
+    }
+  ],
+  "release_pid": 16708,
+  "release_modules": [
+    {
+      "ModuleName": "libgodotsteam.windows.template_release.x86_64.dll",
+      "FileName": "<workspace>\\.godot\\steam_candidates\\20260907_034452_e661f0ee\\windows\\libgodotsteam.windows.template_release.x86_64.dll",
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "ModuleName": "steam_api64.dll",
+      "FileName": "<workspace>\\.godot\\steam_candidates\\20260907_034452_e661f0ee\\windows\\steam_api64.dll",
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    }
+  ],
+  "archive": {
+    "passed": true,
+    "path": "LiangshanHeroes_Steam_candidate.zip",
+    "bytes": 219811886,
+    "sha256": "768d1c15dedfd0cd19f89bb3528028171f2abf0115d3ca51a244e90e8f3b44d5",
+    "members": [
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 287589608,
+        "sha256": "2a633b1a7dbf2161e7e5d69410203093668e65553dcbe82dbeb1734518b20c05"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      }
+    ]
+  },
+  "added_restore_modules": [
+    {
+      "source": "scripts/run_continuous_effect_state.gd",
+      "sha256": "4b1d6214cd760039110b7154555c06a86ffd8ea9dbeb6ca6da8102e24bb2726d",
+      "pck_present": true
+    },
+    {
+      "source": "scripts/run_graph_identity.gd",
+      "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+      "pck_present": true
+    },
+    {
+      "source": "scripts/run_li_brawn_axes_state.gd",
+      "sha256": "cd8662a38012cc4739e403a4b9eb12023c55eb5bf0d750cbf6640b063f591fde",
+      "pck_present": true
+    },
+    {
+      "source": "scripts/run_map_state.gd",
+      "sha256": "9ec7cf0030819b3cff2c32a2e8124fe49efc58d3851fcb32c1bddd7ac59dc1fd",
+      "pck_present": true
+    },
+    {
+      "source": "scripts/run_projectile_state.gd",
+      "sha256": "ad39e3f107fa2a08511e90500fae853d4c203f39b8dbb69c467e8cb4db5bf662",
+      "pck_present": true
+    },
+    {
+      "source": "scripts/run_scenery_state.gd",
+      "sha256": "3806fdfde0fec6b7574a37834fd047395e8c4dd963e82657b560b9ca89cf64e6",
+      "pck_present": true
+    },
+    {
+      "source": "scripts/run_unit_graph.gd",
+      "sha256": "633b631234664fb1abf17d738a6be8599d0c1c9eb55620d495cab51da06f6319",
+      "pck_present": true
+    },
+    {
+      "source": "scripts/run_unit_state.gd",
+      "sha256": "e17915f82c7bbb159e7674458368f138d5696762b1a78974bbfe616e438886c6",
+      "pck_present": true
+    }
+  ],
+  "engine_lock_released_at_completion": true,
+  "live_steam_tested": false,
+  "uploaded_by_this_candidate_task": false,
+  "scope": "Offline native contract tests and actual Windows release package validation only. No Steam server, account, subscription, achievement unlock or full-run restore acceptance is inferred."
+}

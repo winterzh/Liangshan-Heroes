@@ -1,3 +1,9 @@
+## 2026-09-07 Steam 后台与候选证据
+
+- `docs/STEAM_BACKEND_SETUP_20260907.md`：保存后回读、30项成就/60图标映射、文件访问与命名弹窗接续条件；授权有效，配置/包尚未发布。
+- `qa/steam_backend_20260907/backend_state.json`：交互UI观察摘要，区分已保存草稿、未上传图标、未创建测试分支和未完成双账号实测，不是HTTP原响应。
+- `qa/steam_backend_20260907/candidate/`：固定df7ed18的新176项原生、65项PCK和真实发行EXE/DLL证据、来源映射、脱敏记录与ZIP成员哈希。实际ZIP留`.godot/steam_candidates/20260907_034452_e661f0ee/`，不随Git同步。
+
 ## 2026-09-07 运行时 RNG 模块与独立包证据
 
 - `scripts/run_gameplay_rng.gd`：第9个正式恢复组件，独立原生随机流与可信内容版本；恢复不依赖原始`.gd`源码，不迁移Battle调用。

@@ -1,3 +1,11 @@
+## 2026-09-07 Steam 后台接续与候选复现
+
+本轮已确认后台发布/测试分支上传授权，实际仍为保存草稿；[接续说明](STEAM_BACKEND_SETUP_20260907.md)包含30项后台ID与60图标映射、Edge扩展文件访问条件、分支命名prompt及双账号验证步骤。启用文件URL访问或手工选择属于恢复正常上传条件，不是再次等待发布授权。先补齐图标并发布完整配置，再向Windows Depot5088121上传和核对测试分支，default维持25154403。
+
+新候选固定源码df7ed189c1b04a501ca6c3d2fe1c45e781231c18，私有QA目录`.godot/steam_integration_qa/20260907_034241_c81fc185`、候选目录`.godot/steam_candidates/20260907_034452_e661f0ee`；176项原生、65项实际PCK与发行DLL/正常退出均通过。[可复验来源与命令](../qa/steam_backend_20260907/candidate/README.md)。后续checkout已推进0054ee2，不能把该冻结包写成当前HEAD导出，也不能用其旧来源收据导出改变后的源码。包、引擎缓存和私有profile不进入Git。
+
+本轮`qa/steam_backend_20260907/`以`.gitattributes`保留原始字节及日志末尾空行，暂存Git对象须与本地收据SHA一致；不要按文本换行规则重写归档后仍沿用旧哈希。
+
 ## 2026-09-07 运行时 RNG 与 PCK 复现
 
 新增第9个正式恢复组件`scripts/run_gameplay_rng.gd`；源码208条与R1/正式资源路径PCK各57条通过，原PCK报告守护失败单列。[运行时RNG归档](../qa/run_gameplay_rng_runtime_20260907/README.md)按run保留driver/runner/pins、模块、导出模板和来源映射；旧RNG的source-only历史原文不改写。当前正常游戏入口不变，Battle随机调用尚未迁移。

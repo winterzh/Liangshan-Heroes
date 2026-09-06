@@ -1,0 +1,70 @@
+{
+  "record_type": "interactive_ui_observation_summary",
+  "observed_utc": "2026-09-06T20:04:01Z",
+  "app_id": 5088120,
+  "windows_depot_id": 5088121,
+  "scope": "Saved Steamworks drafts and a local verified candidate; not a published schema or live integration result.",
+  "authorization": {"backend_publish": true, "test_branch_upload": true, "default_branch_update": false, "workshop_everyone": false},
+  "initial_state": {"uncommitted_app_data": false, "stats": 0, "achievements": 0},
+  "stats": {
+    "saved_and_read_back": ["TOTAL_WINS", "TOTAL_KILLS", "DEFENSE_WINS", "AI_WINS"],
+    "type": "INT", "permission": "client", "increment_only": true,
+    "min": 0, "max": 2147483647, "default": 0, "aggregated": false
+  },
+  "achievements": {
+    "saved_count": 30,
+    "backend_rows": "a5_0 through a5_29, in catalog order",
+    "catalog": "tools/contracts/steam/steamworks_catalog.json",
+    "english_names_and_descriptions_verified": 30,
+    "schinese_names_and_descriptions_verified": 30,
+    "progress_bindings_verified": 10,
+    "after_reload_localization_status": ["English 已全部本地化。", "Simplified Chinese 已全部本地化。"],
+    "uploaded_icons": 0,
+    "required_icons": 60
+  },
+  "workshop": {
+    "visibility": "developers_only",
+    "test_group_provided": false,
+    "ugc_file_transfer_saved": true,
+    "ready_to_use_content": true,
+    "category": "Content Type / 内容类型",
+    "tags": ["Map", "Defense"],
+    "title_english": "Liangshan Heroes Workshop",
+    "description_english": "Create and share scenarios and custom defense challenges with the in-game editors. Subscribe to community creations and play them from the Workshop menu.",
+    "title_schinese": "水浒英雄传创意工坊",
+    "description_schinese": "用游戏内编辑器制作并分享自定义剧本与守城挑战。订阅社区作品后，即可从游戏的创意工坊菜单开始游玩。",
+    "sample_items_uploaded": 0
+  },
+  "cloud": {
+    "bytes_quota_before_and_after": 1000000000,
+    "files_quota_before": 20,
+    "files_quota_saved_and_independently_read_back": 1000,
+    "auto_cloud_paths": 0,
+    "other_settings_preserved": true
+  },
+  "builds": {
+    "default_build_id": 25154403,
+    "observed_branches": ["default", "macos"],
+    "proposed_test_branch": "steam-integration",
+    "test_branch_created": false,
+    "candidate_uploaded": false,
+    "candidate_source_head": "df7ed189c1b04a501ca6c3d2fe1c45e781231c18",
+    "candidate_zip_sha256": "768d1c15dedfd0cd19f89bb3528028171f2abf0115d3ca51a244e90e8f3b44d5",
+    "upload_page": "https://partner.steamgames.com/apps/depotuploads/5088120",
+    "upload_mode": "standard"
+  },
+  "publishing_diff_review": {
+    "sections": ["stats", "community", "policies", "depots", "ufs", "common"],
+    "workshop_depot_added": 5088120,
+    "ufs_change": "maxnumfiles 20 -> 1000; quota and sync_while_suspended unchanged",
+    "achievement_languages_added": ["english", "schinese"],
+    "result": "All sections correspond to this task's saved configuration; no publish action taken."
+  },
+  "backend_published": false,
+  "two_account_live_qa": false,
+  "blockers": [
+    {"action": "filechooser.setFiles for the first achievement icon", "result": "Not allowed", "documented_recovery": "User enables Allow access to file URLs in the Edge ChatGPT extension Details, or manually selects files in the normal chooser."},
+    {"action": "accept the test branch name JavaScript prompt", "result": "CDP Emulation.setFocusEmulationEnabled timeout", "documented_state": "Independent builds page still showed only default and macos; user must complete the normal prompt."},
+    {"action": "two-account Workshop validation", "result": "Second test account and tester group have not been provided."}
+  ]
+}
