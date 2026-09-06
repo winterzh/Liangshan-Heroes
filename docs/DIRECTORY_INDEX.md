@@ -1,3 +1,10 @@
+## 2026-09-06 寨墙遮挡检查增量
+
+- `tools/wall_visibility_qa.gd`：旧版完整入口对照、边界/实际士兵命中、图片及七组配对计时。
+- `tools/contracts/wall_visibility/`：2ea8c69 完整入口冻结参照。
+- `docs/WALL_VISIBILITY_20260906.md`：算法边界、验证与复现。
+- `qa/wall_visibility_20260906/`：最终渲染/无画面报告、四张遮挡/恢复图、墙体回归、正常压力、诊断及来源收据。
+
 ## 2026-09-06 邻居筛选增量
 
 - `tools/crowd_neighbor_qa.gd`：完整派发、人数/状态/桶序边界及独立候选计数。

@@ -1,3 +1,7 @@
+## 2026-09-06 梁山寨墙遮挡检查
+
+新增 `tools/wall_visibility_qa.gd`：真实渲染 214 项、无画面 210 项，输出 `.godot/wall_visibility_qa/`；46 项墙体整合回归及正常压力命令见[说明](WALL_VISIBILITY_20260906.md)。不改变源码启动配置。正常压力 40.09 FPS/P95 59.245ms，整体性能尚待验收；另一任务未提交的墙宽/方向调整不属于本批。
+
 ## 2026-09-06 密集兵群邻居筛选
 
 新增 `tools/crowd_neighbor_qa.gd`，使用headless，输出 `.godot/crowd_neighbor_qa/`；99项/82,968次位置对照通过。已包含祝家庄新门楼1b9784a，整合通行/接应/门楼回归和实际压力复现见[说明](CROWD_NEIGHBORS_20260906.md)。源码启动配置不变，实际战斗仍36.66FPS/P95 64.368ms，未完成性能验收。

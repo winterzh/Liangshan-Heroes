@@ -263,26 +263,13 @@ func _process(delta: float) -> void:
 		_sync_gate_state(_side_gate_parts,"east",battle.units)
 	_fade_gate(_gate_parts,Rect2(Vector2(_gate_cell)+Vector2(-2.5,-1.5),Vector2(6,3)),battle.units)
 	_fade_gate(_side_gate_parts,Rect2(Vector2(_east_gate_cell)+Vector2(-1.5,-2.5),Vector2(3,6)),battle.units)
-	_refresh_wall_visibility(battle.units)
-
-func _refresh_wall_visibility(units: Array) -> void:
-	if _wall_parts.is_empty():
-		return
-	# Snapshot only for this synchronous pass. Movement, visibility and depth
-	# are read again next tick; wall overlap geometry and boundary rules stay live.
-	var feet := PackedVector2Array()
-	var depths := PackedInt32Array()
-	for unit in units:
-		if is_instance_valid(unit) and unit.hp>0 and unit.visible and not unit.is_building:
-			feet.append(_map.project(unit.position))
-			depths.append(unit.z_index)
 	for wall in _wall_parts:
 		var wall_fades := false
-		var origin := _map.project(wall.position)
-		for i in range(feet.size()):
-			if depths[i]<=wall.z_index and wall.body_overlaps(feet[i]-origin):
-				wall_fades = true
-				break
+		for unit in battle.units:
+			if is_instance_valid(unit) and unit.hp>0 and unit.visible and not unit.is_building and unit.z_index<=wall.z_index:
+				if wall.body_overlaps(_map.project(unit.position)-_map.project(wall.position)):
+					wall_fades = true
+					break
 		# 不再把整段寨墙淡到近乎消失；保留遮挡关系，避免贴墙单位被误读为穿墙。
 		wall.modulate.a = 0.72 if wall_fades else 1.0
 

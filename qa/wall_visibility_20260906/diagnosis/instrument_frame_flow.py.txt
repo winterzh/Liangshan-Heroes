@@ -1,0 +1,33 @@
+from pathlib import Path
+import subprocess,re
+names=['unit','battle','hud','liangshan_scenery','campaign_scenery','world_shadow','liangshan_entrance','music','rts_camera']
+def step(label):return '\tpreload("res://scratchpad/phase_metrics.gd").add_time(_flow_label,_flow_stamp)\n\t_flow_stamp=Time.get_ticks_usec()\n\t_flow_label="'+label+'"\n'
+def split_body(source,method,prefix,markers):
+ lines=source.splitlines(keepends=True)
+ start=next(i for i,l in enumerate(lines) if l.startswith('func '+method+'('))
+ end=start+1
+ while end<len(lines) and (not lines[end].strip() or lines[end].startswith('\t')):end+=1
+ body=''.join(lines[start+1:end])
+ for marker,label in markers:
+  assert body.count(marker)==1,(method,marker,body.count(marker))
+  body=body.replace(marker,step(prefix+label)+marker,1)
+ body=re.sub(r'^(\t+)return\b',lambda m:m.group(1)+'preload("res://scratchpad/phase_metrics.gd").add_time(_flow_label,_flow_stamp)\n'+m.group(0),body,flags=re.M)
+ body='\tvar _flow_label := "'+prefix+'opening"\n\tvar _flow_stamp := Time.get_ticks_usec()\n'+body.rstrip()+'\n\tpreload("res://scratchpad/phase_metrics.gd").add_time(_flow_label,_flow_stamp)\n\n\n'
+ return ''.join(lines[:start+1])+body+''.join(lines[end:])
+for name in names:
+ p=Path('scripts/'+name+'.gd');raw=p.read_bytes()
+ assert raw.replace(b'\r\n',b'\n')==subprocess.check_output(['git','show','HEAD:'+p.as_posix()]).replace(b'\r\n',b'\n'),name
+ Path('scratchpad/frame_flow_base_'+name+'.gd.txt').write_bytes(raw)
+ s=raw.decode().replace('\r\n','\n')
+ if name=='unit':
+  s=split_body(s,'_phys_body','physics_',[
+   ('\t_cd = maxf','regen'),('\t_tick_ability_slots(delta)','slots_inventory'),('\tif _temp_atk_t > 0.0:','status_timers'),('\t_eject_t -= delta','occupancy_targets'),('\t# 引导施法（凌振轰天连炮等）','cast'),('\tif _stun_t > 0.0:','orders'),('\t_move_blend = move_toward','animation'),('\t# 卡死看门狗','stuck')])
+  s=split_body(s,'_draw','draw_',[('\tif story_outcome in ["embarked", "retreated"]:','effects'),('\tvar has_walk :=','body'),('\tvar bar_y: float','labels')])
+ else:
+  occurrence=[0]
+  def wrap(m):
+   indent,args=m.groups();occurrence[0]+=1;arg=args.split(':')[0].strip()
+   impl='_flow_process_'+name+'_'+str(occurrence[0])
+   return indent+'func _process('+args+') -> void:\n'+indent+'\tvar started := Time.get_ticks_usec()\n'+indent+'\t'+impl+'('+arg+')\n'+indent+'\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+impl+'",started)\n\n'+indent+'func '+impl+'('+args+') -> void:'
+  s,n=re.subn(r'^(\t*)func _process\(([^\n]+)\) -> void:',wrap,s,flags=re.M);assert n>0,name
+ p.write_bytes(s.encode())
