@@ -1,3 +1,9 @@
+## 2026-09-06 战役死亡造型证据
+
+- `tools/campaign_terminal_costume_qa.gd`、`tools/campaign_terminal_visual_unit.gd`：终态来源/缓存隔离、实际致命伤和Unit绘制观察。
+- `docs/CAMPAIGN_TERMINAL_COSTUME_20260906.md`：缺图策略、复现与未完成范围。
+- `qa/campaign_terminal_costume_20260906/`：旧Art控制脚本、失败/通过画面、回归、覆盖摘要及来源收据；`.gdignore`排除常规资源扫描。
+
 ## 2026-09-06 AI 决策时序增量
 
 - `tools/ai_schedule_qa.gd`：生产生成/派发的轨迹、资格、暂停与分段清理验证。

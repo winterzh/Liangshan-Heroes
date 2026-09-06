@@ -610,8 +610,8 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 			if _anim_cache.has(variant_cache_key): return _anim_cache[variant_cache_key]
 			var variant_tex := _campaign_texture(variant_path)
 			# 剧情NPC只有有依据的姿态时，保持本期造型，不能切回后期武器/甲胄。
-			# 终态缺图交给绘制层用本期造型做程序化倒地，不能借通用英雄
-			# 的另一套服装，也不能把仍存活的 down 当作死亡。
+			# 终态语义必须隔离：down/death 缺图时继续查同名旧素材或交给绘制层
+			# 做程序化终态，不能用站姿冒充，更不能互相借图。
 			if variant_tex == null and state not in ["idle", "death", "down"]:
 				variant_tex = _campaign_texture(CampaignArt.animation_path(variant, "idle", direction))
 			if variant_tex != null:
@@ -625,8 +625,6 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 						result.append(frame)
 				_anim_cache[variant_cache_key] = result
 				return result
-			if state in ["death", "down"]:
-				return [] # Keep this negative lookup out of the generic cache.
 	key = _ra(key)                     # 运行时别名（场景新建单位借动画）
 	key = SPRITE_ALIAS.get(key, key)   # 无专属走图的将领/兵种借同型官军逐帧
 	var directional_ck := ""
@@ -762,8 +760,6 @@ func unit_anim_uses_directional_source(key: String, state: String, direction: St
 			if state not in ["idle", "death", "down"] \
 					and ResourceLoader.exists(CampaignArt.animation_path(variant, "idle", direction)):
 				return true
-			if state in ["death", "down"]:
-				return false
 	key = _ra(key)
 	key = SPRITE_ALIAS.get(key, key)
 	# 必须与 unit_anim_frames 的实际选图顺序一致，否则绘制层会错把旧动作

@@ -35,8 +35,8 @@ func _run() -> void:
 	var old_texture: Texture2D = art.avatar_texture("wu_song")
 	_check("legacy_signature",not old_frames.is_empty() and old_texture!=null)
 	# down is the non-lethal story terminal; death is the fatal terminal. A
-	# campaign variant without death art must retain the legacy/programmatic
-	# death path instead of silently borrowing its down or idle pose.
+	# campaign variant without death art keeps its current costume through
+	# procedural death instead of borrowing generic death or living down.
 	for direction in CA.DIRECTIONS:
 		var down_path := CA.animation_path("wu_song_mengzhou", "down", direction)
 		var death_path := CA.animation_path("wu_song_mengzhou", "death", direction)
@@ -49,10 +49,9 @@ func _run() -> void:
 		_check("campaign_down_reads_exact_down_" + direction,
 			not down_frames.is_empty() and _frame_source(down_frames[0]) == down_path
 			and art.unit_anim_uses_directional_source("wu_song", "down", direction, "wu_song_mengzhou"))
-		_check("missing_campaign_death_uses_legacy_death_" + direction,
+		_check("missing_campaign_death_preserves_costume_procedurally_" + direction,
 			not art.campaign_variant_has_animation("wu_song_mengzhou", "death", direction)
-			and not death_frames.is_empty()
-			and _frame_source(death_frames[0]) == "res://assets/anim/wu_song_death.png"
+			and death_frames.is_empty()
 			and not art.unit_anim_uses_directional_source("wu_song", "death", direction, "wu_song_mengzhou"),
 			{"actual":_frame_source(death_frames[0]) if not death_frames.is_empty() else ""})
 		var lu_down_path := CA.animation_path("lu_zhishen_rescue", "down", direction)
@@ -70,7 +69,7 @@ func _run() -> void:
 			and lu_intercept.size() == 1 and _frame_source(lu_intercept[0]) == lu_attack_path
 			and art.unit_anim_uses_directional_source("lu_zhishen", "intercept", direction, "lu_zhishen_rescue"))
 		# 快活林蒋忠的 hurt/down 都是原著中仍存活的剧情状态。五种状态
-		# 必须逐方向读取本批独立 PNG；普通死亡继续回退通用死亡素材，
+		# 必须逐方向读取本批独立 PNG；普通死亡保持本期造型程序化倒下，
 		# 不能把倒地告饶图当作尸体。
 		for menshen_state in ["idle", "walk", "attack", "hurt", "down"]:
 			var menshen_path := CA.animation_path("jiang_menshen_fists", menshen_state, direction)
@@ -88,8 +87,7 @@ func _run() -> void:
 		_check("jiang_menshen_down_stays_separate_from_death_" + direction,
 			CA.animation_path("jiang_menshen_fists", "down", direction) != CA.animation_path("jiang_menshen_fists", "death", direction)
 			and not art.campaign_variant_has_animation("jiang_menshen_fists", "death", direction)
-			and not menshen_death.is_empty()
-			and _frame_source(menshen_death[0]) == "res://assets/anim/jiang_menshen_death.png"
+			and menshen_death.is_empty()
 			and not art.unit_anim_uses_directional_source("jiang_menshen", "death", direction, "jiang_menshen_fists"))
 		var procedural_death: Array = art.unit_anim_frames("dong_chao", "death", direction, "dong_chao_escort")
 		_check("missing_campaign_and_legacy_death_stays_empty_for_programmatic_fallback_" + direction,

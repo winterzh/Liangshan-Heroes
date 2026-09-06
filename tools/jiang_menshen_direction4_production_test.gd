@@ -104,7 +104,7 @@ func _terminal_and_mode_isolation(art: Node) -> void:
 		var down: Array = art.unit_anim_frames(UNIT_KEY, "down", direction, VARIANT)
 		var death: Array = art.unit_anim_frames(UNIT_KEY, "death", direction, VARIANT)
 		var death_source := _source(death[0]) if not death.is_empty() else ""
-		_check("down does not alias death " + direction, not down.is_empty() and _source(down[0]) == _expected("down", direction) and death_source != _expected("down", direction) and not art.unit_anim_uses_directional_source(UNIT_KEY, "death", direction, VARIANT))
+		_check("down does not alias death " + direction, not down.is_empty() and _source(down[0]) == _expected("down", direction) and death.is_empty() and death_source != _expected("down", direction) and not art.unit_anim_uses_directional_source(UNIT_KEY, "death", direction, VARIANT))
 		for state in STATES:
 			var generic: Array = art.unit_anim_frames(UNIT_KEY, state, direction, "")
 			var source := _source(generic[0]) if not generic.is_empty() else ""
@@ -161,7 +161,7 @@ func _write_report() -> void:
 	if output.is_empty(): output = "res://qa/jiang_menshen_direction4_production_20260902/runtime_report.json"
 	var absolute := ProjectSettings.globalize_path(output)
 	DirAccess.make_dir_recursive_absolute(absolute.get_base_dir())
-	var payload := {"passed":failures.is_empty(), "checks":checks.size(), "failures":failures, "variant":VARIANT, "required_frames":20, "states":STATES, "directions":DIRECTIONS, "story_route":"Level7 hurt is a living abdomen hit; subdued is a living backward fall/yield; windup is same-direction attack", "death_route":"independent legacy death; never down", "free_mode_isolation_checked":true, "checks_detail":checks}
+	var payload := {"passed":failures.is_empty(), "checks":checks.size(), "failures":failures, "variant":VARIANT, "required_frames":20, "states":STATES, "directions":DIRECTIONS, "story_route":"Level7 hurt is a living abdomen hit; subdued is a living backward fall/yield; windup is same-direction attack", "death_route":"procedural death in current campaign costume; never living down", "free_mode_isolation_checked":true, "checks_detail":checks}
 	var file := FileAccess.open(absolute, FileAccess.WRITE)
 	file.store_string(JSON.stringify(payload, "  ") + "\n")
 	file.close()

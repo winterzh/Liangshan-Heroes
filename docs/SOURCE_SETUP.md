@@ -1,3 +1,7 @@
+## 2026-09-06 战役死亡造型
+
+源码启动方式保持。新增 `tools/campaign_terminal_costume_qa.gd`，默认输出 `.godot/campaign_terminal_costume/`；`TERMINAL_COSTUME_VISUAL=1`启用真实渲染，`TERMINAL_COSTUME_OUT`可指定目录。专用终态缺图时保持本期服装，复现旧版换装问题和1,172项回归见[说明](CAMPAIGN_TERMINAL_COSTUME_20260906.md)。林冲待完成候选没有接入生产。
+
 ## 2026-09-06 AI 决策时序检查
 
 新增 `tools/ai_schedule_qa.gd`，使用 `--headless` 输出 `.godot/ai_schedule_qa/`；173 项专项加暂停/兵群共 327 项通过。英雄和召唤物决策相位不再取决于装饰实例 ID，源码启动方式不变。完整复现与当前 24.57 FPS 压力限制见[说明](AI_SCHEDULE_20260906.md)。

@@ -2548,7 +2548,7 @@ def expected_paths(profile: dict[str, Any], state: str) -> tuple[list[str], list
             # CampaignArt explicitly aliases the Wild Boar Forest interception
             # pose to the same-direction, exact attack frame.
             return ([f"assets/campaign/anim/{variant}_attack_{d}.png" for d in DIRECTIONS], ["attack"])
-        # CampaignArt maps runtime death to the variant's down file.
+        # Explicit campaign down/death paths are distinct; neither aliases the other.
         return ([f"assets/campaign/anim/{variant}_{state}_{d}.png" for d in DIRECTIONS], [state])
     lookup = profile.get("down_lookup", "down" if role == "narrative_person" else "death") if state == "down" else state
     return ([f"assets/anim/{profile['key']}_{lookup}_{d}.png" for d in DIRECTIONS], [lookup])
@@ -2829,7 +2829,7 @@ def build_report() -> dict[str, Any]:
             "fallback_never_counts_as_exact": True,
             "component_masking_or_zeroing_foreign_pixels_is_provenance_noncompliant": True,
             "accepted_local_operations": ["rectangular_crop", "uniform_scale", "transparent_padding"],
-            "ordinary_down_runtime_note": "Design state down maps to the current runtime lookup shown per row: death for lethal combat, down for non-lethal story outcomes; campaign variants map death to down internally.",
+            "ordinary_down_runtime_note": "Design state down maps to the current runtime lookup shown per row: death for lethal combat, down for non-lethal story outcomes; campaign down and death stay distinct; missing terminal art uses the current costume procedurally, not generic death.",
             "generic_hurt_runtime_note": "Current unit.gd resolves exact four-direction hurt frames for both campaign variants and generic units, with legacy fallback retained by ArtDb.",
         },
         "story_order": list(STORY_ORDER),

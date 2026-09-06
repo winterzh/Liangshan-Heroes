@@ -154,7 +154,7 @@ func _terminal_and_mode_isolation(art: Node) -> void:
 		var death_source := _source(death[0]) if not death.is_empty() else ""
 		_check("down does not alias death %s" % direction,
 			not down.is_empty() and _source(down[0]) == _expected("down", direction)
-			and death_source != _expected("down", direction)
+			and death.is_empty() and death_source != _expected("down", direction)
 			and not art.unit_anim_uses_directional_source(UNIT_KEY, "death", direction, VARIANT),
 			{"down":_source(down[0]) if not down.is_empty() else "", "death":death_source})
 		for state in STATES:
@@ -196,7 +196,7 @@ func _write_report() -> void:
 		"variant":VARIANT, "required_frames":20,
 		"states":STATES, "directions":DIRECTIONS,
 		"intercept_route":"exact same-direction attack PNG",
-		"death_route":"independent legacy/programmatic death; never down",
+		"death_route":"procedural death in current campaign costume; never living down",
 		"free_mode_isolation_checked":true,
 		"checks_detail":checks,
 	}
