@@ -1,0 +1,218 @@
+extends SceneTree
+## Real production Battle/Unit/Inventory; no Battle._ready or player file writes.
+const Counter := preload("res://scratchpad/run_item_ids/item_id_state.gd")
+const VERSION := "battle_item_uid_smoke_v1"
+const MAX_UID := 9223372036854775807
+var checks: Array = []
+var failures: Array = []
+var owned: Array = []
+var manifest: Dictionary = {}
+var report_path: String = ""
+var manifest_ready: bool = false
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	if not passed: failures.append(label)
+	return passed
+
+func _source_guard(label: String) -> void:
+	for path: String in manifest.source_sha256:
+		_check(label + " " + path, FileAccess.get_sha256(path) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for object: Variant in owned:
+		if is_instance_valid(object): object.free()
+	if manifest_ready: _source_guard("source after")
+	var report: Dictionary = {"suite": "item-id", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failures.is_empty() and not aborted,
+		"checks": checks, "check_count": checks.size(), "failures": failures,
+		"failed_count": failures.size(), "process_id": OS.get_process_id(),
+		"actual_user_dir": OS.get_user_data_dir(), "source_sha256": manifest.get("source_sha256", {}),
+		"battle_resume_tested": false, "scope": "Real off-tree Battle/Unit/Inventory allocation, transfer, trusted respawn restore and exact counter JSON to a fresh Battle. No Battle._ready, full graph restore, shop charging, cross-process Battle, PCK or menu test."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[item-id QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _shell(battle_script: Script) -> Variant:
+	var battle: Variant = battle_script.new()
+	owned.append(battle)
+	battle.units_root = Node2D.new()
+	battle.add_child(battle.units_root)
+	battle._items = {"single": {"max_stack": 1}, "stack": {"max_stack": 5}}
+	battle.gold = 137
+	return battle
+
+func _unit(unit_script: Script, inventory_script: Script, battle: Variant) -> Variant:
+	var unit: Variant = unit_script.new()
+	unit.battle = battle
+	unit.visible = false
+	unit.inventory = inventory_script.new(unit)
+	battle.units_root.add_child(unit)
+	battle.units.append(unit)
+	return unit
+
+func _run() -> void:
+	var path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = data
+	for key: String in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for source_path: Variant in manifest.source_sha256:
+		if typeof(source_path) != TYPE_STRING or typeof(manifest.source_sha256[source_path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if not failures.is_empty():
+		_finish(true)
+		return
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var inventory_script: Script = load("res://scripts/hero_inventory.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var codec: Variant = codec_script.new()
+	var state: Variant = Counter.new(codec_script, battle_script)
+	var source: Variant = _shell(battle_script)
+	if not _check("candidate Battle allocator present", source.has_method("allocate_item_uid")):
+		_finish(true)
+		return
+	var first: Variant = _unit(unit_script, inventory_script, source)
+	var second: Variant = _unit(unit_script, inventory_script, source)
+	_check("fresh Battle counter starts at one", source.next_item_uid == 1)
+	_check("two real inventories allocate consecutive stack IDs", first.inventory.put_item(0, "single") and second.inventory.put_item(0, "single") and first.inventory.slots[0].uid == 1 and second.inventory.slots[0].uid == 2 and source.next_item_uid == 3)
+	var allocated: Dictionary = {1: true, 2: true}
+	var bulk_ok: bool = true
+	for index in range(1201):
+		var inv: Variant = first.inventory if index % 2 == 0 else second.inventory
+		if not inv.put_item(2, "single"):
+			bulk_ok = false
+			break
+		var uid: int = inv.slots[2].uid
+		bulk_ok = bulk_ok and uid == index + 3 and not allocated.has(uid)
+		allocated[uid] = true
+		inv.consume_one(2)
+	_check("1201 consumed stacks stay consecutive across two owners", bulk_ok and allocated.size() == 1203 and source.next_item_uid == 1204)
+	first.inventory._uid_seq = MAX_UID
+	_check("legacy local sequence never controls allocation or overflows", first.inventory.put_item(2, "single") and first.inventory.slots[2].uid == 1204 and first.inventory._uid_seq == MAX_UID and source.next_item_uid == 1205)
+	first.inventory.consume_one(2)
+	var before_next: int = source.next_item_uid
+	_check("swap keeps UID and allocation counter", first.inventory.swap_slots(0, 1) and first.inventory.slots[1].uid == 1 and source.next_item_uid == before_next)
+	first.inventory.cooldowns["single"] = 2.5
+	first.inventory.start_proc_cooldown(1, "hit", 0.75)
+	_check("same Battle transfer preserves stack UID count and cooldowns", source.transfer_hero_item(first, 1, second) and first.inventory.slots[1].is_empty() and second.inventory.slots[1].uid == 1 and second.inventory.slots[1].count == 1 and second.inventory.cooldown_left("single") == 2.5 and second.inventory.proc_cooldowns.get("1:hit") == 0.75 and source.next_item_uid == before_next)
+	var other_battle: Variant = _shell(battle_script)
+	var foreign: Variant = _unit(unit_script, inventory_script, other_battle)
+	var before_transfer: Dictionary = second.inventory.snapshot()
+	_check("cross Battle transfer fails before removing item", not second.inventory.transfer_slot(1, foreign.inventory) and second.inventory.snapshot() == before_transfer and foreign.inventory.slots[0].is_empty() and source.next_item_uid == before_next and other_battle.next_item_uid == 1)
+	_check("self transfer fails without moving source", not second.inventory.transfer_slot(1, second.inventory) and second.inventory.snapshot() == before_transfer)
+	var full: Variant = _unit(unit_script, inventory_script, source)
+	_check("full target fixture fills six independent stacks", full.inventory.add_item("single", 6) == 0)
+	var full_before: Dictionary = full.inventory.snapshot()
+	before_next = source.next_item_uid
+	_check("full target transfer keeps both inventories and counter", not second.inventory.transfer_slot(1, full.inventory) and second.inventory.snapshot() == before_transfer and full.inventory.snapshot() == full_before and source.next_item_uid == before_next)
+	# Death leaves an inventory alias while its Node remains allocated. Do not
+	# call the full combat death path; its effects/economy are outside this smoke.
+	second._dying = true
+	second.hp = 0.0
+	source.units.erase(second)
+	source.hero_item_progress["retired_fixture"] = second.inventory.snapshot()
+	var replacement: Variant = _unit(unit_script, inventory_script, source)
+	_check("same Battle respawn restores existing IDs without allocation", replacement.inventory.restore(source.hero_item_progress.retired_fixture) and replacement.inventory.snapshot() == second.inventory.snapshot() and source.next_item_uid == before_next)
+	# A retired effect alias can exceed every still-held UID; the caller's proven
+	# maximum must include it even after all corresponding stacks were consumed.
+	var retired_alias: int = source.allocate_item_uid()
+	source._pending_item_casts.append({"uid": retired_alias})
+	var verified_max: int = retired_alias
+	var captured: Dictionary = state.capture(source, VERSION, verified_max)
+	if not _check("counter captures above all held and retired allocated IDs", captured.get("ok") == true):
+		_finish(true)
+		return
+	var wire: Variant = JSON.parse_string(JSON.stringify(captured.value))
+	var destination: Variant = _shell(battle_script)
+	var new_owner: Variant = _unit(unit_script, inventory_script, destination)
+	var retired_snapshot: Dictionary = second.inventory.snapshot()
+	var empty_snapshot: Dictionary = new_owner.inventory.snapshot()
+	_check("respawn snapshot rejects an uninstalled UID domain atomically", not new_owner.inventory.restore(retired_snapshot) and new_owner.inventory.snapshot() == empty_snapshot)
+	var restored: Dictionary = state.restore(destination, wire, VERSION, verified_max)
+	_check("JSON counter restores to a fresh independent Battle", restored.get("ok") == true and destination.next_item_uid == source.next_item_uid)
+	_check("restored inventory preserves original IDs and legacy sequence", new_owner.inventory.restore(retired_snapshot) and new_owner.inventory.snapshot() == retired_snapshot)
+	var duplicate_snapshot: Dictionary = retired_snapshot.duplicate(true)
+	duplicate_snapshot.slots[2] = duplicate_snapshot.slots[1].duplicate(true)
+	_check("invalid duplicate UID respawn preserves existing inventory", not new_owner.inventory.restore(duplicate_snapshot) and new_owner.inventory.snapshot() == retired_snapshot)
+	var continuation: bool = true
+	for index in range(12):
+		var expected: int = source.allocate_item_uid()
+		var actual: int = destination.allocate_item_uid()
+		continuation = continuation and expected == actual and actual > verified_max
+	_check("fresh Battle resumes twelve allocations without historical collision", continuation)
+	var after_continuation: int = destination.next_item_uid
+	_check("counter restore refuses rewind of a used Battle", state.restore(destination, wire, VERSION, verified_max).get("code") == "FRESH_COUNTER_REQUIRED" and destination.next_item_uid == after_continuation)
+	_check("verified retired maximum cannot equal next counter", state.validate(wire, VERSION, retired_alias + 1).get("code") == "COUNTER_NOT_ABOVE_ALLOCATED")
+	_check("maximum proof rejects float input", state.validate(wire, VERSION, float(verified_max)).get("code") == "VERIFIED_MAX_REQUIRED")
+	_check("content mismatch rejects counter", state.validate(wire, "other_content", verified_max).get("code") == "CONTENT_VERSION")
+	var extra: Dictionary = wire.duplicate(true)
+	extra["verified_max_from_snapshot"] = 0
+	_check("snapshot cannot supply extra self certified proof", state.validate(extra, VERSION, verified_max).get("code") == "COUNTER_FIELDS")
+	var bad_numeric: Dictionary = wire.duplicate(true)
+	bad_numeric.next_item_uid = codec.encode(1.5).value
+	_check("counter rejects finite noninteger value", state.validate(bad_numeric, VERSION, 0).get("code") == "COUNTER_NOT_ABOVE_ALLOCATED")
+	bad_numeric.next_item_uid = {"t": "int64", "v": "9223372036854775808"}
+	_check("counter rejects signed int64 overflow text", not state.validate(bad_numeric, VERSION, 0).get("ok"))
+	var wide: Variant = _shell(battle_script)
+	wide.next_item_uid = 9007199254740993
+	var wide_capture: Dictionary = state.capture(wide, VERSION, 9007199254740992)
+	var wide_wire: Variant = JSON.parse_string(JSON.stringify(wide_capture.value))
+	var wide_new: Variant = _shell(battle_script)
+	_check("JSON keeps counter above two to the fifty third exact", state.restore(wide_new, wide_wire, VERSION, 9007199254740992).get("ok") == true and wide_new.allocate_item_uid() == 9007199254740993 and wide_new.next_item_uid == 9007199254740994)
+	var limit: Variant = _shell(battle_script)
+	var last: Variant = _unit(unit_script, inventory_script, limit)
+	_check("exhaustion fixture owns a partial existing stack", last.inventory.put_item(0, "stack", 2))
+	var stack_uid: int = last.inventory.slots[0].uid
+	limit.next_item_uid = MAX_UID - 1
+	var residue: int = last.inventory.add_item("single", 3)
+	_check("last representable issued UID leaves uninserted quantity intact", residue == 2 and last.inventory.slots[1].uid == MAX_UID - 1 and last.inventory.slots[1].count + residue == 3 and last.inventory.slots[2].is_empty() and limit.next_item_uid == MAX_UID)
+	var exhausted_before: Dictionary = last.inventory.snapshot()
+	_check("exhausted put fails without UID zero or lost old items", not last.inventory.put_item(2, "single") and last.inventory.snapshot() == exhausted_before and limit.next_item_uid == MAX_UID)
+	_check("exhausted allocator returns failure without overflow", limit.allocate_item_uid() == 0 and limit.next_item_uid == MAX_UID)
+	residue = last.inventory.add_item("stack", 7)
+	_check("existing stack fills at exhaustion with exact remainder", residue == 4 and last.inventory.slots[0].uid == stack_uid and last.inventory.slots[0].count == 5 and last.inventory.slots[2].is_empty() and limit.next_item_uid == MAX_UID)
+	var exhausted_capture: Dictionary = state.capture(limit, VERSION, MAX_UID - 1)
+	var exhausted_wire: Variant = JSON.parse_string(JSON.stringify(exhausted_capture.value))
+	var exhausted_new: Variant = _shell(battle_script)
+	_check("exhausted counter roundtrips without reusing final UID", state.restore(exhausted_new, exhausted_wire, VERSION, MAX_UID - 1).get("ok") == true and exhausted_new.allocate_item_uid() == 0)
+	_check("allocated int64 maximum has no valid successor and rejects", not state.validate(exhausted_wire, VERSION, MAX_UID).get("ok"))
+	var standalone: Variant = unit_script.new()
+	owned.append(standalone)
+	standalone.inventory = inventory_script.new(standalone)
+	_check("owner without Battle cannot issue alternate domain UID", standalone.inventory._new_uid() == 0 and standalone.inventory._uid_seq == 0)
+	_check("item operations and failures do not deduct Battle gold", source.gold == 137 and destination.gold == 137 and limit.gold == 137)
+	_check("all fixture Battles stayed off tree without ready", not source.is_inside_tree() and not destination.is_inside_tree() and not limit.is_inside_tree())
+	_finish()

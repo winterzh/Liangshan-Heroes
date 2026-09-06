@@ -1,3 +1,9 @@
+## 2026-09-07 UID 与区域效果复现
+
+新增正式 `scripts/run_item_id_state.gd`、`scripts/run_zone_effects_state.gd`，及同批受测 Battle/Inventory UID分配窄补丁；[归档](../qa/run_item_identity_zones_20260907/README.md)保留原candidate/build_patch/pins、53项allocator、两轮81项区域、原149项Unit回归及231项真实付费复活。后者包含正式counter资源路径复验与99个运行源码映射，原物品自检九项及ALL单独核对。原准备文档的未运行状态保持历史原文。
+
+在独立相容checkout按source index恢复缺失忽略路径，已有源码只核对SHA，不覆盖。入口为 `python scratchpad/run_item_ids/run_smoke.py`、`python scratchpad/run_zone_effects_production_qa/run_smoke.py`、`python scratchpad/run_item_respawn_qa/run_smoke.py`；均传 `--godot "<实际Godot路径>"`，不带 `--run` 只预检，实际执行追加 `--run`，保持共同引擎锁、新私有用户目录及新run。原Unit回归使用 `scratchpad/run_resume_production_qa/run_smoke.py --suite unit` 同协议。正常游戏启动方式不变，未新增继续按钮；归档不含PCK、profile、玩家内容或资源二进制。
+
 ## 2026-09-07 Steam 后台接续与候选复现
 
 本轮已确认后台发布/测试分支上传授权，实际仍为保存草稿；[接续说明](STEAM_BACKEND_SETUP_20260907.md)包含30项后台ID与60图标映射、Edge扩展文件访问条件、分支命名prompt及双账号验证步骤。启用文件URL访问或手工选择属于恢复正常上传条件，不是再次等待发布授权。先补齐图标并发布完整配置，再向Windows Depot5088121上传和核对测试分支，default维持25154403。

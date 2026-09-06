@@ -1,0 +1,237 @@
+{
+	"actual_user_dir": "E:/ChatGPT/水浒-art-validation/scratchpad/run_item_ids/runs/20260906T195440680513Z/private_profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役",
+	"battle_resume_tested": false,
+	"check_count": 53,
+	"checks": [
+		{
+			"label": "actual private user directory",
+			"passed": true
+		},
+		{
+			"label": "source before scripts/unit.gd",
+			"passed": true
+		},
+		{
+			"label": "source before scripts/hero_inventory.gd",
+			"passed": true
+		},
+		{
+			"label": "source before scripts/game_map.gd",
+			"passed": true
+		},
+		{
+			"label": "source before scripts/run_state_value_codec.gd",
+			"passed": true
+		},
+		{
+			"label": "source before scripts/battle.gd",
+			"passed": true
+		},
+		{
+			"label": "source before project.godot",
+			"passed": true
+		},
+		{
+			"label": "source before scratchpad/run_item_ids/item_id_state.gd",
+			"passed": true
+		},
+		{
+			"label": "source before scratchpad/run_item_ids/item_id_smoke.gd",
+			"passed": true
+		},
+		{
+			"label": "candidate Battle allocator present",
+			"passed": true
+		},
+		{
+			"label": "fresh Battle counter starts at one",
+			"passed": true
+		},
+		{
+			"label": "two real inventories allocate consecutive stack IDs",
+			"passed": true
+		},
+		{
+			"label": "1201 consumed stacks stay consecutive across two owners",
+			"passed": true
+		},
+		{
+			"label": "legacy local sequence never controls allocation or overflows",
+			"passed": true
+		},
+		{
+			"label": "swap keeps UID and allocation counter",
+			"passed": true
+		},
+		{
+			"label": "same Battle transfer preserves stack UID count and cooldowns",
+			"passed": true
+		},
+		{
+			"label": "cross Battle transfer fails before removing item",
+			"passed": true
+		},
+		{
+			"label": "self transfer fails without moving source",
+			"passed": true
+		},
+		{
+			"label": "full target fixture fills six independent stacks",
+			"passed": true
+		},
+		{
+			"label": "full target transfer keeps both inventories and counter",
+			"passed": true
+		},
+		{
+			"label": "same Battle respawn restores existing IDs without allocation",
+			"passed": true
+		},
+		{
+			"label": "counter captures above all held and retired allocated IDs",
+			"passed": true
+		},
+		{
+			"label": "respawn snapshot rejects an uninstalled UID domain atomically",
+			"passed": true
+		},
+		{
+			"label": "JSON counter restores to a fresh independent Battle",
+			"passed": true
+		},
+		{
+			"label": "restored inventory preserves original IDs and legacy sequence",
+			"passed": true
+		},
+		{
+			"label": "invalid duplicate UID respawn preserves existing inventory",
+			"passed": true
+		},
+		{
+			"label": "fresh Battle resumes twelve allocations without historical collision",
+			"passed": true
+		},
+		{
+			"label": "counter restore refuses rewind of a used Battle",
+			"passed": true
+		},
+		{
+			"label": "verified retired maximum cannot equal next counter",
+			"passed": true
+		},
+		{
+			"label": "maximum proof rejects float input",
+			"passed": true
+		},
+		{
+			"label": "content mismatch rejects counter",
+			"passed": true
+		},
+		{
+			"label": "snapshot cannot supply extra self certified proof",
+			"passed": true
+		},
+		{
+			"label": "counter rejects finite noninteger value",
+			"passed": true
+		},
+		{
+			"label": "counter rejects signed int64 overflow text",
+			"passed": true
+		},
+		{
+			"label": "JSON keeps counter above two to the fifty third exact",
+			"passed": true
+		},
+		{
+			"label": "exhaustion fixture owns a partial existing stack",
+			"passed": true
+		},
+		{
+			"label": "last representable issued UID leaves uninserted quantity intact",
+			"passed": true
+		},
+		{
+			"label": "exhausted put fails without UID zero or lost old items",
+			"passed": true
+		},
+		{
+			"label": "exhausted allocator returns failure without overflow",
+			"passed": true
+		},
+		{
+			"label": "existing stack fills at exhaustion with exact remainder",
+			"passed": true
+		},
+		{
+			"label": "exhausted counter roundtrips without reusing final UID",
+			"passed": true
+		},
+		{
+			"label": "allocated int64 maximum has no valid successor and rejects",
+			"passed": true
+		},
+		{
+			"label": "owner without Battle cannot issue alternate domain UID",
+			"passed": true
+		},
+		{
+			"label": "item operations and failures do not deduct Battle gold",
+			"passed": true
+		},
+		{
+			"label": "all fixture Battles stayed off tree without ready",
+			"passed": true
+		},
+		{
+			"label": "source after scripts/unit.gd",
+			"passed": true
+		},
+		{
+			"label": "source after scripts/hero_inventory.gd",
+			"passed": true
+		},
+		{
+			"label": "source after scripts/game_map.gd",
+			"passed": true
+		},
+		{
+			"label": "source after scripts/run_state_value_codec.gd",
+			"passed": true
+		},
+		{
+			"label": "source after scripts/battle.gd",
+			"passed": true
+		},
+		{
+			"label": "source after project.godot",
+			"passed": true
+		},
+		{
+			"label": "source after scratchpad/run_item_ids/item_id_state.gd",
+			"passed": true
+		},
+		{
+			"label": "source after scratchpad/run_item_ids/item_id_smoke.gd",
+			"passed": true
+		}
+	],
+	"complete": true,
+	"failed_count": 0,
+	"failures": [],
+	"passed": true,
+	"process_id": 28160,
+	"run_id": "20260906T195440680513Z",
+	"scope": "Real off-tree Battle/Unit/Inventory allocation, transfer, trusted respawn restore and exact counter JSON to a fresh Battle. No Battle._ready, full graph restore, shop charging, cross-process Battle, PCK or menu test.",
+	"source_sha256": {
+		"project.godot": "60b4915832c47dec560ced6059256e7a97edeb36fe2407dbf75abf1c7039e780",
+		"scratchpad/run_item_ids/item_id_smoke.gd": "8d60fdd82982f4ce2172a7be3cfee359ec48075848b2147a9d4a40d8625aa0bf",
+		"scratchpad/run_item_ids/item_id_state.gd": "8bb221e918790ef8e8cd898c7222438cf7316c4ba180c09a8dd5663180ebfae4",
+		"scripts/battle.gd": "d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5",
+		"scripts/game_map.gd": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+		"scripts/hero_inventory.gd": "ab2d40f51695a4141bea1566a997883cc839f36bf6781fc0977151162d4fc595",
+		"scripts/run_state_value_codec.gd": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+		"scripts/unit.gd": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc"
+	},
+	"suite": "item-id"
+}

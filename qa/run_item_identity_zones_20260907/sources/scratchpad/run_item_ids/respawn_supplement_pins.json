@@ -1,0 +1,25 @@
+{
+  "status": "prepared_not_engine_run",
+  "original_frozen_files_unchanged": {
+    "candidate.patch": "a97f6c23fa08e3a629d53f83187aba09cdf310bce89efff3de739cdfeaf7081e",
+    "item_id_smoke.gd": "8d60fdd82982f4ce2172a7be3cfee359ec48075848b2147a9d4a40d8625aa0bf",
+    "item_id_state.gd": "8bb221e918790ef8e8cd898c7222438cf7316c4ba180c09a8dd5663180ebfae4",
+    "pins.json": "398b8523f5b9c9d7524e93af798b73bb8937287be952fb717e4a6c55ae740b0c"
+  },
+  "supplement": [
+    {
+      "path": "scratchpad/run_item_ids/respawn_cases.gd",
+      "bytes": 7467,
+      "raw_sha256": "ce3e331a7809073f641e538e1483a9731909aa08b4770f38b2c96bcec3109de0"
+    },
+    {
+      "path": "scratchpad/run_item_ids/respawn_review.md",
+      "bytes": 4756,
+      "raw_sha256": "097542bac84ed03c7cf04716bbdd8849d99edeeef62df2cf9c9bef1e30b89a4e"
+    }
+  ],
+  "runtime_dependency": "Use original pins candidate sources plus scripts/game_map.gd, scripts/levels/skirmish.gd and the existing whole-project guard; fully initialized disposable standard Battle required. Add respawn_cases.gd to root runtime manifest without rewriting the original pins.",
+  "entry": "await load(\"res://scratchpad/run_item_ids/respawn_cases.gd\").new().run(battle, tree)",
+  "return": "Array of label/passed; tree remains paused; root disposes Battle",
+  "complete_battle_restore": false
+}

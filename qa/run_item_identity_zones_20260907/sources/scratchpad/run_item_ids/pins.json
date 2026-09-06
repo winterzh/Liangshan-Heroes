@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "status": "prepared_not_applied_not_engine_run",
+  "source_changes": [
+    {
+      "path": "scripts/battle.gd",
+      "before_bytes": 759538,
+      "before_sha256": "9b79f2c677fe16def52b312d1e313a6fd63370f9119bb0b11d27443fd1c92e7e",
+      "candidate_bytes": 760069,
+      "candidate_sha256": "d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5"
+    },
+    {
+      "path": "scripts/hero_inventory.gd",
+      "before_bytes": 11132,
+      "before_sha256": "1dd9a3b2fec0a5fc1ed2546e7bc842719a60f2cd251897434564702c01419de5",
+      "candidate_bytes": 12685,
+      "candidate_sha256": "ab2d40f51695a4141bea1566a997883cc839f36bf6781fc0977151162d4fc595"
+    }
+  ],
+  "runtime_sources_after_patch": [
+    {
+      "path": "project.godot",
+      "bytes": 1621,
+      "raw_sha256": "60b4915832c47dec560ced6059256e7a97edeb36fe2407dbf75abf1c7039e780"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "bytes": 197790,
+      "raw_sha256": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc"
+    },
+    {
+      "path": "scripts/run_state_value_codec.gd",
+      "bytes": 12091,
+      "raw_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+    },
+    {
+      "path": "scratchpad/run_item_ids/item_id_state.gd",
+      "bytes": 3565,
+      "raw_sha256": "8bb221e918790ef8e8cd898c7222438cf7316c4ba180c09a8dd5663180ebfae4"
+    },
+    {
+      "path": "scratchpad/run_item_ids/item_id_smoke.gd",
+      "bytes": 14538,
+      "raw_sha256": "8d60fdd82982f4ce2172a7be3cfee359ec48075848b2147a9d4a40d8625aa0bf"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "bytes": 760069,
+      "raw_sha256": "d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5",
+      "requires_candidate_application": true
+    },
+    {
+      "path": "scripts/hero_inventory.gd",
+      "bytes": 12685,
+      "raw_sha256": "ab2d40f51695a4141bea1566a997883cc839f36bf6781fc0977151162d4fc595",
+      "requires_candidate_application": true
+    }
+  ],
+  "protocol": {
+    "environment": "RUN_RESTORE_QA_MANIFEST",
+    "keys": [
+      "run_id",
+      "private_user",
+      "report",
+      "source_sha256"
+    ],
+    "suite": "item-id",
+    "stdout_prefix": "[item-id QA] "
+  },
+  "counter_max_proof": "trusted outer complete graph validator; not supplied by the snapshot",
+  "complete_battle_restore": false
+}

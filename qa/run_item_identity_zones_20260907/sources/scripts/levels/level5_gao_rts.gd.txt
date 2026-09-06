@@ -1,0 +1,401 @@
+extends LevelBase
+## Three finite expeditions on one persistent camp, shore and water network.
+## Shared land combat and paid ship production; story actions only add options.
+const T := GameMap.T
+const Naval := preload("res://scripts/naval_production.gd")
+const Layout := preload("res://scripts/liangshan_layout.gd")
+const HALL := Vector2i(18,30)
+const YARD_SITE := Vector2i(27,46)
+const LAND_POST := Vector2i(26,7)
+const SEA_POST := Vector2i(55,34)
+const LAND_FRONT := Vector2i(34,31)
+const SEA_FRONT := Vector2i(39,44)
+const LANDING := Vector2i(20,49)
+const LANDING_WATER := Vector2i(22,52)
+const WIND := Vector2i(29,38)
+const FIRE_POINTS := [Vector2i(42,29),Vector2i(39,41)]
+const FIRE_SAFE := Vector2i(32,50)
+const SHIP_KEYS := ["ruan_xiaoqi_boat","ruan_xiaoer_boat","ruan_xiaowu_boat","zhang_shun_boat","liangshan_warship"]
+var hall: Unit
+var song: Unit
+var flagship: Unit
+var fireboat: Unit
+var embarked_liu: Unit
+var liu_carrier: Unit
+var prisoner: Unit
+var carrier: Unit
+var workers: Array[Unit]=[]
+var posts: Array[Unit]=[]
+var water_groups: Array=[]
+var land_groups: Array=[]
+var support: Array[Unit]=[]
+var waves := [{"time":140.0,"sent":false,"warned":false},{"time":330.0,"sent":false,"warned":false},{"time":540.0,"sent":false,"warned":false}]
+var elapsed := 0.0
+var strategy_t := 0.0
+var production_t := [95.0,140.0]
+var produced := [0,0]
+var ai_spent_gold := 0
+var ai_spent_wood := 0
+var lure_started := false
+var lure_cell := Vector2i(39,41)
+var fire_prepared := false
+var fire_lit := false
+var port_sealed := false
+var flagship_disabled := false
+var recovered := false
+var landed := false
+var capture_lost := false
+var core_ready := false
+var end_button: Button
+var escort_warning := false
+
+func id() -> String: return "level5"
+func title() -> String: return "三败高太尉"
+func subtitle() -> String: return "经营水寨·水陆断援·火攻擒将"
+func economy_enabled() -> bool: return true
+func start_gold() -> int: return 350
+func start_wood() -> int: return 260
+func base_pop_cap() -> int: return 44
+func start_age() -> int: return 3
+func hero_start_rank() -> int: return 0
+func hero_cap() -> int: return 5
+func fog_enabled() -> bool: return true
+func map_w() -> int: return 60
+func map_h() -> int: return 60
+func map_base() -> int: return T.WATER
+func camera_start_cell() -> Vector2i: return Vector2i(23,37)
+func campaign_core_goal() -> String:
+	return "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。"
+func story_contract_version() -> int: return 3
+func campaign_story_goals() -> Array:
+	return [
+		{"id":"gao_lure","label":"阮小七引活官船进入港汊伏区","required_events":["fleet_in_ambush"]},
+		{"id":"gao_fire","label":"公孙胜祭风、刘唐登船举火，护两艘接应船撤离","required_events":["gongsun_wind","liu_tang_fire_leader","fireboat_prepared","fire_escort_safe"]},
+		{"id":"gao_land","label":"击退岸军并拔除山前补给营","required_events":["gao_land_cleared","gao_land_post_destroyed"]},
+		{"id":"gao_capture","label":"封港凿船、水上接俘、返航后实际押至忠义堂","required_events":["port_sealed","flagship_scuttled","gao_landed","gao_captured"],"forbidden_events":["gao_escaped"]},
+	]
+func deploy_hint() -> String:
+	return "营寨和军队全程保留。工匠采金伐木，兵营练枪弓，南侧开阔岸地可建船坞。陆军走东山关外山路，船只走港水；拆北岸营断陆援，舰队拆东岸船坞断海援。三批主力已经在地图上，可侦察、截击，不必坐等。"
+func intro_lines() -> Array:
+	return [
+		{"who":"旁白","key":"narrator","text":"童贯败归，高俅调水陆军征讨梁山。三次进兵压缩在同一战场：水寨、港汊和山前道路始终保留，官军各部已在远处集结。"},
+		{"who":"吴用","key":"wu_yong","text":"钱粮要分给岸军和水军。先造船坞留补船余地；北岸营与东岸船坞各有补充，拆掉便断一路。英雄留在岸上指挥，外港仍须战船争夺。"},
+		{"who":"刘唐","key":"liu_tang","text":"也可走火攻：公孙先生祭风，我到主码头备火登船。把两艘阮氏接应船护在旁边，等连船进入火点再举火。"},
+		{"who":"宋江","key":"song_jiang","text":"打停座船即可收兵。若要生擒，先封港，再让张顺凿船接俘，沿水道返航，岸军亲自押他到忠义堂。"},
+	]
+func apply_overrides(defs: Dictionary,abilities: Dictionary) -> void:
+	load("res://scripts/levels/level5_liangshan.gd").new().apply_overrides(defs,abilities)
+	Naval.configure(defs)
+	defs.hall.produces=["lou_luo","song_jiang","wu_yong","gongsun_sheng","liu_tang","lin_chong"]
+	for key in SHIP_KEYS: defs[key].pop=3
+	defs.liu_tang_fireboat.pop=0 # The embarked hero is represented by this one authored boat.
+	defs.liu_tang_fireboat.atk=0
+	defs.liu_tang_fireboat.name="待装火具小船"
+func paint_map(map: GameMap) -> void:
+	load("res://scripts/levels/skirmish.gd").new().paint_map(map)
+	map.set_meta("liangshan_hall_cell",HALL)
+	# Northern land road skirts the east wall; never paints a hidden hole in it.
+	Layout.paint(map)
+	map.fill_rect(22,3,10,10,T.GRASS)
+	map.paint_path([Vector2(LAND_POST),Vector2(30,14),Vector2(35,19),Vector2(35,31),Vector2(Layout.RTS_EAST_GATE)],1,T.ROAD)
+	map.fill_rect(39,1,15,29,T.WATER)
+	map.fill_rect(39,29,14,25,T.WATER)
+	map.paint_path([Vector2(42,33),Vector2(37,37),Vector2(37,42),Vector2(40,44)],1,T.WATER)
+	map.fill_rect(20,51,25,4,T.WATER)
+	# Dedicated buildable shore beside, not on top of, the static main pier.
+	map.paint_path([Vector2(18,45),Vector2(27,45)],1,T.ROAD)
+	map.fill_rect(24,44,7,4,T.GRASS)
+	map.fill_rect(23,48,10,7,T.WATER)
+	map.fill_rect(54,31,5,8,T.GRASS)
+	map.fill_rect(50,30,4,10,T.WATER)
+	map.fill_rect(7,29,7,12,T.GRASS)
+	map.fill_rect(33,26,5,8,T.GRASS)
+	map.paint_path([Vector2(35,19),Vector2(LAND_FRONT),Vector2(Layout.RTS_EAST_GATE)],1,T.ROAD)
+	map.fill_rect(HALL.x-1,HALL.y-1,3,3,T.HALL)
+func decorate(map: GameMap) -> void:
+	load("res://scripts/levels/skirmish.gd").new().decorate(map)
+	map.decor=map.decor.filter(func(d): return d[0]!="boat")
+func alive(u) -> bool: return is_instance_valid(u) and u.hp>0 and u.story_outcome==""
+func _count(group: Array) -> int: return group.filter(func(u): return alive(u)).size()
+func _guard(b,key: String,cell: Vector2i,faction := 1) -> Unit:
+	var u: Unit=b.spawn_at(key,faction,cell)
+	u.set_stance(Unit.STANCE_DEFEND)
+	if u.movement_profile=="water": u.visual_scale=1.2
+	return u
+func _resource(b,key: String,cell: Vector2i,amount: float) -> void:
+	var u: Unit=b.spawn_at(key,0,cell)
+	u.res_left=amount
+func deploy(b) -> void:
+	hall=b.spawn_at("hall",0,HALL)
+	hall.display_name="忠义堂"
+	for pair in [["campaign_environment_route","zhongyi_hall"],["campaign_environment_state","default"],["campaign_environment_text_surface_id","level5_hall_plaque"],["campaign_environment_runtime_text","忠义堂"],["campaign_environment_static_visual",true]]: hall.set_meta(pair[0],pair[1])
+	b.spawn_at("barracks",0,Vector2i(24,37))
+	song=b.spawn_at("song_jiang",0,Vector2i(20,34))
+	for record in [["wu_yong",Vector2i(22,34)],["gongsun_sheng",Vector2i(23,34)],["liu_tang",Vector2i(21,36)]]:
+		var u: Unit=b.spawn_at(record[0],0,record[1]); u.set_stance(Unit.STANCE_DEFEND)
+	for i in range(6): workers.append(b.spawn_at("lou_luo",0,Vector2i(10+i,31)))
+	for i in range(6): _guard(b,"liang_qiang" if i<3 else "liang_gong",Vector2i(28+i%2,30+i/2),0)
+	for c in [Vector2i(9,35),Vector2i(12,35),Vector2i(11,39)]: _resource(b,"gold_mine",c,2600)
+	for c in [Vector2i(8,28),Vector2i(10,26),Vector2i(13,25),Vector2i(8,40)]: _resource(b,"tree",c,1900)
+	_resource(b,"gold_mine",Vector2i(29,4),4500)
+	_resource(b,"tree",Vector2i(23,4),2500)
+	for record in [["ruan_xiaoqi_boat",Vector2i(35,49)],["ruan_xiaoer_boat",Vector2i(38,47)],["ruan_xiaowu_boat",Vector2i(40,50)],["zhang_shun_boat",Vector2i(25,53)]]: _guard(b,record[0],record[1],0)
+	fireboat=_guard(b,"liu_tang_fireboat",LANDING_WATER,0)
+	fireboat.passive=true
+	fireboat.set_stance(Unit.STANCE_PASSIVE)
+	posts=[b.spawn_at("barracks",1,LAND_POST),b.spawn_at("shipyard",1,SEA_POST)]
+	posts[0].display_name="山前补给营"
+	posts[1].display_name="东岸官军船坞"
+	for c in [Vector2i(23,10),Vector2i(30,9)]:
+		var tower: Unit=b.spawn_at("arrow_tower",1,c)
+		tower.display_name="补给营护军箭楼"
+	for wave in range(3):
+		var water: Array=[]
+		for i in range([3,5,6][wave]):
+			var cell := Vector2i(43+i%2*3,23+i/2*3) if wave==0 else Vector2i(43+i%2*3,5+i/2*3) if wave==1 else Vector2i(50+i%2*2,15+i/2*3)
+			var ship=_guard(b,"official_vanguard" if wave==2 and i==0 else "imperial_warship",cell)
+			ship.set_meta("gao_wave",wave)
+			if wave==2 and i==0: ship.set_meta("campaign_flag_context","chapter80_vanguard_headship")
+			water.append(ship)
+		water_groups.append(water)
+		var land: Array=[]
+		for i in range([4,6,8][wave]):
+			var key: String="guan_qi" if wave==2 and i<3 else "guan_gong" if i%3==2 else "guan_dao"
+			var land_cell := Vector2i(34+i%2,24+i/2) if wave==0 else Vector2i(30+i%2,13+i/2) if wave==1 else Vector2i(23+i%3,3+i/3)
+			land.append(_guard(b,key,land_cell))
+		land_groups.append(land)
+	flagship=_guard(b,"gao_flagship",Vector2i(51,5))
+	flagship.visual_scale=1.8
+	flagship.defeat_outcome="subdued"
+	flagship.set_meta("campaign_flag_context","chapter80_gao_flagship")
+func on_start(b) -> void:
+	b.faction_res[1]={"gold":560.0,"wood":400.0}
+	for i in range(workers.size()):
+		var node=b.nearest_free_gold(workers[i].position,null,workers[i]) if i<3 else b.nearest_resource(workers[i].position,"wood")
+		if node!=null: workers[i].order_gather(node)
+	b.mission.begin("gao_rts","经营水寨 · 分守水陆","首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。")
+	b.mission.enable_scrolling()
+	b.mission.add_map_locator("南岸建船坞",YARD_SITE)
+	b.mission.add_map_locator("北岸补给营",LAND_POST)
+	b.mission.add_map_locator("东岸官军船坞",SEA_POST)
+	b.mission.add_action("gao_lure_main","阮小七：主港诱舰",Vector2i(42,31),["ruan_xiaoqi_boat"],1,64)
+	b.mission.add_action("gao_lure_side","阮小七：侧汊诱舰",Vector2i(37,39),["ruan_xiaoqi_boat"],1,64)
+	b.mission.add_action("gao_wind","公孙胜：祭风",WIND,["gongsun_sheng"],2,64)
+	b.mission.add_actor_locator("gao_wind","gongsun_sheng")
+	for cell in [YARD_SITE,LAND_POST,SEA_POST,LAND_FRONT,SEA_FRONT]: b.lit_cells[cell]=25
+	b.msg("工匠已分采金木。南岸船坞100金100木，每艘战船90金65木、3人口；请留出下水口。先保住忠义堂与宋江。",10)
+func _retry(b,key: String,text: String) -> void:
+	var a: Dictionary=b.mission.actions[key]
+	a.done=false
+	if is_instance_valid(a.button): a.button.disabled=false
+	a.marker.show()
+	b.mission.set_status(text)
+func _send_wave(b,index: int) -> void:
+	if waves[index].sent: return
+	waves[index].sent=true
+	for u in water_groups[index]:
+		if alive(u):
+			u.set_stance(Unit.STANCE_AGGRO)
+			u.order_amove(b.map.cell_to_world(lure_cell if index==0 and lure_started else SEA_FRONT))
+	for u in land_groups[index]:
+		if alive(u):
+			u.order_amove(b.map.cell_to_world(LAND_FRONT))
+			u.order_amove(hall.position,true)
+	if index==2 and alive(flagship): flagship.order_amove(b.map.cell_to_world(Vector2i(44,40)))
+	b.mission.set_title(["第一败 · 水陆来犯","第二败 · 连船与岸军","第三败 · 海鳅船压港"][index])
+	b.msg("第%d批水陆主力出发。营地、资源和军队继续保留；两处补给源仍可主动拆除。"%(index+1),7)
+func _production(b,delta: float) -> void:
+	if core_ready: return
+	for lane in range(2):
+		if not alive(posts[lane]) or produced[lane]>=[10,4][lane]: continue
+		production_t[lane]-=delta
+		if production_t[lane]>0: continue
+		var naval := lane==1
+		var key: String="imperial_warship" if naval else "guan_gong" if produced[0]%3==2 else "guan_dao"
+		var price: Dictionary=b._defs.liangshan_warship if naval else b._defs.liang_gong if key=="guan_gong" else b._defs.liang_dao
+		var cell: Vector2i=Naval.exit_cell(b,posts[lane],b._defs[key]) if naval else b.map.nearest_open(LAND_POST+Vector2i(0,3))
+		if cell==Naval.INVALID or not b.faction_spend(1,int(price.cost_gold),int(price.cost_wood)):
+			production_t[lane]=1.0; continue
+		var u: Unit=_guard(b,key,cell)
+		u.set_meta("gao_source",lane)
+		u.order_amove(b.map.cell_to_world(SEA_FRONT if naval else LAND_FRONT))
+		if not naval: u.order_amove(hall.position,true)
+		support.append(u)
+		produced[lane]+=1
+		ai_spent_gold+=int(price.cost_gold)
+		ai_spent_wood+=int(price.cost_wood)
+		production_t[lane]=float(price.train_time)
+func _near(b,u,cell: Vector2i,radius: float) -> bool:
+	return alive(u) and u.position.distance_to(b.map.cell_to_world(cell))<=radius
+func _enemy_near(b,p: Vector2,radius: float) -> bool:
+	return b.units.any(func(u): return alive(u) and u.faction==1 and not u.is_resource and not u.is_building and u.position.distance_to(p)<radius)
+func on_mission_action(b,key: String,actor) -> void:
+	match key:
+		"gao_lure_main","gao_lure_side":
+			if lure_started or _count(water_groups[0])==0: return
+			lure_started=true
+			lure_cell=Vector2i(39,43) if key=="gao_lure_main" else Vector2i(37,42)
+			_send_wave(b,0)
+			for u in water_groups[0]:
+				if alive(u): u.order_amove(b.map.cell_to_world(lure_cell))
+			b.msg("官船追入港汊。请把阮小七撤到主力后面，岸弓与战船合击；活官船确实入伏区才计演义印。",7)
+		"gao_wind":
+			b.mission.mark("gongsun_wind","公孙胜祭风，刘唐可在主码头装火具登船。")
+			b.mission.add_action("gao_prepare","刘唐：码头备火登船",LANDING,["liu_tang"],2,48)
+			b.mission.add_actor_locator("gao_prepare","liu_tang")
+		"gao_prepare":
+			if fire_prepared: return
+			if not _near(b,fireboat,LANDING_WATER,80) or b.wood<60:
+				_retry(b,key,"待装火具小船需在主码头水面，另需60木备火。可先造普通战船继续作战。")
+				return
+			b.add_resources(0,-60)
+			fire_prepared=true
+			embarked_liu=actor
+			actor.resolve_story("embarked")
+			fireboat.display_name="刘唐·举火小船"
+			fireboat.set_meta("story_commander","liu_tang")
+			b.mission.mark("liu_tang_fire_leader","刘唐带引火物实际登上主码头小船。")
+			b.mission.mark("fireboat_prepared","小船备好火具，消耗60木；护它接近第二批连船再举火。")
+			for i in range(2): b.mission.add_action("gao_fire_%d"%i,"刘唐："+("外港" if i==0 else "内港")+"举火",FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
+		"gao_fire_0","gao_fire_1":
+			if fire_lit or actor!=fireboat: return
+			var near: Array=water_groups[1].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<200)
+			var two=b.find_unit("ruan_xiaoer_boat")
+			var five=b.find_unit("ruan_xiaowu_boat")
+			if near.is_empty() or not alive(two) or not alive(five) or two.position.distance_to(actor.position)>220 or five.position.distance_to(actor.position)>220:
+				_retry(b,key,"连船需进入火区，两艘阮氏接应船须在附近接刘唐。等敌船靠近再举火，火势只烧伤实际留在区内的官军。")
+				return
+			fire_lit=true
+			liu_carrier=two
+			two.set_meta("carried_story_person","刘唐")
+			b._spawn_ground_fire(actor.position,220,650,8,actor,1,"gao_fireboat")
+			for u in near: u.apply_slow(0.35,8)
+			actor.set_meta("ship_state","disabled")
+			actor.resolve_story("retreated")
+			b.mission.mark("gao_fire_lit","火船燃起，刘唐转入阮小二接应船。火区持续8秒，只有区内官船实际受伤。")
+			b.mission.add_action("gao_fire_withdraw","阮氏接应船：撤出险水",FIRE_SAFE,["ruan_xiaoer_boat","ruan_xiaowu_boat"],1,64)
+		"gao_fire_withdraw":
+			if not _near(b,liu_carrier,FIRE_SAFE,120) or not _near(b,b.find_unit("ruan_xiaowu_boat"),FIRE_SAFE,120) or _enemy_near(b,b.map.cell_to_world(FIRE_SAFE),230):
+				_retry(b,key,"两艘接应船都需回到南侧安全水域，并先压退230距离内的官船。")
+				return
+			b.mission.mark("fire_escort_safe","两艘阮氏接应船和刘唐撤出险水，水寨与其余舰队保留。")
+		"gao_seal":
+			if capture_lost or port_sealed or not flagship_disabled: return
+			if _enemy_near(b,flagship.position,260):
+				_retry(b,key,"座船已停航，但周围仍有官船；先清开封港和小艇靠船的水面。")
+				return
+			port_sealed=true
+			b.mission.mark("port_sealed","阮氏水军控制座船外侧港口，张顺可安全靠船。")
+			b.mission.add_action("gao_scuttle","张顺：凿船接俘",b.map.world_to_cell(flagship.position)+Vector2i(-3,0),["zhang_shun_boat"],3,64)
+		"gao_scuttle":
+			if capture_lost or recovered or not port_sealed: return
+			if actor.position.distance_to(flagship.position)>160 or _enemy_near(b,actor.position,200):
+				_retry(b,key,"张顺须贴近停航座船，先清开靠船处的官军。")
+				return
+			recovered=true
+			carrier=actor
+			actor.set_meta("carried_story_person","高俅")
+			actor.display_name="张顺·押送高俅"
+			flagship.set_meta("ship_state","disabled")
+			flagship.queue_redraw()
+			b.mission.mark("flagship_scuttled","张顺凿破座船并接起高俅；俘虏现在随小艇实际返航。")
+			b.mission.add_action("gao_land","押送艇：主码头交接",LANDING_WATER,["zhang_shun_boat"],1,40)
+		"gao_land":
+			if capture_lost or landed or not recovered or actor!=carrier: return
+			if not _near(b,actor,LANDING_WATER,64) or _enemy_near(b,b.map.cell_to_world(LANDING),160):
+				_retry(b,key,"押送艇需抵主码头水面，岸上交接地须安全。")
+				return
+			landed=true
+			actor.remove_meta("carried_story_person")
+			actor.display_name="张顺·凿船小艇"
+			prisoner=b.spawn_at("gao_qiu",0,LANDING)
+			prisoner.display_name="高俅·待押堂"
+			prisoner.art_variant="gao_qiu_captured"
+			prisoner.is_hero=false; prisoner.is_cavalry=false; prisoner.is_noncombat=true
+			prisoner.base_speed=42; prisoner.atk=0; prisoner.hp=180; prisoner.max_hp=180
+			prisoner.ability=""; prisoner.ability_slots.clear(); prisoner.aura=""
+			prisoner.setup_def=prisoner.setup_def.duplicate(true)
+			prisoner.setup_def["pop"]=0
+			prisoner.set_stance(Unit.STANCE_PASSIVE)
+			b.mission.mark("gao_landed","高俅已实际上岸。选中他和岸军一起返回忠义堂；落单会停下等待护卫。")
+			b.mission.add_map_locator("押俘终点 · 忠义堂前",HALL+Vector2i(0,4))
+func _capture_failed(b,reason: String) -> void:
+	if capture_lost: return
+	capture_lost=true
+	b.mission.mark("gao_escaped",reason+"；仍可打停座船、击退三批主力取得基础通关。")
+	for key in ["gao_seal","gao_scuttle","gao_land"]: b.mission.block_action(key,reason)
+func _core_threats_clear() -> bool:
+	return flagship_disabled and water_groups.all(func(group): return _count(group)==0) and land_groups.all(func(group): return _count(group)==0)
+func _finish(b,captured := false) -> void:
+	if b.phase!=b.Phase.FIGHT or not _core_threats_clear() or not alive(hall) or not alive(song): return
+	if not captured: b.mission.mark("gao_basic_victory","三批主力败退，高俅座船被打停，梁山收兵。")
+	b.win("高俅三次进兵失利，水寨与钱粮守住。"+("高俅已由水军生擒、岸军押至忠义堂，宋江仍以礼相待，盼借此求得招安。" if captured else "本局以击退座船收束；生擒押堂可在重玩时挑战。"))
+func process(b,delta: float) -> void:
+	if not alive(hall) or not alive(song): return
+	elapsed+=delta
+	_production(b,delta)
+	strategy_t-=delta
+	if strategy_t>0: return
+	strategy_t=0.25
+	for i in range(3):
+		if waves[i].sent: continue
+		if elapsed>=waves[i].time-25 and not waves[i].warned:
+			waves[i].warned=true
+			b.msg("第%d批水陆主力约25秒后出发，准备水陆两线；也可截击其集结地。"%(i+1),6)
+		if elapsed>=waves[i].time: _send_wave(b,i)
+	if lure_started and not b.mission.has_event("fleet_in_ambush") and water_groups[0].any(func(u): return _near(b,u,lure_cell,170)):
+		b.mission.mark("fleet_in_ambush","阮小七引得活官船深入港汊，主力可以合击。")
+	if _count(water_groups[0])==0 and not b.mission.has_event("fleet_in_ambush"):
+		b.mission.miss_story_goal("gao_lure","官船在入伏区前已被击退；基础通关不受影响。")
+		for key in ["gao_lure_main","gao_lure_side"]: b.mission.block_action(key,"第一批官船已击退，继续经营和进攻即可。")
+	if _count(water_groups[1])==0 and not fire_lit:
+		b.mission.miss_story_goal("gao_fire","第二批官船已正面击退，本局不再需要举火。")
+		for key in ["gao_wind","gao_prepare","gao_fire_0","gao_fire_1"]: b.mission.block_action(key,"第二批连船已击退，可继续用现存舰队进攻。")
+	if land_groups.all(func(group): return _count(group)==0): b.mission.mark("gao_land_cleared","三批岸上主力均已击退。")
+	if flagship_disabled and not capture_lost and not b.mission.actions.has("gao_seal"):
+		b.mission.add_action("gao_seal","阮氏水军：封港",b.map.world_to_cell(flagship.position)+Vector2i(0,3),["ruan_xiaoer_boat","ruan_xiaowu_boat"],2,64)
+	if landed and alive(prisoner):
+		var escort: bool=b.units.any(func(u): return alive(u) and u!=prisoner and u.faction==0 and not u.is_building and not u.is_worker and not u.is_noncombat and u.movement_profile=="land" and u.position.distance_to(prisoner.position)<180)
+		if not escort:
+			prisoner.order_stop()
+			if not escort_warning: b.msg("高俅落单，停下等待岸军。选中俘虏与护卫，一同押回忠义堂前。",5)
+			escort_warning=true
+		else:
+			escort_warning=false
+			if _near(b,prisoner,HALL+Vector2i(0,4),100) and not _enemy_near(b,prisoner.position,180):
+				b.mission.mark("gao_captured","俘虏与护卫已实际抵忠义堂前。")
+				if _core_threats_clear(): _finish(b,true); return
+	if _core_threats_clear() and not core_ready:
+		core_ready=true
+		b.mission.set_title("主力已退 · 收兵或押俘")
+		b.mission.set_objective("基础目标已达成，可直接收兵通关；也可继续清开座船周围、封港凿船并押俘回堂。")
+		end_button=Button.new()
+		end_button.text="收兵通关 · 已击退高俅"
+		end_button.pressed.connect(func(): _finish(b,b.mission.has_event("gao_captured")))
+		b.mission._buttons.add_child(end_button)
+func on_unit_resolved(b,u,outcome: String) -> void:
+	if u==flagship and outcome=="subdued":
+		flagship_disabled=true
+		u.set_meta("ship_state","damaged")
+		b.mission.mark("flagship_disabled","高俅座船在实际交战中失去战力。压退剩余水陆主力即可收兵，或另做封港押俘。")
+func on_unit_died(b,u) -> void:
+	if u==hall or u==song: b.lose(u.display_name+"失守。岸军要守东山关，舰队护住码头；可重开并调整水陆投入。"); return
+	# The hidden embarked hero reserves population/uniqueness while aboard.
+	# A real loss of his carrier must release that reservation as well.
+	if is_instance_valid(embarked_liu) and ((u==fireboat and not fire_lit) or u==liu_carrier):
+		b.units.erase(embarked_liu)
+		embarked_liu.queue_free()
+		embarked_liu=null
+		b.mission.mark("liu_tang_lost","搭载刘唐的船只损失，刘唐失散；可在忠义堂正常付费重新集结，火攻不再能补办。")
+	if u==posts[0]: b.mission.mark("gao_land_post_destroyed","山前补给营被拆，停止该处所有陆军补充，北侧资源可争取。")
+	if u==posts[1]: b.mission.mark("gao_sea_post_destroyed","东岸官军船坞被拆，停止该处所有战船补充。")
+	if u==flagship: flagship_disabled=true; _capture_failed(b,"座船已沉，未能生擒高俅")
+	if u==carrier or u==prisoner or u.key=="zhang_shun_boat": _capture_failed(b,"押俘所需小艇或俘虏损失")
+	if u.key in ["ruan_xiaoer_boat","ruan_xiaowu_boat"]:
+		if not alive(b.find_unit("ruan_xiaoer_boat")) and not alive(b.find_unit("ruan_xiaowu_boat")): _capture_failed(b,"两艘封港专船均已损失")
+		if not b.mission.has_event("fire_escort_safe"):
+			b.mission.miss_story_goal("gao_fire","接应船损失，可继续用普通舰队正面作战。")
+	if u==fireboat and not fire_lit: b.mission.miss_story_goal("gao_fire","火船损失，可建船坞补普通战船继续进攻。")
+func top_status(_b) -> String:
+	var sent: int=waves.filter(func(w): return w.sent).size()
+	return "三败高太尉 · 已出发%d/3批 · 水陆营地持续保留 · 官军补充 陆%d/10 船%d/4"%[sent,produced[0],produced[1]]

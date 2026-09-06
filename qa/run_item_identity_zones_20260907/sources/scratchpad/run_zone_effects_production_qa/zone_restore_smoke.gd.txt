@@ -1,0 +1,363 @@
+extends SceneTree
+## Four real Battle zone arrays; no Battle._ready/deploy.
+## Original zone/trail/wall passes, real Units, real map_state and navigation.
+## Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Factory := preload("res://scripts/run_zone_effects_state.gd")
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var report_path: String = ""
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+var observed_steps: Dictionary = {}
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "zone-effects-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}), "observed_steps": observed_steps,
+		"scope": "Only chrono/orbit/trail/ice arrays, real original consumers and map-authority restore. Unit local state and one existing ground-DOT fixture are provided separately. Visual Node restoration, other effects, gameplay RNG and full Battle resume are not covered."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[zone-effects-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	# All production scripts load after Autoload readiness. No Battle enters tree.
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	var map_state_script: Script = load("res://scripts/run_map_state.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var codec: Variant = codec_script.new()
+	var factory: Variant = Factory.new(codec_script, battle_script, unit_script)
+	var map_state: Variant = map_state_script.new("zone_smoke_v1")
+	paused = true
+	var world := Node2D.new()
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	world.visible = false
+	owned.append(world)
+	root.add_child(world)
+	var original: Variant = battle_script.new()
+	owned.append(original)
+	original.process_mode = Node.PROCESS_MODE_DISABLED
+	original.set_block_signals(true)
+	var old_fx := Node2D.new()
+	world.add_child(old_fx)
+	original.fx_root = old_fx
+	var old_units: Array = [
+		_make_unit(unit_script, Vector2(1000.0, 0.0), 0),
+		_make_unit(unit_script, Vector2(1010.0, 0.0), 1),
+		_make_unit(unit_script, Vector2.ZERO, 1),
+		_make_unit(unit_script, Vector2(2000.0, 0.0), 0),
+		_make_unit(unit_script, Vector2.ZERO, 1),
+		_make_unit(unit_script, Vector2.ZERO, 1),
+		_make_unit(unit_script, Vector2.ZERO, 1),
+		_make_unit(unit_script, Vector2.ZERO, 0)]
+	old_units[4].story_outcome = "saved"
+	old_units[5].garrisoned = true
+	old_units[6].is_building = true
+	for unit in old_units: world.add_child(unit)
+	original.units = old_units
+	# Explicit current creator shapes; no initial burst/self buff/visual cast is
+	# replayed. The actual consumers below spend source lifetime before saving.
+	original._chrono_zones = [{"pos": Vector2.ZERO, "r": 40.0, "foe": 1, "t": 0.8, "tick": 0.1, "tick_t": 0.0}]
+	original._orbit_zones = [{"caster": old_units[0], "foe": 1, "ability_id": "li_orbit", "r": 40.0,
+		"t": 1.6, "tick": 0.5, "tick_t": 0.5, "dmg": 10.0, "slow": 0.75, "slow_dur": 0.7}]
+	for _index in range(5): original._zone_pass(0.1)
+	_check("source real orbit already spent one damage tick", old_units[1].hp == 490.0)
+	_check("source chrono controls only eligible enemy", old_units[2]._stun_t == 0.22 and old_units[4]._stun_t == 0.0 and old_units[5]._stun_t == 0.0 and old_units[6]._stun_t == 0.0 and old_units[7]._stun_t == 0.0)
+	original._fire_trails = [{"caster": old_units[3], "ability_id": "wei_trail", "t": 1.2,
+		"drop_t": 0.0, "drop": 0.3, "dps": 20.0, "dot_dur": 1.0, "r": 20.0, "foe": 1}]
+	original._trail_pass(0.1)
+	original._trail_pass(0.025)
+	_check("source trail already dropped once and retains positive drop_t", original._ground_dots.size() == 1 and original._fire_trails[0].drop_t > 0.17 and original._fire_trails[0].drop_t < 0.18)
+	# Expired and none records must remain distinct until the original consumer
+	# sees them; this is not a blanket expired -> null normalization.
+	var expired: Variant = unit_script.new()
+	var expired_orbit: Dictionary = original._orbit_zones[0].duplicate(false)
+	expired_orbit["caster"] = expired
+	expired_orbit["ability_id"] = "expired_orbit"
+	var none_orbit: Dictionary = expired_orbit.duplicate(false)
+	none_orbit["caster"] = null
+	none_orbit["ability_id"] = "none_orbit"
+	original._orbit_zones.append(expired_orbit)
+	original._orbit_zones.append(none_orbit)
+	var expired_trail: Dictionary = original._fire_trails[0].duplicate(false)
+	expired_trail["caster"] = expired
+	expired_trail["ability_id"] = "expired_trail"
+	var none_trail: Dictionary = expired_trail.duplicate(false)
+	none_trail["caster"] = null
+	none_trail["ability_id"] = "none_trail"
+	original._fire_trails.append(expired_trail)
+	original._fire_trails.append(none_trail)
+	expired.free()
+	var old_map: Variant = map_script.new()
+	owned.append(old_map)
+	old_map.init_map(8, 8, "marsh", map_script.T.GRASS)
+	old_map.bake()
+	original.map = old_map
+	var overlap := Vector2i(3, 3)
+	var first_only := Vector2i(4, 3)
+	var external := Vector2i(5, 3)
+	original._ice_walls = [{"cells": [overlap, first_only], "t": 0.35}, {"cells": [overlap, external], "t": 0.65}]
+	# Overlap is an authority-boundary fixture using real counting APIs; it does
+	# not claim the ordinary skill can place on an already-blocked cell.
+	for wall in original._ice_walls:
+		for cell in wall.cells: old_map.block_footprint(cell, 0, true)
+	old_map.block_footprint(external, 0, true) # Independent building/obstacle owner.
+	original._ice_wall_pass(0.1)
+	_check("source overlapping walls own 2 counts and another obstacle remains", _count(old_map, overlap) == 2 and _count(old_map, first_only) == 1 and _count(old_map, external) == 2)
+	var old_ids: Dictionary = {}
+	var known: Dictionary = {}
+	for index in range(old_units.size()):
+		old_ids[old_units[index]] = str(index + 1)
+		known[str(index + 1)] = true
+	var captured: Dictionary = factory.capture(original, "zone_smoke_v1", old_ids)
+	if not _ok("capture four partially elapsed arrays", captured):
+		_finish(true)
+		return
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	var state: Dictionary = factory.validate(record, "zone_smoke_v1", known)
+	if not _ok("validate true JSON roundtrip with explicit fields", state):
+		_finish(true)
+		return
+	_check("codec preserves float int Vector2 and Vector2i plus order", state.arrays == factory.validate(captured.record, "zone_smoke_v1", known).arrays and typeof(state.arrays._chrono_zones[0].foe) == TYPE_INT and typeof(state.arrays._ice_walls[0].cells[0]) == TYPE_VECTOR2I and typeof(state.arrays._fire_trails[0].drop_t) == TYPE_FLOAT)
+	_check("expired none and live references retain ordered tags", state.arrays._orbit_zones[0].caster.id == "1" and state.arrays._orbit_zones[1].caster.state == "expired" and state.arrays._orbit_zones[2].caster.state == "none" and state.arrays._fire_trails[1].caster.state == "expired")
+	var payload: Dictionary = codec.decode(record.payload).value
+	var bad_payload: Dictionary = payload.duplicate(true)
+	bad_payload._ice_walls[0].cells[0] = Vector2(3.0, 3.0)
+	var bad_record: Dictionary = record.duplicate(true)
+	bad_record["payload"] = codec.encode(bad_payload).value
+	var bad: Dictionary = factory.instantiate(bad_record, "zone_smoke_v1", known)
+	_check("float vector cell rejected before Battle allocation", not bad.ok and bad.code == "WALL_CELL_TYPE")
+	bad_payload = payload.duplicate(true)
+	bad_payload._fire_trails[0]["drop_t"] = 0
+	bad_record["payload"] = codec.encode(bad_payload).value
+	bad = factory.validate(bad_record, "zone_smoke_v1", known)
+	_check("integer timer rejected rather than silently cast", not bad.ok and bad.code == "VALUE_FLOAT")
+	bad_payload = payload.duplicate(true)
+	bad_payload._chrono_zones[0]["new_effect_key"] = true
+	bad_record["payload"] = codec.encode(bad_payload).value
+	bad = factory.validate(bad_record, "zone_smoke_v1", known)
+	_check("unknown creator field rejected", not bad.ok and bad.code == "ENTRY_FIELDS")
+	_check("untrusted different content version rejected", not factory.validate(record, "wrong_content", known).ok)
+	var map_capture: Dictionary = map_state.capture(old_map)
+	if not _ok("capture actual map authority including overlapping counts", map_capture):
+		_finish(true)
+		return
+	var map_record: Variant = JSON.parse_string(JSON.stringify(map_capture.value))
+	var shell: Dictionary = factory.instantiate(record, "zone_smoke_v1", known)
+	if not _ok("instantiate detached disabled real Battle", shell):
+		_finish(true)
+		return
+	var battle: Variant = shell.battle
+	owned.append(battle)
+	var units: Array = []
+	var ids: Dictionary = {}
+	var new_ids: Dictionary = {}
+	for index in range(old_units.size()):
+		var old: Variant = old_units[index]
+		var unit: Variant = _make_unit(unit_script, old.position, old.faction)
+		unit.hp = old.hp
+		unit.story_outcome = old.story_outcome
+		unit.garrisoned = old.garrisoned
+		unit.is_building = old.is_building
+		unit._stun_t = old._stun_t
+		unit.temp_speed = old.temp_speed
+		unit._temp_speed_t = old._temp_speed_t
+		world.add_child(unit)
+		units.append(unit)
+		ids[str(index + 1)] = unit
+		new_ids[unit] = str(index + 1)
+	battle.units = units
+	var fx := Node2D.new()
+	world.add_child(fx)
+	battle.fx_root = fx
+	# Existing ground DOT is outer-owned, separately supplied as a real fixture;
+	# these four arrays must leave it unchanged, not discard or recreate it.
+	var existing_dot: Dictionary = original._ground_dots[0].duplicate(false)
+	existing_dot["caster"] = units[3]
+	battle._ground_dots.append(existing_dot)
+	var tombstone: Variant = unit_script.new()
+	owned.append(tombstone)
+	var missing_map: Dictionary = factory.bind(battle, record, "zone_smoke_v1", ids, tombstone)
+	_check("walls cannot bind before map authority exists", not missing_map.ok and missing_map.code == "RESTORED_MAP_REQUIRED" and _empty_zones(battle))
+	var game_map: Variant = map_script.new()
+	owned.append(game_map)
+	battle.map = game_map
+	if not _ok("map_state restores counts and all five navigation grids", map_state.restore_into(game_map, map_record)):
+		_finish(true)
+		return
+	var before_counts: PackedInt32Array = game_map._block_count.duplicate()
+	var before_revision: int = game_map._navigation_revision
+	var missing_tombstone: Dictionary = factory.bind(battle, record, "zone_smoke_v1", ids)
+	_check("expired refs require live tombstone without partial array writes", not missing_tombstone.ok and missing_tombstone.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED" and _empty_zones(battle) and game_map._block_count == before_counts)
+	bad_payload = payload.duplicate(true)
+	bad_payload._ice_walls.append({"cells": [overlap], "t": 0.5})
+	bad_record["payload"] = codec.encode(bad_payload).value
+	bad = factory.bind(battle, bad_record, "zone_smoke_v1", ids, tombstone)
+	_check("unbacked extra wall count rejected without mutation", not bad.ok and bad.code == "WALL_COUNTS_NOT_RESTORED" and _empty_zones(battle) and game_map._block_count == before_counts and game_map._navigation_revision == before_revision)
+	if not _ok("bind four arrays without registering any wall", factory.bind(battle, record, "zone_smoke_v1", ids, tombstone)):
+		_finish(true)
+		return
+	tombstone.free()
+	_check("expired caster remains invalid Object while none remains nil", typeof(battle._orbit_zones[1].caster) == TYPE_OBJECT and not is_instance_valid(battle._orbit_zones[1].caster) and typeof(battle._orbit_zones[2].caster) == TYPE_NIL and typeof(battle._fire_trails[1].caster) == TYPE_OBJECT and not is_instance_valid(battle._fire_trails[1].caster))
+	_check("bind preserves authority bytes revision and existing ground DOT", game_map._block_count == before_counts and game_map._navigation_revision == before_revision and battle._ground_dots.size() == 1 and is_same(battle._ground_dots[0], existing_dot))
+	var rebound: Dictionary = factory.capture(battle, "zone_smoke_v1", new_ids)
+	if not _ok("recapture rebound graph before simulation", rebound):
+		_finish(true)
+		return
+	_check("all zone timers values and order match before play", rebound.record == captured.record)
+	_check("restore alone creates no damage drops or visual nodes", units[1].hp == 490.0 and battle._ground_dots.size() == 1 and fx.get_child_count() == 0 and not battle.is_inside_tree())
+	var again: Dictionary = factory.bind(battle, record, "zone_smoke_v1", ids)
+	_check("nonempty effect destination cannot be overwritten", not again.ok and again.code == "DESTINATION_EFFECT_ARRAYS_NOT_EMPTY")
+	await process_frame
+	_check("paused transaction cannot tick itself", factory.capture(battle, "zone_smoke_v1", new_ids).record == captured.record and units[1].hp == 490.0 and fx.get_child_count() == 0)
+	# These reset only the observer Unit's prior stun (Unit state is a separate
+	# module); subsequent controls must come from the real _zone_pass call.
+	old_units[2]._stun_t = 0.0
+	units[2]._stun_t = 0.0
+	var samples: Array = []
+	var damage_steps: Array = []
+	var drop_steps: Array = []
+	var chrono_steps: Array = []
+	var pairs_match: bool = true
+	var new_drops: int = 0
+	var new_hits: int = 0
+	for index in range(20):
+		var step: int = index + 1
+		old_units[3].position = Vector2(2000.0 + float(step) * 10.0, 0.0)
+		units[3].position = old_units[3].position
+		old_units[2]._stun_t = 0.0
+		units[2]._stun_t = 0.0
+		var hp_before: float = units[1].hp
+		var drops_before: int = battle._ground_dots.size()
+		original._zone_pass(0.1)
+		battle._zone_pass(0.1)
+		original._trail_pass(0.1)
+		battle._trail_pass(0.1)
+		original._ice_wall_pass(0.1)
+		battle._ice_wall_pass(0.1)
+		var control: Dictionary = factory.capture(original, "zone_smoke_v1", old_ids)
+		var actual: Dictionary = factory.capture(battle, "zone_smoke_v1", new_ids)
+		pairs_match = pairs_match and control.ok and actual.ok and control.record == actual.record and old_units[1].hp == units[1].hp and old_units[2]._stun_t == units[2]._stun_t and old_map._block_count == game_map._block_count
+		if units[1].hp != hp_before:
+			new_hits += 1
+			damage_steps.append(step)
+		if battle._ground_dots.size() > drops_before:
+			new_drops += battle._ground_dots.size() - drops_before
+			drop_steps.append(step)
+			var dot: Dictionary = battle._ground_dots[-1]
+			pairs_match = pairs_match and dot.pos == units[3].position and dot.ability_id == "wei_trail" and dot.per == 10.0 and dot.tick == 0.5 and dot.t == 1.0 and is_same(dot.caster, units[3])
+		if units[2]._stun_t > 0.0: chrono_steps.append(step)
+		samples.append({"step": step, "overlap": _count(game_map, overlap), "first_only": _count(game_map, first_only), "external": _count(game_map, external), "orbit_hp": units[1].hp, "ground_count": battle._ground_dots.size()})
+		if step == 1:
+			_check("positive saved drop_t prevents first-step extra drop", battle._ground_dots.size() == 1 and battle._fire_trails.size() == 1 and battle._orbit_zones.size() == 1)
+		if step == 2:
+			_check("first wall not released before its remaining lifetime", _count(game_map, overlap) == 2 and _count(game_map, first_only) == 1 and game_map.astar.is_point_solid(overlap))
+		if step == 3:
+			_check("first wall releases only its own overlap count", _count(game_map, overlap) == 1 and _count(game_map, first_only) == 0 and game_map.astar.is_point_solid(overlap) and not game_map.astar.is_point_solid(first_only) and battle._ice_walls.size() == 1)
+		if step == 6:
+			_check("last wall opens shared cell but preserves independent obstacle", _count(game_map, overlap) == 0 and not game_map.astar.is_point_solid(overlap) and not game_map.astar_guan.is_point_solid(overlap) and game_map.astar_water.is_point_solid(overlap) and _count(game_map, external) == 1 and game_map.astar.is_point_solid(external) and battle._ice_walls.is_empty())
+	_check("all twenty source restored pass pairs retain exact effect and count state", pairs_match)
+	_check("orbit resumes exactly two remaining damage ticks", new_hits == 2 and units[1].hp == 470.0 and battle._orbit_zones.is_empty())
+	_check("orbit slow values and chrono exclusions persist", units[1].temp_speed == 0.75 and units[4]._stun_t == 0.0 and units[5]._stun_t == 0.0 and units[6]._stun_t == 0.0 and units[7]._stun_t == 0.0 and not chrono_steps.is_empty() and battle._chrono_zones.is_empty())
+	_check("trail drops at original saved cadence and current positions", new_drops == 4 and drop_steps == [2, 5, 8, 11] and battle._ground_dots.size() == 5 and battle._fire_trails.is_empty())
+	_check("original consumers alone created live impact and fire nodes", fx.get_child_count() == 6 and battle._ground_fire_visuals == 4)
+	var final_revision: int = game_map._navigation_revision
+	battle._zone_pass(1.0)
+	battle._trail_pass(1.0)
+	battle._ice_wall_pass(1.0)
+	_check("exhausted arrays cannot hit drop or release twice", _empty_zones(battle) and units[1].hp == 470.0 and battle._ground_dots.size() == 5 and game_map._navigation_revision == final_revision and _count(game_map, external) == 1)
+	game_map.block_footprint(external, 0, false)
+	_check("independent obstacle opens only after its own release", _count(game_map, external) == 0 and not game_map.astar.is_point_solid(external))
+	_check("Battle ready deployment and visual reconstruction were never invoked", not original.is_inside_tree() and not battle.is_inside_tree() and battle.gold == 0 and battle.wood == 0)
+	observed_steps = {"samples": samples, "damage_steps": damage_steps, "drop_steps": drop_steps, "chrono_steps": chrono_steps}
+	_finish()
+
+func _make_unit(unit_script: Script, at: Vector2, faction: int) -> Variant:
+	var unit: Variant = unit_script.new()
+	owned.append(unit)
+	unit.visible = false
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.position = at
+	unit.faction = faction
+	unit.max_hp = 500.0
+	unit.hp = 500.0
+	unit.radius = 12.0
+	unit.stance = 3
+	return unit
+
+func _count(game_map: Variant, cell: Vector2i) -> int:
+	return int(game_map._block_count[cell.y * game_map.w + cell.x])
+
+func _empty_zones(battle: Variant) -> bool:
+	return battle._chrono_zones.is_empty() and battle._orbit_zones.is_empty() and battle._fire_trails.is_empty() and battle._ice_walls.is_empty()

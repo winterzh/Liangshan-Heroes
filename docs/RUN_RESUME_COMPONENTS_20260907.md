@@ -77,6 +77,18 @@ prepare不赋值Battle数组，不挂接、连接系统信号或激活；成功�
 
 源码run`20260906T193936497244Z`的writer161/reader47通过；PCK R1`20260906T195011243688Z`（PID20224/41908）与正式资源路径`20260906T195239912542Z`（PID1400/2596）各writer24/reader33通过。三份原始`.gd`不可读而编译资源可加载，七种有符号种子各64个后续混合值及终态跨进程一致，不受无关全局随机噪声影响。实际PID/user、stdout、manifest、handoff/报告哈希及源码/玩家保护均核对；正式路径重验同一57项矩阵，不新增独立场景。
 
-原PCK`20260906T194037811287Z`导出exit0，writer虽落盘24项true且内部complete=true，报告Dictionary复读守护仍令其exit2，stdout缺失、reader未启动；整轮失败原文保留。R1只改_write为精确落盘字节加parse成功，其余driver和RNG判断保持。[运行时RNG归档](../qa/run_gameplay_rng_runtime_20260907/README.md)保留旧/新driver、runner/pins、模板及精确复用依赖，不保存PCK、私有工程/profile或玩家文件。
+原PCK`20260906T194037811287Z`导出exit0，writer虽落盘24项true且内部complete=true，报告Dictionary复读守护仍令其exit2，stdout缺失、reader未启动；整轮失败原文保留。已定位旧_write在成功写出报告后、stdout前返回false；Engine元数据经JSON往返的类型变化是可能解释，StringName/String键型未单独实测，具体根因未确定。R1只改_write为精确落盘字节加parse成功，其余driver和RNG判断保持，随后整轮通过。[运行时RNG归档](../qa/run_gameplay_rng_runtime_20260907/README.md)保留旧/新driver、runner/pins、模板及精确复用依赖，不保存PCK、私有工程/profile或玩家文件。
 
 该模块是第9个正式恢复组件，但未迁移Battle随机调用，也未接RunSession、整局跨进程持续战斗、菜单或整游戏PCK续玩。本批独立夹具PCK合同不替代M3整局验收，后续其他生产变动不纳入其历史源集。
+
+## 第10/11组件：物品 UID 与四数组区域效果
+
+[run_item_id_state.gd](../scripts/run_item_id_state.gd) SHA256 为 `8bb221e918790ef8e8cd898c7222438cf7316c4ba180c09a8dd5663180ebfae4`；[run_zone_effects_state.gd](../scripts/run_zone_effects_state.gd) 为 `69c66e349fbb508673856e6377e7fe24b3c76a4adc300cc1e98c0bee70c78c38`。两者与原型同字节。同批 Battle/Inventory 实测字节为 `d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5` / `ab2d40f51695a4141bea1566a997883cc839f36bf6781fc0977151162d4fc595`，原始候选、builder及修改前来源保留。
+
+Battle next_item_uid 替代 ObjectID 与局部序号计算；换格、同域转移和可信复活保留UID，满栏/跨域/坏域/耗尽时在破坏源库存前拒绝。INT64_MAX为耗尽哨兵；补已有stack不占号，未接收数量返回调用方。counter用既有int64 codec通过真实JSON保存高水位，安装只接受尚未使用的新Battle。外层可信最大UID证明须覆盖所有活/死亡库存、退休进度及proc/待施放等别名，不能取存档自报值或活动六槽最大值；先完成整图验证与counter安装，才允许创建物品。
+
+53项allocator run `20260906T195440680513Z`（PID28160，16来源+37其余）及原Unit回归 `20260906T200247535257Z`（PID34988，原149项）通过。真实复活 `20260906T200720412333Z`（PID37340）231项=198来源+33行为/宿主，通过正式counter在两个空Battle间的JSON和后继检查；另在两场依次完整释放的标准驻守Battle完成原物品自检及真实付费复活链。原自检唯一九项及ALL全true。坏库存导致生成失败时保留付费队列/退休进度，反复重试不多扣费、不留失败Unit；取消全额退款，正确原snapshot重练保留UID/数量/两类冷却和成长，成功只装一次。战斗暂停、训练计时显式加速；不代表所有spawn/购买/正常训练时长验收，也不另计一次53项负例。
+
+区域只恢复 `_chrono_zones/_orbit_zones/_fire_trails/_ice_walls`。原型 `20260906T195639137986Z`（PID30560）与正式 `20260906T195836771214Z`（PID17848）各81项=42来源+39其余，20组真实原pass对照验证剩余两次orbit伤害、trail第2/5/8/11步落火及叠墙第3/6步按份释放、独立建筑计数保留。先恢复地图权威与导航再绑定墙数组，不重复登记墙；全部图共享引用上下文并完成绑定后，统一释放临时墓碑、安装和激活。Unit状态与既有地火由外层夹具提供，既存视觉Node未由本模块重建。
+
+[本批五轮档案](../qa/run_item_identity_zones_20260907/README.md)保留全部真实日志/收据、99个复活运行源码映射与精确旧依赖。五轮入口均被各自manifest覆盖，exit0、源码/玩家前后与锁释放通过。原Unit与正式区域只重验既有矩阵，不新增场景计数。本批推进至11组件，尚未完成RunSession整局事务、全部效果与视觉、Battle随机调用接入、跨进程整局继续、菜单或PCK验收；后续标准驻守关卡草稿不在本批证据内。

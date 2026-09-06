@@ -1,0 +1,381 @@
+extends Control
+## 可复用设置面板：主菜单与战斗内 Esc 菜单共用同一套 UI（用 preload 引用，无需 class_name）。
+## add_child(SettingsPanel.new()) 即弹全屏覆盖层；返回/Esc 自销毁并保存。
+## 若调用方需在关闭后做事（如重新显示暂停菜单），设 on_close 回调。
+
+var on_close := Callable()
+var _capture_action := ""
+var _capture_button: Button = null
+var _key_buttons: Dictionary = {}
+var _key_overview: Label
+
+
+func _ready() -> void:
+	theme = UITheme.shared()
+	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停态(Esc 菜单)下仍可操作
+	z_index = 300  # Keep this modal above battle toasts, inventory and skill tips.
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	_build()
+
+
+func _build() -> void:
+	var bg := ColorRect.new()
+	bg.color = Color(UITheme.INK, 0.97)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	bg.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(center)
+	var box := VBoxContainer.new()
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_theme_constant_override("separation", 12)
+	center.add_child(box)
+
+	var title := Label.new()
+	title.text = "⚙  设置"
+	title.add_theme_font_size_override("font_size", 32)
+	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(title)
+
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(660, 460)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	box.add_child(scroll)
+	var p := VBoxContainer.new()
+	p.custom_minimum_size = Vector2(636, 0)
+	p.add_theme_constant_override("separation", 6)
+	scroll.add_child(p)
+
+	_head(p, "🔊  音频")
+	_row(p, "背景音乐", _slider(Settings.bgm, 0.0, 1.0, func(v: float) -> void: Settings.set_bgm(v)))
+	_row(p, "音效", _slider(Settings.sfx, 0.0, 1.0, func(v: float) -> void: Settings.set_sfx(v)))
+	_row(p, "全部静音", _check(Settings.muted, func(on: bool) -> void: Settings.set_muted(on)))
+
+	_head(p, "⏱  游戏")
+	# 慢=原来的正常速度(1.0)；中=1.2×；快=1.5×。改完「返回」恢复对战即生效（_close_pause 重置 time_scale）。
+	_row(p, "游戏速度", _seg([["慢", 1.0], ["中", 1.2], ["快", 1.5]], Settings.game_speed, func(v) -> void:
+		Settings.game_speed = v
+		if not get_tree().paused:
+			Engine.time_scale = v))
+	# 第四档「全托管」+ 自动镜头仅在驻守战「AI友好模式」下可用；未开则只给前三档（无/弱/强）。
+	var micro_opts: Array = [["无", 0], ["弱", 1], ["强", 2]]
+	var micro_cur: int = int(Settings.auto_micro_level)
+	if Campaign.ai_friendly:
+		micro_opts.append(["全托管", 3])
+	elif micro_cur >= 3:
+		micro_cur = 2   # 关掉AI友好模式后，原「全托管」档在面板上回落显示为「强托管」
+	_row(p, "英雄托管", _seg(micro_opts, micro_cur, func(v) -> void: Settings.auto_micro_level = int(v)))
+	_row(p, "行军阵型", _seg([["松散", "loose"], ["方阵", "box"], ["横列", "line"]], Settings.formation_mode, func(v) -> void: Settings.formation_mode = String(v)))
+	if Campaign.ai_friendly:
+		_row(p, "", _note("全托管：驻守战里彻底挂机——喽啰自动采集/建造/修复、自动练兵练将研究、英雄全自动、镜头自动"))
+	else:
+		_row(p, "", _note("「全托管」与自动镜头需先在驻守战开启「AI友好模式」才可用"))
+	_row(p, "氛围特效", _check(Settings.atmosphere, func(on: bool) -> void: Settings.atmosphere = on))
+	if OS.has_feature("mobile"):
+		# 手机横屏方向：自动=重力感应双向横屏；手机不自动转就手动选正向/反向
+		_row(p, "横屏方向", _seg([["自动", "auto"], ["正向", "normal"], ["反向", "flip"]], Screen.orient, func(v) -> void: Screen.set_orientation(String(v))))
+		_row(p, "", _note("自动=重力感应双向横屏；若手机不自动旋转，可手动选正向/反向"))
+	else:
+		_row(p, "全屏", _check(Screen.is_fullscreen(), func(on: bool) -> void: Screen.set_fullscreen(on)))
+
+	_head(p, "🎥  镜头")
+	_row(p, "边缘滚屏", _check(Settings.edge_scroll, func(on: bool) -> void: Settings.edge_scroll = on))
+	_row(p, "镜头速度", _slider(Settings.cam_speed, 0.3, 2.5, func(v: float) -> void: Settings.cam_speed = v))
+	_row(p, "缩放灵敏度", _slider(Settings.zoom_sens, 0.3, 2.5, func(v: float) -> void: Settings.zoom_sens = v))
+
+	_head(p, "💬  显示")
+	# Old packaged Settings instances may predate this field; keep standard and hide this row.
+	var effects_value: Variant = Settings.get("effects_quality")
+	if effects_value is String and effects_value in ["standard", "reduced"]:
+		_row(p, "特效细节", _seg([["标准", "standard"], ["精简", "reduced"]], effects_value, func(v) -> void: Settings.set("effects_quality", String(v))))
+		_row(p, "", _note("精简装饰粒子与拖尾，保留技能提示和命中反馈"))
+	_row(p, "伤害飘字", _check(Settings.show_damage, func(on: bool) -> void: Settings.show_damage = on))
+	_row(p, "血条常显", _check(Settings.show_healthbars, func(on: bool) -> void: Settings.show_healthbars = on))
+	_row(p, "技能冷却数字", _check(Settings.show_cooldown, func(on: bool) -> void: Settings.show_cooldown = on))
+	_row(p, "命令队列线", _check(Settings.show_command_queue, func(on: bool) -> void: Settings.show_command_queue = on))
+	_row(p, "攻击目标线", _check(Settings.show_target_lines, func(on: bool) -> void: Settings.show_target_lines = on))
+	_row(p, "攻击范围圈", _check(Settings.show_range_rings, func(on: bool) -> void: Settings.show_range_rings = on))
+
+	_head(p, "🎯  默认对战（1v1）")
+	_row(p, "难度", _seg([["简单", "easy"], ["普通", "normal"], ["困难", "hard"]], Campaign.ai_difficulty, func(v) -> void: Campaign.ai_difficulty = v))
+	_row(p, "胜利条件", _seg([["征服", "conquest"], ["斩首", "regicide"], ["占山", "koth"]], Campaign.victory_mode, func(v) -> void: Campaign.victory_mode = v))
+
+	_head(p, "⌨  核心键位")
+	p.add_child(_keybind_grid())
+	var reset_keys := Button.new()
+	reset_keys.text = "恢复默认键位"
+	reset_keys.custom_minimum_size = Vector2(150, 34)
+	reset_keys.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	reset_keys.pressed.connect(func() -> void:
+		Settings.reset_keybinds()
+		_refresh_key_buttons())
+	p.add_child(reset_keys)
+
+	_head(p, "键位一览")
+	_key_overview = Label.new()
+	_key_overview.text = _keybind_text()
+	_key_overview.add_theme_font_size_override("font_size", 14)
+	_key_overview.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
+	p.add_child(_key_overview)
+
+	var back := Button.new()
+	back.text = "←  返回（保存）"
+	back.custom_minimum_size = Vector2(240, 46)
+	back.add_theme_font_size_override("font_size", 19)
+	back.pressed.connect(close)
+	box.add_child(back)
+
+
+func close() -> void:
+	Settings.save()
+	Campaign.save_prefs()
+	if on_close.is_valid():
+		on_close.call()
+	queue_free()
+
+
+func _input(event: InputEvent) -> void:
+	if _capture_action == "" or not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	get_viewport().set_input_as_handled()
+	if event.keycode == KEY_ESCAPE:
+		_finish_key_capture()
+	elif Settings.rebind_key(_capture_action, event.keycode):
+		_finish_key_capture()
+		_refresh_key_buttons()
+	else:
+		_capture_button.text = "该键已保留"
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _capture_action != "":
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		get_viewport().set_input_as_handled()
+		close()
+
+
+func _head(parent: VBoxContainer, title: String) -> void:
+	var sp := Control.new()
+	sp.custom_minimum_size = Vector2(0, 6)
+	parent.add_child(sp)
+	var l := Label.new()
+	l.text = title
+	l.add_theme_font_size_override("font_size", 20)
+	l.add_theme_color_override("font_color", UITheme.PAPER_DARK)
+	parent.add_child(l)
+
+
+func _row(parent: VBoxContainer, label_text: String, control: Control) -> void:
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 14)
+	var l := Label.new()
+	l.text = label_text
+	l.custom_minimum_size = Vector2(150, 0)
+	l.add_theme_font_size_override("font_size", 16)
+	l.add_theme_color_override("font_color", UITheme.PAPER)
+	hb.add_child(l)
+	hb.add_child(control)
+	parent.add_child(hb)
+
+
+## 数值滑条 + 实时数值标签。hi<=1 显示百分比；否则显示倍率（×）。
+func _slider(value: float, lo: float, hi: float, cb: Callable) -> Control:
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 10)
+	var sl := HSlider.new()
+	sl.min_value = lo
+	sl.max_value = hi
+	sl.step = 0.05
+	sl.value = value
+	sl.custom_minimum_size = Vector2(240, 26)
+	hb.add_child(sl)
+	var vl := Label.new()
+	vl.custom_minimum_size = Vector2(56, 0)
+	vl.add_theme_font_size_override("font_size", 15)
+	vl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
+	vl.text = ("%d%%" % int(round(value * 100.0))) if hi <= 1.0 else ("%.1f×" % value)
+	hb.add_child(vl)
+	sl.value_changed.connect(func(v: float) -> void:
+		vl.text = ("%d%%" % int(round(v * 100.0))) if hi <= 1.0 else ("%.1f×" % v)
+		cb.call(v))
+	return hb
+
+
+## 灰色小字说明（占控件位，配合空 label 行做整行提示）
+func _note(text: String) -> Control:
+	var l := Label.new()
+	l.text = text
+	l.add_theme_font_size_override("font_size", 12)
+	l.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.custom_minimum_size = Vector2(360, 0)
+	return l
+
+
+func _check(value: bool, cb: Callable) -> Control:
+	var c := CheckButton.new()
+	c.button_pressed = value
+	c.toggled.connect(func(on: bool) -> void: cb.call(on))
+	return c
+
+
+## 数字输入框（SpinBox）：lo..hi、step 步进，可点箭头也可直接键入，实时回调。
+func _num(value: float, lo: float, hi: float, step: float, cb: Callable) -> Control:
+	var sb := SpinBox.new()
+	sb.min_value = lo
+	sb.max_value = hi
+	sb.step = step
+	sb.value = value
+	sb.custom_minimum_size = Vector2(130, 38)
+	sb.add_theme_font_size_override("font_size", 18)
+	sb.value_changed.connect(func(v: float) -> void: cb.call(v))
+	return sb
+
+
+## 分段单选按钮的醒目配色：选中=金底深字(粗边)，未选=暗底灰字。让「当前选中项」一眼可辨。
+func _style_seg(b: Button) -> void:
+	var norm := StyleBoxFlat.new()
+	norm.bg_color = UITheme.INK_SOFT
+	norm.set_corner_radius_all(3)
+	norm.set_border_width_all(1)
+	norm.border_color = UITheme.COPPER
+	var sel := StyleBoxFlat.new()
+	sel.bg_color = UITheme.PAPER_DARK
+	sel.set_corner_radius_all(3)
+	sel.set_border_width_all(1)
+	sel.border_color = UITheme.COPPER_LIGHT
+	b.add_theme_stylebox_override("normal", norm)
+	b.add_theme_stylebox_override("hover", norm)
+	b.add_theme_stylebox_override("pressed", sel)
+	b.add_theme_stylebox_override("hover_pressed", sel)
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	b.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
+	b.add_theme_color_override("font_hover_color", UITheme.PAPER)
+	b.add_theme_color_override("font_pressed_color", UITheme.INK)
+	b.add_theme_color_override("font_hover_pressed_color", UITheme.INK)
+
+
+## 分段单选：[[显示文字, 值], ...]，高亮 current 对应项；点击互斥高亮并回调。
+func _seg(options: Array, current: Variant, cb: Callable) -> Control:
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 6)
+	var btns: Array = []
+	for opt in options:
+		var b := Button.new()
+		b.text = String(opt[0])
+		b.toggle_mode = true
+		b.button_pressed = (opt[1] == current)
+		b.custom_minimum_size = Vector2(80, 38)
+		b.add_theme_font_size_override("font_size", 17)
+		_style_seg(b)   # 选中=醒目金底深字，未选=暗底灰字，一眼区分
+		btns.append(b)
+		hb.add_child(b)
+	for i in range(options.size()):
+		var b: Button = btns[i]
+		var val: Variant = options[i][1]
+		b.pressed.connect(func() -> void:
+			for bb in btns:
+				(bb as Button).button_pressed = false
+			b.button_pressed = true
+			cb.call(val))
+	return hb
+
+
+func _keybind_grid() -> Control:
+	var specs := [
+		["攻击移动", "amove"], ["停止", "stop"],
+		["原地据守", "hold"], ["巡逻", "patrol"],
+		["切换姿态", "stance"], ["英雄托管", "auto"],
+		["命令槽 1", "command_0"], ["命令槽 2", "command_1"],
+		["命令槽 3", "command_2"], ["命令槽 4", "command_3"],
+		["物品槽 1", "item_0"], ["物品槽 2", "item_1"],
+		["物品槽 3", "item_2"], ["物品槽 4", "item_3"],
+		["物品槽 5", "item_4"], ["物品槽 6", "item_5"],
+		["告警/基地", "alert"], ["全选军队", "select_army"],
+		["切子编组", "subgroup"], ["闲置工人", "idle_worker"],
+		["拆除", "demolish"],
+	]
+	var grid := GridContainer.new()
+	grid.columns = 4
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 5)
+	for spec in specs:
+		var label := Label.new()
+		label.text = String(spec[0])
+		label.custom_minimum_size = Vector2(100, 34)
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_color_override("font_color", UITheme.PAPER)
+		grid.add_child(label)
+		var action := String(spec[1])
+		var button := Button.new()
+		button.text = _key_label_compat(action)
+		button.custom_minimum_size = Vector2(86, 34)
+		var legacy_item_key := action.begins_with("item_") and not Settings.has_method("item_key_labels")
+		button.disabled = legacy_item_key
+		button.tooltip_text = "旧安卓基础包固定使用 Z/X/C/V/B/N" if legacy_item_key else "点击后按下新键；冲突键会自动交换"
+		if not legacy_item_key:
+			button.pressed.connect(_begin_key_capture.bind(action, button))
+		grid.add_child(button)
+		_key_buttons[action] = button
+	return grid
+
+
+func _begin_key_capture(action: String, button: Button) -> void:
+	_finish_key_capture()
+	_capture_action = action
+	_capture_button = button
+	button.text = "请按键…"
+	button.grab_focus()
+
+
+func _finish_key_capture() -> void:
+	if _capture_action != "" and is_instance_valid(_capture_button):
+		_capture_button.text = _key_label_compat(_capture_action)
+	_capture_action = ""
+	_capture_button = null
+
+
+func _refresh_key_buttons() -> void:
+	for action in _key_buttons:
+		var button: Button = _key_buttons[action]
+		if is_instance_valid(button):
+			button.text = _key_label_compat(action)
+	if is_instance_valid(_key_overview):
+		_key_overview.text = _keybind_text()
+
+
+func _keybind_text() -> String:
+	var command_keys := Settings.command_key_labels()
+	var item_keys := _item_key_labels_compat()
+	var lines := [
+		"编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入",
+		"%s 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头" % Settings.key_label("select_army"),
+		"%s 攻击移动　%s 停止　%s 原地据守　%s 巡逻　%s 切换姿态" % [Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"), Settings.key_label("patrol"), Settings.key_label("stance")],
+		"%s 英雄技能/命令　F1/F3-F8 按头像选英雄" % " / ".join(command_keys),
+		"%s 当前英雄物品栏" % " / ".join(item_keys),
+		"%s 跳最近告警/回起始视角　%s 子编组　%s 切闲置工人" % [Settings.key_label("alert"), Settings.key_label("subgroup"), Settings.key_label("idle_worker")],
+		"%s 拆除　Esc 菜单 / 取消" % Settings.key_label("demolish"),
+		"镜头：方向键平移　+ / − 或滚轮 缩放　中键拖拽",
+	]
+	return "\n".join(lines)
+
+
+func _item_key_labels_compat() -> Array:
+	if Settings.has_method("item_key_labels"):
+		var labels = Settings.call("item_key_labels")
+		if labels is Array and labels.size() >= 6:
+			return labels
+	return ["Z", "X", "C", "V", "B", "N"]
+
+
+func _key_label_compat(action: String) -> String:
+	if action.begins_with("item_") and not Settings.has_method("item_key_labels"):
+		var slot := action.trim_prefix("item_").to_int()
+		var labels := _item_key_labels_compat()
+		return String(labels[slot]) if slot >= 0 and slot < labels.size() else ""
+	return Settings.key_label(action)

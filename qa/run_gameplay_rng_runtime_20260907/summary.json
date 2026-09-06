@@ -143,7 +143,7 @@
     "stdout_missing": true,
     "reader_not_started": true,
     "complete": false,
-    "reason": "Old _write required native Dictionary equality after JSON report roundtrip; report persisted but guard returned false before stdout. R1 checks exact bytes and successful parse; RNG comparisons unchanged. Engine metadata StringName keys versus parsed String keys explain why native key identity is unsuitable; no RNG assertion failure was observed."
+    "reason": "Observed: old _write returned false after successfully writing the report and before stdout; it required native Dictionary equality after JSON roundtrip. R1 changed only persistence reread to exact bytes plus successful parse, after which the complete run passed; RNG comparisons were unchanged. Engine metadata type changes during JSON roundtrip, such as StringName versus String keys, are a possible explanation only. Key types were not separately measured and the specific root cause is unconfirmed; no RNG assertion failure was observed."
   },
   "production_rng_calls_migrated": false,
   "battle_resume_tested": false,

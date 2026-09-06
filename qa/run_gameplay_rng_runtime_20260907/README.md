@@ -15,7 +15,7 @@
 
 原 PCK 已写出24项全true的 writer_report，内部 complete/passed 也为true，但没有stdout报告，writer exit2、reader未启动。外层receipt的complete=false与pck_tested=false原文保留，不能把内部报告当整轮通过。
 
-旧 _write 在报告写入/复读后要求原生Dictionary完全相等；Engine元数据可能含StringName键，而JSON读回是String键，原生键身份不适合作为持久化检查。失败位置在报告守护分支，没有观测到RNG判断失败。R1只改_write为写入UTF-8字节、确认parse成功并逐字节复读一致；归档对比确认其余driver文本未变，RNG判断和宿主验证保持。[修正原文](sources/scratchpad/run_gameplay_rng_runtime/pck_r1_correction.json)保留旧/新driver与runner/pins SHA。
+已定位旧 _write 在成功写出报告后、输出stdout前返回false；旧实现要求JSON复读后的原生Dictionary完全相等，没有观测到RNG判断失败。Engine元数据经JSON往返发生类型变化（例如StringName与String键差异）是可能解释，键类型未单独实测，不能确定为根因。R1只改_write为写入UTF-8字节、确认parse成功并逐字节复读一致，随后整轮通过；归档对比确认其余driver文本未变，RNG判断和宿主验证保持。[修正原文](sources/scratchpad/run_gameplay_rng_runtime/pck_r1_correction.json)保留旧/新driver与runner/pins SHA。
 
 原失败包SHA为 b31d014c98b5a97739073c8e105b309133ee549775d9713d3a6a9565d8193203；R1为54a8ba8ec47e2adaa52c3ff4fd0cf1fd88259c6266672de65540d2b711f97042；正式路径为401c1dd1e28a488e39ef778b18ba9a2997e6970bc25b4b061c2a427c39d691d5。包本身不入档，哈希、导出进程和模板原文足以标识各自证据，复跑产生新包。
 

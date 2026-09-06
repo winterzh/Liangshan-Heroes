@@ -1,0 +1,159 @@
+extends SceneTree
+## Host validates the original [item] ALL marker independently of this report.
+## Every Battle here is disposable QA state under a private user directory.
+var checks: Array = []
+var failures: Array = []
+var battles: Array = []
+var manifest: Dictionary = {}
+var report_path: String = ""
+var manifest_ready: bool = false
+var item_selftest_calls: int = 0
+var full_battles_created: int = 0
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	if not passed: failures.append(label)
+	return passed
+
+func _source_guard(label: String) -> void:
+	for path: String in manifest.source_sha256:
+		_check(label + " " + path, FileAccess.get_sha256(path) == manifest.source_sha256[path])
+
+func _dispose(battle: Variant) -> void:
+	if is_instance_valid(battle): battle.queue_free()
+	await process_frame
+	await process_frame
+
+func _finish(aborted: bool = false) -> void:
+	for battle: Variant in battles:
+		if is_instance_valid(battle): battle.queue_free()
+	await process_frame
+	await process_frame
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var report: Dictionary = {"suite": "item-respawn", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failures.is_empty() and not aborted,
+		"checks": checks, "check_count": checks.size(), "failures": failures,
+		"failed_count": failures.size(), "process_id": OS.get_process_id(),
+		"actual_user_dir": OS.get_user_data_dir(), "source_sha256": manifest.get("source_sha256", {}),
+		"item_selftest_calls": item_selftest_calls, "full_battles_created": full_battles_created,
+		"battle_resume_tested": false, "scope": "Formal counter JSON on two empty Battle instances; original item selftest in one fully initialized standard defense Battle; real damage/paid revival failure/retry/refund/success in a fresh second Battle. Training timer explicitly accelerated, combat paused. No complete Battle resume, cross-process Battle, PCK or menu continuation."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[item-respawn QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _configure_standard() -> void:
+	var campaign: Node = root.get_node("Campaign")
+	for key: String in ["skirmish_ai", "arena", "scenario", "custom_defense", "scale_on", "ai_friendly", "defense_random"]:
+		campaign.set(key, false)
+	campaign.set("skirmish", true)
+	campaign.set("defense_waves", 30)
+	campaign.set("defense_hero_cap", 4)
+	var settings: Node = root.get_node("Settings")
+	settings.set("auto_micro_level", 0)
+	settings.set("game_speed", 1.0)
+	AudioServer.set_bus_mute(0, true)
+
+func _new_standard_battle() -> Variant:
+	_configure_standard()
+	paused = true
+	var scene: PackedScene = load("res://scenes/main.tscn")
+	var battle: Variant = scene.instantiate()
+	battles.append(battle)
+	root.add_child(battle)
+	current_scene = battle
+	full_battles_created += 1
+	await process_frame
+	battle.hud._intro_root.hide()
+	battle._on_intro_done()
+	battle._on_start_battle()
+	return battle
+
+func _run() -> void:
+	var path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		await _finish(true)
+		return
+	manifest = data
+	for key: String in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			await _finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		await _finish(true)
+		return
+	for source_path: Variant in manifest.source_sha256:
+		if typeof(source_path) != TYPE_STRING or typeof(manifest.source_sha256[source_path]) != TYPE_STRING:
+			_check("host source entry", false)
+			await _finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		await _finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_check("host disables broad smoke and keeps original item fixture", OS.get_environment("SMOKE_TEST") != "1" and OS.get_environment("ITEM_TEST_KEEP") == "1")
+	_source_guard("source before")
+	if not failures.is_empty():
+		await _finish(true)
+		return
+	# Load the FORMAL counter path after Autoload initialization and before any
+	# complete Battle exists. This does not repeat the old 53-case negative matrix.
+	var counter_script: Script = load("res://scripts/run_item_id_state.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var counter: Variant = counter_script.new(codec_script, battle_script)
+	var empty_source: Variant = battle_script.new()
+	var empty_target: Variant = battle_script.new()
+	var captured: Dictionary = counter.capture(empty_source, "item_respawn_counter_v1", 0)
+	if not _check("formal counter captures fresh empty Battle", captured.get("ok") == true):
+		empty_source.free()
+		empty_target.free()
+		await _finish(true)
+		return
+	var wire: Variant = JSON.parse_string(JSON.stringify(captured.value))
+	var restored: Dictionary = counter.restore(empty_target, wire, "item_respawn_counter_v1", 0)
+	_check("formal counter restores through actual JSON to independent Battle", restored.get("ok") == true and empty_target.next_item_uid == 1)
+	_check("formal counter next allocation is exact and advances once", empty_target.allocate_item_uid() == 1 and empty_target.next_item_uid == 2 and empty_source.next_item_uid == 1)
+	empty_source.free()
+	empty_target.free()
+	if not failures.is_empty():
+		await _finish(true)
+		return
+	var item_battle: Variant = await _new_standard_battle()
+	_check("original item selftest uses full standard defense Battle", item_battle.economy and item_battle.level.get_script().resource_path == "res://scripts/levels/skirmish.gd" and item_battle.hud != null)
+	item_battle._item_selftest()
+	item_selftest_calls += 1
+	# The original method computes and prints nine boolean results plus ALL;
+	# host requires its exact unique all-true line. Do not fabricate that marker.
+	var selected: Array = item_battle.selection
+	_check("original item selftest kept its real selected inventory", selected.size() == 1 and selected[0].inventory != null and selected[0].inventory.slots[0].get("id") == "test_bomb" and selected[0].inventory.slots[4].get("id") == "test_heal" and selected[0].inventory.slots[5].is_empty())
+	await _dispose(item_battle)
+	_check("original item Battle fully disposed before respawn fixture", not is_instance_valid(item_battle))
+	var respawn_battle: Variant = await _new_standard_battle()
+	_check("second Battle starts with a fresh counter and no retired items", respawn_battle.next_item_uid == 1 and respawn_battle.hero_item_progress.is_empty() and not respawn_battle._items.has("test_bomb"))
+	var cases_script: Script = load("res://scratchpad/run_item_ids/respawn_cases.gd")
+	var cases: Variant = cases_script.new()
+	var rows: Array = await cases.run(respawn_battle, self)
+	_check("real respawn supplement returned nonempty checks", not rows.is_empty())
+	for row: Dictionary in rows:
+		_check(String(row.label), row.passed == true)
+	await _dispose(respawn_battle)
+	_check("respawn Battle fully disposed after production cases", not is_instance_valid(respawn_battle))
+	await _finish()

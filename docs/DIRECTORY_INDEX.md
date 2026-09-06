@@ -1,3 +1,9 @@
+## 2026-09-07 物品 UID、区域效果与复活证据
+
+- `scripts/run_item_id_state.gd`、`scripts/run_zone_effects_state.gd`：第10/11恢复组件；配合同批Battle/Inventory连续UID窄补丁。counter依赖可信完整图证明，区域只含chrono/orbit/trail/ice四数组。
+- `qa/run_item_identity_zones_20260907/`：五轮53/81/81/149/231项原始收据、日志、来源/玩家摘要、实际Battle/Inventory、两正式模块、candidate/builder及复活case/driver/runner/pins；source index保留99个复活运行来源并按SHA复用旧依赖。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)区分allocator与正式路径补验、原Unit同矩阵回归、原物品自检和真实付费复活；不含私有profile/PCK/玩家文件，整局继续仍未完成。
+
 ## 2026-09-07 Steam 后台与候选证据
 
 - `docs/STEAM_BACKEND_SETUP_20260907.md`：保存后回读、30项成就/60图标映射、文件访问与命名弹窗接续条件；授权有效，配置/包尚未发布。

@@ -43,10 +43,24 @@ func slot_def(slot: int) -> Dictionary:
 	return item_def(String(item.get("id", ""))) if not item.is_empty() else {}
 
 
+func _uid_battle():
+	if owner == null or not is_instance_valid(owner):
+		return null
+	var battle = owner.battle
+	if battle == null or not is_instance_valid(battle) or not battle.has_method("allocate_item_uid"):
+		return null
+	return battle
+
+
 func _new_uid() -> int:
-	_uid_seq += 1
-	var base := int(owner.get_instance_id()) if owner != null and is_instance_valid(owner) else 1
-	return base * 1000 + _uid_seq
+	var battle = _uid_battle()
+	# Ownerless/old standalone tools have no safe Battle UID domain: fail closed.
+	if battle == null:
+		return 0
+	var uid: int = battle.allocate_item_uid()
+	if uid > 0 and _uid_seq < 9223372036854775807:
+		_uid_seq += 1 # Legacy snapshot field only; never determines the UID.
+	return uid
 
 
 func put_item(slot: int, item_id: String, count := 1) -> bool:
@@ -56,7 +70,10 @@ func put_item(slot: int, item_id: String, count := 1) -> bool:
 	if idef.is_empty() or count <= 0:
 		return false
 	var maximum := maxi(1, int(idef.get("max_stack", 1)))
-	slots[slot] = {"id": item_id, "count": mini(count, maximum), "uid": _new_uid()}
+	var uid := _new_uid()
+	if uid <= 0:
+		return false
+	slots[slot] = {"id": item_id, "count": mini(count, maximum), "uid": uid}
 	_notify_changed()
 	return true
 
@@ -84,7 +101,10 @@ func add_item(item_id: String, count := 1) -> int:
 		if empty < 0:
 			break
 		var moved := mini(left, maximum)
-		slots[empty] = {"id": item_id, "count": moved, "uid": _new_uid()}
+		var uid := _new_uid()
+		if uid <= 0:
+			break
+		slots[empty] = {"id": item_id, "count": moved, "uid": uid}
 		left -= moved
 	_notify_changed()
 	return left
@@ -123,7 +143,16 @@ func swap_slots(a: int, b: int) -> bool:
 
 ## 转给另一英雄的第一个空格。数量、实例 uid 和剩余冷却完整保留；目标满栏则原物品不动。
 func transfer_slot(slot: int, target_inventory: HeroInventory) -> bool:
-	if slot < 0 or slot >= SLOT_COUNT or slots[slot].is_empty() or target_inventory == null:
+	if (slot < 0 or slot >= SLOT_COUNT or slots[slot].is_empty() or target_inventory == null
+			or target_inventory == self):
+		return false
+	var battle = _uid_battle()
+	# A preserved UID cannot cross allocation domains or overwrite an alias.
+	if battle == null or not is_same(battle, target_inventory._uid_battle()):
+		return false
+	var source_uid = slots[slot].get("uid")
+	if (typeof(source_uid) != TYPE_INT or source_uid <= 0 or source_uid >= battle.next_item_uid
+			or target_inventory.find_uid(source_uid) >= 0):
 		return false
 	var dst := target_inventory.first_empty_slot()
 	if dst < 0:
@@ -308,9 +337,25 @@ func snapshot() -> Dictionary:
 		"proc_cooldowns": proc_cooldowns.duplicate(true), "uid_seq": _uid_seq}
 
 
-func restore(data: Dictionary) -> void:
+func restore(data: Dictionary) -> bool:
+	# Trusted same-Battle respawn snapshots only. Full RunSession loading uses the
+	# strict Unit adapter and installs the validated Battle counter separately.
+	var battle = _uid_battle()
+	var saved_v = data.get("slots")
+	if battle == null or not (saved_v is Array) or saved_v.size() != SLOT_COUNT:
+		return false
+	var seen := {}
+	for item in saved_v:
+		if not (item is Dictionary):
+			return false
+		if item.is_empty():
+			continue
+		var uid = item.get("uid")
+		if typeof(uid) != TYPE_INT or uid <= 0 or uid >= battle.next_item_uid or seen.has(uid):
+			return false
+		seen[uid] = true
 	_reset_slots()
-	var saved: Array = data.get("slots", [])
+	var saved: Array = saved_v
 	for i in range(mini(SLOT_COUNT, saved.size())):
 		if saved[i] is Dictionary:
 			slots[i] = (saved[i] as Dictionary).duplicate(true)
@@ -318,6 +363,7 @@ func restore(data: Dictionary) -> void:
 	proc_cooldowns = (data.get("proc_cooldowns", {}) as Dictionary).duplicate(true)
 	_uid_seq = maxi(int(data.get("uid_seq", 0)), _uid_seq)
 	_notify_changed()
+	return true
 
 
 static func tick_snapshot(data: Dictionary, delta: float) -> void:

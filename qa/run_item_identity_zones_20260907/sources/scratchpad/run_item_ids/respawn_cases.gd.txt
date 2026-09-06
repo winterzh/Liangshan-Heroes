@@ -1,0 +1,120 @@
+extends RefCounted
+## Add-on for a disposable, fully initialized standard skirmish Battle.
+## Root owns the private process/profile/source guards and destroys this Battle.
+## This function leaves the tree paused. It does not write files or run a runner.
+var checks: Array = []
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	return passed
+
+func run(battle: Variant, tree: SceneTree) -> Array:
+	checks.clear()
+	if not _check("respawn fixture is initialized standard Battle", is_instance_valid(battle)
+			and battle.is_inside_tree() and battle.level != null
+			and battle.level.get_script().resource_path == "res://scripts/levels/skirmish.gd"
+			and battle.map != null and battle.hud != null and battle.economy
+			and battle.has_method("allocate_item_uid")):
+		return checks
+	tree.paused = true
+	battle.phase = battle.Phase.FIGHT
+	battle.gold = 10000
+	battle.wood = 10000
+	battle.pop_cap = 1000
+	var hall: Variant = battle.find_unit("hall")
+	if not _check("respawn fixture has a healthy idle hall", is_instance_valid(hall)
+			and hall.hp > 0.0 and not hall.is_constructing
+			and hall._train_queue.is_empty() and hall._research_key == ""):
+		return checks
+	var hero: Variant = battle.find_unit("song_jiang")
+	if hero == null:
+		var cell: Vector2i = battle.production_exit_cell(hall, "song_jiang")
+		if not _check("respawn fixture has a real open production exit", cell != Vector2i(-1, -1)):
+			return checks
+		hero = battle.spawn_unit("song_jiang", 0, battle.map.cell_to_world(cell))
+	if not _check("respawn fixture uses live leveled production hero", is_instance_valid(hero)
+			and hero.hp > 0.0 and hero.inventory != null and hero._hero_leveled):
+		return checks
+	var slot: int = hero.inventory.first_empty_slot()
+	if not _check("respawn fixture has one free inventory slot", slot >= 0): return checks
+	battle._items["uid_respawn_probe"] = {"name": "UID复活夹具", "max_stack": 3}
+	if not _check("respawn fixture allocates a real stack", hero.inventory.put_item(slot, "uid_respawn_probe", 2)):
+		return checks
+	var uid: int = hero.inventory.slots[slot].uid
+	hero.inventory.cooldowns["uid_respawn_probe"] = 9.25
+	hero.inventory.start_proc_cooldown(uid, "hit", 0.75)
+	var inventory_before_death: Dictionary = hero.inventory.snapshot()
+	var counter_before: int = battle.next_item_uid
+	hero.take_damage(1000000.0, null, false, true)
+	if not _check("real damage emits death and saves item and hero progress", hero._dying and hero.hp == 0.0
+			and not battle.units.has(hero) and battle.hero_item_progress.has("song_jiang")
+			and battle.hero_progress.has("song_jiang")):
+		return checks
+	var good_items: Dictionary = battle.hero_item_progress.song_jiang.duplicate(true)
+	var good_progress: Dictionary = battle.hero_progress.song_jiang.duplicate(true)
+	_check("death snapshot retains real UID count and both cooldowns", good_items == inventory_before_death
+		and good_items.slots[slot].uid == uid and battle.next_item_uid == counter_before)
+	var damaged_items: Dictionary = good_items.duplicate(true)
+	damaged_items.slots[slot].uid = battle.next_item_uid # Has not been allocated.
+	battle.hero_item_progress.song_jiang = damaged_items
+	var gold_before: int = battle.gold
+	var wood_before: int = battle.wood
+	var price: Dictionary = battle._defs.song_jiang
+	var gold_cost: int = int(price.get("cost_gold", 0))
+	var wood_cost: int = int(price.get("cost_wood", 0))
+	if not _check("real hall queue accepts and charges one revival", battle.queue_train(hall, "song_jiang", false)
+			and battle.gold == gold_before - gold_cost and battle.wood == wood_before - wood_cost):
+		return checks
+	var original_children: Array = battle.units_root.get_children(true)
+	var original_active: Array = battle.units.duplicate()
+	var original_serial: int = battle._ai_spawn_serial
+	# Timer acceleration is explicit: execute the real production completion
+	# method without waiting a whole training duration or enabling combat frames.
+	hall._train_t = 0.0
+	hall._production_tick(0.0)
+	_check("bad inventory keeps paid queue blocked and progress intact", hall._train_queue == ["song_jiang"]
+		and hall.production_blocked and hall._production_retry == 0.5
+		and battle.hero_item_progress.song_jiang == damaged_items
+		and battle.hero_progress.song_jiang == good_progress)
+	_check("failed spawn never enters combat registry or advances serial", battle.units == original_active
+		and battle._ai_spawn_serial == original_serial and battle.next_item_uid == counter_before)
+	await tree.process_frame
+	await tree.process_frame
+	_check("failed spawn queued node disappears after frame flush", battle.units_root.get_children(true) == original_children)
+	hall._production_tick(0.6)
+	await tree.process_frame
+	await tree.process_frame
+	_check("production retry neither leaks a Unit nor charges twice", battle.units_root.get_children(true) == original_children
+		and battle.units == original_active and hall._train_queue == ["song_jiang"]
+		and battle.gold == gold_before - gold_cost and battle.wood == wood_before - wood_cost
+		and battle.hero_item_progress.song_jiang == damaged_items)
+	battle.cancel_train(hall, 0)
+	_check("real cancellation fully refunds and clears blocked training", battle.gold == gold_before
+		and battle.wood == wood_before and hall._train_queue.is_empty()
+		and not hall.production_blocked and hall._production_retry == 0.0 and hall._train_t == 0.0)
+	_check("cancellation preserves both retired progress records", battle.hero_item_progress.song_jiang == damaged_items
+		and battle.hero_progress.song_jiang == good_progress)
+	# Reinstall the original valid saved inventory; never renumber it to fix failure.
+	battle.hero_item_progress.song_jiang = good_items.duplicate(true)
+	if not _check("corrected original snapshot can queue the normal revival again", battle.queue_train(hall, "song_jiang", false)):
+		return checks
+	hall._train_t = 0.0
+	hall._production_tick(0.0)
+	var revived: Variant = battle.find_unit("song_jiang")
+	if not _check("successful production returns a distinct living hero", is_instance_valid(revived)
+			and not is_same(revived, hero) and revived.hp > 0.0 and battle.units.has(revived)):
+		return checks
+	_check("successful revival consumes queue and both progress entries once", hall._train_queue.is_empty()
+		and not hall.production_blocked and not battle.hero_item_progress.has("song_jiang")
+		and not battle.hero_progress.has("song_jiang")
+		and battle.gold == gold_before - gold_cost and battle.wood == wood_before - wood_cost)
+	_check("successful revival keeps original item UID and legacy values", revived.inventory.snapshot() == good_items
+		and revived.inventory.slots[slot].uid == uid and battle.next_item_uid == counter_before)
+	_check("successful revival restores saved hero growth", revived.hero_level == good_progress.level
+		and revived.hero_xp == good_progress.xp and revived.skill_points == good_progress.sp
+		and revived.ability_slots.map(func(row: Dictionary) -> int: return int(row.rank)) == good_progress.ranks)
+	_check("only one new hero was installed after repeated failed attempts", battle.units_root.get_child_count(true) == original_children.size() + 1
+		and battle.units.size() == original_active.size() + 1 and battle._ai_spawn_serial == original_serial + 1)
+	_check("old death animation node remains distinct and outside combat registry", is_instance_valid(hero)
+		and hero._dying and not battle.units.has(hero) and battle.units_root.get_children(true).has(hero))
+	return checks
