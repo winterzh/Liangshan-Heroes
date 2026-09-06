@@ -1,0 +1,98 @@
+func gameplay_rng_fault() -> String:
+	return _gameplay_rng_issue
+
+
+func _gameplay_rng_stop(code: String) -> Dictionary:
+	if _gameplay_rng_issue.is_empty():
+		_gameplay_rng_issue = code if not code.is_empty() else "UNKNOWN_RNG_FAULT"
+		print("[gameplay rng] stopped: " + _gameplay_rng_issue)
+		if is_inside_tree():
+			get_tree().paused = true
+			if hud != null:
+				hud.show_pause()
+				hud.show_message("本局运行异常，已暂停。请重新开始或返回主菜单。", 6.0)
+	return {"ok": false, "code": _gameplay_rng_issue}
+
+
+func _gameplay_rng_result(result: Dictionary, expected_type: int) -> Dictionary:
+	if typeof(result.get("ok")) != TYPE_BOOL: return _gameplay_rng_stop("RNG_RESULT_SHAPE")
+	if not result.ok:
+		return _gameplay_rng_stop(String(result.get("code", "RNG_RESULT_SHAPE")))
+	if typeof(result.get("value")) != expected_type: return _gameplay_rng_stop("RNG_VALUE_TYPE")
+	if expected_type == TYPE_FLOAT and not is_finite(result.value): return _gameplay_rng_stop("RNG_VALUE_FINITE")
+	return result
+
+
+func _gameplay_identity_bound(identity: Dictionary) -> bool:
+	return identity.get("ok") == true and identity.get("save_eligible") == true \
+		and typeof(identity.get("content_version")) == TYPE_STRING \
+		and typeof(identity.get("engine_binary_sha256")) == TYPE_STRING
+
+
+func configure_new_gameplay_rng(trusted_context: Dictionary, initial_seed: int) -> Dictionary:
+	# Caller supplies installation identity from the provider, never from a save.
+	if _gameplay_rng != null or not _gameplay_rng_issue.is_empty():
+		return {"ok": false, "code": "ALREADY_CONFIGURED"}
+	var bound := _gameplay_identity_bound(trusted_context)
+	if _gameplay_rng_start_kind.begins_with("restore"):
+		return {"ok": false, "code": "RESTORE_FACTORY_REQUIRED"}
+	if trusted_context.get("save_eligible") == true and not bound:
+		return {"ok": false, "code": "TRUSTED_CONTEXT_SHAPE"}
+	var content: String = trusted_context.content_version if bound else ""
+	var candidate: RefCounted = load("res://scripts/run_gameplay_rng.gd").new(content)
+	var result: Dictionary = candidate.start(initial_seed, trusted_context.engine_binary_sha256) \
+		if bound else candidate.start_unbound(initial_seed)
+	if not result.ok: return result
+	_gameplay_rng = candidate
+	_gameplay_rng_start_kind = "new"
+	_gameplay_content_identity = trusted_context.duplicate(true)
+	return {"ok": true, "code": "OK", "save_eligible": bound}
+
+
+func configure_restored_gameplay_rng(trusted_context: Dictionary, record: Variant) -> Dictionary:
+	if _gameplay_rng != null or not _gameplay_rng_issue.is_empty():
+		return {"ok": false, "code": "ALREADY_CONFIGURED"}
+	# Even a rejected restore must never silently enter the new-game seed path.
+	_gameplay_rng_start_kind = "restore_requested"
+	if not _gameplay_identity_bound(trusted_context):
+		return {"ok": false, "code": "UNBOUND_IDENTITY"}
+	var candidate: RefCounted = load("res://scripts/run_gameplay_rng.gd").new(trusted_context.content_version)
+	var result: Dictionary = candidate.restore(record, trusted_context.engine_binary_sha256)
+	if not result.ok: return result
+	_gameplay_rng = candidate
+	_gameplay_rng_start_kind = "restored"
+	_gameplay_content_identity = trusted_context.duplicate(true)
+	return {"ok": true, "code": "OK"}
+
+
+func capture_gameplay_rng() -> Dictionary:
+	# The whole-world transaction must additionally wait for process/deferred
+	# deletion barriers before calling. This is only the RNG component boundary.
+	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
+	if _gameplay_rng == null: return {"ok": false, "code": "NOT_STARTED"}
+	if is_inside_tree() and not get_tree().paused: return {"ok": false, "code": "PAUSE_REQUIRED"}
+	return _gameplay_rng.capture()
+
+
+func gameplay_randi() -> Dictionary:
+	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
+	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
+	return _gameplay_rng_result(_gameplay_rng.draw_randi(), TYPE_INT)
+
+
+func gameplay_randf() -> Dictionary:
+	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
+	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
+	return _gameplay_rng_result(_gameplay_rng.draw_randf(), TYPE_FLOAT)
+
+
+func gameplay_randi_range(from: int, to: int) -> Dictionary:
+	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
+	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
+	return _gameplay_rng_result(_gameplay_rng.draw_randi_range(from, to), TYPE_INT)
+
+
+func gameplay_randf_range(from: float, to: float) -> Dictionary:
+	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
+	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
+	return _gameplay_rng_result(_gameplay_rng.draw_randf_range(from, to), TYPE_FLOAT)

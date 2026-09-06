@@ -1,0 +1,52 @@
+"""Four synchronous fault propagation stops; old candidate and production stay untouched."""
+import difflib
+import hashlib
+import json
+import re
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+SOURCE = ROOT / 'scratchpad/run_unit_projectile_rng_candidate/candidate_unit.gd'
+PIN = 'ae7158f4495a91b6327cdceabd8262bb34335891aa0b74d48112ac4fe115ded9'
+PRODUCTION_BASE = '2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc'
+raw = SOURCE.read_bytes()
+assert hashlib.sha256(raw).hexdigest() == PIN
+updated = raw
+rows = []
+for method, call in [('take_damage', 'died.emit(self)'),
+                     ('take_damage', 'pg.leave_garrison()'),
+                     ('_phys_body', 'inventory.tick(delta)'),
+                     ('_phys_body', 'battle.despawn_summon(self)')]:
+    start = re.search(rb'^func ' + method.encode() + rb'\(', updated, re.M).start()
+    following = re.search(rb'^func ', updated[start+5:], re.M)
+    end = start+5+following.start()
+    block = updated[start:end]
+    matches = list(re.finditer(rb'^(\t+)' + re.escape(call.encode()) + rb'[^\r\n]*(\r?\n)', block, re.M))
+    assert len(matches) == 1, (method, call)
+    hit = matches[0]
+    guard = hit[1] + b'if not _gameplay_rng_fault().is_empty(): return' + hit[2]
+    block = block[:hit.end()] + guard + block[hit.end():]
+    updated = updated[:start] + block + updated[end:]
+    rows.append({'method': method, 'after': call, 'inserted_hex': guard.hex()})
+assert re.findall(rb'^var [^\r\n]*', raw, re.M) == re.findall(rb'^var [^\r\n]*', updated, re.M)
+# Strip only the newly inserted suffix of each exact call, not existing guards.
+restored = updated
+for row in reversed(rows):
+    method, call = row['method'], row['after']
+    start = re.search(rb'^func '+method.encode()+rb'\(',restored,re.M).start()
+    nxt = re.search(rb'^func ',restored[start+5:],re.M)
+    end = start+5+nxt.start()
+    block = restored[start:end]
+    pattern = rb'(^\t+'+re.escape(call.encode())+rb'[^\r\n]*\r?\n)' + re.escape(bytes.fromhex(row['inserted_hex']))
+    block, count = re.subn(pattern, rb'\1', block, flags=re.M)
+    assert count == 1
+    restored = restored[:start]+block+restored[end:]
+assert restored == raw
+(HERE/'candidate_unit.gd').write_bytes(updated)
+(HERE/'relative_to_frozen.patch').write_bytes(''.join(difflib.unified_diff(raw.decode().splitlines(True),updated.decode().splitlines(True), 'a/scripts/unit.gd','b/scripts/unit.gd')).encode())
+receipt = {'production_applied':False, 'godot_run':False, 'production_base_sha256':PRODUCTION_BASE,
+           'frozen_candidate_sha256':PIN,'candidate_sha256':hashlib.sha256(updated).hexdigest(),
+           'candidate_bytes':len(updated),'declarations_unchanged':True,'reverse_exact':True,'changes':rows}
+(HERE/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(receipt))

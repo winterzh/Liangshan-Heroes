@@ -1,0 +1,49 @@
+from pathlib import Path
+import sys, os, subprocess, json, datetime
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'tools'))
+from contracts.run_content_identity_20260907.probe_runner import utilities
+util = utilities()
+safety = util.load_helper(util.HELPER,util.HELPER_SHA,'mode_process_safety')
+guard = util.load_helper(util.GUARD,util.GUARD_SHA,'mode_source_guard')
+safety.require_exclusive_godot()
+HERE = Path(__file__).resolve().parent
+out = HERE/'mode_runs'/datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+out.mkdir(parents=True)
+with util.LOCK.open('x',encoding='utf-8') as f:f.write(str(out))
+base = ROOT/'.godot/steam_candidates/20260907_054309_1ccc4379'
+exe = base/'probe_host/Godot.exe'
+pack = base/'windows/LiangshanHeroes.exe'
+util.need(util.file_sha(exe)==util.ENGINE_SHA,'Actual editor mismatch')
+raw_sources = guard.source_receipt(ROOT)
+real_user = Path(os.environ['APPDATA'])/'Godot/app_userdata'/guard.project_name(ROOT)
+players = util.tree(real_user)
+receipt = {'complete':False,'engine_sha256':util.ENGINE_SHA,'pack_sha256':util.file_sha(pack),'phases':[]}
+child = None
+try:
+    for phase,extra in [('source',['--path',str(base/'project')]),('pck',['--main-pack',str(pack)])]:
+        part = out/phase;part.mkdir()
+        env = os.environ.copy()
+        for key in ['APPDATA','LOCALAPPDATA','TEMP','TMP']:
+            p=part/'private_profile'/key.lower();p.mkdir(parents=True);env[key]=str(p)
+        env.update(STEAM_DISABLED='1',CAMPAIGN_QA='1',CONTENT_UPDATE_NO_AUTO='1')
+        command=[str(exe),'--headless',*extra,'--script',str(HERE/'mode.gd')]
+        with (part/'report.log').open('xb') as log:
+            child=subprocess.Popen(command,cwd=pack.parent,env=env,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW)
+            child.wait(timeout=90)
+        text=(part/'report.log').read_text(encoding='utf-8')
+        util.need(child.returncode==0 and not util.ERROR.search(text),'Mode diagnostic error: '+phase)
+        rows=[json.loads(line.split(' ',1)[1]) for line in text.splitlines() if line.startswith('IDENTITY_MODE_DIAGNOSTIC ')]
+        util.need(len(rows)==1 and rows[0]['process_id']==child.pid,'Diagnostic report/PID mismatch')
+        receipt['phases'].append({'phase':phase,'pid':child.pid,'exit_code':child.returncode,'observation':rows[0]})
+    receipt['complete']=True
+finally:
+    if child is not None and child.poll() is None:child.kill();child.wait(timeout=30)
+    receipt['child_exit_confirmed']=child is None or child.poll() is not None
+    receipt['source_unchanged']=guard.source_receipt(ROOT)==raw_sources
+    receipt['player_unchanged']=util.tree(real_user)==players
+    receipt['pack_unchanged']=util.file_sha(pack)==receipt['pack_sha256']
+    if all(receipt[k] for k in ['child_exit_confirmed','source_unchanged','player_unchanged','pack_unchanged']) and util.LOCK.read_text(encoding='utf-8')==str(out):util.LOCK.unlink()
+    util.save(out/'receipt.json',receipt)
+    print(json.dumps({'run':str(out),**receipt}))

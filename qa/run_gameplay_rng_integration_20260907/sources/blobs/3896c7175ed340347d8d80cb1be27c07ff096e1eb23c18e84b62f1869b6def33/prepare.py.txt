@@ -1,0 +1,313 @@
+"""Prepare only two candidate files and an exact reverse proof. Never applies or runs Godot."""
+import ast
+import difflib
+import hashlib
+import json
+from pathlib import Path
+import re
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+SOURCES = {
+    'scripts/unit.gd': '2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc',
+    'scripts/projectile.gd': '949d44303dbd8f31f958118f54be6980d2aeb22ef0eeafbac5ba9aa544e530b8',
+}
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def replace(text, old, new):
+    assert text.count(old) == 1, ('Expected one exact anchor', old, text.count(old))
+    return text.replace(old, new)
+
+
+def method_spans(raw):
+    lines = raw.splitlines(keepends=True)
+    offsets, n = [], 0
+    for line in lines:
+        offsets.append(n)
+        n += len(line)
+    spans = {}
+    for index, line in enumerate(lines):
+        match = re.match(rb'func (\w+)\(', line)
+        if not match:
+            continue
+        end = index + 1
+        while end < len(lines) and (not lines[end].strip() or lines[end].startswith(b'\t')):
+            end += 1
+        spans[match.group(1).decode()] = (offsets[index], offsets[end] if end < len(lines) else n)
+    return spans
+
+
+def begin_guard(text, result='return'):
+    lines = text.splitlines(keepends=True)
+    end = next(index for index, line in enumerate(lines) if line.rstrip().endswith(':'))
+    lines.insert(end + 1, '\tif not _gameplay_rng_fault().is_empty(): ' + result + '\n')
+    return ''.join(lines)
+
+
+def after_call(text, expression, result='return'):
+    lines = text.splitlines(keepends=True)
+    found = [index for index, line in enumerate(lines) if expression in line]
+    assert len(found) == 1, (expression, found)
+    start = found[0]
+    depth, end = 0, start
+    for end in range(start, len(lines)):
+        depth += lines[end].count('(') - lines[end].count(')')
+        if depth == 0:
+            break
+    assert depth == 0
+    indent = lines[start][:len(lines[start]) - len(lines[start].lstrip('\t'))]
+    if result == 'queue_free(); return':
+        guard = indent + 'if not _gameplay_rng_fault().is_empty():\n' + indent + '\tqueue_free()\n' + indent + '\treturn\n'
+    else:
+        guard = indent + 'if not _gameplay_rng_fault().is_empty(): ' + result + '\n'
+    lines.insert(end + 1, guard)
+    return ''.join(lines)
+
+
+def guarded_roll_block(text, condition, expression, compare, variable):
+    """Wrap the original conditional body, preserving its short-circuit prefix."""
+    lines = text.splitlines(keepends=True)
+    old = condition + ' and ' + expression + ' < ' + compare + ':'
+    found = [index for index, line in enumerate(lines) if line.strip() == old]
+    assert len(found) == 1, old
+    index = found[0]
+    indent = lines[index][:len(lines[index]) - len(lines[index].lstrip('\t'))]
+    end = index + 1
+    while end < len(lines) and (not lines[end].strip() or lines[end].startswith(indent + '\t')):
+        end += 1
+    body = ''.join('\t' + line if line.strip() else line for line in lines[index + 1:end])
+    block = indent + condition + ':\n'
+    block += indent + '\tvar ' + variable + ': Dictionary = _gameplay_randf_checked()\n'
+    block += indent + '\tif not ' + variable + '.ok: return\n'
+    block += indent + '\tif float(' + variable + '.value) < ' + compare + ':\n' + body
+    return ''.join(lines[:index]) + block + ''.join(lines[end:])
+
+
+UNIT_HELPERS = '''## Pure forwarding helpers; Battle owns the stream and its latched fault.
+## No new Unit state and no global RNG fallback. Detached non-random fixtures
+## may tick, but an actual draw without an owner fails the current action.
+func _gameplay_rng_fault() -> String:
+	if not is_instance_valid(battle): return ""
+	if not battle.has_method("gameplay_rng_fault"): return "GAMEPLAY_RNG_INTERFACE"
+	var fault: Variant = battle.gameplay_rng_fault()
+	return fault if typeof(fault) == TYPE_STRING else "GAMEPLAY_RNG_FAULT_SHAPE"
+
+
+func _gameplay_draw_checked(method: String, arguments: Array, expected_type: int) -> Dictionary:
+	if not is_instance_valid(battle): return {"ok": false, "code": "NO_BATTLE"}
+	var fault: String = _gameplay_rng_fault()
+	if not fault.is_empty(): return {"ok": false, "code": fault}
+	if not battle.has_method(method): return {"ok": false, "code": "GAMEPLAY_RNG_INTERFACE"}
+	var result: Variant = battle.callv(method, arguments)
+	if typeof(result) != TYPE_DICTIONARY or typeof(result.get("ok")) != TYPE_BOOL:
+		return {"ok": false, "code": "GAMEPLAY_RNG_RESULT_SHAPE"}
+	if not result.ok: return result
+	if typeof(result.get("value")) != expected_type:
+		return {"ok": false, "code": "GAMEPLAY_RNG_VALUE_TYPE"}
+	if expected_type == TYPE_FLOAT and not is_finite(result.value):
+		return {"ok": false, "code": "GAMEPLAY_RNG_VALUE_FINITE"}
+	return result
+
+
+func _gameplay_randf_checked() -> Dictionary:
+	return _gameplay_draw_checked("gameplay_randf", [], TYPE_FLOAT)
+
+
+func _gameplay_randf_range_checked(lo: float, hi: float) -> Dictionary:
+	return _gameplay_draw_checked("gameplay_randf_range", [lo, hi], TYPE_FLOAT)
+
+
+func _gameplay_randi_range_checked(lo: int, hi: int) -> Dictionary:
+	return _gameplay_draw_checked("gameplay_randi_range", [lo, hi], TYPE_INT)
+
+
+'''
+
+PROJECTILE_HELPER = '''## Projectile has no owner field; valid shooter/target still identify Battle.
+func _gameplay_rng_fault() -> String:
+	if is_instance_valid(shooter):
+		var fault: String = shooter._gameplay_rng_fault()
+		if not fault.is_empty(): return fault
+	return target._gameplay_rng_fault() if is_instance_valid(target) else ""
+
+
+'''
+
+
+def unit_method(name, text):
+    if name == 'leave_garrison':
+        text = begin_guard(text)
+        text = replace(text, '\t\tvar cell := map.nearest_open(map.world_to_cell(bld.position) + Vector2i(randi_range(-2, 2), int(bld.get_meta("fhalf", 1)) + 1), movement_profile)',
+                       '\t\tvar exit_origin: Vector2i = map.world_to_cell(bld.position)\n'
+                       '\t\tvar exit_roll: Dictionary = _gameplay_randi_range_checked(-2, 2)\n'
+                       '\t\tif not exit_roll.ok: return\n'
+                       '\t\tvar cell := map.nearest_open(exit_origin + Vector2i(int(exit_roll.value), int(bld.get_meta("fhalf", 1)) + 1), movement_profile)')
+    elif name == 'take_damage':
+        text = begin_guard(text)
+        for call in ['battle.trigger_item_event(self, "on_damaged"', 'battle.trigger_item_event(self, "low_hp"',
+                     'battle.trigger_item_event(self, "on_death"', 'battle.trigger_lin_guard(self, from, _lin_guard_rank)']:
+            text = after_call(text, call)
+    elif name == '_physics_process':
+        text = begin_guard(text)
+        text = replace(text, '\t# This chapter has only two paired actors.',
+                       '\tif not _gameplay_rng_fault().is_empty(): return\n\t# This chapter has only two paired actors.')
+    elif name == '_phys_body':
+        text = begin_guard(text)
+        text = replace(text, '\t\t\t_drunk_move = randf_range(_drunk_lo, _drunk_hi)\n\t\t\t_drunk_atk = randf_range(_drunk_lo, _drunk_hi)',
+                       '\t\t\tvar drunk_move_roll: Dictionary = _gameplay_randf_range_checked(_drunk_lo, _drunk_hi)\n'
+                       '\t\t\tif not drunk_move_roll.ok: return\n'
+                       '\t\t\t_drunk_move = float(drunk_move_roll.value)\n'
+                       '\t\t\tvar drunk_atk_roll: Dictionary = _gameplay_randf_range_checked(_drunk_lo, _drunk_hi)\n'
+                       '\t\t\tif not drunk_atk_roll.ok: return\n'
+                       '\t\t\t_drunk_atk = float(drunk_atk_roll.value)')
+        text = replace(text, '\t_move_blend = move_toward(', '\tif not _gameplay_rng_fault().is_empty(): return\n\t_move_blend = move_toward(')
+        text = after_call(text, '\t\t\t_deal_hit()')
+    elif name == '_attack':
+        text = after_call(begin_guard(text), 'battle.trigger_item_event(self, "on_attack"')
+    elif name == '_deal_hit':
+        text = begin_guard(text)
+        text = guarded_roll_block(text, 'if _attack_miss_t > 0.0', 'randf()', '_attack_miss_chance', 'miss_roll')
+        text = guarded_roll_block(text, 'if target_evasion > 0.0 and not t.is_building and not t.is_resource', 'randf()', 'target_evasion', 'evasion_roll')
+        text = replace(text, '\tvar crit := not t.is_building and not t.is_resource and randf() < clampf((0.25 if is_hero else 0.12) + crit_chance_bonus, 0.0, 1.0)',
+                       '\tvar crit: bool = false\n'
+                       '\tif not t.is_building and not t.is_resource:\n'
+                       '\t\tvar crit_roll: Dictionary = _gameplay_randf_checked()\n'
+                       '\t\tif not crit_roll.ok: return\n'
+                       '\t\tcrit = float(crit_roll.value) < clampf((0.25 if is_hero else 0.12) + crit_chance_bonus, 0.0, 1.0)')
+        text = guarded_roll_block(text, 'if bash_chance > 0.0 and not t.is_building and not t.is_resource', 'randf()', 'bash_chance', 'bash_roll')
+        text = replace(text, '\t\tvar ls := lifesteal_frac()',
+                       '\t\tvar ls_result: Dictionary = lifesteal_frac()\n'
+                       '\t\tif not ls_result.ok: return\n'
+                       '\t\tvar ls: float = ls_result.value')
+        text = guarded_roll_block(text, 'if cav_ls_chance > 0.0 and not t.is_building and not t.is_resource', 'randf()', 'cav_ls_chance', 'cav_lifesteal_roll')
+        for call in ['\t_try_li_brawn_axes()', 't.take_damage(dmg, self, crit',
+                     'battle.trigger_item_event(self, "on_hit"', 'battle.spawn_wu_cleave(self, t, wu_cleave)',
+                     't.take_damage(on_hit_dmg, self']:
+            text = after_call(text, call)
+    elif name == '_try_li_brawn_axes':
+        text = begin_guard(text, 'return null')
+        text = replace(text, '\t\tvar roll := randf() if proc_roll < 0.0 else proc_roll',
+                       '\t\tvar roll: float = proc_roll\n'
+                       '\t\tif proc_roll < 0.0:\n'
+                       '\t\t\tvar axes_roll: Dictionary = _gameplay_randf_checked()\n'
+                       '\t\t\tif not axes_roll.ok: return null\n'
+                       '\t\t\troll = float(axes_roll.value)')
+    elif name == 'lifesteal_frac':
+        text = replace(text, 'func lifesteal_frac() -> float:', 'func lifesteal_frac() -> Dictionary:')
+        text = replace(text, '\tvar ls := temp_lifesteal',
+                       '\tvar fault: String = _gameplay_rng_fault()\n'
+                       '\tif not fault.is_empty(): return {"ok": false, "code": fault}\n'
+                       '\tvar ls := temp_lifesteal')
+        text = replace(text, '\t\tls += randf_range(0.10 + 0.10 * float(wr), 0.30 + 0.10 * float(wr))',
+                       '\t\tvar lifesteal_roll: Dictionary = _gameplay_randf_range_checked(0.10 + 0.10 * float(wr), 0.30 + 0.10 * float(wr))\n'
+                       '\t\tif not lifesteal_roll.ok: return lifesteal_roll\n'
+                       '\t\tls += float(lifesteal_roll.value)')
+        text = replace(text, '\treturn ls\n', '\treturn {"ok": true, "value": ls}\n')
+    elif name == 'start_drunk':
+        text = begin_guard(text)
+        text = replace(text, '\t_drunk_move = randf_range(lo, hi)\n\t_drunk_atk = randf_range(lo, hi)',
+                       '\tvar drunk_move_roll: Dictionary = _gameplay_randf_range_checked(lo, hi)\n'
+                       '\tif not drunk_move_roll.ok: return\n'
+                       '\t_drunk_move = float(drunk_move_roll.value)\n'
+                       '\tvar drunk_atk_roll: Dictionary = _gameplay_randf_range_checked(lo, hi)\n'
+                       '\tif not drunk_atk_roll.ok: return\n'
+                       '\t_drunk_atk = float(drunk_atk_roll.value)')
+    elif name == '_do_charge_step':
+        text = after_call(begin_guard(text), 'u.take_damage(_charge_dmg, self')
+    else:
+        raise AssertionError(name)
+    return text
+
+
+def projectile_method(text):
+    text = begin_guard(text)
+    text = replace(text, '\t_life -= delta', '\tif is_queued_for_deletion(): return\n\t_life -= delta')
+    text = replace(text, '\t\t\t\tvar ls: float = s.lifesteal_frac()',
+                   '\t\t\t\tvar ls_result: Dictionary = s.lifesteal_frac()\n'
+                   '\t\t\t\tif not ls_result.ok:\n'
+                   '\t\t\t\t\tqueue_free()\n'
+                   '\t\t\t\t\treturn\n'
+                   '\t\t\t\tvar ls: float = ls_result.value')
+    for call in ['target.take_damage(dmg, s, crit', 's.battle.trigger_item_event(s, "on_hit"',
+                 'u.take_damage(dmg, s, false']:
+        text = after_call(text, call, 'queue_free(); return')
+    return text
+
+
+def prepare():
+    unit_names = ['leave_garrison', 'take_damage', '_physics_process', '_phys_body', '_attack',
+                  '_deal_hit', '_try_li_brawn_axes', 'lifesteal_frac', 'start_drunk', '_do_charge_step']
+    receipt = {'status': 'prepared_not_applied_not_engine_run', 'sources': {},
+               'new_unit_fields': [], 'new_projectile_fields': [], 'global_visual_calls_retained': {'Unit': 2, 'Projectile': 3}}
+    all_patch = []
+    for path, expected in SOURCES.items():
+        raw = (ROOT / path).read_bytes()
+        assert sha(raw) == expected, 'Source drift: ' + path
+        spans = method_spans(raw)
+        operations = []
+        names = unit_names if path.endswith('/unit.gd') else ['_physics_process']
+        for name in names:
+            start, end = spans[name]
+            old = raw[start:end]
+            text = old.decode('utf-8').replace('\r\n', '\n')
+            new = unit_method(name, text) if path.endswith('/unit.gd') else projectile_method(text)
+            assert new != text
+            operations.append((start, end, name, old, new.encode('utf-8')))
+        position = spans['_physics_process'][0]
+        helpers = UNIT_HELPERS if path.endswith('/unit.gd') else PROJECTILE_HELPER
+        operations.append((position, position, 'new_pure_helpers', b'', helpers.encode('utf-8')))
+        operations.sort(key=lambda row: (row[0], row[1]))
+        last, chunks, reverse_rows = 0, [], []
+        output_size = 0
+        for start, end, name, old, new in operations:
+            assert start >= last
+            unchanged = raw[last:start]
+            chunks.extend([unchanged, new])
+            output_size += len(unchanged)
+            reverse_rows.append((output_size, output_size + len(new), old))
+            output_size += len(new)
+            last = end
+        chunks.append(raw[last:])
+        candidate = b''.join(chunks)
+        reverse = candidate
+        for start, end, old in reversed(reverse_rows):
+            reverse = reverse[:start] + old + reverse[end:]
+        assert reverse == raw, 'Exact reverse proof failed'
+        old_vars = re.findall(rb'^var [^\n]+', raw, re.M)
+        new_vars = re.findall(rb'^var [^\n]+', candidate, re.M)
+        assert old_vars == new_vars, 'Declared fields changed'
+        old_spans, new_spans = method_spans(raw), method_spans(candidate)
+        for name, (start, end) in old_spans.items():
+            if name not in names:
+                ns, ne = new_spans[name]
+                assert raw[start:end] == candidate[ns:ne], ('Untouched method changed', name)
+        global_calls = re.findall(rb'(?<![\w.])(?:randf|randi|randf_range|randi_range)\(', candidate)
+        assert len(global_calls) == (2 if path.endswith('/unit.gd') else 3), global_calls
+        filename = Path(path).name
+        (HERE / ('original_' + filename + '.bin')).write_bytes(raw)
+        (HERE / ('candidate_' + filename)).write_bytes(candidate)
+        all_patch.extend(difflib.unified_diff(raw.decode('utf-8').replace('\r\n', '\n').splitlines(keepends=True),
+                                           candidate.decode('utf-8').replace('\r\n', '\n').splitlines(keepends=True),
+                                           fromfile='a/' + path, tofile='b/' + path))
+        receipt['sources'][path] = {'original_raw_sha256': sha(raw), 'candidate_raw_sha256': sha(candidate),
+            'candidate_lf_sha256': sha(candidate.replace(b'\r\n', b'\n')), 'candidate_bytes': len(candidate),
+            'exact_inverse_raw_match': True, 'untouched_original_methods_raw_equal': True,
+            'declared_fields_raw_equal': True, 'original_method_count': len(old_spans),
+            'methods_changed': names, 'global_visual_random_expressions': len(global_calls),
+            'method_receipts': [{'method': name, 'old_raw_sha256': sha(old), 'new_raw_sha256': sha(new)}
+                                for _, _, name, old, new in operations]}
+    (HERE / 'unit_projectile.patch').write_bytes(''.join(all_patch).encode('utf-8'))
+    receipt['generator_sha256'] = sha(Path(__file__).read_bytes())
+    receipt['patch_sha256'] = sha((HERE / 'unit_projectile.patch').read_bytes())
+    (HERE / 'preparation.json').write_bytes((json.dumps(receipt, indent=2) + '\n').encode('utf-8'))
+    assert all(sha((ROOT / path).read_bytes()) == expected for path, expected in SOURCES.items())
+    print(json.dumps(receipt, indent=2))
+
+
+if __name__ == '__main__':
+    ast.parse(Path(__file__).read_text(encoding='utf-8'))
+    prepare()

@@ -1,0 +1,21 @@
+extends SceneTree
+func _initialize() -> void: _run.call_deferred()
+func _run() -> void:
+	await process_frame
+	var provider: Script = load("res://scripts/run_content_identity.gd")
+	var physical_project := ProjectSettings.globalize_path("res://project.godot")
+	var physical_provider := ProjectSettings.globalize_path("res://scripts/run_content_identity.gd")
+	var result := {"args":Array(OS.get_cmdline_args()),"user_args":Array(OS.get_cmdline_user_args()),
+		"editor":OS.has_feature("editor"),"script_path":provider.resource_path,"script_has_source":provider.has_source_code(),
+		"raw_script_exists":FileAccess.file_exists("res://scripts/run_content_identity.gd"),
+		"physical_script_exists":FileAccess.file_exists(physical_provider),
+		"physical_project":physical_project,"physical_project_exists":FileAccess.file_exists(physical_project),
+		"build_resource_exists":ResourceLoader.exists("res://scripts/run_build_identity.gd"),
+		"actual_exe":OS.get_executable_path(),"actual_exe_sha256":FileAccess.get_sha256(OS.get_executable_path()),
+		"process_id":OS.get_process_id(),"user_dir":ProjectSettings.globalize_path("user://")}
+	for name in ["Sfx","Music"]:
+		var node: Node = root.get_node_or_null(name)
+		if node != null and node.has_method("shutdown"): node.call("shutdown")
+	for i in range(3): await process_frame
+	print("IDENTITY_MODE_DIAGNOSTIC ",JSON.stringify(result))
+	quit(0)

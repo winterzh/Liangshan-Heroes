@@ -1,0 +1,1795 @@
+--- a/scripts/battle.gd
++++ b/scripts/battle.gd
+@@ -12,6 +12,10 @@
+ var mission = null
+ var _official_context: Dictionary = {}
+ var _steam_run_id := 0
++var _gameplay_rng: RefCounted = null
++var _gameplay_rng_issue := ""
++var _gameplay_rng_start_kind := ""
++var _gameplay_content_identity: Dictionary = {}
+ var _defs := {}
+ var _abilities := {}
+ var _items := {}
+@@ -266,9 +270,130 @@
+ var _cursor_resources_released := false
+ 
+ 
++func gameplay_rng_fault() -> String:
++	return _gameplay_rng_issue
++
++
++func _gameplay_rng_stop(code: String) -> Dictionary:
++	if _gameplay_rng_issue.is_empty():
++		_gameplay_rng_issue = code if not code.is_empty() else "UNKNOWN_RNG_FAULT"
++		print("[gameplay rng] stopped: " + _gameplay_rng_issue)
++		if is_inside_tree():
++			get_tree().paused = true
++			if hud != null:
++				hud.show_pause()
++				hud.show_message("本局运行异常，已暂停。请重新开始或返回主菜单。", 6.0)
++	return {"ok": false, "code": _gameplay_rng_issue}
++
++
++func _gameplay_rng_result(result: Dictionary, expected_type: int) -> Dictionary:
++	if typeof(result.get("ok")) != TYPE_BOOL: return _gameplay_rng_stop("RNG_RESULT_SHAPE")
++	if not result.ok:
++		return _gameplay_rng_stop(String(result.get("code", "RNG_RESULT_SHAPE")))
++	if typeof(result.get("value")) != expected_type: return _gameplay_rng_stop("RNG_VALUE_TYPE")
++	if expected_type == TYPE_FLOAT and not is_finite(result.value): return _gameplay_rng_stop("RNG_VALUE_FINITE")
++	return result
++
++
++func _gameplay_identity_bound(identity: Dictionary) -> bool:
++	return identity.get("ok") == true and identity.get("save_eligible") == true \
++		and typeof(identity.get("content_version")) == TYPE_STRING \
++		and typeof(identity.get("engine_binary_sha256")) == TYPE_STRING
++
++
++func configure_new_gameplay_rng(trusted_context: Dictionary, initial_seed: int) -> Dictionary:
++	# Caller supplies installation identity from the provider, never from a save.
++	if _gameplay_rng != null or not _gameplay_rng_issue.is_empty():
++		return {"ok": false, "code": "ALREADY_CONFIGURED"}
++	var bound := _gameplay_identity_bound(trusted_context)
++	if _gameplay_rng_start_kind.begins_with("restore"):
++		return {"ok": false, "code": "RESTORE_FACTORY_REQUIRED"}
++	if trusted_context.get("save_eligible") == true and not bound:
++		return {"ok": false, "code": "TRUSTED_CONTEXT_SHAPE"}
++	var content: String = trusted_context.content_version if bound else ""
++	var candidate: RefCounted = load("res://scripts/run_gameplay_rng.gd").new(content)
++	var result: Dictionary = candidate.start(initial_seed, trusted_context.engine_binary_sha256) \
++		if bound else candidate.start_unbound(initial_seed)
++	if not result.ok: return result
++	_gameplay_rng = candidate
++	_gameplay_rng_start_kind = "new"
++	_gameplay_content_identity = trusted_context.duplicate(true)
++	return {"ok": true, "code": "OK", "save_eligible": bound}
++
++
++func configure_restored_gameplay_rng(trusted_context: Dictionary, record: Variant) -> Dictionary:
++	if _gameplay_rng != null or not _gameplay_rng_issue.is_empty():
++		return {"ok": false, "code": "ALREADY_CONFIGURED"}
++	# Even a rejected restore must never silently enter the new-game seed path.
++	_gameplay_rng_start_kind = "restore_requested"
++	if not _gameplay_identity_bound(trusted_context):
++		return {"ok": false, "code": "UNBOUND_IDENTITY"}
++	var candidate: RefCounted = load("res://scripts/run_gameplay_rng.gd").new(trusted_context.content_version)
++	var result: Dictionary = candidate.restore(record, trusted_context.engine_binary_sha256)
++	if not result.ok: return result
++	_gameplay_rng = candidate
++	_gameplay_rng_start_kind = "restored"
++	_gameplay_content_identity = trusted_context.duplicate(true)
++	return {"ok": true, "code": "OK"}
++
++
++func capture_gameplay_rng() -> Dictionary:
++	# The whole-world transaction must additionally wait for process/deferred
++	# deletion barriers before calling. This is only the RNG component boundary.
++	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
++	if _gameplay_rng == null: return {"ok": false, "code": "NOT_STARTED"}
++	if is_inside_tree() and not get_tree().paused: return {"ok": false, "code": "PAUSE_REQUIRED"}
++	return _gameplay_rng.capture()
++
++
++func gameplay_randi() -> Dictionary:
++	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
++	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
++	return _gameplay_rng_result(_gameplay_rng.draw_randi(), TYPE_INT)
++
++
++func gameplay_randf() -> Dictionary:
++	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
++	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
++	return _gameplay_rng_result(_gameplay_rng.draw_randf(), TYPE_FLOAT)
++
++
++func gameplay_randi_range(from: int, to: int) -> Dictionary:
++	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
++	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
++	return _gameplay_rng_result(_gameplay_rng.draw_randi_range(from, to), TYPE_INT)
++
++
++func gameplay_randf_range(from: float, to: float) -> Dictionary:
++	if not _gameplay_rng_issue.is_empty(): return {"ok": false, "code": _gameplay_rng_issue}
++	if _gameplay_rng == null: return _gameplay_rng_stop("NOT_STARTED")
++	return _gameplay_rng_result(_gameplay_rng.draw_randf_range(from, to), TYPE_FLOAT)
++
++
+ func _ready() -> void:
+ 	_refresh_hot_patch_classes()
+ 	level = _resolve_level()
++	# This is the new-game entry only. The future whole-world restore factory
++	# must attach an already prepared world without running deploy/on_start.
++	if not _gameplay_rng_issue.is_empty(): return
++	if _gameplay_rng_start_kind.begins_with("restore"):
++		_gameplay_rng_stop("RESTORE_FACTORY_REQUIRED")
++		return
++	if _gameplay_rng == null:
++		var identity: Dictionary = {"ok": false, "save_eligible": false, "code": "PROVIDER_UNAVAILABLE"}
++		if ResourceLoader.exists("res://scripts/run_content_identity.gd"):
++			var identity_provider: Script = load("res://scripts/run_content_identity.gd")
++			identity = identity_provider.new().resolve_runtime_identity()
++		var bytes := Crypto.new().generate_random_bytes(8)
++		if bytes.size() != 8:
++			_gameplay_rng_stop("NEW_SEED_UNAVAILABLE")
++			return
++		var configured := configure_new_gameplay_rng(identity, bytes.decode_s64(0))
++		if not configured.ok:
++			_gameplay_rng_stop(String(configured.code))
++			return
++	if level.has_method("bind_gameplay_rng_owner"):
++		level.bind_gameplay_rng_owner(self)
+ 	_official_context = SteamRunPolicy.classify(Campaign, level)
+ 	_steam_run_id = SteamService.begin_run(_official_context)
+ 	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense
+@@ -365,11 +490,13 @@
+ 	hud.quit_game.connect(func() -> void: get_tree().paused = false; AppLifecycle.request_quit("battle_quit"))
+ 	add_child(hud)
+ 	hud.setup(self)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_install_target_cursor()
+ 
+ 	if _official_context.get("mode") == "campaign":
+ 		mission = preload("res://scripts/campaign_mission.gd").new(self)
+ 	level.deploy(self)
++	if not _gameplay_rng_issue.is_empty(): return
+ 
+ 	camera.position = to_screen(map.cell_to_world(level.camera_start_cell()))
+ 	hud.set_top("%s · %s" % [level.title(), level.subtitle()])
+@@ -567,6 +694,10 @@
+ 
+ 
+ func _close_pause() -> void:
++	if not _gameplay_rng_issue.is_empty():
++		if hud != null:
++			hud.show_message("本局运行异常，已暂停。请重新开始或返回主菜单。", 6.0)
++		return
+ 	get_tree().paused = false
+ 	if phase != Phase.END:
+ 		Engine.time_scale = Settings.game_speed   # 恢复对战时套用最新游戏速度（设置改了即生效）
+@@ -717,11 +848,23 @@
+ 
+ ## 成批生成敌军并向目标 attack-move（波次用）。返回生成的单位数组。
+ func spawn_group(key: String, n: int, faction: int, gate: Vector2i, target_w: Vector2, spread := 2) -> Array:
++	if not _gameplay_rng_issue.is_empty(): return []
+ 	var out: Array = []
+ 	for i in range(n):
+-		var cell := map.nearest_open(gate + Vector2i(randi_range(-spread, spread), randi_range(-spread, spread)), String(_defs[key].get("movement_profile", "land")))
++		var cell_x := gameplay_randi_range(-spread, spread)
++		if not cell_x.ok: return out
++		var cell_y := gameplay_randi_range(-spread, spread)
++		if not cell_y.ok: return out
++		var cell := map.nearest_open(gate + Vector2i(cell_x.value, cell_y.value), String(_defs[key].get("movement_profile", "land")))
+ 		var u := spawn_unit(key, faction, map.cell_to_world(cell))
+-		u.order_amove(target_w + Vector2(randf_range(-70, 70), randf_range(-70, 70)))
++		if u == null:
++			_gameplay_rng_stop("WAVE_UNIT_CREATION")
++			return out
++		var target_x := gameplay_randf_range(-70.0, 70.0)
++		if not target_x.ok: return out
++		var target_y := gameplay_randf_range(-70.0, 70.0)
++		if not target_y.ok: return out
++		u.order_amove(target_w + Vector2(target_x.value, target_y.value))
+ 		out.append(u)
+ 	return out
+ 
+@@ -825,6 +968,7 @@
+ ## 李逵 E·蛮力：一次触发只建一个效果节点，内部为范围内每名敌军各维护一把追踪飞斧。
+ ## 返回节点供自检直接推进；没有合法目标时返回 null。
+ func spawn_li_brawn_axes(caster: Unit, effect_radius: float, art := "axe"):
++	if not _gameplay_rng_issue.is_empty(): return null
+ 	if not is_instance_valid(caster) or caster.hp <= 0.0:
+ 		return null
+ 	var foe := Unit.FACTION_GUAN if caster.faction == Unit.FACTION_LIANG else Unit.FACTION_LIANG
+@@ -857,6 +1001,7 @@
+ ## 武松 R·狂战斧分裂：主目标身后 100°、120 距离的活体敌军各吃一次独立计算的普通伤害比例。
+ ## 直接结算副目标，不走 _deal_hit，因此不会暴击、吸血、附带攻击特效或递归分裂。
+ func spawn_wu_cleave(caster: Unit, primary: Unit, fraction: float) -> Array:
++	if not _gameplay_rng_issue.is_empty(): return []
+ 	var hit: Array = []
+ 	if not is_instance_valid(caster) or not is_instance_valid(primary) or fraction <= 0.0:
+ 		return hit
+@@ -883,6 +1028,7 @@
+ 			u.absorb_physical_damage(dmg, caster)
+ 		else:
+ 			u.take_damage(dmg, caster, false, false, "wu_drunkgod")
++			if not _gameplay_rng_issue.is_empty(): return hit
+ 		spawn_impact(u.position, true)
+ 		hit.append(u)
+ 	if not hit.is_empty():
+@@ -1200,6 +1346,7 @@
+ 
+ 
+ func do_trade(give: String) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if give == "wood":
+ 		if wood < TRADE_AMT:
+ 			Sfx.play("cant"); return
+@@ -1258,6 +1405,7 @@
+ 
+ 
+ func arm_build(key: String) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if not _defs.get(key, {}).get("buildable", false):
+ 		return
+ 	_disarm_ability()
+@@ -1279,6 +1427,7 @@
+ 
+ 
+ func _try_place_building(p: Vector2) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var key := _build_armed
+ 	var d: Dictionary = _defs.get(key, {})
+ 	var cell := map.world_to_cell(to_logic(p))
+@@ -1311,6 +1460,7 @@
+ 
+ 
+ func _start_construction(key: String, cell: Vector2i, half: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var site := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))
+ 	site.is_constructing = true
+ 	site._pending_build = true   # 先「虚影」：不挡路、不可被攻击；工人走到起第一锤才转实体、封路（见 advance_build）
+@@ -1401,6 +1551,7 @@
+ 
+ ## 武装布置陷阱（喽啰 E 子菜单）：随后点地放置。触屏先把虚影摆到视图中心，拖动定位、松手落地。
+ func arm_trap(key: String) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if not Defs.TRAPS.has(key):
+ 		return
+ 	_disarm_ability()
+@@ -1423,6 +1574,7 @@
+ 
+ ## 落点放置陷阱：校验地面可放 + 花费 → 登记一枚陷阱（短暂布防后生效）。
+ func _try_place_trap(p: Vector2) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var key := _trap_armed
+ 	var d: Dictionary = Defs.TRAPS.get(key, {})
+ 	if d.is_empty():
+@@ -1467,6 +1619,7 @@
+ 
+ ## 陷阱逐帧：布防计时 → 警戒圈内出现敌人即触发一次后销毁。
+ func _trap_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _traps.is_empty():
+ 		return
+ 	var triggered: Array = []
+@@ -1489,6 +1642,7 @@
+ 				break
+ 		if victim != null:
+ 			_trigger_trap(tr, victim)
++			if not _gameplay_rng_issue.is_empty(): return
+ 			triggered.append(tr)
+ 	for tr in triggered:
+ 		if is_instance_valid(tr["fx"]):
+@@ -1498,6 +1652,7 @@
+ 
+ ## 触发一枚陷阱：按 effect.kind 结算（aoe 范围伤 / stun 范围晕 / fire 地面长燃）。
+ func _trigger_trap(tr: Dictionary, victim: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var owner: int = int(tr["owner"])
+ 	var pos: Vector2 = tr["pos"]
+ 	var eff: Dictionary = tr["effect"]
+@@ -1515,6 +1670,7 @@
+ 					u.apply_stun(sdur)
+ 					if sdmg > 0.0:
+ 						u.take_damage(sdmg, null)
++						if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(pos, true)
+ 			shake(4.0, pos)
+ 		_:   # aoe
+@@ -1523,6 +1679,7 @@
+ 				if is_instance_valid(u) and u.faction != owner and u.hp > 0.0 and not u.is_resource \
+ 						and not u.is_building and not u.garrisoned and u.story_outcome == "" and pos.distance_to(u.position) <= r:
+ 					u.take_damage(dmg, null)
++					if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(pos, true)
+ 			shake(5.0, pos)
+ 	Sfx.play("sk_smite")
+@@ -1658,11 +1815,13 @@
+ 
+ ## 竞技场「出兵 / 随机」：交给关卡(arena.gd)刷 50 兵 + 1 名随机敌将试招（主界面两枚按钮触发）。
+ func arena_spawn_troops() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if level != null and level.has_method("arena_spawn_troops"):
+ 		level.arena_spawn_troops(self)
+ 
+ 
+ func arena_spawn_random() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if level != null and level.has_method("arena_spawn_random"):
+ 		level.arena_spawn_random(self)
+ 
+@@ -1745,6 +1904,7 @@
+ 
+ ## feedback=false 供全托管使用：预期的等待不弹玩家提示、不播放失败/点击音效。
+ func queue_train(bld: Unit, key: String, feedback := true) -> bool:
++	if not _gameplay_rng_issue.is_empty(): return false
+ 	var reason := _train_block_reason(bld, key)
+ 	if reason != "":
+ 		if feedback:
+@@ -1773,6 +1933,7 @@
+ 
+ ## 多生产建筑同选：从同类建筑里挑最短队列下单，形成 SC2 式宏操作；单建筑退回原逻辑。
+ func queue_train_multi(bld: Unit, key: String) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var pool := _selected_producers_for(bld, key)
+ 	if pool.size() <= 1:
+ 		queue_train(bld, key)
+@@ -1799,6 +1960,7 @@
+ 
+ ## 取消生产队列里第 index 个（经典RTS式：点队列图标即撤单），全额退还资源；撤的是队首则重置计时。
+ func cancel_train(bld: Unit, index: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if bld == null or not is_instance_valid(bld) or index < 0 or index >= bld._train_queue.size():
+ 		return
+ 	var key: String = bld._train_queue[index]
+@@ -1881,6 +2043,7 @@
+ 
+ 
+ func queue_research(bld: Unit, key: String, feedback := true) -> bool:
++	if not _gameplay_rng_issue.is_empty(): return false
+ 	var reason := _research_block_reason(bld, key)
+ 	if reason != "":
+ 		if feedback:
+@@ -2002,7 +2165,8 @@
+ 
+ ## ---------- 主循环 ----------
+ 
+-func _on_intro_done() -> void:
++func _on_intro_done() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	phase = Phase.DEPLOY
+ 	if level.deploy_hint() != "":
+ 		hud.show_message(level.deploy_hint(), 6.0)
+@@ -2010,12 +2174,14 @@
+ 		hud.hide_deploy()
+ 		hud.set_top("备战开始 — 120 秒后首波来袭")
+ 		_on_start_battle()
++		if not _gameplay_rng_issue.is_empty(): return
+ 	else:
+ 		hud.show_deploy()
+ 		hud.set_top("准备阶段 — 查看战场，点击「开战」开始（开战前不能操作单位）")
+ 
+ 
+-func _on_start_battle() -> void:
++func _on_start_battle() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if phase != Phase.DEPLOY:
+ 		return
+ 	hud.hide_deploy()
+@@ -2023,14 +2189,17 @@
+ 	if mission != null:
+ 		mission.configure_campaign(level.campaign_core_goal(), level.campaign_story_goals(), level.story_contract_version())
+ 	level.on_start(self)
++	if not _gameplay_rng_issue.is_empty(): return
+ 
+ 
+ func _on_unit_died(u: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_resolve_lin_duel_death(u)   # 必须在 units.erase 前判定；助攻/队友补刀同样由目标死亡事件结算。
+ 	var item_killer: Unit = u._killer
+ 	if item_killer != null and is_instance_valid(item_killer) and item_killer.faction != u.faction \
+ 			and item_killer.inventory != null:
+ 		trigger_item_event(item_killer, "on_kill", {"target": u, "source_id": u._killer_source_id})
++		if not _gameplay_rng_issue.is_empty(): return
+ 	if String(u._killer_source_id).begins_with("item:"):
+ 		record_item_kill(item_killer, String(u._killer_source_id).trim_prefix("item:"))
+ 	if u.is_hero and u.inventory != null:
+@@ -2326,7 +2495,8 @@
+ 	print("[prof] bench(def): %d 敌 vs 6 英雄" % n)
+ 
+ 
+-func _physics_process(delta: float) -> void:
++func _physics_process(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if phase == Phase.INTRO:
+ 		return
+ 	_ai_tick_frame += 1
+@@ -2349,12 +2519,15 @@
+ 	if _ecast_acc >= 0.1:
+ 		_ecast_acc = 0.0
+ 		_enemy_ability_pass()
++		if not _gameplay_rng_issue.is_empty(): return
+ 	if _prof_on: _t = _pf("stealth_ecast", _t)
+ 	_auto_micro_pass()
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _prof_on: _t = _pf("automicro", _t)
+ 	_summon_hunt_pass()
+ 	if ai_friendly and int(Settings.auto_micro_level) >= 3:
+ 		_auto_economy_pass(delta)   # 全托管(仅AI友好模式)：喽啰自动经营（只在 FIGHT 跑）
++		if not _gameplay_rng_issue.is_empty(): return
+ 	if _prof_on: _t = _pf("summon_eco", _t)
+ 	_separation_pass(delta)   # 每帧全速跑：分离是软约束，隔帧跑会在密集堆里抖动(画面/手感优先)
+ 	if _prof_on: _t = _pf("separation", _t)
+@@ -2368,26 +2541,43 @@
+ 		return
+ 
+ 	_ground_dot_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_hua_snipe_dot_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_lin_duel_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_zone_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_trap_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_ice_wall_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_ward_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_trail_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_bolt_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_walk_cast_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_walk_item_cast_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_channel_pass(delta)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_tick_pending_casts()
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_tick_pending_item_casts()
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _prof_on: _t = _pf("zones", _t)
+ 	if mission != null:
+ 		mission.tick(delta)
++		if not _gameplay_rng_issue.is_empty(): return
+ 	if phase == Phase.FIGHT:
+ 		level.process(self, delta)
++		if not _gameplay_rng_issue.is_empty(): return
+ 	if phase == Phase.FIGHT:
+ 		hud.set_top(level.top_status(self))
++		if not _gameplay_rng_issue.is_empty(): return
+ 	if _prof_on:
+ 		_t = _pf("level_hud", _t)
+ 		_prof_tick(delta)
+@@ -2415,6 +2605,7 @@
+ 
+ 
+ func _process(_delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	# 触屏：单指按住原地 ≥350ms → 长按。按在己方可驻军建筑上且选了可动单位 → 驻扎；
+ 	# 否则进入「框选」态（之后拖动拖出选择框，不再拖地图）。建造选址态(_build_armed)不参与长按。
+ 	if _dragging and _touch_mode and not _box_mode and not _panning and _build_armed == "" \
+@@ -2726,6 +2917,7 @@
+ ## 每 ~0.5s 一拍：喽啰采集/建造/修复 → 推进建造计划 → 练农民/兵/将 → 研究科技 → 把成军拉去前线。
+ ## 仅在 FIGHT 后才动；驻守战剧情结束会自动进入可操作的 120 秒备战。
+ func _auto_economy_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if not economy or level == null or phase != Phase.FIGHT:
+ 		return
+ 	_eco_t -= delta
+@@ -2745,6 +2937,7 @@
+ 	var remaining_reserve := _eco_research_reserve(remaining_plans)
+ 	_eco_trade(remaining_reserve)
+ 	_eco_traps(remaining_reserve)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_eco_muster_and_charge()
+ 
+ 
+@@ -3247,6 +3440,7 @@
+ 
+ ## 全托管布陷阱：出齐英雄后、钱有富余时，沿前线再往敌方推一点散布一次性机关（轮换三种），上限 ECO_TRAP_CAP。
+ func _eco_traps(tech_reserve := {}) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_eco_trap_cd -= 0.5   # 本拍 ~0.5s 调一次
+ 	if _eco_trap_cd > 0.0:
+ 		return
+@@ -3277,13 +3471,25 @@
+ 		var gw: Vector2 = map.cell_to_world(gates[li])
+ 		var fwd := (gw - anchor)
+ 		fwd = fwd.normalized() if fwd.length() > 1.0 else Vector2(1, 0)
+-		spot = anchor + fwd * randf_range(40.0, 170.0) + Vector2(randf_range(-55.0, 55.0), randf_range(-55.0, 55.0))
++		var forward := gameplay_randf_range(40.0, 170.0)
++		if not forward.ok: return
++		var offset_x := gameplay_randf_range(-55.0, 55.0)
++		if not offset_x.ok: return
++		var offset_y := gameplay_randf_range(-55.0, 55.0)
++		if not offset_y.ok: return
++		spot = anchor + fwd * forward.value + Vector2(offset_x.value, offset_y.value)
+ 	else:
+ 		var muster := _eco_muster_point()
+ 		var fl := _eco_frontline()
+ 		var fwd2 := muster - fl
+ 		fwd2 = fwd2.normalized() if fwd2.length() > 1.0 else Vector2(1, 0)
+-		spot = muster + fwd2 * randf_range(40.0, 150.0) + Vector2(randf_range(-90.0, 90.0), randf_range(-90.0, 90.0))
++		var forward := gameplay_randf_range(40.0, 150.0)
++		if not forward.ok: return
++		var offset_x := gameplay_randf_range(-90.0, 90.0)
++		if not offset_x.ok: return
++		var offset_y := gameplay_randf_range(-90.0, 90.0)
++		if not offset_y.ok: return
++		spot = muster + fwd2 * forward.value + Vector2(offset_x.value, offset_y.value)
+ 	# spot 全程是逻辑空间（unit.position/cell_to_world 同系）——原先这里多套了一层 to_logic(ISO逆变换)，
+ 	# 把落点扭到斜 45° 的错位处，陷阱经常落在莫名其妙的地方/直接放不下。
+ 	var cell := map.world_to_cell(spot)
+@@ -5499,6 +5705,7 @@
+ 
+ 
+ func _unhandled_input(event: InputEvent) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	# 开战(FIGHT)之前一律不接收对单位的操作：旁白/布阵/结算阶段不能选取或指挥单位。
+ 	# （镜头平移缩放在 RTSCamera 里另行处理，「开战」按钮是 HUD 控件，二者不受影响。）
+ 	if phase != Phase.FIGHT:
+@@ -5582,6 +5789,7 @@
+ 						overlay.queue_redraw()
+ 					else:
+ 						_cast_item_armed_at(p)
++						if not _gameplay_rng_issue.is_empty(): return
+ 					return
+ 				if _amove_armed:
+ 					_order_amove_at(p, event.shift_pressed)
+@@ -5625,6 +5833,7 @@
+ 					_cast_armed_at(p)
+ 				elif _item_armed != "" and _touch_mode:
+ 					_cast_item_armed_at(p)
++					if not _gameplay_rng_issue.is_empty(): return
+ 				elif _trap_armed != "" and _touch_mode:
+ 					# 触屏：松手 → 在虚影处布置陷阱（无效则保留 armed，可重选址或点「取消」）
+ 					_try_place_trap(_drag_cur)
+@@ -5706,8 +5915,10 @@
+ 					hud.toggle_auto_selected()    # T：托管选中英雄（单个 / 编队）
+ 		elif Settings.key_matches(event, "demolish") or (Settings.key_for("demolish") == KEY_DELETE and kc == KEY_BACKSPACE):
+ 			delete_selected(event.shift_pressed)   # 拆除选中己方单位/建筑（Mac 上 Delete 即 Backspace；Shift 跳过确认）
++			if not _gameplay_rng_issue.is_empty(): return
+ 		elif item_slot >= 0:
+ 			use_item_hotkey(item_slot)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		elif Settings.key_matches(event, "command_0"):
+ 			_command_hotkey(0)
+ 		elif Settings.key_matches(event, "command_1"):
+@@ -5723,6 +5934,7 @@
+ 			if kc > KEY_F2:
+ 				hidx -= 1   # F2 留给全军；F3 起顺延选择后续英雄
+ 			_select_hero_by_index(hidx)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		elif Settings.key_matches(event, "subgroup"):
+ 			_cycle_subgroup()
+ 		elif Settings.key_matches(event, "idle_worker") \
+@@ -5912,6 +6124,7 @@
+ 
+ ## 武装攻击移动（A 键与触屏「攻击」按钮共用）：随后点地即攻击移动。
+ func arm_amove() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if selection.is_empty():
+ 		return
+ 	_disarm_patrol()
+@@ -5923,6 +6136,7 @@
+ 
+ 
+ func arm_patrol() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _selected_movers().filter(func(u: Unit) -> bool: return not u.is_worker).is_empty():
+ 		return
+ 	cancel_armed()
+@@ -5938,6 +6152,7 @@
+ 
+ ## 武装维修（农民命令卡「维修」键）：随后点己方受损建筑 → 工人前去修缮。
+ func arm_repair() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if not _selection_has_worker():
+ 		msg("先选中农民/工人，再点维修", 1.3)
+ 		return
+@@ -5961,6 +6176,7 @@
+ ## 武装驻扎（英雄命令卡「驻扎」键）：点亮后左键点己方箭楼/聚义厅 → 选中单位进驻。
+ ## 英雄不再走右键自动驻扎，避免据守战里右键聚义厅误判成攻击近敌（见 _issue_order）。
+ func arm_garrison() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _selected_movers().is_empty():
+ 		return
+ 	_disarm_ability()
+@@ -5976,6 +6192,7 @@
+ 
+ ## 武装驻扎落点：点己方有空位的箭楼/聚义厅 → 选中可动单位进驻（含英雄）。
+ func _order_garrison_at(p: Vector2, queued := false) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var bld := _garrisonable_at(p)
+ 	if bld == null:
+ 		msg("那不是可进驻的建筑（需箭楼/聚义厅且有空位）", 1.4)
+@@ -6035,6 +6252,7 @@
+ ## F1..F8：按英雄头像栏顺序（liang_heroes 同序）选中第 idx 个英雄。
+ ## 与点头像一致：驻军中的英雄改为「出击」，在场英雄则选中并居中。
+ func _select_hero_by_index(idx: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var hs := liang_heroes()
+ 	if idx < 0 or idx >= hs.size():
+ 		return
+@@ -6043,6 +6261,7 @@
+ 		return
+ 	if h.garrisoned:
+ 		sortie_unit(h)
++		if not _gameplay_rng_issue.is_empty(): return
+ 	else:
+ 		focus_unit(h)
+ 
+@@ -6113,6 +6332,7 @@
+ 
+ ## 触屏·点选即下令（轻操作式）：点到己方单位/建筑 = 选取；点空地/敌人/资源且有选中 = 上下文指令。
+ func _tap_command(p: Vector2, additive: bool) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _friendly_at(p) != null:
+ 		_click_select(p, additive)        # 命中己方单位/建筑 → 选取（含建筑回退、Shift 追加）
+ 	elif not selection.is_empty():
+@@ -6136,6 +6356,7 @@
+ 
+ ## 触屏轻点：320ms 内在同位置再点一次 = 双击选同屏同类；否则点选即下令。
+ func _touch_tap_or_double(p: Vector2, additive: bool) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var now := Time.get_ticks_msec()
+ 	if now - _last_tap_ms < 360 and _last_tap_pos.distance_to(p) < 56.0:   # 高分屏手指抖动大，放宽容差
+ 		_last_tap_ms = 0
+@@ -6227,12 +6448,15 @@
+ 
+ 
+ func use_item_hotkey(slot: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var hero := active_unit()
+ 	if hero != null and is_instance_valid(hero) and hero.is_hero:
+ 		cast_item(hero, slot, true)
++		if not _gameplay_rng_issue.is_empty(): return
+ 
+ 
+ func cast_item(caster: Unit, slot: int, show_blocked := false) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+ 			or slot < 0 or slot >= HeroInventory.SLOT_COUNT:
+ 		return
+@@ -6262,6 +6486,7 @@
+ 	else:
+ 		_stamp_manual([caster])
+ 		_begin_item_cast(caster, slot, caster.position)
++		if not _gameplay_rng_issue.is_empty(): return
+ 
+ 
+ func _show_item_blocked(caster: Unit, slot: int) -> void:
+@@ -6291,6 +6516,7 @@
+ 
+ 
+ func _cast_item_armed_at(p: Vector2) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var caster := _item_caster
+ 	var slot := _item_slot
+ 	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+@@ -6313,6 +6539,7 @@
+ 			_queue_walk_item(caster, slot, target, Vector2.INF)
+ 		else:
+ 			_begin_item_cast(caster, slot, target.position, target)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		return
+ 	var point := to_logic(p)
+ 	_stamp_manual([caster])
+@@ -6322,6 +6549,7 @@
+ 		_queue_walk_item(caster, slot, null, point)
+ 	else:
+ 		_begin_item_cast(caster, slot, point)
++		if not _gameplay_rng_issue.is_empty(): return
+ 
+ 
+ func item_cast_range(active: Dictionary) -> float:
+@@ -6331,6 +6559,7 @@
+ 
+ 
+ func _begin_item_cast(caster: Unit, slot: int, point: Vector2, target: Unit = null) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+ 			or not caster.inventory.ready(slot):
+ 		return
+@@ -6341,6 +6570,7 @@
+ 	var windup := maxf(0.0, float(active.get("cast_time", 0.0)))
+ 	if windup <= 0.0:
+ 		_do_item_active(caster, slot, point, target)
++		if not _gameplay_rng_issue.is_empty(): return
+ 		return
+ 	var col: Color = idef.get("color", Color("d9bd75"))
+ 	caster.begin_cast_windup(windup, col)
+@@ -6350,6 +6580,7 @@
+ 
+ 
+ func _tick_pending_item_casts() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _pending_item_casts.is_empty():
+ 		return
+ 	var keep: Array = []
+@@ -6369,6 +6600,7 @@
+ 		if target != null and (not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned or target.story_outcome != ""):
+ 			continue
+ 		_do_item_active(caster, slot, pc.get("point", caster.position), target)
++		if not _gameplay_rng_issue.is_empty(): return
+ 	_pending_item_casts = keep
+ 
+ 
+@@ -6397,6 +6629,7 @@
+ 
+ 
+ func _do_item_active(caster: Unit, slot: int, point: Vector2, target: Unit = null) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
+ 			or not caster.inventory.ready(slot):
+ 		return
+@@ -6409,6 +6642,7 @@
+ 		return
+ 	var center := target.position if mode == "unit" else (caster.position if mode == "self" else point)
+ 	_apply_item_effect_bundle(caster, item_id, active.get("effect", {}), active, center, target, "item:" + item_id)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	caster.inventory.start_cooldown(slot)
+ 	if bool(active.get("consume", false)):
+ 		caster.inventory.consume_one(slot)
+@@ -6422,6 +6656,7 @@
+ 
+ func _apply_item_effect_bundle(caster: Unit, item_id: String, effect_v, spec: Dictionary,
+ 		center: Vector2, explicit_target: Unit, source_id: String) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var effects: Array = effect_v if effect_v is Array else [effect_v]
+ 	for ev in effects:
+ 		if not (ev is Dictionary):
+@@ -6430,6 +6665,7 @@
+ 		var targets := _item_effect_targets(caster, effect, spec, center, explicit_target)
+ 		for target in targets:
+ 			_apply_item_effect_to(caster, target, effect, source_id)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		if float(effect.get("reveal", 0.0)) > 0.0:
+ 			_reveal_fog_at(center, float(effect.get("reveal", 0.0)), float(effect.get("reveal_dur", 4.0)))
+ 
+@@ -6463,11 +6699,13 @@
+ 
+ 
+ func _apply_item_effect_to(caster: Unit, target: Unit, effect: Dictionary, source_id: String) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if target == null or not is_instance_valid(target) or target.hp <= 0.0:
+ 		return
+ 	var damage := maxf(0.0, float(effect.get("damage", 0.0)))
+ 	if damage > 0.0 and target.faction != caster.faction:
+ 		target.take_damage(damage, caster, false, bool(effect.get("ignore_reduction", false)), source_id)
++		if not _gameplay_rng_issue.is_empty(): return
+ 	var healing := maxf(0.0, float(effect.get("heal", 0.0)))
+ 	if healing > 0.0 and target.faction == caster.faction:
+ 		target.heal(healing, caster, source_id)
+@@ -6496,6 +6734,7 @@
+ 
+ ## 被动物品事件分发：只在攻击/受击/击杀等既有结算点触发，不做全战场逐帧扫描。
+ func trigger_item_event(owner: Unit, event: String, context: Dictionary) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if owner == null or not is_instance_valid(owner) or owner.inventory == null \
+ 			or (owner.hp <= 0.0 and event != "on_death"):
+ 		return
+@@ -6507,7 +6746,9 @@
+ 		var uid := int(rec.get("uid", 0))
+ 		if not owner.inventory.proc_ready(uid, event):
+ 			continue
+-		if randf() > clampf(float(trigger.get("chance", passive.get("chance", 1.0))), 0.0, 1.0):
++		var proc_roll := gameplay_randf()
++		if not proc_roll.ok: return
++		if proc_roll.value > clampf(float(trigger.get("chance", passive.get("chance", 1.0))), 0.0, 1.0):
+ 			continue
+ 		if float(trigger.get("hp_below", 0.0)) > 0.0 \
+ 				and owner.hp / maxf(owner.max_hp, 1.0) > float(trigger["hp_below"]):
+@@ -6529,14 +6770,17 @@
+ 			trigger.get("interval", passive.get("cooldown", 0.0)))))
+ 		owner.inventory.start_proc_cooldown(uid, event, proc_cd)
+ 		_apply_item_effect_bundle(owner, String(rec.get("item_id", "")), effect_v, trigger, center, explicit_target, source)
++		if not _gameplay_rng_issue.is_empty(): return
+ 
+ 
+ func swap_hero_items(hero: Unit, from_slot: int, to_slot: int) -> bool:
++	if not _gameplay_rng_issue.is_empty(): return false
+ 	return hero != null and is_instance_valid(hero) and hero.inventory != null \
+ 		and hero.inventory.swap_slots(from_slot, to_slot)
+ 
+ 
+ func transfer_hero_item(from_hero: Unit, slot: int, to_hero: Unit) -> bool:
++	if not _gameplay_rng_issue.is_empty(): return false
+ 	if from_hero == null or to_hero == null or not is_instance_valid(from_hero) or not is_instance_valid(to_hero) \
+ 			or from_hero == to_hero or from_hero.faction != Unit.FACTION_LIANG \
+ 			or to_hero.faction != Unit.FACTION_LIANG or from_hero.inventory == null or to_hero.inventory == null:
+@@ -6548,6 +6792,7 @@
+ 
+ 
+ func cast_ability(caster: Unit, slot := 0, show_blocked := false) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if is_instance_valid(caster) and (caster.story_outcome != "" or caster.is_captive): return
+ 	if caster == null or not is_instance_valid(caster) or slot < 0 or slot >= caster.slot_count():
+ 		return
+@@ -6647,6 +6892,7 @@
+ 
+ 
+ func _cast_ability_slot(slot: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var h := active_unit()
+ 	if h == null or not h.is_hero or slot >= h.slot_count():
+ 		return
+@@ -6664,6 +6910,7 @@
+ 
+ ## 学习/升级活动英雄的第 slot 个技能（花一点技能点）
+ func learn_slot(h: Unit, slot: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if h == null or not is_instance_valid(h):
+ 		return
+ 	if not h.can_learn(slot):
+@@ -6673,6 +6920,7 @@
+ 
+ 
+ func _cast_armed_at(p: Vector2) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var caster := _ability_caster
+ 	var ab := _ability_armed
+ 	var slot := _ability_slot
+@@ -6749,6 +6997,7 @@
+ 
+ ## 花荣·切刀/挂弓：在弓与刀之间切换（命令卡按钮触发）。
+ func toggle_hero_melee(hero) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if hero == null or not is_instance_valid(hero) or not hero.can_melee_switch:
+ 		return
+ 	hero.toggle_melee()
+@@ -6797,6 +7046,7 @@
+ ## 施法抬手：技能不再瞬发——先让英雄抬手蓄势 CAST_WINDUP 秒（带蓄能辉光），归零后才结算。
+ ## 目标点 lp 在点击瞬间已锁定，抬手只是表演；抬手期间技能仍占「就绪」，靠 _cast_t>0 防连发。
+ func _begin_cast(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if is_instance_valid(caster) and (caster.story_outcome != "" or caster.is_captive): return
+ 	if caster == null or not is_instance_valid(caster):
+ 		return
+@@ -6848,6 +7098,7 @@
+ 
+ ## 抬手结算：每帧检查待结算队列，施法者抬手归零即真正放招（死亡/失效则丢弃）。
+ func _tick_pending_casts() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _pending_casts.is_empty():
+ 		return
+ 	var keep: Array = []
+@@ -6867,6 +7118,7 @@
+ 					or not target_visible_to(c, tgt)):
+ 				continue
+ 			_do_ability(c, int(pc["slot"]), pc["lp"], tgt)
++			if not _gameplay_rng_issue.is_empty(): return
+ 	_pending_casts = keep
+ 
+ 
+@@ -7004,6 +7256,7 @@
+ 
+ 
+ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if not is_instance_valid(caster) or not caster.slot_ready(slot):
+ 		return
+ 	var aid: String = caster.ability_slots[slot]["id"]
+@@ -7085,6 +7338,7 @@
+ 						dmg *= eff["cav_bonus"]
+ 					_apply_riders(u, eff, rank, caster)   # slow/stun/削甲/致盲/沉默/易伤/缠绕/缴械/嘲讽 一站式
+ 					u.take_damage(dmg, caster, false, false, aid)
++					if not _gameplay_rng_issue.is_empty(): return
+ 					spawn_impact(u.position, true)   # 命中火花
+ 			if eff.get("self_atk", 0.0) > 0.0:
+ 				caster.apply_temp_atk(eff["self_atk"], eff["self_dur"])
+@@ -7103,6 +7357,7 @@
+ 				var pin_dmg := float(_pick(eff.get("dmg_ranks", [24.0, 34.0, 43.0]), rank))
+ 				var pin_root := float(_pick(eff.get("root_ranks", [2.0, 2.5, 3.0]), rank))
+ 				tgt.take_damage(pin_dmg, caster, false, false, aid)
++				if not _gameplay_rng_issue.is_empty(): return
+ 				if tgt.hp > 0.0:
+ 					tgt.apply_root(pin_root)
+ 					caster.start_hua_lock(tgt, int(eff.get("lock_shots", 5)))
+@@ -7127,6 +7382,7 @@
+ 					var burst_pct := float(_pick(eff.get("hero_burst_ranks", [0.20, 0.25, 0.30]), rank))
+ 					var dot_pct := float(_pick(eff.get("hero_dot_ranks", [0.03, 0.04, 0.05]), rank))
+ 					tgt.take_damage(tgt.max_hp * burst_pct, caster, false, false, aid)
++					if not _gameplay_rng_issue.is_empty(): return
+ 					if tgt.hp > 0.0 and dot_pct > 0.0:
+ 						var dot_dur := float(eff.get("dot_dur", 5.0))
+ 						var dot_tick := float(eff.get("dot_tick", 1.0))
+@@ -7140,6 +7396,7 @@
+ 				else:
+ 					# 处决绕过护阵减伤，并把当前护盾也计入斩杀量，确保任何非敌将作战单位真正一箭毙命。
+ 					tgt.take_damage(tgt.hp + tgt._shield + 1.0, caster, false, true, aid)
++					if not _gameplay_rng_issue.is_empty(): return
+ 				var sfx := HuaTargetArrowFx.new()
+ 				sfx.position = caster.position + Vector2(0, -10)
+ 				sfx.end_w = shot_end
+@@ -7163,6 +7420,7 @@
+ 						if map._segment_open(u.position, np, u.movement_profile):
+ 							u.position = np
+ 					u.take_damage(float(eff["dmg"]) * sc, caster, false, false, aid)
++					if not _gameplay_rng_issue.is_empty(): return
+ 		"line_nuke":   # 林冲 Q·破阵突刺：从施法者朝指向贯穿一条矩形带
+ 			var ldir := center - caster.position
+ 			if ldir.length() < 1.0:
+@@ -7187,6 +7445,7 @@
+ 							if map._segment_open(u.position, landing, u.movement_profile):
+ 								u.position = landing
+ 					u.take_damage(line_dmg, caster, false, false, aid)
++					if not _gameplay_rng_issue.is_empty(): return
+ 					spawn_impact(u.position, true)
+ 			if bool(eff.get("lin_break", false)):
+ 				center = caster.position + ldir * llen   # 专属枪影始终刺满固定260射程，不随近点点击或英雄倍率伸长。
+@@ -7203,6 +7462,7 @@
+ 					if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and u.story_outcome == "" and not u.is_resource \
+ 							and _in_capsule(caster.position, bdir, blen, bhw + u.radius, u.position):
+ 						u.take_damage(blink_dmg * sc, caster, false, false, aid)
++						if not _gameplay_rng_issue.is_empty(): return
+ 						spawn_impact(u.position, true)
+ 			var bstart := caster.position
+ 			var bend := caster.position + bdir * blen
+@@ -7249,6 +7509,7 @@
+ 				if eff.get("slow", 0.0) > 0.0:
+ 					u.apply_slow(eff["slow"], eff["slow_dur"])
+ 				u.take_damage(float(eff["dmg"]) * sc, caster, false, false, aid)
++				if not _gameplay_rng_issue.is_empty(): return
+ 				spawn_impact(u.position, true)
+ 			center = caster.position + sdir * clampf(caster.position.distance_to(center), 50.0, srange * 0.95)   # 演出贯穿到扇区前沿(与真实伤害范围一致)
+ 		"orbit_axes":   # 李逵 Q·双斧回旋：绕身持续扫伤的区域，跟随施法者
+@@ -7330,6 +7591,7 @@
+ 			caster.apply_lifesteal(float(eff.get("lifesteal", 1.0)), float(eff.get("dur", 5.0)))
+ 		"summon":   # 召唤物：武松·驱使猛虎及其他英雄召唤技
+ 			_do_summon(caster, eff, rank)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"meteor":
+ 			_do_meteor(caster, eff, rank, center, foe)
+ 		"black_rain":   # 黑雨类 DOT：可指定落点或跟随施法者；每秒伤害/时长随等级
+@@ -7343,16 +7605,19 @@
+ 				br_attack_slow, br_attack_miss, aid)
+ 		"ice_wall":   # 公孙胜 W·冰墙：少量伤害 + 阻隔敌军移动
+ 			_do_ice_wall(caster, eff, sc, rank, center, foe, ad["color"])
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"beast_stampede":   # 公孙胜 E·百兽奔袭：直线击退判定，单张猛兽贴图错列复用成兽群
+ 			_do_beast_stampede(caster, eff, sc, rank, center, foe)
+ 		"drunk_buff":   # 武松 W·三碗不过岗：移动/攻速随机波动
+ 			caster.start_drunk(float(_pick(eff.get("lo", [0.9]), rank)), float(_pick(eff.get("hi", [1.3]), rank)), float(eff.get("dur", 30.0)))
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"drunk_god":   # 武松 R·醉神大闹快活林主动：物免 + 每击加攻 + 结束转血；分裂为已学即常驻
+ 			var god_dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 20.0))
+ 			caster.start_drunk_god(float(_pick(eff.get("bonus", [10.0]), rank)), god_dur,
+ 				int(eff.get("max_stacks", 5)))
+ 		"blink":   # 闪现：朝落点闪现(限 dist)，落点可带小范围伤
+ 			center = _do_blink(caster, eff, sc, center, r, foe, snap, ad)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"channel":   # 引导：定身逐 tick 轰击落点区域（凌振轰天连炮）；被眩晕/沉默即止
+ 			_begin_channel(caster, center, eff, sc, rank, ad)
+ 		"invis":   # 主动隐身：自身隐入（不可被索敌/指向），攻击/施法破隐，破隐首击带加成
+@@ -7361,12 +7626,16 @@
+ 			caster.apply_form(eff.get("form", {}), float(eff.get("dur", 15.0)))
+ 		"pull":   # 钩拉：沿一线把敌人拖向施法者
+ 			_do_pull(caster, eff, sc, center, r, foe, snap)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"knockback":   # 击退：推离落点 + 伤害
+ 			_do_knockback(caster, eff, sc, center, r, foe, snap)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"global_nuke":   # 全图轰击(或仅敌方英雄)
+ 			_do_global_nuke(caster, eff, sc, foe, snap)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"chain_nuke":   # 弹射闪电：逐跳衰减
+ 			_do_chain_nuke(caster, eff, sc, center, foe, snap, ad)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"shield":   # 护盾：自身/范围友军吸收盾
+ 			_do_shield(caster, eff, sc, r, ally, snap)
+ 		"atkspeed":   # 攻速狂暴：自身/范围友军提速
+@@ -7388,14 +7657,18 @@
+ 				swap_t = _nearest_foe_unit(center, caster.faction)
+ 			if swap_t != null and not swap_t.is_building:
+ 				_do_swap(caster, swap_t, ad, eff, sc, rank)
++				if not _gameplay_rng_issue.is_empty(): return
+ 		"ward":   # 立桩：在落点插一根「桩」，原地持续脉冲（治疗友军 / 连珠射敌 / 毒射减速）
+ 			_do_ward(caster, eff, rank, center, ally, foe, ad, slot)
+ 		"fissure":   # 裂地：一线贯穿伤+晕，并沿线裂出一道阻路实墙（鲁智深 Q）
+ 			_do_fissure(caster, eff, sc, center, foe, snap, ad)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"echo":   # 回音重踏：敌越密，每个目标受创越重（鲁智深 R）
+ 			_do_echo(caster, eff, sc, center, r, foe, snap)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"heal_wave":   # 影波：一道波纹在敌我间往复弹跳——灼伤敌、抚愈友（安道全 E）
+ 			_do_heal_wave(caster, eff, sc, center, ally, foe, snap, ad)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		"fire_line":   # 一线长焰：沿指向铺一条直线地火（解珍 R）
+ 			_do_fire_line(caster, eff, rank, center, foe)
+ 		"fire_trail":   # 火径：随身移动，沿途不断在脚下落地火（魏定国 E）
+@@ -7501,6 +7774,7 @@
+ 
+ ## 时空封印 + 双斧回旋：每帧推进计时，按各自节拍结算范围目标。
+ func _zone_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	# 时空封印：10Hz 续 0.22s 晕，持续定身语义不变；施法者/友军不受影响。
+ 	if not _chrono_zones.is_empty():
+ 		for z in _chrono_zones:
+@@ -7535,6 +7809,7 @@
+ 						if float(z["slow"]) > 0.0:
+ 							u.apply_slow(float(z["slow"]), float(z["slow_dur"]))
+ 						u.take_damage(float(z["dmg"]), src, false, false, String(z.get("ability_id", "")))
++						if not _gameplay_rng_issue.is_empty(): return
+ 						spawn_impact(u.position, false)
+ 		_orbit_zones = _orbit_zones.filter(func(z): return float(z["t"]) > 0.0)
+ 	# 天降陨石：滚动推进，碾过敌人吃一次冲击伤害，过处地面铺灼烧 DOT
+@@ -7554,6 +7829,7 @@
+ 					hit[u.get_instance_id()] = true
+ 					u.take_damage(float(z["impact"]), src if is_instance_valid(src) else null, false, false,
+ 						String(z.get("ability_id", "")))
++					if not _gameplay_rng_issue.is_empty(): return
+ 					spawn_impact(u.position, true)
+ 			# 过处地面铺火（每滚约 60px 落一处持续灼烧），用现成地火 DOT 系统
+ 			z["trail"] = float(z["trail"]) + step
+@@ -7592,6 +7868,7 @@
+ 				u.apply_slow(float(z["slow"]), float(z["slow_dur"]))
+ 				u.take_damage(float(z["dmg"]), src if is_instance_valid(src) else null, false, false,
+ 					String(z.get("ability_id", "")))
++				if not _gameplay_rng_issue.is_empty(): return
+ 				spawn_impact(u.position, true)
+ 		_gong_lines = _gong_lines.filter(func(z): return float(z["traveled"]) < float(z["length"]))
+ 
+@@ -7624,6 +7901,7 @@
+ ## ===== 新技能原语结算（闪现/钩拉/击退/全图/弹射/护盾/攻速）=====
+ ## 闪现：朝落点闪现(限 dist)，落点可带小范围伤；返回闪现后中心(供演出落点)。
+ func _do_blink(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array, ad: Dictionary) -> Vector2:
++	if not _gameplay_rng_issue.is_empty(): return center
+ 	var from := caster.position
+ 	var dir := center - caster.position
+ 	if dir.length() > 1.0:
+@@ -7645,12 +7923,14 @@
+ 				if eff.get("slow", 0.0) > 0.0:
+ 					u.apply_slow(eff["slow"], eff.get("slow_dur", 1.0))
+ 				u.take_damage(dmg, caster, false, false, String(eff.get("_ability_id", "")))
++				if not _gameplay_rng_issue.is_empty(): return caster.position
+ 				spawn_impact(u.position, true)
+ 	return caster.position
+ 
+ 
+ ## 钩拉：沿 caster→落点一线把敌人拖向施法者 + 伤害(可眩晕)。
+ func _do_pull(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var dir := center - caster.position
+ 	if dir.length() < 1.0:
+ 		dir = Vector2(-1.0 if caster.face_left else 1.0, 0.0)
+@@ -7668,6 +7948,7 @@
+ 				u.apply_stun(eff["stun"])
+ 			u.take_damage(float(eff.get("dmg", 0.0)) * sc, caster, false, false,
+ 				String(eff.get("_ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(u.position, true)
+ 
+ 
+@@ -7725,6 +8006,7 @@
+ ## 换位（扈三娘·乾坤挪移）：与目标瞬间互换位置——可点敌将拖入阵，也可点袍泽换其脱险。
+ ## 换到敌人才结算伤害+骑手；两端各留一道残光。
+ func _do_swap(caster: Unit, tgt: Unit, ad: Dictionary, eff: Dictionary, sc: float, rank: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if caster.story_outcome != "" or tgt.story_outcome != "" or caster.is_captive or tgt.is_captive: return
+ 	if not map.is_open_world(tgt.position, caster.movement_profile) or not map.is_open_world(caster.position, tgt.movement_profile): return
+ 	var pa := caster.position
+@@ -7736,6 +8018,7 @@
+ 		if float(eff.get("dmg", 0.0)) > 0.0:
+ 			tgt.take_damage(float(eff["dmg"]) * sc, caster, false, false,
+ 				String(eff.get("_ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 	for pair in [[pa, pb], [pb, pa]]:
+ 		var s := BlinkShotFx.new()
+ 		s.start_w = pair[0]
+@@ -7747,6 +8030,7 @@
+ 
+ 
+ func _bolt_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _bolts.is_empty():
+ 		return
+ 	var keep: Array = []
+@@ -7772,6 +8056,7 @@
+ 							tgt.take_damage(float(beff["dmg"]) * float(b["sc"]),
+ 								caster if (caster != null and is_instance_valid(caster)) else null, false, false,
+ 								String(beff.get("_ability_id", "")))
++							if not _gameplay_rng_issue.is_empty(): return
+ 						spawn_impact(tgt.position, true)
+ 						alive = false
+ 					else:
+@@ -7798,6 +8083,7 @@
+ 						hitl.take_damage(float(leff["dmg"]) * float(b["sc"]),
+ 							caster if (caster != null and is_instance_valid(caster)) else null, false, false,
+ 							String(leff.get("_ability_id", "")))
++						if not _gameplay_rng_issue.is_empty(): return
+ 					spawn_impact(hitl.position, true)
+ 					alive = false
+ 				elif float(b["traveled"]) >= float(b["len"]):
+@@ -7838,6 +8124,7 @@
+ 						if float(heff.get("dmg", 0.0)) > 0.0:
+ 							v.take_damage(float(heff["dmg"]) * float(b["sc"]), caster, false, false,
+ 								String(heff.get("_ability_id", "")))
++							if not _gameplay_rng_issue.is_empty(): return
+ 						# 拖行逐段检查通行域，停在岸边或墙前，不越界寻找落点
+ 						v.position = map.limit_displacement(v.position, v.position, v.movement_profile)
+ 						spawn_impact(v.position, true)
+@@ -7860,6 +8147,7 @@
+ 
+ ## ───────────────── 走近使用物品（与技能同一套玩家意图规则）─────────────────
+ func _queue_walk_item(caster: Unit, slot: int, tgt: Unit, point: Vector2) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if caster == null or not is_instance_valid(caster) or caster.inventory == null:
+ 		return
+ 	var uid := int(caster.inventory.slot_item(slot).get("uid", 0))
+@@ -7881,6 +8169,7 @@
+ 
+ 
+ func _walk_item_cast_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _walk_item_casts.is_empty():
+ 		return
+ 	var keep: Array = []
+@@ -7908,6 +8197,7 @@
+ 			continue
+ 		if range == INF or caster.position.distance_to(cast_pos) <= range:
+ 			_begin_item_cast(caster, slot, cast_pos, target)
++			if not _gameplay_rng_issue.is_empty(): return
+ 			continue
+ 		wc["t"] = float(wc.get("t", 0.0)) - delta
+ 		if float(wc["t"]) <= 0.0:
+@@ -7923,6 +8213,7 @@
+ ## 单体技能点了超射程的目标 → 自动朝目标走，一进射程就自动施放。
+ ## 玩家中途下达任何新指令（_order_serial 变化）即取消；目标/技能失效也取消。
+ func _queue_walk_cast(caster: Unit, slot: int, tgt: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	for wc in _walk_casts:
+ 		if wc["c"] == caster:
+ 			wc["slot"] = slot
+@@ -7937,6 +8228,7 @@
+ 
+ 
+ func _queue_walk_cast_point(caster: Unit, slot: int, point: Vector2) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	for wc in _walk_casts:
+ 		if wc["c"] == caster:
+ 			wc["slot"] = slot
+@@ -7951,6 +8243,7 @@
+ 
+ 
+ func _walk_cast_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _walk_casts.is_empty():
+ 		return
+ 	var keep: Array = []
+@@ -7995,6 +8288,7 @@
+ ## ───────────────── 引导施法（channel）─────────────────
+ ## 施法者定身、每 tick 对落点区域结算一轮（伤害+骑手）。被眩晕/沉默/拖走 → unit._break_channel 清零 → 本 pass 停结算。
+ func _begin_channel(caster: Unit, center: Vector2, eff: Dictionary, sc: float, rank: int, ad: Dictionary) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var dur := float(eff.get("dur", 3.0))
+ 	caster._begin_channel_state(dur)
+ 	_channels.append({"caster": caster, "center": center, "eff": eff, "sc": sc, "rank": rank,
+@@ -8002,6 +8296,7 @@
+ 
+ 
+ func _channel_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _channels.is_empty():
+ 		return
+ 	var keep: Array = []
+@@ -8014,12 +8309,14 @@
+ 		if ch["tick_t"] <= 0.0:
+ 			ch["tick_t"] = float(ch["tick"])
+ 			_channel_tick(caster, ch)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		keep.append(ch)
+ 	_channels = keep
+ 
+ 
+ ## 引导单跳结算：对落点半径内敌军结算一轮伤害 + 全套骑手 + 一枚落弹演出。
+ func _channel_tick(caster: Unit, ch: Dictionary) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var eff: Dictionary = ch["eff"]
+ 	var center: Vector2 = ch["center"]
+ 	var r: float = float(ch["r"])
+@@ -8033,6 +8330,7 @@
+ 			if float(eff.get("dmg", 0.0)) > 0.0:
+ 				u.take_damage(float(eff["dmg"]) * sc, caster, false, false,
+ 					String(eff.get("_ability_id", "")))
++				if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(u.position, true)
+ 	# 落弹演出：每跳一朵扩散冲击（复用 AbilityFx，落点带随机抖动更像连炮）
+ 	var jx := (float((int(center.x) * 7 + int(ch["tick_t"] * 100.0)) % 100) / 100.0 - 0.5) * r * 0.7
+@@ -8042,6 +8340,7 @@
+ 
+ ## 击退：范围内敌人被推离落点 + 伤害(可减速/眩晕)。
+ func _do_knockback(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	for u in snap:
+ 		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and u.story_outcome == "" and not u.is_resource and not u.is_building and center.distance_to(u.position) <= r:
+ 			var away: Vector2 = u.position - center
+@@ -8056,22 +8355,26 @@
+ 				u.apply_stun(eff["stun"])
+ 			u.take_damage(float(eff.get("dmg", 0.0)) * sc, caster, false, false,
+ 				String(eff.get("_ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(u.position, true)
+ 
+ 
+ ## 全图轰击：对全场敌军(或仅敌方英雄)结算一次(可减速/眩晕)。
+ func _do_global_nuke(caster: Unit, eff: Dictionary, sc: float, foe: int, snap: Array) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var hero_only := bool(eff.get("heroes_only", false))
+ 	for u in snap:
+ 		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and u.story_outcome == "" and not u.is_resource and not u.is_building and (not hero_only or u.is_hero):
+ 			_apply_riders(u, eff, 1, caster)   # 全图技也吃全套骑手（裴宣·满堂封口的全场沉默靠它）
+ 			u.take_damage(float(eff.get("dmg", 0.0)) * sc, caster, false, false,
+ 				String(eff.get("_ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(u.position, true)
+ 
+ 
+ ## 弹射闪电：从落点最近敌人起跳，逐个弹向最近未命中目标，伤害逐跳衰减。
+ func _do_chain_nuke(caster: Unit, eff: Dictionary, sc: float, center: Vector2, foe: int, snap: Array, ad: Dictionary) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var jumps := int(eff.get("jumps", 4))
+ 	var jrange := float(eff.get("jump", 150.0))
+ 	var dmg := float(eff.get("dmg", 0.0)) * sc
+@@ -8086,6 +8389,7 @@
+ 		if eff.get("stun", 0.0) > 0.0:
+ 			cur.apply_stun(eff["stun"])
+ 		cur.take_damage(dmg, caster, false, false, String(eff.get("_ability_id", "")))
++		if not _gameplay_rng_issue.is_empty(): return
+ 		spawn_impact(cur.position, true)
+ 		var bolt := BlinkShotFx.new()
+ 		bolt.start_w = prev
+@@ -8196,6 +8500,7 @@
+ 
+ ## 立桩逐帧：治疗桩抚平友军；攻击/毒桩锁敌；忠义旗 10Hz 刷新共同减伤，忠每秒回血、义持续加攻速。
+ func _ward_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _wards.is_empty():
+ 		return
+ 	for w in _wards:
+@@ -8261,6 +8566,7 @@
+ 				if float(w["slow"]) > 0.0:
+ 					best.apply_slow(float(w["slow"]), float(w["slow_dur"]))
+ 				best.take_damage(float(w["dmg"]), src, false, false, String(w.get("ability_id", "")))
++				if not _gameplay_rng_issue.is_empty(): return
+ 				spawn_impact(best.position, true)
+ 				var bolt := BlinkShotFx.new()
+ 				bolt.start_w = wp + Vector2(0, -26)
+@@ -8272,6 +8578,7 @@
+ 
+ ## 裂地（鲁智深 Q）：朝指向一线贯穿伤+晕，并把沿线格子锁死成一道阻路实墙(复用冰墙解锁过场)。
+ func _do_fissure(caster: Unit, eff: Dictionary, sc: float, center: Vector2, foe: int, snap: Array, ad: Dictionary) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var ldir := center - caster.position
+ 	if ldir.length() < 1.0:
+ 		ldir = Vector2(-1.0 if caster.face_left else 1.0, 0.0)
+@@ -8287,6 +8594,7 @@
+ 				u.apply_stun(float(eff["stun"]))
+ 			u.take_damage(float(eff["dmg"]) * sc, caster, false, false,
+ 				String(eff.get("_ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(u.position, true)
+ 	var cells: Array = []
+ 	var step := float(GameMap.CELL) * 0.85
+@@ -8311,6 +8619,7 @@
+ 
+ ## 回音重踏（鲁智深 R）：圈内敌越多，每个目标受创越重(base + echo×(n-1))，附眩晕。「敌越密则伤越重」。
+ func _do_echo(caster: Unit, eff: Dictionary, sc: float, center: Vector2, r: float, foe: int, snap: Array) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var hits: Array = []
+ 	for u in snap:
+ 		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and u.story_outcome == "" and not u.is_resource \
+@@ -8328,6 +8637,7 @@
+ 		if eff.get("slow", 0.0) > 0.0:
+ 			u.apply_slow(eff["slow"], eff.get("slow_dur", 1.5))
+ 		u.take_damage(per, caster, false, false, String(eff.get("_ability_id", "")))
++		if not _gameplay_rng_issue.is_empty(): return
+ 		spawn_impact(u.position, true)
+ 		var ep := EchoSlamFx.new()   # 每个被命中敌人脚下再炸一记小回音环（人越密、回音越多）
+ 		ep.position = u.position
+@@ -8337,6 +8647,7 @@
+ 
+ ## 影波（安道全 E）：从施法者起波，在友/敌间往复弹跳——撞到敌人灼伤，撞到友军回血。
+ func _do_heal_wave(caster: Unit, eff: Dictionary, sc: float, _center: Vector2, ally: int, foe: int, snap: Array, ad: Dictionary) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var jumps := int(eff.get("jumps", 5))
+ 	var jrange := float(eff.get("jump", 130.0))
+ 	var dmg := float(eff.get("dmg", 0.0)) * sc
+@@ -8361,6 +8672,7 @@
+ 			rip.col = Color("9fd8ff")
+ 			rip.heal = false
+ 			cur.take_damage(dmg, caster, false, false, String(eff.get("_ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 			spawn_impact(cur.position, true)
+ 		else:
+ 			rip.col = Color("8fe6a0")
+@@ -8413,6 +8725,7 @@
+ 
+ ## 火径逐帧（魏定国 E）：限时内每隔 drop 秒在施法者「当前脚下」落一处地火 → 随移动拖出一条火尾。
+ func _trail_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _fire_trails.is_empty():
+ 		return
+ 	for ftr in _fire_trails:
+@@ -9012,6 +9325,7 @@
+ 
+ ## 召唤物（虎/龙）：在施法者周围生成 count 个单位，按 copy_caster 或等级数组定血/攻；dur>0 则限时。
+ func _do_summon(caster: Unit, eff: Dictionary, rank: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var skey := String(eff.get("unit", ""))
+ 	var skind := String(eff.get("summon_kind", ""))
+ 	# 真·分身：copy_caster 且种类是「幻象类」→ 用施法者自己的兵种 key 生成，于是分身长得就是英雄本人
+@@ -9027,6 +9341,7 @@
+ 			if is_instance_valid(old) and old.is_summon and old.hp > 0.0 and old.faction == caster.faction \
+ 					and old.stat_owner_key == caster.key and old.summon_kind == skind:
+ 				despawn_summon(old)
++				if not _gameplay_rng_issue.is_empty(): return
+ 	var n := maxi(1, int(eff.get("count", 1)))
+ 	var dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 0.0))
+ 	var cmult := float(_pick(eff["copy_mult"], rank)) if eff.has("copy_mult") else 1.0   # copy_caster 时按等级取本体血/攻的百分比
+@@ -9082,6 +9397,7 @@
+ 
+ ## 召唤物到期消散：消散小特效 + 走既有死亡清理。
+ func despawn_summon(u: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if not is_instance_valid(u):
+ 		return
+ 	var pf := AbilityFx.new()
+@@ -9092,6 +9408,7 @@
+ 	u._shield = 0.0
+ 	u._shield_t = 0.0   # 消散不是受击；不能被友军临时护盾挡住，确保“重放替换旧虎”恒成立
+ 	u.take_damage(u.hp + 1.0, null, false, true)
++	if not _gameplay_rng_issue.is_empty(): return
+ 
+ 
+ ## 黑雨 DOT（公孙胜 Q）：机制同地火，黑紫演出。
+@@ -9110,6 +9427,7 @@
+ 
+ ## 冰墙（公孙胜 W）：沿垂直于施法方向布一道墙，少量伤害+减速，并把墙线格子临时锁死阻挡寻路。
+ func _do_ice_wall(caster: Unit, eff: Dictionary, sc: float, rank: int, center: Vector2, foe: int, col: Color) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var wdir := center - caster.position
+ 	if wdir.length() < 1.0:
+ 		wdir = Vector2(-1.0 if caster.face_left else 1.0, 0.0)
+@@ -9126,6 +9444,7 @@
+ 		if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and u.story_outcome == "" and not u.is_resource \
+ 				and _in_capsule(wc - perp * half_len, perp, half_len * 2.0, 24.0 + u.radius, u.position):
+ 			u.take_damage(dmg, caster, false, false, String(eff.get("_ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 			u.apply_slow(float(eff.get("slow", 0.45)), float(eff.get("slow_dur", 1.4)))
+ 			spawn_impact(u.position, false)
+ 	var cells: Array = []
+@@ -9186,6 +9505,7 @@
+ 
+ ## 冰墙到期：解锁此前锁死的格子。
+ func _ice_wall_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _ice_walls.is_empty():
+ 		return
+ 	for w in _ice_walls:
+@@ -9223,6 +9543,7 @@
+ 
+ ## 地面烈焰逐帧推进：到节拍跳伤区内敌人；区到期移除。
+ func _ground_dot_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _ground_dots.is_empty():
+ 		return
+ 	for d in _ground_dots:
+@@ -9253,12 +9574,14 @@
+ 					if attack_miss > 0.0:
+ 						u.apply_attack_miss_chance(attack_miss, float(d["tick"]) + 0.12)
+ 					u.take_damage(per, src, false, false, String(d.get("ability_id", "")))
++					if not _gameplay_rng_issue.is_empty(): return
+ 	_ground_dots = _ground_dots.filter(func(d): return float(d["t"]) > 0.0)
+ 
+ 
+ ## 花荣 R 敌将持续伤害：固定跟随单个目标，每秒按该目标当前最大生命结算一次，共 5 次。
+ ## 与地面 DOT 分开，目标走出原位置也不会脱离；目标死亡/驻入建筑即停止。
+ func _hua_snipe_dot_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _hua_snipe_dots.is_empty():
+ 		return
+ 	for d in _hua_snipe_dots:
+@@ -9278,6 +9601,7 @@
+ 			d["ticks_left"] = int(d["ticks_left"]) - 1
+ 			target.take_damage(target.max_hp * float(d["pct"]), src, false, false,
+ 				String(d.get("ability_id", "")))
++			if not _gameplay_rng_issue.is_empty(): return
+ 			if target.hp <= 0.0:
+ 				break
+ 	_hua_snipe_dots = _hua_snipe_dots.filter(func(d):
+@@ -9287,6 +9611,7 @@
+ 
+ ## 林冲 W 的受击回调：仅 Unit 判定到首次近身有效伤害后调用，保证远程擦伤不会浪费反刺。
+ func trigger_lin_guard(caster: Unit, attacker: Unit, rank: int) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if caster == null or attacker == null or not is_instance_valid(caster) or not is_instance_valid(attacker) \
+ 			or caster.hp <= 0.0 or attacker.hp <= 0.0 or caster.faction == attacker.faction:
+ 		return
+@@ -9303,6 +9628,7 @@
+ 	attacker.position = map.limit_displacement(attacker.position, desired, attacker.movement_profile)
+ 	attacker.apply_stun(stun)
+ 	attacker.take_damage(dmg, caster, false, false, "lin_sweep")
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var fx := LinCounterFx.new()
+ 	fx.position = caster.position
+ 	fx.end_w = attacker.position
+@@ -9327,6 +9653,7 @@
+ 
+ ## 点将只推进极小的活动记录表，不扫描全场。超时即失效，随后目标再死不会回血。
+ func _lin_duel_pass(delta: float) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if _lin_duels.is_empty():
+ 		return
+ 	for d in _lin_duels:
+@@ -9707,6 +10034,7 @@
+ 
+ 
+ func _issue_order(p: Vector2, queued := false) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	# 右键点击「建造中」的己方建筑 → 取消建造、退还资源（经典RTS式）。
+ 	# 仅当没有可移动单位被选中时才取消——否则这一下右键是给部队下移动令，
+ 	# 不能因为点到了工地附近就把在建建筑拆了（这正是「建筑莫名消失」的元凶）。
+@@ -9811,6 +10139,7 @@
+ 
+ ## 武装维修落点：点己方建筑 → 选区里的工人前去修缮（受损才修；完好则提示）。
+ func _order_repair_at(p: Vector2, queued := false) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var workers: Array = selection.filter(func(u: Unit) -> bool:
+ 		return is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0)
+ 	if workers.is_empty():
+@@ -9851,6 +10180,7 @@
+ 
+ 
+ func _order_amove_at(p: Vector2, queued := false) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var movers := _selected_movers()
+ 	if movers.is_empty():
+ 		return
+@@ -9873,6 +10203,7 @@
+ 
+ ## S：停止/原地待命——清空选中单位的指令、就地驻守
+ func _order_stop() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var movers := _selected_movers()
+ 	if movers.is_empty():
+ 		return
+@@ -9885,6 +10216,7 @@
+ 
+ ## H：原地据守——停止当前命令并切到据守姿态，只攻击进入射程的敌人。
+ func _order_hold_position() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var movers := _selected_movers().filter(func(u: Unit) -> bool: return not u.is_worker)
+ 	if movers.is_empty():
+ 		return
+@@ -9898,6 +10230,7 @@
+ 
+ ## P：巡逻——选中的战斗单位在「当前位置 ↔ 鼠标点」间往返，沿途攻击移动迎敌
+ func _order_patrol_at(p: Vector2) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var movers := _selected_movers().filter(func(u): return not u.is_worker)
+ 	if movers.is_empty():
+ 		return
+@@ -9916,6 +10249,7 @@
+ 
+ ## G：循环切换选中战斗单位的作战姿态（进攻 → 守备 → 据守）
+ func _cycle_stance() -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	var movers := _selected_movers().filter(func(u): return not u.is_worker)
+ 	if movers.is_empty():
+ 		return
+@@ -10116,6 +10450,7 @@
+ 
+ ## 取消建造：退还全额资源、解除占地封路、停下建造工人、移除工地
+ func cancel_construction(bld: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if bld == null or not is_instance_valid(bld) or not bld.is_constructing:
+ 		return
+ 	var d: Dictionary = _defs.get(bld.key, {})
+@@ -10151,10 +10486,12 @@
+ 
+ ## 单个英雄出击：从所驻建筑弹出并选中居中（英雄快切栏点驻军英雄=出击）
+ func sortie_unit(u: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if u == null or not is_instance_valid(u) or not u.garrisoned and u.story_outcome == "":
+ 		return
+ 	var bld := u.garrison_holder
+ 	u.leave_garrison()
++	if not _gameplay_rng_issue.is_empty(): return
+ 	Sfx.play("order")
+ 	msg("%s 出击！" % u.display_name, 1.2)
+ 	if bld != null and is_instance_valid(bld):
+@@ -10164,11 +10501,13 @@
+ 
+ ## 出击：把建筑里的驻军全部弹出
+ func ungarrison(bld: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if bld == null or not is_instance_valid(bld):
+ 		return
+ 	for pg in bld.passengers.duplicate():
+ 		if is_instance_valid(pg):
+ 			pg.leave_garrison()
++			if not _gameplay_rng_issue.is_empty(): return
+ 	bld.passengers.clear()
+ 	Sfx.play("order")
+ 	msg("驻军出击！", 1.2)
+@@ -10191,6 +10530,7 @@
+ ## 拆除（经典RTS式 Delete）：删除选中的己方单位/建筑。建筑/地基立即释放占地以防卡位；不退资源。
+ ## 在建工地按「取消建造」退资源走 cancel_construction；已成型建筑/单位则直接销毁。
+ func delete_selected(skip_confirm := false) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if selection.is_empty():
+ 		return
+ 	var doomed: Array = selection.filter(func(u: Unit) -> bool:
+@@ -10212,6 +10552,7 @@
+ 			cancel_construction(u)   # 在建工地：退资源 + 释放占地
+ 		else:
+ 			_demolish(u)
++			if not _gameplay_rng_issue.is_empty(): return
+ 		n += 1
+ 	_set_selection([])
+ 	Sfx.play("cant")
+@@ -10220,6 +10561,7 @@
+ 
+ ## 销毁单个已成型目标：释放占地、清理工人引用、扣回人口、留血渍、移除节点
+ func _demolish(u: Unit) -> void:
++	if not _gameplay_rng_issue.is_empty(): return
+ 	if not is_instance_valid(u):
+ 		return
+ 	if u.is_building:
+@@ -10228,6 +10570,7 @@
+ 			for pg in u.passengers.duplicate():
+ 				if is_instance_valid(pg):
+ 					pg.leave_garrison()
++					if not _gameplay_rng_issue.is_empty(): return
+ 			u.passengers.clear()
+ 		unregister_building_footprint(u)
+ 		var pp := int(u.setup_def.get("provides_pop", 0))
+@@ -15015,7 +15358,11 @@
+ 	var elapsed := 0.0
+ 	var resolved := false
+ 
++	func _gameplay_faulted() -> bool:
++		return is_instance_valid(game) and not game.gameplay_rng_fault().is_empty()
++
+ 	func _process(delta: float) -> void:
++		if is_queued_for_deletion() or _gameplay_faulted(): return
+ 		elapsed += delta
+ 		if elapsed >= dur:
+ 			resolve_hits()
+@@ -15024,8 +15371,9 @@
+ 
+ 	## 命中只造成一次飞斧伤害；不调用普通攻击流程，因此不会递归触发蛮力或附带暴击/攻击特效。
+ 	func resolve_hits() -> void:
+-		if resolved:
++		if resolved or is_queued_for_deletion():
+ 			return
++		if _gameplay_faulted(): return
+ 		resolved = true
+ 		var src: Unit = caster if is_instance_valid(caster) else null
+ 		for hit in hits:
+@@ -15041,6 +15389,9 @@
+ 			else:
+ 				# 只有散射斧显式归入 E；触发它的那次普通攻击仍沿用无 ability_id 的普攻统计。
+ 				target.take_damage(dmg, src, false, false, "li_brawn")
++				if _gameplay_faulted():
++					queue_free()
++					return
+ 			if game != null and is_instance_valid(game):
+ 				game.spawn_impact(target.position, true)
+ 		queue_free()
+--- a/scripts/levels/skirmish.gd
++++ b/scripts/levels/skirmish.gd
+@@ -180,9 +180,25 @@
+ 
+ ## 子类(自定义据守)可覆写这些钩子改波次/投石车/数值；据守本体返回原值，行为不变。
+ var _wavelist_cache: Array = []
++var _gameplay_rng_owner: WeakRef = null
++
++func bind_gameplay_rng_owner(battle: Object) -> void:
++	_gameplay_rng_owner = weakref(battle) if is_instance_valid(battle) else null
++
++func _rng_owner_matches(battle: Object) -> bool:
++	return _gameplay_rng_owner != null and _gameplay_rng_owner.get_ref() == battle
++
++func _rng_draw(method: String) -> Dictionary:
++	var battle: Object = _gameplay_rng_owner.get_ref() if _gameplay_rng_owner != null else null
++	if not is_instance_valid(battle) or not battle.has_method(method):
++		return {"ok": false, "code": "NO_BATTLE"}
++	return battle.call(method)
++
+ func _waves() -> Array:
+ 	if _wavelist_cache.is_empty():
+-		_wavelist_cache = _build_wavelist()
++		var candidate: Array = _build_wavelist()
++		if candidate.is_empty(): return []
++		_wavelist_cache = candidate
+ 	return _wavelist_cache
+ 
+ 
+@@ -245,7 +261,9 @@
+ 	interval = clampf(interval, 1.0, 600.0)
+ 	var out: Array = []
+ 	for i in range(n):
+-		out.append(_make_random_wave(i, interval))
++		var wave: Dictionary = _make_random_wave(i, interval)
++		if wave.is_empty(): return []
++		out.append(wave)
+ 	if OS.get_environment("DEF_RANDOM_DEBUG") == "1":
+ 		var sizes: Array = []
+ 		var ts: Array = []
+@@ -269,16 +287,34 @@
+ 	for gi in range(ng):
+ 		var c := maxi(1, rem) if gi == ng - 1 else mini(per, maxi(1, rem - (ng - 1 - gi)))
+ 		rem -= c
+-		groups.append([RAND_TROOPS[randi() % RAND_TROOPS.size()], c, randi() % GATES.size()])
++		var troop := _rng_draw("gameplay_randi")
++		if not troop.ok: return {}
++		var gate := _rng_draw("gameplay_randi")
++		if not gate.ok: return {}
++		groups.append([RAND_TROOPS[troop.value % RAND_TROOPS.size()], c, gate.value % GATES.size()])
+ 	# 偶尔来个敌将（概率随波次升高，封顶 60%）
+-	if i >= 2 and randf() < clampf(0.15 + i * 0.02, 0.15, 0.6):
+-		groups.append([RAND_BOSSES[randi() % RAND_BOSSES.size()], 1, randi() % GATES.size()])
++	if i >= 2:
++		var boss_roll := _rng_draw("gameplay_randf")
++		if not boss_roll.ok: return {}
++		if boss_roll.value < clampf(0.15 + i * 0.02, 0.15, 0.6):
++			var boss := _rng_draw("gameplay_randi")
++			if not boss.ok: return {}
++			var boss_gate := _rng_draw("gameplay_randi")
++			if not boss_gate.ok: return {}
++			groups.append([RAND_BOSSES[boss.value % RAND_BOSSES.size()], 1, boss_gate.value % GATES.size()])
+ 	# 中后期偶尔压上一头战象
+-	if i >= 6 and randf() < 0.25:
+-		groups.append(["war_elephant", 1, randi() % GATES.size()])
++	if i >= 6:
++		var elephant_roll := _rng_draw("gameplay_randf")
++		if not elephant_roll.ok: return {}
++		if elephant_roll.value < 0.25:
++			var elephant_gate := _rng_draw("gameplay_randi")
++			if not elephant_gate.ok: return {}
++			groups.append(["war_elephant", 1, elephant_gate.value % GATES.size()])
+ 	# 第 1 波固定 120 秒备战(与经典一致)，之后每波 = 玩家所填间隔
+ 	var t: float = 120.0 if i == 0 else interval
+-	return {"t": t, "msg": RAND_MSGS[randi() % RAND_MSGS.size()], "groups": groups}
++	var message := _rng_draw("gameplay_randi")
++	if not message.ok: return {}
++	return {"t": t, "msg": RAND_MSGS[message.value % RAND_MSGS.size()], "groups": groups}
+ 
+ 
+ func _cata_for(i: int) -> int: return 1 if i < 10 else 2
+@@ -318,6 +354,10 @@
+ 
+ 
+ func on_start(b) -> void:
++	if not b.gameplay_rng_fault().is_empty(): return
++	if not _rng_owner_matches(b):
++		b._gameplay_rng_stop("LEVEL_RNG_OWNER")
++		return
+ 	if _started:
+ 		return
+ 	# 单金矿只容一人实地开采：开局 1 金 4 木，且只下这一次命令。
+@@ -335,6 +375,7 @@
+ 	b.msg("喽啰开始采办钱粮——采金伐木，扩充寨势。", 4.0)
+ 	_wave = 0
+ 	var ws: Array = _waves()
++	if ws.is_empty() or not b.gameplay_rng_fault().is_empty(): return
+ 	_wave_t = float(ws[0]["t"]) if not ws.is_empty() else 9999.0
+ 	_wave_spawned = false
+ 	_started = true
+@@ -347,17 +388,22 @@
+ 
+ 
+ func process(b, delta: float) -> void:
++	if not b.gameplay_rng_fault().is_empty(): return
++	if not _rng_owner_matches(b):
++		b._gameplay_rng_stop("LEVEL_RNG_OWNER")
++		return
+ 	if hall == null or not is_instance_valid(hall) or hall.hp <= 0.0:
+ 		b.lose("忠义堂被攻破，杏黄旗倒下了……")
+ 		return
+ 	if not _started:
+ 		return
+ 	var ws: Array = _waves()
++	if ws.is_empty() or not b.gameplay_rng_fault().is_empty(): return
+ 	if _wave < ws.size():
+ 		# 定时出兵：到点就放，不等上一波被清完 → 波次叠加，密度大、间隔短
+ 		_wave_t -= delta
+ 		if _wave_t <= 0.0:
+-			_spawn_wave(b, _wave)
++			if not _spawn_wave(b, _wave): return
+ 			_wave += 1
+ 			if _wave < ws.size():
+ 				_wave_t = float(ws[_wave]["t"])
+@@ -398,9 +444,13 @@
+ 			b.final_wave_cleanup()
+ 
+ 
+-func _spawn_wave(b, i: int) -> void:
+-	_wave_spawned = true
++func _spawn_wave(b, i: int) -> bool:
++	if not b.gameplay_rng_fault().is_empty(): return false
++	if not _rng_owner_matches(b):
++		b._gameplay_rng_stop("LEVEL_RNG_OWNER")
++		return false
+ 	var ws: Array = _waves()
++	if ws.is_empty() or not b.gameplay_rng_fault().is_empty() or i < 0 or i >= ws.size(): return false
+ 	var wave: Dictionary = ws[i]
+ 	b.msg("【第 %d/%d 波】%s" % [i + 1, ws.size(), wave.get("msg", "")], 5.5)
+ 	var hall_pos: Vector2 = b.map.cell_to_world(HALL)
+@@ -413,6 +463,7 @@
+ 		if ecnt > 1.0 and not _is_hero_key(key):
+ 			cnt = maxi(1, int(floor(cnt * ecnt)))
+ 		var spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)
++		if not b.gameplay_rng_fault().is_empty(): return false
+ 		_arm_boss(spawned, _group_rank(g))
+ 		for u in spawned:
+ 			b.apply_enemy_scale(u)   # 血/攻×倍率（小兵+大将都乘）
+@@ -421,8 +472,11 @@
+ 	if n_cata > 0:
+ 		var cgate: Vector2i = GATES[i % GATES.size()]
+ 		var scata: Array = b.spawn_group("siege_cata", n_cata, Unit.FACTION_GUAN, cgate, hall_pos)
++		if not b.gameplay_rng_fault().is_empty(): return false
+ 		for u in scata:
+ 			b.apply_enemy_scale(u)
++	_wave_spawned = true
++	return true
+ 
+ 
+ ## 经济模式下英雄技能默认未学(rank0)不放招 → 给来犯的地方英雄自动学满，使其会自动施放招式
+--- a/scripts/run_gameplay_rng.gd
++++ b/scripts/run_gameplay_rng.gd
+@@ -1,5 +1,5 @@
+ extends RefCounted
+-## An owned native RNG stream. No global random calls and no Battle integration.
++## An owned native gameplay stream. The Battle owns its lifetime and handles faults.
+ const Codec = preload("res://scripts/run_state_value_codec.gd")
+ const MODULE_CONTRACT_VERSION := 1
+ const CODEC_CONTRACT_VERSION := 1
+@@ -65,8 +65,22 @@
+ 	_compat = identity.value
+ 	return {"ok": true, "code": "OK"}
+ 
++func start_unbound(initial_seed: Variant) -> Dictionary:
++	# Explicit new-game fallback when installed-input identity cannot be proven.
++	# It remains an independent gameplay stream, but it can never produce a save.
++	if _rng != null: return _bad("ALREADY_STARTED")
++	if typeof(initial_seed) != TYPE_INT: return _bad("SEED_TYPE")
++	var candidate := RandomNumberGenerator.new()
++	candidate.seed = initial_seed
++	if candidate.seed != initial_seed: return _bad("NATIVE_SEED_DOMAIN")
++	_rng = candidate
++	_calls = 0
++	_compat = {}
++	return {"ok": true, "code": "OK"}
++
+ func capture() -> Dictionary:
+ 	if _rng == null: return _bad("NOT_STARTED")
++	if _compat.is_empty(): return _bad("UNBOUND_IDENTITY")
+ 	var encoded: Dictionary = _codec.encode({"kind": "godot-gameplay-rng", "version": 2,
+ 		"compat": _compat.duplicate(true), "seed": _rng.seed, "state": _rng.state, "calls": _calls})
+ 	if not encoded.ok: return _bad("CODEC_" + encoded.code)
+--- a/scripts/hud.gd
++++ b/scripts/hud.gd
+@@ -615,6 +615,7 @@
+ func toggle_auto_selected() -> void:
+ 	if battle == null:
+ 		return
++	if not battle.gameplay_rng_fault().is_empty(): return
+ 	var hs: Array = battle.selection.filter(func(u): return is_instance_valid(u) and u.is_hero and not u.is_building)
+ 	if hs.is_empty():
+ 		show_message("先选中英雄再托管" if touch_ui else "先选中英雄再托管（T 托管 / Shift+T 全军）", 1.4)
+@@ -639,6 +640,7 @@
+ func _toggle_all_auto() -> void:
+ 	if battle == null:
+ 		return
++	if not battle.gameplay_rng_fault().is_empty(): return
+ 	var hs: Array = battle.liang_heroes()
+ 	if hs.is_empty():
+ 		return

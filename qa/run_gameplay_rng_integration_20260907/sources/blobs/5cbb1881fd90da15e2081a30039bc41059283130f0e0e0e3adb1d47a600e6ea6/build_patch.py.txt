@@ -1,0 +1,420 @@
+"""Pinned candidate only: Battle/standard-defense gameplay random ownership."""
+import hashlib
+import json
+import difflib
+import re
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+BASES = {
+    'scripts/battle.gd': '47357265c54a8cd6c2a5fef24998e357773974843559c4e23965ea3e0d51b629',
+    'scripts/levels/skirmish.gd': '0150ff3ec4c02afcb131f349834ff1487678275e39a894bb042c71318d6411d6',
+    'scripts/run_gameplay_rng.gd': '7705f9e054f3cf4e422623b280dea3bebc1ec4509f768ed8094078f0123d7e45',
+    'scripts/hud.gd': 'f3091000607088f8cbaf5018fbb1aa53e1dbbe30b32c5de66c9b6a01c5d41209',
+}
+PRE_CAST_BATTLE_SHA = 'd88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5'
+GUARD_RECEIPT = []
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+def once(raw, old, new):
+    # Some historical edited blocks have mixed endings. Match exact text under
+    # the separately pinned whole-file SHA, changing only the matching span.
+    pattern = re.escape(old.encode()).replace(b'\\\n', b'\\r?\\n')
+    matches = list(re.finditer(pattern, raw))
+    assert len(matches) == 1, repr(old[:140])
+    match = matches[0]
+    found = match.group()
+    replacement = new.encode()
+    if found.count(b'\r\n') * 2 >= found.count(b'\n') and b'\n' in found:
+        replacement = replacement.replace(b'\n', b'\r\n')
+    return raw[:match.start()] + replacement + raw[match.end():]
+
+def function_span(raw, name):
+    match = re.search(rb'^func ' + name.encode() + rb'\(', raw, re.M)
+    assert match, name
+    following = re.search(rb'^(?:func |class )', raw[match.end():], re.M)
+    end = match.end() + following.start() if following else len(raw)
+    return match.start(), end
+
+def code_only(line):
+    # Only used to find the end of these pinned, ordinary call statements.
+    # No general GDScript rewriting: inline suites/semicolons are rejected.
+    return re.sub(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|#.*', '', line)
+
+def guard_function(raw, name, calls=(), entry=True, result='', post_result=None):
+    start, end = function_span(raw, name)
+    lines = raw[start:end].decode().splitlines(keepends=True)
+    result_post = result if post_result is None else post_result
+    additions = {}
+    for i, line in enumerate(lines):
+        code = code_only(line)
+        if line.startswith('func ') or not any(re.search(r'(?<![\w])' + re.escape(c) + r'\(', code) for c in calls):
+            continue
+        assert ';' not in code and not re.match(r'\s*(?:if|elif|return|for|while)\b', code), (name, line)
+        j, balance = i, 0
+        while True:
+            part = code_only(lines[j])
+            balance += sum(part.count(x) for x in '([{') - sum(part.count(x) for x in ')]}')
+            assert balance >= 0, (name, lines[j])
+            if balance == 0 and not part.rstrip().endswith('\\'): break
+            j += 1
+        indent = line[:len(line)-len(line.lstrip('\t'))]
+        guard = indent + 'if not _gameplay_rng_issue.is_empty(): return' + (' ' + result_post if result_post else '')
+        if j+1 < len(lines) and lines[j+1].rstrip('\r\n') == guard:
+            continue
+        assert j not in additions, (name, line)
+        additions[j] = guard + ('\r\n' if lines[j].endswith('\r\n') else '\n')
+        GUARD_RECEIPT.append({'function': name, 'after': ''.join(lines[i:j+1]).strip()})
+    if entry:
+        header = 0
+        while not code_only(lines[header]).rstrip().endswith(':'): header += 1
+        guard = '\tif not _gameplay_rng_issue.is_empty(): return' + (' ' + result if result else '')
+        if lines[header+1].rstrip('\r\n') != guard:
+            assert header not in additions
+            additions[header] = guard + ('\r\n' if lines[header].endswith('\r\n') else '\n')
+            GUARD_RECEIPT.append({'function': name, 'entry': True})
+    changed = ''.join(line + additions.get(i, '') for i, line in enumerate(lines)).encode()
+    return raw[:start] + changed + raw[end:]
+
+def patch_nested_faults(raw):
+    # Closed runtime call chain: real Unit methods may synchronously reenter
+    # item procs/death callbacks. Check immediately after the original call,
+    # before riders, next targets, visual effects, rewards, or queue commits.
+    calls = {'take_damage', 'start_drunk', 'leave_garrison', 'trigger_item_event',
+             '_trigger_trap', '_begin_item_cast', '_do_item_active',
+             '_apply_item_effect_bundle', '_apply_item_effect_to', 'cast_item',
+             'use_item_hotkey', '_cast_item_armed_at', '_do_ability', '_do_blink',
+             '_do_pull', '_do_swap', '_do_knockback', '_do_global_nuke',
+             '_do_chain_nuke', '_do_fissure', '_do_echo', '_do_heal_wave',
+             '_do_summon', 'despawn_summon', '_do_ice_wall', '_channel_tick',
+             'sortie_unit', 'delete_selected', '_demolish', '_select_hero_by_index'}
+    affected = '''_trap_pass _trigger_trap _on_unit_died use_item_hotkey cast_item
+        _cast_item_armed_at _begin_item_cast _tick_pending_item_casts _do_item_active
+        _apply_item_effect_bundle _apply_item_effect_to trigger_item_event
+        _tick_pending_casts _do_ability _zone_pass _do_pull _do_swap _bolt_pass
+        _walk_item_cast_pass _channel_pass _channel_tick _do_knockback
+        _do_global_nuke _do_chain_nuke _ward_pass _do_fissure _do_echo
+        _do_heal_wave _do_summon despawn_summon _do_ice_wall _ground_dot_pass
+        _hua_snipe_dot_pass trigger_lin_guard sortie_unit ungarrison
+        delete_selected _demolish _select_hero_by_index _unhandled_input'''.split()
+    for name in affected:
+        raw = guard_function(raw, name, calls)
+    raw = guard_function(raw, 'spawn_wu_cleave', calls, result='[]', post_result='hit')
+    raw = guard_function(raw, '_do_blink', calls, result='center', post_result='caster.position')
+    raw = guard_function(raw, 'spawn_group', result='[]')
+    raw = guard_function(raw, 'spawn_li_brawn_axes', result='null')
+    raw = guard_function(raw, '_on_intro_done', ['_on_start_battle'])
+    raw = guard_function(raw, '_on_start_battle', ['level.on_start'])
+    raw = guard_function(raw, '_auto_economy_pass', ['_eco_traps'])
+    # These original callbacks can build the random wave table during startup.
+    for call in ['hud.setup(self)', 'level.deploy(self)']:
+        old = '\t' + call + '\n'
+        raw = once(raw, old, old + '\tif not _gameplay_rng_issue.is_empty(): return\n')
+    raw = once(raw, '\t\tmission.tick(delta)\n',
+               '\t\tmission.tick(delta)\n\t\tif not _gameplay_rng_issue.is_empty(): return\n')
+    raw = once(raw, '\t\thud.set_top(level.top_status(self))\n',
+               '\t\thud.set_top(level.top_status(self))\n\t\tif not _gameplay_rng_issue.is_empty(): return\n')
+    # HUD/touch/command callbacks can be called without going through input.
+    # Read-only selection, pause restart/menu/quit, and visual randomness stay unchanged.
+    for name in '''do_trade arm_build _try_place_building _start_construction
+        arm_trap _try_place_trap arena_spawn_troops arena_spawn_random
+        queue_train_multi cancel_train arm_amove arm_patrol arm_repair arm_garrison
+        _order_garrison_at _tap_command _touch_tap_or_double cast_ability
+        _cast_ability_slot learn_slot _cast_armed_at toggle_hero_melee _begin_cast
+        _queue_walk_item _queue_walk_cast _queue_walk_cast_point _walk_cast_pass
+        _begin_channel _issue_order _order_repair_at _order_amove_at _order_stop
+        _order_hold_position _order_patrol_at _cycle_stance cancel_construction
+        _lin_duel_pass _ice_wall_pass _trail_pass _eco_traps'''.split():
+        raw = guard_function(raw, name)
+    for name in ['queue_train', 'queue_research', 'swap_hero_items', 'transfer_hero_item']:
+        raw = guard_function(raw, name, result='false')
+    # This inner class has its own scope and a trusted owner reference. A
+    # faulting batch remains resolved, queues itself for deletion and cannot
+    # resume its remaining hits even if resolve_hits is manually called again.
+    raw = once(raw, '\t\tif resolved:\n\t\t\treturn\n\t\tresolved = true\n',
+        '\t\tif resolved or is_queued_for_deletion():\n\t\t\treturn\n\t\tif _gameplay_faulted(): return\n\t\tresolved = true\n')
+    raw = once(raw, '\t\t\t\ttarget.take_damage(dmg, src, false, false, "li_brawn")\n',
+        '\t\t\t\ttarget.take_damage(dmg, src, false, false, "li_brawn")\n\t\t\t\tif _gameplay_faulted():\n\t\t\t\t\tqueue_free()\n\t\t\t\t\treturn\n')
+    raw = once(raw, '\tvar resolved := false\n\n\tfunc _process(delta: float) -> void:\n', '''\tvar resolved := false
+
+\tfunc _gameplay_faulted() -> bool:
+\t\treturn is_instance_valid(game) and not game.gameplay_rng_fault().is_empty()
+
+\tfunc _process(delta: float) -> void:
+\t\tif is_queued_for_deletion() or _gameplay_faulted(): return
+''')
+    return raw
+
+def patch_rng(raw):
+    raw = once(raw, '## An owned native RNG stream. No global random calls and no Battle integration.',
+               '## An owned native gameplay stream. The Battle owns its lifetime and handles faults.')
+    raw = once(raw, 'func capture() -> Dictionary:\n\tif _rng == null: return _bad("NOT_STARTED")\n', '''func start_unbound(initial_seed: Variant) -> Dictionary:
+	# Explicit new-game fallback when installed-input identity cannot be proven.
+	# It remains an independent gameplay stream, but it can never produce a save.
+	if _rng != null: return _bad("ALREADY_STARTED")
+	if typeof(initial_seed) != TYPE_INT: return _bad("SEED_TYPE")
+	var candidate := RandomNumberGenerator.new()
+	candidate.seed = initial_seed
+	if candidate.seed != initial_seed: return _bad("NATIVE_SEED_DOMAIN")
+	_rng = candidate
+	_calls = 0
+	_compat = {}
+	return {"ok": true, "code": "OK"}
+
+func capture() -> Dictionary:
+	if _rng == null: return _bad("NOT_STARTED")
+	if _compat.is_empty(): return _bad("UNBOUND_IDENTITY")
+''')
+    return raw
+
+def patch_battle(raw):
+    raw = once(raw, 'var _steam_run_id := 0\n', '''var _steam_run_id := 0
+var _gameplay_rng: RefCounted = null
+var _gameplay_rng_issue := ""
+var _gameplay_rng_start_kind := ""
+var _gameplay_content_identity: Dictionary = {}
+''')
+    api = (HERE / 'battle_rng_api.gd.txt').read_text(encoding='utf-8')
+    raw = once(raw, '\nfunc _ready() -> void:\n', '\n' + api + '\n\nfunc _ready() -> void:\n')
+    raw = once(raw, '\tlevel = _resolve_level()\n', '''	level = _resolve_level()
+	# This is the new-game entry only. The future whole-world restore factory
+	# must attach an already prepared world without running deploy/on_start.
+	if not _gameplay_rng_issue.is_empty(): return
+	if _gameplay_rng_start_kind.begins_with("restore"):
+		_gameplay_rng_stop("RESTORE_FACTORY_REQUIRED")
+		return
+	if _gameplay_rng == null:
+		var identity: Dictionary = {"ok": false, "save_eligible": false, "code": "PROVIDER_UNAVAILABLE"}
+		if ResourceLoader.exists("res://scripts/run_content_identity.gd"):
+			var identity_provider: Script = load("res://scripts/run_content_identity.gd")
+			identity = identity_provider.new().resolve_runtime_identity()
+		var bytes := Crypto.new().generate_random_bytes(8)
+		if bytes.size() != 8:
+			_gameplay_rng_stop("NEW_SEED_UNAVAILABLE")
+			return
+		var configured := configure_new_gameplay_rng(identity, bytes.decode_s64(0))
+		if not configured.ok:
+			_gameplay_rng_stop(String(configured.code))
+			return
+	if level.has_method("bind_gameplay_rng_owner"):
+		level.bind_gameplay_rng_owner(self)
+''')
+    raw = once(raw, 'func _close_pause() -> void:\n', '''func _close_pause() -> void:
+	if not _gameplay_rng_issue.is_empty():
+		if hud != null:
+			hud.show_message("本局运行异常，已暂停。请重新开始或返回主菜单。", 6.0)
+		return
+''')
+    for signature in ['func _physics_process(delta: float) -> void:',
+                      'func _process(_delta: float) -> void:',
+                      'func _unhandled_input(event: InputEvent) -> void:',
+                      'func _on_intro_done() -> void:',
+                      'func _on_start_battle() -> void:']:
+        raw = once(raw, '\n' + signature + '\n', '\n' + signature + '\n\tif not _gameplay_rng_issue.is_empty(): return\n')
+    raw = once(raw, '''		var cell := map.nearest_open(gate + Vector2i(randi_range(-spread, spread), randi_range(-spread, spread)), String(_defs[key].get("movement_profile", "land")))
+		var u := spawn_unit(key, faction, map.cell_to_world(cell))
+		u.order_amove(target_w + Vector2(randf_range(-70, 70), randf_range(-70, 70)))
+''', '''		var cell_x := gameplay_randi_range(-spread, spread)
+		if not cell_x.ok: return out
+		var cell_y := gameplay_randi_range(-spread, spread)
+		if not cell_y.ok: return out
+		var cell := map.nearest_open(gate + Vector2i(cell_x.value, cell_y.value), String(_defs[key].get("movement_profile", "land")))
+		var u := spawn_unit(key, faction, map.cell_to_world(cell))
+		if u == null:
+			_gameplay_rng_stop("WAVE_UNIT_CREATION")
+			return out
+		var target_x := gameplay_randf_range(-70.0, 70.0)
+		if not target_x.ok: return out
+		var target_y := gameplay_randf_range(-70.0, 70.0)
+		if not target_y.ok: return out
+		u.order_amove(target_w + Vector2(target_x.value, target_y.value))
+''')
+    for origin, direction, distance, scatter in [('anchor', 'fwd', '170.0', '55.0'),
+                                                   ('muster', 'fwd2', '150.0', '90.0')]:
+        old = f'\t\tspot = {origin} + {direction} * randf_range(40.0, {distance}) + Vector2(randf_range(-{scatter}, {scatter}), randf_range(-{scatter}, {scatter}))\n'
+        new = f'''		var forward := gameplay_randf_range(40.0, {distance})
+		if not forward.ok: return
+		var offset_x := gameplay_randf_range(-{scatter}, {scatter})
+		if not offset_x.ok: return
+		var offset_y := gameplay_randf_range(-{scatter}, {scatter})
+		if not offset_y.ok: return
+		spot = {origin} + {direction} * forward.value + Vector2(offset_x.value, offset_y.value)
+'''
+        raw = once(raw, old, new)
+    raw = once(raw, '''		if randf() > clampf(float(trigger.get("chance", passive.get("chance", 1.0))), 0.0, 1.0):
+''', '''		var proc_roll := gameplay_randf()
+		if not proc_roll.ok: return
+		if proc_roll.value > clampf(float(trigger.get("chance", passive.get("chance", 1.0))), 0.0, 1.0):
+''')
+    # These callbacks can consume the same stream through Unit/passive effects.
+    for old in [
+        '\t\ttrigger_item_event(item_killer, "on_kill", {"target": u, "source_id": u._killer_source_id})\n',
+        '\t_apply_item_effect_bundle(caster, item_id, active.get("effect", {}), active, center, target, "item:" + item_id)\n',
+        '\t\t\t_apply_item_effect_to(caster, target, effect, source_id)\n',
+        '\t\ttarget.take_damage(damage, caster, false, bool(effect.get("ignore_reduction", false)), source_id)\n',
+        '\t\t_apply_item_effect_bundle(owner, String(rec.get("item_id", "")), effect_v, trigger, center, explicit_target, source)\n',
+    ]:
+        indent = old[:len(old) - len(old.lstrip('\t'))]
+        raw = once(raw, old, old + indent + 'if not _gameplay_rng_issue.is_empty(): return\n')
+    # Frame scheduling cannot continue into later passes after a nested draw fails.
+    physics_start = raw.index(b'\nfunc _physics_process(') + 1
+    physics_end = raw.index(b'\nfunc _process(', physics_start) + 1
+    physics = raw[physics_start:physics_end]
+    for call in ['_enemy_ability_pass()', '_auto_micro_pass()',
+                 '_ground_dot_pass(delta)', '_hua_snipe_dot_pass(delta)', '_lin_duel_pass(delta)',
+                 '_zone_pass(delta)', '_trap_pass(delta)', '_ice_wall_pass(delta)',
+                 '_ward_pass(delta)', '_trail_pass(delta)', '_bolt_pass(delta)',
+                 '_walk_cast_pass(delta)', '_walk_item_cast_pass(delta)', '_channel_pass(delta)',
+                 '_tick_pending_casts()', '_tick_pending_item_casts()', 'level.process(self, delta)']:
+        indent = '\t\t' if call in ['_enemy_ability_pass()', 'level.process(self, delta)'] else '\t'
+        old = indent + call + '\n'
+        physics = once(physics, old, old + indent + 'if not _gameplay_rng_issue.is_empty(): return\n')
+    old = '\t\t_auto_economy_pass(delta)   # 全托管(仅AI友好模式)：喽啰自动经营（只在 FIGHT 跑）\n'
+    physics = once(physics, old, old + '\t\tif not _gameplay_rng_issue.is_empty(): return\n')
+    raw = raw[:physics_start] + physics + raw[physics_end:]
+    return patch_nested_faults(raw)
+
+def patch_level(raw):
+    raw = once(raw, 'var _wavelist_cache: Array = []\n', '''var _wavelist_cache: Array = []
+var _gameplay_rng_owner: WeakRef = null
+
+func bind_gameplay_rng_owner(battle: Object) -> void:
+	_gameplay_rng_owner = weakref(battle) if is_instance_valid(battle) else null
+
+func _rng_owner_matches(battle: Object) -> bool:
+	return _gameplay_rng_owner != null and _gameplay_rng_owner.get_ref() == battle
+
+func _rng_draw(method: String) -> Dictionary:
+	var battle: Object = _gameplay_rng_owner.get_ref() if _gameplay_rng_owner != null else null
+	if not is_instance_valid(battle) or not battle.has_method(method):
+		return {"ok": false, "code": "NO_BATTLE"}
+	return battle.call(method)
+
+''')
+    raw = once(raw, '''	if _wavelist_cache.is_empty():
+		_wavelist_cache = _build_wavelist()
+''', '''	if _wavelist_cache.is_empty():
+		var candidate: Array = _build_wavelist()
+		if candidate.is_empty(): return []
+		_wavelist_cache = candidate
+''')
+    raw = once(raw, '\t\tout.append(_make_random_wave(i, interval))\n', '''		var wave: Dictionary = _make_random_wave(i, interval)
+		if wave.is_empty(): return []
+		out.append(wave)
+''')
+    raw = once(raw, '\t\tgroups.append([RAND_TROOPS[randi() % RAND_TROOPS.size()], c, randi() % GATES.size()])\n', '''		var troop := _rng_draw("gameplay_randi")
+		if not troop.ok: return {}
+		var gate := _rng_draw("gameplay_randi")
+		if not gate.ok: return {}
+		groups.append([RAND_TROOPS[troop.value % RAND_TROOPS.size()], c, gate.value % GATES.size()])
+''')
+    raw = once(raw, '''	if i >= 2 and randf() < clampf(0.15 + i * 0.02, 0.15, 0.6):
+		groups.append([RAND_BOSSES[randi() % RAND_BOSSES.size()], 1, randi() % GATES.size()])
+''', '''	if i >= 2:
+		var boss_roll := _rng_draw("gameplay_randf")
+		if not boss_roll.ok: return {}
+		if boss_roll.value < clampf(0.15 + i * 0.02, 0.15, 0.6):
+			var boss := _rng_draw("gameplay_randi")
+			if not boss.ok: return {}
+			var boss_gate := _rng_draw("gameplay_randi")
+			if not boss_gate.ok: return {}
+			groups.append([RAND_BOSSES[boss.value % RAND_BOSSES.size()], 1, boss_gate.value % GATES.size()])
+''')
+    raw = once(raw, '''	if i >= 6 and randf() < 0.25:
+		groups.append(["war_elephant", 1, randi() % GATES.size()])
+''', '''	if i >= 6:
+		var elephant_roll := _rng_draw("gameplay_randf")
+		if not elephant_roll.ok: return {}
+		if elephant_roll.value < 0.25:
+			var elephant_gate := _rng_draw("gameplay_randi")
+			if not elephant_gate.ok: return {}
+			groups.append(["war_elephant", 1, elephant_gate.value % GATES.size()])
+''')
+    raw = once(raw, '\treturn {"t": t, "msg": RAND_MSGS[randi() % RAND_MSGS.size()], "groups": groups}\n', '''	var message := _rng_draw("gameplay_randi")
+	if not message.ok: return {}
+	return {"t": t, "msg": RAND_MSGS[message.value % RAND_MSGS.size()], "groups": groups}
+''')
+    raw = once(raw, 'func on_start(b) -> void:\n', '''func on_start(b) -> void:
+	if not b.gameplay_rng_fault().is_empty(): return
+	if not _rng_owner_matches(b):
+		b._gameplay_rng_stop("LEVEL_RNG_OWNER")
+		return
+''')
+    # Preserve the started short-circuit and original first-gather ordering.
+    # A failed random wave build leaves partial prior state locked, never a save.
+    raw = once(raw, '\t_wave = 0\n\tvar ws: Array = _waves()\n',
+               '\t_wave = 0\n\tvar ws: Array = _waves()\n\tif ws.is_empty() or not b.gameplay_rng_fault().is_empty(): return\n')
+    raw = once(raw, 'func process(b, delta: float) -> void:\n', '''func process(b, delta: float) -> void:
+	if not b.gameplay_rng_fault().is_empty(): return
+	if not _rng_owner_matches(b):
+		b._gameplay_rng_stop("LEVEL_RNG_OWNER")
+		return
+''')
+    raw = once(raw, '\tvar ws: Array = _waves()\n\tif _wave < ws.size():\n', '''	var ws: Array = _waves()
+	if ws.is_empty() or not b.gameplay_rng_fault().is_empty(): return
+	if _wave < ws.size():
+''')
+    raw = once(raw, '\t\t\t_spawn_wave(b, _wave)\n', '\t\t\tif not _spawn_wave(b, _wave): return\n')
+    raw = once(raw, '''func _spawn_wave(b, i: int) -> void:
+	_wave_spawned = true
+	var ws: Array = _waves()
+''', '''func _spawn_wave(b, i: int) -> bool:
+	if not b.gameplay_rng_fault().is_empty(): return false
+	if not _rng_owner_matches(b):
+		b._gameplay_rng_stop("LEVEL_RNG_OWNER")
+		return false
+	var ws: Array = _waves()
+	if ws.is_empty() or not b.gameplay_rng_fault().is_empty() or i < 0 or i >= ws.size(): return false
+''')
+    raw = once(raw, '\t\tvar spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)\n', '''		var spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)
+		if not b.gameplay_rng_fault().is_empty(): return false
+''')
+    raw = once(raw, '\t\tvar scata: Array = b.spawn_group("siege_cata", n_cata, Unit.FACTION_GUAN, cgate, hall_pos)\n', '''		var scata: Array = b.spawn_group("siege_cata", n_cata, Unit.FACTION_GUAN, cgate, hall_pos)
+		if not b.gameplay_rng_fault().is_empty(): return false
+''')
+    raw = once(raw, '''		for u in scata:
+			b.apply_enemy_scale(u)
+''', '''		for u in scata:
+			b.apply_enemy_scale(u)
+	_wave_spawned = true
+	return true
+''')
+    return raw
+
+def patch_hud(raw):
+    for name in ['toggle_auto_selected', '_toggle_all_auto']:
+        start, end = function_span(raw, name)
+        block = once(raw[start:end], '\tif battle == null:\n\t\treturn\n',
+            '\tif battle == null:\n\t\treturn\n\tif not battle.gameplay_rng_fault().is_empty(): return\n')
+        raw = raw[:start] + block + raw[end:]
+    return raw
+
+rows = []
+diffs = []
+for path, expected in BASES.items():
+    original = (ROOT / path).read_bytes()
+    assert sha(original) == expected, path
+    updated = {'scripts/battle.gd': patch_battle, 'scripts/levels/skirmish.gd': patch_level,
+               'scripts/run_gameplay_rng.gd': patch_rng, 'scripts/hud.gd': patch_hud}[path](original)
+    target = HERE / 'candidate' / path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(updated)
+    rows.append({'path': path, 'base_sha256': expected, 'candidate_sha256': sha(updated), 'size': len(updated)})
+    diffs.extend(difflib.unified_diff(original.decode().splitlines(keepends=True),
+                                     updated.decode().splitlines(keepends=True), 'a/' + path, 'b/' + path))
+(HERE / 'candidate.patch').write_bytes(''.join(diffs).encode('utf-8'))
+(HERE / 'candidate.json').write_text(json.dumps({'applied': False, 'godot_run': False,
+    'pending': ['trusted provider integration', 'frozen Unit/Projectile candidate integration',
+                'native parse and injected nested-fault/multitarget/UI tests',
+                'whole-world restore factory and complete-frame capture barriers',
+                'Level adapter excludes new WeakRef; outer restore must rebind owner',
+                'non-skirmish Level internal loops are outside this standard-defense migration'],
+    'rebase': {'old_battle_sha256': PRE_CAST_BATTLE_SHA,
+               'new_battle_sha256': BASES['scripts/battle.gd'],
+               'only_change': 'parent approved freed targets: two explicit Object validity rejects and checked tgt argument',
+               'receipt': 'scratchpad/run_cast_flow_r1/application.json'},
+    'fault_guards_added': GUARD_RECEIPT, 'files': rows}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+print(json.dumps(rows))

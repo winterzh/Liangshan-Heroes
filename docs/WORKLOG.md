@@ -1,3 +1,15 @@
+## 2026-09-07 玩法RNG实际接入与源码/PCK身份验证
+
+正式Battle/Unit/Projectile、标准关卡与HUD已接入独立原生gameplay RNG；原application14字节、probe R1及provider R2各自保留来源，不把未提交源码当base HEAD 69b9b866…原树。
+
+初次与R2 native各176项通过；两套callsite分别为20260906T212733214636Z和20260906T220055422528Z，各342/213/215/211/214=1195，其中1020为源码前后核对、175为功能/宿主检查。R2五PID17672/35844/39236/34020/8456，源码/玩家保护/锁释放true。两轮重验同矩阵，不增加独立场景。
+
+首builder20260907_053155_29e025d2因source probe的JSON字段比较失败（PID8796、9true/1false、exit1），PCK未启动；R1 builder20260907_054309_1ccc4379的source10通过，但PCK PID32540 exit1、SOURCE_PROVIDER_UNREADABLE，整轮仍失败。真实JSON诊断定位bytes的int→float深层比较差异，probe R1只修字段比较；真实模式诊断证明源码与PCK所见args/editor相同而Script backing不同，provider R2据此分别严格验证源码或编译身份，无fallback。两次失败和两次诊断原文保留。
+
+最终R2 builder 20260907_060601_f70626d8 与outer20260906T220553697867Z均complete=true，源码/玩家保护true；source身份10项（PID34776）与PCK身份10项（PID19328，source_mode=false）全通过，包65及正式EXE/native DLL启动（PID38660）通过。
+
+迁移盘点的31处调用不等于31个分支均实跑；_eco_traps两个各3次draw的分支仅静态核对次序/短路，未单独动态覆盖。 整局RunSession、退出续战及发行EXE内Battle身份观察点未验收；物品施法/bolts未试跑，不并入本批。qa/run_gameplay_rng_integration_20260907/已冻结295份原始产物（16,493,620 bytes），manifest为597e75dd6802c82a622725a34e7c1b2bb988c87050ca3fed9d2fdeb1b3235a1a，本批无Steam上传或发布。
+
 ## 2026-09-07 技能施法流程与过期目标修复
 
 第14正式组件 `scripts/run_cast_flow_state.gd` 与受测原型同字节，覆盖_walk_casts/_pending_casts/_channels，权威效果数组累计12/17。原型首轮 `20260906T204913855863Z`（PID40952、exit1）在真实_pending消费者将previously freed目标传入typed _do_ability时出错；无报告，原strict日志与源码保留，不归咎夹具、不算通过。

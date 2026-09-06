@@ -130,3 +130,19 @@ R1 `20260906T205452854069Z`（PID23352、report `2df604f8d1773044c458754dec8006c
 真实Battle/Unit/GameMap/LevelBase/HUD空壳与原creator产生两个walk模式、剩余抬手和已走一跳的channel及真实释放引用；JSON绑定后回捕与Unit局部状态相同且无新FX/CD/命令。25步原consumer及真实Unit计时体对照验证pending第3步一次、walk第7步一次、channel第4/8/12/16/20步五次；真实新order_move及apply_silence取消对应流，过期目标不扣CD，空数组不重复。第3步到达位置由夹具显式供应，非完整移动仿真。新生成FX数量对照不代表旧视觉Node恢复。
 
 本批仍依赖夹具供应Unit局部值/库存外层/原路径/可信能力定义，没有完整UnitGraph+Battle事务组合；旧视觉、物品施法与其他效果、一般未来实体分配、RNG隔离/迁移、退出重启、菜单/磁盘/PCK续玩未验收。后续物品候选与其消费者缺口未纳入，本批M3整局仍未完成。
+
+## 第9组件后续：真实玩法RNG与源码/PCK安装身份
+
+本节补充实际调用接入，保留各旧批次“当时未接入”的历史说明。本批是正式Battle/Unit/Projectile、关卡/HUD与第9组件的接入、provider和构建工具验证，不是第15个恢复适配器。
+
+初次与R2 native各176项通过；两套callsite分别为20260906T212733214636Z和20260906T220055422528Z，各342/213/215/211/214=1195，其中1020为源码前后核对、175为功能/宿主检查。R2五PID17672/35844/39236/34020/8456，源码/玩家保护/锁释放true。两轮重验同矩阵，不增加独立场景。
+
+调用点验证原draw次序、视觉噪声隔离、耗尽后停止后继消费者/命令并拒绝capture；故障前伤害保留。startup是真实完整新Battle源码入口，绑定先于关卡/HUD/单位；restore_reject阻止恢复预配置对象误走新局部署。writer/reader是独立进程，只恢复RNG JSON，其他受控对象重建并比较真实后缀/终态。迁移盘点的31处调用不等于31个分支均实跑；_eco_traps两个各3次draw的分支仅静态核对次序/短路，未单独动态覆盖。
+
+首builder20260907_053155_29e025d2因source probe的JSON字段比较失败（PID8796、9true/1false、exit1），PCK未启动；R1 builder20260907_054309_1ccc4379的source10通过，但PCK PID32540 exit1、SOURCE_PROVIDER_UNREADABLE，整轮仍失败。真实JSON诊断定位bytes的int→float深层比较差异，probe R1只修字段比较；真实模式诊断证明源码与PCK所见args/editor相同而Script backing不同，provider R2据此分别严格验证源码或编译身份，无fallback。两次失败和两次诊断原文保留。
+
+最终R2 builder 20260907_060601_f70626d8 与outer20260906T220553697867Z均complete=true，源码/玩家保护true；source身份10项（PID34776）与PCK身份10项（PID19328，source_mode=false）全通过，包65及正式EXE/native DLL启动（PID38660）通过。 实际安装身份为fababc4025d35561fcc5c7380f20eb9b79fd4650cc1b7ff53f59c8754f95fb5d，2646文件/285273844 bytes；provider为a78dc5…。这证明源码/PCK的独立provider合同及普通发行EXE启动，没有在发行EXE内部观察Battle RNG/provider绑定，也不是完整Battle恢复。
+
+各旧/新run的102来源由自己manifest绑定，联合仅103个唯一SHA、101个共有；R2只增加16601 B的provider原文。旧provider从APP候选精确保留，不读当前ROOT冒充；相同driver原字节可映射两个原入口。原false收据不改写，成功结果另立；早期runtime RNG关于StringName键型的未定根因不据本次不同诊断改写。
+
+qa/run_gameplay_rng_integration_20260907/已冻结295份原始产物16,493,620 bytes、1272条源码映射，manifest为597e75dd6802c82a622725a34e7c1b2bb988c87050ca3fed9d2fdeb1b3235a1a。完整RunSession/整局保存提交与恢复、全部事件/旧视觉、退出重启菜单及发行Battle绑定观察点仍未验收；物品施法/bolts未跑，不并入本批。

@@ -1,0 +1,1296 @@
+{
+  "kind": "read_only_rng_migration_call_inventory",
+  "schema": 1,
+  "engine_run": false,
+  "production_changed": false,
+  "counts_are": "static expressions, not runtime random draws",
+  "scope": "All global random expressions in the three named scripts, plus inspected direct dependencies. Not an all-game random audit.",
+  "classification_counts": {
+    "scripts/battle.gd": {
+      "gameplay_owned": 11,
+      "qa_fixture_global": 2,
+      "visual_global": 82
+    },
+    "scripts/unit.gd": {
+      "gameplay_owned": 12,
+      "visual_global": 2
+    },
+    "scripts/levels/skirmish.gd": {
+      "wave_owned_schedule": 8
+    }
+  },
+  "sources": [
+    {
+      "path": "scripts/battle.gd",
+      "bytes": 760069,
+      "raw_sha256": "d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "bytes": 197790,
+      "raw_sha256": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "bytes": 24623,
+      "raw_sha256": "0150ff3ec4c02afcb131f349834ff1487678275e39a894bb042c71318d6411d6"
+    },
+    {
+      "path": "scripts/levels/custom_defense.gd",
+      "bytes": 1999,
+      "raw_sha256": "20830cc7d01160c77c5eb31bc86689e7d3d9ace6bd2e701b80a20ebe874c6ae8"
+    },
+    {
+      "path": "scripts/projectile.gd",
+      "bytes": 8430,
+      "raw_sha256": "949d44303dbd8f31f958118f54be6980d2aeb22ef0eeafbac5ba9aa544e530b8"
+    },
+    {
+      "path": "scripts/run_gameplay_rng.gd",
+      "bytes": 7153,
+      "raw_sha256": "7705f9e054f3cf4e422623b280dea3bebc1ec4509f768ed8094078f0123d7e45"
+    },
+    {
+      "path": "scripts/run_state_value_codec.gd",
+      "bytes": 12091,
+      "raw_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+    },
+    {
+      "path": "scripts/level_base.gd",
+      "bytes": 3720,
+      "raw_sha256": "ab0b1bc5f57f856b94e07695f54da03291f49070931cfd0428dcb8f9c3f7215f"
+    },
+    {
+      "path": "scripts/defs.gd",
+      "bytes": 218233,
+      "raw_sha256": "4cb4fa2288235aff117d7373794f335b5cc5092bf8fad5fd416d0f7dc5c1b155"
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "bytes": 34327,
+      "raw_sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87"
+    },
+    {
+      "path": "scripts/sfx.gd",
+      "bytes": 17656,
+      "raw_sha256": "1c98c1a0daf2e531e0ca50b845ec0292a21462f8a73d970271dd1056fbec2ad0"
+    },
+    {
+      "path": "scripts/android_updater.gd",
+      "bytes": 22576,
+      "raw_sha256": "4a67acd65db800749f9ba06a18e5e589eba7b722dcf3e28fd9a77c8e410e55ad"
+    },
+    {
+      "path": "export_presets.cfg",
+      "bytes": 6106,
+      "raw_sha256": "952163bf2c45089942d23f39124163fb37fdaddf90a0f270a60bdbb214ae5cc0"
+    },
+    {
+      "path": "project.godot",
+      "bytes": 1621,
+      "raw_sha256": "60b4915832c47dec560ced6059256e7a97edeb36fe2407dbf75abf1c7039e780"
+    },
+    {
+      "path": "tools/build_steam_candidate.py",
+      "bytes": 8788,
+      "raw_sha256": "d8283f82395a5f63805b2b45770aa092b134961a267f9aeec4945b22261fbf29"
+    },
+    {
+      "path": "tools/build_release_candidate_staging.py",
+      "bytes": 46994,
+      "raw_sha256": "3c1b39ab591438724aae9d236e9538add71d7cedda281bf8a2c673ebb19db1b3"
+    },
+    {
+      "path": "tools/steam_candidate_verification.py",
+      "bytes": 4476,
+      "raw_sha256": "30946826ec55525c1f118b345249f1d3fd85c4ae9d9971e6711d71a7828d0a5a"
+    },
+    {
+      "path": "tools/build_packages.sh",
+      "bytes": 8114,
+      "raw_sha256": "db228525ac33b50dbfda122896e6f3dd37e7f3cb89c6d72e9ae85a1e2ca7be57"
+    },
+    {
+      "path": "tools/build_android_release.sh",
+      "bytes": 2583,
+      "raw_sha256": "1876d068b10891651da18a434ed0b0ae6e2df6c9c275ff6d7c72a246a7c3c4d5"
+    },
+    {
+      "path": "tools/publish_hot_update.sh",
+      "bytes": 9939,
+      "raw_sha256": "35da455e4699e84cf95585b8ff7df12fd2f37716e82038de28e597cad788fcd5"
+    }
+  ],
+  "calls": [
+    {
+      "path": "scripts/battle.gd",
+      "line": 722,
+      "column": 48,
+      "scope": "spawn_group",
+      "function": "randi_range",
+      "expression": "randi_range(-spread, spread)",
+      "category": "gameplay_owned",
+      "source_line": "var cell := map.nearest_open(gate + Vector2i(randi_range(-spread, spread), randi_range(-spread, spread)), String(_defs[key].get(\"movement_profile\", \"land\")))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 722,
+      "column": 78,
+      "scope": "spawn_group",
+      "function": "randi_range",
+      "expression": "randi_range(-spread, spread)",
+      "category": "gameplay_owned",
+      "source_line": "var cell := map.nearest_open(gate + Vector2i(randi_range(-spread, spread), randi_range(-spread, spread)), String(_defs[key].get(\"movement_profile\", \"land\")))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 724,
+      "column": 36,
+      "scope": "spawn_group",
+      "function": "randf_range",
+      "expression": "randf_range(-70, 70)",
+      "category": "gameplay_owned",
+      "source_line": "u.order_amove(target_w + Vector2(randf_range(-70, 70), randf_range(-70, 70)))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 724,
+      "column": 58,
+      "scope": "spawn_group",
+      "function": "randf_range",
+      "expression": "randf_range(-70, 70)",
+      "category": "gameplay_owned",
+      "source_line": "u.order_amove(target_w + Vector2(randf_range(-70, 70), randf_range(-70, 70)))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3280,
+      "column": 25,
+      "scope": "_eco_traps",
+      "function": "randf_range",
+      "expression": "randf_range(40.0, 170.0)",
+      "category": "gameplay_owned",
+      "source_line": "spot = anchor + fwd * randf_range(40.0, 170.0) + Vector2(randf_range(-55.0, 55.0), randf_range(-55.0, 55.0))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3280,
+      "column": 60,
+      "scope": "_eco_traps",
+      "function": "randf_range",
+      "expression": "randf_range(-55.0, 55.0)",
+      "category": "gameplay_owned",
+      "source_line": "spot = anchor + fwd * randf_range(40.0, 170.0) + Vector2(randf_range(-55.0, 55.0), randf_range(-55.0, 55.0))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3280,
+      "column": 86,
+      "scope": "_eco_traps",
+      "function": "randf_range",
+      "expression": "randf_range(-55.0, 55.0)",
+      "category": "gameplay_owned",
+      "source_line": "spot = anchor + fwd * randf_range(40.0, 170.0) + Vector2(randf_range(-55.0, 55.0), randf_range(-55.0, 55.0))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3286,
+      "column": 26,
+      "scope": "_eco_traps",
+      "function": "randf_range",
+      "expression": "randf_range(40.0, 150.0)",
+      "category": "gameplay_owned",
+      "source_line": "spot = muster + fwd2 * randf_range(40.0, 150.0) + Vector2(randf_range(-90.0, 90.0), randf_range(-90.0, 90.0))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3286,
+      "column": 61,
+      "scope": "_eco_traps",
+      "function": "randf_range",
+      "expression": "randf_range(-90.0, 90.0)",
+      "category": "gameplay_owned",
+      "source_line": "spot = muster + fwd2 * randf_range(40.0, 150.0) + Vector2(randf_range(-90.0, 90.0), randf_range(-90.0, 90.0))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3286,
+      "column": 87,
+      "scope": "_eco_traps",
+      "function": "randf_range",
+      "expression": "randf_range(-90.0, 90.0)",
+      "category": "gameplay_owned",
+      "source_line": "spot = muster + fwd2 * randf_range(40.0, 150.0) + Vector2(randf_range(-90.0, 90.0), randf_range(-90.0, 90.0))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 6510,
+      "column": 6,
+      "scope": "trigger_item_event",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "gameplay_owned",
+      "source_line": "if randf() > clampf(float(trigger.get(\"chance\", passive.get(\"chance\", 1.0))), 0.0, 1.0):"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12573,
+      "column": 73,
+      "scope": "_huarong_test",
+      "function": "randf_range",
+      "expression": "randf_range(-55, 55)",
+      "category": "qa_fixture_global",
+      "source_line": "var mob := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, center + Vector2(randf_range(-55, 55), randf_range(-38, 38)))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12573,
+      "column": 95,
+      "scope": "_huarong_test",
+      "function": "randf_range",
+      "expression": "randf_range(-38, 38)",
+      "category": "qa_fixture_global",
+      "source_line": "var mob := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, center + Vector2(randf_range(-55, 55), randf_range(-38, 38)))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13432,
+      "column": 13,
+      "scope": "ArrowRainFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13433,
+      "column": 21,
+      "scope": "ArrowRainFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var dist := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13435,
+      "column": 94,
+      "scope": "ArrowRainFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_arrows.append({\"p\": GameMap.ISO.basis_xform(lo), \"delay\": float(i) * (0.55 / float(N)) + randf() * 0.045})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13545,
+      "column": 13,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13546,
+      "column": 18,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13548,
+      "column": 14,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.28, \"h\": randf_range(24.0, 42.0), \"w\": randf_range(8.0, 15.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13548,
+      "column": 35,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(24.0, 42.0)",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.28, \"h\": randf_range(24.0, 42.0), \"w\": randf_range(8.0, 15.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13548,
+      "column": 65,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(8.0, 15.0)",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.28, \"h\": randf_range(24.0, 42.0), \"w\": randf_range(8.0, 15.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13548,
+      "column": 95,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.28, \"h\": randf_range(24.0, 42.0), \"w\": randf_range(8.0, 15.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13550,
+      "column": 13,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13551,
+      "column": 18,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13553,
+      "column": 14,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.4, \"spd\": randf_range(45.0, 90.0), \"drift\": randf_range(-12.0, 12.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13553,
+      "column": 36,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(45.0, 90.0)",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.4, \"spd\": randf_range(45.0, 90.0), \"drift\": randf_range(-12.0, 12.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13553,
+      "column": 70,
+      "scope": "FlameburstFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(-12.0, 12.0)",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.4, \"spd\": randf_range(45.0, 90.0), \"drift\": randf_range(-12.0, 12.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13600,
+      "column": 36,
+      "scope": "LightningFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(-16.0, 16.0)",
+      "category": "visual_global",
+      "source_line": "var x := 0.0 if i == steps else randf_range(-16.0, 16.0)"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13603,
+      "column": 15,
+      "scope": "LightningFx/_ready",
+      "function": "randi_range",
+      "expression": "randi_range(2, steps - 1)",
+      "category": "visual_global",
+      "source_line": "var idx := randi_range(2, steps - 1)"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13605,
+      "column": 37,
+      "scope": "LightningFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(-32.0, 32.0)",
+      "category": "visual_global",
+      "source_line": "_branches.append([o, o + Vector2(randf_range(-32.0, 32.0), randf_range(-8.0, 22.0))])"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13605,
+      "column": 63,
+      "scope": "LightningFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(-8.0, 22.0)",
+      "category": "visual_global",
+      "source_line": "_branches.append([o, o + Vector2(randf_range(-32.0, 32.0), randf_range(-8.0, 22.0))])"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13633,
+      "column": 13,
+      "scope": "RallyFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13634,
+      "column": 18,
+      "scope": "RallyFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13636,
+      "column": 14,
+      "scope": "RallyFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.4, \"spd\": randf_range(45.0, 80.0), \"cross\": randf() < 0.35})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13636,
+      "column": 36,
+      "scope": "RallyFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(45.0, 80.0)",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.4, \"spd\": randf_range(45.0, 80.0), \"cross\": randf() < 0.35})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13636,
+      "column": 70,
+      "scope": "RallyFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.4, \"spd\": randf_range(45.0, 80.0), \"cross\": randf() < 0.35})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13698,
+      "column": 9,
+      "scope": "SlashArcFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_a0 = randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13731,
+      "column": 9,
+      "scope": "IronStaffSweepFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_a0 = randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13771,
+      "column": 26,
+      "scope": "WaterSplashFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_drops.append({\"ang\": randf() * TAU, \"spd\": randf_range(60.0, 120.0), \"delay\": randf() * 0.1})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13771,
+      "column": 48,
+      "scope": "WaterSplashFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(60.0, 120.0)",
+      "category": "visual_global",
+      "source_line": "_drops.append({\"ang\": randf() * TAU, \"spd\": randf_range(60.0, 120.0), \"delay\": randf() * 0.1})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13771,
+      "column": 83,
+      "scope": "WaterSplashFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_drops.append({\"ang\": randf() * TAU, \"spd\": randf_range(60.0, 120.0), \"delay\": randf() * 0.1})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13810,
+      "column": 13,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13811,
+      "column": 18,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad * 0.8"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13812,
+      "column": 58,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(18.0, 30.0)",
+      "category": "visual_global",
+      "source_line": "_blobs.append({\"p\": Vector2(cos(a), sin(a)) * d, \"r\": randf_range(18.0, 30.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13812,
+      "column": 89,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_blobs.append({\"p\": Vector2(cos(a), sin(a)) * d, \"r\": randf_range(18.0, 30.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13814,
+      "column": 13,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13815,
+      "column": 18,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13816,
+      "column": 89,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_bubbles.append({\"p\": GameMap.ISO.basis_xform(Vector2(cos(a), sin(a)) * d), \"delay\": randf() * 0.6, \"spd\": randf_range(20.0, 40.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 13816,
+      "column": 111,
+      "scope": "PoisonCloudFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(20.0, 40.0)",
+      "category": "visual_global",
+      "source_line": "_bubbles.append({\"p\": GameMap.ISO.basis_xform(Vector2(cos(a), sin(a)) * d), \"delay\": randf() * 0.6, \"spd\": randf_range(20.0, 40.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14232,
+      "column": 25,
+      "scope": "MeteorFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_embers.append({\"a\": randf() * TAU, \"d\": randf(), \"sp\": randf_range(40.0, 95.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14232,
+      "column": 45,
+      "scope": "MeteorFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_embers.append({\"a\": randf() * TAU, \"d\": randf(), \"sp\": randf_range(40.0, 95.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14232,
+      "column": 60,
+      "scope": "MeteorFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(40.0, 95.0)",
+      "category": "visual_global",
+      "source_line": "_embers.append({\"a\": randf() * TAU, \"d\": randf(), \"sp\": randf_range(40.0, 95.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14232,
+      "column": 91,
+      "scope": "MeteorFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_embers.append({\"a\": randf() * TAU, \"d\": randf(), \"sp\": randf_range(40.0, 95.0), \"ph\": randf() * TAU})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14304,
+      "column": 13,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14305,
+      "column": 18,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14307,
+      "column": 10,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(20.0, 40.0)",
+      "category": "visual_global",
+      "source_line": "\"h\": randf_range(20.0, 40.0), \"w\": randf_range(7.0, 14.0),"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14307,
+      "column": 40,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(7.0, 14.0)",
+      "category": "visual_global",
+      "source_line": "\"h\": randf_range(20.0, 40.0), \"w\": randf_range(7.0, 14.0),"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14308,
+      "column": 11,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"rate\": randf_range(1.4, 2.4)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14308,
+      "column": 34,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(1.4, 2.4)",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"rate\": randf_range(1.4, 2.4)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14311,
+      "column": 13,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14312,
+      "column": 18,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14314,
+      "column": 11,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"spd\": randf_range(34.0, 70.0), \"drift\": randf_range(-10.0, 10.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14314,
+      "column": 33,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(34.0, 70.0)",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"spd\": randf_range(34.0, 70.0), \"drift\": randf_range(-10.0, 10.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14314,
+      "column": 67,
+      "scope": "GroundFireFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(-10.0, 10.0)",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"spd\": randf_range(34.0, 70.0), \"drift\": randf_range(-10.0, 10.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14355,
+      "column": 25,
+      "scope": "StompFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_cracks.append({\"a\": randf() * TAU, \"len\": randf_range(0.55, 1.0), \"w\": randf_range(2.0, 3.5)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14355,
+      "column": 47,
+      "scope": "StompFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(0.55, 1.0)",
+      "category": "visual_global",
+      "source_line": "_cracks.append({\"a\": randf() * TAU, \"len\": randf_range(0.55, 1.0), \"w\": randf_range(2.0, 3.5)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14355,
+      "column": 76,
+      "scope": "StompFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(2.0, 3.5)",
+      "category": "visual_global",
+      "source_line": "_cracks.append({\"a\": randf() * TAU, \"len\": randf_range(0.55, 1.0), \"w\": randf_range(2.0, 3.5)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14357,
+      "column": 13,
+      "scope": "StompFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14358,
+      "column": 65,
+      "scope": "StompFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(60.0, 130.0)",
+      "category": "visual_global",
+      "source_line": "_debris.append({\"dir\": Vector2(cos(a), sin(a) * 0.6), \"spd\": randf_range(60.0, 130.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14395,
+      "column": 11,
+      "scope": "WhirlFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_spin = randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14432,
+      "column": 9,
+      "scope": "BloodFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_a0 = randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14434,
+      "column": 13,
+      "scope": "BloodFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14435,
+      "column": 64,
+      "scope": "BloodFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(70.0, 150.0)",
+      "category": "visual_global",
+      "source_line": "_drops.append({\"dir\": Vector2(cos(a), sin(a) * 0.6), \"spd\": randf_range(70.0, 150.0), \"r\": randf_range(1.6, 3.2)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14435,
+      "column": 95,
+      "scope": "BloodFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(1.6, 3.2)",
+      "category": "visual_global",
+      "source_line": "_drops.append({\"dir\": Vector2(cos(a), sin(a) * 0.6), \"spd\": randf_range(70.0, 150.0), \"r\": randf_range(1.6, 3.2)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14839,
+      "column": 9,
+      "scope": "SpearSweepFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_a0 = randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14840,
+      "column": 18,
+      "scope": "SpearSweepFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_dir = -1.0 if randf() < 0.5 else 1.0"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15121,
+      "column": 13,
+      "scope": "BlackRainFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15122,
+      "column": 18,
+      "scope": "BlackRainFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15124,
+      "column": 11,
+      "scope": "BlackRainFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"spd\": randf_range(120.0, 200.0), \"h\": randf_range(26.0, 46.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15124,
+      "column": 33,
+      "scope": "BlackRainFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(120.0, 200.0)",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"spd\": randf_range(120.0, 200.0), \"h\": randf_range(26.0, 46.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15124,
+      "column": 65,
+      "scope": "BlackRainFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(26.0, 46.0)",
+      "category": "visual_global",
+      "source_line": "\"ph\": randf() * TAU, \"spd\": randf_range(120.0, 200.0), \"h\": randf_range(26.0, 46.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15163,
+      "column": 54,
+      "scope": "IceWallFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(20.0, 34.0)",
+      "category": "visual_global",
+      "source_line": "_shards.append({\"off\": dir * (f * half_len), \"h\": randf_range(20.0, 34.0),"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15164,
+      "column": 10,
+      "scope": "IceWallFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(9.0, 14.0)",
+      "category": "visual_global",
+      "source_line": "\"w\": randf_range(9.0, 14.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15504,
+      "column": 13,
+      "scope": "SilenceFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15505,
+      "column": 18,
+      "scope": "SilenceFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var d := sqrt(randf()) * rad * 0.7"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15507,
+      "column": 14,
+      "scope": "SilenceFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.2, \"sway\": randf() * TAU, \"h\": randf_range(20.0, 30.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15507,
+      "column": 37,
+      "scope": "SilenceFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.2, \"sway\": randf() * TAU, \"h\": randf_range(20.0, 30.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15507,
+      "column": 57,
+      "scope": "SilenceFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(20.0, 30.0)",
+      "category": "visual_global",
+      "source_line": "\"delay\": randf() * 0.2, \"sway\": randf() * TAU, \"h\": randf_range(20.0, 30.0)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15543,
+      "column": 13,
+      "scope": "ArmorCrackFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "var a := randf() * TAU"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15544,
+      "column": 65,
+      "scope": "ArmorCrackFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(70.0, 150.0)",
+      "category": "visual_global",
+      "source_line": "_shards.append({\"dir\": Vector2(cos(a), sin(a) * 0.6), \"spd\": randf_range(70.0, 150.0), \"rot\": randf() * TAU, \"sz\": randf_range(3.0, 5.5)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15544,
+      "column": 98,
+      "scope": "ArmorCrackFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_shards.append({\"dir\": Vector2(cos(a), sin(a) * 0.6), \"spd\": randf_range(70.0, 150.0), \"rot\": randf() * TAU, \"sz\": randf_range(3.0, 5.5)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15544,
+      "column": 119,
+      "scope": "ArmorCrackFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(3.0, 5.5)",
+      "category": "visual_global",
+      "source_line": "_shards.append({\"dir\": Vector2(cos(a), sin(a) * 0.6), \"spd\": randf_range(70.0, 150.0), \"rot\": randf() * TAU, \"sz\": randf_range(3.0, 5.5)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15546,
+      "column": 25,
+      "scope": "ArmorCrackFx/_ready",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "visual_global",
+      "source_line": "_cracks.append({\"a\": randf() * TAU, \"len\": randf_range(0.5, 1.0), \"w\": randf_range(1.5, 2.6)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15546,
+      "column": 47,
+      "scope": "ArmorCrackFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(0.5, 1.0)",
+      "category": "visual_global",
+      "source_line": "_cracks.append({\"a\": randf() * TAU, \"len\": randf_range(0.5, 1.0), \"w\": randf_range(1.5, 2.6)})"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15546,
+      "column": 75,
+      "scope": "ArmorCrackFx/_ready",
+      "function": "randf_range",
+      "expression": "randf_range(1.5, 2.6)",
+      "category": "visual_global",
+      "source_line": "_cracks.append({\"a\": randf() * TAU, \"len\": randf_range(0.5, 1.0), \"w\": randf_range(1.5, 2.6)})"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 855,
+      "column": 75,
+      "scope": "leave_garrison",
+      "function": "randi_range",
+      "expression": "randi_range(-2, 2)",
+      "category": "gameplay_owned",
+      "source_line": "var cell := map.nearest_open(map.world_to_cell(bld.position) + Vector2i(randi_range(-2, 2), int(bld.get_meta(\"fhalf\", 1)) + 1), movement_profile)"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1176,
+      "column": 18,
+      "scope": "_phys_body",
+      "function": "randf_range",
+      "expression": "randf_range(_drunk_lo, _drunk_hi)",
+      "category": "gameplay_owned",
+      "source_line": "_drunk_move = randf_range(_drunk_lo, _drunk_hi)"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1177,
+      "column": 17,
+      "scope": "_phys_body",
+      "function": "randf_range",
+      "expression": "randf_range(_drunk_lo, _drunk_hi)",
+      "category": "gameplay_owned",
+      "source_line": "_drunk_atk = randf_range(_drunk_lo, _drunk_hi)"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1930,
+      "column": 30,
+      "scope": "_deal_hit",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "gameplay_owned",
+      "source_line": "if _attack_miss_t > 0.0 and randf() < _attack_miss_chance:"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1937,
+      "column": 74,
+      "scope": "_deal_hit",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "gameplay_owned",
+      "source_line": "if target_evasion > 0.0 and not t.is_building and not t.is_resource and randf() < target_evasion:"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1970,
+      "column": 58,
+      "scope": "_deal_hit",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "gameplay_owned",
+      "source_line": "var crit := not t.is_building and not t.is_resource and randf() < clampf((0.25 if is_hero else 0.12) + crit_chance_bonus, 0.0, 1.0)"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2012,
+      "column": 72,
+      "scope": "_deal_hit",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "gameplay_owned",
+      "source_line": "if bash_chance > 0.0 and not t.is_building and not t.is_resource and randf() < bash_chance:"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2018,
+      "column": 74,
+      "scope": "_deal_hit",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "gameplay_owned",
+      "source_line": "if cav_ls_chance > 0.0 and not t.is_building and not t.is_resource and randf() < cav_ls_chance:"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2075,
+      "column": 15,
+      "scope": "_try_li_brawn_axes",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "gameplay_owned",
+      "source_line": "var roll := randf() if proc_roll < 0.0 else proc_roll"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2707,
+      "column": 9,
+      "scope": "lifesteal_frac",
+      "function": "randf_range",
+      "expression": "randf_range(0.10 + 0.10 * float(wr), 0.30 + 0.10 * float(wr))",
+      "category": "gameplay_owned",
+      "source_line": "ls += randf_range(0.10 + 0.10 * float(wr), 0.30 + 0.10 * float(wr))"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2927,
+      "column": 16,
+      "scope": "start_drunk",
+      "function": "randf_range",
+      "expression": "randf_range(lo, hi)",
+      "category": "gameplay_owned",
+      "source_line": "_drunk_move = randf_range(lo, hi)"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2928,
+      "column": 15,
+      "scope": "start_drunk",
+      "function": "randf_range",
+      "expression": "randf_range(lo, hi)",
+      "category": "gameplay_owned",
+      "source_line": "_drunk_atk = randf_range(lo, hi)"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 3258,
+      "column": 28,
+      "scope": "_spawn_dust",
+      "function": "randf_range",
+      "expression": "randf_range(-3.0, 3.0)",
+      "category": "visual_global",
+      "source_line": "_dust.append({\"x\": back + randf_range(-3.0, 3.0), \"y\": randf_range(1.0, 4.0), \"t\": DUST_DUR})"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 3258,
+      "column": 57,
+      "scope": "_spawn_dust",
+      "function": "randf_range",
+      "expression": "randf_range(1.0, 4.0)",
+      "category": "visual_global",
+      "source_line": "_dust.append({\"x\": back + randf_range(-3.0, 3.0), \"y\": randf_range(1.0, 4.0), \"t\": DUST_DUR})"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 272,
+      "column": 30,
+      "scope": "_make_random_wave",
+      "function": "randi",
+      "expression": "randi()",
+      "category": "wave_owned_schedule",
+      "source_line": "groups.append([RAND_TROOPS[randi() % RAND_TROOPS.size()], c, randi() % GATES.size()])"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 272,
+      "column": 64,
+      "scope": "_make_random_wave",
+      "function": "randi",
+      "expression": "randi()",
+      "category": "wave_owned_schedule",
+      "source_line": "groups.append([RAND_TROOPS[randi() % RAND_TROOPS.size()], c, randi() % GATES.size()])"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 274,
+      "column": 16,
+      "scope": "_make_random_wave",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "wave_owned_schedule",
+      "source_line": "if i >= 2 and randf() < clampf(0.15 + i * 0.02, 0.15, 0.6):"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 275,
+      "column": 30,
+      "scope": "_make_random_wave",
+      "function": "randi",
+      "expression": "randi()",
+      "category": "wave_owned_schedule",
+      "source_line": "groups.append([RAND_BOSSES[randi() % RAND_BOSSES.size()], 1, randi() % GATES.size()])"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 275,
+      "column": 64,
+      "scope": "_make_random_wave",
+      "function": "randi",
+      "expression": "randi()",
+      "category": "wave_owned_schedule",
+      "source_line": "groups.append([RAND_BOSSES[randi() % RAND_BOSSES.size()], 1, randi() % GATES.size()])"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 277,
+      "column": 16,
+      "scope": "_make_random_wave",
+      "function": "randf",
+      "expression": "randf()",
+      "category": "wave_owned_schedule",
+      "source_line": "if i >= 6 and randf() < 0.25:"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 278,
+      "column": 37,
+      "scope": "_make_random_wave",
+      "function": "randi",
+      "expression": "randi()",
+      "category": "wave_owned_schedule",
+      "source_line": "groups.append([\"war_elephant\", 1, randi() % GATES.size()])"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 281,
+      "column": 35,
+      "scope": "_make_random_wave",
+      "function": "randi",
+      "expression": "randi()",
+      "category": "wave_owned_schedule",
+      "source_line": "return {\"t\": t, \"msg\": RAND_MSGS[randi() % RAND_MSGS.size()], \"groups\": groups}"
+    }
+  ]
+}

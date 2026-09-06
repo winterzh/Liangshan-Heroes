@@ -1,0 +1,102 @@
+--- a/tools/build_steam_candidate.py
++++ b/tools/build_steam_candidate.py
+@@ -15,6 +15,8 @@
+ import zipfile
+ from run_steam_integration_qa import ROOT, LOCK, install_native, resolve_godot
+ from steam_candidate_verification import verify
++from contracts.run_content_identity_20260907.build_identity import seed, generate, verify_generated, DERIVED
++from contracts.run_content_identity_20260907.probe_runner import run_locked as probe_content_identity, utilities as identity_utilities
+ 
+ CORE = {"project.godot", "export_presets.cfg", "icon.png", "icon.png.import", "icon.ico"}
+ RUNTIME = ("assets/anim/", "assets/campaign/anim/", "assets/campaign/objects/",
+@@ -26,6 +28,7 @@
+ def allowed(name):
+     path = PurePosixPath(name)
+     if name in CORE: return True
++    if name.startswith("content/"): return path.suffix == ".json"
+     if name.startswith("scripts/"): return path.suffix in {".gd", ".gdshader", ".uid"}
+     if name.startswith("scenes/"): return path.suffix == ".tscn"
+     if path.parent == PurePosixPath("assets") or name.startswith("assets/ui/"):
+@@ -59,7 +62,9 @@
+     qa.relative_to((ROOT / ".godot/steam_integration_qa").resolve())
+     proof = json.loads((qa / "receipt.json").read_text())
+     if not proof.get("complete"): raise RuntimeError("A successful QA run is required")
+-    records = [row for row in proof["source_files"] if allowed(row["path"])]
++    records = [row for row in proof["source_files"] if allowed(row["path"]) and row["path"] != DERIVED]
++    if not any(row["path"] == "scripts/run_content_identity.gd" for row in records):
++        raise RuntimeError("The successful QA snapshot must include the reviewed identity provider")
+     for row in records:
+         if sha(ROOT / row["path"]) != row["sha256"]:
+             raise RuntimeError("Source changed since QA: " + row["path"])
+@@ -105,6 +110,8 @@
+         windows = run / "windows"
+         windows.mkdir()
+         exe = windows / "LiangshanHeroes.exe"
++        receipt["identity_seed"] = seed(project)
++        identity_generation = None
+         commands = [
+             ("import", [engine,"--headless","--path",str(project),"--editor","--import"]),
+             ("export", [engine,"--headless","--path",str(project),"--export-release","Windows Steam",str(exe)]),
+@@ -121,9 +128,42 @@
+             receipt["steps"].append({"name":name,"exit_code":code,"seconds":round(time.time()-started,2)})
+             errors = [line for line in text.splitlines() if any(word in line for word in ["SCRIPT ERROR", "ERROR:", "Parse Error"])]
+             if code or errors: raise RuntimeError(name + " failed: " + "\n".join(errors))
++            if name == "import":
++                identity_generation = generate(project)
++                with (run / "content_identity_generation.json").open("x", encoding="utf-8") as output:
++                    output.write(json.dumps(identity_generation, indent=2) + "\n")
++                receipt["content_identity"] = identity_generation
++            else:
++                verify_generated(project, identity_generation)
+         verification = verify(run, windows, Path(engine), env)
+         receipt["steps"].extend(verification["steps"])
+         receipt["verification"] = verification
++        identity_util = identity_utilities()
++        identity_source_guard = identity_util.load_helper(identity_util.GUARD, identity_util.GUARD_SHA, "identity_export_source_guard")
++        real_user = Path(os.environ["APPDATA"]) / "Godot/app_userdata" / identity_source_guard.project_name(ROOT)
++        identity_players_before = identity_util.tree(real_user)
++        identity_sources_before = identity_source_guard.source_receipt(ROOT)
++        identity_util.save(run / "identity_players_before.json", identity_players_before)
++        identity_util.save(run / "identity_sources_before.json", identity_sources_before)
++        def identity_guard():
++            if LOCK.read_text(encoding="utf-8") != str(run): raise RuntimeError("Identity probe lost builder lock")
++            if identity_util.tree(real_user) != identity_players_before: raise RuntimeError("Real player profile changed")
++            if identity_source_guard.source_receipt(ROOT) != identity_sources_before: raise RuntimeError("Production source changed")
++            for row in records:
++                if sha(ROOT / row["path"]) != row["sha256"]: raise RuntimeError("Production source changed before identity probe")
++            verify_generated(project, identity_generation)
++        for probe_stage, probe_pack in [("source_identity_probe", None), ("content_identity_probe", exe)]:
++            receipt["identity_probe_exit_unconfirmed"] = True
++            try:
++                receipt[probe_stage] = probe_content_identity(project, probe_pack, Path(engine), run / probe_stage, env, identity_generation["identity"], identity_guard)
++            finally:
++                process_path = run / probe_stage / "process_receipt.json"
++                if process_path.is_file():
++                    process = json.loads(process_path.read_text(encoding="utf-8"))
++                    receipt["identity_probe_exit_unconfirmed"] = process["child_started"] and not process["child_exit_confirmed"]
++        identity_guard()
++        identity_util.save(run / "identity_players_after.json", identity_util.tree(real_user))
++        identity_util.save(run / "identity_sources_after.json", identity_source_guard.source_receipt(ROOT))
+         for expected in ["steam_api64.dll", "libgodotsteam.windows.template_release.x86_64.dll"]:
+             found = list(windows.rglob(expected))
+             if len(found) != 1 or sha(found[0]) != sha(ROOT / "vendor/godotsteam/win64" / expected):
+@@ -139,7 +179,7 @@
+     finally:
+         if child is not None and child.poll() is None: child.kill(); child.wait(timeout=30)
+         (run / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+-        if LOCK.read_text() == str(run): LOCK.unlink()
++        if not receipt.get("identity_probe_exit_unconfirmed", False) and LOCK.read_text() == str(run): LOCK.unlink()
+         print(json.dumps({"complete":receipt["complete"],"run":str(run),"checks":receipt.get("checks",0)}), flush=True)
+ 
+ if __name__ == "__main__": main()
+--- a/export_presets.cfg
++++ b/export_presets.cfg
+@@ -155,7 +155,7 @@
+ dedicated_server=false
+ custom_features="steam"
+ export_filter="all_resources"
+-include_filter=""
++include_filter="content/*.json"
+ exclude_filter="vendor/*, addons/godotsteam/*.md, *_raw*.png, ART_PROMPTS.md, tools/*, build/*, qa/*, docs/*, implementation_20260902/*, **/__pycache__/*, campaign_environment_v8_20260831/*, assets/campaign/source/*, assets/campaign/*.json, assets/campaign/web_prompts_*/*, assets/direction4/source/*, assets/direction4/web_prompts_*/*, assets/direction4/poses/*, assets/direction4/*.json, compatibility.json, icon.icns, icon.ico"
+ export_path="build/steam/LiangshanHeroes.exe"
+ patches=PackedStringArray()

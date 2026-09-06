@@ -1,0 +1,29 @@
+# 可信内容身份的最小接入点（只读结论）
+
+现有链条能为构建生成可靠的外部摘要，但目前未发现统一、随当前有效 PCK 可读取的精确内容身份。`Campaign.VERSION` 和 `AndroidUpdater.active_content_version` 是展示/发布版本字符串；相同字符串下源码可以不同，不能传给 RNG 当精确源码身份。也不能从待加载的 save.compat 反取“可信”参数。
+
+本目录 `call_inventory.json` 的 20 文件 SHA 只是本次审阅来源锁，不是完整运行内容 manifest，不能直接把它的摘要作为正式内容身份。
+
+| 已有流程/源码 | 已经可复用的证据 | 目前缺口 |
+| --- | --- | --- |
+| `tools/build_steam_candidate.py:62–105`、末尾校验 | successful QA 的精确 `source_files`，复制前后 raw SHA，builder/probe/QA receipt SHA，实际编辑器及导出模板 SHA，原生 DLL 来源、最终 exe/zip 内容摘要 | 收据在私有构建外层，未生成包内内容常量；`source_head` 不能替代实际文件集合 |
+| `tools/build_release_candidate_staging.py:861–886` | 物理白名单、`source_tree_sha256`、逐文件摘要 | 明确 `manifest_is_adjacent_not_packaged=true`，游戏读不到这份旁置 manifest |
+| `tools/build_packages.sh` / `build_android_release.sh` | 各自导出完整包/base PCK，发布点或签名/输出校验 | 与 Windows Steam builder 是不同入口，没有同一强制身份生成步骤 |
+| `export_presets.cfg` | `script_export_mode=2`，Windows 嵌入 PCK | 不应假设发布包可用 FileAccess 读取原始 `.gd` 文本再现场算源摘要 |
+| `scripts/android_updater.gd:332–380` / `tools/publish_hot_update.sh` | 安装时签名校验、目标平台校验、实际 PCK SHA/size，再 mount；现有热补丁签名链可复用 | mount 后只公开版本字符串，没有精确可信的已挂载 PCK 摘要给存档模块；基础包身份可能因资源被覆盖而过期 |
+| `tools/steam_candidate_verification.py` | 已有包内脚本 probe 与真实发布 exe 启动检查 | 尚未核对包内编译身份常量与构建输入摘要一致 |
+
+## 建议先接通 Windows Steam 的最小版本
+
+1. 复用已冻结的运行文件白名单与逐文件 raw SHA，按明确定义的 UTF-8 canonical 编码，对排序后的 `{path,bytes,sha256}` 列表及身份 schema/生成器版本求 SHA256。必须包含实际生效的 gameplay 脚本、场景/数据、项目配置及原生绑定；提交号只作辅助。`Defs.apply_content_pack` 能读 `res://content/units.json` 和 `abilities.json`，因此还要明确这两个可选输入的存在/缺失状态。当前 Steam builder 的物理白名单不包含 `content/*.json`；不能把一个现存覆盖文件静默排除后仍声称 identity 覆盖运行内容。若该 preset 不打包它们，包内 probe 要验证它们确实不可见；允许打包则将它们加入同一受审白名单。
+2. 在私有构建中生成很小的 `scripts/run_build_identity.gd`：只含 schema、`CONTENT_SHA256` 和迁移合同标识，不加 Autoload/class_name。通过编译脚本常量供运行时读取，符合已有 `.gd` 白名单；不去读取运行包中不可用的源码文本。只有该派生文件本身从输入摘要中排除，以免自指；生成器源码/规则必须纳入构建证据，最终派生文件的真实字节另外记录并在导出前后复核。
+3. 包内 probe 加载编译常量，与主机按实际输入算出的预期值逐字比较；缺失、旧值、不同 PCK/源集合立即拒绝。保留现有实际 exe/原生 DLL 检查。内容常量不是自己证明自己的签名；可信性来自受控生成、精确文件链和包内核对。
+4. Battle/未来 RunSession 从安装包 provider 取得此值，生成 `content_version="source-v1:" + CONTENT_SHA256` 之类固定合同字符串，再传给正式 RNG 及其他状态模块。不得用 QA 临时任意字符串冒充正式身份。源码私有 QA 可由已固定的 host 对真实快照生成同样的期望值，并注入候选 Battle；这不意味着发布包 provider 已完成。
+5. 正式 RNG 的 `engine_binary_sha256` 继续表示实际执行二进制 SHA。Windows 可在启动阶段一次读取实际 `OS.get_executable_path()` 所指文件，或由可信宿主测量后传入；不能把编辑器/导出模板 SHA 冒充最终 exe。嵌入 PCK 的最终 exe 包含内容，不能把它自己的最终 SHA 编进同一 exe，形成自指。保存模块已经另有引擎版本/hash/位宽字段，不能用这些替代实际二进制摘要。其他平台的可访问二进制/宿主绑定未在本批实现，不能假装已支持。
+6. 当前热更新可在启动早期覆盖 res://。只有“基础包固定身份 + 本次已验证实际 mounted PCK 的 SHA”才能代表当前组合；最窄的后续方案是让 Updater 在签名+SHA+size+mount 全部成功后提供已验证 patch SHA，由 provider 组合基础身份和该摘要，或者强制每个补丁携带并验证新身份资源。必须选一种并覆盖旧补丁边界；不能在旧补丁没有身份资源时悄悄沿用基础常量。provider 的求值必须晚于挂载，且避免 preload 在挂载前缓存旧常量。初批若仅支持无已挂载补丁的 Windows 包，就显式限制恢复资格；缺身份不得默认为可恢复。
+
+这需要 builder、派生资源、运行时 provider、包内 probe 四个明确接点；完整包 shell 和热更新入口随后也需要强制步骤。它超出 Battle/Unit/skirmish 三个文件的随机调用替换，因此本批交付准确清单与接口合同，没有制造新的通用 manifest 框架或给现有 export 写半套补丁。
+
+首批资格检查应具体固定为：实际 level 脚本为 `res://scripts/levels/skirmish.gd`、经典 `defense_waves=30`、`defense_random=false`、非 custom_defense/arena/场景编辑器覆盖；两份可选 content JSON 均不存在；没有已挂载热补丁；实际输入集合和编译身份校验一致。热补丁判定不要只比较展示版本字符串，最小增加 Updater 的只读“实际验证且挂载成功的 patch SHA”状态，在 `load_resource_pack` 成功后赋值，初批发现非空就拒绝续玩资格。没有该状态的旧 bootstrap 不默认为支持。未通过资格检查不创建可保存/恢复的标准战局，也不从存档恢复身份或退回 global RNG。其他模式的新局行为与启动兼容须保留明确初始化策略；不将此窄资格限制伪装为那些模式的续玩也已通过。
+
+初版采用精确内容绑定会保守拒绝包括部分非玩法资源变化在内的旧存档，这是可明确接受的严格策略，不能误写成已实现跨版本迁移。内容集合的可选文件、PCK 覆盖与实际 exe 身份必须在接入时一次定义清楚；后续兼容规则另行版本化。

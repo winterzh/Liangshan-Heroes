@@ -1,0 +1,40 @@
+from pathlib import Path
+import sys, os, subprocess, json, datetime
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT/'tools'))
+from contracts.run_content_identity_20260907.probe_runner import utilities
+util = utilities()
+safety = util.load_helper(util.HELPER,util.HELPER_SHA,'transport_process_safety')
+safety.require_exclusive_godot()
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+out = Path(__file__).parent/'runs'/stamp
+out.mkdir(parents=True)
+with util.LOCK.open('x',encoding='utf-8') as f: f.write(str(out))
+exe = Path(r'C:\Users\Administrator\Desktop\新建文件夹 (2)\Godot_v4.6.3-stable_win64.exe')
+util.need(util.file_sha(exe) == util.ENGINE_SHA,'Actual engine mismatch')
+project = out/'project'; project.mkdir()
+(project/'project.godot').write_bytes(b'config_version=5\n[application]\nconfig/name="Identity Transport Diagnostic"\n')
+env = os.environ.copy()
+for key in ['APPDATA','LOCALAPPDATA','TEMP','TMP']:
+    p = out/'private_profile'/key.lower(); p.mkdir(parents=True); env[key] = str(p)
+script = Path(__file__).parent/'transport.gd'
+receipt = {'complete':False,'script_sha256':util.file_sha(script),'engine_sha256':util.ENGINE_SHA}
+child = None
+try:
+    with (out/'report.log').open('xb') as log:
+        child = subprocess.Popen([str(exe),'--headless','--path',str(project),'--script',str(script)],env=env,cwd=project,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW)
+        receipt['pid'] = child.pid
+        child.wait(timeout=60)
+    receipt['exit_code'] = child.returncode
+    text = (out/'report.log').read_text(encoding='utf-8')
+    util.need(child.returncode == 0 and not util.ERROR.search(text),'Diagnostic engine error')
+    rows = [json.loads(line.split(' ',1)[1]) for line in text.splitlines() if line.startswith('IDENTITY_TRANSPORT_DIAGNOSTIC ')]
+    util.need(len(rows)==1,'Missing diagnostic')
+    receipt.update(complete=True,observation=rows[0])
+finally:
+    if child is not None and child.poll() is None: child.kill(); child.wait(timeout=30)
+    receipt['child_exit_confirmed'] = child is None or child.poll() is not None
+    if receipt['child_exit_confirmed'] and util.LOCK.read_text(encoding='utf-8') == str(out): util.LOCK.unlink()
+    util.save(out/'receipt.json',receipt)
+    print(json.dumps({'run':str(out),**receipt}))

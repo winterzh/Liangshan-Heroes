@@ -1,0 +1,29 @@
+--- a/scripts/run_content_identity.gd
++++ b/scripts/run_content_identity.gd
+@@ -259,11 +259,16 @@
+ 	if not exe.is_absolute_path() or not _no_link(exe): return _bad("ENGINE_BINARY_UNREADABLE")
+ 	var engine_sha: String = FileAccess.get_sha256(exe)
+ 	if not _valid_sha(engine_sha): return _bad("ENGINE_BINARY_UNREADABLE")
+-	var source_mode: bool = OS.has_feature("editor") and not ("--main-pack" in OS.get_cmdline_args())
++	# Godot consumes --main-pack before exposing OS command-line arguments.
++	# Inspect this executed Script's backing instead; each branch still proves
++	# its physical inputs or compiled manifest without falling back to the other.
++	var executed_script: Script = get_script()
++	var source_mode: bool = executed_script.has_source_code()
++	if source_mode and not OS.has_feature("editor"): return _bad("SOURCE_BACKING_UNSUPPORTED")
+ 	var snapshot: Dictionary
+ 	var source_base := ""
+ 	if source_mode:
+-		var script: Script = get_script()
++		var script: Script = executed_script
+ 		var resource: String = script.resource_path
+ 		if not resource.begins_with("res://") or not script.has_source_code(): return _bad("SOURCE_PROVIDER_UNREADABLE")
+ 		var base: String = ProjectSettings.globalize_path("res://").simplify_path()
+@@ -283,6 +288,7 @@
+ 		# Dynamic load after Updater, no Autoload/global symbol or preloaded base constant.
+ 		var build: Resource = ResourceLoader.load(BUILD_PATH, "GDScript", ResourceLoader.CACHE_MODE_IGNORE)
+ 		if not build is Script: return _bad("BUILD_IDENTITY_SCRIPT")
++		if (build as Script).has_source_code(): return _bad("BUILD_IDENTITY_BACKING")
+ 		var constants: Dictionary = (build as Script).get_script_constant_map()
+ 		var value: Variant = constants.get("IDENTITY")
+ 		if typeof(value) != TYPE_DICTIONARY: return _bad("BUILD_IDENTITY_FIELDS")

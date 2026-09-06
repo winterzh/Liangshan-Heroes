@@ -1,0 +1,31 @@
+from pathlib import Path
+import hashlib, json, difflib
+ROOT = Path(__file__).resolve().parents[1]
+BASE = ROOT/'scratchpad/run_gameplay_rng_callsite_qa'
+DEST = ROOT/'scratchpad/run_gameplay_rng_callsite_r2'
+OUT = ROOT/'scratchpad/run_content_identity_r2'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+assert not DEST.exists() and not OUT.exists()
+DEST.mkdir();OUT.mkdir()
+for name in ['driver.gd','contract.json','.gdignore','README.md']:
+    (DEST/name).write_bytes((BASE/name).read_bytes())
+runner=(BASE/'run_qa.py').read_bytes()
+assert sha(runner)=='b670f7cbbd65726645f9d8bb461a351c664fda2d83d6cf2173db3118dd000093'
+runner=runner.replace(b'run_gameplay_rng_callsite_qa',b'run_gameplay_rng_callsite_r2')
+(DEST/'run_qa.py').write_bytes(runner)
+original=ROOT/'scratchpad/run_gameplay_rng_integration/application/candidate/scripts/run_content_identity.gd.txt'
+old=original.read_bytes();new=(ROOT/'scripts/run_content_identity.gd').read_bytes()
+assert sha(old)=='aae43a2097bfbe5b251fb7c2fc9e08375f685a4d4dfa28e5e0aa54442f637f6b'
+assert sha(new)=='a78dc5e9895cc4bf381e4c368c51527075ce5afa5835531881faa3a99d71077f'
+(OUT/'before_provider.gd.txt').write_bytes(old)
+(OUT/'after_provider.gd.txt').write_bytes(new)
+(OUT/'provider.patch').write_bytes(''.join(difflib.unified_diff(old.decode().replace('\r\n','\n').splitlines(True),new.decode().replace('\r\n','\n').splitlines(True),fromfile='a/scripts/run_content_identity.gd',tofile='b/scripts/run_content_identity.gd')).encode('utf-8'))
+receipt={'path':'scripts/run_content_identity.gd','before_sha256':sha(old),'after_sha256':sha(new),'bytes':len(new),
+         'diagnostic':'scratchpad/run_content_identity_transport/mode_runs/20260906T215605938295Z/receipt.json',
+         'changes':['Select from the executed provider Script source backing; main-pack is consumed by native main',
+                    'Keep independent source proof without fallback; source-backed release layout unsupported',
+                    'Reject source-backed build constants in the compiled provider branch'],
+         'callsite_driver_unchanged':sha((BASE/'driver.gd').read_bytes())==sha((DEST/'driver.gd').read_bytes()),
+         'old_runner_sha256':sha((BASE/'run_qa.py').read_bytes()),'new_runner_sha256':sha(runner),'godot_run':False}
+(OUT/'receipt.json').write_bytes((json.dumps(receipt,indent=2)+'\n').encode('utf-8'))
+print(json.dumps(receipt))

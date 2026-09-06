@@ -1,0 +1,508 @@
+"""Freeze this batch's exact evidence; never execute engines or Git.
+All receipt/source validation and input planning finish before QA is created.
+"""
+from pathlib import Path
+import hashlib
+import json
+
+ROOT = Path(__file__).resolve().parents[1]
+QA = ROOT / "qa/run_gameplay_rng_integration_20260907"
+APP = ROOT / "scratchpad/run_gameplay_rng_integration/application"
+TRANSPORT = ROOT / "scratchpad/run_content_identity_transport"
+PROVIDER_R2 = ROOT / "scratchpad/run_content_identity_r2"
+BASE_HEAD = "69b9b86610b6dfb058b0bfd740fb818b14df45ad"
+PROVIDER_OLD = "aae43a2097bfbe5b251fb7c2fc9e08375f685a4d4dfa28e5e0aa54442f637f6b"
+PROVIDER_NEW = "a78dc5e9895cc4bf381e4c368c51527075ce5afa5835531881faa3a99d71077f"
+PROBE_OLD = "e7d28bdbc602fd2526173385bed3ad5b6824637ebd8b262a221edb0b7c474677"
+PROBE_NEW = "62a6ea6d5e3b87bb60d3c2dfe72d6c245972d58924f80bdfef91a130a7a18d85"
+NATIVES = [
+    ("initial", ".godot/steam_integration_qa/20260907_052224_8929b774",
+     "scratchpad/run_gameplay_rng_integration/native_qa/20260906T212216886816Z", PROVIDER_OLD),
+    ("r2", ".godot/steam_integration_qa/20260907_055815_2e6a535d",
+     "scratchpad/run_gameplay_rng_integration/native_qa/20260906T215808268283Z", PROVIDER_NEW),
+]
+CALLS = [
+    ("initial", "scratchpad/run_gameplay_rng_callsite_qa", "20260906T212733214636Z", PROVIDER_OLD),
+    ("r2", "scratchpad/run_gameplay_rng_callsite_r2", "20260906T220055422528Z", PROVIDER_NEW),
+]
+BUILDS = [
+    ("failed0", ".godot/steam_candidates/20260907_053155_29e025d2",
+     "scratchpad/run_gameplay_rng_integration/build_qa/20260906T213147616892Z", PROVIDER_OLD),
+    ("failed_r1", ".godot/steam_candidates/20260907_054309_1ccc4379",
+     "scratchpad/run_gameplay_rng_integration/build_qa/20260906T214302638272Z", PROVIDER_OLD),
+    ("final_r2", ".godot/steam_candidates/20260907_060601_f70626d8",
+     "scratchpad/run_gameplay_rng_integration/build_qa/20260906T220553697867Z", PROVIDER_NEW),
+]
+REUSE_INDEXES = [
+    "qa/run_axes_20260907/source_index.json",
+    "qa/run_cast_flow_20260907/source_index.json",
+    "qa/run_continuous_effects_20260907/source_index.json",
+    "qa/run_defense_level_20260907/source_index.json",
+]
+HELPERS = [
+    "qa/run_gameplay_rng_20260907/sources/run_gameplay_rng_r1/run_qa.py.txt",
+    "qa/run_gameplay_rng_20260907/dependencies/scratchpad/separation_sections_diag/frozen/process_safety.py.txt",
+    "qa/run_gameplay_rng_20260907/dependencies/tools/run_reduced_effects_qa.py.txt",
+]
+def need(ok, message):
+    if not ok:
+        raise RuntimeError(message)
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+def read(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+def relative(path):
+    return Path(path).resolve().relative_to(ROOT.resolve()).as_posix()
+
+def under_root(path):
+    result = Path(path)
+    if not result.is_absolute():
+        result = ROOT / result
+    result = result.resolve()
+    need(result.is_relative_to(ROOT.resolve()), "Outside repository: " + str(path))
+    return result
+
+def exact(path, digest=None, size=None):
+    path = under_root(path)
+    need(path.is_file() and not path.is_symlink(), "Missing regular file: " + str(path))
+    raw = path.read_bytes()
+    if digest is not None:
+        need(sha(raw) == digest, "Source SHA mismatch: " + relative(path))
+    if size is not None:
+        need(len(raw) == size, "Source size mismatch: " + relative(path))
+    return raw
+
+def stdout_report(path, prefix, report):
+    rows = [json.loads(line[len(prefix):]) for line in Path(path).read_text(encoding="utf-8").splitlines()
+            if line.startswith(prefix)]
+    need(len(rows) == 1 and rows[0] == report, "Report/stdout mismatch: " + str(path))
+
+def outer_guard(path, expected_complete, run_key, run_path):
+    value = read(path / "receipt.json")
+    need(value["complete"] is expected_complete, "Outer completion mismatch: " + str(path))
+    need(value["player_guard_unchanged"] is True and value["source_guard_unchanged"] is True,
+         "Outer source/player guard failed: " + str(path))
+    normalized = [x.replace("\\", "/") for x in value[run_key]]
+    need(normalized == [relative(run_path)], "Outer run linkage mismatch")
+    need(exact(path / "sources_before.json") == exact(path / "sources_after.json"),
+         "Outer raw source summaries differ")
+    return value
+
+need(not QA.exists(), "Archive already exists; do not rewrite frozen evidence")
+# Fail immediately when the final real run has not completed. No output directory yet.
+final_base, final_outer = ROOT / BUILDS[2][1], ROOT / BUILDS[2][2]
+final_receipt = read(final_base / "receipt.json")
+need(final_receipt.get("complete") is True and final_receipt.get("verification", {}).get("complete") is True,
+     "Final R2 builder is not complete")
+need(not (ROOT / ".godot/redraw_rejection_source.lock").exists(), "Engine lock remains")
+
+# Plan raw inputs in memory, validating all paths before the first write.
+planned, mappings, blobs, reused, source_sets, run_summaries = {}, [], {}, {}, {}, {}
+def artifact(source, destination):
+    source = under_root(source)
+    raw = exact(source)
+    need(source.suffix.lower() not in {".exe", ".dll", ".pck", ".zip", ".png", ".jpg", ".webp", ".key", ".pem"},
+         "Binary/private artifact denied: " + relative(source))
+    need(not any(p in {"private_profile", "profile", "__pycache__"} for p in source.parts)
+         and not source.name.startswith(("players_", "identity_players_")), "Player listing denied")
+    target = under_root(QA / destination)
+    need(target.is_relative_to(QA.resolve()), "Archive target escaped")
+    raw.decode("utf-8")
+    name = target.relative_to(QA).as_posix()
+    if name in planned:
+        need(planned[name]["raw"] == raw, "Conflicting archive destination")
+    else:
+        planned[name] = {"raw": raw, "original": relative(source)}
+    return relative(target)
+
+def reusable_rows(value):
+    if isinstance(value, dict):
+        digest = value.get("sha256")
+        path = value.get("archive") or value.get("archive_path") or value.get("archived_path")
+        if isinstance(digest, str) and isinstance(path, str):
+            yield digest, path
+        for child in value.values():
+            yield from reusable_rows(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from reusable_rows(child)
+
+for name in REUSE_INDEXES:
+    index = ROOT / name
+    for digest, path in reusable_rows(read(index)):
+        candidate = under_root(path)
+        if candidate.is_file() and sha(candidate.read_bytes()) == digest:
+            reused.setdefault(digest, relative(candidate))
+for name in HELPERS:
+    reused[sha(exact(name))] = name
+
+application = read(APP / "receipt.json")
+need(application.get("applied") is True and len(application["files"]) == 14, "APP14 not complete")
+fix = read(TRANSPORT / "fix_receipt.json")
+repair = read(PROVIDER_R2 / "receipt.json")
+need((fix["path"], fix["before_sha256"], fix["after_sha256"]) ==
+     ("tools/contracts/run_content_identity_20260907/pck_probe.gd", PROBE_OLD, PROBE_NEW),
+     "Probe correction identity changed")
+need((repair["path"], repair["before_sha256"], repair["after_sha256"]) ==
+     ("scripts/run_content_identity.gd", PROVIDER_OLD, PROVIDER_NEW), "Provider R2 identity changed")
+allowed = {fix["path"]: PROBE_NEW, repair["path"]: PROVIDER_NEW}
+candidates = {}
+for row in application["files"]:
+    name = row["path"]
+    after = APP / "candidate" / (name + ".txt")
+    exact(after, row["after_sha256"], row["bytes"])
+    candidates[(name, row["after_sha256"])] = after
+    if row["before_sha256"] is not None:
+        before = APP / "before" / (name + ".txt")
+        exact(before, row["before_sha256"])
+        candidates[(name, row["before_sha256"])] = before
+    exact(ROOT / name, allowed.get(name, row["after_sha256"]))
+exact(PROVIDER_R2 / "before_provider.gd.txt", PROVIDER_OLD)
+exact(PROVIDER_R2 / "after_provider.gd.txt", PROVIDER_NEW, repair["bytes"])
+
+def source(name, role, digest=None, origin=None, private_project=None):
+    name = str(name).replace("\\", "/")
+    if origin is not None:
+        chosen = under_root(origin)
+        raw = exact(chosen, digest)
+    else:
+        options = []
+        if digest is not None and (name, digest) in candidates:
+            options.append(candidates[(name, digest)])
+        options.append(ROOT / name)
+        if private_project is not None:
+            options.append(private_project / name)
+        chosen, raw = None, None
+        for option in options:
+            if option.is_file():
+                trial = exact(option)
+                if digest is None or sha(trial) == digest:
+                    chosen, raw = option, trial
+                    break
+        if raw is None and digest in reused:
+            chosen = ROOT / reused[digest]
+            raw = exact(chosen, digest)
+        need(raw is not None, "No exact historical source: " + name)
+    digest = sha(raw)
+    if digest not in blobs:
+        if digest in reused:
+            exact(reused[digest], digest, len(raw))
+            blobs[digest] = reused[digest]
+        else:
+            blobs[digest] = artifact(chosen, "sources/blobs/" + digest + "/" + Path(name).name + ".txt")
+    record = {"source": name, "archive": blobs[digest], "sha256": digest, "bytes": len(raw),
+              "role": role, "original": relative(chosen), "reused_existing": digest in reused}
+    mappings.append(record)
+    return record
+
+# Every old APP candidate remains bound to the original receipt; current repairs are separate.
+artifact(APP / "receipt.json", "preparation/application.json")
+for row in application["files"]:
+    source(row["path"], "application14 original", row["after_sha256"])
+    source(row["path"], "final production", allowed.get(row["path"], row["after_sha256"]))
+    if row["before_sha256"] is not None:
+        source(row["path"], "before application14", row["before_sha256"])
+
+phase_counts = {"matrix": 342, "startup": 213, "restore_reject": 215, "writer": 211, "reader": 214}
+for label, harness_name, run_id, provider in CALLS:
+    harness, run = ROOT / harness_name, ROOT / harness_name / "runs" / run_id
+    receipt, pins = read(run / "receipt.json"), read(harness / "pins.json")
+    need(all(receipt.get(k) is True for k in ["complete", "source_unchanged", "player_unchanged", "lock_released"]),
+         "Callsite run incomplete: " + label)
+    exact(harness / "pins.json", receipt["pins_sha256"])
+    need(pins["source_sha256"] == receipt["source_sha256"] and len(receipt["source_sha256"]) == 102,
+         "Callsite pins differ from actual run")
+    need(receipt["source_sha256"]["scripts/run_content_identity.gd"] == provider, "Callsite provider differs")
+    exact(harness / "run_qa.py", pins["runner_sha256"])
+    exact(harness / "contract.json", pins["contract_sha256"])
+    need(exact(run / "sources_before.json") == exact(run / "sources_after.json"), "Callsite source summaries differ")
+    contract = read(harness / "contract.json")
+    summaries = []
+    need([p["phase"] for p in receipt["phases"]] == list(phase_counts), "Phase order changed")
+    for item in receipt["phases"]:
+        phase, expected_count = item["phase"], phase_counts[item["phase"]]
+        part = run / phase
+        report, proc, manifest = read(part / "report.json"), read(part / "report_process.json"), read(part / "manifest.json")
+        exact(part / "report.json", item["report_sha256"])
+        need(report["complete"] is True and report["passed"] is True
+             and len(report["checks"]) == expected_count == item["checks"]
+             and all(c["passed"] is True for c in report["checks"]), "Callsite report failed")
+        need(proc["child_started"] is True and proc["child_exit_confirmed"] is True and proc["exit_code"] == 0
+             and proc["child_pid"] == report["process_id"] == item["process_id"], "Callsite process mismatch")
+        need(manifest["source_sha256"] == receipt["source_sha256"], "Phase source manifest mismatch")
+        need(report["identity"]["provider_sha256"] == provider, "Observed provider mismatch")
+        entry = proc["command"][proc["command"].index("--script") + 1].removeprefix("res://")
+        need(entry in manifest["source_sha256"], "Actual callsite entry absent from manifest")
+        labels = [c["label"] for c in report["checks"]]
+        for prefix in ["source_before:", "source_after:"]:
+            need(sorted(x[len(prefix):] for x in labels if x.startswith(prefix)) == sorted(manifest["source_sha256"]),
+                 "Incomplete exact source-label coverage")
+        for required in contract["always_required"] + contract["required_labels"][phase]:
+            need(required in labels, "Missing functional/host label: " + required)
+        stdout_report(part / "report.log", "[gameplay-rng-callsites QA] ", report)
+        summaries.append({"phase": phase, "checks": expected_count, "source_checks": 204,
+                          "other_checks": expected_count - 204, "pid": proc["child_pid"],
+                          "exit_code": 0, "report_sha256": item["report_sha256"],
+                          "actual_entry": entry, "stdout_matches_report": True})
+    need(len(set(x["pid"] for x in summaries)) == 5, "Callsite phases must have distinct processes")
+    reader = read(run / "reader/manifest.json")
+    need(reader["writer_pid"] == summaries[3]["pid"]
+         and reader["writer_report_sha256"] == summaries[3]["report_sha256"], "Writer/reader linkage differs")
+    exact(run / "handoff.json", reader["handoff_sha256"])
+    source_sets["callsites_" + label] = [
+        source(name, "callsite " + label, digest)
+        for name, digest in receipt["source_sha256"].items()]
+    for name in [".gdignore", "run_qa.py", "driver.gd", "contract.json", "pins.json", "README.md"]:
+        source(relative(harness / name), "callsite harness " + label)
+    if label == "initial":
+        source(relative(harness / "preparation.json"), "original harness preparation")
+    for path in sorted(run.rglob("*")):
+        if not path.is_file() or "private_profile" in path.parts or path.name.startswith("players_"):
+            continue
+        need(path.suffix in {".json", ".log"}, "Unexpected callsite evidence")
+        artifact(path, "runs/callsites_" + label + "/" + path.relative_to(run).as_posix())
+    run_summaries["callsites_" + label] = {"run": relative(run), "complete": True, "checks": 1195,
+        "source_checks": 1020, "other_checks": 175, "phases": summaries, "same_matrix": True,
+        "full_battle_resume_tested": False}
+
+def native_text_sources(rows, label, private_project):
+    result = []
+    for row in rows:
+        name = row["path"]
+        suffix = Path(name).suffix.lower()
+        if suffix in {".gd", ".gdshader", ".tscn", ".godot", ".cfg", ".uid", ".gdextension"}:
+            result.append(source(name, label, row["sha256"], private_project=private_project))
+    return result
+
+for label, base_name, outer_name, provider in NATIVES:
+    base, outer = ROOT / base_name, ROOT / outer_name
+    receipt, report = read(base / "receipt.json"), read(base / "report.json")
+    need(receipt["complete"] is True and receipt["checks"] == 176 and report["passed"] is True
+         and len(report["checks"]) == 176 and all(c["passed"] is True for c in report["checks"]),
+         "Native report failed: " + label)
+    need(all(step["exit_code"] == 0 for step in receipt["steps"]), "Native child failed")
+    need([row["sha256"] for row in receipt["source_files"] if row["path"] == "scripts/run_content_identity.gd"] == [provider],
+         "Native source provider mismatch")
+    outer_guard(outer, True, "qa_runs", base)
+    catalog = read(base / "backend/steamworks_catalog.json")
+    need(len(catalog["achievements"]) == 30 and len(catalog["stats"]) == 4, "Catalog matrix changed")
+    source_sets["native_" + label] = native_text_sources(receipt["source_files"], "native " + label, base / "project")
+    for name in ["receipt.json", "report.json", "import.log", "catalog.log", "contracts.log", "backend/steamworks_catalog.json"]:
+        artifact(base / name, "runs/native_" + label + "/" + name)
+    for name in ["receipt.json", "sources_before.json", "sources_after.json"]:
+        artifact(outer / name, "runs/native_" + label + "_outer/" + name)
+    run_summaries["native_" + label] = {"run": base_name, "complete": True, "checks": 176,
+        "imported_texture_cache": receipt.get("imported_texture_cache"), "cold_import_tested": False,
+        "source_manifest": "runs/native_" + label + "/receipt.json", "outer_guards": True}
+
+def probe_summary(base, stage, expected_passed, provider, expected_bad=None, expected_true=10):
+    folder = base / stage
+    report, proc, manifest = read(folder / "report.json"), read(folder / "process_receipt.json"), read(folder / "manifest.json")
+    need(report["complete"] is True and report["passed"] is expected_passed and len(report["checks"]) == 10
+         and sum(c["passed"] is True for c in report["checks"]) == expected_true, "Identity probe checks differ")
+    need(proc["child_started"] is True and proc["child_exit_confirmed"] is True
+         and proc["exit_code"] == (0 if expected_passed else 1)
+         and report["process_id"] == proc["child_pid"], "Identity process mismatch")
+    exact(folder / "manifest.json", report["manifest_sha256"])
+    if expected_passed:
+        need(all(c["passed"] is True for c in report["checks"]) and proc["complete"] is True,
+             "Incomplete successful identity probe")
+        exact(folder / "report.json", proc["report_sha256"])
+        need(report["identity"]["provider_sha256"] == provider, "Identity provider mismatch")
+    elif expected_bad is not None:
+        need(report["identity"]["code"] == expected_bad, "Identity failure code changed")
+    entry = proc["command"][proc["command"].index("--script") + 1]
+    need(entry in proc["sources"], "Identity actual entry absent from process source receipt")
+    for path, digest in proc["sources"].items():
+        source(relative(path), stage + " host", digest)
+    stdout_report(folder / "report.log", "CONTENT_IDENTITY_REPORT ", report)
+    return {"stage": stage, "complete": expected_passed, "report_complete": True,
+            "report_passed": expected_passed, "checks": 10, "passed_checks": expected_true,
+            "pid": proc["child_pid"], "exit_code": proc["exit_code"],
+            "failure_code": report["identity"].get("code"), "pack_sha256": proc["pack_sha256"],
+            "report_sha256": sha(exact(folder / "report.json")), "actual_entry": entry,
+            "release_process_tested": report["release_process_tested"]}
+
+for label, base_name, outer_name, provider in BUILDS:
+    base, outer = ROOT / base_name, ROOT / outer_name
+    receipt = read(base / "receipt.json")
+    passed = label == "final_r2"
+    need(receipt["complete"] is passed and receipt["verification"]["complete"] is True
+         and receipt["verification"]["checks"] == 65, "Builder scope mismatch: " + label)
+    need(all(step["exit_code"] == 0 for step in receipt["steps"]), "Builder export/package step failed")
+    outer_guard(outer, passed, "candidate_runs", base)
+    expected_native = NATIVES[1 if passed else 0][1]
+    need(receipt["qa_run"].replace("\\", "/") == expected_native, "Builder native receipt linkage differs")
+    exact(ROOT / expected_native / "receipt.json", receipt["qa_receipt_sha256"])
+    generation = read(base / "content_identity_generation.json")
+    need(generation["identity"]["provider_sha256"] == provider, "Generated provider mismatch")
+    need(receipt["content_identity"] == generation, "Builder generation receipt mismatch")
+    if label == "failed0":
+        probes = [probe_summary(base, "source_identity_probe", False, provider, expected_true=9)]
+        old_report = read(base / "source_identity_probe/report.json")
+        need([x["label"] for x in old_report["checks"] if not x["passed"]] == ["exact_optional_content"],
+             "Initial failure changed")
+        need(not (base / "content_identity_probe").exists(), "Initial PCK probe unexpectedly exists")
+    elif label == "failed_r1":
+        probes = [probe_summary(base, "source_identity_probe", True, provider),
+                  probe_summary(base, "content_identity_probe", False, provider,
+                                expected_bad="SOURCE_PROVIDER_UNREADABLE", expected_true=2)]
+    else:
+        probes = [probe_summary(base, stage, True, provider)
+                  for stage in ["source_identity_probe", "content_identity_probe"]]
+        need(all(receipt[stage]["complete"] is True for stage in ["source_identity_probe", "content_identity_probe"]),
+             "Final builder did not record both successful probes")
+    need((base / "identity_sources_after.json").exists() is passed, "Unexpected inner-after evidence state")
+    if passed:
+        need(exact(base / "identity_sources_before.json") == exact(base / "identity_sources_after.json"),
+             "Final inner source guard drift")
+    source_sets["build_" + label] = native_text_sources(receipt["source_files"], "build " + label, base / "project")
+    derived = generation["derived"]
+    source(derived["path"], "derived private build constant " + label, derived["sha256"],
+           origin=base / "project" / derived["path"])
+    exact(base / "project" / derived["path"], derived["sha256"], derived["bytes"])
+    source(derived["path"] + ".uid", "derived private import UID " + label,
+           origin=base / "project" / (derived["path"] + ".uid"))
+    names = ["receipt.json", "content_identity_generation.json", "verification_report.json",
+             "package_report.json", "import.log", "export.log", "package.log", "exe_smoke.log",
+             "identity_sources_before.json"]
+    if passed:
+        names.append("identity_sources_after.json")
+    for name in names:
+        artifact(base / name, "runs/build_" + label + "/" + name)
+    for name in ["receipt.json", "sources_before.json", "sources_after.json"]:
+        artifact(outer / name, "runs/build_" + label + "_outer/" + name)
+    for probe in probes:
+        for name in ["manifest.json", "report.json", "report.log", "process_receipt.json"]:
+            artifact(base / probe["stage"] / name, "runs/build_" + label + "/" + probe["stage"] + "/" + name)
+    run_summaries["build_" + label] = {"run": base_name, "complete": passed, "package_checks": 65,
+        "release_pid": receipt["verification"]["release_pid"], "probes": probes, "outer_guards": True,
+        "inner_after_present": passed, "pck_probe_started": label != "failed0",
+        "release_battle_identity_observed": False}
+
+# Actual diagnostic observations, with raw stdout matched to the receipts.
+diag = TRANSPORT / "runs/20260906T214125997167Z"
+diagnostic = read(diag / "receipt.json")
+need(diagnostic["complete"] is True and diagnostic["exit_code"] == 0
+     and diagnostic["child_exit_confirmed"] is True, "JSON diagnostic incomplete")
+obs = diagnostic["observation"]
+need(obs["original_bytes_type"] == 2 and obs["parsed_bytes_type"] == 3
+     and obs["dictionary_equal"] is False and obs["normalized_equal"] is True
+     and obs["typed_parsed_equal"] is False, "JSON diagnostic observation changed")
+exact(TRANSPORT / "transport.gd", diagnostic["script_sha256"])
+stdout_report(diag / "report.log", "IDENTITY_TRANSPORT_DIAGNOSTIC ", obs)
+for name in ["receipt.json", "report.log"]:
+    artifact(diag / name, "runs/json_diagnostic/" + name)
+mode = TRANSPORT / "mode_runs/20260906T215605938295Z"
+mode_receipt = read(mode / "receipt.json")
+need(all(mode_receipt[k] is True for k in ["complete", "child_exit_confirmed", "source_unchanged",
+                                          "player_unchanged", "pack_unchanged"]), "Mode diagnostic incomplete")
+need([x["phase"] for x in mode_receipt["phases"]] == ["source", "pck"], "Mode phase order changed")
+for item in mode_receipt["phases"]:
+    need(item["exit_code"] == 0 and item["pid"] == item["observation"]["process_id"], "Mode process mismatch")
+    stdout_report(mode / item["phase"] / "report.log", "IDENTITY_MODE_DIAGNOSTIC ", item["observation"])
+    artifact(mode / item["phase"] / "report.log", "runs/mode_diagnostic/" + item["phase"] + "/report.log")
+observations = [x["observation"] for x in mode_receipt["phases"]]
+need(observations[0]["args"] == observations[1]["args"]
+     and observations[0]["script_has_source"] is True and observations[1]["script_has_source"] is False
+     and observations[0]["physical_script_exists"] is True and observations[1]["physical_script_exists"] is False,
+     "Source/PCK mode observation changed")
+need(mode_receipt["pack_sha256"] == run_summaries["build_failed_r1"]["probes"][1]["pack_sha256"],
+     "Mode diagnostic did not use failed R1 pack")
+artifact(mode / "receipt.json", "runs/mode_diagnostic/receipt.json")
+run_summaries["json_diagnostic"] = {"complete": True, "pid": diagnostic["pid"], "observation": obs}
+run_summaries["mode_diagnostic"] = {"complete": True, "phases": mode_receipt["phases"],
+                                   "source_player_pack_unchanged": True}
+
+preparations = [
+    ("scratchpad/run_gameplay_rng_callsite_qa/unit_r1", ["prepare.py", "receipt.json", "relative_to_frozen.patch"]),
+    ("scratchpad/run_gameplay_rng_battle", ["candidate.json", "candidate.patch", "build_patch.py", "battle_rng_api.gd.txt"]),
+    ("scratchpad/run_unit_projectile_rng_candidate", ["prepare.py", "README.md"]),
+    ("scratchpad/run_content_identity", ["pins.json", "README.md", "updater.patch", "updater_pins.json",
+                                        "steam_builder.patch", "steam_builder_pins.json"]),
+    ("scratchpad/run_gameplay_rng_migration", ["call_inventory.json", "build_identity_minimum.md"]),
+    ("scratchpad/run_gameplay_rng_integration", ["run_native_qa.py", "run_candidate.py"]),
+    ("scratchpad/run_content_identity_transport", ["transport.gd", "run.py", "record_fix.py", "fix_receipt.json",
+                                                  "pck_probe_r1.patch", "mode.gd", "run_mode.py"]),
+    ("scratchpad/run_content_identity_r2", ["receipt.json", "provider.patch", "before_provider.gd.txt", "after_provider.gd.txt"]),
+]
+for base, names in preparations:
+    for name in names:
+        source(base + "/" + name, "preparation, diagnosis or correction")
+for name in [
+    "scratchpad/apply_gameplay_rng_identity.py", "scratchpad/prepare_rng_identity_r2.py",
+    "scratchpad/archive_gameplay_rng_integration.py", "scratchpad/stage_gameplay_rng_integration.py",
+    "tools/run_steam_integration_qa.py", "tools/steam_integration_qa.gd", "tools/steam_integration_suite.gd",
+    "tools/steam_catalog_export.gd", "tools/steam_fake_api.gd", "tools/steam_package_probe.gd",
+    "tools/steam_candidate_verification.py",
+] + HELPERS:
+    source(name, "execution source or exact archived helper")
+
+# Bind old and new driver/runner relationships from the actual repair receipt.
+old_harness = ROOT / CALLS[0][1]
+new_harness = ROOT / CALLS[1][1]
+need(exact(old_harness / "driver.gd") == exact(new_harness / "driver.gd")
+     and repair["callsite_driver_unchanged"] is True, "R2 driver bytes differ")
+exact(old_harness / "run_qa.py", repair["old_runner_sha256"])
+exact(new_harness / "run_qa.py", repair["new_runner_sha256"])
+old_digests = {row["sha256"] for row in source_sets["callsites_initial"]}
+new_digests = {row["sha256"] for row in source_sets["callsites_r2"]}
+need(len(old_digests & new_digests) == 101 and len(old_digests | new_digests) == 103,
+     "Unexpected old/R2 runtime source delta")
+need(sum(row["reused_existing"] for row in source_sets["callsites_initial"]) >= 93,
+     "Expected 93 verified existing source blobs were not reused")
+
+# This is still preflight: validate all planned bytes and mappings before mkdir.
+for row in mappings:
+    path = under_root(row["archive"])
+    if path.is_relative_to(QA.resolve()):
+        raw = planned[path.relative_to(QA).as_posix()]["raw"]
+    else:
+        raw = exact(path)
+    need(sha(raw) == row["sha256"] and len(raw) == row["bytes"], "Planned source mapping drift")
+need(not QA.exists(), "Another writer created the archive")
+need(not (ROOT / ".godot/redraw_rejection_source.lock").exists(), "Engine started during preflight")
+QA.mkdir(parents=True)
+files = []
+for name, item in planned.items():
+    target = QA / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("xb") as handle:
+        handle.write(item["raw"])
+    files.append({"path": name, "sha256": sha(item["raw"]), "bytes": len(item["raw"]), "original": item["original"]})
+(QA / ".gdignore").write_bytes(b"")
+files.append({"path": ".gdignore", "sha256": sha(b""), "bytes": 0, "original": None, "role": "archive import exclusion"})
+def save_new(path, value):
+    raw = (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    with path.open("xb") as handle:
+        handle.write(raw)
+    return sha(raw)
+
+source_index = {"schema": 2, "archive_path_base": "repository_root", "mappings": mappings,
+    "source_sets": source_sets, "unique_source_blobs": len(blobs),
+    "reused_existing_blobs": sum(path.startswith("qa/") and not path.startswith(relative(QA) + "/")
+                                  for path in blobs.values()),
+    "source_manifest_note": "Native/build receipts retain exact source_files hashes; outer guards prove each run's protected source remained unchanged. No claim of equality to a Git tree.",
+    "reproduction_note": "Restore the selected source_set to original paths; the R2 README retains old example commands, so use its actual run_qa.py and report_process entry. Binary inputs stay under native/template provenance."}
+index_sha = save_new(QA / "source_index.json", source_index)
+manifest_sha = save_new(QA / "manifest.json", {"schema": 2, "base_git_head": BASE_HEAD,
+    "base_git_note": "Starting checkout identity, not a claim that applied uncommitted sources belong to this tree.",
+    "files": files, "runs": run_summaries, "complete_world_resume": False, "release_battle_identity_observed": False,
+    "callsite_coverage": "Each old/R2 matrix has 1195 rows, including 1020 source checks and 175 other checks. Repetition adds no independent scenarios. Migration inventory counts are not runtime branch coverage; the two three-draw eco_traps branches were reviewed statically, not individually exercised.",
+    "excluded": "Player profiles/listings, Steam credentials/caches, binary packages, images and import caches."})
+for row in files:
+    exact(QA / row["path"], row["sha256"], row["bytes"])
+for row in mappings:
+    exact(ROOT / row["archive"], row["sha256"], row["bytes"])
+verification = {"verified": True, "schema": 2, "files": len(files), "raw_artifact_bytes": sum(r["bytes"] for r in files),
+    "source_mappings": len(mappings), "unique_source_blobs": len(blobs),
+    "reused_existing_blobs": source_index["reused_existing_blobs"], "source_index_sha256": index_sha,
+    "manifest_sha256": manifest_sha, "all_final_receipts_checked_before_write": True,
+    "failed_history_preserved": ["failed0", "failed_r1"], "runtime_unique_union": 103,
+    "runtime_same_raw_between_runs": 101, "generated_sidecars": ["source_index.json", "manifest.json", "archive_verification.json"],
+    "README_added_by_root_after_archive": True, "git_or_engine_executed": False}
+save_new(QA / "archive_verification.json", verification)
+print(json.dumps(verification))

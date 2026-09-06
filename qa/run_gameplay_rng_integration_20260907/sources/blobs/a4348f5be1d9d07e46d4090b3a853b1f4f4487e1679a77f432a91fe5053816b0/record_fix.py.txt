@@ -1,0 +1,27 @@
+from pathlib import Path
+import hashlib, json, difflib
+ROOT = Path(__file__).resolve().parents[2]
+HERE = Path(__file__).resolve().parent
+target = 'tools/contracts/run_content_identity_20260907/pck_probe.gd'
+old = (ROOT/'scratchpad/run_gameplay_rng_integration/application/candidate'/(target+'.txt')).read_bytes()
+new = (ROOT/target).read_bytes()
+sha = lambda b: hashlib.sha256(b).hexdigest()
+assert sha(old) == 'e7d28bdbc602fd2526173385bed3ad5b6824637ebd8b262a221edb0b7c474677'
+assert sha(new) == '62a6ea6d5e3b87bb60d3c2dfe72d6c245972d58924f80bdfef91a130a7a18d85'
+before = old.decode('utf-8').replace('\r\n','\n')
+after = new.decode('utf-8').replace('\r\n','\n')
+start = after.index('func _optional_content_matches(')
+end = after.index('func _run()',start)
+inverse = (after[:start]+after[end:]).replace('_optional_content_matches(result.get("optional_content"), manifest.optional_content)', 'result.get("optional_content") == manifest.optional_content')
+assert inverse == before
+with (HERE/'pck_probe_r1.patch').open('xb') as f:
+    f.write(''.join(difflib.unified_diff(before.splitlines(True), after.splitlines(True), fromfile='a/'+target,tofile='b/'+target)).encode('utf-8'))
+value = {'path':target,'before_sha256':sha(old),'after_sha256':sha(new),'bytes':len(new),
+         'lf_inverse_exact':True,'production_provider_changed':False,
+         'changes':['Add exact optional-content transport field comparator','Use comparator for the existing single optional-content check'],
+         'diagnostic':'scratchpad/run_content_identity_transport/runs/20260906T214125997167Z/receipt.json',
+         'original_builder':'.godot/steam_candidates/20260907_053155_29e025d2',
+         'new_builder':'.godot/steam_candidates/20260907_054309_1ccc4379',
+         'new_builder_passed':False}
+with (HERE/'fix_receipt.json').open('xb') as f: f.write((json.dumps(value,indent=2)+'\n').encode('utf-8'))
+print(json.dumps(value))

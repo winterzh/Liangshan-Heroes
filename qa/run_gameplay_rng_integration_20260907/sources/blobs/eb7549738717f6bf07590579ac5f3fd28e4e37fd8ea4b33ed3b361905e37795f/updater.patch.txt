@@ -1,0 +1,44 @@
+--- a/scripts/android_updater.gd
++++ b/scripts/android_updater.gd
+@@ -52,6 +52,9 @@
+ var status_text := ""
+ var progress := -1.0
+ var active_content_version := BASE_CONTENT_VERSION
++# Installed-input identity reads actual bootstrap completion/mount evidence, never the display version.
++var _run_identity_complete := false
++var _run_identity_patch_sha256 := ""
+ var available_manifest: Dictionary = {}
+ var platform_id := ""
+ var architecture := ""
+@@ -75,6 +78,7 @@
+ 	# 所以反向判断才能稳定区分导出程序与本地编辑调试。专项测试仍可显式绕过。
+ 	enabled = platform_id != "" and (not OS.has_feature("editor") or _is_update_test())
+ 	if not enabled:
++		_run_identity_complete = true
+ 		return
+ 	_update_dir = ANDROID_UPDATE_DIR if platform_id == "android" else DESKTOP_UPDATE_ROOT.path_join(platform_id)
+ 	_state_path = _update_dir.path_join("state.json")
+@@ -82,6 +86,7 @@
+ 	_download_tmp_path = _update_dir.path_join("download.pck.tmp")
+ 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_update_dir))
+ 	_load_installed_patch()
++	_run_identity_complete = true
+ 
+ 
+ func _ready() -> void:
+@@ -375,6 +380,7 @@
+ 	if not size_ok:
+ 		return
+ 	if ProjectSettings.load_resource_pack(path, true):
++		_run_identity_patch_sha256 = expected_sha
+ 		active_content_version = version
+ 		_cleanup_stale_patches(path)
+ 
+@@ -613,3 +619,7 @@
+ 
+ func _fail(text: String) -> void:
+ 	_set_status("error", text)
++
++
++func run_content_mount_identity() -> Dictionary:
++	return {"schema": 1, "complete": _run_identity_complete, "patch_sha256": _run_identity_patch_sha256}

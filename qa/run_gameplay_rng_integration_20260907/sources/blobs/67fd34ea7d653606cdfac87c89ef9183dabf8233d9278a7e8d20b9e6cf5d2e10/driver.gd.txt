@@ -1,0 +1,499 @@
+extends SceneTree
+## Real production consumers only. Shell cases never execute Battle._ready.
+## Separate startup phase runs the original complete new-game _ready.
+const I64_MAX := 9223372036854775807
+var checks: Array = []
+var manifest: Dictionary = {}
+var failures: Array = []
+var owned: Array = []
+var trusted: Dictionary = {}
+var bs: Script
+var us: Script
+var ms: Script
+var ps: Script
+var ls: Script
+var rs: Script
+var ds: Script
+var hs: Script
+var ins: Script
+var codec: Variant
+var campaign: Variant
+var watched: Variant = null
+var early_events: Array = []
+var detail: Dictionary = {}
+
+func _initialize() -> void: _run.call_deferred()
+
+func check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	if not passed: failures.append(label)
+	return passed
+
+func same(a: Variant, b: Variant) -> bool:
+	var aa: Dictionary = codec.encode(a)
+	var bb: Dictionary = codec.encode(b)
+	return aa.ok and bb.ok and aa.value == bb.value
+
+func normalized(path: String) -> String:
+	return path.replace("\\", "/").simplify_path().to_lower()
+
+func source_check(prefix: String) -> void:
+	for path in manifest.source_sha256:
+		check(prefix + ":" + path, FileAccess.get_sha256("res://" + path) == manifest.source_sha256[path])
+
+func finish(aborted: bool = false) -> void:
+	for node in owned:
+		if is_instance_valid(node): node.free()
+	owned.clear()
+	paused = false
+	if manifest.has("source_sha256"): source_check("source_after")
+	var report: Dictionary = {"suite": "gameplay-rng-callsites", "phase": manifest.get("phase", ""),
+		"run_id": manifest.get("run_id", ""), "process_id": OS.get_process_id(),
+		"actual_user_dir": OS.get_user_data_dir(), "source_sha256": manifest.get("source_sha256", {}),
+		"engine_binary_sha256": manifest.get("engine_binary_sha256", ""), "identity": trusted,
+		"complete": not aborted, "passed": not aborted and failures.is_empty(), "checks": checks,
+		"failures": failures, "detail": detail,
+		"scope": "Real source callsites and a separate real startup. RNG-only suffix handoff recreates controlled fixtures; not full Battle/Unit/Map restore, visual equivalence, PCK or performance acceptance."}
+	if manifest.has("report"):
+		var f := FileAccess.open(manifest.report, FileAccess.WRITE)
+		if f == null: quit(1); return
+		f.store_string(JSON.stringify(report, "\t")); f.close()
+	print("[gameplay-rng-callsites QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("RUN_RNG_CALLSITE_MANIFEST")))
+	if typeof(data) != TYPE_DICTIONARY: finish(true); return
+	manifest = data
+	if not check("manifest_profile", normalized(OS.get_user_data_dir()) == normalized(manifest.private_user)):
+		finish(true); return
+	if not check("manifest_new_report", String(manifest.report).is_absolute_path() and not FileAccess.file_exists(manifest.report)):
+		manifest.erase("report"); finish(true); return
+	source_check("source_before")
+	if not failures.is_empty(): finish(true); return
+	bs = load("res://scripts/battle.gd")
+	us = load("res://scripts/unit.gd")
+	ms = load("res://scripts/game_map.gd")
+	ps = load("res://scripts/projectile.gd")
+	ls = load("res://scripts/levels/skirmish.gd")
+	rs = load("res://scripts/run_gameplay_rng.gd")
+	ds = load("res://scripts/defs.gd")
+	hs = load("res://scripts/hud.gd")
+	ins = load("res://scripts/hero_inventory.gd")
+	codec = load("res://scripts/run_state_value_codec.gd").new()
+	var provider: Variant = load("res://scripts/run_content_identity.gd").new()
+	trusted = provider.resolve_runtime_identity()
+	if not check("provider_actual_trusted", trusted.get("ok") == true and trusted.get("save_eligible") == true):
+		finish(true); return
+	if not check("provider_matches_host_engine", trusted.get("engine_binary_sha256") == manifest.engine_binary_sha256 
+		and FileAccess.get_sha256(OS.get_executable_path()) == manifest.engine_binary_sha256):
+		finish(true); return
+	campaign = root.get_node("Campaign")
+	campaign.skirmish = true; campaign.skirmish_ai = false; campaign.arena = false
+	campaign.scenario = false; campaign.custom_defense = false; campaign.ai_friendly = false
+	campaign.defense_waves = 30; campaign.defense_random = false; campaign.scale_on = false
+	root.get_node("Settings").auto_micro_level = 0
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true) # Sfx still executes its original calls.
+	paused = true
+	match String(manifest.phase):
+		"matrix": await matrix()
+		"startup": startup()
+		"restore_reject": restore_reject()
+		"writer": handoff_writer()
+		"reader": handoff_reader()
+		_: check("known_phase", false)
+	finish()
+
+func shell(initial_seed: int = 101, restore_record: Variant = null) -> Variant:
+	var b: Variant = bs.new()
+	owned.append(b)
+	b.process_mode = Node.PROCESS_MODE_DISABLED
+	var world := Node2D.new()
+	world.visible = false; world.process_mode = Node.PROCESS_MODE_DISABLED
+	root.add_child(world); owned.append(world)
+	b.world = world
+	b.units_root = Node2D.new(); world.add_child(b.units_root)
+	b.fx_root = Node2D.new(); world.add_child(b.fx_root)
+	b.map = ms.new(); owned.append(b.map)
+	b.map.init_map(96, 72, "marsh", ms.T.GRASS); b.map.bake()
+	b._defs = ds.UNITS.duplicate(true); b._abilities = ds.ABILITIES.duplicate(true)
+	b._items = ds.ITEMS.duplicate(true)
+	b.level = ls.new(); b.level.bind_gameplay_rng_owner(b)
+	b.hud = hs.new(); b.hud._info_expanded = true; b.hud.battle = b; owned.append(b.hud)
+	b.fog = false; b._lite_fx = false; b.economy = false
+	var configured: Dictionary = b.configure_new_gameplay_rng(trusted, initial_seed) if restore_record == null \
+		else b.configure_restored_gameplay_rng(trusted, restore_record)
+	check("fixture_shell_configured", configured.get("ok") == true)
+	return b
+
+func reference(initial_seed: int) -> Variant:
+	var r: Variant = rs.new(trusted.content_version)
+	check("fixture_reference_started", r.start(initial_seed, trusted.engine_binary_sha256).ok)
+	return r
+
+func state(b: Variant) -> Dictionary:
+	# Inspect real module after a fault without bypassing Battle's save rejection.
+	var cap: Dictionary = b._gameplay_rng.capture()
+	var decoded: Dictionary = codec.decode(cap.record)
+	return decoded.value
+
+func stream_equal(label: String, b: Variant, r: Variant) -> void:
+	var cap: Dictionary = r.capture()
+	check(label, same(state(b), codec.decode(cap.record).value))
+
+func count_at(b: Variant, calls: int) -> void:
+	var value: Dictionary = state(b)
+	value["calls"] = calls
+	var record: Dictionary = codec.encode(value)
+	check("fixture_real_exhaustion_record", b._gameplay_rng.restore(record.value, trusted.engine_binary_sha256).ok)
+
+func unit(b: Variant, at: Vector2 = Vector2(500, 500), faction: int = 0) -> Variant:
+	var u: Variant = us.new()
+	u.visible = false; u.process_mode = Node.PROCESS_MODE_DISABLED
+	u.key = "guan_dao"; u.display_name = "Callsite fixture"
+	u.setup_def = ds.UNITS["guan_dao"].duplicate(true)
+	u.position = at; u.faction = faction; u.battle = b; u.map = b.map
+	u.max_hp = 1000.0; u.hp = 1000.0; u.radius = 12.0
+	u.atk = 100.0; u.atk_range = 50.0; u.defense = 0.0; u.crit_chance_bonus = -1.0
+	u.passive = true; u.stance = us.STANCE_PASSIVE; u._combat_cool = 999.0
+	u._track_combat_stats = false; u.inventory = null
+	b.units_root.add_child(u); b.units.append(u)
+	return u
+
+func pair(initial_seed: int = 101) -> Array:
+	var b: Variant = shell(initial_seed)
+	var a: Variant = unit(b); a.hp = 500.0
+	var t: Variant = unit(b, Vector2(530, 500), 1)
+	a._pending_target = t
+	return [b, a, t, reference(initial_seed)]
+
+func equip_event(b: Variant, owner: Variant, event: String) -> void:
+	# Defs.ITEMS is currently empty. This explicit data-only passive fixture is
+	# consumed by original HeroInventory and Battle, not a fake RNG or callback.
+	b._items["qa_fault_passive"] = {"name": "QA passive", "max_stack": 1,
+		"passive": {"triggers": {event: {"chance": 1.0, "target": "self", "heal": 1.0, "cooldown": 1.0}}}}
+	owner.inventory = ins.new(owner)
+	owner.inventory.slots[0] = {"id": "qa_fault_passive", "count": 1, "uid": b.allocate_item_uid()}
+
+func expected_wave(r: Variant, i: int, interval: float) -> Dictionary:
+	# Independent arithmetic oracle, original production _make_random_wave is
+	# called once separately. Retain '%' and branch-dependent draws explicitly.
+	var total: int = clampi(10 + i + floori(float(i) / 3.0), 10, 42)
+	var ng: int = clampi(2 + floori(float(i) / 6.0), 2, 4)
+	var per: int = maxi(1, roundi(float(total) / float(ng)))
+	var rem: int = total
+	var groups: Array = []
+	for gi in range(ng):
+		var count: int = maxi(1, rem) if gi == ng - 1 else mini(per, maxi(1, rem - (ng - 1 - gi)))
+		rem -= count
+		var troop: int = r.draw_randi().value
+		var gate: int = r.draw_randi().value
+		groups.append([ls.RAND_TROOPS[troop % ls.RAND_TROOPS.size()], count, gate % ls.GATES.size()])
+	if i >= 2:
+		var boss_roll: float = r.draw_randf().value
+		if boss_roll < clampf(0.15 + float(i) * 0.02, 0.15, 0.6):
+			var boss: int = r.draw_randi().value
+			var gate: int = r.draw_randi().value
+			groups.append([ls.RAND_BOSSES[boss % ls.RAND_BOSSES.size()], 1, gate % ls.GATES.size()])
+	if i >= 6:
+		if float(r.draw_randf().value) < 0.25:
+			groups.append(["war_elephant", 1, int(r.draw_randi().value) % ls.GATES.size()])
+	var message: int = r.draw_randi().value
+	return {"t": 120.0 if i == 0 else interval, "msg": ls.RAND_MSGS[message % ls.RAND_MSGS.size()], "groups": groups}
+
+func noise() -> void:
+	for _i in range(17):
+		randf(); randi(); randf_range(-30.0, 30.0)
+
+func matrix() -> void:
+	var b: Variant = shell(9007199254740993)
+	var r: Variant = reference(9007199254740993)
+	for spec in [["randi", []], ["randf", []], ["randi_range", [-2147483648, 2147483647]], ["randf_range", [-70.0, 70.0]]]:
+		var actual: Dictionary = b.callv("gameplay_" + spec[0], spec[1])
+		var expected: Dictionary = r.callv("draw_" + spec[0], spec[1])
+		check("api_" + spec[0], actual.ok and same(actual.value, expected.value))
+	stream_equal("api_native_int64_state", b, r)
+	var gate := Vector2i(12, 12)
+	var dest := Vector2(900, 900)
+	var expected_spawn: Array = []
+	for _i in range(3):
+		var x: int = r.draw_randi_range(-2, 2).value
+		var y: int = r.draw_randi_range(-2, 2).value
+		var cell: Vector2i = b.map.nearest_open(gate + Vector2i(x, y), "land")
+		var dx: float = r.draw_randf_range(-70.0, 70.0).value
+		var dy: float = r.draw_randf_range(-70.0, 70.0).value
+		expected_spawn.append([b.map.cell_to_world(cell), dest + Vector2(dx, dy)])
+	var spawned: Array = b.spawn_group("guan_dao", 3, 1, gate, dest)
+	check("spawn_three_units", spawned.size() == 3)
+	for i in range(spawned.size()):
+		check("spawn_jitter_and_amove_" + str(i), spawned[i].position == expected_spawn[i][0]
+			and spawned[i]._amove_dest == expected_spawn[i][1] and spawned[i]._state == us.ST_AMOVE and spawned[i]._order_serial == 1)
+	stream_equal("spawn_four_draws_each", b, r)
+	var fixed_before: Dictionary = state(b)
+	var table: Array = b.level._waves()
+	check("classic_30_cache_zero_draw", same(table, ls.WAVES) and table.size() == 30 and same(fixed_before, state(b)))
+	for i in [0, 1, 2, 5, 6, 12, 29]:
+		var expected: Dictionary = expected_wave(r, i, 25.0)
+		var actual: Dictionary = b.level._make_random_wave(i, 25.0)
+		check("random_wave_modulo_" + str(i), same(actual, expected))
+		stream_equal("random_wave_shortcircuit_" + str(i), b, r)
+	var u: Variant = unit(b)
+	u.start_drunk(0.9, 1.3, 30.0)
+	var dm: float = r.draw_randf_range(0.9, 1.3).value
+	var da: float = r.draw_randf_range(0.9, 1.3).value
+	check("drunk_immediate_two", u._drunk_move == dm and u._drunk_atk == da and u._drunk_reroll == 0.0)
+	u._physics_process(0.125)
+	dm = r.draw_randf_range(0.9, 1.3).value; da = r.draw_randf_range(0.9, 1.3).value
+	check("drunk_next_step_two", u._drunk_move == dm and u._drunk_atk == da and u._drunk_reroll == 1.4 and u._drunk_t == 29.875)
+	stream_equal("drunk_original_draw_order", b, r)
+	noise()
+	u.melee_mode = true
+	var heal_roll: Dictionary = u.lifesteal_frac()
+	check("visual_noise_independent", heal_roll.ok and heal_roll.value == r.draw_randf_range(0.2, 0.4).value)
+	stream_equal("visual_noise_stream_state", b, r)
+	attack_cases()
+	await projectile_cases()
+	fault_cases()
+	await axes_fault_case()
+
+func attack_cases() -> void:
+	for kind in ["blind", "miss", "miss_zero", "crit_zero", "crit_one", "building", "resource", "combo"]:
+		var f: Array = pair(401)
+		var b: Variant = f[0]; var a: Variant = f[1]; var t: Variant = f[2]; var r: Variant = f[3]
+		var damage: float = 100.0
+		var healing: float = 0.0
+		match kind:
+			"blind": a._blind_t = 1.0; damage = 0.0
+			"miss": a._attack_miss_t = 1.0; a._attack_miss_chance = 1.0; r.draw_randf(); damage = 0.0
+			"miss_zero": a._attack_miss_t = 1.0; a._attack_miss_chance = 0.0; r.draw_randf(); r.draw_randf()
+			"crit_zero": r.draw_randf()
+			"crit_one": a.crit_chance_bonus = 1.0; r.draw_randf(); damage = 180.0
+			"building": t.is_building = true
+			"resource": t.is_resource = true
+			"combo":
+				a.bash_chance = 1.0; a.bash_dur = 2.0; a.melee_mode = true
+				a.cav_ls_chance = 1.0; a.cav_ls_frac = 0.2; t.is_cavalry = true
+				r.draw_randf(); r.draw_randf()
+				healing = damage * (float(r.draw_randf_range(0.2, 0.4).value) + 0.2)
+				r.draw_randf()
+		a._deal_hit()
+		check("attack_damage_" + kind, is_equal_approx(t.hp, 1000.0 - damage))
+		check("attack_heal_" + kind, is_equal_approx(a.hp, 500.0 + healing))
+		stream_equal("attack_consumption_" + kind, b, r)
+		if kind == "combo": check("bash_applied", t._stun_t == 2.0)
+	# Pick a seed using only the independent native reference, then call the
+	# production evasion branch exactly once. No expected-value double attack.
+	var selected_seed: int = -1
+	for seed_value in range(100):
+		var probe := RandomNumberGenerator.new(); probe.seed = seed_value
+		if probe.randf() < 0.9: selected_seed = seed_value; break
+	var e: Array = pair(selected_seed)
+	e[2].evasion = 0.95; e[3].draw_randf(); e[1]._deal_hit()
+	check("evasion_stops_before_crit", e[2].hp == 1000.0)
+	stream_equal("evasion_single_draw", e[0], e[3])
+	var f: Array = pair(101)
+	f[1].ability_slots = [{"id": "li_brawn", "rank": 1, "cd_t": 0.0, "passive": true}]
+	var before: Dictionary = state(f[0])
+	var axes: Variant = f[1]._try_li_brawn_axes(0.0)
+	check("axes_explicit_roll_no_draw", is_instance_valid(axes) and same(before, state(f[0])))
+	var zero: Dictionary = f[0]._abilities["li_brawn"].duplicate(true)
+	zero["effect"]["axe_chance"] = 0.0
+	f[0]._abilities["li_brawn"] = zero
+	var absent: Variant = f[1]._try_li_brawn_axes()
+	f[3].draw_randf()
+	check("axes_zero_chance_still_draws", absent == null)
+	stream_equal("axes_default_roll_consumed", f[0], f[3])
+
+func projectile_cases() -> void:
+	for should_fault in [false, true]:
+		var f: Array = pair(402)
+		var b: Variant = f[0]; var a: Variant = f[1]; var t: Variant = f[2]
+		a.melee_mode = true
+		if should_fault: count_at(b, I64_MAX)
+		var p: Variant = ps.new(); b.fx_root.add_child(p)
+		p.position = t.position; p.setup(a, t, 30.0)
+		var handle: WeakRef = weakref(p)
+		p._physics_process(0.01)
+		var suffix: String = "fault" if should_fault else "normal"
+		check("projectile_one_damage_" + suffix, t.hp == 970.0 and p.is_queued_for_deletion())
+		if should_fault:
+			check("projectile_partial_no_default_heal", a.hp == 500.0 and b.gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED" and not b.capture_gameplay_rng().ok)
+		else:
+			var fraction: float = f[3].draw_randf_range(0.2, 0.4).value
+			check("projectile_real_lifesteal", is_equal_approx(a.hp, 500.0 + 30.0 * fraction))
+			stream_equal("projectile_consumption", b, f[3])
+		var after: Dictionary = state(b)
+		p._physics_process(0.01)
+		check("projectile_no_second_hit_" + suffix, t.hp == 970.0 and same(after, state(b)))
+		await process_frame
+		check("projectile_exited_" + suffix, handle.get_ref() == null)
+
+func fault_cases() -> void:
+	var b: Variant = shell()
+	count_at(b, I64_MAX)
+	var before: Dictionary = state(b)
+	var denied: Dictionary = b.gameplay_randf()
+	check("exhaustion_no_default_value", not denied.ok and denied.code == "CALL_COUNT_EXHAUSTED" and not denied.has("value") and same(before, state(b)))
+	check("exhaustion_capture_denied", not b.capture_gameplay_rng().ok)
+	var u: Variant = unit(b); u._story_pose_t = 2.0; u._temp_atk_t = 2.0
+	u._physics_process(0.5)
+	check("unit_next_step_stopped", u._story_pose_t == 2.0 and u._temp_atk_t == 2.0)
+	b.selection = [u]; u.is_hero = true
+	b.hud.toggle_auto_selected(); b.hud._toggle_all_auto()
+	b.arm_build("house"); b._order_amove_at(Vector2.ZERO); b.cast_ability(u, 0)
+	check("fault_ui_commands_stopped", not u.auto_micro and u._order_serial == 0 and not b.queue_train(null, "guan_dao"))
+	var wave: Variant = shell()
+	wave.level.hall = unit(wave); wave.level.hall.is_building = true
+	wave.level._started = true; wave.level._wave_t = 0.0
+	wave.level._wavelist_cache = ls.WAVES.duplicate(true)
+	count_at(wave, I64_MAX - 2)
+	wave.level.process(wave, 0.01)
+	check("wave_partial_spawn_no_advance", wave.gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED" and wave.level._wave == 0
+		and not wave.level._wave_spawned and wave.units.size() == 2 and wave.units[1]._order_serial == 0)
+	check("wave_partial_capture_denied", not wave.capture_gameplay_rng().ok)
+	var random_b: Variant = shell()
+	campaign.defense_random = true; campaign.defense_rand_waves = 3
+	count_at(random_b, I64_MAX - 6)
+	var partial: Array = random_b.level._waves()
+	check("random_partial_cache_not_committed", partial.is_empty() and random_b.level._wavelist_cache.is_empty()
+		and random_b.gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED")
+	campaign.defense_random = false
+	var f: Array = pair()
+	var second: Variant = unit(f[0], Vector2(540, 500), 1)
+	f[2].is_hero = true; equip_event(f[0], f[2], "on_damaged")
+	count_at(f[0], I64_MAX)
+	f[0]._apply_item_effect_bundle(f[1], "qa_bundle", [{"damage": 25.0}, {"stun": 2.0}],
+		{"radius": 100.0, "unit_team": "enemy"}, Vector2(530, 500), null, "qa_bundle")
+	check("nested_multitarget_stops", f[2].hp == 975.0 and second.hp == 1000.0 and f[2]._stun_t == 0.0
+		and f[0].gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED" and not f[0].capture_gameplay_rng().ok)
+	unit_r1_faults()
+
+func unit_r1_faults() -> void:
+	var periodic: Variant = shell()
+	var u: Variant = unit(periodic); equip_event(periodic, u, "periodic")
+	u._temp_atk_t = 2.0; u.temp_atk = 2.0; u._drunk_t = 2.0
+	count_at(periodic, I64_MAX)
+	u._physics_process(0.25)
+	check("r1_periodic_stops_same_body", periodic.gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED" and u._temp_atk_t == 2.0 and u._drunk_t == 2.0)
+	var death: Array = pair()
+	death[1].is_hero = true; equip_event(death[0], death[1], "on_kill")
+	death[2].hp = 10.0; death[2].died.connect(death[0]._on_unit_died)
+	count_at(death[0], I64_MAX)
+	death[2].take_damage(20.0, death[1])
+	check("r1_death_signal_stops_same_action", death[0].gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED" and death[2].hp == 0.0 and not death[2]._dying)
+	var g: Array = pair()
+	var hall: Variant = g[2]; hall.is_building = true; hall.hp = 10.0
+	var p1: Variant = unit(g[0]); var p2: Variant = unit(g[0])
+	for passenger in [p1, p2]: passenger.garrison_holder = hall; passenger.garrisoned = true
+	hall.passengers = [p1, p2]
+	count_at(g[0], I64_MAX)
+	hall.take_damage(20.0, g[1])
+	check("r1_passengers_stop_before_second", g[0].gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED" and not p1.garrisoned
+		and p2.garrisoned and hall.passengers == [p2])
+	var summon: Variant = shell()
+	var s: Variant = unit(summon); s.is_summon = true; s._summon_ttl = 0.1; s._buff_glow = 0.6
+	equip_event(summon, s, "on_death"); count_at(summon, I64_MAX)
+	s._physics_process(0.25)
+	check("r1_summon_expiry_stops_same_body", summon.gameplay_rng_fault() == "CALL_COUNT_EXHAUSTED" and s.hp == 0.0 and s._buff_glow == 0.6 and not s._dying)
+
+func axes_fault_case() -> void:
+	var f: Array = pair()
+	var second: Variant = unit(f[0], Vector2(550, 500), 1)
+	f[2].is_hero = true; equip_event(f[0], f[2], "on_damaged")
+	var axes: Variant = f[0].spawn_li_brawn_axes(f[1], 120.0)
+	if not check("axes_real_batch_created", is_instance_valid(axes) and axes.hits.size() == 2): return
+	var handle: WeakRef = weakref(axes)
+	count_at(f[0], I64_MAX)
+	axes.resolve_hits()
+	check("axes_partial_stops_second_target", f[2].hp == 900.0 and second.hp == 1000.0 and axes.resolved and axes.is_queued_for_deletion())
+	axes.resolve_hits()
+	check("axes_no_repeated_damage", f[2].hp == 900.0 and second.hp == 1000.0)
+	await process_frame
+	check("axes_fault_batch_exited", handle.get_ref() == null)
+
+func on_node_added(node: Node) -> void:
+	if not is_instance_valid(watched): return
+	var script: Variant = node.get_script()
+	if script == hs or script == us:
+		early_events.append({"kind": "hud" if script == hs else "unit", "bound": watched._gameplay_rng != null
+			and watched.level != null and watched.level._rng_owner_matches(watched)
+			and watched.gameplay_rng_fault().is_empty()})
+
+func startup() -> void:
+	campaign.defense_random = true; campaign.defense_rand_waves = 3
+	watched = bs.new(); owned.append(watched)
+	watched.process_mode = Node.PROCESS_MODE_DISABLED
+	node_added.connect(on_node_added)
+	root.add_child(watched) # Original full _ready; no override, no manual seed injection.
+	node_added.disconnect(on_node_added)
+	var hud_seen := false
+	var unit_seen := false
+	var all_bound := true
+	for event in early_events:
+		hud_seen = hud_seen or event.kind == "hud"
+		unit_seen = unit_seen or event.kind == "unit"
+		all_bound = all_bound and event.bound
+	check("startup_bound_before_hud_and_units", hud_seen and unit_seen and all_bound)
+	check("startup_actual_full_battle", watched.hud != null and watched.map != null and not watched.units.is_empty()
+		and watched._gameplay_rng_start_kind == "new" and watched.gameplay_rng_fault().is_empty())
+	var record: Dictionary = state(watched)
+	var r: Variant = reference(record.seed)
+	var expected: Array = []
+	for i in range(3): expected.append(expected_wave(r, i, campaign.defense_interval))
+	var actual: Array = watched.level._waves()
+	check("startup_actual_random_cache", same(actual, expected))
+	stream_equal("startup_seed_precedes_wave_generation", watched, r)
+	detail["early_events"] = early_events
+
+func restore_reject() -> void:
+	var r: Variant = reference(-9007199254740993)
+	var record: Dictionary = r.capture().record
+	for invalid in [false, true]:
+		var b: Variant = bs.new(); owned.append(b)
+		b.process_mode = Node.PROCESS_MODE_DISABLED
+		var result: Dictionary = b.configure_restored_gameplay_rng(trusted, {} if invalid else record)
+		check("restore_preconfigure_" + str(invalid), not result.ok if invalid else result.ok)
+		root.add_child(b)
+		check("restore_attach_refuses_new_game_" + str(invalid), b.gameplay_rng_fault() == "RESTORE_FACTORY_REQUIRED"
+			and b.map == null and b.hud == null and b.units.is_empty() and b._steam_run_id == 0 and b.get_child_count() == 0)
+		check("restore_attach_capture_denied_" + str(invalid), not b.capture_gameplay_rng().ok)
+
+func suffix(b: Variant) -> Dictionary:
+	noise()
+	var units: Array = b.spawn_group("guan_dao", 2, 1, Vector2i(12, 12), Vector2(900, 900))
+	var trace: Array = []
+	for u in units: trace.append([u.position, u._amove_dest])
+	var a: Variant = unit(b)
+	a.start_drunk(0.9, 1.3, 30.0)
+	trace.append([a._drunk_move, a._drunk_atk])
+	a._physics_process(0.125)
+	trace.append([a._drunk_move, a._drunk_atk])
+	a.melee_mode = true
+	trace.append(a.lifesteal_frac().value)
+	trace.append(b.level._make_random_wave(6, 25.0))
+	return {"trace": codec.encode(trace).value, "end_record": b.capture_gameplay_rng().record}
+
+func handoff_writer() -> void:
+	var b: Variant = shell(-9007199254740993)
+	b.spawn_group("guan_dao", 1, 1, Vector2i(12, 12), Vector2(900, 900))
+	var prefix_unit: Variant = unit(b); prefix_unit.start_drunk(0.9, 1.3, 30.0)
+	var checkpoint: Dictionary = b.capture_gameplay_rng().record
+	var expected: Dictionary = suffix(b)
+	var handoff: Dictionary = {"version": 1, "run_id": manifest.run_id, "writer_pid": OS.get_process_id(),
+		"record": checkpoint, "expected": expected, "scope": "RNG continuation through recreated callsite fixtures"}
+	var f := FileAccess.open(manifest.handoff, FileAccess.WRITE)
+	if not check("writer_handoff_open", f != null): return
+	f.store_string(JSON.stringify(handoff)); f.close()
+	check("writer_handoff_json", typeof(JSON.parse_string(FileAccess.get_file_as_string(manifest.handoff))) == TYPE_DICTIONARY)
+	detail["handoff_sha256"] = FileAccess.get_sha256(manifest.handoff)
+
+func handoff_reader() -> void:
+	if not check("reader_handoff_host_hash", FileAccess.get_sha256(manifest.handoff) == manifest.handoff_sha256): return
+	var handoff: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest.handoff))
+	if not check("reader_distinct_process", typeof(handoff) == TYPE_DICTIONARY and handoff.run_id == manifest.run_id
+		and int(handoff.writer_pid) != OS.get_process_id() and int(handoff.writer_pid) == int(manifest.writer_pid)): return
+	var b: Variant = shell(0, handoff.record)
+	var actual: Dictionary = suffix(b)
+	check("reader_actual_consumer_suffix", actual.trace == handoff.expected.trace)
+	check("reader_exact_rng_suffix_state", actual.end_record == handoff.expected.end_record)
+	check("reader_restore_kind_preserved", b._gameplay_rng_start_kind == "restored" and b.gameplay_rng_fault().is_empty())

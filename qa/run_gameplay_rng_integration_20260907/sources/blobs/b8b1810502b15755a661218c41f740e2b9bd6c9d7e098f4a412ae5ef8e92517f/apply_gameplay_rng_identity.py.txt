@@ -1,0 +1,107 @@
+"""Apply only the frozen reviewed RNG/identity candidates after every pin passes."""
+from pathlib import Path
+import hashlib, json, re, datetime
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / 'scratchpad/run_gameplay_rng_integration/application'
+def sha(raw): return hashlib.sha256(raw).hexdigest()
+def need(ok, message):
+    if not ok: raise RuntimeError(message)
+plans = []
+def plan(target, source, before, after):
+    dst = ROOT / target
+    old = dst.read_bytes() if dst.exists() else None
+    need((sha(old) if old is not None else None) == before, 'Base drift: ' + target)
+    raw = (ROOT / source).read_bytes() if isinstance(source, str) else source
+    need(sha(raw) == after, 'Candidate drift: ' + target)
+    plans.append((target, old, raw, source if isinstance(source, str) else 'pinned unified patch'))
+
+bundle = json.loads((ROOT / 'scratchpad/run_gameplay_rng_battle/candidate.json').read_text(encoding='utf-8'))
+for row in bundle['files']:
+    plan(row['path'], 'scratchpad/run_gameplay_rng_battle/candidate/' + row['path'], row['base_sha256'], row['candidate_sha256'])
+plan('scripts/unit.gd', 'scratchpad/run_gameplay_rng_callsite_qa/unit_r1/candidate_unit.gd',
+     '2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc',
+     'b0ffcb7ada64918d21f91fe7dfd5e7500c59b5545150fdf90294ccc8a8bd253f')
+plan('scripts/projectile.gd', 'scratchpad/run_unit_projectile_rng_candidate/candidate_projectile.gd',
+     '949d44303dbd8f31f958118f54be6980d2aeb22ef0eeafbac5ba9aa544e530b8',
+     'd3c1e0f697fa4ac4ca846fb53a80513b1a1dcb2f19626e64eb7cfaa677e67d03')
+plan('scripts/run_content_identity.gd', 'scratchpad/run_content_identity/provider.gd', None,
+     'aae43a2097bfbe5b251fb7c2fc9e08375f685a4d4dfa28e5e0aa54442f637f6b')
+plan('scripts/android_updater.gd', 'scratchpad/run_content_identity/updater_candidate.gd.txt',
+     '4a67acd65db800749f9ba06a18e5e589eba7b722dcf3e28fd9a77c8e410e55ad',
+     'd88b22a9dac61c0f04b88bf165a9975821aca931c1c4a5c36106ab02b52b9765')
+for name, digest in {
+    'build_identity.py': '818f280d3c8518348566e9986bd5bb6dd0b05f18a4ffdcc0bcd30efd398e946a',
+    'probe_runner.py': '72af02fd888ee292957caab5446a25e659fbd8f0945e9757192f840e2dffcfa3',
+    'pck_probe.gd': 'e7d28bdbc602fd2526173385bed3ad5b6824637ebd8b262a221edb0b7c474677',
+}.items():
+    plan('tools/contracts/run_content_identity_20260907/' + name,
+         'scratchpad/run_content_identity/' + name, None, digest)
+ignore = (ROOT / 'scratchpad/run_content_identity/.gdignore').read_bytes()
+need(ignore == b'\n', 'Unexpected import-ignore marker')
+plan('tools/contracts/run_content_identity_20260907/.gdignore', ignore, None, sha(ignore))
+
+pins = json.loads((ROOT / 'scratchpad/run_content_identity/steam_builder_pins.json').read_text(encoding='utf-8'))
+patch = (ROOT / 'scratchpad/run_content_identity/steam_builder.patch').read_bytes()
+need(sha(patch) == pins['patch_sha256'], 'Builder patch drift')
+lines = patch.decode('utf-8').splitlines()
+sections = {}
+i = 0
+while i < len(lines):
+    need(lines[i].startswith('--- a/'), 'Expected diff header')
+    target = lines[i][6:]
+    need(lines[i + 1] == '+++ b/' + target, 'Mismatched diff header')
+    i += 2
+    hunks = []
+    while i < len(lines) and not lines[i].startswith('--- a/'):
+        header = re.fullmatch(r'@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@.*', lines[i])
+        need(header is not None, 'Bad hunk header')
+        i += 1
+        body = []
+        while i < len(lines) and not lines[i].startswith(('@@ ', '--- a/')):
+            body.append(lines[i]); i += 1
+        hunks.append((int(header[1]) - 1, body))
+    sections[target] = hunks
+for row in pins['files']:
+    name = row['path']
+    old = (ROOT / name).read_bytes()
+    need(sha(old) == row['before_raw_sha256'], 'Builder base drift: ' + name)
+    source = old.decode('utf-8').splitlines()
+    result, pos = [], 0
+    for start, body in sections[name]:
+        need(start >= pos, 'Overlapping diff')
+        result.extend(source[pos:start]); pos = start
+        for line in body:
+            need(line and line[0] in ' +-','Invalid diff line')
+            if line[0] != '+':
+                need(pos < len(source) and source[pos] == line[1:], 'Hunk context mismatch: ' + name)
+                pos += 1
+            if line[0] != '-': result.append(line[1:])
+    result.extend(source[pos:])
+    variants = [(sep.join(result) + sep).encode('utf-8') for sep in ['\n', '\r\n']]
+    matching = [raw for raw in variants if sha(raw) == row['candidate_raw_sha256']]
+    need(len(matching) == 1, 'No exact pinned newline variant: ' + name)
+    plan(name, matching[0], row['before_raw_sha256'], row['candidate_raw_sha256'])
+
+need(not OUT.exists(), 'Application receipt already exists; inspect it rather than reapply')
+OUT.mkdir(parents=True)
+records = []
+for target, old, raw, source in plans:
+    if old is not None:
+        before = OUT / 'before' / (target + '.txt')
+        before.parent.mkdir(parents=True, exist_ok=True)
+        before.write_bytes(old)
+    after = OUT / 'candidate' / (target + '.txt')
+    after.parent.mkdir(parents=True, exist_ok=True)
+    after.write_bytes(raw)
+    records.append({'path': target, 'source': source, 'before_sha256': sha(old) if old is not None else None,
+                    'after_sha256': sha(raw), 'bytes': len(raw)})
+for target, old, raw, source in plans:
+    destination = ROOT / target
+    need((destination.read_bytes() if destination.exists() else None) == old, 'Drift just before write: ' + target)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(raw)
+receipt = {'applied_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'applied': True,
+           'godot_run': False, 'files': records}
+(OUT / 'receipt.json').write_bytes((json.dumps(receipt, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
+print(json.dumps({'applied': True, 'files': len(records), 'receipt': str(OUT / 'receipt.json')}))

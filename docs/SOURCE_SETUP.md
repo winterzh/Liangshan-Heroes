@@ -1,3 +1,13 @@
+## 2026-09-07 RNG接入与安装身份验证
+
+新Battle独立解析安装身份，在关卡/HUD/单位创建前绑定玩法RNG；恢复预配置对象拒绝走重新部署的新局入口，完整根恢复工厂仍待实现。故障锁存停止后继消费者/命令并拒绝capture，不回滚已发生伤害。provider R2按实际执行Script backing区分源码与编译资源，分别严格校验，不依据存档字段、剩余命令行args或editor feature推断身份，也不fallback。
+
+R2 native 20260907_055815_2e6a535d的176项及callsite 20260906T220055422528Z五阶段1195项通过（含1020来源检查）。最终R2 builder 20260907_060601_f70626d8 与outer20260906T220553697867Z均complete=true，源码/玩家保护true；source身份10项（PID34776）与PCK身份10项（PID19328，source_mode=false）全通过，包65及正式EXE/native DLL启动（PID38660）通过。
+
+构建生成run_build_identity.gd属于派生私有输入。实际安装身份为fababc4025d35561fcc5c7380f20eb9b79fd4650cc1b7ff53f59c8754f95fb5d，2646文件/285273844 bytes；provider为a78dc5…。这证明源码/PCK的独立provider合同及普通发行EXE启动，没有在发行EXE内部观察Battle RNG/provider绑定，也不是完整Battle恢复。
+
+复现按各source_set和原process command还原路径；旧provider aae43a…来自application/candidate原文，R2 a78dc5…单列，两个driver入口同字节共用blob。原R2 README中的旧示例命令保留原文，实际复现应使用run_gameplay_rng_callsite_r2/run_qa.py及其report_process入口。Godot由本机配置提供，玩家清单、包、缓存不入仓库。归档manifest为597e75dd6802c82a622725a34e7c1b2bb988c87050ca3fed9d2fdeb1b3235a1a，source_index采用仓库根相对路径。
+
 ## 2026-09-07 技能施法恢复复现
 
 新增 `scripts/run_cast_flow_state.gd` 及受测Battle过期目标窄修复；[归档](../qa/run_cast_flow_20260907/README.md)保留原失败、相同driver的R1成功、正式路径成功三轮，原/改runner与pins、原始patch/application及准备/修复/晋级脚本。原失败无report，不能用于通过结论；两轮成功各63项同矩阵。

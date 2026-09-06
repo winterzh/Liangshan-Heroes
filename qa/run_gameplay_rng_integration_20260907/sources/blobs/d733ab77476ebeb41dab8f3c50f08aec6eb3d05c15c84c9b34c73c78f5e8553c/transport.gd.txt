@@ -1,0 +1,22 @@
+extends SceneTree
+
+func _initialize() -> void:
+	var original: Array[Dictionary] = [{"path":"content/units.json", "present":false, "bytes":0, "sha256":""}]
+	var parsed: Variant = JSON.parse_string(JSON.stringify(original))
+	var typed_parsed: Array[Dictionary] = []
+	for row in parsed: typed_parsed.append(row)
+	var untyped_original: Array = []
+	for row in original: untyped_original.append(row)
+	var normalized: Array[Dictionary] = []
+	for row in parsed:
+		var clone: Dictionary = row.duplicate()
+		clone.bytes = int(clone.bytes)
+		normalized.append(clone)
+	var result := {"original_bytes_type":typeof(original[0].bytes), "parsed_bytes_type":typeof(parsed[0].bytes),
+		"int_type":TYPE_INT,"float_type":TYPE_FLOAT,"original_array_typed":original.is_typed(),
+		"parsed_array_typed":parsed.is_typed(),"direct_equal":original == parsed,
+		"typed_parsed_equal":original == typed_parsed,"untyped_original_equal":untyped_original == parsed,
+		"normalized_equal":original == normalized,"dictionary_equal":original[0] == parsed[0],
+		"scalar_equal":original[0].bytes == parsed[0].bytes}
+	print("IDENTITY_TRANSPORT_DIAGNOSTIC ", JSON.stringify(result))
+	quit(0)

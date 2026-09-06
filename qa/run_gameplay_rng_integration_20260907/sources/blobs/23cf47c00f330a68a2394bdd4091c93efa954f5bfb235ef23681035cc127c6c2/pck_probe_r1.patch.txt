@@ -1,0 +1,38 @@
+--- a/tools/contracts/run_content_identity_20260907/pck_probe.gd
++++ b/tools/contracts/run_content_identity_20260907/pck_probe.gd
+@@ -7,6 +7,26 @@
+ 
+ func _check(label: String, passed: bool) -> void:
+ 	_checks.append({"label": label, "passed": passed})
++
++func _optional_content_matches(actual: Variant, expected: Variant) -> bool:
++	# JSON transports byte counts as float64. Preserve the provider's integer
++	# requirement and compare only exactly representable, bounded host integers.
++	if typeof(actual) != TYPE_ARRAY or typeof(expected) != TYPE_ARRAY or actual.size() != expected.size(): return false
++	var fields := ["path", "present", "bytes", "sha256"]
++	for index in range(actual.size()):
++		var row: Variant = actual[index]
++		var host: Variant = expected[index]
++		if typeof(row) != TYPE_DICTIONARY or typeof(host) != TYPE_DICTIONARY or row.size() != 4 or host.size() != 4: return false
++		for field in fields:
++			if not row.has(field) or not host.has(field): return false
++		for field in ["path", "sha256"]:
++			if typeof(row[field]) != TYPE_STRING or typeof(host[field]) != TYPE_STRING or row[field] != host[field]: return false
++		if typeof(row.present) != TYPE_BOOL or typeof(host.present) != TYPE_BOOL or row.present != host.present: return false
++		if typeof(row.bytes) != TYPE_INT or row.bytes < 0 or row.bytes > 34359738368: return false
++		if typeof(host.bytes) not in [TYPE_INT, TYPE_FLOAT]: return false
++		if typeof(host.bytes) == TYPE_FLOAT and (not is_finite(host.bytes) or floor(host.bytes) != host.bytes): return false
++		if host.bytes < 0 or host.bytes > 34359738368 or row.bytes != int(host.bytes): return false
++	return true
+ 
+ func _run() -> void:
+ 	await process_frame
+@@ -34,7 +54,7 @@
+ 	_check("host_rules_digest", result.get("rules_sha256") == manifest.rules_sha256)
+ 	_check("host_provider_digest", result.get("provider_sha256") == manifest.provider_sha256)
+ 	_check("actual_executing_binary", result.get("engine_binary_sha256") == FileAccess.get_sha256(OS.get_executable_path()) and result.get("engine_binary_sha256") == manifest.engine_binary_sha256)
+-	_check("exact_optional_content", result.get("optional_content") == manifest.optional_content)
++	_check("exact_optional_content", _optional_content_matches(result.get("optional_content"), manifest.optional_content))
+ 	_check("private_user", ProjectSettings.globalize_path("user://").simplify_path() == String(manifest.private_user).simplify_path())
+ 	_check("native_present_when_expected", not bool(manifest.native_expected) or Engine.has_singleton("Steam"))
+ 	var passed := true

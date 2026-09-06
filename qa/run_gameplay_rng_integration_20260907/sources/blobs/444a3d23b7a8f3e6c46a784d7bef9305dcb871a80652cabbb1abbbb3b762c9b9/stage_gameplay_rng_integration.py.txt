@@ -1,0 +1,161 @@
+"""Stage only the frozen RNG integration batch after root runs the archive."""
+from pathlib import Path
+import hashlib
+import json
+import re
+import subprocess
+
+ROOT = Path(__file__).resolve().parents[1]
+QA = ROOT / "qa/run_gameplay_rng_integration_20260907"
+OUT = ROOT / "scratchpad/run_gameplay_rng_integration/stage_review"
+BASE_HEAD = "69b9b86610b6dfb058b0bfd740fb818b14df45ad"
+ALLOWED_AFTER = {
+    "tools/contracts/run_content_identity_20260907/pck_probe.gd": "62a6ea6d5e3b87bb60d3c2dfe72d6c245972d58924f80bdfef91a130a7a18d85",
+    "scripts/run_content_identity.gd": "a78dc5e9895cc4bf381e4c368c51527075ce5afa5835531881faa3a99d71077f",
+}
+def need(ok, message):
+    if not ok:
+        raise RuntimeError(message)
+
+def git(*args, **kwargs):
+    return subprocess.check_output(["git", *args], cwd=ROOT, **kwargs)
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+def read(path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def safe_path(name):
+    path = ROOT / name
+    need(not path.is_symlink() and path.resolve().is_relative_to(ROOT.resolve()), "Unsafe source path: " + name)
+    need(path.is_file(), "Missing regular file: " + name)
+    return path
+
+need(git("rev-parse", "HEAD", text=True).strip() == BASE_HEAD, "Unexpected base HEAD")
+need(git("branch", "--show-current", text=True).strip() == "codex/art-validation-20260906", "Unexpected branch")
+need(git("remote", "get-url", "origin", text=True).strip() == "https://github.com/winterzh/Liangshan-Heroes.git",
+     "Unexpected repository")
+need(not git("diff", "--cached", "--name-only", "-z"), "Existing staged changes require separate review")
+need(not OUT.exists(), "Stage review already exists; do not overwrite")
+need(not (ROOT / ".godot/redraw_rejection_source.lock").exists(), "Engine lock remains")
+
+application = read(ROOT / "scratchpad/run_gameplay_rng_integration/application/receipt.json")
+fix = read(ROOT / "scratchpad/run_content_identity_transport/fix_receipt.json")
+repair = read(ROOT / "scratchpad/run_content_identity_r2/receipt.json")
+need(application["applied"] is True and len(application["files"]) == 14, "APP14 receipt incomplete")
+need({fix["path"]: fix["after_sha256"], repair["path"]: repair["after_sha256"]} == ALLOWED_AFTER,
+     "Approved two-fix identity differs")
+ordinary = [row["path"] for row in application["files"]]
+ordinary += [".gitattributes", "docs/WORKLOG.md", "docs/SOURCE_SETUP.md", "docs/PROJECT_STATUS.md",
+             "docs/DIRECTORY_INDEX.md", "docs/RUN_RESUME_COMPONENTS_20260907.md"]
+for row in application["files"]:
+    expected = ALLOWED_AFTER.get(row["path"], row["after_sha256"])
+    need(sha(safe_path(row["path"]).read_bytes()) == expected, "Production drift: " + row["path"])
+    original = ROOT / "scratchpad/run_gameplay_rng_integration/application/candidate" / (row["path"] + ".txt")
+    raw = original.read_bytes()
+    need(sha(raw) == row["after_sha256"] and len(raw) == row["bytes"], "Original APP candidate drift")
+    if row["before_sha256"] is not None:
+        before = ROOT / "scratchpad/run_gameplay_rng_integration/application/before" / (row["path"] + ".txt")
+        need(sha(before.read_bytes()) == row["before_sha256"], "Original before-source drift")
+
+manifest, index, verification = read(QA / "manifest.json"), read(QA / "source_index.json"), read(QA / "archive_verification.json")
+need(manifest["schema"] == 2 and index["schema"] == 2 and index["archive_path_base"] == "repository_root",
+     "Unsupported archive path schema")
+need(verification["verified"] is True and verification["all_final_receipts_checked_before_write"] is True,
+     "Archive has not passed full readback")
+need(sha((QA / "manifest.json").read_bytes()) == verification["manifest_sha256"]
+     and sha((QA / "source_index.json").read_bytes()) == verification["source_index_sha256"],
+     "Archive sidecar hash differs")
+need(manifest["runs"]["build_final_r2"]["complete"] is True
+     and manifest["runs"]["build_failed0"]["complete"] is False
+     and manifest["runs"]["build_failed_r1"]["complete"] is False, "Builder history differs")
+for label in ["callsites_initial", "callsites_r2"]:
+    need(manifest["runs"][label]["complete"] is True and manifest["runs"][label]["checks"] == 1195
+         and manifest["runs"][label]["source_checks"] == 1020, "Callsite summary differs")
+for label in ["native_initial", "native_r2"]:
+    need(manifest["runs"][label]["complete"] is True and manifest["runs"][label]["checks"] == 176,
+         "Native summary differs")
+
+for row in manifest["files"]:
+    path = QA / row["path"]
+    need(path.resolve().is_relative_to(QA.resolve()), "Manifest archive path escaped")
+    raw = safe_path(path.relative_to(ROOT).as_posix()).read_bytes()
+    need(len(raw) == row["bytes"] and sha(raw) == row["sha256"], "Archive raw evidence drift: " + row["path"])
+tracked = {}
+for line in git("ls-files", "--stage", "-z").split(b"\0"):
+    if not line:
+        continue
+    metadata, name = line.split(b"\t", 1)
+    mode, oid, stage = metadata.decode().split()
+    tracked[name.decode("utf-8")] = (stage, oid)
+
+reused_paths = set()
+for row in index["mappings"]:
+    # Schema 2 uses repository-root paths for BOTH existing and new blobs.
+    path = safe_path(row["archive"])
+    raw = path.read_bytes()
+    need(len(raw) == row["bytes"] and sha(raw) == row["sha256"], "Source mapping drift: " + row["source"])
+    if not path.resolve().is_relative_to(QA.resolve()):
+        reused_paths.add(row["archive"])
+        need(row["archive"] in tracked and tracked[row["archive"]][0] == "0", "Reused source is not tracked")
+        committed_raw = git("cat-file", "blob", tracked[row["archive"]][1])
+        need(sha(committed_raw) == row["sha256"], "Reused tracked blob differs from tested raw bytes")
+
+evidence = sorted(p.relative_to(ROOT).as_posix() for p in QA.rglob("*") if p.is_file())
+allowed_evidence = {str(QA.relative_to(ROOT)).replace("\\", "/") + "/" + row["path"] for row in manifest["files"]}
+allowed_evidence.update((QA / name).relative_to(ROOT).as_posix()
+                        for name in ["source_index.json", "manifest.json", "archive_verification.json", "README.md"])
+need((QA / "README.md").is_file(), "Archive explanation absent")
+need(set(evidence) == allowed_evidence, "Unexpected archive file outside frozen manifest and declared sidecars")
+paths = sorted(set(ordinary + evidence))
+records = []
+secret = re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|sk-proj-[A-Za-z0-9_-]{40,}")
+for name in paths:
+    path = safe_path(name)
+    need(path.stat().st_size < 10 * 1024 * 1024, "Large file needs explicit review: " + name)
+    need(not any(part in {"private_profile", "profile", ".godot", "__pycache__"} for part in path.relative_to(ROOT).parts),
+         "Private/cache path excluded")
+    need(not path.name.startswith(("players_", "identity_players_")), "Private listing excluded")
+    need(path.suffix.lower() not in {".exe", ".pck", ".zip", ".dll", ".key", ".pem", ".png", ".jpg", ".webp"},
+         "Artifact type excluded")
+    raw = path.read_bytes()
+    need(secret.search(raw) is None, "Possible sensitive content: " + name)
+    records.append({"path": name, "bytes": len(raw), "raw_sha256": sha(raw)})
+
+# Git mutations begin only after all whitelist, history, source and credential checks.
+OUT.mkdir(parents=True, exist_ok=False)
+for label, names, force in [("ordinary", ordinary, False), ("evidence", evidence, True)]:
+    spec = OUT / (label + ".pathspec")
+    spec.write_bytes(b"".join(name.encode("utf-8") + b"\0" for name in names))
+    args = ["--literal-pathspecs", "add"] + (["-f"] if force else [])
+    git(*args, "--pathspec-from-file=" + str(spec), "--pathspec-file-nul")
+staged = set(git("diff", "--cached", "--name-only", "-z").decode("utf-8").split("\0")) - {""}
+need(staged == set(paths), "Staging set differs from exact whitelist")
+staged_index = {}
+for line in git("ls-files", "--stage", "-z").split(b"\0"):
+    if not line:
+        continue
+    metadata, name = line.split(b"\t", 1)
+    mode, oid, stage = metadata.decode().split()
+    name = name.decode("utf-8")
+    if name in staged:
+        need(stage == "0", "Unmerged whitelist entry")
+        staged_index[name] = oid
+for record in records:
+    name = record["path"]
+    blob = git("cat-file", "blob", staged_index[name])
+    if (name in ordinary and name.startswith("docs/")) or name == ".gitattributes":
+        expected_oid = git("hash-object", "--path=" + name, "--stdin", input=(ROOT / name).read_bytes()).decode().strip()
+        need(staged_index[name] == expected_oid, "Document clean-filter drift: " + name)
+    else:
+        need(sha(blob) == record["raw_sha256"], "Staged bytes differ from tested bytes: " + name)
+    record["git_blob"] = staged_index[name]
+need(not git("diff", "--cached", "--check"), "Staged whitespace check failed")
+receipt = {"verified": True, "paths": len(paths), "bytes": sum(row["bytes"] for row in records), "records": records,
+           "source_files": len(ordinary), "evidence_files": len(evidence), "reused_tracked_source_blobs": len(reused_paths),
+           "manifest_sha256": verification["manifest_sha256"], "source_index_sha256": verification["source_index_sha256"],
+           "secret_scan": "No targeted credential signatures", "remote_target": "origin codex/sync-20260905-stable",
+           "push_performed": False}
+(OUT / "receipt.json").write_bytes((json.dumps(receipt, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+print(json.dumps({key: value for key, value in receipt.items() if key != "records"}))

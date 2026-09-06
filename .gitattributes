@@ -138,3 +138,13 @@ scripts/run_defense_level_state.gd* -text whitespace=blank-at-eol,blank-at-eof,s
 qa/run_cast_flow_20260907/** -text -whitespace
 
 scripts/run_cast_flow_state.gd* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve the runtime and build identity bytes exercised by the integration QA.
+scripts/run_content_identity.gd* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/android_updater.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/levels/skirmish.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/projectile.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/contracts/run_content_identity_20260907/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/build_steam_candidate.py -text -eol whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+export_presets.cfg -text -eol whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+qa/run_gameplay_rng_integration_20260907/** -text -whitespace

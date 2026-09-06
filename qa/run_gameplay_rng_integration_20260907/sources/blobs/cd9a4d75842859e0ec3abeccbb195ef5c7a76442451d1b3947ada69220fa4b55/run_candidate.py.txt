@@ -1,0 +1,37 @@
+"""Run the real private Steam candidate builder, retaining pre-export player/source evidence."""
+from pathlib import Path
+import sys, os, datetime, json
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools'))
+from contracts.run_content_identity_20260907.probe_runner import utilities
+import build_steam_candidate as actual
+util = utilities()
+guard = util.load_helper(util.GUARD, util.GUARD_SHA, 'rng_build_source_guard')
+OUT = Path(__file__).resolve().parent / 'build_qa' / datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+OUT.mkdir(parents=True)
+real_user = Path(os.environ['APPDATA']) / 'Godot/app_userdata' / guard.project_name(ROOT)
+players = util.tree(real_user)
+sources = guard.source_receipt(ROOT)
+util.save(OUT / 'players_before.json', players)
+util.save(OUT / 'sources_before.json', sources)
+before = set((ROOT / '.godot/steam_candidates').glob('*'))
+receipt = {'complete': False, 'builder_sha256': util.file_sha(Path(actual.__file__)),
+           'player_guard_unchanged': False, 'source_guard_unchanged': False}
+sys.argv = [str(Path(actual.__file__)), '--run', '--godot',
+            r'C:\Users\Administrator\Desktop\新建文件夹 (2)\Godot_v4.6.3-stable_win64.exe'] + sys.argv[1:]
+try:
+    actual.main()
+    receipt['complete'] = True
+finally:
+    after_players = util.tree(real_user)
+    after_sources = guard.source_receipt(ROOT)
+    util.save(OUT / 'players_after.json', after_players)
+    util.save(OUT / 'sources_after.json', after_sources)
+    receipt['player_guard_unchanged'] = after_players == players
+    receipt['source_guard_unchanged'] = after_sources == sources
+    added = set((ROOT / '.godot/steam_candidates').glob('*')) - before
+    receipt['candidate_runs'] = [str(p.relative_to(ROOT)) for p in sorted(added)]
+    util.save(OUT / 'receipt.json', receipt)
+    print(json.dumps({'outer_receipt': str(OUT / 'receipt.json'), **receipt}), flush=True)
+    util.need(receipt['player_guard_unchanged'] and receipt['source_guard_unchanged'], 'Build source or real player drift')

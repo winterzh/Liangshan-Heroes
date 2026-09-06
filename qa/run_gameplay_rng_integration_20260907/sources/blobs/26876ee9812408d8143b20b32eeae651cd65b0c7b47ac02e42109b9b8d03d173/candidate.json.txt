@@ -1,0 +1,674 @@
+{
+  "applied": false,
+  "godot_run": false,
+  "pending": [
+    "trusted provider integration",
+    "frozen Unit/Projectile candidate integration",
+    "native parse and injected nested-fault/multitarget/UI tests",
+    "whole-world restore factory and complete-frame capture barriers",
+    "Level adapter excludes new WeakRef; outer restore must rebind owner",
+    "non-skirmish Level internal loops are outside this standard-defense migration"
+  ],
+  "rebase": {
+    "old_battle_sha256": "d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5",
+    "new_battle_sha256": "47357265c54a8cd6c2a5fef24998e357773974843559c4e23965ea3e0d51b629",
+    "only_change": "parent approved freed targets: two explicit Object validity rejects and checked tgt argument",
+    "receipt": "scratchpad/run_cast_flow_r1/application.json"
+  },
+  "fault_guards_added": [
+    {
+      "function": "_trap_pass",
+      "after": "_trigger_trap(tr, victim)"
+    },
+    {
+      "function": "_trap_pass",
+      "entry": true
+    },
+    {
+      "function": "_trigger_trap",
+      "after": "u.take_damage(sdmg, null)"
+    },
+    {
+      "function": "_trigger_trap",
+      "after": "u.take_damage(dmg, null)"
+    },
+    {
+      "function": "_trigger_trap",
+      "entry": true
+    },
+    {
+      "function": "_on_unit_died",
+      "entry": true
+    },
+    {
+      "function": "use_item_hotkey",
+      "after": "cast_item(hero, slot, true)"
+    },
+    {
+      "function": "use_item_hotkey",
+      "entry": true
+    },
+    {
+      "function": "cast_item",
+      "after": "_begin_item_cast(caster, slot, caster.position)"
+    },
+    {
+      "function": "cast_item",
+      "entry": true
+    },
+    {
+      "function": "_cast_item_armed_at",
+      "after": "_begin_item_cast(caster, slot, target.position, target)"
+    },
+    {
+      "function": "_cast_item_armed_at",
+      "after": "_begin_item_cast(caster, slot, point)"
+    },
+    {
+      "function": "_cast_item_armed_at",
+      "entry": true
+    },
+    {
+      "function": "_begin_item_cast",
+      "after": "_do_item_active(caster, slot, point, target)"
+    },
+    {
+      "function": "_begin_item_cast",
+      "entry": true
+    },
+    {
+      "function": "_tick_pending_item_casts",
+      "after": "_do_item_active(caster, slot, pc.get(\"point\", caster.position), target)"
+    },
+    {
+      "function": "_tick_pending_item_casts",
+      "entry": true
+    },
+    {
+      "function": "_do_item_active",
+      "entry": true
+    },
+    {
+      "function": "_apply_item_effect_bundle",
+      "entry": true
+    },
+    {
+      "function": "_apply_item_effect_to",
+      "entry": true
+    },
+    {
+      "function": "trigger_item_event",
+      "entry": true
+    },
+    {
+      "function": "_tick_pending_casts",
+      "after": "_do_ability(c, int(pc[\"slot\"]), pc[\"lp\"], tgt)"
+    },
+    {
+      "function": "_tick_pending_casts",
+      "entry": true
+    },
+    {
+      "function": "_do_ability",
+      "after": "u.take_damage(dmg, caster, false, false, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "tgt.take_damage(pin_dmg, caster, false, false, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "tgt.take_damage(tgt.max_hp * burst_pct, caster, false, false, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "tgt.take_damage(tgt.hp + tgt._shield + 1.0, caster, false, true, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "u.take_damage(float(eff[\"dmg\"]) * sc, caster, false, false, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "u.take_damage(line_dmg, caster, false, false, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "u.take_damage(blink_dmg * sc, caster, false, false, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "u.take_damage(float(eff[\"dmg\"]) * sc, caster, false, false, aid)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_summon(caster, eff, rank)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_ice_wall(caster, eff, sc, rank, center, foe, ad[\"color\"])"
+    },
+    {
+      "function": "_do_ability",
+      "after": "caster.start_drunk(float(_pick(eff.get(\"lo\", [0.9]), rank)), float(_pick(eff.get(\"hi\", [1.3]), rank)), float(eff.get(\"dur\", 30.0)))"
+    },
+    {
+      "function": "_do_ability",
+      "after": "center = _do_blink(caster, eff, sc, center, r, foe, snap, ad)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_pull(caster, eff, sc, center, r, foe, snap)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_knockback(caster, eff, sc, center, r, foe, snap)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_global_nuke(caster, eff, sc, foe, snap)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_chain_nuke(caster, eff, sc, center, foe, snap, ad)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_swap(caster, swap_t, ad, eff, sc, rank)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_fissure(caster, eff, sc, center, foe, snap, ad)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_echo(caster, eff, sc, center, r, foe, snap)"
+    },
+    {
+      "function": "_do_ability",
+      "after": "_do_heal_wave(caster, eff, sc, center, ally, foe, snap, ad)"
+    },
+    {
+      "function": "_do_ability",
+      "entry": true
+    },
+    {
+      "function": "_zone_pass",
+      "after": "u.take_damage(float(z[\"dmg\"]), src, false, false, String(z.get(\"ability_id\", \"\")))"
+    },
+    {
+      "function": "_zone_pass",
+      "after": "u.take_damage(float(z[\"impact\"]), src if is_instance_valid(src) else null, false, false,\r\n\t\t\t\t\t\tString(z.get(\"ability_id\", \"\")))"
+    },
+    {
+      "function": "_zone_pass",
+      "after": "u.take_damage(float(z[\"dmg\"]), src if is_instance_valid(src) else null, false, false,\r\n\t\t\t\t\tString(z.get(\"ability_id\", \"\")))"
+    },
+    {
+      "function": "_zone_pass",
+      "entry": true
+    },
+    {
+      "function": "_do_pull",
+      "after": "u.take_damage(float(eff.get(\"dmg\", 0.0)) * sc, caster, false, false,\r\n\t\t\t\tString(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_pull",
+      "entry": true
+    },
+    {
+      "function": "_do_swap",
+      "after": "tgt.take_damage(float(eff[\"dmg\"]) * sc, caster, false, false,\r\n\t\t\t\tString(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_swap",
+      "entry": true
+    },
+    {
+      "function": "_bolt_pass",
+      "after": "tgt.take_damage(float(beff[\"dmg\"]) * float(b[\"sc\"]),\r\n\t\t\t\t\t\t\t\tcaster if (caster != null and is_instance_valid(caster)) else null, false, false,\r\n\t\t\t\t\t\t\t\tString(beff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_bolt_pass",
+      "after": "hitl.take_damage(float(leff[\"dmg\"]) * float(b[\"sc\"]),\r\n\t\t\t\t\t\t\tcaster if (caster != null and is_instance_valid(caster)) else null, false, false,\r\n\t\t\t\t\t\t\tString(leff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_bolt_pass",
+      "after": "v.take_damage(float(heff[\"dmg\"]) * float(b[\"sc\"]), caster, false, false,\r\n\t\t\t\t\t\t\t\tString(heff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_bolt_pass",
+      "entry": true
+    },
+    {
+      "function": "_walk_item_cast_pass",
+      "after": "_begin_item_cast(caster, slot, cast_pos, target)"
+    },
+    {
+      "function": "_walk_item_cast_pass",
+      "entry": true
+    },
+    {
+      "function": "_channel_pass",
+      "after": "_channel_tick(caster, ch)"
+    },
+    {
+      "function": "_channel_pass",
+      "entry": true
+    },
+    {
+      "function": "_channel_tick",
+      "after": "u.take_damage(float(eff[\"dmg\"]) * sc, caster, false, false,\r\n\t\t\t\t\tString(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_channel_tick",
+      "entry": true
+    },
+    {
+      "function": "_do_knockback",
+      "after": "u.take_damage(float(eff.get(\"dmg\", 0.0)) * sc, caster, false, false,\r\n\t\t\t\tString(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_knockback",
+      "entry": true
+    },
+    {
+      "function": "_do_global_nuke",
+      "after": "u.take_damage(float(eff.get(\"dmg\", 0.0)) * sc, caster, false, false,\r\n\t\t\t\tString(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_global_nuke",
+      "entry": true
+    },
+    {
+      "function": "_do_chain_nuke",
+      "after": "cur.take_damage(dmg, caster, false, false, String(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_chain_nuke",
+      "entry": true
+    },
+    {
+      "function": "_ward_pass",
+      "after": "best.take_damage(float(w[\"dmg\"]), src, false, false, String(w.get(\"ability_id\", \"\")))"
+    },
+    {
+      "function": "_ward_pass",
+      "entry": true
+    },
+    {
+      "function": "_do_fissure",
+      "after": "u.take_damage(float(eff[\"dmg\"]) * sc, caster, false, false,\r\n\t\t\t\tString(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_fissure",
+      "entry": true
+    },
+    {
+      "function": "_do_echo",
+      "after": "u.take_damage(per, caster, false, false, String(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_echo",
+      "entry": true
+    },
+    {
+      "function": "_do_heal_wave",
+      "after": "cur.take_damage(dmg, caster, false, false, String(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_heal_wave",
+      "entry": true
+    },
+    {
+      "function": "_do_summon",
+      "after": "despawn_summon(old)"
+    },
+    {
+      "function": "_do_summon",
+      "entry": true
+    },
+    {
+      "function": "despawn_summon",
+      "after": "u.take_damage(u.hp + 1.0, null, false, true)"
+    },
+    {
+      "function": "despawn_summon",
+      "entry": true
+    },
+    {
+      "function": "_do_ice_wall",
+      "after": "u.take_damage(dmg, caster, false, false, String(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_ice_wall",
+      "entry": true
+    },
+    {
+      "function": "_ground_dot_pass",
+      "after": "u.take_damage(per, src, false, false, String(d.get(\"ability_id\", \"\")))"
+    },
+    {
+      "function": "_ground_dot_pass",
+      "entry": true
+    },
+    {
+      "function": "_hua_snipe_dot_pass",
+      "after": "target.take_damage(target.max_hp * float(d[\"pct\"]), src, false, false,\r\n\t\t\t\tString(d.get(\"ability_id\", \"\")))"
+    },
+    {
+      "function": "_hua_snipe_dot_pass",
+      "entry": true
+    },
+    {
+      "function": "trigger_lin_guard",
+      "after": "attacker.take_damage(dmg, caster, false, false, \"lin_sweep\")"
+    },
+    {
+      "function": "trigger_lin_guard",
+      "entry": true
+    },
+    {
+      "function": "sortie_unit",
+      "after": "u.leave_garrison()"
+    },
+    {
+      "function": "sortie_unit",
+      "entry": true
+    },
+    {
+      "function": "ungarrison",
+      "after": "pg.leave_garrison()"
+    },
+    {
+      "function": "ungarrison",
+      "entry": true
+    },
+    {
+      "function": "delete_selected",
+      "after": "_demolish(u)"
+    },
+    {
+      "function": "delete_selected",
+      "entry": true
+    },
+    {
+      "function": "_demolish",
+      "after": "pg.leave_garrison()"
+    },
+    {
+      "function": "_demolish",
+      "entry": true
+    },
+    {
+      "function": "_select_hero_by_index",
+      "after": "sortie_unit(h)"
+    },
+    {
+      "function": "_select_hero_by_index",
+      "entry": true
+    },
+    {
+      "function": "_unhandled_input",
+      "after": "_cast_item_armed_at(p)"
+    },
+    {
+      "function": "_unhandled_input",
+      "after": "_cast_item_armed_at(p)"
+    },
+    {
+      "function": "_unhandled_input",
+      "after": "delete_selected(event.shift_pressed)   # 拆除选中己方单位/建筑（Mac 上 Delete 即 Backspace；Shift 跳过确认）"
+    },
+    {
+      "function": "_unhandled_input",
+      "after": "use_item_hotkey(item_slot)"
+    },
+    {
+      "function": "_unhandled_input",
+      "after": "_select_hero_by_index(hidx)"
+    },
+    {
+      "function": "spawn_wu_cleave",
+      "after": "u.take_damage(dmg, caster, false, false, \"wu_drunkgod\")"
+    },
+    {
+      "function": "spawn_wu_cleave",
+      "entry": true
+    },
+    {
+      "function": "_do_blink",
+      "after": "u.take_damage(dmg, caster, false, false, String(eff.get(\"_ability_id\", \"\")))"
+    },
+    {
+      "function": "_do_blink",
+      "entry": true
+    },
+    {
+      "function": "spawn_group",
+      "entry": true
+    },
+    {
+      "function": "spawn_li_brawn_axes",
+      "entry": true
+    },
+    {
+      "function": "_on_intro_done",
+      "after": "_on_start_battle()"
+    },
+    {
+      "function": "_on_start_battle",
+      "after": "level.on_start(self)"
+    },
+    {
+      "function": "_auto_economy_pass",
+      "after": "_eco_traps(remaining_reserve)"
+    },
+    {
+      "function": "_auto_economy_pass",
+      "entry": true
+    },
+    {
+      "function": "do_trade",
+      "entry": true
+    },
+    {
+      "function": "arm_build",
+      "entry": true
+    },
+    {
+      "function": "_try_place_building",
+      "entry": true
+    },
+    {
+      "function": "_start_construction",
+      "entry": true
+    },
+    {
+      "function": "arm_trap",
+      "entry": true
+    },
+    {
+      "function": "_try_place_trap",
+      "entry": true
+    },
+    {
+      "function": "arena_spawn_troops",
+      "entry": true
+    },
+    {
+      "function": "arena_spawn_random",
+      "entry": true
+    },
+    {
+      "function": "queue_train_multi",
+      "entry": true
+    },
+    {
+      "function": "cancel_train",
+      "entry": true
+    },
+    {
+      "function": "arm_amove",
+      "entry": true
+    },
+    {
+      "function": "arm_patrol",
+      "entry": true
+    },
+    {
+      "function": "arm_repair",
+      "entry": true
+    },
+    {
+      "function": "arm_garrison",
+      "entry": true
+    },
+    {
+      "function": "_order_garrison_at",
+      "entry": true
+    },
+    {
+      "function": "_tap_command",
+      "entry": true
+    },
+    {
+      "function": "_touch_tap_or_double",
+      "entry": true
+    },
+    {
+      "function": "cast_ability",
+      "entry": true
+    },
+    {
+      "function": "_cast_ability_slot",
+      "entry": true
+    },
+    {
+      "function": "learn_slot",
+      "entry": true
+    },
+    {
+      "function": "_cast_armed_at",
+      "entry": true
+    },
+    {
+      "function": "toggle_hero_melee",
+      "entry": true
+    },
+    {
+      "function": "_begin_cast",
+      "entry": true
+    },
+    {
+      "function": "_queue_walk_item",
+      "entry": true
+    },
+    {
+      "function": "_queue_walk_cast",
+      "entry": true
+    },
+    {
+      "function": "_queue_walk_cast_point",
+      "entry": true
+    },
+    {
+      "function": "_walk_cast_pass",
+      "entry": true
+    },
+    {
+      "function": "_begin_channel",
+      "entry": true
+    },
+    {
+      "function": "_issue_order",
+      "entry": true
+    },
+    {
+      "function": "_order_repair_at",
+      "entry": true
+    },
+    {
+      "function": "_order_amove_at",
+      "entry": true
+    },
+    {
+      "function": "_order_stop",
+      "entry": true
+    },
+    {
+      "function": "_order_hold_position",
+      "entry": true
+    },
+    {
+      "function": "_order_patrol_at",
+      "entry": true
+    },
+    {
+      "function": "_cycle_stance",
+      "entry": true
+    },
+    {
+      "function": "cancel_construction",
+      "entry": true
+    },
+    {
+      "function": "_lin_duel_pass",
+      "entry": true
+    },
+    {
+      "function": "_ice_wall_pass",
+      "entry": true
+    },
+    {
+      "function": "_trail_pass",
+      "entry": true
+    },
+    {
+      "function": "_eco_traps",
+      "entry": true
+    },
+    {
+      "function": "queue_train",
+      "entry": true
+    },
+    {
+      "function": "queue_research",
+      "entry": true
+    },
+    {
+      "function": "swap_hero_items",
+      "entry": true
+    },
+    {
+      "function": "transfer_hero_item",
+      "entry": true
+    }
+  ],
+  "files": [
+    {
+      "path": "scripts/battle.gd",
+      "base_sha256": "47357265c54a8cd6c2a5fef24998e357773974843559c4e23965ea3e0d51b629",
+      "candidate_sha256": "07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd",
+      "size": 777207
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "base_sha256": "0150ff3ec4c02afcb131f349834ff1487678275e39a894bb042c71318d6411d6",
+      "candidate_sha256": "f4d609aaf020829e1fbabe82413fa88e1d310cfdde5e9511f40ca61e21e5fd5f",
+      "size": 26869
+    },
+    {
+      "path": "scripts/run_gameplay_rng.gd",
+      "base_sha256": "7705f9e054f3cf4e422623b280dea3bebc1ec4509f768ed8094078f0123d7e45",
+      "candidate_sha256": "0ddfd48ab72c4f6846ac8ae7725fff28c6654f5b5505bd742635170d5019f893",
+      "size": 7766
+    },
+    {
+      "path": "scripts/hud.gd",
+      "base_sha256": "f3091000607088f8cbaf5018fbb1aa53e1dbbe30b32c5de66c9b6a01c5d41209",
+      "candidate_sha256": "5ddcb5d6bccb5462c11d507b619e142a9ffd2e32ddb6da57b06f5a005ebdb9df",
+      "size": 179142
+    }
+  ]
+}

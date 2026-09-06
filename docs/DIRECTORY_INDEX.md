@@ -1,3 +1,11 @@
+## 2026-09-07 RNG与安装身份新增入口
+
+- scripts/run_content_identity.gd：实际安装身份；R2依据Script backing严格验证源码或编译资源，native/callsite及source/PCK身份合同均已验证。
+- tools/contracts/run_content_identity_20260907/：构建身份生成、source/PCK probe；probe R1修复JSON字段传输比较。
+- qa/run_gameplay_rng_integration_20260907/：本批已冻结正式档，包含两native、两callsite、三build（两失败/最终通过）、两diagnostic、APP14及两修复链，source_index schema2使用仓库根相对路径并复用既有精确QA原文。
+
+旧/R2调用点各102来源联合103个唯一SHA，101个共有，93个已有归档原文可复用。原provider候选和R2当前来源分开；正式档manifest为597e75dd6802c82a622725a34e7c1b2bb988c87050ca3fed9d2fdeb1b3235a1a；295份原始产物16,493,620 bytes，不含生成sidecar和后补README。
+
 ## 2026-09-07 技能施法三数组及修复证据
 
 - `scripts/run_cast_flow_state.gd`：第14恢复组件，保存走近、抬手、引导三数组；依赖外层Unit计时/CD/路径与统一identity，累计12/17权威数组。

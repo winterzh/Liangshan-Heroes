@@ -1,0 +1,33 @@
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -985,12 +985,14 @@
+ 		if battle != null and (is_hero or is_building):
+ 			battle.shake(5.0 if is_building else 4.0, position)
+ 		died.emit(self)  # 通知主控（移出 units、计数、血渍标记）
++		if not _gameplay_rng_fault().is_empty(): return
+ 		if is_building:
+ 			# 建筑被摧毁前，把驻军全部弹出（不随建筑陪葬）
+ 			if not passengers.is_empty():
+ 				for pg in passengers.duplicate():
+ 					if is_instance_valid(pg):
+ 						pg.leave_garrison()
++						if not _gameplay_rng_fault().is_empty(): return
+ 				passengers.clear()
+ 			# 非资源建筑不留废墟：battle._on_unit_died 播放坍塌演出并释放节点，地面恢复如初（星际/红警式）。
+ 			# 资源点（金矿/林木）保留旧染暗表现（枯竭另走 deplete_resource）。
+@@ -1193,6 +1195,7 @@
+ 	_tick_ability_slots(delta)
+ 	if inventory != null:
+ 		inventory.tick(delta)
++		if not _gameplay_rng_fault().is_empty(): return
+ 	if _temp_atk_t > 0.0:
+ 		_temp_atk_t -= delta
+ 		if _temp_atk_t <= 0.0:
+@@ -1338,6 +1341,7 @@
+ 			_summon_ttl = 0.0
+ 			if battle != null and battle.has_method("despawn_summon"):
+ 				battle.despawn_summon(self)
++				if not _gameplay_rng_fault().is_empty(): return
+ 	if _buff_glow > 0.0:
+ 		_buff_glow = maxf(0.0, _buff_glow - delta)
+ 		_queue_animated_redraw(0.08, _buff_glow <= 0.0)
