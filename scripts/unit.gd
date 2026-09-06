@@ -138,6 +138,7 @@ var hero_level := 1
 var hero_xp := 0.0
 var skill_points := 0
 var auto_micro := false      # 托管：自动放招 + 自动加点 + 走位/退守/索敌（per-unit 开关，PC/移动端通用）
+var ai_tick_phase := 0  # Assigned by Battle from successful mobile-unit spawn order.
 var _ai_dest := Vector2.INF  # 托管移动去抖：上次下发的移动落点（同向不重发，免得每次决策都重算路径、朝向抖）
 var _base_atk := 0.0
 var _base_hp := 0.0

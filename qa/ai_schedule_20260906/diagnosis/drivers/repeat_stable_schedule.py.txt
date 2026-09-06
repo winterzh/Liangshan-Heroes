@@ -1,0 +1,6 @@
+from pathlib import Path
+s=Path('scratchpad/wall_schedule_compare.py').read_text(encoding='utf8')
+s=s.replace('wall_schedule_', 'stable_wall_schedule_').replace('wall-schedule-', 'stable-wall-schedule-')
+# The driver filename is unchanged; output and restoration receipts are separate.
+s=s.replace('res://scratchpad/stable_wall_schedule_probe.gd','res://scratchpad/wall_schedule_probe.gd')
+exec(s)

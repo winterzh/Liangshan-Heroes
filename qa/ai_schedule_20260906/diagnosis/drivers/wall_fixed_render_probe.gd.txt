@@ -1,0 +1,59 @@
+extends "res://tools/rts_performance_probe.gd"
+
+func _unit_state(b) -> Array:
+	var result:=[]
+	for u in b.units:
+		result.append([u.get_instance_id(),u.position,u.hp,u._state,u._anim_t,u._cd,u.visible,u.z_index])
+	return result
+
+func _window(b, redraw: bool, label: String) -> Dictionary:
+	for i in range(12):
+		if redraw:
+			for u in b.units: u.queue_redraw()
+		await RenderingServer.frame_post_draw
+	var rows:=[]
+	var started:=Time.get_ticks_usec();var previous:=started
+	while Time.get_ticks_usec()-started<1500000:
+		if redraw:
+			for u in b.units: u.queue_redraw()
+		await RenderingServer.frame_post_draw
+		var now:=Time.get_ticks_usec()
+		rows.append({"frame_ms":float(now-previous)/1000.0,
+			"render_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(root.get_viewport_rid()),
+			"render_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(root.get_viewport_rid()),
+			"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)})
+		previous=now
+	var elapsed:=float(Time.get_ticks_usec()-started)/1000000.0
+	return {"label":label,"redraw_units_each_frame":redraw,"frames":rows.size(),"seconds":elapsed,"fps":rows.size()/elapsed,"rows":rows}
+
+func sample(b,_label: String) -> Dictionary:
+	b._perf_bench_setup(200);b._prof_on=false
+	await _wait(3)
+	b.process_mode=Node.PROCESS_MODE_DISABLED
+	b.camera.zoom=Vector2.ONE*1.2;b.center_camera_cell(Vector2i(23,35));b.camera.force_update_scroll()
+	var s=b.map.sample_scenery._entrance
+	var current: Array[Node2D]=s._wall_parts.duplicate()
+	s._wall_parts.clear()
+	for ridge in s._bank_ridges:
+		for i in range(ridge.size()-1):
+			var steps:=maxi(1,ceili(ridge[i].distance_to(ridge[i+1])/3.2))
+			for j in range(steps):
+				var a: Vector2=ridge[i].lerp(ridge[i+1],float(j)/steps)*b.map.CELL
+				var z: Vector2=ridge[i].lerp(ridge[i+1],float(j+1)/steps)*b.map.CELL
+				s._add_wall(a,z)
+	var legacy: Array[Node2D]=s._wall_parts.duplicate()
+	var original_state:=_unit_state(b)
+	RenderingServer.viewport_set_measure_render_time(root.get_viewport_rid(),true)
+	var windows:=[]
+	for redraw in [false,true]:
+		for use_current in [false,true,true,false,false,true]:
+			s._wall_parts=current if use_current else legacy
+			for w in current: w.visible=use_current
+			for w in legacy: w.visible=not use_current
+			s._process(0.1)
+			var label: String="current_20" if use_current else "legacy_32"
+			var result:=await _window(b,redraw,label)
+			result["state_unchanged"]=_unit_state(b)==original_state
+			windows.append(result)
+			print("[fixed-wall] ",label," redraw=",redraw," fps=",result.fps," state=",result.state_unchanged)
+	return {"scope":"Same frozen battle and units, old/new wall subdivision only; cached canvas then equal unit redraw workload. Root viewport timings may be delayed and are not a GPU fence.","legacy_walls":legacy.size(),"current_walls":current.size(),"unit_count":b.units.size(),"state_unchanged":_unit_state(b)==original_state,"windows":windows}

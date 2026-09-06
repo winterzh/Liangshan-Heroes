@@ -38,6 +38,9 @@ const AUTOCAM_REVIEW_ZOOM := 1.5       # 检阅我方英雄时的近景缩放（
 
 # 全托管经济 AI（auto_micro_level>=3）：喽啰自动采集/建造/修复 + 自动练兵练将研究
 # 策略（用户定）：优先出齐英雄(AoE 打 3× 群)，再升级基地/造兵/科技/箭楼。
+# Combat scheduling must not depend on decoration/resource ObjectIDs.
+var _ai_spawn_serial := 0
+var _ai_tick_frame := 0
 var _eco_t := 0.0
 var _eco_last_wood := -1
 var _eco_wood_stall := 0.0
@@ -601,6 +604,9 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 		u.visible = u.fog_visible
 	u.died.connect(_on_unit_died)
 	u.story_resolved.connect(_on_unit_story_resolved)
+	if not u.is_building and not u.is_resource:
+		u.ai_tick_phase = AI_TICK_PHASES[_ai_spawn_serial % AI_TICK]
+		_ai_spawn_serial += 1
 	units.append(u)
 	if u.is_building: configure_production_berth(u)
 	return u
@@ -2310,6 +2316,7 @@ func _perf_bench_setup(n: int) -> void:
 func _physics_process(delta: float) -> void:
 	if phase == Phase.INTRO:
 		return
+	_ai_tick_frame += 1
 	_blocker_query_budget = 8
 	for snap in hero_item_progress.values():
 		HeroInventory.tick_snapshot(snap, delta)   # 阵亡等待复活时冷却继续按游戏时间流逝
@@ -4483,6 +4490,8 @@ func _foe_within(pos: Vector2, r: float, my_fac: int) -> bool:
 ## 按 u.key 分派到 _brain_*（林冲盯骑兵、花荣后排风筝、武松召虎开大…），无专属脑者走 _auto_micro_generic。
 ## 只对开了 auto_micro 的英雄生效；没人托管时整 pass 只是一次廉价过滤。每将每 ~0.27s 一个动作。
 const AI_TICK := 16   # 托管决策节流：每英雄约每 16 物理帧(~0.27s)决策一次，错帧分散
+# Spread consecutive spawns across the cycle before filling neighboring ticks.
+const AI_TICK_PHASES := [0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15]
 
 func _auto_micro_pass() -> void:
 	if hud == null:
@@ -4498,7 +4507,7 @@ func _auto_micro_pass() -> void:
 		for u in units:
 			if is_instance_valid(u) and u.is_hero and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 and not u.auto_micro:
 				u.auto_micro = true
-	var frame := Engine.get_physics_frames()
+	var frame := _ai_tick_frame
 	for u in units:
 		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or not u.is_hero \
 				or not u.auto_micro or u.hp <= 0.0 or u.is_building:
@@ -4511,8 +4520,8 @@ func _auto_micro_pass() -> void:
 			continue   # 玩家刚亲自下过令：保护期内托管不插手（执行完会提前解除）
 		if String(u.key) == "hua_rong" and u.hua_lock_active() and target_visible_to(u, u._hua_lock_target):
 			continue   # E 的五次跨距锁定普攻正在执行：托管不能用走位/换目标把它中途覆盖
-		# 节流：每帧都决策会让英雄不停改朝向(左右摇头)、徒增寻路抖动；改成每 ~0.27s 一次，按 id 错帧
-		if (frame + u.get_instance_id()) % AI_TICK != 0:
+		# 每 ~0.27s 一次；按战斗内生成顺序分配相位，不受装饰对象数量影响。
+		if frame % AI_TICK != u.ai_tick_phase:
 			continue
 		if lvl == 1:
 			_auto_micro_weak(u)   # 弱托管：守住附近一块（~15×15 格），不追远、不管别处
@@ -4620,11 +4629,11 @@ func _auto_micro_weak(u: Unit) -> void:
 ## 召唤物自动出击：召出来的猛虎/金龙(is_summon)无需手操——空闲就攻击移动扑向最近敌、持续索敌
 ## （等价「框住按 A 出去」）。与托管档位无关，始终生效；不打断正在进行的攻击/移动。
 func _summon_hunt_pass() -> void:
-	var frame := Engine.get_physics_frames()
+	var frame := _ai_tick_frame
 	for u in units:
 		if not is_instance_valid(u) or not u.is_summon or u.hp <= 0.0 or u._state != Unit.ST_IDLE:
 			continue
-		if (frame + u.get_instance_id()) % AI_TICK != 0:
+		if frame % AI_TICK != u.ai_tick_phase:
 			continue
 		var fp := _nearest_foe_pos(u.position, u.faction)
 		if fp != Vector2.INF:
@@ -16685,6 +16694,8 @@ func clear_campaign_section() -> void:
 			u.process_mode = Node.PROCESS_MODE_DISABLED
 			u.queue_free()
 	units.clear()
+	_ai_spawn_serial = 0
+	_ai_tick_frame = 0
 	WorldShadow.clear_dying_shadows(self)
 	for effect in fx_root.get_children():
 		effect.process_mode = Node.PROCESS_MODE_DISABLED
