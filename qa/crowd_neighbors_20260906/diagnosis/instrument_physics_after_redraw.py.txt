@@ -1,0 +1,24 @@
+from pathlib import Path
+import re,subprocess
+targets={
+ 'scripts/battle.gd':['_physics_process','_grid_build','_separation_pass','_auto_micro_pass','_aura_pass','_fog_pass'],
+ 'scripts/game_map.gd':['find_path','find_firing_path','find_static_cell_path','_smooth_path'],
+ 'scripts/unit.gd':['_phys_body','_do_chase','_follow_path','_acquire','_tick_ability_slots','_passive_regen'],
+}
+for name,methods in targets.items():
+ p=Path(name);original=p.read_bytes()
+ assert original.replace(b'\r\n',b'\n')==subprocess.check_output(['git','show','HEAD:'+name]).replace(b'\r\n',b'\n'),name
+ Path('scratchpad/physics_after_redraw_base_'+p.name+'.txt').write_bytes(original)
+ s=original.decode()
+ for method in methods:
+  pattern=re.compile(r'^func '+re.escape(method)+r'\(([^\r\n]*)\) -> ([^:\r\n]+):',re.M)
+  def replace(m):
+   args,result=m.groups();names=[arg.strip().split(':')[0] for arg in args.split(',')] if args else []
+   impl='_physics_after_redraw_probe_'+method
+   body='func '+method+'('+args+') -> '+result+':\n\tvar started := Time.get_ticks_usec()\n\t'
+   body+=('var value: '+result+' = ' if result!='void' else '')+impl+'('+','.join(names)+')\n'
+   body+='\tpreload("res://scratchpad/phase_metrics.gd").add_time("'+p.stem+method+'",started)\n'
+   if result!='void':body+='\treturn value\n'
+   return body+'\n\nfunc '+impl+'('+args+') -> '+result+':'
+  s,n=pattern.subn(replace,s);assert n==1,(name,method,n)
+ p.write_bytes(s.encode())

@@ -1,3 +1,10 @@
+## 2026-09-06 邻居筛选增量
+
+- `tools/crowd_neighbor_qa.gd`：完整派发、人数/状态/桶序边界及独立候选计数。
+- `tools/contracts/crowd_neighbors/`：5457de7已缓冲算法的完整冻结参照。
+- `docs/CROWD_NEIGHBORS_20260906.md`：实现、计时边界与复现。
+- `qa/crowd_neighbors_20260906/`：99项位置回归、导航/接应/新门楼整合、正常战斗、未采用候选及原始诊断和收据。
+
 ## 2026-09-06 祝家庄原生门楼增量
 
 - `assets/campaign/objects/zhu_gate_native_20260906_default.png`：带原生alpha的生产门楼及标准导入侧车。
