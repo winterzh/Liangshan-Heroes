@@ -1,0 +1,126 @@
+"""Export a private Windows Steam feature candidate from a successful QA snapshot.
+
+No upload or publication; this is not the commercial artwork/readiness gate.
+The runtime allowlist follows the verified September 7 Windows update scope.
+"""
+from pathlib import Path, PurePosixPath
+import argparse
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import time
+import uuid
+from run_steam_integration_qa import ROOT, LOCK, install_native, resolve_godot
+
+CORE = {"project.godot", "export_presets.cfg", "icon.png", "icon.png.import", "icon.ico"}
+RUNTIME = ("assets/anim/", "assets/campaign/anim/", "assets/campaign/objects/",
+           "assets/campaign/portraits/", "assets/campaign/environment/", "assets/vfx/", "assets/characters/")
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def allowed(name):
+    path = PurePosixPath(name)
+    if name in CORE: return True
+    if name.startswith("scripts/"): return path.suffix in {".gd", ".gdshader", ".uid"}
+    if name.startswith("scenes/"): return path.suffix == ".tscn"
+    if path.parent == PurePosixPath("assets") or name.startswith("assets/ui/"):
+        return "_raw" not in name and "/atlases/" not in name and name.endswith((".png", ".png.import"))
+    return name.startswith(RUNTIME) and "_raw" not in name and name.endswith((".png", ".png.import", ".tres"))
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--qa-run", type=Path, required=True)
+    parser.add_argument("--godot")
+    parser.add_argument("--run", action="store_true")
+    args = parser.parse_args()
+    qa = args.qa_run.resolve()
+    qa.relative_to((ROOT / ".godot/steam_integration_qa").resolve())
+    proof = json.loads((qa / "receipt.json").read_text())
+    if not proof.get("complete"): raise RuntimeError("A successful QA run is required")
+    records = [row for row in proof["source_files"] if allowed(row["path"])]
+    for row in records:
+        if sha(ROOT / row["path"]) != row["sha256"]:
+            raise RuntimeError("Source changed since QA: " + row["path"])
+    if not args.run:
+        print(json.dumps({"preflight":True, "source_files":len(records), "godot":str(resolve_godot(args.godot))}))
+        return
+    running = subprocess.check_output(["powershell.exe", "-NoProfile", "-Command", "@(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | ForEach-Object { $_.Id }) | ConvertTo-Json -Compress"], text=True).strip()
+    if running and json.loads(running): raise RuntimeError("Godot engine slot occupied")
+    run = ROOT / ".godot/steam_candidates" / (time.strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8])
+    run.mkdir(parents=True)
+    with LOCK.open("x", encoding="utf-8") as lock: lock.write(str(run))
+    receipt = {"complete":False, "kind":"windows_steam_feature_candidate", "qa_run":str(qa.relative_to(ROOT)),
+               "qa_receipt_sha256":sha(qa / "receipt.json"), "source_head":proof["source_head"],
+               "builder_sha256":sha(Path(__file__)), "probe_sha256":sha(ROOT / "tools/steam_package_probe.gd"),
+               "source_files":records, "steps":[], "uploaded":False, "live_steam_tested":False}
+    child = None
+    try:
+        project = run / "project"
+        for row in records:
+            dest = project / row["path"]
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / row["path"], dest)
+            if sha(dest) != row["sha256"]: raise RuntimeError("Source changed during copy")
+        shutil.copytree(qa / "project/.godot/imported", project / ".godot/imported")
+        install_native(project)
+        receipt["native_provenance"] = json.loads((ROOT / "vendor/godotsteam/provenance.json").read_text())
+        env = os.environ.copy()
+        for key in list(env):
+            if key.endswith(("_TEST", "_QA", "_AUDIT")) or key in {"LEVEL", "SCENARIO", "CUSTOM_DEFENSE", "SKIRMISH", "SKIRMISH_AI", "ARENA", "SCREENSHOT_DIR"}:
+                env.pop(key)
+        template = Path(os.environ["APPDATA"]) / "Godot/export_templates/4.6.3.stable/windows_release_x86_64.exe"
+        for key in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
+            private = run / "profile" / key.lower()
+            private.mkdir(parents=True, exist_ok=True)
+            env[key] = str(private)
+        target = Path(env["APPDATA"]) / "Godot/export_templates/4.6.3.stable/windows_release_x86_64.exe"
+        target.parent.mkdir(parents=True)
+        shutil.copyfile(template, target)
+        receipt["template_sha256"] = sha(target)
+        engine = str(resolve_godot(args.godot))
+        receipt["godot_sha256"] = sha(Path(engine))
+        env.update(STEAM_DISABLED="1", CONTENT_UPDATE_NO_AUTO="1", STEAM_PACKAGE_REPORT=str(run / "package_report.json"))
+        windows = run / "windows"
+        windows.mkdir()
+        exe = windows / "LiangshanHeroes.exe"
+        commands = [
+            ("import", [engine,"--headless","--path",str(project),"--editor","--import"]),
+            ("export", [engine,"--headless","--path",str(project),"--export-release","Windows Steam",str(exe)]),
+            ("package", [engine,"--headless","--main-pack",str(exe),"--script",str(ROOT / "tools/steam_package_probe.gd")]),
+            ("exe_smoke", [str(exe),"--headless","--quit-after","120"]),
+        ]
+        for name, command in commands:
+            print("RUN " + name + " " + str(run), flush=True)
+            started = time.time()
+            with (run / (name + ".log")).open("wb") as log:
+                child = subprocess.Popen(command, cwd=windows, env=env, stdout=log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
+                try: code = child.wait(timeout=600)
+                except BaseException:
+                    child.kill(); child.wait(timeout=30); raise
+            text = (run / (name + ".log")).read_text(encoding="utf-8", errors="replace")
+            receipt["steps"].append({"name":name,"exit_code":code,"seconds":round(time.time()-started,2)})
+            errors = [line for line in text.splitlines() if any(word in line for word in ["SCRIPT ERROR", "ERROR:", "Parse Error"])]
+            if code or errors: raise RuntimeError(name + " failed: " + "\n".join(errors))
+        report = json.loads((run / "package_report.json").read_text(encoding="utf-8"))
+        if not report["passed"]: raise RuntimeError("Exported package checks failed")
+        for expected in ["steam_api64.dll", "libgodotsteam.windows.template_release.x86_64.dll"]:
+            found = list(windows.rglob(expected))
+            if len(found) != 1 or sha(found[0]) != sha(ROOT / "vendor/godotsteam/win64" / expected):
+                raise RuntimeError("Native export dependency missing or changed: " + expected)
+        receipt["outputs"] = [{"path":p.relative_to(windows).as_posix(),"bytes":p.stat().st_size,"sha256":sha(p)} for p in sorted(windows.rglob("*")) if p.is_file()]
+        for row in records:
+            if sha(ROOT / row["path"]) != row["sha256"]: raise RuntimeError("Source changed during export")
+            if not row["path"].endswith(".import") and sha(project / row["path"]) != row["sha256"]:
+                raise RuntimeError("Exporter changed production source: " + row["path"])
+        receipt["checks"] = len(report["checks"])
+        receipt["complete"] = True
+    finally:
+        if child is not None and child.poll() is None: child.kill(); child.wait(timeout=30)
+        (run / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+        if LOCK.read_text() == str(run): LOCK.unlink()
+        print(json.dumps({"complete":receipt["complete"],"run":str(run),"checks":receipt.get("checks",0)}), flush=True)
+
+if __name__ == "__main__": main()

@@ -75,3 +75,19 @@ qa/wall_direction_20260906/** -text whitespace=blank-at-eol,blank-at-eof,space-b
 tools/wall_direction_qa.gd text eol=lf
 
 qa/steam_update_20260907/** -text -whitespace
+
+# Preserve the existing mixed endings and exact Steam QA evidence bytes.
+scripts/hud.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/menu.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+export_presets.cfg text eol=crlf whitespace=-blank-at-eof,cr-at-eol
+scripts/steam_*.gd text eol=lf
+scripts/workshop_*.gd text eol=lf
+tools/steam_*.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/run_steam_integration_qa.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/build_steam_candidate.py text eol=lf
+tools/setup_steam_dependency.py text eol=lf
+tools/steam_candidate_verification.py text eol=lf
+assets/ui/achievements/*.import text eol=lf
+tools/contracts/steam/** -text
+vendor/godotsteam/** -text -whitespace
+qa/steam_integration_20260907/** -text -whitespace

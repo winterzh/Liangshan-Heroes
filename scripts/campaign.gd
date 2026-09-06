@@ -158,9 +158,14 @@ func has_next() -> bool:
 	return next_index() >= 0 and implemented(next_index())
 
 
-func on_level_won(result: Dictionary = {}) -> Dictionary:
-	unlocked = maxi(unlocked, current + 2)
-	var level_id := String(LEVELS[current].id) if current >= 0 and current < LEVELS.size() else ""
+func on_level_won(result: Dictionary = {}, context: Dictionary = {}) -> Dictionary:
+	if context.get("mode", "custom") != "campaign":
+		return {"accepted":false,"new_story_seal":false}
+	var level_id := String(context.get("level_id", ""))
+	var index := index_for_id(level_id)
+	if index < 0:
+		return {"accepted":false,"new_story_seal":false}
+	unlocked = maxi(unlocked, index + 2)
 	if result.is_empty():
 		result = {"core_cleared":true,"story_complete":false,"story_done":0,"story_total":0,
 			"done_ids":[],"contract_version":1}

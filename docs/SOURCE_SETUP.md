@@ -1,3 +1,9 @@
+## 2026-09-07 Steam 接入复现
+
+正常 `Play.cmd` 启动保持可用，「更多」可查看成就和工坊入口；普通源码启动不计 Steam 成就。Windows Steam 版使用固定 GodotSteam 4.22.1/Steamworks1.65，在隔离工程启用 `steam` 导出特性。
+
+先运行 `python -X utf8 -B tools/run_steam_integration_qa.py --run --native --visual`；成功后将收据目录传给 `tools/build_steam_candidate.py --run --qa-run <目录>`，源码变化须重验。助手使用私有用户目录及共同引擎锁，成品只写忽略的 `.godot/steam_candidates/`。不要直接从普通源目录导出 `Windows Steam` 后遗漏原生 DLL；不要把 `steam_appid.txt` 或玩家目录打包。依赖哈希、完整命令、后台配置及双账号步骤见[Steam 接入](STEAM_INTEGRATION_20260907.md)。
+
 ## 2026-09-07 商店素材复现与发布状态
 
 本轮新增 `marketing/steam_store_20260907/`，由 `marketing/.gdignore` 排除Godot扫描；不会改变游戏启动入口。封面交付尺寸可用 `py -3 -X utf8 marketing/steam_store_20260907/prepare_capsules.py` 从仓库原图复现，需要Python3与FFmpeg。来源、库图片处理和投放白名单见[素材说明](../marketing/steam_store_20260907/README.md)。

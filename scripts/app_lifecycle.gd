@@ -19,6 +19,9 @@ func request_quit(reason := "app") -> void:
 		return
 	_quit_started = true
 	_quit_reason = reason
+	var steam := get_node_or_null("/root/SteamService")
+	if steam != null:
+		steam.flush()
 	var sfx := get_node_or_null("/root/Sfx")
 	if sfx != null and sfx.has_method("shutdown"):
 		sfx.shutdown()

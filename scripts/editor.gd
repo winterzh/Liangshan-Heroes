@@ -57,6 +57,11 @@ func _build() -> void:
 	var spacer := Control.new(); spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(spacer)
 	top.add_child(_btn("返回菜单", func() -> void: get_tree().change_scene_to_file("res://scenes/menu.tscn")))
 
+	var workshop_bar := HBoxContainer.new()
+	root.add_child(workshop_bar)
+	workshop_bar.add_child(_btn("发布／更新到创意工坊", func() -> void: SteamPanels.show_publish(self, "custom_defense", _cfg)))
+	workshop_bar.add_child(_btn("另存本地副本", func() -> void:
+		_show_toast("副本保存：" + SteamPanels.save_copy("custom_defense", _cfg))))
 	# —— 分页切换 ——
 	var tabs := HBoxContainer.new()
 	tabs.add_theme_constant_override("separation", 6)

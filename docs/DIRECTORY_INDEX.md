@@ -1,3 +1,12 @@
+## 2026-09-07 Steam 成就与工坊
+
+- `scripts/steam_*.gd`、`scripts/workshop_*.gd`：成就目录/状态/官方模式/Steam 适配、工坊数据校验/服务/示例及共享面板。
+- `assets/ui/achievements/`：60 张 256×256 生产图标及导入侧车；矢量原文和后台清单位于 `tools/contracts/steam/`。
+- `vendor/godotsteam/`：固定版本 Windows x86_64 依赖、许可证、上游原文和逐文件 SHA；`.gdignore` 防止普通源工程加载。
+- `tools/run_steam_integration_qa.py`、`tools/build_steam_candidate.py`：隔离 QA 和 Windows Steam 候选导出入口；辅助 GD 均排除出包。
+- `docs/STEAM_INTEGRATION_20260907.md`、`qa/steam_integration_20260907/`：产品规则、后台待执行清单、真实离线/原生/界面证据与失败轮。
+- `.godot/steam_integration_qa/`、`.godot/steam_candidates/`：仅本机私有工程、用户目录、缓存和候选 EXE/DLL，不提交 Git。
+
 ## 2026-09-07 Steam 商店与公告素材
 
 - `marketing/steam_store_20260907/`：四种商店封面、三种库图、生成来源/提示词/哈希、复现脚本与中英文介绍；只把交付图拖入Steam，源图及失败证据不投放。

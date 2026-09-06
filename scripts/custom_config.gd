@@ -95,7 +95,7 @@ static func save(cfg: Dictionary) -> String:
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f == null:
 		return ""
-	f.store_string(JSON.stringify(cfg, "\t"))
+	f.store_string(JSON.stringify(WorkshopContent.encode_payload(cfg), "\t"))
 	f.close()
 	return path
 
@@ -122,4 +122,4 @@ static func load_by_name(name: String) -> Dictionary:
 	var txt := f.get_as_text()
 	f.close()
 	var data: Variant = JSON.parse_string(txt)
-	return data if data is Dictionary else {}
+	return WorkshopContent.runtime_payload(data) if data is Dictionary else {}

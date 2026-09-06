@@ -569,6 +569,12 @@ func _show_more() -> void:
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
 
+	var achievements := _mk_big_btn("成就 · 30 项", UITheme.COPPER_LIGHT)
+	achievements.pressed.connect(func() -> void: SteamPanels.show_achievements(self))
+	box.add_child(achievements)
+	var workshop := _mk_big_btn("创意工坊 · 订阅关卡", UITheme.COPPER_LIGHT)
+	workshop.pressed.connect(func() -> void: SteamPanels.show_workshop(self))
+	box.add_child(workshop)
 	var sed := _mk_big_btn("🗺  场景编辑器（造关）", Color("9fe06f"))
 	sed.pressed.connect(func() -> void:
 		get_tree().change_scene_to_file.call_deferred("res://scenes/scenario_editor.tscn"))

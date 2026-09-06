@@ -1,0 +1,67 @@
+"""Verify an already-exported candidate with its actual release EXE; no re-export."""
+from pathlib import Path
+import argparse
+import hashlib
+import json
+import os
+import subprocess
+import time
+import uuid
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+LOCK = ROOT / ".godot/redraw_rejection_source.lock"
+sys.path.insert(0, str(ROOT / "tools"))
+from steam_candidate_verification import verify
+from run_steam_integration_qa import resolve_godot
+
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--candidate", type=Path, required=True)
+    args = parser.parse_args()
+    candidate = args.candidate.resolve()
+    candidate.relative_to((ROOT / ".godot/steam_candidates").resolve())
+    prior = json.loads((candidate / "receipt.json").read_text())
+    assert all(any(row["name"] == name and row["exit_code"] == 0 for row in prior["steps"]) for name in ["import", "export"])
+    assert not prior["uploaded"] and prior["kind"] == "windows_steam_feature_candidate"
+    running = subprocess.check_output(["powershell.exe","-NoProfile","-Command","@(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | ForEach-Object { $_.Id }) | ConvertTo-Json -Compress"], text=True).strip()
+    assert not running or not json.loads(running), "Godot slot occupied"
+    run = candidate / ("verification_" + time.strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:6])
+    run.mkdir()
+    with LOCK.open("x") as handle: handle.write(str(run))
+    receipt = {"complete":False,"source_export_receipt_sha256":sha(candidate / "receipt.json"),"helper_sha256":sha(Path(__file__)),
+               "probe_sha256":sha(ROOT / "tools/steam_package_probe.gd"),"steps":[],"uploaded":False,"live_steam_tested":False}
+    child = None
+    try:
+        windows = candidate / "windows"
+        outputs = [{"path":p.relative_to(windows).as_posix(),"bytes":p.stat().st_size,"sha256":sha(p)} for p in sorted(windows.rglob("*")) if p.is_file()]
+        receipt["outputs"] = outputs
+        assert {p["path"] for p in outputs} == {"LiangshanHeroes.exe","steam_api64.dll","libgodotsteam.windows.template_release.x86_64.dll"}
+        for name in ["steam_api64.dll","libgodotsteam.windows.template_release.x86_64.dll"]:
+            assert sha(windows / name) == sha(ROOT / "vendor/godotsteam/win64" / name)
+        for row in prior["source_files"]:
+            assert sha(ROOT / row["path"]) == row["sha256"], row["path"]
+            if not row["path"].endswith(".import"):
+                assert sha(candidate / "project" / row["path"]) == row["sha256"], row["path"]
+        env = os.environ.copy()
+        for key in list(env):
+            if key.endswith(("_TEST","_QA","_AUDIT")) or key in {"LEVEL","SCENARIO","CUSTOM_DEFENSE","SKIRMISH","SKIRMISH_AI","ARENA","SCREENSHOT_DIR"}: env.pop(key)
+        for key in ["APPDATA","LOCALAPPDATA","TEMP","TMP"]:
+            path = run / "profile" / key.lower(); path.mkdir(parents=True)
+            env[key] = str(path)
+        env.update(STEAM_DISABLED="1",CONTENT_UPDATE_NO_AUTO="1",STEAM_PACKAGE_REPORT=str(run / "package_report.json"))
+        verification = verify(run, windows, resolve_godot(None), env)
+        receipt["steps"] = verification["steps"]
+        receipt["verification"] = verification
+        assert all(sha(windows / row["path"]) == row["sha256"] for row in outputs)
+        receipt["checks"] = verification["checks"]
+        receipt["complete"] = True
+    finally:
+        if child is not None and child.poll() is None: child.kill(); child.wait(timeout=30)
+        (run / "receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
+        if LOCK.read_text() == str(run): LOCK.unlink()
+        print(json.dumps({"complete":receipt["complete"],"run":str(run)}),flush=True)
+
+if __name__ == "__main__": main()

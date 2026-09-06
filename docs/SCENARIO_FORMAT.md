@@ -126,3 +126,8 @@ func top_status(b, s) -> String     # 顶栏文字（返回非空则覆盖默认
 func cond(b, name, s) -> bool       # 供 win/lose 里的 {"type":"hook","name":...} 调用
 ```
 可读写 `s._refs`（ref 名→Unit）、用 `b.spawn_at/spawn_group/msg/win/lose` 等 Battle API。
+
+
+## 创意工坊发行格式（2026-09-07）
+
+本地编辑器格式继续兼容。通过创意工坊发布时另加 format_version=1 的 manifest 和数据校验：地图限 24–96 格、仅使用内置单位/技能/美术，不接受脚本或外部资源。发布、更新和订阅作品均作为自定义玩法，不计 Steam 成就或官方演义记录。格式、字段上限、后台配置与 QA 见 [Steam 接入说明](STEAM_INTEGRATION_20260907.md)。

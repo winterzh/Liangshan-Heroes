@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "reviewer": "Codex root",
+  "method": "view_image on six actual 1280x720 Godot viewport images; shared unchanged panels across the two visual runs",
+  "scope": "UI layout and rendering only; no real Steam connection or full manual campaign play",
+  "captures": [
+    {
+      "path": "visual/achievements.png",
+      "sha256": "cb4e48a72a154382f0924ea69d93849eed375584e2ba2dc889e1e4dc031ecee2"
+    },
+    {
+      "path": "visual/defense_editor.png",
+      "sha256": "0c49bb07427f96b82f1ba61b147ac9bd8a09296983fd1764f0de6a6e87677d7b"
+    },
+    {
+      "path": "visual/more.png",
+      "sha256": "b9d843504644f8388a40daeae4f1443c8e8ccae431e344392c5c2a09af8468eb"
+    },
+    {
+      "path": "visual/publish.png",
+      "sha256": "eec6b5f967d969e1cf2534edc55c8f924d3e87addbe1d32470d0913d149bbf7a"
+    },
+    {
+      "path": "visual/scenario_editor.png",
+      "sha256": "d8e31861a62137be62fd66bac500a9b2af6f04a1bd2e395a8f51f49cc725e7d7"
+    },
+    {
+      "path": "visual/workshop.png",
+      "sha256": "1ee183b5782f743b4f0cab08eb934e2c73a1716e1ef78c99dde15025c77cfafd"
+    }
+  ],
+  "findings": [
+    "More menu entries and back controls fit the viewport.",
+    "Achievement icons and descriptions render, long list scrolls.",
+    "Workshop disconnected state and controls are legible.",
+    "Both editors retain their controls below the added publishing row.",
+    "Publish form shows title, description, privacy, preview, terms and disabled disconnected submit."
+  ],
+  "fixture_failure": "One test placed an ability-only color field on a unit; corrected to song_rally in final_native_176. The production conversion was unchanged by this fixture fix."
+}

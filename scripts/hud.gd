@@ -2304,6 +2304,10 @@ func _build_end() -> void:
 
 
 func show_intro(lines: Array) -> void:
+	if lines.is_empty():
+		_intro_root.hide()
+		intro_done.emit()
+		return
 	_intro_lines = lines
 	_intro_i = 0
 	_intro_root.visible = true

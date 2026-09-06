@@ -10,6 +10,8 @@ enum Phase { INTRO, DEPLOY, FIGHT, END }
 
 var level: LevelBase
 var mission = null
+var _official_context: Dictionary = {}
+var _steam_run_id := 0
 var _defs := {}
 var _abilities := {}
 var _items := {}
@@ -263,6 +265,8 @@ var _cursor_resources_released := false
 func _ready() -> void:
 	_refresh_hot_patch_classes()
 	level = _resolve_level()
+	_official_context = SteamRunPolicy.classify(Campaign, level)
+	_steam_run_id = SteamService.begin_run(_official_context)
 	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense
 	_defs = Defs.UNITS.duplicate(true)
 	_abilities = Defs.ABILITIES.duplicate(true)
@@ -359,7 +363,7 @@ func _ready() -> void:
 	hud.setup(self)
 	_install_target_cursor()
 
-	if level.id().begins_with("level"):
+	if _official_context.get("mode") == "campaign":
 		mission = preload("res://scripts/campaign_mission.gd").new(self)
 	level.deploy(self)
 
@@ -2063,6 +2067,8 @@ func _on_unit_died(u: Unit) -> void:
 	_spawn_death_remains(u)
 	if u.faction == Unit.FACTION_GUAN and not u.is_building:
 		kills += 1
+		if phase == Phase.FIGHT:
+			SteamService.record_kill(_steam_run_id)
 		# 按英雄统计歼敌：把这一杀记到「最后一击」的梁山英雄名下。
 		# 用英雄 key 作键（而非 instance_id）→ 英雄阵亡后在聚义厅复活(新实例)仍并入同一条战功，不另起一行。
 		var k: Unit = u._killer
@@ -4074,9 +4080,10 @@ func _end(victory: bool, line: String) -> void:
 		# Freeze the same-run goal states before persistence, metrics, callbacks or
 		# settlement UI can observe or mutate them.
 		campaign_result = mission.result_snapshot(victory)
-	if camp != null and victory:
-		var saved_result: Dictionary = camp.on_level_won(campaign_result)
+	if camp != null and victory and _official_context.get("mode") == "campaign":
+		var saved_result: Dictionary = camp.on_level_won(campaign_result, _official_context)
 		campaign_result["new_story_seal"] = bool(saved_result.get("new_story_seal", false))
+	SteamService.settle(_steam_run_id, victory, campaign_result)
 	var report := _hero_end_tally()
 	if mission != null:
 		mission.finish_metrics(victory)

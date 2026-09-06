@@ -255,6 +255,14 @@ func _build() -> void:
 	top.add_child(_btn("返回菜单", func() -> void:
 		get_tree().change_scene_to_file("res://scenes/menu.tscn")))
 
+	var workshop_bar := HBoxContainer.new()
+	root.add_child(workshop_bar)
+	workshop_bar.add_child(_btn("发布／更新到创意工坊", func() -> void:
+		_flush_terrain()
+		SteamPanels.show_publish(self, "scenario", _cfg)))
+	workshop_bar.add_child(_btn("另存本地副本", func() -> void:
+		_flush_terrain()
+		_show_toast("副本保存：" + SteamPanels.save_copy("scenario", _cfg))))
 	# 三栏：左工具 / 中画布 / 右属性
 	var cols := HBoxContainer.new()
 	cols.size_flags_vertical = Control.SIZE_EXPAND_FILL
