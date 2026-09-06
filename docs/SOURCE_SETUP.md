@@ -1,3 +1,9 @@
+## 2026-09-06 祝家庄原生门楼
+
+重新运行`Play.cmd`并重开“三打祝家庄”，现有启动缓存检查会导入新门楼PNG。只更换两座门的变体与木栅接口，不需配置图像API。孙立仍选中后右键3号旗标并停留5秒。
+
+新增`tools/zhujiazhuang_gate_art_qa.gd`和只读`tools/zhujiazhuang_gate_sources.py`，默认输出`.godot/wall_gate_native/`，可使用`GATE_ART_VISUAL=1`保存真实渲染图。完整命令、当前回归和范围见[说明](ZHU_GATE_NATIVE_20260906.md)。
+
 ## 2026-09-06 单位重绘调度
 
 物理追帧期间的重复Unit重绘合并到出画面前。源码启动配置不变，重新启动游戏加载；新增实际渲染入口 `tools/unit_redraw_qa.gd`、`tools/unit_redraw_stress.gd`，分别输出 `.godot/unit_redraw_qa/` 与 `PERF_OUT` 指定文件。专项42项通过，正常战斗窗口37.27FPS/P95 67.158ms仍待优化。基线已含宋江四向，复现与全部回归见[说明](UNIT_REDRAW_20260906.md)。

@@ -1,0 +1,515 @@
+{
+  "base_commit": "5457de797678889ce606abb9468a2a994f634d51",
+  "before_capture_commit": "57e2512db918498f2950c7669cd2bf6863e2265e",
+  "branch": "codex/sync-20260905-stable",
+  "scope": "Native gate image and timber flanks in two Zhujiazhuang gates; texture-only tint, existing wall/navigation/task rules retained",
+  "verification": {
+    "gate_art": 27,
+    "sources": 22,
+    "walls": 46,
+    "sun_li_contact": 22,
+    "song_jiang": 250,
+    "wall_views_saved": 6
+  },
+  "inputs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "e3f3a8cab59c59c3816e98d16d9a38913f7290fe6b33844aa1a6f603de694258",
+      "git_bytes_sha256": "e3f3a8cab59c59c3816e98d16d9a38913f7290fe6b33844aa1a6f603de694258",
+      "size": 4415,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "assets/campaign/environment/level5/stockade_segment.png",
+      "sha256": "e1f807ef74b32a7bd16bc14705a1436938b6942da34018f96294d11a834a0c44",
+      "git_bytes_sha256": "e1f807ef74b32a7bd16bc14705a1436938b6942da34018f96294d11a834a0c44",
+      "size": 50509,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "assets/campaign/objects/zhu_gate_native_20260906_default.png",
+      "sha256": "570b6fe33ed6c731dbc85cea7efb92d06b7b44cf11c960c3f30f1ac11ce04300",
+      "git_bytes_sha256": "570b6fe33ed6c731dbc85cea7efb92d06b7b44cf11c960c3f30f1ac11ce04300",
+      "size": 2154409,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "assets/campaign/objects/zhu_gate_native_20260906_default.png.import",
+      "sha256": "ddb2f69d0803d51eea6f52c46a767b074cdd2283c7b7fcbf0ed5d15834238096",
+      "git_bytes_sha256": "ddb2f69d0803d51eea6f52c46a767b074cdd2283c7b7fcbf0ed5d15834238096",
+      "size": 1025,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "assets/terrain2.png",
+      "sha256": "b20a185980a3c223897aea654cea22d81d88348423d135fd81103b41cc25f544",
+      "git_bytes_sha256": "b20a185980a3c223897aea654cea22d81d88348423d135fd81103b41cc25f544",
+      "size": 2487050,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "docs/DIRECTORY_INDEX.md",
+      "sha256": "81ea3e9d4a7ff8dc71bdf6cc5c8c8f70da0b8532213a8f90713ece083fed4485",
+      "git_bytes_sha256": "f278963fc71abc6adaf23c0cfae506582f719d72ac23084808e33a9f8de7efaf",
+      "size": 16715,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "docs/RELEASE_READINESS_20260905.md",
+      "sha256": "d701e7f39a5e4a5b6053b379a645790fb435bf4b09b58c12fd99d24acd9d4a32",
+      "git_bytes_sha256": "3414b7d7d7969ff9e7b58301a52d9462c91f10130edf0e6c6011b678e0e9d12f",
+      "size": 8782,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "docs/SOURCE_SETUP.md",
+      "sha256": "9ff12512cab0d9314fb46e09c540d0de7627b4b4e4ffc69a66396b93f576a43d",
+      "git_bytes_sha256": "c7d45c436d5db0b04475d2a2ea4dbcddfafee3a4b998df2cb6be2d7bd28e1446",
+      "size": 68983,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "docs/WALL_JOIN_POLISH_20260906.md",
+      "sha256": "fd551668f1667dd2d390bcecd7881c46b87b0e076e5de2946b42d12025b4b97e",
+      "git_bytes_sha256": "fd551668f1667dd2d390bcecd7881c46b87b0e076e5de2946b42d12025b4b97e",
+      "size": 2134,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "docs/WORKLOG.md",
+      "sha256": "d43a14148de6ba5b99e70f4e3bde68c25c0137162e2ced850c0cbc2e1986eb66",
+      "git_bytes_sha256": "28c76cdc29130dab4e4847b393675f41258567ce36e77d459b2bb04b1c10d5b0",
+      "size": 172147,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "docs/ZHU_GATE_NATIVE_20260906.md",
+      "sha256": "87432a2a11412dfc4da45335c12d28d520953955988b11da989fc0f797bbb001",
+      "git_bytes_sha256": "87432a2a11412dfc4da45335c12d28d520953955988b11da989fc0f797bbb001",
+      "size": 3424,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "project.godot",
+      "sha256": "5f60d39f4817f3428c82c29004cc8bd4314e89ef322728c79266ee08dd63793c",
+      "git_bytes_sha256": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32",
+      "size": 1519,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "qa/wall_join_polish_20260906/after/zhu_close.png",
+      "sha256": "77aaf1011804979c8e5ce0abfc7269007e082cbe3a59ca1805e76811d756e9d7",
+      "git_bytes_sha256": "77aaf1011804979c8e5ce0abfc7269007e082cbe3a59ca1805e76811d756e9d7",
+      "size": 2035401,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/art_db.gd",
+      "sha256": "9d4e237f7fe3ef6eb7c9bf22bdd1f18ac390ac4d35495327cb4629623a491789",
+      "git_bytes_sha256": "02c800005ae36ba6da064af5ca616db02d48172d2a1c626b64b78dc8459f8d37",
+      "size": 43304,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "scripts/battle.gd",
+      "sha256": "eb279f675487cee2c9ef9861abb543d05149e838580e642291f655387c64c42c",
+      "git_bytes_sha256": "eb279f675487cee2c9ef9861abb543d05149e838580e642291f655387c64c42c",
+      "size": 757357,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/campaign_art.gd",
+      "sha256": "dfcbef879857d7676ad6f024a639c288d28dd477f896149e943a892a8c10443e",
+      "git_bytes_sha256": "dfcbef879857d7676ad6f024a639c288d28dd477f896149e943a892a8c10443e",
+      "size": 14226,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/campaign_city_wall.gd",
+      "sha256": "02cc31b5ff761d3832c5a12f292002603ac15bc1fa28c2a781d944634416a622",
+      "git_bytes_sha256": "993767d27b44b9fcbf1dfbd5e48c27c73c0229b321878105ea8c5254f89d6122",
+      "size": 2483,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "scripts/campaign_gate_visual.gd",
+      "sha256": "8e4da265f7cd8cdac782df03f474e2a1edad3ac9557ba54d341fe86803c61ca4",
+      "git_bytes_sha256": "8e4da265f7cd8cdac782df03f474e2a1edad3ac9557ba54d341fe86803c61ca4",
+      "size": 3489,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "sha256": "f8025e6b929ed8c509d5b98ce2f990366ce2a1c6561a6328c45165bf835c480d",
+      "git_bytes_sha256": "f8025e6b929ed8c509d5b98ce2f990366ce2a1c6561a6328c45165bf835c480d",
+      "size": 18753,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/defs.gd",
+      "sha256": "4cb4fa2288235aff117d7373794f335b5cc5092bf8fad5fd416d0f7dc5c1b155",
+      "git_bytes_sha256": "a2f9a9fe9a669829871c0bcb9fd9295b451e8b9744993deb4f007ab1d80607fb",
+      "size": 218233,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+      "git_bytes_sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+      "size": 34327,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256": "2efe7999a6159dc5460e831563f7b95a2a83c0aef00c1d655fb688e34bbec287",
+      "git_bytes_sha256": "2efe7999a6159dc5460e831563f7b95a2a83c0aef00c1d655fb688e34bbec287",
+      "size": 17988,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "sha256": "b7630a6457ea357c8b32202633c8ad1b908e035579f1961a639457ff698b8a0f",
+      "git_bytes_sha256": "b7630a6457ea357c8b32202633c8ad1b908e035579f1961a639457ff698b8a0f",
+      "size": 21404,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/liangshan_scenery.gd",
+      "sha256": "2a88c6ff4b5d610093d8dcd8dd0182d9d124a26969d76e154f4be236f20c00c4",
+      "git_bytes_sha256": "24ff0d84f30874c33a2a16985e66a05ff58be4d683bcd0defca468b5acf9e118",
+      "size": 34440,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "scripts/liangshan_stockade.gd",
+      "sha256": "69adc35f014d93d96936e9d59d8fd45350aa44d6ed1ba5af61ddefdf1b731a3c",
+      "git_bytes_sha256": "69adc35f014d93d96936e9d59d8fd45350aa44d6ed1ba5af61ddefdf1b731a3c",
+      "size": 2705,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256": "f0b66e689f5b62f2900988eee287ec8fb5a80de853ff78ae0a05693097c16c1b",
+      "git_bytes_sha256": "f0b66e689f5b62f2900988eee287ec8fb5a80de853ff78ae0a05693097c16c1b",
+      "size": 196246,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "scripts/world_shadow.gd",
+      "sha256": "10554e639b1a4493e4f4104574401c43bece1b61908caca0a0aa7e0d78e84568",
+      "git_bytes_sha256": "f084388a2b7ee53dbb181d79bdf63cf13c4597e967c1b5ea987f4736ca5e4836",
+      "size": 20445,
+      "newline_conversion_only": true
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_bytes_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/README.md",
+      "sha256": "85b93d3db1ac0815acfbc8b9fa55a89465adaf85d6e5a76451d8d40f2e334774",
+      "git_bytes_sha256": "85b93d3db1ac0815acfbc8b9fa55a89465adaf85d6e5a76451d8d40f2e334774",
+      "size": 844,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/alpha2_prompt.txt",
+      "sha256": "ae855c52250e63eb2ccecc8eda52f47887e025305d7e3a8601b5f36f6cc5d9a8",
+      "git_bytes_sha256": "ae855c52250e63eb2ccecc8eda52f47887e025305d7e3a8601b5f36f6cc5d9a8",
+      "size": 49,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/alpha_attempt.png",
+      "sha256": "e45ed9e3fd25396cc6e5bfe07d71b506505826de9af3cb20394cb92b68f45e3d",
+      "git_bytes_sha256": "e45ed9e3fd25396cc6e5bfe07d71b506505826de9af3cb20394cb92b68f45e3d",
+      "size": 2006843,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/alpha_clipped.png",
+      "sha256": "067e49cc86d0fa333c332f49c86810a71c91fdbe01aa8a96141eb9f0d58c4caf",
+      "git_bytes_sha256": "067e49cc86d0fa333c332f49c86810a71c91fdbe01aa8a96141eb9f0d58c4caf",
+      "size": 2535353,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/alpha_prompt.txt",
+      "sha256": "30d8c33173467300c86cab222d4a5353accd40671c7ec86abe246f2eb44fd7ce",
+      "git_bytes_sha256": "30d8c33173467300c86cab222d4a5353accd40671c7ec86abe246f2eb44fd7ce",
+      "size": 372,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/gate.png",
+      "sha256": "0630d63643c1cf4bd1cc66499f000864851fe1e8fb4ccfee9538a8d56f7ba431",
+      "git_bytes_sha256": "0630d63643c1cf4bd1cc66499f000864851fe1e8fb4ccfee9538a8d56f7ba431",
+      "size": 1864994,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/generation.json",
+      "sha256": "8cd91e37a114480f57d512be339d3080e7f30a15979aa1a668f301cbc422ff83",
+      "git_bytes_sha256": "8cd91e37a114480f57d512be339d3080e7f30a15979aa1a668f301cbc422ff83",
+      "size": 4579,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/padding_prompt.txt",
+      "sha256": "c91078a5807f1e75eaff40e4f245fc59bede76cf852b826bc00269ff3b92e5c8",
+      "git_bytes_sha256": "c91078a5807f1e75eaff40e4f245fc59bede76cf852b826bc00269ff3b92e5c8",
+      "size": 313,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/contracts/zhu_gate_native_20260906/prompt.txt",
+      "sha256": "d4ce3973ceefe221f30a6e67f2e57e194abe6e652704229ce13b7b70b763ecb8",
+      "git_bytes_sha256": "d4ce3973ceefe221f30a6e67f2e57e194abe6e652704229ce13b7b70b763ecb8",
+      "size": 2071,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/song_jiang_direction4_qa.gd",
+      "sha256": "9904739a66a92e3ebc1b36e8a35cf7d451600f12bb1951b000bc2702796ac23b",
+      "git_bytes_sha256": "9904739a66a92e3ebc1b36e8a35cf7d451600f12bb1951b000bc2702796ac23b",
+      "size": 9784,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/wall_alignment_test.gd",
+      "sha256": "6e105d4d58b4fd49089ec8f1c59a0279733cd707d95578486cc307d2609c63f9",
+      "git_bytes_sha256": "6e105d4d58b4fd49089ec8f1c59a0279733cd707d95578486cc307d2609c63f9",
+      "size": 4460,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/wall_alignment_visual.gd",
+      "sha256": "310e01a4c92ce40eedf37dc22a40792b24ca65536fc4783e5aa150217fb9186f",
+      "git_bytes_sha256": "310e01a4c92ce40eedf37dc22a40792b24ca65536fc4783e5aa150217fb9186f",
+      "size": 1454,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/zhujiazhuang_gate_art_qa.gd",
+      "sha256": "1e05e000ab5e14246f3f4b33dab2bb61da113379dcd58ea0c2645ee71c55914d",
+      "git_bytes_sha256": "1e05e000ab5e14246f3f4b33dab2bb61da113379dcd58ea0c2645ee71c55914d",
+      "size": 3770,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/zhujiazhuang_gate_contact_test.gd",
+      "sha256": "e2f412d40f1bb72356dd5f46c790013df9c388da4568b946158408f4de6d7763",
+      "git_bytes_sha256": "e2f412d40f1bb72356dd5f46c790013df9c388da4568b946158408f4de6d7763",
+      "size": 5421,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/zhujiazhuang_gate_sources.py",
+      "sha256": "d2d3603fafdc25edd16c7019283330575c9d0644aa3e6dbb8ccd3381efc8b20f",
+      "git_bytes_sha256": "d2d3603fafdc25edd16c7019283330575c9d0644aa3e6dbb8ccd3381efc8b20f",
+      "size": 2870,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "tools/zhujiazhuang_rts_test.gd",
+      "sha256": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+      "git_bytes_sha256": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a",
+      "size": 15364,
+      "newline_conversion_only": false
+    }
+  ],
+  "evidence": [
+    {
+      "path": "qa/zhu_gate_native_20260906/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_bytes_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/README.md",
+      "sha256": "123e482ef6abfd4df4e38949ed022e983bba337dc04b1f4abe33d9f1f444c613",
+      "git_bytes_sha256": "123e482ef6abfd4df4e38949ed022e983bba337dc04b1f4abe33d9f1f444c613",
+      "size": 2348,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/attempts/gate_art_wrong_legacy_assertion.log",
+      "sha256": "8592f726fb80999b2ba37075e824b67bdeb11e63621f38150e08565e0d862522",
+      "git_bytes_sha256": "8592f726fb80999b2ba37075e824b67bdeb11e63621f38150e08565e0d862522",
+      "size": 1489,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/attempts/rejected_height_only.png",
+      "sha256": "c4e5245af4d4475857bbbe06aaddc4145ad0085957bb0302ed45ff9e4e056ef3",
+      "git_bytes_sha256": "c4e5245af4d4475857bbbe06aaddc4145ad0085957bb0302ed45ff9e4e056ef3",
+      "size": 2047030,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/before/zhu_close.png",
+      "sha256": "fdd7abacea935440bc82daf62150766bdb414c32b77e41d5429efb94cee3780d",
+      "git_bytes_sha256": "fdd7abacea935440bc82daf62150766bdb414c32b77e41d5429efb94cee3780d",
+      "size": 2035383,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/contact.log",
+      "sha256": "fe96daadfef3d2e2bc5e5729b6c9f78bc423b0936b4831e566bc3afeeaf1a151",
+      "git_bytes_sha256": "fe96daadfef3d2e2bc5e5729b6c9f78bc423b0936b4831e566bc3afeeaf1a151",
+      "size": 1370,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/contact/report.json",
+      "sha256": "f9e1116089555ef9c9f02a5980abf731e77d548fa6b4aeab34385ff54028fd2b",
+      "git_bytes_sha256": "f9e1116089555ef9c9f02a5980abf731e77d548fa6b4aeab34385ff54028fd2b",
+      "size": 197,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/final/defense_close.png",
+      "sha256": "8b4d0c7ff30b373614e68c040144fc9c28b29b2f3c753989849ac1a827f3933b",
+      "git_bytes_sha256": "8b4d0c7ff30b373614e68c040144fc9c28b29b2f3c753989849ac1a827f3933b",
+      "size": 1716909,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/final/defense_wide.png",
+      "sha256": "300afb1024035a3173633283716a10f7bd22c30d2e39f89fc4167054277ca61e",
+      "git_bytes_sha256": "300afb1024035a3173633283716a10f7bd22c30d2e39f89fc4167054277ca61e",
+      "size": 2285564,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/final/liangshan_close.png",
+      "sha256": "76891374ea098878337f32a58b5d6758d88e187ba4beb1c96adbc67c1ea1af8c",
+      "git_bytes_sha256": "76891374ea098878337f32a58b5d6758d88e187ba4beb1c96adbc67c1ea1af8c",
+      "size": 1913630,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/final/liangshan_wide.png",
+      "sha256": "938a233721116a7b246d0df75350e6778d2a9600d5e7e636447e7ec6e316f49d",
+      "git_bytes_sha256": "938a233721116a7b246d0df75350e6778d2a9600d5e7e636447e7ec6e316f49d",
+      "size": 2232356,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/final/zhu_close.png",
+      "sha256": "05792771a8b86d535ecc3d819c7b1d5318f0e9b83d1a2b6cdcab4afde41b7711",
+      "git_bytes_sha256": "05792771a8b86d535ecc3d819c7b1d5318f0e9b83d1a2b6cdcab4afde41b7711",
+      "size": 2014839,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/final/zhu_wide.png",
+      "sha256": "4c2d9a6ed0401ef30c3f9c70555948d657c31e476269abbc3872d48a1ab5066f",
+      "git_bytes_sha256": "4c2d9a6ed0401ef30c3f9c70555948d657c31e476269abbc3872d48a1ab5066f",
+      "size": 2330359,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/final_import.log",
+      "sha256": "3d44703b86ccf49c3c21786837736aec4d5c8acc9798af7aaac026afb150e920",
+      "git_bytes_sha256": "3d44703b86ccf49c3c21786837736aec4d5c8acc9798af7aaac026afb150e920",
+      "size": 1784,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/gate_art.log",
+      "sha256": "cb717b1afd06b1e72f5c2fc4904a9ed9e35cd1826ca3568a9b151304f8f7abd4",
+      "git_bytes_sha256": "cb717b1afd06b1e72f5c2fc4904a9ed9e35cd1826ca3568a9b151304f8f7abd4",
+      "size": 1489,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/runtime/both_wide.png",
+      "sha256": "3d9f946dfc9383b5f39f94e3a9e942d0919bd97db2b7ad0da1dba4d99b45fcb0",
+      "git_bytes_sha256": "3d9f946dfc9383b5f39f94e3a9e942d0919bd97db2b7ad0da1dba4d99b45fcb0",
+      "size": 2330354,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/runtime/main_close.png",
+      "sha256": "a17d1a56a3a5ddbf92e7378f430d3287bced190aa9885fecf07d99b27b62b9ae",
+      "git_bytes_sha256": "a17d1a56a3a5ddbf92e7378f430d3287bced190aa9885fecf07d99b27b62b9ae",
+      "size": 1924172,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/runtime/report.json",
+      "sha256": "2dde7c84b28e46ecce07c49cc0f7a932e6c8c3ee9c24f5ca4d6f54a4f7c36578",
+      "git_bytes_sha256": "2dde7c84b28e46ecce07c49cc0f7a932e6c8c3ee9c24f5ca4d6f54a4f7c36578",
+      "size": 390,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/runtime/side_close.png",
+      "sha256": "9c530f0ecee33fd0a4d370eb673a050ef329f734ceb4eb6058f498d858a4eae5",
+      "git_bytes_sha256": "9c530f0ecee33fd0a4d370eb673a050ef329f734ceb4eb6058f498d858a4eae5",
+      "size": 2021398,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/size.log",
+      "sha256": "2a684162ee61960f45a12d82e95594250f95d32b63f065ff425dbed89819014c",
+      "git_bytes_sha256": "2a684162ee61960f45a12d82e95594250f95d32b63f065ff425dbed89819014c",
+      "size": 96,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/song.log",
+      "sha256": "25e764223c7c3567f9418bd500d2abe895b714e7a964ac9fbf59f4ebad32acfc",
+      "git_bytes_sha256": "25e764223c7c3567f9418bd500d2abe895b714e7a964ac9fbf59f4ebad32acfc",
+      "size": 10931,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/song/live_melee.png",
+      "sha256": "697b4f1991bc2b35d76a4f3effc08e7886740ae7b19c0b0493cf5b403c103d1a",
+      "git_bytes_sha256": "697b4f1991bc2b35d76a4f3effc08e7886740ae7b19c0b0493cf5b403c103d1a",
+      "size": 1946184,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/song/report.json",
+      "sha256": "14822d10211e77eb8a18428662351935f5d09659b4a590d6f8bba243aed2e5d6",
+      "git_bytes_sha256": "14822d10211e77eb8a18428662351935f5d09659b4a590d6f8bba243aed2e5d6",
+      "size": 4847,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/song/unit_pose_matrix.png",
+      "sha256": "c2a8c962a435bfe887894164c1ea64683d7094f6cbd62fdd56b3df5f98e7d381",
+      "git_bytes_sha256": "c2a8c962a435bfe887894164c1ea64683d7094f6cbd62fdd56b3df5f98e7d381",
+      "size": 306745,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/sources.json",
+      "sha256": "3f7b4cc334da70c73c3e94dd798a152d04888cc252ef29d91e1093bda31f454e",
+      "git_bytes_sha256": "3f7b4cc334da70c73c3e94dd798a152d04888cc252ef29d91e1093bda31f454e",
+      "size": 2151,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/visual_final.log",
+      "sha256": "72fea1acc7f4655dfa6a0ba000d60337e56197fced8b4c62921fc6c17db8af1e",
+      "git_bytes_sha256": "72fea1acc7f4655dfa6a0ba000d60337e56197fced8b4c62921fc6c17db8af1e",
+      "size": 668,
+      "newline_conversion_only": false
+    },
+    {
+      "path": "qa/zhu_gate_native_20260906/wall.log",
+      "sha256": "e571f17b2715c6a98c29201286095ad3549aacd9583405e08ff887cb0dd98471",
+      "git_bytes_sha256": "e571f17b2715c6a98c29201286095ad3549aacd9583405e08ff887cb0dd98471",
+      "size": 3241,
+      "newline_conversion_only": false
+    }
+  ]
+}

@@ -4,6 +4,28 @@ extends RefCounted
 const SOURCE_LEFT := Vector2(0.04, 0.64)
 const SOURCE_RIGHT := Vector2(0.96, 0.925)
 
+## This native facing has timber flanks matching the manor's palisade.
+## Source coordinates refer to the two end-post stone feet in the untouched PNG.
+const ZHU_NATIVE_VARIANT := "zhu_gate_native_20260906"
+const ZHU_NATIVE_PATH := "res://assets/campaign/objects/zhu_gate_native_20260906_default.png"
+const ZHU_NATIVE_LEFT := Vector2(1322.0/1536.0,647.0/1024.0)
+const ZHU_NATIVE_RIGHT := Vector2(230.0/1536.0,935.0/1024.0)
+
+static func configure_zhujiazhuang(unit) -> void:
+	unit.set_meta("campaign_gate_wall_span",Vector2(0,128))
+	# Keep the matching legacy texture/anchors together if an incomplete checkout
+	# lacks the native asset; validation still reports that checkout as incomplete.
+	if not ResourceLoader.exists(ZHU_NATIVE_PATH): return
+	unit.art_variant=ZHU_NATIVE_VARIANT
+	unit.set_meta("campaign_gate_source_left",ZHU_NATIVE_LEFT)
+	unit.set_meta("campaign_gate_source_right",ZHU_NATIVE_RIGHT)
+	unit.set_meta("campaign_gate_visual_height",180.0)
+	unit.set_meta("campaign_gate_texture_tint",Color(0.60,0.70,0.83))
+
+static func source_tint(unit, tint: Color) -> Color:
+	# Texture-only calibration: health bars, labels and selection stay readable.
+	return tint*unit.get_meta("campaign_gate_texture_tint",Color.WHITE)
+
 static func enabled(unit) -> bool:
 	return unit.is_building and unit.has_meta("campaign_gate_wall_span")
 

@@ -168,6 +168,7 @@ const GENERIC_OBJECT_ALIASES := {
 	"jiangzhou_scaffold": "scaffold",
 }
 const OBJECT_ALIASES := {
+	"zhu_gate_native_20260906": "zhu_gate_native_20260906",
 	"tribute_load_alpha_20260906": "tribute_load_alpha_20260906",
 	"tribute_load": "tribute_load", "wine_buckets": "wine_buckets", "jujube_load": "jujube_load", "jujube_cart": "jujube_cart", "wine_bowls": "wine_bowls",
 	"bailong_temple": "bailong_temple", "cuiyun_tower": "cuiyun_tower", "cuiyun_signal": "cuiyun_tower",

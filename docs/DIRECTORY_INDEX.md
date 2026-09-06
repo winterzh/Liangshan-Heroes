@@ -1,3 +1,10 @@
+## 2026-09-06 祝家庄原生门楼增量
+
+- `assets/campaign/objects/zhu_gate_native_20260906_default.png`：带原生alpha的生产门楼及标准导入侧车。
+- `tools/contracts/zhu_gate_native_20260906/`：四次内置生成的完整提示词、三张中间原图、引用和SHA链。
+- `tools/zhujiazhuang_gate_art_qa.gd`、`tools/zhujiazhuang_gate_sources.py`：实机锚点/隔离与只读来源审计。
+- `docs/ZHU_GATE_NATIVE_20260906.md`、`qa/zhu_gate_native_20260906/`：实现、前后图、日志和收据。
+
 ## 2026-09-06 单位重绘增量
 
 - `tools/unit_redraw_qa.gd`：真实物理追帧、双视口像素和生命周期验证；`tools/unit_redraw_stress.gd`：无计时包装的实战窗口。

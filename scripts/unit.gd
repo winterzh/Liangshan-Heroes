@@ -4104,7 +4104,7 @@ func _draw_building() -> void:
 			if preload("res://scripts/campaign_gate_visual.gd").enabled(self):
 				var gate_transform := preload("res://scripts/campaign_gate_visual.gd").source_transform(self, tex.get_size())
 				draw_set_transform_matrix(GameMap.ISO_INV * gate_transform)
-				draw_texture_rect(tex, Rect2(Vector2.ZERO, tex.get_size()), false, tint)
+				draw_texture_rect(tex, Rect2(Vector2.ZERO, tex.get_size()), false, preload("res://scripts/campaign_gate_visual.gd").source_tint(self,tint))
 				preload("res://scripts/campaign_gate_visual.gd").draw_closed_leaf(self,tex.get_size(),tint)
 			elif bool(get_meta("building_visual_mirror",false)):
 				draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(Vector2(-1,0),Vector2(0,1),Vector2.ZERO))

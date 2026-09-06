@@ -140,10 +140,10 @@ func deploy(b) -> void:
 		resource_guards.append(_guard(b,spec[0],spec[1]))
 	gate = b.spawn_at("zhu_gate",1,MAIN_GATE)
 	gate.display_name = "祝家庄正门"
-	gate.set_meta("campaign_gate_wall_span",Vector2(0,128))
+	preload("res://scripts/campaign_gate_visual.gd").configure_zhujiazhuang(gate)
 	side_gate = b.spawn_at("zhu_gate",1,SIDE_GATE)
 	side_gate.display_name = "祝家庄偏门"
-	side_gate.set_meta("campaign_gate_wall_span",Vector2(0,128))
+	preload("res://scripts/campaign_gate_visual.gd").configure_zhujiazhuang(side_gate)
 	# Existing shared towers cover both entrances. Catapults can outrange them;
 	# melee defenders protect the towers, making an escorted siege force useful.
 	# Offset along the inner wall so roofs do not overlap the gatehouse.
