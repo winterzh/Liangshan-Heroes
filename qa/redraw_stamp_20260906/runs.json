@@ -1,0 +1,56 @@
+[
+  {
+    "label": "timing",
+    "script": "tools/redraw_stamp_timing.gd",
+    "headless": true,
+    "environment": {},
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 14.004732847213745
+  },
+  {
+    "label": "pause",
+    "script": "tools/pause_menu_qa.gd",
+    "headless": false,
+    "environment": {},
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 13.385768175125122
+  },
+  {
+    "label": "ranged",
+    "script": "tools/ranged_firing_path_test.gd",
+    "headless": true,
+    "environment": {
+      "RTS_TEST_OUT": "res://.godot/redraw_stamp_ranged"
+    },
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 11.377049684524536
+  },
+  {
+    "label": "yezhulin",
+    "script": "tools/yezhulin_short_test.gd",
+    "headless": false,
+    "environment": {
+      "YF_CASE": "all",
+      "YF_VISUAL": "1"
+    },
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 323.75282979011536
+  },
+  {
+    "label": "stress",
+    "script": "tools/unit_redraw_stress.gd",
+    "headless": false,
+    "environment": {
+      "PERF_DEFENSE": "1",
+      "PERF_OUT": "res://.godot/redraw_stamp_stress.json",
+      "REDRAW_SCREENSHOT": "res://.godot/redraw_stamp_stress.png"
+    },
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 20.504074573516846
+  }
+]

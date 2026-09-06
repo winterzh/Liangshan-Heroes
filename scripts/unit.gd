@@ -328,6 +328,7 @@ var _idle_t := 0.0         # 待机呼吸相位（恒进）
 var _real_frames := false  # 当前状态是否在播放真·逐帧（用于压低程序化叠加）
 var _frame_directional := false # 当前实际帧是否来自四向资源；false时才允许旧素材水平镜像
 var _animated_redraw_t := 0.0 # 兵海时受击/状态/死亡动画的重绘节流；移动动画仍逐帧
+var _queued_redraw_frame := -1
 var _dying := false        # 死亡动画进行中（已脱离战斗，待倒地淡出后释放）
 var _death_t := 0.0
 var _death_lean := 1.0     # 倒地方向（屏幕左右）
@@ -1023,9 +1024,12 @@ func _request_redraw() -> void:
 	if not is_inside_tree() or not Engine.is_in_physics_frame():
 		queue_redraw()
 		return
-	var next_frame := get_tree().process_frame
-	if not next_frame.is_connected(queue_redraw):
-		next_frame.connect(queue_redraw, CONNECT_ONE_SHOT)
+	# Catch-up physics ticks share the process frame counter. The one-shot
+	# connection is consumed after those ticks, before the next counter value.
+	var frame := Engine.get_process_frames()
+	if frame != _queued_redraw_frame:
+		_queued_redraw_frame = frame
+		get_tree().process_frame.connect(queue_redraw, CONNECT_ONE_SHOT)
 
 
 func _queue_animated_redraw(interval := 0.08, force := false) -> void:

@@ -1,3 +1,9 @@
+## 2026-09-06 重绘帧号检查
+
+补测保留初次 20.78 FPS，旧请求方法 22.39/24.56 FPS、本版 23.06/24.09 FPS，区间重叠；不宣称整体帧率提升。四次正常战斗日志、原始帧时间与 Unit 原字节恢复收据见 `qa/redraw_stamp_20260906/control/`。
+
+新增 `tools/redraw_stamp_qa.gd`（必须真实渲染）和 `tools/redraw_stamp_timing.gd`（可 headless），默认 `.godot/redraw_stamp_qa/`、`.godot/redraw_stamp_timing/`；前者 62 项、128 对 RGBA 与原方法一致，后者六组完整请求窗口计时。整合暂停、攻击和野猪林共 247 项行为检查。源码启动不变，[复现与测量范围](REDRAW_STAMP_20260906.md)。
+
 ## 2026-09-06 兵群导航格检查
 
 新增 `tools/crowd_nav_qa.gd`，`--headless` 运行默认输出 `.godot/crowd_nav_qa/`；136 项、147,806 次位置对照，整合林冲动画后的五组回归共 868 项通过。普通启动方式不变，专项依赖的冻结完整旧方法已纳入仓库并保持 LF。复现及完整计时边界见[说明](CROWD_NAV_20260906.md)。

@@ -1,0 +1,24 @@
+from pathlib import Path
+import subprocess,os,re,json,hashlib
+unit=Path('scripts/unit.gd');saved=unit.read_bytes();text=saved.decode()
+pattern=re.compile(r'^func _request_redraw\(.*?(?=^func _queue_animated_redraw)',re.M|re.S)
+old,n=pattern.subn(lambda m:Path('tools/contracts/redraw_stamp/before_68a9430.txt').read_text(encoding='utf8')+'\n\n',text)
+assert n==1
+exe=Path(r'E:\ChatGPT\水浒\godot.local.txt').read_text(encoding='utf8').strip()
+records=[]
+try:
+ for label,reference in [('old_a',True),('current_a',False),('current_b',False),('old_b',True)]:
+  unit.write_bytes(old.encode() if reference else saved)
+  env=os.environ.copy()
+  for key in ['PERF_MODE','PERF_LEVEL','PERF_CELL','REDRAW_SCREENSHOT']:env.pop(key,None)
+  env.update({'PERF_DEFENSE':'1','PERF_OUT':'res://.godot/redraw_control_'+label+'.json'})
+  log=Path('scratchpad/redraw-control-'+label+'.log')
+  with log.open('wb') as stream:r=subprocess.run([exe,'--path','.','--script','res://tools/unit_redraw_stress.gd'],env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=120)
+  errors=re.findall(r'SCRIPT ERROR|^ERROR:|\bFAIL\b',log.read_text(encoding='utf8',errors='replace'),re.M)
+  assert r.returncode==0 and not errors,label
+  result=json.loads(Path('.godot/redraw_control_'+label+'.json').read_text(encoding='utf8'))
+  records.append({'label':label,'reference_helper':reference,'exit_code':r.returncode,'errors':len(errors),'fps':result['fps'],'p95_ms':result['p95_ms'],'unit_count':result['unit_count']})
+  print(records[-1],flush=True)
+finally:
+ unit.write_bytes(saved);assert unit.read_bytes()==saved
+ Path('scratchpad/redraw_control_receipt.json').write_bytes((json.dumps({'records':records,'source_restored':True,'unit_sha256_raw':hashlib.sha256(saved).hexdigest(),'scope':'Four fresh normal live combats alternating old/current/current/old request helper; the current internal frame field is retained for both. Combat evolution is not frozen; timing observations are not an exact simulation replay.'},indent=2)+'\n').encode())

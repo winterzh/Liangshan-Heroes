@@ -1,0 +1,25 @@
+from pathlib import Path
+import subprocess,os,re,json,hashlib,time
+exe=Path(r'E:\ChatGPT\水浒\godot.local.txt').read_text(encoding='utf8').strip()
+records=[]
+source=Path('scripts/unit.gd').read_bytes()
+def run(label,script,headless,overrides):
+ env=os.environ.copy()
+ for key in ['PERF_MODE','PERF_OUT','PERF_DEFENSE','PERF_LEVEL','PERF_CELL','REDRAW_SCREENSHOT','RTS_TEST_OUT','LC_VISUAL','LC_QA_OUT','TERMINAL_COSTUME_VISUAL','TERMINAL_COSTUME_OUT','YF_CASE','YF_VISUAL','YF_SIZE']:
+  env.pop(key,None)
+ env.update(overrides)
+ log=Path('scratchpad/redraw-stamp-'+label+'.log')
+ start=time.time()
+ with log.open('wb') as stream:
+  result=subprocess.run([exe]+(['--headless'] if headless else [])+['--path','.','--script','res://'+script],env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=300)
+ errors=re.findall(r'SCRIPT ERROR|^ERROR:|\bFAIL\b',log.read_text(encoding='utf8',errors='replace'),re.M)
+ records.append({'label':label,'script':script,'headless':headless,'environment':overrides,'exit_code':result.returncode,'error_matches':len(errors),'elapsed_seconds':time.time()-start})
+ Path('scratchpad/redraw_stamp_runs.json').write_bytes((json.dumps(records,indent=2)+'\n').encode())
+ print(label,result.returncode,'errors',len(errors),flush=True)
+ assert result.returncode==0 and not errors,label
+ assert Path('scripts/unit.gd').read_bytes()==source
+run('timing','tools/redraw_stamp_timing.gd',True,{})
+run('pause','tools/pause_menu_qa.gd',False,{})
+run('ranged','tools/ranged_firing_path_test.gd',True,{'RTS_TEST_OUT':'res://.godot/redraw_stamp_ranged'})
+run('yezhulin','tools/yezhulin_short_test.gd',False,{'YF_CASE':'all','YF_VISUAL':'1'})
+run('stress','tools/unit_redraw_stress.gd',False,{'PERF_DEFENSE':'1','PERF_OUT':'res://.godot/redraw_stamp_stress.json','REDRAW_SCREENSHOT':'res://.godot/redraw_stamp_stress.png'})

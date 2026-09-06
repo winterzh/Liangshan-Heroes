@@ -1,0 +1,23 @@
+extends "res://tools/rts_performance_probe.gd"
+static var followed := 0
+static var intermediate_arrivals := 0
+static var blocked_attempts := 0
+static var x_success := 0
+static var unnecessary_y_map := 0
+static var unnecessary_y_body := 0
+static func observe_move(intermediate: bool) -> void:
+	followed+=1
+	if intermediate:intermediate_arrivals+=1
+static func observe_slide(x_open: bool, y_axis: bool, y_map: bool) -> void:
+	blocked_attempts+=1
+	if x_open:
+		x_success+=1
+		if y_axis:unnecessary_y_map+=1
+		if y_map:unnecessary_y_body+=1
+func sample(b,_label: String) -> Dictionary:
+	b._perf_bench_setup(200);b._prof_on=false
+	await _wait(3)
+	followed=0;intermediate_arrivals=0;blocked_attempts=0;x_success=0;unnecessary_y_map=0;unnecessary_y_body=0
+	var physics_start:=Engine.get_physics_frames();var started:=Time.get_ticks_usec()
+	await _wait(10)
+	return {"followed":followed,"intermediate_arrivals":intermediate_arrivals,"blocked_attempts":blocked_attempts,"x_success":x_success,"unnecessary_y_map":unnecessary_y_map,"unnecessary_y_body":unnecessary_y_body,"physics_steps":Engine.get_physics_frames()-physics_start,"wall_seconds":float(Time.get_ticks_usec()-started)/1000000.0,"scope":"Temporary counters in baseline full follow_path during live combat; no normal FPS claim."}

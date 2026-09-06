@@ -1,0 +1,43 @@
+extends "res://tools/chase_speed_qa.gd"
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true)
+	var b=await _start("level1");b.process_mode=Node.PROCESS_MODE_DISABLED
+	var script:=GDScript.new()
+	script.source_code='extends "res://scripts/unit.gd"\n'+FileAccess.get_file_as_string("res://scratchpad/follow_reference_68a9430.txt").replace("func _follow_path(","func _old_follow(")+FileAccess.get_file_as_string("res://scratchpad/follow_candidate.txt").replace("func _follow_path(","func _new_follow(")
+	check(script.reload()==OK,"complete candidate methods compile")
+	if not failures.is_empty():quit(2);return
+	var u=_unit(b,script,0);var target=_unit(b,script,1)
+	var ordinary: Array=b.units.duplicate();b.units.assign([u,target]);b.fog=false
+	var Map=load("res://scripts/game_map.gd");var map=Map.new();map.init_map(24,24,"marsh",Map.T.GRASS)
+	u.map=map
+	var samples:=[]
+	for label in ["normal","x_slide","y_slide","body_block","repath"]:
+		map.fill_rect(0,0,24,24,Map.T.GRASS)
+		if label in ["x_slide","y_slide","repath"]:map.set_cell_t(5,5,Map.T.CLIFF)
+		if label in ["y_slide","repath"]:map.set_cell_t(5,4,Map.T.CLIFF)
+		if label=="repath":map.set_cell_t(4,5,Map.T.CLIFF)
+		map.bake()
+		u.position=Vector2(159.7,159.7);u._path=PackedVector2Array([Vector2(300,300)]);u._path_i=0;u._block_rp=0.0
+		u._root_t=0;u._group_cap=0;u._state=u.ST_MOVE
+		target.position=Vector2(165,165) if label=="body_block" else Vector2(640,640)
+		b._grid_build()
+		var start:=_capture(u)
+		var old_result: bool=u._old_follow(1.0/60.0);var expected:=var_to_bytes(_capture(u))
+		_restore(u,start);var new_result: bool=u._new_follow(1.0/60.0)
+		check(old_result==new_result and var_to_bytes(_capture(u))==expected,"full method output identical "+label)
+		var windows:=[];var before:=[];var after:=[]
+		for old_first in [true,true,false,true]:
+			for reference in ([true,false] if old_first else [false,true]):
+				var elapsed:=0
+				for i in range(4000):
+					_restore(u,start)
+					var began:=Time.get_ticks_usec()
+					if reference:u._old_follow(1.0/60.0)
+					else:u._new_follow(1.0/60.0)
+					elapsed+=Time.get_ticks_usec()-began
+				windows.append({"reference":reference,"us":elapsed})
+		for i in range(2,windows.size()):(before if windows[i].reference else after).append(windows[i].us)
+		before.sort();after.sort();samples.append({"label":label,"windows":windows,"before_us":before[1],"after_us":after[1],"ratio":float(after[1])/before[1]})
+	FileAccess.open("res://.godot/follow_probe.json",FileAccess.WRITE).store_string(JSON.stringify({"samples":samples,"failures":failures},"\t"))
+	b.units.assign(ordinary);u.free();target.free();map.free();await _dispose(b)
+	quit(0 if failures.is_empty() else 1)

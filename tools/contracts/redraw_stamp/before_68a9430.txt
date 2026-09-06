@@ -1,0 +1,10 @@
+func _request_redraw() -> void:
+	# Catch-up physics ticks each flush deferred CanvasItem draws. Combine those
+	# requests before the next process pass so the canvas sees the final state.
+	# Non-physics input/UI requests keep the usual immediate queueing behavior.
+	if not is_inside_tree() or not Engine.is_in_physics_frame():
+		queue_redraw()
+		return
+	var next_frame := get_tree().process_frame
+	if not next_frame.is_connected(queue_redraw):
+		next_frame.connect(queue_redraw, CONNECT_ONE_SHOT)

@@ -1,3 +1,9 @@
+## 2026-09-06 重绘帧号增量
+
+- `tools/redraw_stamp_qa.gd`、`tools/redraw_stamp_timing.gd`：旧/新请求方法的真实渲染生命周期与物理回调耗时。
+- `tools/contracts/redraw_stamp/`：68a9430 完整方法与原始字节保护。
+- `docs/REDRAW_STAMP_20260906.md`、`qa/redraw_stamp_20260906/`：247 项行为验证、实际图片、配对计时、正常压力和未采用移动候选诊断。
+
 ## 2026-09-06 兵群导航复用增量
 
 - `tools/crowd_nav_qa.gd`：完整分离、精度/封格修改、初始格查询成本与配对计时。
