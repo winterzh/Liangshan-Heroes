@@ -1,3 +1,10 @@
+## 2026-09-06 Steam Windows 更新证据
+
+- `docs/STEAM_UPDATE_20260906.md`：PR合并、冻结源、包身份、验证范围与Steam实际状态入口。
+- `docs/UPDATE_ANNOUNCEMENT_20260906.md`：简短玩家更新公告文案。
+- `qa/steam_update_20260906/`：50份白名单构建/包内检查/实际EXE测试/Vulkan图片证据，逐文件哈希清单及根任务合并/发布收据；`.gdignore`排除Godot常规扫描。
+- `.godot/steam_update_20260906/`：本机忽略的冻结源码、副本、导出EXE/ZIP和隔离用户目录，不进入Git。
+
 ## 2026-09-06 统一状态入口
 
 - `docs/PROJECT_STATUS.md`：当前版本、八关实现、近期反馈、四向覆盖、验收缺口和后续顺序。

@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "source_commit": "954ffde683e79fe90656e5acba78692bc5de67b8",
+  "executable": "E:\\ChatGPT\\水浒\\.godot\\steam_update_20260906\\windows\\LiangshanHeroes.exe",
+  "size_bytes": 286979872,
+  "sha256": "f7e7fdabbf3869e56a6b5b0d1869069e89122ccb8dc4c2e091ed16b188e0bcf3",
+  "steps": [
+    {
+      "name": "contract",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--main-pack",
+        "E:\\ChatGPT\\水浒\\.godot\\steam_update_20260906\\windows\\LiangshanHeroes.exe",
+        "--script",
+        "E:\\ChatGPT\\水浒\\.godot\\steam_update_20260906\\package_contract.gd"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 45.813,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    },
+    {
+      "name": "smoke_driver",
+      "command": [
+        "py",
+        "-3",
+        "-X",
+        "utf8",
+        "-B",
+        "E:\\ChatGPT\\水浒\\.godot\\steam_update_20260906\\run_package_smoke.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 43.124,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    },
+    {
+      "name": "visual",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64_console.exe",
+        "--main-pack",
+        "E:\\ChatGPT\\水浒\\.godot\\steam_update_20260906\\windows\\LiangshanHeroes.exe",
+        "--rendering-method",
+        "forward_plus",
+        "--rendering-driver",
+        "vulkan",
+        "--script",
+        "E:\\ChatGPT\\水浒\\.godot\\steam_update_20260906\\package_visual_capture.gd"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 12.573,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    }
+  ],
+  "contract_checks": 437,
+  "smoke_cases": 11,
+  "visual_captures": 2,
+  "visual_review_pending": false,
+  "scope": "Short actual release EXE smoke and embedded PCK checks; not full human campaign or 30-wave/long-duration acceptance.",
+  "visual_review": "visual_review.json",
+  "visual_review_type": "Codex image inspection, not human playtest"
+}
