@@ -1,3 +1,9 @@
+## 2026-09-07 第12组件：陨石与守卫
+
+正式 `run_meteor_wards_state`原型/正式路径各54项通过，25步真实Battle consumer与Unit原计时对照保留命中身份、脉冲相位、忠/义旗来源池TTL与降档；[两轮证据](../qa/run_meteor_wards_20260907/README.md)记录实际入口、来源/玩家保护和退出锁。新增meteor/wards使权威效果数组累计9/17，正式恢复组件为12个，同矩阵复验不增加独立场景。
+
+根事务须恢复精确ward_serial、Unit已有值/来源池并共享完整identity；bind失败丢弃整个私有上下文，全部图完成后再释放墓碑和启用。MeteorFx/WardFx等既存视觉Node、其余数组、Battle随机调用与整局跨进程/菜单/PCK续玩仍未完成。后续标准30波关卡草稿不属于本批验收，M3继续保持开放。
+
 ## 2026-09-07 第10/11组件：物品 UID 与四数组区域效果
 
 物品counter与区域效果模块按原型同字节晋级，正式恢复组件现为11个。Battle/Inventory已切换同Battle连续正int64物品UID，转移/可信复活保留原号，耗尽与坏域前置拒绝。53项allocator、区域原型/正式各81项、Inventory修改后原Unit149项回归通过；[真实付费复活231项](../qa/run_item_identity_zones_20260907/README.md)验证坏库存失败时队列/进度不丢、重试不重复扣费、取消退款、正常旧库存复活保留UID/冷却/成长。原物品自检九项及ALL唯一全true；正式counter路径在同轮通过JSON后继检查。

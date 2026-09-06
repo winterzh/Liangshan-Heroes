@@ -1,0 +1,366 @@
+extends SceneTree
+## Meteor and wards; real consumers, real identity graph and Unit timers.
+## No Battle._ready/deploy and no visual Node restoration.
+## Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Factory := preload("res://scratchpad/run_meteor_wards_resume/meteor_wards_state.gd")
+var graphs: Array = []
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var report_path: String = ""
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+var observed_steps: Dictionary = {}
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for graph in graphs: graph.dispose()
+	graphs.clear()
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "meteor-wards-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}), "observed_steps": observed_steps,
+		"scope": "Only meteor/wards; actual target identity graph, Battle consumers and passive real Unit timer bodies. Root supplies ward_serial and Unit local values/pools; original GroundFire/other effects and visual Nodes are not restored by this module. Not full Battle resume, RNG isolation or future general entity allocation proof."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[meteor-wards-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	var identity_script: Script = load("res://scripts/run_graph_identity.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var codec: Variant = codec_script.new()
+	paused = true
+	var world := Node2D.new()
+	world.visible = false
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	owned.append(world)
+	root.add_child(world)
+	var original: Variant = battle_script.new()
+	owned.append(original)
+	original.process_mode = Node.PROCESS_MODE_DISABLED
+	original.set_block_signals(true)
+	var old_fx := Node2D.new()
+	world.add_child(old_fx)
+	original.fx_root = old_fx
+	var game_map: Variant = map_script.new()
+	owned.append(game_map)
+	game_map.init_map(40, 16, "marsh", map_script.T.GRASS)
+	game_map.bake()
+	original.map = game_map
+	var heal_at: Vector2 = game_map.cell_to_world(Vector2i(2, 10))
+	var attack_at: Vector2 = game_map.cell_to_world(Vector2i(12, 10))
+	var poison_at: Vector2 = game_map.cell_to_world(Vector2i(22, 10))
+	var banner_at: Vector2 = game_map.cell_to_world(Vector2i(32, 10))
+	var old_units: Array = [
+		_unit(unit_script, Vector2.ZERO, 0, 500.0),
+		_unit(unit_script, Vector2(82.0, 0.0), 1, 500.0),
+		_unit(unit_script, Vector2(142.0, 0.0), 1, 500.0),
+		_unit(unit_script, heal_at, 0, 100.0),
+		_unit(unit_script, attack_at, 1, 500.0),
+		_unit(unit_script, poison_at, 1, 500.0),
+		_unit(unit_script, banner_at, 0, 100.0),
+		_unit(unit_script, banner_at + Vector2(5.0, 0.0), 0, 100.0),
+		_unit(unit_script, heal_at, 0, 100.0),
+		_unit(unit_script, attack_at, 1, 500.0),
+		_unit(unit_script, banner_at, 0, 100.0)]
+	old_units[6].is_hero = true
+	old_units[8].story_outcome = "saved"
+	old_units[9].is_resource = true
+	old_units[10].is_captive = true
+	for unit in old_units: world.add_child(unit)
+	original.units = old_units.duplicate()
+	var retired_unit: Variant = _unit(unit_script, Vector2(82.0, 8.0), 1, 500.0)
+	world.add_child(retired_unit)
+	original.units.append(retired_unit)
+	# Use real creators on the source only. Restore never repeats the drop,
+	# source counter increment, pulse or visual construction.
+	original._do_meteor(old_units[0], {"width": 20.0, "len": 180.0, "roll_speed": 60.0,
+		"impact_ranks": [30.0], "dps_ranks": [10.0], "dot_dur": 1.0, "_ability_id": "song_meteor"}, 1, Vector2(500.0, 0.0), 1)
+	original._zone_pass(0.5)
+	var old_retired_id: int = retired_unit.get_instance_id()
+	_check("real meteor spent initial impact and immediate trail", old_units[1].hp == 470.0 and retired_unit.hp == 470.0 and original._ground_dots.size() == 1 and original._meteor_zones[0].trail == 0.0 and original._meteor_zones[0].hit.size() == 2)
+	original.units = old_units
+	retired_unit.free()
+	var ghost_meteor: Dictionary = original._meteor_zones[0].duplicate(false)
+	ghost_meteor["pos"] = Vector2(-1000.0, 0.0)
+	ghost_meteor["remain"] = 30.0
+	ghost_meteor["caster"] = retired_unit
+	ghost_meteor["hit"] = {}
+	original._meteor_zones.append(ghost_meteor)
+	var ad: Dictionary = {"color": Color(0.3, 0.8, 0.4, 0.75)}
+	original._do_ward(old_units[0], _ward_eff("heal", 2.0), 1, heal_at, 0, 1, ad)
+	original._do_ward(old_units[0], _ward_eff("attack", 2.0), 1, attack_at, 0, 1, ad)
+	original._do_ward(old_units[0], _ward_eff("poison", 2.0), 1, poison_at, 0, 1, ad)
+	var loyalty: Dictionary = _ward_eff("banner", 1.4)
+	loyalty["banner_variants"] = ["loyalty"]
+	loyalty["hero_reduction_ranks"] = [0.30]
+	loyalty["troop_reduction_ranks"] = [0.12]
+	loyalty["heal"] = 10.0
+	var righteous: Dictionary = _ward_eff("banner", 2.0)
+	righteous["banner_variants"] = ["righteous"]
+	righteous["hero_reduction_ranks"] = [0.15]
+	righteous["troop_reduction_ranks"] = [0.08]
+	righteous["atkspeed_ranks"] = [1.25]
+	original._do_ward(old_units[0], loyalty, 1, banner_at, 0, 1, ad)
+	original._do_ward(old_units[0], righteous, 1, banner_at, 0, 1, ad)
+	# Unit ref boundary cases: wards continue even after a caster disappears.
+	original._wards[0]["caster"] = null
+	original._wards[2]["caster"] = retired_unit
+	for _index in range(2):
+		original._ward_pass(0.1)
+		for unit in old_units: unit._physics_process(0.1)
+	_check("real ward source spent exactly one heal attack and poison pulse", old_units[3].hp == 112.0 and old_units[4].hp == 491.0 and old_units[5].hp == 491.0 and original._ward_serial == 5)
+	_check("two banner aura IDs exist independently with actual Unit timers", old_units[6]._damage_reduction_sources.size() == 2 and old_units[6]._damage_reduction_sources.has(4) and old_units[6]._damage_reduction_sources.has(5) and old_units[6]._aura_atkspeed_sources.has(5) and old_units[6]._damage_reduction == 0.30 and old_units[6]._aura_atkspeed == 1.25)
+	var old_id_to_unit: Dictionary = {}
+	var old_object_to_id: Dictionary = {}
+	var known: Dictionary = {}
+	for index in range(old_units.size()):
+		old_id_to_unit[str(index + 1)] = old_units[index]
+		old_object_to_id[old_units[index]] = str(index + 1)
+		known[str(index + 1)] = true
+	var old_graph: Variant = identity_script.new(unit_script)
+	graphs.append(old_graph)
+	if not _ok("original identity graph owns complete live fixture universe", old_graph.configure(old_id_to_unit, old_units)):
+		_finish(true)
+		return
+	var factory: Variant = _factory(codec_script, battle_script, unit_script, old_graph)
+	var captured: Dictionary = factory.capture(original, "meteor_wards_smoke_v1", old_object_to_id)
+	if not _ok("capture meteor hit graph and all ward fields", captured):
+		_finish(true)
+		return
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	var new_graph: Variant = identity_script.new(unit_script)
+	graphs.append(new_graph)
+	if not _ok("fresh graph declares stable names before allocation", new_graph.declare_entities(known)):
+		_finish(true)
+		return
+	var restored_factory: Variant = _factory(codec_script, battle_script, unit_script, new_graph)
+	var state: Dictionary = restored_factory.validate(record, "meteor_wards_smoke_v1", known)
+	if not _ok("validate JSON before allocating any restored Unit", state):
+		_finish(true)
+		return
+	_check("JSON retains live and retired ordered hit identities", state.arrays._meteor_zones[0].hit.size() == 2 and state.arrays._meteor_zones[0].hit[0].identity.kind == "entity" and state.arrays._meteor_zones[0].hit[0].identity.id == "2" and state.arrays._meteor_zones[0].hit[1].identity.kind == "retired")
+	_check("ward serial Color int aura IDs and none expired references survive", state.required_ward_serial == 5 and typeof(state.arrays._wards[0].aura_id) == TYPE_INT and typeof(state.arrays._wards[0].col) == TYPE_COLOR and state.arrays._wards[0].caster.state == "none" and state.arrays._wards[2].caster.state == "expired")
+	var payload: Dictionary = codec.decode(record.payload).value
+	var bad_payload: Dictionary = payload.duplicate(true)
+	bad_payload.arrays._meteor_zones[0].hit.append(bad_payload.arrays._meteor_zones[0].hit[0].duplicate(true))
+	var bad_record: Dictionary = record.duplicate(true)
+	bad_record["payload"] = codec.encode(bad_payload).value
+	var bad: Dictionary = restored_factory.instantiate(bad_record, "meteor_wards_smoke_v1", known)
+	_check("duplicate saved hit identity rejected before Battle allocation", not bad.ok and bad.code == "HIT_DUPLICATE_IDENTITY")
+	bad_payload = payload.duplicate(true)
+	bad_payload.arrays._meteor_zones[0].hit[0]["identity"] = {"kind": "entity", "id": "999"}
+	bad_record["payload"] = codec.encode(bad_payload).value
+	_check("unregistered hit entity rejected", not restored_factory.validate(bad_record, "meteor_wards_smoke_v1", known).ok)
+	bad_payload = payload.duplicate(true)
+	bad_payload["ward_serial"] = 5.0
+	bad_record["payload"] = codec.encode(bad_payload).value
+	bad = restored_factory.validate(bad_record, "meteor_wards_smoke_v1", known)
+	_check("floating ward serial rejected", not bad.ok and bad.code == "WARD_SERIAL")
+	bad_payload = payload.duplicate(true)
+	bad_payload.arrays._wards[0]["extra"] = true
+	bad_record["payload"] = codec.encode(bad_payload).value
+	bad = restored_factory.validate(bad_record, "meteor_wards_smoke_v1", known)
+	_check("unknown ward field rejected", not bad.ok and bad.code == "ENTRY_FIELDS")
+	var units: Array = []
+	var ids: Dictionary = {}
+	var new_object_to_id: Dictionary = {}
+	# Exact values consumed by this fixture are supplied as the root Unit layer
+	# would. No apply_* or heal is used to re-create already-earned pools.
+	for index in range(old_units.size()):
+		var old: Variant = old_units[index]
+		var unit: Variant = _unit(unit_script, old.position, old.faction, old.hp)
+		for field in ["is_hero", "is_resource", "is_captive", "story_outcome", "_combat_cool", "temp_speed", "_temp_speed_t", "_damage_reduction", "_damage_reduction_t", "_aura_atkspeed"]:
+			unit.set(field, old.get(field))
+		unit._damage_reduction_sources = old._damage_reduction_sources.duplicate(true)
+		unit._aura_atkspeed_sources = old._aura_atkspeed_sources.duplicate(true)
+		world.add_child(unit)
+		units.append(unit)
+		ids[str(index + 1)] = unit
+		new_object_to_id[unit] = str(index + 1)
+	if not _ok("new graph binds complete new Unit universe", new_graph.configure(ids, units)):
+		_finish(true)
+		return
+	var shell: Dictionary = restored_factory.instantiate(record, "meteor_wards_smoke_v1", known)
+	if not _ok("instantiate real detached Battle shell", shell):
+		_finish(true)
+		return
+	var battle: Variant = shell.battle
+	owned.append(battle)
+	battle.units = units
+	var fx := Node2D.new()
+	world.add_child(fx)
+	battle.fx_root = fx
+	# No map is used by the two continuation consumers. A separate fresh map is
+	# required only for the final future-ward serial test, not restored here.
+	var tombstone: Variant = new_graph.expired_unit()
+	var pools_before: Dictionary = units[6]._damage_reduction_sources.duplicate(true)
+	var early: Dictionary = restored_factory.bind(battle, record, "meteor_wards_smoke_v1", ids, tombstone)
+	_check("root must restore saved ward serial before effect binding", not early.ok and early.code == "ROOT_WARD_SERIAL_NOT_RESTORED" and battle._wards.is_empty() and battle._meteor_zones.is_empty())
+	battle._ward_serial = state.required_ward_serial # Root-owned field restoration.
+	var missing: Dictionary = restored_factory.bind(battle, record, "meteor_wards_smoke_v1", ids)
+	_check("missing live tombstone leaves destination arrays untouched", not missing.ok and missing.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED" and battle._wards.is_empty() and battle._meteor_zones.is_empty())
+	if not _ok("bind target IDs pools source IDs and expired caster refs", restored_factory.bind(battle, record, "meteor_wards_smoke_v1", ids, tombstone)):
+		_finish(true)
+		return
+	new_graph.release_tombstones()
+	_check("retired hit key is remapped away from old ID and new live units", battle._meteor_zones[0].hit.has(units[1].get_instance_id()) and not battle._meteor_zones[0].hit.has(old_retired_id) and not battle._meteor_zones[0].hit.has(units[2].get_instance_id()) and battle._meteor_zones[0].hit.size() == 2)
+	_check("ward and meteor expired caster stay freed Objects", typeof(battle._wards[2].caster) == TYPE_OBJECT and not is_instance_valid(battle._wards[2].caster) and typeof(battle._meteor_zones[1].caster) == TYPE_OBJECT and not is_instance_valid(battle._meteor_zones[1].caster))
+	var rebound: Dictionary = restored_factory.capture(battle, "meteor_wards_smoke_v1", new_object_to_id)
+	if not _ok("recapture rebound IDs without advancing gameplay", rebound):
+		_finish(true)
+		return
+	_check("exact values and canonical hit tokens match after binding", rebound.record == captured.record)
+	_check("bind did not heal pulse refresh pools spawn fire or advance serial", units[3].hp == 112.0 and units[4].hp == 491.0 and units[6]._damage_reduction_sources == pools_before and battle._ward_serial == 5 and battle._ground_dots.is_empty() and fx.get_child_count() == 0)
+	await process_frame
+	_check("paused detached transaction remains unchanged", restored_factory.capture(battle, "meteor_wards_smoke_v1", new_object_to_id).record == captured.record and fx.get_child_count() == 0)
+	var samples: Array = []
+	var pairs_match: bool = true
+	var meteor_hit_steps: Array = []
+	var meteor_drop_steps: Array = []
+	var source_ground_count: int = original._ground_dots.size()
+	for index in range(25):
+		var step: int = index + 1
+		var victim_hp: float = units[2].hp
+		var ground_count: int = battle._ground_dots.size()
+		original._zone_pass(0.1)
+		battle._zone_pass(0.1)
+		original._ward_pass(0.1)
+		battle._ward_pass(0.1)
+		for unit in old_units: unit._physics_process(0.1)
+		for unit in units: unit._physics_process(0.1)
+		var expected: Dictionary = factory.capture(original, "meteor_wards_smoke_v1", old_object_to_id)
+		var actual: Dictionary = restored_factory.capture(battle, "meteor_wards_smoke_v1", new_object_to_id)
+		pairs_match = pairs_match and expected.ok and actual.ok and expected.record == actual.record
+		for i in range(units.size()):
+			pairs_match = pairs_match and old_units[i].hp == units[i].hp and old_units[i]._damage_reduction_sources == units[i]._damage_reduction_sources and old_units[i]._aura_atkspeed_sources == units[i]._aura_atkspeed_sources
+		pairs_match = pairs_match and original._ground_dots.size() - source_ground_count == battle._ground_dots.size()
+		if units[2].hp != victim_hp: meteor_hit_steps.append(step)
+		if battle._ground_dots.size() > ground_count: meteor_drop_steps.append(step)
+		if step == 1:
+			_check("saved meteor live hit not repeated and trail not reset to immediate drop", units[1].hp == 470.0 and units[2].hp == 500.0 and battle._ground_dots.is_empty())
+		if step == 16:
+			_check("expired stronger banner yields to surviving source after real Unit TTL", units[6]._damage_reduction_sources.size() == 1 and units[6]._damage_reduction_sources.has(5) and units[6]._damage_reduction == 0.15 and units[7]._damage_reduction == 0.08 and units[6]._aura_atkspeed == 1.25)
+		samples.append({"step": step, "prior_victim_hp": units[1].hp, "future_victim_hp": units[2].hp, "heal_hp": units[3].hp, "attack_hp": units[4].hp, "poison_hp": units[5].hp, "banner_hp": units[6].hp, "banner_reduction": units[6]._damage_reduction, "ground_count": battle._ground_dots.size()})
+	_check("all twenty-five effect health and Unit source-pool pairs match", pairs_match)
+	_check("meteor hits old target zero more times and new target exactly once", units[1].hp == 470.0 and units[2].hp == 470.0 and meteor_hit_steps.size() == 1 and battle._meteor_zones.is_empty())
+	_check("meteor retains travel-based next fire distance", meteor_drop_steps == [10, 20] and battle._ground_dots.size() == 2)
+	_check("ward remaining pulses resume without reset", units[3].hp == 148.0 and units[4].hp == 464.0 and units[5].hp == 464.0 and units[6].hp == 130.0 and units[7].hp == 130.0)
+	_check("ward eligibility still skips story resource captive Units", units[8].hp == 100.0 and units[9].hp == 500.0 and units[10].hp == 100.0 and units[10]._damage_reduction_sources.is_empty())
+	_check("expired banners remove each original source via real Unit timers", battle._wards.is_empty() and units[6]._damage_reduction_sources.is_empty() and units[6]._aura_atkspeed_sources.is_empty() and units[6]._damage_reduction == 0.0 and units[6]._aura_atkspeed == 1.0)
+	var final_health: Array = []
+	for unit in units: final_health.append(unit.hp)
+	battle._zone_pass(0.5)
+	battle._ward_pass(0.5)
+	var unchanged: bool = true
+	for i in range(units.size()): unchanged = unchanged and units[i].hp == final_health[i]
+	_check("exhausted arrays cannot re-hit heal or re-create ground fire", unchanged and battle._ground_dots.size() == 2 and battle._ward_serial == 5)
+	var future_map: Variant = map_script.new()
+	owned.append(future_map)
+	future_map.init_map(40, 16, "marsh", map_script.T.GRASS)
+	future_map.bake()
+	battle.map = future_map
+	battle._do_ward(units[0], _ward_eff("attack", 2.0), 1, attack_at, 0, 1, ad)
+	_check("next actual ward increments restored serial without reusing old source", battle._ward_serial == 6 and battle._wards.size() == 1 and battle._wards[0].aura_id == 6)
+	_check("real future consumers created actual FX only after simulation", fx.get_child_count() > 0 and not original.is_inside_tree() and not battle.is_inside_tree() and battle.gold == 0 and battle.wood == 0)
+	observed_steps = {"samples": samples, "meteor_hit_steps": meteor_hit_steps, "meteor_drop_steps": meteor_drop_steps}
+	_finish()
+
+func _factory(codec_script: Script, battle_script: Script, unit_script: Script, graph: Variant) -> Variant:
+	# Existing graph's target domain has precisely the meteor-hit semantics:
+	# live entity IDs and retired integer IDs. This bridge does not edit a Unit
+	# field; it reuses the current target-domain protocol until root names it.
+	return Factory.new(codec_script, battle_script, unit_script,
+		func(value: Variant) -> Dictionary: return graph.encode_identity("_chase_last_id", value),
+		func(value: Variant) -> Dictionary: return graph.validate_identity("_chase_last_id", value),
+		func(value: Variant) -> Dictionary: return graph.decode_identity("_chase_last_id", value))
+
+func _ward_eff(mode: String, duration: float) -> Dictionary:
+	return {"ward_mode": mode, "ward_dur": duration, "ward_radius": 32.0, "pulse": 0.5,
+		"heal": 12.0, "dmg": 9.0, "slow": 0.8 if mode == "poison" else 0.0,
+		"slow_dur": 0.4, "_ability_id": "ward_" + mode}
+
+func _unit(unit_script: Script, at: Vector2, faction: int, hp: float) -> Variant:
+	var unit: Variant = unit_script.new()
+	owned.append(unit)
+	unit.visible = false
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.position = at
+	unit.faction = faction
+	unit.max_hp = 500.0
+	unit.hp = hp
+	unit.radius = 12.0
+	unit.passive = true
+	unit._combat_cool = 999.0 # Suppress generic out-of-combat healing in this fixture.
+	unit.stance = 3
+	return unit

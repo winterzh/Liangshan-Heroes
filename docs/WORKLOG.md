@@ -1,3 +1,9 @@
+## 2026-09-07 陨石与守卫恢复
+
+上一UID+zone批已同步stable `87a57c0c201d1776bd9dad1936a5213e9ca5b7fd`。本批第12模块 `scripts/run_meteor_wards_state.gd`按原型同字节晋级，只恢复meteor/wards两权威数组，累计9/17数组；原型 `20260906T201655159599Z`（PID40312）与正式 `20260906T201847036187Z`（PID41376）各54项通过，18来源前后+36其余，正式路径重验同矩阵不新增场景。
+
+25组真实原consumer与Unit原计时体对照验证：旧陨石目标不重击、新目标一次，地火按剩余行程铺设，守卫脉冲保留相位，忠/义旗来源池按实际TTL降档和清空；恢复serial后下次真实建桩使用新号。[两轮档案](../qa/run_meteor_wards_20260907/README.md)的入口manifest、报告/stdout/PID、exit0、源码/玩家前后及锁释放均核对。根须先恢复精确ward_serial和Unit既有来源池，失败丢弃整份私有绑定事务；旧视觉Node、其余数组、RNG隔离与M3整局仍未完成，后续关卡草稿不纳入本批。
+
 ## 2026-09-07 物品 UID、区域效果与真实付费复活
 
 本批新增第10、11个正式恢复组件 `run_item_id_state.gd`、`run_zone_effects_state.gd`，均与受测原型同字节；Battle/Inventory 的物品新 stack 改由所属 Battle 连续分配正 int64 UID，换格/同域转移/可信复活保留原号，损坏或耗尽时拒绝而不写 UID 0。物品53项（16来源+37其余）、区域原型与正式各81项（42+39）、Inventory修改后原Unit149项回归均通过；正式复验不累计新场景。

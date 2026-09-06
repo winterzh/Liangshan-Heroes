@@ -1,3 +1,9 @@
+## 2026-09-07 陨石与守卫模块及证据
+
+- `scripts/run_meteor_wards_state.gd`：第12恢复组件，只含meteor/wards；命中身份走目标域，根负责精确ward_serial与Unit来源池。
+- `qa/run_meteor_wards_20260907/`：原型/正式各54项、25步真实consumer/Unit TTL对照，两轮收据/日志/摘要、模块/driver/runner及旧依赖精确SHA映射。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)记录权威数组累计9/17及事务约束；旧视觉Node、其余效果和M3整局未完成，后续关卡草稿未纳入。
+
 ## 2026-09-07 物品 UID、区域效果与复活证据
 
 - `scripts/run_item_id_state.gd`、`scripts/run_zone_effects_state.gd`：第10/11恢复组件；配合同批Battle/Inventory连续UID窄补丁。counter依赖可信完整图证明，区域只含chrono/orbit/trail/ice四数组。

@@ -92,3 +92,13 @@ Battle next_item_uid 替代 ObjectID 与局部序号计算；换格、同域转�
 区域只恢复 `_chrono_zones/_orbit_zones/_fire_trails/_ice_walls`。原型 `20260906T195639137986Z`（PID30560）与正式 `20260906T195836771214Z`（PID17848）各81项=42来源+39其余，20组真实原pass对照验证剩余两次orbit伤害、trail第2/5/8/11步落火及叠墙第3/6步按份释放、独立建筑计数保留。先恢复地图权威与导航再绑定墙数组，不重复登记墙；全部图共享引用上下文并完成绑定后，统一释放临时墓碑、安装和激活。Unit状态与既有地火由外层夹具提供，既存视觉Node未由本模块重建。
 
 [本批五轮档案](../qa/run_item_identity_zones_20260907/README.md)保留全部真实日志/收据、99个复活运行源码映射与精确旧依赖。五轮入口均被各自manifest覆盖，exit0、源码/玩家前后与锁释放通过。原Unit与正式区域只重验既有矩阵，不新增场景计数。本批推进至11组件，尚未完成RunSession整局事务、全部效果与视觉、Battle随机调用接入、跨进程整局继续、菜单或PCK验收；后续标准驻守关卡草稿不在本批证据内。
+
+## 第12组件：陨石与守卫
+
+[run_meteor_wards_state.gd](../scripts/run_meteor_wards_state.gd)与原型同字节，SHA256 `35d7ed60320167d1c72e840a2ce6193fe6ea3bba62abac319033a4bcc3636fa3`。新增 `_meteor_zones/_wards`，权威数组累计9/17；原型 `20260906T201655159599Z`（PID40312）及正式 `20260906T201847036187Z`（PID41376）各54项=18来源+36其余，同矩阵复验不增加独立场景。[归档](../qa/run_meteor_wards_20260907/README.md)保留精确模块、两driver/runner、原准备合同及复用来源，两轮入口均在manifest中，report/stdout/PID、源码/玩家前后、exit0和锁释放核对通过。
+
+meteor有序hit使用真实identity目标域entity/retired token，映射新正整数ID；不复制旧ObjectID，不接受scalar/source-pool token或重复/碰撞。payload保存ward_serial并返回required_ward_serial，bind只接受根已安装的精确serial，不代写或递增。Unit既有攻速/减伤来源池属于Unit层，不能重新施法补造；任何bind失败丢弃整份私有事务，即使Battle数组未写，decoder也可能已经分配墓碑。先完成所有图绑定，再统一释放墓碑、安装、启用。
+
+25组原_zone_pass/_ward_pass与真实Unit _physics_process计时对照证明旧陨石目标不重击、新目标仅一次、地火第10/20步按余程生成、守卫脉冲相位保持，忠旗到期降到仍有效义旗并逐来源TTL清空；空数组不重授。下次真实建桩使用serial6，不复用旧1–5。Unit局部值和既有来源池由夹具独立提供，非完整Unit恢复组合。
+
+MeteorFx/WardFx等既存视觉仍需保存life、t/dur、style及私有动画/随机字段，不能重新_ready生成替代原状态。本批只证明两数组、真实消费者和Unit计时，未验收旧视觉重建、RNG隔离、一般未来实体分配、其余8数组、整局跨进程继续或菜单/PCK。后续标准驻守关卡草稿不在本批；M3整局未完成。

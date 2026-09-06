@@ -1,3 +1,9 @@
+## 2026-09-07 陨石与守卫复现
+
+新增第12恢复模块 `scripts/run_meteor_wards_state.gd`，原型与正式路径各54项同矩阵通过。[归档](../qa/run_meteor_wards_20260907/README.md)保留两轮原文、模块/driver/runner、准备README及精确复用依赖；实际绑定需要真实identity目标域、已恢复的根ward_serial及Unit来源池，任何bind失败丢弃整份私有事务，全图绑定后统一释放墓碑。
+
+独立相容checkout按source index恢复缺失忽略路径，已有源码只核对、不覆盖。入口 `python scratchpad/run_meteor_wards_production_qa/run_smoke.py --godot "<实际Godot路径>"`，不带 `--run` 仅预检，实际执行追加 `--run`，保持共同锁、新私有用户目录与新run。未新增游戏继续入口；PCK、profile、玩家内容与资源二进制不入档，既存视觉Node恢复仍待外层工厂。
+
 ## 2026-09-07 UID 与区域效果复现
 
 新增正式 `scripts/run_item_id_state.gd`、`scripts/run_zone_effects_state.gd`，及同批受测 Battle/Inventory UID分配窄补丁；[归档](../qa/run_item_identity_zones_20260907/README.md)保留原candidate/build_patch/pins、53项allocator、两轮81项区域、原149项Unit回归及231项真实付费复活。后者包含正式counter资源路径复验与99个运行源码映射，原物品自检九项及ALL单独核对。原准备文档的未运行状态保持历史原文。
