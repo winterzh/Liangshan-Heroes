@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "state": "PREPARED_NOT_ENGINE_TESTED",
+  "adapter_schema": "battle_fog_values_v1",
+  "record_fields": [
+    "schema",
+    "battle_source_lf",
+    "map_source_lf",
+    "content_fingerprint",
+    "values"
+  ],
+  "value_fields": [
+    {
+      "field": "map_w",
+      "source": "scripts/game_map.gd",
+      "declaration_line": 47,
+      "contract": "int 1..256; read through actual Battle.map; total cells <=4096"
+    },
+    {
+      "field": "map_h",
+      "source": "scripts/game_map.gd",
+      "declaration_line": 48,
+      "contract": "int 1..256; independent expected Vector2i required on validate"
+    },
+    {
+      "field": "fog",
+      "source": "scripts/battle.gd",
+      "declaration_line": 173,
+      "contract": "bool"
+    },
+    {
+      "field": "_vision",
+      "source": "scripts/battle.gd",
+      "declaration_line": 174,
+      "contract": "PackedByteArray native; bounded Array[int 0..2] wire via codec"
+    },
+    {
+      "field": "_sight_now",
+      "source": "scripts/battle.gd",
+      "declaration_line": 175,
+      "contract": "PackedByteArray native; bounded Array[int 0..1] wire via codec"
+    },
+    {
+      "field": "_reveal_t",
+      "source": "scripts/battle.gd",
+      "declaration_line": 176,
+      "contract": "PackedFloat32Array; finite nonnegative, preserve signed zero and bit pattern"
+    },
+    {
+      "field": "_fog_t",
+      "source": "scripts/battle.gd",
+      "declaration_line": 180,
+      "contract": "float64 finite countdown 0..FOG_STEP inclusive; signed zero retained"
+    }
+  ],
+  "max_axis": 256,
+  "max_cells": 4096,
+  "length_rule": "enabled: all three buffers w*h; disabled: all w*h or all empty; mixed lengths refused before traversal/conversion",
+  "source_dimension_chain": [
+    "scripts/battle.gd:294 map.init_map(level.map_w(),level.map_h(),...)",
+    "scripts/levels/skirmish.gd:112-113 60x60",
+    "scripts/levels/level3_zhujiazhuang_rts.gd:58-59 64x56"
+  ],
+  "consumers": [
+    "scripts/battle.gd:3905 is_visible_world",
+    "scripts/battle.gd:3939 is_lit_world",
+    "scripts/battle.gd:3949 is_explored_world",
+    "scripts/battle.gd:3971 _fog_pass advances phase/reveal and writes render/Unit state",
+    "scripts/battle.gd:4020 _reveal_fog_at updates revelation without running a full pass"
+  ],
+  "budget_static_calculation": {
+    "status": "arithmetic_only_not_runtime",
+    "nodes_at_4096_cells": 12303,
+    "codec_json_bytes_upper_bound_at_4096_cells": 820910,
+    "codec_limits": {
+      "nodes": 32768,
+      "bytes": 1048576,
+      "depth": 32
+    }
+  },
+  "explicit_noncoverage": [
+    "lit_cells",
+    "map grid/navigation/metadata",
+    "Unit visibility coherence",
+    "reference graph",
+    "render resources",
+    "assignment restore",
+    "physics/process snapshot barrier",
+    "gameplay RNG",
+    "Battle/level/effects",
+    "disk transaction",
+    "cross-process gameplay resume"
+  ],
+  "normalization": "No sorting, clamping, truncation, default fill, fog pass or reinitialization. Two explicit byte transport conversions only after validation.",
+  "restore_ready": false
+}

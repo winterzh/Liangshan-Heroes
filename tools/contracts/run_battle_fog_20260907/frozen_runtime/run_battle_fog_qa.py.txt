@@ -1,0 +1,143 @@
+"""Frozen Battle fog capture/validate QA. Default is read-only preflight.
+--run reuses the verified exact-child lifecycle with a new private profile.
+No source copy/import, production mutation, restore or performance acceptance.
+"""
+import argparse
+from collections import Counter
+import datetime,hashlib,json,os,re,sys,types
+from pathlib import Path
+sys.dont_write_bytecode=True
+ROOT=Path(__file__).resolve().parents[1]
+HERE=ROOT/'scratchpad/run_battle_fog_state'
+SELF=Path(__file__).resolve()
+CONTRACT=SELF.with_suffix('.contract.json')
+LOCK=ROOT/'.godot/redraw_rejection_source.lock'
+RUNTIME=['scripts/battle.gd','scripts/game_map.gd','scripts/run_state_value_codec.gd',
+         'scratchpad/run_battle_fog_state/fog_values.gd','scratchpad/run_battle_fog_state/qa_driver.gd']
+COMMON=ROOT/'scratchpad/run_resume_adapters_qa.py'
+COMMON_SHA='1e11fe77f7fde4d088c71e4e0cf97c6c3278b4690821baf01cd883e23607d573'
+LIFECYCLE=ROOT/'scratchpad/run_unit_state_adapter/run_qa.py'
+LIFECYCLE_SHA='ad12b2b4caff9a90d0712031372be6cedb50b869fcc97d2dc02aee11842c7b34'
+sha=lambda raw:hashlib.sha256(raw).hexdigest()
+def need(ok,message):
+    if not ok:raise RuntimeError(message)
+def save(path,value):path.write_bytes((json.dumps(value,ensure_ascii=False,indent=2)+'\n').encode())
+def load_source(path,name,expected):
+    raw=path.read_bytes();need(sha(raw)==expected,'Helper changed: '+str(path))
+    module=types.ModuleType(name);module.__file__=str(path)
+    exec(compile(raw.decode('utf-8-sig'),str(path),'exec'),module.__dict__)
+    return module
+common=load_source(COMMON,'battle_fog_common',COMMON_SHA)
+read=common.read
+
+def frozen(contract,contract_sha):
+    need(sha(CONTRACT.read_bytes())==contract_sha,'Controller contract drift')
+    need(sha(SELF.read_bytes())==contract['controller_raw_sha256'],'Controller drift')
+    need(sha((HERE/'pins.json').read_bytes())==contract['pins_raw_sha256'],'Fog pins drift')
+    need(sha(COMMON.read_bytes())==COMMON_SHA and sha(LIFECYCLE.read_bytes())==LIFECYCLE_SHA,'Helper drift')
+    expected=contract['files']
+    need(set(RUNTIME)<=set(expected),'Incomplete frozen runtime')
+    for name,row in expected.items():
+        path=ROOT/name
+        need(not Path(name).is_absolute() and ROOT in path.resolve().parents,'Source escapes checkout')
+        common.no_links(path)
+        raw=path.read_bytes()
+        need(sha(raw)==row['sha256'] and len(raw)==row['bytes'],'Frozen input drift: '+name)
+    return {name:expected[name]['sha256'] for name in RUNTIME}
+
+def validate(report,manifest,manifest_sha,process,contract):
+    need(type(report.get('schema')) is int and report['schema']==1,'Wrong schema')
+    need(report.get('run_id')==manifest['run_id'] and report.get('manifest_sha256')==manifest_sha,'Run/manifest mismatch')
+    need(type(report.get('process_id')) is int and report['process_id']==process['child_pid'],'PID mismatch')
+    need(isinstance(report.get('actual_user_dir'),str) and Path(report['actual_user_dir']).resolve()==Path(manifest['private_user']).resolve(),'Wrong actual user directory')
+    need(report.get('source_sha256')==manifest['source_sha256']==report.get('source_after_sha256'),'Runtime source mismatch')
+    checks=report.get('checks')
+    need(isinstance(checks,list) and 80<=len(checks)<=5000 and report.get('passed') is True and report.get('failures')==[],'Empty/failed/incomplete QA')
+    need(all(isinstance(row,dict) and row.get('passed') is True and isinstance(row.get('label'),str) and row['label'] for row in checks),'Invalid check row')
+    labels=Counter(row['label'] for row in checks)
+    need(type(report.get('check_count')) is int and report['check_count']==len(checks),'Count mismatch')
+    groups=dict(Counter(row.get('group') for row in checks))
+    need(report.get('check_groups')==groups and set(groups)<={'environment','source','behavior','rejection','fixture','json'},'Groups mismatch')
+    for label in contract['required_labels']:need(labels[label]==1,'Incomplete QA sequence: '+label)
+    source_checks=sum(row['label'].startswith(('runtime source ','source unchanged ')) for row in checks)
+    need(source_checks==10 and groups.get('source')==13,'Five sources plus source/manifest checks required')
+    for label in ['exact five runtime source entries','five runtime source files unchanged','root manifest raw bytes unchanged']:
+        need(labels[label]==1,'Missing source aggregate: '+label)
+    for key in ['real_battle_and_map_objects','objects_outside_simulation_tree','capture_validate_only']:
+        need(report.get(key) is True,'Missing true scope: '+key)
+    for key in ['assignment_restore_implemented','render_resources_rebuilt','snapshot_barrier_implemented','unit_visibility_reconciled','battle_resume_tested','restore_ready']:
+        need(report.get(key) is False,'Unsupported scope: '+key)
+    coverage=report.get('coverage',{})
+    need(coverage.get('captured_battle_fog_values')==5 and coverage.get('captured_map_dimension_values')==2,'Coverage count mismatch')
+    need(coverage.get('fog_fields')==['fog','_vision','_sight_now','_reveal_t','_fog_t'] and coverage.get('map_fields')==['w','h'],'Coverage fields mismatch')
+    need(coverage.get('fog_values_complete') is True,'Incomplete fog values')
+    for key in ['battle_state_complete','map_state_complete','lit_cells_captured','unit_visibility_reconciled','render_resources_rebuilt','snapshot_barrier_implemented','restore_ready']:
+        need(coverage.get(key) is False,'Unsupported coverage: '+key)
+    engine=report.get('engine',{})
+    need(all(type(engine.get(k)) is int for k in ['major','minor','patch']) and engine['major']==4,'Missing engine identity')
+    return {'checks':len(checks),'source_hash_checks':source_checks,'other_checks':len(checks)-source_checks,'check_groups':groups}
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',action='store_true');parser.add_argument('--godot');parser.add_argument('--timeout',type=int,default=120)
+    args=parser.parse_args();need(30<=args.timeout<=240,'Timeout bound')
+    contract=read(CONTRACT);contract_sha=sha(CONTRACT.read_bytes())
+    need(contract.get('schema')==1 and contract.get('suite')=='battle-fog','Wrong controller contract')
+    runtime=frozen(contract,contract_sha)
+    if not args.run:
+        print(json.dumps({'preflight':True,'frozen_files':len(contract['files']),'godot_run':False,'writes':False}));return 0
+    guard=load_source(ROOT/'tools/run_reduced_effects_qa.py','battle_fog_guard',contract['guard_raw_sha256'])
+    lifecycle=load_source(LIFECYCLE,'battle_fog_lifecycle',LIFECYCLE_SHA)
+    lifecycle.SCRIPT='scratchpad/run_battle_fog_state/qa_driver.gd'
+    need(lifecycle.ROOT==ROOT,'Wrong lifecycle checkout')
+    exe=Path(guard.resolve_godot(args.godot));common.no_links(exe)
+    need(exe.suffix.lower()=='.exe' and not re.search(r'[._-]console\.exe$',exe.name,re.I),'Actual non-console exe required')
+    guard.require_exclusive_godot();need(not LOCK.exists(),'Godot lock occupied')
+    name=guard.project_name(ROOT);real_user=Path(os.environ['APPDATA'])/'Godot/app_userdata'/name
+    common.no_links(real_user);protected=guard.signatures(real_user)
+    stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ');out=HERE/'runs'/stamp
+    common.no_links(out);out.mkdir(parents=True,exist_ok=False)
+    token=str(os.getpid())+'|'+str(out);LOCK.parent.mkdir(exist_ok=True)
+    with LOCK.open('x',encoding='utf-8') as f:f.write(token)
+    result={'schema':1,'suite':'battle-fog','complete':False,'lock_released':False,'godot_run':False,'source_mutations':False,
+            'restore_ready':False,'protected_player_before':protected,'controller_contract':contract,'controller_contract_raw_sha256':contract_sha,
+            'engine_raw_sha256':sha(exe.read_bytes()),'common_raw_sha256':COMMON_SHA,'lifecycle_raw_sha256':LIFECYCLE_SHA}
+    source=None
+    try:
+        guard.require_exclusive_godot();frozen(contract,contract_sha)
+        source=guard.source_receipt(ROOT);save(out/'sources.json',source)
+        need(source['raw_file_sha256']['tools/run_reduced_effects_qa.py']==contract['guard_raw_sha256'],'Guard drift while loading')
+        profile=out/'private_profile';user=profile/'appdata/Godot/app_userdata'/name
+        user.mkdir(parents=True,exist_ok=False);(profile/'localappdata').mkdir();(profile/'temp').mkdir()
+        env,controls=guard.environment(source,out,profile,user)
+        for key in list(env):
+            if key.startswith(('UNIT_ADAPTER_','UNIT_REFERENCES_','INVENTORY_QA_','BATTLE_FOG_QA_','ANIM_LOAD_','FIRST_USE_','VALUE_CODEC_','STORE_QA_','REDRAW_','SEPARATION_','REDUCED_EFFECTS_','CHASE_PATH_')):env.pop(key)
+        env.update(APPDATA=str(profile/'appdata'),LOCALAPPDATA=str(profile/'localappdata'),TEMP=str(profile/'temp'),TMP=str(profile/'temp'))
+        manifest={'schema':1,'run_id':stamp,'run_dir':str(out),'private_user':str(user),'report':str(out/'report.json'),'source_sha256':runtime}
+        save(out/'manifest.json',manifest);manifest_sha=sha((out/'manifest.json').read_bytes())
+        env['BATTLE_FOG_QA_MANIFEST']=str(out/'manifest.json')
+        save(out/'configuration.json',{'source_project':str(ROOT),'manifest':manifest,'manifest_raw_sha256':manifest_sha,'controlled_production_switches':controls,'private_environment':{k:env[k] for k in ['APPDATA','LOCALAPPDATA','TEMP','TMP']}})
+        need(guard.signatures(real_user)==protected,'Player drift before launch')
+        process=lifecycle.run_process(guard,exe,out,env,args.timeout)
+        need(sha((out/'manifest.json').read_bytes())==manifest_sha,'Manifest drift')
+        common.no_links(out/'report.json');report=read(out/'report.json');counts=validate(report,manifest,manifest_sha,process,contract)
+        markers=[line.removeprefix('[battle-fog-state QA] ') for line in (out/'process.log').read_bytes().decode('utf-8').splitlines() if line.startswith('[battle-fog-state QA] ')]
+        need(len(markers)==1 and json.loads(markers[0])==report,'Stdout report does not match exact sidecar')
+        result.update(complete=True,process_id=process['child_pid'],exit_code=process['exit_code'],report_raw_sha256=sha((out/'report.json').read_bytes()),source_files=len(source['raw_file_sha256']),source_combined_sha256=source['combined_sha256'],**counts)
+    except BaseException as error:
+        result['error']=type(error).__name__+': '+str(error);raise
+    finally:
+        try:
+            path=out/'process_receipt.json'
+            if path.exists():
+                process=read(path);process['lifecycle_original_scope']=process['scope'];process['scope']='Battle fog capture/validate; no gameplay restore';save(path,process)
+                result.update(godot_run=process.get('child_pid') is not None,process_id=process.get('child_pid'),exit_code=process.get('exit_code'))
+            guard.require_exclusive_godot();frozen(contract,contract_sha)
+            need(source is not None and guard.source_receipt(ROOT)==source,'Source drift; retain lock')
+            need(guard.signatures(real_user)==protected,'Player drift; retain lock')
+            need(LOCK.read_text(encoding='utf-8')==token,'Lock ownership changed')
+            result.update(source_unchanged=True,protected_player_after=guard.signatures(real_user));LOCK.unlink();result['lock_released']=True
+        except BaseException as error:result.update(complete=False,final_guard_error=type(error).__name__+': '+str(error))
+        save(out/'receipt.json',result);print(json.dumps({'run':str(out),'complete':result['complete'],'lock_released':result['lock_released']}))
+    return 0 if result['complete'] and result['lock_released'] else 2
+
+if __name__=='__main__':sys.exit(main())

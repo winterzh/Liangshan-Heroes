@@ -1,0 +1,246 @@
+{
+  "schema": 1,
+  "status": "ACTUAL_GODOT_QA_PASSED_INDEPENDENT_EVIDENCE_REVIEW",
+  "local_archive_date": "2026-09-07",
+  "run_id": "20260906T162217847550Z",
+  "complete": true,
+  "process_id": 4652,
+  "exit_code": 0,
+  "child_exit_confirmed": true,
+  "lock_released": true,
+  "actual_user_dir": "E:/ChatGPT/水浒-art-validation/scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/private_profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役",
+  "engine": {
+    "major": 4,
+    "minor": 6,
+    "patch": 3,
+    "hex": 263683,
+    "status": "stable",
+    "build": "official",
+    "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+    "timestamp": 0,
+    "string": "4.6.3-stable (official)"
+  },
+  "check_count": 182,
+  "source_hash_checks": 10,
+  "other_checks_as_runner_reports": 172,
+  "check_groups": {
+    "environment": 3,
+    "source": 13,
+    "behavior": 30,
+    "rejection": 51,
+    "json": 31,
+    "fixture": 54
+  },
+  "all_source_group_assertions": 13,
+  "other_assertions_excluding_entire_source_group": 169,
+  "count_note": "182 assertion rows = 10 per-file source before/after checks + 3 other source identity/aggregate checks + 169 non-source assertions. Runner other_checks=172 includes those 3 source checks. Groups include JSON and fixture helper assertions, not independent scenario counts.",
+  "passed_check_rows": 182,
+  "failed_check_rows": 0,
+  "mandatory_key_labels_verified_once": [
+    "actual production Battle and GameMap instances",
+    "real objects remain outside simulation tree",
+    "disabled constructor fog with three empty arrays captured",
+    "five fog values never imply map Battle render or snapshot completion",
+    "standard 60 by 60 fog captured with actual map dimensions",
+    "real JSON fog record validates all seven explicit values",
+    "capture JSON hop and validation consume no gameplay RNG",
+    "both packed byte arrays retain length order and exact states",
+    "float32 reveal bits survive actual JSON including signed zero subnormal and rounding",
+    "QA proves subnormal decimal rounding and maximum finite float32 input bits",
+    "fog phase retains native float64 bits without reset or float32 conversion",
+    "fog native values canonically reencode to the complete original tree",
+    "decoded packed buffers do not alias live Battle arrays",
+    "non-square map validates with independent expected dimensions",
+    "same cell count with transposed dimensions refused",
+    "int64 maximum axis refused before multiplication",
+    "cell budget refused before array traversal",
+    "encoded float32 infinity refused",
+    "recursive encoded tree refused without stringify",
+    "freed typed GameMap reference refused before dimension reads",
+    "exact 4096-cell budget fits one whole-tree codec budget",
+    "exact cell limit survives real JSON",
+    "enabled fog cannot use empty constructor buffers",
+    "no ready deploy fog pass render resource or map baking side effects"
+  ],
+  "focused_evidence": [
+    {
+      "check_index_one_based": 19,
+      "label": "capture JSON hop and validation consume no gameplay RNG",
+      "passed": true,
+      "group": "behavior"
+    },
+    {
+      "check_index_one_based": 22,
+      "label": "float32 reveal bits survive actual JSON including signed zero subnormal and rounding",
+      "passed": true,
+      "group": "behavior"
+    },
+    {
+      "check_index_one_based": 23,
+      "label": "QA proves float32 input rounding and negative zero were actually present",
+      "passed": true,
+      "group": "fixture"
+    },
+    {
+      "check_index_one_based": 24,
+      "label": "QA proves subnormal decimal rounding and maximum finite float32 input bits",
+      "passed": true,
+      "group": "fixture"
+    },
+    {
+      "check_index_one_based": 25,
+      "label": "fog phase retains native float64 bits without reset or float32 conversion",
+      "passed": true,
+      "group": "behavior"
+    },
+    {
+      "check_index_one_based": 26,
+      "label": "fog native values canonically reencode to the complete original tree",
+      "passed": true,
+      "group": "behavior"
+    },
+    {
+      "check_index_one_based": 38,
+      "label": "same cell count with transposed dimensions refused",
+      "passed": true,
+      "group": "rejection"
+    },
+    {
+      "check_index_one_based": 167,
+      "label": "freed typed GameMap reference refused before dimension reads",
+      "passed": true,
+      "group": "rejection"
+    },
+    {
+      "check_index_one_based": 169,
+      "label": "exact 4096-cell budget fits one whole-tree codec budget",
+      "passed": true,
+      "group": "behavior"
+    },
+    {
+      "check_index_one_based": 171,
+      "label": "exact cell limit survives real JSON",
+      "passed": true,
+      "group": "behavior"
+    }
+  ],
+  "focused_evidence_interpretation": {
+    "freed_map": "QA assigns a real GameMap to the real Battle, frees that object, then the adapter returns MAP_INSTANCE before dimension reads; this exact test passed without engine diagnostics. It does not restore expired references.",
+    "float32_input_bits": "Positive fixture explicitly checks little-endian 01000000 minimum subnormal, cdcccc3d for 0.1, ffff7f7f maximum finite, 00000080 negative zero, and 16777217 rounded to 16777216 before the encode input. Whole-array bit comparison then passes after real JSON.",
+    "phase": "_fog_t native float64 bit comparison and inclusive 0/0.18/signed-zero boundaries passed; no timer reset or float32 conversion.",
+    "4096_cells": "Actual 64x64 capture and real JSON validate succeeded. The earlier 12303-node/820910-byte bound remains a static arithmetic calculation, not a newly measured engine counter."
+  },
+  "stdout_report_marker_count": 1,
+  "stdout_report_semantically_identical": true,
+  "strict_utf8_log_clean": true,
+  "strict_log_diagnostics": [],
+  "runtime_sources_before_after": {
+    "scripts/battle.gd": "b6d23aced27f91d7155e1ac996be644fe1d01554feead0dbba931fcc65e5f6a3",
+    "scripts/game_map.gd": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+    "scripts/run_state_value_codec.gd": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+    "scratchpad/run_battle_fog_state/fog_values.gd": "7b024521b8d65003b4d8c8ca2976bf883e73176549f45be560dbed7e1c4fc43a",
+    "scratchpad/run_battle_fog_state/qa_driver.gd": "2c3a9afc4eea6a13cd870839c3e05a06ce63dac08640fd7498db218d9be2adf1"
+  },
+  "five_runtime_raw_and_lf_pins_rechecked": true,
+  "thirteen_controller_frozen_inputs_rechecked": true,
+  "original_pins_supports_preparation_preserved": true,
+  "source_ledger": {
+    "file_count": 2713,
+    "combined_sha256": "f12de07498b7074dd1c8fb0edf0bde9bdc5f0dfad5b95d850624b32e2a65fa20",
+    "stored_ledger_digest_recomputed": true,
+    "full_live_2713_file_rehash_performed_in_this_review": false,
+    "actual_run_full_source_before_after_unchanged": true,
+    "note": "This review rechecked the 13 explicitly frozen inputs and recomputed the saved source ledger digest. Full live tree equality is evidence from the original root-owned run, not a new broad production hash."
+  },
+  "protected_player_before_after_equal_in_receipt": true,
+  "scope": {
+    "captured_battle_fog_values": 5,
+    "captured_map_dimension_values": 2,
+    "fog_fields": [
+      "fog",
+      "_vision",
+      "_sight_now",
+      "_reveal_t",
+      "_fog_t"
+    ],
+    "map_fields": [
+      "w",
+      "h"
+    ],
+    "fog_values_complete": true,
+    "battle_state_complete": false,
+    "map_state_complete": false,
+    "lit_cells_captured": false,
+    "unit_visibility_reconciled": false,
+    "render_resources_rebuilt": false,
+    "snapshot_barrier_implemented": false,
+    "restore_ready": false
+  },
+  "additional_scope": {
+    "capture_validate_only": true,
+    "real_battle_and_map_objects": true,
+    "objects_outside_simulation_tree": true,
+    "assignment_restore_implemented": false,
+    "gameplay_rng_state_restored": false,
+    "disk_store_connected": false,
+    "cross_process_resume_tested": false,
+    "performance_acceptance": false
+  },
+  "historical_preflight": {
+    "source": "scratchpad/run_battle_fog_state/archive_prep/frozen_runtime/controller_preflight.json",
+    "synthetic_rejections": 14,
+    "game_checks": 0,
+    "godot_run": false,
+    "note": "Controller fabricated-report checks are separate preparation evidence and are not added to 182 actual assertions."
+  },
+  "evidence_files": [
+    {
+      "source": "scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/configuration.json",
+      "bytes": 4567,
+      "sha256": "3acd2492eff90f089ef7de9feccca1b506394d716f90043f73e0c35f02c9c1f3"
+    },
+    {
+      "source": "scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/manifest.json",
+      "bytes": 1059,
+      "sha256": "3428bf33ff90a7f2c0c7db2b00fb7e037e7e1487917620549b4080ee76a3f435"
+    },
+    {
+      "source": "scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/sources.json",
+      "bytes": 323765,
+      "sha256": "5353088b41902781546b2e075a8cde7c1437b21b0134a7a379cd6edbce457105"
+    },
+    {
+      "source": "scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/process_receipt.json",
+      "bytes": 720,
+      "sha256": "0d71c0e8b282f5abc6d9d05cdad0ebea48d8406d523915b29a3555ef6bc9201e"
+    },
+    {
+      "source": "scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/process.log",
+      "bytes": 19089,
+      "sha256": "cb5030aa3a15de39fcf7f73e0a096dcc3ca53cb32e2f9fc2e150ec54d2bbfd76"
+    },
+    {
+      "source": "scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/receipt.json",
+      "bytes": 5604,
+      "sha256": "96298d36d4a50da0c596789bed70b880d251435525cd33afe3e1a31e1fa84cbb"
+    },
+    {
+      "source": "scratchpad/run_battle_fog_state/runs/20260906T162217847550Z/report.json",
+      "bytes": 23077,
+      "sha256": "409b4bcf81c0676f466754a0e23eebacb84c32dd561d07842c138ccfdff0013d"
+    }
+  ],
+  "frozen_dependencies_receipt": {
+    "source": "scratchpad/run_battle_fog_state/archive_prep/runtime_freeze.json",
+    "bytes": 2514,
+    "sha256": "73b7a9141754a019e677a7c897749cd8719ce4c03c682a7f94b9489f174e4f0d"
+  },
+  "preparation_history_note": "Original tested README/pins/field_contract/qa_contract/remaining_coverage/preparation/controller review remain original bytes. They describe preparation time; this new summary records subsequent actual evidence.",
+  "review_activity": {
+    "godot_runs": 0,
+    "production_writes": 0,
+    "shared_controller_writes": 0,
+    "formal_archive_copies": 0
+  },
+  "archive_boundary": "Only named run report/log/receipts/source ledger and tested text dependencies. No private_profile, player files, copied project, fixtures, caches, engine binary or whole-tree copy."
+}

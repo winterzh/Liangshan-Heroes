@@ -1,0 +1,150 @@
+extends RefCounted
+## Five explicit Battle fog values, plus dimensions from the actual GameMap.
+## No rendering, fog pass, reference graph, live assignment or restore transaction.
+const SCHEMA := "battle_fog_values_v1"
+const BATTLE_SOURCE_LF := "c0b15a40a21c82e9d3138c1289996af3ba381c0437c933df1615c21d4f38d89d"
+const MAP_SOURCE_LF := "35a31084088e8665790b9bc940054d05a96f7e995ecfcd28796d2b6fad63800a"
+const CODEC_SOURCE_LF := "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+const MAX_AXIS := 256
+const MAX_CELLS := 4096
+const FOG_STEP := 0.18
+const FOG_FIELDS := ["fog", "_vision", "_sight_now", "_reveal_t", "_fog_t"]
+const VALUE_FIELDS := ["map_w", "map_h", "fog", "_vision", "_sight_now", "_reveal_t", "_fog_t"]
+var _battle_script: GDScript
+var _map_script: GDScript
+var _codec
+var _source_ok := false
+
+func _init(battle_script: GDScript, map_script: GDScript, codec_script: GDScript) -> void:
+	_battle_script = battle_script
+	_map_script = map_script
+	if battle_script == null or map_script == null or codec_script == null: return
+	if battle_script.source_code.replace("\r\n", "\n").sha256_text() != BATTLE_SOURCE_LF: return
+	if map_script.source_code.replace("\r\n", "\n").sha256_text() != MAP_SOURCE_LF: return
+	if codec_script.source_code.replace("\r\n", "\n").sha256_text() != CODEC_SOURCE_LF: return
+	if not battle_script.can_instantiate() or not map_script.can_instantiate() or not codec_script.can_instantiate(): return
+	_codec = codec_script.new()
+	_source_ok = _codec != null
+
+func _failure(code: String, field := "") -> Dictionary:
+	return {"ok": false, "code": code, "field": field, "restore_ready": false}
+
+func coverage() -> Dictionary:
+	return {"captured_battle_fog_values": 5, "captured_map_dimension_values": 2,
+		"fog_fields": FOG_FIELDS.duplicate(), "map_fields": ["w", "h"],
+		"fog_values_complete": true, "battle_state_complete": false,
+		"map_state_complete": false, "lit_cells_captured": false,
+		"unit_visibility_reconciled": false, "render_resources_rebuilt": false,
+		"snapshot_barrier_implemented": false, "restore_ready": false}
+
+func _fields(value: Dictionary, names: Array) -> bool:
+	if value.size() != names.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in names: return false
+	return true
+
+func _fingerprint(value: String) -> bool:
+	if value.length() != 64: return false
+	for index in range(value.length()):
+		var point: int = value.unicode_at(index)
+		if not (point >= 48 and point <= 57) and not (point >= 97 and point <= 102): return false
+	return true
+
+func _dimensions(width: Variant, height: Variant) -> Dictionary:
+	# Check axes before multiplication, allocation, duplication or traversal.
+	if typeof(width) != TYPE_INT or typeof(height) != TYPE_INT: return _failure("DIMENSION_TYPE")
+	if width < 1 or height < 1 or width > MAX_AXIS or height > MAX_AXIS:
+		return _failure("DIMENSION_BOUND")
+	var cells: int = width * height
+	if cells > MAX_CELLS: return _failure("CELL_LIMIT")
+	return {"ok": true, "cells": cells}
+
+func _check_values(values: Dictionary, native_bytes: bool) -> Dictionary:
+	if not _fields(values, VALUE_FIELDS): return _failure("VALUE_FIELDS")
+	var dimensions: Dictionary = _dimensions(values.map_w, values.map_h)
+	if not dimensions.ok: return dimensions
+	if typeof(values.fog) != TYPE_BOOL: return _failure("FOG_FLAG", "fog")
+	var byte_type: int = TYPE_PACKED_BYTE_ARRAY if native_bytes else TYPE_ARRAY
+	if typeof(values._vision) != byte_type: return _failure("BYTE_ARRAY_TYPE", "_vision")
+	if typeof(values._sight_now) != byte_type: return _failure("BYTE_ARRAY_TYPE", "_sight_now")
+	if typeof(values._reveal_t) != TYPE_PACKED_FLOAT32_ARRAY: return _failure("REVEAL_TYPE", "_reveal_t")
+	# Disabled, never-initialized fog has three empty arrays. A disabled but
+	# materialized snapshot is retained as-is; never erase remembered values.
+	var empty: bool = values._vision.is_empty() and values._sight_now.is_empty() and values._reveal_t.is_empty()
+	if empty:
+		if values.fog: return _failure("ARRAY_LENGTH", "fog_enabled_requires_cells")
+	elif values._vision.size() != dimensions.cells or values._sight_now.size() != dimensions.cells \
+			or values._reveal_t.size() != dimensions.cells:
+		return _failure("ARRAY_LENGTH")
+	# _fog_t is a native float64 countdown, not a PackedFloat32 element.
+	# At a completed callback it is 0 initially, or 0..FOG_STEP after a pass.
+	if typeof(values._fog_t) != TYPE_FLOAT or not is_finite(values._fog_t) \
+			or values._fog_t < 0.0 or values._fog_t > FOG_STEP:
+		return _failure("FOG_PHASE", "_fog_t")
+	for index in range(values._vision.size()):
+		var vision: Variant = values._vision[index]
+		var sight: Variant = values._sight_now[index]
+		if typeof(vision) != TYPE_INT or vision < 0 or vision > 2:
+			return _failure("VISION_DOMAIN", "_vision[%d]" % index)
+		if typeof(sight) != TYPE_INT or sight < 0 or sight > 1:
+			return _failure("SIGHT_DOMAIN", "_sight_now[%d]" % index)
+		var reveal: float = values._reveal_t[index]
+		if not is_finite(reveal) or reveal < 0.0:
+			return _failure("REVEAL_DOMAIN", "_reveal_t[%d]" % index)
+	# Cross-field visibility/Unit/phase coherence belongs to the snapshot
+	# coordinator; a caller must not use this local validator as that proof.
+	return {"ok": true, "arrays_initialized": not empty}
+
+func capture_values(battle: Variant, content_fingerprint: String) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if not _fingerprint(content_fingerprint): return _failure("CONTENT_FINGERPRINT")
+	if typeof(battle) != TYPE_OBJECT or not is_instance_valid(battle): return _failure("BATTLE_INSTANCE")
+	if battle.get_script() != _battle_script: return _failure("BATTLE_INSTANCE")
+	if battle.is_queued_for_deletion(): return _failure("BATTLE_PENDING_DELETE")
+	# Untyped local retains a freed Object Variant until the validity check.
+	var actual_map = battle.map
+	if typeof(actual_map) != TYPE_OBJECT or not is_instance_valid(actual_map): return _failure("MAP_INSTANCE")
+	if actual_map.get_script() != _map_script: return _failure("MAP_INSTANCE")
+	if actual_map.is_queued_for_deletion(): return _failure("MAP_PENDING_DELETE")
+	var values: Dictionary = {"map_w": actual_map.w, "map_h": actual_map.h,
+		"fog": battle.fog, "_vision": battle._vision, "_sight_now": battle._sight_now,
+		"_reveal_t": battle._reveal_t, "_fog_t": battle._fog_t}
+	var checked: Dictionary = _check_values(values, true)
+	if not checked.ok: return checked
+	# The existing codec has no PackedByteArray tag. Convert only these two
+	# explicitly checked, bounded arrays; one codec call budgets the whole tree.
+	values._vision = Array(values._vision)
+	values._sight_now = Array(values._sight_now)
+	var encoded: Dictionary = _codec.encode(values)
+	if not encoded.ok: return _failure("CODEC_" + String(encoded.code), String(encoded.path))
+	return {"ok": true, "record": {"schema": SCHEMA, "battle_source_lf": BATTLE_SOURCE_LF,
+		"map_source_lf": MAP_SOURCE_LF, "content_fingerprint": content_fingerprint, "values": encoded.value},
+		"arrays_initialized": checked.arrays_initialized, "coverage": coverage(), "restore_ready": false}
+
+func validate_record(record: Variant, content_fingerprint: String, expected_dimensions: Variant) -> Dictionary:
+	if not _source_ok: return _failure("SOURCE_CONTRACT")
+	if not _fingerprint(content_fingerprint): return _failure("CONTENT_FINGERPRINT")
+	if typeof(expected_dimensions) != TYPE_VECTOR2I: return _failure("EXPECTED_DIMENSIONS")
+	var expected: Dictionary = _dimensions(expected_dimensions.x, expected_dimensions.y)
+	if not expected.ok: return _failure("EXPECTED_DIMENSIONS")
+	if typeof(record) != TYPE_DICTIONARY or not _fields(record, ["schema", "battle_source_lf", "map_source_lf", "content_fingerprint", "values"]):
+		return _failure("RECORD_FIELDS")
+	if typeof(record.schema) != TYPE_STRING or record.schema != SCHEMA: return _failure("SCHEMA")
+	if typeof(record.battle_source_lf) != TYPE_STRING or record.battle_source_lf != BATTLE_SOURCE_LF \
+			or typeof(record.map_source_lf) != TYPE_STRING or record.map_source_lf != MAP_SOURCE_LF:
+		return _failure("SOURCE_CONTRACT")
+	if typeof(record.content_fingerprint) != TYPE_STRING or record.content_fingerprint != content_fingerprint:
+		return _failure("CONTENT_FINGERPRINT")
+	var decoded: Dictionary = _codec.decode(record.values)
+	if not decoded.ok: return _failure("CODEC_" + String(decoded.code), String(decoded.path))
+	if typeof(decoded.value) != TYPE_DICTIONARY: return _failure("VALUE_FIELDS")
+	var checked: Dictionary = _check_values(decoded.value, false)
+	if not checked.ok: return checked
+	if decoded.value.map_w != expected_dimensions.x or decoded.value.map_h != expected_dimensions.y:
+		return _failure("DIMENSION_MISMATCH")
+	# Conversion follows domain checks: PackedByteArray construction must never
+	# truncate a decoded -1, 256, float or bool into a valid-looking byte.
+	decoded.value._vision = PackedByteArray(decoded.value._vision)
+	decoded.value._sight_now = PackedByteArray(decoded.value._sight_now)
+	return {"ok": true, "values": decoded.value, "arrays_initialized": checked.arrays_initialized,
+		"coverage": coverage(), "restore_ready": false}

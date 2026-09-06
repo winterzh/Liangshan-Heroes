@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "suite": "battle-fog",
+  "complete": true,
+  "lock_released": true,
+  "godot_run": true,
+  "source_mutations": false,
+  "restore_ready": false,
+  "protected_player_before": {
+    "settings": "absent",
+    "campaign": "e53e068321329011e38df0613595f86f64ba2aba4120e5955d321c07ad2f2b60",
+    "screen": "absent"
+  },
+  "controller_contract": {
+    "schema": 1,
+    "suite": "battle-fog",
+    "controller_raw_sha256": "42e4cd9681606f77a8b8786bf6d21b84500d91b668abea74ab418e127bfc6785",
+    "pins_raw_sha256": "d34da511410b22d5de031ccece3d5b0aadd6a12ecc4e2ecefead7ac4e1d91987",
+    "guard_raw_sha256": "1cecf1c3e6bb7c15992e6955fcad67e959cf836a198e9ceca28d744a1a573c0c",
+    "required_labels": [
+      "actual production Battle and GameMap instances",
+      "real objects remain outside simulation tree",
+      "disabled constructor fog with three empty arrays captured",
+      "five fog values never imply map Battle render or snapshot completion",
+      "standard 60 by 60 fog captured with actual map dimensions",
+      "real JSON fog record validates all seven explicit values",
+      "capture JSON hop and validation consume no gameplay RNG",
+      "both packed byte arrays retain length order and exact states",
+      "float32 reveal bits survive actual JSON including signed zero subnormal and rounding",
+      "QA proves subnormal decimal rounding and maximum finite float32 input bits",
+      "fog phase retains native float64 bits without reset or float32 conversion",
+      "fog native values canonically reencode to the complete original tree",
+      "decoded packed buffers do not alias live Battle arrays",
+      "non-square map validates with independent expected dimensions",
+      "same cell count with transposed dimensions refused",
+      "int64 maximum axis refused before multiplication",
+      "cell budget refused before array traversal",
+      "encoded float32 infinity refused",
+      "recursive encoded tree refused without stringify",
+      "freed typed GameMap reference refused before dimension reads",
+      "exact 4096-cell budget fits one whole-tree codec budget",
+      "exact cell limit survives real JSON",
+      "enabled fog cannot use empty constructor buffers",
+      "no ready deploy fog pass render resource or map baking side effects"
+    ],
+    "files": {
+      "scripts/battle.gd": {
+        "bytes": 759137,
+        "sha256": "b6d23aced27f91d7155e1ac996be644fe1d01554feead0dbba931fcc65e5f6a3"
+      },
+      "scripts/game_map.gd": {
+        "bytes": 34327,
+        "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87"
+      },
+      "scripts/run_state_value_codec.gd": {
+        "bytes": 12091,
+        "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+      },
+      "scratchpad/run_battle_fog_state/fog_values.gd": {
+        "bytes": 9119,
+        "sha256": "7b024521b8d65003b4d8c8ca2976bf883e73176549f45be560dbed7e1c4fc43a"
+      },
+      "scratchpad/run_battle_fog_state/qa_driver.gd": {
+        "bytes": 23628,
+        "sha256": "2c3a9afc4eea6a13cd870839c3e05a06ce63dac08640fd7498db218d9be2adf1"
+      },
+      "scratchpad/run_battle_fog_state/.gdignore": {
+        "bytes": 1,
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      "scratchpad/run_battle_fog_state/README.md": {
+        "bytes": 6813,
+        "sha256": "cf7c52d3acc223b8825288d52f13fa398c4d554873053d8ed1ce3b9ac847c6a2"
+      },
+      "scratchpad/run_battle_fog_state/field_contract.json": {
+        "bytes": 3072,
+        "sha256": "66f08d34b6ab784683379a2eff3f81584b2e7d8c5fc867788fed43d15b2c9480"
+      },
+      "scratchpad/run_battle_fog_state/qa_contract.json": {
+        "bytes": 4821,
+        "sha256": "c7bfda9095e7cae1589fd149eb8e83e101a369f3e73a929520d6bd1f89caf8eb"
+      },
+      "scratchpad/run_battle_fog_state/remaining_coverage.md": {
+        "bytes": 9768,
+        "sha256": "925907ba968fc963768bebdcb4324473864b99f8c95722214371726bcc24d6c8"
+      },
+      "project.godot": {
+        "bytes": 1519,
+        "sha256": "5f60d39f4817f3428c82c29004cc8bd4314e89ef322728c79266ee08dd63793c"
+      },
+      "tools/run_reduced_effects_qa.py": {
+        "bytes": 27321,
+        "sha256": "1cecf1c3e6bb7c15992e6955fcad67e959cf836a198e9ceca28d744a1a573c0c"
+      },
+      "tools/run_polish_performance.py": {
+        "bytes": 12538,
+        "sha256": "ede41c7acdf96254bb9725558253dbee5e336019b67bc197bb04d4c0b788c52a"
+      }
+    },
+    "scope": "one exact fog suite; five-value capture/validate only",
+    "gameplay_restore": false
+  },
+  "controller_contract_raw_sha256": "523349d5ee17820904dc83f29f5e722b0f1aa464660a572b2cf3da62a3c61f42",
+  "engine_raw_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "common_raw_sha256": "1e11fe77f7fde4d088c71e4e0cf97c6c3278b4690821baf01cd883e23607d573",
+  "lifecycle_raw_sha256": "ad12b2b4caff9a90d0712031372be6cedb50b869fcc97d2dc02aee11842c7b34",
+  "process_id": 4652,
+  "exit_code": 0,
+  "report_raw_sha256": "409b4bcf81c0676f466754a0e23eebacb84c32dd561d07842c138ccfdff0013d",
+  "source_files": 2713,
+  "source_combined_sha256": "f12de07498b7074dd1c8fb0edf0bde9bdc5f0dfad5b95d850624b32e2a65fa20",
+  "checks": 182,
+  "source_hash_checks": 10,
+  "other_checks": 172,
+  "check_groups": {
+    "environment": 3,
+    "source": 13,
+    "behavior": 30,
+    "rejection": 51,
+    "json": 31,
+    "fixture": 54
+  },
+  "source_unchanged": true,
+  "protected_player_after": {
+    "settings": "absent",
+    "campaign": "e53e068321329011e38df0613595f86f64ba2aba4120e5955d321c07ad2f2b60",
+    "screen": "absent"
+  }
+}

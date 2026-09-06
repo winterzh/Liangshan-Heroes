@@ -1,3 +1,9 @@
+## 2026-09-07 迷雾与临时侦察数据
+
+- `docs/RUN_BATTLE_FOG_20260907.md`：五个迷雾值与真实地图宽高、182条实测、完整恢复延期范围。
+- `qa/run_battle_fog_20260907/`：本轮报告/日志/来源、实际进程与私有路径收据、独立复核及精确归档清单。
+- `tools/contracts/run_battle_fog_20260907/`：受测适配器/QA/pins、原准备说明和冻结controller/helper；按README恢复后复验，不参与生产启动。
+
 ## 2026-09-07 Unit 局部恢复数据与四段诊断
 
 - `docs/RUN_UNIT_REFERENCES_20260907.md`、`qa/run_unit_references_20260907/`：14 直接引用、两个数组、七类命令队列；原两次失败、五键修复、162 条实测与原路径复现说明。

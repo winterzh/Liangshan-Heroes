@@ -1,0 +1,414 @@
+extends SceneTree
+## Root owns the private profile, shared lock, exact child and source guards.
+const CONTENT_FIXTURE := "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+const SOURCE_PATHS := ["scripts/battle.gd", "scripts/game_map.gd", "scripts/run_state_value_codec.gd",
+	"scratchpad/run_battle_fog_state/fog_values.gd", "scratchpad/run_battle_fog_state/qa_driver.gd"]
+class WrongObject extends RefCounted:
+	var calls := 0
+	func _to_string() -> String:
+		calls += 1
+		return "not a Battle"
+	func _get_property_list() -> Array[Dictionary]:
+		calls += 1
+		return []
+
+var checks: Array = []
+var failures: Array = []
+var battle_script: GDScript
+var map_script: GDScript
+var adapter_script: GDScript
+var codec_script: GDScript
+var adapter
+var codec
+
+func _initialize() -> void: _run.call_deferred()
+
+func check(ok: bool, label: String, group := "behavior") -> void:
+	checks.append({"label": label, "passed": ok, "group": group})
+	if not ok: failures.append(label)
+
+func _normalize(path: String) -> String:
+	return path.replace("\\", "/").simplify_path().trim_suffix("/")
+
+func _source_pins(expected: Dictionary, prefix: String) -> Dictionary:
+	var result: Dictionary = {}
+	for path in SOURCE_PATHS:
+		result[path] = FileAccess.get_sha256("res://" + path)
+		check(expected.has(path) and result[path].length() == 64 and result[path] == expected.get(path, ""), prefix + path, "source")
+	return result
+
+func _hop(record: Dictionary) -> Dictionary:
+	var parser := JSON.new()
+	var error: int = parser.parse(JSON.stringify(record, "", false))
+	check(error == OK and typeof(parser.data) == TYPE_DICTIONARY, "record crosses real JSON syntax", "json")
+	return parser.data if error == OK and typeof(parser.data) == TYPE_DICTIONARY else {}
+
+func _f64(value: float) -> String:
+	var raw := PackedByteArray()
+	raw.resize(8)
+	raw.encode_double(0, value)
+	return raw.hex_encode()
+
+func _f32(values: PackedFloat32Array) -> String:
+	var raw := PackedByteArray()
+	raw.resize(values.size() * 4)
+	for index in range(values.size()): raw.encode_float(index * 4, values[index])
+	return raw.hex_encode()
+
+func _populate(battle, actual_map, width: int, height: int) -> void:
+	# These assignments only construct QA input. No loaded record is applied.
+	actual_map.w = width
+	actual_map.h = height
+	battle.fog = true
+	battle._vision = PackedByteArray()
+	battle._sight_now = PackedByteArray()
+	battle._reveal_t = PackedFloat32Array()
+	battle._vision.resize(width * height)
+	battle._sight_now.resize(width * height)
+	battle._reveal_t.resize(width * height)
+	for index in range(width * height):
+		battle._vision[index] = index % 3
+		battle._sight_now[index] = 1 if index % 3 == 2 else 0
+		battle._reveal_t[index] = 0.1 if index % 11 == 0 else 0.0
+		if battle._reveal_t[index] > 0.0: battle._vision[index] = 2
+	battle._fog_t = 0.123456789012345
+
+func _repack(record: Dictionary, mutate: Callable) -> Dictionary:
+	var decoded: Dictionary = codec.decode(record.values)
+	check(decoded.ok, "negative fixture decodes valid original value tree", "fixture")
+	if not decoded.ok: return {}
+	mutate.call(decoded.value)
+	var encoded: Dictionary = codec.encode(decoded.value)
+	check(encoded.ok, "negative fixture encoded with the real value codec", "fixture")
+	if not encoded.ok: return {}
+	var changed: Dictionary = record.duplicate(true)
+	changed.values = encoded.value
+	return _hop(changed)
+
+func _reject(record: Variant, code: String, label: String, dimensions := Vector2i(7, 3)) -> void:
+	var result: Dictionary = adapter.validate_record(record, CONTENT_FIXTURE, dimensions)
+	check(not result.ok and result.code == code and not result.has("values") and not result.has("record") \
+		and result.restore_ready == false, label, "rejection")
+
+func _capture_reject(subject: Variant, code: String, label: String) -> void:
+	var result: Dictionary = adapter.capture_values(subject, CONTENT_FIXTURE)
+	check(not result.ok and result.code == code and not result.has("values") and not result.has("record") \
+		and result.restore_ready == false, label, "rejection")
+
+func _replace_tag(record: Dictionary, field: String, value: Dictionary) -> Dictionary:
+	var changed: Dictionary = record.duplicate(true)
+	var found := false
+	for entry in changed.values.entries:
+		if entry[0].t == "string" and entry[0].v == field:
+			entry[1] = value
+			found = true
+	check(found, "encoded field replacement identifies exact key", "fixture")
+	return changed
+
+func _cases() -> void:
+	var battle = battle_script.new()
+	var actual_map = map_script.new()
+	check(battle.get_script() == battle_script and actual_map.get_script() == map_script,
+		"actual production Battle and GameMap instances")
+	check(not battle.is_inside_tree() and not actual_map.is_inside_tree(),
+		"real objects remain outside simulation tree", "environment")
+	_capture_reject(battle, "MAP_INSTANCE", "unbound Battle map refused before dimension reads")
+	battle.map = actual_map
+	var events: Dictionary = {"count": 0}
+	battle.ready.connect(func() -> void: events.count += 1)
+	actual_map.ready.connect(func() -> void: events.count += 1)
+	var initial: Dictionary = adapter.capture_values(battle, CONTENT_FIXTURE)
+	check(initial.ok and not initial.arrays_initialized and not initial.restore_ready,
+		"disabled constructor fog with three empty arrays captured")
+	if not initial.ok:
+		battle.free()
+		actual_map.free()
+		return
+	var initial_checked: Dictionary = adapter.validate_record(_hop(initial.record), CONTENT_FIXTURE,
+		Vector2i(actual_map.w, actual_map.h))
+	check(initial_checked.ok and not initial_checked.arrays_initialized and not initial_checked.values.fog \
+		and initial_checked.values._vision.is_empty() and initial_checked.values._sight_now.is_empty() \
+		and initial_checked.values._reveal_t.is_empty(), "disabled empty fog validates without initializing resources")
+	check(initial.coverage.fog_fields == ["fog", "_vision", "_sight_now", "_reveal_t", "_fog_t"] \
+		and initial.coverage.captured_battle_fog_values == 5 and initial.coverage.captured_map_dimension_values == 2 \
+		and not initial.coverage.battle_state_complete and not initial.coverage.map_state_complete \
+		and not initial.coverage.lit_cells_captured and not initial.coverage.unit_visibility_reconciled \
+		and not initial.coverage.render_resources_rebuilt and not initial.coverage.snapshot_barrier_implemented,
+		"five fog values never imply map Battle render or snapshot completion")
+
+	_populate(battle, actual_map, 60, 60)
+	var small_bits := PackedByteArray([1, 0, 0, 0])
+	battle._reveal_t[0] = -0.0
+	battle._reveal_t[1] = small_bits.decode_float(0)
+	battle._reveal_t[2] = 0.1
+	battle._reveal_t[3] = 16777217.0
+	battle._reveal_t[4] = 3.4028234663852886e38
+	var before_vision: PackedByteArray = battle._vision.duplicate()
+	var before_sight: PackedByteArray = battle._sight_now.duplicate()
+	var before_reveal: PackedFloat32Array = battle._reveal_t.duplicate()
+	var before_phase: String = _f64(battle._fog_t)
+	seed(461873)
+	var expected_random: int = randi()
+	seed(461873)
+	var captured: Dictionary = adapter.capture_values(battle, CONTENT_FIXTURE)
+	check(captured.ok and captured.arrays_initialized, "standard 60 by 60 fog captured with actual map dimensions")
+	if not captured.ok:
+		battle.free()
+		actual_map.free()
+		return
+	var checked: Dictionary = adapter.validate_record(_hop(captured.record), CONTENT_FIXTURE, Vector2i(60, 60))
+	check(checked.ok and checked.values.size() == 7, "real JSON fog record validates all seven explicit values")
+	if not checked.ok:
+		battle.free()
+		actual_map.free()
+		return
+	check(randi() == expected_random, "capture JSON hop and validation consume no gameplay RNG")
+	check(typeof(checked.values.map_w) == TYPE_INT and typeof(checked.values.map_h) == TYPE_INT \
+		and checked.values.map_w == 60 and checked.values.map_h == 60,
+		"dimensions retain exact integer type through JSON")
+	check(typeof(checked.values._vision) == TYPE_PACKED_BYTE_ARRAY and typeof(checked.values._sight_now) == TYPE_PACKED_BYTE_ARRAY \
+		and checked.values._vision == before_vision and checked.values._sight_now == before_sight,
+		"both packed byte arrays retain length order and exact states")
+	check(typeof(checked.values._reveal_t) == TYPE_PACKED_FLOAT32_ARRAY \
+		and _f32(checked.values._reveal_t) == _f32(before_reveal),
+		"float32 reveal bits survive actual JSON including signed zero subnormal and rounding")
+	check(before_reveal[3] == 16777216.0 and _f32(PackedFloat32Array([checked.values._reveal_t[0]])) == "00000080",
+		"QA proves float32 input rounding and negative zero were actually present", "fixture")
+	check(_f32(PackedFloat32Array([before_reveal[1]])) == "01000000" \
+		and _f32(PackedFloat32Array([before_reveal[2]])) == "cdcccc3d" \
+		and _f32(PackedFloat32Array([before_reveal[4]])) == "ffff7f7f",
+		"QA proves subnormal decimal rounding and maximum finite float32 input bits", "fixture")
+	check(typeof(checked.values._fog_t) == TYPE_FLOAT and _f64(checked.values._fog_t) == before_phase,
+		"fog phase retains native float64 bits without reset or float32 conversion")
+	var wire: Dictionary = checked.values.duplicate(true)
+	wire._vision = Array(wire._vision)
+	wire._sight_now = Array(wire._sight_now)
+	var canonical: Dictionary = codec.encode(wire)
+	check(canonical.ok and JSON.stringify(canonical.value, "", false) == JSON.stringify(captured.record.values, "", false),
+		"fog native values canonically reencode to the complete original tree")
+	for index in [0, 1, 2, 59, 60, 3599]:
+		var cell := Vector2i(index % 60, int(index / 60))
+		var point: Vector2 = actual_map.cell_to_world(cell)
+		check(battle.is_visible_world(point) == (checked.values._sight_now[index] == 1 or checked.values._reveal_t[index] > 0.0) \
+			and battle.is_lit_world(point) == (checked.values._vision[index] == 2) \
+			and battle.is_explored_world(point) == (checked.values._vision[index] != 0),
+			"captured cells agree with original visibility consumers at index %d" % index)
+	check(battle._vision == before_vision and battle._sight_now == before_sight \
+		and _f32(battle._reveal_t) == _f32(before_reveal) and _f64(battle._fog_t) == before_phase,
+		"capture validation and read-only consumers leave live fog unchanged")
+	checked.values._vision[0] = 1
+	checked.values._sight_now[0] = 1
+	checked.values._reveal_t[0] = 91.0
+	check(battle._vision == before_vision and battle._sight_now == before_sight \
+		and _f32(battle._reveal_t) == _f32(before_reveal), "decoded packed buffers do not alias live Battle arrays")
+
+	_populate(battle, actual_map, 7, 3)
+	var rectangular: Dictionary = adapter.capture_values(battle, CONTENT_FIXTURE)
+	check(rectangular.ok, "non-square actual map dimensions are captured instead of assuming 60 by 60")
+	var record: Dictionary = _hop(rectangular.record) if rectangular.ok else {}
+	var rectangle_checked: Dictionary = adapter.validate_record(record, CONTENT_FIXTURE, Vector2i(7, 3))
+	check(rectangle_checked.ok and rectangle_checked.values._vision.size() == 21 \
+		and rectangle_checked.values.map_w == 7 and rectangle_checked.values.map_h == 3,
+		"non-square map validates with independent expected dimensions")
+	if not rectangle_checked.ok:
+		battle.free()
+		actual_map.free()
+		return
+	_reject(record, "DIMENSION_MISMATCH", "same cell count with transposed dimensions refused", Vector2i(3, 7))
+	for bad_expected in [Vector2(7, 3), [7, 3], Vector2i(0, 3), Vector2i(257, 1)]:
+		var result: Dictionary = adapter.validate_record(record, CONTENT_FIXTURE, bad_expected)
+		check(not result.ok and result.code == "EXPECTED_DIMENSIONS", "invalid externally expected dimensions refused", "rejection")
+	var changed: Dictionary = record.duplicate(true)
+	changed.erase("map_source_lf")
+	_reject(changed, "RECORD_FIELDS", "missing wrapper field refused")
+	changed = record.duplicate(true)
+	changed["render_resource"] = "unexpected"
+	_reject(changed, "RECORD_FIELDS", "extra wrapper field refused")
+	changed = record.duplicate(true)
+	changed.schema = "unknown"
+	_reject(changed, "SCHEMA", "unknown fog schema refused")
+	for field in ["battle_source_lf", "map_source_lf"]:
+		changed = record.duplicate(true)
+		changed[field] = CONTENT_FIXTURE
+		_reject(changed, "SOURCE_CONTRACT", "wrong source refused: " + field)
+	changed = record.duplicate(true)
+	changed.content_fingerprint = "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+	_reject(changed, "CONTENT_FINGERPRINT", "content fingerprint mismatch refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v.erase("_fog_t")), "VALUE_FIELDS", "missing fog phase refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v["lit_cells"] = {}), "VALUE_FIELDS", "undeclared highlight field refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v.map_w = 7.0), "DIMENSION_TYPE", "floating dimension refused without coercion")
+	_reject(_repack(record, func(v: Dictionary) -> void: v.map_w = 0), "DIMENSION_BOUND", "zero axis refused before cell allocation")
+	_reject(_repack(record, func(v: Dictionary) -> void: v.map_h = -3), "DIMENSION_BOUND", "negative axis refused before multiplication")
+	_reject(_repack(record, func(v: Dictionary) -> void: v.map_w = 9223372036854775807), "DIMENSION_BOUND", "int64 maximum axis refused before multiplication")
+	_reject(_repack(record, func(v: Dictionary) -> void: v.map_w = 257), "DIMENSION_BOUND", "axis budget refused")
+	_reject(_repack(record, func(v: Dictionary) -> void:
+		v.map_w = 65
+		v.map_h = 65), "CELL_LIMIT", "cell budget refused before array traversal")
+	_reject(_repack(record, func(v: Dictionary) -> void: v.fog = 1), "FOG_FLAG", "integer fog flag refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v._vision.pop_back()), "ARRAY_LENGTH", "truncated vision buffer refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v._sight_now.append(0)), "ARRAY_LENGTH", "extra sight byte refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v._reveal_t.resize(20)), "ARRAY_LENGTH", "mismatched reveal buffer refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v._vision = "not bytes"), "BYTE_ARRAY_TYPE", "wrong byte transport type refused")
+	for wrong_byte in [-1, 3, 256, 0.0, true]:
+		_reject(_repack(record, func(v: Dictionary) -> void: v._vision[0] = wrong_byte), "VISION_DOMAIN",
+			"invalid vision value refused before byte conversion: " + str(wrong_byte))
+	_reject(_repack(record, func(v: Dictionary) -> void: v._sight_now[0] = 2), "SIGHT_DOMAIN", "sight bit above one refused")
+	_reject(_repack(record, func(v: Dictionary) -> void: v._reveal_t = Array(v._reveal_t)), "REVEAL_TYPE", "ordinary float array cannot replace PackedFloat32Array")
+	_reject(_repack(record, func(v: Dictionary) -> void: v._reveal_t[0] = -0.1), "REVEAL_DOMAIN", "negative reveal time refused")
+	for bad_phase in [-0.001, 0.180001, 0]:
+		_reject(_repack(record, func(v: Dictionary) -> void: v._fog_t = bad_phase), "FOG_PHASE", "invalid completed-callback phase refused: " + str(bad_phase))
+	for phase in [-0.0, 0.0, 0.18]:
+		battle._fog_t = phase
+		var phase_capture: Dictionary = adapter.capture_values(battle, CONTENT_FIXTURE)
+		var phase_checked: Dictionary = adapter.validate_record(_hop(phase_capture.record), CONTENT_FIXTURE, Vector2i(7, 3))
+		check(phase_checked.ok and _f64(phase_checked.values._fog_t) == _f64(phase), "inclusive fog phase boundary preserves exact bits")
+	for nonfinite in [INF, NAN]:
+		battle._reveal_t[0] = nonfinite
+		_capture_reject(battle, "REVEAL_DOMAIN", "live non-finite float32 reveal refused before encoding")
+		battle._reveal_t[0] = 0.0
+		battle._fog_t = nonfinite
+		_capture_reject(battle, "FOG_PHASE", "live non-finite phase refused before encoding")
+		battle._fog_t = 0.0
+	_reject(_replace_tag(record, "_reveal_t", {"t": "packed_f32", "v": "0000807f"}), "CODEC_NON_FINITE", "encoded float32 infinity refused")
+	_reject(_replace_tag(record, "_fog_t", {"t": "f64", "v": "000000000000f87f"}), "CODEC_NON_FINITE", "encoded float64 NaN refused")
+	_reject(_replace_tag(record, "_vision", {"t": "Object", "v": "do not load"}), "CODEC_UNKNOWN_TAG", "Object tag refused without execution")
+	changed = record.duplicate(true)
+	changed.values.entries[0][1] = changed.values
+	_reject(changed, "CODEC_CYCLE", "recursive encoded tree refused without stringify")
+	changed.values.entries[0][1] = {"t": "int64", "v": "7"}
+	var oversized: Array = []
+	oversized.resize(32769)
+	_reject(_replace_tag(record, "_vision", {"t": "array", "v": oversized}), "CODEC_NODE_LIMIT", "oversized encoded array refused before child traversal")
+	var wrong := WrongObject.new()
+	_capture_reject(wrong, "BATTLE_INSTANCE", "different Object rejected before Battle field reads")
+	check(wrong.calls == 0, "wrong Object property list and string hooks are not invoked")
+	var dead_battle = battle_script.new()
+	dead_battle.free()
+	_capture_reject(dead_battle, "BATTLE_INSTANCE", "freed Battle refused before member reads")
+	var dead_map = map_script.new()
+	battle.map = dead_map
+	dead_map.free()
+	_capture_reject(battle, "MAP_INSTANCE", "freed typed GameMap reference refused before dimension reads")
+	battle.map = actual_map
+	var changed_script := GDScript.new()
+	changed_script.source_code = "extends RefCounted\n"
+	var wrong_source = adapter_script.new(changed_script, map_script, codec_script)
+	var source_result: Dictionary = wrong_source.capture_values(battle, CONTENT_FIXTURE)
+	check(not source_result.ok and source_result.code == "SOURCE_CONTRACT", "changed Battle source rejected before capture", "rejection")
+	_populate(battle, actual_map, 64, 64)
+	var maximum: Dictionary = adapter.capture_values(battle, CONTENT_FIXTURE)
+	check(maximum.ok, "exact 4096-cell budget fits one whole-tree codec budget")
+	if maximum.ok:
+		var maximum_checked: Dictionary = adapter.validate_record(_hop(maximum.record), CONTENT_FIXTURE, Vector2i(64, 64))
+		check(maximum_checked.ok and maximum_checked.values._vision.size() == 4096, "exact cell limit survives real JSON")
+	battle.fog = false
+	var disabled: Dictionary = adapter.capture_values(battle, CONTENT_FIXTURE)
+	check(disabled.ok and disabled.arrays_initialized, "disabled materialized fog retains remembered buffers")
+	actual_map.w = 65
+	actual_map.h = 65
+	_capture_reject(battle, "CELL_LIMIT", "live over-budget dimensions refused before buffer copy")
+	actual_map.w = 64
+	actual_map.h = 64
+	battle._vision = PackedByteArray()
+	battle._sight_now = PackedByteArray()
+	battle._reveal_t = PackedFloat32Array()
+	battle.fog = true
+	_capture_reject(battle, "ARRAY_LENGTH", "enabled fog cannot use empty constructor buffers")
+	check(events.count == 0 and battle.world == null and battle._vision_img == null and battle._fog_tex == null \
+		and battle._fog_layer == null and actual_map.grid.is_empty() and actual_map._block_count.is_empty() \
+		and not battle.is_inside_tree() and not actual_map.is_inside_tree(),
+		"no ready deploy fog pass render resource or map baking side effects")
+	battle.map = null
+	battle.free()
+	actual_map.free()
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("BATTLE_FOG_QA_MANIFEST")
+	if manifest_path.is_empty() or not FileAccess.file_exists(manifest_path):
+		push_error("Battle fog QA requires a root-owned private manifest")
+		quit(2)
+		return
+	var input := FileAccess.open(manifest_path, FileAccess.READ)
+	if input == null or input.get_length() < 2 or input.get_length() > 65536:
+		push_error("Battle fog QA manifest size or open rejected")
+		quit(2)
+		return
+	var text: String = input.get_as_text()
+	input.close()
+	var parser := JSON.new()
+	if parser.parse(text) != OK or typeof(parser.data) != TYPE_DICTIONARY:
+		push_error("Battle fog QA manifest must be a JSON Dictionary")
+		quit(2)
+		return
+	var manifest: Dictionary = parser.data
+	for field in ["run_id", "run_dir", "private_user", "report"]:
+		if not manifest.has(field) or typeof(manifest[field]) != TYPE_STRING or manifest[field].is_empty():
+			push_error("Battle fog QA manifest missing required String")
+			quit(2)
+			return
+	if not manifest.has("source_sha256") or typeof(manifest.source_sha256) != TYPE_DICTIONARY:
+		push_error("Battle fog QA manifest missing source hashes")
+		quit(2)
+		return
+	var run_dir: String = _normalize(manifest.run_dir)
+	var report_path: String = _normalize(manifest.report)
+	var private_user: String = _normalize(manifest.private_user)
+	var runs_dir: String = _normalize(ProjectSettings.globalize_path("res://scratchpad/run_battle_fog_state/runs"))
+	if run_dir.get_base_dir() != runs_dir or run_dir.get_file() != manifest.run_id \
+			or _normalize(manifest_path) != run_dir + "/manifest.json" or report_path != run_dir + "/report.json" \
+			or not private_user.begins_with(run_dir + "/private_profile/") or FileAccess.file_exists(report_path):
+		push_error("Battle fog QA paths must remain in the new root-owned run")
+		quit(2)
+		return
+	var manifest_sha: String = FileAccess.get_sha256(manifest_path)
+	check(_normalize(OS.get_user_data_dir()) == private_user, "parent-isolated actual profile", "environment")
+	check(manifest.source_sha256.size() == SOURCE_PATHS.size(), "exact five runtime source entries", "source")
+	var before: Dictionary = _source_pins(manifest.source_sha256, "runtime source ")
+	if not failures.is_empty():
+		push_error("Battle fog QA source or actual private environment mismatch")
+		quit(2)
+		return
+	battle_script = load("res://scripts/battle.gd") as GDScript
+	map_script = load("res://scripts/game_map.gd") as GDScript
+	codec_script = load("res://scripts/run_state_value_codec.gd") as GDScript
+	adapter_script = load("res://scratchpad/run_battle_fog_state/fog_values.gd") as GDScript
+	check(battle_script != null and map_script != null and codec_script != null and adapter_script != null,
+		"real Battle map codec and adapter scripts loaded", "environment")
+	if battle_script == null or map_script == null or codec_script == null or adapter_script == null:
+		quit(2)
+		return
+	codec = codec_script.new()
+	adapter = adapter_script.new(battle_script, map_script, codec_script)
+	_cases()
+	var after: Dictionary = _source_pins(manifest.source_sha256, "source unchanged ")
+	check(before == after, "five runtime source files unchanged", "source")
+	check(FileAccess.get_sha256(manifest_path) == manifest_sha, "root manifest raw bytes unchanged", "source")
+	var groups: Dictionary = {}
+	for row in checks: groups[row.group] = int(groups.get(row.group, 0)) + 1
+	var report: Dictionary = {"schema": 1, "run_id": manifest.run_id, "manifest_sha256": manifest_sha,
+		"passed": not checks.is_empty() and failures.is_empty(),
+		"checks": checks, "check_count": checks.size(), "check_groups": groups, "failures": failures,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(), "engine": Engine.get_version_info(),
+		"source_sha256": before, "source_after_sha256": after, "real_battle_and_map_objects": true, "objects_outside_simulation_tree": true,
+		"capture_validate_only": true, "assignment_restore_implemented": false, "render_resources_rebuilt": false,
+		"snapshot_barrier_implemented": false, "unit_visibility_reconciled": false, "battle_resume_tested": false,
+		"restore_ready": false, "coverage": adapter.coverage()}
+	if FileAccess.file_exists(report_path):
+		push_error("Battle fog QA refuses an existing report")
+		quit(2)
+		return
+	var file := FileAccess.open(report_path, FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot create battle fog QA report")
+		quit(2)
+		return
+	var stored: bool = file.store_string(JSON.stringify(report, "\t", false) + "\n")
+	file.flush()
+	var error: int = file.get_error()
+	file.close()
+	if not stored or error != OK:
+		push_error("Incomplete battle fog QA report write")
+		quit(2)
+		return
+	print("[battle-fog-state QA] " + JSON.stringify(report, "", false))
+	quit(0 if report.passed else 1)

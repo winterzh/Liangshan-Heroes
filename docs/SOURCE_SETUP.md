@@ -1,3 +1,9 @@
+## 2026-09-07 迷雾局部值复现
+
+正常启动不变，仍没有可用的“继续本局”。迷雾适配只在真实Battle/Map的树外实例上完成采集/验证。说明见[迷雾状态](RUN_BATTLE_FOG_20260907.md)，原文与恢复路径在 `tools/contracts/run_battle_fog_20260907/`，182条实际证据在 `qa/run_battle_fog_20260907/`。
+
+按冻结合同在专用相容checkout还原原路径后先只读预检，再由根任务在共用Godot锁下串行运行。新入口使用BATTLE_FOG_QA_MANIFEST，创建新的run与私有用户目录，不复制或使用实际玩家存档。原准备README/pins不能改成已测状态；实际结果见独立收据。禁止从归档文本直接启动，或混入其他版本的controller/helper。
+
 ## 2026-09-07 Unit 引用、物品栏与主体诊断
 
 正常游戏启动方式保持；当前仍无可用的“保存退出/继续本局”。[Unit 引用](RUN_UNIT_REFERENCES_20260907.md)和[物品栏](RUN_INVENTORY_VALUES_20260907.md)仅为经过实机采集/验证的草稿，原代码分别封存于 `qa/run_unit_references_20260907/` 和 `tools/contracts/run_inventory_values_20260906/`。按各归档 README 恢复精确原路径和版本后才预检/串行复验；不要直接从归档运行、覆盖其他工作或修改旧 pins 消除来源错误。

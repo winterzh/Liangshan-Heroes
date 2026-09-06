@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "STATIC_PREPARATION_ONLY",
+  "pins": {
+    "bytes": 2955,
+    "raw_sha256": "d34da511410b22d5de031ccece3d5b0aadd6a12ecc4e2ecefead7ac4e1d91987",
+    "lf_sha256": "d34da511410b22d5de031ccece3d5b0aadd6a12ecc4e2ecefead7ac4e1d91987"
+  },
+  "static_checks": [
+    "Actual Battle fog declarations 173-180 and map dimensions 47-48 matched; standard60x60 is a fixture, not global assumption.",
+    "Frozen Battle/Map/codec LF source constants match current raw/LF identities.",
+    "Adapter has unique methods, one whole-tree encode/decode each, no gameplay, fog pass, render, IO or RNG calls.",
+    "Axes/cell and array lengths precede iteration/conversion; byte domains precede PackedByteArray construction.",
+    "4096-cell codec cost arithmetic 12303 nodes / 820910 byte bound, below frozen limits; runtime maximum test still pending.",
+    "QA uses runtime loads after autoload; concrete inferred locals only; actual Battle and Map stay outside simulation tree.",
+    "Real JSON and input-bit fixtures present; source/manifest identity and private-user protocol declared.",
+    "24 mandatory key labels appear exactly once as literal QA check labels."
+  ],
+  "godot_runs": 0,
+  "gdscript_parser_run": false,
+  "production_writes": 0,
+  "shared_controller_writes": 0,
+  "git_run": false,
+  "limitations": "Static source/shape/arithmetic checks are not Godot parse or runtime evidence. No actual check count or pass claim."
+}

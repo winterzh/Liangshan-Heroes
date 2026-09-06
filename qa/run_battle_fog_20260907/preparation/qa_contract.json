@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "state": "FROZEN_PREPARED_NOT_GODOT_RUN",
+  "suite": "battle-fog",
+  "entry": "res://scratchpad/run_battle_fog_state/qa_driver.gd",
+  "manifest_environment": "BATTLE_FOG_QA_MANIFEST",
+  "manifest_path": "scratchpad/run_battle_fog_state/runs/<run_id>/manifest.json",
+  "manifest_required_fields": [
+    "run_id",
+    "run_dir",
+    "private_user",
+    "report",
+    "source_sha256"
+  ],
+  "manifest_source_paths": [
+    "scripts/battle.gd",
+    "scripts/game_map.gd",
+    "scripts/run_state_value_codec.gd",
+    "scratchpad/run_battle_fog_state/fog_values.gd",
+    "scratchpad/run_battle_fog_state/qa_driver.gd"
+  ],
+  "manifest_paths": "run_dir must be direct child of this suite runs and basename==run_id; manifest exactly run_dir/manifest.json; report exactly new run_dir/report.json; private_user below run_dir/private_profile and equals actual user directory",
+  "source_policy": "five runtime raw SHA values matched to manifest before and after; manifest raw SHA unchanged; root additionally owns full source and player guards",
+  "stdout_report_prefix": "[battle-fog-state QA] ",
+  "required_key_labels_once": [
+    "actual production Battle and GameMap instances",
+    "real objects remain outside simulation tree",
+    "disabled constructor fog with three empty arrays captured",
+    "five fog values never imply map Battle render or snapshot completion",
+    "standard 60 by 60 fog captured with actual map dimensions",
+    "real JSON fog record validates all seven explicit values",
+    "capture JSON hop and validation consume no gameplay RNG",
+    "both packed byte arrays retain length order and exact states",
+    "float32 reveal bits survive actual JSON including signed zero subnormal and rounding",
+    "QA proves subnormal decimal rounding and maximum finite float32 input bits",
+    "fog phase retains native float64 bits without reset or float32 conversion",
+    "fog native values canonically reencode to the complete original tree",
+    "decoded packed buffers do not alias live Battle arrays",
+    "non-square map validates with independent expected dimensions",
+    "same cell count with transposed dimensions refused",
+    "int64 maximum axis refused before multiplication",
+    "cell budget refused before array traversal",
+    "encoded float32 infinity refused",
+    "recursive encoded tree refused without stringify",
+    "freed typed GameMap reference refused before dimension reads",
+    "exact 4096-cell budget fits one whole-tree codec budget",
+    "exact cell limit survives real JSON",
+    "enabled fog cannot use empty constructor buffers",
+    "no ready deploy fog pass render resource or map baking side effects"
+  ],
+  "allowed_check_groups": [
+    "behavior",
+    "rejection",
+    "json",
+    "fixture",
+    "source",
+    "environment"
+  ],
+  "expected_completed_source_group_count": 13,
+  "source_group_explanation": "5 runtime source +5 source unchanged +1 exact entry count +1 aggregate file equality +1 manifest equality; do not count as functional cases",
+  "expected_total_check_count": null,
+  "required_true_report_fields": [
+    "passed",
+    "real_battle_and_map_objects",
+    "objects_outside_simulation_tree",
+    "capture_validate_only"
+  ],
+  "required_false_report_fields": [
+    "assignment_restore_implemented",
+    "render_resources_rebuilt",
+    "snapshot_barrier_implemented",
+    "unit_visibility_reconciled",
+    "battle_resume_tested",
+    "restore_ready"
+  ],
+  "required_report_identity": [
+    "run_id",
+    "manifest_sha256",
+    "process_id",
+    "actual_user_dir",
+    "engine",
+    "source_sha256",
+    "source_after_sha256"
+  ],
+  "required_result_checks": [
+    "nonempty checks list; every passed is true; nonempty label and known group",
+    "check_count equals length; check_groups equals actual counts; failures empty",
+    "each required key label appears exactly once",
+    "stdout sole JSON marker semantically equals report file",
+    "self PID equals exact owned child; manifest SHA and run_id exact; before/after hashes exact",
+    "actual user matches private environment; strict Unicode/parser/ERROR/WARNING/FAIL log clean",
+    "exit0 and child exit confirmed; full source/player before-after verification; lock released after owned child termination"
+  ],
+  "external_environment": "root-owned new APPDATA/LOCALAPPDATA/TEMP/TMP; no HOME override; existing QA/update suppression flags as appropriate; no engine concurrent with other runs; actual non-console exe",
+  "prohibited": [
+    "new runner framework",
+    "shared controller edits in this subtask",
+    "Godot run during preparation",
+    "production changes",
+    "whole private_profile archive"
+  ],
+  "known_unrun_boundary": [
+    "Queued-deletion Battle/Map guards exist but are not an extra QA case in this bounded batch."
+  ],
+  "restore_ready": false
+}
