@@ -1,5 +1,7 @@
 # 2026-09-07 Windows Steam 更新
 
+后续公告：2026-09-07 01:44 HKT 已公开发布[《9 月 7 日更新：操作体验与问题修复》](https://store.steampowered.com/news/app/5088120/view/708907988310558255)，关联 Build25154403；中文标题与四项更新内容已在公开页面回读确认，另附同义英文版。详见[公告发布记录](STEAM_ANNOUNCEMENT_20260907.md)与独立公告 QA 收据；原构建 QA 归档保持当时的历史状态。
+
 本轮已从 stable 源码 `443e75e887afd76f9569cae17b0527a72408aedc` 构建并上传 Windows 更新，Steam BuildID **25154403**、Depot Manifest **596698599141519420**。服务端文件名、大小和 SHA1 与已验证 EXE 完全一致。已回读确认 default 为25154403，Windows更新已上线；实际状态见[发布收据](../qa/steam_update_20260907/PUBLISH_STATUS.json)。
 
 ## 本次变化
