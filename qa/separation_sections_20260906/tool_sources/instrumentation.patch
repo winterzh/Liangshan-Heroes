@@ -1,0 +1,61 @@
+--- a/scripts/battle.gd
++++ b/scripts/battle.gd
+@@ -1,5 +1,6 @@
+ class_name Battle
+ extends Node2D
++const SeparationDiag = preload("res://scratchpad/separation_sections_diag/generated/ledger.gd")
+ const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
+ const WorldShadow := preload("res://scripts/world_shadow.gd")
+ ## 通用战斗运行器：加载一个 LevelBase 关卡，提供地图/单位/相机/HUD 与全部通用系统
+@@ -5417,9 +5418,11 @@
+ 	# Buffering wins for dense medium crowds. Keep the direct
+ 	# path for sparse/small groups and the phased path above 320 movers.
+ 	if _mob_count >= 64 and _mob_count <= 320 and _mob_grid.size() * 2 < _mob_count:
++		SeparationDiag.dispatched(0, _mob_count, _mob_grid.size())
+ 		preload("res://scripts/crowd_separation.gd").solve(units, _mob_grid, map, GRID_CELL)
+ 		return
+ 	var stagger := _mob_count > 320
++	SeparationDiag.dispatched(2 if stagger else 1, _mob_count, _mob_grid.size())
+ 	for a: Unit in units:
+ 		if a.is_building or a.is_resource or a.hp <= 0.0 or a.garrisoned or a.story_outcome != "":
+ 			continue
+--- a/scripts/crowd_separation.gd
++++ b/scripts/crowd_separation.gd
+@@ -1,4 +1,5 @@
+ extends RefCounted
++const SeparationDiag = preload("res://scratchpad/separation_sections_diag/generated/ledger.gd")
+ ## Snapshot a complete synchronous pass over 64-320 densely grouped movers.
+ ## Sparse/small groups and phased crowds use Battle's direct loop. Buffers are local so
+ ## PackedArray updates do not keep a second property-held copy alive.
+@@ -8,6 +9,7 @@
+ const NAV_OPEN := 8  # Current position stays in open navigation during this synchronous solve.
+ 
+ static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: float) -> void:
++	var __separation_t: int = SeparationDiag.begin_solve()
+ 	var sources: Array[Unit] = []
+ 	var indexes: Dictionary = {}
+ 	var order: Array[int] = []
+@@ -58,6 +60,7 @@
+ 			if not nav.is_point_solid(cell):
+ 				flags[i] |= NAV_OPEN
+ 				nav_rects[i] = Rect2(Vector2(cell) * GameMap.CELL,Vector2.ONE * GameMap.CELL)
++	__separation_t = SeparationDiag.stage(0, __separation_t)
+ 	var profile_cells := {}
+ 	for cell in buckets:
+ 		var groups := {}
+@@ -76,6 +79,7 @@
+ 			# Keep original neighbor order. Inactive and different-profile entries
+ 			# were unconditional rejects; an ID maximum can reject whole buckets.
+ 			profile_cells[profile][cell] = [group[0],PackedInt32Array(group[1])]
++	__separation_t = SeparationDiag.stage(1, __separation_t)
+ 	for ai: int in order:
+ 		var aid := ids[ai]
+ 		var ap := positions[ai]
+@@ -128,5 +132,7 @@
+ 						nav_rects[bi]=Rect2(Vector2(Vector2i(next_b / float(GameMap.CELL))) * GameMap.CELL,Vector2.ONE * GameMap.CELL)
+ 		positions[ai]=ap
+ 		nav_rects[ai]=a_nav
++	__separation_t = SeparationDiag.stage(2, __separation_t)
+ 	for i in range(count):
+ 		if sources[i].position != positions[i]: sources[i].position=positions[i]
++	SeparationDiag.end_solve(__separation_t)

@@ -1,0 +1,21 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+ERROR: Condition "len == 0" is true. Returning: FAILED
+   at: update (core/crypto/hashing_context.cpp:53)
+   GDScript backtrace (most recent call first):
+       [0] _digest (res://scratchpad/run_save_store/run_save_store.gd:33)
+       [1] _decode (res://scratchpad/run_save_store/run_save_store.gd:137)
+       [2] _read_verified (res://scratchpad/run_save_store/run_save_store.gd:149)
+       [3] read_slot (res://scratchpad/run_save_store/run_save_store.gd:161)
+       [4] _single (res://qa/qa_driver.gd:173)
+       [5] _run (res://qa/qa_driver.gd:228)
+ERROR: Condition "len == 0" is true. Returning: FAILED
+   at: update (core/crypto/hashing_context.cpp:53)
+   GDScript backtrace (most recent call first):
+       [0] _digest (res://scratchpad/run_save_store/run_save_store.gd:33)
+       [1] _decode (res://scratchpad/run_save_store/run_save_store.gd:137)
+       [2] _read_verified (res://scratchpad/run_save_store/run_save_store.gd:149)
+       [3] save_payload (res://scratchpad/run_save_store/run_save_store.gd:200)
+       [4] _single (res://qa/qa_driver.gd:175)
+       [5] _run (res://qa/qa_driver.gd:228)
+[store-disk QA] case=empty_payload phase=single checks=25 failures=0

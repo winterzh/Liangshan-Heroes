@@ -1,0 +1,149 @@
+{
+  "schema": 1,
+  "passed": true,
+  "checks": 23,
+  "results": [
+    {
+      "label": "exact source plus declared canonical UID",
+      "passed": true,
+      "expected": "accept"
+    },
+    {
+      "label": "source byte drift",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Private source/metadata differs from exact reconstructed original: ['scripts/b.gd']"
+    },
+    {
+      "label": "existing UID rewritten",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Private source/metadata differs from exact reconstructed original: ['scripts/a.gd.uid']"
+    },
+    {
+      "label": "undeclared new UID",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Unexpected private source-side addition"
+    },
+    {
+      "label": "missing required source",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Private source/metadata differs from exact reconstructed original: ['scripts/a.gd']"
+    },
+    {
+      "label": "invalid declared UID bytes",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Invalid declared generated UID: scripts/b.gd.uid"
+    },
+    {
+      "label": "previous partial-import UID changed on second import",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Import modified pre-existing source or generated UID"
+    },
+    {
+      "label": "existing import exact CRLF to LF",
+      "passed": true,
+      "expected": "accept"
+    },
+    {
+      "label": "import parameter change",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Private source/metadata differs from exact reconstructed original: ['scripts/texture.png.import']"
+    },
+    {
+      "label": "import UID change",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Private source/metadata differs from exact reconstructed original: ['scripts/texture.png.import']"
+    },
+    {
+      "label": "import path change",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Private source/metadata differs from exact reconstructed original: ['scripts/texture.png.import']"
+    },
+    {
+      "label": "already LF metadata cannot revert to CRLF",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Import modified pre-existing source or generated UID"
+    },
+    {
+      "label": "non-import line-ending drift still rejected",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Private source/metadata differs from exact reconstructed original: ['scripts/a.gd']"
+    },
+    {
+      "label": "unchanged imported cache",
+      "passed": true,
+      "expected": "accept"
+    },
+    {
+      "label": "only new and updated shader cache allowed",
+      "passed": true,
+      "expected": "accept"
+    },
+    {
+      "label": "imported resource cache mutation",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Imported resource/class/UID/non-shader cache drift"
+    },
+    {
+      "label": "new unclassified cache file",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Imported resource/class/UID/non-shader cache drift"
+    },
+    {
+      "label": "UID cache removed",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Imported resource/class/UID/non-shader cache drift"
+    },
+    {
+      "label": "tar source reconstructed without extraction",
+      "passed": true,
+      "expected": "accept"
+    },
+    {
+      "label": "original archive raw hash drift",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Frozen base.tar changed"
+    },
+    {
+      "label": "tar parent traversal",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Unsafe archive member"
+    },
+    {
+      "label": "tar duplicate source",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Duplicate/case-colliding archive member"
+    },
+    {
+      "label": "tar case collision",
+      "passed": true,
+      "expected": "reject",
+      "observed": "Duplicate/case-colliding archive member"
+    }
+  ],
+  "godot_run": false,
+  "real_subprocesses_started": 0,
+  "temporary_fixtures_removed": true,
+  "failed_run_modified": false,
+  "inputs": {
+    "resume.py": "7d4e416b85ed3af125d0e648a099cdf46ec1b1232b173cefe2a6ee481388630b",
+    "launch.py": "79c9090f890c68d530b2bb6fa2a70b786513558f799d92d042a6448b42e13f99",
+    "resume_contract.json": "bb5360fc9078c9299aa68964c3df39ba25fe07853c984c34012300ae3c7e9505"
+  }
+}

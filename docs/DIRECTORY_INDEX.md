@@ -1,3 +1,11 @@
+## 2026-09-06 续玩基础与分离诊断
+
+- `docs/RUN_SAVE_FOUNDATION_20260906.md`：被测磁盘协议、49案例、历史失败及未接生产的边界。
+- `tools/contracts/run_save_store_draft_20260906/`：实测store、QA与runner原文、raw摘要及新checkout复现说明；GD按文本封存。
+- `qa/run_save_store_20260906/`：当前五场完整运行、历史失败、空摘要修复和白名单复制收据。
+- `qa/separation_sections_20260906/`：4baafc1分离内部10秒配对诊断、实际生成源、严格同钟分析、导入失败与后续恢复收据。
+- 两份QA和草稿合同有 `.gdignore` 与局部raw换行属性；均不含私有用户目录、fixture文件、Godot缓存或引擎。
+
 ## 2026-09-06 持续打磨 M2C
 
 - `docs/REDUCED_EFFECTS_20260906.md`、`docs/PHYSICS_COST_20260906.md`：可选特效、独立错误修复、同源性能结果与物理热点诊断。

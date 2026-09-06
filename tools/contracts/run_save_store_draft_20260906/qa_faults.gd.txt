@@ -1,0 +1,137 @@
+extends "res://scratchpad/run_save_store/run_save_store.gd"
+## Test-only narrow seams. All non-injected paths execute the pinned superclass.
+var fault := ""
+var events: Array = []
+var injection_errors: Array = []
+var checkpoint: Callable
+var committed := false
+var previous_reads := 0
+var injected := false
+
+func _init(directory: String, validator: Callable) -> void:
+	super(directory, validator)
+
+func _note(name: String, kind := "injected_boundary_result") -> void:
+	events.append({"event":name,"kind":kind})
+	injected = true
+
+func _replace_bytes(path: String, raw: PackedByteArray) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		injection_errors.append("fixture write open: " + path)
+		return
+	var stored: bool = file.store_buffer(raw)
+	file.flush()
+	var error: int = file.get_error()
+	file.close()
+	if not stored or error != OK: injection_errors.append("fixture write incomplete: " + path)
+
+func _changed_envelope(raw: PackedByteArray, semantic := false) -> PackedByteArray:
+	var data: Dictionary = JSON.parse_string(raw.get_string_from_utf8())
+	data.payload = data.payload.replace("two", "bad")
+	if semantic:
+		var bytes: PackedByteArray = data.payload.to_utf8_buffer()
+		data.payload_bytes = str(bytes.size())
+		data.payload_sha256 = _digest(bytes)
+	return (JSON.stringify(data, "", true) + "\n").to_utf8_buffer()
+
+func _pause_at(name: String) -> void:
+	if fault == "interrupt_" + name and checkpoint.is_valid():
+		_note(name, "real_completed_io_then_external_process_termination")
+		checkpoint.call(name)
+
+func _has_residue() -> bool:
+	var residue := super._has_residue()
+	if fault == "lock_race" and not residue and not injected:
+		_note("another cooperating writer acquires lock", "actual_filesystem_conflict")
+		var error := DirAccess.make_dir_absolute(_directory.path_join(LOCK))
+		if error != OK: injection_errors.append("cannot create conflicting lock")
+	return residue
+
+func _write_new(path: String, raw: PackedByteArray) -> Dictionary:
+	if fault == "write_open":
+		_note("write open rejected")
+		return _result("WRITE_OPEN", "QA boundary injection", ERR_FILE_CANT_OPEN)
+	if fault == "write_short":
+		_replace_bytes(path, raw.slice(0, int(raw.size() / 2)))
+		_note("partial temporary file closed", "real_partial_file_plus_injected_io_error")
+		return _result("WRITE_INCOMPLETE", "QA boundary injection", ERR_FILE_CANT_WRITE)
+	if fault == "pending_race":
+		_replace_bytes(path, "external-pending".to_utf8_buffer())
+		_note("pending appears before open", "actual_filesystem_conflict")
+	var result := super._write_new(path, raw)
+	if not result.ok: return result
+	match fault:
+		"temp_truncated":
+			_replace_bytes(path, raw.slice(0, 12))
+			_note("closed temporary truncated", "real_file_corruption")
+		"temp_digest", "temp_semantic":
+			_replace_bytes(path, _changed_envelope(raw, fault == "temp_semantic"))
+			_note("closed temporary changed", "real_file_corruption")
+		"temp_whitespace":
+			_replace_bytes(path, raw + " ".to_utf8_buffer())
+			_note("closed temporary bytes changed with identical meaning", "real_file_corruption")
+		"slot_changed":
+			var slot := _directory.path_join(SLOT)
+			_replace_bytes(slot, FileAccess.get_file_as_bytes(slot) + " ".to_utf8_buffer())
+			_note("external slot changed before replacement", "actual_filesystem_conflict")
+	_pause_at("temp_closed")
+	return result
+
+func _read_raw(path: String) -> Dictionary:
+	if path.ends_with(PREVIOUS): previous_reads += 1
+	if path.ends_with(TEMP) and fault in ["temp_read_open", "temp_read_incomplete"]:
+		_note("closed temporary read rejected")
+		return _result("READ_OPEN" if fault == "temp_read_open" else "READ_INCOMPLETE", "QA boundary injection", ERR_FILE_CANT_READ)
+	if path.ends_with(PREVIOUS) and fault == "backup_read" and previous_reads == 1:
+		_note("backup read rejected")
+		return _result("READ_OPEN", "QA boundary injection", ERR_FILE_CANT_READ)
+	if path.ends_with(PREVIOUS) and fault == "rollback_read" and previous_reads == 2:
+		_note("rollback verification read rejected")
+		return _result("READ_OPEN", "QA boundary injection", ERR_FILE_CANT_READ)
+	if path.ends_with(SLOT) and committed and fault == "final_read":
+		_note("final read rejected")
+		return _result("READ_OPEN", "QA boundary injection", ERR_FILE_CANT_READ)
+	if path.ends_with(PREVIOUS) and committed and previous_reads == 2 and fault == "backup_changed":
+		_replace_bytes(path, FileAccess.get_file_as_bytes(path) + " ".to_utf8_buffer())
+		_note("external backup changed before cleanup", "actual_filesystem_conflict")
+	var result := super._read_raw(path)
+	if result.ok and path.ends_with(PREVIOUS) and committed and previous_reads == 2 and fault == "cleanup_previous":
+		var error := FileAccess.set_read_only_attribute(path, true)
+		if error != OK: injection_errors.append("cannot set real backup read-only attribute")
+		_note("backup deletion denied by real Windows read-only attribute", "actual_os_permission_failure")
+	return result
+
+func _move_to_empty(from: String, to: String) -> int:
+	if from.ends_with(SLOT) and fault == "backup_move":
+		_note("backup move rejected")
+		return ERR_FILE_CANT_WRITE
+	if from.ends_with(TEMP):
+		if fault in ["replace_rollback", "replace_no_rollback", "rollback_read"]:
+			_note("pending to slot move rejected")
+			return ERR_FILE_CANT_WRITE
+		if fault == "replace_external":
+			_replace_bytes(to, "external-slot".to_utf8_buffer())
+			_note("external destination blocks commit", "actual_filesystem_conflict")
+	if from.ends_with(PREVIOUS) and fault == "replace_no_rollback":
+		_note("rollback move rejected")
+		return ERR_FILE_CANT_WRITE
+	var error := super._move_to_empty(from, to)
+	if error == OK:
+		if from.ends_with(SLOT): _pause_at("backup_moved")
+		if from.ends_with(TEMP):
+			committed = true
+			if fault == "final_corrupt":
+				_replace_bytes(to, "broken-new-slot".to_utf8_buffer())
+				_note("new slot corrupted before final read", "real_file_corruption")
+			_pause_at("committed")
+	return error
+
+func _save_locked(payload: PackedByteArray, had_old: bool, old_hash: String) -> Dictionary:
+	var result := super._save_locked(payload, had_old, old_hash)
+	if result.ok:
+		if fault == "cleanup_lock":
+			_replace_bytes(_directory.path_join(LOCK).path_join("held.txt"), "fixture-held".to_utf8_buffer())
+			_note("empty lock made nonempty before release", "actual_filesystem_conflict")
+		_pause_at("backup_removed")
+	return result

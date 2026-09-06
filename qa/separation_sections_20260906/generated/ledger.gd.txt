@@ -1,0 +1,166 @@
+extends RefCounted
+## All times use Time.get_ticks_usec(). Four spans cover the original synchronous solve.
+const STEP_CAP := 8192
+const FRAME_CAP := 32768
+const STEP_WIDTH := 17
+const PRESENT_WIDTH := 7
+const PROCESS_WIDTH := 3
+static var steps := PackedInt64Array()
+static var presents := PackedInt64Array()
+static var processes := PackedInt64Array()
+static var spans := PackedInt64Array()
+static var timed := false
+static var active := false
+static var measuring := false
+static var step_open := false
+static var in_solve := false
+static var overflow := false
+static var errors := 0
+static var step_count := 0
+static var present_count := 0
+static var process_count := 0
+static var tick := 0
+static var physics_id := -1
+static var process_id := -1
+static var physics_boundary_us := 0
+static var physics_boundary_id := -1
+static var step_observer_us := 0
+static var step_signal_us := 0
+static var dispatch_count := 0
+static var route := -1 # 0 buffered; 1 direct; 2 phased direct
+static var mobs := 0
+static var buckets := 0
+static var solve_calls := 0
+static var solve_completions := 0
+static var stage_mask := 0
+static var start_anchor := {}
+static var end_anchor := {}
+static var previous_present_us := 0
+static var previous_step_count := 0
+
+static func prepare(mode: String) -> void:
+	timed = mode == "timed"
+	steps.resize(STEP_CAP * STEP_WIDTH)
+	presents.resize(FRAME_CAP * PRESENT_WIDTH)
+	processes.resize(FRAME_CAP * PROCESS_WIDTH)
+	spans.resize(4)
+	active = true
+
+static func physics_boundary() -> void:
+	if not active: return
+	physics_boundary_us = Time.get_ticks_usec()
+	physics_boundary_id = Engine.get_physics_frames()
+
+static func process_boundary() -> void:
+	if not active or not measuring: return
+	if process_count >= FRAME_CAP:
+		overflow = true; return
+	var offset := process_count * PROCESS_WIDTH
+	processes[offset] = Time.get_ticks_usec()
+	processes[offset+1] = Engine.get_process_frames()
+	processes[offset+2] = Engine.get_physics_frames()
+	process_count += 1
+
+static func open_step(m1_tick: int) -> void:
+	if not active: return
+	if step_open or m1_tick != step_count + 1: errors += 1
+	tick = m1_tick
+	physics_id = Engine.get_physics_frames()
+	process_id = Engine.get_process_frames()
+	step_observer_us = Time.get_ticks_usec()
+	step_signal_us = physics_boundary_us
+	if physics_id != physics_boundary_id: errors += 1
+	dispatch_count = 0; route = -1; mobs = 0; buckets = 0
+	solve_calls = 0; solve_completions = 0; stage_mask = 0; in_solve = false
+	spans.fill(0)
+	step_open = true
+
+static func dispatched(path: int, mob_count: int, bucket_count: int) -> void:
+	if not active or not step_open: return
+	if Engine.get_physics_frames() != physics_id: errors += 1
+	dispatch_count += 1; route = path; mobs = mob_count; buckets = bucket_count
+
+static func begin_solve() -> int:
+	if not active or not step_open: return 0
+	if in_solve or route != 0: errors += 1
+	in_solve = true; solve_calls += 1
+	return Time.get_ticks_usec() if timed else 0
+
+static func stage(index: int, previous_us: int) -> int:
+	if not active or not step_open: return 0
+	var now := Time.get_ticks_usec() if timed else 0
+	if not in_solve or stage_mask != (1 << index)-1: errors += 1
+	stage_mask |= 1 << index
+	if timed:
+		if now < previous_us: errors += 1
+		spans[index] += now-previous_us
+	return now
+
+static func end_solve(previous_us: int) -> void:
+	if not active or not step_open: return
+	stage(3, previous_us)
+	solve_completions += 1; in_solve = false
+
+static func close_step(at_presentation: bool) -> void:
+	if not step_open: return
+	step_open = false
+	var collected_id := Engine.get_physics_frames()
+	if collected_id != physics_id + (0 if at_presentation else 1): errors += 1
+	if dispatch_count != 1 or in_solve: errors += 1
+	if route == 0:
+		if solve_calls != 1 or solve_completions != 1 or stage_mask != 15: errors += 1
+	elif route not in [1,2] or solve_calls != 0 or solve_completions != 0 or stage_mask != 0:
+		errors += 1
+	if step_count >= STEP_CAP:
+		overflow = true; return
+	var offset := step_count * STEP_WIDTH
+	steps[offset] = tick; steps[offset+1] = physics_id; steps[offset+2] = process_id
+	steps[offset+3] = step_signal_us; steps[offset+4] = step_observer_us
+	steps[offset+5] = collected_id; steps[offset+6] = Time.get_ticks_usec()
+	steps[offset+7] = dispatch_count; steps[offset+8] = route
+	steps[offset+9] = mobs; steps[offset+10] = buckets
+	steps[offset+11] = solve_calls; steps[offset+12] = stage_mask
+	for index in range(4): steps[offset+13+index] = spans[index]
+	step_count += 1
+
+static func begin_measurement(now: int, m1_tick: int) -> void:
+	close_step(true)
+	start_anchor = {"us":now,"m1_tick":m1_tick,"physics_id":Engine.get_physics_frames(),"process_id":Engine.get_process_frames(),"step_count":step_count}
+	previous_present_us = now; previous_step_count = step_count; measuring = true
+
+static func presented(now: int, m1_tick: int) -> void:
+	close_step(true)
+	if not measuring: errors += 1; return
+	if present_count >= FRAME_CAP:
+		overflow = true; return
+	var offset := present_count * PRESENT_WIDTH
+	presents[offset] = previous_present_us; presents[offset+1] = now
+	presents[offset+2] = Engine.get_process_frames(); presents[offset+3] = Engine.get_physics_frames()
+	presents[offset+4] = m1_tick; presents[offset+5] = previous_step_count; presents[offset+6] = step_count
+	previous_present_us = now; previous_step_count = step_count; present_count += 1
+
+static func end_measurement(now: int, m1_tick: int) -> void:
+	close_step(true)
+	end_anchor = {"us":now,"m1_tick":m1_tick,"physics_id":Engine.get_physics_frames(),"process_id":Engine.get_process_frames(),"step_count":step_count}
+	measuring = false
+
+static func _rows(data: PackedInt64Array, count: int, width: int) -> Array:
+	var output := []
+	for index in range(count):
+		var row := []
+		for column in range(width): row.append(data[index*width+column])
+		output.append(row)
+	return output
+
+static func report() -> Dictionary:
+	return {"schema":1,"timed":timed,"valid":errors==0 and not overflow,"errors":errors,"overflow":overflow,
+		"m1_start":start_anchor,"m1_end":end_anchor,"step_count":step_count,"presentation_count":present_count,
+		"step_columns":["m1_tick","physics_id","process_id","physics_signal_us","observer_us","collection_physics_id","collected_us","dispatch_count","route","mobs","buckets","solve_calls","stage_mask","snapshot_us","profile_cells_us","pairs_us","publish_us"],
+		"steps":_rows(steps,step_count,STEP_WIDTH),
+		"presentation_columns":["start_us","end_us","process_id","physics_id","m1_tick","step_begin_index","step_end_index"],
+		"presentations":_rows(presents,present_count,PRESENT_WIDTH),
+		"process_columns":["signal_us","process_id","physics_id"],"processes":_rows(processes,process_count,PROCESS_WIDTH),
+		"clock":"same Time.get_ticks_usec for physics/process signals, M1 timestamps and solve spans",
+		"scope":"four original solve stages only; no optimization, no normal FPS or acceptance",
+		"overhead":"five clocks per solve timed only; stage bookkeeping after each timestamp enters the next span; last bookkeeping is excluded; both modes retain frame/step clocks and counters",
+		"rng_added":false,"extra_nodes":0,"acceptance_eligible":false,"performance_claim":false}

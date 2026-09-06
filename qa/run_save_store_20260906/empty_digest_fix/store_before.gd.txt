@@ -1,0 +1,279 @@
+extends RefCounted
+## Disk-only DRAFT. No Battle, Autoload, scene, entity codec, or player-path access.
+## Caller supplies already encoded UTF-8 payload and a pure complete validator.
+## Only explicit existing directories below this draft's fixtures/ are accepted.
+
+const FIXTURE_ROOT := "res://scratchpad/run_save_store/fixtures"
+const MAGIC := "LIANGSHAN_RUN_SAVE"
+const FORMAT_VERSION := "1"
+const SCHEMA_VERSION := "1"
+const MAX_PAYLOAD_BYTES := 16 * 1024 * 1024
+const MAX_FILE_BYTES := MAX_PAYLOAD_BYTES * 6 + 4096
+const SLOT := "run_continue.json"
+const TEMP := "run_continue.pending"
+const PREVIOUS := "run_continue.previous"
+const LOCK := "run_continue.writing"
+
+var _directory: String
+var _validator: Callable
+var _busy := false
+
+func _init(fixture_directory: String, complete_payload_validator: Callable) -> void:
+	_directory = ProjectSettings.globalize_path(fixture_directory).replace("\\", "/").simplify_path().trim_suffix("/")
+	_validator = complete_payload_validator
+
+func _result(code: String, detail := "", engine_error: int = OK) -> Dictionary:
+	return {"ok": code == "OK", "code": code, "detail": detail,
+		"engine_error": engine_error, "commit_state": "not_attempted",
+		"recovery_required": false, "slot_path": _directory.path_join(SLOT)}
+
+func _digest(raw: PackedByteArray) -> String:
+	var context := HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	context.update(raw)
+	return context.finish().hex_encode()
+
+func _exists(path: String) -> bool:
+	return FileAccess.file_exists(path) or DirAccess.dir_exists_absolute(path)
+
+func _guard() -> Dictionary:
+	var boundary := ProjectSettings.globalize_path(FIXTURE_ROOT).replace("\\", "/").simplify_path().trim_suffix("/")
+	if not _directory.is_absolute_path() or not _directory.to_lower().begins_with(boundary.to_lower() + "/"):
+		return _result("INVALID_FIXTURE_PATH", "Use a dedicated existing fixtures/<case> directory")
+	if not _validator.is_valid(): return _result("VALIDATOR_REQUIRED")
+	if not DirAccess.dir_exists_absolute(_directory): return _result("DIRECTORY_MISSING")
+	# Refuse link ancestors and every controlled leaf before opening a writable file.
+	for leaf in [SLOT, TEMP, PREVIOUS, LOCK]:
+		var current: String = _directory.path_join(leaf)
+		while current != current.get_base_dir():
+			var parent := DirAccess.open(current.get_base_dir())
+			if parent == null: return _result("PATH_CHECK_FAILED", current, DirAccess.get_open_error())
+			if parent.is_link(current.get_file()): return _result("LINK_REFUSED", current)
+			current = current.get_base_dir()
+	return _result("OK")
+
+func _has_residue() -> bool:
+	for leaf in [TEMP, PREVIOUS, LOCK]:
+		if _exists(_directory.path_join(leaf)): return true
+	return false
+
+func _valid_utf8(raw: PackedByteArray) -> bool:
+	# Reject bad encodings BEFORE Godot's decoder can emit a Unicode error.
+	# Literal NUL is forbidden in our JSON text; an escaped \\u0000 is ordinary ASCII.
+	var index := 0
+	while index < raw.size():
+		var first: int = raw[index]
+		if first == 0: return false
+		if first <= 0x7f:
+			index += 1
+			continue
+		var width := 0
+		var low := 0x80
+		var high := 0xbf
+		if first >= 0xc2 and first <= 0xdf: width = 2
+		elif first >= 0xe0 and first <= 0xef:
+			width = 3
+			if first == 0xe0: low = 0xa0
+			if first == 0xed: high = 0x9f
+		elif first >= 0xf0 and first <= 0xf4:
+			width = 4
+			if first == 0xf0: low = 0x90
+			if first == 0xf4: high = 0x8f
+		else: return false
+		if index + width > raw.size() or raw[index + 1] < low or raw[index + 1] > high: return false
+		for offset in range(2, width):
+			if raw[index + offset] < 0x80 or raw[index + offset] > 0xbf: return false
+		index += width
+	return true
+
+func _validate_payload(payload: PackedByteArray) -> Dictionary:
+	if payload.is_empty() or payload.size() > MAX_PAYLOAD_BYTES: return _result("PAYLOAD_SIZE")
+	if not _valid_utf8(payload): return _result("PAYLOAD_UTF8")
+	if payload.get_string_from_utf8().to_utf8_buffer() != payload: return _result("PAYLOAD_UTF8")
+	if not _validator.is_valid(): return _result("VALIDATOR_REQUIRED")
+	# Validator must check the COMPLETE schema/content/references, without mutation,
+	# awaits, filesystem access, RNG, or scene creation. Not a permissive default.
+	var verdict: Variant = _validator.call(payload.duplicate(), SCHEMA_VERSION)
+	if not verdict is Dictionary or not verdict.get("ok") is bool:
+		return _result("VALIDATOR_CONTRACT")
+	if verdict.ok != true:
+		var rejected := _result("PAYLOAD_REJECTED")
+		rejected["validation"] = verdict
+		return rejected
+	return _result("OK")
+
+func _read_raw(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return _result("READ_OPEN", path, FileAccess.get_open_error())
+	var count := file.get_length()
+	if count <= 0 or count > MAX_FILE_BYTES:
+		file.close()
+		return _result("FILE_SIZE", path)
+	var raw := file.get_buffer(count)
+	var read_error: int = file.get_error()
+	file.close()
+	if raw.size() != count or read_error not in [OK, ERR_FILE_EOF]: return _result("READ_INCOMPLETE", path, read_error)
+	return {"ok": true, "raw": raw, "file_sha256": _digest(raw)}
+
+func _decode(raw: PackedByteArray) -> Dictionary:
+	if not _valid_utf8(raw): return _result("FILE_UTF8")
+	var text := raw.get_string_from_utf8()
+	if text.to_utf8_buffer() != raw: return _result("FILE_UTF8")
+	var parser := JSON.new()
+	if parser.parse(text) != OK: return _result("ENVELOPE_JSON", parser.get_error_message())
+	var envelope: Variant = parser.data
+	if not envelope is Dictionary: return _result("ENVELOPE_SHAPE")
+	var fields: Array = envelope.keys()
+	fields.sort()
+	if fields != ["format_version", "magic", "payload", "payload_bytes", "payload_sha256", "schema_version"]:
+		return _result("ENVELOPE_FIELDS")
+	for field in fields:
+		if not envelope[field] is String: return _result("ENVELOPE_TYPES", field)
+	if envelope.magic != MAGIC: return _result("MAGIC_MISMATCH")
+	if envelope.format_version != FORMAT_VERSION: return _result("UNSUPPORTED_FORMAT")
+	if envelope.schema_version != SCHEMA_VERSION: return _result("UNSUPPORTED_SCHEMA")
+	var payload: PackedByteArray = envelope.payload.to_utf8_buffer()
+	if envelope.payload_bytes != str(payload.size()): return _result("PAYLOAD_LENGTH")
+	if envelope.payload_sha256 != _digest(payload): return _result("PAYLOAD_DIGEST")
+	var validity := _validate_payload(payload)
+	if not validity.ok: return validity
+	var accepted := _result("OK")
+	accepted["payload"] = payload
+	accepted["payload_sha256"] = envelope.payload_sha256
+	accepted["file_sha256"] = _digest(raw)
+	return accepted
+
+func _read_verified(path: String) -> Dictionary:
+	var read := _read_raw(path)
+	if not read.ok: return read
+	var verified := _decode(read.raw)
+	if verified.ok: verified["raw"] = read.raw
+	return verified
+
+func read_slot() -> Dictionary:
+	var guarded := _guard()
+	if not guarded.ok: return guarded
+	if _busy or _has_residue():
+		var pending := _result("RECOVERY_REQUIRED", "An active/interrupted transaction requires inspection; no automatic overwrite")
+		pending.recovery_required = true
+		return pending
+	if not _exists(_directory.path_join(SLOT)): return _result("NO_SLOT")
+	var loaded := _read_verified(_directory.path_join(SLOT))
+	loaded.erase("raw")
+	return loaded # Reading never consumes, repairs, migrates or removes a slot.
+
+func _write_new(path: String, raw: PackedByteArray) -> Dictionary:
+	if _exists(path): return _result("PATH_ALREADY_EXISTS", path)
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null: return _result("WRITE_OPEN", path, FileAccess.get_open_error())
+	file.store_buffer(raw)
+	file.flush()
+	var written := file.get_position()
+	var write_error: int = file.get_error()
+	file.close()
+	if written != raw.size() or write_error != OK: return _result("WRITE_INCOMPLETE", path, write_error)
+	# Caller reopens and validates the entire CLOSED file before any replacement.
+	return _result("OK")
+
+func _move_to_empty(from: String, to: String) -> int:
+	if _exists(to): return ERR_ALREADY_EXISTS
+	return DirAccess.rename_absolute(from, to)
+
+func _same_old_slot(had_old: bool, old_hash: String) -> bool:
+	var path := _directory.path_join(SLOT)
+	if not had_old: return not _exists(path)
+	var current := _read_raw(path)
+	return current.ok and current.file_sha256 == old_hash
+
+func save_payload(payload: PackedByteArray) -> Dictionary:
+	var guarded := _guard()
+	if not guarded.ok: return guarded
+	if _busy or _has_residue():
+		var pending := _result("RECOVERY_REQUIRED", "Preserve pending, previous and lock; no retry overwrites them")
+		pending.recovery_required = true
+		return pending
+	var validated := _validate_payload(payload)
+	if not validated.ok: return validated
+	var had_old := _exists(_directory.path_join(SLOT))
+	var old_hash := ""
+	if had_old:
+		var old := _read_verified(_directory.path_join(SLOT))
+		if not old.ok:
+			var refused := _result("EXISTING_SLOT_REJECTED", "Original corrupt/incompatible slot preserved at its original path")
+			refused["cause"] = old
+			return refused
+		old_hash = old.file_sha256
+	# mkdir is a small cooperative per-slot lock. No lock stealing or stale cleanup.
+	var lock_error := DirAccess.make_dir_absolute(_directory.path_join(LOCK))
+	if lock_error != OK: return _result("LOCK_UNAVAILABLE", "Another writer or residue", lock_error)
+	_busy = true
+	var saved := _save_locked(payload, had_old, old_hash)
+	_busy = false
+	if saved.ok:
+		var unlock_error := DirAccess.remove_absolute(_directory.path_join(LOCK))
+		if unlock_error != OK:
+			saved = _result("CLEANUP_FAILED", "New slot verified; lock preserved", unlock_error)
+			saved.commit_state = "new_verified"
+	if not saved.ok:
+		saved.recovery_required = true
+		saved["previous_path"] = _directory.path_join(PREVIOUS)
+		saved["pending_path"] = _directory.path_join(TEMP)
+		saved["had_old_slot"] = had_old
+		saved["original_slot_state_unchanged"] = _same_old_slot(had_old, old_hash)
+		saved["old_slot_at_original_path"] = had_old and saved.original_slot_state_unchanged
+	return saved
+
+func _save_locked(payload: PackedByteArray, had_old: bool, old_hash: String) -> Dictionary:
+	var slot := _directory.path_join(SLOT)
+	var pending := _directory.path_join(TEMP)
+	var previous := _directory.path_join(PREVIOUS)
+	var envelope := {"magic": MAGIC, "format_version": FORMAT_VERSION,
+		"schema_version": SCHEMA_VERSION, "payload_bytes": str(payload.size()),
+		"payload_sha256": _digest(payload), "payload": payload.get_string_from_utf8()}
+	var raw := (JSON.stringify(envelope, "", true) + "\n").to_utf8_buffer()
+	var written := _write_new(pending, raw)
+	if not written.ok: return written
+	var verified := _read_verified(pending)
+	if not verified.ok: return verified
+	if verified.raw != raw: return _result("TEMP_READBACK_MISMATCH")
+	if not _same_old_slot(had_old, old_hash): return _result("SLOT_CHANGED", "External content preserved; replacement not attempted")
+	if had_old:
+		var backup_error := _move_to_empty(slot, previous)
+		if backup_error != OK: return _result("BACKUP_MOVE", "Old slot not intentionally overwritten", backup_error)
+		var backup := _read_verified(previous)
+		if not backup.ok or backup.file_sha256 != old_hash:
+			return _result("BACKUP_VERIFY", "Preserve previous and pending for inspection")
+	# Godot 4.6 Windows rename removes an existing destination before MoveFileW.
+	# Therefore NEVER rename over an existing file, and never call this atomic.
+	var commit_error := _move_to_empty(pending, slot)
+	if commit_error != OK:
+		var failed := _result("REPLACE_FAILED", "Attempt rollback only into an empty slot", commit_error)
+		failed.commit_state = "unknown" if _exists(slot) else "not_committed"
+		if had_old and not _exists(slot):
+			var backup := _read_verified(previous)
+			if backup.ok and backup.file_sha256 == old_hash:
+				failed["rollback_error"] = _move_to_empty(previous, slot)
+				failed["rollback_verified"] = _same_old_slot(true, old_hash)
+		return failed
+	var final := _read_verified(slot)
+	if not final.ok or final.file_sha256 != _digest(raw):
+		var uncertain := _result("COMMIT_UNVERIFIED", "Preserve slot and previous; never restore over unknown content")
+		uncertain.commit_state = "unknown"
+		return uncertain
+	if had_old:
+		# Delete only our exact verified backup after the new slot is fully verified.
+		var backup := _read_raw(previous)
+		if not backup.ok or backup.file_sha256 != old_hash:
+			var conflict := _result("BACKUP_CHANGED", "New slot verified; preserve unexpected previous file")
+			conflict.commit_state = "new_verified"
+			return conflict
+		var cleanup_error := DirAccess.remove_absolute(previous)
+		if cleanup_error != OK:
+			var cleanup := _result("CLEANUP_FAILED", "New slot verified; previous retained", cleanup_error)
+			cleanup.commit_state = "new_verified"
+			return cleanup
+	var result := _result("OK")
+	result.commit_state = "new_verified"
+	result["payload_sha256"] = _digest(payload)
+	result["file_sha256"] = final.file_sha256
+	return result

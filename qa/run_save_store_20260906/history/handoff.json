@@ -1,0 +1,38 @@
+{
+  "status": "draft_ready_for_root_review",
+  "scope": "text checks only, not GDScript parsing or disk behavior proof",
+  "files": {
+    "run_save_store.gd": {
+      "bytes": 12855,
+      "sha256": "a812ee51ada71837ec8fd238c0786bd60d63e881c4beaa5093df65a81b9f9192"
+    },
+    "README.md": {
+      "bytes": 9933,
+      "sha256": "19049d23486692d228de113caa9b95cccf9c2d43b63a85cde1c832271796de41"
+    },
+    ".gdignore": {
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  },
+  "text_checks": [
+    "RefCounted without global class registration",
+    "no user path or Battle/RNG/reflection references",
+    "required public/disk validation seams exist"
+  ],
+  "independent_review_fixes": [
+    "distinguish initially absent slot from preserved old file",
+    "describe old/new artifact survival by commit phase"
+  ],
+  "godot_run": false,
+  "production_modified": false,
+  "git_run": false,
+  "battle_resume_implemented": false,
+  "ui_opened": false,
+  "pending": [
+    "GDScript parsing",
+    "actual closed-file readback",
+    "injected IO errors and rollback",
+    "separate-process read and interruption"
+  ]
+}

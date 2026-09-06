@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "run_id": "20260906T110309704630Z",
+  "complete": true,
+  "godot_run": true,
+  "production_mutated": false,
+  "lock_released": true,
+  "cases": [
+    {
+      "case": "interrupt_temp_closed",
+      "phases": [
+        {
+          "phase": "interrupt_writer",
+          "expected_termination": true,
+          "pid": 2324
+        },
+        {
+          "phase": "interrupt_reader",
+          "pid": 37360,
+          "checks": 17,
+          "report": "interrupt_temp_closed_interrupt_reader.json",
+          "sha256": "170735681ffbf9fff5905bd3f60257381ed47f8e4ec93ec8d5f9eb44b7f3f3dc"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "interrupt_backup_moved",
+      "phases": [
+        {
+          "phase": "interrupt_writer",
+          "expected_termination": true,
+          "pid": 9068
+        },
+        {
+          "phase": "interrupt_reader",
+          "pid": 36676,
+          "checks": 17,
+          "report": "interrupt_backup_moved_interrupt_reader.json",
+          "sha256": "40745b7cb4173bb0ace17ea027ee6137207dc92afc67fe83a5d7183a9aac94b2"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "interrupt_committed",
+      "phases": [
+        {
+          "phase": "interrupt_writer",
+          "expected_termination": true,
+          "pid": 29060
+        },
+        {
+          "phase": "interrupt_reader",
+          "pid": 6476,
+          "checks": 17,
+          "report": "interrupt_committed_interrupt_reader.json",
+          "sha256": "6966e6f8eee1be35d927f9193263539cdfee03fe81cdc50034ff3ca091cb58c8"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "interrupt_backup_removed",
+      "phases": [
+        {
+          "phase": "interrupt_writer",
+          "expected_termination": true,
+          "pid": 27216
+        },
+        {
+          "phase": "interrupt_reader",
+          "pid": 15684,
+          "checks": 17,
+          "report": "interrupt_backup_removed_interrupt_reader.json",
+          "sha256": "ee37c0b4afee0062db9244e52f96e918bdb99791b69a2f2828d44120df1f53c7"
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "automatic_recovery_implemented": false
+}

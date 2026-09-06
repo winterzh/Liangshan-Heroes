@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "run_id": "20260906T110241975424Z",
+  "complete": true,
+  "godot_run": true,
+  "production_mutated": false,
+  "lock_released": true,
+  "cases": [
+    {
+      "case": "roundtrip",
+      "phases": [
+        {
+          "phase": "single",
+          "pid": 34192,
+          "checks": 22,
+          "report": "roundtrip_single.json",
+          "sha256": "3f57aee58a7ab90f9e24f2542d7de259ab4f266c05c64680b3719e1c72678a5a"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "case": "restart",
+      "phases": [
+        {
+          "phase": "writer",
+          "pid": 16696,
+          "checks": 20,
+          "report": "restart_writer.json",
+          "sha256": "fd7650eac8a1863258bc7927ca87f8ed33e340977674db07206e9e8950f7b7ce"
+        },
+        {
+          "phase": "reader",
+          "pid": 34844,
+          "checks": 17,
+          "report": "restart_reader.json",
+          "sha256": "dbb3277c6f5a0ed9457d1658d440b8ef21e21c7a20c7309d075360dd2fcc4698"
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "automatic_recovery_implemented": false
+}

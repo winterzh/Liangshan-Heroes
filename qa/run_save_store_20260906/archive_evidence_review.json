@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "scope": "Read-only archive evidence links and counters; did not rerun engine or inspect private fixture files. Independent disk-state review is archived separately.",
+  "counts": {
+    "cases": 49,
+    "process_phases": 54,
+    "ordinary_exits": 50,
+    "expected_terminations": 4,
+    "assertions": 1233
+  },
+  "verified_current_runs": [
+    {
+      "run": "20260906T105745511741Z",
+      "receipt_sha256": "368173fb928db601d46bc97781dbf5c83d6e235b7476655fba52b22fda1c8392",
+      "cases": 14,
+      "assertions": 350
+    },
+    {
+      "run": "20260906T110026638765Z",
+      "receipt_sha256": "6ecfc9495e0ea3c64a3bd026bfdc722b97ffdbe4de76d53d5abbcbac83a50c37",
+      "cases": 6,
+      "assertions": 132
+    },
+    {
+      "run": "20260906T110042779296Z",
+      "receipt_sha256": "8e18351d0e0fd178c7002646acbe431fea8c3f692b7f3fc8c4c78896147063f9",
+      "cases": 23,
+      "assertions": 624
+    },
+    {
+      "run": "20260906T110241975424Z",
+      "receipt_sha256": "df6513b4e65ad903069c63adcd34563a484555f85c6bf9932bfe7aff2453fb37",
+      "cases": 2,
+      "assertions": 59
+    },
+    {
+      "run": "20260906T110309704630Z",
+      "receipt_sha256": "bd40a7e2cd8a8732093ff2f93087721264b1704a8e62477848eb534dc7ce2394",
+      "cases": 4,
+      "assertions": 68
+    }
+  ],
+  "case_names": [
+    "backup_changed",
+    "backup_move",
+    "backup_read",
+    "bad_length",
+    "bad_magic",
+    "bad_sha",
+    "cleanup_lock",
+    "cleanup_previous",
+    "empty_file",
+    "empty_payload",
+    "envelope_fields",
+    "envelope_shape",
+    "envelope_types",
+    "file_utf8",
+    "final_corrupt",
+    "final_read",
+    "input_empty",
+    "input_oversize",
+    "input_semantic",
+    "input_utf8",
+    "interrupt_backup_moved",
+    "interrupt_backup_removed",
+    "interrupt_committed",
+    "interrupt_temp_closed",
+    "lock_race",
+    "new_write_open",
+    "pending_race",
+    "replace_external",
+    "replace_no_rollback",
+    "replace_rollback",
+    "restart",
+    "rollback_read",
+    "roundtrip",
+    "semantic_file",
+    "slot_changed",
+    "slot_directory",
+    "temp_digest",
+    "temp_read_incomplete",
+    "temp_read_open",
+    "temp_semantic",
+    "temp_truncated",
+    "temp_whitespace",
+    "truncated",
+    "unknown_format",
+    "unknown_schema",
+    "validator_contract",
+    "validator_missing",
+    "write_open",
+    "write_short"
+  ],
+  "source_pins": {
+    "run_save_store.gd": "86619f5cbf87e984ed253d66dddf2b852c8e11fe5e34d256c5a463bef16abca3",
+    "qa_faults.gd": "aaf8b1e11276748b63f163a88e40214c4a4c0f56da574e3c71c4c1c3e66a1e6c",
+    "qa_driver.gd": "4e20dca59faa4bc7f8fae58849035134388e78915f52ccf386df4ec50d375675",
+    "run_qa.py": "233dcd47bfe99af5419c38a2a135060860dbf46719683521c8e5610776b73fd2"
+  },
+  "original_failures_preserved": [
+    "20260906T105109305561Z",
+    "20260906T105546530306Z",
+    "20260906T105642990314Z"
+  ],
+  "older_success_not_added": "20260906T105022891023Z",
+  "preparation_only_not_a_run": "20260906T104721118969Z",
+  "godot_run": false,
+  "source_mutated": false
+}

@@ -1,0 +1,187 @@
+{
+	"actual_user_dir": "E:/ChatGPT/水浒-art-validation/scratchpad/run_save_store/runs/20260906T105745511741Z/private_profile/appdata/Godot/app_userdata/RunSaveStore Private QA/",
+	"api_results": [
+		{
+			"code": "OK",
+			"commit_state": "new_verified",
+			"detail": "",
+			"engine_error": 0,
+			"file_sha256": "f93a08121042d0b77053dc56232704bb5830639b08b388eb694a4381162fdd0a",
+			"ok": true,
+			"payload_sha256": "6525a0b7303031336648f53ab65c2bd0289a936dcb30eee9f7197941114cb25f",
+			"recovery_required": false,
+			"slot_path": "E:/ChatGPT/水浒-art-validation/scratchpad/run_save_store/runs/20260906T105745511741Z/project/scratchpad/run_save_store/fixtures/envelope_shape/run_continue.json"
+		},
+		{
+			"code": "ENVELOPE_SHAPE",
+			"commit_state": "not_attempted",
+			"detail": "",
+			"engine_error": 0,
+			"ok": false,
+			"recovery_required": false,
+			"slot_path": "E:/ChatGPT/水浒-art-validation/scratchpad/run_save_store/runs/20260906T105745511741Z/project/scratchpad/run_save_store/fixtures/envelope_shape/run_continue.json"
+		},
+		{
+			"cause": {
+				"code": "ENVELOPE_SHAPE",
+				"commit_state": "not_attempted",
+				"detail": "",
+				"engine_error": 0,
+				"ok": false,
+				"recovery_required": false,
+				"slot_path": "E:/ChatGPT/水浒-art-validation/scratchpad/run_save_store/runs/20260906T105745511741Z/project/scratchpad/run_save_store/fixtures/envelope_shape/run_continue.json"
+			},
+			"code": "EXISTING_SLOT_REJECTED",
+			"commit_state": "not_attempted",
+			"detail": "Original corrupt/incompatible slot preserved at its original path",
+			"engine_error": 0,
+			"ok": false,
+			"recovery_required": false,
+			"slot_path": "E:/ChatGPT/水浒-art-validation/scratchpad/run_save_store/runs/20260906T105745511741Z/project/scratchpad/run_save_store/fixtures/envelope_shape/run_continue.json"
+		}
+	],
+	"case": "envelope_shape",
+	"checks": [
+		{
+			"label": "private project has no production Autoloads or scene",
+			"passed": true
+		},
+		{
+			"label": "exact runtime source scratchpad/run_save_store/run_save_store.gd",
+			"passed": true
+		},
+		{
+			"label": "exact runtime source qa/qa_faults.gd",
+			"passed": true
+		},
+		{
+			"label": "exact runtime source qa/qa_driver.gd",
+			"passed": true
+		},
+		{
+			"label": "exact runtime source project.godot",
+			"passed": true
+		},
+		{
+			"label": "pinned original and thin fault subclass compile",
+			"passed": true
+		},
+		{
+			"label": "fresh case has no slot",
+			"passed": true
+		},
+		{
+			"label": "real superclass writes A",
+			"passed": true
+		},
+		{
+			"label": "real superclass reads exact A bytes",
+			"passed": true
+		},
+		{
+			"label": "separate B oracle directory created",
+			"passed": true
+		},
+		{
+			"label": "B file oracle comes from real superclass, not mirror encoder",
+			"passed": true
+		},
+		{
+			"label": "B oracle round-trips the explicit B input bytes",
+			"passed": true
+		},
+		{
+			"label": "fixture file opens: run_continue.json",
+			"passed": true
+		},
+		{
+			"label": "fixture file closes after complete write: run_continue.json",
+			"passed": true
+		},
+		{
+			"label": "specific corrupt/unsupported read error",
+			"passed": true
+		},
+		{
+			"label": "write refuses the same corrupt/unsupported original",
+			"passed": true
+		},
+		{
+			"label": "read and write rejection preserve every original byte/path",
+			"passed": true
+		},
+		{
+			"label": "failed artifact retained: run_continue.json",
+			"passed": true
+		},
+		{
+			"label": "filesystem state run_continue.pending = absent",
+			"passed": true
+		},
+		{
+			"label": "filesystem state run_continue.previous = absent",
+			"passed": true
+		},
+		{
+			"label": "filesystem state run_continue.writing = absent",
+			"passed": true
+		},
+		{
+			"label": "source unchanged after QA scratchpad/run_save_store/run_save_store.gd",
+			"passed": true
+		},
+		{
+			"label": "source unchanged after QA qa/qa_faults.gd",
+			"passed": true
+		},
+		{
+			"label": "source unchanged after QA qa/qa_driver.gd",
+			"passed": true
+		},
+		{
+			"label": "source unchanged after QA project.godot",
+			"passed": true
+		}
+	],
+	"failures": [],
+	"injection_events": [],
+	"manifest_sha256": "9daa310beca8d5964d6a10015fae35aaf7315b4db06454bc841303a8359bc501",
+	"passed": true,
+	"phase": "single",
+	"process_id": 36296,
+	"references": {
+		"A": "f93a08121042d0b77053dc56232704bb5830639b08b388eb694a4381162fdd0a",
+		"A_space": "38c6e9880a33944024ee691fff3d6e003ebf968d7c8308d05d66de5cecb01833",
+		"B": "390361177a4d54469fc3a6e591e43dbe760058b6620daf13026d1254992f8fd0",
+		"B_space": "63968ca894a3941e6de420e692026b00071c2929ebfc7e50b61804522e654343",
+		"broken": "898710e54074574b91c548024561e3c5440d4019a815c73fe7ed18a7c63fcad8",
+		"external": "8e9643525c48628cf58e8e44c7fa940ec43414958a35e19c1e6cef5a5e8e9b29",
+		"external_pending": "4e7a63eb4e7d93583b0efa9d8ed2ad1999fe5d5f1651a64f94de9b70344f47bd"
+	},
+	"run_id": "20260906T105745511741Z",
+	"schema": 1,
+	"scope": "disk fixture only; no Battle resume, automatic recovery, durability or FPS claim",
+	"snapshot": {
+		"run_continue.json": {
+			"bytes": 2,
+			"kind": "file",
+			"sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+		},
+		"run_continue.pending": {
+			"kind": "absent"
+		},
+		"run_continue.previous": {
+			"kind": "absent"
+		},
+		"run_continue.writing": {
+			"kind": "absent"
+		}
+	},
+	"source_sha256": {
+		"project.godot": "08057b30a09085bda643ec479ebee774fca0f32d9c6f3213b80ea86d475b7c3f",
+		"qa/qa_driver.gd": "4e20dca59faa4bc7f8fae58849035134388e78915f52ccf386df4ec50d375675",
+		"qa/qa_faults.gd": "aaf8b1e11276748b63f163a88e40214c4a4c0f56da574e3c71c4c1c3e66a1e6c",
+		"scratchpad/run_save_store/run_save_store.gd": "86619f5cbf87e984ed253d66dddf2b852c8e11fe5e34d256c5a463bef16abca3"
+	},
+	"validator_calls": 9
+}

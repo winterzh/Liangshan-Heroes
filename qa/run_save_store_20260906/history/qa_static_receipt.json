@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "scope": "Python/catalog/fake child checks only; no GDScript or OS process validation",
+  "checks": [
+    "run_qa.py Python AST",
+    "qa_static_checks.py Python AST",
+    "pinned unchanged original store",
+    "49 cases have concrete filesystem oracles",
+    "54 process plan, 4 explicit interrupted writers",
+    "fake child normal owns/cleans/retains exact handle as expected",
+    "fake child keyboard owns/cleans/retains exact handle as expected",
+    "fake child unconfirmed owns/cleans/retains exact handle as expected"
+  ],
+  "samples": [
+    {
+      "mode": "normal",
+      "exception": null,
+      "kills": 0,
+      "waits": 1,
+      "exit_confirmed": true
+    },
+    {
+      "mode": "keyboard",
+      "exception": "KeyboardInterrupt",
+      "kills": 1,
+      "waits": 2,
+      "exit_confirmed": true
+    },
+    {
+      "mode": "unconfirmed",
+      "exception": "RuntimeError",
+      "kills": 1,
+      "waits": 2,
+      "exit_confirmed": false
+    }
+  ],
+  "source": {
+    "run_save_store.gd": "a812ee51ada71837ec8fd238c0786bd60d63e881c4beaa5093df65a81b9f9192",
+    "qa_faults.gd": "aaf8b1e11276748b63f163a88e40214c4a4c0f56da574e3c71c4c1c3e66a1e6c",
+    "qa_driver.gd": "4e20dca59faa4bc7f8fae58849035134388e78915f52ccf386df4ec50d375675",
+    "run_qa.py": "3c07d3a8185548dc93dbb24e0264a1a27c2ba039be5193b77ca393fb6ba36f31"
+  },
+  "godot_run": false,
+  "shared_lock_accessed": false,
+  "real_profile_accessed": false,
+  "stub_outputs": "E:\\ChatGPT\\水浒-art-validation\\scratchpad\\run_save_store\\static_stub_runs\\20260906T105512266536Z"
+}

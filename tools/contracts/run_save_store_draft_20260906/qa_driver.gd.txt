@@ -1,0 +1,269 @@
+extends SceneTree
+## Private no-Autoload project only. The runner creates this project and manifest.
+const STORE_PATH := "res://scratchpad/run_save_store/run_save_store.gd"
+const FAULT_PATH := "res://qa/qa_faults.gd"
+const TEXT_A := '{"kind":"disk_fixture","revision":"9223372036854775807","marker":"one","text":"梁山\\n继续"}'
+const TEXT_B := '{"kind":"disk_fixture","revision":"2","marker":"two","text":"梁山\\n继续"}'
+var manifest: Dictionary = {}
+var checks: Array = []
+var failures: Array = []
+var api_results: Array = []
+var validator_calls := 0
+var case_dir := ""
+var output := ""
+var references: Dictionary = {}
+var store_script: GDScript
+var fault_script: GDScript
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+func check(ok: bool, label: String) -> void:
+	checks.append({"label":label,"passed":ok})
+	if not ok: failures.append(label)
+
+func _key(path: String) -> String:
+	return ProjectSettings.globalize_path(path).replace("\\", "/").simplify_path().trim_suffix("/").to_lower()
+
+func _hash(raw: PackedByteArray) -> String:
+	var context := HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	if not raw.is_empty(): context.update(raw)
+	return context.finish().hex_encode()
+
+func _write(path: String, raw: PackedByteArray) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	check(file != null, "fixture file opens: " + path.get_file())
+	if file == null: return
+	var stored: bool = file.store_buffer(raw)
+	file.flush()
+	var error: int = file.get_error()
+	file.close()
+	check(stored and error == OK, "fixture file closes after complete write: " + path.get_file())
+
+func _validator(payload: PackedByteArray, schema: String) -> Dictionary:
+	validator_calls += 1 # Observer only; never changes validation outcome.
+	var parser := JSON.new()
+	if schema != "1" or parser.parse(payload.get_string_from_utf8()) != OK: return {"ok":false,"code":"FIXTURE_JSON"}
+	var data: Variant = parser.data
+	if not data is Dictionary: return {"ok":false,"code":"FIXTURE_SHAPE"}
+	var fields: Array = data.keys(); fields.sort()
+	if fields != ["kind","marker","revision","text"]: return {"ok":false,"code":"FIXTURE_FIELDS"}
+	for field in fields:
+		if not data[field] is String: return {"ok":false,"code":"FIXTURE_TYPES"}
+	if data.kind != "disk_fixture" or data.text != "梁山\n继续": return {"ok":false,"code":"FIXTURE_VALUES"}
+	var pair_valid: bool = (data.revision == "9223372036854775807" and data.marker == "one") or (data.revision == "2" and data.marker == "two")
+	return {"ok":pair_valid,"code":"OK" if pair_valid else "FIXTURE_REFERENCE_PAIR"}
+
+func _snapshot() -> Dictionary:
+	var snapshot := {}
+	for leaf in ["run_continue.json","run_continue.pending","run_continue.previous","run_continue.writing"]:
+		var path := case_dir.path_join(leaf)
+		if FileAccess.file_exists(path):
+			var raw := FileAccess.get_file_as_bytes(path)
+			snapshot[leaf] = {"kind":"file","bytes":raw.size(),"sha256":_hash(raw)}
+		elif DirAccess.dir_exists_absolute(path):
+			var names := DirAccess.get_files_at(path); names.sort()
+			var files := {}
+			for name in names: files[name] = FileAccess.get_sha256(path.path_join(name))
+			snapshot[leaf] = {"kind":"directory","files":files}
+		else: snapshot[leaf] = {"kind":"absent"}
+	return snapshot
+
+func _record(result: Dictionary) -> void:
+	var cleaned: Dictionary = result.duplicate(true)
+	cleaned.erase("payload"); cleaned.erase("raw")
+	api_results.append(cleaned)
+
+func _assert_state() -> void:
+	var state := _snapshot()
+	for leaf in manifest.expected_state:
+		var expected: String = manifest.expected_state[leaf]
+		var observed: Dictionary = state[leaf]
+		if expected in ["absent","directory"]:
+			check(observed.kind == expected, "filesystem state " + leaf + " = " + expected)
+		elif expected == "any_file":
+			check(observed.kind == "file", "failed artifact retained: " + leaf)
+		else:
+			check(observed.kind == "file" and observed.get("sha256","") == references[expected], "exact bytes " + leaf + " = " + expected)
+
+func _control() -> bool:
+	var store = store_script.new(case_dir, _validator)
+	check(store.read_slot().code == "NO_SLOT", "fresh case has no slot")
+	var saved: Dictionary = store.save_payload(TEXT_A.to_utf8_buffer())
+	_record(saved)
+	check(saved.ok and saved.commit_state == "new_verified", "real superclass writes A")
+	var read: Dictionary = store.read_slot()
+	check(read.ok and read.get("payload") == TEXT_A.to_utf8_buffer(), "real superclass reads exact A bytes")
+	if not saved.ok or not read.ok: return false
+	var original := FileAccess.get_file_as_bytes(case_dir.path_join("run_continue.json"))
+	references.A = _hash(original)
+	references.A_space = _hash(original + " ".to_utf8_buffer())
+	var oracle := case_dir + "_oracle"
+	check(DirAccess.make_dir_recursive_absolute(oracle) == OK, "separate B oracle directory created")
+	var writer = store_script.new(oracle, _validator)
+	var written: Dictionary = writer.save_payload(TEXT_B.to_utf8_buffer())
+	check(written.ok, "B file oracle comes from real superclass, not mirror encoder")
+	if not written.ok: return false
+	var b_read: Dictionary = writer.read_slot()
+	check(b_read.ok and b_read.get("payload") == TEXT_B.to_utf8_buffer(), "B oracle round-trips the explicit B input bytes")
+	if not b_read.ok or b_read.get("payload") != TEXT_B.to_utf8_buffer(): return false
+	var b := FileAccess.get_file_as_bytes(oracle.path_join("run_continue.json"))
+	references.B = _hash(b)
+	references.B_space = _hash(b + " ".to_utf8_buffer())
+	references.external = _hash("external-slot".to_utf8_buffer())
+	references.external_pending = _hash("external-pending".to_utf8_buffer())
+	references.broken = _hash("broken-new-slot".to_utf8_buffer())
+	return true
+
+func _mutate_existing(name: String) -> void:
+	var path := case_dir.path_join("run_continue.json")
+	var raw := FileAccess.get_file_as_bytes(path)
+	if name == "slot_directory":
+		check(DirAccess.remove_absolute(path) == OK, "remove owned A before directory-as-slot fixture")
+		check(DirAccess.make_dir_absolute(path) == OK, "real directory blocks slot file open")
+		return
+	if name == "empty_file": _write(path, PackedByteArray()); return
+	if name == "truncated": _write(path, raw.slice(0,12)); return
+	if name == "file_utf8": _write(path, PackedByteArray([0xf0,0x28,0x8c,0xbc])); return
+	if name == "envelope_shape": _write(path, "[]".to_utf8_buffer()); return
+	var envelope: Dictionary = JSON.parse_string(raw.get_string_from_utf8())
+	match name:
+		"unknown_schema": envelope.schema_version = "2"
+		"unknown_format": envelope.format_version = "2"
+		"bad_magic": envelope.magic = "OTHER"
+		"bad_sha": envelope.payload_sha256 = "0".repeat(64)
+		"bad_length": envelope.payload_bytes = "01"
+		"empty_payload":
+			envelope.payload = ""
+			envelope.payload_bytes = "0"
+			envelope.payload_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+		"envelope_fields": envelope["unreviewed"] = "x"
+		"envelope_types": envelope.schema_version = 1
+		"semantic_file":
+			envelope.payload = envelope.payload.replace("one", "bad")
+			var bytes: PackedByteArray = envelope.payload.to_utf8_buffer()
+			envelope.payload_bytes = str(bytes.size())
+			envelope.payload_sha256 = _hash(bytes)
+	_write(path, (JSON.stringify(envelope,"",true) + "\n").to_utf8_buffer())
+
+func _checkpoint(name: String) -> void:
+	var receipt := {"schema":1,"run_id":manifest.run_id,"case":manifest.case,
+		"phase":manifest.phase,"checkpoint":name,"process_id":OS.get_process_id(),
+		"snapshot":_snapshot(),"references":references,"failures":failures,
+		"manifest_sha256":FileAccess.get_sha256(OS.get_environment("STORE_QA_MANIFEST"))}
+	_write(manifest.checkpoint, JSON.stringify(receipt,"\t").to_utf8_buffer())
+	var deadline := Time.get_ticks_msec() + 45000
+	while Time.get_ticks_msec() < deadline: OS.delay_msec(20)
+	push_error("Owned process was not terminated at the requested checkpoint")
+	quit(3)
+
+func _single() -> void:
+	if not _control(): return
+	var store = store_script.new(case_dir, _validator)
+	var before := _snapshot()
+	if manifest.kind == "smoke":
+		var saved: Dictionary = store.save_payload(TEXT_B.to_utf8_buffer()); _record(saved)
+		check(saved.ok and saved.commit_state == "new_verified", "real overwrite A to B succeeds")
+		var loaded: Dictionary = store.read_slot()
+		check(loaded.ok and loaded.get("payload") == TEXT_B.to_utf8_buffer(), "overwrite reads exact B without integer loss")
+	elif manifest.kind == "corrupt":
+		_mutate_existing(manifest.case)
+		var corrupted := _snapshot()
+		var loaded: Dictionary = store.read_slot(); _record(loaded)
+		check(not loaded.ok and loaded.code == manifest.expected_code, "specific corrupt/unsupported read error")
+		var refused: Dictionary = store.save_payload(TEXT_B.to_utf8_buffer()); _record(refused)
+		check(not refused.ok and refused.code == "EXISTING_SLOT_REJECTED" and refused.cause.code == manifest.expected_code, "write refuses the same corrupt/unsupported original")
+		check(_snapshot() == corrupted, "read and write rejection preserve every original byte/path")
+	elif manifest.kind == "input":
+		var payload := TEXT_B.to_utf8_buffer()
+		if manifest.case == "input_empty": payload = PackedByteArray()
+		elif manifest.case == "input_utf8": payload = PackedByteArray([0xed,0xa0,0x80])
+		elif manifest.case == "input_semantic": payload = TEXT_B.replace("two","bad").to_utf8_buffer()
+		elif manifest.case == "input_oversize": payload.resize(16 * 1024 * 1024 + 1)
+		elif manifest.case == "validator_missing": store = store_script.new(case_dir, Callable())
+		elif manifest.case == "validator_contract": store = store_script.new(case_dir, func(_p, _s): return "yes")
+		var refused: Dictionary = store.save_payload(payload); _record(refused)
+		check(not refused.ok and refused.code == manifest.expected_code, "specific input/validator error")
+		check(_snapshot() == before, "invalid new payload never opens a transaction or changes old slot")
+	elif manifest.kind == "io":
+		if manifest.get("no_old",false):
+			check(DirAccess.remove_absolute(case_dir.path_join("run_continue.json")) == OK, "remove owned control A for first-write failure case")
+		var injected_store = fault_script.new(case_dir, _validator)
+		injected_store.fault = manifest.get("fault",manifest.case)
+		var result: Dictionary = injected_store.save_payload(TEXT_B.to_utf8_buffer()); _record(result)
+		check(not result.ok and result.code == manifest.expected_code, "injected I/O failure reaches expected real caller branch")
+		check(injected_store.injected and injected_store.injection_errors.is_empty(), "intended boundary was exercised without injector errors")
+		check(result.get("commit_state") == manifest.expected_commit, "commit status describes actual stage")
+		if manifest.case == "replace_rollback": check(result.get("rollback_verified",false) and result.get("old_slot_at_original_path",false), "real previous-to-empty-slot rollback restores exact A")
+		if manifest.case == "replace_no_rollback": check(not result.get("rollback_verified",true), "failed rollback is never claimed verified")
+		if manifest.case != "lock_race": check(result.get("recovery_required",false), "failure retains transaction evidence")
+		if manifest.get("no_old",false):
+			check(not result.get("had_old_slot",true) and not result.get("old_slot_at_original_path",true) and result.get("original_slot_state_unchanged",false), "initial absence is distinct from a restored old slot")
+		manifest["injection_events"] = injected_store.events
+		var residue := _snapshot()
+		check(store.read_slot().code == "RECOVERY_REQUIRED", "new store refuses implicit recovery")
+		check(store.save_payload(TEXT_B.to_utf8_buffer()).code == "RECOVERY_REQUIRED", "new store refuses overwrite of recovery evidence")
+		check(_snapshot() == residue, "read/retry leave failed filesystem untouched")
+	_assert_state()
+
+func _run() -> void:
+	var manifest_path := OS.get_environment("STORE_QA_MANIFEST")
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+	if not parsed is Dictionary: push_error("Missing private QA manifest"); quit(2); return
+	manifest = parsed
+	output = manifest.report
+	case_dir = manifest.case_dir
+	var root_path: String = manifest.run_root
+	if not _key(output).begins_with(_key(root_path)+"/") or not _key(case_dir).begins_with(_key("res://scratchpad/run_save_store/fixtures")+"/") or _key("user://") != _key(manifest.expected_user_dir):
+		push_error("Private project/output/profile mapping mismatch"); quit(2); return
+	check(root.get_child_count() == 0, "private project has no production Autoloads or scene")
+	for path in manifest.source_sha256:
+		check(FileAccess.get_sha256("res://"+path) == manifest.source_sha256[path], "exact runtime source " + path)
+	if not failures.is_empty(): _finish(); return
+	store_script = load(STORE_PATH)
+	fault_script = load(FAULT_PATH)
+	check(store_script != null and fault_script != null and store_script.can_instantiate() and fault_script.can_instantiate(), "pinned original and thin fault subclass compile")
+	if not failures.is_empty(): _finish(); return
+	if manifest.phase == "single": _single()
+	elif manifest.phase in ["writer","interrupt_writer"]:
+		if _control():
+			if manifest.phase == "interrupt_writer":
+				var injected_store = fault_script.new(case_dir, _validator)
+				injected_store.fault = manifest.case
+				injected_store.checkpoint = _checkpoint
+				injected_store.save_payload(TEXT_B.to_utf8_buffer())
+				check(false, "interruption writer must be killed at its marker")
+			else: _assert_state()
+	elif manifest.phase in ["reader","interrupt_reader"]:
+		references = manifest.references
+		var before := _snapshot()
+		var store = store_script.new(case_dir, _validator)
+		var loaded: Dictionary = store.read_slot(); _record(loaded)
+		check(loaded.code == ("OK" if manifest.phase == "reader" else "RECOVERY_REQUIRED"), "fresh process has expected read/recovery result")
+		if manifest.phase == "reader": check(loaded.get("payload") == TEXT_A.to_utf8_buffer(), "fresh process reads exact writer A bytes")
+		else: check(store.save_payload(TEXT_B.to_utf8_buffer()).code == "RECOVERY_REQUIRED", "fresh process preserves interrupted transaction")
+		check(_snapshot() == before, "separate reader does not alter slot or residue")
+		_assert_state()
+	else: check(false,"unknown private QA phase")
+	_finish()
+
+func _finish() -> void:
+	for path in manifest.source_sha256:
+		check(FileAccess.get_sha256("res://"+path) == manifest.source_sha256[path], "source unchanged after QA " + path)
+	var report := {"schema":1,"run_id":manifest.run_id,"case":manifest.case,"phase":manifest.phase,
+		"passed":not checks.is_empty() and failures.is_empty(),"checks":checks,"failures":failures,
+		"process_id":OS.get_process_id(),"actual_user_dir":ProjectSettings.globalize_path("user://"),
+		"manifest_sha256":FileAccess.get_sha256(OS.get_environment("STORE_QA_MANIFEST")),
+		"source_sha256":manifest.source_sha256,"snapshot":_snapshot(),"references":references,
+		"api_results":api_results,"validator_calls":validator_calls,"injection_events":manifest.get("injection_events",[]),
+		"scope":"disk fixture only; no Battle resume, automatic recovery, durability or FPS claim"}
+	var file := FileAccess.open(output,FileAccess.WRITE)
+	if file == null: push_error("Cannot write private QA report"); quit(2); return
+	var stored: bool = file.store_buffer(JSON.stringify(report,"\t").to_utf8_buffer())
+	file.flush()
+	var error: int = file.get_error()
+	file.close()
+	if not stored or error != OK: push_error("Incomplete private QA report"); quit(2); return
+	print("[store-disk QA] case=",manifest.case," phase=",manifest.phase," checks=",checks.size()," failures=",failures.size())
+	quit(0 if report.passed else 1)

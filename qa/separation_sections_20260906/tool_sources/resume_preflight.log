@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "E:\ChatGPT\水浒-art-validation\scratchpad\separation_sections_diag\resume.py", line 240, in <module>
+    if __name__=='__main__': sys.exit(main())
+  File "E:\ChatGPT\水浒-art-validation\scratchpad\separation_sections_diag\resume.py", line 226, in main
+    failed,project,expected,allowed,current,exe,safe,player=preflight(args,launcher,pins,contract)
+  File "E:\ChatGPT\水浒-art-validation\scratchpad\separation_sections_diag\resume.py", line 133, in preflight
+    current=verify_project(project,expected,allowed,launcher)
+  File "E:\ChatGPT\水浒-art-validation\scratchpad\separation_sections_diag\resume.py", line 87, in verify_project
+    need(all(actual.get(name)==value for name,value in expected.items()),'Private source/metadata differs from exact reconstructed original')
+  File "E:\ChatGPT\水浒-art-validation\scratchpad\separation_sections_diag\resume.py", line 22, in need
+    if not ok: raise RuntimeError(message)
+RuntimeError: Private source/metadata differs from exact reconstructed original

@@ -1,0 +1,50 @@
+extends "res://tools/polish_performance_probe.gd"
+const SeparationDiag = preload("res://scratchpad/separation_sections_diag/generated/ledger.gd")
+var separation_output := ""
+var separation_mode := ""
+
+func _initialize() -> void:
+	separation_output = OS.get_environment("SEPARATION_SECTIONS_OUT")
+	separation_mode = OS.get_environment("SEPARATION_SECTIONS_MODE")
+	if separation_output.is_empty() or separation_mode not in ["timed","clockless"]:
+		push_error("Explicit separation diagnostic output/mode required"); quit(2); return
+	var private_root := OS.get_environment("SEPARATION_SECTIONS_USER_ROOT").replace("\\","/").simplify_path().trim_suffix("/")
+	var actual := ProjectSettings.globalize_path("user://").replace("\\","/").simplify_path()
+	if private_root.is_empty() or not actual.to_lower().begins_with(private_root.to_lower()+"/"):
+		push_error("Private child user:// isolation failed"); quit(2); return
+	OS.set_environment("POLISH_CASE","defense200")
+	OS.set_environment("POLISH_CAMERA","fixed")
+	OS.set_environment("POLISH_SECONDS","10")
+	OS.set_environment("POLISH_OUT",separation_output.get_base_dir().path_join("m1_10s.json"))
+	super._initialize()
+
+func _on_tick() -> void:
+	if is_instance_valid(battle_ref): SeparationDiag.close_step(false)
+	super._on_tick()
+	if is_instance_valid(battle_ref): SeparationDiag.open_step(physics_tick)
+
+func _separation_physics_boundary() -> void:
+	SeparationDiag.physics_boundary()
+
+func _separation_process_boundary() -> void:
+	SeparationDiag.process_boundary()
+
+func _dispose(b) -> void:
+	b.process_mode = Node.PROCESS_MODE_DISABLED
+	SeparationDiag.close_step(true)
+	SeparationDiag.active = false
+	physics_frame.disconnect(_separation_physics_boundary)
+	process_frame.disconnect(_separation_process_boundary)
+	check(not b._prof_on,"native profiler remains disabled; only solve stages are timed")
+	check(SeparationDiag.step_count == physics_tick,"all original M1 ticks including last step collected")
+	check(SeparationDiag.errors == 0 and not SeparationDiag.overflow,"stage/dispatch/frame ledger integrity")
+	var data := SeparationDiag.report()
+	data["mode"] = separation_mode
+	data["actual_user_dir"] = ProjectSettings.globalize_path("user://")
+	var file := FileAccess.open(separation_output,FileAccess.WRITE)
+	check(file != null,"separation sidecar opened")
+	if file != null:
+		file.store_string(JSON.stringify(data,"\t")); file.close()
+	await super._dispose(b)
+
+# @@PINNED_M1_RUN_WITH_ANCHORS@@

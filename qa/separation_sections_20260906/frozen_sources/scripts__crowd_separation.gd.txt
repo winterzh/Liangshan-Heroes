@@ -1,0 +1,132 @@
+extends RefCounted
+## Snapshot a complete synchronous pass over 64-320 densely grouped movers.
+## Sparse/small groups and phased crowds use Battle's direct loop. Buffers are local so
+## PackedArray updates do not keep a second property-held copy alive.
+const ACTIVE := 1
+const MOVING := 2
+const GOLD_PHASING := 4
+const NAV_OPEN := 8  # Current position stays in open navigation during this synchronous solve.
+
+static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: float) -> void:
+	var sources: Array[Unit] = []
+	var indexes: Dictionary = {}
+	var order: Array[int] = []
+	for u: Unit in units:
+		if u.is_building or u.is_resource or u.hp <= 0.0 or u.garrisoned or u.story_outcome != "": continue
+		var id := u.get_instance_id()
+		if not indexes.has(id):
+			indexes[id] = sources.size()
+			sources.append(u)
+		order.append(indexes[id])
+	# A queued death/retreat can remain in the grid until the next physics frame.
+	# Preserve those neighbor entries and the original ID/active-state tests.
+	for bucket in buckets.values():
+		for u: Unit in bucket:
+			var id := u.get_instance_id()
+			if not indexes.has(id):
+				indexes[id] = sources.size()
+				sources.append(u)
+	var count := sources.size()
+	var ids := PackedInt64Array()
+	var positions := PackedVector2Array()
+	var radii := PackedFloat64Array()
+	var profiles: Array[String] = []
+	var flags := PackedByteArray()
+	var nav_rects: Array[Rect2] = []
+	nav_rects.resize(count)
+	# Navigation is read once per source for this call only; no callbacks or
+	# terrain mutations occur before the final position writes below.
+	var region := Rect2i(0,0,map.w,map.h)
+	var land_ready := map.astar != null and map.astar.region.encloses(region)
+	var water_ready := map.astar_water != null and map.astar_water.region.encloses(region)
+	var width := map.w * GameMap.CELL
+	var height := map.h * GameMap.CELL
+	ids.resize(count);positions.resize(count);radii.resize(count);profiles.resize(count);flags.resize(count)
+	for i in range(count):
+		var u := sources[i]
+		ids[i] = u.get_instance_id()
+		positions[i] = u.position
+		radii[i] = u.radius
+		profiles[i] = u.movement_profile
+		var moving := u._state == Unit.ST_MOVE or u._state == Unit.ST_AMOVE or u._state == Unit.ST_CHASE
+		var phasing := u.is_worker and u._carry_kind == "gold" and (u._state == Unit.ST_GATHER or u._state == Unit.ST_RETURN)
+		flags[i] = (ACTIVE if u.story_outcome == "" else 0) | (MOVING if moving else 0) | (GOLD_PHASING if phasing else 0)
+		var p := positions[i]
+		if (water_ready if profiles[i] == "water" else land_ready) and p.x >= 0 and p.y >= 0 and p.x < width and p.y < height:
+			var cell := Vector2i(p / float(GameMap.CELL))
+			var nav := map.astar_water if profiles[i] == "water" else map.astar
+			if not nav.is_point_solid(cell):
+				flags[i] |= NAV_OPEN
+				nav_rects[i] = Rect2(Vector2(cell) * GameMap.CELL,Vector2.ONE * GameMap.CELL)
+	var profile_cells := {}
+	for cell in buckets:
+		var groups := {}
+		for u: Unit in buckets[cell]:
+			var id := u.get_instance_id()
+			var i: int = indexes[id]
+			if (flags[i] & ACTIVE) == 0: continue
+			var profile := profiles[i]
+			if not groups.has(profile): groups[profile] = [id,[]]
+			var group: Array = groups[profile]
+			group[0] = maxi(group[0],id)
+			group[1].append(i)
+		for profile: String in groups:
+			if not profile_cells.has(profile): profile_cells[profile] = {}
+			var group: Array = groups[profile]
+			# Keep original neighbor order. Inactive and different-profile entries
+			# were unconditional rejects; an ID maximum can reject whole buckets.
+			profile_cells[profile][cell] = [group[0],PackedInt32Array(group[1])]
+	for ai: int in order:
+		var aid := ids[ai]
+		var ap := positions[ai]
+		var a_nav := nav_rects[ai]
+		var a_open := (flags[ai] & NAV_OPEN) != 0
+		var profile := profiles[ai]
+		var cells: Variant = profile_cells.get(profile)
+		if cells == null: continue
+		var moving := (flags[ai] & MOVING) != 0
+		var phasing := (flags[ai] & GOLD_PHASING) != 0
+		var radius := radii[ai]
+		var cx := int(floor(ap.x / cell_size))
+		var cy := int(floor(ap.y / cell_size))
+		for gy in range(cy-1,cy+2):
+			for gx in range(cx-1,cx+2):
+				var bucket: Variant = cells.get(Vector2i(gx,gy))
+				if bucket == null or int(bucket[0]) <= aid: continue
+				for bi: int in bucket[1]:
+					if ids[bi] <= aid: continue
+					if phasing and (flags[bi] & GOLD_PHASING) != 0: continue
+					var bp := positions[bi]
+					var diff := ap-bp
+					var d2 := diff.length_squared()
+					var min_d := radius+radii[bi]+2.0
+					if d2 >= min_d*min_d or d2 <= 0.0001: continue
+					var distance := sqrt(d2)
+					var b_moving := (flags[bi] & MOVING) != 0
+					var aw := 0.5
+					var bw := 0.5
+					if moving and not b_moving:
+						aw=0.85;bw=0.15
+					elif b_moving and not moving:
+						aw=0.15;bw=0.85
+					var direction := diff/distance
+					var overlap := min_d-distance
+					var next_a := ap+direction*overlap*aw
+					var next_b := bp-direction*overlap*bw
+					# A segment contained in one open cell cannot cross a blocked edge.
+					# Reject nonfinite destinations before Rect2.has_point.
+					if a_open and next_a.is_finite() and a_nav.has_point(next_a):
+						ap=next_a
+					elif map._segment_open(ap,next_a,profile):
+						ap=next_a
+						a_nav=Rect2(Vector2(Vector2i(ap / float(GameMap.CELL))) * GameMap.CELL,Vector2.ONE * GameMap.CELL)
+					var b_nav: Rect2 = nav_rects[bi]
+					if (flags[bi] & NAV_OPEN) != 0 and next_b.is_finite() and b_nav.has_point(next_b):
+						positions[bi]=next_b
+					elif map._segment_open(bp,next_b,profile):
+						positions[bi]=next_b
+						nav_rects[bi]=Rect2(Vector2(Vector2i(next_b / float(GameMap.CELL))) * GameMap.CELL,Vector2.ONE * GameMap.CELL)
+		positions[ai]=ap
+		nav_rects[ai]=a_nav
+	for i in range(count):
+		if sources[i].position != positions[i]: sources[i].position=positions[i]
