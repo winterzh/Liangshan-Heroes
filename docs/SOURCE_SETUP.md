@@ -1,3 +1,7 @@
+## 2026-09-06 Steam公告交接
+
+当前default仍为Build25149197；对应[更新公告](UPDATE_ANNOUNCEMENT_20260906.md)已公开发布，事件708907988310558226。qa/steam_update_20260906/announcement_receipt.json记录发布、语言和关联构建，PUBLISH_STATUS.json已同步公告状态。源码启动和本机Godot配置不变，接续开发时保留这份交接记录。
+
 ## 2026-09-06 主线合并与 Windows 更新包
 
 PR #1已按用户授权合并，统一源码954ffde与main合并提交37d3e36同树。后续仍从既定stable分支安全拉取；已关闭PR #1不能继续当成开放PR使用。正常Play.cmd/Godot启动方式不变。

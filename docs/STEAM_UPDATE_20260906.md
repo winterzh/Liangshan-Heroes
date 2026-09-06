@@ -23,4 +23,4 @@
 
 通过Steamworks的SteamPipe→通过网页上传的内容，以“标准”上传已验证ZIP，创建生成版本；核对Depot中的EXE文件名、大小及SHA1后再预览更改并设置default上线。上传与切换已分别核实。未另做完整Steam客户端下载，不将网页清单核对称为已下载试玩。官方流程见[SteamPipe文档](https://partner.steamgames.com/doc/sdk/uploading)。
 
-本轮更新现有Windows构建，不执行首次商店正式发行，不更改macOS Depot或外部更新器。公告文案见[简短公告](UPDATE_ANNOUNCEMENT_20260906.md)，本轮只写文案，未发布社区公告。
+本轮更新现有Windows构建，不执行首次商店正式发行，不更改macOS Depot或外部更新器。后续按用户要求，已于2026-09-06 14:55 HKT发布[Steam简短公告](https://store.steampowered.com/news/app/5088120/view/708907988310558226)，关联本次Build25149197；中英文正文和记录见[公告文档](UPDATE_ANNOUNCEMENT_20260906.md)、[发布收据](../qa/steam_update_20260906/announcement_receipt.json)。
