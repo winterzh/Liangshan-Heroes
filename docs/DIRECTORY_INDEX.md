@@ -1,9 +1,18 @@
+## 2026-09-06 寨墙整合证据
+
+`qa/wall_visibility_20260906/integration/` 保存 9739fbe 整合后的 322 项报告、入口精确合并校验、门楼/墙图、正常压力及隔离运行与源码恢复收据。根 QA 目录保留整合前证据，最终状态见 integration/README.md。
+
 ## 2026-09-06 寨墙遮挡检查增量
 
 - `tools/wall_visibility_qa.gd`：旧版完整入口对照、边界/实际士兵命中、图片及七组配对计时。
 - `tools/contracts/wall_visibility/`：2ea8c69 完整入口冻结参照。
 - `docs/WALL_VISIBILITY_20260906.md`：算法边界、验证与复现。
 - `qa/wall_visibility_20260906/`：最终渲染/无画面报告、四张遮挡/恢复图、墙体回归、正常压力、诊断及来源收据。
+
+## 2026-09-06 木墙方向增量
+
+- `tools/wall_direction_qa.gd`：六种方向/坡度的真实像素对照与三地图比例验证。
+- `docs/WALL_DIRECTION_20260906.md`、`qa/wall_direction_20260906/`：实现、失败/通过日志、前后画面和输入收据。
 
 ## 2026-09-06 邻居筛选增量
 

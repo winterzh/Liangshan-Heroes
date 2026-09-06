@@ -15,8 +15,10 @@ func _run() -> void:
 		wall.end_local=end
 		wall.height_scale=78
 		var tr: Transform2D=wall.source_transform()
-		check((tr*Renderer.CAMPAIGN_LEFT_FOOT).length()<0.001,"left actual post foot lies on wall origin: "+str(end))
-		check((tr*Renderer.CAMPAIGN_RIGHT_FOOT).distance_to(end)<0.001,"right actual post foot lies on map endpoint: "+str(end))
+		var upper: Vector2=Vector2.ZERO if end.y>=0 else end
+		var lower: Vector2=end if end.y>=0 else Vector2.ZERO
+		check((tr*Renderer.CAMPAIGN_LEFT_FOOT).distance_to(upper)<0.001,"upper source post foot lies on upper wall end: "+str(end))
+		check((tr*Renderer.CAMPAIGN_RIGHT_FOOT).distance_to(lower)<0.001,"lower source post foot lies on lower wall end: "+str(end))
 		var post: Vector2=tr*(Renderer.CAMPAIGN_LEFT_FOOT-Vector2(0,98))-tr*Renderer.CAMPAIGN_LEFT_FOOT
 		check(absf(post.x)<0.001 and absf(post.y+78)<0.001,"upright post preserves height on this axis and slope: "+str(end))
 		wall.free()
@@ -35,7 +37,9 @@ func _run() -> void:
 		check(not walls.is_empty() and walls.all(func(w): return w.get_script()==Renderer and w.campaign_texture==texture),label+" uses one consistent accepted timber source on both wall axes")
 		check(walls.all(func(w):
 			var tr: Transform2D=w.source_transform()
-			return (tr*Renderer.CAMPAIGN_LEFT_FOOT).length()<0.001 and (tr*Renderer.CAMPAIGN_RIGHT_FOOT).distance_to(w.end_local)<0.001),label+" real wall parts match both projected map endpoints")
+			var upper: Vector2=Vector2.ZERO if w.end_local.y>=0 else w.end_local
+			var lower: Vector2=w.end_local if w.end_local.y>=0 else Vector2.ZERO
+			return (tr*Renderer.CAMPAIGN_LEFT_FOOT).distance_to(upper)<0.001 and (tr*Renderer.CAMPAIGN_RIGHT_FOOT).distance_to(lower)<0.001),label+" real wall parts match both projected map endpoints")
 		check(walls.all(func(w):
 			return w.body_overlaps(w.end_local*0.5-Vector2(0,w.height_scale*0.6)) and not w.body_overlaps(w.end_local*0.5-Vector2(0,w.height_scale*2+50))),label+" occlusion covers upright wall height and excludes empty sky")
 		if scene[1]==2:

@@ -129,8 +129,8 @@ func _setup_stockade() -> void:
 	# 直线分段沿新布局的不可走边界布置，不再画圆弧花园栅栏。
 	for ridge in _bank_ridges:
 		for i in range(ridge.size()-1):
-			var spacing := 3.2
-			var steps := maxi(1,ceili(ridge[i].distance_to(ridge[i+1])/spacing))
+			var span := _map.project(ridge[i+1]*GameMap.CELL)-_map.project(ridge[i]*GameMap.CELL)
+			var steps := Stockade.panel_count(span,88.0 if _rts_layout else 78.0)
 			for j in range(steps):
 				var a: Vector2 = ridge[i].lerp(ridge[i+1],float(j)/steps)*GameMap.CELL
 				var b: Vector2 = ridge[i].lerp(ridge[i+1],float(j+1)/steps)*GameMap.CELL

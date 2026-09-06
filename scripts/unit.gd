@@ -3679,6 +3679,16 @@ func _rest_frame(fallback: Texture2D) -> Texture2D:
 	return fallback
 
 
+func _building_shadow_texture(visible_texture: Texture2D, scoped_texture: Texture2D) -> Texture2D:
+	# Gate feet describe the displayed variant. Falling back to the old atlas
+	# here would cast a different silhouette through the new source anchors.
+	if preload("res://scripts/campaign_gate_visual.gd").enabled(self) and not art_variant.is_empty() and visible_texture!=null:
+		return visible_texture
+	if scoped_texture!=null: return scoped_texture
+	var texture: Texture2D=Art.building_texture(key)
+	return texture if texture!=null else Art.terrain_texture(key)
+
+
 func _draw() -> void:
 	var tex: Texture2D = Art.unit_texture(key, art_variant, animation_direction)
 	if setup_def.has("campaign_object"):
@@ -3701,10 +3711,7 @@ func _draw() -> void:
 	if (is_building or is_resource) and not bool(get_meta("campaign_environment_static_visual",false)):
 		var shadow_tex := tex
 		if is_building:
-			shadow_tex = scoped_environment_tex
-			if shadow_tex == null: shadow_tex = Art.building_texture(key)
-			if shadow_tex == null:
-				shadow_tex = Art.terrain_texture(key)
+			shadow_tex = _building_shadow_texture(tex,scoped_environment_tex)
 		# `_draw_sprite_animated` caches the actual source direction; reusing it
 		# avoids a second Art/ResourceLoader query for the remaining sparse route.
 		WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)

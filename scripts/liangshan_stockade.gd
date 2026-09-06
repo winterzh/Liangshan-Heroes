@@ -13,6 +13,13 @@ const CAMPAIGN_LEFT_FOOT := Vector2(185,264)
 const CAMPAIGN_RIGHT_FOOT := Vector2(331,342)
 const CAMPAIGN_POST_HEIGHT := 98.0
 
+static func panel_count(projected_span: Vector2, post_height: float) -> int:
+	# A panel's 78px foot rise represents a 2:1 map run. Match its natural
+	# width to the chosen post height instead of squeezing every height into
+	# the same three cells. The caller still keeps both original endpoints.
+	var width := 2.0*(CAMPAIGN_RIGHT_FOOT.y-CAMPAIGN_LEFT_FOOT.y)*post_height/CAMPAIGN_POST_HEIGHT
+	return maxi(1,roundi(absf(projected_span.x)/maxf(width,1.0)))
+
 func source_transform() -> Transform2D:
 	var scale := campaign_texture.get_size()/512.0
 	var left := CAMPAIGN_LEFT_FOOT*scale
@@ -20,6 +27,12 @@ func source_transform() -> Transform2D:
 	return _fit_feet(left,right,height_scale/(CAMPAIGN_POST_HEIGHT*scale.y))
 
 func _fit_feet(left: Vector2,right: Vector2,vertical_scale: float) -> Transform2D:
+	# Traversing the same world wall in reverse must not change its picture.
+	# Match the source's upper foot to the upper world end before fitting.
+	if end_local.y*(right.y-left.y)<0.0 or (end_local.y==0.0 and end_local.x<0.0):
+		var swap := left
+		left=right
+		right=swap
 	var y_axis := Vector2(0,vertical_scale)
 	var x_axis := (end_local-y_axis*(right.y-left.y))/(right.x-left.x)
 	return Transform2D(x_axis,y_axis,-x_axis*left.x-y_axis*left.y)
