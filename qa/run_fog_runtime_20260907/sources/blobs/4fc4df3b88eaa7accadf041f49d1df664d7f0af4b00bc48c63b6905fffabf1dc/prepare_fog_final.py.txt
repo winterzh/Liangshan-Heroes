@@ -1,0 +1,52 @@
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+src = ROOT / 'scratchpad/run_fog_runtime_state/fog_state.gd'
+raw = src.read_bytes()
+assert sha(raw) == 'caef97f9a10ca7dfaa39bd51a997c1bce8eb5575e7210a4a085ccfba57567d30'
+target = ROOT / 'scripts/run_fog_state.gd'
+assert not target.exists()
+old = ROOT / 'scratchpad/run_fog_runtime_state_r3'
+out = ROOT / 'scratchpad/run_fog_runtime_final'
+assert not out.exists()
+driver = (old / 'driver.gd').read_bytes()
+runner = (old / 'run_smoke.py').read_bytes()
+assert sha(driver) == 'ac65846de98bf9f2e97a40931ccd60ab1c8914e88eeea7cd7831d62591d1b619'
+assert sha(runner) == 'b44341baf192a3d7d108b8c6f07fd0d04059d130d5e8c086a9f1ff3fcfd90f6d'
+module_old = b'scratchpad/run_fog_runtime_state/fog_state.gd'
+module_new = b'scripts/run_fog_state.gd'
+folder_old = b'scratchpad/run_fog_runtime_state_r3/'
+folder_new = b'scratchpad/run_fog_runtime_final/'
+assert driver.count(module_old) == 1 and runner.count(module_old) == 1
+assert runner.count(folder_old) == 2
+final_driver = driver.replace(module_old, module_new)
+final_runner = runner.replace(module_old, module_new).replace(folder_old, folder_new)
+assert final_driver.replace(module_new, module_old) == driver
+assert final_runner.replace(module_new, module_old).replace(folder_new, folder_old) == runner
+attrs = ROOT / '.gitattributes'
+before = attrs.read_bytes()
+rule = b'\nqa/run_fog_runtime_20260907/** -text -whitespace\nscripts/run_fog_state.gd* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol\n'
+assert b'scripts/run_fog_state.gd*' not in before
+out.mkdir()
+(out / '.gdignore').write_bytes(b'')
+(out / 'driver.gd').write_bytes(final_driver)
+(out / 'run_smoke.py').write_bytes(final_runner)
+(out / 'QA_CONTRACT.md').write_text('''# Fog runtime final production path
+
+The exact R3-tested module is promoted as scripts/run_fog_state.gd. The driver and runner only change the module resource and this harness directory; inverse replacements recover the original R3 bytes. The actual production source set is frozen anew, and the runtime provider computes its content identity from that source set.
+
+All R3 checks, native Forward+ rendering, actual paused nonphysics boundary, three paired PNG captures and strict diagnostics remain required. This repeats the same component matrix at the formal resource path; it is not a new scenario or full Battle save/continue test. R3 and its three failed predecessors remain unchanged. See ../run_fog_runtime_state_r3/QA_CONTRACT.md and ../run_fog_runtime_state/QA_CONTRACT.md for fixture and scope.
+''', encoding='utf-8')
+target.write_bytes(raw)
+attrs.write_bytes(before + rule)
+(out / 'preparation.json').write_text(json.dumps({
+    'production_changed': True, 'engine_run': False, 'module_byte_identical_to_r3': True,
+    'module_sha256': sha(raw), 'driver_sha256': sha(final_driver),
+    'runner_sha256': sha(final_runner), 'inverse_exact': True,
+    'gitattributes_before_sha256': sha(before), 'gitattributes_after_sha256': sha(before + rule),
+    'previous_run': 'scratchpad/run_fog_runtime_state_r3/runs/20260906T224445455084Z',
+}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+print(json.dumps({'prepared': True, 'module_sha256': sha(raw), 'driver_sha256': sha(final_driver), 'runner_sha256': sha(final_runner)}))

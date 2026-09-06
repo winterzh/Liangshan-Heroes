@@ -1,0 +1,118 @@
+"""R2 fixes the empty production item-catalog fixture only. Python preparation."""
+import ast
+import copy
+import difflib
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+OLD = ROOT/'scratchpad/run_battle_root_state_r1_qa'
+FOG = 'caef97f9a10ca7dfaa39bd51a997c1bce8eb5575e7210a4a085ccfba57567d30'
+OLD_SHA = {
+    'driver.gd':'f6380893766f88d9ffc962dd842c7a9ebe729070903050f53acb0718a3294e7d',
+    'run_smoke.py':'91d5597cb16596f715065b175eccd2b15feb529292602578d02f5bc6491ea6c1',
+    'pins.json':'78e38b18082f0729181d0a3e14fe52b39c0bf28faf027c4c61eb5dcfa91e3a6e',
+    'runs/20260906T224833895013Z/report.log':'9c23eacaf1e6d2339746bd9e94f594e293744b6c6bfc3b965fc57b2caa096be9',
+    'runs/20260906T224833895013Z/receipt.json':'b5a5d7359aae89937a8b62dfe15fc4ec8a1cbb75878a5abe2610465306fd069c',
+}
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+def write(name, value):
+    (HERE/name).write_bytes((json.dumps(value, ensure_ascii=False, indent=2)+'\n').encode('utf-8'))
+for name, expected in OLD_SHA.items():
+    assert sha(OLD/name)==expected, 'Frozen parent or failure evidence changed: '+name
+old_pins=json.loads((OLD/'pins.json').read_bytes())
+for name, expected in old_pins['source_sha256'].items():
+    assert sha(ROOT/name)==expected, 'Existing R1 source changed: '+name
+assert sha(ROOT/'scripts/run_fog_state.gd')==FOG, 'Expected exact newly promoted fog module'
+old_runtime={name for name in old_pins['source_sha256'] if name.startswith(('scripts/','scenes/'))}
+runtime={p.relative_to(ROOT).as_posix() for folder, suffix in [('scripts','.gd'),('scenes','.tscn')]
+         for p in (ROOT/folder).rglob('*'+suffix)}
+assert runtime==old_runtime|{'scripts/run_fog_state.gd'}, 'Only explicitly approved new fog runtime path allowed'
+
+before=(OLD/'driver.gd').read_bytes()
+driver=before.decode('utf-8')
+old='\tslots[0] = {"id": String(battle._items.keys()[0]), "count": 2, "uid": 9007199254740993}\n\tvar item_id: String = slots[0].id'
+new='\t# Defs.ITEMS is deliberately empty. This is a structural UID/alias fixture,\n\t# not an installed or usable gameplay item and never a provider identity.\n\tvar item_id: String = "qa_root_retired_uid"\n\t_check("retired UID fixture has no production item definition", battle._items.is_empty() and battle.item_def(item_id).is_empty())\n\tslots[0] = {"id": item_id, "count": 2, "uid": 9007199254740993}'
+assert driver.count(old)==1
+driver=driver.replace(old,new)
+assert driver.replace(new,old).encode('utf-8')==before
+(HERE/'driver.gd').write_bytes(driver.encode('utf-8'))
+(HERE/'driver_r2.patch').write_bytes(''.join(difflib.unified_diff(before.decode().splitlines(True),driver.splitlines(True),
+    fromfile='r1/driver.gd',tofile='r2/driver.gd')).encode('utf-8'))
+
+contract=json.loads((OLD/'field_contract.json').read_bytes())
+contract['frozen_prerequisites']['scripts/run_fog_state.gd']=FOG
+write('field_contract.json',contract)
+labels=json.loads((OLD/'required_labels.json').read_bytes())
+labels['required'].append('retired UID fixture has no production item definition')
+assert len(labels['required'])==len(set(labels['required']))==640
+write('required_labels.json',labels)
+
+runner=(OLD/'run_smoke.py').read_text(encoding='utf-8').replace('run_battle_root_state_r1_qa','run_battle_root_state_r2_qa')
+runner=runner.replace('Actual root R1 fields and viewport consumer;', 'Actual root R1 fields and viewport consumer, R2 fixture;')
+ast.parse(runner)
+(HERE/'run_smoke.py').write_bytes(runner.encode('utf-8'))
+docs=(OLD/'QA_CONTRACT.md').read_text(encoding='utf-8')
+docs=docs.replace('# Battle root R1 actual smoke preparation','# Battle root R1 module — R2 actual smoke preparation')
+docs=docs.replace('Prepared only; no Godot parse or execution, no successful root restore claim.',
+    'This R2 harness is prepared only; it has not run in Godot. Its parent R1 actual run failed with no final report, so no successful root restore is claimed.')
+docs=docs.replace('run_battle_root_state_r1_qa','run_battle_root_state_r2_qa')
+docs=docs.replace('`prepare.py`','`prepare_r2.py`')
+docs += '''
+
+## R2 narrow correction and retained failure
+
+Parent actual run `scratchpad/run_battle_root_state_r1_qa/runs/20260906T224833895013Z`
+stopped at driver line 396 with `Invalid access of index 0 Array`. Its log and
+receipt remain unchanged; it produced no report. Do not count earlier accumulated
+assertions as a passing suite. Host evidence confirmed child exit, source/player
+preservation and lock release.
+
+`scripts/defs.gd:348` deliberately declares an empty `ITEMS` dictionary;
+`Battle._ready:402` copies it without inserting items. The driver's assumption
+that `_items.keys()[0]` exists was wrong. R2 replaces only that fixture selection
+with explicit `qa_root_retired_uid`. A new actual assertion confirms it has no
+production definition. This name exercises root record structure, exact int64 UID
+and alias transport through the real codec and pure inventory validator. It does
+not claim a usable production item, inject definitions, change content identity,
+call item use, or test item gameplay. The other 639 required labels are retained.
+
+The other direct indexes were checked: `slots[0]` follows construction of six
+slots; all three `translated_origins` indexes follow a short-circuit size==3;
+`u:0` follows the nonempty complete registry check; the final `back()` follows a
+successful final `_roundtrip` that appended its real destination. `records.viewport`
+is used only after successful viewport roundtrip. No other unguarded content-first
+array access was found. Source capture already awaits real process boundaries
+after startup and asserts paused/nonphysics state; this R2 does not rely only on
+the initial deferred callback and does not alter barriers.
+
+Root explicitly confirmed the only new production runtime source is
+`scripts/run_fog_state.gd`, SHA caef97f9a10ca7dfaa39bd51a997c1bce8eb5575e7210a4a085ccfba57567d30.
+R2 pins include that source (107 entries expected), and preparation rejects any
+other runtime path addition, removal, or original source change. Battle07d7,
+provider a78 and root module 3a758 stay exact. The actual provider will resolve
+the new complete source identity at runtime; no earlier saved version is reused.
+The driver inverse proves its single replacement reproduces the frozen R1 bytes.
+Suite remains `battle-root-r1` because the module schema/revision did not change;
+R2 refers only to the harness. Source mode, normal Forward+, private profile,
+strict process/lock/source/player lifecycle and all scope limitations above remain.
+'''
+(HERE/'QA_CONTRACT.md').write_bytes(docs.encode('utf-8'))
+result=subprocess.run([sys.executable,'-X','utf8',str(HERE/'run_smoke.py'),'--freeze'],cwd=ROOT,
+    capture_output=True,text=True,encoding='utf-8')
+assert result.returncode==0,result.stdout+'\n'+result.stderr
+assert json.loads(result.stdout)['source_count']==107
+write('preparation.json',{'prepared_only':True,'godot_run':False,'python_ast':True,
+    'gd_parse_tested_this_revision':False,'driver_single_replacement_inverse_exact':True,
+    'new_runtime_sources':{'scripts/run_fog_state.gd':FOG},'source_count':107,
+    'old_failure_preserved':OLD_SHA,'required_labels':len(labels['required']),
+    'old_module_unchanged':contract['frozen_prerequisites']['scratchpad/run_battle_root_state_r1/root_state.gd'],
+    'driver_sha256':sha(HERE/'driver.gd'),'runner_sha256':sha(HERE/'run_smoke.py'),
+    'pins_sha256':sha(HERE/'pins.json'),'freeze_result':json.loads(result.stdout)})
+assert all(sha(OLD/name)==value for name,value in OLD_SHA.items())
+print(json.dumps({'prepared':True,'godot_run':False,'source_count':107,'required_labels':640,
+    'driver_sha256':sha(HERE/'driver.gd'),'runner_sha256':sha(HERE/'run_smoke.py'),'pins_sha256':sha(HERE/'pins.json')}))

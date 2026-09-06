@@ -1,0 +1,15 @@
+# Fog runtime R2: real paused process boundary
+
+R1 forward_plus run 20260906T223430986013Z (PID 32308) reached the first capture and correctly rejected PAUSED_QUIESCENT_BARRIER_REQUIRED. Merely setting paused inside a deferred callback did not leave the engine physics frame. Its 211 rows include 206 source checks and the failed capture; it did not exercise the remaining restore matrix.
+
+R2 retains the module unchanged and adds an await of the actual SceneTree process_frame after pausing, followed by a required native paused/nonphysics assertion before constructing the controlled fixtures. The host also requires that label. No module barrier is weakened. Earlier files, pins and both failed runs remain intact. The rest of the driver is byte-identical after reversing this one insertion; only new entry paths and the required-label host check accompany it.
+
+# Fog runtime R1: actual desktop renderer
+
+The original actual run 20260906T223109968612Z (PID 20512) stopped before producing a report because forced OpenGL emitted "2D MSAA is not yet supported for GLES3" with the project's existing 2D MSAA setting. The original module, driver, pins and failed run remain unchanged. Its host confirmed child exit, source/player equality and lock release; no component checks are inferred from that failure.
+
+This revision changes only the runner's renderer/expected renderer to forward_plus and the new driver entry/run folder. The driver bytes remain identical and still preload the frozen original fog_state.gd. Project settings and runtime production files are unchanged. This follows the desktop project default; it does not disable MSAA or relax strict diagnostic handling. Renderer name, actual non-console engine PID, private user, exact source hashes and stdout/report are still checked by the host. Run identity and fresh outputs belong to this new folder.
+
+The exact behavioral matrix is unchanged: five fog values and lagging CPU/texture RGBA8 pixels; JSON restore into a detached blocked Battle with an independent real Map and fixed FogLayer; original visibility consumers/timing and independent Canvas images including nonempty pixels; malformed input early rejection. Map/Unit/world state is supplied by controlled fixtures. This is not whole-world resume, runtime performance or PCK acceptance. Full original field, budget, native consumer and fixture descriptions remain in ../run_fog_runtime_state/QA_CONTRACT.md, whose GL-only execution instructions apply only to the failed original run.
+
+Default run_smoke.py is read-only preflight. --freeze records reviewed source pins without an engine; --run --godot <actual non-console executable> launches the one owned process under the shared engine lock. Preserve both runs and exact dependencies; exclude private profiles/player listings from Git.

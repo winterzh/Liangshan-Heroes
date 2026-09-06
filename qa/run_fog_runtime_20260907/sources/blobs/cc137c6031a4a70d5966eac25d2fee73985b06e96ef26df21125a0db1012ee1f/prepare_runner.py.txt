@@ -1,0 +1,73 @@
+"""Copy the reviewed single-suite lifecycle with bounded fog-specific substitutions."""
+import ast
+import hashlib
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+SOURCE = ROOT / 'scratchpad/run_axes_qa/run_smoke.py'
+SOURCE_SHA = 'e3b19ca42a91da3e276c8f7af81763e1357685e41365e55ce435f56e4baf1408'
+raw = SOURCE.read_bytes()
+assert hashlib.sha256(raw).hexdigest() == SOURCE_SHA
+text = raw.decode('utf-8').replace('\r\n', '\n')
+
+def replace(before, after):
+    global text
+    assert text.count(before) == 1, before
+    text = text.replace(before, after)
+
+replace('Real LiBrawnAxesFx restore smoke; each --run has a fresh private user profile.',
+        'Actual fog consumers and Canvas; default preflight, --run uses a fresh private profile.')
+replace("'--path', str(ROOT), '--headless', '--script',\n               'res://scratchpad/run_axes_qa/' + entry]",
+        "'--path', str(ROOT), '--rendering-method', 'gl_compatibility',\n               '--resolution', '1280x720', '--script',\n               'res://scratchpad/run_fog_runtime_state/' + entry]")
+replace("parser.add_argument('--run', action='store_true')\n    parser.add_argument('--godot', required=True)\n    parser.add_argument('--suite', choices=['axes'], default='axes')",
+        "mode = parser.add_mutually_exclusive_group()\n    mode.add_argument('--run', action='store_true')\n    mode.add_argument('--freeze', action='store_true', help='Explicit source repin; no engine')\n    parser.add_argument('--godot')")
+begin = "    exe = Path(args.godot).resolve()"
+end = "    guard = util.load_helper(util.GUARD"
+start = text.index(begin); stop = text.index(end)
+text = text[:start] + '''    entry = 'driver.gd'
+    names = ['project.godot', 'scratchpad/run_fog_runtime_state/fog_state.gd',
+             'scratchpad/run_fog_runtime_state/driver.gd']
+    names += [path.relative_to(ROOT).as_posix() for directory, suffix in
+              [('scripts', '.gd'), ('scenes', '.tscn')]
+              for path in (ROOT/directory).rglob('*' + suffix)]
+    names = sorted(set(names))
+    hashes = {name: util.file_sha(ROOT/name) for name in names}
+    runner_sha = util.file_sha(Path(__file__))
+    contract_sha = util.file_sha(HERE/'QA_CONTRACT.md')
+    pins_path = HERE/'pins.json'
+    if args.freeze:
+        if pins_path.exists():
+            history = HERE/'pins_history'; history.mkdir(exist_ok=True)
+            stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+            (history/(stamp+'.json')).write_bytes(pins_path.read_bytes())
+        pins_path.write_bytes((json.dumps({'frozen': True, 'godot_run': False,
+            'source_sha256': hashes, 'runner_sha256': runner_sha,
+            'contract_sha256': contract_sha,
+            'provider_note': 'Actual installed provider is resolved at run time; root provider fix requires explicit reviewed repin.'},
+            ensure_ascii=False, indent=2)+'\\n').encode('utf-8'))
+        print(json.dumps({'frozen': True, 'godot_run': False, 'source_count': len(hashes),
+                          'pins_sha256': util.file_sha(pins_path)}))
+        return 0
+    pins = util.read(pins_path)
+    util.need(pins['source_sha256'] == hashes and pins['runner_sha256'] == runner_sha
+              and pins['contract_sha256'] == contract_sha, 'Frozen sources/runner/contract drift; explicitly review before --freeze')
+    if not args.run:
+        print(json.dumps({'preflight': True, 'godot_run': False, 'source_count': len(hashes),
+                          'pins_sha256': util.file_sha(pins_path)}))
+        return 0
+    util.need(bool(args.godot), 'Pass the actual non-console engine executable')
+    exe = Path(args.godot).resolve()
+    util.need('_console' not in exe.stem.lower(), 'Console wrapper cannot prove the actual child PID')
+    util.need(util.file_sha(exe) == util.ENGINE_SHA, 'Wrong engine')
+''' + text[stop:]
+replace("suite = args.suite + '-restore'", "suite = 'fog-runtime-restore'")
+replace("'report': str(out / 'report.json'), 'source_sha256': hashes}",
+        "'report': str(out / 'report.json'), 'source_sha256': hashes,\n                    'engine_binary_sha256': util.ENGINE_SHA}")
+replace("util.need(report.get('source_sha256') == hashes, 'Source report mismatch')",
+        "util.need(report.get('source_sha256') == hashes, 'Source report mismatch')\n        util.need(report.get('engine_binary_sha256') == util.ENGINE_SHA\n                  and report.get('rendering_method') == 'gl_compatibility', 'Engine or renderer mismatch')")
+replace("util.need(util.file_sha(Path(__file__)) == runner_sha, 'Runner changed')\n\n        safety.require_exclusive_godot = launch_guard",
+        "util.need(util.file_sha(Path(__file__)) == runner_sha, 'Runner changed')\n            util.need(util.file_sha(HERE/'QA_CONTRACT.md') == contract_sha\n                      and util.read(pins_path) == pins, 'Contract or pins changed')\n\n        safety.require_exclusive_godot = launch_guard")
+ast.parse(text)
+(HERE/'run_smoke.py').write_bytes(text.encode('utf-8'))
+print(hashlib.sha256(text.encode('utf-8')).hexdigest())

@@ -1,0 +1,46 @@
+--- frozen/root_state.gd
++++ r1/root_state.gd
+@@ -339,6 +339,18 @@
+ 	if values.gold < 0 or values.wood < 0 or values.pop_cap < 0 or values.current_age < 1 or values.current_age > 3: return _bad("ECONOMY_RANGE")
+ 	return _dictionaries(values)
+ 
++func _rect_to_wire(value: Variant) -> Dictionary:
++	if typeof(value) != TYPE_RECT2: return _bad("RECT2_TYPE", "_unit_draw_rect")
++	var rect: Rect2 = value
++	if not rect.position.is_finite() or not rect.size.is_finite(): return _bad("RECT2_NON_FINITE", "_unit_draw_rect")
++	return _good({"position": rect.position, "size": rect.size})
++
++func _rect_from_wire(value: Variant) -> Dictionary:
++	if not _fields(value, ["position", "size"]): return _bad("RECT2_FIELDS", "_unit_draw_rect")
++	if typeof(value.position) != TYPE_VECTOR2 or typeof(value.size) != TYPE_VECTOR2: return _bad("RECT2_COMPONENT_TYPE", "_unit_draw_rect")
++	if not value.position.is_finite() or not value.size.is_finite(): return _bad("RECT2_NON_FINITE", "_unit_draw_rect")
++	return _good(Rect2(value.position, value.size))
++
+ func _clocks(clocks: Variant, values: Variant) -> Dictionary:
+ 	if not _fields(clocks, ["physics", "process", "msec"]) or not _fields(values, ROOT_ENGINE_CLOCK + ROOT_INPUT_CLOCK): return _bad("CLOCK_FIELDS")
+ 	for key in clocks:
+@@ -397,6 +409,13 @@
+ 	var focus: Dictionary = {"kind": "none"} if battle._autocam_focus == Vector2.INF else {"kind": "point", "value": battle._autocam_focus}
+ 	var raw: Dictionary = {"values": values, "references": references, "selection": selection.value, "groups": groups.value,
+ 		"grids": grids, "identities": identities, "blockers": blockers.value, "eco": eco.value, "clock_values": clock_values, "clocks": clocks, "focus": focus}
++	# Rect2 has no value-codec tag. Preserve its two Vector2 values explicitly.
++	# Leave the already validated native values alone; only the wire dictionary changes.
++	var rect_wire: Dictionary = _rect_to_wire(values["_unit_draw_rect"])
++	if not rect_wire.ok: return rect_wire
++	var wire_values: Dictionary = values.duplicate()
++	wire_values["_unit_draw_rect"] = rect_wire.value
++	raw["values"] = wire_values
+ 	var encoded: Dictionary = _codec.encode(raw)
+ 	if not encoded.ok: return encoded
+ 	if Engine.get_physics_frames() != clocks.physics or Engine.get_process_frames() != clocks.process: return _bad("SNAPSHOT_FRAME_CHANGED")
+@@ -412,6 +431,10 @@
+ 	if not decoded.ok: return decoded
+ 	var raw: Variant = decoded.value
+ 	if not _fields(raw, PAYLOAD_FIELDS): return _bad("PAYLOAD_FIELDS")
++	if typeof(raw.values) != TYPE_DICTIONARY or not raw.values.has("_unit_draw_rect"): return _bad("VALUE_FIELDS")
++	var rect_native: Dictionary = _rect_from_wire(raw.values["_unit_draw_rect"])
++	if not rect_native.ok: return rect_native
++	raw["values"]["_unit_draw_rect"] = rect_native.value
+ 	var values: Dictionary = _values(raw.values)
+ 	if not values.ok: return values
+ 	if not _fields(raw.references, ROOT_REFERENCE): return _bad("REFERENCE_FIELDS")

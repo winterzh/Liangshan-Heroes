@@ -1,3 +1,19 @@
+## 2026-09-07 默认迷雾恢复组件
+
+正式入口为 `scripts/run_fog_state.gd`。capture 要求 SceneTree 真正暂停且不处于 physics 帧；单设 paused 不能保证屏障成立。恢复同时保留逻辑值和可能滞后的真实图像/纹理，不能按当前 vision 提前重画。bind 返回脱树禁用层及原 world 索引，外层负责 Map、Unit 可见标志和整体挂接/激活顺序。
+
+R3 与正式路径各 276 行通过，实测 PNG 和原失败已归档；复现须按该轮源码、harness/helper 映射还原原路径。详见[迷雾 QA](../qa/run_fog_runtime_20260907/README.md)。此组件仍未接成可用的整局续玩入口。
+
+停止前另将根状态 R2、稳定实体、ItemCast 和时钟准备物保存为[未晋级交接草稿](RUN_RESUME_HANDOFF_20260907.md)。这些草稿不纳入生产组件或 Steam 候选；本机停止新开发，由“完成项目收尾并发布”任务统一合入和同步。
+
+## 2026-09-07 早上公司接续入口
+
+本轮修复`tools/build_steam_candidate.py`结束时锁标识的读取编码：锁以UTF-8写入，现在也明确按UTF-8回读。已在本机cp936、Python非UTF-8模式下复现旧读取不匹配而新读取匹配；不要通过删除其他任务的锁来解决占用。独立PCK probe命令应给`--main-pack`绝对路径，子进程工作目录与调用目录不同；本轮相对路径失败及后续绝对路径运行分别保留在早间QA。
+
+以[早间交接](MORNING_HANDOFF_20260907.md)为当前入口：从`winterzh/Liangshan-Heroes`的`codex/sync-20260905-stable`获取最新源码。先确认工作区干净且无分叉，再执行`git pull --ff-only origin codex/sync-20260905-stable`；Godot4.6.3路径由本机`godot.local.txt`或`GODOT_PATH`提供，运行`Play.cmd`。办公室历史非Git工作区仍须独立checkout和逐文件同步，包含外层文档。下方旧段落中的PR #1接续措辞已过时，PR #1现已关闭。
+
+早间测试基于56adcac，176项原生合同通过；包、缓存与用户目录均只留本机忽略路径，精确候选结果见[QA](../qa/morning_handoff_20260907/README.md)。GitHub源码与Steam版本分开：default实时回读25154403，新配置与新包尚未上线，须按[后台接续](STEAM_BACKEND_SETUP_20260907.md)恢复正常文件上传并完成验证。
+
 ## 2026-09-07 RNG接入与安装身份验证
 
 新Battle独立解析安装身份，在关卡/HUD/单位创建前绑定玩法RNG；恢复预配置对象拒绝走重新部署的新局入口，完整根恢复工厂仍待实现。故障锁存停止后继消费者/命令并拒绝capture，不回滚已发生伤害。provider R2按实际执行Script backing区分源码与编译资源，分别严格校验，不依据存档字段、剩余命令行args或editor feature推断身份，也不fallback。

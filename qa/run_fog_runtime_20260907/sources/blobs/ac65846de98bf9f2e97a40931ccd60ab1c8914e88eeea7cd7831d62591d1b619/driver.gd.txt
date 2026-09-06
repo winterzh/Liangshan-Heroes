@@ -1,0 +1,273 @@
+extends SceneTree
+## Actual Battle fog consumers and GameMap, with two disabled Battle shells.
+## No Battle._ready, deployment, invented provider identity or source extraction.
+const Factory := preload("res://scratchpad/run_fog_runtime_state/fog_state.gd")
+var checks: Array = []
+var owned: Array = []
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+var report_path: String = ""
+var runtime_identity: Dictionary = {}
+var canvas_evidence: Array = []
+var codec: Variant
+var battle_script: Variant
+var map_script: Script
+var unit_script: Script
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	return passed
+
+func _ok(label: String, value: Dictionary) -> bool:
+	checks.append({"label": label, "passed": value.get("ok") == true,
+		"code": String(value.get("code", "")), "field": String(value.get("field", ""))})
+	return value.get("ok") == true
+
+func _source_guard(label: String) -> bool:
+	var result: bool = true
+	for path in manifest.source_sha256:
+		result = _check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path]) and result
+	return result
+
+func _finish(aborted: bool = false) -> void:
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "fog-runtime-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": not aborted and failures.is_empty(),
+		"checks": checks, "check_count": checks.size(), "failures": failures,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}),
+		"engine_binary_sha256": manifest.get("engine_binary_sha256", ""),
+		"rendering_method": RenderingServer.get_current_rendering_method(),
+		"runtime_identity": runtime_identity, "canvas_evidence": canvas_evidence,
+		"scope": "Real 60x60 GameMap and original Battle fog consumers; JSON restore of authority, lagging RGBA8 display, real FogLayer Canvas comparison, native timer continuation. Unit fog flags copied as explicit outer fixture. No complete Battle/Unit/Map restore or exported-PCK test."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t")); file.close()
+	print("[fog-runtime-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _shell() -> Variant:
+	var battle: Variant = battle_script.new()
+	battle.process_mode = Node.PROCESS_MODE_DISABLED; battle.set_block_signals(true)
+	owned.append(battle)
+	var map: Variant = map_script.new()
+	map.process_mode = Node.PROCESS_MODE_DISABLED; map.set_block_signals(true)
+	map.init_map(60, 60, "plain", 4); map.bake() # Actual GameMap.T.GRASS.
+	owned.append(map); battle.map = map; battle._lite_fx = false
+	var view: SubViewport = SubViewport.new()
+	view.size = Vector2i(64, 64); view.disable_3d = true
+	view.world_2d = World2D.new()
+	view.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	root.add_child(view); owned.append(view)
+	var world: Node2D = Node2D.new()
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	view.add_child(world)
+	view.canvas_transform = Transform2D(Vector2(1.0 / 32.0, 0), Vector2(0, 1.0 / 32.0), Vector2.ZERO)
+	battle.world = world
+	# A visible backdrop distinguishes transparent fog from an empty black viewport.
+	var backdrop := ColorRect.new()
+	backdrop.size = Vector2(1920, 1920); backdrop.color = Color.WHITE
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE; backdrop.z_index = -1
+	world.add_child(backdrop)
+	battle.units_root = Node2D.new(); world.add_child(battle.units_root)
+	battle.fx_root = Node2D.new(); world.add_child(battle.fx_root)
+	return battle
+
+func _units(battle: Variant) -> void:
+	for index in range(3):
+		var unit: Variant = unit_script.new()
+		owned.append(unit)
+		unit.process_mode = Node.PROCESS_MODE_DISABLED; unit.set_block_signals(true)
+		unit.battle = battle; unit.map = battle.map; unit.setup_def = {"sight": 2}
+		unit.position = battle.map.cell_to_world(Vector2i(12, 12) if index == 0 else Vector2i(50, 50))
+		unit.faction = 0 if index == 0 else 1
+		unit.is_building = index == 2
+		battle.units.append(unit)
+
+func _state(battle: Variant) -> Dictionary:
+	return {"fog": battle.fog, "_vision": Array(battle._vision), "_sight_now": Array(battle._sight_now),
+		"_reveal_t": battle._reveal_t, "_fog_t": battle._fog_t}
+
+func _same(label: String, old: Variant, restored: Variant) -> void:
+	var a: Dictionary = codec.encode(_state(old))
+	var b: Dictionary = codec.encode(_state(restored))
+	_check(label + " exact five values", a.ok and b.ok and a.value == b.value)
+	_check(label + " CPU image bytes", old._vision_img.get_data() == restored._vision_img.get_data())
+	_check(label + " actual texture bytes", old._fog_tex.get_image().get_data() == restored._fog_tex.get_image().get_data())
+	var flags_same: bool = true
+	for i in range(old.units.size()):
+		flags_same = flags_same and old.units[i].fog_visible == restored.units[i].fog_visible and old.units[i].visible == restored.units[i].visible
+	_check(label + " real enemy display flags", flags_same)
+
+func _canvas_pair(label: String, old: Variant, restored: Variant) -> void:
+	var left: SubViewport = old.world.get_parent()
+	var right: SubViewport = restored.world.get_parent()
+	left.render_target_update_mode = SubViewport.UPDATE_ONCE
+	right.render_target_update_mode = SubViewport.UPDATE_ONCE
+	old._fog_layer.queue_redraw(); restored._fog_layer.queue_redraw()
+	await RenderingServer.frame_post_draw
+	var a: Image = left.get_texture().get_image()
+	var b: Image = right.get_texture().get_image()
+	_check(label + " actual separate Canvas frames", a != null and b != null and a.get_size() == Vector2i(64, 64) and b.get_size() == a.get_size() and a.get_data() == b.get_data())
+	# Different known pixels prove the comparison isn't two empty viewports.
+	var black: Color = a.get_pixel(2, 2)
+	var clear: Color = a.get_pixel(12, 12)
+	checks.append({"label": label + " actual fog black versus clear region", "passed": black == Color.BLACK and clear == Color.WHITE, "black_rgba": black.to_html(), "clear_rgba": clear.to_html()})
+	var stem: String = label.replace(" ", "_")
+	var left_path: String = report_path.get_base_dir().path_join(stem + "_left.png")
+	var right_path: String = report_path.get_base_dir().path_join(stem + "_right.png")
+	var left_saved: int = a.save_png(left_path)
+	var right_saved: int = b.save_png(right_path)
+	_check(label + " native Canvas images saved", left_saved == OK and right_saved == OK)
+	canvas_evidence.append({"phase": label, "left": left_path, "right": right_path, "left_sha256": FileAccess.get_sha256(left_path), "right_sha256": FileAccess.get_sha256(right_path)})
+
+func _attach(factory: Variant, battle: Variant, record: Dictionary) -> bool:
+	var bound: Dictionary = factory.bind(battle, record)
+	if not _ok("detached fog bind", bound): return false
+	if bound.layer != null:
+		_check("staged layer detached and disabled", bound.layer.get_parent() == null and bound.layer.process_mode == Node.PROCESS_MODE_DISABLED and bound.layer.is_blocking_signals())
+		battle.world.add_child(bound.layer)
+		battle.world.move_child(bound.layer, bound.world_child_index)
+	return _ok("paused layer activation", factory.activate(battle, bound.activation))
+
+func _rejected(factory: Variant, record: Dictionary, label: String, code: String) -> void:
+	var destination: Variant = _shell()
+	var value: Dictionary = factory.bind(destination, record)
+	_check(label, value.get("ok") == false and value.get("code") == code)
+	_check(label + " leaves destination untouched", destination._vision.is_empty() and destination._sight_now.is_empty() and destination._reveal_t.is_empty() and destination._vision_img == null and destination._fog_tex == null and destination._fog_layer == null)
+
+func _run() -> void:
+	var path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest", false); _finish(true); return
+	manifest = data
+	for key in ["run_id", "private_user", "report", "engine_binary_sha256"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false); _finish(true); return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false); _finish(true); return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		report_path = ""; _check("fresh absolute report", false); _finish(true); return
+	manifest_ready = true
+	if not _check("private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower()):
+		_finish(true); return
+	if not _source_guard("source before"):
+		_finish(true); return
+	var provider_script: Script = load("res://scripts/run_content_identity.gd")
+	var provider: Variant = provider_script.new()
+	var identity: Dictionary = provider.resolve_runtime_identity()
+	if not _ok("actual provider identity", identity):
+		_finish(true); return
+	if not _check("actual provider save eligibility and native engine", identity.get("save_eligible") == true and identity.get("engine_binary_sha256") == manifest.engine_binary_sha256):
+		_finish(true); return
+	runtime_identity = {"content_version": identity.content_version,
+		"source_mode": identity.get("source_mode"), "identity_scope": identity.get("identity_scope"),
+		"engine_binary_sha256": identity.engine_binary_sha256}
+	battle_script = load("res://scripts/battle.gd")
+	map_script = load("res://scripts/game_map.gd")
+	unit_script = load("res://scripts/unit.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var layer_script: Script = battle_script.FogLayer
+	codec = codec_script.new()
+	var factory: Variant = Factory.new(identity, battle_script, map_script, codec_script, layer_script)
+	paused = true
+	# Pause admission first, then resume outside the physics message flush.
+	await process_frame
+	if not _check("actual paused nonphysics frame boundary", paused and not Engine.is_in_physics_frame()):
+		_finish(true); return
+	var old: Variant = _shell(); _units(old)
+	old.fog = true; old._init_fog()
+	old._fog_pass(0.01); old._fog_pass(0.04)
+	var point: Vector2 = old.units[1].position
+	old._reveal_fog_at(point, 0.0, 1.0)
+	_check("real reveal is logically visible before display refresh", old.is_visible_world(point) and old.is_lit_world(point) and old._vision_img.get_pixel(50, 50).a == 1.0 and not old.units[1].visible)
+	var captured: Dictionary = factory.capture(old, {"quiescent": true})
+	if not _ok("standard 60x60 real fog capture", captured):
+		_finish(true); return
+	var record: Dictionary = JSON.parse_string(JSON.stringify(captured.record))
+	if not _ok("JSON runtime contract validate", factory.validate(record, Vector2i(60, 60))):
+		_finish(true); return
+	var restored: Variant = _shell(); _units(restored)
+	# These two Unit fields belong to Unit-state installation, not Fog bind.
+	for i in range(old.units.size()):
+		restored.units[i].fog_visible = old.units[i].fog_visible
+		restored.units[i].visible = old.units[i].visible
+	if not _attach(factory, restored, record):
+		_finish(true); return
+	_same("installed lagging snapshot", old, restored)
+	_check("node and actual resource binding", restored._fog_layer.tex == restored._fog_tex and restored._fog_layer.ws == Vector2(1920, 1920) and restored._fog_layer.z_index == 3600 and restored._fog_layer.get_index() == old._fog_layer.get_index())
+	await _canvas_pair("installed lagging snapshot", old, restored)
+	old._fog_pass(0.05); restored._fog_pass(0.05)
+	_same("before saved timer expires", old, restored)
+	_check("no eager reveal decay or display refresh", restored._reveal_t[3050] == 1.0 and restored._vision_img.get_pixel(50, 50).a == 1.0 and not restored.units[1].visible)
+	old._fog_pass(0.10); restored._fog_pass(0.10)
+	_same("first resumed real pass", old, restored)
+	_check("remaining reveal uses actual elapsed overshoot", is_equal_approx(restored._reveal_t[3050], 0.81) and restored.units[1].visible and restored.units[2].visible and restored._vision_img.get_pixel(50, 50).a == 0.0)
+	await _canvas_pair("first resumed real pass", old, restored)
+	old._fog_pass(1.2); restored._fog_pass(1.2)
+	_same("reveal expires to exploration memory", old, restored)
+	_check("ordinary hidden but building memory retained", not restored.units[1].fog_visible and not restored.units[1].visible and restored.units[2].fog_visible and restored.units[2].visible)
+	_check("real visibility consumers after expiry", not restored.is_visible_world(point) and not restored.is_lit_world(point) and restored.is_explored_world(point) and not restored.target_visible_to(restored.units[0], restored.units[1]) and not restored._has_live_sight_at(point))
+	_check("actual Map clamped edge and live ally sight", restored.map.world_to_cell(Vector2(-32, -32)) == Vector2i.ZERO and not restored.is_visible_world(Vector2(-32, -32)) and not restored.is_explored_world(Vector2(-32, -32)) and restored._has_live_sight_at(restored.units[0].position))
+	await _canvas_pair("exploration memory", old, restored)
+	# Disabled-empty and disabled-materialized are both real production states.
+	var empty: Variant = _shell()
+	var empty_capture: Dictionary = factory.capture(empty, {"quiescent": true})
+	if not _ok("fog disabled empty capture", empty_capture):
+		_finish(true); return
+	var empty_restored: Variant = _shell()
+	if not _attach(factory, empty_restored, JSON.parse_string(JSON.stringify(empty_capture.record))):
+		_finish(true); return
+	_check("disabled empty has no synthetic image or layer", not empty_restored.fog and empty_restored._vision.is_empty() and empty_restored._fog_layer == null and empty_restored.is_visible_world(point))
+	old.fog = false; old._fog_layer.visible = false
+	var disabled_capture: Dictionary = factory.capture(old, {"quiescent": true})
+	if not _ok("disabled materialized capture", disabled_capture):
+		_finish(true); return
+	var disabled: Variant = _shell()
+	if not _attach(factory, disabled, JSON.parse_string(JSON.stringify(disabled_capture.record))):
+		_finish(true); return
+	_check("disabled materialized retains buffers phase and hidden layer", not disabled.fog and disabled._vision == old._vision and disabled._reveal_t == old._reveal_t and disabled._fog_t == old._fog_t and not disabled._fog_layer.visible)
+	var wrong: Dictionary = record.duplicate(true); wrong["schema"] = "old-source-hash-contract"
+	_rejected(factory, wrong, "unknown schema rejected", "SCHEMA")
+	wrong = record.duplicate(true); wrong["content_version"] = "save-cannot-self-authorize"
+	_rejected(factory, wrong, "untrusted content version rejected", "CONTENT_VERSION")
+	wrong = record.duplicate(true); wrong["codec_contract"] = "unsupported"
+	_rejected(factory, wrong, "unknown codec rejected", "CODEC_CONTRACT")
+	var decoded: Dictionary = codec.decode(record.payload)
+	var native: Dictionary = decoded.value
+	var corruptions: Array = [
+		{"key": "_vision", "value": 256, "code": "VISION_DOMAIN"},
+		{"key": "_sight_now", "value": true, "code": "SIGHT_DOMAIN"},
+		{"key": "_reveal_t", "value": -0.25, "code": "REVEAL_DOMAIN"}]
+	for mutation in corruptions:
+		var changed: Dictionary = native.duplicate(true)
+		changed["values"][mutation.key][0] = mutation.value
+		var encoded: Dictionary = codec.encode(changed)
+		if not _ok("encode deliberate " + mutation.code, encoded):
+			_finish(true); return
+		wrong = record.duplicate(true); wrong["payload"] = encoded.value
+		_rejected(factory, wrong, mutation.code + " validation", mutation.code)
+	var phase_native: Dictionary = native.duplicate(true)
+	phase_native["values"]["_fog_t"] = 0.19
+	var phase_payload: Dictionary = codec.encode(phase_native)
+	wrong = record.duplicate(true); wrong["payload"] = phase_payload.value
+	_rejected(factory, wrong, "phase rejected rather than reset", "FOG_PHASE")
+	_check("different actual map dimensions rejected", factory.validate(record, Vector2i(59, 60)).get("code") == "DIMENSION_MISMATCH")
+	var no_trust: Variant = Factory.new({}, battle_script, map_script, codec_script, layer_script)
+	_check("missing caller provider rejected", no_trust.validate(record, Vector2i(60, 60)).get("code") == "TRUSTED_RUNTIME_CONTRACT_REQUIRED")
+	_check("no Battle ready or deployment in fixture", not old.is_inside_tree() and not restored.is_inside_tree() and old.level == null and restored.level == null and old.units.size() == 3 and restored.units.size() == 3)
+	_finish()

@@ -1,0 +1,105 @@
+"""Only Rect2 wire conversion; exact inverse to the frozen root candidate/template."""
+import ast
+import difflib
+import hashlib
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+OLD = ROOT/'scratchpad/run_battle_root_state'
+FROZEN = {
+    'root_state.gd': '0bec6384d80c3973ec1ad9e0eeb36f48f826f52b2f70b37015e20ae7ee04d246',
+    'root_state.gd.in': 'f0d19ef1b754a796b37a72279ecbb59a405358f3721141cda705004d33767dde',
+}
+BASE_BATTLE = '07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd'
+
+HELPERS = '''func _rect_to_wire(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_RECT2: return _bad("RECT2_TYPE", "_unit_draw_rect")
+	var rect: Rect2 = value
+	if not rect.position.is_finite() or not rect.size.is_finite(): return _bad("RECT2_NON_FINITE", "_unit_draw_rect")
+	return _good({"position": rect.position, "size": rect.size})
+
+func _rect_from_wire(value: Variant) -> Dictionary:
+	if not _fields(value, ["position", "size"]): return _bad("RECT2_FIELDS", "_unit_draw_rect")
+	if typeof(value.position) != TYPE_VECTOR2 or typeof(value.size) != TYPE_VECTOR2: return _bad("RECT2_COMPONENT_TYPE", "_unit_draw_rect")
+	if not value.position.is_finite() or not value.size.is_finite(): return _bad("RECT2_NON_FINITE", "_unit_draw_rect")
+	return _good(Rect2(value.position, value.size))
+
+'''
+CAPTURE = '''	# Rect2 has no value-codec tag. Preserve its two Vector2 values explicitly.
+	# Leave the already validated native values alone; only the wire dictionary changes.
+	var rect_wire: Dictionary = _rect_to_wire(values["_unit_draw_rect"])
+	if not rect_wire.ok: return rect_wire
+	var wire_values: Dictionary = values.duplicate()
+	wire_values["_unit_draw_rect"] = rect_wire.value
+	raw["values"] = wire_values
+'''
+VALIDATE = '''	if typeof(raw.values) != TYPE_DICTIONARY or not raw.values.has("_unit_draw_rect"): return _bad("VALUE_FIELDS")
+	var rect_native: Dictionary = _rect_from_wire(raw.values["_unit_draw_rect"])
+	if not rect_native.ok: return rect_native
+	raw["values"]["_unit_draw_rect"] = rect_native.value
+'''
+EDITS = [
+    ('func _clocks(clocks: Variant, values: Variant) -> Dictionary:',
+     HELPERS + 'func _clocks(clocks: Variant, values: Variant) -> Dictionary:'),
+    ('\tvar encoded: Dictionary = _codec.encode(raw)\n',
+     CAPTURE + '\tvar encoded: Dictionary = _codec.encode(raw)\n'),
+    ('\tvar values: Dictionary = _values(raw.values)\n',
+     VALIDATE + '\tvar values: Dictionary = _values(raw.values)\n'),
+]
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+def save(name, value):
+    (HERE/name).write_bytes((json.dumps(value, ensure_ascii=False, indent=2)+'\n').encode('utf-8'))
+
+assert digest((ROOT/'scripts/battle.gd').read_bytes()) == BASE_BATTLE
+ast.parse(Path(__file__).read_text(encoding='utf-8'))
+receipts = {}
+for name, expected in FROZEN.items():
+    before = (OLD/name).read_bytes()
+    assert digest(before) == expected, name
+    newline = b'\r\n' if b'\r\n' in before else b'\n'
+    changes = [(a.encode().replace(b'\n', newline), b.encode().replace(b'\n', newline)) for a, b in EDITS]
+    candidate = before
+    for old, new in changes:
+        assert candidate.count(old) == 1, (name, old)
+        candidate = candidate.replace(old, new)
+    inverse = candidate
+    for old, new in reversed(changes):
+        assert inverse.count(new) == 1
+        inverse = inverse.replace(new, old)
+    assert inverse == before
+    assert digest((OLD/name).read_bytes()) == expected
+    (HERE/name).write_bytes(candidate)
+    patch = ''.join(difflib.unified_diff(before.decode().splitlines(keepends=True),
+                                        candidate.decode().splitlines(keepends=True),
+                                        fromfile='frozen/'+name, tofile='r1/'+name))
+    (HERE/(name+'.patch')).write_bytes(patch.encode())
+    receipts[name] = {'parent_bytes': len(before), 'parent_sha256': expected,
+                      'candidate_bytes': len(candidate), 'candidate_sha256': digest(candidate),
+                      'inverse_raw_exact': True, 'inverse_sha256': digest(inverse),
+                      'insertion_sites': 3, 'parent_unchanged': True}
+sources = ['scripts/battle.gd', 'scripts/unit.gd', 'scripts/levels/skirmish.gd',
+           'scripts/run_state_value_codec.gd', 'scripts/run_unit_state.gd',
+           'scripts/run_graph_identity.gd', 'scripts/run_content_identity.gd']
+for name in sources:
+    assert (ROOT/name).is_file(), name
+pins = {'frozen_preparation': True, 'godot_run': False, 'root_factory_still_required': True,
+        'scope': 'Only _unit_draw_rect Rect2 explicit Vector2 position/size wire representation',
+        'provider_final_repin_pending': True,
+        'parent_candidate_files': FROZEN,
+        'runtime_source_sha256': {name: digest((ROOT/name).read_bytes()) for name in sources},
+        'inverse': receipts,
+        'files': {name: {'bytes': (HERE/name).stat().st_size, 'sha256': digest((HERE/name).read_bytes())}
+                  for name in ['build.py', 'root_state.gd', 'root_state.gd.in',
+                               'root_state.gd.patch', 'root_state.gd.in.patch', 'README.md', '.gdignore']}}
+save('pins.json', pins)
+save('preparation.json', {'godot_run': False, 'python_ast': True,
+     'inverse_raw_exact': True, 'parent_files_unchanged': True,
+     'production_battle_unchanged': digest((ROOT/'scripts/battle.gd').read_bytes()) == BASE_BATTLE,
+     'pins_sha256': digest((HERE/'pins.json').read_bytes()), 'files': receipts})
+print(json.dumps({'prepared': True, 'godot_run': False, 'inverse_exact': True,
+                  'pins_sha256': digest((HERE/'pins.json').read_bytes()), 'files': receipts}))

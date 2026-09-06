@@ -1,0 +1,38 @@
+# Fog runtime restore candidate
+
+Prepared, **not run**. This module has no `source_code`, raw GDScript hash, reflection or save-selected load path. The actual installed `run_content_identity.gd` resolves its trusted context before `Factory.new(identity, BattleScript, MapScript, CodecScript, BattleScript.FogLayer)`. The provider is currently being corrected by the parent task; a reviewed explicit source repin is required after that independent fix. This is a runtime-compatible design, not a claim that this module has passed exported-PCK execution.
+
+`capture(battle, {quiescent:true})` requires the real paused SceneTree outside its physics callback. `validate(record, actual_map_dimensions)` rejects unknown schema/content/codec, malformed arrays, unsupported layer extensions and image bytes. `bind(detached_disabled_blocked_battle, record)` creates the exact saved Image/ImageTexture and the fixed native FogLayer, assigns only the five authority values and three display object fields, and returns the still-detached layer, saved world child index and activation. The outer transaction attaches it at that index, then calls `activate` while paused. No `Battle._ready`, `_init_fog`, `_fog_pass`, setup, target changes or gameplay RNG calls occur in bind/activate. Map and Unit restoration remain explicit outer dependencies.
+
+The authoritative five fields are `fog`, `_vision`, `_sight_now`, `_reveal_t`, `_fog_t`; dimensions belong to the real installed Map. The first two arrays are converted to exact integer arrays for the existing value codec; the native `PackedFloat32Array` retains exact bits. Invalid byte-domain integers are rejected **before** constructing PackedByteArray. Bound: 256 per axis and 4096 cells; the real test uses standard 60×60. The module/codec contracts are `battle_fog_runtime_v1` / `run_state_value_codec_v1`.
+
+Actual consumers at Battle 07d7cb…:
+
+| Production location | Reads/writes and restoration responsibility |
+| --- | --- |
+| `_init_fog` 4105 | Creates the five field buffers, opaque RGBA8 image, ImageTexture, actual FogLayer z=3600/world order. Reference fixture only; never called on restored Battle. |
+| `_reveal_fog_at` 4239 | Writes `_vision` and `_reveal_t` immediately; does not update image/texture or Unit visibility. |
+| `_fog_pass` 4190 | Uses saved `_fog_t` overshoot for reveal decay; rebuilds current sight from actual Units, updates vision/image/texture and enemy `fog_visible`/`visible`. |
+| `is_visible_world` 4124 / `_has_live_sight_at` 4136 | Uses sight/reveal; the latter also inspects actual Unit positions and state. |
+| `is_lit_world` 4158 / `is_explored_world` 4168 / `target_visible_to` 4177 | Reads memory/current fog and observer distance. Real Map.world_to_cell clamps outside positions to edges; the smoke records that actual behavior. |
+| `FogLayer` 14248 | Native `_draw` draws borders and texture using `tex`/`ws`; `_process` only requests redraw. Bind rebuilds its fixed class, transform, display flags, order and activation. |
+| Unit `fog_visible` / CanvasItem.visible | Preserved by Unit module. This smoke copies those two already-captured values into real new Unit fixtures explicitly; fog bind never writes them. |
+
+Saving only authority and drawing a fresh image from `_vision` is incorrect between reveal and the next fog pass. The record therefore includes bounded **actual existing RGBA8 pixels**, requiring ImageTexture and CPU Image equality; pixels may deliberately disagree with current logical vision. It accepts opaque/half/transparent black only, no mipmaps/custom material/metadata/child nodes. Fog disabled with no buffers creates no objects. Disabled but previously materialized fog preserves buffers, timer, exact pixels and hidden-layer state.
+
+The actual source-mode smoke uses two off-tree real Battle shells and independently baked native 60×60 GameMaps. It does not deploy or attach Battle. Each side has three actual off-tree Units: a friendly observer at (12,12), an ordinary enemy and an enemy building at (50,50). A reference `_init_fog` and original fog pass establish the fixture; a reveal occurs after only part of the next timer has elapsed. It captures → JSON roundtrips → validates → binds fresh image/layer and paused-attaches. At saved phase, before timer expiry, first pass and reveal expiry it compares exact values, CPU image, actual ImageTexture bytes and actual Unit display flags. Independent SubViewports/World2Ds invoke the real FogLayer draw, compare RGBA frames and check distinct known clear/black pixels against an empty-frame false positive. These controlled Canvas waits are not a proof of whole-world Engine frame phase restoration.
+
+Negative cases use the real codec and factory: unknown module/codec/content, 256 vision byte, boolean sight byte, negative reveal, timer beyond FOG_STEP, wrong Map dimensions, missing trusted caller context. Each bad bind checks that the fresh destination still has no arrays/images/layer. This is not gameplay optimization, whole Battle resume, global input replay, another mode or another map size acceptance.
+
+Execution uses a reviewed single-suite runner copy: default is read-only preflight; `--freeze` explicitly records changed reviewed source bytes and retains the prior pins; `--run --godot <actual-non-console-exe>` owns the shared engine lock and one actual native process. Current source Scripts/scenes/project + new two GD files are pinned, including actual provider and Autoload Updater. No large source copy/import, player-data copy or production mutation occurs. Existing `.godot` imported resources are reused; cache files are not represented as production or archived. APPDATA/LOCALAPPDATA/TEMP/TMP are fresh under the run directory. Source guard enumerates/hashes all production resource roots before/after; player guard observes the real user directory without using it. Child PID, manifest, engine SHA, renderer (`gl_compatibility`), private user and report/stdout are cross-checked. Owned errors stop immediately; exact child exit and exclusivity are required before releasing the lock. Failures retain their unique run directory and lock when safe release cannot be established.
+
+Commands (parent alone runs the final one after source repin and engine handoff):
+
+```powershell
+& $python -X utf8 scratchpad/run_fog_runtime_state/prepare_runner.py
+& $python -X utf8 scratchpad/run_fog_runtime_state/run_smoke.py --freeze
+& $python -X utf8 scratchpad/run_fog_runtime_state/run_smoke.py
+& $python -X utf8 scratchpad/run_fog_runtime_state/run_smoke.py --run --godot $actualGodot
+```
+
+Output: `runs/<UTC>/{manifest.json,environment.json,report.log,report_process.json,report.json,sources_before.json,sources_after.json,players_before.json,players_after.json,receipt.json}` plus a **private_profile that must not be archived**. Report suite/prefix: `fog-runtime-restore` / `[fog-runtime-restore QA] `. Source hashes in QA are external evidence, not the saved runtime compatibility identity.

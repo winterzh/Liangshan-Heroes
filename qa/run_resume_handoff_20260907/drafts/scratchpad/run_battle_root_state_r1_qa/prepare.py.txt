@@ -1,0 +1,100 @@
+"""Create the narrow root R1 wrapper and frozen source/label contracts; no engine."""
+import ast
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+PARENT = ROOT/'scratchpad/run_fog_runtime_state/run_smoke.py'
+PARENT_SHA = '158c3110679bb5bed568b080ff283b16b63624f9362104df95edfcd6a845cf86'
+PINS = {
+    'scripts/battle.gd': '07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd',
+    'scripts/run_content_identity.gd': 'a78dc5e9895cc4bf381e4c368c51527075ce5afa5835531881faa3a99d71077f',
+    'scratchpad/run_battle_root_state_r1/root_state.gd': '3a758cdb6f0e6b7eb30ff83c2b6b9f01cb97742f26c9513fc89ee9b566d11c6f',
+    'scratchpad/run_battle_root_state/field_coverage.json': '33b3533ebc462981f9ad60eff14c085f2a2c44cd0f8203ff159bf13d675359ac',
+}
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+def write(name, data):
+    (HERE/name).write_bytes((json.dumps(data, ensure_ascii=False, indent=2)+'\n').encode('utf-8'))
+for name, digest in PINS.items():
+    assert sha(ROOT/name) == digest, 'Frozen prerequisite changed: '+name
+assert sha(PARENT) == PARENT_SHA, 'Reviewed lifecycle changed'
+text = (ROOT/'scratchpad/run_battle_root_state_r1/root_state.gd').read_text(encoding='utf-8')
+def array(name):
+    return json.loads(re.search(r'^const '+name+r' := (\[.*\])$', text, re.M).group(1))
+values = re.findall(r'^\t"([^"]+)": TYPE_', text, re.M)
+root_names = values[:]
+for group in ['ROOT_REFERENCE','ROOT_REFERENCE_LIST','ROOT_GROUPS','ROOT_SPATIAL_GRID',
+              'ROOT_NATIVE_IDENTITY_MAP','ROOT_BLOCKER_CACHE','ROOT_ECO_CACHE',
+              'ROOT_ENGINE_CLOCK','ROOT_INPUT_CLOCK','ROOT_INFINITY_SENTINEL']:
+    root_names += array(group)
+declared, external = array('ALL_DECLARATIONS'), array('EXTERNAL_FIELDS')
+coverage = json.loads((ROOT/'scratchpad/run_battle_root_state/field_coverage.json').read_bytes())
+actual = re.findall(r'^var ([A-Za-z_][A-Za-z_0-9]*)', (ROOT/'scripts/battle.gd').read_text(encoding='utf-8'), re.M)
+assert len(values)==83 and len(root_names)==104 and len(set(root_names+external))==169
+assert actual == declared == [row['field'] for row in coverage['fields']]
+assert len(external)==65 and set(root_names+external)==set(actual)
+write('field_contract.json', {'declared_names':declared, 'root_names':root_names, 'external_names':external,
+     'ordinary_names':values, 'frozen_prerequisites':PINS})
+labels = ['actual trusted provider','actual provider save eligible and native engine',
+    '169 declarations 104 root 65 external exact','classification matches frozen declaration table',
+    'real standard Battle paused and started once','Battle uses actual trusted provider',
+    'default Rect2 retained before real grid build','source shared identity configure',
+    'fresh shared identity declares known IDs','fresh real Unit shells shared identity configure',
+    'real viewport produces nonzero Rect2','original viewport consumer distinguishes inside outside',
+    'restored original consumer preserves inside outside','actual viewport Rect2 preserved',
+    'nonempty blocker budget preserved','nonempty economic cache preserved',
+    'native ID moved to fresh real Unit','unsupported actual field is exposed',
+    'unsupported capture does not silently zero field',
+    'expired is live tombstone until all root binds','expired preserved as freed object not null']
+for case in ['default','viewport','fractional_negative']:
+    labels += [case+' '+suffix for suffix in ['capture','capture source unchanged','capture draws no native RNG',
+        'JSON record','actual codec decode','Rect2 wire exact keys and Vector2','validate','retired UID aliases exact',
+        'bind','common input time origin','same frame detached install','external factory untouched','no whole Battle claim']]
+    labels += [case+' root field '+field for field in root_names]
+    labels += [case+' field encodable '+field for field in values]
+for case in ['scalar','missing_size','extra_key','integer_component','vector2i_component','missing_field']:
+    labels += ['malformed '+case+' '+suffix for suffix in ['validate rejects','bind rejects','all 104 untouched']]
+assert len(labels)==len(set(labels))
+write('required_labels.json', {'required':labels,'prepared_only':True,'godot_run':False})
+
+raw = PARENT.read_bytes()
+runner = raw.decode('utf-8')
+runner = runner.replace('Actual fog consumers and Canvas;', 'Actual root R1 fields and viewport consumer;')
+runner = runner.replace('run_fog_runtime_state', 'run_battle_root_state_r1_qa')
+runner = runner.replace('fog-runtime-restore', 'battle-root-r1')
+runner = runner.replace('gl_compatibility', 'forward_plus')
+runner = runner.replace("errors='ignore'", "errors='replace'")
+old = "    names = ['project.godot', 'scratchpad/run_battle_root_state_r1_qa/fog_state.gd',\n             'scratchpad/run_battle_root_state_r1_qa/driver.gd']"
+new = "    names = ['project.godot', 'scratchpad/run_battle_root_state_r1/root_state.gd',\n             'scratchpad/run_battle_root_state/field_coverage.json',\n             'scratchpad/run_battle_root_state_r1_qa/driver.gd',\n             'scratchpad/run_battle_root_state_r1_qa/field_contract.json',\n             'scratchpad/run_battle_root_state_r1_qa/required_labels.json']\n    field_contract = json.loads((HERE/'field_contract.json').read_bytes())\n    required_labels = json.loads((HERE/'required_labels.json').read_bytes())['required']\n    for name, expected in field_contract['frozen_prerequisites'].items():\n        util.need(util.file_sha(ROOT/name) == expected, 'Explicit root R1 prerequisite drift: '+name)"
+assert runner.count(old)==1
+runner=runner.replace(old,new)
+old="            'provider_note': 'Actual installed provider is resolved at run time; root provider fix requires explicit reviewed repin.'}"
+new="            'provider_note': 'Battle07d7/providerR2a78/rootR1 3a758 explicit frozen baseline; actual provider resolves trust at runtime.'}"
+assert runner.count(old)==1
+runner=runner.replace(old,new)
+old="                    'engine_binary_sha256': util.ENGINE_SHA}"
+new="                    'engine_binary_sha256': util.ENGINE_SHA,\n                    'declared_names': field_contract['declared_names'], 'root_names': field_contract['root_names']}"
+assert runner.count(old)==1
+runner=runner.replace(old,new)
+old="        util.need(util.file_sha(out / 'manifest.json') == manifest_sha, 'Manifest drift')"
+new="        labels = [row.get('label') for row in checks]\n        util.need(set(required_labels).issubset(labels), 'Required root/Rect2 coverage missing')\n        util.need(report.get('declarations') == 169 and report.get('root_fields') == field_contract['root_names']\n                  and report.get('external_fields') == field_contract['external_names']\n                  and report.get('completed_cases') == ['default','viewport','fractional_negative']\n                  and report.get('battle_resume_tested') is False, 'Wrong root classification or scope')\n        util.need(util.file_sha(out / 'manifest.json') == manifest_sha, 'Manifest drift')"
+assert runner.count(old)==1
+runner=runner.replace(old,new)
+ast.parse(runner)
+(HERE/'run_smoke.py').write_bytes(runner.encode('utf-8'))
+result=subprocess.run([sys.executable,'-X','utf8',str(HERE/'run_smoke.py'),'--freeze'],cwd=ROOT,capture_output=True,text=True,encoding='utf-8')
+assert result.returncode==0, result.stdout+'\n'+result.stderr
+pins_raw=(HERE/'pins.json').read_bytes()
+write('preparation.json', {'prepared_only':True,'godot_run':False,'gd_parse_tested':False,
+    'python_ast':True,'frozen_module_unchanged':True,'declarations':169,'root_fields':104,'ordinary_fields':83,
+    'required_label_count':len(labels),'parent_runner_sha256':PARENT_SHA,'runner_sha256':sha(HERE/'run_smoke.py'),
+    'driver_sha256':sha(HERE/'driver.gd'),'pins_sha256':hashlib.sha256(pins_raw).hexdigest(),
+    'freeze_result':json.loads(result.stdout)})
+assert all(sha(ROOT/name)==digest for name,digest in PINS.items())
+print(json.dumps({'prepared':True,'godot_run':False,'required_labels':len(labels),
+    'driver_sha256':sha(HERE/'driver.gd'),'runner_sha256':sha(HERE/'run_smoke.py'),'pins_sha256':sha(HERE/'pins.json')}))

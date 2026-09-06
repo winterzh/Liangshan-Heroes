@@ -1,0 +1,61 @@
+extends RefCounted
+## Small executable candidate smoke. Caller injects fixed Scripts; no runner or mock Node.
+## Core checks do not prove actual Battle/Unit/SceneTree ordering or continuation.
+var _checks: Array = []
+
+func _check(label: String, passed: bool) -> void:
+	_checks.append({"label": label, "passed": passed})
+
+func _json(value: Variant) -> Variant:
+	var parser := JSON.new()
+	if parser.parse(JSON.stringify(value)) != OK: return null
+	return parser.data
+
+func run(core_script: Script, codec_script: Script) -> Array:
+	_checks.clear()
+	var core: Variant = core_script.new(codec_script, "fixture-core-v1")
+	var first: Dictionary = core.reserve()
+	var abandoned: Dictionary = core.reserve(2)
+	var after_failed_spawn: Dictionary = core.reserve()
+	_check("reserve_positive_and_burned_gaps", first.ok and first.first == 1 and abandoned.first == 2 and abandoned.last == 3 and after_failed_spawn.first == 4 and core.next_entity_id() == 5)
+	_check("bad_count_does_not_allocate", not core.reserve(0).ok and not core.reserve(1.0).ok and core.next_entity_id() == 5)
+	var begin: Dictionary = core.begin_step()
+	_check("tick_begin_once", begin.ok and begin.tick == 1 and not core.begin_step().ok and core.simulation_tick() == 1)
+	_check("mid_step_capture_rejected", not core.capture([1, 4]).ok)
+	_check("explicit_commit_and_duplicate_rejection", core.commit_after_callback_barrier().ok and not core.commit_after_callback_barrier().ok)
+	var captured: Dictionary = core.capture([1, 4])
+	var transferred: Variant = _json(captured.record)
+	var restored: Variant = core_script.new(codec_script, "fixture-core-v1")
+	var accepted: Dictionary = restored.restore_fresh(transferred, [1, 4])
+	_check("real_json_fresh_restore", captured.ok and accepted.ok and restored.next_entity_id() == 5 and restored.simulation_tick() == 1)
+	var source_next: Dictionary = core.reserve()
+	var restored_next: Dictionary = restored.reserve()
+	_check("future_allocation_continuity", source_next.ok and restored_next.ok and source_next.first == restored_next.first and source_next.first == 5)
+	_check("future_tick_continuity", core.begin_step().tick == restored.begin_step().tick and core.simulation_tick() == 2)
+	core.commit_after_callback_barrier()
+	restored.commit_after_callback_barrier()
+	_check("duplicate_ids_rejected", not restored.capture([1, 1]).ok)
+	_check("counter_must_exceed_known_ids", not restored.capture([6]).ok)
+	_check("zero_and_float_ids_rejected", not restored.capture([0]).ok and not restored.capture([1.0]).ok)
+	_check("live_destination_not_rewound", not restored.restore_fresh(transferred, [1, 4]).ok and restored.next_entity_id() == 6)
+	var bad: Dictionary = transferred.duplicate(true)
+	bad["extra"] = true
+	var fresh_bad: Variant = core_script.new(codec_script, "fixture-core-v1")
+	_check("extra_field_atomic_rejection", not fresh_bad.restore_fresh(bad, []).ok and fresh_bad.next_entity_id() == 1 and fresh_bad.simulation_tick() == 0)
+	var wrong_content: Variant = core_script.new(codec_script, "fixture-other-content")
+	_check("trusted_content_rejection", not wrong_content.restore_fresh(transferred, [1, 4]).ok)
+	var codec: Variant = codec_script.new()
+	var large: Dictionary = codec.encode({"next_entity_id": 9007199254740993, "simulation_tick": 9007199254740993})
+	var large_record := {"schema": "battle_entity_clock_v1", "content_version": "fixture-core-v1", "values": large.value}
+	var large_core: Variant = core_script.new(codec_script, "fixture-core-v1")
+	_check("exact_above_2pow53_json", large_core.restore_fresh(_json(large_record), [9007199254740992]).ok and large_core.next_entity_id() == 9007199254740993 and large_core.simulation_tick() == 9007199254740993)
+	var near: Dictionary = codec.encode({"next_entity_id": 9223372036854775806, "simulation_tick": 9223372036854775806})
+	var near_record := {"schema": "battle_entity_clock_v1", "content_version": "fixture-core-v1", "values": near.value}
+	var limit: Variant = core_script.new(codec_script, "fixture-core-v1")
+	var installed: Dictionary = limit.restore_fresh(_json(near_record), [])
+	var last: Dictionary = limit.reserve()
+	_check("last_id_and_exhausted_counter", installed.ok and last.ok and last.first == 9223372036854775806 and limit.next_entity_id() == 9223372036854775807 and not limit.reserve().ok)
+	_check("last_tick_without_overflow", limit.begin_step().ok and limit.simulation_tick() == 9223372036854775807 and limit.commit_after_callback_barrier().ok and not limit.begin_step().ok)
+	core.invalidate("UNIT_CALLBACK_FAILED")
+	_check("partial_step_fault_never_captures", not core.capture([1, 4, 5]).ok and not core.reserve().ok and not core.begin_step().ok)
+	return _checks.duplicate(true)

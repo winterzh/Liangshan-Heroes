@@ -179,7 +179,7 @@ def main():
     finally:
         if child is not None and child.poll() is None: child.kill(); child.wait(timeout=30)
         (run / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
-        if not receipt.get("identity_probe_exit_unconfirmed", False) and LOCK.read_text() == str(run): LOCK.unlink()
+        if not receipt.get("identity_probe_exit_unconfirmed", False) and LOCK.read_text(encoding="utf-8") == str(run): LOCK.unlink()
         print(json.dumps({"complete":receipt["complete"],"run":str(run),"checks":receipt.get("checks",0)}), flush=True)
 
 if __name__ == "__main__": main()

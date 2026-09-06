@@ -1,0 +1,49 @@
+{
+  "status": "frozen_partial_at_parent_departure_handoff",
+  "godot_run": false,
+  "production_modified": false,
+  "old_candidate_modified": false,
+  "git_used": false,
+  "runnable": false,
+  "files": {
+    ".gdignore": {
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "QA_CONTRACT.md": {
+      "bytes": 7116,
+      "sha256": "be30fe7fe2884af6c75dc3cbe7015cae3dac057a1e7db2ccd61d4ce268ff57b6"
+    },
+    "freed_probe.gd.inc": {
+      "bytes": 6945,
+      "sha256": "00b4061dcfb9b1f1b3ea63d88e1fa03b28a7f74d7658b6642907dd5dfe05bbac"
+    }
+  },
+  "missing": [
+    "driver.gd",
+    "run_smoke.py",
+    "pins.json",
+    "required_labels/source_contract",
+    "static generator/AST/preflight receipt"
+  ],
+  "unchanged_old_module": {
+    "path": "scratchpad/run_item_cast_flow_resume/item_cast_flow_state.gd",
+    "sha256": "45599305f173853bc6bf9c69334a4655308bb52310b440fc84b44f71f5fd7854"
+  },
+  "unchanged_old_smoke": {
+    "path": "scratchpad/run_item_cast_flow_resume/item_cast_flow_restore_smoke.gd",
+    "sha256": "4cf69c0581a16f7722e496058a1c8843655f9a2378da7ea4dcde64e20bbc65af"
+  },
+  "findings": [
+    "Current Battle07d7 pending item consumer still guards validity only inside target != null before a typed Unit call; actual freed-target error reproduction is pending.",
+    "Standard walking unit target has point INF; may drop before typed call. Do not claim both paths necessarily fail.",
+    "State module field/schema contract still matches current creators; no module modification prepared.",
+    "Defs.ITEMS is intentionally empty; use named protocol-only fixture definitions in detached Battle, never claim installed player items."
+  ],
+  "remaining": [
+    "Integrate fragment with old smoke helpers into a new driver. Replace fixed CONTENT with actual provider-resolved trusted version and host engine SHA check. Bind real checked RNG to each detached fixture; add paused process-frame barrier.",
+    "Add manifest phase dispatch for freed_pending, freed_walk, lifecycle. Retain real creator/free/consumer calls and strict failure; checkpoints do not make errors pass.",
+    "Copy actual root R2 runner lifecycle into this new directory, adapt source list/phase labels and freeze explicit current production including scripts/run_fog_state.gd. No engine before root review."
+  ],
+  "scope": "No full UnitGraph/Map/Battle restore, stable entity migration, item availability, PCK or menu continuation claim."
+}

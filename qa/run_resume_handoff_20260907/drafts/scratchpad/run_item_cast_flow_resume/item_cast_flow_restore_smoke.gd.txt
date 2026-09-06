@@ -1,0 +1,413 @@
+extends SceneTree
+## Two item queues; real item creators/consumers, Inventory and Unit phase bodies.
+## No Battle._ready/deploy and no visual Node restoration.
+## Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Factory := preload("res://scratchpad/run_item_cast_flow_resume/item_cast_flow_state.gd")
+const CONTENT := "item_cast_flow_smoke_v1"
+const UNIT_FIXTURE_FIELDS := ["hp","max_hp","_base_hp","base_speed","_base_speed","_base_atk","_base_defense","atk","atk_range","defense","_order_serial","_cast_serial","_cast_t","_cast_dur","_cast_color","_channel_t","_channel_dur","_charge_t","_charge_dash","ability_slots","_queue","_path","_path_i","_state","manual_order_active","_target","_stun_t","_silence_t","_home","_has_home","_resume_amove","_chase_intent","_patrolling","_group_cap","_combat_cool","temp_speed","_temp_speed_t","_buff_glow"]
+const INVENTORY_FIXTURE_FIELDS := ["slots", "cooldowns", "proc_cooldowns", "_uid_seq", "_periodic_acc"]
+var graphs: Array = []
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var report_path: String = ""
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+var observed_steps: Dictionary = {}
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for graph in graphs: graph.dispose()
+	graphs.clear()
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "item-cast-flow-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}), "observed_steps": observed_steps,
+		"scope": "Only pending/walking item queues through real creators, consumers, Unit phases and Inventory timers. The fixture directly supplies Unit and inventory fields, trusted QA items, a real empty map, a trusted fixture UID maximum and staged arrivals. No full UnitGraph/Inventory loader, whole-graph UID validator, movement simulation, existing visual restoration, full Battle resume, RNG isolation, PCK or menu continuation."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[item-cast-flow-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var inventory_script: Script = load("res://scripts/hero_inventory.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var identity_script: Script = load("res://scripts/run_graph_identity.gd")
+	var counter_script: Script = load("res://scripts/run_item_id_state.gd")
+	var level_script: Script = load("res://scripts/level_base.gd")
+	var hud_script: Script = load("res://scripts/hud.gd")
+	var codec: Variant = codec_script.new()
+	var factory: Variant = Factory.new(codec_script, battle_script, unit_script)
+	var counter: Variant = counter_script.new(codec_script, battle_script)
+	paused = true
+	Campaign.scale_on = false # Explicit QA hero multiplier, private fixture only.
+	var world := Node2D.new()
+	world.visible = false
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	root.add_child(world)
+	owned.append(world)
+	var original: Variant = battle_script.new()
+	owned.append(original)
+	_shell_environment(original, world, map_script, level_script, hud_script)
+	# A trusted high-water fixture exercises int64 UIDs above JSON's exact float range.
+	original.next_item_uid = 9007199254740993
+	var old_units: Array = []
+	var locations: Array = [Vector2(80, 80), Vector2(80, 300), Vector2(820, 80),
+		Vector2(80, 500), Vector2(860, 300), Vector2(80, 300),
+		Vector2(80, 800), Vector2(80, 1000), Vector2(80, 1200), Vector2(80, 1400),
+		Vector2(400, 80), Vector2(400, 300), Vector2(900, 80)]
+	var allocated: bool = true
+	for index in range(locations.size()):
+		var unit: Variant = _unit(unit_script, locations[index], index < 10)
+		world.add_child(unit)
+		if index < 10:
+			unit.battle = original
+			unit.map = original.map
+			unit.inventory = inventory_script.new(unit)
+			var issued: bool = unit.inventory.put_item(0, "qa_unit_item" if index in [0, 2, 4, 5, 6] else ("qa_point_item" if index in [1, 9] else "qa_self_item"), 1 if index == 8 else 3)
+			allocated = allocated and issued
+		old_units.append(unit)
+	if not _check("real inventories allocate all ten caster stacks", allocated):
+		_finish(true)
+		return
+	original.units = old_units.duplicate()
+	if not _check("actual second stack allocates a distinct same-item UID", old_units[2].inventory.put_item(1, "qa_unit_item", 3)):
+		_finish(true)
+		return
+	var retired_target: Variant = _unit(unit_script, Vector2(900, 300), false)
+	world.add_child(retired_target)
+	var retired_caster: Variant = _unit(unit_script, Vector2(80, 1600), true)
+	world.add_child(retired_caster)
+	retired_caster.battle = original
+	retired_caster.map = original.map
+	retired_caster.inventory = inventory_script.new(retired_caster)
+	if not _check("real soon-retired caster allocates the highest fixture UID", retired_caster.inventory.put_item(0, "qa_self_item", 3)):
+		_finish(true)
+		return
+	var retired_uid: int = retired_caster.inventory.slot_item(0).uid
+	# Age timeout comes from the real consumer, not an invented record field.
+	original._queue_walk_item(old_units[9], 0, null, Vector2(600, 1400))
+	original._walk_item_cast_pass(14.75)
+	original._queue_walk_item(old_units[0], 0, old_units[10], Vector2.INF)
+	original._queue_walk_item(old_units[1], 0, null, old_units[11].position)
+	original._queue_walk_item(old_units[5], 0, retired_target, Vector2.INF)
+	original._queue_walk_item(old_units[6], 0, old_units[10], Vector2.INF)
+	original._walk_item_cast_pass(0.125)
+	_check("real walk creators keep order and original path timers", original._walk_item_casts.size() == 5 and original._walk_item_casts[0].c == old_units[9] and original._walk_item_casts[0].age == 14.875 and original._walk_item_casts[1].point == Vector2.INF and old_units[0]._order_serial == 1)
+	original._begin_item_cast(old_units[2], 0, old_units[12].position, old_units[12])
+	original._begin_item_cast(old_units[3], 0, old_units[3].position)
+	original._begin_item_cast(old_units[4], 0, retired_target.position, retired_target)
+	original._begin_item_cast(old_units[7], 0, old_units[7].position)
+	original._begin_item_cast(old_units[8], 0, old_units[8].position)
+	original._begin_item_cast(retired_caster, 0, retired_caster.position)
+	for index in [2, 3, 4, 7, 8]: old_units[index]._physics_process(0.125)
+	retired_caster._physics_process(0.125)
+	original._tick_pending_item_casts()
+	var moved_uid: int = old_units[2].inventory.slot_item(0).uid
+	_check("real slot swap leaves historical pending slot while UID moves", old_units[2].inventory.swap_slots(0, 3) and original._pending_item_casts[0].slot == 0 and original._pending_item_casts[0].uid == moved_uid and old_units[2].inventory.find_uid(moved_uid) == 3)
+	old_units[2].inventory.start_proc_cooldown(moved_uid, "fixture", 2.375)
+	old_units[8].inventory.consume_one(0)
+	retired_target.free()
+	retired_caster.free()
+	_check("real windups retain time without spending and removed UID stays pending", old_units[2]._cast_t == 0.375 and old_units[2].inventory.cooldown_left("qa_unit_item") == 0.0 and old_units[2].inventory.slot_item(3).count == 3 and old_units[8].inventory.slots[0].is_empty() and original._pending_item_casts.size() == 6)
+	var old_object_ids: Dictionary = {}
+	var known: Dictionary = {}
+	for index in range(old_units.size()):
+		old_object_ids[old_units[index]] = str(index + 1)
+		known[str(index + 1)] = true
+	var captured: Dictionary = factory.capture(original, CONTENT, old_object_ids)
+	if not _ok("capture ordered item queues with real freed references", captured):
+		_finish(true)
+		return
+	var record: Dictionary = JSON.parse_string(JSON.stringify(captured.record))
+	var validated: Dictionary = factory.validate(record, CONTENT, known)
+	if not _ok("real JSON preserves item UID aliases and point modes", validated):
+		_finish(true)
+		return
+	_check("all queue UID aliases include retired owner above live inventories", validated.item_uid_aliases.size() == 11 and validated.item_uid_alias_max == retired_uid and typeof(validated.item_uid_alias_max) == TYPE_INT and retired_uid > 9007199254740993 and validated.item_uid_max_scope == "these_two_queues_only" and _live_uid_max(old_units) < retired_uid)
+	var raw: Dictionary = codec.decode(record.payload).value
+	var bad: Dictionary = raw.duplicate(true)
+	bad._pending_item_casts[0].erase("uid")
+	_check("missing creator UID is rejected", not factory.validate(_record_with_payload(record, bad, codec), CONTENT, known).ok)
+	bad = raw.duplicate(true)
+	bad._pending_item_casts[0].uid = float(moved_uid)
+	_check("rounded float item UID is rejected without coercion", not factory.validate(_record_with_payload(record, bad, codec), CONTENT, known).ok)
+	bad = raw.duplicate(true)
+	bad._pending_item_casts[0].uid = 9223372036854775807
+	_check("allocator exhaustion sentinel cannot appear as an issued alias", not factory.validate(_record_with_payload(record, bad, codec), CONTENT, known).ok)
+	bad = raw.duplicate(true)
+	bad._pending_item_casts[0].serial = 1.0
+	_check("cast serial must retain int type", not factory.validate(_record_with_payload(record, bad, codec), CONTENT, known).ok)
+	bad = raw.duplicate(true)
+	bad._walk_item_casts[1].point = {"mode": "point", "value": Vector2(400, 80)}
+	_check("single target intent cannot become point intent", not factory.validate(_record_with_payload(record, bad, codec), CONTENT, known).ok)
+	bad = raw.duplicate(true)
+	bad._pending_item_casts[0].target = {"state": "entity", "id": "999"}
+	_check("unknown live target rejects before allocation", not factory.instantiate(_record_with_payload(record, bad, codec), CONTENT, known).ok)
+	_check("trusted content mismatch rejects before allocation", not factory.instantiate(record, CONTENT + "_other", known).ok)
+	# Only this bounded fixture knows there are no other allocated alias domains.
+	# A real root validator MUST combine these aliases with every other inventory/graph.
+	var saved_counter: Dictionary = counter.capture(original, CONTENT, retired_uid)
+	if not _ok("outer counter captures with trusted complete fixture maximum", saved_counter):
+		_finish(true)
+		return
+	var counter_record: Dictionary = JSON.parse_string(JSON.stringify(saved_counter.value))
+	var bad_counter: Dictionary = counter_record.duplicate(true)
+	bad_counter.next_item_uid = codec.encode(retired_uid).value
+	_check("outer counter rejects alias reuse even when owner has expired", not counter.validate(bad_counter, CONTENT, retired_uid).ok)
+	var made: Dictionary = factory.instantiate(record, CONTENT, known)
+	if not _ok("instantiate real detached disabled Battle without allocating items", made):
+		_finish(true)
+		return
+	var restored: Variant = made.battle
+	owned.append(restored)
+	_shell_environment(restored, world, map_script, level_script, hud_script)
+	if not _ok("outer counter installs before any inventory is supplied", counter.restore(restored, counter_record, CONTENT, retired_uid)):
+		_finish(true)
+		return
+	var units: Array = []
+	var ids: Dictionary = {}
+	var object_ids: Dictionary = {}
+	for index in range(old_units.size()):
+		var old: Variant = old_units[index]
+		var unit: Variant = _unit(unit_script, old.position, old.is_hero)
+		for field in UNIT_FIXTURE_FIELDS: unit.set(field, _copy_value(old.get(field)))
+		if old.battle != null:
+			unit.battle = restored
+			unit.map = restored.map
+			unit.inventory = inventory_script.new(unit)
+			for field in INVENTORY_FIXTURE_FIELDS: unit.inventory.set(field, _copy_value(old.inventory.get(field)))
+		world.add_child(unit)
+		units.append(unit)
+		ids[str(index + 1)] = unit
+		object_ids[unit] = str(index + 1)
+	restored.units = units.duplicate()
+	var graph: Variant = identity_script.new(unit_script)
+	graphs.append(graph)
+	if not _ok("shared identity declares fixture unit names", graph.declare_entities(known)) or not _ok("shared identity binds every live fixture unit", graph.configure(ids, units)):
+		_finish(true)
+		return
+	var before: Array = _unit_states(units)
+	var saved_next_uid: int = restored.next_item_uid
+	var refused: Dictionary = factory.bind(restored, record, CONTENT + "_other", ids)
+	_check("version mismatch bind makes zero array inventory Unit or counter mutation", not refused.ok and refused.code == "CONTENT_VERSION" and restored._pending_item_casts.is_empty() and restored._walk_item_casts.is_empty() and before == _unit_states(units) and restored.next_item_uid == saved_next_uid)
+	refused = factory.bind(restored, record, CONTENT, ids)
+	_check("expired references require live caller tombstone with zero mutation", not refused.ok and refused.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED" and restored._pending_item_casts.is_empty() and restored._walk_item_casts.is_empty() and before == _unit_states(units) and restored.next_item_uid == saved_next_uid)
+	if not _ok("bind both ordered queues through the common live tombstone", factory.bind(restored, record, CONTENT, ids, graph.expired_unit())):
+		_finish(true)
+		return
+	graph.release_tombstones()
+	var rebound: Dictionary = factory.capture(restored, CONTENT, object_ids)
+	_check("recapture matches including moved slot retired UID and expired tags", rebound.ok and rebound.record == captured.record and rebound.item_uid_aliases == captured.item_uid_aliases)
+	_check("bind never consumes items starts cooldowns allocates or commands", before == _unit_states(units) and restored.next_item_uid == saved_next_uid and restored.fx_root.get_child_count() == 0 and units[2]._cast_t == 0.375 and units[0]._order_serial == 1)
+	refused = factory.bind(restored, record, CONTENT, ids)
+	_check("nonempty item queues cannot be overwritten", not refused.ok and refused.code == "DESTINATION_EFFECT_ARRAYS_NOT_EMPTY")
+	await process_frame
+	_check("paused scene cannot advance restored intents or inventory clocks", factory.capture(restored, CONTENT, object_ids).record == captured.record and before == _unit_states(units))
+	var old_fx: int = original.fx_root.get_child_count()
+	var samples: Array = []
+	var pending_steps: Array = []
+	var walk_steps: Array = []
+	var equivalent: bool = true
+	for step in range(1, 13):
+		var pending_hp: float = units[12].hp
+		var walk_hp: float = units[10].hp
+		_step(original, old_units, step)
+		_step(restored, units, step)
+		var expected: Dictionary = factory.capture(original, CONTENT, old_object_ids)
+		var actual: Dictionary = factory.capture(restored, CONTENT, object_ids)
+		equivalent = equivalent and expected.ok and actual.ok and expected.record == actual.record and _unit_states(old_units) == _unit_states(units) and original.next_item_uid == restored.next_item_uid
+		if units[12].hp != pending_hp: pending_steps.append(step)
+		if units[10].hp != walk_hp: walk_steps.append(step)
+		if step == 1:
+			_check("saved positive windup and repath timers prevent first step replay", units[2]._cast_t == 0.25 and units[12].hp == 500.0 and units[0]._order_serial == 1 and units[2].inventory.slot_item(3).count == 3)
+		if step == 2:
+			_check("real new order interrupt and age expiry cancel without item spending", units[6]._order_serial == 2 and not _has_caster(restored._walk_item_casts, units[6], "c") and not _has_caster(restored._walk_item_casts, units[9], "c") and not _has_caster(restored._pending_item_casts, units[7], "caster") and units[7].inventory.slot_item(0).count == 3)
+		samples.append({"step": step, "pending_hp": units[12].hp, "walk_hp": units[10].hp, "point_hp": units[11].hp, "self_hp": units[3].hp, "walk_count": restored._walk_item_casts.size(), "pending_count": restored._pending_item_casts.size(), "moved_stack_count": units[2].inventory.slot_item(3).count, "shared_cd": units[2].inventory.cooldown_left("qa_unit_item")})
+	_check("twelve real consumers and Unit or inventory timer pairs match", equivalent)
+	_check("pending unit and self items settle once after remaining windup", pending_steps == [3] and units[12].hp == 515.0 and units[3].hp == 515.0 and units[2].inventory.slot_item(3).count == 2 and units[3].inventory.slot_item(0).count == 2)
+	_check("UID follows swapped stack while same-item cooldown covers second stack", units[2].inventory.find_uid(moved_uid) == 3 and units[2].inventory.slots[0].is_empty() and units[2].inventory.slot_item(1).count == 3 and units[2].inventory.cooldown_left("qa_unit_item") > 0.0 and not units[2].inventory.ready(1))
+	_check("walk unit and point settle once after explicitly supplied arrival", walk_steps == [7] and units[10].hp == 515.0 and units[11].hp == 515.0 and units[0].inventory.slot_item(0).count == 2 and units[1].inventory.slot_item(0).count == 2)
+	var unspent: bool = true
+	for index in [4, 5, 6, 7, 9]:
+		unspent = unspent and units[index].inventory.slot_item(0).count == 3 and units[index].inventory.cooldowns.is_empty()
+	_check("expired targets cancelled and timed-out items never consume or start CD", unspent and units[8].inventory.slots[0].is_empty() and units[8].inventory.cooldowns.is_empty())
+	_check("future item consumers create equal new FX without replaying old FX", original.fx_root.get_child_count() - old_fx == restored.fx_root.get_child_count() and restored.fx_root.get_child_count() == 4)
+	var done: Array = _unit_states(units)
+	restored._walk_item_cast_pass(1.0)
+	restored._tick_pending_item_casts()
+	_check("empty queues never settle twice mutate inventory paths or allocate IDs", restored._walk_item_casts.is_empty() and restored._pending_item_casts.is_empty() and done == _unit_states(units) and restored.next_item_uid == saved_next_uid)
+	_check("neither real Battle ran ready deployment or economy", not original.is_inside_tree() and not restored.is_inside_tree() and original.gold == 0 and restored.gold == 0)
+	observed_steps = {"samples": samples, "pending_steps": pending_steps, "walk_steps": walk_steps, "retired_uid_decimal": str(retired_uid), "next_item_uid_decimal": str(saved_next_uid), "moved_uid_decimal": str(moved_uid)}
+	_finish()
+
+func _record_with_payload(record: Dictionary, payload: Dictionary, codec: Variant) -> Dictionary:
+	var copy: Dictionary = record.duplicate(true)
+	copy["payload"] = codec.encode(payload).value
+	return copy
+
+func _has_caster(rows: Array, unit: Variant, field: String) -> bool:
+	for row in rows:
+		if row[field] == unit: return true
+	return false
+
+func _shell_environment(battle: Variant, world: Node2D, map_script: Script, level_script: Script, hud_script: Script) -> void:
+	battle.process_mode = Node.PROCESS_MODE_DISABLED
+	battle.set_block_signals(true)
+	battle.world = world
+	battle.level = level_script.new()
+	var game_map: Variant = map_script.new()
+	owned.append(game_map)
+	game_map.init_map(64, 64, "marsh", map_script.T.GRASS)
+	game_map.bake()
+	battle.map = game_map
+	var fx := Node2D.new()
+	world.add_child(fx)
+	battle.fx_root = fx
+	var hud: Variant = hud_script.new()
+	owned.append(hud)
+	hud._info_expanded = true
+	battle.hud = hud
+	# Real item definitions supplied as bounded QA data, all effects use original APIs.
+	var unit_item: Dictionary = {"name": "QA unit item", "max_stack": 3, "color": Color(0.3, 0.5, 1.0),
+		"active": {"target": "unit", "unit_team": "ally", "range": 120.0, "cast_time": 0.5,
+		"cooldown": 8.0, "consume": true, "effect": {"target": "explicit", "heal": 15.0}}}
+	var point_item: Dictionary = unit_item.duplicate(true)
+	point_item.name = "QA point item"
+	point_item.active.target = "point"
+	point_item.active.radius = 20.0
+	point_item.active.effect = {"team": "ally", "heal": 15.0, "radius": 20.0}
+	var self_item: Dictionary = unit_item.duplicate(true)
+	self_item.name = "QA self item"
+	self_item.active.target = "self"
+	self_item.active.effect = {"target": "self", "heal": 15.0}
+	battle._items = {"qa_unit_item": unit_item, "qa_point_item": point_item, "qa_self_item": self_item}
+
+func _unit(script: Script, at: Vector2, hero: bool) -> Variant:
+	var unit: Variant = script.new()
+	owned.append(unit)
+	unit.visible = false
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.position = at
+	unit.faction = 0
+	unit.is_hero = hero
+	unit.max_hp = 1000.0
+	unit._base_hp = 1000.0
+	unit.hp = 500.0
+	unit.radius = 12.0
+	unit._base_speed = 180.0
+	unit.base_speed = 180.0
+	unit.passive = true
+	unit.stance = 3
+	unit._combat_cool = 999.0
+	return unit
+
+func _step(battle: Variant, units: Array, step: int) -> void:
+	if step == 2:
+		units[6].order_move(Vector2(80, 900))
+		units[7].cancel_cast_windup()
+	if step == 3:
+		# This fixture supplies arrival; it does not claim complete movement replay.
+		units[0].position = units[10].position - Vector2(40, 0)
+		units[1].position = units[11].position - Vector2(40, 0)
+	for unit in units:
+		if unit.inventory == null: continue
+		if unit._cast_t > 0.0:
+			unit._physics_process(0.125)
+		else:
+			unit.inventory.tick(0.125)
+	battle._walk_item_cast_pass(0.125)
+	battle._tick_pending_item_casts()
+
+func _copy_value(value: Variant) -> Variant:
+	return value.duplicate(true) if typeof(value) in [TYPE_ARRAY, TYPE_DICTIONARY] else (value.duplicate() if typeof(value) == TYPE_PACKED_VECTOR2_ARRAY else value)
+
+func _unit_states(units: Array) -> Array:
+	var result: Array = []
+	for unit in units:
+		var state: Dictionary = {}
+		for field in UNIT_FIXTURE_FIELDS: state[field] = _copy_value(unit.get(field))
+		state["position"] = unit.position
+		if unit.inventory != null:
+			var inv: Dictionary = {}
+			for field in INVENTORY_FIXTURE_FIELDS: inv[field] = _copy_value(unit.inventory.get(field))
+			state["inventory"] = inv
+		result.append(state)
+	return result
+
+func _live_uid_max(units: Array) -> int:
+	var maximum: int = 0
+	for unit in units:
+		if unit.inventory == null: continue
+		for item in unit.inventory.slots:
+			if not item.is_empty(): maximum = maxi(maximum, item.uid)
+	return maximum

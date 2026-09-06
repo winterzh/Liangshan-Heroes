@@ -1,3 +1,11 @@
+## 第 15 个组件：默认迷雾状态
+
+`scripts/run_fog_state.gd` 为 caef97f… 原字节晋级，显式保存 `fog/_vision/_sight_now/_reveal_t/_fog_t`、既存 RGBA8 图像/纹理及默认 FogLayer。保留 reveal 先改逻辑、下一 fog pass 才刷新显示的时差；bind 不重跑迷雾逻辑、不改 Unit 可见标志。
+
+R3 与正式路径各 276 行通过，其中 206 来源前后、70 其余检查；两轮三阶段左右共产生 12 张原生 PNG；归档按精确字节比较保留正式轮 6 个实体文件，R3 的 6 个原路径/SHA 映射到对应图片。GL 无 report、R1 暂停屏障拒绝、R2 三项黑/透明 Canvas 判据失败各自保留，修正在夹具，模块未变。详见[迷雾 QA](../qa/run_fog_runtime_20260907/README.md)。
+
+夹具仅两脱树 Battle、60×60 草地 Map、3 个真实 Unit（可见标志由外层复制）、恒等 world/1:32 Canvas 和默认层；不含完整事务、ISO/camera、任意扩展 Node、PCK 或退出续战。组件计数为 15，效果数组仍为 12/17；根状态另批。
+
 # 续玩组件恢复：Unit、Projectile 与 Map（2026-09-07）
 
 本轮已在真实 Godot 对象上验证 Unit、Projectile、Map 的局部恢复，并将五个适配模块放入正式 `scripts/`。这仍是完整续玩的基础组件：Battle 尚无调用方，未接菜单“继续本局”，也未验证整局跨进程恢复、持续战斗等价性或导出 PCK。

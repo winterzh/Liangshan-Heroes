@@ -1,3 +1,17 @@
+## 2026-09-07 迷雾恢复组件与证据
+
+- `scripts/run_fog_state.gd`：第 15 个恢复组件，保存迷雾逻辑、刷新余时、真实滞后图像与默认 FogLayer。
+- [qa/run_fog_runtime_20260907/](../qa/run_fog_runtime_20260907/README.md)：GL、R1、R2 三次失败和 R3/正式两次通过的原始收据，正式轮 6 个 PNG 实体文件、R3 的 6 个原路径/SHA 映射，精确源码与复用映射。
+
+本批不包含根状态候选。
+
+停止前另将根状态 R2、稳定实体、ItemCast 和时钟准备物保存为[未晋级交接草稿](RUN_RESUME_HANDOFF_20260907.md)。这些草稿不纳入生产组件或 Steam 候选；本机停止新开发，由“完成项目收尾并发布”任务统一合入和同步。
+
+## 2026-09-07 早间收尾入口
+
+- `docs/MORNING_HANDOFF_20260907.md`：七点源码检查点、Steam实际状态与阻塞、公司电脑接续步骤。
+- `qa/morning_handoff_20260907/`：本轮原生合同、候选验证、交付清单与不含账号信息的Steam页面观察记录。
+
 ## 2026-09-07 RNG与安装身份新增入口
 
 - scripts/run_content_identity.gd：实际安装身份；R2依据Script backing严格验证源码或编译资源，native/callsite及source/PCK身份合同均已验证。

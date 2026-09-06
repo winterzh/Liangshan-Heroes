@@ -1,0 +1,103 @@
+# Current item cast creator/consumer lifecycle preparation
+
+**Frozen partial handoff:** work stopped at the parent's departure handoff request.
+Only `.gdignore`, this contract and `freed_probe.gd.inc` exist as prepared inputs.
+There is no integrated `driver.gd`, `run_smoke.py` or `pins.json` yet. The lifecycle,
+phase protocol and commands below are the intended implementation, not runnable
+or verified tools. See `HANDOFF.json` for the exact unfinished work. The fragment
+depends on helpers/globals from the old smoke and cannot run standalone.
+
+Prepared only. No Godot run, production edit, or completed item restore is claimed.
+The unchanged state module is
+`scratchpad/run_item_cast_flow_resume/item_cast_flow_state.gd`, raw SHA
+`45599305f173853bc6bf9c69334a4655308bb52310b440fc84b44f71f5fd7854`.
+Its old 4735 Battle/2819 Unit pins remain preparation history; this harness pins
+current Battle07d7 / Unitb0ff / provider a78 and newly promoted Fogcaef explicitly.
+The module uses injected Scripts and version; it does not read old source hashes
+at runtime. No module/schema change was found necessary in this read-only review.
+
+The current `_begin_item_cast` creates all six pending fields and stores actual
+UID/cast serial. `_queue_walk_item` creates all seven walking fields, with real
+single-target `point=Vector2.INF`. Original consumers preserve UID lookup after a
+slot swap and the original timer/order rules. The state module still matches
+these explicit fields; it does not issue commands, restart windup, consume items,
+assign UID, or normalize expired references to none.
+
+There is one concrete unverified production risk: `_tick_pending_item_casts`
+(Battle around 6600) wraps instance validity in `target != null`, then forwards
+the original Variant to `_do_item_active(... target: Unit)`. It lacks the explicit
+TYPE_OBJECT/invalid guard already added to the skill queue. The analogous walking
+guard is also present, but the standard INF point can cause earlier cancellation;
+the harness does not claim both paths must fail. Actual errors remain visible and
+strictly reject their run. No expected-error mode converts a crash into a pass.
+
+Three independent phases use the same driver/source set and separate actual
+processes/private profiles. Choose one explicitly; default is `freed_pending`:
+
+- `freed_pending`: real item allocation and `_begin_item_cast`, actual Unit timer
+  advancing to 0.375 remaining, real target.free, capture/JSON/validate, real fresh
+  Battle and Unit/inventory fixture state, shared live tombstone bind/release, then
+  original `_tick_pending_item_casts`. A positive timer is checked before the real
+  remaining timer expires. Exact original and restored consumer calls each have a
+  persisted checkpoint. Expected desired behavior is cancellation without cost;
+  the current known risk may fail this phase. Keep the failure.
+- `freed_walk`: same process through original `_queue_walk_item` with the actual
+  unit-target INF sentinel. After free and restore, call the actual walking pass.
+  Do not inject a finite point merely to force a different branch. Cancellation,
+  no spend/cooldown/FX and no repeated action are checked on both sides.
+- `lifecycle`: retains the old unexecuted broad fixture: two ordered queues,
+  actual allocation above 2^53, swap/UID lookup, shared cooldown, consumed/missing
+  UID, expired target/caster, cancellation/new order, timeout, 12 real timer/pass
+  pairs, explicit staged arrival and once-only healing/consume. Expired pending
+  remains present, so current production can fail before completing this phase.
+  This is not silently reduced to a green-only case set.
+
+Actual installed provider resolution must succeed and report host-verified engine
+SHA/save eligibility. Its returned version is used by the module and counter.
+Both detached Battle fixtures bind real checked native RNG with the same explicit
+test seed; no fake random API or fallback is introduced. This is test control,
+not cross-process stream restoration. No Battle `_ready`/deploy runs.
+
+`Defs.ITEMS` is intentionally empty. The harness asserts that fact before placing
+three **protocol-only QA definitions** into each detached fixture's `_items`:
+unit/point/self targets, 0.5s windup, 8s cooldown, max stack three, consume-one and
+15 HP healing through original consumers. These are not shipped or available
+player items, are not installed in Defs/content files, and do not certify actual
+shop/drop balance. Trusted provider identifies the real code used; these explicit
+fixture dictionaries test protocol behavior and are not a claim of a production
+save's effective content identity. No item catalog `[0]` assumption exists.
+
+True Unit, HeroInventory, Battle, GameMap, HUD and identity classes are used.
+GameMap is a real empty 64x64 fixture. Unit and inventory fields are supplied
+directly and explicitly as in the original bounded fixture, not via fake classes.
+This is not complete UnitGraph/Map restoration. Counter maximum is trusted only
+for this finite fixture; it is not a whole-game UID maximum. Restored Battle stays
+detached, disabled, signal blocked; actual Units/FX live beneath a disabled hidden
+world in a truly paused tree. A process-frame await and nonphysics assertion
+precede capture/consumer work. Existing visuals, global ordering and future entity
+identity migration remain outside scope; numeric stable strings match the current
+module contract, not the future stable-entity candidate.
+
+Runner lifecycle is copied from the actual root R2 harness: exact direct Godot
+handle and PID, private APPDATA/LOCALAPPDATA/TEMP, Forward+ 1280x720 with normal
+MSAA retained, common engine lock, strict Unicode/error log check, timely exact
+child termination, and source/player protection before/after. No game copy,
+large cache copy, import, live Steam account operation or user-profile override.
+It uses the current checkout and existing import cache. An error produces a failed
+receipt and preserves logs/checkpoints; missing report never counts as success.
+
+```powershell
+& $python -X utf8 scratchpad/run_item_cast_flow_r1_qa/run_smoke.py
+& $python -X utf8 scratchpad/run_item_cast_flow_r1_qa/run_smoke.py --run --phase freed_pending --godot $actualNonConsoleGodot
+& $python -X utf8 scratchpad/run_item_cast_flow_r1_qa/run_smoke.py --run --phase freed_walk --godot $actualNonConsoleGodot
+& $python -X utf8 scratchpad/run_item_cast_flow_r1_qa/run_smoke.py --run --phase lifecycle --godot $actualNonConsoleGodot
+```
+
+Root runs phases serially under the shared lock. Any later production repair
+requires a new explicit source freeze/revision, retaining the failing baseline.
+Preparation verifies fixed prerequisites and existing source path set. Reports
+use suite `item-cast-flow-restore`, include phase, PID, user path, current source
+hashes and actual trusted context. Host enforces each phase's required labels.
+Exclude private_profile from archives. This proves neither production item
+availability nor a full saved game, disk transaction, restart, PCK, menu Continue
+or release behavior. All actual results remain pending until root executes them.

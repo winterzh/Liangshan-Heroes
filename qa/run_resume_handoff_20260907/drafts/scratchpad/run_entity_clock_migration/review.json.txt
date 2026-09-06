@@ -1,0 +1,62 @@
+{
+  "status": "static_only_not_engine_tested",
+  "source_hash_checks": 14,
+  "source_unchanged": true,
+  "unit_declarations_before": 272,
+  "proposed_unit_declarations_after": 273,
+  "native_frame_source_lines": 63,
+  "modulo_source_lines": 71,
+  "unexecuted_core_smoke_labels": [
+    "reserve_positive_and_burned_gaps",
+    "bad_count_does_not_allocate",
+    "tick_begin_once",
+    "mid_step_capture_rejected",
+    "explicit_commit_and_duplicate_rejection",
+    "real_json_fresh_restore",
+    "future_allocation_continuity",
+    "future_tick_continuity",
+    "duplicate_ids_rejected",
+    "counter_must_exceed_known_ids",
+    "zero_and_float_ids_rejected",
+    "live_destination_not_rewound",
+    "extra_field_atomic_rejection",
+    "trusted_content_rejection",
+    "exact_above_2pow53_json",
+    "last_id_and_exhausted_counter",
+    "last_tick_without_overflow",
+    "partial_step_fault_never_captures"
+  ],
+  "checks": [
+    {
+      "label": "all_14_frozen_sources_unchanged",
+      "passed": true
+    },
+    {
+      "label": "actual_272_unit_declarations",
+      "passed": true
+    },
+    {
+      "label": "18_unique_unexecuted_core_smoke_labels",
+      "passed": true
+    },
+    {
+      "label": "core_has_no_engine_native_id_rng_or_source_load",
+      "passed": true
+    },
+    {
+      "label": "fresh_restore_validates_before_two_writes",
+      "passed": true
+    },
+    {
+      "label": "exact_codec_and_real_json_in_smoke_source",
+      "passed": true
+    }
+  ],
+  "godot_run": false,
+  "production_patch_applied": false,
+  "barrier_verified_in_engine": false,
+  "limitations": [
+    "Textual/static review is not Godot parse or a real Battle/Unit continuation test.",
+    "Spawn failure caller transactions, v2 Unit/Graph wiring and RunSession complete-step barrier are prerequisites before any production integration."
+  ]
+}

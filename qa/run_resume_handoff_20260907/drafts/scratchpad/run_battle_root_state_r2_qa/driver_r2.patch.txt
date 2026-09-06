@@ -1,0 +1,16 @@
+--- r1/driver.gd
++++ r2/driver.gd
+@@ -393,8 +393,11 @@
+ 	# JSON's exact numeric range. The real pure Unit inventory checker validates it.
+ 	var slots: Array = []
+ 	for slot in range(6): slots.append({})
+-	slots[0] = {"id": String(battle._items.keys()[0]), "count": 2, "uid": 9007199254740993}
+-	var item_id: String = slots[0].id
++	# Defs.ITEMS is deliberately empty. This is a structural UID/alias fixture,
++	# not an installed or usable gameplay item and never a provider identity.
++	var item_id: String = "qa_root_retired_uid"
++	_check("retired UID fixture has no production item definition", battle._items.is_empty() and battle.item_def(item_id).is_empty())
++	slots[0] = {"id": item_id, "count": 2, "uid": 9007199254740993}
+ 	battle.hero_item_progress = {"song_jiang": {"slots": slots, "cooldowns": {item_id: 2.25},
+ 		"proc_cooldowns": {"9007199254740993:on_hit": 1.5}, "uid_seq": 7}}
+ 	battle.hero_progress = {"song_jiang": {"level": 3, "xp": 7.125, "sp": 2, "ranks": [1, 2, 0, 0]}}

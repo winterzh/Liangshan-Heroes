@@ -1,0 +1,139 @@
+# Battle root R1 module — R2 actual smoke preparation
+
+This R2 harness is prepared only; it has not run in Godot. Its parent R1 actual run failed with no final report, so no successful root restore is claimed. The
+module under test remains the exact frozen `scratchpad/run_battle_root_state_r1/root_state.gd`
+raw SHA `3a758cdb6f0e6b7eb30ff83c2b6b9f01cb97742f26c9513fc89ee9b566d11c6f`.
+Battle is `07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd`;
+provider R2 is `a78dc5e9895cc4bf381e4c368c51527075ce5afa5835531881faa3a99d71077f`.
+No tested module, production, old receipt, or old harness is changed.
+
+The real installed provider resolves its identity before any fixture is built.
+Its eligibility and actual engine executable SHA must agree with the host. Only
+this returned trusted content version enters Factory capture/validate/bind; no
+save compatibility value or invented executable identity supplies trust.
+
+There is one ordinary `scenes/main.tscn` Battle. Its real `_ready` deploys standard
+30-wave skirmish; the fixture invokes the original `_on_intro_done` once, which
+starts its original Level, including the original initial gather commands. This
+is a **new-game capture fixture**, not a restore method. The tree is truly paused,
+Battle disabled, pointer input absent, and process/deferred work drains before
+capture. No await occurs between a successful capture and its corresponding bind.
+The first capture requires the untouched default Rect2. The second obtains a
+nonzero rectangle from the original `_grid_build`, using the actual viewport and
+RTSCamera. The third is an explicit fractional/negative-size transport boundary;
+it does not call `has_point` on a negative rectangle.
+
+The exact frozen classification must still be 169 declarations = 104 root fields
++ 65 external fields. Every one of the 83 ordinary values receives an independent
+real codec audit, with only Rect2 converted to the documented position/size pair.
+Every one of the 104 root fields is individually checked after all three binds.
+Normal values compare native types and exact values; arrays and dictionaries
+preserve ordering and duplicate entries. Clock fields verify the specified origin
+translation rather than pretending saved absolute process time remains valid.
+All three input timestamps must use one observed bind-time origin. Each bind
+checks the returned physics/process frame immediately. This proves only the root
+cache's same-frame/modulo-16 obligation, not all Unit native-ID residues or global
+simulation phase/order.
+
+All destination Battles are real `battle_script.new()` objects, detached, signal
+blocked and disabled. They never enter the tree or run `_ready`, deploy, setup,
+orders, damage, RNG draws or activation. Their Map field is explicitly assigned
+the original real Map as a **read-only projection fixture** for the original
+`unit_visual_active` calls. Map restore and cross-object ownership are not tested.
+The entire live Unit set under the real source units_root is registered in the
+production shared identity module, including resources/buildings. New real Unit
+shells represent those stable identities in the destination; their local values,
+inventories and gameplay state are not restored. This is not UnitGraph integration.
+
+After the default case, explicit root fixtures add nonempty selection/groups with
+duplicates, none and expired entries, two blocker entries with remaining budget
+three, live-native-ID caches, and a nonempty economic cache. No cache is cleared to
+make validation pass. A retirement snapshot with a UID above 2^53 exercises exact
+codec int64 and retained proc-key aliases, using the production Unit factory's
+pure `_check_inventory` Callable. These roots are boundary fixtures, not a claim
+of complete graph consistency or actual player command reachability. The shared
+expired Unit tombstone stays live through every bind and is freed only after all
+root destinations are installed; the final reference must remain an expired
+Object rather than null.
+
+The normal rectangle case checks actual original inside/outside consumer results
+before comparing the restored consumer. Six separately JSON-roundtripped malformed
+wires (scalar, missing/extra keys, integer or Vector2i components, missing rectangle
+field) must fail both validate and bind with the specific early error. All 104
+destination root fields must remain unchanged. A deliberately unsupported nested
+Object in the real source `_camera_locs` must be reported by the codec and rejected
+by capture; it is never silently zeroed or removed. Other unexpected unsupported
+values appear by field name in `field_capture_audit` and make the run fail.
+
+`run_smoke.py` is a narrow copy of the reviewed fog runtime lifecycle: actual
+non-console engine handle, common engine lock, new isolated APPDATA/LOCALAPPDATA
+and temp directories, strict log stop, actual report PID, complete source/player
+before/after checks, confirmed exit and final exclusivity before lock release.
+There is no game copy, import, cache rewrite, PCK export, user-data override, or
+player-profile access from the GD driver. Source mode reuses the existing local
+Godot import cache. The host only reads real player data for before/after guards;
+the child uses its new private profile. Steam/updater controls come from the
+reviewed source-aware environment helper and the actual private profile.
+
+Use the project's normal desktop `forward_plus` renderer at 1280x720; retain its
+MSAA settings. The parent's actual fog GL run exposed the unsupported 2D MSAA
+warning, so this harness does not force GL compatibility or disable production
+MSAA to pass a strict log. This is a renderer selection for the QA process only.
+
+Run after root review and engine-slot release:
+
+```powershell
+& $python -X utf8 scratchpad/run_battle_root_state_r2_qa/run_smoke.py
+& $python -X utf8 scratchpad/run_battle_root_state_r2_qa/run_smoke.py --run --godot $actualNonConsoleGodot
+```
+
+Default is source-hash preflight only. `--freeze` is explicit source repinning and
+still refuses a different Battle/provider/module baseline; no automatic baseline
+migration occurs. `prepare_r2.py` creates the wrapper, field/label contracts and pins
+using Python only. No GDScript semantic or native success is inferred from it.
+
+Outputs: `runs/<UTC>/report.json`, `report.log`, `report_process.json`, manifest,
+source/player guards and final receipt. Required label coverage is enforced by the
+host as well as all returned checks. Keep failures. Exclude `private_profile` and
+Godot caches from any archive. The snapshot record itself contains no inferred
+full-world completion flag. UI save/quit/continue, disk commit, complete Map/Unit/
+FX restoration, restored activation, cross-process gameplay and PCK remain outside
+this bounded harness.
+
+
+## R2 narrow correction and retained failure
+
+Parent actual run `scratchpad/run_battle_root_state_r1_qa/runs/20260906T224833895013Z`
+stopped at driver line 396 with `Invalid access of index 0 Array`. Its log and
+receipt remain unchanged; it produced no report. Do not count earlier accumulated
+assertions as a passing suite. Host evidence confirmed child exit, source/player
+preservation and lock release.
+
+`scripts/defs.gd:348` deliberately declares an empty `ITEMS` dictionary;
+`Battle._ready:402` copies it without inserting items. The driver's assumption
+that `_items.keys()[0]` exists was wrong. R2 replaces only that fixture selection
+with explicit `qa_root_retired_uid`. A new actual assertion confirms it has no
+production definition. This name exercises root record structure, exact int64 UID
+and alias transport through the real codec and pure inventory validator. It does
+not claim a usable production item, inject definitions, change content identity,
+call item use, or test item gameplay. The other 639 required labels are retained.
+
+The other direct indexes were checked: `slots[0]` follows construction of six
+slots; all three `translated_origins` indexes follow a short-circuit size==3;
+`u:0` follows the nonempty complete registry check; the final `back()` follows a
+successful final `_roundtrip` that appended its real destination. `records.viewport`
+is used only after successful viewport roundtrip. No other unguarded content-first
+array access was found. Source capture already awaits real process boundaries
+after startup and asserts paused/nonphysics state; this R2 does not rely only on
+the initial deferred callback and does not alter barriers.
+
+Root explicitly confirmed the only new production runtime source is
+`scripts/run_fog_state.gd`, SHA caef97f9a10ca7dfaa39bd51a997c1bce8eb5575e7210a4a085ccfba57567d30.
+R2 pins include that source (107 entries expected), and preparation rejects any
+other runtime path addition, removal, or original source change. Battle07d7,
+provider a78 and root module 3a758 stay exact. The actual provider will resolve
+the new complete source identity at runtime; no earlier saved version is reused.
+The driver inverse proves its single replacement reproduces the frozen R1 bytes.
+Suite remains `battle-root-r1` because the module schema/revision did not change;
+R2 refers only to the harness. Source mode, normal Forward+, private profile,
+strict process/lock/source/player lifecycle and all scope limitations above remain.

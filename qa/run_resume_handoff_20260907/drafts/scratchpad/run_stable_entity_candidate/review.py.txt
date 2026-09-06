@@ -1,0 +1,171 @@
+"""One bounded static receipt and exact call-site inventory; never runs Godot/Git."""
+import collections
+import hashlib
+import json
+from pathlib import Path
+import re
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+
+
+def digest(raw): return hashlib.sha256(raw).hexdigest()
+def lf(raw): return raw.decode('utf-8-sig').replace('\r\n', '\n')
+def save(name, value):
+    (HERE / name).write_bytes((json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode())
+
+
+def methods(text):
+    matches = list(re.finditer(r'^(?:static )?func (\w+)\(', text, re.M))
+    result = {}
+    for i, match in enumerate(matches):
+        name = match.group(1)
+        assert name not in result, name
+        end = matches[i+1].start() if i+1 < len(matches) else len(text)
+        result[name] = text[match.start():end]
+    return result
+
+
+def replay_patch(patch, sources):
+    """Verify context/deleted lines and replay all seven LF diff sections in memory."""
+    sections = re.split(r'(?m)(?=^--- a/)', patch)
+    result = {}
+    for section in sections:
+        if not section: continue
+        lines = section.splitlines(True)
+        name = lines[0].rstrip()[6:]
+        assert name in sources and name not in result
+        assert lines[1].rstrip() == '+++ b/' + name
+        old = sources[name].splitlines(True)
+        cursor, built, index = 0, [], 2
+        while index < len(lines):
+            header = re.fullmatch(r'@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@\n', lines[index])
+            assert header, lines[index]
+            start, old_count, new_start, new_count = [int(v) if v is not None else 1 for v in header.groups()]
+            target = start - 1 if old_count else start
+            assert cursor <= target <= len(old)
+            built.extend(old[cursor:target]); cursor = target
+            index += 1
+            consumed = emitted = 0
+            assert len(built) == (new_start - 1 if new_count else new_start)
+            while index < len(lines) and not lines[index].startswith('@@ '):
+                mark, data = lines[index][0], lines[index][1:]
+                assert mark in ' +-'
+                if mark in ' -':
+                    assert cursor < len(old) and old[cursor] == data, (name, cursor)
+                    cursor += 1; consumed += 1
+                if mark in ' +': built.append(data); emitted += 1
+                index += 1
+            assert (consumed, emitted) == (old_count, new_count), name
+        built.extend(old[cursor:])
+        result[name] = ''.join(built)
+    return result
+
+
+def main():
+    receipt = json.loads((HERE / 'source_receipt.json').read_bytes())
+    before, candidate = {}, {}
+    for row in receipt['files']:
+        name = row['path']
+        raw = (HERE / 'before' / (name + '.txt')).read_bytes()
+        assert digest(raw) == row['before_raw_sha256']
+        assert (ROOT / name).read_bytes() == raw, ('source drift', name)
+        after = (HERE / 'candidate' / name).read_bytes()
+        assert digest(after) == row['candidate_raw_sha256']
+        before[name], candidate[name] = lf(raw), lf(after)
+        assert after == candidate[name].encode(), name
+    patch = (HERE / 'stable_entity.patch').read_bytes()
+    assert digest(patch) == receipt['patch_sha256']
+    assert replay_patch(lf(patch), before) == candidate
+
+    expected_changes = {
+        'scripts/battle.gd': {'entity_ids_available', '_allocate_entity_id', 'spawn_unit', 'spawn_at',
+            'spawn_group', '_resource_blocked', '_try_place_building', '_start_construction',
+            'ai_start_construction', 'queue_train_multi', '_auto_economy_pass', '_eco_build',
+            '_eco_train', '_eco_research_barracks', '_eco_reserved_buildings', '_eco_lane_heroes',
+            '_eco_lane_assignments', '_eco_idle_barracks', '_eco_rebalance_hero', '_grid_build',
+            '_separation_pass', '_do_summon', '_eco_research_selftest'},
+        'scripts/unit.gd': {'_phys_body', '_production_tick', '_target_score'},
+        'scripts/crowd_separation.gd': {'solve'},
+        'scripts/run_unit_state.gd': {'_read_explicit', '_assign_values', '_registry', 'validate', 'bind', 'activate'},
+        'scripts/run_unit_graph.gd': {'_id', '_next_id', '_live_graph', 'capture', 'validate', 'prepare'},
+        'scripts/levels/skirmish.gd': {'deploy', '_spawn_wave'},
+        'scripts/levels/skirmish_ai.gd': {'deploy', 'process', '_ai_workers', '_ai_build', '_ai_rebuild_missing',
+            '_ai_train', '_ai_heroes', '_ai_siege'},
+    }
+    changed = {}
+    for name in before:
+        old_funcs, new_funcs = methods(before[name]), methods(candidate[name])
+        actual = {f for f in old_funcs.keys() | new_funcs.keys() if old_funcs.get(f) != new_funcs.get(f)}
+        assert actual == expected_changes[name], (name, sorted(actual), sorted(expected_changes[name]))
+        changed[name] = sorted(actual)
+        # Source order and count of every native/global and Battle RNG draw call
+        # remain identical. This is static evidence, not a runtime draw proof.
+        pattern = r'\b(?:gameplay_)?(?:randf|randi)(?:_range)?\s*\('
+        assert re.findall(pattern, before[name]) == re.findall(pattern, candidate[name]), name
+        frames = r'Engine\.get_(?:physics_frames|process_frames)\([^\n]*'
+        assert re.findall(frames, before[name]) == re.findall(frames, candidate[name]), name
+
+    unit = candidate['scripts/unit.gd']
+    declared = re.findall(r'^var (\w+)', unit, re.M)
+    assert len(declared) == len(set(declared)) == 273
+    state = candidate['scripts/run_unit_state.gd']
+    rules_region = state.split('const RULES := {\n', 1)[1].split('\n}', 1)[0]
+    rules = re.findall(r'^\s*"([^"]+)":', rules_region, re.M)
+    reads = re.findall(r'"([^"]+)":unit\.', methods(state)['_read_explicit'])
+    writes = re.findall(r'\tunit\.(\w+) = values\[', methods(state)['_assign_values'])
+    assert set(rules) == set(reads) == set(writes)
+    assert rules.count('entity_id') == reads.count('entity_id') == writes.count('entity_id') == 1
+    assert len(rules) == 244  # 242 explicitly captured declarations plus inherited position/modulate.
+    assert 'release_tombstones(' not in methods(candidate['scripts/run_unit_graph.gd'])['prepare']
+    assert 'next_entity_id' not in methods(candidate['scripts/battle.gd'])['clear_campaign_section']
+    for method_name in ['_physics_process', '_on_unit_died', 'on_unit_trained', 'clear_campaign_section']:
+        assert methods(before['scripts/battle.gd'])[method_name] == methods(candidate['scripts/battle.gd'])[method_name]
+    assert methods(before['scripts/crowd_separation.gd'])['solve'].replace('u.get_instance_id()', 'u.entity_id') == methods(candidate['scripts/crowd_separation.gd'])['solve']
+
+    # Enumerate every actual source call line, including unmodified chapters and
+    # developer-only self-tests. No heuristic marks an unreviewed path as safe.
+    spawn_rows, native_rows, input_pins = [], [], []
+    for path in sorted((ROOT / 'scripts').rglob('*.gd')):
+        raw = path.read_bytes(); text = lf(raw)
+        name = path.relative_to(ROOT).as_posix()
+        function = '<top-level>'
+        relevant = False
+        for number, line in enumerate(text.splitlines(), 1):
+            match = re.match(r'(?:static )?func (\w+)\(', line)
+            if match: function = match.group(1)
+            code = line.strip()
+            if code.startswith('#') or match: continue
+            if re.search(r'\b(?:spawn_unit|spawn_at|spawn_group|_start_construction|ai_start_construction)\(', code):
+                relevant = True
+                status = 'unmodified_call_site_requires_failure_review'
+                if name == 'scripts/battle.gd':
+                    status = 'covered_real_shared_path' if function in {'spawn_at','spawn_group','_try_place_building',
+                        '_start_construction','ai_start_construction','on_unit_trained','_eco_build','_do_summon'} else 'developer_fixture_not_exhaustion_safe'
+                elif name in {'scripts/levels/skirmish.gd','scripts/levels/skirmish_ai.gd'}:
+                    status = 'covered_real_level_path'
+                spawn_rows.append(dict(path=name,line=number,function=function,code=code,status=status))
+            if re.search(r'get_instance_id\(|Engine\.get_(?:physics_frames|process_frames)\(', code):
+                relevant = True
+                native_rows.append(dict(path=name,line=number,function=function,code=code))
+        if relevant or name in before:
+            input_pins.append(dict(path=name,bytes=len(raw),raw_sha256=digest(raw)))
+    statuses = dict(collections.Counter(r['status'] for r in spawn_rows))
+    save('semantic_inventory.json', dict(status='candidate_not_applied', changed_methods=changed,
+        creation_source_rows=len(spawn_rows), creation_statuses=statuses, creation_calls=spawn_rows,
+        native_frame_source_rows=len(native_rows), native_frame_calls=native_rows, source_inputs=input_pins,
+        notes=['Rows are source locations, not dynamic invocation counts or test scenarios.',
+               'Unmodified chapter/arena/scenario rows are remaining application dependencies; status is not a claim that every row is unsafe.',
+               'Developer-only fixtures assume fresh allocators; do not run exhausted-counter injection through their unchecked spawn helpers.']))
+    save('static_review.json', dict(status='static_pass_application_blocked', godot_run=False, git_run=False,
+        production_changed=False, candidate_files=len(candidate), patch_replays_exact_lf=True,
+        source_raw_unchanged=True, unit_declared_count=len(declared), explicit_value_fields=len(rules),
+        opaque_identity_transport_unchanged=True, rng_call_order_static_unchanged=True,
+        engine_frame_calls_unchanged=True, clock_barrier_implemented=False, complete_resume=False,
+        changed_methods=changed, creation_statuses=statuses,
+        hard_remaining=['Unmodified nonstandard level creation/commit paths require actual failure propagation before global application.',
+                        'Candidate has not been parsed or exercised by Godot; v2 graph driver and actual creation-failure regressions remain.']))
+    print(json.dumps(dict(status='static_pass_application_blocked',unit_declarations=len(declared),explicit_values=len(rules),creation_statuses=statuses)))
+
+
+if __name__ == '__main__': main()

@@ -1,0 +1,32 @@
+--- original/run_smoke.py
++++ r1/run_smoke.py
+@@ -19,9 +19,9 @@
+ def execute(util, safety, exe, entry, out, env):
+     """Keep the exact child handle; stop promptly on its own parser/error output."""
+     safety.require_exclusive_godot()
+-    command = [str(exe), '--path', str(ROOT), '--rendering-method', 'gl_compatibility',
++    command = [str(exe), '--path', str(ROOT), '--rendering-method', 'forward_plus',
+                '--resolution', '1280x720', '--script',
+-               'res://scratchpad/run_fog_runtime_state/' + entry]
++               'res://scratchpad/run_fog_runtime_state_r1/' + entry]
+     process = None
+     failure = cleanup = None
+     confirmed = False
+@@ -83,7 +83,7 @@
+     args = parser.parse_args()
+     entry = 'driver.gd'
+     names = ['project.godot', 'scratchpad/run_fog_runtime_state/fog_state.gd',
+-             'scratchpad/run_fog_runtime_state/driver.gd']
++             'scratchpad/run_fog_runtime_state_r1/driver.gd']
+     names += [path.relative_to(ROOT).as_posix() for directory, suffix in
+               [('scripts', '.gd'), ('scenes', '.tscn')]
+               for path in (ROOT/directory).rglob('*' + suffix)]
+@@ -185,7 +185,7 @@
+         util.need(Path(report.get('actual_user_dir', '')).resolve() == user.resolve(), 'user:// mismatch')
+         util.need(report.get('source_sha256') == hashes, 'Source report mismatch')
+         util.need(report.get('engine_binary_sha256') == util.ENGINE_SHA
+-                  and report.get('rendering_method') == 'gl_compatibility', 'Engine or renderer mismatch')
++                  and report.get('rendering_method') == 'forward_plus', 'Engine or renderer mismatch')
+         checks = report.get('checks', [])
+         util.need(report.get('complete') is True and report.get('passed') is True
+                   and checks and report.get('failures') == []

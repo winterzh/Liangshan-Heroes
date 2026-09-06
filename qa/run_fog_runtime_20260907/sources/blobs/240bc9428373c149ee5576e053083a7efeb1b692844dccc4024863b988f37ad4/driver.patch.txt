@@ -1,0 +1,13 @@
+--- r1/driver.gd
++++ r2/driver.gd
+@@ -170,6 +170,10 @@
+ 	codec = codec_script.new()
+ 	var factory: Variant = Factory.new(identity, battle_script, map_script, codec_script, layer_script)
+ 	paused = true
++	# Pause admission first, then resume outside the physics message flush.
++	await process_frame
++	if not _check("actual paused nonphysics frame boundary", paused and not Engine.is_in_physics_frame()):
++		_finish(true); return
+ 	var old: Variant = _shell(); _units(old)
+ 	old.fog = true; old._init_fog()
+ 	old._fog_pass(0.01); old._fog_pass(0.04)

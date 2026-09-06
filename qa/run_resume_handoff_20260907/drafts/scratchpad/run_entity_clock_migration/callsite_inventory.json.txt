@@ -1,0 +1,962 @@
+{
+  "scope": "all scripts/**/*.gd; exact API occurrences plus all literal modulo 2/3, stride and AI_TICK rows",
+  "godot_run": false,
+  "native_frame_call_rows": 63,
+  "categories": {
+    "migrate_battle_tick": 2,
+    "optional_stable_cache_key_same_batch_pairs": 9,
+    "migrate_stable_entity_order": 9,
+    "retain_equality_native_with_shared_identity_or_local_lifetime": 23,
+    "qa_fixture_update_if_domain_changes": 2,
+    "retain_visual_native": 8,
+    "nonstandard_campaign_deferred": 3,
+    "retain_identity_transport_native": 7
+  },
+  "rows": [
+    {
+      "path": "scripts/battle.gd",
+      "line": 1228,
+      "method": "_resource_blocked",
+      "text": "var fr := int(Engine.get_physics_frames())",
+      "category": "migrate_battle_tick"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 1232,
+      "method": "_resource_blocked",
+      "text": "var nid := node.get_instance_id()",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 1943,
+      "method": "queue_train_multi",
+      "text": "return a.get_instance_id() < b.get_instance_id()",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2277,
+      "method": "_on_unit_died",
+      "text": "xk_id = k.get_instance_id()",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2281,
+      "method": "_on_unit_died",
+      "text": "and h.get_instance_id() != xk_id \\",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2296,
+      "method": "_on_unit_died",
+      "text": "xkg_id = kg.get_instance_id()",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2299,
+      "method": "_on_unit_died",
+      "text": "and h.get_instance_id() != xkg_id \\",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2875,
+      "method": "final_wave_cleanup",
+      "text": "var eid := e.get_instance_id()",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3280,
+      "method": "_eco_train",
+      "text": "if not reserved.has(hall.get_instance_id()) and _eco_count_workers() < _eco_wcap_dyn() \\",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3361,
+      "method": "_eco_research_barracks",
+      "text": "or (u._train_queue.size() == best._train_queue.size() and u.get_instance_id() < best.get_instance_id()):",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3383,
+      "method": "_eco_reserved_buildings",
+      "text": "out[bld.get_instance_id()] = true",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3849,
+      "method": "_eco_lane_heroes",
+      "text": "heroes.sort_custom(func(a, b): return a.get_instance_id() < b.get_instance_id())",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3936,
+      "method": "_eco_lane_assignments",
+      "text": "result[h.get_instance_id()] = li",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3952,
+      "method": "_eco_lane_assignments",
+      "text": "result[h.get_instance_id()] = best",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3961,
+      "method": "_eco_lane_runtime_state",
+      "text": "var bucket := int(Engine.get_physics_frames() / maxi(1, AI_TICK))",
+      "category": "migrate_battle_tick"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 4001,
+      "method": "_eco_idle_barracks",
+      "text": "and not reserved.has(u.get_instance_id()) and u._train_queue.size() < bq:",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 4966,
+      "method": "_eco_rebalance_hero",
+      "text": "var li := int(assignments.get(u.get_instance_id(), _eco_nearest_lane(u.position, lanes)))",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5544,
+      "method": "_grid_build",
+      "text": "var fid: int = ft.get_instance_id()",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5646,
+      "method": "_separation_pass",
+      "text": "var aid := a.get_instance_id()",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5664,
+      "method": "_separation_pass",
+      "text": "if b.get_instance_id() <= aid or b.story_outcome != \"\" or b.movement_profile != a_profile:",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7522,
+      "method": "_do_ability",
+      "text": "float(eff.get(\"self_reduction_dur\", orbit_dur)), -int(caster.get_instance_id()))",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7571,
+      "method": "_do_ability",
+      "text": "caster.apply_damage_reduction(duel_reduce, duel_dur, -600000 - int(caster.get_instance_id()))",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7828,
+      "method": "_zone_pass",
+      "text": "and not hit.has(u.get_instance_id()) and mp.distance_to(u.position) <= mhw + u.radius:",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7829,
+      "method": "_zone_pass",
+      "text": "hit[u.get_instance_id()] = true",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7861,
+      "method": "_zone_pass",
+      "text": "or hit_g.has(u.get_instance_id()):",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7865,
+      "method": "_zone_pass",
+      "text": "hit_g[u.get_instance_id()] = true",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8386,
+      "method": "_do_chain_nuke",
+      "text": "hit[cur.get_instance_id()] = true",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8410,
+      "method": "_nearest_foe_to",
+      "text": "if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and u.story_outcome == \"\" and not u.is_resource and not u.is_building and not hit.has(u.get_instance_id()):",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8656,
+      "method": "_do_heal_wave",
+      "text": "hit[caster.get_instance_id()] = true",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8663,
+      "method": "_do_heal_wave",
+      "text": "hit[cur.get_instance_id()] = true",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8694,
+      "method": "_nearest_wave_node",
+      "text": "and (u.faction == ally or u.faction == foe) and not hit.has(u.get_instance_id()):",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11892,
+      "method": "_eco_research_selftest",
+      "text": "reserved[picked.get_instance_id()] = true",
+      "category": "qa_fixture_update_if_domain_changes"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12470,
+      "method": "_final_cleanup_selftest",
+      "text": "level.set(\"_final_cleanup_positions\", {foe.get_instance_id(): foe.position})",
+      "category": "qa_fixture_update_if_domain_changes"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 16,
+      "method": "solve",
+      "text": "var id := u.get_instance_id()",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 25,
+      "method": "solve",
+      "text": "var id := u.get_instance_id()",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 47,
+      "method": "solve",
+      "text": "ids[i] = u.get_instance_id()",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 65,
+      "method": "solve",
+      "text": "var id := u.get_instance_id()",
+      "category": "migrate_stable_entity_order"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 682,
+      "method": "_refresh_skill_rail",
+      "text": "sig.append(h.get_instance_id())",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 824,
+      "method": "_refresh_hero_bar",
+      "text": "keys.append(h.get_instance_id())",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1842,
+      "method": "_rebuild_command_card",
+      "text": "sig = [\"hero\", au.get_instance_id(), au.melee_mode]   # 切刀/弓 → 重建命令卡更新按钮态",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1846,
+      "method": "_rebuild_command_card",
+      "text": "sig = [\"train\", au.get_instance_id(), au._train_queue.size(), au._research_key,",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1849,
+      "method": "_rebuild_command_card",
+      "text": "sig = [\"trade\", au.get_instance_id()]",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1999,
+      "method": "_rebuild_grid",
+      "text": "var keys: Array = alive.map(func(u) -> int: return u.get_instance_id())",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 561,
+      "method": "on_unit_resolved",
+      "text": "b.mission.mark(\"embarked_%d\" % u.get_instance_id(), u.display_name + \"活着登船\")",
+      "category": "nonstandard_campaign_deferred"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 437,
+      "method": "_adopt_latest_player_escort_order",
+      "text": "escort_orders[unit.get_instance_id()] = unit._order_serial",
+      "category": "nonstandard_campaign_deferred"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 497,
+      "method": "_enforce_post_rescue_escort_control",
+      "text": "and int(escort_orders.get(unit.get_instance_id(),-1))==unit._order_serial \\",
+      "category": "nonstandard_campaign_deferred"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 430,
+      "method": "process",
+      "text": "var eid: int = e.get_instance_id()",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 78,
+      "method": "configure",
+      "text": "var object_id: int = unit.get_instance_id()",
+      "category": "retain_identity_transport_native"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 122,
+      "method": "_registered_live",
+      "text": "return is_instance_valid(unit) and not unit.is_queued_for_deletion() and unit.get_instance_id() == object_id",
+      "category": "retain_identity_transport_native"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 212,
+      "method": "decode_identity",
+      "text": "return _good(unit.get_instance_id())",
+      "category": "retain_identity_transport_native"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 217,
+      "method": "decode_identity",
+      "text": "if unit.get_instance_id() > MAX_I64 - token.offset.to_int(): return _bad(\"SOURCE_OVERFLOW\")",
+      "category": "retain_identity_transport_native"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 218,
+      "method": "decode_identity",
+      "text": "return _good(-unit.get_instance_id() - token.offset.to_int())",
+      "category": "retain_identity_transport_native"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 223,
+      "method": "decode_identity",
+      "text": "var object_id: int = unit.get_instance_id()",
+      "category": "retain_identity_transport_native"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 236,
+      "method": "decode_identity",
+      "text": "if -unit.get_instance_id() - offset == source_id: return _bad(\"SOURCE_COLLISION\")",
+      "category": "retain_identity_transport_native"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 415,
+      "method": "chase_blocked",
+      "text": "return v != null and _giveup_t > 0.0 and v.get_instance_id() == _giveup_id",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1080,
+      "method": "_request_redraw",
+      "text": "var frame := Engine.get_process_frames()",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1102,
+      "method": "_queue_motion_redraw",
+      "text": "if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:",
+      "category": "retain_visual_native"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1542,
+      "method": "_do_chase",
+      "text": "if _target != null and _target.get_instance_id() != _chase_last_id:",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1543,
+      "method": "_do_chase",
+      "text": "_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1610,
+      "method": "_do_chase",
+      "text": "_giveup_id = _target.get_instance_id()",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2312,
+      "method": "_target_score",
+      "text": "var already := int(battle._focus_counts.get(u.get_instance_id(), 0))",
+      "category": "optional_stable_cache_key_same_batch_pairs"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2852,
+      "method": "start_lin_guard",
+      "text": "apply_damage_reduction(reduction, dur, -500000 - int(get_instance_id()))",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2862,
+      "method": "_advance_lin_spear",
+      "text": "var tid := int(t.get_instance_id())",
+      "category": "retain_equality_native_with_shared_identity_or_local_lifetime"
+    }
+  ],
+  "modulo_rows": [
+    {
+      "path": "scripts/battle.gd",
+      "line": 750,
+      "method": "spawn_unit",
+      "text": "u.ai_tick_phase = AI_TICK_PHASES[_ai_spawn_serial % AI_TICK]",
+      "identity_cadence": true
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2324,
+      "method": "_death_remains_texture",
+      "text": "if atlas.get_width() % 4 != 0 or atlas.get_height() % 2 != 0 or cell_w <= 0 or cell_w != cell_h:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2492,
+      "method": "_perf_bench_setup",
+      "text": "var e := spawn_unit(ek[i % 3], Unit.FACTION_GUAN, c + Vector2(340, -160) + off)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 4744,
+      "method": "_auto_micro_pass",
+      "text": "if frame % AI_TICK != u.ai_tick_phase:",
+      "identity_cadence": true
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 4856,
+      "method": "_summon_hunt_pass",
+      "text": "if frame % AI_TICK != u.ai_tick_phase:",
+      "identity_cadence": true
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5636,
+      "method": "_separation_pass",
+      "text": "_sep_phase = (_sep_phase + 1) % 3",
+      "identity_cadence": true
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5647,
+      "method": "_separation_pass",
+      "text": "if stagger and aid % 3 != _sep_phase:",
+      "identity_cadence": true
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7709,
+      "method": "_do_ability",
+      "text": "cast_label = \"忠义双旗·%s旗\" % (\"忠\" if caster.slot_cast_sequence(slot) % 2 == 1 else \"义\")",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11341,
+      "method": "_rework_selftest",
+      "text": "var cf := _rwt_foe(Vector2i(20 + ci % 2, 20 + ci / 2))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11415,
+      "method": "_ability_cast_selftest",
+      "text": "var fu := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(base + Vector2i(2 + i % 3, 2 + i / 3))))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12207,
+      "method": "_towertrap_selftest",
+      "text": "lane_foes.append(spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, lanes_t[2] + Vector2(float(fi % 3) * 12.0, float(fi / 3) * 12.0)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14292,
+      "method": "_draw",
+      "text": "var r := 1.1 + 0.7 * float(i % 3)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14310,
+      "method": "_draw",
+      "text": "var light := (i % 2 == 0)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14369,
+      "method": "configure",
+      "text": "if atlas == null or atlas.get_width() % 4 != 0 or atlas.get_height() % 2 != 0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 14465,
+      "method": "_draw",
+      "text": "if reduced_fx and i % 2 == 1:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15555,
+      "method": "_ready",
+      "text": "var lane := (i % 3) - 1",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15557,
+      "method": "_ready",
+      "text": "_pack.append({\"side\": float(lane) * 37.0 + (-8.0 if row % 2 == 1 else 8.0),",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15576,
+      "method": "_draw",
+      "text": "+ Vector2(0, -18.0 - float(i % 2) * 2.0 + float(FRAME_BOB[frame_i]))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15696,
+      "method": "_ready",
+      "text": "if i % 2 == 0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15767,
+      "method": "_ready",
+      "text": "_motes.append({\"a\": float(i) * 0.63, \"r\": 10.0 + float(i % 4) * 5.0, \"sp\": 1.6 + float(i % 3) * 0.5, \"ph\": float(i) * 0.9})",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16538,
+      "method": "_autocam_selftest",
+      "text": "spawned.append(spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, B + Vector2(20 + (k % 3) * 22, (k / 3) * 22)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/campaign_city_wall.gd",
+      "line": 24,
+      "method": "_build_mesh",
+      "text": "var stagger := 0.5 if row%2 else 0.0",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "line": 37,
+      "method": "setup",
+      "text": "var tex := Art.object_texture(\"tree\") if Config.dry_woods(_style) else Art.object_texture(\"tree1\" if (x+y)%3!=0 else \"tree2\")",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "line": 44,
+      "method": "setup",
+      "text": "if t==GameMap.T.REEDS and not Config.dry_woods(_style) and (x*17+y*31)%3!=0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "line": 703,
+      "method": "_draw",
+      "text": "if (t == T.GRASS or t == T.HALL) and hv % 3 == 0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "line": 751,
+      "method": "_draw",
+      "text": "if (x + y) % 2 == 0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "line": 673,
+      "method": "_start_convoy",
+      "text": "convoy.append(b.spawn_at(\"jun_han\", Unit.FACTION_GUAN, GATE_E + Vector2i(-i % 3, i % 3 - 1)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 146,
+      "method": "deploy",
+      "text": "for i in range(4): city_guards.append(_guard(b,\"guan_dao\" if i<2 else \"guan_gong\",Vector2i(18+i%2,24+i/2)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 147,
+      "method": "deploy",
+      "text": "for i in range(5): blockers.append(_guard(b,\"guan_qi\" if i<2 else \"guan_gong\",Vector2i(28+i%2,35+i/2)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 148,
+      "method": "deploy",
+      "text": "for i in range(4): blockers.append(_guard(b,\"guan_dao\" if i<3 else \"guan_gong\",Vector2i(23+i%2,44+i/2)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 149,
+      "method": "deploy",
+      "text": "for i in range(6): pursuit.append(_guard(b,\"guan_dao\" if i<4 else \"guan_gong\",Vector2i(32+i%3,9+i/3)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 263,
+      "method": "_produce",
+      "text": "var key: String=\"guan_gong\" if enemy_produced%3==2 else \"guan_dao\"",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 585,
+      "method": "_third_day",
+      "text": "b.spawn_at(\"liang_qiang\" if i%2==0 else \"liang_gong\",Unit.FACTION_LIANG,Vector2i(26+i%4,30+i/4))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 752,
+      "method": "_smoke_drive",
+      "text": "member.order_move(rally_world + Vector2((member_index % 2) * 20.0, (member_index / 2) * 20.0))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 169,
+      "method": "deploy",
+      "text": "var u: Unit = b.spawn_at(PRISONERS[i],2,PRISON+Vector2i(i%3,i/3))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 306,
+      "method": "_raids",
+      "text": "var target := CAMP if raids_sent % 2 == 0 or not expansion_secured else EXPANSION",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 281,
+      "method": "_deploy_battle",
+      "text": "var c := REED_W + Vector2i(-1+i%3,-2+i/3)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 282,
+      "method": "_deploy_battle",
+      "text": "if i >= 6: c = REED_S + Vector2i(-2+i%3,-2+(i-6)/3)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 408,
+      "method": "_spawn_riders",
+      "text": "var u = b.spawn_at(\"lian_huan_ma\",Unit.FACTION_GUAN,from_cell+Vector2i(-i/3,(i%3-1)*2))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 118,
+      "method": "deploy",
+      "text": "for i in range(6): b.spawn_at([\"gou_lian\",\"gou_lian\",\"liang_qiang\",\"liang_qiang\",\"liang_gong\",\"liang_gong\"][i],0,Vector2i(17+i%3,28+i/3))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 132,
+      "method": "deploy",
+      "text": "var u: Unit=_guard(b,\"lian_huan_ma\",RIDER_POSTS[lane]+Vector2i(i/3,(i%3-1)*2))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 230,
+      "method": "_support_tick",
+      "text": "var key: String=\"guan_gong\" if ai_trained%3==2 else \"guan_dao\"",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 137,
+      "method": "deploy",
+      "text": "for i in range(6): _guard(b,\"liang_qiang\" if i<3 else \"liang_gong\",Vector2i(28+i%2,30+i/2),0)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 155,
+      "method": "deploy",
+      "text": "var cell := Vector2i(43+i%2*3,23+i/2*3) if wave==0 else Vector2i(43+i%2*3,5+i/2*3) if wave==1 else Vector2i(50+i%2*2,15+i/2*3)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 163,
+      "method": "deploy",
+      "text": "var key: String=\"guan_qi\" if wave==2 and i<3 else \"guan_gong\" if i%3==2 else \"guan_dao\"",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 164,
+      "method": "deploy",
+      "text": "var land_cell := Vector2i(34+i%2,24+i/2) if wave==0 else Vector2i(30+i%2,13+i/2) if wave==1 else Vector2i(23+i%3,3+i/3)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 214,
+      "method": "_production",
+      "text": "var key: String=\"imperial_warship\" if naval else \"guan_gong\" if produced[0]%3==2 else \"guan_dao\"",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 124,
+      "method": "deploy",
+      "text": "var ship=b.spawn_at(\"imperial_warship\",1,Vector2i(40+i%3,5+i*3))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 247,
+      "method": "on_mission_action",
+      "text": "land_enemies.append(b.spawn_at(\"guan_qi\" if i%4==0 else \"guan_dao\",1,Vector2i(17+i%3,2+i/3)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 589,
+      "method": "_start_land_closure",
+      "text": "b.spawn_at(\"liang_qiang\" if i%2==0 else \"liang_gong\",0,Vector2i(24+i%5,25+i/5))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 608,
+      "method": "_start_final_fleet",
+      "text": "var ship=b.spawn_at(ship_key,1,Vector2i(40+i%3,8+i*3))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "line": 321,
+      "method": "process",
+      "text": "special_kind = \"heavy\" if special_index % 2 == 1 else \"rush\"",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin_short.gd",
+      "line": 171,
+      "method": "_begin_special",
+      "text": "special_kind=\"heavy\" if special_index%2==1 else \"rush\"",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 185,
+      "method": "deploy",
+      "text": "for i in range(6): reserve.append(_guard(b,\"guan_dao\" if i<4 else \"guan_gong\",Vector2i(30+i%3,26+i/3)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 186,
+      "method": "deploy",
+      "text": "for i in range(6): pursuit.append(_guard(b,\"guan_dao\" if i<4 else \"guan_gong\",Vector2i(40+i%3,11+i/3)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 317,
+      "method": "_support_tick",
+      "text": "var key: String=\"guan_gong\" if ai_trained%3==2 else \"guan_dao\"",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 142,
+      "method": "deploy",
+      "text": "for i in range(8): outside_army.append(b.spawn_at(\"liang_qiang\" if i%2==0 else \"liang_gong\",Unit.FACTION_LIANG,Vector2i(27+i%4,49+i/4)))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/liangshan_entrance.gd",
+      "line": 222,
+      "method": "_draw_terrace",
+      "text": "if i % 3 != 0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/liangshan_entrance.gd",
+      "line": 226,
+      "method": "_draw_terrace",
+      "text": "var size := 26.0 + float(i % 3) * 7.0",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/liangshan_gate.gd",
+      "line": 86,
+      "method": "_draw_post",
+      "text": "draw_line(p,p-Vector2(0,61),Color(\"826039\") if i%2==0 else Color(\"30261b\"),1.1,true)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/liangshan_gate.gd",
+      "line": 106,
+      "method": "_draw_post",
+      "text": "draw_polyline(grain, Color(0.20,0.12,0.06,0.35) if i%2==0 else Color(0.71,0.51,0.28,0.22), 0.65, true)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/liangshan_scenery.gd",
+      "line": 73,
+      "method": "setup",
+      "text": "if terrain == GameMap.T.REEDS and (x*17+y*31)%3!=0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/liangshan_scenery.gd",
+      "line": 285,
+      "method": "_cache_reeds",
+      "text": "if i%2==0:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/music.gd",
+      "line": 410,
+      "method": "_battle_march",
+      "text": "var v := 0.5 if k % 4 == 0 else (0.34 if k % 2 == 0 else 0.22)",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/music.gd",
+      "line": 429,
+      "method": "_battle_rush",
+      "text": "if k % 2 == 1:",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/music.gd",
+      "line": 446,
+      "method": "_battle_siege",
+      "text": "_add_drum(buf, k * step, 0.55 if k % 2 == 0 else 0.30, rng, 72.0)   # 沉重低鼓",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/music.gd",
+      "line": 474,
+      "method": "_battle_gallop",
+      "text": "var up := mini(mel[k] + (k % 3), MEL.size() - 1)   # 每三音上冲",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1102,
+      "method": "_queue_motion_redraw",
+      "text": "if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:",
+      "identity_cadence": true
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 4016,
+      "method": "_draw_star",
+      "text": "var rr := rad if i % 2 == 0 else rad * 0.45",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 4327,
+      "method": "_draw_burning",
+      "text": "var ay := -s * (0.24 + 0.20 * float(i % 2))",
+      "identity_cadence": false
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 4382,
+      "method": "_draw_resource_node",
+      "text": "okey = variants[int(absf(position.x * 0.13 + position.y * 0.07)) % 3]",
+      "identity_cadence": false
+    }
+  ],
+  "notes": [
+    "Rows count source lines, not independent scenarios or runtime call frequency.",
+    "No instance_from_id/is_instance_id_valid/get_frames_drawn callers appeared in scripts.",
+    "Modulo arithmetic on positions, loops, skill sequences and artwork is listed separately and is not ObjectID dependence."
+  ]
+}

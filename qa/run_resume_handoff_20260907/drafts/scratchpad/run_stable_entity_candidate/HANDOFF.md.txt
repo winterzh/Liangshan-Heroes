@@ -1,0 +1,39 @@
+# 稳定实体 ID 候选：未晋级检查点
+
+2026-09-07 离家交接。现有候选停止编辑，只保存供下一工作地点继续的原始材料。**没有应用生产、运行 Godot、完成静态审查或证明整局续玩。不可把此目录作为已验证补丁直接应用。** 本次仅新增本说明和 `archive_whitelist.json`；原有 19 文件保持原字节。
+
+原有材料包括 7 份 `before/scripts/**/*.gd.txt`、7 份 `candidate/scripts/**/*.gd`、`stable_entity.patch`、`source_receipt.json`、`prepare.py`、`review.py` 和空 `.gdignore`。`source_receipt.json` 分别记录原始 raw、规范 LF 与候选 raw SHA；候选统一 LF，文件体积变化不能直接解释为删除生产逻辑。
+
+## 已写入候选，但未引擎验证
+
+- Battle 拥有正 int64 `next_entity_id`，Unit 增加 `entity_id`，分配后不因失败、死亡或复活回收。最大 int64 只作耗尽的 next 哨兵，不发给单位；没有 native ID 或假 Unit 回退。
+- 训练选择、经济分路、Crowd 成对分离及其配对缓存使用同一稳定 ID 域；原生命中集合、目标整数及负来源域继续由原 `run_graph_identity.gd` 转换，未改该模块。新局排序和 `%3` 分组基于新稳定 ID，**不声称数值顺序、个体分组或战斗轨迹与旧 ObjectID 完全相同**。
+- Unit/Graph 提案为显式 v2：Unit 声明计数常量 272→273，保存 ID 字段并核对 envelope/registry；Graph 保存十进制字符串 next counter，校验其大于全部当前图 ID，返回待安装 Battle 字段。所有对象仍先离树构造、统一绑定；共享 identity 保持开放，由外层释放 tombstones，安装 counter 后才允许激活。v1 不猜 ID、不静默补齐。
+- 标准驻守部署、整波容量预检、共享建造/召唤/训练和 skirmish_ai 农民、兵、英雄、攻城车、两条建造付款路径已加入失败检查、必要退费与调用链早退。使用现有 owned-world fault 栅栏；该栅栏本身不能中断当前 GDScript 调用栈。已创建的失败批次允许留下停止的世界，不能继续冒称整波成功或允许保存。
+- 未实现 simulation tick、完整帧结束 barrier、RunSession 或全世界提交事务。死亡历史 next counter 必须来自实际捕获的分配器，不可从当前活单位最大 ID 重新推导；完整图校验只证明其大于该图当前 ID，不能单独证明被删除的分配历史。
+
+## 静态审查停点
+
+`prepare.py` 最后一轮成功生成 7 文件与补丁。`review.py` 已先核对 7 份 before 与当时生产原字节、收据候选 SHA，并将整个补丁在内存中重放到 LF 原文、得到精确候选。随后在变化方法白名单断言退出，实际集合额外含 `run_unit_state.gd::_unit`：当前简单函数切段器把该函数之后、下一函数之前的常量区也计入方法，因此须先纠正这项审查边界，再检查其余断言。**没有运行 Godot 解析器；没有产生 `static_review.json` 或 `semantic_inventory.json`，也没有通过的整批静态收据。** 本次按要求不修代码或重跑审查。
+
+README、最终 pins、真实 QA 合同与完整调用清单原计划尚未完成。文件白名单只证明交接原字节，不能当功能 QA 收据。
+
+## 全局应用前剩余事务缺口
+
+非驻守章节、arena/scenario 和开发自检仍有未覆盖创建调用方；不能把 null 早退机械铺到所有行后便宣称完整事务。已确认的具体例子（行号对应本候选来源）：
+
+- `scripts/levels/level2_jiangzhou.gd:223,237`：救宋江/戴宗先从 Battle 移除并释放旧绑缚对象，再创建新对象，随后直接写属性。耗尽下必须在破坏旧状态之前准备/校验创建，或明确停止并保留可恢复事务状态。
+- `scripts/levels/level6_yezhulin.gd:263,348,536`：绑缚/解缚替换链同样涉及旧实体移除及故事状态推进；`_finish_untie` 的创建失败不能被当作解缚成功。
+- `scripts/levels/arena.gd:109,116`：批量调用之后仍推进 `_wave`；需要每批失败传播，不能把半波记成完成。
+- `scripts/levels/scenario.gd:212,223,232`：先置 `_wave_spawned`，之后出兵/援军与 hook；需要提交点和 hook 失败边界核查。自定义 hook 不能凭内建关卡修复推断为安全。
+- `Battle` 的 `_build_test`、`_perf_bench_setup` 及多项自检存在新局资源充足的假定；不要把耗尽注入通过这些未检查的辅助入口运行，再把其崩溃当候选 allocator 的唯一判断依据。
+
+因此此版本保留为 **application blocked / review incomplete**。下一步先完成有限静态复核和上述调用方事务处理，再由根任务安排独占真实 QA。真实 QA 至少需要新分配/删除/复活后不复用、接近 int64 上限、失败退费/不推进波次、Crowd 同域、Unit/Graph v2 真 JSON 往返、counter 未安装不能激活，以及恢复后未来分配连续性。旧 schema 的历史成功记录不能直接代替新候选验证；不新增场景累计数。
+
+## 原字节归档与恢复
+
+`archive_whitelist.json` 精确列出 19 原文件和本说明共 20 项 source、建议 destination、bytes、SHA。建议目的地为 `tools/contracts/run_stable_entity_draft_20260907/`；7 份候选 `.gd` 在归档中改名为 `.gd.txt`，恢复路径另列，内容不改变。其他文件原名保留。空 `.gdignore` 是白名单文件，收尾器不得再次生成覆盖。JSON 清单自身不纳入自身摘要；交接回复给其独立 SHA，归档者可另收该清单。
+
+只复制白名单，不复制任何私有工程、profile、用户存档、引擎缓存或玩家数据。已有目的文件发生冲突时拒绝覆盖；写入后逐项 raw SHA 回读。恢复到一个**新建、原先不存在**的被忽略 `scratchpad/run_stable_entity_candidate/`，按 `restore_relative_path` 还原文件名，再逐项校验；不要覆盖正在开发的同名目录。
+
+`prepare.py` 仍依赖未包含在这 19 项中的历史 `scratchpad/run_entity_clock_migration/source_pins.json`（raw SHA `861ea2dbad1f81f2ed223a1a47aac530e37fb9bd684d80caaa828b8e9cce064d`）和精确原生产源。此包是完整候选原文检查点，**不是可脱离原工程直接执行的独立 QA 工程**。不要在源码已经变化后直接运行准备器重写此历史材料；继续工作时另建新候选代，保留本批收据。

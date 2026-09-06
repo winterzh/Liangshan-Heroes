@@ -1,0 +1,258 @@
+"""Generate this ignored candidate only from exact reviewed source bytes. No engine/Git."""
+import difflib
+import hashlib
+import json
+from pathlib import Path
+import re
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+OLD_PINS = ROOT / 'scratchpad/run_entity_clock_migration/source_pins.json'
+
+
+def sha(raw): return hashlib.sha256(raw).hexdigest()
+
+
+def write(path, raw):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(raw)
+
+
+def replace(text, old, new, count=1):
+    assert text.count(old) == count, (old[:120], text.count(old), count)
+    return text.replace(old, new)
+
+
+def method(text, name, transform):
+    marker = 'func ' + name + '('
+    starts = [m.start() for m in re.finditer(r'^' + re.escape(marker), text, re.M)]
+    assert len(starts) == 1, name
+    start = starts[0]
+    end_match = re.search(r'^func ', text[start + len(marker):], re.M)
+    end = start + len(marker) + end_match.start() if end_match else len(text)
+    before = text[start:end]
+    after = transform(before)
+    assert before != after, name
+    return text[:start] + after + text[end:]
+
+
+def main():
+    old_pins = json.loads(OLD_PINS.read_bytes())
+    expected = {r['path']: r['raw_sha256'] for r in old_pins['source_files']}
+    expected['scripts/levels/skirmish_ai.gd'] = '5c44952de5bdc1d729beab785afe3cb5b73e2ca9beda1ba596bfba6ea5c8315c'
+    paths = ['scripts/battle.gd', 'scripts/unit.gd', 'scripts/crowd_separation.gd',
+             'scripts/run_unit_state.gd', 'scripts/run_unit_graph.gd',
+             'scripts/levels/skirmish.gd', 'scripts/levels/skirmish_ai.gd']
+    before = {}
+    for name in paths:
+        raw = (ROOT / name).read_bytes()
+        assert sha(raw) == expected[name], name
+        before[name] = raw
+    # skirmish_ai is the two real paying callers of the shared constructor.
+    # Its separately reviewed exact source is frozen in the same receipt.
+    source = {p: b.decode('utf-8-sig').replace('\r\n', '\n') for p, b in before.items()}
+    out = dict(source)
+    battle = out['scripts/battle.gd']
+    battle = replace(battle, 'var next_item_uid: int = 1\n', 'var next_item_uid: int = 1\n# Positive per-Battle Unit identity; MAX is an exhausted next-counter sentinel.\nconst ENTITY_ID_EXHAUSTED := 9223372036854775807\nvar next_entity_id: int = 1\n')
+    battle = replace(battle, '# 目标 instance_id →', '# 目标 entity_id →')
+    battle = replace(battle, '# 资源点 instance_id →', '# 资源点 entity_id →')
+    allocator = '''func entity_ids_available(count: int = 1) -> bool:
+	return count >= 0 and next_entity_id >= 1 and next_entity_id <= ENTITY_ID_EXHAUSTED \\
+		and count <= ENTITY_ID_EXHAUSTED - next_entity_id
+
+
+func _allocate_entity_id() -> int:
+	if not _gameplay_rng_issue.is_empty(): return 0
+	if not entity_ids_available(1):
+		_gameplay_rng_stop("ENTITY_ID_EXHAUSTED")
+		return 0
+	var allocated: int = next_entity_id
+	next_entity_id += 1
+	# Failed later construction burns this ID. No rollback/reuse, including death.
+	return allocated
+
+
+'''
+    battle = replace(battle, 'func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:\n', allocator + 'func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:\n')
+    battle = method(battle, 'spawn_unit', lambda s: replace(s, '\tvar u := Unit.new()\n', '\tif not _gameplay_rng_issue.is_empty(): return null\n\tif not _defs.has(key) or not world_pos.is_finite():\n\t\t_gameplay_rng_stop("ENTITY_SPAWN_ARGUMENTS")\n\t\treturn null\n\tvar stable_id: int = _allocate_entity_id()\n\tif stable_id == 0: return null\n\tvar u := Unit.new()\n\tu.entity_id = stable_id\n'))
+    battle = method(battle, 'spawn_at', lambda s: replace(s, '\tvar u := spawn_unit(key, faction, map.cell_to_world(at))\n', '\tvar u := spawn_unit(key, faction, map.cell_to_world(at))\n\tif u == null: return null\n'))
+    battle = method(battle, 'spawn_group', lambda s: replace(s, '\tvar out: Array = []\n', '\tif not entity_ids_available(maxi(0, n)):\n\t\t_gameplay_rng_stop("ENTITY_WAVE_CAPACITY")\n\t\treturn []\n\tvar out: Array = []\n'))
+    for name in ['queue_train_multi', '_eco_research_barracks', '_eco_lane_heroes', '_separation_pass']:
+        battle = method(battle, name, lambda s: s.replace('.get_instance_id()', '.entity_id'))
+    # Paired ephemeral identity dictionaries are one domain; opaque hit/source
+    # tokens deliberately remain native and use the existing GraphIdentity bridge.
+    for name in ['_resource_blocked', '_eco_train', '_eco_reserved_buildings', '_eco_lane_assignments',
+                 '_eco_idle_barracks', '_eco_rebalance_hero', '_grid_build', '_eco_research_selftest']:
+        battle = method(battle, name, lambda s: s.replace('.get_instance_id()', '.entity_id'))
+    # Failed construction must neither dereference null nor retain prepaid resources.
+    def player_build(s):
+        s = replace(s, '\t_start_construction(key, cell, half)\n', '\tif not _start_construction(key, cell, half):\n\t\tadd_resources(cg, cw)\n\t\treturn\n')
+        return s
+    battle = method(battle, '_try_place_building', player_build)
+    def construction(s):
+        s = replace(s, 'half: int) -> void:', 'half: int) -> bool:')
+        s = replace(s, '\tif not _gameplay_rng_issue.is_empty(): return\n', '\tif not _gameplay_rng_issue.is_empty(): return false\n')
+        s = replace(s, '\tvar site := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))\n', '\tvar site := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))\n\tif site == null: return false\n')
+        s = replace(s, '\tmsg("开始建造 %s" % String(_defs[key].get("name", key)), 1.5)\n', '\tmsg("开始建造 %s" % String(_defs[key].get("name", key)), 1.5)\n\treturn true\n')
+        return s
+    battle = method(battle, '_start_construction', construction)
+    battle = method(battle, 'ai_start_construction', lambda s: replace(s, '\tvar site := spawn_unit(key, faction, map.cell_to_world(cell))\n', '\tvar site := spawn_unit(key, faction, map.cell_to_world(cell))\n\tif site == null: return null\n'))
+    # The exact caller is found from the unique actual call, not its display comment.
+    battle = replace(battle, '\tai_start_construction(key, cell, Unit.FACTION_LIANG, builder)\n', '\tif ai_start_construction(key, cell, Unit.FACTION_LIANG, builder) == null:\n\t\tadd_resources(cg, cw)\n\t\treturn\n')
+    battle = method(battle, '_auto_economy_pass', lambda s: replace(s, '\t_eco_build(tech_reserve)\n', '\t_eco_build(tech_reserve)\n\tif not _gameplay_rng_issue.is_empty(): return\n'))
+    # Summon capacity/landing validation precedes replacing old summons. Normal
+    # landing coordinates and RNG calls are unchanged. Unexpected later failure
+    # stops the owned world and returns before the existing slot-CD commit.
+    def summon(s):
+        marker = '\t# 武松虎等“场上只留一只”的召唤：'
+        index = s.index(marker)
+        planning = '''	var n := maxi(1, int(eff.get("count", 1)))
+	if not entity_ids_available(n):
+		_gameplay_rng_stop("ENTITY_SUMMON_CAPACITY")
+		return
+	var spawn_positions: Array[Vector2] = []
+	for i in n:
+		var ang := TAU * (float(i) / float(n)) + 0.6
+		var off := Vector2(cos(ang), sin(ang)) * (34.0 + 8.0 * float(n))
+		var cell: Vector2i = map.nearest_open(map.world_to_cell(caster.position + off))
+		if cell.x < 0:
+			_gameplay_rng_stop("ENTITY_SUMMON_TERRAIN")
+			return
+		spawn_positions.append(map.cell_to_world(cell))
+'''
+        s = s[:index] + planning + s[index:]
+        # Remove only the old post-replacement declaration.
+        location = s.index('\tvar n := maxi(1, int(eff.get("count", 1)))\n', s.index(marker))
+        old = '\tvar n := maxi(1, int(eff.get("count", 1)))\n'
+        s = s[:location] + s[location + len(old):]
+        loop = '\tfor i in n:\n\t\tvar ang := TAU * (float(i) / float(n)) + 0.6\n\t\tvar off := Vector2(cos(ang), sin(ang)) * (34.0 + 8.0 * float(n))\n\t\tvar pos := map.cell_to_world(map.nearest_open(map.world_to_cell(caster.position + off)))\n\t\tvar su := spawn_unit(skey, caster.faction, pos)\n'
+        return replace(s, loop, '\tfor i in n:\n\t\tvar pos: Vector2 = spawn_positions[i]\n\t\tvar su := spawn_unit(skey, caster.faction, pos)\n\t\tif su == null:\n\t\t\t_gameplay_rng_stop("ENTITY_SUMMON_CREATION")\n\t\t\treturn\n')
+    battle = method(battle, '_do_summon', summon)
+    out['scripts/battle.gd'] = battle
+
+    unit = out['scripts/unit.gd']
+    # Insert immediately after extends, without moving existing declarations/setters.
+    unit = replace(unit, 'extends Node2D\n', 'extends Node2D\n# 0 is an unregistered constructor shell; real Battle entities are positive.\nvar entity_id: int = 0\n')
+    unit = method(unit, '_target_score', lambda s: s.replace('u.get_instance_id()', 'u.entity_id'))
+    unit = method(unit, '_production_tick', lambda s: replace(s, '\t\tif not battle.on_unit_trained(self,key):\n', '\t\tif not battle.on_unit_trained(self,key):\n\t\t\tif not _gameplay_rng_fault().is_empty(): return\n'))
+    unit = method(unit, '_phys_body', lambda s: replace(s, '\t\t\t_production_tick(delta)\n', '\t\t\t_production_tick(delta)\n\t\t\tif not _gameplay_rng_fault().is_empty(): return\n'))
+    out['scripts/unit.gd'] = unit
+    out['scripts/crowd_separation.gd'] = replace(out['scripts/crowd_separation.gd'], 'u.get_instance_id()', 'u.entity_id', 4)
+
+    state = out['scripts/run_unit_state.gd']
+    state = replace(state, 'defense_unit_state_v1', 'defense_unit_state_v2')
+    state = replace(state, 'const DECLARED_COUNT := 272', 'const DECLARED_COUNT := 273')
+    state = replace(state, 'const CAPTURED_DECLARED_COUNT := 241', 'const CAPTURED_DECLARED_COUNT := 242')
+    state = replace(state, 'const RULES := {\n', 'const RULES := {\n  "entity_id": "int",\n')
+    state = replace(state, 'const INT_RANGES := {\n', 'const INT_RANGES := {\n  "entity_id": [1, 9223372036854775806],\n')
+    state = replace(state, 'const MAX_ID := "9223372036854775807"', 'const MAX_ID := "9223372036854775806"')
+    state = replace(state, '\t\t"defeat_outcome":unit.defeat_outcome,', '\t\t"entity_id":unit.entity_id,\n\t\t"defeat_outcome":unit.defeat_outcome,')
+    state = replace(state, '\tunit.defeat_outcome = values["defeat_outcome"]', '\tunit.entity_id = values["entity_id"]\n\tunit.defeat_outcome = values["defeat_outcome"]')
+    state = replace(state, '\t\tif not _id(entity_id): return _failure("REGISTRY_ID")\n', '\t\tif not _id(entity_id): return _failure("REGISTRY_ID")\n\t\tif object.entity_id < 1 or str(object.entity_id) != entity_id: return _failure("REGISTRY_ENTITY_FIELD")\n')
+    state = method(state, 'validate', lambda s: replace(s, '\tif not values.ok: return values\n', '\tif not values.ok: return values\n\tif str(values.values.entity_id) != record.entity_id: return _failure("ENTITY_FIELD_ENVELOPE")\n'))
+    state = method(state, 'bind', lambda s: replace(s, '\t\tif not _id(key) or not _unit(id_to_unit[key]): return _failure("BIND_REGISTRY")\n', '\t\tif not _id(key) or not _unit(id_to_unit[key]): return _failure("BIND_REGISTRY")\n\t\tif str(id_to_unit[key].entity_id) != key: return _failure("BIND_ENTITY_FIELD")\n'))
+    state = method(state, 'activate', lambda s: replace(s, '\tif not _unit(unit): return _failure("UNIT_INSTANCE")\n', '\tif not _unit(unit): return _failure("UNIT_INSTANCE")\n\tif unit.entity_id < 1 or unit.entity_id >= 9223372036854775807: return _failure("ENTITY_FIELD")\n\tif not is_instance_valid(unit.battle): return _failure("ENTITY_ALLOCATOR_NOT_INSTALLED")\n\tvar next_id: Variant = unit.battle.get("next_entity_id")\n\tif typeof(next_id) != TYPE_INT or unit.entity_id >= next_id:\n\t\treturn _failure("ENTITY_ALLOCATOR_NOT_INSTALLED")\n'))
+    out['scripts/run_unit_state.gd'] = state
+
+    graph = out['scripts/run_unit_graph.gd']
+    graph = replace(graph, '## Caller owns persistent IDs and the retained identity context across later saves.\n', '## Battle allocates positive Unit.entity_id; caller injects the exact matching map.\n## Caller retains the shared native identity context across later saves.\n')
+    graph = replace(graph, 'defense_unit_graph_v1', 'defense_unit_graph_v2')
+    graph = replace(graph, 'const MAX_ID := "9223372036854775807"', 'const MAX_ID := "9223372036854775806"\nconst MAX_NEXT_ID := "9223372036854775807"')
+    graph = replace(graph, '"active_order", "records"]\n', '"active_order", "records", "next_entity_id"]\n')
+    counter_fn = '''func _next_id(value: Variant) -> bool:
+	# Reuse canonical positive text grammar, with MAX allowed only for next.
+	return _id(value) or (typeof(value) == TYPE_STRING and value == MAX_NEXT_ID)
+
+
+'''
+    graph = replace(graph, 'func _fields(value: Variant, expected: Array) -> bool:\n', counter_fn + 'func _fields(value: Variant, expected: Array) -> bool:\n')
+    graph = method(graph, '_live_graph', lambda s: replace(s, '\tvar unit_root: Variant = battle.units_root\n', '\tif typeof(battle.next_entity_id) != TYPE_INT or battle.next_entity_id < 1: return _bad("NEXT_ENTITY_ID")\n\tvar unit_root: Variant = battle.units_root\n'))
+    graph = method(graph, 'capture', lambda s: replace(s, '\t\tif not _id(entity_id): return _bad("ENTITY_ID")\n', '\t\tif not _id(entity_id): return _bad("ENTITY_ID")\n\t\tif unit.entity_id < 1 or str(unit.entity_id) != entity_id: return _bad("ENTITY_FIELD_REGISTRY")\n\t\tif unit.entity_id >= battle.next_entity_id: return _bad("ENTITY_COUNTER_BOUND")\n'))
+    graph = replace(graph, '"root_order": root_order, "active_order": active_order, "records": records}', '"root_order": root_order, "active_order": active_order, "records": records, "next_entity_id": str(battle.next_entity_id)}')
+    def validate_graph(s):
+        s = replace(s, '\tfor field: String in ["root_order", "active_order", "records"]:\n', '\tif not _next_id(snapshot.next_entity_id): return _bad("NEXT_ENTITY_ID")\n\tvar next_id: int = String(snapshot.next_entity_id).to_int()\n\tfor field: String in ["root_order", "active_order", "records"]:\n')
+        s = replace(s, '\t\tif not _id(entity_id): return _bad("ENTITY_ID")\n', '\t\tif not _id(entity_id): return _bad("ENTITY_ID")\n\t\tif String(entity_id).to_int() >= next_id: return _bad("ENTITY_COUNTER_BOUND")\n')
+        s = replace(s, '"known_ids": known}', '"known_ids": known, "next_entity_id": next_id}')
+        return s
+    graph = method(graph, 'validate', validate_graph)
+    graph = replace(graph, '\t\t"tombstones_released": false,\n', '\t\t"tombstones_released": false,\n\t\t"pending_battle_fields": {"next_entity_id": checked.next_entity_id}, "entity_allocator_installed": false,\n')
+    out['scripts/run_unit_graph.gd'] = graph
+
+    skirmish = out['scripts/levels/skirmish.gd']
+    def deploy(s):
+        s = replace(s, '\thall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)\n', '\thall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)\n\tif hall == null:\n\t\tb._gameplay_rng_stop("ENTITY_DEPLOY_HALL")\n\t\treturn\n')
+        s = replace(s, '\tvar gm: Unit = b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)\n', '\tvar gm: Unit = b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)\n\tif gm == null:\n\t\tb._gameplay_rng_stop("ENTITY_DEPLOY_RESOURCE")\n\t\treturn\n')
+        s = replace(s, '\t\tb.spawn_at("tree", Unit.FACTION_LIANG, c)\n', '\t\tif b.spawn_at("tree", Unit.FACTION_LIANG, c) == null:\n\t\t\tb._gameplay_rng_stop("ENTITY_DEPLOY_TREE")\n\t\t\treturn\n')
+        s = replace(s, '\t\tif gate != null:\n', '\t\tif gate == null:\n\t\t\tb._gameplay_rng_stop("ENTITY_DEPLOY_GATE")\n\t\t\treturn\n\t\tif gate != null:\n')
+        s = replace(s, '\t\tb.spawn_at("lou_luo", Unit.FACTION_LIANG, c)\n', '\t\tif b.spawn_at("lou_luo", Unit.FACTION_LIANG, c) == null:\n\t\t\tb._gameplay_rng_stop("ENTITY_DEPLOY_WORKER")\n\t\t\treturn\n')
+        for x in [17,19]:
+            line = f'\tb.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i({x}, 39))\n'
+            s = replace(s, line, line.replace('\tb.spawn_at', '\tif b.spawn_at').rstrip() + ' == null:\n\t\tb._gameplay_rng_stop("ENTITY_DEPLOY_TROOP")\n\t\treturn\n')
+        return s
+    skirmish = method(skirmish, 'deploy', deploy)
+    # A capacity failure may leave a stopped candidate world, but never commits
+    # _wave_spawned/_wave. Existing per-group failure guards remain unchanged.
+    skirmish = method(skirmish, '_spawn_wave', lambda s: replace(s, '\tvar wave: Dictionary = ws[i]\n', '\tvar wave: Dictionary = ws[i]\n\tvar required_ids: int = maxi(0, _cata_for(i))\n\tvar capacity_scale: float = b.enemy_count_mult()\n\tfor group in wave["groups"]:\n\t\tvar group_count: int = int(group[1])\n\t\tif capacity_scale > 1.0 and not _is_hero_key(String(group[0])):\n\t\t\tgroup_count = maxi(1, int(floor(group_count * capacity_scale)))\n\t\tgroup_count = maxi(0, group_count)\n\t\tif group_count > 9223372036854775807 - required_ids:\n\t\t\tb._gameplay_rng_stop("ENTITY_WAVE_COUNT")\n\t\t\treturn false\n\t\trequired_ids += group_count\n\tif not b.entity_ids_available(required_ids):\n\t\tb._gameplay_rng_stop("ENTITY_WAVE_CAPACITY")\n\t\treturn false\n'))
+    out['scripts/levels/skirmish.gd'] = skirmish
+    ai = out['scripts/levels/skirmish_ai.gd']
+    def ai_deploy(s):
+        # Every creation statement in this fixed method is single-line. Preserve
+        # normal call order, checking assignments before any following consumer.
+        lines = s.splitlines(True)
+        rebuilt = []
+        for line in lines:
+            if re.search(r'b\.spawn_(at|unit)\(', line) is None:
+                rebuilt.append(line)
+                continue
+            indent = line[:len(line) - len(line.lstrip('\t'))]
+            code = line.strip().split('   #', 1)[0]
+            if '= b.spawn_' in code:
+                rebuilt.append(line)
+                target = code.split('= b.spawn_', 1)[0].strip()
+                if target.startswith('var '): target = target[4:].split(':', 1)[0].strip()
+                rebuilt.append(indent + 'if ' + target + ' == null:\n')
+            else:
+                assert code.startswith('b.spawn_'), code
+                rebuilt.append(indent + 'if ' + code + ' == null:\n')
+            rebuilt.append(indent + '\tb._gameplay_rng_stop("ENTITY_AI_DEPLOY")\n')
+            rebuilt.append(indent + '\treturn\n')
+        return ''.join(rebuilt)
+    ai = method(ai, 'deploy', ai_deploy)
+    def ai_process(s):
+        s = replace(s, 'func process(b, delta: float) -> void:\n', 'func process(b, delta: float) -> void:\n\tif not b._gameplay_rng_issue.is_empty(): return\n')
+        for name in ['_ai_workers', '_ai_build', '_ai_train', '_ai_heroes', '_ai_siege']:
+            call = '\t' + name + '(b, delta)\n'
+            s = replace(s, call, call + '\tif not b._gameplay_rng_issue.is_empty(): return\n')
+        return s
+    ai = method(ai, 'process', ai_process)
+    ai = method(ai, '_ai_workers', lambda s: replace(s, '\tvar nw: Unit = b.spawn_unit("lou_luo", _guan(), b.map.cell_to_world(wc))\n', '\tvar nw: Unit = b.spawn_unit("lou_luo", _guan(), b.map.cell_to_world(wc))\n\tif nw == null:\n\t\tb.add_resources(WORKER_G, 0, _guan())\n\t\treturn\n'))
+    ai = replace(ai, '\t_pending_site = b.ai_start_construction(key, cell, _guan(), builder)   # 完工/失败前不推进 _build_i\n', '\t_pending_site = b.ai_start_construction(key, cell, _guan(), builder)   # 完工/失败前不推进 _build_i\n\tif _pending_site == null:\n\t\tb.add_resources(cg, cw, _guan())\n\t\treturn\n')
+    ai = replace(ai, '\t\t_pending_site = b.ai_start_construction(String(k), b.map.nearest_open(cell), _guan(), builder)\n', '\t\t_pending_site = b.ai_start_construction(String(k), b.map.nearest_open(cell), _guan(), builder)\n\t\tif _pending_site == null:\n\t\t\tb.add_resources(cg, cw, _guan())\n\t\t\treturn false\n')
+    ai = method(ai, '_ai_build', lambda s: replace(s, '\tif _build_i >= BUILD_PLAN.size():\n', '\tif not b._gameplay_rng_issue.is_empty(): return\n\tif _build_i >= BUILD_PLAN.size():\n'))
+    ai = method(ai, '_ai_train', lambda s: replace(s, '\tvar u: Unit = b.spawn_unit(pick["key"], _guan(), b.map.cell_to_world(cell))\n', '\tvar u: Unit = b.spawn_unit(pick["key"], _guan(), b.map.cell_to_world(cell))\n\tif u == null:\n\t\tb.add_resources(int(pick["g"]), int(pick["w"]), _guan())\n\t\treturn\n'))
+    def ai_heroes(s):
+        # Keep success-path assignment order; restore the pre-attempt timer/index
+        # on failure before any garrison, staged-array, log or message consumer.
+        s = replace(s, '\tb.faction_spend(_guan(), cost, 0)\n', '\tif not b.faction_spend(_guan(), cost, 0): return\n\tvar before_hero_t: float = _hero_t\n')
+        s = replace(s, '\tvar h: Unit = b.spawn_unit(key, _guan(), b.map.cell_to_world(cell))\n', '\tvar h: Unit = b.spawn_unit(key, _guan(), b.map.cell_to_world(cell))\n\tif h == null:\n\t\tb.add_resources(cost, 0, _guan())\n\t\t_hero_t = before_hero_t\n\t\t_hero_i -= 1\n\t\treturn\n')
+        return s
+    ai = method(ai, '_ai_heroes', ai_heroes)
+    ai = method(ai, '_ai_siege', lambda s: replace(s, '\tvar u: Unit = b.spawn_unit("siege_ram", _guan(), b.map.cell_to_world(cell))\n', '\tvar u: Unit = b.spawn_unit("siege_ram", _guan(), b.map.cell_to_world(cell))\n\tif u == null:\n\t\tb.add_resources(110, 70, _guan())\n\t\treturn\n'))
+    out['scripts/levels/skirmish_ai.gd'] = ai
+
+    rows, patches = [], []
+    for name in paths:
+        raw = out[name].encode('utf-8')
+        assert raw != before[name], name
+        write(HERE/'before'/ (name+'.txt'), before[name])
+        write(HERE/'candidate'/name, raw)
+        diff = ''.join(difflib.unified_diff(source[name].splitlines(True), out[name].splitlines(True), fromfile='a/'+name, tofile='b/'+name))
+        patches.append(diff)
+        rows.append(dict(path=name,before_bytes=len(before[name]),before_raw_sha256=sha(before[name]),before_lf_sha256=sha(source[name].encode()),candidate_bytes=len(raw),candidate_raw_sha256=sha(raw)))
+    write(HERE/'stable_entity.patch', ''.join(patches).encode())
+    write(HERE/'source_receipt.json', (json.dumps(dict(status='candidate_not_applied_not_engine_tested',files=rows,patch_sha256=sha((HERE/'stable_entity.patch').read_bytes()),original_pins_sha256=sha(OLD_PINS.read_bytes()),notes=['Candidate sources use LF; before raw and LF hashes remain distinct.','Do not apply until static semantic review completes and remaining dependencies are reported.','No simulation tick or Engine frame consumer was modified.']),indent=2)+'\n').encode())
+    write(HERE/'.gdignore', b'')
+    print(json.dumps({'files':len(rows),'patch_sha256':sha((HERE/'stable_entity.patch').read_bytes())}))
+
+
+if __name__ == '__main__': main()

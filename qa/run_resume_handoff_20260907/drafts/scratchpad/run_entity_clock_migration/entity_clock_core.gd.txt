@@ -1,0 +1,123 @@
+extends RefCounted
+## Candidate value core owned by one Battle. No Node/Engine/RNG access.
+## This does not implement the outer SceneTree completion barrier or spawn transaction.
+const SCHEMA := "battle_entity_clock_v1"
+const I64_MAX := 9223372036854775807
+const MAX_BATCH := 4096
+var _codec: Variant = null
+var _content_version: String
+var _next_entity_id: int = 1
+var _simulation_tick: int = 0
+var _step_open := false
+var _used := false
+var _fault := ""
+
+func _init(codec_script: Script, trusted_content_version: String) -> void:
+	_content_version = trusted_content_version
+	if codec_script != null and codec_script.can_instantiate(): _codec = codec_script.new()
+
+func _bad(code: String) -> Dictionary:
+	return {"ok": false, "code": code}
+
+func _ready_code() -> String:
+	if _codec == null: return "CODEC_REQUIRED"
+	if _content_version.strip_edges().is_empty() or _content_version.length() > 256: return "CONTENT_VERSION"
+	if not _fault.is_empty(): return "FAULTED:" + _fault
+	return ""
+
+func _fields(value: Variant, names: Array) -> bool:
+	if typeof(value) != TYPE_DICTIONARY or value.size() != names.size(): return false
+	for key: Variant in value:
+		if typeof(key) != TYPE_STRING or key not in names: return false
+	return true
+
+func next_entity_id() -> int:
+	return _next_entity_id
+
+func simulation_tick() -> int:
+	return _simulation_tick
+
+func step_open() -> bool:
+	return _step_open
+
+func can_reserve(count: Variant = 1) -> Dictionary:
+	var code: String = _ready_code()
+	if not code.is_empty(): return _bad(code)
+	if typeof(count) != TYPE_INT or count < 1 or count > MAX_BATCH: return _bad("ALLOCATION_COUNT")
+	# MAX is an exhausted next-counter sentinel and is never an entity ID.
+	if _next_entity_id > I64_MAX - count: return _bad("ENTITY_ID_EXHAUSTED")
+	return {"ok": true}
+
+func reserve(count: Variant = 1) -> Dictionary:
+	var checked: Dictionary = can_reserve(count)
+	if not checked.ok: return checked
+	var first: int = _next_entity_id
+	_next_entity_id += count
+	_used = true
+	# Burn reservations on any later spawn failure; never decrement/recycle.
+	return {"ok": true, "first": first, "count": count, "last": _next_entity_id - 1}
+
+func begin_step() -> Dictionary:
+	var code: String = _ready_code()
+	if not code.is_empty(): return _bad(code)
+	if _step_open: return _bad("PREVIOUS_STEP_UNCOMMITTED")
+	if _simulation_tick == I64_MAX: return _bad("SIMULATION_TICK_EXHAUSTED")
+	_simulation_tick += 1
+	_step_open = true
+	_used = true
+	return {"ok": true, "tick": _simulation_tick}
+
+func commit_after_callback_barrier() -> Dictionary:
+	# Trusted RunSession call only: all prior physics callbacks/timers/deletions
+	# must have completed. This value core cannot prove external callback order.
+	var code: String = _ready_code()
+	if not code.is_empty(): return _bad(code)
+	if not _step_open: return _bad("NO_OPEN_STEP")
+	_step_open = false
+	return {"ok": true, "tick": _simulation_tick}
+
+func invalidate(reason: String) -> void:
+	if _fault.is_empty(): _fault = reason if not reason.is_empty() else "UNKNOWN"
+
+func _check_values(values: Variant, known_entity_ids: Variant) -> Dictionary:
+	if not _fields(values, ["next_entity_id", "simulation_tick"]): return _bad("VALUE_FIELDS")
+	if typeof(values.next_entity_id) != TYPE_INT or values.next_entity_id < 1: return _bad("NEXT_ENTITY_ID")
+	if typeof(values.simulation_tick) != TYPE_INT or values.simulation_tick < 0: return _bad("SIMULATION_TICK")
+	if typeof(known_entity_ids) != TYPE_ARRAY or known_entity_ids.size() > MAX_BATCH: return _bad("KNOWN_ENTITY_IDS")
+	var seen := {}
+	for entity_id: Variant in known_entity_ids:
+		if typeof(entity_id) != TYPE_INT or entity_id < 1 or entity_id >= values.next_entity_id: return _bad("ENTITY_COUNTER_BOUND")
+		if seen.has(entity_id): return _bad("ENTITY_ID_DUPLICATE")
+		seen[entity_id] = true
+	return {"ok": true, "values": values}
+
+func capture(known_entity_ids: Variant) -> Dictionary:
+	var code: String = _ready_code()
+	if not code.is_empty(): return _bad(code)
+	if _step_open: return _bad("CAPTURE_DURING_STEP")
+	var values := {"next_entity_id": _next_entity_id, "simulation_tick": _simulation_tick}
+	var checked: Dictionary = _check_values(values, known_entity_ids)
+	if not checked.ok: return checked
+	var encoded: Dictionary = _codec.encode(values)
+	if not encoded.ok: return _bad("CODEC_" + String(encoded.code))
+	return {"ok": true, "record": {"schema": SCHEMA, "content_version": _content_version, "values": encoded.value}}
+
+func validate(record: Variant, known_entity_ids: Variant) -> Dictionary:
+	var code: String = _ready_code()
+	if not code.is_empty(): return _bad(code)
+	if not _fields(record, ["schema", "content_version", "values"]): return _bad("RECORD_FIELDS")
+	if typeof(record.schema) != TYPE_STRING or record.schema != SCHEMA: return _bad("SCHEMA")
+	if typeof(record.content_version) != TYPE_STRING or record.content_version != _content_version: return _bad("CONTENT_VERSION")
+	var decoded: Dictionary = _codec.decode(record.values)
+	if not decoded.ok: return _bad("CODEC_" + String(decoded.code))
+	return _check_values(decoded.value, known_entity_ids)
+
+func restore_fresh(record: Variant, known_entity_ids: Variant) -> Dictionary:
+	if _used or _step_open: return _bad("FRESH_DESTINATION_REQUIRED")
+	var checked: Dictionary = validate(record, known_entity_ids)
+	if not checked.ok: return checked
+	# Whole validation precedes either write. Source Battle is never an argument.
+	_next_entity_id = checked.values.next_entity_id
+	_simulation_tick = checked.values.simulation_tick
+	_used = true
+	return {"ok": true}

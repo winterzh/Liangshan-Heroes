@@ -1,0 +1,104 @@
+## Unintegrated fragment only. Required globals/helpers are in the old smoke;
+## actual provider/phase/runner wiring has not been generated. No Godot check.
+func _probe_checkpoint(side: String, game: Variant, caster: Variant, record: Dictionary) -> void:
+	var row: Dictionary = {"phase": phase, "side": side, "run_id": manifest.run_id,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"stage": "before_original_consumer", "cast_t": caster._cast_t,
+		"pending_count": game._pending_item_casts.size(), "walk_count": game._walk_item_casts.size(),
+		"stack_count": caster.inventory.slot_item(0).get("count", 0),
+		"cooldowns": caster.inventory.cooldowns.duplicate(true), "record": record,
+		"no_whole_battle_resume_claim": true}
+	var path: String = report_path.get_base_dir().path_join("checkpoint_" + phase + "_" + side + ".json")
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		_check("checkpoint persisted " + side, false)
+	else:
+		file.store_string(JSON.stringify(row, "\t")); file.close()
+	print("[item-cast-flow checkpoint] ", JSON.stringify(row))
+
+func _freed_probe(original: Variant, world: Node2D, scripts: Dictionary, factory: Variant,
+		codec: Variant, counter: Variant) -> void:
+	var caster: Variant = _unit(scripts.unit, Vector2(80.0, 80.0), true)
+	var target: Variant = _unit(scripts.unit, Vector2(100.0, 80.0), false)
+	world.add_child(caster); world.add_child(target)
+	caster.battle = original; caster.map = original.map
+	caster.inventory = scripts.inventory.new(caster)
+	original.units = [caster, target]
+	if not _check(phase + " original inventory allocates protocol fixture", caster.inventory.put_item(0, "qa_unit_item", 3)):
+		_finish(true); return
+	var uid: int = caster.inventory.slot_item(0).uid
+	if phase == "freed_pending":
+		original._begin_item_cast(caster, 0, target.position, target)
+		caster._physics_process(0.125)
+		if not _check(phase + " original creator queues live target", original._pending_item_casts.size() == 1 and caster._cast_t == 0.375):
+			_finish(true); return
+	else:
+		# Standard unit-target route supplies INF. Do not invent a finite point
+		# to force an unrelated typed call the real creator does not request.
+		original._queue_walk_item(caster, 0, target, Vector2.INF)
+		if not _check(phase + " original creator queues live target", original._walk_item_casts.size() == 1 and original._walk_item_casts[0].point == Vector2.INF):
+			_finish(true); return
+	target.free()
+	original.units = [caster]
+	var captured: Dictionary = factory.capture(original, content_version, {caster: "1"})
+	if not _ok(phase + " capture actual freed target", captured):
+		_finish(true); return
+	var record: Dictionary = JSON.parse_string(JSON.stringify(captured.record))
+	var checked: Dictionary = factory.validate(record, content_version, {"1": true})
+	if not _ok(phase + " codec JSON validates expired tag", checked):
+		_finish(true); return
+	var made: Dictionary = factory.instantiate(record, content_version, {"1": true})
+	if not _ok(phase + " instantiate detached true Battle", made):
+		_finish(true); return
+	var restored: Variant = made.battle
+	owned.append(restored)
+	if not _shell_environment(restored, world, scripts.map, scripts.level, scripts.hud):
+		_finish(true); return
+	var saved_counter: Dictionary = counter.capture(original, content_version, uid)
+	if not _ok(phase + " capture bounded fixture counter", saved_counter):
+		_finish(true); return
+	if not _ok(phase + " restore bounded fixture counter", counter.restore(restored, JSON.parse_string(JSON.stringify(saved_counter.value)), content_version, uid)):
+		_finish(true); return
+	var fresh: Variant = _unit(scripts.unit, caster.position, true)
+	for field: String in UNIT_FIXTURE_FIELDS: fresh.set(field, _copy_value(caster.get(field)))
+	fresh.battle = restored; fresh.map = restored.map
+	fresh.inventory = scripts.inventory.new(fresh)
+	for field: String in INVENTORY_FIXTURE_FIELDS: fresh.inventory.set(field, _copy_value(caster.inventory.get(field)))
+	world.add_child(fresh); restored.units = [fresh]
+	var graph: Variant = scripts.identity.new(scripts.unit)
+	graphs.append(graph)
+	if not _ok(phase + " shared identity declare", graph.declare_entities({"1": true})) or not _ok(phase + " shared identity configure", graph.configure({"1": fresh}, [fresh])):
+		_finish(true); return
+	var before: Array = _unit_states([fresh])
+	if not _ok(phase + " bind live expired tombstone", factory.bind(restored, record, content_version, {"1": fresh}, graph.expired_unit())):
+		_finish(true); return
+	graph.release_tombstones()
+	var rebound: Dictionary = factory.capture(restored, content_version, {fresh: "1"})
+	_check(phase + " expired JSON record recaptures exactly", rebound.get("ok") == true and rebound.record == captured.record)
+	_check(phase + " binding never spends ticks or commands", before == _unit_states([fresh]) and restored.next_item_uid == original.next_item_uid)
+	var expired_value: Variant = restored._pending_item_casts[0].target if phase == "freed_pending" else restored._walk_item_casts[0].tgt
+	_check(phase + " reference remains expired Object not none", typeof(expired_value) == TYPE_OBJECT and not is_instance_valid(expired_value))
+	await process_frame
+	_check(phase + " actual paused nonphysics boundary", paused and not Engine.is_in_physics_frame())
+	var pair: Array = [["original", original, caster], ["restored", restored, fresh]]
+	for side: Array in pair:
+		var game: Variant = side[1]
+		var unit: Variant = side[2]
+		if phase == "freed_pending":
+			game._tick_pending_item_casts() # Existing positive windup must still wait.
+			_check(phase + " remaining windup preserved " + side[0], game._pending_item_casts.size() == 1 and unit._cast_t == 0.375)
+			unit._physics_process(0.375) # Actual Unit timer, not direct timer zeroing.
+			_check(phase + " original Unit timer expires " + side[0], unit._cast_t == 0.0)
+		_probe_checkpoint(side[0], game, unit, record)
+		# No error suppression, substitute consumer or local production guard.
+		# Current 07d7 may emit a typed freed-target error at this exact call.
+		if phase == "freed_pending": game._tick_pending_item_casts()
+		else: game._walk_item_cast_pass(0.125)
+		_check(phase + " invalid intent cancels without spend " + side[0], game._pending_item_casts.is_empty() and game._walk_item_casts.is_empty() and unit.inventory.slot_item(0).count == 3 and unit.inventory.cooldowns.is_empty())
+		var settled: Array = _unit_states([unit])
+		game._tick_pending_item_casts(); game._walk_item_cast_pass(0.125)
+		_check(phase + " no duplicate action " + side[0], settled == _unit_states([unit]) and game.fx_root.get_child_count() == 0 and game.gameplay_rng_fault().is_empty())
+	observed_steps = {"phase": phase, "original_cast_t": caster._cast_t, "restored_cast_t": fresh._cast_t,
+		"uid_decimal": str(uid), "original_next_uid_decimal": str(original.next_item_uid),
+		"restored_next_uid_decimal": str(restored.next_item_uid)}
+	_finish()

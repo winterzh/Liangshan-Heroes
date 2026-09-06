@@ -1,0 +1,148 @@
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'scratchpad/run_frame_boundary_probe'
+OLD = ROOT / 'scratchpad/run_fog_runtime_final'
+assert not OUT.exists()
+sha = lambda x: hashlib.sha256(x).hexdigest()
+driver_raw = (OLD / 'driver.gd').read_bytes()
+runner_raw = (OLD / 'run_smoke.py').read_bytes()
+assert sha(driver_raw) == '90435ea9529b1134d2e21ee5f731669bda1b8ce7b27d179ac287c6c2cbfb6b49'
+assert sha(runner_raw) == '2c157d37ac180c57e7c49720c6d826f507691c5cfc9fb31b06705d2ce9a30882'
+driver = driver_raw.decode('utf-8')
+head = driver[:driver.index('func _shell()')]
+head = head.replace('const Factory := preload("res://scripts/run_fog_state.gd")', 'const Core := preload("res://scratchpad/run_entity_clock_migration/entity_clock_core.gd")')
+head = head.replace('var canvas_evidence: Array = []', 'var events: Array = []\nvar step_core: Variant\nvar probes: Array = []\nvar victims: Dictionary = {}\nvar capture_pending := false\nvar capture_done := false\nvar paused_frames := 0\nvar captured_tick := -1\nvar closing := false\nvar callback_counts: Dictionary = {}')
+head = head.replace('"canvas_evidence": canvas_evidence', '"events": events')
+head = head.replace('fog-runtime-restore', 'frame-boundary-probe')
+old_scope = 'Real 60x60 GameMap and original Battle fog consumers; JSON restore of authority, lagging RGBA8 display, real FogLayer Canvas comparison, native timer continuation. Unit fog flags copied as explicit outer fixture. No complete Battle/Unit/Map restore or exported-PCK test.'
+head = head.replace(old_scope, 'Instrumented SceneTree callback ordering with real physics timers, tweens, deferred calls and queue_free. Actual candidate clock core and provider. Not a Battle integration, real input test or complete save/continue.')
+head = head.replace('## Actual Battle fog consumers and GameMap, with two disabled Battle shells.\n## No Battle._ready, deployment, invented provider identity or source extraction.', '## Actual engine callback-boundary diagnostic, not a production RunSession.')
+start = driver.index('func _run()')
+stop = driver.index('\n\tcodec =', start)
+setup = driver[start:stop]
+tail = '''
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	step_core = Core.new(codec_script, identity.content_version)
+	# This fresh process deliberately limits rendering to expose catch-up physics.
+	Engine.max_fps = 10
+	for index in range(2):
+		var probe := StepProbe.new()
+		probe.host = self; probe.index = index
+		probe.process_physics_priority = index
+		root.add_child(probe); owned.append(probe); probes.append(probe)
+	physics_frame.connect(_physics_boundary)
+	process_frame.connect(_process_boundary)
+	_record("probe armed", 0)
+
+class StepProbe:
+	extends Node
+	var host: Variant
+	var index: int
+	func _physics_process(_delta: float) -> void:
+		host.node_callback(index)
+
+func _record(kind: String, tick: int) -> void:
+	events.append({"kind": kind, "tick": tick, "physics": Engine.get_physics_frames(),
+		"process": Engine.get_process_frames(), "paused": paused,
+		"in_physics": Engine.is_in_physics_frame()})
+
+func _late(kind: String, tick: int) -> void:
+	_record(kind, tick)
+	if kind == "timer": call_deferred("_late", "timer nested deferred", tick)
+
+func node_callback(index: int) -> void:
+	var tick: int = step_core.simulation_tick()
+	_record("node " + str(index), tick)
+	callback_counts[tick] = int(callback_counts.get(tick, 0)) + 1
+	_check("node runs in open step " + str(tick) + ":" + str(index), step_core.step_open() and not paused)
+	if index != 0: return
+	call_deferred("_late", "node deferred", tick)
+	var victim := Node.new()
+	root.add_child(victim); victims[tick] = victim
+	victim.queue_free()
+	var timer: SceneTreeTimer = create_timer(0.0, false, true, false)
+	timer.timeout.connect(_late.bind("timer", tick))
+	var tween: Tween = create_tween()
+	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+	tween.tween_callback(_late.bind("tween", tick))
+	if tick == 8:
+		capture_pending = true
+		_record("capture requested in node callback", tick)
+		_check("mid callback capture refused", step_core.capture([]).get("code") == "CAPTURE_DURING_STEP")
+
+func _commit(kind: String) -> void:
+	if not step_core.step_open(): return
+	var tick: int = step_core.simulation_tick()
+	var kinds: Array = []
+	for event in events:
+		if event.tick == tick: kinds.append(event.kind)
+	_check("both node callbacks finished " + str(tick), callback_counts.get(tick) == 2)
+	for required in ["node deferred", "timer", "tween", "timer nested deferred"]:
+		_check(required + " before commit " + str(tick), required in kinds)
+	_check("queued deletion before commit " + str(tick), victims.has(tick) and not is_instance_valid(victims[tick]))
+	_ok("commit core " + str(tick), step_core.commit_after_callback_barrier())
+	_record("commit at " + kind, tick)
+
+func _physics_boundary() -> void:
+	if closing or step_core == null: return
+	_commit("physics boundary")
+	if capture_pending:
+		_pause_for_capture()
+	if paused: return
+	_ok("begin core step", step_core.begin_step())
+	_record("begin", step_core.simulation_tick())
+
+func _pause_for_capture() -> void:
+	if capture_done: return
+	paused = true
+	captured_tick = step_core.simulation_tick()
+	_record("capture barrier paused", captured_tick)
+	_ok("committed core capture", step_core.capture([]))
+	capture_done = true
+
+func _process_boundary() -> void:
+	if closing or step_core == null: return
+	_commit("process boundary")
+	if capture_pending: _pause_for_capture()
+	if not capture_done: return
+	paused_frames += 1
+	if paused_frames < 3: return
+	_check("paused world does not open or advance tick", captured_tick == 8 and step_core.simulation_tick() == 8 and not step_core.step_open())
+	_check("paused world has exactly sixteen node callbacks", callback_counts.size() == 8 and callback_counts.values().all(func(value): return value == 2))
+	var per_render: Dictionary = {}
+	for event in events:
+		if event.kind == "begin": per_render[event.process] = int(per_render.get(event.process, 0)) + 1
+	var catch_up := false
+	for count in per_render.values():
+		if count > 1: catch_up = true
+	_check("actual multiple physics steps within rendered frame", catch_up)
+	closing = true
+	physics_frame.disconnect(_physics_boundary); process_frame.disconnect(_process_boundary)
+	_finish()
+'''
+final_driver = (head + setup + tail).encode('utf-8')
+runner = runner_raw.decode('utf-8').replace('scratchpad/run_fog_runtime_final/', 'scratchpad/run_frame_boundary_probe/')
+runner = runner.replace("'scripts/run_fog_state.gd'", "'scratchpad/run_entity_clock_migration/entity_clock_core.gd'")
+runner = runner.replace('fog-runtime-restore', 'frame-boundary-probe')
+first = runner.index("        util.need(any(row.get('label') == 'actual paused nonphysics frame boundary'")
+last = runner.index("        util.need(util.file_sha(out / 'manifest.json')", first)
+runner = runner[:first] + '''        labels = {row['label'] for row in checks if row.get('passed') is True}
+        util.need({'paused world does not open or advance tick', 'paused world has exactly sixteen node callbacks', 'actual multiple physics steps within rendered frame', 'committed core capture', 'mid callback capture refused'} <= labels, 'Required boundary observations absent')
+        util.need(report.get('events') and len([event for event in report['events'] if event['kind'] == 'begin']) == 8, 'Missing real callback trace')
+''' + runner[last:]
+runner = runner.replace('Actual fog consumers and Canvas;', 'Actual callback-boundary observation;')
+OUT.mkdir()
+(OUT / '.gdignore').write_bytes(b'')
+(OUT / 'driver.gd').write_bytes(final_driver)
+(OUT / 'run_smoke.py').write_bytes(runner.encode('utf-8'))
+(OUT / 'QA_CONTRACT.md').write_bytes(b'''# SceneTree capture boundary diagnostic
+
+Prepared only until a native receipt completes. Runs the actual proposed value core with actual installed-provider identity. Two real Node physics callbacks schedule real deferred calls, zero-duration physics timers, physics tweens and queued deletion. Each next physics/process boundary observes whether these have completed before committing the previous step. The eighth step requests capture inside a node callback; a boundary pauses before any new step and observes three process frames without further simulation. Render cap 10 exposes actual catch-up physics in this private QA process. The host requires the full eight-step trace and strict engine diagnostics, source/player guards, exact executable and owned-process exit.
+
+This diagnoses engine ordering and an instrumented proposed hook. It does not exercise Battle/Unit callbacks, scene admission, real input, asynchronous external work or a production RunSession. A failed observation must be preserved and used to revise the proposed barrier, never hidden as a successful complete-world snapshot.
+''')
+(OUT / 'preparation.json').write_bytes((json.dumps({'prepared': True, 'engine_run': False, 'production_changed': False, 'driver_sha256': sha(final_driver), 'runner_sha256': sha(runner.encode('utf-8')), 'scaffold_driver_sha256': sha(driver_raw), 'scaffold_runner_sha256': sha(runner_raw)}, indent=2) + '\n').encode('utf-8'))
+print(json.dumps({'prepared': True, 'driver_sha256': sha(final_driver), 'runner_sha256': sha(runner.encode('utf-8'))}))

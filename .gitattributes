@@ -148,3 +148,11 @@ tools/contracts/run_content_identity_20260907/** -text whitespace=blank-at-eol,b
 tools/build_steam_candidate.py -text -eol whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 export_presets.cfg -text -eol whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 qa/run_gameplay_rng_integration_20260907/** -text -whitespace
+
+# Preserve the morning handoff QA receipts without newline conversion.
+qa/morning_handoff_20260907/** -text -whitespace
+
+
+qa/run_fog_runtime_20260907/** -text -whitespace
+scripts/run_fog_state.gd* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+qa/run_resume_handoff_20260907/** -text -whitespace

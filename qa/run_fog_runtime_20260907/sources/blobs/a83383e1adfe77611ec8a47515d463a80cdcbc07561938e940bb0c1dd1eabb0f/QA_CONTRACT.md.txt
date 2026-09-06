@@ -1,0 +1,9 @@
+# Fog runtime R3: visible Canvas backdrop and captured images
+
+R2 20260906T224007277021Z (PID 33716) completed 273 rows: the three black-versus-clear region checks failed; all other rows including the actual paused boundary, state/texture restoration, real consumers and negative cases passed. The project explicitly clears viewports to black, and the controlled viewport had no terrain/background below the fog, so transparent and opaque regions both appeared black. This failed run and all earlier frozen inputs remain unchanged.
+
+R3 adds an explicit white ColorRect below the real FogLayer in each controlled world. The check is stronger: the known unexplored pixel must be opaque black and the live-sight pixel opaque white; actual RGBA strings are reported. A scene that is entirely black, entirely white or does not draw the fog fails. The paired world child ordering includes the same backdrop on both sides. This is a visibility test aid, not a restored game-map renderer.
+
+The module remains the original caef97f... resource. The four narrow driver edits add the backdrop and image-reporting only; inverse reconstruction returns R2 exact bytes. Three phases save actual left/right 64x64 PNGs directly from each native SubViewport. The host requires all three phases, report-matching PNG SHA256 and identical paired PNG bytes. Source/player protection and strict diagnostics remain unchanged. These generated QA images should be retained as actual render evidence; player profiles/listings and caches stay excluded.
+
+The original field/fixture contract is ../run_fog_runtime_state/QA_CONTRACT.md. R1/R2 describe the preserved renderer and paused-boundary repairs. Normal desktop forward_plus is used. Scope remains five fog values, lagging pixels and the default FogLayer with controlled independent maps/Unit flags. No full Unit/Map/world, ISO camera, arbitrary custom Node extensions, PCK, complete save/continue or performance acceptance is claimed.

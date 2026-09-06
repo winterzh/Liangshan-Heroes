@@ -1,0 +1,49 @@
+--- r2/driver.gd
++++ r3/driver.gd
+@@ -8,6 +8,7 @@
+ var manifest_ready: bool = false
+ var report_path: String = ""
+ var runtime_identity: Dictionary = {}
++var canvas_evidence: Array = []
+ var codec: Variant
+ var battle_script: Variant
+ var map_script: Script
+@@ -46,7 +47,7 @@
+ 		"source_sha256": manifest.get("source_sha256", {}),
+ 		"engine_binary_sha256": manifest.get("engine_binary_sha256", ""),
+ 		"rendering_method": RenderingServer.get_current_rendering_method(),
+-		"runtime_identity": runtime_identity,
++		"runtime_identity": runtime_identity, "canvas_evidence": canvas_evidence,
+ 		"scope": "Real 60x60 GameMap and original Battle fog consumers; JSON restore of authority, lagging RGBA8 display, real FogLayer Canvas comparison, native timer continuation. Unit fog flags copied as explicit outer fixture. No complete Battle/Unit/Map restore or exported-PCK test."}
+ 	if not report_path.is_empty():
+ 		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+@@ -75,6 +76,11 @@
+ 	view.add_child(world)
+ 	view.canvas_transform = Transform2D(Vector2(1.0 / 32.0, 0), Vector2(0, 1.0 / 32.0), Vector2.ZERO)
+ 	battle.world = world
++	# A visible backdrop distinguishes transparent fog from an empty black viewport.
++	var backdrop := ColorRect.new()
++	backdrop.size = Vector2(1920, 1920); backdrop.color = Color.WHITE
++	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE; backdrop.z_index = -1
++	world.add_child(backdrop)
+ 	battle.units_root = Node2D.new(); world.add_child(battle.units_root)
+ 	battle.fx_root = Node2D.new(); world.add_child(battle.fx_root)
+ 	return battle
+@@ -116,7 +122,16 @@
+ 	var b: Image = right.get_texture().get_image()
+ 	_check(label + " actual separate Canvas frames", a != null and b != null and a.get_size() == Vector2i(64, 64) and b.get_size() == a.get_size() and a.get_data() == b.get_data())
+ 	# Different known pixels prove the comparison isn't two empty viewports.
+-	_check(label + " actual fog black versus clear region", a.get_pixel(2, 2) != a.get_pixel(12, 12))
++	var black: Color = a.get_pixel(2, 2)
++	var clear: Color = a.get_pixel(12, 12)
++	checks.append({"label": label + " actual fog black versus clear region", "passed": black == Color.BLACK and clear == Color.WHITE, "black_rgba": black.to_html(), "clear_rgba": clear.to_html()})
++	var stem: String = label.replace(" ", "_")
++	var left_path: String = report_path.get_base_dir().path_join(stem + "_left.png")
++	var right_path: String = report_path.get_base_dir().path_join(stem + "_right.png")
++	var left_saved: int = a.save_png(left_path)
++	var right_saved: int = b.save_png(right_path)
++	_check(label + " native Canvas images saved", left_saved == OK and right_saved == OK)
++	canvas_evidence.append({"phase": label, "left": left_path, "right": right_path, "left_sha256": FileAccess.get_sha256(left_path), "right_sha256": FileAccess.get_sha256(right_path)})
+ 
+ func _attach(factory: Variant, battle: Variant, record: Dictionary) -> bool:
+ 	var bound: Dictionary = factory.bind(battle, record)

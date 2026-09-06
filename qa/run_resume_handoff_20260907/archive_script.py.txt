@@ -1,0 +1,149 @@
+"""Archive only named unfinished drafts and two existing root QA runs. No engine/Git."""
+from pathlib import Path
+import hashlib
+import json
+import re
+
+ROOT = Path(__file__).resolve().parent.parent
+QA = ROOT / 'qa/run_resume_handoff_20260907'
+sha = lambda x: hashlib.sha256(x).hexdigest()
+def read(p): return json.loads(p.read_text(encoding='utf-8'))
+def need(x, why):
+    if not x: raise RuntimeError(why)
+need(not QA.exists(), 'Never overwrite handoff')
+need(not (ROOT / '.godot/redraw_rejection_source.lock').exists(), 'Own engine lock remains')
+planned, source_rows, runs = {}, [], []
+secret = re.compile(rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|sk-proj-[A-Za-z0-9_-]{40,}')
+def add(name, destination=None, expected=None):
+    p = ROOT / name
+    need(p.is_file() and not p.is_symlink() and p.resolve().is_relative_to(ROOT.resolve()), 'Unsafe path ' + name)
+    need(not any(x in {'private_profile', 'profile', '__pycache__', '.godot'} for x in p.relative_to(ROOT).parts), 'Private/cache path')
+    need(not p.name.startswith(('players_', 'identity_players_')), 'Player listing')
+    raw = p.read_bytes()
+    need(len(raw) < 10 * 1024 * 1024 and secret.search(raw) is None, 'Size/secret review')
+    raw.decode('utf-8')
+    need(p.suffix.lower() not in {'.exe', '.dll', '.pck', '.zip', '.png', '.jpg', '.pem', '.key'}, 'Binary excluded')
+    need(expected is None or sha(raw) == expected, 'Hash differs: ' + name)
+    destination = destination or 'drafts/' + name + '.txt'
+    target = QA / destination
+    need(target.resolve().is_relative_to(QA.resolve()), 'Destination escaped')
+    need(destination not in planned or planned[destination]['raw'] == raw, 'Destination conflict')
+    planned[destination] = {'raw': raw, 'original': name}
+    return target.relative_to(ROOT).as_posix()
+
+# Named, bounded draft sets. No recursive scratchpad collection.
+sets = {
+ 'scratchpad/run_battle_root_state_r1': ['.gdignore','build.py','pins.json','preparation.json','README.md','root_state.gd','root_state.gd.in','root_state.gd.in.patch','root_state.gd.patch'],
+ 'scratchpad/run_battle_root_state_r1_qa': ['.gdignore','driver.gd','field_contract.json','pins.json','preparation.json','prepare.py','QA_CONTRACT.md','required_labels.json','run_smoke.py'],
+ 'scratchpad/run_battle_root_state_r2_qa': ['.gdignore','driver_r2.patch','driver.gd','field_contract.json','pins.json','preparation.json','prepare_r2.py','QA_CONTRACT.md','required_labels.json','run_smoke.py'],
+ 'scratchpad/run_entity_clock_migration': ['.gdignore','callsite_inventory.json','core_smoke.gd','entity_clock_core.gd','MIGRATION.md','pins.json','review.json','source_pins.json'],
+ 'scratchpad/run_item_cast_flow_resume': ['.gdignore','item_cast_flow_restore_smoke.gd','item_cast_flow_state.gd','pins.json','README.md'],
+ 'scratchpad/run_item_cast_flow_r1_qa': ['.gdignore','QA_CONTRACT.md','freed_probe.gd.inc','HANDOFF.json'],
+ 'scratchpad/run_frame_boundary_probe': ['.gdignore','driver.gd','run_smoke.py','QA_CONTRACT.md','pins.json','preparation.json'],
+}
+for directory, names in sets.items():
+    for name in names: add(directory + '/' + name)
+for name in ['scratchpad/run_battle_root_state/field_coverage.json', 'scratchpad/prepare_frame_boundary_probe.py', 'scratchpad/recover_unlaunched_frame_probe_lock.py']:
+    add(name)
+
+stable = ROOT / 'scratchpad/run_stable_entity_candidate'
+stable_receipt = read(stable / 'source_receipt.json')
+need(stable_receipt['status'] == 'candidate_not_applied_not_engine_tested' and len(stable_receipt['files']) == 7, 'Stable draft changed')
+for row in stable_receipt['files']:
+    for kind, key in [('before','before_raw_sha256'), ('candidate','candidate_raw_sha256')]:
+        add('scratchpad/run_stable_entity_candidate/' + kind + '/' + row['path'] + ('.txt' if kind == 'before' else ''), expected=row[key])
+for name in ['.gdignore','prepare.py','review.py','source_receipt.json','stable_entity.patch','HANDOFF.md','archive_whitelist.json']:
+    add('scratchpad/run_stable_entity_candidate/' + name)
+
+# Raw source evidence can reuse committed, byte-identical earlier QA blobs.
+reuse = {}
+def rows(value):
+    if isinstance(value, dict):
+        digest, path = value.get('sha256'), value.get('archive') or value.get('archive_path')
+        if isinstance(digest, str) and isinstance(path, str): yield digest, path
+        for child in value.values(): yield from rows(child)
+    elif isinstance(value, list):
+        for child in value: yield from rows(child)
+index_name = 'qa/run_gameplay_rng_integration_20260907/source_index.json'
+for digest, name in rows(read(ROOT / index_name)):
+    p = ROOT / name
+    if p.is_file() and p.resolve().is_relative_to((ROOT / 'qa').resolve()) and sha(p.read_bytes()) == digest:
+        reuse.setdefault(digest, name)
+def source(name, digest, role):
+    if digest in reuse:
+        archive = reuse[digest]
+        raw = (ROOT / archive).read_bytes()
+    else:
+        raw = (ROOT / name).read_bytes()
+        archive = add(name, 'sources/' + digest + '/' + Path(name).name + '.txt', digest)
+    need(sha(raw) == digest, 'Source differs')
+    source_rows.append({'source':name,'archive':archive,'sha256':digest,'bytes':len(raw),'role':role})
+
+for label, base, stamp, passed in [
+ ('root_r1_failed','scratchpad/run_battle_root_state_r1_qa','20260906T224833895013Z',False),
+ ('root_r2_passed','scratchpad/run_battle_root_state_r2_qa','20260906T230020380173Z',True),
+]:
+    run = ROOT / base / 'runs' / stamp
+    receipt = read(run / 'receipt.json'); process = read(run / 'report_process.json')
+    need(receipt['complete'] is passed, 'Unexpected root result')
+    need(all(receipt.get(key) is True for key in ['source_unchanged','player_unchanged','lock_released']), 'Root guards failed')
+    need(process['child_exit_confirmed'] is True, 'Unconfirmed root exit')
+    need((run/'sources_before.json').read_bytes() == (run/'sources_after.json').read_bytes(), 'Root raw source guard differs')
+    manifest = read(run/'manifest.json')
+    need(manifest['source_sha256'] == receipt['source_sha256'], 'Root source manifest differs')
+    for name, digest in manifest['source_sha256'].items(): source(name, digest, label)
+    names = ['receipt.json','report.log','report_process.json','manifest.json','environment.json','sources_before.json','sources_after.json']
+    if passed:
+        report = read(run/'report.json')
+        need(report['passed'] is True and report['complete'] is True and len(report['checks']) == 918 and all(row['passed'] is True for row in report['checks']), 'Root R2 checks differ')
+        need(report['process_id'] == process['child_pid'] and process['exit_code'] == 0, 'Root PID/exit mismatch')
+        prefix = '[battle-root-state QA] '
+        # Prefix is read from the frozen runner/driver instead of guessed here.
+        actual_marked = [line for line in (run/'report.log').read_text(encoding='utf-8').splitlines() if line.startswith('[') and ' QA] ' in line]
+        need(len(actual_marked) == 1 and json.loads(actual_marked[0].split(' QA] ',1)[1]) == report, 'Root stdout report differs')
+        need(sha((run/'report.json').read_bytes()) == '3c41ad88a255822ad53149407d101737561f02549666878e37eb3be744efdee5', 'Root report SHA')
+        names.append('report.json')
+    else:
+        need(not (run/'report.json').exists() and "Invalid access of index '0'" in (run/'report.log').read_text(encoding='utf-8'), 'Original fixture failure differs')
+    for name in names: add((run/name).relative_to(ROOT).as_posix(), 'runs/' + label + '/' + name)
+    runs.append({'label':label,'run_id':stamp,'passed':passed,'production_promoted':False,'pid':process['child_pid'],'checks':918 if passed else None})
+
+probe = ROOT/'scratchpad/run_frame_boundary_probe/runs/20260906T230504671901Z'
+recovery = read(probe/'unlaunched_lock_recovery.json')
+need(read(probe/'receipt.json')['godot_run'] is False and recovery['released'] is True and recovery['source_unchanged'] is True and recovery['player_unchanged'] is True, 'Probe not safely stopped')
+for name in ['receipt.json','manifest.json','unlaunched_lock_recovery.json']:
+    add((probe/name).relative_to(ROOT).as_posix(), 'runs/clock_probe_unlaunched/' + name)
+for name, digest in read(probe/'manifest.json')['source_sha256'].items(): source(name,digest,'clock_probe_unlaunched_inputs_only')
+for name, digest in [
+ ('scratchpad/run_gameplay_rng_r1/run_qa.py','8f9c82100bf8b635abd74f9a79b31335e72df404f30c62f3f490458af3e0e1ad'),
+ ('scratchpad/separation_sections_diag/frozen/process_safety.py','7983b00449f8d606e4f1be55ca13596239fbc8b47c3894ff3c31da03757835a1'),
+ ('tools/run_reduced_effects_qa.py','1cecf1c3e6bb7c15992e6955fcad67e959cf836a198e9ceca28d744a1a573c0c')]:
+    source(name,digest,'exact_lifecycle_dependency')
+add(Path(__file__).relative_to(ROOT).as_posix(), 'archive_script.py.txt')
+
+description = '''# 停止前的续玩工作草稿
+
+本目录是 2026-09-07 07:00 收尾时的受控交接，全部草稿未晋级、不可直接覆盖生产。生产仍以已提交 stable 和独立通过的 Fog 批次为准。本目录没有新实现、引擎运行、提交或发布。
+
+- 根状态 R1 模块在 R2 harness 完成 918 项真实检查；首轮因生产物品表为空而夹具访问首项失败，无报告，原错误保留。R2 仅用明确结构测试物品标识修正夹具。模块仍未接整局；原 Map 只读引用与新 Unit 壳是显式夹具，未恢复完整 Map/Unit 图。104 根字段、169 声明分类将随稳定实体迁移变化，必须重新审查。仅保存当前模块、生成材料、两次 QA 与全部 tested-source 映射。
+- 稳定实体候选保留七份 before/candidate、补丁和准备/审查脚本。静态审查停在方法白名单断言，尚未完成；非驻守章节仍有创建失败后旧实体已删除、波次已推进的事务缺口。Unit/Graph v2、稳定排序和 ID 耗尽传播未经过引擎测试，不可应用。
+- ItemCast 保留旧模块/旧 smoke 与新协议探针片段。新 harness 尚缺 driver、runner、pins；当前 pending typed-freed 风险尚未实跑，不能把静态发现当成已复现或已修复。
+- 时钟草稿保留值核心、迁移清单和实际 callback probe 准备物。probe 在启动前因收尾任务占用引擎而被拒绝，没有 Godot 子进程或运行报告；原收据保持失败，另附只释放本任务精确锁的恢复记录。准备 driver 还含两个同名 codec_script 局部声明，尚未解析，必须先修正并重新冻结，不能直接运行。它也未证明真实 Battle 输入屏障。
+
+source_index.json 的 archive 均相对仓库根目录。历史复用原文来自已提交 QA，未用当前文件替换旧 SHA。drafts 以 .txt 存原字节；恢复到独立 scratch 目录时按 original 路径去掉归档附加后缀，先核对 source receipt、缺项、身份与当前源码，再审查重建，绝不覆盖 production。
+
+后续顺序：先完成稳定实体调用链审查和模拟时钟/输入屏障，再重整根事务与剩余效果。完整 30 波保存退出重启继续、祝家庄、菜单/PCK/发行 EXE、八关和最终性能门槛均未通过。不得以本目录行数计为整局完成。
+'''
+planned['README.md'] = {'raw':description.encode('utf-8'),'original':'generated handoff summary'}
+planned['.gdignore'] = {'raw':b'\n','original':'generated ignore marker'}
+QA.mkdir()
+files=[]
+for name,item in sorted(planned.items()):
+    p=QA/name; p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(item['raw'])
+    need(p.read_bytes()==item['raw'],'Archive readback differs')
+    files.append({'path':name,'original':item['original'],'bytes':len(item['raw']),'sha256':sha(item['raw'])})
+def save(name,value): (QA/name).write_bytes((json.dumps(value,ensure_ascii=False,indent=2)+'\n').encode('utf-8'))
+save('source_index.json',{'schema':2,'archive_path_base':'repository_root','mappings':source_rows})
+save('manifest.json',{'schema':1,'status':'unpromoted_partial_handoff','base_head':'56adcacb78356fb9ecc33bc62eb0db252cb35ea6','files':files,'runs':runs,'new_engine_execution':False,'production_modified':False,'private_data_included':False})
+save('archive_verification.json',{'verified':True,'files':len(files),'bytes':sum(x['bytes'] for x in files),'source_mappings':len(source_rows),'manifest_sha256':sha((QA/'manifest.json').read_bytes()),'source_index_sha256':sha((QA/'source_index.json').read_bytes()),'all_inputs_checked_before_write':True,'git_used':False})
+print(json.dumps(read(QA/'archive_verification.json')))

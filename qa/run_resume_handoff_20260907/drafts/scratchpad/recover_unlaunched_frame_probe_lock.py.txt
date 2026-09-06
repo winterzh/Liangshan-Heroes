@@ -1,0 +1,42 @@
+"""Release only this unlaunched probe's own lock; never operate on any engine."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import types
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'scratchpad/run_frame_boundary_probe/runs/20260906T230504671901Z'
+base = ROOT / 'scratchpad/run_gameplay_rng_r1/run_qa.py'
+raw = base.read_bytes()
+assert hashlib.sha256(raw).hexdigest() == '8f9c82100bf8b635abd74f9a79b31335e72df404f30c62f3f490458af3e0e1ad'
+util = types.ModuleType('unlaunched_probe_recovery')
+util.__file__ = str(base)
+exec(compile(raw.decode('utf-8'), str(base), 'exec'), util.__dict__)
+receipt = util.read(OUT / 'receipt.json')
+assert receipt['godot_run'] is False
+assert receipt['error'] == 'RuntimeError: Godot is already running; acquire an exclusive slot first. PIDs=36252'
+assert not any((OUT / name).exists() for name in ['report.log', 'report.json', 'report_process.json'])
+token = '3236|' + str(OUT)
+assert util.LOCK == ROOT / '.godot/redraw_rejection_source.lock'
+assert util.LOCK.read_text(encoding='utf-8') == token
+guard = util.load_helper(util.GUARD, util.GUARD_SHA, 'source_guard_recovery')
+after = guard.source_receipt(ROOT)
+before = util.read(OUT / 'sources_before.json')
+real_user = Path(os.environ['APPDATA']) / 'Godot/app_userdata' / guard.project_name(ROOT)
+players_after = util.tree(real_user)
+players_before = util.read(OUT / 'players_before.json')
+assert after == before, 'Source changed after unlaunched probe'
+assert players_after == players_before, 'Player changed after unlaunched probe'
+assert util.LOCK.read_text(encoding='utf-8') == token
+assert not (OUT / 'unlaunched_lock_recovery.json').exists()
+result = {'released': False, 'probe_engine_started': False, 'original_failure_preserved': True,
+          'source_unchanged': True, 'player_unchanged': True,
+          'other_engine_killed_or_changed': False, 'other_checkout_lock_touched': False,
+          'reason': 'Launch guard refused before the runner set godot_run or entered execute; no child was created. Only the exact owned token is released while the closing task retains its separate engine and checkout lock.',
+          'original_receipt_sha256': util.file_sha(OUT / 'receipt.json')}
+util.save(OUT / 'recovery_sources_after.json', after)
+util.LOCK.unlink()
+result['released'] = not util.LOCK.exists()
+util.save(OUT / 'unlaunched_lock_recovery.json', result)
+print(json.dumps(result))

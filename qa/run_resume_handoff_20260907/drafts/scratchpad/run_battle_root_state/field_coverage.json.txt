@@ -1,0 +1,1340 @@
+{
+  "schema": 1,
+  "battle_raw_sha256": "07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd",
+  "declarations": 169,
+  "complete_classification": true,
+  "classification_is_not_complete_restore": true,
+  "godot_run": false,
+  "fields": [
+    {
+      "field": "level",
+      "line": 11,
+      "category": "external_level",
+      "type": null,
+      "declaration": "var level: LevelBase"
+    },
+    {
+      "field": "mission",
+      "line": 12,
+      "category": "standard_requires_null",
+      "type": null,
+      "declaration": "var mission = null"
+    },
+    {
+      "field": "_official_context",
+      "line": 13,
+      "category": "external_steam_transaction",
+      "type": null,
+      "declaration": "var _official_context: Dictionary = {}"
+    },
+    {
+      "field": "_steam_run_id",
+      "line": 14,
+      "category": "external_steam_transaction",
+      "type": null,
+      "declaration": "var _steam_run_id := 0"
+    },
+    {
+      "field": "_gameplay_rng",
+      "line": 15,
+      "category": "external_rng",
+      "type": null,
+      "declaration": "var _gameplay_rng: RefCounted = null"
+    },
+    {
+      "field": "_gameplay_rng_issue",
+      "line": 16,
+      "category": "external_rng",
+      "type": null,
+      "declaration": "var _gameplay_rng_issue := \"\""
+    },
+    {
+      "field": "_gameplay_rng_start_kind",
+      "line": 17,
+      "category": "external_rng",
+      "type": null,
+      "declaration": "var _gameplay_rng_start_kind := \"\""
+    },
+    {
+      "field": "_gameplay_content_identity",
+      "line": 18,
+      "category": "external_rng",
+      "type": null,
+      "declaration": "var _gameplay_content_identity: Dictionary = {}"
+    },
+    {
+      "field": "_defs",
+      "line": 19,
+      "category": "external_trusted_definition_factory",
+      "type": null,
+      "declaration": "var _defs := {}"
+    },
+    {
+      "field": "_abilities",
+      "line": 20,
+      "category": "external_trusted_definition_factory",
+      "type": null,
+      "declaration": "var _abilities := {}"
+    },
+    {
+      "field": "_items",
+      "line": 21,
+      "category": "external_trusted_definition_factory",
+      "type": null,
+      "declaration": "var _items := {}"
+    },
+    {
+      "field": "next_item_uid",
+      "line": 25,
+      "category": "external_item_id_counter",
+      "type": null,
+      "declaration": "var next_item_uid: int = 1"
+    },
+    {
+      "field": "world",
+      "line": 27,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var world: Node2D"
+    },
+    {
+      "field": "map",
+      "line": 28,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var map: GameMap"
+    },
+    {
+      "field": "hud",
+      "line": 29,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var hud: HUD"
+    },
+    {
+      "field": "camera",
+      "line": 30,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var camera: RTSCamera"
+    },
+    {
+      "field": "units_root",
+      "line": 31,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var units_root: Node2D"
+    },
+    {
+      "field": "fx_root",
+      "line": 32,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var fx_root: Node2D"
+    },
+    {
+      "field": "overlay",
+      "line": 33,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var overlay: Node2D"
+    },
+    {
+      "field": "ai_friendly",
+      "line": 36,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var ai_friendly := false"
+    },
+    {
+      "field": "_autocam_enabled",
+      "line": 37,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _autocam_enabled := false          # 玩家是否点了「自动镜头」按钮开启（全托管后左下角出现该按钮）"
+    },
+    {
+      "field": "_autocam_active",
+      "line": 38,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _autocam_active := false           # 当前是否正由自动镜头接管"
+    },
+    {
+      "field": "_autocam_dwell",
+      "line": 39,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _autocam_dwell := 0.0              # 当前机位已停留秒数（≥AUTOCAM_DWELL 才重选）"
+    },
+    {
+      "field": "_autocam_target_pos",
+      "line": 40,
+      "category": "root_value",
+      "type": "VECTOR2",
+      "declaration": "var _autocam_target_pos := Vector2.ZERO   # 目标镜头中心(屏幕/iso 空间)"
+    },
+    {
+      "field": "_autocam_target_zoom",
+      "line": 41,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _autocam_target_zoom := 1.1        # 目标缩放"
+    },
+    {
+      "field": "_autocam_focus",
+      "line": 42,
+      "category": "root_infinity_sentinel",
+      "type": null,
+      "declaration": "var _autocam_focus := Vector2.INF      # 当前聚焦战团中心(逻辑坐标)，用于跨帧判定战团是否还在"
+    },
+    {
+      "field": "_autocam_review_idx",
+      "line": 43,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _autocam_review_idx := 0           # 检阅模式：当前轮到第几名英雄"
+    },
+    {
+      "field": "_autocam_review_unit",
+      "line": 44,
+      "category": "root_reference",
+      "type": null,
+      "declaration": "var _autocam_review_unit: Unit = null  # 检阅模式：正在跟拍的英雄（非空=检阅中，每帧跟随其走位）"
+    },
+    {
+      "field": "_ai_spawn_serial",
+      "line": 52,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _ai_spawn_serial := 0"
+    },
+    {
+      "field": "_ai_tick_frame",
+      "line": 53,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _ai_tick_frame := 0"
+    },
+    {
+      "field": "_eco_t",
+      "line": 54,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _eco_t := 0.0"
+    },
+    {
+      "field": "_eco_last_wood",
+      "line": 55,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _eco_last_wood := -1"
+    },
+    {
+      "field": "_eco_wood_stall",
+      "line": 56,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _eco_wood_stall := 0.0"
+    },
+    {
+      "field": "_eco_trap_cd",
+      "line": 57,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _eco_trap_cd := 0.0   # 全托管布陷阱节流"
+    },
+    {
+      "field": "_eco_trap_lane",
+      "line": 58,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _eco_trap_lane := 0   # 布陷阱轮换的来路序号（三门轮流照顾）"
+    },
+    {
+      "field": "_eco_lane_cache_bucket",
+      "line": 59,
+      "category": "root_engine_clock",
+      "type": null,
+      "declaration": "var _eco_lane_cache_bucket := -1   # 动态分路态势按 AI_TICK 缓存；6 将同拍共用，避免兵海里重复全表扫描"
+    },
+    {
+      "field": "_eco_lane_cache",
+      "line": 60,
+      "category": "root_eco_cache",
+      "type": null,
+      "declaration": "var _eco_lane_cache := {}"
+    },
+    {
+      "field": "_last_hb",
+      "line": 61,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _last_hb := 1.0       # 上次英雄倍率(变了就重算在场英雄血量)"
+    },
+    {
+      "field": "units",
+      "line": 83,
+      "category": "external_unit_graph",
+      "type": null,
+      "declaration": "var units: Array = []"
+    },
+    {
+      "field": "_grid",
+      "line": 84,
+      "category": "root_spatial_grid",
+      "type": null,
+      "declaration": "var _grid: Dictionary = {}            # 空间网格(每物理帧重建)：Vector2i 格 → Array[Unit]，加速分离/光环/索敌的邻近查询"
+    },
+    {
+      "field": "_mob_grid",
+      "line": 85,
+      "category": "root_spatial_grid",
+      "type": null,
+      "declaration": "var _mob_grid: Dictionary = {}        # 仅存机动单位；分离按桶对遍历，避免每名单位重复查询 9 个邻桶"
+    },
+    {
+      "field": "_body_grid_liang",
+      "line": 86,
+      "category": "root_spatial_grid",
+      "type": null,
+      "declaration": "var _body_grid_liang: Dictionary = {} # 身体阻挡只查敌方机动单位；分阵营建桶，避免后排单位反复扫描大批友军"
+    },
+    {
+      "field": "_body_grid_guan",
+      "line": 87,
+      "category": "root_spatial_grid",
+      "type": null,
+      "declaration": "var _body_grid_guan: Dictionary = {}"
+    },
+    {
+      "field": "_focus_counts",
+      "line": 88,
+      "category": "root_native_identity_map",
+      "type": null,
+      "declaration": "var _focus_counts: Dictionary = {}    # 目标 instance_id → 有多少机动单位正锁定它(每物理帧随网格重建)；索敌打分的「过度集火」惩罚用"
+    },
+    {
+      "field": "_res_block_cache",
+      "line": 89,
+      "category": "root_native_identity_map",
+      "type": null,
+      "declaration": "var _res_block_cache: Dictionary = {} # 资源点 instance_id → 是否被建筑压住(按物理帧缓存；排矿农民每帧都问，别每次全表扫建筑)"
+    },
+    {
+      "field": "_res_block_frame",
+      "line": 90,
+      "category": "root_engine_clock",
+      "type": null,
+      "declaration": "var _res_block_frame := -1"
+    },
+    {
+      "field": "_blocker_cache",
+      "line": 91,
+      "category": "root_blocker_cache",
+      "type": null,
+      "declaration": "var _blocker_cache: Dictionary = {}   # 起点格|终点格|导航版本 → 首个堵路建筑（或 null）"
+    },
+    {
+      "field": "_blocker_cache_revision",
+      "line": 92,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _blocker_cache_revision := -1"
+    },
+    {
+      "field": "_blocker_query_budget",
+      "line": 93,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _blocker_query_budget := 8        # 每物理帧最多做 8 次新静态路线解析，兵海不同帧抢 A*"
+    },
+    {
+      "field": "_lite_fx",
+      "line": 94,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _lite_fx := false                 # 大规模交战/全托管观战启用视觉预算，保留技能主体但限制逐目标反馈洪峰"
+    },
+    {
+      "field": "_mob_count",
+      "line": 95,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _mob_count := 0"
+    },
+    {
+      "field": "_sep_phase",
+      "line": 96,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _sep_phase := 0"
+    },
+    {
+      "field": "_impact_fx_frame",
+      "line": 97,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _impact_fx_frame := 0"
+    },
+    {
+      "field": "_damage_fx_frame",
+      "line": 98,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _damage_fx_frame := 0"
+    },
+    {
+      "field": "_ground_fire_visuals",
+      "line": 99,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _ground_fire_visuals := 0"
+    },
+    {
+      "field": "_unit_draw_rect",
+      "line": 100,
+      "category": "root_value",
+      "type": "RECT2",
+      "declaration": "var _unit_draw_rect := Rect2()"
+    },
+    {
+      "field": "_death_remains",
+      "line": 138,
+      "category": "external_death_remains_factory",
+      "type": null,
+      "declaration": "var _death_remains: Array = []"
+    },
+    {
+      "field": "_death_remains_atlas",
+      "line": 139,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _death_remains_atlas: Texture2D = null"
+    },
+    {
+      "field": "_death_remains_atlas_checked",
+      "line": 140,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _death_remains_atlas_checked := false"
+    },
+    {
+      "field": "_death_remains_serial",
+      "line": 141,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _death_remains_serial := 0"
+    },
+    {
+      "field": "_no_opt",
+      "line": 142,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _no_opt := false                  # 压测对照(NO_OPT=1)：关掉 1.1.1 索敌限流，量优化前后差"
+    },
+    {
+      "field": "_stealth_acc",
+      "line": 143,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _stealth_acc := 0.0               # 潜行 pass 限流累加（不必每帧跑）"
+    },
+    {
+      "field": "_ecast_acc",
+      "line": 144,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _ecast_acc := 0.0                 # 敌将放招 pass 限流累加（不必每帧跑）"
+    },
+    {
+      "field": "_prof_on",
+      "line": 145,
+      "category": "diagnostic_rejected",
+      "type": null,
+      "declaration": "var _prof_on := false                 # 性能压测(PERF_BENCH)：逐帧给各系统计时；正常游玩为 false"
+    },
+    {
+      "field": "_prof",
+      "line": 146,
+      "category": "diagnostic_rejected",
+      "type": null,
+      "declaration": "var _prof := {}                       # 标签 → 累计微秒"
+    },
+    {
+      "field": "_prof_frames",
+      "line": 147,
+      "category": "diagnostic_rejected",
+      "type": null,
+      "declaration": "var _prof_frames := 0"
+    },
+    {
+      "field": "_prof_print_acc",
+      "line": 148,
+      "category": "diagnostic_rejected",
+      "type": null,
+      "declaration": "var _prof_print_acc := 0.0"
+    },
+    {
+      "field": "_unit_proc_us",
+      "line": 149,
+      "category": "diagnostic_rejected",
+      "type": null,
+      "declaration": "var _unit_proc_us := 0                # 单位 _physics_process 累计耗时(由 unit.gd 回填)"
+    },
+    {
+      "field": "selection",
+      "line": 151,
+      "category": "root_reference_list",
+      "type": null,
+      "declaration": "var selection: Array = []"
+    },
+    {
+      "field": "phase",
+      "line": 152,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var phase := Phase.INTRO"
+    },
+    {
+      "field": "kills",
+      "line": 153,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var kills := 0"
+    },
+    {
+      "field": "hero_kills",
+      "line": 154,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var hero_kills := {}          # 按英雄统计歼敌：instance_id -> {name, key, n}（战后结算展示）"
+    },
+    {
+      "field": "track_hero_combat_stats",
+      "line": 155,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var track_hero_combat_stats := false   # 仅驻守/自定义据守启用；其他模式的受击路径只多一次布尔判断"
+    },
+    {
+      "field": "hero_combat_stats",
+      "line": 156,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var hero_combat_stats := {}    # 英雄 key -> {name, damage, taken, healing, kills, skill_damage, item_stats}，英雄战死重练仍沿用"
+    },
+    {
+      "field": "_ability_owner_cache",
+      "line": 157,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var _ability_owner_cache := {} # 主动技能 id -> 英雄 key；供施法者阵亡后仍在跳伤的 DOT 继续正确归属"
+    },
+    {
+      "field": "_active_ability_cache",
+      "line": 158,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var _active_ability_cache := {} # 技能 id -> bool；伤害热路径只在首次遇到该技能时读定义"
+    },
+    {
+      "field": "_hero_active_ability_cache",
+      "line": 159,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var _hero_active_ability_cache := {} # \"英雄|技能\" -> bool；避免每次范围跳伤都重扫四个技能槽"
+    },
+    {
+      "field": "hero_progress",
+      "line": 160,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var hero_progress := {}        # 英雄战死存档：key -> {level,xp,sp,ranks}（聚义厅重练后恢复，不从1级重来）"
+    },
+    {
+      "field": "hero_item_progress",
+      "line": 161,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var hero_item_progress := {}   # 所有英雄的物品快照；与等级系统分离，固定技能英雄复活也能恢复"
+    },
+    {
+      "field": "lit_cells",
+      "line": 162,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var lit_cells := {}          # 关卡高亮格（如盘陀路指路）：Vector2i -> 剩余秒"
+    },
+    {
+      "field": "economy",
+      "line": 165,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var economy := false"
+    },
+    {
+      "field": "gold",
+      "line": 166,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var gold := 0"
+    },
+    {
+      "field": "wood",
+      "line": 167,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var wood := 0"
+    },
+    {
+      "field": "pop_cap",
+      "line": 168,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var pop_cap := 0"
+    },
+    {
+      "field": "current_age",
+      "line": 169,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var current_age := 1    # 玩家时代：1草莽 / 2聚义 / 3替天行道（聚义厅研究升代；门槛 min_age 过滤菜单）"
+    },
+    {
+      "field": "faction_res",
+      "line": 170,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var faction_res := {}   # 非玩家阵营的私有钱粮池 {faction: {gold, wood}}（1v1 里 AI 官军用，与玩家互不串账）"
+    },
+    {
+      "field": "faction_gather_mult",
+      "line": 171,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var faction_gather_mult := {}   # 非玩家阵营的采集系数 {faction: float}（难度手感：易<1、普=1 对等、难>1）"
+    },
+    {
+      "field": "_tech_done",
+      "line": 173,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var _tech_done := {}"
+    },
+    {
+      "field": "tech_atk",
+      "line": 174,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var tech_atk := 1.0"
+    },
+    {
+      "field": "tech_hp",
+      "line": 175,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var tech_hp := 1.0"
+    },
+    {
+      "field": "hero_tech_atk",
+      "line": 178,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var hero_tech_atk := 1.0"
+    },
+    {
+      "field": "hero_tech_hp",
+      "line": 179,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var hero_tech_hp := 1.0"
+    },
+    {
+      "field": "tech_gather",
+      "line": 180,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var tech_gather := 1.0"
+    },
+    {
+      "field": "fog",
+      "line": 183,
+      "category": "external_fog_values",
+      "type": null,
+      "declaration": "var fog := false"
+    },
+    {
+      "field": "_vision",
+      "line": 184,
+      "category": "external_fog_values",
+      "type": null,
+      "declaration": "var _vision: PackedByteArray       # 每格 0=未探索 1=已探索(阴影) 2=明亮(当前确有视野)"
+    },
+    {
+      "field": "_sight_now",
+      "line": 185,
+      "category": "external_fog_values",
+      "type": null,
+      "declaration": "var _sight_now: PackedByteArray    # 本次 pass 是否真正在某单位视野内（复用，免每帧重分配）"
+    },
+    {
+      "field": "_reveal_t",
+      "line": 186,
+      "category": "external_fog_values",
+      "type": null,
+      "declaration": "var _reveal_t: PackedFloat32Array  # 技能临时侦察剩余秒数；属于真实视野，不与地面驻留混用"
+    },
+    {
+      "field": "_vision_img",
+      "line": 187,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _vision_img: Image"
+    },
+    {
+      "field": "_fog_tex",
+      "line": 188,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _fog_tex: ImageTexture"
+    },
+    {
+      "field": "_fog_layer",
+      "line": 189,
+      "category": "external_node_factory",
+      "type": null,
+      "declaration": "var _fog_layer: Node2D"
+    },
+    {
+      "field": "_fog_t",
+      "line": 190,
+      "category": "external_fog_values",
+      "type": null,
+      "declaration": "var _fog_t := 0.0"
+    },
+    {
+      "field": "_dragging",
+      "line": 193,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _dragging := false"
+    },
+    {
+      "field": "_drag_from",
+      "line": 194,
+      "category": "root_value",
+      "type": "VECTOR2",
+      "declaration": "var _drag_from := Vector2.ZERO"
+    },
+    {
+      "field": "_click_fx_pos",
+      "line": 195,
+      "category": "root_value",
+      "type": "VECTOR2",
+      "declaration": "var _click_fx_pos := Vector2.ZERO"
+    },
+    {
+      "field": "_click_fx_t",
+      "line": 196,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _click_fx_t := 0.0"
+    },
+    {
+      "field": "_click_fx_attack",
+      "line": 197,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _click_fx_attack := false"
+    },
+    {
+      "field": "_amove_armed",
+      "line": 198,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _amove_armed := false"
+    },
+    {
+      "field": "_patrol_armed",
+      "line": 199,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _patrol_armed := false"
+    },
+    {
+      "field": "_repair_armed",
+      "line": 200,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _repair_armed := false     # 武装维修：点己方受损建筑即派工人修缮"
+    },
+    {
+      "field": "_garrison_armed",
+      "line": 201,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _garrison_armed := false   # 武装驻扎：英雄「驻扎」键点亮后，左键点己方建筑即进驻"
+    },
+    {
+      "field": "_ability_armed",
+      "line": 202,
+      "category": "root_value",
+      "type": "STRING",
+      "declaration": "var _ability_armed := \"\""
+    },
+    {
+      "field": "_ability_caster",
+      "line": 203,
+      "category": "root_reference",
+      "type": null,
+      "declaration": "var _ability_caster: Unit = null"
+    },
+    {
+      "field": "_ground_dots",
+      "line": 204,
+      "category": "external_continuous",
+      "type": null,
+      "declaration": "var _ground_dots: Array = []   # 活动的地面烈焰 DOT：{pos,r,foe,caster,t,tick_t,tick,per}"
+    },
+    {
+      "field": "_hua_snipe_dots",
+      "line": 205,
+      "category": "external_continuous",
+      "type": null,
+      "declaration": "var _hua_snipe_dots: Array = [] # 花荣 R 敌将单体百分比流血：{target,caster,t,tick_t,tick,pct}"
+    },
+    {
+      "field": "_lin_duels",
+      "line": 206,
+      "category": "external_continuous",
+      "type": null,
+      "declaration": "var _lin_duels: Array = []      # 林冲 R 点将：{caster,target,t,heal_pct}；目标限时内死亡即回血并刷新 Q/W"
+    },
+    {
+      "field": "_chrono_zones",
+      "line": 207,
+      "category": "external_zones",
+      "type": null,
+      "declaration": "var _chrono_zones: Array = []  # 时空封印立场：{pos,r,foe,t}——每帧把域内敌军续晕（林冲 R）"
+    },
+    {
+      "field": "_orbit_zones",
+      "line": 208,
+      "category": "external_zones",
+      "type": null,
+      "declaration": "var _orbit_zones: Array = []   # 双斧回旋扫伤区：{caster,foe,r,t,tick,tick_t,dmg,slow,slow_dur}（李逵 Q）"
+    },
+    {
+      "field": "_meteor_zones",
+      "line": 209,
+      "category": "external_meteor_wards",
+      "type": null,
+      "declaration": "var _meteor_zones: Array = []  # 天降陨石滚动区：{pos,dir,remain,hw,foe,caster,impact,dps,dot_dur,hit,trail}（宋江 W）"
+    },
+    {
+      "field": "_gong_lines",
+      "line": 210,
+      "category": "external_gong_traps",
+      "type": null,
+      "declaration": "var _gong_lines: Array = []    # 公孙胜 E 行进兽群：按施法瞬间自身实际移速×倍率推进，沿途逐个命中"
+    },
+    {
+      "field": "_ice_walls",
+      "line": 211,
+      "category": "external_zones",
+      "type": null,
+      "declaration": "var _ice_walls: Array = []     # 冰墙阻挡：{cells:[Vector2i],t}——到期解锁格子（公孙胜 W）"
+    },
+    {
+      "field": "_wards",
+      "line": 212,
+      "category": "external_meteor_wards",
+      "type": null,
+      "declaration": "var _wards: Array = []          # 立桩/旗阵：治疗、攻击、毒桩及忠义旗（减伤+忠回血/义攻速）"
+    },
+    {
+      "field": "_ward_serial",
+      "line": 213,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _ward_serial := 0           # 忠义旗光环来源编号：让重叠旗按来源独立到期并正确降档"
+    },
+    {
+      "field": "_fire_trails",
+      "line": 214,
+      "category": "external_zones",
+      "type": null,
+      "declaration": "var _fire_trails: Array = []    # 火径：{caster,t,drop_t,drop,dps,dot_dur,r,foe}——随身移动沿途铺地火（魏定国 E）"
+    },
+    {
+      "field": "_bolts",
+      "line": 215,
+      "category": "external_bolts",
+      "type": null,
+      "declaration": "var _bolts: Array = []          # 技能弹道：{mode:bolt/hook_out/hook_drag, pos,tgt/dir,eff,sc,rank,caster,fx}——追踪弹/钩镰"
+    },
+    {
+      "field": "_walk_casts",
+      "line": 216,
+      "category": "external_cast_flow",
+      "type": null,
+      "declaration": "var _walk_casts: Array = []     # 走近施法队列：{c,slot,tgt/point,serial,t,age}——超射程时自动接近原目标再放"
+    },
+    {
+      "field": "_channels",
+      "line": 217,
+      "category": "external_cast_flow",
+      "type": null,
+      "declaration": "var _channels: Array = []       # 引导施法：{caster,center,eff,sc,rank,r,tick,tick_t}——逐 tick 结算，施法者被打断即止"
+    },
+    {
+      "field": "_pending_casts",
+      "line": 218,
+      "category": "external_cast_flow",
+      "type": null,
+      "declaration": "var _pending_casts: Array = []  # 施法抬手·待结算队列：{caster,slot,lp}——抬手归零后才真正放招"
+    },
+    {
+      "field": "_ability_slot",
+      "line": 228,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _ability_slot := 0"
+    },
+    {
+      "field": "_item_armed",
+      "line": 229,
+      "category": "root_value",
+      "type": "STRING",
+      "declaration": "var _item_armed := \"\"         # 待指向主动物品 id（与英雄技能 armed 独立，沉默规则不同）"
+    },
+    {
+      "field": "_item_caster",
+      "line": 230,
+      "category": "root_reference",
+      "type": null,
+      "declaration": "var _item_caster: Unit = null"
+    },
+    {
+      "field": "_item_slot",
+      "line": 231,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _item_slot := 0"
+    },
+    {
+      "field": "_pending_item_casts",
+      "line": 232,
+      "category": "external_item_cast_flow",
+      "type": null,
+      "declaration": "var _pending_item_casts: Array = []"
+    },
+    {
+      "field": "_walk_item_casts",
+      "line": 233,
+      "category": "external_item_cast_flow",
+      "type": null,
+      "declaration": "var _walk_item_casts: Array = []"
+    },
+    {
+      "field": "_build_armed",
+      "line": 234,
+      "category": "root_value",
+      "type": "STRING",
+      "declaration": "var _build_armed := \"\"        # 待放置的建筑 key（遭遇战建造）"
+    },
+    {
+      "field": "_trap_armed",
+      "line": 235,
+      "category": "root_value",
+      "type": "STRING",
+      "declaration": "var _trap_armed := \"\"         # 待布置的陷阱 key（喽啰 E 子菜单·一次性机关）"
+    },
+    {
+      "field": "_worker_cat",
+      "line": 236,
+      "category": "root_value",
+      "type": "STRING",
+      "declaration": "var _worker_cat := \"\"         # 喽啰命令卡当前分类页：\"\"=根 / \"build\"建筑 / \"tower\"塔 / \"trap\"陷阱"
+    },
+    {
+      "field": "_hall_page",
+      "line": 237,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _hall_page := 0           # 聚义厅「点将」菜单当前页（108 将太多 → 按星次分页）"
+    },
+    {
+      "field": "_hall_cat",
+      "line": 238,
+      "category": "root_value",
+      "type": "STRING",
+      "declaration": "var _hall_cat := \"\"           # 竞技场点将二级菜单当前分类：\"\"=分类根页 / tiangang / disha_a / disha_b"
+    },
+    {
+      "field": "_traps",
+      "line": 239,
+      "category": "external_gong_traps",
+      "type": null,
+      "declaration": "var _traps: Array = []        # 已布置的陷阱：{key,pos,trigger_r,arm_t,effect,owner,fx}"
+    },
+    {
+      "field": "_active",
+      "line": 240,
+      "category": "root_reference",
+      "type": null,
+      "declaration": "var _active: Unit = null      # 当前子组「活动单位」（Tab 切换；命令卡/QWER 针对它）"
+    },
+    {
+      "field": "_inspect_unit",
+      "line": 241,
+      "category": "root_reference",
+      "type": null,
+      "declaration": "var _inspect_unit: Unit = null  # 「查看中」的敌方单位（只读：显示信息+高亮，但不进 selection、不可下令）"
+    },
+    {
+      "field": "_demolish_armed_t",
+      "line": 242,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _demolish_armed_t := 0.0  # 拆除已成型建筑的二次确认计时"
+    },
+    {
+      "field": "_alert_t",
+      "line": 243,
+      "category": "root_value",
+      "type": "FLOAT",
+      "declaration": "var _alert_t := 0.0           # 遭袭告警计时（小地图闪烁）"
+    },
+    {
+      "field": "_alert_pos",
+      "line": 244,
+      "category": "root_value",
+      "type": "VECTOR2",
+      "declaration": "var _alert_pos := Vector2.ZERO"
+    },
+    {
+      "field": "_idle_i",
+      "line": 245,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _idle_i := 0              # 闲置喽啰轮询索引"
+    },
+    {
+      "field": "_groups",
+      "line": 246,
+      "category": "root_groups",
+      "type": null,
+      "declaration": "var _groups := {}"
+    },
+    {
+      "field": "_last_group_key",
+      "line": 247,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _last_group_key := -1"
+    },
+    {
+      "field": "_last_group_time",
+      "line": 248,
+      "category": "root_input_clock",
+      "type": null,
+      "declaration": "var _last_group_time := 0"
+    },
+    {
+      "field": "_camera_locs",
+      "line": 249,
+      "category": "root_value",
+      "type": "DICTIONARY",
+      "declaration": "var _camera_locs := {}     # Ctrl/⌘+F1-F4 记录；Shift+F1-F4 跳转"
+    },
+    {
+      "field": "_smoke",
+      "line": 250,
+      "category": "diagnostic_rejected",
+      "type": null,
+      "declaration": "var _smoke := false"
+    },
+    {
+      "field": "_smoke_t",
+      "line": 251,
+      "category": "diagnostic_rejected",
+      "type": null,
+      "declaration": "var _smoke_t := 0.0"
+    },
+    {
+      "field": "_touch_mode",
+      "line": 252,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _touch_mode := false   # 触摸屏模式（一旦收到触摸事件即开启触摸交互：轻点选取、长按下令）"
+    },
+    {
+      "field": "_allow_touch",
+      "line": 255,
+      "category": "external_device_capability",
+      "type": null,
+      "declaration": "var _allow_touch := OS.has_feature(\"mobile\") or OS.has_feature(\"web\") or OS.get_environment(\"TOUCH_UI\") == \"1\""
+    },
+    {
+      "field": "_press_ms",
+      "line": 256,
+      "category": "root_input_clock",
+      "type": null,
+      "declaration": "var _press_ms := 0         # 左键/单指按下的时刻"
+    },
+    {
+      "field": "_box_mode",
+      "line": 257,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _box_mode := false     # 触屏：长按原地后进入「框选」态（再拖动拖出选择框）"
+    },
+    {
+      "field": "_panning",
+      "line": 258,
+      "category": "root_value",
+      "type": "BOOL",
+      "declaration": "var _panning := false      # 触屏：单指拖动地图中"
+    },
+    {
+      "field": "_drag_cur",
+      "line": 259,
+      "category": "root_value",
+      "type": "VECTOR2",
+      "declaration": "var _drag_cur := Vector2.ZERO   # 触屏：当前手指位置"
+    },
+    {
+      "field": "_last_tap_ms",
+      "line": 260,
+      "category": "root_input_clock",
+      "type": null,
+      "declaration": "var _last_tap_ms := 0      # 触屏双击检测"
+    },
+    {
+      "field": "_last_tap_pos",
+      "line": 261,
+      "category": "root_value",
+      "type": "VECTOR2",
+      "declaration": "var _last_tap_pos := Vector2.ZERO"
+    },
+    {
+      "field": "_target_cursor",
+      "line": 262,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _target_cursor: ImageTexture   # 攻击/施法指向时的「圈中带点」鼠标"
+    },
+    {
+      "field": "_cur_attack",
+      "line": 263,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _cur_attack: ImageTexture"
+    },
+    {
+      "field": "_cur_gather_wood",
+      "line": 264,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _cur_gather_wood: ImageTexture"
+    },
+    {
+      "field": "_cur_gather_gold",
+      "line": 265,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _cur_gather_gold: ImageTexture"
+    },
+    {
+      "field": "_cur_repair",
+      "line": 266,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _cur_repair: ImageTexture"
+    },
+    {
+      "field": "_cur_select",
+      "line": 267,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _cur_select: ImageTexture"
+    },
+    {
+      "field": "_cur_garrison",
+      "line": 268,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _cur_garrison: ImageTexture   # 驻军：靛蓝环+拱门，提示「点这进驻」"
+    },
+    {
+      "field": "_hover_kind",
+      "line": 269,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _hover_kind := \"normal\""
+    },
+    {
+      "field": "_cursor_resources_released",
+      "line": 270,
+      "category": "external_visual_resource_factory",
+      "type": null,
+      "declaration": "var _cursor_resources_released := false"
+    },
+    {
+      "field": "_mission_order_token_seq",
+      "line": 10015,
+      "category": "root_value",
+      "type": "INT",
+      "declaration": "var _mission_order_token_seq := 0"
+    }
+  ],
+  "all_production_clock_reads": [
+    {
+      "file": "scripts/battle.gd",
+      "line": 1228,
+      "text": "var fr := int(Engine.get_physics_frames())"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 2434,
+      "text": "var now := Time.get_ticks_usec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 2506,
+      "text": "var _t := Time.get_ticks_usec() if _prof_on else 0"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 2613,
+      "text": "and Time.get_ticks_msec() - _press_ms >= 350 and _drag_from.distance_to(_drag_cur) < 16.0:"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 3961,
+      "text": "var bucket := int(Engine.get_physics_frames() / maxi(1, AI_TICK))"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 5751,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 5763,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 5776,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 5788,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 5824,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 6360,
+      "text": "var now := Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 9904,
+      "text": "var now := Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/battle.gd",
+      "line": 14283,
+      "text": "var t := Time.get_ticks_msec() / 1000.0"
+    },
+    {
+      "file": "scripts/campaign_mission.gd",
+      "line": 281,
+      "text": "_stage_started_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/campaign_mission.gd",
+      "line": 715,
+      "text": "\"wall_seconds\":float(Time.get_ticks_msec()-_stage_started_ms)/1000.0,"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 2870,
+      "text": "if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3139,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3258,
+      "text": "if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3608,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3670,
+      "text": "and Time.get_ticks_msec() - _press_ms >= 400:"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3735,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3748,
+      "text": "and not _drag_started and Time.get_ticks_msec() - _press_ms >= 350 \\"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3934,
+      "text": "_press_ms = Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/hud.gd",
+      "line": 3938,
+      "text": "var held := Time.get_ticks_msec() - _press_ms"
+    },
+    {
+      "file": "scripts/sfx.gd",
+      "line": 92,
+      "text": "var now := Time.get_ticks_msec()"
+    },
+    {
+      "file": "scripts/unit.gd",
+      "line": 1057,
+      "text": "var __t0 := Time.get_ticks_usec()"
+    },
+    {
+      "file": "scripts/unit.gd",
+      "line": 1059,
+      "text": "battle._unit_proc_us += Time.get_ticks_usec() - __t0"
+    },
+    {
+      "file": "scripts/unit.gd",
+      "line": 1080,
+      "text": "var frame := Engine.get_process_frames()"
+    },
+    {
+      "file": "scripts/unit.gd",
+      "line": 1102,
+      "text": "if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:"
+    }
+  ]
+}

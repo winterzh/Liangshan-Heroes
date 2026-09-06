@@ -1,0 +1,342 @@
+"""Freeze only the five Fog runs after all raw inputs and final success are verified.
+This script does not execute Godot or Git. Existing archives are never rewritten.
+"""
+from pathlib import Path
+import hashlib
+import json
+import struct
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+QA = ROOT / "qa/run_fog_runtime_20260907"
+INPUTS_SHA = "038f6badc9c640d4698186226f53fdb7f00ed985ab3af15ba3e2feccf8a87dfe"
+BASE_HEAD = "56adcacb78356fb9ecc33bc62eb0db252cb35ea6"
+MODULE_SHA = "caef97f9a10ca7dfaa39bd51a997c1bce8eb5575e7210a4a085ccfba57567d30"
+ENGINE_SHA = "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+PREFIX = "[fog-runtime-restore QA] "
+PHASES = ["installed lagging snapshot", "first resumed real pass", "exploration memory"]
+PNG_SHAS = [
+    "a9c8e8ad0c9bac85db806f99bffccf035ac91917b00b7b5850cc5db998ef6d07",
+    "8bade0c783a5f5d7f8f643b3f97e1cf2314746eb6851c1e16e44edd9d23c7d65",
+    "0fa72b9d812c220193e87423c46d54a30fd1d35b2c771d29906df4f2ebc87c2c",
+]
+
+def need(ok, message):
+    if not ok:
+        raise RuntimeError(message)
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+def path_in_root(name):
+    p = Path(name)
+    if not p.is_absolute():
+        p = ROOT / p
+    need(not p.is_symlink(), "Symlink denied: " + str(name))
+    p = p.resolve()
+    need(p.is_relative_to(ROOT.resolve()), "Path outside repository: " + str(name))
+    return p
+
+def relative(p):
+    return path_in_root(p).relative_to(ROOT).as_posix()
+
+def exact(name, digest=None, size=None):
+    p = path_in_root(name)
+    need(p.is_file(), "Missing file: " + str(name))
+    raw = p.read_bytes()
+    need(digest is None or sha(raw) == digest, "Raw SHA drift: " + relative(p))
+    need(size is None or len(raw) == size, "Raw length drift: " + relative(p))
+    return raw
+
+def read(name):
+    return json.loads(exact(name).decode("utf-8"))
+
+def reused_rows(value):
+    if isinstance(value, dict):
+        digest = value.get("sha256")
+        archive = value.get("archive") or value.get("archive_path")
+        if isinstance(digest, str) and isinstance(archive, str):
+            yield digest, archive
+        for child in value.values():
+            yield from reused_rows(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from reused_rows(child)
+
+def main():
+    need(not QA.exists(), "QA already exists; never rewrite completed evidence")
+    config = json.loads(exact(HERE / "inputs.json", INPUTS_SHA).decode("utf-8"))
+    need(config["schema"] == 1 and config["base_git_head"] == BASE_HEAD, "Input contract differs")
+    runs = config["runs"]
+    need([r["label"] for r in runs] == ["gl", "r1", "r2", "r3", "formal"], "Run identity/order changed")
+    final = runs[-1]
+    # Fail before mkdir when final execution/report/guards have not completed.
+    final_receipt = read(Path(final["run"]) / "receipt.json")
+    final_report = read(Path(final["run"]) / "report.json")
+    need(all(final_receipt.get(k) is True for k in
+             ["complete", "source_unchanged", "player_unchanged", "lock_released"]), "Formal run not complete")
+    need(final_report.get("complete") is True and final_report.get("passed") is True
+         and len(final_report.get("checks", [])) == 276
+         and all(c.get("passed") is True for c in final_report["checks"]), "Formal report is not PASS")
+    need(not (ROOT / ".godot/redraw_rejection_source.lock").exists(), "Engine lock remains")
+
+    planned, mappings, blobs, reused, source_sets, summaries, png_records = {}, [], {}, {}, {}, {}, []
+    frozen_input_rows = config["extra_inputs"] + config["dependencies"] + config["reuse_indexes"]
+    for run in runs:
+        frozen_input_rows += run["harness_inputs"] + run["evidence"]
+    for row in frozen_input_rows:
+        exact(row["path"], row["sha256"], row["bytes"])
+    for row in config["reuse_indexes"]:
+        for digest, archive in reused_rows(read(row["path"])):
+            candidate = path_in_root(archive)
+            need(candidate.is_relative_to((ROOT / "qa").resolve()), "Reuse outside QA")
+            if candidate.is_file() and sha(exact(candidate)) == digest:
+                reused.setdefault(digest, relative(candidate))
+
+    def artifact(name, destination, is_png=False):
+        p = path_in_root(name)
+        raw = exact(p)
+        parts = p.relative_to(ROOT).parts
+        need(not any(x in {"private_profile", "profile", ".godot", "__pycache__"} for x in parts),
+             "Private/cache artifact denied")
+        need(not p.name.startswith(("players_", "identity_players_")), "Player listing denied")
+        if is_png:
+            need(p.suffix.lower() == ".png" and raw[:8] == b"\x89PNG\r\n\x1a\n"
+                 and raw[12:16] == b"IHDR" and struct.unpack(">II", raw[16:24]) == (64, 64),
+                 "Expected native 64x64 PNG")
+        else:
+            need(p.suffix.lower() not in {".png", ".jpg", ".webp", ".pck", ".exe", ".dll", ".zip", ".key", ".pem"},
+                 "Non-evidence binary denied")
+            raw.decode("utf-8")
+        target = path_in_root(QA / destination)
+        need(target.is_relative_to(QA.resolve()), "Destination escaped QA")
+        key = target.relative_to(QA).as_posix()
+        if key in planned:
+            need(planned[key]["raw"] == raw, "Conflicting destination")
+        else:
+            planned[key] = {"raw": raw, "original": relative(p), "png": is_png}
+        return relative(target)
+
+    def source(name, role, digest):
+        # Reuse exact existing blobs first; current files never replace historical bytes.
+        if digest in reused:
+            chosen = ROOT / reused[digest]
+            raw = exact(chosen, digest)
+        else:
+            chosen = path_in_root(name)
+            raw = exact(chosen, digest)
+        if digest not in blobs:
+            blobs[digest] = reused[digest] if digest in reused else artifact(
+                chosen, "sources/blobs/" + digest + "/" + Path(name).name + ".txt")
+        row = {"source": name, "archive": blobs[digest], "sha256": digest,
+               "bytes": len(raw), "role": role, "original": relative(chosen),
+               "reused_existing": digest in reused}
+        mappings.append(row)
+        return row
+
+    source_sets["host_dependencies"] = [
+        source(r["path"], "exact preparation or execution helper", r["sha256"])
+        for r in config["dependencies"]]
+    for r in config["extra_inputs"]:
+        source(r["path"], "formal promotion source", r["sha256"])
+    old_module = "scratchpad/run_fog_runtime_state/fog_state.gd"
+    new_module = "scripts/run_fog_state.gd"
+    need(exact(old_module, MODULE_SHA, 17770) == exact(new_module, MODULE_SHA, 17770),
+         "Formal module differs from unchanged candidate")
+    prep = read("scratchpad/run_fog_runtime_final/preparation.json")
+    need(prep["module_byte_identical_to_r3"] is True and prep["inverse_exact"] is True
+         and prep["module_sha256"] == MODULE_SHA, "Promotion receipt incomplete")
+    old_driver = exact("scratchpad/run_fog_runtime_state_r3/driver.gd")
+    new_driver = exact("scratchpad/run_fog_runtime_final/driver.gd", prep["driver_sha256"])
+    old_runner = exact("scratchpad/run_fog_runtime_state_r3/run_smoke.py")
+    new_runner = exact("scratchpad/run_fog_runtime_final/run_smoke.py", prep["runner_sha256"])
+    need(new_driver.replace(new_module.encode(), old_module.encode()) == old_driver,
+         "Formal driver inverse replacement differs")
+    need(new_runner.replace(new_module.encode(), old_module.encode()).replace(
+        b"scratchpad/run_fog_runtime_final/", b"scratchpad/run_fog_runtime_state_r3/") == old_runner,
+        "Formal runner inverse replacement differs")
+    need(exact("scratchpad/run_fog_runtime_state/driver.gd") ==
+         exact("scratchpad/run_fog_runtime_state_r1/driver.gd"), "R1 changed original driver")
+
+    other_checks = {}
+    for run in runs:
+        label, base = run["label"], ROOT / run["run"]
+        receipt = read(base / "receipt.json")
+        manifest = read(base / "manifest.json")
+        process = read(base / "report_process.json")
+        pins = read(Path(run["harness"]) / "pins.json")
+        hashes = manifest["source_sha256"]
+        need(len(hashes) == 103 and hashes == pins["source_sha256"] == receipt["source_sha256"],
+             "Pins/manifest/receipt source mismatch: " + label)
+        need(receipt["runner_sha256"] == pins["runner_sha256"]
+             and receipt["engine_sha256"] == manifest["engine_binary_sha256"] == ENGINE_SHA,
+             "Host identity mismatch: " + label)
+        exact(Path(run["harness"]) / "run_smoke.py", pins["runner_sha256"])
+        exact(Path(run["harness"]) / "QA_CONTRACT.md", pins["contract_sha256"])
+        need(receipt["suite"] == "fog-runtime-restore" and receipt["godot_run"] is True
+             and receipt["complete"] is run["passed"], "Receipt outcome mismatch")
+        need(all(receipt.get(k) is True for k in ["source_unchanged", "player_unchanged", "lock_released"]),
+             "Source/player/lock guard failed")
+        need(exact(base / "sources_before.json") == exact(base / "sources_after.json"),
+             "Protected source before/after differs")
+        protected = read(base / "sources_before.json")["raw_file_sha256"]
+        for name, digest in hashes.items():
+            if not name.startswith("scratchpad/"):
+                need(protected.get(name) == digest, "Runtime/protected source disagreement: " + name)
+        need(process["child_started"] is True and process["child_exit_confirmed"] is True
+             and process["child_pid"] == run["pid"] and process["exit_code"] == (0 if run["passed"] else 1)
+             and process["timed_out"] is False and process["cleanup_error"] is None, "Child process differs")
+        command = process["command"]
+        need(command.count("--script") == 1, "Actual entry is ambiguous")
+        entry = command[command.index("--script") + 1].removeprefix("res://")
+        expected_entry = run["harness"] + "/driver.gd"
+        need(entry == expected_entry and entry in hashes, "Actual driver absent from manifest")
+        method = command[command.index("--rendering-method") + 1]
+        need(method == ("gl_compatibility" if label == "gl" else "forward_plus"), "Renderer differs")
+        need(hashes[new_module if label == "formal" else old_module] == MODULE_SHA, "Module source differs")
+        source_sets[label] = [source(name, "runtime " + label, digest) for name, digest in hashes.items()]
+        need(sum(x["reused_existing"] for x in source_sets[label]) == 101, "Expected 101 exact reusable sources")
+        source_sets[label + "_harness"] = [
+            source(x["path"], "harness " + label, x["sha256"]) for x in run["harness_inputs"]]
+        summary = {"run": run["run"], "complete": run["passed"], "pid": run["pid"],
+                   "exit_code": process["exit_code"], "actual_entry": entry, "source_count": 103,
+                   "source_player_lock_true": True, "report_absent": label == "gl",
+                   "whole_battle_resume": False}
+        log = exact(base / "report.log").decode("utf-8")
+        stdout = [json.loads(line[len(PREFIX):]) for line in log.splitlines() if line.startswith(PREFIX)]
+        if label == "gl":
+            need(not (base / "report.json").exists() and stdout == [], "GL report must remain absent")
+            need("2D MSAA is not yet supported for GLES3" in log, "Original GL diagnostic missing")
+            summary["failure"] = "Strict GL 2D MSAA warning; no report"
+        else:
+            report = json.loads(exact(base / "report.json", run["report_sha256"]).decode("utf-8"))
+            need(stdout == [report], "Stdout/report mismatch")
+            need(report["suite"] == "fog-runtime-restore" and report["process_id"] == run["pid"]
+                 and report["run_id"] == run["run_id"] and manifest["run_id"] == run["run_id"],
+                 "Observed process/run identity differs")
+            need(report["complete"] is run["report_complete"] and report["passed"] is run["passed"]
+                 and report["check_count"] == len(report["checks"]) == run["checks"], "Report outcome/count differs")
+            need(report["source_sha256"] == hashes and report["engine_binary_sha256"] == ENGINE_SHA
+                 and report["rendering_method"] == method, "Report source/engine mismatch")
+            failed = [c for c in report["checks"] if c["passed"] is not True]
+            need(failed == run["expected_failures"] and report["failures"] == [c["label"] for c in failed],
+                 "Historical failure details differ")
+            for prefix in ["source before ", "source after "]:
+                source_checks = [c for c in report["checks"] if c["label"].startswith(prefix)]
+                need(len(source_checks) == 103 and all(c["passed"] is True for c in source_checks)
+                     and sorted(c["label"][len(prefix):] for c in source_checks) == sorted(hashes),
+                     "Incomplete source before/after rows")
+            other_checks[label] = [c for c in report["checks"]
+                                   if not c["label"].startswith(("source before ", "source after "))]
+            if label == "r1":
+                need(len(failed) == 1 and failed[0]["code"] == "PAUSED_QUIESCENT_BARRIER_REQUIRED",
+                     "Original capture barrier failure missing")
+            if run["passed"]:
+                need(failed == [] and process["exception"] is None and receipt["process_id"] == run["pid"]
+                     and receipt["checks"] == 276 and receipt["report_sha256"] == run["report_sha256"],
+                     "Successful host report receipt differs")
+            summary.update(report_complete=report["complete"], report_passed=report["passed"],
+                           checks=run["checks"], source_checks=206, other_checks=run["checks"] - 206,
+                           failed_rows=failed, stdout_matches_report=True, report_sha256=run["report_sha256"],
+                           runtime_identity=report["runtime_identity"])
+            if label in {"r3", "formal"}:
+                canvas = report["canvas_evidence"]
+                need([p["phase"] for p in canvas] == PHASES, "Canvas phases differ")
+                for pair, expected_sha in zip(canvas, PNG_SHAS):
+                    marker = pair["phase"] + " actual fog black versus clear region"
+                    matches = [c for c in report["checks"] if c["label"] == marker]
+                    need(len(matches) == 1 and matches[0]["black_rgba"] == "000000ff"
+                         and matches[0]["clear_rgba"] == "ffffffff", "Known black/clear pixel differs")
+                    pair_raw = []
+                    for side in ["left", "right"]:
+                        name = pair["phase"].replace(" ", "_") + "_" + side + ".png"
+                        p = path_in_root(pair[side])
+                        need(p == base / name and pair[side + "_sha256"] == expected_sha, "Canvas path/hash differs")
+                        raw = exact(p, expected_sha)
+                        stored = ROOT / final["run"] / name
+                        need(exact(stored, expected_sha) == raw, "Cross-run PNG bytes differ")
+                        dest = artifact(stored, "runs/formal/" + name, True)
+                        pair_raw.append(raw)
+                        png_records.append({"run": label, "phase": pair["phase"], "side": side,
+                                            "original": relative(p), "archive": dest, "stored_from": relative(stored),
+                                            "sha256": expected_sha, "bytes": len(raw), "width": 64, "height": 64,
+                                            "reused_formal_bytes": label == "r3", "cross_run_byte_equal": True})
+                    need(pair_raw[0] == pair_raw[1], "Paired Canvas PNG bytes differ")
+                summary["original_png_files"] = 6
+                summary["archived_png_files"] = 6 if label == "formal" else 0
+                summary["png_observations_preserved"] = 6
+        for row in run["evidence"]:
+            p = Path(row["path"])
+            if p.suffix != ".png":
+                artifact(p, "runs/" + label + "/" + p.name)
+        summaries[label] = summary
+    need(other_checks["r3"] == other_checks["formal"], "Formal path changed the R3 check matrix")
+    need(len(png_records) == 12, "Exactly 12 original PNG observations required")
+    need(len({r["archive"] for r in png_records}) == 6, "Exactly six physical PNG files required")
+    need(sum(item["png"] for item in planned.values()) == 6, "Unexpected physical PNG count")
+    # Final current sources remain pinned; old source sets are never read as current.
+    for name, digest in read(Path(final["run"]) / "manifest.json")["source_sha256"].items():
+        exact(name, digest)
+    for name in ["archive_fog.py", "inputs.json"]:
+        source(relative(HERE / name), "archive provenance", sha(exact(HERE / name)))
+    artifact(HERE / "README.final.md", "README.md")
+    # All mappings and original inputs are rechecked before the first QA write.
+    for row in mappings:
+        p = path_in_root(row["archive"])
+        raw = planned[p.relative_to(QA).as_posix()]["raw"] if p.is_relative_to(QA.resolve()) else exact(p)
+        need(len(raw) == row["bytes"] and sha(raw) == row["sha256"], "Planned mapping differs")
+    for row in frozen_input_rows:
+        exact(row["path"], row["sha256"], row["bytes"])
+    need(not QA.exists() and not (ROOT / ".godot/redraw_rejection_source.lock").exists(), "Archive/lock appeared")
+    QA.mkdir(parents=True)
+    files = []
+    for name, item in planned.items():
+        target = QA / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("xb") as handle:
+            handle.write(item["raw"])
+        files.append({"path": name, "sha256": sha(item["raw"]), "bytes": len(item["raw"]),
+                      "original": item["original"], "native_png": item["png"]})
+    with (QA / ".gdignore").open("xb") as handle:
+        handle.write(b"")
+    files.append({"path": ".gdignore", "sha256": sha(b""), "bytes": 0, "original": None, "native_png": False})
+    def save_new(name, value):
+        raw = (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        with (QA / name).open("xb") as handle:
+            handle.write(raw)
+        return sha(raw)
+    index = {"schema": 2, "archive_path_base": "repository_root", "mappings": mappings,
+             "source_sets": source_sets, "unique_source_blobs": len(blobs),
+             "image_mappings": png_records,
+             "image_storage_note": "Twelve actual original observations map to six formal PNG files after exact cross-run byte comparison; both original reports/logs and each original path/SHA remain preserved.",
+             "reused_existing_blobs": sum(d in reused for d in blobs),
+             "reuse_indexes": config["reuse_indexes"],
+             "reproduction": "Restore the selected source_set and harness/helper mappings to their original paths. Use its actual report_process command and frozen runner; historical preparation notes describe only their original time. Engine/native imported inputs remain local and are not bundled."}
+    index_sha = save_new("source_index.json", index)
+    manifest_sha = save_new("manifest.json", {
+        "schema": 2, "base_git_head": BASE_HEAD, "base_git_note": config["base_git_note"],
+        "files": files, "runs": summaries, "png_evidence": png_records,
+        "promoted_module": {"path": new_module, "sha256": MODULE_SHA, "bytes": 17770},
+        "formal_components": 15, "authority_effect_arrays": "12/17 unchanged",
+        "whole_battle_resume": False, "pck_tested": False, "root_state_included": False,
+        "same_matrix_note": "R3 and formal each 276 rows = 206 source before/after + 70 other rows; repetition adds no independent scenarios.",
+        "excluded": config["exclusions"]})
+    for row in files:
+        exact(QA / row["path"], row["sha256"], row["bytes"])
+    for row in mappings:
+        exact(row["archive"], row["sha256"], row["bytes"])
+    verification = {
+        "schema": 2, "verified": True, "all_receipts_checked_before_write": True,
+        "manifest_sha256": manifest_sha, "source_index_sha256": index_sha,
+        "files": len(files), "raw_artifact_bytes": sum(r["bytes"] for r in files),
+        "source_mappings": len(mappings), "unique_source_blobs": len(blobs),
+        "reused_existing_blobs": index["reused_existing_blobs"], "png_files": 6,
+        "original_png_observations": 12, "png_deduplicated_by_exact_bytes": True,
+        "failed_history_preserved": ["gl", "r1", "r2"], "passed": ["r3", "formal"],
+        "generated_sidecars": ["manifest.json", "source_index.json", "archive_verification.json"],
+        "git_or_engine_executed": False, "root_state_included": False}
+    save_new("archive_verification.json", verification)
+    print(json.dumps(verification))
+
+if __name__ == "__main__":
+    main()

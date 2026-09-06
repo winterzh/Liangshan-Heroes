@@ -1,0 +1,41 @@
+"""Preparation evidence only: no engine parsing, native behavior or PCK claim."""
+import ast
+import hashlib
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+for name in ['prepare_runner.py', 'run_smoke.py', 'static_check.py']:
+    ast.parse((HERE/name).read_text(encoding='utf-8'))
+module = (HERE/'fog_state.gd').read_text(encoding='utf-8')
+for forbidden in ['source_code', 'FileAccess', 'load(', 'get_property_list', 'get_instance_id', 'randf(', 'randi(']:
+    assert forbidden not in module, forbidden
+bind = module[module.index('func bind('):]
+for forbidden in ['_init_fog(', '_fog_pass(', '_reveal_fog_at(', 'fog_visible', '.visible =']:
+    assert forbidden not in bind, forbidden
+assert 'PackedByteArray(values._vision)' in module
+assert module.index('var checked: Dictionary = _values(values, false)') < module.index('PackedByteArray(values._vision)')
+assert (HERE/'.gdignore').is_file()
+driver = (HERE/'driver.gd').read_text(encoding='utf-8')
+assert '.cell_center(' not in driver
+assert driver.count('old._fog_pass(') == 5 and driver.count('restored._fog_pass(') == 3
+assert 'view.world_2d = World2D.new()' in driver
+assert 'await RenderingServer.frame_post_draw' in driver
+pins = json.loads((HERE/'pins.json').read_text(encoding='utf-8'))
+assert pins['source_sha256']['scripts/battle.gd'] == '07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd'
+assert all(sha(ROOT/name) == value for name, value in pins['source_sha256'].items())
+files = ['.gdignore', 'fog_state.gd', 'driver.gd', 'prepare_runner.py', 'run_smoke.py', 'QA_CONTRACT.md', 'pins.json', 'static_check.py']
+result = {'prepared': True, 'python_ast_valid': True, 'default_preflight_passed': True,
+          'godot_run': False, 'gd_engine_parse_tested': False, 'pck_tested': False,
+          'production_mutation': False, 'source_count': len(pins['source_sha256']),
+          'base_battle_sha256': pins['source_sha256']['scripts/battle.gd'],
+          'provider_sha256_at_preparation': pins['source_sha256']['scripts/run_content_identity.gd'],
+          'provider_repin_pending': True,
+          'files': {name: {'bytes': (HERE/name).stat().st_size, 'sha256': sha(HERE/name)} for name in files}}
+(HERE/'preparation.json').write_bytes((json.dumps(result, indent=2)+'\n').encode())
+print(json.dumps(result))

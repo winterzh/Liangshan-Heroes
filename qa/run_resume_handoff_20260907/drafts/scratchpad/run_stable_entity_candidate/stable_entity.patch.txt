@@ -1,0 +1,818 @@
+--- a/scripts/battle.gd
++++ b/scripts/battle.gd
+@@ -23,6 +23,9 @@
+ # it is never issued, so next_item_uid always exceeds every allocated item UID.
+ const ITEM_UID_EXHAUSTED := 9223372036854775807
+ var next_item_uid: int = 1
++# Positive per-Battle Unit identity; MAX is an exhausted next-counter sentinel.
++const ENTITY_ID_EXHAUSTED := 9223372036854775807
++var next_entity_id: int = 1
+ 
+ var world: Node2D
+ var map: GameMap
+@@ -85,8 +88,8 @@
+ var _mob_grid: Dictionary = {}        # 仅存机动单位；分离按桶对遍历，避免每名单位重复查询 9 个邻桶
+ var _body_grid_liang: Dictionary = {} # 身体阻挡只查敌方机动单位；分阵营建桶，避免后排单位反复扫描大批友军
+ var _body_grid_guan: Dictionary = {}
+-var _focus_counts: Dictionary = {}    # 目标 instance_id → 有多少机动单位正锁定它(每物理帧随网格重建)；索敌打分的「过度集火」惩罚用
+-var _res_block_cache: Dictionary = {} # 资源点 instance_id → 是否被建筑压住(按物理帧缓存；排矿农民每帧都问，别每次全表扫建筑)
++var _focus_counts: Dictionary = {}    # 目标 entity_id → 有多少机动单位正锁定它(每物理帧随网格重建)；索敌打分的「过度集火」惩罚用
++var _res_block_cache: Dictionary = {} # 资源点 entity_id → 是否被建筑压住(按物理帧缓存；排矿农民每帧都问，别每次全表扫建筑)
+ var _res_block_frame := -1
+ var _blocker_cache: Dictionary = {}   # 起点格|终点格|导航版本 → 首个堵路建筑（或 null）
+ var _blocker_cache_revision := -1
+@@ -714,8 +717,31 @@
+ 	return map.unproject(p) if map != null else GameMap.ISO_INV * p
+ 
+ 
++func entity_ids_available(count: int = 1) -> bool:
++	return count >= 0 and next_entity_id >= 1 and next_entity_id <= ENTITY_ID_EXHAUSTED \
++		and count <= ENTITY_ID_EXHAUSTED - next_entity_id
++
++
++func _allocate_entity_id() -> int:
++	if not _gameplay_rng_issue.is_empty(): return 0
++	if not entity_ids_available(1):
++		_gameplay_rng_stop("ENTITY_ID_EXHAUSTED")
++		return 0
++	var allocated: int = next_entity_id
++	next_entity_id += 1
++	# Failed later construction burns this ID. No rollback/reuse, including death.
++	return allocated
++
++
+ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
++	if not _gameplay_rng_issue.is_empty(): return null
++	if not _defs.has(key) or not world_pos.is_finite():
++		_gameplay_rng_stop("ENTITY_SPAWN_ARGUMENTS")
++		return null
++	var stable_id: int = _allocate_entity_id()
++	if stable_id == 0: return null
+ 	var u := Unit.new()
++	u.entity_id = stable_id
+ 	units_root.add_child(u)
+ 	u.setup(key, _defs[key], faction, self, map)
+ 	if not u.is_building and not map.is_open_world(world_pos, u.movement_profile):
+@@ -764,6 +790,7 @@
+ 		push_error("No valid spawn terrain for " + key)
+ 		return null
+ 	var u := spawn_unit(key, faction, map.cell_to_world(at))
++	if u == null: return null
+ 	if blocks:
+ 		u.set_meta("fcell", at)
+ 		u.set_meta("fhalf", building_footprint_half(key))
+@@ -849,6 +876,9 @@
+ ## 成批生成敌军并向目标 attack-move（波次用）。返回生成的单位数组。
+ func spawn_group(key: String, n: int, faction: int, gate: Vector2i, target_w: Vector2, spread := 2) -> Array:
+ 	if not _gameplay_rng_issue.is_empty(): return []
++	if not entity_ids_available(maxi(0, n)):
++		_gameplay_rng_stop("ENTITY_WAVE_CAPACITY")
++		return []
+ 	var out: Array = []
+ 	for i in range(n):
+ 		var cell_x := gameplay_randi_range(-spread, spread)
+@@ -1229,7 +1259,7 @@
+ 	if _res_block_frame != fr:
+ 		_res_block_frame = fr
+ 		_res_block_cache.clear()
+-	var nid := node.get_instance_id()
++	var nid := node.entity_id
+ 	if _res_block_cache.has(nid):
+ 		return bool(_res_block_cache[nid])
+ 	var blocked := _resource_blocked_calc(node)
+@@ -1454,14 +1484,17 @@
+ 	_stamp_manual(player_builders)
+ 	spend(cg, cw)
+ 	Sfx.play("build")
+-	_start_construction(key, cell, half)
++	if not _start_construction(key, cell, half):
++		add_resources(cg, cw)
++		return
+ 	if not Input.is_key_pressed(KEY_SHIFT):   # 按住 Shift 连续放置
+ 		_cancel_build()
+ 
+ 
+-func _start_construction(key: String, cell: Vector2i, half: int) -> void:
+-	if not _gameplay_rng_issue.is_empty(): return
++func _start_construction(key: String, cell: Vector2i, half: int) -> bool:
++	if not _gameplay_rng_issue.is_empty(): return false
+ 	var site := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))
++	if site == null: return false
+ 	site.is_constructing = true
+ 	site._pending_build = true   # 先「虚影」：不挡路、不可被攻击；工人走到起第一锤才转实体、封路（见 advance_build）
+ 	site.build_progress = 0.0
+@@ -1472,6 +1505,7 @@
+ 		return is_instance_valid(u) and u.is_worker and u.hp > 0.0)
+ 	_order_builders_to_site(builders, site, Input.is_key_pressed(KEY_SHIFT))
+ 	msg("开始建造 %s" % String(_defs[key].get("name", key)), 1.5)
++	return true
+ 
+ 
+ ## Shift 连放语义：首座「立刻开工」（非排队，打断采集——采集是无限循环任务，排在它后面的建造令
+@@ -1493,6 +1527,7 @@
+ func ai_start_construction(key: String, cell: Vector2i, faction: int, builder: Unit) -> Unit:
+ 	var half := building_footprint_half(key)
+ 	var site := spawn_unit(key, faction, map.cell_to_world(cell))
++	if site == null: return null
+ 	site.is_constructing = true
+ 	site._pending_build = true   # 同玩家：先虚影、工人到场起建才封路（见 advance_build）
+ 	site.build_progress = 0.0
+@@ -1940,7 +1975,7 @@
+ 		return
+ 	pool.sort_custom(func(a: Unit, b: Unit) -> bool:
+ 		if a._train_queue.size() == b._train_queue.size():
+-			return a.get_instance_id() < b.get_instance_id()
++			return a.entity_id < b.entity_id
+ 		return a._train_queue.size() < b._train_queue.size())
+ 	queue_train(pool[0], key)
+ 
+@@ -2930,6 +2965,7 @@
+ 	_eco_update_wood_stall()
+ 	_eco_workers()
+ 	_eco_build(tech_reserve)
++	if not _gameplay_rng_issue.is_empty(): return
+ 	_eco_train(research_plans, tech_reserve)
+ 	_eco_research(research_plans)
+ 	# 研究可能已在本拍启动并扣费；重新计算剩余计划，避免继续为已启动项目重复留预算。
+@@ -3236,7 +3272,9 @@
+ 		return
+ 	if not spend(cg, cw):
+ 		return
+-	ai_start_construction(key, cell, Unit.FACTION_LIANG, builder)
++	if ai_start_construction(key, cell, Unit.FACTION_LIANG, builder) == null:
++		add_resources(cg, cw)
++		return
+ 
+ 
+ ## 练兵（英雄至上·高于一切）：只要还没出齐 或 有英雄战死，聚义厅就【只许排英雄】——
+@@ -3277,7 +3315,7 @@
+ 			queue_train(hall, hk, false)
+ 		return
+ 	# 英雄齐全且无人阵亡：补农民 → 兵营常备军
+-	if not reserved.has(hall.get_instance_id()) and _eco_count_workers() < _eco_wcap_dyn() \
++	if not reserved.has(hall.entity_id) and _eco_count_workers() < _eco_wcap_dyn() \
+ 			and _eco_can_train("lou_luo", hall, tech_reserve):
+ 		queue_train(hall, "lou_luo", false)
+ 		return
+@@ -3358,7 +3396,7 @@
+ 				and u.hp > 0.0 and not u.is_constructing and u._research_key == ""):
+ 			continue
+ 		if best == null or u._train_queue.size() < best._train_queue.size() \
+-				or (u._train_queue.size() == best._train_queue.size() and u.get_instance_id() < best.get_instance_id()):
++				or (u._train_queue.size() == best._train_queue.size() and u.entity_id < best.entity_id):
+ 			best = u
+ 	return best
+ 
+@@ -3380,7 +3418,7 @@
+ 	for p in plans:
+ 		var bld = p.get("bld", null)
+ 		if is_instance_valid(bld):
+-			out[bld.get_instance_id()] = true
++			out[bld.entity_id] = true
+ 	return out
+ 
+ 
+@@ -3846,7 +3884,7 @@
+ 		if is_instance_valid(h) and h.faction == Unit.FACTION_LIANG and h.is_hero and h.hp > 0.0 \
+ 				and h.auto_micro and not h.manual_order_active and h.manual_order_t <= 0.0:
+ 			heroes.append(h)
+-	heroes.sort_custom(func(a, b): return a.get_instance_id() < b.get_instance_id())
++	heroes.sort_custom(func(a, b): return a.entity_id < b.entity_id)
+ 	return heroes
+ 
+ 
+@@ -3933,7 +3971,7 @@
+ 		stay.sort_custom(func(a, b): return a.position.distance_squared_to(lanes[li]) < b.position.distance_squared_to(lanes[li]))
+ 		for si in range(mini(int(need[li]), stay.size())):
+ 			var h: Unit = stay[si]
+-			result[h.get_instance_id()] = li
++			result[h.entity_id] = li
+ 			open.erase(h)
+ 			need[li] = int(need[li]) - 1
+ 	# 剩余英雄按到尚缺路线的距离补位，跨路人数保持最少。
+@@ -3949,7 +3987,7 @@
+ 				best = li
+ 		if best < 0:
+ 			best = _eco_nearest_lane(h.position, lanes)
+-		result[h.get_instance_id()] = best
++		result[h.entity_id] = best
+ 		if best >= 0:
+ 			need[best] = maxi(0, int(need[best]) - 1)
+ 	return result
+@@ -3998,7 +4036,7 @@
+ 	for u in units:
+ 		if is_instance_valid(u) and u.key == "barracks" and u.faction == Unit.FACTION_LIANG \
+ 				and u.hp > 0.0 and not u.is_constructing and u._research_key == "" \
+-				and not reserved.has(u.get_instance_id()) and u._train_queue.size() < bq:
++				and not reserved.has(u.entity_id) and u._train_queue.size() < bq:
+ 			bq = u._train_queue.size()
+ 			best = u
+ 	return best
+@@ -4963,7 +5001,7 @@
+ 		return false
+ 	var pressure: Array = state.get("pressure", [])
+ 	var assignments: Dictionary = state.get("assignments", {})
+-	var li := int(assignments.get(u.get_instance_id(), _eco_nearest_lane(u.position, lanes)))
++	var li := int(assignments.get(u.entity_id, _eco_nearest_lane(u.position, lanes)))
+ 	if li < 0:
+ 		return false
+ 	var anchor: Vector2 = lanes[li]
+@@ -5541,7 +5579,7 @@
+ 				body_grid[k] = [u]
+ 			var ft = u._target   # 目标可能已在同帧释放；先以 Variant 接住，再做实例有效性检查。
+ 			if ft != null and is_instance_valid(ft):   # 顺路统计「谁被几人锁定」，索敌打分 O(1) 查——别在打分里逐目标扫邻格
+-				var fid: int = ft.get_instance_id()
++				var fid: int = ft.entity_id
+ 				_focus_counts[fid] = int(_focus_counts.get(fid, 0)) + 1
+ 		if _grid.has(k):
+ 			_grid[k].append(u)
+@@ -5643,7 +5681,7 @@
+ 	for a: Unit in units:
+ 		if a.is_building or a.is_resource or a.hp <= 0.0 or a.garrisoned or a.story_outcome != "":
+ 			continue
+-		var aid := a.get_instance_id()
++		var aid := a.entity_id
+ 		if stagger and aid % 3 != _sep_phase:
+ 			continue
+ 		var a_mv := a._state == Unit.ST_MOVE or a._state == Unit.ST_AMOVE or a._state == Unit.ST_CHASE
+@@ -5661,7 +5699,7 @@
+ 					continue
+ 				var bucket: Array = bucket_v
+ 				for b: Unit in bucket:
+-					if b.get_instance_id() <= aid or b.story_outcome != "" or b.movement_profile != a_profile:
++					if b.entity_id <= aid or b.story_outcome != "" or b.movement_profile != a_profile:
+ 						continue   # 每对只处理一次；同时跳过自身
+ 					if a_phase and _gold_phasing(b):
+ 						continue
+@@ -9335,6 +9373,19 @@
+ 		skey = caster.key
+ 	if skey == "" or not _defs.has(skey):
+ 		return
++	var n := maxi(1, int(eff.get("count", 1)))
++	if not entity_ids_available(n):
++		_gameplay_rng_stop("ENTITY_SUMMON_CAPACITY")
++		return
++	var spawn_positions: Array[Vector2] = []
++	for i in n:
++		var ang := TAU * (float(i) / float(n)) + 0.6
++		var off := Vector2(cos(ang), sin(ang)) * (34.0 + 8.0 * float(n))
++		var cell: Vector2i = map.nearest_open(map.world_to_cell(caster.position + off))
++		if cell.x < 0:
++			_gameplay_rng_stop("ENTITY_SUMMON_TERRAIN")
++			return
++		spawn_positions.append(map.cell_to_world(cell))
+ 	# 武松虎等“场上只留一只”的召唤：仅替换同一英雄本人拥有、同种类的旧召唤，不误伤队友的虎。
+ 	if bool(eff.get("replace_existing", false)):
+ 		for old in units.duplicate():
+@@ -9342,16 +9393,16 @@
+ 					and old.stat_owner_key == caster.key and old.summon_kind == skind:
+ 				despawn_summon(old)
+ 				if not _gameplay_rng_issue.is_empty(): return
+-	var n := maxi(1, int(eff.get("count", 1)))
+ 	var dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 0.0))
+ 	var cmult := float(_pick(eff["copy_mult"], rank)) if eff.has("copy_mult") else 1.0   # copy_caster 时按等级取本体血/攻的百分比
+ 	var hp_mult := float(_pick(eff["copy_hp_mult"], rank)) if eff.has("copy_hp_mult") else cmult
+ 	var atk_mult := float(_pick(eff["copy_atk_mult"], rank)) if eff.has("copy_atk_mult") else cmult
+ 	for i in n:
+-		var ang := TAU * (float(i) / float(n)) + 0.6
+-		var off := Vector2(cos(ang), sin(ang)) * (34.0 + 8.0 * float(n))
+-		var pos := map.cell_to_world(map.nearest_open(map.world_to_cell(caster.position + off)))
++		var pos: Vector2 = spawn_positions[i]
+ 		var su := spawn_unit(skey, caster.faction, pos)
++		if su == null:
++			_gameplay_rng_stop("ENTITY_SUMMON_CREATION")
++			return
+ 		su.is_summon = true
+ 		su.summon_kind = skind
+ 		su.stat_owner_key = caster.key   # 驻守战的召唤物/幻象战绩归召唤英雄
+@@ -11889,7 +11940,7 @@
+ 	var picks_shortest := picked != null and picked._train_queue.is_empty()
+ 	var reserved := {}
+ 	if picked != null:
+-		reserved[picked.get_instance_id()] = true
++		reserved[picked.entity_id] = true
+ 	var skips_reserved := picked == null or _eco_idle_barracks(reserved) != picked
+ 	gold = 100; wood = 100
+ 	var reserve_blocks_spend := not _eco_can_spend_after_tech(25, 14, {"gold": 80, "wood": 80})
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -1,5 +1,7 @@
+ class_name Unit
+ extends Node2D
++# 0 is an unregistered constructor shell; real Battle entities are positive.
++var entity_id: int = 0
+ const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
+ ## 单位：梁山好汉 / 官军。有图集贴图就用贴图，否则绘制占位图形。
+ 
+@@ -1143,6 +1145,7 @@
+ 			_tower_tick(delta)   # 防御塔（箭楼）固定索敌射击
+ 		if not is_constructing and not _train_queue.is_empty():
+ 			_production_tick(delta)
++			if not _gameplay_rng_fault().is_empty(): return
+ 		elif not is_constructing and _research_key != "":
+ 			_research_t -= delta
+ 			if _research_t <= 0.0:
+@@ -1861,6 +1864,7 @@
+ 	if _train_t <= 0.0:
+ 		var key: String = _train_queue[0]
+ 		if not battle.on_unit_trained(self,key):
++			if not _gameplay_rng_fault().is_empty(): return
+ 			if not production_blocked and faction==FACTION_LIANG:
+ 				battle.msg(display_name+"："+production_wait_label()+"，请清开出口；取消队列可退资源。",4)
+ 			production_blocked=true
+@@ -2309,7 +2313,7 @@
+ 		s += 30.0
+ 	if battle != null and not u.is_hero:
+ 		# 集火人数走 battle 每帧统计的全局表(O(1))——此前逐候选扫邻格是 O(候选×邻居)，兵海下正是索敌卡顿的老路
+-		var already := int(battle._focus_counts.get(u.get_instance_id(), 0))
++		var already := int(battle._focus_counts.get(u.entity_id, 0))
+ 		if u == _target:
+ 			already -= 1   # 自己当前锁定的不算「别人集火」
+ 		s -= float(clampi(already, 0, 6)) * 8.0
+--- a/scripts/crowd_separation.gd
++++ b/scripts/crowd_separation.gd
+@@ -13,7 +13,7 @@
+ 	var order: Array[int] = []
+ 	for u: Unit in units:
+ 		if u.is_building or u.is_resource or u.hp <= 0.0 or u.garrisoned or u.story_outcome != "": continue
+-		var id := u.get_instance_id()
++		var id := u.entity_id
+ 		if not indexes.has(id):
+ 			indexes[id] = sources.size()
+ 			sources.append(u)
+@@ -22,7 +22,7 @@
+ 	# Preserve those neighbor entries and the original ID/active-state tests.
+ 	for bucket in buckets.values():
+ 		for u: Unit in bucket:
+-			var id := u.get_instance_id()
++			var id := u.entity_id
+ 			if not indexes.has(id):
+ 				indexes[id] = sources.size()
+ 				sources.append(u)
+@@ -44,7 +44,7 @@
+ 	ids.resize(count);positions.resize(count);radii.resize(count);profiles.resize(count);flags.resize(count)
+ 	for i in range(count):
+ 		var u := sources[i]
+-		ids[i] = u.get_instance_id()
++		ids[i] = u.entity_id
+ 		positions[i] = u.position
+ 		radii[i] = u.radius
+ 		profiles[i] = u.movement_profile
+@@ -62,7 +62,7 @@
+ 	for cell in buckets:
+ 		var groups := {}
+ 		for u: Unit in buckets[cell]:
+-			var id := u.get_instance_id()
++			var id := u.entity_id
+ 			var i: int = indexes[id]
+ 			if (flags[i] & ACTIVE) == 0: continue
+ 			var profile := profiles[i]
+--- a/scripts/run_unit_state.gd
++++ b/scripts/run_unit_state.gd
+@@ -6,7 +6,7 @@
+ ## Never calls setup/spawn_at/order/Inventory.restore or recomputes gameplay stats.
+ ## Only art_variant's existing setter runs: signals are blocked, detached redraw only.
+ ## Five draw caches are regenerated; draw cadence is not gameplay state.
+-const SCHEMA := "defense_unit_state_v1"
++const SCHEMA := "defense_unit_state_v2"
+ const ID_FIELDS := ["_lin_spear_target_id", "_chase_last_id", "_giveup_id"]
+ const POOL_FIELDS := ["_aura_atkspeed_sources", "_damage_reduction_sources"]
+ const INVENTORY_FIELDS := ["slots", "cooldowns", "proc_cooldowns", "_uid_seq", "_periodic_acc"]
+@@ -37,9 +37,10 @@
+ func _unit(value: Variant) -> bool:
+ 	return typeof(value) == TYPE_OBJECT and is_instance_valid(value) and value.get_script() == _unit_script and not value.is_queued_for_deletion()
+ 
+-const DECLARED_COUNT := 272
+-const CAPTURED_DECLARED_COUNT := 241
++const DECLARED_COUNT := 273
++const CAPTURED_DECLARED_COUNT := 242
+ const RULES := {
++  "entity_id": "int",
+   "defeat_outcome": "string",
+   "story_outcome": "string",
+   "movement_profile": "string",
+@@ -285,6 +286,7 @@
+   "modulate": "color"
+ }
+ const INT_RANGES := {
++  "entity_id": [1, 9223372036854775806],
+   "faction": [
+     0,
+     1
+@@ -336,7 +338,7 @@
+ const MAX_ENTITIES := 4096
+ const MAX_ARRAY_ITEMS := 4096
+ const MAX_ORDERS := 4096
+-const MAX_ID := "9223372036854775807"
++const MAX_ID := "9223372036854775806"
+ const DIRECT_FIELDS := ["story_assist_partner","story_assist_owner","_gold_miner","_gather_node","_drop",
+ 	"_build_site","garrison_holder","_garrison_dest","rally_node","_taunt_src","_hua_lock_target","_target","_pending_target","_killer"]
+ const ARRAY_FIELDS := ["_gold_waiters","passengers","_charge_hit"]
+@@ -345,6 +347,7 @@
+ 
+ func _read_explicit(unit) -> Dictionary:
+ 	return {
++		"entity_id":unit.entity_id,
+ 		"defeat_outcome":unit.defeat_outcome,
+ 		"story_outcome":unit.story_outcome,
+ 		"movement_profile":unit.movement_profile,
+@@ -592,6 +595,7 @@
+ 
+ const MAX_PATH_POINTS := 4096
+ func _assign_values(unit: Variant, values: Dictionary) -> void:
++	unit.entity_id = values["entity_id"]
+ 	unit.defeat_outcome = values["defeat_outcome"]
+ 	unit.story_outcome = values["story_outcome"]
+ 	unit.movement_profile = values["movement_profile"]
+@@ -985,6 +989,7 @@
+ 		if object.is_queued_for_deletion(): return _failure("REGISTRY_PENDING_DELETE")
+ 		var entity_id: Variant = registry[object]
+ 		if not _id(entity_id): return _failure("REGISTRY_ID")
++		if object.entity_id < 1 or str(object.entity_id) != entity_id: return _failure("REGISTRY_ENTITY_FIELD")
+ 		if ids.has(entity_id): return _failure("REGISTRY_DUPLICATE_ID")
+ 		ids[entity_id] = true
+ 	return {"ok":true,"ids":ids}
+@@ -1313,6 +1318,7 @@
+ 	if typeof(payload.values) != TYPE_DICTIONARY: return _failure("VALUE_FIELDS")
+ 	var values: Dictionary = _from_wire(payload.values)
+ 	if not values.ok: return values
++	if str(values.values.entity_id) != record.entity_id: return _failure("ENTITY_FIELD_ENVELOPE")
+ 	checked = _check_values(values.values)
+ 	if not checked.ok: return checked
+ 	var references: Dictionary = _references(payload.references, known_ids, false)
+@@ -1389,6 +1395,7 @@
+ 	var seen: Dictionary = {}
+ 	for key in id_to_unit:
+ 		if not _id(key) or not _unit(id_to_unit[key]): return _failure("BIND_REGISTRY")
++		if str(id_to_unit[key].entity_id) != key: return _failure("BIND_ENTITY_FIELD")
+ 		if seen.has(id_to_unit[key]): return _failure("BIND_DUPLICATE_OBJECT")
+ 		seen[id_to_unit[key]] = true
+ 		known[key] = true
+@@ -1434,6 +1441,11 @@
+ # remain paused until ALL Units/Effects/Battle are released by the transaction.
+ func activate(unit: Variant, activation: Dictionary) -> Dictionary:
+ 	if not _unit(unit): return _failure("UNIT_INSTANCE")
++	if unit.entity_id < 1 or unit.entity_id >= 9223372036854775807: return _failure("ENTITY_FIELD")
++	if not is_instance_valid(unit.battle): return _failure("ENTITY_ALLOCATOR_NOT_INSTALLED")
++	var next_id: Variant = unit.battle.get("next_entity_id")
++	if typeof(next_id) != TYPE_INT or unit.entity_id >= next_id:
++		return _failure("ENTITY_ALLOCATOR_NOT_INSTALLED")
+ 	var checked: Dictionary = _check_activation(activation)
+ 	if not checked.ok: return checked
+ 	if not unit.is_inside_tree() or not unit.get_tree().paused: return _failure("ACTIVATION_REQUIRES_PAUSED_TREE")
+--- a/scripts/run_unit_graph.gd
++++ b/scripts/run_unit_graph.gd
+@@ -2,12 +2,14 @@
+ ## Trusted Script injection only. No script/resource path comes from a snapshot.
+ ## Capture under the outer complete-step barrier; pending deletions must finish.
+ ## units_root children (including dying Units) and Battle.units have separate order.
+-## Caller owns persistent IDs and the retained identity context across later saves.
++## Battle allocates positive Unit.entity_id; caller injects the exact matching map.
++## Caller retains the shared native identity context across later saves.
+ ## prepare() never installs Battle fields, connects signals, attaches or activates.
+-const SCHEMA := "defense_unit_graph_v1"
++const SCHEMA := "defense_unit_graph_v2"
+ const MAX_UNITS := 4096
+-const MAX_ID := "9223372036854775807"
+-const GRAPH_FIELDS := ["schema", "content_version", "root_order", "active_order", "records"]
++const MAX_ID := "9223372036854775806"
++const MAX_NEXT_ID := "9223372036854775807"
++const GRAPH_FIELDS := ["schema", "content_version", "root_order", "active_order", "records", "next_entity_id"]
+ var _factory: Variant = null
+ var _identity_script: Script
+ var _unit_script: Script
+@@ -38,6 +40,11 @@
+ 		if value.unicode_at(index) < 48 or value.unicode_at(index) > 57: return false
+ 	return value.length() < MAX_ID.length() or value <= MAX_ID
+ 
++func _next_id(value: Variant) -> bool:
++	# Reuse canonical positive text grammar, with MAX allowed only for next.
++	return _id(value) or (typeof(value) == TYPE_STRING and value == MAX_NEXT_ID)
++
++
+ func _fields(value: Variant, expected: Array) -> bool:
+ 	if typeof(value) != TYPE_DICTIONARY or value.size() != expected.size(): return false
+ 	for key in value:
+@@ -59,6 +66,7 @@
+ 	if not _node(battle, _battle_script): return _bad("BATTLE_INSTANCE")
+ 	var checked: Dictionary = _destination(battle, battle.map)
+ 	if not checked.ok: return checked
++	if typeof(battle.next_entity_id) != TYPE_INT or battle.next_entity_id < 1: return _bad("NEXT_ENTITY_ID")
+ 	var unit_root: Variant = battle.units_root
+ 	if typeof(unit_root) != TYPE_OBJECT or not is_instance_valid(unit_root) or not unit_root is Node2D:
+ 		return _bad("UNITS_ROOT")
+@@ -99,6 +107,8 @@
+ 		if not _node(unit, _unit_script) or not graph.membership.has(unit): return _bad("REGISTRY_COMPLETE_SET")
+ 		var entity_id: Variant = object_to_id[unit]
+ 		if not _id(entity_id): return _bad("ENTITY_ID")
++		if unit.entity_id < 1 or str(unit.entity_id) != entity_id: return _bad("ENTITY_FIELD_REGISTRY")
++		if unit.entity_id >= battle.next_entity_id: return _bad("ENTITY_COUNTER_BOUND")
+ 		if id_to_unit.has(entity_id): return _bad("ENTITY_ID_DUPLICATE")
+ 		id_to_unit[entity_id] = unit
+ 	var owns_identity: bool = typeof(retained_identity) == TYPE_NIL
+@@ -120,7 +130,7 @@
+ 		root_order.append(entity_id)
+ 	for unit: Variant in graph.active: active_order.append(object_to_id[unit])
+ 	return {"ok": true, "value": {"schema": SCHEMA, "content_version": content_version,
+-		"root_order": root_order, "active_order": active_order, "records": records}, "identity": identity,
++		"root_order": root_order, "active_order": active_order, "records": records, "next_entity_id": str(battle.next_entity_id)}, "identity": identity,
+ 		"complete_battle_restore": false}
+ 
+ func validate(snapshot: Variant, content_version: String) -> Dictionary:
+@@ -130,12 +140,15 @@
+ 	if typeof(snapshot.schema) != TYPE_STRING or snapshot.schema != SCHEMA: return _bad("GRAPH_SCHEMA")
+ 	if typeof(snapshot.content_version) != TYPE_STRING or snapshot.content_version != content_version:
+ 		return _bad("CONTENT_VERSION")
++	if not _next_id(snapshot.next_entity_id): return _bad("NEXT_ENTITY_ID")
++	var next_id: int = String(snapshot.next_entity_id).to_int()
+ 	for field: String in ["root_order", "active_order", "records"]:
+ 		if typeof(snapshot[field]) != TYPE_ARRAY or snapshot[field].size() > MAX_UNITS: return _bad("GRAPH_ARRAY", field)
+ 	if snapshot.records.size() != snapshot.root_order.size(): return _bad("RECORD_COUNT")
+ 	var known: Dictionary = {}
+ 	for entity_id: Variant in snapshot.root_order:
+ 		if not _id(entity_id): return _bad("ENTITY_ID")
++		if String(entity_id).to_int() >= next_id: return _bad("ENTITY_COUNTER_BOUND")
+ 		if known.has(entity_id): return _bad("ROOT_ID_DUPLICATE")
+ 		known[entity_id] = true
+ 	var active_seen: Dictionary = {}
+@@ -161,7 +174,7 @@
+ 			return _bad("UNIT_" + String(result.get("code", "INVALID")), str(index) + ":" + String(result.get("field", "")))
+ 	identity.dispose()
+ 	# Deep copy only after the bounded inner codec has rejected cycles/invalid trees.
+-	return {"ok": true, "value": snapshot.duplicate(true), "known_ids": known}
++	return {"ok": true, "value": snapshot.duplicate(true), "known_ids": known, "next_entity_id": next_id}
+ 
+ func _restore_failed(error: Dictionary, created: Array, identity: Variant = null) -> Dictionary:
+ 	# Only newly created, never-attached Units enter this list; source graph excluded.
+@@ -210,4 +223,5 @@
+ 		"id_to_unit": id_to_unit, "object_to_id": object_to_id, "activation_plan": activation_plan,
+ 		"identity": identity, "expired_unit": expired, "attached": false, "activated": false,
+ 		"tombstones_released": false,
++		"pending_battle_fields": {"next_entity_id": checked.next_entity_id}, "entity_allocator_installed": false,
+ 		"pending_battle_signals": ["died", "story_resolved"], "complete_battle_restore": false}
+--- a/scripts/levels/skirmish.gd
++++ b/scripts/levels/skirmish.gd
+@@ -324,6 +324,9 @@
+ func deploy(b) -> void:
+ 	_apply_overrides(b)   # 自定义据守：在任何 spawn 前把数值覆盖合并进 b._defs/_abilities
+ 	hall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)
++	if hall == null:
++		b._gameplay_rng_stop("ENTITY_DEPLOY_HALL")
++		return
+ 	hall.display_name = "忠义堂"
+ 	hall.set_meta("campaign_environment_route", "zhongyi_hall")
+ 	hall.set_meta("campaign_environment_state", "default")
+@@ -331,26 +334,40 @@
+ 	hall.set_meta("campaign_environment_runtime_text", "忠义堂")
+ 	hall.set_meta("campaign_environment_static_visual", true)
+ 	var gm: Unit = b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)
++	if gm == null:
++		b._gameplay_rng_stop("ENTITY_DEPLOY_RESOURCE")
++		return
+ 	# 60 关·史诗：六将全程升级/研究/造兵，默认 6000 储量撑不到后期 → 金矿储量放宽到 18000
+ 	if gm != null and (int(Campaign.defense_waves) >= 60 or Campaign.defense_random):
+ 		gm.res_left = 18000.0
+ 	# 两片木材林团收在寨内西侧经济区，不再压住北路转东山关的敌军来路。
+ 	# 树干各占一个导航格，树被砍完后才释放通道。
+ 	for c in TREE_GROVE_WEST + TREE_GROVE_REAR:
+-		b.spawn_at("tree", Unit.FACTION_LIANG, c)
++		if b.spawn_at("tree", Unit.FACTION_LIANG, c) == null:
++			b._gameplay_rng_stop("ENTITY_DEPLOY_TREE")
++			return
+ 	# 山前关、东山关都是有生命值的实体寨门。五格门洞被完整封住，官军必须先破门；
+ 	# 其视觉仍由 LiangshanEntrance 统一绘制，避免叠一座通用建筑。
+ 	for spec in [["main", Layout.gate_for(b.map), "山前关寨门"],
+ 			["east", Layout.east_gate_for(b.map), "东山关寨门"]]:
+ 		var gate: Unit = b.spawn_at("stockade_gate", Unit.FACTION_LIANG, spec[1])
++		if gate == null:
++			b._gameplay_rng_stop("ENTITY_DEPLOY_GATE")
++			return
+ 		if gate != null:
+ 			gate.display_name = String(spec[2])
+ 			gate.set_meta("liangshan_gate_id", String(spec[0]))
+ 			gate.set_meta("scene_visual_only", true)
+ 	for c in [Vector2i(17, 35), Vector2i(18, 36), Vector2i(19, 35), Vector2i(17, 37), Vector2i(19, 37)]:
+-		b.spawn_at("lou_luo", Unit.FACTION_LIANG, c)
+-	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(17, 39))
+-	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(19, 39))
++		if b.spawn_at("lou_luo", Unit.FACTION_LIANG, c) == null:
++			b._gameplay_rng_stop("ENTITY_DEPLOY_WORKER")
++			return
++	if b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(17, 39)) == null:
++		b._gameplay_rng_stop("ENTITY_DEPLOY_TROOP")
++		return
++	if b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(19, 39)) == null:
++		b._gameplay_rng_stop("ENTITY_DEPLOY_TROOP")
++		return
+ 
+ 
+ func on_start(b) -> void:
+@@ -452,6 +469,20 @@
+ 	var ws: Array = _waves()
+ 	if ws.is_empty() or not b.gameplay_rng_fault().is_empty() or i < 0 or i >= ws.size(): return false
+ 	var wave: Dictionary = ws[i]
++	var required_ids: int = maxi(0, _cata_for(i))
++	var capacity_scale: float = b.enemy_count_mult()
++	for group in wave["groups"]:
++		var group_count: int = int(group[1])
++		if capacity_scale > 1.0 and not _is_hero_key(String(group[0])):
++			group_count = maxi(1, int(floor(group_count * capacity_scale)))
++		group_count = maxi(0, group_count)
++		if group_count > 9223372036854775807 - required_ids:
++			b._gameplay_rng_stop("ENTITY_WAVE_COUNT")
++			return false
++		required_ids += group_count
++	if not b.entity_ids_available(required_ids):
++		b._gameplay_rng_stop("ENTITY_WAVE_CAPACITY")
++		return false
+ 	b.msg("【第 %d/%d 波】%s" % [i + 1, ws.size(), wave.get("msg", "")], 5.5)
+ 	var hall_pos: Vector2 = b.map.cell_to_world(HALL)
+ 	# 敌方倍率 e（「改变倍率」开启时）：非英雄小兵 数量×e（向下取整，至少1）；小兵+大将 血/攻按倍率放大。
+--- a/scripts/levels/skirmish_ai.gd
++++ b/scripts/levels/skirmish_ai.gd
+@@ -155,39 +155,74 @@
+ func deploy(b) -> void:
+ 	# 玩家方
+ 	hall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)
+-	b.spawn_at("gold_mine", Unit.FACTION_LIANG, P_GOLD)
+-	b.spawn_at("gold_mine", Unit.FACTION_LIANG, P_GOLD2)   # 双方各两座金矿(对等)：金是瓶颈，两座可同时下两人
++	if hall == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
++	if b.spawn_at("gold_mine", Unit.FACTION_LIANG, P_GOLD) == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
++	if b.spawn_at("gold_mine", Unit.FACTION_LIANG, P_GOLD2) == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
+ 	for c in [Vector2i(21, 51), Vector2i(23, 52), Vector2i(22, 53), Vector2i(24, 53), Vector2i(20, 52),
+ 			Vector2i(9, 41), Vector2i(10, 43), Vector2i(8, 43), Vector2i(11, 41), Vector2i(9, 44)]:
+-		b.spawn_at("tree", Unit.FACTION_LIANG, c)
++		if b.spawn_at("tree", Unit.FACTION_LIANG, c) == null:
++			b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++			return
+ 	for c in [Vector2i(17, 46), Vector2i(18, 47), Vector2i(17, 48), Vector2i(19, 47), Vector2i(18, 49)]:
+-		b.spawn_at("lou_luo", Unit.FACTION_LIANG, c)
+-	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(20, 46))
+-	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(21, 47))
++		if b.spawn_at("lou_luo", Unit.FACTION_LIANG, c) == null:
++			b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++			return
++	if b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(20, 46)) == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
++	if b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(21, 47)) == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
+ 
+ 	# 斩首模式：双方各立一名主帅（宋江 / 高俅），杀掉敌方主帅即胜、自家主帅亡即败
+ 	_victory = _resolve_victory()
+ 	if _victory == "regicide":
+ 		_p_king = b.spawn_at("song_jiang", Unit.FACTION_LIANG, HALL + Vector2i(2, 2))
++		if _p_king == null:
++			b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++			return
+ 		_ai_king = b.spawn_at("gao_qiu", _guan(), AI_BASE + Vector2i(-2, 2))
++		if _ai_king == null:
++			b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++			return
+ 		_seed_hero(_p_king)   # 玩家主帅也开局带技能(与高俅对等)，否则技能 rank0 + R 锁 6 级太弱
+ 		_seed_hero(_ai_king)
+ 
+ 	# 电脑方·官军大营(聚义厅形制·改名·作 AI 卸货点) + 金矿/林木(中立可争夺) + 起手农民 + 守军
+ 	ai_base = b.spawn_at("hall", _guan(), AI_BASE)
++	if ai_base == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
+ 	ai_base.display_name = "官军大营"
+-	b.spawn_at("gold_mine", Unit.FACTION_LIANG, AI_GOLD)
+-	b.spawn_at("gold_mine", Unit.FACTION_LIANG, AI_GOLD2)
++	if b.spawn_at("gold_mine", Unit.FACTION_LIANG, AI_GOLD) == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
++	if b.spawn_at("gold_mine", Unit.FACTION_LIANG, AI_GOLD2) == null:
++		b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++		return
+ 	for c in [Vector2i(51, 21), Vector2i(53, 22), Vector2i(52, 23), Vector2i(54, 19), Vector2i(50, 22),
+ 			Vector2i(53, 24), Vector2i(55, 21), Vector2i(51, 24), Vector2i(54, 23), Vector2i(52, 20)]:
+-		b.spawn_at("tree", Unit.FACTION_LIANG, c)
++		if b.spawn_at("tree", Unit.FACTION_LIANG, c) == null:
++			b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++			return
+ 	_muster = b.map.cell_to_world(b.map.nearest_open(AI_BASE + Vector2i(-2, 3)))
+ 	var nworkers := int(DIFF[_resolve_diff()]["workers"])
+ 	for i in range(nworkers):
+ 		var wc: Vector2i = b.map.nearest_open(AI_BASE + Vector2i(randi_range(-2, 1), randi_range(2, 4)))
+-		b.spawn_unit("lou_luo", _guan(), b.map.cell_to_world(wc))
++		if b.spawn_unit("lou_luo", _guan(), b.map.cell_to_world(wc)) == null:
++			b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++			return
+ 	for c in [Vector2i(48, 16), Vector2i(49, 17), Vector2i(50, 17)]:
+ 		var g: Unit = b.spawn_at("guan_dao", _guan(), c)
++		if g == null:
++			b._gameplay_rng_stop("ENTITY_AI_DEPLOY")
++			return
+ 		_garrison(g)
+ 
+ 
+@@ -266,6 +301,7 @@
+ 
+ 
+ func process(b, delta: float) -> void:
++	if not b._gameplay_rng_issue.is_empty(): return
+ 	if _check_victory(b, delta):   # 按所选胜利条件判定（征服/斩首/占山为王）
+ 		return
+ 	if not _started:
+@@ -273,10 +309,15 @@
+ 	_elapsed += delta
+ 	_ai_advance_age()
+ 	_ai_workers(b, delta)
++	if not b._gameplay_rng_issue.is_empty(): return
+ 	_ai_build(b, delta)
++	if not b._gameplay_rng_issue.is_empty(): return
+ 	_ai_train(b, delta)
++	if not b._gameplay_rng_issue.is_empty(): return
+ 	_ai_heroes(b, delta)
++	if not b._gameplay_rng_issue.is_empty(): return
+ 	_ai_siege(b, delta)
++	if not b._gameplay_rng_issue.is_empty(): return
+ 	_ai_defend(b, delta)
+ 	_ai_command(b, delta)
+ 
+@@ -335,6 +376,9 @@
+ 		return
+ 	var wc: Vector2i = b.map.nearest_open(AI_BASE + Vector2i(randi_range(-2, 1), randi_range(2, 4)))
+ 	var nw: Unit = b.spawn_unit("lou_luo", _guan(), b.map.cell_to_world(wc))
++	if nw == null:
++		b.add_resources(WORKER_G, 0, _guan())
++		return
+ 	var node = _pick_ai_node(b, nw, _count_gold_miners(b) < 2)
+ 	if node != null:
+ 		nw.order_gather(node)
+@@ -419,6 +463,7 @@
+ 		return
+ 	if _ai_rebuild_missing(b):   # 已建成建筑被毁 → 先补建（兵营被拆不再等于永久断兵）
+ 		return
++	if not b._gameplay_rng_issue.is_empty(): return
+ 	if _build_i >= BUILD_PLAN.size():
+ 		return
+ 	var e: Dictionary = BUILD_PLAN[_build_i]
+@@ -436,6 +481,9 @@
+ 		return
+ 	var cell: Vector2i = b.map.nearest_open(AI_BASE + e["cell"])
+ 	_pending_site = b.ai_start_construction(key, cell, _guan(), builder)   # 完工/失败前不推进 _build_i
++	if _pending_site == null:
++		b.add_resources(cg, cw, _guan())
++		return
+ 	_pending_builder = builder
+ 	_rebuilding = false   # 主序列工地：完工时正常推进 _build_i（防上一座重建工地半途被拆留下脏标志）
+ 	_build_cool = 9.0
+@@ -475,6 +523,9 @@
+ 			return false
+ 		# 记录保留在 _built 里：重建工地若中途被拆，下一轮仍会判定「缺这座」再补（完工分支不重复追加）
+ 		_pending_site = b.ai_start_construction(String(k), b.map.nearest_open(cell), _guan(), builder)
++		if _pending_site == null:
++			b.add_resources(cg, cw, _guan())
++			return false
+ 		_pending_builder = builder
+ 		_rebuilding = true
+ 		_build_cool = 9.0
+@@ -553,6 +604,9 @@
+ 	var src := _building_pos(b, "barracks", AI_BASE + Vector2i(2, 3))
+ 	var cell: Vector2i = b.map.nearest_open(src + Vector2i(randi_range(-1, 1), randi_range(1, 3)))
+ 	var u: Unit = b.spawn_unit(pick["key"], _guan(), b.map.cell_to_world(cell))
++	if u == null:
++		b.add_resources(int(pick["g"]), int(pick["w"]), _guan())
++		return
+ 	_garrison(u)
+ 	_staged.append(u)
+ 
+@@ -573,11 +627,17 @@
+ 	var cost := int(HERO_COST.get(key, 300))
+ 	if not b.faction_can_afford(_guan(), cost, 0):
+ 		return
+-	b.faction_spend(_guan(), cost, 0)
++	if not b.faction_spend(_guan(), cost, 0): return
++	var before_hero_t: float = _hero_t
+ 	_hero_t = float(_hero_diff["int"])
+ 	_hero_i += 1
+ 	var cell: Vector2i = b.map.nearest_open(AI_BASE + Vector2i(randi_range(-3, 0), randi_range(2, 4)))
+ 	var h: Unit = b.spawn_unit(key, _guan(), b.map.cell_to_world(cell))
++	if h == null:
++		b.add_resources(cost, 0, _guan())
++		_hero_t = before_hero_t
++		_hero_i -= 1
++		return
+ 	# 英雄成长对等（conquest 与玩家一致）：敌将同样 1 级出场、靠击杀经验升级——
+ 	# 经验镜像在 Battle 阵亡结算里，加点走 _enemy_ability_pass 的 _auto_learn，与玩家英雄同一套曲线。
+ 	# （斩首模式的双方主帅仍由 _seed_hero 开局满配，保持王对王对等。）
+@@ -607,6 +667,9 @@
+ 	var src := _building_pos(b, "siege_workshop", AI_BASE)
+ 	var cell: Vector2i = b.map.nearest_open(src + Vector2i(randi_range(-1, 1), randi_range(1, 3)))
+ 	var u: Unit = b.spawn_unit("siege_ram", _guan(), b.map.cell_to_world(cell))
++	if u == null:
++		b.add_resources(110, 70, _guan())
++		return
+ 	_garrison(u)
+ 	_staged.append(u)
+ 	if OS.get_environment("SMOKE_TEST") == "1":
