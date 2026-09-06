@@ -725,6 +725,9 @@ func _load_generic_directional_frames(path: String) -> Array:
 			var frame: Texture2D = source.get_frame_texture(&"default", i)
 			if frame == null or frame.get_height() <= 0 or frame.get_width() != frame.get_height():
 				return []
+			var draw_scale: Variant = frame.get_meta("draw_scale", 1.0)
+			if not (draw_scale is float or draw_scale is int): return []
+			if not is_finite(float(draw_scale)) or float(draw_scale) < 0.25 or float(draw_scale) > 4.0: return []
 			frames.append(frame)
 		return frames
 	return []

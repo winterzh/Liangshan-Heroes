@@ -1,3 +1,7 @@
+## 当前快照：2026-09-06 两会话已整合
+
+本轮重新盘点：164定义、159参考，四向待机/行走/攻击/死亡齐全数仍 **26/9/9/7**，驻守敌军待机覆盖709/778。宋江、林冲已接入的动作保持；孙立36次生成已归档为[未接入草稿](../tools/contracts/sun_li_direction4_draft_20260906/README.md)，不计入覆盖。其余全库未完成。统一进度见[PROJECT_STATUS](PROJECT_STATUS.md)，本轮输出见[盘点](../qa/unified_20260906/inventory/inventory.json)。下方各次增量保留历史证据。
+
 ## 当前增量：2026-09-06 林冲已接入
 
 林冲通用战斗的站立/行走/攻击/受击/死亡四向基础动作已接入：7张原生RGBA、32个姿态、20个排帧资源；四向实际移动、近战伤害、受击、倒下释放和剧情服装隔离通过。全库164定义的四向idle/walk/attack/death文件数量现为 **26/9/9/7**，驻守敌军idle仍709/778。详见[林冲说明](LIN_CHONG_DIRECTION4_20260906.md)及[当前清单](../qa/lin_chong_direction4_20260906/regressions/inventory/inventory.json)。

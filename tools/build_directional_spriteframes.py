@@ -43,7 +43,10 @@ def render(manifest):
         source = sources[pose['source']]
         imported_w, imported_h = source['imported_size']
         left, top, pad_w, pad_h = pose['margin']
-        numbers([x, y, width, height, left, top, pad_w, pad_h, *pose['draw_offset_px']])
+        draw_scale = pose.get('draw_scale', 1.0)
+        numbers([x, y, width, height, left, top, pad_w, pad_h, *pose['draw_offset_px'], draw_scale])
+        if not 0.25 <= draw_scale <= 4.0:
+            raise ValueError('Authored draw scale outside supported range: ' + key)
         if min(x, y, left, top, pad_w, pad_h) < 0 or min(width, height) <= 0:
             raise ValueError('Negative/outside frame bounds: ' + key)
         if x + width > imported_w or y + height > imported_h or width + pad_w != height + pad_h:
@@ -63,6 +66,8 @@ def render(manifest):
             for key in unique:
                 p = poses[key]
                 text += f'[sub_resource type="AtlasTexture" id="{key}"]\natlas = ExtResource("{p["source"]}")\nregion = Rect2({numbers(p["region"])})\nmargin = Rect2({numbers(p["margin"])})\nfilter_clip = true\nmetadata/draw_offset_px = Vector2({numbers(p["draw_offset_px"])})\nmetadata/authored_direction4 = true\n\n'
+                if p.get('draw_scale', 1.0) != 1.0:
+                    text = text[:-1] + 'metadata/draw_scale = ' + numbers([p['draw_scale']]) + '\n\n'
             frames = ',\n'.join('{"duration": 1.0, "texture": SubResource("' + key + '")}' for key in pose_keys)
             text += '[resource]\nanimations = [{\n"frames": [\n' + frames + '\n],\n"loop": ' + ('false' if state in ('death', 'down') else 'true') + ',\n"name": &"default",\n"speed": 4.0\n}]\n'
             outputs[f'assets/anim/{character}_{state}_{direction}.tres'] = text

@@ -1,0 +1,66 @@
+extends "res://.godot/lc_pose_guide.gd"
+## Code-native 3D anatomy reference; never a production sprite.
+func _horse(parent, phase: int) -> void:
+	var gray=Color("6b706f");var skin=Color("ad937f");var left=Color("d63f32");var right=Color("2670d4")
+	rod(parent,Vector3(0,1.18,-0.58),Vector3(0,1.18,0.58),0.32,gray)
+	rod(parent,Vector3(0,1.24,-0.58),Vector3(0,1.81,-0.96),0.19,gray)
+	rod(parent,Vector3(0,1.80,-1.0),Vector3(0,1.63,-1.36),0.14,gray)
+	for side in [-1,1]:
+		rod(parent,Vector3(side*0.08,1.88,-1.03),Vector3(side*0.11,2.08,-1.0),0.037,gray)
+		for front in [true,false]:
+			var z: float=-0.60 if front else 0.56
+			var lead: bool=(side==-1)==front
+			if phase==2:lead=not lead
+			var walking: bool=phase in [1,2]
+			var shift: float=(-0.38 if lead else 0.38) if walking else 0.0
+			var hip=Vector3(side*0.21,1.02,z)
+			var knee=Vector3(side*0.23,0.52,z+shift*0.45)
+			var hoof=Vector3(side*0.25,0.08 if not walking or lead else 0.24,z+shift)
+			var col: Color=left if side==-1 else right
+			rod(parent,hip,knee,0.065,col);rod(parent,knee,hoof,0.042,col);sphere(parent,hoof,0.075,col)
+	rod(parent,Vector3(0,1.4,0.71),Vector3(0,0.35,1.04),0.07,gray)
+	rod(parent,Vector3(0,1.55,0),Vector3(0,2.11,0),0.24,gray)
+	sphere(parent,Vector3(0,2.34,-0.025),0.16,skin);sphere(parent,Vector3(0,2.34,-0.18),0.05,skin)
+	var right_hand=Vector3(0.37,1.65,-0.32);var right_elbow=Vector3(0.34,1.83,-0.13);var mace_tip=Vector3(0.42,0.95,-1.05)
+	if phase==3:
+		right_hand=Vector3(0.32,2.63,0.2);right_elbow=Vector3(0.46,2.27,0.12);mace_tip=Vector3(0.34,2.74,1.03)
+	elif phase==4:
+		right_hand=Vector3(0.39,1.85,-0.85);right_elbow=Vector3(0.45,2.0,-0.45);mace_tip=Vector3(0.42,1.68,-1.8)
+	for side in [-1,1]:
+		var col: Color=left if side==-1 else right
+		var hand=Vector3(-0.28,1.83,-0.42) if side==-1 else right_hand
+		var elbow=Vector3(side*0.34,1.83,-0.13) if side==-1 else right_elbow
+		rod(parent,Vector3(side*0.26,2.05,0),elbow,0.07,col)
+		rod(parent,elbow,hand,0.055,col);sphere(parent,hand,0.068,col)
+		rod(parent,Vector3(side*0.16,1.54,0),Vector3(side*0.36,1.20,-0.23),0.085,col)
+		rod(parent,Vector3(side*0.36,1.20,-0.23),Vector3(side*0.36,0.92,0),0.075,col)
+		rod(parent,Vector3(side*0.36,0.92,0),Vector3(side*0.36,0.92,-0.17),0.075,col)
+	rod(parent,Vector3(-0.28,1.83,-0.42),Vector3(-0.10,1.65,-1.32),0.012,left)
+	rod(parent,right_hand,mace_tip,0.037,right)
+	for fraction in [0.2,0.4,0.6,0.8]:
+		sphere(parent,right_hand.lerp(mace_tip,fraction),0.054,right)
+
+func _run() -> void:
+	root.size=Vector2i(1536,1024);root.content_scale_size=root.size;DisplayServer.window_set_size(root.size)
+	var world=Node3D.new();root.add_child(world)
+	var env=WorldEnvironment.new();env.environment=Environment.new();env.environment.background_mode=Environment.BG_COLOR
+	env.environment.background_color=Color("e1e3de");env.environment.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
+	env.environment.ambient_light_color=Color.WHITE;env.environment.ambient_light_energy=0.85;world.add_child(env)
+	var light=DirectionalLight3D.new();light.rotation_degrees=Vector3(-55,-30,0);world.add_child(light)
+	var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=3.9;world.add_child(camera);camera.current=true
+	var folder="res://.godot/sun_li_direction4/pose_guide";DirAccess.make_dir_recursive_absolute(folder)
+	for view in [["se",Vector3(6,5,-6)],["sw",Vector3(-6,5,-6)],["ne",Vector3(6,5,6)],["nw",Vector3(-6,5,6)]]:
+		camera.position=view[1]+Vector3(0,1.24,0);camera.look_at(Vector3(0,1.24,0))
+		for pose in [["idle",0],["windup",3],["strike",4]]:
+			var guide=Node3D.new();world.add_child(guide);_horse(guide,pose[1])
+			await process_frame;await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(folder+"/"+pose[0]+"_"+view[0]+".png")
+			guide.queue_free();await process_frame
+		var pair=[]
+		for index in range(2):
+			var actor=Node3D.new();world.add_child(actor);actor.position=camera.global_basis.x*((-1.0 if index==0 else 1.0)*1.34);_horse(actor,index+1);pair.append(actor)
+		await process_frame;await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(folder+"/walk_"+view[0]+".png")
+		for actor in pair:actor.queue_free()
+		await process_frame
+	quit()

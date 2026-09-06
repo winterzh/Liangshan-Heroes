@@ -3409,11 +3409,14 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 		sx = 1.0
 		sy = 1.0
 	draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off))
-	var srect := Rect2(-s * 0.5, -s * 0.82, s, s)
+	# A fallen rider beside its horse can exceed the standing frame's square.
+	# Keep the authored body scale while retaining the same physical ground pivot.
+	var drawn_size := s * _frame_draw_scale(frame)
+	var srect := Rect2(-drawn_size * 0.5, -drawn_size * 0.82, drawn_size, drawn_size)
 	# Art may attach a QA-approved per-frame compensation in native texture
 	# pixels. Apply it only to the painted rectangle: physics, selection and the
 	# unit's logical position remain unchanged. Unknown/legacy frames use zero.
-	srect.position += _frame_draw_offset(frame, s)
+	srect.position += _frame_draw_offset(frame, drawn_size)
 	# 暗色描边：四方各偏移画成半透黑剪影，叠出轮廓 → 单位从草地/背景里清晰跳出（提升可读性）
 	if not _dying and not _ultra_mass_visuals():
 		var ow := 1.7
@@ -3484,6 +3487,14 @@ func _campaign_flag_route(for_render := false) -> Dictionary:
 	if for_render and not _frame_directional:
 		return {}
 	return route
+
+
+func _frame_draw_scale(frame: Texture2D) -> float:
+	if frame == null: return 1.0
+	var scale_meta: Variant = frame.get_meta("draw_scale", 1.0)
+	if not (scale_meta is float or scale_meta is int): return 1.0
+	var value := float(scale_meta)
+	return value if is_finite(value) and value >= 0.25 and value <= 4.0 else 1.0
 
 
 func _frame_draw_offset(frame: Texture2D, drawn_size: float) -> Vector2:

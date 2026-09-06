@@ -1,6 +1,6 @@
 """Read-only PNG lineage, alpha and inter-frame contamination audit (Pillow)."""
 from pathlib import Path
-import argparse, hashlib, json, re
+import argparse, hashlib, json, re, math
 from itertools import combinations
 from PIL import Image
 
@@ -47,7 +47,10 @@ def main():
         x,y,w,h=pose['region_raw']
         check(key+' region inside native source',min(x,y)>=0 and min(w,h)>0 and x+w<=source['native_size'][0] and y+h<=source['native_size'][1])
         check(key+' square padding',pose['region'][2]+pose['margin'][2]==pose['virtual_size_imported'] and pose['region'][3]+pose['margin'][3]==pose['virtual_size_imported'])
-        check(key+' ground pivot finite and authored',len(pose['pivot'])==2 and all(isinstance(v,(int,float)) for v in pose['pivot']))
+        check(key+' ground pivot finite and authored',len(pose['pivot'])==2 and all(isinstance(v,(int,float)) and math.isfinite(v) for v in pose['pivot']))
+        if 'draw_scale' in pose:
+            scale=pose['draw_scale']
+            check(key+' authored body scale finite and supported',isinstance(scale,(int,float)) and math.isfinite(scale) and 0.25<=scale<=4.0)
     # Each pose has a distinct sampling rectangle. Shared nontransparent pixels
     # between two rectangles reveal a neighboring spear/limb entering the crop.
     for (ka,a),(kb,b) in combinations(manifest['poses'].items(),2):

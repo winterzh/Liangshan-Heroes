@@ -1,3 +1,11 @@
+## 2026-09-06 统一状态入口
+
+- `docs/PROJECT_STATUS.md`：当前版本、八关实现、近期反馈、四向覆盖、验收缺口和后续顺序。
+- `docs/UNIFIED_SNAPSHOT_20260906.md`、`qa/unified_20260906/`：两会话整合、1,729项验证、实际截图与输入收据。
+- `docs/RELEASE_READINESS_20260905.md`：当前可售门槛；`docs/RELEASE_READINESS_HISTORY_20260906.md`保留本轮整理前的完整历史快照。
+- `tools/directional_frame_scale_qa.gd`：每帧身体比例与脚锚的实际像素测试。
+- `tools/contracts/sun_li_direction4_draft_20260906/`：尚未接入的36次原生生成、便携来源清单、7张姿势参考和原型；`.gdignore`防止常规资源扫描。
+
 ## 2026-09-06 索敌候选增量
 
 - `tools/enemy_candidates_qa.gd`、`tools/contracts/enemy_candidates/`：查询顺序/实时阵营/完整目标行为与旧方法冻结参考。

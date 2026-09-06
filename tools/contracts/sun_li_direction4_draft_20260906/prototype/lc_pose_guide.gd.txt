@@ -1,0 +1,39 @@
+extends SceneTree
+## Code-native 3D pose reference only; not a production character bitmap.
+func material(color: Color) -> StandardMaterial3D:
+	var m=StandardMaterial3D.new();m.albedo_color=color;m.roughness=0.8;return m
+func sphere(parent, point: Vector3, radius: float, color: Color) -> void:
+	var node=MeshInstance3D.new();var mesh=SphereMesh.new();mesh.radius=radius;mesh.height=radius*2
+	node.mesh=mesh;node.material_override=material(color);node.position=point;parent.add_child(node)
+func rod(parent, a: Vector3, b: Vector3, radius: float, color: Color) -> void:
+	var node=MeshInstance3D.new();var mesh=CylinderMesh.new();mesh.top_radius=radius;mesh.bottom_radius=radius;mesh.height=a.distance_to(b)
+	node.mesh=mesh;node.material_override=material(color);node.position=(a+b)*0.5
+	node.quaternion=Quaternion(Vector3.UP,(b-a).normalized());parent.add_child(node)
+func _initialize() -> void: _run.call_deferred()
+func _run() -> void:
+	root.size=Vector2i(1100,1100);DisplayServer.window_set_size(root.size)
+	var world=Node3D.new();root.add_child(world)
+	var env=WorldEnvironment.new();env.environment=Environment.new()
+	env.environment.background_mode=Environment.BG_COLOR;env.environment.background_color=Color("e2e4df")
+	env.environment.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
+	env.environment.ambient_light_color=Color.WHITE;env.environment.ambient_light_energy=0.8;world.add_child(env)
+	var light=DirectionalLight3D.new();light.rotation_degrees=Vector3(-50,-35,0);world.add_child(light)
+	var gray=Color("454c54");var skin=Color("aa927a");var left=Color("d93830");var right=Color("245cd6")
+	rod(world,Vector3(0,0.85,0),Vector3(0,1.45,0),0.28,gray)
+	sphere(world,Vector3(0,1.70,-0.015),0.17,skin)
+	sphere(world,Vector3(0,1.98,0.01),0.07,Color("262626"))
+	sphere(world,Vector3(0,1.70,-0.18),0.055,skin)
+	var lh=Vector3(0.08,1.06,-0.65);var rh=Vector3(0.28,1.0,0.05)
+	for arm in [[Vector3(-0.3,1.43,0),Vector3(-0.37,1.12,-0.35),lh,left],[Vector3(0.3,1.43,0),Vector3(0.48,1.14,0.08),rh,right]]:
+		rod(world,arm[0],arm[1],0.085,arm[3]);rod(world,arm[1],arm[2],0.07,arm[3]);sphere(world,arm[2],0.085,arm[3])
+	for leg in [[Vector3(-0.15,0.86,0),Vector3(-0.21,0.46,-0.20),Vector3(-0.34,0.1,-0.13)],[Vector3(0.15,0.86,0),Vector3(0.22,0.47,0.12),Vector3(0.34,0.1,0.13)]]:
+		rod(world,leg[0],leg[1],0.1,gray);rod(world,leg[1],leg[2],0.08,gray);rod(world,leg[2]+Vector3(0,0,0.06),leg[2]+Vector3(0,0,-0.15),0.08,gray)
+	var direction=(lh-rh).normalized();var tip=lh+direction*1.0;var tail=rh-direction*0.55
+	rod(world,tail,tip,0.023,Color("b57625"));rod(world,tip,tip+direction*0.23,0.044,Color("e0e4e7"))
+	var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=4.2;world.add_child(camera)
+	var folder="res://.godot/lin_chong_direction4/pose_guide";DirAccess.make_dir_recursive_absolute(folder)
+	for view in [["se",Vector3(6,5,-6)],["sw",Vector3(-6,5,-6)],["ne",Vector3(6,5,6)],["nw",Vector3(-6,5,6)]]:
+		camera.position=view[1]+Vector3(0,1.0,0);camera.look_at(Vector3(0,1.0,0));camera.current=true
+		await process_frame;await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(folder+"/"+view[0]+".png")
+	quit()

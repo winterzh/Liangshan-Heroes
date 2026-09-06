@@ -1,3 +1,9 @@
+## 2026-09-06 统一版本入口
+
+两会话已收尾整合；当前状态请先看[PROJECT_STATUS](PROJECT_STATUS.md)，历史增量不代表当前缺口。工程仍在根目录，Godot4.6.3与Play.cmd启动方式保持。孙立候选保存在 `tools/contracts/sun_li_direction4_draft_20260906/`，不需要生成图片即可启动当前游戏；草稿未被生产加载。
+
+新增 `tools/directional_frame_scale_qa.gd`，以非headless运行才能做像素比较；`FRAME_SCALE_OUT`可指定输出目录。组合验证和各原有脚本入口见[统一QA](../qa/unified_20260906/README.md)。换电脑仍先核对Git状态后安全拉取既定分支，本机路径不写入公共脚本。
+
 ## 2026-09-06 索敌候选检查
 
 新增 `tools/enemy_candidates_qa.gd`，使用 `--headless` 默认输出 `.godot/enemy_candidates_qa/`；冻结完整旧索敌方法随源码同步。68 项专项含 4,032 次查询、1,575 次完整状态/目标对照和 12 组配对计时；整合回归共 450 项。普通启动不变，[复现及测量范围](ENEMY_CANDIDATES_20260906.md)。
