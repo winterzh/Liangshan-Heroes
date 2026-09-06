@@ -1,0 +1,59 @@
+[
+  {
+    "label": "segment",
+    "script": "tools/segment_endpoint_qa.gd",
+    "headless": true,
+    "environment": {},
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 14.533413887023926
+  },
+  {
+    "label": "ranged",
+    "script": "tools/ranged_firing_path_test.gd",
+    "headless": true,
+    "environment": {
+      "RTS_TEST_OUT": "res://.godot/crowd_nav_ranged"
+    },
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 9.525695323944092
+  },
+  {
+    "label": "lin-chong",
+    "script": "tools/lin_chong_direction4_qa.gd",
+    "headless": false,
+    "environment": {
+      "LC_VISUAL": "1",
+      "LC_QA_OUT": "res://.godot/crowd_nav_lin_chong"
+    },
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 47.50360298156738
+  },
+  {
+    "label": "costume",
+    "script": "tools/campaign_terminal_costume_qa.gd",
+    "headless": false,
+    "environment": {
+      "TERMINAL_COSTUME_VISUAL": "1",
+      "TERMINAL_COSTUME_OUT": "res://.godot/crowd_nav_costume"
+    },
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 15.475740909576416
+  },
+  {
+    "label": "stress",
+    "script": "tools/unit_redraw_stress.gd",
+    "headless": false,
+    "environment": {
+      "PERF_DEFENSE": "1",
+      "PERF_OUT": "res://.godot/crowd_nav_stress.json",
+      "REDRAW_SCREENSHOT": "res://.godot/crowd_nav_stress.png"
+    },
+    "exit_code": 0,
+    "error_matches": 0,
+    "elapsed_seconds": 19.5820631980896
+  }
+]

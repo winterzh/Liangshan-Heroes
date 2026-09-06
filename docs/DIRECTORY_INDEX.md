@@ -1,3 +1,9 @@
+## 2026-09-06 兵群导航复用增量
+
+- `tools/crowd_nav_qa.gd`：完整分离、精度/封格修改、初始格查询成本与配对计时。
+- `tools/contracts/crowd_nav/`：9c19c93 完整求解器、分派及字节保护属性。
+- `docs/CROWD_NAV_20260906.md`、`qa/crowd_nav_20260906/`：实现、868 项整合验证、正常压力、未采用方案和来源收据。
+
 ## 2026-09-06 林冲四向素材与证据
 
 - `assets/characters/lin_chong_direction4_20260906/`：7张原生RGBA与导入配置。

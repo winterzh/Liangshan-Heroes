@@ -1,0 +1,37 @@
+extends "res://tools/crowd_separation_qa.gd"
+
+func _cost(script: GDScript, b, units: Array, positions: Array) -> int:
+	var elapsed:=0
+	for i in range(80):
+		_restore(units,positions)
+		var start:=Time.get_ticks_usec()
+		script.call("solve",b.units,b._mob_grid,b.map,b.GRID_CELL)
+		elapsed+=Time.get_ticks_usec()-start
+	return elapsed
+
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true)
+	var b=await _start("level7",true);b.process_mode=Node.PROCESS_MODE_DISABLED
+	var old=load("res://scripts/crowd_separation.gd")
+	var candidate=load("res://scratchpad/sorted_candidate.gd")
+	var results:=[]
+	for n in [64,128,206,320]:
+		b._perf_bench_setup(n-6);b._prof_on=false;await process_frame
+		var units: Array=b.units.filter(func(u):return not u.is_building and not u.is_resource)
+		var baseline:=_positions(units)
+		for spread in [false,true]:
+			var positions: Array=baseline.map(func(p):return baseline[0]+(p-baseline[0])*(2.4 if spread else 1.0))
+			_restore(units,positions);b._grid_build()
+			old.call("solve",b.units,b._mob_grid,b.map,b.GRID_CELL);var expected:=_positions(units)
+			_restore(units,positions);candidate.call("solve",b.units,b._mob_grid,b.map,b.GRID_CELL)
+			check(expected==_positions(units),"same complete solver positions n="+str(n)+" spread="+str(spread))
+			_cost(old,b,units,positions);_cost(candidate,b,units,positions)
+			var before:=[];var after:=[]
+			for old_first in [true,false,true]:
+				for reference in ([true,false] if old_first else [false,true]):
+					(before if reference else after).append(_cost(old if reference else candidate,b,units,positions))
+			before.sort();after.sort()
+			results.append({"units":n,"spread":spread,"before_us":before,"after_us":after,"ratio":float(after[1])/before[1]})
+			print("[sorted-probe] ",n," spread=",spread," before=",before[1]," after=",after[1]," ratio=",float(after[1])/before[1])
+	FileAccess.open("res://.godot/sorted_probe.json",FileAccess.WRITE).store_string(JSON.stringify(results,"\t"))
+	await _dispose(b);quit(0 if failures.is_empty() else 1)

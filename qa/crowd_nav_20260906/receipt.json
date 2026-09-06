@@ -1,0 +1,635 @@
+{
+  "baseline": "c1aa85de994d5906f6ca6905d30ece332495e4a4",
+  "frozen_reference_base": "9c19c93496d7c7bfd708bd9bb59fb403f72f3e54",
+  "production_changes": [
+    "scripts/crowd_separation.gd"
+  ],
+  "checks": {
+    "crowd": 136,
+    "segment": 69,
+    "ranged": 23,
+    "lin_chong": 354,
+    "costume": 286
+  },
+  "unique_checks": 868,
+  "sources": [
+    {
+      "path": "assets/anim/lin_chong_attack_ne.tres",
+      "sha256_lf": "d413e64c2bc2a7e2e05b0d089af3520d274329272d721af35ea2aaacd78ed41e"
+    },
+    {
+      "path": "assets/anim/lin_chong_attack_nw.tres",
+      "sha256_lf": "5b936a75d91263fb4316c1e5985f8d7ef9853788a32f449e2cff2511ed84608a"
+    },
+    {
+      "path": "assets/anim/lin_chong_attack_se.tres",
+      "sha256_lf": "4474e6e42cc55c8c3cf6848c5113be7914127e91dee2d62d5d6b1bcf98280e1e"
+    },
+    {
+      "path": "assets/anim/lin_chong_attack_sw.tres",
+      "sha256_lf": "64f4b0b331796643fe02278e2b11096edfb4bb1c4c1cab387c83239c7da1372d"
+    },
+    {
+      "path": "assets/anim/lin_chong_death_ne.tres",
+      "sha256_lf": "1d1521057c1f24bb21d9854933f97bc62cf14ec9202e9172022ac825bd695e97"
+    },
+    {
+      "path": "assets/anim/lin_chong_death_nw.tres",
+      "sha256_lf": "268ef9bee8a9b2439d1eab016398b9942db56fa26e384f840d070c645db41c66"
+    },
+    {
+      "path": "assets/anim/lin_chong_death_se.tres",
+      "sha256_lf": "d8c5006da1ec2f3ae11d4f7c78320fbfd26d457df4c56b437ba2383e8c18be2f"
+    },
+    {
+      "path": "assets/anim/lin_chong_death_sw.tres",
+      "sha256_lf": "b1a37a5e2b619ba7856a9dd263efdc61467a3b90d82c2e01ae3d38cda22a043d"
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_ne.tres",
+      "sha256_lf": "e8cee1cd86a1ec03c3b021d7b566c8e83e232a542df35474e929d092e3c29208"
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_nw.tres",
+      "sha256_lf": "fbeec3a1e40a6a59571201477b17f2a45ab6749e43d358ebb9fa17d51feab72c"
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_se.tres",
+      "sha256_lf": "a14c9c0a07e18542bd8e89f9e717efe31cda0cc9da3066c74b946c9ab81e7803"
+    },
+    {
+      "path": "assets/anim/lin_chong_hurt_sw.tres",
+      "sha256_lf": "ce1cc566499e4a0158b150fcb735161cd77915814c841e5e7d2966578868cc94"
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_ne.tres",
+      "sha256_lf": "82f67dc352c5085e02a99afec3931b96cd17a8136eb0ff2ee56e886dd332be88"
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_nw.tres",
+      "sha256_lf": "c444607a8d2433662b0eb53038f88ae5355ee70046031aa569d1a4388574a3f8"
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_se.tres",
+      "sha256_lf": "54b6d07772a49cf8a44f033dcb6f1713360fd824d743a2e43c87867ad2b62857"
+    },
+    {
+      "path": "assets/anim/lin_chong_idle_sw.tres",
+      "sha256_lf": "8a89744adcd87350ee64a49502b287656830319bc0b390f1fd1836a37769db4f"
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_ne.tres",
+      "sha256_lf": "c8e5ba63c3f46829e656e1a79c9a587673fc3b93641cc3ed98c2850a9eea50b5"
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_nw.tres",
+      "sha256_lf": "27219d29436168b27cc48142f765a24ea727add82f6dae6ec4f2de18c1a6bb32"
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_se.tres",
+      "sha256_lf": "afb2c3898091e7d8666f26de06697dcfd9b0f24fa56a2f06a0ab351dacee7779"
+    },
+    {
+      "path": "assets/anim/lin_chong_walk_sw.tres",
+      "sha256_lf": "6fdca24d9703f46fec7e5098ca8f74d36bef767573c800e7ecb11e9242158033"
+    },
+    {
+      "path": "assets/direction4/lin_chong_20260906.json",
+      "sha256_lf": "3fc7e0281f923cca06bc4f9e0b1a4bdab724026da6ad3e826f7902144b8879e9"
+    },
+    {
+      "path": "docs/CROWD_NAV_20260906.md",
+      "sha256_lf": "65e3d69b93abd69cda9585289a83142307faa00c5830686383aa6ca21b2f077e"
+    },
+    {
+      "path": "docs/DIRECTORY_INDEX.md",
+      "sha256_lf": "f8030576a6e16f85441f322da318d14c4f3d292bcb043e78b2aff88e918a7404"
+    },
+    {
+      "path": "docs/RELEASE_READINESS_20260905.md",
+      "sha256_lf": "169a330cc4391799ae55f6cbd3b570ce589f83357986982cdaf5fe29fc7747c4"
+    },
+    {
+      "path": "docs/SOURCE_SETUP.md",
+      "sha256_lf": "f29f12e7fec015a8681bac5edeba2154181153c807f7fc410f981f145d6ba5e0"
+    },
+    {
+      "path": "docs/WORKLOG.md",
+      "sha256_lf": "784f3d72598f952bec6639c5b3485b695599e5609b54c99393e4409709583e12"
+    },
+    {
+      "path": "project.godot",
+      "sha256_lf": "710782fc0c2ca1786ef3f76fd341d57fe140e869138eeea8dc85f5f31740da32"
+    },
+    {
+      "path": "scenes/codex.tscn",
+      "sha256_lf": "67347f1dd2145321886e6022806321c1d48c51b5bf4eb26dd9c60fffc1484dfd"
+    },
+    {
+      "path": "scenes/editor.tscn",
+      "sha256_lf": "1ebb53ee68976d7addc9190fd4a00c590cc763d5228b35a1cde6a85c6ba5f469"
+    },
+    {
+      "path": "scenes/main.tscn",
+      "sha256_lf": "fa745b1734767722158500b04306d596d299cf7bd9fc4532fa7d423737b795bf"
+    },
+    {
+      "path": "scenes/menu.tscn",
+      "sha256_lf": "6b36a5679944e504b4443176db3bc00c02fd85af52a7b6189b82ca5f692151e4"
+    },
+    {
+      "path": "scenes/scenario_editor.tscn",
+      "sha256_lf": "e0c68d4da42c095fa93e751313f95ff636f4a867c19b6004bdf0557d5fff1b92"
+    },
+    {
+      "path": "scripts/ability_visuals.gd",
+      "sha256_lf": "4d980ca87f5269a307ff36c3dbd4733d93aab4c80ac54b41b1438eeecb323ab8"
+    },
+    {
+      "path": "scripts/android_updater.gd",
+      "sha256_lf": "739aae0cd81886292588bda2977971816c0ca035451fbc0be1ebfd924dee48ea"
+    },
+    {
+      "path": "scripts/app_lifecycle.gd",
+      "sha256_lf": "278bb44402fe92d065c63a883e1d6f0e6df9b76ad49a9d55749fddd5a1c2a596"
+    },
+    {
+      "path": "scripts/art_db.gd",
+      "sha256_lf": "acf9a1cc278436bd6aa013816cbe92d33f9fbf5d41c6e9d1bd294e39c5c11c2a"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "sha256_lf": "8de7ac4c375fa8dcacb4368b4de43e4fd0b08f23840398c8500949a84f7cbec2"
+    },
+    {
+      "path": "scripts/bios.gd",
+      "sha256_lf": "138f1a2be1103013f9c299b809182d7ea733f57dbadfc94136cdcc32706f4eed"
+    },
+    {
+      "path": "scripts/campaign.gd",
+      "sha256_lf": "922c826c6f49e869a1fdb4bf3702ec3865fca3f8c060b11be06a778d6aa320f2"
+    },
+    {
+      "path": "scripts/campaign_art.gd",
+      "sha256_lf": "b0e917215def4c76c5c2c6a67058a0167d91e3f69bde83df64def99cccba9b0f"
+    },
+    {
+      "path": "scripts/campaign_art_event.gd",
+      "sha256_lf": "44c7f16dcb511b0de9a7975724fbd0522ce74316c0f8f5296c8fb1f19fb8fa7b"
+    },
+    {
+      "path": "scripts/campaign_city_wall.gd",
+      "sha256_lf": "993767d27b44b9fcbf1dfbd5e48c27c73c0229b321878105ea8c5254f89d6122"
+    },
+    {
+      "path": "scripts/campaign_environment.gd",
+      "sha256_lf": "83f315c2121c5ca29f317312588519da13b2d64f9aac9c9b1c4e24ac7257cfb3"
+    },
+    {
+      "path": "scripts/campaign_environment_art.gd",
+      "sha256_lf": "19b7d0424b2fa9dcf14b4267ad2257457bcaefb7159088d3856cdf65edaa82b2"
+    },
+    {
+      "path": "scripts/campaign_flag_overlay.gd",
+      "sha256_lf": "0975f7b74bfd07175f8ebd78223beadfa058794a57c6654dc7395b03a4148118"
+    },
+    {
+      "path": "scripts/campaign_gate_visual.gd",
+      "sha256_lf": "8e4da265f7cd8cdac782df03f474e2a1edad3ac9557ba54d341fe86803c61ca4"
+    },
+    {
+      "path": "scripts/campaign_height.gd",
+      "sha256_lf": "6d471b42f11787e4ffa71417e9bbe45a830aa53b6a5ea79c954faa11aef8ea4a"
+    },
+    {
+      "path": "scripts/campaign_mission.gd",
+      "sha256_lf": "a4265ac3e12994d0824a1140fd5e0d45fda30460d265850fe4f993841c58a583"
+    },
+    {
+      "path": "scripts/campaign_passage.gd",
+      "sha256_lf": "5c494e1c2715ee013d3b34eaf3d1a1d2a73144581cbce929a444f503e79801bf"
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "sha256_lf": "9ec53538efef52f33e942c43cbe5fa717d277efc6b7c7b06aea527280e83ca28"
+    },
+    {
+      "path": "scripts/codex.gd",
+      "sha256_lf": "2dc073881313ed26e89628748be6a319553c7c75809b2e53ef5d73db43c75c9d"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "sha256_lf": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b"
+    },
+    {
+      "path": "scripts/custom_config.gd",
+      "sha256_lf": "57e2cb92ec21115797e1065c4765a221a5d0d5f9f63506656c1bc0c0edf2f3ea"
+    },
+    {
+      "path": "scripts/defs.gd",
+      "sha256_lf": "a2f9a9fe9a669829871c0bcb9fd9295b451e8b9744993deb4f007ab1d80607fb"
+    },
+    {
+      "path": "scripts/editor.gd",
+      "sha256_lf": "118cfa09b6a95beb5bb0bd9ccb1cf7f4e91a9733c17cf3062e04af6842cbeec3"
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "sha256_lf": "35a31084088e8665790b9bc940054d05a96f7e995ecfcd28796d2b6fad63800a"
+    },
+    {
+      "path": "scripts/hero_inventory.gd",
+      "sha256_lf": "b7fa741fc4a208606d6de724164eda57252aa38800893817d39e279dc429a097"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "sha256_lf": "90a84a3ed017bee07c5933492486de06744b842b6a6f2c8c23f7f23bdd19a553"
+    },
+    {
+      "path": "scripts/level_base.gd",
+      "sha256_lf": "85ab169499f6b6a5e5089f9103ada60ea72cbef6938ed38148477a4ee3f5eb2e"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "sha256_lf": "be28fb2a9ebb9d5670d8a31375e15db39132718e89ed86c1f5bb5608e3a40b64"
+    },
+    {
+      "path": "scripts/levels/custom_defense.gd",
+      "sha256_lf": "5c7577c547c2ca0ce13de8ef4ff0fb48e2bd38e80bb5e38b126211438bba18f3"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "sha256_lf": "63dad8a51347805d5130c66f07c28aa7308820c34f11d0856865703a8c825acb"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang_short.gd",
+      "sha256_lf": "977de70cea8e7e47e652631c3942318f5814934a2289a3bd0ee9a4fe5de4be82"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "sha256_lf": "32e9579727f9046bc001a87c2a625b49294306f20dcb88e63f2fdc7e033d88b8"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "sha256_lf": "deac59250f0ea1b1bb0da035ccc5f94cf58ab9b28c2a17b44af5cd9579acd845"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "sha256_lf": "1c2ea7dcc9262f3010f02b13ca2c31d298526ccd1f6ea8a0ea29e2bfebce3ac1"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256_lf": "2efe7999a6159dc5460e831563f7b95a2a83c0aef00c1d655fb688e34bbec287"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "sha256_lf": "c987c42ba6c8020377d8b904e997446936a1c1665f1bb418608e0679314a5b39"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "sha256_lf": "fedacd256dec2cc0cad4a25bddedaa062ab41fe609d8cda75930e421f3f5bd88"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "sha256_lf": "304be56ce55fbdbba3deefa5323967a1e0586797e9b51f1ea52436cab219aac0"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "sha256_lf": "31448d375b4feb5e02019fea53cb603a94ea22b371d774693118eb2bdd5ba1b3"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "sha256_lf": "8dd10a0610b0d470e717d8c07f299ed20c17dbdc232a1d88f2e45f2ce6283e52"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "sha256_lf": "ee4d14e518a4ad1a05d199a4eaf7a94b42a1c0641e6086e7a2c8f4cbf99ce654"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin_short.gd",
+      "sha256_lf": "8bd7056bd2bf19b49865dc3f7644cf6c03586695ce794ec077edeaa66a93044f"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "sha256_lf": "b7630a6457ea357c8b32202633c8ad1b908e035579f1961a639457ff698b8a0f"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "sha256_lf": "cde49d348d92df81178a923cfd6fce602bcdef3e32b143a06f437c1be5e5ca59"
+    },
+    {
+      "path": "scripts/levels/scenario.gd",
+      "sha256_lf": "cd5b6a0ec12455c04cb537d73c578635c692b738194b2298a302772c79aae732"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "sha256_lf": "66d404456c045ef42114caa0f1f534f537098eff02b73f4b680f0b3546950794"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "sha256_lf": "79247357fc16362335ee0dfe38899cb01d005fca86705dfc5bfd1e8843f4b5bb"
+    },
+    {
+      "path": "scripts/liangshan_entrance.gd",
+      "sha256_lf": "c16796c42f997d4ca903b353c4bb01541a9c4c2e82d115ce941b58d122d91e85"
+    },
+    {
+      "path": "scripts/liangshan_environment.gd",
+      "sha256_lf": "e2319fe25609edb95b21c55bbbd81846a9fdc1b0a592be9854ec4782add3bcd9"
+    },
+    {
+      "path": "scripts/liangshan_gate.gd",
+      "sha256_lf": "416106f84d42e918e3bf2b729d05e11b3d3d87ba90d2d80290ea2664a5873b29"
+    },
+    {
+      "path": "scripts/liangshan_height.gd",
+      "sha256_lf": "7a7a2ef3bfed87cbed2ff256db2ad06eedf15918ade1f8ca9aa2dbe72a192662"
+    },
+    {
+      "path": "scripts/liangshan_layout.gd",
+      "sha256_lf": "2f2165495f63e47682778668b2fc3259d61844a4e01cf0cf49bb2552cbd089e9"
+    },
+    {
+      "path": "scripts/liangshan_scenery.gd",
+      "sha256_lf": "24ff0d84f30874c33a2a16985e66a05ff58be4d683bcd0defca468b5acf9e118"
+    },
+    {
+      "path": "scripts/liangshan_stockade.gd",
+      "sha256_lf": "10932f029b360250edb8d90d3c2827105ccc9ab70c36703d5426a3ea52625e1d"
+    },
+    {
+      "path": "scripts/lore_data.gd",
+      "sha256_lf": "6cf1bf8df784bbe4ccb98c9402af75ca092c4b7e290530fae7d4eeaf6b33655e"
+    },
+    {
+      "path": "scripts/menu.gd",
+      "sha256_lf": "0d4f707099b1001ddc7370096fdf6e60d4fa09e299cc8e4fa70288ccf55346c5"
+    },
+    {
+      "path": "scripts/music.gd",
+      "sha256_lf": "c39eb8ace49502f7b5bf04ab68e6bde52d32043de32d73736e11b71e0a04515f"
+    },
+    {
+      "path": "scripts/naval_production.gd",
+      "sha256_lf": "b0b7819f1e50fb7885488cac23969fe1005a95b2303aef9625de72eb2ad15c2a"
+    },
+    {
+      "path": "scripts/projectile.gd",
+      "sha256_lf": "bb8d4b708772048557e080843c35ef1c83d1f4dc3c81e03772a085d113af3859"
+    },
+    {
+      "path": "scripts/rts_camera.gd",
+      "sha256_lf": "d246af0a7005f18e9d8f31e54b68bd5453343ae69050dff3585ab2d1ee329fd0"
+    },
+    {
+      "path": "scripts/scenario_editor.gd",
+      "sha256_lf": "e5eab1617f61e05a16b5d45cd970b6e044c8f4ceaa44b9ddf311406c4da62a23"
+    },
+    {
+      "path": "scripts/scenario_store.gd",
+      "sha256_lf": "5b4069765f69e08ef1a81894a8668a126ce45ce6590d07cd85cecbe2cfae27ed"
+    },
+    {
+      "path": "scripts/screen.gd",
+      "sha256_lf": "29b21df8f6f63376c245e9d7595efde8403d8e6c1ac1cde4df743cf79c614fbf"
+    },
+    {
+      "path": "scripts/settings.gd",
+      "sha256_lf": "93ffcc801149744cc9b0eed35b1bfd0769b5f25ac8f80cdbb7865997b5ef646c"
+    },
+    {
+      "path": "scripts/settings_panel.gd",
+      "sha256_lf": "1a8f455515bbed7a287eeebb32aded1838356d667633fa728c81e2b0ea42cfca"
+    },
+    {
+      "path": "scripts/sfx.gd",
+      "sha256_lf": "ed3e9e5527b68d47ff02ffc53e75256d1483287dd29f512165c8086c75232f1b"
+    },
+    {
+      "path": "scripts/skirmish_frame_alignment.gd",
+      "sha256_lf": "810fb25bdd5caf7fa0dafe86d3dcf4e9d5a61dde9b7d8413886c52f61b3417c4"
+    },
+    {
+      "path": "scripts/terrain_draw_batch.gd",
+      "sha256_lf": "a4a691f590290298a82c7ab8073485787e8f4454a3f804f3225a97206d5cd9a8"
+    },
+    {
+      "path": "scripts/ui_theme.gd",
+      "sha256_lf": "c05ebb540e0d20b1d00f04f5811d58d11cf7dae92114afe51d24e5ae8e08cfc8"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256_lf": "cc5647926c1f896b5d839e71f29d7bc5569b9b7df34186c90a3321c6ea419290"
+    },
+    {
+      "path": "scripts/world_shadow.gd",
+      "sha256_lf": "f084388a2b7ee53dbb181d79bdf63cf13c4597e967c1b5ea987f4736ca5e4836"
+    },
+    {
+      "path": "tools/campaign_mode_performance_test.gd",
+      "sha256_lf": "65a08cbad409b020d4323a39db218f46af94698a764f396df6140fae07cc67de"
+    },
+    {
+      "path": "tools/campaign_terminal_costume_qa.gd",
+      "sha256_lf": "a9dcbc2a103c500032945c1de605624606f8f94b1042a111c9225795b041c75c"
+    },
+    {
+      "path": "tools/contracts/crowd_nav/.gitattributes",
+      "sha256_lf": "fd13dad2ecae9b5cdde18e56b396b87ce73a5e3d9c05455bb00a1afc2c424106"
+    },
+    {
+      "path": "tools/contracts/crowd_nav/dispatch_before_9c19c93.txt",
+      "sha256_lf": "5abd13653bc238a29bd790889a3dbbd2610ec535d193ac337426864b7e78c87d"
+    },
+    {
+      "path": "tools/contracts/crowd_nav/solver_before_9c19c93.txt",
+      "sha256_lf": "fea12fde5cfcd1d9ff81e32314d73527ad999857118e7982c7b4aee7497cfccd"
+    },
+    {
+      "path": "tools/crowd_buffer_qa.gd",
+      "sha256_lf": "71eabb546be986ff2cab16eb772ecd2c83334e85e1823bc6283145e2d5460351"
+    },
+    {
+      "path": "tools/crowd_nav_qa.gd",
+      "sha256_lf": "b63c52b45276b2d05474fef36c030e4a03cca51fa424890d0ed93cb7b7b1cf3a"
+    },
+    {
+      "path": "tools/crowd_neighbor_qa.gd",
+      "sha256_lf": "d7828bac1b6eeb410f059e7d81b490418201e6efc6da3fc2097e62250451a0ac"
+    },
+    {
+      "path": "tools/crowd_separation_qa.gd",
+      "sha256_lf": "c42ba19665bce1573c96974c43dfe079bcc36b6955bf58bee7b41aa2276fb160"
+    },
+    {
+      "path": "tools/lin_chong_direction4_qa.gd",
+      "sha256_lf": "9d91548c81f87e2905672d4e08884b110d63bb1b1ae6f18613a0b9ff19f6f7a5"
+    },
+    {
+      "path": "tools/ranged_firing_path_test.gd",
+      "sha256_lf": "8920a2662476130201877a6e94199ee17f805b1cc98f221a3396e609d12666d9"
+    },
+    {
+      "path": "tools/rts_performance_probe.gd",
+      "sha256_lf": "ec238f3e9641d0096527c686c9226fd257ec0d75ad498c83e9cf26db555f7904"
+    },
+    {
+      "path": "tools/segment_endpoint_qa.gd",
+      "sha256_lf": "25578cd5f469947813ddb57ca807ee4b1cab3f2c3e78827de0dc925f79ac0420"
+    },
+    {
+      "path": "tools/segment_navigation_qa.gd",
+      "sha256_lf": "b2cbc34be56baec3c3068dd6c9eee030192ea050f0cb24f0ebac437bbdc570d8"
+    },
+    {
+      "path": "tools/unit_redraw_stress.gd",
+      "sha256_lf": "88e9255bb33e936428b90d33523da55592f669d021f514b17cf9801b4cb45e46"
+    },
+    {
+      "path": "tools/zhujiazhuang_rts_test.gd",
+      "sha256_lf": "2ca4034d5299ca79c4de25b7fa3edf453d54f4a495562bdc5490056c77d3170a"
+    }
+  ],
+  "evidence": [
+    {
+      "path": ".gdignore",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 90,
+      "sha256": "40c83f13b27522cfe6d2924150d57b102c73c24d4ee889775af78958da3b1fda"
+    },
+    {
+      "path": "costume/console.log",
+      "bytes": 21039,
+      "sha256": "f225b3efededc74ec08ea022d4d3446fcc2448e3c7f188b39ea4c85cbd44a314"
+    },
+    {
+      "path": "costume/costume_matrix.png",
+      "bytes": 318500,
+      "sha256": "657c44c50e1979bf46ae3850ffcda7890afce73adeeb1acea37d672011e837e5"
+    },
+    {
+      "path": "costume/report.json",
+      "bytes": 2607,
+      "sha256": "50208b319c8be070700632759b8a8613530340469237f6975895c23dced2c621"
+    },
+    {
+      "path": "crowd/console.log",
+      "bytes": 11292,
+      "sha256": "dca4e7eacae5d8e484af050dd82dc5b560ba0cd61831fec34844860f5e20e8b0"
+    },
+    {
+      "path": "crowd/report.json",
+      "bytes": 32175,
+      "sha256": "102ec7897cf18e03b6c073cd55e8f3ddced9bdf56c73a01f4b600cdbe7fd9bb9"
+    },
+    {
+      "path": "diagnosis/preload_failure.log",
+      "bytes": 1702,
+      "sha256": "0dfa3be6e63018defddcd8516d729a618ac64c40e256df5bc7e45b549d0c4daa"
+    },
+    {
+      "path": "diagnosis/sorted_candidate.gd.txt",
+      "bytes": 4502,
+      "sha256": "7a0605116506ac732b155c9bb20dcb0c1d0494587f86a7d71faf1a3668c82a52"
+    },
+    {
+      "path": "diagnosis/sorted_console.log",
+      "bytes": 1454,
+      "sha256": "2b18b3d2101f6354f5bbd9f331df7e6169a1e31499197228661cc3449d5807df"
+    },
+    {
+      "path": "diagnosis/sorted_driver.gd.txt",
+      "bytes": 2064,
+      "sha256": "bb9da25172bf6716e07e128bb62474deaaaa03918425dd6ff8e3a2eb2404c874"
+    },
+    {
+      "path": "diagnosis/sorted_results.json",
+      "bytes": 1392,
+      "sha256": "981670ab07dbcdb87c061f84d4301ea220acbb67a0bad1a88c567f7624905a11"
+    },
+    {
+      "path": "integration/import.log",
+      "bytes": 5575,
+      "sha256": "5f73f577403ffbc9ddbaf17abb2e8d876d7829833655242b1352b7f73f54b397"
+    },
+    {
+      "path": "integration/receipt.json",
+      "bytes": 7357,
+      "sha256": "14bb2ec7d113747ea819296db4d08973a5775f7157b437331c081fe576fc4c78"
+    },
+    {
+      "path": "lin_chong/console.log",
+      "bytes": 17124,
+      "sha256": "215abdca4f870b0483c7e13a9b5232880f11c1704c04095df73a63913780d17f"
+    },
+    {
+      "path": "lin_chong/live_melee.png",
+      "bytes": 2057556,
+      "sha256": "badcf7bbcde661ea65e0393ea727e2a2b4ae8125e45464585321fa393deb0790"
+    },
+    {
+      "path": "lin_chong/report.json",
+      "bytes": 8509,
+      "sha256": "3cc79c4fd7fe6f1424daaf29e6c3f7ec0fb24e3feadbf841e45ef08116a6bb53"
+    },
+    {
+      "path": "lin_chong/unit_pose_matrix.png",
+      "bytes": 345769,
+      "sha256": "6b88b38904d4098d2adb201b4720eac43b022a1f8e10a6a218392ec8131b9ca9"
+    },
+    {
+      "path": "ranged/console.log",
+      "bytes": 1450,
+      "sha256": "77f9d476b1f11f743f6f3f92b8871613dda54993dec0dde8c01c89af4531f33a"
+    },
+    {
+      "path": "ranged/report.json",
+      "bytes": 217,
+      "sha256": "b80596f5bb440615321d8bcd6a975c007539a3fe3f9cc33847b0dca31036da4e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2140,
+      "sha256": "befff289625157fe6cf03325ba1d17e37322a703a891f807733131c8b76ada6d"
+    },
+    {
+      "path": "runner.py.txt",
+      "bytes": 1952,
+      "sha256": "2c4669e5830d118dc8d59f44f7dbe15cd3aa59864f7df9302d08f30fc60404c2"
+    },
+    {
+      "path": "runs.json",
+      "bytes": 1467,
+      "sha256": "6d4996f6ea2e4d0ff7f12c3522a1ea6b7b915fccacf9d6859b480c0cc919d24f"
+    },
+    {
+      "path": "segment/console.log",
+      "bytes": 5759,
+      "sha256": "06910d822a33c35109ac569dc835e96c600294c8571cc6e9c24dffeac10c0784"
+    },
+    {
+      "path": "segment/report.json",
+      "bytes": 8975,
+      "sha256": "dc7c5bf8073b83a9327e671d2bd3430f507cdde9dc57d9e685d479408a0f4d63"
+    },
+    {
+      "path": "stress/console.log",
+      "bytes": 861,
+      "sha256": "984add53555ae2e77d893ee5e26f686449c5a51f6815ac19dbe3dbf5d1ab870a"
+    },
+    {
+      "path": "stress/final.json",
+      "bytes": 3410,
+      "sha256": "9207f312396ed0a9c03eef76adadda3018f40cfc0a4ac149d1634fc130b04b5a"
+    },
+    {
+      "path": "stress/final.png",
+      "bytes": 1175937,
+      "sha256": "b6e399295dcb6b2b7fe811d015500469608d7239db89d1ed0b2a94945488f768"
+    }
+  ]
+}

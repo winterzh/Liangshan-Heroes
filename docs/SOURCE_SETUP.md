@@ -1,3 +1,7 @@
+## 2026-09-06 兵群导航格检查
+
+新增 `tools/crowd_nav_qa.gd`，`--headless` 运行默认输出 `.godot/crowd_nav_qa/`；136 项、147,806 次位置对照，整合林冲动画后的五组回归共 868 项通过。普通启动方式不变，专项依赖的冻结完整旧方法已纳入仓库并保持 LF。复现及完整计时边界见[说明](CROWD_NAV_20260906.md)。
+
 ## 2026-09-06 林冲四向基础动作
 
 拉取后通过既有 `Play.cmd` 进入并重开关卡，启动器会按现有流程补齐Godot导入缓存。7张原生图、20个TRES与清单均在仓库内，不需要再次生成美术。新增 `tools/lin_chong_direction4_qa.gd`（`LC_VISUAL=1`启用实机画面、`LC_QA_OUT`指定目录），默认输出 `.godot/lin_chong_direction4/runtime/`。排帧复核与来源只读审计见[实现](LIN_CHONG_DIRECTION4_20260906.md)；Python来源审计需要Pillow，本机路径仍只在忽略配置中。
