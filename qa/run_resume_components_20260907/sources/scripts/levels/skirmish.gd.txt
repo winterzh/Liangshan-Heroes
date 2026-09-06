@@ -1,0 +1,474 @@
+extends LevelBase
+## 自由「遭遇战」模式（经营养成 + 英雄成长）。
+## 梁山泊据守：原著地貌压缩为水泊、港汊、芦苇滩、林峦三关与忠义堂前平地。
+## 采集、建造、生产、英雄祭坛/升级、Tab 子组、敌军波次将在后续阶段逐步接入。
+
+const T := GameMap.T
+const Layout := preload("res://scripts/liangshan_layout.gd")
+const Landscape := preload("res://scripts/liangshan_environment.gd")
+const HALL := Vector2i(18, 30)
+const HILLTOP_FLAG := Vector2i(18, 23)
+const GOLD := Vector2i(7, 35)
+const TREE_GROVE_WEST := [
+	Vector2i(8, 23), Vector2i(10, 23), Vector2i(12, 24), Vector2i(9, 25),
+	Vector2i(11, 26), Vector2i(8, 27), Vector2i(13, 27), Vector2i(11, 29),
+]
+const TREE_GROVE_REAR := [
+	Vector2i(10, 32), Vector2i(12, 32), Vector2i(13, 33), Vector2i(9, 34),
+	Vector2i(11, 35), Vector2i(13, 36), Vector2i(10, 37), Vector2i(12, 38),
+]
+# 原著到第八十回明确写成：水泊四面芦苇烟水，旱路只有山前新筑大路。
+# 据守战因此保留一路陆军进山，并把另两路解释为鸭嘴滩、金沙滩登陆后的岸军。
+const GATE_A := Vector2i(18, 1)    # 山前大路：经林中山道进入寨侧
+const GATE_B := Vector2i(32, 32)   # 鸭嘴滩：东港登陆，经东山关入寨
+const GATE_C := Vector2i(18, 50)   # 金沙滩：主码头登陆，经山前关入寨
+const GATES := [GATE_A, GATE_B, GATE_C]
+
+# 官军围剿波次（30 波·步步紧逼）：t=距上一波秒数，groups=[key, 数量, 门(0=东/1=北/2=西)]
+# 定时来袭、不等清场 → 波次叠加；里程碑波出「地方英雄」boss（自动学满技能、会放招）。
+# 难度曲线：1-9 立寨练兵期 → 10-20 三面围攻 → 21-30 群英压境·多将合围，第 30 波三帅决死。
+const WAVES := [
+	{"t": 120.0, "msg": "官军探马杀到——头一拨人马已近寨门！",
+		"groups": [["guan_dao", 6, 0], ["guan_gong", 3, 0]]},
+	{"t": 32.0, "msg": "马军突进，小心骑兵冲阵！",
+		"groups": [["guan_dao", 7, 0], ["guan_qi", 3, 1], ["guan_gong", 3, 0]]},
+	{"t": 30.0, "msg": "官军大队压上，寨子吃紧！",
+		"groups": [["guan_dao", 8, 0], ["guan_gong", 4, 1], ["guan_qi", 4, 0]]},
+	{"t": 30.0, "msg": "两路夹攻，弓马齐至！",
+		"groups": [["guan_dao", 9, 0], ["guan_gong", 5, 1], ["guan_qi", 5, 0]]},
+	{"t": 32.0, "msg": "祝家庄教师栾廷玉，铁棒开路！",
+		"groups": [["luan_tingyu", 1, 0], ["guan_dao", 9, 0], ["guan_qi", 4, 1], ["guan_gong", 4, 0]]},
+	{"t": 30.0, "msg": "西北沙碛驼铃骤响——骆驼快骑绕道扰寨！",
+		"groups": [["camel_rider", 4, 1], ["guan_dao", 10, 2], ["guan_gong", 6, 1], ["guan_qi", 4, 0]]},
+	{"t": 28.0, "msg": "南疆战象踏阵而来，地动山摇！（属马军，长枪钩镰克之）",
+		"groups": [["war_elephant", 1, 0], ["guan_jingqi", 5, 0], ["guan_dao", 10, 2], ["guan_gong", 6, 1]]},
+	{"t": 30.0, "msg": "十节度奉旨征剿——首领王焕领韩滔、彭玘杀到！",
+		"groups": [["wang_huan", 1, 0], ["han_tao", 1, 0], ["peng_qi", 1, 2], ["guan_qi", 6, 0], ["guan_gong", 6, 1]]},
+	{"t": 28.0, "msg": "官军新编火枪队，铅子如雹！",
+		"groups": [["guan_musket", 4, 0], ["guan_zhanzi", 4, 2], ["guan_dao", 10, 0], ["guan_gong", 6, 1]]},
+	{"t": 32.0, "msg": "双鞭呼延灼，连环铁骑踏寨而来！",
+		"groups": [["hu_yanzhuo", 1, 0], ["guan_jingqi", 6, 0], ["guan_qi", 5, 1], ["guan_gong", 6, 2]]},
+	{"t": 28.0, "msg": "节度使徐京、王文德两路并进！",
+		"groups": [["xu_jing", 1, 2], ["wang_wende", 1, 0], ["guan_jingqi", 5, 0], ["guan_gong", 8, 1], ["guan_qi", 5, 2]]},
+	{"t": 28.0, "msg": "官军投弹手掷震天雷，火光四溅！",
+		"groups": [["guan_bomber", 4, 1], ["guan_zhanzi", 6, 2], ["guan_dao", 12, 0], ["guan_gong", 8, 1]]},
+	{"t": 30.0, "msg": "祝家庄祝虎、祝彪领庄兵杀到！",
+		"groups": [["zhu_hu", 1, 0], ["zhu_biao", 1, 1], ["zhu_qi", 6, 0], ["zhu_gong", 6, 1], ["guan_dao", 8, 2]]},
+	{"t": 28.0, "msg": "急先锋梅展引骆驼快骑突阵！",
+		"groups": [["mei_zhan", 1, 0], ["camel_rider", 5, 1], ["guan_jingqi", 7, 0], ["guan_gong", 8, 1]]},
+	{"t": 32.0, "msg": "快活林蒋门神，赤膊巨汉压阵！",
+		"groups": [["jiang_menshen", 1, 0], ["jiang_thug", 8, 0], ["guan_dao", 12, 2], ["guan_gong", 8, 1]]},
+	{"t": 28.0, "msg": "雁门节度张开督炮弓，火枪压阵！",
+		"groups": [["zhang_kai", 1, 1], ["guan_musket", 5, 0], ["guan_zhanzi", 6, 2], ["guan_gong", 9, 1]]},
+	{"t": 28.0, "msg": "汉阳节度杨温引战象冲营！",
+		"groups": [["yang_wen", 1, 0], ["war_elephant", 1, 2], ["guan_qi", 8, 0], ["guan_gong", 10, 1]]},
+	{"t": 30.0, "msg": "一丈青扈三娘、祝龙双将临阵！",
+		"groups": [["hu_sanniang", 1, 2], ["zhu_long", 1, 0], ["zhu_qi", 8, 0], ["guan_jingqi", 6, 2], ["guan_gong", 8, 1]]},
+	{"t": 28.0, "msg": "蕃将李从吉、段鹏举铁骑洪流！",
+		"groups": [["li_congji", 1, 0], ["duan_pengju", 1, 2], ["guan_jingqi", 8, 0], ["camel_rider", 5, 1], ["guan_gong", 10, 1]]},
+	{"t": 34.0, "msg": "没羽箭张清携龚旺、丁得孙，飞石如雨！",
+		"groups": [["zhang_qing", 1, 1], ["gong_wang", 1, 0], ["ding_desun", 1, 0], ["guan_qi", 8, 0], ["guan_gong", 10, 1], ["guan_dao", 10, 2]]},
+	{"t": 28.0, "msg": "天水节度项元镇箭无虚发，投弹助阵！",
+		"groups": [["xiang_yuanzhen", 1, 0], ["guan_bomber", 5, 1], ["guan_jingqi", 8, 0], ["guan_gong", 10, 1]]},
+	{"t": 28.0, "msg": "太原节度荆忠大杆刀，力劈千军！",
+		"groups": [["jing_zhong", 1, 2], ["guan_zhanzi", 8, 2], ["guan_jingqi", 7, 0], ["guan_gong", 12, 1]]},
+	{"t": 30.0, "msg": "凌州水火二将——圣水单廷圭、神火魏定国合阵！",
+		"groups": [["shan_tinggui", 1, 0], ["wei_dingguo", 1, 1], ["guan_jingqi", 8, 0], ["guan_qi", 8, 2], ["guan_gong", 10, 1]]},
+	{"t": 28.0, "msg": "铁骑洪流，三面倾轧！",
+		"groups": [["guan_jingqi", 10, 0], ["guan_zhanzi", 10, 2], ["guan_gong", 12, 1], ["guan_qi", 6, 1]]},
+	{"t": 34.0, "msg": "曾头市史文恭携轰天雷凌振，画戟火炮齐至！",
+		"groups": [["shi_wengong", 1, 0], ["ling_zhen", 1, 1], ["guan_musket", 6, 0], ["guan_jingqi", 8, 0], ["guan_gong", 12, 1]]},
+	{"t": 28.0, "msg": "倾巢精锐，战象铁骑围寨！",
+		"groups": [["guan_jingqi", 10, 0], ["war_elephant", 1, 2], ["guan_zhanzi", 8, 1], ["guan_gong", 12, 1]]},
+	{"t": 30.0, "msg": "大名府都监闻达·李天王督军压境！",
+		"groups": [["wen_da", 1, 0], ["hu_yanzhuo", 1, 2], ["guan_jingqi", 9, 0], ["camel_rider", 6, 1], ["guan_gong", 12, 1]]},
+	{"t": 28.0, "msg": "刽子手、火枪手与铁骑死战不退！",
+		"groups": [["guan_zhanzi", 12, 2], ["guan_musket", 6, 0], ["guan_jingqi", 10, 0], ["guan_gong", 12, 1]]},
+	{"t": 30.0, "msg": "祝龙、祝虎、祝彪——祝家三杰合围，战象开道！",
+		"groups": [["zhu_long", 1, 0], ["zhu_hu", 1, 0], ["zhu_biao", 1, 1], ["zhu_qi", 10, 0], ["war_elephant", 1, 2], ["guan_gong", 12, 1]]},
+	{"t": 36.0, "msg": "枢密使童贯亲督中军，高太尉、王焕、史文恭合围——决死一战！",
+		"groups": [["tong_guan", 1, 0], ["gao_qiu", 1, 0], ["wang_huan", 1, 2], ["shi_wengong", 1, 1], ["guan_jingqi", 10, 0], ["war_elephant", 1, 2], ["guan_musket", 6, 0], ["guan_gong", 14, 1]]},
+]
+
+var hall: Unit
+var _wave := 0
+var _wave_t := 0.0
+var _wave_spawned := false
+var _started := false
+var _final_cleanup_last_alive := -1
+var _final_cleanup_last_hp := -1.0
+var _final_cleanup_positions := {}
+var _final_cleanup_quiet := 0.0
+var _final_cleanup_tick := 0.0
+var _final_cleanup_active := false
+
+const FINAL_CLEANUP_LOW_QUIET := 8.0
+const FINAL_CLEANUP_STEP := 2.0
+
+
+func id() -> String: return "skirmish"
+func title() -> String: return "驻守战"
+func subtitle() -> String: return "水泊三关 · 据守忠义堂"
+func map_w() -> int: return 60
+func map_h() -> int: return 60
+func map_theme() -> String: return "marsh"
+func map_base() -> int: return T.WATER
+# 等距画面的屏幕水平由 x-y 决定；(23,35)与忠义堂(18,30)同为-12，
+# 因而堂、主路正好落在可玩区水平中线，而不是按网格x误判居中。
+func camera_start_cell() -> Vector2i: return Vector2i(23, 35)
+
+func economy_enabled() -> bool: return true
+func hero_start_rank() -> int: return 0   # 驻守战：英雄仍走原来的经验升级学技能
+func start_gold() -> int: return 250
+func start_wood() -> int: return 150
+func base_pop_cap() -> int: return 20
+func hero_cap() -> int: return int(Campaign.defense_hero_cap)   # 驻守战英雄上限（菜单选：默认 4 / 60关 6）
+func fog_enabled() -> bool: return true
+func threat_gates() -> Array: return GATES   # 官军固定三门来路 → 托管分路防守/陷阱布走廊
+func auto_start_after_intro() -> bool: return true
+
+func deploy_hint() -> String:
+	return "自由经营：剧情结束即进入 120 秒备战，可立即采金伐木、整军建寨；两座寨门可承伤和修理，官军破门后才会涌入。"
+
+
+func intro_lines() -> Array:
+	return [
+		{"who": "旁白", "key": "narrator", "text": "梁山泊外芦苇烟水、港汊纵横；由金沙滩上岸，穿林过三关，才到忠义堂前的一片平地。遣喽啰采办钱粮，招兵买马，凭水泊与关隘长久周旋。"},
+		{"who": "军令", "key": "narrator", "text": "【据守·三十波】官军一路由山前新筑大路进兵，两路乘船抢登鸭嘴滩、金沙滩。一波紧似一波，更有栾廷玉、呼延灼、史文恭等敌将压阵。守山路、扼滩头、护住忠义堂！"},
+	]
+
+
+func paint_map(map: GameMap) -> void:
+	map.set_meta("liangshan_rts_court", true)
+	# 原著没有直写堂门罗盘方向；按“山前南路三关→忠义堂前”的中轴关系，
+	# 并采用传统正殿坐北朝南，驻守战把 +Y 约定为南，堂门朝南面向山前关。
+	map.set_meta("zhongyi_hall_facing_cardinal", "south")
+	map.set_meta("zhongyi_hall_front_vector", Vector2i(0, 1))
+	# 先给寨心留出可经营的平地，再由共同梁山地貌写入外圈水泊、芦汊、林峦和岩脊。
+	# COMBAT_GROUND 会保留这块非规则腹地，不会把经济模式压成只能沿一条窄路建造。
+	map.fill_ellipse(Vector2(20, 30), 19, 16, T.MARSH)
+	map.fill_ellipse(Vector2(20, 30), 14, 11, T.GRASS)
+	map.scatter(T.MARSH, T.REEDS, 6)
+	map.fill_ellipse(Vector2(14, 24), 3, 2, T.FOREST, [T.GRASS])
+	map.fill_ellipse(Vector2(13, 37), 3, 2, T.FOREST, [T.GRASS])
+	map.fill_ellipse(Vector2(25, 22), 2, 2, T.FOREST, [T.GRASS])
+	Landscape.paint(map)
+	Layout.paint(map)
+	# 第八十回所说的山前新筑大路；其余两路只从滩头登陆，不再跨水铺直线土路。
+	map.paint_path([Vector2(18, 0), Vector2(18, 6), Vector2(21, 11), Vector2(19, 17),
+		Vector2(23, 22), Vector2(29, 29), Vector2(GATE_B.x, GATE_B.y)], 1, T.ROAD)
+	# 忠义堂地基；厅、寨门、木墙、码头由共同视觉系统按同一坐标绘制。
+	for y in range(HALL.y - 1, HALL.y + 2):
+		for x in range(HALL.x - 1, HALL.x + 2):
+			map.set_cell_t(x, y, T.HALL)
+
+
+func decorate(map: GameMap) -> void:
+	# 驻守战复用已经校准过的梁山泊第五关环境素材，但不改变关卡ID或战役进度。
+	map.set_meta("liangshan_art_level_id", "level5")
+	map.decor = [
+		["banner", Vector2i(18, 33), 220.0, "zhongyi_hall_standard_east"],
+		["banner", Vector2i(14, 33), 220.0, "zhongyi_hall_standard_west"],
+		# 杏黄“替天行道”旗在山顶、忠义堂后方且位于寨墙以内；不再孤悬寨外。
+		["banner", HILLTOP_FLAG, 220.0, "liangshan_hilltop_standard"],
+		["boat", Vector2i(13, 49), 68.0], ["boat", Vector2i(20, 50), 68.0],
+		["boat", Vector2i(37, 31), 58.0], ["boat", Vector2i(34, 53), 52.0],
+		["rocks", Vector2i(7, 23), 128.0], ["rocks", Vector2i(26, 12), 128.0],
+	]
+	map.enable_liangshan_sample()
+
+
+## 子类(自定义据守)可覆写这些钩子改波次/投石车/数值；据守本体返回原值，行为不变。
+var _wavelist_cache: Array = []
+func _waves() -> Array:
+	if _wavelist_cache.is_empty():
+		_wavelist_cache = _build_wavelist()
+	return _wavelist_cache
+
+
+## 按菜单所选波数构造波次表：30=经典原表；<30 取前 n 波；>30 经典之后循环加量续到 n 波。
+func _build_wavelist() -> Array:
+	if Campaign.defense_random:
+		return _random_waves(int(Campaign.defense_rand_waves), float(Campaign.defense_interval))
+	var n := int(Campaign.defense_waves)
+	if n == WAVES.size():
+		return WAVES.duplicate(true)
+	if n < WAVES.size():
+		return WAVES.slice(0, maxi(1, n))
+	return _extended_waves(n)
+
+
+## 60 关·史诗：前 29 波照旧，之后循环复用中后段波次并逐圈加量，末波仍为高太尉决战。
+func _extended_waves(n: int) -> Array:
+	var out: Array = WAVES.slice(0, WAVES.size() - 1)   # 前 29 波（决战留作末波）
+	var pool: Array = WAVES.slice(6, WAVES.size() - 1)  # 中后段循环池
+	var k := 0
+	var boost := 1
+	while out.size() < n - 1:
+		var src: Dictionary = pool[k % pool.size()]
+		var w: Dictionary = src.duplicate(true)
+		w["t"] = maxf(20.0, float(src["t"]) - 2.0)
+		var g2: Array = []
+		for g in src["groups"]:
+			g2.append([g[0], int(g[1]) + boost, int(g[2])])
+		w["groups"] = g2
+		w["msg"] = "援军不绝，铁壁再压——第 %d 波来袭！" % (out.size() + 1)
+		out.append(w)
+		k += 1
+		if k % pool.size() == 0:
+			boost += 1
+	out.append(WAVES[WAVES.size() - 1].duplicate(true))
+	return out
+
+
+# —— 自定义随机波次 ——————————————————————————————————————————————
+# 杂兵池（非英雄，构成主力）
+const RAND_TROOPS := ["guan_dao", "guan_gong", "guan_qi", "guan_jingqi",
+	"guan_zhanzi", "guan_musket", "guan_bomber", "camel_rider"]
+# 敌将池（偶尔单个登场，概率随波次升高）
+const RAND_BOSSES := ["luan_tingyu", "hu_yanzhuo", "jiang_menshen", "hu_sanniang",
+	"zhang_qing", "yang_wen", "mei_zhan", "shan_tinggui", "wei_dingguo",
+	"wang_huan", "xu_jing", "jing_zhong"]
+const RAND_MSGS := ["官军杂队四面来袭！", "援军不绝，旗号杂乱却势凶！",
+	"乌合之众却人多势众，守住！", "又一拨官军压上寨门！", "马步弓杂军合围而来！"]
+
+
+## 每波目标兵力（仿经典波次的增长曲线）：首波约 10，逐波递增，封顶 42。
+func _rand_wave_count(i: int) -> int:
+	return clampi(10 + i + i / 3, 10, 42)
+
+
+## 生成 n 波随机敌军，每波固定间隔 interval 秒。每波数量随波次增长（见 _rand_wave_count）；
+## 数量×e、血/攻×倍率由 _spawn_wave 统一施加（与经典波次同一条路径）。
+func _random_waves(n: int, interval: float) -> Array:
+	n = clampi(n, 1, 999)
+	interval = clampf(interval, 1.0, 600.0)
+	var out: Array = []
+	for i in range(n):
+		out.append(_make_random_wave(i, interval))
+	if OS.get_environment("DEF_RANDOM_DEBUG") == "1":
+		var sizes: Array = []
+		var ts: Array = []
+		for w in out:
+			var c := 0
+			for g in w["groups"]:
+				c += int(g[1])
+			sizes.append(c)
+			ts.append(float(w["t"]))
+		print("[randwave] n=%d interval=%.1f t=%s counts=%s" % [out.size(), interval, str(ts), str(sizes)])
+	return out
+
+
+## 单波随机编成：把目标兵力拆成 2~4 组随机杂兵(随机门)，并按波次概率附带敌将/战象。
+func _make_random_wave(i: int, interval: float) -> Dictionary:
+	var total := _rand_wave_count(i)
+	var ng := clampi(2 + i / 6, 2, 4)
+	var per := maxi(1, int(round(float(total) / float(ng))))
+	var groups: Array = []
+	var rem := total
+	for gi in range(ng):
+		var c := maxi(1, rem) if gi == ng - 1 else mini(per, maxi(1, rem - (ng - 1 - gi)))
+		rem -= c
+		groups.append([RAND_TROOPS[randi() % RAND_TROOPS.size()], c, randi() % GATES.size()])
+	# 偶尔来个敌将（概率随波次升高，封顶 60%）
+	if i >= 2 and randf() < clampf(0.15 + i * 0.02, 0.15, 0.6):
+		groups.append([RAND_BOSSES[randi() % RAND_BOSSES.size()], 1, randi() % GATES.size()])
+	# 中后期偶尔压上一头战象
+	if i >= 6 and randf() < 0.25:
+		groups.append(["war_elephant", 1, randi() % GATES.size()])
+	# 第 1 波固定 120 秒备战(与经典一致)，之后每波 = 玩家所填间隔
+	var t: float = 120.0 if i == 0 else interval
+	return {"t": t, "msg": RAND_MSGS[randi() % RAND_MSGS.size()], "groups": groups}
+
+
+func _cata_for(i: int) -> int: return 1 if i < 10 else 2
+func _apply_overrides(_b) -> void: pass
+
+
+func deploy(b) -> void:
+	_apply_overrides(b)   # 自定义据守：在任何 spawn 前把数值覆盖合并进 b._defs/_abilities
+	hall = b.spawn_at("hall", Unit.FACTION_LIANG, HALL)
+	hall.display_name = "忠义堂"
+	hall.set_meta("campaign_environment_route", "zhongyi_hall")
+	hall.set_meta("campaign_environment_state", "default")
+	hall.set_meta("campaign_environment_text_surface_id", "level5_hall_plaque")
+	hall.set_meta("campaign_environment_runtime_text", "忠义堂")
+	hall.set_meta("campaign_environment_static_visual", true)
+	var gm: Unit = b.spawn_at("gold_mine", Unit.FACTION_LIANG, GOLD)
+	# 60 关·史诗：六将全程升级/研究/造兵，默认 6000 储量撑不到后期 → 金矿储量放宽到 18000
+	if gm != null and (int(Campaign.defense_waves) >= 60 or Campaign.defense_random):
+		gm.res_left = 18000.0
+	# 两片木材林团收在寨内西侧经济区，不再压住北路转东山关的敌军来路。
+	# 树干各占一个导航格，树被砍完后才释放通道。
+	for c in TREE_GROVE_WEST + TREE_GROVE_REAR:
+		b.spawn_at("tree", Unit.FACTION_LIANG, c)
+	# 山前关、东山关都是有生命值的实体寨门。五格门洞被完整封住，官军必须先破门；
+	# 其视觉仍由 LiangshanEntrance 统一绘制，避免叠一座通用建筑。
+	for spec in [["main", Layout.gate_for(b.map), "山前关寨门"],
+			["east", Layout.east_gate_for(b.map), "东山关寨门"]]:
+		var gate: Unit = b.spawn_at("stockade_gate", Unit.FACTION_LIANG, spec[1])
+		if gate != null:
+			gate.display_name = String(spec[2])
+			gate.set_meta("liangshan_gate_id", String(spec[0]))
+			gate.set_meta("scene_visual_only", true)
+	for c in [Vector2i(17, 35), Vector2i(18, 36), Vector2i(19, 35), Vector2i(17, 37), Vector2i(19, 37)]:
+		b.spawn_at("lou_luo", Unit.FACTION_LIANG, c)
+	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(17, 39))
+	b.spawn_at("liang_dao", Unit.FACTION_LIANG, Vector2i(19, 39))
+
+
+func on_start(b) -> void:
+	if _started:
+		return
+	# 单金矿只容一人实地开采：开局 1 金 4 木，且只下这一次命令。
+	var workers: Array = []
+	for u in b.units:
+		if is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG:
+			workers.append(u)
+	for i in range(workers.size()):
+		var kind := "gold" if i == 0 else "wood"
+		var node = b.nearest_resource(workers[i].position, kind)
+		if node == null:
+			node = b.nearest_resource(workers[i].position, "")
+		if node != null:
+			workers[i].order_gather(node)
+	b.msg("喽啰开始采办钱粮——采金伐木，扩充寨势。", 4.0)
+	_wave = 0
+	var ws: Array = _waves()
+	_wave_t = float(ws[0]["t"]) if not ws.is_empty() else 9999.0
+	_wave_spawned = false
+	_started = true
+	_final_cleanup_last_alive = -1
+	_final_cleanup_last_hp = -1.0
+	_final_cleanup_positions.clear()
+	_final_cleanup_quiet = 0.0
+	_final_cleanup_tick = 0.0
+	_final_cleanup_active = false
+
+
+func process(b, delta: float) -> void:
+	if hall == null or not is_instance_valid(hall) or hall.hp <= 0.0:
+		b.lose("忠义堂被攻破，杏黄旗倒下了……")
+		return
+	if not _started:
+		return
+	var ws: Array = _waves()
+	if _wave < ws.size():
+		# 定时出兵：到点就放，不等上一波被清完 → 波次叠加，密度大、间隔短
+		_wave_t -= delta
+		if _wave_t <= 0.0:
+			_spawn_wave(b, _wave)
+			_wave += 1
+			if _wave < ws.size():
+				_wave_t = float(ws[_wave]["t"])
+	else:
+		var alive: int = b.enemies_alive()
+		if alive == 0:
+			# 末波也已出，且场上敌人尽灭 → 守住了
+			b.win("官军围剿一波波尽数瓦解——梁山大寨，固若金汤！")
+			return
+		# 手动/托管共用的末波监测：每 2 秒看一次敌军数量、总生命和位置。
+		# 任一项真有推进就重置；连续 8 秒全无进展才显形/修路，手动模式也不会卡结算。
+		_final_cleanup_tick -= delta
+		if _final_cleanup_tick > 0.0:
+			return
+		_final_cleanup_tick = FINAL_CLEANUP_STEP
+		var total_hp := 0.0
+		var positions := {}
+		var moved := false
+		for e in b.units:
+			if not (is_instance_valid(e) and e.faction == Unit.FACTION_GUAN and e.hp > 0.0 \
+					and not e.is_building and e.story_outcome == ""):
+				continue
+			total_hp += e.hp
+			var eid: int = e.get_instance_id()
+			positions[eid] = e.position
+			if _final_cleanup_positions.has(eid) and e.position.distance_to(_final_cleanup_positions[eid]) > 32.0:
+				moved = true
+		var progressed := _final_cleanup_last_alive < 0 or alive != _final_cleanup_last_alive \
+			or (_final_cleanup_last_hp >= 0.0 and total_hp < _final_cleanup_last_hp - 0.5) or moved
+		_final_cleanup_last_alive = alive
+		_final_cleanup_last_hp = total_hp
+		_final_cleanup_positions = positions
+		_final_cleanup_quiet = 0.0 if progressed else _final_cleanup_quiet + FINAL_CLEANUP_STEP
+		if not _final_cleanup_active and _final_cleanup_quiet >= FINAL_CLEANUP_LOW_QUIET:
+			_final_cleanup_active = true
+			b.msg("末波连续 8 秒无进展，哨骑已标出残敌并修复其进攻路线……", 4.0)
+		if _final_cleanup_active:
+			b.final_wave_cleanup()
+
+
+func _spawn_wave(b, i: int) -> void:
+	_wave_spawned = true
+	var ws: Array = _waves()
+	var wave: Dictionary = ws[i]
+	b.msg("【第 %d/%d 波】%s" % [i + 1, ws.size(), wave.get("msg", "")], 5.5)
+	var hall_pos: Vector2 = b.map.cell_to_world(HALL)
+	# 敌方倍率 e（「改变倍率」开启时）：非英雄小兵 数量×e（向下取整，至少1）；小兵+大将 血/攻按倍率放大。
+	var ecnt: float = b.enemy_count_mult()
+	for g in wave["groups"]:
+		var gate: Vector2i = GATES[clampi(int(g[2]), 0, GATES.size() - 1)]
+		var key := String(g[0])
+		var cnt := int(g[1])
+		if ecnt > 1.0 and not _is_hero_key(key):
+			cnt = maxi(1, int(floor(cnt * ecnt)))
+		var spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)
+		_arm_boss(spawned, _group_rank(g))
+		for u in spawned:
+			b.apply_enemy_scale(u)   # 血/攻×倍率（小兵+大将都乘）
+	# 每波附带投石车：射程远、专破箭楼，轮换从一门压上（数量由 _cata_for 决定）
+	var n_cata: int = _cata_for(i)
+	if n_cata > 0:
+		var cgate: Vector2i = GATES[i % GATES.size()]
+		var scata: Array = b.spawn_group("siege_cata", n_cata, Unit.FACTION_GUAN, cgate, hall_pos)
+		for u in scata:
+			b.apply_enemy_scale(u)
+
+
+## 经济模式下英雄技能默认未学(rank0)不放招 → 给来犯的地方英雄自动学满，使其会自动施放招式
+func _arm_boss(spawned: Array, rank := 2) -> void:
+	if rank <= 0:
+		return   # rank 0：敌将不学技能、不放招
+	for u in spawned:
+		if not (is_instance_valid(u) and u.is_hero):
+			continue
+		for s in range(u.slot_count()):
+			if not bool(u.ability_slots[s]["passive"]):
+				u.ability_slots[s]["rank"] = clampi(rank, 1, 2)
+
+
+## 该兵组敌将的技能等级（0=不放招 / 1 / 2满级）。据守本体一律满级；自定义据守按 config 第 4 元。
+func _group_rank(_g) -> int:
+	return 2
+
+
+## 该兵种是否为英雄/敌将（AI友好模式下不×3）。
+func _is_hero_key(key: String) -> bool:
+	var d: Variant = Defs.UNITS.get(key, {})
+	return d is Dictionary and bool((d as Dictionary).get("hero", false))
+
+
+func top_status(b) -> String:
+	var total := _waves().size()
+	var phase := "整军备战"
+	if _started and _wave < total:
+		phase = "%d秒·%s" % [int(ceil(maxf(_wave_t, 0.0))), _next_attack_lanes()]
+	elif _started:
+		phase = "清剿残敌"
+	return "忠义堂防线 ｜ %d/%d波 ｜ %s ｜ 堂%d%% ｜ 敌%d" % [
+		_wave, total, phase,
+		int(hall.hp / hall.max_hp * 100.0) if (hall != null and is_instance_valid(hall)) else 0,
+		b.enemies_alive()]
+
+
+func _next_attack_lanes() -> String:
+	var ws := _waves()
+	if _wave < 0 or _wave >= ws.size():
+		return "三路"
+	var lane_names := ["山前大路", "鸭嘴滩", "金沙滩"]
+	var lanes: Array[String] = []
+	for g in ws[_wave].get("groups", []):
+		var lane: String = lane_names[clampi(int(g[2]), 0, lane_names.size() - 1)]
+		if lane not in lanes:
+			lanes.append(lane)
+	return "/".join(lanes)

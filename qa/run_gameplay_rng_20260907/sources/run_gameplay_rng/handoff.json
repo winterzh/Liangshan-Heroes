@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "FROZEN_READY_FOR_ROOT_SERIAL_ENGINE_VALIDATION_AFTER_RELEASE_WORK",
+  "pins": {
+    "path": "scratchpad/run_gameplay_rng/pins.json",
+    "bytes": 2576,
+    "raw_sha256": "6b14e70511963ece705867394671466a6257e58355507b8a8b913724cc2923a2",
+    "lf_sha256": "6b14e70511963ece705867394671466a6257e58355507b8a8b913724cc2923a2"
+  },
+  "preparation_receipt": {
+    "path": "scratchpad/run_gameplay_rng/preparation_receipt.json",
+    "bytes": 2127,
+    "raw_sha256": "c1b05e624e6136dc54f3a811bf964c7d4ccfe62c2e6bcde9f4c5830926532f4c",
+    "lf_sha256": "c1b05e624e6136dc54f3a811bf964c7d4ccfe62c2e6bcde9f4c5830926532f4c"
+  },
+  "runtime_sources": [
+    {
+      "path": "scripts/run_state_value_codec.gd",
+      "bytes": 12091,
+      "raw_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "lf_sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+    },
+    {
+      "path": "scratchpad/run_gameplay_rng/gameplay_rng.gd",
+      "bytes": 6589,
+      "raw_sha256": "af0695d8ddf355035f36f15af25386fbd35b95e0d35b5ad939e6030ec8ea1738",
+      "lf_sha256": "af0695d8ddf355035f36f15af25386fbd35b95e0d35b5ad939e6030ec8ea1738"
+    },
+    {
+      "path": "scratchpad/run_gameplay_rng/qa_driver.gd",
+      "bytes": 21777,
+      "raw_sha256": "cdb34529ae22a80b949a6296514b78b7de04d219ca5e920e8622dc169a08474b",
+      "lf_sha256": "cdb34529ae22a80b949a6296514b78b7de04d219ca5e920e8622dc169a08474b"
+    }
+  ],
+  "entry": "res://scratchpad/run_gameplay_rng/qa_driver.gd",
+  "manifest_environment": "GAMEPLAY_RNG_QA_MANIFEST",
+  "qa_contract": {
+    "path": "scratchpad/run_gameplay_rng/qa_contract.json",
+    "bytes": 7391,
+    "raw_sha256": "28f20172cf37f4f6d55833803fd347d5296dd9ffd28ba36d6de24c90a87e297b",
+    "lf_sha256": "28f20172cf37f4f6d55833803fd347d5296dd9ffd28ba36d6de24c90a87e297b"
+  },
+  "scope": "independent native gameplay RNG stream only; exact codec seed/state/call count; source-mode compatibility; writer+reader independent processes",
+  "must_not_claim": [
+    "production migration",
+    "old shared-global RNG sequence equivalence",
+    "battle restore complete",
+    "performance gain",
+    "Godot parser or runtime pass during preparation"
+  ],
+  "next_owner": "root schedules existing guarded lifecycle for two real processes; no scratchpad subagent engine run",
+  "steam_boundary": "No production/Autoload/shared controller/Git changes. This prepared module is not included in Steam publication by this subtask."
+}

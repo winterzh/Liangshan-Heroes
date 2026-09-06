@@ -1,3 +1,15 @@
+## 2026-09-07 追击候选结论、独立 RNG 与真实组件恢复
+
+本批原始受测源码基线为 `199aac6`，具体新增模块/驱动以各 run manifest 的原始 SHA 为准；追击窄诊断另使用冻结 `4baafc1`。安全快进后，`fe1faf5a71b92a81b4404c8f35cce2b648d50a49` 加受测时尚未提交的五个正式模块这一源码集，已完成新一轮串行组件兼容性复测：Unit149（run `20260906T190047879205Z`，PID13232）、Projectile54（`20260906T190128073061Z`，PID14024）、Map63（`20260906T190208572861Z`，PID36160），全部exit0，complete/source/player/lock检查通过。[新HEAD独立收据](../qa/run_resume_components_20260907/integrated_head/README.md)。相同组件复测不新增场景计数，也不是成就/工坊服务端联调验收。`fe1faf5` 的 Steam 成就/工坊接入仍是本地源码和候选包，未替代线上 Build25154403，也不表示后台发布或双账号联调完成。
+
+追击 timed/clockless 分别测得 602/597 个物理步、1,840/1,750 次 strict 调用，fallback 均为 0；结论 `stop_no_fallback`，停止当前 fallback 优化假设。timed 完整 strict 方法均值约 0.186ms/物理步，含探针成本，嵌套 AStar 不再相加；55/88 条 Map 行为检查和离线186条不是完整 Unit 状态等价或正常 FPS 提升。[诊断与证据](CHASE_PATH_DIAGNOSTIC_20260907.md)。
+
+独立原生玩法 RNG 的 R1 私有 writer/reader 完成137+47=184条检查，七个种子各64次后续混合调用，共448个结果跨两个进程逐项一致。原解析失败、修复源码和真实进程/来源/玩家保护收据均保留；尚未迁移生产全局随机调用，不宣称旧共享随机序列或PCK等价。[RNG说明](RUN_GAMEPLAY_RNG_20260907.md)。
+
+五个正式模块 `run_unit_state`、`run_graph_identity`、`run_projectile_state`、`run_map_state`、`run_scenery_state` 已晋级：真实 Unit149、Projectile54、Map63条通过，并按正式加载路径复验。两组相同组件检查不重复计为新场景；所有计数包含来源与辅助断言。Map63只验证headless原生数据/导航/材质，不含截图。原Map和Unit两次失败、原型及正式路径证据分别归档；Map晋级只改Scenery固定preload路径。[组件说明](RUN_RESUME_COMPONENTS_20260907.md)。
+
+下一步接通标准30波整局的稳定实体与容器顺序、物品UID/分配序号、游戏tick/各时钟和全部持续效果/待执行事件，再由RunSession统一组织暂停屏障、状态验证、恢复与失败原子性。继续验证关闭程序后恢复并持续行动，随后接菜单，再测PCK和祝家庄；M3、持续30FPS及最终60FPS/P95/P99门槛保持开放。
+
 ## 2026-09-07 Steam 成就与工坊源码接入
 
 实现 30 项成就、4 项官方玩法统计、当前演义印旧档补领、账号切换保护，以及两种编辑器发布/更新、订阅下载校验与游玩。自定义内容不能靠伪造官方 ID 获得演义记录；顺带修复空剧情启动和编辑器 Color 的 JSON 存读。原生最终复验 176 项通过，普通版本界面检查和六张实际窗口截图已完成。候选导出、失败轮和线上待验收范围见[接入说明](STEAM_INTEGRATION_20260907.md)及[QA](../qa/steam_integration_20260907/README.md)。

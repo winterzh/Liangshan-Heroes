@@ -1,3 +1,13 @@
+## 2026-09-07 本批源码基线与组件复现
+
+本批已有结果对应 `199aac6` 基线及各 manifest 精确源码；追击诊断另固定在 `4baafc1`。工作区安全快进后，`fe1faf5a71b92a81b4404c8f35cce2b648d50a49` 加受测时尚未提交的五个正式模块已独立复验Unit149、Projectile54、Map63；三进程均exit0，源码/玩家保护及共同锁释放通过，见[整合HEAD收据](../qa/run_resume_components_20260907/integrated_head/README.md)。复现须使用该轮manifest精确字节，不将复测重复计为新场景。Steam 接入仍为本地候选，线上 default 保持已发布 Build25154403；本批源码同步不表示重新上传游戏包或启用成就/工坊服务。
+
+五份正式 `scripts/run_unit_state.gd`、`run_graph_identity.gd`、`run_projectile_state.gd`、`run_map_state.gd`、`run_scenery_state.gd` 的组件检查为 Unit149、Projectile54、Map63，原型与正式加载路径各自收据分开。复现入口与精确 helper/外部源码依赖见[组件QA](../qa/run_resume_components_20260907/README.md)及[正式路径QA](../qa/run_resume_components_20260907/production_path/README.md)。只在新的相容 checkout 按清单恢复受忽略的 scratchpad 原路径，已存在时核对、不覆盖；本机 Godot 路径由参数或 `GODOT_PATH` 提供，不直接运行归档 `.gd.txt`。
+
+[RNG归档](../qa/run_gameplay_rng_20260907/README.md)独立保留R1双进程184条检查和7×64=448个后续随机结果；这是原生独立流的source-mode合同，尚未接入生产随机调用。全部引擎验证须串行、实际Popen退出确认、私有APPDATA与共享锁；历史profile、玩家文件和缓存不作复现输入。
+
+[追击诊断](CHASE_PATH_DIAGNOSTIC_20260907.md)的0 fallback与约0.186ms/物理步仅决定停止该候选，不是正常性能结果。正常启动方式不因这些基础组件改变；尚无已验收的整局保存退出/菜单继续或PCK恢复。下一步RunSession接通整局顺序、UID、tick、全部效果和暂停/恢复事务。
+
 ## 2026-09-07 Steam 接入复现
 
 正常 `Play.cmd` 启动保持可用，「更多」可查看成就和工坊入口；普通源码启动不计 Steam 成就。Windows Steam 版使用固定 GodotSteam 4.22.1/Steamworks1.65，在隔离工程启用 `steam` 导出特性。

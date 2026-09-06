@@ -1,0 +1,272 @@
+extends RefCounted
+## Private observer. Static packed step aggregates; no instances or retained paths.
+const STEP_CAP := 2048
+const FRAME_CAP := 8192
+const PRESENT_WIDTH := 7
+const PROCESS_WIDTH := 3
+const CHAIN_CALLS := 0
+const CHAIN_COMPLETIONS := 1
+const RANGED_CHAINS := 2
+const STRICT_CALLS := 3
+const STRICT_RETURNS := 4
+const STRICT_EMPTY := 5
+const STRICT_RANGED_EMPTY := 6
+const STRICT_POINTS := 7
+const STRICT_US := 8
+const STRICT_FALLBACK_US := 9
+const STRICT_FALLBACK_ASTAR_US := 10
+const FALLBACK_CALLS := 11
+const FALLBACK_RETURNS := 12
+const FALLBACK_EMPTY := 13
+const FALLBACK_POINTS := 14
+const FALLBACK_US := 15
+const STRICT_ENDPOINT_REJECT := 16
+const STRICT_SAME_CELL := 17
+const STRICT_ASTAR_EMPTY_REJECT := 18
+const STRICT_SMOOTH_RETURN := 19
+const STRICT_SMOOTH_EMPTY := 20
+const STRICT_ASTAR_ENTER := 21
+const STRICT_ASTAR_RETURN := 22
+const STRICT_ASTAR_EMPTY_IDS := 23
+const STRICT_ASTAR_IDS_TOTAL := 24
+const STRICT_ASTAR_US := 25
+const FALLBACK_PRECONDITION_REJECT := 26
+const FALLBACK_NO_OPEN_TARGET := 27
+const FALLBACK_ASTAR_EMPTY_REJECT := 28
+const FALLBACK_REACH_REJECT := 29
+const FALLBACK_SMOOTH_RETURN := 30
+const FALLBACK_SMOOTH_EMPTY := 31
+const FALLBACK_ASTAR_ENTER := 32
+const FALLBACK_ASTAR_RETURN := 33
+const FALLBACK_ASTAR_EMPTY_IDS := 34
+const FALLBACK_ASTAR_IDS_TOTAL := 35
+const FALLBACK_ASTAR_US := 36
+const METRIC_COUNT := 37
+const STEP_WIDTH := 44
+const TIME_METRICS := [8, 9, 10, 15, 25, 36]
+const STEP_COLUMNS := ["m1_tick", "physics_id", "process_id", "physics_signal_us", "observer_us", "collection_physics_id", "collected_us", "chain_calls", "chain_completions", "ranged_chains", "strict_calls", "strict_returns", "strict_empty", "strict_ranged_empty", "strict_points", "strict_us", "strict_fallback_us", "strict_fallback_astar_us", "fallback_calls", "fallback_returns", "fallback_empty", "fallback_points", "fallback_us", "strict_endpoint_reject", "strict_same_cell", "strict_astar_empty_reject", "strict_smooth_return", "strict_smooth_empty", "strict_astar_enter", "strict_astar_return", "strict_astar_empty_ids", "strict_astar_ids_total", "strict_astar_us", "fallback_precondition_reject", "fallback_no_open_target", "fallback_astar_empty_reject", "fallback_reach_reject", "fallback_smooth_return", "fallback_smooth_empty", "fallback_astar_enter", "fallback_astar_return", "fallback_astar_empty_ids", "fallback_astar_ids_total", "fallback_astar_us"]
+static var steps := PackedInt64Array()
+static var presents := PackedInt64Array()
+static var processes := PackedInt64Array()
+static var counters := PackedInt64Array()
+static var timed := false
+static var active := false
+static var measuring := false
+static var step_open := false
+static var overflow := false
+static var errors := 0
+static var step_count := 0
+static var present_count := 0
+static var process_count := 0
+static var tick := 0
+static var physics_id := -1
+static var process_id := -1
+static var physics_boundary_us := 0
+static var physics_boundary_id := -1
+static var step_observer_us := 0
+static var step_signal_us := 0
+static var start_anchor := {}
+static var end_anchor := {}
+static var previous_present_us := 0
+static var previous_step_count := 0
+static var chain_open := false
+static var chain_ranged := false
+static var strict_done := false
+static var fallback_done := false
+static var last_strict_empty := false
+static var last_strict_us := 0
+static var last_strict_astar_us := 0
+static var call_kind := -1
+static var reason := -1
+static var astar_open := false
+static var call_astar_us := 0
+
+static func prepare(mode: String) -> void:
+	timed = mode == "timed"
+	steps.resize(STEP_CAP * STEP_WIDTH)
+	presents.resize(FRAME_CAP * PRESENT_WIDTH)
+	processes.resize(FRAME_CAP * PROCESS_WIDTH)
+	counters.resize(METRIC_COUNT)
+	active = true
+
+static func physics_boundary() -> void:
+	if not active: return
+	physics_boundary_us = Time.get_ticks_usec()
+	physics_boundary_id = Engine.get_physics_frames()
+
+static func process_boundary() -> void:
+	if not active or not measuring: return
+	if process_count >= FRAME_CAP:
+		overflow = true; return
+	var offset := process_count * PROCESS_WIDTH
+	processes[offset] = Time.get_ticks_usec()
+	processes[offset+1] = Engine.get_process_frames()
+	processes[offset+2] = Engine.get_physics_frames()
+	process_count += 1
+
+static func open_step(m1_tick: int) -> void:
+	if not active: return
+	if step_open or chain_open or call_kind != -1 or astar_open or m1_tick != step_count + 1: errors += 1
+	tick = m1_tick
+	physics_id = Engine.get_physics_frames()
+	process_id = Engine.get_process_frames()
+	step_observer_us = Time.get_ticks_usec()
+	step_signal_us = physics_boundary_us
+	if physics_id != physics_boundary_id: errors += 1
+	counters.fill(0)
+	step_open = true
+
+static func begin_chain(ranged: bool) -> bool:
+	if not active: return false
+	if not step_open or chain_open or call_kind != -1 or Engine.get_physics_frames() != physics_id:
+		errors += 1; return false
+	chain_open = true; chain_ranged = ranged
+	strict_done = false; fallback_done = false; last_strict_empty = false
+	last_strict_us = 0; last_strict_astar_us = 0
+	counters[CHAIN_CALLS] += 1
+	if ranged: counters[RANGED_CHAINS] += 1
+	return true
+
+static func begin_call(token: bool, kind: int) -> int:
+	if not token: return -1
+	if not chain_open or call_kind != -1 or kind < 0 or kind > 1 or astar_open:
+		errors += 1; return -1
+	if (kind == 0 and strict_done) or (kind == 1 and (not strict_done or not last_strict_empty or not chain_ranged or fallback_done)):
+		errors += 1; return -1
+	call_kind = kind; reason = -1; call_astar_us = 0
+	if kind == 0:
+		counters[STRICT_CALLS] += 1
+	else:
+		counters[FALLBACK_CALLS] += 1
+		if timed:
+			counters[STRICT_FALLBACK_US] += last_strict_us
+			counters[STRICT_FALLBACK_ASTAR_US] += last_strict_astar_us
+	# The complete method interval begins after this counter bookkeeping.
+	return Time.get_ticks_usec() if timed else 0
+
+static func note_reason(kind: int, terminal: int) -> void:
+	if not active or not chain_open or call_kind != kind: return
+	if reason != -1: errors += 1
+	reason = terminal
+
+static func begin_astar(kind: int) -> int:
+	if not active or not chain_open or call_kind != kind: return -1
+	if astar_open: errors += 1; return -1
+	astar_open = true
+	counters[STRICT_ASTAR_ENTER if kind == 0 else FALLBACK_ASTAR_ENTER] += 1
+	return Time.get_ticks_usec() if timed else 0
+
+static func finish_astar(kind: int, started: int, ids_size: int) -> void:
+	if started < 0: return
+	var ended: int = Time.get_ticks_usec() if timed else 0
+	if not chain_open or call_kind != kind or not astar_open or ids_size < 0:
+		errors += 1; return
+	astar_open = false
+	counters[STRICT_ASTAR_RETURN if kind == 0 else FALLBACK_ASTAR_RETURN] += 1
+	counters[STRICT_ASTAR_IDS_TOTAL if kind == 0 else FALLBACK_ASTAR_IDS_TOTAL] += ids_size
+	if ids_size == 0: counters[STRICT_ASTAR_EMPTY_IDS if kind == 0 else FALLBACK_ASTAR_EMPTY_IDS] += 1
+	if timed:
+		if ended < started: errors += 1
+		call_astar_us += ended - started
+		counters[STRICT_ASTAR_US if kind == 0 else FALLBACK_ASTAR_US] += ended - started
+
+static func finish_call(token: bool, kind: int, started: int, points: int) -> void:
+	if not token: return
+	var ended: int = Time.get_ticks_usec() if timed else 0
+	if started < 0 or not chain_open or call_kind != kind or astar_open or reason < 0 or points < 0:
+		errors += 1; return
+	if kind == 0 and reason != STRICT_ENDPOINT_REJECT and reason != STRICT_SAME_CELL and reason != STRICT_ASTAR_EMPTY_REJECT and reason != STRICT_SMOOTH_RETURN:
+		errors += 1; return
+	if kind == 1 and reason != FALLBACK_PRECONDITION_REJECT and reason != FALLBACK_NO_OPEN_TARGET and reason != FALLBACK_ASTAR_EMPTY_REJECT and reason != FALLBACK_REACH_REJECT and reason != FALLBACK_SMOOTH_RETURN:
+		errors += 1; return
+	var duration: int = ended - started if timed else 0
+	if timed and (duration < 0 or duration < call_astar_us): errors += 1
+	counters[reason] += 1
+	counters[STRICT_RETURNS if kind == 0 else FALLBACK_RETURNS] += 1
+	counters[STRICT_POINTS if kind == 0 else FALLBACK_POINTS] += points
+	if points == 0:
+		counters[STRICT_EMPTY if kind == 0 else FALLBACK_EMPTY] += 1
+		if reason == STRICT_SMOOTH_RETURN: counters[STRICT_SMOOTH_EMPTY] += 1
+		if reason == FALLBACK_SMOOTH_RETURN: counters[FALLBACK_SMOOTH_EMPTY] += 1
+	if timed: counters[STRICT_US if kind == 0 else FALLBACK_US] += duration
+	if kind == 0:
+		strict_done = true; last_strict_empty = points == 0
+		last_strict_us = duration; last_strict_astar_us = call_astar_us
+		if last_strict_empty and chain_ranged: counters[STRICT_RANGED_EMPTY] += 1
+	else:
+		fallback_done = true
+	call_kind = -1; reason = -1
+
+static func end_chain(token: bool) -> void:
+	if not token: return
+	if not chain_open or call_kind != -1 or astar_open or not strict_done or fallback_done != (chain_ranged and last_strict_empty): errors += 1
+	counters[CHAIN_COMPLETIONS] += 1
+	chain_open = false
+
+static func close_step(at_presentation: bool) -> void:
+	if not step_open: return
+	step_open = false
+	var collected_id := Engine.get_physics_frames()
+	if collected_id != physics_id + (0 if at_presentation else 1): errors += 1
+	if chain_open or call_kind != -1 or astar_open: errors += 1
+	if counters[CHAIN_CALLS] != counters[CHAIN_COMPLETIONS] or counters[CHAIN_CALLS] != counters[STRICT_CALLS] or counters[STRICT_CALLS] != counters[STRICT_RETURNS]: errors += 1
+	if counters[FALLBACK_CALLS] != counters[FALLBACK_RETURNS] or counters[FALLBACK_CALLS] != counters[STRICT_RANGED_EMPTY]: errors += 1
+	if counters[STRICT_CALLS] != counters[STRICT_ENDPOINT_REJECT] + counters[STRICT_SAME_CELL] + counters[STRICT_ASTAR_ENTER]: errors += 1
+	if counters[STRICT_ASTAR_ENTER] != counters[STRICT_ASTAR_RETURN] or counters[STRICT_ASTAR_RETURN] != counters[STRICT_ASTAR_EMPTY_REJECT] + counters[STRICT_SMOOTH_RETURN]: errors += 1
+	if counters[STRICT_ASTAR_EMPTY_IDS] != counters[STRICT_ASTAR_EMPTY_REJECT]: errors += 1
+	if counters[STRICT_EMPTY] != counters[STRICT_ENDPOINT_REJECT] + counters[STRICT_ASTAR_EMPTY_REJECT] + counters[STRICT_SMOOTH_EMPTY]: errors += 1
+	if counters[FALLBACK_CALLS] != counters[FALLBACK_PRECONDITION_REJECT] + counters[FALLBACK_NO_OPEN_TARGET] + counters[FALLBACK_ASTAR_ENTER]: errors += 1
+	if counters[FALLBACK_ASTAR_ENTER] != counters[FALLBACK_ASTAR_RETURN] or counters[FALLBACK_ASTAR_RETURN] != counters[FALLBACK_ASTAR_EMPTY_REJECT] + counters[FALLBACK_REACH_REJECT] + counters[FALLBACK_SMOOTH_RETURN]: errors += 1
+	if counters[FALLBACK_ASTAR_EMPTY_IDS] != counters[FALLBACK_ASTAR_EMPTY_REJECT]: errors += 1
+	if counters[FALLBACK_EMPTY] != counters[FALLBACK_PRECONDITION_REJECT] + counters[FALLBACK_NO_OPEN_TARGET] + counters[FALLBACK_ASTAR_EMPTY_REJECT] + counters[FALLBACK_REACH_REJECT] + counters[FALLBACK_SMOOTH_EMPTY]: errors += 1
+	if counters[RANGED_CHAINS] > counters[CHAIN_CALLS] or counters[STRICT_RANGED_EMPTY] > counters[STRICT_EMPTY]: errors += 1
+	if timed and (counters[STRICT_FALLBACK_US] > counters[STRICT_US] or counters[STRICT_FALLBACK_ASTAR_US] > counters[STRICT_ASTAR_US] or counters[STRICT_ASTAR_US] > counters[STRICT_US] or counters[FALLBACK_ASTAR_US] > counters[FALLBACK_US]): errors += 1
+	if step_count >= STEP_CAP:
+		overflow = true; return
+	var offset := step_count * STEP_WIDTH
+	steps[offset] = tick; steps[offset+1] = physics_id; steps[offset+2] = process_id
+	steps[offset+3] = step_signal_us; steps[offset+4] = step_observer_us
+	steps[offset+5] = collected_id; steps[offset+6] = Time.get_ticks_usec()
+	for index in METRIC_COUNT:
+		steps[offset+7+index] = -1 if not timed and index in TIME_METRICS else counters[index]
+	step_count += 1
+
+static func begin_measurement(now: int, m1_tick: int) -> void:
+	close_step(true)
+	start_anchor = {"us":now,"m1_tick":m1_tick,"physics_id":Engine.get_physics_frames(),"process_id":Engine.get_process_frames(),"step_count":step_count}
+	previous_present_us = now; previous_step_count = step_count; measuring = true
+
+static func presented(now: int, m1_tick: int) -> void:
+	close_step(true)
+	if not measuring: errors += 1; return
+	if present_count >= FRAME_CAP:
+		overflow = true; return
+	var offset := present_count * PRESENT_WIDTH
+	presents[offset] = previous_present_us; presents[offset+1] = now
+	presents[offset+2] = Engine.get_process_frames(); presents[offset+3] = Engine.get_physics_frames()
+	presents[offset+4] = m1_tick; presents[offset+5] = previous_step_count; presents[offset+6] = step_count
+	previous_present_us = now; previous_step_count = step_count; present_count += 1
+
+static func end_measurement(now: int, m1_tick: int) -> void:
+	close_step(true)
+	end_anchor = {"us":now,"m1_tick":m1_tick,"physics_id":Engine.get_physics_frames(),"process_id":Engine.get_process_frames(),"step_count":step_count}
+	measuring = false
+
+static func _rows(data: PackedInt64Array, count: int, width: int) -> Array:
+	var output := []
+	for index in range(count):
+		var row := []
+		for column in range(width): row.append(data[index*width+column])
+		output.append(row)
+	return output
+
+static func report() -> Dictionary:
+	return {"schema":1,"timed":timed,"valid":errors==0 and not overflow,"errors":errors,"overflow":overflow,
+		"m1_start":start_anchor,"m1_end":end_anchor,"step_count":step_count,"presentation_count":present_count,
+		"step_columns":STEP_COLUMNS,"steps":_rows(steps,step_count,STEP_WIDTH),
+		"presentation_columns":["start_us","end_us","process_id","physics_id","m1_tick","step_begin_index","step_end_index"],"presentations":_rows(presents,present_count,PRESENT_WIDTH),
+		"process_columns":["signal_us","process_id","physics_id"],"processes":_rows(processes,process_count,PROCESS_WIDTH),
+		"clock":"same Time.get_ticks_usec as original M1 physics/process/presentation anchors",
+		"scope":"Only Unit._do_chase direct repath strict call and its immediate ranged fallback. Other orders, exit transitions and _follow_path watchdog calls excluded.",
+		"overhead":"Complete map method intervals include inserted branch/AStar observer overhead; AStar intervals include boundary calls and are nested subsets, never additive to parent methods. Both modes keep same counters/scopes/anchor clocks; clockless disables only method/AStar duration clocks. No estimated subtraction.",
+		"clockless_costs":"-1 means unavailable, never zero","rng_added":false,"extra_nodes":0,"per_unit_rows":false,"retained_path_arrays":false,"acceptance_eligible":false,"performance_claim":false}

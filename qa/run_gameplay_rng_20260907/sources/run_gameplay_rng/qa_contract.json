@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "state": "PREPARED_NOT_GODOT_RUN",
+  "suite": "gameplay-rng",
+  "entry": "res://scratchpad/run_gameplay_rng/qa_driver.gd",
+  "stages": [
+    "writer",
+    "reader"
+  ],
+  "manifest_environment": "GAMEPLAY_RNG_QA_MANIFEST",
+  "manifest_required_exact_fields": [
+    "run_id",
+    "run_dir",
+    "stage",
+    "private_user",
+    "report",
+    "source_sha256",
+    "engine_binary_sha256",
+    "handoff_sha256",
+    "writer_report_sha256"
+  ],
+  "manifest_field_types": "source_sha256 exact Dictionary of three raw SHA Strings; all other fields String",
+  "manifest_source_paths": [
+    "scripts/run_state_value_codec.gd",
+    "scratchpad/run_gameplay_rng/gameplay_rng.gd",
+    "scratchpad/run_gameplay_rng/qa_driver.gd"
+  ],
+  "paths": {
+    "manifest": "<absolute run_dir>/<stage>_manifest.json",
+    "report": "<absolute run_dir>/<stage>_report.json",
+    "handoff": "<absolute run_dir>/handoff.json",
+    "private_user": "actual user:// below <run_dir>/private_profile/<stage>/",
+    "run_id": "basename of absolute run_dir"
+  },
+  "writer_inputs": "handoff_sha256 and writer_report_sha256 both empty; writer output files must not exist",
+  "reader_inputs": "host checks completed writer then supplies SHA256 of exact existing handoff.json and writer_report.json; both unchanged at reader end",
+  "max_each_input_bytes": 1048576,
+  "stdout_report_prefix": "[gameplay-rng QA] ",
+  "required_common_labels_once": [
+    "fresh report and manifest are inside the exact run directory",
+    "actual user directory matches this stage private profile",
+    "stage input and output ownership is explicit",
+    "three runtime source files match exact manifest entries",
+    "runtime sources unchanged after this stage",
+    "manifest bytes unchanged after this stage"
+  ],
+  "required_writer_labels_once": [
+    "at least one checkpoint contains an actual native negative signed state",
+    "seven native seed checkpoints and mixed suffixes prepared",
+    "writer handoff file rereads the exact tagged JSON tree",
+    "construction start mixed draws capture and restore do not consume the global stream",
+    "signed state transport domain never passes through JSON numeric floats",
+    "count overflow rejected by all four APIs before advancing",
+    "invalid bounds consume no state or public call count",
+    "equal integer bounds count one API call while native state stays unchanged",
+    "recursive encoded input refused without stringify",
+    "malicious object encoded tag refused without serialization",
+    "state above signed int64 domain refused",
+    "different actual engine binary identity refused",
+    "numerically equal float compatibility field refused",
+    "different module source refused",
+    "different codec source refused",
+    "missing state refused"
+  ],
+  "required_reader_labels_once": [
+    "reader consumes host-pinned writer report and handoff bytes",
+    "reader decodes the persisted JSON file with exact value codec",
+    "reader has a successful different writer process and matching run identity",
+    "writer and reader runtime source identities are identical",
+    "all seven independent-process mixed suffixes match exact integer and float bits",
+    "global and visual consumption leaves gameplay continuation and terminal state unchanged",
+    "reader leaves both writer artifacts byte-identical"
+  ],
+  "required_seven_indexed_labels": {
+    "writer": [
+      "native signed seed accepted exactly ",
+      "wrapper prefix matches native mixed API bits ",
+      "checkpoint holds native seed state and public count ",
+      "wrapper suffix and final state match native mixed API "
+    ],
+    "reader": [
+      "fresh process stream restores checkpoint ",
+      "seed then state restore preserves the complete checkpoint ",
+      "persisted mixed suffix matches bits despite global and visual noise ",
+      "persisted final seed state and count match after noise "
+    ]
+  },
+  "indexed_label_suffixes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "allowed_check_groups": [
+    "behavior",
+    "rejection",
+    "fixture",
+    "json",
+    "source",
+    "environment"
+  ],
+  "expected_completed_source_groups": {
+    "writer": 9,
+    "reader": 12
+  },
+  "source_groups_explanation": "both stages 3 before + 3 after + exact expected map + before/after aggregate + manifest unchanged = 9; reader adds pinned handoff/writer inputs + shared writer/reader source identity + both inputs unchanged = 12. These are not gameplay cases.",
+  "expected_total_check_count": null,
+  "expected_seeds_decimal": [
+    "0",
+    "1",
+    "-1",
+    "-9223372036854775808",
+    "9223372036854775807",
+    "9007199254740993",
+    "-9007199254740993"
+  ],
+  "sequence": {
+    "prefix_calls": "17 + seed index",
+    "suffix_calls_per_seed": 64,
+    "suffix_calls_total": 448,
+    "mixed_pattern": [
+      "randi",
+      "randf",
+      "randi_range full signed32",
+      "randf_range(-70.0,70.0)",
+      "randi_range(9,-9)",
+      "randf_range(0.3,-0.1)",
+      "randi_range(7,7)",
+      "randf_range(-0.0,-0.0)"
+    ]
+  },
+  "required_true_report_fields": [
+    "complete",
+    "passed",
+    "native_rng_module_restore_implemented"
+  ],
+  "independent_process_continuation_tested": {
+    "writer": false,
+    "reader": true
+  },
+  "required_false_report_fields": [
+    "production_rng_migrated",
+    "old_global_sequence_equivalence",
+    "battle_resume_tested",
+    "restore_ready"
+  ],
+  "required_identity": [
+    "suite",
+    "stage",
+    "run_id",
+    "process_id",
+    "actual_user_dir",
+    "engine",
+    "engine_binary_sha256",
+    "manifest_sha256",
+    "handoff_sha256",
+    "source_sha256",
+    "source_after_sha256"
+  ],
+  "host_required_checks": [
+    "Actual non-console Godot executable hash equals supplied engine_binary_sha256, same binary both stages; pin private project.godot and the three runtime raw files.",
+    "Two distinct actual owned Godot processes, serially launched; writer exit confirmed before reader; report selfPID equals exact owned child and readerPID differs.",
+    "Per-stage private APPDATA/LOCALAPPDATA/TEMP/TMP only; actual user path exact; no HOME or parent environment override.",
+    "Shared project source lock and existing source/player guards cover every actual child; never unlock until exact owned process exit is confirmed.",
+    "Exit0, complete/passed true, nonempty checks all bool passed=true, check_count and check_groups exact actual counts, all labels and seven-indexed checks exactly once, failures empty.",
+    "Exactly one stdout marker JSON equals report file semantically; reject Unicode parsing error, Parse Error, SCRIPT ERROR, ERROR, WARNING, FAIL and other strict existing log patterns.",
+    "Writer run report passes full validation before its report+handoff SHA feed new reader manifest; reader cannot replace or silently regenerate writer artifacts.",
+    "Both stages agree on run_id/source/engine and expected handoff SHA. Source maps contain exact three entries before/after; freeze manifests and both reports with raw SHA.",
+    "Writer success alone is not cross-process continuation. Static preparation is not engine parse or QA proof."
+  ],
+  "archive_boundary": "exact scripts as ignored text, contracts, manifests, handoff, reports/logs/receipts only; no private project/profile/cache/player directories",
+  "godot_runs_during_preparation": 0,
+  "restore_ready": false
+}

@@ -1,0 +1,671 @@
+{
+  "schema": 1,
+  "tested_source_set": {
+    "base_commit": "fe1faf5a71b92a81b4404c8f35cce2b648d50a49",
+    "additional_formal_modules_uncommitted_at_test_time": [
+      "scripts/run_unit_state.gd",
+      "scripts/run_graph_identity.gd",
+      "scripts/run_projectile_state.gd",
+      "scripts/run_map_state.gd",
+      "scripts/run_scenery_state.gd"
+    ],
+    "additional_generated_script_uids": [
+      "scripts/run_graph_identity.gd.uid",
+      "scripts/run_map_state.gd.uid",
+      "scripts/run_projectile_state.gd.uid",
+      "scripts/run_scenery_state.gd.uid",
+      "scripts/run_state_value_codec.gd.uid",
+      "scripts/run_unit_state.gd.uid",
+      "scripts/steam_achievement_catalog.gd.uid",
+      "scripts/steam_achievement_state.gd.uid",
+      "scripts/steam_panels.gd.uid",
+      "scripts/steam_run_policy.gd.uid",
+      "scripts/steam_service.gd.uid",
+      "scripts/workshop_content.gd.uid",
+      "scripts/workshop_examples.gd.uid",
+      "scripts/workshop_service.gd.uid",
+      "tools/reduced_effects_qa.gd.uid",
+      "tools/reduced_effects_ui_qa.gd.uid"
+    ],
+    "qualification": "Base HEAD plus five exact manifest-pinned formal modules and generated UIDs; not all tested files belong to the base commit tree."
+  },
+  "base_head_evidence": "qa/run_resume_components_20260907/integrated_head/imports/20260906T185810280911Z/receipt.json",
+  "runs": {
+    "20260906T190047879205Z": {
+      "suite": "unit-restore",
+      "runtime_sources": [
+        {
+          "repository_path": "scripts/unit.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/unit.gd.txt",
+          "bytes": 197790,
+          "sha256": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/hero_inventory.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/hero_inventory.gd.txt",
+          "bytes": 11132,
+          "sha256": "1dd9a3b2fec0a5fc1ed2546e7bc842719a60f2cd251897434564702c01419de5",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/game_map.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/game_map.gd.txt",
+          "bytes": 34327,
+          "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_state_value_codec.gd",
+          "archive_path": "qa/run_gameplay_rng_20260907/dependencies/scripts/run_state_value_codec.gd.txt",
+          "bytes": 12091,
+          "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/battle.gd",
+          "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/battle.gd.txt",
+          "bytes": 759538,
+          "sha256": "9b79f2c677fe16def52b312d1e313a6fd63370f9119bb0b11d27443fd1c92e7e",
+          "reused_existing_frozen_bytes": false,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "project.godot",
+          "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/project.godot.txt",
+          "bytes": 1621,
+          "sha256": "60b4915832c47dec560ced6059256e7a97edeb36fe2407dbf75abf1c7039e780",
+          "reused_existing_frozen_bytes": false,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_unit_state.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/unit_state.gd.txt",
+          "bytes": 66629,
+          "sha256": "e17915f82c7bbb159e7674458368f138d5696762b1a78974bbfe616e438886c6",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_graph_identity.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/graph_identity.gd.txt",
+          "bytes": 11445,
+          "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scratchpad/run_resume_production_qa/identity_boundary_smoke.gd",
+          "archive_path": "qa/run_resume_components_20260907/production_path/sources/scratchpad/run_resume_production_qa/identity_boundary_smoke.gd.txt",
+          "bytes": 13370,
+          "sha256": "e19d4b41b8d58111b133830526274cbb462da0e47676514a327ece8b2d7a5c65",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scratchpad/run_resume_production_qa/restore_smoke.gd",
+          "archive_path": "qa/run_resume_components_20260907/production_path/sources/scratchpad/run_resume_production_qa/restore_smoke.gd.txt",
+          "bytes": 14309,
+          "sha256": "5615d4f8ad50dda2ca6e7a3157c7248c2859da79161643a9c6e9df937d8d2a12",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        }
+      ],
+      "runner": {
+        "repository_path": "scratchpad/run_resume_production_qa/run_smoke.py",
+        "archive_path": "qa/run_resume_components_20260907/production_path/sources/scratchpad/run_resume_production_qa/run_smoke.py",
+        "bytes": 11341,
+        "sha256": "9c28ef9e84040e505477b9928ff3f965132a629ddfeac8b0ffc4539886d48a5a",
+        "reused_existing_frozen_bytes": true,
+        "role": "actual QA runner"
+      }
+    },
+    "20260906T190128073061Z": {
+      "suite": "projectile-restore",
+      "runtime_sources": [
+        {
+          "repository_path": "scripts/unit.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/unit.gd.txt",
+          "bytes": 197790,
+          "sha256": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/hero_inventory.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/hero_inventory.gd.txt",
+          "bytes": 11132,
+          "sha256": "1dd9a3b2fec0a5fc1ed2546e7bc842719a60f2cd251897434564702c01419de5",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/game_map.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/game_map.gd.txt",
+          "bytes": 34327,
+          "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_state_value_codec.gd",
+          "archive_path": "qa/run_gameplay_rng_20260907/dependencies/scripts/run_state_value_codec.gd.txt",
+          "bytes": 12091,
+          "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/battle.gd",
+          "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/battle.gd.txt",
+          "bytes": 759538,
+          "sha256": "9b79f2c677fe16def52b312d1e313a6fd63370f9119bb0b11d27443fd1c92e7e",
+          "reused_existing_frozen_bytes": false,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "project.godot",
+          "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/project.godot.txt",
+          "bytes": 1621,
+          "sha256": "60b4915832c47dec560ced6059256e7a97edeb36fe2407dbf75abf1c7039e780",
+          "reused_existing_frozen_bytes": false,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/projectile.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/projectile.gd.txt",
+          "bytes": 8430,
+          "sha256": "949d44303dbd8f31f958118f54be6980d2aeb22ef0eeafbac5ba9aa544e530b8",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_projectile_state.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/projectile_state.gd.txt",
+          "bytes": 16840,
+          "sha256": "ad39e3f107fa2a08511e90500fae853d4c203f39b8dbb69c467e8cb4db5bf662",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scratchpad/run_resume_production_qa/projectile_restore_smoke.gd",
+          "archive_path": "qa/run_resume_components_20260907/production_path/sources/scratchpad/run_resume_production_qa/projectile_restore_smoke.gd.txt",
+          "bytes": 13622,
+          "sha256": "589ef1aaab52ac3ef2ba2fd7144db26ac1926303ae8dbd398b50bd6bbdb963da",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        }
+      ],
+      "runner": {
+        "repository_path": "scratchpad/run_resume_production_qa/run_smoke.py",
+        "archive_path": "qa/run_resume_components_20260907/production_path/sources/scratchpad/run_resume_production_qa/run_smoke.py",
+        "bytes": 11341,
+        "sha256": "9c28ef9e84040e505477b9928ff3f965132a629ddfeac8b0ffc4539886d48a5a",
+        "reused_existing_frozen_bytes": true,
+        "role": "actual QA runner"
+      }
+    },
+    "20260906T190208572861Z": {
+      "suite": "map-restore",
+      "runtime_sources": [
+        {
+          "repository_path": "scripts/unit.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/unit.gd.txt",
+          "bytes": 197790,
+          "sha256": "2819b06d4f6266b6b16c3f4fbfd85ffc3f547546cc6c38c47db2367e076818cc",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/hero_inventory.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/hero_inventory.gd.txt",
+          "bytes": 11132,
+          "sha256": "1dd9a3b2fec0a5fc1ed2546e7bc842719a60f2cd251897434564702c01419de5",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/game_map.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/game_map.gd.txt",
+          "bytes": 34327,
+          "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_state_value_codec.gd",
+          "archive_path": "qa/run_gameplay_rng_20260907/dependencies/scripts/run_state_value_codec.gd.txt",
+          "bytes": 12091,
+          "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/battle.gd",
+          "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/battle.gd.txt",
+          "bytes": 759538,
+          "sha256": "9b79f2c677fe16def52b312d1e313a6fd63370f9119bb0b11d27443fd1c92e7e",
+          "reused_existing_frozen_bytes": false,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "project.godot",
+          "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/project.godot.txt",
+          "bytes": 1621,
+          "sha256": "60b4915832c47dec560ced6059256e7a97edeb36fe2407dbf75abf1c7039e780",
+          "reused_existing_frozen_bytes": false,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_map_state.gd",
+          "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_map_state.gd.txt",
+          "bytes": 27189,
+          "sha256": "9ec7cf0030819b3cff2c32a2e8124fe49efc58d3851fcb32c1bddd7ac59dc1fd",
+          "reused_existing_frozen_bytes": false,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/run_scenery_state.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/scenery_state.gd.txt",
+          "bytes": 28131,
+          "sha256": "3806fdfde0fec6b7574a37834fd047395e8c4dd963e82657b560b9ca89cf64e6",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scratchpad/run_resume_production_qa/map_restore_smoke.gd",
+          "archive_path": "qa/run_resume_components_20260907/production_path/sources/scratchpad/run_resume_production_qa/map_restore_smoke.gd.txt",
+          "bytes": 12122,
+          "sha256": "c301bff842e90989592dc884fedd64390a3d33b83c26d9fea5473ad59fc80eae",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/liangshan_height.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/liangshan_height.gd.txt",
+          "bytes": 2318,
+          "sha256": "039bde96c08630f0434d67200ff1461b4221dc0862d7aea5b7f5f245aef44e24",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/campaign_height.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/campaign_height.gd.txt",
+          "bytes": 224,
+          "sha256": "1da4915ec1e1600236a964659dc5be4c785e5e5d0d10a565d689b426804577a4",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/levels/skirmish.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/levels/skirmish.gd.txt",
+          "bytes": 24623,
+          "sha256": "0150ff3ec4c02afcb131f349834ff1487678275e39a894bb042c71318d6411d6",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/liangshan_scenery.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/liangshan_scenery.gd.txt",
+          "bytes": 33709,
+          "sha256": "24ff0d84f30874c33a2a16985e66a05ff58be4d683bcd0defca468b5acf9e118",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/liangshan_entrance.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/liangshan_entrance.gd.txt",
+          "bytes": 15119,
+          "sha256": "3652f81da449a1fd4c63f00d1a5611fb35dc0a1856a2181666773ae6c7ad85ee",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/liangshan_gate.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/liangshan_gate.gd.txt",
+          "bytes": 14351,
+          "sha256": "1ce05b65e1694ccbc04f786b1ca8f3c721ca82ff58fa30ff28bb508038f399a7",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/liangshan_stockade.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/liangshan_stockade.gd.txt",
+          "bytes": 3432,
+          "sha256": "1df1216f54c2e95392735422c737adbd795fc401cc18344faafa1de05513ec17",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/campaign_flag_overlay.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/campaign_flag_overlay.gd.txt",
+          "bytes": 9903,
+          "sha256": "f609d5772f4e676f4f38f51b1026a1174341b1ebaf25fb64d2561da76dbb6720",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/campaign_art_event.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/campaign_art_event.gd.txt",
+          "bytes": 571,
+          "sha256": "b62394fda4e81f20217ddfb4e2bc5e941323ebe0f352f209f681b9aa26f3e280",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/liangshan_coast.gdshader",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/liangshan_coast.gdshader.txt",
+          "bytes": 9662,
+          "sha256": "579f6fbf74dba401cf83b876f7fa320a9b1b573a02215b7015fd7e14a5fab76a",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        },
+        {
+          "repository_path": "scripts/liangshan_layout.gd",
+          "archive_path": "qa/run_resume_components_20260907/sources/scripts/liangshan_layout.gd.txt",
+          "bytes": 3996,
+          "sha256": "9512f8c03561d016ee657cca1281ef89c9b69cd65c8abdb0078bdc5929d95ca9",
+          "reused_existing_frozen_bytes": true,
+          "role": "tested source"
+        }
+      ],
+      "runner": {
+        "repository_path": "scratchpad/run_resume_production_qa/run_smoke.py",
+        "archive_path": "qa/run_resume_components_20260907/production_path/sources/scratchpad/run_resume_production_qa/run_smoke.py",
+        "bytes": 11341,
+        "sha256": "9c28ef9e84040e505477b9928ff3f965132a629ddfeac8b0ffc4539886d48a5a",
+        "reused_existing_frozen_bytes": true,
+        "role": "actual QA runner"
+      }
+    }
+  },
+  "formal_modules": [
+    {
+      "repository_path": "scripts/run_unit_state.gd",
+      "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/unit_state.gd.txt",
+      "bytes": 66629,
+      "sha256": "e17915f82c7bbb159e7674458368f138d5696762b1a78974bbfe616e438886c6",
+      "reused_existing_frozen_bytes": true,
+      "role": "tested source",
+      "uncommitted_at_test_time": true
+    },
+    {
+      "repository_path": "scripts/run_graph_identity.gd",
+      "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/graph_identity.gd.txt",
+      "bytes": 11445,
+      "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+      "reused_existing_frozen_bytes": true,
+      "role": "tested source",
+      "uncommitted_at_test_time": true
+    },
+    {
+      "repository_path": "scripts/run_projectile_state.gd",
+      "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/projectile_state.gd.txt",
+      "bytes": 16840,
+      "sha256": "ad39e3f107fa2a08511e90500fae853d4c203f39b8dbb69c467e8cb4db5bf662",
+      "reused_existing_frozen_bytes": true,
+      "role": "tested source",
+      "uncommitted_at_test_time": true
+    },
+    {
+      "repository_path": "scripts/run_map_state.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_map_state.gd.txt",
+      "bytes": 27189,
+      "sha256": "9ec7cf0030819b3cff2c32a2e8124fe49efc58d3851fcb32c1bddd7ac59dc1fd",
+      "reused_existing_frozen_bytes": false,
+      "role": "tested source",
+      "uncommitted_at_test_time": true
+    },
+    {
+      "repository_path": "scripts/run_scenery_state.gd",
+      "archive_path": "qa/run_resume_components_20260907/sources/scratchpad/run_resume_integration/scenery_state.gd.txt",
+      "bytes": 28131,
+      "sha256": "3806fdfde0fec6b7574a37834fd047395e8c4dd963e82657b560b9ca89cf64e6",
+      "reused_existing_frozen_bytes": true,
+      "role": "tested source",
+      "uncommitted_at_test_time": true
+    }
+  ],
+  "steam_workshop_source_dependencies": [
+    {
+      "repository_path": "scripts/steam_achievement_catalog.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_achievement_catalog.gd.txt",
+      "bytes": 4150,
+      "sha256": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    },
+    {
+      "repository_path": "scripts/steam_achievement_state.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_achievement_state.gd.txt",
+      "bytes": 1716,
+      "sha256": "f0dddf190f440d64367bb84c1ff1dc634174bdd3fab45148cfd5b879786bc71e",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    },
+    {
+      "repository_path": "scripts/steam_panels.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_panels.gd.txt",
+      "bytes": 8670,
+      "sha256": "189858a1d9a1f47d388b897e2927fd847a35046a38c1faaf315b781946c59a12",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    },
+    {
+      "repository_path": "scripts/steam_run_policy.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_run_policy.gd.txt",
+      "bytes": 1526,
+      "sha256": "25eb69d40a3c57d944ffb0078e49b9b431336f159e05b7cf65c7dddb7e6c2c24",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    },
+    {
+      "repository_path": "scripts/steam_service.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_service.gd.txt",
+      "bytes": 7119,
+      "sha256": "6948d2cf1678d1e91eef6c8c3644af336d8105d70977eac0221b5ed713a68998",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    },
+    {
+      "repository_path": "scripts/workshop_content.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/workshop_content.gd.txt",
+      "bytes": 19437,
+      "sha256": "74a49022f8ab0dae998f32f66ccc70e70394b973ce21b9d626c9471f0a45ebcc",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    },
+    {
+      "repository_path": "scripts/workshop_examples.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/workshop_examples.gd.txt",
+      "bytes": 1539,
+      "sha256": "c21e2454f830e290e627212de772063549f76ac7f44ed15ddf569bf4c8e4306d",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    },
+    {
+      "repository_path": "scripts/workshop_service.gd",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/workshop_service.gd.txt",
+      "bytes": 8606,
+      "sha256": "9028e3f30ad098135400aa7efc66d7608154c7f54db608fb4f9c91d503f154e1",
+      "reused_existing_frozen_bytes": false,
+      "role": "Steam/Workshop source dependency from all three full-source baselines"
+    }
+  ],
+  "shared_harness_dependencies": [
+    {
+      "repository_path": "scratchpad/run_gameplay_rng_r1/run_qa.py",
+      "archive_path": "qa/run_gameplay_rng_20260907/sources/run_gameplay_rng_r1/run_qa.py.txt",
+      "bytes": 20425,
+      "sha256": "8f9c82100bf8b635abd74f9a79b31335e72df404f30c62f3f490458af3e0e1ad",
+      "reused_existing_frozen_bytes": true,
+      "role": "fixed SHA host helper"
+    },
+    {
+      "repository_path": "scratchpad/separation_sections_diag/frozen/process_safety.py",
+      "archive_path": "qa/run_gameplay_rng_20260907/dependencies/scratchpad/separation_sections_diag/frozen/process_safety.py.txt",
+      "bytes": 20414,
+      "sha256": "7983b00449f8d606e4f1be55ca13596239fbc8b47c3894ff3c31da03757835a1",
+      "reused_existing_frozen_bytes": true,
+      "role": "fixed SHA host helper"
+    },
+    {
+      "repository_path": "tools/run_reduced_effects_qa.py",
+      "archive_path": "qa/run_gameplay_rng_20260907/dependencies/tools/run_reduced_effects_qa.py.txt",
+      "bytes": 27321,
+      "sha256": "1cecf1c3e6bb7c15992e6955fcad67e959cf836a198e9ceca28d744a1a573c0c",
+      "reused_existing_frozen_bytes": true,
+      "role": "fixed SHA host helper"
+    }
+  ],
+  "retained_generated_script_uids": [
+    {
+      "repository_path": "scripts/run_graph_identity.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_graph_identity.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "0a039359b27bd80bc57af1bfb942fdeea8d4698a31a293cf9747a8d0099055c8",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/run_map_state.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_map_state.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "5307977673171dffcd8418d05b4171935640738c833ec6a4090bcc6fb2e1e80e",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/run_projectile_state.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_projectile_state.gd.uid.txt",
+      "bytes": 19,
+      "sha256": "8627cd7579d69714c1fa094da865fdb1275b0b12f506f707debfec32d2c578c5",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/run_scenery_state.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_scenery_state.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "9c19df817fcb9d5cb441f54da69e6bbcb48511ebfac058b94ba1bf20373aa334",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/run_state_value_codec.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_state_value_codec.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "cc43b6562af5d87bff9afa1b066598b3fb33c11fbe9d5bf1f8274cdace7b462f",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/run_unit_state.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/run_unit_state.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "aeb40ed588b23db316bfef3642a4d4d9b7dcd36b3eb08e9bd99719a26c689679",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/steam_achievement_catalog.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_achievement_catalog.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "4ffb8e72c0c926d3acb1c31975715fc8efbf6654c6e2b3c82247432b65494b0f",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/steam_achievement_state.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_achievement_state.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "f90d08d150d899c7ca62674b05df195d3be715258c428bf28b5b10c9a46a9213",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/steam_panels.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_panels.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "751898f8b523841aab353d0c6291ea4b5543e616b87375b6877a6222127cd11e",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/steam_run_policy.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_run_policy.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "420d94ffb03ce92346cf06d78e37f9bdb06b96774bae189fb27bc53a02e4f885",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/steam_service.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/steam_service.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "1165ba97d76e70fc38622f2a2bf4411275b563649038b39c63118602ac460a1d",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/workshop_content.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/workshop_content.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "0d923495ddf9465961884436be10c1ebfd1ead0304c6a57bdee9e8fae33d2dbd",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/workshop_examples.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/workshop_examples.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "cfeb03cde4d17cb0a3ba105cb854b4d89ec3963755b1114acc34ef535e30a9e1",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "scripts/workshop_service.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scripts/workshop_service.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "f950bc276cafcf93443ad89b6eb422b8f6f0101aedf8bb926d1282cfe6779143",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "tools/reduced_effects_qa.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/tools/reduced_effects_qa.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "af315df25afde77288a3b8eb1c85d16ce87e6137284e14d982eef8feee570669",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    },
+    {
+      "repository_path": "tools/reduced_effects_ui_qa.gd.uid",
+      "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/tools/reduced_effects_ui_qa.gd.uid.txt",
+      "bytes": 20,
+      "sha256": "43da93313531a4dadeab5e228e92bdec07760364debb14bc24ad47c8995c3552",
+      "reused_existing_frozen_bytes": false,
+      "role": "generated script UID retained in tested source baseline"
+    }
+  ],
+  "import_utility": {
+    "repository_path": "scratchpad/run_resume_production_qa/import_current.py",
+    "archive_path": "qa/run_resume_components_20260907/integrated_head/sources/scratchpad/run_resume_production_qa/import_current.py",
+    "bytes": 4507,
+    "sha256": "a44239ecf08d0a1856399a378bcb9402998f0783acdf3cf0c8074edb98d7b4ec",
+    "reused_existing_frozen_bytes": false,
+    "role": "current import utility; original import receipt did not pin runner SHA"
+  },
+  "referenced_original_archive_manifest_sha256": {
+    "qa/run_gameplay_rng_20260907/archive_manifest.json": "df51f09bae02a2467e7706d98d10dbc7a386d1aad0af7b64d299b4c102422e5d",
+    "qa/run_resume_components_20260907/archive_manifest.json": "08a0825195e1b524dc3693603df0773b517422bc67cdfb0378ea018d7c264500",
+    "qa/run_resume_components_20260907/production_path/archive_manifest.json": "07a5f2a9d88f61ad6fc341e46ddc12f99fe04508beae9fa527a7894a36150ecd"
+  },
+  "all_mapped_sources_have_archived_bytes": true,
+  "source_deduplication": "Earlier frozen bytes are referenced when SHA matches. repository_path remains the correct restore path, including formal modules equal to scratch prototypes.",
+  "content_resources_and_other_project_dependencies": "Requires a complete checkout and matching resources. Full source receipts retain 2862 hashes; binary content, vendor DLLs and profiles are not copied. This does not prove online Steam behavior."
+}

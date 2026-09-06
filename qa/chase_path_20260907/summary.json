@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "status": "ARCHIVED_REAL_EVIDENCE_VERIFIED",
+  "diagnostic": {
+    "timed": {
+      "physics_steps": 602,
+      "strict_calls": 1840,
+      "fallback_calls": 0,
+      "strict_us_per_physics_step": 185.6860465116279,
+      "strict_total_us": 111783,
+      "strict_astar_nested_total_us": 16755,
+      "measurement_ticks": [
+        303,
+        904
+      ],
+      "warmup_steps_excluded": 302,
+      "first600_complete": true,
+      "decision": "stop_no_fallback",
+      "all_recomputed_fields_match": true
+    },
+    "clockless": {
+      "physics_steps": 597,
+      "strict_calls": 1750,
+      "fallback_calls": 0,
+      "strict_us_per_physics_step": null,
+      "strict_total_us": null,
+      "strict_astar_nested_total_us": null,
+      "measurement_ticks": [
+        305,
+        901
+      ],
+      "warmup_steps_excluded": 304,
+      "first600_complete": false,
+      "decision": "stop_no_fallback",
+      "all_recomputed_fields_match": true
+    }
+  },
+  "decision": "stop_no_fallback",
+  "generation_id": "20260906T175543040968Z",
+  "behavior": {
+    "baseline_run": "20260906T175413610766Z",
+    "candidate_run": "20260906T175746359017Z",
+    "baseline_checks": 55,
+    "candidate_checks": 88,
+    "offline_checks": 186,
+    "cases": 9,
+    "original_calls_per_process": 13,
+    "ordered_points_compared": 7,
+    "baseline_pid": 15688,
+    "candidate_pid": 27328,
+    "comparison_valid": true,
+    "uncovered_real_branches": [
+      "find_firing_path no_open_target guard on a stable map with valid open start",
+      "find_firing_path AStar empty ids: not independently forced by these real layouts"
+    ],
+    "unit_do_chase_state_equivalence": false,
+    "check_evidence": "55/88 are native report counters with empty failures; the offline result stores all 186 explicit check rows."
+  },
+  "timed_pid": 30632,
+  "clockless_pid": 38272,
+  "engine_raw_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "history_note": "Original generation receipt full_offline_analysis_pending=true is preserved. Original analysis files and this independent exact recomputation establish subsequent completed offline analysis.",
+  "scope": "Direct chase repath strict/fallback probe plus nine real Map fixtures. Complete method time includes probe; AStar nested; clockless durations null.",
+  "normal_fps_available": false,
+  "acceptance_eligible": false,
+  "production_optimization_implemented": false,
+  "full_unit_state_equivalence": false,
+  "battle_resume_tested": false
+}

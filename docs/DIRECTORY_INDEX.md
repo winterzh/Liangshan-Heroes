@@ -1,3 +1,12 @@
+## 2026-09-07 追击诊断、独立 RNG 与真实恢复组件
+
+- `docs/CHASE_PATH_DIAGNOSTIC_20260907.md`、`qa/chase_path_20260907/`：冻结4baafc1的602/597步、0 fallback与约0.186ms/步取舍，55/88原生Map和186离线检查；原始收据、诊断和分析器按字节归档，不是生产优化或正常FPS验收。
+- `docs/RUN_GAMEPLAY_RNG_20260907.md`、`qa/run_gameplay_rng_20260907/`：R1私有独立流writer137/reader47检查及7×64=448个后续结果，原失败、成功双进程与精确源码/helper。未迁移生产全局随机流，不复制私有profile或引擎。
+- `scripts/run_unit_state.gd`、`scripts/run_graph_identity.gd`、`scripts/run_projectile_state.gd`、`scripts/run_map_state.gd`、`scripts/run_scenery_state.gd`：五个正式组件；Unit149、Projectile54、Map63在原型及正式加载路径复验，同一组检查不重复当新场景。
+- `docs/RUN_RESUME_COMPONENTS_20260907.md`、`qa/run_resume_components_20260907/`：原型五轮含两次失败，`production_path/`独立保留正式路径三轮；逐轮manifest/报告/进程/来源与玩家摘要、失败原文、源码映射和哈希清单。正式五模块作为明确仓库依赖；Map只改Scenery preload路径，63条headless数据/材质检查无截图验收。
+- 本批原始受测基线199aac6保持，精确文件身份以run manifest为准；快进fe1faf5加受测时尚未提交的五个正式模块后，Unit149/Projectile54/Map63兼容性复测已通过。`qa/run_resume_components_20260907/integrated_head/`独立保留新三轮源码/进程/来源保护收据及[说明](../qa/run_resume_components_20260907/integrated_head/README.md)，不覆盖原型/正式路径历史，也不新增场景计数。Steam接入仍是本地候选，线上Build25154403不变。下一步整局顺序/UID/tick/全部效果与RunSession尚未构成已验收菜单或PCK续玩入口。
+- 归档均由`.gdignore`隔离，GDScript按文本封存，不含私有工程、profile、缓存或玩家数据；复现时按README恢复到新的忽略路径，已存在不覆盖。
+
 ## 2026-09-07 Steam 成就与工坊
 
 - `scripts/steam_*.gd`、`scripts/workshop_*.gd`：成就目录/状态/官方模式/Steam 适配、工坊数据校验/服务/示例及共享面板。

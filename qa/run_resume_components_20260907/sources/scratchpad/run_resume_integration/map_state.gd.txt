@@ -1,0 +1,483 @@
+extends RefCounted
+## Private resume adapter. Call capture under the Battle snapshot barrier.
+## No paint/bake/deploy, scene-tree attachment or gameplay RNG calls.
+## Each fixed section uses the production codec independently; five 8k-cell
+## navigation tables exceed its single-value byte budget when combined.
+## The outer save transaction must inject its trusted build/content version and
+## bound total file bytes. Never derive that trust from a supplied snapshot.
+const Codec := preload("res://scripts/run_state_value_codec.gd")
+const Height := preload("res://scripts/liangshan_height.gd")
+const CampaignHeight := preload("res://scripts/campaign_height.gd")
+const SceneryState := preload("res://scratchpad/run_resume_integration/scenery_state.gd")
+const MAX_SIDE := 512
+const MAX_CELLS := 8192
+const MAX_DECOR := 2048
+const NAV_NAMES := ["astar", "astar_guan", "astar_water", "astar_static", "astar_static_guan"]
+const SECTION_NAMES := ["header", "grid", "base_solid", "block_count", "height", "metadata", "display",
+	"astar", "astar_guan", "astar_water", "astar_static", "astar_static_guan"]
+const HEADER_FIELDS := ["w", "h", "theme", "base_fill", "navigation_revision", "decor",
+	"environment_style", "natural_surface_enabled", "transform", "modulate", "self_modulate",
+	"visible", "z_index", "z_as_relative", "y_sort_enabled", "texture_filter", "texture_repeat",
+	"light_mask", "visibility_layer", "use_parent_material"]
+const NAV_FIELDS := ["region_position", "region_size", "cell_size", "offset", "cell_shape",
+	"compute_heuristic", "estimate_heuristic", "diagonal_mode", "jumping_enabled", "solid_hex", "weight_f64_hex"]
+const META_NAMES := ["liangshan_rts_court", "zhongyi_hall_facing_cardinal", "zhongyi_hall_front_vector",
+	"liangshan_art_level_id", "liangshan_hall_cell", "campaign_wall_segments", "campaign_city_sign_cell",
+	"campaign_city_wicket_sealed", "natural_surface_contract"]
+var _content_version: String = ""
+
+
+func _init(content_version: String) -> void:
+	# An invalid constructor version leaves this adapter unusable. No fallback
+	# version, environment lookup, raw source read or snapshot-derived trust.
+	if not content_version.strip_edges().is_empty() and content_version.length() <= 256:
+		_content_version = content_version
+
+
+func capture(game_map: GameMap) -> Dictionary:
+	if _content_version.is_empty(): return _fail("CONTENT_VERSION_REQUIRED", "$/content_version")
+	if not is_instance_valid(game_map): return _fail("MAP_REQUIRED", "$")
+	if game_map.get_script() != preload("res://scripts/game_map.gd"):
+		return _fail("MAP_SCRIPT_UNSUPPORTED", "$")
+	if not _dimensions(game_map.w, game_map.h): return _fail("MAP_DIMENSIONS", "$/header")
+	var revision: int = game_map._navigation_revision
+	var raw := {
+		"header": {
+			"w": game_map.w, "h": game_map.h, "theme": game_map.theme, "base_fill": game_map.base_fill,
+			"navigation_revision": revision, "decor": game_map.decor.duplicate(true),
+			"environment_style": game_map.environment_style, "natural_surface_enabled": game_map.natural_surface_enabled,
+			"transform": [game_map.transform.x, game_map.transform.y, game_map.transform.origin],
+			"modulate": game_map.modulate, "self_modulate": game_map.self_modulate,
+			"visible": game_map.visible, "z_index": game_map.z_index, "z_as_relative": game_map.z_as_relative,
+			"y_sort_enabled": game_map.y_sort_enabled, "texture_filter": game_map.texture_filter,
+			"texture_repeat": game_map.texture_repeat, "light_mask": game_map.light_mask,
+			"visibility_layer": game_map.visibility_layer, "use_parent_material": game_map.use_parent_material},
+		"grid": game_map.grid.to_byte_array().hex_encode(),
+		"base_solid": game_map._base_solid.hex_encode(),
+		"block_count": game_map._block_count.to_byte_array().hex_encode(),
+		"metadata": {}}
+	for key in game_map.get_meta_list():
+		var name: String = String(key)
+		if name not in META_NAMES: return _fail("MAP_META_UNSUPPORTED", "$/metadata/" + name)
+		raw.metadata[name] = game_map.get_meta(key)
+	var height_result: Dictionary = _capture_height(game_map.height_field)
+	if not height_result.ok: return height_result
+	raw["height"] = height_result.value
+	var display_result: Dictionary = _capture_display(game_map)
+	if not display_result.ok: return display_result
+	raw["display"] = display_result.value
+	for name in NAV_NAMES:
+		var nav_result: Dictionary = _capture_nav(game_map.get(name), game_map.w, game_map.h, name)
+		if not nav_result.ok: return nav_result
+		raw[name] = nav_result.value
+	if revision != game_map._navigation_revision: return _fail("CAPTURE_CHANGED", "$/header/navigation_revision")
+	var checked: Dictionary = _validate_raw(raw)
+	if not checked.ok: return checked
+	var encoded := {"schema": "game_map_v2", "content_version": _content_version, "sections": {}}
+	var codec := Codec.new()
+	for name in SECTION_NAMES:
+		if name == "display":
+			# Display already has individually bounded codec node/uniform chunks.
+			encoded.sections[name] = raw[name]
+			continue
+		var result: Dictionary = codec.encode(raw[name])
+		if not result.ok: return _codec_failure(result, name)
+		encoded.sections[name] = result.value
+	return {"ok": true, "code": "OK", "value": encoded,
+		"complete": checked.requirements.is_empty(), "requirements": checked.requirements}
+
+
+func validate(snapshot: Variant) -> Dictionary:
+	if _content_version.is_empty(): return _fail("CONTENT_VERSION_REQUIRED", "$/content_version")
+	if not _fields(snapshot, ["schema", "content_version", "sections"]) or snapshot.schema != "game_map_v2":
+		return _fail("MAP_SCHEMA", "$")
+	if typeof(snapshot.content_version) != TYPE_STRING or snapshot.content_version != _content_version:
+		return _fail("CONTENT_VERSION_MISMATCH", "$/content_version")
+	if not _fields(snapshot.sections, SECTION_NAMES): return _fail("MAP_SECTIONS", "$/sections")
+	# Check the nested envelope before decoding any gameplay values. Both trust
+	# comparisons therefore finish before stage/restore can touch a target.
+	var display_check: Dictionary = SceneryState.new(_content_version).validate(snapshot.sections.display)
+	if not display_check.ok: return display_check
+	var raw: Dictionary = {}
+	var codec := Codec.new()
+	for name in SECTION_NAMES:
+		if name == "display":
+			raw[name] = snapshot.sections[name].duplicate(true)
+			continue
+		var decoded: Dictionary = codec.decode(snapshot.sections[name])
+		if not decoded.ok: return _codec_failure(decoded, name)
+		raw[name] = decoded.value
+	return _validate_raw(raw)
+
+
+## Complete standard map entry. Caller supplies a detached Battle/world/map
+## shell with battle.map, fog and _vision already bound. Gameplay values are
+## installed once, followed by the fixed pure visual scenery factory and exact
+## saved runtime/material state. Failure after installation invalidates the
+## private transaction; never expose or reuse that tree after a failure.
+func restore_into(target: GameMap, snapshot: Variant) -> Dictionary:
+	var checked: Dictionary = validate(snapshot)
+	if not checked.ok: return checked
+	if not checked.requirements.is_empty():
+		return {"ok": false, "code": "DISPLAY_ADAPTER_REQUIRED", "path": "$/display",
+			"target_changed": false, "requirements": checked.requirements}
+	var raw: Dictionary = checked.value
+	var installed: Dictionary = _install_values(target, raw, [{"phase": "display_pending"}])
+	if not installed.ok: return installed
+	return _finish_display(target, raw)
+
+
+## Complete the second phase after stage_map_values and private Unit/fog
+## binding. Units must bind their saved footprint metadata without incrementing
+## map counts again. This rejects a live tree or an already-created scenery.
+func finish_display(target: GameMap, snapshot: Variant) -> Dictionary:
+	var checked: Dictionary = validate(snapshot)
+	if not checked.ok: return checked
+	if not is_instance_valid(target) or target.is_inside_tree() or target.sample_scenery != null:
+		return _fail("PRIVATE_STAGED_MAP_REQUIRED", "$")
+	if not checked.requirements.is_empty():
+		return {"ok": false, "code": "DISPLAY_ADAPTER_REQUIRED", "requirements": checked.requirements}
+	return _finish_display(target, checked.value)
+
+
+func _finish_display(target: GameMap, raw: Dictionary) -> Dictionary:
+	if target.w != raw.header.w or target.h != raw.header.h or target.grid.to_byte_array().hex_encode() != raw.grid \
+			or target._base_solid.hex_encode() != raw.base_solid or target._block_count.to_byte_array().hex_encode() != raw.block_count \
+			or target._navigation_revision != raw.header.navigation_revision:
+		return {"ok": false, "code": "STAGED_MAP_CHANGED", "discard_private_transaction": true}
+	var display_result: Dictionary = SceneryState.new(_content_version).restore_into(target, raw.display)
+	if not display_result.ok:
+		display_result["discard_private_transaction"] = true
+		return display_result
+	# Audit the factory against the actual saved authoritative state. It has no
+	# reason to alter any of these values, even temporarily.
+	if target.w != raw.header.w or target.h != raw.header.h or target.grid.to_byte_array().hex_encode() != raw.grid \
+			or target._base_solid.hex_encode() != raw.base_solid or target._block_count.to_byte_array().hex_encode() != raw.block_count \
+			or target._navigation_revision != raw.header.navigation_revision:
+		return {"ok": false, "code": "VISUAL_FACTORY_CHANGED_MAP", "discard_private_transaction": true}
+	for name in NAV_NAMES:
+		var nav_check: Dictionary = _capture_nav(target.get(name), target.w, target.h, name)
+		if not nav_check.ok or nav_check.value != raw[name]:
+			return {"ok": false, "code": "VISUAL_FACTORY_CHANGED_NAV", "path": name, "discard_private_transaction": true}
+	# setup regenerates natural_surface_contract; preserve the exact saved keys
+	# and order after the scenery adapter has compared its rebuilt contract.
+	for name in target.get_meta_list(): target.remove_meta(name)
+	for name in raw.metadata: target.set_meta(name, raw.metadata[name])
+	target.visible = raw.header.visible
+	target.queue_redraw()
+	return {"ok": true, "code": "OK", "complete": true, "requirements": [], "footprints_already_registered": true,
+		"restored_scenery_nodes": display_result.get("restored_nodes", 0)}
+
+
+## Explicit transaction phase, NOT a complete restored map. It installs exact
+## gameplay/height/meta values into a detached, empty private map and leaves the
+## map hidden. Caller must satisfy display requirements before exposing the new
+## Battle, or dispose its private tree. Do not register saved footprints again:
+## counts and all five navigation grids are ALREADY restored here.
+func stage_map_values(target: GameMap, snapshot: Variant) -> Dictionary:
+	var checked: Dictionary = validate(snapshot)
+	if not checked.ok: return checked
+	var requirements: Array = checked.requirements.duplicate(true)
+	if checked.value.display.kind != "none": requirements.append({"phase": "call_finish_display_after_unit_and_fog_binding"})
+	return _install_values(target, checked.value, requirements)
+
+
+func _install_values(target: GameMap, raw: Dictionary, requirements: Array) -> Dictionary:
+	var target_check: Dictionary = _empty_target(target)
+	if not target_check.ok: return target_check
+	# Allocate complete replacements before assigning any target property. Never
+	# mutate a caller-owned AStar instance which might alias another live map.
+	var navs: Dictionary = {}
+	for name in NAV_NAMES:
+		navs[name] = _new_nav(raw[name])
+	var field: RefCounted = null
+	if raw.height.kind != "none":
+		field = Height.new() if raw.height.kind == "liangshan" else CampaignHeight.new()
+		field.width = raw.height.width
+		field.height = raw.height.height
+		field.samples = raw.height.samples.duplicate()
+		if raw.height.kind == "campaign": field.style = raw.height.style
+		# Preserve actual RF image bits, not samples/MAX_HEIGHT recomputation:
+		# build() stores the pre-f32 profile in the GPU image, so it can differ.
+		var img := Image.create_from_data(raw.height.width, raw.height.height, false,
+			Image.FORMAT_RF, raw.height.texture_rf_hex.hex_decode())
+		if img == null or img.is_empty(): return _fail("HEIGHT_IMAGE_CREATE", "$/height")
+		field.texture = ImageTexture.create_from_image(img)
+		if field.texture == null: return _fail("HEIGHT_TEXTURE_CREATE", "$/height")
+	var header: Dictionary = raw.header
+	target.w = header.w
+	target.h = header.h
+	target.theme = header.theme
+	target.base_fill = header.base_fill
+	target.grid = raw.grid.hex_decode().to_int32_array()
+	target._base_solid = raw.base_solid.hex_decode()
+	target._block_count = raw.block_count.hex_decode().to_int32_array()
+	target._navigation_revision = header.navigation_revision
+	for name in NAV_NAMES: target.set(name, navs[name])
+	target.decor = header.decor.duplicate(true)
+	target.height_field = field
+	target.environment_style = header.environment_style
+	target.natural_surface_enabled = header.natural_surface_enabled
+	for name in raw.metadata: target.set_meta(name, raw.metadata[name])
+	target.transform = Transform2D(header.transform[0], header.transform[1], header.transform[2])
+	target.modulate = header.modulate
+	target.self_modulate = header.self_modulate
+	target.z_index = header.z_index
+	target.z_as_relative = header.z_as_relative
+	target.y_sort_enabled = header.y_sort_enabled
+	target.texture_filter = header.texture_filter
+	target.texture_repeat = header.texture_repeat
+	target.light_mask = header.light_mask
+	target.visibility_layer = header.visibility_layer
+	target.use_parent_material = header.use_parent_material
+	# _terrain_draw_cache is derived per CanvasItem draw; the new map is empty.
+	target.visible = header.visible if requirements.is_empty() else false
+	if requirements.is_empty(): target.queue_redraw()
+	return {"ok": true, "code": "OK" if requirements.is_empty() else "MAP_VALUES_STAGED",
+		"complete": requirements.is_empty(), "requirements": requirements,
+		"saved_visible": header.visible, "footprints_already_registered": true}
+
+
+func _empty_target(target: GameMap) -> Dictionary:
+	if not is_instance_valid(target): return _fail("PRIVATE_MAP_REQUIRED", "$")
+	if target.get_script() != preload("res://scripts/game_map.gd"):
+		return _fail("MAP_SCRIPT_UNSUPPORTED", "$")
+	if target.is_inside_tree() or target.is_queued_for_deletion(): return _fail("DETACHED_MAP_REQUIRED", "$")
+	if not target.grid.is_empty() or not target._base_solid.is_empty() or not target._block_count.is_empty() \
+			or target._navigation_revision != 0 or not target.decor.is_empty() or target.get_child_count(true) != 0 \
+			or not target.get_meta_list().is_empty() or target.sample_scenery != null or target.height_field != null \
+			or target.material != null or target._terrain_draw_cache != null:
+		return _fail("EMPTY_MAP_REQUIRED", "$")
+	for name in NAV_NAMES:
+		var nav: Variant = target.get(name)
+		if not is_instance_valid(nav) or not nav is AStarGrid2D or nav.region != Rect2i():
+			return _fail("EMPTY_NAV_REQUIRED", "$/" + name)
+	return {"ok": true}
+
+
+func _capture_nav(nav: Variant, width: int, height: int, name: String) -> Dictionary:
+	if not is_instance_valid(nav) or not nav is AStarGrid2D or nav.get_script() != null:
+		return _fail("NAV_CLASS_UNSUPPORTED", "$/" + name)
+	if nav.is_dirty() or nav.region != Rect2i(0, 0, width, height):
+		return _fail("NAV_NOT_BAKED", "$/" + name)
+	var solid := PackedByteArray()
+	var weights := PackedByteArray()
+	solid.resize(width * height)
+	weights.resize(width * height * 8)
+	for y in range(height):
+		for x in range(width):
+			var index: int = y * width + x
+			var cell := Vector2i(x, y)
+			solid[index] = 1 if nav.is_point_solid(cell) else 0
+			weights.encode_double(index * 8, nav.get_point_weight_scale(cell))
+	return {"ok": true, "value": {
+		"region_position": nav.region.position, "region_size": nav.region.size,
+		"cell_size": nav.cell_size, "offset": nav.offset, "cell_shape": nav.cell_shape,
+		"compute_heuristic": nav.default_compute_heuristic, "estimate_heuristic": nav.default_estimate_heuristic,
+		"diagonal_mode": nav.diagonal_mode, "jumping_enabled": nav.jumping_enabled,
+		"solid_hex": solid.hex_encode(), "weight_f64_hex": weights.hex_encode()}}
+
+
+func _new_nav(state: Dictionary) -> AStarGrid2D:
+	var nav := AStarGrid2D.new()
+	nav.region = Rect2i(state.region_position, state.region_size)
+	nav.cell_size = state.cell_size
+	nav.offset = state.offset
+	nav.cell_shape = state.cell_shape
+	nav.default_compute_heuristic = state.compute_heuristic
+	nav.default_estimate_heuristic = state.estimate_heuristic
+	nav.diagonal_mode = state.diagonal_mode
+	nav.jumping_enabled = state.jumping_enabled
+	nav.update()
+	var solid: PackedByteArray = state.solid_hex.hex_decode()
+	var weights: PackedByteArray = state.weight_f64_hex.hex_decode()
+	for y in range(state.region_size.y):
+		for x in range(state.region_size.x):
+			var index: int = y * state.region_size.x + x
+			var cell := Vector2i(x, y)
+			nav.set_point_solid(cell, solid[index] == 1)
+			nav.set_point_weight_scale(cell, weights.decode_double(index * 8))
+	return nav
+
+
+func _capture_height(field: RefCounted) -> Dictionary:
+	if field == null: return {"ok": true, "value": {"kind": "none"}}
+	if not is_instance_valid(field): return _fail("HEIGHT_INVALID", "$/height")
+	var kind := "liangshan" if field.get_script() == Height else "campaign" if field.get_script() == CampaignHeight else ""
+	if kind.is_empty(): return _fail("HEIGHT_SCRIPT_UNSUPPORTED", "$/height")
+	if not field.texture is ImageTexture: return _fail("HEIGHT_TEXTURE_UNSUPPORTED", "$/height")
+	var img: Image = field.texture.get_image()
+	if img == null or img.get_format() != Image.FORMAT_RF or img.has_mipmaps() \
+			or img.get_width() != field.width or img.get_height() != field.height:
+		return _fail("HEIGHT_TEXTURE_FORMAT", "$/height")
+	return {"ok": true, "value": {"kind": kind, "width": field.width, "height": field.height,
+		"style": field.style if kind == "campaign" else "", "samples": field.samples.duplicate(),
+		"texture_rf_hex": img.get_data().hex_encode()}}
+
+
+func _capture_display(game_map: GameMap) -> Dictionary:
+	return SceneryState.new(_content_version).capture(game_map)
+
+
+func _validate_raw(raw: Dictionary) -> Dictionary:
+	var h: Variant = raw.header
+	if not _fields(h, HEADER_FIELDS) or not _dimensions(h.w, h.h): return _fail("MAP_HEADER", "$/header")
+	var count: int = h.w * h.h
+	if not _text(h.theme, 128) or not _text(h.environment_style, 128) \
+			or not _integer(h.base_fill, 0, GameMap.T.DOCK) or not _integer(h.navigation_revision, 0, 9223372036854775807):
+		return _fail("MAP_HEADER_VALUE", "$/header")
+	for name in ["natural_surface_enabled", "visible", "z_as_relative", "y_sort_enabled", "use_parent_material"]:
+		if typeof(h[name]) != TYPE_BOOL: return _fail("MAP_BOOL", "$/header/" + name)
+	if not _integer(h.z_index, -4096, 4096) or not _integer(h.texture_filter, 0, 6) \
+			or not _integer(h.texture_repeat, 0, 3) or not _integer(h.light_mask, 0, 4294967295) \
+			or not _integer(h.visibility_layer, 0, 4294967295): return _fail("MAP_CANVAS_VALUE", "$/header")
+	if typeof(h.transform) != TYPE_ARRAY or h.transform.size() != 3: return _fail("MAP_TRANSFORM", "$/header")
+	for vector in h.transform:
+		if typeof(vector) != TYPE_VECTOR2 or not vector.is_finite(): return _fail("MAP_TRANSFORM", "$/header")
+	for color in [h.modulate, h.self_modulate]:
+		if typeof(color) != TYPE_COLOR or not _finite_color(color): return _fail("MAP_COLOR", "$/header")
+	if typeof(h.decor) != TYPE_ARRAY or h.decor.size() > MAX_DECOR: return _fail("MAP_DECOR", "$/header/decor")
+	for index in range(h.decor.size()):
+		var d: Variant = h.decor[index]
+		if typeof(d) != TYPE_ARRAY or d.size() not in [3, 4, 8]: return _fail("DECOR_SHAPE", "$/header/decor/" + str(index))
+		if not _text(d[0], 256) or typeof(d[1]) != TYPE_VECTOR2I or not _number(d[2], 0.001, 65536.0):
+			return _fail("DECOR_VALUE", "$/header/decor/" + str(index))
+		if d.size() == 4 and not (_text(d[3], 256) or _integer(d[3], 0, 65535)):
+			return _fail("DECOR_MARKER", "$/header/decor/" + str(index))
+		if d.size() == 8 and (d[0] != "campaign_environment_object" or not _text(d[3], 256) \
+				or not _text(d[4], 256) or not _number(d[5], 0.0, 1.0) or typeof(d[6]) != TYPE_BOOL or typeof(d[7]) != TYPE_BOOL):
+			return _fail("DECOR_OBJECT", "$/header/decor/" + str(index))
+	if not _hex(raw.grid, count * 8) or not _hex(raw.base_solid, count * 2) or not _hex(raw.block_count, count * 8):
+		return _fail("MAP_PACKED_LENGTH", "$/grid")
+	var grid: PackedInt32Array = raw.grid.hex_decode().to_int32_array()
+	var base: PackedByteArray = raw.base_solid.hex_decode()
+	var blocks: PackedInt32Array = raw.block_count.hex_decode().to_int32_array()
+	for i in range(count):
+		if grid[i] < 0 or grid[i] > GameMap.T.DOCK or base[i] > 1 or blocks[i] < 0:
+			return _fail("MAP_CELL_VALUE", "$/grid/" + str(i))
+	for name in NAV_NAMES:
+		var n: Variant = raw[name]
+		if not _fields(n, NAV_FIELDS): return _fail("NAV_FIELDS", "$/" + name)
+		if typeof(n.region_position) != TYPE_VECTOR2I or n.region_position != Vector2i.ZERO \
+				or typeof(n.region_size) != TYPE_VECTOR2I or n.region_size != Vector2i(h.w, h.h):
+			return _fail("NAV_REGION", "$/" + name)
+		if typeof(n.cell_size) != TYPE_VECTOR2 or not n.cell_size.is_finite() or n.cell_size.x <= 0 or n.cell_size.y <= 0 \
+				or typeof(n.offset) != TYPE_VECTOR2 or not n.offset.is_finite(): return _fail("NAV_GEOMETRY", "$/" + name)
+		if not _integer(n.cell_shape, 0, 2) or not _integer(n.compute_heuristic, 0, 3) \
+				or not _integer(n.estimate_heuristic, 0, 3) or not _integer(n.diagonal_mode, 0, 3) \
+				or typeof(n.jumping_enabled) != TYPE_BOOL: return _fail("NAV_OPTIONS", "$/" + name)
+		if not _hex(n.solid_hex, count * 2) or not _hex(n.weight_f64_hex, count * 16):
+			return _fail("NAV_PACKED_LENGTH", "$/" + name)
+		var solid: PackedByteArray = n.solid_hex.hex_decode()
+		var weights: PackedByteArray = n.weight_f64_hex.hex_decode()
+		for i in range(count):
+			var weight: float = weights.decode_double(i * 8)
+			if solid[i] > 1 or not is_finite(weight) or weight < 0.0:
+				return _fail("NAV_POINT_VALUE", "$/" + name + "/" + str(i))
+	# Do not derive base/static/weights from the current terrain table: legal live
+	# maps can have edits after bake. The transaction separately audits footprints.
+	var height_check: Dictionary = _validate_height(raw.height, h.w, h.h)
+	if not height_check.ok: return height_check
+	var meta_check: Dictionary = _validate_metadata(raw.metadata)
+	if not meta_check.ok: return meta_check
+	var display_check: Dictionary = SceneryState.new(_content_version).validate(raw.display)
+	if not display_check.ok: return display_check
+	return {"ok": true, "code": "OK", "value": raw, "requirements": _display_requirements(raw)}
+
+
+func _validate_height(state: Variant, width: int, height: int) -> Dictionary:
+	if _fields(state, ["kind"]) and state.kind == "none": return {"ok": true}
+	if not _fields(state, ["kind", "width", "height", "style", "samples", "texture_rf_hex"]):
+		return _fail("HEIGHT_FIELDS", "$/height")
+	if typeof(state.kind) != TYPE_STRING or state.kind not in ["liangshan", "campaign"] \
+			or not _integer(state.width, width + 1, width + 1) or not _integer(state.height, height + 1, height + 1) \
+			or not _text(state.style, 128) or (state.kind == "liangshan" and state.style != ""):
+		return _fail("HEIGHT_HEADER", "$/height")
+	var count: int = state.width * state.height
+	if typeof(state.samples) != TYPE_PACKED_FLOAT32_ARRAY or state.samples.size() != count \
+			or not _hex(state.texture_rf_hex, count * 8): return _fail("HEIGHT_SAMPLES", "$/height")
+	var texture_bytes: PackedByteArray = state.texture_rf_hex.hex_decode()
+	for i in range(count):
+		var sample: float = state.samples[i]
+		var pixel: float = texture_bytes.decode_float(i * 4)
+		if not is_finite(sample) or sample < 0.0 or sample > Height.MAX_HEIGHT \
+				or not is_finite(pixel) or pixel < 0.0 or pixel > 1.0:
+			return _fail("HEIGHT_RANGE", "$/height/" + str(i))
+	return {"ok": true}
+
+
+func _validate_metadata(metadata: Variant) -> Dictionary:
+	if typeof(metadata) != TYPE_DICTIONARY or metadata.size() > META_NAMES.size():
+		return _fail("MAP_METADATA", "$/metadata")
+	for key in metadata:
+		if typeof(key) != TYPE_STRING or key not in META_NAMES: return _fail("MAP_META_UNSUPPORTED", "$/metadata")
+		var value: Variant = metadata[key]
+		match key:
+			"liangshan_rts_court", "campaign_city_wicket_sealed":
+				if typeof(value) != TYPE_BOOL: return _fail("META_BOOL", "$/metadata/" + key)
+			"zhongyi_hall_facing_cardinal", "liangshan_art_level_id":
+				if not _text(value, 128): return _fail("META_TEXT", "$/metadata/" + key)
+			"zhongyi_hall_front_vector", "liangshan_hall_cell", "campaign_city_sign_cell":
+				if typeof(value) != TYPE_VECTOR2I: return _fail("META_CELL", "$/metadata/" + key)
+			"campaign_wall_segments":
+				if typeof(value) != TYPE_ARRAY or value.size() > 256: return _fail("META_WALLS", "$/metadata/" + key)
+				for segment in value:
+					if typeof(segment) != TYPE_ARRAY or segment.size() != 2: return _fail("META_WALL", "$/metadata/" + key)
+					for endpoint in segment:
+						if typeof(endpoint) != TYPE_VECTOR2 or not endpoint.is_finite(): return _fail("META_WALL", "$/metadata/" + key)
+			"natural_surface_contract":
+				# Source/art evidence is retained as bounded value data, never loaded
+				# as a resource path or executed. Its rebuild belongs to display QA.
+				if typeof(value) != TYPE_DICTIONARY or value.size() > 32: return _fail("META_SURFACE", "$/metadata/" + key)
+	return {"ok": true}
+
+
+func _display_requirements(raw: Dictionary) -> Array:
+	var requirements: Array = []
+	if raw.header.use_parent_material:
+		requirements.append({"field": "use_parent_material", "code": "PARENT_MATERIAL_BINDING_REQUIRED",
+			"suggestion": "The outer transaction must restore the parent CanvasItem material before exposing this map."})
+	return requirements
+
+
+func _dimensions(width: Variant, height: Variant) -> bool:
+	return _integer(width, 1, MAX_SIDE) and _integer(height, 1, MAX_SIDE) and width * height <= MAX_CELLS
+
+
+func _fields(value: Variant, names: Array) -> bool:
+	if typeof(value) != TYPE_DICTIONARY or value.size() != names.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in names: return false
+	return true
+
+
+func _integer(value: Variant, low: int, high: int) -> bool:
+	return typeof(value) == TYPE_INT and value >= low and value <= high
+
+
+func _number(value: Variant, low: float, high: float) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and value >= low and value <= high
+
+
+func _text(value: Variant, maximum: int) -> bool:
+	return typeof(value) == TYPE_STRING and value.length() <= maximum
+
+
+func _finite_color(value: Color) -> bool:
+	return is_finite(value.r) and is_finite(value.g) and is_finite(value.b) and is_finite(value.a)
+
+
+func _hex(value: Variant, length: int) -> bool:
+	if typeof(value) != TYPE_STRING or value.length() != length: return false
+	for i in range(length):
+		var c: int = value.unicode_at(i)
+		if not (c >= 48 and c <= 57) and not (c >= 97 and c <= 102): return false
+	return true
+
+
+func _codec_failure(result: Dictionary, section: String) -> Dictionary:
+	return {"ok": false, "code": "CODEC_" + result.code, "path": "$/" + section + String(result.get("path", ""))}
+
+
+func _fail(code: String, path: String) -> Dictionary:
+	return {"ok": false, "code": code, "path": path, "target_changed": false}

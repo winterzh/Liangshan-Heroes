@@ -1,0 +1,93 @@
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -1478,6 +1478,8 @@
+ 		_last_pos = position
+ 
+ 
++const _ChasePathDiag = preload("res://scratchpad/chase_path_diag/generated/ledger.gd")
++
+ func _do_chase(delta: float) -> void:
+ 	if _target != null and _target.get_instance_id() != _chase_last_id:
+ 		_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置
+@@ -1562,9 +1564,15 @@
+ 		_repath -= delta
+ 		if _repath <= 0.0:
+ 			_repath = 0.4
++			var __cp_token: bool = _ChasePathDiag.begin_chain(is_ranged)
++			var __cp_started: int = _ChasePathDiag.begin_call(__cp_token, 0)
+ 			_path = map.find_path(position, _target.position, faction, movement_profile)
++			_ChasePathDiag.finish_call(__cp_token, 0, __cp_started, _path.size())
+ 			if _path.is_empty() and is_ranged:
++				__cp_started = _ChasePathDiag.begin_call(__cp_token, 1)
+ 				_path = map.find_firing_path(position,_target.position,reach,faction,movement_profile)
++				_ChasePathDiag.finish_call(__cp_token, 1, __cp_started, _path.size())
++			_ChasePathDiag.end_chain(__cp_token)
+ 			_path_i = 0
+ 		_follow_path(delta)
+ 
+--- a/scripts/game_map.gd
++++ b/scripts/game_map.gd
+@@ -328,19 +328,26 @@
+ 	return Vector2i(-1, -1)
+ 
+ 
++const _ChasePathDiag = preload("res://scratchpad/chase_path_diag/generated/ledger.gd")
++
+ func find_path(from_w: Vector2, to_w: Vector2, faction := 0, profile: String = "land") -> PackedVector2Array:
+ 	var a := nearest_open(world_to_cell(from_w), profile)
+ 	var target_cell := world_to_cell(to_w)
+ 	var b := nearest_open_from(target_cell, a, profile)
+ 	var out := PackedVector2Array()
+ 	if a.x < 0 or b.x < 0 or not is_open_world(from_w, profile):
++		_ChasePathDiag.note_reason(0, _ChasePathDiag.STRICT_ENDPOINT_REJECT)
+ 		return out
+ 	if a == b:
+ 		out.append(to_w if target_cell == b and is_open_world(to_w, profile) else cell_to_world(b))
++		_ChasePathDiag.note_reason(0, _ChasePathDiag.STRICT_SAME_CELL)
+ 		return out
+ 	var nav := astar_water if profile == "water" else (astar if faction == 0 else astar_guan)
++	var __cp_astar_started: int = _ChasePathDiag.begin_astar(0)
+ 	var ids := nav.get_id_path(a, b)
++	_ChasePathDiag.finish_astar(0, __cp_astar_started, ids.size())
+ 	if ids.is_empty():
++		_ChasePathDiag.note_reason(0, _ChasePathDiag.STRICT_ASTAR_EMPTY_REJECT)
+ 		return out   # 不可达就明确失败；单位状态机负责结束/重试，绝不伪造穿墙直线
+ 	for i in range(1, ids.size()):
+ 		out.append(cell_to_world(ids[i]))
+@@ -349,6 +356,7 @@
+ 		var prev := from_w if smooth.size() == 1 else smooth[smooth.size() - 2]
+ 		if _segment_open(prev, to_w, profile):
+ 			smooth[smooth.size() - 1] = to_w
++	_ChasePathDiag.note_reason(0, _ChasePathDiag.STRICT_SMOOTH_RETURN)
+ 	return smooth
+ 
+ 
+@@ -361,16 +369,25 @@
+ ## rejects partial paths, and this never smooths through a wall or shoreline.
+ func find_firing_path(from_w: Vector2, target_w: Vector2, reach: float, faction := 0, profile := "land") -> PackedVector2Array:
+ 	var out := PackedVector2Array()
+-	if reach<=0 or not is_open_world(from_w,profile): return out
++	if reach<=0 or not is_open_world(from_w,profile):
++		_ChasePathDiag.note_reason(1, _ChasePathDiag.FALLBACK_PRECONDITION_REJECT)
++		return out
+ 	var a := world_to_cell(from_w)
+ 	var b := nearest_open_from(world_to_cell(target_w),a,profile)
+-	if b.x<0: return out
++	if b.x<0:
++		_ChasePathDiag.note_reason(1, _ChasePathDiag.FALLBACK_NO_OPEN_TARGET)
++		return out
+ 	var nav := astar_water if profile=="water" else astar if faction==0 else astar_guan
+ 	# b is deliberately open: partial queries against solid destinations can
+ 	# cause exceptionally long searches in AStarGrid2D.
++	var __cp_astar_started: int = _ChasePathDiag.begin_astar(1)
+ 	var ids := nav.get_id_path(a,b,true)
+-	if ids.is_empty() or cell_to_world(ids[-1]).distance_to(target_w)>reach-4.0: return out
++	_ChasePathDiag.finish_astar(1, __cp_astar_started, ids.size())
++	if ids.is_empty() or cell_to_world(ids[-1]).distance_to(target_w)>reach-4.0:
++		_ChasePathDiag.note_reason(1, _ChasePathDiag.FALLBACK_ASTAR_EMPTY_REJECT if ids.size() == 0 else _ChasePathDiag.FALLBACK_REACH_REJECT)
++		return out
+ 	for i in range(1,ids.size()): out.append(cell_to_world(ids[i]))
++	_ChasePathDiag.note_reason(1, _ChasePathDiag.FALLBACK_SMOOTH_RETURN)
+ 	return _smooth_path(from_w,out,profile)
+ 
+ 

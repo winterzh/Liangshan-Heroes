@@ -1,0 +1,256 @@
+extends SceneTree
+## Real Projectile restore, direct original physics stepping and SceneTree deletion.
+## This isolates single-target damage; it does not certify splash or full Battle resume.
+## Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Factory := preload("res://scripts/run_projectile_state.gd")
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var report_path: String = ""
+var exit_counts: Dictionary = {"hit": 0, "expired": 0}
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _on_exit(label: String) -> void:
+	exit_counts[label] += 1
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "projectile-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}),
+		"scope": "Real Unit/Projectile; JSON flight-state roundtrip, paused attachment, direct original physics stepping, one real HP/shield hit and true queue-free/exit, expired target no-hit. No splash/item/lifesteal or full Battle resume claim."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[projectile-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	# Load actual classes only after Autoloads are ready. No fabricated Script.
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var projectile_script: Script = load("res://scripts/projectile.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var factory: Variant = Factory.new(codec_script, projectile_script, unit_script)
+	paused = true
+	var world: Node2D = Node2D.new()
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	owned.append(world)
+	root.add_child(world)
+	var source_shooter: Variant = _make_unit(unit_script, Vector2.ZERO, 0)
+	var source_target: Variant = _make_unit(unit_script, Vector2(240.0, 0.0), 1)
+	world.add_child(source_shooter)
+	world.add_child(source_target)
+	source_shooter.setup_def = {"proj_kind": "bomb"}
+	source_target._shield = 7.0
+	var source: Variant = projectile_script.new()
+	owned.append(source)
+	world.add_child(source)
+	_check("real projectile receives an engine-generated name", String(source.name).begins_with("@"))
+	source.visible = false
+	source.position = Vector2.ZERO
+	source.on_slow_mult = 0.6
+	source.on_slow_dur = 1.75
+	# The original game's setup initializes this fixture once, before capture.
+	# The RESTORE factory must not call setup or reroll the saved random spin.
+	source.setup(source_shooter, source_target, 33.5, true)
+	source.set_physics_process(true)
+	source._physics_process(0.125)
+	if not _check("original real projectile is in flight without damage", not source.is_queued_for_deletion() and source.position.x > 0.0 and source.position.x < source_target.position.x and source_target.hp == 500.0 and source_target._shield == 7.0):
+		_finish(true)
+		return
+	var captured: Dictionary = factory.capture(source, "projectile_smoke_v1", {source_shooter: "1", source_target: "2"})
+	if not _ok("capture real in-flight projectile", captured):
+		_finish(true)
+		return
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	var known: Dictionary = {"1": true, "2": true}
+	var validated: Dictionary = factory.validate(record, "projectile_smoke_v1", known)
+	if not _ok("validate real JSON flight roundtrip", validated):
+		_finish(true)
+		return
+	_check("original flight values retained by JSON", validated.values == factory._read_values(source))
+	_check("original Node state retained by JSON", validated.node == factory._read_node(source))
+	_check("generated Node name is recreated rather than assigned as an explicit name", validated.node.name == "")
+	var old_target_id: int = source_target.get_instance_id()
+	var old_shooter_id: int = source_shooter.get_instance_id()
+	# Remove the original graph before restoration, so it cannot deal a second hit.
+	source.free()
+	source_shooter.free()
+	source_target.free()
+	var shooter: Variant = _make_unit(unit_script, Vector2.ZERO, 0)
+	var target: Variant = _make_unit(unit_script, Vector2(240.0, 0.0), 1)
+	target._shield = 7.0
+	world.add_child(shooter)
+	world.add_child(target)
+	var restored: Dictionary = factory.instantiate(record, "projectile_smoke_v1", known)
+	if not _ok("instantiate flight without setup", restored):
+		_finish(true)
+		return
+	var projectile: Variant = restored.projectile
+	owned.append(projectile)
+	_check("new shell is detached disabled and signal-blocked", projectile.get_parent() == null and not projectile.is_inside_tree() and projectile.process_mode == Node.PROCESS_MODE_DISABLED and projectile.is_blocking_signals())
+	_check("new shell does not bind references early", projectile.target == null and projectile.shooter == null)
+	if not _ok("bind new live Unit graph", factory.bind(projectile, record, "projectile_smoke_v1", {"1": shooter, "2": target})):
+		_finish(true)
+		return
+	_check("both references remapped to actual new Units", is_same(projectile.target, target) and is_same(projectile.shooter, shooter) and target.get_instance_id() != old_target_id and shooter.get_instance_id() != old_shooter_id)
+	world.add_child(projectile)
+	if not _ok("activate after paused ordered attachment", factory.activate(projectile, restored.activation)):
+		_finish(true)
+		return
+	projectile.tree_exited.connect(_on_exit.bind("hit"))
+	_check("all twelve declared values unchanged after restore", factory._read_values(projectile) == validated.values)
+	_check("Node transform display and processing restored", factory._read_node(projectile) == validated.node)
+	await process_frame
+	_check("paused attachment did not advance flight", factory._read_values(projectile) == validated.values and projectile.position == validated.node.position and target.hp == 500.0)
+	var prior_life: float = projectile._life
+	var prior_position: Vector2 = projectile.position
+	projectile._physics_process(0.1)
+	_check("restored original method continues real flight", not projectile.is_queued_for_deletion() and projectile.position != prior_position and is_equal_approx(projectile._life, prior_life - 0.1) and target.hp == 500.0 and target._shield == 7.0)
+	# Controlled dt crosses the actual hit threshold while remaining life > 0.
+	projectile._physics_process(1.0)
+	_check("one actual hit consumes shield and HP exactly", target._shield == 0.0 and target.hp == 473.5)
+	_check("one actual hit applies original slow", target.temp_speed == 0.6 and target._temp_speed_t == 1.75)
+	_check("hit requests real queued deletion", is_instance_valid(projectile) and projectile.is_queued_for_deletion())
+	_check("queued projectile is rejected by snapshot barrier", not factory.capture(projectile, "projectile_smoke_v1", {shooter: "1", target: "2"}).ok)
+	await process_frame
+	await process_frame
+	_check("hit projectile really freed and exited once", not is_instance_valid(projectile) and exit_counts.hit == 1)
+	var after_hit: float = target.hp
+	for _index in range(3): await process_frame
+	_check("subsequent frames cannot repeat freed projectile damage", target.hp == after_hit and target._shield == 0.0 and exit_counts.hit == 1)
+	# A second case saves an already-freed target, then restores via a live Unit
+	# tombstone and releases it only after typed references have been assigned.
+	var original_dead_target: Variant = _make_unit(unit_script, Vector2(12.0, 0.0), 1)
+	var expired_source: Variant = projectile_script.new()
+	expired_source.name = "ExpiredTargetSnapshot"
+	owned.append(expired_source)
+	expired_source.visible = false
+	expired_source.target = original_dead_target
+	expired_source.shooter = shooter
+	expired_source.dmg = 71.0
+	expired_source._life = 2.2
+	expired_source.set_physics_process(true)
+	original_dead_target.free()
+	var expired_capture: Dictionary = factory.capture(expired_source, "projectile_smoke_v1", {shooter: "1"})
+	if not _ok("capture freed target tag", expired_capture):
+		_finish(true)
+		return
+	var expired_record: Variant = JSON.parse_string(JSON.stringify(expired_capture.record))
+	var expired_state: Dictionary = factory.validate(expired_record, "projectile_smoke_v1", {"1": true})
+	if not _ok("validate freed target JSON", expired_state):
+		_finish(true)
+		return
+	_check("freed target remains expired rather than none", expired_state.references.target.state == "expired")
+	expired_source.free()
+	var expired_shell: Dictionary = factory.instantiate(expired_record, "projectile_smoke_v1", {"1": true})
+	if not _ok("instantiate expired-target projectile", expired_shell):
+		_finish(true)
+		return
+	var expired_projectile: Variant = expired_shell.projectile
+	owned.append(expired_projectile)
+	var missing_tombstone: Dictionary = factory.bind(expired_projectile, expired_record, "projectile_smoke_v1", {"1": shooter})
+	_check("bind rejects missing tombstone before assignment", not missing_tombstone.ok and missing_tombstone.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED" and expired_projectile.target == null and expired_projectile.shooter == null)
+	var tombstone: Variant = unit_script.new()
+	owned.append(tombstone)
+	if not _ok("bind live detached tombstone", factory.bind(expired_projectile, expired_record, "projectile_smoke_v1", {"1": shooter}, tombstone)):
+		_finish(true)
+		return
+	_check("typed target assigned while tombstone is alive", is_instance_valid(expired_projectile.target) and is_same(expired_projectile.target, tombstone))
+	tombstone.free()
+	_check("typed target becomes freed Object after global release", typeof(expired_projectile.target) == TYPE_OBJECT and not is_instance_valid(expired_projectile.target))
+	world.add_child(expired_projectile)
+	if not _ok("activate expired-target projectile while paused", factory.activate(expired_projectile, expired_shell.activation)):
+		_finish(true)
+		return
+	expired_projectile.tree_exited.connect(_on_exit.bind("expired"))
+	var shooter_hp: float = shooter.hp
+	expired_projectile._physics_process(0.05)
+	_check("expired target requests deletion without real damage", expired_projectile.is_queued_for_deletion() and target.hp == after_hit and shooter.hp == shooter_hp)
+	await process_frame
+	await process_frame
+	_check("expired-target projectile actually exits once", not is_instance_valid(expired_projectile) and exit_counts.expired == 1)
+	_check("no second damage from either expired projectile", target.hp == after_hit and shooter.hp == shooter_hp and exit_counts.hit == 1)
+	_finish()
+
+func _make_unit(unit_script: Script, at: Vector2, faction: int) -> Variant:
+	var unit: Variant = unit_script.new()
+	owned.append(unit)
+	unit.visible = false
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.position = at
+	unit.faction = faction
+	unit.max_hp = 500.0
+	unit.hp = 500.0
+	unit.radius = 12.0
+	unit.stance = 3
+	# Real Unit.take_damage; no Battle, item inventory, passive lifesteal or stat
+	# callbacks in this bounded single-hit fixture. No Unit.setup or fake method.
+	return unit

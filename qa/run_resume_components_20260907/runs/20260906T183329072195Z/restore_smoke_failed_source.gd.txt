@@ -1,0 +1,276 @@
+extends SceneTree
+## External --script smoke for the real Unit factory; no Battle._ready/deploy.
+## Requires root's graph_identity.gd. Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Identity := preload("res://scratchpad/run_resume_integration/graph_identity.gd")
+const Factory := preload("res://scratchpad/run_resume_integration/unit_state.gd")
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var identity_contexts: Array = []
+var report_path: String = ""
+var signal_count: int = 0
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _on_signal(_unit: Variant) -> void:
+	signal_count += 1
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for ctx in identity_contexts: ctx.dispose()
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "unit-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}),
+		"scope": "Real detached Unit/Inventory/Map/Battle objects; JSON, value/reference/identity binding and paused attachment. No full Battle resume or combat equivalence."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[unit-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	# Delay loading game classes until Autoloads are ready; no fake class source.
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var boundary_script: Script = load("res://scratchpad/run_resume_integration/identity_boundary_smoke.gd")
+	var boundaries: Array = boundary_script.new().run(unit_script)
+	for row: Dictionary in boundaries:
+		_check(String(row.label), bool(row.passed))
+	if failed > 0:
+		_finish(true)
+		return
+	var inventory_script: Script = load("res://scripts/hero_inventory.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var factory: Variant = Factory.new(codec_script, unit_script, inventory_script)
+	var a: Variant = unit_script.new()
+	var b: Variant = unit_script.new()
+	var old_expired: Variant = unit_script.new()
+	var map: Variant = map_script.new()
+	var battle: Variant = battle_script.new()
+	owned.append_array([a, b, map, battle])
+	a.name = "SavedHero"
+	b.name = "SavedTarget"
+	a.visible = false
+	b.visible = false
+	a.set_physics_process(true)
+	b.set_physics_process(true)
+	a.key = "li_kui"
+	a.display_name = "李逵"
+	a.is_hero = true
+	a.hp = 317.5
+	a.max_hp = 777.0
+	a.position = Vector2(91.25, 203.75)
+	a.scale = Vector2(1.1, 0.9)
+	a.rotation = 0.1
+	a.art_variant = "smoke_local_variant"
+	a._state = 3
+	a._path = PackedVector2Array([Vector2(11.5, 20.0), Vector2(19.0, 22.25)])
+	a._path_i = 1
+	a._lunge = 0.61
+	a._hit_at = 0.4
+	a._pending_done = false
+	a._cast_t = 0.17
+	a._cast_serial = 9
+	a._weapon = 2
+	a._stepped = true
+	a._anim_t = 0.83
+	a._train_queue = ["bandit", "bandit"]
+	a.ability_slots = [{"id": "smoke_ability", "rank": 2, "cd_t": 0.37, "passive": false, "charges": 1, "recharge_t": 0.29, "cast_seq": 4}]
+	a._form = {"atk_mult": 1.1, "tint": Color(0.6, 0.7, 0.8, 1.0)}
+	a._form_backup = {"atk_cd": 0.8, "base_speed": 45.0, "radius": 12.0, "mod_r": 1.0, "mod_g": 1.0, "mod_b": 1.0}
+	a.set_meta("fcell", Vector2i(3, 4))
+	a.set_meta("footprint_blocked", true)
+	a.set_meta("campaign_environment_text_rect", Rect2(1.0, 2.0, 3.0, 4.0))
+	var inv: Variant = inventory_script.new(a)
+	a.inventory = inv
+	inv.slots[0] = {"id": "smoke_item", "count": 2, "uid": 9007199254740993}
+	inv.cooldowns = {"smoke_item": 2.37}
+	inv.proc_cooldowns = {"9007199254740993:attack": 0.71}
+	inv._uid_seq = 37
+	inv._periodic_acc = 0.19
+	a._target = b
+	a._pending_target = old_expired
+	a._gold_waiters = [b, null, b, old_expired]
+	a._charge_hit = [b, old_expired, b]
+	a._queue = [{"kind": "move", "pos": Vector2(2.5, 3.5), "group_cap": 11.0},
+		{"kind": "attack", "target": old_expired, "explicit": true}]
+	b.passengers = [a]
+	a.garrison_holder = b
+	a._lin_spear_target_id = b.get_instance_id()
+	a._chase_last_id = old_expired.get_instance_id()
+	a._giveup_id = 0
+	var target_id: int = b.get_instance_id()
+	var item_hash: int = "smoke_item".hash()
+	a._aura_atkspeed_sources = {-target_id: {"mult": 1.5, "t": 1.37}, 17: {"mult": 1.2, "t": 0.27}}
+	a._damage_reduction_sources = {-500000-target_id: {"amount": 0.3, "t": 2.31},
+		-600000-target_id: {"amount": 0.4, "t": 1.29}, item_hash: {"amount": 0.1, "t": 0.7}, 0: {"amount": 0.2, "t": 0.3}}
+	old_expired.free()
+	var original: Variant = Identity.new(unit_script)
+	identity_contexts.append(original)
+	if not _ok("identity original configure", original.configure({"1": a, "2": b})):
+		_finish(true)
+		return
+	var object_to_id: Dictionary = {a: "1", b: "2"}
+	var records: Array = []
+	for index in range(2):
+		var source: Variant = [a, b][index]
+		var captured: Dictionary = factory.capture(source, str(index + 1), "smoke_content_v1", object_to_id, original.encode_identity)
+		if not _ok("capture %d" % index, captured):
+			_finish(true)
+			return
+		records.append(captured.record)
+	var json_text: String = JSON.stringify(records)
+	var restored_records: Variant = JSON.parse_string(json_text)
+	if not _check("real JSON roundtrip", typeof(restored_records) == TYPE_ARRAY and restored_records.size() == 2):
+		_finish(true)
+		return
+	var shells: Array = []
+	var known: Dictionary = {"1": true, "2": true}
+	var restored: Variant = Identity.new(unit_script)
+	identity_contexts.append(restored)
+	if not _ok("fresh identity declare before any restored Unit", restored.declare_entities(known)):
+		_finish(true)
+		return
+	for index in range(2):
+		var shell: Dictionary = factory.instantiate(restored_records[index], "smoke_content_v1", known, restored.validate_identity)
+		if not _ok("instantiate %d" % index, shell):
+			_finish(true)
+			return
+		owned.append(shell.unit)
+		shells.append(shell)
+		_check("shell detached disabled blocked %d" % index, not shell.unit.is_inside_tree() and shell.unit.get_parent() == null and shell.unit.process_mode == Node.PROCESS_MODE_DISABLED and shell.unit.is_blocking_signals())
+		_check("no Battle/map before bind %d" % index, shell.unit.battle == null and shell.unit.map == null)
+	var ra: Variant = shells[0].unit
+	var rb: Variant = shells[1].unit
+	var new_ids: Dictionary = {"1": ra, "2": rb}
+	if not _ok("identity restored configure", restored.configure(new_ids)):
+		_finish(true)
+		return
+	var missing_tombstone: Dictionary = factory.bind(ra, restored_records[0], "smoke_content_v1", new_ids, battle, map,
+		restored.decode_identity, restored.validate_identity)
+	_check("expired binding rejects missing live tombstone", not missing_tombstone.ok and missing_tombstone.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED")
+	_check("failed bind left every destination unassigned", ra.battle == null and ra.map == null and ra._target == null and ra._queue.is_empty() and ra._aura_atkspeed_sources.is_empty())
+	var tombstone: Variant = restored.expired_unit()
+	for index in range(2):
+		var bound: Dictionary = factory.bind(shells[index].unit, restored_records[index], "smoke_content_v1", new_ids, battle, map,
+			restored.decode_identity, restored.validate_identity, tombstone)
+		if not _ok("bind %d" % index, bound):
+			_finish(true)
+			return
+	_check("expired still live until global release", is_instance_valid(ra._pending_target) and is_same(ra._pending_target, tombstone))
+	_check("live target points at restored entity", is_same(ra._target, rb) and not is_same(ra._target, b))
+	_check("gold waiters ordered duplicates none retained", ra._gold_waiters.size() == 4 and is_same(ra._gold_waiters[0], rb) and ra._gold_waiters[1] == null and is_same(ra._gold_waiters[2], rb))
+	_check("garrison reciprocal references", is_same(ra.garrison_holder, rb) and is_same(rb.passengers[0], ra))
+	_check("charge hit ordered duplicates retained", ra._charge_hit.size() == 3 and is_same(ra._charge_hit[0], rb) and is_same(ra._charge_hit[2], rb))
+	_check("live target integer remapped", ra._lin_spear_target_id == rb.get_instance_id() and ra._lin_spear_target_id != a._lin_spear_target_id)
+	_check("zero target integer preserved", ra._giveup_id == 0)
+	var restored_expired_id: int = ra._chase_last_id
+	_check("expired integer mapped to temporary live identity", is_instance_id_valid(restored_expired_id))
+	_check("aura source remapped and ward serial preserved", ra._aura_atkspeed_sources.has(-int(rb.get_instance_id())) and ra._aura_atkspeed_sources.has(17))
+	_check("guard duel source remapped and item zero preserved", ra._damage_reduction_sources.has(-500000-int(rb.get_instance_id())) and ra._damage_reduction_sources.has(-600000-int(rb.get_instance_id())) and ra._damage_reduction_sources.has(item_hash) and ra._damage_reduction_sources.has(0))
+	restored.release_tombstones()
+	_check("typed expired preserved as freed Object", typeof(ra._pending_target) == TYPE_OBJECT and not is_instance_valid(ra._pending_target))
+	_check("order expired preserved", typeof(ra._queue[1].target) == TYPE_OBJECT and not is_instance_valid(ra._queue[1].target))
+	_check("array expired preserved", typeof(ra._gold_waiters[3]) == TYPE_OBJECT and not is_instance_valid(ra._gold_waiters[3]) and typeof(ra._charge_hit[1]) == TYPE_OBJECT and not is_instance_valid(ra._charge_hit[1]))
+	_check("expired integer no longer a live identity", not is_instance_id_valid(restored_expired_id))
+	for index in range(2):
+		var source: Variant = [a, b][index]
+		var copy: Variant = shells[index].unit
+		_check("all 243 explicit local values equal %d" % index, factory._read_explicit(source) == factory._read_explicit(copy))
+		_check("metadata all preserved %d" % index, factory._read_metadata(source) == factory._read_metadata(copy))
+	_check("inventory owner rebound", is_same(ra.inventory.owner, ra))
+	_check("inventory five values exact including int64 UID", factory._read_inventory(a).value == factory._read_inventory(ra).value and ra.inventory.slots[0].uid == 9007199254740993)
+	_check("pending hit and cast preserved", not ra._pending_done and ra._lunge == 0.61 and ra._cast_t == 0.17 and ra._cast_serial == 9)
+	_check("no Battle deploy resources or queues touched", battle.units.is_empty() and battle.gold == 0 and battle.wood == 0 and battle._pending_casts.is_empty() and battle._channels.is_empty())
+	var invalid_record: Dictionary = restored_records[0].duplicate(true)
+	invalid_record["schema"] = "unknown"
+	_check("unknown schema rejects before instantiate", not factory.instantiate(invalid_record, "smoke_content_v1", known, restored.validate_identity).ok)
+	_check("content mismatch rejects before instantiate", not factory.instantiate(restored_records[0], "different_content", known, restored.validate_identity).ok)
+	# Attach while paused, matching the final transaction's commit barrier.
+	paused = true
+	var staging: Node2D = Node2D.new()
+	owned.append(staging)
+	root.add_child(staging)
+	for index in range(2):
+		var copy: Variant = shells[index].unit
+		copy.appearance_changed.connect(_on_signal)
+		copy.died.connect(_on_signal)
+		staging.add_child(copy)
+		if not _ok("activate in paused tree %d" % index, factory.activate(copy, shells[index].activation)):
+			_finish(true)
+			return
+	var before_hp: float = ra.hp
+	var before_cast: float = ra._cast_t
+	await process_frame
+	await process_frame
+	_check("paused attachment does not tick damage cast or timer", ra.hp == before_hp and ra._cast_t == before_cast)
+	_check("restore emitted no appearance or death callback", signal_count == 0)
+	_check("saved node order returned to caller", staging.get_child(0) == ra and staging.get_child(1) == rb)
+	_finish()

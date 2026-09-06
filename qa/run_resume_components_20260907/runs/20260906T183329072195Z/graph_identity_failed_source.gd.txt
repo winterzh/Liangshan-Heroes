@@ -1,0 +1,250 @@
+extends RefCounted
+## Integer identities at the Unit save boundary. This is not the simulation ID
+## allocator: Battle ordering, future item UIDs and per-run ticks remain separate.
+## Keep this object with the restored Battle so retired identities retain their
+## canonical tokens on later saves. Never capture while simulation is running.
+const ID_FIELDS := ["_lin_spear_target_id", "_chase_last_id", "_giveup_id"]
+const POOL_FIELDS := ["_aura_atkspeed_sources", "_damage_reduction_sources"]
+const OFFSETS := [0, 500000, 600000]
+const MAX_I64 := 9223372036854775807
+const MIN_I64 := -9223372036854775807 - 1
+var _script: Script
+var _entities: Dictionary = {}
+var _known_ids: Dictionary = {}
+var _object_ids: Dictionary = {}
+var _retired_ids: Dictionary = {}
+var _retired_sources: Dictionary = {}
+var _decoded_ids: Dictionary = {}
+var _decoded_sources: Dictionary = {}
+var _issued_id_tokens: Dictionary = {}
+var _issued_source_tokens: Dictionary = {}
+var _next_id_token := 1
+var _next_source_token := 1
+var _tombstones: Array = []
+var _expired: Variant = null
+var _released := false
+
+func _init(unit_script: Script) -> void:
+	_script = unit_script
+
+func _bad(code: String) -> Dictionary:
+	return {"ok": false, "code": code}
+
+func _good(value: Variant) -> Dictionary:
+	return {"ok": true, "value": value}
+
+func _id(value: Variant) -> bool:
+	return typeof(value) == TYPE_STRING and not value.is_empty() and value.length() <= 128
+
+func _int_text(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_STRING or value.is_empty() or value.length() > 20:
+		return _bad("INTEGER_TEXT")
+	if not value.is_valid_int(): return _bad("INTEGER_TEXT")
+	var negative: bool = value.begins_with("-")
+	var digits: String = value.substr(1) if negative else value
+	var bound: String = "9223372036854775808" if negative else "9223372036854775807"
+	if digits.length() > 19 or (digits.length() == 19 and digits > bound): return _bad("INTEGER_TEXT")
+	var number: int = value.to_int()
+	if str(number) != value: return _bad("INTEGER_TEXT")
+	return _good(number)
+
+func _fields(value: Variant, names: Array) -> bool:
+	if typeof(value) != TYPE_DICTIONARY or value.size() != names.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in names: return false
+	return true
+
+func configure(id_to_unit: Dictionary) -> Dictionary:
+	# Whole registry is checked before replacement. Stable strings are supplied
+	# by the outer transaction, never inferred from array position on restore.
+	if _script == null or not _script.can_instantiate(): return _bad("UNIT_SCRIPT")
+	var object_ids := {}
+	for entity_id in id_to_unit:
+		var unit: Variant = id_to_unit[entity_id]
+		if not _id(entity_id) or typeof(unit) != TYPE_OBJECT or not is_instance_valid(unit):
+			return _bad("ENTITY_REGISTRY")
+		if unit.get_script() != _script or unit.is_queued_for_deletion(): return _bad("ENTITY_REGISTRY")
+		var object_id: int = unit.get_instance_id()
+		if object_ids.has(object_id) or _retired_ids.has(object_id): return _bad("ENTITY_DUPLICATE")
+		object_ids[object_id] = entity_id
+	_entities = id_to_unit.duplicate()
+	_known_ids.clear()
+	for entity_id in id_to_unit: _known_ids[entity_id] = true
+	_object_ids = object_ids
+	return {"ok": true}
+
+func declare_entities(known_ids: Dictionary) -> Dictionary:
+	# Pre-allocation validation in a fresh process has names, but no Unit yet.
+	# No content supplied by a save is ever used as a class/script path.
+	if not _entities.is_empty() or not _tombstones.is_empty(): return _bad("REGISTRY_ALREADY_BOUND")
+	for entity_id in known_ids:
+		if not _id(entity_id): return _bad("ENTITY_REGISTRY")
+	_known_ids.clear()
+	for entity_id in known_ids: _known_ids[entity_id] = true
+	return {"ok": true}
+
+func _retire_id(native_id: int) -> String:
+	if _retired_ids.has(native_id): return _retired_ids[native_id]
+	var token: String = "r:" + str(_next_id_token)
+	while _issued_id_tokens.has(token):
+		_next_id_token += 1
+		token = "r:" + str(_next_id_token)
+	_issued_id_tokens[token] = true
+	_retired_ids[native_id] = token
+	_next_id_token += 1
+	return token
+
+func _retire_source(native_id: int) -> String:
+	if _retired_sources.has(native_id): return _retired_sources[native_id]
+	var token: String = "s:-" + str(_next_source_token)
+	while _issued_source_tokens.has(token):
+		_next_source_token += 1
+		token = "s:-" + str(_next_source_token)
+	_issued_source_tokens[token] = true
+	_retired_sources[native_id] = token
+	_next_source_token += 1
+	return token
+
+func _registered_live(object_id: int) -> bool:
+	if not _object_ids.has(object_id): return false
+	var unit: Variant = _entities[_object_ids[object_id]]
+	return is_instance_valid(unit) and not unit.is_queued_for_deletion() and unit.get_instance_id() == object_id
+
+func encode_identity(field: String, value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_INT: return _bad("NATIVE_INTEGER_REQUIRED")
+	if field in ID_FIELDS:
+		if value < 0: return _bad("TARGET_ID_RANGE")
+		if value == 0: return _good({"kind": "scalar", "value": "0"})
+		if _object_ids.has(value):
+			if not _registered_live(value): return _bad("STALE_ENTITY_REGISTRY")
+			return _good({"kind": "entity", "id": _object_ids[value]})
+		if is_instance_id_valid(value): return _bad("LIVE_TARGET_MISSING_FROM_REGISTRY")
+		return _good({"kind": "retired", "id": _retire_id(value)})
+	if field not in POOL_FIELDS: return _bad("IDENTITY_FIELD")
+	# Both ward serials and String.hash item sources are nonnegative, and their
+	# existing equality semantics must survive unchanged. Zero is the default.
+	if value >= 0: return _good({"kind": "scalar", "value": str(value)})
+	if _retired_sources.has(value):
+		return _good({"kind": "retired_source", "id": _retired_sources[value]})
+	var matches: Array = []
+	if value != MIN_I64:
+		for offset: int in OFFSETS:
+			var object_id: int = -value - offset
+			if object_id > 0 and _object_ids.has(object_id):
+				if not _registered_live(object_id): return _bad("STALE_ENTITY_REGISTRY")
+				matches.append({"kind": "unit_source", "id": _object_ids[object_id], "offset": str(offset)})
+			elif object_id > 0 and is_instance_id_valid(object_id):
+				var other: Variant = instance_from_id(object_id)
+				if is_instance_valid(other) and other.get_script() == _script:
+					return _bad("LIVE_SOURCE_MISSING_FROM_REGISTRY")
+	if matches.size() > 1: return _bad("AMBIGUOUS_SOURCE_ID")
+	if matches.size() == 1: return _good(matches[0])
+	# A completely freed caster cannot reapply its old source. Give the old
+	# equality class an opaque token, instead of reusing another process's ID.
+	return _good({"kind": "retired_source", "id": _retire_source(value)})
+
+func validate_identity(field: String, token: Variant) -> Dictionary:
+	if field not in ID_FIELDS and field not in POOL_FIELDS: return _bad("IDENTITY_FIELD")
+	if typeof(token) != TYPE_DICTIONARY or typeof(token.get("kind")) != TYPE_STRING:
+		return _bad("IDENTITY_TOKEN")
+	var is_target: bool = field in ID_FIELDS
+	match token.kind:
+		"scalar":
+			if not _fields(token, ["kind", "value"]): return _bad("IDENTITY_TOKEN")
+			var parsed := _int_text(token.value)
+			if not parsed.ok or parsed.value < 0 or (is_target and parsed.value != 0):
+				return _bad("SCALAR_ID_RANGE")
+		"entity":
+			if not is_target or not _fields(token, ["kind", "id"]) or not _id(token.id):
+				return _bad("IDENTITY_TOKEN")
+			if not _known_ids.has(token.id): return _bad("ENTITY_MISSING")
+		"retired":
+			if not is_target or not _fields(token, ["kind", "id"]) or not _id(token.id):
+				return _bad("IDENTITY_TOKEN")
+			if not token.id.begins_with("r:"): return _bad("RETIRED_TOKEN")
+			var parsed := _int_text(token.id.substr(2))
+			if not parsed.ok or parsed.value <= 0: return _bad("RETIRED_TOKEN")
+		"unit_source":
+			if is_target or not _fields(token, ["kind", "id", "offset"]) or not _id(token.id):
+				return _bad("IDENTITY_TOKEN")
+			if not _known_ids.has(token.id): return _bad("ENTITY_MISSING")
+			if token.offset not in ["0", "500000", "600000"]: return _bad("SOURCE_DOMAIN")
+		"retired_source":
+			if is_target or not _fields(token, ["kind", "id"]) or not _id(token.id):
+				return _bad("IDENTITY_TOKEN")
+			if not token.id.begins_with("s:"): return _bad("RETIRED_TOKEN")
+			var parsed := _int_text(token.id.substr(2))
+			if not parsed.ok or parsed.value >= 0: return _bad("RETIRED_TOKEN")
+		_:
+			return _bad("IDENTITY_TOKEN")
+	return {"ok": true}
+
+func _tombstone() -> Variant:
+	if _released: return null
+	var unit: Variant = _script.new()
+	unit.set_block_signals(true)
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.set_process(false)
+	unit.set_physics_process(false)
+	_tombstones.append(unit)
+	return unit
+
+func expired_unit() -> Variant:
+	if _released: return null
+	if not is_instance_valid(_expired): _expired = _tombstone()
+	return _expired
+
+func decode_identity(field: String, token: Variant) -> Dictionary:
+	var checked := validate_identity(field, token)
+	if not checked.ok: return checked
+	match token.kind:
+		"scalar": return _good(token.value.to_int())
+		"entity":
+			if not _entities.has(token.id): return _bad("ENTITY_NOT_BOUND")
+			var unit: Variant = _entities[token.id]
+			if not is_instance_valid(unit): return _bad("ENTITY_EXPIRED")
+			return _good(unit.get_instance_id())
+		"unit_source":
+			if not _entities.has(token.id): return _bad("ENTITY_NOT_BOUND")
+			var unit: Variant = _entities[token.id]
+			if not is_instance_valid(unit): return _bad("ENTITY_EXPIRED")
+			if unit.get_instance_id() > MAX_I64 - token.offset.to_int(): return _bad("SOURCE_OVERFLOW")
+			return _good(-unit.get_instance_id() - token.offset.to_int())
+		"retired":
+			if not _decoded_ids.has(token.id):
+				var unit: Variant = _tombstone()
+				if not is_instance_valid(unit): return _bad("RESTORE_BINDING_CLOSED")
+				var object_id: int = unit.get_instance_id()
+				_decoded_ids[token.id] = object_id
+				_retired_ids[object_id] = token.id
+				_issued_id_tokens[token.id] = true
+			return _good(_decoded_ids[token.id])
+		"retired_source":
+			if not _decoded_sources.has(token.id):
+				if _released: return _bad("RESTORE_BINDING_CLOSED")
+				# Godot ObjectIDs reserve their sign bit. These values are also far
+				# outside unsigned String.hash and all positive ward serials.
+				var source_id: int = -MAX_I64 + _decoded_sources.size()
+				for unit: Variant in _entities.values():
+					for offset: int in OFFSETS:
+						if -unit.get_instance_id() - offset == source_id: return _bad("SOURCE_COLLISION")
+				_decoded_sources[token.id] = source_id
+				_retired_sources[source_id] = token.id
+				_issued_source_tokens[token.id] = true
+			return _good(_decoded_sources[token.id])
+	return _bad("IDENTITY_TOKEN")
+
+func release_tombstones() -> void:
+	# Call only after every typed Unit reference and every integer ID has bound.
+	# The assigned Variants then become genuinely freed Objects, not nulls.
+	for unit: Variant in _tombstones:
+		if is_instance_valid(unit): unit.free()
+	_tombstones.clear()
+	_expired = null
+	_released = true
+
+func dispose() -> void:
+	release_tombstones()
+	_entities.clear()
+	_known_ids.clear()
+	_object_ids.clear()

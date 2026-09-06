@@ -1,0 +1,375 @@
+extends SceneTree
+## Two real processes are required. No in-process replay can satisfy the reader contract.
+const SOURCE_PATHS := ["scripts/run_state_value_codec.gd", "scratchpad/run_gameplay_rng/gameplay_rng.gd", "scratchpad/run_gameplay_rng/qa_driver.gd"]
+const MANIFEST_FIELDS := ["run_id", "run_dir", "stage", "private_user", "report", "source_sha256", "engine_binary_sha256", "handoff_sha256", "writer_report_sha256"]
+const MAX_FILE_BYTES := 1048576
+const SEEDS := [0, 1, -1, -9223372036854775807 - 1, 9223372036854775807, 9007199254740993, -9007199254740993]
+const PREFIX_CALLS := 17
+const SUFFIX_CALLS := 64
+var checks: Array = []
+var failures: Array = []
+var codec
+var module_script: GDScript
+var manifest: Dictionary = {}
+var actual_before: Dictionary = {}
+var manifest_path := ""
+var manifest_sha := ""
+var handoff_sha := ""
+
+func _initialize() -> void: _run.call_deferred()
+
+func check(ok: bool, label: String, group := "behavior") -> void:
+	checks.append({"label": label, "passed": ok, "group": group})
+	if not ok: failures.append(label)
+
+func _normal(path: String) -> String:
+	return path.replace("\\", "/").simplify_path().trim_suffix("/")
+
+func _fields(value: Variant, names: Array) -> bool:
+	if typeof(value) != TYPE_DICTIONARY or value.size() != names.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in names: return false
+	return true
+
+func _read_json(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return {"ok": false}
+	var size: int = file.get_length()
+	if size <= 0 or size > MAX_FILE_BYTES:
+		file.close()
+		return {"ok": false}
+	var raw: PackedByteArray = file.get_buffer(size)
+	file.close()
+	if raw.size() != size: return {"ok": false}
+	var text: String = raw.get_string_from_utf8()
+	if text.to_utf8_buffer() != raw: return {"ok": false}
+	var parser := JSON.new()
+	var error: int = parser.parse(text)
+	if error != OK or typeof(parser.data) != TYPE_DICTIONARY: return {"ok": false}
+	return {"ok": true, "value": parser.data}
+
+func _source(expected: Dictionary, prefix: String) -> Dictionary:
+	var actual: Dictionary = {}
+	for path in SOURCE_PATHS:
+		actual[path] = FileAccess.get_sha256("res://" + path)
+		check(expected.has(path) and actual[path].length() == 64 and actual[path] == expected.get(path, ""), prefix + path, "source")
+	return actual
+
+func _same(left: Variant, right: Variant) -> bool:
+	var a: Dictionary = codec.encode(left)
+	var b: Dictionary = codec.encode(right)
+	return a.ok and b.ok and a.value == b.value
+
+func _hop(record: Dictionary) -> Dictionary:
+	var parser := JSON.new()
+	var error: int = parser.parse(JSON.stringify(record, "", false))
+	check(error == OK and typeof(parser.data) == TYPE_DICTIONARY, "real JSON checkpoint syntax", "json")
+	return parser.data if error == OK and typeof(parser.data) == TYPE_DICTIONARY else {}
+
+func _operation(stream, index: int) -> Dictionary:
+	match index % 8:
+		0: return stream.draw_randi()
+		1: return stream.draw_randf()
+		2: return stream.draw_randi_range(-2147483648, 2147483647)
+		3: return stream.draw_randf_range(-70.0, 70.0)
+		4: return stream.draw_randi_range(9, -9)
+		5: return stream.draw_randf_range(0.3, -0.1)
+		6: return stream.draw_randi_range(7, 7)
+		_: return stream.draw_randf_range(-0.0, -0.0)
+
+func _native_operation(stream: RandomNumberGenerator, index: int) -> Variant:
+	match index % 8:
+		0: return stream.randi()
+		1: return stream.randf()
+		2: return stream.randi_range(-2147483648, 2147483647)
+		3: return stream.randf_range(-70.0, 70.0)
+		4: return stream.randi_range(9, -9)
+		5: return stream.randf_range(0.3, -0.1)
+		6: return stream.randi_range(7, 7)
+		_: return stream.randf_range(-0.0, -0.0)
+
+func _noise(visual: RandomNumberGenerator) -> void:
+	# These model draw-only effects; they deliberately consume two unrelated streams.
+	for _index in range(3):
+		randi()
+		randf()
+		randi_range(-7, 7)
+		randf_range(-11.0, 11.0)
+		visual.randi()
+		visual.randf_range(-90.0, 90.0)
+
+func _trace(stream, start_index: int, count: int, visual: RandomNumberGenerator = null) -> Array:
+	var result: Array = []
+	for offset in range(count):
+		if visual != null: _noise(visual)
+		var draw: Dictionary = _operation(stream, start_index + offset)
+		if not draw.ok:
+			check(false, "valid trace draw refused", "fixture")
+			return []
+		result.append({"operation": (start_index + offset) % 8, "value": draw.value})
+	return result
+
+func _changed(record: Dictionary, field: String, value: Variant) -> Dictionary:
+	var decoded: Dictionary = codec.decode(record)
+	check(decoded.ok, "negative fixture decodes native checkpoint", "fixture")
+	if not decoded.ok: return {}
+	decoded.value[field] = value
+	var encoded: Dictionary = codec.encode(decoded.value)
+	check(encoded.ok, "negative fixture uses exact value codec", "fixture")
+	return _hop(encoded.value) if encoded.ok else {}
+
+func _rejected(stream, record: Variant, code: String, label: String) -> void:
+	var before: Dictionary = stream.capture()
+	var result: Dictionary = stream.restore(record, manifest.engine_binary_sha256)
+	var after: Dictionary = stream.capture()
+	check(not result.ok and (result.code.begins_with(code) if code == "CODEC_" else result.code == code), label, "rejection")
+	check(before.ok and after.ok and before.record == after.record, label + " leaves seed state and count unchanged", "rejection")
+
+func _local_cases(record: Dictionary) -> void:
+	var stream = module_script.new()
+	check(stream.restore(_hop(record), manifest.engine_binary_sha256).ok, "local negative fixture starts from a captured native state", "fixture")
+	for bad in [null, true, 1.0, "1", RefCounted.new()]:
+		var fresh = module_script.new()
+		check(not fresh.start(bad, manifest.engine_binary_sha256).ok and not fresh.capture().ok,
+			"non-integer seed refused before initialization", "rejection")
+	_rejected(stream, _changed(record, "kind", "other"), "KIND", "unknown record kind refused")
+	_rejected(stream, _changed(record, "version", 2), "VERSION", "unknown version refused")
+	_rejected(stream, _changed(record, "version", 1.0), "VERSION", "floating version refused")
+	_rejected(stream, _changed(record, "extra", true), "RECORD_FIELDS", "extra record field refused")
+	_rejected(stream, _changed(record, "seed", 1.0), "RNG_INTEGER_TYPE", "floating seed refused")
+	_rejected(stream, _changed(record, "state", "-1"), "RNG_INTEGER_TYPE", "untagged textual state refused")
+	_rejected(stream, _changed(record, "calls", -1), "CALL_COUNT", "negative call count refused")
+	_rejected(stream, _changed(record, "calls", 1.0), "CALL_COUNT", "floating call count refused")
+	var native: Dictionary = codec.decode(record).value
+	var missing: Dictionary = native.duplicate(true)
+	missing.erase("state")
+	_rejected(stream, _hop(codec.encode(missing).value), "RECORD_FIELDS", "missing state refused")
+	var wrong: Dictionary = native.compat.duplicate(true)
+	wrong["engine_binary_sha256"] = "0".repeat(64) if manifest.engine_binary_sha256 != "0".repeat(64) else "1".repeat(64)
+	_rejected(stream, _changed(record, "compat", wrong), "COMPAT_MISMATCH", "different actual engine binary identity refused")
+	wrong = native.compat.duplicate(true)
+	wrong["real_t_bits"] = float(wrong.real_t_bits)
+	_rejected(stream, _changed(record, "compat", wrong), "COMPAT_MISMATCH", "numerically equal float compatibility field refused")
+	wrong = native.compat.duplicate(true)
+	wrong["module_sha256"] = "0".repeat(64)
+	_rejected(stream, _changed(record, "compat", wrong), "COMPAT_MISMATCH", "different module source refused")
+	wrong = native.compat.duplicate(true)
+	wrong["codec_sha256"] = "0".repeat(64)
+	_rejected(stream, _changed(record, "compat", wrong), "COMPAT_MISMATCH", "different codec source refused")
+	_rejected(stream, {"t": "object", "v": RefCounted.new()}, "CODEC_", "malicious object encoded tag refused without serialization")
+	var cyclic: Dictionary = {"t": "array", "v": []}
+	cyclic.v.append(cyclic)
+	_rejected(stream, cyclic, "CODEC_", "recursive encoded input refused without stringify")
+	cyclic.v.clear()
+	var overflow: Dictionary = record.duplicate(true)
+	for entry in overflow.entries:
+		if entry[0].get("v", "") == "state": entry[1] = {"t": "int64", "v": "9223372036854775808"}
+	_rejected(stream, overflow, "CODEC_", "state above signed int64 domain refused")
+	var before: Dictionary = stream.capture()
+	var bad_draws: Array = [stream.draw_randi_range(1.0, 2), stream.draw_randi_range(-2147483649, 0),
+		stream.draw_randi_range(0, 2147483648), stream.draw_randf_range(0, 1.0),
+		stream.draw_randf_range(NAN, 1.0), stream.draw_randf_range(0.0, INF), stream.draw_randf_range(-1.0e31, 0.0)]
+	var all_rejected := true
+	for draw in bad_draws: all_rejected = all_rejected and not draw.ok
+	check(all_rejected and before.record == stream.capture().record, "invalid bounds consume no state or public call count", "rejection")
+	check(not stream.start(9, manifest.engine_binary_sha256).ok and before.record == stream.capture().record,
+		"second start cannot reset a running stream", "rejection")
+	var same_bound: Dictionary = stream.draw_randi_range(7, 7)
+	var same_state: Dictionary = codec.decode(stream.capture().record).value
+	var prior_state: Dictionary = codec.decode(before.record).value
+	check(same_bound.ok and same_bound.value == 7 and same_state.state == prior_state.state \
+		and same_state.calls == prior_state.calls + 1, "equal integer bounds count one API call while native state stays unchanged")
+	var exhausted: Dictionary = _changed(record, "calls", 9223372036854775807)
+	check(stream.restore(exhausted, manifest.engine_binary_sha256).ok, "maximum signed int64 public count restores exactly", "fixture")
+	var limits: Array = [stream.draw_randi(), stream.draw_randf(), stream.draw_randi_range(1, 2), stream.draw_randf_range(1.0, 2.0)]
+	var limits_ok := true
+	for draw in limits: limits_ok = limits_ok and not draw.ok and draw.code == "CALL_COUNT_EXHAUSTED"
+	check(limits_ok and stream.capture().record == exhausted, "count overflow rejected by all four APIs before advancing", "rejection")
+	# Check state transport extremes without installing invented states in a native RNG.
+	var domain: Array = [-9223372036854775807 - 1, 9223372036854775807, 9007199254740993, -9007199254740993]
+	var transported: Dictionary = codec.decode(_hop(codec.encode(domain).value))
+	check(transported.ok and _same(domain, transported.value), "signed state transport domain never passes through JSON numeric floats")
+	seed(76431)
+	var expected_global: int = randi()
+	seed(76431)
+	var independent = module_script.new()
+	var started: Dictionary = independent.start(-1, manifest.engine_binary_sha256)
+	var traced: Array = _trace(independent, 0, 16)
+	var captured: Dictionary = independent.capture()
+	var restored: Dictionary = independent.restore(captured.record, manifest.engine_binary_sha256)
+	check(started.ok and traced.size() == 16 and restored.ok and randi() == expected_global,
+		"construction start mixed draws capture and restore do not consume the global stream")
+
+func _writer() -> bool:
+	var cases: Array = []
+	var native_negative_state := false
+	for index in range(SEEDS.size()):
+		var stream = module_script.new()
+		var native := RandomNumberGenerator.new()
+		native.seed = SEEDS[index]
+		var started: Dictionary = stream.start(SEEDS[index], manifest.engine_binary_sha256)
+		check(started.ok and native.seed == SEEDS[index], "native signed seed accepted exactly " + str(index))
+		if not started.ok: return false
+		var prefix: Array = _trace(stream, 0, PREFIX_CALLS + index)
+		var expected: Array = []
+		for n in range(PREFIX_CALLS + index): expected.append({"operation": n % 8, "value": _native_operation(native, n)})
+		var capture: Dictionary = stream.capture()
+		check(_same(prefix, expected), "wrapper prefix matches native mixed API bits " + str(index))
+		if not capture.ok: return false
+		var checkpoint: Dictionary = _hop(capture.record)
+		var state: Dictionary = codec.decode(checkpoint).value
+		check(state.seed == SEEDS[index] and state.state == native.state and state.calls == PREFIX_CALLS + index,
+			"checkpoint holds native seed state and public count " + str(index))
+		native_negative_state = native_negative_state or state.state < 0
+		var suffix: Array = _trace(stream, PREFIX_CALLS + index, SUFFIX_CALLS)
+		expected.clear()
+		for n in range(PREFIX_CALLS + index, PREFIX_CALLS + index + SUFFIX_CALLS): expected.append({"operation": n % 8, "value": _native_operation(native, n)})
+		var ending: Dictionary = stream.capture()
+		var end_values: Dictionary = codec.decode(ending.record).value
+		check(_same(suffix, expected) and end_values.state == native.state and end_values.calls == PREFIX_CALLS + index + SUFFIX_CALLS,
+			"wrapper suffix and final state match native mixed API " + str(index))
+		cases.append({"index": index, "checkpoint": checkpoint, "suffix": suffix, "end": ending.record})
+	check(native_negative_state, "at least one checkpoint contains an actual native negative signed state", "fixture")
+	_local_cases(cases[0].checkpoint)
+	var packet: Dictionary = {"version": 1, "run_id": manifest.run_id, "writer_pid": OS.get_process_id(), "source_sha256": actual_before, "cases": cases}
+	var wire: Dictionary = codec.encode(packet)
+	check(wire.ok and cases.size() == 7, "seven native seed checkpoints and mixed suffixes prepared")
+	if not wire.ok or not failures.is_empty(): return false
+	var path: String = _normal(manifest.run_dir) + "/handoff.json"
+	if FileAccess.file_exists(path): return false
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null: return false
+	file.store_string(JSON.stringify(wire.value, "", false) + "\n")
+	file.flush()
+	var error: int = file.get_error()
+	file.close()
+	handoff_sha = FileAccess.get_sha256(path)
+	var reread: Dictionary = _read_json(path)
+	check(error == OK and reread.ok and reread.value == wire.value and handoff_sha.length() == 64,
+		"writer handoff file rereads the exact tagged JSON tree", "json")
+	return failures.is_empty()
+
+func _reader() -> bool:
+	var base: String = _normal(manifest.run_dir)
+	handoff_sha = FileAccess.get_sha256(base + "/handoff.json")
+	var writer: Dictionary = _read_json(base + "/writer_report.json")
+	var input: Dictionary = _read_json(base + "/handoff.json")
+	check(handoff_sha == manifest.handoff_sha256 and handoff_sha.length() == 64 \
+		and FileAccess.get_sha256(base + "/writer_report.json") == manifest.writer_report_sha256,
+		"reader consumes host-pinned writer report and handoff bytes", "source")
+	if not writer.ok or not input.ok or not failures.is_empty(): return false
+	var decoded: Dictionary = codec.decode(input.value)
+	check(decoded.ok, "reader decodes the persisted JSON file with exact value codec", "json")
+	if not decoded.ok: return false
+	var packet: Variant = decoded.value
+	if not _fields(packet, ["version", "run_id", "writer_pid", "source_sha256", "cases"]): return false
+	check(typeof(packet.version) == TYPE_INT and packet.version == 1 and packet.run_id == manifest.run_id \
+		and typeof(packet.writer_pid) == TYPE_INT and packet.writer_pid > 0 and packet.writer_pid != OS.get_process_id() \
+		and writer.value.get("process_id", -1) == packet.writer_pid and writer.value.get("complete", false) == true \
+		and writer.value.get("passed", false) == true and writer.value.get("stage", "") == "writer" \
+		and writer.value.get("run_id", "") == manifest.run_id and writer.value.get("handoff_sha256", "") == handoff_sha,
+		"reader has a successful different writer process and matching run identity", "environment")
+	check(packet.source_sha256 == actual_before and writer.value.get("source_sha256", {}) == actual_before \
+		and writer.value.get("source_after_sha256", {}) == actual_before, "writer and reader runtime source identities are identical", "source")
+	if not failures.is_empty() or typeof(packet.cases) != TYPE_ARRAY or packet.cases.size() != SEEDS.size(): return false
+	var all_suffixes := true
+	var all_ends := true
+	for index in range(SEEDS.size()):
+		var item: Variant = packet.cases[index]
+		if not _fields(item, ["index", "checkpoint", "suffix", "end"]) or item.index != index: return false
+		var stream = module_script.new()
+		var restored: Dictionary = stream.restore(item.checkpoint, manifest.engine_binary_sha256)
+		check(restored.ok, "fresh process stream restores checkpoint " + str(index))
+		if not restored.ok: return false
+		check(stream.capture().record == item.checkpoint, "seed then state restore preserves the complete checkpoint " + str(index))
+		var visual := RandomNumberGenerator.new()
+		visual.seed = 871 + index
+		var actual: Array = _trace(stream, PREFIX_CALLS + index, SUFFIX_CALLS, visual)
+		var suffix_ok: bool = actual.size() == SUFFIX_CALLS and _same(actual, item.suffix)
+		var end_ok: bool = stream.capture().record == item.end
+		check(suffix_ok, "persisted mixed suffix matches bits despite global and visual noise " + str(index))
+		check(end_ok, "persisted final seed state and count match after noise " + str(index))
+		all_suffixes = all_suffixes and suffix_ok
+		all_ends = all_ends and end_ok
+	check(all_suffixes, "all seven independent-process mixed suffixes match exact integer and float bits")
+	check(all_ends, "global and visual consumption leaves gameplay continuation and terminal state unchanged")
+	return failures.is_empty()
+
+func _run() -> void:
+	manifest_path = _normal(OS.get_environment("GAMEPLAY_RNG_QA_MANIFEST"))
+	var loaded: Dictionary = _read_json(manifest_path)
+	if not loaded.ok or not _fields(loaded.value, MANIFEST_FIELDS):
+		push_error("GAMEPLAY_RNG_QA_MANIFEST invalid")
+		quit(2)
+		return
+	manifest = loaded.value
+	manifest_sha = FileAccess.get_sha256(manifest_path)
+	for key in MANIFEST_FIELDS:
+		if key != "source_sha256" and typeof(manifest[key]) != TYPE_STRING:
+			push_error("RNG manifest scalar type invalid")
+			quit(2)
+			return
+	if not _fields(manifest.source_sha256, SOURCE_PATHS) or manifest.stage not in ["writer", "reader"]:
+		push_error("RNG manifest source or stage invalid")
+		quit(2)
+		return
+	var base: String = _normal(manifest.run_dir)
+	var report_path: String = _normal(manifest.report)
+	var actual_user: String = _normal(ProjectSettings.globalize_path("user://"))
+	var expected_manifest: String = base + "/" + manifest.stage + "_manifest.json"
+	var private_root: String = base + "/private_profile/" + manifest.stage + "/"
+	check(base.is_absolute_path() and base.get_file() == manifest.run_id and manifest_path == expected_manifest \
+		and report_path == base + "/" + manifest.stage + "_report.json" and not FileAccess.file_exists(report_path),
+		"fresh report and manifest are inside the exact run directory", "environment")
+	check(actual_user == _normal(manifest.private_user) and actual_user.begins_with(private_root),
+		"actual user directory matches this stage private profile", "environment")
+	check((manifest.stage == "writer" and manifest.handoff_sha256 == "" and manifest.writer_report_sha256 == "" \
+		and not FileAccess.file_exists(base + "/handoff.json")) or (manifest.stage == "reader" \
+		and manifest.handoff_sha256.length() == 64 and manifest.writer_report_sha256.length() == 64),
+		"stage input and output ownership is explicit", "environment")
+	actual_before = _source(manifest.source_sha256, "source before ")
+	check(actual_before == manifest.source_sha256, "three runtime source files match exact manifest entries", "source")
+	if not failures.is_empty():
+		push_error("RNG QA preflight failed")
+		quit(2)
+		return
+	var codec_script: GDScript = load("res://scripts/run_state_value_codec.gd")
+	module_script = load("res://scratchpad/run_gameplay_rng/gameplay_rng.gd")
+	if codec_script == null or module_script == null:
+		push_error("RNG QA source load failed")
+		quit(2)
+		return
+	codec = codec_script.new()
+	var completed: bool = _writer() if manifest.stage == "writer" else _reader()
+	var actual_after: Dictionary = _source(manifest.source_sha256, "source after ")
+	check(actual_after == actual_before, "runtime sources unchanged after this stage", "source")
+	check(FileAccess.get_sha256(manifest_path) == manifest_sha, "manifest bytes unchanged after this stage", "source")
+	if manifest.stage == "reader":
+		check(FileAccess.get_sha256(base + "/handoff.json") == manifest.handoff_sha256 \
+			and FileAccess.get_sha256(base + "/writer_report.json") == manifest.writer_report_sha256,
+			"reader leaves both writer artifacts byte-identical", "source")
+	var groups: Dictionary = {}
+	for item in checks: groups[item.group] = int(groups.get(item.group, 0)) + 1
+	var report: Dictionary = {"suite": "gameplay-rng", "stage": manifest.stage, "run_id": manifest.run_id,
+		"complete": completed and failures.is_empty(), "passed": completed and failures.is_empty(), "process_id": OS.get_process_id(),
+		"actual_user_dir": actual_user, "engine": Engine.get_version_info(), "engine_binary_sha256": manifest.engine_binary_sha256,
+		"manifest_sha256": manifest_sha, "handoff_sha256": handoff_sha, "source_sha256": actual_before, "source_after_sha256": actual_after,
+		"check_count": checks.size(), "check_groups": groups, "checks": checks, "failures": failures,
+		"native_rng_module_restore_implemented": true, "independent_process_continuation_tested": manifest.stage == "reader" and completed and failures.is_empty(),
+		"production_rng_migrated": false, "old_global_sequence_equivalence": false, "battle_resume_tested": false, "restore_ready": false}
+	var output: String = JSON.stringify(report, "", false)
+	var report_file := FileAccess.open(report_path, FileAccess.WRITE)
+	if report_file == null:
+		push_error("RNG QA report write failed")
+		quit(2)
+		return
+	report_file.store_string(output + "\n")
+	report_file.flush()
+	var write_error: int = report_file.get_error()
+	report_file.close()
+	if write_error != OK:
+		push_error("RNG QA report flush failed")
+		quit(2)
+		return
+	print("[gameplay-rng QA] " + output)
+	quit(0 if report.passed else 1)

@@ -1,0 +1,203 @@
+extends RefCounted
+## Real detached Unit identities in fresh contexts, with JSON between contexts.
+## This is not a cross-process runner or a Battle continuation equivalence test.
+## The caller owns the engine lifecycle and merges the returned checks.
+## Each configure call supplies the explicit complete live Unit fixture set.
+## ObjectDB checks below use only IDs returned by real allocated Unit objects;
+## never probe a guessed source offset to infer registry completeness.
+const Identity := preload("res://scratchpad/run_resume_integration/graph_identity.gd")
+const TARGET := "_chase_last_id"
+const POOL := "_damage_reduction_sources"
+const MAX_I64 := 9223372036854775807
+const MIN_I64 := -9223372036854775807 - 1
+
+func _check(rows: Array, label: String, passed: bool) -> void:
+	rows.append({"label": "identity boundary: " + label, "passed": passed})
+
+func _ok(result: Dictionary) -> bool:
+	return result.get("ok") == true
+
+func _reject(result: Dictionary, code: String) -> bool:
+	return result.get("ok") == false and result.get("code") == code
+
+func _value(result: Dictionary) -> Variant:
+	return result.get("value") if _ok(result) else null
+
+func _new_unit(unit_script: Script, owned: Array) -> Variant:
+	var unit: Variant = unit_script.new()
+	unit.set_block_signals(true)
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.set_process(false)
+	unit.set_physics_process(false)
+	owned.append(unit)
+	return unit
+
+func _finish(rows: Array, contexts: Array, owned: Array) -> Array:
+	for context: Variant in contexts:
+		context.dispose()
+	for unit: Variant in owned:
+		if is_instance_valid(unit): unit.free()
+	return rows
+
+func run(unit_script: Script) -> Array:
+	var rows: Array = []
+	var contexts: Array = []
+	var owned: Array = []
+	_check(rows, "Unit script is instantiable", unit_script != null and unit_script.can_instantiate())
+	if unit_script == null or not unit_script.can_instantiate(): return rows
+	var owner: Variant = _new_unit(unit_script, owned)
+	var target: Variant = _new_unit(unit_script, owned)
+	var old_native: int = target.get_instance_id()
+	var old_source: int = -old_native
+	var first: Variant = Identity.new(unit_script)
+	contexts.append(first)
+	var configured: Dictionary = first.configure({"owner": owner, "target": target}, [owner, target])
+	_check(rows, "configure exact complete live set", _ok(configured))
+	if not _ok(configured): return _finish(rows, contexts, owned)
+	_check(rows, "configure rejects live Unit omitted from registry",
+		not _ok(first.configure({"owner": owner}, [owner, target])))
+	_check(rows, "missing rejection preserves previous registry",
+		_value(first.encode_identity(TARGET, old_native)) == {"kind": "entity", "id": "target"})
+	_check(rows, "configure rejects registry Unit outside complete set",
+		not _ok(first.configure({"owner": owner, "target": target}, [owner])))
+	_check(rows, "extra rejection preserves previous registry",
+		_value(first.encode_identity(TARGET, old_native)) == {"kind": "entity", "id": "target"})
+	_check(rows, "registered target stays entity",
+		_value(first.encode_identity(TARGET, old_native)) == {"kind": "entity", "id": "target"})
+	for offset: int in Identity.OFFSETS:
+		var source_token: Dictionary = {"kind": "unit_source", "id": "target", "offset": str(offset)}
+		_check(rows, "registered source stays entity offset " + str(offset),
+			_value(first.encode_identity(POOL, -old_native - offset)) == source_token)
+		_check(rows, "registered source decodes exact native offset " + str(offset),
+			_value(first.decode_identity(POOL, source_token)) == -old_native - offset)
+	target.free()
+	_check(rows, "fixture target really freed", not is_instance_id_valid(old_native))
+	_check(rows, "freed registered target rejects",
+		_reject(first.encode_identity(TARGET, old_native), "STALE_ENTITY_REGISTRY"))
+	for offset: int in Identity.OFFSETS:
+		_check(rows, "freed registered source rejects offset " + str(offset),
+			_reject(first.encode_identity(POOL, -old_native - offset), "STALE_ENTITY_REGISTRY"))
+	configured = first.configure({"owner": owner}, [owner])
+	_check(rows, "refresh registry removes freed target", _ok(configured))
+	if not _ok(configured): return _finish(rows, contexts, owned)
+	var old_id_token: Variant = _value(first.encode_identity(TARGET, old_native))
+	var old_source_token: Variant = _value(first.encode_identity(POOL, old_source))
+	_check(rows, "first retired tokens issued", typeof(old_id_token) == TYPE_DICTIONARY and typeof(old_source_token) == TYPE_DICTIONARY)
+	if typeof(old_id_token) != TYPE_DICTIONARY or typeof(old_source_token) != TYPE_DICTIONARY:
+		return _finish(rows, contexts, owned)
+	_check(rows, "first target token is independent ordinal", old_id_token == {"kind": "retired", "id": "r:1"})
+	_check(rows, "first source token is independent ordinal", old_source_token == {"kind": "retired_source", "id": "s:-1"})
+	_check(rows, "same native target keeps first token", _value(first.encode_identity(TARGET, old_native)) == old_id_token)
+	_check(rows, "same native source keeps first token", _value(first.encode_identity(POOL, old_source)) == old_source_token)
+	var wire: Variant = JSON.parse_string(JSON.stringify([old_id_token, old_source_token]))
+	_check(rows, "first JSON roundtrip keeps tokens", wire == [old_id_token, old_source_token])
+	if typeof(wire) != TYPE_ARRAY or wire.size() != 2: return _finish(rows, contexts, owned)
+	var restored: Variant = Identity.new(unit_script)
+	contexts.append(restored)
+	configured = restored.configure({"owner": owner}, [owner])
+	_check(rows, "fresh restore context configures", _ok(configured))
+	if not _ok(configured): return _finish(rows, contexts, owned)
+	var restored_id_result: Dictionary = restored.decode_identity(TARGET, wire[0])
+	var restored_source_result: Dictionary = restored.decode_identity(POOL, wire[1])
+	_check(rows, "restore both retired tokens", _ok(restored_id_result) and _ok(restored_source_result))
+	if not _ok(restored_id_result) or not _ok(restored_source_result): return _finish(rows, contexts, owned)
+	var restored_id: int = restored_id_result.value
+	var restored_source: int = restored_source_result.value
+	_check(rows, "restored target uses new real tombstone", restored_id != old_native and is_instance_id_valid(restored_id))
+	_check(rows, "restored source uses distinct negative surrogate", restored_source != old_source and restored_source < 0)
+	restored.release_tombstones()
+	_check(rows, "restored target tombstone really freed", not is_instance_id_valid(restored_id))
+	_check(rows, "resave keeps original target token", _value(restored.encode_identity(TARGET, restored_id)) == wire[0])
+	_check(rows, "resave keeps original source token", _value(restored.encode_identity(POOL, restored_source)) == wire[1])
+	var newcomer: Variant = _new_unit(unit_script, owned)
+	var new_native: int = newcomer.get_instance_id()
+	newcomer.free()
+	_check(rows, "new death is a different real Unit", new_native != old_native and new_native != restored_id and not is_instance_id_valid(new_native))
+	var new_id_token: Variant = _value(restored.encode_identity(TARGET, new_native))
+	var new_source_token: Variant = _value(restored.encode_identity(POOL, -new_native))
+	_check(rows, "new death obtains target token", typeof(new_id_token) == TYPE_DICTIONARY)
+	_check(rows, "new death obtains source token", typeof(new_source_token) == TYPE_DICTIONARY)
+	if typeof(new_id_token) != TYPE_DICTIONARY or typeof(new_source_token) != TYPE_DICTIONARY:
+		return _finish(rows, contexts, owned)
+	_check(rows, "new target token skips imported reservation", new_id_token == {"kind": "retired", "id": "r:2"} and new_id_token != wire[0])
+	_check(rows, "new source token skips imported reservation", new_source_token == {"kind": "retired_source", "id": "s:-2"} and new_source_token != wire[1])
+	_check(rows, "new target repeated save is stable", _value(restored.encode_identity(TARGET, new_native)) == new_id_token)
+	_check(rows, "new source repeated save is stable", _value(restored.encode_identity(POOL, -new_native)) == new_source_token)
+	_check(rows, "old target remains stable after new death", _value(restored.encode_identity(TARGET, restored_id)) == wire[0])
+	_check(rows, "old source remains stable after new death", _value(restored.encode_identity(POOL, restored_source)) == wire[1])
+	var second_wire: Variant = JSON.parse_string(JSON.stringify([wire[0], new_id_token, wire[1], new_source_token]))
+	_check(rows, "second JSON preserves old and new tokens", second_wire == [wire[0], new_id_token, wire[1], new_source_token])
+	if typeof(second_wire) != TYPE_ARRAY or second_wire.size() != 4: return _finish(rows, contexts, owned)
+	var third: Variant = Identity.new(unit_script)
+	contexts.append(third)
+	configured = third.configure({"owner": owner}, [owner])
+	_check(rows, "second restore context configures", _ok(configured))
+	if not _ok(configured): return _finish(rows, contexts, owned)
+	var decoded: Array = []
+	for index in range(4):
+		var field: String = TARGET if index < 2 else POOL
+		var result: Dictionary = third.decode_identity(field, second_wire[index])
+		_check(rows, "second restore token " + str(index), _ok(result) and typeof(_value(result)) == TYPE_INT)
+		if not _ok(result) or typeof(_value(result)) != TYPE_INT: return _finish(rows, contexts, owned)
+		decoded.append(result.value)
+	_check(rows, "second restore target identities remain distinct", decoded[0] != decoded[1])
+	_check(rows, "second restore source identities remain distinct", decoded[2] != decoded[3])
+	third.release_tombstones()
+	for index in range(4):
+		var field: String = TARGET if index < 2 else POOL
+		_check(rows, "third save keeps canonical token " + str(index),
+			_value(third.encode_identity(field, decoded[index])) == second_wire[index])
+	for scalar: int in [0, 17, 9007199254740993, MAX_I64]:
+		var scalar_encoded: Dictionary = restored.encode_identity(POOL, scalar)
+		var scalar_wire: Variant = JSON.parse_string(JSON.stringify(_value(scalar_encoded)))
+		var scalar_decoded: Dictionary = third.decode_identity(POOL, scalar_wire)
+		_check(rows, "pool scalar JSON retains exact int64 " + str(scalar),
+			_value(scalar_encoded) == {"kind": "scalar", "value": str(scalar)} and
+			typeof(_value(scalar_decoded)) == TYPE_INT and _value(scalar_decoded) == scalar)
+		_check(rows, "pool scalar cannot alias retired sources " + str(scalar), scalar != decoded[2] and scalar != decoded[3])
+	_check(rows, "target scalar zero accepted", _value(third.decode_identity(TARGET, {"kind": "scalar", "value": "0"})) == 0)
+	_check(rows, "positive target scalar rejected", _reject(third.validate_identity(TARGET, {"kind": "scalar", "value": "17"}), "SCALAR_ID_RANGE"))
+	_check(rows, "negative native target rejected", _reject(third.encode_identity(TARGET, MIN_I64), "TARGET_ID_RANGE"))
+	_check(rows, "native float rejected", _reject(third.encode_identity(POOL, 1.0), "NATIVE_INTEGER_REQUIRED"))
+	_check(rows, "native string rejected", _reject(third.encode_identity(POOL, "1"), "NATIVE_INTEGER_REQUIRED"))
+	var legacy: Variant = Identity.new(unit_script)
+	contexts.append(legacy)
+	configured = legacy.configure({"owner": owner}, [owner])
+	_check(rows, "legacy token context configures", _ok(configured))
+	if not _ok(configured): return _finish(rows, contexts, owned)
+	var legacy_tokens: Array = [
+		{"kind": "retired", "id": "r:" + str(old_native)},
+		{"kind": "retired_source", "id": "s:" + str(old_source)},
+		{"kind": "retired_source", "id": "s:-9223372036854775808"}]
+	var legacy_values: Array = []
+	for index in range(3):
+		var field: String = TARGET if index == 0 else POOL
+		var legacy_wire: Variant = JSON.parse_string(JSON.stringify(legacy_tokens[index]))
+		var result: Dictionary = legacy.decode_identity(field, legacy_wire)
+		_check(rows, "legacy signed-domain token decodes " + str(index), _ok(result))
+		if not _ok(result): return _finish(rows, contexts, owned)
+		legacy_values.append(result.value)
+	legacy.release_tombstones()
+	for index in range(3):
+		var field: String = TARGET if index == 0 else POOL
+		_check(rows, "legacy token survives canonical resave " + str(index),
+			_value(legacy.encode_identity(field, legacy_values[index])) == legacy_tokens[index])
+	var minimum_encoded: Dictionary = legacy.encode_identity(POOL, MIN_I64)
+	_check(rows, "native int64 minimum retires without negation overflow", _ok(minimum_encoded))
+	if _ok(minimum_encoded):
+		_check(rows, "native int64 minimum repeats same token", _value(legacy.encode_identity(POOL, MIN_I64)) == minimum_encoded.value)
+	var invalid: Array = [
+		[POOL, {"kind": "scalar", "value": "9223372036854775808"}, "SCALAR_ID_RANGE"],
+		[POOL, {"kind": "scalar", "value": "-9223372036854775809"}, "SCALAR_ID_RANGE"],
+		[POOL, {"kind": "scalar", "value": "99999999999999999999"}, "SCALAR_ID_RANGE"],
+		[POOL, {"kind": "scalar", "value": "01"}, "SCALAR_ID_RANGE"],
+		[POOL, {"kind": "scalar", "value": "-0"}, "SCALAR_ID_RANGE"],
+		[POOL, {"kind": "scalar", "value": 9007199254740993}, "SCALAR_ID_RANGE"],
+		[TARGET, {"kind": "retired", "id": "r:9223372036854775808"}, "RETIRED_TOKEN"],
+		[POOL, {"kind": "retired_source", "id": "s:-9223372036854775809"}, "RETIRED_TOKEN"]]
+	for index in range(invalid.size()):
+		var item: Array = invalid[index]
+		_check(rows, "malformed integer token rejects before decode " + str(index),
+			_reject(legacy.validate_identity(item[0], item[1]), item[2]) and
+			_reject(legacy.decode_identity(item[0], item[1]), item[2]))
+	return _finish(rows, contexts, owned)

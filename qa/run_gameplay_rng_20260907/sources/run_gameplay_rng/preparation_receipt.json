@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "STATIC_PREPARATION_ONLY",
+  "pins": {
+    "path": "scratchpad/run_gameplay_rng/pins.json",
+    "bytes": 2576,
+    "raw_sha256": "6b14e70511963ece705867394671466a6257e58355507b8a8b913724cc2923a2",
+    "lf_sha256": "6b14e70511963ece705867394671466a6257e58355507b8a8b913724cc2923a2"
+  },
+  "static_checks": [
+    "Runtime dependency is exactly the existing c8c4 codec plus the two prepared GDScript files.",
+    "Unique functions and lexical bracket/string sanity checked; no Godot parser or interpreter was run.",
+    "Module has no global RNG invocation, stringify, Node reflection or instance-ID serialization.",
+    "Restore validates before construction, then seed before state, native readback before replacing owned RNG.",
+    "Seven writer native checkpoints and 64 mixed suffix calls each; reader requires different PID and frozen input bytes.",
+    "Writer/reader mandatory literal labels and all seven indexed label prefixes occur exactly once in source.",
+    "Exact source group counts are structurally 9 writer and 12 reader; these are not behavioral case counts.",
+    "Compatibility preserves typed fields and locks actual executable identity supplied by the host; source-mode exported-script identity remains a later integration boundary.",
+    "Synthetic maximum-shape packet cost was computed from the frozen codec charge rules, below its budgets; this is not a runtime sequence or parse test."
+  ],
+  "synthetic_packet_budget_not_runtime": {
+    "nodes": 4378,
+    "json_bytes_upper_bound": 529104,
+    "depth": 10,
+    "example_encoded_json_bytes": 129838,
+    "conservative_identity_string_lengths": 64,
+    "codec_limits": {
+      "nodes": 32768,
+      "bytes": 1048576,
+      "depth": 32
+    }
+  },
+  "required_literal_labels": {
+    "common": 6,
+    "writer": 16,
+    "reader": 7
+  },
+  "seven_indexed_label_prefixes": {
+    "writer": 4,
+    "reader": 4
+  },
+  "godot_runs": 0,
+  "gdscript_parser_run": false,
+  "actual_game_checks": null,
+  "production_writes": 0,
+  "shared_runner_writes": 0,
+  "git_run": false,
+  "new_runner_framework": false,
+  "restore_ready": false
+}

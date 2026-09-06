@@ -1,0 +1,189 @@
+extends SceneTree
+## Actual production Battle shell and standard skirmish map. _ready/deploy and
+## simulation never run; only the initial test source map uses level.paint_map
+## and decorate. The two restore destinations use map_state exclusively.
+## Root owns engine lock, private profile, manifest and whole-source guards.
+var checks: Array = []
+var failed := 0
+var owned: Array = []
+var manifest: Dictionary = {}
+var report_path := ""
+var manifest_ready := false
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+
+func _ok(label: String, result: Dictionary) -> bool:
+	var passed: bool = bool(result.get("ok", false))
+	checks.append({"label": label, "passed": passed, "code": String(result.get("code", "")), "path": String(result.get("path", ""))})
+	if not passed: failed += 1
+	return passed
+
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+
+func _finish(aborted := false) -> void:
+	for node in owned:
+		if is_instance_valid(node): node.free()
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report := {"suite": "map-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}),
+		"scope": "Actual standard skirmish terrain, five navigation grids, height RF texture, scenery and coast material; real JSON and one-step/two-phase private restore. No Battle._ready, deploy, simulation, full run resume or visual screenshot acceptance."}
+	if not report_path.is_empty():
+		var file := FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[map-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+
+func _shell(battle_script: Script, map_script: Script, level_script: Script) -> Variant:
+	var battle: Variant = battle_script.new()
+	owned.append(battle)
+	battle.process_mode = Node.PROCESS_MODE_DISABLED
+	battle.visible = false
+	battle.level = level_script.new()
+	battle.world = Node2D.new()
+	battle.world.transform = GameMap.ISO
+	battle.add_child(battle.world)
+	battle.map = map_script.new()
+	battle.world.add_child(battle.map)
+	battle.fog = true
+	battle._vision = PackedByteArray()
+	return battle
+
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	# Load after Autoloads initialize, without attaching a Battle to SceneTree.
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	var level_script: Script = load("res://scripts/levels/skirmish.gd")
+	var adapter_script: Script = load("res://scratchpad/run_resume_integration/map_state.gd")
+	if not _check("actual scripts load", battle_script != null and map_script != null and level_script != null and adapter_script != null):
+		_finish(true)
+		return
+	var adapter: Variant = adapter_script.new()
+	var source: Variant = _shell(battle_script, map_script, level_script)
+	var source_map: GameMap = source.map
+	source_map.init_map(source.level.map_w(), source.level.map_h(), source.level.map_theme(), source.level.map_base())
+	source.level.paint_map(source_map)
+	source_map.bake()
+	source._vision.resize(source_map.w * source_map.h)
+	for i in range(source._vision.size()): source._vision[i] = i % 3
+	source.level.decorate(source_map)
+	if not _check("standard real scenery and height constructed", source_map.sample_scenery != null and source_map.height_field != null and source_map.material is ShaderMaterial):
+		_finish(true)
+		return
+	# Actual navigation mutations, including overlap count and profile-specific
+	# double weights, must survive without deriving them from terrain defaults.
+	var cell: Vector2i = source_map.nearest_open(Vector2i(18, 35))
+	source_map.block_footprint(cell, 0, true)
+	source_map.block_footprint(cell, 0, true)
+	source_map.astar.set_point_weight_scale(cell, 1.23456789012345)
+	source_map.astar_guan.set_point_weight_scale(cell, 2.125)
+	source_map.astar_water.set_point_weight_scale(cell, 0.75)
+	source_map.astar_static.set_point_weight_scale(cell, 3.0625)
+	source_map.astar_static_guan.set_point_weight_scale(cell, 1.875)
+	source_map.sample_scenery._visibility_tick = 0.037
+	source_map.sample_scenery._entrance._tick = 0.042
+	source_map.sample_scenery._entrance._gate_parts[0].sealed = false
+	source_map.sample_scenery._entrance._gate_parts[0].modulate.a = 0.48
+	if not source_map.sample_scenery._sprites.is_empty(): source_map.sample_scenery._sprites[0].visible = false
+	source_map.material.set_shader_parameter("coast_enabled", false)
+	source_map.material.set_shader_parameter("natural_seed", 4095.5)
+	var captured: Dictionary = adapter.capture(source_map)
+	if not _ok("capture actual standard map", captured):
+		_finish(true)
+		return
+	var json_text: String = JSON.stringify(captured.value)
+	var snapshot: Variant = JSON.parse_string(json_text)
+	if not _ok("strict validate real JSON", adapter.validate(snapshot)):
+		_finish(true)
+		return
+	var restored: Variant = _shell(battle_script, map_script, level_script)
+	var staged: Dictionary = adapter.stage_map_values(restored.map, snapshot)
+	if not _ok("stage authoritative map values", staged):
+		_finish(true)
+		return
+	_check("display remains hidden until finish", not restored.map.visible and restored.map.sample_scenery == null and not staged.complete)
+	restored._vision = source._vision.duplicate()
+	if not _ok("finish standard display after fog binding", adapter.finish_display(restored.map, snapshot)):
+		_finish(true)
+		return
+	var recaptured: Dictionary = adapter.capture(restored.map)
+	if not _ok("recapture restored map", recaptured):
+		_finish(true)
+		return
+	_check("all codec sections and visual records roundtrip exactly", JSON.stringify(recaptured.value) == json_text)
+	_check("overlap count and original navigation revision retained", restored.map._block_count[restored.map.idx(cell.x, cell.y)] == 2 and restored.map._navigation_revision == source_map._navigation_revision)
+	var independent := true
+	for name in adapter.NAV_NAMES: independent = independent and not is_same(source_map.get(name), restored.map.get(name))
+	_check("five navigation objects are private replacements", independent)
+	_check("actual height samples and RF image bytes retained", restored.map.height_field.samples.to_byte_array() == source_map.height_field.samples.to_byte_array() \
+		and restored.map.height_field.texture.get_image().get_data() == source_map.height_field.texture.get_image().get_data())
+	var direct: Variant = _shell(battle_script, map_script, level_script)
+	direct._vision = source._vision.duplicate()
+	if not _ok("one-step standard map restore", adapter.restore_into(direct.map, snapshot)):
+		_finish(true)
+		return
+	var direct_capture: Dictionary = adapter.capture(direct.map)
+	_check("one-step snapshot matches two-phase snapshot", direct_capture.ok and JSON.stringify(direct_capture.value) == json_text)
+	var source_after: Dictionary = adapter.capture(source_map)
+	_check("capture and restore did not mutate source map", source_after.ok and JSON.stringify(source_after.value) == json_text)
+	_check("no Battle ready deploy or economy changes", source.units.is_empty() and restored.units.is_empty() and direct.units.is_empty() \
+		and source.gold == 0 and source.wood == 0 and restored.gold == 0 and restored.wood == 0 \
+		and source._pending_casts.is_empty() and restored._channels.is_empty() and not source.is_inside_tree() and not restored.is_inside_tree())
+	_finish()

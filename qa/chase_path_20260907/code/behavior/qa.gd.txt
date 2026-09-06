@@ -1,0 +1,195 @@
+extends SceneTree
+## External --script entry. No GameMap type reference before Autoload readiness.
+const MAP_RAW := {
+	"baseline":"0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+	"candidate":"9145fac5b213ae732fb837f8bd4ecdeccc212b3d39b589798181ad65f6d87122"}
+const MAP_LF := {
+	"baseline":"35a31084088e8665790b9bc940054d05a96f7e995ecfcd28796d2b6fad63800a",
+	"candidate":"cf898e57959412dca0dd3b23de4d9f891bb2859c25cba5df7f63dd0d8f80cc1d"}
+var variant := ""
+var output := ""
+var expected_user := ""
+var output_root := ""
+var checks := 0
+var failures: Array[String] = []
+var rows: Array = []
+var map_script: GDScript
+var probe: Variant = null
+var source_before := ""
+
+func _initialize() -> void:
+	variant = OS.get_environment("CHASE_BEHAVIOR_VARIANT")
+	output = OS.get_environment("CHASE_BEHAVIOR_OUT").replace("\\","/").simplify_path()
+	expected_user = OS.get_environment("CHASE_BEHAVIOR_USER_ROOT").replace("\\","/").simplify_path().trim_suffix("/")
+	output_root = OS.get_environment("CHASE_BEHAVIOR_OUTPUT_ROOT").replace("\\","/").simplify_path().trim_suffix("/")
+	if variant not in ["baseline","candidate"] or expected_user.is_empty() or output_root.is_empty() or not output.to_lower().begins_with(output_root.to_lower()+"/"):
+		push_error("Explicit behavior variant and private output/user roots required"); quit(2); return
+	var actual := ProjectSettings.globalize_path("user://").replace("\\","/").simplify_path()
+	if not actual.to_lower().begins_with(expected_user.to_lower()+"/") or FileAccess.file_exists(output):
+		push_error("Behavior private user guard failed or output already exists"); quit(2); return
+	call_deferred("_run")
+
+func check(ok: bool, label: String) -> void:
+	checks += 1
+	if not ok:
+		failures.append(label)
+		print("[chase-path-behavior] FAIL "+label)
+
+func _sha_text(text: String) -> String:
+	var digest := HashingContext.new()
+	digest.start(HashingContext.HASH_SHA256)
+	var bytes := text.to_utf8_buffer()
+	if not bytes.is_empty(): digest.update(bytes)
+	return digest.finish().hex_encode()
+
+func _specs() -> Array:
+	return [
+		{"id":"strict_same_cell","layout":"open","from":[49.25,49.5],"to":[55.5,51.75],"faction":0,"profile":"land","firing":false,"reach":0.0,"strict_empty":false,"strict_reason":"strict_same_cell"},
+		{"id":"strict_outside_start","layout":"open","from":[-1.0,48.0],"to":[240.0,112.0],"faction":0,"profile":"land","firing":false,"reach":0.0,"strict_empty":true,"strict_reason":"strict_endpoint_reject"},
+		{"id":"strict_reachable","layout":"open","from":[48.0,112.0],"to":[241.5,114.25],"faction":0,"profile":"land","firing":false,"reach":0.0,"strict_empty":false,"strict_reason":"strict_smooth_return"},
+		{"id":"strict_weighted_detour_faction1","layout":"weighted","from":[48.0,112.0],"to":[240.0,112.0],"faction":1,"profile":"land","firing":false,"reach":0.0,"strict_empty":false,"strict_reason":"strict_smooth_return"},
+		{"id":"firing_endpoint_reach_reject","layout":"wall","from":[48.0,112.0],"to":[240.0,112.0],"faction":0,"profile":"land","firing":true,"reach":80.0,"strict_empty":true,"strict_reason":"strict_astar_empty_reject","fallback_empty":true,"fallback_reason":"fallback_reach_reject"},
+		{"id":"firing_partial_reachable","layout":"wall","from":[48.0,112.0],"to":[240.0,112.0],"faction":0,"profile":"land","firing":true,"reach":220.0,"strict_empty":true,"strict_reason":"strict_astar_empty_reject","fallback_empty":false,"fallback_reason":"fallback_smooth_return"},
+		{"id":"firing_one_node_final_empty","layout":"isolated","from":[48.0,80.0],"to":[208.0,80.0],"faction":0,"profile":"land","firing":true,"reach":200.0,"strict_empty":true,"strict_reason":"strict_astar_empty_reject","fallback_empty":true,"fallback_reason":"fallback_smooth_empty"},
+		{"id":"firing_zero_reach_guard","layout":"wall","from":[48.0,112.0],"to":[240.0,112.0],"faction":0,"profile":"land","firing":true,"reach":0.0,"strict_empty":true,"strict_reason":"strict_astar_empty_reject","fallback_empty":true,"fallback_reason":"fallback_precondition_reject"},
+		{"id":"strict_water_reachable","layout":"water","from":[48.0,112.0],"to":[240.0,112.0],"faction":0,"profile":"water","firing":false,"reach":0.0,"strict_empty":false,"strict_reason":"strict_smooth_return"}
+	]
+
+func _map(spec: Dictionary) -> Variant:
+	var m: Variant = map_script.new()
+	m.name = "PathBehavior_"+String(spec["id"])
+	m.visible = false
+	m.process_mode = Node.PROCESS_MODE_DISABLED
+	root.add_child(m)
+	# Numeric terrain values are pinned by the whole real GameMap source SHA.
+	var fill := 0 if spec["layout"] == "water" else 9 if spec["layout"] == "isolated" else 4
+	m.init_map(9,7,"marsh",fill)
+	if spec["layout"] == "wall":
+		for y in 7: m.set_cell_t(4,y,9)
+	elif spec["layout"] == "weighted":
+		for x in 9:
+			m.set_cell_t(x,1,5)
+			m.set_cell_t(x,6,6)
+		for y in range(2,6): m.set_cell_t(4,y,9)
+	elif spec["layout"] == "isolated":
+		m.set_cell_t(1,2,4); m.set_cell_t(6,2,4)
+	m.bake()
+	return m
+
+func _nav_state(m: Variant) -> Dictionary:
+	var grids: Array = []
+	for nav in [m.astar,m.astar_guan,m.astar_water,m.astar_static,m.astar_static_guan]:
+		var cells: Array = []
+		for y in 7:
+			for x in 9:
+				var id := Vector2i(x,y)
+				cells.append([x,y,bool(nav.is_point_solid(id)),float(nav.get_point_weight_scale(id))])
+		grids.append({"region":[nav.region.position.x,nav.region.position.y,nav.region.size.x,nav.region.size.y],"cell_size":[nav.cell_size.x,nav.cell_size.y],"diagonal_mode":int(nav.diagonal_mode),"cells":cells})
+	var state := {"w":int(m.w),"h":int(m.h),"grid":Array(m.grid),"navigation_revision":int(m.navigation_revision()),"nav_grids":grids}
+	return {"values":state,"variant_bytes_hex":var_to_bytes(state).hex_encode()}
+
+func _ledger_state() -> Variant:
+	if probe == null: return null
+	var values := {}
+	for index in probe.METRIC_COUNT:
+		var name: String = String(probe.STEP_COLUMNS[index+7])
+		values[name] = null if name.ends_with("_us") else int(probe.counters[index])
+	return {"mode":"clockless","metrics":values,"errors":int(probe.errors),"chain_open":bool(probe.chain_open),"call_kind":int(probe.call_kind),"astar_open":bool(probe.astar_open)}
+
+func _path_record(method: String, spec: Dictionary, path: PackedVector2Array) -> Dictionary:
+	var points: Array = []
+	for point in path: points.append([point.x,point.y])
+	return {"method":method,"input":{"from":spec["from"],"to":spec["to"],"faction":spec["faction"],"profile":spec["profile"],"reach":spec["reach"] if method == "find_firing_path" else null},
+		"variant_type":typeof(path),"size":path.size(),"points":points,"variant_bytes_hex":var_to_bytes(path).hex_encode(),"ledger_after_call":_ledger_state()}
+
+func _case(spec: Dictionary, ordinal: int) -> void:
+	var m: Variant = _map(spec)
+	check(m.is_inside_tree(),String(spec["id"])+" real map entered tree")
+	var before := _nav_state(m)
+	await physics_frame
+	var token := false
+	if probe != null:
+		probe.physics_boundary(); probe.open_step(ordinal)
+		token = probe.begin_chain(bool(spec["firing"]))
+		check(token,String(spec["id"])+" real observer scope opened")
+	var from_w := Vector2(float(spec["from"][0]),float(spec["from"][1]))
+	var target_w := Vector2(float(spec["to"][0]),float(spec["to"][1]))
+	var started: int = int(probe.begin_call(token,0)) if probe != null else -1
+	# Exactly one real strict call; no repeat, hidden oracle, or stub navigation.
+	var strict: PackedVector2Array = m.find_path(from_w,target_w,int(spec["faction"]),String(spec["profile"]))
+	if probe != null: probe.finish_call(token,0,started,strict.size())
+	var calls: Array = [_path_record("find_path",spec,strict)]
+	check(strict.is_empty() == bool(spec["strict_empty"]),String(spec["id"])+" expected strict boundary")
+	if bool(spec["firing"]) and strict.is_empty():
+		started = int(probe.begin_call(token,1)) if probe != null else -1
+		# Exactly one real firing call, only following this real empty strict result.
+		var firing: PackedVector2Array = m.find_firing_path(from_w,target_w,float(spec["reach"]),int(spec["faction"]),String(spec["profile"]))
+		if probe != null: probe.finish_call(token,1,started,firing.size())
+		calls.append(_path_record("find_firing_path",spec,firing))
+		check(firing.is_empty() == bool(spec["fallback_empty"]),String(spec["id"])+" expected firing boundary")
+	if probe != null:
+		probe.end_chain(token); probe.close_step(true)
+	var ledger: Variant = _ledger_state()
+	if probe != null:
+		check(int(ledger["errors"]) == 0 and not ledger["chain_open"] and not ledger["astar_open"],String(spec["id"])+" ledger scope and invariants")
+		check(int(ledger["metrics"][String(spec["strict_reason"])]) == 1,String(spec["id"])+" actual strict branch")
+		if bool(spec["firing"]):
+			check(int(ledger["metrics"][String(spec["fallback_reason"])]) == 1,String(spec["id"])+" actual firing branch")
+		if spec["id"] == "firing_one_node_final_empty":
+			check(int(ledger["metrics"]["fallback_astar_ids_total"]) == 1 and int(ledger["metrics"]["fallback_astar_empty_ids"]) == 0,String(spec["id"])+" actual nonempty one-node AStar result")
+	var after := _nav_state(m)
+	check(before["variant_bytes_hex"] == after["variant_bytes_hex"],String(spec["id"])+" map/nav inputs unchanged")
+	check(calls.size() == (2 if bool(spec["firing"]) else 1),String(spec["id"])+" exact original call count")
+	var handle: WeakRef = weakref(m)
+	m.queue_free(); m = null
+	await process_frame
+	await process_frame
+	var freed: bool = handle.get_ref() == null
+	check(freed,String(spec["id"])+" real map freed")
+	rows.append({"spec":spec,"navigation_before":before,"navigation_after":after,"calls":calls,"ledger_after_case":ledger,"map_freed":freed})
+
+func _run() -> void:
+	await process_frame
+	check(root.get_node_or_null("Art") != null,"Autoload Art exists before loading GameMap")
+	source_before = FileAccess.get_sha256("res://scripts/game_map.gd")
+	check(source_before == String(MAP_RAW[variant]),"actual private GameMap raw SHA")
+	if not failures.is_empty(): _write_and_exit(); return
+	map_script = load("res://scripts/game_map.gd") as GDScript
+	check(map_script != null,"actual private GameMap script loaded")
+	if map_script == null: _write_and_exit(); return
+	check(_sha_text(map_script.source_code.replace("\r\n","\n")) == String(MAP_LF[variant]),"loaded script LF source matches actual variant")
+	var constants := map_script.get_script_constant_map()
+	if variant == "candidate":
+		probe = constants.get("_ChasePathDiag")
+		check(probe != null,"observer is exact preloaded candidate ledger")
+		if probe != null: probe.prepare("clockless")
+	else:
+		check(not constants.has("_ChasePathDiag"),"reference has no observer preload")
+	if not failures.is_empty(): _write_and_exit(); return
+	var specs := _specs()
+	for index in specs.size(): await _case(specs[index],index+1)
+	if probe != null:
+		probe.active = false
+		check(probe.errors == 0 and not probe.overflow and probe.step_count == 9,"complete nine-case observer ledger")
+	_write_and_exit()
+
+func _write_and_exit() -> void:
+	var after := FileAccess.get_sha256("res://scripts/game_map.gd")
+	check(source_before == after,"actual private source unchanged")
+	var report := {"schema":1,"variant":variant,"complete":rows.size()==9 and failures.is_empty(),"checks":checks,"failures":failures,
+		"pid":OS.get_process_id(),"godot":Engine.get_version_info(),"actual_user_dir":ProjectSettings.globalize_path("user://"),"project_root":ProjectSettings.globalize_path("res://"),
+		"qa_script_path":get_script().resource_path,"qa_script_raw_sha256":FileAccess.get_sha256(get_script().resource_path),"map_source_before":source_before,"map_source_after":after,
+		"map_script_lf_sha256":_sha_text(map_script.source_code.replace("\r\n","\n")) if map_script != null else "","cases":rows,
+		"stub_cases":[],"uncovered_real_branches":["find_firing_path no_open_target guard on a stable map with valid open start","find_firing_path AStar empty ids: not independently forced by these real layouts"],
+		"unit_do_chase_state_equivalence":false,"unit_state_scope":"Deferred. This QA exercises real GameMap methods and observer API, not Unit._do_chase or its full state transitions.","performance_claim":false}
+	var file := FileAccess.open(output,FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot open fresh behavior report"); quit(2); return
+	var stored: bool = file.store_buffer(JSON.stringify(report,"\t").to_utf8_buffer())
+	file.flush()
+	var error := file.get_error()
+	file.close()
+	if not stored or error != OK:
+		push_error("Behavior report incomplete write"); quit(2); return
+	print("[chase-path-behavior] "+JSON.stringify({"variant":variant,"complete":report["complete"],"checks":checks,"failures":failures.size(),"cases":rows.size(),"pid":OS.get_process_id()}))
+	quit(0 if bool(report["complete"]) else 2)
