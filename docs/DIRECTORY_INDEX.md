@@ -1,3 +1,8 @@
+## 2026-09-06 木墙方向增量
+
+- `tools/wall_direction_qa.gd`：六种方向/坡度的真实像素对照与三地图比例验证。
+- `docs/WALL_DIRECTION_20260906.md`、`qa/wall_direction_20260906/`：实现、失败/通过日志、前后画面和输入收据。
+
 ## 2026-09-06 邻居筛选增量
 
 - `tools/crowd_neighbor_qa.gd`：完整派发、人数/状态/桶序边界及独立候选计数。

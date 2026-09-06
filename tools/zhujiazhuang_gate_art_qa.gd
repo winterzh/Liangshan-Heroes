@@ -13,6 +13,7 @@ func _run() -> void:
 	for gate in [b.level.gate,b.level.side_gate]:
 		var texture: Texture2D=art.unit_texture(gate.key,gate.art_variant)
 		check(texture.resource_path==expected,gate.display_name+" loads its native texture")
+		check(gate._building_shadow_texture(texture,null)==texture,"actual gate shadow selector retains the displayed native texture")
 		check(texture.get_size()==Vector2(512,341),"bounded standard texture import")
 		var tr: Transform2D=visual.source_transform(gate,texture.get_size())
 		# Independently measured stone feet in the 1536x1024 original.
@@ -49,6 +50,8 @@ func _run() -> void:
 	await _dispose(b)
 	b=await _start("",7)
 	check(b.level.gate.art_variant!="zhu_gate_native_20260906","Daming retains its distinct gate art")
+	var city_texture: Texture2D=art.unit_texture(b.level.gate.key,b.level.gate.art_variant)
+	check(city_texture!=null and b.level.gate._building_shadow_texture(city_texture,null)==city_texture,"Daming shadow also uses its displayed variant")
 	check(visual.source_tint(b.level.gate,Color(0.3,0.4,0.5,0.7))==Color(0.3,0.4,0.5,0.7),"Daming tint remains identical including opacity")
 	await _dispose(b)
 	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":failures.is_empty(),"failures":failures,"observations":observations},"\t")+"\n")

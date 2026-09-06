@@ -1,3 +1,7 @@
+## 2026-09-06 木墙分段与门阴影
+
+重新运行`Play.cmd`并重开关卡，加载墙片比例与门阴影修正，无新增素材导入。新增`tools/wall_direction_qa.gd`，默认输出`.godot/wall_direction_qa/`；`WALL_DIRECTION_VISUAL=1`使用真实渲染比较反向铺设，`WALL_DIRECTION_OUT`可改输出目录。当前380项回归与范围见[说明](WALL_DIRECTION_20260906.md)。
+
 ## 2026-09-06 密集兵群邻居筛选
 
 新增 `tools/crowd_neighbor_qa.gd`，使用headless，输出 `.godot/crowd_neighbor_qa/`；99项/82,968次位置对照通过。已包含祝家庄新门楼1b9784a，整合通行/接应/门楼回归和实际压力复现见[说明](CROWD_NEIGHBORS_20260906.md)。源码启动配置不变，实际战斗仍36.66FPS/P95 64.368ms，未完成性能验收。

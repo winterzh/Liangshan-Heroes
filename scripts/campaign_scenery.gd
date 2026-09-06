@@ -215,6 +215,9 @@ func _add_story_sign(p: Vector2,size: float,label: String) -> void:
 
 func _add_wall(a: Vector2,z: Vector2,height_override := 0.0) -> void:
 	var n := int(ceil(a.distance_to(z)/(1.7 if _style=="level8" else 3.0)))
+	if _style=="level3":
+		var span := _map.project((z+Vector2(0.5,0.5))*32)-_map.project((a+Vector2(0.5,0.5))*32)
+		n=Stockade.panel_count(span,height_override if height_override>0.0 else 52.0)
 	for i in range(n):
 		var from: Vector2 = (a.lerp(z,float(i)/n)+Vector2(0.5,0.5))*32
 		var to: Vector2 = (a.lerp(z,float(i+1)/n)+Vector2(0.5,0.5))*32
