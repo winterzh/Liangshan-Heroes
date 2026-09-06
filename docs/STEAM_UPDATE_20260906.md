@@ -1,6 +1,6 @@
 # 2026-09-06 Windows Steam 更新
 
-用户明确授权本轮合并及更新 Steam。PR #1 已合并；更新包已验证，用户已手动选择验证包，网页上传请求已提交，正在等待Steam返回结果；尚未切换默认版本。最终状态以[发布收据](../qa/steam_update_20260906/PUBLISH_STATUS.json)为准。
+用户明确授权本轮合并及更新 Steam。PR #1 已合并；Windows 更新已上传并上线 Steam default，BuildID为 **25149197**，Depot Manifest为 **6277611029325164920**。最终状态以[发布收据](../qa/steam_update_20260906/PUBLISH_STATUS.json)为准。
 
 ## 源码与成品
 
@@ -19,8 +19,8 @@
 
 ## Steam 发布步骤与范围
 
-目标应用5088120、Windows Depot5088121、default分支。操作前Steamworks确认default为25136463，Depot Manifest为7280684617482783161，现有Depot也只有根目录EXE。
+目标应用5088120、Windows Depot5088121、default分支。操作前Steamworks确认default为25136463，Depot Manifest为7280684617482783161，现有Depot也只有根目录EXE。现已完成上传、创建Build25149197与default切换；回读默认分支行显示25149197，新清单仅含286,979,872字节的LiangshanHeroes.exe，SHA1与本地已测成品一致。Steam预览显示从旧构建升级约需20.9MB。
 
-通过Steamworks的SteamPipe→通过网页上传的内容，以“标准”上传已验证ZIP，创建生成版本；核对Depot中的EXE文件名、大小及SHA1后再预览更改并设置default上线。上传成功不等于default已切换，必须另行回读。官方流程见[SteamPipe文档](https://partner.steamgames.com/doc/sdk/uploading)。
+通过Steamworks的SteamPipe→通过网页上传的内容，以“标准”上传已验证ZIP，创建生成版本；核对Depot中的EXE文件名、大小及SHA1后再预览更改并设置default上线。上传与切换已分别核实。未另做完整Steam客户端下载，不将网页清单核对称为已下载试玩。官方流程见[SteamPipe文档](https://partner.steamgames.com/doc/sdk/uploading)。
 
 本轮更新现有Windows构建，不执行首次商店正式发行，不更改macOS Depot或外部更新器。公告文案见[简短公告](UPDATE_ANNOUNCEMENT_20260906.md)，本轮只写文案，未发布社区公告。

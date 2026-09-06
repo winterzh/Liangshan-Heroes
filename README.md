@@ -1,6 +1,6 @@
 # 水浒英雄传：八幕战役
 
-**当前统一进度：[PROJECT_STATUS](docs/PROJECT_STATUS.md)**（2026-09-06）。两会话已收尾整合，PR #1 已按用户授权合并到 main；开发分支仍为 `codex/sync-20260905-stable`。八关均有新版实现，仍处于试玩与完善阶段。宋江、林冲四向已接入，孙立仍是保存中的草稿。本次 Windows 包与 Steam 更新状态见[交付记录](docs/STEAM_UPDATE_20260906.md)，[简短更新公告](docs/UPDATE_ANNOUNCEMENT_20260906.md)已写好。
+**当前统一进度：[PROJECT_STATUS](docs/PROJECT_STATUS.md)**（2026-09-06）。两会话已收尾整合，PR #1 已按用户授权合并到 main；开发分支仍为 `codex/sync-20260905-stable`。八关均有新版实现，仍处于试玩与完善阶段。宋江、林冲四向已接入，孙立仍是保存中的草稿。Steam Windows默认版本已更新为Build25149197，见[交付记录](docs/STEAM_UPDATE_20260906.md)，[简短更新公告](docs/UPDATE_ANNOUNCEMENT_20260906.md)已写好。
 
 2026-09-06：快活林可择店饮酒、独立练步或直接挑战。蒋门神的冲撞会实际移动；W后右键换位，趁当前破绽用E近身踢中。运行 `Play.cmd` 并重开“醉打蒋门神”；[规则与验证边界](docs/KUAIHUOLIN_SHORT_20260906.md)。
 

@@ -5,7 +5,7 @@
 ## 统一版本与同步方式
 
 - 仓库：`winterzh/Liangshan-Heroes`；开发分支：`codex/sync-20260905-stable`。[PR #1](https://github.com/winterzh/Liangshan-Heroes/pull/1) 已按用户本轮授权合并为 `37d3e363847ff37177ef62ce8927db5f4a270bc6`，与统一源码 `954ffde683e79fe90656e5acba78692bc5de67b8` 同树。
-- 已等另一个会话完成并停止，接入其最后两次提交 `bf3e1a6`（重绘）和 `8b5c077`（索敌）。原有墙门、八关、宋江/林冲等工作保留。已从该统一提交冻结并验证 Windows 更新包；Steam 实际上传/上线状态见[本次交付记录](STEAM_UPDATE_20260906.md)。
+- 已等另一个会话完成并停止，接入其最后两次提交 `bf3e1a6`（重绘）和 `8b5c077`（索敌）。原有墙门、八关、宋江/林冲等工作保留。已从该统一提交冻结并验证 Windows 更新包；Steam default已上线Build25149197，服务端EXE哈希与已测包一致；见[本次交付记录](STEAM_UPDATE_20260906.md)。
 - 当前实际工程为仓库根目录 `project.godot`，使用 Godot **4.6.3** 和 `Play.cmd`。机器路径只放在忽略的 `godot.local.txt` 或 `GODOT_PATH`；见[源码启动说明](SOURCE_SETUP.md)。
 - 换电脑先检查工作区与分支，干净且没有分叉再 `git pull --ff-only origin codex/sync-20260905-stable`；开发后验证、更新文档、逐文件提交推送。main 已包含本次统一源码；PR #1 已关闭，后续不得误称它仍开放。
 - 本轮统一验证和逐文件整合说明见[快照记录](UNIFIED_SNAPSHOT_20260906.md)；孙立未完成素材已连同提示词、原生图和工具原型保存进仓库，见[草稿说明](../tools/contracts/sun_li_direction4_draft_20260906/README.md)。
