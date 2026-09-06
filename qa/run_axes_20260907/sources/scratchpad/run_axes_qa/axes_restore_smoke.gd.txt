@@ -1,0 +1,245 @@
+extends SceneTree
+## Real nested Battle.LiBrawnAxesFx; pre-impact JSON resume and mixed-target hit.
+## Uses actual Unit damage and actual Battle.spawn_impact; never Battle._ready/deploy.
+## Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Factory := preload("res://scratchpad/run_resume_integration/li_brawn_axes_state.gd")
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var report_path: String = ""
+var exit_counts: Dictionary = {"axes": 0}
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _on_exit(label: String) -> void:
+	exit_counts[label] += 1
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "axes-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}),
+		"scope": "Real nested Battle.LiBrawnAxesFx with real Unit and detached Battle; pending JSON restore, expired-first/live-second batch, one actual hit and one impact, guard against repeated resolve and true exit. No full Battle resume claim."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[axes-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	# Load classes after Autoload ready; no source extraction, rewriting or stubs.
+	var battle_script: Variant = load("res://scripts/battle.gd")
+	var axes_script: Script = battle_script.LiBrawnAxesFx
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var codec: Variant = codec_script.new()
+	var art: Variant = root.get_node("Art")
+	var texture: Texture2D = art.item_texture("axe")
+	if texture == null: texture = art.ability_projectile_texture("axe")
+	if not _check("fixed production axe texture available", texture != null):
+		_finish(true)
+		return
+	var factory: Variant = Factory.new(codec_script, axes_script, unit_script, texture)
+	paused = true
+	var world: Node2D = Node2D.new()
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	owned.append(world)
+	root.add_child(world)
+	var old_game: Variant = battle_script.new()
+	owned.append(old_game)
+	var old_fx_root: Node2D = Node2D.new()
+	world.add_child(old_fx_root)
+	old_game.fx_root = old_fx_root
+	var original_caster: Variant = _make_unit(unit_script, Vector2.ZERO, 0)
+	var original_target: Variant = _make_unit(unit_script, Vector2(75.0, 0.0), 1)
+	var dead_first: Variant = _make_unit(unit_script, Vector2(45.0, 0.0), 1)
+	world.add_child(original_caster)
+	world.add_child(original_target)
+	original_target._shield = 8.0
+	var source: Variant = axes_script.new()
+	owned.append(source)
+	source.name = "PendingAxes"
+	source.visible = false
+	source.position = Vector2(0.0, -8.0)
+	source.caster = original_caster
+	source.game = old_game
+	source.hits = [{"target": dead_first, "dmg": 91.0}, {"target": original_target, "dmg": 31.5}]
+	source.tex = texture
+	old_fx_root.add_child(source)
+	source.set_process(true)
+	dead_first.free()
+	source._process(0.34)
+	if not _check("original effect remains before impact threshold", not source.resolved and not source.is_queued_for_deletion() and source.elapsed < source.dur and original_target.hp == 500.0 and original_target._shield == 8.0):
+		_finish(true)
+		return
+	var captured: Dictionary = factory.capture(source, "axes_smoke_v1", {original_caster: "1", original_target: "2"})
+	if not _ok("capture actual pending axes with expired first target", captured):
+		_finish(true)
+		return
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	var known: Dictionary = {"1": true, "2": true}
+	var validated: Dictionary = factory.validate(record, "axes_smoke_v1", known)
+	if not _ok("validate actual JSON roundtrip", validated):
+		_finish(true)
+		return
+	_check("pending times and resolved flag exact", validated.values == factory._read_values(source))
+	_check("ordered expired/live hits and original damage retained", validated.hits.size() == 2 and validated.hits[0].target.state == "expired" and validated.hits[0].dmg == 91.0 and validated.hits[1].target.state == "entity" and validated.hits[1].target.id == "2" and validated.hits[1].dmg == 31.5)
+	_check("texture serialized only as fixed trusted visual token", validated.visual == "trusted_axe")
+	# Validate refusal independently of a queue-free node: the saved resolved bit
+	# must never be reset to false by instantiate.
+	var unpacked: Dictionary = codec.decode(record.payload)
+	var bad_payload: Dictionary = unpacked.value.duplicate(true)
+	bad_payload.values["resolved"] = true
+	var bad_encoded: Dictionary = codec.encode(bad_payload)
+	var bad_record: Dictionary = record.duplicate(true)
+	bad_record["payload"] = bad_encoded.value
+	var resolved_rejection: Dictionary = factory.instantiate(bad_record, "axes_smoke_v1", known)
+	_check("resolved saved record cannot create pending damage", not resolved_rejection.ok and resolved_rejection.code == "ALREADY_RESOLVED")
+	bad_payload = unpacked.value.duplicate(true)
+	bad_payload["visual"] = "res://arbitrary_save_texture.png"
+	bad_encoded = codec.encode(bad_payload)
+	bad_record["payload"] = bad_encoded.value
+	var visual_rejection: Dictionary = factory.instantiate(bad_record, "axes_smoke_v1", known)
+	_check("saved texture path is rejected without dynamic load", not visual_rejection.ok and visual_rejection.code == "VISUAL_KIND")
+	var old_caster_id: int = original_caster.get_instance_id()
+	var old_target_id: int = original_target.get_instance_id()
+	source.free()
+	original_caster.free()
+	original_target.free()
+	old_game.free()
+	var game: Variant = battle_script.new()
+	owned.append(game)
+	var effects: Node2D = Node2D.new()
+	world.add_child(effects)
+	game.fx_root = effects
+	var caster: Variant = _make_unit(unit_script, Vector2.ZERO, 0)
+	var target: Variant = _make_unit(unit_script, Vector2(75.0, 0.0), 1)
+	target._shield = 8.0
+	world.add_child(caster)
+	world.add_child(target)
+	var restored: Dictionary = factory.instantiate(record, "axes_smoke_v1", known)
+	if not _ok("instantiate actual nested axes class", restored):
+		_finish(true)
+		return
+	var fx: Variant = restored.fx
+	owned.append(fx)
+	_check("shell uses exact injected real class and is inert", fx.get_script() == axes_script and fx.get_parent() == null and fx.process_mode == Node.PROCESS_MODE_DISABLED and fx.is_blocking_signals())
+	_check("texture is trusted runtime reference without hit side effects", is_same(fx.tex, texture) and fx.caster == null and fx.hits.is_empty() and fx.game == null and effects.get_child_count() == 0 and target.hp == 500.0)
+	var missing: Dictionary = factory.bind(fx, record, "axes_smoke_v1", {"1": caster, "2": target}, game)
+	_check("missing tombstone rejects whole bind before mutation", not missing.ok and missing.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED" and fx.caster == null and fx.game == null and fx.hits.is_empty())
+	var tombstone: Variant = unit_script.new()
+	owned.append(tombstone)
+	if not _ok("bind new graph with live target tombstone", factory.bind(fx, record, "axes_smoke_v1", {"1": caster, "2": target}, game, tombstone)):
+		_finish(true)
+		return
+	_check("new Battle and Unit graph bound", is_same(fx.game, game) and is_same(fx.caster, caster) and is_same(fx.hits[1].target, target) and caster.get_instance_id() != old_caster_id and target.get_instance_id() != old_target_id)
+	_check("expired first target bound before global release", is_same(fx.hits[0].target, tombstone) and is_instance_valid(fx.hits[0].target))
+	tombstone.free()
+	_check("expired first target stays freed Object", typeof(fx.hits[0].target) == TYPE_OBJECT and not is_instance_valid(fx.hits[0].target))
+	effects.add_child(fx)
+	if not _ok("paused activation after complete graph binding", factory.activate(fx, restored.activation)):
+		_finish(true)
+		return
+	fx.tree_exited.connect(_on_exit.bind("axes"))
+	_check("all pending timing and Node state exact after activation", factory._read_values(fx) == validated.values and factory._read_node(fx) == validated.node)
+	await process_frame
+	_check("paused attachment does not resolve or advance", factory._read_values(fx) == validated.values and target.hp == 500.0 and target._shield == 8.0 and effects.get_child_count() == 1)
+	fx._process(0.01)
+	_check("real process remains below impact threshold", not fx.resolved and not fx.is_queued_for_deletion() and fx.elapsed < fx.dur and target.hp == 500.0)
+	fx._process(0.02)
+	_check("real process skips expired first target and hits later live target", fx.resolved and target.hp == 476.5 and target._shield == 0.0 and caster.hp == 500.0)
+	_check("real new Battle receives exactly one impact", effects.get_child_count() == 2)
+	_check("resolved effect requests actual queued deletion", fx.is_queued_for_deletion())
+	_check("resolved queued node rejected by capture barrier", not factory.capture(fx, "axes_smoke_v1", {caster: "1", target: "2"}).ok)
+	# Invoke the original process once more before delete flush to exercise its
+	# existing resolved guard; do not call resolve_hits separately for an oracle.
+	fx._process(0.02)
+	_check("second original process cannot resolve damage or impact twice", target.hp == 476.5 and target._shield == 0.0 and effects.get_child_count() == 2)
+	await process_frame
+	await process_frame
+	_check("axes effect actually freed and exited once", not is_instance_valid(fx) and exit_counts.axes == 1 and effects.get_child_count() == 1)
+	for _index in range(3): await process_frame
+	_check("later frames cannot repeat freed axes damage", target.hp == 476.5 and target._shield == 0.0 and caster.hp == 500.0 and exit_counts.axes == 1)
+	_check("Battle never entered tree or deployed", not game.is_inside_tree() and game.units.is_empty() and game.gold == 0 and game.wood == 0)
+	_finish()
+
+func _make_unit(unit_script: Script, at: Vector2, faction: int) -> Variant:
+	var unit: Variant = unit_script.new()
+	owned.append(unit)
+	unit.visible = false
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.position = at
+	unit.faction = faction
+	unit.max_hp = 500.0
+	unit.hp = 500.0
+	unit.radius = 12.0
+	unit.stance = 3
+	# Damage is real; disable no methods, and do not enable optional hero stats
+	# or inventory callbacks in this bounded restore/one-hit fixture.
+	return unit

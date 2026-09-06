@@ -1,3 +1,9 @@
+## 2026-09-07 飞斧恢复组件与证据
+
+- `scripts/run_li_brawn_axes_state.gd`：真实`Battle.LiBrawnAxesFx`的待结算值、Node状态、有序命中和新对象图恢复；与已通过原型同字节。
+- `qa/run_axes_20260907/`：原型`20260906T190607921584Z`及正式`20260906T191522544612Z`两轮各46条证据、runner/driver/factory、promotion、manifest与来源索引；相同依赖复用旧组件归档，不重复大Battle源码。GDScript以`.gd.txt`保存，`.gdignore`隔离，无profile、缓存、玩家存档或资源二进制。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)追加飞斧边界；两轮是相同组件复验，M3整局、菜单和PCK续玩仍待完成。
+
 ## 2026-09-07 追击诊断、独立 RNG 与真实恢复组件
 
 - `docs/CHASE_PATH_DIAGNOSTIC_20260907.md`、`qa/chase_path_20260907/`：冻结4baafc1的602/597步、0 fallback与约0.186ms/步取舍，55/88原生Map和186离线检查；原始收据、诊断和分析器按字节归档，不是生产优化或正常FPS验收。

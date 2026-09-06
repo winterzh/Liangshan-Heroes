@@ -1,3 +1,9 @@
+## 2026-09-07 飞斧恢复组件复现
+
+新增正式 `scripts/run_li_brawn_axes_state.gd`，原型与正式路径各46条真实对象检查通过；两轮受测文件分别按manifest精确SHA复现，不把相同检查累加成新场景。[飞斧QA](../qa/run_axes_20260907/README.md)保留runner、driver、factory、晋级收据与依赖映射；未变Battle等原字节明确复用已提交的组件归档。
+
+在独立相容checkout按source index恢复缺失的忽略路径，正式入口为 `python scratchpad/run_axes_production_qa/run_smoke.py --godot "<实际Godot路径>" --suite axes`；不带`--run`仅预检，实际执行追加`--run`并使用新私有用户目录和共同引擎锁。已有文件只核对、不覆盖，不从归档`.gd.txt`直接运行。本批无`.gd.uid`，不为生成UID额外启动编辑器。正常游戏启动不变，仍未接整局保存退出、菜单继续或PCK恢复。
+
 ## 2026-09-07 本批源码基线与组件复现
 
 本批已有结果对应 `199aac6` 基线及各 manifest 精确源码；追击诊断另固定在 `4baafc1`。工作区安全快进后，`fe1faf5a71b92a81b4404c8f35cce2b648d50a49` 加受测时尚未提交的五个正式模块已独立复验Unit149、Projectile54、Map63；三进程均exit0，源码/玩家保护及共同锁释放通过，见[整合HEAD收据](../qa/run_resume_components_20260907/integrated_head/README.md)。复现须使用该轮manifest精确字节，不将复测重复计为新场景。Steam 接入仍为本地候选，线上 default 保持已发布 Build25154403；本批源码同步不表示重新上传游戏包或启用成就/工坊服务。

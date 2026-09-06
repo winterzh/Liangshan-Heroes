@@ -46,3 +46,11 @@ Map/Scenery v2 已将运行时依赖原始源码摘要的条件改为由外层�
 受测源码集为 `fe1faf5a71b92a81b4404c8f35cce2b648d50a49` 加上述五个正式模块，具体文件以每轮 manifest 为准。Unit `20260906T190047879205Z`（PID13232/149条）、Projectile `20260906T190128073061Z`（PID14024/54条）、Map `20260906T190208572861Z`（PID36160/63条）均 exit0、完整报告与严格日志通过，源码和真实玩家文件前后摘要一致，锁已释放。新 Autoload 与 Battle 源码的精确身份随 [integrated_head](../qa/run_resume_components_20260907/integrated_head/README.md) 单列保留。
 
 这是同一组组件在新源码集上的兼容复验，不增加独立场景数量，也不代表 Steam 成就/工坊联调、完整 Battle 或导出包续玩已经验收。当前发布版本仍由 Steam 发布记录单独管理。
+
+## 李逵飞斧待结算效果恢复增量
+
+[run_li_brawn_axes_state.gd](../scripts/run_li_brawn_axes_state.gd)已按原型同字节晋级，SHA256为`cd8662a38012cc4739e403a4b9eb12023c55eb5bf0d750cbf6640b063f591fde`。它显式保存pending时钟、Node状态、caster及有序hits/原伤害，纹理只使用固定可信引用或原程序绘图标记；先创建禁用的真实嵌套效果，再绑定新Battle/Unit图，交由外层统一激活，不在恢复时提前结算伤害。
+
+原型run`20260906T190607921584Z`（PID5796）和正式路径`20260906T191522544612Z`（PID30268）各46条检查通过，均exit0、来源/玩家前后摘要一致且共同锁释放。每轮16条来源前后与30条其余检查，覆盖真实JSON、暂停绑定、首个已释放目标后的活目标一次命中、新Battle一次impact、重复resolve保护及实际queue-free/退出。同组检查复验不累加为独立场景；[飞斧归档](../qa/run_axes_20260907/README.md)保留原始报告、进程、晋级与精确源码映射。
+
+归档/晋级时既有已同步基线为`9bcda9ef510cab041081d0e2bf23addfe0593d02`；较早原型受测文件仍以其manifest为准，不回写Git归属。本增量未接完整Battle/RunSession，未覆盖其他全部持续效果、整局跨进程续战、菜单或PCK恢复，不改变M3验收要求。
