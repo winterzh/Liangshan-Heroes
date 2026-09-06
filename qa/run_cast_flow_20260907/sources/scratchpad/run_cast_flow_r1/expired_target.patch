@@ -1,0 +1,25 @@
+--- a/scripts/battle.gd
++++ b/scripts/battle.gd
+@@ -6861,10 +6861,12 @@
+ 			keep.append(pc)                 # 仍在抬手
+ 		else:
+ 			var tgt = pc.get("tgt")
++			if typeof(tgt) == TYPE_OBJECT and not is_instance_valid(tgt):
++				continue   # A freed Object may compare equal to null; never pass it to a typed cast API.
+ 			if tgt != null and (not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned or tgt.story_outcome != "" \
+ 					or not target_visible_to(c, tgt)):
+ 				continue
+-			_do_ability(c, int(pc["slot"]), pc["lp"], pc.get("tgt"))
++			_do_ability(c, int(pc["slot"]), pc["lp"], tgt)
+ 	_pending_casts = keep
+ 
+ 
+@@ -7955,6 +7957,8 @@
+ 	for wc in _walk_casts:
+ 		var c = wc["c"]
+ 		var tgt = wc.get("tgt")
++		if typeof(tgt) == TYPE_OBJECT and not is_instance_valid(tgt):
++			continue   # A freed Object may compare equal to null; never pass it to a typed cast API.
+ 		if c == null or not is_instance_valid(c) or c.hp <= 0.0:
+ 			continue
+ 		if tgt != null and (not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned or tgt.story_outcome != "" \

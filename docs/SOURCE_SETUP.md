@@ -1,3 +1,11 @@
+## 2026-09-07 技能施法恢复复现
+
+新增 `scripts/run_cast_flow_state.gd` 及受测Battle过期目标窄修复；[归档](../qa/run_cast_flow_20260907/README.md)保留原失败、相同driver的R1成功、正式路径成功三轮，原/改runner与pins、原始patch/application及准备/修复/晋级脚本。原失败无report，不能用于通过结论；两轮成功各63项同矩阵。
+
+在独立相容checkout按source index恢复缺失忽略路径，已有文件先核对不覆盖。正式入口 `python scratchpad/run_cast_flow_production_qa/run_smoke.py --godot "<实际Godot路径>"`；不带 `--run` 仅预检，实际运行追加 `--run`，保持共同锁、新私有用户目录与新run。源码依赖按逐轮SHA恢复，原patch/晋级脚本仅保留来源，不自动重跑。
+
+外层先恢复Unit施法/引导计时、CD、order serial/路径和其他图；三数组bind只做树外禁用Battle壳的完整验证和赋值，全部图完成后才释放同一identity的活类型墓碑并安装启用。正常游戏入口不变，未新增菜单或磁盘续玩；物品施法尚未纳入。
+
 ## 2026-09-07 标准30波关卡恢复复现
 
 新增 `scripts/run_defense_level_state.gd`，只接受已启动经典30波原表；原型及正式各253项同矩阵通过。[归档](../qa/run_defense_level_20260907/README.md)按两轮各100源码映射保留driver/runner/pins、原准备文档与promote_defense_level.py，旧依赖按SHA复用。正式pins的driver bytes未从22,071更新为实际22,056，但固定SHA和真实入口均正确；原文保留，source index使用实际字节数。

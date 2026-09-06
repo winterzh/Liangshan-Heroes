@@ -1,0 +1,348 @@
+extends SceneTree
+## Three casting flows; real creators/consumers and actual Unit phase bodies.
+## No Battle._ready/deploy and no visual Node restoration.
+## Runner owns engine lock, private APPDATA,
+## source/EXE receipts and strict engine-log checks. Does not access user:// files.
+## RUN_RESTORE_QA_MANIFEST is host-owned JSON: run_id/private_user/report/source_sha256.
+const Factory := preload("res://scripts/run_cast_flow_state.gd")
+const CONTENT := "cast_flow_smoke_v1"
+const UNIT_FIXTURE_FIELDS := ["hp", "_order_serial", "_cast_serial", "_cast_t", "_cast_dur", "_cast_color", "_channel_t", "_channel_dur", "ability_slots", "_queue", "_path", "_path_i", "_state", "manual_order_active", "_target", "_stun_t", "_silence_t", "_home", "_has_home", "_resume_amove", "_chase_intent", "_patrolling", "_group_cap", "_combat_cool", "temp_speed", "_temp_speed_t", "_buff_glow"]
+var graphs: Array = []
+var checks: Array = []
+var failed: int = 0
+var owned: Array = []
+var report_path: String = ""
+var manifest: Dictionary = {}
+var manifest_ready: bool = false
+var observed_steps: Dictionary = {}
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(name: String, passed: bool) -> bool:
+	checks.append({"label": name, "passed": passed})
+	if not passed: failed += 1
+	return passed
+
+func _ok(name: String, result: Dictionary) -> bool:
+	checks.append({"label": name, "passed": bool(result.get("ok", false)), "code": String(result.get("code", "")), "field": String(result.get("field", ""))})
+	if not result.get("ok", false):
+		failed += 1
+		return false
+	return true
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for graph in graphs: graph.dispose()
+	graphs.clear()
+	for object in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "cast-flow-restore", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failed == 0 and not aborted, "checks": checks,
+		"check_count": checks.size(), "failures": failures, "failed_count": failed,
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}), "observed_steps": observed_steps,
+		"scope": "Only walk/pending/channel queues through real creators, consumers and Unit phase timer bodies. The fixture supplies Unit values, trusted abilities, a real empty map and explicitly staged arrivals. No full movement simulation, existing visual restoration, full Battle resume, RNG isolation, PCK or menu continuation."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[cast-flow-restore QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var manifest_path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var manifest_data: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path)) if not manifest_path.is_empty() else null
+	if typeof(manifest_data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = manifest_data
+	for key in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for path in manifest.source_sha256:
+		if typeof(path) != TYPE_STRING or typeof(manifest.source_sha256[path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if failed > 0:
+		_finish(true)
+		return
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var identity_script: Script = load("res://scripts/run_graph_identity.gd")
+	var level_script: Script = load("res://scripts/level_base.gd")
+	var hud_script: Script = load("res://scripts/hud.gd")
+	var codec: Variant = codec_script.new()
+	var factory: Variant = Factory.new(codec_script, battle_script, unit_script)
+	paused = true
+	var world := Node2D.new()
+	world.visible = false
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	root.add_child(world)
+	owned.append(world)
+	var original: Variant = battle_script.new()
+	owned.append(original)
+	_shell_environment(original, world, map_script, level_script, hud_script)
+	var old_units: Array = []
+	var locations: Array = [Vector2(80, 80), Vector2(80, 300), Vector2(820, 80),
+		Vector2(80, 500), Vector2(80, 750), Vector2(860, 300),
+		Vector2(400, 80), Vector2(400, 300), Vector2(900, 80),
+		Vector2(180, 500), Vector2(180, 750), Vector2(80, 1000), Vector2(80, 300)]
+	for index in range(locations.size()):
+		var unit: Variant = _unit(unit_script, locations[index], 1 if index in [6, 7, 8, 9, 10] else 0)
+		world.add_child(unit)
+		if index not in [6, 7, 8, 9, 10]:
+			unit.battle = original
+			unit.map = original.map
+			unit.ability_slots = [_slot("ling_zhen_q" if index in [3, 4] else ("qa_unit_spell" if index in [0, 5, 12] else "qa_point_spell"))]
+		old_units.append(unit)
+	original.units = old_units.duplicate()
+	var retired_target: Variant = _unit(unit_script, Vector2(900, 300), 1)
+	world.add_child(retired_target)
+	original._queue_walk_cast(old_units[0], 0, old_units[6])
+	original._queue_walk_cast_point(old_units[1], 0, old_units[7].position)
+	original._queue_walk_cast_point(old_units[11], 0, Vector2(500, 1000))
+	original._queue_walk_cast(old_units[12], 0, retired_target)
+	original._walk_cast_pass(0.125)
+	_check("real walk creators retain target and point modes after one path command", original._walk_casts.size() == 4 and original._walk_casts[0].point == Vector2.INF and original._walk_casts[1].tgt == null and original._walk_casts[0].serial == old_units[0]._order_serial and old_units[0]._order_serial == 1 and original._walk_casts[0].t == 0.4)
+	original._begin_cast(old_units[2], 0, old_units[8].position)
+	original._begin_cast(old_units[5], 0, retired_target.position, retired_target)
+	old_units[2]._physics_process(0.125)
+	old_units[5]._physics_process(0.125)
+	original._tick_pending_casts()
+	_check("real windups retain remaining time without starting cooldown", original._pending_casts.size() == 2 and old_units[2]._cast_t == 0.375 and old_units[2].ability_slots[0].cd_t == 0.0)
+	original._do_ability(old_units[3], 0, old_units[9].position)
+	original._do_ability(old_units[4], 0, old_units[10].position)
+	original._channel_pass(0.125)
+	old_units[3]._physics_process(0.25)
+	old_units[4]._physics_process(0.25)
+	_check("real channel creators spent one tick and retain both eff and ad", original._channels.size() == 2 and old_units[9].hp == 978.0 and old_units[10].hp == 978.0 and original._channels[0].tick_t == 0.5 and original._channels[0].ad.has("effect") and old_units[3]._channel_t == 2.75 and old_units[3].ability_slots[0].cd_t > 0.0)
+	var retired_caster: Variant = _unit(unit_script, Vector2(20, 500), 0)
+	original._begin_channel(retired_caster, old_units[9].position, original._channels[0].eff, 1.0, 1, original._channels[0].ad)
+	retired_caster.free()
+	retired_target.free()
+	var known: Dictionary = {}
+	var old_object_ids: Dictionary = {}
+	for index in range(old_units.size()):
+		var id: String = str(index + 1)
+		known[id] = true
+		old_object_ids[old_units[index]] = id
+	var captured: Dictionary = factory.capture(original, CONTENT, old_object_ids)
+	if not _ok("capture all three creator queues including freed references", captured):
+		_finish(true)
+		return
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	var validated: Dictionary = factory.validate(record, CONTENT, known)
+	if not _ok("real JSON preserves explicit point sentinel and complete channel data", validated):
+		_finish(true)
+		return
+	_check("ordered walk pending and channel entries and infinity sentinel survive", validated.arrays._walk_casts.size() == 4 and validated.arrays._pending_casts.size() == 2 and validated.arrays._channels.size() == 3 and validated.arrays._walk_casts[0].point == Vector2.INF and validated.arrays._walk_casts[1].point == old_units[7].position)
+	var raw: Dictionary = codec.decode(record.payload).value
+	var bad_payload: Dictionary = raw.duplicate(true)
+	bad_payload._channels[0].erase("ad")
+	_check("missing real channel ad is rejected", not factory.validate(_record_with_payload(record, bad_payload, codec), CONTENT, known).ok)
+	bad_payload = raw.duplicate(true)
+	bad_payload._walk_casts[0]["point"] = {"mode": "point", "value": Vector2(400, 80)}
+	_check("unit target cannot be laundered as a finite point mode", not factory.validate(_record_with_payload(record, bad_payload, codec), CONTENT, known).ok)
+	bad_payload = raw.duplicate(true)
+	bad_payload._pending_casts[0]["serial"] = 1.0
+	_check("cast serial float is rejected without coercion", not factory.validate(_record_with_payload(record, bad_payload, codec), CONTENT, known).ok)
+	bad_payload = raw.duplicate(true)
+	bad_payload._channels[0].eff["dmg"] = null
+	_check("consumed optional field cannot be replaced by null", not factory.validate(_record_with_payload(record, bad_payload, codec), CONTENT, known).ok)
+	bad_payload = raw.duplicate(true)
+	bad_payload._channels[0]["caster"] = {"state": "entity", "id": "999"}
+	_check("unregistered caster is rejected before allocation", not factory.instantiate(_record_with_payload(record, bad_payload, codec), CONTENT, known).ok)
+	_check("content version mismatch rejects before allocation", not factory.instantiate(record, CONTENT + "_other", known).ok)
+	var old_record: Dictionary = captured.record
+	var made: Dictionary = factory.instantiate(record, CONTENT, known)
+	if not _ok("instantiate disabled detached real Battle", made):
+		_finish(true)
+		return
+	var restored: Variant = made.battle
+	owned.append(restored)
+	_shell_environment(restored, world, map_script, level_script, hud_script)
+	var units: Array = []
+	var ids: Dictionary = {}
+	var object_ids: Dictionary = {}
+	# Fixture supplies the prevalidated Unit layer explicitly. No creator,
+	# move command, begin_cast, apply_* or cooldown call reconstructs its state.
+	for index in range(old_units.size()):
+		var old: Variant = old_units[index]
+		var unit: Variant = _unit(unit_script, old.position, old.faction)
+		for field in UNIT_FIXTURE_FIELDS:
+			var value: Variant = old.get(field)
+			unit.set(field, value.duplicate(true) if typeof(value) in [TYPE_ARRAY, TYPE_DICTIONARY] else (value.duplicate() if typeof(value) == TYPE_PACKED_VECTOR2_ARRAY else value))
+		if old.battle != null:
+			unit.battle = restored
+			unit.map = restored.map
+		world.add_child(unit)
+		units.append(unit)
+		ids[str(index + 1)] = unit
+		object_ids[unit] = str(index + 1)
+	restored.units = units.duplicate()
+	var graph: Variant = identity_script.new(unit_script)
+	graphs.append(graph)
+	if not _ok("shared identity declares stable unit names", graph.declare_entities(known)) or not _ok("shared identity configures the complete live fixture", graph.configure(ids, units)):
+		_finish(true)
+		return
+	var before: Array = _unit_states(units)
+	var absent: Dictionary = factory.bind(restored, record, CONTENT, ids)
+	_check("missing live tombstone rejects with zero array or Unit mutation", not absent.ok and absent.code == "LIVE_DETACHED_TOMBSTONE_REQUIRED" and restored._walk_casts.is_empty() and restored._pending_casts.is_empty() and restored._channels.is_empty() and before == _unit_states(units))
+	if not _ok("bind all queues with the caller owned live tombstone", factory.bind(restored, record, CONTENT, ids, graph.expired_unit())):
+		_finish(true)
+		return
+	graph.release_tombstones()
+	var rebound: Dictionary = factory.capture(restored, CONTENT, object_ids)
+	_check("recapture matches canonical saved state before any consumer", rebound.ok and rebound.record == old_record)
+	_check("restore neither commands nor restarts phases cooldowns or FX", before == _unit_states(units) and restored.fx_root.get_child_count() == 0 and units[0]._order_serial == 1 and units[2]._cast_t == 0.375 and units[3]._channel_t == 2.75)
+	var duplicate: Dictionary = factory.bind(restored, record, CONTENT, ids)
+	_check("nonempty destination cannot be overwritten", not duplicate.ok and duplicate.code == "DESTINATION_EFFECT_ARRAYS_NOT_EMPTY")
+	await process_frame
+	_check("paused restored tree cannot tick itself", factory.capture(restored, CONTENT, object_ids).record == old_record and before == _unit_states(units))
+	var old_fx_count: int = original.fx_root.get_child_count()
+	var samples: Array = []
+	var equivalent: bool = true
+	var channel_steps: Array = []
+	var pending_steps: Array = []
+	var walking_steps: Array = []
+	for step in range(1, 26):
+		var channel_hp: float = units[9].hp
+		var pending_hp: float = units[8].hp
+		var walking_hp: float = units[6].hp
+		_step(original, old_units, step)
+		_step(restored, units, step)
+		var expected: Dictionary = factory.capture(original, CONTENT, old_object_ids)
+		var actual: Dictionary = factory.capture(restored, CONTENT, object_ids)
+		equivalent = equivalent and expected.ok and actual.ok and expected.record == actual.record and _unit_states(old_units) == _unit_states(units)
+		if units[9].hp != channel_hp: channel_steps.append(step)
+		if units[8].hp != pending_hp: pending_steps.append(step)
+		if units[6].hp != walking_hp: walking_steps.append(step)
+		if step == 1:
+			_check("positive saved repath and windup timers prevent first step replay", units[0]._order_serial == 1 and units[2]._cast_t == 0.25 and units[8].hp == 1000.0 and units[9].hp == 978.0)
+		if step == 2:
+			_check("real new order and silence cancel only their original flows", units[11]._order_serial == 2 and not _has_caster(restored._walk_casts, units[11], "c") and not _has_caster(restored._channels, units[4], "caster") and units[10].hp == 978.0)
+		samples.append({"step": step, "walk_hp": units[6].hp, "point_hp": units[7].hp, "pending_hp": units[8].hp, "channel_hp": units[9].hp, "interrupted_hp": units[10].hp, "walk_count": restored._walk_casts.size(), "pending_count": restored._pending_casts.size(), "channel_count": restored._channels.size()})
+	_check("twenty five original consumer and real Unit phase pairs match", equivalent)
+	_check("walk target and point settle once after fixture arrival", units[6].hp == 985.0 and units[7].hp == 985.0 and walking_steps == [7] and units[0]._order_serial == 1)
+	_check("remaining windup settles once and expired target never settles", units[8].hp == 985.0 and pending_steps == [3] and units[5].ability_slots[0].cd_t == 0.0)
+	_check("channel resumes exactly five remaining ticks and interruption stops damage", channel_steps == [4, 8, 12, 16, 20] and units[9].hp == 868.0 and units[10].hp == 978.0)
+	_check("source and restored future consumers create equal new FX", original.fx_root.get_child_count() - old_fx_count == restored.fx_root.get_child_count() and restored.fx_root.get_child_count() > 0)
+	var done_state: Array = _unit_states(units)
+	restored._walk_cast_pass(1.0)
+	restored._tick_pending_casts()
+	restored._channel_pass(1.0)
+	_check("exhausted queues cannot cast again charge twice or change paths", restored._walk_casts.is_empty() and restored._pending_casts.is_empty() and restored._channels.is_empty() and done_state == _unit_states(units))
+	_check("neither real Battle ran ready deployment or economy", not original.is_inside_tree() and not restored.is_inside_tree() and original.gold == 0 and restored.gold == 0 and original.next_item_uid == 1 and restored.next_item_uid == 1)
+	observed_steps = {"samples": samples, "channel_steps": channel_steps, "pending_steps": pending_steps, "walk_steps": walking_steps}
+	_finish()
+
+func _record_with_payload(record: Dictionary, payload: Dictionary, codec: Variant) -> Dictionary:
+	var copy: Dictionary = record.duplicate(true)
+	copy["payload"] = codec.encode(payload).value
+	return copy
+
+func _has_caster(rows: Array, unit: Variant, field: String) -> bool:
+	for row in rows:
+		if row[field] == unit: return true
+	return false
+
+func _shell_environment(battle: Variant, world: Node2D, map_script: Script, level_script: Script, hud_script: Script) -> void:
+	battle.process_mode = Node.PROCESS_MODE_DISABLED
+	battle.set_block_signals(true)
+	battle.world = world
+	battle.level = level_script.new() # Real no-op LevelBase hook, not a mock Battle.
+	var game_map: Variant = map_script.new()
+	owned.append(game_map)
+	game_map.init_map(64, 48, "marsh", map_script.T.GRASS)
+	game_map.bake()
+	battle.map = game_map
+	var fx := Node2D.new()
+	world.add_child(fx)
+	battle.fx_root = fx
+	var hud: Variant = hud_script.new()
+	owned.append(hud)
+	hud._info_expanded = true # Real log sink; detached and no toast widgets.
+	battle.hud = hud
+	var point_ad: Dictionary = {"name": "QA point spell", "cd": 8.0, "targeted": true, "target": "point", "radius": 20.0, "cast_windup": 0.5, "color": Color(0.3, 0.5, 1.0), "effect": {"kind": "smite", "dmg": 15.0, "cast_range": 120.0}}
+	var unit_ad: Dictionary = point_ad.duplicate(true)
+	unit_ad["name"] = "QA unit spell"
+	unit_ad["target"] = "unit"
+	battle._abilities = {"qa_point_spell": point_ad, "qa_unit_spell": unit_ad, "ling_zhen_q": Defs.ABILITIES["ling_zhen_q"].duplicate(true)}
+
+func _slot(id: String) -> Dictionary:
+	return {"id": id, "rank": 1, "cd_t": 0.0, "passive": false}
+
+func _unit(script: Script, at: Vector2, faction: int) -> Variant:
+	var unit: Variant = script.new()
+	owned.append(unit)
+	unit.visible = false
+	unit.process_mode = Node.PROCESS_MODE_DISABLED
+	unit.position = at
+	unit.faction = faction
+	unit.max_hp = 1000.0
+	unit.hp = 1000.0
+	unit.radius = 12.0
+	unit.passive = true
+	unit.stance = 3
+	unit._combat_cool = 999.0
+	return unit
+
+func _step(battle: Variant, units: Array, step: int) -> void:
+	if step == 2:
+		units[11].order_move(Vector2(80, 1100)) # Real new player order cancels old intent.
+		units[4].apply_silence(2.0) # Real interruption clears channel state.
+	if step == 3:
+		# Arrival is explicitly supplied by this fixture, not a movement/path test.
+		units[0].position = units[6].position - Vector2(40, 0)
+		units[1].position = units[7].position - Vector2(40, 0)
+	for unit in units:
+		if unit._cast_t > 0.0 or unit._channel_t > 0.0:
+			unit._physics_process(0.125) # Actual windup/channel/cooldown timer bodies.
+		else:
+			unit._tick_ability_slots(0.125)
+	battle._walk_cast_pass(0.125)
+	battle._channel_pass(0.125)
+	battle._tick_pending_casts()
+
+func _unit_states(units: Array) -> Array:
+	var result: Array = []
+	for unit in units:
+		var state: Dictionary = {}
+		for field in UNIT_FIXTURE_FIELDS:
+			var value: Variant = unit.get(field)
+			state[field] = value.duplicate(true) if typeof(value) in [TYPE_ARRAY, TYPE_DICTIONARY] else (value.duplicate() if typeof(value) == TYPE_PACKED_VECTOR2_ARRAY else value)
+		state["position"] = unit.position
+		result.append(state)
+	return result
+

@@ -116,3 +116,17 @@ MeteorFx/WardFx等既存视觉仍需保存life、t/dur、style及私有动画/�
 两次安装复用同一个Battle/Map/Defs容器，金木与地图grid/block_count/revision保持；_ai_spawn_serial由夹具保存值回设。全局RNG未迁移/重seed，兵组与攻击移动意图匹配不等于随机坐标/精确路径重演。身份解码途中失败应丢弃私有上下文，全部系统绑定后才释放墓碑；此单层结果不能代替完整根事务。
 
 [归档](../qa/run_defense_level_20260907/README.md)保留原pins/preparation/README及晋级脚本。正式pins的driver字节数仍为原型22,071，实际22,056；其rawSHA及运行manifest正确，source index按实际值记录并单列描述差异，不将整轮改为失败。未测试Battle/地图整体恢复、全部效果与既存视觉、退出重启、菜单/磁盘/PCK；权威数组仍9/17，施法流程候选与后续RNG工作未计入，本批后M3整局仍未完成。
+
+## 第14组件：走近、抬手与引导
+
+[run_cast_flow_state.gd](../scripts/run_cast_flow_state.gd) 与原候选同字节，15,409 bytes，SHA256 `127a230696570b50207fd06a3c4e7a4f33dad7bb24d33a333e4d136343976587`。覆盖_walk_casts/_pending_casts/_channels，权威数组累计12/17；walk全部c/slot/tgt/point/serial/t/age、pending全部caster/slot/lp/tgt/serial、channel全部caster/center/eff/sc/rank/r/tick/tick_t/ad显式保存。eff/ad完整走有预算codec，缺失可选键保持缺失；单体walk的Vector2.INF仅在该字段编码为unit_target标记，点地要求有限point，不放宽普通codec。
+
+首轮 `20260906T204913855863Z`（PID40952、exit1）保留原生产真实错误：_tick_pending_casts中target != null漏过previously freed Object，再传给_do_ability第4个typed Unit参数，strict log触发host失败且无report，不能推算检查数。原Battle SHA `d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5`；仅pending/walk两处加typeof Object且无效前置拒绝，再把pending已检查局部变量传入原API，修复SHA `47357265c54a8cd6c2a5fef24998e357773974843559c4e23965ea3e0d51b629`。三处编辑在unified patch中为两个hunk，不含物品consumer修改。
+
+R1 `20260906T205452854069Z`（PID23352、report `2df604f8d1773044c458754dec8006c2a8db9b33ccfc13af093df75e651cc9a0`）及正式 `20260906T205651467321Z`（PID32308、report `f5035b08449ab4803d4c1624a82e1f98c2ea1059b34806c5ca3426476a03f841`）各63项=32来源+31功能/宿主通过。R1 driver与首轮原字节相同；正式只改模块preload路径。各轮16来源、实际入口、PID/退出与源码/玩家保护/锁均核对；通过轮report与stdout/user/SHA一致，正式重验不新增场景。[归档](../qa/run_cast_flow_20260907/README.md)保留全部原始失败/通过材料、旧/新源码映射、patch/application和三版准备/runner/pins。
+
+模块由可信版本和固定Script构造，不运行时读GD哈希或动态load存档路径。bind只接受树外DISABLED且阻断信号的空Battle壳，完整校验后一次赋三数组，不下命令、寻路、重新施法或扣冷却。Unit原_cast_t/_cast_serial、channel时钟、ability_slots、order serial/路径/队列/目标/控制状态必须由外层先恢复；required_unit_fields仅是依赖声明，不是完整Unit适配验收。过期计时/不匹配serial保留给原消费者；expired引用绑定同一开放identity的活类型墓碑，所有图完成后再统一释放并安装激活。
+
+真实Battle/Unit/GameMap/LevelBase/HUD空壳与原creator产生两个walk模式、剩余抬手和已走一跳的channel及真实释放引用；JSON绑定后回捕与Unit局部状态相同且无新FX/CD/命令。25步原consumer及真实Unit计时体对照验证pending第3步一次、walk第7步一次、channel第4/8/12/16/20步五次；真实新order_move及apply_silence取消对应流，过期目标不扣CD，空数组不重复。第3步到达位置由夹具显式供应，非完整移动仿真。新生成FX数量对照不代表旧视觉Node恢复。
+
+本批仍依赖夹具供应Unit局部值/库存外层/原路径/可信能力定义，没有完整UnitGraph+Battle事务组合；旧视觉、物品施法与其他效果、一般未来实体分配、RNG隔离/迁移、退出重启、菜单/磁盘/PCK续玩未验收。后续物品候选与其消费者缺口未纳入，本批M3整局仍未完成。

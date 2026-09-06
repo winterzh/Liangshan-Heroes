@@ -1,3 +1,9 @@
+## 2026-09-07 技能施法三数组及修复证据
+
+- `scripts/run_cast_flow_state.gd`：第14恢复组件，保存走近、抬手、引导三数组；依赖外层Unit计时/CD/路径与统一identity，累计12/17权威数组。
+- `qa/run_cast_flow_20260907/`：原生产真实失败、生产修复R1、正式路径三轮；各16运行源码映射、原始收据/日志/摘要、模块/driver/runner/pins及原patch/application/准备/修复/晋级脚本。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)区分真实freed目标修复、同矩阵63项复验和整局边界；旧Battle等按SHA复用，不含profile、玩家内容或PCK，后续物品候选不纳入。
+
 ## 2026-09-07 标准驻守关卡恢复及证据
 
 - `scripts/run_defense_level_state.gd`：第13恢复组件，已启动经典30波skirmish的12声明状态；hall/末波采样接共享Unit身份图。

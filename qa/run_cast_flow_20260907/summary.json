@@ -1,0 +1,673 @@
+{
+  "schema": 1,
+  "formal_component_ordinal": 14,
+  "module_sha256": "127a230696570b50207fd06a3c4e7a4f33dad7bb24d33a333e4d136343976587",
+  "covered_arrays": [
+    "_walk_casts",
+    "_pending_casts",
+    "_channels"
+  ],
+  "cumulative_authoritative_effect_arrays": 12,
+  "total_effect_arrays": 17,
+  "runs": [
+    {
+      "run_id": "20260906T204913855863Z",
+      "kind": "original_failure",
+      "suite": "cast-flow-restore",
+      "complete": false,
+      "process_id": 40952,
+      "exit_code": 1,
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "child_exit_confirmed": true,
+      "full_source_file_count": 2870,
+      "check_count": null,
+      "report_present": false,
+      "classification": "actual production consumer runtime failure",
+      "error": "RuntimeError: Owned Godot emitted an error; see report.log",
+      "failure_log": "Invalid _do_ability argument 4: previously freed Object is not a Unit"
+    },
+    {
+      "run_id": "20260906T205452854069Z",
+      "kind": "production_fix_r1",
+      "suite": "cast-flow-restore",
+      "complete": true,
+      "process_id": 23352,
+      "exit_code": 0,
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "child_exit_confirmed": true,
+      "full_source_file_count": 2870,
+      "check_count": 63,
+      "source_before_after_checks": 32,
+      "other_checks": 31,
+      "report_sha256": "2df604f8d1773044c458754dec8006c2a8db9b33ccfc13af093df75e651cc9a0",
+      "scope": "Only walk/pending/channel queues through real creators, consumers and Unit phase timer bodies. The fixture supplies Unit values, trusted abilities, a real empty map and explicitly staged arrivals. No full movement simulation, existing visual restoration, full Battle resume, RNG isolation, PCK or menu continuation.",
+      "observed_steps": {
+        "channel_steps": [
+          4,
+          8,
+          12,
+          16,
+          20
+        ],
+        "pending_steps": [
+          3
+        ],
+        "samples": [
+          {
+            "channel_count": 2,
+            "channel_hp": 978.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 1000.0,
+            "point_hp": 1000.0,
+            "step": 1,
+            "walk_count": 3,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 978.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 1000.0,
+            "point_hp": 1000.0,
+            "step": 2,
+            "walk_count": 2,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 978.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 3,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 4,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 5,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 6,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 7,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 8,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 9,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 10,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 11,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 12,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 13,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 14,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 15,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 16,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 17,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 18,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 19,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 20,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 21,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 22,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 23,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 24,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 25,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          }
+        ],
+        "walk_steps": [
+          7
+        ]
+      }
+    },
+    {
+      "run_id": "20260906T205651467321Z",
+      "kind": "formal_path",
+      "suite": "cast-flow-restore",
+      "complete": true,
+      "process_id": 32308,
+      "exit_code": 0,
+      "source_unchanged": true,
+      "player_unchanged": true,
+      "lock_released": true,
+      "child_exit_confirmed": true,
+      "full_source_file_count": 2871,
+      "check_count": 63,
+      "source_before_after_checks": 32,
+      "other_checks": 31,
+      "report_sha256": "f5035b08449ab4803d4c1624a82e1f98c2ea1059b34806c5ca3426476a03f841",
+      "scope": "Only walk/pending/channel queues through real creators, consumers and Unit phase timer bodies. The fixture supplies Unit values, trusted abilities, a real empty map and explicitly staged arrivals. No full movement simulation, existing visual restoration, full Battle resume, RNG isolation, PCK or menu continuation.",
+      "observed_steps": {
+        "channel_steps": [
+          4,
+          8,
+          12,
+          16,
+          20
+        ],
+        "pending_steps": [
+          3
+        ],
+        "samples": [
+          {
+            "channel_count": 2,
+            "channel_hp": 978.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 1000.0,
+            "point_hp": 1000.0,
+            "step": 1,
+            "walk_count": 3,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 978.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 1000.0,
+            "point_hp": 1000.0,
+            "step": 2,
+            "walk_count": 2,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 978.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 3,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 4,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 5,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 2,
+            "pending_hp": 985.0,
+            "point_hp": 1000.0,
+            "step": 6,
+            "walk_count": 0,
+            "walk_hp": 1000.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 956.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 7,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 8,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 9,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 10,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 934.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 11,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 12,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 13,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 14,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 912.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 15,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 16,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 17,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 18,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 890.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 19,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 20,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 1,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 21,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 22,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 23,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 24,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          },
+          {
+            "channel_count": 0,
+            "channel_hp": 868.0,
+            "interrupted_hp": 978.0,
+            "pending_count": 0,
+            "pending_hp": 985.0,
+            "point_hp": 985.0,
+            "step": 25,
+            "walk_count": 0,
+            "walk_hp": 985.0
+          }
+        ],
+        "walk_steps": [
+          7
+        ]
+      }
+    }
+  ],
+  "original_failure_preserved": true,
+  "r1_driver_same_raw_bytes": true,
+  "r1_runtime_only_battle_and_entry_path_changed": true,
+  "formal_driver_only_preload_path_changed": true,
+  "battle_before_sha256": "d88caffd78a8530a79521262199a7ce116b2d0f5631c16cac136b6fa38552af5",
+  "battle_after_sha256": "47357265c54a8cd6c2a5fef24998e357773974843559c4e23965ea3e0d51b629",
+  "production_semantic_edits": 3,
+  "unified_patch_hunks": 2,
+  "production_item_cast_consumers_modified": false,
+  "same_successful_suite_repeated_through_formal_path": true,
+  "unit_values_and_paths_supplied_by_fixture": true,
+  "full_unit_adapter_combination_tested": false,
+  "arrival_positions_explicitly_staged": true,
+  "existing_visual_nodes_restored": false,
+  "full_movement_simulation_tested": false,
+  "complete_battle_resume_tested": false,
+  "exit_restart_continuation_tested": false,
+  "pck_export_tested": false,
+  "menu_continue_tested": false,
+  "rng_isolation_tested": false,
+  "later_item_cast_work_excluded": true
+}
