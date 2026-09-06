@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-07",
+  "scope": "Steam library artwork only; upload status unsubmitted",
+  "generator": "OpenAI image_gen built-in; prompts in library_prompts.json",
+  "sources": [
+    {
+      "path": "source/library_capsule_native.png",
+      "width": 1024,
+      "height": 1536,
+      "mode": "RGB",
+      "bytes": 3443228,
+      "sha256": "f575e167b85c50f2cd910e818222a60933e85db6c8d9a1c05be482a2b1bd270d",
+      "generated_original": "C:\\Users\\Administrator\\.codex\\generated_images\\01a077c5-0ac9-79d0-b449-b2b9c4dc04d9\\exec-abc7a5fb-b971-4779-bb3b-2d7125b6c24e.png"
+    },
+    {
+      "path": "source/library_hero_native.png",
+      "width": 2206,
+      "height": 713,
+      "mode": "RGB",
+      "bytes": 2895925,
+      "sha256": "c7ae03e01a158cdf915a76ea00bd955244cd829ec0790ef3184bcd56d0708cc8",
+      "generated_original": "C:\\Users\\Administrator\\.codex\\generated_images\\01a077c5-0ac9-79d0-b449-b2b9c4dc04d9\\exec-b87546ba-9786-4766-b3a6-1c9162260dc0.png"
+    }
+  ],
+  "header_source": {
+    "path": "../capsules/header.png",
+    "sha256": "137c04068b3b208878089293eb1478e3a734dc18bd1ea36fc17379ad140c2eb2"
+  },
+  "deliverables": [
+    {
+      "path": "library_capsule.png",
+      "width": 600,
+      "height": 900,
+      "mode": "RGB",
+      "bytes": 1135007,
+      "sha256": "780104b537285e13798b83c4de18d9d9dc230dd662306f0e8509d5330624e427"
+    },
+    {
+      "path": "library_capsule_schinese.png",
+      "width": 600,
+      "height": 900,
+      "mode": "RGB",
+      "bytes": 1135007,
+      "sha256": "780104b537285e13798b83c4de18d9d9dc230dd662306f0e8509d5330624e427"
+    },
+    {
+      "path": "library_header.png",
+      "width": 920,
+      "height": 430,
+      "mode": "RGB",
+      "bytes": 849836,
+      "sha256": "137c04068b3b208878089293eb1478e3a734dc18bd1ea36fc17379ad140c2eb2"
+    },
+    {
+      "path": "library_header_schinese.png",
+      "width": 920,
+      "height": 430,
+      "mode": "RGB",
+      "bytes": 849836,
+      "sha256": "137c04068b3b208878089293eb1478e3a734dc18bd1ea36fc17379ad140c2eb2"
+    },
+    {
+      "path": "library_hero.png",
+      "width": 3840,
+      "height": 1240,
+      "mode": "RGB",
+      "bytes": 6931360,
+      "sha256": "b5193a6a36d17fca59ba87dd0aab3db2e19844b9b5cd4ff7d448aac0a97ae5d6"
+    },
+    {
+      "path": "library_hero_schinese.png",
+      "width": 3840,
+      "height": 1240,
+      "mode": "RGB",
+      "bytes": 6931360,
+      "sha256": "b5193a6a36d17fca59ba87dd0aab3db2e19844b9b5cd4ff7d448aac0a97ae5d6"
+    }
+  ],
+  "processing": {
+    "library_capsule": "FFmpeg Lanczos resize 1024x1536 -> 600x900; exact same 2:3 aspect ratio.",
+    "library_hero": "AI artwork native 2206x713. Ordinary proportional Lanczos upsampling to 3840x1241 then trim one bottom delivery pixel to required 3840x1240. No AI super-resolution enhancement, no stretched figures.",
+    "library_header": "Byte-identical copy of previously verified 920x430 store header.",
+    "schinese": "Byte-identical copy of corresponding base file; official game title is Chinese."
+  },
+  "not_delivered": {
+    "library_logo": {
+      "status": "not_delivered",
+      "reason": "Two built-in imagegen attempts returned RGB with a baked checkerboard, not true alpha. Do not upload or treat as transparent. Retain the existing transparent Steam library logo after checking its preview.",
+      "failed_evidence": [
+        {
+          "path": "failed_evidence/logo_attempt_1_RGB_not_transparent.png",
+          "width": 1478,
+          "height": 1064,
+          "mode": "RGB",
+          "bytes": 1683725,
+          "sha256": "2507d1b2fcb8d642a54db1d708fb4bfafa64b67c586c733a05d58ca6710d60c3"
+        },
+        {
+          "path": "failed_evidence/logo_attempt_2_RGB_not_transparent.png",
+          "width": 1477,
+          "height": 1065,
+          "mode": "RGB",
+          "bytes": 1828504,
+          "sha256": "7031f5f92f341dbc6541f28d8566ded0115d2229037accf539fb512e1a1fde75"
+        }
+      ]
+    }
+  },
+  "visual_qa": {
+    "library_capsule": "PASS: exact title 水浒英雄传 and subtitle 八幕战役; readable title; complete hero faces and limbs; no clipped title.",
+    "library_hero": "PASS locally: no text, no logos, plain banners; Song Jiang face approximately x50%, y34%, Lin Chong x62%, y37%; both central. Leftmost 25% is quiet dark brush landscape for existing transparent logo. Place logo within left 25%, lower or mid-left, max approx 960x600 at native delivery size so its right edge stays before heroes; verify actual Steam preview.",
+    "library_header": "Copied from previously reviewed store asset; same composition and identity.",
+    "limits": [
+      "Three types delivered; new transparent library logo is NOT delivered.",
+      "Native hero is AI-generated 2206x713 and conventionally upscaled; it is not native 4K detail.",
+      "Steam placement and responsive cropping still require backend preview; no upload or publishing performed by this subtask."
+    ]
+  }
+}

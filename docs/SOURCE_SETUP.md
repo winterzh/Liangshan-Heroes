@@ -1,3 +1,11 @@
+## 2026-09-07 商店素材复现与发布状态
+
+本轮新增 `marketing/steam_store_20260907/`，由 `marketing/.gdignore` 排除Godot扫描；不会改变游戏启动入口。封面交付尺寸可用 `py -3 -X utf8 marketing/steam_store_20260907/prepare_capsules.py` 从仓库原图复现，需要Python3与FFmpeg。来源、库图片处理和投放白名单见[素材说明](../marketing/steam_store_20260907/README.md)。
+
+45秒1080p实机视频和五张原生截图见[录制与重剪说明](../marketing/steam_store_20260907/video/README.md)，来源为443e75e的已验证包；需Godot4.6.3、Python3及FFmpeg，原始电影和隔离用户目录写入被忽略的`.godot/`。离线Movie Maker帧率不代表实时游戏性能。
+
+商店中英文介绍已公开发布，图片和视频仍待上传；各阶段以[交接](STEAM_STORE_MEDIA_20260907.md)和[状态收据](../qa/steam_store_media_20260907/PUBLISH_STATUS.json)为准。当前游戏Build25154403与本轮商店素材分开记录；对应[9月7日公告](STEAM_ANNOUNCEMENT_20260907.md)已公开，不重复创建同内容公告。
+
 ## 2026-09-07 Windows 更新成品与复现
 
 Steam default已确认为Build25154403，源443e75e；完整状态见[更新记录](STEAM_UPDATE_20260907.md)。本地EXE和单文件ZIP在忽略目录 `.godot/steam_update_20260907/windows/`；[QA归档](../qa/steam_update_20260907/README.md)提供精确来源和复现步骤。构建助手需恢复到全新忽略目录并使用GODOT_PATH，不覆盖历史产物或沿用旧passed收据。新增设置已验证跨进程保存，整局继续入口仍未实现。

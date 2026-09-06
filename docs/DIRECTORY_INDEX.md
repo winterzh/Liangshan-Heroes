@@ -1,3 +1,11 @@
+## 2026-09-07 Steam 商店与公告素材
+
+- `marketing/steam_store_20260907/`：四种商店封面、三种库图、生成来源/提示词/哈希、复现脚本与中英文介绍；只把交付图拖入Steam，源图及失败证据不投放。
+- `marketing/steam_store_20260907/video/`：45秒1080p宣传片、五张原生截图、时间线、录制脚本、来源摘要与音画检查；不含原始电影或玩家数据。
+- `docs/STEAM_STORE_MEDIA_20260907.md`、`qa/steam_store_media_20260907/`：本地美术QA、已发布文案/标签与待上传素材的分项收据。
+- `docs/STEAM_ANNOUNCEMENT_20260907.md`、`qa/steam_announcement_20260907/`：另一发布任务的9月7日玩家公告与公开回读，事件708907988310558255，关联Build25154403。
+- `marketing/.gdignore` 隔离营销素材；原始电影、录制用户目录留在忽略的 `.godot/steam_store_media_20260907/`，不上传Git。
+
 ## 2026-09-07 Steam Windows 更新证据
 
 - `docs/STEAM_UPDATE_20260907.md`：本轮已上线Windows包、功能变化、验证范围和Steam状态。
