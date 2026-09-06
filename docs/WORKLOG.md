@@ -1,3 +1,9 @@
+## 2026-09-07 Unit 顺序图组合恢复
+
+上一批持续效果已在`4c4b60d5d734286d75e609f85c743eb4702db9ee`同步stable。本批将`scripts/run_unit_graph.gd`按原型同字节晋级；原型`20260906T192949868331Z`（PID41376）及正式`20260906T193154174815Z`（PID33580）各73条通过，含20来源前后与53其余，exit0、源码/玩家摘要不变、锁释放。两轮实际执行入口和driver SHA均被manifest准确覆盖，同组复验不新增场景计数。
+
+真实五Unit保留完整sibling/root顺序、独立active顺序及dying节点，核对矿工/驻军关系、重复引用、物品UID与末条坏记录提前拒绝。[精确源码和原文](../qa/run_unit_graph_20260907/README.md)已归档。prepare不安装Battle数组；返回同一开放identity及仍存活的typed tombstones，须等全部Battle/FX/整数图绑定后由外层统一release、安装并激活。M3整局、全局UID/tick、经济/效果、菜单及PCK仍未验收。
+
 ## 2026-09-07 ground/hua/lin 持续效果恢复
 
 上一批飞斧已在`37066b6a40ca0146b1d3023e8e36e5040a9773e7`同步stable。本批将`run_continuous_effect_state`按原型同字节晋级，仅恢复`_ground_dots`、`_hua_snipe_dots`、`_lin_duels`三数组。原型`20260906T191947368450Z`（PID40452）与修正后正式`20260906T192639802801Z`（PID40280）各52条通过，含16来源前后和36其余检查；均exit0、源码/玩家摘要不变、锁释放。同组复验不新增场景计数。

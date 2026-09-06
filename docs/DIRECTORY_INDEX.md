@@ -1,3 +1,9 @@
+## 2026-09-07 Unit 顺序图模块与证据
+
+- `scripts/run_unit_graph.gd`：完整Unit sibling/root顺序、独立active顺序、dying节点及全图引用恢复组合；prepare只返回计划、开放identity和活tombstones，不安装Battle数组。
+- `qa/run_unit_graph_20260907/`：原型`20260906T192949868331Z`与正式`20260906T193154174815Z`各73条原文，包含模块、runner/driver、promotion、原准备pins/README与依赖索引；同SHA旧依赖明确复用，归档文本由`.gdignore`隔离。
+- [组件说明](RUN_RESUME_COMPONENTS_20260907.md)明确所有FX/整数图须共用返回identity，全部绑定后才由外层release并激活；M3整局、菜单及PCK仍待完成。
+
 ## 2026-09-07 三数组持续效果模块与证据
 
 - `scripts/run_continuous_effect_state.gd`：只恢复`_ground_dots`、`_hua_snipe_dots`、`_lin_duels`的剩余值、顺序与对象引用，按原型同字节晋级。

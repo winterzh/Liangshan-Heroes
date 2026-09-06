@@ -1,3 +1,9 @@
+## 2026-09-07 Unit 图恢复复现
+
+新增正式`scripts/run_unit_graph.gd`，原型与正式路径各73条真实图检查通过，两份runner要求实际入口必须在manifest中。按[Unit图QA](../qa/run_unit_graph_20260907/README.md)的source index恢复缺失忽略路径，保留原pins/README准备状态；已有源码只核对、不覆盖。正式入口为`python scratchpad/run_unit_graph_production_qa/run_smoke.py --godot "<实际Godot路径>" --suite unit-graph`，不带`--run`仅预检；实际执行追加`--run`，保持共同锁、新私有用户目录和新run，不直接运行归档`.gd.txt`。
+
+prepare返回树外禁用Unit、两份顺序及同一开放identity/活typed tombstones，不赋值Battle容器。其他全部Battle/FX/整数图必须先复用该identity绑定完，外层才能统一release_tombstones、安装和激活；不得仅Unit准备成功就提前释放。正常启动不变，尚无整局/UI/PCK续玩验收。
+
 ## 2026-09-07 三数组持续效果复现
 
 新增正式`scripts/run_continuous_effect_state.gd`，仅处理ground/hua/lin三数组。原型及修正后正式路径各52条通过；首轮正式驱动未被manifest覆盖的原文独立保留，不当作引擎失败或完整版本证明。[持续效果QA](../qa/run_continuous_effects_20260907/README.md)提供最终runner/driver、模块、promotion、历史修正和精确依赖映射。

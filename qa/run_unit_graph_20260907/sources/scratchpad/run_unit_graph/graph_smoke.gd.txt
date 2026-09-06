@@ -1,0 +1,283 @@
+extends SceneTree
+## Actual Unit/Map/Battle objects; Battle never enters the tree or runs _ready.
+## Root runner supplies RUN_RESTORE_QA_MANIFEST and owns process/source protections.
+## No independent runner, persistent player file, or whole-Battle resume claim.
+const Graph := preload("res://scratchpad/run_unit_graph/unit_graph.gd")
+const VERSION := "unit_graph_smoke_v1"
+var checks: Array = []
+var owned: Array = []
+var contexts: Array = []
+var failures: Array = []
+var manifest: Dictionary = {}
+var report_path: String = ""
+var manifest_ready: bool = false
+var signal_count: int = 0
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	if not passed: failures.append(label)
+	return passed
+
+func _ok(label: String, result: Dictionary) -> bool:
+	checks.append({"label": label, "passed": result.get("ok") == true,
+		"code": result.get("code", ""), "field": result.get("field", "")})
+	if result.get("ok") != true:
+		failures.append(label)
+		return false
+	return true
+
+func _on_signal(_sender: Variant) -> void:
+	signal_count += 1
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	for context: Variant in contexts: context.dispose()
+	for object: Variant in owned:
+		if is_instance_valid(object): object.free()
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var report: Dictionary = {"suite": "unit-graph", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": failures.is_empty() and not aborted,
+		"checks": checks, "check_count": checks.size(), "failures": failures, "failed_count": failures.size(),
+		"process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(),
+		"source_sha256": manifest.get("source_sha256", {}), "battle_resume_tested": false,
+		"scope": "Five real Unit nodes in an off-tree Battle/Map, four active plus one dying; ordered graph JSON capture, validate-all before allocation, all-unit binding, freed references and paused activation. No Battle._ready, economy/effects/disk restore, global UID/tick, cross-process Battle, PCK or menu test."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1)
+			return
+		file.store_string(JSON.stringify(report, "\t"))
+		file.close()
+	print("[unit-graph QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _shell(battle_script: Script, map_script: Script) -> Variant:
+	var battle: Variant = battle_script.new()
+	owned.append(battle)
+	battle.world = Node2D.new()
+	battle.map = map_script.new()
+	battle.units_root = Node2D.new()
+	battle.add_child(battle.world)
+	battle.world.add_child(battle.map)
+	battle.world.add_child(battle.units_root)
+	battle.gold = 137
+	battle.wood = 59
+	return battle
+
+func _unit(unit_script: Script, battle: Variant, name_text: String) -> Variant:
+	var unit: Variant = unit_script.new()
+	unit.name = name_text
+	unit.key = name_text.to_lower()
+	unit.display_name = name_text
+	unit.visible = false
+	unit.battle = battle
+	unit.map = battle.map
+	unit.set_physics_process(true)
+	battle.units_root.add_child(unit)
+	return unit
+
+func _run() -> void:
+	var path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest present", false)
+		_finish(true)
+		return
+	manifest = data
+	for key: String in ["run_id", "private_user", "report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false)
+			_finish(true)
+			return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host source manifest", false)
+		_finish(true)
+		return
+	for source_path in manifest.source_sha256:
+		if typeof(source_path) != TYPE_STRING or typeof(manifest.source_sha256[source_path]) != TYPE_STRING:
+			_check("host source entry", false)
+			_finish(true)
+			return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		_check("new absolute report path", false)
+		report_path = ""
+		_finish(true)
+		return
+	manifest_ready = true
+	_check("actual private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower())
+	_source_guard("source before")
+	if not failures.is_empty():
+		_finish(true)
+		return
+	# Defer game-class loads until Autoload initialization has completed.
+	var unit_script: Script = load("res://scripts/unit.gd")
+	var battle_script: Script = load("res://scripts/battle.gd")
+	var map_script: Script = load("res://scripts/game_map.gd")
+	var inventory_script: Script = load("res://scripts/hero_inventory.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var state_script: Script = load("res://scripts/run_unit_state.gd")
+	var identity_script: Script = load("res://scripts/run_graph_identity.gd")
+	var graph: Variant = Graph.new(state_script, identity_script, codec_script,
+		unit_script, inventory_script, battle_script, map_script)
+	var factory: Variant = state_script.new(codec_script, unit_script, inventory_script)
+	var source: Variant = _shell(battle_script, map_script)
+	var target: Variant = _shell(battle_script, map_script)
+	# Four active Units and one still-allocated death-animation node, in actual
+	# sibling order. Persistent fixture IDs deliberately do not follow that order.
+	var holder: Variant = _unit(unit_script, source, "Holder")
+	var dying: Variant = _unit(unit_script, source, "Dying")
+	var mine: Variant = _unit(unit_script, source, "Mine")
+	var miner: Variant = _unit(unit_script, source, "Miner")
+	var waiter: Variant = _unit(unit_script, source, "Waiter")
+	holder.is_building = true
+	mine.is_resource = true
+	mine.res_kind = "gold"
+	miner.is_worker = true
+	waiter.is_worker = true
+	dying.hp = 0.0
+	dying._dying = true
+	dying._death_t = 0.47
+	source.units.assign([waiter, miner, mine, holder])
+	var ids: Dictionary = {waiter: "9007199254740993", holder: "41", miner: "73", dying: "107", mine: "19"}
+	var expected_root: Array = ["41", "107", "19", "73", "9007199254740993"]
+	var expected_active: Array = ["9007199254740993", "73", "19", "41"]
+	var expired: Variant = unit_script.new()
+	var expired_id: int = expired.get_instance_id()
+	mine._gold_miner = miner
+	mine._gold_waiters = [waiter, miner, waiter, null, expired]
+	miner._gather_node = mine
+	waiter._gather_node = mine
+	miner._drop = holder
+	holder.passengers = [miner, waiter, miner]
+	miner.garrison_holder = holder
+	waiter.garrison_holder = holder
+	miner._target = dying
+	miner._pending_target = expired
+	miner._charge_hit = [dying, expired, dying]
+	miner._queue = [{"kind": "move", "pos": Vector2(2.5, 3.5), "group_cap": 11.0},
+		{"kind": "attack", "target": expired, "explicit": true}]
+	miner._lin_spear_target_id = dying.get_instance_id()
+	miner._chase_last_id = expired_id
+	miner._damage_reduction_sources = {-500000-int(holder.get_instance_id()): {"amount": 0.3, "t": 2.31},
+		-expired_id: {"amount": 0.2, "t": 0.7}, 17: {"amount": 0.1, "t": 0.9}}
+	miner._aura_atkspeed_sources = {-int(holder.get_instance_id()): {"mult": 1.5, "t": 1.37}, 23: {"mult": 1.2, "t": 0.27}}
+	miner.inventory = inventory_script.new(miner)
+	miner.inventory.slots[0] = {"id": "graph_item", "count": 2, "uid": 9007199254740993}
+	miner.inventory._uid_seq = 37
+	miner.inventory._periodic_acc = 0.19
+	miner._cast_t = 0.17
+	expired.free()
+	_check("fixture dying node lives outside active list", is_instance_valid(dying) and dying._dying and not source.units.has(dying) and source.units_root.get_child_count() == 5)
+	var captured: Dictionary = graph.capture(source, ids, VERSION)
+	if not _ok("capture complete ordered Unit graph", captured):
+		_finish(true)
+		return
+	contexts.append(captured.identity)
+	_check("persistent IDs follow tree order rather than mapping order", captured.value.root_order == expected_root)
+	_check("active order is independent and omits dying", captured.value.active_order == expected_active)
+	_check("one record for every allocated Unit child", captured.value.records.size() == 5)
+	var json_text: String = JSON.stringify(captured.value)
+	var wire: Variant = JSON.parse_string(json_text)
+	var validated: Dictionary = graph.validate(wire, VERSION)
+	if not _ok("real JSON graph validates all records", validated):
+		_finish(true)
+		return
+	_check("wire and validated snapshot preserve exact JSON", JSON.stringify(validated.value) == json_text)
+	var missing: Dictionary = ids.duplicate()
+	missing.erase(dying)
+	_check("capture rejects omitted dying node", graph.capture(source, missing, VERSION).get("code") == "REGISTRY_COMPLETE_SET")
+	var duplicate_ids: Dictionary = ids.duplicate()
+	duplicate_ids[dying] = ids[holder]
+	_check("capture rejects duplicate persistent IDs", graph.capture(source, duplicate_ids, VERSION).get("code") == "ENTITY_ID_DUPLICATE")
+	var invalid_last: Dictionary = wire.duplicate(true)
+	invalid_last.records[-1]["schema"] = "invalid_last_record"
+	var rejected: Dictionary = graph.prepare(invalid_last, VERSION, source, source.map)
+	_check("invalid last record rejects before allocating any Unit", rejected.get("ok") == false and rejected.get("code") == "UNIT_SCHEMA" and rejected.get("created_count") == 0 and rejected.get("freed_count") == 0)
+	_check("failed last record leaves original parent and active arrays untouched", source.units_root.get_children() == [holder, dying, mine, miner, waiter] and source.units == [waiter, miner, mine, holder])
+	var invalid_active: Dictionary = wire.duplicate(true)
+	invalid_active.active_order.append("999")
+	_check("unknown active identity rejects", graph.prepare(invalid_active, VERSION, target, target.map).get("code") == "ACTIVE_ID_UNKNOWN")
+	var invalid_order: Dictionary = wire.duplicate(true)
+	invalid_order.root_order[0] = invalid_order.root_order[1]
+	_check("duplicate tree identity rejects", graph.validate(invalid_order, VERSION).get("code") == "ROOT_ID_DUPLICATE")
+	_check("wrong trusted content version rejects", graph.prepare(wire, "different_content", target, target.map).get("code") == "CONTENT_VERSION")
+	var original_again: Dictionary = graph.capture(source, ids, VERSION, captured.identity)
+	_check("all failed operations preserve complete original graph values", original_again.get("ok") == true and JSON.stringify(original_again.value) == json_text)
+	_check("failure leaves destination empty and economy untouched", target.units_root.get_child_count() == 0 and target.units.is_empty() and target.gold == 137 and target.wood == 59)
+	var prepared: Dictionary = graph.prepare(wire, VERSION, target, target.map)
+	if not _ok("prepare whole new graph without installing it", prepared):
+		_finish(true)
+		return
+	contexts.append(prepared.identity)
+	owned.append_array(prepared.units_in_root_order)
+	var restored: Dictionary = prepared.id_to_unit
+	var new_holder: Variant = restored["41"]
+	var new_dying: Variant = restored["107"]
+	var new_mine: Variant = restored["19"]
+	var new_miner: Variant = restored["73"]
+	var new_waiter: Variant = restored["9007199254740993"]
+	_check("new root order includes dying at original index", prepared.units_in_root_order == [new_holder, new_dying, new_mine, new_miner, new_waiter])
+	_check("new active order remains independent", prepared.active_units == [new_waiter, new_miner, new_mine, new_holder] and not prepared.active_units.has(new_dying))
+	_check("prepare leaves original destination containers unassigned", target.units_root.get_child_count() == 0 and target.units.is_empty())
+	var detached: bool = true
+	var destination_bound: bool = true
+	for unit: Variant in prepared.units_in_root_order:
+		detached = detached and unit.get_script() == unit_script and unit.get_parent() == null and not unit.is_inside_tree() and unit.process_mode == Node.PROCESS_MODE_DISABLED and unit.is_blocking_signals()
+		destination_bound = destination_bound and is_same(unit.battle, target) and is_same(unit.map, target.map)
+	_check("all new graph nodes are real detached disabled Units", detached)
+	_check("graph plan leaves commit and activation to root", not prepared.attached and not prepared.activated and not prepared.complete_battle_restore and prepared.pending_battle_signals == ["died", "story_resolved"])
+	_check("all nodes bind only to destination Battle and Map", destination_bound)
+	_check("miner resource relation binds across records", new_mine._gold_miner == new_miner and new_miner._gather_node == new_mine and new_waiter._gather_node == new_mine and new_miner._drop == new_holder)
+	_check("waiting list keeps duplicate order and null", new_mine._gold_waiters.size() == 5 and new_mine._gold_waiters[0] == new_waiter and new_mine._gold_waiters[1] == new_miner and new_mine._gold_waiters[2] == new_waiter and new_mine._gold_waiters[3] == null)
+	_check("garrison reciprocal graph and duplicate order retained", new_holder.passengers == [new_miner, new_waiter, new_miner] and new_miner.garrison_holder == new_holder and new_waiter.garrison_holder == new_holder)
+	_check("dying target is a real live reference outside activity", new_miner._target == new_dying and new_dying._dying and new_dying.hp == 0.0 and new_dying._death_t == 0.47)
+	_check("prepare keeps shared typed tombstone alive for remaining graphs", not prepared.tombstones_released and is_instance_valid(prepared.expired_unit) and new_miner._pending_target == prepared.expired_unit and new_mine._gold_waiters[4] == prepared.expired_unit and new_miner._charge_hit[1] == prepared.expired_unit and new_miner._queue[1].target == prepared.expired_unit)
+	var later_retired: Dictionary = prepared.identity.decode_identity("_chase_last_id", {"kind": "retired", "id": "r:9000"})
+	var later_source: Dictionary = prepared.identity.decode_identity("_damage_reduction_sources", {"kind": "retired_source", "id": "s:-9000"})
+	_check("shared identity accepts later graph unseen retired target", later_retired.get("ok") == true)
+	_check("shared identity accepts later graph unseen retired source", later_source.get("ok") == true)
+	# Simulate the outer transaction's finish after ALL typed/integer graph binds.
+	# The returned flag describes prepare's state; only the caller closes binding.
+	prepared.identity.release_tombstones()
+	_check("explicit outer finish frees typed references after all graph binding", typeof(new_miner._pending_target) == TYPE_OBJECT and not is_instance_valid(new_miner._pending_target) and typeof(new_mine._gold_waiters[4]) == TYPE_OBJECT and not is_instance_valid(new_mine._gold_waiters[4]) and not is_instance_valid(prepared.expired_unit))
+	_check("charge array keeps live duplicates around expired reference", new_miner._charge_hit.size() == 3 and new_miner._charge_hit[0] == new_dying and new_miner._charge_hit[2] == new_dying and not is_instance_valid(new_miner._charge_hit[1]))
+	_check("command order retains real expired attack reference", new_miner._queue.size() == 2 and new_miner._queue[0].pos == Vector2(2.5, 3.5) and typeof(new_miner._queue[1].target) == TYPE_OBJECT and not is_instance_valid(new_miner._queue[1].target))
+	_check("native live target identity remapped", new_miner._lin_spear_target_id == new_dying.get_instance_id() and new_miner._lin_spear_target_id != miner._lin_spear_target_id)
+	_check("native retired target keeps canonical token", prepared.identity.encode_identity("_chase_last_id", new_miner._chase_last_id).value == captured.identity.encode_identity("_chase_last_id", expired_id).value)
+	_check("source pool keeps bound caster and ward domains", new_miner._damage_reduction_sources.has(-500000-int(new_holder.get_instance_id())) and new_miner._damage_reduction_sources.has(17) and new_miner._damage_reduction_sources.size() == 3 and new_miner._aura_atkspeed_sources.has(-int(new_holder.get_instance_id())) and new_miner._aura_atkspeed_sources.has(23))
+	_check("inventory owner UID and phase restored without purchasing", new_miner.inventory.owner == new_miner and new_miner.inventory.slots[0].uid == 9007199254740993 and new_miner.inventory._uid_seq == 37 and new_miner.inventory._periodic_acc == 0.19)
+	for index in range(5):
+		_check("every explicit Unit value retained " + str(index), factory._read_explicit(prepared.units_in_root_order[index]) == factory._read_explicit([holder, dying, mine, miner, waiter][index]))
+	original_again = graph.capture(source, ids, VERSION, captured.identity)
+	_check("successful preparation leaves original graph unchanged", original_again.get("ok") == true and JSON.stringify(original_again.value) == json_text and source.gold == 137 and source.wood == 59)
+	# Simulate only the caller's final Unit attachment portion, with no Battle._ready.
+	paused = true
+	var staging: Node2D = Node2D.new()
+	staging.visible = false
+	owned.append(staging)
+	root.add_child(staging)
+	for row: Dictionary in prepared.activation_plan:
+		row.unit.appearance_changed.connect(_on_signal)
+		row.unit.died.connect(_on_signal)
+		staging.add_child(row.unit)
+	for row: Dictionary in prepared.activation_plan:
+		if not _ok("activate graph Unit " + row.entity_id, factory.activate(row.unit, row.activation)):
+			_finish(true)
+			return
+	_check("caller attaches all nodes in original sibling order", staging.get_children() == prepared.units_in_root_order)
+	var before_cast: float = new_miner._cast_t
+	var before_death: float = new_dying._death_t
+	await process_frame
+	await process_frame
+	_check("paused activation runs no cast or death timestep", new_miner._cast_t == before_cast and new_dying._death_t == before_death)
+	_check("graph restoration emits no appearance or death callbacks", signal_count == 0)
+	_check("source and destination Battle never ran ready or deployment", not source.is_inside_tree() and not target.is_inside_tree() and source.gold == 137 and target.gold == 137 and target.units.is_empty() and target._pending_casts.is_empty() and target._channels.is_empty())
+	_finish()

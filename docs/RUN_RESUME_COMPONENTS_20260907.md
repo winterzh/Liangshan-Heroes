@@ -62,3 +62,11 @@ Map/Scenery v2 已将运行时依赖原始源码摘要的条件改为由外层�
 原型`20260906T191947368450Z`（PID40452）及修正后正式`20260906T192639802801Z`（PID40280）各52条通过，其中16来源前后与36其余；exit0、源码/玩家摘要一致、锁释放。真实pass续算剩余3次地火和4次按当前最大生命计算的百分比流血；真实队友击杀后直接调用原决斗死亡消费者，回血、Q/W复位与奖励效果只发生一次，重复回调和奖励后再保存恢复均不重复发奖。[持续效果归档](../qa/run_continuous_effects_20260907/README.md)保留完整两组版本证据。
 
 首轮正式`20260906T192154836197Z`实际运行正式driver，但runtime manifest仍指向原型driver；其52项与exit0原文保留为manifest coverage gap，不改成引擎失败，也不充作正式driver完整版本证明。仅修正runner目录后新增最终run，旧runner和修正记录独立归档。相同组件复验不累加为新场景；本增量不覆盖其他14类效果、完整`_on_unit_died`清理、玩法RNG或Battle/RunSession整局，不改变菜单/PCK及M3验收要求。
+
+## Unit sibling 与 active 顺序图增量
+
+[run_unit_graph.gd](../scripts/run_unit_graph.gd)与原型同字节，SHA256为`633b631234664fb1abf17d738a6be8599d0c1c9eb55620d495cab51da06f6319`。组合已受测Unit与整数身份模块，先完整校验所有记录，再依root顺序创建并绑定新Unit；root_order包含dying节点，active_order独立保存，持久ID不由字典顺序或native ID推导。实际五Unit夹具核对矿工/等待、驻军双向及重复关系、命令/失效引用、身份池和物品UID/相位；末条坏记录在分配前拒绝，原图不变。
+
+prepare不赋值Battle数组，不挂接、连接系统信号或激活；成功返回两份顺序、新图和同一份仍开放的identity，以及仍存活的typed tombstones，`tombstones_released=false`。外层必须先通过该identity完成所有Battle/FX/整数图绑定，再统一`identity.release_tombstones()`、安装顺序与监听并激活。测试证明后续未见的retired目标/来源仍能绑定，显式外层finish后引用才成为真实已释放对象。后续保存保留同一identity；它不是全局实体/物品UID或tick分配器。
+
+原型`20260906T192949868331Z`（PID41376）及正式`20260906T193154174815Z`（PID33580）各73条通过，含20来源前后与53其余；两轮实际command入口及driver SHA与manifest完全对应，exit0、源码/玩家保护和锁释放通过。[Unit图归档](../qa/run_unit_graph_20260907/README.md)保留原准备pins/README，不将“尚未运行”历史改写。相同组件复验不新增场景；不运行Battle._ready/部署，不证明经济/效果/磁盘恢复、整局失败原子性、全局UID/tick、跨进程Battle、菜单UI或PCK验收。
