@@ -2,6 +2,10 @@
 
 本轮用户要求“上传”，从干净 stable `e3a758bd849c42e5236d5baca80a92a8d80802eb` 冻结并重新构建。Steam 服务端状态独立记录于 `steam_server_receipt.json`；本页的本地成功不代替上传或分支生效证据。
 
+## Steam 最终状态
+
+Build **25173165** 已在 `steam-integration` 测试分支生效，用户完成原确认框后回读分支行和上线历史确认。公开 `default` 保持 **25164373**。先前浏览器确认框超时及旧分支观察保留在服务端收据的历史字段；本次仅回读并更新记录，没有重传包或再次提交切换。
+
 ## 成品
 
 唯一 ZIP 为 221,187,505 字节，SHA256 `1cf1075302e35934bff76917e696bfb852aa1a57d6e894ef2b04133910fafaff`。成员恰好为 EXE、两枚 GodotSteam release DLL 和许可证；CRC、成员集合、逐文件尺寸与 SHA256 全部重新校验。[交付清单](candidate_delivery.json)另含服务端比对所需 SHA1。
