@@ -156,3 +156,10 @@ qa/morning_handoff_20260907/** -text -whitespace
 qa/run_fog_runtime_20260907/** -text -whitespace
 scripts/run_fog_state.gd* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 qa/run_resume_handoff_20260907/** -text -whitespace
+
+# Godot rewrites import descriptors as LF on every platform.
+assets/**/*.import text eol=lf
+docs/**/*.import text eol=lf
+icon*.import text eol=lf
+
+qa/company_handoff_20260907/** -text -whitespace

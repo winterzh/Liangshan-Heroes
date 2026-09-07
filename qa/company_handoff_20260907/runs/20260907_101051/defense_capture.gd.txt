@@ -1,0 +1,47 @@
+extends SceneTree
+
+func _initialize() -> void:
+    call_deferred("_run")
+
+func _run() -> void:
+    root.size = Vector2i(1280, 720)
+    if change_scene_to_file("res://scenes/menu.tscn") != OK:
+        quit(2)
+        return
+    await process_frame
+    await process_frame
+    var menu: Node = current_scene
+    menu.call("_show_defense")
+    var selected: Button = null
+    for node: Node in menu.find_children("*", "Button", true, false):
+        if "30 关" in String(node.get("text")):
+            selected = node as Button
+            break
+    if selected == null:
+        push_error("Standard 30-wave menu button missing")
+        quit(3)
+        return
+    selected.pressed.emit()
+    await create_timer(6.0, true, false, true).timeout
+    for step in range(16):
+        var next_button: Button = null
+        for node: Node in current_scene.find_children("*", "Button", true, false):
+            if node.is_visible_in_tree() and String(node.get("text")).begins_with("继续"):
+                next_button = node as Button
+                break
+        if next_button == null:
+            break
+        next_button.pressed.emit()
+        await create_timer(0.35, true, false, true).timeout
+    await create_timer(2.0, true, false, true).timeout
+    await RenderingServer.frame_post_draw
+    var battle: Node = current_scene
+    var is_battle := battle != null and battle.scene_file_path == "res://scenes/main.tscn"
+    var fault := String(battle.call("gameplay_rng_fault")) if is_battle else "SCENE_MISMATCH"
+    var phase: int = int(battle.get("phase")) if is_battle else -1
+    var ready := is_battle and phase > 0 and fault.is_empty() and battle.get("_gameplay_rng") != null and battle.get("world") != null and battle.get("map") != null and battle.get("hud") != null
+    var output := OS.get_environment("COMPANY_CAPTURE_OUTPUT")
+    var save_error: Error = root.get_texture().get_image().save_png(output)
+    var report := {"scene": battle.scene_file_path, "phase": phase, "ready": ready, "rng_fault": fault, "paused": paused, "save_error": save_error, "user_dir": OS.get_user_data_dir()}
+    print("COMPANY_DEFENSE_CAPTURE ", JSON.stringify(report))
+    quit(0 if ready and save_error == OK else 4)

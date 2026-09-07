@@ -1,3 +1,11 @@
+## 2026-09-07 公司端已恢复启动
+
+公司继续使用已确认的独立 Git checkout，工程根目录直接包含 `project.godot`；旧共享外层仅保留历史工程和指向当前 checkout 的本机交接提示。`Play.cmd` 与 Godot 4.6.3 的正常启动方式不变，机器路径只放被忽略的 `godot.local.txt` 或 `GODOT_PATH`。
+
+首次导入已补齐需要跨电脑共享的资源/脚本 UID，并将生产 `.import` 固定为 LF。QA 图片旁自动生成的 `.import` 和 `.uid` 留在本地，原始图片、收据及来源 manifest 仍入库；若以后某份正式清单依赖具体 sidecar，须显式纳入。不要用全盘 git add 收进 QA 自动生成物。
+
+本机导入、主菜单和标准 30 波驻守入口已通过，驻守已越过旁白进入场景，RNG 无故障。隔离测试使用较短的私有用户路径，避免 Windows shader cache 路径过长；不需要改变系统设置。[实际结果、两轮失败及复验方式](../qa/company_handoff_20260907/README.md)。这不改变早间 Steam 上传和完整续玩的未完成边界。
+
 ## 2026-09-07 默认迷雾恢复组件
 
 正式入口为 `scripts/run_fog_state.gd`。capture 要求 SceneTree 真正暂停且不处于 physics 帧；单设 paused 不能保证屏障成立。恢复同时保留逻辑值和可能滞后的真实图像/纹理，不能按当前 vision 提前重画。bind 返回脱树禁用层及原 world 索引，外层负责 Map、Unit 可见标志和整体挂接/激活顺序。
