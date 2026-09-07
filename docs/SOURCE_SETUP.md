@@ -1,3 +1,11 @@
+## 2026-09-07 本机开发与历史材料位置
+
+当前工程实际位置为 `D:\AI项目\水浒\开发工程`，Godot 工程仍在目录根部，运行 `Play.cmd` 或顶层 `D:\AI项目\水浒\开始游戏.cmd`。原 `D:\CodexTemp\liangshan-github-sync-20260905-5f8a7c2e` 已改为指向新工程的目录联接。后续开发、构建与验证直接使用新的 D 实路径；Godot 可执行文件仍由本机 `godot.local.txt` 配置。
+
+旧 C 项目完整存放于 `D:\AI项目\水浒\历史资料`。原 `C:\Users\rsb\Desktop\AI项目\水浒` 根保持普通目录，8 个子目录分别联接到历史资料下的对应目录，10 个根文件保留本机交接用途（含本轮新增 README）。历史来源 JSON 与旧 QA 路径保持原文；不要移除这些兼容入口。构建隔离 profile 应使用独立的新实目录，不能使用目录联接路径。
+
+本轮只迁移存储位置并更新文档。旧材料 17,241 个文件逐文件 SHA-256 零差异；Godot 4.6.3 隔离导入与 180 帧主菜单 headless 启动均退出 0、无 ERROR，未增加真人通关结论。准确清单与收据见[存储迁移 QA](../qa/storage_migration_20260907/README.md)。
+
 ## 2026-09-07 Windows Steam 候选的短用户目录
 
 Steam QA 与构建命令可追加 `--profile-root "<本机较短的绝对目录>"`，两阶段使用同一根但各自独占新建当轮目录。不得指向真实玩家目录、复用既有 profile 或使用链接/reparse 路径。未指定保持原有行为；无需修改系统设置。该选项仅影响隔离验证和候选导出，不改变 `Play.cmd`。完整命令见 [Steam 接入说明](STEAM_INTEGRATION_20260907.md)，边界检查见[公司 Steam QA](../qa/company_steam_upload_20260907/README.md)。
