@@ -1,3 +1,7 @@
+## 2026-09-08 更新公告与配图已公开
+
+[9月8日公告](https://store.steampowered.com/news/app/5088120/view/708907988310558956)已发布，后台公开状态、正式页面中英文正文及1920×1080实机配图均已核对。说明公开版任务框与steam-integration测试更新，完整保存/继续战斗仍在开发。仅发布公告，不改变此前构建验收边界；[文案与QA](STEAM_ANNOUNCEMENT_20260908.md)。下方未发布公告/仅草稿均为此前批次状态。
+
 ## 2026-09-08 Windows Steam 上传完成
 
 Windows 最新源码 `e3a758b` 已上传为 Steam Build **25173165**，Depot `5088121` / Manifest **2578852481018016286**。用户完成原确认框后，Steamworks canonical builds 页面已回读确认 `steam-integration` 测试分支为 **25173165**，并显示相应上线历史记录。服务端四文件大小与 SHA1 均匹配本地成品。

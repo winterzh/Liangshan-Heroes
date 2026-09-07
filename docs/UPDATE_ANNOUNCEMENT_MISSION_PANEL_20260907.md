@@ -8,4 +8,4 @@
 
 ---
 
-状态：已撰写，尚未发布社区公告。对应 Windows Steam Build 25164373。
+状态：内容已纳入2026-09-08发布的[任务面板优化与测试版进展](https://store.steampowered.com/news/app/5088120/view/708907988310558956)，本页保留原草稿。任务框部分对应 Windows Steam Build 25164373；新公告另外说明测试分支25173165，含中英文和实机配图，见[发布记录](STEAM_ANNOUNCEMENT_20260908.md)。

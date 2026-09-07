@@ -1,3 +1,7 @@
+## 2026-09-08 Steam 公告与实机配图已发布
+
+按用户“发布”指令发布中英文[任务面板优化与测试版进展](https://store.steampowered.com/news/app/5088120/view/708907988310558956)，页面时间03:27 CST。后台成功且公开可见；正式新闻地址的两种语言全文和1920×1080实机图均已回读。关联测试分支25173165，并区分公开任务框热更25164373与未完成的完整续玩。使用默认游戏封面，正文新增实机配图；未更换构建或上传商店视频。发布文案、图片SHA及检查边界见[公告记录](STEAM_ANNOUNCEMENT_20260908.md)和[收据](../qa/steam_announcement_20260908/publication_receipt.json)。本轮仅文档/QA，按stable分支同步；下方“未发布公告”为上传阶段历史状态。
+
 ## 2026-09-08 Windows Steam 上传完成
 
 Windows 最新源码 `e3a758b` 已上传为 Steam Build **25173165**，Depot `5088121` / Manifest **2578852481018016286**。用户完成原确认框后，Steamworks canonical builds 页面已回读确认 `steam-integration` 测试分支为 **25173165**，并显示相应上线历史记录。服务端四文件大小与 SHA1 均匹配本地成品。

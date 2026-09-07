@@ -1,3 +1,8 @@
+## 2026-09-08 公告发布归档
+
+- `docs/STEAM_ANNOUNCEMENT_20260908.md`：已发布中英文内容、正文实机配图来源与公开页检查。
+- `qa/steam_announcement_20260908/`：独立公告发布收据；复用任务框QA原图，不复制图片或改写构建收据。
+
 ## 2026-09-08 Windows Steam 上传完成
 
 - `docs/STEAM_UPDATE_20260908.md`：本轮Steam构建、分支和验证范围。

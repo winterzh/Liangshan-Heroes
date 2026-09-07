@@ -1,3 +1,7 @@
+## 2026-09-08 公告发布交接
+
+中英文公告与任务框实机配图已发布，事件708907988310558956；[已发布内容与来源](STEAM_ANNOUNCEMENT_20260908.md)、[独立收据](../qa/steam_announcement_20260908/publication_receipt.json)。图片复用已跟踪QA原图，新增QA目录以.gdignore隔离并保持原字节。启动方式和游戏源码没有变化；此前上传收据未发布公告的字段保留历史状态，以本条后续记录为准。
+
 ## 2026-09-08 Windows Steam 上传完成
 
 Windows 最新源码 `e3a758b` 已上传为 Steam Build **25173165**，Depot `5088121` / Manifest **2578852481018016286**。用户完成原确认框后，Steamworks canonical builds 页面已回读确认 `steam-integration` 测试分支为 **25173165**，并显示相应上线历史记录。服务端四文件大小与 SHA1 均匹配本地成品。
