@@ -1,3 +1,11 @@
+## 2026-09-08 Windows Steam 上传完成
+
+Windows 最新源码 `e3a758b` 已成功上传并创建 Steam Build **25173165**，Depot `5088121` / Manifest **2578852481018016286**。服务端四文件大小与 SHA1 均匹配本地成品。`steam-integration` 切换停在普通确认框，浏览器工具超时，尚未回读确认生效。
+
+本次从D盘规范checkout的干净e3a758b构建；本机包在忽略目录 `.godot/steam_candidates/20260908_024605_edee2afb/`。依赖Godot4.6.3及固定GodotSteam发行DLL，私有短路径测试环境；源码启动方式不变。[复现与边界](../qa/steam_upload_20260908/README.md)。
+
+公开 default 最近一次回读为 **25164373**，测试分支切换前为 **25160280**；不能把上传成功写成分支已更新。需要完成已有确认框后重新打开canonical builds页核对，无需重传或重新创建Build。本轮没有发布社区公告。完整续玩、真实客户端/双账号 Steam 验收和新美术生产验收仍未完成。
+
 ## 2026-09-07 Steam任务框更新
 
 Windows Steam default现为Build 25164373，八关任务框支持默认收起/点击展开。构建来自公开443e75e及f3da82f单个组件，正常开发仍在本checkout。[来源、成品与复现](STEAM_MISSION_PANEL_UPDATE_20260907.md)。

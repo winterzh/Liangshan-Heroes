@@ -1,3 +1,8 @@
+## 2026-09-08 Windows Steam 上传完成
+
+- `docs/STEAM_UPDATE_20260908.md`：本轮Steam构建、分支和验证范围。
+- `qa/steam_upload_20260908/`：全新原生、导出、实际EXE短测、原始失败、路径脱敏映射及服务端回读证据。
+
 ## 2026-09-07 任务框Steam交付
 
 - `docs/STEAM_MISSION_PANEL_UPDATE_20260907.md`：实际线上Build与来源范围。
