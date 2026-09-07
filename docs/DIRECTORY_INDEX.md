@@ -1,3 +1,9 @@
+## 2026-09-08 相机恢复
+
+- scripts/run_camera_state.gd：显式相机字段、屏障输入与暂停激活。
+- docs/CAMERA_RESUME_20260908.md：合同、原生结果及剩余工作。
+- qa/camera_resume_20260908/：原始执行证据、候选和SHA安装收据。
+
 ## 2026-09-08 世界显示恢复
 
 - scripts/run_world_display_state.gd：世界组成、受信资源、阴影缓冲与身份、暂停激活。

@@ -1,3 +1,5 @@
+后续更新：核心现为v4，相机为第17分区，并返回待激活camera_module，见[相机恢复](CAMERA_RESUME_20260908.md)。下方v1—v3内容保留为各阶段历史记录。
+
 后续更新：核心现为v3、world_display第16分区已接入，准备Battle具有跳过新局初始化的禁用入树入口，见[世界显示恢复](WORLD_DISPLAY_RESUME_20260908.md)。下方早期v1/v2记录保留为历史阶段。
 
 后续更新：核心schema现为v2、第15分区death_remains已接入，见[死亡残留恢复](DEATH_REMAINS_RESUME_20260908.md)。下文保留首次v1准备事务的原始合同和验收记录。

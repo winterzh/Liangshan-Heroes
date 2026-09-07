@@ -1,3 +1,7 @@
+## 2026-09-08 相机恢复
+
+core schema v4增加camera，返回待激活camera_module。RTSCamera._ready只对可信准备标记分流；Play.cmd及玩家菜单保持。完整安装顺序见[相机合同](CAMERA_RESUME_20260908.md)，隔离原生复现见[QA](../qa/camera_resume_20260908/README.md)。
+
 ## 2026-09-08 世界显示恢复
 
 新增run_world_display_state及原生UID；core内部schema v3新增world_display。Battle新增仅供禁用准备树的_ready分流，玩家Play.cmd及菜单入口保持。按[本批QA](../qa/world_display_resume_20260908/README.md)在来源提交复现实测；[生命周期边界](WORLD_DISPLAY_RESUME_20260908.md)明确最终安装仍待接入。

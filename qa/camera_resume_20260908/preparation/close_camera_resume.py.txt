@@ -1,0 +1,83 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime
+root=Path.cwd();out=root/'scratchpad/camera_resume_20260908';q=root/'qa/camera_resume_20260908'
+head='4c0fafce921bfa98e31c9f9b7c1b0824a9c73962';run='overlay_20260907T215752Z_14d9f297';native=root/'.godot/stabilization_overlay'/run
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text());report=json.loads((native/'report.json').read_text())
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and not report['failed_count'] and all(x['passed'] for x in report['checks'])
+assert not (root/'.godot/redraw_rejection_source.lock').exists()
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+for row in changes:
+ p=root/row['path'];assert p.exists()==row['before_exists']
+ if p.exists():assert sha(p)==row['before_raw_sha256']
+ assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+q.mkdir(exist_ok=False);(q/'.gdignore').write_text('\n');pins=[]
+def archive(src,name):
+ dst=q/name;dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(src.read_bytes());assert sha(dst)==sha(src)
+ pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+ archive(native/name,'native/'+name)
+for row in changes:archive(native/'project'/row['path'],'native/'+Path(row['path']).name+'.txt')
+archive(native/'project/tools/camera_resume/driver.gd','native/driver.gd.txt')
+for p in out.iterdir():
+ if p.is_file():archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_camera_resume.py','close_camera_resume.py']:archive(root/'.godot'/name,'preparation/'+name+'.txt')
+uid=native/'project/scripts/run_camera_state.gd.uid';archive(uid,'candidate/run_camera_state.gd.uid.txt')
+for row in changes:(root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/'scripts/run_camera_state.gd.uid').write_bytes(uid.read_bytes())
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks']);count=report['check_count'];other=count-source_count
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'changes':changes,'native_uid_sha256':sha(uid),'checks':count,'source_sha_checks':source_count,'other_checks':other,'complete_world_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'README.md').write_text(f'''# 相机恢复原生 QA
+
+来源 `{head}`，单次原生运行 `{run}` 通过。{count}项中{source_count}是来源SHA、{other}是状态/输入/生命周期/回滚断言。使用Godot4.6.3、Windows Forward+/Vulkan及RTX4060 Laptop，私有user://；实际窗口最小化、viewport0×0。滚轮/中键事件通过真实Viewport.push_input分发，不是直接调用相机处理方法，也不是Windows人工鼠标或可见画面验收。
+
+native保留实际生产候选、驱动、执行器、manifest/freeze、日志、报告与保护收据；candidate为最终输入，preparation仅供审计。SOURCE_PINS记录原字节SHA，installation记录晋级和原生UID。整个QA由.gdignore隔离，字节由Git属性保留。
+
+在来源提交的独立checkout核对原生Godot和runner/guard SHA，将candidate三份生产.gd.txt和driver.gd.txt恢复为.gd原名，连同overlay_manifest.json、freeze.json置于scratchpad/camera_resume_20260908并加.gdignore；不要把新模块归档UID复制进来源scripts，隔离导入会生成。运行：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 2318e00e4286dc9b7d21c58082aa1704b3508f70472b0a77fbde3e1034504321 --candidate scratchpad/camera_resume_20260908 --expected-files 3 --driver driver.gd --driver-destination tools/camera_resume/driver.gd --suite camera-resume-native --prefix "[camera resume QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可换受控短绝对路径；历史路径不作新写入目的地。未提供完整Battle继续、磁盘槽、跨进程、Steam账号或画面排版结论。[合同与后续](../../docs/CAMERA_RESUME_20260908.md)。
+''',encoding='utf-8')
+(root/'docs/CAMERA_RESUME_20260908.md').write_text(f'''# RTS 相机状态与输入恢复
+
+新增run_camera_state，world core内部schema v4增加第17分区camera。保留RTSCamera的10个脚本字段、27个已声明Camera2D属性、当前镜头标志及既有Node2D绘制/处理状态。位置、非等比缩放、限制、震动强度/相位、近期手动操作计时和触屏模式按原值恢复；没有保存的资源路径、脚本名或任意对象反序列化入口。
+
+## 屏障与安装
+
+捕获要求真实Battle的HELD屏障与原相机归属。屏障临时把camera.process_mode设DISABLED并关闭unhandled_input，模块从该屏障已保存的原值恢复这两个字段，避免把临时封锁持久化成永久失灵。未提交中键/触摸手势仍依既有屏障清空，不在继续时恢复按住状态；touch_mode保留。
+
+prepare创建禁用的Camera2D并关闭处理与输入，按保存值赋值，加仅限内存的_run_camera_prepared标记，再归属新Battle。相机的_ready遇到标记不执行make_current或zoom=1.1；Camera2D.enabled也保持false，避免原生入树阶段抢占旧镜头。没有标记的新局仍走原初始化。
+
+camera_module.activate只能在所属Battle/相机关系有效、暂停且已入树、准备标记和禁用状态仍完整时调用。它恢复屏障前处理/输入优先级与标志，再启用、make_current和force_update_scroll，清除准备标记；重复调用拒绝。此步骤必须由完整安装事务与HUD、根时钟、Unit/Fx/Fog、Steam一起调度，目前core只返回待激活模块。
+
+## 当前支持边界
+
+本工程RTSCamera使用一个启用的当前镜头，未启用Camera2D原生位置/旋转平滑、平滑限位或拖拽边界。模块要求这一实际合同：这些需要隐藏历史状态的选项若被打开会明确拒绝，不重置后假装等价。自定义Viewport、子节点、未知信号连接、材质/元数据覆盖拒绝。27属性的定义对照[Godot Camera2D源码](https://github.com/godotengine/godot/blob/4.6/scene/2d/camera_2d.cpp)。这不是所有Camera2D用法的通用序列化。
+
+## 原生证据
+
+单次运行{count}项={source_count}来源SHA+{other}其他断言全部通过。在真实经典战斗正常推进120个physics观察帧后，夹具设置非默认位置、非等比缩放、平移速度、震动/相位、触屏模式、PAUSABLE处理及优先级，并构造未完成手势，再由真实屏障清空手势和完成捕获。JSON准备后，全部10脚本值、支持的引擎属性及继承绘制属性逐字段等于暂停源。
+
+准备相机挂载时保留原缩放，旧相机仍为current；暂停激活才切换current并还原屏障前输入。独立启用该相机的实际idle回调后，震动/相位/手动操作计时继续推进。真实Viewport输入分发接受滚轮缩放、中键拖动和松开；不是直接调用_unhandled_input。结束时恢复旧镜头并确认源屏障仍HELD。
+
+零缩放、未释放手势、原生平滑、未知字段和错误类型均拒绝并释放临时Battle/身份对象；保留17坏分区、原地图/迷雾、世界顺序/纹理/阴影、4096阴影槽、自然尸体退出和死亡残留回归。私有玩家/源码/候选保护通过，子进程退出且锁释放。[原始QA](../qa/camera_resume_20260908/README.md)、[安装收据](../qa/camera_resume_20260908/installation.json)。
+
+窗口最小化、viewport0×0，无截图/视觉布局、真实操作手感、完整30波或跨进程结论。下一步是HUD及其交互状态、氛围/浮尘时间、剩余特效和Battle根最终安装，随后原子继续槽、保存成功才退出与冷启动未来行为验证，再适配八战役。源码同步stable，本批不更新Steam包。
+''',encoding='utf-8')
+def prepend(path,text):
+ p=root/path;p.write_text(text+'\n\n'+p.read_text(encoding='utf-8-sig'),encoding='utf-8',newline='\n')
+prepend('docs/WORKLOG.md',f'## 2026-09-08 续玩主线：相机与屏障前输入恢复\n\n新增run_camera_state，core v4第17分区；保留位置/缩放/震动/触屏与屏障前处理输入状态，准备相机不抢旧镜头或重置缩放。真实Viewport滚轮、中键拖动/松开及idle恢复通过，坏记录完整回滚；{count}项中{source_count}来源SHA、{other}其他。受测三脚本及原生UID晋级。[合同](CAMERA_RESUME_20260908.md)、[QA](../qa/camera_resume_20260908/README.md)。HUD/氛围、最终根安装、继续槽和跨进程仍待完成；本批同步stable，不更新Steam。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 相机恢复\n\ncore schema v4增加camera，返回待激活camera_module。RTSCamera._ready只对可信准备标记分流；Play.cmd及玩家菜单保持。完整安装顺序见[相机合同](CAMERA_RESUME_20260908.md)，隔离原生复现见[QA](../qa/camera_resume_20260908/README.md)。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 相机恢复与原生输入已接入\n\n相机字段、屏障前处理/输入状态、延后接管及真实Viewport滚轮/中键恢复通过。[证据](CAMERA_RESUME_20260908.md)。尚未完成HUD/氛围/其余特效、根和Steam最终安装、磁盘继续槽、跨进程及全局验收。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 相机恢复\n\n- scripts/run_camera_state.gd：显式相机字段、屏障输入与暂停激活。\n- docs/CAMERA_RESUME_20260908.md：合同、原生结果及剩余工作。\n- qa/camera_resume_20260908/：原始执行证据、候选和SHA安装收据。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续更新：核心现为v4，相机为第17分区，并返回待激活camera_module，见[相机恢复](CAMERA_RESUME_20260908.md)。下方v1—v3内容保留为各阶段历史记录。')
+p=root/'docs/STABILIZATION_EXECUTION_20260907.md';s=p.read_text();s=s.replace('世界显示及禁用准备入口已接入；相机/HUD/氛围与最终安装','世界显示、相机及禁用准备入口已接入；HUD/氛围与最终安装').replace('见[最新证据](WORLD_DISPLAY_RESUME_20260908.md)','见[最新证据](CAMERA_RESUME_20260908.md)');p.write_text(s,encoding='utf-8')
+p=root/'.gitattributes';p.write_bytes(p.read_bytes()+b'\n# Preserve exact tested camera adapters and native evidence.\nscripts/run_camera_state.gd* -text -whitespace\nscripts/rts_camera.gd -text -whitespace\nqa/camera_resume_20260908/** -text -whitespace\n')
+print(json.dumps({'archive_pins':len(pins),'checks':count,'source_checks':source_count,'other_checks':other,'installed_bytes_equal_native':True}))
