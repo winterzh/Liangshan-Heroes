@@ -48,16 +48,39 @@ def resolve_godot(value):
     if not path.is_file(): raise RuntimeError("Non-console Godot executable unavailable")
     return path.resolve()
 
+def resolve_profile_root(value):
+    """An optional short parent; never follow links or reuse a prior profile."""
+    if value is None: return None
+    path = Path(value)
+    if not path.is_absolute(): raise RuntimeError("--profile-root must be an absolute path")
+    for item in [path] + list(path.parents):
+        if item.exists() or item.is_symlink():
+            attributes = item.lstat()
+            if item.is_symlink() or getattr(attributes, "st_file_attributes", 0) & 0x400:
+                raise RuntimeError("Profile link/reparse path refused: " + str(item))
+            if not item.is_dir(): raise RuntimeError("Profile parent is not a directory: " + str(item))
+    return path
+
+def create_private_profile(run, profile_root):
+    parent = resolve_profile_root(profile_root)
+    profile = run / "profile" if parent is None else parent / run.name
+    resolve_profile_root(profile)
+    profile.mkdir(parents=True, exist_ok=False)
+    resolve_profile_root(profile)
+    return profile
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot")
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--visual", action="store_true")
     parser.add_argument("--native", action="store_true")
+    parser.add_argument("--profile-root", type=Path, help="Absolute short parent for a new, exclusive private profile")
     parser.add_argument("--cache-from", type=Path, help="Prior private QA run; reuse imported textures only")
     args = parser.parse_args()
+    profile_root = resolve_profile_root(args.profile_root)
     if not args.run:
-        print(json.dumps({"preflight":True, "source_files":len(sources()), "godot":str(resolve_godot(args.godot)), "lock_busy":LOCK.exists()}))
+        print(json.dumps({"preflight":True, "source_files":len(sources()), "godot":str(resolve_godot(args.godot)), "lock_busy":LOCK.exists(), "profile_root":str(profile_root) if profile_root else None}))
         return
     running = subprocess.check_output(["powershell.exe", "-NoProfile", "-Command", "@(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | ForEach-Object { $_.Id }) | ConvertTo-Json -Compress"], text=True).strip()
     if running and json.loads(running): raise RuntimeError("Godot is running; shared engine slot unavailable")
@@ -88,9 +111,11 @@ def main():
         for key in list(env):
             if key.endswith(("_TEST", "_QA", "_QA_MANIFEST", "_AUDIT")) or key in ["LEVEL","SCENARIO","CUSTOM_DEFENSE","SKIRMISH","SKIRMISH_AI","ARENA","AUTO_MICRO","AUTOMICRO"]:
                 env.pop(key)
+        profile = create_private_profile(run, profile_root)
+        receipt["private_profile"] = str(profile)
         for key in ["APPDATA","LOCALAPPDATA","TEMP","TMP"]:
-            private = run / "profile" / key.lower()
-            private.mkdir(parents=True, exist_ok=True)
+            private = profile / key.lower()
+            private.mkdir()
             env[key] = str(private)
         env.update(STEAM_DISABLED="1", CAMPAIGN_QA="1", STEAM_QA_OUTPUT=str(run), STEAM_CATALOG_OUTPUT=str(run / "backend"), STEAM_QA_VISUAL="1" if args.visual else "0", STEAM_QA_NATIVE="1" if args.native else "0")
         engine = str(resolve_godot(args.godot))

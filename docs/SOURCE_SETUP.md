@@ -1,3 +1,7 @@
+## 2026-09-07 Windows Steam 候选的短用户目录
+
+Steam QA 与构建命令可追加 `--profile-root "<本机较短的绝对目录>"`，两阶段使用同一根但各自独占新建当轮目录。不得指向真实玩家目录、复用既有 profile 或使用链接/reparse 路径。未指定保持原有行为；无需修改系统设置。该选项仅影响隔离验证和候选导出，不改变 `Play.cmd`。完整命令见 [Steam 接入说明](STEAM_INTEGRATION_20260907.md)，边界检查见[公司 Steam QA](../qa/company_steam_upload_20260907/README.md)。
+
 ## 2026-09-07 公司端已恢复启动
 
 公司继续使用已确认的独立 Git checkout，工程根目录直接包含 `project.godot`；旧共享外层仅保留历史工程和指向当前 checkout 的本机交接提示。`Play.cmd` 与 Godot 4.6.3 的正常启动方式不变，机器路径只放被忽略的 `godot.local.txt` 或 `GODOT_PATH`。

@@ -58,6 +58,8 @@ python -X utf8 -B tools/build_steam_candidate.py --qa-run .godot/steam_integrati
 python -X utf8 -B tools/build_steam_candidate.py --run --qa-run .godot/steam_integration_qa/本次成功目录
 ```
 
+Windows 私有用户路径过长时，QA 和构建命令都可追加 `--profile-root "<本机较短绝对目录>"`；工具在该根下独占新建各轮子目录，拒绝既有目录及链接/reparse，不复用玩家数据。未指定时保持原目录布局。
+
 每次创建全新私有 project/profile、APPDATA/LOCALAPPDATA/TEMP/TMP，强制 `STEAM_DISABLED=1`；自动测试不连接真实账号。`--cache-from` 仅接受此前隔离 QA 目录，复用导入纹理以减少等待。收据核对受测源码前后 SHA；源码改变后不能用旧 QA 收据导出。
 
 新增的 `Windows Steam` 导出预设必须由构建助手在隔离工程使用，不能直接在普通源目录点击导出后宣称已含 Steam DLL。候选只复制明确运行目录，排除 tools/qa/docs/marketing/vendor 原始目录及来源草稿，再安装核对哈希的原生依赖。导出后挂载实际 EXE 内嵌 PCK，核验 `steam` 特性、singleton、60 张图标、官方脚本身份和无开发文件，并执行 EXE 短启动。成品和缓存留在 `.godot/steam_candidates/`，不进入 Git。

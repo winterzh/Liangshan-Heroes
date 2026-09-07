@@ -13,7 +13,7 @@ import subprocess
 import time
 import uuid
 import zipfile
-from run_steam_integration_qa import ROOT, LOCK, install_native, resolve_godot
+from run_steam_integration_qa import ROOT, LOCK, install_native, resolve_godot, resolve_profile_root, create_private_profile
 from steam_candidate_verification import verify
 from contracts.run_content_identity_20260907.build_identity import seed, generate, verify_generated, DERIVED
 from contracts.run_content_identity_20260907.probe_runner import run_locked as probe_content_identity, utilities as identity_utilities
@@ -56,8 +56,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--qa-run", type=Path, required=True)
     parser.add_argument("--godot")
+    parser.add_argument("--profile-root", type=Path, help="Absolute short parent for a new, exclusive private profile")
     parser.add_argument("--run", action="store_true")
     args = parser.parse_args()
+    profile_root = resolve_profile_root(args.profile_root)
     qa = args.qa_run.resolve()
     qa.relative_to((ROOT / ".godot/steam_integration_qa").resolve())
     proof = json.loads((qa / "receipt.json").read_text())
@@ -69,7 +71,7 @@ def main():
         if sha(ROOT / row["path"]) != row["sha256"]:
             raise RuntimeError("Source changed since QA: " + row["path"])
     if not args.run:
-        print(json.dumps({"preflight":True, "source_files":len(records), "godot":str(resolve_godot(args.godot))}))
+        print(json.dumps({"preflight":True, "source_files":len(records), "godot":str(resolve_godot(args.godot)), "profile_root":str(profile_root) if profile_root else None}))
         return
     running = subprocess.check_output(["powershell.exe", "-NoProfile", "-Command", "@(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | ForEach-Object { $_.Id }) | ConvertTo-Json -Compress"], text=True).strip()
     if running and json.loads(running): raise RuntimeError("Godot engine slot occupied")
@@ -96,9 +98,11 @@ def main():
             if key.endswith(("_TEST", "_QA", "_AUDIT")) or key in {"LEVEL", "SCENARIO", "CUSTOM_DEFENSE", "SKIRMISH", "SKIRMISH_AI", "ARENA", "SCREENSHOT_DIR"}:
                 env.pop(key)
         template = Path(os.environ["APPDATA"]) / "Godot/export_templates/4.6.3.stable/windows_release_x86_64.exe"
+        profile = create_private_profile(run, profile_root)
+        receipt["private_profile"] = str(profile)
         for key in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
-            private = run / "profile" / key.lower()
-            private.mkdir(parents=True, exist_ok=True)
+            private = profile / key.lower()
+            private.mkdir()
             env[key] = str(private)
         target = Path(env["APPDATA"]) / "Godot/export_templates/4.6.3.stable/windows_release_x86_64.exe"
         target.parent.mkdir(parents=True)
