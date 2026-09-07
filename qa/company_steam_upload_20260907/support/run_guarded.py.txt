@@ -1,0 +1,58 @@
+"""Outer source/player guard for the current company Steam package run."""
+import argparse, datetime, hashlib, json, os, subprocess, sys
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'tools'))
+from contracts.run_content_identity_20260907.probe_runner import utilities
+util=utilities()
+guard=util.load_helper(util.GUARD,util.GUARD_SHA,'company_steam_source_guard')
+safety=util.load_helper(util.HELPER,util.HELPER_SHA,'company_steam_process_safety')
+p=argparse.ArgumentParser()
+p.add_argument('--phase',choices=['qa','build'],required=True)
+p.add_argument('--qa-run',type=Path)
+a=p.parse_args()
+if a.phase=='build' and not a.qa_run: p.error('build requires --qa-run')
+outer=Path(__file__).parent/(a.phase+'_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S'))
+outer.mkdir(exist_ok=False)
+head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+real_user=Path(os.environ['APPDATA'])/'Godot/app_userdata'/guard.project_name(ROOT)
+code=['tools/run_steam_integration_qa.py','tools/build_steam_candidate.py','tools/steam_candidate_verification.py','tools/contracts/run_content_identity_20260907/probe_runner.py','tools/contracts/run_content_identity_20260907/build_identity.py']
+def tool_hashes(): return {n:hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in code}
+def save(name,value): util.save(outer/name,value)
+safety.require_exclusive_godot()
+assert not (ROOT/'.godot/redraw_rejection_source.lock').exists()
+source=guard.source_receipt(ROOT); players=util.tree(real_user); hashes=tool_hashes()
+save('sources_before.json',source); save('players_before.json',players)
+command=[sys.executable,'-X','utf8','-B',str(ROOT/('tools/run_steam_integration_qa.py' if a.phase=='qa' else 'tools/build_steam_candidate.py')),'--run','--profile-root',r'<PRIVATE_PROFILE_ROOT>']
+if a.phase=='qa': command+=['--native','--visual','--cache-from',str(ROOT/'.godot/steam_integration_qa/company_cache_only_20260907')]
+else: command+=['--qa-run',str(a.qa_run.resolve())]
+receipt={'complete':False,'phase':a.phase,'source_head':head,'command':command,'tool_sha256':hashes,'child_started':False,'child_exit_confirmed':False,'source_unchanged':False,'players_unchanged':False}
+child=None
+try:
+    with (outer/'controller.log').open('xb') as log:
+        child=subprocess.Popen(command,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        receipt.update(child_started=True,child_pid=child.pid)
+        child.wait(timeout=2400)
+        receipt.update(child_exit_confirmed=True,exit_code=child.returncode)
+    raw=(outer/'controller.log').read_text(encoding='utf-8')
+    marked=[json.loads(line) for line in raw.splitlines() if line.startswith('{') and '"run"' in line]
+    assert child.returncode==0 and marked and marked[-1].get('complete') is True,raw[-12000:]
+    receipt['inner']=marked[-1]
+    receipt['complete']=True
+except BaseException as error:
+    receipt['error']=type(error).__name__+': '+str(error)
+finally:
+    if child is not None and child.poll() is None:
+        child.kill(); child.wait(timeout=30)
+        receipt.update(child_exit_confirmed=True,exit_code=child.returncode)
+    try:
+        safety.require_exclusive_godot()
+        after=guard.source_receipt(ROOT); player_after=util.tree(real_user)
+        save('sources_after.json',after); save('players_after.json',player_after)
+        receipt.update(source_unchanged=after==source,players_unchanged=player_after==players,tools_unchanged=tool_hashes()==hashes,lock_released=not (ROOT/'.godot/redraw_rejection_source.lock').exists())
+        assert all(receipt[k] for k in ['source_unchanged','players_unchanged','tools_unchanged','lock_released'])
+    except BaseException as error:
+        receipt.update(complete=False,guard_error=type(error).__name__+': '+str(error))
+    save('receipt.json',receipt)
+    print(json.dumps({'outer':str(outer),**receipt}))
+sys.exit(0 if receipt['complete'] else 1)

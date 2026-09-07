@@ -1,5 +1,7 @@
 # Steam 后台配置与测试分支准备（2026-09-07）
 
+公司续传已恢复正常文件选择：stable `d4728d4` 的候选已生成 Build `25160280`、Depot `5088121` / Manifest `399339942090359717`；新建 `steam-integration` 分支并回读当前 Build 为 `25160280`，`default` 保持 `25154403`。本次上传未要求先发布仅新增 Workshop Depot 的待发布配置，服务端 4 文件均与本地候选匹配。60 张成就图标和其余 Steamworks 草稿仍未发布，双账号联调仍待执行。精确收据见[公司 Steam QA](../qa/company_steam_upload_20260907/README.md)。下方内容保留上传前的历史观察。
+
 早上七点再次核对：30项中英文已保存、图标仍缺，正常首项filechooser.setFiles仍返回Not allowed；builds只有default/macos，default仍为25154403，上传页仍提示未发布Depot配置。新一轮候选与公司接续见[早间交接](MORNING_HANDOFF_20260907.md)。本页df7ed18包保持历史测试候选身份，不自动替换成后续源码包。
 
 本页记录本轮后台已保存草稿与尚缺的服务端/实机证据。App 为 `5088120`，Windows Depot 为 `5088121`。用户已确认后台配置发布、独立测试分支上传和双账号联调；该授权继续有效。当前仍未发布后台配置、未上传本轮候选 ZIP，测试分支创建未成功。后台实际回读的 default 仍是 Build `25154403`，其已上线内容见 [最近 Windows 更新](STEAM_UPDATE_20260907.md)。

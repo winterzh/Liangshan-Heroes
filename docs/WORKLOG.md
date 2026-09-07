@@ -1,3 +1,15 @@
+## 2026-09-07 公司 Steam 测试分支上传完成
+
+已将 stable `d4728d413ee5ec2df27e132ab4297cf096da363b` 的唯一核验候选通过标准 HTTP 流程上传到 App `5088120`。Steam 生成 Build `25160280`、Windows Depot `5088121`、Manifest `399339942090359717`，并已将该 Build 设置到新建的 `steam-integration` 测试分支；canonical builds 页回读分支当前值为 `25160280`，`default` 保持 `25154403`。
+
+服务端 manifest 恰好 4 个文件、总计 291,960,918 字节，EXE、GodotSteam release DLL、`steam_api64.dll` 和许可证的逐项大小/SHA1 均与本地候选一致。完整收据见[公司 Steam QA](../qa/company_steam_upload_20260907/README.md)。本轮没有发布仍缺 60 张图标的 Steamworks 成就/工坊配置，也没有完成真实账号、Steam 客户端下载、完整续局、性能或真人试玩验收。
+
+## 2026-09-07 公司新 Steam 候选已验证
+
+源码固定为 stable `d4728d413ee5ec2df27e132ab4297cf096da363b`。本轮原生合同 182 项（包含六张界面），实际包 65 项、发行 EXE 与两枚 release DLL 启动、源码与 PCK 身份各 10 项通过；内外层源码/真实玩家/工具保护通过、进程退出且锁已释放。
+
+唯一候选 ZIP 为 221,072,864 字节，SHA256 `a2ad089583e332e9149f59ba91d197b756fc117ad2a8bbb36a94a8a13f73740f`；只含 EXE、两枚发行 DLL 和许可证。[本轮 QA](../qa/company_steam_upload_20260907/README.md)保留精确原件、来源映射和逐文件哈希。本地打包已完成，Steam 上传状态在该 QA 单列，不能把此项构建结果当作服务端上线或真实账号验收。
+
 ## 2026-09-07 公司 Steam 构建准备
 
 用户要求打包上传。为避免公司 Windows 私有 shader cache 路径过长，Steam QA 与构建助手新增可选 `--profile-root`；10 项边界检查及独立审阅通过，保留原生/PCK/身份/源码与玩家保护全部门槛。先冻结工具，再以新收据导出当前源码；结果见[公司 Steam QA](../qa/company_steam_upload_20260907/README.md)。本准备提交未上传 Steam。

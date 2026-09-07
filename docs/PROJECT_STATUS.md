@@ -1,3 +1,7 @@
+## 2026-09-07 Steam 测试分支已上传
+
+当前 stable `d4728d4` 已生成 Steam Build `25160280`，Windows Depot `5088121` / Manifest `399339942090359717`，服务端 4 文件大小和 SHA1 与本地候选一致。新建 `steam-integration` 分支并回读当前 Build 为 `25160280`；公开 `default` 继续使用 `25154403`。本轮只完成候选上传和测试分支激活，60 张成就图标、Steamworks 配置发布、客户端真实启动与双账号联调仍未完成。[上传与构建收据](../qa/company_steam_upload_20260907/README.md)。
+
 ## 2026-09-07 公司端接续已恢复
 
 公司独立 stable checkout 已同步早间交接，并验证 Godot 4.6.3 导入、普通主菜单和标准驻守实际进入场景。首次导入的资源/脚本 UID 已补齐，跨电脑换行和 QA 自动生成物已分类处理；见[公司 QA](../qa/company_handoff_20260907/README.md)。正式恢复组件仍为 15 个；本轮没有推进整局续玩、性能或真人试玩门槛。
