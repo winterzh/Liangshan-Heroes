@@ -1,3 +1,10 @@
+## 2026-09-07 恢复图与待发送事务
+
+- scripts/run_battle_root_state.gd、run_remaining_effect_state.gd、run_item_cast_flow_state.gd、run_visual_graph.gd：四个已验证的局部恢复模块；整体世界工厂仍未完成。
+- docs/STABILIZATION_RESUME_GRAPH_20260907.md、qa/stabilization_resume_graph_20260907/：原生有限范围结果、历史失败、冻结候选及五脚本安装收据。
+- docs/STEAM_RECEIPT_OUTBOX_DRAFT_20260907.md、tools/contracts/steam_receipt_outbox_draft_20260907/：原生62项的纯事务模型和恢复执行说明。
+- docs/STABILIZATION_DUST_FILTER_QA_20260907.md、qa/stabilization_dust_filter_20260907/：原生数据等价与六次正常性能筛选；候选已停止。
+
 ## 2026-09-07 稳定编号与后续基础
 
 - `docs/STABILIZATION_IDENTITY_INTEGRATION_20260907.md`、`qa/stabilization_identity_integration_20260907/`：25生产脚本、9正常开局、45桥接行为和精确接入收据。

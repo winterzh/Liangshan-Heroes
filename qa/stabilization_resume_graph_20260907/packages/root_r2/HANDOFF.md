@@ -1,0 +1,1 @@
+Root v2 R2 separates content definition keys from stable entity IDs. The previous native failure is retained. Stable references and identity cache validation remain strict decimal. Added actual hero stat producer and nonnumeric item key fixture to the existing full 105-field roundtrip; no complete world/clock claim. Same native entry/suite/prefix as parent.

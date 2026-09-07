@@ -1,0 +1,23 @@
+{
+  "status": "candidate_static_and_pure_data_only",
+  "source_head": "c0285f91d4131e7631707fa59903d4b61fd460bb",
+  "baseline_receipt_sha256": "0c2674f485553560cc93664836c17b2dc78af7e737ae2f8788f2ea2b8e34ecc7",
+  "path": "scripts/unit.gd",
+  "git_blob_oid": "c95d2b012a37f5aaa63d02b4696cd7fb912224d3",
+  "before_sha256": "b0ffcb7ada64918d21f91fe7dfd5e7500c59b5545150fdf90294ccc8a8bd253f",
+  "candidate_sha256": "395c06f9dbca1e407a27326dab5f7e8049048015152667d09ee502740dad3cee",
+  "patch_sha256": "68e4ad4b4ca41186180e0face9e0282776707c5b38d220a130610c0deea4553d",
+  "changed_methods": [
+    "_phys_body"
+  ],
+  "all_other_methods_byte_identical": true,
+  "rng_and_health_methods_byte_identical": true,
+  "replacement_contains_no_rng_or_health_calls": true,
+  "original_decrement_pass_preserved": true,
+  "new_array_and_order_preserved": true,
+  "old_block": "\tif not _dust.is_empty():\n\t\tfor d in _dust:\n\t\t\td.t -= delta\n\t\t_dust = _dust.filter(func(d): return d.t > 0.0)\n\t\t_request_redraw()\n",
+  "new_block": "\tif not _dust.is_empty():\n\t\tfor d in _dust:\n\t\t\td.t -= delta\n\t\tvar alive_dust: Array = []\n\t\tfor dust_particle in _dust:\n\t\t\tif dust_particle.t > 0.0:\n\t\t\t\talive_dust.append(dust_particle)\n\t\t_dust = alive_dust\n\t\t_request_redraw()\n",
+  "production_modified": false,
+  "godot_runtime_tested": false,
+  "normal_ab_tested": false
+}

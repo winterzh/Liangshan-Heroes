@@ -1,0 +1,20 @@
+--- r4/visual_smoke.gd
++++ r5/visual_smoke.gd
+@@ -159,6 +159,7 @@
+ 	var source: Variant = _shell()
+ 	var target: Variant = _shell()
+ 	var stage: Node2D = _stage()
++	var restored_stage: Node2D = _stage()
+ 	source.fx_root = Node2D.new()
+ 	source.fx_root.name = "FxRoot"
+ 	source.fx_root.z_index = 7
+@@ -237,7 +238,8 @@
+ 		_check("trap consumer shares real marker and preserves arming state", target._traps[0].fx.get_script() == scripts.battle.TrapMarkerFx and target._traps[0].arm_t == source._traps[0].arm_t and target._traps[0].fx.armed == source._traps[0].fx.armed)
+ 	prepared.identity.release_tombstones()
+ 	new_visual.release_expired_fx()
+-	stage.add_child(target.fx_root)
++	restored_stage.add_child(target.fx_root)
++	_check(kind + " distinct stage parents preserve identical transform and exact root name", stage != restored_stage and stage.global_transform == restored_stage.global_transform and source.fx_root.get_parent() == stage and target.fx_root.get_parent() == restored_stage and source.fx_root.name == target.fx_root.name and String(target.fx_root.name) == "FxRoot")
+ 	if not _ok(kind + " activate exact paused visual graph", new_visual.activate()): return false
+ 	var target_ids: Dictionary = {}
+ 	for id: String in prepared.id_to_unit: target_ids[prepared.id_to_unit[id]] = id

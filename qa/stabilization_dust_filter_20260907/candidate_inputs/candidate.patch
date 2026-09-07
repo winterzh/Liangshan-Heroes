@@ -1,0 +1,25 @@
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -1498,17 +1498,21 @@
+ 		_anim_t += delta * (13.0 if is_cavalry else 9.5) * MOVE_SCALE * (base_speed / 72.0)
+ 		# 每半个步频相位 = 一次落脚 → 扬尘
+ 		if floori(_anim_t / PI) != floori(prev / PI):
+ 			_spawn_dust()
+ 		_queue_motion_redraw()
+ 	if not _dust.is_empty():
+ 		for d in _dust:
+ 			d.t -= delta
+-		_dust = _dust.filter(func(d): return d.t > 0.0)
++		var alive_dust: Array = []
++		for dust_particle in _dust:
++			if dust_particle.t > 0.0:
++				alive_dust.append(dust_particle)
++		_dust = alive_dust
+ 		_request_redraw()
+ 	if _lunge > 0.0:
+ 		var prev_l := _lunge
+ 		_lunge = maxf(0.0, _lunge - delta * _swing_speed)
+ 		if not _pending_done and prev_l > _hit_at and _lunge <= _hit_at:
+ 			_deal_hit()
+ 			if not _gameplay_rng_fault().is_empty(): return
+ 		_request_redraw()

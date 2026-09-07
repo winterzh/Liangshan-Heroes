@@ -1,0 +1,65 @@
+"""Archive completed dust evidence without caches, profiles or unrelated sources."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+sys.dont_write_bytecode = True
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+sys.path.insert(0,str(ROOT/'tools'))
+import run_stabilization_performance as guard
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--ab-run',type=Path,required=True)
+    args = parser.parse_args()
+    guard.no_links(args.ab_run)
+    ab = args.ab_run.resolve()
+    need = guard.need
+    need(ab.parent == (ROOT/'.godot/stabilization_performance').resolve() and ab.name.startswith('dust_ab_'), 'Wrong A/B source')
+    receipt = json.loads((ab/'receipt.json').read_text(encoding='utf-8'))
+    need(receipt.get('lock_released') and not receipt.get('godot_pids_after'), 'A/B has not closed')
+    destination = ROOT/'qa/stabilization_dust_filter_20260907'
+    guard.no_links(destination); destination.mkdir(parents=True,exist_ok=False)
+    (destination/'.gdignore').write_bytes(b'')
+    entries = []
+    def copy(source,relative):
+        guard.no_links(source)
+        raw = source.read_bytes()
+        target = destination/relative
+        need(not target.exists(), 'Duplicate archive target')
+        target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes(raw)
+        entries.append({'path':relative,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})
+    data = ROOT/'.godot/stabilization_performance/dust_data_20260907T071006Z_c95a6641'
+    for name,source in [('native_data',data),('normal_ab',ab)]:
+        for path in sorted(source.iterdir()):
+            if path.is_file(): copy(path,name+'/'+path.name)
+    for path in sorted((data/'project').iterdir()):
+        if path.is_file(): copy(path,'native_data/project/'+path.name)
+    source_manifest = json.loads((ab/'source_manifest.json').read_text(encoding='utf-8'))
+    for variant in ('A','B'):
+        for name,digest in source_manifest['variants'][variant].items():
+            if name in ('scripts/unit.gd','project.godot','.polish_frozen_source.json') or name.startswith('tools/'):
+                source = ab/variant/name
+                need(hashlib.sha256(source.read_bytes()).hexdigest() == digest, 'Executed source changed')
+                copy(source,'normal_ab/executed_projects/'+variant+'/'+name)
+    for label,source in [('candidate_inputs',ROOT/'scratchpad/stabilization_dust_filter_20260907'),('ab_inputs',HERE)]:
+        frozen = json.loads((source/'freeze.json').read_text(encoding='utf-8'))
+        for name,digest in frozen['inputs'].items():
+            need(hashlib.sha256((source/name).read_bytes()).hexdigest() == digest,'Frozen archive input changed')
+            copy(source/name,label+'/'+name)
+        copy(source/'freeze.json',label+'/freeze.json')
+    copy(ROOT/'.godot/stabilization_performance/20260907T053341Z_cd6e93a0/receipt.json','original_m1_receipt.json')
+    copy(Path(__file__),'archive_script.py.txt')
+    for item in entries:
+        need(hashlib.sha256((destination/item['path']).read_bytes()).hexdigest() == item['sha256'],'Archive verification failed')
+    manifest = {'source_head':receipt['source_head'],'native_data_scope':'1007 pure-data cases; no Unit timestep',
+        'normal_ab_complete':receipt['complete'],'normal_ab_decision':receipt.get('analysis',{}).get('decision'),
+        'excluded':'Godot caches, private profiles, real player files, complete asset copies, unrelated production sources',
+        'archive_bytes_verified':True,'files':entries}
+    guard.save(destination/'archive_manifest.json',manifest)
+    print(json.dumps({'archive':str(destination),'files':len(entries),'MiB':sum(x['bytes'] for x in entries)/1048576,'verified':True}))
+
+if __name__ == '__main__': main()

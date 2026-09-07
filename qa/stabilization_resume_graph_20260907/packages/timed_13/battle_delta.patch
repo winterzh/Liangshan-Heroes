@@ -1,0 +1,66 @@
+--- frozen_visual/battle.gd
++++ timed_visual/battle.gd
+@@ -13462,6 +13462,7 @@
+ 	var _seed := 0
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		dur = 0.7
+ 		t = 0.7
+ 		_seed = (int(position.x) * 13 + int(position.y) * 7) % 360
+@@ -13828,6 +13829,7 @@
+ 	var _arrows: Array = []       # 每根：{p:Vector2(屏幕落点偏移), delay:float}
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		dur = 1.2
+ 		t = 1.2
+ 		for i in range(N):
+@@ -13878,6 +13880,7 @@
+ 	var _ang := 0.0
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		travel = 0.24 if (pin or big) else 0.18
+ 		dur = travel + (0.6 if (pin or big) else 0.34)
+ 		t = dur
+@@ -13940,6 +13943,7 @@
+ 	var _embers: Array = []
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		dur = 0.85
+ 		t = 0.85
+ 		var n := 9 + int(rad / 14.0)
+@@ -14628,6 +14632,7 @@
+ 	var _embers: Array = []
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		dur = life
+ 		t = life
+ 		position = start_w
+@@ -14700,6 +14705,7 @@
+ 	var _embers: Array = []
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		dur = life
+ 		t = life
+ 		var n := (5 + int(rad / 20.0)) if lite else (10 + int(rad / 10.0))
+@@ -15049,6 +15055,7 @@
+ 	const N := 10   # 10×10 = 100 块碎片：块切得细才有「一块块塌下来」的颗粒感
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		dur = 1.1
+ 		t = dur
+ 
+@@ -15653,6 +15660,7 @@
+ 	var _ph := 0.0
+ 
+ 	func _ready() -> void:
++		if get_meta("_run_restore_prepared", false): return
+ 		dur = life
+ 		t = life
+ 		_ph = float((int(position.x) * 7 + int(position.y) * 3) % 100) * 0.06

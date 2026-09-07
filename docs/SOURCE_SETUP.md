@@ -1,3 +1,9 @@
+## 2026-09-07 恢复模块与失败关闭事务基础
+
+生产新增run_battle_root_state、run_remaining_effect_state、run_item_cast_flow_state、run_visual_graph，使用实际受测字节及原生UID。五脚本/四UID安装收据位于qa/stabilization_resume_graph_20260907；完整玩家保存/继续入口仍未加入，正常启动方式不变。
+
+该QA与尘粒候选QA均以.gdignore隔离并按.gitattributes保持原字节。Steam outbox封存草稿须按SOURCE_PINS恢复原名至全新scratchpad子目录；只含纯模型，不能作为生产磁盘或SDK调用入口。旧overlay freeze的before绑定61f8f55，新阶段须针对当前集成来源重新审查冻结。[范围与原生结果](STABILIZATION_RESUME_GRAPH_20260907.md)。
+
 ## 2026-09-07 稳定编号与隔离验收入口
 
 生产已接入25份稳定编号/驻守v2脚本，与9个正常世界开局、86身份及45桥接行为的受测字节一致。新`tools/run_stabilization_overlay.py`按明确Git生产白名单与外部冻结候选运行单个驱动；`--case-id`只接受冻结launch_contract内案例，所有修改仍留在全新私有工程。旧freeze中的before不能直接套到已更新生产上，下一轮须审查并重锁。

@@ -1,0 +1,762 @@
+{
+  "root_confirmed_production_head": "61f8f557cb19e5f6483f468ba3435767a2108584",
+  "production_scripts_scanned": 96,
+  "matches": {
+    "engine_frame": [
+      {
+        "path": "scripts/battle.gd",
+        "line": 1258,
+        "text": "var fr := int(Engine.get_physics_frames())"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 3999,
+        "text": "var bucket := int(Engine.get_physics_frames() / maxi(1, AI_TICK))"
+      },
+      {
+        "path": "scripts/unit.gd",
+        "line": 1082,
+        "text": "var frame := Engine.get_process_frames()"
+      },
+      {
+        "path": "scripts/unit.gd",
+        "line": 1104,
+        "text": "if entity_id % stride != int(Engine.get_physics_frames()) % stride:"
+      }
+    ],
+    "monotonic_time": [
+      {
+        "path": "scripts/battle.gd",
+        "line": 2469,
+        "text": "var now := Time.get_ticks_usec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 2541,
+        "text": "var _t := Time.get_ticks_usec() if _prof_on else 0"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 2648,
+        "text": "and Time.get_ticks_msec() - _press_ms >= 350 and _drag_from.distance_to(_drag_cur) < 16.0:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 5789,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 5801,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 5814,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 5826,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 5862,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 6398,
+        "text": "var now := Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 9955,
+        "text": "var now := Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14334,
+        "text": "var t := Time.get_ticks_msec() / 1000.0"
+      },
+      {
+        "path": "scripts/campaign_mission.gd",
+        "line": 281,
+        "text": "_stage_started_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/campaign_mission.gd",
+        "line": 715,
+        "text": "\"wall_seconds\":float(Time.get_ticks_msec()-_stage_started_ms)/1000.0,"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 2870,
+        "text": "if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3139,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3258,
+        "text": "if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3608,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3670,
+        "text": "and Time.get_ticks_msec() - _press_ms >= 400:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3735,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3748,
+        "text": "and not _drag_started and Time.get_ticks_msec() - _press_ms >= 350 \\"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3934,
+        "text": "_press_ms = Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3938,
+        "text": "var held := Time.get_ticks_msec() - _press_ms"
+      },
+      {
+        "path": "scripts/sfx.gd",
+        "line": 92,
+        "text": "var now := Time.get_ticks_msec()"
+      },
+      {
+        "path": "scripts/unit.gd",
+        "line": 1059,
+        "text": "var __t0 := Time.get_ticks_usec()"
+      },
+      {
+        "path": "scripts/unit.gd",
+        "line": 1061,
+        "text": "battle._unit_proc_us += Time.get_ticks_usec() - __t0"
+      }
+    ],
+    "native_callback": [
+      {
+        "path": "scripts/android_updater.gd",
+        "line": 116,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 2533,
+        "text": "func _physics_process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 2642,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13122,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13448,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13496,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13618,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13643,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13678,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13740,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 13775,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14303,
+        "text": "func _process(_d: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14324,
+        "text": "func _process(_d: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14369,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14445,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14502,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14534,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14580,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14632,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 14943,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 15360,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 15415,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 15491,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 15532,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 15654,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 15820,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/campaign_art_event.gd",
+        "line": 8,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/campaign_passage.gd",
+        "line": 8,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/campaign_scenery.gd",
+        "line": 253,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/codex.gd",
+        "line": 528,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 1021,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 2643,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 2746,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 2806,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 2862,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3252,
+        "text": "func _process(_delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3664,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3835,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 3926,
+        "text": "func _process(_d: float) -> void:"
+      },
+      {
+        "path": "scripts/liangshan_entrance.gd",
+        "line": 255,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/liangshan_scenery.gd",
+        "line": 642,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/music.gd",
+        "line": 157,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/projectile.gd",
+        "line": 58,
+        "text": "func _physics_process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/rts_camera.gd",
+        "line": 39,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/scenario_editor.gd",
+        "line": 158,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/scenario_editor.gd",
+        "line": 1093,
+        "text": "func _process(_d: float) -> void:"
+      },
+      {
+        "path": "scripts/steam_service.gd",
+        "line": 51,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/unit.gd",
+        "line": 1055,
+        "text": "func _physics_process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/workshop_service.gd",
+        "line": 30,
+        "text": "func _process(delta: float) -> void:"
+      },
+      {
+        "path": "scripts/world_shadow.gd",
+        "line": 139,
+        "text": "func _process(_delta: float) -> void:"
+      }
+    ],
+    "deferred": [
+      {
+        "path": "scripts/android_updater.gd",
+        "line": 233,
+        "text": "_start_request.call_deferred(_cache_bust(_signature_url()), \"signature\")"
+      },
+      {
+        "path": "scripts/android_updater.gd",
+        "line": 290,
+        "text": "begin_download.call_deferred()"
+      },
+      {
+        "path": "scripts/codex.gd",
+        "line": 64,
+        "text": "get_tree().change_scene_to_file.call_deferred(\"res://scenes/menu.tscn\")"
+      },
+      {
+        "path": "scripts/codex.gd",
+        "line": 91,
+        "text": "get_tree().change_scene_to_file.call_deferred(\"res://scenes/menu.tscn\"))"
+      },
+      {
+        "path": "scripts/editor.gd",
+        "line": 126,
+        "text": "search.grab_focus.call_deferred()"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 241,
+        "text": "call_deferred(\"_layout_top_status\")"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 259,
+        "text": "call_deferred(\"_layout_top_status\")"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 611,
+        "text": "call_deferred(\"_layout_skill_rail\")"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 718,
+        "text": "call_deferred(\"_layout_skill_rail\")"
+      },
+      {
+        "path": "scripts/levels/level3_zhujiazhuang.gd",
+        "line": 194,
+        "text": "_second_day.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level3_zhujiazhuang.gd",
+        "line": 222,
+        "text": "_third_day.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level3_zhujiazhuang.gd",
+        "line": 341,
+        "text": "_second_day.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level3_zhujiazhuang.gd",
+        "line": 374,
+        "text": "_third_day.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level3_zhujiazhuang.gd",
+        "line": 734,
+        "text": "_third_day.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level4_lianhuanma.gd",
+        "line": 159,
+        "text": "_deploy_battle.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level4_lianhuanma.gd",
+        "line": 204,
+        "text": "_deploy_battle.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level4_lianhuanma.gd",
+        "line": 548,
+        "text": "_deploy_battle.call_deferred(b)"
+      },
+      {
+        "path": "scripts/levels/level7_kuaihuolin_short.gd",
+        "line": 98,
+        "text": "_verify_hit.call_deferred(b,menshen,menshen.hp+menshen._shield,signature,exposed_left>0,ability_id)"
+      },
+      {
+        "path": "scripts/menu.gd",
+        "line": 30,
+        "text": "get_tree().change_scene_to_file.call_deferred(\"res://scenes/main.tscn\")"
+      },
+      {
+        "path": "scripts/menu.gd",
+        "line": 109,
+        "text": "col.add_child(_mk_module(\"📖  英雄图鉴\", \"108 将 · 立绘 / 技能 / 生平\", UITheme.WARNING, func() -> void: get_tree().change_scene_to_file.call_deferred(\"res://scenes/codex.tscn\")))"
+      },
+      {
+        "path": "scripts/menu.gd",
+        "line": 580,
+        "text": "get_tree().change_scene_to_file.call_deferred(\"res://scenes/scenario_editor.tscn\"))"
+      },
+      {
+        "path": "scripts/menu.gd",
+        "line": 591,
+        "text": "get_tree().change_scene_to_file.call_deferred(\"res://scenes/editor.tscn\"))"
+      },
+      {
+        "path": "scripts/menu.gd",
+        "line": 790,
+        "text": "_on_content_update_available.call_deferred("
+      },
+      {
+        "path": "scripts/menu.gd",
+        "line": 795,
+        "text": "_on_full_package_update.call_deferred(version)"
+      },
+      {
+        "path": "scripts/menu.gd",
+        "line": 797,
+        "text": "_on_content_update_ready.call_deferred("
+      },
+      {
+        "path": "scripts/music.gd",
+        "line": 95,
+        "text": "call_deferred(\"_add_track_buf\", \"calm\", cb)"
+      },
+      {
+        "path": "scripts/music.gd",
+        "line": 97,
+        "text": "call_deferred(\"_add_track_buf\", \"battle\", bb)"
+      }
+    ],
+    "schedule_settings": [
+      {
+        "path": "scripts/app_lifecycle.gd",
+        "line": 12,
+        "text": "process_mode = Node.PROCESS_MODE_ALWAYS"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 17157,
+        "text": "u.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/battle.gd",
+        "line": 17164,
+        "text": "effect.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/campaign_scenery.gd",
+        "line": 23,
+        "text": "process_priority = 1000"
+      },
+      {
+        "path": "scripts/hud.gd",
+        "line": 148,
+        "text": "process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停时 UI（暂停菜单）仍可操作"
+      },
+      {
+        "path": "scripts/levels/level1_huangnigang.gd",
+        "line": 437,
+        "text": "bundle.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/levels/level1_huangnigang.gd",
+        "line": 453,
+        "text": "bundle.process_mode = int(bundle.get_meta(\"tribute_process_mode\", Node.PROCESS_MODE_INHERIT))"
+      },
+      {
+        "path": "scripts/liangshan_scenery.gd",
+        "line": 43,
+        "text": "process_priority = 1000  # 单位物理和特效位置更新之后，再同步绘制高度。"
+      },
+      {
+        "path": "scripts/music.gd",
+        "line": 36,
+        "text": "process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停时音乐继续"
+      },
+      {
+        "path": "scripts/run_cast_flow_state.gd",
+        "line": 225,
+        "text": "battle.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_continuous_effect_state.gd",
+        "line": 179,
+        "text": "battle.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_fog_state.gd",
+        "line": 222,
+        "text": "layer.set_block_signals(true); layer.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_fog_state.gd",
+        "line": 246,
+        "text": "layer.process_priority = activation.priority; layer.process_physics_priority = activation.physics_priority"
+      },
+      {
+        "path": "scripts/run_fog_state.gd",
+        "line": 250,
+        "text": "layer.set_block_signals(activation.signals_blocked); layer.process_mode = activation.mode"
+      },
+      {
+        "path": "scripts/run_graph_identity.gd",
+        "line": 192,
+        "text": "unit.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_li_brawn_axes_state.gd",
+        "line": 232,
+        "text": "fx.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_li_brawn_axes_state.gd",
+        "line": 293,
+        "text": "fx.process_priority = activation.priority"
+      },
+      {
+        "path": "scripts/run_li_brawn_axes_state.gd",
+        "line": 294,
+        "text": "fx.process_physics_priority = activation.physics_priority"
+      },
+      {
+        "path": "scripts/run_li_brawn_axes_state.gd",
+        "line": 302,
+        "text": "fx.process_mode = activation.mode"
+      },
+      {
+        "path": "scripts/run_meteor_wards_state.gd",
+        "line": 234,
+        "text": "battle.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_projectile_state.gd",
+        "line": 215,
+        "text": "projectile.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_projectile_state.gd",
+        "line": 271,
+        "text": "projectile.process_priority = activation.priority"
+      },
+      {
+        "path": "scripts/run_projectile_state.gd",
+        "line": 272,
+        "text": "projectile.process_physics_priority = activation.physics_priority"
+      },
+      {
+        "path": "scripts/run_projectile_state.gd",
+        "line": 280,
+        "text": "projectile.process_mode = activation.mode"
+      },
+      {
+        "path": "scripts/run_scenery_state.gd",
+        "line": 184,
+        "text": "node.process_mode = saved.runtime.process_mode"
+      },
+      {
+        "path": "scripts/run_scenery_state.gd",
+        "line": 185,
+        "text": "node.process_priority = saved.runtime.process_priority"
+      },
+      {
+        "path": "scripts/run_unit_state.gd",
+        "line": 1345,
+        "text": "unit.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/run_unit_state.gd",
+        "line": 1452,
+        "text": "unit.process_priority = activation.priority"
+      },
+      {
+        "path": "scripts/run_unit_state.gd",
+        "line": 1453,
+        "text": "unit.process_physics_priority = activation.physics_priority"
+      },
+      {
+        "path": "scripts/run_unit_state.gd",
+        "line": 1461,
+        "text": "unit.process_mode = activation.mode"
+      },
+      {
+        "path": "scripts/run_zone_effects_state.gd",
+        "line": 195,
+        "text": "battle.process_mode = Node.PROCESS_MODE_DISABLED"
+      },
+      {
+        "path": "scripts/screen.gd",
+        "line": 12,
+        "text": "process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停时也能切全屏"
+      },
+      {
+        "path": "scripts/settings_panel.gd",
+        "line": 15,
+        "text": "process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停态(Esc 菜单)下仍可操作"
+      },
+      {
+        "path": "scripts/steam_service.gd",
+        "line": 27,
+        "text": "process_mode = Node.PROCESS_MODE_ALWAYS"
+      },
+      {
+        "path": "scripts/workshop_service.gd",
+        "line": 15,
+        "text": "process_mode = Node.PROCESS_MODE_ALWAYS"
+      }
+    ]
+  },
+  "source_raw_sha256": {
+    "scripts/android_updater.gd": "d88b22a9dac61c0f04b88bf165a9975821aca931c1c4a5c36106ab02b52b9765",
+    "scripts/app_lifecycle.gd": "3983fcfdce5381ec9f2a5742e77dcaac8df996e73c699b63780069f211ff06cb",
+    "scripts/battle.gd": "a3b3039fa85990dc31add4500fb0435120e3aa5ea3d28de9c09dbf98f850d2d7",
+    "scripts/campaign_art_event.gd": "b62394fda4e81f20217ddfb4e2bc5e941323ebe0f352f209f681b9aa26f3e280",
+    "scripts/campaign_mission.gd": "10e91c3709c12c2f26110ce409a38a6273c5f04ae3a68cbe769a2136f17056e4",
+    "scripts/campaign_passage.gd": "665bf4a589539b4215b6baf8bc130948cd31d886c05f8c62aa1cdc8ea57cc364",
+    "scripts/campaign_scenery.gd": "2a8d3dadc2cd08e45fb7db3f6cbe843eb6ca97959ff96527ecaa8f4e6ed22564",
+    "scripts/codex.gd": "c60a1e57c2b5ade5e4366e176b85e469d1eed28a49587d48b532347c9d5cb7c2",
+    "scripts/editor.gd": "add544ae8adfbddc6f8ebdabfbdffb0a015859f45e8804e50d1fb7bf88cda82a",
+    "scripts/hud.gd": "5ddcb5d6bccb5462c11d507b619e142a9ffd2e32ddb6da57b06f5a005ebdb9df",
+    "scripts/levels/level1_huangnigang.gd": "13be4ee8af9703d9efdc7b56017b19730ea1f13e4f0c43e15babd7b76071a270",
+    "scripts/levels/level3_zhujiazhuang.gd": "cb1175d5c027b1cde74d82fe6904b7598e706a61032cc977577866da570f8707",
+    "scripts/levels/level4_lianhuanma.gd": "92ebdfedb0384d4d3fb1cfd78c8325b18f3beeecfc131861662e386cf038b55f",
+    "scripts/levels/level7_kuaihuolin_short.gd": "56dae04aaafeefcb0dc22331872e14ab0a7d4b7268b6cd17f57b623dbabecba9",
+    "scripts/liangshan_entrance.gd": "3652f81da449a1fd4c63f00d1a5611fb35dc0a1856a2181666773ae6c7ad85ee",
+    "scripts/liangshan_scenery.gd": "2a88c6ff4b5d610093d8dcd8dd0182d9d124a26969d76e154f4be236f20c00c4",
+    "scripts/menu.gd": "cc614512fd226a458fed6d58da6376d78a963d944ebabef6f0a43dfe5002b007",
+    "scripts/music.gd": "8ede75e1ce99803c76f41dcd13513cff480ba2ce6a8acd060ffe4f01b6dd9f8f",
+    "scripts/projectile.gd": "d3c1e0f697fa4ac4ca846fb53a80513b1a1dcb2f19626e64eb7cfaa677e67d03",
+    "scripts/rts_camera.gd": "fabd8a382664f2f70e047d92851daf0ed3b3af6ba982d582e9383e67376f73f2",
+    "scripts/run_cast_flow_state.gd": "127a230696570b50207fd06a3c4e7a4f33dad7bb24d33a333e4d136343976587",
+    "scripts/run_continuous_effect_state.gd": "4b1d6214cd760039110b7154555c06a86ffd8ea9dbeb6ca6da8102e24bb2726d",
+    "scripts/run_fog_state.gd": "caef97f9a10ca7dfaa39bd51a997c1bce8eb5575e7210a4a085ccfba57567d30",
+    "scripts/run_graph_identity.gd": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+    "scripts/run_li_brawn_axes_state.gd": "cd8662a38012cc4739e403a4b9eb12023c55eb5bf0d750cbf6640b063f591fde",
+    "scripts/run_meteor_wards_state.gd": "35d7ed60320167d1c72e840a2ce6193fe6ea3bba62abac319033a4bcc3636fa3",
+    "scripts/run_projectile_state.gd": "ad39e3f107fa2a08511e90500fae853d4c203f39b8dbb69c467e8cb4db5bf662",
+    "scripts/run_scenery_state.gd": "3806fdfde0fec6b7574a37834fd047395e8c4dd963e82657b560b9ca89cf64e6",
+    "scripts/run_unit_state.gd": "976130a3da822907d6d29778b61f71d77009c043c06d06616cf7f237409280f7",
+    "scripts/run_zone_effects_state.gd": "69c66e349fbb508673856e6377e7fe24b3c76a4adc300cc1e98c0bee70c78c38",
+    "scripts/scenario_editor.gd": "78a4e3d068f21ea446caf102504f0e4318c2b342d42d789bfd09a486bf513ca9",
+    "scripts/screen.gd": "c060f120bc83f57a5e7ac06c1f409e4a53e780d813fa23a3e3182d422232e060",
+    "scripts/settings_panel.gd": "89ff6ccc94314d7d489ba7703b7e210c1b846286df52a66c90a7d9405b1bba7d",
+    "scripts/sfx.gd": "1c98c1a0daf2e531e0ca50b845ec0292a21462f8a73d970271dd1056fbec2ad0",
+    "scripts/steam_service.gd": "6948d2cf1678d1e91eef6c8c3644af336d8105d70977eac0221b5ed713a68998",
+    "scripts/unit.gd": "76639d3b467872356d4923f683da946968f16ee3906b5d08ea2af7fefba3a142",
+    "scripts/workshop_service.gd": "9028e3f30ad098135400aa7efc66d7608154c7f54db608fb4f9c91d503f154e1",
+    "scripts/world_shadow.gd": "4418006242c54a8ed14ab1c636772e8d8083f786d7d0f575285d47c817733b19"
+  },
+  "scope": "All production scripts/*.gd recursively; lexical inventory of listed scheduling constructs, not a complete dynamic side-effect proof."
+}

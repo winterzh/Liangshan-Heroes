@@ -1,0 +1,582 @@
+extends RefCounted
+## Root data only; the outer transaction owns the real restore-only factory.
+## No _ready, setup, orders, grid rebuild, damage, RNG draws or inventory restore.
+const SCHEMA := "defense_battle_root_v2"
+const MAX_ENTITIES := 4096
+const MAX_CACHE := 8192
+const MAX_I64 := 9223372036854775807
+const MAX_ENTITY_ID := "9223372036854775806"
+const PAYLOAD_FIELDS := ["values", "references", "selection", "groups", "grids", "identities", "blockers", "eco", "clock_values", "clocks", "focus"]
+# Generated from a reviewed explicit list; no runtime source reflection.
+const VALUE_TYPES := {
+	"ai_friendly": TYPE_BOOL,
+	"_autocam_enabled": TYPE_BOOL,
+	"_autocam_active": TYPE_BOOL,
+	"_lite_fx": TYPE_BOOL,
+	"_no_opt": TYPE_BOOL,
+	"track_hero_combat_stats": TYPE_BOOL,
+	"economy": TYPE_BOOL,
+	"_click_fx_attack": TYPE_BOOL,
+	"_amove_armed": TYPE_BOOL,
+	"_patrol_armed": TYPE_BOOL,
+	"_repair_armed": TYPE_BOOL,
+	"_garrison_armed": TYPE_BOOL,
+	"_touch_mode": TYPE_BOOL,
+	"_dragging": TYPE_BOOL,
+	"_box_mode": TYPE_BOOL,
+	"_panning": TYPE_BOOL,
+	"next_entity_id": TYPE_INT,
+	"_autocam_review_idx": TYPE_INT,
+	"_ai_spawn_serial": TYPE_INT,
+	"_ai_tick_frame": TYPE_INT,
+	"_eco_last_wood": TYPE_INT,
+	"_eco_trap_lane": TYPE_INT,
+	"_blocker_cache_revision": TYPE_INT,
+	"_blocker_query_budget": TYPE_INT,
+	"_mob_count": TYPE_INT,
+	"_sep_phase": TYPE_INT,
+	"_impact_fx_frame": TYPE_INT,
+	"_damage_fx_frame": TYPE_INT,
+	"_ground_fire_visuals": TYPE_INT,
+	"_death_remains_serial": TYPE_INT,
+	"phase": TYPE_INT,
+	"kills": TYPE_INT,
+	"gold": TYPE_INT,
+	"wood": TYPE_INT,
+	"pop_cap": TYPE_INT,
+	"current_age": TYPE_INT,
+	"_ward_serial": TYPE_INT,
+	"_ability_slot": TYPE_INT,
+	"_item_slot": TYPE_INT,
+	"_hall_page": TYPE_INT,
+	"_idle_i": TYPE_INT,
+	"_last_group_key": TYPE_INT,
+	"_mission_order_token_seq": TYPE_INT,
+	"_autocam_dwell": TYPE_FLOAT,
+	"_autocam_target_zoom": TYPE_FLOAT,
+	"_eco_t": TYPE_FLOAT,
+	"_eco_wood_stall": TYPE_FLOAT,
+	"_eco_trap_cd": TYPE_FLOAT,
+	"_last_hb": TYPE_FLOAT,
+	"_stealth_acc": TYPE_FLOAT,
+	"_ecast_acc": TYPE_FLOAT,
+	"tech_atk": TYPE_FLOAT,
+	"tech_hp": TYPE_FLOAT,
+	"hero_tech_atk": TYPE_FLOAT,
+	"hero_tech_hp": TYPE_FLOAT,
+	"tech_gather": TYPE_FLOAT,
+	"_click_fx_t": TYPE_FLOAT,
+	"_demolish_armed_t": TYPE_FLOAT,
+	"_alert_t": TYPE_FLOAT,
+	"_autocam_target_pos": TYPE_VECTOR2,
+	"_drag_from": TYPE_VECTOR2,
+	"_click_fx_pos": TYPE_VECTOR2,
+	"_alert_pos": TYPE_VECTOR2,
+	"_drag_cur": TYPE_VECTOR2,
+	"_last_tap_pos": TYPE_VECTOR2,
+	"_unit_draw_rect": TYPE_RECT2,
+	"_ability_armed": TYPE_STRING,
+	"_item_armed": TYPE_STRING,
+	"_build_armed": TYPE_STRING,
+	"_trap_armed": TYPE_STRING,
+	"_worker_cat": TYPE_STRING,
+	"_hall_cat": TYPE_STRING,
+	"hero_kills": TYPE_DICTIONARY,
+	"hero_combat_stats": TYPE_DICTIONARY,
+	"_ability_owner_cache": TYPE_DICTIONARY,
+	"_active_ability_cache": TYPE_DICTIONARY,
+	"_hero_active_ability_cache": TYPE_DICTIONARY,
+	"hero_progress": TYPE_DICTIONARY,
+	"hero_item_progress": TYPE_DICTIONARY,
+	"lit_cells": TYPE_DICTIONARY,
+	"faction_res": TYPE_DICTIONARY,
+	"faction_gather_mult": TYPE_DICTIONARY,
+	"_tech_done": TYPE_DICTIONARY,
+	"_camera_locs": TYPE_DICTIONARY,
+}
+const ROOT_REFERENCE := ["_autocam_review_unit", "_ability_caster", "_item_caster", "_active", "_inspect_unit"]
+const ROOT_REFERENCE_LIST := ["selection"]
+const ROOT_GROUPS := ["_groups"]
+const ROOT_SPATIAL_GRID := ["_grid", "_mob_grid", "_body_grid_liang", "_body_grid_guan"]
+const ROOT_STABLE_IDENTITY_MAP := ["_focus_counts", "_res_block_cache"]
+const ROOT_BLOCKER_CACHE := ["_blocker_cache"]
+const ROOT_ECO_CACHE := ["_eco_lane_cache"]
+const ROOT_ENGINE_CLOCK := ["_res_block_frame", "_eco_lane_cache_bucket"]
+const ROOT_INPUT_CLOCK := ["_last_group_time", "_press_ms", "_last_tap_ms"]
+const ROOT_INFINITY_SENTINEL := ["_autocam_focus"]
+const EXTERNAL_FIELDS := ["level", "mission", "_official_context", "_steam_run_id", "_gameplay_rng", "_gameplay_rng_issue", "_gameplay_rng_start_kind", "_gameplay_content_identity", "_defs", "_abilities", "_items", "next_item_uid", "world", "map", "hud", "camera", "units_root", "fx_root", "overlay", "units", "_death_remains", "_death_remains_atlas", "_death_remains_atlas_checked", "_prof_on", "_prof", "_prof_frames", "_prof_print_acc", "_unit_proc_us", "fog", "_vision", "_sight_now", "_reveal_t", "_vision_img", "_fog_tex", "_fog_layer", "_fog_t", "_ground_dots", "_hua_snipe_dots", "_lin_duels", "_chrono_zones", "_orbit_zones", "_meteor_zones", "_gong_lines", "_ice_walls", "_wards", "_fire_trails", "_bolts", "_walk_casts", "_channels", "_pending_casts", "_pending_item_casts", "_walk_item_casts", "_traps", "_smoke", "_smoke_t", "_allow_touch", "_target_cursor", "_cur_attack", "_cur_gather_wood", "_cur_gather_gold", "_cur_repair", "_cur_select", "_cur_garrison", "_hover_kind", "_cursor_resources_released"]
+const ALL_DECLARATIONS := ["level", "mission", "_official_context", "_steam_run_id", "_gameplay_rng", "_gameplay_rng_issue", "_gameplay_rng_start_kind", "_gameplay_content_identity", "_defs", "_abilities", "_items", "next_item_uid", "next_entity_id", "world", "map", "hud", "camera", "units_root", "fx_root", "overlay", "ai_friendly", "_autocam_enabled", "_autocam_active", "_autocam_dwell", "_autocam_target_pos", "_autocam_target_zoom", "_autocam_focus", "_autocam_review_idx", "_autocam_review_unit", "_ai_spawn_serial", "_ai_tick_frame", "_eco_t", "_eco_last_wood", "_eco_wood_stall", "_eco_trap_cd", "_eco_trap_lane", "_eco_lane_cache_bucket", "_eco_lane_cache", "_last_hb", "units", "_grid", "_mob_grid", "_body_grid_liang", "_body_grid_guan", "_focus_counts", "_res_block_cache", "_res_block_frame", "_blocker_cache", "_blocker_cache_revision", "_blocker_query_budget", "_lite_fx", "_mob_count", "_sep_phase", "_impact_fx_frame", "_damage_fx_frame", "_ground_fire_visuals", "_unit_draw_rect", "_death_remains", "_death_remains_atlas", "_death_remains_atlas_checked", "_death_remains_serial", "_no_opt", "_stealth_acc", "_ecast_acc", "_prof_on", "_prof", "_prof_frames", "_prof_print_acc", "_unit_proc_us", "selection", "phase", "kills", "hero_kills", "track_hero_combat_stats", "hero_combat_stats", "_ability_owner_cache", "_active_ability_cache", "_hero_active_ability_cache", "hero_progress", "hero_item_progress", "lit_cells", "economy", "gold", "wood", "pop_cap", "current_age", "faction_res", "faction_gather_mult", "_tech_done", "tech_atk", "tech_hp", "hero_tech_atk", "hero_tech_hp", "tech_gather", "fog", "_vision", "_sight_now", "_reveal_t", "_vision_img", "_fog_tex", "_fog_layer", "_fog_t", "_dragging", "_drag_from", "_click_fx_pos", "_click_fx_t", "_click_fx_attack", "_amove_armed", "_patrol_armed", "_repair_armed", "_garrison_armed", "_ability_armed", "_ability_caster", "_ground_dots", "_hua_snipe_dots", "_lin_duels", "_chrono_zones", "_orbit_zones", "_meteor_zones", "_gong_lines", "_ice_walls", "_wards", "_ward_serial", "_fire_trails", "_bolts", "_walk_casts", "_channels", "_pending_casts", "_ability_slot", "_item_armed", "_item_caster", "_item_slot", "_pending_item_casts", "_walk_item_casts", "_build_armed", "_trap_armed", "_worker_cat", "_hall_page", "_hall_cat", "_traps", "_active", "_inspect_unit", "_demolish_armed_t", "_alert_t", "_alert_pos", "_idle_i", "_groups", "_last_group_key", "_last_group_time", "_camera_locs", "_smoke", "_smoke_t", "_touch_mode", "_allow_touch", "_press_ms", "_box_mode", "_panning", "_drag_cur", "_last_tap_ms", "_last_tap_pos", "_target_cursor", "_cur_attack", "_cur_gather_wood", "_cur_gather_gold", "_cur_repair", "_cur_select", "_cur_garrison", "_hover_kind", "_cursor_resources_released", "_mission_order_token_seq"]
+var _codec: Variant
+var _battle_script: Script
+var _unit_script: Script
+var _level_script: Script
+var _inventory_check: Callable
+var _encode_id: Callable
+var _validate_id: Callable
+var _decode_id: Callable
+var _bound: Dictionary = {}
+
+func _init(codec_script: Script, battle_script: Script, unit_script: Script, level_script: Script,
+		inventory_check: Callable, encode_identity: Callable, validate_identity: Callable, decode_identity: Callable) -> void:
+	_codec = codec_script.new()
+	_battle_script = battle_script; _unit_script = unit_script; _level_script = level_script
+	_inventory_check = inventory_check
+	_encode_id = encode_identity; _validate_id = validate_identity; _decode_id = decode_identity
+
+func _bad(code: String, field: String = "") -> Dictionary:
+	return {"ok": false, "code": code, "field": field, "complete_battle": false}
+
+func _good(value: Variant) -> Dictionary: return {"ok": true, "value": value}
+
+func _fields(value: Variant, names: Array) -> bool:
+	if typeof(value) != TYPE_DICTIONARY or value.size() != names.size(): return false
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in names: return false
+	return true
+
+func _id(value: Variant) -> bool:
+	if typeof(value) != TYPE_STRING or value.is_empty() or value.length() > MAX_ENTITY_ID.length(): return false
+	if value.unicode_at(0) < 49 or value.unicode_at(0) > 57: return false
+	for i in range(1, value.length()):
+		if value.unicode_at(i) < 48 or value.unicode_at(i) > 57: return false
+	return value.length() < MAX_ENTITY_ID.length() or value <= MAX_ENTITY_ID
+
+func _node(value: Variant, script: Script) -> bool:
+	return typeof(value) == TYPE_OBJECT and is_instance_valid(value) and value is Node and value.get_script() == script and not value.is_queued_for_deletion()
+
+func _known(ids: Dictionary) -> Dictionary:
+	if ids.size() > MAX_ENTITIES: return _bad("ENTITY_LIMIT")
+	for key in ids:
+		if not _id(key): return _bad("ENTITY_ID")
+	return {"ok": true}
+
+func _registry(registry: Dictionary, inverse: bool = false) -> Dictionary:
+	if registry.size() > MAX_ENTITIES: return _bad("ENTITY_LIMIT")
+	var seen: Dictionary = {}
+	for key in registry:
+		var object: Variant = registry[key] if inverse else key
+		var stable: Variant = key if inverse else registry[key]
+		if not _node(object, _unit_script) or not _id(stable): return _bad("ENTITY_REGISTRY")
+		if str(object.entity_id) != stable: return _bad("ENTITY_FIELD_REGISTRY")
+		var unique: Variant = object if inverse else stable
+		if seen.has(unique): return _bad("ENTITY_REGISTRY_DUPLICATE")
+		seen[unique] = true
+	return {"ok": true}
+
+func _tag(value: Variant, registry: Dictionary) -> Dictionary:
+	if typeof(value) == TYPE_NIL: return _good({"state": "none"})
+	if typeof(value) != TYPE_OBJECT: return _bad("UNIT_REFERENCE")
+	if not is_instance_valid(value): return _good({"state": "expired"})
+	if not _node(value, _unit_script) or not registry.has(value): return _bad("UNIT_NOT_REGISTERED")
+	return _good({"state": "entity", "id": registry[value]})
+
+func _tag_valid(tag: Variant, ids: Dictionary) -> bool:
+	if typeof(tag) != TYPE_DICTIONARY or typeof(tag.get("state")) != TYPE_STRING: return false
+	if tag.state in ["none", "expired"]: return _fields(tag, ["state"])
+	return tag.state == "entity" and _fields(tag, ["state", "id"]) and _id(tag.id) and ids.has(tag.id)
+
+func _tags(values: Variant, registry: Dictionary, capture_mode: bool) -> Dictionary:
+	if typeof(values) != TYPE_ARRAY or values.size() > MAX_CACHE: return _bad("REFERENCE_ARRAY")
+	var output: Array = []
+	for value in values:
+		if capture_mode:
+			var tag: Dictionary = _tag(value, registry)
+			if not tag.ok: return tag
+			output.append(tag.value)
+		else:
+			if not _tag_valid(value, registry): return _bad("REFERENCE_TAG")
+			output.append(value)
+	return _good(output)
+
+func _identity_rows(value: Variant, capture_mode: bool, bool_values: bool = false, lane_count: int = -1) -> Dictionary:
+	if (capture_mode and typeof(value) != TYPE_DICTIONARY) or (not capture_mode and typeof(value) != TYPE_ARRAY): return _bad("IDENTITY_MAP")
+	if value.size() > MAX_CACHE: return _bad("IDENTITY_MAP_LIMIT")
+	var rows: Array = []
+	var seen: Dictionary = {}
+	for key in value:
+		var stable: Variant
+		var datum: Variant
+		if capture_mode:
+			if typeof(key) != TYPE_INT or key <= 0 or key >= MAX_I64: return _bad("STABLE_UNIT_ID")
+			stable = str(key); datum = value[key]
+		else:
+			if not _fields(key, ["id", "value"]): return _bad("IDENTITY_ROW")
+			stable = key.id; datum = key.value
+		if not _id(stable): return _bad("STABLE_UNIT_ID")
+		if seen.has(stable): return _bad("DUPLICATE_CACHE_ID")
+		seen[stable] = true
+		if bool_values:
+			if typeof(datum) != TYPE_BOOL: return _bad("CACHE_BOOL")
+		else:
+			if typeof(datum) != TYPE_INT: return _bad("CACHE_INTEGER")
+			if lane_count >= 0:
+				if datum < -1 or datum >= lane_count: return _bad("CACHE_LANE_INDEX")
+			elif datum < 0: return _bad("CACHE_NEGATIVE_COUNT")
+		rows.append({"id": stable, "value": datum})
+	return _good(rows)
+
+func _allocator_bounds(raw: Dictionary, known: Dictionary) -> Dictionary:
+	var next_id: int = raw.values.next_entity_id
+	for stable: String in known:
+		if stable.to_int() >= next_id: return _bad("ENTITY_COUNTER_BOUND")
+	for name: String in ROOT_STABLE_IDENTITY_MAP:
+		for row: Dictionary in raw.identities[name]:
+			if String(row.id).to_int() >= next_id: return _bad("CACHE_COUNTER_BOUND", name)
+	if not raw.eco.is_empty():
+		for row: Dictionary in raw.eco.assignments:
+			if String(row.id).to_int() >= next_id: return _bad("CACHE_COUNTER_BOUND", "_eco_lane_cache")
+	return {"ok": true}
+
+func _reference_map(value: Variant, registry: Dictionary, capture_mode: bool, kind: String) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY or value.size() > MAX_CACHE: return _bad("REFERENCE_MAP")
+	var output: Dictionary = {}
+	for key in value:
+		if kind == "groups" and (typeof(key) != TYPE_INT or key < 0 or key > 9): return _bad("GROUP_KEY")
+		if kind == "grid" and typeof(key) != TYPE_VECTOR2I: return _bad("GRID_KEY")
+		if kind == "blockers":
+			if typeof(key) != TYPE_STRING or key.is_empty() or key.length() > 160 or key.split("|").size() != 3: return _bad("BLOCKER_KEY")
+			if capture_mode:
+				var tag: Dictionary = _tag(value[key], registry)
+				if not tag.ok: return tag
+				output[key] = tag.value
+			else:
+				if not _tag_valid(value[key], registry): return _bad("BLOCKER_REFERENCE")
+				output[key] = value[key]
+		else:
+			var list: Dictionary = _tags(value[key], registry, capture_mode)
+			if not list.ok: return list
+			output[key] = list.value
+	return _good(output)
+
+func _eco(value: Variant, registry: Dictionary, capture_mode: bool) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY: return _bad("ECO_CACHE")
+	if value.is_empty(): return _good({})
+	if not _fields(value, ["lanes", "pressure", "heroes", "assignments"]): return _bad("ECO_FIELDS")
+	if typeof(value.lanes) != TYPE_ARRAY or typeof(value.pressure) != TYPE_ARRAY or value.lanes.size() > 64 or value.pressure.size() != value.lanes.size(): return _bad("ECO_LANES")
+	for point in value.lanes:
+		if typeof(point) != TYPE_VECTOR2 or not point.is_finite(): return _bad("ECO_LANE_POINT")
+	for pressure in value.pressure:
+		if typeof(pressure) != TYPE_FLOAT or not is_finite(pressure) or pressure < 0.0: return _bad("ECO_PRESSURE")
+	var heroes: Dictionary = _tags(value.heroes, registry, capture_mode)
+	if not heroes.ok: return heroes
+	var assignments: Dictionary = _identity_rows(value.assignments, capture_mode, false, value.lanes.size())
+	if not assignments.ok: return assignments
+	return _good({"lanes": value.lanes, "pressure": value.pressure, "heroes": heroes.value, "assignments": assignments.value})
+
+func _progress(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY or value.size() > 4096 or not _inventory_check.is_valid(): return _bad("HERO_ITEM_PROGRESS")
+	var aliases: Array = []
+	for hero in value:
+		if not _id(hero): return _bad("HERO_ITEM_KEY")
+		var snapshot: Variant = value[hero]
+		if not _fields(snapshot, ["slots", "cooldowns", "proc_cooldowns", "uid_seq"]): return _bad("RETIRED_INVENTORY_FIELDS", hero)
+		# Original HeroInventory.snapshot has four values. Add the fifth value
+		# only to invoke the existing pure shape validator; never write it back.
+		var five: Dictionary = {"slots": snapshot.slots, "cooldowns": snapshot.cooldowns, "proc_cooldowns": snapshot.proc_cooldowns, "_uid_seq": snapshot.uid_seq, "_periodic_acc": 0.0}
+		var checked: Variant = _inventory_check.call(five)
+		if typeof(checked) != TYPE_DICTIONARY or checked.get("ok") != true: return _bad("RETIRED_INVENTORY_INVALID", hero)
+		for index in range(snapshot.slots.size()):
+			var item: Dictionary = snapshot.slots[index]
+			if item.is_empty(): continue
+			if item.uid >= MAX_I64: return _bad("UID_EXHAUSTED_SENTINEL", hero)
+			aliases.append({"source": "hero_item_progress", "hero": hero, "slot": index, "uid": item.uid, "item_id": item.id})
+		for key in snapshot.proc_cooldowns:
+			# Pure inventory validation already matched the exact decimal prefix
+			# to a held UID. Preserve every suffix/key; do not reassign identity.
+			var text: String = key
+			aliases.append({"source": "hero_item_progress.proc_cooldowns", "hero": hero, "key": text, "uid": text.left(text.find(":")).to_int()})
+	return _good(aliases)
+
+func _dictionaries(values: Dictionary) -> Dictionary:
+	for name in ["_ability_owner_cache", "_active_ability_cache", "_hero_active_ability_cache", "_tech_done"]:
+		for key in values[name]:
+			if typeof(key) != TYPE_STRING: return _bad("STRING_CACHE_KEY", name)
+			var expected: int = TYPE_STRING if name == "_ability_owner_cache" else TYPE_BOOL
+			if typeof(values[name][key]) != expected: return _bad("STRING_CACHE_VALUE", name)
+	for name in ["hero_kills", "hero_combat_stats", "hero_progress", "hero_item_progress"]:
+		for key in values[name]:
+			if not _id(key) or typeof(values[name][key]) != TYPE_DICTIONARY: return _bad("HERO_RECORD", name)
+	for key in values.hero_kills:
+		var rec: Dictionary = values.hero_kills[key]
+		if not _fields(rec, ["name", "key", "n"]) or typeof(rec.name) != TYPE_STRING or typeof(rec.key) != TYPE_STRING or typeof(rec.n) != TYPE_INT or rec.n < 0: return _bad("HERO_KILLS")
+	for key in values.hero_progress:
+		var rec: Dictionary = values.hero_progress[key]
+		if not _fields(rec, ["level", "xp", "sp", "ranks"]) or typeof(rec.level) != TYPE_INT or typeof(rec.xp) != TYPE_FLOAT or typeof(rec.sp) != TYPE_INT or typeof(rec.ranks) != TYPE_ARRAY: return _bad("HERO_PROGRESS")
+		if rec.level < 1 or not is_finite(rec.xp) or rec.xp < 0.0 or rec.sp < 0 or rec.ranks.size() > 32: return _bad("HERO_PROGRESS_RANGE")
+		for rank in rec.ranks:
+			if typeof(rank) != TYPE_INT or rank < 0: return _bad("HERO_RANK")
+	for key in values.hero_combat_stats:
+		var rec: Dictionary = values.hero_combat_stats[key]
+		if not _fields(rec, ["name", "key", "damage", "taken", "healing", "kills", "skill_damage", "item_stats"]): return _bad("HERO_STATS_FIELDS")
+		if typeof(rec.name) != TYPE_STRING or typeof(rec.key) != TYPE_STRING or typeof(rec.kills) != TYPE_INT or rec.kills < 0: return _bad("HERO_STATS_LABELS")
+		for field in ["damage", "taken", "healing"]:
+			if typeof(rec[field]) != TYPE_FLOAT or not is_finite(rec[field]) or rec[field] < 0.0: return _bad("HERO_STATS_AMOUNT")
+		if typeof(rec.skill_damage) != TYPE_DICTIONARY or typeof(rec.item_stats) != TYPE_DICTIONARY: return _bad("HERO_STATS_MAP")
+		for skill in rec.skill_damage:
+			if typeof(skill) != TYPE_STRING or typeof(rec.skill_damage[skill]) != TYPE_FLOAT or rec.skill_damage[skill] < 0.0: return _bad("SKILL_STATS")
+		for item in rec.item_stats:
+			var ir: Variant = rec.item_stats[item]
+			if not _id(item) or not _fields(ir, ["name", "damage", "healing", "kills"]): return _bad("ITEM_STATS_FIELDS")
+			if typeof(ir.name) != TYPE_STRING or typeof(ir.kills) != TYPE_INT or ir.kills < 0: return _bad("ITEM_STATS_LABELS")
+			for amount in ["damage", "healing"]:
+				if typeof(ir[amount]) != TYPE_FLOAT or ir[amount] < 0.0: return _bad("ITEM_STATS_AMOUNT")
+	for key in values.lit_cells:
+		if typeof(key) != TYPE_VECTOR2I or typeof(values.lit_cells[key]) != TYPE_FLOAT or values.lit_cells[key] <= 0.0: return _bad("LIT_CELLS")
+	for key in values._camera_locs:
+		if typeof(key) != TYPE_INT or key < 1 or key > 4 or typeof(values._camera_locs[key]) != TYPE_VECTOR2: return _bad("CAMERA_LOCATIONS")
+	for key in values.faction_res:
+		var rec: Variant = values.faction_res[key]
+		if typeof(key) != TYPE_INT or not _fields(rec, ["gold", "wood"]) or typeof(rec.gold) != TYPE_INT or typeof(rec.wood) != TYPE_INT: return _bad("FACTION_RESOURCES")
+	for key in values.faction_gather_mult:
+		if typeof(key) != TYPE_INT or typeof(values.faction_gather_mult[key]) != TYPE_FLOAT or values.faction_gather_mult[key] < 0.0: return _bad("FACTION_GATHER")
+	return _progress(values.hero_item_progress)
+
+func _values(values: Variant) -> Dictionary:
+	if not _fields(values, VALUE_TYPES.keys()): return _bad("VALUE_FIELDS")
+	for name in VALUE_TYPES:
+		if typeof(values[name]) != VALUE_TYPES[name]: return _bad("VALUE_TYPE", name)
+		if VALUE_TYPES[name] == TYPE_FLOAT and not is_finite(values[name]): return _bad("NON_FINITE", name)
+	if values.next_entity_id < 1: return _bad("NEXT_ENTITY_ID")
+	if values.phase != 2 or not values.economy: return _bad("STANDARD_FIGHT_ONLY")
+	if values._dragging or values._box_mode or values._panning: return _bad("ACTIVE_POINTER_GESTURE")
+	if values._blocker_query_budget < 0 or values._blocker_query_budget > 8: return _bad("BLOCKER_BUDGET")
+	if values._blocker_cache_revision < -1: return _bad("BLOCKER_REVISION")
+	for name in ["_autocam_target_zoom", "_last_hb", "tech_atk", "tech_hp", "hero_tech_atk", "hero_tech_hp", "tech_gather"]:
+		if values[name] <= 0.0: return _bad("POSITIVE_MULTIPLIER", name)
+	if values._ai_spawn_serial < 0 or values._ai_tick_frame < 0 or values._ward_serial < 0: return _bad("ROOT_SERIAL")
+	if values.gold < 0 or values.wood < 0 or values.pop_cap < 0 or values.current_age < 1 or values.current_age > 3: return _bad("ECONOMY_RANGE")
+	return _dictionaries(values)
+
+func _rect_to_wire(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_RECT2: return _bad("RECT2_TYPE", "_unit_draw_rect")
+	var rect: Rect2 = value
+	if not rect.position.is_finite() or not rect.size.is_finite(): return _bad("RECT2_NON_FINITE", "_unit_draw_rect")
+	return _good({"position": rect.position, "size": rect.size})
+
+func _rect_from_wire(value: Variant) -> Dictionary:
+	if not _fields(value, ["position", "size"]): return _bad("RECT2_FIELDS", "_unit_draw_rect")
+	if typeof(value.position) != TYPE_VECTOR2 or typeof(value.size) != TYPE_VECTOR2: return _bad("RECT2_COMPONENT_TYPE", "_unit_draw_rect")
+	if not value.position.is_finite() or not value.size.is_finite(): return _bad("RECT2_NON_FINITE", "_unit_draw_rect")
+	return _good(Rect2(value.position, value.size))
+
+func _clocks(clocks: Variant, values: Variant) -> Dictionary:
+	if not _fields(clocks, ["physics", "process", "msec"]) or not _fields(values, ROOT_ENGINE_CLOCK + ROOT_INPUT_CLOCK): return _bad("CLOCK_FIELDS")
+	for key in clocks:
+		if typeof(clocks[key]) != TYPE_INT or clocks[key] < 0: return _bad("CLOCK_TYPE")
+	for key in values:
+		if typeof(values[key]) != TYPE_INT: return _bad("CLOCK_VALUE", key)
+	# A translated stale stamp may be negative in a younger process. Both
+	# consumers only compare equality to a nonnegative current frame/bucket.
+	if values._res_block_frame < clocks.physics - MAX_I64 or values._res_block_frame > clocks.physics: return _bad("RESOURCE_CACHE_FRAME")
+	if values._eco_lane_cache_bucket < clocks.physics / 16 - MAX_I64 or values._eco_lane_cache_bucket > clocks.physics / 16: return _bad("ECO_CACHE_BUCKET")
+	for key in ROOT_INPUT_CLOCK:
+		if values[key] > clocks.msec or values[key] < clocks.msec - MAX_I64: return _bad("INPUT_CLOCK_RANGE", key)
+	return {"ok": true}
+
+func capture(battle: Variant, content_version: String, object_to_id: Dictionary, boundary: Dictionary) -> Dictionary:
+	if content_version.is_empty() or content_version.length() > 256: return _bad("TRUSTED_CONTENT_VERSION")
+	if not _node(battle, _battle_script) or not battle.is_inside_tree() or not battle.get_tree().paused: return _bad("PAUSED_REAL_BATTLE")
+	if boundary.get("quiescent") != true or boundary.get("input_released") != true or Engine.is_in_physics_frame(): return _bad("OUTER_SNAPSHOT_BARRIER_REQUIRED")
+	if battle.mission != null or not is_instance_valid(battle.level) or battle.level.get_script() != _level_script: return _bad("STANDARD_LEVEL_ONLY")
+	if not battle.gameplay_rng_fault().is_empty(): return _bad("FAULTED_BATTLE")
+	if battle._prof_on or battle._smoke or not battle._prof.is_empty() or battle._prof_frames != 0 or battle._prof_print_acc != 0.0 or battle._unit_proc_us != 0 or battle._smoke_t != 0.0: return _bad("DIAGNOSTIC_RUN")
+	var registered: Dictionary = _registry(object_to_id)
+	if not registered.ok: return registered
+	var clocks: Dictionary = {"physics": Engine.get_physics_frames(), "process": Engine.get_process_frames(), "msec": Time.get_ticks_msec()}
+	var values: Dictionary = {}
+	for name in VALUE_TYPES: values[name] = battle.get(name)
+	var checked: Dictionary = _values(values)
+	if not checked.ok: return checked
+	var references: Dictionary = {}
+	for name in ROOT_REFERENCE:
+		var tag: Dictionary = _tag(battle.get(name), object_to_id)
+		if not tag.ok: return _bad(tag.code, name)
+		references[name] = tag.value
+	var selection: Dictionary = _tags(battle.selection, object_to_id, true)
+	if not selection.ok: return selection
+	var groups: Dictionary = _reference_map(battle._groups, object_to_id, true, "groups")
+	if not groups.ok: return groups
+	var blockers: Dictionary = _reference_map(battle._blocker_cache, object_to_id, true, "blockers")
+	if not blockers.ok: return blockers
+	var grids: Dictionary = {}
+	for name in ROOT_SPATIAL_GRID:
+		var grid: Dictionary = _reference_map(battle.get(name), object_to_id, true, "grid")
+		if not grid.ok: return _bad(grid.code, name)
+		grids[name] = grid.value
+	var identities: Dictionary = {}
+	for name in ROOT_STABLE_IDENTITY_MAP:
+		var ids: Dictionary = _identity_rows(battle.get(name), true, name == "_res_block_cache")
+		if not ids.ok: return _bad(ids.code, name)
+		identities[name] = ids.value
+	var eco: Dictionary = _eco(battle._eco_lane_cache, object_to_id, true)
+	if not eco.ok: return eco
+	var clock_values: Dictionary = {}
+	for name in ROOT_ENGINE_CLOCK + ROOT_INPUT_CLOCK: clock_values[name] = battle.get(name)
+	var clock_check: Dictionary = _clocks(clocks, clock_values)
+	if not clock_check.ok: return clock_check
+	var focus: Dictionary = {"kind": "none"} if battle._autocam_focus == Vector2.INF else {"kind": "point", "value": battle._autocam_focus}
+	var raw: Dictionary = {"values": values, "references": references, "selection": selection.value, "groups": groups.value,
+		"grids": grids, "identities": identities, "blockers": blockers.value, "eco": eco.value, "clock_values": clock_values, "clocks": clocks, "focus": focus}
+	var known: Dictionary = {}
+	for unit: Variant in object_to_id: known[object_to_id[unit]] = true
+	var bounds: Dictionary = _allocator_bounds(raw, known)
+	if not bounds.ok: return bounds
+	# Rect2 has no value-codec tag. Preserve its two Vector2 values explicitly.
+	# Leave the already validated native values alone; only the wire dictionary changes.
+	var rect_wire: Dictionary = _rect_to_wire(values["_unit_draw_rect"])
+	if not rect_wire.ok: return rect_wire
+	var wire_values: Dictionary = values.duplicate()
+	wire_values["_unit_draw_rect"] = rect_wire.value
+	raw["values"] = wire_values
+	var encoded: Dictionary = _codec.encode(raw)
+	if not encoded.ok: return encoded
+	if Engine.get_physics_frames() != clocks.physics or Engine.get_process_frames() != clocks.process: return _bad("SNAPSHOT_FRAME_CHANGED")
+	return {"ok": true, "record": {"schema": SCHEMA, "content_version": content_version, "payload": encoded.value},
+		"item_uid_aliases": checked.value, "external_fields": EXTERNAL_FIELDS.duplicate(), "complete_battle": false}
+
+func validate(record: Variant, content_version: String, known_unit_ids: Dictionary) -> Dictionary:
+	if content_version.is_empty() or content_version.length() > 256: return _bad("TRUSTED_CONTENT_VERSION")
+	if not _fields(record, ["schema", "content_version", "payload"]) or record.schema != SCHEMA or record.content_version != content_version: return _bad("RECORD_CONTRACT")
+	var known: Dictionary = _known(known_unit_ids)
+	if not known.ok: return known
+	var decoded: Dictionary = _codec.decode(record.payload)
+	if not decoded.ok: return decoded
+	var raw: Variant = decoded.value
+	if not _fields(raw, PAYLOAD_FIELDS): return _bad("PAYLOAD_FIELDS")
+	if typeof(raw.values) != TYPE_DICTIONARY or not raw.values.has("_unit_draw_rect"): return _bad("VALUE_FIELDS")
+	var rect_native: Dictionary = _rect_from_wire(raw.values["_unit_draw_rect"])
+	if not rect_native.ok: return rect_native
+	raw["values"]["_unit_draw_rect"] = rect_native.value
+	var values: Dictionary = _values(raw.values)
+	if not values.ok: return values
+	if not _fields(raw.references, ROOT_REFERENCE): return _bad("REFERENCE_FIELDS")
+	for name in ROOT_REFERENCE:
+		if not _tag_valid(raw.references[name], known_unit_ids): return _bad("REFERENCE_TAG", name)
+	var selected: Dictionary = _tags(raw.selection, known_unit_ids, false)
+	if not selected.ok: return selected
+	var groups: Dictionary = _reference_map(raw.groups, known_unit_ids, false, "groups")
+	if not groups.ok: return groups
+	var blockers: Dictionary = _reference_map(raw.blockers, known_unit_ids, false, "blockers")
+	if not blockers.ok: return blockers
+	if not _fields(raw.grids, ROOT_SPATIAL_GRID) or not _fields(raw.identities, ROOT_STABLE_IDENTITY_MAP): return _bad("CACHE_FIELDS")
+	for name in ROOT_SPATIAL_GRID:
+		var grid: Dictionary = _reference_map(raw.grids[name], known_unit_ids, false, "grid")
+		if not grid.ok: return _bad(grid.code, name)
+	for name in ROOT_STABLE_IDENTITY_MAP:
+		var ids: Dictionary = _identity_rows(raw.identities[name], false, name == "_res_block_cache")
+		if not ids.ok: return _bad(ids.code, name)
+	var eco: Dictionary = _eco(raw.eco, known_unit_ids, false)
+	if not eco.ok: return eco
+	var bounds: Dictionary = _allocator_bounds(raw, known_unit_ids)
+	if not bounds.ok: return bounds
+	var clocks: Dictionary = _clocks(raw.clocks, raw.clock_values)
+	if not clocks.ok: return clocks
+	if not _fields(raw.focus, ["kind"]) or raw.focus.kind != "none":
+		if not _fields(raw.focus, ["kind", "value"]) or raw.focus.kind != "point" or typeof(raw.focus.value) != TYPE_VECTOR2 or not raw.focus.value.is_finite(): return _bad("FOCUS_SENTINEL")
+	return {"ok": true, "value": raw, "item_uid_aliases": values.value, "external_fields": EXTERNAL_FIELDS.duplicate(), "complete_battle": false}
+
+func _resolve(tag: Dictionary, units: Dictionary, expired_unit: Variant) -> Dictionary:
+	if tag.state == "none": return _good(null)
+	if tag.state == "entity": return _good(units[tag.id])
+	if not _node(expired_unit, _unit_script) or expired_unit.is_inside_tree() or expired_unit.get_parent() != null: return _bad("LIVE_DETACHED_TOMBSTONE_REQUIRED")
+	return _good(expired_unit)
+
+func _resolve_list(tags: Array, units: Dictionary, expired_unit: Variant) -> Dictionary:
+	var result: Array = []
+	for tag in tags:
+		var resolved: Dictionary = _resolve(tag, units, expired_unit)
+		if not resolved.ok: return resolved
+		result.append(resolved.value)
+	return _good(result)
+
+func _resolve_map(rows: Dictionary, units: Dictionary, expired_unit: Variant, single: bool = false) -> Dictionary:
+	var result: Dictionary = {}
+	for key in rows:
+		var resolved: Dictionary = _resolve(rows[key], units, expired_unit) if single else _resolve_list(rows[key], units, expired_unit)
+		if not resolved.ok: return resolved
+		result[key] = resolved.value
+	return _good(result)
+
+func _decode_rows(rows: Array) -> Dictionary:
+	var result: Dictionary = {}
+	for row: Dictionary in rows:
+		if not _id(row.id): return _bad("STABLE_UNIT_ID")
+		var stable: int = String(row.id).to_int()
+		if result.has(stable): return _bad("DECODE_ID_COLLISION")
+		result[stable] = row.value
+	return _good(result)
+
+func bind(battle: Variant, record: Variant, content_version: String, id_to_unit: Dictionary,
+		expired_unit: Variant, boundary: Dictionary) -> Dictionary:
+	if not _node(battle, _battle_script) or battle.is_inside_tree() or battle.get_parent() != null or battle.process_mode != Node.PROCESS_MODE_DISABLED or not battle.is_blocking_signals(): return _bad("DETACHED_DISABLED_BATTLE_REQUIRED")
+	var loop: MainLoop = Engine.get_main_loop()
+	if not loop is SceneTree or not (loop as SceneTree).paused: return _bad("PAUSED_MAIN_TREE_REQUIRED")
+	if not battle.gameplay_rng_fault().is_empty(): return _bad("FAULTED_DESTINATION")
+	if _bound.has(battle): return _bad("ALREADY_BOUND")
+	if boundary.get("quiescent") != true or boundary.get("input_released") != true or Engine.is_in_physics_frame(): return _bad("OUTER_INSTALL_BARRIER_REQUIRED")
+	var registered: Dictionary = _registry(id_to_unit, true)
+	if not registered.ok: return registered
+	if id_to_unit.values().has(expired_unit): return _bad("TOMBSTONE_IS_ENTITY")
+	var known: Dictionary = {}
+	for key in id_to_unit: known[key] = true
+	var checked: Dictionary = validate(record, content_version, known)
+	if not checked.ok: return checked
+	var raw: Dictionary = checked.value
+	var frame: int = Engine.get_physics_frames()
+	var process_frame: int = Engine.get_process_frames()
+	var now: int = Time.get_ticks_msec()
+	if frame % 16 != int(raw.clocks.physics) % 16: return _bad("ROOT_ECO_CLOCK_PHASE_REQUIRED")
+	# Only this root cache's phase is proved here. Unit visual modulo 2/3,
+	# queued draw process-frame stamps and relative native ID ordering are
+	# separate outer obligations, not consequences of this modulo-16 check.
+	var pending: Dictionary = raw.values.duplicate(true)
+	for name in ROOT_REFERENCE:
+		var resolved: Dictionary = _resolve(raw.references[name], id_to_unit, expired_unit)
+		if not resolved.ok: return resolved
+		pending[name] = resolved.value
+	var selected: Dictionary = _resolve_list(raw.selection, id_to_unit, expired_unit)
+	if not selected.ok: return selected
+	pending["selection"] = selected.value
+	var groups: Dictionary = _resolve_map(raw.groups, id_to_unit, expired_unit)
+	if not groups.ok: return groups
+	pending["_groups"] = groups.value
+	var blockers: Dictionary = _resolve_map(raw.blockers, id_to_unit, expired_unit, true)
+	if not blockers.ok: return blockers
+	pending["_blocker_cache"] = blockers.value
+	for name in ROOT_SPATIAL_GRID:
+		var grid: Dictionary = _resolve_map(raw.grids[name], id_to_unit, expired_unit)
+		if not grid.ok: return grid
+		pending[name] = grid.value
+	for name in ROOT_STABLE_IDENTITY_MAP:
+		var ids: Dictionary = _decode_rows(raw.identities[name])
+		if not ids.ok: return ids
+		pending[name] = ids.value
+	var eco: Dictionary = raw.eco.duplicate(true)
+	if not eco.is_empty():
+		var heroes: Dictionary = _resolve_list(eco.heroes, id_to_unit, expired_unit)
+		if not heroes.ok: return heroes
+		var assignments: Dictionary = _decode_rows(eco.assignments)
+		if not assignments.ok: return assignments
+		eco["heroes"] = heroes.value; eco["assignments"] = assignments.value
+	pending["_eco_lane_cache"] = eco
+	var old_frame: int = raw.clocks.physics
+	var old_bucket: int = raw.clock_values._eco_lane_cache_bucket
+	# Subtract age before adding a new origin, so a near-limit valid snapshot
+	# cannot overflow through an intermediate old+delta expression.
+	pending["_eco_lane_cache_bucket"] = -1 if old_bucket == -1 else frame / 16 - (old_frame / 16 - old_bucket)
+	var old_res_frame: int = raw.clock_values._res_block_frame
+	# A stale cache only needs to remain stale; keep its actual rows. Its next
+	# original consumer will invalidate it, just as before the saved barrier.
+	pending["_res_block_frame"] = -1 if old_res_frame == -1 else frame - (old_frame - old_res_frame)
+	for name in ROOT_INPUT_CLOCK:
+		var age: int = int(raw.clocks.msec) - int(raw.clock_values[name])
+		pending[name] = now - age
+	pending["_autocam_focus"] = Vector2.INF if raw.focus.kind == "none" else raw.focus.value
+	if Engine.get_physics_frames() != frame or Engine.get_process_frames() != process_frame: return _bad("INSTALL_FRAME_CHANGED")
+	# Every fallible decode/validation occurs before the first Battle write.
+	# These are the explicit audited plain declarations, with no setters.
+	for name in pending: battle.set(name, pending[name])
+	_bound[battle] = true
+	return {"ok": true, "bound_physics_frame": frame, "bound_process_frame": process_frame,
+		"item_uid_aliases": checked.item_uid_aliases, "external_fields": EXTERNAL_FIELDS.duplicate(),
+		"requires_same_turn_install_and_activate": true, "requires_shared_tombstone_release": true, "complete_battle": false}

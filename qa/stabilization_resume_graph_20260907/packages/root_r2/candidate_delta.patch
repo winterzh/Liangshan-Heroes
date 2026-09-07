@@ -1,0 +1,40 @@
+--- root-v2-r1
++++ root-v2-r2-content-keys
+@@ -141,6 +141,10 @@
+ 		if value.unicode_at(i) < 48 or value.unicode_at(i) > 57: return false
+ 	return value.length() < MAX_ENTITY_ID.length() or value <= MAX_ENTITY_ID
+ 
++func _content_key(value: Variant) -> bool:
++	# Definition keys and stable entity numbers are separate domains.
++	return typeof(value) == TYPE_STRING and not value.is_empty() and value.length() <= 128
++
+ func _node(value: Variant, script: Script) -> bool:
+ 	return typeof(value) == TYPE_OBJECT and is_instance_valid(value) and value is Node and value.get_script() == script and not value.is_queued_for_deletion()
+ 
+@@ -267,7 +271,7 @@
+ 	if typeof(value) != TYPE_DICTIONARY or value.size() > 4096 or not _inventory_check.is_valid(): return _bad("HERO_ITEM_PROGRESS")
+ 	var aliases: Array = []
+ 	for hero in value:
+-		if not _id(hero): return _bad("HERO_ITEM_KEY")
++		if not _content_key(hero): return _bad("HERO_ITEM_KEY")
+ 		var snapshot: Variant = value[hero]
+ 		if not _fields(snapshot, ["slots", "cooldowns", "proc_cooldowns", "uid_seq"]): return _bad("RETIRED_INVENTORY_FIELDS", hero)
+ 		# Original HeroInventory.snapshot has four values. Add the fifth value
+@@ -295,7 +299,7 @@
+ 			if typeof(values[name][key]) != expected: return _bad("STRING_CACHE_VALUE", name)
+ 	for name in ["hero_kills", "hero_combat_stats", "hero_progress", "hero_item_progress"]:
+ 		for key in values[name]:
+-			if not _id(key) or typeof(values[name][key]) != TYPE_DICTIONARY: return _bad("HERO_RECORD", name)
++			if not _content_key(key) or typeof(values[name][key]) != TYPE_DICTIONARY: return _bad("HERO_RECORD", name)
+ 	for key in values.hero_kills:
+ 		var rec: Dictionary = values.hero_kills[key]
+ 		if not _fields(rec, ["name", "key", "n"]) or typeof(rec.name) != TYPE_STRING or typeof(rec.key) != TYPE_STRING or typeof(rec.n) != TYPE_INT or rec.n < 0: return _bad("HERO_KILLS")
+@@ -316,7 +320,7 @@
+ 			if typeof(skill) != TYPE_STRING or typeof(rec.skill_damage[skill]) != TYPE_FLOAT or rec.skill_damage[skill] < 0.0: return _bad("SKILL_STATS")
+ 		for item in rec.item_stats:
+ 			var ir: Variant = rec.item_stats[item]
+-			if not _id(item) or not _fields(ir, ["name", "damage", "healing", "kills"]): return _bad("ITEM_STATS_FIELDS")
++			if not _content_key(item) or not _fields(ir, ["name", "damage", "healing", "kills"]): return _bad("ITEM_STATS_FIELDS")
+ 			if typeof(ir.name) != TYPE_STRING or typeof(ir.kills) != TYPE_INT or ir.kills < 0: return _bad("ITEM_STATS_LABELS")
+ 			for amount in ["damage", "healing"]:
+ 				if typeof(ir[amount]) != TYPE_FLOAT or ir[amount] < 0.0: return _bad("ITEM_STATS_AMOUNT")
