@@ -1,0 +1,110 @@
+from pathlib import Path
+import hashlib, json, difflib
+root=Path.cwd(); out=root/'scratchpad/hud_messages_resume_20260908'
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+h=(root/'scripts/hud.gd').read_text(encoding='utf-8')
+h=rep(h,'var _message_log: Array = []','var _message_log: Array = []\nvar _info_scroll_pending := false\nvar _info_scroll_restore := Vector2i(-1, -1)')
+h=rep(h,'\nfunc _process(delta: float) -> void:\n\t', '''\nfunc _process(delta: float) -> void:
+	# Deferred message scrolling belongs to the HUD clock, so the save barrier
+	# freezes it together with input and toast animation.
+	if _info_scroll_restore.x >= 0:
+		_info_scroll.scroll_horizontal = _info_scroll_restore.x
+		_info_scroll.scroll_vertical = _info_scroll_restore.y
+		_info_scroll_restore = Vector2i(-1, -1)
+	if _info_scroll_pending:
+		_info_scroll_pending = false
+		_info_scroll.scroll_vertical = int(_info_scroll.get_v_scroll_bar().max_value)
+	''')
+h=rep(h,'\tvar row := PanelContainer.new()\n\trow.name = "InfoToast"', '''	var row := _make_info_toast(text, 1)
+	_arm_info_toast(row, true)
+
+
+func _make_info_toast(text: String, count: int) -> PanelContainer:
+	var row := PanelContainer.new()
+	row.name = "InfoToast"''')
+h=rep(h,'row.set_meta("info_count", 1)','row.set_meta("info_count", count)')
+h=rep(h,'\tlabel.text = text\n\tlabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT','\tlabel.text = "%s  ×%d" % [text, count] if count > 1 else text\n\tlabel.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT')
+h=rep(h,'\t_arm_info_toast(row, true)\n\n\nfunc _arm_info_toast(row: Control, fade_in: bool) -> void:', '\treturn row\n\n\nfunc _arm_info_toast(row: Control, fade_in: bool, restored_hold := -1.0) -> void:')
+a='''	if fade_in:
+		tw.tween_property(row, "modulate:a", 1.0, 0.15)
+		tw.tween_interval(1.60 if battle != null and battle.has_method("_full_auto") \\
+				and bool(battle.call("_full_auto")) else 2.60)
+	else:
+		tw.tween_interval(1.75 if battle != null and battle.has_method("_full_auto") \\
+				and bool(battle.call("_full_auto")) else 2.75)'''
+b='''	var observer: bool = battle != null and battle.has_method("_full_auto") and bool(battle.call("_full_auto"))
+	var hold: float = (1.60 if observer else 2.60) if fade_in else (1.75 if observer else 2.75)
+	if restored_hold >= 0.0: hold = restored_hold
+	row.set_meta("toast_fade_in", fade_in)
+	row.set_meta("toast_hold", hold)
+	if fade_in:
+		tw.tween_property(row, "modulate:a", 1.0, 0.15)
+	tw.tween_interval(hold)'''
+h=rep(h,a,b)
+h=rep(h,'''func _scroll_info_to_bottom() -> void:
+	if _info_scroll == null or not is_inside_tree():
+		return
+	await get_tree().process_frame
+	if _info_scroll != null:
+		_info_scroll.scroll_vertical = int(_info_scroll.get_v_scroll_bar().max_value)''','''func _scroll_info_to_bottom() -> void:
+	if _info_scroll != null and is_inside_tree():
+		_info_scroll_pending = true''')
+# Preserve every untouched line's original mixed line ending for reviewable Git
+# diffs. Candidate and isolated native input still remain byte-identical.
+old_lines=(root/'scripts/hud.gd').read_bytes().decode('utf-8').splitlines(keepends=True)
+new_lines=h.splitlines()
+preserved=[]
+for op,i,j,a,b in difflib.SequenceMatcher(None,[x.rstrip('\r\n') for x in old_lines],new_lines,autojunk=False).get_opcodes():
+    if op=='equal': preserved.extend(old_lines[i:j])
+    elif op in ('insert','replace'):
+        neighbor=old_lines[min(i,len(old_lines)-1)]
+        ending='\r\n' if neighbor.endswith('\r\n') else '\n'
+        preserved.extend(line+ending for line in new_lines[a:b])
+assert ''.join(preserved).replace('\r\n','\n')==h
+(out/'hud.gd').write_bytes(''.join(preserved).encode('utf-8'))
+c=(root/'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c=rep(c,'classic_world_core_preparation_v4','classic_world_core_preparation_v5')
+c=rep(c,'"world_display", "camera"]','"world_display", "camera", "hud_messages"]')
+c=rep(c,'const CameraState :=','const HudMessages := preload("res://scripts/run_hud_messages_state.gd")\nconst CameraState :=')
+c=rep(c,'\tsections["camera"] = camera_state.value','''	sections["camera"] = camera_state.value
+	var hud_messages: Dictionary = HudMessages.new().capture(source)
+	if not hud_messages.ok:
+		if retained_identity == null: identity.dispose()
+		return hud_messages
+	sections["hud_messages"] = hud_messages.value''')
+c=rep(c,'\t_pending_root = s.root.duplicate(true)','''	checked = HudMessages.new().decode(s.hud_messages)
+	if not checked.ok: return _abort(checked, "hud_messages")
+	_pending_root = s.root.duplicate(true)''')
+c=rep(c,'"camera_module": _camera_module,','"camera_module": _camera_module, "pending_hud_messages": s.hud_messages.duplicate(true),')
+(out/'run_battle_world_core.gd').write_text(c,encoding='utf-8',newline='\n')
+
+# Driver augmentation is kept separate for readable review.
+d=(root/'qa/camera_resume_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('camera-resume-native','hud-messages-resume-native').replace('[camera resume QA] ','[hud messages QA] ')
+d=rep(d,'\tbattle._save_barrier.capture_ready.connect(_barrier_ready)', '''	# Make three native Tween phases observable under the actual input barrier.
+	battle.hud._clear_info_toasts()
+	battle.hud._message_log.clear(); battle.hud._info_unread = 0
+	for text: String in ["淡入", "停留", "停留", "淡出"]: battle.hud.show_message(text)
+	var toast_rows: Array = battle.hud.msg_box.get_children()
+	toast_rows[0].get_meta("toast_tween").custom_step(0.05)
+	toast_rows[1].get_meta("toast_tween").custom_step(1.20)
+	toast_rows[2].get_meta("toast_tween").custom_step(2.85)
+	battle.hud._info_scroll_pending = true
+	battle._save_barrier.capture_ready.connect(_barrier_ready)''')
+d=rep(d,'\tif not await _camera_cases(core_script, identity, runtime, wire):', '''	if not await _hud_message_cases(core_script, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	if not await _camera_cases(core_script, identity, runtime, wire):''')
+d+='\n'+(out/'driver_cases.gd').read_text(encoding='utf-8')
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+changes=[]
+for name in ['hud.gd','run_hud_messages_state.gd','run_battle_world_core.gd']:
+    p=root/'scripts'/name
+    row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':'scratchpad/hud_messages_resume_20260908/'+name,'candidate_sha256':sha(out/name)}
+    if p.exists(): row['before_raw_sha256']=sha(p)
+    changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+names=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd','driver_cases.gd']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names}},indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))

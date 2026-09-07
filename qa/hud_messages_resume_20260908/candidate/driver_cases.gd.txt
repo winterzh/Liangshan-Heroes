@@ -1,0 +1,116 @@
+func _fresh_message_hud() -> Variant:
+	var hud: Variant = load("res://scripts/hud.gd").new()
+	root.add_child(hud)
+	hud.process_mode = Node.PROCESS_MODE_DISABLED
+	hud.set_block_signals(true)
+	return hud
+
+func _message_rows_equal(a: Variant, b: Variant) -> bool:
+	var left: Array = a.msg_box.get_children()
+	var right: Array = b.msg_box.get_children()
+	if left.size() != right.size(): return false
+	for index in range(left.size()):
+		for key: String in ["info_text", "info_count", "toast_fade_in", "toast_hold"]:
+			if left[index].get_meta(key) != right[index].get_meta(key): return false
+		if absf(left[index].modulate.a - right[index].modulate.a) > 0.00001 or left[index].get_node("Text").text != right[index].get_node("Text").text: return false
+	return true
+
+func _hud_message_cases(core_script: Script, wire: Dictionary) -> bool:
+	var before: int = checks.size()
+	var adapter: Script = load("res://scripts/run_hud_messages_state.gd")
+	var raw: Dictionary = adapter.new().decode(wire.sections.hud_messages).value
+	var source: Variant = battle.hud
+	_check("messages capture preserves native fade hold fade-out phases", raw.toasts.size() == 3 and raw.toasts[0].elapsed < 0.15 and raw.toasts[1].elapsed > 0.15 and raw.toasts[1].elapsed < 2.75 and raw.toasts[2].elapsed > 2.75)
+	_check("messages capture stores real pending scroll under input barrier", raw.scroll_pending and source._info_scroll_pending)
+	_check("capture includes deduplicated native toast and history count", raw.toasts[1].count == 2 and not raw.toasts[1].fade_in and raw.toasts[1].hold == 2.75 and raw.log[1].count == 2)
+	for frame in range(3): await process_frame
+	_check("real barrier freezes native Tweens and pending scroll", adapter.new().capture(battle).value == wire.sections.hud_messages)
+	var invalid_hud: Variant = _fresh_message_hud()
+	for problem: String in ["unknown", "unread", "log_count", "oversize", "text_type", "phase", "duration", "alpha", "duplicate", "expanded", "scroll", "nan"]:
+		var bad: Dictionary = raw.duplicate(true)
+		match problem:
+			"unknown": bad["script"] = "res://untrusted.gd"
+			"unread": bad.unread = 51
+			"log_count": bad.log[0].count = 0
+			"oversize": bad.log.resize(51)
+			"text_type": bad.toasts[0].text = 3
+			"phase": bad.toasts[0].elapsed = 3.0
+			"duration": bad.toasts[0].hold = 300.0
+			"alpha": bad.toasts[0].alpha = 0.99
+			"duplicate": bad.toasts[1].text = bad.toasts[0].text
+			"expanded": bad.expanded = true
+			"scroll": bad.scroll.x = -1
+			"nan": bad.toasts[0].elapsed = NAN
+		var encoded: Dictionary = codec.encode(bad)
+		var result: Dictionary = adapter.new().restore(invalid_hud, encoded.value) if encoded.ok else encoded
+		_check("messages corrupt " + problem + " rejected before target mutation", not result.ok and invalid_hud._message_log.is_empty() and invalid_hud.msg_box.get_child_count() == 0 and not invalid_hud._info_expanded)
+	invalid_hud.free()
+	var target: Variant = _fresh_message_hud()
+	var module: Variant = adapter.new()
+	if not _ok("native message restore into paused constructed HUD", module.restore(target, wire.sections.hud_messages)):
+		target.free(); return false
+	_check("message log unread and text restored without replay", target._message_log == source._message_log and target._info_unread == source._info_unread and target._info_log.text == source._info_log.text and target._info_toggle.text == source._info_toggle.text)
+	_check("native Tween seek restores all three phases and labels", _message_rows_equal(source, target))
+	_check("message restore keeps HUD input gate closed", target.process_mode == Node.PROCESS_MODE_DISABLED and target.is_blocking_signals())
+	for frame in range(3): await process_frame
+	_check("prepared message timelines do not age before activation", _message_rows_equal(source, target) and target._info_scroll_pending)
+	var prepared_label: Node = target.msg_box.get_child(0).get_node("Text")
+	prepared_label.set_block_signals(false)
+	_check("message activation rejects changed child before enabling any row", not module.activate_rows().ok and target.msg_box.get_child(0).process_mode == Node.PROCESS_MODE_DISABLED)
+	prepared_label.set_block_signals(true)
+	_check("message rows activate once without opening HUD", module.activate_rows().ok and not module.activate_rows().ok and target.process_mode == Node.PROCESS_MODE_DISABLED)
+	# Fixture opens only these HUD idle consumers while SceneTree and gameplay
+	# remain paused. The source uses its original running Tweens, not a model.
+	source.process_mode = Node.PROCESS_MODE_ALWAYS
+	target.process_mode = Node.PROCESS_MODE_ALWAYS
+	var ticks := 0
+	var equal := true
+	var source_exits: Array = [0]
+	var target_exits: Array = [0]
+	for node: Node in source.msg_box.get_children():
+		node.set_block_signals(false)
+		node.tree_exited.connect(func() -> void: source_exits[0] += 1)
+	for node: Node in target.msg_box.get_children(): node.tree_exited.connect(func() -> void: target_exits[0] += 1)
+	var deadline: int = Time.get_ticks_msec() + 6000
+	while Time.get_ticks_msec() < deadline:
+		await process_frame
+		equal = equal and _message_rows_equal(source, target)
+		ticks += 1
+		if source.msg_box.get_child_count() == 0 and target.msg_box.get_child_count() == 0: break
+	_check("original and restored native Tweens match every idle frame", equal and ticks > 3)
+	checks.append({"label": "native toast observation", "passed": true, "idle_frames": ticks, "source_exits": source_exits[0], "target_exits": target_exits[0], "source_remaining": source.msg_box.get_child_count(), "target_remaining": target.msg_box.get_child_count()})
+	_check("native toasts expire once without restart or duplicate exit", source_exits[0] == 3 and target_exits[0] == 3 and source.msg_box.get_child_count() == 0 and target.msg_box.get_child_count() == 0)
+	_check("pending scroll resumes on HUD idle and is consumed once", not source._info_scroll_pending and not target._info_scroll_pending and target._info_scroll_restore == Vector2i(-1, -1))
+	source.process_mode = Node.PROCESS_MODE_DISABLED
+	# Post-restore interactions use the original public HUD behavior.
+	target.show_message("重复消息"); target.show_message("重复消息")
+	var row: Variant = target.msg_box.get_child(0)
+	_check("restored HUD deduplicates toast and log and resets finite hold", row.get_meta("info_count") == 2 and row.get_meta("toast_fade_in") == false and row.get_meta("toast_hold") == 2.75 and target._message_log[-1].count == 2 and row.get_node("Text").text == "重复消息  ×2")
+	for text: String in ["四", "五", "六"]: target.show_message(text)
+	_check("post-restore toast cap retains newest three", target.msg_box.get_child_count() == 3 and target.msg_box.get_child(0).get_meta("info_text") == "四")
+	for n in range(55): target.show_message("消息" + str(n))
+	_check("post-restore history and unread cap remain fifty", target._message_log.size() == 50 and target._info_unread == 50 and target._message_log[0].text == "消息5")
+	target._info_toggle.pressed.emit()
+	_check("actual info button clears unread and pending toasts", target._info_expanded and target._info_panel.visible and target._info_unread == 0 and target.msg_box.get_child_count() == 0 and target._info_scroll_pending)
+	await process_frame; await process_frame
+	_check("expanded restored history scrolls to native bottom", target._info_scroll.scroll_vertical == maxi(0, int(target._info_scroll.get_v_scroll_bar().max_value - target._info_scroll.get_v_scroll_bar().page)))
+	# Expanded history restores the existing read position without an implicit
+	# click, unread reset, replay or forced bottom-scroll when none was pending.
+	var expanded: Dictionary = raw.duplicate(true)
+	expanded.expanded = true; expanded.unread = 0; expanded.toasts = []
+	expanded.log = target._message_log.duplicate(true)
+	expanded.scroll = Vector2i(0, 25); expanded.scroll_pending = false
+	var second: Variant = _fresh_message_hud()
+	var second_module: Variant = adapter.new()
+	_check("expanded history restores without marking messages again", second_module.restore(second, codec.encode(expanded).value).ok and second._info_expanded and second._info_unread == 0 and not second._info_scroll_pending)
+	second_module.activate_rows()
+	await process_frame; await process_frame
+	second.process_mode = Node.PROCESS_MODE_ALWAYS
+	await process_frame; await process_frame
+	_check("restored read position survives native container layout", second._info_scroll.scroll_vertical == 25)
+	second.free(); target.free()
+	await process_frame; await process_frame
+	_check("message comparison leaves gameplay and old HUD frozen", paused and source.process_mode == Node.PROCESS_MODE_DISABLED and battle._save_barrier.state == battle._save_barrier.State.HELD)
+	for index in range(before, checks.size()):
+		if not checks[index].passed: return false
+	return true

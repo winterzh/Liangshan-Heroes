@@ -1,3 +1,7 @@
+## 2026-09-08 HUD 消息恢复
+
+core v5第18分区hud_messages，接入消息历史/未读/阅读位置/待滚动及原Tween阶段捕获，暂停HUD可重建提示并延后开放。原提示与恢复提示真实idle逐帧匹配且各退出一次；最终5949项中5794来源SHA、155其他，失败记录保留。三份受测脚本及原生UID晋级。[合同](HUD_MESSAGES_RESUME_20260908.md)、[QA](../qa/hud_messages_resume_20260908/README.md)。完整HUD、最终安装和玩家继续槽仍待交付；本批同步stable，不更新Steam。
+
 ## 2026-09-08 续玩主线：相机与屏障前输入恢复
 
 新增run_camera_state，core v4第17分区；保留位置/缩放/震动/触屏与屏障前处理输入状态，准备相机不抢旧镜头或重置缩放。真实Viewport滚轮、中键拖动/松开及idle恢复通过，坏记录完整回滚；5909项中5790来源SHA、119其他。受测三脚本及原生UID晋级。[合同](CAMERA_RESUME_20260908.md)、[QA](../qa/camera_resume_20260908/README.md)。HUD/氛围、最终根安装、继续槽和跨进程仍待完成；本批同步stable，不更新Steam。

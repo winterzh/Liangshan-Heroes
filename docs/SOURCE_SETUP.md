@@ -1,3 +1,7 @@
+## 2026-09-08 HUD 消息恢复
+
+core schema v5增加hud_messages并返回已校验pending_hud_messages。调用方须先暂停构建全新HUD，再restore和activate_rows；HUD整体输入仍由最终安装控制。[合同和复现](HUD_MESSAGES_RESUME_20260908.md)。启动方式、Play.cmd及玩家菜单没有变化。
+
 ## 2026-09-08 相机恢复
 
 core schema v4增加camera，返回待激活camera_module。RTSCamera._ready只对可信准备标记分流；Play.cmd及玩家菜单保持。完整安装顺序见[相机合同](CAMERA_RESUME_20260908.md)，隔离原生复现见[QA](../qa/camera_resume_20260908/README.md)。

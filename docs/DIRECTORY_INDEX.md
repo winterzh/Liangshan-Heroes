@@ -1,3 +1,9 @@
+## 2026-09-08 HUD 消息恢复
+
+- scripts/run_hud_messages_state.gd：消息历史、阅读位置和有限提示动画的显式状态。
+- docs/HUD_MESSAGES_RESUME_20260908.md：恢复合同、原生证据及剩余工作。
+- qa/hud_messages_resume_20260908/：失败/通过原始运行、受测输入和安装SHA。
+
 ## 2026-09-08 相机恢复
 
 - scripts/run_camera_state.gd：显式相机字段、屏障输入与暂停激活。
