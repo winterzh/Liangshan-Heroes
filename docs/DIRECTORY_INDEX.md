@@ -1,3 +1,9 @@
+## 2026-09-08 HUD 整体恢复
+
+- scripts/run_hud_state.gd：FIGHT HUD状态、隐藏准备及同帧激活。
+- docs/HUD_RESUME_20260908.md：真实根绑定后的安装顺序与剩余工作。
+- qa/hud_resume_20260908/：原始失败/通过、受测候选、来源和安装SHA。
+
 ## 2026-09-08 HUD 消息恢复
 
 - scripts/run_hud_messages_state.gd：消息历史、阅读位置和有限提示动画的显式状态。

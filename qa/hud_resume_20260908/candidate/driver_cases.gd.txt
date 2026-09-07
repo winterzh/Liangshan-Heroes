@@ -1,0 +1,132 @@
+func _all_hud_gated(hud: Node) -> bool:
+	var stack: Array = [hud]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		if node.process_mode != Node.PROCESS_MODE_DISABLED or not node.is_blocking_signals(): return false
+		stack.append_array(node.get_children(true))
+	return true
+
+func _hud_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var before: int = checks.size()
+	var raw: Dictionary = codec.decode(wire.sections.hud).value
+	var source: Variant = battle.hud
+	_check("HUD barrier releases held inventory and hover without closing popup", not source._inventory_grid.get_child(0)._held and source._inventory_grid.get_child(0)._press_ms == 0 and not source._tip_panel.visible and source._tip_owner == null and source._inventory_popup_open)
+	_check("HUD barrier cancels native GUI drag", not root.gui_is_dragging())
+	_check("HUD captures pause confirmation touch and source refresh phase", raw.values.touch_ui and raw.values._inventory_popup_open and raw.pause.visible and raw.pause.pending == "menu" and raw.values._panel_accum == 0.13)
+	var widget_script: Script = load("res://scripts/hud.gd")
+	var hud_script: Script = load("res://scripts/run_hud_state.gd")
+	var known: Dictionary = {}
+	for id: String in wire.sections.units.root_order: known[id] = true
+	for problem: String in ["unknown", "id", "clock", "pause", "canvas", "minimap", "inventory_clock"]:
+		var bad: Dictionary = raw.duplicate(true)
+		match problem:
+			"unknown": bad["resource"] = "res://unknown.gd"
+			"id": bad.selected[0].id = "999999999"
+			"clock": bad.values._panel_accum = -1.0
+			"pause": bad.pause.pending = "execute"
+			"canvas": bad.canvas.x = Vector2.ZERO
+			"minimap": bad.minimap.pixels = {"width": 1, "height": 1, "hex": "zzzzzzzz"}
+			"inventory_clock": bad.inventory_clocks[0] = "late"
+		_check("HUD malformed " + problem + " rejected", not hud_script.new().validate(bad, known).ok)
+	var mismatched: Dictionary = wire.duplicate(true)
+	var mismatch_raw: Dictionary = raw.duplicate(true)
+	mismatch_raw.minimap.pixels = {"width": 1, "height": 1, "hex": "000000ff"}
+	mismatched.sections.hud = codec.encode(mismatch_raw).value
+	var rollback: Variant = core_script.new(identity, runtime)
+	var pre: Dictionary = rollback.prepare(mismatched)
+	var rejected: Dictionary = rollback.mount_disabled(root) if pre.ok else pre
+	_check("late HUD map mismatch rolls back mounted world and root clock", pre.ok and not rejected.ok and rejected.code == "HUD_MINIMAP_MAP_MISMATCH" and rollback._battle == null and rollback._identity == null and battle.camera.is_current())
+	rollback.dispose()
+	var module: Variant = core_script.new(identity, runtime)
+	var plan: Dictionary = module.prepare(wire)
+	if not _ok("full HUD preparation attaches only disabled unready skeleton", plan): module.dispose(); return false
+	var target: Variant = plan.battle
+	var hud: Variant = target.hud
+	_check("prepared HUD is hidden detached and not ready", not hud.visible and not hud.is_inside_tree() and not hud.is_node_ready() and hud.battle == null and target._run_clock == null)
+	_check("HUD cannot finish or activate before mounted root state", not plan.hud_module.finish().ok and not plan.hud_module.activate().ok)
+	var count_before: int = target.units.size()
+	var serial_before: int = target.next_entity_id
+	var mounted: Dictionary = module.mount_disabled(root)
+	if not _ok("root state binds before paused full HUD construction", mounted): module.dispose(); return false
+	_check("prepared Battle ready neither deploys nor opens gameplay", target.units.size() == count_before and target.next_entity_id == serial_before and target._gameplay_rng_start_kind == "restored" and target._save_barrier == null and target._steam_run_id == 0 and target._cursor_resources_released and target.process_mode == Node.PROCESS_MODE_DISABLED)
+	_check("HUD and minimap reference the newly restored battle", hud.battle == target and hud.minimap.battle == target and target._run_clock != null)
+	_check("prepared scene retains the trusted normal restart resource", target.scene_file_path == "res://scenes/main.tscn")
+	_check("existing hero chip and inventory draw phases restore by identity", raw.hero_clocks.size() == 1 and hud._hero_bar.get_child(0)._redraw_accum == 0.04 and hud._inventory_grid.get_child(0)._draw_acc == 0.03)
+	_check("restored hero appearance signal targets its new chip", hud._hero_bar.get_child(0).hero == target.selection[0] and target.selection[0].appearance_changed.is_connected(Callable(hud._hero_bar.get_child(0), "_on_appearance_changed")))
+	_check("minimap cached native pixels and refresh phase preserved", hud.minimap._bg != null and hud.minimap._bg.get_image().get_data() == source.minimap._bg.get_image().get_data() and hud.minimap._accum == raw.minimap.clock)
+	_check("all original and dynamically built controls remain gated", not hud.visible and _all_hud_gated(hud))
+	_check("root economy is visible before input without a fake process", target.gold == 4321 and target.wood == 876 and hud._res_gold.text == "金 4321" and hud._res_wood.text == "木 876" and hud._res_pop.text == source._res_pop.text)
+	_check("restored selection uses new shared Unit identities", hud._sel_ref.size() == 1 and hud._sel_ref[0] == target.selection[0] and hud._sel_ref[0] != source._sel_ref[0] and hud._inventory_hero == target.active_unit())
+	_check("inventory popup command cards and portrait text restored", hud._inventory_popup_open and hud._inventory_popup.visible and hud._info_name.text == source._info_name.text and hud._skill_bar.get_child_count() == source._skill_bar.get_child_count())
+	_check("HUD logical timing and pending pause survive construction", hud._panel_accum == 0.13 and hud._autocam_pulse == raw.values._autocam_pulse and hud._pause_root.visible and hud._pause_confirm.visible and hud._pause_pending_action == "menu")
+	var stage_focus: Control = root.gui_get_focus_owner()
+	_check("prepared pause menu does not steal keyboard focus", stage_focus == null or not hud.is_ancestor_of(stage_focus))
+	var active_before: Variant = target._active
+	_check("root active pointer stays captured through presentation rebuild", active_before == target.selection[0])
+	var starts: Array = [0]
+	hud.start_battle.connect(func() -> void: starts[0] += 1)
+	hud.start_btn.pressed.emit()
+	_check("blocked start button does not replay start signal", starts[0] == 0 and target.next_entity_id == serial_before and not hud.start_btn.visible)
+	if not _ok("HUD activates in same paused installation turn", plan.hud_module.activate()): module.dispose(); return false
+	_check("HUD restores pre-barrier input and visibility", hud.visible == raw.canvas.visible and hud.process_mode == raw.activation.mode and hud.is_processing_input() == raw.activation.input and hud.is_blocking_signals() == raw.activation.blocked)
+	_check("pause confirmation initially focuses cancel action", root.gui_get_focus_owner() == hud._pause_cancel_button)
+	_check("HUD refuses duplicate activation and mount", not plan.hud_module.activate().ok and not module.mount_disabled(root).ok)
+	# Native viewport routing. Escape cancels the question first, then the
+	# existing Battle callback resumes. Re-pause synchronously before any frame.
+	var escape := InputEventKey.new(); escape.keycode = KEY_ESCAPE; escape.pressed = true
+	root.push_input(escape, true)
+	_check("restored pause receives viewport Escape and cancels departure", hud._pause_root.visible and not hud._pause_confirm.visible and hud._pause_pending_action == "" and paused)
+	root.push_input(escape, true)
+	_check("second Escape reaches original Battle resume callback", not paused and not hud._pause_root.visible)
+	paused = true
+	# Releases without a corresponding new press must not cast/learn/use after
+	# the barrier discarded the source gesture. Exercise each real handler.
+	var release := InputEventMouseButton.new(); release.button_index = MOUSE_BUTTON_LEFT; release.pressed = false
+	var command: Variant = null
+	var ability: Variant = null
+	for button: Variant in hud._skill_bar.get_children():
+		if button.get_script() == widget_script.CmdButton: command = button
+		if button.get_script() == widget_script.HeroSlotButton: ability = button
+	if command != null: command._gui_input(release)
+	if ability != null: ability._gui_input(release)
+	hud._inventory_grid.get_child(0)._gui_input(release)
+	_check("discarded releases do not arm commands or show item tips", target._garrison_armed == false and target._ability_armed == "" and target._item_armed == "" and not hud._tip_panel.visible)
+	# Existing controls operate from live restored data during actual idle ticks.
+	target.gold = 5432; target.wood = 321
+	var deadline: int = Time.get_ticks_msec() + 1500
+	while hud._res_gold.text != "金 5432" and Time.get_ticks_msec() < deadline: await process_frame
+	_check("restored resource labels follow actual native HUD idle", hud._res_gold.text == "金 5432" and hud._res_wood.text == "木 321")
+	var friendly: Array = []
+	for unit: Variant in target.units:
+		if unit.hp > 0.0 and unit.faction == Unit.FACTION_LIANG and not unit.is_resource: friendly.append(unit)
+	for size: int in [0, 1, 10, 12]:
+		if size > friendly.size(): _check("enough actual units for HUD selection " + str(size), false); continue
+		target.selection = friendly.slice(0, size); target._active = null
+		hud.update_selection_panel(target.selection)
+		await process_frame; await process_frame
+		_check("restored HUD real selection interaction " + str(size), hud._sel_ref.size() == size and hud._sel_grid.get_child_count() == size and (hud._info_name.text == "" if size == 0 else not hud._info_name.text.is_empty()))
+	var building: Variant = null
+	for unit: Variant in target.units:
+		if unit.is_building and unit.setup_def.has("produces") and unit.faction == Unit.FACTION_LIANG: building = unit; break
+	if _check("real restored production building available", building != null):
+		target.selection = [building]; target._active = building; hud.update_selection_panel(target.selection)
+		await process_frame; await process_frame
+		var actual_specs: Array = []
+		for button: Variant in hud._skill_bar.get_children():
+			if button.get_script() == widget_script.CmdButton: actual_specs.append(button.spec)
+		_check("production command cards reconstruct from actual restored building", not actual_specs.is_empty() and hud._inventory_hero == null and not hud._inventory_popup_open and hud._info_name.text == building.display_name)
+	module.dispose()
+	await process_frame; await process_frame
+	var stale: Variant = core_script.new(identity, runtime)
+	var stale_plan: Dictionary = stale.prepare(wire)
+	var stale_mount: Dictionary = stale.mount_disabled(root) if stale_plan.ok else stale_plan
+	if stale_mount.ok:
+		await process_frame
+		_check("HUD refuses input activation after installation frame elapsed", not stale_plan.hud_module.activate().ok and _all_hud_gated(stale_plan.battle.hud) and not stale_plan.battle.hud.visible)
+	else: _ok("stale-frame fixture prepares and mounts", stale_mount)
+	stale.dispose()
+	await process_frame; await process_frame
+	_check("HUD fixture leaves source gameplay frozen", paused and battle._save_barrier.state == battle._save_barrier.State.HELD and battle.hud.process_mode == Node.PROCESS_MODE_DISABLED)
+	for index in range(before, checks.size()):
+		if not checks[index].passed: return false
+	return true

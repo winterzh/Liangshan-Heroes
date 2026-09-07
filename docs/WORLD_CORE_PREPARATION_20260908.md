@@ -1,3 +1,5 @@
+后续更新：核心现为v6、19分区，mount_disabled可先绑定真实根时钟和数据再暂停挂载HUD；全世界激活仍由最终事务负责，见[HUD合同](HUD_RESUME_20260908.md)。下方早期“绝不挂载”表述仅描述各阶段历史API。
+
 后续更新：核心现为v5，hud_messages为第18分区；prepare校验后返回pending_hud_messages，完整HUD工厂仍待接入，见[消息恢复](HUD_MESSAGES_RESUME_20260908.md)。下方版本说明保留为历史阶段。
 
 后续更新：核心现为v4，相机为第17分区，并返回待激活camera_module，见[相机恢复](CAMERA_RESUME_20260908.md)。下方v1—v3内容保留为各阶段历史记录。

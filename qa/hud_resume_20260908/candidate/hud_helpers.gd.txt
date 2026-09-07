@@ -1,0 +1,40 @@
+func _release_run_pointer_state() -> void:
+	if get_viewport().gui_is_dragging(): get_viewport().gui_cancel_drag()
+	var focus: Control = get_viewport().gui_get_focus_owner()
+	if focus != null and is_ancestor_of(focus): focus.release_focus()
+	_tip_panel.hide(); _tip_owner = null; _tip_anchor = Rect2()
+	var stack: Array = [self]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		if node is CmdButton or node is HeroSlotButton:
+			node._held = false; node._press_ms = 0; node._tip_shown = false
+			node._press_pos = Vector2.ZERO; node._aiming = false
+		elif node is InventorySlotButton:
+			node._held = false; node._press_ms = 0; node._tip_shown = false
+			node._press_pos = Vector2.ZERO; node._drag_started = false
+		elif node is TouchChip:
+			node._down = false; node._press_ms = 0
+		stack.append_array(node.get_children(true))
+
+
+func _gate_run_prepared_ui() -> void:
+	# Record original flags once, including widgets added later by setup/touch
+	# layout. Repeated gating must not replace desired flags with DISABLED.
+	var plan: Dictionary = get_meta("_run_hud_activation", {})
+	var stack: Array = [self]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		if not plan.has(node): plan[node] = {"mode": node.process_mode, "blocked": node.is_blocking_signals()}
+		node.process_mode = Node.PROCESS_MODE_DISABLED; node.set_block_signals(true)
+		stack.append_array(node.get_children(true))
+	set_meta("_run_hud_activation", plan)
+
+
+func _open_run_prepared_ui() -> void:
+	var plan: Dictionary = get_meta("_run_hud_activation")
+	for node: Node in plan:
+		if not is_instance_valid(node) or node.is_queued_for_deletion(): continue
+		node.process_mode = plan[node].mode; node.set_block_signals(plan[node].blocked)
+	if not Settings.keybinds_changed.is_connected(_on_keybinds_changed): Settings.keybinds_changed.connect(_on_keybinds_changed)
+	if not get_viewport().size_changed.is_connected(_on_viewport_size_changed): get_viewport().size_changed.connect(_on_viewport_size_changed)
+	remove_meta("_run_hud_activation"); remove_meta("_run_hud_prepared")

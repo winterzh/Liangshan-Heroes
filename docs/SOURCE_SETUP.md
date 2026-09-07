@@ -1,3 +1,7 @@
+## 2026-09-08 HUD 整体恢复
+
+core schema v6新增hud与mount_disabled：离树真实根绑定后暂停挂载、构建HUD，同帧交给最终事务激活。启动方式、Play.cmd和玩家菜单不变；[安装合同与复现](HUD_RESUME_20260908.md)。不得将HUD内部激活验证当完整继续功能。
+
 ## 2026-09-08 HUD 消息恢复
 
 core schema v5增加hud_messages并返回已校验pending_hud_messages。调用方须先暂停构建全新HUD，再restore和activate_rows；HUD整体输入仍由最终安装控制。[合同和复现](HUD_MESSAGES_RESUME_20260908.md)。启动方式、Play.cmd及玩家菜单没有变化。

@@ -184,7 +184,6 @@ func prepare(record: Variant) -> Dictionary:
 	if not checked.requirements.is_empty(): return _bad("MAP_DISPLAY_UNSUPPORTED")
 	_battle = B.new()
 	_battle._cursor_resources_released = true # No global cursor is owned until final installation.
-	_battle.scene_file_path = "res://scenes/main.tscn" # Trusted restart route, never a saved path.
 	_battle.process_mode = Node.PROCESS_MODE_DISABLED
 	_battle.set_block_signals(true)
 	_battle._defs = _runtime.defs.duplicate(true)

@@ -1,0 +1,143 @@
+from pathlib import Path
+import hashlib,json,difflib
+root=Path.cwd(); out=root/'scratchpad/hud_resume_20260908'
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+def save(name,s):
+    p=root/'scripts'/name
+    if p.exists():
+        old=p.read_bytes().decode('utf-8').splitlines(keepends=True); new=s.splitlines(); result=[]
+        for op,i,j,a,b in difflib.SequenceMatcher(None,[x.rstrip('\r\n') for x in old],new,autojunk=False).get_opcodes():
+            if op=='equal': result.extend(old[i:j])
+            elif op in ('insert','replace'):
+                e='\r\n' if old[min(i,len(old)-1)].endswith('\r\n') else '\n'
+                result.extend(x+e for x in new[a:b])
+        assert ''.join(result).replace('\r\n','\n')==s
+        (out/name).write_bytes(''.join(result).encode('utf-8'))
+    else: (out/name).write_text(s,encoding='utf-8',newline='\n')
+h=(root/'scripts/hud.gd').read_text(encoding='utf-8')
+h=rep(h,'\tif not Settings.keybinds_changed.is_connected(_on_keybinds_changed):','\tif not has_meta("_run_hud_prepared") and not Settings.keybinds_changed.is_connected(_on_keybinds_changed):')
+h=rep(h,'\tget_viewport().size_changed.connect(_on_viewport_size_changed)','\tif not has_meta("_run_hud_prepared"):\n\t\tget_viewport().size_changed.connect(_on_viewport_size_changed)')
+h=rep(h,'\t_apply_safe_area()\n\n\nfunc setup','\t_apply_safe_area()\n\tif has_meta("_run_hud_prepared"): _gate_run_prepared_ui()\n\n\nfunc setup')
+h=rep(h,'\tif OS.has_feature("mobile") or OS.has_feature("web") or OS.get_environment("TOUCH_UI") == "1":','\tif not has_meta("_run_hud_prepared") and (OS.has_feature("mobile") or OS.has_feature("web") or OS.get_environment("TOUCH_UI") == "1"):')
+h=rep(h,'\t_pause_cancel_button.grab_focus()','\tif not has_meta("_run_hud_prepared"): _pause_cancel_button.grab_focus()')
+h=rep(h,'\t_pause_resume_button.grab_focus()','\tif not has_meta("_run_hud_prepared"): _pause_resume_button.grab_focus()')
+release='\t\t\telse:\n\t\t\t\t_held = false\n\t\t\t\tif _tip_shown:'
+assert h.count(release)==3
+h=h.replace(release,'\t\t\telse:\n\t\t\t\tif not _held:\n\t\t\t\t\taccept_event(); return # Ignore release after a cancelled save gesture.\n\t\t\t\t_held = false\n\t\t\t\tif _tip_shown:')
+# Share the existing resource rendering path with the paused constructor; never
+# invoke _process with a fake delta to initialize the restored HUD.
+a=h.index('\t\tif battle != null and battle.economy and _res_bar.visible:',h.index('\nfunc _process('))
+b=h.index('\t\tif not _sel_ref.is_empty():',a)
+resource=h[a:b]
+h=h[:a]+'\t\t_refresh_resource_values()\n'+h[b:]
+resource=''.join(line[1:] if line.startswith('\t') else line for line in resource.splitlines(keepends=True))
+h+='\n\nfunc _refresh_resource_values() -> void:\n'+resource
+h+='\n'+(out/'hud_helpers.gd').read_text(encoding='utf-8')
+save('hud.gd',h)
+b=(root/'scripts/battle.gd').read_text(encoding='utf-8')
+a=b.index('\thud.start_battle.connect(_on_start_battle)\n');z=b.index('\tadd_child(hud)',a)
+signals=b[a:z]
+b=b[:a]+'\t_connect_hud_signals()\n'+b[z:]
+b+='\n\nfunc _connect_hud_signals() -> void:\n'+signals
+b=rep(b,' or _run_clock != null or _save_barrier != null',' or not _prepared_clock_entry_valid() or _save_barrier != null')
+b+='''
+
+func _prepared_clock_entry_valid() -> bool:
+	if not has_meta("_run_core_clock_bound"): return _run_clock == null
+	var bound: Variant = get_meta("_run_core_clock_bound")
+	return typeof(bound) == TYPE_DICTIONARY and bound.size() == 3 and bound.has_all(["clock", "physics", "process"]) and _run_clock != null and bound.clock == _run_clock and bound.physics == Engine.get_physics_frames() and bound.process == Engine.get_process_frames()
+'''
+save('battle.gd',b)
+s=(root/'scripts/run_battle_barrier.gd').read_text(encoding='utf-8')
+s=rep(s,'\tvar stack: Array = [world.hud]','\tworld.hud._release_run_pointer_state()\n\tvar stack: Array = [world.hud]')
+save('run_battle_barrier.gd',s)
+c=(root/'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c=rep(c,'## Internal world preparation transaction. Never mounts, starts or saves a Battle.','## Internal preparation and paused mounting. Never starts or saves a Battle.')
+c=rep(c,'classic_world_core_preparation_v5','classic_world_core_preparation_v6')
+c=rep(c,'"camera", "hud_messages"]','"camera", "hud_messages", "hud"]')
+c=rep(c,'const HudMessages :=','const HudState := preload("res://scripts/run_hud_state.gd")\nconst HudMessages :=')
+c=rep(c,'var _pending_root: Dictionary = {}','var _pending_root: Dictionary = {}\nvar _hud_module: Variant = null\nvar _mount_frame: Dictionary = {}')
+c=rep(c,'\t_battle = B.new()','\t_battle = B.new()\n\t_battle._cursor_resources_released = true # No global cursor is owned until final installation.')
+c=rep(c,'\t_battle._cursor_resources_released = true # No global cursor is owned until final installation.','\t_battle._cursor_resources_released = true # No global cursor is owned until final installation.\n\t_battle.scene_file_path = "res://scenes/main.tscn" # Trusted restart route, never a saved path.')
+c=rep(c,'\tsections["hud_messages"] = hud_messages.value','''	sections["hud_messages"] = hud_messages.value
+	var hud_state: Dictionary = HudState.new().capture(source, ids)
+	if not hud_state.ok:
+		if retained_identity == null: identity.dispose()
+		return hud_state
+	sections["hud"] = hud_state.value''')
+c=rep(c,'\t_pending_root = s.root.duplicate(true)','''	_hud_module = HudState.new()
+	checked = _hud_module.bind(_battle, s.hud, s.hud_messages, ids, _unit_plan.expired_unit)
+	if not checked.ok: return _abort(checked, "hud")
+	_pending_root = s.root.duplicate(true)''')
+c=rep(c,'"pending_hud_messages": s.hud_messages.duplicate(true),','"pending_hud_messages": s.hud_messages.duplicate(true), "hud_module": _hud_module,')
+c=rep(c,'\t_camera_module = null','\t_camera_module = null\n\t_hud_module = null\n\t_mount_frame.clear()')
+c+='''
+
+func mount_disabled(parent: Node) -> Dictionary:
+	if not is_instance_valid(_battle) or _battle.get_parent() != null or _battle.is_inside_tree() or not _mount_frame.is_empty() or not is_instance_valid(parent) or not parent.is_inside_tree() or not parent.get_tree().paused or Engine.is_in_physics_frame(): return _bad("PAUSED_WORLD_MOUNT_REQUIRED")
+	var bound: Dictionary = _root_state(_identity).bind(_battle, _pending_root, _trusted.content_version, _unit_plan.id_to_unit, _unit_plan.expired_unit, {"quiescent": true, "input_released": true})
+	if not bound.ok: return _abort(bound, "root_install")
+	_mount_frame = {"clock": _battle._run_clock, "physics": bound.bound_physics_frame, "process": bound.bound_process_frame}
+	_battle.set_meta("_run_core_clock_bound", _mount_frame.duplicate())
+	parent.add_child(_battle)
+	if not _battle.gameplay_rng_fault().is_empty(): return _abort(_bad("PREPARED_READY_FAULT"), "mount")
+	var hud: Dictionary = _hud_module.finish()
+	if not hud.ok: return _abort(hud, "hud_finish")
+	if not _battle._prepared_clock_entry_valid(): return _abort(_bad("INSTALL_FRAME_CHANGED"), "mount")
+	return {"ok": true, "battle": _battle, "hud_module": _hud_module, "bound_physics_frame": bound.bound_physics_frame, "bound_process_frame": bound.bound_process_frame, "requires_same_turn_install_and_activate": true, "complete_world": false, "gameplay_activated": false}
+'''
+save('run_battle_world_core.gd',c)
+d=(root/'qa/hud_messages_resume_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('hud-messages-resume-native','hud-resume-native').replace('[hud messages QA] ','[hud resume QA] ')
+d=rep(d,'\t# Make three native Tween phases observable', '''	# Non-default real UI state; shared Unit IDs must survive rebuilding.
+	var countable: Array = battle.units.filter(func(unit) -> bool: return unit.hp > 0.0 and unit.faction == Unit.FACTION_LIANG and not unit.is_resource)
+	var worker: Variant = null
+	for unit: Variant in countable:
+		if unit.is_worker: worker = unit; break
+	if not _check("HUD fixture has an actual worker definition", worker != null): await _finish(true); return
+	while countable.size() < 12:
+		var extra: Variant = battle.spawn_unit(worker.key, Unit.FACTION_LIANG, worker.position)
+		if extra == null: _check("HUD fixture worker spawns", false); await _finish(true); return
+		countable.append(extra)
+	battle.gold = 4321; battle.wood = 876
+	var selected_heroes: Array = battle.liang_heroes()
+	if selected_heroes.is_empty():
+		battle.spawn_unit(battle_script.ECO_HERO_ORDER[0], unit_script.FACTION_LIANG, worker.position + Vector2(32.0, 0.0))
+		selected_heroes = battle.liang_heroes()
+	if not _check("HUD fixture has hero", not selected_heroes.is_empty()): await _finish(true); return
+	battle._set_selection([selected_heroes[0]])
+	battle.hud.set_touch_ui(true)
+	battle.hud._refresh_hero_bar()
+	battle.hud._hero_bar.get_child(0)._redraw_accum = 0.04
+	battle.hud._inventory_popup_open = true; battle.hud.refresh_inventory()
+	battle.hud._refresh_resource_values()
+	battle.hud.minimap._build_bg()
+	battle.hud._panel_accum = 0.13
+	battle.hud._autocam_pulse = 1.75
+	battle.hud.show_pause(); battle.hud._request_pause_action("menu")
+	# Unsubmitted gestures must be released by the real barrier.
+	var slot: Variant = battle.hud._inventory_grid.get_child(0)
+	slot._held = true; slot._press_ms = 333; slot._tip_shown = true
+	slot._draw_acc = 0.03
+	var drag_preview := Label.new(); drag_preview.text = "取消中的物品拖拽"
+	slot.force_drag(slot._drag_payload(), drag_preview)
+	_check("actual native inventory drag fixture starts", root.gui_is_dragging())
+	battle.hud.show_skill_tip(slot, Rect2(10, 10, 40, 40), "临时提示", "不应续接按住状态", "", Color.WHITE)
+	# Make three native Tween phases observable''')
+d=rep(d,'\tif not await _hud_message_cases(core_script, wire):','''	if not await _hud_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	if not await _hud_message_cases(core_script, wire):''')
+d+='\n'+(out/'driver_cases.gd').read_text(encoding='utf-8')
+d=d.replace('Unit.FACTION_LIANG','unit_script.FACTION_LIANG')
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+changes=[]
+for name in ['hud.gd','battle.gd','run_battle_barrier.gd','run_battle_world_core.gd','run_hud_state.gd']:
+    p=root/'scripts'/name; row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':'scratchpad/hud_resume_20260908/'+name,'candidate_sha256':sha(out/name)}
+    if p.exists(): row['before_raw_sha256']=sha(p)
+    changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+names=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd','driver_cases.gd','hud_helpers.gd']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names}},indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))
