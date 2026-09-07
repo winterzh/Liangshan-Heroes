@@ -19,6 +19,8 @@ Godot 4.6.3、当前源码白名单的独立工程、独立 user://。运行 `ov
 
 ## 接下来
 
+后续已完成：Projectile/飞斧统一有序图通过两轮原生及图腾并存验证，见[混合图记录](MIXED_FX_RESUME_20260908.md)。以下继续作为整体世界工厂要求。
+
 按[世界工厂顺序](../qa/stabilization_battle_barrier_integration_20260907/independent_review/WORLD_FACTORY_NEXT.md)继续接统一 FxRoot 路由与原始顺序，纳入实际 Projectile/飞斧。随后完成脱树禁用世界、原子安装、跨进程移动/生产/伤害/死亡/波次对照，再接单继续槽和菜单。
 
 完整世界恢复、其他特效/死亡残留、全局视觉随机数策略、真实Steam回执、八关保存、长期性能和真人门槛仍开放。本轮只更新开发源码与文档，没有上传Steam或更换公开构建。

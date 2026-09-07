@@ -1,3 +1,7 @@
+## 2026-09-08 混合特效图恢复
+
+run_visual_graph构造器增加可选的受信Projectile/飞斧适配器，调用顺序见[实现合同](MIXED_FX_RESUME_20260908.md)。原调用和Play.cmd启动保持；没有玩家继续入口。复现使用231f560来源的独立checkout，按[QA](../qa/mixed_fx_20260908/README.md)恢复冻结候选原名；全部QA以.gdignore隔离、.gitattributes保持原字节。完整世界工厂仍待开发。
+
 ## 2026-09-08 闪现箭光恢复
 
 `battle.gd`和`run_visual_graph.gd`接入已原生验证的BlinkShotFx保存恢复；普通启动仍用Play.cmd，没有开放继续战斗入口。复现须在aae6593的独立checkout按[本批QA](../qa/blink_resume_20260908/README.md)恢复冻结候选名字；QA内.gd.txt不能直接运行。档案以.gdignore隔离并保持原字节。[范围与后续](BLINK_RESUME_20260908.md)。

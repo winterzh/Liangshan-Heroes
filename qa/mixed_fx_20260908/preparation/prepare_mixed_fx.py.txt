@@ -1,0 +1,95 @@
+from pathlib import Path
+import hashlib,json,subprocess
+root=Path(__file__).resolve().parents[1]
+out=root/'scratchpad/mixed_fx_20260908';out.mkdir(parents=True,exist_ok=True)
+(out/'.gdignore').write_bytes(b'')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def rep(s,a,b):
+ assert s.count(a)==1,a
+ return s.replace(a,b)
+s=(root/'scripts/run_visual_graph.gd').read_text(encoding='utf-8')
+s=rep(s,'\t"container": [],','\t"container": [],\n\t"projectile": ["state"],\n\t"li_brawn_axes": ["state"],')
+s=rep(s,'var _codec: Variant','const AUTHORITY_KINDS := ["projectile", "li_brawn_axes"]\nvar _projectile_adapter: Variant\nvar _axes_adapter: Variant\nvar _unit_tombstone: Variant = null\nvar _codec: Variant')
+s=rep(s,'trusted_textures: Dictionary = {}) -> void:', 'trusted_textures: Dictionary = {}, projectile_adapter: Variant = null, axes_adapter: Variant = null) -> void:')
+s=rep(s,'\t_textures = trusted_textures.duplicate()', '\t_textures = trusted_textures.duplicate()\n\t_projectile_adapter = projectile_adapter\n\t_axes_adapter = axes_adapter')
+s=rep(s,'\tif node.get_script() == _battle.BlinkShotFx:', '\tif _projectile_adapter != null and _projectile_adapter._projectile(node): return "projectile"\n\tif _axes_adapter != null and _axes_adapter._axes(node): return "li_brawn_axes"\n\tif node.get_script() == _battle.BlinkShotFx:')
+s=rep(s,'\t\tvar row: Dictionary = {"id": id,', '''\t\tvar values: Dictionary
+\t\tif kind in AUTHORITY_KINDS:
+\t\t\tif kind == "li_brawn_axes" and (not is_instance_valid(_owner) or not is_same(node.game, _owner)): return _failure("AXES_GRAPH_OWNER")
+\t\t\tfor signal_info: Dictionary in node.get_signal_list():
+\t\t\t\tif not node.get_signal_connection_list(signal_info.name).is_empty(): return _failure("AUTHORITY_SIGNAL_CONNECTION", kind)
+\t\t\tvar captured: Dictionary = _adapter(kind).capture(node, version, units)
+\t\t\tif not captured.ok: return captured
+\t\t\tvalues = {"state": captured.record}
+\t\telse: values = _values(node, kind)
+\t\tvar row: Dictionary = {"id": id,''')
+s=rep(s,'"kind": kind, "node": _read_node(node), "values": _values(node, kind), "references": refs}', '"kind": kind, "node": _read_node(node), "values": values, "references": refs}')
+s=rep(s,'\t\tvar vc: Dictionary = _values_check(row.values, row.kind)', '''\t\tvar vc: Dictionary
+\t\tif row.kind in AUTHORITY_KINDS:
+\t\t\tif _adapter(row.kind) == null: return _failure("AUTHORITY_ADAPTER_REQUIRED", row.kind)
+\t\t\tif typeof(row.values) != TYPE_DICTIONARY or not _fields(row.values, ["state"]): return _failure("AUTHORITY_VALUES")
+\t\t\tvc = _adapter(row.kind).validate(row.values.state, version, known)
+\t\t\tif vc.ok and vc.node != row.node: return _failure("AUTHORITY_NODE_MISMATCH", row.id)
+\t\telse: vc = _values_check(row.values, row.kind)''')
+s=rep(s,'\t# All fallible record/reference checks precede any allocation or typed assignment.', '''\tfor row: Dictionary in checked.rows:
+\t\tif row.kind not in AUTHORITY_KINDS: continue
+\t\tif row.kind == "li_brawn_axes":
+\t\t\tif not is_instance_valid(_owner) or _owner.get_script() != _battle or _owner.is_inside_tree() or _owner.is_queued_for_deletion(): return _failure("AXES_PRIVATE_OWNER_REQUIRED")
+\t\tvar state: Dictionary = _adapter(row.kind).validate(row.values.state, version, registry.known)
+\t\tvar tags: Array = state.references.values() if row.kind == "projectile" else [state.caster]
+\t\tif row.kind == "li_brawn_axes":
+\t\t\tfor hit: Dictionary in state.hits: tags.append(hit.target)
+\t\tfor tag: Dictionary in tags:
+\t\t\tif tag.state == "expired" and (typeof(expired_unit) != TYPE_OBJECT or not is_instance_valid(expired_unit) or expired_unit.get_script() != _unit or expired_unit.is_queued_for_deletion() or expired_unit.get_parent() != null or expired_unit.is_inside_tree() or units.values().has(expired_unit)): return _failure("LIVE_UNIT_TOMBSTONE_REQUIRED")
+\t# Validate the entire mixed graph and all references before allocation.''')
+start=s.index('\t\tvar node: Node2D = _new(row.kind)',s.index('func prepare('))
+end=s.index('\t\t_nodes[row.id] = node',start)
+old=s[start:end]
+new='''\t\tvar node: Node2D
+\t\tif row.kind in AUTHORITY_KINDS:
+\t\t\tvar made: Dictionary = _adapter(row.kind).instantiate(row.values.state, version, registry.known)
+\t\t\tif not made.ok:
+\t\t\t\tdispose()
+\t\t\t\treturn made
+\t\t\tnode = made.projectile if row.kind == "projectile" else made.fx
+\t\t\tvar bound: Dictionary
+\t\t\tif row.kind == "projectile": bound = _projectile_adapter.bind(node, row.values.state, version, units, expired_unit)
+\t\t\telse: bound = _axes_adapter.bind(node, row.values.state, version, units, _owner, expired_unit)
+\t\t\tif not bound.ok:
+\t\t\t\tnode.free()
+\t\t\t\tdispose()
+\t\t\t\treturn bound
+\t\telse:
+'''+''.join('\t'+line if line.strip() else line for line in old.replace('\t\tvar node: Node2D = _new(row.kind)','\t\tnode = _new(row.kind)').splitlines(True))
+s=s[:start]+new+s[end:]
+s=rep(s,'\t\t\t\treturn bound\n\t\telse:', '\t\t\t\treturn bound\n\t\t\tif bound.expired_bindings > 0: _unit_tombstone = expired_unit\n\t\telse:')
+s=rep(s,'\tif _committed: return _failure("VISUAL_ALREADY_ACTIVATED")','\tif _committed: return _failure("VISUAL_ALREADY_ACTIVATED")\n\tif is_instance_valid(_unit_tombstone): return _failure("UNIT_TOMBSTONE_NOT_RELEASED")')
+s=rep(s,'\tfor id: String in _nodes:\n\t\tvar node: Node2D = _nodes[id]\n\t\tif not is_instance_valid(node)', '''\tvar child_counts: Dictionary = {}
+\tfor row: Dictionary in _records.values():
+\t\tif row.parent != "": child_counts[row.parent] = int(child_counts.get(row.parent, 0)) + 1
+\tfor id: String in _nodes:
+\t\tvar node: Node2D = _nodes[id]
+\t\tif not is_instance_valid(node)''')
+s=rep(s,'return _failure("VISUAL_ACTIVATION_STATE")\n\tfor id:', '''return _failure("VISUAL_ACTIVATION_STATE")
+\t\tvar row: Dictionary = _records[id]
+\t\tif node.is_queued_for_deletion() or _kind(node) != row.kind or node.get_child_count(true) != int(child_counts.get(id, 0)): return _failure("VISUAL_ACTIVATION_TOPOLOGY")
+\t\tif row.parent != "" and (node.get_parent() != _nodes[row.parent] or node.get_index(true) != row.index): return _failure("VISUAL_ACTIVATION_TOPOLOGY")
+\t\tif row.kind == "li_brawn_axes" and (not is_instance_valid(_owner) or _owner.fx_root != _root or not is_same(node.game, _owner)): return _failure("AXES_GRAPH_OWNER")
+\tfor id:''')
+s=rep(s,'\t_activation.clear()','\t_activation.clear()\n\t_unit_tombstone = null')
+s=rep(s,'\tif kind not in TIMED_KINDS: return {"ok": true}\n\t# The supported timed creators', '\tif kind not in TIMED_KINDS + AUTHORITY_KINDS: return {"ok": true}\n\t# The supported timed and authority creators')
+s+='''
+func _adapter(kind: String) -> Variant:
+\treturn _projectile_adapter if kind == "projectile" else _axes_adapter
+'''
+(out/'run_visual_graph.gd').write_text(s,encoding='utf-8',newline='\n')
+driver=(root/'qa/blink_resume_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+driver=driver.replace('blink-resume-native','mixed-fx-native').replace('[blink resume QA] ','[mixed Fx QA] ')
+driver=rep(driver,'"run_continuous_effect_state", "hud"]:', '"run_continuous_effect_state", "hud", "projectile", "run_projectile_state", "run_li_brawn_axes_state"]:')
+driver=rep(driver,'\t_finish()\n\nfunc _shell()', '\tif not await _mixed_engine_case():\n\t\t_finish(true)\n\t\treturn\n\t_finish()\n\nfunc _shell()')
+driver+=(root/'.godot/mixed_engine_case.gd.inc').read_text(encoding='utf-8')
+(out/'driver.gd').write_text(driver,encoding='utf-8',newline='\n')
+changes=[{'path':'scripts/run_visual_graph.gd','before_exists':True,'before_raw_sha256':sha(root/'scripts/run_visual_graph.gd'),'candidate':(out/'run_visual_graph.gd').relative_to(root).as_posix(),'candidate_sha256':sha(out/'run_visual_graph.gd')}]
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+(out/'freeze.json').write_text(json.dumps({'inputs':{p:sha(out/p) for p in ['run_visual_graph.gd','driver.gd','overlay_manifest.json']}},indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'freeze':sha(out/'freeze.json')}))
