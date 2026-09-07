@@ -1,0 +1,119 @@
+{
+  "schema": 2,
+  "segment_seconds": 10,
+  "note": "All wall-clock segments, no best-window selection. Boundary-crossing frames are proportionally counted for FPS. Percentiles include every overlapping frame. This is workload diagnosis, not a new acceptance gate.",
+  "samples": [
+    {
+      "report": "defense200_fixed_1.json",
+      "scenario": "defense200",
+      "effects_quality": "standard",
+      "effects_quality_provenance": "recorded",
+      "effects_quality_verified": true,
+      "effects_quality_violations": 0,
+      "effects_quality_check_scope": "setup, measurement boundaries and existing 60-physics-tick trajectory cadence",
+      "camera_mode": "fixed",
+      "segments": [
+        {
+          "index": 0,
+          "from_seconds": 0.0,
+          "frame_equivalents": 236.0,
+          "seconds": 6.022462999999997,
+          "fps": 39.18662513991371,
+          "p95_ms": 33.892,
+          "p99_ms": 48.866,
+          "complete_ten_seconds": false
+        }
+      ],
+      "lowest_complete_segment_fps": null,
+      "highest_complete_segment_p95_ms": null,
+      "cpu_process_monitor_median_ms": 21.492,
+      "cpu_physics_monitor_median_ms": 9.592,
+      "render_cpu_median_ms": 3.32599997520447,
+      "render_gpu_median_ms": 3.773499965667725
+    },
+    {
+      "report": "economy_fixed_1.json",
+      "scenario": "economy",
+      "effects_quality": "standard",
+      "effects_quality_provenance": "recorded",
+      "effects_quality_verified": true,
+      "effects_quality_violations": 0,
+      "effects_quality_check_scope": "setup, measurement boundaries and existing 60-physics-tick trajectory cadence",
+      "camera_mode": "fixed",
+      "segments": [
+        {
+          "index": 0,
+          "from_seconds": 0.0,
+          "frame_equivalents": 1069.0,
+          "seconds": 6.004619,
+          "fps": 178.02961353584632,
+          "p95_ms": 8.016,
+          "p99_ms": 9.108,
+          "complete_ten_seconds": false
+        }
+      ],
+      "lowest_complete_segment_fps": null,
+      "highest_complete_segment_p95_ms": null,
+      "cpu_process_monitor_median_ms": 9.247,
+      "cpu_physics_monitor_median_ms": 1.922,
+      "render_cpu_median_ms": 1.61000001430511,
+      "render_gpu_median_ms": 1.12999999523163
+    },
+    {
+      "report": "gao_contact_fixed_1.json",
+      "scenario": "gao_contact",
+      "effects_quality": "standard",
+      "effects_quality_provenance": "recorded",
+      "effects_quality_verified": true,
+      "effects_quality_violations": 0,
+      "effects_quality_check_scope": "setup, measurement boundaries and existing 60-physics-tick trajectory cadence",
+      "camera_mode": "fixed",
+      "segments": [
+        {
+          "index": 0,
+          "from_seconds": 0.0,
+          "frame_equivalents": 719.0,
+          "seconds": 6.000842,
+          "fps": 119.8165190818222,
+          "p95_ms": 13.002,
+          "p99_ms": 14.628,
+          "complete_ten_seconds": false
+        }
+      ],
+      "lowest_complete_segment_fps": null,
+      "highest_complete_segment_p95_ms": null,
+      "cpu_process_monitor_median_ms": 11.959,
+      "cpu_physics_monitor_median_ms": 4.049,
+      "render_cpu_median_ms": 1.90799999237061,
+      "render_gpu_median_ms": 0.996999979019165
+    },
+    {
+      "report": "zhu_contact_fixed_1.json",
+      "scenario": "zhu_contact",
+      "effects_quality": "standard",
+      "effects_quality_provenance": "recorded",
+      "effects_quality_verified": true,
+      "effects_quality_violations": 0,
+      "effects_quality_check_scope": "setup, measurement boundaries and existing 60-physics-tick trajectory cadence",
+      "camera_mode": "fixed",
+      "segments": [
+        {
+          "index": 0,
+          "from_seconds": 0.0,
+          "frame_equivalents": 929.0,
+          "seconds": 6.0016929999999995,
+          "fps": 154.789656851825,
+          "p95_ms": 11.865,
+          "p99_ms": 14.335,
+          "complete_ten_seconds": false
+        }
+      ],
+      "lowest_complete_segment_fps": null,
+      "highest_complete_segment_p95_ms": null,
+      "cpu_process_monitor_median_ms": 10.578,
+      "cpu_physics_monitor_median_ms": 8.66,
+      "render_cpu_median_ms": 0.561999976634979,
+      "render_gpu_median_ms": 0.722000002861023
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema": 2,
+  "segment_seconds": 10,
+  "note": "All wall-clock segments, no best-window selection. Boundary-crossing frames are proportionally counted for FPS. Percentiles include every overlapping frame. This is workload diagnosis, not a new acceptance gate.",
+  "samples": [
+    {
+      "report": "defense200_auto_1.json",
+      "scenario": "defense200",
+      "effects_quality": "standard",
+      "effects_quality_provenance": "recorded",
+      "effects_quality_verified": true,
+      "effects_quality_violations": 0,
+      "effects_quality_check_scope": "setup, measurement boundaries and existing 60-physics-tick trajectory cadence",
+      "camera_mode": "auto",
+      "segments": [
+        {
+          "index": 0,
+          "from_seconds": 0.0,
+          "frame_equivalents": 251.0,
+          "seconds": 6.007403,
+          "fps": 41.78178157849573,
+          "p95_ms": 32.661,
+          "p99_ms": 49.343,
+          "complete_ten_seconds": false
+        }
+      ],
+      "lowest_complete_segment_fps": null,
+      "highest_complete_segment_p95_ms": null,
+      "cpu_process_monitor_median_ms": 19.235,
+      "cpu_physics_monitor_median_ms": 10.638,
+      "render_cpu_median_ms": 3.10199999809265,
+      "render_gpu_median_ms": 3.53399991989136
+    }
+  ]
+}

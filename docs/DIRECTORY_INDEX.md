@@ -1,3 +1,9 @@
+## 2026-09-07 性能与 Steam 配置记录
+
+- `docs/STABILIZATION_PERFORMANCE_20260907.md`、`qa/stabilization_performance_20260907/`：五组三次正常基线、Unit诊断、失败尝试、原始工具与SHA清单。
+- `tools/run_stabilization_performance.py`、`prepare_unit_remainder_diagnostic.py`、`run_unit_remainder_diagnostic.py`、`unit_remainder_observer.gd`：冻结源码、私有执行及分段诊断入口。
+- `qa/steam_configuration_publish_20260907/`：60图标后台/玩家页面标识、原图SHA、发布及构建回读的脱敏观察；不含登录缓存或分支口令。
+
 ## 2026-09-07 收尾计划与来源恢复
 
 - `docs/STABILIZATION_EXECUTION_20260907.md`：用户批准的Windows收尾范围、顺序、并行边界和实际批次结果。

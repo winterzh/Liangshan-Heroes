@@ -1,3 +1,9 @@
+## 2026-09-07 性能基线与平台配置收据
+
+`tools/run_stabilization_performance.py`从明确Git提交的生产blob创建短路径私有工程，先冻结真实gameplay RNG，再运行五组各三次正常60秒窗口。诊断工具绑定完整基线输入，仅在私有派生工程插桩；命令和边界见[性能说明](STABILIZATION_PERFORMANCE_20260907.md)。Godot槽仍须独占，真实玩家目录只做前后守护。
+
+`qa/stabilization_performance_20260907/`保留原始结果、日志、截图、失败尝试和执行工具原字节，不同步私有profile或Godot缓存。`qa/steam_configuration_publish_20260907/`为脱敏浏览器观察及本地生产图SHA，不是HTTP响应或Steam客户端SDK收据。后台配置现已发布，测试分支包仍为d4728d4；Git源码更新和Steam构建交付分开记录。
+
 ## 2026-09-07 来源审计可迁移化
 
 当前工程使用 `D:/AI项目/水浒/开发工程` 实路径。新增来源链位于 `tools/contracts/art_provenance_recovery_20260907/`：451个按固定历史SHA追回的文件，462个旧引用通过独立mapping映射，生产manifest原字节保留。该目录不是普通缓存，必须随本批源码白名单同步；`.gdignore`避免引擎导入证据图，`.gitattributes`避免Git改写原换行字节。
