@@ -1,0 +1,88 @@
+$ErrorActionPreference = 'Stop'
+$qaBase = 'D:/AI项目/水浒/开发工程/scratchpad/parallel_steam_store_20260907/attempt_a2'
+$qaRun = Join-Path $qaBase 'runs/20260907T091322Z_b22324f5'
+function Assert-Qa([bool]$condition, [string]$message) { if (-not $condition) { throw $message } }
+function Read-QaJson([string]$path) { Get-Content -Raw -LiteralPath $path | ConvertFrom-Json -Depth 100 }
+function Hash-Qa([string]$path) { (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant() }
+$qaReceipt = Read-QaJson (Join-Path $qaRun 'receipt.json')
+$qaFreeze = Read-QaJson (Join-Path $qaBase 'freeze.json')
+Assert-Qa ($qaReceipt.passed -eq $true) 'Final receipt not PASS'
+Assert-Qa ((Hash-Qa (Join-Path $qaBase 'freeze.json')) -eq $qaReceipt.freeze_sha256) 'Freeze SHA mismatch'
+foreach ($qaFlag in @('source_unchanged','head_unchanged','frozen_inputs_unchanged','player_profiles_unchanged','child_exits_confirmed','lock_released')) {
+	Assert-Qa ($qaReceipt.$qaFlag -eq $true) ('Guard failed: ' + $qaFlag)
+}
+Assert-Qa ($qaReceipt.godot_pids_after.Count -eq 0) 'Godot PID residue reported'
+foreach ($qaInput in $qaFreeze.inputs.PSObject.Properties) {
+	Assert-Qa ((Hash-Qa (Join-Path $qaBase $qaInput.Name)) -eq $qaInput.Value) ('Frozen input differs: ' + $qaInput.Name)
+}
+foreach ($qaInput in $qaReceipt.copied_inputs.PSObject.Properties) {
+	Assert-Qa ((Hash-Qa (Join-Path $qaRun ('project/' + $qaInput.Name))) -eq $qaInput.Value) ('Executed input differs: ' + $qaInput.Name)
+}
+$qaKillCount = 0
+$qaNativeChecks = 0
+$qaTraceEvents = 0
+$qaTraceFiles = 0
+$qaNormalReports = 0
+foreach ($qaPhase in $qaReceipt.processes) {
+	Assert-Qa ($qaPhase.child_exit_confirmed -eq $true) ('Child exit unconfirmed: ' + $qaPhase.name)
+	Assert-Qa ($qaPhase.errors.Count -eq 0) ('Recorded engine errors: ' + $qaPhase.name)
+	$qaLog = Get-Content -Raw -LiteralPath (Join-Path $qaRun ($qaPhase.name + '.log'))
+	Assert-Qa ($qaLog -notmatch '(?m)SCRIPT ERROR|^ERROR:|^WARNING:|Parse Error|Compile Error|leaked|RID allocations') ('Raw engine log error: ' + $qaPhase.name)
+	if ($qaPhase.expected_external_termination) {
+		$qaKillCount++
+		$qaCheckpoint = Read-QaJson (Join-Path $qaRun ($qaPhase.name + '_checkpoint.json'))
+		Assert-Qa ($qaPhase.exit_code -ne 0 -and $qaPhase.checkpoint_verified -eq $true) ('Not an abrupt checkpoint termination: ' + $qaPhase.name)
+		Assert-Qa ($qaCheckpoint.pid -eq $qaPhase.pid -and $qaCheckpoint.name -eq $qaPhase.checkpoint) ('Raw checkpoint identity differs: ' + $qaPhase.name)
+	} else {
+		Assert-Qa ($qaPhase.exit_code -eq 0) ('Normal phase failed: ' + $qaPhase.name)
+		if ($qaPhase.mode) {
+			$qaWorker = Read-QaJson (Join-Path $qaRun ($qaPhase.name + '.json'))
+			Assert-Qa ($qaWorker.passed -eq $true -and $qaWorker.failed -eq 0 -and $qaWorker.pid -eq $qaPhase.pid -and $qaWorker.phase -eq $qaPhase.mode) ('Worker report differs: ' + $qaPhase.name)
+			Assert-Qa (@($qaWorker.checks | Where-Object {$_.passed -ne $true}).Count -eq 0) ('Worker assertion failed: ' + $qaPhase.name)
+			Assert-Qa ($qaWorker.profile.Replace('\','/') -eq ($qaRun.Replace('\','/') + '/private_profile/appdata/LHReceiptDiskContract')) ('Worker profile differs: ' + $qaPhase.name)
+			$qaNativeChecks += $qaWorker.checks.Count
+			$qaNormalReports++
+		}
+	}
+	# Each originating worker owns one trace. Recovery and bad-ledger workers
+	# deliberately reuse/preserve another worker's case and are checked separately.
+	if ($qaPhase.mode -notin @('contract','dispatch','callback1','callback8','stat_failure','store_false')) { continue }
+	$qaCasePath = Join-Path $qaRun ('project/fixtures/' + $qaPhase.case)
+	$qaTracePath = Join-Path $qaCasePath 'sdk.jsonl'
+	if (-not (Test-Path -LiteralPath $qaTracePath)) { continue }
+	$qaTraceFiles++
+	foreach ($qaLine in Get-Content -LiteralPath $qaTracePath) {
+		$qaEvent = $qaLine | ConvertFrom-Json -Depth 100
+		$qaRecordPath = Join-Path $qaCasePath ('5088120/76561198000000001/record_{0:D10}.json' -f [int]$qaEvent.revision)
+		Assert-Qa ($qaEvent.pid -eq $qaPhase.pid -and $qaEvent.accepted -is [bool]) 'Trace event owner or accepted type differs'
+		Assert-Qa ((Hash-Qa $qaRecordPath) -eq $qaEvent.marker_sha256) 'Trace marker differs from raw journal bytes'
+		$qaEnvelope = Read-QaJson $qaRecordPath
+		Assert-Qa ($qaEnvelope.app -eq '5088120' -and $qaEnvelope.owner -eq '76561198000000001' -and [int]$qaEnvelope.revision -eq $qaEvent.revision) 'Trace envelope identity differs'
+		$qaPayloadBytes = [Text.Encoding]::UTF8.GetBytes($qaEnvelope.payload)
+		$qaPayloadDigest = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($qaPayloadBytes)).ToLowerInvariant()
+		Assert-Qa ($qaPayloadDigest -eq $qaEnvelope.payload_sha256 -and [int]$qaEnvelope.payload_bytes -eq $qaPayloadBytes.Length) 'Trace payload integrity differs'
+		$qaDocument = $qaEnvelope.payload | ConvertFrom-Json -Depth 100
+		Assert-Qa ($qaDocument.owner -eq '76561198000000001' -and $qaDocument.receipt.requires_correction -eq $false -and $qaDocument.outbound.state -eq 'uncertain' -and $qaDocument.outbound.token -eq $qaEvent.token) 'Trace lacks exact healthy uncertain marker'
+		switch ($qaEvent.call) {
+			'SetStat' { Assert-Qa ($qaDocument.outbound.stats.PSObject.Properties[$qaEvent.name].Value -eq $qaEvent.value) 'Stat target differs' }
+			'SetAchievement' { Assert-Qa ($qaDocument.outbound.unlocked.PSObject.Properties[$qaEvent.name].Value -eq $true) 'Achievement target differs' }
+			'StoreStats' { }
+			default { throw 'Unknown trace method' }
+		}
+		$qaTraceEvents++
+	}
+}
+$qaEvidenceFiles = 0
+foreach ($qaCrash in $qaReceipt.crash_cases) {
+	$qaEvidence = Join-Path $qaRun $qaCrash.evidence
+	$qaActual = @(Get-ChildItem -LiteralPath $qaEvidence -Recurse -File)
+	Assert-Qa ($qaActual.Count -eq @($qaCrash.pre_recovery.files.PSObject.Properties).Count) ('Crash evidence file count differs: ' + $qaCrash.name)
+	foreach ($qaFile in $qaCrash.pre_recovery.files.PSObject.Properties) {
+		Assert-Qa ((Hash-Qa (Join-Path $qaEvidence $qaFile.Name)) -eq $qaFile.Value) ('Crash evidence changed: ' + $qaCrash.name + '/' + $qaFile.Name)
+		$qaEvidenceFiles++
+	}
+	$qaRecovery = Read-QaJson (Join-Path $qaRun ($qaCrash.name + '_recover.json'))
+	Assert-Qa ($qaRecovery.passed -eq $true -and $qaCrash.no_sdk_replay -eq $true) ('Recovery or no-replay receipt failed: ' + $qaCrash.name)
+}
+Assert-Qa ($qaKillCount -eq 26 -and $qaReceipt.processes.Count -eq 69 -and $qaNormalReports -eq 42 -and $qaNativeChecks -eq 293) 'Aggregate count differs'
+[ordered]@{passed=$true;run='20260907T091322Z_b22324f5';processes=69;owned_checkpoint_kills=$qaKillCount;normal_worker_reports=$qaNormalReports;native_checks=$qaNativeChecks;trace_files=$qaTraceFiles;trace_events=$qaTraceEvents;retained_crash_evidence_files=$qaEvidenceFiles;receipt_sha256=(Hash-Qa (Join-Path $qaRun 'receipt.json'));freeze_sha256=(Hash-Qa (Join-Path $qaBase 'freeze.json'));scope='Independent raw-log/checkpoint/report/executed-source/trace/journal/evidence readback. No new engine or SDK execution.'} | ConvertTo-Json -Compress

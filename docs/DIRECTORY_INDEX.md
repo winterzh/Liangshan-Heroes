@@ -1,3 +1,11 @@
+## 2026-09-07 并行开发第一批
+
+- `scripts/run_battle_clock.gd`、`run_battle_barrier.gd`：已接入的模拟时钟和经典捕获屏障；根状态升级v3。
+- `docs/STABILIZATION_PARALLEL_BATCH_20260907.md`：本批实测结果、限定范围及下一批世界工厂顺序。
+- `qa/stabilization_battle_barrier_integration_20260907/`：失败/成功原记录、四份候选、9正常开局、安装收据、独立审查与世界工厂设计。
+- `qa/steam_receipt_disk_20260907/`：A1迟到回调缺陷、A2假SDK/磁盘强杀矩阵、合成fixture和来源映射；未接生产。
+- `qa/art_song_jiang_a1_candidates_20260907/`：独立网页原图、提示词、来源、明暗对照、初审和淘汰记录；不属于生产美术。
+
 ## 2026-09-07 任务框交互
 
 - `docs/MISSION_PANEL_TOGGLE_20260907.md`：默认收起、点击展开/收回的玩家说明与实现。

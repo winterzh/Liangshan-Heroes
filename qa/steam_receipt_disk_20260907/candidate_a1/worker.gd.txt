@@ -1,0 +1,141 @@
+extends SceneTree
+const Host = preload("res://receipt_host.gd")
+const Disk = preload("res://receipt_disk.gd")
+const Catalog = preload("res://scripts/steam_achievement_catalog.gd")
+const OWNER := "76561198000000001"
+const RUN := "0123456789abcdef0123456789abcdef"
+const SEND := "abcdef0123456789abcdef0123456789"
+const READ := "11111111111111111111111111111111"
+const SESSION := "22222222222222222222222222222222"
+const DEFENSE := {"mode": "defense", "level_id": "", "waves": 30}
+var checks: Array = []
+var details: Dictionary = {}
+var host: RefCounted
+
+func check(name: String, passed: bool) -> void:
+	checks.append({"name": name, "passed": passed})
+
+func stats(kills := 0) -> Dictionary:
+	return {"TOTAL_KILLS": kills, "TOTAL_WINS": 0, "DEFENSE_WINS": 0, "AI_WINS": 0}
+
+func unlocks() -> Dictionary:
+	var value := {}
+	for entry in Catalog.entries(): value[entry.id] = false
+	return value
+
+func _init() -> void:
+	var case_name := OS.get_environment("DISK_CASE")
+	if not case_name.is_valid_identifier(): quit(2); return
+	var path := "res://fixtures/" + case_name
+	var mode := OS.get_environment("DISK_MODE")
+	host = Host.new(path, OWNER, SESSION)
+	check("private profile", OS.get_user_data_dir().replace("\\", "/") == OS.get_environment("DISK_EXPECTED_PROFILE"))
+	if mode == "inspect_bad":
+		var before: Dictionary = host.disk.inventory()
+		var rejected: Dictionary = host.disk.open_head()
+		check("invalid ledger rejects without mutation", not rejected.ok and before == host.disk.inventory())
+		details.rejection = rejected
+		finish(mode)
+		return
+	if mode == "recover":
+		recover_case()
+		finish(mode)
+		return
+	var opened: Dictionary = host.open()
+	check("head opens", opened.ok)
+	if not opened.ok: details.open = opened; finish(mode); return
+	if mode in ["seed", "contract"]:
+		check("create durable", host.transaction("create", [stats(), unlocks()]).ok)
+		check("begin durable", host.transaction("run", ["prepare_begin", [RUN, DEFENSE]]).ok)
+		check("progress durable", host.transaction("run", ["prepare_progress", [RUN, DEFENSE, 2000]]).ok)
+		check("three linked committed records", host.disk.open_head().revision == 3 and host.model.capture().receipt.stats.TOTAL_KILLS == 2000)
+		if mode == "contract": contract_case(path)
+	elif mode == "dispatch":
+		details.dispatch = host.publish(SEND)
+		check("dispatch waits", details.dispatch.ok)
+	elif mode in ["callback1", "callback8"]:
+		var target := OS.get_environment("DISK_STOP_AT")
+		OS.set_environment("DISK_STOP_AT", "")
+		check("dispatch before callback", host.publish(SEND).ok)
+		OS.set_environment("DISK_STOP_AT", target)
+		details.callback = host.on_stored(Disk.APP, OWNER, SESSION, 1 if mode == "callback1" else 8)
+		check("callback transaction", details.callback.ok)
+	elif mode == "stat_failure":
+		host.sdk.fail_stat = "TOTAL_WINS"
+		check("second stat failure retains marker", not host.publish(SEND).ok and host.disk.open_head().document.outbound.state == "uncertain")
+	elif mode == "store_false":
+		host.sdk.store_accepts = false
+		check("store false retains marker", not host.publish(SEND).ok and host.disk.open_head().document.outbound.state == "uncertain")
+	else: check("known mode", false)
+	finish(mode)
+
+func recover_case() -> void:
+	var before: Dictionary = host.disk.inventory()
+	var opened: Dictionary = host.disk.open_head()
+	if not opened.ok:
+		var plan: Dictionary = host.disk.inspect_recovery()
+		details.plan = plan
+		if OS.get_environment("DISK_EXPECT_BLOCKED") == "1":
+			check("torn evidence remains blocked", not plan.ok and before == host.disk.inventory())
+			check("blocked ledger never authorizes host", not host.open().ok)
+			return
+		check("unique dead writer recovery plan", plan.ok)
+		if not plan.ok: return
+		var recovered: Dictionary = host.disk.recover(plan)
+		check("forward-only recovery completes", recovered.ok)
+		if not recovered.ok: details.recovered = recovered; return
+	opened = host.open()
+	check("recovered head opens", opened.ok)
+	if not opened.ok: return
+	var document: Dictionary = host.model.capture()
+	details.before = document
+	if document.outbound.state == "uncertain" or document.receipt.requires_correction:
+		check("reopened old batch cannot issue", not host.model.take_sdk_targets(OWNER, SEND).ok)
+		check("reopened old run cannot progress", not host.transaction("run", ["prepare_progress", [RUN, DEFENSE, 2001]]).ok)
+		check("new batch blocked until server correction", not host.publish(READ).ok)
+		if not document.receipt.requires_correction:
+			check("invalidation persisted", host.transaction("invalidate", []).ok)
+		check("old token terminal before server read", host.model.capture().receipt.runs[RUN].terminal)
+		check("fake authoritative correction exact", host.authoritative_fixture_correction(READ, stats(7), unlocks()).ok)
+		check("old high target cannot revive", host.model.capture().receipt.stats.TOTAL_KILLS == 7 and not host.transaction("run", ["prepare_progress", [RUN, DEFENSE, 2001]]).ok)
+	else:
+		check("clean record stays at latest durable progress", document.receipt.stats.TOTAL_KILLS == 2000)
+	details.after = host.model.capture()
+
+func contract_case(path: String) -> void:
+	var stale := Host.new(path, OWNER, SESSION)
+	check("second host opens same head", stale.open().ok)
+	check("typed host arguments rejected", not host.transaction("dispatch", [true]).ok and not host.transaction("correct", []).ok)
+	check("SDK has no send before publication", not FileAccess.file_exists(ProjectSettings.globalize_path(path).path_join("sdk.jsonl")))
+	check("full publication marker precedes SDK", host.publish(SEND).ok)
+	check("second batch forbidden", not host.publish(READ).ok)
+	check("wrong app callback rejected", not host.on_stored("1", OWNER, SESSION, 1).ok)
+	check("wrong owner callback rejected", not host.on_stored(Disk.APP, "76561198000000002", SESSION, 1).ok)
+	check("wrong session callback rejected", not host.on_stored(Disk.APP, OWNER, READ, 1).ok)
+	check("timeout keeps marker", not host.on_stored(Disk.APP, OWNER, SESSION, 2).ok and host.model.capture().outbound.state == "uncertain")
+	check("progress during send durable", host.transaction("run", ["prepare_progress", [RUN, DEFENSE, 2001]]).ok)
+	check("frozen target unchanged", host.model.capture().outbound.stats.TOTAL_KILLS == 2000)
+	check("stale host CAS rejects", stale.transaction("run", ["prepare_progress", [RUN, DEFENSE, 3000]]).code == "HOST_CAS_CHANGED")
+	check("ack preserves newer progress", host.on_stored(Disk.APP, OWNER, SESSION, 1).ok and host.disk.open_head().document.receipt.stats.TOTAL_KILLS == 2001)
+	check("duplicate success cannot clear another batch", not host.on_stored(Disk.APP, OWNER, SESSION, 1).ok)
+	check("unowned result8 invalidates", host.on_stored(Disk.APP, OWNER, SESSION, 8).ok and host.disk.open_head().document.receipt.requires_correction)
+	check("fake exact lower correction", host.authoritative_fixture_correction(READ, stats(7), unlocks()).ok and host.model.capture().receipt.stats.TOTAL_KILLS == 7)
+	check("terminal remains durable", host.disk.open_head().document.receipt.runs[RUN].terminal)
+	var live: Dictionary = host.disk.acquire()
+	check("live writer owns lock", live.ok)
+	check("second writer cannot take live lock", not Disk.new(path, OWNER).acquire().ok)
+	check("recovery never steals live writer", host.disk.inspect_recovery().code == "WRITER_ALIVE")
+	check("owned lock releases", host.disk.release().ok)
+
+func finish(mode: String) -> void:
+	var failed := 0
+	for row in checks:
+		if not row.passed: failed += 1
+	var report := {"suite": "steam-receipt-disk-fake-sdk", "phase": mode, "pid": OS.get_process_id(), "profile": OS.get_user_data_dir(), "passed": failed == 0, "failed": failed, "checks": checks, "details": details, "real_sdk": false, "power_loss_tested": false}
+	var file := FileAccess.open(OS.get_environment("DISK_REPORT"), FileAccess.WRITE)
+	if file == null: quit(2); return
+	file.store_string(JSON.stringify(report, "\t"))
+	file.flush()
+	file.close()
+	print("[steam receipt disk QA] ", JSON.stringify(report))
+	quit(0 if failed == 0 else 1)

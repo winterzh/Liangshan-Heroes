@@ -1,3 +1,9 @@
+## 2026-09-07 实际Battle捕获基础已接入
+
+继续使用当前 `Play.cmd` 启动。Battle已接入run_battle_clock/run_battle_barrier，根状态为v3，尚未提供玩家继续本局入口。四源码与两个UID逐字节匹配R4及9个正常开局的实际执行源码；依据为[接入收据](../qa/stabilization_battle_barrier_integration_20260907/installation.json)。
+
+跨机接续先拉取stable，读取[本批说明](STABILIZATION_PARALLEL_BATCH_20260907.md)与各QA的SOURCE_PINS。屏障、Steam假SDK的归档GD以.gd.txt保留；按映射在匹配来源的独立scratchpad恢复后才能复跑，旧绝对路径只代表历史观察。两类QA和美术候选都以.gdignore隔离，缓存、玩家文件及完整私有工程不入库。Godot仍需串行预约；源码更新不等于这些恢复模块已随Steam包交付。
+
 ## 2026-09-07 任务目标按需展开
 
 重新运行本工程 `Play.cmd` 进入战役，左侧默认显示 `▶ 任务目标`，点击查看详情，再点 `▼ 收起任务` 收回。阶段切换保持本局选择，新局默认收起。[实现与验证](MISSION_PANEL_TOGGLE_20260907.md)。源码更新不等于Steam构建更新。

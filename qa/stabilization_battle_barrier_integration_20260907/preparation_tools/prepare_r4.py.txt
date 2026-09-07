@@ -1,0 +1,51 @@
+from pathlib import Path
+import argparse,hashlib,json,shutil,subprocess,sys
+ROOT=Path(__file__).resolve().parents[2]
+HERE=Path(__file__).resolve().parent
+OLD=HERE/'attempt_r3'
+OUT=HERE/'attempt_r4'
+FRAGMENT=ROOT/'scratchpad/parallel_barrier_qa_20260907/actual_drain_fragment.gd.txt'
+def sha(data): return hashlib.sha256(data).hexdigest()
+def dump(path,data): path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+def git(*args): return subprocess.check_output(['git',*args],cwd=ROOT)
+cli=argparse.ArgumentParser(); cli.add_argument('--reviewed-head',required=True); args=cli.parse_args()
+assert git('rev-parse','HEAD').decode().strip()==args.reviewed_head
+assert not git('status','--porcelain')
+assert sha((OLD/'freeze.json').read_bytes())=='93942811415614d4541a854cc9dee8522c756de05e49f7352470ddad25a37724'
+assert sha(FRAGMENT.read_bytes())=='7060dd52eaddfb8191c1b8af53366d19d29ab5e605ff329e25c58f29fc11b2c8'
+sys.path.insert(0,str(ROOT/'tools')); import run_stabilization_performance as guard
+before={r['path']:r for r in guard.tree('b074ba91c28a9e24a32b1ad2469522094f8267cd')}
+after={r['path']:r for r in guard.tree(args.reviewed_head)}
+changed=[n for n in sorted(set(before)|set(after)) if before.get(n)!=after.get(n)]
+assert changed==['scripts/campaign_mission.gd'],changed
+assert sha((ROOT/'scripts/campaign_mission.gd').read_bytes())=='036a9bf725efebb9a0c924b0cc7655c91e9a06545916986ed2ea182b15e40887'
+assert not OUT.exists(); shutil.copytree(OLD,OUT)
+driver=(OUT/'barrier_smoke.gd').read_text(encoding='utf-8')
+needle='\t# The two fixture Units stay registered and alive until the driver\'s existing'
+assert driver.count(needle)==1
+driver=driver.replace(needle,'\tif not await _qa_exit_capture_cases(caster, victim): return false\n'+needle)
+driver += '\n'+FRAGMENT.read_text(encoding='utf-8')
+driver=driver.replace('Adds real Projectile physics and LiBrawnAxes idle damage hold/release/one-hit/free checks through actual Battle creators.', 'Adds real Projectile physics and LiBrawnAxes idle damage hold/release/one-hit/free checks, then both actual tree_exiting callbacks request capture and verify queued-free drain before HELD through actual Battle creators.')
+(OUT/'barrier_smoke.gd').write_text(driver,encoding='utf-8',newline='\n')
+sys.path.insert(0,str(ROOT/'scratchpad/stabilization_identity_20260907/parser_runtime'))
+from gdtoolkit.parser import parser
+parser.parse(driver)
+overlay=json.loads((OUT/'overlay_manifest.json').read_text(encoding='utf-8'))
+overlay['source_head']=args.reviewed_head
+for row in overlay['files']:
+    p=ROOT/row['path']; assert p.exists()==row['before_exists']
+    if p.exists(): assert sha(p.read_bytes())==row['before_raw_sha256']
+    row['candidate']=(OUT/'candidate'/row['path']).relative_to(ROOT).as_posix()
+dump(OUT/'overlay_manifest.json',overlay)
+dump(OUT/'r4_review.json',{'previous_freeze_sha256':sha((OLD/'freeze.json').read_bytes()),
+    'previous_native_pass':'overlay_20260907T090206Z_7eeaacdb','source_head':args.reviewed_head,
+    'production_changes_since_b074':changed,'campaign_mission_candidate_sha256':sha((ROOT/changed[0]).read_bytes()),
+    'fragment_sha256':sha(FRAGMENT.read_bytes()),'barrier_candidate_files_unchanged':True,
+    'scope':'two actual tree_exiting requests; original source damage and freed effects verified stable before HELD',
+    'native_tested':False})
+freeze=json.loads((OUT/'freeze.json').read_text(encoding='utf-8'))
+freeze['source_head']=args.reviewed_head
+freeze['parent_freeze_sha256']=sha((OLD/'freeze.json').read_bytes())
+freeze['inputs']={p.relative_to(OUT).as_posix():sha(p.read_bytes()) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='freeze.json'}
+dump(OUT/'freeze.json',freeze)
+print(json.dumps({'source_head':args.reviewed_head,'freeze_sha256':sha((OUT/'freeze.json').read_bytes()),'candidate':OUT.relative_to(ROOT).as_posix()}))

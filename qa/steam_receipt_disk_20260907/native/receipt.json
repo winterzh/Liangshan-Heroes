@@ -1,0 +1,1573 @@
+{
+  "suite": "steam-receipt-disk-fake-sdk",
+  "passed": true,
+  "source_head": "f3da82f7452a2164c704c34a97c6b2696e99b9c3",
+  "freeze_sha256": "0b00adc68bf1760c683b008e62aa24116a3133154d07bc1d30fe0ace6f714661",
+  "godot_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "processes": [
+    {
+      "name": "import",
+      "mode": null,
+      "case": null,
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 25788,
+      "exit_code": 0,
+      "seconds": 3.1038257000036538,
+      "errors": []
+    },
+    {
+      "name": "seed",
+      "mode": "seed",
+      "case": "base",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 39996,
+      "exit_code": 0,
+      "seconds": 0.3622303000302054,
+      "errors": [],
+      "checks": 6
+    },
+    {
+      "name": "contract",
+      "mode": "contract",
+      "case": "contract",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 12448,
+      "exit_code": 0,
+      "seconds": 0.6402949999901466,
+      "errors": [],
+      "checks": 33
+    },
+    {
+      "name": "crash_00",
+      "mode": "dispatch",
+      "case": "crash_00",
+      "checkpoint": "lock_acquired",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 29732,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.21854839997831732,
+      "errors": []
+    },
+    {
+      "name": "crash_00_recover",
+      "mode": "recover",
+      "case": "crash_00",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 32440,
+      "exit_code": 0,
+      "seconds": 0.28120980004314333,
+      "errors": [],
+      "checks": 5
+    },
+    {
+      "name": "crash_01",
+      "mode": "dispatch",
+      "case": "crash_01",
+      "checkpoint": "prepared_dispatch",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 34120,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.21954649995313957,
+      "errors": []
+    },
+    {
+      "name": "crash_01_recover",
+      "mode": "recover",
+      "case": "crash_01",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 36696,
+      "exit_code": 0,
+      "seconds": 0.26823619997594506,
+      "errors": [],
+      "checks": 5
+    },
+    {
+      "name": "crash_02",
+      "mode": "dispatch",
+      "case": "crash_02",
+      "checkpoint": "pending_half",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 46384,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.25377760000992566,
+      "errors": []
+    },
+    {
+      "name": "crash_02_recover",
+      "mode": "recover",
+      "case": "crash_02",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 34444,
+      "exit_code": 0,
+      "seconds": 0.26531569997314364,
+      "errors": [],
+      "checks": 3
+    },
+    {
+      "name": "crash_03",
+      "mode": "dispatch",
+      "case": "crash_03",
+      "checkpoint": "pending_verified",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 41824,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.23924870003247634,
+      "errors": []
+    },
+    {
+      "name": "crash_03_recover",
+      "mode": "recover",
+      "case": "crash_03",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 46676,
+      "exit_code": 0,
+      "seconds": 0.36314430000493303,
+      "errors": [],
+      "checks": 11
+    },
+    {
+      "name": "crash_04",
+      "mode": "dispatch",
+      "case": "crash_04",
+      "checkpoint": "record_renamed",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 18872,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2828295999788679,
+      "errors": []
+    },
+    {
+      "name": "crash_04_recover",
+      "mode": "recover",
+      "case": "crash_04",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 32324,
+      "exit_code": 0,
+      "seconds": 0.3609021999873221,
+      "errors": [],
+      "checks": 11
+    },
+    {
+      "name": "crash_05",
+      "mode": "dispatch",
+      "case": "crash_05",
+      "checkpoint": "record_verified",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 24928,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.24201119999634102,
+      "errors": []
+    },
+    {
+      "name": "crash_05_recover",
+      "mode": "recover",
+      "case": "crash_05",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 44680,
+      "exit_code": 0,
+      "seconds": 0.36983919999329373,
+      "errors": [],
+      "checks": 11
+    },
+    {
+      "name": "crash_06",
+      "mode": "dispatch",
+      "case": "crash_06",
+      "checkpoint": "disk_before_model_dispatch",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 38108,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2186072999611497,
+      "errors": []
+    },
+    {
+      "name": "crash_06_recover",
+      "mode": "recover",
+      "case": "crash_06",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 46212,
+      "exit_code": 0,
+      "seconds": 0.36520519998157397,
+      "errors": [],
+      "checks": 11
+    },
+    {
+      "name": "crash_07",
+      "mode": "dispatch",
+      "case": "crash_07",
+      "checkpoint": "model_before_unlock_dispatch",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 41920,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.21996100002434105,
+      "errors": []
+    },
+    {
+      "name": "crash_07_recover",
+      "mode": "recover",
+      "case": "crash_07",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 30384,
+      "exit_code": 0,
+      "seconds": 0.36195250001037493,
+      "errors": [],
+      "checks": 11
+    },
+    {
+      "name": "crash_08",
+      "mode": "dispatch",
+      "case": "crash_08",
+      "checkpoint": "before_sdk",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 41124,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.223399700014852,
+      "errors": []
+    },
+    {
+      "name": "crash_08_recover",
+      "mode": "recover",
+      "case": "crash_08",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 6720,
+      "exit_code": 0,
+      "seconds": 0.36297060002107173,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "crash_09",
+      "mode": "dispatch",
+      "case": "crash_09",
+      "checkpoint": "after_first_stat",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 45360,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.22029879997717217,
+      "errors": []
+    },
+    {
+      "name": "crash_09_recover",
+      "mode": "recover",
+      "case": "crash_09",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 33896,
+      "exit_code": 0,
+      "seconds": 0.3596451999619603,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "crash_10",
+      "mode": "dispatch",
+      "case": "crash_10",
+      "checkpoint": "after_achievement",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 37824,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2579008000320755,
+      "errors": []
+    },
+    {
+      "name": "crash_10_recover",
+      "mode": "recover",
+      "case": "crash_10",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 6032,
+      "exit_code": 0,
+      "seconds": 0.36185550002846867,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "crash_11",
+      "mode": "dispatch",
+      "case": "crash_11",
+      "checkpoint": "after_store",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 30268,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.24591250001685694,
+      "errors": []
+    },
+    {
+      "name": "crash_11_recover",
+      "mode": "recover",
+      "case": "crash_11",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 30276,
+      "exit_code": 0,
+      "seconds": 0.36948420002590865,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "crash_12",
+      "mode": "callback1",
+      "case": "crash_12",
+      "checkpoint": "callback_1",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 8336,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.27431090001482517,
+      "errors": []
+    },
+    {
+      "name": "crash_12_recover",
+      "mode": "recover",
+      "case": "crash_12",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 7256,
+      "exit_code": 0,
+      "seconds": 0.3583391000283882,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "crash_13",
+      "mode": "callback1",
+      "case": "crash_13",
+      "checkpoint": "prepared_stored",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 6032,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.27914689999306574,
+      "errors": []
+    },
+    {
+      "name": "crash_13_recover",
+      "mode": "recover",
+      "case": "crash_13",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 40792,
+      "exit_code": 0,
+      "seconds": 0.35604159999638796,
+      "errors": [],
+      "checks": 11
+    },
+    {
+      "name": "crash_14",
+      "mode": "callback1",
+      "case": "crash_14",
+      "checkpoint": "pending_half",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 38568,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2665495999972336,
+      "errors": []
+    },
+    {
+      "name": "crash_14_recover",
+      "mode": "recover",
+      "case": "crash_14",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 9928,
+      "exit_code": 0,
+      "seconds": 0.26833230000920594,
+      "errors": [],
+      "checks": 3
+    },
+    {
+      "name": "crash_15",
+      "mode": "callback1",
+      "case": "crash_15",
+      "checkpoint": "pending_verified",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 35004,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.28039410000201315,
+      "errors": []
+    },
+    {
+      "name": "crash_15_recover",
+      "mode": "recover",
+      "case": "crash_15",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 46676,
+      "exit_code": 0,
+      "seconds": 0.26585339999292046,
+      "errors": [],
+      "checks": 5
+    },
+    {
+      "name": "crash_16",
+      "mode": "callback1",
+      "case": "crash_16",
+      "checkpoint": "record_renamed",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 6480,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.28009140002541244,
+      "errors": []
+    },
+    {
+      "name": "crash_16_recover",
+      "mode": "recover",
+      "case": "crash_16",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 20580,
+      "exit_code": 0,
+      "seconds": 0.2684766000020318,
+      "errors": [],
+      "checks": 5
+    },
+    {
+      "name": "crash_17",
+      "mode": "callback1",
+      "case": "crash_17",
+      "checkpoint": "disk_before_model_stored",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 14980,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.27096910000545904,
+      "errors": []
+    },
+    {
+      "name": "crash_17_recover",
+      "mode": "recover",
+      "case": "crash_17",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 24920,
+      "exit_code": 0,
+      "seconds": 0.26800009998260066,
+      "errors": [],
+      "checks": 5
+    },
+    {
+      "name": "crash_18",
+      "mode": "callback1",
+      "case": "crash_18",
+      "checkpoint": "model_before_unlock_stored",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 34140,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.27982189995236695,
+      "errors": []
+    },
+    {
+      "name": "crash_18_recover",
+      "mode": "recover",
+      "case": "crash_18",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 45272,
+      "exit_code": 0,
+      "seconds": 0.26781210000626743,
+      "errors": [],
+      "checks": 5
+    },
+    {
+      "name": "crash_19",
+      "mode": "callback8",
+      "case": "crash_19",
+      "checkpoint": "callback_8",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 9220,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2383395999786444,
+      "errors": []
+    },
+    {
+      "name": "crash_19_recover",
+      "mode": "recover",
+      "case": "crash_19",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 27160,
+      "exit_code": 0,
+      "seconds": 0.362693999952171,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "crash_20",
+      "mode": "callback8",
+      "case": "crash_20",
+      "checkpoint": "prepared_stored",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 31612,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.25848239997867495,
+      "errors": []
+    },
+    {
+      "name": "crash_20_recover",
+      "mode": "recover",
+      "case": "crash_20",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 32320,
+      "exit_code": 0,
+      "seconds": 0.3607769000227563,
+      "errors": [],
+      "checks": 11
+    },
+    {
+      "name": "crash_21",
+      "mode": "callback8",
+      "case": "crash_21",
+      "checkpoint": "pending_half",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 40468,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.28818049997789785,
+      "errors": []
+    },
+    {
+      "name": "crash_21_recover",
+      "mode": "recover",
+      "case": "crash_21",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 36220,
+      "exit_code": 0,
+      "seconds": 0.2738233999698423,
+      "errors": [],
+      "checks": 3
+    },
+    {
+      "name": "crash_22",
+      "mode": "callback8",
+      "case": "crash_22",
+      "checkpoint": "pending_verified",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 44728,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.25833429995691404,
+      "errors": []
+    },
+    {
+      "name": "crash_22_recover",
+      "mode": "recover",
+      "case": "crash_22",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 41896,
+      "exit_code": 0,
+      "seconds": 0.36163369996938854,
+      "errors": [],
+      "checks": 10
+    },
+    {
+      "name": "crash_23",
+      "mode": "callback8",
+      "case": "crash_23",
+      "checkpoint": "record_renamed",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 44536,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2626699999673292,
+      "errors": []
+    },
+    {
+      "name": "crash_23_recover",
+      "mode": "recover",
+      "case": "crash_23",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 45708,
+      "exit_code": 0,
+      "seconds": 0.3598178999964148,
+      "errors": [],
+      "checks": 10
+    },
+    {
+      "name": "crash_24",
+      "mode": "callback8",
+      "case": "crash_24",
+      "checkpoint": "disk_before_model_stored",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 10808,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.26143319997936487,
+      "errors": []
+    },
+    {
+      "name": "crash_24_recover",
+      "mode": "recover",
+      "case": "crash_24",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 45480,
+      "exit_code": 0,
+      "seconds": 0.36967109999386594,
+      "errors": [],
+      "checks": 10
+    },
+    {
+      "name": "crash_25",
+      "mode": "callback8",
+      "case": "crash_25",
+      "checkpoint": "model_before_unlock_stored",
+      "child_exit_confirmed": true,
+      "expected_external_termination": true,
+      "pid": 24204,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.278244299988728,
+      "errors": []
+    },
+    {
+      "name": "crash_25_recover",
+      "mode": "recover",
+      "case": "crash_25",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 41272,
+      "exit_code": 0,
+      "seconds": 0.3608659000019543,
+      "errors": [],
+      "checks": 10
+    },
+    {
+      "name": "stat_failure",
+      "mode": "stat_failure",
+      "case": "stat_failure",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 36328,
+      "exit_code": 0,
+      "seconds": 0.2814079000381753,
+      "errors": [],
+      "checks": 3
+    },
+    {
+      "name": "stat_failure_recover",
+      "mode": "recover",
+      "case": "stat_failure",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 42000,
+      "exit_code": 0,
+      "seconds": 0.36762909998651594,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "store_false",
+      "mode": "store_false",
+      "case": "store_false",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 42168,
+      "exit_code": 0,
+      "seconds": 0.3614604999893345,
+      "errors": [],
+      "checks": 3
+    },
+    {
+      "name": "store_false_recover",
+      "mode": "recover",
+      "case": "store_false",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 44908,
+      "exit_code": 0,
+      "seconds": 0.3613043000223115,
+      "errors": [],
+      "checks": 9
+    },
+    {
+      "name": "bad_utf8",
+      "mode": "inspect_bad",
+      "case": "bad_utf8",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 44120,
+      "exit_code": 0,
+      "seconds": 0.2682952999603003,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_truncated",
+      "mode": "inspect_bad",
+      "case": "bad_truncated",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 36704,
+      "exit_code": 0,
+      "seconds": 0.26813209999818355,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_hash",
+      "mode": "inspect_bad",
+      "case": "bad_hash",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 45144,
+      "exit_code": 0,
+      "seconds": 0.26921860000584275,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_owner",
+      "mode": "inspect_bad",
+      "case": "bad_owner",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 8596,
+      "exit_code": 0,
+      "seconds": 0.2722123999847099,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_extra",
+      "mode": "inspect_bad",
+      "case": "bad_extra",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 30268,
+      "exit_code": 0,
+      "seconds": 0.26680769998347387,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_negative",
+      "mode": "inspect_bad",
+      "case": "bad_negative",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 20028,
+      "exit_code": 0,
+      "seconds": 0.26813229999970645,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_bool",
+      "mode": "inspect_bad",
+      "case": "bad_bool",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 552,
+      "exit_code": 0,
+      "seconds": 0.28532750002341345,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_fraction",
+      "mode": "inspect_bad",
+      "case": "bad_fraction",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 40872,
+      "exit_code": 0,
+      "seconds": 0.29021230002399534,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_chain",
+      "mode": "inspect_bad",
+      "case": "bad_chain",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 42104,
+      "exit_code": 0,
+      "seconds": 0.2816916999872774,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "bad_unknown",
+      "mode": "inspect_bad",
+      "case": "bad_unknown",
+      "checkpoint": null,
+      "child_exit_confirmed": true,
+      "expected_external_termination": false,
+      "pid": 32800,
+      "exit_code": 0,
+      "seconds": 0.27971380000235513,
+      "errors": [],
+      "checks": 2
+    }
+  ],
+  "crash_cases": [
+    {
+      "name": "crash_00",
+      "mode": "dispatch",
+      "point": "lock_acquired",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "writing/owner.json": "774e1e130d86e1627bed9a4ea8c600bd58ed3ab5d1f8a72e83be6e05e9a846c4"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_00",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_01",
+      "mode": "dispatch",
+      "point": "prepared_dispatch",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "writing/owner.json": "00c5763f01373449b2fd2d44993c311795379c1271240bbf3416ae459b86fe70"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_01",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_02",
+      "mode": "dispatch",
+      "point": "pending_half",
+      "recovery_blocked_expected": true,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "receipt.pending": "5a4e96776e3b4aec62954b903091039c149d6c202b735e2d70952f73827db3e4",
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "writing/owner.json": "d79f0ee721b3c19469f7dc85c3997ebb13dbb08f68a6493b75fc63708f25f9fe"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_02",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_03",
+      "mode": "dispatch",
+      "point": "pending_verified",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "receipt.pending": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "writing/owner.json": "89731804b58785ef4d17db6c3e021b7f8c2e33e3cd901cc537aab5b22b5b19a3"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_03",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_04",
+      "mode": "dispatch",
+      "point": "record_renamed",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "94f6f6ad3f8fdd8c8e762c5e9abfa131f8862ae73fe27822c9c8b0b003a560ac"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_04",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_05",
+      "mode": "dispatch",
+      "point": "record_verified",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "9f132357f2d324a36f2a5956d77914a4e0fc6eceaf46933916a29f8b56784404"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_05",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_06",
+      "mode": "dispatch",
+      "point": "disk_before_model_dispatch",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "d444e6ec60db01039fb24cc5155ed61d2e7f7952b6228ace73430738c03c078b"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_06",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_07",
+      "mode": "dispatch",
+      "point": "model_before_unlock_dispatch",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "449b6225a6ed01ff1b639210d452d018cad8c11640c671ad93c978eb9edaf881"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_07",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_08",
+      "mode": "dispatch",
+      "point": "before_sdk",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87"
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "evidence": "crash_evidence/crash_08",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 0
+    },
+    {
+      "name": "crash_09",
+      "mode": "dispatch",
+      "point": "after_first_stat",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87"
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "evidence": "crash_evidence/crash_09",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 1
+    },
+    {
+      "name": "crash_10",
+      "mode": "dispatch",
+      "point": "after_achievement",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87"
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "evidence": "crash_evidence/crash_10",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 5
+    },
+    {
+      "name": "crash_11",
+      "mode": "dispatch",
+      "point": "after_store",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87"
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "evidence": "crash_evidence/crash_11",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_12",
+      "mode": "callback1",
+      "point": "callback_1",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87"
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "evidence": "crash_evidence/crash_12",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_13",
+      "mode": "callback1",
+      "point": "prepared_stored",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "d8df7bf517ba4dfb5297d7b9a18cefbc62f42ffe110547f08afbf22a5fe94e90"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_13",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_14",
+      "mode": "callback1",
+      "point": "pending_half",
+      "recovery_blocked_expected": true,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "receipt.pending": "2e218a526d85a5d7ed94cdebf37e0094445898293a19f401b7f71687c40e76dd",
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "08f8a9f7d24ccf5023c11a0cba8bc73c0b2026553428add3206620c328787a8a"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_14",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_15",
+      "mode": "callback1",
+      "point": "pending_verified",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "receipt.pending": "a3575ee67cc8d572ba7f5d570d4f915c47014879d60100e493e3dbb01de5852e",
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "9e60f54b9f426b6e021ca576fc6bec4313e8a1a8fa70c9dcc4b5f7efa97b66c6"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_15",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_16",
+      "mode": "callback1",
+      "point": "record_renamed",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "record_0000000005.json": "a3575ee67cc8d572ba7f5d570d4f915c47014879d60100e493e3dbb01de5852e",
+          "writing/owner.json": "f8b0c8b2984a647bbfaa89edc8fe8c372ba4a901959d46b4463fc6fb4d90b965"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_16",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_17",
+      "mode": "callback1",
+      "point": "disk_before_model_stored",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "record_0000000005.json": "a3575ee67cc8d572ba7f5d570d4f915c47014879d60100e493e3dbb01de5852e",
+          "writing/owner.json": "b0d9ea2b5c16ae9f12dfd66d2c5e5d5e76c44513dde69872ca5a0a4bde604a50"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_17",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_18",
+      "mode": "callback1",
+      "point": "model_before_unlock_stored",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "record_0000000005.json": "a3575ee67cc8d572ba7f5d570d4f915c47014879d60100e493e3dbb01de5852e",
+          "writing/owner.json": "2457c6a6800fee41914c62270872fce03dc98f9d504c218d6d4ce6023034b8ab"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_18",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_19",
+      "mode": "callback8",
+      "point": "callback_8",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87"
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "evidence": "crash_evidence/crash_19",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_20",
+      "mode": "callback8",
+      "point": "prepared_stored",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "ceaeab2ee2efd2bb13ebf4e5812947c7b1a2575ab917e97ebdb6c6a83184d730"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_20",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_21",
+      "mode": "callback8",
+      "point": "pending_half",
+      "recovery_blocked_expected": true,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "receipt.pending": "af8c744d4c3a45a826a4cd535354a4ec0aa0ad131061ab5399530ec1e02599b2",
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "e0fdc190d63b13d68a4381ea67623213d84d0be75bbcab30110c9cee879e1f7a"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_21",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_22",
+      "mode": "callback8",
+      "point": "pending_verified",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "receipt.pending": "3428aec22512d5fdc23598accf0744b9c12d1a19b3ffc590fc222876a65dd42e",
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "writing/owner.json": "c472786e1c74a2a0356693b44d7e32bbfcb748b1a68270fba7256a3489eed0de"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_22",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_23",
+      "mode": "callback8",
+      "point": "record_renamed",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "record_0000000005.json": "3428aec22512d5fdc23598accf0744b9c12d1a19b3ffc590fc222876a65dd42e",
+          "writing/owner.json": "77c2cd378c2ba3e6607ba59a15b3a5661a510dbf883e24f066199191491bd855"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_23",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_24",
+      "mode": "callback8",
+      "point": "disk_before_model_stored",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "record_0000000005.json": "3428aec22512d5fdc23598accf0744b9c12d1a19b3ffc590fc222876a65dd42e",
+          "writing/owner.json": "2779b41d9a316b8803b368663dbbc3b7042f7cbc1424ab42de8609db0a2b8357"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_24",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    },
+    {
+      "name": "crash_25",
+      "mode": "callback8",
+      "point": "model_before_unlock_stored",
+      "recovery_blocked_expected": false,
+      "pre_recovery": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": "57d447a2d8d723ec5872ecf4fccdf560e2a66188e7670832d1640e02b0a7a726",
+          "record_0000000002.json": "df09aefd4d84a60fa1d89001c5645d97872da48425ddbe2b6505ce068db94af6",
+          "record_0000000003.json": "e3e21a668d3c1a6b9f7c6ea2f6b18754f38113a9eb87960c0e59b978bd1da15c",
+          "record_0000000004.json": "f2f099724dcf5727a8aa28d85574846d96a4ef1cce0d4e96b7a6c7507e97ee87",
+          "record_0000000005.json": "3428aec22512d5fdc23598accf0744b9c12d1a19b3ffc590fc222876a65dd42e",
+          "writing/owner.json": "ec00731b28a942f35f87c01ea146f7160b63c5cef811878c0763d159b4c9e818"
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "evidence": "crash_evidence/crash_25",
+      "no_sdk_replay": true,
+      "independently_audited_sdk_events": 6
+    }
+  ],
+  "negative_cases": [
+    {
+      "name": "bad_utf8",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_truncated",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_hash",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_owner",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_extra",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_negative",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_bool",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_fraction",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_chain",
+      "rejected_unchanged": true
+    },
+    {
+      "name": "bad_unknown",
+      "rejected_unchanged": true
+    }
+  ],
+  "real_sdk": false,
+  "production_integration": false,
+  "power_loss_tested": false,
+  "boundaries": [
+    "append-only fixture journal capped at 2048 records",
+    "torn pending remains blocked",
+    "crashed recovery lock remains blocked",
+    "no multi-device merge or rollback resistance",
+    "callback session and authoritative reads are synthetic",
+    "no automatic retry of uncertain batches"
+  ],
+  "copied_inputs": {
+    "checkpoint.gd": "fc702cad4ce71a8c32e07094ccd5d75d5ea7f2471c2e92e7a84ea9dd2650bdea",
+    "receipt_disk.gd": "916fd83589a422309e4d8b48e066fa9c3d109a0bf0a8429b7e217e54ed47a60c",
+    "fake_sdk.gd": "b0cbf089cc39847f3e1f797837161796483d64d8f07dbddec71a6f821aa4ca51",
+    "receipt_host.gd": "e49e16c7c6d4cb69e5d29b4f056f630be33b318367815473003e4b72d9d8705c",
+    "worker.gd": "300f8af6bae03d2006f1d55d9a30b0398808f21f574b15e99f8fd8e65a045d72",
+    "steam_run_receipt.gd": "acd21358de698c9a6c8e3806873439fe90abdc6ed3bc9b2a7153263de719cc66",
+    "steam_receipt_outbox.gd": "e200f6c0a0c069c24ca0f60d962386ce7796d0edb141040718807c9e22bb1541",
+    "scripts/steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "scripts/steam_achievement_state.gd": "f0dddf190f440d64367bb84c1ff1dc634174bdd3fab45148cfd5b879786bc71e",
+    "project.godot": "3743c490c5372eff07ec60c8d23ea8be7271e5df25b86f7861fadc1252cf3eb3"
+  },
+  "source_unchanged": true,
+  "head_unchanged": true,
+  "frozen_inputs_unchanged": true,
+  "player_profiles_unchanged": true,
+  "godot_pids_after": [],
+  "child_exits_confirmed": true,
+  "lock_released": true
+}
