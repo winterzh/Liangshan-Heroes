@@ -6,6 +6,7 @@ func _run() -> void:
 	AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll=false
 	var b=await _start("",1)
+	b.mission._toggle.button_pressed = true
 	var l=b.level
 	var folder := "res://.godot/jiangzhou_rts/layout"
 	DirAccess.make_dir_recursive_absolute(folder)

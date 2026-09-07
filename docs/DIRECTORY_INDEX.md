@@ -1,3 +1,9 @@
+## 2026-09-07 任务框交互
+
+- `docs/MISSION_PANEL_TOGGLE_20260907.md`：默认收起、点击展开/收回的玩家说明与实现。
+- `tools/campaign_objective_toggle_test.gd`：真实GUI点击、地图空出区域、隐藏状态更新及滚动验证。
+- `qa/mission_panel_toggle_20260907/`：首轮警告、最终原生结果、截图、候选字节、来源SHA与隔离复现入口。
+
 ## 2026-09-07 本轮收尾交接
 
 - docs/STABILIZATION_CLOSEOUT_20260907.md：已同步代码基线、待验范围与下一次执行顺序。

@@ -1,0 +1,25 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[freeplay-core] PASS legacy save without records migrates to empty records
+[freeplay-core] PASS migration keeps known ids and safely defaults malformed records
+[freeplay-core] PASS base clear records one partial run without a story seal
+[freeplay-core] PASS worse replay neither regresses nor unions best story goals
+[freeplay-core] PASS story seal is exact-once and later partial clears cannot remove it
+[freeplay-core] PASS unknown level id cannot enter persistent records
+[freeplay-core] PASS required events remain candidates until victory settlement
+[freeplay-core] PASS forbidden event misses story goal without ending battle or leaking an internal event id
+[freeplay-core] PASS repeated miss is idempotent and does not duplicate report rows
+[freeplay-core] PASS candidate progress and forbidden failures survive begin transition
+[freeplay-core] PASS explicit completion resolves exactly once
+[freeplay-core] PASS base victory and story completion are independent results
+[freeplay-core] PASS late forbidden event defeats an earlier candidate and prevents a false full seal
+[freeplay-core] PASS settlement snapshot freezes same-run state against repeat resolution
+[freeplay-core] PASS script placement, generic S/H/P/attack stamps, path crossing and stopped orders cannot auto-trigger an action zone
+[freeplay-core] PASS the closest clicked marker wins over insertion order and starts the intended action-zone interaction
+[freeplay-core] PASS manual zone commits atomically and consumes the whole group token before adjacent follow-ups
+[freeplay-core] PASS a real valid skill order cancels a task-button route without falsely completing it or swallowing the windup
+[freeplay-core] PASS task-button dispatch cannot auto-trigger a following optional action
+[freeplay-core] PASS a new matching ground-click receipt can still claim the following optional action
+[freeplay-core] PASS all goals in one victorious run earn the non-numeric story seal result
+[freeplay-core] PASS CAMPAIGN_QA leaves campaign.cfg existence and bytes unchanged
+[freeplay-core-result] {"failures":[],"passed":true}

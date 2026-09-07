@@ -124,6 +124,7 @@ func _capture_battle_hud(campaign) -> bool:
 	battle.hud._on_start_pressed()
 	for _i in range(5):
 		await process_frame
+	battle.mission._toggle.button_pressed = true
 	battle.hud.set_top(battle.level.top_status(battle))
 	battle.mission.tick(0.0)
 	battle.mission._panel.reset_size()
@@ -244,9 +245,9 @@ func _collect_story_cards(node: Node, out: Array[Dictionary]) -> void:
 
 func _all_label_texts(node: Node) -> Array[String]:
 	var out: Array[String] = []
-	if node is Label and node.visible:
+	if node is Label and node.is_visible_in_tree():
 		out.append(node.text)
-	if node is Button and node.visible:
+	if node is Button and node.is_visible_in_tree():
 		out.append(node.text)
 	for child in node.get_children():
 		out.append_array(_all_label_texts(child))

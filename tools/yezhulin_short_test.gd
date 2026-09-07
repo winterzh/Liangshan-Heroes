@@ -48,6 +48,7 @@ func _action_done(b,actor,key: String,seconds := 50.0) -> bool:
 
 func _shot(b,name: String,cell: Vector2i) -> void:
 	if not visual: return
+	b.mission._toggle.button_pressed = true
 	b.camera.zoom=Vector2.ONE
 	b.center_camera_cell(cell)
 	await process_frame
