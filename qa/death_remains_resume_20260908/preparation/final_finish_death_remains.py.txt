@@ -1,0 +1,36 @@
+from pathlib import Path
+import hashlib,json,datetime
+root=Path(__file__).resolve().parents[1]
+qa=root/'qa/death_remains_resume_20260908';out=root/'scratchpad/death_remains_20260908'
+run_id='overlay_20260907T210859Z_548a38c3'
+run=root/'.godot/stabilization_overlay'/run_id
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+r=json.loads((run/'receipt.json').read_text());assert r['complete'] and not r['final_issues'] and r['lock_released']
+assert not (root/'.godot/redraw_rejection_source.lock').exists()
+pins=json.loads((qa/'SOURCE_PINS.json').read_text())['files']
+def archive(source,relative):
+    target=qa/relative;assert not target.exists();target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(source.read_bytes())
+    pins.append({'source_relative':source.relative_to(root).as_posix(),'archive_relative':relative,'sha256':sha(target),'bytes':target.stat().st_size})
+for name in ['receipt.json','report.json','manifest.json','import.log','driver.log','freeze.json','executed_runner.py.txt','executed_guard.py.txt']:
+    archive(run/name,'runs/r8/'+name)
+archive(run/'project/tools/death_remains/driver.gd','runs/r8/driver.gd.txt')
+for c in r['candidate_changes']:
+    source=run/'project'/c['path'];assert sha(source)==c['candidate_sha256']==sha(root/c['candidate'])
+    archive(source,'runs/r8/'+Path(c['path']).name+'.txt')
+    (root/c['path']).write_bytes(source.read_bytes())
+    if not c['before_exists']:
+        uid=run/'project'/(c['path']+'.uid');(root/(c['path']+'.uid')).write_bytes(uid.read_bytes())
+        archive(uid,'final_candidate/'+uid.name+'.txt')
+for name in ['driver.gd','mixed_driver.gd','run_death_remains_state.gd','run_visual_graph.gd','run_battle_world_core.gd']:
+    archive(out/name,'final_candidate/'+name+'.txt')
+for name in ['freeze.json','overlay_manifest.json']:archive(out/name,'final_candidate/'+name)
+for name in ['prepare_death_driver.py','death_remains_cases.gd.inc','finish_death_remains.py']:
+    archive(root/'.godot'/name,'preparation/final_'+name+'.txt')
+report=json.loads((run/'report.json').read_text());n=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks'])
+install=json.loads((qa/'installation.json').read_text())
+install.update(installed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),final_native_run=run_id,
+               native_uid_sha256=sha(root/'scripts/run_death_remains_state.gd.uid'))
+install['runs'].append({'run_id':run_id,'complete':True,'checks':report['check_count'],'source_sha_checks':n,'other_checks':report['check_count']-n,'failures':[],'completed_cases':report['completed_cases']})
+(qa/'installation.json').write_text(json.dumps(install,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(qa/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(install['runs'][-1],ensure_ascii=False))

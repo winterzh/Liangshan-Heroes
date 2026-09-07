@@ -1,0 +1,15 @@
+from pathlib import Path
+import hashlib,json
+root=Path(__file__).resolve().parents[1]
+out=root/'scratchpad/death_remains_20260908'
+s=(root/'qa/mixed_fx_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+old='\tif not await _mixed_engine_case():'
+assert s.count(old)==1
+s=s.replace(old,'\tif not await _death_fallback_case():\n\t\t_finish(true); return\n'+old)
+s+='\n'+(root/'.godot/death_fallback_case.gd.inc').read_text(encoding='utf-8')
+(out/'mixed_driver.gd').write_text(s,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+freeze=json.loads((out/'freeze.json').read_text())
+freeze['inputs']['mixed_driver.gd']=sha(out/'mixed_driver.gd')
+(out/'freeze.json').write_text(json.dumps(freeze,indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))

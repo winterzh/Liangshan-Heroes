@@ -1,0 +1,78 @@
+func _remains_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var first: Variant = core_script.new(identity, runtime)
+	var second: Variant = core_script.new(identity, runtime)
+	var a: Dictionary = first.prepare(wire)
+	var b: Dictionary = second.prepare(wire)
+	if not _ok("death remains two complete cores prepare", a) or not _ok("death remains second core prepares", b):
+		first.dispose(); second.dispose(); return false
+	var original: Variant = a.battle._death_remains[0]
+	var copy: Variant = b.battle._death_remains[0]
+	var state: Variant = a.visual._remains
+	_check("death remains current values metadata and atlas slice exact", state.capture_node(original).value == state.capture_node(copy).value and original.frame_texture != copy.frame_texture and original.frame_texture.atlas == copy.frame_texture.atlas)
+	_check("death owner cache list and callback stay bound to new worlds", a.battle._death_remains_atlas_checked == battle._death_remains_atlas_checked and a.battle._death_remains_atlas == battle._death_remains_atlas and original.expired.get_connections()[0].callable == Callable(a.battle, "_on_death_remains_expired"))
+	# Lifecycle fixtures derived from a real death: shorten only remaining time,
+	# so the real idle callbacks reach expiration without waiting 45 seconds.
+	original.remaining = 0.7; copy.remaining = 0.7
+	original.age = 0.30; copy.age = 0.30
+	var stage := Node2D.new()
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	root.add_child(stage)
+	for plan: Dictionary in [a, b]:
+		plan.battle.world.remove_child(plan.battle.fx_root)
+		stage.add_child(plan.battle.fx_root)
+	_check("death graph cannot activate with removed owner list entry", _remains_owner_guard(a))
+	if not _ok("death first graph paused activation", a.visual.activate()) or not _ok("death second graph paused activation", b.visual.activate()):
+		stage.free(); first.dispose(); second.dispose(); return false
+	var pairs := 0
+	var equal := true
+	var merged := false
+	var exits := {"a": 0, "b": 0}
+	original.tree_exited.connect(func(): exits.a += 1)
+	copy.tree_exited.connect(func(): exits.b += 1)
+	for tick in range(300):
+		await process_frame
+		if is_instance_valid(original) != is_instance_valid(copy): equal = false; break
+		if not is_instance_valid(original): break
+		pairs += 1
+		equal = equal and state.capture_node(original).value == state.capture_node(copy).value and original.reveal_alpha() == copy.reveal_alpha()
+		if not merged and original.age > 0.4:
+			# Same existing gameplay method must refresh remaining without resetting age.
+			original.lifetime = 0.6; copy.lifetime = 0.6
+			original.fade_duration = 0.3; copy.fade_duration = 0.3
+			original.refresh_from_merge(); copy.refresh_from_merge()
+			merged = true
+	_check("death real idle reveal merge fade and natural deletion equal", equal and pairs > 0 and merged and not is_instance_valid(original) and not is_instance_valid(copy))
+	_check("death natural expiration erases both owner arrays once", a.battle._death_remains.is_empty() and b.battle._death_remains.is_empty() and exits.a == 1 and exits.b == 1)
+	completed_cases.append("death_real_idle_pairs=" + str(pairs))
+	stage.free(); first.dispose(); second.dispose()
+	# Every below mutation stays JSON-safe; failures must discard the new tree.
+	for problem: String in ["owner_missing", "owner_duplicate", "bad_atlas", "bad_life", "bad_slice", "unknown_meta"]:
+		var bad: Dictionary = wire.duplicate(true)
+		if problem.begins_with("owner"):
+			var owner: Dictionary = codec.decode(bad.sections.death_remains).value
+			if problem == "owner_missing": owner.order.clear()
+			else: owner.order.append(owner.order[0])
+			bad.sections.death_remains = codec.encode(owner).value
+		else:
+			var rows: Array = codec.decode(bad.sections.visual.records).value
+			for row: Dictionary in rows:
+				if row.kind != "death_remains": continue
+				match problem:
+					"bad_atlas": row.values.state.texture.atlas.signature.path = "res://assets/untrusted.png"
+					"bad_life": row.values.state.remaining = -1.0
+					"bad_slice": row.values.state.texture.region_position.x += 1.0
+					"unknown_meta": row.values.state.metadata["untracked"] = 1
+				break
+			bad.sections.visual.records = codec.encode(rows).value
+		var rejected: Variant = core_script.new(identity, runtime)
+		var result: Dictionary = rejected.prepare(bad)
+		_check("death corrupt record rolls back " + problem + " " + str(result.get("code", "")), not result.ok and not is_instance_valid(rejected._battle) and rejected._identity == null)
+		rejected.dispose()
+	return true
+
+func _remains_owner_guard(plan: Dictionary) -> bool:
+	var original: Array = plan.battle._death_remains.duplicate()
+	plan.battle._death_remains.clear()
+	var refused: Dictionary = plan.visual.activate()
+	plan.battle._death_remains = original
+	return not refused.ok and refused.code == "REMAINS_OWNER_CHANGED"

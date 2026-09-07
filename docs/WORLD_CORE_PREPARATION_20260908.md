@@ -1,3 +1,5 @@
+后续更新：核心schema现为v2、第15分区death_remains已接入，见[死亡残留恢复](DEATH_REMAINS_RESUME_20260908.md)。下文保留首次v1准备事务的原始合同和验收记录。
+
 # 经典据守战斗世界准备事务
 
 从e8b4d496acb440d364da04898952cd5f26f7400d接续，新增内部 `scripts/run_battle_world_core.gd`，把现有状态组件接到同一个实际Battle捕获和离树准备事务。正式接入的是R5受测字节及原生导入生成的UID。它尚不能挂载或继续整场战斗；没有玩家存档槽或菜单入口。

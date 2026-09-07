@@ -1,3 +1,7 @@
+## 2026-09-08 死亡残留恢复
+
+run_visual_graph加入DeathRemains；run_battle_world_core内部schema v2新增death_remains分区。[接口与边界](DEATH_REMAINS_RESUME_20260908.md)、[两种原生驱动复现](../qa/death_remains_resume_20260908/README.md)。新模块UID和源码均取受测字节，QA隔离并保留原SHA。Play.cmd保持；完整玩家继续入口仍未开放。
+
 ## 2026-09-08 战斗世界核心准备
 
 新增内部run_battle_world_core及原生UID，构造与后续安装边界见[实现说明](WORLD_CORE_PREPARATION_20260908.md)。Play.cmd和玩家入口保持；完整继续功能仍未开放。隔离overlay测试新增--rendered-driver以读取真实Vulkan纹理，默认/编辑器导入仍无头；R5复现需在e8b4d49独立checkout恢复归档执行器和候选，见[QA](../qa/world_core_20260908/README.md)。QA以.gdignore隔离、Git属性保持原字节。

@@ -1,3 +1,9 @@
+## 2026-09-08 死亡残留恢复
+
+- `scripts/run_death_remains_state.gd`：残留字段/贴图/元数据与所属列表和缓存的显式恢复。
+- `docs/DEATH_REMAINS_RESUME_20260908.md`：合同、失败修复、原生结果与完整世界后续。
+- `qa/death_remains_resume_20260908/`：八轮原始失败/通过、最终候选与驱动、SHA和安装收据。
+
 ## 2026-09-08 世界核心准备事务
 
 - `scripts/run_battle_world_core.gd`：实际屏障捕获、同一身份的多模块离树准备与失败释放。
