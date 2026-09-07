@@ -1,3 +1,9 @@
+## 2026-09-07 任务框Steam交付
+
+- `docs/STEAM_MISSION_PANEL_UPDATE_20260907.md`：实际线上Build与来源范围。
+- `docs/UPDATE_ANNOUNCEMENT_MISSION_PANEL_20260907.md`：简短公告草稿。
+- `qa/steam_mission_panel_20260907/`：独立成品验证、截图、双来源清单及服务端收据。
+
 ## 2026-09-07 并行开发第一批
 
 - `scripts/run_battle_clock.gd`、`run_battle_barrier.gd`：已接入的模拟时钟和经典捕获屏障；根状态升级v3。

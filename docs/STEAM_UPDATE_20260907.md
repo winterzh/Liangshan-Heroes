@@ -1,3 +1,7 @@
+## 2026-09-07 任务框Windows正式热更新
+
+已按用户授权将default更新为Build **25164373**，Manifest **7569243532561280133**。来源为公开443e75e + f3da82f的任务框单文件覆盖；服务端单EXE大小/SHA1与本地成品一致，default回读确认。测试分支仍25160280，未携带后续开发候选；公告已撰写未发布。[本次说明](STEAM_MISSION_PANEL_UPDATE_20260907.md)、[QA](../qa/steam_mission_panel_20260907/README.md)。下方为此前历史发布记录。
+
 ## 2026-09-07 公司测试分支新 Build
 
 当前源码 `d4728d413ee5ec2df27e132ab4297cf096da363b` 已上传为 Steam Build **25160280**，Windows Depot `5088121` 的 Manifest 为 **399339942090359717**。新建 `steam-integration` 分支并设置为该 Build；`default` 仍为 **25154403**，没有把本轮尚待真实账号验收的成就/工坊功能推给正式用户。

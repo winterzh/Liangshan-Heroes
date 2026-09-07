@@ -1,3 +1,7 @@
+## 2026-09-07 Steam任务框更新
+
+Windows Steam default现为Build 25164373，八关任务框支持默认收起/点击展开。构建来自公开443e75e及f3da82f单个组件，正常开发仍在本checkout。[来源、成品与复现](STEAM_MISSION_PANEL_UPDATE_20260907.md)。
+
 ## 2026-09-07 实际Battle捕获基础已接入
 
 继续使用当前 `Play.cmd` 启动。Battle已接入run_battle_clock/run_battle_barrier，根状态为v3，尚未提供玩家继续本局入口。四源码与两个UID逐字节匹配R4及9个正常开局的实际执行源码；依据为[接入收据](../qa/stabilization_battle_barrier_integration_20260907/installation.json)。

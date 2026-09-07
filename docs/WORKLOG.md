@@ -1,3 +1,7 @@
+## 2026-09-07 任务框Steam热更新
+
+用户明确要求更新Steam。公开版443e75e + f3da82f单个任务框组件已构建、同包验证、上传并激活Windows default Build 25164373，Manifest 7569243532561280133；服务端单EXE大小/SHA1与本地成品一致。437包内合同、11 EXE短测、115真实GUI通过；公告已写成草稿未发布。[发布说明](STEAM_MISSION_PANEL_UPDATE_20260907.md)、[QA](../qa/steam_mission_panel_20260907/README.md)。本包不是当前stable整体导出，后续集成/美术工作仍按原状态。
+
 ## 2026-09-07 并行第一批：实际捕获基础接入
 
 在任务框已同步的f3da82f上，完成真实Battle屏障R4与据守/八关9个正常开局回归，四份受测源码及两个UID按原SHA接入：新增模拟时钟/输入屏障，根状态升级v3。实际箭矢和飞斧的伤害、暂停保持、退出清理与恢复后不重复通过；R4为6556检查（5774来源SHA、782其它），不代表完整续玩。所有成功轮的源码/玩家/候选/进程/锁保护通过，失败尝试保留。[本批与下一步](STABILIZATION_PARALLEL_BATCH_20260907.md)、[接入收据](../qa/stabilization_battle_barrier_integration_20260907/installation.json)。
