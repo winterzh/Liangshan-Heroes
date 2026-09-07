@@ -1,3 +1,9 @@
+## 2026-09-08 世界显示恢复
+
+- scripts/run_world_display_state.gd：世界组成、受信资源、阴影缓冲与身份、暂停激活。
+- docs/WORLD_DISPLAY_RESUME_20260908.md：合同、原生结果、失败修复和剩余安装门。
+- qa/world_display_resume_20260908/：八轮原始证据、候选、执行器及SHA安装收据。
+
 ## 2026-09-08 死亡残留恢复
 
 - `scripts/run_death_remains_state.gd`：残留字段/贴图/元数据与所属列表和缓存的显式恢复。

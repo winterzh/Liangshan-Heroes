@@ -1,0 +1,16 @@
+from pathlib import Path
+p=Path('scratchpad/world_display_20260908/driver.gd')
+s=p.read_text(encoding='utf-8')
+start=s.index('\tvar victim: Variant = null')
+end=s.index('\tfor tick in range(120):',start)
+kill=s[start:end]
+s=s[:start]+s[end:]
+anchor='\tbattle._save_barrier.capture_ready.connect(_barrier_ready)'
+s=s.replace(anchor,kill+anchor)
+anchor='\tvar source_core: Variant = core_script.new(identity, runtime)'
+addition='\t# Explicit render fixture on the held actual source, after normal gameplay.\n\tvar reader: Variant = load("res://scripts/run_world_display_state.gd").new()\n\tbattle.world.modulate = Color(0.9, 0.8, 0.7, 1.0)\n\tbattle.units_root.position = Vector2(3.0, -2.0)\n\tfor child: Node in battle.world.get_children(true):\n\t\tif reader._role(battle, child) == "water":\n\t\t\tchild.z_index = -987; child.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED\n\t\t\tchild.position = Vector2(2.0, 4.0)\n\t\tif reader._role(battle, child) == "dapple": battle.world.move_child(child, 1)\n'
+s=s.replace(anchor,addition+anchor)
+anchor='\t\t\t_check("shadow exact buffer capacity visible and owner",'
+idx=s.index(anchor)
+s=s[:idx]+'\t\t\tvar source_ids: Array = []; var target_ids: Array = []\n\t\t\tfor unit: Variant in a.retained_dying_units: source_ids.append(unit.entity_id)\n\t\t\tfor unit: Variant in b.retained_dying_units: target_ids.append(unit.entity_id)\n\t\t\t_check("dying shadow uses restored unit identity in original order", source_ids.size() == 1 and source_ids == target_ids and b.retained_dying_units[0] != a.retained_dying_units[0] and b.retained_dying_units[0].battle == target and b.retained_dying_units[0] not in target.units)\n'+s[idx:]
+p.write_text(s,encoding='utf-8',newline='\n')

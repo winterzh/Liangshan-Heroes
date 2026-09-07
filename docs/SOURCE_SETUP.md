@@ -1,3 +1,7 @@
+## 2026-09-08 世界显示恢复
+
+新增run_world_display_state及原生UID；core内部schema v3新增world_display。Battle新增仅供禁用准备树的_ready分流，玩家Play.cmd及菜单入口保持。按[本批QA](../qa/world_display_resume_20260908/README.md)在来源提交复现实测；[生命周期边界](WORLD_DISPLAY_RESUME_20260908.md)明确最终安装仍待接入。
+
 ## 2026-09-08 死亡残留恢复
 
 run_visual_graph加入DeathRemains；run_battle_world_core内部schema v2新增death_remains分区。[接口与边界](DEATH_REMAINS_RESUME_20260908.md)、[两种原生驱动复现](../qa/death_remains_resume_20260908/README.md)。新模块UID和源码均取受测字节，QA隔离并保留原SHA。Play.cmd保持；完整玩家继续入口仍未开放。

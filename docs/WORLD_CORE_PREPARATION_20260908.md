@@ -1,3 +1,5 @@
+后续更新：核心现为v3、world_display第16分区已接入，准备Battle具有跳过新局初始化的禁用入树入口，见[世界显示恢复](WORLD_DISPLAY_RESUME_20260908.md)。下方早期v1/v2记录保留为历史阶段。
+
 后续更新：核心schema现为v2、第15分区death_remains已接入，见[死亡残留恢复](DEATH_REMAINS_RESUME_20260908.md)。下文保留首次v1准备事务的原始合同和验收记录。
 
 # 经典据守战斗世界准备事务

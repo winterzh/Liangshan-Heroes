@@ -1,0 +1,808 @@
+extends SceneTree
+## Real root-only transaction. One real new game is the capture fixture;
+## every destination stays detached. Map and Unit local restoration are external.
+const Factory := preload("res://scripts/run_battle_root_state.gd")
+const FROZEN_DECLARED_NAMES := ["level", "mission", "_official_context", "_steam_run_id", "_gameplay_rng", "_gameplay_rng_issue", "_gameplay_rng_start_kind", "_gameplay_content_identity", "_defs", "_abilities", "_items", "next_item_uid", "next_entity_id", "_run_clock", "_save_barrier", "world", "map", "hud", "camera", "units_root", "fx_root", "overlay", "ai_friendly", "_autocam_enabled", "_autocam_active", "_autocam_dwell", "_autocam_target_pos", "_autocam_target_zoom", "_autocam_focus", "_autocam_review_idx", "_autocam_review_unit", "_ai_spawn_serial", "_ai_tick_frame", "_eco_t", "_eco_last_wood", "_eco_wood_stall", "_eco_trap_cd", "_eco_trap_lane", "_eco_lane_cache_bucket", "_eco_lane_cache", "_last_hb", "units", "_grid", "_mob_grid", "_body_grid_liang", "_body_grid_guan", "_focus_counts", "_res_block_cache", "_res_block_frame", "_blocker_cache", "_blocker_cache_revision", "_blocker_query_budget", "_lite_fx", "_mob_count", "_sep_phase", "_impact_fx_frame", "_damage_fx_frame", "_ground_fire_visuals", "_unit_draw_rect", "_death_remains", "_death_remains_atlas", "_death_remains_atlas_checked", "_death_remains_serial", "_no_opt", "_stealth_acc", "_ecast_acc", "_prof_on", "_prof", "_prof_frames", "_prof_print_acc", "_unit_proc_us", "selection", "phase", "kills", "hero_kills", "track_hero_combat_stats", "hero_combat_stats", "_ability_owner_cache", "_active_ability_cache", "_hero_active_ability_cache", "hero_progress", "hero_item_progress", "lit_cells", "economy", "gold", "wood", "pop_cap", "current_age", "faction_res", "faction_gather_mult", "_tech_done", "tech_atk", "tech_hp", "hero_tech_atk", "hero_tech_hp", "tech_gather", "fog", "_vision", "_sight_now", "_reveal_t", "_vision_img", "_fog_tex", "_fog_layer", "_fog_t", "_dragging", "_drag_from", "_click_fx_pos", "_click_fx_t", "_click_fx_attack", "_amove_armed", "_patrol_armed", "_repair_armed", "_garrison_armed", "_ability_armed", "_ability_caster", "_ground_dots", "_hua_snipe_dots", "_lin_duels", "_chrono_zones", "_orbit_zones", "_meteor_zones", "_gong_lines", "_ice_walls", "_wards", "_ward_serial", "_fire_trails", "_bolts", "_walk_casts", "_channels", "_pending_casts", "_ability_slot", "_item_armed", "_item_caster", "_item_slot", "_pending_item_casts", "_walk_item_casts", "_build_armed", "_trap_armed", "_worker_cat", "_hall_page", "_hall_cat", "_traps", "_active", "_inspect_unit", "_demolish_armed_t", "_alert_t", "_alert_pos", "_idle_i", "_groups", "_last_group_key", "_last_group_time", "_camera_locs", "_smoke", "_smoke_t", "_touch_mode", "_allow_touch", "_press_ms", "_box_mode", "_panning", "_drag_cur", "_last_tap_ms", "_last_tap_pos", "_target_cursor", "_cur_attack", "_cur_gather_wood", "_cur_gather_gold", "_cur_repair", "_cur_select", "_cur_garrison", "_hover_kind", "_cursor_resources_released", "_mission_order_token_seq"]
+const FROZEN_ROOT_NAMES := ["ai_friendly", "_autocam_enabled", "_autocam_active", "_lite_fx", "_no_opt", "track_hero_combat_stats", "economy", "_click_fx_attack", "_amove_armed", "_patrol_armed", "_repair_armed", "_garrison_armed", "_touch_mode", "_dragging", "_box_mode", "_panning", "next_entity_id", "_autocam_review_idx", "_ai_spawn_serial", "_ai_tick_frame", "_eco_last_wood", "_eco_trap_lane", "_blocker_cache_revision", "_blocker_query_budget", "_mob_count", "_sep_phase", "_impact_fx_frame", "_damage_fx_frame", "_ground_fire_visuals", "_death_remains_serial", "phase", "kills", "gold", "wood", "pop_cap", "current_age", "_ward_serial", "_ability_slot", "_item_slot", "_hall_page", "_idle_i", "_last_group_key", "_mission_order_token_seq", "_autocam_dwell", "_autocam_target_zoom", "_eco_t", "_eco_wood_stall", "_eco_trap_cd", "_last_hb", "_stealth_acc", "_ecast_acc", "tech_atk", "tech_hp", "hero_tech_atk", "hero_tech_hp", "tech_gather", "_click_fx_t", "_demolish_armed_t", "_alert_t", "_autocam_target_pos", "_drag_from", "_click_fx_pos", "_alert_pos", "_drag_cur", "_last_tap_pos", "_unit_draw_rect", "_ability_armed", "_item_armed", "_build_armed", "_trap_armed", "_worker_cat", "_hall_cat", "hero_kills", "hero_combat_stats", "_ability_owner_cache", "_active_ability_cache", "_hero_active_ability_cache", "hero_progress", "hero_item_progress", "lit_cells", "faction_res", "faction_gather_mult", "_tech_done", "_camera_locs", "_autocam_review_unit", "_ability_caster", "_item_caster", "_active", "_inspect_unit", "selection", "_groups", "_grid", "_mob_grid", "_body_grid_liang", "_body_grid_guan", "_focus_counts", "_res_block_cache", "_blocker_cache", "_eco_lane_cache", "_res_block_frame", "_eco_lane_cache_bucket", "_last_group_time", "_press_ms", "_last_tap_ms", "_autocam_focus"]
+const BARRIER := {"quiescent": true, "input_released": true}
+var checks: Array = []
+var field_audit: Array = []
+var root_names: Array = []
+var manifest: Dictionary = {}
+var manifest_ready := false
+var report_path := ""
+var runtime_identity: Dictionary = {}
+var battle: Variant
+var codec: Variant
+var source_factory: Variant
+var restore_factory: Variant
+var source_identity: Variant
+var restored_identity: Variant
+var unit_checker: Variant
+var battle_script: Script
+var unit_script: Script
+var object_to_id: Dictionary = {}
+var id_to_unit: Dictionary = {}
+var restored_units: Dictionary = {}
+var known_ids: Dictionary = {}
+var owned_detached: Array = []
+var records: Dictionary = {}
+var viewport_rect := Rect2()
+var completed_cases: Array = []
+var captured_clock: Dictionary = {}
+var capture_rejections: Array = []
+var actual_damage_cases_tested := false
+
+func _barrier_ready(record: Dictionary) -> void:
+	captured_clock = record.duplicate(true)
+
+func _barrier_rejected(code: String) -> void:
+	capture_rejections.append(code)
+
+func _wait_barrier() -> bool:
+	for frame in range(30):
+		if not captured_clock.is_empty() or not capture_rejections.is_empty(): break
+		await process_frame
+	return not captured_clock.is_empty() and capture_rejections.is_empty()
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	return passed
+
+func _ok(label: String, result: Dictionary) -> bool:
+	checks.append({"label": label, "passed": result.get("ok") == true,
+		"code": String(result.get("code", "")), "field": str(result.get("cause", result.get("path", result.get("section", result.get("field", "")))))})
+	return result.get("ok") == true
+
+func _source_guard(label: String) -> bool:
+	var result := true
+	for path in manifest.source_sha256:
+		result = _check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path]) and result
+	return result
+
+func _finish(aborted := false) -> void:
+	if source_identity != null: source_identity.dispose()
+	if restored_identity != null: restored_identity.dispose()
+	for object: Variant in owned_detached:
+		if is_instance_valid(object): object.free()
+	if is_instance_valid(battle):
+		battle.free()
+	await process_frame
+	await process_frame
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row: Dictionary in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "world-display-native", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": not aborted and failures.is_empty(), "checks": checks,
+		"check_count": checks.size(), "failed_count": failures.size(), "failures": failures, "process_id": OS.get_process_id(),
+		"actual_user_dir": OS.get_user_data_dir(), "source_sha256": manifest.get("source_sha256", {}),
+		"engine_binary_sha256": manifest.get("engine_binary_sha256", ""),
+		"display_server": DisplayServer.get_name(), "video_adapter": RenderingServer.get_video_adapter_name(), "rendering_driver": RenderingServer.get_current_rendering_driver_name(), "rendering_method": RenderingServer.get_current_rendering_method(), "runtime_identity": runtime_identity,
+		"declarations": Factory.ALL_DECLARATIONS.size(), "root_fields": root_names,
+		"external_fields": Factory.EXTERNAL_FIELDS, "field_capture_audit": field_audit,
+		"completed_cases": completed_cases,
+		"actual_viewport_rect": {"position": [viewport_rect.position.x, viewport_rect.position.y],
+			"size": [viewport_rect.size.x, viewport_rect.size.y]},
+		"actual_damage_cases_tested": actual_damage_cases_tested,
+		"battle_resume_tested": false, "scope": "Actual classic Battle runs normally, captures all core sections under its HELD barrier, prepares a disabled detached world and rolls back corrupt sections. Root-clock binding, all-world display/UI/Steam, final attachment and activation remain pending. No cross-process or player-slot claim."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1); return
+		file.store_string(JSON.stringify(report, "\t")); file.close()
+	print("[world display QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _same(a: Variant, b: Variant) -> bool:
+	if typeof(a) != typeof(b): return false
+	if typeof(a) == TYPE_OBJECT:
+		# The root contract preserves expired versus none, not the old address of
+		# an already freed Object. Never dereference or compare freed operands.
+		if not is_instance_valid(a): return not is_instance_valid(b)
+		return is_instance_valid(b) and a == b
+	if typeof(a) == TYPE_ARRAY:
+		if a.size() != b.size(): return false
+		for i in range(a.size()):
+			if not _same(a[i], b[i]): return false
+		return true
+	if typeof(a) == TYPE_DICTIONARY:
+		if not _same(a.keys(), b.keys()): return false
+		for key: Variant in a:
+			if not _same(a[key], b[key]): return false
+		return true
+	return a == b
+
+func _root_values(node: Variant) -> Dictionary:
+	var values: Dictionary = {}
+	for name: String in root_names:
+		var value: Variant = node.get(name)
+		values[name] = value.duplicate(true) if typeof(value) in [TYPE_ARRAY, TYPE_DICTIONARY] else value
+	return values
+
+func _wire_value(name: String, value: Variant) -> Variant:
+	if name == "_unit_draw_rect" and typeof(value) == TYPE_RECT2:
+		return {"position": value.position, "size": value.size}
+	return value
+
+func _audit_values(label: String) -> void:
+	# Probe every declared ordinary field independently, including empty values.
+	# The single explicit Rect2 transport is the production candidate's contract.
+	# Unsupported nested values stay failures; no replacement/defaulting occurs.
+	for name: String in Factory.VALUE_TYPES:
+		var value: Variant = battle.get(name)
+		var encoded: Dictionary = codec.encode(_wire_value(name, value))
+		field_audit.append({"case": label, "field": name, "native_type": typeof(value),
+			"declared_type": Factory.VALUE_TYPES[name], "supported": encoded.get("ok") == true,
+			"code": String(encoded.get("code", "")), "rect_wire_only": name == "_unit_draw_rect"})
+		_check(label + " field encodable " + name, encoded.get("ok") == true and typeof(value) == Factory.VALUE_TYPES[name])
+
+func _shell() -> Variant:
+	var target: Variant = battle_script.new()
+	target.process_mode = Node.PROCESS_MODE_DISABLED
+	target.set_block_signals(true)
+	# Projection only: this is deliberately not a second map or Map restore.
+	target.map = battle.map
+	owned_detached.append(target)
+	return target
+
+func _reference(tag: Dictionary, tombstone: Variant) -> Variant:
+	if tag.state == "none": return null
+	if tag.state == "expired": return tombstone
+	return restored_units[tag.id]
+
+func _reference_list(tags: Array, tombstone: Variant) -> Array:
+	var result: Array = []
+	for tag: Dictionary in tags: result.append(_reference(tag, tombstone))
+	return result
+
+func _reference_map(rows: Dictionary, tombstone: Variant, single := false) -> Dictionary:
+	var result: Dictionary = {}
+	for key: Variant in rows:
+		result[key] = _reference(rows[key], tombstone) if single else _reference_list(rows[key], tombstone)
+	return result
+
+func _identities(rows: Array) -> Dictionary:
+	var result: Dictionary = {}
+	for row: Dictionary in rows: result[String(row.id).to_int()] = row.value
+	return result
+
+func _compare_fields(label: String, target: Variant, checked: Dictionary, bound: Dictionary,
+		tombstone: Variant, before_msec: int, after_msec: int) -> void:
+	var raw: Dictionary = checked.value
+	var expected: Dictionary = raw.values.duplicate(true)
+	for name: String in Factory.ROOT_REFERENCE: expected[name] = _reference(raw.references[name], tombstone)
+	expected["selection"] = _reference_list(raw.selection, tombstone)
+	expected["_groups"] = _reference_map(raw.groups, tombstone)
+	expected["_blocker_cache"] = _reference_map(raw.blockers, tombstone, true)
+	for name: String in Factory.ROOT_SPATIAL_GRID: expected[name] = _reference_map(raw.grids[name], tombstone)
+	for name: String in Factory.ROOT_STABLE_IDENTITY_MAP: expected[name] = _identities(raw.identities[name])
+	var eco: Dictionary = raw.eco.duplicate(true)
+	if not eco.is_empty():
+		eco["heroes"] = _reference_list(raw.eco.heroes, tombstone)
+		eco["assignments"] = _identities(raw.eco.assignments)
+	expected["_eco_lane_cache"] = eco
+	expected["_autocam_focus"] = Vector2.INF if raw.focus.kind == "none" else raw.focus.value
+	expected["_eco_lane_cache_bucket"] = raw.clock_values._eco_lane_cache_bucket
+	expected["_res_block_frame"] = raw.clock_values._res_block_frame
+	_check(label + " restored explicit clock preserves exact phase", target._run_clock.capture().record == raw.simulation)
+	var translated_origins: Array = []
+	for name: String in root_names:
+		if name in Factory.ROOT_INPUT_CLOCK:
+			var age: int = int(raw.clocks.msec) - int(raw.clock_values[name])
+			var actual: Variant = target.get(name)
+			var origin: int = int(actual) + age
+			translated_origins.append(origin)
+			_check(label + " root field " + name, typeof(actual) == TYPE_INT and origin >= before_msec and origin <= after_msec)
+		else:
+			_check(label + " root field " + name, expected.has(name) and _same(expected[name], target.get(name)))
+	_check(label + " common input time origin", translated_origins.size() == 3 and translated_origins[0] == translated_origins[1] and translated_origins[1] == translated_origins[2])
+	_check(label + " same frame detached install", bound.bound_physics_frame == Engine.get_physics_frames() and bound.bound_process_frame == Engine.get_process_frames() and target.get_parent() == null and not target.is_inside_tree() and target.process_mode == Node.PROCESS_MODE_DISABLED and target.is_blocking_signals())
+	_check(label + " external factory untouched", target.map == battle.map and target.level == null and target.world == null and target.hud == null and target.units.is_empty() and target._gameplay_rng == null)
+
+func _roundtrip(label: String, visual := false) -> bool:
+	_audit_values(label)
+	var before: Dictionary = _root_values(battle)
+	var rng_before: Dictionary = battle._gameplay_rng.capture()
+	var captured: Dictionary = source_factory.capture(battle, runtime_identity.content_version, object_to_id, BARRIER)
+	if not _ok(label + " capture", captured): return false
+	_check(label + " capture source unchanged", _same(before, _root_values(battle)))
+	_check(label + " capture draws no native RNG", _same(rng_before, battle._gameplay_rng.capture()))
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	if not _check(label + " JSON record", typeof(record) == TYPE_DICTIONARY): return false
+	records[label] = record
+	var decoded: Dictionary = codec.decode(record.payload)
+	if not _ok(label + " actual codec decode", decoded): return false
+	var wire: Variant = decoded.value.values._unit_draw_rect
+	_check(label + " Rect2 wire exact keys and Vector2", typeof(wire) == TYPE_DICTIONARY and wire.keys() == ["position", "size"] and typeof(wire.position) == TYPE_VECTOR2 and typeof(wire.size) == TYPE_VECTOR2)
+	var checked: Dictionary = restore_factory.validate(record, runtime_identity.content_version, known_ids)
+	if not _ok(label + " validate", checked): return false
+	_check(label + " retired UID aliases exact", _same(captured.item_uid_aliases, checked.item_uid_aliases))
+	var target: Variant = _shell()
+	var tombstone: Variant = restored_identity.expired_unit()
+	var before_msec: int = Time.get_ticks_msec()
+	var bound: Dictionary = restore_factory.bind(target, record, runtime_identity.content_version, restored_units, tombstone, BARRIER)
+	var after_msec: int = Time.get_ticks_msec()
+	if not _ok(label + " bind", bound): return false
+	_compare_fields(label, target, checked, bound, tombstone, before_msec, after_msec)
+	_check(label + " no whole Battle claim", captured.complete_battle == false and checked.complete_battle == false and bound.complete_battle == false)
+	if visual:
+		var rect: Rect2 = battle._unit_draw_rect
+		var inside: Vector2 = battle.to_logic(rect.get_center())
+		var outside: Vector2 = battle.to_logic(rect.end + Vector2(240.0, 240.0))
+		_check("original viewport consumer distinguishes inside outside", battle._lite_fx and battle.unit_visual_active(inside) and not battle.unit_visual_active(outside))
+		_check("restored original consumer preserves inside outside", target.unit_visual_active(inside) == battle.unit_visual_active(inside) and target.unit_visual_active(outside) == battle.unit_visual_active(outside))
+		_check("actual viewport Rect2 preserved", target._unit_draw_rect == viewport_rect)
+		_check("nonempty blocker budget preserved", target._blocker_query_budget == 3 and not target._blocker_cache.is_empty())
+		_check("nonempty economic cache preserved", not target._eco_lane_cache.is_empty() and target._eco_lane_cache.heroes.size() == 4)
+		_check("stable cache key survives fresh real Unit identity", target._focus_counts.has(restored_units["1"].entity_id) and restored_units["1"].entity_id == id_to_unit["1"].entity_id and restored_units["1"].get_instance_id() != id_to_unit["1"].get_instance_id())
+	completed_cases.append(label)
+	return true
+
+func _negative_rects() -> bool:
+	var valid: Dictionary = records.viewport
+	var cases: Array = [
+		{"name": "scalar", "wire": 7, "code": "RECT2_FIELDS"},
+		{"name": "missing_size", "wire": {"position": Vector2.ZERO}, "code": "RECT2_FIELDS"},
+		{"name": "extra_key", "wire": {"position": Vector2.ZERO, "size": Vector2.ONE, "extra": true}, "code": "RECT2_FIELDS"},
+		{"name": "integer_component", "wire": {"position": Vector2.ZERO, "size": 2}, "code": "RECT2_COMPONENT_TYPE"},
+		{"name": "vector2i_component", "wire": {"position": Vector2i.ZERO, "size": Vector2.ONE}, "code": "RECT2_COMPONENT_TYPE"},
+		{"name": "missing_field", "wire": null, "code": "VALUE_FIELDS"}]
+	for item: Dictionary in cases:
+		var decoded: Dictionary = codec.decode(valid.payload)
+		if not _ok("negative source decode " + item.name, decoded): return false
+		if item.name == "missing_field": decoded.value.values.erase("_unit_draw_rect")
+		else: decoded.value.values["_unit_draw_rect"] = item.wire
+		var encoded: Dictionary = codec.encode(decoded.value)
+		if not _ok("negative encodable envelope " + item.name, encoded): return false
+		var bad: Dictionary = valid.duplicate(true)
+		bad["payload"] = encoded.value
+		bad = JSON.parse_string(JSON.stringify(bad))
+		var checked: Dictionary = restore_factory.validate(bad, runtime_identity.content_version, known_ids)
+		_check("malformed " + item.name + " validate rejects", checked.get("ok") == false and checked.get("code") == item.code)
+		var target: Variant = _shell()
+		var before: Dictionary = _root_values(target)
+		var bound: Dictionary = restore_factory.bind(target, bad, runtime_identity.content_version, restored_units, restored_identity.expired_unit(), BARRIER)
+		_check("malformed " + item.name + " bind rejects", bound.get("ok") == false and bound.get("code") == item.code)
+		_check("malformed " + item.name + " all 105 untouched", _same(before, _root_values(target)))
+	# Audit an actual unsupported nested object, then restore the original source
+	# field. It must be reported/rejected, never erased or defaulted for capture.
+	var old_cache: Dictionary = battle._camera_locs.duplicate(true)
+	var unsupported := RefCounted.new()
+	battle._camera_locs[2] = unsupported
+	var unsupported_codec: Dictionary = codec.encode(battle._camera_locs)
+	var rejected: Dictionary = source_factory.capture(battle, runtime_identity.content_version, object_to_id, BARRIER)
+	_check("unsupported actual field is exposed", unsupported_codec.get("ok") == false and rejected.get("ok") == false and rejected.get("code") == "CAMERA_LOCATIONS")
+	field_audit.append({"case": "unsupported_negative", "field": "_camera_locs", "supported": false,
+		"expected_rejection": true, "codec_code": unsupported_codec.get("code"), "capture_code": rejected.get("code")})
+	_check("unsupported capture does not silently zero field", battle._camera_locs[2] == unsupported)
+	battle._camera_locs = old_cache
+	return true
+
+func _configure_standard() -> void:
+	var campaign: Node = root.get_node("Campaign")
+	for key: String in ["skirmish_ai", "arena", "scenario", "custom_defense", "scale_on", "ai_friendly", "defense_random"]:
+		campaign.set(key, false)
+	campaign.set("skirmish", true); campaign.set("defense_waves", 30); campaign.set("defense_hero_cap", 4)
+	root.get_node("Settings").set("auto_micro_level", 0)
+	root.get_node("Settings").set("game_speed", 1.0)
+	AudioServer.set_bus_mute(0, true)
+
+func _run() -> void:
+	var path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest", false); await _finish(true); return
+	manifest = data
+	for key: String in ["run_id", "private_user", "report", "engine_binary_sha256"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false); await _finish(true); return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host sources", false); await _finish(true); return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		report_path = ""; _check("fresh report", false); await _finish(true); return
+	manifest_ready = true
+	if not _check("private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower()):
+		await _finish(true); return
+	if not _source_guard("source before"):
+		await _finish(true); return
+	var provider_script: Script = load("res://scripts/run_content_identity.gd")
+	var identity: Dictionary = provider_script.new().resolve_runtime_identity()
+	if not _ok("actual trusted provider", identity):
+		await _finish(true); return
+	if not _check("actual provider save eligible and native engine", identity.get("save_eligible") == true and identity.get("engine_binary_sha256") == manifest.engine_binary_sha256):
+		await _finish(true); return
+	runtime_identity = {"content_version": identity.content_version, "source_mode": identity.source_mode,
+		"identity_scope": identity.identity_scope, "engine_binary_sha256": identity.engine_binary_sha256}
+	battle_script = load("res://scripts/battle.gd")
+	unit_script = load("res://scripts/unit.gd")
+	var level_script: Script = load("res://scripts/levels/skirmish.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var inventory_script: Script = load("res://scripts/hero_inventory.gd")
+	var checker_script: Script = load("res://scripts/run_unit_state.gd")
+	var graph_script: Script = load("res://scripts/run_graph_identity.gd")
+	codec = codec_script.new()
+	unit_checker = checker_script.new(codec_script, unit_script, inventory_script)
+	root_names = Factory.VALUE_TYPES.keys()
+	for group: Array in [Factory.ROOT_REFERENCE, Factory.ROOT_REFERENCE_LIST, Factory.ROOT_GROUPS, Factory.ROOT_SPATIAL_GRID,
+		Factory.ROOT_STABLE_IDENTITY_MAP, Factory.ROOT_BLOCKER_CACHE, Factory.ROOT_ECO_CACHE,
+		Factory.ROOT_ENGINE_CLOCK, Factory.ROOT_INPUT_CLOCK, Factory.ROOT_INFINITY_SENTINEL]: root_names.append_array(group)
+	var all_names: Array = root_names + Factory.ROOT_SIMULATION_CLOCK + Factory.EXTERNAL_FIELDS
+	var unique: Dictionary = {}
+	for name: String in all_names: unique[name] = true
+	_check("172 declarations 105 values plus clock 66 external exact", Factory.ALL_DECLARATIONS.size() == 172 and root_names.size() == 105 and Factory.ROOT_SIMULATION_CLOCK.size() == 1 and Factory.EXTERNAL_FIELDS.size() == 66 and unique.size() == 172 and unique.size() == Factory.ALL_DECLARATIONS.size())
+	var complete_names := true
+	for name: String in Factory.ALL_DECLARATIONS: complete_names = complete_names and unique.has(name)
+	_check("classification matches frozen declaration table", complete_names and Factory.ALL_DECLARATIONS == FROZEN_DECLARED_NAMES and root_names == FROZEN_ROOT_NAMES)
+	_configure_standard()
+	paused = true
+	var scene: PackedScene = load("res://scenes/main.tscn")
+	battle = scene.instantiate()
+	battle.process_mode = Node.PROCESS_MODE_INHERIT
+	root.add_child(battle); current_scene = battle
+	await process_frame
+	battle.hud._intro_root.hide()
+	battle._on_intro_done()
+	await process_frame
+	await process_frame
+	paused = false
+	var victim: Variant = null
+	for unit: Variant in battle.units:
+		if not unit.is_building and not unit.is_resource and not unit.is_hero:
+			victim = unit; break
+	if not _check("actual classic death victim exists", victim != null): await _finish(true); return
+	victim.take_damage(1000000.0, null, false, true)
+	_check("actual death creates a tracked remains node", victim.hp == 0.0 and battle._death_remains.size() == 1)
+	for tick in range(120):
+		await physics_frame
+		if tick % 30 == 0:
+			_check("new cache phase matches actual Engine at tick " + str(tick), battle._run_cache_frame() == Engine.get_physics_frames())
+	await process_frame
+	battle._save_barrier.capture_ready.connect(_barrier_ready)
+	battle._save_barrier.capture_rejected.connect(_barrier_rejected)
+	_check("actual FIGHT capture request accepted", battle.request_run_capture().ok)
+	if not _check("actual controller reaches stable capture", await _wait_barrier()):
+		await _finish(true); return
+	_check("actual rendered Vulkan adapter available", DisplayServer.get_name() != "headless" and not RenderingServer.get_video_adapter_name().is_empty() and RenderingServer.get_current_rendering_driver_name() == "vulkan")
+	var core_script: Script = load("res://scripts/run_battle_world_core.gd")
+	var runtime := {"defs": battle._defs, "abilities": battle._abilities, "items": battle._items}
+	var source_core: Variant = core_script.new(identity, runtime)
+	var captured: Dictionary = source_core.capture(battle)
+	if not _ok("actual held classic captures all core sections", captured):
+		source_core.dispose(); await _finish(true); return
+	source_identity = captured.identity
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.record))
+	var target_core: Variant = core_script.new(identity, runtime)
+	var prepared: Dictionary = target_core.prepare(wire)
+	if not _ok("actual classic JSON prepares private world core", prepared):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	var target: Variant = prepared.battle
+	_check("world remains off tree disabled without root clock or Steam begin", not target.is_inside_tree() and target.process_mode == Node.PROCESS_MODE_DISABLED and target.is_blocking_signals() and target._run_clock == null and target._steam_run_id == 0)
+	var source_order: Array = []
+	var target_order: Array = []
+	var source_active: Array = []
+	var target_active: Array = []
+	for unit: Variant in battle.units_root.get_children(): source_order.append(unit.entity_id)
+	for unit: Variant in target.units_root.get_children(): target_order.append(unit.entity_id)
+	for unit: Variant in battle.units: source_active.append(unit.entity_id)
+	for unit: Variant in target.units: target_active.append(unit.entity_id)
+	_check("world core retains actual unit count and unit ordering", source_order == target_order and source_active == target_active)
+	_check("world core restored hall belongs to new unit graph", target.level.hall != battle.level.hall and target.level.hall.entity_id == battle.level.hall.entity_id and target.level.hall.battle == target)
+	_check("world core preserves wave without deploy or start", target.level._wave == battle.level._wave and target.level._wave_t == battle.level._wave_t and target.level._started == battle.level._started and target.next_entity_id == battle.next_entity_id)
+	_check("world core RNG restored without extra draw", target.capture_gameplay_rng().record == battle.capture_gameplay_rng().record)
+	var map_state: Variant = load("res://scripts/run_map_state.gd").new(identity.content_version)
+	var map_read: Dictionary = map_state.capture(target.map)
+	_check("world core map five navigation tables footprints scenery exact", map_read.ok and _same(map_read.value, captured.record.sections.map))
+	_check("world core fog bytes and resources retained", target._vision == battle._vision and target._sight_now == battle._sight_now and target._reveal_t == battle._reveal_t and target._fog_t == battle._fog_t and target._vision_img.get_data() == battle._vision_img.get_data() and target._fog_tex != battle._fog_tex and target._fog_tex.get_image().get_data() == battle._fog_tex.get_image().get_data() and target._fog_layer.tex == target._fog_tex)
+	var display_script: Script = load("res://scripts/run_world_display_state.gd")
+	var world_roles: Array = []
+	var restored_roles: Array = []
+	var display_reader: Variant = display_script.new()
+	for node: Node in battle.world.get_children(true): world_roles.append(display_reader._role(battle, node))
+	for node: Node in target.world.get_children(true): restored_roles.append(display_reader._role(target, node))
+	_check("world sibling roles exactly match actual source", world_roles == restored_roles and world_roles.has("water") and world_roles.has("dapple") and world_roles.has("shadow"))
+	for role: String in ["water", "dapple", "shadow"]:
+		var a: Variant = battle.world.get_child(world_roles.find(role))
+		var b: Variant = target.world.get_child(restored_roles.find(role))
+		_check("display native transform copied " + role, a.transform == b.transform and a.z_index == b.z_index and a.texture_repeat == b.texture_repeat)
+		if role != "shadow":
+			_check("display trusted pixels exact " + role, a.tex.get_image().get_data() == b.tex.get_image().get_data() and a.ws == b.ws)
+		else:
+			_check("shadow exact buffer capacity visible and owner", a.paired_multimesh.buffer == b.paired_multimesh.buffer and a.capacity == b.capacity and a.active_count == b.active_count and b.battle == target)
+	if not await _display_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	_check("world core root binding deliberately deferred for final installation", prepared.pending_root == captured.record.sections.root and prepared.complete_world == false and prepared.mounted == false and prepared.activated == false)
+	var source_tick: Dictionary = battle._run_clock.capture()
+	var source_wave: float = battle.level._wave_t
+	for tick in range(4): await process_frame
+	_check("prepared world remains inactive across frames while old world held", target.level._wave_t == source_wave and target._run_clock == null and battle._run_clock.capture() == source_tick)
+	for section: String in core_script.SECTIONS:
+		var bad: Dictionary = wire.duplicate(true)
+		bad.sections[section] = {"invalid": true}
+		var rejected: Variant = core_script.new(identity, runtime)
+		var failed: Dictionary = rejected.prepare(bad)
+		_check("late section rollback releases complete private world " + section, not failed.ok and not is_instance_valid(rejected._battle) and rejected._identity == null)
+		rejected.dispose()
+	for conflict: String in ["engine", "entity_counter", "ground_fire", "item_queue"]:
+		var bad: Dictionary = wire.duplicate(true)
+		var expected: String = ""
+		if conflict == "engine":
+			bad.engine_sha256 = "0".repeat(64); expected = "WORLD_CORE_IDENTITY"
+		elif conflict in ["entity_counter", "ground_fire"]:
+			var raw: Dictionary = codec.decode(bad.sections.root.payload).value
+			var field: String = "next_entity_id" if conflict == "entity_counter" else "_ground_fire_visuals"
+			raw.values[field] += 1
+			bad.sections.root.payload = codec.encode(raw).value
+			expected = "ROOT_ENTITY_COUNTER_MISMATCH" if conflict == "entity_counter" else "ROOT_GROUND_FIRE_COUNT_MISMATCH"
+		else:
+			# Synthetic stale queue alias; no item definition or live source mutation.
+			var raw: Dictionary = codec.decode(bad.sections.item_casts.payload).value
+			raw._pending_item_casts.append({"caster": {"state": "entity", "id": wire.sections.units.root_order[0]}, "slot": 0, "uid": 900, "point": Vector2.ZERO, "target": {"state": "none"}, "serial": 0})
+			bad.sections.item_casts.payload = codec.encode(raw).value
+			expected = "COUNTER_NOT_ABOVE_ALLOCATED"
+		var rejected: Variant = core_script.new(identity, runtime)
+		var failed: Dictionary = rejected.prepare(bad)
+		_check("cross section conflict rejects and disposes " + conflict + " " + str(failed), not failed.ok and failed.code == expected and not is_instance_valid(rejected._battle) and rejected._identity == null)
+		if conflict == "item_queue":
+			bad.sections.items.next_item_uid = codec.encode(901).value
+			var repaired: Dictionary = rejected.prepare(bad)
+			_check("counter above historical queue alias prepares without pruning " + str(repaired.get("code", "")), repaired.ok and repaired.battle.next_item_uid == 901 and repaired.battle._pending_item_casts[0].uid == 900)
+		rejected.dispose()
+	_check("all failed prepares leave original world alive and unchanged", is_instance_valid(battle) and battle.level._wave_t == source_wave and battle._run_clock.capture() == source_tick)
+	completed_cases.append("actual_classic_world_core_prepare_and_rollback")
+	if not await _remains_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	target_core.dispose()
+	source_core.dispose()
+	_check("successful prepare explicit disposal releases private Battle", not is_instance_valid(target))
+	_check("source capture released after world preparation", battle._save_barrier.release_capture().ok)
+	await _finish()
+
+
+# Append these helpers to ROOT's R2 SceneTree driver. Invoke
+#   if not await _qa_actual_damage_cases(): await _finish(true); return
+# AFTER restoring all original 105 root fixture fields and releasing capture,
+# BEFORE the final preexisting-user-pause case. Requires existing battle,
+# _check, _ok, _wait_barrier, captured_clock, capture_rejections helpers.
+# This is a PREPARED, STATIC-ONLY fragment. No native run was performed here.
+
+func _qa_damage_arena() -> Dictionary:
+	# Prefer a real open land pair far from every existing combatant/building.
+	# Resource bodies are excluded from combat isolation but their solid map
+	# cells remain excluded by is_open_world. Never alter terrain or move units.
+	for y in range(4, int(battle.map.h) - 4):
+		for x in range(4, int(battle.map.w) - 8):
+			var a: Vector2 = battle.map.cell_to_world(Vector2i(x, y))
+			var b: Vector2 = battle.map.cell_to_world(Vector2i(x + 4, y))
+			if not battle.map.is_open_world(a) or not battle.map.is_open_world(b): continue
+			var isolated := true
+			for unit: Variant in battle.units:
+				if not is_instance_valid(unit) or unit.hp <= 0.0 or unit.is_resource: continue
+				if a.distance_to(unit.position) < 480.0 or b.distance_to(unit.position) < 480.0:
+					isolated = false
+					break
+			if isolated: return {"ok": true, "caster": a, "target": b}
+	return {"ok": false, "code": "REAL_OPEN_ISOLATED_ARENA_REQUIRED"}
+
+func _qa_hero_damage(key: String) -> float:
+	return float(battle.hero_combat_stats.get(key, {}).get("damage", 0.0))
+
+func _qa_wait_effect_exit(effect: Variant, label: String) -> bool:
+	# Real engine callbacks only; never invoke Projectile._physics_process,
+	# LiBrawnAxesFx._process, resolve_hits, or set their lifetime/elapsed fields.
+	for tick in range(180):
+		if not is_instance_valid(effect): break
+		await physics_frame
+		await process_frame
+	return _check(label + " real effect queue_free drained", not is_instance_valid(effect))
+
+func _qa_hold_live_effect(effect: Variant, victim: Variant, label: String, is_axes: bool) -> bool:
+	captured_clock.clear()
+	capture_rejections.clear()
+	if not _ok(label + " real capture request", battle.request_run_capture()): return false
+	if not _check(label + " controller capture ready", await _wait_barrier()): return false
+	if not _check(label + " effect remains a live registered child", is_instance_valid(effect) and effect.get_parent() == battle.fx_root and not effect.is_queued_for_deletion()): return false
+	var hp_before: float = victim.hp
+	var position_before: Vector2 = effect.position
+	var timer_before: float = effect.elapsed if is_axes else effect._life
+	var clock_before: Dictionary = battle._run_clock.capture()
+	if not _ok(label + " held clock available", clock_before): return false
+	var engine_before: int = Engine.get_physics_frames()
+	var wave_before: float = battle.level._wave_t
+	for tick in range(5):
+		await physics_frame
+		await process_frame
+	if not _check(label + " real Engine physics clock advanced", Engine.get_physics_frames() > engine_before): return false
+	if not _check(label + " held effect and HP unchanged", is_instance_valid(effect) and victim.hp == hp_before and effect.position == position_before and (effect.elapsed if is_axes else effect._life) == timer_before): return false
+	if not _check(label + " no premature axes resolution", not is_axes or not effect.resolved): return false
+	if not _ok(label + " controller still healthy", battle._save_barrier.health()): return false
+	if not _check(label + " simulation and wave held", battle.level._wave_t == wave_before and battle._run_clock.capture() == clock_before): return false
+	return true
+
+func _qa_actual_damage_cases() -> bool:
+	if not _check("damage fixtures begin in running classic Battle", not paused and battle.phase == 2 and battle.gameplay_rng_fault().is_empty()): return false
+	var arena: Dictionary = _qa_damage_arena()
+	if not _ok("actual damage open land arena", arena): return false
+	var caster: Variant = battle.spawn_unit("li_kui", 0, arena.caster)
+	var victim: Variant = battle.spawn_unit("guan_dao", 1, arena.target)
+	if not _check("real spawn_unit gives living stable entities", is_instance_valid(caster) and is_instance_valid(victim) and caster.entity_id > 0 and victim.entity_id > caster.entity_id and caster.hp > 0.0 and victim.hp > 0.0): return false
+	# This fixture suppresses only these two units' autonomous actions, leaving
+	# Battle, spatial-grid construction, physics edges, effects, and HUD live.
+	caster.set_physics_process(false)
+	victim.set_physics_process(false)
+	for tick in range(2): await physics_frame
+	await process_frame
+	if not _check("real physics grid sees both fixtures", battle.units_near(caster.position, 180.0).has(victim)): return false
+	if not _check("damage fixture has no reduction shield immunity", victim._shield == 0.0 and victim._dmg_amp == 0.0 and victim._damage_reduction == 0.0 and not victim.is_phys_immune() and not victim.garrisoned and not victim.is_building and not victim.is_resource): return false
+	# Open the existing user pause first so creation cannot race a 360ms idle
+	# hitch. The candidate still reaches HELD solely through its real gate.
+	battle._open_pause()
+	if not _check("projectile fixture uses real user pause", paused): return false
+	var hp_arrow: float = victim.hp
+	var stats_arrow: float = _qa_hero_damage("li_kui")
+	var before_children: Array = battle.fx_root.get_children()
+	battle.spawn_projectile(caster, victim, 13.0)
+	var projectile: Variant = null
+	var new_projectiles := 0
+	for child: Node in battle.fx_root.get_children():
+		if not before_children.has(child) and child.get_script() == load("res://scripts/projectile.gd"):
+			projectile = child
+			new_projectiles += 1
+	if not _check("actual spawn_projectile creates one untouched arrow", new_projectiles == 1 and is_instance_valid(projectile) and projectile.shooter == caster and projectile.target == victim and projectile.dmg == 13.0 and projectile._life == 3.0): return false
+	if not await _qa_hold_live_effect(projectile, victim, "projectile", false): return false
+	if not _check("projectile release preserves preexisting pause", battle._save_barrier.release_capture().ok and paused): return false
+	battle._close_pause()
+	if not _check("projectile release resumes real engine", not paused): return false
+	if not await _qa_wait_effect_exit(projectile, "projectile"): return false
+	if not _check("projectile real damage exactly once", is_equal_approx(victim.hp, hp_arrow - 13.0) and is_equal_approx(_qa_hero_damage("li_kui") - stats_arrow, 13.0)): return false
+	for tick in range(12): await physics_frame
+	await process_frame
+	if not _check("projectile cannot repeat after freed", not is_instance_valid(projectile) and is_equal_approx(victim.hp, hp_arrow - 13.0) and is_equal_approx(_qa_hero_damage("li_kui") - stats_arrow, 13.0)): return false
+	# Same real entities, still alive. Grid comes from actual Battle callbacks.
+	battle._open_pause()
+	var hp_axes: float = victim.hp
+	var stats_axes: float = _qa_hero_damage("li_kui")
+	var axes: Variant = battle.spawn_li_brawn_axes(caster, 160.0)
+	if not _check("actual axes creator makes one unresolved live target", is_instance_valid(axes) and axes.hits.size() == 1 and axes.hits[0].target == victim and axes.elapsed == 0.0 and not axes.resolved): return false
+	# Read the creator's real, immutable hit plan; do not recompute damage logic.
+	var expected_axes: float = float(axes.hits[0].dmg)
+	if not _check("axes fixture is nonlethal positive damage", expected_axes > 0.0 and expected_axes < hp_axes): return false
+	if not await _qa_hold_live_effect(axes, victim, "axes", true): return false
+	if not _check("axes release preserves preexisting pause", battle._save_barrier.release_capture().ok and paused): return false
+	battle._close_pause()
+	if not _check("axes release resumes real engine", not paused): return false
+	if not await _qa_wait_effect_exit(axes, "axes"): return false
+	if not _check("axes real idle damage exactly once", is_equal_approx(victim.hp, hp_axes - expected_axes) and is_equal_approx(_qa_hero_damage("li_kui") - stats_axes, expected_axes)): return false
+	for tick in range(30): await physics_frame
+	await process_frame
+	if not _check("axes cannot repeat after freed", not is_instance_valid(axes) and is_equal_approx(victim.hp, hp_axes - expected_axes) and is_equal_approx(_qa_hero_damage("li_kui") - stats_axes, expected_axes)): return false
+	if not _check("damage cases retain source cache domain and healthy Battle", battle._run_cache_frame() == Engine.get_physics_frames() and battle.gameplay_rng_fault().is_empty() and battle._run_clock.fault().is_empty()): return false
+	if not await _qa_exit_capture_cases(caster, victim): return false
+	# The two fixture Units stay registered and alive until the driver's existing
+	# final battle.free(). Do not free a live Unit behind Battle.units caches.
+	return true
+
+# Append to the same SceneTree driver as actual_damage_driver_fragment.
+# Before that fragment's final return true, invoke:
+#   if not await _qa_exit_capture_cases(caster, victim): return false
+# STATIC PREPARATION ONLY. Original fragment and candidate remain unchanged.
+
+func _qa_capture_from_real_exit(observation: Dictionary) -> void:
+	# This callback is reached by real Projectile / LiBrawnAxesFx queue_free.
+	# The node has not finished leaving yet. Never fake capture_ready or advance
+	# either damage consumer manually. Record engine phase without assuming that
+	# queue_free's flush phase equals its originating damage callback phase.
+	observation["callbacks"] = int(observation["callbacks"]) + 1
+	observation["in_physics"] = Engine.is_in_physics_frame()
+	observation["engine_physics_frame"] = Engine.get_physics_frames()
+	observation["engine_process_frame"] = Engine.get_process_frames()
+	observation["request"] = battle.request_run_capture()
+
+func _qa_exit_capture_case(caster: Variant, victim: Variant, is_axes: bool) -> bool:
+	var label := "axes exit drain" if is_axes else "projectile exit drain"
+	if not _check(label + " starts running", not paused): return false
+	battle._open_pause()
+	if not _check(label + " fixture uses real user pause", paused): return false
+	var hp_before: float = victim.hp
+	var stats_before: float = _qa_hero_damage("li_kui")
+	var effect: Variant = null
+	var expected_damage := 13.0
+	if is_axes:
+		effect = battle.spawn_li_brawn_axes(caster, 160.0)
+		if not _check(label + " real unresolved axes creator", is_instance_valid(effect) and effect.hits.size() == 1 and effect.hits[0].target == victim and effect.elapsed == 0.0 and not effect.resolved): return false
+		expected_damage = float(effect.hits[0].dmg)
+	else:
+		var before_children: Array = battle.fx_root.get_children()
+		battle.spawn_projectile(caster, victim, expected_damage)
+		var count := 0
+		for child: Node in battle.fx_root.get_children():
+			if not before_children.has(child) and child.get_script() == load("res://scripts/projectile.gd"):
+				effect = child
+				count += 1
+		if not _check(label + " real single projectile creator", count == 1 and is_instance_valid(effect) and effect.target == victim and effect.shooter == caster): return false
+	if not _check(label + " positive nonlethal real hit plan", expected_damage > 0.0 and expected_damage < hp_before): return false
+	captured_clock.clear()
+	capture_rejections.clear()
+	var observation: Dictionary = {"callbacks": 0, "in_physics": false,
+		"engine_physics_frame": -1, "engine_process_frame": -1, "request": {}}
+	effect.tree_exiting.connect(_qa_capture_from_real_exit.bind(observation), CONNECT_ONE_SHOT)
+	battle._close_pause()
+	if not _check(label + " released to actual consumers", not paused): return false
+	# SceneTree signals continue while paused. Two boundaries are required by
+	# the candidate after the real exit callback requests capture.
+	for tick in range(180):
+		if not captured_clock.is_empty() or not capture_rejections.is_empty(): break
+		await physics_frame
+		await process_frame
+	if not _check(label + " actual exit callback exactly once", int(observation["callbacks"]) == 1): return false
+	if not _ok(label + " actual exit callback request accepted", observation["request"]): return false
+	if not _check(label + " actual controller reached HELD", not captured_clock.is_empty() and capture_rejections.is_empty() and paused): return false
+	if not _check(label + " queue_free completed before stable capture", not is_instance_valid(effect)): return false
+	if not _check(label + " real damage completed before stable capture", is_equal_approx(victim.hp, hp_before - expected_damage) and is_equal_approx(_qa_hero_damage("li_kui") - stats_before, expected_damage)): return false
+	if not _ok(label + " complete physics and world tree are healthy", battle._save_barrier.health()): return false
+	checks.append({"label": label + " exit callback engine phase recorded", "passed": true,
+		"tree_exiting_in_physics_frame": observation["in_physics"],
+		"engine_physics_frame": observation["engine_physics_frame"],
+		"engine_process_frame": observation["engine_process_frame"],
+		"note": "Queue-free flush observation, not a claim that this is the originating damage callback phase."})
+	var held_clock: Dictionary = battle._run_clock.capture()
+	if not _ok(label + " real held clock captured", held_clock): return false
+	var held_hp: float = victim.hp
+	var held_wave: float = battle.level._wave_t
+	var engine_before: int = Engine.get_physics_frames()
+	for tick in range(5):
+		await physics_frame
+		await process_frame
+	if not _check(label + " Engine advances while damage and world remain held", Engine.get_physics_frames() > engine_before and victim.hp == held_hp and battle.level._wave_t == held_wave and battle._run_clock.capture() == held_clock and not is_instance_valid(effect)): return false
+	if not _ok(label + " gate remains healthy after held frames", battle._save_barrier.health()): return false
+	if not _check(label + " release restores original running state", battle._save_barrier.release_capture().ok and not paused): return false
+	for tick in range(12): await physics_frame
+	await process_frame
+	if not _check(label + " no duplicate damage or exit after resume", int(observation["callbacks"]) == 1 and not is_instance_valid(effect) and is_equal_approx(victim.hp, hp_before - expected_damage) and is_equal_approx(_qa_hero_damage("li_kui") - stats_before, expected_damage)): return false
+	if not _check(label + " original cache phase and RNG health preserved", battle._run_cache_frame() == Engine.get_physics_frames() and battle._run_clock.fault().is_empty() and battle.gameplay_rng_fault().is_empty()): return false
+	return true
+
+func _qa_exit_capture_cases(caster: Variant, victim: Variant) -> bool:
+	if not await _qa_exit_capture_case(caster, victim, false): return false
+	if not await _qa_exit_capture_case(caster, victim, true): return false
+	return true
+
+func _remains_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var first: Variant = core_script.new(identity, runtime)
+	var second: Variant = core_script.new(identity, runtime)
+	var a: Dictionary = first.prepare(wire)
+	var b: Dictionary = second.prepare(wire)
+	if not _ok("death remains two complete cores prepare", a) or not _ok("death remains second core prepares", b):
+		first.dispose(); second.dispose(); return false
+	var original: Variant = a.battle._death_remains[0]
+	var copy: Variant = b.battle._death_remains[0]
+	var state: Variant = a.visual._remains
+	var live_mark: Variant = battle._death_remains[0]
+	var native_equal := true
+	for field: String in state.NATIVE:
+		native_equal = native_equal and original.get(field) == live_mark.get(field) and copy.get(field) == live_mark.get(field)
+	_check("death restored native fields equal held real death source", native_equal)
+	_check("death restored slice and metadata equal held real source", state.capture_node(original).value == state.capture_node(live_mark).value)
+	_check("death remains current values metadata and atlas slice exact", state.capture_node(original).value == state.capture_node(copy).value and original.frame_texture != copy.frame_texture and original.frame_texture.atlas == copy.frame_texture.atlas)
+	_check("death owner cache list and callback stay bound to new worlds", a.battle._death_remains_atlas_checked == battle._death_remains_atlas_checked and a.battle._death_remains_atlas == battle._death_remains_atlas and original.expired.get_connections()[0].callable == Callable(a.battle, "_on_death_remains_expired"))
+	# Lifecycle fixtures derived from a real death: shorten only remaining time,
+	# so the real idle callbacks reach expiration without waiting 45 seconds.
+	original.remaining = 0.7; copy.remaining = 0.7
+	original.age = 0.30; copy.age = 0.30
+	var stage := Node2D.new()
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	root.add_child(stage)
+	for plan: Dictionary in [a, b]:
+		plan.battle.world.remove_child(plan.battle.fx_root)
+		stage.add_child(plan.battle.fx_root)
+	_check("death graph cannot activate with removed owner list entry", _remains_owner_guard(a))
+	if not _ok("death first graph paused activation", a.visual.activate()) or not _ok("death second graph paused activation", b.visual.activate()):
+		stage.free(); first.dispose(); second.dispose(); return false
+	var pairs := 0
+	var equal := true
+	var merged := false
+	var exits := {"a": 0, "b": 0}
+	original.tree_exited.connect(func(): exits.a += 1)
+	copy.tree_exited.connect(func(): exits.b += 1)
+	for tick in range(300):
+		await process_frame
+		if is_instance_valid(original) != is_instance_valid(copy): equal = false; break
+		if not is_instance_valid(original): break
+		pairs += 1
+		equal = equal and state.capture_node(original).value == state.capture_node(copy).value and original.reveal_alpha() == copy.reveal_alpha()
+		if not merged and original.age > 0.4:
+			# Same existing gameplay method must refresh remaining without resetting age.
+			original.lifetime = 0.6; copy.lifetime = 0.6
+			original.fade_duration = 0.3; copy.fade_duration = 0.3
+			original.refresh_from_merge(); copy.refresh_from_merge()
+			merged = true
+	_check("death real idle reveal merge fade and natural deletion equal", equal and pairs > 0 and merged and not is_instance_valid(original) and not is_instance_valid(copy))
+	_check("death natural expiration erases both owner arrays once", a.battle._death_remains.is_empty() and b.battle._death_remains.is_empty() and exits.a == 1 and exits.b == 1)
+	completed_cases.append("death_real_idle_pairs=" + str(pairs))
+	stage.free(); first.dispose(); second.dispose()
+	# Every below mutation stays JSON-safe; failures must discard the new tree.
+	for problem: String in ["owner_missing", "owner_duplicate", "bad_atlas", "bad_life", "bad_slice", "unknown_meta"]:
+		var bad: Dictionary = wire.duplicate(true)
+		if problem.begins_with("owner"):
+			var owner: Dictionary = codec.decode(bad.sections.death_remains).value
+			if problem == "owner_missing": owner.order.clear()
+			else: owner.order.append(owner.order[0])
+			bad.sections.death_remains = codec.encode(owner).value
+		else:
+			var rows: Array = codec.decode(bad.sections.visual.records).value
+			for row: Dictionary in rows:
+				if row.kind != "death_remains": continue
+				match problem:
+					"bad_atlas": row.values.state.texture.atlas.signature.path = "res://assets/untrusted.png"
+					"bad_life": row.values.state.remaining = -1.0
+					"bad_slice": row.values.state.texture.region_position.x += 1.0
+					"unknown_meta": row.values.state.metadata["untracked"] = 1
+				break
+			bad.sections.visual.records = codec.encode(rows).value
+		var rejected: Variant = core_script.new(identity, runtime)
+		var result: Dictionary = rejected.prepare(bad)
+		_check("death corrupt record rolls back " + problem + " " + str(result.get("code", "")), not result.ok and not is_instance_valid(rejected._battle) and rejected._identity == null)
+		rejected.dispose()
+	return true
+
+func _remains_owner_guard(plan: Dictionary) -> bool:
+	var original: Array = plan.battle._death_remains.duplicate()
+	plan.battle._death_remains.clear()
+	var refused: Dictionary = plan.visual.activate()
+	plan.battle._death_remains = original
+	return not refused.ok and refused.code == "REMAINS_OWNER_CHANGED"
+
+func _display_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var before: int = checks.size()
+	for problem: String in ["duplicate", "missing", "unknown", "texture", "reference", "capacity"]:
+		var bad: Dictionary = wire.duplicate(true)
+		var raw: Dictionary = codec.decode(bad.sections.world_display).value
+		match problem:
+			"duplicate": raw.children.append(raw.children[0].duplicate(true))
+			"missing": raw.children = raw.children.filter(func(row): return row.role != "map")
+			"unknown": raw.children[0].role = "saved_script"
+			"texture":
+				for row: Dictionary in raw.children:
+					if row.role == "water": row.texture.sha256 = "0".repeat(64)
+			"reference":
+				for row: Dictionary in raw.children:
+					if row.role == "shadow": row.retained.append("999999999")
+			"capacity":
+				for row: Dictionary in raw.children:
+					if row.role == "shadow": row.capacity = 129
+		bad.sections.world_display = codec.encode(raw).value
+		var module: Variant = core_script.new(identity, runtime)
+		var result: Dictionary = module.prepare(bad)
+		_check("display corrupted " + problem + " rejects and frees destination", not result.ok and module._battle == null and module._identity == null)
+		module.dispose()
+	var module: Variant = core_script.new(identity, runtime)
+	var result: Dictionary = module.prepare(wire)
+	if not _ok("display lifecycle prepared", result): module.dispose(); return false
+	var target: Variant = result.battle
+	var source_world: Node2D = target.world
+	target.remove_child(source_world)
+	var stage := Node2D.new(); stage.process_mode = Node.PROCESS_MODE_ALWAYS; root.add_child(stage)
+	stage.add_child(source_world)
+	# The rest of the prepared Battle stays off tree. Only rendering is enabled.
+	_check("display activation after ready", result.world_display.activate().ok)
+	var roles: Array = []
+	var reader: Variant = load("res://scripts/run_world_display_state.gd").new()
+	for node: Node in source_world.get_children(true): roles.append(reader._role(target, node))
+	var water: Node2D = source_world.get_child(roles.find("water"))
+	var saved: Dictionary = codec.decode(wire.sections.world_display).value
+	for row: Dictionary in saved.children:
+		if row.role == "water": _check("water ready preserves saved render state", water.z_index == row.node.z_index and water.transform == Transform2D(row.node.basis_x,row.node.basis_y,row.node.position) and not water.has_meta("_run_restore_prepared"))
+	for tick in range(4): await process_frame
+	var shadow: Variant = source_world.get_child(roles.find("shadow"))
+	_check("shadow native processing keeps valid batch", shadow.battle == target and shadow.active_count == shadow.paired_multimesh.visible_instance_count)
+	stage.remove_child(source_world); target.add_child(source_world); stage.free()
+	module.dispose()
+	for index in range(before, checks.size()):
+		if not checks[index].passed: return false
+	return true
