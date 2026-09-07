@@ -1,3 +1,9 @@
+## 2026-09-07 本轮收尾交接
+
+- docs/STABILIZATION_CLOSEOUT_20260907.md：已同步代码基线、待验范围与下一次执行顺序。
+- qa/stabilization_battle_barrier_draft_20260907/：实际Battle屏障/根v3冻结候选与驱动，原生未运行，未接生产。
+- qa/stabilization_art_a1_brief_20260907/：宋江/林冲制作依据、状态表与输入摘要，没有新增生成图。
+
 ## 2026-09-07 恢复图与待发送事务
 
 - scripts/run_battle_root_state.gd、run_remaining_effect_state.gd、run_item_cast_flow_state.gd、run_visual_graph.gd：四个已验证的局部恢复模块；整体世界工厂仍未完成。

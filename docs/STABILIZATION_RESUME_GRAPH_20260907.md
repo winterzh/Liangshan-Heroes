@@ -36,3 +36,5 @@
 其余特效、真实 Projectile、LiBrawnAxes、死亡残留、场景节点及统一世界工厂继续待接。根 v2 仍使用原 Engine 时钟合同与模 16 约束；已验证的时钟/屏障仅为独立调度草稿，未接真实 Battle 输入、任务 deferred、idle 伤害或根 v3。没有新玩家槽、磁盘事务、跨进程战斗恢复、完整 30 波、八关胜利、1800 秒运行或 Steam 成品包验收。
 
 Steam outbox 另完成 62 项原生模型检查，同时复跑原 receipt 88 项；只证明原生 JSON 与串行模型，不证明实际磁盘/SDK 崩溃链，见 [事务草稿](STEAM_RECEIPT_OUTBOX_DRAFT_20260907.md)。性能尘粒候选三对 A/B 未获益，已停止，见 [性能判定](STABILIZATION_DUST_FILTER_QA_20260907.md)。
+
+本轮停止前，另封存了实际Battle输入屏障、独立缓存时钟和根v3候选；只有准备期语法检查与冻结摘要验证，原生尚未运行、未晋级生产，见[候选恢复说明](../qa/stabilization_battle_barrier_draft_20260907/README.md)。

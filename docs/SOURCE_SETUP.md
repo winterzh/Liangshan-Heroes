@@ -1,3 +1,9 @@
+## 2026-09-07 停止前封存与继续开发入口
+
+此前验证代码基线 `2e40c4a` 已同步；本次仅增加交接与隔离草稿。`qa/stabilization_battle_barrier_draft_20260907/` 保存原字节候选、驱动、冻结记录和恢复说明，须按SOURCE_PINS在指定来源的独立checkout恢复至全新scratchpad，再运行原生QA。准备脚本不是自包含重建入口，不能从QA目录直接执行。
+
+`qa/stabilization_art_a1_brief_20260907/` 保存美术制作依据；迁移使用inputs.json的relative_path，绝对路径仅是历史观察。正常启动方式仍见原说明。[本次交接](STABILIZATION_CLOSEOUT_20260907.md)。
+
 ## 2026-09-07 恢复模块与失败关闭事务基础
 
 生产新增run_battle_root_state、run_remaining_effect_state、run_item_cast_flow_state、run_visual_graph，使用实际受测字节及原生UID。五脚本/四UID安装收据位于qa/stabilization_resume_graph_20260907；完整玩家保存/继续入口仍未加入，正常启动方式不变。
