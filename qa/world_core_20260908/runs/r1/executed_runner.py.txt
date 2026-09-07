@@ -56,7 +56,6 @@ def main():
     parser.add_argument("--suite", required=True)
     parser.add_argument("--prefix", required=True)
     parser.add_argument("--case-id", default="")
-    parser.add_argument("--rendered-driver", action="store_true", help="Run only the driver with Forward+ Vulkan; import stays headless")
     parser.add_argument("--profile-root", type=Path, default=Path("D:/LHPerfProfiles"))
     parser.add_argument("--run", action="store_true")
     args = parser.parse_args()
@@ -117,7 +116,6 @@ def main():
     guard.no_links(lock)
     info = {"preflight": True, "source_head": head, "source_mode": "current production raw bytes by committed path whitelist",
             "production_files": len(rows), "candidate_files": len(changes), "suite": args.suite, "case_id": args.case_id, "freeze_sha256": args.freeze_sha256,
-            "driver_render_mode": "forward_plus_vulkan" if args.rendered_driver else "headless",
             "godot_sha256": guard.sha(exe.read_bytes()), "godot_pids_before": guard.godot_processes(), "lock_busy": lock.exists()}
     print(json.dumps(info, ensure_ascii=False), flush=True)
     if not args.run:
@@ -143,9 +141,7 @@ def main():
         guard.need(not guard.godot_processes(), "Unexpected Godot before " + label)
         log = run / (label + ".log")
         start = time.monotonic()
-        render_args = (["--rendering-method", "forward_plus", "--rendering-driver", "vulkan", "--minimized"]
-                       if label == "driver" and args.rendered_driver else ["--headless"])
-        command = [str(exe)] + render_args + ["--path", str(project)] + extra
+        command = [str(exe), "--headless", "--path", str(project)] + extra
         with log.open("xb") as stream:
             active = subprocess.Popen(command, cwd=project, env=env, stdout=stream, stderr=subprocess.STDOUT,
                                       creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))

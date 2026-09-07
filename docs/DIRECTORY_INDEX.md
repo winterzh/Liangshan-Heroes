@@ -1,3 +1,9 @@
+## 2026-09-08 世界核心准备事务
+
+- `scripts/run_battle_world_core.gd`：实际屏障捕获、同一身份的多模块离树准备与失败释放。
+- `docs/WORLD_CORE_PREPARATION_20260908.md`：接口顺序、原生证据、完整世界与继续槽后续。
+- `qa/world_core_20260908/`：五轮原始运行、失败/成功记录、冻结候选/驱动、来源与安装收据。
+
 ## 2026-09-08 混合FxRoot
 
 - `docs/MIXED_FX_RESUME_20260908.md`：统一Projectile/飞斧/视觉图合同、原生结果与世界工厂后续。

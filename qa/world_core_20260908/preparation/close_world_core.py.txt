@@ -1,0 +1,68 @@
+from pathlib import Path
+import datetime, hashlib, json, subprocess
+
+root = Path(__file__).resolve().parents[1]
+qa = root / 'qa/world_core_20260908'
+candidate = root / 'scratchpad/world_core_20260908'
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+runs = ['overlay_20260907T202155Z_f5cb8c1f', 'overlay_20260907T202926Z_d95a4a0a',
+        'overlay_20260907T203251Z_d72f6c73', 'overlay_20260907T203400Z_b61c6206',
+        'overlay_20260907T203649Z_7e114bee']
+head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
+assert head == 'e8b4d496acb440d364da04898952cd5f26f7400d'
+assert not (root / '.godot/redraw_rejection_source.lock').exists()
+last = root / '.godot/stabilization_overlay' / runs[-1]
+receipt = json.loads((last / 'receipt.json').read_text())
+assert receipt['complete'] and not receipt['final_issues'] and not receipt['godot_pids_after']
+change = json.loads((candidate / 'overlay_manifest.json').read_text())['files'][0]
+assert not change['before_exists'] and not (root / change['path']).exists()
+assert sha(candidate / 'run_battle_world_core.gd') == sha(last / 'project' / change['path']) == change['candidate_sha256']
+assert sha(candidate / 'driver.gd') == sha(last / 'project/tools/world_core/driver.gd')
+assert sha(root / 'tools/run_stabilization_overlay.py') == receipt['runner_sha256']
+qa.mkdir(exist_ok=False)
+(qa / '.gdignore').write_bytes(b'')
+pins = []
+
+def archive(source, relative):
+    target = qa / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(source.read_bytes())
+    pins.append({'source_relative': source.relative_to(root).as_posix(), 'archive_relative': relative,
+                 'bytes': target.stat().st_size, 'sha256': sha(target)})
+
+totals = []
+for i, run_id in enumerate(runs, 1):
+    run = root / '.godot/stabilization_overlay' / run_id
+    r = json.loads((run / 'receipt.json').read_text())
+    assert r['source_head'] == head and not r['final_issues'] and r['lock_released']
+    assert all(r[k] for k in ['source_unchanged', 'player_unchanged', 'private_source_unchanged', 'candidate_unchanged'])
+    for name in ['receipt.json', 'report.json', 'manifest.json', 'import.log', 'driver.log', 'freeze.json', 'executed_runner.py.txt', 'executed_guard.py.txt']:
+        if (run / name).exists(): archive(run / name, f'runs/r{i}/' + name)
+    archive(run / 'project/tools/world_core/driver.gd', f'runs/r{i}/driver.gd.txt')
+    archive(run / 'project/scripts/run_battle_world_core.gd', f'runs/r{i}/run_battle_world_core.gd.txt')
+    item = {'run_id': run_id, 'complete': r['complete'], 'error': r.get('error')}
+    if (run / 'report.json').exists():
+        report = json.loads((run / 'report.json').read_text())
+        n = sum(x['label'].startswith(('source before ', 'source after ')) for x in report['checks'])
+        item.update(checks=report['check_count'], source_sha_checks=n, other_checks=report['check_count'] - n,
+                    failures=report['failures'])
+    totals.append(item)
+for name in ['run_battle_world_core.gd', 'driver.gd']:
+    archive(candidate / name, 'candidate/' + name + '.txt')
+for name in ['freeze.json', 'overlay_manifest.json']: archive(candidate / name, 'candidate/' + name)
+archive(root / '.godot/prepare_world_core.py', 'preparation/prepare_world_core.py.txt')
+archive(root / '.godot/close_world_core.py', 'preparation/close_world_core.py.txt')
+for name in [change['path'], change['path'] + '.uid']:
+    source = last / 'project' / name
+    target = root / name
+    assert not target.exists()
+    target.write_bytes(source.read_bytes())
+    archive(source, 'candidate/' + Path(name).name + '.tested.txt')
+    assert sha(target) == sha(source)
+install = {'source_head': head, 'installed_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+           'files': [change], 'native_uid_sha256': sha(root / (change['path'] + '.uid')),
+           'installed_bytes_equal_final_native_run': True, 'runner_sha256': receipt['runner_sha256'],
+           'runs': totals, 'full_world_resume_complete': False, 'steam_uploaded': False}
+(qa / 'installation.json').write_text(json.dumps(install, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+(qa / 'SOURCE_PINS.json').write_text(json.dumps({'files': pins}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+print(json.dumps({'archive_files': len(pins), 'archive_bytes': sum(x['bytes'] for x in pins), 'runs': totals}, ensure_ascii=False))

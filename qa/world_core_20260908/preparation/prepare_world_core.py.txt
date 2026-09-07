@@ -1,0 +1,93 @@
+from pathlib import Path
+import hashlib,json,subprocess
+root=Path(__file__).resolve().parents[1];out=root/'scratchpad/world_core_20260908'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+driver=(root/'qa/stabilization_battle_barrier_integration_20260907/frozen_packages/attempt_r4/barrier_smoke.gd.txt').read_text(encoding='utf-8')
+start=driver.index('\t_check("actual complete physics steps recorded"',driver.index('func _run()'))
+end=driver.index('\n\n',driver.index('\tawait _finish()',start))
+driver=driver[:start]+'''\t_check("actual rendered Vulkan adapter available", DisplayServer.get_name() != "headless" and not RenderingServer.get_video_adapter_name().is_empty() and RenderingServer.get_current_rendering_driver_name() == "vulkan")
+\tvar core_script: Script = load("res://scripts/run_battle_world_core.gd")
+\tvar runtime := {"defs": battle._defs, "abilities": battle._abilities, "items": battle._items}
+\tvar source_core: Variant = core_script.new(identity, runtime)
+\tvar captured: Dictionary = source_core.capture(battle)
+\tif not _ok("actual held classic captures all core sections", captured):
+\t\tsource_core.dispose(); await _finish(true); return
+\tsource_identity = captured.identity
+\tvar wire: Dictionary = JSON.parse_string(JSON.stringify(captured.record))
+\tvar target_core: Variant = core_script.new(identity, runtime)
+\tvar prepared: Dictionary = target_core.prepare(wire)
+\tif not _ok("actual classic JSON prepares private world core", prepared):
+\t\ttarget_core.dispose(); source_core.dispose(); await _finish(true); return
+\tvar target: Variant = prepared.battle
+\t_check("world remains off tree disabled without root clock or Steam begin", not target.is_inside_tree() and target.process_mode == Node.PROCESS_MODE_DISABLED and target.is_blocking_signals() and target._run_clock == null and target._steam_run_id == 0)
+\tvar source_order: Array = []
+\tvar target_order: Array = []
+\tvar source_active: Array = []
+\tvar target_active: Array = []
+\tfor unit: Variant in battle.units_root.get_children(): source_order.append(unit.entity_id)
+\tfor unit: Variant in target.units_root.get_children(): target_order.append(unit.entity_id)
+\tfor unit: Variant in battle.units: source_active.append(unit.entity_id)
+\tfor unit: Variant in target.units: target_active.append(unit.entity_id)
+\t_check("world core retains actual unit count and unit ordering", source_order == target_order and source_active == target_active)
+\t_check("world core restored hall belongs to new unit graph", target.level.hall != battle.level.hall and target.level.hall.entity_id == battle.level.hall.entity_id and target.level.hall.battle == target)
+\t_check("world core preserves wave without deploy or start", target.level._wave == battle.level._wave and target.level._wave_t == battle.level._wave_t and target.level._started == battle.level._started and target.next_entity_id == battle.next_entity_id)
+\t_check("world core RNG restored without extra draw", target.capture_gameplay_rng().record == battle.capture_gameplay_rng().record)
+\tvar map_state: Variant = load("res://scripts/run_map_state.gd").new(identity.content_version)
+\tvar map_read: Dictionary = map_state.capture(target.map)
+\t_check("world core map five navigation tables footprints scenery exact", map_read.ok and _same(map_read.value, captured.record.sections.map))
+\t_check("world core fog bytes and resources retained", target._vision == battle._vision and target._sight_now == battle._sight_now and target._reveal_t == battle._reveal_t and target._fog_t == battle._fog_t and target._vision_img.get_data() == battle._vision_img.get_data() and target._fog_tex != battle._fog_tex and target._fog_tex.get_image().get_data() == battle._fog_tex.get_image().get_data() and target._fog_layer.tex == target._fog_tex)
+\t_check("world core root binding deliberately deferred for final installation", prepared.pending_root == captured.record.sections.root and prepared.complete_world == false and prepared.mounted == false and prepared.activated == false)
+\tvar source_tick: Dictionary = battle._run_clock.capture()
+\tvar source_wave: float = battle.level._wave_t
+\tfor tick in range(4): await process_frame
+\t_check("prepared world remains inactive across frames while old world held", target.level._wave_t == source_wave and target._run_clock == null and battle._run_clock.capture() == source_tick)
+\tfor section: String in core_script.SECTIONS:
+\t\tvar bad: Dictionary = wire.duplicate(true)
+\t\tbad.sections[section] = {"invalid": true}
+\t\tvar rejected: Variant = core_script.new(identity, runtime)
+\t\tvar failed: Dictionary = rejected.prepare(bad)
+\t\t_check("late section rollback releases complete private world " + section, not failed.ok and not is_instance_valid(rejected._battle) and rejected._identity == null)
+\t\trejected.dispose()
+\tfor conflict: String in ["engine", "entity_counter", "ground_fire", "item_queue"]:
+\t\tvar bad: Dictionary = wire.duplicate(true)
+\t\tvar expected: String = ""
+\t\tif conflict == "engine":
+\t\t\tbad.engine_sha256 = "0".repeat(64); expected = "WORLD_CORE_IDENTITY"
+\t\telif conflict in ["entity_counter", "ground_fire"]:
+\t\t\tvar raw: Dictionary = codec.decode(bad.sections.root.payload).value
+\t\t\tvar field: String = "next_entity_id" if conflict == "entity_counter" else "_ground_fire_visuals"
+\t\t\traw.values[field] += 1
+\t\t\tbad.sections.root.payload = codec.encode(raw).value
+\t\t\texpected = "ROOT_ENTITY_COUNTER_MISMATCH" if conflict == "entity_counter" else "ROOT_GROUND_FIRE_COUNT_MISMATCH"
+\t\telse:
+\t\t\t# Synthetic stale queue alias; no item definition or live source mutation.
+\t\t\tvar raw: Dictionary = codec.decode(bad.sections.item_casts.payload).value
+\t\t\traw._pending_item_casts.append({"caster": {"state": "entity", "id": wire.sections.units.root_order[0]}, "slot": 0, "uid": 900, "point": Vector2.ZERO, "target": {"state": "none"}, "serial": 0})
+\t\t\tbad.sections.item_casts.payload = codec.encode(raw).value
+\t\t\texpected = "COUNTER_NOT_ABOVE_ALLOCATED"
+\t\tvar rejected: Variant = core_script.new(identity, runtime)
+\t\tvar failed: Dictionary = rejected.prepare(bad)
+\t\t_check("cross section conflict rejects and disposes " + conflict + " " + str(failed), not failed.ok and failed.code == expected and not is_instance_valid(rejected._battle) and rejected._identity == null)
+\t\tif conflict == "item_queue":
+\t\t\tbad.sections.items.next_item_uid = codec.encode(901).value
+\t\t\tvar repaired: Dictionary = rejected.prepare(bad)
+\t\t\t_check("counter above historical queue alias prepares without pruning " + str(repaired.get("code", "")), repaired.ok and repaired.battle.next_item_uid == 901 and repaired.battle._pending_item_casts[0].uid == 900)
+\t\trejected.dispose()
+\t_check("all failed prepares leave original world alive and unchanged", is_instance_valid(battle) and battle.level._wave_t == source_wave and battle._run_clock.capture() == source_tick)
+\tcompleted_cases.append("actual_classic_world_core_prepare_and_rollback")
+\ttarget_core.dispose()
+\tsource_core.dispose()
+\t_check("successful prepare explicit disposal releases private Battle", not is_instance_valid(target))
+\t_check("source capture released after world preparation", battle._save_barrier.release_capture().ok)
+\tawait _finish()
+'''+driver[end:]
+driver=driver.replace('actual-classic-battle-barrier-candidate','world-core-native').replace('[actual classic barrier QA] ','[world core QA] ')
+driver=driver.replace('"rendering_method": RenderingServer.get_current_rendering_method(),', '"display_server": DisplayServer.get_name(), "video_adapter": RenderingServer.get_video_adapter_name(), "rendering_driver": RenderingServer.get_current_rendering_driver_name(), "rendering_method": RenderingServer.get_current_rendering_method(),')
+scope_start=driver.index('"battle_resume_tested": false, "scope":')
+scope_end=driver.index('}\n',scope_start)
+driver=driver[:scope_start]+'"battle_resume_tested": false, "scope": "Actual classic Battle runs normally, captures all core sections under its HELD barrier, prepares a disabled detached world and rolls back corrupt sections. Root-clock binding, all-world display/UI/Steam, final attachment and activation remain pending. No cross-process or player-slot claim."'+driver[scope_end:]
+(out/'driver.gd').write_text(driver,encoding='utf-8',newline='\n')
+change={'path':'scripts/run_battle_world_core.gd','before_exists':False,'candidate':(out/'run_battle_world_core.gd').relative_to(root).as_posix(),'candidate_sha256':sha(out/'run_battle_world_core.gd')}
+(out/'overlay_manifest.json').write_text(json.dumps({'files':[change]},indent=2)+'\n',encoding='utf-8')
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in ['run_battle_world_core.gd','driver.gd','overlay_manifest.json']}},indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'freeze':sha(out/'freeze.json')}))

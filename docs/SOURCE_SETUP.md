@@ -1,3 +1,7 @@
+## 2026-09-08 战斗世界核心准备
+
+新增内部run_battle_world_core及原生UID，构造与后续安装边界见[实现说明](WORLD_CORE_PREPARATION_20260908.md)。Play.cmd和玩家入口保持；完整继续功能仍未开放。隔离overlay测试新增--rendered-driver以读取真实Vulkan纹理，默认/编辑器导入仍无头；R5复现需在e8b4d49独立checkout恢复归档执行器和候选，见[QA](../qa/world_core_20260908/README.md)。QA以.gdignore隔离、Git属性保持原字节。
+
 ## 2026-09-08 混合特效图恢复
 
 run_visual_graph构造器增加可选的受信Projectile/飞斧适配器，调用顺序见[实现合同](MIXED_FX_RESUME_20260908.md)。原调用和Play.cmd启动保持；没有玩家继续入口。复现使用231f560来源的独立checkout，按[QA](../qa/mixed_fx_20260908/README.md)恢复冻结候选原名；全部QA以.gdignore隔离、.gitattributes保持原字节。完整世界工厂仍待开发。
