@@ -1,3 +1,7 @@
+## 2026-09-08 闪现箭光恢复
+
+`battle.gd`和`run_visual_graph.gd`接入已原生验证的BlinkShotFx保存恢复；普通启动仍用Play.cmd，没有开放继续战斗入口。复现须在aae6593的独立checkout按[本批QA](../qa/blink_resume_20260908/README.md)恢复冻结候选名字；QA内.gd.txt不能直接运行。档案以.gdignore隔离并保持原字节。[范围与后续](BLINK_RESUME_20260908.md)。
+
 ## 2026-09-08 公告发布交接
 
 中英文公告与任务框实机配图已发布，事件708907988310558956；[已发布内容与来源](STEAM_ANNOUNCEMENT_20260908.md)、[独立收据](../qa/steam_announcement_20260908/publication_receipt.json)。图片复用已跟踪QA原图，新增QA目录以.gdignore隔离并保持原字节。启动方式和游戏源码没有变化；此前上传收据未发布公告的字段保留历史状态，以本条后续记录为准。
