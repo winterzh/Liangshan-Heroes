@@ -1,3 +1,13 @@
+## 2026-09-07 缓存清理与历史归档映射
+
+- `D:\AI项目\水浒\归档\水浒_过期资料_20260907.7z`：9 组历史目录、4,161 个文件的归档，1,455,622,866 字节；已完成 `7z t` 和完整解压 SHA-256 零差异核对。
+- 已归档的历史目录：`_archive/release_candidates/release_candidate_20260901_134110`、`_archive/campaign_history/campaign_environment_v8_20260831`、`_archive/visual_samples/visual_sample_20260831` 与同目录的 `visual_sample_v2_20260831` 至 `visual_sample_v6_20260831`，以及 `implementation_20260904`。以上相对路径均位于 `D:\AI项目\水浒\历史资料`，原位置保留 `已归档.md`。
+- 继续展开：原始 ZIP、`_archive/campaign_history/campaign_rework_20260831_173850`、视觉 v7、`implementation_20260902` 和 `implementation_20260903`，以保持来源与基线可读。
+- 缓存处理：3 份已核验的重复导入缓存和旧历史工程的标准 `.godot` 已删除；当前工程主缓存保留，旧工程再次启动时重建缓存。最新候选 ZIP、冻结源码、原始收据、正式素材和来源保留。
+- `qa/storage_cleanup_20260907/`：本轮清理、归档及最终保护和启动验证的证据入口。50 个 Git 临时垃圾文件因删除被自动审批策略阻止而保留；不计入本轮约 1.89 GiB 净释放量。
+
+游戏内容及启动方式不变；更早的目录记录保持原文，已归档项目按上方入口还原。
+
 ## 2026-09-07 本机存储迁移映射
 
 | 本机路径 | 当前用途 |
