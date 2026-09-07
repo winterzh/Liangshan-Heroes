@@ -1,3 +1,10 @@
+## 2026-09-07 收尾计划与来源恢复
+
+- `docs/STABILIZATION_EXECUTION_20260907.md`：用户批准的Windows收尾范围、顺序、并行边界和实际批次结果。
+- `docs/ART_PROVENANCE_RECOVERY_20260907.md`、`qa/art_provenance_recovery_20260907/`：来源统计修复、失败与最终报告、正反例、独立副本和精确白名单。
+- `tools/contracts/art_provenance_recovery_20260907/`：固定mapping与451份去重原字节来源证据；随源码同步，不能按临时截图或Godot缓存排除。
+- `tools/campaign_art_evidence.py`、`campaign_art_evidence_selftest.py`、`campaign_art_portability_check.py`、`recover_campaign_art_provenance.py`：严格来源映射、TRES验收、隔离验证和受控历史回收工具。
+
 ## 2026-09-07 缓存清理与历史归档映射
 
 - `D:\AI项目\水浒\归档\水浒_过期资料_20260907.7z`：9 组历史目录、4,161 个文件的归档，1,455,622,866 字节；已完成 `7z t` 和完整解压 SHA-256 零差异核对。

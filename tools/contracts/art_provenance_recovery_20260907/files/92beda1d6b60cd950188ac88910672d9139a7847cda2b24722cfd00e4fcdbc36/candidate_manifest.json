@@ -1,0 +1,1218 @@
+{
+  "schema_version": 1,
+  "kind": "lianhuanma_p0_fixed_grid_direction4_candidate",
+  "created_at": "2026-09-03T09:46:26.164860+08:00",
+  "campaign_level": 4,
+  "scene_context": "lianhuanma_battle",
+  "novel_basis": [
+    "水浒传第五十五回：深盔垂护项只露双眼，马披重甲只露四蹄，每三十匹铁环连锁",
+    "水浒传第五十七回：钩镰枪钩蹄拽腿，先倒两侧马脚后中间甲马惊乱"
+  ],
+  "source_generation_conversations": [],
+  "source_generation_includes_codex_imagegen": true,
+  "cleanup_conversations": [
+    "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce"
+  ],
+  "cleanup_verification": "implementation_20260902/lianhuanma_p0_source/web_alpha_cleanup_verification.json",
+  "cleanup_verification_sha256": "a2d8e7fa73d9f748d63019e7a4f554ae3cccfdede5ce49cf0af157df49c6304e",
+  "web_alpha_cleanup_performed": true,
+  "web_alpha_cleanup_rule": "alpha<=15 -> RGBA(0,0,0,0); alpha>15 -> byte-identical RGBA",
+  "local_alpha_cleanup_performed": false,
+  "local_operations": [
+    "fixed declared 4-column and fixed fractional row cell definition",
+    "continuous rectangle crop per cell",
+    "one uniform proportional scale per complete source sheet",
+    "transparent padding into 256x256 frame",
+    "two-frame horizontal walk encoding",
+    "PNG and JSON encoding"
+  ],
+  "forbidden_local_operations_used": [],
+  "mirroring_performed": false,
+  "repainting_performed": false,
+  "connected_component_isolation_performed": false,
+  "frame_size": [
+    256,
+    256
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "states": [
+    "idle",
+    "walk",
+    "attack",
+    "hurt",
+    "death"
+  ],
+  "source_count": 4,
+  "output_count": 20,
+  "sources": [
+    {
+      "source_path": "implementation_20260902/lianhuanma_p0_source/web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_mode": "RGBA",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "prompt_path": "implementation_20260902/lianhuanma_p0_source/01_lian_huan_ma_idle_walk_3x4.txt",
+      "prompt_sha256": "6ea108fbd98ec34cf026362dfc42b472b31e9afdf31a472d2227b04e87a7699b",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-3a0800d0-bb7e-4650-91e8-e0c4b844f0ad.png"
+      },
+      "raw_source_path": "implementation_20260902/lianhuanma_p0_source/raw_before_web_alpha15_cleanup/web_lian_huan_ma_idle_walk_3x4.png",
+      "raw_source_sha256": "6be02841808e62be7ba93c11b33a0a07588744e78a43dba7e3eb41c02f4da8d8",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "web_cleanup_prompt_sha256": "0BDE218E93FB077F23300D87CE79A284C7F7BCCD12178CD7DBEF34DD8FD431CC",
+      "exact_cleanup_rule_verified": true,
+      "fixed_grid": {
+        "columns": 4,
+        "rows": 3,
+        "x_boundaries": [
+          0,
+          362,
+          724,
+          1086,
+          1448
+        ],
+        "y_boundaries": [
+          0,
+          362,
+          724,
+          1086
+        ]
+      },
+      "single_uniform_scale_for_source_sheet": 0.6432748538011696,
+      "target_max_width": 232,
+      "target_max_height": 220,
+      "target_bottom_y": 232
+    },
+    {
+      "source_path": "implementation_20260902/lianhuanma_p0_source/web_lian_huan_ma_attack_v2_1x4.png",
+      "source_sha256": "9ca17bbd0dd18c380074cc4832c0fae8c622175212fb14353073bcf55b6567a7",
+      "source_mode": "RGBA",
+      "source_size": [
+        2126,
+        740
+      ],
+      "prompt_path": "implementation_20260902/lianhuanma_p0_source/07_attack_v2_generation_record.txt",
+      "prompt_sha256": "5ac7f3d6a355dbdb773b826fdc9ff8d8740c7d7343a636410aec784a1c0e20fe",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-1199f26d-16b5-40c2-8637-89a4ce390d5d.png"
+      },
+      "raw_source_path": "implementation_20260902/lianhuanma_p0_source/raw_before_web_alpha15_cleanup/web_lian_huan_ma_attack_v2_1x4.png",
+      "raw_source_sha256": "592a110d2ed3b4692266d463687376e50f46a7c7df4b05eb5f86b6d19ab11e27",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "web_cleanup_prompt_sha256": "5C1EDB37FB11DE9C9B1C48B69C68954580F646443FDC6820D9DAA9D46600F988",
+      "exact_cleanup_rule_verified": true,
+      "fixed_grid": {
+        "columns": 4,
+        "rows": 1,
+        "x_boundaries": [
+          0,
+          525,
+          1055,
+          1613,
+          2126
+        ],
+        "y_boundaries": [
+          0,
+          740
+        ]
+      },
+      "single_uniform_scale_for_source_sheet": 0.31029619181946405,
+      "target_max_width": 238,
+      "target_max_height": 220,
+      "target_bottom_y": 232
+    },
+    {
+      "source_path": "implementation_20260902/lianhuanma_p0_source/web_lian_huan_ma_hurt_1x4.png",
+      "source_sha256": "90c9042d29a1e4b5ea9b41a7a3259f104066b93c23d2e73e147e788e20f83064",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "prompt_path": "implementation_20260902/lianhuanma_p0_source/03_lian_huan_ma_hurt_1x4.txt",
+      "prompt_sha256": "349e67d4c53e7b7d102a8d98daeb9287df7f6d429c4ce04ab0610befae753aa6",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-118e2eb6-1205-4908-8240-f3054b6d5835.png"
+      },
+      "raw_source_path": "implementation_20260902/lianhuanma_p0_source/raw_before_web_alpha15_cleanup/web_lian_huan_ma_hurt_1x4.png",
+      "raw_source_sha256": "47b9129ee26a3d382d782ab3a587731469ee13dfbcda832b0cce315f60bea999",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "web_cleanup_prompt_sha256": "0BDE218E93FB077F23300D87CE79A284C7F7BCCD12178CD7DBEF34DD8FD431CC",
+      "exact_cleanup_rule_verified": true,
+      "fixed_grid": {
+        "columns": 4,
+        "rows": 1,
+        "x_boundaries": [
+          0,
+          543,
+          1086,
+          1629,
+          2172
+        ],
+        "y_boundaries": [
+          0,
+          724
+        ]
+      },
+      "single_uniform_scale_for_source_sheet": 0.35772357723577236,
+      "target_max_width": 238,
+      "target_max_height": 220,
+      "target_bottom_y": 232
+    },
+    {
+      "source_path": "implementation_20260902/lianhuanma_p0_source/web_lian_huan_ma_down_1x4.png",
+      "source_sha256": "3a6810c4964954ffccd3a91e9fb40ff4b515f118ea9667a7c6911c888f2ad129",
+      "source_mode": "RGBA",
+      "source_size": [
+        1942,
+        809
+      ],
+      "prompt_path": "implementation_20260902/lianhuanma_p0_source/04_lian_huan_ma_down_1x4.txt",
+      "prompt_sha256": "0ccdd07820317206a6576891d94da81448c2e3c9ace42c49a45c1bc819ed9b66",
+      "generation_origin": {
+        "kind": "codex_imagegen_generated",
+        "generated_image_path": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-d9705f76-3148-47b5-b3a3-d96cc69c7b3e.png"
+      },
+      "raw_source_path": "implementation_20260902/lianhuanma_p0_source/raw_before_web_alpha15_cleanup/web_lian_huan_ma_down_1x4.png",
+      "raw_source_sha256": "e17e94705176913db9ca26b29f526905d068ab2d6571c1b9c6b378f214509c78",
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "web_cleanup_prompt_sha256": "0BDE218E93FB077F23300D87CE79A284C7F7BCCD12178CD7DBEF34DD8FD431CC",
+      "exact_cleanup_rule_verified": true,
+      "fixed_grid": {
+        "columns": 4,
+        "rows": 1,
+        "x_boundaries": [
+          0,
+          486,
+          971,
+          1456,
+          1942
+        ],
+        "y_boundaries": [
+          0,
+          809
+        ]
+      },
+      "single_uniform_scale_for_source_sheet": 0.3547008547008547,
+      "target_max_width": 238,
+      "target_max_height": 166,
+      "target_bottom_y": 220
+    }
+  ],
+  "outputs": [
+    {
+      "variant": "lian_huan_ma",
+      "state": "idle",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_idle_se.png",
+      "candidate_sha256": "4f5f213aa2c3aab34828429b1ce47efd9f694eb92abb3f138820e3d5de04de22",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          0,
+          0,
+          362,
+          362
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          29,
+          11,
+          354,
+          327
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "resized_size": [
+        209,
+        203
+      ],
+      "paste_xy": [
+        23,
+        29
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.6430769230769231,
+        0.6424050632911392
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "idle",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_idle_sw.png",
+      "candidate_sha256": "b146518c02be279eacd070e496a6376102b838d490881e4557d7c47ad79267d1",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          362,
+          0,
+          724,
+          362
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          377,
+          11,
+          677,
+          350
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "resized_size": [
+        193,
+        218
+      ],
+      "paste_xy": [
+        31,
+        14
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.6433333333333333,
+        0.6430678466076696
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "idle",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_idle_ne.png",
+      "candidate_sha256": "44c6ee3ccc3fa60db94d6acc86c4d7b26f4f9bc267824e7537994fabffd301df",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          724,
+          0,
+          1086,
+          362
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          811,
+          9,
+          1060,
+          349
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "resized_size": [
+        160,
+        219
+      ],
+      "paste_xy": [
+        48,
+        13
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.642570281124498,
+        0.6441176470588236
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "idle",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_idle_nw.png",
+      "candidate_sha256": "b6b9884ac914c5ed4cb9f840f18557f83e45b386450ca7ab0ad24069e92d3a45",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          1086,
+          0,
+          1448,
+          362
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          1164,
+          14,
+          1435,
+          350
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "resized_size": [
+        174,
+        216
+      ],
+      "paste_xy": [
+        41,
+        16
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.6420664206642066,
+        0.6428571428571429
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "walk",
+      "direction": "se",
+      "frame_count": 2,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_walk_se.png",
+      "candidate_sha256": "bbf6973366aa5ab3a0cd212cc2fb85e171d85c070dc61440c7c01df4a08a1d89",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          0,
+          362,
+          362,
+          724
+        ],
+        [
+          0,
+          724,
+          362,
+          1086
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          14,
+          372,
+          360,
+          684
+        ],
+        [
+          17,
+          730,
+          355,
+          1050
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "placements": [
+        {
+          "resized_size": [
+            223,
+            201
+          ],
+          "paste_xy": [
+            16,
+            31
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.6445086705202312,
+            0.6442307692307693
+          ]
+        },
+        {
+          "resized_size": [
+            217,
+            206
+          ],
+          "paste_xy": [
+            19,
+            26
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.6420118343195266,
+            0.64375
+          ]
+        }
+      ],
+      "output_size": [
+        512,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "walk",
+      "direction": "sw",
+      "frame_count": 2,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_walk_sw.png",
+      "candidate_sha256": "94cd0d680bb42fb3a113bdbed88f6882ac731491903ed4919372e6681fc0a047",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          362,
+          362,
+          724,
+          724
+        ],
+        [
+          362,
+          724,
+          724,
+          1086
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          387,
+          371,
+          677,
+          710
+        ],
+        [
+          375,
+          734,
+          685,
+          1075
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "placements": [
+        {
+          "resized_size": [
+            187,
+            218
+          ],
+          "paste_xy": [
+            34,
+            14
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.6448275862068965,
+            0.6430678466076696
+          ]
+        },
+        {
+          "resized_size": [
+            199,
+            219
+          ],
+          "paste_xy": [
+            28,
+            13
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.6419354838709678,
+            0.6422287390029325
+          ]
+        }
+      ],
+      "output_size": [
+        512,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "walk",
+      "direction": "ne",
+      "frame_count": 2,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_walk_ne.png",
+      "candidate_sha256": "b9451de799c7fc1caa6c96ac6da49754c92a68b6c25793ce48123aa9efbe4aa9",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          724,
+          362,
+          1086,
+          724
+        ],
+        [
+          724,
+          724,
+          1086,
+          1086
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          808,
+          368,
+          1083,
+          710
+        ],
+        [
+          802,
+          735,
+          1073,
+          1074
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "placements": [
+        {
+          "resized_size": [
+            177,
+            220
+          ],
+          "paste_xy": [
+            39,
+            12
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.6436363636363637,
+            0.6432748538011696
+          ]
+        },
+        {
+          "resized_size": [
+            174,
+            218
+          ],
+          "paste_xy": [
+            41,
+            14
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.6420664206642066,
+            0.6430678466076696
+          ]
+        }
+      ],
+      "output_size": [
+        512,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "walk",
+      "direction": "nw",
+      "frame_count": 2,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_walk_nw.png",
+      "candidate_sha256": "8e01dac05b2efb5f043f7ad626ed793298a40c343d9f835167b178654c371dd1",
+      "source_file": "web_lian_huan_ma_idle_walk_3x4.png",
+      "source_sha256": "ad096b5ef9a1203a7b86beadd4d40d7c8aee098c6f028415a03abd1c38cb2158",
+      "source_cell_rects_xyxy": [
+        [
+          1086,
+          362,
+          1448,
+          724
+        ],
+        [
+          1086,
+          724,
+          1448,
+          1086
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          1157,
+          373,
+          1446,
+          710
+        ],
+        [
+          1149,
+          735,
+          1436,
+          1075
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.6432748538011696,
+      "placements": [
+        {
+          "resized_size": [
+            186,
+            217
+          ],
+          "paste_xy": [
+            35,
+            15
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.643598615916955,
+            0.6439169139465876
+          ]
+        },
+        {
+          "resized_size": [
+            185,
+            219
+          ],
+          "paste_xy": [
+            35,
+            13
+          ],
+          "actual_scale_xy_after_integer_rounding": [
+            0.6445993031358885,
+            0.6441176470588236
+          ]
+        }
+      ],
+      "output_size": [
+        512,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "attack",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_attack_se.png",
+      "candidate_sha256": "4a63d37b329eb6597fa4a6a1bbb0f0e80bfd2652679508764439cb4e293a3019",
+      "source_file": "web_lian_huan_ma_attack_v2_1x4.png",
+      "source_sha256": "9ca17bbd0dd18c380074cc4832c0fae8c622175212fb14353073bcf55b6567a7",
+      "source_cell_rects_xyxy": [
+        [
+          0,
+          0,
+          525,
+          740
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          18,
+          13,
+          521,
+          722
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.31029619181946405,
+      "resized_size": [
+        156,
+        220
+      ],
+      "paste_xy": [
+        50,
+        12
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.3101391650099404,
+        0.31029619181946405
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "attack",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_attack_sw.png",
+      "candidate_sha256": "068bf3dd6f3f57d659ec4dfc9175d1961a177ce18f9dda246c2a4bc340fa1af7",
+      "source_file": "web_lian_huan_ma_attack_v2_1x4.png",
+      "source_sha256": "9ca17bbd0dd18c380074cc4832c0fae8c622175212fb14353073bcf55b6567a7",
+      "source_cell_rects_xyxy": [
+        [
+          525,
+          0,
+          1055,
+          740
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          530,
+          13,
+          1049,
+          722
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.31029619181946405,
+      "resized_size": [
+        161,
+        220
+      ],
+      "paste_xy": [
+        47,
+        12
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.31021194605009633,
+        0.31029619181946405
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "attack",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_attack_ne.png",
+      "candidate_sha256": "5be60f713a7dd4d3e2ef2523e7b6df27e6af506456dbe8e458a42c488d9399cc",
+      "source_file": "web_lian_huan_ma_attack_v2_1x4.png",
+      "source_sha256": "9ca17bbd0dd18c380074cc4832c0fae8c622175212fb14353073bcf55b6567a7",
+      "source_cell_rects_xyxy": [
+        [
+          1055,
+          0,
+          1613,
+          740
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          1063,
+          26,
+          1608,
+          716
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.31029619181946405,
+      "resized_size": [
+        169,
+        214
+      ],
+      "paste_xy": [
+        43,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.3100917431192661,
+        0.3101449275362319
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "attack",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_attack_nw.png",
+      "candidate_sha256": "a964619e4af562c94f4185f238a22ccbc2c88760a2b17697c4705e3e2aa54b99",
+      "source_file": "web_lian_huan_ma_attack_v2_1x4.png",
+      "source_sha256": "9ca17bbd0dd18c380074cc4832c0fae8c622175212fb14353073bcf55b6567a7",
+      "source_cell_rects_xyxy": [
+        [
+          1613,
+          0,
+          2126,
+          740
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          1618,
+          33,
+          2114,
+          727
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.31029619181946405,
+      "resized_size": [
+        154,
+        215
+      ],
+      "paste_xy": [
+        51,
+        17
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.31048387096774194,
+        0.30979827089337175
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "hurt",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_hurt_se.png",
+      "candidate_sha256": "4397c3182d560c0a439c55995125886dba921102c3a78962f1c8c07164f17aba",
+      "source_file": "web_lian_huan_ma_hurt_1x4.png",
+      "source_sha256": "90c9042d29a1e4b5ea9b41a7a3259f104066b93c23d2e73e147e788e20f83064",
+      "source_cell_rects_xyxy": [
+        [
+          0,
+          0,
+          543,
+          724
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          6,
+          46,
+          514,
+          600
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.35772357723577236,
+      "resized_size": [
+        182,
+        198
+      ],
+      "paste_xy": [
+        37,
+        34
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.35826771653543305,
+        0.3574007220216607
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "hurt",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_hurt_sw.png",
+      "candidate_sha256": "0fc4cfb2b686f6c4e3c678827904fe119eb49a04fef13f25269678808ac1c962",
+      "source_file": "web_lian_huan_ma_hurt_1x4.png",
+      "source_sha256": "90c9042d29a1e4b5ea9b41a7a3259f104066b93c23d2e73e147e788e20f83064",
+      "source_cell_rects_xyxy": [
+        [
+          543,
+          0,
+          1086,
+          724
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          639,
+          37,
+          1023,
+          629
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.35772357723577236,
+      "resized_size": [
+        137,
+        212
+      ],
+      "paste_xy": [
+        59,
+        20
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.3567708333333333,
+        0.3581081081081081
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "hurt",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_hurt_ne.png",
+      "candidate_sha256": "68244878d38b40850fd8cb773a576db163faba876eb324dd6a8f89abf0dfa883",
+      "source_file": "web_lian_huan_ma_hurt_1x4.png",
+      "source_sha256": "90c9042d29a1e4b5ea9b41a7a3259f104066b93c23d2e73e147e788e20f83064",
+      "source_cell_rects_xyxy": [
+        [
+          1086,
+          0,
+          1629,
+          724
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          1162,
+          61,
+          1629,
+          653
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.35772357723577236,
+      "resized_size": [
+        167,
+        212
+      ],
+      "paste_xy": [
+        44,
+        20
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.3576017130620985,
+        0.3581081081081081
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "hurt",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_hurt_nw.png",
+      "candidate_sha256": "48611c2b02a237b19f8ca3757150c0b3471a0ab6008082d8c4bdac3bbd39f24f",
+      "source_file": "web_lian_huan_ma_hurt_1x4.png",
+      "source_sha256": "90c9042d29a1e4b5ea9b41a7a3259f104066b93c23d2e73e147e788e20f83064",
+      "source_cell_rects_xyxy": [
+        [
+          1629,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          1629,
+          47,
+          2144,
+          662
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.35772357723577236,
+      "resized_size": [
+        184,
+        220
+      ],
+      "paste_xy": [
+        36,
+        12
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.3572815533980582,
+        0.35772357723577236
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "death",
+      "direction": "se",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_death_se.png",
+      "candidate_sha256": "0dcb644f7dcd6d3c62b2b51466a9c7ce2ddf1d77fba9e89d2bdeab8e9c497cec",
+      "source_file": "web_lian_huan_ma_down_1x4.png",
+      "source_sha256": "3a6810c4964954ffccd3a91e9fb40ff4b515f118ea9667a7c6911c888f2ad129",
+      "source_cell_rects_xyxy": [
+        [
+          0,
+          0,
+          486,
+          809
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          22,
+          200,
+          481,
+          609
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.3547008547008547,
+      "resized_size": [
+        163,
+        145
+      ],
+      "paste_xy": [
+        46,
+        75
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.355119825708061,
+        0.3545232273838631
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "death",
+      "direction": "sw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_death_sw.png",
+      "candidate_sha256": "7088e9e3c55110d498079322b2676ce52b55be406af8edd770ae7a258b94b190",
+      "source_file": "web_lian_huan_ma_down_1x4.png",
+      "source_sha256": "3a6810c4964954ffccd3a91e9fb40ff4b515f118ea9667a7c6911c888f2ad129",
+      "source_cell_rects_xyxy": [
+        [
+          486,
+          0,
+          971,
+          809
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          513,
+          213,
+          948,
+          605
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.3547008547008547,
+      "resized_size": [
+        154,
+        139
+      ],
+      "paste_xy": [
+        51,
+        81
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.35402298850574715,
+        0.35459183673469385
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "death",
+      "direction": "ne",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_death_ne.png",
+      "candidate_sha256": "757ca73599b06afbe4b4f7cf8726748095f13b78a569b386479f8c506752c2be",
+      "source_file": "web_lian_huan_ma_down_1x4.png",
+      "source_sha256": "3a6810c4964954ffccd3a91e9fb40ff4b515f118ea9667a7c6911c888f2ad129",
+      "source_cell_rects_xyxy": [
+        [
+          971,
+          0,
+          1456,
+          809
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          979,
+          193,
+          1448,
+          625
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.3547008547008547,
+      "resized_size": [
+        166,
+        153
+      ],
+      "paste_xy": [
+        45,
+        67
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.35394456289978676,
+        0.3541666666666667
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "lian_huan_ma",
+      "state": "death",
+      "direction": "nw",
+      "frame_count": 1,
+      "candidate_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/outputs/lian_huan_ma_death_nw.png",
+      "candidate_sha256": "8089c3860553fe741f050a68d935adf4fe9f4d6ca4d500ed889554ca6b825bd0",
+      "source_file": "web_lian_huan_ma_down_1x4.png",
+      "source_sha256": "3a6810c4964954ffccd3a91e9fb40ff4b515f118ea9667a7c6911c888f2ad129",
+      "source_cell_rects_xyxy": [
+        [
+          1456,
+          0,
+          1942,
+          809
+        ]
+      ],
+      "source_rects_xyxy": [
+        [
+          1523,
+          184,
+          1931,
+          652
+        ]
+      ],
+      "uniform_scale_for_source_sheet": 0.3547008547008547,
+      "resized_size": [
+        145,
+        166
+      ],
+      "paste_xy": [
+        55,
+        54
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.3553921568627451,
+        0.3547008547008547
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    }
+  ],
+  "preview_path": "qa/lianhuanma_p0_direction4_candidate_pipeline_20260903/candidate_preview.png",
+  "preview_sha256": "be74b4689e2ccbc5593960872bc51ab40a6ede02e0de33fdb36f006314e0c4d1",
+  "production_modified": false,
+  "steam_modified_or_exported": false
+}

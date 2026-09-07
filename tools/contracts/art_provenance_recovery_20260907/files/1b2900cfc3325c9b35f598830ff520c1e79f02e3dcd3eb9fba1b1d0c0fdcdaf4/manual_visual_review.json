@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "kind": "lianhuanma_p0_manual_visual_review",
+  "reviewed_at": "2026-09-03T09:47:43+08:00",
+  "passed": true,
+  "candidate_manifest_sha256": "92beda1d6b60cd950188ac88910672d9139a7847cda2b24722cfd00e4fcdbc36",
+  "candidate_preview_sha256": "be74b4689e2ccbc5593960872bc51ab40a6ede02e0de33fdb36f006314e0c4d1",
+  "reviewed_output_count": 20,
+  "reviewed_frame_count": 24,
+  "checks": {
+    "four_directions_are_independently_drawn": true,
+    "idle_walk_attack_hurt_death_are_visually_distinct": true,
+    "all_figures_fit_without_neighbor_fragments": true,
+    "attack_v2_uses_natural_transparent_gutters": true,
+    "deep_helmet_with_narrow_eye_opening": true,
+    "horse_barding_reaches_legs_with_hooves_exposed": true,
+    "side_iron_rings_and_short_chain_present": true,
+    "no_text_flag_banner_emblem_or_scene_background": true,
+    "down_state_has_no_gore": true,
+    "transparent_background_and_frame_contract": true
+  },
+  "novel_basis": [
+    "水浒传第五十五回：深盔垂护项只露双眼，马披重甲只露四蹄，每三十匹铁环连锁",
+    "水浒传第五十七回：钩镰枪钩蹄拽腿，先倒两侧马脚后中间甲马惊乱"
+  ],
+  "rejected_candidates": [
+    {
+      "candidate_preview_sha256": "0e9032a33f414451b1b4e48a09193b81b143990f9dde7f0761547d7e8a8322d1",
+      "reason": "原攻击图第3与第4方向横向重叠，固定矩形裁切带入邻格碎片"
+    },
+    {
+      "generated_image_sha256": "7C28BF934486193B39328D0A55AD56ADBEF3D6B91F8F00E042BC63E15ACAF803",
+      "reason": "重排图为带烘焙棋盘格的RGB，不是真透明"
+    },
+    {
+      "generated_image_sha256": "3A8B7C0AD0ADF109B7FC9D01D4B02CC280BF8D735939602C8D8450794BBCFEB5",
+      "reason": "透明化重出仍为带烘焙棋盘格的RGB，不是真透明"
+    }
+  ],
+  "local_pixel_editing_performed": false,
+  "steam_modified_or_exported": false
+}

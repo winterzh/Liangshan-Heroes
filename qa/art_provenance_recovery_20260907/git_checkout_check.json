@@ -1,0 +1,61 @@
+{
+  "kind": "git_index_checkout_art_audit",
+  "passed": true,
+  "source_head": "c0285f91d4131e7631707fa59903d4b61fd460bb",
+  "inputs": 1384,
+  "absent_optional_import_sidecars": [
+    "qa/skirmish_direction4_fix_20260905/archer_before/guan_gong_attack_sw.png.import",
+    "qa/skirmish_direction4_fix_20260905/archer_before/guan_gong_death_sw.png.import",
+    "qa/skirmish_direction4_fix_20260905/archer_before/guan_gong_idle_sw.png.import",
+    "qa/skirmish_direction4_fix_20260905/archer_before/guan_gong_walk_sw.png.import"
+  ],
+  "byte_differences": [],
+  "same_audit_summary": true,
+  "summary": {
+    "per_level_requirement_rows": 444,
+    "unique_art_state_rows": 347,
+    "accepted_exact_unique_rows": 118,
+    "exact_file_unique_rows_before_provenance_filter": 118,
+    "coverage_percent_unique_rows": 34.006,
+    "existing_four_direction_rows_requiring_web_regeneration_for_provenance": 0,
+    "existing_four_direction_rows_visual_review_first": 0,
+    "missing_or_partial_exact_rows_requiring_web_generation": 229,
+    "missing_rows_with_existing_codex_animation_reference": 104,
+    "missing_rows_without_same_state_art_reference": 125,
+    "status_counts": {
+      "exact_provenance_compliant": 118,
+      "missing_exact_direction_files": 229
+    },
+    "minimum_web_source_atlases_at_four_rows_each": 58,
+    "first_eight_sample_atlases": 9,
+    "remaining_atlases": 54
+  },
+  "command": [
+    "py",
+    "-3.14",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\LHGitQA\\cb772afc\\tools\\campaign_direction4_coverage_audit.py",
+    "--check",
+    "--output",
+    "D:\\LHGitQA\\cb772afc\\audit.json"
+  ],
+  "report_sha256": "db75c3c48c273e96e70da108a11701cea852d75e1defff56b5ef7136758b7d6a",
+  "godot_run": false,
+  "production_png_tres_written": false,
+  "stage0_whitelist_count": 502,
+  "staged_changed_count": 480,
+  "prior_attempts": [
+    {
+      "passed": false,
+      "reason": "Long Windows checkout prefix and four optional ignored Godot import sidecars not in index."
+    },
+    {
+      "passed": false,
+      "checkout": "D:/LHGitQA/b3704186",
+      "reason": "12 old action evidence inputs transformed by Git line endings; audit rejected 10 states and returned 108/347. Fixed exact-byte attributes without changing local input bytes."
+    }
+  ],
+  "notes": "1,384 inputs freshly checked out from actual Git index with real attributes; 4 optional generated import files remain absent; all checked-out bytes equal original audited inputs. Git commit and remote readback recorded separately."
+}

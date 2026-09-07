@@ -17,11 +17,16 @@ import struct
 from collections import Counter, defaultdict
 from pathlib import Path, PurePosixPath
 from typing import Any
+import campaign_art_evidence as evidence
 
 
 DIRECTIONS = ("se", "sw", "ne", "nw")
 COMBAT_STATES = ("idle", "walk", "attack", "hurt", "down")
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _evidence_path(value: str, expected_sha256: str | None = None) -> Path:
+    return evidence.legacy_path(ROOT, value, expected_sha256)
 
 
 def combat(key: str, variant: str = "", *, down_lookup: str = "death", extra: tuple[str, ...] = ()) -> dict[str, Any]:
@@ -1136,8 +1141,21 @@ def _valid_skirmish_archer_sw_revision(
         backup_entries = list(backup_root.iterdir())
     except OSError:
         return False
-    if {entry.name for entry in backup_entries} != set(SKIRMISH_ARCHER_SW_TARGETS):
+    source_entries = [entry for entry in backup_entries if not entry.name.endswith('.png.import')]
+    if {entry.name for entry in source_entries} != set(SKIRMISH_ARCHER_SW_TARGETS):
         return False
+    # Editor-generated import descriptors are not source images. Permit only
+    # exact companion names pointing at the corresponding immutable backup;
+    # unexpected files, directories, symlinks and redirected metadata still fail.
+    for entry in backup_entries:
+        if not entry.name.endswith('.png.import'): continue
+        target = entry.name.removesuffix('.import')
+        if target not in SKIRMISH_ARCHER_SW_TARGETS or not entry.is_file() or entry.is_symlink(): return False
+        try:
+            text = entry.read_text(encoding='utf-8')
+        except (OSError, UnicodeError): return False
+        expected_source = f'source_file="res://{SKIRMISH_ARCHER_SW_BACKUP_REL}/{target}"'
+        if expected_source not in text or 'importer="texture"' not in text: return False
     backups = _archer_sw_backup_overrides(root)
     for target, backup in backups.items():
         if _verified_override_file(root, backup, expected_before[target]) is None:
@@ -1492,11 +1510,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         candidate_manifest = workspace_path(str(data.get("candidate_manifest", "")))
         candidate_preview = workspace_path(str(data.get("candidate_preview", "")))
@@ -1601,8 +1615,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def manifest_path(value: str) -> Path:
-            candidate = Path(value)
-            return candidate if candidate.is_absolute() else ROOT / candidate
+            return _evidence_path(value)
 
         top_level_complete = bool(
             data.get("schema_version") == 1
@@ -1667,11 +1680,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         candidate_manifest = workspace_path(str(data.get("candidate_manifest", "")))
         manual_review = workspace_path(str(data.get("manual_visual_review", "")))
@@ -1753,11 +1762,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         candidate_manifest = workspace_path(str(data.get("candidate_manifest", "")))
         manual_review = workspace_path(str(data.get("manual_visual_review", "")))
@@ -1802,8 +1807,8 @@ def provenance_index() -> dict[str, dict[str, Any]]:
             and workspace_path(str(source.get("raw_source_path", ""))).is_file()
             and sha256(workspace_path(str(source.get("raw_source_path", "")))).lower()
                 == str(source.get("raw_source_sha256", "")).lower()
-            and Path(str(source.get("generation_origin", {}).get("generated_image_path", ""))).is_file()
-            and sha256(Path(str(source.get("generation_origin", {}).get("generated_image_path", "")))).lower()
+            and _evidence_path(str(source.get("generation_origin", {}).get("generated_image_path", ""))).is_file()
+            and sha256(_evidence_path(str(source.get("generation_origin", {}).get("generated_image_path", "")))).lower()
                 == str(source.get("raw_source_sha256", "")).lower()
             for source in sources
         ))
@@ -1852,18 +1857,17 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         candidate_manifest = workspace_path(str(data.get("candidate_manifest", "")))
         manual_review = workspace_path(str(data.get("manual_visual_review", "")))
         backup_manifest = workspace_path(str(data.get("backup_manifest", "")))
         source_audit = workspace_path(str(data.get("source_audit", "")))
         historical_web_manifest = workspace_path(str(data.get("historical_web_manifest", "")))
-        historical_web_qa = workspace_path(str(data.get("historical_web_qa", "")))
+        # This is a frozen historical QA revision, not the subsequently updated
+        # runtime-side report at the same old filename. The original hash stays
+        # mandatory when resolving its recovered copy.
+        historical_web_qa = _evidence_path(str(data.get("historical_web_qa", "")), str(data.get("historical_web_qa_sha256", "")).lower())
         top_level_complete = bool(
             data.get("schema_version") == 1
             and data.get("campaign_level") == 8
@@ -1899,8 +1903,8 @@ def provenance_index() -> dict[str, dict[str, Any]]:
             and workspace_path(str(source.get("source_path", ""))).is_file()
             and sha256(workspace_path(str(source.get("source_path", "")))).lower()
                 == str(source.get("source_sha256", "")).lower()
-            and workspace_path(str(source.get("prompt_path", ""))).is_file()
-            and sha256(workspace_path(str(source.get("prompt_path", "")))).lower()
+            and _evidence_path(str(source.get("prompt_path", "")), str(source.get("prompt_sha256", "")).lower()).is_file()
+            and sha256(_evidence_path(str(source.get("prompt_path", "")), str(source.get("prompt_sha256", "")).lower())).lower()
                 == str(source.get("prompt_sha256", "")).lower()
             for source in sources
         ))
@@ -1946,11 +1950,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         candidate_manifest = workspace_path(str(data.get("candidate_manifest", "")))
         manual_review = workspace_path(str(data.get("manual_visual_review", "")))
@@ -1996,8 +1996,8 @@ def provenance_index() -> dict[str, dict[str, Any]]:
             and workspace_path(str(source.get("prompt_path", ""))).is_file()
             and sha256(workspace_path(str(source.get("prompt_path", "")))).lower()
                 == str(source.get("prompt_sha256", "")).lower()
-            and Path(str(source.get("codex_imagegen_original", ""))).is_file()
-            and sha256(Path(str(source.get("codex_imagegen_original", "")))).lower()
+            and _evidence_path(str(source.get("codex_imagegen_original", ""))).is_file()
+            and sha256(_evidence_path(str(source.get("codex_imagegen_original", "")))).lower()
                 == str(source.get("raw_sha256", "")).lower()
             for source in sources
         ))
@@ -2051,11 +2051,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         candidate_manifest = workspace_path(str(data.get("candidate_manifest", "")))
         manual_review = workspace_path(str(data.get("manual_visual_review", "")))
@@ -2091,7 +2087,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         cleaned_path = workspace_path(str(source.get("cleaned_path", "")))
         raw_path = workspace_path(str(source.get("raw_path", "")))
         prompt_path = workspace_path(str(source.get("prompt_path", "")))
-        original_path = Path(str(source.get("codex_imagegen_original", "")))
+        original_path = _evidence_path(str(source.get("codex_imagegen_original", "")))
         source_complete = bool(
             source.get("mode") == "RGBA"
             and source.get("size") == [1224, 1285]
@@ -2153,11 +2149,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         def hashed_file(path_value: object, hash_value: object) -> bool:
             file_path = workspace_path(str(path_value or ""))
@@ -2241,16 +2233,16 @@ def provenance_index() -> dict[str, dict[str, Any]]:
                 and hashed_file(base.get("prompt_path"), base.get("prompt_sha256"))
                 and hashed_file(base.get("raw_path"), base.get("raw_sha256"))
                 and hashed_file(base.get("cleaned_path"), base.get("cleaned_sha256"))
-                and Path(str(base.get("codex_imagegen_original", ""))).is_file()
-                and sha256(Path(str(base.get("codex_imagegen_original", "")))).lower() == str(base.get("raw_sha256", "")).lower()
+                and _evidence_path(str(base.get("codex_imagegen_original", ""))).is_file()
+                and sha256(_evidence_path(str(base.get("codex_imagegen_original", "")))).lower() == str(base.get("raw_sha256", "")).lower()
                 and walk.get("source_mode") == "RGBA"
                 and len(walk.get("fixed_x_boundaries", [])) == 5
                 and len(walk.get("continuous_y_ranges", [])) == 4
                 and hashed_file(walk.get("prompt_path"), walk.get("prompt_sha256"))
                 and hashed_file(walk.get("raw_path"), walk.get("raw_sha256"))
                 and hashed_file(walk.get("cleaned_path"), walk.get("cleaned_sha256"))
-                and Path(str(walk.get("codex_imagegen_original", ""))).is_file()
-                and sha256(Path(str(walk.get("codex_imagegen_original", "")))).lower() == str(walk.get("raw_sha256", "")).lower()
+                and _evidence_path(str(walk.get("codex_imagegen_original", ""))).is_file()
+                and sha256(_evidence_path(str(walk.get("codex_imagegen_original", "")))).lower() == str(walk.get("raw_sha256", "")).lower()
             )
 
         outputs = data.get("outputs", [])
@@ -2321,11 +2313,7 @@ def provenance_index() -> dict[str, dict[str, Any]]:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         def workspace_path(value: str) -> Path:
-            candidate = Path(value)
-            if candidate.is_absolute():
-                return candidate
-            in_project = ROOT / candidate
-            return in_project if in_project.exists() else ROOT.parent / candidate
+            return _evidence_path(value)
 
         def hashed_file(path_value: object, hash_value: object) -> bool:
             file_path = workspace_path(str(path_value or ""))
@@ -2534,7 +2522,8 @@ def provenance_index() -> dict[str, dict[str, Any]]:
     daming_lu_rescued_p0_manifest("assets/campaign/daming_lu_rescued_p0_direction4_manifest.json")
     jiangzhou_prisoners_p0_manifest("assets/campaign/jiangzhou_prisoners_p0_direction4_manifest.json")
     yezhulin_remaining_p0_manifest("assets/campaign/yezhulin_remaining_p0_direction4_manifest.json")
-    result.update(skirmish_action_provenance_index())
+    result.update(skirmish_action_provenance_index(root=ROOT))
+    result.update(evidence.native_provenance_index(ROOT))
     return result
 
 
@@ -2551,7 +2540,14 @@ def expected_paths(profile: dict[str, Any], state: str) -> tuple[list[str], list
         # Explicit campaign down/death paths are distinct; neither aliases the other.
         return ([f"assets/campaign/anim/{variant}_{state}_{d}.png" for d in DIRECTIONS], [state])
     lookup = profile.get("down_lookup", "down" if role == "narrative_person" else "death") if state == "down" else state
-    return ([f"assets/anim/{profile['key']}_{lookup}_{d}.png" for d in DIRECTIONS], [lookup])
+    paths = []
+    for direction in DIRECTIONS:
+        png = f"assets/anim/{profile['key']}_{lookup}_{direction}.png"
+        # Match Art._resolve_generic_directional_path exactly: an existing PNG
+        # keeps priority even when malformed; only its absence permits TRES.
+        tres = str(Path(png).with_suffix('.tres')).replace('\\', '/')
+        paths.append(tres if not (ROOT / png).is_file() and (ROOT / tres).is_file() else png)
+    return (paths, [lookup])
 
 
 def existing_undirected_references(profile: dict[str, Any], runtime_lookup: list[str]) -> list[dict[str, Any]]:
@@ -2656,6 +2652,14 @@ def build_report() -> dict[str, Any]:
     flat: list[dict[str, Any]] = []
     input_hashes: dict[str, str] = {}
 
+    portable_inputs = ["tools/campaign_direction4_coverage_audit.py", "tools/campaign_art_evidence.py",
+                       "tools/build_directional_spriteframes.py", evidence.MAPPING]
+    for character in evidence.NATIVE:
+        portable_inputs.extend([f"assets/direction4/{character}_20260906.json",
+                                f"tools/contracts/{character}_direction4_20260906/generation.json"])
+    for rel in portable_inputs:
+        if (ROOT / rel).is_file(): input_hashes[rel] = sha256(ROOT / rel)
+
     for rel in ["scripts/campaign.gd", "scripts/campaign_art.gd", "scripts/art_db.gd", "scripts/unit.gd", "assets/direction4/manifest.json", "assets/direction4/campaign_object_manifest.json", SKIRMISH_ACTION_MANIFEST_REL, "assets/campaign/web_art_manifest.json", "assets/campaign/lu_zhishen_rescue_direction4_manifest.json", "assets/campaign/wu_song_mengzhou_direction4_manifest.json", "assets/campaign/jiang_menshen_fists_direction4_manifest.json", "assets/campaign/lin_chong_p0_direction4_manifest.json", "assets/campaign/li_kui_jiangzhou_direction4_manifest.json", "assets/campaign/gao_flagship_direction4_manifest.json", "assets/campaign/gao_qiu_captured_direction4_manifest.json", "assets/campaign/huangnigang_p0_direction4_manifest.json", "assets/direction4/lianhuanma_p0_direction4_manifest.json", "assets/campaign/daming_prisoners_rect_rebuild_direction4_manifest.json", "assets/campaign/ordinary_officials_p0_direction4_manifest.json", "assets/campaign/daming_lu_rescued_p0_direction4_manifest.json", "assets/campaign/jiangzhou_prisoners_p0_direction4_manifest.json", "assets/campaign/yezhulin_remaining_p0_direction4_manifest.json"]:
         path = ROOT / rel
         if path.exists():
@@ -2673,7 +2677,9 @@ def build_report() -> dict[str, Any]:
                 direction_records: list[dict[str, Any]] = []
                 for direction, rel_path in zip(DIRECTIONS, paths):
                     file_path = ROOT / rel_path
-                    dims = png_dimensions(file_path) if file_path.exists() else None
+                    is_spriteframes = file_path.suffix == '.tres'
+                    dims = png_dimensions(file_path) if file_path.exists() and not is_spriteframes else None
+                    valid_geometry = evidence.spriteframes_geometry(ROOT, file_path) if is_spriteframes else bool(dims and dims[1] > 0 and dims[0] % dims[1] == 0)
                     provenance_record = provenance.get(rel_path, {
                         "tracked": False,
                         "manifest": "",
@@ -2688,7 +2694,8 @@ def build_report() -> dict[str, Any]:
                         "exists": file_path.exists(),
                         "sha256": sha256(file_path) if file_path.exists() else "",
                         "png_dimensions": list(dims) if dims else None,
-                        "valid_strip_geometry": bool(dims and dims[1] > 0 and dims[0] % dims[1] == 0),
+                        "valid_strip_geometry": valid_geometry,
+                        "resource_format": "SpriteFrames" if is_spriteframes else "PNG_strip",
                         **provenance_record,
                     })
                 files_exact = all(item["exists"] and item["valid_strip_geometry"] for item in direction_records)
@@ -2829,6 +2836,9 @@ def build_report() -> dict[str, Any]:
             "fallback_never_counts_as_exact": True,
             "component_masking_or_zeroing_foreign_pixels_is_provenance_noncompliant": True,
             "accepted_local_operations": ["rectangular_crop", "uniform_scale", "transparent_padding"],
+            "generic_resource_priority": "exact PNG first; only when absent use same-key same-state same-direction SpriteFrames",
+            "spriteframes_acceptance": "fixed reviewed manifest and generation hashes, complete native lineage, import bounds and exact authored resource reproduction; geometry alone never grants provenance",
+            "legacy_evidence_policy": "original bytes and expected hashes preserved in a pinned portable mapping; no runtime PNG/TRES redirection or historical-directory dependency",
             "ordinary_down_runtime_note": "Design state down maps to the current runtime lookup shown per row: death for lethal combat, down for non-lethal story outcomes; campaign down and death stay distinct; missing terminal art uses the current costume procedurally, not generic death.",
             "generic_hurt_runtime_note": "Current unit.gd resolves exact four-direction hurt frames for both campaign variants and generic units, with legacy fallback retained by ArtDb.",
         },

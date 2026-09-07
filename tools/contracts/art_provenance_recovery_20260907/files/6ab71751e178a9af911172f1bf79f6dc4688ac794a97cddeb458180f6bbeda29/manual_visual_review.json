@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-03T08:27:47.8637200+08:00",
+  "reviewer": "Codex visual inspection of the runtime-size contact sheet plus all accepted/redrawn source and direction/state candidates",
+  "reviewed_artifact": "qa/huangnigang_p0_direction4_candidate_pipeline_20260903/runtime_size_fringe_preview.png",
+  "candidate_manifest_sha256": "345EE103644064929CC0497E641D1BD95B6FD6F1A8F57C56B14012B6E02E68AE",
+  "passed": true,
+  "scope": "Huangnigang eight actors: idle/walk x SE/SW/NE/NW, plus Bai Sheng carry idle/walk x SE/SW/NE/NW",
+  "checks": {
+    "all_72_direction_state_outputs_present": true,
+    "all_four_directions_are_visually_distinct": true,
+    "walk_sheets_have_two_distinct_gait_frames": true,
+    "same_identity_and_costume_are_preserved_within_each_variant": true,
+    "chapter_14_to_16_character_cues_remain_readable": true,
+    "chapter_16_bare_torso_disguise_context_is_respected": true,
+    "bai_sheng_normal_and_carry_variants_are_distinct_and_consistent": true,
+    "ruan_xiaowu_front_views_keep_blue_leopard_chest_tattoo": true,
+    "ruan_xiaowu_back_views_do_not_invent_a_back_tattoo": true,
+    "no_foreign_neighbor_pixels_or_cross_row_fragments_seen": true,
+    "no_cut_head_hands_feet_or_weapons_seen": true,
+    "no_checkerboard_or_solid_background_baked_into_outputs": true,
+    "no_visible_runtime_size_fringe": true,
+    "no_local_masking_pixel_clearing_mirroring_or_repainting": true
+  },
+  "adoption_decisions": {
+    "accepted_after_review": [
+      "hn_chao_gai",
+      "hn_wu_yong",
+      "hn_gongsun_sheng",
+      "hn_ruan_xiaoer",
+      "hn_bai_sheng",
+      "hn_bai_sheng_carry"
+    ],
+    "redrawn_then_accepted": [
+      "hn_liu_tang",
+      "hn_ruan_xiaowu",
+      "hn_ruan_xiaoqi"
+    ]
+  },
+  "notes": [
+    "Liu Tang and Ruan Xiaoqi were redrawn because the first sources had visible foreign weapon fragments; the accepted V2 candidates are clean.",
+    "Ruan Xiaowu was redrawn because the first source leaked high-alpha pixels from neighboring rows; the accepted V2 candidate is clean in all eight outputs.",
+    "Wu Yong, Gongsun Sheng and the other six guests are shown bare-chested specifically for the chapter 16 Huangnigang cooling/disguise context, not as generic character clothing.",
+    "The checkerboard exists only in the QA preview; production candidates remain RGBA with transparent frame edges.",
+    "Automated source hashes, exact web alpha cleanup verification, continuous fixed-grid crop windows, proportional scale and transparent padding evidence are recorded in candidate_manifest.json."
+  ],
+  "steam_modified_or_exported": false
+}

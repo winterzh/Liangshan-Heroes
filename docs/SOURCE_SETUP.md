@@ -1,3 +1,9 @@
+## 2026-09-07 来源审计可迁移化
+
+当前工程使用 `D:/AI项目/水浒/开发工程` 实路径。新增来源链位于 `tools/contracts/art_provenance_recovery_20260907/`：451个按固定历史SHA追回的文件，462个旧引用通过独立mapping映射，生产manifest原字节保留。该目录不是普通缓存，必须随本批源码白名单同步；`.gdignore`避免引擎导入证据图，`.gitattributes`避免Git改写原换行字节。
+
+日常运行 `py -3.14 -X utf8 -B tools/campaign_direction4_coverage_audit.py --check --output scratchpad/art-audit/report.json` 无需访问历史目录。118/347为文件与来源合同统计，退出0仍不代表229个缺项完成；新增角色TRES或正式修订须更新经独立验收的固定manifest/生成链，不能现场自认。命令、自测和独立副本证据见[来源修复说明](ART_PROVENANCE_RECOVERY_20260907.md)。
+
 ## 2026-09-07 清理后的使用与还原入口
 
 当前开发仍直接使用 `D:\AI项目\水浒\开发工程` 的 `Play.cmd`，主导入缓存保留。旧历史 `Liangshan-Heroes` 的标准 `.godot` 已清理，旧启动器再次运行时会重建导入缓存；游戏内容、最新候选 ZIP、冻结源码、原始收据、正式素材和来源未作清退。

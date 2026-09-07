@@ -277,6 +277,20 @@ def run() -> dict[str, Any]:
             assert row["kind"] == "skirmish_archer_sw_visual_revision"
         checks.append("committed four-target revision preserves 48 base strips and binds idle plus three actions to revision evidence")
 
+        sidecar = root / audit.SKIRMISH_ARCHER_SW_BACKUP_REL / 'guan_gong_idle_sw.png.import'
+        sidecar.write_text('[remap]\nimporter="texture"\n[deps]\nsource_file="res://' + audit.SKIRMISH_ARCHER_SW_BACKUP_REL + '/guan_gong_idle_sw.png"\n', encoding='utf-8')
+        assert all(row['provenance_compliant'] for row in audit.skirmish_action_provenance_index(root=root).values())
+        checks.append('exact Godot backup import companion does not masquerade as an extra source image')
+        sidecar.write_text('[remap]\nimporter="texture"\n[deps]\nsource_file="res://assets/anim/other.png"\n', encoding='utf-8')
+        assert_revision_only_rejected(audit.skirmish_action_provenance_index(root=root))
+        sidecar.unlink()
+        checks.append('redirected import companion rejects revision acceptance')
+        extra_backup = sidecar.parent / 'unreviewed.png'
+        extra_backup.write_bytes(b'not an accepted source')
+        assert_revision_only_rejected(audit.skirmish_action_provenance_index(root=root))
+        extra_backup.unlink()
+        checks.append('unreviewed extra backup still rejects the exact revision scope')
+
         pristine_source = source_path.read_bytes()
         pristine_revision = revision_path.read_bytes()
         changed_source = Image.open(source_path)

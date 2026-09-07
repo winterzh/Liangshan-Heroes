@@ -1,0 +1,1768 @@
+{
+  "schema_version": 1,
+  "kind": "ordinary_officials_p0_exact_web_cleanup_fixed_rect_candidate",
+  "created_at": "2026-09-03T11:08:25.456295+08:00",
+  "variants": [
+    "chai_jin_officer",
+    "yue_he_officer",
+    "guan_dao",
+    "guan_gong",
+    "guan_qi",
+    "guan_zhanzi",
+    "guan_laozi",
+    "jun_han",
+    "zhu_keke"
+  ],
+  "states": [
+    "idle"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "output_count": 36,
+  "portrait_count": 2,
+  "source_count": 4,
+  "cleanup_verification": "implementation_20260902/ordinary_officials_p0_source/web_alpha_cleanup_verification.json",
+  "cleanup_verification_sha256": "2CE6B91FEF9C87169448BEC61D96E8470871AB84683E159A2A83411FD458E68A",
+  "web_alpha_cleanup_rule": "alpha<=15 -> RGBA(0,0,0,0); alpha>15 -> byte-identical RGBA",
+  "web_alpha_cleanup_performed": true,
+  "local_alpha_cleanup_performed": false,
+  "crop_rule": "Predeclared fixed transparent-seam cells, then one alpha bounding box per cell only to choose a padded continuous rectangle; every RGBA pixel inside that rectangle is retained.",
+  "scale_rule": "One uniform proportional scale per variant across its four directions, then transparent 256x256 padding.",
+  "allowed_local_operations": [
+    "read-only alpha bounding box within a fixed cell",
+    "continuous rectangle crop",
+    "uniform proportional scale",
+    "transparent padding",
+    "PNG encoding"
+  ],
+  "forbidden_local_operations_used": [],
+  "sources": [
+    {
+      "cleaned_path": "implementation_20260902/ordinary_officials_p0_source/web_alpha15_cleaned_from_web/01_daming_public_servants_alpha15_exact.png",
+      "cleaned_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_path": "implementation_20260902/ordinary_officials_p0_source/01_daming_public_servants_raw.png",
+      "raw_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "prompt_path": "implementation_20260902/ordinary_officials_p0_source/01_daming_public_servants_4x2.txt",
+      "prompt_sha256": "D61F44F6D18A5B55461CC2EFEB6EB517EB1277011834460D561DFEBC51B15305",
+      "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-c6b31365-5bef-4100-bd16-31ec5eb87dfc.png",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "rows": [
+        "chai_jin_officer",
+        "yue_he_officer"
+      ],
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "fixed_x_boundaries": [
+        0,
+        443,
+        887,
+        1330,
+        1774
+      ],
+      "fixed_y_boundaries": [
+        0,
+        435,
+        887
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "exact_alpha_cleanup_verified": true
+    },
+    {
+      "cleaned_path": "implementation_20260902/ordinary_officials_p0_source/web_alpha15_cleaned_from_web/02b_common_official_troops_v2_alpha15_exact.png",
+      "cleaned_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_path": "implementation_20260902/ordinary_officials_p0_source/02b_common_official_troops_v2_raw.png",
+      "raw_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "prompt_path": "implementation_20260902/ordinary_officials_p0_source/02b_common_official_troops_4x3_v2.txt",
+      "prompt_sha256": "A2019FDF4A75B99E2224476AE9945C3B4997A6993F79A9579DA29AE4630E99F7",
+      "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-86f1ee3a-13fd-4ecc-aa9c-9398e320c899.png",
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGBA",
+      "rows": [
+        "guan_dao",
+        "guan_gong",
+        "guan_qi"
+      ],
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "fixed_x_boundaries": [
+        0,
+        404,
+        740,
+        1103,
+        1448
+      ],
+      "fixed_y_boundaries": [
+        0,
+        325,
+        637,
+        1086
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "exact_alpha_cleanup_verified": true
+    },
+    {
+      "cleaned_path": "implementation_20260902/ordinary_officials_p0_source/web_alpha15_cleaned_from_web/03_jiangzhou_execution_staff_alpha15_exact.png",
+      "cleaned_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_path": "implementation_20260902/ordinary_officials_p0_source/03_jiangzhou_execution_staff_raw.png",
+      "raw_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "prompt_path": "implementation_20260902/ordinary_officials_p0_source/03_jiangzhou_execution_staff_4x2.txt",
+      "prompt_sha256": "BDBBEF668924F06432241607BBD5C95472C3303EA3D98127647E8D609678BABB",
+      "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-50300b92-8ea4-4cae-897d-da623d6abc64.png",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "rows": [
+        "guan_zhanzi",
+        "guan_laozi"
+      ],
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "fixed_x_boundaries": [
+        0,
+        443,
+        887,
+        1330,
+        1774
+      ],
+      "fixed_y_boundaries": [
+        0,
+        421,
+        887
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "exact_alpha_cleanup_verified": true
+    },
+    {
+      "cleaned_path": "implementation_20260902/ordinary_officials_p0_source/web_alpha15_cleaned_from_web/04_story_porter_and_manor_guard_alpha15_exact.png",
+      "cleaned_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_path": "implementation_20260902/ordinary_officials_p0_source/04_story_porter_and_manor_guard_raw.png",
+      "raw_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "prompt_path": "implementation_20260902/ordinary_officials_p0_source/04_story_porter_and_manor_guard_4x2.txt",
+      "prompt_sha256": "5333999B616E4ACB6152B057E87555915A5A86A099B4B7386799CE308A84F65E",
+      "codex_imagegen_original": "C:/Users/rsb/.codex/generated_images/01a060ed-ea65-74f1-aa47-a8daa91a06d0/exec-c5b0e8c1-72c2-43d2-a720-992c7a3d6234.png",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "rows": [
+        "jun_han",
+        "zhu_keke"
+      ],
+      "directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "fixed_x_boundaries": [
+        0,
+        443,
+        887,
+        1330,
+        1774
+      ],
+      "fixed_y_boundaries": [
+        0,
+        425,
+        887
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "web_cleanup_conversation_url": "https://chatgpt.com/c/6a98aaad-027c-83ea-b636-31a9014935ce",
+      "exact_alpha_cleanup_verified": true
+    }
+  ],
+  "variant_scales": {
+    "chai_jin_officer": 0.48687350835322196,
+    "yue_he_officer": 0.491566265060241,
+    "guan_dao": 0.7662835249042146,
+    "guan_gong": 0.7434944237918215,
+    "guan_qi": 0.55858310626703,
+    "guan_zhanzi": 0.507537688442211,
+    "guan_laozi": 0.4752941176470588,
+    "jun_han": 0.5088161209068011,
+    "zhu_keke": 0.47754137115839246
+  },
+  "outputs": [
+    {
+      "variant": "chai_jin_officer",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/chai_jin_officer_idle_se.png",
+      "candidate_sha256": "A48EDD1A29E372F1CAEC4CF3061ED5AAE56D60013C5D48B61EE936AF2A543E03",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        0,
+        0,
+        443,
+        435
+      ],
+      "continuous_source_crop_xyxy": [
+        151,
+        4,
+        315,
+        423
+      ],
+      "requested_scale": 0.48687350835322196,
+      "resized_size": [
+        80,
+        204
+      ],
+      "paste_xy": [
+        88,
+        16
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4878048780487805,
+        0.48687350835322196
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "chai_jin_officer",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/chai_jin_officer_idle_sw.png",
+      "candidate_sha256": "0A5C7C2F150DD51B8F3F04366AE81CDE72C8F90B588D701CCD065B5868B134D6",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        443,
+        0,
+        887,
+        435
+      ],
+      "continuous_source_crop_xyxy": [
+        573,
+        4,
+        738,
+        423
+      ],
+      "requested_scale": 0.48687350835322196,
+      "resized_size": [
+        80,
+        204
+      ],
+      "paste_xy": [
+        88,
+        16
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.48484848484848486,
+        0.48687350835322196
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "chai_jin_officer",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/chai_jin_officer_idle_ne.png",
+      "candidate_sha256": "5ADFBB090981C9D7704638EBD19E6AC7ACE6BB8FA8BF1028796AC68F90F26022",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        887,
+        0,
+        1330,
+        435
+      ],
+      "continuous_source_crop_xyxy": [
+        1036,
+        5,
+        1194,
+        416
+      ],
+      "requested_scale": 0.48687350835322196,
+      "resized_size": [
+        77,
+        200
+      ],
+      "paste_xy": [
+        89,
+        20
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4873417721518987,
+        0.48661800486618007
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "chai_jin_officer",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/chai_jin_officer_idle_nw.png",
+      "candidate_sha256": "F7B342BABCD6F28562E8AE42BE4CA6A20BAE4AE9984C7C1296811705123DDDA2",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        1330,
+        0,
+        1774,
+        435
+      ],
+      "continuous_source_crop_xyxy": [
+        1464,
+        4,
+        1623,
+        419
+      ],
+      "requested_scale": 0.48687350835322196,
+      "resized_size": [
+        77,
+        202
+      ],
+      "paste_xy": [
+        89,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.48427672955974843,
+        0.4867469879518072
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "yue_he_officer",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/yue_he_officer_idle_se.png",
+      "candidate_sha256": "CF7DCDE3FD2ADFA8326808CE50618EFC4EAFD9BC64CBA567F53BEE2EF004037E",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        0,
+        435,
+        443,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        156,
+        450,
+        311,
+        864
+      ],
+      "requested_scale": 0.491566265060241,
+      "resized_size": [
+        76,
+        204
+      ],
+      "paste_xy": [
+        90,
+        16
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.49032258064516127,
+        0.4927536231884058
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "yue_he_officer",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/yue_he_officer_idle_sw.png",
+      "candidate_sha256": "728B041292C0BE7D6A647FB81BA39930FE45FA1DF0300B81E3E41BC1DAF1C369",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        443,
+        435,
+        887,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        573,
+        448,
+        730,
+        863
+      ],
+      "requested_scale": 0.491566265060241,
+      "resized_size": [
+        77,
+        204
+      ],
+      "paste_xy": [
+        89,
+        16
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.49044585987261147,
+        0.491566265060241
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "yue_he_officer",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/yue_he_officer_idle_ne.png",
+      "candidate_sha256": "54F711EB60CD5F4C63D9AEF697EAF9BED138923A85FAFBE88BA489AA6314E845",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        887,
+        435,
+        1330,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        1043,
+        453,
+        1193,
+        861
+      ],
+      "requested_scale": 0.491566265060241,
+      "resized_size": [
+        74,
+        201
+      ],
+      "paste_xy": [
+        91,
+        19
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.49333333333333335,
+        0.49264705882352944
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "yue_he_officer",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/yue_he_officer_idle_nw.png",
+      "candidate_sha256": "47EEDE232AA1974967C2FF886E301177D0CCF41B90F119312E6BB3D69C556832",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "01_daming_public_servants_alpha15_exact.png",
+      "source_sha256": "78F5A0749A593438F11D65C16C017148DDAA8D4B374D52F4866A62EA5A5C3CE6",
+      "raw_source_file": "01_daming_public_servants_raw.png",
+      "raw_source_sha256": "36142D705BA6CF07764A0DD2286AA12ABD0B8E145194E347A48270794E0C7161",
+      "fixed_source_cell_xyxy": [
+        1330,
+        435,
+        1774,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        1466,
+        452,
+        1618,
+        863
+      ],
+      "requested_scale": 0.491566265060241,
+      "resized_size": [
+        75,
+        202
+      ],
+      "paste_xy": [
+        90,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4934210526315789,
+        0.49148418491484186
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "guan_dao",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_dao_idle_se.png",
+      "candidate_sha256": "D4DD0F52D574200F4C69D37341CAA2003396C4069713413C5DFD92AA70174460",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        0,
+        0,
+        404,
+        325
+      ],
+      "continuous_source_crop_xyxy": [
+        73,
+        39,
+        303,
+        300
+      ],
+      "requested_scale": 0.7662835249042146,
+      "resized_size": [
+        176,
+        200
+      ],
+      "paste_xy": [
+        40,
+        20
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.7652173913043478,
+        0.7662835249042146
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_dao",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_dao_idle_sw.png",
+      "candidate_sha256": "09C5A60294D79B6ECD6953D417552E1EC06FA86DDEEBB8A760E7422F6F7A04E8",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        404,
+        0,
+        740,
+        325
+      ],
+      "continuous_source_crop_xyxy": [
+        412,
+        37,
+        629,
+        296
+      ],
+      "requested_scale": 0.7662835249042146,
+      "resized_size": [
+        166,
+        198
+      ],
+      "paste_xy": [
+        45,
+        22
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.7649769585253456,
+        0.7644787644787645
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_dao",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_dao_idle_ne.png",
+      "candidate_sha256": "1E92BB4DE0FE14A85C252ED9BF115E415A6BD4A2DC2DEAE0A559F75574C14794",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        740,
+        0,
+        1103,
+        325
+      ],
+      "continuous_source_crop_xyxy": [
+        820,
+        50,
+        1017,
+        297
+      ],
+      "requested_scale": 0.7662835249042146,
+      "resized_size": [
+        151,
+        189
+      ],
+      "paste_xy": [
+        52,
+        31
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.766497461928934,
+        0.7651821862348178
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_dao",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_dao_idle_nw.png",
+      "candidate_sha256": "C6D0110191845F681B67A47DF87F2D3AB9433663791B4008094EEB8A50D6415D",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        1103,
+        0,
+        1448,
+        325
+      ],
+      "continuous_source_crop_xyxy": [
+        1162,
+        37,
+        1376,
+        296
+      ],
+      "requested_scale": 0.7662835249042146,
+      "resized_size": [
+        164,
+        198
+      ],
+      "paste_xy": [
+        46,
+        22
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.7663551401869159,
+        0.7644787644787645
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_gong",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_gong_idle_se.png",
+      "candidate_sha256": "F902E3ED067ED8F74CF6712447319C5F76F813ECA7A990B426C7829A704A01AC",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        0,
+        325,
+        404,
+        637
+      ],
+      "continuous_source_crop_xyxy": [
+        140,
+        352,
+        319,
+        621
+      ],
+      "requested_scale": 0.7434944237918215,
+      "resized_size": [
+        133,
+        200
+      ],
+      "paste_xy": [
+        61,
+        20
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.7430167597765364,
+        0.7434944237918215
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_gong",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_gong_idle_sw.png",
+      "candidate_sha256": "E846831DBC685245565653FD3331BA8BD3CE0784317DA512C0BA7426DD8F4959",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        404,
+        325,
+        740,
+        637
+      ],
+      "continuous_source_crop_xyxy": [
+        470,
+        351,
+        666,
+        618
+      ],
+      "requested_scale": 0.7434944237918215,
+      "resized_size": [
+        146,
+        199
+      ],
+      "paste_xy": [
+        55,
+        21
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.7448979591836735,
+        0.7453183520599251
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_gong",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_gong_idle_ne.png",
+      "candidate_sha256": "7A21BCEBD634E69F858AAE304D7DE379AE32E7B7B868810049167B624A422AC0",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        740,
+        325,
+        1103,
+        637
+      ],
+      "continuous_source_crop_xyxy": [
+        799,
+        357,
+        999,
+        621
+      ],
+      "requested_scale": 0.7434944237918215,
+      "resized_size": [
+        149,
+        196
+      ],
+      "paste_xy": [
+        53,
+        24
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.745,
+        0.7424242424242424
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_gong",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_gong_idle_nw.png",
+      "candidate_sha256": "9561A5F20A801C4FC9C29BCDC473F9D828F8086D152327181F10DE42E6180E6E",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        1103,
+        325,
+        1448,
+        637
+      ],
+      "continuous_source_crop_xyxy": [
+        1129,
+        355,
+        1312,
+        619
+      ],
+      "requested_scale": 0.7434944237918215,
+      "resized_size": [
+        136,
+        196
+      ],
+      "paste_xy": [
+        60,
+        24
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.7431693989071039,
+        0.7424242424242424
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_qi",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_qi_idle_se.png",
+      "candidate_sha256": "8B2FB7522018EDCC112EDFC654E1B00B56EE4706FF83666E4A39CBE4417586FC",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        0,
+        637,
+        404,
+        1086
+      ],
+      "continuous_source_crop_xyxy": [
+        60,
+        653,
+        396,
+        1015
+      ],
+      "requested_scale": 0.55858310626703,
+      "resized_size": [
+        188,
+        202
+      ],
+      "paste_xy": [
+        34,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5595238095238095,
+        0.5580110497237569
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "guan_qi",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_qi_idle_sw.png",
+      "candidate_sha256": "73C1BBFDBCA91743103C9E2F4BF409AB853BE9714BA82A840A05001619973D3B",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        404,
+        637,
+        740,
+        1086
+      ],
+      "continuous_source_crop_xyxy": [
+        439,
+        655,
+        709,
+        1022
+      ],
+      "requested_scale": 0.55858310626703,
+      "resized_size": [
+        151,
+        205
+      ],
+      "paste_xy": [
+        52,
+        15
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5592592592592592,
+        0.55858310626703
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "guan_qi",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_qi_idle_ne.png",
+      "candidate_sha256": "797E877EB4FD637AD6E39D4189610542891697B623ECA7ACC13EF42F7ABA2DF7",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        740,
+        637,
+        1103,
+        1086
+      ],
+      "continuous_source_crop_xyxy": [
+        772,
+        663,
+        1077,
+        1029
+      ],
+      "requested_scale": 0.55858310626703,
+      "resized_size": [
+        170,
+        204
+      ],
+      "paste_xy": [
+        43,
+        16
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5573770491803278,
+        0.5573770491803278
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "guan_qi",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_qi_idle_nw.png",
+      "candidate_sha256": "C7C7A25B684192B5711B58BCEF81C7CBB3E282FBBE76F71CA27FF3241FE90C8D",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "02b_common_official_troops_v2_alpha15_exact.png",
+      "source_sha256": "7B68861FF4E7C6A355C3D5A5415362FFD69D3377E6037972850D51A43F82ECAE",
+      "raw_source_file": "02b_common_official_troops_v2_raw.png",
+      "raw_source_sha256": "93DFA4E6588540B283A2294B39F3B1BC53EDA4082804ED098EAD8BD09C3E2CA4",
+      "fixed_source_cell_xyxy": [
+        1103,
+        637,
+        1448,
+        1086
+      ],
+      "continuous_source_crop_xyxy": [
+        1129,
+        662,
+        1387,
+        1027
+      ],
+      "requested_scale": 0.55858310626703,
+      "resized_size": [
+        144,
+        204
+      ],
+      "paste_xy": [
+        56,
+        16
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5581395348837209,
+        0.5589041095890411
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第066回"
+    },
+    {
+      "variant": "guan_zhanzi",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_zhanzi_idle_se.png",
+      "candidate_sha256": "88002BBE4B0890E185801AB610BA824DCE82D61B031B95DB6FB53E6721DC7561",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        0,
+        0,
+        443,
+        421
+      ],
+      "continuous_source_crop_xyxy": [
+        131,
+        11,
+        341,
+        409
+      ],
+      "requested_scale": 0.507537688442211,
+      "resized_size": [
+        107,
+        202
+      ],
+      "paste_xy": [
+        74,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5095238095238095,
+        0.507537688442211
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_zhanzi",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_zhanzi_idle_sw.png",
+      "candidate_sha256": "CE15077C59E8EC426BF8410C3C04357B2585390672D2D44D2161C01A28B1B06C",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        443,
+        0,
+        887,
+        421
+      ],
+      "continuous_source_crop_xyxy": [
+        506,
+        12,
+        776,
+        403
+      ],
+      "requested_scale": 0.507537688442211,
+      "resized_size": [
+        137,
+        198
+      ],
+      "paste_xy": [
+        59,
+        22
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5074074074074074,
+        0.5063938618925832
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_zhanzi",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_zhanzi_idle_ne.png",
+      "candidate_sha256": "6C0DBBB8D3308EB41BA86DE1992ABC7C0C76ED3B34685FF67F581E4093C0E0C0",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        887,
+        0,
+        1330,
+        421
+      ],
+      "continuous_source_crop_xyxy": [
+        991,
+        10,
+        1269,
+        404
+      ],
+      "requested_scale": 0.507537688442211,
+      "resized_size": [
+        141,
+        200
+      ],
+      "paste_xy": [
+        57,
+        20
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5071942446043165,
+        0.5076142131979695
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_zhanzi",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_zhanzi_idle_nw.png",
+      "candidate_sha256": "A03C83FFF91C134A618829573843DD30622537C69265B1F3C34282E41F1B4D9B",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        1330,
+        0,
+        1774,
+        421
+      ],
+      "continuous_source_crop_xyxy": [
+        1401,
+        8,
+        1664,
+        393
+      ],
+      "requested_scale": 0.507537688442211,
+      "resized_size": [
+        133,
+        195
+      ],
+      "paste_xy": [
+        61,
+        25
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5057034220532319,
+        0.5064935064935064
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_laozi",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_laozi_idle_se.png",
+      "candidate_sha256": "E46BB7581E5705988DD0479073092E527FAB64141CB8A034B9F139F3CB3F8C22",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        0,
+        421,
+        443,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        99,
+        433,
+        314,
+        856
+      ],
+      "requested_scale": 0.4752941176470588,
+      "resized_size": [
+        102,
+        201
+      ],
+      "paste_xy": [
+        77,
+        19
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4744186046511628,
+        0.475177304964539
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_laozi",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_laozi_idle_sw.png",
+      "candidate_sha256": "6E09EA0F3DE2E5825CFFE44490C9603CBE32DC5B4DBF0B542E69673E1E822313",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        443,
+        421,
+        887,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        495,
+        433,
+        767,
+        858
+      ],
+      "requested_scale": 0.4752941176470588,
+      "resized_size": [
+        129,
+        202
+      ],
+      "paste_xy": [
+        63,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4742647058823529,
+        0.4752941176470588
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_laozi",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_laozi_idle_ne.png",
+      "candidate_sha256": "319138E09C26F67E3BDE2F0D14EB579471F568B9DC7E59123F2AC8D9B6EC78D5",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        887,
+        421,
+        1330,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        1004,
+        440,
+        1281,
+        855
+      ],
+      "requested_scale": 0.4752941176470588,
+      "resized_size": [
+        132,
+        197
+      ],
+      "paste_xy": [
+        62,
+        23
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.47653429602888087,
+        0.4746987951807229
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "guan_laozi",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/guan_laozi_idle_nw.png",
+      "candidate_sha256": "7650460E91500B93A180E46F709E63E3F6B795F91B81E93985CDF898CDEA48F5",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "03_jiangzhou_execution_staff_alpha15_exact.png",
+      "source_sha256": "8AE0425372C86A72D9052BA676125BAE2C8051E602CDAA6EEB770C194E478601",
+      "raw_source_file": "03_jiangzhou_execution_staff_raw.png",
+      "raw_source_sha256": "BD70D1CE55BDB492EF6B877590A3B81FAA0DC70C2F26A938AA9EF674440562A3",
+      "fixed_source_cell_xyxy": [
+        1330,
+        421,
+        1774,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        1465,
+        439,
+        1725,
+        846
+      ],
+      "requested_scale": 0.4752941176470588,
+      "resized_size": [
+        124,
+        193
+      ],
+      "paste_xy": [
+        66,
+        27
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.47692307692307695,
+        0.4742014742014742
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第040回"
+    },
+    {
+      "variant": "jun_han",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/jun_han_idle_se.png",
+      "candidate_sha256": "EB11529E61E1E0E8F2A4D835CF9947DFF0FC3F840A69DAE219D525327B4DE1C8",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        0,
+        0,
+        443,
+        425
+      ],
+      "continuous_source_crop_xyxy": [
+        44,
+        16,
+        429,
+        401
+      ],
+      "requested_scale": 0.5088161209068011,
+      "resized_size": [
+        196,
+        196
+      ],
+      "paste_xy": [
+        30,
+        24
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.509090909090909,
+        0.509090909090909
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第016回"
+    },
+    {
+      "variant": "jun_han",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/jun_han_idle_sw.png",
+      "candidate_sha256": "C2FD344DFE1B7CB545552C1B8C474F5BA77E2FE531C907260157C61F380DD0F9",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        443,
+        0,
+        887,
+        425
+      ],
+      "continuous_source_crop_xyxy": [
+        493,
+        33,
+        828,
+        395
+      ],
+      "requested_scale": 0.5088161209068011,
+      "resized_size": [
+        170,
+        184
+      ],
+      "paste_xy": [
+        43,
+        36
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5074626865671642,
+        0.5082872928176796
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第016回"
+    },
+    {
+      "variant": "jun_han",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/jun_han_idle_ne.png",
+      "candidate_sha256": "06E3CD5AB9D4F0BA14DEF49036B313609DAFC4B0F3552E81EFACB22CFE00262C",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        887,
+        0,
+        1330,
+        425
+      ],
+      "continuous_source_crop_xyxy": [
+        932,
+        12,
+        1300,
+        404
+      ],
+      "requested_scale": 0.5088161209068011,
+      "resized_size": [
+        187,
+        199
+      ],
+      "paste_xy": [
+        34,
+        21
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5081521739130435,
+        0.5076530612244898
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第016回"
+    },
+    {
+      "variant": "jun_han",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/jun_han_idle_nw.png",
+      "candidate_sha256": "7E3F0DB46FC4AF668BECBA6648FD400A38586A7A0A00788EEB038462328672F2",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        1330,
+        0,
+        1774,
+        425
+      ],
+      "continuous_source_crop_xyxy": [
+        1377,
+        14,
+        1741,
+        411
+      ],
+      "requested_scale": 0.5088161209068011,
+      "resized_size": [
+        185,
+        202
+      ],
+      "paste_xy": [
+        35,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.5082417582417582,
+        0.5088161209068011
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第016回"
+    },
+    {
+      "variant": "zhu_keke",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/zhu_keke_idle_se.png",
+      "candidate_sha256": "2E1FE49FAF8E74EF6FA8F3ED5A6BFA5D554D39FA4F861A0F9984807A7B309E79",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        0,
+        425,
+        443,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        94,
+        440,
+        418,
+        848
+      ],
+      "requested_scale": 0.47754137115839246,
+      "resized_size": [
+        155,
+        195
+      ],
+      "paste_xy": [
+        50,
+        25
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4783950617283951,
+        0.47794117647058826
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第048回"
+    },
+    {
+      "variant": "zhu_keke",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/zhu_keke_idle_sw.png",
+      "candidate_sha256": "4D5714C9A477CCB4E3E9ECBC15665E82CB164B06F933585B426822D892022D3C",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        443,
+        425,
+        887,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        476,
+        441,
+        798,
+        844
+      ],
+      "requested_scale": 0.47754137115839246,
+      "resized_size": [
+        154,
+        192
+      ],
+      "paste_xy": [
+        51,
+        28
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4782608695652174,
+        0.47642679900744417
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第048回"
+    },
+    {
+      "variant": "zhu_keke",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/zhu_keke_idle_ne.png",
+      "candidate_sha256": "B2F5CED3EA104B784B4600AF93693FAE0A4D42574D71FA4D3661400966A38FB2",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        887,
+        425,
+        1330,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        970,
+        443,
+        1306,
+        843
+      ],
+      "requested_scale": 0.47754137115839246,
+      "resized_size": [
+        160,
+        191
+      ],
+      "paste_xy": [
+        48,
+        29
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.47619047619047616,
+        0.4775
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第048回"
+    },
+    {
+      "variant": "zhu_keke",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/zhu_keke_idle_nw.png",
+      "candidate_sha256": "97B714F10E38E527D0D5C54CFB0BAAC9540ED41BB2C3A85D9792AF5A679C7C68",
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA",
+      "source_file": "04_story_porter_and_manor_guard_alpha15_exact.png",
+      "source_sha256": "0CD9C635D5AEC37F6A8A2869F866594ABD8D40BFFAA3511B22FCF76A1B79367D",
+      "raw_source_file": "04_story_porter_and_manor_guard_raw.png",
+      "raw_source_sha256": "B7FC3F69F6E6E8B164E6588A9C5F62E09DD40E599E684E53FE2DD0BEB69D2299",
+      "fixed_source_cell_xyxy": [
+        1330,
+        425,
+        1774,
+        887
+      ],
+      "continuous_source_crop_xyxy": [
+        1389,
+        443,
+        1689,
+        866
+      ],
+      "requested_scale": 0.47754137115839246,
+      "resized_size": [
+        143,
+        202
+      ],
+      "paste_xy": [
+        56,
+        18
+      ],
+      "actual_scale_xy_after_integer_rounding": [
+        0.4766666666666667,
+        0.47754137115839246
+      ],
+      "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第048回"
+    }
+  ],
+  "portraits": [
+    {
+      "variant": "chai_jin_officer",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/chai_jin_officer_portrait.png",
+      "candidate_sha256": "A48EDD1A29E372F1CAEC4CF3061ED5AAE56D60013C5D48B61EE936AF2A543E03",
+      "byte_identical_to": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/chai_jin_officer_idle_se.png"
+    },
+    {
+      "variant": "yue_he_officer",
+      "candidate_path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/yue_he_officer_portrait.png",
+      "candidate_sha256": "CF7DCDE3FD2ADFA8326808CE50618EFC4EAFD9BC64CBA567F53BEE2EF004037E",
+      "byte_identical_to": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/outputs/yue_he_officer_idle_se.png"
+    }
+  ],
+  "preview": {
+    "path": "qa/ordinary_officials_p0_direction4_candidate_pipeline_20260903/candidate_contact_sheet.png",
+    "sha256": "12AF274FAE2448EFF8A090257951E14398B9FF80FA1990E23282FF3FA64DAA0F",
+    "qa_only_labels_and_checkerboard": true
+  },
+  "steam_modified_or_exported": false
+}
