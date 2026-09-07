@@ -1,0 +1,118 @@
+{
+  "scope": "pure_model_and_graceful_fixture_processes_only",
+  "model_checks": 88,
+  "fixture_phase_count": 7,
+  "fixture_checks": 45,
+  "production_integration": false,
+  "actual_Steam_SDK_calls": false,
+  "power_loss_or_atomic_file_adapter_tested": false,
+  "first_failure": "No-op assertion compared normalized integer dictionary to raw JSON float dictionary; corrected to compare pre/post normalized state and exact file bytes",
+  "model_changed_between_attempts": false,
+  "phases": {
+    "attempt_1_fixture_comparison_failed": [
+      {
+        "name": "import",
+        "exit_code": 0,
+        "seconds": 2.8982048999750987
+      },
+      {
+        "name": "model",
+        "exit_code": 0,
+        "seconds": 0.35940319998189807,
+        "checks": 88,
+        "passed": true
+      },
+      {
+        "name": "create",
+        "exit_code": 0,
+        "seconds": 0.25908430002164096,
+        "checks": 5,
+        "passed": true
+      },
+      {
+        "name": "resume",
+        "exit_code": 0,
+        "seconds": 0.1694798999815248,
+        "checks": 6,
+        "passed": true
+      },
+      {
+        "name": "intent_only",
+        "exit_code": 0,
+        "seconds": 0.16906280000694096,
+        "checks": 4,
+        "passed": true
+      },
+      {
+        "name": "recover",
+        "exit_code": 1,
+        "seconds": 0.16453760000877082
+      }
+    ],
+    "attempt_2_passed": [
+      {
+        "name": "import",
+        "exit_code": 0,
+        "seconds": 3.0945607999456115
+      },
+      {
+        "name": "model",
+        "exit_code": 0,
+        "seconds": 0.3546002000221051,
+        "checks": 88,
+        "passed": true
+      },
+      {
+        "name": "create",
+        "exit_code": 0,
+        "seconds": 0.17063030001008883,
+        "checks": 5,
+        "passed": true
+      },
+      {
+        "name": "resume",
+        "exit_code": 0,
+        "seconds": 0.1710307999746874,
+        "checks": 6,
+        "passed": true
+      },
+      {
+        "name": "intent_only",
+        "exit_code": 0,
+        "seconds": 0.1707888999953866,
+        "checks": 4,
+        "passed": true
+      },
+      {
+        "name": "recover",
+        "exit_code": 0,
+        "seconds": 0.17034939996665344,
+        "checks": 9,
+        "passed": true
+      },
+      {
+        "name": "invalidate_only",
+        "exit_code": 0,
+        "seconds": 0.26190059998771176,
+        "checks": 7,
+        "passed": true
+      },
+      {
+        "name": "correct",
+        "exit_code": 0,
+        "seconds": 0.16209210001397878,
+        "checks": 7,
+        "passed": true
+      },
+      {
+        "name": "recover_correction",
+        "exit_code": 0,
+        "seconds": 0.16786749998573214,
+        "checks": 7,
+        "passed": true
+      }
+    ]
+  },
+  "archive_files": 42,
+  "archive_bytes": 120292
+}

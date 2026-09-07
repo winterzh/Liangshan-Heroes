@@ -1,3 +1,11 @@
+## 2026-09-07 稳定编号与后续基础
+
+- `docs/STABILIZATION_IDENTITY_INTEGRATION_20260907.md`、`qa/stabilization_identity_integration_20260907/`：25生产脚本、9正常开局、45桥接行为和精确接入收据。
+- `docs/STABILIZATION_IDENTITY_NATIVE_QA_20260907.md`、`qa/stabilization_identity_20260907/`：原24文件候选的86行为及失败入口历史。
+- `tools/run_stabilization_identity.py`、`tools/run_stabilization_overlay.py`：冻结候选的原生私有执行入口。
+- `docs/STABILIZATION_UNIT_BODY_QA_20260907.md`、`qa/stabilization_unit_body_20260907/`：33范围的高开销诊断，只用于定位。
+- `docs/STEAM_RUN_RECEIPT_DRAFT_20260907.md`、`qa/steam_run_receipt_draft_20260907/`、`tools/contracts/steam_run_receipt_draft_20260907/`：纯回执候选、原生结果和原字节恢复清单。
+
 ## 2026-09-07 性能与 Steam 配置记录
 
 - `docs/STABILIZATION_PERFORMANCE_20260907.md`、`qa/stabilization_performance_20260907/`：五组三次正常基线、Unit诊断、失败尝试、原始工具与SHA清单。

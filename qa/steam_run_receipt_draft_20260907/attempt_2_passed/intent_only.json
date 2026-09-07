@@ -1,0 +1,29 @@
+{
+	"checks": [
+		{
+			"name": "actual private user directory",
+			"passed": true
+		},
+		{
+			"name": "open prior process receipt",
+			"passed": true
+		},
+		{
+			"name": "win intent persisted",
+			"passed": true
+		},
+		{
+			"name": "process exits before model commit and SDK call",
+			"passed": true
+		}
+	],
+	"failed": 0,
+	"interruption": "graceful exit after intent write; no power-loss simulation",
+	"passed": true,
+	"phase": "intent_only",
+	"pid": 26064,
+	"production_disk_transaction_or_sdk": false,
+	"scope": "pure_receipt_fixture_cross_process",
+	"unsolved_host_boundary": "result 8 before invalidation persistence; receipt rollback with a battle slot; no atomic disk adapter here",
+	"user_data_dir": "D:/LHReceiptProfiles/aa40ed0161ab48e9ad812dd0d9bfe3c4/appdata/LHReceiptContract"
+}

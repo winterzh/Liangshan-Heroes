@@ -1,3 +1,9 @@
+## 2026-09-07 稳定编号与隔离验收入口
+
+生产已接入25份稳定编号/驻守v2脚本，与9个正常世界开局、86身份及45桥接行为的受测字节一致。新`tools/run_stabilization_overlay.py`按明确Git生产白名单与外部冻结候选运行单个驱动；`--case-id`只接受冻结launch_contract内案例，所有修改仍留在全新私有工程。旧freeze中的before不能直接套到已更新生产上，下一轮须审查并重锁。
+
+身份、接入、Unit诊断和Steam回执QA均有独立`.gdignore`，原始证据按`.gitattributes`保持字节。回执草稿恢复原名到全新`scratchpad/<名称>/`后才可运行，不能从contracts直接执行；它仍无真实SDK/玩家槽权限入口。命令、范围与目录见[身份说明](STABILIZATION_IDENTITY_INTEGRATION_20260907.md)、[回执说明](STEAM_RUN_RECEIPT_DRAFT_20260907.md)。正常游戏仍用Play.cmd，尚无继续本局菜单。
+
 ## 2026-09-07 性能基线与平台配置收据
 
 `tools/run_stabilization_performance.py`从明确Git提交的生产blob创建短路径私有工程，先冻结真实gameplay RNG，再运行五组各三次正常60秒窗口。诊断工具绑定完整基线输入，仅在私有派生工程插桩；命令和边界见[性能说明](STABILIZATION_PERFORMANCE_20260907.md)。Godot槽仍须独占，真实玩家目录只做前后守护。

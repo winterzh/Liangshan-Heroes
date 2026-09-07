@@ -1,0 +1,363 @@
+{
+	"checks": [
+		{
+			"name": "actual private model user directory",
+			"passed": true
+		},
+		{
+			"name": "create account",
+			"passed": true
+		},
+		{
+			"name": "begin prepared without changing committed receipt",
+			"passed": true
+		},
+		{
+			"name": "unpersisted begin cannot publish",
+			"passed": true
+		},
+		{
+			"name": "begin JSON commit",
+			"passed": true
+		},
+		{
+			"name": "committed absolute targets publish for current owner",
+			"passed": true
+		},
+		{
+			"name": "another account cannot publish",
+			"passed": true
+		},
+		{
+			"name": "same token is not a new run",
+			"passed": true
+		},
+		{
+			"name": "known run can resume",
+			"passed": true
+		},
+		{
+			"name": "unknown run cannot resume",
+			"passed": true
+		},
+		{
+			"name": "different account cannot resume",
+			"passed": true
+		},
+		{
+			"name": "custom context cannot regain qualification",
+			"passed": true
+		},
+		{
+			"name": "another eligible context cannot reuse this token",
+			"passed": true
+		},
+		{
+			"name": "progress not published before commit",
+			"passed": true
+		},
+		{
+			"name": "unpersisted progress blocks SDK targets",
+			"passed": true
+		},
+		{
+			"name": "20 kills committed",
+			"passed": true
+		},
+		{
+			"name": "record opens after JSON restart",
+			"passed": true
+		},
+		{
+			"name": "old 10-kill snapshot does not recredit",
+			"passed": true
+		},
+		{
+			"name": "replay to 20 does not recredit",
+			"passed": true
+		},
+		{
+			"name": "21st kill adds one",
+			"passed": true
+		},
+		{
+			"name": "tampered preparation rejected",
+			"passed": true
+		},
+		{
+			"name": "failed commit leaves count unchanged",
+			"passed": true
+		},
+		{
+			"name": "original preparation can retry",
+			"passed": true
+		},
+		{
+			"name": "stale preparation cannot replace newer one",
+			"passed": true
+		},
+		{
+			"name": "newer preparation survives",
+			"passed": true
+		},
+		{
+			"name": "win committed",
+			"passed": true
+		},
+		{
+			"name": "win stats counted once",
+			"passed": true
+		},
+		{
+			"name": "defense achievement unlocked",
+			"passed": true
+		},
+		{
+			"name": "terminal receipt survives restart",
+			"passed": true
+		},
+		{
+			"name": "terminal run cannot regain eligibility",
+			"passed": true
+		},
+		{
+			"name": "old pre-win battle result does not recredit",
+			"passed": true
+		},
+		{
+			"name": "terminal kills rejected",
+			"passed": true
+		},
+		{
+			"name": "new token is a separate run",
+			"passed": true
+		},
+		{
+			"name": "second run 1 kill adds one",
+			"passed": true
+		},
+		{
+			"name": "loss marks terminal",
+			"passed": true
+		},
+		{
+			"name": "loss does not add wins",
+			"passed": true
+		},
+		{
+			"name": "loss replay cannot become victory",
+			"passed": true
+		},
+		{
+			"name": "active test record restored",
+			"passed": true
+		},
+		{
+			"name": "negative kills",
+			"passed": true
+		},
+		{
+			"name": "fractional kills",
+			"passed": true
+		},
+		{
+			"name": "string kills",
+			"passed": true
+		},
+		{
+			"name": "boolean kills",
+			"passed": true
+		},
+		{
+			"name": "NaN kills",
+			"passed": true
+		},
+		{
+			"name": "infinite kills",
+			"passed": true
+		},
+		{
+			"name": "overflow kills",
+			"passed": true
+		},
+		{
+			"name": "invalid input leaves record unchanged",
+			"passed": true
+		},
+		{
+			"name": "record owner mismatch rejected",
+			"passed": true
+		},
+		{
+			"name": "unsupported record context rejected",
+			"passed": true
+		},
+		{
+			"name": "negative record highwater rejected",
+			"passed": true
+		},
+		{
+			"name": "nonterminal victory rejected",
+			"passed": true
+		},
+		{
+			"name": "unknown achievement rejected",
+			"passed": true
+		},
+		{
+			"name": "fractional record version",
+			"passed": true
+		},
+		{
+			"name": "fractional record generation",
+			"passed": true
+		},
+		{
+			"name": "numeric correction boolean rejected",
+			"passed": true
+		},
+		{
+			"name": "owner above uint64 rejected",
+			"passed": true
+		},
+		{
+			"name": "uint64 owner retained as exact string",
+			"passed": true
+		},
+		{
+			"name": "higher server floor merges once",
+			"passed": true
+		},
+		{
+			"name": "same server floor does not add again",
+			"passed": true
+		},
+		{
+			"name": "lower server read does not erase pending absolute target",
+			"passed": true
+		},
+		{
+			"name": "highwater survives server floor merge",
+			"passed": true
+		},
+		{
+			"name": "saturation account created",
+			"passed": true
+		},
+		{
+			"name": "saturation run created",
+			"passed": true
+		},
+		{
+			"name": "stat saturates without losing per-run highwater",
+			"passed": true
+		},
+		{
+			"name": "maximum generation can open",
+			"passed": true
+		},
+		{
+			"name": "maximum generation does not overflow",
+			"passed": true
+		},
+		{
+			"name": "run tombstone capacity opens",
+			"passed": true
+		},
+		{
+			"name": "run limit cannot evict old tombstones",
+			"passed": true
+		},
+		{
+			"name": "over-capacity record rejected",
+			"passed": true
+		},
+		{
+			"name": "correction fixture restored",
+			"passed": true
+		},
+		{
+			"name": "correction fixture has prior earned targets",
+			"passed": true
+		},
+		{
+			"name": "correction requires persisted invalidation",
+			"passed": true
+		},
+		{
+			"name": "result 8 immediately blocks publication",
+			"passed": true
+		},
+		{
+			"name": "old pending target cannot commit after result 8",
+			"passed": true
+		},
+		{
+			"name": "invalidation persisted separately",
+			"passed": true
+		},
+		{
+			"name": "correction barrier survives JSON restart",
+			"passed": true
+		},
+		{
+			"name": "normal max merge cannot bypass correction",
+			"passed": true
+		},
+		{
+			"name": "old active slot loses qualification on invalidation",
+			"passed": true
+		},
+		{
+			"name": "new runs wait for authoritative correction",
+			"passed": true
+		},
+		{
+			"name": "pre-invalidation read cannot serve as authority",
+			"passed": true
+		},
+		{
+			"name": "authority correction cannot publish before persistence",
+			"passed": true
+		},
+		{
+			"name": "authority correction commits exact lower targets",
+			"passed": true
+		},
+		{
+			"name": "late old read cannot resurrect rejected floor",
+			"passed": true
+		},
+		{
+			"name": "retained tombstone rejects old token begin",
+			"passed": true
+		},
+		{
+			"name": "corrected old slot cannot regain qualification",
+			"passed": true
+		},
+		{
+			"name": "corrected terminal retry does not resurrect wins",
+			"passed": true
+		},
+		{
+			"name": "fresh run allowed after durable correction",
+			"passed": true
+		},
+		{
+			"name": "fresh kill adds only one to corrected floor",
+			"passed": true
+		},
+		{
+			"name": "failed invalidation persistence keeps in-process publish blocked",
+			"passed": true
+		}
+	],
+	"failed": 0,
+	"passed": true,
+	"pid": 40784,
+	"production_steam_or_disk_integration": false,
+	"scope": "pure_receipt_model_json_contract",
+	"unsolved_host_boundary": "result 8 callback received but invalidation not yet durably persisted; capture is not a publication API",
+	"user_data_dir": "D:/LHReceiptProfiles/aa40ed0161ab48e9ad812dd0d9bfe3c4/appdata/LHReceiptContract"
+}
