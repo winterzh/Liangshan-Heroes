@@ -1,3 +1,11 @@
+## 2026-09-09 祝家庄恢复组件开发入口
+
+普通启动仍为`Play.cmd`，玩家继续入口未开放。本批新增选型/工厂341项与单位图423项原生组件证据，八关LevelState205项及经典短流程295项回归通过；各批独立冻结，不当作完整战役或正式包验收。说明见[官方选型](OFFICIAL_RESTORE_PROFILE_20260909.md)、[特殊单位图](LEVEL3_UNIT_GRAPH_20260909.md)。
+
+命令分别为`py -3.14 -X utf8 -B tools/run_official_restore_profile_qa.py --run`与`py -3.14 -X utf8 -B tools/run_level3_unit_graph_qa.py --run`；省略`--run`只预检。工具自建D盘私有profile、禁用Steam并独占引擎锁，必须串行；不将QA环境变量写入玩家入口。经典短流程继续使用`tools/run_continue_flow_qa.py --run`，完整30波旧证据保持其原始来源身份。
+
+景物/MapState候选已归档到`qa/level3_scenery_prepare_20260909`，未解析未应用，不能直接视作生产实现。世界、任务UI、持久结算和真实Steam确认仍待完成。线上Build25185242和既有公告沿用，本批只同步已验证源码与相关记录。
+
 ## 2026-09-09 本地终局收据与续玩诊断
 
 普通启动仍使用`Play.cmd`，玩家继续入口未开放。内部单槽现为`classic_continue_slot_v3`，保留本地active收据并新增本局英雄托管档位；旧v1/v2槽保留并明确拒绝，不手工补字段或猜测迁移。恢复前后托管档位一致，安装失败还原菜单原值，不写全局设置文件。终局记录失败时在错误界面重试结算或明确退出，不能把终局战斗恢复为继续运行。[本地收据说明](LOCAL_CONTINUE_LIFECYCLE_20260909.md)。

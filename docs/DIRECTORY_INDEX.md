@@ -1,3 +1,11 @@
+## 2026-09-09 祝家庄恢复组件
+
+- `scripts/run_official_restore_profile.gd`、`scripts/run_level3_world_factory.gd`、`docs/OFFICIAL_RESTORE_PROFILE_20260909.md`：固定经典30波/祝家庄选型、私有运行定义与31字段关卡恢复工厂；组件验证不等于完整世界恢复。
+- `scripts/run_unit_state.gd`、`scripts/run_unit_graph.gd`：保留经典默认合同，增加从已校验祝家庄关卡记录派生的特殊单位角色与独立图版本。
+- `qa/official_restore_profile_20260909/`、`qa/level3_unit_graph_20260909/`：本批隔离组件证据；实际通过范围和失败尝试以各目录说明及原始收据为准。
+- `docs/LEVEL3_UNIT_GRAPH_20260909.md`：特殊单位角色、全图先验证后分配、九份组件快照与世界整合边界。
+- `qa/level3_scenery_prepare_20260909/`：景物与MapState接线候选，31份来源/补丁/静态证据按原字节归档；未原生解析、未应用，不计世界完成。
+
 ## 2026-09-09 终局身份、任务界面与经典玩法驱动
 
 - `tools/classic30_inflight_observer.gd`：经典验收的只读弹道、五类施法队列和单位施法计时观察；HELD保存与新进程暂停恢复逐值比较。它不替代全部特殊伤害组件，也不写游戏状态。

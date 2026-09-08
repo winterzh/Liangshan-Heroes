@@ -1,0 +1,70 @@
+--- a/scripts/run_map_state.gd
++++ b/scripts/run_map_state.gd
+@@ -25,13 +25,15 @@
+ 	"liangshan_art_level_id", "liangshan_hall_cell", "campaign_wall_segments", "campaign_city_sign_cell",
+ 	"campaign_city_wicket_sealed", "natural_surface_contract"]
+ var _content_version: String = ""
+-
+-
+-func _init(content_version: String) -> void:
++var _trusted_context: Dictionary = {}
++
++
++func _init(content_version: String, trusted_context: Dictionary = {}) -> void:
+ 	# An invalid constructor version leaves this adapter unusable. No fallback
+ 	# version, environment lookup, raw source read or snapshot-derived trust.
+ 	if not content_version.strip_edges().is_empty() and content_version.length() <= 256:
+ 		_content_version = content_version
++	_trusted_context = trusted_context.duplicate(true)
+ 
+ 
+ func capture(game_map: GameMap) -> Dictionary:
+@@ -96,7 +98,7 @@
+ 	if not _fields(snapshot.sections, SECTION_NAMES): return _fail("MAP_SECTIONS", "$/sections")
+ 	# Check the nested envelope before decoding any gameplay values. Both trust
+ 	# comparisons therefore finish before stage/restore can touch a target.
+-	var display_check: Dictionary = SceneryState.new(_content_version).validate(snapshot.sections.display)
++	var display_check: Dictionary = SceneryState.new(_content_version, _trusted_context).validate(snapshot.sections.display)
+ 	if not display_check.ok: return display_check
+ 	var raw: Dictionary = {}
+ 	var codec := Codec.new()
+@@ -145,7 +147,7 @@
+ 			or target._base_solid.hex_encode() != raw.base_solid or target._block_count.to_byte_array().hex_encode() != raw.block_count \
+ 			or target._navigation_revision != raw.header.navigation_revision:
+ 		return {"ok": false, "code": "STAGED_MAP_CHANGED", "discard_private_transaction": true}
+-	var display_result: Dictionary = SceneryState.new(_content_version).restore_into(target, raw.display)
++	var display_result: Dictionary = SceneryState.new(_content_version, _trusted_context).restore_into(target, raw.display)
+ 	if not display_result.ok:
+ 		display_result["discard_private_transaction"] = true
+ 		return display_result
+@@ -165,8 +167,10 @@
+ 	for name in raw.metadata: target.set_meta(name, raw.metadata[name])
+ 	target.visible = raw.header.visible
+ 	target.queue_redraw()
+-	return {"ok": true, "code": "OK", "complete": true, "requirements": [], "footprints_already_registered": true,
+-		"restored_scenery_nodes": display_result.get("restored_nodes", 0)}
++	return {"ok": true, "code": "OK", "complete": not display_result.get("requires_activation", false), "requirements": [], "footprints_already_registered": true,
++		"restored_scenery_nodes": display_result.get("restored_nodes", 0),
++		"display_requires_activation": display_result.get("requires_activation", false),
++		"display_adapter": display_result.get("adapter")}
+ 
+ 
+ ## Explicit transaction phase, NOT a complete restored map. It installs exact
+@@ -316,7 +320,7 @@
+ 
+ 
+ func _capture_display(game_map: GameMap) -> Dictionary:
+-	return SceneryState.new(_content_version).capture(game_map)
++	return SceneryState.new(_content_version, _trusted_context).capture(game_map)
+ 
+ 
+ func _validate_raw(raw: Dictionary) -> Dictionary:
+@@ -380,7 +384,7 @@
+ 	if not height_check.ok: return height_check
+ 	var meta_check: Dictionary = _validate_metadata(raw.metadata)
+ 	if not meta_check.ok: return meta_check
+-	var display_check: Dictionary = SceneryState.new(_content_version).validate(raw.display)
++	var display_check: Dictionary = SceneryState.new(_content_version, _trusted_context).validate(raw.display)
+ 	if not display_check.ok: return display_check
+ 	return {"ok": true, "code": "OK", "value": raw, "requirements": _display_requirements(raw)}
+ 
