@@ -1,0 +1,119 @@
+extends RefCounted
+## Internal independent-account observation. No write confirmation or current-cache fallback.
+const Catalog = preload("res://scripts/steam_achievement_catalog.gd")
+const SOURCE := "independent_requested_user_cache"
+var _native: Object
+var _observer := ""
+var _target := ""
+var _pending := ""
+var _closed := false
+
+func _bad(code: String) -> Dictionary:
+	return {"ok": false, "code": code}
+
+func _fail(code: String) -> Dictionary:
+	_closed = true
+	_pending = ""
+	return _bad(code)
+
+func _valid_account(value: String) -> bool:
+	if value.is_empty() or value.length() > 20 or value.begins_with("0"): return false
+	for c in value:
+		if c not in "0123456789": return false
+	# Compare decimal strings: Steam IDs must never round through JSON float/int64.
+	return value.length() < 20 or value.casecmp_to("18446744073709551615") <= 0
+
+func _valid_handle(value: String) -> bool:
+	if value.length() != 16 or value == "0000000000000000": return false
+	for c in value:
+		if c not in "0123456789abcdef": return false
+	return true
+
+func _matches(row: Dictionary) -> bool:
+	return _number_is(row.get("protocol"), 1) and _number_is(row.get("app"), Catalog.APP_ID) and row.get("observer") == _observer and row.get("target") == _target and row.get("source") == SOURCE
+
+func _number_is(value: Variant, expected: int) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and float(value) == float(expected)
+
+func _query(command: String) -> Dictionary:
+	if _closed: return _bad("OBSERVER_CLOSED")
+	if not is_instance_valid(_native) or not _native.has_method("observer_query"): return _fail("OBSERVER_UNSUPPORTED")
+	var raw: Variant = _native.call("observer_query", command)
+	if typeof(raw) != TYPE_STRING: return _fail("BAD_NATIVE_RESPONSE")
+	var value: Variant = JSON.parse_string(raw)
+	if typeof(value) != TYPE_DICTIONARY or typeof(value.get("ok")) != TYPE_BOOL: return _fail("BAD_NATIVE_RESPONSE")
+	if not value.ok:
+		if typeof(value.get("code")) != TYPE_STRING or value.code.is_empty(): return _fail("BAD_NATIVE_RESPONSE")
+		# Native failures retire this facade; timeout/abandonment fences live natively.
+		_closed = true
+		_pending = ""
+	return value
+
+func attach(observer: String, target: String, supplied_native: Object = null) -> Dictionary:
+	if _closed or _native != null: return _bad("ALREADY_ATTACHED")
+	if not _valid_account(observer) or not _valid_account(target): return _bad("BAD_IDENTITIES")
+	if observer == target: return _bad("TARGET_IS_OBSERVER")
+	if supplied_native != null:
+		_native = supplied_native
+	elif ClassDB.class_exists("SteamStatsObserver"):
+		_native = ClassDB.instantiate("SteamStatsObserver")
+	else:
+		return _fail("OBSERVER_UNSUPPORTED")
+	if not is_instance_valid(_native) or not _native.has_method("observer_query"): return _fail("OBSERVER_UNSUPPORTED")
+	_observer = observer
+	_target = target
+	var bound := _query("bind " + observer + " " + target)
+	if not bound.ok: return bound
+	if not _matches(bound): return _fail("WRONG_IDENTITY")
+	return bound
+
+func _identity() -> Dictionary:
+	var identity := _query("identity")
+	if identity.ok and not _matches(identity): return _fail("WRONG_IDENTITY")
+	return identity
+
+func request() -> Dictionary:
+	if _closed: return _bad("OBSERVER_CLOSED")
+	if not _pending.is_empty(): return _bad("READ_BUSY")
+	var identity := _identity()
+	if not identity.ok: return identity
+	var started := _query("request")
+	if not started.ok: return started
+	var handle: Variant = started.get("handle")
+	if typeof(handle) != TYPE_STRING or not _valid_handle(handle): return _fail("BAD_NATIVE_HANDLE")
+	if not _matches(started) or not _number_is(started.get("timeout_ms"), 30000): return _fail("BAD_NATIVE_RESPONSE")
+	_pending = handle
+	return started
+
+func poll(handle: String) -> Dictionary:
+	if _closed: return _bad("OBSERVER_CLOSED")
+	if not _valid_handle(handle) or handle != _pending: return _bad("UNKNOWN_HANDLE")
+	var identity := _identity()
+	if not identity.ok: return identity
+	var result := _query("poll " + handle)
+	if not result.ok: return result
+	if not _matches(result) or result.get("handle") != handle or typeof(result.get("pending")) != TYPE_BOOL: return _fail("BAD_NATIVE_RESPONSE")
+	if result.pending: return result
+	_pending = ""
+	return _snapshot(handle)
+
+func _snapshot(handle: String) -> Dictionary:
+	var stats := {}
+	var unlocked := {}
+	for name in Catalog.STATS:
+		var row := _query("stat " + handle + " " + name)
+		if not row.ok: return row
+		if not _matches(row) or row.get("handle") != handle: return _fail("MIXED_SNAPSHOT")
+		var value: Variant = row.get("value")
+		if typeof(value) not in [TYPE_INT, TYPE_FLOAT]: return _fail("BAD_STAT")
+		if not is_finite(float(value)) or value < 0 or value > 2147483647 or float(int(value)) != float(value): return _fail("BAD_STAT")
+		stats[name] = int(value)
+	for entry in Catalog.entries():
+		var row := _query("achievement " + handle + " " + entry.id)
+		if not row.ok: return row
+		if not _matches(row) or row.get("handle") != handle: return _fail("MIXED_SNAPSHOT")
+		if typeof(row.get("value")) != TYPE_BOOL: return _fail("BAD_ACHIEVEMENT")
+		unlocked[entry.id] = row.value
+	var identity := _identity()
+	if not identity.ok: return identity
+	return {"ok": true, "protocol": 1, "app": Catalog.APP_ID, "observer": _observer, "target": _target, "source": SOURCE, "handle": handle, "stats": stats, "unlocked": unlocked, "write_confirmation": false}

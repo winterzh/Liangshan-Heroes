@@ -1,0 +1,48 @@
+{
+  "result": "PASS",
+  "reviewed_utc": "2026-09-08T19:52:05.758800+00:00",
+  "final_run": "20260909_034724_209b6af2",
+  "preserved_failed_run": "20260909_034414_bd649218",
+  "method": "Independent read-only inspection and SHA verification after root ran the controlled runner; no Godot or Git invocation in this review.",
+  "checks": {
+    "behavior_checks": 76,
+    "unique_check_names": 76,
+    "current_source_sha_checks": 2953,
+    "frozen_source_sha_checks": 2953,
+    "archived_snapshot_sha_checks": 23,
+    "engine_report_source_sha_checks": 4,
+    "runner_scene_literal_matches_generated_scene": true,
+    "generated_scene_matches_frozen_and_archived_files": true,
+    "final_log_hashes_and_zero_errors": true,
+    "profile_guard_expected_exit_2_no_report": true,
+    "profile_guard_zero_fixture_writes_recorded": true
+  },
+  "source_pins": {
+    "res://scripts/run_slot_store.gd": "ae142a9a5cbecbb9e46f805b227b93acf1f268c2e0a5c3633f52a7c8e8e88f52",
+    "res://scripts/run_snapshot_store.gd": "d16b98cba85b8eaf05dfb66642a2f2eb3914ec9f65ec523b33b6f3d52f51b937",
+    "res://scripts/run_world_session.gd": "c396deaf0139df5a9f540da4dbfef48ab1c40dc2348616a836e18318b9099217",
+    "res://tools/owned_slot_retry_qa.gd": "424987ebca5d8204c1b410c5ef12ecc5d460f6ca6bbb5c479ac0de59bf988a5c"
+  },
+  "generated_scene_sha256": "1863561b80b2a4642c81f4657769641e4c15fe5927b8b05b65ffee6fb1149007",
+  "final_receipt_sha256": "b1446d2ba8193c0e68679c513ed3d2a671fd61c173b5be836c0a3fb18a7263f0",
+  "regression_report_sha256": "ad916d7297d24f3993cb2fd55bb424793e69915c4df19d760cda6b87f5fbc5fa",
+  "failed_receipt_sha256": "803327cf450850f5bdd71318bc136068800b8544913fb78864dfdb0516ba1175",
+  "failed_attempt": {
+    "import_exit_code": 0,
+    "profile_guard_exit_code": 1,
+    "profile_guard_expected_exit_code": 2,
+    "errors": 2,
+    "cause": "The --script SceneTree driver preloaded Session/Battle/Unit before project autoload names Localize and Sfx were registered.",
+    "repair": "Use an ordinary Node main scene, defer execution from _ready, and route SceneTree APIs through get_tree(). The runner freezes and hashes the exact generated tscn.",
+    "accepted_behavior_checks": 0
+  },
+  "boundaries": {
+    "real_steam": false,
+    "production_slot_document": false,
+    "full_world_flow": false,
+    "full_30_waves": false,
+    "player_entry_enabled": false,
+    "power_loss_durability_proven": false
+  },
+  "historical_artifacts_unchanged": true
+}

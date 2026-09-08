@@ -1,3 +1,13 @@
+## 2026-09-09 续玩流程与故障恢复
+
+- `docs/CONTINUE_FLOW_20260909.md`、`qa/continue_flow_20260909/`：内部真实菜单保存退出、跨进程继续、覆盖竞争、错误操作及四语截图。
+- `docs/OWNED_SLOT_RETRY_20260909.md`、`qa/owned_slot_retry_20260909/`：同Session/原token事务重试、故障拒绝及受控复现。
+- `docs/CAMPAIGN_MISSION_STATE_20260909.md`、`qa/campaign_mission_state_20260909/`：44字段分类、Mission组件与跨进程QA；外部UI工厂尚待整合。
+- `docs/HUD_PAUSE_RESTORE_20260909.md`、`qa/hud_pause_restore_20260909/`：可信准备态暂停确认恢复与普通忙碌操作拦截。
+- `docs/CONTINUE_FLOW_TEXT_20260909.md`、`assets/localization/continue_flow.json`：30个四语源键及原词库不变核验。
+- `docs/STEAM_STATS_OBSERVER_20260909.md`、`qa/steam_stats_observer_20260909/`：独立目标只读观察器的原生/扩展证据；真实第二账号及写确认未通过。
+- 各`tools/run_*_qa.py`提供只读预检与显式`--run`；受控工程、私有profile和测试DLL位于忽略的工作目录，不作为玩家资源提交。
+
 ## 2026-09-09 Steam 正式激活与公告发布
 
 - `docs/STEAM_STATS_FIX_PUBLICATION_20260909.md`：正式 default Build25185242 / Manifest1883518997850700800、公告708907988310559239，以及后台发布和公开页面回读的验收边界。

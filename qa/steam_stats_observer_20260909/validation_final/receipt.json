@@ -1,0 +1,735 @@
+{
+  "complete": true,
+  "sources": {
+    "native/steam_stats_reader/build_profile.json": "3d38d062afbf6d75f648dec342a7e5d965bec84ebfa7b6ea63c0ac13a0dabcb8",
+    "native/steam_stats_reader/CMakeLists.txt": "250d13245b273ceb54fb2235f958ab826b5cd4bcc4141d0a4ca0d794d20c207a",
+    "native/steam_stats_reader/extension.cpp": "4540316e0f63973d2d796a9db3469826ec57e8a26475fe694807c0b325aedde6",
+    "native/steam_stats_reader/mock_steam.cpp": "334ff05c842a7b46c1fc2accd2e8c2617cc53d01823efcfced3544a431e85b5c",
+    "native/steam_stats_reader/observer.hpp": "14439fbb78372514c91c9c24a9809e341f94249f09b2d1541ca39b6578827cfb",
+    "native/steam_stats_reader/OBSERVER.md": "bb3d9f94fc9142d3eeb3306777dbf601efd2c73fc97d74b77dffd80eccb35a6c",
+    "native/steam_stats_reader/observer_test.cpp": "fa36e9915b42b13790c3faf36fa4d93d2d94331bdab0c99f2d842f39602bd021",
+    "native/steam_stats_reader/reader.hpp": "11be67d8d8cc1ef412c10073d8596f56e2b73ecdc6956f1b3ef309217f32e51c",
+    "native/steam_stats_reader/reader_test.cpp": "6e46151f60f2130d20462e6cc226201d884c083808cc13bb91d1c766979856c8",
+    "native/steam_stats_reader/README.md": "595a73f8d807fff729174046356f19a2a36de0949aec994fb3e3c0b6c7c5af45",
+    "native/steam_stats_reader/windows_api.hpp": "4b9a19a0094b4c540635cc5ac3586b869f9f0d93d818107c4171df60db7b528a",
+    "native/steam_stats_reader/third_party/gdextension_interface.h": "355ff4c6254fdd434ea16d9a8ef0f18e3f95aeb3e3f00d98db10769ece3c7fe5",
+    "scripts/steam_stats_observer.gd": "411faef60c6c0035ab495f9339903720de7d8076a198555b4f521d3c0d76e029",
+    "scripts/steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "tools/steam_stats_observer_qa.gd": "77ea0286bba6855adbf523d9548ab5f17f573ed6894aa1cecc8e7ca5d6d68a06",
+    "scripts/steam_stats_reader.gd": "23dc98449a5e71add9114483b8c29a5e423044b257281ec699bca3b34e65c6ec",
+    "tools/steam_stats_reader_qa.gd": "38298d7e2ea751449a69c44a9e42c5157aac454bb8c1026477713c6daed86214",
+    "tools/build_steam_stats_reader.py": "39a64f343b718da3c0c060350afc127f45f09acdc5141a70ad9e866fa81d6559",
+    "tools/run_steam_integration_qa.py": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+    "tools/test_steam_stats_observer_native.py": "2d3699c285c2f94ce9cd4966c97cdf1f45d488d27e681304f3f181a737b7f3d8",
+    "tools/validate_steam_stats_observer.py": "1a5e4d264dbf6c17d68a0e59ecd782c47397fe1259a71652b32b454a4416f545"
+  },
+  "vendor_before": {
+    "vendor/steam_stats_reader/.gdignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/steam_stats_reader/GODOT_CPP_LICENSE.md": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf",
+    "vendor/steam_stats_reader/provenance.json": "b47345574cfabeb30655dddf88ac7107c0f923cf917d2fbe26f9e37d64e08420",
+    "vendor/steam_stats_reader/win64/steam_stats_reader.dll": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a"
+  },
+  "commands": [
+    {
+      "name": "native_tests",
+      "args": [
+        "<PYTHON_ROOT>\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "<WORKSPACE>\\tools\\test_steam_stats_observer_native.py"
+      ],
+      "exit_code": 0,
+      "log_sha256": "72aa67027e3e31fe928fb72afbdca6a03312abcab66afce4dea8cd121bd3c1d6"
+    },
+    {
+      "name": "facade_import",
+      "args": [
+        "<USERPROFILE>\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--path",
+        "<ISOLATED_ROOT>\\lsh_observer_build\\observer_20260909_032214_59eb343a\\facade",
+        "--editor",
+        "--import"
+      ],
+      "exit_code": 0,
+      "log_sha256": "5152971a898a40509281d3884176a8009a0aa0fd9834c8fbdcb1949053435dbd"
+    },
+    {
+      "name": "facade_test",
+      "args": [
+        "<USERPROFILE>\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--path",
+        "<ISOLATED_ROOT>\\lsh_observer_build\\observer_20260909_032214_59eb343a\\facade",
+        "--script",
+        "res://tools/steam_stats_observer_qa.gd"
+      ],
+      "exit_code": 0,
+      "log_sha256": "68cde0be6d6d9ecb7d27b6f88a03e6f78398c0c47dca3c21e0b6d22938b0ff26"
+    },
+    {
+      "name": "absent_import",
+      "args": [
+        "<USERPROFILE>\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--path",
+        "<ISOLATED_ROOT>\\lsh_observer_build\\observer_20260909_032214_59eb343a\\absent",
+        "--editor",
+        "--import"
+      ],
+      "exit_code": 0,
+      "log_sha256": "5152971a898a40509281d3884176a8009a0aa0fd9834c8fbdcb1949053435dbd"
+    },
+    {
+      "name": "absent_test",
+      "args": [
+        "<USERPROFILE>\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--path",
+        "<ISOLATED_ROOT>\\lsh_observer_build\\observer_20260909_032214_59eb343a\\absent",
+        "--script",
+        "res://tools/steam_stats_observer_qa.gd"
+      ],
+      "exit_code": 0,
+      "log_sha256": "b1ae908603de26985aa55239a3750bdbae25661b6455e9c53186b5fe686cf5c2"
+    },
+    {
+      "name": "mock_import",
+      "args": [
+        "<USERPROFILE>\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--path",
+        "<ISOLATED_ROOT>\\lsh_observer_build\\observer_20260909_032214_59eb343a\\mock",
+        "--editor",
+        "--import"
+      ],
+      "exit_code": 0,
+      "log_sha256": "5152971a898a40509281d3884176a8009a0aa0fd9834c8fbdcb1949053435dbd"
+    },
+    {
+      "name": "mock_test",
+      "args": [
+        "<USERPROFILE>\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--path",
+        "<ISOLATED_ROOT>\\lsh_observer_build\\observer_20260909_032214_59eb343a\\mock",
+        "--script",
+        "res://tools/steam_stats_observer_qa.gd"
+      ],
+      "exit_code": 0,
+      "log_sha256": "f0b1efab33101464241202c35f01e91ee4b4574177c3358387296a687135437a"
+    }
+  ],
+  "reports": {
+    "facade": {
+      "checks": [
+        {
+          "label": "old native object returns explicit unsupported",
+          "passed": true
+        },
+        {
+          "label": "old query never called as cache fallback",
+          "passed": true
+        },
+        {
+          "label": "self observation rejected",
+          "passed": true
+        },
+        {
+          "label": "bad target syntax rejected: ",
+          "passed": true
+        },
+        {
+          "label": "bad target syntax rejected: 0",
+          "passed": true
+        },
+        {
+          "label": "bad target syntax rejected: 076561198000000002",
+          "passed": true
+        },
+        {
+          "label": "bad target syntax rejected: 18446744073709551616",
+          "passed": true
+        },
+        {
+          "label": "bad target syntax rejected: 76561198000000002 extra",
+          "passed": true
+        },
+        {
+          "label": "invalid attachment never calls native",
+          "passed": true
+        },
+        {
+          "label": "malformed native attach is rejected: type",
+          "passed": true
+        },
+        {
+          "label": "malformed native attach is rejected: json",
+          "passed": true
+        },
+        {
+          "label": "malformed native attach is rejected: ok",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "exact unsigned handle preserved",
+          "passed": true
+        },
+        {
+          "label": "only one read outstanding",
+          "passed": true
+        },
+        {
+          "label": "wrong handle cannot poll native",
+          "passed": true
+        },
+        {
+          "label": "pending exposes no snapshot",
+          "passed": true
+        },
+        {
+          "label": "complete four stats and thirty achievements",
+          "passed": true
+        },
+        {
+          "label": "valid zero and false preserved",
+          "passed": true
+        },
+        {
+          "label": "snapshot separates both accounts",
+          "passed": true
+        },
+        {
+          "label": "snapshot explicitly cannot confirm writes",
+          "passed": true
+        },
+        {
+          "label": "duplicate completion rejected",
+          "passed": true
+        },
+        {
+          "label": "same instance supports next exact handle",
+          "passed": true
+        },
+        {
+          "label": "late previous handle cannot complete next read",
+          "passed": true
+        },
+        {
+          "label": "next read completes",
+          "passed": true
+        },
+        {
+          "label": "facade never asks for current-user cache or writes",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed completed envelope rejected: observer",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed completed envelope rejected: target",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed completed envelope rejected: app",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed completed envelope rejected: protocol",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed completed envelope rejected: source",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed completed envelope rejected: handle",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed getter envelope rejects entire snapshot: observer",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed getter envelope rejects entire snapshot: target",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed getter envelope rejects entire snapshot: app",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed getter envelope rejects entire snapshot: protocol",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed getter envelope rejects entire snapshot: source",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "mixed getter envelope rejects entire snapshot: handle",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "getter failure rejects whole snapshot: 1",
+          "passed": true
+        },
+        {
+          "label": "failed snapshot facade cannot be reused",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "getter failure rejects whole snapshot: 4",
+          "passed": true
+        },
+        {
+          "label": "failed snapshot facade cannot be reused",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "getter failure rejects whole snapshot: 5",
+          "passed": true
+        },
+        {
+          "label": "failed snapshot facade cannot be reused",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "getter failure rejects whole snapshot: 34",
+          "passed": true
+        },
+        {
+          "label": "failed snapshot facade cannot be reused",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "invalid stat type/range rejected: -1",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "invalid stat type/range rejected: 2147483648",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "invalid stat type/range rejected: 1.5",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "invalid stat type/range rejected: true",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "invalid stat type/range rejected: 0",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "int32 max and achieved true preserved",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "numeric false not accepted as achievement boolean",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "native failure is preserved: READ_TIMEOUT",
+          "passed": true
+        },
+        {
+          "label": "late success cannot resurrect failed facade",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "native failure is preserved: OBSERVER_CHANGED",
+          "passed": true
+        },
+        {
+          "label": "late success cannot resurrect failed facade",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "native failure is preserved: RESULT_IDENTITY_MISMATCH",
+          "passed": true
+        },
+        {
+          "label": "late success cannot resurrect failed facade",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "native failure is preserved: READ_RESULT_FAILED",
+          "passed": true
+        },
+        {
+          "label": "late success cannot resurrect failed facade",
+          "passed": true
+        },
+        {
+          "label": "attach separate synthetic observer and target",
+          "passed": true
+        },
+        {
+          "label": "synthetic request accepted",
+          "passed": true
+        },
+        {
+          "label": "native failure is preserved: RESULT_UNAVAILABLE",
+          "passed": true
+        },
+        {
+          "label": "late success cannot resurrect failed facade",
+          "passed": true
+        }
+      ],
+      "live_steam_tested": false,
+      "native_mode": false,
+      "passed": true,
+      "write_confirmation_tested": false
+    },
+    "absent": {
+      "checks": [
+        {
+          "label": "native observer class registered",
+          "passed": true
+        },
+        {
+          "label": "absent Steam fails without initialization",
+          "passed": true
+        }
+      ],
+      "live_steam_tested": false,
+      "native_mode": true,
+      "passed": true,
+      "write_confirmation_tested": false
+    },
+    "mock": {
+      "checks": [
+        {
+          "label": "native observer class registered",
+          "passed": true
+        },
+        {
+          "label": "compiled class binds independent target",
+          "passed": true
+        },
+        {
+          "label": "native exact read handle",
+          "passed": true
+        },
+        {
+          "label": "native read pending before callback",
+          "passed": true
+        },
+        {
+          "label": "compiled independent target ABI result accepted",
+          "passed": true
+        },
+        {
+          "label": "compiled target getters complete",
+          "passed": true
+        },
+        {
+          "label": "compiled snapshot cannot confirm writes",
+          "passed": true
+        },
+        {
+          "label": "native duplicate rejected",
+          "passed": true
+        },
+        {
+          "label": "native second request accepted",
+          "passed": true
+        },
+        {
+          "label": "native old callback cannot finish next request",
+          "passed": true
+        },
+        {
+          "label": "native second read completes",
+          "passed": true
+        },
+        {
+          "label": "native third request accepted",
+          "passed": true
+        },
+        {
+          "label": "native callback for observer rejected instead of target",
+          "passed": true
+        },
+        {
+          "label": "native late correction cannot resurrect closed facade",
+          "passed": true
+        }
+      ],
+      "live_steam_tested": false,
+      "native_mode": true,
+      "passed": true,
+      "write_confirmation_tested": false
+    }
+  },
+  "live_steam_tested": false,
+  "write_confirmation_tested": false,
+  "vendor_replaced": false,
+  "godot_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "native_tests": {
+    "receipt": ".godot\\steam_observer_native\\f8fcccaf7d2d\\receipt.json",
+    "receipt_sha256": "d987745c8596e5c2ee849ba47036c18379ea22e14e2d5cb04a0bbf29dc13aaaa",
+    "reports": {
+      "reader_test": {
+        "passed": true,
+        "checks": 61,
+        "exe_sha256": "951a8a681e121cb71af4ff90bc4c41a7aab9be75e57c7fb630684792ca37516b"
+      },
+      "observer_test": {
+        "passed": true,
+        "checks": 184,
+        "live_steam_tested": false,
+        "exe_sha256": "1c9c590d8a962849b32a5a0a724dc688877aa9e2bf25971e07f8752e54cb189d"
+      }
+    }
+  },
+  "reader_builder": {
+    "receipt": ".godot\\steam_reader_build\\58e3895e2199\\receipt.json",
+    "receipt_sha256": "34d826210fe171a8083272699bbae2545a350c10aae895322901953917ed2e7b",
+    "dll_sha256": "b62f1371d212b95f27b7e1257228ff6f2eb3066d4b165ea02591f944c98bc7a8",
+    "mock_sha256": "7b8ebf65636c667f0b0d03f6c47ca97344b6b23222789491a8cb3f7a6cac18ea",
+    "mock_exports": [
+      "SteamAPI_GetHSteamPipe",
+      "SteamAPI_GetHSteamUser",
+      "SteamAPI_ISteamUserStats_GetAchievement",
+      "SteamAPI_ISteamUserStats_GetStatInt32",
+      "SteamAPI_ISteamUserStats_GetUserAchievement",
+      "SteamAPI_ISteamUserStats_GetUserStatInt32",
+      "SteamAPI_ISteamUserStats_RequestUserStats",
+      "SteamAPI_ISteamUser_GetSteamID",
+      "SteamAPI_ISteamUtils_GetAPICallResult",
+      "SteamAPI_ISteamUtils_GetAppID",
+      "SteamAPI_ISteamUtils_IsAPICallCompleted",
+      "SteamAPI_SteamUserStats_v013",
+      "SteamAPI_SteamUser_v023",
+      "SteamAPI_SteamUtils_v011",
+      "lsh_mock_init"
+    ]
+  },
+  "lock_released": true
+}
