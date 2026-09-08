@@ -1,3 +1,7 @@
+## 2026-09-08 四语公告与商店语言表入口
+
+四语[公开更新公告](https://store.steampowered.com/news/app/5088120/view/708907988310559012)已发布，关联当前 default Build25182453；商店公开语言表已标注简体中文、英语、日语、繁体中文的界面支持，音频与字幕未标注。语言仍从主菜单左上角或设置顶部切换。本轮仅发布平台内容，没有改运行代码、EXE 或启动方式，也未重跑 Godot。文案、图片来源、四语公开回读及封面回退边界见[公告维护记录](STEAM_LOCALIZATION_ANNOUNCEMENT_20260908.md)与[QA](../qa/steam_localization_announcement_20260908/README.md)。客户端下载和玩家推送尚未验收；下方条目为历史演进。
+
 ## 2026-09-08 Steam 四语打包入口
 
 Steam 候选从本轮成功的原生 QA 快照复制，必须保留 catalog、Noto CJK 字体及 OFL。当前 Windows 正式版 default 已更新为 Build25182453，Manifest4066863387208539897；用户手机确认后，服务器清单、canonical分支及发布历史已核实。主菜单左上角或设置顶部可选择四语。构建命令与收据见[四语 Steam 更新](STEAM_LOCALIZATION_UPDATE_20260908.md)，客户端下载尚未验收。

@@ -1,3 +1,11 @@
+## 2026-09-08 四语公告与商店语言表
+
+- `marketing/steam_localization_announcement_20260908/copy.json`：四语标题、副标题、摘要、正文与图片占位符。
+- `marketing/steam_localization_announcement_20260908/rendered_copy.json`：替换为 Steam 图片引用的四语正文。
+- `marketing/steam_localization_announcement_20260908/images.json`：原图来源、尺寸、哈希、上传引用与封面记录；不复制或修改图片像素。
+- `docs/STEAM_LOCALIZATION_ANNOUNCEMENT_20260908.md`：已发布公告 708907988310559012、商店语言表与后续维护边界。
+- `qa/steam_localization_announcement_20260908/`：公开文本/图片、商店语言表的 `publication_receipt.json`、`validation.json` 及说明；`.gdignore` 阻止 Godot 扫描。本轮未变更运行代码或 EXE。
+
 ## 2026-09-08 Steam 四语交付
 
 - `docs/STEAM_LOCALIZATION_UPDATE_20260908.md`、`qa/steam_localization_update_20260908/`：四语与校订内容的 Windows 更新记录。
