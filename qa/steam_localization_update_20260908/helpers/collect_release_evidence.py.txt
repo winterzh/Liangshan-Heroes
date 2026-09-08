@@ -1,0 +1,322 @@
+"""Collect only reviewed release evidence; never run a game or publish a build.
+
+Usage (from the project root):
+  py -3.14 -X utf8 -B .godot/localization_release_20260908/collect_release_evidence.py \
+    --qa-run .godot/steam_integration_qa/<successful-run> \
+    --candidate-run .godot/steam_candidates/<successful-run> \
+    --smoke-run .godot/localization_release_20260908/<successful-smoke>
+
+An extra --private-profile-root may be repeated if a smoke run used a different
+external profile parent. Native/candidate profile parents are inferred from
+their receipts, without opening those directories. Existing identical evidence
+is accepted; different destination bytes are never overwritten.
+"""
+from pathlib import Path
+import argparse
+import hashlib
+import json
+import os
+import re
+import stat
+import zipfile
+
+
+ROOT = Path(__file__).resolve().parents[2]
+DESTINATION = ROOT / "qa/steam_localization_update_20260908"
+NATIVE_FILES = (
+    "receipt.json", "report.json", "import.log", "catalog.log", "contracts.log",
+    "achievements.png", "defense_editor.png", "more.png", "publish.png",
+    "scenario_editor.png", "workshop.png",
+)
+EXPORT_FILES = (
+    "receipt.json", "verification_report.json", "package_report.json",
+    "content_identity_generation.json", "import.log", "export.log",
+    "package.log", "exe_smoke.log",
+)
+IDENTITY_DIRECTORIES = ("source_identity_probe", "content_identity_probe")
+IDENTITY_FILES = ("manifest.json", "report.json", "report.log", "process_receipt.json")
+SMOKE_CASES = tuple(f"level{i}" for i in range(1, 9)) + ("defense", "cleanup", "main_menu")
+PACKAGE_MEMBERS = (
+    "LiangshanHeroes.exe", "libgodotsteam.windows.template_release.x86_64.dll",
+    "steam_api64.dll", "GODOTSTEAM_LICENSE.txt",
+)
+ARCHIVE_NAME = "LiangshanHeroes_Steam_candidate.zip"
+MAX_EVIDENCE_BYTES = 16 * 1024 * 1024
+
+
+def need(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+
+def no_links(path):
+    for part in (path, *path.parents):
+        if part.exists() or part.is_symlink():
+            info = part.lstat()
+            need(not part.is_symlink() and not getattr(info, "st_file_attributes", 0) & 0x400,
+                 "Link/reparse paths are not accepted")
+
+
+def checked_directory(value, parent):
+    path = Path(value).absolute()
+    no_links(path)
+    path = path.resolve()
+    need(path.is_dir() and path.is_relative_to(parent) and path != parent,
+         "Input must be an existing run directory under " + parent.relative_to(ROOT).as_posix())
+    return path
+
+
+def sha256(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def hashes(path):
+    no_links(path)
+    need(path.is_file(), "Required package member is missing")
+    before = path.stat()
+    digest256, digest1 = hashlib.sha256(), hashlib.sha1()
+    count = 0
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            count += len(block)
+            digest256.update(block)
+            digest1.update(block)
+    after = path.stat()
+    need((before.st_size, before.st_mtime_ns) == (after.st_size, after.st_mtime_ns)
+         and count == before.st_size, "Package changed while being read")
+    return {"bytes": count, "sha256": digest256.hexdigest(), "sha1": digest1.hexdigest()}
+
+
+def json_bytes(value):
+    return (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+
+
+class Evidence:
+    def __init__(self):
+        self.originals = {}
+
+    def raw(self, path):
+        if path not in self.originals:
+            no_links(path)
+            need(path.is_file() and path.stat().st_size <= MAX_EVIDENCE_BYTES,
+                 "Missing or oversized allowlisted evidence: " + path.relative_to(ROOT).as_posix())
+            self.originals[path] = path.read_bytes()
+        return self.originals[path]
+
+    def document(self, path):
+        value = json.loads(self.raw(path).decode("utf-8-sig"))
+        need(isinstance(value, dict), "Expected a JSON report object")
+        return value
+
+
+def successful_checks(report, label):
+    need(report.get("passed") is True, label + " did not pass")
+    checks = report.get("checks", [])
+    need(isinstance(checks, list) and checks and all(row.get("passed") is True for row in checks),
+         label + " has failed or absent checks")
+
+
+def redactor(native, candidate, extra_roots):
+    replacements = [(str(ROOT), "<PROJECT_ROOT>")]
+    private_roots = set(str(Path(value).absolute()) for value in extra_roots)
+    for receipt in (native, candidate):
+        profile = receipt.get("private_profile")
+        need(isinstance(profile, str) and Path(profile).is_absolute(), "Private profile receipt is missing")
+        path = Path(profile)
+        if not path.is_relative_to(ROOT):
+            private_roots.add(str(path.parent))
+    for value in private_roots:
+        path = Path(value)
+        need(path.is_absolute() and len(path.parts) >= 3 and not ROOT.is_relative_to(path),
+             "Private profile replacement must name a specific external parent")
+        replacements.append((str(path), "<PRIVATE_PROFILE_ROOT>"))
+    user_root = os.environ["USERPROFILE"]
+    replacements.append((user_root, "<USER_ROOT>"))
+    variants = {}
+    for source, replacement in replacements:
+        for spelling in {source, source.replace("\\", "/")}:
+            for form in {spelling, json.dumps(spelling, ensure_ascii=False)[1:-1],
+                         json.dumps(spelling, ensure_ascii=True)[1:-1]}:
+                variants[form] = replacement
+    substitutions = [(re.compile(re.escape(source), re.IGNORECASE), value)
+                     for source, value in sorted(variants.items(), key=lambda item: -len(item[0]))]
+
+    def text(value):
+        for pattern, replacement in substitutions:
+            value = pattern.sub(lambda match: replacement, value)
+        # Also redact a C-user root appearing in a recorded source/tool path.
+        return re.sub(r'C:(?:\\+|/)Users(?:\\+|/)[^\\/\s"<>:]+',
+                      "<USER_ROOT>", value, flags=re.IGNORECASE)
+
+    def structured(value):
+        if isinstance(value, dict):
+            pairs = [(text(key), structured(item)) for key, item in value.items()]
+            need(len({key for key, _ in pairs}) == len(pairs), "Redaction would merge JSON keys")
+            return dict(pairs)
+        if isinstance(value, list):
+            return [structured(item) for item in value]
+        return text(value) if isinstance(value, str) else value
+
+    return text, structured
+
+
+def verified_delivery(candidate_path, proof, smoke):
+    archive_record = proof.get("archive", {})
+    need(archive_record.get("passed") is True and archive_record.get("path") == ARCHIVE_NAME,
+         "Successful candidate archive receipt is required")
+    archive = candidate_path / ARCHIVE_NAME
+    archive_hashes = hashes(archive)
+    need(all(archive_hashes[key] == archive_record.get(key) for key in ("bytes", "sha256")),
+         "Candidate ZIP differs from its receipt")
+    recorded = archive_record.get("members", [])
+    need(len(recorded) == 4 and {row.get("path") for row in recorded} == set(PACKAGE_MEMBERS),
+         "Candidate receipt must list exactly the four approved package members")
+    recorded = {row["path"]: row for row in recorded}
+    outputs = proof.get("outputs", [])
+    need(len(outputs) == 3 and {row.get("path") for row in outputs} == set(PACKAGE_MEMBERS[:3]),
+         "Candidate output receipt must list the EXE and two release DLLs")
+    outputs = {row["path"]: row for row in outputs}
+    rows = []
+    with zipfile.ZipFile(archive) as package:
+        infos = package.infolist()
+        need(len(infos) == 4 and {info.filename for info in infos} == set(PACKAGE_MEMBERS)
+             and all(not info.is_dir() and not (info.flag_bits & 1)
+                     and not stat.S_ISLNK(info.external_attr >> 16) for info in infos),
+             "ZIP must contain exactly four regular, unencrypted top-level members")
+        need(package.testzip() is None, "ZIP CRC verification failed")
+        for name in PACKAGE_MEMBERS:
+            digest256, digest1, count = hashlib.sha256(), hashlib.sha1(), 0
+            with package.open(name) as handle:
+                for block in iter(lambda: handle.read(1024 * 1024), b""):
+                    count += len(block)
+                    digest256.update(block)
+                    digest1.update(block)
+            row = {"path": name, "bytes": count, "sha256": digest256.hexdigest(), "sha1": digest1.hexdigest()}
+            need(package.getinfo(name).file_size == count, "ZIP member size differs")
+            need(all(row[key] == recorded[name].get(key) for key in ("bytes", "sha256")),
+                 "ZIP member differs from candidate archive receipt: " + name)
+            member_path = (ROOT / "vendor/godotsteam/license.md" if name == "GODOTSTEAM_LICENSE.txt"
+                           else candidate_path / "windows" / name)
+            actual = hashes(member_path)
+            need(all(row[key] == actual[key] for key in ("bytes", "sha256", "sha1")),
+                 "ZIP member differs from the verified disk artifact: " + name)
+            if name in outputs:
+                need(all(row[key] == outputs[name].get(key) for key in ("bytes", "sha256")),
+                     "Disk artifact differs from candidate output receipt: " + name)
+            rows.append(row)
+    need(smoke.get("exe_sha256") == rows[0]["sha256"], "Smoke tested a different EXE")
+    delivery = {"source_head": proof["source_head"],
+                "archive": {"passed": True, "path": ARCHIVE_NAME,
+                            "bytes": archive_hashes["bytes"], "sha256": archive_hashes["sha256"],
+                            "crc_checked": True}, "members": rows}
+    return archive, archive_hashes, delivery
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--qa-run", required=True, type=Path)
+    parser.add_argument("--candidate-run", required=True, type=Path)
+    parser.add_argument("--smoke-run", required=True, type=Path)
+    parser.add_argument("--private-profile-root", action="append", default=[], type=Path)
+    args = parser.parse_args()
+    native_path = checked_directory(args.qa_run, ROOT / ".godot/steam_integration_qa")
+    candidate_path = checked_directory(args.candidate_run, ROOT / ".godot/steam_candidates")
+    smoke_path = checked_directory(args.smoke_run, ROOT / ".godot/localization_release_20260908")
+    no_links(DESTINATION)
+    evidence = Evidence()
+    native = evidence.document(native_path / "receipt.json")
+    proof = evidence.document(candidate_path / "receipt.json")
+    smoke = evidence.document(smoke_path / "receipt.json")
+    need(native.get("complete") is True and native.get("native") is True and native.get("visual") is True,
+         "A complete native visual QA receipt is required")
+    need(proof.get("complete") is True and proof.get("verification", {}).get("complete") is True,
+         "A complete, verified candidate is required")
+    need(smoke.get("complete") is True, "A complete smoke receipt is required")
+    need(native.get("source_head") == proof.get("source_head") == smoke.get("source_head"),
+         "QA/candidate/smoke source snapshots differ")
+    need(proof.get("qa_receipt_sha256") == sha256(evidence.raw(native_path / "receipt.json")),
+         "Candidate does not reference this exact native QA receipt")
+    need((ROOT / proof["qa_run"]).resolve() == native_path, "Candidate references another QA directory")
+    for flag in ("source_unchanged", "players_unchanged", "exe_unchanged", "child_exit_confirmed", "lock_released"):
+        need(smoke.get(flag) is True, "Smoke receipt did not confirm " + flag)
+    cases = smoke.get("cases", [])
+    need(len(cases) == len(SMOKE_CASES) and {row.get("name") for row in cases} == set(SMOKE_CASES),
+         "The full eleven-case smoke run is required")
+    need(all(row.get("passed") is True and row.get("exit_code") == 0
+             and row.get("child_exit_confirmed") is True and not row.get("errors") for row in cases),
+         "Smoke has a failed or unfinished case")
+    native_report = evidence.document(native_path / "report.json")
+    package_report = evidence.document(candidate_path / "package_report.json")
+    successful_checks(native_report, "Native QA")
+    successful_checks(package_report, "Steam package")
+    need(native.get("checks") == len(native_report["checks"]), "Native check count differs")
+    verification = evidence.document(candidate_path / "verification_report.json")
+    need(verification.get("complete") is True and verification.get("checks") == len(package_report["checks"])
+         and proof.get("checks") == len(package_report["checks"]), "Package verification/count differs")
+    localization = package_report.get("localization", {})
+    need(localization.get("catalog_sha256") == proof.get("localization_catalog_sha256")
+         == localization.get("expected_catalog_sha256") and bool(localization.get("catalog_sha256")),
+         "Packed catalog hash evidence is absent or inconsistent")
+    locales = localization.get("locales", [])
+    need(len(locales) == 4 and {row.get("locale") for row in locales} == {"zh_CN", "zh_TW", "en", "ja"}
+         and all(row.get("mismatch_count") == 0 for row in locales), "Four-language package checks are incomplete")
+    need(localization.get("biographies") == 108 and localization.get("chapter_references") == 108,
+         "Packed original-text data checks are incomplete")
+    for directory in IDENTITY_DIRECTORIES:
+        process = evidence.document(candidate_path / directory / "process_receipt.json")
+        report = evidence.document(candidate_path / directory / "report.json")
+        need(process.get("complete") is True and process.get("child_exit_confirmed") is True
+             and process.get("exit_code") == 0, "Identity probe did not finish successfully")
+        successful_checks(report, directory)
+    archive, archive_hashes, delivery = verified_delivery(candidate_path, proof, smoke)
+    redact_text, redact_object = redactor(native, proof, args.private_profile_root)
+    selected = [(native_path / name, "native/" + name) for name in NATIVE_FILES]
+    selected += [(candidate_path / name, "export/" + name) for name in EXPORT_FILES]
+    selected += [(candidate_path / directory / name, "export/" + directory + "/" + name)
+                 for directory in IDENTITY_DIRECTORIES for name in IDENTITY_FILES]
+    selected += [(smoke_path / "receipt.json", "smoke/receipt.json")]
+    selected += [(smoke_path / (case + ending), "smoke/" + case + ending)
+                 for case in SMOKE_CASES for ending in (".console.log", ".godot.log")]
+    pending, mapping = {}, []
+    for source, relative in selected:
+        raw = evidence.raw(source)
+        if source.suffix == ".png":
+            need(raw.startswith(b"\x89PNG\r\n\x1a\n"), "Invalid allowlisted PNG")
+            archived = raw
+        elif source.suffix == ".json":
+            archived = json_bytes(redact_object(json.loads(raw.decode("utf-8-sig"))))
+        else:
+            archived = redact_text(raw.decode("utf-8-sig")).encode("utf-8")
+        pending[relative] = archived
+        mapping.append({"source": source.relative_to(ROOT).as_posix(), "archive": relative,
+                        "original_sha256": sha256(raw), "archive_sha256": sha256(archived),
+                        "original_bytes": len(raw), "bytes": len(archived)})
+    delivery_raw = json_bytes(delivery)
+    pending["candidate_delivery.json"] = delivery_raw
+    mapping.append({"source": archive.relative_to(ROOT).as_posix(), "archive": "candidate_delivery.json",
+                    "kind": "derived_from_verified_zip", "original_sha256": archive_hashes["sha256"],
+                    "archive_sha256": sha256(delivery_raw), "original_bytes": archive_hashes["bytes"],
+                    "bytes": len(delivery_raw)})
+    pending["source_mapping.json"] = json_bytes(mapping)
+    # Validate every destination and collision before writing the first file.
+    for relative, raw in pending.items():
+        target = DESTINATION / relative
+        no_links(target)
+        need(target.is_relative_to(DESTINATION), "Output escaped the fixed QA destination")
+        if target.exists():
+            need(target.is_file() and target.read_bytes() == raw,
+                 "Refusing to overwrite different evidence: " + relative)
+    for relative, raw in pending.items():
+        target = DESTINATION / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if not target.exists():
+            with target.open("xb") as output:
+                output.write(raw)
+        need(sha256(target.read_bytes()) == sha256(raw), "Archived evidence verification failed")
+    print(json.dumps({"complete": True, "destination": DESTINATION.relative_to(ROOT).as_posix(),
+                      "files": len(pending), "mapped_sources": len(mapping),
+                      "zip_sha256": archive_hashes["sha256"], "source_head": proof["source_head"]}))
+
+
+if __name__ == "__main__":
+    main()
