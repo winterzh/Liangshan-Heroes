@@ -1,0 +1,153 @@
+extends RefCounted
+## Trusted environmental consumers. Final gameplay/cursor/Steam ownership is external.
+const B := preload("res://scripts/battle.gd")
+const M := preload("res://scripts/game_map.gd")
+const Codec := preload("res://scripts/run_state_value_codec.gd")
+const Fog := preload("res://scripts/run_fog_state.gd")
+const Display := preload("res://scripts/run_world_display_state.gd")
+const SCHEMA := "battle_environment_v1"
+const ROLES := ["world", "overlay", "camera", "atmosphere", "motes", "hud"]
+const RECT_FIXED := ["color", "mouse_filter", "focus_mode", "anchor_left", "anchor_top", "anchor_right", "anchor_bottom", "offset_left", "offset_top", "offset_right", "offset_bottom", "rotation", "scale", "pivot_offset", "custom_minimum_size", "grow_horizontal", "grow_vertical", "visible", "modulate", "self_modulate", "z_index", "z_as_relative", "show_behind_parent", "top_level", "light_mask", "visibility_layer", "texture_filter", "texture_repeat", "use_parent_material", "clip_children", "clip_contents", "layout_direction"]
+const UNIFORMS := ["vignette", "warmth", "contrast", "saturation", "screen_tex"]
+var _codec: Variant = Codec.new()
+var _node: Variant = Fog.new({}, B, M, Codec, B.FogLayer)
+var _owner: Variant = null
+var _plan: Dictionary = {}
+var _record: Dictionary = {}
+var _active := false
+
+func _bad(code: String) -> Dictionary:
+	return {"ok": false, "code": code}
+
+func _fields(value: Variant, keys: Array) -> bool:
+	return typeof(value) == TYPE_DICTIONARY and value.size() == keys.size() and value.has_all(keys)
+
+func _environment_safe(node: Node2D) -> bool:
+	if node.is_queued_for_deletion() or node.material != null or not node.get_meta_list().is_empty(): return false
+	for info: Dictionary in node.get_signal_list():
+		for connection: Dictionary in node.get_signal_connection_list(info.name):
+			var call: Callable = connection.callable
+			# Engine-managed resizing of the one trusted ColorRect child.
+			if info.name == &"item_rect_changed" and node.get_script() == B.AtmosphereLayer and call.get_object() == node.rect and call.get_method() == "Control::_size_changed" and call.get_bound_arguments().is_empty() and connection.flags == 0: continue
+			if info.name != &"child_order_changed" or connection.flags != Object.CONNECT_REFERENCE_COUNTED or not node.is_inside_tree() or call.get_object() != node.get_viewport(): return false
+			if call.get_method() == "Viewport::canvas_parent_mark_dirty" and call.get_bound_arguments() == [node]: continue
+			if call.get_method() == "Viewport::gui_set_root_order_dirty" and call.get_bound_arguments().is_empty(): continue
+			return false
+	return true
+
+func _rect_fixed(layer: Variant) -> bool:
+	if layer.get_child_count(true) != 1 or layer.get_child(0) != layer.rect: return false
+	var rect: Variant = layer.rect
+	if rect.get_script() != null or rect.is_queued_for_deletion() or rect.get_child_count(true) != 0 or not rect.get_meta_list().is_empty() or rect.process_mode != Node.PROCESS_MODE_INHERIT or rect.is_blocking_signals(): return false
+	if not rect.material is ShaderMaterial or rect.material.get_script() != null or rect.material.shader == null or rect.material.shader.get_script() != null: return false
+	for info: Dictionary in rect.get_signal_list():
+		if not rect.get_signal_connection_list(info.name).is_empty(): return false
+	var template := B.AtmosphereLayer.new()
+	var valid: bool = rect.material.shader.code == template.rect.material.shader.code
+	for key: String in RECT_FIXED: valid = valid and rect.get(key) == template.rect.get(key)
+	for key: String in UNIFORMS: valid = valid and rect.material.get_shader_parameter(key) == template.rect.material.get_shader_parameter(key)
+	var shader_phase: Variant = rect.material.get_shader_parameter("phase")
+	valid = valid and typeof(shader_phase) == TYPE_FLOAT and is_equal_approx(shader_phase, layer.phase)
+	template.free()
+	return valid
+
+func capture(owner: Variant) -> Dictionary:
+	if not is_instance_valid(owner) or owner.get_script() != B or not owner.is_inside_tree() or not owner.get_tree().paused or owner._save_barrier == null or owner._save_barrier.state != owner._save_barrier.State.HELD: return _bad("ENVIRONMENT_HELD_REQUIRED")
+	var nodes: Dictionary = {}; var order: Array = []
+	for child: Node in owner.get_children(true):
+		# The actual clock barrier is reconstructed by final installation, not a display.
+		if child == owner._save_barrier: continue
+		var role := ""
+		if child == owner.world: role = "world"
+		elif child == owner.camera: role = "camera"
+		elif child == owner.hud: role = "hud"
+		elif child == owner.overlay and child.get_script() == B.Overlay and child.b == owner: role = "overlay"
+		elif child.get_script() == B.AmbientMotes: role = "motes"
+		elif child.get_script() == B.AtmosphereLayer: role = "atmosphere"
+		if role.is_empty() or role in order: return _bad("ENVIRONMENT_ROOT_CHILD")
+		order.append(role)
+		if role not in ["overlay", "motes", "atmosphere"]: continue
+		if not _environment_safe(child): return _bad("ENVIRONMENT_NODE_" + role)
+		if role == "atmosphere":
+			if not _rect_fixed(child): return _bad("ENVIRONMENT_SHADER_OR_RECT")
+		elif child.get_child_count(true) != 0: return _bad("ENVIRONMENT_CHILD")
+		nodes[role] = {"node": _node._node_values(child), "phase": 0.0 if role == "overlay" else child.phase}
+	var raw := {"schema": SCHEMA, "order": order, "nodes": nodes}
+	var checked: Dictionary = validate(raw)
+	if not checked.ok: return checked
+	return _codec.encode(raw)
+
+func validate(raw: Variant) -> Dictionary:
+	if not _fields(raw, ["schema", "order", "nodes"]) or raw.schema != SCHEMA or typeof(raw.order) != TYPE_ARRAY or typeof(raw.nodes) != TYPE_DICTIONARY: return _bad("ENVIRONMENT_RECORD")
+	if not _fields(raw.nodes, ["overlay", "motes"] + (["atmosphere"] if raw.nodes.has("atmosphere") else [])): return _bad("ENVIRONMENT_ROLES")
+	var required: Array = ["world", "overlay", "camera", "motes", "hud"] + (["atmosphere"] if raw.nodes.has("atmosphere") else [])
+	if raw.order.size() != required.size(): return _bad("ENVIRONMENT_ORDER")
+	var seen: Array = []
+	for role: Variant in raw.order:
+		if typeof(role) != TYPE_STRING or role not in required or role in seen: return _bad("ENVIRONMENT_ORDER")
+		seen.append(role)
+	for role: String in raw.nodes:
+		var item: Variant = raw.nodes[role]
+		if not _fields(item, ["node", "phase"]) or not _node._node_valid(item.node): return _bad("ENVIRONMENT_NODE_RECORD")
+		if typeof(item.phase) != TYPE_FLOAT or not is_finite(item.phase) or item.phase < 0.0 or (role == "overlay" and item.phase != 0.0): return _bad("ENVIRONMENT_PHASE")
+		# Pausing must actually freeze these scene-local consumers.
+		if item.node.activation.mode not in [Node.PROCESS_MODE_INHERIT, Node.PROCESS_MODE_PAUSABLE]: return _bad("ENVIRONMENT_PAUSE_MODE")
+	return {"ok": true}
+
+func bind(owner: Variant, wire: Variant) -> Dictionary:
+	if _owner != null or not is_instance_valid(owner) or owner.get_script() != B or owner.is_inside_tree() or owner.process_mode != Node.PROCESS_MODE_DISABLED or owner.overlay != null: return _bad("ENVIRONMENT_BIND_PHASE")
+	var decoded: Dictionary = _codec.decode(wire)
+	if not decoded.ok: return decoded
+	var checked: Dictionary = validate(decoded.value)
+	if not checked.ok: return checked
+	var raw: Dictionary = decoded.value
+	var roles := {"world": owner.world, "camera": owner.camera, "hud": owner.hud}
+	if owner.get_child_count(true) != roles.size(): return _bad("ENVIRONMENT_FRESH_ROOT")
+	for node: Variant in roles.values():
+		if not is_instance_valid(node) or node.get_parent() != owner: return _bad("ENVIRONMENT_FRESH_ROOT")
+	for role: String in raw.nodes:
+		var node: Variant
+		if role == "overlay": node = B.Overlay.new(); node.b = owner
+		elif role == "motes": node = B.AmbientMotes.new(); node.phase = raw.nodes[role].phase
+		else: node = B.AtmosphereLayer.new(); node.set_phase(raw.nodes[role].phase)
+		var values: Dictionary = raw.nodes[role].node
+		if not values.name.is_empty(): node.name = values.name
+		node.transform = Transform2D(values.basis_x, values.basis_y, values.position)
+		for key: String in ["modulate", "self_modulate", "z_index", "z_as_relative", "show_behind_parent", "top_level", "y_sort_enabled", "light_mask", "visibility_layer", "texture_filter", "texture_repeat", "use_parent_material", "clip_children"]: node.set(key, values[key])
+		node.physics_interpolation_mode = values.interpolation
+		node.visible = false; node.process_mode = Node.PROCESS_MODE_DISABLED; node.set_block_signals(true)
+		owner.add_child(node); roles[role] = node; _plan[role] = node
+	for index in range(raw.order.size()): owner.move_child(roles[raw.order[index]], index)
+	owner.overlay = roles.overlay
+	_owner = owner; _record = raw.duplicate(true)
+	return {"ok": true}
+
+func activate() -> Dictionary:
+	if _active or not is_instance_valid(_owner) or not _owner.is_inside_tree() or not _owner.get_tree().paused or _owner.process_mode != Node.PROCESS_MODE_DISABLED or not _owner._prepared_clock_entry_valid() or _owner._run_clock == null: return _bad("ENVIRONMENT_ACTIVATION_PHASE")
+	var roles := {"world": _owner.world, "camera": _owner.camera, "hud": _owner.hud}
+	roles.merge(_plan)
+	if _owner.overlay != _plan.overlay: return _bad("ENVIRONMENT_CHANGED")
+	if _owner.get_child_count(true) != _record.order.size(): return _bad("ENVIRONMENT_CHANGED")
+	for index in range(_record.order.size()):
+		if _owner.get_child(index) != roles[_record.order[index]]: return _bad("ENVIRONMENT_CHANGED")
+	for role: String in _plan:
+		var node: Variant = _plan[role]
+		if not is_instance_valid(node) or node.is_queued_for_deletion() or node.get_parent() != _owner or node.visible or node.process_mode != Node.PROCESS_MODE_DISABLED or not node.is_blocking_signals(): return _bad("ENVIRONMENT_CHANGED")
+		if not _environment_safe(node): return _bad("ENVIRONMENT_CHANGED")
+		var values: Dictionary = _node._node_values(node)
+		for key: String in values:
+			if key not in ["activation", "visible"] and values[key] != _record.nodes[role].node[key]: return _bad("ENVIRONMENT_CHANGED")
+		if role == "overlay":
+			if node.get_script() != B.Overlay or node.b != _owner or node.get_child_count(true) != 0: return _bad("ENVIRONMENT_CHANGED")
+		elif role == "motes":
+			if node.get_script() != B.AmbientMotes or node.phase != _record.nodes[role].phase or node.get_child_count(true) != 0: return _bad("ENVIRONMENT_CHANGED")
+		elif node.get_script() != B.AtmosphereLayer or node.phase != _record.nodes[role].phase or not _rect_fixed(node): return _bad("ENVIRONMENT_CHANGED")
+	for role: String in _plan:
+		var node: Variant = _plan[role]; var a: Dictionary = _record.nodes[role].node.activation
+		node.process_priority = a.priority; node.process_physics_priority = a.physics_priority
+		node.set_process(a.process); node.set_physics_process(a.physics); node.set_process_input(a.input)
+		node.set_process_shortcut_input(a.shortcut); node.set_process_unhandled_input(a.unhandled_input); node.set_process_unhandled_key_input(a.unhandled_key)
+		node.set_block_signals(a.signals_blocked); node.process_mode = a.mode
+		node.visible = _record.nodes[role].node.visible; node.queue_redraw()
+	_active = true
+	return {"ok": true, "gameplay_activated": false}

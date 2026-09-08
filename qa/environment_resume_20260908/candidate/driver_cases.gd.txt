@@ -1,0 +1,72 @@
+
+func _environment_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var adapter: Script = load("res://scripts/run_environment_state.gd")
+	var raw: Dictionary = codec.decode(wire.sections.environment).value
+	_check("native environment includes atmosphere and scene-local phases", raw.nodes.has("atmosphere") and raw.nodes.motes.phase > 0.0 and raw.nodes.atmosphere.phase > 0.0)
+	var original: Dictionary = {}
+	for child: Node in battle.get_children():
+		if child.get_script() == battle_script.AtmosphereLayer: original["atmosphere"] = child
+		elif child.get_script() == battle_script.AmbientMotes: original["motes"] = child
+	var phase_before: float = original.motes.phase
+	for frame in range(4): await process_frame
+	_check("real HELD pause freezes motes and shader phase", original.motes.phase == phase_before and adapter.new().capture(battle).value == wire.sections.environment)
+	for kind: String in ["field", "role", "duplicate", "phase", "negative", "mode", "node"]:
+		var bad: Dictionary = raw.duplicate(true)
+		match kind:
+			"field": bad.extra = true
+			"role": bad.nodes.extra = bad.nodes.motes
+			"duplicate": bad.order[0] = bad.order[1]
+			"phase": bad.nodes.motes.phase = 7
+			"negative": bad.nodes.atmosphere.phase = -1.0
+			"mode": bad.nodes.motes.node.activation.mode = Node.PROCESS_MODE_ALWAYS
+			"node": bad.nodes.overlay.node.z_index = 5000
+		_check("environment rejects " + kind, not adapter.new().validate(bad).ok)
+	var shader: Shader = original.atmosphere.rect.material.shader
+	var code: String = shader.code
+	shader.code += "\n// altered source"
+	_check("capture rejects untrusted shader source", not adapter.new().capture(battle).ok)
+	shader.code = code
+	var module: Variant = core_script.new(identity, runtime)
+	var plan: Dictionary = module.prepare(wire)
+	if not _ok("complete environment preparation", plan): module.dispose(); return false
+	var env: Variant = plan.environment_module
+	_check("environment activation rejects detached tree", not env.activate().ok)
+	_check("overlay references restored owner and all environment stays hidden", plan.battle.overlay.b == plan.battle and not plan.battle.overlay.visible and not env._plan.motes.visible and not env._plan.atmosphere.visible)
+	if not _ok("environment mounts with real restored root", module.mount_disabled(root)): module.dispose(); return false
+	_check("environment preserves local phases and trusted shader uniform", env._plan.motes.phase == raw.nodes.motes.phase and env._plan.atmosphere.phase == raw.nodes.atmosphere.phase and is_equal_approx(env._plan.atmosphere.rect.material.get_shader_parameter("phase"), raw.nodes.atmosphere.phase))
+	env._plan.motes.position += Vector2.ONE
+	_check("environment rejects render-state tampering before showing any layer", not env.activate().ok and not env._plan.overlay.visible and not env._plan.atmosphere.visible)
+	env._plan.motes.position -= Vector2.ONE
+	var previous_canvas: Transform2D = root.canvas_transform
+	root.canvas_transform = Transform2D(Vector2(1.5, 0.2), Vector2(0.1, 1.2), Vector2(70.0, -40.0))
+	var activated: Dictionary = env.activate()
+	_check("activation refits to the newly installed canvas without changing phase", activated.ok and env._plan.atmosphere.screen.get_global_transform_with_canvas().is_equal_approx(Transform2D.IDENTITY) and env._plan.atmosphere.phase == raw.nodes.atmosphere.phase)
+	root.canvas_transform = previous_canvas
+	if not _ok("same-frame environment activation", activated): module.dispose(); return false
+	_check("environment is single activation and no gameplay", not env.activate().ok and plan.battle.process_mode == Node.PROCESS_MODE_DISABLED and plan.battle._save_barrier == null)
+	# Run only original/restored consumers on actual engine idle frames; gameplay stays HELD.
+	for role: String in original:
+		original[role].process_mode = Node.PROCESS_MODE_ALWAYS
+		env._plan[role].process_mode = Node.PROCESS_MODE_ALWAYS
+	for frame in range(12): await process_frame
+	_check("native idle continues equal motes and atmosphere phases", original.motes.phase > phase_before and original.motes.phase == env._plan.motes.phase and original.atmosphere.phase == env._plan.atmosphere.phase)
+	_check("native idle updates restored shader uniform", is_equal_approx(env._plan.atmosphere.rect.material.get_shader_parameter("phase"), env._plan.atmosphere.phase))
+	for role: String in original:
+		original[role].process_mode = raw.nodes[role].node.activation.mode
+		if role == "atmosphere": original[role].set_phase(raw.nodes[role].phase)
+		else: original[role].phase = raw.nodes[role].phase
+	module.dispose()
+	var without: Dictionary = wire.duplicate(true); var optional: Dictionary = raw.duplicate(true)
+	optional.order.erase("atmosphere"); optional.nodes.erase("atmosphere")
+	without.sections.environment = codec.encode(optional).value
+	var absent: Variant = core_script.new(identity, runtime)
+	var absent_plan: Dictionary = absent.prepare(without)
+	_check("saved disabled atmosphere is not invented by current setting", absent_plan.ok and not absent_plan.environment_module._plan.has("atmosphere"))
+	absent.dispose()
+	var stale: Variant = core_script.new(identity, runtime)
+	var stale_plan: Dictionary = stale.prepare(wire)
+	if not stale_plan.ok or not stale.mount_disabled(root).ok: stale.dispose(); return false
+	await process_frame
+	_check("environment rejects delayed activation without showing new consumers", not stale_plan.environment_module.activate().ok and not stale_plan.battle.overlay.visible)
+	stale.dispose()
+	return true

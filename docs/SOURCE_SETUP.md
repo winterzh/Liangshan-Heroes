@@ -1,3 +1,7 @@
+## 2026-09-08 战场环境恢复
+
+内部core v7新增environment，mount_disabled之后同帧交给最终事务激活环境；新局浮尘/微光改用可暂停场景相位。启动器与玩家菜单未变。[合同及复现](ENVIRONMENT_RESUME_20260908.md)。完整玩家继续仍未开放。
+
 ## 2026-09-08 HUD 整体恢复
 
 core schema v6新增hud与mount_disabled：离树真实根绑定后暂停挂载、构建HUD，同帧交给最终事务激活。启动方式、Play.cmd和玩家菜单不变；[安装合同与复现](HUD_RESUME_20260908.md)。不得将HUD内部激活验证当完整继续功能。

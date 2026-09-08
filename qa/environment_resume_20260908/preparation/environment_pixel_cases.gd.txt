@@ -1,0 +1,47 @@
+
+func _environment_pixels() -> bool:
+	var views: Array = []; var layers: Array = []
+	for index in range(2):
+		var view := SubViewport.new(); view.size = Vector2i(128, 96)
+		view.disable_3d = true; view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		view.world_2d = World2D.new()
+		var stage := Node2D.new(); view.add_child(stage)
+		var bg := ColorRect.new(); bg.color = Color(0.1, 0.2, 0.8, 1.0)
+		bg.size = Vector2(view.size); stage.add_child(bg)
+		if index == 0:
+			var layer: Variant = battle_script.AtmosphereLayer.new(); layer.set_phase(12.5)
+			stage.add_child(layer); layers.append(layer)
+		else:
+			# Independent pre-change shader and the original direct ColorRect hierarchy.
+			var rect := ColorRect.new(); var material := ShaderMaterial.new(); var shader := Shader.new()
+			shader.code = LEGACY_ENVIRONMENT_SHADER.replace("TIME", "12.5")
+			material.shader = shader; rect.material = material; rect.z_index = 3700
+			rect.size = Vector2(view.size)
+			stage.add_child(rect); layers.append(rect)
+		root.add_child(view); views.append(view)
+	for frame in range(3): await process_frame
+	RenderingServer.force_draw(false)
+	var image_a: Image = views[0].get_texture().get_image()
+	var image_b: Image = views[1].get_texture().get_image()
+	checks.append({"label": "native pixel diagnostics", "passed": true, "new_rect": str(layers[0].rect.size), "old_rect": str(layers[1].size), "viewport": str(views[0].get_visible_rect()), "image_size": str(image_a.get_size()), "center": str(image_a.get_pixel(64, 48))})
+	_check("Vulkan atmosphere wraps the viewport at native nonzero dimensions", layers[0].rect.size == Vector2(128, 96) and layers[1].size == Vector2(128, 96) and image_a.get_size() == Vector2i(128, 96))
+	var data_a: PackedByteArray = image_a.get_data(); var data_b: PackedByteArray = image_b.get_data()
+	var differing := 0; var maximum := 0
+	for index in range(data_a.size()):
+		var difference: int = absi(int(data_a[index]) - int(data_b[index]))
+		if difference > 0: differing += 1
+		maximum = maxi(maximum, difference)
+	checks.append({"label": "Vulkan shader reference differs by at most one 8-bit channel step", "passed": maximum <= 1 and data_a.size() == data_b.size(), "maximum_channel_difference": maximum, "differing_channels": differing, "channels": data_a.size(), "actual_phase": layers[0].phase})
+	_check("Vulkan postprocessing actually changes the blue background", image_a.get_pixel(64, 48) != Color(0.1, 0.2, 0.8, 1.0) and image_a.get_pixel(64, 48).b > 0.2)
+	for frame in range(3): await process_frame
+	RenderingServer.force_draw(false)
+	_check("Vulkan paused pixels do not drift with engine TIME", image_a.get_data() == views[0].get_texture().get_image().get_data())
+	layers[0].set_phase(23.75)
+	RenderingServer.force_draw(false)
+	_check("Vulkan explicit phase changes real water shimmer pixels", image_a.get_data() != views[0].get_texture().get_image().get_data())
+	for view: SubViewport in views: view.size = Vector2i(192, 108)
+	for frame in range(2): await process_frame
+	RenderingServer.force_draw(false)
+	_check("atmosphere child reflows after native viewport resize", layers[0].rect.size == Vector2(192, 108) and views[0].get_texture().get_image().get_size() == Vector2i(192, 108))
+	for view: SubViewport in views: view.free()
+	return checks.all(func(row: Dictionary) -> bool: return row.passed)

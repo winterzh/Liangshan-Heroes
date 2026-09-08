@@ -1,3 +1,5 @@
+后续更新：核心v7共20分区，environment已覆盖指示层/氛围/浮尘及显示子节点顺序，见[环境合同](ENVIRONMENT_RESUME_20260908.md)。完整安装和玩家继续仍待交付。
+
 后续更新：核心现为v6、19分区，mount_disabled可先绑定真实根时钟和数据再暂停挂载HUD；全世界激活仍由最终事务负责，见[HUD合同](HUD_RESUME_20260908.md)。下方早期“绝不挂载”表述仅描述各阶段历史API。
 
 后续更新：核心现为v5，hud_messages为第18分区；prepare校验后返回pending_hud_messages，完整HUD工厂仍待接入，见[消息恢复](HUD_MESSAGES_RESUME_20260908.md)。下方版本说明保留为历史阶段。

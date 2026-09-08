@@ -1,3 +1,9 @@
+## 2026-09-08 战场环境恢复
+
+- scripts/run_environment_state.gd：Overlay/氛围/浮尘的状态、隐藏准备及同帧激活。
+- docs/ENVIRONMENT_RESUME_20260908.md：环境相位与原生渲染验证。
+- qa/environment_resume_20260908/：原生运行、受测候选、来源和晋级SHA。
+
 ## 2026-09-08 HUD 整体恢复
 
 - scripts/run_hud_state.gd：FIGHT HUD状态、隐藏准备及同帧激活。

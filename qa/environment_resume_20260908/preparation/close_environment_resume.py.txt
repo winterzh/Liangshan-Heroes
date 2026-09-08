@@ -1,0 +1,81 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+root=Path.cwd(); out=root/'scratchpad/environment_resume_20260908'; q=root/'qa/environment_resume_20260908'
+head='6481a1fc358ca3ed30aabdc401e4b48bf3c79858'; run=sys.argv[1]; native=root/'.godot/stabilization_overlay'/run
+assert native.resolve().parent==(root/'.godot/stabilization_overlay').resolve()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+assert r['suite']=='environment-resume-native'
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and report['complete'] and not report['failed_count'] and all(x['passed'] for x in report['checks'])
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+for row in changes:
+    p=root/row['path']; assert p.exists()==row['before_exists']
+    if p.exists(): assert sha(p)==row['before_raw_sha256']
+    assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+q.mkdir(exist_ok=False); (q/'.gdignore').write_text('\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes()); assert sha(dst)==sha(src)
+    pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    receipt=json.loads(path.read_text())
+    if receipt.get('source_head')!=head or receipt.get('suite')!='environment-resume-native': continue
+    folder=path.parent; tag='runs/'+folder.name
+    runs.append({'run_id':folder.name,'complete':receipt.get('complete'),'freeze_sha256':receipt['freeze_sha256']})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes: archive(folder/'project'/row['path'],tag+'/'+Path(row['path']).name+'.txt')
+    archive(folder/'project/tools/environment_resume/driver.gd',tag+'/driver.gd.txt')
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_environment_resume.py','close_environment_resume.py','verify_environment_stage.py','environment_pixel_cases.gd']: archive(root/'.godot'/name,'preparation/'+name+'.txt')
+uid=native/'project/scripts/run_environment_state.gd.uid'; archive(uid,'candidate/run_environment_state.gd.uid.txt')
+for row in changes: (root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/'scripts/run_environment_state.gd.uid').write_bytes(uid.read_bytes())
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks']); count=report['check_count']; other=count-source_count
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'runs':runs,'changes':changes,'native_uid_sha256':sha(uid),'checks':count,'source_sha_checks':source_count,'other_checks':other,'full_gameplay_activation':False,'complete_world_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json')
+(root/'docs/ENVIRONMENT_RESUME_20260908.md').write_text(f'''# 战场环境状态恢复
+
+内部核心schema v7新增第20分区environment，保存Overlay、浮尘与可选氛围层的显式Node2D渲染/处理属性、场景内动画相位及Battle直接显示子节点顺序。真实保存屏障不算显示子节点，仍由最终安装流程创建；其它陌生根子节点、材质、元数据、回调、重复角色及无效值拒绝。Overlay绑定新Battle，因此选框、命令指示、范围圈等继续读取同一套已恢复根状态。
+
+原浮尘Time.get_ticks_msec和滤镜shader TIME改为场景节点的delta相位，暂停会冻结，恢复赋值不重新起算；不改变60Hz模拟或战斗规则。着色器采用当前受信代码，保存记录不接收shader文本、路径、资源或回调。氛围可选开关以实际捕获节点为准，不因当前设置重新添加缺失滤镜。新AtmosphereLayer管理原有ColorRect，暖色/对比/饱和/暗角及水面微光公式保持；发现原ColorRect在Node2D下的FULL_RECT锚点实际尺寸为零，无法铺满屏幕。本批改为显式视口尺寸，并通过受信screen子Node2D抵消画布/相机变换；每个原生idle、视口尺寸变化及同帧激活后重排，保留z=3700及Overlay/浮尘/HUD层序。该修复使原设置开启时的氛围滤镜真正可见，最终观感仍需人工验收。
+
+Godot4.6公开文档明确shader TIME不随暂停停止，见[CanvasItem着色器](https://docs.godotengine.org/en/4.6/tutorials/shaders/shader_reference/canvas_item_shader.html)。原生尺寸回调Control::_size_changed只在item_rect_changed、来源为唯一受信screen子Node2D且目标为其唯一ColorRect、无绑定参数且flags=0时认可；两个Viewport子序回调沿用严格限定。陌生连接不会写入存档。
+
+prepare创建离树隐藏、DISABLED且阻断信号的环境节点，按保存顺序排列world/overlay/camera/atmosphere/motes/hud。mount_disabled仍先绑定真实根数据及clock，再挂载禁用世界。environment_module.activate仅在相同安装帧、暂停树、根仍禁用且全部节点/顺序/相位/受信材质未改变时开放；重复、过帧、篡改拒绝。该入口只开放显示消费者，不代表完整战斗激活。最终事务须统筹Unit/Fx/Fog/相机/HUD、屏障/共享占位对象、Steam持久局、光标与current_scene。
+
+最终原生{count}项通过，其中{source_count}来源SHA、{other}其它检查。见[QA](../qa/environment_resume_20260908/README.md)及[安装收据](../qa/environment_resume_20260908/installation.json)。真实HELD冻结、原生idle相位等价续接、shader uniform、可选氛围、坏记录/来源/安装/回滚和前序HUD等回归均保留。离屏Vulkan像素使用128×96视口，旧着色器TIME替换成12.5常量、显式设置全屏矩形作为独立公式参考，容许单通道最多1/255量化误差，实际最大差值和不同通道数在原始报告中，另检查暂停稳定、修改相位改变微光、192×108重排。主游戏最小化窗口仍为0×0，这不是整场可见画面或人工体验验收。
+
+尚未开放玩家继续：剩余Fx、完整世界/Steam绑定、光标所有权与退出/重开上下文、磁盘原子槽及跨进程、八战役适配仍要推进；完整30波、1800秒、两台Windows、真实性能和真人验收继续开放。本批仅同步GitHub stable，不更新Steam。
+''',encoding='utf-8',newline='\n')
+(q/'README.md').write_text(f'''# 战场环境原生恢复 QA
+
+来源提交 `{head}`。最终 `{run}`，freeze `{freeze}`，{count}项通过={source_count}来源SHA+{other}其它检查；来源/玩家文件/私有源码/候选保护、退出及锁释放以原始receipt为准。
+
+R1根清单遗漏真实保存屏障；R2严格Node2D信号检查拒绝氛围父层的Control尺寸连接；R3原生诊断确认item_rect_changed → 唯一ColorRect的Control::_size_changed，flags=0。R4加入精确认可和像素测试，R5用独立World2D排除相机串扰后确认新/旧锚定矩形均0×0，128×96纹理全黑，不能把相同黑图当PASS；据此修正实际全屏布局，并给参考矩形和背景显式尺寸。R6几何与真实绘制通过，精确逐字节等值失败；R7量化为36864通道中仅1通道相差1/255并通过全套；最终另覆盖激活前改变真实Viewport画布变换后的全屏重算。后续结果以最终报告为准。全部原始通过/失败保留在runs，各自结论以各自report/receipt为准。一次手输freeze重复字符被预检拒绝，没有启动原生进程。
+
+真实经典战斗运行并通过HELD捕获全部20分区；新Battle禁用准备、真实根绑定挂载，再仅激活环境。原生idle对照时仅把源/新环境消费者临时设为ALWAYS，游戏仍HELD；对照结束恢复源模式/相位。没有伪造delta调用生产_process。保留HUD、消息Tween、相机、世界显示、死亡残留及坏分区回滚套件。游戏主窗口0×0；专用128×96及192×108 SubViewport由Forward+/Vulkan真实渲染，非可见战斗截图。
+
+在来源提交独立checkout核对引擎/runner/guard SHA，把candidate内.gd.txt恢复.gd原名至scratchpad/environment_resume_20260908，保留.gdignore、manifest及freeze，UID让隔离原生导入生成，然后运行：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/environment_resume_20260908 --expected-files 3 --driver driver.gd --driver-destination tools/environment_resume/driver.gd --suite environment-resume-native --prefix "[environment resume QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可替换成受控短绝对路径。生产文件只从最终受测字节晋级，原混合换行保留。SOURCE_PINS固定归档来源，installation固定晋级来源及SHA。[实现与范围](../../docs/ENVIRONMENT_RESUME_20260908.md)。无完整游戏续玩/磁盘槽/跨进程/Steam验收结论。
+''',encoding='utf-8',newline='\n')
+def prepend(path,text):
+    p=root/path; p.write_bytes((text+'\n\n').encode()+p.read_bytes())
+prepend('docs/WORKLOG.md',f'## 2026-09-08 环境相位与指示层恢复\n\ncore v7第20分区environment接入浮尘/氛围场景相位、Overlay新Battle绑定、节点顺序及隐藏准备/同帧激活。原生{count}项={source_count}来源SHA+{other}其它通过，包含独立旧shader常量参考的Vulkan像素与视口重排。[合同](ENVIRONMENT_RESUME_20260908.md)、[QA](../qa/environment_resume_20260908/README.md)。完整激活、Steam/光标上下文、继续槽、跨进程和全部验收继续推进。本批仅同步stable。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 战场环境恢复\n\n内部core v7新增environment，mount_disabled之后同帧交给最终事务激活环境；新局浮尘/微光改用可暂停场景相位。启动器与玩家菜单未变。[合同及复现](ENVIRONMENT_RESUME_20260908.md)。完整玩家继续仍未开放。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 环境与指示层恢复已接入\n\n可保存浮尘/氛围相位、重建Overlay及显示顺序；原生暂停/续接与独立参考Vulkan像素检查通过。[证据](ENVIRONMENT_RESUME_20260908.md)。剩余Fx、完整世界/Steam/光标上下文、继续槽和跨进程及原计划验收仍开放。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 战场环境恢复\n\n- scripts/run_environment_state.gd：Overlay/氛围/浮尘的状态、隐藏准备及同帧激活。\n- docs/ENVIRONMENT_RESUME_20260908.md：环境相位与原生渲染验证。\n- qa/environment_resume_20260908/：原生运行、受测候选、来源和晋级SHA。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续更新：核心v7共20分区，environment已覆盖指示层/氛围/浮尘及显示子节点顺序，见[环境合同](ENVIRONMENT_RESUME_20260908.md)。完整安装和玩家继续仍待交付。')
+prepend('docs/STABILIZATION_EXECUTION_20260907.md','2026-09-08推进：环境相位/Overlay准备与同帧显示激活已接入，见[最新原生证据](ENVIRONMENT_RESUME_20260908.md)。下表完整世界/Steam安装、磁盘继续、八战役、性能/人工验收仍未完成。')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve native-tested environment adapter and evidence.\nscripts/run_environment_state.gd* -text -whitespace\nqa/environment_resume_20260908/** -text -whitespace\n')
+print(json.dumps({'pins':len(pins),'runs':runs,'checks':count,'source_checks':source_count,'other_checks':other,'installed_bytes_equal_native':True}))
