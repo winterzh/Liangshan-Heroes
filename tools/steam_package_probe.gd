@@ -42,7 +42,7 @@ func _check_localization() -> void:
 		var source: String = lore[key]
 		check("packed biography has complete paragraphs: " + key, source.split("\n\n", false).size() >= 2)
 		var references: Variant = chapters.get(key, [])
-		var valid_references := references is Array and not references.is_empty()
+		var valid_references: bool = references is Array and not references.is_empty()
 		if references is Array:
 			for chapter in references:
 				valid_references = valid_references and chapter is int and chapter >= 1 and chapter <= 120
