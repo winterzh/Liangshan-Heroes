@@ -1,6 +1,6 @@
 ## 2026-09-08 Steam 四语打包入口
 
-Steam 候选从本轮成功的原生 QA 快照复制，必须保留 catalog、Noto CJK 字体及 OFL。当前 Windows 成品 Build25182453 已上传且服务器清单匹配，等待用户选择上线分支；正式版仍是25164373、测试分支仍是25179481。构建命令与收据见[四语 Steam 更新](STEAM_LOCALIZATION_UPDATE_20260908.md)。运行入口及四语选择方式沿用下方说明。
+Steam 候选从本轮成功的原生 QA 快照复制，必须保留 catalog、Noto CJK 字体及 OFL。当前 Windows 正式版 default 已更新为 Build25182453，Manifest4066863387208539897；用户手机确认后，服务器清单、canonical分支及发布历史已核实。主菜单左上角或设置顶部可选择四语。构建命令与收据见[四语 Steam 更新](STEAM_LOCALIZATION_UPDATE_20260908.md)，客户端下载尚未验收。
 
 ## 2026-09-08 校订文本与排版入口
 

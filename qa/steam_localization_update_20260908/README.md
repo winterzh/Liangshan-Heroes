@@ -14,6 +14,6 @@
 
 复现：运行 `tools/run_steam_integration_qa.py --run --native --visual --profile-root <新的短绝对根>`，再运行 `tools/build_steam_candidate.py --run --qa-run <成功QA目录> --profile-root <短绝对根>`。同包短测 helper 恢复到工程 `.godot/<新目录>/smoke_verified_package.py`，替换私有 profile 占位符后传入候选目录。各套件串行占用引擎槽。
 
-Build25182453已上传，Manifest4066863387208539897；服务器四文件大小/SHA1与验收包相同，canonical构建/分支和manifest已回读。用户尚未回答目标分支，提交构建选择“无”，不执行上线；default保持25164373，steam-integration保持25179481，详见 `steam_server_receipt.json`。
+Build25182453已在default正式版生效，Manifest4066863387208539897；服务器四文件大小/SHA1与验收包相同。用户明确批准 default 并完成手机验证器确认后，canonical分支及发布历史均确认25182453，steam-integration仍为25179481。预览从25164373更新的增量下载为25.2 MB，真实客户端下载尚未验收；提交构建时选择“无”保留为此前上传时历史事实，详见 `steam_server_receipt.json`。
 
 内容起点与构建流程见 [更新说明](../../docs/STEAM_LOCALIZATION_UPDATE_20260908.md)。未列为成功的上传或上线步骤不得从候选文件存在推断完成。
