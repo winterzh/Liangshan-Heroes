@@ -1,3 +1,9 @@
+## 2026-09-08 跟随及贴图特效恢复
+
+- scripts/run_linked_fx_state.gd：12类固定字段、引用/贴图表及缓存校验。
+- docs/LINKED_FX_RESUME_20260908.md：当前Art登记与生命周期合同。
+- qa/linked_fx_20260908/：原生输入、来源/日志/报告及晋级SHA。
+
 ## 2026-09-08 程序化特效恢复
 
 - scripts/run_procedural_fx_state.gd：30类固定字段/缓存校验及受信Script白名单。

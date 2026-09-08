@@ -536,12 +536,7 @@ func activate() -> Dictionary:
 		if row.parent != "" and (node.get_parent() != _nodes[row.parent] or node.get_index(true) != row.index): return _failure("VISUAL_ACTIVATION_TOPOLOGY")
 		for field: String in _reference_bindings.get(id, {}):
 			if not is_same(node.get(field), _reference_bindings[id][field]): return _failure("VISUAL_REFERENCE_CHANGED", row.kind + "." + field)
-			var tag: Dictionary = row.references[field]
-			var target: Variant = node.get(field)
-			if tag.state == "entity" and (not is_instance_valid(target) or target.is_queued_for_deletion() or target.get_script() != _unit or str(target.entity_id) != tag.id): return _failure("VISUAL_BOUND_UNIT_CHANGED", row.kind + "." + field)
 		if _linked.TYPES.has(row.kind):
-			var prepared_check: Dictionary = _linked_prepared_check(node, row)
-			if not prepared_check.ok: return prepared_check
 			for field: String in _linked.TEXTURES[row.kind]:
 				if not _texture_token(node.get(field)).ok: return _failure("LINKED_TEXTURE_CHANGED", field)
 			if _values(node, row.kind) != row.values: return _failure("LINKED_PREPARATION_CHANGED", row.kind)
@@ -756,13 +751,3 @@ func bind_remains_owner(record: Variant) -> Dictionary:
 
 func _reference_fields(kind: String) -> Array:
 	return ["chain_from"] if kind == "bolt" else _linked.REFERENCES.get(kind, [])
-
-func _linked_prepared_check(node: Node2D, row: Dictionary) -> Dictionary:
-	if node.get_meta_list().size() != 1 or node.get_meta("_run_restore_prepared", false) != true: return _failure("LINKED_PREPARATION_MARKER", row.kind)
-	for info: Dictionary in node.get_signal_list():
-		if not node.get_signal_connection_list(info.name).is_empty(): return _failure("LINKED_PREPARATION_CONNECTION", row.kind)
-	if node.material != null or node.use_parent_material or node.texture_filter != CanvasItem.TEXTURE_FILTER_PARENT_NODE or node.texture_repeat != CanvasItem.TEXTURE_REPEAT_PARENT_NODE or node.light_mask != 1 or node.visibility_layer != 1 or node.clip_children != CanvasItem.CLIP_CHILDREN_DISABLED: return _failure("LINKED_PREPARATION_RENDER", row.kind)
-	var state: Dictionary = _read_node(node); state.erase("activation")
-	var expected: Dictionary = row.node.duplicate(); expected.erase("activation")
-	if state != expected: return _failure("LINKED_PREPARATION_NODE", row.kind)
-	return {"ok": true}

@@ -1,0 +1,211 @@
+func _linked_cases(core_script: Script, identity: Dictionary, runtime: Dictionary) -> bool:
+	var adapter: Variant = load("res://scripts/run_linked_fx_state.gd").new(battle_script)
+	var catalog: Variant = core_script.new(identity, runtime)
+	var art: Variant = root.get_node("Art")
+	_check("default core resolves current Art atlas palette and official axe", catalog._textures.size() >= 36 and catalog._axe_texture == art.item_texture("axe"))
+	for scenario: String in ["entity", "none", "expired"]:
+		if not await _linked_pair(adapter, catalog, identity, scenario): catalog.dispose(); return false
+	# Full factory must discover the same installed Art without a fixture-supplied palette.
+	var added: Array = []
+	var a: Variant = battle.units[0]; var b: Variant = battle.units[1]
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		_linked_setup(fx, kind, adapter, a, b, art)
+		battle.fx_root.add_child(fx); added.append(fx)
+	var collapse: Variant = battle_script.BuildingCollapseFx.new()
+	for key: String in catalog._textures:
+		if key.begins_with("building:"): collapse.tex = catalog._textures[key]; break
+	_check("installed building collapse texture is non-null", collapse.tex != null)
+	battle.fx_root.add_child(collapse); added.append(collapse)
+	var axes: Variant = battle_script.LiBrawnAxesFx.new()
+	axes.caster = a; axes.game = battle; axes.tex = art.item_texture("axe"); axes.hits = [{"target": b, "dmg": 1.0}]
+	battle.fx_root.add_child(axes); added.append(axes)
+	var complete: Dictionary = catalog.capture(battle)
+	if not _ok("held full core captures twelve linked types and textured collapse", complete):
+		for node: Node in added: node.free()
+		catalog.dispose(); return false
+	var target: Variant = core_script.new(identity, runtime)
+	var full: Dictionary = target.prepare(JSON.parse_string(JSON.stringify(complete.record)))
+	if not _ok("full core prepares linked types with default trusted Art catalog", full):
+		complete.identity.dispose(); target.dispose(); catalog.dispose()
+		for node: Node in added: node.free()
+		return false
+	_check("linked full core remains disabled with exact effect count", full.battle.process_mode == Node.PROCESS_MODE_DISABLED and full.battle.fx_root.get_child_count() == battle.fx_root.get_child_count())
+	var prepared_axes: Variant = full.battle.fx_root.get_child(full.battle.fx_root.get_child_count() - 1)
+	_check("default core rebinds textured damage-authority axes without resolving hits", prepared_axes.get_script() == battle_script.LiBrawnAxesFx and prepared_axes.tex == art.item_texture("axe") and prepared_axes.game == full.battle and not prepared_axes.resolved and prepared_axes.hits.size() == 1 and prepared_axes.hits[0].target != b)
+	for node: Node2D in full.battle.fx_root.get_children():
+		var kind: String = adapter.kind(node)
+		if kind.is_empty(): continue
+		for field: String in adapter.REFERENCES[kind]:
+			var rebound: Variant = node.get(field)
+			_check("full core stable Unit rebinding " + kind + "." + field, rebound != a and rebound != b and rebound in full.battle.units and rebound.entity_id in [a.entity_id, b.entity_id])
+	complete.identity.dispose(); target.dispose(); catalog.dispose()
+	for node: Node in added: node.free()
+	return true
+
+func _linked_setup(fx: Variant, kind: String, adapter: Variant, a: Variant, b: Variant, art: Variant) -> void:
+	for field: String in adapter.REFERENCES[kind]: fx.set(field, a if field in ["caster", "source"] else b)
+	if adapter.TYPES[kind].has("life"): fx.life = 0.75
+	if adapter.TYPES[kind].has("end_w"): fx.end_w = Vector2(160.0, 45.0)
+	if kind == "ability_projectile":
+		fx.tex = art.ability_projectile_texture("fire_orb"); fx.impact_tex = art.ability_impact_texture("fire_burst"); fx.lob = true
+	if kind == "ability_impact": fx.tex = art.ability_impact_texture("ice_burst"); fx.mode = "rune"
+	if kind == "orbit_axes": fx.tex = art.item_texture("axe")
+	if kind == "lin_spear_stack": fx.stacks = 3; fx.proc = true
+
+func _linked_pair(adapter: Variant, catalog: Variant, identity: Dictionary, scenario: String) -> bool:
+	var visual_script: Script = load("res://scripts/run_visual_graph.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var codec: Variant = codec_script.new()
+	var source: Variant = visual_script.new(codec_script, battle_script, unit_script, null, catalog._textures)
+	var restore: Variant = visual_script.new(codec_script, battle_script, unit_script, null, catalog._textures)
+	var art: Variant = root.get_node("Art")
+	var stage := Node2D.new(); stage.process_mode = Node.PROCESS_MODE_DISABLED
+	var original := Node2D.new(); original.transform = load("res://scripts/game_map.gd").ISO
+	stage.add_child(original); root.add_child(stage)
+	var a: Variant = unit_script.new(); var b: Variant = unit_script.new()
+	var aa: Variant = unit_script.new(); var bb: Variant = unit_script.new()
+	a.entity_id = 1; aa.entity_id = 1; b.entity_id = 2; bb.entity_id = 2
+	for unit: Variant in [a, b, aa, bb]: unit.hp = 100.0; unit.position = Vector2(10, 15); unit._cast_t = 2.0
+	a._hua_lock_target = b; aa._hua_lock_target = bb; a._hua_lock_shots = 3; aa._hua_lock_shots = 3
+	var source_units: Dictionary = {a: "1", b: "2"}; var target_units: Dictionary = {"1": aa, "2": bb}
+	var nodes: Dictionary = {}
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		_linked_setup(fx, kind, adapter, a, b, art)
+		if scenario == "none":
+			for field: String in adapter.REFERENCES[kind]: fx.set(field, null)
+			for field: String in adapter.TEXTURES[kind]: fx.set(field, null)
+		if kind == "black_rain": fx.lite = scenario != "entity"
+		original.add_child(fx); nodes[kind] = fx
+		if scenario == "entity":
+			var actual: Array = []
+			for property: Dictionary in fx.get_property_list():
+				if int(property.usage) & PROPERTY_USAGE_SCRIPT_VARIABLE: actual.append(String(property.name))
+			actual.sort(); var declared: Array = adapter.TYPES[kind].keys() + adapter.REFERENCES[kind] + adapter.TEXTURES[kind]; declared.sort()
+			_check("native linked field inventory " + kind, actual == declared)
+	if scenario == "entity":
+		stage.process_mode = Node.PROCESS_MODE_ALWAYS; await process_frame; await process_frame; stage.process_mode = Node.PROCESS_MODE_DISABLED
+	elif scenario == "expired":
+		a.free(); b.free(); source_units.clear()
+	var captured: Dictionary = source.capture(original, identity.content_version, source_units)
+	if not _ok("capture linked native graph " + scenario, captured): return false
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.value))
+	var checked: Dictionary = source.validate(wire, identity.content_version, {"1": true, "2": true})
+	if not _ok("validate linked JSON graph " + scenario, checked): return false
+	var rows: Array = checked.rows
+	_check("all twelve linked types retained " + scenario, rows.size() == 13)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		for field: String in row.references:
+			_check("reference tag preserved " + scenario + " " + row.kind + "." + field, row.references[field].state == scenario)
+		if scenario != "entity": continue
+		for problem: String in ["extra", "type", "range"]:
+			var bad: Dictionary = row.values.duplicate(true)
+			var clock: String = "pulse" if row.kind == "hua_lock_mark" else "t"
+			if problem == "extra": bad.extra = true
+			elif problem == "type": bad[clock] = "invalid"
+			else: bad[clock] = -1.0
+			_check("reject linked invalid " + row.kind + " " + problem, not adapter.validate(bad, row.kind).ok)
+		for field: String in adapter.TEXTURES[row.kind]:
+			_check("live texture token registered " + row.kind + "." + field, row.values[field].state == "trusted")
+			var bad: Dictionary = row.values.duplicate(true); bad[field].key = "res://unknown.png"
+			_check("reject saved resource path as texture key " + row.kind + "." + field, not source._values_check(bad, row.kind).ok)
+			bad = row.values.duplicate(true); bad[field].signature.width += 1
+			_check("reject changed texture signature " + row.kind + "." + field, not source._values_check(bad, row.kind).ok)
+			bad = row.values.duplicate(true); bad[field].signature.region_size += Vector2.ONE
+			_check("reject changed atlas region " + row.kind + "." + field, not source._values_check(bad, row.kind).ok)
+		for field: String in adapter.REFERENCES[row.kind]:
+			var bad_rows: Array = rows.duplicate(true); bad_rows[int(row.id) - 1].references[field] = {"state": "entity", "id": "999"}
+			var bad_wire: Dictionary = wire.duplicate(true); bad_wire.records = codec.encode(bad_rows).value
+			_check("reject dangling entity reference " + row.kind + "." + field, not source.validate(bad_wire, identity.content_version, {"1": true, "2": true}).ok)
+		for field: String in adapter.TYPES[row.kind]:
+			if adapter.TYPES[row.kind][field] != TYPE_ARRAY: continue
+			var bad: Dictionary = row.values.duplicate(true); bad[field].clear()
+			_check("linked particle cache cannot disappear " + row.kind, not adapter.validate(bad, row.kind).ok)
+	var tombstone: Variant = null
+	if scenario == "expired":
+		_check("expired references reject omitted shared tombstone", not restore.prepare(wire, identity.content_version, target_units).ok and restore._nodes.is_empty())
+		tombstone = unit_script.new()
+	var prepared: Dictionary = restore.prepare(wire, identity.content_version, target_units, tombstone)
+	if not _ok("prepare linked graph " + scenario, prepared): return false
+	stage.add_child(restore._root)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var copy: Variant = restore._nodes[row.id]
+		_check("ready preserves linked fields and caches " + scenario + " " + row.kind, restore._values(copy, row.kind) == row.values and copy.process_mode == Node.PROCESS_MODE_DISABLED and copy.has_meta("_run_restore_prepared"))
+		for field: String in row.references:
+			var tag: Dictionary = row.references[field]
+			var expected: Variant = target_units[tag.id] if tag.state == "entity" else (tombstone if tag.state == "expired" else null)
+			_check("exact fresh Unit binding " + scenario + " " + row.kind + "." + field, is_same(copy.get(field), expected))
+	if scenario == "expired":
+		_check("activation waits for actual shared tombstone release", not restore.activate().ok)
+		tombstone.free()
+	if scenario == "entity":
+		aa.entity_id = 999
+		_check("activation rejects bound Unit stable ID mutation", not restore.activate().ok)
+		aa.entity_id = 1
+		# Independent transaction: release a registered entity after binding, before activation.
+		var vanished: Variant = unit_script.new(); vanished.entity_id = 1
+		var broken: Variant = visual_script.new(codec_script, battle_script, unit_script, null, catalog._textures)
+		var broken_prepare: Dictionary = broken.prepare(wire, identity.content_version, {"1": vanished, "2": bb})
+		if not _ok("prepare disposable linked transaction for binding-loss test", broken_prepare): return false
+		stage.add_child(broken._root); vanished.free()
+		_check("activation rejects actual precommit entity release", not broken.activate().ok)
+		broken.dispose()
+		for row: Dictionary in rows:
+			if row.kind == "container": continue
+			var copy: Variant = restore._nodes[row.id]
+			var field: String = "pulse" if row.kind == "hua_lock_mark" else "t"
+			var saved: float = copy.get(field); copy.set(field, saved + 0.01)
+			_check("reject changed linked phase before activation " + row.kind, not restore.activate().ok); copy.set(field, saved)
+			copy.set_meta("foreign", true)
+			_check("reject linked metadata injection " + row.kind, not restore.activate().ok); copy.remove_meta("foreign")
+			var callback := func(): pass
+			copy.tree_exited.connect(callback)
+			_check("reject linked callback injection " + row.kind, not restore.activate().ok); copy.tree_exited.disconnect(callback)
+			copy.light_mask = 2
+			_check("reject linked render override " + row.kind, not restore.activate().ok); copy.light_mask = 1
+			copy.position += Vector2.ONE
+			_check("reject linked transform mutation " + row.kind, not restore.activate().ok); copy.position -= Vector2.ONE
+			for ref: String in row.references:
+				var saved_ref: Variant = copy.get(ref); copy.set(ref, a)
+				_check("reject old-world reference before activation " + row.kind + "." + ref, not restore.activate().ok); copy.set(ref, saved_ref)
+			for tex: String in adapter.TEXTURES[row.kind]:
+				var saved_tex: Variant = copy.get(tex); copy.set(tex, null)
+				_check("reject changed linked texture before activation " + row.kind + "." + tex, not restore.activate().ok); copy.set(tex, saved_tex)
+	if not _ok("activate linked graph " + scenario, restore.activate()): return false
+	var exits: Dictionary = {}; var equal: Dictionary = {}; var pairs: Dictionary = {}; var frames := 0
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var key: String = row.kind; exits[key] = {"original": 0, "copy": 0}; equal[key] = true; pairs[key] = 0
+		nodes[key].tree_exited.connect(func(): exits[key].original += 1)
+		restore._nodes[row.id].tree_exited.connect(func(): exits[key].copy += 1)
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	for frame in range(300):
+		if scenario == "entity":
+			if frame < 12:
+				for unit: Variant in [a, b, aa, bb]: unit.position += Vector2(2.0, 1.0)
+			if frame == 5: a._cast_t = 0.0; aa._cast_t = 0.0; a._hua_lock_shots = 0; aa._hua_lock_shots = 0
+			if frame == 8: b.hp = 0.0; bb.hp = 0.0
+			if frame == 12: a.free(); b.free(); aa.free(); bb.free()
+		await process_frame; frames += 1
+		var alive := false
+		for row: Dictionary in rows:
+			if row.kind == "container": continue
+			var x: Variant = nodes[row.kind]; var y: Variant = restore._nodes[row.id]
+			var xv: bool = is_instance_valid(x); var yv: bool = is_instance_valid(y)
+			if xv != yv: equal[row.kind] = false
+			if not xv or not yv: continue
+			alive = true; pairs[row.kind] += 1
+			equal[row.kind] = equal[row.kind] and source._values(x, row.kind) == restore._values(y, row.kind) and x.transform == y.transform
+		if scenario == "entity" and frame == 15:
+			_check("black rain persists after follow unit freed", is_instance_valid(nodes.black_rain) and nodes.black_rain.t > 0.1)
+		if not alive: break
+	for key: String in equal:
+		_check("native linked playback and one expiry " + scenario + " " + key, equal[key] and exits[key].original == 1 and exits[key].copy == 1 and (scenario != "entity" or pairs[key] > 0))
+	stage.free(); source.dispose(); restore.dispose()
+	for unit: Variant in [a, b, aa, bb]:
+		if is_instance_valid(unit): unit.free()
+	completed_cases.append("linked_" + scenario + "_frames=" + str(frames))
+	return true
