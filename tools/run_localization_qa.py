@@ -11,10 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--godot', required=True, type=Path)
-    parser.add_argument('--mode', choices=['runtime', 'visual', 'battle', 'battle-headless', 'preference'], default='runtime')
+    parser.add_argument('--mode', choices=['runtime', 'visual', 'review', 'combat-review', 'contract', 'battle', 'battle-headless', 'preference'], default='runtime')
     parser.add_argument('--locale', choices=['zh_CN', 'zh_TW', 'en', 'ja'], default='en')
     parser.add_argument('--level', type=int, default=6)
     parser.add_argument('--visible', action='store_true', help='Place the visual test window on screen for final inspection')
+    parser.add_argument('--resolution', default='1280x720')
+    parser.add_argument('--baseline-revision', help='Explicit Git revision used by contract mode')
     parser.add_argument('--out', type=Path, default=ROOT/'scratchpad/localization/qa')
     parser.add_argument('--profile', type=Path)
     parser.add_argument('--preference-action', choices=['save', 'reload', 'override'], default='save')
@@ -31,6 +33,14 @@ def main():
     env['LSH_QA_REPORT'] = str(out/'report.json')
     env['LSH_QA_CAPTURE_DIR'] = str(out)
     env['LSH_QA_MODE'] = args.mode
+    if args.mode == 'contract':
+        if not args.baseline_revision:
+            parser.error('contract mode requires --baseline-revision')
+        source = subprocess.check_output(['git', 'show', args.baseline_revision + ':scripts/defs.gd'], cwd=ROOT)
+        source = source.replace(b'class_name Defs', b'# Baseline definitions; loaded only for comparison', 1)
+        baseline = out/'baseline_defs.gd'
+        baseline.write_bytes(source)
+        env['LSH_QA_BASELINE_DEFS'] = str(baseline)
     env['LSH_QA_PREFERENCE_ACTION'] = args.preference_action
     if args.mode == 'preference':
         if args.preference_action == 'override':
@@ -42,12 +52,13 @@ def main():
         env['LEVEL'] = str(args.level)
     for key in ['SMOKE_TEST', 'AUTOMICRO', 'SKIRMISH', 'SKIRMISH_AI', 'ARENA', 'SCENARIO', 'SCREENSHOT_DIR']:
         env.pop(key, None)
-    command = [str(args.godot), '--path', str(ROOT), '--resolution', '1280x720']
-    if args.mode in ('runtime', 'battle-headless', 'preference'):
+    command = [str(args.godot), '--path', str(ROOT), '--resolution', args.resolution]
+    if args.mode in ('runtime', 'battle-headless', 'preference', 'contract'):
         command += ['--headless']
     else:
         command += ['--rendering-method', 'gl_compatibility', '--position', '0,0' if args.visible else '20000,20000']
-    command += ['res://tools/localization_qa.tscn']
+    scene = {'review': 'text_ui_review', 'combat-review': 'battle_text_ui_review', 'contract': 'text_review_contract'}.get(args.mode, 'localization_qa')
+    command += ['res://tools/' + scene + '.tscn']
     with (out/'godot.log').open('w', encoding='utf-8') as log:
         process = subprocess.run(command, env=env, stdout=log, stderr=subprocess.STDOUT,
                                  timeout=180, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))

@@ -33,7 +33,7 @@ func _build() -> void:
 	add_child(root)
 
 	# —— 顶栏：标题 + 配置名 + 文件操作 ——
-	var top := HBoxContainer.new()
+	var top := HFlowContainer.new()
 	top.add_theme_constant_override("separation", 8)
 	root.add_child(top)
 	var ttl := Label.new()
@@ -154,7 +154,8 @@ func _unit_row(k: String) -> HBoxContainer:
 	row.add_theme_constant_override("separation", 6)
 	var nm := Label.new()
 	nm.text = String(u.get("name", k))
-	nm.custom_minimum_size = Vector2(96, 30)
+	nm.custom_minimum_size = Vector2(190, 30)
+	nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(nm)
 	for f in CustomConfig.UNIT_FIELDS:
 		row.add_child(_lbl(_field_label(f)))
@@ -182,7 +183,8 @@ func _build_abilities() -> void:
 		row.add_theme_constant_override("separation", 6)
 		var nm := Label.new()
 		nm.text = String(a.get("name", id))
-		nm.custom_minimum_size = Vector2(96, 30)
+		nm.custom_minimum_size = Vector2(190, 30)
+		nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		row.add_child(nm)
 		row.add_child(_lbl(Localize.text("冷却"))); row.add_child(_num(a, "cd"))
 		row.add_child(_lbl(Localize.text("范围"))); row.add_child(_num(a, "radius"))
@@ -318,7 +320,7 @@ func _hdr(text: String) -> Label:
 
 
 func _field_label(f: String) -> String:
-	return {"hp": Localize.text("血"), "atk": Localize.text("攻"), "defense": Localize.text("防"), "range": Localize.text("射程"), "cd": Localize.text("攻速"), "speed": Localize.text("移速"),
+	return {"hp": Localize.text("血"), "atk": Localize.text("攻"), "defense": Localize.text("防"), "range": Localize.text("射程"), "cd": Localize.text("攻击间隔"), "speed": Localize.text("移速"),
 		"dmg": Localize.text("伤害"), "slow": Localize.text("减速"), "slow_dur": Localize.text("减速时长"), "stun": Localize.text("眩晕"), "dur": Localize.text("持续"),
 		"heal": Localize.text("治疗"), "atk_mult": Localize.text("攻倍"), "speed_mult": Localize.text("速倍"), "atk_add": Localize.text("加攻"),
 		"hp_add": Localize.text("加血"), "regen": Localize.text("回血"), "lifesteal": Localize.text("吸血"), "len": Localize.text("长度"), "width": Localize.text("宽度"),

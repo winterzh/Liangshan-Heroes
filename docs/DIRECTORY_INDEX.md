@@ -1,3 +1,12 @@
+## 2026-09-08 文本校订与布局检查
+
+- `scripts/lore_data.gd`：108 篇校订生平与回目索引。
+- `scratchpad/.gdignore`：受控保留的扫描边界；目录中其他测试数据仍被 Git 忽略。
+- `assets/localization/text_review_ui.json`：出处、改编说明与补充界面词条。
+- `tools/apply_text_review.py`、`tools/normalize_localization_names.py`：精确替换及术语统一工具。
+- `tools/text_ui_review.gd/.tscn`、`tools/battle_text_ui_review.gd/.tscn`、`tools/text_review_contract.gd/.tscn`：界面、战斗文本和玩法定义回归。
+- `docs/TEXT_REVIEW_20260908.md`、`qa/text_review_20260908/`：逐人原著依据、应用收据、运行记录与选定截图。
+
 ## 2026-09-08 本地化文件
 
 - `scripts/localization.gd`：四语注册、偏好保存、显示绑定。

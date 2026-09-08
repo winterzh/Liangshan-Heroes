@@ -143,10 +143,10 @@ func _units_in_cat(cat: String) -> Array:
 ## 二级菜单单位选择器：一行分类按钮(点切该类) + 当前类下单位列表。on_pick(key,name)。
 func _build_unit_picker(parent: Node, on_pick: Callable) -> void:
 	var cats := ["天罡", "地煞", "英雄·大将", "兵卒", "建筑"]
-	var catbar := GridContainer.new(); catbar.columns = 3; parent.add_child(catbar)
+	var catbar := HFlowContainer.new(); parent.add_child(catbar)
 	for cat in cats:
 		var c: String = cat
-		var cb := _btn(("▸" if c == _palette_cat else "") + c + " (%d)" % _units_in_cat(c).size(), func() -> void:
+		var cb := _btn(("▸" if c == _palette_cat else "") + Localize.text(c) + " (%d)" % _units_in_cat(c).size(), func() -> void:
 			_palette_cat = c; _refresh_tool_panel())
 		cb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		catbar.add_child(cb)
@@ -155,7 +155,8 @@ func _build_unit_picker(parent: Node, on_pick: Callable) -> void:
 	for k in _units_in_cat(_palette_cat):
 		var kk: String = k
 		var nm := _uname(String(k))
-		var kb := _btn(nm, func() -> void: on_pick.call(kk, nm))
+		var kb := _btn(_display_uname(kk), func() -> void: on_pick.call(kk, nm))
+		kb.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		kb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		ub.add_child(kb)
 
@@ -228,7 +229,7 @@ func _build() -> void:
 	add_child(root)
 
 	# 顶栏
-	var top := HBoxContainer.new()
+	var top := HFlowContainer.new()
 	top.add_theme_constant_override("separation", 8)
 	root.add_child(top)
 	var ttl := Label.new()
@@ -276,10 +277,15 @@ func _build() -> void:
 	root.add_child(cols)
 
 	# 左：工具
+	var left_scroll := ScrollContainer.new()
+	left_scroll.name = "ToolScroll"
+	left_scroll.custom_minimum_size.x = 208
+	left_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	cols.add_child(left_scroll)
 	var left := VBoxContainer.new()
-	left.custom_minimum_size = Vector2(190, 0)
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left.add_theme_constant_override("separation", 4)
-	cols.add_child(left)
+	left_scroll.add_child(left)
 	_build_tools(left)
 
 	# 中：画布
@@ -364,7 +370,7 @@ func _refresh_tool_panel() -> void:
 				sw.add_theme_color_override("font_color", Color.WHITE if col.get_luminance() < 0.5 else Color.BLACK)
 				var sb := StyleBoxFlat.new(); sb.bg_color = col; sb.set_corner_radius_all(4); sw.add_theme_stylebox_override("normal", sb)
 				var t2: String = tn
-				sw.pressed.connect(func() -> void: cur_terrain = t2; _show_toast("地形：" + _terrain_label(t2)))
+				sw.pressed.connect(func() -> void: cur_terrain = t2; _show_toast(Localize.text("地形：") + _terrain_label(t2)))
 				grid.add_child(sw)
 			var bl := Label.new(); bl.text = Localize.text("笔刷大小"); _tool_panel.add_child(bl)
 			var bsl := HSlider.new(); bsl.min_value = 1; bsl.max_value = 4; bsl.step = 1; bsl.value = brush
@@ -376,16 +382,16 @@ func _refresh_tool_panel() -> void:
 			var fb := HBoxContainer.new(); _tool_panel.add_child(fb)
 			for f in [[Localize.text("梁山"), "LIANG"], [Localize.text("官军"), "GUAN"]]:
 				var fk: String = f[1]
-				var fbtn := _btn(f[0], func() -> void: cur_faction = fk; _show_toast("阵营：" + String(f[0])))
+				var fbtn := _btn(f[0], func() -> void: cur_faction = fk; _show_toast(Localize.text("阵营：") + Localize.text(String(f[0]))))
 				fb.add_child(fbtn)
 			var ul := Label.new(); ul.text = Localize.text("单位（先选类·再点单位）"); ul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(ul)
-			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("单位：" + nm))
+			_build_unit_picker(_tool_panel, func(k: String, _nm: String) -> void: cur_unit = k; _show_toast(Localize.text("单位：") + _display_uname(k)))
 		"decor":
 			var dl := Label.new(); dl.text = Localize.text("装饰物（纯美观）"); dl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(dl)
 			var dgrid := GridContainer.new(); dgrid.columns = 2; _tool_panel.add_child(dgrid)
 			for dk in DECOR_KEYS:
 				var dkk: String = dk
-				var dbtn := _btn(String(DECOR_LABELS.get(dk, dk)), func() -> void: cur_decor = dkk; _show_toast("装饰：" + String(DECOR_LABELS.get(dkk, dkk))))
+				var dbtn := _btn(String(DECOR_LABELS.get(dk, dk)), func() -> void: cur_decor = dkk; _show_toast(Localize.text("装饰：") + Localize.text(String(DECOR_LABELS.get(dkk, dkk)))))
 				dbtn.custom_minimum_size = Vector2(82, 26)
 				dgrid.add_child(dbtn)
 			var dsl_l := Label.new(); dsl_l.text = Localize.text("尺寸"); _tool_panel.add_child(dsl_l)
@@ -400,9 +406,9 @@ func _refresh_tool_panel() -> void:
 			var rfb := HBoxContainer.new(); _tool_panel.add_child(rfb)
 			for f in [[Localize.text("梁山"), "LIANG"], [Localize.text("官军"), "GUAN"]]:
 				var fk: String = f[1]
-				rfb.add_child(_btn(f[0], func() -> void: cur_rf_faction = fk; _show_toast("增援阵营：" + String(f[0]))))
+				rfb.add_child(_btn(f[0], func() -> void: cur_rf_faction = fk; _show_toast(Localize.text("增援阵营：") + Localize.text(String(f[0])))))
 			var rul := Label.new(); rul.text = Localize.text("援军单位（先选类·再点单位）"); rul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(rul)
-			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("援军：" + nm))
+			_build_unit_picker(_tool_panel, func(k: String, _nm: String) -> void: cur_unit = k; _show_toast(Localize.text("援军：") + _display_uname(k)))
 			var rtip := Label.new(); rtip.text = Localize.text("点地图把该单位放进第 N 波的增援；该波触发时刷出")
 			rtip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; rtip.add_theme_font_size_override("font_size", 11)
 			_tool_panel.add_child(rtip)
@@ -410,7 +416,7 @@ func _refresh_tool_panel() -> void:
 			var gl := Label.new(); gl.text = Localize.text("出兵口编号"); gl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(gl)
 			for g in GATE_NAMES:
 				var gk: String = g
-				var gb := _btn(Localize.text("口 ") + g, func() -> void: cur_gate = gk; _show_toast("放置出兵口：" + gk))
+				var gb := _btn(Localize.text("口 ") + g, func() -> void: cur_gate = gk; _show_toast(Localize.text("放置出兵口：") + gk))
 				gb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				_tool_panel.add_child(gb)
 		"camera":
@@ -762,7 +768,7 @@ func _edit_unit(key: String) -> void:
 	if key == "":
 		return
 	_eu_key = key
-	var pw := _popup_window(Localize.format_text("编辑单位：%s (%s)", [_uname(key), key]), 560, 640)
+	var pw := _popup_window(Localize.format_text("编辑单位：%s (%s)", [_display_uname(key), key]), 560, 640)
 	_eu_root = pw["root"]
 	var top := HBoxContainer.new(); (pw["body"] as Control).add_child(top)
 	var hint := Label.new(); hint.text = Localize.text("改动仅对本关生效"); hint.add_theme_color_override("font_color", UITheme.COMPLETE)
@@ -829,7 +835,7 @@ func _eu_clone() -> void:
 		_eu_root.queue_free()
 	_build()                # 刷新「放单位」下拉，带上新单位
 	_edit_unit(nk)
-	_show_toast(Localize.format_text("已复制为 %s（借用 %s 美术），可在「放单位」里摆放", [nk, _uname(src)]))
+	_show_toast(Localize.format_text("已复制为 %s（借用 %s 美术），可在「放单位」里摆放", [nk, _display_uname(src)]))
 
 
 func _ae_open(aid: String) -> void:
@@ -975,6 +981,10 @@ func _popup_window(title_text: String, w: float, h: float, host: Node = null) ->
 	bh.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(bh)
 	var tl := Label.new(); tl.text = "▦  " + Localize.text(title_text)
+	tl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tl.clip_text = true
+	tl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	tl.tooltip_text = tl.text
 	tl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tl.add_theme_font_size_override("font_size", 17); tl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	bh.add_child(tl)
@@ -1026,7 +1036,9 @@ func _opt_row(label: String, items: Array, cur: String, cb: Callable) -> HBoxCon
 	var l := Label.new(); l.text = label; l.custom_minimum_size = Vector2(110, 0); h.add_child(l)
 	var o := OptionButton.new(); o.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	for i in range(items.size()):
-		o.add_item(String(items[i]), i)
+		var raw := String(items[i])
+		var display := _terrain_label(raw) if raw in TERRAINS else Localize.text(String({"marsh": "水泊", "plain": "平原", "hills": "丘陵", "town": "城镇", "clear": "清敌后出兵", "timed": "定时出兵"}.get(raw, raw)))
+		o.add_item(display, i)
 		if String(items[i]) == cur:
 			o.select(i)
 	o.item_selected.connect(func(idx: int) -> void: cb.call(String(items[idx])))
@@ -1036,8 +1048,10 @@ func _opt_row(label: String, items: Array, cur: String, cb: Callable) -> HBoxCon
 
 func _key_opt(keys: Array, cur: String, cb: Callable) -> OptionButton:
 	var o := OptionButton.new(); o.custom_minimum_size = Vector2(96, 0)
+	o.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	o.get_popup().auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	for i in range(keys.size()):
-		o.add_item(_uname(String(keys[i])), i)
+		o.add_item(_display_uname(String(keys[i])), i)
 		if String(keys[i]) == cur:
 			o.select(i)
 	o.item_selected.connect(func(idx: int) -> void: cb.call(String(keys[idx])))

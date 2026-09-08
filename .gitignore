@@ -16,7 +16,8 @@ source code.zip
 *~
 
 # 会话临时目录（不入库）
-scratchpad/
+scratchpad/*
+!scratchpad/.gdignore
 
 # Godot-generated QA sidecars; source evidence and already tracked files remain versioned.
 # Explicitly include a sidecar if a production or QA provenance manifest requires it.
@@ -30,3 +31,9 @@ qa/**/*.uid
 # Standalone localization QA scripts are loaded by path.
 /tools/localization_qa.gd.uid
 /tools/localization_package_probe.gd.uid
+/tools/text_ui_review.gd.uid
+/tools/battle_text_ui_review.gd.uid
+/tools/text_review_contract.gd.uid
+
+# Rebuildable Python maintenance cache.
+__pycache__/

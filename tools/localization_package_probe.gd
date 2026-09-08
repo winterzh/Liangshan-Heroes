@@ -21,6 +21,9 @@ func _run() -> void:
 			failures.append("packed font missing glyph: " + character)
 	if not FileAccess.file_exists("res://assets/fonts/OFL.txt"):
 		failures.append("font license missing")
+	for directory in ["scratchpad", "qa", "tools", "build"]:
+		if DirAccess.dir_exists_absolute("res://" + directory):
+			failures.append("development directory entered package: " + directory)
 	var report := {"locale": locale, "passed": failures.is_empty(), "failures": failures,
 		"catalog_sha256": FileAccess.get_sha256(catalog)}
 	var output := FileAccess.open(OS.get_environment("LSH_QA_REPORT"), FileAccess.WRITE)

@@ -74,7 +74,7 @@ func _build() -> void:
 	fs.tooltip_text = "切换全屏 / 窗口（F11 或 Alt+Enter）"
 	fs.focus_mode = Control.FOCUS_NONE
 	fs.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-	fs.offset_left = -116.0
+	fs.offset_left = -170.0
 	fs.offset_right = -16.0
 	fs.offset_top = 14.0
 	fs.offset_bottom = 46.0
@@ -85,20 +85,26 @@ func _build() -> void:
 	add_child(fs)
 
 	# 大模块入口（竖排，居中在「副标题以下 ~ 版本号以上」的带内，绝不再顶进标题区）
+	var module_scroll := ScrollContainer.new()
+	module_scroll.name = "ModuleScroll"
+	module_scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	module_scroll.offset_top = 128.0
+	module_scroll.offset_bottom = -64.0
+	module_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(module_scroll)
 	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	center.offset_top = 128.0
-	center.offset_bottom = -36.0
-	add_child(center)
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	module_scroll.add_child(center)
 
 	var col := VBoxContainer.new()
 	col.alignment = BoxContainer.ALIGNMENT_CENTER
-	col.add_theme_constant_override("separation", 10)
+	col.add_theme_constant_override("separation", 8)
 	center.add_child(col)
 
 	col.add_child(_mk_module("📜  剧情模式", "八幕全开放 · 自由通关，依原著完成可收录演义印", UITheme.PAPER_DARK, _show_story))
 	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", UITheme.COMPLETE, _show_defense, true))
-	col.add_child(_mk_module("⚔  1v1 对战", "对称经济 · 真实造兵造房，三种胜利条件、三档 AI", UITheme.COPPER_LIGHT, _show_1v1))
+	col.add_child(_mk_module("⚔  1v1 对战", "对称经济 · 真实造兵造房，两种胜利条件、三档 AI", UITheme.COPPER_LIGHT, _show_1v1))
 	col.add_child(_mk_module("🏟  竞技场", "百八好汉技能试演场 · 自由点将放技能、一键刷敌", UITheme.VERMILION, func() -> void:
 		Campaign.arena = true
 		Campaign.skirmish = false
@@ -171,7 +177,7 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 
 	var btn := Button.new()
 	Localize.bind_render(btn, func() -> String: return Localize.text(title_text) + ("       " + Localize.text("★ 推荐") if recommended else ""))
-	btn.custom_minimum_size = Vector2(650, 64)
+	btn.custom_minimum_size = Vector2(650, 52)
 	btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	btn.add_theme_font_size_override("font_size", 28)
 	btn.add_theme_color_override("font_color", accent)
@@ -215,20 +221,30 @@ class MenuOverlay extends ColorRect:
 			queue_free()
 
 
-func _mk_overlay(title_text: String, format_args: Variant = null) -> Array:
+func _mk_overlay(title_text: String, format_args: Variant = null, content_width := 760.0) -> Array:
 	var overlay := MenuOverlay.new()
-	overlay.color = Color(0.06, 0.05, 0.035, 0.97)   # 近不透明的暖深底，弹层文字清晰可读
+	overlay.color = Color(0.06, 0.05, 0.035, 1.0)
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(overlay)
+	var scroll := ScrollContainer.new()
+	scroll.name = "OverlayScroll"
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.offset_left = 24; scroll.offset_right = -24
+	scroll.offset_top = 76; scroll.offset_bottom = -24
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	overlay.add_child(scroll)
 	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	overlay.add_child(center)
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.add_child(center)
 	var box := VBoxContainer.new()
+	box.custom_minimum_size.x = content_width
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_theme_constant_override("separation", 12)
 	center.add_child(box)
 	var title := Label.new()
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	if format_args == null:
 		title.text = title_text
 	else:
@@ -281,7 +297,7 @@ func _mk_big_btn(text: String, col: Color, format_args: Variant = null) -> Butto
 # 模块一：剧情模式（八幕战役卡片）
 # ======================================================================
 func _show_story() -> void:
-	var ov := _mk_overlay("剧情模式 · 八幕战役")
+	var ov := _mk_overlay("剧情模式 · 八幕战役", null, 1080.0)
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
 
@@ -293,6 +309,13 @@ func _show_story() -> void:
 	rule.add_theme_font_size_override("font_size", 16)
 	rule.add_theme_color_override("font_color", Color("d8c79c"))
 	box.add_child(rule)
+	var adaptation := Label.new()
+	adaptation.text = "剧情根据原著改编；关卡顺序、对白及技能为游戏设计。"
+	adaptation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	adaptation.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	adaptation.add_theme_font_size_override("font_size", 14)
+	adaptation.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
+	box.add_child(adaptation)
 
 	var grid := VBoxContainer.new()
 	grid.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -300,7 +323,8 @@ func _show_story() -> void:
 	var mission_scroll := ScrollContainer.new()
 	mission_scroll.name = "CampaignCardsScroll"
 	mission_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	mission_scroll.custom_minimum_size = Vector2(1080, clampf(get_viewport_rect().size.y - 280.0, 300.0, 560.0))
+	mission_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	mission_scroll.custom_minimum_size = Vector2(1080, 0)
 	box.add_child(mission_scroll)
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mission_scroll.add_child(grid)
@@ -331,7 +355,7 @@ func _show_defense() -> void:
 	var box: VBoxContainer = ov[1]
 
 	var tip := Label.new()
-	tip.text = "守住聚义厅，击退一波波官军围剿"
+	tip.text = "守住忠义堂，击退一波波官军围剿"
 	tip.add_theme_font_size_override("font_size", 16)
 	tip.add_theme_color_override("font_color", Color("9fb0c4"))
 	tip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -449,6 +473,7 @@ func _show_defense() -> void:
 
 	# 自定义随机波次：任意波数 + 每波固定间隔(秒)，每波随机敌军(数量随波次增长)、受敌方倍率影响
 	var rndlbl := Label.new()
+	rndlbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rndlbl.text = "🎲 自定义随机波次（任意波数 · 随机敌军 · 数量随波次增长）"
 	rndlbl.add_theme_font_size_override("font_size", 15)
 	rndlbl.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
@@ -640,6 +665,9 @@ func _show_scenario_picker() -> void:
 	for name in saved:
 		var nm: String = name
 		var b := _mk_big_btn("▶  " + nm, Color("9fe06f"))
+		b.clip_text = true
+		b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		b.tooltip_text = nm
 		b.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		b.pressed.connect(func() -> void:
 			var d: Dictionary = ScenarioStore.load_by_name(nm)
@@ -661,27 +689,15 @@ func _show_scenario_picker() -> void:
 # ======================================================================
 func _show_custom_picker() -> void:
 	var saved: Array = CustomConfig.list_saved()
-	var overlay := ColorRect.new()
-	overlay.color = Color(0.06, 0.05, 0.035, 0.97)   # 近不透明的暖深底，弹层文字清晰可读
-	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	add_child(overlay)
-	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	overlay.add_child(center)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 10)
-	box.alignment = BoxContainer.ALIGNMENT_CENTER
-	center.add_child(box)
-	var title := Label.new()
-	title.text = "选择自定义据守配置" if not saved.is_empty() else "还没有保存的配置——先去「更多 → 关卡编辑器」做一个并保存"
-	title.add_theme_font_size_override("font_size", 24)
-	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(title)
+	var ov := _mk_overlay("选择自定义据守配置" if not saved.is_empty() else "还没有保存的配置——先去「更多 → 据守数值编辑器」做一个并保存")
+	var overlay: ColorRect = ov[0]
+	var box: VBoxContainer = ov[1]
 	for name in saved:
 		var b := Button.new()
 		b.text = "▶  " + String(name)
+		b.clip_text = true
+		b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		b.tooltip_text = String(name)
 		b.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		b.custom_minimum_size = Vector2(340, 46)
 		b.add_theme_font_size_override("font_size", 20)

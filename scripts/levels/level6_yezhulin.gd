@@ -75,7 +75,7 @@ func apply_overrides(defs: Dictionary, _abilities: Dictionary) -> void:
 
 func intro_lines() -> Array:
 	return [
-		{"who": "旁白", "key": "narrator", "text": "林冲刺配沧州，双脚已被滚水烫伤。董超、薛霸受买嘱，要在僻静的野猪林下手。鲁智深一路尾随，未曾露面。"},
+		{"who": "旁白", "key": "narrator", "text": "林冲刺配沧州，双脚已被滚水烫伤。董超、薛霸受买嘱，要在野猪林下手。原著中鲁智深先到林内埋伏；本关从暗中跟随押解队伍开始，由你把握救人时机。"},
 		{"who": "鲁智深", "key": "lu_zhishen", "text": "两个公人一路折磨林教头。洒家且从林边跟上，看他们到这僻静处又要做甚么。"},
 		{"who": "行前提示", "key": "narrator", "text": "先沿北侧松林或南侧芦丛暗中跟上，在棍落之前救下林冲。救人后框选四人，自己决定先歇脚照伤还是直接出林。"},
 	]

@@ -10,6 +10,7 @@ var _sub_lbl: Label
 var _abil_title: Label
 var _abil_lbl: Label
 var _bio_lbl: Label
+var _lore_source: Label
 var _port: AnimBox
 var _walk: AnimBox
 var _atk: AnimBox
@@ -162,6 +163,12 @@ func _ready() -> void:
 	_name_lbl.add_theme_font_size_override("font_size", 34)
 	_name_lbl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	detail.add_child(_name_lbl)
+	var edition := Label.new()
+	edition.text = Localize.text("生平依据一百二十回本《水浒全传》；技能、数值及扩展兵种为游戏设计。")
+	edition.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	edition.add_theme_font_size_override("font_size", 14)
+	edition.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
+	detail.add_child(edition)
 	_sub_lbl = Label.new()
 	_sub_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_sub_lbl.custom_minimum_size = Vector2(660, 0)
@@ -297,6 +304,11 @@ func _build_lore_overlay() -> void:
 	_lore_text.add_theme_color_override("font_color", Color(0.15, 0.10, 0.05))   # 墨色
 	_lore_text.add_theme_constant_override("line_spacing", 13)
 	_lore_scroll.add_child(_lore_text)
+	_lore_source = Label.new()
+	_lore_source.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_lore_source.add_theme_font_size_override("font_size", 14)
+	_lore_source.add_theme_color_override("font_color", Color(0.35, 0.24, 0.14))
+	cv.add_child(_lore_source)
 
 
 func _show_lore() -> void:
@@ -306,6 +318,11 @@ func _show_lore() -> void:
 	var sl: String = _localized_star_label(_cur)
 	_lore_name.text = _disp_name(_cur) + ("　〔%s〕" % sl if sl != "" else "")
 	_lore_text.text = Bios.get_lore(_cur, _utype(d))
+	var chapters: Array = LoreData.CHAPTERS.get(_cur, [])
+	var chapter_labels := PackedStringArray()
+	for chapter in chapters:
+		chapter_labels.append(str(chapter))
+	_lore_source.text = Localize.format_text("原著依据：第 %s 回（一百二十回本）", ", ".join(chapter_labels)) if not chapters.is_empty() else Localize.text("人物与单位说明；战斗能力为游戏设计。")
 	var vp: Vector2 = get_viewport_rect().size
 	var pw: float = clampf(vp.x * 0.54, 360.0, 760.0)   # 约半屏多一点，限个上下界
 	_lore_panel.size = Vector2(pw, vp.y)
@@ -383,6 +400,8 @@ func _select(key: String) -> void:
 	else:
 		_sub_lbl.text = _stat_block(d, t)
 	_bio_lbl.text = Bios.get_bio(key, t)
+	if key == "ruan_brother":
+		_bio_lbl.text = Localize.text("阮小二，号「立地太岁」，石碣村渔人，阮氏三兄弟中的长兄。参与智取生辰纲，入梁山后为水军头领。\n\n本条记阮小二生平；战斗单位「阮氏好汉」合并表现阮氏兄弟。")
 	# 技能（1/2/3 级数值）：有技能组的英雄；战役单将退回单技能
 	var abil: Array = d.get("abilities", [])
 	if abil.is_empty() and String(d.get("ability", "")) != "":
@@ -450,12 +469,13 @@ func _select(key: String) -> void:
 	_atk.set_frames(af)
 
 
-## 显示名：有战斗单位条目用其 name；图鉴专条（仅 STAR 名册）用一百单八将姓名；都没有退回 key。
+## 图鉴优先使用星将本名；合并战斗单位的名称另在说明中交代。
 func _disp_name(key: String) -> String:
+	if Bios.STAR.has(key):
+		return Localize.text(Bios.star_name(key))
 	if Defs.UNITS.has(key):
 		return Localize.text(String(Defs.UNITS[key].get("name", key)))
-	var sn := Bios.star_name(key)
-	return Localize.text(sn) if sn != "" else key
+	return key
 
 
 ## 详细数值条：血量/攻击/攻击间隔/射程/移速/造价/人口/建造·训练/特性——建筑与英雄/单位通用。

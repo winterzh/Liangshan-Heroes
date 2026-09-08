@@ -2277,7 +2277,7 @@ func _build_intro() -> void:
 
 func _build_end() -> void:
 	_end_root = ColorRect.new()
-	_end_root.color = Color(0.06, 0.05, 0.035, 0.93)   # 结算：近不透明暖深底
+	_end_root.color = Color(0.06, 0.05, 0.035, 1.0)
 	_end_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_end_root.mouse_filter = Control.MOUSE_FILTER_STOP
 	# Mission panels are attached to the HUD after it is built. Keep settlement
@@ -2286,8 +2286,10 @@ func _build_end() -> void:
 	_end_root.visible = false
 	add_child(_end_root)
 
-	var cc := CenterContainer.new()
+	var cc := MarginContainer.new()
 	cc.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	cc.offset_left = 60; cc.offset_right = -60
+	cc.offset_top = 20; cc.offset_bottom = -20
 	_end_root.add_child(cc)
 
 	var vbox := VBoxContainer.new()
@@ -2301,13 +2303,15 @@ func _build_end() -> void:
 	vbox.add_child(_end_title)
 
 	_end_sub = Label.new()
+	_end_sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_end_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_end_sub.add_theme_font_size_override("font_size", 20)
 	vbox.add_child(_end_sub)
 
 	# 各路好汉战绩：逐将列出总战绩、主动技能及显式统计的伤害型被动；英雄多时固定高度滚动。
 	_end_tally_scroll = ScrollContainer.new()
-	_end_tally_scroll.custom_minimum_size = Vector2(920, 360)
+	_end_tally_scroll.custom_minimum_size = Vector2(920, 120)
+	_end_tally_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_end_tally_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_end_tally_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	vbox.add_child(_end_tally_scroll)
