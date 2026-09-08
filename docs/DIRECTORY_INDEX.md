@@ -1,3 +1,8 @@
+## 2026-09-08 Steam 四语交付
+
+- `docs/STEAM_LOCALIZATION_UPDATE_20260908.md`、`qa/steam_localization_update_20260908/`：四语与校订内容的 Windows 更新记录。
+- `tools/build_steam_candidate.py`、`tools/steam_package_probe.gd`：纳入四语资源的候选白名单与实际 Steam 包检查。
+
 ## 2026-09-08 文本校订与布局检查
 
 - `scripts/lore_data.gd`：108 篇校订生平与回目索引。

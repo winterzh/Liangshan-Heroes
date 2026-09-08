@@ -1,7 +1,7 @@
 """Export a private Windows Steam feature candidate from a successful QA snapshot.
 
 No upload or publication; this is not the commercial artwork/readiness gate.
-The runtime allowlist follows the verified September 7 Windows update scope.
+The runtime allowlist includes the reviewed four-language catalog and font.
 """
 from pathlib import Path, PurePosixPath
 import argparse
@@ -19,6 +19,8 @@ from contracts.run_content_identity_20260907.build_identity import seed, generat
 from contracts.run_content_identity_20260907.probe_runner import run_locked as probe_content_identity, utilities as identity_utilities
 
 CORE = {"project.godot", "export_presets.cfg", "icon.png", "icon.png.import", "icon.ico"}
+LOCALIZATION = {"assets/localization/catalog.json", "assets/fonts/NotoSansCJK-Regular.ttc",
+                "assets/fonts/NotoSansCJK-Regular.ttc.import", "assets/fonts/OFL.txt"}
 RUNTIME = ("assets/anim/", "assets/campaign/anim/", "assets/campaign/objects/",
            "assets/campaign/portraits/", "assets/campaign/environment/", "assets/vfx/", "assets/characters/")
 
@@ -27,7 +29,7 @@ def sha(path):
 
 def allowed(name):
     path = PurePosixPath(name)
-    if name in CORE: return True
+    if name in CORE or name in LOCALIZATION: return True
     if name.startswith("content/"): return path.suffix == ".json"
     if name.startswith("scripts/"): return path.suffix in {".gd", ".gdshader", ".uid"}
     if name.startswith("scenes/"): return path.suffix == ".tscn"
@@ -65,6 +67,9 @@ def main():
     proof = json.loads((qa / "receipt.json").read_text())
     if not proof.get("complete"): raise RuntimeError("A successful QA run is required")
     records = [row for row in proof["source_files"] if allowed(row["path"]) and row["path"] != DERIVED]
+    missing_localization = LOCALIZATION - {row["path"] for row in records}
+    if missing_localization:
+        raise RuntimeError("The successful QA snapshot must include localization inputs: " + ", ".join(sorted(missing_localization)))
     if not any(row["path"] == "scripts/run_content_identity.gd" for row in records):
         raise RuntimeError("The successful QA snapshot must include the reviewed identity provider")
     for row in records:
@@ -110,7 +115,10 @@ def main():
         receipt["template_sha256"] = sha(target)
         engine = str(resolve_godot(args.godot))
         receipt["godot_sha256"] = sha(Path(engine))
-        env.update(STEAM_DISABLED="1", CONTENT_UPDATE_NO_AUTO="1", STEAM_PACKAGE_REPORT=str(run / "package_report.json"))
+        catalog_sha256 = sha(project / "assets/localization/catalog.json")
+        receipt["localization_catalog_sha256"] = catalog_sha256
+        env.update(STEAM_DISABLED="1", CONTENT_UPDATE_NO_AUTO="1", STEAM_PACKAGE_REPORT=str(run / "package_report.json"),
+                   LSH_QA_CATALOG_SHA=catalog_sha256)
         windows = run / "windows"
         windows.mkdir()
         exe = windows / "LiangshanHeroes.exe"

@@ -114,7 +114,7 @@ func _build_global() -> void:
 
 # ---------- 单位分页 ----------
 func _build_units() -> void:
-	_body.add_child(_hdr(Localize.format_text("单位数值（敌我全单位，含战役登场，共 %d 个）：血 / 攻 / 防 / 射程 / 攻速(秒) / 移速", _cfg["units"].size())))
+	_body.add_child(_hdr(Localize.format_text("单位数值（敌我全单位，含战役登场，共 %d 个）：血 / 攻 / 防 / 射程 / 攻击间隔(秒) / 移速", _cfg["units"].size())))
 	# 搜索框：按名过滤（持续打字不丢焦点——过滤态下重建后回焦）
 	var search := LineEdit.new(); search.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	search.placeholder_text = Localize.text("🔍 搜索单位名（如 林冲 / 官军 / 祝家）…")
