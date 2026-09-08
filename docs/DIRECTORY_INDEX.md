@@ -1,3 +1,12 @@
+## 2026-09-09 Steam 正式激活与公告发布
+
+- `docs/STEAM_STATS_FIX_PUBLICATION_20260909.md`：正式 default Build25185242 / Manifest1883518997850700800、公告708907988310559239，以及后台发布和公开页面回读的验收边界。
+- `qa/steam_stats_fix_publication_20260909/preflight.json`：四语字段、长度、BBCode、文案范围与哈希、原候选ZIP及六成员、复用封面的脱敏静态复核；不用于证明当前登录或公开状态。
+- `qa/steam_stats_fix_publication_20260909/publication_receipt.json`、`public_rendered.json`：本轮正式分支、部署历史、公告发布与四语公开回读收据及可见文本；每语9片段、合计36片段精确匹配。通过已登录会话访问公开URL，未做退出登录对照；封面保存和各公开位置实际展示分开记录。不覆盖9月8日原始收据，目录`.gdignore`阻止Godot扫描。
+- `docs/STEAM_STATS_FIX_20260908.md`、`marketing/steam_stats_fix_20260908/README.md`：修复发行范围与已发布文案的维护入口；源码、发行包及`copy.json`未变，玩家续玩入口仍未开放。
+
+以下各批次“候选仍在构建”“未发布”等说明保留当时语境；当前正式版及公告状态以上方新记录为准。
+
 ## 2026-09-08 普通 Steam 统计修复与续玩组件收尾
 
 - `docs/STEAM_STATS_FIX_20260908.md`：普通统计初始化、旧保存通知与服务器校正处理的修复，以及本轮已获授权、执行中的候选/Steam更新/公告状态；以最终收据区分各阶段。

@@ -1,10 +1,12 @@
-# Steam统计修复公告草稿
+# Steam统计修复公告文案与发布记录
 
-本目录只提供四语公告初稿，尚未填写Steam后台或发布。发布负责人需在本次更新同包验证、上线状态核验后采用文案。`copy.json`沿用上一批公告格式：`schinese`、`tchinese`、`english`、`japanese`各含`title`、`subtitle`、`summary`、`body_bbcode`。
+本目录文案已用于公告 [708907988310559239](https://store.steampowered.com/news/app/5088120/view/708907988310559239)，后台已发布并显示公开可见，开始时间为北京时间2026-09-09 02:17，关联正式default Build25185242。四语公开页面每语标题、副标题和7段正文共9片段，合计36片段已与`copy.json`去BBCode后的对应内容逐项及顺序精确匹配。新闻列表已出现本公告及正确标题；简中和日文公开页上半部截图目检可读。此为已登录会话访问公开URL，未做退出登录对照。最新状态见 [发布记录](../../docs/STEAM_STATS_FIX_PUBLICATION_20260909.md) 与 [脱敏收据](../../qa/steam_stats_fix_publication_20260909/publication_receipt.json)。维护时使用本活动ID，避免重复创建。
+
+`copy.json`未修改，沿用上一批公告格式：`schinese`、`tchinese`、`english`、`japanese`各含`title`、`subtitle`、`summary`、`body_bbcode`。此前“仅草稿/未发布”描述为9月8日准备阶段状态。
 
 文案范围：统计读取失败处理、连续游玩时保存状态误判、Steam统计校正后的本局停止集计和重启提示。发行包包含只读桥接属于实现细节，不写进玩家公告。正文明确说明战斗中途保存与继续尚未开放，经典30波及八关仍待统一验收；没有宣称持久云同步、断网重启后补传、统计绝不丢失或续玩已经交付。
 
-复用此前已验收的无文字800×450封面：`docs/steam_announcement_20260901/event_cover_800x450_english_v2.png`。既有Steam封面地址：`https://clan.fastly.steamstatic.com/images/46272698/2105fa26234a9377723de86a7519262f3f5949cb.png`。历史采用记录见`docs/STEAM_LOCALIZATION_ANNOUNCEMENT_20260908.md`；本批未生成、编辑或上传图片。正文没有图片占位符，可直接使用四语BBCode，封面需由发布负责人在本次活动中设置。
+复用此前已验收的无文字800×450封面：`docs/steam_announcement_20260901/event_cover_800x450_english_v2.png`。既有Steam封面地址：`https://clan.fastly.steamstatic.com/images/46272698/2105fa26234a9377723de86a7519262f3f5949cb.png`。历史采用记录见`docs/STEAM_LOCALIZATION_ANNOUNCEMENT_20260908.md`；9月8日准备阶段未生成、编辑或上传图片；9月9日发布时将既有封面上传到本活动的英语封面槽。正文没有图片占位符，四语BBCode已用于本次活动。已保存该无文字800×450英文封面；发布提示明确确认其他语言回退英语。当前公开小型补丁新闻列表卡片实际使用游戏胶囊图`capsule_616x353_schinese.jpg`，正文页顶部使用游戏截图背景。因此仅确认活动封面已保存并随活动发布，不宣称所有公开位置均展示该封面。
 
 字段长度沿用上一批限制：标题最多80字符，副标题最多120字符，摘要最多180字符；正文使用成对的`h2`和`list`标签。四语JSON形状、长度、BBCode标签配对、三条更新项目以及无残留图片占位符均已通过静态检查；该检查不代表Steam后台保存或发布。
 
@@ -15,4 +17,4 @@
 | english | 44 | 58 | 151 | 847 |
 | japanese | 22 | 22 | 76 | 374 |
 
-封面文件的PNG尺寸已回读为800×450，SHA-256为`508a9c882c68579ebdcc4832890f83ccd36448269ade8347b027bfdb035a56da`。`copy.json` SHA-256为`ab474e4029d636eb95229bf091eadbe7c951a658e1c00704396d961fd5054d9c`。未执行浏览器、Godot或Git操作。
+封面文件的PNG尺寸已回读为800×450，SHA-256为`508a9c882c68579ebdcc4832890f83ccd36448269ade8347b027bfdb035a56da`。`copy.json` SHA-256为`ab474e4029d636eb95229bf091eadbe7c951a658e1c00704396d961fd5054d9c`。9月8日文案准备仅做静态检查；9月9日发布任务完成Steam后台操作，本次文档收尾未变更运行代码、文案或图片，未重跑Godot。

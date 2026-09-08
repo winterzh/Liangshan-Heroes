@@ -1,0 +1,110 @@
+{
+  "observed_utc": "2026-09-08T17:55:47.793845+00:00",
+  "result": "PASS",
+  "scope": "Offline announcement preflight for existing frozen candidate. No browser, Steam login/default state, public rendering, Git or Godot was inspected or modified. Historical Steam receipt is used only to join build and candidate membership, never as current login or publication status.",
+  "app_id": 5088120,
+  "depot_id": 5088121,
+  "build_id": "25185242",
+  "manifest_id": "1883518997850700800",
+  "copy_path": "marketing/steam_stats_fix_20260908/copy.json",
+  "copy_sha256": "ab474e4029d636eb95229bf091eadbe7c951a658e1c00704396d961fd5054d9c",
+  "language_checks": [
+    {
+      "language": "schinese",
+      "field_lengths": {
+        "title": 16,
+        "subtitle": 15,
+        "summary": 54,
+        "body_bbcode": 274
+      },
+      "title_subtitle_summary_within_existing_limits": true,
+      "balanced_allowed_bbcode": true,
+      "update_items": 3,
+      "explicit_resume_not_available": true,
+      "publication_claim_review": "PASS"
+    },
+    {
+      "language": "tchinese",
+      "field_lengths": {
+        "title": 16,
+        "subtitle": 15,
+        "summary": 54,
+        "body_bbcode": 274
+      },
+      "title_subtitle_summary_within_existing_limits": true,
+      "balanced_allowed_bbcode": true,
+      "update_items": 3,
+      "explicit_resume_not_available": true,
+      "publication_claim_review": "PASS"
+    },
+    {
+      "language": "english",
+      "field_lengths": {
+        "title": 44,
+        "subtitle": 58,
+        "summary": 151,
+        "body_bbcode": 847
+      },
+      "title_subtitle_summary_within_existing_limits": true,
+      "balanced_allowed_bbcode": true,
+      "update_items": 3,
+      "explicit_resume_not_available": true,
+      "publication_claim_review": "PASS"
+    },
+    {
+      "language": "japanese",
+      "field_lengths": {
+        "title": 22,
+        "subtitle": 22,
+        "summary": 76,
+        "body_bbcode": 374
+      },
+      "title_subtitle_summary_within_existing_limits": true,
+      "balanced_allowed_bbcode": true,
+      "update_items": 3,
+      "explicit_resume_not_available": true,
+      "publication_claim_review": "PASS"
+    }
+  ],
+  "field_limits_source": "Existing accepted announcement format in marketing/steam_stats_fix_20260908/README.md; title 80, subtitle 120, summary 180.",
+  "manual_scope_review": {
+    "result": "PASS",
+    "supported_claims": [
+      "Failed Steam stats reads are not accepted as valid data.",
+      "Uncorrelated stored notifications do not mark later progress saved.",
+      "Steam correction stops later tracking and writes in the current process and prompts restart."
+    ],
+    "explicit_boundaries": [
+      "No claim of durable synchronization or proof of a specific server write acknowledgement.",
+      "No promise of offline/restart resending or lossless persistence.",
+      "Classic 30 waves and all eight chapter resume options remain unavailable pending joint acceptance."
+    ],
+    "implementation_review": "Read-only review of SteamService initial snapshot validation, success notification handling and correction guard matches this bounded copy."
+  },
+  "candidate_checks": {
+    "six_local_members_match_historical_server_receipt": true,
+    "archive_size_sha256_match_frozen_candidate": true,
+    "zip_member_names_sizes_match": true,
+    "archive_sha256": "b160a06f066f9b4c087d5ee1ef5ebd2265954ba8c91a2c73ec4bf191b317bd96",
+    "candidate_status_booleans_are_historical_local_scope": true
+  },
+  "reused_cover": {
+    "path": "docs/steam_announcement_20260901/event_cover_800x450_english_v2.png",
+    "sha256": "508a9c882c68579ebdcc4832890f83ccd36448269ade8347b027bfdb035a56da",
+    "width": 800,
+    "height": 450,
+    "inspection": "PNG header and hash only; previously accepted cover reused, no new visual acceptance claim."
+  },
+  "input_sha256": {
+    "docs/STEAM_STATS_FIX_20260908.md": "de5de21732c9886c6ca9e46462742038ba1a1339a901d44ee254eac715fc48f2",
+    "qa/steam_stats_fix_20260908/candidate_delivery.json": "568c8a2d88eab35ee3e43c8c9b7c86281575b88691259036e3706413363cb30f",
+    "qa/steam_stats_fix_20260908/steam_server_receipt.json": "f8c1f60093aced58886d871446328d4de3f179dee00e163ed087cc3046ef1a8b",
+    "scripts/steam_service.gd": "8753432ecfc1a45888c3287391083b26442e3e4e596ea597cf35cadd24dbc7eb"
+  },
+  "remaining_online_checks": [
+    "Current default build and activation history readback.",
+    "Save all four languages, associate the intended build, and configure the cover.",
+    "Publish once and verify each public language title, subtitle and body."
+  ],
+  "findings": []
+}
