@@ -1,3 +1,11 @@
+## 2026-09-09 本地终局收据与续玩诊断
+
+普通启动仍使用`Play.cmd`，玩家继续入口未开放。内部单槽现为`classic_continue_slot_v2`，未计Steam统计局也必须引用独立本地active收据；旧v1槽保留并明确拒绝，不手工补token或猜测迁移。终局记录失败时在错误界面重试结算或明确退出，不能把终局战斗恢复为继续运行。[本地收据说明](LOCAL_CONTINUE_LIFECYCLE_20260909.md)。
+
+完整流程使用`py -3.14 -X utf8 -B tools/run_continue_flow_qa.py --run`；加`--terminal-only`只验证收据/保存终局冲突/重启拒绝。任务界面组件使用`tools/run_campaign_presentation_state_qa.py --run`；普通经典玩法诊断使用`tools/run_classic30_continue_acceptance.py --diagnostic-seconds 300 --run`，完整30波命令及失败边界见[驱动说明](CLASSIC30_CONTINUE_ACCEPTANCE_20260909.md)。这些工具都由Python调用，独占共享Godot锁、使用新D盘冻结副本与隔离profile；诊断300秒不等于完整30波，组件PASS不等于八关世界验收。四语词库4393条。
+
+当前已完成Flow269项、Presentation348项、Mission142项及普通经典300秒/前6波诊断；各组件持有自己的冻结源码记录，不冒充同版九种玩法总验收。最终300秒批`052434_5c3663da`已修正测试技能筛选，但没有执行保存恢复，下一步使用上方不带`--diagnostic-seconds`的完整驱动。Steam登录已再次核实正常，已发布Build25185242及公告继续沿用，避免重复发布。下方186项等为前批历史，现行结果见[流程QA](../qa/continue_flow_20260909/README.md)及各新批次收据。
+
 ## 2026-09-09 内部保存继续开发入口
 
 正常游戏仍使用`Play.cmd`，保存/继续按钮尚未对玩家开放。本批内部经典菜单流程186项、同进程事务故障76项、Mission状态142项、暂停确认93项通过；原统计队列221项和18处进程强杀回归通过。四语词库4391条，现有4361条不变。新增观察器仅在隔离构建验证，未替换vendor DLL，也未取得真实持久写确认。

@@ -23,7 +23,7 @@ def sha(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("batch", nargs="?", default="20260909_033618_46aa9054")
+    parser.add_argument("batch", nargs="?", default="20260909_045557_eb6be9e0")
     args = parser.parse_args()
     assert re.fullmatch(r"\d{8}_\d{6}_[0-9a-f]{8}", args.batch), "Invalid batch name"
     evidence = QA / args.batch

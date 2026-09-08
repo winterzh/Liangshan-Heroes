@@ -1,6 +1,8 @@
 # CampaignMission 独立状态组件
 
-日期：2026-09-09。本批新增 `scripts/run_campaign_mission_state.gd`、`tools/campaign_mission_state_qa.gd` 和 `tools/run_campaign_mission_state_qa.py`。**最终批 `20260909_033618_46aa9054` 已通过 142 项原生行为检查（组件进程 120、独立重启进程 22），独立回读核对通过；前两次解析失败原样保留。** Mission 组件没有修改 `campaign_mission.gd`、Battle、Unit、世界槽或玩家入口；不代表八关已经可以续玩。
+后续实现说明（2026-09-09）：原先缺少的定位器参数已在正式创建点登记明确 metadata，并新增 [界面/地图标记工厂](CAMPAIGN_PRESENTATION_STATE_20260909.md)，可与本文 Mission token/registry 接口配对。最新 Mission 回归批 `20260909_045557_eb6be9e0` 已通过 **142 项（120 组件＋22 独立重启）**：导入和行为进程退出 0、错误 0，私有 profile 保护预期退出 2、错误 0；2,953 个来源的当前/冻结 SHA 共 5,906 次核验通过。其受测 Mission SHA 为 `6514aa9cd028ab4af513b2349ccd0076104cebc193765203b14e932416b88171`，状态组件 SHA 仍为 `c9ae212121a4ed234f1aff2fc6e9d1c8242a47b70e097eb3d4a7c05fdd2077d5`。该 runner 不包含新 presentation，不能用这 142 项证明新界面工厂或完整世界恢复已通过。
+
+初始组件交付（2026-09-09）新增 `scripts/run_campaign_mission_state.gd`、`tools/campaign_mission_state_qa.gd` 和 `tools/run_campaign_mission_state_qa.py`。历史批 `20260909_033618_46aa9054` 通过 142 项原生行为检查（120＋22）并独立回读；前两次解析失败原样保留。初始组件当时没有修改 `campaign_mission.gd`、Battle、Unit、世界槽或玩家入口；后续 Mission 固定构造 API 的新来源以上方回归批为准，不代表八关已经可以续玩。
 
 ## 接口及调用顺序
 
@@ -24,11 +26,11 @@
 - `_stage_started_ms`不直接跨进程复制，保存 `capture_ticks_msec - started_ms`，恢复设为 `restore_ticks_msec - stage_age_ms`。恢复后的锚点可以为负数，这是新进程启动时间短于已经发生的阶段耗时的合法情况；离线时间不计入旧阶段。已关闭阶段的 `wall_seconds`作为历史数值原样保留。
 - 冻结 `_result_cache`按已保存目标的顺序和状态独立核对done/missed/pending列表、总数、核心结果和契约版本。冻结结果以及已有victory/defeat终局指标只允许恢复供结果检查，返回 `resume_eligible=false`；世界槽仍必须拒绝将其作为可继续战斗。组件不调用 `result_snapshot()`重新评估、不授予章节成绩或Steam收益。
 
-## 外部presentation的实际阻塞
+## 初始外部presentation阻塞与后续进展
 
-任务状态完整不等于任务UI已具备跨进程工厂。当前 `add_map_locator()` 的cell/label和 `add_actor_locator()` 的actor_key只存在于匿名闭包捕获值中，普通Callable绑定参数无法安全重建这些值。按钮、本地化描述符和marker均用外部token表示，`presentation_captured/restored`不能替代真正的适配器。
+初始组件交付时，`add_map_locator()` 的 cell/label 和 `add_actor_locator()` 的 actor_key 只存在于匿名闭包捕获值中，普通 Callable 绑定参数无法安全重建这些值。后续已迁移为显式描述及固定回调；实际界面、滚动、标记和本地化工厂的验证仍由专用 presentation 批次负责。按钮、本地化描述符和 marker 的外部 token，以及 `presentation_captured/restored` 布尔值，始终不能替代完整适配器验收。
 
-完整接入前需要主任务统一调整这两个共享API：把固定locator种类及参数存为显式、可验证的描述（例如按钮metadata或公开描述API），由可信工厂重建回调。不能从按钮已翻译文本猜人物/坐标，也不能保留旧Mission闭包。此需求已告知主任务，本批没有直接修改共享源码。
+初始交付提出的两个共享 API 调整现已实现：固定 locator 种类及参数作为可验证描述登记，由可信工厂重建回调。独立 presentation 最终批 `20260909_050932_4cb652ff` 已通过 348 项组件检查；它不从按钮已翻译文本猜人物/坐标，也不保留旧 Mission 闭包。该结果尚未接入 WorldCore，后续仍需完整世界与全部关卡流程验收。
 
 另外，外层须保存并重建Localize的源文/格式参数/render描述、按钮显隐和禁用、marker视觉状态与地图位置、面板布局和语言刷新生命周期。恢复失败时须清理新面板的全局语言连接及本地化绑定；不能只释放RefCounted而把私有UI或闭包留在全局绑定表。
 
@@ -46,7 +48,7 @@ py -3.14 -X utf8 -B tools/run_campaign_mission_state_qa.py --run
 
 QA使用实际CampaignMission与Unit类，宿主地图、HUD和关卡回调是明确的合成fixture。已验证半动作剩余时间、单次回调/奖励、已消费右键不启动同位置后续任务、重复事件、目标状态、UI回调归属、坏记录和终局结果。两个进程之间只传递本组件JSON，**没有世界槽、真实任务部署或真实关卡通关**。
 
-最终批来源基线为 `23cc5751803d805f42b12fa3a249df905ed1d50f` 加本批工作区改动，不能把该 HEAD 当作全部受测源码身份。实际组件 SHA-256 为 `c9ae212121a4ed234f1aff2fc6e9d1c8242a47b70e097eb3d4a7c05fdd2077d5`；driver 为 `01d4dc475035660247901b411098cd8503c013c670d1696186b681adf7271b1e`；runner 为 `4e729c1c49a1c62f2b80cbdd6c93a5de02318aa66dca446c456290fb2141c9d6`。完整来源表在 [最终收据](../qa/campaign_mission_state_20260909/20260909_033618_46aa9054/receipt.json)。
+以下保留初始组件交付的历史来源与步骤；最新回归已列在本文开头。初始批来源基线为 `23cc5751803d805f42b12fa3a249df905ed1d50f` 加当批工作区改动，不能把该 HEAD 当作全部受测源码身份。实际组件 SHA-256 为 `c9ae212121a4ed234f1aff2fc6e9d1c8242a47b70e097eb3d4a7c05fdd2077d5`；driver 为 `01d4dc475035660247901b411098cd8503c013c670d1696186b681adf7271b1e`；runner 为 `4e729c1c49a1c62f2b80cbdd6c93a5de02318aa66dca446c456290fb2141c9d6`。完整来源表在 [初始收据](../qa/campaign_mission_state_20260909/20260909_033618_46aa9054/receipt.json)。
 
 | 最终步骤 | 退出码 / 错误 | 秒数 | 实际范围 |
 | --- | --- | --- | --- |
@@ -59,4 +61,4 @@ QA使用实际CampaignMission与Unit类，宿主地图、HUD和关卡回调是�
 
 历史失败分别保留：`20260909_032943_e77c9e0b` 在导入时遇到共享 ContinueFlow 的局部变量类型推断错误，由主任务修复；`20260909_033057_5403ac54` 的 profile_guard 暴露本组件直接从类名调用非静态 `get_script_property_list()`，已改为显式 `Script` 变量后调用。两次均为未完成批次，不能与最终 142 项通过合并计数。
 
-仍待外层完成：可信官方关卡/内容注册、Mission与Level/Unit角色关系交叉核验、UI/marker工厂、世界准备/激活/失败释放、正常保存退出/继续入口、Steam持久确认，以及完整30波、八关、长期性能、双机和真人验收。
+仍待外层完成：可信官方关卡/内容注册、Mission与Level/Unit角色关系交叉核验、已验证 UI/marker 工厂到世界流程的接入、世界准备/激活/失败释放、正常保存退出/继续入口、Steam持久确认，以及完整30波、八关、长期性能、双机和真人验收。

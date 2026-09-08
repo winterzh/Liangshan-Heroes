@@ -1,3 +1,10 @@
+## 2026-09-09 终局身份、任务界面与经典玩法驱动
+
+- `scripts/run_local_lifecycle.gd`、`docs/LOCAL_CONTINUE_LIFECYCLE_20260909.md`：未计Steam统计的本地active/terminal收据、槽v2绑定及终局故障重试；不包含Steam写确认。
+- `scripts/run_campaign_presentation_state.gd`、`docs/CAMPAIGN_PRESENTATION_STATE_20260909.md`、`qa/campaign_presentation_state_20260909/`：固定Mission控件、marker、翻译绑定及恢复布局组件；尚未由官方战役WorldCore调用，原生失败/成功以各批收据为准。
+- `tools/classic30_player_commands.gd`、`tools/classic30_continue_acceptance.gd`、`tools/run_classic30_continue_acceptance.py`、`docs/CLASSIC30_CONTINUE_ACCEPTANCE_20260909.md`、`qa/classic30_continue_20260909/`：普通经典局付费玩家命令驱动，300秒诊断与完整30波续玩验收分开；无AI友好、跳波或改模拟速度。
+- `qa/continue_flow_20260909/`新增本地收据、首次与已有槽保存终局相撞、失败重试及跨进程终局拒绝；32个四语键包含新增终局错误反馈。
+
 ## 2026-09-09 续玩流程与故障恢复
 
 - `docs/CONTINUE_FLOW_20260909.md`、`qa/continue_flow_20260909/`：内部真实菜单保存退出、跨进程继续、覆盖竞争、错误操作及四语截图。

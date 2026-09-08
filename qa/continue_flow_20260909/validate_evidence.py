@@ -1,4 +1,5 @@
 """Read back the final operation-flow evidence; does not run Godot or write files."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -6,13 +7,18 @@ import re
 
 QA = Path(__file__).resolve().parent
 ROOT = QA.parent.parent
-BATCH = "20260909_033854_66f38f86"
+BATCH = "20260909_050106_87b82121"
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def main():
-    run = QA / BATCH
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--batch", default=BATCH)
+    parser.add_argument("--historical", action="store_true", help="Read preserved evidence without requiring the current checkout to equal it")
+    args = parser.parse_args()
+    assert args.batch and Path(args.batch).name == args.batch
+    run = QA / args.batch
     receipt = json.loads((run / "receipt.json").read_text(encoding="utf-8"))
     assert receipt["complete"] is True
     total = 0
@@ -34,15 +40,22 @@ def main():
             assert report["result"]["ok"] is True
         total += len(report["checks"])
         pids.append(report["pid"])
-    assert total == receipt["checks"] == 186
-    assert len(pids) == len(set(pids)) == 7 and pids == receipt["processes"]
+    assert total == receipt["checks"] and total > 0
+    expected_cases = receipt.get("cases", [s["case"] for s in receipt["steps"]])
+    assert [s["case"] for s in receipt["steps"]] == expected_cases
+    assert len(pids) == len(set(pids)) == len(expected_cases) - 2 and pids == receipt["processes"]
     for row in receipt["source_files"]:
-        assert sha(ROOT / row["path"]) == row["sha256"], row["path"]
+        if not args.historical:
+            assert sha(ROOT / row["path"]) == row["sha256"], row["path"]
+        preserved = run / "source_snapshot" / row["path"]
+        if preserved.exists():
+            assert sha(preserved) == row["sha256"], str(preserved)
     for image in receipt["screenshots"]:
         assert sha(run / "screenshots" / image["path"]) == image["sha256"]
-    assert len(receipt["screenshots"]) == 12
-    print(json.dumps({"passed": True, "batch": BATCH, "checks": total,
-                      "source_files": len(receipt["source_files"]), "screenshots": 12,
+    expected_images = 4 if receipt.get("terminal_only", False) else (16 if "terminal" in expected_cases else 12)
+    assert len(receipt["screenshots"]) == expected_images
+    print(json.dumps({"passed": True, "batch": args.batch, "checks": total,
+                      "source_files": len(receipt["source_files"]), "screenshots": expected_images, "historical": args.historical,
                       "engine_rerun": False, "full_30_waves": False, "real_steam": False}))
 
 if __name__ == "__main__":
