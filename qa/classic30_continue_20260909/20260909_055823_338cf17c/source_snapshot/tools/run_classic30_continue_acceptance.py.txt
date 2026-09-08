@@ -1,0 +1,447 @@
+"""Run ordinary classic defense with player commands and real process restarts.
+
+Default is read-only preflight. --run owns the shared engine lock. A diagnostic
+attempt is never classified as full-30-wave, human, Steam, or performance PASS.
+"""
+import argparse
+import ast
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import time
+import uuid
+
+from run_steam_integration_qa import (
+    ROOT, LOCK, sources as runtime_sources, resolve_godot,
+    resolve_profile_root, create_private_profile,
+)
+
+OWN = ["tools/classic30_continue_acceptance.gd", "tools/classic30_player_commands.gd",
+       "tools/run_classic30_continue_acceptance.py", "tools/run_steam_integration_qa.py",
+       "tools/classic30_inflight_observer.gd"]
+OBSERVED = ["project.godot", "scripts/battle.gd", "scripts/unit.gd", "scripts/defs.gd",
+            "scripts/levels/skirmish.gd", "scripts/menu.gd", "scripts/hud.gd",
+            "scripts/continue_flow.gd", "scripts/app_lifecycle.gd",
+            "scripts/run_battle_barrier.gd", "scripts/run_battle_clock.gd",
+            "scripts/run_snapshot_store.gd", "scripts/run_slot_store.gd",
+            "scripts/run_local_lifecycle.gd", "scripts/run_world_session.gd"]
+CASES = ["public_gate", "new_economy", "resume_combat", "resume_transition",
+         "resume_victory", "terminal_reject_1", "terminal_reject_2"]
+EXPECTED = {"public_gate": "public_gate_verified", "new_economy": "saved_and_exiting",
+            "resume_combat": "saved_and_exiting", "resume_transition": "saved_and_exiting",
+            "resume_victory": "natural_victory", "terminal_reject_1": "terminal_refused",
+            "terminal_reject_2": "terminal_refused"}
+ERROR = re.compile(r"(?m)^(?:SCRIPT ERROR:|ERROR:)|Parse Error|Compile Error|leaked at exit|RID allocations")
+SCENE = '''[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://tools/classic30_continue_acceptance.gd" id="1"]
+[node name="Classic30AcceptanceObserver" type="Node"]
+script = ExtResource("1")
+'''
+
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def write(path, value):
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def no_links(path):
+    for item in [path] + list(path.parents):
+        if item.exists() or item.is_symlink():
+            require(not item.is_symlink() and not getattr(item.lstat(), "st_file_attributes", 0) & 0x400,
+                    "Reparse/link path refused: " + str(item))
+
+
+def tree_snapshot(path):
+    no_links(path)
+    result = {"exists": path.exists(), "files": {}, "directories": []}
+    if not path.exists():
+        return result
+    for base, dirs, files in os.walk(path, followlinks=False):
+        for name in dirs + files:
+            no_links(Path(base) / name)
+        result["directories"].append(Path(base).relative_to(path).as_posix())
+        for name in files:
+            node = Path(base) / name
+            result["files"][node.relative_to(path).as_posix()] = sha(node)
+    result["directories"].sort()
+    return result
+
+
+def digest_json(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
+def engine_pids():
+    raw = subprocess.check_output([
+        "powershell.exe", "-NoProfile", "-Command",
+        "@(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' -or $_.ProcessName -like 'Liangshan*' } | ForEach-Object { $_.Id }) | ConvertTo-Json -Compress",
+    ], text=True).strip()
+    result = json.loads(raw) if raw else []
+    return result if isinstance(result, list) else [result]
+
+
+def sources():
+    return sorted(set(runtime_sources()) | set(OWN) | set(OBSERVED))
+
+
+def normal_wave_schedule():
+    text = (ROOT / "scripts/levels/skirmish.gd").read_text(encoding="utf-8-sig")
+    start = text.index("const WAVES := [") + len("const WAVES := ")
+    # This trusted source constant contains only literal strings/numbers/lists.
+    # literal_eval neither executes GDScript nor invokes the engine.
+    waves = ast.literal_eval(text[start:text.index("\n]\n", start) + 2])
+    result, elapsed = [], 0.0
+    for index, wave in enumerate(waves):
+        elapsed += wave["t"]
+        result.append({"wave": index + 1, "seconds": elapsed,
+                       "enemies": sum(row[1] for row in wave["groups"]) + (1 if index < 10 else 2)})
+    require(len(result) == 30 and elapsed == 986 and sum(row["enemies"] for row in result) == 778,
+            "Classic wave contract changed; review expectations before running")
+    return result
+
+
+def policy_guard():
+    """Conservative review guard, not a GDScript parser or gameplay proof."""
+    patterns = [r"\b(?:Engine|Settings|Campaign|battle|b|hero|worker|u)\.[A-Za-z_]\w*\s*=(?!=)",
+                r"\.(?:set|set_meta|spawn_unit|spawn_group|spawn_at|take_damage|_spawn_wave|_do_ability|_begin_cast|_ai_cast_slot|_auto_economy_pass|_auto_micro_pass|win|lose)\s*\("]
+    violations = []
+    for name in OWN[:2]:
+        for number, line in enumerate((ROOT / name).read_text(encoding="utf-8-sig").splitlines(), 1):
+            code = line.split("#", 1)[0]
+            if any(re.search(pattern, code) for pattern in patterns):
+                violations.append({"path": name, "line": number})
+    require(not violations, "Test command surface needs review: " + str(violations))
+    return {"passed": True, "scope": "conservative forbidden-write/helper scan only"}
+
+
+def check_step_output(case, run_id, pid, control, exit_code, errors, stop_reason, log_text, step):
+    """Retain the child's result before checking independent source guards.
+
+    A valid failed report is evidence of the failed attempt, never a PASS.
+    Process, report identity/hash, scope and outcome requirements stay strict.
+    """
+    if case == "profile_guard":
+        require(exit_code == 2 and not errors and not stop_reason and "PRIVATE_PROFILE_REQUIRED" in log_text,
+                "Private-profile guard did not reject correctly")
+        require(not any(Path(control[key]).exists() for key in ["report", "state", "events", "progress"]),
+                "Profile guard wrote test fixtures or reports")
+        return None
+    process_ok = exit_code == 0 and not errors and not stop_reason
+    if case == "import":
+        require(process_ok, "Actual process failed: " + case)
+        return None
+    report_path, state_path = Path(control["report"]), Path(control["state"])
+    require(report_path.is_file() and state_path.is_file(), "Missing report/state: " + case)
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    require(isinstance(report, dict) and report.get("suite") == "classic30-continue-acceptance"
+            and report.get("run_id") == run_id and report.get("case") == case and report.get("pid") == pid,
+            "Report process/case identity")
+    step.update(outcome=report.get("outcome"), report_passed=report.get("passed"),
+                report_sha256=sha(report_path), state_sha256=sha(state_path))
+    checks = report.get("checks")
+    checks_shape = isinstance(checks, list) and bool(checks) and all(isinstance(row, dict) for row in checks)
+    step["failed_checks"] = [row.get("name") for row in checks if row.get("passed") is not True] if checks_shape else ["invalid_check_inventory"]
+    require(report.get("source_sha256") == control["source_sha256"] and report.get("state_sha256") == sha(state_path)
+            and report.get("events_sha256") == sha(Path(control["events"])), "Report/source/event/state hash chain")
+    require(all(report.get(key) is False for key in ["real_steam", "player_entry_enabled", "manual_player_test", "performance_acceptance"]),
+            "Test scope was overstated")
+    step["report_identity_and_hashes_verified"] = True
+    require(report.get("passed") is True and checks_shape and not step["failed_checks"],
+            "Gameplay failed: " + case + " / " + str(report.get("outcome")) + "; checks=" + str(step["failed_checks"]))
+    require(process_ok, "Actual process failed: " + case)
+    if case == "diagnostic":
+        require(report.get("outcome") in ["diagnostic_duration_reached", "normal_play_defeat", "natural_victory"],
+                "Unknown diagnostic outcome")
+    else:
+        require(report.get("outcome") == EXPECTED[case], "Unexpected gameplay outcome: " + str(report.get("outcome")))
+    return report
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--run", action="store_true")
+    parser.add_argument("--godot")
+    parser.add_argument("--work-root", type=Path, default=Path("D:/CodexTemp/classic30_continue"))
+    parser.add_argument("--diagnostic-seconds", type=int, default=0,
+                        help="Ordinary play only; never a full acceptance result (recommended first run: 300)")
+    parser.add_argument("--max-sim-seconds", type=int, default=1800)
+    parser.add_argument("--timeout-seconds", type=int, default=3600,
+                        help="Wall-clock limit per actual play process; no simulation acceleration")
+    args = parser.parse_args()
+    require(0 <= args.diagnostic_seconds <= 3600, "Diagnostic duration must be 0..3600")
+    require(1000 <= args.max_sim_seconds <= 7200 and args.diagnostic_seconds <= args.max_sim_seconds,
+            "Simulation cap must cover the requested diagnostic and all normal waves")
+    require(300 <= args.timeout_seconds <= 14400, "Wall timeout must be 300..14400")
+    engine = resolve_godot(args.godot)
+    work_root = resolve_profile_root(args.work_root)
+    require(work_root is not None and str(work_root).isascii() and ROOT not in work_root.parents and ROOT != work_root,
+            "Private absolute ASCII work root outside checkout required")
+    names = sources()
+    schedule = normal_wave_schedule()
+    command_guard = policy_guard()
+    for name in names:
+        no_links(ROOT / name)
+        require((ROOT / name).is_file(), "Missing frozen input " + name)
+    print(json.dumps({"preflight": True, "source_files": len(names), "lock_busy": LOCK.exists(),
+                      "godot_pids": engine_pids(), "work_root": str(work_root),
+                      "diagnostic_seconds": args.diagnostic_seconds, "final_wave_at_seconds": 986,
+                      "total_wave_enemies": 778, "ai_friendly": False, "scale_on": False,
+                      "real_steam": False, "command_surface_guard": command_guard}, ensure_ascii=False), flush=True)
+    if not args.run:
+        return 0
+    require(not engine_pids(), "Godot/game engine slot is occupied")
+    run_id = time.strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
+    run = work_root / run_id
+    evidence = ROOT / "qa/classic30_continue_20260909" / run_id
+    project = run / "project"
+    owner = json.dumps({"owner": "classic30_continue", "pid": os.getpid(), "run_id": run_id})
+    receipt = {"schema": "classic30_acceptance_attempt_v1", "complete": False,
+               "acceptance_passed": False, "diagnostic_complete": False, "run_id": run_id,
+               "run": str(run), "diagnostic_seconds": args.diagnostic_seconds,
+               "source_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+               "source_files": [], "godot_sha256": sha(engine), "steps": [],
+               "step_failures": [], "guard_failures": [],
+               "normal_wave_schedule": schedule, "fresh_import": True,
+               "real_steam": False, "player_entry_enabled": False, "human_playtest": False,
+               "performance_acceptance": False, "source_guard": False, "player_unchanged": False}
+    locked = False
+    active = None
+    profile = None
+    protected = None
+    protected_before = None
+    copied = {}
+
+    def guards():
+        require(LOCK.is_file() and LOCK.read_text(encoding="utf-8") == owner, "Shared lock ownership changed")
+        require(sources() == names, "Current source path set changed")
+        require(all(sha(ROOT / name) == digest for name, digest in copied.items()), "Current source bytes changed")
+        require(all(sha(project / name) == digest for name, digest in copied.items()), "Frozen source bytes changed")
+        require(sha(project / "classic30_acceptance.tscn") == receipt["scene_sha256"], "Generated entry changed")
+        require(sha(engine) == receipt["godot_sha256"], "Engine bytes changed")
+        if protected is not None:
+            require(tree_snapshot(protected) == protected_before, "Real player profile changed")
+
+    def checked_guards(stage, require_idle=False):
+        try:
+            guards()
+            if require_idle:
+                require(not engine_pids(), "Unexpected engine process after " + stage)
+        except Exception as exc:
+            receipt["source_guard"] = False
+            receipt["guard_failures"].append({"stage": stage, "error": str(exc)})
+            raise
+
+    try:
+        LOCK.parent.mkdir(parents=True, exist_ok=True)
+        with LOCK.open("x", encoding="utf-8") as lock:
+            lock.write(owner)
+        locked = True
+        require(not engine_pids(), "Engine started before shared lock acquisition")
+        run.mkdir(parents=True, exist_ok=False)
+        project.mkdir()
+        evidence.mkdir(parents=True, exist_ok=False)
+        ignore = evidence.parent / ".gdignore"
+        if not ignore.exists(): ignore.write_bytes(b"")
+        for name in names:
+            data = (ROOT / name).read_bytes()
+            destination = project / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(data)
+            copied[name] = hashlib.sha256(data).hexdigest()
+        receipt["source_files"] = [{"path": name, "sha256": copied[name]} for name in names]
+        (project / "classic30_acceptance.tscn").write_text(SCENE, encoding="utf-8")
+        receipt["scene_sha256"] = sha(project / "classic30_acceptance.tscn")
+        for name in sorted(set(OWN + OBSERVED)):
+            destination = evidence / "source_snapshot" / (name + ".txt")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(project / name, destination)
+        config_text = (project / "project.godot").read_text(encoding="utf-8-sig")
+        require("config/use_custom_user_dir" not in config_text, "Custom production profile mapping needs review")
+        game_names = re.findall(r'^config/name="([^\"]+)"', config_text, re.M)
+        require(len(game_names) == 1 and not any(c in game_names[0] for c in '<>:"/\\|?*'), "Ambiguous player directory")
+        protected = Path(os.environ["APPDATA"]) / "Godot/app_userdata" / game_names[0]
+        protected_before = tree_snapshot(protected)
+        receipt["protected_profile_before_digest"] = digest_json(protected_before)
+        profile = create_private_profile(run, None)
+        env = os.environ.copy()
+        # Clear every registered gameplay environment hook, including hooks
+        # without *_QA/*_TEST suffixes. Keep normal platform/system variables.
+        environment_hooks = set()
+        for file in (project / "scripts").rglob("*.gd"):
+            environment_hooks.update(re.findall(r'OS\.(?:get_environment|has_environment)\("([A-Z0-9_]+)"\)', file.read_text(encoding="utf-8-sig")))
+        for key in list(env):
+            if key in environment_hooks or key.endswith(("_TEST", "_QA", "_QA_MANIFEST", "_AUDIT")) or key.startswith("LSH_"):
+                env.pop(key)
+        for key in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
+            folder = profile / key.lower()
+            folder.mkdir()
+            env[key] = str(folder)
+        env.update(STEAM_DISABLED="1", CAMPAIGN_QA="1", LSH_CONTINUE_FLOW_QA="1",
+                   LSH_CONTINUE_FLOW_PROFILE=str(profile), LSH_CLASSIC30_QA="1", LSH_CLASSIC30_RUN=str(run))
+        previous = None
+        cases = ["import", "profile_guard", "public_gate", "diagnostic"] if args.diagnostic_seconds else ["import", "profile_guard"] + CASES
+        for case in cases:
+            checked_guards("before:" + case)
+            require(not engine_pids(), "Engine slot occupied before " + case)
+            control = {"run_id": run_id, "case": "public_gate" if case in ("import", "profile_guard") else case,
+                       "report": str(run / (case + "_report.json")), "state": str(run / (case + "_state.json")),
+                       "events": str(run / (case + "_events.jsonl")), "progress": str(run / (case + "_progress.json")),
+                       "screenshots": str(run / "screenshots"), "previous_state": str(previous) if previous else "",
+                       "previous_sha256": sha(previous) if previous else "", "diagnostic_seconds": args.diagnostic_seconds,
+                       "max_sim_seconds": args.max_sim_seconds,
+                       "source_sha256": {name: copied[name] for name in sorted(set(OWN + OBSERVED))}}
+            control_path = run / (case + "_control.json")
+            write(control_path, control)
+            child_env = env.copy()
+            child_env["LSH_CLASSIC30_CONTROL"] = str(control_path)
+            if case in ["public_gate", "profile_guard"]:
+                child_env["LSH_CONTINUE_FLOW_QA"] = "0"
+            if case == "profile_guard":
+                child_env["LSH_CONTINUE_FLOW_PROFILE"] = str(profile / "mismatch")
+            graphics = ["--headless"] if case in ["import", "profile_guard", "public_gate"] else ["--rendering-method", "gl_compatibility", "--audio-driver", "Dummy", "--resolution", "1280x720"]
+            extra = ["--editor", "--import"] if case == "import" else ["res://classic30_acceptance.tscn"]
+            command = [str(engine)] + graphics + ["--path", str(project)] + extra
+            log_path = evidence / (case + ".log")
+            print("RUN " + case + " " + str(run), flush=True)
+            started, next_print = time.monotonic(), time.monotonic() + 30
+            stop_reason = ""
+            with log_path.open("wb") as stream:
+                active = subprocess.Popen(command, cwd=project, env=child_env, stdout=stream, stderr=subprocess.STDOUT,
+                                          creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                pid = active.pid
+                while active.poll() is None:
+                    time.sleep(0.5)
+                    log_text = log_path.read_text(encoding="utf-8", errors="replace")
+                    limit = args.timeout_seconds if case not in ["import", "profile_guard", "public_gate"] else 300
+                    if ERROR.search(log_text): stop_reason = "engine_error"
+                    elif time.monotonic() - started > limit: stop_reason = "wall_timeout"
+                    if stop_reason:
+                        active.kill()  # Only this runner's exact Popen child.
+                        active.wait(timeout=30)
+                        break
+                    if time.monotonic() >= next_print:
+                        next_print += 30
+                        progress_path = Path(control["progress"])
+                        if progress_path.exists():
+                            try:
+                                progress = json.loads(progress_path.read_text(encoding="utf-8"))
+                                print("PROGRESS " + json.dumps({k: progress.get(k) for k in ["case", "sim_seconds", "wave", "hall_hp", "enemies", "gold", "wood", "kills"]}), flush=True)
+                            except (OSError, ValueError):
+                                pass  # A concurrently replaced progress sample is not a receipt.
+                exit_code = active.wait(timeout=30)
+                active = None
+            log_text = log_path.read_text(encoding="utf-8", errors="replace")
+            errors = [line for line in log_text.splitlines() if ERROR.search(line)]
+            step = {"case": case, "pid": pid, "exit_code": exit_code, "errors": errors,
+                    "stop_reason": stop_reason, "seconds": time.monotonic() - started,
+                    "log_sha256": sha(log_path), "control_sha256": sha(control_path)}
+            receipt["steps"].append(step)
+            report_path, state_path = Path(control["report"]), Path(control["state"])
+            for source in [report_path, state_path, Path(control["events"]), Path(control["progress"])]:
+                if source.is_file(): shutil.copyfile(source, evidence / source.name)
+            if (run / "screenshots").exists():
+                for source in sorted((run / "screenshots").glob("*.png")):
+                    destination = evidence / "screenshots" / source.name
+                    if not destination.exists():
+                        destination.parent.mkdir(exist_ok=True)
+                        shutil.copyfile(source, destination)
+            # Always inspect both channels after a child exits. A source edit
+            # must not conceal an independently failed gameplay check, and a
+            # failed report must not skip the source/player/lock verification.
+            output_failure = guard_failure = None
+            report = None
+            try:
+                report = check_step_output(case, run_id, pid, control, exit_code, errors, stop_reason, log_text, step)
+            except Exception as exc:
+                output_failure = exc
+                step["failure"] = str(exc)
+                receipt["step_failures"].append({"case": case, "error": str(exc),
+                                                  "outcome": step.get("outcome"), "failed_checks": step.get("failed_checks", [])})
+            try:
+                checked_guards("after:" + case, require_idle=True)
+            except Exception as exc:
+                guard_failure = exc
+                step["guard_failure"] = str(exc)
+            if output_failure is not None:
+                raise output_failure
+            if guard_failure is not None:
+                raise guard_failure
+            if report is None:
+                continue
+            if case == "diagnostic":
+                receipt["diagnostic_complete"] = report["outcome"] == "diagnostic_duration_reached"
+                receipt["diagnostic_outcome"] = report["outcome"]
+            if case != "public_gate": previous = state_path
+        checked_guards("all_steps_complete")
+        receipt["source_guard"] = True
+        receipt["player_unchanged"] = tree_snapshot(protected) == protected_before
+        receipt["complete"] = True
+        if not args.diagnostic_seconds:
+            final = json.loads(previous.read_text(encoding="utf-8"))
+            require(final.get("normal_start") is True and final.get("initial_orders_paid") is True and final.get("victory") is True,
+                    "Missing ordinary start/payment/victory")
+            require([row["wave"] for row in final["waves"]] == list(range(1, 31)), "Thirty-wave occurrence inventory")
+            require(sum(len(row["enemy_roster"]) for row in final["waves"]) == 778, "Ordinary enemy roster cardinality")
+            require([row["kind"] for row in final["checkpoints"]] == ["economy", "combat", "wave_transition"], "Three checkpoint phases")
+            combat = final["checkpoints"][1].get("held_witness", {})
+            require(combat.get("enemies", 0) > 0 and combat.get("in_flight", 0) > 0,
+                    "Actual paused save boundary lacks an in-flight combat witness")
+            require(len(final["resumes"]) == 3 and all(row["from_pid"] != row["pid"] and not row["differences"] for row in final["resumes"]), "Cross-process exact observed restores")
+            require([row["case"] for row in final["terminal_rejections"]] == ["terminal_reject_1", "terminal_reject_2"], "Repeated terminal refusal")
+            receipt["acceptance_passed"] = True
+    except Exception as exc:
+        receipt["complete"] = False
+        receipt["failure"] = str(exc)
+        print("CLASSIC30 FAILURE " + str(exc), flush=True)
+    finally:
+        if active is not None and active.poll() is None:
+            active.kill()
+            active.wait(timeout=30)
+        if evidence.exists():
+            try:
+                checked_guards("finally")
+                receipt["source_guard"] = not receipt["guard_failures"]
+                receipt["player_unchanged"] = tree_snapshot(protected) == protected_before
+            except Exception as exc:
+                receipt["complete"] = False
+                receipt["acceptance_passed"] = False
+                receipt["final_guard_failure"] = str(exc)
+            receipt["godot_pids_after"] = engine_pids()
+            if receipt["godot_pids_after"]:
+                receipt["complete"] = False
+                receipt["acceptance_passed"] = False
+            try:
+                receipt["protected_profile_after_digest"] = digest_json(tree_snapshot(protected)) if protected is not None else None
+            except Exception as exc:
+                receipt["complete"] = False
+                receipt["acceptance_passed"] = False
+                receipt["player_unchanged"] = False
+                receipt["protected_profile_after_failure"] = str(exc)
+            receipt["lock_released"] = False
+        if locked and LOCK.exists() and LOCK.read_text(encoding="utf-8") == owner:
+            LOCK.unlink()
+            receipt["lock_released"] = True
+        if evidence.exists():
+            write(evidence / "receipt.json", receipt)
+            public_files = {path.relative_to(evidence).as_posix(): {"sha256": sha(path), "bytes": path.stat().st_size}
+                            for path in sorted(evidence.rglob("*")) if path.is_file() and path.name != "manifest.json"}
+            write(evidence / "manifest.json", {"schema": "classic30_attempt_archive_v1", "files": public_files})
+        print(json.dumps({"complete": receipt["complete"], "acceptance_passed": receipt["acceptance_passed"],
+                          "diagnostic_complete": receipt["diagnostic_complete"], "evidence": str(evidence)}, ensure_ascii=False), flush=True)
+    return 0 if receipt["complete"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

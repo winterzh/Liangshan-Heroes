@@ -7,7 +7,7 @@ import re
 
 QA = Path(__file__).resolve().parent
 ROOT = QA.parent.parent
-BATCH = "20260909_050106_87b82121"
+BATCH = "20260909_060917_cb438828"
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()

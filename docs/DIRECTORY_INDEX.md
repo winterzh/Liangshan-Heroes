@@ -1,6 +1,10 @@
 ## 2026-09-09 终局身份、任务界面与经典玩法驱动
 
-- `scripts/run_local_lifecycle.gd`、`docs/LOCAL_CONTINUE_LIFECYCLE_20260909.md`：未计Steam统计的本地active/terminal收据、槽v2绑定及终局故障重试；不包含Steam写确认。
+- `tools/classic30_inflight_observer.gd`：经典验收的只读弹道、五类施法队列和单位施法计时观察；HELD保存与新进程暂停恢复逐值比较。它不替代全部特殊伤害组件，也不写游戏状态。
+- `docs/CONTINUE_SETTINGS_RESTORE_20260909.md`：槽v3保留本局英雄托管档位、恢复事务回滚与295项流程回归的证据边界。
+- `docs/LEVEL3_WORLD_PREPARATION_20260909.md`、`qa/level3_world_prepare_20260909/`：祝家庄世界/单位设计候选与来源映射；未解析、未应用、未接入，不计正式完成。
+
+- `scripts/run_local_lifecycle.gd`、`docs/LOCAL_CONTINUE_LIFECYCLE_20260909.md`：未计Steam统计的本地active/terminal收据、槽v3绑定及终局故障重试；不包含Steam写确认。
 - `scripts/run_campaign_presentation_state.gd`、`docs/CAMPAIGN_PRESENTATION_STATE_20260909.md`、`qa/campaign_presentation_state_20260909/`：固定Mission控件、marker、翻译绑定及恢复布局组件；尚未由官方战役WorldCore调用，原生失败/成功以各批收据为准。
 - `tools/classic30_player_commands.gd`、`tools/classic30_continue_acceptance.gd`、`tools/run_classic30_continue_acceptance.py`、`docs/CLASSIC30_CONTINUE_ACCEPTANCE_20260909.md`、`qa/classic30_continue_20260909/`：普通经典局付费玩家命令驱动，300秒诊断与完整30波续玩验收分开；无AI友好、跳波或改模拟速度。
 - `qa/continue_flow_20260909/`新增本地收据、首次与已有槽保存终局相撞、失败重试及跨进程终局拒绝；32个四语键包含新增终局错误反馈。

@@ -1,0 +1,255 @@
+--- a/scripts/run_unit_state.gd
++++ b/scripts/run_unit_state.gd
+@@ -1,5 +1,5 @@
+ extends RefCounted
+-## Standard-defense Unit factory, explicit module schema + caller content version.
++## UNAPPLIED DRAFT: classic Unit factory plus explicit Level3 role contract.
+ ## Compiled Script injection works in exported PCKs; no source_code/raw-file reads.
+ ## Caller must stop simulation, validate the entire run, instantiate in saved order,
+ ## bind every graph, connect Battle signals, attach while paused, then activate.
+@@ -7,6 +7,12 @@
+ ## Only art_variant's existing setter runs: signals are blocked, detached redraw only.
+ ## Five draw caches are regenerated; draw cadence is not gameplay state.
+ const SCHEMA := "defense_unit_state_v2"
++const LEVEL3_SCHEMA := "level3_unit_state_v1"
++const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
++const ZHU_PRISONERS := ["shi_qian", "shi_xiu", "qin_ming", "yang_lin", "huang_xin", "wang_ying", "deng_fei"]
++var _unit_schema := SCHEMA
++var _scope_error := ""
++var _chapter_roles: Dictionary = {}
+ const ID_FIELDS := ["_lin_spear_target_id", "_chase_last_id", "_giveup_id"]
+ const POOL_FIELDS := ["_aura_atkspeed_sources", "_damage_reduction_sources"]
+ const INVENTORY_FIELDS := ["slots", "cooldowns", "proc_cooldowns", "_uid_seq", "_periodic_acc"]
+@@ -21,9 +27,11 @@
+ var _inventory_script: Script
+ var _codec: Variant = null
+ 
+-func _init(codec_script: Script, unit_script: Script, inventory_script: Script) -> void:
++func _init(codec_script: Script, unit_script: Script, inventory_script: Script,
++		trusted_context: Dictionary = CLASSIC_CONTEXT, trusted_level3_roles: Dictionary = {}) -> void:
+ 	_unit_script = unit_script
+ 	_inventory_script = inventory_script
++	_configure_context(trusted_context, trusted_level3_roles)
+ 	if codec_script != null and unit_script != null and inventory_script != null:
+ 		if codec_script.can_instantiate() and unit_script.can_instantiate() and inventory_script.can_instantiate():
+ 			_codec = codec_script.new()
+@@ -849,6 +857,129 @@
+ func _finite_number(value: Variant) -> bool:
+ 	return typeof(value) == TYPE_INT or (typeof(value) == TYPE_FLOAT and is_finite(value))
+ 
++func _configure_context(context: Dictionary, roles: Dictionary) -> void:
++	if not _fields(context, ["mode", "level_id", "waves"]):
++		_scope_error = "UNIT_CONTEXT_FIELDS"; return
++	if typeof(context.mode) != TYPE_STRING or typeof(context.level_id) != TYPE_STRING or typeof(context.waves) not in [TYPE_INT, TYPE_FLOAT]:
++		_scope_error = "UNIT_CONTEXT_TYPE"; return
++	if context.mode == "defense" and context.level_id == "" and context.waves == 30:
++		if not roles.is_empty(): _scope_error = "CLASSIC_CHAPTER_ROLES"
++		return
++	if context.mode != "campaign" or context.level_id != "level3" or context.waves != 0:
++		_scope_error = "UNIT_CONTEXT_UNSUPPORTED"; return
++	if _unit_script != preload("res://scripts/unit.gd"):
++		_scope_error = "LEVEL3_PRODUCTION_UNIT_REQUIRED"; return
++	if not _fields(roles, ["hu", "gate", "side_gate", "prisoners"]) or not _id(roles.hu) or typeof(roles.prisoners) != TYPE_ARRAY or roles.prisoners.size() != ZHU_PRISONERS.size():
++		_scope_error = "LEVEL3_ROLES"; return
++	var pending: Dictionary = {}
++	for field: String in ["hu", "gate", "side_gate"]:
++		var id: Variant = roles[field]
++		if id == null: continue
++		if not _id(id) or pending.has(id): _scope_error = "LEVEL3_ROLE_ID"; return
++		pending[id] = {"role": field, "key": "hu_sanniang" if field == "hu" else "zhu_gate"}
++	for index: int in range(ZHU_PRISONERS.size()):
++		var id: Variant = roles.prisoners[index]
++		if id == null: continue
++		if not _id(id) or pending.has(id): _scope_error = "LEVEL3_ROLE_ID"; return
++		pending[id] = {"role": "prisoner", "key": ZHU_PRISONERS[index]}
++	_chapter_roles = pending
++	_unit_schema = LEVEL3_SCHEMA
++
++func _chapter_registry(known_ids: Dictionary) -> Dictionary:
++	if not _scope_error.is_empty(): return _failure(_scope_error)
++	for id: String in _chapter_roles:
++		if not known_ids.has(id): return _failure("LEVEL3_ROLE_NOT_IN_GRAPH", id)
++	return {"ok": true}
++
++func _check_chapter_values(v: Dictionary) -> Dictionary:
++	if not _scope_error.is_empty(): return _failure(_scope_error)
++	if _unit_schema == SCHEMA:
++		# Original classic restrictions remain unchanged.
++		for field: String in ["defeat_outcome", "story_outcome", "_pose_previous_variant"]:
++			if v[field] != "": return _failure("CHAPTER_STATE_UNSUPPORTED", field)
++		if v._story_pose_t != 0.0 or v.is_captive: return _failure("CHAPTER_STATE_UNSUPPORTED")
++		return {"ok": true}
++	# Level3 never plays a story pose or installs assistance links. Supporting
++	# another official chapter later requires its own explicit contract.
++	if v._story_pose_t != 0.0 or v._pose_previous_variant != "": return _failure("LEVEL3_STORY_POSE_UNSUPPORTED")
++	var role: Dictionary = _chapter_roles.get(str(v.entity_id), {})
++	if role.is_empty():
++		if v.defeat_outcome != "" or v.story_outcome != "" or v.is_captive or v.faction == 2: return _failure("LEVEL3_UNREGISTERED_CHAPTER_UNIT")
++		return {"ok": true}
++	if v.key != role.key: return _failure("LEVEL3_ROLE_KEY", role.role)
++	match role.role:
++		"hu":
++			if v.faction != 1 or not v.is_hero or v.is_captive or v.is_building or v.is_resource or v.defeat_outcome != "captured" or v.story_outcome not in ["", "captured"]:
++				return _failure("LEVEL3_HU_STATE")
++			if v.hp <= 0.0 or v._dying: return _failure("LEVEL3_HU_LIFETIME")
++		"gate", "side_gate":
++			if v.faction != 1 or not v.is_building or v.is_resource or v.is_captive or v.defeat_outcome != "" or v.hp <= 0.0 or v._dying:
++				return _failure("LEVEL3_GATE_STATE")
++			if v.story_outcome != "" and not (role.role == "side_gate" and v.story_outcome == "retreated"): return _failure("LEVEL3_GATE_OUTCOME")
++		"prisoner":
++			if v.is_building or v.is_resource or not v.is_noncombat or v.defeat_outcome != "" or v.story_outcome != "": return _failure("LEVEL3_PRISONER_STATE")
++			if v.is_captive:
++				if v.faction != 2 or not v.is_hero or not v.passive or v.stance != 3 or v.base_speed != 0.0 or v.atk != 0.0 or v.ability != "" or not v.ability_slots.is_empty() or v.art_variant != "bound_" + v.key:
++					return _failure("LEVEL3_BOUND_PRISONER")
++			elif v.faction != 0 or v.is_hero or v.base_speed != 82.0 or v.atk != 0.0 or v.ability != "" or not v.ability_slots.is_empty() or v.art_variant != "":
++				return _failure("LEVEL3_RESCUED_PRISONER")
++			# Do not demand hp>0: a dead nonessential captive can remain a dying
++			# child after Battle.units erased it. Do not rewrite that live behavior.
++			if (v.hp <= 0.0) != v._dying: return _failure("LEVEL3_PRISONER_LIFETIME")
++	if v.story_outcome != "":
++		if not v.passive or v.stance != 3 or v.selected or v.garrisoned or v.hp < 1.0 or v._dying:
++			return _failure("LEVEL3_RESOLVED_LIFETIME")
++		if not v._pending_done or v._lunge != 0.0 or v._cast_t != 0.0 or v._stepped or v._move_blend != 0.0:
++			return _failure("LEVEL3_RESOLUTION_PENDING")
++		# resolve_story calls order_stop, which intentionally returns for buildings.
++		if not v.is_building and (v._state != 0 or not v._path.is_empty() or v._patrolling or v._resume_amove or v._hold_order_active or v.mission_order_active or v.mission_order_token != 0 or v.mission_order_arrival_t != 0.0 or v.mission_order_target != Vector2.INF):
++			return _failure("LEVEL3_RESOLVED_ORDER")
++	return {"ok": true}
++
++func _check_chapter_parts(v: Dictionary, refs: Dictionary, meta: Dictionary, node: Dictionary) -> Dictionary:
++	if _unit_schema == SCHEMA: return {"ok": true}
++	if meta.has("story_pose"): return _failure("LEVEL3_STORY_POSE_UNSUPPORTED")
++	for field: String in ["story_assist_partner", "story_assist_owner"]:
++		if refs[field].state != "none": return _failure("LEVEL3_ASSISTANCE_UNSUPPORTED", field)
++	var role: Dictionary = _chapter_roles.get(str(v.entity_id), {})
++	if role.is_empty(): return {"ok": true}
++	if role.role in ["gate", "side_gate"]:
++		var cell := Vector2i(20, 28) if role.role == "gate" else Vector2i(20, 18)
++		if typeof(meta.get("fcell")) != TYPE_VECTOR2I or meta.fcell != cell or typeof(meta.get("fhalf")) != TYPE_INT or meta.fhalf != 1 or typeof(meta.get("footprint_blocked")) != TYPE_BOOL:
++			return _failure("LEVEL3_GATE_FOOTPRINT")
++		if meta.footprint_blocked != (v.story_outcome == ""): return _failure("LEVEL3_GATE_BLOCKING_STATE")
++	elif meta.has("footprint_blocked"):
++		if typeof(meta.footprint_blocked) != TYPE_BOOL or meta.footprint_blocked: return _failure("LEVEL3_ACTOR_FOOTPRINT")
++	if v.is_captive and v.garrisoned: return _failure("LEVEL3_CAPTIVE_GARRISON")
++	if v.story_outcome == "retreated" and node.visible: return _failure("LEVEL3_RETIRED_GATE_VISIBLE")
++	if v.story_outcome != "":
++		if refs._pending_target.state != "none": return _failure("LEVEL3_RESOLVED_PENDING_TARGET")
++		if not v.is_building:
++			if not refs._queue.is_empty() or refs._target.state != "none" or refs._hua_lock_target.state != "none": return _failure("LEVEL3_RESOLVED_TARGET_OR_QUEUE")
++	# A captured enemy may be invisible due to fog/culling. Freed evacuees may
++	# be garrisoned or executing player orders. Other Units may retain resolved
++	# references in queued attacks, taunt, missiles and one-step caches.
++	return {"ok": true}
++
++func validate_level3_membership(states: Dictionary, active_ids: Array) -> Dictionary:
++	# Called on the outputs of validate(), before any allocation/activation.
++	# This is an additional graph obligation, not an alternative Unit decoder.
++	if _unit_schema != LEVEL3_SCHEMA or not _scope_error.is_empty(): return _failure("LEVEL3_CONTEXT_REQUIRED")
++	var known: Dictionary = {}
++	for id: Variant in states:
++		if not _id(id) or typeof(states[id]) != TYPE_DICTIONARY or states[id].get("ok") != true or states[id].get("entity_id") != id or typeof(states[id].get("values")) != TYPE_DICTIONARY: return _failure("VALIDATED_LEVEL3_STATES_REQUIRED")
++		known[id] = true
++	var checked: Dictionary = _chapter_registry(known)
++	if not checked.ok: return checked
++	var active: Dictionary = {}
++	for id: Variant in active_ids:
++		if not _id(id) or not known.has(id) or active.has(id): return _failure("LEVEL3_ACTIVE_REGISTRY")
++		active[id] = true
++	for id: String in _chapter_roles:
++		var value: Dictionary = states[id].values
++		if active.has(id) != (value.hp > 0.0 and not value._dying): return _failure("LEVEL3_ROLE_ACTIVE_MEMBERSHIP", id)
++	return {"ok": true, "complete_world": false, "root_and_effect_validation_required": true}
++
+ func _check_values(values: Dictionary) -> Dictionary:
+ 	if not _fields(values, RULES.keys()): return _failure("VALUE_FIELDS")
+ 	for field in RULES:
+@@ -861,7 +992,9 @@
+ 				if typeof(value) != TYPE_BOOL: return _failure("VALUE_TYPE",field)
+ 			"int":
+ 				if typeof(value) != TYPE_INT: return _failure("VALUE_TYPE",field)
+-				if INT_RANGES.has(field) and (value < INT_RANGES[field][0] or value > INT_RANGES[field][1]): return _failure("VALUE_RANGE",field)
++				if field == "faction" and _unit_schema == LEVEL3_SCHEMA:
++					if value < 0 or value > 2: return _failure("VALUE_RANGE", field)
++				elif INT_RANGES.has(field) and (value < INT_RANGES[field][0] or value > INT_RANGES[field][1]): return _failure("VALUE_RANGE",field)
+ 			"float":
+ 				if typeof(value) != TYPE_FLOAT: return _failure("VALUE_TYPE",field)
+ 				if not is_finite(value): return _failure("NON_FINITE",field)
+@@ -927,11 +1060,8 @@
+ 				for key in value:
+ 					if typeof(value[key]) != TYPE_FLOAT or not is_finite(value[key]): return _failure("FORM_BACKUP_TYPE",field)
+ 			_: return _failure("RULE_UNIMPLEMENTED",field)
+-	# Standard defense excludes chapter state; references remain the next layer's
+-	# responsibility even when current pointers happen to be null.
+-	for field in ["defeat_outcome","story_outcome","_pose_previous_variant"]:
+-		if values[field] != "": return _failure("CHAPTER_STATE_UNSUPPORTED",field)
+-	if values._story_pose_t != 0.0 or values.is_captive: return _failure("CHAPTER_STATE_UNSUPPORTED")
++	var chapter: Dictionary = _check_chapter_values(values)
++	if not chapter.ok: return chapter
+ 	if values._path_i < 0: return _failure("VALUE_RANGE","_path_i")
+ 	return {"ok":true}
+ 
+@@ -1273,12 +1403,15 @@
+ 	return {"ok": true, "value": values}
+ 
+ func capture(unit: Variant, entity_id: String, content_version: String, object_to_id: Dictionary, encode_identity: Callable) -> Dictionary:
++	if not _scope_error.is_empty(): return _failure(_scope_error)
+ 	if _codec == null: return _failure("MODULE_CONFIGURATION")
+ 	if not _version(content_version): return _failure("CONTENT_VERSION")
+ 	if not _unit(unit): return _failure("UNIT_INSTANCE")
+ 	var registry: Dictionary = _registry(object_to_id)
+ 	if not registry.ok: return registry
+ 	if not object_to_id.has(unit) or object_to_id[unit] != entity_id: return _failure("SUBJECT_ID")
++	var role_registry: Dictionary = _chapter_registry(registry.ids)
++	if not role_registry.ok: return role_registry
+ 	var values: Dictionary = _read_explicit(unit)
+ 	var checked: Dictionary = _check_values(values)
+ 	if not checked.ok: return checked
+@@ -1295,22 +1428,29 @@
+ 	var node: Dictionary = _read_node(unit)
+ 	checked = _check_node(node)
+ 	if not checked.ok: return checked
++	var flat_metadata: Dictionary = _check_metadata(metadata.value)
++	if not flat_metadata.ok: return flat_metadata
++	checked = _check_chapter_parts(values, references.values, flat_metadata.value, node)
++	if not checked.ok: return checked
+ 	# Preserve null inventory exactly, including unusual externally created heroes.
+ 	var payload: Dictionary = {"values": _to_wire(values), "references": references.values, "ids": identities.ids,
+ 		"pools": identities.pools, "inventory": inventory.value, "metadata": metadata.value, "node": node}
+ 	var encoded: Dictionary = _codec.encode(payload)
+ 	if not encoded.ok: return _failure("CODEC_" + String(encoded.code), String(encoded.get("path", "")))
+-	return {"ok": true, "record": {"schema": SCHEMA, "content_version": content_version, "entity_id": entity_id, "payload": encoded.value}}
++	return {"ok": true, "record": {"schema": _unit_schema, "content_version": content_version, "entity_id": entity_id, "payload": encoded.value}}
+ 
+ func validate(record: Variant, content_version: String, known_ids: Dictionary, validate_identity: Callable) -> Dictionary:
++	if not _scope_error.is_empty(): return _failure(_scope_error)
+ 	if _codec == null: return _failure("MODULE_CONFIGURATION")
+ 	if not _version(content_version): return _failure("CONTENT_VERSION")
+ 	if typeof(record) != TYPE_DICTIONARY or not _fields(record, ["schema", "content_version", "entity_id", "payload"]): return _failure("RECORD_FIELDS")
+-	if typeof(record.schema) != TYPE_STRING or record.schema != SCHEMA: return _failure("SCHEMA")
++	if typeof(record.schema) != TYPE_STRING or record.schema != _unit_schema: return _failure("SCHEMA")
+ 	if typeof(record.content_version) != TYPE_STRING or record.content_version != content_version: return _failure("CONTENT_VERSION")
+ 	var checked: Dictionary = _known_ids(known_ids)
+ 	if not checked.ok: return checked
+ 	if not _id(record.entity_id) or not known_ids.has(record.entity_id): return _failure("SUBJECT_ID")
++	checked = _chapter_registry(known_ids)
++	if not checked.ok: return checked
+ 	var decoded: Dictionary = _codec.decode(record.payload)
+ 	if not decoded.ok: return _failure("CODEC_" + String(decoded.code), String(decoded.get("path", "")))
+ 	var payload: Variant = decoded.value
+@@ -1332,6 +1472,8 @@
+ 	var metadata: Dictionary = _check_metadata(payload.metadata)
+ 	if not metadata.ok: return metadata
+ 	checked = _check_node(payload.node)
++	if not checked.ok: return checked
++	checked = _check_chapter_parts(values.values, references.values, metadata.value, payload.node)
+ 	if not checked.ok: return checked
+ 	return {"ok": true, "entity_id": record.entity_id, "values": values.values, "references": references.values,
+ 		"ids": identities.ids, "pools": identities.pools, "inventory": payload.inventory, "metadata": metadata.value, "node": payload.node}
+@@ -1440,6 +1582,7 @@
+ # graph and signal connection, freed tombstones, and restored RNG. Tree must
+ # remain paused until ALL Units/Effects/Battle are released by the transaction.
+ func activate(unit: Variant, activation: Dictionary) -> Dictionary:
++	if not _scope_error.is_empty(): return _failure(_scope_error)
+ 	if not _unit(unit): return _failure("UNIT_INSTANCE")
+ 	if unit.entity_id < 1 or unit.entity_id >= 9223372036854775807: return _failure("ENTITY_FIELD")
+ 	if not is_instance_valid(unit.battle): return _failure("ENTITY_ALLOCATOR_NOT_INSTALLED")
