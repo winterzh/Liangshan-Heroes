@@ -1,0 +1,133 @@
+class CounterSDK extends RefCounted:
+	var owner := 76561198000000001
+	var stats := {"TOTAL_KILLS": 50, "TOTAL_WINS": 0, "DEFENSE_WINS": 0, "AI_WINS": 0}
+	var achievements := {}
+	var writes: Array = []
+	var stores := 0
+	var set_ok := true
+	var store_ok := true
+	func getSteamID() -> int: return owner
+	func run_callbacks() -> void: pass
+	func steamShutdown() -> void: pass
+	func setStatInt(id: String, value: int) -> bool:
+		writes.append({"id": id, "value": value, "accepted": set_ok})
+		if set_ok: stats[id] = value
+		return set_ok
+	func setAchievement(id: String) -> bool:
+		achievements[id] = true
+		return true
+	func storeStats() -> bool:
+		stores += 1
+		return store_ok
+
+func _counter_enemy(point: Vector2, phase: int, faction := 1, building := false) -> Variant:
+	var previous_phase: int = battle.phase
+	battle.phase = phase
+	var unit: Variant = battle.spawn_unit(battle.level.hall.key if building else "guan_dao", faction, point)
+	if not is_instance_valid(unit): battle.phase = previous_phase; return null
+	unit.set_physics_process(false)
+	unit.take_damage(1000000.0, null, false, true)
+	battle.phase = previous_phase
+	return unit
+
+func _steam_counter_cases(identity: Dictionary, runtime: Dictionary) -> bool:
+	var steam: Variant = root.get_node("SteamService")
+	var api := CounterSDK.new()
+	_check("counter fixture is SDK-disabled native run", OS.get_environment("STEAM_DISABLED") == "1" and steam.native == null and not steam.available)
+	steam.native = api; steam.available = true; steam.stats_ready = true; steam.account = str(api.owner)
+	steam._context = battle._official_context.duplicate(true)
+	steam._run_counter += 1; steam._active_run = steam._run_counter
+	battle._steam_run_id = steam._active_run
+	var run_id: int = steam._active_run
+	var unlocked := {}
+	for entry in SteamAchievementCatalog.entries(): unlocked[entry.id] = false
+	steam.state.seed(api.stats, unlocked)
+	steam._sent_stats = api.stats.duplicate(); steam._sent_achievements = unlocked.duplicate()
+	steam._run_kill_highwater = battle._steam_valid_kills
+	var initial_count: int = battle._steam_valid_kills
+	var arena: Dictionary = _qa_damage_arena()
+	if not _ok("counter native arena", arena): return false
+	for excluded: String in ["intro", "end", "friendly", "building"]:
+		var before: int = battle._steam_valid_kills
+		var unit: Variant = _counter_enemy(arena.target, 0 if excluded == "intro" else (3 if excluded == "end" else 2), 0 if excluded == "friendly" else 1, excluded == "building")
+		if not _check("native excluded death exists " + excluded, is_instance_valid(unit) and unit.hp == 0.0): return false
+		_check("native excluded death not Steam credit " + excluded, battle._steam_valid_kills == before and api.stats.TOTAL_KILLS == 50)
+	for i in range(2):
+		var unit: Variant = _counter_enemy(arena.target, 2)
+		if not _check("native eligible death %d" % i, is_instance_valid(unit) and unit.hp == 0.0): return false
+		_check("actual death forwards cumulative value %d" % i, battle._steam_valid_kills == initial_count + i + 1 and steam._run_kill_highwater == battle._steam_valid_kills and api.stats.TOTAL_KILLS == 51 + i)
+		unit.take_damage(1000000.0, null, false, true)
+		_check("dead unit cannot credit again %d" % i, api.stats.TOTAL_KILLS == 51 + i)
+	for i in range(3): await physics_frame
+	await process_frame
+	if not await _swap_hold(): return false
+	# Model an earlier world with newer service history, the exact read-again case.
+	var world_count: int = battle._steam_valid_kills
+	steam.record_kill(run_id, world_count + 3)
+	var history: int = steam._run_kill_highwater
+	var history_total: int = api.stats.TOTAL_KILLS
+	var swap: Variant = load("res://scripts/run_world_swap.gd").new(identity, runtime)
+	if not _ok("capture actual world behind Steam history", swap.prepare(battle, source_identity)): return false
+	var root_record: Dictionary = swap._record.sections.root
+	var value: Dictionary = codec.decode(root_record.payload).value
+	_check("root v4 includes exact eligible cumulative counter", root_record.schema == "defense_battle_root_v4" and value.values._steam_valid_kills == world_count)
+	var root_validator: Variant = swap._core._root_state(swap._core._identity)
+	var known := {}
+	for id in swap._core._unit_plan.id_to_unit: known[id] = true
+	var old := root_record.duplicate(true); old.schema = "defense_battle_root_v3"
+	_check("old root schema cannot guess cumulative history", not root_validator.validate(old, identity.content_version, known).ok)
+	for invalid: Variant in [-1, 2147483648, int(value.values.kills) + 1, 1.5]:
+		var bad := root_record.duplicate(true); var raw := value.duplicate(true)
+		raw.values._steam_valid_kills = invalid; bad.payload = codec.encode(raw).value
+		_check("invalid eligible counter rejected " + str(invalid), not root_validator.validate(bad, identity.content_version, known).ok)
+	var installed: Dictionary = swap.commit()
+	if not _ok("actual world replaces with cumulative counter", installed): return false
+	battle = installed.battle; source_identity.dispose(); source_identity = installed.identity
+	_check("world restore preserves earlier counter and later history separately", battle._steam_valid_kills == world_count and steam._run_kill_highwater == history and api.stats.TOTAL_KILLS == history_total and battle._steam_run_id == run_id)
+	for i in range(4):
+		var unit: Variant = _counter_enemy(arena.target, 2)
+		if not _check("restored actual enemy death %d" % i, is_instance_valid(unit) and unit.hp == 0.0): return false
+		_check("restored replay credits only above high water %d" % i, battle._steam_valid_kills == world_count + i + 1 and api.stats.TOTAL_KILLS == history_total + (1 if i == 3 else 0))
+	var after: int = api.stats.TOTAL_KILLS
+	var before_writes: int = api.writes.size()
+	for invalid: Variant in [-1, 2147483648, 1.5, true, "99999", null, {}]: steam.record_kill(run_id, invalid)
+	steam.record_kill(0, history + 99); steam.record_kill(run_id + 1, history + 99)
+	steam.record_kill(run_id, 0); steam.record_kill(run_id, history)
+	_check("invalid duplicate and stale calls do not write cache", api.stats.TOTAL_KILLS == after and api.writes.size() == before_writes)
+	# A rejected cache setter is retried as the same absolute total, without
+	# counting the repeated cumulative input again.
+	api.set_ok = false
+	steam.record_kill(run_id, history + 3)
+	_check("failed cache setter retains credited model total", api.stats.TOTAL_KILLS == after and steam.state.stats.TOTAL_KILLS == after + 2 and steam._dirty)
+	steam.record_kill(run_id, history + 3)
+	_check("repeat failed input does not count twice", steam.state.stats.TOTAL_KILLS == after + 2)
+	api.set_ok = true; steam._retry_after = 0; steam._process(10.0)
+	_check("periodic retry publishes same total once", api.stats.TOTAL_KILLS == after + 2)
+	api.store_ok = false; steam._store_busy = false; steam._retry_after = 0; steam.flush()
+	_check("store failure leaves retry state without changing total", steam._dirty and not steam._store_busy and api.stats.TOTAL_KILLS == after + 2)
+	api.store_ok = true; steam._retry_after = 0; steam.flush()
+	_check("retry StoreStats leaves count unchanged", steam._store_busy and api.stats.TOTAL_KILLS == after + 2)
+	steam.settle(run_id, true, {})
+	var terminal_count: int = api.stats.TOTAL_KILLS
+	steam.record_kill(run_id, history + 90); steam.settle(run_id, true, {})
+	_check("terminal excludes more kills and duplicate win", api.stats.TOTAL_KILLS == terminal_count and api.stats.TOTAL_WINS == 1 and api.stats.DEFENSE_WINS == 1)
+	steam.state.settled.clear()
+	steam.state.stats.TOTAL_KILLS = 2147483646; api.stats.TOTAL_KILLS = 2147483646
+	steam._sent_stats.TOTAL_KILLS = 2147483646
+	steam.record_kill(run_id, history + 100)
+	_check("large delta saturates without per-kill loop", api.stats.TOTAL_KILLS == 2147483647 and steam._run_kill_highwater == history + 100)
+	api.owner += 1; before_writes = api.writes.size()
+	steam.record_kill(run_id, history + 101)
+	_check("account change rejects before high-water mutation", not steam.available and steam._run_kill_highwater == history + 100 and api.writes.size() == before_writes)
+	_check("new run resets memory history even when QA excluded", steam.begin_run({"mode": "custom"}) == 0 and steam._run_kill_highwater == 0)
+	steam.native = null; steam.available = false; steam.stats_ready = false; steam._active_run = 0; battle._steam_run_id = 0
+	steam._context = battle._official_context.duplicate(true)
+	steam.state.seed({}, {}); steam._dirty = false; steam._store_busy = false
+	swap.dispose()
+	for i in range(3): await physics_frame
+	await process_frame
+	if not await _swap_hold(): return false
+	_check("eligible counter remains recapturable after native deaths", battle._save_barrier.health().ok and battle._steam_valid_kills <= battle.kills)
+	_check("counter fixture releases native barrier", battle._save_barrier.release_capture().ok)
+	completed_cases.append("actual_battle_cumulative_steam_kills_across_world_restore")
+	return true

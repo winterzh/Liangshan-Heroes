@@ -1,3 +1,8 @@
+## 2026-09-08 战斗累计击杀
+
+- docs/STEAM_BATTLE_COUNTER_20260908.md：root v4、有效击杀累计/内存高水位合同。
+- qa/steam_counter_20260908/：真实死亡、第三次世界替换及Steam假SDK重试证据。
+
 ## 2026-09-08 Steam独立局记录
 
 - scripts/steam_run_receipt.gd：账号、局token、高水位、终局与校正纯模型。

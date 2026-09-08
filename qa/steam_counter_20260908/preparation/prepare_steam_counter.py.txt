@@ -1,0 +1,58 @@
+from pathlib import Path
+import difflib,json,hashlib
+root=Path.cwd(); out=root/'scratchpad/steam_counter_20260908'; out.mkdir(exist_ok=True)
+(out/'.gdignore').write_text('\n')
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+def save(path,s):
+    p=root/path; old=p.read_bytes().decode().splitlines(keepends=True); new=s.splitlines(); result=[]
+    for op,i,j,a,b in difflib.SequenceMatcher(None,[x.rstrip('\r\n') for x in old],new,autojunk=False).get_opcodes():
+        if op=='equal': result.extend(old[i:j])
+        elif op in ('insert','replace'):
+            ending='\r\n' if old[min(i,len(old)-1)].endswith('\r\n') else '\n'
+            result.extend(x+ending for x in new[a:b])
+    assert ''.join(result).replace('\r\n','\n')==s
+    (out/p.name).write_bytes(''.join(result).encode())
+b=(root/'scripts/battle.gd').read_text(encoding='utf-8')
+b=rep(b,'var kills := 0','var kills := 0\nvar _steam_valid_kills := 0 # Cumulative eligible deaths; restored with the world, not Steam history.')
+b=rep(b,'\t\t\tSteamService.record_kill(_steam_run_id)','\t\t\t_steam_valid_kills = mini(2147483647, _steam_valid_kills + 1)\n\t\t\tSteamService.record_kill(_steam_run_id, _steam_valid_kills)')
+save('scripts/battle.gd',b)
+s=(root/'scripts/steam_service.gd').read_text(encoding='utf-8')
+s=rep(s,'var _active_run := 0','var _active_run := 0\nvar _run_kill_highwater := 0')
+s=rep(s,'func begin_run(context: Dictionary) -> int:\n\t_active_run = 0','func begin_run(context: Dictionary) -> int:\n\t_active_run = 0\n\t_run_kill_highwater = 0')
+s=rep(s,'func record_kill(run_id: int) -> void:', 'func record_kill(run_id: int, total_valid_kills: Variant) -> void:')
+s=rep(s,'\tstate.add_kill()\n\t_sync_state()', '''	# A restored world can be behind the service's history. Replaying its old
+	# deaths must not increase statistics again. Never infer a per-event delta.
+	if typeof(total_valid_kills) != TYPE_INT or total_valid_kills < 0 or total_valid_kills > 2147483647:
+		return
+	if total_valid_kills <= _run_kill_highwater: return
+	var newly_credited: int = total_valid_kills - _run_kill_highwater
+	_run_kill_highwater = total_valid_kills
+	state.stats.TOTAL_KILLS = mini(2147483647, int(state.stats.get("TOTAL_KILLS", 0)) + newly_credited)
+	state.evaluate()
+	_sync_state()''')
+save('scripts/steam_service.gd',s)
+r=(root/'scripts/run_battle_root_state.gd').read_text(encoding='utf-8')
+r=rep(r,'defense_battle_root_v3','defense_battle_root_v4')
+r=rep(r,'\t"kills": TYPE_INT,','\t"kills": TYPE_INT,\n\t"_steam_valid_kills": TYPE_INT,')
+r=rep(r,'"phase", "kills", "hero_kills"','"phase", "kills", "_steam_valid_kills", "hero_kills"')
+r=rep(r,'\tif values.next_entity_id < 1:', '\tif values._steam_valid_kills < 0 or values._steam_valid_kills > 2147483647 or values._steam_valid_kills > values.kills: return _bad("STEAM_KILL_RANGE")\n\tif values.next_entity_id < 1:')
+save('scripts/run_battle_root_state.gd',r)
+t=(root/'tools/steam_integration_suite.gd').read_text(encoding='utf-8')
+assert t.count('service.record_kill(11)')==3
+for n in range(1,4): t=t.replace('service.record_kill(11)',f'service.record_kill(11, {n})',1)
+save('tools/steam_integration_suite.gd',t)
+d=(root/'qa/world_swap_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('world-swap-native','steam-counter-native').replace('[world swap QA] ','[steam counter QA] ')
+d=rep(d,'"phase", "kills", "hero_kills"','"phase", "kills", "_steam_valid_kills", "hero_kills"')
+d=rep(d,'"phase", "kills", "gold"','"phase", "kills", "_steam_valid_kills", "gold"')
+d=d.replace('172 declarations 105 values plus clock 66 external exact','173 declarations 106 values plus clock 66 external exact').replace('== 172','== 173').replace('root_names.size() == 105','root_names.size() == 106')
+d=rep(d,'\tif not await _swap_cases(identity, runtime): await _finish(true); return\n\tawait _finish()', '\tif not await _swap_cases(identity, runtime): await _finish(true); return\n\tif not await _steam_counter_cases(identity, runtime): await _finish(true); return\n\tawait _finish()')
+if (out/'counter_cases.gd').exists():
+    d+='\n'+(out/'counter_cases.gd').read_text(encoding='utf-8')
+    (out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+    sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest(); names=['battle.gd','steam_service.gd','run_battle_root_state.gd']
+    rows=[{'path':'scripts/'+n,'before_exists':True,'before_raw_sha256':sha(root/'scripts'/n),'candidate':out.relative_to(root).as_posix()+'/'+n,'candidate_sha256':sha(out/n)} for n in names]
+    (out/'overlay_manifest.json').write_text(json.dumps({'files':rows},indent=2)+'\n')
+    (out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names+['steam_integration_suite.gd','counter_cases.gd','driver.gd','overlay_manifest.json']}},indent=2)+'\n')
+    print(sha(out/'freeze.json'))

@@ -193,7 +193,7 @@ func _adapter_tests(service: Node) -> void:
 	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
 	service._retry_after = 0
 	service._active_run = 11
-	service.record_kill(11, 1)
+	service.record_kill(11)
 	check("kills sent to Steam cache immediately", api.stats.TOTAL_KILLS == 1)
 	api.store_ok = false
 	service.flush()
@@ -201,7 +201,7 @@ func _adapter_tests(service: Node) -> void:
 	api.store_ok = true
 	service._retry_after = 0
 	service.flush()
-	service.record_kill(11, 2)
+	service.record_kill(11)
 	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
 	check("in-flight newer progress remains dirty", service._dirty)
 	service._retry_after = 0
@@ -238,7 +238,7 @@ func _adapter_tests(service: Node) -> void:
 	check("unsubscribe preserves local source", ScenarioStore.list_saved().has(source.title))
 	var count_before: int = api.stats.TOTAL_KILLS
 	api.owner = 222
-	service.record_kill(11, 3)
+	service.record_kill(11)
 	check("account switch cannot write old progress to new user", not service.available and api.stats.TOTAL_KILLS == count_before)
 	service.native = null
 	service.available = false

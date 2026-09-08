@@ -1,3 +1,5 @@
+后续：Battle现已传递可恢复的累计有效击杀，SteamService完成同进程高水位防重，见[实际世界验证](STEAM_BATTLE_COUNTER_20260908.md)。本页持久ledger仍未由服务调用，outbox及Session绑定继续待办。
+
 # Steam 独立持久局记录
 
 三个内部模块已进入生产源码：steam_run_receipt保留严格账号/玩法/局身份、累计击杀高水位与终局一次；steam_receipt_store负责Windows实际文件事务及最近两份完整快照；steam_run_ledger串行完成校验、落盘回读、模型提交和读写新鲜度检查。尚未由SteamService或Battle调用，不会自行创建玩家记录或改变现有成就统计。后续须把此模块接到统一Session、Steam持续同步和玩家继续槽，不能把本批称为完整续玩或真实SDK验收。

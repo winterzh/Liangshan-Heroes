@@ -1,0 +1,49 @@
+{
+  "source_head": "0df8997952cb5a7616a6bf3839da1fd30b9645bd",
+  "installed_at_utc": "2026-09-08T02:11:00.231524+00:00",
+  "native_run": "overlay_20260908T020526Z_ec75c46c",
+  "runs": [
+    {
+      "run_id": "overlay_20260908T020526Z_ec75c46c",
+      "complete": true,
+      "freeze_sha256": "0930e47353841769df76aaf0c7510abc6f2d0d3b54c4be3be8f14607d3fdde84"
+    }
+  ],
+  "changes": [
+    {
+      "path": "scripts/battle.gd",
+      "before_exists": true,
+      "before_raw_sha256": "bce2ff6bbd174dca86f4f6258a0bda2cb3933761a6834ea3bca06bee61343850",
+      "candidate": "scratchpad/steam_counter_20260908/battle.gd",
+      "candidate_sha256": "62f47cd5cfcc7b9549d9266a11afae3ec416e02bcc813cc4600c0fbee3c246df"
+    },
+    {
+      "path": "scripts/steam_service.gd",
+      "before_exists": true,
+      "before_raw_sha256": "6948d2cf1678d1e91eef6c8c3644af336d8105d70977eac0221b5ed713a68998",
+      "candidate": "scratchpad/steam_counter_20260908/steam_service.gd",
+      "candidate_sha256": "b3bca0e49468f10f8cc2f88a1bc332a9ff56b84c1b64bb94baf64bff35162c55"
+    },
+    {
+      "path": "scripts/run_battle_root_state.gd",
+      "before_exists": true,
+      "before_raw_sha256": "26e935a223dac79b1399056301d02469b63e7dd7cbb2cfe223fb3910942e3637",
+      "candidate": "scratchpad/steam_counter_20260908/run_battle_root_state.gd",
+      "candidate_sha256": "a5696f7273f6734244efdcf7702bafcb6ef16f1a3c916edf157e0bb4135e164e"
+    }
+  ],
+  "tool_change": {
+    "path": "tools/steam_integration_suite.gd",
+    "before_sha256": "1c7004dec9b14e4d5ebc0ef50a3bd062bcbcb39b24a02b69f37d3cc6f82e9d8f",
+    "after_sha256": "392a90bd1df74cbfd9fd7ffb02403718bc74f1d08781dce91c62c9887de837d4",
+    "scope": "three existing mock-adapter calls now pass cumulative totals 1, 2, 3; full workshop/UI suite not rerun"
+  },
+  "checks": 6694,
+  "source_sha_checks": 5826,
+  "diagnostic_rows": 2,
+  "assertions": 866,
+  "same_process_actual_battle_counter_tested": true,
+  "persistent_steam_binding": false,
+  "cross_process_resume": false,
+  "steam_updated": false
+}

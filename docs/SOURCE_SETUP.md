@@ -1,3 +1,7 @@
+## 2026-09-08 Steam战斗累计值接口
+
+record_kill现在要求run_id与本局累计有效击杀两个参数；Battle已同步调用，root v4保存新计数。旧root v3不推测迁移；目前玩家继续槽未开放。独立持久收据尚待接到服务及Session。[接口与原生验证](STEAM_BATTLE_COUNTER_20260908.md)。
+
 ## 2026-09-08 持久局记录内部API
 
 新增steam_run_receipt/store/ledger内部模块。未来由Session传入实时账号和受信玩法；默认user://steam_receipts/v1独立于战斗槽。当前未由autoload或Battle调用，不改变启动和菜单。[接口、存储边界与复现](STEAM_RUN_LEDGER_20260908.md)。

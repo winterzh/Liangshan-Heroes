@@ -1,3 +1,5 @@
+后续：根记录已提升v4，包含_steam_valid_kills；实际世界替换保留累计值，服务历史高水位保持外部。[验证](STEAM_BATTLE_COUNTER_20260908.md)。持久Steam与跨进程仍未接通。
+
 后续更新：core已增加组件统一激活与节点/identity所有权转移，run_world_swap完成同进程实际世界替换；[验证](WORLD_SWAP_20260908.md)。持久Steam、磁盘/玩家继续和跨进程尚未交付。
 
 后续更新：此前剩余12类特效已接入，默认工厂登记当前Art中的物品/技能/建筑贴图；core仍v7、20分区。见[当前证据](LINKED_FX_RESUME_20260908.md)，完整安装和玩家继续仍待交付。

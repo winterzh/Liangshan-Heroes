@@ -1,3 +1,7 @@
+## 2026-09-08 实际战斗累计击杀防重
+
+Battle传递FIGHT有效敌军死亡累计值，SteamService按当前局历史高水位只加新增差值；root提升v4并恢复独立计数。第三次真实世界替换后旧进度不重加、超过高水位只加1，缓存失败/重试、终局和账号变化通过。最终866断言、5826来源SHA及2诊断；[实现](STEAM_BATTLE_COUNTER_20260908.md)、[QA](../qa/steam_counter_20260908/README.md)。持久Steam/Session和玩家继续仍待接通，本批仅stable同步。
+
 ## 2026-09-08 Steam独立局记录存储
 
 接入三个内部持久记录模块，累计击杀高水位、胜负终局墓碑、账号/玩法校验和两份快照轮换。原生2100次写入、7个强杀重启窗口、11类坏记录及八关/据守/AI统计检查通过，共2382非来源断言；5826来源SHA单列。SteamService/Battle与玩家槽尚未调用，持续SDK发布及原整体验收仍待推进。[实现与限制](STEAM_RUN_LEDGER_20260908.md)、[QA](../qa/steam_ledger_20260908/README.md)。本批仅GitHub stable同步。
