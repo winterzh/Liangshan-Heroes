@@ -1,3 +1,10 @@
+## 2026-09-08 Steam独立局记录
+
+- scripts/steam_run_receipt.gd：账号、局token、高水位、终局与校正纯模型。
+- scripts/steam_receipt_store.gd：独立快照文件事务、压缩和死写者恢复。
+- scripts/steam_run_ledger.gd：内部串行落盘及新鲜度检查API。
+- docs/STEAM_RUN_LEDGER_20260908.md、qa/steam_ledger_20260908/：合同及原生崩溃/坏记录证据。
+
 ## 2026-09-08 统一世界替换
 
 - scripts/run_world_swap.gd：同进程HELD世界替换与旧场景/Steam内存局交接。

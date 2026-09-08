@@ -1,0 +1,49 @@
+from pathlib import Path
+root=Path.cwd(); out=root/'scratchpad/steam_ledger_20260908'
+p=root/'.godot/prepare_steam_ledger.py'; s=p.read_text(encoding='utf-8'); anchor="s=s.replace('Checkpoint.hit(', '_checkpoint(')"
+assert s.count(anchor)==1
+s=s.replace(anchor, "s=s.replace(' or \"\\\\u0000\" in raw', '')\n"+anchor)
+p.write_text(s,encoding='utf-8',newline='\n')
+p=out/'driver.gd'; s=p.read_text(encoding='utf-8')
+a='\tcheck(point + " kill actual child", OS.kill(pid) == OK)'
+b='''	var live_bytes := folder_hashes(ledger._store.directory)
+	var competing := Ledger.new()
+	var denied: Dictionary = competing.open(ACCOUNT, stats(), unlocks(), path)
+	check(point + " live writer blocks competitor", not denied.ok)
+	check(point + " competitor leaves writer bytes", folder_hashes(ledger._store.directory) == live_bytes)
+'''+a
+assert s.count(a)==1; s=s.replace(a,b)
+a='\tvar long_lived := fresh("user://ledger_qa/long")'
+b='''	var modes := fresh("user://ledger_qa/modes")
+	for index in range(1, 9):
+		var context := {"mode": "campaign", "level_id": "level%d" % index, "waves": 0}
+		var game: Dictionary = modes.begin_run(context)
+		if not ok("campaign %d begins" % index, game): continue
+		ok("campaign %d settles" % index, modes.settle(game.token, context, true, {"story_total": 2, "story_done": 2, "story_complete": true}))
+		var state: Dictionary = modes.capture().record
+		check("campaign %d clear and story" % index, state.unlocked["ACH_CLEAR_LEVEL_%d" % index] and state.unlocked["ACH_STORY_LEVEL_%d" % index])
+	for waves in [20, 60]:
+		var context := {"mode": "defense", "level_id": "", "waves": waves}
+		var game: Dictionary = modes.begin_run(context)
+		if ok("defense %d begins" % waves, game): ok("defense %d win" % waves, modes.settle(game.token, context, true, {}))
+	var ai := {"mode": "ai", "level_id": "", "waves": 0}
+	var ai_run: Dictionary = modes.begin_run(ai)
+	if ok("AI official begins", ai_run): ok("AI victory", modes.settle(ai_run.token, ai, true, {}))
+	check("modes total eleven wins", modes.capture().record.stats.TOTAL_WINS == 11 and modes.capture().record.stats.DEFENSE_WINS == 2 and modes.capture().record.stats.AI_WINS == 1)
+	var loss: Dictionary = modes.begin_run(CONTEXT)
+	if ok("loss begins", loss):
+		ok("loss durable terminal", modes.settle(loss.token, CONTEXT, false, {}))
+		ok("later victory cannot reverse loss", modes.settle(loss.token, CONTEXT, true, {}))
+		check("loss not counted", modes.capture().record.stats.TOTAL_WINS == 11)
+	var capped := Ledger.new()
+	ok("saturation seed", capped.open(ACCOUNT, stats(2147483646), unlocks(), "user://ledger_qa/capped"))
+	var cap_run: Dictionary = capped.begin_run(CONTEXT)
+	if ok("saturation run", cap_run):
+		ok("saturation progress", capped.progress(cap_run.token, CONTEXT, 20))
+		check("saturates signed int and preserves high water", capped.capture().record.stats.TOTAL_KILLS == 2147483647 and capped.capture().record.runs[cap_run.token].credited_kills == 20)
+		var copy: Dictionary = capped.capture()
+		copy.record.stats.TOTAL_KILLS = 0
+		check("capture detached from live record", capped.capture().record.stats.TOTAL_KILLS == 2147483647)
+'''+a
+assert s.count(a)==1; s=s.replace(a,b)
+p.write_text(s,encoding='utf-8',newline='\n')

@@ -1,3 +1,7 @@
+## 2026-09-08 持久局记录内部API
+
+新增steam_run_receipt/store/ledger内部模块。未来由Session传入实时账号和受信玩法；默认user://steam_receipts/v1独立于战斗槽。当前未由autoload或Battle调用，不改变启动和菜单。[接口、存储边界与复现](STEAM_RUN_LEDGER_20260908.md)。
+
 ## 2026-09-08 世界替换内部接口
 
 run_world_swap要求实际current_scene的HELD经典30波来源，prepare/commit保持同步，返回新Battle及历史identity；失败保留旧世界HELD，成功继承用户暂停状态。未增加菜单或启动方式。[接口与复现](WORLD_SWAP_20260908.md)。跨进程及玩家继续尚未开放。
