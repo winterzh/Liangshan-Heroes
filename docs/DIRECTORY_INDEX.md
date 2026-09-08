@@ -1,3 +1,11 @@
+## 2026-09-08 Steam 读取适配器
+
+- `native/steam_stats_reader/`：原生只读桥接源码、CMake/精简绑定配置、合成核心/ABI测试及 MIT 头文件来源；`native/.gdignore` 阻止扫描。
+- `scripts/steam_stats_reader.gd`：完整统计/成就读取门面，当前为内部接口。
+- `tools/build_steam_stats_reader.py`、`tools/steam_stats_reader_qa.gd`：可复现编译和真实 Godot 隔离验证。
+- `vendor/steam_stats_reader/`：受测 DLL、许可和来源清单，尚未加入现有 Steam 候选安装步骤。
+- `docs/STEAM_STATS_READER_20260908.md`、`qa/steam_stats_reader_20260908/`：合同、86项验证及首次导入失败诊断。
+
 ## 2026-09-08 四语公告与商店语言表
 
 - `marketing/steam_localization_announcement_20260908/copy.json`：四语标题、副标题、摘要、正文与图片占位符。

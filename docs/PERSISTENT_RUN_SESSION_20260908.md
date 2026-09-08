@@ -1,5 +1,7 @@
 # 持久局身份与完整世界会话联调
 
+后续前置模块已新增 [Steam 只读统计桥接](STEAM_STATS_READER_20260908.md)：86项验证通过，读取身份与成功布尔值保留；尚未作为持久发送器接入本会话，以下内部激活和玩家入口边界保持。
+
 ## 已接入的内部路径
 
 steam_local_run_session把独立Ledger、局token、待提交累计击杀和终局意图连接起来。SteamService新增显式内部启用接口_open_persistent_runs，并在该模式下把真实Battle的累计死亡/终局回调交给本机收据。run_world_session保存前先确认同一局收据落盘，再写世界槽；恢复使用当前账号打开的独立收据验证token、玩法、高水位、代数与终局状态，沿用原token而分配新的进程内handle。旧槽不会覆盖或重建统计历史。

@@ -1,3 +1,7 @@
+## 2026-09-08 Steam 读取适配器构建入口
+
+新增内部读取桥接，普通游戏启动方式保持。开发者可在工程根执行 `py -3.14 -X utf8 -B tools/build_steam_stats_reader.py`，由 Visual Studio C++/CMake/Ninja 编译并运行隔离验证；无需初始化 Steam。依赖固定哈希，临时编译目录使用英文短路径，可用 `--work-root` 和 `--profile-root` 指定。受测 DLL 保存在 `vendor/steam_stats_reader/`，尚未加入正常启动和 Steam 候选安装清单。[接口与边界](STEAM_STATS_READER_20260908.md) · [构建说明](../native/steam_stats_reader/README.md)。
+
 ## 2026-09-08 四语公告与商店语言表入口
 
 四语[公开更新公告](https://store.steampowered.com/news/app/5088120/view/708907988310559012)已发布，关联当前 default Build25182453；商店公开语言表已标注简体中文、英语、日语、繁体中文的界面支持，音频与字幕未标注。语言仍从主菜单左上角或设置顶部切换。本轮仅发布平台内容，没有改运行代码、EXE 或启动方式，也未重跑 Godot。文案、图片来源、四语公开回读及封面回退边界见[公告维护记录](STEAM_LOCALIZATION_ANNOUNCEMENT_20260908.md)与[QA](../qa/steam_localization_announcement_20260908/README.md)。客户端下载和玩家推送尚未验收；下方条目为历史演进。
