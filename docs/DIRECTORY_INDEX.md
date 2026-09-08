@@ -1,3 +1,9 @@
+## 2026-09-08 统一世界替换
+
+- scripts/run_world_swap.gd：同进程HELD世界替换与旧场景/Steam内存局交接。
+- docs/WORLD_SWAP_20260908.md：激活/回滚/所有权合同。
+- qa/world_swap_20260908/：原生生产/移动/伤害持续运行证据与受测SHA。
+
 ## 2026-09-08 跟随及贴图特效恢复
 
 - scripts/run_linked_fx_state.gd：12类固定字段、引用/贴图表及缓存校验。

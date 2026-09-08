@@ -1,0 +1,1821 @@
+extends SceneTree
+## Actual HELD classic capture, disabled world mounting and consumer restoration.
+## Full gameplay, Steam and player disk continuation remain external.
+const Factory := preload("res://scripts/run_battle_root_state.gd")
+const FROZEN_DECLARED_NAMES := ["level", "mission", "_official_context", "_steam_run_id", "_gameplay_rng", "_gameplay_rng_issue", "_gameplay_rng_start_kind", "_gameplay_content_identity", "_defs", "_abilities", "_items", "next_item_uid", "next_entity_id", "_run_clock", "_save_barrier", "world", "map", "hud", "camera", "units_root", "fx_root", "overlay", "ai_friendly", "_autocam_enabled", "_autocam_active", "_autocam_dwell", "_autocam_target_pos", "_autocam_target_zoom", "_autocam_focus", "_autocam_review_idx", "_autocam_review_unit", "_ai_spawn_serial", "_ai_tick_frame", "_eco_t", "_eco_last_wood", "_eco_wood_stall", "_eco_trap_cd", "_eco_trap_lane", "_eco_lane_cache_bucket", "_eco_lane_cache", "_last_hb", "units", "_grid", "_mob_grid", "_body_grid_liang", "_body_grid_guan", "_focus_counts", "_res_block_cache", "_res_block_frame", "_blocker_cache", "_blocker_cache_revision", "_blocker_query_budget", "_lite_fx", "_mob_count", "_sep_phase", "_impact_fx_frame", "_damage_fx_frame", "_ground_fire_visuals", "_unit_draw_rect", "_death_remains", "_death_remains_atlas", "_death_remains_atlas_checked", "_death_remains_serial", "_no_opt", "_stealth_acc", "_ecast_acc", "_prof_on", "_prof", "_prof_frames", "_prof_print_acc", "_unit_proc_us", "selection", "phase", "kills", "hero_kills", "track_hero_combat_stats", "hero_combat_stats", "_ability_owner_cache", "_active_ability_cache", "_hero_active_ability_cache", "hero_progress", "hero_item_progress", "lit_cells", "economy", "gold", "wood", "pop_cap", "current_age", "faction_res", "faction_gather_mult", "_tech_done", "tech_atk", "tech_hp", "hero_tech_atk", "hero_tech_hp", "tech_gather", "fog", "_vision", "_sight_now", "_reveal_t", "_vision_img", "_fog_tex", "_fog_layer", "_fog_t", "_dragging", "_drag_from", "_click_fx_pos", "_click_fx_t", "_click_fx_attack", "_amove_armed", "_patrol_armed", "_repair_armed", "_garrison_armed", "_ability_armed", "_ability_caster", "_ground_dots", "_hua_snipe_dots", "_lin_duels", "_chrono_zones", "_orbit_zones", "_meteor_zones", "_gong_lines", "_ice_walls", "_wards", "_ward_serial", "_fire_trails", "_bolts", "_walk_casts", "_channels", "_pending_casts", "_ability_slot", "_item_armed", "_item_caster", "_item_slot", "_pending_item_casts", "_walk_item_casts", "_build_armed", "_trap_armed", "_worker_cat", "_hall_page", "_hall_cat", "_traps", "_active", "_inspect_unit", "_demolish_armed_t", "_alert_t", "_alert_pos", "_idle_i", "_groups", "_last_group_key", "_last_group_time", "_camera_locs", "_smoke", "_smoke_t", "_touch_mode", "_allow_touch", "_press_ms", "_box_mode", "_panning", "_drag_cur", "_last_tap_ms", "_last_tap_pos", "_target_cursor", "_cur_attack", "_cur_gather_wood", "_cur_gather_gold", "_cur_repair", "_cur_select", "_cur_garrison", "_hover_kind", "_cursor_resources_released", "_mission_order_token_seq"]
+const FROZEN_ROOT_NAMES := ["ai_friendly", "_autocam_enabled", "_autocam_active", "_lite_fx", "_no_opt", "track_hero_combat_stats", "economy", "_click_fx_attack", "_amove_armed", "_patrol_armed", "_repair_armed", "_garrison_armed", "_touch_mode", "_dragging", "_box_mode", "_panning", "next_entity_id", "_autocam_review_idx", "_ai_spawn_serial", "_ai_tick_frame", "_eco_last_wood", "_eco_trap_lane", "_blocker_cache_revision", "_blocker_query_budget", "_mob_count", "_sep_phase", "_impact_fx_frame", "_damage_fx_frame", "_ground_fire_visuals", "_death_remains_serial", "phase", "kills", "gold", "wood", "pop_cap", "current_age", "_ward_serial", "_ability_slot", "_item_slot", "_hall_page", "_idle_i", "_last_group_key", "_mission_order_token_seq", "_autocam_dwell", "_autocam_target_zoom", "_eco_t", "_eco_wood_stall", "_eco_trap_cd", "_last_hb", "_stealth_acc", "_ecast_acc", "tech_atk", "tech_hp", "hero_tech_atk", "hero_tech_hp", "tech_gather", "_click_fx_t", "_demolish_armed_t", "_alert_t", "_autocam_target_pos", "_drag_from", "_click_fx_pos", "_alert_pos", "_drag_cur", "_last_tap_pos", "_unit_draw_rect", "_ability_armed", "_item_armed", "_build_armed", "_trap_armed", "_worker_cat", "_hall_cat", "hero_kills", "hero_combat_stats", "_ability_owner_cache", "_active_ability_cache", "_hero_active_ability_cache", "hero_progress", "hero_item_progress", "lit_cells", "faction_res", "faction_gather_mult", "_tech_done", "_camera_locs", "_autocam_review_unit", "_ability_caster", "_item_caster", "_active", "_inspect_unit", "selection", "_groups", "_grid", "_mob_grid", "_body_grid_liang", "_body_grid_guan", "_focus_counts", "_res_block_cache", "_blocker_cache", "_eco_lane_cache", "_res_block_frame", "_eco_lane_cache_bucket", "_last_group_time", "_press_ms", "_last_tap_ms", "_autocam_focus"]
+const BARRIER := {"quiescent": true, "input_released": true}
+var checks: Array = []
+var field_audit: Array = []
+var root_names: Array = []
+var manifest: Dictionary = {}
+var manifest_ready := false
+var report_path := ""
+var runtime_identity: Dictionary = {}
+var battle: Variant
+var codec: Variant
+var source_factory: Variant
+var restore_factory: Variant
+var source_identity: Variant
+var restored_identity: Variant
+var unit_checker: Variant
+var battle_script: Script
+var unit_script: Script
+var object_to_id: Dictionary = {}
+var id_to_unit: Dictionary = {}
+var restored_units: Dictionary = {}
+var known_ids: Dictionary = {}
+var owned_detached: Array = []
+var records: Dictionary = {}
+var viewport_rect := Rect2()
+var completed_cases: Array = []
+var captured_clock: Dictionary = {}
+var capture_rejections: Array = []
+var actual_damage_cases_tested := false
+
+func _barrier_ready(record: Dictionary) -> void:
+	captured_clock = record.duplicate(true)
+
+func _barrier_rejected(code: String) -> void:
+	capture_rejections.append(code)
+
+func _wait_barrier() -> bool:
+	for frame in range(30):
+		if not captured_clock.is_empty() or not capture_rejections.is_empty(): break
+		await process_frame
+	return not captured_clock.is_empty() and capture_rejections.is_empty()
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	return passed
+
+func _ok(label: String, result: Dictionary) -> bool:
+	checks.append({"label": label, "passed": result.get("ok") == true,
+		"code": String(result.get("code", "")), "field": str(result.get("cause", result.get("path", result.get("section", result.get("field", "")))))})
+	return result.get("ok") == true
+
+func _source_guard(label: String) -> bool:
+	var result := true
+	for path in manifest.source_sha256:
+		result = _check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path]) and result
+	return result
+
+func _finish(aborted := false) -> void:
+	if source_identity != null: source_identity.dispose()
+	if restored_identity != null: restored_identity.dispose()
+	for object: Variant in owned_detached:
+		if is_instance_valid(object): object.free()
+	if is_instance_valid(battle):
+		battle.free()
+	await process_frame
+	await process_frame
+	paused = false
+	if manifest_ready: _source_guard("source after")
+	var failures: Array = []
+	for row: Dictionary in checks:
+		if not row.passed: failures.append(row.label)
+	var report: Dictionary = {"suite": "world-swap-native", "run_id": manifest.get("run_id", ""),
+		"complete": not aborted, "passed": not aborted and failures.is_empty(), "checks": checks,
+		"check_count": checks.size(), "failed_count": failures.size(), "failures": failures, "process_id": OS.get_process_id(),
+		"actual_user_dir": OS.get_user_data_dir(), "source_sha256": manifest.get("source_sha256", {}),
+		"engine_binary_sha256": manifest.get("engine_binary_sha256", ""),
+		"display_server": DisplayServer.get_name(), "video_adapter": RenderingServer.get_video_adapter_name(), "rendering_driver": RenderingServer.get_current_rendering_driver_name(), "rendering_method": RenderingServer.get_current_rendering_method(), "runtime_identity": runtime_identity,
+		"declarations": Factory.ALL_DECLARATIONS.size(), "root_fields": root_names,
+		"external_fields": Factory.EXTERNAL_FIELDS, "field_capture_audit": field_audit,
+		"completed_cases": completed_cases,
+		"actual_viewport_rect": {"position": [viewport_rect.position.x, viewport_rect.position.y],
+			"size": [viewport_rect.size.x, viewport_rect.size.y]},
+		"actual_damage_cases_tested": actual_damage_cases_tested,
+		"same_process_world_swap_tested": completed_cases.has("actual_world_swap_twice_native_production_movement_damage"), "cross_process_resume_tested": false, "scope": "Actual HELD classic world replacement twice, native movement/paid production/pending damage, rollback and previous component regression. Persistent Steam, cross-process and player slot remain pending."}
+	if not report_path.is_empty():
+		var file: FileAccess = FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			quit(1); return
+		file.store_string(JSON.stringify(report, "\t")); file.close()
+	print("[world swap QA] ", JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _same(a: Variant, b: Variant) -> bool:
+	if typeof(a) != typeof(b): return false
+	if typeof(a) == TYPE_OBJECT:
+		# The root contract preserves expired versus none, not the old address of
+		# an already freed Object. Never dereference or compare freed operands.
+		if not is_instance_valid(a): return not is_instance_valid(b)
+		return is_instance_valid(b) and a == b
+	if typeof(a) == TYPE_ARRAY:
+		if a.size() != b.size(): return false
+		for i in range(a.size()):
+			if not _same(a[i], b[i]): return false
+		return true
+	if typeof(a) == TYPE_DICTIONARY:
+		if not _same(a.keys(), b.keys()): return false
+		for key: Variant in a:
+			if not _same(a[key], b[key]): return false
+		return true
+	return a == b
+
+func _root_values(node: Variant) -> Dictionary:
+	var values: Dictionary = {}
+	for name: String in root_names:
+		var value: Variant = node.get(name)
+		values[name] = value.duplicate(true) if typeof(value) in [TYPE_ARRAY, TYPE_DICTIONARY] else value
+	return values
+
+func _wire_value(name: String, value: Variant) -> Variant:
+	if name == "_unit_draw_rect" and typeof(value) == TYPE_RECT2:
+		return {"position": value.position, "size": value.size}
+	return value
+
+func _audit_values(label: String) -> void:
+	# Probe every declared ordinary field independently, including empty values.
+	# The single explicit Rect2 transport is the production candidate's contract.
+	# Unsupported nested values stay failures; no replacement/defaulting occurs.
+	for name: String in Factory.VALUE_TYPES:
+		var value: Variant = battle.get(name)
+		var encoded: Dictionary = codec.encode(_wire_value(name, value))
+		field_audit.append({"case": label, "field": name, "native_type": typeof(value),
+			"declared_type": Factory.VALUE_TYPES[name], "supported": encoded.get("ok") == true,
+			"code": String(encoded.get("code", "")), "rect_wire_only": name == "_unit_draw_rect"})
+		_check(label + " field encodable " + name, encoded.get("ok") == true and typeof(value) == Factory.VALUE_TYPES[name])
+
+func _shell() -> Variant:
+	var target: Variant = battle_script.new()
+	target.process_mode = Node.PROCESS_MODE_DISABLED
+	target.set_block_signals(true)
+	# Projection only: this is deliberately not a second map or Map restore.
+	target.map = battle.map
+	owned_detached.append(target)
+	return target
+
+func _reference(tag: Dictionary, tombstone: Variant) -> Variant:
+	if tag.state == "none": return null
+	if tag.state == "expired": return tombstone
+	return restored_units[tag.id]
+
+func _reference_list(tags: Array, tombstone: Variant) -> Array:
+	var result: Array = []
+	for tag: Dictionary in tags: result.append(_reference(tag, tombstone))
+	return result
+
+func _reference_map(rows: Dictionary, tombstone: Variant, single := false) -> Dictionary:
+	var result: Dictionary = {}
+	for key: Variant in rows:
+		result[key] = _reference(rows[key], tombstone) if single else _reference_list(rows[key], tombstone)
+	return result
+
+func _identities(rows: Array) -> Dictionary:
+	var result: Dictionary = {}
+	for row: Dictionary in rows: result[String(row.id).to_int()] = row.value
+	return result
+
+func _compare_fields(label: String, target: Variant, checked: Dictionary, bound: Dictionary,
+		tombstone: Variant, before_msec: int, after_msec: int) -> void:
+	var raw: Dictionary = checked.value
+	var expected: Dictionary = raw.values.duplicate(true)
+	for name: String in Factory.ROOT_REFERENCE: expected[name] = _reference(raw.references[name], tombstone)
+	expected["selection"] = _reference_list(raw.selection, tombstone)
+	expected["_groups"] = _reference_map(raw.groups, tombstone)
+	expected["_blocker_cache"] = _reference_map(raw.blockers, tombstone, true)
+	for name: String in Factory.ROOT_SPATIAL_GRID: expected[name] = _reference_map(raw.grids[name], tombstone)
+	for name: String in Factory.ROOT_STABLE_IDENTITY_MAP: expected[name] = _identities(raw.identities[name])
+	var eco: Dictionary = raw.eco.duplicate(true)
+	if not eco.is_empty():
+		eco["heroes"] = _reference_list(raw.eco.heroes, tombstone)
+		eco["assignments"] = _identities(raw.eco.assignments)
+	expected["_eco_lane_cache"] = eco
+	expected["_autocam_focus"] = Vector2.INF if raw.focus.kind == "none" else raw.focus.value
+	expected["_eco_lane_cache_bucket"] = raw.clock_values._eco_lane_cache_bucket
+	expected["_res_block_frame"] = raw.clock_values._res_block_frame
+	_check(label + " restored explicit clock preserves exact phase", target._run_clock.capture().record == raw.simulation)
+	var translated_origins: Array = []
+	for name: String in root_names:
+		if name in Factory.ROOT_INPUT_CLOCK:
+			var age: int = int(raw.clocks.msec) - int(raw.clock_values[name])
+			var actual: Variant = target.get(name)
+			var origin: int = int(actual) + age
+			translated_origins.append(origin)
+			_check(label + " root field " + name, typeof(actual) == TYPE_INT and origin >= before_msec and origin <= after_msec)
+		else:
+			_check(label + " root field " + name, expected.has(name) and _same(expected[name], target.get(name)))
+	_check(label + " common input time origin", translated_origins.size() == 3 and translated_origins[0] == translated_origins[1] and translated_origins[1] == translated_origins[2])
+	_check(label + " same frame detached install", bound.bound_physics_frame == Engine.get_physics_frames() and bound.bound_process_frame == Engine.get_process_frames() and target.get_parent() == null and not target.is_inside_tree() and target.process_mode == Node.PROCESS_MODE_DISABLED and target.is_blocking_signals())
+	_check(label + " external factory untouched", target.map == battle.map and target.level == null and target.world == null and target.hud == null and target.units.is_empty() and target._gameplay_rng == null)
+
+func _roundtrip(label: String, visual := false) -> bool:
+	_audit_values(label)
+	var before: Dictionary = _root_values(battle)
+	var rng_before: Dictionary = battle._gameplay_rng.capture()
+	var captured: Dictionary = source_factory.capture(battle, runtime_identity.content_version, object_to_id, BARRIER)
+	if not _ok(label + " capture", captured): return false
+	_check(label + " capture source unchanged", _same(before, _root_values(battle)))
+	_check(label + " capture draws no native RNG", _same(rng_before, battle._gameplay_rng.capture()))
+	var record: Variant = JSON.parse_string(JSON.stringify(captured.record))
+	if not _check(label + " JSON record", typeof(record) == TYPE_DICTIONARY): return false
+	records[label] = record
+	var decoded: Dictionary = codec.decode(record.payload)
+	if not _ok(label + " actual codec decode", decoded): return false
+	var wire: Variant = decoded.value.values._unit_draw_rect
+	_check(label + " Rect2 wire exact keys and Vector2", typeof(wire) == TYPE_DICTIONARY and wire.keys() == ["position", "size"] and typeof(wire.position) == TYPE_VECTOR2 and typeof(wire.size) == TYPE_VECTOR2)
+	var checked: Dictionary = restore_factory.validate(record, runtime_identity.content_version, known_ids)
+	if not _ok(label + " validate", checked): return false
+	_check(label + " retired UID aliases exact", _same(captured.item_uid_aliases, checked.item_uid_aliases))
+	var target: Variant = _shell()
+	var tombstone: Variant = restored_identity.expired_unit()
+	var before_msec: int = Time.get_ticks_msec()
+	var bound: Dictionary = restore_factory.bind(target, record, runtime_identity.content_version, restored_units, tombstone, BARRIER)
+	var after_msec: int = Time.get_ticks_msec()
+	if not _ok(label + " bind", bound): return false
+	_compare_fields(label, target, checked, bound, tombstone, before_msec, after_msec)
+	_check(label + " no whole Battle claim", captured.complete_battle == false and checked.complete_battle == false and bound.complete_battle == false)
+	if visual:
+		var rect: Rect2 = battle._unit_draw_rect
+		var inside: Vector2 = battle.to_logic(rect.get_center())
+		var outside: Vector2 = battle.to_logic(rect.end + Vector2(240.0, 240.0))
+		_check("original viewport consumer distinguishes inside outside", battle._lite_fx and battle.unit_visual_active(inside) and not battle.unit_visual_active(outside))
+		_check("restored original consumer preserves inside outside", target.unit_visual_active(inside) == battle.unit_visual_active(inside) and target.unit_visual_active(outside) == battle.unit_visual_active(outside))
+		_check("actual viewport Rect2 preserved", target._unit_draw_rect == viewport_rect)
+		_check("nonempty blocker budget preserved", target._blocker_query_budget == 3 and not target._blocker_cache.is_empty())
+		_check("nonempty economic cache preserved", not target._eco_lane_cache.is_empty() and target._eco_lane_cache.heroes.size() == 4)
+		_check("stable cache key survives fresh real Unit identity", target._focus_counts.has(restored_units["1"].entity_id) and restored_units["1"].entity_id == id_to_unit["1"].entity_id and restored_units["1"].get_instance_id() != id_to_unit["1"].get_instance_id())
+	completed_cases.append(label)
+	return true
+
+func _negative_rects() -> bool:
+	var valid: Dictionary = records.viewport
+	var cases: Array = [
+		{"name": "scalar", "wire": 7, "code": "RECT2_FIELDS"},
+		{"name": "missing_size", "wire": {"position": Vector2.ZERO}, "code": "RECT2_FIELDS"},
+		{"name": "extra_key", "wire": {"position": Vector2.ZERO, "size": Vector2.ONE, "extra": true}, "code": "RECT2_FIELDS"},
+		{"name": "integer_component", "wire": {"position": Vector2.ZERO, "size": 2}, "code": "RECT2_COMPONENT_TYPE"},
+		{"name": "vector2i_component", "wire": {"position": Vector2i.ZERO, "size": Vector2.ONE}, "code": "RECT2_COMPONENT_TYPE"},
+		{"name": "missing_field", "wire": null, "code": "VALUE_FIELDS"}]
+	for item: Dictionary in cases:
+		var decoded: Dictionary = codec.decode(valid.payload)
+		if not _ok("negative source decode " + item.name, decoded): return false
+		if item.name == "missing_field": decoded.value.values.erase("_unit_draw_rect")
+		else: decoded.value.values["_unit_draw_rect"] = item.wire
+		var encoded: Dictionary = codec.encode(decoded.value)
+		if not _ok("negative encodable envelope " + item.name, encoded): return false
+		var bad: Dictionary = valid.duplicate(true)
+		bad["payload"] = encoded.value
+		bad = JSON.parse_string(JSON.stringify(bad))
+		var checked: Dictionary = restore_factory.validate(bad, runtime_identity.content_version, known_ids)
+		_check("malformed " + item.name + " validate rejects", checked.get("ok") == false and checked.get("code") == item.code)
+		var target: Variant = _shell()
+		var before: Dictionary = _root_values(target)
+		var bound: Dictionary = restore_factory.bind(target, bad, runtime_identity.content_version, restored_units, restored_identity.expired_unit(), BARRIER)
+		_check("malformed " + item.name + " bind rejects", bound.get("ok") == false and bound.get("code") == item.code)
+		_check("malformed " + item.name + " all 105 untouched", _same(before, _root_values(target)))
+	# Audit an actual unsupported nested object, then restore the original source
+	# field. It must be reported/rejected, never erased or defaulted for capture.
+	var old_cache: Dictionary = battle._camera_locs.duplicate(true)
+	var unsupported := RefCounted.new()
+	battle._camera_locs[2] = unsupported
+	var unsupported_codec: Dictionary = codec.encode(battle._camera_locs)
+	var rejected: Dictionary = source_factory.capture(battle, runtime_identity.content_version, object_to_id, BARRIER)
+	_check("unsupported actual field is exposed", unsupported_codec.get("ok") == false and rejected.get("ok") == false and rejected.get("code") == "CAMERA_LOCATIONS")
+	field_audit.append({"case": "unsupported_negative", "field": "_camera_locs", "supported": false,
+		"expected_rejection": true, "codec_code": unsupported_codec.get("code"), "capture_code": rejected.get("code")})
+	_check("unsupported capture does not silently zero field", battle._camera_locs[2] == unsupported)
+	battle._camera_locs = old_cache
+	return true
+
+func _configure_standard() -> void:
+	var campaign: Node = root.get_node("Campaign")
+	for key: String in ["skirmish_ai", "arena", "scenario", "custom_defense", "scale_on", "ai_friendly", "defense_random"]:
+		campaign.set(key, false)
+	campaign.set("skirmish", true); campaign.set("defense_waves", 30); campaign.set("defense_hero_cap", 4)
+	root.get_node("Settings").set("auto_micro_level", 0)
+	root.get_node("Settings").set("game_speed", 1.0)
+	root.get_node("Settings").set("atmosphere", true)
+	AudioServer.set_bus_mute(0, true)
+
+func _run() -> void:
+	var path: String = OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if typeof(data) != TYPE_DICTIONARY:
+		_check("host manifest", false); await _finish(true); return
+	manifest = data
+	for key: String in ["run_id", "private_user", "report", "engine_binary_sha256"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key, false); await _finish(true); return
+	if typeof(manifest.get("source_sha256")) != TYPE_DICTIONARY or manifest.source_sha256.is_empty():
+		_check("host sources", false); await _finish(true); return
+	report_path = manifest.report
+	if not report_path.is_absolute_path() or FileAccess.file_exists(report_path):
+		report_path = ""; _check("fresh report", false); await _finish(true); return
+	manifest_ready = true
+	if not _check("private user directory", OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower() == manifest.private_user.replace("\\", "/").simplify_path().to_lower()):
+		await _finish(true); return
+	if not _source_guard("source before"):
+		await _finish(true); return
+	var provider_script: Script = load("res://scripts/run_content_identity.gd")
+	var identity: Dictionary = provider_script.new().resolve_runtime_identity()
+	if not _ok("actual trusted provider", identity):
+		await _finish(true); return
+	if not _check("actual provider save eligible and native engine", identity.get("save_eligible") == true and identity.get("engine_binary_sha256") == manifest.engine_binary_sha256):
+		await _finish(true); return
+	runtime_identity = {"content_version": identity.content_version, "source_mode": identity.source_mode,
+		"identity_scope": identity.identity_scope, "engine_binary_sha256": identity.engine_binary_sha256}
+	battle_script = load("res://scripts/battle.gd")
+	unit_script = load("res://scripts/unit.gd")
+	var level_script: Script = load("res://scripts/levels/skirmish.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var inventory_script: Script = load("res://scripts/hero_inventory.gd")
+	var checker_script: Script = load("res://scripts/run_unit_state.gd")
+	var graph_script: Script = load("res://scripts/run_graph_identity.gd")
+	codec = codec_script.new()
+	unit_checker = checker_script.new(codec_script, unit_script, inventory_script)
+	root_names = Factory.VALUE_TYPES.keys()
+	for group: Array in [Factory.ROOT_REFERENCE, Factory.ROOT_REFERENCE_LIST, Factory.ROOT_GROUPS, Factory.ROOT_SPATIAL_GRID,
+		Factory.ROOT_STABLE_IDENTITY_MAP, Factory.ROOT_BLOCKER_CACHE, Factory.ROOT_ECO_CACHE,
+		Factory.ROOT_ENGINE_CLOCK, Factory.ROOT_INPUT_CLOCK, Factory.ROOT_INFINITY_SENTINEL]: root_names.append_array(group)
+	var all_names: Array = root_names + Factory.ROOT_SIMULATION_CLOCK + Factory.EXTERNAL_FIELDS
+	var unique: Dictionary = {}
+	for name: String in all_names: unique[name] = true
+	_check("172 declarations 105 values plus clock 66 external exact", Factory.ALL_DECLARATIONS.size() == 172 and root_names.size() == 105 and Factory.ROOT_SIMULATION_CLOCK.size() == 1 and Factory.EXTERNAL_FIELDS.size() == 66 and unique.size() == 172 and unique.size() == Factory.ALL_DECLARATIONS.size())
+	var complete_names := true
+	for name: String in Factory.ALL_DECLARATIONS: complete_names = complete_names and unique.has(name)
+	_check("classification matches frozen declaration table", complete_names and Factory.ALL_DECLARATIONS == FROZEN_DECLARED_NAMES and root_names == FROZEN_ROOT_NAMES)
+	_configure_standard()
+	paused = true
+	var scene: PackedScene = load("res://scenes/main.tscn")
+	battle = scene.instantiate()
+	battle.process_mode = Node.PROCESS_MODE_INHERIT
+	root.add_child(battle); current_scene = battle
+	await process_frame
+	battle.hud._intro_root.hide()
+	battle._on_intro_done()
+	await process_frame
+	await process_frame
+	paused = false
+	for tick in range(120):
+		await physics_frame
+		if tick % 30 == 0:
+			_check("new cache phase matches actual Engine at tick " + str(tick), battle._run_cache_frame() == Engine.get_physics_frames())
+	await process_frame
+	var victim: Variant = null
+	for unit: Variant in battle.units:
+		if not unit.is_building and not unit.is_resource and not unit.is_hero:
+			victim = unit; break
+	if not _check("actual classic death victim exists", victim != null): await _finish(true); return
+	victim.take_damage(1000000.0, null, false, true)
+	_check("actual death creates a tracked remains node", victim.hp == 0.0 and battle._death_remains.size() == 1)
+	battle.camera.position = Vector2(250.0, 320.0)
+	battle.camera.zoom = Vector2(2.3, 1.8)
+	battle.camera.pan_speed = 831.0
+	battle.camera._shake = 7.0; battle.camera._shake_ph = 1.25
+	battle.camera._user_input_t = 1.4
+	battle.camera.touch_mode = true
+	battle.camera.process_mode = Node.PROCESS_MODE_PAUSABLE
+	battle.camera.process_priority = 13
+	# Explicit active pointer fixture; the real barrier must discard this gesture.
+	battle.camera._mid_drag = true; battle.camera._touches = {0: Vector2(20.0, 30.0)}
+	battle.camera._pinch_d = 8.0; battle.camera._pinch_mid = Vector2(4.0, 6.0)
+	# Non-default real UI state; shared Unit IDs must survive rebuilding.
+	var countable: Array = battle.units.filter(func(unit) -> bool: return unit.hp > 0.0 and unit.faction == unit_script.FACTION_LIANG and not unit.is_resource)
+	var worker: Variant = null
+	for unit: Variant in countable:
+		if unit.is_worker: worker = unit; break
+	if not _check("HUD fixture has an actual worker definition", worker != null): await _finish(true); return
+	while countable.size() < 12:
+		var extra: Variant = battle.spawn_unit(worker.key, unit_script.FACTION_LIANG, worker.position)
+		if extra == null: _check("HUD fixture worker spawns", false); await _finish(true); return
+		countable.append(extra)
+	battle.gold = 4321; battle.wood = 876
+	var selected_heroes: Array = battle.liang_heroes()
+	if selected_heroes.is_empty():
+		battle.spawn_unit(battle_script.ECO_HERO_ORDER[0], unit_script.FACTION_LIANG, worker.position + Vector2(32.0, 0.0))
+		selected_heroes = battle.liang_heroes()
+	if not _check("HUD fixture has hero", not selected_heroes.is_empty()): await _finish(true); return
+	battle._set_selection([selected_heroes[0]])
+	battle.hud.set_touch_ui(true)
+	battle.hud._refresh_hero_bar()
+	battle.hud._hero_bar.get_child(0)._redraw_accum = 0.04
+	battle.hud._inventory_popup_open = true; battle.hud.refresh_inventory()
+	battle.hud._refresh_resource_values()
+	battle.hud.minimap._build_bg()
+	battle.hud._panel_accum = 0.13
+	battle.hud._autocam_pulse = 1.75
+	battle.hud.show_pause(); battle.hud._request_pause_action("menu")
+	# Unsubmitted gestures must be released by the real barrier.
+	var slot: Variant = battle.hud._inventory_grid.get_child(0)
+	slot._held = true; slot._press_ms = 333; slot._tip_shown = true
+	slot._draw_acc = 0.03
+	var drag_preview := Label.new(); drag_preview.text = "取消中的物品拖拽"
+	slot.force_drag(slot._drag_payload(), drag_preview)
+	_check("actual native inventory drag fixture starts", root.gui_is_dragging())
+	battle.hud.show_skill_tip(slot, Rect2(10, 10, 40, 40), "临时提示", "不应续接按住状态", "", Color.WHITE)
+	# Make three native Tween phases observable under the actual input barrier.
+	battle.hud._clear_info_toasts()
+	battle.hud._message_log.clear(); battle.hud._info_unread = 0
+	for text: String in ["淡入", "停留", "停留", "淡出"]: battle.hud.show_message(text)
+	var toast_rows: Array = battle.hud.msg_box.get_children()
+	toast_rows[0].get_meta("toast_tween").custom_step(0.05)
+	toast_rows[1].get_meta("toast_tween").custom_step(1.20)
+	toast_rows[2].get_meta("toast_tween").custom_step(2.85)
+	battle.hud._info_scroll_pending = true
+	battle._save_barrier.capture_ready.connect(_barrier_ready)
+	battle._save_barrier.capture_rejected.connect(_barrier_rejected)
+	_check("actual FIGHT capture request accepted", battle.request_run_capture().ok)
+	if not _check("actual controller reaches stable capture", await _wait_barrier()):
+		await _finish(true); return
+	_check("actual rendered Vulkan adapter available", DisplayServer.get_name() != "headless" and not RenderingServer.get_video_adapter_name().is_empty() and RenderingServer.get_current_rendering_driver_name() == "vulkan")
+	var core_script: Script = load("res://scripts/run_battle_world_core.gd")
+	var runtime := {"defs": battle._defs, "abilities": battle._abilities, "items": battle._items}
+	# Explicit render fixture on the held actual source, after normal gameplay.
+	var reader: Variant = load("res://scripts/run_world_display_state.gd").new()
+	battle.world.modulate = Color(0.9, 0.8, 0.7, 1.0)
+	battle.units_root.position = Vector2(3.0, -2.0)
+	for child: Node in battle.world.get_children(true):
+		if reader._role(battle, child) == "water":
+			child.z_index = -987; child.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
+			child.position = Vector2(2.0, 4.0)
+		if reader._role(battle, child) == "dapple": battle.world.move_child(child, 1)
+	var source_core: Variant = core_script.new(identity, runtime)
+	var captured: Dictionary = source_core.capture(battle)
+	if not _ok("actual held classic captures all core sections", captured):
+		source_core.dispose(); await _finish(true); return
+	source_identity = captured.identity
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.record))
+	var target_core: Variant = core_script.new(identity, runtime)
+	var prepared: Dictionary = target_core.prepare(wire)
+	if not _ok("actual classic JSON prepares private world core", prepared):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	var target: Variant = prepared.battle
+	if not await _linked_cases(core_script, identity, runtime):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	if not await _procedural_cases(core_script, identity, runtime):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	if not await _environment_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	if not await _hud_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	if not await _hud_message_cases(core_script, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	if not await _camera_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	_check("world remains off tree disabled without root clock or Steam begin", not target.is_inside_tree() and target.process_mode == Node.PROCESS_MODE_DISABLED and target.is_blocking_signals() and target._run_clock == null and target._steam_run_id == 0)
+	var source_order: Array = []
+	var target_order: Array = []
+	var source_active: Array = []
+	var target_active: Array = []
+	for unit: Variant in battle.units_root.get_children(): source_order.append(unit.entity_id)
+	for unit: Variant in target.units_root.get_children(): target_order.append(unit.entity_id)
+	for unit: Variant in battle.units: source_active.append(unit.entity_id)
+	for unit: Variant in target.units: target_active.append(unit.entity_id)
+	_check("world core retains actual unit count and unit ordering", source_order == target_order and source_active == target_active)
+	_check("world core restored hall belongs to new unit graph", target.level.hall != battle.level.hall and target.level.hall.entity_id == battle.level.hall.entity_id and target.level.hall.battle == target)
+	_check("world core preserves wave without deploy or start", target.level._wave == battle.level._wave and target.level._wave_t == battle.level._wave_t and target.level._started == battle.level._started and target.next_entity_id == battle.next_entity_id)
+	_check("world core RNG restored without extra draw", target.capture_gameplay_rng().record == battle.capture_gameplay_rng().record)
+	var map_state: Variant = load("res://scripts/run_map_state.gd").new(identity.content_version)
+	var map_read: Dictionary = map_state.capture(target.map)
+	_check("world core map five navigation tables footprints scenery exact", map_read.ok and _same(map_read.value, captured.record.sections.map))
+	_check("world core fog bytes and resources retained", target._vision == battle._vision and target._sight_now == battle._sight_now and target._reveal_t == battle._reveal_t and target._fog_t == battle._fog_t and target._vision_img.get_data() == battle._vision_img.get_data() and target._fog_tex != battle._fog_tex and target._fog_tex.get_image().get_data() == battle._fog_tex.get_image().get_data() and target._fog_layer.tex == target._fog_tex)
+	var display_script: Script = load("res://scripts/run_world_display_state.gd")
+	var world_roles: Array = []
+	var restored_roles: Array = []
+	var display_reader: Variant = display_script.new()
+	for node: Node in battle.world.get_children(true): world_roles.append(display_reader._role(battle, node))
+	for node: Node in target.world.get_children(true): restored_roles.append(display_reader._role(target, node))
+	_check("world sibling roles exactly match actual source", world_roles == restored_roles and world_roles.has("water") and world_roles.has("dapple") and world_roles.has("shadow"))
+	for pair: Array in [[battle.world, target.world], [battle.units_root, target.units_root]]:
+		var left: Dictionary = display_reader._node._node_values(pair[0]); left.erase("activation")
+		var right: Dictionary = display_reader._node._node_values(pair[1]); right.erase("activation")
+		_check("world and units container full render fields equal actual source", left == right)
+	for role: String in ["water", "dapple", "shadow"]:
+		var a: Variant = battle.world.get_child(world_roles.find(role))
+		var b: Variant = target.world.get_child(restored_roles.find(role))
+		var left: Dictionary = display_reader._node._node_values(a); left.erase("activation")
+		var right: Dictionary = display_reader._node._node_values(b); right.erase("activation")
+		_check("display all inherited render fields exact " + role, left == right)
+		_check("display native transform copied " + role, a.transform == b.transform and a.z_index == b.z_index and a.texture_repeat == b.texture_repeat)
+		if role != "shadow":
+			_check("display trusted pixels exact " + role, a.tex.get_image().get_data() == b.tex.get_image().get_data() and a.ws == b.ws)
+		else:
+			var source_ids: Array = []; var target_ids: Array = []
+			for unit: Variant in a.retained_dying_units: source_ids.append(unit.entity_id)
+			for unit: Variant in b.retained_dying_units: target_ids.append(unit.entity_id)
+			_check("dying shadow uses restored unit identity in original order", source_ids.size() == 1 and source_ids == target_ids and b.retained_dying_units[0] != a.retained_dying_units[0] and b.retained_dying_units[0].battle == target and b.retained_dying_units[0] not in target.units)
+			_check("shadow exact buffer capacity visible and owner", a.paired_multimesh.buffer == b.paired_multimesh.buffer and a.capacity == b.capacity and a.active_count == b.active_count and b.battle == target)
+	if not await _display_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	_check("world core root binding deliberately deferred for final installation", prepared.pending_root == captured.record.sections.root and prepared.complete_world == false and prepared.mounted == false and prepared.activated == false)
+	var source_tick: Dictionary = battle._run_clock.capture()
+	var source_wave: float = battle.level._wave_t
+	for tick in range(4): await process_frame
+	_check("prepared world remains inactive across frames while old world held", target.level._wave_t == source_wave and target._run_clock == null and battle._run_clock.capture() == source_tick)
+	for section: String in core_script.SECTIONS:
+		var bad: Dictionary = wire.duplicate(true)
+		bad.sections[section] = {"invalid": true}
+		var rejected: Variant = core_script.new(identity, runtime)
+		var failed: Dictionary = rejected.prepare(bad)
+		_check("late section rollback releases complete private world " + section, not failed.ok and not is_instance_valid(rejected._battle) and rejected._identity == null)
+		rejected.dispose()
+	for conflict: String in ["engine", "entity_counter", "ground_fire", "item_queue"]:
+		var bad: Dictionary = wire.duplicate(true)
+		var expected: String = ""
+		if conflict == "engine":
+			bad.engine_sha256 = "0".repeat(64); expected = "WORLD_CORE_IDENTITY"
+		elif conflict in ["entity_counter", "ground_fire"]:
+			var raw: Dictionary = codec.decode(bad.sections.root.payload).value
+			var field: String = "next_entity_id" if conflict == "entity_counter" else "_ground_fire_visuals"
+			raw.values[field] += 1
+			bad.sections.root.payload = codec.encode(raw).value
+			expected = "ROOT_ENTITY_COUNTER_MISMATCH" if conflict == "entity_counter" else "ROOT_GROUND_FIRE_COUNT_MISMATCH"
+		else:
+			# Synthetic stale queue alias; no item definition or live source mutation.
+			var raw: Dictionary = codec.decode(bad.sections.item_casts.payload).value
+			raw._pending_item_casts.append({"caster": {"state": "entity", "id": wire.sections.units.root_order[0]}, "slot": 0, "uid": 900, "point": Vector2.ZERO, "target": {"state": "none"}, "serial": 0})
+			bad.sections.item_casts.payload = codec.encode(raw).value
+			expected = "COUNTER_NOT_ABOVE_ALLOCATED"
+		var rejected: Variant = core_script.new(identity, runtime)
+		var failed: Dictionary = rejected.prepare(bad)
+		_check("cross section conflict rejects and disposes " + conflict + " " + str(failed), not failed.ok and failed.code == expected and not is_instance_valid(rejected._battle) and rejected._identity == null)
+		if conflict == "item_queue":
+			bad.sections.items.next_item_uid = codec.encode(901).value
+			var repaired: Dictionary = rejected.prepare(bad)
+			_check("counter above historical queue alias prepares without pruning " + str(repaired.get("code", "")), repaired.ok and repaired.battle.next_item_uid == 901 and repaired.battle._pending_item_casts[0].uid == 900)
+		rejected.dispose()
+	_check("all failed prepares leave original world alive and unchanged", is_instance_valid(battle) and battle.level._wave_t == source_wave and battle._run_clock.capture() == source_tick)
+	completed_cases.append("actual_classic_world_core_prepare_and_rollback")
+	if not await _remains_cases(core_script, identity, runtime, wire):
+		target_core.dispose(); source_core.dispose(); await _finish(true); return
+	target_core.dispose()
+	source_core.dispose()
+	_check("successful prepare explicit disposal releases private Battle", not is_instance_valid(target))
+	_check("source capture released after world preparation", battle._save_barrier.release_capture().ok)
+	if not await _swap_cases(identity, runtime): await _finish(true); return
+	await _finish()
+
+
+# Append these helpers to ROOT's R2 SceneTree driver. Invoke
+#   if not await _qa_actual_damage_cases(): await _finish(true); return
+# AFTER restoring all original 105 root fixture fields and releasing capture,
+# BEFORE the final preexisting-user-pause case. Requires existing battle,
+# _check, _ok, _wait_barrier, captured_clock, capture_rejections helpers.
+# This is a PREPARED, STATIC-ONLY fragment. No native run was performed here.
+
+func _qa_damage_arena() -> Dictionary:
+	# Prefer a real open land pair far from every existing combatant/building.
+	# Resource bodies are excluded from combat isolation but their solid map
+	# cells remain excluded by is_open_world. Never alter terrain or move units.
+	for y in range(4, int(battle.map.h) - 4):
+		for x in range(4, int(battle.map.w) - 8):
+			var a: Vector2 = battle.map.cell_to_world(Vector2i(x, y))
+			var b: Vector2 = battle.map.cell_to_world(Vector2i(x + 4, y))
+			if not battle.map.is_open_world(a) or not battle.map.is_open_world(b): continue
+			var isolated := true
+			for unit: Variant in battle.units:
+				if not is_instance_valid(unit) or unit.hp <= 0.0 or unit.is_resource: continue
+				if a.distance_to(unit.position) < 480.0 or b.distance_to(unit.position) < 480.0:
+					isolated = false
+					break
+			if isolated: return {"ok": true, "caster": a, "target": b}
+	return {"ok": false, "code": "REAL_OPEN_ISOLATED_ARENA_REQUIRED"}
+
+func _qa_hero_damage(key: String) -> float:
+	return float(battle.hero_combat_stats.get(key, {}).get("damage", 0.0))
+
+func _qa_wait_effect_exit(effect: Variant, label: String) -> bool:
+	# Real engine callbacks only; never invoke Projectile._physics_process,
+	# LiBrawnAxesFx._process, resolve_hits, or set their lifetime/elapsed fields.
+	for tick in range(180):
+		if not is_instance_valid(effect): break
+		await physics_frame
+		await process_frame
+	return _check(label + " real effect queue_free drained", not is_instance_valid(effect))
+
+func _qa_hold_live_effect(effect: Variant, victim: Variant, label: String, is_axes: bool) -> bool:
+	captured_clock.clear()
+	capture_rejections.clear()
+	if not _ok(label + " real capture request", battle.request_run_capture()): return false
+	if not _check(label + " controller capture ready", await _wait_barrier()): return false
+	if not _check(label + " effect remains a live registered child", is_instance_valid(effect) and effect.get_parent() == battle.fx_root and not effect.is_queued_for_deletion()): return false
+	var hp_before: float = victim.hp
+	var position_before: Vector2 = effect.position
+	var timer_before: float = effect.elapsed if is_axes else effect._life
+	var clock_before: Dictionary = battle._run_clock.capture()
+	if not _ok(label + " held clock available", clock_before): return false
+	var engine_before: int = Engine.get_physics_frames()
+	var wave_before: float = battle.level._wave_t
+	for tick in range(5):
+		await physics_frame
+		await process_frame
+	if not _check(label + " real Engine physics clock advanced", Engine.get_physics_frames() > engine_before): return false
+	if not _check(label + " held effect and HP unchanged", is_instance_valid(effect) and victim.hp == hp_before and effect.position == position_before and (effect.elapsed if is_axes else effect._life) == timer_before): return false
+	if not _check(label + " no premature axes resolution", not is_axes or not effect.resolved): return false
+	if not _ok(label + " controller still healthy", battle._save_barrier.health()): return false
+	if not _check(label + " simulation and wave held", battle.level._wave_t == wave_before and battle._run_clock.capture() == clock_before): return false
+	return true
+
+func _qa_actual_damage_cases() -> bool:
+	if not _check("damage fixtures begin in running classic Battle", not paused and battle.phase == 2 and battle.gameplay_rng_fault().is_empty()): return false
+	var arena: Dictionary = _qa_damage_arena()
+	if not _ok("actual damage open land arena", arena): return false
+	var caster: Variant = battle.spawn_unit("li_kui", 0, arena.caster)
+	var victim: Variant = battle.spawn_unit("guan_dao", 1, arena.target)
+	if not _check("real spawn_unit gives living stable entities", is_instance_valid(caster) and is_instance_valid(victim) and caster.entity_id > 0 and victim.entity_id > caster.entity_id and caster.hp > 0.0 and victim.hp > 0.0): return false
+	# This fixture suppresses only these two units' autonomous actions, leaving
+	# Battle, spatial-grid construction, physics edges, effects, and HUD live.
+	caster.set_physics_process(false)
+	victim.set_physics_process(false)
+	for tick in range(2): await physics_frame
+	await process_frame
+	if not _check("real physics grid sees both fixtures", battle.units_near(caster.position, 180.0).has(victim)): return false
+	if not _check("damage fixture has no reduction shield immunity", victim._shield == 0.0 and victim._dmg_amp == 0.0 and victim._damage_reduction == 0.0 and not victim.is_phys_immune() and not victim.garrisoned and not victim.is_building and not victim.is_resource): return false
+	# Open the existing user pause first so creation cannot race a 360ms idle
+	# hitch. The candidate still reaches HELD solely through its real gate.
+	battle._open_pause()
+	if not _check("projectile fixture uses real user pause", paused): return false
+	var hp_arrow: float = victim.hp
+	var stats_arrow: float = _qa_hero_damage("li_kui")
+	var before_children: Array = battle.fx_root.get_children()
+	battle.spawn_projectile(caster, victim, 13.0)
+	var projectile: Variant = null
+	var new_projectiles := 0
+	for child: Node in battle.fx_root.get_children():
+		if not before_children.has(child) and child.get_script() == load("res://scripts/projectile.gd"):
+			projectile = child
+			new_projectiles += 1
+	if not _check("actual spawn_projectile creates one untouched arrow", new_projectiles == 1 and is_instance_valid(projectile) and projectile.shooter == caster and projectile.target == victim and projectile.dmg == 13.0 and projectile._life == 3.0): return false
+	if not await _qa_hold_live_effect(projectile, victim, "projectile", false): return false
+	if not _check("projectile release preserves preexisting pause", battle._save_barrier.release_capture().ok and paused): return false
+	battle._close_pause()
+	if not _check("projectile release resumes real engine", not paused): return false
+	if not await _qa_wait_effect_exit(projectile, "projectile"): return false
+	if not _check("projectile real damage exactly once", is_equal_approx(victim.hp, hp_arrow - 13.0) and is_equal_approx(_qa_hero_damage("li_kui") - stats_arrow, 13.0)): return false
+	for tick in range(12): await physics_frame
+	await process_frame
+	if not _check("projectile cannot repeat after freed", not is_instance_valid(projectile) and is_equal_approx(victim.hp, hp_arrow - 13.0) and is_equal_approx(_qa_hero_damage("li_kui") - stats_arrow, 13.0)): return false
+	# Same real entities, still alive. Grid comes from actual Battle callbacks.
+	battle._open_pause()
+	var hp_axes: float = victim.hp
+	var stats_axes: float = _qa_hero_damage("li_kui")
+	var axes: Variant = battle.spawn_li_brawn_axes(caster, 160.0)
+	if not _check("actual axes creator makes one unresolved live target", is_instance_valid(axes) and axes.hits.size() == 1 and axes.hits[0].target == victim and axes.elapsed == 0.0 and not axes.resolved): return false
+	# Read the creator's real, immutable hit plan; do not recompute damage logic.
+	var expected_axes: float = float(axes.hits[0].dmg)
+	if not _check("axes fixture is nonlethal positive damage", expected_axes > 0.0 and expected_axes < hp_axes): return false
+	if not await _qa_hold_live_effect(axes, victim, "axes", true): return false
+	if not _check("axes release preserves preexisting pause", battle._save_barrier.release_capture().ok and paused): return false
+	battle._close_pause()
+	if not _check("axes release resumes real engine", not paused): return false
+	if not await _qa_wait_effect_exit(axes, "axes"): return false
+	if not _check("axes real idle damage exactly once", is_equal_approx(victim.hp, hp_axes - expected_axes) and is_equal_approx(_qa_hero_damage("li_kui") - stats_axes, expected_axes)): return false
+	for tick in range(30): await physics_frame
+	await process_frame
+	if not _check("axes cannot repeat after freed", not is_instance_valid(axes) and is_equal_approx(victim.hp, hp_axes - expected_axes) and is_equal_approx(_qa_hero_damage("li_kui") - stats_axes, expected_axes)): return false
+	if not _check("damage cases retain source cache domain and healthy Battle", battle._run_cache_frame() == Engine.get_physics_frames() and battle.gameplay_rng_fault().is_empty() and battle._run_clock.fault().is_empty()): return false
+	if not await _qa_exit_capture_cases(caster, victim): return false
+	# The two fixture Units stay registered and alive until the driver's existing
+	# final battle.free(). Do not free a live Unit behind Battle.units caches.
+	return true
+
+# Append to the same SceneTree driver as actual_damage_driver_fragment.
+# Before that fragment's final return true, invoke:
+#   if not await _qa_exit_capture_cases(caster, victim): return false
+# STATIC PREPARATION ONLY. Original fragment and candidate remain unchanged.
+
+func _qa_capture_from_real_exit(observation: Dictionary) -> void:
+	# This callback is reached by real Projectile / LiBrawnAxesFx queue_free.
+	# The node has not finished leaving yet. Never fake capture_ready or advance
+	# either damage consumer manually. Record engine phase without assuming that
+	# queue_free's flush phase equals its originating damage callback phase.
+	observation["callbacks"] = int(observation["callbacks"]) + 1
+	observation["in_physics"] = Engine.is_in_physics_frame()
+	observation["engine_physics_frame"] = Engine.get_physics_frames()
+	observation["engine_process_frame"] = Engine.get_process_frames()
+	observation["request"] = battle.request_run_capture()
+
+func _qa_exit_capture_case(caster: Variant, victim: Variant, is_axes: bool) -> bool:
+	var label := "axes exit drain" if is_axes else "projectile exit drain"
+	if not _check(label + " starts running", not paused): return false
+	battle._open_pause()
+	if not _check(label + " fixture uses real user pause", paused): return false
+	var hp_before: float = victim.hp
+	var stats_before: float = _qa_hero_damage("li_kui")
+	var effect: Variant = null
+	var expected_damage := 13.0
+	if is_axes:
+		effect = battle.spawn_li_brawn_axes(caster, 160.0)
+		if not _check(label + " real unresolved axes creator", is_instance_valid(effect) and effect.hits.size() == 1 and effect.hits[0].target == victim and effect.elapsed == 0.0 and not effect.resolved): return false
+		expected_damage = float(effect.hits[0].dmg)
+	else:
+		var before_children: Array = battle.fx_root.get_children()
+		battle.spawn_projectile(caster, victim, expected_damage)
+		var count := 0
+		for child: Node in battle.fx_root.get_children():
+			if not before_children.has(child) and child.get_script() == load("res://scripts/projectile.gd"):
+				effect = child
+				count += 1
+		if not _check(label + " real single projectile creator", count == 1 and is_instance_valid(effect) and effect.target == victim and effect.shooter == caster): return false
+	if not _check(label + " positive nonlethal real hit plan", expected_damage > 0.0 and expected_damage < hp_before): return false
+	captured_clock.clear()
+	capture_rejections.clear()
+	var observation: Dictionary = {"callbacks": 0, "in_physics": false,
+		"engine_physics_frame": -1, "engine_process_frame": -1, "request": {}}
+	effect.tree_exiting.connect(_qa_capture_from_real_exit.bind(observation), CONNECT_ONE_SHOT)
+	battle._close_pause()
+	if not _check(label + " released to actual consumers", not paused): return false
+	# SceneTree signals continue while paused. Two boundaries are required by
+	# the candidate after the real exit callback requests capture.
+	for tick in range(180):
+		if not captured_clock.is_empty() or not capture_rejections.is_empty(): break
+		await physics_frame
+		await process_frame
+	if not _check(label + " actual exit callback exactly once", int(observation["callbacks"]) == 1): return false
+	if not _ok(label + " actual exit callback request accepted", observation["request"]): return false
+	if not _check(label + " actual controller reached HELD", not captured_clock.is_empty() and capture_rejections.is_empty() and paused): return false
+	if not _check(label + " queue_free completed before stable capture", not is_instance_valid(effect)): return false
+	if not _check(label + " real damage completed before stable capture", is_equal_approx(victim.hp, hp_before - expected_damage) and is_equal_approx(_qa_hero_damage("li_kui") - stats_before, expected_damage)): return false
+	if not _ok(label + " complete physics and world tree are healthy", battle._save_barrier.health()): return false
+	checks.append({"label": label + " exit callback engine phase recorded", "passed": true,
+		"tree_exiting_in_physics_frame": observation["in_physics"],
+		"engine_physics_frame": observation["engine_physics_frame"],
+		"engine_process_frame": observation["engine_process_frame"],
+		"note": "Queue-free flush observation, not a claim that this is the originating damage callback phase."})
+	var held_clock: Dictionary = battle._run_clock.capture()
+	if not _ok(label + " real held clock captured", held_clock): return false
+	var held_hp: float = victim.hp
+	var held_wave: float = battle.level._wave_t
+	var engine_before: int = Engine.get_physics_frames()
+	for tick in range(5):
+		await physics_frame
+		await process_frame
+	if not _check(label + " Engine advances while damage and world remain held", Engine.get_physics_frames() > engine_before and victim.hp == held_hp and battle.level._wave_t == held_wave and battle._run_clock.capture() == held_clock and not is_instance_valid(effect)): return false
+	if not _ok(label + " gate remains healthy after held frames", battle._save_barrier.health()): return false
+	if not _check(label + " release restores original running state", battle._save_barrier.release_capture().ok and not paused): return false
+	for tick in range(12): await physics_frame
+	await process_frame
+	if not _check(label + " no duplicate damage or exit after resume", int(observation["callbacks"]) == 1 and not is_instance_valid(effect) and is_equal_approx(victim.hp, hp_before - expected_damage) and is_equal_approx(_qa_hero_damage("li_kui") - stats_before, expected_damage)): return false
+	if not _check(label + " original cache phase and RNG health preserved", battle._run_cache_frame() == Engine.get_physics_frames() and battle._run_clock.fault().is_empty() and battle.gameplay_rng_fault().is_empty()): return false
+	return true
+
+func _qa_exit_capture_cases(caster: Variant, victim: Variant) -> bool:
+	if not await _qa_exit_capture_case(caster, victim, false): return false
+	if not await _qa_exit_capture_case(caster, victim, true): return false
+	return true
+
+func _remains_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var first: Variant = core_script.new(identity, runtime)
+	var second: Variant = core_script.new(identity, runtime)
+	var a: Dictionary = first.prepare(wire)
+	var b: Dictionary = second.prepare(wire)
+	if not _ok("death remains two complete cores prepare", a) or not _ok("death remains second core prepares", b):
+		first.dispose(); second.dispose(); return false
+	var original: Variant = a.battle._death_remains[0]
+	var copy: Variant = b.battle._death_remains[0]
+	var state: Variant = a.visual._remains
+	var live_mark: Variant = battle._death_remains[0]
+	var native_equal := true
+	for field: String in state.NATIVE:
+		native_equal = native_equal and original.get(field) == live_mark.get(field) and copy.get(field) == live_mark.get(field)
+	_check("death restored native fields equal held real death source", native_equal)
+	_check("death restored slice and metadata equal held real source", state.capture_node(original).value == state.capture_node(live_mark).value)
+	_check("death remains current values metadata and atlas slice exact", state.capture_node(original).value == state.capture_node(copy).value and original.frame_texture != copy.frame_texture and original.frame_texture.atlas == copy.frame_texture.atlas)
+	_check("death owner cache list and callback stay bound to new worlds", a.battle._death_remains_atlas_checked == battle._death_remains_atlas_checked and a.battle._death_remains_atlas == battle._death_remains_atlas and original.expired.get_connections()[0].callable == Callable(a.battle, "_on_death_remains_expired"))
+	# Lifecycle fixtures derived from a real death: shorten only remaining time,
+	# so the real idle callbacks reach expiration without waiting 45 seconds.
+	original.remaining = 0.7; copy.remaining = 0.7
+	original.age = 0.30; copy.age = 0.30
+	var stage := Node2D.new()
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	root.add_child(stage)
+	for plan: Dictionary in [a, b]:
+		plan.battle.world.remove_child(plan.battle.fx_root)
+		stage.add_child(plan.battle.fx_root)
+	_check("death graph cannot activate with removed owner list entry", _remains_owner_guard(a))
+	if not _ok("death first graph paused activation", a.visual.activate()) or not _ok("death second graph paused activation", b.visual.activate()):
+		stage.free(); first.dispose(); second.dispose(); return false
+	var pairs := 0
+	var equal := true
+	var merged := false
+	var exits := {"a": 0, "b": 0}
+	original.tree_exited.connect(func(): exits.a += 1)
+	copy.tree_exited.connect(func(): exits.b += 1)
+	for tick in range(300):
+		await process_frame
+		if is_instance_valid(original) != is_instance_valid(copy): equal = false; break
+		if not is_instance_valid(original): break
+		pairs += 1
+		equal = equal and state.capture_node(original).value == state.capture_node(copy).value and original.reveal_alpha() == copy.reveal_alpha()
+		if not merged and original.age > 0.4:
+			# Same existing gameplay method must refresh remaining without resetting age.
+			original.lifetime = 0.6; copy.lifetime = 0.6
+			original.fade_duration = 0.3; copy.fade_duration = 0.3
+			original.refresh_from_merge(); copy.refresh_from_merge()
+			merged = true
+	_check("death real idle reveal merge fade and natural deletion equal", equal and pairs > 0 and merged and not is_instance_valid(original) and not is_instance_valid(copy))
+	_check("death natural expiration erases both owner arrays once", a.battle._death_remains.is_empty() and b.battle._death_remains.is_empty() and exits.a == 1 and exits.b == 1)
+	completed_cases.append("death_real_idle_pairs=" + str(pairs))
+	stage.free(); first.dispose(); second.dispose()
+	# Every below mutation stays JSON-safe; failures must discard the new tree.
+	for problem: String in ["owner_missing", "owner_duplicate", "bad_atlas", "bad_life", "bad_slice", "unknown_meta"]:
+		var bad: Dictionary = wire.duplicate(true)
+		if problem.begins_with("owner"):
+			var owner: Dictionary = codec.decode(bad.sections.death_remains).value
+			if problem == "owner_missing": owner.order.clear()
+			else: owner.order.append(owner.order[0])
+			bad.sections.death_remains = codec.encode(owner).value
+		else:
+			var rows: Array = codec.decode(bad.sections.visual.records).value
+			for row: Dictionary in rows:
+				if row.kind != "death_remains": continue
+				match problem:
+					"bad_atlas": row.values.state.texture.atlas.signature.path = "res://assets/untrusted.png"
+					"bad_life": row.values.state.remaining = -1.0
+					"bad_slice": row.values.state.texture.region_position.x += 1.0
+					"unknown_meta": row.values.state.metadata["untracked"] = 1
+				break
+			bad.sections.visual.records = codec.encode(rows).value
+		var rejected: Variant = core_script.new(identity, runtime)
+		var result: Dictionary = rejected.prepare(bad)
+		_check("death corrupt record rolls back " + problem + " " + str(result.get("code", "")), not result.ok and not is_instance_valid(rejected._battle) and rejected._identity == null)
+		rejected.dispose()
+	return true
+
+func _remains_owner_guard(plan: Dictionary) -> bool:
+	var original: Array = plan.battle._death_remains.duplicate()
+	plan.battle._death_remains.clear()
+	var refused: Dictionary = plan.visual.activate()
+	plan.battle._death_remains = original
+	return not refused.ok and refused.code == "REMAINS_OWNER_CHANGED"
+
+func _display_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var before: int = checks.size()
+	for problem: String in ["duplicate", "missing", "unknown", "texture", "reference", "capacity"]:
+		var bad: Dictionary = wire.duplicate(true)
+		var raw: Dictionary = load("res://scripts/run_world_display_state.gd").new().decode_record(bad.sections.world_display).value
+		match problem:
+			"duplicate": raw.children.append(raw.children[0].duplicate(true))
+			"missing": raw.children = raw.children.filter(func(row): return row.role != "map")
+			"unknown": raw.children[0].role = "saved_script"
+			"texture":
+				for row: Dictionary in raw.children:
+					if row.role == "water": row.texture.sha256 = "0".repeat(64)
+			"reference":
+				for row: Dictionary in raw.children:
+					if row.role == "shadow": row.retained.append("999999999")
+			"capacity":
+				for row: Dictionary in raw.children:
+					if row.role == "shadow": row.capacity = 129
+		bad.sections.world_display = load("res://scripts/run_world_display_state.gd").new().encode_record(raw).value
+		var module: Variant = core_script.new(identity, runtime)
+		var result: Dictionary = module.prepare(bad)
+		_check("display corrupted " + problem + " rejects and frees destination", not result.ok and module._battle == null and module._identity == null)
+		module.dispose()
+	var wide: Dictionary = wire.duplicate(true)
+	var display: Variant = load("res://scripts/run_world_display_state.gd").new()
+	var values: Dictionary = display.decode_record(wide.sections.world_display).value
+	for row: Dictionary in values.children:
+		if row.role == "shadow":
+			row.capacity = 4096; row.active = 0; row.retained_visible = 0; row.retained = []
+			row.buffer = "0".repeat(4096 * 12 * 8)
+	wide.sections.world_display = display.encode_record(values).value
+	var large: Variant = core_script.new(identity, runtime)
+	var large_result: Dictionary = large.prepare(wide)
+	_check("4096 shadow slots preserve bounded exact f32 buffer", large_result.ok)
+	if large_result.ok:
+		var batch: Variant = null
+		# Identify by trusted script if a presentation name changes.
+		for child: Node in large_result.battle.world.get_children():
+			if child.get_script() == load("res://scripts/world_shadow.gd").ShadowBatch: batch = child
+		_check("large native buffer roundtrip", batch.capacity == 4096 and batch.paired_multimesh.buffer.to_byte_array().hex_encode() == wide.sections.world_display.shadow_buffer)
+	large.dispose()
+	for bad_buffer: String in ["z", "00", "0000c07f" + wide.sections.world_display.shadow_buffer.substr(8)]:
+		var bad: Dictionary = wide.duplicate(true); bad.sections.world_display.shadow_buffer = bad_buffer
+		var rejected: Variant = core_script.new(identity, runtime)
+		_check("malformed or nonfinite shadow bytes rejected", not rejected.prepare(bad).ok and rejected._battle == null)
+		rejected.dispose()
+	var module: Variant = core_script.new(identity, runtime)
+	var result: Dictionary = module.prepare(wire)
+	if not _ok("display lifecycle prepared", result): module.dispose(); return false
+	var target: Variant = result.battle
+	var source_world: Node2D = target.world
+	var stage := Node2D.new(); stage.process_mode = Node.PROCESS_MODE_ALWAYS; root.add_child(stage)
+	_check("display refuses activation before mounting", not result.world_display.activate().ok)
+	stage.add_child(target)
+	_check("prepared Battle ready skips new clock RNG Steam and deployment", target._run_clock == null and target._save_barrier == null and target._steam_run_id == 0 and target.gameplay_rng_fault().is_empty() and target.level._wave == battle.level._wave and target.units.size() == battle.units.size())
+	# Keep real Battle ancestry for map consumers; Battle and Units stay disabled.
+	_check("display activation after ready", result.world_display.activate().ok)
+	source_world.process_mode = Node.PROCESS_MODE_ALWAYS # explicit rendering-only fixture
+	var roles: Array = []
+	var reader: Variant = load("res://scripts/run_world_display_state.gd").new()
+	for node: Node in source_world.get_children(true): roles.append(reader._role(target, node))
+	var water: Node2D = source_world.get_child(roles.find("water"))
+	var saved: Dictionary = load("res://scripts/run_world_display_state.gd").new().decode_record(wire.sections.world_display).value
+	for row: Dictionary in saved.children:
+		if row.role == "water": _check("water ready preserves saved render state", water.z_index == row.node.z_index and water.transform == Transform2D(row.node.basis_x,row.node.basis_y,row.node.position) and not water.has_meta("_run_restore_prepared"))
+	for tick in range(4): await process_frame
+	var shadow: Variant = source_world.get_child(roles.find("shadow"))
+	_check("shadow native processing keeps valid batch", shadow.battle == target and shadow.active_count == shadow.paired_multimesh.visible_instance_count)
+	var corpse: Variant = shadow.retained_dying_units[0]
+	corpse._death_t = unit_script.DEATH_DUR - 0.10 # explicit expiry fixture
+	var activated := false
+	for row: Dictionary in result.unit_plan.activation_plan:
+		if row.unit == corpse: activated = unit_checker.activate(corpse, row.activation).ok
+	_check("retained corpse uses actual Unit activation", activated)
+	corpse.process_mode = Node.PROCESS_MODE_ALWAYS
+	var exits := {"count": 0}
+	corpse.tree_exited.connect(func(): exits.count += 1)
+	for tick in range(60):
+		await physics_frame
+		if not is_instance_valid(corpse): break
+	for tick in range(3): await process_frame
+	_check("native corpse expiry prunes restored shadow owner once", not is_instance_valid(corpse) and exits.count == 1 and shadow.retained_dying_units.is_empty() and shadow.retained_dying_visible == 0)
+	stage.remove_child(target); stage.free()
+	module.dispose()
+	for index in range(before, checks.size()):
+		if not checks[index].passed: return false
+	return true
+
+func _camera_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var before: int = checks.size()
+	var camera_script: Script = load("res://scripts/run_camera_state.gd")
+	var saved: Dictionary = codec.decode(wire.sections.camera).value
+	var actual: Variant = battle.camera
+	_check("camera capture recovers activation from before real input gate", actual.process_mode == Node.PROCESS_MODE_DISABLED and not actual.is_processing_unhandled_input() and saved.node.activation.mode == Node.PROCESS_MODE_PAUSABLE and saved.node.activation.unhandled_input)
+	_check("camera barrier releases pointer gesture but retains touch mode", saved.script._mid_drag == false and saved.script._touches.is_empty() and saved.script._pinch_d == 0.0 and saved.script._pinch_mid == Vector2.ZERO and saved.script.touch_mode)
+	for problem: String in ["zoom", "gesture", "smoothing", "unknown", "type"]:
+		var bad: Dictionary = wire.duplicate(true); var raw: Dictionary = saved.duplicate(true)
+		match problem:
+			"zoom": raw.engine.zoom.x = 0.0
+			"gesture": raw.script._mid_drag = true
+			"smoothing": raw.engine.position_smoothing_enabled = true
+			"unknown": raw.engine["resource"] = "res://unknown.gd"
+			"type": raw.script.pan_speed = "fast"
+		bad.sections.camera = codec.encode(raw).value
+		var failed: Variant = core_script.new(identity, runtime)
+		_check("camera corrupt " + problem + " rolls back complete prepared world", not failed.prepare(bad).ok and failed._battle == null and failed._identity == null)
+		failed.dispose()
+	var module: Variant = core_script.new(identity, runtime)
+	var plan: Dictionary = module.prepare(wire)
+	if not _ok("camera comparison core prepares", plan): module.dispose(); return false
+	var target: Variant = plan.battle
+	var cam: Variant = target.camera
+	var equal := true
+	for key: String in camera_script.SCRIPT_FIELDS: equal = equal and cam.get(key) == actual.get(key)
+	_check("camera all ten script values equal held source", equal)
+	equal = true
+	for key: String in camera_script.CAMERA_INTS + camera_script.CAMERA_BOOLS + camera_script.CAMERA_FLOATS + ["offset", "zoom"]:
+		if key != "enabled": equal = equal and cam.get(key) == actual.get(key)
+	_check("camera all supported native values equal source before mount", equal)
+	var read: Variant = camera_script.new()
+	var a: Dictionary = read._nodes._node_values(actual); a.erase("activation")
+	var b: Dictionary = read._nodes._node_values(cam); b.erase("activation")
+	_check("camera inherited Node2D fields equal source", a == b)
+	_check("camera cannot activate before mounting", not plan.camera_module.activate().ok)
+	root.add_child(target)
+	_check("camera ready preserves zoom and never steals old viewport", cam.zoom == saved.engine.zoom and not cam.enabled and actual.is_current() and not cam.is_current())
+	_check("camera paused activation selects prepared camera", plan.camera_module.activate().ok and cam.is_current() and not actual.is_current())
+	_check("camera activation restores pre-barrier input and processing", cam.process_mode == saved.node.activation.mode and cam.is_processing() == saved.node.activation.process and cam.is_processing_unhandled_input() == saved.node.activation.unhandled_input and cam.process_priority == saved.node.activation.priority)
+	# Isolate camera idle callbacks in the same real Viewport; gameplay stays off.
+	cam.process_mode = Node.PROCESS_MODE_ALWAYS
+	var shake_before: float = cam._shake
+	var phase_before: float = cam._shake_ph
+	for frame in range(3): await process_frame
+	_check("camera shake resumes through native idle frames", cam._shake < shake_before and cam._shake_ph > phase_before and cam._user_input_t < saved.script._user_input_t)
+	var wheel := InputEventMouseButton.new()
+	wheel.button_index = MOUSE_BUTTON_WHEEL_UP; wheel.pressed = true; wheel.position = Vector2(300.0, 200.0)
+	var old_zoom: Vector2 = cam.zoom
+	root.push_input(wheel, true)
+	await process_frame
+	_check("restored camera receives real viewport wheel input", cam.zoom.x > old_zoom.x and cam._user_input_t > 0.0)
+	var left: Vector2 = cam.position
+	var down := InputEventMouseButton.new(); down.button_index = MOUSE_BUTTON_MIDDLE; down.pressed = true; down.position = Vector2(300.0, 200.0)
+	root.push_input(down, true)
+	var move := InputEventMouseMotion.new(); move.position = Vector2(330.0, 212.0); move.relative = Vector2(30.0, 12.0)
+	root.push_input(move, true)
+	down.pressed = false; root.push_input(down, true)
+	await process_frame
+	_check("restored camera receives viewport drag and release", cam.position != left and not cam._mid_drag)
+	_check("camera refuses repeated activation", not plan.camera_module.activate().ok)
+	module.dispose(); actual.make_current(); actual.force_update_scroll()
+	_check("camera test leaves frozen source view current", actual.is_current() and battle._save_barrier.state == battle._save_barrier.State.HELD)
+	for index in range(before, checks.size()):
+		if not checks[index].passed: return false
+	return true
+
+func _fresh_message_hud() -> Variant:
+	var hud: Variant = load("res://scripts/hud.gd").new()
+	root.add_child(hud)
+	hud.process_mode = Node.PROCESS_MODE_DISABLED
+	hud.set_block_signals(true)
+	return hud
+
+func _message_rows_equal(a: Variant, b: Variant) -> bool:
+	var left: Array = a.msg_box.get_children()
+	var right: Array = b.msg_box.get_children()
+	if left.size() != right.size(): return false
+	for index in range(left.size()):
+		for key: String in ["info_text", "info_count", "toast_fade_in", "toast_hold"]:
+			if left[index].get_meta(key) != right[index].get_meta(key): return false
+		if absf(left[index].modulate.a - right[index].modulate.a) > 0.00001 or left[index].get_node("Text").text != right[index].get_node("Text").text: return false
+	return true
+
+func _hud_message_cases(core_script: Script, wire: Dictionary) -> bool:
+	var before: int = checks.size()
+	var adapter: Script = load("res://scripts/run_hud_messages_state.gd")
+	var raw: Dictionary = adapter.new().decode(wire.sections.hud_messages).value
+	var source: Variant = battle.hud
+	_check("messages capture preserves native fade hold fade-out phases", raw.toasts.size() == 3 and raw.toasts[0].elapsed < 0.15 and raw.toasts[1].elapsed > 0.15 and raw.toasts[1].elapsed < 2.75 and raw.toasts[2].elapsed > 2.75)
+	_check("messages capture stores real pending scroll under input barrier", raw.scroll_pending and source._info_scroll_pending)
+	_check("capture includes deduplicated native toast and history count", raw.toasts[1].count == 2 and not raw.toasts[1].fade_in and raw.toasts[1].hold == 2.75 and raw.log[1].count == 2)
+	for frame in range(3): await process_frame
+	_check("real barrier freezes native Tweens and pending scroll", adapter.new().capture(battle).value == wire.sections.hud_messages)
+	var invalid_hud: Variant = _fresh_message_hud()
+	for problem: String in ["unknown", "unread", "log_count", "oversize", "text_type", "phase", "duration", "alpha", "duplicate", "expanded", "scroll", "nan"]:
+		var bad: Dictionary = raw.duplicate(true)
+		match problem:
+			"unknown": bad["script"] = "res://untrusted.gd"
+			"unread": bad.unread = 51
+			"log_count": bad.log[0].count = 0
+			"oversize": bad.log.resize(51)
+			"text_type": bad.toasts[0].text = 3
+			"phase": bad.toasts[0].elapsed = 3.0
+			"duration": bad.toasts[0].hold = 300.0
+			"alpha": bad.toasts[0].alpha = 0.99
+			"duplicate": bad.toasts[1].text = bad.toasts[0].text
+			"expanded": bad.expanded = true
+			"scroll": bad.scroll.x = -1
+			"nan": bad.toasts[0].elapsed = NAN
+		var encoded: Dictionary = codec.encode(bad)
+		var result: Dictionary = adapter.new().restore(invalid_hud, encoded.value) if encoded.ok else encoded
+		_check("messages corrupt " + problem + " rejected before target mutation", not result.ok and invalid_hud._message_log.is_empty() and invalid_hud.msg_box.get_child_count() == 0 and not invalid_hud._info_expanded)
+	invalid_hud.free()
+	var target: Variant = _fresh_message_hud()
+	var module: Variant = adapter.new()
+	if not _ok("native message restore into paused constructed HUD", module.restore(target, wire.sections.hud_messages)):
+		target.free(); return false
+	_check("message log unread and text restored without replay", target._message_log == source._message_log and target._info_unread == source._info_unread and target._info_log.text == source._info_log.text and target._info_toggle.text == source._info_toggle.text)
+	_check("native Tween seek restores all three phases and labels", _message_rows_equal(source, target))
+	_check("message restore keeps HUD input gate closed", target.process_mode == Node.PROCESS_MODE_DISABLED and target.is_blocking_signals())
+	for frame in range(3): await process_frame
+	_check("prepared message timelines do not age before activation", _message_rows_equal(source, target) and target._info_scroll_pending)
+	var prepared_label: Node = target.msg_box.get_child(0).get_node("Text")
+	prepared_label.set_block_signals(false)
+	_check("message activation rejects changed child before enabling any row", not module.activate_rows().ok and target.msg_box.get_child(0).process_mode == Node.PROCESS_MODE_DISABLED)
+	prepared_label.set_block_signals(true)
+	_check("message rows activate once without opening HUD", module.activate_rows().ok and not module.activate_rows().ok and target.process_mode == Node.PROCESS_MODE_DISABLED)
+	# Fixture opens only these HUD idle consumers while SceneTree and gameplay
+	# remain paused. The source uses its original running Tweens, not a model.
+	source.process_mode = Node.PROCESS_MODE_ALWAYS
+	target.process_mode = Node.PROCESS_MODE_ALWAYS
+	var ticks := 0
+	var equal := true
+	var source_exits: Array = [0]
+	var target_exits: Array = [0]
+	for node: Node in source.msg_box.get_children():
+		node.set_block_signals(false)
+		node.tree_exited.connect(func() -> void: source_exits[0] += 1)
+	for node: Node in target.msg_box.get_children(): node.tree_exited.connect(func() -> void: target_exits[0] += 1)
+	var deadline: int = Time.get_ticks_msec() + 6000
+	while Time.get_ticks_msec() < deadline:
+		await process_frame
+		equal = equal and _message_rows_equal(source, target)
+		ticks += 1
+		if source.msg_box.get_child_count() == 0 and target.msg_box.get_child_count() == 0: break
+	_check("original and restored native Tweens match every idle frame", equal and ticks > 3)
+	checks.append({"label": "native toast observation", "passed": true, "idle_frames": ticks, "source_exits": source_exits[0], "target_exits": target_exits[0], "source_remaining": source.msg_box.get_child_count(), "target_remaining": target.msg_box.get_child_count()})
+	_check("native toasts expire once without restart or duplicate exit", source_exits[0] == 3 and target_exits[0] == 3 and source.msg_box.get_child_count() == 0 and target.msg_box.get_child_count() == 0)
+	_check("pending scroll resumes on HUD idle and is consumed once", not source._info_scroll_pending and not target._info_scroll_pending and target._info_scroll_restore == Vector2i(-1, -1))
+	source.process_mode = Node.PROCESS_MODE_DISABLED
+	# Post-restore interactions use the original public HUD behavior.
+	target.show_message("重复消息"); target.show_message("重复消息")
+	var row: Variant = target.msg_box.get_child(0)
+	_check("restored HUD deduplicates toast and log and resets finite hold", row.get_meta("info_count") == 2 and row.get_meta("toast_fade_in") == false and row.get_meta("toast_hold") == 2.75 and target._message_log[-1].count == 2 and row.get_node("Text").text == "重复消息  ×2")
+	for text: String in ["四", "五", "六"]: target.show_message(text)
+	_check("post-restore toast cap retains newest three", target.msg_box.get_child_count() == 3 and target.msg_box.get_child(0).get_meta("info_text") == "四")
+	for n in range(55): target.show_message("消息" + str(n))
+	_check("post-restore history and unread cap remain fifty", target._message_log.size() == 50 and target._info_unread == 50 and target._message_log[0].text == "消息5")
+	target._info_toggle.pressed.emit()
+	_check("actual info button clears unread and pending toasts", target._info_expanded and target._info_panel.visible and target._info_unread == 0 and target.msg_box.get_child_count() == 0 and target._info_scroll_pending)
+	await process_frame; await process_frame
+	_check("expanded restored history scrolls to native bottom", target._info_scroll.scroll_vertical == maxi(0, int(target._info_scroll.get_v_scroll_bar().max_value - target._info_scroll.get_v_scroll_bar().page)))
+	# Expanded history restores the existing read position without an implicit
+	# click, unread reset, replay or forced bottom-scroll when none was pending.
+	var expanded: Dictionary = raw.duplicate(true)
+	expanded.expanded = true; expanded.unread = 0; expanded.toasts = []
+	expanded.log = target._message_log.duplicate(true)
+	expanded.scroll = Vector2i(0, 25); expanded.scroll_pending = false
+	var second: Variant = _fresh_message_hud()
+	var second_module: Variant = adapter.new()
+	_check("expanded history restores without marking messages again", second_module.restore(second, codec.encode(expanded).value).ok and second._info_expanded and second._info_unread == 0 and not second._info_scroll_pending)
+	second_module.activate_rows()
+	await process_frame; await process_frame
+	second.process_mode = Node.PROCESS_MODE_ALWAYS
+	await process_frame; await process_frame
+	_check("restored read position survives native container layout", second._info_scroll.scroll_vertical == 25)
+	second.free(); target.free()
+	await process_frame; await process_frame
+	_check("message comparison leaves gameplay and old HUD frozen", paused and source.process_mode == Node.PROCESS_MODE_DISABLED and battle._save_barrier.state == battle._save_barrier.State.HELD)
+	for index in range(before, checks.size()):
+		if not checks[index].passed: return false
+	return true
+
+func _all_hud_gated(hud: Node) -> bool:
+	var stack: Array = [hud]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		if node.process_mode != Node.PROCESS_MODE_DISABLED or not node.is_blocking_signals(): return false
+		stack.append_array(node.get_children(true))
+	return true
+
+func _hud_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	var before: int = checks.size()
+	var raw: Dictionary = codec.decode(wire.sections.hud).value
+	var source: Variant = battle.hud
+	_check("HUD barrier releases held inventory and hover without closing popup", not source._inventory_grid.get_child(0)._held and source._inventory_grid.get_child(0)._press_ms == 0 and not source._tip_panel.visible and source._tip_owner == null and source._inventory_popup_open)
+	_check("HUD barrier cancels native GUI drag", not root.gui_is_dragging())
+	_check("HUD captures pause confirmation touch and source refresh phase", raw.values.touch_ui and raw.values._inventory_popup_open and raw.pause.visible and raw.pause.pending == "menu" and raw.values._panel_accum == 0.13)
+	var widget_script: Script = load("res://scripts/hud.gd")
+	var hud_script: Script = load("res://scripts/run_hud_state.gd")
+	var known: Dictionary = {}
+	for id: String in wire.sections.units.root_order: known[id] = true
+	for problem: String in ["unknown", "id", "clock", "pause", "canvas", "minimap", "inventory_clock"]:
+		var bad: Dictionary = raw.duplicate(true)
+		match problem:
+			"unknown": bad["resource"] = "res://unknown.gd"
+			"id": bad.selected[0].id = "999999999"
+			"clock": bad.values._panel_accum = -1.0
+			"pause": bad.pause.pending = "execute"
+			"canvas": bad.canvas.x = Vector2.ZERO
+			"minimap": bad.minimap.pixels = {"width": 1, "height": 1, "hex": "zzzzzzzz"}
+			"inventory_clock": bad.inventory_clocks[0] = "late"
+		_check("HUD malformed " + problem + " rejected", not hud_script.new().validate(bad, known).ok)
+	var mismatched: Dictionary = wire.duplicate(true)
+	var mismatch_raw: Dictionary = raw.duplicate(true)
+	mismatch_raw.minimap.pixels = {"width": 1, "height": 1, "hex": "000000ff"}
+	mismatched.sections.hud = codec.encode(mismatch_raw).value
+	var rollback: Variant = core_script.new(identity, runtime)
+	var pre: Dictionary = rollback.prepare(mismatched)
+	var rejected: Dictionary = rollback.mount_disabled(root) if pre.ok else pre
+	_check("late HUD map mismatch rolls back mounted world and root clock", pre.ok and not rejected.ok and rejected.code == "HUD_MINIMAP_MAP_MISMATCH" and rollback._battle == null and rollback._identity == null and battle.camera.is_current())
+	rollback.dispose()
+	var module: Variant = core_script.new(identity, runtime)
+	var plan: Dictionary = module.prepare(wire)
+	if not _ok("full HUD preparation attaches only disabled unready skeleton", plan): module.dispose(); return false
+	var target: Variant = plan.battle
+	var hud: Variant = target.hud
+	_check("prepared HUD is hidden detached and not ready", not hud.visible and not hud.is_inside_tree() and not hud.is_node_ready() and hud.battle == null and target._run_clock == null)
+	_check("HUD cannot finish or activate before mounted root state", not plan.hud_module.finish().ok and not plan.hud_module.activate().ok)
+	var count_before: int = target.units.size()
+	var serial_before: int = target.next_entity_id
+	var mounted: Dictionary = module.mount_disabled(root)
+	if not _ok("root state binds before paused full HUD construction", mounted): module.dispose(); return false
+	_check("prepared Battle ready neither deploys nor opens gameplay", target.units.size() == count_before and target.next_entity_id == serial_before and target._gameplay_rng_start_kind == "restored" and target._save_barrier == null and target._steam_run_id == 0 and target._cursor_resources_released and target.process_mode == Node.PROCESS_MODE_DISABLED)
+	_check("HUD and minimap reference the newly restored battle", hud.battle == target and hud.minimap.battle == target and target._run_clock != null)
+	_check("prepared scene retains the trusted normal restart resource", target.scene_file_path == "res://scenes/main.tscn")
+	_check("existing hero chip and inventory draw phases restore by identity", raw.hero_clocks.size() == 1 and hud._hero_bar.get_child(0)._redraw_accum == 0.04 and hud._inventory_grid.get_child(0)._draw_acc == 0.03)
+	_check("restored hero appearance signal targets its new chip", hud._hero_bar.get_child(0).hero == target.selection[0] and target.selection[0].appearance_changed.is_connected(Callable(hud._hero_bar.get_child(0), "_on_appearance_changed")))
+	_check("minimap cached native pixels and refresh phase preserved", hud.minimap._bg != null and hud.minimap._bg.get_image().get_data() == source.minimap._bg.get_image().get_data() and hud.minimap._accum == raw.minimap.clock)
+	_check("all original and dynamically built controls remain gated", not hud.visible and _all_hud_gated(hud))
+	_check("root economy is visible before input without a fake process", target.gold == 4321 and target.wood == 876 and hud._res_gold.text == "金 4321" and hud._res_wood.text == "木 876" and hud._res_pop.text == source._res_pop.text)
+	_check("restored selection uses new shared Unit identities", hud._sel_ref.size() == 1 and hud._sel_ref[0] == target.selection[0] and hud._sel_ref[0] != source._sel_ref[0] and hud._inventory_hero == target.active_unit())
+	_check("inventory popup command cards and portrait text restored", hud._inventory_popup_open and hud._inventory_popup.visible and hud._info_name.text == source._info_name.text and hud._skill_bar.get_child_count() == source._skill_bar.get_child_count())
+	_check("HUD logical timing and pending pause survive construction", hud._panel_accum == 0.13 and hud._autocam_pulse == raw.values._autocam_pulse and hud._pause_root.visible and hud._pause_confirm.visible and hud._pause_pending_action == "menu")
+	var stage_focus: Control = root.gui_get_focus_owner()
+	_check("prepared pause menu does not steal keyboard focus", stage_focus == null or not hud.is_ancestor_of(stage_focus))
+	var active_before: Variant = target._active
+	_check("root active pointer stays captured through presentation rebuild", active_before == target.selection[0])
+	var starts: Array = [0]
+	hud.start_battle.connect(func() -> void: starts[0] += 1)
+	hud.start_btn.pressed.emit()
+	_check("blocked start button does not replay start signal", starts[0] == 0 and target.next_entity_id == serial_before and not hud.start_btn.visible)
+	if not _ok("HUD activates in same paused installation turn", plan.hud_module.activate()): module.dispose(); return false
+	_check("HUD restores pre-barrier input and visibility", hud.visible == raw.canvas.visible and hud.process_mode == raw.activation.mode and hud.is_processing_input() == raw.activation.input and hud.is_blocking_signals() == raw.activation.blocked)
+	_check("pause confirmation initially focuses cancel action", root.gui_get_focus_owner() == hud._pause_cancel_button)
+	_check("HUD refuses duplicate activation and mount", not plan.hud_module.activate().ok and not module.mount_disabled(root).ok)
+	# Native viewport routing. Escape cancels the question first, then the
+	# existing Battle callback resumes. Re-pause synchronously before any frame.
+	var escape := InputEventKey.new(); escape.keycode = KEY_ESCAPE; escape.pressed = true
+	root.push_input(escape, true)
+	_check("restored pause receives viewport Escape and cancels departure", hud._pause_root.visible and not hud._pause_confirm.visible and hud._pause_pending_action == "" and paused)
+	root.push_input(escape, true)
+	_check("second Escape reaches original Battle resume callback", not paused and not hud._pause_root.visible)
+	paused = true
+	# Releases without a corresponding new press must not cast/learn/use after
+	# the barrier discarded the source gesture. Exercise each real handler.
+	var release := InputEventMouseButton.new(); release.button_index = MOUSE_BUTTON_LEFT; release.pressed = false
+	var command: Variant = null
+	var ability: Variant = null
+	for button: Variant in hud._skill_bar.get_children():
+		if button.get_script() == widget_script.CmdButton: command = button
+		if button.get_script() == widget_script.HeroSlotButton: ability = button
+	if command != null: command._gui_input(release)
+	if ability != null: ability._gui_input(release)
+	hud._inventory_grid.get_child(0)._gui_input(release)
+	_check("discarded releases do not arm commands or show item tips", target._garrison_armed == false and target._ability_armed == "" and target._item_armed == "" and not hud._tip_panel.visible)
+	# Existing controls operate from live restored data during actual idle ticks.
+	target.gold = 5432; target.wood = 321
+	var deadline: int = Time.get_ticks_msec() + 1500
+	while hud._res_gold.text != "金 5432" and Time.get_ticks_msec() < deadline: await process_frame
+	_check("restored resource labels follow actual native HUD idle", hud._res_gold.text == "金 5432" and hud._res_wood.text == "木 321")
+	var friendly: Array = []
+	for unit: Variant in target.units:
+		if unit.hp > 0.0 and unit.faction == unit_script.FACTION_LIANG and not unit.is_resource: friendly.append(unit)
+	for size: int in [0, 1, 10, 12]:
+		if size > friendly.size(): _check("enough actual units for HUD selection " + str(size), false); continue
+		target.selection = friendly.slice(0, size); target._active = null
+		hud.update_selection_panel(target.selection)
+		await process_frame; await process_frame
+		_check("restored HUD real selection interaction " + str(size), hud._sel_ref.size() == size and hud._sel_grid.get_child_count() == size and (hud._info_name.text == "" if size == 0 else not hud._info_name.text.is_empty()))
+	var building: Variant = null
+	for unit: Variant in target.units:
+		if unit.is_building and unit.setup_def.has("produces") and unit.faction == unit_script.FACTION_LIANG: building = unit; break
+	if _check("real restored production building available", building != null):
+		target.selection = [building]; target._active = building; hud.update_selection_panel(target.selection)
+		await process_frame; await process_frame
+		var actual_specs: Array = []
+		for button: Variant in hud._skill_bar.get_children():
+			if button.get_script() == widget_script.CmdButton: actual_specs.append(button.spec)
+		_check("production command cards reconstruct from actual restored building", not actual_specs.is_empty() and hud._inventory_hero == null and not hud._inventory_popup_open and hud._info_name.text == building.display_name)
+	module.dispose()
+	await process_frame; await process_frame
+	var stale: Variant = core_script.new(identity, runtime)
+	var stale_plan: Dictionary = stale.prepare(wire)
+	var stale_mount: Dictionary = stale.mount_disabled(root) if stale_plan.ok else stale_plan
+	if stale_mount.ok:
+		await process_frame
+		_check("HUD refuses input activation after installation frame elapsed", not stale_plan.hud_module.activate().ok and _all_hud_gated(stale_plan.battle.hud) and not stale_plan.battle.hud.visible)
+	else: _ok("stale-frame fixture prepares and mounts", stale_mount)
+	stale.dispose()
+	await process_frame; await process_frame
+	_check("HUD fixture leaves source gameplay frozen", paused and battle._save_barrier.state == battle._save_barrier.State.HELD and battle.hud.process_mode == Node.PROCESS_MODE_DISABLED)
+	for index in range(before, checks.size()):
+		if not checks[index].passed: return false
+	return true
+
+
+func _environment_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+	if not await _environment_pixels(): return false
+	var adapter: Script = load("res://scripts/run_environment_state.gd")
+	var raw: Dictionary = codec.decode(wire.sections.environment).value
+	_check("native environment includes atmosphere and scene-local phases", raw.nodes.has("atmosphere") and raw.nodes.motes.phase > 0.0 and raw.nodes.atmosphere.phase > 0.0)
+	var original: Dictionary = {}
+	for child: Node in battle.get_children():
+		if child.get_script() == battle_script.AtmosphereLayer: original["atmosphere"] = child
+		elif child.get_script() == battle_script.AmbientMotes: original["motes"] = child
+	var phase_before: float = original.motes.phase
+	for frame in range(4): await process_frame
+	_check("real HELD pause freezes motes and shader phase", original.motes.phase == phase_before and adapter.new().capture(battle).value == wire.sections.environment)
+	for kind: String in ["field", "role", "duplicate", "phase", "negative", "mode", "node"]:
+		var bad: Dictionary = raw.duplicate(true)
+		match kind:
+			"field": bad.extra = true
+			"role": bad.nodes.extra = bad.nodes.motes
+			"duplicate": bad.order[0] = bad.order[1]
+			"phase": bad.nodes.motes.phase = 7
+			"negative": bad.nodes.atmosphere.phase = -1.0
+			"mode": bad.nodes.motes.node.activation.mode = Node.PROCESS_MODE_ALWAYS
+			"node": bad.nodes.overlay.node.z_index = 5000
+		_check("environment rejects " + kind, not adapter.new().validate(bad).ok)
+	var shader: Shader = original.atmosphere.rect.material.shader
+	var code: String = shader.code
+	shader.code += "\n// altered source"
+	_check("capture rejects untrusted shader source", not adapter.new().capture(battle).ok)
+	shader.code = code
+	var module: Variant = core_script.new(identity, runtime)
+	var plan: Dictionary = module.prepare(wire)
+	if not _ok("complete environment preparation", plan): module.dispose(); return false
+	var env: Variant = plan.environment_module
+	_check("environment activation rejects detached tree", not env.activate().ok)
+	_check("overlay references restored owner and all environment stays hidden", plan.battle.overlay.b == plan.battle and not plan.battle.overlay.visible and not env._plan.motes.visible and not env._plan.atmosphere.visible)
+	if not _ok("environment mounts with real restored root", module.mount_disabled(root)): module.dispose(); return false
+	_check("environment preserves local phases and trusted shader uniform", env._plan.motes.phase == raw.nodes.motes.phase and env._plan.atmosphere.phase == raw.nodes.atmosphere.phase and is_equal_approx(env._plan.atmosphere.rect.material.get_shader_parameter("phase"), raw.nodes.atmosphere.phase))
+	env._plan.motes.position += Vector2.ONE
+	_check("environment rejects render-state tampering before showing any layer", not env.activate().ok and not env._plan.overlay.visible and not env._plan.atmosphere.visible)
+	env._plan.motes.position -= Vector2.ONE
+	var previous_canvas: Transform2D = root.canvas_transform
+	root.canvas_transform = Transform2D(Vector2(1.5, 0.2), Vector2(0.1, 1.2), Vector2(70.0, -40.0))
+	var activated: Dictionary = env.activate()
+	_check("activation refits to the newly installed canvas without changing phase", activated.ok and env._plan.atmosphere.screen.get_global_transform_with_canvas().is_equal_approx(Transform2D.IDENTITY) and env._plan.atmosphere.phase == raw.nodes.atmosphere.phase)
+	root.canvas_transform = previous_canvas
+	if not _ok("same-frame environment activation", activated): module.dispose(); return false
+	_check("environment is single activation and no gameplay", not env.activate().ok and plan.battle.process_mode == Node.PROCESS_MODE_DISABLED and plan.battle._save_barrier == null)
+	# Run only original/restored consumers on actual engine idle frames; gameplay stays HELD.
+	for role: String in original:
+		original[role].process_mode = Node.PROCESS_MODE_ALWAYS
+		env._plan[role].process_mode = Node.PROCESS_MODE_ALWAYS
+	for frame in range(12): await process_frame
+	_check("native idle continues equal motes and atmosphere phases", original.motes.phase > phase_before and original.motes.phase == env._plan.motes.phase and original.atmosphere.phase == env._plan.atmosphere.phase)
+	_check("native idle updates restored shader uniform", is_equal_approx(env._plan.atmosphere.rect.material.get_shader_parameter("phase"), env._plan.atmosphere.phase))
+	for role: String in original:
+		original[role].process_mode = raw.nodes[role].node.activation.mode
+		if role == "atmosphere": original[role].set_phase(raw.nodes[role].phase)
+		else: original[role].phase = raw.nodes[role].phase
+	module.dispose()
+	var without: Dictionary = wire.duplicate(true); var optional: Dictionary = raw.duplicate(true)
+	optional.order.erase("atmosphere"); optional.nodes.erase("atmosphere")
+	without.sections.environment = codec.encode(optional).value
+	var absent: Variant = core_script.new(identity, runtime)
+	var absent_plan: Dictionary = absent.prepare(without)
+	_check("saved disabled atmosphere is not invented by current setting", absent_plan.ok and not absent_plan.environment_module._plan.has("atmosphere"))
+	absent.dispose()
+	var stale: Variant = core_script.new(identity, runtime)
+	var stale_plan: Dictionary = stale.prepare(wire)
+	if not stale_plan.ok or not stale.mount_disabled(root).ok: stale.dispose(); return false
+	await process_frame
+	_check("environment rejects delayed activation without showing new consumers", not stale_plan.environment_module.activate().ok and not stale_plan.battle.overlay.visible)
+	stale.dispose()
+	return true
+
+const LEGACY_ENVIRONMENT_SHADER := """
+shader_type canvas_item;
+uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
+uniform float vignette : hint_range(0.0, 1.0) = 0.34;
+uniform float warmth : hint_range(0.0, 0.3) = 0.07;
+uniform float contrast : hint_range(0.8, 1.4) = 1.07;
+uniform float saturation : hint_range(0.5, 1.6) = 1.14;
+void fragment() {
+	vec2 uv = SCREEN_UV;
+	vec3 col = texture(screen_tex, uv).rgb;
+	col = (col - 0.5) * contrast + 0.5;                       // 对比
+	float l = dot(col, vec3(0.299, 0.587, 0.114));
+	col = mix(vec3(l), col, saturation);                      // 饱和
+	col.r += warmth * l;                                      // 高光偏暖
+	col.b += warmth * (1.0 - l) * 0.55;                       // 阴影偏冷
+	// 水面波光：在偏蓝像素上叠加随时间流动的微光（无需逐格扫描）
+	float waterness = clamp((col.b - max(col.r, col.g)) * 3.2, 0.0, 1.0);
+	float sh = (sin(uv.x * 60.0 + uv.y * 38.0 + TIME * 1.4) * 0.5 + 0.5)
+		* (sin(uv.x * 28.0 - uv.y * 66.0 - TIME * 1.05) * 0.5 + 0.5);
+	col += waterness * sh * 0.10 * vec3(0.72, 0.86, 1.0);
+	vec2 d = uv - vec2(0.5);
+	float vig = smoothstep(0.92, 0.30, length(d) * 1.28);     // 暗角
+	col *= mix(1.0 - vignette, 1.0, vig);
+	COLOR = vec4(clamp(col, 0.0, 1.0), 1.0);
+}
+"""
+
+
+func _environment_pixels() -> bool:
+	var views: Array = []; var layers: Array = []
+	for index in range(2):
+		var view := SubViewport.new(); view.size = Vector2i(128, 96)
+		view.disable_3d = true; view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		view.world_2d = World2D.new()
+		var stage := Node2D.new(); view.add_child(stage)
+		var bg := ColorRect.new(); bg.color = Color(0.1, 0.2, 0.8, 1.0)
+		bg.size = Vector2(view.size); stage.add_child(bg)
+		if index == 0:
+			var layer: Variant = battle_script.AtmosphereLayer.new(); layer.set_phase(12.5)
+			stage.add_child(layer); layers.append(layer)
+		else:
+			# Independent pre-change shader and the original direct ColorRect hierarchy.
+			var rect := ColorRect.new(); var material := ShaderMaterial.new(); var shader := Shader.new()
+			shader.code = LEGACY_ENVIRONMENT_SHADER.replace("TIME", "12.5")
+			material.shader = shader; rect.material = material; rect.z_index = 3700
+			rect.size = Vector2(view.size)
+			stage.add_child(rect); layers.append(rect)
+		root.add_child(view); views.append(view)
+	for frame in range(3): await process_frame
+	RenderingServer.force_draw(false)
+	var image_a: Image = views[0].get_texture().get_image()
+	var image_b: Image = views[1].get_texture().get_image()
+	checks.append({"label": "native pixel diagnostics", "passed": true, "new_rect": str(layers[0].rect.size), "old_rect": str(layers[1].size), "viewport": str(views[0].get_visible_rect()), "image_size": str(image_a.get_size()), "center": str(image_a.get_pixel(64, 48))})
+	_check("Vulkan atmosphere wraps the viewport at native nonzero dimensions", layers[0].rect.size == Vector2(128, 96) and layers[1].size == Vector2(128, 96) and image_a.get_size() == Vector2i(128, 96))
+	var data_a: PackedByteArray = image_a.get_data(); var data_b: PackedByteArray = image_b.get_data()
+	var differing := 0; var maximum := 0
+	for index in range(data_a.size()):
+		var difference: int = absi(int(data_a[index]) - int(data_b[index]))
+		if difference > 0: differing += 1
+		maximum = maxi(maximum, difference)
+	checks.append({"label": "Vulkan shader reference differs by at most one 8-bit channel step", "passed": maximum <= 1 and data_a.size() == data_b.size(), "maximum_channel_difference": maximum, "differing_channels": differing, "channels": data_a.size(), "actual_phase": layers[0].phase})
+	_check("Vulkan postprocessing actually changes the blue background", image_a.get_pixel(64, 48) != Color(0.1, 0.2, 0.8, 1.0) and image_a.get_pixel(64, 48).b > 0.2)
+	for frame in range(3): await process_frame
+	RenderingServer.force_draw(false)
+	_check("Vulkan paused pixels do not drift with engine TIME", image_a.get_data() == views[0].get_texture().get_image().get_data())
+	layers[0].set_phase(23.75)
+	RenderingServer.force_draw(false)
+	_check("Vulkan explicit phase changes real water shimmer pixels", image_a.get_data() != views[0].get_texture().get_image().get_data())
+	for view: SubViewport in views: view.size = Vector2i(192, 108)
+	for frame in range(2): await process_frame
+	RenderingServer.force_draw(false)
+	_check("atmosphere child reflows after native viewport resize", layers[0].rect.size == Vector2(192, 108) and views[0].get_texture().get_image().get_size() == Vector2i(192, 108))
+	for view: SubViewport in views: view.free()
+	return checks.all(func(row: Dictionary) -> bool: return row.passed)
+
+
+func _procedural_cases(core_script: Script, identity: Dictionary, runtime: Dictionary) -> bool:
+	var adapter: Variant = load("res://scripts/run_procedural_fx_state.gd").new(battle_script)
+	var visual_script: Script = load("res://scripts/run_visual_graph.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var source: Variant = visual_script.new(codec_script, battle_script, unit_script)
+	var restore: Variant = visual_script.new(codec_script, battle_script, unit_script)
+	var stage := Node2D.new(); stage.process_mode = Node.PROCESS_MODE_DISABLED
+	var original := Node2D.new(); original.transform = load("res://scripts/game_map.gd").ISO
+	stage.add_child(original); root.add_child(stage)
+	var nodes: Dictionary = {}
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		if adapter.TYPES[kind].has("life"): fx.life = 0.5
+		if adapter.TYPES[kind].has("end_w"): fx.end_w = Vector2(100.0, 30.0)
+		if adapter.TYPES[kind].has("start_w"): fx.start_w = Vector2(-45.0, -20.0)
+		if adapter.TYPES[kind].has("from_w"): fx.from_w = Vector2(-50.0, 35.0)
+		original.add_child(fx); nodes[kind] = fx
+		var actual: Array = []
+		for property: Dictionary in fx.get_property_list():
+			if int(property.usage) & PROPERTY_USAGE_SCRIPT_VARIABLE: actual.append(String(property.name))
+		actual.sort(); var declared: Array = adapter.TYPES[kind].keys(); declared.sort()
+		_check("actual native procedural field inventory " + kind, actual == declared)
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	await process_frame; await process_frame
+	stage.process_mode = Node.PROCESS_MODE_DISABLED
+	var captured: Dictionary = source.capture(original, identity.content_version, {})
+	if not _ok("capture thirty native procedural effects in one graph", captured): stage.free(); source.dispose(); restore.dispose(); return false
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.value))
+	var checked: Dictionary = source.validate(wire, identity.content_version, {})
+	var rows: Array = checked.rows
+	_check("procedural graph includes exactly thirty distinct native scripts", rows.size() == 31 and nodes.size() == 30)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		for problem: String in ["extra", "age", "type"]:
+			var bad: Dictionary = row.values.duplicate(true)
+			if problem == "extra": bad.extra = true
+			elif problem == "age": bad.t = bad.dur + 0.01
+			else: bad.t = "invalid"
+			_check("procedural bad " + row.kind + " " + problem, not adapter.validate(bad, row.kind).ok)
+		for key: String in row.values:
+			if adapter.TYPES[row.kind][key] not in [TYPE_ARRAY, TYPE_PACKED_VECTOR2_ARRAY]: continue
+			var bad: Dictionary = row.values.duplicate(true)
+			bad[key].clear()
+			_check("procedural cache cannot disappear " + row.kind + "." + key, not adapter.validate(bad, row.kind).ok)
+	var prepared: Dictionary = restore.prepare(wire, identity.content_version, {})
+	if not _ok("prepare all procedural scripts from JSON graph", prepared): stage.free(); source.dispose(); restore.dispose(); return false
+	stage.add_child(restore._root)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var copy: Variant = restore._nodes[row.id]
+		_check("native ready preserves procedural random cache and phase " + row.kind, restore._values(copy, row.kind) == row.values and copy.process_mode == Node.PROCESS_MODE_DISABLED and copy.has_meta("_run_restore_prepared"))
+		for key: String in adapter.TYPES[row.kind]:
+			if adapter.TYPES[row.kind][key] == TYPE_PACKED_VECTOR2_ARRAY:
+				_check("packed vector native type and coordinates preserved " + row.kind, typeof(copy.get(key)) == TYPE_PACKED_VECTOR2_ARRAY and copy.get(key) == nodes[row.kind].get(key))
+	var changed: Variant = restore._nodes[rows[1].id]; var saved_t: float = changed.t
+	changed.t += 0.01
+	_check("procedural activation rejects changed playback state", not restore.activate().ok)
+	changed.t = saved_t
+	if not _ok("activate complete procedural graph under paused tree", restore.activate()): stage.free(); source.dispose(); restore.dispose(); return false
+	var exits: Dictionary = {}; var pairs: Dictionary = {}
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var key: String = row.kind; exits[key] = {"original": 0, "copy": 0}; pairs[key] = 0
+		nodes[key].tree_exited.connect(func(): exits[key].original += 1)
+		restore._nodes[row.id].tree_exited.connect(func(): exits[key].copy += 1)
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	var equal: Dictionary = {}; var frames := 0
+	for key: String in nodes: equal[key] = true
+	for frame in range(300):
+		await process_frame; frames += 1
+		var alive := false
+		for row: Dictionary in rows:
+			if row.kind == "container": continue
+			var original_fx: Variant = nodes[row.kind]; var copy: Variant = restore._nodes[row.id]
+			var a: bool = is_instance_valid(original_fx); var b: bool = is_instance_valid(copy)
+			if a != b: equal[row.kind] = false
+			if not a or not b: continue
+			alive = true; pairs[row.kind] += 1
+			equal[row.kind] = equal[row.kind] and source._values(original_fx, row.kind) == restore._values(copy, row.kind) and original_fx.transform == copy.transform
+		if not alive: break
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		_check("native procedural continuation and single expiry " + row.kind, equal[row.kind] and pairs[row.kind] > 0 and exits[row.kind].original == 1 and exits[row.kind].copy == 1)
+	stage.free(); source.dispose(); restore.dispose()
+	# Integrate the same thirty real constructors into the actual HELD Battle.
+	var added: Array = []
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		battle.fx_root.add_child(fx); added.append(fx)
+	var combined: Variant = core_script.new(identity, runtime)
+	var complete: Dictionary = combined.capture(battle)
+	if not _ok("actual held world captures all thirty procedural kinds", complete):
+		for node: Node in added: node.free()
+		combined.dispose(); return false
+	var target: Variant = core_script.new(identity, runtime)
+	var full: Dictionary = target.prepare(JSON.parse_string(JSON.stringify(complete.record)))
+	_check("whole core restores thirty effects without gameplay activation", full.ok and full.battle.fx_root.get_child_count() == battle.fx_root.get_child_count() and full.battle.process_mode == Node.PROCESS_MODE_DISABLED)
+	complete.identity.dispose(); target.dispose(); combined.dispose()
+	for node: Node in added: node.free()
+	completed_cases.append("procedural_native_frames=" + str(frames))
+	return true
+
+func _linked_cases(core_script: Script, identity: Dictionary, runtime: Dictionary) -> bool:
+	var adapter: Variant = load("res://scripts/run_linked_fx_state.gd").new(battle_script)
+	var catalog: Variant = core_script.new(identity, runtime)
+	var art: Variant = root.get_node("Art")
+	_check("default core resolves current Art atlas palette and official axe", catalog._textures.size() >= 36 and catalog._axe_texture == art.item_texture("axe"))
+	for scenario: String in ["entity", "none", "expired"]:
+		if not await _linked_pair(adapter, catalog, identity, scenario): catalog.dispose(); return false
+	# Full factory must discover the same installed Art without a fixture-supplied palette.
+	var added: Array = []
+	var a: Variant = battle.units[0]; var b: Variant = battle.units[1]
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		_linked_setup(fx, kind, adapter, a, b, art)
+		battle.fx_root.add_child(fx); added.append(fx)
+	var collapse: Variant = battle_script.BuildingCollapseFx.new()
+	for key: String in catalog._textures:
+		if key.begins_with("building:"): collapse.tex = catalog._textures[key]; break
+	_check("installed building collapse texture is non-null", collapse.tex != null)
+	battle.fx_root.add_child(collapse); added.append(collapse)
+	var axes: Variant = battle_script.LiBrawnAxesFx.new()
+	axes.caster = a; axes.game = battle; axes.tex = art.item_texture("axe"); axes.hits = [{"target": b, "dmg": 1.0}]
+	battle.fx_root.add_child(axes); added.append(axes)
+	var complete: Dictionary = catalog.capture(battle)
+	if not _ok("held full core captures twelve linked types and textured collapse", complete):
+		for node: Node in added: node.free()
+		catalog.dispose(); return false
+	var target: Variant = core_script.new(identity, runtime)
+	var full: Dictionary = target.prepare(JSON.parse_string(JSON.stringify(complete.record)))
+	if not _ok("full core prepares linked types with default trusted Art catalog", full):
+		complete.identity.dispose(); target.dispose(); catalog.dispose()
+		for node: Node in added: node.free()
+		return false
+	_check("linked full core remains disabled with exact effect count", full.battle.process_mode == Node.PROCESS_MODE_DISABLED and full.battle.fx_root.get_child_count() == battle.fx_root.get_child_count())
+	var prepared_axes: Variant = full.battle.fx_root.get_child(full.battle.fx_root.get_child_count() - 1)
+	_check("default core rebinds textured damage-authority axes without resolving hits", prepared_axes.get_script() == battle_script.LiBrawnAxesFx and prepared_axes.tex == art.item_texture("axe") and prepared_axes.game == full.battle and not prepared_axes.resolved and prepared_axes.hits.size() == 1 and prepared_axes.hits[0].target != b)
+	for node: Node2D in full.battle.fx_root.get_children():
+		var kind: String = adapter.kind(node)
+		if kind.is_empty(): continue
+		for field: String in adapter.REFERENCES[kind]:
+			var rebound: Variant = node.get(field)
+			_check("full core stable Unit rebinding " + kind + "." + field, rebound != a and rebound != b and rebound in full.battle.units and rebound.entity_id in [a.entity_id, b.entity_id])
+	complete.identity.dispose(); target.dispose(); catalog.dispose()
+	for node: Node in added: node.free()
+	return true
+
+func _linked_setup(fx: Variant, kind: String, adapter: Variant, a: Variant, b: Variant, art: Variant) -> void:
+	for field: String in adapter.REFERENCES[kind]: fx.set(field, a if field in ["caster", "source"] else b)
+	if adapter.TYPES[kind].has("life"): fx.life = 0.75
+	if adapter.TYPES[kind].has("end_w"): fx.end_w = Vector2(160.0, 45.0)
+	if kind == "ability_projectile":
+		fx.tex = art.ability_projectile_texture("fire_orb"); fx.impact_tex = art.ability_impact_texture("fire_burst"); fx.lob = true
+	if kind == "ability_impact": fx.tex = art.ability_impact_texture("ice_burst"); fx.mode = "rune"
+	if kind == "orbit_axes": fx.tex = art.item_texture("axe")
+	if kind == "lin_spear_stack": fx.stacks = 3; fx.proc = true
+
+func _linked_pair(adapter: Variant, catalog: Variant, identity: Dictionary, scenario: String) -> bool:
+	var visual_script: Script = load("res://scripts/run_visual_graph.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var codec: Variant = codec_script.new()
+	var source: Variant = visual_script.new(codec_script, battle_script, unit_script, null, catalog._textures)
+	var restore: Variant = visual_script.new(codec_script, battle_script, unit_script, null, catalog._textures)
+	var art: Variant = root.get_node("Art")
+	var stage := Node2D.new(); stage.process_mode = Node.PROCESS_MODE_DISABLED
+	var original := Node2D.new(); original.transform = load("res://scripts/game_map.gd").ISO
+	stage.add_child(original); root.add_child(stage)
+	var a: Variant = unit_script.new(); var b: Variant = unit_script.new()
+	var aa: Variant = unit_script.new(); var bb: Variant = unit_script.new()
+	a.entity_id = 1; aa.entity_id = 1; b.entity_id = 2; bb.entity_id = 2
+	for unit: Variant in [a, b, aa, bb]: unit.hp = 100.0; unit.position = Vector2(10, 15); unit._cast_t = 2.0
+	a._hua_lock_target = b; aa._hua_lock_target = bb; a._hua_lock_shots = 3; aa._hua_lock_shots = 3
+	var source_units: Dictionary = {a: "1", b: "2"}; var target_units: Dictionary = {"1": aa, "2": bb}
+	var nodes: Dictionary = {}
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		_linked_setup(fx, kind, adapter, a, b, art)
+		if scenario == "none":
+			for field: String in adapter.REFERENCES[kind]: fx.set(field, null)
+			for field: String in adapter.TEXTURES[kind]: fx.set(field, null)
+		if kind == "black_rain": fx.lite = scenario != "entity"
+		original.add_child(fx); nodes[kind] = fx
+		if scenario == "entity":
+			var actual: Array = []
+			for property: Dictionary in fx.get_property_list():
+				if int(property.usage) & PROPERTY_USAGE_SCRIPT_VARIABLE: actual.append(String(property.name))
+			actual.sort(); var declared: Array = adapter.TYPES[kind].keys() + adapter.REFERENCES[kind] + adapter.TEXTURES[kind]; declared.sort()
+			_check("native linked field inventory " + kind, actual == declared)
+	if scenario == "entity":
+		stage.process_mode = Node.PROCESS_MODE_ALWAYS; await process_frame; await process_frame; stage.process_mode = Node.PROCESS_MODE_DISABLED
+	elif scenario == "expired":
+		a.free(); b.free(); source_units.clear()
+	var captured: Dictionary = source.capture(original, identity.content_version, source_units)
+	if not _ok("capture linked native graph " + scenario, captured): return false
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.value))
+	var checked: Dictionary = source.validate(wire, identity.content_version, {"1": true, "2": true})
+	if not _ok("validate linked JSON graph " + scenario, checked): return false
+	var rows: Array = checked.rows
+	_check("all twelve linked types retained " + scenario, rows.size() == 13)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		for field: String in row.references:
+			_check("reference tag preserved " + scenario + " " + row.kind + "." + field, row.references[field].state == scenario)
+		if scenario != "entity": continue
+		for problem: String in ["extra", "type", "range"]:
+			var bad: Dictionary = row.values.duplicate(true)
+			var clock: String = "pulse" if row.kind == "hua_lock_mark" else "t"
+			if problem == "extra": bad.extra = true
+			elif problem == "type": bad[clock] = "invalid"
+			else: bad[clock] = -1.0
+			_check("reject linked invalid " + row.kind + " " + problem, not adapter.validate(bad, row.kind).ok)
+		for field: String in adapter.TEXTURES[row.kind]:
+			_check("live texture token registered " + row.kind + "." + field, row.values[field].state == "trusted")
+			var bad: Dictionary = row.values.duplicate(true); bad[field].key = "res://unknown.png"
+			_check("reject saved resource path as texture key " + row.kind + "." + field, not source._values_check(bad, row.kind).ok)
+			bad = row.values.duplicate(true); bad[field].signature.width += 1
+			_check("reject changed texture signature " + row.kind + "." + field, not source._values_check(bad, row.kind).ok)
+			bad = row.values.duplicate(true); bad[field].signature.region_size += Vector2.ONE
+			_check("reject changed atlas region " + row.kind + "." + field, not source._values_check(bad, row.kind).ok)
+		for field: String in adapter.REFERENCES[row.kind]:
+			var bad_rows: Array = rows.duplicate(true); bad_rows[int(row.id) - 1].references[field] = {"state": "entity", "id": "999"}
+			var bad_wire: Dictionary = wire.duplicate(true); bad_wire.records = codec.encode(bad_rows).value
+			_check("reject dangling entity reference " + row.kind + "." + field, not source.validate(bad_wire, identity.content_version, {"1": true, "2": true}).ok)
+		for field: String in adapter.TYPES[row.kind]:
+			if adapter.TYPES[row.kind][field] != TYPE_ARRAY: continue
+			var bad: Dictionary = row.values.duplicate(true); bad[field].clear()
+			_check("linked particle cache cannot disappear " + row.kind, not adapter.validate(bad, row.kind).ok)
+	var tombstone: Variant = null
+	if scenario == "expired":
+		_check("expired references reject omitted shared tombstone", not restore.prepare(wire, identity.content_version, target_units).ok and restore._nodes.is_empty())
+		tombstone = unit_script.new()
+	var prepared: Dictionary = restore.prepare(wire, identity.content_version, target_units, tombstone)
+	if not _ok("prepare linked graph " + scenario, prepared): return false
+	stage.add_child(restore._root)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var copy: Variant = restore._nodes[row.id]
+		_check("ready preserves linked fields and caches " + scenario + " " + row.kind, restore._values(copy, row.kind) == row.values and copy.process_mode == Node.PROCESS_MODE_DISABLED and copy.has_meta("_run_restore_prepared"))
+		for field: String in row.references:
+			var tag: Dictionary = row.references[field]
+			var expected: Variant = target_units[tag.id] if tag.state == "entity" else (tombstone if tag.state == "expired" else null)
+			_check("exact fresh Unit binding " + scenario + " " + row.kind + "." + field, is_same(copy.get(field), expected))
+	if scenario == "expired":
+		_check("activation waits for actual shared tombstone release", not restore.activate().ok)
+		tombstone.free()
+	if scenario == "entity":
+		aa.entity_id = 999
+		_check("activation rejects bound Unit stable ID mutation", not restore.activate().ok)
+		aa.entity_id = 1
+		# Independent transaction: release a registered entity after binding, before activation.
+		var vanished: Variant = unit_script.new(); vanished.entity_id = 1
+		var broken: Variant = visual_script.new(codec_script, battle_script, unit_script, null, catalog._textures)
+		var broken_prepare: Dictionary = broken.prepare(wire, identity.content_version, {"1": vanished, "2": bb})
+		if not _ok("prepare disposable linked transaction for binding-loss test", broken_prepare): return false
+		stage.add_child(broken._root); vanished.free()
+		_check("activation rejects actual precommit entity release", not broken.activate().ok)
+		broken.dispose()
+		for row: Dictionary in rows:
+			if row.kind == "container": continue
+			var copy: Variant = restore._nodes[row.id]
+			var field: String = "pulse" if row.kind == "hua_lock_mark" else "t"
+			var saved: float = copy.get(field); copy.set(field, saved + 0.01)
+			_check("reject changed linked phase before activation " + row.kind, not restore.activate().ok); copy.set(field, saved)
+			copy.set_meta("foreign", true)
+			_check("reject linked metadata injection " + row.kind, not restore.activate().ok); copy.remove_meta("foreign")
+			var callback := func(): pass
+			copy.tree_exited.connect(callback)
+			_check("reject linked callback injection " + row.kind, not restore.activate().ok); copy.tree_exited.disconnect(callback)
+			copy.light_mask = 2
+			_check("reject linked render override " + row.kind, not restore.activate().ok); copy.light_mask = 1
+			copy.position += Vector2.ONE
+			_check("reject linked transform mutation " + row.kind, not restore.activate().ok); copy.position -= Vector2.ONE
+			for ref: String in row.references:
+				var saved_ref: Variant = copy.get(ref); copy.set(ref, a)
+				_check("reject old-world reference before activation " + row.kind + "." + ref, not restore.activate().ok); copy.set(ref, saved_ref)
+			for tex: String in adapter.TEXTURES[row.kind]:
+				var saved_tex: Variant = copy.get(tex); copy.set(tex, null)
+				_check("reject changed linked texture before activation " + row.kind + "." + tex, not restore.activate().ok); copy.set(tex, saved_tex)
+	if not _ok("activate linked graph " + scenario, restore.activate()): return false
+	var exits: Dictionary = {}; var equal: Dictionary = {}; var pairs: Dictionary = {}; var frames := 0
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var key: String = row.kind; exits[key] = {"original": 0, "copy": 0}; equal[key] = true; pairs[key] = 0
+		nodes[key].tree_exited.connect(func(): exits[key].original += 1)
+		restore._nodes[row.id].tree_exited.connect(func(): exits[key].copy += 1)
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	for frame in range(300):
+		if scenario == "entity":
+			if frame < 12:
+				for unit: Variant in [a, b, aa, bb]: unit.position += Vector2(2.0, 1.0)
+			if frame == 5: a._cast_t = 0.0; aa._cast_t = 0.0; a._hua_lock_shots = 0; aa._hua_lock_shots = 0
+			if frame == 8: b.hp = 0.0; bb.hp = 0.0
+			if frame == 12: a.free(); b.free(); aa.free(); bb.free()
+		await process_frame; frames += 1
+		var alive := false
+		for row: Dictionary in rows:
+			if row.kind == "container": continue
+			var x: Variant = nodes[row.kind]; var y: Variant = restore._nodes[row.id]
+			var xv: bool = is_instance_valid(x); var yv: bool = is_instance_valid(y)
+			if xv != yv: equal[row.kind] = false
+			if not xv or not yv: continue
+			alive = true; pairs[row.kind] += 1
+			equal[row.kind] = equal[row.kind] and source._values(x, row.kind) == restore._values(y, row.kind) and x.transform == y.transform
+		if scenario == "entity" and frame == 15:
+			_check("black rain persists after follow unit freed", is_instance_valid(nodes.black_rain) and nodes.black_rain.t > 0.1)
+		if not alive: break
+	for key: String in equal:
+		_check("native linked playback and one expiry " + scenario + " " + key, equal[key] and exits[key].original == 1 and exits[key].copy == 1 and (scenario != "entity" or pairs[key] > 0))
+	stage.free(); source.dispose(); restore.dispose()
+	for unit: Variant in [a, b, aa, bb]:
+		if is_instance_valid(unit): unit.free()
+	completed_cases.append("linked_" + scenario + "_frames=" + str(frames))
+	return true
+
+func _swap_hold() -> bool:
+	captured_clock.clear(); capture_rejections.clear()
+	if not battle._save_barrier.capture_ready.is_connected(_barrier_ready): battle._save_barrier.capture_ready.connect(_barrier_ready)
+	if not battle._save_barrier.capture_rejected.is_connected(_barrier_rejected): battle._save_barrier.capture_rejected.connect(_barrier_rejected)
+	if not _ok("swap requests actual complete-step barrier", battle.request_run_capture()): return false
+	return _check("swap reaches actual HELD world", await _wait_barrier())
+
+func _swap_cases(identity: Dictionary, runtime: Dictionary) -> bool:
+	var swap_script: Script = load("res://scripts/run_world_swap.gd")
+	var steam: Variant = root.get_node("SteamService")
+	var steam_before: Dictionary = {"counter": steam._run_counter, "active": steam._active_run, "context": steam._context.duplicate(true), "stats": steam.state.stats.duplicate(true)}
+	var worker: Variant = null
+	for unit: Variant in battle.units:
+		if unit.is_worker and unit.faction == 0 and unit.hp > 0.0: worker = unit; break
+	if not _check("swap actual worker exists", worker != null): return false
+	var worker_id: int = worker.entity_id; var worker_key: String = worker.key
+	var movement_start: Vector2 = worker.position
+	var move_cell: Vector2i = battle.map.nearest_open(battle.map.world_to_cell(worker.position + Vector2(210.0, 0.0)))
+	worker.order_move(battle.map.cell_to_world(move_cell))
+	var gold_before_order: int = battle.gold
+	if not _check("swap real paid production order accepted", battle.queue_train(battle.level.hall, worker_key, false)): return false
+	_check("swap production uses actual unit gold cost", gold_before_order - battle.gold == int(battle._defs[worker_key].get("cost_gold", 0)))
+	var paid_gold: int = battle.gold; var initial_counter: int = battle.next_entity_id
+	if not await _swap_hold(): return false
+	paid_gold = battle.gold; initial_counter = battle.next_entity_id # Snapshot boundary, after all queued simulation work.
+	var old: Variant = battle; var old_cursor: Variant = old._target_cursor
+	var old_clock: Dictionary = old._run_clock.capture(); var old_rng: Dictionary = old.capture_gameplay_rng()
+	var old_count: int = old.units.size(); var old_training: float = old.level.hall._train_t
+	for problem: String in ["unit", "late_environment", "steam_lease"]:
+		var rejected: Variant = swap_script.new(identity, runtime)
+		var setup: Dictionary = rejected.prepare(battle, source_identity)
+		if not _ok("prepare world replacement failure case " + problem, setup): return false
+		if problem == "unit": setup.battle.units[0].entity_id = 999999
+		elif problem == "late_environment": rejected._core._environment._plan.overlay.position += Vector2.ONE
+		else: steam._run_counter += 1
+		var result: Dictionary = rejected.commit()
+		if problem == "steam_lease": steam._run_counter -= 1
+		_check("world replacement rolls back " + problem, not result.ok and is_instance_valid(old) and current_scene == old and not is_instance_valid(setup.battle) and old.camera.is_current() and old._target_cursor == old_cursor and old._run_clock.capture() == old_clock and old.capture_gameplay_rng() == old_rng and old.units.size() == old_count and old._save_barrier.health().ok)
+		rejected.dispose()
+	var swap: Variant = swap_script.new(identity, runtime)
+	var setup: Dictionary = swap.prepare(battle, source_identity)
+	if not _ok("prepare real moving producing world replacement", setup): return false
+	var wave: int = battle.level._wave; var timer: float = battle.level._wave_t
+	var installed: Dictionary = swap.commit()
+	if not _ok("commit unified actual world replacement", installed): return false
+	battle = installed.battle
+	if source_identity != null: source_identity.dispose()
+	source_identity = installed.identity
+	# The component capture API requires pause. No engine callback can run in this stack.
+	var installed_pause: bool = paused; paused = true
+	var installed_rng: Dictionary = battle.capture_gameplay_rng()
+	paused = installed_pause
+	var unchanged := {"source_freed": not is_instance_valid(old), "current_scene": current_scene == battle, "restart_route": battle.scene_file_path == "res://scenes/main.tscn", "units": battle.units.size() == old_count, "allocator": battle.next_entity_id == initial_counter, "wave": battle.level._wave == wave, "wave_timer": battle.level._wave_t == timer, "production_timer": battle.level.hall._train_t == old_training, "gold": battle.gold == paid_gold, "rng": installed_rng == old_rng, "running": not paused}
+	for key: String in unchanged: _check("world replacement no redeployment " + key, unchanged[key])
+	checks.append({"label": "world swap install diagnostic", "passed": true, "expected": {"units": old_count, "allocator": initial_counter, "wave": wave, "wave_timer": timer, "production_timer": old_training, "gold": paid_gold, "rng": old_rng}, "actual": {"units": battle.units.size(), "allocator": battle.next_entity_id, "wave": battle.level._wave, "wave_timer": battle.level._wave_t, "production_timer": battle.level.hall._train_t, "gold": battle.gold, "rng": installed_rng}})
+	_check("installed world owns actual barrier and fresh cursor", battle._save_barrier != null and battle._save_barrier.world == battle and battle._save_barrier.clock == battle._run_clock and not battle._cursor_resources_released and battle._target_cursor != null and battle._target_cursor != old_cursor)
+	_check("world commit cannot run twice", not swap.commit().ok)
+	var rebound_worker: Variant = null
+	for unit: Variant in battle.units:
+		if unit.entity_id == worker_id: rebound_worker = unit
+	_check("restored Unit has exactly new-world lifecycle callbacks", rebound_worker.get_signal_connection_list("died").size() == 1 and rebound_worker.get_signal_connection_list("died")[0].callable == Callable(battle, "_on_unit_died") and rebound_worker.get_signal_connection_list("story_resolved").size() == 1)
+	# Run the normal paid production timer, without shortening it or invoking callbacks.
+	for tick in range(1200):
+		await physics_frame
+		if not battle.gameplay_rng_fault().is_empty(): break
+		if battle.level.hall._train_queue.is_empty(): break
+	await process_frame
+	_check("restored world continues native movement production and wave clock", battle.gameplay_rng_fault().is_empty() and battle._run_clock.fault().is_empty() and rebound_worker.position.distance_to(movement_start) > 3.0 and battle.level.hall._train_queue.is_empty() and battle.next_entity_id == initial_counter + 1 and battle.level._wave_t < timer)
+	# A second replacement preserves an in-flight authority effect and a user pause.
+	var arena: Dictionary = _qa_damage_arena()
+	if not _ok("restored world has real open damage arena", arena): return false
+	var caster: Variant = battle.spawn_unit("li_kui", 0, arena.caster)
+	var victim: Variant = battle.spawn_unit("guan_dao", 1, arena.target)
+	caster.set_physics_process(false); victim.set_physics_process(false)
+	for tick in range(2): await physics_frame
+	await process_frame
+	battle._open_pause()
+	var hp: float = victim.hp; var victim_id: int = victim.entity_id
+	battle.spawn_projectile(caster, victim, 13.0)
+	if not await _swap_hold(): return false
+	var again: Variant = swap_script.new(identity, runtime)
+	if not _ok("recapture and prepare already restored world with pending damage", again.prepare(battle, source_identity)): return false
+	old = battle
+	installed = again.commit()
+	if not _ok("second restored world commits with pending projectile", installed): return false
+	battle = installed.battle; source_identity.dispose(); source_identity = installed.identity
+	for unit: Variant in battle.units:
+		if unit.entity_id == victim_id: victim = unit
+	_check("world replacement preserves real user pause and damage pending", paused and not is_instance_valid(old) and victim.hp == hp and battle._save_barrier.state == battle._save_barrier.State.IDLE)
+	battle._close_pause()
+	for tick in range(90): await physics_frame
+	await process_frame
+	_check("restored in-flight projectile deals damage exactly once", is_equal_approx(victim.hp, hp - 13.0) and battle.gameplay_rng_fault().is_empty())
+	victim.take_damage(1000000.0, null, false, true)
+	_check("restored death signal updates actual Battle registry once", victim.hp == 0.0 and not battle.units.has(victim))
+	for tick in range(5): await physics_frame
+	await process_frame
+	if not await _swap_hold(): return false
+	_check("twice restored world remains recapturable with complete-step clock", battle._save_barrier.health().ok and battle._run_clock.capture().ok and int(battle._run_clock.capture().record.next_tick) > int(old_clock.record.next_tick))
+	_check("same-process replacement neither begins nor settles a new Steam run", steam_before == {"counter": steam._run_counter, "active": steam._active_run, "context": steam._context.duplicate(true), "stats": steam.state.stats.duplicate(true)})
+	_check("restored capture can release and resume", battle._save_barrier.release_capture().ok)
+	completed_cases.append("actual_world_swap_twice_native_production_movement_damage")
+	swap.dispose(); again.dispose()
+	return true

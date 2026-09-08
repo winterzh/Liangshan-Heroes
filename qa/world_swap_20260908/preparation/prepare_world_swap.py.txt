@@ -1,0 +1,41 @@
+from pathlib import Path
+import json,hashlib,difflib
+root=Path.cwd(); out=root/'scratchpad/world_swap_20260908'; out.mkdir(exist_ok=True)
+(out/'.gdignore').write_text('\n')
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+def save(name,s):
+    p=root/'scripts'/name
+    if p.exists():
+        old=p.read_bytes().decode().splitlines(keepends=True); new=s.splitlines(); result=[]
+        for op,i,j,a,b in difflib.SequenceMatcher(None,[x.rstrip('\r\n') for x in old],new,autojunk=False).get_opcodes():
+            if op=='equal': result.extend(old[i:j])
+            elif op in ('insert','replace'):
+                e='\r\n' if old[min(i,len(old)-1)].endswith('\r\n') else '\n'
+                result.extend(x+e for x in new[a:b])
+        assert ''.join(result).replace('\r\n','\n')==s
+        (out/name).write_bytes(''.join(result).encode())
+    else: (out/name).write_text(s,encoding='utf-8',newline='\n')
+c=(root/'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c=rep(c,'var _environment: Variant = null','var _environment: Variant = null\nvar _fog_module: Variant = null\nvar _fog_plan: Dictionary = {}\nvar _activated := false\nvar _owns_world := true')
+c=rep(c,'\tvar fog_plan: Dictionary = fog.bind(_battle, s.fog)','\tvar fog_plan: Dictionary = fog.bind(_battle, s.fog)\n\t_fog_module = fog\n\t_fog_plan = fog_plan')
+c=rep(c,'\tif is_instance_valid(_battle): _battle.free()','\tif _owns_world and is_instance_valid(_battle): _battle.free()')
+c=rep(c,'\t_environment = null','\t_environment = null\n\t_fog_module = null\n\t_fog_plan.clear()')
+c=rep(c,'\t_mount_frame = {"clock":', '\tvar ground: Dictionary = _visual.bind_ground_fire_owner(_battle, _battle._ground_fire_visuals)\n\tif not ground.ok: return _abort(ground, "ground_fire_install")\n\t_mount_frame = {"clock":')
+c+='\n'+(out/'activation.gd').read_text(encoding='utf-8')
+save('run_battle_world_core.gd',c)
+save('run_world_swap.gd',(out/'swap.gd').read_text(encoding='utf-8'))
+d=(root/'qa/linked_fx_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8').replace('linked-fx-resume-native','world-swap-native').replace('[linked fx QA] ','[world swap QA] ')
+d=rep(d,'"battle_resume_tested": false, "scope": "Actual classic Battle captures twenty sections under HELD. Tests prepare and mount disabled worlds after root-clock binding, activate individual UI/display consumers, and verify native environment idle plus nonzero Vulkan viewport pixels. Full gameplay/Steam/cursor installation, cross-process and player-slot remain pending."','"same_process_world_swap_tested": completed_cases.has("actual_world_swap_twice_native_production_movement_damage"), "cross_process_resume_tested": false, "scope": "Actual HELD classic world replacement twice, native movement/paid production/pending damage, rollback and previous component regression. Persistent Steam, cross-process and player slot remain pending."')
+d=rep(d,'\t_check("source capture released after world preparation", battle._save_barrier.release_capture().ok)\n\tawait _finish()', '\t_check("source capture released after world preparation", battle._save_barrier.release_capture().ok)\n\tif not await _swap_cases(identity, runtime): await _finish(true); return\n\tawait _finish()')
+d+='\n'+(out/'driver_cases.gd').read_text(encoding='utf-8')
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest(); changes=[]
+for name in ['run_battle_world_core.gd','run_world_swap.gd']:
+    p=root/'scripts'/name; row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':out.relative_to(root).as_posix()+'/'+name,'candidate_sha256':sha(out/name)}
+    if p.exists(): row['before_raw_sha256']=sha(p)
+    changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+inputs=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd','driver_cases.gd','activation.gd','swap.gd']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in inputs}},indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))

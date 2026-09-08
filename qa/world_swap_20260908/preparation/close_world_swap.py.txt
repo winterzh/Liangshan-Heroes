@@ -1,0 +1,87 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+root=Path.cwd(); out=root/'scratchpad/world_swap_20260908'; q=root/'qa/world_swap_20260908'
+head='2f2ee3a66de94f7051df70185ed623f8802e64a3'; run=sys.argv[1]; native=root/'.godot/stabilization_overlay'/run
+assert native.resolve().parent==(root/'.godot/stabilization_overlay').resolve()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+assert r['suite']=='world-swap-native'
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and report['complete'] and not report['failed_count'] and all(x['passed'] for x in report['checks'])
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+for row in changes:
+    p=root/row['path']; assert p.exists()==row['before_exists']
+    if p.exists(): assert sha(p)==row['before_raw_sha256']
+    assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+q.mkdir(exist_ok=False); (q/'.gdignore').write_text('\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes()); assert sha(dst)==sha(src)
+    pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    receipt=json.loads(path.read_text())
+    if receipt.get('source_head')!=head or receipt.get('suite')!='world-swap-native': continue
+    folder=path.parent; tag='runs/'+folder.name
+    runs.append({'run_id':folder.name,'complete':receipt.get('complete'),'freeze_sha256':receipt['freeze_sha256']})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes: archive(folder/'project'/row['path'],tag+'/'+Path(row['path']).name+'.txt')
+    archive(folder/'project/tools/world_swap/driver.gd',tag+'/driver.gd.txt')
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_world_swap.py','close_world_swap.py','verify_world_swap_stage.py']: archive(root/'.godot'/name,'preparation/'+name+'.txt')
+uid=native/'project/scripts/run_world_swap.gd.uid'; archive(uid,'candidate/run_world_swap.gd.uid.txt')
+for row in changes: (root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/'scripts/run_world_swap.gd.uid').write_bytes(uid.read_bytes())
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks']); count=report['check_count']; other=count-source_count
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'runs':runs,'changes':changes,'native_uid_sha256':sha(uid),'checks':count,'source_sha_checks':source_count,'other_checks':other,'full_gameplay_activation':False,'complete_world_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json')
+diagnostics=sum(x['label'] in ['native pixel diagnostics','world swap install diagnostic'] for x in report['checks']); assertions=other-diagnostics
+installation.update({'diagnostic_rows':diagnostics,'non_source_assertions':assertions,'full_gameplay_activation':True,'same_process_world_swap':True,'cross_process_resume':False,'player_continue_entry':False,'persistent_steam_binding':False})
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(root/'docs/WORLD_SWAP_20260908.md').write_text(f'''# 经典据守世界替换与统一激活
+
+run_world_swap把实际HELD经典30波世界同步捕获、重建并替换为可运行的新世界。它是内部同进程恢复事务：来源必须仍是SceneTree.current_scene且位于根节点，必须通过真实屏障健康检查；不接受调用方提供的任意存档和Steam局编号。玩家保存退出/继续入口、磁盘槽和跨进程持久局仍未接通，八战役适配及原整体验收要求不变。
+
+prepare只读取旧世界，保留旧场景和全局光标；用当前受信内容/引擎身份及运行定义调用world_core.prepare。commit再次核对官方玩法与当前Steam服务的账号、活动局编号和计数器，在同一暂停非物理帧内绑定根状态/时钟、图腾退出计数并挂载新世界。Unit的died/story_resolved只连接新Battle，所有图已绑定后才释放共享Unit/Fx占位，依次恢复Unit、视觉、雾、世界显示、镜头、环境和HUD；最后创建真实物理步屏障并激活恢复时钟和Battle处理标志。
+
+所有可能返回失败的组件阶段完成前，旧世界仍保留。失败时释放新世界和身份，重新把旧镜头设为current，旧世界保持HELD，调用方可以继续操作旧屏障；未提前提交场景、开始Steam新局、重放技能或部署地图/单位。成功后切换current_scene、释放旧世界，随后安装新光标，避免旧场景退出清除新光标。保留原先用户暂停状态与受信main.tscn重开路径。handoff_world转移节点与身份的所有权；调用方保留返回identity，供再次捕获时解释历史编号。
+
+当前Steam绑定仅继承同一真实源世界仍有效的内存局。测试环境run=0仍不计入，非零局需账号/统计就绪且未结算；不会伪造跨进程身份或把旧局编号导入新进程。真实账号、持久回执/outbox及跨进程统计防重仍是后续必做项。
+
+最终原生{count}条记录全部通过：{source_count}来源SHA、{assertions}非来源断言、{diagnostics}诊断记录（环境像素和安装状态各1），保留前序776项断言回归。新增实际世界替换两次：移动中的工人、正常付费训练队列、当前波次/资源/实体分配器/RNG不重置；通过原生物理回调完成训练并继续移动。第二次在真实用户暂停下保存待命中的投射物，恢复后仍暂停，正常继续后伤害恰好13一次；死亡回调移出新Battle注册表，随后可再次进入完整步屏障。
+
+另验证Unit编号异常、镜头激活后的环境状态异常、Steam局租约改变均回滚，旧世界/镜头/光标/时钟/RNG保留；重复commit拒绝，两个替换未调用Steam begin/settle。新代码仅在内部模块调用，不增加菜单入口。本次主窗口0×0，证据是Windows原生模拟和状态/生命周期，不是新增可见画面或真人观感；既有环境专用SubViewport像素回归另列。[QA](../qa/world_swap_20260908/README.md)、[受测字节晋级](../qa/world_swap_20260908/installation.json)。
+
+下一步接入持久Steam局与统一Session生命周期、磁盘槽及菜单、跨进程重启继续；随后祝家庄及其余七关、完整30波和1800秒、两台Windows、60FPS P95/P99、美术与真人/双账号验收。此次只推GitHub stable，没有Steam构建发布。
+''',encoding='utf-8',newline='\n')
+(q/'README.md').write_text(f'''# 统一世界激活与替换原生 QA
+
+来源`{head}`；最终`{run}`，freeze`{freeze}`。{count}条记录通过={source_count}来源SHA+{assertions}非来源断言+{diagnostics}诊断记录；原776项回归保留。诊断为环境像素与安装时点状态各1，未计入功能断言。新增两次完整实际世界替换、移动/真实付费生产完成/在途投射物13点单次伤害/死亡回调/再次真实屏障，与3种失败回滚。运行方法为Windows Vulkan、主窗口0×0、私有user://；没有跨进程继续、真实Steam账号或真人视觉验收。
+
+本次受测候选只有world_core与新world_swap。前序场景/特效/Unit/Battle直接取已提交源码，原生受测副本及SHA见runs和SOURCE_PINS，晋级文件见installation。R1已完成两次实际替换，但未重新部署组合断言失败：恢复已运行时调用capture_gameplay_rng违反其暂停前置条件，返回PAUSE_REQUIRED。R2保持生产候选字节不变，改在同步调用栈内暂停读取RNG后恢复运行状态，资源/分配器取稳定屏障时点，并拆开各项断言和保留预期/实测诊断。全部实际运行均保留，不以最终通过覆盖失败输入；新脚本UID来自原生隔离导入。
+
+复现时使用来源提交独立checkout，将candidate/*.gd.txt还原原名到scratchpad/world_swap_20260908，保留.gdignore、manifest和freeze；随后执行：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/world_swap_20260908 --expected-files 2 --driver driver.gd --driver-destination tools/world_swap/driver.gd --suite world-swap-native --prefix "[world swap QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可换受控短绝对路径。全目标边界、激活顺序/回滚及待办见[实现说明](../../docs/WORLD_SWAP_20260908.md)。
+''',encoding='utf-8',newline='\n')
+def prepend(path,text):
+    p=root/path; p.write_bytes((text+'\n\n').encode()+p.read_bytes())
+prepend('docs/WORKLOG.md',f'## 2026-09-08 实际世界统一激活与替换\n\n接入内部同进程世界替换、组件激活/真实步屏障、旧场景/光标交接和失败回滚。真实付费训练、移动、待命中投射物在两次替换后持续运行，伤害13点一次，死亡回调及再次捕获通过；最终{assertions}断言、{source_count}来源SHA和{diagnostics}诊断。[合同](WORLD_SWAP_20260908.md)、[QA](../qa/world_swap_20260908/README.md)。持久Steam/跨进程/玩家继续仍待接通；本批仅stable同步。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 世界替换内部接口\n\nrun_world_swap要求实际current_scene的HELD经典30波来源，prepare/commit保持同步，返回新Battle及历史identity；失败保留旧世界HELD，成功继承用户暂停状态。未增加菜单或启动方式。[接口与复现](WORLD_SWAP_20260908.md)。跨进程及玩家继续尚未开放。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 同进程实际世界恢复已通过\n\n两次真实世界替换后的移动、付费生产、在途伤害/死亡回调和再捕获通过，组件失败可回滚。[证据](WORLD_SWAP_20260908.md)。完整玩家续玩仍缺持久Steam/Session、磁盘与菜单、跨进程；原八关/长时/双机/性能/美术/真人验收保留。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 统一世界替换\n\n- scripts/run_world_swap.gd：同进程HELD世界替换与旧场景/Steam内存局交接。\n- docs/WORLD_SWAP_20260908.md：激活/回滚/所有权合同。\n- qa/world_swap_20260908/：原生生产/移动/伤害持续运行证据与受测SHA。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续更新：core已增加组件统一激活与节点/identity所有权转移，run_world_swap完成同进程实际世界替换；[验证](WORLD_SWAP_20260908.md)。持久Steam、磁盘/玩家继续和跨进程尚未交付。')
+prepend('docs/STABILIZATION_EXECUTION_20260907.md','2026-09-08推进：统一激活、旧世界/光标交接和组件失败回滚通过，两次同进程世界替换后实际生产/移动/伤害继续运行。持久Steam、玩家槽/菜单与跨进程仍待接通，原整体验收不变。[最新证据](WORLD_SWAP_20260908.md)。')
+p=root/'docs/STABILIZATION_EXECUTION_20260907.md'
+s=p.read_text(encoding='utf-8').replace('此前剩余12类Fx已补齐，完整安装、继续槽和跨进程续玩仍未交付，见[最新证据](LINKED_FX_RESUME_20260908.md)','剩余12类Fx及同进程世界替换已接入，持久Steam/Session、继续槽和跨进程续玩仍未交付，见[最新证据](WORLD_SWAP_20260908.md)')
+p.write_text(s,encoding='utf-8',newline='\n')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve native-tested world swap and evidence.\nscripts/run_world_swap.gd* -text -whitespace\nqa/world_swap_20260908/** -text -whitespace\n')
+print(json.dumps({'pins':len(pins),'runs':runs,'checks':count,'source_checks':source_count,'assertions':assertions,'diagnostics':diagnostics,'installed_bytes_equal_native':True}))

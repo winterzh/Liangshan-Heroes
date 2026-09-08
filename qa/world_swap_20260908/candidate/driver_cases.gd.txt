@@ -1,0 +1,104 @@
+func _swap_hold() -> bool:
+	captured_clock.clear(); capture_rejections.clear()
+	if not battle._save_barrier.capture_ready.is_connected(_barrier_ready): battle._save_barrier.capture_ready.connect(_barrier_ready)
+	if not battle._save_barrier.capture_rejected.is_connected(_barrier_rejected): battle._save_barrier.capture_rejected.connect(_barrier_rejected)
+	if not _ok("swap requests actual complete-step barrier", battle.request_run_capture()): return false
+	return _check("swap reaches actual HELD world", await _wait_barrier())
+
+func _swap_cases(identity: Dictionary, runtime: Dictionary) -> bool:
+	var swap_script: Script = load("res://scripts/run_world_swap.gd")
+	var steam: Variant = root.get_node("SteamService")
+	var steam_before: Dictionary = {"counter": steam._run_counter, "active": steam._active_run, "context": steam._context.duplicate(true), "stats": steam.state.stats.duplicate(true)}
+	var worker: Variant = null
+	for unit: Variant in battle.units:
+		if unit.is_worker and unit.faction == 0 and unit.hp > 0.0: worker = unit; break
+	if not _check("swap actual worker exists", worker != null): return false
+	var worker_id: int = worker.entity_id; var worker_key: String = worker.key
+	var movement_start: Vector2 = worker.position
+	var move_cell: Vector2i = battle.map.nearest_open(battle.map.world_to_cell(worker.position + Vector2(210.0, 0.0)))
+	worker.order_move(battle.map.cell_to_world(move_cell))
+	var gold_before_order: int = battle.gold
+	if not _check("swap real paid production order accepted", battle.queue_train(battle.level.hall, worker_key, false)): return false
+	_check("swap production uses actual unit gold cost", gold_before_order - battle.gold == int(battle._defs[worker_key].get("cost_gold", 0)))
+	var paid_gold: int = battle.gold; var initial_counter: int = battle.next_entity_id
+	if not await _swap_hold(): return false
+	paid_gold = battle.gold; initial_counter = battle.next_entity_id # Snapshot boundary, after all queued simulation work.
+	var old: Variant = battle; var old_cursor: Variant = old._target_cursor
+	var old_clock: Dictionary = old._run_clock.capture(); var old_rng: Dictionary = old.capture_gameplay_rng()
+	var old_count: int = old.units.size(); var old_training: float = old.level.hall._train_t
+	for problem: String in ["unit", "late_environment", "steam_lease"]:
+		var rejected: Variant = swap_script.new(identity, runtime)
+		var setup: Dictionary = rejected.prepare(battle, source_identity)
+		if not _ok("prepare world replacement failure case " + problem, setup): return false
+		if problem == "unit": setup.battle.units[0].entity_id = 999999
+		elif problem == "late_environment": rejected._core._environment._plan.overlay.position += Vector2.ONE
+		else: steam._run_counter += 1
+		var result: Dictionary = rejected.commit()
+		if problem == "steam_lease": steam._run_counter -= 1
+		_check("world replacement rolls back " + problem, not result.ok and is_instance_valid(old) and current_scene == old and not is_instance_valid(setup.battle) and old.camera.is_current() and old._target_cursor == old_cursor and old._run_clock.capture() == old_clock and old.capture_gameplay_rng() == old_rng and old.units.size() == old_count and old._save_barrier.health().ok)
+		rejected.dispose()
+	var swap: Variant = swap_script.new(identity, runtime)
+	var setup: Dictionary = swap.prepare(battle, source_identity)
+	if not _ok("prepare real moving producing world replacement", setup): return false
+	var wave: int = battle.level._wave; var timer: float = battle.level._wave_t
+	var installed: Dictionary = swap.commit()
+	if not _ok("commit unified actual world replacement", installed): return false
+	battle = installed.battle
+	if source_identity != null: source_identity.dispose()
+	source_identity = installed.identity
+	# The component capture API requires pause. No engine callback can run in this stack.
+	var installed_pause: bool = paused; paused = true
+	var installed_rng: Dictionary = battle.capture_gameplay_rng()
+	paused = installed_pause
+	var unchanged := {"source_freed": not is_instance_valid(old), "current_scene": current_scene == battle, "restart_route": battle.scene_file_path == "res://scenes/main.tscn", "units": battle.units.size() == old_count, "allocator": battle.next_entity_id == initial_counter, "wave": battle.level._wave == wave, "wave_timer": battle.level._wave_t == timer, "production_timer": battle.level.hall._train_t == old_training, "gold": battle.gold == paid_gold, "rng": installed_rng == old_rng, "running": not paused}
+	for key: String in unchanged: _check("world replacement no redeployment " + key, unchanged[key])
+	checks.append({"label": "world swap install diagnostic", "passed": true, "expected": {"units": old_count, "allocator": initial_counter, "wave": wave, "wave_timer": timer, "production_timer": old_training, "gold": paid_gold, "rng": old_rng}, "actual": {"units": battle.units.size(), "allocator": battle.next_entity_id, "wave": battle.level._wave, "wave_timer": battle.level._wave_t, "production_timer": battle.level.hall._train_t, "gold": battle.gold, "rng": installed_rng}})
+	_check("installed world owns actual barrier and fresh cursor", battle._save_barrier != null and battle._save_barrier.world == battle and battle._save_barrier.clock == battle._run_clock and not battle._cursor_resources_released and battle._target_cursor != null and battle._target_cursor != old_cursor)
+	_check("world commit cannot run twice", not swap.commit().ok)
+	var rebound_worker: Variant = null
+	for unit: Variant in battle.units:
+		if unit.entity_id == worker_id: rebound_worker = unit
+	_check("restored Unit has exactly new-world lifecycle callbacks", rebound_worker.get_signal_connection_list("died").size() == 1 and rebound_worker.get_signal_connection_list("died")[0].callable == Callable(battle, "_on_unit_died") and rebound_worker.get_signal_connection_list("story_resolved").size() == 1)
+	# Run the normal paid production timer, without shortening it or invoking callbacks.
+	for tick in range(1200):
+		await physics_frame
+		if not battle.gameplay_rng_fault().is_empty(): break
+		if battle.level.hall._train_queue.is_empty(): break
+	await process_frame
+	_check("restored world continues native movement production and wave clock", battle.gameplay_rng_fault().is_empty() and battle._run_clock.fault().is_empty() and rebound_worker.position.distance_to(movement_start) > 3.0 and battle.level.hall._train_queue.is_empty() and battle.next_entity_id == initial_counter + 1 and battle.level._wave_t < timer)
+	# A second replacement preserves an in-flight authority effect and a user pause.
+	var arena: Dictionary = _qa_damage_arena()
+	if not _ok("restored world has real open damage arena", arena): return false
+	var caster: Variant = battle.spawn_unit("li_kui", 0, arena.caster)
+	var victim: Variant = battle.spawn_unit("guan_dao", 1, arena.target)
+	caster.set_physics_process(false); victim.set_physics_process(false)
+	for tick in range(2): await physics_frame
+	await process_frame
+	battle._open_pause()
+	var hp: float = victim.hp; var victim_id: int = victim.entity_id
+	battle.spawn_projectile(caster, victim, 13.0)
+	if not await _swap_hold(): return false
+	var again: Variant = swap_script.new(identity, runtime)
+	if not _ok("recapture and prepare already restored world with pending damage", again.prepare(battle, source_identity)): return false
+	old = battle
+	installed = again.commit()
+	if not _ok("second restored world commits with pending projectile", installed): return false
+	battle = installed.battle; source_identity.dispose(); source_identity = installed.identity
+	for unit: Variant in battle.units:
+		if unit.entity_id == victim_id: victim = unit
+	_check("world replacement preserves real user pause and damage pending", paused and not is_instance_valid(old) and victim.hp == hp and battle._save_barrier.state == battle._save_barrier.State.IDLE)
+	battle._close_pause()
+	for tick in range(90): await physics_frame
+	await process_frame
+	_check("restored in-flight projectile deals damage exactly once", is_equal_approx(victim.hp, hp - 13.0) and battle.gameplay_rng_fault().is_empty())
+	victim.take_damage(1000000.0, null, false, true)
+	_check("restored death signal updates actual Battle registry once", victim.hp == 0.0 and not battle.units.has(victim))
+	for tick in range(5): await physics_frame
+	await process_frame
+	if not await _swap_hold(): return false
+	_check("twice restored world remains recapturable with complete-step clock", battle._save_barrier.health().ok and battle._run_clock.capture().ok and int(battle._run_clock.capture().record.next_tick) > int(old_clock.record.next_tick))
+	_check("same-process replacement neither begins nor settles a new Steam run", steam_before == {"counter": steam._run_counter, "active": steam._active_run, "context": steam._context.duplicate(true), "stats": steam.state.stats.duplicate(true)})
+	_check("restored capture can release and resume", battle._save_barrier.release_capture().ok)
+	completed_cases.append("actual_world_swap_twice_native_production_movement_damage")
+	swap.dispose(); again.dispose()
+	return true
