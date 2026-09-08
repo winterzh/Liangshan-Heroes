@@ -28,8 +28,13 @@ EXPORT bool SteamAPI_ISteamUtils_IsAPICallCompleted(void *self, uint64_t handle,
 EXPORT bool SteamAPI_ISteamUtils_GetAPICallResult(void *self, uint64_t handle, void *data, int size, int callback, bool *failed) {
     *failed = self != context() || handle != active;
     if (size != 24 || callback != 1101 || *failed) return false;
-    lsh::Received result{5088120, setting("LSH_MOCK_RESULT", 1), 0, 76561198000000001ULL};
-    std::memcpy(data, &result, sizeof(result)); return true;
+    // Independent wire fixture: do not memcpy the bridge's logical struct.
+    unsigned char wire[24]; std::memset(wire, 0xA5, sizeof(wire));
+    uint64_t game = 5088120, owner = 76561198000000001ULL;
+    int32_t result = setting("LSH_MOCK_RESULT", 1);
+    std::memcpy(wire, &game, 8); std::memcpy(wire + 8, &result, 4);
+    std::memcpy(wire + 12, &owner, 8);
+    std::memcpy(data, wire, sizeof(wire)); return true;
 }
 EXPORT bool SteamAPI_ISteamUserStats_GetStatInt32(void *self, const char *name, int32_t *value) {
     *value = setting("LSH_MOCK_VALUE");

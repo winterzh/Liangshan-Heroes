@@ -13,7 +13,7 @@ struct Received {
     uint32_t padding;
     uint64_t owner;
 };
-static_assert(sizeof(Received) == 24 && offsetof(Received, owner) == 16);
+// Logical result, NOT the wire ABI: packed CSteamID has different alignment.
 struct Api {
     virtual ~Api() = default;
     virtual bool ready() = 0;

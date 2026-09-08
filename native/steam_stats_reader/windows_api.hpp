@@ -4,6 +4,8 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#include <array>
+#include <cstring>
 #include "reader.hpp"
 
 namespace lsh {
@@ -46,7 +48,17 @@ public:
     uint32_t app() override { return get_app(utils); }
     uint64_t request(uint64_t id) override { return get_request(stats, id); }
     bool completed(uint64_t h, bool &f) override { return is_completed(utils, h, &f); }
-    bool result(uint64_t h, Received &r, bool &f) override { return get_result(utils, h, &r, sizeof(r), 1101, &f); }
+    bool result(uint64_t h, Received &r, bool &f) override {
+        // CSteamID is packed to alignment 1 in Valve's steamclientpublic.h.
+        // Windows callback alignment is 8: size 24, but the ID starts at 12,
+        // with four trailing pad bytes. A plain uint64 member starts at 16.
+        std::array<unsigned char, 24> wire{};
+        if (!get_result(utils, h, wire.data(), static_cast<int>(wire.size()), 1101, &f)) return false;
+        std::memcpy(&r.game, wire.data(), 8);
+        std::memcpy(&r.result, wire.data() + 8, 4);
+        std::memcpy(&r.owner, wire.data() + 12, 8);
+        return true;
+    }
     bool stat(uint64_t id, const char *n, int32_t &v, bool current) override { return current ? get_stat(stats, n, &v) : get_user_stat(stats, id, n, &v); }
     bool achievement(uint64_t id, const char *n, bool &v, bool current) override { return current ? get_achievement(stats, n, &v) : get_user_achievement(stats, id, n, &v); }
 };

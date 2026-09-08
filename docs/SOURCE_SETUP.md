@@ -1,3 +1,7 @@
+## 2026-09-08 真实 Steam 只读诊断入口
+
+`py -3.14 -X utf8 -B tools/run_steam_stats_live_read.py` 默认只做前置检查；加 `--run` 在全新隔离最小工程使用当前登录账号，仅读取，不加载正常游戏服务。先关闭其他 Godot/游戏进程。原始日志可能含账号信息，留在本机临时目录，不提交。修正版 reader DLL 已实测连续读取；该工具不能证明统计写入完成，玩家保存/继续入口尚未开放。[合同与复现](STEAM_LIVE_READ_20260908.md)。
+
 ## 2026-09-08 Steam 读取适配器构建入口
 
 新增内部读取桥接，普通游戏启动方式保持。开发者可在工程根执行 `py -3.14 -X utf8 -B tools/build_steam_stats_reader.py`，由 Visual Studio C++/CMake/Ninja 编译并运行隔离验证；无需初始化 Steam。依赖固定哈希，临时编译目录使用英文短路径，可用 `--work-root` 和 `--profile-root` 指定。受测 DLL 保存在 `vendor/steam_stats_reader/`，尚未加入正常启动和 Steam 候选安装清单。[接口与边界](STEAM_STATS_READER_20260908.md) · [构建说明](../native/steam_stats_reader/README.md)。

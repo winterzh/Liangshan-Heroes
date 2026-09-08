@@ -1,3 +1,9 @@
+## 2026-09-08 真实 Steam 读取修复
+
+- `tools/run_steam_stats_live_read.py`、`tools/steam_stats_live_read.gd`：独立真实账号只读诊断，默认预检。
+- `docs/STEAM_LIVE_READ_20260908.md`、`qa/steam_stats_live_read_20260908/`：真实 ABI 失败与修复证据、86项隔离检查及脱敏读取收据。
+- `vendor/steam_stats_reader/provenance.json`：已指向本次修正版，旧批次证据保留历史上下文。
+
 ## 2026-09-08 Steam 读取适配器
 
 - `native/steam_stats_reader/`：原生只读桥接源码、CMake/精简绑定配置、合成核心/ABI测试及 MIT 头文件来源；`native/.gdignore` 阻止扫描。
