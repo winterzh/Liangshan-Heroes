@@ -24,6 +24,7 @@ const AUTO_DISPATCH_META := &"campaign_mission_auto_dispatch"
 var _panel: PanelContainer
 var _toggle: Button
 var _details: VBoxContainer
+var _detail_scroll: ScrollContainer
 var _expanded := false
 var _title: Label
 var _core: Label
@@ -32,6 +33,7 @@ var _objective: Label
 var _buttons: VBoxContainer
 var _status: Label
 var _feedback_text := ""
+var _feedback_active := false
 var _feedback_left := 0.0
 var _markers: Array = []
 var stage_metrics: Array[Dictionary] = []
@@ -74,12 +76,19 @@ func _init(owner) -> void:
 	_toggle.toggle_mode = true
 	_toggle.toggled.connect(_set_expanded)
 	outer.add_child(_toggle)
+	_detail_scroll = ScrollContainer.new()
+	_detail_scroll.name = "ObjectiveScroll"
+	_detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	outer.add_child(_detail_scroll)
+	_detail_scroll.hide()
 	_details = VBoxContainer.new()
 	_details.name = "ObjectiveDetails"
-	outer.add_child(_details)
+	_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_detail_scroll.add_child(_details)
 	_details.hide()
 	var box := _details
 	_title = Label.new()
+	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_title.add_theme_font_size_override("font_size", 17)
 	_title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	box.add_child(_title)
@@ -110,15 +119,43 @@ func _init(owner) -> void:
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(_status)
 	battle.hud.add_child(_panel)
+	Localize.language_changed.connect(_on_language_changed)
+	_panel.tree_exiting.connect(func() -> void:
+		if Localize.language_changed.is_connected(_on_language_changed):
+			Localize.language_changed.disconnect(_on_language_changed), CONNECT_ONE_SHOT)
 	_panel.hide()
 
 func _set_expanded(expanded: bool) -> void:
 	_expanded = expanded
 	_details.visible = expanded
-	_toggle.text = "▼ 收起任务" if expanded else "▶ 任务目标"
-	_toggle.tooltip_text = "收起任务详情，留出战场视野" if expanded else "展开本关目标与任务定位按钮"
-	_panel.custom_minimum_size.x = 286 if expanded else 148
+	_detail_scroll.visible = expanded
+	_toggle.text = Localize.text("▼ 收起任务" if expanded else "▶ 任务目标")
+	_toggle.tooltip_text = Localize.text("收起任务详情，留出战场视野" if expanded else "展开本关目标与任务定位按钮")
+	_layout_details()
 	_panel.reset_size()
+
+func _layout_details() -> void:
+	var width := 370.0 if Localize.locale == "en" else 312.0
+	_panel.custom_minimum_size.x = width if _expanded else 148.0
+	if _expanded:
+		var available: float = battle.get_viewport().get_visible_rect().size.y - RTSCamera.PANEL_H - _panel.position.y - 70.0
+		_detail_scroll.custom_minimum_size = Vector2(width - 24.0, clampf(available, 160.0, 440.0))
+
+func _on_language_changed(_locale: String) -> void:
+	if not is_instance_valid(_panel): return
+	_set_expanded(_expanded)
+	_title.text = Localize.text(stage_title)
+	_objective.text = Localize.text(objective)
+	_refresh_campaign_text()
+	# The status binding refreshes before this signal; mirror feedback for diagnostics.
+	if _feedback_active:
+		_feedback_text = _status.text
+	for action in actions.values():
+		if is_instance_valid(action.button):
+			var template := "无法办理 · %s" if action.has("blocked_reason") else "查看 · %s"
+			action.button.text = Localize.format_text(template, action.label)
+			action.button.tooltip_text = Localize.text(String(action.blocked_reason)) if action.has("blocked_reason") else Localize.format_text("定位现场；移动、攻击和交互均由玩家下令。建议人物：%s", _actor_labels(action.actors))
+		if is_instance_valid(action.marker): action.marker.queue_redraw()
 
 func configure_campaign(core_text: String, goals: Array, contract_version := 1) -> void:
 	# A battle owns one contract. Repeated start signals must not erase goals already
@@ -168,7 +205,7 @@ func complete_story_goal(goal_id: String, note := "") -> bool:
 		return false
 	goal.state = STORY_DONE
 	goal.note = note
-	if note != "": report.append("演义完成 · %s：%s" % [goal.label, note])
+	if note != "": report.append(Localize.format_text("演义完成 · %s：%s", [goal.label, note]))
 	_refresh_campaign_text()
 	return true
 
@@ -180,10 +217,10 @@ func miss_story_goal(goal_id: String, reason: String) -> bool:
 		return false
 	goal.state = STORY_MISSED
 	goal.reason = reason
-	report.append("演义未成 · %s%s" % [goal.label, "：" + reason if reason != "" else ""])
+	report.append(Localize.format_text("演义未成 · %s%s", [goal.label, "：" + reason if reason != "" else ""]))
 	if not _story_miss_notified:
 		_story_miss_notified = true
-		battle.msg("演义条件未达成：%s。本关仍可继续。" % (reason if reason != "" else String(goal.label)), 5.0)
+		battle.msg(Localize.format_text("演义条件未达成：%s。本关仍可继续。", (reason if reason != "" else String(goal.label))), 5.0)
 	_refresh_campaign_text()
 	return true
 
@@ -233,10 +270,10 @@ func result_snapshot(victory: bool) -> Dictionary:
 
 func result_report(result: Dictionary) -> String:
 	var total := int(result.get("story_total", 0))
-	var lines: Array[String] = ["基础通关：%s" % ("完成" if bool(result.get("core_cleared", false)) else "未完成")]
+	var lines: Array[String] = [Localize.format_text("基础通关：%s", ("完成" if bool(result.get("core_cleared", false)) else "未完成"))]
 	if total > 0:
-		lines.append("演义复现：%d/%d%s" % [int(result.get("story_done", 0)), total,
-			" · 获得演义印" if bool(result.get("story_complete", false)) else ""])
+		lines.append(Localize.format_text("演义复现：%d/%d%s", [int(result.get("story_done", 0)), total,
+			" · 获得演义印" if bool(result.get("story_complete", false)) else ""]))
 	return "\n".join(lines)
 
 func _evaluate_story_event(event_id: String) -> void:
@@ -247,7 +284,7 @@ func _evaluate_story_event(event_id: String) -> void:
 		if goal.forbidden_events.has(event_id):
 			# Forbidden event ids are stable implementation keys. They must never leak
 			# into player-facing toasts or the battle report.
-			miss_story_goal(goal_id, "本局已偏离“%s”的原著条件" % String(goal.label))
+			miss_story_goal(goal_id, Localize.format_text("本局已偏离“%s”的原著条件", String(goal.label)))
 	_refresh_campaign_text()
 
 func _evaluate_all_story_goals(finalize_required := false) -> void:
@@ -259,7 +296,7 @@ func _evaluate_all_story_goals(finalize_required := false) -> void:
 		var violated := false
 		for event_id in forbidden:
 			if events.has(event_id):
-				miss_story_goal(goal_id, "本局已偏离“%s”的原著条件" % String(goal.label))
+				miss_story_goal(goal_id, Localize.format_text("本局已偏离“%s”的原著条件", String(goal.label)))
 				violated = true
 				break
 		if violated or String(goal.state) != STORY_PENDING:
@@ -273,7 +310,7 @@ func _refresh_campaign_text() -> void:
 	if _core == null or _story == null:
 		return
 	_core.visible = core_goal != ""
-	_core.text = "核心目标 · " + core_goal if core_goal != "" else ""
+	_core.text = Localize.text("核心目标 · ") + Localize.text(core_goal) if core_goal != "" else ""
 	_story.visible = not story_goals.is_empty()
 	if story_goals.is_empty():
 		_story.text = ""
@@ -293,8 +330,8 @@ func _refresh_campaign_text() -> void:
 				if events.has(event_id): matched += 1
 			progress = " %d/%d" % [matched, required.size()]
 			if matched == required.size(): icon = "◐"
-		rows.append("%s %s%s" % [icon, String(goal.label), progress])
-	_story.text = "演义目标（可选） %d/%d\n%s" % [done, story_goals.size(), "\n".join(rows)]
+		rows.append("%s %s%s" % [icon, Localize.text(String(goal.label)), progress])
+	_story.text = Localize.format_text("演义目标（可选） %d/%d\n%s", [done, story_goals.size(), "\n".join(rows)])
 
 func begin(new_id: String, title: String, text: String) -> void:
 	if active_action_id!="": _stage_interruptions+=1
@@ -318,34 +355,38 @@ func begin(new_id: String, title: String, text: String) -> void:
 	for marker in _markers:
 		if is_instance_valid(marker): marker.queue_free()
 	_markers.clear()
-	_title.text = title
+	_title.text = Localize.text(title)
 	_feedback_text = ""
 	_feedback_left = 0.0
 	set_objective(text)
-	_status.text = "任务按钮只定位现场；请自行选人并右键目标标记。"
+	set_status("任务按钮只定位现场；请自行选人并右键目标标记。")
 
 ## Change the heading while ongoing economy, actions and their progress continue.
 func set_title(text: String) -> void:
 	stage_title = text
-	_title.text = text
+	_title.text = Localize.text(text)
 
 func set_objective(text: String) -> void:
 	objective = text
-	_objective.text = text
+	_objective.text = Localize.text(text)
 
 func set_status(text: String) -> void:
-	_status.text = text
+	# Keep source/template bindings, including messages formatted by the caller.
+	# Every replacement retires any older feedback independently of its wording.
+	Localize.bind_text(_status, text)
+	_feedback_active = false
 	_feedback_text = ""
 	_feedback_left = 0.0
 
 ## Brief explanations outlive periodic help, but never delay an order or progress.
 func set_feedback(text: String, seconds := 2.5) -> void:
 	set_status(text)
-	_feedback_text = text
+	_feedback_active = true
+	_feedback_text = _status.text
 	_feedback_left = maxf(0.0, seconds)
 
 func set_guidance(text: String) -> void:
-	if active_action_id != "" or (_feedback_left > 0.0 and _status.text == _feedback_text):
+	if active_action_id != "" or (_feedback_left > 0.0 and _feedback_active):
 		return
 	set_status(text)
 
@@ -354,19 +395,10 @@ var _scroll_content: VBoxContainer
 ## Optional long objective list: keep title/core and live action feedback fixed.
 ## The middle story/locator list scrolls within the space above command cards.
 func enable_scrolling() -> void:
-	if _scroll!=null: return
-	var box: VBoxContainer=_details
-	_scroll=ScrollContainer.new()
-	_scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
-	_scroll.follow_focus=true
-	_scroll_content=VBoxContainer.new()
-	_scroll_content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	for child in [_story,_objective,_buttons]:
-		box.remove_child(child)
-		_scroll_content.add_child(child)
-	_scroll.add_child(_scroll_content)
-	box.add_child(_scroll)
-	box.move_child(_scroll,2)
+	# All expanded objective panels now share one bounded scroll region.
+	_scroll = _detail_scroll
+	_scroll_content = _details
+
 
 func add_action(action_id: String, label: String, cell: Vector2i, actors: Array, duration := 1.0, reach := 96.0, click_reach := 48.0, show_button := true) -> void:
 	if actions.has(action_id):
@@ -374,10 +406,11 @@ func add_action(action_id: String, label: String, cell: Vector2i, actors: Array,
 	var button = null
 	if show_button:
 		button = Button.new()
-		button.text = "查看 · %s" % label
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		button.text = Localize.format_text("查看 · %s", label)
 		button.custom_minimum_size.y = 32
 		button.add_theme_font_size_override("font_size", 15)
-		button.tooltip_text = "定位现场；移动、攻击和交互均由玩家下令。建议人物：%s" % _actor_labels(actors)
+		button.tooltip_text = Localize.format_text("定位现场；移动、攻击和交互均由玩家下令。建议人物：%s", _actor_labels(actors))
 		button.pressed.connect(focus_action.bind(action_id))
 		_buttons.add_child(button)
 	var marker := MissionMarker.new()
@@ -396,19 +429,20 @@ func add_action(action_id: String, label: String, cell: Vector2i, actors: Array,
 		"show_button": show_button, "done": false}
 	actions[action_id]["marker"] = marker
 	if not show_button:
-		_status.text = "没有自动寻路按钮；选中人物后右键场景标记即可行动。"
+		set_status("没有自动寻路按钮；选中人物后右键场景标记即可行动。")
 
 ## Pure location button: no task registration, selection, movement or timer.
 func add_map_locator(label: String, cell: Vector2i) -> Button:
 	var button := Button.new()
-	button.text="查看 · "+label
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	Localize.bind_format(button, "查看 · %s", label)
 	button.custom_minimum_size.y=32
 	button.add_theme_font_size_override("font_size",15)
 	button.tooltip_text="只定位地图；选人和移动仍由玩家指挥。"
 	button.pressed.connect(func():
 		if battle.phase!=battle.Phase.FIGHT: return
 		battle.center_camera_cell(cell)
-		_status.text="已定位："+label+"。此按钮只移动镜头，请自行选人下令。")
+		set_status(Localize.format_text("%s%s%s", ["已定位：", label, "。此按钮只移动镜头，请自行选人下令。"])))
 	_buttons.add_child(button)
 	return button
 
@@ -419,7 +453,7 @@ func update_action_actors(action_id: String, actor_keys: Array) -> void:
 	action["actors"] = actor_keys
 	var button = action.get("button")
 	if is_instance_valid(button):
-		button.tooltip_text = "定位现场；移动、攻击和交互均由玩家下令。建议人物：%s" % _actor_labels(actor_keys)
+		button.tooltip_text = Localize.format_text("定位现场；移动、攻击和交互均由玩家下令。建议人物：%s", _actor_labels(actor_keys))
 	_refresh_marker_captions()
 
 func focus_action(action_id: String) -> bool:
@@ -429,24 +463,25 @@ func focus_action(action_id: String) -> bool:
 	if action.done:
 		return false
 	battle.center_camera_cell(action.cell)
-	_status.text = String(action.get("blocked_reason", ""))
+	set_status(String(action.get("blocked_reason", "")))
 	if _status.text.is_empty():
-		_status.text = "已定位：%s。选中%s后右键旗标，停留%s秒。" % [action.label, _actor_labels(action.actors), str(action.duration)]
+		set_status(Localize.format_text("已定位：%s。选中%s后右键旗标，停留%s秒。", [action.label, _actor_labels(action.actors), str(action.duration)]))
 	return true
 
 ## Locator only: select and show the required actor without issuing any order.
 func add_actor_locator(action_id: String, actor_key: String) -> void:
 	var button := Button.new()
-	button.text = "选中 · %s" % _actor_labels([actor_key])
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	Localize.bind_render(button, func() -> String: return Localize.format_text("选中 · %s", _actor_labels([actor_key])))
 	button.tooltip_text = "选中并定位人物；随后右键任务旗标，才会前往接应。"
 	button.pressed.connect(func():
 		for u in battle.units:
 			if is_instance_valid(u) and u.key == actor_key and _valid_action_actor(u, actions[action_id]):
 				battle.select_single(u, false)
 				battle.center_camera_cell(battle.map.world_to_cell(u.position))
-				_status.text = "已选中%s；右键%d号旗标办理%s。" % [u.display_name, actions[action_id].marker.number, actions[action_id].label]
+				set_status(Localize.format_text("已选中%s；右键%d号旗标办理%s。", [u.display_name, actions[action_id].marker.number, actions[action_id].label]))
 				return
-		_status.text = "所需人物无法行动：%s。" % _actor_labels([actor_key]))
+		set_status(Localize.format_text("所需人物无法行动：%s。", _actor_labels([actor_key]))))
 	_buttons.add_child(button)
 	actions[action_id]["actor_button"] = button
 
@@ -457,7 +492,7 @@ func block_action(action_id: String, reason: String) -> void:
 	action["blocked_reason"] = reason
 	if active_action_id == action_id: on_player_order(_actor)
 	if is_instance_valid(action.button):
-		action.button.text = "无法办理 · %s" % action.label
+		action.button.text = Localize.format_text("无法办理 · %s", action.label)
 		action.button.tooltip_text = reason
 	if is_instance_valid(action.get("actor_button")): action.actor_button.disabled = true
 	action.marker.hide()
@@ -489,9 +524,9 @@ func prepare_manual_move(movers: Array, target: Vector2) -> Dictionary:
 			candidate = u
 			best = u.position.distance_squared_to(destination)
 	if candidate == null:
-		set_feedback("需要%s：请选中该人物，再右键%d号旗标。" % [_actor_labels(action.actors), action.marker.number])
+		set_feedback(Localize.format_text("需要%s：请选中该人物，再右键%d号旗标。", [_actor_labels(action.actors), action.marker.number]))
 		return {}
-	_status.text = "%s正在前往%d号旗标；到场停留%s秒办理。" % [candidate.display_name, action.marker.number, str(action.duration)]
+	set_status(Localize.format_text("%s正在前往%d号旗标；到场停留%s秒办理。", [candidate.display_name, action.marker.number, str(action.duration)]))
 	return {"actor":candidate, "target":destination}
 
 func _refresh_marker_captions() -> void:
@@ -521,7 +556,7 @@ func request_action(action_id: String) -> bool:
 			candidate = u
 			best = score
 	if candidate == null:
-		_status.text = "所需人物不在场，或仍被绑缚。"
+		set_status("所需人物不在场，或仍被绑缚。")
 		return false
 	_start_action(action_id, candidate, true)
 	return true
@@ -542,14 +577,14 @@ func _start_action(action_id: String, candidate, dispatch: bool) -> void:
 		_actor.clear_mission_order_intent()
 		_actor.order_move(destination)
 		_actor.manual_order_t = 60.0
-		_status.text = "%s：前往%s" % [_actor.display_name, action.label]
+		set_status(Localize.format_text("%s：前往%s", [_actor.display_name, action.label]))
 	else:
 		# Claim exactly one compatible action for this player command. Otherwise a
 		# newly-added colocated follow-up could consume the same old move order.
 		_actor.manual_order_t = 0.0
 		_actor.manual_order_active = false
 		_actor.clear_mission_order_intent()
-		_status.text = "%s：已手动到达，开始%s" % [_actor.display_name, action.label]
+		set_status(Localize.format_text("%s：已手动到达，开始%s", [_actor.display_name, action.label]))
 	_refresh_marker_captions()
 
 func _valid_action_actor(u, action: Dictionary) -> bool:
@@ -631,7 +666,7 @@ func _try_manual_action() -> bool:
 
 func _actor_labels(actor_keys: Array) -> String:
 	if actor_keys.is_empty():
-		return "任一可行动好汉"
+		return Localize.text("任一可行动好汉")
 	var names: Array[String] = []
 	for key_value in actor_keys:
 		var key := String(key_value)
@@ -640,9 +675,9 @@ func _actor_labels(actor_keys: Array) -> String:
 		var label := key
 		if battle._defs.has(key):
 			label = String(battle._defs[key].get("name", key))
-		names.append(label)
+		names.append(Localize.text(label))
 	if names.is_empty():
-		return "暂时无人可接手"
+		return Localize.text("暂时无人可接手")
 	return "、".join(names)
 
 func tick(delta: float) -> void:
@@ -652,12 +687,8 @@ func tick(delta: float) -> void:
 	if _feedback_left > 0.0:
 		_feedback_left = maxf(0.0, _feedback_left - delta)
 	_panel.position = battle.hud.campaign_objective_position()
-	if _scroll!=null:
-		var bottom: float=battle.hud._bottom_panel.get_global_rect().position.y
-		var fixed: float=_title.get_combined_minimum_size().y+_core.get_combined_minimum_size().y+_status.get_combined_minimum_size().y+40
-		fixed += _toggle.get_combined_minimum_size().y + _details.get_parent().get_theme_constant("separation")
-		var available: float=maxf(80,bottom-_panel.position.y-fixed-12)
-		_scroll.custom_minimum_size=Vector2(278,minf(available,_scroll_content.get_combined_minimum_size().y))
+	if _expanded:
+		_layout_details()
 	_panel.reset_size()
 	elapsed += delta
 	total_game_seconds += delta
@@ -694,11 +725,11 @@ func tick(delta: float) -> void:
 				_actor = null
 				_progress = 0.0
 				_retry = 0.0
-				set_feedback("%s离开办理范围；请重新下令到目标标记。" % interrupted_actor.display_name)
+				set_feedback(Localize.format_text("%s离开办理范围；请重新下令到目标标记。", interrupted_actor.display_name))
 		return
 	_actor.order_stop()
 	_progress += delta
-	_status.text = "%s：%s %d%%" % [_actor.display_name, action.label, mini(100, int(100.0 * _progress / action.duration))]
+	set_status(Localize.format_text("%s：%s %d%%", [_actor.display_name, action.label, mini(100, int(100.0 * _progress / action.duration))]))
 	if _progress < action.duration:
 		return
 	# Commit before callback: another hit/click or a phase switch cannot resolve it twice.
@@ -747,6 +778,8 @@ class MissionMarker extends Node2D:
 	var label := ""
 	var number := 1
 	var show_caption := true
+	func _ready() -> void:
+		Localize.language_changed.connect(func(_locale): queue_redraw())
 	func _draw() -> void:
 		draw_arc(Vector2.ZERO, 25, 0, TAU, 28, Color(0.98,0.79,0.34,0.86), 2.0)
 		draw_set_transform_matrix(GameMap.ISO_INV)
@@ -754,4 +787,4 @@ class MissionMarker extends Node2D:
 		draw_colored_polygon(PackedVector2Array([Vector2(0,-30),Vector2(16,-26),Vector2(0,-22)]),Color(0.98,0.79,0.34))
 		draw_string(ThemeDB.fallback_font,Vector2(1,-15),str(number),HORIZONTAL_ALIGNMENT_CENTER,18,12,Color(1.0,0.90,0.66))
 		if show_caption:
-			draw_string(ThemeDB.fallback_font,Vector2(-50,-40),label,HORIZONTAL_ALIGNMENT_CENTER,100,12,Color(1.0,0.90,0.66))
+			draw_string(ThemeDB.fallback_font,Vector2(-100,-40),Localize.text(label),HORIZONTAL_ALIGNMENT_CENTER,200,12,Color(1.0,0.90,0.66))

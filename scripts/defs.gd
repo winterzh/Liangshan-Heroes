@@ -1095,7 +1095,7 @@ static func armor_for(key: String, def: Dictionary) -> float:
 ## ——与 Battle._do_ability 的 sc 一致（伤害/回血随技能等级放大）。rank<=0 按 1 级预览。
 static func ability_desc(aid: String, rank: int) -> String:
 	var ad: Dictionary = ABILITIES.get(aid, {})
-	var desc := String(ad.get("desc", ""))
+	var desc := Localize.text(String(ad.get("desc", "")))
 	if desc.find("{v}") == -1:
 		return desc
 	var eff: Dictionary = ad.get("effect", {})
@@ -1125,124 +1125,124 @@ static func ability_levels(aid: String) -> String:
 	var kind := String(eff.get("kind", ""))
 	var extra := ""
 	if eff.has("dot_total"):
-		extra += "　续 %ss 共 %s" % [str(eff.get("dot_dur", 3.0)), _l3a(float(eff["dot_total"]))]
+		extra += Localize.format_text("　续 %ss 共 %s", [str(eff.get("dot_dur", 3.0)), _l3a(float(eff["dot_total"]))])
 	if eff.has("def_down"):
 		var dd = eff["def_down"]
-		extra += ("　削甲 %d/%d/%d" % [int(dd[0]), int(dd[1]), int(dd[2])]) if (dd is Array and (dd as Array).size() >= 3) else ("　削甲 %d" % int(dd))
+		extra += (Localize.format_text("　削甲 %d/%d/%d", [int(dd[0]), int(dd[1]), int(dd[2])])) if (dd is Array and (dd as Array).size() >= 3) else (Localize.format_text("　削甲 %d", int(dd)))
 	if eff.has("blind"):
-		extra += "　致盲 %ss(攻击必失)" % str(eff["blind"])
+		extra += Localize.format_text("　致盲 %ss(攻击必失)", str(eff["blind"]))
 	if float(eff.get("silence", 0.0)) > 0.0:
-		extra += "　噤声 %ss(禁敌施法)" % str(eff["silence"])
+		extra += Localize.format_text("　噤声 %ss(禁敌施法)", str(eff["silence"]))
 	if float(eff.get("amp", 0.0)) > 0.0:
-		extra += "　易伤 +%d%%/%ss" % [int(float(eff["amp"]) * 100.0), int(float(eff.get("amp_dur", 6.0)))]
+		extra += Localize.format_text("　易伤 +%d%%/%ss", [int(float(eff["amp"]) * 100.0), int(float(eff.get("amp_dur", 6.0)))])
 	if float(eff.get("root", 0.0)) > 0.0:
-		extra += "　缠绕 %ss(定身可反击)" % str(eff["root"])
+		extra += Localize.format_text("　缠绕 %ss(定身可反击)", str(eff["root"]))
 	if float(eff.get("disarm", 0.0)) > 0.0:
-		extra += "　缴械 %ss(不能普攻)" % str(eff["disarm"])
+		extra += Localize.format_text("　缴械 %ss(不能普攻)", str(eff["disarm"]))
 	if float(eff.get("taunt", 0.0)) > 0.0:
-		extra += "　嘲讽 %ss(强制攻击自己)" % str(eff["taunt"])
+		extra += Localize.format_text("　嘲讽 %ss(强制攻击自己)", str(eff["taunt"]))
 	if String(eff.get("dispel", "")) == "buffs":
-		extra += "　驱散(清敌增益)"
+		extra += Localize.text("　驱散(清敌增益)")
 	elif String(eff.get("dispel", "")) == "debuffs":
-		extra += "　净化(解友减益)"
+		extra += Localize.text("　净化(解友减益)")
 	if float(eff.get("hex", 0.0)) > 0.0:
-		extra += "　变形 %ss(沉默+缴械+减速)" % str(eff["hex"])
+		extra += Localize.format_text("　变形 %ss(沉默+缴械+减速)", str(eff["hex"]))
 	match kind:
 		"bolt":
-			var _bl := "直线弹(可躲)" if (eff.has("homing") and not bool(eff["homing"])) else "单体追踪弹"
+			var _bl := Localize.text("直线弹(可躲)") if (eff.has("homing") and not bool(eff["homing"])) else Localize.text("单体追踪弹")
 			return "%s %s%s" % [_bl, _l3a(float(eff.get("dmg", 0.0))), extra]
 		"channel":
 			var _ct := int(float(eff.get("dur", 3.0)) / maxf(0.1, float(eff.get("tick", 0.5))))
-			return "引导%ss·每%ss轰一轮 %s（约%d轮）%s" % [str(eff.get("dur", 3.0)), str(eff.get("tick", 0.5)), _l3a(float(eff.get("dmg", 0.0))), _ct, extra]
+			return Localize.format_text("引导%ss·每%ss轰一轮 %s（约%d轮）%s", [str(eff.get("dur", 3.0)), str(eff.get("tick", 0.5)), _l3a(float(eff.get("dmg", 0.0))), _ct, extra])
 		"invis":
 			var _ib := float(eff.get("strike_bonus", 0.0))
-			var _isb := ("　破隐首击+%s" % _l3a(_ib)) if _ib > 0.0 else ""
-			return "隐身%ss(不可被索敌/指向·出手即现形)%s%s" % [str(eff.get("dur", 8.0)), _isb, extra]
+			var _isb := (Localize.format_text("　破隐首击+%s", _l3a(_ib))) if _ib > 0.0 else ""
+			return Localize.format_text("隐身%ss(不可被索敌/指向·出手即现形)%s%s", [str(eff.get("dur", 8.0)), _isb, extra])
 		"transform":
 			var fm: Dictionary = eff.get("form", {})
 			var fps := PackedStringArray()
-			if fm.has("atk_mult"): fps.append("攻×%.2f" % float(fm["atk_mult"]))
-			if fm.has("hp_mult"): fps.append("血×%.2f" % float(fm["hp_mult"]))
-			if fm.has("atk_cd_mult"): fps.append("攻速×%.2f" % (1.0 / maxf(0.1, float(fm["atk_cd_mult"]))))
-			if fm.has("speed_mult"): fps.append("移速×%.2f" % float(fm["speed_mult"]))
-			return "变身%ss·%s（到期还原）%s" % [str(eff.get("dur", 15.0)), " ".join(fps), extra]
+			if fm.has("atk_mult"): fps.append(Localize.format_text("攻×%.2f", float(fm["atk_mult"])))
+			if fm.has("hp_mult"): fps.append(Localize.format_text("血×%.2f", float(fm["hp_mult"])))
+			if fm.has("atk_cd_mult"): fps.append(Localize.format_text("攻速×%.2f", (1.0 / maxf(0.1, float(fm["atk_cd_mult"])))))
+			if fm.has("speed_mult"): fps.append(Localize.format_text("移速×%.2f", float(fm["speed_mult"])))
+			return Localize.format_text("变身%ss·%s（到期还原）%s", [str(eff.get("dur", 15.0)), " ".join(fps), extra])
 		"hook":
-			return "钩中拖回·伤 %s　钩程 %d%s" % [_l3a(float(eff.get("dmg", 0.0))), int(float(eff.get("len", 300.0))), extra]
+			return Localize.format_text("钩中拖回·伤 %s　钩程 %d%s", [_l3a(float(eff.get("dmg", 0.0))), int(float(eff.get("len", 300.0))), extra])
 		"swap":
-			var sw := "与目标瞬间换位(敌我皆可点)"
+			var sw := Localize.text("与目标瞬间换位(敌我皆可点)")
 			if float(eff.get("dmg", 0.0)) > 0.0:
-				sw += "　换敌伤 %s" % _l3a(float(eff["dmg"]))
+				sw += Localize.format_text("　换敌伤 %s", _l3a(float(eff["dmg"])))
 			return sw + extra
 		"passive":
 			var ps := ""
-			if float(eff.get("atk_add", 0.0)) > 0.0: ps += "攻+%s　" % _l3p(float(eff["atk_add"]))
-			if float(eff.get("hp_add", 0.0)) > 0.0: ps += "血+%s　" % _l3p(float(eff["hp_add"]))
-			if float(eff.get("range_add", 0.0)) > 0.0: ps += "射程+%s　" % _l3p(float(eff["range_add"]))
-			if float(eff.get("regen", 0.0)) > 0.0: ps += "回血+%s/s　" % _l3p(float(eff["regen"]))
-			if float(eff.get("bonus_cav", 0.0)) > 0.0: ps += "克骑加成+%.1f/%.1f/%.1f　" % [float(eff["bonus_cav"]), float(eff["bonus_cav"]) * 2.0, float(eff["bonus_cav"]) * 3.0]
-			if float(eff.get("lifesteal", 0.0)) > 0.0: ps += "吸血%d%%(固定)　" % int(float(eff["lifesteal"]) * 100.0)
+			if float(eff.get("atk_add", 0.0)) > 0.0: ps += Localize.format_text("攻+%s　", _l3p(float(eff["atk_add"])))
+			if float(eff.get("hp_add", 0.0)) > 0.0: ps += Localize.format_text("血+%s　", _l3p(float(eff["hp_add"])))
+			if float(eff.get("range_add", 0.0)) > 0.0: ps += Localize.format_text("射程+%s　", _l3p(float(eff["range_add"])))
+			if float(eff.get("regen", 0.0)) > 0.0: ps += Localize.format_text("回血+%s/s　", _l3p(float(eff["regen"])))
+			if float(eff.get("bonus_cav", 0.0)) > 0.0: ps += Localize.format_text("克骑加成+%.1f/%.1f/%.1f　", [float(eff["bonus_cav"]), float(eff["bonus_cav"]) * 2.0, float(eff["bonus_cav"]) * 3.0])
+			if float(eff.get("lifesteal", 0.0)) > 0.0: ps += Localize.format_text("吸血%d%%(固定)　", int(float(eff["lifesteal"]) * 100.0))
 			var fr: Array = eff.get("cav_ls_frac_ranks", [])
 			if fr.size() == 3:
-				ps += "打骑%d%%几率吸血%d/%d/%d%%" % [int(float(eff.get("cav_ls_chance", 0.0)) * 100.0), int(float(fr[0]) * 100.0), int(float(fr[1]) * 100.0), int(float(fr[2]) * 100.0)]
+				ps += Localize.format_text("打骑%d%%几率吸血%d/%d/%d%%", [int(float(eff.get("cav_ls_chance", 0.0)) * 100.0), int(float(fr[0]) * 100.0), int(float(fr[1]) * 100.0), int(float(fr[2]) * 100.0)])
 			if bool(eff.get("lin_spear", false)):
 				var lb: Array = eff.get("bonus_ranks", [35, 55, 75])
 				var lh: Array = eff.get("heal_frac_ranks", [0.35, 0.45, 0.55])
-				ps += "同目标3层触发+%d/%d/%d伤·按实际伤害回%d/%d/%d%%·骑兵每击2层　" % [
-					int(lb[0]), int(lb[1]), int(lb[2]), int(float(lh[0]) * 100.0), int(float(lh[1]) * 100.0), int(float(lh[2]) * 100.0)]
+				ps += Localize.format_text("同目标3层触发+%d/%d/%d伤·按实际伤害回%d/%d/%d%%·骑兵每击2层　", [
+					int(lb[0]), int(lb[1]), int(lb[2]), int(float(lh[0]) * 100.0), int(float(lh[1]) * 100.0), int(float(lh[2]) * 100.0)])
 			var apr2: Array = eff.get("aura_power_ranks", [])
 			if apr2.size() == 3:
-				ps += "攻击光环×%.2f/%.2f/%.2f　" % [float(apr2[0]), float(apr2[1]), float(apr2[2])]
+				ps += Localize.format_text("攻击光环×%.2f/%.2f/%.2f　", [float(apr2[0]), float(apr2[1]), float(apr2[2])])
 			return ps.strip_edges()
 		"slow_aura":
 			var b := float(eff.get("slow", 0.1))
-			return "敌移速 −%d/−%d/−%d%%" % [int(b * 100.0), int(b * 200.0), int(b * 300.0)]
+			return Localize.format_text("敌移速 −%d/−%d/−%d%%", [int(b * 100.0), int(b * 200.0), int(b * 300.0)])
 		"rally":
-			return "回血 %s　攻×%s/%ss(固定)" % [_l3a(float(eff.get("heal", 0.0))), str(eff.get("atk_mult", 1.0)), str(eff.get("dur", 8.0))]
+			return Localize.format_text("回血 %s　攻×%s/%ss(固定)", [_l3a(float(eff.get("heal", 0.0))), str(eff.get("atk_mult", 1.0)), str(eff.get("dur", 8.0))])
 		"haste":
-			return "移速+%d%% / %ss(固定)" % [int(round((float(eff.get("speed_mult", 1.0)) - 1.0) * 100.0)), str(eff.get("dur", 7.0))]
+			return Localize.format_text("移速+%d%% / %ss(固定)", [int(round((float(eff.get("speed_mult", 1.0)) - 1.0) * 100.0)), str(eff.get("dur", 7.0))])
 		"debuff":
-			return "减速%d%%+降攻 / %ss(固定)" % [int(float(eff.get("slow", 0.0)) * 100.0), str(eff.get("dur", 0.0))]
+			return Localize.format_text("减速%d%%+降攻 / %ss(固定)", [int(float(eff.get("slow", 0.0)) * 100.0), str(eff.get("dur", 0.0))])
 		"line_nuke":
 			if bool(eff.get("lin_break", false)):
 				var ld: Array = eff.get("dmg_ranks", [45, 65, 85])
 				var lp: Array = eff.get("push_ranks", [60, 80, 100])
 				var la: Array = eff.get("def_down_ranks", [2, 4, 6])
-				return "伤%d/%d/%d·线长%d宽%d·普通兵推%d/%d/%d·骑兵/武将削甲%d/%d/%d" % [
+				return Localize.format_text("伤%d/%d/%d·线长%d宽%d·普通兵推%d/%d/%d·骑兵/武将削甲%d/%d/%d", [
 					int(ld[0]), int(ld[1]), int(ld[2]), int(eff.get("len", 300)), int(eff.get("width", 72)),
-					int(lp[0]), int(lp[1]), int(lp[2]), int(la[0]), int(la[1]), int(la[2])]
-			return "贯穿伤害 %s%s" % [_l3a(float(eff.get("dmg", 0.0))), extra]
+					int(lp[0]), int(lp[1]), int(lp[2]), int(la[0]), int(la[1]), int(la[2])])
+			return Localize.format_text("贯穿伤害 %s%s", [_l3a(float(eff.get("dmg", 0.0))), extra])
 		"chrono":
 			if eff.has("radius_ranks"):
 				var rr: Array = eff["radius_ranks"]
-				return "定身%ss · 范围 %d/%d/%d" % [str(eff.get("dur", 10.0)), int(rr[0]), int(rr[1]), int(rr[2])]
-			return "定身 %ss(固定)" % str(eff.get("dur", 10.0))
+				return Localize.format_text("定身%ss · 范围 %d/%d/%d", [str(eff.get("dur", 10.0)), int(rr[0]), int(rr[1]), int(rr[2])])
+			return Localize.format_text("定身 %ss(固定)", str(eff.get("dur", 10.0)))
 		"lin_guard":
 			var lr: Array = eff.get("reduction_ranks", [0.35, 0.45, 0.55])
 			var lcd: Array = eff.get("counter_dmg_ranks", [55, 80, 105])
 			var ls: Array = eff.get("counter_stun_ranks", [1.0, 1.3, 1.6])
-			return "架枪%ss·减伤%d/%d/%d%%·首次近身反刺%d/%d/%d伤·晕%s/%s/%ss" % [
+			return Localize.format_text("架枪%ss·减伤%d/%d/%d%%·首次近身反刺%d/%d/%d伤·晕%s/%s/%ss", [
 				str(eff.get("dur", 2.0)), int(float(lr[0]) * 100.0), int(float(lr[1]) * 100.0), int(float(lr[2]) * 100.0),
-				int(lcd[0]), int(lcd[1]), int(lcd[2]), str(ls[0]), str(ls[1]), str(ls[2])]
+				int(lcd[0]), int(lcd[1]), int(lcd[2]), str(ls[0]), str(ls[1]), str(ls[2])])
 		"lin_duel":
 			var ldu: Array = eff.get("dur_ranks", [5, 6, 7])
 			var ldr: Array = eff.get("reduction_ranks", [0.30, 0.40, 0.50])
 			var las: Array = eff.get("atkspeed_ranks", [1.40, 1.60, 1.80])
 			var lhp: Array = eff.get("heal_pct_ranks", [0.30, 0.40, 0.50])
-			return "只点敌将·%d范围·%d/%d/%ds·减伤%d/%d/%d%%·攻速+%d/%d/%d%%·阵亡回%d/%d/%d%%并刷新Q/W" % [
+			return Localize.format_text("只点敌将·%d范围·%d/%d/%ds·减伤%d/%d/%d%%·攻速+%d/%d/%d%%·阵亡回%d/%d/%d%%并刷新Q/W", [
 				int(eff.get("cast_range", 520)), int(ldu[0]), int(ldu[1]), int(ldu[2]),
 				int(float(ldr[0]) * 100.0), int(float(ldr[1]) * 100.0), int(float(ldr[2]) * 100.0),
 				int((float(las[0]) - 1.0) * 100.0), int((float(las[1]) - 1.0) * 100.0), int((float(las[2]) - 1.0) * 100.0),
-				int(float(lhp[0]) * 100.0), int(float(lhp[1]) * 100.0), int(float(lhp[2]) * 100.0)]
+				int(float(lhp[0]) * 100.0), int(float(lhp[1]) * 100.0), int(float(lhp[2]) * 100.0)])
 		"self_buff":
-			return "攻+%s　吸血%d%%/%ss(固定)" % [_l3a(float(eff.get("atk_add", 0.0))), int(float(eff.get("lifesteal", 0.0)) * 100.0), str(eff.get("dur", 5.0))]
+			return Localize.format_text("攻+%s　吸血%d%%/%ss(固定)", [_l3a(float(eff.get("atk_add", 0.0))), int(float(eff.get("lifesteal", 0.0)) * 100.0), str(eff.get("dur", 5.0))])
 		"orbit_axes":
-			var orbit_text := "每跳 %s ×%ss" % [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("dur", 3.0))]
+			var orbit_text := Localize.format_text("每跳 %s ×%ss", [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("dur", 3.0))])
 			if float(eff.get("self_reduction", 0.0)) > 0.0:
-				orbit_text += "·减伤%d%%/%ss" % [int(float(eff["self_reduction"]) * 100.0),
-					str(eff.get("self_reduction_dur", eff.get("dur", 3.0)))]
+				orbit_text += Localize.format_text("·减伤%d%%/%ss", [int(float(eff["self_reduction"]) * 100.0),
+					str(eff.get("self_reduction_dur", eff.get("dur", 3.0)))])
 			return orbit_text
 		"drag":
-			return "拖入水 %s" % _l3a(float(eff.get("dmg", 0.0)))
+			return Localize.format_text("拖入水 %s", _l3a(float(eff.get("dmg", 0.0))))
 		"fire_dot", "black_rain":
 			# 每秒伤害(dps 固定 / dps_ranks 随等级) · 持续(dur_ranks 随等级)
 			var dps_s := ""
@@ -1252,12 +1252,12 @@ static func ability_levels(aid: String) -> String:
 			elif eff.has("dps"):
 				dps_s = "%d" % int(float(eff["dps"]))
 			if dps_s != "":
-				var dur_s := "%ss(固定)" % str(eff.get("dur", 5.0))
+				var dur_s := Localize.format_text("%ss(固定)", str(eff.get("dur", 5.0)))
 				if eff.has("dur_ranks"):
 					var du: Array = eff["dur_ranks"]
 					dur_s = "%d/%d/%ds" % [int(du[0]), int(du[1]), int(du[2])]
-				return "每秒 %s · 持续 %s" % [dps_s, dur_s]
-			return "%ss累计 %s" % [str(eff.get("dur", 5.0)), _l3a(float(eff.get("dmg", 0.0)))]
+				return Localize.format_text("每秒 %s · 持续 %s", [dps_s, dur_s])
+			return Localize.format_text("%ss累计 %s", [str(eff.get("dur", 5.0)), _l3a(float(eff.get("dmg", 0.0)))])
 		"ice_wall":
 			var iw_dmg := _l3a(float(eff.get("dmg", 0.0)))
 			if eff.has("dmg_ranks"):
@@ -1267,47 +1267,47 @@ static func ability_levels(aid: String) -> String:
 			if eff.has("dur_ranks"):
 				var idu: Array = eff["dur_ranks"]
 				iw_dur = "%d/%d/%ds" % [int(idu[0]), int(idu[1]), int(idu[2])]
-			return "墙伤 %s　阻挡%s%s" % [iw_dmg, iw_dur, extra]
+			return Localize.format_text("墙伤 %s　阻挡%s%s", [iw_dmg, iw_dur, extra])
 		"beast_stampede":
 			var bd: Array = eff.get("dmg_ranks", [0, 0, 0])
 			var bp: Array = eff.get("push_ranks", [0, 0, 0])
-			return "伤害%d/%d/%d·推退%d/%d/%d·减速%d%%" % [int(bd[0]), int(bd[1]), int(bd[2]),
-				int(bp[0]), int(bp[1]), int(bp[2]), int(round((1.0 - float(eff.get("slow", 1.0))) * 100.0))]
+			return Localize.format_text("伤害%d/%d/%d·推退%d/%d/%d·减速%d%%", [int(bd[0]), int(bd[1]), int(bd[2]),
+				int(bp[0]), int(bp[1]), int(bp[2]), int(round((1.0 - float(eff.get("slow", 1.0))) * 100.0))])
 		"weapon_toggle":
-			return "切近战/远程·近战吸血/击 20-40/30-50/40-60%"
+			return Localize.text("切近战/远程·近战吸血/击 20-40/30-50/40-60%")
 		"drunk_buff":
 			var lo: Array = eff.get("lo", [0.9, 0.7, 0.7])
 			var hi: Array = eff.get("hi", [1.3, 1.5, 1.8])
-			return "移/攻速随机 ×%.1f~%.1f / ×%.1f~%.1f / ×%.1f~%.1f　%ss" % [float(lo[0]), float(hi[0]), float(lo[1]), float(hi[1]), float(lo[2]), float(hi[2]), str(eff.get("dur", 30.0))]
+			return Localize.format_text("移/攻速随机 ×%.1f~%.1f / ×%.1f~%.1f / ×%.1f~%.1f　%ss", [float(lo[0]), float(hi[0]), float(lo[1]), float(hi[1]), float(lo[2]), float(hi[2]), str(eff.get("dur", 30.0))])
 		"drunk_god":
 			var bo: Array = eff.get("bonus", [10.0, 20.0, 30.0])
 			var gd: Array = eff.get("dur_ranks", [eff.get("dur", 20.0), eff.get("dur", 20.0), eff.get("dur", 20.0)])
 			var gc: Array = eff.get("cleave_ranks", [0.0, 0.0, 0.0])
-			return "被动分裂%d/%d/%d%%·主动物免%s/%s/%ss·每击+%d/%d/%d攻(最多%d层)·结束挡伤50%%转血" % [
+			return Localize.format_text("被动分裂%d/%d/%d%%·主动物免%s/%s/%ss·每击+%d/%d/%d攻(最多%d层)·结束挡伤50%%转血", [
 				int(float(gc[0]) * 100.0), int(float(gc[1]) * 100.0), int(float(gc[2]) * 100.0),
-				str(gd[0]), str(gd[1]), str(gd[2]), int(bo[0]), int(bo[1]), int(bo[2]), int(eff.get("max_stacks", 5))]
+				str(gd[0]), str(gd[1]), str(gd[2]), int(bo[0]), int(bo[1]), int(bo[2]), int(eff.get("max_stacks", 5))])
 		"summon":
 			if bool(eff.get("copy_caster", false)):
-				var mtxt := "血/攻同本体"
+				var mtxt := Localize.text("血/攻同本体")
 				if eff.has("copy_hp_mult") or eff.has("copy_atk_mult"):
 					var hm: Array = eff.get("copy_hp_mult", [1.0, 1.0, 1.0])
 					var am: Array = eff.get("copy_atk_mult", [1.0, 1.0, 1.0])
-					mtxt = "血=本体%d/%d/%d%%·攻=本体%d/%d/%d%%" % [int(float(hm[0]) * 100.0), int(float(hm[1]) * 100.0), int(float(hm[2]) * 100.0), int(float(am[0]) * 100.0), int(float(am[1]) * 100.0), int(float(am[2]) * 100.0)]
+					mtxt = Localize.format_text("血=本体%d/%d/%d%%·攻=本体%d/%d/%d%%", [int(float(hm[0]) * 100.0), int(float(hm[1]) * 100.0), int(float(hm[2]) * 100.0), int(float(am[0]) * 100.0), int(float(am[1]) * 100.0), int(float(am[2]) * 100.0)])
 				elif eff.has("copy_mult"):
 					var cm: Array = eff["copy_mult"]
-					mtxt = "血/攻=本体%d/%d/%d%%" % [int(float(cm[0]) * 100.0), int(float(cm[1]) * 100.0), int(float(cm[2]) * 100.0)]
+					mtxt = Localize.format_text("血/攻=本体%d/%d/%d%%", [int(float(cm[0]) * 100.0), int(float(cm[1]) * 100.0), int(float(cm[2]) * 100.0)])
 				var dtxt := "%ds" % int(float(eff.get("dur", 10.0)))
 				if eff.has("dur_ranks"):
 					var dr: Array = eff["dur_ranks"]
 					dtxt = "%d/%d/%ds" % [int(dr[0]), int(dr[1]), int(dr[2])]
-				return "召%d只·%s·持续%s" % [int(eff.get("count", 1)), mtxt, dtxt]
+				return Localize.format_text("召%d只·%s·持续%s", [int(eff.get("count", 1)), mtxt, dtxt])
 			var hp: Array = eff.get("hp", [])
 			var atk: Array = eff.get("atk", [])
 			var hs := ""
 			for x in hp: hs += ("/" if hs != "" else "") + str(int(x))
 			var ats := ""
 			for x in atk: ats += ("/" if ats != "" else "") + str(int(x))
-			return "召%d只·血%s·攻%s" % [int(eff.get("count", 1)), hs, ats]
+			return Localize.format_text("召%d只·血%s·攻%s", [int(eff.get("count", 1)), hs, ats])
 		"ward":
 			var _mode := String(eff.get("ward_mode", "attack"))
 			var _durw := str(eff.get("ward_dur", 8.0))
@@ -1319,28 +1319,28 @@ static func ability_levels(aid: String) -> String:
 				var _trr: Array = eff.get("troop_reduction_ranks", [0.5, 0.65, 0.8])
 				var _bhr: Array = eff.get("heal_ranks", [20.0, 25.0, 30.0])
 				var _bar: Array = eff.get("atkspeed_ranks", [1.5, 1.7, 1.9])
-				return "2点充能/10秒回1点·英雄减伤%d/%d/%d%%·兵/召减伤%d/%d/%d%%·忠回%d/%d/%d/s·义攻速+%d/%d/%d%%·存%ss" % [
+				return Localize.format_text("2点充能/10秒回1点·英雄减伤%d/%d/%d%%·兵/召减伤%d/%d/%d%%·忠回%d/%d/%d/s·义攻速+%d/%d/%d%%·存%ss", [
 					int(float(_hrr[0]) * 100.0), int(float(_hrr[1]) * 100.0), int(float(_hrr[2]) * 100.0),
 					int(float(_trr[0]) * 100.0), int(float(_trr[1]) * 100.0), int(float(_trr[2]) * 100.0),
 					int(_bhr[0]), int(_bhr[1]), int(_bhr[2]),
-					roundi((float(_bar[0]) - 1.0) * 100.0), roundi((float(_bar[1]) - 1.0) * 100.0), roundi((float(_bar[2]) - 1.0) * 100.0), _durw]
+					roundi((float(_bar[0]) - 1.0) * 100.0), roundi((float(_bar[1]) - 1.0) * 100.0), roundi((float(_bar[2]) - 1.0) * 100.0), _durw])
 			if _mode == "heal":
 				var _hs := str(int(float(eff.get("heal", 0.0))))
 				if eff.has("heal_ranks"):
 					var _hr: Array = eff["heal_ranks"]
 					_hs = "%d/%d/%d" % [int(_hr[0]), int(_hr[1]), int(_hr[2])]
-				return "立桩·每%ss回血%s · 范围%d · 存%ss" % [str(eff.get("pulse", 1.0)), _hs, int(eff.get("ward_radius", 200)), _durw]
+				return Localize.format_text("立桩·每%ss回血%s · 范围%d · 存%ss", [str(eff.get("pulse", 1.0)), _hs, int(eff.get("ward_radius", 200)), _durw])
 			var _ds := str(int(float(eff.get("dmg", 0.0))))
 			if eff.has("dmg_ranks"):
 				var _dr: Array = eff["dmg_ranks"]
 				_ds = "%d/%d/%d" % [int(_dr[0]), int(_dr[1]), int(_dr[2])]
-			return "立桩·每%ss射敌%s%s · 范围%d · 存%ss" % [str(eff.get("pulse", 1.0)), _ds, ("·减速" if float(eff.get("slow", 0.0)) > 0.0 else ""), int(eff.get("ward_radius", 200)), _durw]
+			return Localize.format_text("立桩·每%ss射敌%s%s · 范围%d · 存%ss", [str(eff.get("pulse", 1.0)), _ds, (Localize.text("·减速") if float(eff.get("slow", 0.0)) > 0.0 else ""), int(eff.get("ward_radius", 200)), _durw])
 		"fissure":
-			return "贯穿 %s　震晕%ss · 裂墙阻路%ss%s" % [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("stun", 0.0)), str(eff.get("wall_dur", 4.0)), extra]
+			return Localize.format_text("贯穿 %s　震晕%ss · 裂墙阻路%ss%s", [_l3a(float(eff.get("dmg", 0.0))), str(eff.get("stun", 0.0)), str(eff.get("wall_dur", 4.0)), extra])
 		"echo":
-			return "每目标 %s　每多一敌+%s · 震晕%ss" % [_l3a(float(eff.get("dmg", 0.0))), _l3a(float(eff.get("echo", 0.0))), str(eff.get("stun", 0.0))]
+			return Localize.format_text("每目标 %s　每多一敌+%s · 震晕%ss", [_l3a(float(eff.get("dmg", 0.0))), _l3a(float(eff.get("echo", 0.0))), str(eff.get("stun", 0.0))])
 		"heal_wave":
-			return "弹跳%d次·伤敌%s／愈友%s" % [int(eff.get("jumps", 5)), _l3a(float(eff.get("dmg", 0.0))), _l3a(float(eff.get("heal", 0.0)))]
+			return Localize.format_text("弹跳%d次·伤敌%s／愈友%s", [int(eff.get("jumps", 5)), _l3a(float(eff.get("dmg", 0.0))), _l3a(float(eff.get("heal", 0.0)))])
 		"fire_line", "fire_trail":
 			var _dps := ""
 			if eff.has("dps_ranks"):
@@ -1352,8 +1352,8 @@ static func ability_levels(aid: String) -> String:
 			if eff.has("dur_ranks"):
 				var _du: Array = eff["dur_ranks"]
 				_durf = "%d/%d/%d" % [int(_du[0]), int(_du[1]), int(_du[2])]
-			return "地火每秒 %s · 持续 %ss" % [_dps, _durf]
+			return Localize.format_text("地火每秒 %s · 持续 %ss", [_dps, _durf])
 		_:
 			if eff.has("dmg"):
-				return "伤害 %s%s" % [_l3a(float(eff["dmg"])), extra]
+				return Localize.format_text("伤害 %s%s", [_l3a(float(eff["dmg"])), extra])
 			return extra.strip_edges()

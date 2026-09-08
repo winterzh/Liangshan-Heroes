@@ -295,7 +295,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			stage = "gaol_entry"
 			b.mission.begin("daming_gaol_entry","核验已过·进牢就位","柴进、乐和分别走过牢门，在囚室外就位；现在不能开枷。时迁若尚未取火种，先补齐。")
 			b.mission.add_action("daming_chai_inside","柴进：入牢就位",PRISON_INSIDE,["chai_jin"],0.6,24.0)
-			b.mission.add_action("daming_yue_inside","乐和：入牢就位",PRISON_INSIDE+Vector2i(2,0),["yue_he"],0.6,24.0)
+			b.mission.add_action("daming_yue_inside",Localize.text("乐和：入牢就位"),PRISON_INSIDE+Vector2i(2,0),["yue_he"],0.6,24.0)
 			if not b.mission.has_event("daming_fire_ready"): b.mission.add_action("daming_fire_cache","时迁：取火种",CACHE_CELL,["shi_qian"],1.5,24.0)
 			if alarmed: _add_cover_actions(b)
 		"daming_chai_inside":
@@ -317,7 +317,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				b.mission.mark("daming_inner_party_missing","举火受阻：牢中内应已经离开岗位")
 				_retry_action(b,action_id,"柴进、乐和必须在举火时仍留牢院；先让离岗者重新入牢就位，再举火。")
 				b.mission.add_action("daming_chai_inside","柴进：返回牢内就位",PRISON_INSIDE,["chai_jin"],0.6,24.0)
-				b.mission.add_action("daming_yue_inside","乐和：返回牢内就位",PRISON_INSIDE+Vector2i(2,0),["yue_he"],0.6,24.0)
+				b.mission.add_action("daming_yue_inside",Localize.text("乐和：返回牢内就位"),PRISON_INSIDE+Vector2i(2,0),["yue_he"],0.6,24.0)
 				return
 			if alarmed or not scout_cover:
 				_retry_action(b,action_id,"守军仍在跟踪时迁，不能当面举火。先到灯市或衣帽点甩开盘查，再回来。")
@@ -468,14 +468,14 @@ func _restore_or_add_pressure_action(b,line: String) -> void:
 			b.mission._refresh_marker_captions()
 		return
 	b.mission.add_action(action_id,
-		"接应军：%s（%d人）"%[("稳住主街" if line == "street" else "控住牢前"),_pressure_required(line)],
+		Localize.format_text("接应军：%s（%d人）", [("稳住主街" if line == "street" else "控住牢前"),_pressure_required(line)]),
 		_pressure_cell(line),ESCORT_KEYS,1.2,56.0)
 
 func _refresh_pressure_action_label(b,line: String) -> void:
 	var action_id := "daming_secure_"+line
 	if not b.mission.actions.has(action_id): return
 	var action: Dictionary = b.mission.actions[action_id]
-	var label_text := "接应军：%s（%d人）"%[("稳住主街" if line == "street" else "控住牢前"),_pressure_required(line)]
+	var label_text := Localize.format_text("接应军：%s（%d人）", [("稳住主街" if line == "street" else "控住牢前"),_pressure_required(line)])
 	action.label = label_text
 	var number := 1
 	for id in b.mission.actions:
@@ -486,14 +486,14 @@ func _refresh_pressure_action_label(b,line: String) -> void:
 func _stabilize_pressure_line(b,line: String,action_id: String) -> void:
 	var cell := _pressure_cell(line)
 	if _pressure_contested(b,line):
-		b.mission.mark("daming_%s_line_contested"%line,"%s仍有未受控制的官军"%("主街" if line == "street" else "牢前"))
+		b.mission.mark("daming_%s_line_contested"%line,Localize.format_text("%s仍有未受控制的官军", ("主街" if line == "street" else "牢前")))
 		_retry_action(b,action_id,"先击败、晕眩或缴械这条线上的官军，再调接应者到位。")
 		return
 	var required := _pressure_required(line)
 	var present := _response_count_at(b,cell)
 	if present < required:
-		b.mission.mark("daming_%s_manpower_short"%line,"%s人手不足：需要%d名，当前%d名"%[("主街" if line == "street" else "牢前"),required,present])
-		_retry_action(b,action_id,"这条线需要%d名可战接应者同时在场；从另一线调人后可重试。"%required)
+		b.mission.mark("daming_%s_manpower_short"%line,Localize.format_text("%s人手不足：需要%d名，当前%d名", [("主街" if line == "street" else "牢前"),required,present]))
+		_retry_action(b,action_id,Localize.format_text("这条线需要%d名可战接应者同时在场；从另一线调人后可重试。", required))
 		return
 	var was_recovery := street_recoveries > 0 if line == "street" else jail_recoveries > 0
 	if line == "street":
@@ -513,7 +513,7 @@ func _stabilize_pressure_line(b,line: String,action_id: String) -> void:
 		b.mission.mark("daming_%s_first"%line,
 			"先稳主街，牢前守军趁隙收紧；控牢前须三名接应者" if line == "street" else "先控牢前，主街守军趁隙收紧；稳主街须三名接应者")
 	b.mission.mark("daming_%s_line_recovered"%line if was_recovery else "daming_%s_line_secured"%line,
-		"%s已重新稳住"%("主街" if line == "street" else "牢前") if was_recovery else "%s已有接应军实际驻住"%("主街" if line == "street" else "牢前"))
+		Localize.format_text("%s已重新稳住", ("主街" if line == "street" else "牢前")) if was_recovery else Localize.format_text("%s已有接应军实际驻住", ("主街" if line == "street" else "牢前")))
 	if street_secured and jail_secured:
 		b.mission.mark("daming_both_lines_secured","主街与牢前两条接应线均已稳住；仍须防追兵重新冲开主街")
 
@@ -572,10 +572,10 @@ func _start_open_assault(b,reason: String) -> void:
 	var fire_already_lit: bool = b.mission.has_event("daming_fire_lit")
 	open_assault = true
 	if fire_already_lit:
-		b.mission.mark("daming_late_breach",reason+"；火号仍有效，余部改以强攻补上中断的牢内接应")
+		b.mission.mark("daming_late_breach",reason+Localize.text("；火号仍有效，余部改以强攻补上中断的牢内接应"))
 		_miss_story(b,"daming_response","牢中接应中断，改由到场好汉强开牢门")
 	else:
-		b.mission.mark("daming_open_assault",reason+"；潜入任务改为公开攻门")
+		b.mission.mark("daming_open_assault",reason+Localize.text("；潜入任务改为公开攻门"))
 		b.mission.mark("daming_signal_missed","公开攻城没有以翠云楼火号发动接应")
 		_miss_story(b,"daming_infiltration","改走公开攻城，没有完成元宵潜入分工")
 		_miss_story(b,"daming_signal","没有以牢中内应就位后的翠云楼火号起事")
@@ -620,7 +620,7 @@ func _release_prisoners_free(b,actor) -> void:
 	if b.map.sample_scenery != null: b.map.sample_scenery.set_story_object_state("prison_gate","open")
 	_release_prisoner(lu)
 	_release_prisoner(shi)
-	b.mission.mark("daming_prison_breached","%s强开牢门与枷锁，救出卢俊义、石秀"%actor.display_name)
+	b.mission.mark("daming_prison_breached",Localize.format_text("%s强开牢门与枷锁，救出卢俊义、石秀", actor.display_name))
 	b.mission.mark("daming_prisoners_freed","卢俊义、石秀已被救出")
 	_miss_story(b,"daming_response","没有由柴进、乐和按牢中接应开枷")
 	stage = "extract"
@@ -661,7 +661,7 @@ func _auto_extract_free(b) -> void:
 		if not is_instance_valid(actor) or actor.hp <= 0.0 or actor.story_outcome != "": continue
 		if b.map.world_to_cell(actor.position).y >= 40:
 			actor.resolve_story("retreated")
-			b.mission.mark(record[1],"%s活着撤出大名府"%record[2])
+			b.mission.mark(record[1],Localize.format_text("%s活着撤出大名府", record[2]))
 func _add_cover_actions(b) -> void:
 	if not b.mission.has_event("daming_crowd_cover_used"): b.mission.add_action("daming_crowd_cover","时迁：混入灯市人群",CROWD_CELL,["shi_qian"],1.0,48.0)
 	b.mission.add_action("daming_recover_cover","时迁：退回衣帽点掩护",OFFICER_CELL,["shi_qian"],1.2,48.0)
@@ -775,7 +775,7 @@ func process(b, delta: float) -> void:
 			if not b._gameplay_rng_issue.is_empty():
 				return
 			reinforcements_sent = true
-			b.mission.mark("daming_pursuit","退路赶来%s名追兵！护住卢俊义、石秀，向南门撤离。"%count)
+			b.mission.mark("daming_pursuit",Localize.format_text("退路赶来%s名追兵！护住卢俊义、石秀，向南门撤离。", count))
 	if b.mission.has_event("daming_lu_safe") and b.mission.has_event("daming_shi_safe"):
 		b.mission.mark("daming_victory","两名获救者均已活着出城")
 		if b.mission.has_event("daming_gate_breached"):
@@ -790,14 +790,14 @@ func process(b, delta: float) -> void:
 
 func on_unit_died(b,u) -> void:
 	if u == lu or u == shi:
-		b.lose("%s阵亡，两名囚犯已不可能一同生还出城。"%u.display_name)
+		b.lose(Localize.format_text("%s阵亡，两名囚犯已不可能一同生还出城。", u.display_name))
 	elif u == scout and not b.mission.has_event("daming_fire_lit"):
 		b.mission.mark("daming_signal_missed","时迁未能完成翠云楼火号")
 		_miss_story(b,"daming_signal","时迁未能完成翠云楼火号")
 		_start_open_assault(b,"时迁失去战力，接应军改走公开攻城")
 	elif not rescued and (u == chai or u == yue):
 		if not b.mission.has_event("daming_fire_lit"):
-			_miss_story(b,"daming_infiltration","%s未能完成乔装入牢"%u.display_name)
+			_miss_story(b,"daming_infiltration",Localize.format_text("%s未能完成乔装入牢", u.display_name))
 		_miss_story(b,"daming_response","牢中接应不全，改由外军强开牢门")
 		_start_open_assault(b,"牢中内应不全，接应军改走公开攻城")
 	elif u == strategist:
@@ -820,7 +820,7 @@ func top_status(b) -> String:
 	var names := {"approach":"城外换装","city_cross":"三人入城","infiltrate":"灯市潜行","gaol_entry":"乔装入牢","signal":"待举火","gate":"南门接应","rescue":"劫牢解枷","extract":"护送出城"}
 	var street_text := "稳" if street_secured and not _pressure_contested(b,"street") else ("争" if street_secured else "待")
 	var jail_text := "稳" if jail_secured and not _pressure_contested(b,"jail") else ("争" if jail_secured else "待")
-	return "智取大名府 | %s | 警觉%d%% | 主街%s·牢前%s | 二囚须生还"%[names.get(stage,stage),int(alarm*50.0),street_text,jail_text]
+	return Localize.format_text("智取大名府 | %s | 警觉%d%% | 主街%s·牢前%s | 二囚须生还", [names.get(stage,stage),int(alarm*50.0),street_text,jail_text])
 
 func _smoke_drive(b,delta: float) -> void:
 	smoke_t -= delta

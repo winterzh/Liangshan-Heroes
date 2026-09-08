@@ -201,7 +201,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			return
 		actor.set_meta("merchant_disguise", true)
 		cover_restored = true
-		b.mission.mark("cover_restored_" + actor.key, actor.display_name + "退回枣车，收敛举动，重新作商客歇脚")
+		b.mission.mark("cover_restored_" + actor.key, Localize.text(actor.display_name) + Localize.text("退回枣车，收敛举动，重新作商客歇脚"))
 		b.mission.set_objective("已回到枣车旁。继续作商客歇脚，等疑心平复再接着酒计；切勿向押送人动武。")
 		return
 	if action_id.begins_with("force_take_"):
@@ -362,7 +362,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				if not _cargo_stage_action_valid(b, action_id, actor, i):
 					return
 				cargo_ready[i] = true
-				b.mission.mark("cargo_ready_%d" % i, "%s已在第%d担旁站定，走%s出冈" % [actor.display_name, i + 1, CARGO_ROUTE_NAMES[i]])
+				b.mission.mark("cargo_ready_%d" % i, Localize.format_text("%s已在第%d担旁站定，走%s出冈", [Localize.text(actor.display_name), i + 1, CARGO_ROUTE_NAMES[i]]))
 				if cargo_plan == "grouped":
 					if cargo_ready.size() == 3:
 						b.mission.mark("cargo_group_ready", "三名搬运人各守一担，北沿、中道、南沿都已安排妥当")
@@ -379,8 +379,8 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				_pick_up_bundle(b, bundles[i])
 				actor.set_meta("carrying_tribute", i)
 				actor.apply_slow(0.78, 999.0)
-				b.mission.mark(action_id, "%s挑起第%d担，走%s送往西冈口" % [actor.display_name, i + 1, CARGO_ROUTE_NAMES[i]])
-				b.mission.add_action("deliver_%d" % i, "%s·走%s送出第%d担" % [actor.display_name, CARGO_ROUTE_NAMES[i], i + 1], GATE_W + Vector2i(0, i - 1), [actor.key], 1.0)
+				b.mission.mark(action_id, Localize.format_text("%s挑起第%d担，走%s送往西冈口", [Localize.text(actor.display_name), i + 1, CARGO_ROUTE_NAMES[i]]))
+				b.mission.add_action("deliver_%d" % i, Localize.format_text("%s·走%s送出第%d担", [Localize.text(actor.display_name), CARGO_ROUTE_NAMES[i], i + 1]), GATE_W + Vector2i(0, i - 1), [actor.key], 1.0)
 				_refresh_cargo_objective(b)
 			elif action_id.begins_with("deliver_"):
 				var i := int(action_id.trim_prefix("deliver_"))
@@ -391,7 +391,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				bundles[i].position = b.map.cell_to_world(GATE_W + Vector2i(0, i - 1))
 				_put_down_bundle(b, bundles[i])
 				delivered += 1
-				b.mission.mark(action_id, "第%d担已由%s送出黄泥冈" % [i + 1, CARGO_ROUTE_NAMES[i]])
+				b.mission.mark(action_id, Localize.format_text("第%d担已由%s送出黄泥冈", [i + 1, CARGO_ROUTE_NAMES[i]]))
 				if delivered == 3:
 					b.mission.add_action("withdraw", "晁盖·招呼众人出冈", GATE_W, ["chao_gai"], 1.0)
 				elif cargo_plan == "serial":
@@ -529,7 +529,7 @@ func _add_force_take(b, index: int) -> void:
 	# CampaignMission treats an empty actor list as "any Liang unit". Use a key
 	# that no real unit owns while every survivor is already carrying another load.
 	if available.is_empty(): available.append(NO_FORCE_CARRIER)
-	b.mission.add_action(action_id, "任一好汉·接手第%d担" % (index + 1), _bundle_claim_cell(b, index), available, 1.0, 48.0)
+	b.mission.add_action(action_id, Localize.format_text("任一好汉·接手第%d担", (index + 1)), _bundle_claim_cell(b, index), available, 1.0, 48.0)
 
 
 func _available_force_carriers() -> Array:
@@ -561,14 +561,14 @@ func _add_force_deliver(b, index: int, actor) -> void:
 	if st != FORCE or not is_instance_valid(actor) or actor.hp <= 0.0: return
 	var attempt: int = int(force_attempts.get(index, 0))
 	var action_id := "force_deliver_%d_%d" % [index, attempt]
-	b.mission.add_action(action_id, "%s·送出第%d担" % [actor.display_name, index + 1], GATE_W + Vector2i(0, index - 1), [actor.key], 1.0)
+	b.mission.add_action(action_id, Localize.format_text("%s·送出第%d担", [Localize.text(actor.display_name), index + 1]), GATE_W + Vector2i(0, index - 1), [actor.key], 1.0)
 
 func _force_take_cargo(b, action_id: String, actor, index: int) -> void:
 	if st != FORCE or index < 0 or index >= bundles.size() or _cargo_was_delivered(b, index) or cargo.has(index): return
 	if not is_instance_valid(actor) or actor.hp <= 0.0 or actor.story_outcome != "": return
 	if actor.has_meta("carrying_tribute"):
 		_set_force_carrier_eligible(b, actor.key, false)
-		_retry_action(b, action_id, actor.display_name + "已经挑着一担，请另选一名好汉接手。")
+		_retry_action(b, action_id, Localize.text(actor.display_name) + Localize.text("已经挑着一担，请另选一名好汉接手。"))
 		return
 	if not is_instance_valid(bundles[index]) or not b.units.has(bundles[index]): return
 	cargo[index] = actor
@@ -576,7 +576,7 @@ func _force_take_cargo(b, action_id: String, actor, index: int) -> void:
 	actor.set_meta("carrying_tribute", index)
 	_set_force_carrier_eligible(b, actor.key, false)
 	actor.apply_slow(0.78, 999.0)
-	b.mission.mark("force_taken_%d_%d" % [index, int(force_attempts.get(index, 0))], actor.display_name + "在混战中挑起第%d担" % (index + 1))
+	b.mission.mark("force_taken_%d_%d" % [index, int(force_attempts.get(index, 0))], Localize.text(actor.display_name) + Localize.format_text("在混战中挑起第%d担", (index + 1)))
 	_add_force_deliver(b, index, actor)
 
 func _force_deliver_cargo(b, _action_id: String, actor, index: int) -> void:
@@ -590,7 +590,7 @@ func _force_deliver_cargo(b, _action_id: String, actor, index: int) -> void:
 	_put_down_bundle(b, bundles[index])
 	cargo.erase(index)
 	delivered += 1
-	b.mission.mark("force_delivered_%d" % index, "第%d担已由%s强夺出冈" % [index + 1, actor.display_name])
+	b.mission.mark("force_delivered_%d" % index, Localize.format_text("第%d担已由%s强夺出冈", [index + 1, Localize.text(actor.display_name)]))
 	if delivered >= 3:
 		_begin_free_withdraw(b)
 
@@ -602,7 +602,7 @@ func _drop_carried_bundle(b, actor) -> void:
 	_put_down_bundle(b, bundles[index])
 	cargo.erase(index)
 	force_attempts[index] = int(force_attempts.get(index, 0)) + 1
-	b.mission.mark("force_drop_%d_%d" % [index, int(force_attempts[index])], actor.display_name + "倒下，第%d担落在原地，可由他人接力" % (index + 1))
+	b.mission.mark("force_drop_%d_%d" % [index, int(force_attempts[index])], Localize.text(actor.display_name) + Localize.format_text("倒下，第%d担落在原地，可由他人接力", (index + 1)))
 	if st == FORCE: _add_force_take(b, index)
 
 func _begin_free_withdraw(b) -> void:
@@ -661,15 +661,15 @@ func _add_cargo_stage_action(b, index: int) -> void:
 	var action_id := "stage_%d" % index
 	if b.mission.actions.has(action_id): return
 	var actor_name: String = b._defs[CARRIERS[index]]["name"]
-	var label := "%s·到第%d担旁走%s" % [actor_name, index + 1, CARGO_ROUTE_NAMES[index]]
-	if cargo_plan == "serial": label = "%s·到第%d担旁接手" % [actor_name, index + 1]
+	var label := Localize.format_text("%s·到第%d担旁走%s", [actor_name, index + 1, CARGO_ROUTE_NAMES[index]])
+	if cargo_plan == "serial": label = Localize.format_text("%s·到第%d担旁接手", [actor_name, index + 1])
 	b.mission.add_action(action_id, label, CARGO_STAGE_CELLS[index], [CARRIERS[index]], 0.8, 40.0)
 
 func _add_cargo_take_action(b, index: int) -> void:
 	if index < 0 or index >= 3 or not cargo_assignments.has(index) or not cargo_ready.has(index) or cargo.has(index): return
 	var action_id := "take_%d" % index
 	if b.mission.actions.has(action_id): return
-	b.mission.add_action(action_id, "%s·挑起第%d担" % [b._defs[CARRIERS[index]]["name"], index + 1], _bundle_claim_cell(b, index), [CARRIERS[index]], 1.2)
+	b.mission.add_action(action_id, Localize.format_text("%s·挑起第%d担", [b._defs[CARRIERS[index]]["name"], index + 1]), _bundle_claim_cell(b, index), [CARRIERS[index]], 1.2)
 
 
 func _bundle_claim_cell(b, index: int) -> Vector2i:
@@ -694,8 +694,8 @@ func _refresh_cargo_objective(b) -> void:
 	elif cargo_plan == "serial": plan_label = "逐担派送"
 	var entries: Array[String] = []
 	for i in range(3):
-		entries.append("第%d担 %s·%s %s" % [i + 1, b._defs[CARRIERS[i]]["name"], CARGO_ROUTE_NAMES[i], _cargo_assignment_state(b, i)])
-	var objective := "%s｜%s。三担各走一次；昏倒的押送者不可再攻击。" % [plan_label, "；".join(entries)]
+		entries.append(Localize.format_text("第%d担 %s·%s %s", [i + 1, b._defs[CARRIERS[i]]["name"], CARGO_ROUTE_NAMES[i], _cargo_assignment_state(b, i)]))
+	var objective := Localize.format_text("%s｜%s。三担各走一次；昏倒的押送者不可再攻击。", [plan_label, "；".join(entries)])
 	if objective == cargo_objective_cache: return
 	cargo_objective_cache = objective
 	b.mission.set_objective(objective)
@@ -778,13 +778,13 @@ func _suspicion_tick(b, delta: float) -> void:
 			names.append(u.display_name)
 			var action_id := "return_" + key
 			if not b.mission.actions.has(action_id):
-				b.mission.add_action(action_id, u.display_name + "·退回枣车收敛举动", _cover_cell(key), [key], 0.8, 40.0)
+				b.mission.add_action(action_id, Localize.text(u.display_name) + Localize.text("·退回枣车收敛举动"), _cover_cell(key), [key], 0.8, 40.0)
 			elif b.mission.actions[action_id].done:
 				_retry_action(b, action_id, "")
 		if not suspicion_seen:
 			suspicion_seen = true
 			b.mission.mark("suspicion_raised", "有人离开枣车，逼近押担队，杨志起疑；让露出破绽的人回车旁歇脚")
-		b.mission.set_objective("%s逼近押队，疑心%d/100；让此人退回枣车藏住破绽。疑心到100或向押送人动武，酒计便告败。" % ["、".join(names), ceili(exposure)])
+		b.mission.set_objective(Localize.format_text("%s逼近押队，疑心%d/100；让此人退回枣车藏住破绽。疑心到100或向押送人动武，酒计便告败。", ["、".join(names), ceili(exposure)]))
 	if is_instance_valid(suspicion_sign):
 		suspicion_sign.show()
 		suspicion_sign.position = yang.position
@@ -792,7 +792,7 @@ func _suspicion_tick(b, delta: float) -> void:
 		var names: Array[String] = []
 		for key in suspicious_keys:
 			names.append(b._defs[key]["name"])
-		_set_sign(suspicion_sign, "杨志疑心 %d/100%s" % [ceili(exposure), "·" + "、".join(names) if not names.is_empty() else ""])
+		_set_sign(suspicion_sign, Localize.format_text("杨志疑心 %d/100%s", [ceili(exposure), "·" + "、".join(names) if not names.is_empty() else ""]))
 	if exposure >= 100.0:
 		b.mission.mark("exposed", "贩枣客反复逼近押担队，杨志识破身份，拒饮催担")
 		_begin_force_route(b, "疑心已到100，杨志识破贩枣身份；七星决定强夺纲担", false)
@@ -814,14 +814,14 @@ func _begin_wine_trial(b, retry: bool) -> void:
 	# A failed wine handoff must not delete an unresolved disguise recovery task.
 	for u in actors:
 		if is_instance_valid(u) and not u.get_meta("merchant_disguise", true):
-			b.mission.add_action("return_" + u.key, u.display_name + "·退回枣车收敛举动", _cover_cell(u.key), [u.key], 0.8, 40.0)
+			b.mission.add_action("return_" + u.key, Localize.text(u.display_name) + Localize.text("·退回枣车收敛举动"), _cover_cell(u.key), [u.key], 0.8, 40.0)
 
 func _reset_wine_attempt(b, reason: String) -> void:
 	if sale_drugged or drug_done: return
 	attention_missed = true
 	b.mission.mark("missed_attention", "借瓢配合已断，先收瓢退开；重新试酒，另寻时机")
 	_begin_wine_trial(b, true)
-	b.msg(reason + " 杨志催担在即，歇脚余时不会增加。", 5.0)
+	b.msg(reason + Localize.text(" 杨志催担在即，歇脚余时不会增加。"), 5.0)
 
 func _retry_action(b, action_id: String, reason: String) -> void:
 	if b.mission.actions.has(action_id):
@@ -928,7 +928,7 @@ func process(b, delta: float) -> void:
 func on_unit_died(b, u) -> void:
 	if u in actors:
 		_drop_carried_bundle(b, u)
-		b.mission.mark("huangnigang_actor_lost", u.display_name + "折在黄泥冈，其余好汉仍可接力夺担")
+		b.mission.mark("huangnigang_actor_lost", Localize.text(u.display_name) + Localize.text("折在黄泥冈，其余好汉仍可接力夺担"))
 		_story_miss(b, "all_safe", "七星或白胜已有伤亡。")
 		_begin_force_route(b, "好汉已有伤亡，余众改以强夺接力完成核心目标", true)
 		if not b._gameplay_rng_issue.is_empty(): return
@@ -950,11 +950,11 @@ func on_unit_resolved(b, u, outcome: String) -> void:
 func top_status(_b) -> String:
 	var phase_name: String = ["摆枣察路", "押队上冈", "杨志盘问", "白胜挑酒", "配合酒计", "挑担出冈", "招呼撤离", "身份败露·强夺"][st]
 	var detail := ""
-	if st in [INQUIRY, ARRIVAL, WINE]: detail = " | 疑心%d/100" % ceili(exposure)
-	if st in [ARRIVAL, WINE]: detail += " · 歇脚剩%d秒" % ceili(maxf(0.0, 100.0 - rest_t))
-	if wine_step in ["scoop", "reclaim"] and not sale_drugged: detail += " · 引注意%d秒" % ceili(attention_left)
-	if st == CARRY and cargo_plan != "": detail += " · %s" % ("集中编组" if cargo_plan == "grouped" else "逐担派送")
-	return "智取生辰纲 | %s%s | 送担%d/3" % [phase_name, detail, delivered]
+	if st in [INQUIRY, ARRIVAL, WINE]: detail = Localize.format_text(" | 疑心%d/100", ceili(exposure))
+	if st in [ARRIVAL, WINE]: detail += Localize.format_text(" · 歇脚剩%d秒", ceili(maxf(0.0, 100.0 - rest_t)))
+	if wine_step in ["scoop", "reclaim"] and not sale_drugged: detail += Localize.format_text(" · 引注意%d秒", ceili(attention_left))
+	if st == CARRY and cargo_plan != "": detail += " · %s" % (Localize.text("集中编组") if cargo_plan == "grouped" else Localize.text("逐担派送"))
+	return Localize.format_text("智取生辰纲 | %s%s | 送担%d/3", [phase_name, detail, delivered])
 
 func _story_miss(b, goal_id: String, reason: String) -> void:
 	if b.mission.has_method("miss_story_goal"):
@@ -1011,7 +1011,9 @@ class FieldSign extends Node2D:
 	var label := ""
 	var tint := Color.WHITE
 	var radius := 20.0
+	func _ready() -> void:
+		Localize.language_changed.connect(func(_locale): queue_redraw())
 	func _draw() -> void:
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(tint, 0.55), 1.4)
 		draw_set_transform_matrix(GameMap.ISO_INV)
-		draw_string(ThemeDB.fallback_font, Vector2(-104, -36), label, HORIZONTAL_ALIGNMENT_CENTER, 208, 12, tint)
+		draw_string(ThemeDB.fallback_font, Vector2(-104, -36), Localize.text(label), HORIZONTAL_ALIGNMENT_CENTER, 208, 12, tint)

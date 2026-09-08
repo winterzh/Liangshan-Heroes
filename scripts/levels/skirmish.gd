@@ -228,7 +228,7 @@ func _extended_waves(n: int) -> Array:
 		for g in src["groups"]:
 			g2.append([g[0], int(g[1]) + boost, int(g[2])])
 		w["groups"] = g2
-		w["msg"] = "援军不绝，铁壁再压——第 %d 波来袭！" % (out.size() + 1)
+		w["msg"] = Localize.format_text("援军不绝，铁壁再压——第 %d 波来袭！", (out.size() + 1))
 		out.append(w)
 		k += 1
 		if k % pool.size() == 0:
@@ -483,7 +483,7 @@ func _spawn_wave(b, i: int) -> bool:
 	if not b.entity_ids_available(required_ids):
 		b._gameplay_rng_stop("ENTITY_WAVE_CAPACITY")
 		return false
-	b.msg("【第 %d/%d 波】%s" % [i + 1, ws.size(), wave.get("msg", "")], 5.5)
+	b.msg(Localize.format_text("【第 %d/%d 波】%s", [i + 1, ws.size(), wave.get("msg", "")]), 5.5)
 	var hall_pos: Vector2 = b.map.cell_to_world(HALL)
 	# 敌方倍率 e（「改变倍率」开启时）：非英雄小兵 数量×e（向下取整，至少1）；小兵+大将 血/攻按倍率放大。
 	var ecnt: float = b.enemy_count_mult()
@@ -537,13 +537,13 @@ func top_status(b) -> String:
 	var total := _waves().size()
 	var phase := "整军备战"
 	if _started and _wave < total:
-		phase = "%d秒·%s" % [int(ceil(maxf(_wave_t, 0.0))), _next_attack_lanes()]
+		phase = Localize.format_text("%d秒·%s", [int(ceil(maxf(_wave_t, 0.0))), _next_attack_lanes()])
 	elif _started:
 		phase = "清剿残敌"
-	return "忠义堂防线 ｜ %d/%d波 ｜ %s ｜ 堂%d%% ｜ 敌%d" % [
+	return Localize.format_text("忠义堂防线 ｜ %d/%d波 ｜ %s ｜ 堂%d%% ｜ 敌%d", [
 		_wave, total, phase,
 		int(hall.hp / hall.max_hp * 100.0) if (hall != null and is_instance_valid(hall)) else 0,
-		b.enemies_alive()]
+		b.enemies_alive()])
 
 
 func _next_attack_lanes() -> String:

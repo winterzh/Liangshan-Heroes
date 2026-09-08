@@ -344,3 +344,57 @@ qa/persistent_session_20260908/** -text -whitespace
 
 # Preserve current Steam candidate QA evidence bytes.
 qa/steam_resume_update_20260908/** -text -whitespace
+
+# Localization sources, fonts and retained verification.
+assets/localization/** text eol=lf
+assets/fonts/*.ttc binary
+assets/fonts/*.import text eol=lf
+assets/fonts/*.json text eol=lf
+assets/fonts/OFL.txt -text
+scripts/localization.gd* text eol=lf
+tools/*localization*.py text eol=lf
+tools/localization_*.gd* text eol=lf
+tools/localization_qa.tscn text eol=lf
+qa/localization_20260908/** -text -whitespace
+
+# Preserve the exact runtime source bytes accepted by localization QA.
+export_presets.cfg -text -whitespace
+project.godot -text -whitespace
+scripts/android_updater.gd -text -whitespace
+scripts/battle.gd -text -whitespace
+scripts/bios.gd -text -whitespace
+scripts/campaign_mission.gd -text -whitespace
+scripts/campaign_scenery.gd -text -whitespace
+scripts/codex.gd -text -whitespace
+scripts/defs.gd -text -whitespace
+scripts/editor.gd -text -whitespace
+scripts/hud.gd -text -whitespace
+scripts/level_base.gd -text -whitespace
+scripts/levels/arena.gd -text -whitespace
+scripts/levels/custom_defense.gd -text -whitespace
+scripts/levels/level1_huangnigang.gd -text -whitespace
+scripts/levels/level1_huangnigang_short.gd -text -whitespace
+scripts/levels/level2_jiangzhou.gd -text -whitespace
+scripts/levels/level2_jiangzhou_rts.gd -text -whitespace
+scripts/levels/level3_zhujiazhuang.gd -text -whitespace
+scripts/levels/level3_zhujiazhuang_rts.gd -text -whitespace
+scripts/levels/level4_lianhuanma.gd -text -whitespace
+scripts/levels/level4_lianhuanma_rts.gd -text -whitespace
+scripts/levels/level5_gao_rts.gd -text -whitespace
+scripts/levels/level5_liangshan.gd -text -whitespace
+scripts/levels/level6_yezhulin.gd -text -whitespace
+scripts/levels/level7_kuaihuolin.gd -text -whitespace
+scripts/levels/level7_kuaihuolin_short.gd -text -whitespace
+scripts/levels/level8_daming_rts.gd -text -whitespace
+scripts/levels/level8_dongchangfu.gd -text -whitespace
+scripts/levels/scenario.gd -text -whitespace
+scripts/levels/skirmish.gd -text -whitespace
+scripts/levels/skirmish_ai.gd -text -whitespace
+scripts/menu.gd -text -whitespace
+scripts/scenario_editor.gd -text -whitespace
+scripts/settings_panel.gd -text -whitespace
+scripts/steam_panels.gd -text -whitespace
+scripts/ui_theme.gd -text -whitespace
+scripts/unit.gd -text -whitespace
+scripts/workshop_content.gd -text -whitespace
+scripts/workshop_service.gd -text -whitespace

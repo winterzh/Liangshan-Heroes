@@ -162,7 +162,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				return
 			b.mission.mark("lhm_drill_started","徐宁演示钩镰枪配合")
 			b.show_story_art("hook_spear_team",xu.position,128.0,3.0,"engaged")
-			b.mission.add_action("lhm_partner","钩镰手：搭档就位",DRILL_CELL+Vector2i(0,1),["gou_lian"],2.0)
+			b.mission.add_action("lhm_partner",Localize.text("钩镰手：搭档就位"),DRILL_CELL+Vector2i(0,1),["gou_lian"],2.0)
 			b.mission.set_objective("另派一名钩镰手到木马旁配合徐宁。单人不能形成上下照应。")
 		"lhm_partner":
 			if stage != "training" or b.mission.has_event("lhm_drill_complete"):
@@ -245,7 +245,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				first_lane = "west"
 			rear_lane = _other_lane(first_lane)
 			wave_phase = "front_lure"
-			b.mission.begin("lhm_battle","前队·诱骑入伏","前队尚在道口。让诱敌好汉进入%s路线，再撤到草林侧后；伏兵不得提前暴露。"%_lane_name(first_lane))
+			b.mission.begin("lhm_battle","前队·诱骑入伏",Localize.format_text("前队尚在道口。让诱敌好汉进入%s路线，再撤到草林侧后；伏兵不得提前暴露。", _lane_name(first_lane)))
 			b.mission.add_action("lhm_front_lure","诱敌手：引前队入伏",_lane_entry(first_lane),["lin_chong","hua_rong","tang_long"],1.2)
 			_spawn_battle_enemies(b,first_lane,rear_lane)
 			if not b._gameplay_rng_issue.is_empty(): return
@@ -257,19 +257,19 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				return
 			front_lure = actor
 			wave_phase = "front_withdraw"
-			b.mission.mark("lhm_front_lure_entered","诱敌手进入%s冲锋线，前队开始咬住目标"%_lane_name(first_lane))
+			b.mission.mark("lhm_front_lure_entered",Localize.format_text("诱敌手进入%s冲锋线，前队开始咬住目标", _lane_name(first_lane)))
 			_activate_wave(b,1,first_lane,"luring")
 			b.lit_cells[_lane_retreat(first_lane)] = 18.0
-			b.mission.set_objective("诱敌手尚在打击道内。请玩家命他撤到%s侧后安全点，伏兵再现身。"%_lane_name(first_lane))
+			b.mission.set_objective(Localize.format_text("诱敌手尚在打击道内。请玩家命他撤到%s侧后安全点，伏兵再现身。", _lane_name(first_lane)))
 		"lhm_rear_lure":
 			if stage != "battle" or wave_phase != "rear_lure" or rear_lane == "":
 				return
 			rear_lure = actor
 			wave_phase = "rear_withdraw"
-			b.mission.mark("lhm_rear_lure_entered","第二名诱敌手进入%s路线，引动后队"%_lane_name(rear_lane))
+			b.mission.mark("lhm_rear_lure_entered",Localize.format_text("第二名诱敌手进入%s路线，引动后队", _lane_name(rear_lane)))
 			_activate_wave(b,2,rear_lane,"luring")
 			b.lit_cells[_lane_retreat(rear_lane)] = 18.0
-			b.mission.set_objective("后队尚未冲入伏击带。请玩家命诱敌手退到%s侧后，再由预备队合钩。"%_lane_name(rear_lane))
+			b.mission.set_objective(Localize.format_text("后队尚未冲入伏击带。请玩家命诱敌手退到%s侧后，再由预备队合钩。", _lane_name(rear_lane)))
 
 func _clear_section(b) -> void:
 	b.clear_campaign_section()
@@ -339,7 +339,7 @@ func _deploy_battle(b) -> void:
 func _try_ready(b) -> void:
 	if b.mission.has_event("lhm_west_ready") and b.mission.has_event("lhm_south_ready"):
 		if _hooks_near(b,b.map.cell_to_world(REED_W)) and _hooks_near(b,b.map.cell_to_world(REED_S)):
-			b.mission.add_action("lhm_signal","宋江：发令诱敌",JIANGTAI_CELL+Vector2i(3,0),["song_jiang"],2.0)
+			b.mission.add_action("lhm_signal",Localize.text("宋江：发令诱敌"),JIANGTAI_CELL+Vector2i(3,0),["song_jiang"],2.0)
 
 func _retry_action(b, action_id: String, reason: String) -> void:
 	# The site inspection completed, but its tactical requirement failed. Re-enable only this action.
@@ -507,27 +507,27 @@ func _begin_rear_redeploy(b) -> void:
 		b.mission.mark("lhm_direct_break","前队有人未入钩镰伏击便被正面击溃")
 		_miss_story(b,"lhm_hooks","并非十二骑都先由钩镰枪破阵")
 	b.mission.mark("lhm_front_wave_broken",
-		"前队已经击溃，后队在另一条路上暂缓不进" if front_broken < WAVE_SIZE else "前队六骑已在%s破阵击溃，后队在另一条路上暂缓不进"%_lane_name(first_lane))
+		"前队已经击溃，后队在另一条路上暂缓不进" if front_broken < WAVE_SIZE else Localize.format_text("前队六骑已在%s破阵击溃，后队在另一条路上暂缓不进", _lane_name(first_lane)))
 	rear_lane = _other_lane(first_lane)
 	wave_phase = "rear_redeploy"
-	b.mission.begin("lhm_redeploy","后队·调预备伏兵","第一伏已经暴露。把保存下来的钩镰预备队调到%s，至少两人可战，再检查新的伏击位。"%_lane_name(rear_lane))
+	b.mission.begin("lhm_redeploy","后队·调预备伏兵",Localize.format_text("第一伏已经暴露。把保存下来的钩镰预备队调到%s，至少两人可战，再检查新的伏击位。", _lane_name(rear_lane)))
 	b.mission.add_action("lhm_west_ambush","钩镰手：改布西伏",REED_W,["gou_lian","xu_ning"],2.0)
 	b.mission.add_action("lhm_south_ambush","钩镰手：改布南伏",REED_S,["gou_lian","xu_ning"],2.0)
 
 func _redeploy_reserve(b, lane: String, action_id: String) -> void:
 	if lane != rear_lane:
-		_retry_action(b,action_id,"前队已经用过%s，后队不会再走这条明伏。把预备队改调到%s。"%[_lane_name(first_lane),_lane_name(rear_lane)])
+		_retry_action(b,action_id,Localize.format_text("前队已经用过%s，后队不会再走这条明伏。把预备队改调到%s。", [_lane_name(first_lane),_lane_name(rear_lane)]))
 		return
 	var lane_pos: Vector2 = b.map.cell_to_world(_lane_cell(lane))
 	if not _hooks_near(b,lane_pos):
-		_retry_action(b,action_id,"%s不足两名可战钩镰手。若原预备队减员，就从另一队调人补位后再检查。"%_lane_name(lane))
+		_retry_action(b,action_id,Localize.format_text("%s不足两名可战钩镰手。若原预备队减员，就从另一队调人补位后再检查。", _lane_name(lane)))
 		return
 	for u in b.units_of(Unit.FACTION_LIANG):
 		if u.key in ["gou_lian","xu_ning"] and u.story_outcome == "" and u.position.distance_to(lane_pos) <= HOOK_TEAM_RADIUS:
 			u.set_meta("ambush_lane",_lane_cell(lane))
-	b.mission.mark("lhm_reserve_redeployed","预备钩镰手转到%s，后队改道压来"%_lane_name(lane))
+	b.mission.mark("lhm_reserve_redeployed",Localize.format_text("预备钩镰手转到%s，后队改道压来", _lane_name(lane)))
 	wave_phase = "rear_lure"
-	b.mission.begin("lhm_rear_lure","后队·换路再诱","后队见第一伏暴露，转走%s。另派诱敌手进入路线，随后撤出打击道。"%_lane_name(lane))
+	b.mission.begin("lhm_rear_lure","后队·换路再诱",Localize.format_text("后队见第一伏暴露，转走%s。另派诱敌手进入路线，随后撤出打击道。", _lane_name(lane)))
 	b.mission.add_action("lhm_rear_lure","诱敌手：引后队入新伏",_lane_entry(lane),["lin_chong","hua_rong","tang_long"],1.2)
 
 func process(b, delta: float) -> void:
@@ -557,21 +557,21 @@ func process(b, delta: float) -> void:
 		var west := _hook_count(b,b.map.cell_to_world(REED_W))
 		var south := _hook_count(b,b.map.cell_to_world(REED_S))
 		if stage == "prepare":
-			b.mission.set_objective("西伏可战枪手%d/2，南伏%d/2。每骑近旁须有两人协同；缺人、晕眩或缴械时，调同伴补位。"%[west,south])
+			b.mission.set_objective(Localize.format_text("西伏可战枪手%d/2，南伏%d/2。每骑近旁须有两人协同；缺人、晕眩或缴械时，调同伴补位。", [west,south]))
 			_try_ready(b)
 		elif wave_phase == "front_charge":
-			b.mission.set_objective("前队已入%s：破阵%d/6，击溃%d/6。诱敌手须留在侧后，枪手两人一组下钩。"%[_lane_name(first_lane),front_broken,front_defeated])
+			b.mission.set_objective(Localize.format_text("前队已入%s：破阵%d/6，击溃%d/6。诱敌手须留在侧后，枪手两人一组下钩。", [_lane_name(first_lane),front_broken,front_defeated]))
 		elif wave_phase == "rear_redeploy":
-			b.mission.set_objective("第一伏已经暴露。%s现有可战枪手%d/2；保存或补调两人，再检查新伏击位。"%[_lane_name(rear_lane),_hook_count(b,b.map.cell_to_world(_lane_cell(rear_lane)))])
+			b.mission.set_objective(Localize.format_text("第一伏已经暴露。%s现有可战枪手%d/2；保存或补调两人，再检查新伏击位。", [_lane_name(rear_lane),_hook_count(b,b.map.cell_to_world(_lane_cell(rear_lane)))]))
 		elif wave_phase == "rear_charge":
-			b.mission.set_objective("后队已改走%s：破阵%d/6，击溃%d/6。仍须两名可战枪手协同。"%[_lane_name(rear_lane),rear_broken,rear_defeated])
+			b.mission.set_objective(Localize.format_text("后队已改走%s：破阵%d/6，击溃%d/6。仍须两名可战枪手协同。", [_lane_name(rear_lane),rear_broken,rear_defeated]))
 	if stage == "battle":
 		if wave_phase == "front_withdraw" and _lure_is_clear(b,front_lure,first_lane):
-			b.mission.mark("lhm_front_lure_withdrew","诱敌手撤出%s打击道，前队六骑冲入草林"%_lane_name(first_lane))
+			b.mission.mark("lhm_front_lure_withdrew",Localize.format_text("诱敌手撤出%s打击道，前队六骑冲入草林", _lane_name(first_lane)))
 			wave_phase = "front_charge"
 			_activate_wave(b,1,first_lane)
 		if wave_phase == "rear_withdraw" and _lure_is_clear(b,rear_lure,rear_lane):
-			b.mission.mark("lhm_rear_lure_withdrew","第二名诱敌手撤出%s打击道，后队改道冲入新伏"%_lane_name(rear_lane))
+			b.mission.mark("lhm_rear_lure_withdrew",Localize.format_text("第二名诱敌手撤出%s打击道，后队改道冲入新伏", _lane_name(rear_lane)))
 			wave_phase = "rear_charge"
 			_activate_wave(b,2,rear_lane)
 		for u in riders:
@@ -595,7 +595,7 @@ func process(b, delta: float) -> void:
 				if broken_count in [1,7]:
 					b.show_story_art("hook_spear_team",u.position-Vector2(22,0),110.0,2.0,"engaged")
 					b.show_story_art("broken_cavalry",u.position+Vector2(25,0),100.0,2.0)
-				b.mission.mark("lhm_break_%d"%broken_count,"草林伏兵钩倒第%d骑甲马"%broken_count)
+				b.mission.mark("lhm_break_%d"%broken_count,Localize.format_text("草林伏兵钩倒第%d骑甲马", broken_count))
 		if wave_phase == "front_charge" and front_defeated == WAVE_SIZE:
 			_begin_rear_redeploy(b)
 		if lhm_killed >= lhm_total and broken_count < lhm_total and not b.mission.has_event("lhm_direct_break"):
@@ -683,8 +683,8 @@ func on_unit_resolved(b, u, outcome: String) -> void:
 		b.mission.mark("lhm_hu_withdrew","呼延灼脱出战阵，往青州奔走")
 
 func top_status(_b) -> String:
-	var detail := "前队%d/6 · 后队%d/6"%[front_broken,rear_broken] if stage == "battle" else "破连环 %d/%d"%[broken_count,lhm_total]
-	return "大破连环马 | %s | %s · 击溃 %d/%d"%[{"training":"钩镰演练","transition":"枪法练成","prepare":"布置伏兵","battle":"诱骑破阵"}.get(stage,stage),detail,lhm_killed,lhm_total]
+	var detail := Localize.format_text("前队%d/6 · 后队%d/6", [front_broken,rear_broken]) if stage == "battle" else Localize.format_text("破连环 %d/%d", [broken_count,lhm_total])
+	return Localize.format_text("大破连环马 | %s | %s · 击溃 %d/%d", [{"training":"钩镰演练","transition":"枪法练成","prepare":"布置伏兵","battle":"诱骑破阵"}.get(stage,stage),detail,lhm_killed,lhm_total])
 
 func _smoke_drive(b, delta: float) -> void:
 	smoke_t -= delta

@@ -233,7 +233,7 @@ func on_mission_action(b, action_id: String, _actor) -> void:
 					b.map.sync_render_position(guest)
 			stage = "inside"
 			b.mission.begin("zhu_inside","第三打·内外分工","顾大嫂在堂前发出内应信号，邹渊、邹润守监门开陷车；孙立守吊桥接应孙新，宋江在庄外列阵。等七名好汉分两队退到内院，再发总攻。")
-			b.mission.add_action("zhu_free_prisoners","顾大嫂：发出救囚信号",PRISON_CELL+Vector2i(2,0),["gu_dasao"],3.0)
+			b.mission.add_action("zhu_free_prisoners",Localize.text("顾大嫂：发出救囚信号"),PRISON_CELL+Vector2i(2,0),["gu_dasao"],3.0)
 			b.mission.add_action("zhu_inner_support","孙立：到庄门内侧接应",INNER_GATE_SUPPORT,["sun_li"],1.5,40.0)
 			b.mission.add_action("zhu_outer_position","宋江：率外军在门外占位",OUTER_RALLY,["song_jiang"],1.5,40.0)
 			_refresh_third_objective(b)
@@ -321,7 +321,7 @@ func _free_scout_tick(b) -> void:
 				continue
 			free_scout = actor
 			actor.set_meta("zhu_free_scout",true)
-			b.mission.mark("zhu_free_scout","%s自行探到庄前；未循白杨记号，仍可带队撤回。"%actor.display_name)
+			b.mission.mark("zhu_free_scout",Localize.format_text("%s自行探到庄前；未循白杨记号，仍可带队撤回。", actor.display_name))
 			_miss_story(b,"zhu_poplar","没有由石秀依白杨记号完成探路脱围")
 			stage = "withdraw"
 			b.mission.begin("zhu_withdraw_free","第一打·自行脱围","侦察已经取得。让任一幸存人马返回东侧营地；走错路只会遭伏，不会判整关失败。")
@@ -416,7 +416,7 @@ func _third_free_tick(b) -> void:
 			if is_instance_valid(captive) and captive.hp > 0.0:
 				_release_captive(captive)
 				captive.order_hold_position()
-		b.mission.mark("zhu_prisoners_freed","%s强开囚车，七名好汉获得自由"%actor.display_name)
+		b.mission.mark("zhu_prisoners_freed",Localize.format_text("%s强开囚车，七名好汉获得自由", actor.display_name))
 		break
 
 func _role_at(b, actor, cell: Vector2i, radius := 52.0) -> bool:
@@ -504,7 +504,7 @@ func _prisoner_groups_tick(b) -> void:
 		var group: Array = prisoner_groups[group_index]
 		if not b.mission.has_event(event_id) and _group_at_rally(b,group,rally):
 			for u in group: u.order_hold_position()
-			b.mission.mark(event_id,"获救好汉第%d队已经退到内院" % (group_index+1))
+			b.mission.mark(event_id,Localize.format_text("获救好汉第%d队已经退到内院", (group_index+1)))
 			_refresh_third_objective(b)
 
 func _third_signal_ready(b) -> bool:
@@ -521,13 +521,13 @@ func _restore_third_role_actions(b) -> void:
 func _refresh_third_objective(b) -> void:
 	if stage != "inside": return
 	var statuses := [
-		"顾大嫂策应救囚%s" % ("已办" if b.mission.has_event("zhu_prisoners_freed") else "未办"),
-		"孙立吊桥内侧%s" % ("就位" if b.mission.has_event("zhu_inner_support_ready") else "未就位"),
-		"宋江门外%s" % ("就位" if b.mission.has_event("zhu_outer_ready") else "未就位"),
-		"第一队%s" % ("到内院" if b.mission.has_event("zhu_prison_group_a_safe") else "撤离中"),
-		"第二队%s" % ("到内院" if b.mission.has_event("zhu_prison_group_b_safe") else "撤离中"),
-		"庄门%s" % ("已开" if b.mission.has_event("zhu_gate_opened") else "仍闭")]
-	b.mission.set_objective("；".join(statuses)+"。开门不等于总攻，内外俱备后由宋江发令。")
+		Localize.format_text("顾大嫂策应救囚%s", ("已办" if b.mission.has_event("zhu_prisoners_freed") else "未办")),
+		Localize.format_text("孙立吊桥内侧%s", ("就位" if b.mission.has_event("zhu_inner_support_ready") else "未就位")),
+		Localize.format_text("宋江门外%s", ("就位" if b.mission.has_event("zhu_outer_ready") else "未就位")),
+		Localize.format_text("第一队%s", ("到内院" if b.mission.has_event("zhu_prison_group_a_safe") else "撤离中")),
+		Localize.format_text("第二队%s", ("到内院" if b.mission.has_event("zhu_prison_group_b_safe") else "撤离中")),
+		Localize.format_text("庄门%s", ("已开" if b.mission.has_event("zhu_gate_opened") else "仍闭"))]
+	b.mission.set_objective("；".join(statuses)+Localize.text("。开门不等于总攻，内外俱备后由宋江发令。"))
 
 func _begin_third_assault(b) -> void:
 	stage = "assault"
@@ -819,7 +819,7 @@ func _light_route(b) -> void:
 			b.lit_cells[Vector2i(roundi(p.x),roundi(p.y))] = 999.0
 
 func top_status(_b) -> String:
-	return "三打祝家庄 | %s | 保全领军好汉" % {"scout":"辨认白杨","withdraw":"脱围回营","second":"分位擒将","send_hu":"同行押送","hu_handoff":"营前交接","transition":"数日后","infiltrate":"报明身份入庄","inside":"内外分工","assault":"里应外合"}.get(stage,stage)
+	return Localize.format_text("三打祝家庄 | %s | 保全领军好汉", {"scout":"辨认白杨","withdraw":"脱围回营","second":"分位擒将","send_hu":"同行押送","hu_handoff":"营前交接","transition":"数日后","infiltrate":"报明身份入庄","inside":"内外分工","assault":"里应外合"}.get(stage,stage))
 
 func _smoke_drive(b, delta: float) -> void:
 	smoke_t -= delta

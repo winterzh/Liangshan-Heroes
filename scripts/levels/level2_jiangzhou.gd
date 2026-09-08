@@ -231,7 +231,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 		"west_street", "south_lane":
 			b.mission.mark(action_id, "李逵从西街挤近法场" if action_id == "west_street" else "南巷好汉准备接应救出的囚犯")
 			if b.mission.has_event("west_street") and b.mission.has_event("south_lane"):
-				b.mission.add_action("first_axes", "李逵·排头动手", SCAFFOLD + Vector2i(-2, 3), ["li_kui"], 0.6)
+				b.mission.add_action("first_axes", Localize.text("李逵·排头动手"), SCAFFOLD + Vector2i(-2, 3), ["li_kui"], 0.6)
 		"first_axes":
 			if st != APPROACH:
 				return
@@ -284,13 +284,13 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			_order_escape_route(b)
 			b.mission.begin("bailong", "护着二人寻江而走", "西巷近而狭，南巷远而宽；两处截兵都已露头。若选错，可在中途岔口改道一次，再护送二人到白龙庙。")
 			b.mission.add_action("bailong", "晁盖·到白龙庙江边", BAILONG, ["chao_gai"], 1.0)
-			b.mission.add_action("change_route", "可选·岔口改走%s" % ("南巷" if escape_route == "route_west" else "西巷"), Vector2i(22, 28), ["chao_gai"], 0.8)
+			b.mission.add_action("change_route", Localize.format_text("可选·岔口改走%s", ("南巷" if escape_route == "route_west" else "西巷")), Vector2i(22, 28), ["chao_gai"], 0.8)
 		"change_route":
 			if st != RETREAT or escape_route == "" or route_changed:
 				return
 			escape_route = "route_south" if escape_route == "route_west" else "route_west"
 			route_changed = true
-			b.mission.mark("jiangzhou_route_changed", "晁盖看清截兵去向，改走%s；改道机会已用" % ("南巷宽路" if escape_route == "route_south" else "西巷近路"))
+			b.mission.mark("jiangzhou_route_changed", Localize.format_text("晁盖看清截兵去向，改走%s；改道机会已用", ("南巷宽路" if escape_route == "route_south" else "西巷近路")))
 			_order_escape_route(b)
 		"bailong":
 			if st != RETREAT:
@@ -306,7 +306,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			rear_guard = actor
 			rear_guard_recalled = false
 			rear_guard.stance = Unit.STANCE_AGGRO
-			b.mission.mark("jiangzhou_rearguard_set", rear_guard.display_name + "已由玩家部署在白龙庙前，掩护二人登船")
+			b.mission.mark("jiangzhou_rearguard_set", Localize.text(rear_guard.display_name) + Localize.text("已由玩家部署在白龙庙前，掩护二人登船"))
 			b.mission.begin("embark", "江边相会·二人登船", "宋江、戴宗分别登船即可脱险；断后者由玩家自行安排，不再是胜利门锁。")
 			_add_embark_actions(b)
 		"board_song":
@@ -320,13 +320,13 @@ func on_mission_action(b, action_id: String, actor) -> void:
 		"rally_dock":
 			if st != EMBARK:
 				return
-			b.mission.mark("rally_dock", "晁盖已经抵达码头并发出收队信号；其余人仍须由玩家亲自撤到江边" + ("，%s仍在庙前断后" % rear_guard.display_name if is_instance_valid(rear_guard) else ""))
+			b.mission.mark("rally_dock", Localize.text("晁盖已经抵达码头并发出收队信号；其余人仍须由玩家亲自撤到江边") + (Localize.format_text("，%s仍在庙前断后", Localize.text(rear_guard.display_name)) if is_instance_valid(rear_guard) else ""))
 		"recall_rearguard":
 			if st != EMBARK or not is_instance_valid(rear_guard) or not _living(rear_guard):
 				return
 			rear_guard_recalled = true
 			rear_guard.stance = Unit.STANCE_PASSIVE
-			b.mission.mark("jiangzhou_rearguard_recalled", rear_guard.display_name + "已由玩家从断后位撤到码头")
+			b.mission.mark("jiangzhou_rearguard_recalled", Localize.text(rear_guard.display_name) + Localize.text("已由玩家从断后位撤到码头"))
 		"leave_now":
 			if st != EMBARK or not _living(song_freed) or not _living(dai_freed) \
 					or song_freed.story_outcome != "embarked" or dai_freed.story_outcome != "embarked":
@@ -371,7 +371,7 @@ func _start_uprising(b, actor, li_first: bool) -> void:
 	if li_first:
 		b.mission.mark("jiangzhou_li_first", "李逵候到行刑时刻，排头扑向刽子手")
 	else:
-		b.mission.mark("jiangzhou_other_first", actor.display_name + "提前发动，众好汉随即劫法场")
+		b.mission.mark("jiangzhou_other_first", Localize.text(actor.display_name) + Localize.text("提前发动，众好汉随即劫法场"))
 		_story_miss(b, "li_kui_first", "没有候到李逵排头动手。")
 	b.mission.begin("halt_execution", "打断行刑", "击倒两名刽子手，拦住行刑；随即上刑台，分别替二人解绳。")
 	for u in rescuing_army:
@@ -407,9 +407,9 @@ func _begin_river_escape(b, at_bailong: bool) -> void:
 	var li: Unit = b.find_unit("li_kui")
 	var yan: Unit = b.find_unit("yan_shun")
 	if _living(li):
-		b.mission.add_action("rearguard_li", "可选·李逵守庙前路口", BAILONG + Vector2i(2, 0), ["li_kui"], 0.8)
+		b.mission.add_action("rearguard_li", Localize.text("可选·李逵守庙前路口"), BAILONG + Vector2i(2, 0), ["li_kui"], 0.8)
 	if _living(yan):
-		b.mission.add_action("rearguard_yan", "可选·燕顺守庙前路口", BAILONG + Vector2i(2, 1), ["yan_shun"], 0.8)
+		b.mission.add_action("rearguard_yan", Localize.text("可选·燕顺守庙前路口"), BAILONG + Vector2i(2, 1), ["yan_shun"], 0.8)
 	_add_embark_actions(b)
 	_spawn_wave3(b)
 	if not b._gameplay_rng_issue.is_empty(): return
@@ -417,9 +417,9 @@ func _begin_river_escape(b, at_bailong: bool) -> void:
 func _add_embark_actions(b) -> void:
 	var leader: Unit = b.find_unit("chao_gai")
 	if _living(leader):
-		b.mission.add_action("rally_dock", "可选·晁盖到码头发收队信号", DOCK_C + Vector2i(0, -1), ["chao_gai"], 1.0)
+		b.mission.add_action("rally_dock", Localize.text("可选·晁盖到码头发收队信号"), DOCK_C + Vector2i(0, -1), ["chao_gai"], 1.0)
 	b.mission.add_action("board_song", "宋江·登船脱险", DOCK_C, ["song_jiang"], 1.8)
-	b.mission.add_action("board_dai", "戴宗·登船脱险", DOCK_C + Vector2i(1, 0), ["dai_zong"], 1.8)
+	b.mission.add_action("board_dai", Localize.text("戴宗·登船脱险"), DOCK_C + Vector2i(1, 0), ["dai_zong"], 1.8)
 
 func _rescued_pair_near(b, cell: Vector2i, radius: float) -> bool:
 	var target: Vector2 = b.map.cell_to_world(cell)
@@ -442,7 +442,7 @@ func _order_escape_route(b) -> void:
 	for point in points:
 		b.lit_cells[point] = 18.0
 	var route_name := "西巷近路" if escape_route == "route_west" else "南巷宽路"
-	b.mission.set_status("已标出%s。请自行编组护送宋江、戴宗；系统不会替队伍行军。" % route_name)
+	b.mission.set_status(Localize.format_text("已标出%s。请自行编组护送宋江、戴宗；系统不会替队伍行军。", route_name))
 
 func _spawn_pursuit_wave(b) -> void:
 	if pursuit_wave_done or st != RETREAT:
@@ -490,8 +490,8 @@ func process(b, delta: float) -> void:
 		b.mission.begin("free_captives", "刑台解缚", "分别替宋江、戴宗解绳，留人掩护，尽快离开法场。")
 		# 标记留在两名囚犯各自的刑台前沿，保持原著主线派遣路径；人物办理距离
 		# 放宽以容纳刑台碰撞与人群，但点击命中仅24px，点两标记中间不会误救。
-		b.mission.add_action("free_song", "好汉·救下宋江", SCAFFOLD + Vector2i(-1, 1), RESCUERS, 1.3, 160.0, 24.0)
-		b.mission.add_action("free_dai", "好汉·救下戴宗", SCAFFOLD + Vector2i(1, 1), RESCUERS, 1.3, 160.0, 24.0)
+		b.mission.add_action("free_song", Localize.text("好汉·救下宋江"), SCAFFOLD + Vector2i(-1, 1), RESCUERS, 1.3, 160.0, 24.0)
+		b.mission.add_action("free_dai", Localize.text("好汉·救下戴宗"), SCAFFOLD + Vector2i(1, 1), RESCUERS, 1.3, 160.0, 24.0)
 	if st == RETREAT:
 		if not pursuit_wave_done and pursuit_timer >= 0.0:
 			pursuit_timer -= delta
@@ -507,13 +507,13 @@ func process(b, delta: float) -> void:
 	if st == EMBARK:
 		if not recall_action_added and is_instance_valid(rear_guard) and _living(rear_guard) and b.mission.has_event("board_song") and b.mission.has_event("board_dai") and b.mission.has_event("rally_dock"):
 			recall_action_added = true
-			b.mission.add_action("recall_rearguard", "%s·撤到码头" % rear_guard.display_name, DOCK_C, [rear_guard.key], 0.7, 54.0)
+			b.mission.add_action("recall_rearguard", Localize.format_text("%s·撤到码头", rear_guard.display_name), DOCK_C, [rear_guard.key], 0.7, 54.0)
 		if b.mission.has_event("rally_dock"):
 			for u in rescuing_army:
 				if _living(u) and u.story_outcome == "" and u.position.distance_to(b.map.cell_to_world(DOCK_C)) < DOCK_R:
 					if u == rear_guard and not rear_guard_recalled:
 						rear_guard_recalled = true
-						b.mission.mark("jiangzhou_rearguard_recalled", rear_guard.display_name + "已由玩家从断后位撤到码头")
+						b.mission.mark("jiangzhou_rearguard_recalled", Localize.text(rear_guard.display_name) + Localize.text("已由玩家从断后位撤到码头"))
 					u.resolve_story("embarked")
 		if _living(song_freed) and _living(dai_freed) and song_freed.story_outcome == "embarked" and dai_freed.story_outcome == "embarked":
 			var named_safe := true
@@ -525,7 +525,7 @@ func process(b, delta: float) -> void:
 				b.mission.mark("jiangzhou_named_survive", "本关具名好汉均活着脱险")
 			elif b.mission.has_event("rally_dock") and not b.mission.has_event("jiangzhou_named_lost") and not b.mission.has_event("jiangzhou_depart_early"):
 				if not b.mission.actions.has("leave_now"):
-					b.mission.add_action("leave_now", "可选·二人先行开船（放弃全员脱险印）", DOCK_C + Vector2i(2, 0), [], 0.6)
+					b.mission.add_action("leave_now", Localize.text("可选·二人先行开船（放弃全员脱险印）"), DOCK_C + Vector2i(2, 0), [], 0.6)
 				b.mission.set_objective("宋江、戴宗已经登船。可等具名好汉全部撤到码头；也可选择先行开船，立即完成核心营救。")
 				return
 			else:
@@ -625,22 +625,22 @@ func on_unit_died(b, u) -> void:
 	elif u == dai_bound or u == dai_freed:
 		b.lose("戴宗遇害，营救失败。")
 	elif u in rescuing_army and u.key in ["chao_gai", "li_kui", "hua_rong", "yan_shun", "zhang_shun", "zhang_heng"]:
-		b.mission.mark("jiangzhou_named_lost", u.display_name + "未能脱险；营救仍可继续")
+		b.mission.mark("jiangzhou_named_lost", Localize.text(u.display_name) + Localize.text("未能脱险；营救仍可继续"))
 		_story_miss(b, "named_survive", "具名好汉已有伤亡。")
 
 func on_unit_resolved(b, u, outcome: String) -> void:
 	if outcome == "embarked":
-		b.mission.mark("embarked_%d" % u.entity_id, u.display_name + "活着登船")
+		b.mission.mark("embarked_%d" % u.entity_id, Localize.text(u.display_name) + Localize.text("活着登船"))
 
 func top_status(_b) -> String:
 	var stage_text: String = ["分路混入", "中断行刑", "分别解救二人", "护送至白龙庙", "掩护登船"][st]
 	if st in [APPROACH, BREAK_EXEC]:
-		stage_text += " | 行刑剩余%d秒" % ceili(exec_timer)
+		stage_text += Localize.format_text(" | 行刑剩余%d秒", ceili(exec_timer))
 	if st == EMBARK:
-		stage_text += " | 宋江%s·戴宗%s" % ["已登船" if _living(song_freed) and song_freed.story_outcome == "embarked" else "未脱险", "已登船" if _living(dai_freed) and dai_freed.story_outcome == "embarked" else "未脱险"]
+		stage_text += Localize.format_text(" | 宋江%s·戴宗%s", [Localize.text("已登船") if _living(song_freed) and song_freed.story_outcome == "embarked" else Localize.text("未脱险"), Localize.text("已登船") if _living(dai_freed) and dai_freed.story_outcome == "embarked" else Localize.text("未脱险")])
 		if is_instance_valid(rear_guard):
-			stage_text += " | %s%s" % [rear_guard.display_name, "正撤回" if rear_guard_recalled else "断后"]
-	return "江州劫法场 | " + stage_text
+			stage_text += " | %s%s" % [Localize.text(rear_guard.display_name), Localize.text("正撤回") if rear_guard_recalled else Localize.text("断后")]
+	return Localize.text("江州劫法场 | ") + stage_text
 
 func _smoke_drive(b, delta: float) -> void:
 	if b.mission.active_action_id != "":

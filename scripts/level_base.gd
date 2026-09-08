@@ -7,6 +7,8 @@ extends RefCounted
 func id() -> String: return "level"
 func title() -> String: return ""
 func subtitle() -> String: return ""
+func display_title() -> String: return Localize.text(title())
+func display_subtitle() -> String: return Localize.text(subtitle())
 
 # 地图
 func map_w() -> int: return 60
@@ -19,6 +21,7 @@ func camera_start_cell() -> Vector2i: return Vector2i(map_w() / 2, map_h() / 2)
 
 # 剧情与部署
 func intro_lines() -> Array: return []
+func localize_intro_text() -> bool: return true
 func deploy_hint() -> String: return "查看战场形势与兵力部署，点「开战」开始（开战后方可选取、指挥兵马）。"
 func auto_start_after_intro() -> bool: return false
 func deploy(_b) -> void: pass                       # 部署初始我军（及预置敌军/目标）

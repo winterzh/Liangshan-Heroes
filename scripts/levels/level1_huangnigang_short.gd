@@ -100,14 +100,14 @@ func _begin_team_setup(b, retry: bool) -> void:
 func _restore_cover_actions(b) -> void:
 	for u in actors:
 		if is_instance_valid(u) and u.hp>0 and not u.get_meta("merchant_disguise",true):
-			b.mission.add_action("return_"+u.key,u.display_name+" · 回枣车收敛",_cover_cell(u.key),[u.key],0.8,40.0)
+			b.mission.add_action("return_"+u.key,Localize.text(u.display_name)+Localize.text(" · 回枣车收敛"),_cover_cell(u.key),[u.key],0.8,40.0)
 
 func _reset_wine_attempt(b, reason: String) -> void:
 	if sale_drugged or drug_done: return
 	attention_missed=true
 	b.mission.mark("missed_attention","配合中断，保留已试过的好酒，另找争酒时机。")
 	_begin_team_setup(b,true)
-	b.msg(reason+" 好酒不用重试，歇脚余时也不会重置。",5)
+	b.msg(reason+Localize.text(" 好酒不用重试，歇脚余时也不会重置。"),5)
 
 func _team_ready(b) -> bool:
 	return _at(b,b.find_unit("wu_yong"),SALE_WINE,70) and _at(b,b.find_unit("bai_sheng"),SALE_WINE,70) and _identity_ready(b)
@@ -135,10 +135,10 @@ func _wine_team_tick(b, delta: float) -> void:
 		return
 	if not _team_ready(b):
 		team_t=0
-		b.mission.set_status("引目还剩%d秒：吴用%s，白胜%s。两人需在乙桶旁、身份未露。"%[ceili(attention_left),"到位" if _at(b,b.find_unit("wu_yong"),SALE_WINE,70) else "未到", "到位" if _at(b,b.find_unit("bai_sheng"),SALE_WINE,70) else "未到"])
+		b.mission.set_status(Localize.format_text("引目还剩%d秒：吴用%s，白胜%s。两人需在乙桶旁、身份未露。", [ceili(attention_left),"到位" if _at(b,b.find_unit("wu_yong"),SALE_WINE,70) else "未到", "到位" if _at(b,b.find_unit("bai_sheng"),SALE_WINE,70) else "未到"]))
 		return
 	team_t+=delta
-	b.mission.set_status("刘唐引目，吴用借瓢、白胜夺回 · 配合 %d%%"%mini(100,int(team_t/3.0*100)))
+	b.mission.set_status(Localize.format_text("刘唐引目，吴用借瓢、白胜夺回 · 配合 %d%%", mini(100,int(team_t/3.0*100))))
 	if team_t<3: return
 	# One completed player-coordinated handoff; no new walking orders or actors.
 	scoop_prepared=true; sale_drugged=true; drug_done=true; attention_left=0; wine_step="done"
@@ -162,11 +162,11 @@ func _add_force_take(b, index: int) -> void:
 	if not is_instance_valid(bundles[index]) or not b.units.has(bundles[index]): return
 	var available:=_available_force_carriers()
 	if available.is_empty(): available.append(NO_FORCE_CARRIER)
-	b.mission.add_action("force_take_%d_%d"%[index,int(force_attempts.get(index,0))],"空手同伴 · 挑第%d担"%(index+1),_bundle_claim_cell(b,index),available,0.6,48)
+	b.mission.add_action("force_take_%d_%d"%[index,int(force_attempts.get(index,0))],Localize.format_text("空手同伴 · 挑第%d担", (index+1)),_bundle_claim_cell(b,index),available,0.6,48)
 
 func _add_force_deliver(b, index: int, actor) -> void:
 	if st not in [CARRY,FORCE] or not is_instance_valid(actor): return
-	b.mission.add_action("force_deliver_%d_%d"%[index,int(force_attempts.get(index,0))],actor.display_name+" · 送第%d担出冈"%(index+1),GATE_W+Vector2i(0,index-1),[actor.key],0.6,64)
+	b.mission.add_action("force_deliver_%d_%d"%[index,int(force_attempts.get(index,0))],Localize.text(actor.display_name)+Localize.format_text(" · 送第%d担出冈", (index+1)),GATE_W+Vector2i(0,index-1),[actor.key],0.6,64)
 
 func _force_take_cargo(b, action_id: String, actor, index: int) -> void:
 	if st not in [CARRY,FORCE] or index<0 or index>=bundles.size() or _cargo_was_delivered(b,index) or cargo.has(index): return
@@ -180,7 +180,7 @@ func _force_take_cargo(b, action_id: String, actor, index: int) -> void:
 	actor.queue_redraw()
 	_set_force_carrier_eligible(b,actor.key,false)
 	actor.apply_slow(0.78,999)
-	b.mission.mark("force_taken_%d_%d"%[index,int(force_attempts.get(index,0))],actor.display_name+"挑起第%d担，去路由玩家下令。"%(index+1))
+	b.mission.mark("force_taken_%d_%d"%[index,int(force_attempts.get(index,0))],Localize.text(actor.display_name)+Localize.format_text("挑起第%d担，去路由玩家下令。", (index+1)))
 	_add_force_deliver(b,index,actor)
 
 func _force_deliver_cargo(b, action_id: String, actor, index: int) -> void:
@@ -195,7 +195,7 @@ func _force_deliver_cargo(b, action_id: String, actor, index: int) -> void:
 	bundles[index].faction=Unit.FACTION_LIANG
 	_put_down_bundle(b,bundles[index])
 	cargo.erase(index); delivered+=1
-	b.mission.mark("force_delivered_%d"%index,"第%d担由%s送出黄泥冈。"%[index+1,actor.display_name])
+	b.mission.mark("force_delivered_%d"%index,Localize.format_text("第%d担由%s送出黄泥冈。", [index+1,Localize.text(actor.display_name)]))
 	if delivered==3: _begin_free_withdraw(b)
 
 func _begin_free_withdraw(b) -> void:
@@ -218,7 +218,7 @@ func on_unit_died(b, u) -> void:
 	if u in actors and drug_done:
 		var index:=int(u.get_meta("carrying_tribute",-1))
 		_drop_carried_bundle(b,u)
-		b.mission.mark("huangnigang_actor_lost",u.display_name+"倒下；幸存者仍可接力搬担。")
+		b.mission.mark("huangnigang_actor_lost",Localize.text(u.display_name)+Localize.text("倒下；幸存者仍可接力搬担。"))
 		_story_miss(b,"all_safe","已有好汉阵亡。")
 		if index>=0: _add_force_take(b,index)
 		if _available_force_carriers().is_empty() and cargo.is_empty(): b.lose("所有同伴倒下，无人能够带走纲担。")
@@ -273,7 +273,7 @@ func _sync_controls(b) -> void:
 		b.mission.add_map_locator("白胜 · 乙桶旁站位",BAI_STATION)
 	for key in keys:
 		var button:=Button.new()
-		button.text="选中 · "+String(b._defs[key].name)
+		button.text=Localize.text("选中 · ")+String(b._defs[key].name)
 		button.pressed.connect(func():
 			var u=b.find_unit(key)
 			if is_instance_valid(u) and u.hp>0: b.select_single(u,false); b.center_camera_cell(b.map.world_to_cell(u.position)))
@@ -288,5 +288,5 @@ func _sync_controls(b) -> void:
 func top_status(_b) -> String:
 	var text: String=super.top_status(_b)
 	if st==CARRY: text=text.replace("逐担派送","分队搬运")
-	if st==WINE and wine_step=="cooperate": text+=" · 引目%d秒 · 配合%d%%"%[ceili(attention_left),mini(100,int(team_t/3.0*100))]
+	if st==WINE and wine_step=="cooperate": text+=Localize.format_text(" · 引目%d秒 · 配合%d%%", [ceili(attention_left),mini(100,int(team_t/3.0*100))])
 	return text

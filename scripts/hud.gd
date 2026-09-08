@@ -92,6 +92,7 @@ var _intro_port_tex: TextureRect
 var _intro_port_fallback: ColorRect
 var _intro_port_char: Label
 var _intro_lines: Array = []
+var _translate_intro := true
 var _intro_i := 0
 
 var _end_root: ColorRect
@@ -150,6 +151,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停时 UI（暂停菜单）仍可操作
 	if not has_meta("_run_hud_prepared") and not Settings.keybinds_changed.is_connected(_on_keybinds_changed):
 		Settings.keybinds_changed.connect(_on_keybinds_changed)
+	if not Localize.language_changed.is_connected(_on_language_changed):
+		Localize.language_changed.connect(_on_language_changed)
 
 	top_label = Label.new()
 	top_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
@@ -159,6 +162,7 @@ func _ready() -> void:
 	top_label.offset_bottom = 42.0
 	top_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	top_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	top_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_style_label(top_label, 18)
 	var top_sb := StyleBoxFlat.new()
 	top_sb.bg_color = Color(UITheme.INK_SOFT, 0.90)
@@ -179,7 +183,7 @@ func _ready() -> void:
 	add_child(msg_box)
 
 	start_btn = Button.new()
-	start_btn.text = "⚔  开 战"
+	Localize.bind_render(start_btn, func() -> String: return Localize.text("⚔  开 战"))
 	start_btn.add_theme_font_size_override("font_size", 24)
 	start_btn.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	start_btn.offset_left = -100.0
@@ -312,23 +316,23 @@ func _build_touch_controls() -> void:
 	_touch_actions.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_touch_actions.visible = false
 	add_child(_touch_actions)
-	_act_amove = _mk_action_btn("⚔攻击", Color("c84a3a"), func() -> void:
+	_act_amove = _mk_action_btn(Localize.text("⚔攻击"), Color("c84a3a"), func() -> void:
 		if battle != null: battle.arm_amove())
-	_act_stop = _mk_action_btn("■停", Color("4a5a72"), func() -> void:
+	_act_stop = _mk_action_btn(Localize.text("■停"), Color("4a5a72"), func() -> void:
 		if battle != null: battle._order_stop())
-	_act_stance = _mk_action_btn("⛨姿态", Color("4a6a4a"), func() -> void:
+	_act_stance = _mk_action_btn(Localize.text("⛨姿态"), Color("4a6a4a"), func() -> void:
 		if battle != null: battle._cycle_stance())
-	_act_delete = _mk_action_btn("✕拆", Color("7a2a22"), func() -> void:
+	_act_delete = _mk_action_btn(Localize.text("✕拆"), Color("7a2a22"), func() -> void:
 		if battle != null: battle.delete_selected(true))
-	_act_cancel = _mk_action_btn("⨯取消", Color("6a5a2a"), func() -> void:
+	_act_cancel = _mk_action_btn(Localize.text("⨯取消"), Color("6a5a2a"), func() -> void:
 		if battle != null: battle.cancel_armed())
 	_act_cancel.visible = false
 	# 出击键：选中有驻军的建筑（聚义厅/箭楼）时出现，让驻军冲出（触屏入口，桌面在命令卡也有）
-	_act_eject = _mk_action_btn("🚪出击", Color("4a6a8a"), func() -> void:
+	_act_eject = _mk_action_btn(Localize.text("🚪出击"), Color("4a6a8a"), func() -> void:
 		if battle != null and battle.active_unit() != null: battle.ungarrison(battle.active_unit()))
 	_act_eject.visible = false
 	# 托管：当前英雄自动放招 + 自动加点 + 进攻索敌（移动端省手核心）
-	_act_auto = _mk_action_btn("🪄托管", Color("8a5ad0"), func() -> void:
+	_act_auto = _mk_action_btn(Localize.text("🪄托管"), Color("8a5ad0"), func() -> void:
 		toggle_auto_selected())
 	_act_auto.visible = false
 
@@ -349,7 +353,7 @@ func _build_touch_controls() -> void:
 		_group_chips.append(chip)
 	# 「全军」一键：选中所有作战单位（轻操作式少微操）
 	var allb := Button.new()
-	allb.text = "全军"
+	Localize.bind_render(allb, func() -> String: return Localize.text("全军"))
 	allb.custom_minimum_size = Vector2(72, 68)
 	allb.focus_mode = Control.FOCUS_NONE
 	allb.add_theme_font_size_override("font_size", 20)
@@ -365,7 +369,7 @@ func _build_touch_controls() -> void:
 	_touch_groups.add_child(allb)
 	# 托管全军：一键让全部在场英雄进入/退出托管
 	_act_allauto = Button.new()
-	_act_allauto.text = "🪄托管军"
+	Localize.bind_render(_act_allauto, func() -> String: return Localize.text("🪄托管军"))
 	_act_allauto.custom_minimum_size = Vector2(72, 68)
 	_act_allauto.focus_mode = Control.FOCUS_NONE
 	_act_allauto.add_theme_font_size_override("font_size", 18)
@@ -381,7 +385,7 @@ func _build_touch_controls() -> void:
 
 	# 屏上「☰ 菜单」键（右上角）：安卓返回键之外的入口，点开暂停菜单（继续/重开/返回/退出）
 	_menu_btn = Button.new()
-	_menu_btn.text = "☰ 菜单"
+	Localize.bind_render(_menu_btn, func() -> String: return Localize.text("☰ 菜单"))
 	_menu_btn.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	_menu_btn.offset_right = -12.0
 	_menu_btn.offset_top = 10.0
@@ -527,11 +531,13 @@ func _layout_top_status() -> void:
 		left = maxf(322.0 + safe.x, _res_bar.position.x + res_w + 8.0)
 	top_label.offset_left = left
 	top_label.offset_right = -128.0 - safe.z
+	top_label.offset_bottom = (68.0 if Localize.locale == "en" else 48.0) + safe.y
+	top_label.add_theme_font_size_override("font_size", 16 if Localize.locale == "en" else 18)
 
 
 func _mk_action_btn(text: String, col: Color, cb: Callable) -> Button:
 	var b := Button.new()
-	b.text = text
+	Localize.bind_text(b, text)
 	b.custom_minimum_size = Vector2(96, 72)
 	b.focus_mode = Control.FOCUS_NONE
 	b.add_theme_font_size_override("font_size", 22)
@@ -578,23 +584,23 @@ func _refresh_touch_controls() -> void:
 	_act_stance.visible = has_mover and au != null and not au.is_building and not placing
 	if _act_stance.visible:
 		match au.stance:
-			Unit.STANCE_DEFEND: _act_stance.text = "⛨守备"
-			Unit.STANCE_HOLD: _act_stance.text = "⛨据守"
-			Unit.STANCE_PASSIVE: _act_stance.text = "⛨避战"
-			_: _act_stance.text = "⛨进攻"
+			Unit.STANCE_DEFEND: Localize.bind_render(_act_stance, func() -> String: return Localize.text("⛨守备"))
+			Unit.STANCE_HOLD: Localize.bind_render(_act_stance, func() -> String: return Localize.text("⛨据守"))
+			Unit.STANCE_PASSIVE: Localize.bind_render(_act_stance, func() -> String: return Localize.text("⛨避战"))
+			_: Localize.bind_render(_act_stance, func() -> String: return Localize.text("⛨进攻"))
 	_act_delete.visible = not sel.is_empty() and not placing
 	_act_cancel.visible = battle.is_armed()
 	if _act_cancel.visible:
-		_act_cancel.text = "⨯取消建造" if placing else "⨯取消"
+		Localize.bind_render(_act_cancel, func() -> String: return Localize.text("⨯取消建造") if placing else Localize.text("⨯取消"))
 	if _act_eject != null:
 		_act_eject.visible = garrisoned_bld and not placing
 		if garrisoned_bld:
-			_act_eject.text = "🚪出击 (%d)" % au.passengers.size()
+			_act_eject.text = Localize.format_text("🚪出击 (%d)", au.passengers.size())
 	var micro_on: bool = int(Settings.auto_micro_level) > 0   # 「无托管」档隐藏托管按钮
 	if _act_auto != null:
 		_act_auto.visible = micro_on and au != null and au.is_hero and not au.is_building and not placing
 		if _act_auto.visible:
-			_act_auto.text = "🚫取消托管" if au.auto_micro else "🪄托管"
+			_act_auto.text = Localize.text("🚫取消托管") if au.auto_micro else Localize.text("🪄托管")
 			_act_auto.add_theme_color_override("font_color", Color(1.0, 0.7, 0.6) if au.auto_micro else Color(1, 0.96, 0.9))
 	if _act_allauto != null:
 		_act_allauto.visible = micro_on
@@ -605,7 +611,7 @@ func _refresh_touch_controls() -> void:
 			if not h.auto_micro:
 				all_on = false
 				break
-		_act_allauto.text = "🚫取消托管军" if all_on else "🪄托管军"
+		Localize.bind_render(_act_allauto, func() -> String: return Localize.text("🚫取消托管军") if all_on else Localize.text("🪄托管军"))
 	var action_layout_signature := "%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_touch_actions.visible, _act_amove.visible, _act_stop.visible, _act_stance.visible,
 		_act_delete.visible, _act_cancel.visible, _act_eject.visible, _act_auto.visible,
@@ -622,7 +628,7 @@ func toggle_auto_selected() -> void:
 	if not battle.gameplay_rng_fault().is_empty(): return
 	var hs: Array = battle.selection.filter(func(u): return is_instance_valid(u) and u.is_hero and not u.is_building)
 	if hs.is_empty():
-		show_message("先选中英雄再托管" if touch_ui else "先选中英雄再托管（T 托管 / Shift+T 全军）", 1.4)
+		show_message(Localize.text("先选中英雄再托管") if touch_ui else Localize.text("先选中英雄再托管（T 托管 / Shift+T 全军）"), 1.4)
 		return
 	# 有任一已托管 → 视为取消（全部关）；否则全部开。这样混合选区也能一键取消。
 	var any_on := false
@@ -637,7 +643,7 @@ func toggle_auto_selected() -> void:
 			h.manual_order_t = 0.0
 			h.clear_mission_order_intent()
 			h.set_stance(Unit.STANCE_AGGRO)
-	show_message("%s %d 名英雄托管" % ["关闭" if any_on else "开启", hs.size()], 1.2)
+	show_message(Localize.format_text("%s %d 名英雄托管", [Localize.text("关闭") if any_on else Localize.text("开启"), hs.size()]), 1.2)
 
 
 ## 托管全军：一键切换全部在场英雄的 auto_micro（已全开→全关，否则全开）。
@@ -660,7 +666,7 @@ func _toggle_all_auto() -> void:
 			h.manual_order_t = 0.0
 			h.clear_mission_order_intent()
 			h.set_stance(Unit.STANCE_AGGRO)
-	show_message("%s全军托管（%d 名英雄）" % ["开启" if not all_on else "关闭", hs.size()], 1.2)
+	show_message(Localize.format_text("%s全军托管（%d 名英雄）", [Localize.text("开启") if not all_on else Localize.text("关闭"), hs.size()]), 1.2)
 
 
 ## 右缘常驻技能轨（仅触屏）：每个在场英雄一行，主动与被动技能全部显示。
@@ -968,15 +974,19 @@ func _build_skill_tip() -> void:
 	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_tip_panel.add_child(vb)
 	_tip_title = Label.new()
+	_tip_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_tip_title.custom_minimum_size.x = 320
 	_tip_title.add_theme_font_size_override("font_size", 17)
 	vb.add_child(_tip_title)
 	_tip_body = Label.new()
 	_tip_body.add_theme_font_size_override("font_size", 14)
 	_tip_body.add_theme_color_override("font_color", UITheme.PAPER)
 	_tip_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_tip_body.custom_minimum_size = Vector2(236, 0)
+	_tip_body.custom_minimum_size = Vector2(320, 0)
 	vb.add_child(_tip_body)
 	_tip_foot = Label.new()
+	_tip_foot.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_tip_foot.custom_minimum_size.x = 320
 	_tip_foot.add_theme_font_size_override("font_size", 12)
 	_tip_foot.add_theme_color_override("font_color", UITheme.COMPLETE)
 	vb.add_child(_tip_foot)
@@ -989,10 +999,10 @@ func show_skill_tip(owner, anchor: Rect2, title: String, body: String, foot: Str
 		return
 	_tip_owner = owner
 	_tip_anchor = anchor
-	_tip_title.text = title
+	Localize.bind_text(_tip_title, title)
 	_tip_title.add_theme_color_override("font_color", col if col.a > 0.0 else UITheme.PAPER_DARK)
-	_tip_body.text = body
-	_tip_foot.text = foot
+	Localize.bind_text(_tip_body, body)
+	Localize.bind_text(_tip_foot, foot)
 	_tip_foot.visible = foot != ""
 	_tip_panel.visible = true
 	_tip_panel.reset_size()
@@ -1053,7 +1063,7 @@ func _process(delta: float) -> void:
 		var show_ej: bool = not touch_ui and au != null and au.is_building and not au.passengers.is_empty()
 		_eject_float.visible = show_ej
 		if show_ej:
-			_eject_float.text = "🚪 出击 (%d)" % au.passengers.size()
+			_eject_float.text = Localize.format_text("🚪 出击 (%d)", au.passengers.size())
 	_panel_accum += delta
 	if _panel_accum >= 0.25:
 		_panel_accum = 0.0
@@ -1070,6 +1080,8 @@ func _process(delta: float) -> void:
 			_fps_label.add_theme_color_override("font_color",
 				Color("9fe89f") if fps >= 50 else (Color("f0d060") if fps >= 30 else Color("f07a6a")))
 		_refresh_resource_values()
+		_layout_top_status()
+		_layout_info_panel()
 		if not _sel_ref.is_empty():
 			_refresh_panel()
 
@@ -1134,7 +1146,7 @@ func _build_bottom_panel() -> void:
 	# 拆除按钮：头像右上角小红「✕」。点击拆除选中的己方单位/建筑（防卡位）；快捷键 Delete。
 	_delete_btn = Button.new()
 	_delete_btn.text = "✕"
-	_delete_btn.tooltip_text = "拆除选中单位/建筑（Delete）"
+	Localize.bind_render(_delete_btn, func() -> String: return Localize.text("拆除选中单位/建筑（Delete）"), &"tooltip_text")
 	_delete_btn.custom_minimum_size = Vector2(24, 24)
 	_delete_btn.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	_delete_btn.offset_left = -24
@@ -1225,7 +1237,7 @@ func _build_bottom_panel() -> void:
 	_inventory_dock.add_theme_constant_override("separation", 2)
 	_info_dock.add_child(_inventory_dock)
 	_inventory_title = Label.new()
-	_inventory_title.text = "英雄物品"
+	Localize.bind_render(_inventory_title, func() -> String: return Localize.text("英雄物品"))
 	_inventory_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_inventory_title.add_theme_font_size_override("font_size", 11)
 	_inventory_title.add_theme_color_override("font_color", Color("d8c38d"))
@@ -1236,11 +1248,11 @@ func _build_bottom_panel() -> void:
 	_inventory_grid = _make_inventory_grid(false)
 	_inventory_inline.add_child(_inventory_grid)
 	_inventory_toggle = Button.new()
-	_inventory_toggle.text = "▦ 物品"
+	Localize.bind_render(_inventory_toggle, func() -> String: return Localize.text("▦ 物品"))
 	_inventory_toggle.custom_minimum_size = Vector2(92, 70)
 	_inventory_toggle.focus_mode = Control.FOCUS_NONE
 	_inventory_toggle.add_theme_font_size_override("font_size", 17)
-	_inventory_toggle.tooltip_text = "打开当前英雄的六格物品栏"
+	Localize.bind_render(_inventory_toggle, func() -> String: return Localize.text("打开当前英雄的六格物品栏"), &"tooltip_text")
 	_inventory_toggle.pressed.connect(func() -> void:
 		_inventory_popup_open = not _inventory_popup_open
 		_layout_inventory())
@@ -1353,7 +1365,7 @@ func _layout_inventory() -> void:
 	if not has_hero or not narrow:
 		_inventory_popup_open = false
 	_inventory_popup.visible = has_hero and narrow and _inventory_popup_open
-	_inventory_toggle.text = ("▾ 收起" if _inventory_popup_open else "▦ 物品")
+	Localize.bind_render(_inventory_toggle, func() -> String: return (Localize.text("▾ 收起") if _inventory_popup_open else Localize.text("▦ 物品")))
 	if not _inventory_popup.visible:
 		_layout_skill_rail()
 		return
@@ -1381,10 +1393,10 @@ func _item_tip_data(hero: Unit, slot: int) -> Dictionary:
 	var item: Dictionary = hero.inventory.slot_item(slot)
 	var idef: Dictionary = hero.inventory.slot_def(slot)
 	if item.is_empty() or idef.is_empty():
-		return {"title": "空物品栏", "body": "可放置主动或被动物品。", "foot": "共 6 格", "color": Color("8f8267")}
+		return {"title": Localize.text("空物品栏"), "body": Localize.text("可放置主动或被动物品。"), "foot": Localize.text("共 6 格"), "color": Color("8f8267")}
 	var lines: Array[String] = []
-	var stat_names := {"hp": "生命", "attack": "攻击", "defense": "防御", "range": "射程",
-		"speed": "移速", "attack_speed": "攻速", "evasion": "闪避", "regen": "每秒回血", "lifesteal": "吸血"}
+	var stat_names := {"hp": Localize.text("生命"), "attack": Localize.text("攻击"), "defense": Localize.text("防御"), "range": Localize.text("射程"),
+		"speed": Localize.text("移速"), "attack_speed": Localize.text("攻速"), "evasion": Localize.text("闪避"), "regen": Localize.text("每秒回血"), "lifesteal": Localize.text("吸血")}
 	for key_v in (idef.get("stats", {}) as Dictionary):
 		var key := String(key_v)
 		lines.append("%s %+g" % [String(stat_names.get(key, key)), float(idef["stats"][key])])
@@ -1393,18 +1405,18 @@ func _item_tip_data(hero: Unit, slot: int) -> Dictionary:
 		lines.append("%s %+.0f%%" % [String(stat_names.get(key, key)), float(idef["stats_pct"][key]) * 100.0])
 	var desc := String(idef.get("description", idef.get("desc", "")))
 	if desc != "":
-		lines.append(desc)
+		lines.append(Localize.text(desc))
 	var active: Dictionary = idef.get("active", {})
 	if not active.is_empty():
-		var active_desc := String(active.get("description", active.get("desc", "主动使用")))
-		lines.append("主动：" + active_desc)
+		var active_desc := String(active.get("description", active.get("desc", Localize.text("主动使用"))))
+		lines.append(Localize.text("主动：") + Localize.text(active_desc))
 		var detail: Array[String] = []
 		if active.has("cooldown"):
-			detail.append("冷却 %.1fs" % float(active["cooldown"]))
+			detail.append(Localize.format_text("冷却 %.1fs", float(active["cooldown"])))
 		if active.has("range"):
-			detail.append("距离 %d" % int(active["range"]))
+			detail.append(Localize.format_text("距离 %d", int(active["range"])))
 		if float(active.get("cast_time", 0.0)) > 0.0:
-			detail.append("施法 %.1fs" % float(active["cast_time"]))
+			detail.append(Localize.format_text("施法 %.1fs", float(active["cast_time"])))
 		if not detail.is_empty():
 			lines.append(" · ".join(detail))
 	var passive_raw = idef.get("passive", [])
@@ -1413,11 +1425,11 @@ func _item_tip_data(hero: Unit, slot: int) -> Dictionary:
 		if passive_v is Dictionary:
 			var passive_desc := String(passive_v.get("description", passive_v.get("desc", "")))
 			if passive_desc != "":
-				lines.append("被动：" + passive_desc)
+				lines.append(Localize.text("被动：") + Localize.text(passive_desc))
 	var hotkeys := _item_key_labels_compat()
-	var foot := "只读查看" if hero.faction != Unit.FACTION_LIANG else \
-		("短按使用 · 长按说明/拖动" if touch_ui else "%s 使用 · 拖动换位/转交" % hotkeys[slot])
-	return {"title": String(idef.get("name", item.get("id", "物品"))),
+	var foot := Localize.text("只读查看") if hero.faction != Unit.FACTION_LIANG else \
+		(Localize.text("短按使用 · 长按说明/拖动") if touch_ui else Localize.format_text("%s 使用 · 拖动换位/转交", hotkeys[slot]))
+	return {"title": Localize.text(String(idef.get("name", item.get("id", "物品")))),
 		"body": "\n".join(lines), "foot": foot, "color": idef.get("color", Color("d9bd75"))}
 
 
@@ -1443,7 +1455,7 @@ func _build_info_panel() -> void:
 	root.add_theme_constant_override("separation", 6)
 	_info_panel.add_child(root)
 	var log_title := Label.new()
-	log_title.text = "最近消息"
+	Localize.bind_render(log_title, func() -> String: return Localize.text("最近消息"))
 	log_title.add_theme_font_size_override("font_size", 13)
 	log_title.add_theme_color_override("font_color", UITheme.COMPLETE)
 	root.add_child(log_title)
@@ -1464,8 +1476,8 @@ func _build_info_panel() -> void:
 	_info_scroll.add_child(_info_log)
 
 	_control_help_toggle = CheckButton.new()
-	_control_help_toggle.text = "在主界面显示操作提示"
-	_control_help_toggle.tooltip_text = "显示在右下角即时信息的上方；移动端不显示键盘操作提示"
+	Localize.bind_render(_control_help_toggle, func() -> String: return Localize.text("在主界面显示操作提示"))
+	Localize.bind_render(_control_help_toggle, func() -> String: return Localize.text("显示在右下角即时信息的上方；移动端不显示键盘操作提示"), &"tooltip_text")
 	_control_help_toggle.focus_mode = Control.FOCUS_NONE
 	_control_help_toggle.add_theme_font_size_override("font_size", 14)
 	_control_help_toggle.add_theme_color_override("font_color", Color("d8c38d"))
@@ -1518,7 +1530,7 @@ func _update_info_toggle() -> void:
 		return
 	var unread_text := "%d+" % INFO_LOG_CAP if _info_unread >= INFO_LOG_CAP else str(_info_unread)
 	var badge := " (%s)" % unread_text if _info_unread > 0 and not _info_expanded else ""
-	_info_toggle.text = ("▼ 收起信息" if _info_expanded else "▲ 展开信息") + badge
+	Localize.bind_render(_info_toggle, func() -> String: return (Localize.text("▼ 收起信息") if _info_expanded else Localize.text("▲ 展开信息")) + badge)
 
 
 func _update_info_panel_mode() -> void:
@@ -1624,8 +1636,9 @@ func _layout_info_panel() -> void:
 	_info_panel.position = panel_rect.position
 	_info_panel.size = panel_rect.size
 	# 折叠态即时消息：靠右，操作提示开启时位于其上方，最多三条向上滚动。
-	var toast_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - help_lift - 180.0),
-		Vector2(width, 180.0))
+	var toast_height := maxf(180.0, msg_box.get_combined_minimum_size().y)
+	var toast_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - help_lift - toast_height),
+		Vector2(width, toast_height))
 	msg_box.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	msg_box.position = toast_rect.position
 	msg_box.size = toast_rect.size
@@ -1633,7 +1646,7 @@ func _layout_info_panel() -> void:
 	_layout_skill_rail()
 
 
-func _append_info_message(text: String) -> void:
+func _append_info_message(text: String, quiet_in_full_auto := false) -> void:
 	if text == "":
 		return
 	if not _message_log.is_empty() and String(_message_log[-1].get("text", "")) == text:
@@ -1642,7 +1655,8 @@ func _append_info_message(text: String) -> void:
 		_message_log.append({"text": text, "count": 1})
 	if _message_log.size() > INFO_LOG_CAP:
 		_message_log.pop_front()
-	var quiet_observer_message := _is_quiet_ai_observer_message(text)
+	var quiet_observer_message: bool = _is_quiet_ai_observer_message(text) or (quiet_in_full_auto \
+		and battle != null and battle.has_method("_full_auto") and bool(battle.call("_full_auto")))
 	if not _info_expanded and not quiet_observer_message:
 		_info_unread = mini(INFO_LOG_CAP, _info_unread + 1)
 		_show_info_toast(text)
@@ -1661,7 +1675,7 @@ func _is_quiet_ai_observer_message(text: String) -> bool:
 	if not clean.begins_with("【"):
 		return false
 	var close := clean.find("】")
-	return close == clean.length() - 1 or clean.contains("剩余能量")
+	return close == clean.length() - 1 or clean.contains(Localize.text("剩余能量"))
 
 
 func _show_info_toast(text: String) -> void:
@@ -1672,7 +1686,7 @@ func _show_info_toast(text: String) -> void:
 			child.set_meta("info_count", count)
 			var label := child.get_node_or_null("Text") as Label
 			if label != null:
-				label.text = "%s  ×%d" % [text, count]
+				Localize.bind_text(label, text, &"text", "  ×%d" % count)
 			_arm_info_toast(child, false)
 			return
 	var toast_cap := 2 if battle != null and battle.has_method("_full_auto") \
@@ -1702,7 +1716,7 @@ func _make_info_toast(text: String, count: int) -> PanelContainer:
 	row.add_theme_stylebox_override("panel", sb)
 	var label := Label.new()
 	label.name = "Text"
-	label.text = "%s  ×%d" % [text, count] if count > 1 else text
+	Localize.bind_text(label, text, &"text", "  ×%d" % count if count > 1 else "")
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_font_size_override("font_size", 16 if touch_ui else 14)
@@ -1763,23 +1777,23 @@ func _refresh_info_log() -> void:
 	if _info_log == null:
 		return
 	if _message_log.is_empty():
-		_info_log.text = "暂无消息"
+		Localize.bind_render(_info_log, func() -> String: return Localize.text("暂无消息"))
 		return
 	var lines: Array[String] = []
 	for row in _message_log:
 		var suffix := "  ×%d" % int(row.get("count", 1)) if int(row.get("count", 1)) > 1 else ""
-		lines.append("• %s%s" % [String(row.get("text", "")), suffix])
+		lines.append("• %s%s" % [Localize.current_text(String(row.get("text", ""))), suffix])
 	_info_log.text = "\n".join(lines)
 
 
 func _key_help_text() -> String:
 	var ck := Settings.command_key_labels()
 	var ik := _item_key_labels_compat()
-	return "左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s物品\n%s选闲置 Ctrl/Shift+数字编队\n%s回基地 Esc菜单" % [
+	return Localize.format_text("左键 选取·框选·双击选同类\n右键 移动/攻击/采集/修理/续建/进驻\n%s攻击移动 %s待命 %s据守 %s巡逻 %s切姿态 %s托管\n%s拆除 Shift排队 %s命令 %s切单位\n%s物品\n%s选闲置 Ctrl/Shift+数字编队\n%s回基地 Esc菜单", [
 		Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"),
 		Settings.key_label("patrol"), Settings.key_label("stance"), Settings.key_label("auto"),
 		Settings.key_label("demolish"), "/".join(ck), Settings.key_label("subgroup"),
-		"/".join(ik), Settings.key_label("idle_worker"), Settings.key_label("alert")]
+		"/".join(ik), Settings.key_label("idle_worker"), Settings.key_label("alert")])
 
 
 ## 安卓内容补丁在 APK 启动后才挂载；旧 APK 的 Settings Autoload 已经实例化，不能假定
@@ -1813,6 +1827,31 @@ func _set_show_control_help_enabled(on: bool) -> void:
 	else:
 		# 旧 APK 没有可持久化字段；本次运行仍保持开关行为，移动端始终会隐藏键盘提示。
 		_legacy_show_control_help = on
+
+
+func _on_language_changed(_locale: String) -> void:
+	if not is_instance_valid(top_label):
+		return
+	_on_keybinds_changed()
+	_refresh_panel()
+	_refresh_resource_values()
+	_update_info_toggle()
+	_refresh_info_log()
+	if is_instance_valid(battle) and battle.level != null and battle.phase == battle.Phase.FIGHT:
+		set_top(battle.level.top_status(battle))
+	elif is_instance_valid(battle) and battle.level != null and battle.phase == battle.Phase.INTRO:
+		set_top(Localize.format_text("%s · %s", [battle.level.display_title(), battle.level.display_subtitle()], false))
+	if is_instance_valid(_intro_root) and _intro_root.visible and not _intro_lines.is_empty():
+		_show_intro_line()
+	if is_instance_valid(battle):
+		for unit in battle.units:
+			if is_instance_valid(unit):
+				unit.queue_redraw()
+	_layout_top_status.call_deferred()
+	_layout_info_panel.call_deferred()
+	hide_skill_tip(null)
+	if touch_ui:
+		_refresh_touch_controls()
 
 
 func _on_keybinds_changed() -> void:
@@ -1885,22 +1924,22 @@ func _rebuild_command_card() -> void:
 				var cb := CmdButton.new(); cb.hud = self
 				cb.spec = {"kind": "trap", "key": spec["key"], "label": spec["label"],
 					"cost_g": spec["cost_g"], "cost_w": spec["cost_w"], "affordable": spec["affordable"],
-					"sub": "左键选址布置（一次性机关）"}
+					"sub": Localize.text("左键选址布置（一次性机关）")}
 				_skill_bar.add_child(cb)
 			_add_worker_back()
 		else:
 			# 根页：Q 建筑　W 塔　E 陷阱　R 维修
-			for cdef in [{"cat": "build", "label": "建筑", "sub": "兵营/民居/仓库/集市/作坊"},
-					{"cat": "tower", "label": "塔", "sub": "箭楼/霹雳炮/五雷法坛/拒马"},
-					{"cat": "trap", "label": "陷阱", "sub": "滚木/陷坑/火油（一次性）"}]:
+			for cdef in [{"cat": "build", "label": Localize.text("建筑"), "sub": Localize.text("兵营/民居/仓库/集市/作坊")},
+					{"cat": "tower", "label": Localize.text("塔"), "sub": Localize.text("箭楼/霹雳炮/五雷法坛/拒马")},
+					{"cat": "trap", "label": Localize.text("陷阱"), "sub": Localize.text("滚木/陷坑/火油（一次性）")}]:
 				var cb := CmdButton.new(); cb.hud = self
 				cb.spec = {"kind": "cat", "cat": cdef["cat"], "label": cdef["label"],
 					"cost_g": 0, "cost_w": 0, "affordable": true, "sub": cdef["sub"]}
 				_skill_bar.add_child(cb)
 			# 维修键：点亮后再点己方建筑即派工人修。
 			var rp := CmdButton.new(); rp.hud = self
-			rp.spec = {"kind": "repair", "label": "维修", "cost_g": 0, "cost_w": 0,
-				"sub": "点亮后点选受损的己方建筑修缮"}
+			rp.spec = {"kind": "repair", "label": Localize.text("维修"), "cost_g": 0, "cost_w": 0,
+				"sub": Localize.text("点亮后点选受损的己方建筑修缮")}
 			_skill_bar.add_child(rp)
 	elif au.is_building and not au.is_constructing and (au.setup_def.has("produces") or au.setup_def.has("researches")) and eco:
 		# 生产建筑：训练/研究按钮更小、分两排（多列）；键盘 Q/W/E/R 仍按 train_menu 顺序派发。
@@ -1914,8 +1953,8 @@ func _rebuild_command_card() -> void:
 		# 有驻军 → 出击键并入这张两排网格(同样紧凑)，免得单独成第三排溢出底栏
 		if not au.passengers.is_empty():
 			var eb := CmdButton.new(); eb.hud = self; eb.compact = true
-			eb.spec = {"kind": "eject", "label": "出击 (%d)" % au.passengers.size(),
-				"cost_g": 0, "cost_w": 0, "affordable": true, "sub": "驻军全部冲出", "bld": au}
+			eb.spec = {"kind": "eject", "label": Localize.format_text("出击 (%d)", au.passengers.size()),
+				"cost_g": 0, "cost_w": 0, "affordable": true, "sub": Localize.text("驻军全部冲出"), "bld": au}
 			prod.append(eb)
 		_skill_bar.columns = maxi(1, int(ceil(prod.size() / 2.0)))   # 分两排
 		for b in prod:
@@ -1932,16 +1971,16 @@ func _rebuild_command_card() -> void:
 	if au.is_hero:
 		var gb := CmdButton.new()
 		gb.hud = self
-		gb.spec = {"kind": "garrison", "label": "驻扎", "cost_g": 0, "cost_w": 0,
-			"affordable": true, "sub": "点亮后左键点选箭楼/聚义厅进驻"}
+		gb.spec = {"kind": "garrison", "label": Localize.text("驻扎"), "cost_g": 0, "cost_w": 0,
+			"affordable": true, "sub": Localize.text("点亮后左键点选箭楼/聚义厅进驻")}
 		_skill_bar.add_child(gb)
 	# 出击按钮：有驻军的非生产建筑（如箭楼）显示在此（生产建筑的出击键已并入上面的两排网格）
 	if au.is_building and not au.passengers.is_empty() \
 			and not (au.setup_def.has("produces") or au.setup_def.has("researches")):
 		var eb := CmdButton.new()
 		eb.hud = self
-		eb.spec = {"kind": "eject", "label": "出击 (%d)" % au.passengers.size(),
-			"cost_g": 0, "cost_w": 0, "affordable": true, "sub": "驻军全部冲出", "bld": au}
+		eb.spec = {"kind": "eject", "label": Localize.format_text("出击 (%d)", au.passengers.size()),
+			"cost_g": 0, "cost_w": 0, "affordable": true, "sub": Localize.text("驻军全部冲出"), "bld": au}
 		_skill_bar.add_child(eb)
 
 
@@ -1949,8 +1988,8 @@ func _rebuild_command_card() -> void:
 func _add_worker_back() -> void:
 	var bb := CmdButton.new()
 	bb.hud = self
-	bb.spec = {"kind": "back", "label": "返回", "cost_g": 0, "cost_w": 0,
-		"affordable": true, "sub": "回上一层（Esc / 右键也可）"}
+	bb.spec = {"kind": "back", "label": Localize.text("返回"), "cost_g": 0, "cost_w": 0,
+		"affordable": true, "sub": Localize.text("回上一层（Esc / 右键也可）")}
 	_skill_bar.add_child(bb)
 
 
@@ -1962,7 +2001,7 @@ func _rebuild_queue_bar(bld) -> void:
 		return
 	_queue_bar.visible = true
 	var title := Label.new()
-	title.text = "生产队列  %d" % bld._train_queue.size()
+	title.text = Localize.format_text("生产队列  %d", bld._train_queue.size())
 	title.add_theme_font_size_override("font_size", 13)
 	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	_queue_bar.add_child(title)
@@ -1978,7 +2017,7 @@ func _rebuild_queue_bar(bld) -> void:
 		qb.compact = true
 		qb.spec = {"kind": "cancel_train", "key": qkey, "bld": bld, "index": qi,
 			"label": String(battle._defs.get(qkey, {}).get("name", qkey)),
-			"cost_g": 0, "cost_w": 0, "sub": "左键点击 = 取消该项生产（资源退还）"}
+			"cost_g": 0, "cost_w": 0, "sub": Localize.text("左键点击 = 取消该项生产（资源退还）")}
 		grid.add_child(qb)
 
 
@@ -2074,43 +2113,43 @@ func _refresh_panel() -> void:
 		_port_tex.visible = true
 	else:
 		_port_tex.visible = false
-		_port_char.text = prim.display_name.substr(0, 1)
+		_port_char.text = Localize.text(prim.display_name).substr(0, 1)
 	var multi := alive.size() > 1
 	_port_frame.visible = multi          # 多选时点亮金框，标出面板这位即活动单位
-	var title := prim.display_name
+	var title := Localize.text(prim.display_name)
 	if prim.is_hero and prim._hero_leveled:
 		title += "  Lv%d" % prim.hero_level
 	if multi:
-		title = "▸ " + title + "  (当前 ｜ 共 %d ｜ Tab 切换)" % alive.size()
+		title = "▸ " + title + Localize.format_text("  (当前 ｜ 共 %d ｜ Tab 切换)", alive.size())
 	_info_name.text = title
-	_info_hp.text = "生命  %d / %d" % [int(prim.hp), int(prim.max_hp)]
+	_info_hp.text = Localize.format_text("生命  %d / %d", [int(prim.hp), int(prim.max_hp)])
 	if prim.is_building:
 		if prim.is_constructing:
 			var pct: int = int(prim.build_progress / maxf(prim.build_time, 0.1) * 100.0)
-			_info_hp.text = "施工  %d%%   （生命 %d / %d）" % [pct, int(prim.hp), int(prim.max_hp)]
-			_info_stats.text = "右键工地续建 · 空选取消退资源"
+			_info_hp.text = Localize.format_text("施工  %d%%   （生命 %d / %d）", [pct, int(prim.hp), int(prim.max_hp)])
+			Localize.bind_render(_info_stats, func() -> String: return Localize.text("右键工地续建 · 空选取消退资源"))
 		elif prim.setup_def.has("produces"):
 			var q: int = prim._train_queue.size()
 			if q > 0:
-				_info_stats.text = "队列 %d · %s，请清开出口" % [q,prim.production_wait_label()] if prim.production_blocked else "队列 %d · 剩 %d 秒 · 右键设集结点" % [q, int(ceil(prim._train_t))]
+				_info_stats.text = Localize.format_text("队列 %d · %s，请清开出口", [q,prim.production_wait_label()]) if prim.production_blocked else Localize.format_text("队列 %d · 剩 %d 秒 · 右键设集结点", [q, int(ceil(prim._train_t))])
 			else:
-				_info_stats.text = "右键水面设集结点 · 留出下水口" if bool(prim.setup_def.get("requires_shore",false)) else "右键设集结点 · 资源上=自动采"
+				_info_stats.text = Localize.text("右键水面设集结点 · 留出下水口") if bool(prim.setup_def.get("requires_shore",false)) else Localize.text("右键设集结点 · 资源上=自动采")
 		elif prim.atk > 0.0:
-			_info_stats.text = "箭楼 · 攻 %d  射程 %d  自动御敌" % [int(prim.atk), int(prim.atk_range)]
+			_info_stats.text = Localize.format_text("箭楼 · 攻 %d  射程 %d  自动御敌", [int(prim.atk), int(prim.atk_range)])
 		else:
-			_info_stats.text = "守住此处，便是守住梁山"
+			Localize.bind_render(_info_stats, func() -> String: return Localize.text("守住此处，便是守住梁山"))
 		if prim.garrison_cap > 0 and not prim.is_constructing:
-			_info_stats.text += " · 驻军 %d/%d" % [prim.passengers.size(), prim.garrison_cap]
+			_info_stats.text += Localize.format_text(" · 驻军 %d/%d", [prim.passengers.size(), prim.garrison_cap])
 	elif prim.is_hero and prim._hero_leveled:
 		# 攻显示「有效攻击」= atk×buff_atk（含科技/光环加成）；否则研究攻击科技后数字不变，看着像没生效
 		# 防显示「有效防御」= defense − 削甲(_def_down)；每点防约减 5% 普攻伤害
-		_info_stats.text = "攻 %d  防 %d  生命 %d  ｜ 经验 %d/%d  技能点 %d  ｜ %s" % [
-			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.max_hp), int(prim.hero_xp), int(prim.xp_to_next()), prim.skill_points, _stance_tag(prim)]
+		_info_stats.text = Localize.format_text("攻 %d  防 %d  生命 %d  ｜ 经验 %d/%d  技能点 %d  ｜ %s", [
+			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.max_hp), int(prim.hero_xp), int(prim.xp_to_next()), prim.skill_points, _stance_tag(prim)])
 	elif prim.is_worker:
-		_info_stats.text = "攻 %d    防 %d    射程 %d    移速 %d" % [int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed)]
+		_info_stats.text = Localize.format_text("攻 %d    防 %d    射程 %d    移速 %d", [int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed)])
 	else:
-		_info_stats.text = "攻 %d    防 %d    射程 %d    移速 %d    ｜ %s" % [
-			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)]
+		_info_stats.text = Localize.format_text("攻 %d    防 %d    射程 %d    移速 %d    ｜ %s", [
+			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)])
 
 
 ## 有效防御值（含双戒刀削甲 _def_down）；每点防约减 5% 普攻伤害。
@@ -2121,16 +2160,16 @@ func _eff_def(u) -> int:
 func _stance_tag(u) -> String:
 	if touch_ui:
 		match u.stance:
-			Unit.STANCE_DEFEND: return "姿态 守备"
-			Unit.STANCE_HOLD: return "姿态 据守"
-			Unit.STANCE_PASSIVE: return "姿态 避战"
-			_: return "姿态 进攻"
+			Unit.STANCE_DEFEND: return Localize.text("姿态 守备")
+			Unit.STANCE_HOLD: return Localize.text("姿态 据守")
+			Unit.STANCE_PASSIVE: return Localize.text("姿态 避战")
+			_: return Localize.text("姿态 进攻")
 	var key := Settings.key_label("stance")
 	match u.stance:
-		Unit.STANCE_DEFEND: return "姿态 守备(%s)" % key
-		Unit.STANCE_HOLD: return "姿态 据守(%s)" % key
-		Unit.STANCE_PASSIVE: return "姿态 避战(%s)" % key
-		_: return "姿态 进攻(%s)" % key
+		Unit.STANCE_DEFEND: return Localize.format_text("姿态 守备(%s)", key)
+		Unit.STANCE_HOLD: return Localize.format_text("姿态 据守(%s)", key)
+		Unit.STANCE_PASSIVE: return Localize.format_text("姿态 避战(%s)", key)
+		_: return Localize.format_text("姿态 进攻(%s)", key)
 
 
 func _style_label(l: Label, size: int) -> void:
@@ -2228,7 +2267,7 @@ func _build_intro() -> void:
 	vbox.add_child(_intro_text)
 
 	var btn := Button.new()
-	btn.text = "继续 ▸"
+	Localize.bind_render(btn, func() -> String: return Localize.text("继续 ▸"))
 	btn.add_theme_font_size_override("font_size", 18)
 	btn.size_flags_horizontal = Control.SIZE_SHRINK_END
 	btn.pressed.connect(_advance_intro)
@@ -2288,25 +2327,26 @@ func _build_end() -> void:
 	vbox.add_child(row)
 
 	_end_next = Button.new()
-	_end_next.text = "下一关 ▸"
+	Localize.bind_render(_end_next, func() -> String: return Localize.text("下一关 ▸"))
 	_end_next.add_theme_font_size_override("font_size", 20)
 	_end_next.pressed.connect(func() -> void: battle.next_campaign_chapter())
 	row.add_child(_end_next)
 
 	var rbtn := Button.new()
-	rbtn.text = "重打本关"
+	Localize.bind_render(rbtn, func() -> String: return Localize.text("重打本关"))
 	rbtn.add_theme_font_size_override("font_size", 20)
 	rbtn.pressed.connect(func() -> void: restart.emit())
 	row.add_child(rbtn)
 
 	var mbtn := Button.new()
-	mbtn.text = "战役地图"
+	Localize.bind_render(mbtn, func() -> String: return Localize.text("战役地图"))
 	mbtn.add_theme_font_size_override("font_size", 20)
 	mbtn.pressed.connect(func() -> void: to_menu.emit())
 	row.add_child(mbtn)
 
 
-func show_intro(lines: Array) -> void:
+func show_intro(lines: Array, translate_content := true) -> void:
+	_translate_intro = translate_content
 	if lines.is_empty():
 		_intro_root.hide()
 		intro_done.emit()
@@ -2321,9 +2361,17 @@ func _show_intro_line() -> void:
 	var line: Dictionary = _intro_lines[_intro_i]
 	var who: String = line.get("who", "旁白")
 	var color: Color = SPEAKER_COLORS.get(who, Color.WHITE)
-	_intro_name.text = "【%s】" % who
+	_intro_name.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	_intro_text.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	if _translate_intro:
+		Localize.bind_format(_intro_name, "【%s】", who)
+		Localize.bind_text(_intro_text, String(line.get("text", "")))
+	else:
+		Localize.unbind(_intro_name)
+		Localize.unbind(_intro_text)
+		_intro_name.text = "【%s】" % who
+		_intro_text.text = String(line.get("text", ""))
 	_intro_name.add_theme_color_override("font_color", color)
-	_intro_text.text = String(line.get("text", ""))
 	var tex: Texture2D = Art.portrait_texture(String(line.get("key", "narrator")))
 	if battle != null:
 		var actor = battle.find_unit(String(line.get("key", "narrator")))
@@ -2337,7 +2385,8 @@ func _show_intro_line() -> void:
 		_intro_port_tex.visible = false
 		_intro_port_fallback.visible = true
 		_intro_port_fallback.color = color.darkened(0.2)
-		_intro_port_char.text = who.substr(0, 1)
+		_intro_port_char.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+		_intro_port_char.text = (Localize.text(who) if _translate_intro else who).substr(0, 1)
 
 
 func _advance_intro() -> void:
@@ -2362,12 +2411,12 @@ func _on_start_pressed() -> void:
 	start_battle.emit()
 
 
-func show_message(text: String, _dur := 3.5) -> void:
-	_append_info_message(text)
+func show_message(text: String, _dur := 3.5, quiet_in_full_auto := false) -> void:
+	_append_info_message(text, quiet_in_full_auto)
 
 
 func set_top(text: String) -> void:
-	top_label.text = text
+	Localize.bind_text(top_label, text)
 
 
 ## AI友好模式·自动镜头按钮：左下角（命令面板上方）。全员托管后出现，点一下开/关自动镜头。
@@ -2390,7 +2439,7 @@ func _build_autocam_badge() -> void:
 		_autocam_btn.add_theme_stylebox_override(st, sb)
 	_autocam_btn.add_theme_color_override("font_color", UITheme.PAPER)
 	_autocam_btn.add_theme_color_override("font_hover_color", UITheme.PAPER_DARK)
-	_autocam_btn.text = "🎥 自动镜头"
+	Localize.bind_render(_autocam_btn, func() -> String: return Localize.text("🎥 自动镜头"))
 	_autocam_btn.pressed.connect(func() -> void:
 		if battle != null and battle.has_method("toggle_autocam"):
 			battle.toggle_autocam())
@@ -2399,11 +2448,11 @@ func _build_autocam_badge() -> void:
 
 ## 竞技场·主界面两枚按钮（左下、命令面板之上）：⚔出兵 / 🎲随机。仅竞技场显示(见 _refresh_panel)。
 func _build_arena_buttons() -> void:
-	_arena_troops_btn = _mk_arena_btn("⚔ 出兵", Color("ff9a3a"), -(RTSCamera.PANEL_H + 12.0))
+	_arena_troops_btn = _mk_arena_btn(Localize.text("⚔ 出兵"), Color("ff9a3a"), -(RTSCamera.PANEL_H + 12.0))
 	_arena_troops_btn.pressed.connect(func() -> void:
 		if battle != null and battle.has_method("arena_spawn_troops"):
 			battle.arena_spawn_troops())
-	_arena_random_btn = _mk_arena_btn("🎲 随机（带敌将）", Color("ff5a4a"), -(RTSCamera.PANEL_H + 54.0))
+	_arena_random_btn = _mk_arena_btn(Localize.text("🎲 随机（带敌将）"), Color("ff5a4a"), -(RTSCamera.PANEL_H + 54.0))
 	_arena_random_btn.pressed.connect(func() -> void:
 		if battle != null and battle.has_method("arena_spawn_random"):
 			battle.arena_spawn_random())
@@ -2441,7 +2490,7 @@ func set_autocam_button(show: bool, on: bool) -> void:
 	_autocam_btn.visible = show
 	if not show:
 		return
-	_autocam_btn.text = "🎬 自动镜头·开" if on else "🎥 自动镜头"
+	Localize.bind_render(_autocam_btn, func() -> String: return Localize.text("🎬 自动镜头·开") if on else Localize.text("🎥 自动镜头"))
 	_autocam_btn.add_theme_color_override("font_color",
 		UITheme.COMPLETE if on else UITheme.PAPER)
 	if not on:
@@ -2449,18 +2498,18 @@ func set_autocam_button(show: bool, on: bool) -> void:
 
 
 func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "", campaign_result: Dictionary = {}) -> void:
-	_end_title.text = "旗开得胜！" if victory else "功败垂成……"
+	Localize.bind_render(_end_title, func() -> String: return Localize.text("旗开得胜！") if victory else Localize.text("功败垂成……"))
 	_end_title.add_theme_color_override("font_color", UITheme.PAPER_DARK if victory else UITheme.DANGER)
 	var campaign_line := ""
 	if not campaign_result.is_empty():
-		campaign_line = "\n基础通关：%s" % ("完成" if victory else "未完成")
+		campaign_line = Localize.format_text("\n基础通关：%s", (Localize.text("完成") if victory else Localize.text("未完成")))
 		var total := int(campaign_result.get("story_total", 0))
 		if total > 0:
-			campaign_line += "\n演义复现：%d/%d" % [int(campaign_result.get("story_done", 0)), total]
+			campaign_line += Localize.format_text("\n演义复现：%d/%d", [int(campaign_result.get("story_done", 0)), total])
 			if bool(campaign_result.get("story_complete", false)):
-				campaign_line += " · %s" % ("首次获得演义印" if bool(campaign_result.get("new_story_seal", false)) else "演义印已收录")
+				campaign_line += " · %s" % (Localize.text("首次获得演义印") if bool(campaign_result.get("new_story_seal", false)) else Localize.text("演义印已收录"))
 			elif victory:
-				campaign_line += " · 演义印未收录（可重打补齐）"
+				campaign_line += Localize.text(" · 演义印未收录（可重打补齐）")
 				var missed_labels: Array[String] = []
 				var result_goals: Variant = campaign_result.get("goals", [])
 				if result_goals is Array:
@@ -2472,11 +2521,11 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 					# Keep settlement compact beside the fixed-height battle report. One
 					# concrete missing goal plus the remaining count is enough to guide replay.
 					var preview: Array[String] = missed_labels.slice(0, 1)
-					campaign_line += "\n待补演义：" + "；".join(preview)
+					campaign_line += Localize.text("\n待补演义：") + "；".join(preview)
 					if missed_labels.size() > preview.size():
-						campaign_line += "；另%d项" % (missed_labels.size() - preview.size())
-	_end_sub.text = "%s\n此役歼灭敌军 %d 人。%s" % [line, kills, campaign_line]
-	_end_tally.text = ("⚔ 各路好汉战绩 ⚔\n" + hero_tally) if hero_tally != "" else ""
+						campaign_line += Localize.format_text("；另%d项", (missed_labels.size() - preview.size()))
+	Localize.bind_render(_end_sub, func() -> String: return Localize.format_text("%s\n此役歼灭敌军 %d 人。%s", [line, kills, campaign_line]))
+	Localize.bind_render(_end_tally, func() -> String: return (Localize.text("⚔ 各路好汉战绩 ⚔\n") + hero_tally) if hero_tally != "" else "")
 	_end_tally.visible = hero_tally != ""
 	_end_tally_scroll.visible = hero_tally != ""
 	_end_next.visible = victory and has_next
@@ -2504,7 +2553,7 @@ func _build_pause() -> void:
 	_pause_options = vb
 
 	var t := Label.new()
-	t.text = "暂停"
+	Localize.bind_render(t, func() -> String: return Localize.text("暂停"))
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t.add_theme_font_size_override("font_size", 46)
 	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
@@ -2512,7 +2561,7 @@ func _build_pause() -> void:
 
 	for spec in [["继续 (Esc)", "resume"], ["重新开始本局", "restart"], ["返回主菜单", "menu"], ["退出游戏", "quit"]]:
 		var b := Button.new()
-		b.text = String(spec[0])
+		Localize.bind_text(b, String(spec[0]))
 		b.add_theme_font_size_override("font_size", 22)
 		b.custom_minimum_size = Vector2(240, 48)
 		var action := String(spec[1])
@@ -2525,7 +2574,7 @@ func _build_pause() -> void:
 
 	# 设置（与主菜单同一套面板）：先收起暂停菜单，关闭设置后再弹回；HUD 为 ALWAYS，暂停态可操作
 	var setb := Button.new()
-	setb.text = "⚙ 设置"
+	Localize.bind_render(setb, func() -> String: return Localize.text("⚙ 设置"))
 	setb.add_theme_font_size_override("font_size", 22)
 	setb.custom_minimum_size = Vector2(240, 48)
 	setb.pressed.connect(func() -> void:
@@ -2540,11 +2589,11 @@ func _build_pause() -> void:
 	fsb.add_theme_font_size_override("font_size", 20)
 	fsb.custom_minimum_size = Vector2(240, 44)
 	var scr := get_node_or_null("/root/Screen")
-	fsb.text = ("⛶ 退出全屏 (F11)" if (scr != null and scr.is_fullscreen()) else "⛶ 全屏 (F11)")
+	Localize.bind_render(fsb, func() -> String: return (Localize.text("⛶ 退出全屏 (F11)") if (scr != null and scr.is_fullscreen()) else Localize.text("⛶ 全屏 (F11)")))
 	fsb.pressed.connect(func() -> void:
 		if scr != null:
 			scr.toggle_fullscreen()
-			fsb.text = "⛶ 退出全屏 (F11)" if scr.is_fullscreen() else "⛶ 全屏 (F11)")
+			Localize.bind_render(fsb, func() -> String: return Localize.text("⛶ 退出全屏 (F11)") if scr.is_fullscreen() else Localize.text("⛶ 全屏 (F11)")))
 	vb.add_child(fsb)
 
 	_pause_confirm = VBoxContainer.new()
@@ -2562,7 +2611,7 @@ func _build_pause() -> void:
 	_pause_confirm_text.add_theme_font_size_override("font_size", 20)
 	_pause_confirm.add_child(_pause_confirm_text)
 	_pause_cancel_button = Button.new()
-	_pause_cancel_button.text = "取消 · 留在本局 (Esc)"
+	Localize.bind_render(_pause_cancel_button, func() -> String: return Localize.text("取消 · 留在本局 (Esc)"))
 	_pause_cancel_button.custom_minimum_size.y = 48.0
 	_pause_cancel_button.add_theme_font_size_override("font_size", 22)
 	_pause_cancel_button.pressed.connect(show_pause)
@@ -2577,11 +2626,11 @@ func _build_pause() -> void:
 func _request_pause_action(action: String) -> void:
 	if not _pause_root.visible or not action in ["restart", "menu", "quit"]: return
 	_pause_pending_action = action
-	_pause_confirm_title.text = {"restart": "重新开始本局？", "menu": "返回主菜单？", "quit": "退出游戏？"}[action]
-	_pause_confirm_button.text = {"restart": "确认重新开始", "menu": "确认返回主菜单", "quit": "确认退出游戏"}[action]
-	_pause_confirm_text.text = "本局的战斗进度不会保存，之后需从本局开头重新开始。"
+	Localize.bind_render(_pause_confirm_title, func() -> String: return {"restart": Localize.text("重新开始本局？"), "menu": Localize.text("返回主菜单？"), "quit": Localize.text("退出游戏？")}[action])
+	Localize.bind_render(_pause_confirm_button, func() -> String: return {"restart": Localize.text("确认重新开始"), "menu": Localize.text("确认返回主菜单"), "quit": Localize.text("确认退出游戏")}[action])
+	Localize.bind_render(_pause_confirm_text, func() -> String: return Localize.text("本局的战斗进度不会保存，之后需从本局开头重新开始。"))
 	if battle != null and battle.level.id().begins_with("level"):
-		_pause_confirm_text.text += "\n\n已获得的章节解锁和通关记录会保留。"
+		_pause_confirm_text.text += Localize.text("\n\n已获得的章节解锁和通关记录会保留。")
 	_pause_options.hide()
 	_pause_confirm.show()
 	# Opening the question never focuses the destructive action.
@@ -2746,7 +2795,7 @@ class UnitIcon extends Control:
 
 	func _process(_delta: float) -> void:
 		if is_instance_valid(unit):
-			tooltip_text = unit.display_name if count <= 1 else "%s ×%d" % [unit.display_name, count]
+			tooltip_text = Localize.text(unit.display_name) if count <= 1 else "%s ×%d" % [Localize.text(unit.display_name), count]
 		queue_redraw()
 
 	func _draw() -> void:
@@ -2761,7 +2810,7 @@ class UnitIcon extends Control:
 			# 极少数仍无图者：画名字首字（而非黄圈），至少能认出是谁
 			var f := ThemeDB.fallback_font
 			var col := Color("e6b84c") if unit.faction == Unit.FACTION_LIANG else Color("e08c7c")
-			draw_string(f, Vector2(0, size.y * 0.5 + 6.0), unit.display_name.substr(0, 1),
+			draw_string(f, Vector2(0, size.y * 0.5 + 6.0), Localize.text(unit.display_name).substr(0, 1),
 				HORIZONTAL_ALIGNMENT_CENTER, size.x, 22, col)
 		# 血条
 		var frac := clampf(unit.hp / unit.max_hp, 0.0, 1.0)
@@ -2806,7 +2855,7 @@ class SkillButton extends Control:
 
 	func _process(_delta: float) -> void:
 		if is_instance_valid(hero):
-			tooltip_text = "%s（%s）" % [adef.get("name", ""), hotkey]
+			tooltip_text = "%s（%s）" % [Localize.text(String(adef.get("name", ""))), hotkey]
 			queue_redraw()
 
 	func _draw() -> void:
@@ -2817,13 +2866,13 @@ class SkillButton extends Control:
 		var rdy := hero.ability_ready()
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.13, 0.10, 0.07))
 		draw_rect(Rect2(0, 0, 5, size.y), col)
-		draw_string(f, Vector2(13, 23), adef.get("name", ""), HORIZONTAL_ALIGNMENT_LEFT, size.x - 28, 18, Color("ffd866"))
+		draw_string(f, Vector2(13, 23), Localize.text(String(adef.get("name", ""))), HORIZONTAL_ALIGNMENT_LEFT, size.x - 28, 18, Color("ffd866"))
 		# 右上角热键键帽
 		if hotkey != "":
 			draw_rect(Rect2(size.x - 25, 6, 18, 18), Color(0.05, 0.04, 0.03, 0.9))
 			draw_rect(Rect2(size.x - 25, 6, 18, 18), Color(0.5, 0.45, 0.3), false, 1.0)
 			draw_string(f, Vector2(size.x - 21, 20), hotkey, HORIZONTAL_ALIGNMENT_LEFT, 16, 14, Color("ffe9a8"))
-		draw_multiline_string(f, Vector2(13, 44), adef.get("desc", ""), HORIZONTAL_ALIGNMENT_LEFT, size.x - 18, 12, -1, Color(0.82, 0.82, 0.78))
+		draw_multiline_string(f, Vector2(13, 44), Localize.text(String(adef.get("desc", ""))), HORIZONTAL_ALIGNMENT_LEFT, size.x - 18, 12, -1, Color(0.82, 0.82, 0.78))
 		# 冷却遮罩 + 倒计时秒数（自下而上填充）
 		if not rdy:
 			var frac := hero.ability_cd_frac()
@@ -2878,24 +2927,24 @@ class CmdButton extends Control:
 		var cg := int(spec.get("cost_g", 0))
 		var cw := int(spec.get("cost_w", 0))
 		var kind := String(spec.get("kind", "build"))
-		var sub := String(spec.get("sub", ""))
+		var sub := Localize.text(String(spec.get("sub", "")))
 		if sub == "":
 			match kind:
-				"train": sub = "左键训练（Shift 排队）"
-				"build": sub = "左键选址放置"
-				"research": sub = "左键研究科技"
-				"trade": sub = "左键交易"
-				"eject": sub = "驻军全部冲出"
+				"train": sub = Localize.text("左键训练（Shift 排队）")
+				"build": sub = Localize.text("左键选址放置")
+				"research": sub = Localize.text("左键研究科技")
+				"trade": sub = Localize.text("左键交易")
+				"eject": sub = Localize.text("驻军全部冲出")
 		var _hide_cost: bool = hud.battle != null and hud.battle.has_method("train_cost_hidden") and hud.battle.train_cost_hidden()
 		var foot := ""
 		if (cg > 0 or cw > 0) and not _hide_cost:
-			foot = "花费　金 %d　木 %d" % [cg, cw]
+			foot = Localize.format_text("花费　金 %d　木 %d", [cg, cw])
 		# 点将悬浮卡：训练英雄时附上该英雄 4 技能速览（名字·kind·一句说明），点将前先看清 kit
 		if kind == "train":
 			var kit := _train_kit_summary(String(spec.get("key", "")))
 			if kit != "":
 				sub = (sub + "\n" + kit) if sub != "" else kit
-		hud.show_skill_tip(self, get_global_rect(), String(spec.get("label", "")), sub, foot, Color("ffd866"))
+		hud.show_skill_tip(self, get_global_rect(), Localize.text(String(spec.get("label", ""))), sub, foot, Color("ffd866"))
 
 	func _on_hover_out() -> void:
 		if hud != null:
@@ -2926,10 +2975,10 @@ class CmdButton extends Control:
 			if ad.is_empty():
 				continue
 			var kd := String(ad.get("effect", {}).get("kind", ""))
-			var kl: String = KIND_LABEL.get(kd, kd)
+			var kl: String = Localize.text(KIND_LABEL.get(kd, kd))
 			var slot: String = slots[i] if i < slots.size() else "·"
-			var pas := "·被动" if bool(ad.get("passive", false)) else ""
-			lines.append("%s %s〔%s%s〕" % [slot, String(ad.get("name", "")), kl, pas])
+			var pas := Localize.text("·被动") if bool(ad.get("passive", false)) else ""
+			lines.append("%s %s〔%s%s〕" % [slot, Localize.text(String(ad.get("name", ""))), kl, pas])
 		return "\n".join(lines)
 
 	## 返回按钮矢量图标：左指箭头（无专属美术，画干净的几何图标而非汉字）
@@ -2965,42 +3014,42 @@ class CmdButton extends Control:
 		var kind := String(spec.get("kind", "build"))
 		var key := String(spec.get("key", ""))
 		var accent := Color(0.55, 0.42, 0.22)
-		var glyph := "建"
+		var glyph := Localize.text("建")
 		var tex: Texture2D = null
 		if kind == "train":
-			accent = Color(0.45, 0.55, 0.32); glyph = "练"; tex = Art.avatar_texture(key)   # 有头像优先用头像(干净)，无则退回走图
+			accent = Color(0.45, 0.55, 0.32); glyph = Localize.text("练"); tex = Art.avatar_texture(key)   # 有头像优先用头像(干净)，无则退回走图
 		elif kind == "build":
 			tex = Art.building_texture(key)
 		elif kind == "cat":
 			var cat := String(spec.get("cat", ""))
 			if cat == "tower":
-				accent = Color(0.5, 0.42, 0.62); glyph = "塔"; tex = Art.building_texture("arrow_tower")
+				accent = Color(0.5, 0.42, 0.62); glyph = Localize.text("塔"); tex = Art.building_texture("arrow_tower")
 			elif cat == "trap":
-				accent = Color(0.6, 0.45, 0.25); glyph = "陷"; tex = Art.trap_texture("trap_logs")
+				accent = Color(0.6, 0.45, 0.25); glyph = Localize.text("陷"); tex = Art.trap_texture("trap_logs")
 			else:
-				accent = Color(0.5, 0.45, 0.3); glyph = "建"; tex = Art.building_texture("barracks")
+				accent = Color(0.5, 0.45, 0.3); glyph = Localize.text("建"); tex = Art.building_texture("barracks")
 		elif kind == "trap":
-			accent = Color(0.6, 0.45, 0.25); glyph = String(spec.get("label", "陷")).substr(0, 1); tex = Art.trap_texture(key)
+			accent = Color(0.6, 0.45, 0.25); glyph = String(spec.get("label", Localize.text("陷"))).substr(0, 1); tex = Art.trap_texture(key)
 		elif kind == "back":
-			accent = Color(0.4, 0.4, 0.42); glyph = "返"
+			accent = Color(0.4, 0.4, 0.42); glyph = Localize.text("返")
 		elif kind == "research":
-			accent = Color(0.45, 0.4, 0.62); glyph = "研"
+			accent = Color(0.45, 0.4, 0.62); glyph = Localize.text("研")
 		elif kind == "train_page":
-			accent = Color(0.4, 0.42, 0.5); glyph = "页"
+			accent = Color(0.4, 0.42, 0.5); glyph = Localize.text("页")
 		elif kind == "hall_cat":
-			accent = Color(0.5, 0.42, 0.6); glyph = String(spec.get("glyph", "将"))
+			accent = Color(0.5, 0.42, 0.6); glyph = String(spec.get("glyph", Localize.text("将")))
 		elif kind == "arena_spawn":
-			accent = Color(0.66, 0.28, 0.24); glyph = "敌"
+			accent = Color(0.66, 0.28, 0.24); glyph = Localize.text("敌")
 		elif kind == "trade":
-			accent = Color(0.6, 0.5, 0.2); glyph = "易"
+			accent = Color(0.6, 0.5, 0.2); glyph = Localize.text("易")
 		elif kind == "eject":
-			accent = Color(0.6, 0.3, 0.25); glyph = "出"
+			accent = Color(0.6, 0.3, 0.25); glyph = Localize.text("出")
 		elif kind == "repair":
-			accent = Color(0.3, 0.55, 0.62); glyph = "修"
+			accent = Color(0.3, 0.55, 0.62); glyph = Localize.text("修")
 		elif kind == "weapon":
-			accent = Color(0.42, 0.5, 0.62); glyph = "刀" if bool(spec.get("melee", false)) else "弓"
+			accent = Color(0.42, 0.5, 0.62); glyph = Localize.text("刀") if bool(spec.get("melee", false)) else Localize.text("弓")
 		elif kind == "garrison":
-			accent = Color(0.42, 0.45, 0.72); glyph = "驻"
+			accent = Color(0.42, 0.45, 0.72); glyph = Localize.text("驻")
 		elif kind == "cancel_train":
 			accent = Color(0.66, 0.28, 0.24); glyph = "×"; tex = Art.avatar_texture(key)   # 队列图标同样优先用头像
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
@@ -3026,55 +3075,55 @@ class CmdButton extends Control:
 			else:
 				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.71), glyph, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(30 * gsc), icol)
 		# 名称（y 随按钮高度，desktop 88→69、touch 104→85）
-		draw_string(f, Vector2(3, size.y - 19), String(spec.get("label", "")), HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (11 if compact else (15 if big else 13)),
+		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 19), Localize.text(String(spec.get("label", ""))), size.x - 6, (11 if compact else (15 if big else 13)),
 			Color("ffd866") if aff else Color(0.62, 0.52, 0.4))
 		# 底行：花费；生产/研究中则显示进度。竞技场沙盒资源无限 → 隐藏金木花费（信息噪声）。
 		var _hide_cost: bool = hud != null and hud.battle != null and hud.battle.has_method("train_cost_hidden") and hud.battle.train_cost_hidden()
 		var info := ""
 		if cg > 0 and not _hide_cost:
-			info += "金%d " % cg
+			info += Localize.format_text("金%d ", cg)
 		if cw > 0 and not _hide_cost:
-			info += "木%d" % cw
+			info += Localize.format_text("木%d", cw)
 		if kind == "eject":
-			info = "驻军全出"
+			info = Localize.text("驻军全出")
 		elif kind == "repair":
-			info = "修受损建筑"
+			info = Localize.text("修受损建筑")
 		elif kind == "weapon":
-			info = "+10%吸血" if bool(spec.get("melee", false)) else "可拔刀"
+			info = Localize.text("+10%吸血") if bool(spec.get("melee", false)) else Localize.text("可拔刀")
 		elif kind == "garrison":
-			info = "点亮后点建筑进驻"
+			info = Localize.text("点亮后点建筑进驻")
 		elif kind == "cat":
-			info = "▸ 展开"
+			info = Localize.text("▸ 展开")
 		elif kind == "hall_cat":
-			info = String(spec.get("info", "▸ 展开"))
+			info = String(spec.get("info", Localize.text("▸ 展开")))
 		elif kind == "back":
-			info = "◂ 返回"
+			info = Localize.text("◂ 返回")
 		elif kind == "train_page":
-			info = String(spec.get("label", ""))
+			info = Localize.text(String(spec.get("label", "")))
 		elif kind == "arena_spawn":
-			info = "一键召敌试招"
+			info = Localize.text("一键召敌试招")
 		elif kind == "trap":
-			info = "" if _hide_cost else (("金%d " % cg if cg > 0 else "") + ("木%d" % cw if cw > 0 else ""))
+			info = "" if _hide_cost else ((Localize.format_text("金%d ", cg) if cg > 0 else "") + (Localize.format_text("木%d", cw) if cw > 0 else ""))
 		elif kind == "train":
 			var bld = spec.get("bld", null)
 			if is_instance_valid(bld) and not bld._train_queue.is_empty():
-				info = bld.production_wait_label()+"·清出口" if bld.production_blocked else "队列%d 剩%ds" % [bld._train_queue.size(), int(ceil(bld._train_t))]
+				info = bld.production_wait_label()+Localize.text("·清出口") if bld.production_blocked else Localize.format_text("队列%d 剩%ds", [bld._train_queue.size(), int(ceil(bld._train_t))])
 		elif kind == "research":
 			var rb = spec.get("bld", null)
 			if is_instance_valid(rb) and rb._research_key != "":
-				info = "研究 剩%ds" % int(ceil(rb._research_t))
+				info = Localize.format_text("研究 剩%ds", int(ceil(rb._research_t)))
 		elif kind == "cancel_train":
 			var cb = spec.get("bld", null)
 			if int(spec.get("index", -1)) == 0 and is_instance_valid(cb):
-				info = cb.production_wait_label()+"·点撤" if cb.production_blocked else "训练中 剩%ds·点撤" % int(ceil(cb._train_t))
+				info = cb.production_wait_label()+Localize.text("·点撤") if cb.production_blocked else Localize.format_text("训练中 剩%ds·点撤", int(ceil(cb._train_t)))
 			else:
-				info = "排队·点撤单"
+				info = Localize.text("排队·点撤单")
 		# 撤单图标：右上角红 × 角标，提示「点我取消」
 		if kind == "cancel_train":
 			var bdg := Rect2(ir.position.x + ir.size.x - 17, ir.position.y, 17, 17)
 			draw_rect(bdg, Color(0.72, 0.14, 0.11, 0.92))
 			draw_string(f, Vector2(bdg.position.x + 3, bdg.position.y + 14), "×", HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color(1, 1, 1))
-		draw_string(f, Vector2(3, size.y - 4), info, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (9 if compact else (13 if big else 11)),
+		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 4), info, size.x - 6, (9 if compact else (13 if big else 11)),
 			Color("ffd24a") if aff else Color(0.85, 0.35, 0.3))
 		# 快捷键键帽（Q/W/E/R，与 _command_hotkey 槽位一致）；「出击」/撤单/队列 非槽位命令，不画键帽。触屏隐藏（手机无键盘）
 		var slot := get_index()
@@ -3274,26 +3323,26 @@ class HeroSlotButton extends Control:
 		var max_charges := hero.slot_max_charges(slot)
 		var foot := ""
 		if passive and not has_active:
-			foot = "常驻被动 · 无需施放"
+			foot = Localize.text("常驻被动 · 无需施放")
 		elif passive and has_active:
-			foot = "常驻被动 + 主动 · 冷却 %d 秒 · 等级 %d/3 · 热键 %s" % [cd, rank, hotkey]
+			foot = Localize.format_text("常驻被动 + 主动 · 冷却 %d 秒 · 等级 %d/3 · 热键 %s", [cd, rank, hotkey])
 		elif rank <= 0:
-			foot = "未学习 · 点图标右下「＋」学习（消耗技能点）"
+			foot = Localize.text("未学习 · 点图标右下「＋」学习（消耗技能点）")
 		elif max_charges > 0:
 			var variants: Array = ad.get("effect", {}).get("banner_variants", [])
 			var next_kind := String(variants[hero.slot_cast_sequence(slot) % variants.size()]) if not variants.is_empty() else ""
-			var next_label := "忠" if next_kind == "loyalty" else ("义" if next_kind == "righteous" else "")
-			foot = "%d点能量 · 每%d秒恢复1点 · 当前%d/%d%s · 等级 %d/3 · 热键 %s" % [
+			var next_label := Localize.text("忠") if next_kind == "loyalty" else (Localize.text("义") if next_kind == "righteous" else "")
+			foot = Localize.format_text("%d点能量 · 每%d秒恢复1点 · 当前%d/%d%s · 等级 %d/3 · 热键 %s", [
 				max_charges, int(round(hero.slot_charge_recovery(slot))), hero.slot_charges(slot), max_charges,
-				(" · 下一面「%s」" % next_label) if next_label != "" else "", rank, hotkey]
+				(Localize.text(" · 下一面「%s」") % next_label) if next_label != "" else "", rank, hotkey])
 		else:
-			foot = "冷却 %d 秒 · 等级 %d/3 · 热键 %s" % [cd, rank, hotkey]
+			foot = Localize.format_text("冷却 %d 秒 · 等级 %d/3 · 热键 %s", [cd, rank, hotkey])
 		# 说明 + 各级数值速览（1/2/3 级）——悬浮即见技能详情
 		var body := Defs.ability_desc(String(s["id"]), rank)
 		var detail := Defs.ability_levels(String(s["id"]))
 		if detail != "":
-			body += "\n〔1/2/3级〕" + detail
-		hud.show_skill_tip(self, get_global_rect(), String(ad.get("name", "")),
+			body += Localize.text("\n〔1/2/3级〕") + detail
+		hud.show_skill_tip(self, get_global_rect(), Localize.text(String(ad.get("name", ""))),
 			body, foot, ad.get("color", Color.WHITE))
 
 	func _on_hover_out() -> void:
@@ -3313,7 +3362,7 @@ class HeroSlotButton extends Control:
 		var max_charges := hero.slot_max_charges(slot)
 		var charges := hero.slot_charges(slot) if max_charges > 0 else 0
 		var recharge_left := hero.slot_recharge_left(slot) if max_charges > 0 else 0.0
-		var nm := String(ad.get("name", ""))
+		var nm := Localize.text(String(ad.get("name", "")))
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
 		# 方形徽记：技能色块底 + 矢量图标（无图标的技能回退名称首字）
 		var big: bool = hud != null and hud.touch_ui
@@ -3342,7 +3391,7 @@ class HeroSlotButton extends Control:
 					Color(1, 1, 1, 0.94) if learned else Color(0.85, 0.85, 0.85, 0.6))
 		# 被动角标
 		if passive:
-			draw_string(f, Vector2(ir.position.x, ir.position.y + 13.0 * ds), "被动", HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(11 * ds), Color(0.78, 0.92, 0.78))
+			draw_string(f, Vector2(ir.position.x, ir.position.y + 13.0 * ds), Localize.text("被动"), HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(11 * ds), Color(0.78, 0.92, 0.78))
 		# 多充能技能：图标右上画能量格，左上标下一面忠/义旗。
 		if max_charges > 0 and learned:
 			for ci in range(max_charges):
@@ -3352,7 +3401,7 @@ class HeroSlotButton extends Control:
 			var variants: Array = ad.get("effect", {}).get("banner_variants", [])
 			if not variants.is_empty():
 				var next_kind := String(variants[hero.slot_cast_sequence(slot) % variants.size()])
-				var next_label := "忠" if next_kind == "loyalty" else "义"
+				var next_label := Localize.text("忠") if next_kind == "loyalty" else Localize.text("义")
 				var next_col := Color("b9dcff") if next_kind == "loyalty" else Color("ffe69a")
 				draw_string(f, ir.position + Vector2(3.0 * ds, 14.0 * ds), next_label, HORIZONTAL_ALIGNMENT_LEFT, -1, int(12 * ds), next_col)
 		# 等级圆点（满 3 级）叠在图标底部
@@ -3370,30 +3419,30 @@ class HeroSlotButton extends Control:
 		if castable and learned and (pending or cd_left > 0.0 or charge_empty):
 			draw_rect(ir, Color(0, 0, 0, 0.55))
 			if Settings.show_cooldown:
-				var center_text := "施法" if pending else str(int(ceil(cd_left if cd_left > 0.0 else recharge_left)))
+				var center_text := Localize.text("施法") if pending else str(int(ceil(cd_left if cd_left > 0.0 else recharge_left)))
 				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.65), center_text, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int((16 if pending else 24) * ds), Color(1, 1, 1, 0.95))
 		elif rank == 0 and not passive:
 			draw_rect(ir, Color(0, 0, 0, 0.36))
 		# 名称（y 随按钮高度）
 		var nm_fs: int = 12 if compact and big else (14 if compact else (15 if big else 13))
-		draw_string(f, Vector2(3, size.y - 19), nm, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, nm_fs, Color("ffd866") if learned else Color(0.6, 0.55, 0.45))
+		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 19), nm, size.x - 6, nm_fs, Color("ffd866") if learned else Color(0.6, 0.55, 0.45))
 		# 底行状态：未冷却时显示该技能（当前等级）的冷却秒数——让玩家随时看到「CD 多少」
 		var st := ""
 		if castable and learned and pending:
-			st = "施法中"
+			st = Localize.text("施法中")
 		elif castable and learned and max_charges > 0:
 			# 充能数必须一眼可辨：只画小圆点或“2/2”很容易被误认成技能等级。
 			# 紧凑的移动端技能轨也保留完整“能量 2/2”，恢复倒计时交给零能量遮罩和说明卡。
-			st = "能量 %d/%d" % [charges, max_charges]
+			st = Localize.format_text("能量 %d/%d", [charges, max_charges])
 		elif castable and learned and cd_left > 0.0:
-			st = "冷却 %ds" % int(ceil(cd_left))
+			st = Localize.format_text("冷却 %ds", int(ceil(cd_left)))
 		elif castable and learned:
 			st = "CD %ds " % int(round(hero.slot_cd(slot))) + hotkey   # 就绪：直接标出冷却时长
 		elif passive:
-			st = "常驻" if learned else "被动·未学"
+			st = Localize.text("常驻") if learned else Localize.text("被动·未学")
 		elif hero.can_learn(slot):
-			st = "可学 +"
-		draw_string(f, Vector2(3, size.y - 4), st, HORIZONTAL_ALIGNMENT_CENTER, size.x - 6, (10 if compact else 13) if big else 11, Color(0.82, 0.86, 0.72))
+			st = Localize.text("可学 +")
+		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 4), st, size.x - 6, (10 if compact else 13) if big else 11, Color(0.82, 0.86, 0.72))
 		var _touch: bool = big
 		# 热键键帽（触屏隐藏，手机无键盘）
 		if hotkey != "" and not passive and not _touch:
@@ -3682,7 +3731,7 @@ class InventorySlotButton extends Control:
 		var tip: Dictionary = hud._item_tip_data(hero, slot)
 		if tip.is_empty():
 			return
-		hud.show_skill_tip(self, get_global_rect(), String(tip.get("title", "物品")),
+		hud.show_skill_tip(self, get_global_rect(), String(tip.get("title", Localize.text("物品"))),
 			String(tip.get("body", "")), String(tip.get("foot", "")), tip.get("color", Color("d9bd75")))
 
 	func _on_hover() -> void:
@@ -3707,7 +3756,7 @@ class InventorySlotButton extends Control:
 	func _drag_preview() -> Control:
 		var label := Label.new()
 		var idef: Dictionary = hero.inventory.slot_def(slot) if _valid_inventory() else {}
-		label.text = String(idef.get("name", "物品"))
+		Localize.bind_render(label, func() -> String: return Localize.text(String(idef.get("name", "物品"))))
 		label.custom_minimum_size = Vector2(78, 34)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -3789,12 +3838,12 @@ class InventorySlotButton extends Control:
 			draw_rect(inner, Color(col.r * 0.24, col.g * 0.24, col.b * 0.24, 1.0))
 			draw_circle(inner.get_center(), minf(inner.size.x, inner.size.y) * 0.27, Color(col.r, col.g, col.b, 0.28))
 			draw_string(f, Vector2(inner.position.x, inner.position.y + inner.size.y * 0.66),
-				String(idef.get("name", item_id)).substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER,
+				Localize.text(String(idef.get("name", item_id))).substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER,
 				inner.size.x, 24 if popup_size else 21, col)
 		if hud != null and not hud.touch_ui:
 			draw_rect(Rect2(2, 2, 17, 15), Color(0, 0, 0, 0.72))
 			draw_string(f, Vector2(5, 14), hotkeys[slot], HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("fff0bd"))
-		var mark := "主" if not idef.get("active", {}).is_empty() else "被"
+		var mark := Localize.text("主") if not idef.get("active", {}).is_empty() else Localize.text("被")
 		draw_rect(Rect2(size.x - 18, 2, 16, 15), Color(0, 0, 0, 0.72))
 		draw_string(f, Vector2(size.x - 16, 14), mark, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, col)
 		var count := int(item.get("count", 1))
@@ -3809,7 +3858,7 @@ class InventorySlotButton extends Control:
 				size.x, 16, Color.WHITE)
 		elif hud != null and hud.battle != null and hud.battle.is_item_cast_pending(hero, slot):
 			draw_rect(rect.grow(-2.0), Color(0.18, 0.12, 0.02, 0.58))
-			draw_string(f, Vector2(0, size.y * 0.61), "施", HORIZONTAL_ALIGNMENT_CENTER,
+			draw_string(f, Vector2(0, size.y * 0.61), Localize.text("施"), HORIZONTAL_ALIGNMENT_CENTER,
 				size.x, 18, Color("ffd866"))
 		if hud != null and hud.battle != null and hud.battle._item_caster == hero \
 				and hud.battle._item_slot == slot and hud.battle._item_armed != "":
@@ -3887,16 +3936,16 @@ class HeroChip extends Control:
 		if tex != null:
 			draw_texture_rect(tex, ir, false, Color(0.55, 0.6, 0.85) if garr else Color.WHITE)
 		else:
-			draw_string(f, Vector2(0, size.y * 0.52), hero.display_name.substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 32, Color("ffe9a8"))
+			draw_string(f, Vector2(0, size.y * 0.52), Localize.text(hero.display_name).substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 32, Color("ffe9a8"))
 		# 驻军徽标：左上「驻」+ 底部「点击出击」提示，让玩家知道这头像现在是出击键
 		if garr:
 			draw_rect(ir, Color(0.10, 0.13, 0.28, 0.42))
-			draw_string(f, Vector2(5, 22), "驻", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("cfe0ff"))
-			draw_string(f, Vector2(0, size.y - 16), "▶出击", HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 14, Color("cfe0ff"))
+			draw_string(f, Vector2(5, 22), Localize.text("驻"), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("cfe0ff"))
+			draw_string(f, Vector2(0, size.y - 16), Localize.text("▶出击"), HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 14, Color("cfe0ff"))
 		# 托管徽标：绿底「托管」横幅压在头像顶部，一眼可辨哪些英雄在托管
 		if hero.auto_micro:
 			draw_rect(Rect2(3, 3, avatar_w - 6, 17), Color(0.10, 0.34, 0.15, 0.92))
-			draw_string(f, Vector2(3, 16), "托管", HORIZONTAL_ALIGNMENT_CENTER, avatar_w - 6, 13, Color(0.80, 1.0, 0.84))
+			draw_string(f, Vector2(3, 16), Localize.text("托管"), HORIZONTAL_ALIGNMENT_CENTER, avatar_w - 6, 13, Color(0.80, 1.0, 0.84))
 		var frac := clampf(hero.hp / hero.max_hp, 0.0, 1.0)
 		draw_rect(Rect2(3, size.y - 10, avatar_w - 6, 7), Color(0, 0, 0, 0.7))
 		draw_rect(Rect2(3, size.y - 10, (avatar_w - 6) * frac, 7), Color(0.3, 0.85, 0.3).lerp(Color(0.85, 0.2, 0.15), 1.0 - frac))
@@ -3909,9 +3958,9 @@ class HeroChip extends Control:
 			var font_size := 10 if size.y < 50.0 else 12
 			var line_h := size.y / 3.0
 			var labels := [
-				["伤害 " + hud._format_combat_stat(float(rec.get("damage", 0.0))), Color("ffbf75")],
-				["承伤 " + hud._format_combat_stat(float(rec.get("taken", 0.0))), Color("9fcfff")],
-				["击杀 %d" % int(rec.get("kills", 0)), Color("ffe48a")],
+				[Localize.text("伤害 ") + hud._format_combat_stat(float(rec.get("damage", 0.0))), Color("ffbf75")],
+				[Localize.text("承伤 ") + hud._format_combat_stat(float(rec.get("taken", 0.0))), Color("9fcfff")],
+				[Localize.format_text("击杀 %d", int(rec.get("kills", 0))), Color("ffe48a")],
 			]
 			for i in range(3):
 				var baseline := float(i) * line_h + line_h * 0.69
@@ -3960,15 +4009,15 @@ class TouchChip extends Control:
 		draw_string(f, Vector2(0, size.y * 0.58), str(num), HORIZONTAL_ALIGNMENT_CENTER, size.x, 32,
 			Color("ffe9a8") if lit else Color(0.55, 0.5, 0.4))
 		if lit:
-			draw_string(f, Vector2(0, size.y - 6), "%d兵" % n, HORIZONTAL_ALIGNMENT_CENTER, size.x, 13, Color(0.8, 0.85, 0.7))
+			draw_string(f, Vector2(0, size.y - 6), Localize.format_text("%d兵", n), HORIZONTAL_ALIGNMENT_CENTER, size.x, 13, Color(0.8, 0.85, 0.7))
 
 
 func _refresh_resource_values() -> void:
 	if battle != null and battle.economy and _res_bar.visible:
-		_res_gold.text = "金 %d" % battle.gold
-		_res_wood.text = "木 %d" % battle.wood
+		Localize.bind_render(_res_gold, func() -> String: return Localize.format_text("金 %d", battle.gold))
+		Localize.bind_render(_res_wood, func() -> String: return Localize.format_text("木 %d", battle.wood))
 		var up: int = battle.used_pop()
-		_res_pop.text = "人口 %d / %d" % [up, battle.pop_cap]
+		Localize.bind_render(_res_pop, func() -> String: return Localize.format_text("人口 %d / %d", [up, battle.pop_cap]))
 		# 人口已满 → 标红提示（该造民居/聚义厅扩人口了）
 		_res_pop.add_theme_color_override("font_color",
 			UITheme.DANGER if up >= battle.pop_cap and battle.pop_cap > 0 else UITheme.PAPER_MUTED)
@@ -3979,7 +4028,7 @@ func _refresh_resource_values() -> void:
 				idle += 1
 		_res_idle.visible = idle > 0
 		if idle > 0:
-			_res_idle.text = "⚒ 闲置 %d" % idle
+			Localize.bind_render(_res_idle, func() -> String: return Localize.format_text("⚒ 闲置 %d", idle))
 
 func _release_run_pointer_state() -> void:
 	if get_viewport().gui_is_dragging(): get_viewport().gui_cancel_drag()

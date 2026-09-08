@@ -40,7 +40,7 @@ func start_age() -> int: return 3
 
 
 func deploy_hint() -> String:
-	return "竞技场沙盒：聚义厅「点将」选任意英雄出战（资源无限、即时成军、4 技能满配），自由放 Q/W/E/R；屏幕左下「⚔出兵 / 🎲随机」各召 50 兵 + 1 名随机敌将对练。"
+	return Localize.text("竞技场沙盒：聚义厅「点将」选任意英雄出战（资源无限、即时成军、4 技能满配），自由放 Q/W/E/R；屏幕左下「⚔出兵 / 🎲随机」各召 50 兵 + 1 名随机敌将对练。")
 
 
 func intro_lines() -> Array:
@@ -143,10 +143,10 @@ func _arena_spawn(b, pool: Array, randomized: bool, boss_count: int) -> void:
 	if not b._gameplay_rng_issue.is_empty():
 		return
 	_wave += 1
-	var who := ("（敌将：%s）" % "、".join(names)) if not names.is_empty() else "（纯兵）"
-	b.msg("【刷敌 第 %d 波】50 兵%s压上——试招！" % [_wave, who], 3.0)
+	var who := (Localize.format_text("（敌将：%s）", "、".join(names))) if not names.is_empty() else "（纯兵）"
+	b.msg(Localize.format_text("【刷敌 第 %d 波】50 兵%s压上——试招！", [_wave, who]), 3.0)
 
 
 func top_status(b) -> String:
-	return "竞技场·沙盒 ｜ 金∞ 木∞ 人口 %d/%d ｜ 聚义厅『点将』出战 · 左下『出兵/随机』试招（已刷 %d 波）" % [
-		b.used_pop(), b.pop_cap, _wave]
+	return Localize.format_text("竞技场·沙盒 ｜ 金∞ 木∞ 人口 %d/%d ｜ 聚义厅『点将』出战 · 左下『出兵/随机』试招（已刷 %d 波）", [
+		b.used_pop(), b.pop_cap, _wave])

@@ -396,10 +396,10 @@ func _cover_tick(b,delta: float) -> void:
 			if u._invis_t<=0:
 				u.set_meta("daming_covered",false)
 				u.display_name=u.setup_def.name+"·暴露"
-				b.msg(u.setup_def.name+"暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。",5)
+				b.msg(Localize.text(u.setup_def.name)+Localize.text("暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。"),5)
 		elif _near(b,u,SAFEHOUSE,88) and not _guarded(b,SAFEHOUSE,170):
 			u.set_meta("daming_recover",float(u.get_meta("daming_recover"))+delta)
-			if float(u.get_meta("daming_recover"))>=3: _cover(u); b.msg(u.setup_def.name+"已在蔡福家恢复乔装。",4)
+			if float(u.get_meta("daming_recover"))>=3: _cover(u); b.msg(Localize.text(u.setup_def.name)+Localize.text("已在蔡福家恢复乔装。"),4)
 		else: u.set_meta("daming_recover",0.0)
 func _support_tick(b,delta: float) -> void:
 	if not alive(enemy_hq):
@@ -468,7 +468,7 @@ func process(b,delta: float) -> void:
 			var u=record[0]
 			if alive(u) and gate_open and _near(b,u,EXIT_CELL,130) and b.map.world_to_cell(u.position).y>=45:
 				u.resolve_story("retreated")
-				b.mission.mark(record[1],u.setup_def.name+"已活着抵达城外接应地")
+				b.mission.mark(record[1],Localize.text(u.setup_def.name)+Localize.text("已活着抵达城外接应地"))
 		if b.mission.has_event("daming_lu_safe") and b.mission.has_event("daming_shi_safe"):
 			b.mission.mark("daming_victory","两名获救者生还，梁山前营守住")
 			b.win("卢俊义、石秀已一同活着出城，营救完成！城外经营、城内行动与护送战果按本局记录结算。")
@@ -478,9 +478,9 @@ func process(b,delta: float) -> void:
 		b.mission.set_title(new_title)
 func on_unit_died(b,u) -> void:
 	if u==hall: b.lose("梁山前营失守，接应与后勤被切断。可重开并留兵保护营地。")
-	elif u==lu or u==shi: b.lose(u.setup_def.name+"在营救途中阵亡；二人必须活着抵达接应地。")
+	elif u==lu or u==shi: b.lose(Localize.text(u.setup_def.name)+Localize.text("在营救途中阵亡；二人必须活着抵达接应地。"))
 	elif u==gate: _open_gate(b,true)
-	elif u in posts: b.mission.mark("daming_post_%d"%posts.find(u),u.display_name+"已毁，该处停止后续补军，已出场部队仍在")
+	elif u in posts: b.mission.mark("daming_post_%d"%posts.find(u),Localize.text(u.display_name)+Localize.text("已毁，该处停止后续补军，已出场部队仍在"))
 	elif u==enemy_hq: b.mission.mark("daming_hq_fallen","留守大营已毁，两处补军停止；已经在场的留守队仍须提防")
 	elif u in spies:
 		if u==scout and not signaled: b.mission.block_action("daming_fire","时迁阵亡，火号无法办理；外军可直接击破南门继续营救。")
@@ -488,4 +488,4 @@ func on_unit_died(b,u) -> void:
 			if not prison_open: b.mission.block_action("daming_admit","牢中内应不齐，外军可清开牢前强入。")
 			if not signaled: b.mission.block_action("daming_fire","牢中内应不齐，火号路线不可用；仍可正面攻门救人。")
 func top_status(_b) -> String:
-	return "大名府 · 前营经营 / 城内行动 · 乔装%d/3 · 火号%s · 二囚%s"%[spies.filter(func(u): return alive(u) and u._invis_t>0).size(),"%d秒"%ceili(signal_left) if signal_left>0 else "已过" if signaled else "待起","已解枷" if rescued else "待救"]
+	return Localize.format_text("大名府 · 前营经营 / 城内行动 · 乔装%d/3 · 火号%s · 二囚%s", [spies.filter(func(u): return alive(u) and u._invis_t>0).size(),Localize.format_text("%d秒", ceili(signal_left)) if signal_left>0 else "已过" if signaled else "待起","已解枷" if rescued else "待救"])

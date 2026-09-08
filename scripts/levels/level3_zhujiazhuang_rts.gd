@@ -287,7 +287,7 @@ func on_start(b) -> void:
 	b.mission.begin("zhu_rts", "第一打 · 扎营探路", "北取资源，南拔外营；兵营补兵、作坊造器械。先侦察，再决定主攻方向。")
 	b.mission.enable_scrolling()
 	b.mission.add_action("zhu_rts_recon","探路：查看外围战场",Vector2i(42,22),FIELD_ACTORS,1.0,64.0)
-	b.mission.add_action("zhu_rts_rescue","救出被囚好汉",PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
+	b.mission.add_action("zhu_rts_rescue",Localize.text("救出被囚好汉"),PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
 	b.lit_cells[OUTPOST] = 12.0
 	b.lit_cells[EXPANSION] = 12.0
 	b.msg("北面可夺资源，南面拆营可断援。首支庄客约150秒后出发，注意建民居补人口。",8.0)
@@ -427,7 +427,7 @@ func _raids(b, delta: float) -> void:
 	raids_sent += 1
 	raid_clock = 90.0
 	b.lit_cells[OUTPOST] = 15.0
-	b.msg("庄客从南面外营出击！目标：%s。拔掉外营可阻止下一次出击。" % ("梁山前营" if target == CAMP else "北面资源区"),6.0)
+	b.msg(Localize.format_text("庄客从南面外营出击！目标：%s。拔掉外营可阻止下一次出击。", ("梁山前营" if target == CAMP else "北面资源区")),6.0)
 
 func _refresh_stage(b) -> void:
 	var next := "siege" if inside_open or main_breached or supply_cut else "contest" if expansion_secured or sent_sun else "scout"
@@ -464,7 +464,7 @@ func process(b, delta: float) -> void:
 			b.mission.mark("zhu_seven_safe","七名被囚好汉全部撤回前营")
 		if _alive(prisoners[0]) and prisoners[0].position.distance_to(hall.position) < 190.0:
 			if not b.mission.actions.has("zhu_rts_finish"):
-				b.mission.add_action("zhu_rts_finish","宋江：收军结算（可先救齐七人）",CAMP+Vector2i(-4,0),["song_jiang"],1.0,96.0)
+				b.mission.add_action("zhu_rts_finish",Localize.text("宋江：收军结算（可先救齐七人）"),CAMP+Vector2i(-4,0),["song_jiang"],1.0,96.0)
 				b.msg("核心目标已完成。宋江到前营标记收军即可获胜；也可继续接回其余好汉。",7.0)
 
 func on_unit_resolved(b, u, outcome: String) -> void:
@@ -509,5 +509,5 @@ func _finish_ready() -> bool:
 	return manor_fallen and prisoners_freed and _alive(hall) and not prisoners.is_empty() and _alive(prisoners[0]) and prisoners[0].position.distance_to(hall.position) < 190.0
 
 func top_status(_b) -> String:
-	var supply := "外营已断援" if supply_cut else "外营出击约 %d 秒" % maxi(0,ceili(raid_clock))
-	return "祝家庄 · %s · %s · %s" % ["攻庄救人" if stage == "siege" else "经营与侦察", "北矿可采" if expansion_secured else "北矿待争", supply]
+	var supply := "外营已断援" if supply_cut else Localize.format_text("外营出击约 %d 秒", maxi(0,ceili(raid_clock)))
+	return Localize.format_text("祝家庄 · %s · %s · %s", ["攻庄救人" if stage == "siege" else "经营与侦察", "北矿可采" if expansion_secured else "北矿待争", supply])

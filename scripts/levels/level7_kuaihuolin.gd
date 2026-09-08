@@ -180,7 +180,7 @@ func on_start(b) -> void:
 	drill_marker = null
 	smoke_t = 0.0
 	b.mission.begin("taverns", "无三不过望", "按沿路次序吃酒，每家三碗。酒后拳力增强，步速与出手会不稳；可用“稳住酒势”短时调整。")
-	b.mission.add_action("drink_0", "武松·第一家吃三碗", TAVERN_CELLS[0] + Vector2i(0, 2), ["wu_song"], 1.6)
+	b.mission.add_action("drink_0", Localize.text("武松·第一家吃三碗"), TAVERN_CELLS[0] + Vector2i(0, 2), ["wu_song"], 1.6)
 	b.mission.add_action("ask_shi", "可选·施恩说拳路", Vector2i(14, 18), ["shi_en"], 1.2)
 
 func on_mission_action(b, action_id: String, actor) -> void:
@@ -195,13 +195,13 @@ func on_mission_action(b, action_id: String, actor) -> void:
 		wu.heal(35.0)
 		wu.start_drunk(maxf(0.64, 1.0 - 0.09 * drunk), 1.08, 999.0)
 		wu._buff_glow = 0.8
-		b.mission.mark(action_id, "第%d家酒望，武松吃足三碗" % (i + 1))
+		b.mission.mark(action_id, Localize.format_text("第%d家酒望，武松吃足三碗", (i + 1)))
 		if drunk == 2:
 			_start_step_drill(b)
 		elif drunk < TAVERN_CELLS.size():
-			b.mission.add_action("drink_%d" % drunk, "武松·第%d家吃三碗" % (drunk + 1), TAVERN_CELLS[drunk] + Vector2i(0, 2), ["wu_song"], 1.6)
+			b.mission.add_action("drink_%d" % drunk, Localize.format_text("武松·第%d家吃三碗", (drunk + 1)), TAVERN_CELLS[drunk] + Vector2i(0, 2), ["wu_song"], 1.6)
 		else:
-			b.mission.add_action("provoke", "武松·到店换酒挑衅", KUAIHUO + Vector2i(-2, 1), ["wu_song"], 1.4)
+			b.mission.add_action("provoke", Localize.text("武松·到店换酒挑衅"), KUAIHUO + Vector2i(-2, 1), ["wu_song"], 1.4)
 			b.mission.set_objective("酒已吃足。到挂着“河阳风月”酒望的店前佯醉换酒，激蒋门神来斗。")
 		return
 	match action_id:
@@ -220,7 +220,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			if st != RETURN_SHOP or menshen.story_outcome != "subdued":
 				return
 			b.mission.mark("terms", "蒋忠应下三件事：退还酒店家当，请快活林众豪杰向施恩赔话，交割后离开孟州")
-			b.mission.add_action("restore_shop", "施恩·收回酒店", SIGN + Vector2i(0, 2), ["shi_en"], 1.8)
+			b.mission.add_action("restore_shop", Localize.text("施恩·收回酒店"), SIGN + Vector2i(0, 2), ["shi_en"], 1.8)
 		"restore_shop":
 			if st != RETURN_SHOP or actor != shi:
 				return
@@ -377,18 +377,18 @@ func _set_menshen_subdued(b) -> void:
 	wu.stance = Unit.STANCE_PASSIVE
 	b.mission.mark("menshen_subdued", "蒋门神倒地告饶，武松收住拳头，叫他听清退店条件")
 	b.mission.begin("return_shop", "夺回快活林酒店", "可直接让施恩接管酒店；若先由武松说清退店还物、赔话、离开孟州三件事，可完成原著章回。")
-	b.mission.add_action("terms", "武松·说清退店条件", b.map.world_to_cell(menshen.position) + Vector2i(-1, 0), ["wu_song"], 1.5)
-	b.mission.add_action("restore_shop", "施恩·接管酒店", SIGN + Vector2i(0, 2), ["shi_en"], 1.8)
+	b.mission.add_action("terms", Localize.text("武松·说清退店条件"), b.map.world_to_cell(menshen.position) + Vector2i(-1, 0), ["wu_song"], 1.5)
+	b.mission.add_action("restore_shop", Localize.text("施恩·接管酒店"), SIGN + Vector2i(0, 2), ["shi_en"], 1.8)
 
 func on_unit_died(b, u) -> void:
 	if u == wu or u == shi:
-		b.lose(u.display_name + "倒下，夺店失败。")
+		b.lose(Localize.text(u.display_name) + Localize.text("倒下，夺店失败。"))
 	elif u == menshen:
 		b.lose("蒋门神丧命，已无从逼他退店赔话。夺店失败。")
 
 func top_status(_b) -> String:
 	if st == ROAD:
-		return "无三不过望 | 已吃酒 %d/4家 | 武松徒手" % drunk
+		return Localize.format_text("无三不过望 | 已吃酒 %d/4家 | 武松徒手", drunk)
 	if st == STEP_DRILL:
 		return "施恩试步 | 离开脚下圆场，练一次横移"
 	if st == RETURN_SHOP:
@@ -398,7 +398,7 @@ func top_status(_b) -> String:
 		tell = "重拳将落！" if special_kind == "heavy" else "直冲将发！"
 	elif exposed_left > 0.0:
 		tell = "架势已松·趁势反击"
-	return "快活林拳脚对决 | 圆场离开·直线横移 | " + tell
+	return Localize.text("快活林拳脚对决 | 圆场离开·直线横移 | ") + tell
 
 func _smoke_drive(b, delta: float) -> void:
 	if b.mission.active_action_id != "":
@@ -457,9 +457,9 @@ func _complete_step_drill(b, source: String) -> void:
 	if is_instance_valid(drill_marker):
 		drill_marker.queue_free()
 	drill_marker = null
-	b.mission.mark("road_step_practiced", "武松趁着酒意试走玉环步，横移离开重拳落点（%s）" % source)
+	b.mission.mark("road_step_practiced", Localize.format_text("武松趁着酒意试走玉环步，横移离开重拳落点（%s）", source))
 	b.mission.begin("taverns_resume", "继行无三不过望", "已练过一次侧移，继续沿官道吃酒。真交手时，圆形落点要离开，直线冲撞要横移。")
-	b.mission.add_action("drink_2", "武松·第三家吃三碗", TAVERN_CELLS[2] + Vector2i(0, 2), ["wu_song"], 1.6)
+	b.mission.add_action("drink_2", Localize.text("武松·第三家吃三碗"), TAVERN_CELLS[2] + Vector2i(0, 2), ["wu_song"], 1.6)
 
 func _distance_to_segment(point: Vector2, start: Vector2, finish: Vector2) -> float:
 	var line := finish - start

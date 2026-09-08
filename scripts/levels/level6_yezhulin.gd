@@ -285,8 +285,8 @@ func process(b, delta: float) -> void:
 			var route_hint := "北侧松林离大树更近，但留给你的反应时间较短。" if shadow_route == "north_pines" else "南侧芦丛更隐蔽，但要从更远处赶到大树。"
 			if shadow_route=="lost_trail":
 				route_hint="虽然没能一路暗随，仍有24秒赶到树旁补救。"
-			b.mission.begin("intercept", "水火棍将落", ("持续贴得过近，公人已经加快动手！" if shadow_warning else "薛霸已经举棍！") + route_hint + "让鲁智深在倒计时结束前赶到松树旁拦棍。")
-			b.mission.add_action("intercept", "鲁智深·禅杖拦棍", PINE + Vector2i(1, -1), ["lu_zhishen"], 0.8, 40.0, 48.0, false)
+			b.mission.begin("intercept", Localize.text("水火棍将落"), (Localize.text("持续贴得过近，公人已经加快动手！") if shadow_warning else Localize.text("薛霸已经举棍！")) + route_hint + Localize.text("让鲁智深在倒计时结束前赶到松树旁拦棍。"))
+			b.mission.add_action("intercept", Localize.text("鲁智深·禅杖拦棍"), PINE + Vector2i(1, -1), ["lu_zhishen"], 0.8, 40.0, 48.0, false)
 			_add_selection_button(b)
 			b.mission.add_map_locator("大松树 · 赶来拦棍",PINE)
 	elif st == RESCUE:
@@ -329,11 +329,11 @@ func process(b, delta: float) -> void:
 
 func on_unit_died(b, u) -> void:
 	if u == lin_bound or u == lin_freed:
-		b.lose(u.display_name + "有失，护送失败。")
+		b.lose(Localize.text(u.display_name) + Localize.text("有失，护送失败。"))
 	elif u == lu:
 		b.lose("鲁智深倒下，林冲尚未脱险。")
 	elif u in escorts:
-		b.mission.mark("yezhulin_escort_lost", u.display_name + "丧命；仍可救林冲出林，但不能完成留命章回")
+		b.mission.mark("yezhulin_escort_lost", Localize.text(u.display_name) + Localize.text("丧命；仍可救林冲出林，但不能完成留命章回"))
 		_story_miss(b, "spare_escorts", "两名解差未能全身。")
 		_story_miss(b,"care_and_escort","已有解差阵亡，仍可护送林冲与幸存者出林。")
 		if st in [STALK, RESCUE]:
@@ -462,8 +462,8 @@ func _adopt_latest_player_escort_order(b) -> void:
 		escort_orders[unit.entity_id] = unit._order_serial
 		unit.passive = true
 		unit.stance = Unit.STANCE_PASSIVE
-	var stop_hint := "点“■停”可让整队停下。" if b.hud.touch_ui else "按%s可让整队停下。" % Settings.key_label("stop")
-	b.mission.set_status("已接收玩家路线：鲁智深领队，幸存解差照应林冲。" + stop_hint)
+	var stop_hint := "点“■停”可让整队停下。" if b.hud.touch_ui else Localize.format_text("按%s可让整队停下。", Settings.key_label("stop"))
+	b.mission.set_status(Localize.text("已接收玩家路线：鲁智深领队，幸存解差照应林冲。") + stop_hint)
 
 func _regulate_escort_spacing(b) -> void:
 	var group := _escort_group()
@@ -534,7 +534,7 @@ func _enforce_post_rescue_escort_control(b) -> void:
 		return
 	if not player_control_guard_fired:
 		player_control_guard_fired = true
-		b.mission.mark("post_rescue_auto_move_blocked", "%s收到非玩家移动命令，已在原地拦停" % "、".join(blocked))
+		b.mission.mark("post_rescue_auto_move_blocked", Localize.format_text("%s收到非玩家移动命令，已在原地拦停", "、".join(blocked)))
 	b.mission.set_status("已拦下非玩家移动；相送队只跟随你的右键路线。")
 
 func _full_group_near(point: Vector2, radius: float) -> bool:
@@ -660,12 +660,12 @@ func _shadow_distance() -> float:
 
 func top_status(b) -> String:
 	if st == RESCUE:
-		return "野猪林 | 拦棍倒计时 %d 秒" % ceili(maxf(0.0, exec_timer))
+		return Localize.format_text("野猪林 | 拦棍倒计时 %d 秒", ceili(maxf(0.0, exec_timer)))
 	if st == STALK:
 		var distance := _shadow_distance()
 		var distance_text := "过近·立即退回林边" if distance < SHADOW_TOO_CLOSE_R else ("过远·向官道边跟上" if distance > SHADOW_TOO_FAR_R else "未露面·距离合适")
-		return "野猪林 | 暗中跟随 | " + distance_text
-	return "野猪林 | " + ["暗中跟随", "拦棍救人", "求情解缚·照料脚伤", "相送沧州道"][st]
+		return Localize.text("野猪林 | 暗中跟随 | ") + Localize.text(distance_text)
+	return Localize.text("野猪林 | ") + [Localize.text("暗中跟随"), Localize.text("拦棍救人"), Localize.text("求情解缚·照料脚伤"), Localize.text("相送沧州道")][st]
 
 func _smoke_drive(b, delta: float) -> void:
 	if st == STALK and is_instance_valid(lu) and is_instance_valid(lin_freed) \

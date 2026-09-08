@@ -115,7 +115,7 @@ func _build() -> void:
 	ver_panel.name = "VersionBadge"
 	ver_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ver_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	ver_panel.offset_left = -238.0
+	ver_panel.offset_left = -410.0
 	ver_panel.offset_top = -54.0
 	ver_panel.offset_right = -16.0
 	ver_panel.offset_bottom = -12.0
@@ -137,11 +137,11 @@ func _build() -> void:
 		content_version = String(AndroidUpdater.active_content_version)
 		if content_version == "":
 			content_version = Campaign.VERSION
-	ver.text = "战役重做 · 八幕战役（v%s）" % content_version
-	ver.tooltip_text = "完整安装包 v%s · 当前内容 v%s" % [Campaign.VERSION, content_version]
+	Localize.bind_format(ver, "战役重做 · 八幕战役（v%s）", content_version)
+	Localize.bind_format(ver, "完整安装包 v%s · 当前内容 v%s", [Campaign.VERSION, content_version], &"tooltip_text")
 	ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ver.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	ver.add_theme_font_size_override("font_size", 17)
+	ver.add_theme_font_size_override("font_size", 14)
 	ver.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	ver_panel.add_child(ver)
 
@@ -157,6 +157,11 @@ func _build() -> void:
 		add_child(_update_label)
 		_setup_content_update_ui()
 
+	var language := Localize.create_selector()
+	language.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	language.position = Vector2(16, 14)
+	add_child(language)
+
 
 ## 主菜单大模块：整块为一个带图标(emoji)的大按钮 + 下方小字副标题。
 func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callable, recommended := false) -> Control:
@@ -165,8 +170,9 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 	vb.add_theme_constant_override("separation", 3)
 
 	var btn := Button.new()
-	btn.text = title_text + ("       ★ 推荐" if recommended else "")
-	btn.custom_minimum_size = Vector2(580, 64)   # 6 模块要全塞进 900 高的窗口：82→64，配 col 间距 10
+	Localize.bind_render(btn, func() -> String: return Localize.text(title_text) + ("       " + Localize.text("★ 推荐") if recommended else ""))
+	btn.custom_minimum_size = Vector2(650, 64)
+	btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	btn.add_theme_font_size_override("font_size", 28)
 	btn.add_theme_color_override("font_color", accent)
 	btn.focus_mode = Control.FOCUS_NONE
@@ -187,6 +193,8 @@ func _mk_module(title_text: String, subtitle: String, accent: Color, cb: Callabl
 
 	var s := Label.new()
 	s.text = subtitle
+	s.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	s.custom_minimum_size = Vector2(650, 0)
 	s.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	s.add_theme_font_size_override("font_size", 14)
 	s.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
@@ -207,7 +215,7 @@ class MenuOverlay extends ColorRect:
 			queue_free()
 
 
-func _mk_overlay(title_text: String) -> Array:
+func _mk_overlay(title_text: String, format_args: Variant = null) -> Array:
 	var overlay := MenuOverlay.new()
 	overlay.color = Color(0.06, 0.05, 0.035, 0.97)   # 近不透明的暖深底，弹层文字清晰可读
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -221,7 +229,10 @@ func _mk_overlay(title_text: String) -> Array:
 	box.add_theme_constant_override("separation", 12)
 	center.add_child(box)
 	var title := Label.new()
-	title.text = title_text
+	if format_args == null:
+		title.text = title_text
+	else:
+		Localize.bind_format(title, title_text, format_args)
 	title.add_theme_font_size_override("font_size", 32)
 	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -254,9 +265,12 @@ func _add_back(box: VBoxContainer, overlay: ColorRect) -> void:
 
 
 ## 大号入口按钮（弹层内的选项）。
-func _mk_big_btn(text: String, col: Color) -> Button:
+func _mk_big_btn(text: String, col: Color, format_args: Variant = null) -> Button:
 	var b := Button.new()
-	b.text = text
+	if format_args == null:
+		b.text = text
+	else:
+		Localize.bind_format(b, text, format_args)
 	b.custom_minimum_size = Vector2(440, 56)
 	b.add_theme_font_size_override("font_size", 22)
 	b.add_theme_color_override("font_color", col)
@@ -273,6 +287,8 @@ func _show_story() -> void:
 
 	var rule := Label.new()
 	rule.text = "完成核心目标即可通关；依原著完成可选目标，可收录「演义印」"
+	rule.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rule.custom_minimum_size = Vector2(1080, 0)
 	rule.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	rule.add_theme_font_size_override("font_size", 16)
 	rule.add_theme_color_override("font_color", Color("d8c79c"))
@@ -281,7 +297,13 @@ func _show_story() -> void:
 	var grid := VBoxContainer.new()
 	grid.alignment = BoxContainer.ALIGNMENT_CENTER
 	grid.add_theme_constant_override("separation", 14)
-	box.add_child(grid)
+	var mission_scroll := ScrollContainer.new()
+	mission_scroll.name = "CampaignCardsScroll"
+	mission_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	mission_scroll.custom_minimum_size = Vector2(1080, clampf(get_viewport_rect().size.y - 280.0, 300.0, 560.0))
+	box.add_child(mission_scroll)
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mission_scroll.add_child(grid)
 
 	var per_row := 4
 	var n := Campaign.LEVELS.size()
@@ -321,12 +343,12 @@ func _show_defense() -> void:
 	afb.button_pressed = Campaign.ai_friendly
 	afb.custom_minimum_size = Vector2(420, 44)
 	afb.add_theme_font_size_override("font_size", 17)
-	afb.text = "🤖 AI友好模式（全自动）：%s" % ("开" if Campaign.ai_friendly else "关")
+	Localize.bind_format(afb, "🤖 AI友好模式（全自动）：%s", "开" if Campaign.ai_friendly else "关")
 	afb.add_theme_color_override("font_color", UITheme.PAPER_DARK if Campaign.ai_friendly else UITheme.PAPER_MUTED)
 	box.add_child(afb)
 	afb.toggled.connect(func(on: bool) -> void:
 		Campaign.ai_friendly = on
-		afb.text = "🤖 AI友好模式（全自动）：%s" % ("开" if on else "关")
+		Localize.bind_format(afb, "🤖 AI友好模式（全自动）：%s", "开" if on else "关")
 		afb.add_theme_color_override("font_color", UITheme.PAPER_DARK if on else UITheme.PAPER_MUTED))
 	var aftip := Label.new()
 	aftip.text = "（开启=全员英雄自动托管、可开自动镜头观战。和下面的倍率互不影响）"
@@ -343,7 +365,7 @@ func _show_defense() -> void:
 	scb.button_pressed = Campaign.scale_on
 	scb.custom_minimum_size = Vector2(420, 44)
 	scb.add_theme_font_size_override("font_size", 17)
-	scb.text = "⚖ 改变倍率：%s" % ("开" if Campaign.scale_on else "关")
+	Localize.bind_format(scb, "⚖ 改变倍率：%s", "开" if Campaign.scale_on else "关")
 	scb.add_theme_color_override("font_color", UITheme.PAPER_DARK if Campaign.scale_on else UITheme.PAPER_MUTED)
 	box.add_child(scb)
 	var hsp := SpinBox.new()   # 英雄倍率框(先建引用，敌方回调里同步)
@@ -390,7 +412,7 @@ func _show_defense() -> void:
 	hrow.add_child(hsp)
 	scb.toggled.connect(func(on: bool) -> void:
 		Campaign.scale_on = on
-		scb.text = "⚖ 改变倍率：%s" % ("开" if on else "关")
+		Localize.bind_format(scb, "⚖ 改变倍率：%s", "开" if on else "关")
 		scb.add_theme_color_override("font_color", UITheme.PAPER_DARK if on else UITheme.PAPER_MUTED)
 		erow.visible = on
 		hrow.visible = on)
@@ -515,7 +537,7 @@ func _show_1v1() -> void:
 	var vstat := Label.new()
 	vstat.add_theme_font_size_override("font_size", 18)
 	vstat.add_theme_color_override("font_color", Color("a9e34b"))
-	vstat.text = "▶ " + String(vnames.get(Campaign.victory_mode, "征服·破营"))
+	Localize.bind_render(vstat, func() -> String: return "▶ " + Localize.text(String(vnames.get(Campaign.victory_mode, "征服·破营"))))
 	for vc in [["征服", "conquest"], ["斩首", "regicide"]]:
 		var vb := Button.new()
 		vb.text = vc[0]
@@ -524,7 +546,7 @@ func _show_1v1() -> void:
 		var vkey: String = vc[1]
 		vb.pressed.connect(func() -> void:
 			Campaign.victory_mode = vkey
-			vstat.text = "▶ " + String(vnames.get(vkey, "")))
+			Localize.bind_render(vstat, func() -> String: return "▶ " + Localize.text(String(vnames.get(Campaign.victory_mode, "")))))
 		vrow.add_child(vb)
 	vrow.add_child(vstat)
 
@@ -598,7 +620,7 @@ func _show_more() -> void:
 	box.add_child(st)
 
 	if AndroidUpdater.enabled:
-		var update_btn := _mk_big_btn("↻  检查%s更新" % _update_platform_name(), UITheme.COPPER_LIGHT)
+		var update_btn := _mk_big_btn("↻  检查%s更新", UITheme.COPPER_LIGHT, _update_platform_name())
 		update_btn.pressed.connect(func() -> void:
 			overlay.queue_free()
 			AndroidUpdater.check_now())
@@ -618,6 +640,7 @@ func _show_scenario_picker() -> void:
 	for name in saved:
 		var nm: String = name
 		var b := _mk_big_btn("▶  " + nm, Color("9fe06f"))
+		b.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		b.pressed.connect(func() -> void:
 			var d: Dictionary = ScenarioStore.load_by_name(nm)
 			if not d.is_empty():
@@ -659,6 +682,7 @@ func _show_custom_picker() -> void:
 	for name in saved:
 		var b := Button.new()
 		b.text = "▶  " + String(name)
+		b.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		b.custom_minimum_size = Vector2(340, 46)
 		b.add_theme_font_size_override("font_size", 20)
 		var nm: String = name
@@ -684,7 +708,7 @@ func _make_card(i: int) -> Control:
 	var unlocked := Campaign.is_unlocked(i)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(200, 250)
+	panel.custom_minimum_size = Vector2(240, 270)
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(UITheme.INK_SOFT, 0.97) if unlocked else UITheme.PANEL_DISABLED
 	sb.border_color = UITheme.COPPER if unlocked else Color(0.25, 0.22, 0.18, 0.72)
@@ -701,7 +725,7 @@ func _make_card(i: int) -> Control:
 	panel.add_child(vb)
 
 	var num := Label.new()
-	num.text = "第 %d 幕" % Campaign.story_number(i)
+	Localize.bind_format(num, "第 %d 幕", Campaign.story_number(i))
 	num.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	num.add_theme_font_size_override("font_size", 16)
 	num.add_theme_color_override("font_color", UITheme.COPPER_LIGHT if unlocked else Color(0.38, 0.34, 0.29))
@@ -739,7 +763,10 @@ func _make_card(i: int) -> Control:
 			seal.add_theme_color_override("font_color", UITheme.VERMILION)
 		else:
 			var total := int(record.get("story_total", 0))
-			seal.text = "演义复现 %d/%d" % [int(record.get("best_done", 0)), total] if total > 0 else "演义印尚未收录"
+			if total > 0:
+				Localize.bind_format(seal, "演义复现 %d/%d", [int(record.get("best_done", 0)), total])
+			else:
+				seal.text = "演义印尚未收录"
 			seal.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
 		vb.add_child(seal)
 
@@ -815,14 +842,14 @@ func _on_content_update_status(update_state: String, text: String, _progress: fl
 func _on_content_update_available(version: String, size_bytes: int) -> void:
 	if _update_overlay != null and is_instance_valid(_update_overlay):
 		return
-	var ov := _mk_overlay("发现%s内容更新" % _update_platform_name())
+	var ov := _mk_overlay("发现%s内容更新", _update_platform_name())
 	var overlay: Control = ov[0]
 	var box: VBoxContainer = ov[1]
 	_update_overlay = overlay
 	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
 	var info := Label.new()
-	info.text = "内容版本 v%s\n差异包大小：%s\n\n只更新游戏脚本、关卡和素材，不需要重新安装完整包。" % [
-		version, AndroidUpdater.format_bytes(size_bytes)]
+	Localize.bind_format(info, "内容版本 v%s\n差异包大小：%s\n\n只更新游戏脚本、关卡和素材，不需要重新安装完整包。", [
+		version, AndroidUpdater.format_bytes(size_bytes)])
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info.add_theme_font_size_override("font_size", 19)
 	info.add_theme_color_override("font_color", Color("c8d3df"))
@@ -838,13 +865,13 @@ func _on_content_update_available(version: String, size_bytes: int) -> void:
 func _on_content_update_ready(version: String) -> void:
 	if _update_overlay != null and is_instance_valid(_update_overlay):
 		_update_overlay.queue_free()
-	var ov := _mk_overlay("%s更新已下载" % _update_platform_name())
+	var ov := _mk_overlay("%s更新已下载", _update_platform_name())
 	var overlay: Control = ov[0]
 	var box: VBoxContainer = ov[1]
 	_update_overlay = overlay
 	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
 	var info := Label.new()
-	info.text = "内容版本 v%s 已通过签名和完整性校验。\n退出后重新打开游戏即可生效。" % version
+	Localize.bind_format(info, "内容版本 v%s 已通过签名和完整性校验。\n退出后重新打开游戏即可生效。", version)
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info.add_theme_font_size_override("font_size", 20)
 	info.add_theme_color_override("font_color", Color("c8e6b4"))
@@ -864,8 +891,8 @@ func _on_full_package_update(version: String) -> void:
 	_update_overlay = overlay
 	overlay.tree_exited.connect(func() -> void: _update_overlay = null)
 	var info := Label.new()
-	info.text = "新版 v%s 包含%s程序层变更，无法使用差异包。\n请下载对应的完整包进行更新。" % [
-		version, _update_platform_name()]
+	Localize.bind_format(info, "新版 v%s 包含%s程序层变更，无法使用差异包。\n请下载对应的完整包进行更新。", [
+		version, _update_platform_name()])
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info.add_theme_font_size_override("font_size", 20)
 	info.add_theme_color_override("font_color", Color("ffd0a0"))

@@ -321,22 +321,22 @@ const LORE := {
 
 static func get_bio(key: String, type_label := "") -> String:
 	if BIOS.has(key):
-		return BIOS[key]
+		return Localize.text(BIOS[key])
 	# 一百单八将·暂无专写简述者：用座次/星号/诨名合成一句，图鉴不留空（详细生平见 LORE，分批补全）。
 	if STAR.has(key):
 		var s: Array = STAR[key]
-		return "%s%s，梁山泊一百单八将第 %d 位，%s。" % [s[2], s[3], int(s[0]), s[1]]
+		return Localize.format_text("%s%s，梁山泊一百单八将第 %d 位，%s。", [Localize.text(s[2]), Localize.text(s[3]), int(s[0]), Localize.text(s[1])])
 	if type_label != "":
-		return "%s——征战沙场的一员。" % type_label
-	return "暂无生平记载。"
+		return Localize.format_text("%s——征战沙场的一员。", Localize.text(type_label))
+	return Localize.text("暂无生平记载。")
 
 
 ## 详细小传：优先用自动生成的详细生平(LoreData，约1000字)，其次本文件 LORE，再退回简述。
 static func get_lore(key: String, type_label := "") -> String:
 	if LoreData.LORE.has(key):
-		return LoreData.LORE[key]
+		return Localize.text(LoreData.LORE[key])
 	if LORE.has(key):
-		return LORE[key]
+		return Localize.text(LORE[key])
 	return get_bio(key, type_label)
 
 

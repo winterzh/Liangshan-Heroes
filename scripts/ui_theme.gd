@@ -21,6 +21,9 @@ const PANEL := Color(0.09, 0.07, 0.055, 0.96)
 const PANEL_SOFT := Color(0.15, 0.115, 0.08, 0.96)
 const PANEL_DISABLED := Color(0.075, 0.064, 0.052, 0.88)
 
+const FONT = preload("res://assets/fonts/NotoSansCJK-Regular.ttc")
+
+static var _locale_font: FontVariation
 static var _shared_theme: Theme
 
 
@@ -63,7 +66,7 @@ static func _box(bg: Color, border: Color, width: int, radius: int, margins: Vec
 
 static func _build_theme() -> Theme:
 	var t := Theme.new()
-	t.default_font = ThemeDB.fallback_font
+	t.default_font = locale_font()
 	t.default_font_size = 15
 
 	# 通用文字层级。
@@ -150,3 +153,30 @@ static func _build_theme() -> Theme:
 		t.set_stylebox("grabber_pressed", kind, grab_pressed)
 
 	return t
+
+
+static func locale_font() -> FontVariation:
+	if _locale_font == null:
+		_locale_font = FontVariation.new()
+		_locale_font.base_font = FONT
+	return _locale_font
+
+
+static func apply_language_font(locale: String) -> void:
+	var font := locale_font()
+	font.variation_face_index = {"zh_CN": 2, "zh_TW": 3}.get(locale, 0)
+	ThemeDB.fallback_font = font
+
+
+## Custom-drawn command cards have a fixed footprint. Preserve a readable font
+## and mark clipped names explicitly; the hover/long-press card keeps full text.
+static func draw_compact_label(canvas: CanvasItem, font: Font, position: Vector2, text: String, width: float, font_size: int, color: Color) -> void:
+	var actual_size := font_size
+	while actual_size > 11 and font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x > width:
+		actual_size -= 1
+	var shown := text
+	if font.get_string_size(shown, HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x > width:
+		while not shown.is_empty() and font.get_string_size(shown + "…", HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x > width:
+			shown = shown.left(shown.length() - 1)
+		shown += "…"
+	canvas.draw_string(font, position, shown, HORIZONTAL_ALIGNMENT_CENTER, width, actual_size, color)

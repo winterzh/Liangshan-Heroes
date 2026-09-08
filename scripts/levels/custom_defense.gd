@@ -13,6 +13,7 @@ func _init() -> void:
 func id() -> String: return "custom_defense"
 func title() -> String: return String(_cfg.get("name", "自定义据守"))
 func subtitle() -> String: return "自定义据守战"
+func display_title() -> String: return title()
 
 func start_gold() -> int: return int(_cfg.get("start_gold", 250))
 func start_wood() -> int: return int(_cfg.get("start_wood", 150))
@@ -22,7 +23,7 @@ func hero_cap() -> int: return int(_cfg.get("hero_cap", 4))
 
 func intro_lines() -> Array:
 	return [{"who": "军令", "key": "narrator",
-		"text": "【自定义据守】%s——守住聚义厅，击退所有来犯的官军！" % String(_cfg.get("name", ""))}]
+		"text": Localize.format_text("【自定义据守】%s——守住聚义厅，击退所有来犯的官军！", String(_cfg.get("name", "")), false)}]
 
 
 ## 波次：用 config 的，空则退回据守本体 WAVES。

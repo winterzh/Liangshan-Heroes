@@ -93,6 +93,9 @@ func start_age() -> int: return int(data.get("start_age", 3))
 # ---------- 剧情 ----------
 
 func intro_lines() -> Array: return data.get("intro", [])
+func localize_intro_text() -> bool: return false
+func display_title() -> String: return title()
+func display_subtitle() -> String: return subtitle()
 
 
 # ---------- 地形 / 装饰 ----------
@@ -235,7 +238,7 @@ func _spawn_wave(b, i: int) -> bool:
 		return false
 	var msg := String(wave.get("msg", ""))
 	if msg != "":
-		b.msg("【第 %d 波】%s" % [i + 1, msg], 5.0)
+		b.msg(Localize.format_text("【第 %d 波】%s", [i + 1, msg], false), 5.0)
 	var target := _wave_target(b)
 	var wf := _fac(data.get("wave_faction", "GUAN"))
 	var gates: Dictionary = data.get("gates", {})
@@ -309,8 +312,8 @@ func top_status(b) -> String:
 		var nxt := ""
 		var pending := (_wave_i < waves.size()) if _wm == "timed" else (not _wave_spawned)
 		if pending and not _waves_done:
-			nxt = " | 下一波 %d 秒" % int(ceil(maxf(0.0, _wave_t)))
-		return "第 %d/%d 波%s | 歼敌 %d" % [mini(_wave_i + 1, waves.size()), waves.size(), nxt, b.kills]
+			nxt = Localize.format_text(" | 下一波 %d 秒", int(ceil(maxf(0.0, _wave_t))))
+		return Localize.format_text("第 %d/%d 波%s | 歼敌 %d", [mini(_wave_i + 1, waves.size()), waves.size(), nxt, b.kills])
 	return String(data.get("top_status", ""))
 
 

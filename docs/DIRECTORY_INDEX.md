@@ -1,3 +1,13 @@
+## 2026-09-08 本地化文件
+
+- `scripts/localization.gd`：四语注册、偏好保存、显示绑定。
+- `assets/localization/`：运行词库、源分片、完整传记、术语和精确排除清单。
+- `assets/fonts/`：Noto CJK 字体集合、OFL 许可证与来源哈希。
+- `tools/build_localization.py`、`tools/localization_catalog.py`：重建及完整性检查。
+- `tools/run_localization_qa.py`、`tools/localization_qa.gd/.tscn`：隔离运行与画面验证。
+- `tools/run_localization_package_qa.py`、`tools/localization_package_probe.gd`：本地 PCK 导出、四语资源与主菜单启动检查。
+- `docs/LOCALIZATION_20260908.md`、`qa/localization_20260908/`：实现说明与本批证据。
+
 ## 2026-09-08 恢复组件Steam更新
 
 - docs/STEAM_RESUME_UPDATE_20260908.md：本轮构建、上传状态和接续。

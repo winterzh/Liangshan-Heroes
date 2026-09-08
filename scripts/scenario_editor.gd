@@ -111,6 +111,11 @@ func _uname(k: String) -> String:
 	return String(_udef(k).get("name", k))
 
 
+func _display_uname(k: String) -> String:
+	var source := _uname(k)
+	return Localize.text(source) if source == String(Defs.UNITS.get(k, {}).get("name", k)) else source
+
+
 ## 单位一级分类：108将分天罡(座次1-36)/地煞(37-108)；其余按 英雄·大将 / 兵卒 / 建筑。
 func _unit_cat(k: String) -> String:
 	if Bios.STAR.has(k):
@@ -227,42 +232,43 @@ func _build() -> void:
 	top.add_theme_constant_override("separation", 8)
 	root.add_child(top)
 	var ttl := Label.new()
-	ttl.text = "场景编辑器"
+	ttl.text = Localize.text("场景编辑器")
 	ttl.add_theme_font_size_override("font_size", 22)
 	ttl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	top.add_child(ttl)
-	var nl := Label.new(); nl.text = "  关名："; top.add_child(nl)
+	var nl := Label.new(); nl.text = Localize.text("  关名："); top.add_child(nl)
 	_name_edit = LineEdit.new()
+	_name_edit.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	_name_edit.text = String(_cfg.get("title", "我的关卡"))
 	_name_edit.custom_minimum_size = Vector2(180, 32)
 	_name_edit.text_changed.connect(func(t: String) -> void: _cfg["title"] = t)
 	top.add_child(_name_edit)
-	top.add_child(_btn("新建", func() -> void:
+	top.add_child(_btn(Localize.text("新建"), func() -> void:
 		_cfg = ScenarioStore.default_scenario(); _name_edit.text = _cfg["title"]; _rebuild_map_model(); _build()))
-	top.add_child(_btn("读取", _show_load))
-	top.add_child(_btn("保存", func() -> void:
+	top.add_child(_btn(Localize.text("读取"), _show_load))
+	top.add_child(_btn(Localize.text("保存"), func() -> void:
 		_flush_terrain()
 		var p := ScenarioStore.save(_cfg)
-		_show_toast("已保存：" + p if p != "" else "保存失败")))
-	var mod := _btn("📋 已改单位", _show_modified_units)
+		_show_toast(Localize.text("已保存：") + p if p != "" else Localize.text("保存失败"))))
+	var mod := _btn(Localize.text("📋 已改单位"), _show_modified_units)
 	mod.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
-	mod.tooltip_text = "查看/编辑本关改过或自定义的单位"
+	mod.tooltip_text = Localize.text("查看/编辑本关改过或自定义的单位")
 	top.add_child(mod)
-	var play := _btn("▶ 试玩", _playtest)
+	var play := _btn(Localize.text("▶ 试玩"), _playtest)
 	play.add_theme_color_override("font_color", UITheme.COMPLETE)
 	top.add_child(play)
 	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(sp)
-	top.add_child(_btn("返回菜单", func() -> void:
+	top.add_child(_btn(Localize.text("返回菜单"), func() -> void:
 		get_tree().change_scene_to_file("res://scenes/menu.tscn")))
 
 	var workshop_bar := HBoxContainer.new()
 	root.add_child(workshop_bar)
-	workshop_bar.add_child(_btn("发布／更新到创意工坊", func() -> void:
+	workshop_bar.add_child(_btn(Localize.text("发布／更新到创意工坊"), func() -> void:
 		_flush_terrain()
 		SteamPanels.show_publish(self, "scenario", _cfg)))
-	workshop_bar.add_child(_btn("另存本地副本", func() -> void:
+	workshop_bar.add_child(_btn(Localize.text("另存本地副本"), func() -> void:
 		_flush_terrain()
-		_show_toast("副本保存：" + SteamPanels.save_copy("scenario", _cfg))))
+		_show_toast(Localize.text("副本保存：") + SteamPanels.save_copy("scenario", _cfg))))
 	# 三栏：左工具 / 中画布 / 右属性
 	var cols := HBoxContainer.new()
 	cols.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -309,10 +315,10 @@ func _build() -> void:
 
 func _build_tools(left: VBoxContainer) -> void:
 	var hint := Label.new()
-	hint.text = "工具"
+	hint.text = Localize.text("工具")
 	hint.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	left.add_child(hint)
-	for t in [["选择/改单位", "select"], ["刷地形", "terrain"], ["放单位", "unit"], ["放装饰", "decor"], ["放增援", "reinforce"], ["出兵口", "gate"], ["镜头起点", "camera"], ["擦除", "erase"]]:
+	for t in [[Localize.text("选择/改单位"), "select"], [Localize.text("刷地形"), "terrain"], [Localize.text("放单位"), "unit"], [Localize.text("放装饰"), "decor"], [Localize.text("放增援"), "reinforce"], [Localize.text("出兵口"), "gate"], [Localize.text("镜头起点"), "camera"], [Localize.text("擦除"), "erase"]]:
 		var key: String = t[1]
 		var b := _btn(t[0], func() -> void: tool = key; _refresh_tool_panel())
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -326,7 +332,7 @@ func _build_tools(left: VBoxContainer) -> void:
 	_refresh_tool_panel()
 	left.add_child(HSeparator.new())
 	var tip := Label.new()
-	tip.text = "左键画/放，右键拖动平移，滚轮缩放"
+	tip.text = Localize.text("左键画/放，右键拖动平移，滚轮缩放")
 	tip.add_theme_font_size_override("font_size", 11)
 	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tip.add_theme_color_override("font_color", Color("9a8f7a"))
@@ -340,14 +346,14 @@ func _refresh_tool_panel() -> void:
 		c.queue_free()
 	match tool:
 		"select":
-			var l := Label.new(); l.text = "选择 / 改单位"; l.add_theme_color_override("font_color", UITheme.COPPER_LIGHT); _tool_panel.add_child(l)
+			var l := Label.new(); l.text = Localize.text("选择 / 改单位"); l.add_theme_color_override("font_color", UITheme.COPPER_LIGHT); _tool_panel.add_child(l)
 			var tip := Label.new()
-			tip.text = "双击地图上已放置的单位\n→ 编辑它的属性 / 技能。\n右栏波次里点单位旁「✎」同理。\n只有改过的单位会被写入本关，\n其余单位保持默认。改动仅本图生效。"
+			tip.text = Localize.text("双击地图上已放置的单位\n→ 编辑它的属性 / 技能。\n右栏波次里点单位旁「✎」同理。\n只有改过的单位会被写入本关，\n其余单位保持默认。改动仅本图生效。")
 			tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			tip.add_theme_font_size_override("font_size", 12); tip.add_theme_color_override("font_color", Color("b8c4d4"))
 			_tool_panel.add_child(tip)
 		"terrain":
-			var l := Label.new(); l.text = "地形"; l.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(l)
+			var l := Label.new(); l.text = Localize.text("地形"); l.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(l)
 			var grid := GridContainer.new(); grid.columns = 2; _tool_panel.add_child(grid)
 			for tn in TERRAINS:
 				var sw := Button.new()
@@ -360,98 +366,98 @@ func _refresh_tool_panel() -> void:
 				var t2: String = tn
 				sw.pressed.connect(func() -> void: cur_terrain = t2; _show_toast("地形：" + _terrain_label(t2)))
 				grid.add_child(sw)
-			var bl := Label.new(); bl.text = "笔刷大小"; _tool_panel.add_child(bl)
+			var bl := Label.new(); bl.text = Localize.text("笔刷大小"); _tool_panel.add_child(bl)
 			var bsl := HSlider.new(); bsl.min_value = 1; bsl.max_value = 4; bsl.step = 1; bsl.value = brush
 			bsl.custom_minimum_size = Vector2(0, 20)
 			bsl.value_changed.connect(func(v: float) -> void: brush = int(v))
 			_tool_panel.add_child(bsl)
 		"unit":
-			var fl := Label.new(); fl.text = "阵营"; fl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(fl)
+			var fl := Label.new(); fl.text = Localize.text("阵营"); fl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(fl)
 			var fb := HBoxContainer.new(); _tool_panel.add_child(fb)
-			for f in [["梁山", "LIANG"], ["官军", "GUAN"]]:
+			for f in [[Localize.text("梁山"), "LIANG"], [Localize.text("官军"), "GUAN"]]:
 				var fk: String = f[1]
 				var fbtn := _btn(f[0], func() -> void: cur_faction = fk; _show_toast("阵营：" + String(f[0])))
 				fb.add_child(fbtn)
-			var ul := Label.new(); ul.text = "单位（先选类·再点单位）"; ul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(ul)
+			var ul := Label.new(); ul.text = Localize.text("单位（先选类·再点单位）"); ul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(ul)
 			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("单位：" + nm))
 		"decor":
-			var dl := Label.new(); dl.text = "装饰物（纯美观）"; dl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(dl)
+			var dl := Label.new(); dl.text = Localize.text("装饰物（纯美观）"); dl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(dl)
 			var dgrid := GridContainer.new(); dgrid.columns = 2; _tool_panel.add_child(dgrid)
 			for dk in DECOR_KEYS:
 				var dkk: String = dk
 				var dbtn := _btn(String(DECOR_LABELS.get(dk, dk)), func() -> void: cur_decor = dkk; _show_toast("装饰：" + String(DECOR_LABELS.get(dkk, dkk))))
 				dbtn.custom_minimum_size = Vector2(82, 26)
 				dgrid.add_child(dbtn)
-			var dsl_l := Label.new(); dsl_l.text = "尺寸"; _tool_panel.add_child(dsl_l)
+			var dsl_l := Label.new(); dsl_l.text = Localize.text("尺寸"); _tool_panel.add_child(dsl_l)
 			var dsl := HSlider.new(); dsl.min_value = 32; dsl.max_value = 120; dsl.step = 4; dsl.value = cur_decor_size
 			dsl.custom_minimum_size = Vector2(0, 20)
 			dsl.value_changed.connect(func(v: float) -> void: cur_decor_size = v)
 			_tool_panel.add_child(dsl)
 		"reinforce":
-			var rl := Label.new(); rl.text = "波次增援（影响战局）"; rl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(rl)
+			var rl := Label.new(); rl.text = Localize.text("波次增援（影响战局）"); rl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(rl)
 			var nwaves: int = maxi(1, _cfg.get("waves", []).size())
-			_tool_panel.add_child(_spin_row("放入第几波", clampi(cur_rf_wave, 1, nwaves), 1, nwaves, func(v: int) -> void: cur_rf_wave = v))
+			_tool_panel.add_child(_spin_row(Localize.text("放入第几波"), clampi(cur_rf_wave, 1, nwaves), 1, nwaves, func(v: int) -> void: cur_rf_wave = v))
 			var rfb := HBoxContainer.new(); _tool_panel.add_child(rfb)
-			for f in [["梁山", "LIANG"], ["官军", "GUAN"]]:
+			for f in [[Localize.text("梁山"), "LIANG"], [Localize.text("官军"), "GUAN"]]:
 				var fk: String = f[1]
 				rfb.add_child(_btn(f[0], func() -> void: cur_rf_faction = fk; _show_toast("增援阵营：" + String(f[0]))))
-			var rul := Label.new(); rul.text = "援军单位（先选类·再点单位）"; rul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(rul)
+			var rul := Label.new(); rul.text = Localize.text("援军单位（先选类·再点单位）"); rul.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(rul)
 			_build_unit_picker(_tool_panel, func(k: String, nm: String) -> void: cur_unit = k; _show_toast("援军：" + nm))
-			var rtip := Label.new(); rtip.text = "点地图把该单位放进第 N 波的增援；该波触发时刷出"
+			var rtip := Label.new(); rtip.text = Localize.text("点地图把该单位放进第 N 波的增援；该波触发时刷出")
 			rtip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; rtip.add_theme_font_size_override("font_size", 11)
 			_tool_panel.add_child(rtip)
 		"gate":
-			var gl := Label.new(); gl.text = "出兵口编号"; gl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(gl)
+			var gl := Label.new(); gl.text = Localize.text("出兵口编号"); gl.add_theme_color_override("font_color", UITheme.PAPER_DARK); _tool_panel.add_child(gl)
 			for g in GATE_NAMES:
 				var gk: String = g
-				var gb := _btn("口 " + g, func() -> void: cur_gate = gk; _show_toast("放置出兵口：" + gk))
+				var gb := _btn(Localize.text("口 ") + g, func() -> void: cur_gate = gk; _show_toast("放置出兵口：" + gk))
 				gb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				_tool_panel.add_child(gb)
 		"camera":
-			var cl := Label.new(); cl.text = "点地图设置开局镜头中心"; cl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; _tool_panel.add_child(cl)
+			var cl := Label.new(); cl.text = Localize.text("点地图设置开局镜头中心"); cl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; _tool_panel.add_child(cl)
 		"erase":
-			var el := Label.new(); el.text = "点单位/出兵口将其删除"; el.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; _tool_panel.add_child(el)
+			var el := Label.new(); el.text = Localize.text("点单位/出兵口将其删除"); el.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; _tool_panel.add_child(el)
 
 
 ## ---------- 右栏：地图 / 全局 / 波次 / 胜负 ----------
 
 func _build_props(right: VBoxContainer) -> void:
-	right.add_child(_head("地图"))
+	right.add_child(_head(Localize.text("地图")))
 	var m: Dictionary = _cfg["map"]
-	right.add_child(_spin_row("宽", int(m.get("w", 48)), 24, 96, func(v: int) -> void:
+	right.add_child(_spin_row(Localize.text("宽"), int(m.get("w", 48)), 24, 96, func(v: int) -> void:
 		_cfg["map"]["w"] = v; _rebuild_map_model()))
-	right.add_child(_spin_row("高", int(m.get("h", 48)), 24, 96, func(v: int) -> void:
+	right.add_child(_spin_row(Localize.text("高"), int(m.get("h", 48)), 24, 96, func(v: int) -> void:
 		_cfg["map"]["h"] = v; _rebuild_map_model()))
-	right.add_child(_opt_row("主题", THEMES, String(m.get("theme", "marsh")), func(s: String) -> void: _cfg["map"]["theme"] = s))
-	right.add_child(_opt_row("底色地形", TERRAINS, String(m.get("base", "GRASS")), func(s: String) -> void:
+	right.add_child(_opt_row(Localize.text("主题"), THEMES, String(m.get("theme", "marsh")), func(s: String) -> void: _cfg["map"]["theme"] = s))
+	right.add_child(_opt_row(Localize.text("底色地形"), TERRAINS, String(m.get("base", "GRASS")), func(s: String) -> void:
 		_cfg["map"]["base"] = s; _rebuild_map_model()))
 
-	right.add_child(_head("全局"))
-	var eco := CheckBox.new(); eco.text = "开启经营（采集/建造/训练）"; eco.button_pressed = bool(_cfg.get("economy", false))
+	right.add_child(_head(Localize.text("全局")))
+	var eco := CheckBox.new(); eco.text = Localize.text("开启经营（采集/建造/训练）"); eco.button_pressed = bool(_cfg.get("economy", false))
 	eco.toggled.connect(func(v: bool) -> void: _cfg["economy"] = v)
 	right.add_child(eco)
-	right.add_child(_spin_row("起始金", int(_cfg.get("start_gold", 0)), 0, 9999, func(v: int) -> void: _cfg["start_gold"] = v))
-	right.add_child(_spin_row("起始木", int(_cfg.get("start_wood", 0)), 0, 9999, func(v: int) -> void: _cfg["start_wood"] = v))
-	right.add_child(_spin_row("人口上限", int(_cfg.get("pop_cap", 0)), 0, 200, func(v: int) -> void: _cfg["pop_cap"] = v))
-	right.add_child(_spin_row("英雄上限", int(_cfg.get("hero_cap", 0)), 0, 12, func(v: int) -> void: _cfg["hero_cap"] = v))
-	right.add_child(_spin_row("起始时代(1-3)", int(_cfg.get("start_age", 3)), 1, 3, func(v: int) -> void: _cfg["start_age"] = v))
+	right.add_child(_spin_row(Localize.text("起始金"), int(_cfg.get("start_gold", 0)), 0, 9999, func(v: int) -> void: _cfg["start_gold"] = v))
+	right.add_child(_spin_row(Localize.text("起始木"), int(_cfg.get("start_wood", 0)), 0, 9999, func(v: int) -> void: _cfg["start_wood"] = v))
+	right.add_child(_spin_row(Localize.text("人口上限"), int(_cfg.get("pop_cap", 0)), 0, 200, func(v: int) -> void: _cfg["pop_cap"] = v))
+	right.add_child(_spin_row(Localize.text("英雄上限"), int(_cfg.get("hero_cap", 0)), 0, 12, func(v: int) -> void: _cfg["hero_cap"] = v))
+	right.add_child(_spin_row(Localize.text("起始时代(1-3)"), int(_cfg.get("start_age", 3)), 1, 3, func(v: int) -> void: _cfg["start_age"] = v))
 
-	right.add_child(_head("胜负预设"))
+	right.add_child(_head(Localize.text("胜负预设")))
 	var presets := ["据守：守基地+撑过所有波", "歼灭：消灭全部敌人", "限时坚守60秒", "自定义(不改)"]
-	right.add_child(_opt_row("规则", presets, presets[0], func(s: String) -> void: _apply_win_preset(s)))
+	right.add_child(_opt_row(Localize.text("规则"), presets, presets[0], func(s: String) -> void: _apply_win_preset(s)))
 
-	right.add_child(_head("开场剧情"))
-	right.add_child(_btn("＋ 加一句", func() -> void:
+	right.add_child(_head(Localize.text("开场剧情")))
+	right.add_child(_btn(Localize.text("＋ 加一句"), func() -> void:
 		_cfg["intro"].append({"who": "旁白", "key": "narrator", "text": ""}); _rebuild_intro()))
 	_intro_box = VBoxContainer.new()
 	_intro_box.add_theme_constant_override("separation", 4)
 	right.add_child(_intro_box)
 	_rebuild_intro()
 
-	right.add_child(_head("敌方波次"))
-	right.add_child(_opt_row("出兵方式", ["clear", "timed"], String(_cfg.get("wave_mode", "clear")), func(s: String) -> void: _cfg["wave_mode"] = s))
-	right.add_child(_spin_row("波间隔(默认秒)", int(_cfg.get("wave_gap", 9)), 0, 120, func(v: int) -> void: _cfg["wave_gap"] = float(v)))
-	right.add_child(_btn("＋ 添加一波", func() -> void:
+	right.add_child(_head(Localize.text("敌方波次")))
+	right.add_child(_opt_row(Localize.text("出兵方式"), ["clear", "timed"], String(_cfg.get("wave_mode", "clear")), func(s: String) -> void: _cfg["wave_mode"] = s))
+	right.add_child(_spin_row(Localize.text("波间隔(默认秒)"), int(_cfg.get("wave_gap", 9)), 0, 120, func(v: int) -> void: _cfg["wave_gap"] = float(v)))
+	right.add_child(_btn(Localize.text("＋ 添加一波"), func() -> void:
 		_cfg["waves"].append({"delay": float(_cfg.get("wave_gap", 9.0)), "msg": "", "groups": []}); _rebuild_waves()))
 	_waves_box = VBoxContainer.new()
 	_waves_box.add_theme_constant_override("separation", 4)
@@ -471,16 +477,16 @@ func _rebuild_intro() -> void:
 		var panel := PanelContainer.new()
 		var pv := VBoxContainer.new(); pv.add_theme_constant_override("separation", 2); panel.add_child(pv)
 		var top := HBoxContainer.new(); pv.add_child(top)
-		var who := LineEdit.new(); who.text = String(line.get("who", "")); who.placeholder_text = "说话人"
+		var who := LineEdit.new(); who.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED; who.text = String(line.get("who", "")); who.placeholder_text = Localize.text("说话人")
 		who.custom_minimum_size = Vector2(70, 0)
 		who.text_changed.connect(func(t: String) -> void: (_cfg["intro"][lid] as Dictionary)["who"] = t)
 		top.add_child(who)
-		var key := LineEdit.new(); key.text = String(line.get("key", "narrator")); key.placeholder_text = "头像键"
+		var key := LineEdit.new(); key.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED; key.text = String(line.get("key", "narrator")); key.placeholder_text = Localize.text("头像键")
 		key.custom_minimum_size = Vector2(90, 0); key.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		key.text_changed.connect(func(t: String) -> void: (_cfg["intro"][lid] as Dictionary)["key"] = t)
 		top.add_child(key)
-		top.add_child(_btn("删", func() -> void: (_cfg["intro"] as Array).remove_at(lid); _rebuild_intro()))
-		var txt := LineEdit.new(); txt.text = String(line.get("text", "")); txt.placeholder_text = "台词"
+		top.add_child(_btn(Localize.text("删"), func() -> void: (_cfg["intro"] as Array).remove_at(lid); _rebuild_intro()))
+		var txt := LineEdit.new(); txt.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED; txt.text = String(line.get("text", "")); txt.placeholder_text = Localize.text("台词")
 		txt.text_changed.connect(func(t: String) -> void: (_cfg["intro"][lid] as Dictionary)["text"] = t)
 		pv.add_child(txt)
 		_intro_box.add_child(panel)
@@ -497,10 +503,10 @@ func _rebuild_waves() -> void:
 		var panel := PanelContainer.new()
 		var pv := VBoxContainer.new(); pv.add_theme_constant_override("separation", 2); panel.add_child(pv)
 		var hdr := HBoxContainer.new(); pv.add_child(hdr)
-		var hl := Label.new(); hl.text = "第 %d 波" % (wi + 1); hl.add_theme_color_override("font_color", UITheme.PAPER_DARK); hdr.add_child(hl)
+		var hl := Label.new(); hl.text = Localize.format_text("第 %d 波", (wi + 1)); hl.add_theme_color_override("font_color", UITheme.PAPER_DARK); hdr.add_child(hl)
 		var wid := wi
-		hdr.add_child(_mini_spin("延时", float(wave.get("delay", 9.0)), 0, 120, func(v: int) -> void: (_cfg["waves"][wid] as Dictionary)["delay"] = float(v)))
-		var delb := _btn("删波", func() -> void: (_cfg["waves"] as Array).remove_at(wid); _rebuild_waves())
+		hdr.add_child(_mini_spin(Localize.text("延时"), float(wave.get("delay", 9.0)), 0, 120, func(v: int) -> void: (_cfg["waves"][wid] as Dictionary)["delay"] = float(v)))
+		var delb := _btn(Localize.text("删波"), func() -> void: (_cfg["waves"] as Array).remove_at(wid); _rebuild_waves())
 		hdr.add_child(delb)
 		for gi in range(wave.get("groups", []).size()):
 			var grp: Dictionary = wave["groups"][gi]
@@ -510,28 +516,28 @@ func _rebuild_waves() -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["key"] = k))
 			# ✎ 点击时「实时」读当前下拉选中的兵种(而非建表时的旧值)，换了兵种再点也对
 			var eb := _btn("✎", func() -> void: _edit_unit(String(((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary).get("key", ""))))
-			eb.tooltip_text = "编辑当前选中兵种的属性/技能（仅本关）"; gr.add_child(eb)
+			eb.tooltip_text = Localize.text("编辑当前选中兵种的属性/技能（仅本关）"); gr.add_child(eb)
 			gr.add_child(_mini_spin("×", int(grp.get("n", 4)), 1, 40, func(v: int) -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["n"] = v))
 			gr.add_child(_gate_opt(String(grp.get("gate", "E")), func(g: String) -> void:
 				((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["gate"] = g))
-			var boss := CheckBox.new(); boss.text = "首领"; boss.button_pressed = String(grp.get("ref", "")) == "boss"
-			boss.tooltip_text = "标记为首领/Boss：在「斩首」胜利模式下，此单位阵亡即获胜"
+			var boss := CheckBox.new(); boss.text = Localize.text("首领"); boss.button_pressed = String(grp.get("ref", "")) == "boss"
+			boss.tooltip_text = Localize.text("标记为首领/Boss：在「斩首」胜利模式下，此单位阵亡即获胜")
 			boss.toggled.connect(func(v: bool) -> void:
 				if v: ((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary)["ref"] = "boss"
 				else: ((_cfg["waves"][wid] as Dictionary)["groups"][gid] as Dictionary).erase("ref"))
 			gr.add_child(boss)
 			gr.add_child(_btn("x", func() -> void: ((_cfg["waves"][wid] as Dictionary)["groups"] as Array).remove_at(gid); _rebuild_waves()))
-		pv.add_child(_btn("＋组", func() -> void:
+		pv.add_child(_btn(Localize.text("＋组"), func() -> void:
 			(_cfg["waves"][wid] as Dictionary)["groups"].append({"key": _combat_keys[0] if not _combat_keys.is_empty() else "guan_dao", "n": 4, "gate": "E"}); _rebuild_waves()))
 		# 增援（用「放增援」工具往这一波放单位后在此显示/编辑提示语、清空）
 		if wave.has("reinforce"):
 			var rf: Dictionary = wave["reinforce"]
 			var rfn: int = rf.get("units", []).size()
 			var rrow := HBoxContainer.new(); pv.add_child(rrow)
-			var rlbl := Label.new(); rlbl.text = "增援 %d 人" % rfn; rlbl.add_theme_color_override("font_color", UITheme.COMPLETE); rrow.add_child(rlbl)
-			rrow.add_child(_btn("清空", func() -> void: (_cfg["waves"][wid] as Dictionary).erase("reinforce"); _rebuild_waves()))
-			var rmsg := LineEdit.new(); rmsg.text = String(rf.get("msg", "")); rmsg.placeholder_text = "增援提示语（如：伏兵杀到！）"
+			var rlbl := Label.new(); rlbl.text = Localize.format_text("增援 %d 人", rfn); rlbl.add_theme_color_override("font_color", UITheme.COMPLETE); rrow.add_child(rlbl)
+			rrow.add_child(_btn(Localize.text("清空"), func() -> void: (_cfg["waves"][wid] as Dictionary).erase("reinforce"); _rebuild_waves()))
+			var rmsg := LineEdit.new(); rmsg.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED; rmsg.text = String(rf.get("msg", "")); rmsg.placeholder_text = Localize.text("增援提示语（如：伏兵杀到！）")
 			rmsg.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			rmsg.text_changed.connect(func(t: String) -> void: ((_cfg["waves"][wid] as Dictionary)["reinforce"] as Dictionary)["msg"] = t)
 			pv.add_child(rmsg)
@@ -583,7 +589,7 @@ func click_cell(cell: Vector2i) -> void:
 		"reinforce":
 			var waves: Array = _cfg.get("waves", [])
 			if waves.is_empty():
-				_show_toast("先在右栏「敌方波次」加一波，再放增援")
+				_show_toast(Localize.text("先在右栏「敌方波次」加一波，再放增援"))
 				return
 			var wi := clampi(cur_rf_wave - 1, 0, waves.size() - 1)
 			var wave: Dictionary = waves[wi]
@@ -651,7 +657,7 @@ func _playtest() -> void:
 
 func _show_load() -> void:
 	var saved: Array = ScenarioStore.list_saved()
-	var pw := _popup_window("读取关卡", 420, 480)
+	var pw := _popup_window(Localize.text("读取关卡"), 420, 480)
 	var root: Control = pw["root"]
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -660,7 +666,7 @@ func _show_load() -> void:
 	var box := VBoxContainer.new(); box.add_theme_constant_override("separation", 6)
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(box)
 	if saved.is_empty():
-		var e := Label.new(); e.text = "还没有保存的关卡"; e.add_theme_color_override("font_color", Color("c8b89a")); box.add_child(e)
+		var e := Label.new(); e.text = Localize.text("还没有保存的关卡"); e.add_theme_color_override("font_color", Color("c8b89a")); box.add_child(e)
 	for name in saved:
 		var nm: String = name
 		var b := _btn("▶ " + nm, _load_named.bind(nm, root))
@@ -690,14 +696,14 @@ func _edit_unit_at(cell: Vector2i) -> void:
 				if int(rc[0]) == cell.x and int(rc[1]) == cell.y:
 					_edit_unit(String(e.get("key", "")))
 					return
-	_show_toast("这一格没有单位——切到「放单位」先摆一个，或双击已放的单位")
+	_show_toast(Localize.text("这一格没有单位——切到「放单位」先摆一个，或双击已放的单位"))
 
 
 ## 列出本关「改过 / 自定义」的单位 + 技能（改单位属性进 units、改技能进 abilities，两者都列）。
 func _show_modified_units() -> void:
 	var units: Dictionary = _cfg.get("units", {})
 	var abils: Dictionary = _cfg.get("abilities", {})
-	var pw := _popup_window("本关已改 / 自定义（单位 %d · 技能 %d）" % [units.size(), abils.size()], 460, 520)
+	var pw := _popup_window(Localize.format_text("本关已改 / 自定义（单位 %d · 技能 %d）", [units.size(), abils.size()]), 460, 520)
 	var root: Control = pw["root"]
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -706,25 +712,25 @@ func _show_modified_units() -> void:
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.add_child(box)
 	if units.is_empty() and abils.is_empty():
 		var e := Label.new()
-		e.text = "还没改过任何东西。\n切到「选择/改单位」双击地图上的单位，\n或在右栏波次里点兵种旁的「✎」。"
+		e.text = Localize.text("还没改过任何东西。\n切到「选择/改单位」双击地图上的单位，\n或在右栏波次里点兵种旁的「✎」。")
 		e.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; e.add_theme_color_override("font_color", Color("c8b89a"))
 		box.add_child(e)
 		return
 	if not units.is_empty():
-		box.add_child(_head("改过的单位"))
+		box.add_child(_head(Localize.text("改过的单位")))
 		var uk: Array = units.keys(); uk.sort()
 		for k in uk:
 			var kk := String(k)
-			var b := _btn("✎ " + _uname(kk) + "  (" + kk + ")", _open_modified.bind(kk, root))
+			var b := _btn("✎ " + _display_uname(kk) + "  (" + kk + ")", _open_modified.bind(kk, root))
 			b.alignment = HORIZONTAL_ALIGNMENT_LEFT; b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			b.custom_minimum_size = Vector2(0, 34); box.add_child(b)
 	if not abils.is_empty():
-		box.add_child(_head("改过的技能（点→打开其所属单位）"))
+		box.add_child(_head(Localize.text("改过的技能（点→打开其所属单位）")))
 		var ak: Array = abils.keys(); ak.sort()
 		for a in ak:
 			var aa := String(a)
 			var owner := _ability_owner(aa)
-			var lbl := "✦ " + _aname(aa) + "  (" + aa + ")" + ("  ←" + _uname(owner) if owner != "" else "")
+			var lbl := "✦ " + _display_aname(aa) + "  (" + aa + ")" + ("  ←" + _display_uname(owner) if owner != "" else "")
 			var ab := _btn(lbl, _open_modified.bind(owner if owner != "" else aa, root, owner == ""))
 			ab.alignment = HORIZONTAL_ALIGNMENT_LEFT; ab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			ab.custom_minimum_size = Vector2(0, 34); box.add_child(ab)
@@ -756,12 +762,12 @@ func _edit_unit(key: String) -> void:
 	if key == "":
 		return
 	_eu_key = key
-	var pw := _popup_window("编辑单位：%s (%s)" % [_uname(key), key], 560, 640)
+	var pw := _popup_window(Localize.format_text("编辑单位：%s (%s)", [_uname(key), key]), 560, 640)
 	_eu_root = pw["root"]
 	var top := HBoxContainer.new(); (pw["body"] as Control).add_child(top)
-	var hint := Label.new(); hint.text = "改动仅对本关生效"; hint.add_theme_color_override("font_color", UITheme.COMPLETE)
+	var hint := Label.new(); hint.text = Localize.text("改动仅对本关生效"); hint.add_theme_color_override("font_color", UITheme.COMPLETE)
 	hint.add_theme_font_size_override("font_size", 12); hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(hint)
-	top.add_child(_btn("复制为新单位", _eu_clone))
+	top.add_child(_btn(Localize.text("复制为新单位"), _eu_clone))
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	(pw["body"] as Control).add_child(sc)
@@ -780,18 +786,18 @@ func _eu_rebuild_form() -> void:
 		return
 	for spec in UNIT_SCHEMA:
 		_eu_form.add_child(_prop_row(_udef(key), func(fk, v) -> void: _unit_set(key, fk, v), spec))
-	_eu_form.add_child(_head("技能（点「编辑」改全部参数）"))
+	_eu_form.add_child(_head(Localize.text("技能（点「编辑」改全部参数）")))
 	var d := _udef(key)
 	var ab: Array = d.get("abilities", [])
 	if ab.is_empty() and String(d.get("ability", "")) != "":
 		ab = [d["ability"]]
 	if ab.is_empty():
-		var none := Label.new(); none.text = "（该单位无技能）"; none.add_theme_color_override("font_color", Color("9aa3ad")); _eu_form.add_child(none)
+		var none := Label.new(); none.text = Localize.text("（该单位无技能）"); none.add_theme_color_override("font_color", Color("9aa3ad")); _eu_form.add_child(none)
 	for aid in ab:
 		var aid2 := String(aid)
 		var hr := HBoxContainer.new()
-		var al := Label.new(); al.text = "  " + _aname(aid2) + "  (" + aid2 + ")"; al.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hr.add_child(al)
-		hr.add_child(_btn("编辑", func() -> void: _ae_open(aid2)))
+		var al := Label.new(); al.text = "  " + _display_aname(aid2) + "  (" + aid2 + ")"; al.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hr.add_child(al)
+		hr.add_child(_btn(Localize.text("编辑"), func() -> void: _ae_open(aid2)))
 		_eu_form.add_child(hr)
 
 
@@ -823,12 +829,12 @@ func _eu_clone() -> void:
 		_eu_root.queue_free()
 	_build()                # 刷新「放单位」下拉，带上新单位
 	_edit_unit(nk)
-	_show_toast("已复制为 %s（借用 %s 美术），可在「放单位」里摆放" % [nk, _uname(src)])
+	_show_toast(Localize.format_text("已复制为 %s（借用 %s 美术），可在「放单位」里摆放", [nk, _uname(src)]))
 
 
 func _ae_open(aid: String) -> void:
 	# 叠在单位编辑窗之上的小弹窗（背景半透明，仍能看见底下的单位属性）
-	var pw := _popup_window("技能编辑：%s (%s)" % [_aname(aid), aid], 560, 560, _eu_root)
+	var pw := _popup_window(Localize.format_text("技能编辑：%s (%s)", [_aname(aid), aid]), 560, 560, _eu_root)
 	pw["xbtn"].pressed.connect(_eu_rebuild_form)   # 关闭后刷新单位窗里的技能入口
 	var sc := ScrollContainer.new(); sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -845,6 +851,11 @@ func _adef(aid: String) -> Dictionary:
 
 func _aname(aid: String) -> String:
 	return String(_adef(aid).get("name", aid))
+
+
+func _display_aname(aid: String) -> String:
+	var source := _aname(aid)
+	return Localize.text(source) if source == String(Defs.ABILITIES.get(aid, {}).get("name", aid)) else source
 
 func _edit_unit_dict(key: String) -> Dictionary:
 	if not _cfg.has("units"):
@@ -884,11 +895,11 @@ func _prop_row(read_d: Dictionary, on_set: Callable, spec: Array) -> HBoxContain
 		s.value_changed.connect(func(v: float) -> void: on_set.call(key, (int(v) if typ == "int" else v)))
 		h.add_child(s)
 	elif typ == "str":
-		var le := LineEdit.new(); le.text = String(cur) if cur != null else ""; le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var le := LineEdit.new(); le.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED; le.text = String(cur) if cur != null else ""; le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		le.text_changed.connect(func(t: String) -> void: on_set.call(key, t))
 		h.add_child(le)
 	elif typ == "list":
-		var le2 := LineEdit.new(); le2.text = (",".join(cur) if cur is Array else ""); le2.placeholder_text = "技能id,逗号分隔"
+		var le2 := LineEdit.new(); le2.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED; le2.text = (",".join(cur) if cur is Array else ""); le2.placeholder_text = Localize.text("技能id,逗号分隔")
 		le2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		le2.text_changed.connect(func(t: String) -> void: on_set.call(key, _split_csv(t)))
 		h.add_child(le2)
@@ -897,7 +908,7 @@ func _prop_row(read_d: Dictionary, on_set: Callable, spec: Array) -> HBoxContain
 		var curs := String(cur) if cur != null else ""   # cur 可能为 null：勿用 String(null)
 		var o := OptionButton.new(); o.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		for i in range(opts.size()):
-			o.add_item(opts[i] if opts[i] != "" else "(无)", i)
+			o.add_item(opts[i] if opts[i] != "" else Localize.text("(无)"), i)
 			if curs == opts[i]:
 				o.select(i)
 		o.item_selected.connect(func(idx: int) -> void: on_set.call(key, String(opts[idx])))
@@ -963,7 +974,7 @@ func _popup_window(title_text: String, w: float, h: float, host: Node = null) ->
 	bh.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bh.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(bh)
-	var tl := Label.new(); tl.text = "▦  " + title_text
+	var tl := Label.new(); tl.text = "▦  " + Localize.text(title_text)
 	tl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tl.add_theme_font_size_override("font_size", 17); tl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	bh.add_child(tl)
@@ -980,7 +991,7 @@ func _popup_window(title_text: String, w: float, h: float, host: Node = null) ->
 
 
 func _head(t: String) -> Label:
-	var l := Label.new(); l.text = "— " + t + " —"
+	var l := Label.new(); l.text = "— " + Localize.text(t) + " —"
 	l.add_theme_font_size_override("font_size", 15); l.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	return l
 
@@ -1036,7 +1047,7 @@ func _key_opt(keys: Array, cur: String, cb: Callable) -> OptionButton:
 func _gate_opt(cur: String, cb: Callable) -> OptionButton:
 	var o := OptionButton.new(); o.custom_minimum_size = Vector2(60, 0)
 	for i in range(GATE_NAMES.size()):
-		o.add_item("口" + GATE_NAMES[i], i)
+		o.add_item(Localize.text("口") + GATE_NAMES[i], i)
 		if GATE_NAMES[i] == cur:
 			o.select(i)
 	o.item_selected.connect(func(idx: int) -> void: cb.call(GATE_NAMES[idx]))
@@ -1044,9 +1055,9 @@ func _gate_opt(cur: String, cb: Callable) -> OptionButton:
 
 
 func _terrain_label(tn: String) -> String:
-	var zh := {"GRASS": "草地", "WATER": "水", "SHORE": "浅滩", "MARSH": "沼泽", "REEDS": "芦苇",
-		"ROAD": "道路", "FOREST": "树林", "DRYHILL": "旱丘", "CLIFF": "崖", "TOWN": "城镇",
-		"PLAZA": "广场", "FIELD": "田", "PLAIN": "平原", "DOCK": "栈桥", "HALL": "地基"}
+	var zh := {"GRASS": Localize.text("草地"), "WATER": Localize.text("水"), "SHORE": Localize.text("浅滩"), "MARSH": Localize.text("沼泽"), "REEDS": Localize.text("芦苇"),
+		"ROAD": Localize.text("道路"), "FOREST": Localize.text("树林"), "DRYHILL": Localize.text("旱丘"), "CLIFF": Localize.text("崖"), "TOWN": Localize.text("城镇"),
+		"PLAZA": Localize.text("广场"), "FIELD": Localize.text("田"), "PLAIN": Localize.text("平原"), "DOCK": Localize.text("栈桥"), "HALL": Localize.text("地基")}
 	return String(zh.get(tn, tn))
 
 
@@ -1187,7 +1198,7 @@ class MapCanvas extends Control:
 			draw_circle(cp, cz * 0.42, Color(0, 0, 0, 0.6), false, 1.5)
 			if String(e.get("ref", "")) == "hall":
 				draw_arc(cp, cz * 0.6, 0, TAU, 16, Color(1, 0.9, 0.3), 2.0)
-			var nm: String = ed._uname(String(e.get("key", "")))
+			var nm: String = ed._display_uname(String(e.get("key", "")))
 			if cz >= 11.0:
 				draw_string(f, cp + Vector2(-cz * 0.35, cz * 0.28), nm.substr(0, 1), HORIZONTAL_ALIGNMENT_LEFT, -1, int(cz * 0.7), Color(0.06, 0.05, 0.04))
 		# 镜头起点

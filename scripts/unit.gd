@@ -1851,7 +1851,7 @@ func advance_build(delta: float) -> void:
 func production_wait_label() -> String:
 	var water := not _train_queue.is_empty() and battle!=null \
 		and String(battle._defs.get(_train_queue[0],{}).get("movement_profile","land"))=="water"
-	return "等待下水" if water else "等待出口"
+	return Localize.text("等待下水") if water else Localize.text("等待出口")
 
 
 ## 建筑生产：完成且出口可用时才出队；堵口的成船仍可取消并退费。
@@ -1866,7 +1866,7 @@ func _production_tick(delta: float) -> void:
 		if not battle.on_unit_trained(self,key):
 			if not _gameplay_rng_fault().is_empty(): return
 			if not production_blocked and faction==FACTION_LIANG:
-				battle.msg(display_name+"："+production_wait_label()+"，请清开出口；取消队列可退资源。",4)
+				battle.msg(Localize.format_text("%s：%s%s", [display_name, production_wait_label(), "，请清开出口；取消队列可退资源。"]),4)
 			production_blocked=true
 			_production_retry=0.5
 			return
@@ -3948,9 +3948,9 @@ func _draw() -> void:
 	if (is_hero or is_building) and not _dying:
 		var f := ThemeDB.fallback_font
 		var ty := bar_y - 6.0
-		draw_string(f, Vector2(-49.0, ty + 1.0), display_name, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 13, Color(0, 0, 0, 0.8))
+		UITheme.draw_compact_label(self, f, Vector2(-49.0, ty + 1.0), Localize.text(display_name), 100.0, 13, Color(0, 0, 0, 0.8))
 		var nc := Color("ffd866") if faction == FACTION_LIANG else Color("ff8866")
-		draw_string(f, Vector2(-50.0, ty), display_name, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 13, nc)
+		UITheme.draw_compact_label(self, f, Vector2(-50.0, ty), Localize.text(display_name), 100.0, 13, nc)
 		# 驻军占用徽标：建筑里有兵时在名字上方显示「▣ N/容量」，一眼看出驻军情况
 		if is_building and not passengers.is_empty():
 			var gt := "▣ %d/%d" % [passengers.size(), garrison_cap]
@@ -3962,7 +3962,7 @@ func _draw() -> void:
 	if story_outcome != "":
 		var status_text := story_label()
 		if not is_hero and not is_building and not inspected and movement_profile!="water":
-			status_text = {"unconscious":"昏", "subdued":"服", "captured":"俘"}.get(story_outcome,status_text)
+			status_text = {"unconscious":Localize.text("昏"), "subdued":Localize.text("服"), "captured":Localize.text("俘")}.get(story_outcome,status_text)
 		draw_string(ThemeDB.fallback_font, Vector2(-45,bar_y+12), status_text, HORIZONTAL_ALIGNMENT_CENTER, 90, 13, Color(0.96,0.83,0.53))
 	if is_bound_person():
 		for rope_y in [-22,-19]: draw_line(Vector2(-7,rope_y),Vector2(7,rope_y),Color(0.65,0.48,0.27),1.7)
@@ -4458,8 +4458,8 @@ func resolve_story(outcome: String) -> bool:
 
 func story_label() -> String:
 	if movement_profile=="water" and story_outcome=="subdued":
-		return {"damaged":"已停航","flooding":"正在进水","disabled":"已沉陷"}.get(String(get_meta("ship_state","")),"已停航")
-	return {"unconscious":"昏迷", "subdued":"已制服", "captured":"已被擒", "retreated":"已撤离", "embarked":"已登船"}.get(story_outcome, "")
+		return {"damaged":Localize.text("已停航"),"flooding":Localize.text("正在进水"),"disabled":Localize.text("已沉陷")}.get(String(get_meta("ship_state","")),Localize.text("已停航"))
+	return {"unconscious":Localize.text("昏迷"), "subdued":Localize.text("已制服"), "captured":Localize.text("已被擒"), "retreated":Localize.text("已撤离"), "embarked":Localize.text("已登船")}.get(story_outcome, "")
 
 func play_story_pose(pose: String, variant: String, duration := 2.0) -> void:
 	if _story_pose_t <= 0.0: _pose_previous_variant = art_variant

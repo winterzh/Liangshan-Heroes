@@ -268,7 +268,7 @@ func _send_wave(b,index: int) -> void:
 			u.order_amove(hall.position,true)
 	if index==2 and alive(flagship): flagship.order_amove(b.map.cell_to_world(Vector2i(44,40)))
 	b.mission.set_title(["第一败 · 水陆来犯","第二败 · 连船与岸军","第三败 · 海鳅船压港"][index])
-	b.msg("第%d批水陆主力出发。营地、资源和军队继续保留；两处补给源仍可主动拆除。"%(index+1),7)
+	b.msg(Localize.format_text("第%d批水陆主力出发。营地、资源和军队继续保留；两处补给源仍可主动拆除。", (index+1)),7)
 func _production(b,delta: float) -> void:
 	if core_ready:
 		return
@@ -333,7 +333,7 @@ func on_mission_action(b,key: String,actor) -> void:
 			b.mission.mark("liu_tang_fire_leader","刘唐带引火物实际登上主码头小船。")
 			b.mission.mark("fireboat_prepared","小船备好火具，消耗60木；护它接近第二批连船再举火。")
 			for i in range(2):
-				b.mission.add_action("gao_fire_%d"%i,"刘唐："+("外港" if i==0 else "内港")+"举火",FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
+				b.mission.add_action("gao_fire_%d"%i,Localize.text("刘唐：")+(Localize.text("外港") if i==0 else Localize.text("内港"))+Localize.text("举火"),FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
 		"gao_fire_0","gao_fire_1":
 			if fire_lit or actor!=fireboat:
 				return
@@ -366,7 +366,7 @@ func on_mission_action(b,key: String,actor) -> void:
 				return
 			port_sealed=true
 			b.mission.mark("port_sealed","阮氏水军控制座船外侧港口，张顺可安全靠船。")
-			b.mission.add_action("gao_scuttle","张顺：凿船接俘",b.map.world_to_cell(flagship.position)+Vector2i(-3,0),["zhang_shun_boat"],3,64)
+			b.mission.add_action("gao_scuttle",Localize.text("张顺：凿船接俘"),b.map.world_to_cell(flagship.position)+Vector2i(-3,0),["zhang_shun_boat"],3,64)
 		"gao_scuttle":
 			if capture_lost or recovered or not port_sealed:
 				return
@@ -411,18 +411,18 @@ func on_mission_action(b,key: String,actor) -> void:
 			prisoner.setup_def["pop"]=0
 			prisoner.set_stance(Unit.STANCE_PASSIVE)
 			b.mission.mark("gao_landed","高俅已实际上岸。选中他和岸军一起返回忠义堂；落单会停下等待护卫。")
-			b.mission.add_map_locator("押俘终点 · 忠义堂前",HALL+Vector2i(0,4))
+			b.mission.add_map_locator(Localize.text("押俘终点 · 忠义堂前"),HALL+Vector2i(0,4))
 func _capture_failed(b,reason: String) -> void:
 	if capture_lost: return
 	capture_lost=true
-	b.mission.mark("gao_escaped",reason+"；仍可打停座船、击退三批主力取得基础通关。")
+	b.mission.mark("gao_escaped",reason+Localize.text("；仍可打停座船、击退三批主力取得基础通关。"))
 	for key in ["gao_seal","gao_scuttle","gao_land"]: b.mission.block_action(key,reason)
 func _core_threats_clear() -> bool:
 	return flagship_disabled and water_groups.all(func(group): return _count(group)==0) and land_groups.all(func(group): return _count(group)==0)
 func _finish(b,captured := false) -> void:
 	if b.phase!=b.Phase.FIGHT or not _core_threats_clear() or not alive(hall) or not alive(song): return
 	if not captured: b.mission.mark("gao_basic_victory","三批主力败退，高俅座船被打停，梁山收兵。")
-	b.win("高俅三次进兵失利，水寨与钱粮守住。"+("高俅已由水军生擒、岸军押至忠义堂，宋江仍以礼相待，盼借此求得招安。" if captured else "本局以击退座船收束；生擒押堂可在重玩时挑战。"))
+	b.win(Localize.text("高俅三次进兵失利，水寨与钱粮守住。")+(Localize.text("高俅已由水军生擒、岸军押至忠义堂，宋江仍以礼相待，盼借此求得招安。") if captured else Localize.text("本局以击退座船收束；生擒押堂可在重玩时挑战。")))
 func process(b,delta: float) -> void:
 	if not alive(hall) or not alive(song):
 		return
@@ -438,7 +438,7 @@ func process(b,delta: float) -> void:
 			continue
 		if elapsed>=waves[i].time-25 and not waves[i].warned:
 			waves[i].warned=true
-			b.msg("第%d批水陆主力约25秒后出发，准备水陆两线；也可截击其集结地。"%(i+1),6)
+			b.msg(Localize.format_text("第%d批水陆主力约25秒后出发，准备水陆两线；也可截击其集结地。", (i+1)),6)
 		if elapsed>=waves[i].time:
 			_send_wave(b,i)
 	if lure_started and not b.mission.has_event("fleet_in_ambush") and water_groups[0].any(func(u): return _near(b,u,lure_cell,170)):
@@ -454,7 +454,7 @@ func process(b,delta: float) -> void:
 	if land_groups.all(func(group): return _count(group)==0):
 		b.mission.mark("gao_land_cleared","三批岸上主力均已击退。")
 	if flagship_disabled and not capture_lost and not b.mission.actions.has("gao_seal"):
-		b.mission.add_action("gao_seal","阮氏水军：封港",b.map.world_to_cell(flagship.position)+Vector2i(0,3),["ruan_xiaoer_boat","ruan_xiaowu_boat"],2,64)
+		b.mission.add_action("gao_seal",Localize.text("阮氏水军：封港"),b.map.world_to_cell(flagship.position)+Vector2i(0,3),["ruan_xiaoer_boat","ruan_xiaowu_boat"],2,64)
 	if landed and alive(prisoner):
 		var escort: bool=b.units.any(func(u): return alive(u) and u!=prisoner and u.faction==0 and not u.is_building and not u.is_worker and not u.is_noncombat and u.movement_profile=="land" and u.position.distance_to(prisoner.position)<180)
 		if not escort:
@@ -483,7 +483,7 @@ func on_unit_resolved(b,u,outcome: String) -> void:
 		u.set_meta("ship_state","damaged")
 		b.mission.mark("flagship_disabled","高俅座船在实际交战中失去战力。压退剩余水陆主力即可收兵，或另做封港押俘。")
 func on_unit_died(b,u) -> void:
-	if u==hall or u==song: b.lose(u.display_name+"失守。岸军要守东山关，舰队护住码头；可重开并调整水陆投入。"); return
+	if u==hall or u==song: b.lose(Localize.text(u.display_name)+Localize.text("失守。岸军要守东山关，舰队护住码头；可重开并调整水陆投入。")); return
 	# The hidden embarked hero reserves population/uniqueness while aboard.
 	# A real loss of his carrier must release that reservation as well.
 	if is_instance_valid(embarked_liu) and ((u==fireboat and not fire_lit) or u==liu_carrier):
@@ -502,4 +502,4 @@ func on_unit_died(b,u) -> void:
 	if u==fireboat and not fire_lit: b.mission.miss_story_goal("gao_fire","火船损失，可建船坞补普通战船继续进攻。")
 func top_status(_b) -> String:
 	var sent: int=waves.filter(func(w): return w.sent).size()
-	return "三败高太尉 · 已出发%d/3批 · 水陆营地持续保留 · 官军补充 陆%d/10 船%d/4"%[sent,produced[0],produced[1]]
+	return Localize.format_text("三败高太尉 · 已出发%d/3批 · 水陆营地持续保留 · 官军补充 陆%d/10 船%d/4", [sent,produced[0],produced[1]])

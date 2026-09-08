@@ -385,14 +385,22 @@ class StoryCrowd extends Node2D:
 class StorySign extends Node2D:
 	var size := 72.0
 	var label := ""
+	func _ready() -> void:
+		Localize.language_changed.connect(_on_language_changed)
+	func _on_language_changed(_locale: String) -> void:
+		queue_redraw()
 	func _draw() -> void:
 		draw_set_transform_matrix(GameMap.ISO_INV)
 		var w := maxf(size,54.0)
+		# Keep the source label in map/snapshot data; localize only the painted sign.
+		var shown := Localize.text(label)
+		var font := ThemeDB.fallback_font
+		var board_width := maxf(w*0.88,font.get_string_size(shown,HORIZONTAL_ALIGNMENT_LEFT,-1,14).x+12.0)
 		draw_line(Vector2(0,4),Vector2(0,-w*0.72),Color("4f3624"),3.2)
-		var board := Rect2(-w*0.44,-w*0.70,w*0.88,23.0)
+		var board := Rect2(-board_width*0.5,-w*0.70,board_width,23.0)
 		draw_rect(board,Color("4a2f20"))
 		draw_rect(board,Color("c5a364"),false,1.8)
-		draw_string(ThemeDB.fallback_font,Vector2(board.position.x,-w*0.53),label,HORIZONTAL_ALIGNMENT_CENTER,board.size.x,14,Color("f4e3b1"))
+		draw_string(font,Vector2(board.position.x,-w*0.53),shown,HORIZONTAL_ALIGNMENT_CENTER,board.size.x,14,Color("f4e3b1"))
 		draw_set_transform_matrix(Transform2D.IDENTITY)
 
 

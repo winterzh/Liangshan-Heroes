@@ -41,6 +41,17 @@ func _build() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 
+	# Keep the recovery control visible above the scrolling settings in every locale.
+	var language_row := HBoxContainer.new()
+	language_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	language_row.add_theme_constant_override("separation", 14)
+	var language_label := Label.new()
+	language_label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	language_label.text = "语言 / Language / 言語"
+	language_row.add_child(language_label)
+	language_row.add_child(Localize.create_selector())
+	box.add_child(language_row)
+
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(660, 460)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -117,7 +128,9 @@ func _build() -> void:
 
 	_head(p, "键位一览")
 	_key_overview = Label.new()
-	_key_overview.text = _keybind_text()
+	Localize.bind_render(_key_overview, _keybind_text)
+	_key_overview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_key_overview.custom_minimum_size = Vector2(620, 0)
 	_key_overview.add_theme_font_size_override("font_size", 14)
 	_key_overview.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	p.add_child(_key_overview)
@@ -175,7 +188,7 @@ func _row(parent: VBoxContainer, label_text: String, control: Control) -> void:
 	hb.add_theme_constant_override("separation", 14)
 	var l := Label.new()
 	l.text = label_text
-	l.custom_minimum_size = Vector2(150, 0)
+	l.custom_minimum_size = Vector2(180, 0)
 	l.add_theme_font_size_override("font_size", 16)
 	l.add_theme_color_override("font_color", UITheme.PAPER)
 	hb.add_child(l)
@@ -353,14 +366,14 @@ func _keybind_text() -> String:
 	var command_keys := Settings.command_key_labels()
 	var item_keys := _item_key_labels_compat()
 	var lines := [
-		"编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入",
-		"%s 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头" % Settings.key_label("select_army"),
-		"%s 攻击移动　%s 停止　%s 原地据守　%s 巡逻　%s 切换姿态" % [Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"), Settings.key_label("patrol"), Settings.key_label("stance")],
-		"%s 英雄技能/命令　F1/F3-F8 按头像选英雄" % " / ".join(command_keys),
-		"%s 当前英雄物品栏" % " / ".join(item_keys),
-		"%s 跳最近告警/回起始视角　%s 子编组　%s 切闲置工人" % [Settings.key_label("alert"), Settings.key_label("subgroup"), Settings.key_label("idle_worker")],
-		"%s 拆除　Esc 菜单 / 取消" % Settings.key_label("demolish"),
-		"镜头：方向键平移　+ / − 或滚轮 缩放　中键拖拽",
+		Localize.text("编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入"),
+		Localize.format_text("%s 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头", Settings.key_label("select_army")),
+		Localize.format_text("%s 攻击移动　%s 停止　%s 原地据守　%s 巡逻　%s 切换姿态", [Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"), Settings.key_label("patrol"), Settings.key_label("stance")]),
+		Localize.format_text("%s 英雄技能/命令　F1/F3-F8 按头像选英雄", " / ".join(command_keys)),
+		Localize.format_text("%s 当前英雄物品栏", " / ".join(item_keys)),
+		Localize.format_text("%s 跳最近告警/回起始视角　%s 子编组　%s 切闲置工人", [Settings.key_label("alert"), Settings.key_label("subgroup"), Settings.key_label("idle_worker")]),
+		Localize.format_text("%s 拆除　Esc 菜单 / 取消", Settings.key_label("demolish")),
+		Localize.text("镜头：方向键平移　+ / − 或滚轮 缩放　中键拖拽"),
 	]
 	return "\n".join(lines)
 

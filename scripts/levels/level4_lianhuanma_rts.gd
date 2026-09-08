@@ -224,7 +224,7 @@ func on_start(b) -> void:
 		if node!=null: workers[i].order_gather(node)
 	for i in range(enemy_workers.size()): enemy_workers[i].order_gather(enemy_nodes[i])
 	b.mission.begin("lhm_rts","扎营 · 枪阵迎骑","经营前营、兵营补充钩镰与弓手；两路草林可迎骑，北南辎重营可断援。教场演练可选。")
-	b.mission.add_action("lhm_drill_reset","摆好教场演练骑（可选）",DRILL+Vector2i(-2,0),["xu_ning"],1,64)
+	b.mission.add_action("lhm_drill_reset",Localize.text("摆好教场演练骑（可选）"),DRILL+Vector2i(-2,0),["xu_ning"],1,64)
 	b.mission.add_actor_locator("lhm_drill_reset","xu_ning")
 	for cell in [LANES[0],LANES[1],NORTH_POST,SOUTH_POST]: b.lit_cells[cell]=20.0
 	b.msg("首队甲马约150秒后沿北草林进军，后队约270秒走南路。兵营已能训练钩镰手；派军争辎重营可断护军并延迟该路骑队。",10)
@@ -289,7 +289,7 @@ func _rider_tick(b) -> void:
 			u.apply_slow(0.45,4)
 			broken_count+=1
 			b.show_story_art("broken_cavalry",u.position,72,1.5)
-			b.mission.mark("lhm_break_%d"%broken_count,"钩镰协同破开第%d骑连环阵"%broken_count)
+			b.mission.mark("lhm_break_%d"%broken_count,Localize.format_text("钩镰协同破开第%d骑连环阵", broken_count))
 	if broken_count==12: b.mission.mark("lhm_all_hook_broken","十二骑均被钩镰枪协同破阵")
 func _send_wave(b,lane: int) -> void:
 	waves[lane].sent=true
@@ -298,7 +298,7 @@ func _send_wave(b,lane: int) -> void:
 			u.set_meta("wave_state","charging")
 			u.order_amove(b.map.cell_to_world(LANES[lane]))
 			u.order_amove(hall.position,true)
-	b.msg(("北路" if lane==0 else "南路")+"甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。",7)
+	b.msg((Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。"),7)
 func _support_tick(b,delta: float) -> void:
 	if not alive(enemy_base):
 		return
@@ -347,7 +347,7 @@ func process(b,delta: float) -> void:
 		if elapsed>=float(waves[lane].time)-25 and not waves[lane].warned:
 			waves[lane].warned=true
 			b.lit_cells[RIDER_POSTS[lane]]=30.0
-			b.msg(("北路" if lane==0 else "南路")+"甲马正在集结，约25秒后出发。",6)
+			b.msg((Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("甲马正在集结，约25秒后出发。"),6)
 		if elapsed>=float(waves[lane].time):
 			_send_wave(b,lane)
 	var new_title: String="反攻 · 拔除官军大营" if lhm_killed>=12 else "迎骑 · 经营与两路作战"
@@ -365,7 +365,7 @@ func process(b,delta: float) -> void:
 		b.win("官军大营已破，十二骑连环马尽数击溃；梁山中军守住。呼延灼败走青州。")
 func on_unit_died(b,u) -> void:
 	if u==hall or u==song:
-		b.lose("%s失守。可重开本局，先补枪兵、拒马与人口，再安排两路防守。"%u.display_name)
+		b.lose(Localize.format_text("%s失守。可重开本局，先补枪兵、拒马与人口，再安排两路防守。", u.display_name))
 	elif u in riders:
 		lhm_killed+=1
 		if not bool(u.get_meta("formation_broken",false)): b.mission.mark("lhm_direct_break","部分甲马由正面兵力击溃，未先协同钩破阵")
@@ -377,7 +377,7 @@ func on_unit_died(b,u) -> void:
 	elif u in posts:
 		var lane: int=posts.find(u)
 		if not waves[lane].sent: waves[lane].time+=45.0; waves[lane].warned=false
-		b.mission.mark("lhm_supply_%d"%lane,("北路" if lane==0 else "南路")+"辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场")
+		b.mission.mark("lhm_supply_%d"%lane,(Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场"))
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==han and outcome=="captured": b.mission.mark("lhm_han_captured","韩滔被生擒，仍按敌将看押")
 	elif u==hu and outcome=="retreated": b.mission.mark("lhm_hu_fled","呼延灼骑踢雪乌骓败走青州")
@@ -394,5 +394,5 @@ func on_unit_resolved(b,u,outcome: String) -> void:
 func top_status(_b) -> String:
 	var wave_text: Array[String]=[]
 	for lane in range(2):
-		wave_text.append(("北" if lane==0 else "南")+("已出击" if waves[lane].sent else "%d秒"%maxi(0,ceili(float(waves[lane].time)-elapsed))))
-	return "连环马 · 击溃%d/12 · 钩破%d/12 · %s · 辎重营%d/2"%[lhm_killed,broken_count," / ".join(wave_text),posts.filter(func(u): return alive(u)).size()]
+		wave_text.append((Localize.text("北") if lane==0 else Localize.text("南"))+(Localize.text("已出击") if waves[lane].sent else Localize.format_text("%d秒", maxi(0,ceili(float(waves[lane].time)-elapsed)))))
+	return Localize.format_text("连环马 · 击溃%d/12 · 钩破%d/12 · %s · 辎重营%d/2", [lhm_killed,broken_count," / ".join(wave_text),posts.filter(func(u): return alive(u)).size()])

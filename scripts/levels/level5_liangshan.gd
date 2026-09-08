@@ -253,7 +253,7 @@ func on_mission_action(b, action_id: String, _actor) -> void:
 			fire_point="north" if action_id=="fire_north" else "south"
 			stage="fire_ignite"
 			var point: Vector2i=FIRE_NORTH_CELL if fire_point=="north" else FIRE_SOUTH_CELL
-			b.mission.begin(stage,"第二败·择点举火","火船已贴近%s连船。现在点火，火势只会沿相连的这一段蔓延；接应船随后必须撤出险水。"%("北段" if fire_point=="north" else "南段"))
+			b.mission.begin(stage,"第二败·择点举火",Localize.format_text("火船已贴近%s连船。现在点火，火势只会沿相连的这一段蔓延；接应船随后必须撤出险水。", ("北段" if fire_point=="north" else "南段")))
 			b.mission.add_action("ignite_fireboat","刘唐：点燃火船",point,["liu_tang_fireboat"],1.5,40.0)
 		"ignite_fireboat":
 			if stage!="fire_ignite" or fire_lit or _actor!=fireboat:
@@ -272,7 +272,7 @@ func on_mission_action(b, action_id: String, _actor) -> void:
 					ship.resolve_story("subdued")
 			fireboat.set_meta("ship_state","disabled")
 			fireboat.resolve_story("retreated")
-			b.mission.mark("fire_point_"+fire_point,"刘唐在%s段举火，火势沿三艘相连官船蔓延；另两艘已经解缆逼向接应队。"%("北" if fire_point=="north" else "南"))
+			b.mission.mark("fire_point_"+fire_point,Localize.format_text("刘唐在%s段举火，火势沿三艘相连官船蔓延；另两艘已经解缆逼向接应队。", (Localize.text("北") if fire_point=="north" else Localize.text("南"))))
 			for ship in enemy_fleet:
 				if _effective(ship):
 					ship.passive=false
@@ -503,7 +503,7 @@ func _start_first_direct(b,reason: String, allow_started_route := false) -> void
 	first_direct=true
 	lure_started=true
 	lure_route="direct"
-	b.mission.mark("gao_first_direct",reason+"；伏港诱舰不再计演义印")
+	b.mission.mark("gao_first_direct",reason+Localize.text("；伏港诱舰不再计演义印"))
 	_miss_story(b,"gao_lure","没有先诱官船深入港汊")
 	_activate_fleet(enemy_fleet,b.map.cell_to_world(Vector2i(41,38)))
 	_activate_fleet(fleet,b.map.cell_to_world(Vector2i(41,24)))
@@ -539,7 +539,7 @@ func _capture_route_available() -> bool:
 
 func _mark_capture_route_lost(b,reason: String) -> void:
 	if b.mission.has_event("gao_capture_route_lost"): return
-	b.mission.mark("gao_capture_route_lost",reason+"；仍可正面击退或击沉座船")
+	b.mission.mark("gao_capture_route_lost",reason+Localize.text("；仍可正面击退或击沉座船"))
 	_miss_story(b,"gao_capture",reason)
 
 func _finish_final_direct(b,result: String) -> void:
@@ -617,7 +617,7 @@ func process(b, delta: float) -> void:
 				var entered: bool=cell.y>=31 if lure_route=="main" else cell.x<=37 and cell.y>=25
 				if entered:
 					lure_complete=true
-					b.mission.mark("fleet_in_ambush","官军舰队从%s深入伏区，岸上弓手与水军形成夹击。"%("主港" if lure_route=="main" else "侧汊"))
+					b.mission.mark("fleet_in_ambush",Localize.format_text("官军舰队从%s深入伏区，岸上弓手与水军形成夹击。", ("主港" if lure_route=="main" else "侧汊")))
 					break
 		if _alive(enemy_fleet)==0:
 			# Destroying the fleet before a living ship reaches the ambush remains a
@@ -670,7 +670,7 @@ func _start_land(b) -> void:
 	if not b.entity_ids_available(15):
 		b._gameplay_rng_stop("ENTITY_REDEPLOY_CAPACITY")
 		return
-	b.mission.mark("first_defeat",("【再战·刘唐举火破连舰】梁山正面击退第一路官船，高俅收拢船只再来。" if first_direct else "【再战·刘唐举火破连舰】官船被诱入港汊，第一次水战失利，高俅收拢船只再来。")+"牛邦喜与刘梦龙、党世英掌管水路再进；吴用命刘唐掌管火船，公孙胜祭风。梁山只备一条举火小船，两艘水军船负责接应。也可承担代价改用正面战。")
+	b.mission.mark("first_defeat",(Localize.text("【再战·刘唐举火破连舰】梁山正面击退第一路官船，高俅收拢船只再来。") if first_direct else Localize.text("【再战·刘唐举火破连舰】官船被诱入港汊，第一次水战失利，高俅收拢船只再来。"))+Localize.text("牛邦喜与刘梦龙、党世英掌管水路再进；吴用命刘唐掌管火船，公孙胜祭风。梁山只备一条举火小船，两艘水军船负责接应。也可承担代价改用正面战。"))
 	_reset_section(b)
 	if not b._gameplay_rng_issue.is_empty(): return
 	stage="fire_prepare"
@@ -757,7 +757,7 @@ func _start_land_closure(b) -> void:
 	if _created_entity_3 == null:
 		b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 		return
-	b.mission.begin(stage,"第二败·岸路收束",("正面水战已经结束。" if fire_direct else "举火接应已经完成。")+"命岸军到林口布置伏兵，收束山前来路；陆军沿北侧山路迎敌，不能渡过港水。")
+	b.mission.begin(stage,Localize.text("第二败·岸路收束"),(Localize.text("正面水战已经结束。") if fire_direct else Localize.text("举火接应已经完成。"))+Localize.text("命岸军到林口布置伏兵，收束山前来路；陆军沿北侧山路迎敌，不能渡过港水。"))
 	b.mission.add_action("land_ambush","岸军：布置山前伏兵",Vector2i(23,22),["lin_chong","hua_rong","liang_qiang","liang_gong"],3.0)
 	b.camera.position=b.to_screen(b.map.cell_to_world(Vector2i(23,22)))
 
@@ -859,7 +859,7 @@ func on_unit_died(b, u) -> void:
 
 func top_status(_b) -> String:
 	var names := {"water_lure": "第一败·水战", "fire_prepare":"第二败·准备举火", "fire_position":"第二败·驶近连船", "fire_ignite":"第二败·择点举火", "fire_withdraw":"第二败·接应撤离", "fire_direct":"第二败·正面破舰", "land_ambush": "第二败·岸路收束", "final_fleet": "第三败·水战", "scuttle": "第三败·凿船", "water_rescue":"第三败·水上擒俘", "return_prisoner":"第三败·押俘返航", "capture_gao": "第三败·生擒高俅", "final_complete":"第三败·基础胜利"}
-	return "三败高太尉 · %s | 舰船走水道，陆军走岸路" % names.get(stage, "水陆布阵")
+	return Localize.format_text("三败高太尉 · %s | 舰船走水道，陆军走岸路", names.get(stage, "水陆布阵"))
 
 func paint_map(map: GameMap) -> void:
 	map.fill_ellipse(Vector2(20, 30), 19, 16, T.MARSH)

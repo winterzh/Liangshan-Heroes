@@ -30,10 +30,10 @@ func on_start(b) -> void:
 func _road_actions(b) -> void:
 	b.mission.begin("road_choice","沿途准备 · 饮酒或径赴快活林", "每处酒望可吃一次三碗：拳力更强，步速与出手也更不稳。可以择店饮酒，也可直接挑战；四处都饮过另计演义。第二家旁有可选练步，W只是加速，方向仍由右键决定。")
 	for i in range(taverns.size()):
-		if not taverns[i].drunk: b.mission.add_action("drink_%d"%i,"武松 · 第%d家三碗"%(i+1),TAVERN_CELLS[i]+Vector2i(0,2),["wu_song"],0.8,48)
+		if not taverns[i].drunk: b.mission.add_action("drink_%d"%i,Localize.format_text("武松 · 第%d家三碗", (i+1)),TAVERN_CELLS[i]+Vector2i(0,2),["wu_song"],0.8,48)
 	if not b.mission.has_event("road_step_practiced"):
 		b.mission.add_action("practice_step","可选 · 官道旁试一次换步",Vector2i(25,19),["wu_song"],0.5,40)
-	b.mission.add_action("provoke","武松 · 店前佯醉换酒",KUAIHUO+Vector2i(-2,1),["wu_song"],0.8,48)
+	b.mission.add_action("provoke",Localize.text("武松 · 店前佯醉换酒"),KUAIHUO+Vector2i(-2,1),["wu_song"],0.8,48)
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	if action_id.begins_with("drink_"):
@@ -42,8 +42,8 @@ func on_mission_action(b, action_id: String, actor) -> void:
 		taverns[i].drunk=true; drunk+=1
 		wu._base_atk+=5; wu.atk+=5; wu.heal(35)
 		wu.start_drunk(maxf(0.64,1.0-0.09*drunk),1.08,999)
-		b.mission.mark(action_id,"第%d家酒望吃足三碗；现共%d家，拳力增强，酒势也更不稳。"%[i+1,drunk])
-		b.mission.set_status("已饮%d/4家：可继续沿路，或直接去快活林。"%drunk)
+		b.mission.mark(action_id,Localize.format_text("第%d家酒望吃足三碗；现共%d家，拳力增强，酒势也更不稳。", [i+1,drunk]))
+		b.mission.set_status(Localize.format_text("已饮%d/4家：可继续沿路，或直接去快活林。", drunk))
 	elif action_id=="practice_step":
 		if st!=ROAD or actor!=wu: return
 		_start_step_drill(b)
@@ -69,7 +69,7 @@ func _complete_step_drill(b, source: String) -> void:
 	st=ROAD
 	if is_instance_valid(drill_marker): drill_marker.queue_free()
 	drill_marker=null
-	b.mission.mark("road_step_practiced","武松实际离开重拳落点，试过横移（%s）。"%source)
+	b.mission.mark("road_step_practiced",Localize.format_text("武松实际离开重拳落点，试过横移（%s）。", source))
 	_road_actions(b)
 
 func _open_showdown(b, original_provocation:=false) -> void:
@@ -142,7 +142,7 @@ func _duel_tick(b, delta: float) -> void:
 		return
 	if exposed_left>0:
 		exposed_left=maxf(0,exposed_left-delta)
-		b.mission.set_status("破绽还剩 %.1f秒 · 靠近E反击，或R稳住酒势。"%exposed_left)
+		b.mission.set_status(Localize.format_text("破绽还剩 %.1f秒 · 靠近E反击，或R稳住酒势。", exposed_left))
 		if exposed_left<=0:
 			opening_serial=-1; step_serial=-1
 			menshen.apply_damage_reduction(0.5,999,BRACE_SOURCE)
@@ -200,7 +200,7 @@ func _finish_special(b, missed: bool) -> void:
 		menshen.apply_stun(exposed_left)
 		if special_kind=="heavy": heavy_dodges+=1
 		else: rush_dodges+=1
-		b.mission.mark("dodge_"+special_kind,"蒋门神本次招式落空，架势松动。")
+		b.mission.mark("dodge_"+special_kind,Localize.text("蒋门神本次招式落空，架势松动。"))
 		b.msg("招式落空！靠近E反击。",2)
 	else:
 		step_serial=-1
@@ -225,7 +225,7 @@ func _sync_controls(b) -> void:
 	controls_generation=b.mission._generation
 	for actor in [wu,shi]:
 		var button:=Button.new()
-		button.text="选中 · "+actor.display_name
+		button.text=Localize.text("选中 · ")+Localize.text(actor.display_name)
 		button.pressed.connect(func():
 			if is_instance_valid(actor) and actor.hp>0: b.select_single(actor,false); b.center_camera_cell(b.map.world_to_cell(actor.position)))
 		b.mission._buttons.add_child(button)
@@ -234,7 +234,7 @@ func _sync_controls(b) -> void:
 
 func top_status(b) -> String:
 	if charge_running: return "蒋门神冲撞中 · 横移让开"
-	if exposed_left>0: return "当前破绽 %.1f秒 · 反击命中%d次"%[exposed_left,counter_hits]
+	if exposed_left>0: return Localize.format_text("当前破绽 %.1f秒 · 反击命中%d次", [exposed_left,counter_hits])
 	return super.top_status(b)
 
 class DuelTell extends Node2D:

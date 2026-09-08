@@ -17,11 +17,11 @@ static func _panel(parent: Node, title: String) -> Dictionary:
 	var head := HBoxContainer.new()
 	box.add_child(head)
 	var label := Label.new()
-	label.text = title
+	Localize.bind_text(label, title)
 	label.add_theme_font_size_override("font_size", 24)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(label)
-	head.add_child(_button("返回", overlay.queue_free))
+	head.add_child(_button(Localize.text("返回"), overlay.queue_free))
 	var status_label := Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(status_label)
@@ -37,13 +37,13 @@ static func _panel(parent: Node, title: String) -> Dictionary:
 
 static func _button(label: String, callback: Callable) -> Button:
 	var button := Button.new()
-	button.text = label
+	Localize.bind_text(button, label)
 	button.custom_minimum_size.y = 38
 	button.pressed.connect(callback)
 	return button
 
 static func show_achievements(parent: Node) -> void:
-	var p := _panel(parent, "成就 · 30 项")
+	var p := _panel(parent, Localize.text("成就 · 30 项"))
 	var refresh := func() -> void:
 		p.status.text = SteamService.status
 		for child in p.body.get_children():
@@ -64,31 +64,60 @@ static func show_achievements(parent: Node) -> void:
 			var text := Label.new()
 			text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			text.text = ("✓ " if unlocked else "○ ") + String(entry.title) + "\n" + String(entry.description)
+			var display := _achievement_display(entry)
+			text.text = ("✓ " if unlocked else "○ ") + display.title + "\n" + display.description
 			if entry.stat != "":
-				text.text += "\n%d / %d" % [mini(int(SteamService.state.stats.get(entry.stat, 0)), int(entry.target)), int(entry.target)] if SteamService.stats_ready else "\n进度未读取"
+				text.text += "\n%d / %d" % [mini(int(SteamService.state.stats.get(entry.stat, 0)), int(entry.target)), int(entry.target)] if SteamService.stats_ready else Localize.text("\n进度未读取")
 			row.add_child(text)
 	SteamService.changed.connect(refresh)
 	p.root.tree_exiting.connect(func() -> void: SteamService.changed.disconnect(refresh))
+	var on_language := func(_locale: String) -> void: refresh.call()
+	Localize.language_changed.connect(on_language)
+	p.root.tree_exiting.connect(func() -> void: Localize.language_changed.disconnect(on_language))
 	refresh.call()
 
+
+## Keep the Steam setup export and achievement identities in their source form.
+## Only this view expands the translated templates and official chapter titles.
+static func _achievement_display(entry: Dictionary) -> Dictionary:
+	var id := String(entry.id)
+	var title := Localize.text(String(entry.title))
+	var description := Localize.text(String(entry.description))
+	if id.begins_with("ACH_CLEAR_LEVEL_") or id.begins_with("ACH_STORY_LEVEL_"):
+		var chapter := String(SteamAchievementCatalog.TITLES[int(id.get_slice("_", 3)) - 1])
+		if id.begins_with("ACH_CLEAR"):
+			title = Localize.text(chapter)
+			description = Localize.format_text("通关「%s」。", chapter)
+		else:
+			title = Localize.text("演义印 · ") + Localize.text(chapter)
+			description = Localize.format_text("在同一局中完成「%s」全部原著目标并获胜。", chapter)
+	elif id in ["ACH_DEFENSE_30", "ACH_DEFENSE_60"]:
+		var waves := int(id.get_slice("_", 2))
+		title = Localize.format_text("固守梁山 · %d波", waves)
+		description = Localize.format_text("完成官方据守 %d 波固定档位。", waves)
+	elif not String(entry.stat).is_empty():
+		title = Localize.text(String(entry.title).get_slice(" · ", 0)) + " · " + str(entry.target)
+		var source := String(entry.description).trim_suffix(" %d。" % int(entry.target))
+		description = Localize.text(source) + " " + str(entry.target) + ("." if Localize.locale == "en" else "。")
+	return {"title": title, "description": description}
+
 static func show_workshop(parent: Node) -> void:
-	var p := _panel(parent, "创意工坊 · 已订阅作品")
-	p.head.add_child(_button("浏览工坊", func() -> void: SteamService.open_page("https://steamcommunity.com/app/5088120/workshop/")))
-	p.head.add_child(_button("刷新", WorkshopService.refresh))
-	p.head.add_child(_button("保存创作示例", func() -> void:
+	var p := _panel(parent, Localize.text("创意工坊 · 已订阅作品"))
+	p.head.add_child(_button(Localize.text("浏览工坊"), func() -> void: SteamService.open_page("https://steamcommunity.com/app/5088120/workshop/")))
+	p.head.add_child(_button(Localize.text("刷新"), WorkshopService.refresh))
+	p.head.add_child(_button(Localize.text("保存创作示例"), func() -> void:
 		var a := save_copy("scenario", WorkshopExamples.scenario())
 		var b := save_copy("custom_defense", WorkshopExamples.defense())
-		WorkshopService.status = "示例已保存，可从两种编辑器读取并修改" if a != "" and b != "" else "示例保存失败"
+		WorkshopService.status = Localize.text("示例已保存，可从两种编辑器读取并修改") if a != "" and b != "" else Localize.text("示例保存失败")
 		WorkshopService.changed.emit()))
 	var refresh := func() -> void:
-		p.status.text = WorkshopService.status + "\n工坊关卡不计入 Steam 成就。取消订阅不会删除编辑器里的本地作品。"
+		p.status.text = Localize.text(WorkshopService.status) + Localize.text("\n工坊关卡不计入 Steam 成就。取消订阅不会删除编辑器里的本地作品。")
 		for child in p.body.get_children():
 			p.body.remove_child(child)
 			child.queue_free()
 		if WorkshopService.items.is_empty():
 			var empty := Label.new()
-			empty.text = "还没有可显示的订阅作品。可以先浏览工坊并订阅，再回来刷新。"
+			empty.text = Localize.text("还没有可显示的订阅作品。可以先浏览工坊并订阅，再回来刷新。")
 			empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			p.body.add_child(empty)
 		for item in WorkshopService.items:
@@ -97,33 +126,33 @@ static func show_workshop(parent: Node) -> void:
 			var label := Label.new()
 			label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			label.text = String(item.title) + "\n" + ("可游玩" if item.get("ok", false) else String(item.get("error", "下载中")))
+			label.text = String(item.title) + "\n" + (Localize.text("可游玩") if item.get("ok", false) else String(item.get("error", Localize.text("下载中"))))
 			row.add_child(label)
-			var play := _button("游玩", WorkshopService.play.bind(String(item.id)))
+			var play := _button(Localize.text("游玩"), WorkshopService.play.bind(String(item.id)))
 			play.disabled = not bool(item.get("ok", false))
 			row.add_child(play)
-			row.add_child(_button("作品页", WorkshopService.open_item.bind(String(item.id))))
-			row.add_child(_button("取消订阅", WorkshopService.unsubscribe.bind(String(item.id))))
+			row.add_child(_button(Localize.text("作品页"), WorkshopService.open_item.bind(String(item.id))))
+			row.add_child(_button(Localize.text("取消订阅"), WorkshopService.unsubscribe.bind(String(item.id))))
 	WorkshopService.changed.connect(refresh)
 	p.root.tree_exiting.connect(func() -> void: WorkshopService.changed.disconnect(refresh))
 	WorkshopService.refresh()
 
 static func show_publish(parent: Control, kind: String, source: Dictionary) -> void:
 	var default_cover := parent.get_viewport().get_texture().get_image()
-	var p := _panel(parent, "发布／更新创意工坊作品")
-	var name := LineEdit.new()
+	var p := _panel(parent, Localize.text("发布／更新创意工坊作品"))
+	var name := LineEdit.new(); name.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	name.text = String(source.get("title", source.get("name", "")))
 	name.max_length = 128
 	p.body.add_child(name)
-	var description := TextEdit.new()
-	description.placeholder_text = "作品说明：介绍玩法、胜负条件和建议人数／难度"
+	var description := TextEdit.new(); description.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	description.placeholder_text = Localize.text("作品说明：介绍玩法、胜负条件和建议人数／难度")
 	description.custom_minimum_size.y = 130
 	description.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	p.body.add_child(description)
 	var visibility := OptionButton.new()
-	visibility.add_item("私有（默认）", 2)
-	visibility.add_item("好友可见", 1)
-	visibility.add_item("公开", 0)
+	visibility.add_item(Localize.text("私有（默认）"), 2)
+	visibility.add_item(Localize.text("好友可见"), 1)
+	visibility.add_item(Localize.text("公开"), 0)
 	p.body.add_child(visibility)
 	var cover := {"image":default_cover}
 	var preview := TextureRect.new()
@@ -135,27 +164,27 @@ static func show_publish(parent: Control, kind: String, source: Dictionary) -> v
 	var chooser := FileDialog.new()
 	chooser.access = FileDialog.ACCESS_FILESYSTEM
 	chooser.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	chooser.filters = PackedStringArray(["*.png,*.jpg,*.jpeg ; 封面图片"])
+	chooser.filters = PackedStringArray([Localize.text("*.png,*.jpg,*.jpeg ; 封面图片")])
 	p.root.add_child(chooser)
 	chooser.file_selected.connect(func(path: String) -> void:
 		var f := FileAccess.open(path, FileAccess.READ)
 		if f == null or f.get_length() > 10 * 1024 * 1024:
-			p.status.text = "请选择小于 10 MB 的封面图片"
+			p.status.text = Localize.text("请选择小于 10 MB 的封面图片")
 			return
 		var image := Image.load_from_file(path)
 		if image == null or image.is_empty() or image.get_width() > 8192 or image.get_height() > 8192:
-			p.status.text = "封面图片无效或尺寸过大"
+			p.status.text = Localize.text("封面图片无效或尺寸过大")
 			return
 		cover.image = image
 		preview.texture = ImageTexture.create_from_image(image))
-	p.body.add_child(_button("选择封面（默认使用当前编辑器画面）", func() -> void: chooser.popup_centered_ratio(0.75)))
+	p.body.add_child(_button(Localize.text("选择封面（默认使用当前编辑器画面）"), func() -> void: chooser.popup_centered_ratio(0.75)))
 	var terms := RichTextLabel.new()
 	terms.bbcode_enabled = true
 	terms.fit_content = true
-	terms.text = "提交作品即表示同意 [url=https://steamcommunity.com/sharedfiles/workshoplegalagreement]Steam 创意工坊协议[/url]。使用游戏内素材的地图和据守配置可发布；脚本与外部资源不支持。"
+	terms.text = Localize.text("提交作品即表示同意 [url=https://steamcommunity.com/sharedfiles/workshoplegalagreement]Steam 创意工坊协议[/url]。使用游戏内素材的地图和据守配置可发布；脚本与外部资源不支持。")
 	terms.meta_clicked.connect(func(url: Variant) -> void: SteamService.open_page(String(url)))
 	p.body.add_child(terms)
-	var submit := _button("上传作品", func() -> void:
+	var submit := _button(Localize.text("上传作品"), func() -> void:
 		source["title" if kind == "scenario" else "name"] = name.text
 		WorkshopService.publish(kind, source, description.text, visibility.get_selected_id(), cover.image))
 	p.body.add_child(submit)
@@ -170,5 +199,5 @@ static func save_copy(kind: String, source: Dictionary) -> String:
 	var copy := source.duplicate(true)
 	copy.erase("_workshop_source_id")
 	var field := "title" if kind == "scenario" else "name"
-	copy[field] = String(copy.get(field, "作品")) + "_副本_" + Crypto.new().generate_random_bytes(4).hex_encode()
+	copy[field] = String(copy.get(field, Localize.text("作品"))) + Localize.text("_副本_") + Crypto.new().generate_random_bytes(4).hex_encode()
 	return ScenarioStore.save(copy) if kind == "scenario" else CustomConfig.save(copy)

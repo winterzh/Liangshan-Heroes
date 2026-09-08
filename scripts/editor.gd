@@ -37,36 +37,37 @@ func _build() -> void:
 	top.add_theme_constant_override("separation", 8)
 	root.add_child(top)
 	var ttl := Label.new()
-	ttl.text = "关卡编辑器 · 自定义据守"
+	ttl.text = Localize.text("关卡编辑器 · 自定义据守")
 	ttl.add_theme_font_size_override("font_size", 22)
 	ttl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	top.add_child(ttl)
-	var nl := Label.new(); nl.text = "  配置名："; top.add_child(nl)
+	var nl := Label.new(); nl.text = Localize.text("  配置名："); top.add_child(nl)
 	_name_edit = LineEdit.new()
+	_name_edit.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	_name_edit.text = String(_cfg.get("name", "我的据守"))
 	_name_edit.custom_minimum_size = Vector2(180, 34)
 	_name_edit.text_changed.connect(func(t: String) -> void: _cfg["name"] = t)
 	top.add_child(_name_edit)
-	top.add_child(_btn("新建(默认)", func() -> void: _cfg = CustomConfig.default_config(); _name_edit.text = _cfg["name"]; _rebuild()))
-	top.add_child(_btn("读取", _show_load))
-	top.add_child(_btn("保存", func() -> void:
+	top.add_child(_btn(Localize.text("新建(默认)"), func() -> void: _cfg = CustomConfig.default_config(); _name_edit.text = _cfg["name"]; _rebuild()))
+	top.add_child(_btn(Localize.text("读取"), _show_load))
+	top.add_child(_btn(Localize.text("保存"), func() -> void:
 		var p := CustomConfig.save(_cfg)
-		_show_toast("已保存：" + p if p != "" else "保存失败")))
-	top.add_child(_btn("分享码", _show_share))
-	top.add_child(_btn("导入码", _show_import))
+		_show_toast(Localize.text("已保存：") + p if p != "" else Localize.text("保存失败"))))
+	top.add_child(_btn(Localize.text("分享码"), _show_share))
+	top.add_child(_btn(Localize.text("导入码"), _show_import))
 	var spacer := Control.new(); spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(spacer)
-	top.add_child(_btn("返回菜单", func() -> void: get_tree().change_scene_to_file("res://scenes/menu.tscn")))
+	top.add_child(_btn(Localize.text("返回菜单"), func() -> void: get_tree().change_scene_to_file("res://scenes/menu.tscn")))
 
 	var workshop_bar := HBoxContainer.new()
 	root.add_child(workshop_bar)
-	workshop_bar.add_child(_btn("发布／更新到创意工坊", func() -> void: SteamPanels.show_publish(self, "custom_defense", _cfg)))
-	workshop_bar.add_child(_btn("另存本地副本", func() -> void:
-		_show_toast("副本保存：" + SteamPanels.save_copy("custom_defense", _cfg))))
+	workshop_bar.add_child(_btn(Localize.text("发布／更新到创意工坊"), func() -> void: SteamPanels.show_publish(self, "custom_defense", _cfg)))
+	workshop_bar.add_child(_btn(Localize.text("另存本地副本"), func() -> void:
+		_show_toast(Localize.text("副本保存：") + SteamPanels.save_copy("custom_defense", _cfg))))
 	# —— 分页切换 ——
 	var tabs := HBoxContainer.new()
 	tabs.add_theme_constant_override("separation", 6)
 	root.add_child(tabs)
-	for t in [["单位数值", "units"], ["技能数值", "abilities"], ["敌方波次", "waves"], ["全局/起始", "global"]]:
+	for t in [[Localize.text("单位数值"), "units"], [Localize.text("技能数值"), "abilities"], [Localize.text("敌方波次"), "waves"], [Localize.text("全局/起始"), "global"]]:
 		var key: String = t[1]
 		tabs.add_child(_btn(t[0], func() -> void: _section = key; _rebuild()))
 
@@ -100,23 +101,23 @@ func _rebuild() -> void:
 
 # ---------- 全局/起始分页 ----------
 func _build_global() -> void:
-	_body.add_child(_hdr("自定义据守 · 开局设置"))
+	_body.add_child(_hdr(Localize.text("自定义据守 · 开局设置")))
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
-	row.add_child(_lbl("起始金", 70)); row.add_child(_num(_cfg, "start_gold", 90))
-	row.add_child(_lbl("起始木", 70)); row.add_child(_num(_cfg, "start_wood", 90))
-	row.add_child(_lbl("人口上限", 84)); row.add_child(_num(_cfg, "pop_cap", 90))
-	row.add_child(_lbl("英雄上限", 84)); row.add_child(_num(_cfg, "hero_cap", 70, 6.0))
+	row.add_child(_lbl(Localize.text("起始金"), 70)); row.add_child(_num(_cfg, "start_gold", 90))
+	row.add_child(_lbl(Localize.text("起始木"), 70)); row.add_child(_num(_cfg, "start_wood", 90))
+	row.add_child(_lbl(Localize.text("人口上限"), 84)); row.add_child(_num(_cfg, "pop_cap", 90))
+	row.add_child(_lbl(Localize.text("英雄上限"), 84)); row.add_child(_num(_cfg, "hero_cap", 70, 6.0))
 	_body.add_child(row)
-	_body.add_child(_hdr("说明：负数/超大值会自动收敛到合理范围；改完去「保存」存档，主菜单「自定义据守」加载开打。"))
+	_body.add_child(_hdr(Localize.text("说明：负数/超大值会自动收敛到合理范围；改完去「保存」存档，主菜单「自定义据守」加载开打。")))
 
 
 # ---------- 单位分页 ----------
 func _build_units() -> void:
-	_body.add_child(_hdr("单位数值（敌我全单位，含战役登场，共 %d 个）：血 / 攻 / 防 / 射程 / 攻速(秒) / 移速" % _cfg["units"].size()))
+	_body.add_child(_hdr(Localize.format_text("单位数值（敌我全单位，含战役登场，共 %d 个）：血 / 攻 / 防 / 射程 / 攻速(秒) / 移速", _cfg["units"].size())))
 	# 搜索框：按名过滤（持续打字不丢焦点——过滤态下重建后回焦）
-	var search := LineEdit.new()
-	search.placeholder_text = "🔍 搜索单位名（如 林冲 / 官军 / 祝家）…"
+	var search := LineEdit.new(); search.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	search.placeholder_text = Localize.text("🔍 搜索单位名（如 林冲 / 官军 / 祝家）…")
 	search.text = _unit_filter
 	search.custom_minimum_size = Vector2(320, 32)
 	search.text_changed.connect(func(t: String) -> void:
@@ -126,10 +127,12 @@ func _build_units() -> void:
 		search.grab_focus.call_deferred()
 		search.caret_column = _unit_filter.length()
 	# 按类型分组（英雄/步兵/远程/骑兵/工人/建筑），战役登场的好汉与敌将都各归其位、一目了然
-	var order := ["英雄", "步兵", "远程", "骑兵", "工人", "建筑"]
+	var order := [Localize.text("英雄"), Localize.text("步兵"), Localize.text("远程"), Localize.text("骑兵"), Localize.text("工人"), Localize.text("建筑")]
 	var by_type := {}
 	for k in _cfg["units"].keys():
-		if _unit_filter != "" and not String(_cfg["units"][k].get("name", k)).contains(_unit_filter):
+		var source_name := String(_cfg["units"][k].get("name", k))
+		var search_text := (source_name + " " + Localize.text(source_name) + " " + String(k)).to_lower()
+		if _unit_filter != "" and not search_text.contains(_unit_filter.to_lower()):
 			continue
 		var t := _unit_type(Defs.UNITS.get(k, {}))
 		if not by_type.has(t):
@@ -140,7 +143,7 @@ func _build_units() -> void:
 			continue
 		var ks: Array = by_type[t]
 		ks.sort()
-		_body.add_child(_hdr("【%s】 %d 个" % [t, ks.size()]))
+		_body.add_child(_hdr(Localize.format_text("【%s】 %d 个", [t, ks.size()])))
 		for k in ks:
 			_body.add_child(_unit_row(k))
 
@@ -160,17 +163,17 @@ func _unit_row(k: String) -> HBoxContainer:
 
 
 func _unit_type(d: Dictionary) -> String:
-	if bool(d.get("building", false)): return "建筑"
-	if bool(d.get("hero", false)): return "英雄"
-	if bool(d.get("worker", false)): return "工人"
-	if bool(d.get("cavalry", false)): return "骑兵"
-	if bool(d.get("ranged", false)): return "远程"
-	return "步兵"
+	if bool(d.get("building", false)): return Localize.text("建筑")
+	if bool(d.get("hero", false)): return Localize.text("英雄")
+	if bool(d.get("worker", false)): return Localize.text("工人")
+	if bool(d.get("cavalry", false)): return Localize.text("骑兵")
+	if bool(d.get("ranged", false)): return Localize.text("远程")
+	return Localize.text("步兵")
 
 
 # ---------- 技能分页 ----------
 func _build_abilities() -> void:
-	_body.add_child(_hdr("技能数值：冷却(秒) / 范围 / 效果参数（伤害·减速·眩晕…）"))
+	_body.add_child(_hdr(Localize.text("技能数值：冷却(秒) / 范围 / 效果参数（伤害·减速·眩晕…）")))
 	var keys: Array = _cfg["abilities"].keys()
 	keys.sort()
 	for id in keys:
@@ -181,8 +184,8 @@ func _build_abilities() -> void:
 		nm.text = String(a.get("name", id))
 		nm.custom_minimum_size = Vector2(96, 30)
 		row.add_child(nm)
-		row.add_child(_lbl("冷却")); row.add_child(_num(a, "cd"))
-		row.add_child(_lbl("范围")); row.add_child(_num(a, "radius"))
+		row.add_child(_lbl(Localize.text("冷却"))); row.add_child(_num(a, "cd"))
+		row.add_child(_lbl(Localize.text("范围"))); row.add_child(_num(a, "radius"))
 		if a.has("effect"):
 			var eff: Dictionary = a["effect"]
 			for k in eff:
@@ -196,7 +199,7 @@ func _build_abilities() -> void:
 
 # ---------- 波次分页 ----------
 func _build_waves() -> void:
-	_body.add_child(_hdr("敌方波次：每波间隔(秒) / 投石车数 / 各组[兵种·数量·出兵口0东1北2南]"))
+	_body.add_child(_hdr(Localize.text("敌方波次：每波间隔(秒) / 投石车数 / 各组[兵种·数量·出兵口0东1北2南]")))
 	var waves: Array = _cfg["waves"]
 	for i in range(waves.size()):
 		var w: Dictionary = waves[i]
@@ -206,18 +209,18 @@ func _build_waves() -> void:
 		panel.add_child(pv)
 		var head := HBoxContainer.new()
 		head.add_theme_constant_override("separation", 6)
-		head.add_child(_lbl("第 %d 波" % (i + 1), 60))
-		head.add_child(_lbl("间隔")); head.add_child(_num(w, "t"))
-		head.add_child(_lbl("投石车")); head.add_child(_num(w, "cata", 56, 9))
+		head.add_child(_lbl(Localize.format_text("第 %d 波", (i + 1)), 60))
+		head.add_child(_lbl(Localize.text("间隔"))); head.add_child(_num(w, "t"))
+		head.add_child(_lbl(Localize.text("投石车"))); head.add_child(_num(w, "cata", 56, 9))
 		var idx := i
-		head.add_child(_btn("+兵组", func() -> void: (w["groups"] as Array).append(["guan_dao", 5, 0, 2]); _rebuild()))
-		head.add_child(_btn("删本波", func() -> void: (_cfg["waves"] as Array).remove_at(idx); _rebuild()))
+		head.add_child(_btn(Localize.text("+兵组"), func() -> void: (w["groups"] as Array).append(["guan_dao", 5, 0, 2]); _rebuild()))
+		head.add_child(_btn(Localize.text("删本波"), func() -> void: (_cfg["waves"] as Array).remove_at(idx); _rebuild()))
 		pv.add_child(head)
 		# 本波提示语（出兵时飘在屏幕上）
 		var msg_row := HBoxContainer.new()
 		msg_row.add_theme_constant_override("separation", 6)
-		msg_row.add_child(_lbl("　提示语", 60))
-		var msg_le := LineEdit.new()
+		msg_row.add_child(_lbl(Localize.text("　提示语"), 60))
+		var msg_le := LineEdit.new(); msg_le.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		msg_le.text = String(w.get("msg", ""))
 		msg_le.custom_minimum_size = Vector2(380, 30)
 		msg_le.text_changed.connect(func(t: String) -> void: w["msg"] = t)
@@ -227,7 +230,7 @@ func _build_waves() -> void:
 		for gi in range(groups.size()):
 			pv.add_child(_group_row(groups, gi))
 		_body.add_child(panel)
-	_body.add_child(_btn("＋ 增加一波", func() -> void:
+	_body.add_child(_btn(Localize.text("＋ 增加一波"), func() -> void:
 		(_cfg["waves"] as Array).append({"t": 30.0, "msg": "新一波官军杀到！", "groups": [["guan_dao", 6, 0, 2]], "cata": 1})
 		_rebuild()))
 
@@ -236,7 +239,7 @@ func _group_row(groups: Array, gi: int) -> HBoxContainer:
 	var g: Array = groups[gi]
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
-	row.add_child(_lbl("　兵种", 50))
+	row.add_child(_lbl(Localize.text("　兵种"), 50))
 	var opt := OptionButton.new()
 	var sel := 0
 	for ki in range(_combat_keys.size()):
@@ -248,21 +251,21 @@ func _group_row(groups: Array, gi: int) -> HBoxContainer:
 	opt.select(sel)
 	opt.item_selected.connect(func(idx: int) -> void: g[0] = opt.get_item_metadata(idx))
 	row.add_child(opt)
-	row.add_child(_lbl("数量"))
+	row.add_child(_lbl(Localize.text("数量")))
 	row.add_child(_num_arr(g, 1, 56, 1, 200))
-	row.add_child(_lbl("出兵口"))
+	row.add_child(_lbl(Localize.text("出兵口")))
 	row.add_child(_num_arr(g, 2, 56, 0, 2))
 	if g.size() < 4:
 		g.append(2)
-	row.add_child(_lbl("将技Lv"))
+	row.add_child(_lbl(Localize.text("将技Lv")))
 	row.add_child(_num_arr(g, 3, 46, 0, 2))   # 敌将技能等级 0~2（只对有技能的将领生效）
-	row.add_child(_btn("删", func() -> void: groups.remove_at(gi); _rebuild()))
+	row.add_child(_btn(Localize.text("删"), func() -> void: groups.remove_at(gi); _rebuild()))
 	return row
 
 
 # ---------- 控件工厂 ----------
 func _num(d: Dictionary, key: String, w := 64, hi := 99999.0) -> LineEdit:
-	var le := LineEdit.new()
+	var le := LineEdit.new(); le.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	le.custom_minimum_size = Vector2(w, 30)
 	le.text = _fmt(d.get(key, 0))
 	# 输入校验：收敛到 [0, hi]，并把规整后的值写回输入框（负数/乱填即时纠正）
@@ -276,7 +279,7 @@ func _num(d: Dictionary, key: String, w := 64, hi := 99999.0) -> LineEdit:
 
 
 func _num_arr(arr: Array, idx: int, w := 56, lo := 0, hi := 9999) -> LineEdit:
-	var le := LineEdit.new()
+	var le := LineEdit.new(); le.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	le.custom_minimum_size = Vector2(w, 30)
 	le.text = _fmt(arr[idx])
 	var commit := func(t: String) -> void:
@@ -315,12 +318,12 @@ func _hdr(text: String) -> Label:
 
 
 func _field_label(f: String) -> String:
-	return {"hp": "血", "atk": "攻", "defense": "防", "range": "射程", "cd": "攻速", "speed": "移速",
-		"dmg": "伤害", "slow": "减速", "slow_dur": "减速时长", "stun": "眩晕", "dur": "持续",
-		"heal": "治疗", "atk_mult": "攻倍", "speed_mult": "速倍", "atk_add": "加攻",
-		"hp_add": "加血", "regen": "回血", "lifesteal": "吸血", "len": "长度", "width": "宽度",
-		"windup": "蓄力", "dist": "距离", "tick": "间隔", "bonus_cav": "克骑",
-		"cav_bonus": "克骑", "radius": "范围"}.get(f, f)
+	return {"hp": Localize.text("血"), "atk": Localize.text("攻"), "defense": Localize.text("防"), "range": Localize.text("射程"), "cd": Localize.text("攻速"), "speed": Localize.text("移速"),
+		"dmg": Localize.text("伤害"), "slow": Localize.text("减速"), "slow_dur": Localize.text("减速时长"), "stun": Localize.text("眩晕"), "dur": Localize.text("持续"),
+		"heal": Localize.text("治疗"), "atk_mult": Localize.text("攻倍"), "speed_mult": Localize.text("速倍"), "atk_add": Localize.text("加攻"),
+		"hp_add": Localize.text("加血"), "regen": Localize.text("回血"), "lifesteal": Localize.text("吸血"), "len": Localize.text("长度"), "width": Localize.text("宽度"),
+		"windup": Localize.text("蓄力"), "dist": Localize.text("距离"), "tick": Localize.text("间隔"), "bonus_cav": Localize.text("克骑"),
+		"cav_bonus": Localize.text("克骑"), "radius": Localize.text("范围")}.get(f, f)
 
 
 func _fmt(v: Variant) -> String:
@@ -348,7 +351,7 @@ func _show_load() -> void:
 	box.add_theme_constant_override("separation", 8)
 	center.add_child(box)
 	var t := Label.new()
-	t.text = "读取配置" if not saved.is_empty() else "没有已保存的配置"
+	t.text = Localize.text("读取配置") if not saved.is_empty() else Localize.text("没有已保存的配置")
 	t.add_theme_font_size_override("font_size", 22)
 	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	box.add_child(t)
@@ -359,10 +362,10 @@ func _show_load() -> void:
 			var cfg: Dictionary = CustomConfig.load_by_name(nm)
 			if not cfg.is_empty():
 				_cfg = cfg; _name_edit.text = String(_cfg.get("name", nm))
-				_show_toast("已读取：" + nm)
+				_show_toast(Localize.text("已读取：") + nm)
 			overlay.queue_free(); _rebuild())
 		box.add_child(b)
-	var back := Button.new(); back.text = "取消"; back.custom_minimum_size = Vector2(300, 36)
+	var back := Button.new(); back.text = Localize.text("取消"); back.custom_minimum_size = Vector2(300, 36)
 	back.pressed.connect(overlay.queue_free)
 	box.add_child(back)
 
@@ -389,23 +392,23 @@ func _show_share() -> void:
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
 	var t := Label.new()
-	t.text = "分享码 —— 点「复制」发给好友，对方「导入码」粘贴即可载入此据守设计"
+	t.text = Localize.text("分享码 —— 点「复制」发给好友，对方「导入码」粘贴即可载入此据守设计")
 	t.add_theme_font_size_override("font_size", 18)
 	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	box.add_child(t)
 	var code := Marshalls.utf8_to_base64(JSON.stringify(_cfg))
-	var te := TextEdit.new()
+	var te := TextEdit.new(); te.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	te.text = code
 	te.editable = false
 	te.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	te.custom_minimum_size = Vector2(620, 320)
 	box.add_child(te)
 	var row := HBoxContainer.new(); row.add_theme_constant_override("separation", 10); box.add_child(row)
-	var cp := Button.new(); cp.text = "复制到剪贴板"; cp.custom_minimum_size = Vector2(200, 38)
+	var cp := Button.new(); cp.text = Localize.text("复制到剪贴板"); cp.custom_minimum_size = Vector2(200, 38)
 	cp.pressed.connect(func() -> void:
-		DisplayServer.clipboard_set(code); _show_toast("分享码已复制（%d 字）" % code.length()))
+		DisplayServer.clipboard_set(code); _show_toast(Localize.format_text("分享码已复制（%d 字）", code.length())))
 	row.add_child(cp)
-	var cl := Button.new(); cl.text = "关闭"; cl.custom_minimum_size = Vector2(160, 38)
+	var cl := Button.new(); cl.text = Localize.text("关闭"); cl.custom_minimum_size = Vector2(160, 38)
 	cl.pressed.connect(overlay.queue_free)
 	row.add_child(cl)
 
@@ -416,17 +419,17 @@ func _show_import() -> void:
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
 	var t := Label.new()
-	t.text = "导入码 —— 把好友给的分享码粘贴到下框，点「导入」"
+	t.text = Localize.text("导入码 —— 把好友给的分享码粘贴到下框，点「导入」")
 	t.add_theme_font_size_override("font_size", 18)
 	t.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	box.add_child(t)
-	var te := TextEdit.new()
-	te.placeholder_text = "在此粘贴分享码…"
+	var te := TextEdit.new(); te.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	te.placeholder_text = Localize.text("在此粘贴分享码…")
 	te.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 	te.custom_minimum_size = Vector2(620, 300)
 	box.add_child(te)
 	var row := HBoxContainer.new(); row.add_theme_constant_override("separation", 10); box.add_child(row)
-	var imp := Button.new(); imp.text = "导入"; imp.custom_minimum_size = Vector2(200, 38)
+	var imp := Button.new(); imp.text = Localize.text("导入"); imp.custom_minimum_size = Vector2(200, 38)
 	imp.pressed.connect(func() -> void:
 		var raw := te.text.strip_edges()
 		var js := Marshalls.base64_to_utf8(raw) if raw != "" else ""
@@ -434,11 +437,11 @@ func _show_import() -> void:
 		if parsed is Dictionary and (parsed as Dictionary).has("units") and (parsed as Dictionary).has("waves"):
 			_cfg = parsed
 			_name_edit.text = String(_cfg.get("name", "导入的据守"))
-			_show_toast("已导入：" + String(_cfg.get("name", "")))
+			_show_toast(Localize.text("已导入：") + String(_cfg.get("name", "")))
 			overlay.queue_free(); _rebuild()
 		else:
-			_show_toast("分享码无效，请检查是否完整复制"))
+			_show_toast(Localize.text("分享码无效，请检查是否完整复制")))
 	row.add_child(imp)
-	var cl := Button.new(); cl.text = "取消"; cl.custom_minimum_size = Vector2(160, 38)
+	var cl := Button.new(); cl.text = Localize.text("取消"); cl.custom_minimum_size = Vector2(160, 38)
 	cl.pressed.connect(overlay.queue_free)
 	row.add_child(cl)

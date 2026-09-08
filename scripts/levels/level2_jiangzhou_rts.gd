@@ -235,7 +235,7 @@ func on_start(b) -> void:
 	b.mission.add_map_locator("西街接应营 · 刀枪弓骑",WEST_CAMP)
 	b.mission.add_map_locator("江边接应营 · 共用金木",DOCK_CAMP)
 	b.mission.add_map_locator("东街巡防营 · 拆除断援",CITY_POST)
-	for i in range(2): b.mission.add_action("cache_%d"%i,"夺取补给 · 100金60木",CACHE_CELLS[i]+Vector2i(0,2),RESCUERS,2,64)
+	for i in range(2): b.mission.add_action("cache_%d"%i,Localize.text("夺取补给 · 100金60木"),CACHE_CELLS[i]+Vector2i(0,2),RESCUERS,2,64)
 	b.mission.add_action("west_street","李逵 · 西街就位",Vector2i(22,25),["li_kui"],0.7,64)
 	b.mission.add_action("south_lane","燕顺 · 南巷接应",Vector2i(27,29),["yan_shun"],0.7,64)
 	b.msg("有限金木共用，接应营正常付费、计时补兵。附近补给棚只可领取一次；派人取粮的同时别耽误150秒行刑限时。",9)
@@ -288,8 +288,8 @@ func _free(b,is_song: bool) -> void:
 	else:
 		dai_bound=null
 		dai_freed=rescued
-	b.mission.mark("free_song" if is_song else "free_dai",rescued.display_name+"已解缚，不能作战；请派兵保护并亲自下令撤离。")
-	b.mission.add_action("board_song" if is_song else "board_dai",rescued.display_name+" · 登船",DOCK if is_song else DOCK+Vector2i(2,0),[key],1.5,48,22)
+	b.mission.mark("free_song" if is_song else "free_dai",Localize.text(rescued.display_name)+Localize.text("已解缚，不能作战；请派兵保护并亲自下令撤离。"))
+	b.mission.add_action("board_song" if is_song else "board_dai",Localize.text(rescued.display_name)+Localize.text(" · 登船"),DOCK if is_song else DOCK+Vector2i(2,0),[key],1.5,48,22)
 	b.mission.add_actor_locator("board_song" if is_song else "board_dai",key)
 	if not first_rescued:
 		first_rescued=true
@@ -301,7 +301,7 @@ func _free(b,is_song: bool) -> void:
 		b.mission.add_map_locator("西巷近路",Vector2i(18,34))
 		b.mission.add_map_locator("南巷宽路",Vector2i(27,36))
 		b.mission.add_map_locator("可选 · 宋戴与张顺张横到白龙庙",BAILONG)
-		b.mission.add_action("rally_dock","好汉 · 码头收队",DOCK+Vector2i(0,-2),NAMED,0.7,64)
+		b.mission.add_action("rally_dock",Localize.text("好汉 · 码头收队"),DOCK+Vector2i(0,-2),NAMED,0.7,64)
 func on_mission_action(b,key: String,actor) -> void:
 	if key.begins_with("cache_"):
 		var index: int=int(key.trim_prefix("cache_"))
@@ -321,7 +321,7 @@ func on_mission_action(b,key: String,actor) -> void:
 				return
 			b.mission.mark(key,"李逵西街就位。" if key=="west_street" else "燕顺南巷接应就位。")
 			if b.mission.has_event("west_street") and b.mission.has_event("south_lane"):
-				b.mission.add_action("first_axes","李逵 · 排头动手",SCAFFOLD+Vector2i(-2,3),["li_kui"],0.6,64)
+				b.mission.add_action("first_axes",Localize.text("李逵 · 排头动手"),SCAFFOLD+Vector2i(-2,3),["li_kui"],0.6,64)
 		"first_axes": _uprising(b,actor)
 		"free_song":
 			if execution_halted and song_freed==null:
@@ -339,7 +339,7 @@ func on_mission_action(b,key: String,actor) -> void:
 				_retry(b,key,"登船处仍有近身官军，请护卫清开150距离内的追兵。")
 				return
 			actor.resolve_story("embarked")
-			b.mission.mark(key,actor.display_name+"已活着登船。")
+			b.mission.mark(key,Localize.text(actor.display_name)+Localize.text("已活着登船。"))
 		"rally_dock":
 			rally=true
 			b.mission.mark("rally_dock","码头已收队。玩家带回的具名好汉会在安全登船点上船，其余人仍需亲自指挥撤回。")
@@ -402,7 +402,7 @@ func process(b,delta: float) -> void:
 			b.mission.mark("execution_halted","两名刽子手均被打倒，行刑已中断。")
 			b.mission.set_title("救人 · 分别解缚")
 			for rec in [["free_song",-1,"宋江"],["free_dai",1,"戴宗"]]:
-				b.mission.add_action(rec[0],"好汉 · 救下"+rec[2],SCAFFOLD+Vector2i(rec[1],1),RESCUERS,1.3,130,22)
+				b.mission.add_action(rec[0],Localize.text("好汉 · 救下")+rec[2],SCAFFOLD+Vector2i(rec[1],1),RESCUERS,1.3,130,22)
 		elif exec_left<=0:
 			b.lose("行刑限时已到，两名刽子手未被全部打倒。下次可让补兵与进场同时进行，先集火刽子手再救人。")
 			return
@@ -443,13 +443,13 @@ func process(b,delta: float) -> void:
 		b.mission._buttons.add_child(depart_button)
 func on_unit_died(b,u) -> void:
 	if u==song_bound or u==song_freed or u==dai_bound or u==dai_freed:
-		b.lose(u.display_name+"遇害，营救失败。请用军队清开退路并保护获救者。"); return
+		b.lose(Localize.text(u.display_name)+Localize.text("遇害，营救失败。请用军队清开退路并保护获救者。")); return
 	if not alarm and u.faction==1 and living(u._killer) and u._killer.faction==0: _uprising(b,u._killer)
 	if u==post: b.mission.mark("jiangzhou_post_destroyed","巡防营已拆，停止该处后续补军；已出场官军仍在。")
 	if u==named_units.get(u.key):
-		b.mission.mark("jiangzhou_named_lost",u.display_name+"阵亡，仍可完成二人的核心营救。")
+		b.mission.mark("jiangzhou_named_lost",Localize.text(u.display_name)+Localize.text("阵亡，仍可完成二人的核心营救。"))
 		b.mission.miss_story_goal("named_survive","已有具名好汉阵亡。")
 		if u.key in ["zhang_shun","zhang_heng"] and not meeting:
 			b.mission.miss_story_goal("bailong_meeting","接应好汉已阵亡，可直接护送宋江戴宗到码头完成核心营救。")
 func top_status(_b) -> String:
-	return "江州劫法场 · "+("行刑剩余%d秒"%ceili(exec_left) if not execution_halted else "行刑已中断")+" · 补给%d/2 · 巡防补军%d/8"%[cache_taken.count(true),enemy_produced]
+	return Localize.text("江州劫法场 · ")+(Localize.format_text("行刑剩余%d秒", ceili(exec_left)) if not execution_halted else Localize.text("行刑已中断"))+Localize.format_text(" · 补给%d/2 · 巡防补军%d/8", [cache_taken.count(true),enemy_produced])

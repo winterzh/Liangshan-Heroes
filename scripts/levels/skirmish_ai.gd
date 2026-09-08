@@ -123,7 +123,7 @@ func deploy_hint() -> String:
 func intro_lines() -> Array:
 	return [
 		{"who": "旁白", "key": "narrator", "text": "官军在对岸扎下大营，亦在屯粮募兵、修楼布防。这一回不是死守待援，而是两家正面较量——比谁攒得快、练得精、打得狠。"},
-		{"who": "军令", "key": "narrator", "text": "【对战】难度：%s。守住聚义厅，集结兵马杀过去，踏平官军大营！" % String(DIFF.get(_resolve_diff(), {}).get("name", "普通"))},
+		{"who": "军令", "key": "narrator", "text": Localize.format_text("【对战】难度：%s。守住聚义厅，集结兵马杀过去，踏平官军大营！", String(DIFF.get(_resolve_diff(), {}).get("name", "普通")))},
 	]
 
 
@@ -263,7 +263,7 @@ func on_start(b) -> void:
 	_victory = _resolve_victory()
 	_assign_ai_workers(b)
 	_started = true
-	b.msg("官军（%s）已在对岸扎营——农民下矿伐木、修寨练兵，先发制人！" % String(_diff["name"]), 4.5)
+	b.msg(Localize.format_text("官军（%s）已在对岸扎营——农民下矿伐木、修寨练兵，先发制人！", String(_diff["name"])), 4.5)
 
 
 func _seed_hero(h: Unit) -> void:
@@ -643,7 +643,7 @@ func _ai_heroes(b, delta: float) -> void:
 	# （斩首模式的双方主帅仍由 _seed_hero 开局满配，保持王对王对等。）
 	_garrison(h)
 	_staged.append(h)
-	b.msg("⚔ 官军调来大将【%s】助阵！（与你同样从 1 级练起）" % h.display_name, 4.0)
+	b.msg(Localize.format_text("⚔ 官军调来大将【%s】助阵！（与你同样从 1 级练起）", h.display_name), 4.0)
 	if OS.get_environment("SMOKE_TEST") == "1":
 		print("[ai] hero %s @%s t=%.0f slots=%d" % [key, cell, _elapsed, h.slot_count()])
 
@@ -709,7 +709,7 @@ func _launch_push(b) -> void:
 	_waves_sent += 1
 	if OS.get_environment("SMOKE_TEST") == "1":
 		print("[ai] push #%d size=%d reserve=%d next=%.0f" % [_waves_sent, army.size(), _staged.size(), _diff["pint"]])
-	b.msg("⚔ 官军第 %d 波压向梁山大寨——共 %d 骑！" % [_waves_sent, army.size()], 4.0)
+	b.msg(Localize.format_text("⚔ 官军第 %d 波压向梁山大寨——共 %d 骑！", [_waves_sent, army.size()]), 4.0)
 
 
 func _garrison(u: Unit) -> void:
@@ -790,16 +790,16 @@ func _weighted_troop() -> Dictionary:
 func top_status(b) -> String:
 	var nxt := ""
 	if _started and is_instance_valid(ai_base):
-		nxt = " ｜ 下次突击 %d 秒" % int(ceil(maxf(_push_t, 0.0)))
+		nxt = Localize.format_text(" ｜ 下次突击 %d 秒", int(ceil(maxf(_push_t, 0.0))))
 	# 胜利目标条
 	var obj := ""
 	if _victory == "regicide":
 		var pk := int(_p_king.hp) if (_p_king != null and is_instance_valid(_p_king)) else 0
 		var ak := int(_ai_king.hp) if (_ai_king != null and is_instance_valid(_ai_king)) else 0
-		obj = "【斩首】宋江血%d / 高俅血%d ｜ " % [pk, ak]
-	return obj + "AI对战(%s·%d代) 官军 %d兵·农%d·待发%d%s ｜ 大营 %d%% ｜ AI 金%d 木%d 口%d/%d ｜ 你 金%d 木%d 口%d/%d ｜ 聚义厅 %d%%" % [
+		obj = Localize.format_text("【斩首】宋江血%d / 高俅血%d ｜ ", [pk, ak])
+	return obj + Localize.format_text("AI对战(%s·%d代) 官军 %d兵·农%d·待发%d%s ｜ 大营 %d%% ｜ AI 金%d 木%d 口%d/%d ｜ 你 金%d 木%d 口%d/%d ｜ 聚义厅 %d%%", [
 		String(_diff.get("name", "")), _ai_age, _ai_alive_army(b), _guan_workers(b).size(), _staged.size(), nxt,
 		int(ai_base.hp / ai_base.max_hp * 100.0) if (ai_base != null and is_instance_valid(ai_base)) else 0,
 		int(b.faction_gold(_guan())), int(b.faction_wood(_guan())), _ai_pop(b), _ai_pop_cap(b),
 		b.gold, b.wood, b.used_pop(), b.pop_cap,
-		int(hall.hp / hall.max_hp * 100.0) if (hall != null and is_instance_valid(hall)) else 0]
+		int(hall.hp / hall.max_hp * 100.0) if (hall != null and is_instance_valid(hall)) else 0])
