@@ -13,4 +13,4 @@
 
 复现：使用上述源码与配置的Godot4.6.3，运行 `py -3.14 -X utf8 -B tools/run_steam_integration_qa.py --run --native --visual --profile-root <新的短绝对根>`，随后 `tools/build_steam_candidate.py --run --qa-run <新QA目录> --profile-root <短绝对根>`。将 `helpers/smoke_verified_package.py.txt` 恢复到工程 `.godot/<新目录>/smoke_verified_package.py`，替换私有profile占位符，再传入新成品目录运行。各套件串行占用引擎槽。
 
-服务端状态见 `steam_server_receipt.json`。当前上传控件未附加文件，尚未提交上传；已有安装包保留本机忽略目录，下次直接按哈希复核后续传。
+服务端状态见 `steam_server_receipt.json`。Build25179481已在steam-integration生效，Manifest5125271626255480862；服务器四文件大小/SHA1与成品一致，canonical分支及历史回读确认。default保持25164373。更正：截图确认文件已附加，先前DOM读取被误判为缺少文件URL权限；首轮Upload failed后用相同ZIP重试成功，历史保留在收据。

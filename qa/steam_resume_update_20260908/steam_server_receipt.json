@@ -9,7 +9,58 @@
   },
   "canonical_url": "https://partner.steamgames.com/apps/builds/5088120",
   "observed_date_local": "2026-09-08",
-  "uploaded": false,
-  "branch_changed": false,
-  "blocker": "Edge chooser.setFiles returned without attaching a file; DOM input.files was empty. Browser troubleshooting directs enabling extension Allow access to file URLs. User action pending. Upload button not submitted."
+  "uploaded": true,
+  "branch_changed": true,
+  "previous_blocker_assessment": "Edge chooser.setFiles returned without attaching a file; DOM input.files was empty. Browser troubleshooting directs enabling extension Allow access to file URLs. User action pending. Upload button not submitted.",
+  "assessment_correction": "User confirmed file URL permission already allowed. Screenshot showed selected ZIP. DOM input.files read did not represent actual file selection and must not be used as evidence of missing permission.",
+  "upload_attempts": [
+    {
+      "observed": "2026-09-08",
+      "result": "failed",
+      "visible_message": "Upload failed!",
+      "last_visible_progress_bytes": 220200960
+    },
+    {
+      "observed": "2026-09-08",
+      "result": "success",
+      "source": "same SHA256-verified ZIP",
+      "mode": "standard",
+      "depot_id": 5088121
+    }
+  ],
+  "status": "live_on_steam_integration",
+  "build_id": 25179481,
+  "manifest_id": "5125271626255480862",
+  "observed_branches_after": {
+    "default": 25164373,
+    "steam-integration": 25179481
+  },
+  "branch_history_confirmed": true,
+  "server_size_sha1_match": true,
+  "preview_update_download_mb": 5.2,
+  "local_client_download_verified": false,
+  "manifest_url": "https://partner.steamgames.com/apps/depotmanifest/5088120/5088121/5125271626255480862",
+  "server_files": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68"
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 287938248,
+      "sha1": "85fda92f3f5dc1c1e71d973e3711c34ce05fff01"
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda"
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28"
+    }
+  ],
+  "confirmation_note": "Set-live action opened a JS confirmation; subsequent accept found no active dialog. Canonical builds page then showed target branch and matching history. No repeat set-live action was submitted."
 }
