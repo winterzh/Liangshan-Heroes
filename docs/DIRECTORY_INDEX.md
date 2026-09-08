@@ -1,3 +1,8 @@
+## 2026-09-08 恢复组件Steam更新
+
+- docs/STEAM_RESUME_UPDATE_20260908.md：本轮构建、上传状态和接续。
+- qa/steam_resume_update_20260908/：原生/包/身份/EXE证据与交付清单。
+
 ## 2026-09-08 收尾交接
 
 - docs/CLOSEOUT_20260908.md：当前代码/QA/玩家与Steam交付边界、固定版本接口研究和后续顺序。
