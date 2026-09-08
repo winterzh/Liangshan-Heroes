@@ -1,3 +1,10 @@
+## 2026-09-08 单槽与跨进程会话
+
+- scripts/run_snapshot_store.gd：共享双快照事务基类。
+- scripts/run_slot_store.gd：经典据守单槽模型与读写。
+- scripts/run_world_session.gd：HELD保存、当前菜单恢复事务。
+- docs/WORLD_SLOT_20260908.md、qa/world_slot_20260908/：合同、失败记录及跨进程/存储兼容证据。
+
 ## 2026-09-08 战斗累计击杀
 
 - docs/STEAM_BATTLE_COUNTER_20260908.md：root v4、有效击杀累计/内存高水位合同。

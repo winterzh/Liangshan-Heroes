@@ -1,0 +1,92 @@
+{
+  "source_head": "ef2d87b4c13fb84802f3c3d99927e2ba3b811290",
+  "installed_at_utc": "2026-09-08T02:55:53.099946+00:00",
+  "world_run": "overlay_20260908T024849Z_d0fb85ff",
+  "ledger_run": "overlay_20260908T025311Z_7eba1971",
+  "runs": [
+    {
+      "run_id": "overlay_20260908T023238Z_e98162c9",
+      "suite": "world-slot-native",
+      "complete": false,
+      "freeze_sha256": "cca3dfd50fe65523c11051530fda32c09b8ab4b1fcf7a630eb2fedaa3aeb7724",
+      "error": "RuntimeError: Native process failed: driver"
+    },
+    {
+      "run_id": "overlay_20260908T023620Z_177e447d",
+      "suite": "world-slot-native",
+      "complete": false,
+      "freeze_sha256": "dd1390af291f33c404ca0176328a0241f1a530ab03419084a8739443bfa8d08c",
+      "error": "RuntimeError: Native process failed: driver"
+    },
+    {
+      "run_id": "overlay_20260908T024000Z_25299248",
+      "suite": "world-slot-native",
+      "complete": false,
+      "freeze_sha256": "fbfab4d9e920fc0d721c7cbb8fff1a1bc49bf641336840c4252204a8167f5c24",
+      "error": "RuntimeError: Native process failed: driver"
+    },
+    {
+      "run_id": "overlay_20260908T024849Z_d0fb85ff",
+      "suite": "world-slot-native",
+      "complete": true,
+      "freeze_sha256": "492ab815af248f32b4af98261f1e08805022ee58337fe1cedcbf70b58f7aa93a",
+      "error": null
+    },
+    {
+      "run_id": "overlay_20260908T025311Z_7eba1971",
+      "suite": "steam-ledger-native",
+      "complete": true,
+      "freeze_sha256": "492ab815af248f32b4af98261f1e08805022ee58337fe1cedcbf70b58f7aa93a",
+      "error": null
+    }
+  ],
+  "changes": [
+    {
+      "path": "scripts/run_snapshot_store.gd",
+      "before_exists": false,
+      "candidate": "scratchpad/world_slot_20260908/run_snapshot_store.gd",
+      "candidate_sha256": "54855b1a7ca90db3d2859e2f9595b320e1b75062e3520bdb29111824af1be73c"
+    },
+    {
+      "path": "scripts/steam_receipt_store.gd",
+      "before_exists": true,
+      "candidate": "scratchpad/world_slot_20260908/steam_receipt_store.gd",
+      "candidate_sha256": "7fb5ad82a04a1922de07e00b358d5bc5e263e0e53ad4361ae88048a06289e4bb",
+      "before_raw_sha256": "1fc2e208b31b18d9c5a3981f71b3cf1c939c88c4881e46249b03ad969db0ef27"
+    },
+    {
+      "path": "scripts/run_slot_store.gd",
+      "before_exists": false,
+      "candidate": "scratchpad/world_slot_20260908/run_slot_store.gd",
+      "candidate_sha256": "a2d4b94f4baf8e55703778b9219f3254ce3bb61bbab5dd1ab80f09f113c162e7"
+    },
+    {
+      "path": "scripts/run_world_session.gd",
+      "before_exists": false,
+      "candidate": "scratchpad/world_slot_20260908/run_world_session.gd",
+      "candidate_sha256": "b071e180b2af679ffedb6f34c42acbf50bc63d03497dd88ca6b0fd246adb6411"
+    }
+  ],
+  "uids": {
+    "scripts/run_snapshot_store.gd.uid": "3e8d15c7052c7c7c7d5b930987dc94b22e27855d8d79ac40594ec79e61fcee8c",
+    "scripts/run_slot_store.gd.uid": "2654f6db22aa71f8f76e9b889b77c082e8da1ada36f8bc0d2c5582328bfa05bd",
+    "scripts/run_world_session.gd.uid": "b0c29d6336525b09a3988cd69bcd4cf405b393e324c05a8a56014deeafda32e6"
+  },
+  "counts": {
+    "world-slot-native": {
+      "checks": 5951,
+      "source_sha_checks": 5838,
+      "other_checks": 113
+    },
+    "steam-ledger-native": {
+      "checks": 8231,
+      "source_sha_checks": 5838,
+      "other_checks": 2393
+    }
+  },
+  "scope": "internal uncredited official classic30 cross-process slot/session",
+  "player_menu_entry": false,
+  "persistent_steam_binding": false,
+  "slot_specific_force_kill_tested": false,
+  "steam_updated": false
+}

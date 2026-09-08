@@ -1,3 +1,5 @@
+后续：Steam收据文件事务抽取为run_snapshot_store基类，原v1路径/封套保持兼容；上一批实际两份记录按原SHA打开不改字节，并继续新局/进度通过。完整2100写与7强杀回归重新验证。[单槽与存储证据](WORLD_SLOT_20260908.md)。ledger尚未接到正常SteamService及统一Session。
+
 后续：Battle现已传递可恢复的累计有效击杀，SteamService完成同进程高水位防重，见[实际世界验证](STEAM_BATTLE_COUNTER_20260908.md)。本页持久ledger仍未由服务调用，outbox及Session绑定继续待办。
 
 # Steam 独立持久局记录

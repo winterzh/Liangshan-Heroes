@@ -1,3 +1,7 @@
+## 2026-09-08 世界单槽内部接口
+
+新增run_snapshot_store、run_slot_store、run_world_session；Steam收据改用相同通用事务基类，原v1记录兼容验证通过。默认单槽路径user://continue/v1/5088120/1，当前仅内部未计Steam统计经典30波；启动方式和正常玩家菜单未变。[接口与限制](WORLD_SLOT_20260908.md)。
+
 ## 2026-09-08 Steam战斗累计值接口
 
 record_kill现在要求run_id与本局累计有效击杀两个参数；Battle已同步调用，root v4保存新计数。旧root v3不推测迁移；目前玩家继续槽未开放。独立持久收据尚待接到服务及Session。[接口与原生验证](STEAM_BATTLE_COUNTER_20260908.md)。

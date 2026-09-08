@@ -1,3 +1,5 @@
+后续：完整Core已通过内部单槽与Session在新进程从实际菜单安装、继续移动/训练/伤害和再次保存；当前仅未计Steam统计经典30波，玩家入口与持久Steam仍待接通。[原生证据](WORLD_SLOT_20260908.md)。
+
 后续：根记录已提升v4，包含_steam_valid_kills；实际世界替换保留累计值，服务历史高水位保持外部。[验证](STEAM_BATTLE_COUNTER_20260908.md)。持久Steam与跨进程仍未接通。
 
 后续更新：core已增加组件统一激活与节点/identity所有权转移，run_world_swap完成同进程实际世界替换；[验证](WORLD_SWAP_20260908.md)。持久Steam、磁盘/玩家继续和跨进程尚未交付。

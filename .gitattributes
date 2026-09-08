@@ -331,3 +331,9 @@ qa/steam_ledger_20260908/** -text -whitespace
 
 # Preserve Steam cumulative-counter native evidence.
 qa/steam_counter_20260908/** -text -whitespace
+
+# Preserve tested world slot inputs and native synthetic evidence.
+scripts/run_snapshot_store.gd* -text -whitespace
+scripts/run_slot_store.gd* -text -whitespace
+scripts/run_world_session.gd* -text -whitespace
+qa/world_slot_20260908/** -text -whitespace
