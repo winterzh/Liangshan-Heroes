@@ -1,3 +1,7 @@
+## 2026-09-08 三十类程序化特效恢复
+
+接入30类/167原生字段，缓存/投影/时钟、PackedVector2列表编码与原生类型恢复、就绪闸和激活前篡改拒绝通过。169原生帧逐帧对照和单次结束、真实HELD全core准备及前序回归通过；439断言，另5806来源SHA及1诊断。[合同](PROCEDURAL_FX_RESUME_20260908.md)、[QA](../qa/procedural_fx_20260908/README.md)。剩余10类TimedFx及HuaLockMarkFx/FadingMark、完整安装和玩家继续仍待开发；本批仅同步stable。
+
 ## 2026-09-08 环境相位与指示层恢复
 
 core v7第20分区environment接入浮尘/氛围场景相位、Overlay新Battle绑定、节点顺序及隐藏准备/同帧激活。原生6037项=5802来源SHA+235非来源记录（234断言+1条像素诊断）通过，包含独立旧shader常量参考的Vulkan像素与视口重排。[合同](ENVIRONMENT_RESUME_20260908.md)、[QA](../qa/environment_resume_20260908/README.md)。完整激活、Steam/光标上下文、继续槽、跨进程和全部验收继续推进。本批仅同步stable。

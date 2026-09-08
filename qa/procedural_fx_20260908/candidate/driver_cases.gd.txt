@@ -1,0 +1,102 @@
+
+func _procedural_cases(core_script: Script, identity: Dictionary, runtime: Dictionary) -> bool:
+	var adapter: Variant = load("res://scripts/run_procedural_fx_state.gd").new(battle_script)
+	var visual_script: Script = load("res://scripts/run_visual_graph.gd")
+	var codec_script: Script = load("res://scripts/run_state_value_codec.gd")
+	var source: Variant = visual_script.new(codec_script, battle_script, unit_script)
+	var restore: Variant = visual_script.new(codec_script, battle_script, unit_script)
+	var stage := Node2D.new(); stage.process_mode = Node.PROCESS_MODE_DISABLED
+	var original := Node2D.new(); original.transform = load("res://scripts/game_map.gd").ISO
+	stage.add_child(original); root.add_child(stage)
+	var nodes: Dictionary = {}
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		if adapter.TYPES[kind].has("life"): fx.life = 0.5
+		if adapter.TYPES[kind].has("end_w"): fx.end_w = Vector2(100.0, 30.0)
+		if adapter.TYPES[kind].has("start_w"): fx.start_w = Vector2(-45.0, -20.0)
+		if adapter.TYPES[kind].has("from_w"): fx.from_w = Vector2(-50.0, 35.0)
+		original.add_child(fx); nodes[kind] = fx
+		var actual: Array = []
+		for property: Dictionary in fx.get_property_list():
+			if int(property.usage) & PROPERTY_USAGE_SCRIPT_VARIABLE: actual.append(String(property.name))
+		actual.sort(); var declared: Array = adapter.TYPES[kind].keys(); declared.sort()
+		_check("actual native procedural field inventory " + kind, actual == declared)
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	await process_frame; await process_frame
+	stage.process_mode = Node.PROCESS_MODE_DISABLED
+	var captured: Dictionary = source.capture(original, identity.content_version, {})
+	if not _ok("capture thirty native procedural effects in one graph", captured): stage.free(); source.dispose(); restore.dispose(); return false
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.value))
+	var checked: Dictionary = source.validate(wire, identity.content_version, {})
+	var rows: Array = checked.rows
+	_check("procedural graph includes exactly thirty distinct native scripts", rows.size() == 31 and nodes.size() == 30)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		for problem: String in ["extra", "age", "type"]:
+			var bad: Dictionary = row.values.duplicate(true)
+			if problem == "extra": bad.extra = true
+			elif problem == "age": bad.t = bad.dur + 0.01
+			else: bad.t = "invalid"
+			_check("procedural bad " + row.kind + " " + problem, not adapter.validate(bad, row.kind).ok)
+		for key: String in row.values:
+			if adapter.TYPES[row.kind][key] not in [TYPE_ARRAY, TYPE_PACKED_VECTOR2_ARRAY]: continue
+			var bad: Dictionary = row.values.duplicate(true)
+			bad[key].clear()
+			_check("procedural cache cannot disappear " + row.kind + "." + key, not adapter.validate(bad, row.kind).ok)
+	var prepared: Dictionary = restore.prepare(wire, identity.content_version, {})
+	if not _ok("prepare all procedural scripts from JSON graph", prepared): stage.free(); source.dispose(); restore.dispose(); return false
+	stage.add_child(restore._root)
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var copy: Variant = restore._nodes[row.id]
+		_check("native ready preserves procedural random cache and phase " + row.kind, restore._values(copy, row.kind) == row.values and copy.process_mode == Node.PROCESS_MODE_DISABLED and copy.has_meta("_run_restore_prepared"))
+		for key: String in adapter.TYPES[row.kind]:
+			if adapter.TYPES[row.kind][key] == TYPE_PACKED_VECTOR2_ARRAY:
+				_check("packed vector native type and coordinates preserved " + row.kind, typeof(copy.get(key)) == TYPE_PACKED_VECTOR2_ARRAY and copy.get(key) == nodes[row.kind].get(key))
+	var changed: Variant = restore._nodes[rows[1].id]; var saved_t: float = changed.t
+	changed.t += 0.01
+	_check("procedural activation rejects changed playback state", not restore.activate().ok)
+	changed.t = saved_t
+	if not _ok("activate complete procedural graph under paused tree", restore.activate()): stage.free(); source.dispose(); restore.dispose(); return false
+	var exits: Dictionary = {}; var pairs: Dictionary = {}
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		var key: String = row.kind; exits[key] = {"original": 0, "copy": 0}; pairs[key] = 0
+		nodes[key].tree_exited.connect(func(): exits[key].original += 1)
+		restore._nodes[row.id].tree_exited.connect(func(): exits[key].copy += 1)
+	stage.process_mode = Node.PROCESS_MODE_ALWAYS
+	var equal: Dictionary = {}; var frames := 0
+	for key: String in nodes: equal[key] = true
+	for frame in range(300):
+		await process_frame; frames += 1
+		var alive := false
+		for row: Dictionary in rows:
+			if row.kind == "container": continue
+			var original_fx: Variant = nodes[row.kind]; var copy: Variant = restore._nodes[row.id]
+			var a: bool = is_instance_valid(original_fx); var b: bool = is_instance_valid(copy)
+			if a != b: equal[row.kind] = false
+			if not a or not b: continue
+			alive = true; pairs[row.kind] += 1
+			equal[row.kind] = equal[row.kind] and source._values(original_fx, row.kind) == restore._values(copy, row.kind) and original_fx.transform == copy.transform
+		if not alive: break
+	for row: Dictionary in rows:
+		if row.kind == "container": continue
+		_check("native procedural continuation and single expiry " + row.kind, equal[row.kind] and pairs[row.kind] > 0 and exits[row.kind].original == 1 and exits[row.kind].copy == 1)
+	stage.free(); source.dispose(); restore.dispose()
+	# Integrate the same thirty real constructors into the actual HELD Battle.
+	var added: Array = []
+	for kind: String in adapter.TYPES:
+		var fx: Variant = adapter.scripts[kind].new()
+		battle.fx_root.add_child(fx); added.append(fx)
+	var combined: Variant = core_script.new(identity, runtime)
+	var complete: Dictionary = combined.capture(battle)
+	if not _ok("actual held world captures all thirty procedural kinds", complete):
+		for node: Node in added: node.free()
+		combined.dispose(); return false
+	var target: Variant = core_script.new(identity, runtime)
+	var full: Dictionary = target.prepare(JSON.parse_string(JSON.stringify(complete.record)))
+	_check("whole core restores thirty effects without gameplay activation", full.ok and full.battle.fx_root.get_child_count() == battle.fx_root.get_child_count() and full.battle.process_mode == Node.PROCESS_MODE_DISABLED)
+	complete.identity.dispose(); target.dispose(); combined.dispose()
+	for node: Node in added: node.free()
+	completed_cases.append("procedural_native_frames=" + str(frames))
+	return true

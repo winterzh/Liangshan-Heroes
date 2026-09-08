@@ -1,0 +1,95 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+root=Path.cwd(); out=root/'scratchpad/procedural_fx_20260908'; q=root/'qa/procedural_fx_20260908'
+head='ccfc190ea37cbc4e35cab5aea3687c95dba3572d'; run=sys.argv[1]; native=root/'.godot/stabilization_overlay'/run
+assert native.resolve().parent==(root/'.godot/stabilization_overlay').resolve()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+assert r['suite']=='procedural-fx-resume-native'
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and report['complete'] and not report['failed_count'] and all(x['passed'] for x in report['checks'])
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+for row in changes:
+    p=root/row['path']; assert p.exists()==row['before_exists']
+    if p.exists(): assert sha(p)==row['before_raw_sha256']
+    assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+q.mkdir(exist_ok=False); (q/'.gdignore').write_text('\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes()); assert sha(dst)==sha(src)
+    pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    receipt=json.loads(path.read_text())
+    if receipt.get('source_head')!=head or receipt.get('suite')!='procedural-fx-resume-native': continue
+    folder=path.parent; tag='runs/'+folder.name
+    runs.append({'run_id':folder.name,'complete':receipt.get('complete'),'freeze_sha256':receipt['freeze_sha256']})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes: archive(folder/'project'/row['path'],tag+'/'+Path(row['path']).name+'.txt')
+    archive(folder/'project/tools/procedural_fx/driver.gd',tag+'/driver.gd.txt')
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_procedural_fx.py','close_procedural_fx.py','verify_procedural_stage.py']: archive(root/'.godot'/name,'preparation/'+name+'.txt')
+uid=native/'project/scripts/run_procedural_fx_state.gd.uid'; archive(uid,'candidate/run_procedural_fx_state.gd.uid.txt')
+for row in changes: (root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/'scripts/run_procedural_fx_state.gd.uid').write_bytes(uid.read_bytes())
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks']); count=report['check_count']; other=count-source_count
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'runs':runs,'changes':changes,'native_uid_sha256':sha(uid),'checks':count,'source_sha_checks':source_count,'other_checks':other,'full_gameplay_activation':False,'complete_world_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json')
+diagnostics=sum(x['label']=='native pixel diagnostics' for x in report['checks'])
+assertions=other-diagnostics
+installation.update({'diagnostic_rows':diagnostics,'non_source_assertions':assertions,'new_procedural_classes':30,'new_native_fields':167,'complete_visual_graph':False})
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+spec=json.loads((out/'field_manifest.json').read_text())
+table='\n'.join('| '+row['class']+' | '+str(len(row['fields']))+' |' for row in spec.values())
+remaining='HuaSnipeAimFx、HuaSnipeMarkFx、LinGuardFx、LinSpearStackFx、LinDuelFx、AbilityProjectileFx、AbilityImpactFx、OrbitAxesFx、BlackRainFx、FireflyFx；另有非TimedFx的HuaLockMarkFx和FadingMark'
+(root/'docs/PROCEDURAL_FX_RESUME_20260908.md').write_text(f'''# 三十类程序化特效恢复
+
+run_visual_graph通过run_procedural_fx_state显式注册30个受信TimedFx子类。每类继承dur/t，加上自身字段，共167个原生字段；只读取固定字段名、只构造当前代码白名单中的Script，不从记录加载路径、资源、脚本或回调。视觉图仍标记为部分支持，core保持v7及20分区；兼容性仍受当前受信content_version约束。
+
+| 类 | 含继承时钟的字段数 |
+| --- | --- |
+{table}
+
+浮点/向量/颜色必须有限，持续时间/剩余时间、几何及数组数量受限；缓存字典要求精确键和类型。雷击的折线/分支、鼓舞粒子、水滴、毒云/气泡、震地裂纹/碎石、血滴、定身桩、冰晶、地裂点、沉默符纸和破甲碎片保留原缓存。Lightning._segs与EarthCrack._pts用显式Vector2列表经过既有编码器，读出恢复为PackedVector2Array并核对原生类型及坐标，未扩大通用编码器接受范围。
+
+每个普通_ready只增加_run_restore_prepared闸：正常新局仍执行原有随机形状/寿命/投影计算，恢复时使用保存缓存及阶段，避免重置或重新抽样。准备中的节点DISABLED并阻断信号，图激活前拒绝被修改的播放状态。未知元数据、回调、额外子节点及渲染覆盖拒绝；生命期结束继续使用原TimedFx._process和queue_free，不重播技能/伤害。
+
+最终原生{count}条记录通过：{source_count}来源SHA、{assertions}非来源断言、{diagnostics}条像素诊断。包含30类原生字段清单与167字段覆盖、JSON往返、每类坏字段/类型/时钟、全部缓存缺失、打包向量类型、就绪不重抽样/不重启、激活前篡改拒绝。两个相同投影层中的原/恢复特效在真实idle中逐帧对照变量与变换，169帧内各自自然结束一次；Chrono/IceWall/EarthCrack的life由正常构造入口设置为0.5秒以覆盖结束，不伪造_process(delta)。
+
+另把30个正常构造的特效加入真实HELD经典Battle，完成整个core的capture/JSON/prepare，确认数量不变且Battle仍禁用；随后释放新增夹具，原世界保持HELD。前序HUD/相机/世界显示/残留/环境像素及20分区坏记录回归全部保留。主窗口0×0；新增30类的证据为原生状态/生命周期及整体准备，不是其可见画面、实际战斗重新激活或跨进程验收。[QA](../qa/procedural_fx_20260908/README.md)、[晋级收据](../qa/procedural_fx_20260908/installation.json)。
+
+当前尚未接入的TimedFx：{remaining}。这些类涉及共享单位引用、贴图或独立失效行为，不能忽略或替代为空节点；当前遇到仍明确拒绝保存。之后推进完整世界/Steam持久局/光标/场景上下文安装、磁盘继续槽、跨进程持续行为和八战役。完整30波、1800秒、两台Windows、60FPS及真人验收不变。本批仅GitHub stable同步，无Steam更新。
+''',encoding='utf-8',newline='\n')
+(q/'README.md').write_text(f'''# 三十类程序化特效原生 QA
+
+来源提交 `{head}`，最终 `{run}`，freeze `{freeze}`。{count}条记录通过={source_count}来源SHA+{assertions}非来源断言+{diagnostics}条诊断。新批205项断言及既有234项回归，未把来源哈希或诊断记录当功能用例数。Windows/Forward+/Vulkan，主窗口0×0、私有user://；完整源码/候选/玩家文件保护与原生退出/锁释放见最终receipt。
+
+R1真实30类字段清单通过，捕获在Lightning打包坐标处被既有Codec拒绝UNSUPPORTED_TYPE；未接生产。R2将两个PackedVector2Array字段显式转换为Vector2列表，并原生恢复类型/坐标核对，最终全套通过。runs保留两轮实际输入、执行器、来源清单、日志、报告和收据，SOURCE_PINS给出归档SHA。字段生成依据见candidate/field_manifest.json，生产固定白名单，无运行时任意反射。
+
+30类使用真实当前构造器与_ready；暂停树下只启用独立特效舞台原生idle，捕获后禁用舞台，重建/挂载/激活副本，再逐帧比较原/恢复变量与变换、自然退出次数。全core夹具在真实HELD Battle中加入30个正常节点并捕获/准备，未激活该Battle。新增代码只给普通_ready增加恢复闸；保留原来完整回归驱动。没有新30类的可见像素对比或真人观感结论，前序环境的专用SubViewport像素用例继续执行。
+
+复现需在来源提交独立checkout，核对Godot/runner/guard SHA，把candidate的.gd.txt还原.gd原名到scratchpad/procedural_fx_20260908，保留.gdignore、manifest和freeze；新UID由隔离原生导入产生，不预先放进来源scripts：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/procedural_fx_20260908 --expected-files 3 --driver driver.gd --driver-destination tools/procedural_fx/driver.gd --suite procedural-fx-resume-native --prefix "[procedural fx QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可换受控短绝对路径。生产文件从最终受测字节晋级，既有混合换行保留。[实现、30类清单及剩余工作](../../docs/PROCEDURAL_FX_RESUME_20260908.md)。完整世界/Steam/光标上下文、磁盘槽及跨进程、八战役、性能/人工验收继续开放。
+''',encoding='utf-8',newline='\n')
+def prepend(path,text):
+    p=root/path; p.write_bytes((text+'\n\n').encode()+p.read_bytes())
+prepend('docs/WORKLOG.md',f'## 2026-09-08 三十类程序化特效恢复\n\n接入30类/167原生字段，缓存/投影/时钟、PackedVector2列表编码与原生类型恢复、就绪闸和激活前篡改拒绝通过。169原生帧逐帧对照和单次结束、真实HELD全core准备及前序回归通过；{assertions}断言，另{source_count}来源SHA及{diagnostics}诊断。[合同](PROCEDURAL_FX_RESUME_20260908.md)、[QA](../qa/procedural_fx_20260908/README.md)。剩余10类TimedFx及HuaLockMarkFx/FadingMark、完整安装和玩家继续仍待开发；本批仅同步stable。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 三十类特效恢复\n\n视觉图增加30个固定程序化类，普通开局继续走原构造，恢复ready使用保存形状/时钟。core仍v7、玩家菜单/启动器未变。[字段合同及复现](PROCEDURAL_FX_RESUME_20260908.md)。完整玩家继续仍未开放。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 三十类程序化特效恢复已接入\n\n30类/167字段通过原生JSON恢复、连续播放/单次结束及实际HELD全core准备；前序回归通过。[证据](PROCEDURAL_FX_RESUME_20260908.md)。仍有10类TimedFx及HuaLockMarkFx/FadingMark，随后完整世界/Steam/光标安装、磁盘继续和跨进程等原计划要求继续开放。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 程序化特效恢复\n\n- scripts/run_procedural_fx_state.gd：30类固定字段/缓存校验及受信Script白名单。\n- docs/PROCEDURAL_FX_RESUME_20260908.md：字段清单、恢复闸、剩余类。\n- qa/procedural_fx_20260908/：两轮原生证据、候选及来源/晋级SHA。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续更新：视觉图已增接30类程序化TimedFx，core仍v7、20分区；[当前支持与剩余12类](PROCEDURAL_FX_RESUME_20260908.md)。完整安装和玩家继续未交付。')
+prepend('docs/STABILIZATION_EXECUTION_20260907.md','2026-09-08推进：30类程序化TimedFx/167原生字段恢复及生命周期对照通过；剩余10类TimedFx与HuaLockMarkFx/FadingMark、完整安装、磁盘继续、跨进程和原验收门槛保持开放。[最新证据](PROCEDURAL_FX_RESUME_20260908.md)。')
+p=root/'docs/STABILIZATION_EXECUTION_20260907.md'
+text=p.read_text(encoding='utf-8').replace('指示层及根绑定后的暂停挂载已接入；剩余Fx与最终安装','指示层、30类程序化Fx及根绑定后的暂停挂载已接入；剩余12类Fx与最终安装').replace('见[最新证据](ENVIRONMENT_RESUME_20260908.md)','见[最新证据](PROCEDURAL_FX_RESUME_20260908.md)')
+p.write_text(text,encoding='utf-8',newline='\n')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve native-tested procedural Fx adapter and evidence.\nscripts/run_procedural_fx_state.gd* -text -whitespace\nqa/procedural_fx_20260908/** -text -whitespace\n')
+print(json.dumps({'pins':len(pins),'runs':runs,'checks':count,'source_checks':source_count,'assertions':assertions,'diagnostics':diagnostics,'installed_bytes_equal_native':True}))

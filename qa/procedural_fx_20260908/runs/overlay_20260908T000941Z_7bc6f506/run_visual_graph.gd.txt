@@ -173,9 +173,6 @@ func _values(node: Node2D, kind: String) -> Dictionary:
 	var values: Dictionary = {}
 	for field: String in FIELDS[kind]:
 		if field != "ward_visual": values[field] = node.get(field)
-	if _procedural.TYPES.has(kind):
-		for field: String in FIELDS[kind]:
-			if _procedural.TYPES[kind][field] == TYPE_PACKED_VECTOR2_ARRAY: values[field] = Array(node.get(field))
 	if kind == "building_collapse": values["tex"] = _texture_token(node.tex).value
 	if kind == "ward": values["ward_visual"] = _ward_signature(node.style).value
 	return values
@@ -430,7 +427,6 @@ func prepare(record: Variant, version: String, units: Dictionary, expired_unit: 
 				if field == "ward_visual": continue
 				if row.kind == "building_collapse" and field == "tex":
 					node.tex = null if row.values.tex.state == "none" else _textures[row.values.tex.key]
-				elif _procedural.TYPES.has(row.kind) and _procedural.TYPES[row.kind][field] == TYPE_PACKED_VECTOR2_ARRAY: node.set(field, PackedVector2Array(row.values[field]))
 				else: node.set(field, row.values[field])
 			if row.kind == "bolt":
 				var tag: Dictionary = row.references.chain_from

@@ -1,3 +1,9 @@
+## 2026-09-08 程序化特效恢复
+
+- scripts/run_procedural_fx_state.gd：30类固定字段/缓存校验及受信Script白名单。
+- docs/PROCEDURAL_FX_RESUME_20260908.md：字段清单、恢复闸、剩余类。
+- qa/procedural_fx_20260908/：两轮原生证据、候选及来源/晋级SHA。
+
 ## 2026-09-08 战场环境恢复
 
 - scripts/run_environment_state.gd：Overlay/氛围/浮尘的状态、隐藏准备及同帧激活。

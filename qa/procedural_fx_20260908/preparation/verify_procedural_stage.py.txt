@@ -1,0 +1,24 @@
+from pathlib import Path
+import json,hashlib,re,subprocess
+root=Path.cwd(); q=root/'qa/procedural_fx_20260908'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+receipt=json.loads((q/'installation.json').read_text())
+for row in receipt['changes']:
+    assert sha(root/row['path'])==row['candidate_sha256']
+for row in json.loads((q/'SOURCE_PINS.json').read_text())['files']:
+    p=q/row['archive_relative']; assert sha(p)==row['sha256'] and p.stat().st_size==row['bytes']
+uid=(root/'scripts/run_procedural_fx_state.gd.uid').read_text().strip()
+assert len([p for p in (root/'scripts').rglob('*.uid') if p.read_text().strip()==uid])==1
+assert sha(root/'scripts/run_procedural_fx_state.gd.uid')==receipt['native_uid_sha256']
+paths=['.gitattributes','docs/DIRECTORY_INDEX.md','docs/PROJECT_STATUS.md','docs/SOURCE_SETUP.md','docs/WORKLOG.md','docs/WORLD_CORE_PREPARATION_20260908.md','docs/STABILIZATION_EXECUTION_20260907.md','docs/PROCEDURAL_FX_RESUME_20260908.md','scripts/battle.gd','scripts/run_visual_graph.gd','scripts/run_procedural_fx_state.gd','scripts/run_procedural_fx_state.gd.uid']
+paths+=sorted(p.relative_to(root).as_posix() for p in q.rglob('*') if p.is_file())
+actual=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()+subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines())
+assert set(paths)==actual,(set(paths)-actual,actual-set(paths))
+secret=re.compile(rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|(?:AKIA|ASIA)[A-Z0-9]{16}|gh[pousr]_[a-zA-Z0-9]{25,}|github_pat_[A-Za-z0-9_]{30,}')
+for name in paths:
+    p=root/name
+    assert p.stat().st_size<20_000_000,(name,p.stat().st_size)
+    assert not secret.search(p.read_bytes()),'Sensitive material candidate: '+name
+    assert not p.is_symlink()
+(root/'.godot/procedural_stage_paths.txt').write_text('\n'.join(paths)+'\n',encoding='utf-8')
+print(json.dumps({'files':len(paths),'qa_files':len(paths)-12,'bytes':sum((root/n).stat().st_size for n in paths),'source_and_archive_sha_verified':True,'unique_native_uid':True,'sensitive_pattern_matches':0,'unexpected_paths':0}))

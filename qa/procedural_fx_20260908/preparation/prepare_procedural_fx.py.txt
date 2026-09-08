@@ -1,0 +1,72 @@
+from pathlib import Path
+import hashlib,json,re,difflib
+root=Path.cwd(); out=root/'scratchpad/procedural_fx_20260908'; out.mkdir(exist_ok=True)
+(out/'.gdignore').write_text('\n')
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+def save(name,s):
+    p=root/'scripts'/name
+    if p.exists():
+        old=p.read_bytes().decode().splitlines(keepends=True); new=s.splitlines(); result=[]
+        for op,i,j,a,b in difflib.SequenceMatcher(None,[x.rstrip('\r\n') for x in old],new,autojunk=False).get_opcodes():
+            if op=='equal': result.extend(old[i:j])
+            elif op in ('insert','replace'):
+                e='\r\n' if old[min(i,len(old)-1)].endswith('\r\n') else '\n'
+                result.extend(x+e for x in new[a:b])
+        assert ''.join(result).replace('\r\n','\n')==s
+        (out/name).write_bytes(''.join(result).encode())
+    else: (out/name).write_text(s,encoding='utf-8',newline='\n')
+b=(root/'scripts/battle.gd').read_text(encoding='utf-8'); g=(root/'scripts/run_visual_graph.gd').read_text(encoding='utf-8')
+names=['HuaTargetArrowFx','LinCounterFx','LinDuelResolveFx','LightningFx','RallyFx','HasteFx','SlashArcFx','IronStaffSweepFx','WaterSplashFx','PoisonCloudFx','StoneFx','StompFx','WhirlFx','BloodFx','ChargeFx','PinFx','AbilityBeamFx','AbilitySweepFx','SpearSweepFx','ThrustFx','ChronoFx','IceWallFx','EarthCrackFx','EchoSlamFx','SplitMirrorFx','FireLineFx','ShadowWaveFx','AmpCastFx','SilenceFx','ArmorCrackFx']
+spec={}
+for name in names:
+    kind=re.sub(r'(?<!^)(?=[A-Z])','_',name[:-2]).lower()
+    begin=b.index('class '+name+' extends TimedFx:'); end=begin+len(b[begin:].split('\nclass ',1)[0].split('\nfunc ',1)[0]); block=b[begin:end]
+    fields={'dur':'TYPE_FLOAT','t':'TYPE_FLOAT'}
+    for line in block.splitlines():
+        if not line.startswith('\tvar '): continue
+        key=re.match(r'\tvar (\w+)',line).group(1)
+        if 'PackedVector2Array' in line: typ='TYPE_PACKED_VECTOR2_ARRAY'
+        elif 'Vector2' in line: typ='TYPE_VECTOR2'
+        elif 'Color' in line: typ='TYPE_COLOR'
+        elif ': Array' in line: typ='TYPE_ARRAY'
+        elif ':= false' in line or ':= true' in line: typ='TYPE_BOOL'
+        elif re.search(r':= -?\d+\.\d+',line): typ='TYPE_FLOAT'
+        elif re.search(r':= -?\d+',line): typ='TYPE_INT'
+        else: raise ValueError(line)
+        fields[key]=typ
+    spec[kind]={'class':name,'fields':fields}
+    changed=rep(block,'\tfunc _ready() -> void:\n','\tfunc _ready() -> void:\n\t\tif has_meta("_run_restore_prepared"): return\n')
+    b=b[:begin]+changed+b[end:]
+save('battle.gd',b)
+(out/'field_manifest.json').write_text(json.dumps(spec,indent=2)+'\n',encoding='utf-8')
+definitions='extends RefCounted\n## Thirty trusted procedural TimedFx classes. No saved Script, resource or callback.\nconst TYPES := {\n'+',\n'.join('\t'+json.dumps(k)+': {'+', '.join(json.dumps(f)+': '+t for f,t in row['fields'].items())+'}' for k,row in spec.items())+'}\nvar scripts: Dictionary\n\nfunc _init(battle: Script) -> void:\n\tscripts = {'+', '.join(json.dumps(k)+': battle.'+row['class'] for k,row in spec.items())+'}\n'
+save('run_procedural_fx_state.gd',definitions+'\n'+(out/'validator.gd').read_text(encoding='utf-8'))
+g=rep(g,'const RemainsState :=','const Procedural := preload("res://scripts/run_procedural_fx_state.gd")\nconst RemainsState :=')
+g=rep(g,'\t"container": [],','\t"container": [],\n'+''.join('\t'+json.dumps(k)+': '+json.dumps(list(row['fields']))+',\n' for k,row in spec.items()).rstrip('\n'))
+g=rep(g,'var _remains: Variant','var _procedural: Variant\nvar _remains: Variant')
+g=rep(g,'\t_codec = codec.new()','\t_codec = codec.new()\n\t_procedural = Procedural.new(battle)')
+g=rep(g,'\tif node.get_script() == _battle.DeathRemains:','\tvar procedural_kind: String = _procedural.kind(node)\n\tif not procedural_kind.is_empty(): return procedural_kind\n\tif node.get_script() == _battle.DeathRemains:')
+g=rep(g,'func _new(kind: String) -> Node2D:\n','func _new(kind: String) -> Node2D:\n\tif _procedural.TYPES.has(kind): return _procedural.scripts[kind].new()\n')
+g=rep(g,'\tif kind == "death_remains": return _remains.validate_node(values.state)','\tif _procedural.TYPES.has(kind): return _procedural.validate(values, kind)\n\tif kind == "death_remains": return _remains.validate_node(values.state)')
+g=rep(g,'\tif kind == "building_collapse": values["tex"]', '\tif _procedural.TYPES.has(kind):\n\t\tfor field: String in FIELDS[kind]:\n\t\t\tif _procedural.TYPES[kind][field] == TYPE_PACKED_VECTOR2_ARRAY: values[field] = Array(node.get(field))\n\tif kind == "building_collapse": values["tex"]')
+g=rep(g,'\t\t\t\telse: node.set(field, row.values[field])','\t\t\t\telif _procedural.TYPES.has(row.kind) and _procedural.TYPES[row.kind][field] == TYPE_PACKED_VECTOR2_ARRAY: node.set(field, PackedVector2Array(row.values[field]))\n\t\t\t\telse: node.set(field, row.values[field])')
+g=rep(g,'if row.kind in ["beast_stampede", "hit_spark"] + TIMED_KINDS:','if row.kind in ["beast_stampede", "hit_spark"] + TIMED_KINDS or _procedural.TYPES.has(row.kind):')
+g=rep(g,'\tif kind not in TIMED_KINDS + AUTHORITY_KINDS + ["death_remains"]:', '\tif _procedural.TYPES.has(kind):\n\t\tif not node.get_meta_list().is_empty(): return _failure("PROCEDURAL_METADATA", kind)\n\t\tfor info: Dictionary in node.get_signal_list():\n\t\t\tif not node.get_signal_connection_list(info.name).is_empty(): return _failure("PROCEDURAL_CONNECTION", kind)\n\tif not _procedural.TYPES.has(kind) and kind not in TIMED_KINDS + AUTHORITY_KINDS + ["death_remains"]:')
+g=rep(g,'\t\tif row.kind == "li_brawn_axes" and (not is_instance_valid(_owner)', '\t\tif _procedural.TYPES.has(row.kind) and _values(node, row.kind) != row.values: return _failure("PROCEDURAL_PREPARATION_CHANGED", row.kind)\n\t\tif row.kind == "li_brawn_axes" and (not is_instance_valid(_owner)') if g.count('\t\tif row.kind == "li_brawn_axes" and (not is_instance_valid(_owner)')==1 else g
+save('run_visual_graph.gd',g)
+d=(root/'qa/environment_resume_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('environment-resume-native','procedural-fx-resume-native').replace('[environment resume QA] ','[procedural fx QA] ')
+d=rep(d,'\tif not await _environment_cases(core_script, identity, runtime, wire):','\tif not await _procedural_cases(core_script, identity, runtime):\n\t\ttarget_core.dispose(); source_core.dispose(); await _finish(true); return\n\tif not await _environment_cases(core_script, identity, runtime, wire):')
+d+='\n'+(out/'driver_cases.gd').read_text(encoding='utf-8')
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+changes=[]
+for name in ['battle.gd','run_visual_graph.gd','run_procedural_fx_state.gd']:
+    p=root/'scripts'/name; row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':out.relative_to(root).as_posix()+'/'+name,'candidate_sha256':sha(out/name)}
+    if p.exists(): row['before_raw_sha256']=sha(p)
+    changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+inputs=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd','driver_cases.gd','validator.gd','field_manifest.json']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in inputs}},indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))
