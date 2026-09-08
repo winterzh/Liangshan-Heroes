@@ -5,7 +5,10 @@ signal changed
 signal initialized
 
 const LocalRunSession = preload("res://scripts/steam_local_run_session.gd")
+const StatsReader = preload("res://scripts/steam_stats_reader.gd")
 var _local_runs: RefCounted
+var _stats_reader: RefCounted
+var _correction_required := false
 
 var native: Object
 var available := false
@@ -62,6 +65,9 @@ func _process(delta: float) -> void:
 			_tick = 0.0
 			if ensure_account() and stats_ready and _local_runs.has_pending(): _checkpoint_persistent_run()
 		return
+	if _correction_required:
+		ensure_account()
+		return
 	_tick += delta
 	_retry_after = maxf(0, _retry_after - delta)
 	if _store_busy:
@@ -80,29 +86,29 @@ func _process(delta: float) -> void:
 			status = "Steam 账号已变化，请重启游戏后继续计入成就"
 			changed.emit()
 			return
-		if not stats_ready:
+		if not stats_ready and not _correction_required:
 			_read_initial_state()
 		elif _dirty and _retry_after <= 0:
 			_sync_state()
 			flush()
 
 func _read_initial_state() -> void:
-	var initial := {}
-	for e in SteamAchievementCatalog.entries():
-		var r: Dictionary = native.call("getAchievement", e.id)
-		if not bool(r.get("ret", false)):
-			status = "Steam 成就配置尚未就绪，当前不计入"
-			changed.emit()
-			return
-		initial[e.id] = bool(r.get("achieved", false))
-	var values := {}
-	for name in SteamAchievementCatalog.STATS:
-		var value := int(native.call("getStatInt", name))
-		if value < 0 or not bool(native.call("setStatInt", name, value)):
-			status = "Steam 统计配置尚未就绪，当前不计入"
-			changed.emit()
-			return
-		values[name] = value
+	if _correction_required or not ensure_account(): return
+	stats_ready = false
+	if _stats_reader == null:
+		var reader := StatsReader.new()
+		var attached: Dictionary = reader.attach(account)
+		if attached.ok: _stats_reader = reader
+	var snapshot: Dictionary = {"ok": false}
+	if _stats_reader != null: snapshot = _stats_reader.current_snapshot()
+	if not snapshot.get("ok", false) or snapshot.get("owner") != account or not ensure_account():
+		status = "Steam 统计配置尚未就绪，当前不计入"
+		changed.emit()
+		return
+	# Native getter success is mandatory for every stat and achievement. A write
+	# probe cannot distinguish a failed getter from the legitimate value zero.
+	var values: Dictionary = snapshot.stats
+	var initial: Dictionary = snapshot.unlocked
 	state.seed(values, initial)
 	_sent_stats = values.duplicate()
 	_sent_achievements = initial.duplicate()
@@ -158,7 +164,7 @@ func settle(run_id: int, victory: bool, result: Dictionary) -> void:
 
 func _sync_state() -> void:
 	if _local_runs != null: return # Durable local mode awaits the continuous SDK publisher.
-	if not ensure_account(): return
+	if not ensure_account() or not stats_ready or _correction_required: return
 	var new_unlock := false
 	for name in state.stats:
 		if state.stats[name] == _sent_stats.get(name):
@@ -197,17 +203,21 @@ func _on_stored(game_id: int, result: int) -> void:
 			status = "Steam 统计发生校正，本局停止计入，请重启后检查"
 			changed.emit()
 		return # Uncorrelated callbacks cannot acknowledge local receipt generations.
-	_store_busy = false
+	if _correction_required: return
 	if result == 1:
-		_dirty = _revision != _store_revision or state.stats != _sent_stats or state.unlocked != _sent_achievements
-		status = "Steam 成就已保存"
+		# StoreStats and IndicateAchievementProgress share this notification, which
+		# has no request ID. It must never release a newer in-flight request or
+		# acknowledge any revision. Keep periodic, rate-limited absolute retries.
+		if not _dirty: return
+		status = "Steam 保存尚未确认，将重试"
 	elif result == 8:
 		# Steam rejected stale/invalid parameters and refreshed its cached values.
-		# Do not replay absolute counters over that authoritative correction.
+		# Retain local state, stop writes and require a fresh process to read the
+		# correction. A late success must not re-enable this process.
+		_correction_required = true
 		stats_ready = false
 		_active_run = 0
-		_dirty = false
-		status = "Steam 校正了统计，正在重新读取；下一局恢复计入"
+		status = "Steam 统计发生校正，本局停止计入，请重启后检查"
 	else:
 		_dirty = true
 		_retry_after = 60
@@ -271,7 +281,7 @@ func _local_bad(code: String) -> Dictionary:
 func _open_persistent_runs(root_path := "user://steam_receipts/v1") -> Dictionary:
 	# Internal activation seam. The normal startup does not enable this until
 	# the persistent outbox/SDK publisher is ready. Never inject paths from slots.
-	if _local_runs != null or _active_run != 0 or _dirty or _store_busy: return _local_bad("PERSISTENT_ADOPTION_BUSY")
+	if _local_runs != null or _active_run != 0 or _dirty or _store_busy or _store_revision >= 0 or _correction_required: return _local_bad("PERSISTENT_ADOPTION_BUSY")
 	if not ensure_account() or not stats_ready: return _local_bad("STEAM_NOT_READY")
 	var local := LocalRunSession.new()
 	var opened: Dictionary = local.open(account, state.stats, state.unlocked, root_path)

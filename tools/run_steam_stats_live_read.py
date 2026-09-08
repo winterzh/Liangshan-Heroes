@@ -60,7 +60,7 @@ def main():
             dest = project / name; dest.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(ROOT / name, dest)
         (project / "project.godot").write_text('config_version=5\n[application]\nconfig/name="SteamReadOnlyProbe"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n', encoding="utf-8")
         (project / "steam_appid.txt").write_text("5088120\n", encoding="ascii")
-        install_native(project)
+        install_native(project, include_reader=False)
         dest = project / "addons/steam_stats_reader"; dest.mkdir(parents=True)
         shutil.copyfile(reader_dll, dest / "steam_stats_reader.dll")
         (dest / "reader.gdextension").write_text('[configuration]\nentry_symbol="lsh_stats_reader_init"\ncompatibility_minimum="4.4"\n[libraries]\nwindows.x86_64="res://addons/steam_stats_reader/steam_stats_reader.dll"\n', encoding="utf-8")

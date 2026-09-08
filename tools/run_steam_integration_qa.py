@@ -22,23 +22,60 @@ windows.release.x86_64 = "res://addons/godotsteam/win64/libgodotsteam.windows.te
 [dependencies]
 windows.x86_64 = { "res://addons/godotsteam/win64/steam_api64.dll": "" }
 '''
+READER_EXTENSION = '''[configuration]
+entry_symbol = "lsh_stats_reader_init"
+compatibility_minimum = "4.4"
+[libraries]
+windows.x86_64 = "res://addons/steam_stats_reader/steam_stats_reader.dll"
+'''
+NATIVE_BINDINGS = ["res://addons/godotsteam/godotsteam.gdextension", "res://addons/steam_stats_reader/reader.gdextension"]
 
 def sources():
     raw = subprocess.check_output(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=ROOT)
     names = sorted(set(raw.decode("utf-8").split("\0")) - {""})
     return [p for p in names if p in ROOT_FILES or p.split("/")[0] in RUNTIME_DIRS]
 
-def install_native(project):
-    vendor = ROOT / "vendor/godotsteam"
-    manifest = json.loads((vendor / "provenance.json").read_text())
-    for item in manifest["files"]:
-        source = vendor / item["path"]
-        if hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
-            raise RuntimeError("Modified dependency: " + str(source))
-        dest = project / "addons/godotsteam" / item["path"]
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, dest)
+def native_dependencies(include_reader=True):
+    """Read and verify fixed dependency manifests without loading Steam."""
+    manifests = {}
+    for name in (["godotsteam", "steam_stats_reader"] if include_reader else ["godotsteam"]):
+        vendor = ROOT / "vendor" / name
+        manifest = json.loads((vendor / "provenance.json").read_text(encoding="utf-8"))
+        seen = set()
+        for item in manifest["files"]:
+            relative = item["path"]
+            if relative in seen or Path(relative).is_absolute() or "\\" in relative or any(p in ("", ".", "..") for p in relative.split("/")):
+                raise RuntimeError("Invalid dependency path: " + relative)
+            seen.add(relative)
+            source = vendor / relative
+            if hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
+                raise RuntimeError("Modified dependency: " + str(source))
+            if "bytes" in item and source.stat().st_size != item["bytes"]:
+                raise RuntimeError("Modified dependency size: " + str(source))
+        if name == "steam_stats_reader" and seen != {"win64/steam_stats_reader.dll", "GODOT_CPP_LICENSE.md"}:
+            raise RuntimeError("Unexpected reader dependency inventory")
+        manifests[name] = manifest
+    return manifests
+
+def install_native(project, include_reader=True):
+    manifests = native_dependencies(include_reader)
+    for name, manifest in manifests.items():
+        for item in manifest["files"]:
+            source = ROOT / "vendor" / name / item["path"]
+            relative = Path(item["path"]).name if name == "steam_stats_reader" else item["path"]
+            dest = project / "addons" / name / relative
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, dest)
+            if hashlib.sha256(dest.read_bytes()).hexdigest() != item["sha256"]:
+                raise RuntimeError("Dependency changed during install: " + str(source))
     (project / "addons/godotsteam/godotsteam.gdextension").write_text(EXTENSION, encoding="utf-8")
+    if include_reader:
+        (project / "addons/steam_stats_reader/reader.gdextension").write_text(READER_EXTENSION, encoding="utf-8")
+    # Register before first import: late native class discovery can crash Godot.
+    cache = project / ".godot"
+    cache.mkdir(exist_ok=True)
+    (cache / "extension_list.cfg").write_text("\n".join(NATIVE_BINDINGS if include_reader else NATIVE_BINDINGS[:1]) + "\n", encoding="utf-8")
+    return manifests
 
 def resolve_godot(value):
     value = value or os.environ.get("GODOT_PATH", "") or (ROOT / "godot.local.txt").read_text(encoding="utf-8-sig").strip()
@@ -92,7 +129,8 @@ def main():
     try:
         project = run / "project"
         project.mkdir()
-        for name in sources() + ["tools/steam_integration_qa.gd", "tools/steam_integration_suite.gd", "tools/steam_catalog_export.gd", "tools/steam_fake_api.gd"]:
+        runtime_paths = sources()
+        for name in runtime_paths + ["tools/steam_integration_qa.gd", "tools/steam_integration_suite.gd", "tools/steam_catalog_export.gd", "tools/steam_fake_api.gd"]:
             source = ROOT / name
             data = source.read_bytes()
             dest = project / name
@@ -106,7 +144,7 @@ def main():
             if not imported.is_dir(): raise RuntimeError("Imported texture cache unavailable")
             shutil.copytree(imported, project / ".godot/imported")
             receipt["imported_texture_cache"] = str(prior.relative_to(ROOT))
-        if args.native: install_native(project)
+        if args.native: receipt["native_dependencies"] = install_native(project)
         env = os.environ.copy()
         for key in list(env):
             if key.endswith(("_TEST", "_QA", "_QA_MANIFEST", "_AUDIT")) or key in ["LEVEL","SCENARIO","CUSTOM_DEFENSE","SKIRMISH","SKIRMISH_AI","ARENA","AUTO_MICRO","AUTOMICRO"]:
@@ -144,6 +182,9 @@ def main():
         for row in receipt["source_files"]:
             if hashlib.sha256((ROOT / row["path"]).read_bytes()).hexdigest() != row["sha256"]:
                 raise RuntimeError("Source changed during test: " + row["path"])
+        if sources() != runtime_paths: raise RuntimeError("Runtime source inventory changed during test")
+        if args.native and native_dependencies() != receipt["native_dependencies"]:
+            raise RuntimeError("Native dependency manifest changed during test")
         receipt["complete"] = True
         receipt["checks"] = len(report["checks"])
     finally:

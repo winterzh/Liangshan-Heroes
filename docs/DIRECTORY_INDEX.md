@@ -1,3 +1,17 @@
+## 2026-09-08 普通 Steam 统计修复与续玩组件收尾
+
+- `docs/STEAM_STATS_FIX_20260908.md`：普通统计初始化、旧保存通知与服务器校正处理的修复，以及本轮已获授权、执行中的候选/Steam更新/公告状态；以最终收据区分各阶段。
+- `docs/CONTINUE_DELIVERY_20260908.md`：经典30波与八关统一交付边界、生产持久确认BLOCKED及整体验收待办；玩家保存/继续仍未开放。
+- `tools/run_steam_integration_qa.py`、`tools/build_steam_candidate.py`、`tools/steam_package_probe.gd`：GodotSteam与只读reader共同依赖冻结、原生整合QA、候选复制及同包检查入口。最新191项整合QA通过，候选构建在本条记录时仍执行中。
+- `qa/steam_stats_fix_20260908/`：本批191项整合结果、六张已目检截图、前序fixture失败及候选/平台收据的归档入口；不能以未完成候选认定已发布。
+- `scripts/run_campaign_level_state.gd`、`tools/campaign_level_state_qa.gd`、`tools/run_campaign_level_state_qa.py`：八关显式Level状态组件与隔离运行器。
+- `docs/CAMPAIGN_RESUME_STATE_AUDIT_20260908.md`、`qa/campaign_level_state_20260908/`：逐关字段、共享世界阻塞、最终205项行为检查、profile_guard及5890次SHA核验；保留旧152项和中间批次。
+- `scripts/steam_persistent_outbox.gd`、`scripts/steam_persistent_outbox_state.gd`、`scripts/steam_persistent_outbox_store.gd`：内部持久发送意图/不确定标记及磁盘事务；生产确认未放行。
+- `tools/run_steam_persistent_outbox_qa.py`、`tools/steam_persistent_outbox_qa.gd`、`qa/steam_persistent_outbox_20260908/`：221项原生断言、18个PID强杀检查点和13条fake SDK trace的最终证据与保留诊断，不能替代真实Steam/完整续玩验收。
+- `marketing/steam_stats_fix_20260908/copy.json`、`marketing/steam_stats_fix_20260908/README.md`：四语公告初稿、字段长度检查和复用800×450封面的来源；公告发布状态另记。
+
+下方条目保留其批次当时语境；只读reader现已进入候选管线，不再沿用旧条目的“尚未加入候选”作为当前结论。
+
 ## 2026-09-08 真实 Steam 读取修复
 
 - `tools/run_steam_stats_live_read.py`、`tools/steam_stats_live_read.gd`：独立真实账号只读诊断，默认预检。

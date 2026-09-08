@@ -9,6 +9,9 @@ var owner := 111
 var stats := {"TOTAL_KILLS":0, "TOTAL_WINS":0, "DEFENSE_WINS":0, "AI_WINS":0}
 var achievements := {}
 var store_ok := true
+var read_ok := true
+var stat_writes := 0
+var achievement_writes := 0
 var stores := 0
 var creates := 0
 var submits := 0
@@ -22,11 +25,18 @@ func run_callbacks() -> void: pass
 func steamShutdown() -> void: pass
 func getAchievement(id: String) -> Dictionary: return {"ret":true, "achieved":achievements.get(id, false)}
 func getStatInt(id: String) -> int: return int(stats.get(id, 0))
+func current_snapshot() -> Dictionary:
+	if not read_ok: return {"ok": false, "code": "GETTER_FAILED"}
+	var unlocked := {}
+	for entry in SteamAchievementCatalog.entries(): unlocked[entry.id] = bool(achievements.get(entry.id, false))
+	return {"ok": true, "owner": str(owner), "source": "current_cache", "stats": stats.duplicate(), "unlocked": unlocked}
 func setStatInt(id: String, value: int) -> bool:
+	stat_writes += 1
 	if not stats.has(id): return false
 	stats[id] = value
 	return true
 func setAchievement(id: String) -> bool:
+	achievement_writes += 1
 	achievements[id] = true
 	return true
 func storeStats() -> bool:

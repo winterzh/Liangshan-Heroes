@@ -183,14 +183,22 @@ func _adapter_tests(service: Node) -> void:
 	service.native = api
 	service.available = true
 	service.account = str(api.owner)
+	service._stats_reader = api # Fake read-only authority, never the live SDK.
+	api.read_ok = false
+	service._read_initial_state()
+	check("failed initial read never seeds or writes", not service.stats_ready and service.state.stats.is_empty() and api.stat_writes == 0 and api.achievement_writes == 0 and api.stores == 0)
+	api.read_ok = true
 	service._read_initial_state()
 	check("adapter ready after schema load", service.stats_ready)
+	check("initial cache load uses no stat write probes", api.stat_writes == 0)
 	service._active_run = 10
 	service._context = {"mode":"ai"}
 	service.settle(10, true, {})
 	service.settle(10, true, {})
 	check("adapter duplicate victory writes once", api.stats.TOTAL_WINS == 1 and api.stats.AI_WINS == 1)
 	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
+	check("success notice cannot acknowledge or release request", service._dirty and service._store_busy)
+	service._process(31.0) # A expires; its notification still has no write identity.
 	service._retry_after = 0
 	service._active_run = 11
 	service.record_kill(11, 1)
@@ -201,13 +209,32 @@ func _adapter_tests(service: Node) -> void:
 	api.store_ok = true
 	service._retry_after = 0
 	service.flush()
+	var stores_b: int = api.stores
+	var revision_b: int = service._store_revision
 	service.record_kill(11, 2)
 	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
-	check("in-flight newer progress remains dirty", service._dirty)
+	check("A late success cannot acknowledge B", service._dirty and service._store_busy and service._store_revision == revision_b)
+	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
+	check("duplicate A success cannot release B", service._dirty and service._store_busy and api.stores == stores_b)
 	service._retry_after = 0
 	service.flush()
+	check("busy request cannot be bypassed by duplicate notice", api.stores == stores_b)
+	service._process(31.0)
+	service._retry_after = 0
+	service.flush()
+	check("new progress remains eligible for bounded retry", service._dirty and service._store_busy and api.stores == stores_b + 1)
+	var retained: Dictionary = service.state.stats.duplicate(true)
+	var correction_writes: int = api.stat_writes
+	service._on_stored(SteamAchievementCatalog.APP_ID, 8)
+	api.stats.TOTAL_KILLS = 0 # Server correction, fixture only.
 	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
-	check("acknowledged progress becomes clean", not service._dirty)
+	service._process(120.0)
+	service._read_initial_state()
+	service._sync_state()
+	service.flush()
+	check("correction retains local pending evidence", service.state.stats == retained and service._dirty)
+	check("late success cannot reopen corrected process", not service.stats_ready and service._active_run == 0 and service._correction_required)
+	check("corrected server cache is never overwritten", api.stats.TOTAL_KILLS == 0 and api.stat_writes == correction_writes)
 	var workshop := root.get_node("WorkshopService")
 	workshop._connect_native()
 	var preview := Image.create(32,32,false,Image.FORMAT_RGB8)
@@ -238,8 +265,24 @@ func _adapter_tests(service: Node) -> void:
 	check("unsubscribe preserves local source", ScenarioStore.list_saved().has(source.title))
 	var count_before: int = api.stats.TOTAL_KILLS
 	api.owner = 222
+	service._process(0.1)
 	service.record_kill(11, 3)
-	check("account switch cannot write old progress to new user", not service.available and api.stats.TOTAL_KILLS == count_before)
+	check("corrected process detects account switch without replay", not service.available and api.stats.TOTAL_KILLS == count_before)
+	var normal: Node = load("res://scripts/steam_service.gd").new()
+	root.add_child(normal)
+	var normal_api: RefCounted = load("res://tools/steam_fake_api.gd").new()
+	normal.native = normal_api
+	normal.available = true
+	normal.account = str(normal_api.owner)
+	normal._stats_reader = normal_api
+	normal._read_initial_state()
+	normal._active_run = 12
+	normal_api.owner = 222
+	var normal_writes: int = normal_api.stat_writes
+	normal.record_kill(12, 3)
+	check("normal run account switch rejects old progress", not normal.available and normal_api.stats.TOTAL_KILLS == 0 and normal_api.stat_writes == normal_writes)
+	normal.native = null
+	normal.free()
 	service.native = null
 	service.available = false
 	service.stats_ready = false

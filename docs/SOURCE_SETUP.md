@@ -1,3 +1,24 @@
+## 2026-09-08 统计修复候选验收完成
+
+候选 `20260908_184221_465b304a` 的1088项同包检查、源码/PCK各10项身份检查、实际EXE三个DLL核对及11例串行短测通过，全部进程退出、玩家文件与源码未变。已开始上传经过验证的唯一ZIP；Steam正式分支和公告以随后服务端回读为准。[发行记录](STEAM_STATS_FIX_20260908.md) · [候选证据](../qa/steam_stats_fix_20260908/CANDIDATE.md)。下方构建中状态保留该记录的当时语境。
+
+## 2026-09-08 统计修复、原生候选与续玩组件入口
+
+正常开发继续从本 checkout 的 `Play.cmd` 启动，Godot 路径仍由被忽略的 `godot.local.txt` 或 `GODOT_PATH` 提供。普通 Steam 统计已修正初始化读取判定、连续游玩时的旧保存通知处理，以及服务器校正后停止本局统计并提示重启的行为。菜单没有新增保存/继续按钮，持久outbox生产确认仍为 **BLOCKED**。[本批范围](STEAM_STATS_FIX_20260908.md) · [九种玩法统一交付状态](CONTINUE_DELIVERY_20260908.md)。
+
+原生只读桥接现在与 GodotSteam 一起纳入整合QA和候选依赖清单，构建从成功的同依赖QA快照复制并核验源码、二进制及许可。下方“尚未加入候选”仅指旧批次。先关闭其他Godot/游戏进程，独占引擎槽；使用真实、较短、非链接的私有profile根，不能指向真实玩家目录或复用已有当轮profile。在开发工程根运行：
+
+```powershell
+py -3.14 -X utf8 -B tools/run_steam_integration_qa.py --run --native --visual --profile-root "D:/CodexTemp/lsh_stats_release_qa"
+py -3.14 -X utf8 -B tools/build_steam_candidate.py --qa-run ".godot/steam_integration_qa/<本轮成功QA批次>" --run --profile-root "D:/CodexTemp/lsh_stats_release_package"
+```
+
+第二条的批次替换为第一条实际输出且 `complete=true` 的目录，不能使用失败批次或源码/依赖已变化的旧快照；去掉 `--run` 仅做预检。两阶段均新建隔离APPDATA/LOCALAPPDATA/TEMP/TMP，候选构建不执行Steam上传或发布。当前原生整合批次 `20260908_184100_3f9024fc` 为191项通过、六图已目检；候选 `20260908_184221_465b304a` 在本条记录时仍在构建，未据此认定同包或线上通过。[整合与候选证据](../qa/steam_stats_fix_20260908/)。
+
+内部组件可分别用 `py -3.14 -X utf8 -B tools/run_campaign_level_state_qa.py --run` 和 `py -3.14 -X utf8 -B tools/run_steam_persistent_outbox_qa.py --run` 在独占引擎槽复现；默认不加 `--run` 只预检。前者最终205项行为检查，后者221项断言、18个外部PID强杀点和13条假SDK trace，完整隔离方式与边界见[八关QA](../qa/campaign_level_state_20260908/README.md)和[outbox QA](../qa/steam_persistent_outbox_20260908/README.md)。它们不启动完整九种玩法的玩家续玩流程，也不能证明真实服务端写入确认。
+
+用户已授权本轮Steam更新与公告，执行状态由[统计修复交付记录](STEAM_STATS_FIX_20260908.md)后续补记。四语公告初稿和复用封面说明位于[marketing目录](../marketing/steam_stats_fix_20260908/README.md)。不要把本地成功QA、候选目录或文案文件当作平台已经发布。
+
 ## 2026-09-08 真实 Steam 只读诊断入口
 
 `py -3.14 -X utf8 -B tools/run_steam_stats_live_read.py` 默认只做前置检查；加 `--run` 在全新隔离最小工程使用当前登录账号，仅读取，不加载正常游戏服务。先关闭其他 Godot/游戏进程。原始日志可能含账号信息，留在本机临时目录，不提交。修正版 reader DLL 已实测连续读取；该工具不能证明统计写入完成，玩家保存/继续入口尚未开放。[合同与复现](STEAM_LIVE_READ_20260908.md)。

@@ -1,0 +1,121 @@
+{
+  "reviewed_at": "2026-09-08T10:43:37.951469+00:00",
+  "mode": "independent_read_only_evidence_review",
+  "production_or_tools_modified": false,
+  "engine_started": false,
+  "git_invoked": false,
+  "campaign": {
+    "accepted_as_frozen_component_only": true,
+    "latest_batch": "20260908_182211_992a0be3",
+    "behavior_checks": 205,
+    "all_behavior_checks_passed": true,
+    "component_only": true,
+    "component_sources": [
+      {
+        "path": "scripts/run_campaign_level_state.gd",
+        "sha256": "3c66f30484693163fbd518a7fc2c74701e8c0975788d5a02c7606daa6d9a5108",
+        "current_and_frozen_match": true
+      },
+      {
+        "path": "tools/campaign_level_state_qa.gd",
+        "sha256": "b8e44bedc435c932c6921366151b895736f8244c143a27a4035edc7b67ed51ad",
+        "current_and_frozen_match": true
+      },
+      {
+        "path": "tools/run_campaign_level_state_qa.py",
+        "sha256": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba",
+        "current_and_frozen_match": true
+      }
+    ],
+    "steps": [
+      {
+        "name": "import",
+        "exit_code": 0,
+        "log_sha256": "e41aed83523e8094b719c3a9b303ab793c14f42908e1622ed29340dfe543f996",
+        "errors": 0
+      },
+      {
+        "name": "profile_guard",
+        "exit_code": 2,
+        "log_sha256": "1b2deb5f4d32d189d4cce47841620d65937eac2c424b9180dda7d2c58c999dfd",
+        "errors": 0
+      },
+      {
+        "name": "component",
+        "exit_code": 0,
+        "log_sha256": "b12dc1a7809465aebc08b350c4cf78445196c6119bc029dda0465c76b08398c2",
+        "errors": 0
+      }
+    ],
+    "evidence_manifest_files_rehashed": 162,
+    "evidence_hash_mismatches": [],
+    "submission_files": 168,
+    "submission_paths_exist_unique_and_scoped": true,
+    "audit_document_sha256": "3f60bedacccc5ea8c49e0c1fea44420a0a213445d642ef74d41ee78651dc06c4",
+    "boundary_wording_verified": true,
+    "not_claimed": [
+      "complete_world_resume",
+      "eight_campaign_victories",
+      "classic_30_waves",
+      "real_Steam_confirmation",
+      "performance",
+      "human_playtest"
+    ],
+    "current_shared_dependency_drift_since_campaign_freeze": [
+      "scripts/run_content_identity.gd",
+      "scripts/steam_service.gd",
+      "tools/run_steam_integration_qa.py"
+    ],
+    "qualification": "The three component-owned source files still match. The 2945-input receipt proves its historical frozen batch; three shared dependencies were changed by the root release work afterward, so it is not a current integrated-package acceptance."
+  },
+  "outbox_submission": {
+    "manifest": "qa/steam_persistent_outbox_20260908/submission_files.txt",
+    "manifest_sha256": "ae610995b8d468c917a02d900ac8217f3ef48e8ef518c402359898376f518213",
+    "owned_sources": [
+      {
+        "path": "scripts/steam_persistent_outbox.gd",
+        "sha256": "6f26e68a76398d81b504a687e4943c141bb8fe3dc94da779955d03265c433fa0"
+      },
+      {
+        "path": "scripts/steam_persistent_outbox_state.gd",
+        "sha256": "4fb04626fc6fd2ff60384a3d2ecbed751a7d3a7e78fcc03db510fd22819a6f59"
+      },
+      {
+        "path": "scripts/steam_persistent_outbox_store.gd",
+        "sha256": "e09ebba43711fae2e4e5ff377a8e5f897e0ba77d462276a648762d0a2c21977f"
+      },
+      {
+        "path": "tools/steam_persistent_outbox_qa.gd",
+        "sha256": "f57d1c1784e1ffa48ed72aa82583935bdb0a7b869c8ff7c4236df25fd38bde43"
+      },
+      {
+        "path": "tools/run_steam_persistent_outbox_qa.py",
+        "sha256": "055b5286234b03b67fe041c57063f44463b34ec53671f5358295f67d1ecb0001"
+      }
+    ],
+    "listed_files": 842,
+    "source_runtime_hashes_still_match_final_receipt": true,
+    "archived_evidence_files_rehashed": 828,
+    "evidence_hash_mismatches": [],
+    "all_paths_explicitly_owned_or_manifested": true,
+    "unknown_files_added": false,
+    "bytes_excluding_this_review": 2164787,
+    "largest_file": {
+      "path": "qa/steam_persistent_outbox_20260908/submission_files.txt",
+      "bytes": 105405
+    },
+    "sensitive_scan": {
+      "files_scanned": 841,
+      "scope": "Exact proposed submission files only; matched values are never emitted.",
+      "credential_pattern_hits": [],
+      "unexpected_steam_account_occurrences": [],
+      "binary_cache_or_installer_files": [],
+      "synthetic_accounts_only": true,
+      "fake_authority_literal_classification": "test-only-private-authority-key is a public synthetic test fixture, not an account credential.",
+      "limitation": "Pattern-based local review, not a universal secret-detection guarantee."
+    },
+    "total_bytes_including_this_review": 2169601
+  },
+  "actionable_implementation_findings": [],
+  "overall": "PASS_WITH_SCOPE_QUALIFICATION"
+}

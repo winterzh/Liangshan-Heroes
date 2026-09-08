@@ -3,6 +3,21 @@ extends SceneTree
 var checks: Array[Dictionary] = []
 var files: Array[String] = []
 var localization_report: Dictionary = {}
+var script_report: Dictionary = {}
+
+class SnapshotFixture extends RefCounted:
+	# Only the facade is injected. No live Steam initialization or write APIs.
+	var fail_getter := false
+	var invalid_counter := false
+	func query(command: String) -> String:
+		var owner := "76561198000000001"
+		if command == "identity": return JSON.stringify({"ok": true, "owner": owner, "app": 5088120})
+		if fail_getter: return JSON.stringify({"ok": false, "code": "GETTER_FAILED"})
+		if command.begins_with("current_stat "):
+			return JSON.stringify({"ok": true, "owner": owner, "source": "current_cache", "handle": "", "value": -1 if invalid_counter else 0})
+		if command.begins_with("current_achievement "):
+			return JSON.stringify({"ok": true, "owner": owner, "source": "current_cache", "handle": "", "value": false})
+		return JSON.stringify({"ok": false, "code": "BAD_COMMAND"})
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -16,6 +31,51 @@ func _list(path: String) -> void:
 	dir.include_hidden = true
 	for name in dir.get_files(): files.append(path.path_join(name))
 	for name in dir.get_directories(): _list(path.path_join(name))
+
+func _check_scripts() -> void:
+	var path := OS.get_environment("LSH_QA_SCRIPTS_FILE")
+	var expected_hash := OS.get_environment("LSH_QA_SCRIPTS_SHA")
+	var manifest_valid: bool = not path.is_empty() and expected_hash.length() == 64 and FileAccess.get_sha256(path) == expected_hash
+	check("exact packaged script input manifest", manifest_valid)
+	if not manifest_valid: return
+	var paths: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	check("packaged script manifest is nonempty", paths is Array and not paths.is_empty())
+	if not paths is Array or paths.is_empty(): return
+	var seen: Dictionary = {}
+	for relative in paths:
+		var valid: bool = relative is String and relative.begins_with("scripts/") and relative.ends_with(".gd") and not ".." in relative and not "\\" in relative and not seen.has(relative)
+		check("valid unique packaged script path: " + str(relative), valid)
+		if not valid: continue
+		seen[relative] = true
+		var script: Resource = ResourceLoader.load("res://" + relative, "GDScript")
+		check("packaged script parses: " + relative, script is GDScript and script.can_instantiate())
+	script_report = {"manifest_sha256": expected_hash, "scripts": seen.size()}
+
+func _check_reader() -> void:
+	var present: bool = ClassDB.class_exists("SteamStatsReader")
+	check("read-only reader class in exported package", present)
+	if not present: return
+	var native_reader: Object = ClassDB.instantiate("SteamStatsReader")
+	for command in ["identity", "current_stat TOTAL_KILLS", "current_achievement ACH_WINS_10"]:
+		var raw: Variant = native_reader.call("query", command)
+		var row: Variant = JSON.parse_string(raw) if raw is String else null
+		check("native getter rejects uninitialized Steam: " + command, row is Dictionary and row.get("ok") == false and row.get("code") == "STEAM_NOT_INITIALIZED")
+	var facade_script: GDScript = load("res://scripts/steam_stats_reader.gd")
+	check("packed read-only facade", facade_script != null)
+	if facade_script == null: return
+	var reader: RefCounted = facade_script.new()
+	var fixture := SnapshotFixture.new()
+	reader.native = fixture
+	reader._owner = "76561198000000001"
+	var snapshot: Dictionary = reader.current_snapshot()
+	check("packed facade preserves valid zero and false", snapshot.get("ok", false) and snapshot.stats.size() == 4 and snapshot.unlocked.size() == 30 and snapshot.stats.TOTAL_KILLS == 0 and not snapshot.unlocked.ACH_WINS_10)
+	check("packed current cache is not write acknowledgement", snapshot.get("source") == "current_cache" and snapshot.get("handle") == "")
+	fixture.fail_getter = true
+	var failed: Dictionary = reader.current_snapshot()
+	check("packed getter failure supplies no default progress", failed.get("ok") == false and failed.get("code") == "GETTER_FAILED" and not failed.has("stats") and not failed.has("unlocked"))
+	fixture.fail_getter = false
+	fixture.invalid_counter = true
+	check("packed invalid counter rejects whole snapshot", reader.current_snapshot().get("code") == "BAD_STAT")
 
 func _check_localization() -> void:
 	var catalog_path := "res://assets/localization/catalog.json"
@@ -86,10 +146,12 @@ func _run() -> void:
 	check("native extension in exported package", Engine.has_singleton("Steam"))
 	var service := root.get_node("SteamService")
 	check("Steam QA initialization disabled", not service.available and service.native == null)
+	_check_reader()
+	_check_scripts()
 	_list("res://")
 	var forbidden := false
 	for path in files:
-		for prefix in ["tools/", "qa/", "docs/", "marketing/", "vendor/", "build/", "scratchpad/", "assets/campaign/source/"]:
+		for prefix in ["tools/", "qa/", "docs/", "marketing/", "vendor/", "native/", "build/", "scratchpad/", "assets/campaign/source/"]:
 			forbidden = forbidden or path.begins_with("res://" + prefix)
 		if path.begins_with("res://assets/localization/"):
 			forbidden = forbidden or path != "res://assets/localization/catalog.json"
@@ -115,7 +177,7 @@ func _run() -> void:
 	var passed := true
 	for row in checks: passed = passed and row.passed
 	var out := FileAccess.open(OS.get_environment("STEAM_PACKAGE_REPORT"), FileAccess.WRITE)
-	out.store_string(JSON.stringify({"passed":passed,"checks":checks,"files":files,"localization":localization_report}, "\t"))
+	out.store_string(JSON.stringify({"passed":passed,"checks":checks,"files":files,"localization":localization_report,"scripts":script_report,"steam_initialized":false,"steam_write_calls":0}, "\t"))
 	out.close()
 	for i in range(3): await process_frame
 	print("STEAM_PACKAGE ", "PASS" if passed else "FAIL", " ", checks.size())

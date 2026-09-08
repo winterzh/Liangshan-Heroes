@@ -222,9 +222,14 @@ func _check_optional_content(rows: Array) -> Dictionary:
 
 func _native_export_check(rows: Array, exe: String, source_base: String = "") -> Dictionary:
 	if rows.is_empty():
-		return _bad("NATIVE_UNPINNED") if Engine.has_singleton("Steam") else {"ok": true}
-	# The current package has one explicit GodotSteam Windows binding. Other native layouts are not silently accepted.
+		return _bad("NATIVE_UNPINNED") if Engine.has_singleton("Steam") or ClassDB.class_exists("SteamStatsReader") else {"ok": true}
+	# Only the fixed GodotSteam layout and optional complete read-only reader pair
+	# are supported. Every binding and binary remains part of installed identity.
 	if OS.get_name() != "Windows": return _bad("NATIVE_PLATFORM_UNSUPPORTED")
+	var godotsteam_paths := ["addons/godotsteam/godotsteam.gdextension", "addons/godotsteam/win64/steam_api64.dll",
+		"addons/godotsteam/win64/libgodotsteam.windows.template_debug.x86_64.dll", "addons/godotsteam/win64/libgodotsteam.windows.template_release.x86_64.dll"]
+	var reader_paths := ["addons/steam_stats_reader/reader.gdextension", "addons/steam_stats_reader/steam_stats_reader.dll"]
+	var seen: Dictionary = {}
 	var pins: Dictionary = {}
 	for row in rows:
 		if typeof(row) != TYPE_DICTIONARY or row.size() != 3 or typeof(row.get("path")) != TYPE_STRING \
@@ -232,7 +237,9 @@ func _native_export_check(rows: Array, exe: String, source_base: String = "") ->
 			or not _valid_sha(row.get("sha256")):
 			return _bad("NATIVE_FIELDS")
 		var path: String = row.path
-		if not _path_ok(path) or not path.begins_with("addons/godotsteam/"): return _bad("NATIVE_LAYOUT_UNSUPPORTED")
+		if not _path_ok(path) or path not in godotsteam_paths and path not in reader_paths: return _bad("NATIVE_LAYOUT_UNSUPPORTED")
+		if seen.has(path): return _bad("NATIVE_DUPLICATE")
+		seen[path] = true
 		if path.get_extension() == "gdextension":
 			# Export may rewrite a binding resource. Its source bytes are in the compiled manifest;
 			# actual external library bytes below and the existing loaded-module probe verify runtime binding.
@@ -243,8 +250,19 @@ func _native_export_check(rows: Array, exe: String, source_base: String = "") ->
 		else:
 			return _bad("NATIVE_LAYOUT_UNSUPPORTED")
 	if not Engine.has_singleton("Steam"): return _bad("NATIVE_NOT_LOADED")
+	for path in godotsteam_paths:
+		if not seen.has(path): return _bad("NATIVE_PIN_MISSING:" + path)
+	var has_reader: bool = seen.has(reader_paths[0]) or seen.has(reader_paths[1])
+	if has_reader:
+		for path in reader_paths:
+			if not seen.has(path): return _bad("NATIVE_PIN_MISSING:" + path)
+		if not ClassDB.class_exists("SteamStatsReader"): return _bad("NATIVE_READER_NOT_LOADED")
+	elif ClassDB.class_exists("SteamStatsReader"):
+		return _bad("NATIVE_READER_UNPINNED")
 	var mode := "debug" if OS.has_feature("editor") else "release"
-	for name in ["steam_api64.dll", "libgodotsteam.windows.template_%s.x86_64.dll" % mode]:
+	var runtime_binaries := ["steam_api64.dll", "libgodotsteam.windows.template_%s.x86_64.dll" % mode]
+	if has_reader: runtime_binaries.append("steam_stats_reader.dll")
+	for name in runtime_binaries:
 		if not pins.has(name): return _bad("NATIVE_PIN_MISSING:" + name)
 		var path: String = exe.get_base_dir().path_join(name) if source_base.is_empty() else source_base.path_join(String(pins[name].path))
 		if not _no_link(path) or FileAccess.get_sha256(path) != pins[name].sha256:
