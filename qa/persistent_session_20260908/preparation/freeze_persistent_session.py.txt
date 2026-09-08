@@ -1,0 +1,14 @@
+from pathlib import Path
+import json, hashlib
+root=Path.cwd(); out=root/'scratchpad/persistent_session_20260908'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+names=['steam_local_run_session.gd','steam_service.gd','run_slot_store.gd','run_world_session.gd']
+rows=[]
+for n in names:
+    p=root/'scripts'/n
+    row={'path':'scripts/'+n,'before_exists':p.exists(),'candidate':out.relative_to(root).as_posix()+'/'+n,'candidate_sha256':sha(out/n)}
+    if p.exists(): row['before_raw_sha256']=sha(p)
+    rows.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':rows},indent=2)+'\n')
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names+['driver.gd','driver_uncredited.gd','overlay_manifest.json']}},indent=2)+'\n')
+print(sha(out/'freeze.json'))

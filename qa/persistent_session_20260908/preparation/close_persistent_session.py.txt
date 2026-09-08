@@ -1,0 +1,131 @@
+from pathlib import Path
+import json, hashlib, subprocess, datetime, sys
+root=Path.cwd(); out=root/'scratchpad/persistent_session_20260908'; q=root/'qa/persistent_session_20260908'
+head='6738b3fe9f996a0da034d8237b4f7fbaeb5d831b'
+world_run,ledger_run=sys.argv[1:3]
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+reports={}
+for run,suite in [(world_run,'persistent-session-native'),(ledger_run,'world-slot-native')]:
+    native=root/'.godot/stabilization_overlay'/run
+    receipt=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+    assert receipt['suite']==suite and receipt['source_head']==head
+    assert all(receipt[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released'])
+    assert not receipt['final_issues'] and report['passed'] and report['complete'] and not report['failed_count']
+    assert receipt['freeze_sha256']==sha(out/'freeze.json')
+    for row in changes:
+        p=root/row['path']
+        assert p.exists()==row['before_exists']
+        if p.exists(): assert sha(p)==row['before_raw_sha256']
+        assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+    reports[suite]=report
+assert len(reports['persistent-session-native']['children'])==4
+q.mkdir(exist_ok=False); (q/'.gdignore').write_bytes(b'\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes())
+    try: origin=src.relative_to(root).as_posix()
+    except ValueError: origin='private_synthetic_fixture/'+src.name
+    pins.append({'source_relative':origin,'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    r=json.loads(path.read_text())
+    if r.get('source_head')!=head or r.get('suite') not in reports: continue
+    folder=path.parent; tag='runs/'+folder.name
+    assert r.get('lock_released') and r.get('source_unchanged') and r.get('player_unchanged')
+    runs.append({'run_id':folder.name,'suite':r['suite'],'complete':r.get('complete'),'freeze_sha256':r['freeze_sha256'],'error':r.get('error')})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes:
+        p=folder/'project'/row['path']
+        if p.exists(): archive(p,tag+'/inputs/'+p.name+'.txt')
+    driver=folder/'project/tools'/('persistent_session' if r['suite']=='persistent-session-native' else 'world_slot')/'driver.gd'
+    if driver.exists(): archive(driver,tag+'/inputs/driver.gd.txt')
+    manifest=json.loads((folder/'manifest.json').read_text())
+    private=Path(r['private_profile']).resolve(); fixture=Path(manifest['private_user'])/'slot_qa'
+    assert fixture.resolve().is_relative_to(private)
+    for p in sorted(fixture.rglob('*')):
+        if p.is_file(): archive(p,tag+'/fixtures/'+p.relative_to(fixture).as_posix())
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['freeze_persistent_session.py','close_persistent_session.py']:
+    archive(root/'.godot'/name,'preparation/'+name+'.txt')
+
+for row in changes:
+    if row['before_exists']: archive(root/row['path'],'before/'+Path(row['path']).name+'.txt')
+uid_paths=[]
+for row in changes:
+    (root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+    if not row['before_exists']:
+        name=row['path']+'.uid'; src=root/'.godot/stabilization_overlay'/world_run/'project'/name
+        assert src.exists() and not (root/name).exists()
+        (root/name).write_bytes(src.read_bytes()); archive(src,'installed_uids/'+src.name+'.txt'); uid_paths.append(name)
+counts={}
+for suite,report in reports.items():
+    source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks'])
+    counts[suite]={'checks':report['check_count'],'source_sha_checks':source_count,'other_checks':report['check_count']-source_count}
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'world_run':world_run,'ledger_run':ledger_run,'runs':runs,'changes':changes,'uids':{n:sha(root/n) for n in uid_paths},'counts':counts,'scope':'internal persistent local Steam receipt binding and cross-process classic30 session; normal startup and SDK publisher remain gated','player_menu_entry':False,'persistent_steam_binding':True,'real_sdk_published':False,'slot_specific_force_kill_tested':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json'); wc=counts['persistent-session-native']; lc=counts['world-slot-native']
+contract=f'''# 持久局身份与完整世界会话联调
+
+## 已接入的内部路径
+
+steam_local_run_session把独立Ledger、局token、待提交累计击杀和终局意图连接起来。SteamService新增显式内部启用接口_open_persistent_runs，并在该模式下把真实Battle的累计死亡/终局回调交给本机收据。run_world_session保存前先确认同一局收据落盘，再写世界槽；恢复使用当前账号打开的独立收据验证token、玩法、高水位、代数与终局状态，沿用原token而分配新的进程内handle。旧槽不会覆盖或重建统计历史。
+
+该模式尚未在正常启动自动启用。它启用后不调用SetStat/SetAchievement/StoreStats，也不把无批次身份的SDK回调当成收据代数确认；状态文字明确本机保存、Steam同步未接通。原普通Steam模式仍沿用现有SDK路径。持续outbox/SDK发布的迟到回调、校正与重启窗口、正常启动接入以及玩家保存退出/继续按钮仍需完成。此批不能称为真实Steam账号同步或玩家续玩已经上线。
+
+## 写入与恢复顺序
+
+新局token在Ledger成功落盘后才关联本机handle；公开begin_run保留现有官方玩法与test_environment准入。本机适配器的observe和queue_terminal只更新内存意图，避免在死亡物理帧内执行文件IO。空闲处理每秒最多检查一次待提交意图，或保存/切换新局/退出前显式checkpoint；checkpoint拒绝在物理帧调用。只有超过已持久高水位的累计值才新加统计，终局意图第一次确定后不接受重复或相反结算。击杀与终局分别提交，二者之间的中断仍保留已确认击杀且不会产生第二次已确认胜场。
+
+槽binding新增steam变体，精确6字段：kind、owner、token、credited_kills、generation、receipt_sha256。已有uncredited变体和槽schema v1继续可读，保持严格字段/类型/规范JSON校验。保存时受信账号来自当前SteamService，目录由启动代码提供；任何槽字段都不决定账号、文件路径或脚本。世界累计值不得大于槽记录的已确认高水位；恢复时独立收据代数不能倒退，同代SHA必须匹配，最新该局高水位不能低于保存时值，已终局必须拒绝。
+
+prepare_restore在完整禁用世界准备后验证绑定，commit_restore在组件激活后再读当前收据、核对账号与未终局，成功后无yield/信号/SDK或文件IO地转移局映射和世界所有权。token留在外部会话，Battle只得到本进程handle。绑定校验失败由原Core回滚新世界，实际菜单保留；收据失败发生在写槽之前，原槽和HELD世界保留。已失败的本机宿主保守停止后续读写，当前进程不会忽略错误重建空历史。
+
+内部启用拒绝已有活动局、SDK脏状态/在途请求及未就绪账号。当前读取种子仅用于新收据；已有收据从磁盘恢复自己的统计和墓碑，不被旧SDK缓存种子覆盖。SDK结果8在本机模式触发本地失效并停止计入；回调与失效落盘之间的崩溃原子性并未解决，真实发布器接入仍受该门槛约束。此模式不提供多设备独立增量合并或服务端已确认的承诺。
+
+## 原生证据
+
+最终持久会话运行{world_run}：{wc['checks']}条检查，含{wc['source_sha_checks']}来源SHA与{wc['other_checks']}功能/环境检查。四个独立真实Godot进程依次执行：保存累计2击杀的实际世界；把独立收据推进到5，保留旧槽；新进程恢复后真实敌军死亡累计到3/4/5均不加数，到6仅加1；第三进程再次恢复同token并用实际Battle._end结算，重复结算保持一个胜场；第四进程读取旧槽被RUN_TERMINAL拒绝且菜单/文件保留。
+
+旧槽恢复同时保留此前真实训练、移动、投射物13点单次伤害、实体分配、RNG与时钟相位验证；恢复不是重新部署。附加账号不符、未知token、未来代数、未来高水位、世界领先收据的只读拒绝；实际未知文件使独立收据失败，确认写槽被阻断、之前收据与槽SHA不变、当前Battle继续保留HELD。源进程失败后退出，再由下一进程正常打开原收据，未把未落盘的第6次源世界死亡当成已确认记录。实际文件半写/强杀仍由之前通用Ledger测试覆盖，此批未新增大世界槽或会话联动专属强杀窗口。
+
+原未计统计世界运行{ledger_run}：{lc['checks']}条检查，含{lc['source_sha_checks']}来源SHA与{lc['other_checks']}其他检查，原三个进程保存/恢复/再保存、回滚与拒绝无绑定局全部通过。持久套件还用假SDK验证原未启用分支仍按累计差值写SDK、旧累计不重加、flush路径可用，随后清空测试调用记录，检查本机持久模式没有任何SDK写入。原SDK迟到回调缺陷未由这项回归解决。
+
+Steam账号、SDK和初始50击杀是driver内固定合成夹具；正常Steam singleton始终禁用。测试通过内部_begin_persistent_run接入实际Battle，因为公开begin_run的测试环境禁用规则保持有效，没有放宽生产准入。首轮初始化在物理帧触发RECEIPT_PHYSICS_WRITE_REFUSED，后改为在测试空闲帧初始化；所有失败及其受测输入保留在[QA](../qa/persistent_session_20260908/README.md)，完整清单见installation.json。
+
+## 后续与原范围
+
+下一步完成持续SDK发布器及其重启/迟到/重复/校正窗口，才能在正常启动启用持久模式和玩家按钮。之后补完整槽/收据中断组合、实际复活/完整结算、祝家庄及其余七关、完整30波/1800秒、两台Windows、真实Steam双账号、60FPS P95/P99、美术与真人验收。本批只提交推送GitHub stable，未更新Steam构建。
+'''
+(root/'docs/PERSISTENT_RUN_SESSION_20260908.md').write_text(contract,encoding='utf-8',newline='\n')
+(q/'README.md').write_text(f'''# 持久局与世界会话原生QA
+
+来源`{head}`，freeze`{freeze}`。持久会话`{world_run}`、原未计统计路径`{ledger_run}`均保留报告及实际子进程证据；计数、限制与接口见[合同](../../docs/PERSISTENT_RUN_SESSION_20260908.md)。SOURCE_PINS固定每份实际输入、日志、报告和合成收据/槽，不含真实玩家配置或Steam缓存。
+
+在独立checkout检出上述来源，将candidate/*.gd.txt还原为原名至scratchpad/persistent_session_20260908，其他candidate文件保持原字节。使用已配置Godot4.6.3，以下两个套件串行执行：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/persistent_session_20260908 --expected-files 4 --driver driver.gd --driver-destination tools/persistent_session/driver.gd --suite persistent-session-native --prefix "[persistent session QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/persistent_session_20260908 --expected-files 4 --driver driver_uncredited.gd --driver-destination tools/world_slot/driver.gd --suite world-slot-native --prefix "[world slot QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可改为受控绝对短路径；不在玩家目录运行。新模块UID只从最终持久会话原生导入晋级。此QA使用假SDK，内部模式尚未由正常启动启用，玩家菜单和真实Steam发送待完成。
+''',encoding='utf-8',newline='\n')
+def prepend(path,text):
+    p=root/path; p.write_bytes((text+'\n\n').encode()+p.read_bytes())
+prepend('docs/WORKLOG.md',f'## 2026-09-08 持久局与跨进程会话联调\n\nSteamService内部本机模式已连接实际Battle累计死亡/终局、独立Ledger和世界槽：先确认收据再写槽，恢复沿用token并拒绝已终局。四进程旧2/历史5/新增6及终局一次验证通过，收据失败保留槽与HELD世界；持久{wc["other_checks"]}项、原未计统计{lc["other_checks"]}项非来源检查。[合同](PERSISTENT_RUN_SESSION_20260908.md)、[QA](../qa/persistent_session_20260908/README.md)。正常启动尚未启用本机模式，持续outbox/SDK、玩家按钮及原整体验收仍待完成，本批仅stable同步。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 持久局内部启用接口\n\n新增steam_local_run_session并与SteamService/世界Session连接，槽支持持久token绑定。_open_persistent_runs只供后续统一启动接入，当前正常启动不调用；启用后SDK写入被保留为待完成门槛，状态明确仅本机记录。现有启动和玩家菜单不变。[合同](PERSISTENT_RUN_SESSION_20260908.md)。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 持久局与旧世界防重通过内部联调\n\n四个真实进程保持同一token，旧槽累计2、独立收据5，重放到5不加数、到6只加1，实际终局只记一次且重启拒绝旧槽。[证据](PERSISTENT_RUN_SESSION_20260908.md)。正常启动、持续SDK发布与玩家入口未接通；真实Steam、八关/整场/长时/双机/性能/美术/真人门槛不变。')
+prepend('docs/STABILIZATION_EXECUTION_20260907.md','2026-09-08推进：持久局已接入SteamService内部本机模式和世界Session，先收据后槽、同token跨进程重放/终局拒绝及写失败保留通过。正常启动和玩家入口等待持续SDK发布器及其窗口验证；原完整范围保留。[最新证据](PERSISTENT_RUN_SESSION_20260908.md)。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 持久局会话\n\n- scripts/steam_local_run_session.gd：累计意图、检查点、持久绑定及恢复验证。\n- docs/PERSISTENT_RUN_SESSION_20260908.md：SteamService与世界会话的内部连接合同。\n- qa/persistent_session_20260908/：四进程防重/终局、失败与原未计统计回归。')
+prepend('docs/WORLD_SLOT_20260908.md','后续：槽已增加持久Steam token绑定变体，世界Session在内部本机收据模式下支持有统计局；四进程高水位与终局验证见[最新合同](PERSISTENT_RUN_SESSION_20260908.md)。正常启动尚未启用，SDK发布及玩家按钮仍待完成。下文“有统计局拒绝”保留为前批状态。')
+prepend('docs/STEAM_RUN_LEDGER_20260908.md','后续：Ledger已通过steam_local_run_session连接SteamService内部模式与世界槽，累计值在空闲检查点、保存前和终局持久化，恢复沿用token。[四进程证据](PERSISTENT_RUN_SESSION_20260908.md)。正常启动仍未启用，SDK/outbox继续待办，下文未被服务调用为前批状态。')
+prepend('docs/STEAM_BATTLE_COUNTER_20260908.md','后续：累计计数已在内部本机模式连接持久Ledger与世界槽，跨进程旧进度不重加、终局一次通过；默认SDK模式尚未切换，见[会话证据](PERSISTENT_RUN_SESSION_20260908.md)。')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve persistent session native code and evidence.\nscripts/steam_local_run_session.gd* -text -whitespace\nqa/persistent_session_20260908/** -text -whitespace\n')
+paths=['.gitattributes']+[r['path'] for r in changes]+uid_paths+['docs/'+n for n in ['PERSISTENT_RUN_SESSION_20260908.md','WORKLOG.md','SOURCE_SETUP.md','PROJECT_STATUS.md','STABILIZATION_EXECUTION_20260907.md','DIRECTORY_INDEX.md','WORLD_SLOT_20260908.md','STEAM_RUN_LEDGER_20260908.md','STEAM_BATTLE_COUNTER_20260908.md']]+[p.relative_to(root).as_posix() for p in q.rglob('*') if p.is_file()]
+assert len(paths)==len(set(paths))
+(root/'.godot/persistent_session_stage_paths.txt').write_text('\n'.join(paths)+'\n',encoding='utf-8')
+print(json.dumps({'runs':runs,'pins':len(pins),'paths':len(paths),'counts':counts,'bytes':sum((root/p).stat().st_size for p in paths)},ensure_ascii=False))

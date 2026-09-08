@@ -1,3 +1,5 @@
+后续：Ledger已通过steam_local_run_session连接SteamService内部模式与世界槽，累计值在空闲检查点、保存前和终局持久化，恢复沿用token。[四进程证据](PERSISTENT_RUN_SESSION_20260908.md)。正常启动仍未启用，SDK/outbox继续待办，下文未被服务调用为前批状态。
+
 后续：Steam收据文件事务抽取为run_snapshot_store基类，原v1路径/封套保持兼容；上一批实际两份记录按原SHA打开不改字节，并继续新局/进度通过。完整2100写与7强杀回归重新验证。[单槽与存储证据](WORLD_SLOT_20260908.md)。ledger尚未接到正常SteamService及统一Session。
 
 后续：Battle现已传递可恢复的累计有效击杀，SteamService完成同进程高水位防重，见[实际世界验证](STEAM_BATTLE_COUNTER_20260908.md)。本页持久ledger仍未由服务调用，outbox及Session绑定继续待办。

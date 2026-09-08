@@ -1,3 +1,7 @@
+## 2026-09-08 持久局内部启用接口
+
+新增steam_local_run_session并与SteamService/世界Session连接，槽支持持久token绑定。_open_persistent_runs只供后续统一启动接入，当前正常启动不调用；启用后SDK写入被保留为待完成门槛，状态明确仅本机记录。现有启动和玩家菜单不变。[合同](PERSISTENT_RUN_SESSION_20260908.md)。
+
 ## 2026-09-08 世界单槽内部接口
 
 新增run_snapshot_store、run_slot_store、run_world_session；Steam收据改用相同通用事务基类，原v1记录兼容验证通过。默认单槽路径user://continue/v1/5088120/1，当前仅内部未计Steam统计经典30波；启动方式和正常玩家菜单未变。[接口与限制](WORLD_SLOT_20260908.md)。

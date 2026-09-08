@@ -1,3 +1,9 @@
+## 2026-09-08 持久局会话
+
+- scripts/steam_local_run_session.gd：累计意图、检查点、持久绑定及恢复验证。
+- docs/PERSISTENT_RUN_SESSION_20260908.md：SteamService与世界会话的内部连接合同。
+- qa/persistent_session_20260908/：四进程防重/终局、失败与原未计统计回归。
+
 ## 2026-09-08 单槽与跨进程会话
 
 - scripts/run_snapshot_store.gd：共享双快照事务基类。
