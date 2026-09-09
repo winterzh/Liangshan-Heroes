@@ -5,11 +5,14 @@
   "scope": "User-approved female cover, matching store/library art, promotional companion images, freshly recorded gameplay trailer and screenshots.",
   "authorization": [
     "用这张吧",
-    "宣传图，配图，配套视频什么的这次记得一起更新"
+    "宣传图，配图，配套视频什么的这次记得一起更新",
+    "你自己操作浏览器发布就行",
+    "你操作我的edge浏览器，我给你登录好了",
+    "放了"
   ],
-  "store_upload_status": "blocked_before_file_selection",
+  "store_upload_status": "store_capsules_8_uploaded_remaining_media_waiting_for_user_drag_drop",
   "store_media_published": false,
-  "overall_status": "announcement_cover_saved_public_metadata_verified_store_media_blocked",
+  "overall_status": "store_capsules_revision_6_publicly_verified_announcement_cover_previously_verified_remaining_media_pending",
   "local_delivery": {
     "status": "completed_and_visually_checked",
     "bundle": "D:/AI项目/水浒/Steam新素材-20260909",
@@ -24,7 +27,10 @@
       "bytes": 39360487,
       "video_duration_seconds": 45,
       "frames": 1350,
-      "resolution": [1920, 1080],
+      "resolution": [
+        1920,
+        1080
+      ],
       "fresh_gameplay_seconds": 42,
       "illustrated_end_card_seconds": 3,
       "source_build": 25200149,
@@ -42,18 +48,27 @@
     "public_url": "https://store.steampowered.com/news/app/5088120/view/714538122294067212",
     "public_image": "https://clan.fastly.steamstatic.com/images/46272698/9a674291cb30fb99b7e81b18d053cb3ebabd6682.png",
     "public_checks": {
-      "languages": ["schinese", "english", "tchinese", "japanese"],
+      "languages": [
+        "schinese",
+        "english",
+        "tchinese",
+        "japanese"
+      ],
       "og_image_and_twitter_image": "All four public document metadata fields point to the new cover.",
       "image_loaded": true,
-      "natural_dimensions": [800, 450],
+      "natural_dimensions": [
+        800,
+        450
+      ],
       "public_image_visually_inspected": true,
-      "news_listing": "Minor update cards still render the app's old store capsule. Replacing the announcement cover alone does not replace these store capsule surfaces.",
-      "library": "Event library visibility pending moderation; actual Steam client display not verified."
+      "news_listing": "Store capsule has now been replaced in revision 6; the separate news listing was not independently rechecked in this follow-up.",
+      "library": "Event library visibility pending moderation; actual Steam client display not verified.",
+      "news_listing_prior_to_capsule_publication": "Minor update cards still render the app's old store capsule. Replacing the announcement cover alone does not replace these store capsule surfaces."
     }
   },
-  "store_revision_observed": 5,
-  "observed_diff": "This game has not been modified.",
-  "browser": "Codex in-app browser",
+  "store_revision_observed": 6,
+  "observed_diff": "This game has not been modified. (After revision 6 publication.)",
+  "browser": "User-owned Microsoft Edge; connected extension, claimed existing logged-in Steamworks tab",
   "attempts": [
     {
       "location": "Graphical Assets > Store assets > Update base assets > Agree and continue",
@@ -72,20 +87,115 @@
     "Timed out after 3000ms waiting for file chooser.",
     "Locator diagnostics: no_visible_match for image input."
   ],
-  "recovery": "Reloaded the store trailer editor; old trailer remains intact. Store View Diffs reports no modifications. No store/library/screenshot/trailer upload or store publication occurred; the separate announcement cover update is recorded above.",
+  "recovery": "User dragged the eight capsule files into the normal image drop area. Agent checked all eight slots/languages, explicitly selected Header Capsule for header.png and header_schinese.png, accepted image rules, uploaded, reviewed image-only diffs, publicly published revision 6, and verified the live CN/EN store header.",
   "current_public_media": {
-    "checked_url": "https://store.steampowered.com/app/5088120/_/?l=schinese",
-    "visual": "Old gate/fortress header with yellow title remains visible.",
-    "header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/5833bfa4383177bc2fdb0c903f5b3a4b9d162224/header_schinese.jpg?t=1788855740",
+    "checked_urls": [
+      "https://store.steampowered.com/app/5088120/_/?l=schinese",
+      "https://store.steampowered.com/app/5088120/_/?l=english"
+    ],
+    "visual": "Approved female cover is visible on the live Simplified Chinese storefront.",
+    "header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/df0980e3cc98f86583a5859efd44ae9589b04777/header_schinese.jpg?t=1788942928",
+    "english_header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/df0980e3cc98f86583a5859efd44ae9589b04777/header.jpg?t=1788942928",
     "natural_width": 460,
     "natural_height": 215,
     "complete": true,
-    "trailer": "https://store.steampowered.com/trailer/assets/?trailer=5088120/2025932284/552f27e3ad468041f3d1548b5172d5910b5f42ba/1786373241"
+    "languages_checked": [
+      "schinese",
+      "english"
+    ],
+    "screenshots": "Existing six screenshot asset hashes remain on the public page; the five new captures have not been uploaded.",
+    "trailer": "The new 45-second trailer has not been uploaded or published. Existing trailer retained; no new duration claimed."
   },
-  "next_step": "After all assets finish local validation, use the normal file drag/drop UI to select the prepared deliverables; then classify slots/languages, upload, save, review diffs, publish and verify the public media.",
+  "next_step": "Edge has been returned to Graphical Assets > Library > base-assets drop area. User can drag the six files from 02-游戏库图片 and the five files from 03-实机截图 into that same area; agent will classify, upload and publish. Then upload the new trailer and its promotional thumbnail through the trailer page.",
   "limits": [
-    "This is a technical upload-control limitation, not an authorization rejection.",
-    "Native app APIs are disabled in this session; no alternate OS automation or hidden endpoint uploads were used.",
-    "Do not infer Steam publication from local artwork completion or Git sync."
-  ]
+    "Only eight store capsules are published in revision 6; the complete 22-file media delivery is not fully online.",
+    "Earlier native desktop automation was stopped by its URL-confidence safety check. No bypass or hidden endpoint upload was attempted. Current publication used the connected Edge extension after user file drag/drop.",
+    "Simplified Chinese and English live store headers were verified. Traditional Chinese/Japanese fallback and actual Steam client library display were not rechecked in this follow-up.",
+    "Keep prior failed upload attempts as history; do not infer publication from local files or Git sync."
+  ],
+  "history_before_capsule_publication": {
+    "store_upload_status": "blocked_before_file_selection",
+    "store_media_published": false,
+    "overall_status": "announcement_cover_saved_public_metadata_verified_store_media_blocked",
+    "store_revision_observed": 5,
+    "observed_diff": "This game has not been modified.",
+    "browser": "Codex in-app browser",
+    "recovery": "Reloaded the store trailer editor; old trailer remains intact. Store View Diffs reports no modifications. No store/library/screenshot/trailer upload or store publication occurred; the separate announcement cover update is recorded above.",
+    "current_public_media": {
+      "checked_url": "https://store.steampowered.com/app/5088120/_/?l=schinese",
+      "visual": "Old gate/fortress header with yellow title remains visible.",
+      "header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/5833bfa4383177bc2fdb0c903f5b3a4b9d162224/header_schinese.jpg?t=1788855740",
+      "natural_width": 460,
+      "natural_height": 215,
+      "complete": true,
+      "trailer": "https://store.steampowered.com/trailer/assets/?trailer=5088120/2025932284/552f27e3ad468041f3d1548b5172d5910b5f42ba/1786373241"
+    },
+    "next_step": "After all assets finish local validation, use the normal file drag/drop UI to select the prepared deliverables; then classify slots/languages, upload, save, review diffs, publish and verify the public media.",
+    "limits": [
+      "This is a technical upload-control limitation, not an authorization rejection.",
+      "Native app APIs are disabled in this session; no alternate OS automation or hidden endpoint uploads were used.",
+      "Do not infer Steam publication from local artwork completion or Git sync."
+    ]
+  },
+  "store_capsules_published": true,
+  "store_media_published_definition": "True only when the complete requested store/library/screenshot/trailer set is published. Eight store capsules are published separately below.",
+  "store_publish_receipt": {
+    "date": "2026-09-09",
+    "verified_at_utc": "2026-09-09T08:37:55Z",
+    "revision_before": 5,
+    "revision_after": 6,
+    "backend_result": "Successfully published!",
+    "backend_cache_result": "This app has already been updated in memcached and in store search.",
+    "backend_displayed_publication_time": "9 月 9 日 上午 1:34 (Steamworks displayed timezone; not local China time)",
+    "post_publish_diff": "This game has not been modified.",
+    "file_count": 8,
+    "languages": [
+      "english",
+      "schinese"
+    ],
+    "uploaded_files": [
+      "small_schinese.png",
+      "small.png",
+      "header.png",
+      "header_schinese.png",
+      "vertical_schinese.png",
+      "vertical.png",
+      "main_schinese.png",
+      "main.png"
+    ],
+    "slot_classification": {
+      "small": "Small Capsule",
+      "header": "Header Capsule (explicit manual selection for both languages)",
+      "vertical": "Vertical Capsule",
+      "main": "Main Capsule"
+    },
+    "new_steam_asset_hashes": {
+      "small": "81b94aa5c351066a95c5966132fba563d54cad88",
+      "header": "df0980e3cc98f86583a5859efd44ae9589b04777",
+      "vertical": "852ddc997080dc4df0eb6b1e1b2998a546cc32d4",
+      "main": "0f53e92c29ae8e7f7f2e4f6e1a6aeb57b71d42f2"
+    },
+    "diff_scope": "Only the four capsule types in English and schinese (including generated 1x/2x variants), asset_mtime and previously empty alt_assets container. No library, screenshot, trailer, copy, pricing or game build changes.",
+    "upload_previews_visually_checked": true,
+    "public_cn_header_visually_checked": true,
+    "verification_method": "Read-only DOM image src/naturalWidth/naturalHeight/complete and rendered browser screenshot. No raw page HTML, auth data or browser session data retained."
+  },
+  "remaining_media": {
+    "library_images": {
+      "count": 6,
+      "status": "awaiting_user_drag_drop"
+    },
+    "screenshots": {
+      "count": 5,
+      "status": "awaiting_user_drag_drop"
+    },
+    "trailer": {
+      "count": 1,
+      "status": "awaiting_user_drag_drop"
+    },
+    "trailer_thumbnail": {
+      "count": 1,
+      "status": "not_uploaded"
+    }
+  }
 }

@@ -1,9 +1,9 @@
 ## 2026-09-09 女性封面与整套宣传媒体
 
-- [发布范围与交接](STEAM_STORE_MEDIA_20260909.md)：用户定稿、公告分享封面实际保存、其他媒体的上传阻塞与待完成步骤。
+- [发布范围与交接](STEAM_STORE_MEDIA_20260909.md)：商店8张封面已发布revision6、公告分享封面已更新；库图、截图、视频及视频配图仍待上传发布，首次阻塞留作历史。
 - `marketing/steam_store_20260909_female/`：七种商店/库图、16:9宣传配图、原生来源、完整生成prompt和尺寸规范脚本。
 - `marketing/steam_store_20260909_female/video/`：Build25200149包的新录实机视频、五张截图、时间线与QA；raw及edit_work不进Git。
-- `qa/steam_store_media_20260909_female/`：独立图片与视频目检、当前公开回读、真实上传失败及22文件复制清单。
+- `qa/steam_store_media_20260909_female/`：独立图片与视频目检、商店revision6及两语header公开回读、首次上传失败历史和22文件复制清单。
 - `D:/AI项目/水浒/Steam新素材-20260909/`：本机五组最终上传成品及“先看这里.md”，可由build_upload_bundle.py在另一台机器重建。
 
 ## 2026-09-09 黄泥冈入场与落担
