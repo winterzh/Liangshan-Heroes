@@ -1,0 +1,199 @@
+extends SceneTree
+## Narrow same-pack public-path regression. No production files are changed.
+## Runs under an editor mounting the exact release EXE, with Steam disabled.
+## Button signals/production handlers are exercised; victory/defeat are controlled
+## calls to Battle._end, not natural campaign or complete-30-wave acceptance.
+## The final successful exit must be confirmed by the external process runner.
+
+var checks: Array[Dictionary] = []
+var stages: Array[String] = []
+var report_path := ""
+var profile_path := ""
+var pack_path := ""
+var pack_sha256 := ""
+var menu_script: Script
+var battle_script: Script
+var flow: Node
+var steam: Node
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+func check(label: String, value: bool) -> bool:
+	checks.append({"name": label, "passed": value})
+	return value
+
+func _idle() -> bool:
+	return is_instance_valid(flow) and not bool(flow.call("is_enabled")) and not bool(flow.call("busy"))
+
+func _safe_steam() -> bool:
+	return is_instance_valid(steam) and not bool(steam.get("available")) and steam.get("native") == null
+
+func _write_result(passed: bool, waiting_for_lifecycle_exit: bool) -> void:
+	var data := {"suite": "same-pack-public-flow", "probe_checks_complete": passed, "passed": passed,
+		"checks": checks, "check_count": checks.size(), "stages": stages,
+		"pid": OS.get_process_id(), "pack": pack_path, "pack_sha256": pack_sha256,
+		"driver_sha256": FileAccess.get_sha256(get_script().resource_path),
+		"actual_user_dir": OS.get_user_data_dir(), "profile": profile_path,
+		"steam_service_available": bool(steam.get("available")) if is_instance_valid(steam) else null,
+		"steam_native_attached": steam.get("native") != null if is_instance_valid(steam) else null,
+		"live_steam_write_testing": false,
+		"scope": "Real packed menu/Battle/HUD handlers and button signals; controlled _end outcomes; editor host, not natural gameplay or real Steam acceptance",
+		"requires_external_exit_confirmation": waiting_for_lifecycle_exit,
+		"expected_exit_code": 0 if passed else 1,
+		"successful_exit_owner": "AppLifecycle.request_quit" if waiting_for_lifecycle_exit else "none"}
+	if not report_path.is_empty():
+		var output := FileAccess.open(report_path, FileAccess.WRITE)
+		if output == null:
+			print("PUBLIC_FLOW_REPORT_WRITE_FAILED ", FileAccess.get_open_error())
+			quit(1)
+			return
+		output.store_string(JSON.stringify(data, "\t"))
+		output.close()
+	print("PUBLIC_FLOW ", JSON.stringify(data))
+
+func _stop() -> void:
+	paused = false
+	_write_result(false, false)
+	for name in ["Sfx", "Music"]:
+		var audio_node := root.get_node_or_null(name)
+		if audio_node != null: audio_node.call("shutdown")
+	quit(1)
+
+func _validate_environment() -> bool:
+	profile_path = OS.get_environment("PUBLIC_FLOW_PROFILE").replace("\\", "/").trim_suffix("/")
+	var requested_report := OS.get_environment("PUBLIC_FLOW_REPORT").replace("\\", "/")
+	if not check("absolute private profile", profile_path.is_absolute_path() and profile_path == profile_path.simplify_path()): return false
+	if not check("report stays inside private profile", requested_report.is_absolute_path() and requested_report == requested_report.simplify_path() and requested_report.begins_with(profile_path + "/")): return false
+	report_path = requested_report
+	for name in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
+		if not check("private environment " + name, OS.get_environment(name).replace("\\", "/").trim_suffix("/") == profile_path.path_join(name.to_lower())): return false
+	if not check("actual user directory is private", OS.get_user_data_dir().replace("\\", "/").begins_with(profile_path.path_join("appdata") + "/")): return false
+	if not check("Steam disabled", OS.get_environment("STEAM_DISABLED") == "1"): return false
+	for name in ["LEVEL", "SCENARIO", "CUSTOM_DEFENSE", "SKIRMISH", "SKIRMISH_AI", "ARENA", "SMOKE_TEST", "SCREENSHOT_DIR", "LSH_CONTINUE_FLOW_QA", "AUTO_MICRO", "AUTOMICRO"]:
+		if not check("no alternate launch " + name, OS.get_environment(name).is_empty()): return false
+	# Godot consumes --main-pack before exposing OS arguments. The outer runner
+	# records its exact child command and independently checks the mounted EXE.
+	pack_path = OS.get_environment("PUBLIC_FLOW_PACK_PATH")
+	if not check("explicit caller-recorded pack path", pack_path.is_absolute_path() and pack_path.ends_with(".exe")): return false
+	pack_sha256 = FileAccess.get_sha256(pack_path)
+	return check("mounted EXE matches caller hash", pack_sha256.length() == 64 and pack_sha256 == OS.get_environment("PUBLIC_FLOW_PACK_SHA256"))
+
+func _wait_scene(expected: Script) -> Node:
+	for _frame in range(120):
+		await process_frame
+		if is_instance_valid(current_scene) and current_scene.get_script() == expected and current_scene.is_node_ready():
+			return current_scene
+	return null
+
+func _find_button(parent: Node, phrase: String) -> Button:
+	var found: Array[Button] = []
+	var pending: Array[Node] = [parent]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		if node is Button and node.is_visible_in_tree() and phrase in node.text:
+			found.append(node)
+		for child in node.get_children(): pending.append(child)
+	if not check("one visible button: " + phrase, found.size() == 1): return null
+	return found[0]
+
+func _new_classic_battle() -> Node:
+	var menu := current_scene
+	if not check("real packed menu before launch", is_instance_valid(menu) and menu.get_script() == menu_script): return null
+	if not check("menu continue entry absent", menu.find_child("ContinueBattle", true, false) == null): return null
+	menu.call("_show_defense")
+	await process_frame
+	var start := _find_button(menu, "30 关")
+	if start == null: return null
+	start.pressed.emit()
+	var battle := await _wait_scene(battle_script)
+	if not check("public classic button launches real Battle", is_instance_valid(battle)): return null
+	var hud: Node = battle.get("hud")
+	if not check("real HUD and ordinary battle identity", is_instance_valid(hud) and hud.get("battle") == battle and battle.get("_continue_receipt") == null and String(battle.get("_gameplay_rng_issue")).is_empty()): return null
+	if not check("pause save entry absent", hud.find_child("SaveAndExit", true, false) == null): return null
+	for _line in range(32):
+		var intro: Control = hud.get("_intro_root")
+		if not intro.visible: break
+		var advance: Button = hud.get("_intro_btn")
+		advance.pressed.emit()
+		await process_frame
+	var constants: Dictionary = battle_script.get_script_constant_map()
+	var phases: Dictionary = constants["Phase"]
+	if int(battle.get("phase")) == int(phases["DEPLOY"]):
+		var launch: Button = hud.get("start_btn")
+		launch.pressed.emit()
+		await process_frame
+	if not check("ordinary battle enters FIGHT through intro/start controls", int(battle.get("phase")) == int(phases["FIGHT"]) and not (hud.get("_intro_root") as Control).visible): return null
+	if not check("ordinary battle leaves ContinueFlow idle and Steam disconnected", _idle() and _safe_steam()): return null
+	return battle
+
+func _test_pause_menu() -> bool:
+	var battle := await _new_classic_battle()
+	if battle == null: return false
+	var hud: Node = battle.get("hud")
+	battle.call("_open_pause")
+	if not check("ordinary pause opens", paused and (hud.get("_pause_root") as Control).visible): return false
+	hud.call("_request_pause_action", "menu")
+	if not check("return-menu confirmation opens without leaving battle", current_scene == battle and String(hud.get("_pause_pending_action")) == "menu" and (hud.get("_pause_confirm") as Control).visible and not (hud.get("_pause_options") as Control).visible): return false
+	(hud.get("_pause_cancel_button") as Button).pressed.emit()
+	await process_frame
+	if not check("cancel keeps same paused battle and clears departure", current_scene == battle and paused and String(hud.get("_pause_pending_action")).is_empty() and not (hud.get("_pause_confirm") as Control).visible and (hud.get("_pause_options") as Control).visible): return false
+	(hud.get("_pause_resume_button") as Button).pressed.emit()
+	await process_frame
+	if not check("resume unpauses existing battle", current_scene == battle and not paused and not (hud.get("_pause_root") as Control).visible and _idle()): return false
+	battle.call("_open_pause")
+	hud.call("_request_pause_action", "menu")
+	(hud.get("_pause_confirm_button") as Button).pressed.emit()
+	var menu := await _wait_scene(menu_script)
+	if not check("confirmed return reaches real menu unpaused", is_instance_valid(menu) and not paused and _idle()): return false
+	stages.append("pause-confirm-cancel-resume-return-menu")
+	return true
+
+func _test_outcome(victory: bool) -> bool:
+	var battle := await _new_classic_battle()
+	if battle == null: return false
+	var hud: Node = battle.get("hud")
+	var marker := "Controlled public-path victory" if victory else "Controlled public-path defeat"
+	battle.call("_end", victory, marker)
+	await process_frame
+	var phases: Dictionary = battle_script.get_script_constant_map()["Phase"]
+	var localize := root.get_node("Localize")
+	var expected_title: String = localize.call("text", "旗开得胜！" if victory else "功败垂成……")
+	if not check("ordinary outcome shows real settlement: " + str(victory), int(battle.get("phase")) == int(phases["END"]) and (hud.get("_end_root") as Control).visible and (hud.get("_end_title") as Label).text == expected_title and marker in (hud.get("_end_sub") as Label).text and _idle() and _safe_steam()): return false
+	var before_sub: String = (hud.get("_end_sub") as Label).text
+	battle.call("_end", not victory, "Repeated opposite outcome must be ignored")
+	await process_frame
+	if not check("repeated outcome preserves first settlement: " + str(victory), (hud.get("_end_title") as Label).text == expected_title and (hud.get("_end_sub") as Label).text == before_sub and battle.get("_continue_receipt") == null and _idle()): return false
+	var leave := _find_button(hud.get("_end_root"), "战役地图")
+	if leave == null: return false
+	leave.pressed.emit()
+	var menu := await _wait_scene(menu_script)
+	if not check("settlement button returns to menu: " + str(victory), is_instance_valid(menu) and not paused and _idle()): return false
+	stages.append("controlled-victory" if victory else "controlled-defeat")
+	return true
+
+func _run() -> void:
+	await process_frame
+	if not _validate_environment(): _stop(); return
+	flow = root.get_node_or_null("ContinueFlow")
+	steam = root.get_node_or_null("SteamService")
+	if not check("ContinueFlow disabled and idle; no Steam session", _idle() and _safe_steam()): _stop(); return
+	menu_script = load("res://scripts/menu.gd")
+	battle_script = load("res://scripts/battle.gd")
+	if not check("packed scene scripts available", menu_script != null and battle_script != null): _stop(); return
+	root.get_node("Localize").call("set_language", "zh_CN", false)
+	if not check("load real packed menu", change_scene_to_file("res://scenes/menu.tscn") == OK): _stop(); return
+	var initial_menu: Node = await _wait_scene(menu_script)
+	if initial_menu == null: check("initial menu ready", false); _stop(); return
+	if not await _test_pause_menu(): _stop(); return
+	if not await _test_outcome(true): _stop(); return
+	if not await _test_outcome(false): _stop(); return
+	var lifecycle := root.get_node("AppLifecycle")
+	if not check("quit coordinator initially idle", not bool(lifecycle.call("quit_started")) and _idle() and not paused): _stop(); return
+	lifecycle.call("request_quit", "public_flow_probe")
+	if not check("AppLifecycle accepts normal quit", bool(lifecycle.call("quit_started")) and lifecycle.call("quit_reason") == "public_flow_probe"): _stop(); return
+	await process_frame
+	if not check("quit remains coordinated after one frame", bool(lifecycle.call("quit_started")) and _idle() and _safe_steam()): _stop(); return
+	stages.append("AppLifecycle-quit-request-accepted")
+	_write_result(true, true)
+	# Do not call quit(0): the real AppLifecycle coroutine owns successful exit.

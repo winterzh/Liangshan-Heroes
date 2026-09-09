@@ -1,0 +1,404 @@
+"""Finalize reviewed release documentation only after a verified public receipt.
+
+This helper does not upload, publish, invoke Godot, or commit/push Git changes.
+Run once after reviewing publication_receipt.json and this source. All receipt,
+copy, archive, server-member and destination checks finish before any writes.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+from urllib.parse import urlparse
+import zipfile
+
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent.parent
+QA = ROOT / "qa/steam_latest_update_20260909"
+MARKETING = ROOT / "marketing/steam_latest_update_20260909"
+SOURCE_HEAD = "1102a9b629142524061a1b1fc005407c8da5fc07"
+RUNTIME_COMMIT = "cf746f1a0864355df7f80cd4f18c6882088f4b7e"
+DELIVERY_SHA = "0f25fc5f814df86e099bc557e10c164ebe8c15e5476b70b9f6f9056ff78a6998"
+COPY_SHA = "08e3043021739186f12e2dc93e4080168b5ab50e5d58e9a9139bf3c439dbecf9"
+ZIP_SHA = "4d35279d7ef92d29dd7150d4d8209e7146b5e98ed4774121e744f7380b9d985b"
+EXE_SHA = "f22a44e96b7a0f4b42f599b1d9177e53312bcb3cbd5a6c48484172b21369dc2d"
+COVER_SHA = "508a9c882c68579ebdcc4832890f83ccd36448269ade8347b027bfdb035a56da"
+COVER_REL = "docs/steam_announcement_20260901/event_cover_800x450_english_v2.png"
+MARKER = "## 2026-09-09 最新源码 Steam 正式更新"
+BRANCH = "codex/sync-20260905-stable"
+
+
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise RuntimeError(message)
+
+
+def sha256(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def json_bytes(value: object) -> bytes:
+    return (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+
+
+def file_sha(path: Path) -> str:
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def git_read(*args: str) -> str:
+    return subprocess.check_output(
+        ["git", "-C", str(ROOT), *args], encoding="utf-8"
+    ).strip()
+
+
+def member_fields(item: dict) -> tuple[str, int, str]:
+    require(isinstance(item, dict), "server member must be an object")
+    name = item.get("path", item.get("name"))
+    size = item.get("bytes", item.get("size"))
+    digest = item.get("sha1")
+    require(isinstance(name, str) and Path(name).name == name,
+            "server member must have a plain file name")
+    require(type(size) is int and size >= 0, "server member size missing/invalid")
+    require(isinstance(digest, str) and re.fullmatch(r"[0-9a-fA-F]{40}", digest),
+            "server member SHA1 missing/invalid")
+    return name, size, digest.lower()
+
+
+def main() -> None:
+    require(HERE.name == "steam_latest_release_20260909", "wrong helper directory")
+    require((ROOT / "project.godot").is_file(), "project root missing")
+    require(git_read("rev-parse", "HEAD") == SOURCE_HEAD, "source HEAD changed")
+    require(git_read("branch", "--show-current") == BRANCH, "unexpected branch")
+
+    receipt_path = HERE / "publication_receipt.json"
+    delivery_path = HERE / "candidate_delivery.json"
+    copy_path = HERE / "copy.json"
+    receipt_data = receipt_path.read_bytes()
+    delivery_data = delivery_path.read_bytes()
+    copy_data = copy_path.read_bytes()
+    require(sha256(delivery_data) == DELIVERY_SHA, "candidate delivery bytes changed")
+    require(sha256(copy_data) == COPY_SHA, "reviewed announcement copy changed")
+    receipt = json.loads(receipt_data)
+    delivery = json.loads(delivery_data)
+    copy = json.loads(copy_data)
+    require(receipt.get("default_active") is True, "default activation unconfirmed")
+    require(receipt.get("server_verified") is True, "server verification unconfirmed")
+    require(receipt.get("source_head") == SOURCE_HEAD, "publication source mismatch")
+    require(receipt.get("runtime_commit") == RUNTIME_COMMIT, "runtime source mismatch")
+    require(delivery.get("source_head") == SOURCE_HEAD, "candidate source mismatch")
+    require(delivery.get("runtime_commit") == RUNTIME_COMMIT, "candidate runtime mismatch")
+    require(delivery.get("verified_against_candidate_receipt") is True,
+            "candidate receipt not verified")
+    require(delivery.get("app_id") == 5088120 and delivery.get("depot_id") == 5088121,
+            "wrong app/depot")
+    for key in ("app_id", "depot_id"):
+        if key in receipt:
+            require(receipt[key] == delivery[key], f"publication {key} mismatch")
+    build = str(receipt.get("build_id", ""))
+    manifest = str(receipt.get("manifest_id", ""))
+    require(bool(re.fullmatch(r"[1-9][0-9]{6,}", build)), "invalid build ID")
+    require(bool(re.fullmatch(r"[1-9][0-9]{10,}", manifest)), "invalid manifest ID")
+    require(build == "25200149" and manifest == "7045932649257457621",
+            "receipt differs from verified release")
+
+    announcement = receipt.get("announcement", {})
+    require(announcement.get("published") is True, "announcement not published")
+    require(announcement.get("public_text_verified") is True,
+            "announcement public text not verified")
+    require(announcement.get("editor_fields_verified") == 16
+            and announcement.get("public_segments_verified") == 32,
+            "announcement verification counts differ")
+    readbacks = announcement.get("public_readbacks", [])
+    require(len(readbacks) == 4
+            and {item.get("language") for item in readbacks}
+            == {"schinese", "tchinese", "english", "japanese"}
+            and all(item.get("segments_matched") == item.get("segments_expected") == 8
+                    for item in readbacks), "public language readbacks differ")
+    require(announcement.get("news_feed_current_title_verified") is True,
+            "news feed title not verified")
+    cover_receipt = announcement.get("cover", {})
+    require(cover_receipt.get("sha256") == COVER_SHA
+            and cover_receipt.get("public_thumbnail_complete") is True
+            and cover_receipt.get("public_thumbnail_natural_width") == 400,
+            "published cover verification differs")
+    require(announcement.get("copy_sha256") == COPY_SHA, "published copy hash mismatch")
+    event = str(announcement.get("event_id", ""))
+    require(bool(re.fullmatch(r"[1-9][0-9]{10,}", event)), "invalid event ID")
+    require(event == "714538122294067212", "receipt differs from verified event")
+    public_url = announcement.get("public_url", "")
+    parsed = urlparse(public_url)
+    require(parsed.scheme == "https" and parsed.netloc == "store.steampowered.com"
+            and parsed.path.rstrip("/") == f"/news/app/5088120/view/{event}"
+            and not parsed.query and not parsed.fragment, "unexpected public URL")
+    published_at = announcement.get("published_at")
+    require(isinstance(published_at, str) and bool(published_at.strip())
+            and "\n" not in published_at, "publication time missing/invalid")
+    require(set(copy) == {"schinese", "tchinese", "english", "japanese"},
+            "copy languages mismatch")
+    field_limits = {"title": 80, "subtitle": 120, "summary": 180, "body_bbcode": 100000}
+    lengths = {}
+    for language, fields in copy.items():
+        require(isinstance(fields, dict) and set(fields) == set(field_limits),
+                f"copy fields mismatch: {language}")
+        lengths[language] = {}
+        for field, limit in field_limits.items():
+            value = fields[field]
+            require(isinstance(value, str) and 0 < len(value) <= limit,
+                    f"copy field length invalid: {language}/{field}")
+            lengths[language][field] = len(value)
+    require(lengths["english"]["summary"] == 163, "English summary changed")
+    cover_path = ROOT / COVER_REL
+    require(file_sha(cover_path) == COVER_SHA, "reused cover bytes changed")
+
+    members = delivery.get("members", [])
+    server_files = receipt.get("server_files", [])
+    require(len(members) == delivery.get("member_count") == 6, "candidate member count")
+    require(isinstance(server_files, list) and len(server_files) == 6, "server member count")
+    expected = {item["path"]: item for item in members}
+    require(len(expected) == 6 and "LiangshanHeroes.exe" in expected, "candidate names")
+    observed = {}
+    for item in server_files:
+        name, size, digest = member_fields(item)
+        require(name not in observed and name in expected, "server duplicate/unknown member")
+        require(size == expected[name]["bytes"] and digest == expected[name]["sha1"],
+                f"server member mismatch: {name}")
+        if "sha256" in item:
+            require(item["sha256"].lower() == expected[name]["sha256"],
+                    f"server SHA256 mismatch: {name}")
+        observed[name] = True
+    require(set(observed) == set(expected), "server inventory differs")
+    require(expected["LiangshanHeroes.exe"]["bytes"] == 305829856
+            and expected["LiangshanHeroes.exe"]["sha256"] == EXE_SHA, "EXE identity changed")
+    archive = delivery["archive"]
+    require(archive["bytes"] == 238339231 and archive["sha256"] == ZIP_SHA,
+            "ZIP identity changed")
+    archive_path = (ROOT / archive["path"]).resolve()
+    require(archive_path.is_relative_to((ROOT / ".godot/steam_candidates").resolve()),
+            "archive path outside candidate directory")
+    require(archive_path.stat().st_size == archive["bytes"] and file_sha(archive_path) == ZIP_SHA,
+            "candidate ZIP bytes changed")
+    with zipfile.ZipFile(archive_path) as bundle:
+        require(len(bundle.infolist()) == 6 and set(bundle.namelist()) == set(expected),
+                "ZIP member inventory differs")
+        for name, item in expected.items():
+            data = bundle.read(name)
+            require(len(data) == item["bytes"] and sha256(data) == item["sha256"]
+                    and hashlib.sha1(data).hexdigest() == item["sha1"],
+                    f"ZIP member bytes changed: {name}")
+
+    require(QA.is_dir() and (QA / "README.md").is_file(), "QA archive not ready")
+    require((QA / "candidate_delivery.json").read_bytes() == delivery_data,
+            "QA candidate manifest differs")
+    require(not MARKETING.exists(), "marketing destination already exists")
+    require(not (QA / "publication_receipt.json").exists(), "release receipt already archived")
+    require(not (ROOT / "docs/STEAM_LATEST_UPDATE_20260909.md").exists(),
+            "release document already exists")
+    for file in QA.rglob("*"):
+        require(not file.is_symlink() and not file.is_junction(), "QA contains linked path")
+
+    state = (f"Steam Windows `default` 正式分支已更新为 **Build {build}**，"
+             f"Depot `5088121`，Manifest `{manifest}`。服务端六文件名称、字节数与 SHA1 "
+             "已逐项核对本地候选；canonical 正式分支与部署历史均回读确认，"
+             "激活时间为北京时间2026-09-09 11:16。")
+    source = (f"本次发布源码 HEAD 为 `{SOURCE_HEAD}`，功能源码为 `{RUNTIME_COMMIT}`。"
+              "构建后新增的发布收据与交接文档不属于游戏运行内容。")
+    scope = ("本次包含任务定位、人物选择提示及祝家庄选择按钮的语言处理，"
+             "以及本局设置、任务界面、景物与特效恢复的内部准备。"
+             "战斗中途保存与继续仍未开放；经典30波和八关的统一续玩验收继续推进。")
+    native = ("新增原生 observer DLL 尚未晋级，发行包保留既有 vendor DLL；"
+              "facade 对不可用能力安全拒绝。真实 Steam 持久写入确认仍为 "
+              "`WRITE_CONFIRMATION_UNPROVEN`，不将读取成功或普通保存通知视为可归属写确认。")
+    bounds = ("本批不计完整八关通关、九玩法续玩验收、1800秒长跑、性能达标、两台 Windows、"
+              "真实双账号或真人验收，也未验收 Steam 客户端实际下载和安装。")
+    announcement_line = (f"[四语公开公告]({public_url})已发布，活动 `{event}`，"
+                         f"收据记录发布时间 `{published_at}`（北京时间11:17）；"
+                         "四语各8段、共32段公开可见文本逐项一致，新闻列表已出现新标题。")
+    upload_history = ("网页标准 ZIP 上传两次返回 `Error 9: Did not receive entire file`，"
+                      "未取得有效完整构建，随后使用 SteamCMD 已有缓存登录。"
+                      "首次命令因 Unicode 路径在 PTY 中乱码而中断，退出1且尚未开始构建；"
+                      "改用已核实的既有 ASCII junction 配置，Preview 与正式上传均退出0。"
+                      "配置精确映射六个候选文件，没有扩大上传范围。"
+                      "构建差异列表的 EXE 约8.46MB，Steam 部署预览估算玩家增量约6.3MB；"
+                      "这两个平台值不等于已测得的客户端下载量。"
+                      "脱敏 SteamCMD 日志单独保留，原始失败没有改写为通过。")
+    cover = ("活动封面复用既有800×450无文字英文图，四语共用该图，"
+             f"源图 SHA256 `{COVER_SHA}`。公开媒体返回的400×225变体 "
+             "`2105fa26234a9377723de86a7519262f3f5949cb_400x225.png` 已确认加载完成；"
+             "正文未额外插图。此结果不表示所有 Steam 展示位置都使用该封面。"
+             "简中与日语公开页当前视口已目检，未扩大为四语整页视觉验收。")
+    validation = ("原生整合191项、同包1112项、源码与同包身份探针各10项通过；"
+                  "同一实际 EXE 的11例串行短测通过。编辑器挂载同一发行包的公开菜单/战斗流程64项通过，"
+                  "其胜负由受控触发，不代表自然通关。六张原生界面 PNG 已逐张目检，"
+                  "视觉范围仅限这些截图。首次公共流程探针因 Godot 消费 `--main-pack` 参数导致驱动读不到包路径失败，"
+                  "修正驱动后通过；失败证据保留且不计入通过数。")
+    history = "下方旧批次的版本号与“未发布”等描述保留其当时语境，当前发布状态以本节和正式发布收据为准。"
+
+    new_files: dict[Path, bytes] = {}
+    old_files: dict[Path, bytes] = {}
+
+    def add(path: Path, text: str) -> None:
+        require(path.resolve().is_relative_to(ROOT), "document destination outside project")
+        require(path not in new_files, "duplicate output path")
+        new_files[path] = text.encode("utf-8")
+
+    def prepend(relative: str, body: str) -> None:
+        path = ROOT / relative
+        original = path.read_bytes()
+        require(MARKER.encode("utf-8") not in original, f"already finalized: {relative}")
+        old_files[path] = original
+        new_files[path] = (MARKER + "\n\n" + body.strip() + "\n\n").encode("utf-8") + original
+
+    prepend("README.md", f"{state}\n\n{scope}\n\n{announcement_line} "
+            "[发布范围与验证](docs/STEAM_LATEST_UPDATE_20260909.md)。普通源码启动仍为 `Play.cmd`。"
+            f"{history}")
+    prepend("docs/WORKLOG.md", f"{state}\n\n{source}\n\n{scope}\n\n{validation}\n\n"
+            f"{upload_history}\n\n{native}\n\n{announcement_line}\n\n{cover}\n\n{bounds}\n\n"
+            "[正式发布说明](STEAM_LATEST_UPDATE_20260909.md) · "
+            f"[本批证据](../qa/steam_latest_update_20260909/README.md)。{history}")
+    prepend("docs/SOURCE_SETUP.md", f"{state}\n\n{source}\n\n"
+            "普通源码仍运行 `Play.cmd`。玩家启动不带续玩 QA 开关，保存/继续入口仍关闭；"
+            "开发验证继续使用各自受控驱动和隔离 profile。"
+            f"{native}\n\n{announcement_line} "
+            "[候选、验证与发布收据](STEAM_LATEST_UPDATE_20260909.md)。"
+            f"{bounds}\n\n{history}")
+    prepend("docs/DIRECTORY_INDEX.md", "- [本批发布说明](STEAM_LATEST_UPDATE_20260909.md)："
+            f"Build {build}、Manifest {manifest}、来源与开放范围。\n"
+            "- [本批 QA](../qa/steam_latest_update_20260909/README.md)：候选、短测、公开流程、"
+            "服务端六文件与正式发布收据；总清单覆盖归档证据。\n"
+            "- [四语公告文案](../marketing/steam_latest_update_20260909/README.md)：已发布的"
+            f"16个字段及活动 `{event}`。\n\n{history}")
+    prepend("docs/CONTINUE_DELIVERY_20260908.md", f"{state}\n\n{source}\n\n{scope}\n\n"
+            f"{native}\n\n{validation}\n\n{bounds}\n\n"
+            "下一步仍为祝家庄完整 Core/Session 安装、跨帧状态与回滚、持久章节结算、其余七关整合，"
+            "并取得可证明对应发送意图的真实 Steam 写确认；九种玩法全部验收后统一开放入口。"
+            f"{announcement_line} [本批正式发布记录](STEAM_LATEST_UPDATE_20260909.md)。\n\n{history}")
+
+    table = "\n".join(
+        f"| `{item['path']}` | {item['bytes']:,} | `{item['sha1']}` |"
+        for item in members
+    )
+    add(ROOT / "docs/STEAM_LATEST_UPDATE_20260909.md",
+        "# 2026-09-09 最新源码 Steam 正式更新\n\n"
+        f"{state}\n\n{source}\n\n{announcement_line}\n\n"
+        f"## 本次内容与开放范围\n\n{scope}\n\n{native}\n\n"
+        f"## 候选与验证\n\n{validation}\n\n{bounds}\n\n"
+        f"候选 `{delivery['candidate']}`；ZIP 为 238,339,231 字节，SHA256 `{ZIP_SHA}`。"
+        f"EXE 为 305,829,856 字节，SHA256 `{EXE_SHA}`。"
+        "ZIP 和安装包留在本机候选目录，不纳入 Git 文档同步。\n\n"
+        f"{upload_history}\n\n"
+        "[SteamCMD 脱敏证据](../qa/steam_latest_update_20260909/steamcmd/)。\n\n"
+        "| 服务端文件 | 字节数 | SHA1 |\n| --- | ---: | --- |\n"
+        f"{table}\n\n"
+        "## 公告与交接\n\n"
+        f"四语公告采用已校对的16个字段，文案 SHA256 `{COPY_SHA}`；"
+        "英语摘要163字符。每语公开页的标题、副标题、3个小标题和3段正文共8片段逐项一致，四语合计32片段；"
+        "摘要属于后台已校对字段，不混计为正文页第9段。\n\n"
+        f"{cover}\n\n"
+        "[复用封面源图](steam_announcement_20260901/event_cover_800x450_english_v2.png)。\n\n"
+        "[文案与维护信息](../marketing/steam_latest_update_20260909/README.md) · "
+        "[发布收据](../qa/steam_latest_update_20260909/publication_receipt.json) · "
+        "[QA范围与原始证据](../qa/steam_latest_update_20260909/README.md) · "
+        "[续玩后续计划](CONTINUE_DELIVERY_20260908.md)。\n\n"
+        "历史收据保持原样；候选 delivery 中上传/激活字段表示生成时的本地状态，"
+        "当前状态以独立 publication_receipt.json 为准。后续维护使用本构建和既有公告活动ID，"
+        "避免重复上传或重复发帖。GitHub 同步由白名单提交、推送和远端回读另行确认，"
+        "本文不预写尚未产生的 Git 提交。\n")
+    add(MARKETING / "README.md", "# 2026-09-09 Steam 更新公告\n\n"
+        f"{announcement_line}\n\n"
+        "[copy.json](copy.json) 保留已发布的简中、繁中、英语、日语标题、副标题、摘要和 BBCode 正文，"
+        f"共16字段；原字节 SHA256 `{COPY_SHA}`。英语摘要163字符。\n\n"
+        f"对应 Build `{build}` / Manifest `{manifest}`，来源 `{SOURCE_HEAD}`。"
+        "公告明确中途保存与继续尚未开放。公开32段为四语各8段，"
+        "即标题、副标题、3个小标题和3段正文；摘要不混计为正文页可见段落。\n\n"
+        f"{cover}\n\n"
+        "[复用封面源图](../../docs/steam_announcement_20260901/event_cover_800x450_english_v2.png)。\n\n"
+        "维护时继续使用当前活动ID，不新建重复公告。"
+        "[正式发布说明](../../docs/STEAM_LATEST_UPDATE_20260909.md) · "
+        "[发布收据](../../qa/steam_latest_update_20260909/publication_receipt.json)。\n")
+    new_files[MARKETING / "copy.json"] = copy_data
+    new_files[QA / "publication_receipt.json"] = receipt_data
+    old_qa = (QA / "README.md").read_bytes()
+    old_files[QA / "README.md"] = old_qa
+    require(b"## Finalized public release" not in old_qa, "QA already finalized")
+    new_files[QA / "README.md"] = (
+        "# 2026-09-09 Steam 最新源码发布 QA\n\n"
+        "## Finalized public release\n\n"
+        f"{state}\n\n{source}\n\n{announcement_line}\n\n"
+        "[发布收据](publication_receipt.json) 与候选六成员逐项一致；"
+        "[总证据清单](evidence_manifest.json) 覆盖本目录文件（清单自身除外）。"
+        "原候选 delivery 保留生成时的平台字段，不覆盖历史事实。\n\n"
+        "本次根任务已逐张查看原生 QA 六张 PNG；下面“本归档未追加逐张视觉验收”仅指复制归档动作，"
+        "本节补记范围明确的目检。公开文本回读不等于四语所有页面的视觉验收。\n\n"
+        f"{upload_history}\n\n{cover}\n\n"
+        f"{bounds}\n\n"
+        "以下为发布前归档说明，保留当时状态；其中“待补充”已由上方正式收据补齐。\n\n"
+    ).encode("utf-8") + old_qa
+    new_files[QA / "helpers/finalize_docs.py.txt"] = Path(__file__).read_bytes()
+
+    attr_path = ROOT / ".gitattributes"
+    attrs = attr_path.read_bytes()
+    rule = b"qa/steam_latest_update_20260909/** -text -whitespace"
+    require(rule not in attrs.splitlines(), "QA attributes already added")
+    old_files[attr_path] = attrs
+    new_files[attr_path] = attrs.rstrip(b"\r\n") + b"\n" + rule + b"\n"
+
+    input_hashes = {
+        "source_head": SOURCE_HEAD,
+        "runtime_commit": RUNTIME_COMMIT,
+        "inputs": [
+            {"path": "publication_receipt.json", "bytes": len(receipt_data),
+             "sha256": sha256(receipt_data)},
+            {"path": "candidate_delivery.json", "bytes": len(delivery_data),
+             "sha256": DELIVERY_SHA},
+            {"path": "copy.json", "bytes": len(copy_data), "sha256": COPY_SHA},
+            {"path": COVER_REL, "bytes": cover_path.stat().st_size, "sha256": COVER_SHA},
+        ],
+        "copy_field_lengths": lengths,
+        "candidate_zip_and_all_six_members_reverified": True,
+        "server_six_members_match": True,
+        "preexisting_document_hashes": [
+            {"path": path.relative_to(ROOT).as_posix(), "bytes": len(data), "sha256": sha256(data)}
+            for path, data in sorted(old_files.items())
+        ],
+        "helper_sha256": file_sha(Path(__file__)),
+    }
+    new_files[QA / "finalization_input_hashes.json"] = json_bytes(input_hashes)
+
+    # Recheck preimages immediately before applying the full reviewed output set.
+    for path, original in old_files.items():
+        require(path.read_bytes() == original, f"document changed during preparation: {path}")
+    for path in new_files:
+        if path not in old_files:
+            require(not path.exists(), f"new destination appeared: {path}")
+    for path, data in new_files.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+        require(path.read_bytes() == data, f"document write mismatch: {path}")
+
+    inventory = []
+    for path in sorted(QA.rglob("*")):
+        require(not path.is_symlink() and not path.is_junction(), "QA contains linked path")
+        if path.is_file() and path.name != "evidence_manifest.json":
+            inventory.append({"path": path.relative_to(QA).as_posix(),
+                              "bytes": path.stat().st_size, "sha256": file_sha(path)})
+    manifest_data = {"source_head": SOURCE_HEAD, "build_id": build,
+                     "file_count": len(inventory), "files": inventory}
+    manifest_path = QA / "evidence_manifest.json"
+    manifest_path.write_bytes(json_bytes(manifest_data))
+    require(json.loads(manifest_path.read_bytes()) == manifest_data, "manifest write mismatch")
+    for item in inventory:
+        path = QA / item["path"]
+        require(path.stat().st_size == item["bytes"] and file_sha(path) == item["sha256"],
+                f"final evidence changed: {item['path']}")
+    print(json.dumps({"complete": True, "build_id": build, "manifest_id": manifest,
+                      "event_id": event, "qa_file_count": len(inventory),
+                      "written_paths": [path.relative_to(ROOT).as_posix() for path in new_files]
+                      + [manifest_path.relative_to(ROOT).as_posix()]}, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

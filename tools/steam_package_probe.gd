@@ -77,6 +77,30 @@ func _check_reader() -> void:
 	fixture.invalid_counter = true
 	check("packed invalid counter rejects whole snapshot", reader.current_snapshot().get("code") == "BAD_STAT")
 
+func _check_unreleased_entries() -> void:
+	var flow: Node = root.get_node_or_null("ContinueFlow")
+	check("packed continue coordinator autoload", flow != null)
+	if flow != null:
+		check("packed public continue remains disabled and idle", not flow.is_enabled() and not flow.busy())
+		var parent := VBoxContainer.new()
+		flow.add_continue_entry(parent, null)
+		flow.add_save_entry(parent, null)
+		check("packed normal menus expose no save or continue buttons", parent.get_child_count() == 0)
+		parent.free()
+		var continued: Dictionary = flow.request_continue(null)
+		var saved: Dictionary = flow.request_save_exit(null)
+		check("packed direct continue request remains refused", continued.get("ok") == false and continued.get("code") == "CONTINUE_NOT_RELEASED")
+		check("packed direct save request remains refused", saved.get("ok") == false and saved.get("code") == "CONTINUE_NOT_RELEASED")
+		check("packed refused requests leave coordinator idle", not flow.busy())
+	var observer_script: GDScript = load("res://scripts/steam_stats_observer.gd")
+	check("packed optional observer facade", observer_script != null)
+	check("unreleased native observer is not shipped", not ClassDB.class_exists("SteamStatsObserver"))
+	if observer_script != null:
+		var observer: RefCounted = observer_script.new()
+		var attached: Dictionary = observer.attach("76561198000000001", "76561198000000002")
+		check("packed optional observer fails closed with released dependency", attached.get("ok") == false and attached.get("code") == "OBSERVER_UNSUPPORTED")
+		check("packed unsupported observer cannot request account data", observer.request().get("code") == "OBSERVER_CLOSED")
+
 func _check_localization() -> void:
 	var catalog_path := "res://assets/localization/catalog.json"
 	var expected_hash := OS.get_environment("LSH_QA_CATALOG_SHA")
@@ -148,6 +172,7 @@ func _run() -> void:
 	check("Steam QA initialization disabled", not service.available and service.native == null)
 	_check_reader()
 	_check_scripts()
+	_check_unreleased_entries()
 	_list("res://")
 	var forbidden := false
 	for path in files:
