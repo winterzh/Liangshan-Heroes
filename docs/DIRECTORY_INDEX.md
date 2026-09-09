@@ -1,3 +1,10 @@
+## 2026-09-09 黄泥冈入场与落担
+
+- [改动说明](HUANGNIGANG_ARRIVAL_20260909.md)：七星歇脚、有限押队入场、盘问、白胜现场落担及尚未完成的完整酒计。
+- [QA记录](../qa/huangnigang_arrival_20260909/README.md)：三批原始证据、失败策略、最终八张阶段图及源码/输出校验。
+- `tools/huangnigang_arrival_test.gd`：实际入场观测及单列的酒摊、死亡、重打、基类边界夹具。
+- `qa/huangnigang_arrival_20260909/verify_evidence.py`：只读核对历史证据、当前输入与24条新增三语译文。
+
 ## 2026-09-09 战役设计研究
 
 - [战役重新设计研究](CAMPAIGN_REDESIGN_RESEARCH_20260909.md)：原著因果、七作玩法/评论对照、黄泥冈与祝家庄最小样板及试玩标准。

@@ -1,4 +1,4 @@
-"""Serial, isolated checks for the September 9 gate and siege feedback.
+"""Serial, isolated checks for campaign feedback and Huangnigang arrivals.
 
 Without --run, only prints the selected checks. Each run freezes production
 inputs, imports them in a private D-drive project, disables Steam and retains
@@ -32,6 +32,8 @@ CASES = {
     "daming_assault": ("daming_rts_test.gd", {"DAMING_TEST": "assault"}, False),
     "daming_signal": ("daming_rts_test.gd", {"DAMING_TEST": "signal"}, False),
     "kuaihuolin": ("kuaihuolin_short_test.gd", {"KH_CASE": "all"}, False),
+    "arrival": ("huangnigang_arrival_test.gd", {"HNA_VISUAL": "1"}, True),
+    "huangnigang": ("huangnigang_short_test.gd", {"HNS_CASE": "all"}, False),
 }
 
 
@@ -44,6 +46,7 @@ def main():
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--cases", nargs="+", choices=CASES, default=list(CASES))
     parser.add_argument("--godot")
+    parser.add_argument("--evidence-group", choices=["campaign_feedback_20260909", "huangnigang_arrival_20260909"], default="campaign_feedback_20260909")
     parser.add_argument("--work-root", type=Path, default=Path("D:/CodexTemp/campaign_feedback"))
     args = parser.parse_args()
     engine = resolve_godot(args.godot)
@@ -51,7 +54,7 @@ def main():
     names = sorted(set(sources()) | {
         "tools/" + CASES[case][0] for case in args.cases
     } | {"tools/zhujiazhuang_rts_test.gd", "tools/zhujiazhuang_rts_feedback_test.gd", "tools/run_campaign_feedback_qa.py", "tools/run_steam_integration_qa.py",
-         "tools/run_campaign_level_state_qa.py"})
+         "tools/run_campaign_level_state_qa.py"} | ({"tools/huangnigang_short_test.gd"} if "arrival" in args.cases else set()))
     if not args.run:
         print(json.dumps({"cases": args.cases, "files": len(names), "lock_busy": LOCK.exists()}))
         return 0
@@ -59,7 +62,7 @@ def main():
         raise RuntimeError("Godot/game engine slot is occupied")
     tag = time.strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
     run = work_root / tag
-    evidence = ROOT / "qa/campaign_feedback_20260909" / tag
+    evidence = ROOT / "qa" / args.evidence_group / tag
     project = run / "project"
     receipt = {"complete": False, "source_head": subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
@@ -86,7 +89,7 @@ def main():
         profile = create_private_profile(run, work_root / "profiles")
         env = os.environ.copy()
         for key in list(env):
-            if key.endswith(("_TEST", "_QA", "_AUDIT")) or key.startswith(("LSH_", "RTS_", "KH_", "DAMING_", "MENGZHOU_", "SIEGE_")) or key in ["LEVEL", "SCENARIO", "CUSTOM_DEFENSE", "SKIRMISH", "SKIRMISH_AI", "ARENA", "AUTO_MICRO", "AUTOMICRO"]:
+            if key.endswith(("_TEST", "_QA", "_AUDIT")) or key.startswith(("LSH_", "RTS_", "KH_", "HNS_", "HNA_", "DAMING_", "MENGZHOU_", "SIEGE_")) or key in ["LEVEL", "SCENARIO", "CUSTOM_DEFENSE", "SKIRMISH", "SKIRMISH_AI", "ARENA", "AUTO_MICRO", "AUTOMICRO"]:
                 env.pop(key)
         for key in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
             target = profile / key.lower()
@@ -124,7 +127,7 @@ def main():
         receipt["complete"] &= receipt["source_unchanged"]
     finally:
         if evidence.exists():
-            for folder in [project / "qa", project / ".godot/kuaihuolin_short", project / ".godot/campaign_siege_balance", project / ".godot/mengzhou_gate_alignment", project / ".godot/campaign_fortification_ui"]:
+            for folder in [project / "qa", project / ".godot/kuaihuolin_short", project / ".godot/huangnigang_short", project / ".godot/huangnigang_arrival", project / ".godot/campaign_siege_balance", project / ".godot/mengzhou_gate_alignment", project / ".godot/campaign_fortification_ui"]:
                 if folder.exists():
                     for source in folder.rglob("*"):
                         if source.is_file() and source.suffix in [".json", ".png"]:

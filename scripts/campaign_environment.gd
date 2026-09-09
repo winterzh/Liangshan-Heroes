@@ -215,7 +215,6 @@ static func decorate(map: GameMap,id: String) -> void:
 		# Missing art draws nothing; it is never replaced by a generic weapon icon.
 		result.append(scoped_object(Vector2i(20,17),94.0,"huangnigang_seven_pudao","",0.82,false,true))
 		result.append(scoped_object(Vector2i(34,22),86.0,"huangnigang_dry_verge","",0.82,false,false))
-		result.append(["market_stall",Vector2i(22,21),62.0,"wine"])
 	if id=="level2": result.append(["zhu_gate",Vector2i(30,4),128.0])
 	if id=="level7":
 		# 东门外的市井有酒肆、客店、赌坊和兑坊；名称由摊面招牌承担，不改酒望交互。

@@ -14,7 +14,9 @@ func until(predicate: Callable, seconds: float) -> bool:
 func action(b,u,key: String,seconds:=35.0) -> bool:
 	if not alive(u) or not b.mission.actions.has(key): return false
 	var event:="action:%s:%s"%[b.mission.stage_id,key]
-	if key=="place_dates": event="place_dates" # The convoy can arrive during preparation.
+	# Carts now exist at entry. A fresh optional care order must really complete;
+	# the already-recorded merchant setup event is not evidence of this order.
+	if key=="place_dates": event="dates_checked" if b.mission.has_event("place_dates") else "place_dates"
 	_action(b,u,key)
 	var ok:=await until(func(): return b.mission.has_event(event) or b.phase==b.Phase.END,seconds)
 	if not b.mission.has_event(event): print("[hns-action] timeout ",key," stage=",b.mission.stage_id," actor=",u.position," exposure=",b.level.exposure," controls=",b.mission.actions.keys())
@@ -35,7 +37,8 @@ func _live(name: String) -> void:
 	var l=b.level
 	var start_orders:=orders
 	var combat: Dictionary={}
-	check(l.st==l.MARCH and l.convoy.size()==15 and not b._smoke and not b.economy,"convoy actually approaches while player prepares")
+	check(l.st==l.MARCH and l.convoy.size()>0 and l.convoy.size()<15 and not b._smoke and not b.economy,"convoy starts entering in sequence while merchants already rest")
+	check(l.jujube_carts.size()==7 and l.actors.size()==7 and b.mission.has_event("place_dates") and b.find_unit("bai_sheng")==null,"seven merchants and original carts are present before Bai appears")
 	var chao=b.find_unit("chao_gai")
 	var before: Vector2=chao.position
 	var serial: int=chao._order_serial
@@ -44,8 +47,9 @@ func _live(name: String) -> void:
 	check(select_button.size()==1 and b.selection==[chao] and before==chao.position and serial==chao._order_serial,"selection shortcut selects without issuing movement")
 	await shot(b,name+"_start",l.TOP)
 	if name=="wine":
-		check(await action(b,chao,"place_dates"),"Chao places the actual seven carts during approach")
-		check(await until(func(): return l.st==l.INQUIRY,30),"convoy arrives at real inquiry")
+		check(await action(b,chao,"place_dates"),"Chao completes the optional cart care command without creating new carts")
+		check(await until(func(): return l.st==l.INQUIRY,60) and l.convoy.size()==15 and b.mission.has_event("convoy_rested"),"all fifteen convoy members finish real arrival before inquiry")
+		check(await until(func(): return b.mission.has_event("yang_inquired"),12),"Yang actually approaches the merchants before they answer")
 		check(await action(b,b.find_unit("liu_tang"),"answer_yang"),"Liu answers Yang at the actual inquiry point")
 		check(await action(b,b.find_unit("bai_sheng"),"bring_wine"),"Bai carries wine to the actual sale area")
 		if l.st!=l.WINE:
@@ -59,24 +63,36 @@ func _live(name: String) -> void:
 		check(await until(func(): return l.drug_done or l.force_started,8) and l.drug_done,"three real participants complete one wine handoff")
 		check(b.kills==0 and l.convoy.all(func(u): return u.hp>0 and u.story_outcome=="unconscious"),"all fifteen convoy members survive unconscious")
 	else:
-		check(await until(func(): return l.st==l.INQUIRY,30),"force player waits for the convoy to reach the hill")
+		# The first 20260909_143823_8b2868e3 driver attacked from the seven
+		# scattered cart positions after all guards had gathered and lost. Keep
+		# that evidence; this is a different, explicitly coordinated live plan.
+		var rally:=Vector2i(27,17)
+		var seven: Array=l.actors.duplicate()
+		_click(b,seven,rally)
+		check(await until(func(): return seven.all(func(u): return alive(u) and u.position.distance_to(b.map.cell_to_world(rally))<=110),18) and not l.force_started,"force route gathers all seven through actual movement before opening the ambush")
+		combat["strategy"]="gather_seven_then_attack_entering_column"
+		combat["gather_seconds"]=b.mission.total_game_seconds
+		combat["guards_entered_at_attack"]=l.convoy.size()
+		combat["previous_failed_strategy"]="scattered_merchants_attack_complete_resting_convoy"
+		combat["previous_failure_log"]="qa/huangnigang_arrival_20260909/20260909_143823_8b2868e3/huangnigang.log"
 		b.center_camera_cell(l.TOP)
-		b.select_members(l.actors.filter(func(u): return alive(u)),false)
+		b.select_members(seven,false)
 		b._issue_order(b.to_screen(l.yang.position),false); orders+=1
 		check(await until(func(): return l.force_started,35),"actual player attack starts the force route")
 		if not l.force_started:
 			cases.append({"route":name,"failed_stage":l.st}); await _dispose(b); return
 		var t:=0.0
-		while b.phase==b.Phase.FIGHT and l.convoy.any(func(u): return alive(u)) and t<100:
+		while b.phase==b.Phase.FIGHT and (l.convoy.size()<15 or l.convoy.any(func(u): return alive(u))) and t<100:
 			var guards: Array=l.convoy.filter(func(u): return alive(u))
 			var fighters: Array=l.actors.filter(func(u): return alive(u))
 			if not guards.is_empty() and not fighters.is_empty():
 				b.select_members(fighters,false)
 				b._issue_order(b.to_screen(guards[0].position),false); orders+=1
 			await _wait(2); t+=2
-		check(l.convoy.all(func(u): return u.hp>0 and u.story_outcome=="subdued") and b.phase==b.Phase.FIGHT,"real force combat subdues the convoy without killing Yang")
+		check(l.convoy.size()==15 and l.convoy.all(func(u): return u.hp>0 and u.story_outcome=="subdued") and b.phase==b.Phase.FIGHT,"real force combat subdues all fifteen convoy members without killing Yang")
 		print("[hns-combat] phase=",b.phase," actors=",l.actors.map(func(u): return [u.key,u.hp,b.map.world_to_cell(u.position)] if is_instance_valid(u) else ["fallen"])," guards=",l.convoy.map(func(u): return [u.key,u.hp,u.story_outcome]))
-		combat={"actors":l.actors.map(func(u): return {"key":u.key,"hp":u.hp,"max_hp":u.max_hp} if is_instance_valid(u) else {"fallen":true}),"guards":l.convoy.map(func(u): return {"key":u.key,"hp":u.hp,"outcome":u.story_outcome})}
+		combat["actors"]=l.actors.map(func(u): return {"key":u.key,"hp":u.hp,"max_hp":u.max_hp} if is_instance_valid(u) else {"fallen":true})
+		combat["guards"]=l.convoy.map(func(u): return {"key":u.key,"hp":u.hp,"outcome":u.story_outcome})
 		await shot(b,"force_battle",l.TOP)
 	if b.phase==b.Phase.END:
 		cases.append({"route":name,"failed_phase":true}); await _dispose(b); return
@@ -107,11 +123,32 @@ func _live(name: String) -> void:
 	cases.append({"route":name,"orders":orders-start_orders,"seconds":b.mission.total_game_seconds,"result":result,"events":b.mission.events.keys(),"alive":l.actors.filter(func(u): return alive(u)).size(),"combat":combat})
 	await _dispose(b)
 
+func _complete_convoy_fixture(b) -> void:
+	# Explicit frozen boundary fixture only. This bypasses entry timing and is
+	# never used by either live completion route or the arrival observation test.
+	var l=b.level
+	while l.convoy.size()<15:
+		var before: int=l.convoy.size()
+		l._spawn_next_convoy_member(b)
+		if l.convoy.size()==before:
+			check(false,"boundary fixture can create the remaining finite convoy")
+			break
+	for u in l.convoy: u.set_physics_process(false)
+	check(l.convoy.size()==15,"boundary fixture explicitly contains all fifteen original convoy roles")
+
 func _wine_fixture():
 	var b=await _start("",0)
 	b.set_process(false); b.set_physics_process(false)
 	for u in b.units: u.set_physics_process(false)
 	var l=b.level
+	_complete_convoy_fixture(b)
+	# Explicitly inject the completed arrival layout, not the entry gate layout.
+	# Missing-partner tests use the far gate as safe absence; leaving loads there
+	# would instead exercise the unrelated suspicious-cargo-approach fallback.
+	for i in range(l.convoy.size()):
+		l.convoy[i].position=b.map.cell_to_world(l._convoy_rest_cell(i))
+	for i in range(l.bundles.size()):
+		l.bundles[i].position=b.map.cell_to_world(l.TOP+Vector2i(i,0))
 	l._place_jujube_carts(b)
 	b.mission.mark("place_dates","explicit boundary fixture")
 	b.mission.mark("merchant_identity_confirmed","explicit boundary fixture")
@@ -139,14 +176,18 @@ func _boundaries() -> void:
 	b.set_process(false); b.set_physics_process(false)
 	for u in b.units: u.set_physics_process(false)
 	var l=b.level
+	_complete_convoy_fixture(b)
 	b.find_unit("chao_gai").position=b.map.cell_to_world(l.DATES)
-	l.yang.position=b.map.cell_to_world(l.TOP)
+	for i in range(l.convoy.size()):
+		l.convoy[i].position=b.map.cell_to_world(l._convoy_rest_cell(i))
 	for i in range(3): l.bundles[i].position=b.map.cell_to_world(l.TOP+Vector2i(i,0))
+	l.process(b,0) # Explicitly injected arrival starts the short rest beat.
+	l.process(b,1.5)
 	_action(b,b.find_unit("chao_gai"),"place_dates"); b.mission.tick(0.4)
 	var generation: int=b.mission._generation
-	l.process(b,0)
+	l.process(b,0.6)
 	b.mission.tick(0.7)
-	check(l.st==l.INQUIRY and b.mission._generation==generation and b.mission.has_event("place_dates") and l.jujube_carts.size()==7,"convoy arrival preserves an in-progress player preparation order")
+	check(l.st==l.INQUIRY and b.mission._generation==generation and b.mission.has_event("place_dates") and l.jujube_carts.size()==7 and b.mission.actions.place_dates.done,"frozen arrival boundary preserves the in-progress optional care order and original carts")
 	await _dispose(b)
 	b=await _wine_fixture(); l=b.level
 	var liu=b.find_unit("liu_tang")

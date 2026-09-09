@@ -1,3 +1,9 @@
+## 2026-09-09 黄泥冈入场与落担修复
+
+普通启动仍用 `Play.cmd`，菜单第二幕「智取生辰纲」使用新入场顺序：七星先在枣车旁，押队从东路陆续上冈并歇脚，盘问后白胜才挑酒走来。选白胜、右键落担旗标完成现场交互后才摆酒具。早期强夺仍可自由发起。
+
+复验命令：`py -3.14 -X utf8 -B tools/run_campaign_feedback_qa.py --run --cases arrival huangnigang zhu_contracts --evidence-group huangnigang_arrival_20260909`，随后串行运行 `py -3.14 -X utf8 -B tools/run_campaign_level_state_qa.py --run`。分别为80/61/39项和205项，使用私有D盘工程、私有玩家目录及禁用Steam的环境。[实现与边界](HUANGNIGANG_ARRIVAL_20260909.md)、[阶段图与证据](../qa/huangnigang_arrival_20260909/README.md)。未开放中途保存，未打包或更新Steam。
+
 ## 2026-09-09 战役重新设计研究
 
 [同类评论与原著提案](CAMPAIGN_REDESIGN_RESEARCH_20260909.md)为研究文档；[来源表](research/campaign_20260909/sources.json)与[审计](research/campaign_20260909/audit.json)区分当前源码、旧批实战和待实现建议。当前第二幕仍为黄泥冈短篇；没有改菜单或游戏启动方式。黄泥冈200距离近战遗漏已记录但未修；本批未运行新玩法验收或发布。
