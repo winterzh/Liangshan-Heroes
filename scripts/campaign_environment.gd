@@ -7,6 +7,8 @@ const LEVELS := ["level1","level2","level3","level4","level6","level7","level8"]
 ## tavern or level3 hall into another map.
 const SCOPED_OBJECT_MARKER := "campaign_environment_object"
 const SCOPED_OVERLAY_MARKER := "campaign_environment_overlay"
+## A ground-aligned city entrance uses its own renderer, never a global art alias.
+const MENGZHOU_GATE_MARKER := "campaign_mengzhou_east_gate"
 
 
 static func scoped_object(cell: Vector2i, size: float, route_key: String,
@@ -221,7 +223,7 @@ static func decorate(map: GameMap,id: String) -> void:
 			[Vector2i(38,19),"dice"],[Vector2i(48,18),"money"],[Vector2i(52,22),"inn"]]:
 			result.append(["market_stall",stall[0],64.0,stall[1]])
 		# 左端是孟州东门；酒肆与快活林在城外官道尽头。
-		result.append(["zhu_gate",Vector2i(2,19),170.0])
+		result.append([MENGZHOU_GATE_MARKER,Vector2i(2,19),256.0])
 		# 丁字口主酒楼是 level7 独占物件；源图未到时继续用现有民居。
 		result.append(scoped_object(Vector2i(49,17),154.0,"kuaihuolin_main_tavern","town_house",0.82,false,true))
 	if id=="level4":

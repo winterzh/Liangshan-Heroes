@@ -70,7 +70,7 @@ func campaign_story_goals() -> Array:
 		{"id":"zhu_seven", "label":"七名被囚好汉全部撤回前营", "required_events":["zhu_seven_safe"], "forbidden_events":["zhu_prisoner_lost"]},
 	]
 func deploy_hint() -> String:
-	return "先采金伐木、建民居扩军。北面资源可扩张，南营是来袭兵源；守军会迎敌回防，两个入口均有箭楼。可用投石车远拆箭楼、步兵护送撞车攻门，也可由孙立开偏门。"
+	return "先采金伐木、建民居扩军。北面资源可扩张，南营是来袭兵源；守军会迎敌回防，两个入口均有箭楼。可用投石车远拆箭楼、步兵护送撞车攻门，也可由孙立开偏门。设防城门与箭楼只承受25%的普通武器和技能伤害，撞车、投石车不受此限制。"
 func intro_lines() -> Array:
 	return [
 		{"who":"旁白", "key":"narrator", "text":"时迁偷鸡被擒，陷在祝家庄。宋江领兵来到独龙冈，扎下前营，准备探路攻庄救人。本关将原著三次攻庄合为一场持续战斗。"},
@@ -79,7 +79,10 @@ func intro_lines() -> Array:
 	]
 
 func apply_overrides(defs: Dictionary, _abilities: Dictionary) -> void:
-	# Only chapter availability and captive state differ; shared combat/economy stats remain intact.
+	# Siege defenses are chapter-local; shared HP, attacks and economic prices stay intact.
+	for key in ["zhu_gate", "arrow_tower"]:
+		defs[key]["fortification_damage_mult"] = 0.25
+		defs[key]["fortification_faction"] = Unit.FACTION_GUAN
 	defs["hall"]["produces"] = ["lou_luo", "song_jiang", "lin_chong", "hua_rong"]
 	for troop in TROOPS:
 		for field in ["cost_gold","cost_wood","pop"]:

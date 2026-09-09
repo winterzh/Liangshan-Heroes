@@ -119,13 +119,14 @@ func _live(name: String) -> void:
 					_attack(b); attack_wait=0.7
 		await _wait(0.1); t+=0.1; attack_wait-=0.1
 	var standing_loss: bool=name=="standing" and l.wu.hp<=0 and b.phase==b.Phase.END and not l.victory
-	check((l.st==l.RETURN_SHOP and l.menshen.story_outcome=="subdued") or standing_loss,name+" reaches a real combat outcome (standing control may lose)")
+	check(standing_loss if name=="standing" else (l.st==l.RETURN_SHOP and l.menshen.story_outcome=="subdued"),name+" reaches the required real combat outcome (unprepared standing control loses)")
 	if name!="standing":
 		check(l.heavy_dodges>0 and l.rush_dodges>0,name+" actually avoids both distinct specials")
 		check(charge_travel>100,name+" boss visibly travels through an actual charge")
 		check(l.counter_hits>0 and b.mission.has_event("mengzhou_signature"),name+" actual moving W and current-window E earns signature")
 	else:
 		check(not b.mission.has_event("mengzhou_signature"),"standing attacks cannot counterfeit footwork credit")
+		check(l.drunk==0 and l.heavy_dodges==0 and l.rush_dodges==0 and l.counter_hits==0,"standing loss is an unprepared zero-dodge zero-counter control")
 	if l.st==l.RETURN_SHOP:
 		await _shot(b,name+"_subdued")
 		check(await _action_done(b,l.wu,"terms"),name+" player chooses and speaks the three terms")

@@ -1,3 +1,10 @@
+## 2026-09-09 城门与攻城反馈
+
+- [实现与后续审计](CAMPAIGN_COMBAT_FEEDBACK_20260909.md)：孟州门向、敌方城防、单体塔箭护甲、四语说明和未调整数值。
+- [QA记录](../qa/campaign_feedback_20260909/README.md)：独立伤害/几何夹具、真实路线、1280×720截图及保留的失败尝试。
+- `scripts/campaign_mengzhou_gate.gd`：仅孟州东门的地面轴与阴影渲染；复用已有位图。
+- `tools/run_campaign_feedback_qa.py`：D盘私有工程、私有profile、禁用Steam、共享锁串行验证。
+
 ## 2026-09-09 最新源码 Steam 正式更新
 
 - [本批发布说明](STEAM_LATEST_UPDATE_20260909.md)：Build 25200149、Manifest 7045932649257457621、来源与开放范围。

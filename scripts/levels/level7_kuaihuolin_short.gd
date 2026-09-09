@@ -8,6 +8,12 @@ var step_origin:=Vector2.ZERO
 var counter_hits:=0
 var victory:=false
 
+func paint_map(map: GameMap) -> void:
+	super.paint_map(map)
+	# The open east gate and the heroes share the same road axis. Carry the road
+	# through its threshold instead of leaving four unconnected courtyard cells.
+	map.paint_path([Vector2(2,19),Vector2(START_E.x,START_E.y)],1,T.ROAD)
+
 func story_contract_version() -> int: return 2
 func deploy_hint() -> String:
 	return "沿途饮酒可选，每店三碗增加拳力，也会让步速和出手波动。右键蒋门神直接挑战，或到酒望前佯醉换酒。Q近身直拳；W玉环步后仍需右键移动；避开圆圈重拳或横移让开真实冲撞，再靠近用E鸳鸯脚反击。R可恢复气血、暂稳步履；让施恩留在安全处。"
@@ -155,13 +161,13 @@ func _duel_tick(b, delta: float) -> void:
 		if fist_windup>0: return
 		if special_kind=="rush":
 			menshen.remove_meta("story_pose")
-			menshen._begin_charge(rush_end-rush_from,42,0,rush_from.distance_to(rush_end),92,0.65,0.55,false,"mengzhou_menshen_rush")
+			menshen._begin_charge(rush_end-rush_from,64,0,rush_from.distance_to(rush_end),92,0.65,0.9,false,"mengzhou_menshen_rush")
 			charge_running=true
 		else:
 			var hit:=false
 			for actor in [wu,shi]:
 				if actor.position.distance_to(fist_at)<=78 and b.map._segment_open(menshen.position,actor.position,"land"):
-					hit=true; actor.take_damage(32,menshen); actor.apply_stun(0.55)
+					hit=true; actor.take_damage(56,menshen); actor.apply_stun(0.9)
 			_finish_special(b,not hit)
 		return
 	fist_cd-=delta

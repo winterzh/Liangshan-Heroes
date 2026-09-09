@@ -1,3 +1,9 @@
+## 2026-09-09 城门与攻城反馈
+
+同批快活林重招命中代价已调整；单独复核运行 `py -3.14 -X utf8 -B tools/run_campaign_feedback_qa.py --run --cases kuaihuolin gate`，覆盖无准备站桩、酒路反击、直接反击和实际门向。站桩旧通过不再作为体验合格依据。
+
+本地启动仍使用 `Play.cmd`。孟州门向、两关城防与单体塔箭护甲修复仅进入开发源码；本批未打包或上传Steam。完整验证命令为 `py -3.14 -X utf8 -B tools/run_campaign_feedback_qa.py --run`，不带 `--run` 只预检，可用 `--cases gate siege fort_ui heroes zhu_direct daming_signal` 选取检查；不同Godot验证须串行。新驱动创建D盘私有副本与profile并禁用Steam，不使用玩家存档。[实现说明](CAMPAIGN_COMBAT_FEEDBACK_20260909.md) · [结果与边界](../qa/campaign_feedback_20260909/README.md)。
+
 ## 2026-09-09 最新源码 Steam 正式更新
 
 Steam Windows `default` 正式分支已更新为 **Build 25200149**，Depot `5088121`，Manifest `7045932649257457621`。服务端六文件名称、字节数与 SHA1 已逐项核对本地候选；canonical 正式分支与部署历史均回读确认，激活时间为北京时间2026-09-09 11:16。

@@ -487,3 +487,18 @@ qa/campaign_fx_partition_20260909/** -text -whitespace
 qa/storage_cleanup_20260909/** -text -whitespace
 qa/steam_latest_update_20260909/** -text -whitespace
 marketing/steam_latest_update_20260909/copy.json -text -whitespace
+
+# Preserve campaign feedback evidence and tested source bytes.
+qa/campaign_feedback_20260909/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/campaign_environment.gd -text
+scripts/campaign_mengzhou_gate.gd -text
+scripts/campaign_mengzhou_gate.gd.uid -text
+tools/mengzhou_gate_alignment_test.gd -text
+tools/mengzhou_gate_alignment_test.gd.uid -text
+tools/campaign_siege_balance_test.gd -text
+tools/campaign_siege_balance_test.gd.uid -text
+tools/campaign_fortification_ui_test.gd -text
+tools/campaign_fortification_ui_test.gd.uid -text
+tools/run_campaign_feedback_qa.py -text
+tools/daming_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/zhujiazhuang_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -79,7 +79,7 @@ func campaign_story_goals() -> Array:
 		{"id":"daming_response","label":"鲁智深或武松夺门，牢中内应开枷","required_events":["daming_response_arrived","daming_inner_unlock"],"forbidden_events":["daming_early_unlock","daming_prison_breached"]},
 	]
 func deploy_hint() -> String:
-	return "外军开局即可采集、造兵与攻城。内应先在牢前会合入牢，再由时迁举火，可调开六名机动守军并暂停城内补兵90秒；强攻也能救人。两名伤员必须由玩家带到城外接应地。"
+	return "外军开局即可采集、造兵与攻城。内应先在牢前会合入牢，再由时迁举火，可调开六名机动守军并暂停城内补兵90秒；强攻也能救人。两名伤员必须由玩家带到城外接应地。设防城门与箭楼只承受25%的普通武器和技能伤害，撞车、投石车不受此限制。"
 func intro_lines() -> Array:
 	return [
 		{"who":"旁白","key":"narrator","text":"元宵将至，宋江留山调养，吴用领军在大名府南面扎营。时迁已越墙带火种入城；蔡福已替柴进、乐和换好公人旧衣，三人分头接应。"},
@@ -88,6 +88,9 @@ func intro_lines() -> Array:
 		{"who":"军令","key":"narrator","text":"鲁智深、武松带兵接南门，军队清牢前、拆牢区箭楼，再由内应开枷。卢俊义、石秀获救后不参战，选中二人沿退路走到城外接应地；不必杀光全城。"},
 	]
 func apply_overrides(defs: Dictionary,_abilities: Dictionary) -> void:
+	for key in ["zhu_gate", "arrow_tower"]:
+		defs[key]["fortification_damage_mult"] = 0.25
+		defs[key]["fortification_faction"] = Unit.FACTION_GUAN
 	defs.hall.produces=["lou_luo","wu_yong","lu_zhishen","wu_song","hua_rong"]
 	for key in SPY_KEYS+["lu_junyi","shi_xiu"]:
 		defs[key].hero_trainable=false

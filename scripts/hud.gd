@@ -2134,6 +2134,11 @@ func _refresh_panel() -> void:
 				_info_stats.text = Localize.format_text("队列 %d · %s，请清开出口", [q,prim.production_wait_label()]) if prim.production_blocked else Localize.format_text("队列 %d · 剩 %d 秒 · 右键设集结点", [q, int(ceil(prim._train_t))])
 			else:
 				_info_stats.text = Localize.text("右键水面设集结点 · 留出下水口") if bool(prim.setup_def.get("requires_shore",false)) else Localize.text("右键设集结点 · 资源上=自动采")
+		elif prim.fortification_regular_damage_mult() < 1.0:
+			# 城防倍率读取实际结算入口，敌方查看与己方选中共用；箭楼仍展示攻击和射程。
+			Localize.unbind(_info_stats)
+			_info_stats.text = Localize.format_text("攻 %d  防 %d  射程 %d", [int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range)]) if prim.atk > 0.0 else Localize.format_text("城防 · 防 %d", _eff_def(prim))
+			_info_stats.text += "\n" + Localize.format_text("武器/技能承伤%d%%；撞车/投石车豁免", int(round(prim.fortification_regular_damage_mult() * 100.0)))
 		elif prim.atk > 0.0:
 			_info_stats.text = Localize.format_text("箭楼 · 攻 %d  射程 %d  自动御敌", [int(prim.atk), int(prim.atk_range)])
 		else:

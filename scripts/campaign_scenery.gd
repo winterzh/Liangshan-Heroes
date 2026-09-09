@@ -5,6 +5,7 @@ const CampaignArt := preload("res://scripts/campaign_art.gd")
 const Stockade := preload("res://scripts/liangshan_stockade.gd")
 const CityWall := preload("res://scripts/campaign_city_wall.gd")
 const Passage := preload("res://scripts/campaign_passage.gd")
+const MengzhouGate := preload("res://scripts/campaign_mengzhou_gate.gd")
 var _walls: Array[Node2D] = []
 var _style := ""
 var _lantern_texture: GradientTexture2D
@@ -45,6 +46,9 @@ func setup(game_map: GameMap) -> void:
 				_cache_reeds(x,y)
 	_build_reed_mesh()
 	for d in _map.decor:
+		if d[0]==Config.MENGZHOU_GATE_MARKER:
+			if _style=="level7": _add_mengzhou_gate(d[1])
+			continue
 		if d[0]==Config.SCOPED_OBJECT_MARKER:
 			_add_campaign_environment_object(d)
 			continue
@@ -102,6 +106,22 @@ func setup(game_map: GameMap) -> void:
 		_add_passage(Vector2i(19,20),"牢门")
 		_cuiyun_light=_add_lantern_light(Vector2i(37,15),0.45)
 	queue_redraw()
+
+
+func _add_mengzhou_gate(cell: Vector2i) -> void:
+	var gate := MengzhouGate.new()
+	gate.position = _map.cell_to_world(cell)
+	gate.z_as_relative = false
+	gate.z_index = clampi(1+int(_map.project(gate.position).y),1,3400)
+	gate.set_meta("campaign_environment_route",Config.MENGZHOU_GATE_MARKER)
+	gate.set_meta("campaign_object",Config.MENGZHOU_GATE_MARKER)
+	gate.set_meta("fog_clearance_px",150.0)
+	add_child(gate)
+	# Fog and body occlusion use the existing scenery lifecycle. Its dedicated
+	# ground child draws the aligned silhouette, so no generic shadow is added.
+	_sprites.append(gate)
+	_walls.append(gate)
+	_map.sync_render_position(gate)
 
 
 func _legacy_environment_texture(key: String, state := "default") -> Texture2D:

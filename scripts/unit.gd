@@ -873,8 +873,36 @@ func recently_hit() -> bool:
 	return _hit_recent_t > 0.0
 
 
+## Ordinary attacks, including tower and garrison arrows, share this armor rule.
+## Skills do not call this helper and continue to bypass physical armor.
+func physical_damage_after_armor(d: float) -> float:
+	return d / (1.0 + 0.05 * maxf(0.0, defense - _def_down))
+
+
+## Chapters opt individual building definitions into fortified defenses. The
+## faction gate prevents the same definition from silently buffing player towers.
+func fortification_regular_damage_mult() -> float:
+	if not is_building or is_resource:
+		return 1.0
+	if int(setup_def.get("fortification_faction", faction)) != faction:
+		return 1.0
+	return clampf(float(setup_def.get("fortification_damage_mult", 1.0)), 0.05, 1.0)
+
+
+func _fortification_hit_mult(from: Unit, ignore_reduction: bool, damage_ability_id: String, siege_weapon_hit: bool) -> float:
+	# Explicit source-free internal removals (Delete, section cleanup) must still
+	# remove a building. Named DOT/skills cannot borrow this cleanup exception.
+	if from == null and ignore_reduction and damage_ability_id.is_empty():
+		return 1.0
+	# Only ordinary attacks from real siege engines bypass fortification. A
+	# generic ability attributed to an engine remains an ordinary skill hit.
+	if damage_ability_id.is_empty() and (siege_weapon_hit or (is_instance_valid(from) and from.key in ["siege_ram", "siege_cata"])):
+		return 1.0
+	return fortification_regular_damage_mult()
+
+
 func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction := false,
-		damage_ability_id := "") -> void:
+		damage_ability_id := "", siege_weapon_hit := false) -> void:
 	if not _gameplay_rng_fault().is_empty(): return
 	if hp <= 0.0 or story_outcome != "":
 		return
@@ -887,6 +915,10 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if _track_combat_stats and damage_ability_id == "" and from != null and is_instance_valid(from) \
 			and from.stat_ability_id != "":
 		damage_ability_id = from.stat_ability_id
+	# Fortification is a building/weapon interaction, separate from temporary
+	# damage reduction. Piercing spells and source-free named DOT still obey it.
+	if d > 0.0:
+		d *= _fortification_hit_mult(from, ignore_reduction, damage_ability_id, siege_weapon_hit)
 	var hp_before := hp
 	var shield_absorbed := 0.0
 	# 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
@@ -1903,6 +1935,11 @@ func _tower_tick(delta: float) -> void:
 			if _target.is_hero:
 				dmg *= float(setup_def.get("bonus_hero", 1.0))   # 法坛对英雄 3×
 			var sp := float(setup_def.get("splash", 0.0))         # 霹雳炮溅射
+			# Single-target tower fire follows ordinary armor. Preserve existing
+			# splash damage until it has per-victim armor and saved provenance;
+			# the primary target's armor must not leak into every blast victim.
+			if sp <= 0.0:
+				dmg = _target.physical_damage_after_armor(dmg)
 			var sm := float(setup_def.get("slow_mult", 1.0))      # 拒马减速倍率
 			var sd := float(setup_def.get("slow_dur", 0.0))       # 拒马减速时长
 			battle.spawn_projectile(self, _target, dmg, false, sp, sm, sd)
@@ -1910,7 +1947,7 @@ func _tower_tick(delta: float) -> void:
 			# 驻军增援：每个驻入的远程兵额外放一箭（经典RTS式 garrison-fire）
 			for pg in passengers:
 				if is_instance_valid(pg) and pg.is_ranged and pg.hp > 0.0:
-					battle.spawn_projectile(self, _target, pg.atk * 0.85)
+					battle.spawn_projectile(self, _target, _target.physical_damage_after_armor(pg.atk * 0.85))
 
 
 ## 五雷法坛专用索敌：警戒范围内优先取最近的「敌方英雄」；无英雄则留空(交回 _acquire 取最近)。
@@ -2054,9 +2091,7 @@ func _deal_hit() -> void:
 		dmg += float(lin_spear.get("bonus", 0.0))
 	# 目标防御值：每点 +5% 等效血量 → 伤害 ÷(1+0.05·防御)。仅普通攻击在此减；技能走 take_damage 不经过这里。
 	# 护甲削减（双戒刀）：有效防御 = 防御 − _def_down
-	var eff_def := maxf(0.0, t.defense - t._def_down)
-	if eff_def > 0.0:
-		dmg /= (1.0 + 0.05 * eff_def)
+	dmg = t.physical_damage_after_armor(dmg)
 	# 李逵 E·蛮力：每次有效普攻只掷一次概率；飞斧自身直接结算伤害，不会递归触发本被动。
 	_try_li_brawn_axes()
 	if not _gameplay_rng_fault().is_empty(): return
@@ -2129,9 +2164,7 @@ func secondary_basic_damage_against(t: Unit) -> float:
 		dmg *= float(setup_def["vs_building"])
 	if t.is_hero and setup_def.has("vs_hero"):
 		dmg *= float(setup_def["vs_hero"])
-	var eff_def := maxf(0.0, t.defense - t._def_down)
-	if eff_def > 0.0:
-		dmg /= (1.0 + 0.05 * eff_def)
+	dmg = t.physical_damage_after_armor(dmg)
 	return dmg
 
 
