@@ -1,3 +1,7 @@
+## 2026-09-09 战役重新设计研究
+
+[同类评论与原著提案](CAMPAIGN_REDESIGN_RESEARCH_20260909.md)为研究文档；[来源表](research/campaign_20260909/sources.json)与[审计](research/campaign_20260909/audit.json)区分当前源码、旧批实战和待实现建议。当前第二幕仍为黄泥冈短篇；没有改菜单或游戏启动方式。黄泥冈200距离近战遗漏已记录但未修；本批未运行新玩法验收或发布。
+
 ## 2026-09-09 城门与攻城反馈
 
 同批快活林重招命中代价已调整；单独复核运行 `py -3.14 -X utf8 -B tools/run_campaign_feedback_qa.py --run --cases kuaihuolin gate`，覆盖无准备站桩、酒路反击、直接反击和实际门向。站桩旧通过不再作为体验合格依据。

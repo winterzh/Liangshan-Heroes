@@ -1,3 +1,9 @@
+## 2026-09-09 战役设计研究
+
+- [战役重新设计研究](CAMPAIGN_REDESIGN_RESEARCH_20260909.md)：原著因果、七作玩法/评论对照、黄泥冈与祝家庄最小样板及试玩标准。
+- `docs/research/campaign_20260909/sources.json`：24条Steam短摘录、元数据、3个公开讨论及官方来源；不含长评全文。
+- `docs/research/campaign_20260909/audit.json`：当前入口与12份文件哈希、旧QA边界、尚未修复的数值问题。
+
 ## 2026-09-09 城门与攻城反馈
 
 - [实现与后续审计](CAMPAIGN_COMBAT_FEEDBACK_20260909.md)：孟州门向、敌方城防、单体塔箭护甲、四语说明和未调整数值。
