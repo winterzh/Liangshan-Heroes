@@ -1,0 +1,123 @@
+from cleanup_audit import ROOT,HERE,sha,files
+from pathlib import Path
+import gzip,json,shutil,subprocess
+
+def read(name):return json.loads((HERE/name).read_text(encoding='utf-8'))
+c=read('cache_deletion_receipt.json');a=read('archive_verified.json');ac=read('archive_cleanup_receipt.json')
+p=read('protected_after.json');s=read('smoke_receipt.json')
+assert c['complete'] and ac['complete'] and p['passed'] and s['passed']
+assert c['deleted_roots']==161 and c['deleted_files']==454546 and c['deleted_bytes']==59790139860
+assert not any(Path(r['path']).exists() for r in c['results'])
+assert sha(Path(a['archive']))==a['archive_sha256']
+qa=ROOT/'qa/storage_cleanup_20260909';assert not qa.exists();qa.mkdir()
+(qa/'.gdignore').write_text('',encoding='utf-8')
+copies=['repo_audit.json','temp_audit.json','cache_plan.json','cache_deletion_phase1.json','cache_deletion_receipt.json',
+ 'protected_after.json','archive_verified.json','archive_cleanup_receipt.json','smoke_receipt.json','startup.log',
+ 'retained_temporary_copies.json','fast_verifier_test.json','intentional_executor_transition.json',
+ 'archive_build.log','archive_test.log','archive_extract.log']
+for name in copies:shutil.copyfile(HERE/name,qa/name)
+with (qa/'protected_before.json.gz').open('wb') as target:
+    with gzip.GzipFile(filename='',mode='wb',fileobj=target,mtime=0) as compressed:
+        compressed.write((HERE/'protected_before.json').read_bytes())
+assert gzip.decompress((qa/'protected_before.json.gz').read_bytes())==(HERE/'protected_before.json').read_bytes()
+source_names=['cleanup_audit.py','prepare_cache_plan.py','remove_verified_caches.ps1','CacheFileVerifier.cs',
+ 'remove_verified_caches_fast.ps1','archive_helpers.py','finalize_archive.ps1','smoke_after_cleanup.py','closeout_docs.py']
+(qa/'execution_sources').mkdir()
+for name in source_names:shutil.copyfile(HERE/name,qa/'execution_sources'/(name+'.txt'))
+(qa/'archive_guide').mkdir()
+for name in ['README.md','旧准备与收尾助手_20260909_文件清单.json']:
+    shutil.copyfile(Path('D:/AI项目/水浒/归档')/name,qa/'archive_guide'/name)
+guide=qa/'archive_guide/README.md'
+guide_text=guide.read_text(encoding='utf-8-sig').replace('(../开发工程/qa/','(../../../qa/').replace('(文件清单.json)','(../../storage_cleanup_20260907/archive_file_manifest.json)')
+guide.write_text('本副本仅调整仓库内导航链接；本机原说明位于 `D:/AI项目/水浒/归档/README.md`。\n\n'+guide_text,encoding='utf-8')
+
+readme=f'''# 2026-09-09 冗余缓存清理与旧助手归档
+
+用户授权清理和归档冗余文件。基线为 `cf746f1`，当前开发仍使用 `D:\\AI项目\\水浒\\开发工程`。本轮保留所有 Git 跟踪文件、当前主导入缓存、全部 Steam 候选及关联 QA、各类最新成功测试批、旧批源码/资源/日志/测档、原始美术与验证证据、历史归档和 `.git`。
+
+## 实际完成
+
+| 范围 | 删除的缓存目录 | 文件 | 字节 |
+| --- | ---: | ---: | ---: |
+| 工程内旧隔离测试 `.godot/imported` | 110 | 332334 | 46385682145 |
+| D盘旧测试批 `project/.godot/imported` | 51 | 122212 | 13404457715 |
+| 合计 | **161** | **454546** | **59790139860（55.68 GiB）** |
+
+每个待删缓存的文件名、大小和 SHA-256 都与保留主缓存匹配；规划时全量比对，删除前再次比对并检查完整文件集合、绝对路径范围、reparse、原始工程仍在、主缓存保护清单和共享引擎锁。只删除精确 `imported` 根，未删除旧 `project` 或整个 `.godot`。原 `.godot` 元数据和源码仍可直接读取；需要复查旧工程时先重新导入资源，或按对应 QA 驱动重新生成隔离工程。12类最新成功批次均保留完整。
+
+前50根由原PowerShell逐文件校验器完成；随后主动在已有的删除前锁检查处停止（`in_progress_target=null`），改为等价的只读 C# 校验循环接续。全部路径、集合、大小、SHA校验及原生PowerShell `Remove-Item -LiteralPath` 保留，最终计数与计划完全一致。原阶段收据和主动切换记录保留；这次切换不是审批拒绝或放宽校验。编译校验器7个合成正反例通过，不计为游戏QA。
+
+## 归档
+
+`D:/AI项目/水浒/归档/水浒_旧准备与收尾助手_20260909.7z`：{a['archive_bytes']} 字节，SHA-256 `{a['archive_sha256']}`。52个原始文件共545395字节，另附清单和说明；7-Zip完整性测试、完整解压和全部载荷SHA通过，原件稳定性复核后才移除。
+
+- 31个旧祝家庄景物候选文件在正式 `qa/level3_scenery_prepare_20260909` 中仍有逐路径、逐字节相同副本。原临时目录留有 `已归档.md`。
+- 21个未被当前源码、工具、文档或QA名称引用扫描命中的历史收尾助手已归档；其余被引用的55个助手保留。工程 `.godot` 根留有归档说明。
+
+查看[归档说明副本](archive_guide/README.md)和[文件清单](archive_verified.json)。恢复时先解压到新目录，按 `archive_path` 和SHA核对，再按 `source` 放回所需原路径；不要覆盖后续修改，也不要把旧候选当当前正式实现。压缩包留本机，GitHub保存清单、恢复说明和验证收据。
+
+## 保护与启动验证
+
+清理和隔离启动后，**{p['file_count']}个受保护文件、{p['total_bytes']}字节**逐文件大小/SHA一致，缺失或变化0。范围包括全部16580个原Git文件、主imported、最新Steam25185242候选完整目录、本机Godot路径和总启动器。完整前清单为[protected_before.json.gz](protected_before.json.gz)，[后验结果](protected_after.json)记录其SHA；清理新增文档在后验完成后更新，不冒充原文件零修改。
+
+Godot4.6.3在新D盘隔离profile中禁用Steam，使用保留主导入缓存运行当前默认菜单180帧无头启动，退出{s['exit_code']}，ERROR/SCRIPT ERROR/Parse Error 0。见[startup.log](startup.log)、[启动收据](smoke_receipt.json)。本轮没有强制重导入、视觉/真人/性能或完整战役验收。
+
+自动审批仅拦截了删除本次 `archive_stage` 和 `archive_verify` 两份归档验证临时副本的命令，返回 `blocked by policy`，没有更具体原因；命令未执行，未换工具重试。这两份小型副本保留，不计入释放量，见[保留记录](retained_temporary_copies.json)。上表是实际移除的缓存逻辑字节，不是磁盘空闲增量；本轮审计元数据、少量标记和隔离启动文件另有占用。
+
+## 收据与接续
+
+- [清理计划](cache_plan.json)、[最终删除收据](cache_deletion_receipt.json)：161根精确路径与计数。
+- [工程盘点](repo_audit.json)、[临时批盘点](temp_audit.json)：保留类别、快照与最新批匹配。
+- [归档验证](archive_verified.json)、[原副本移除收据](archive_cleanup_receipt.json)：52个文件、归档SHA及实际操作。
+- 完整每目录成员清单留在 `D:/CodexTemp/watermargin-cleanup-20260909/cache_manifests`，其各自SHA由本计划固定。
+- `execution_sources/*.txt` 为一次性固定清理脚本的证据副本，不能直接用本轮旧白名单重复清理后续批次。
+
+项目启动仍用 `Play.cmd`；功能源码和Steam线上包不变。本轮只同步清理说明与QA，开发继续从[当前续玩计划](../../docs/CONTINUE_DELIVERY_20260908.md)接续。
+'''
+(qa/'README.md').write_text(readme,encoding='utf-8')
+
+def prepend(relative,body):
+    path=ROOT/relative;old=path.read_text(encoding='utf-8-sig')
+    assert '## 2026-09-09 冗余缓存清理与归档' not in old[:350]
+    path.write_text(body+old,encoding='utf-8')
+
+prepend('docs/WORKLOG.md','''## 2026-09-09 冗余缓存清理与归档
+
+从cf746f1盘点并清理161个旧隔离工程的imported目录：454546个文件、59790139860字节（55.68GiB）。待删副本与保留主缓存逐文件SHA一致，删除前再次核对范围、成员、SHA和持锁状态。全部源码、旧批测档/日志、当前缓存、最新Steam候选和12类最新成功测试批保持原位。52个旧准备/收尾助手文件经7z完整解压SHA核对后归档，原位留下说明。
+
+清理及禁用Steam的隔离180帧主菜单启动后，28040个受保护文件逐文件不变，启动退出0、错误0；本轮不扩展视觉/真人/性能验收。主计划与Steam发布状态不变。归档验证临时副本删除被自动审批返回blocked by policy，未执行或重试，保留且不计释放量。准确路径、失败/接续记录和恢复说明见[清理QA](../qa/storage_cleanup_20260909/README.md)。文档更新在保护后验完成后进行，随后白名单同步stable。
+
+''')
+prepend('docs/SOURCE_SETUP.md','''## 2026-09-09 冗余缓存清理与归档
+
+普通启动仍运行`Play.cmd`，本机Godot路径、主导入缓存、生产资源及最新Steam候选均保留。旧测试工程161个imported重复缓存已清理，旧源码/元数据/测档/日志仍在；复查历史私有工程前先重新导入资源，或按其QA驱动创建新隔离工程。不要把整个`.godot`当作缓存删除，其中仍包含发布包、冻结源码与原始验证资料。
+
+旧景物候选重复包及21个无引用收尾助手已归档到`D:/AI项目/水浒/归档/水浒_旧准备与收尾助手_20260909.7z`，当前QA副本和引用中的助手保持原位。恢复清单、保护校验及180帧启动见[本批清理QA](../qa/storage_cleanup_20260909/README.md)。
+
+''')
+prepend('docs/DIRECTORY_INDEX.md','''## 2026-09-09 冗余缓存清理与归档
+
+- `qa/storage_cleanup_20260909/`：161个重复imported目录清理、受保护文件前后哈希、归档与隔离启动证据；原始源文件和所有已提交QA仍保留。
+- `qa/storage_cleanup_20260909/archive_guide/`：本机归档说明与清单的交接副本。7z位于`D:/AI项目/水浒/归档/`。
+- `D:/CodexTemp/level3_scenery_prepare_20260909/已归档.md`和工程`.godot/旧助手已归档_20260909.md`：原位置恢复指引；正式景物候选QA仍在原目录。
+- `D:/CodexTemp/watermargin-cleanup-20260909/`：本轮完整成员清单和审计执行目录；两份归档验证副本因审批拦截仍保留。
+
+''')
+prepend('README.md','''## 2026-09-09 冗余缓存清理与归档
+
+已清理55.68GiB旧测试导入缓存，并归档52个旧准备/收尾助手文件。当前项目文件、主缓存、最新Steam包和原始QA均保留，启动方式仍为`Play.cmd`；28040个受保护文件前后SHA一致，隔离180帧主菜单启动退出0、错误0。[清理结果与恢复说明](qa/storage_cleanup_20260909/README.md)。
+
+''')
+prepend('AGENTS.md','''## 2026-09-09 冗余缓存清理与归档
+
+当前开发仍为`D:/AI项目/水浒/开发工程`。本轮只删除161个已与保留主缓存逐文件SHA匹配的旧`imported`目录（55.68GiB），旧源码/测档/日志、12类最新成功批、主缓存、所有Steam候选/关联QA和Git内部保持原位。旧私有工程复查前应重新导入资源，不要依赖已清理的缓存路径。
+
+52个旧准备与收尾助手文件完整归档至`D:/AI项目/水浒/归档/水浒_旧准备与收尾助手_20260909.7z`，清单、恢复方法及保护后验见`qa/storage_cleanup_20260909/README.md`。所有已提交项目文件与QA保持原位；本批不修改功能源码或Steam包。归档验证临时副本的删除被自动审批拦截而保留，未计入清理量。
+
+''')
+attrs=ROOT/'.gitattributes';text=attrs.read_text(encoding='utf-8-sig')
+line='qa/storage_cleanup_20260909/** -text -whitespace'
+assert line not in text;attrs.write_text(text.rstrip()+'\n'+line+'\n',encoding='utf-8')
+evidence={p.relative_to(qa).as_posix():{'bytes':p.stat().st_size,'sha256':sha(p)} for p in files(qa)}
+(qa/'evidence_manifest.json').write_text(json.dumps({'files':evidence,'note':'Manifest excludes itself'},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'qa':str(qa),'evidence_files':len(evidence),'existing_tracked_files_updated':6},ensure_ascii=False),flush=True)

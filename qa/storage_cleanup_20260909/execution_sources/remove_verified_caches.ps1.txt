@@ -1,0 +1,104 @@
+param([Parameter(Mandatory=$true)][string]$ExpectedPlanSha256)
+$ErrorActionPreference = 'Stop'
+$cleanupRoot = 'D:\CodexTemp\watermargin-cleanup-20260909'
+$projectRoot = 'D:\AI项目\水浒\开发工程'
+$lockPath = Join-Path $projectRoot '.godot\redraw_rejection_source.lock'
+$lockOwner = 'D:/CodexTemp/watermargin-cleanup-20260909'
+$planPath = Join-Path $cleanupRoot 'cache_plan.json'
+function FileHash([string]$Path) {
+    $stream = [System.IO.File]::OpenRead($Path)
+    try { return [Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData($stream)).ToLowerInvariant() }
+    finally { $stream.Dispose() }
+}
+function AssertNoLinks([string]$Path) {
+    $current = [System.IO.Path]::GetFullPath($Path)
+    while ($current) {
+        $item = Get-Item -LiteralPath $current -Force
+        if (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) { throw "Reparse path refused: $current" }
+        $parent = [System.IO.Directory]::GetParent($current)
+        if ($null -eq $parent) { break }
+        $current = $parent.FullName
+    }
+}
+function AssertIdle {
+    if ([System.IO.File]::ReadAllText($lockPath) -cne $lockOwner) { throw 'Cleanup does not own the engine lock' }
+    if (Get-Process -Name '*Godot*' -ErrorAction SilentlyContinue) { throw 'Godot is running' }
+}
+if ((FileHash $planPath) -cne $ExpectedPlanSha256) { throw 'Plan hash mismatch' }
+$plan = Get-Content -LiteralPath $planPath -Raw | ConvertFrom-Json
+$actualHead = (git -C $projectRoot rev-parse HEAD).Trim()
+if ($LASTEXITCODE -ne 0 -or $actualHead -cne $plan.head) { throw 'Source HEAD changed' }
+$tempSuites = @('continue_flow','campaign_presentation_state','classic30_continue','campaign_fx_partition','level3_scenery','campaign_level_state','campaign_mission_state','official_restore_profile','owned_slot_retry','steam_persistent_outbox')
+$results = [System.Collections.Generic.List[object]]::new()
+$receipt = [ordered]@{ complete=$false; plan_sha256=$ExpectedPlanSha256; deleted_roots=0; deleted_files=0L; deleted_bytes=0L; results=$results; method='Native PowerShell literal-path deletion after exact scope, no-reparse, full file hash and engine-lock checks' }
+try {
+    AssertIdle
+    $protectedPath = Join-Path $cleanupRoot 'protected_before.json'
+    if ((FileHash $protectedPath) -cne $plan.protected_manifest_sha256) { throw 'Protected baseline changed' }
+    $protected = Get-Content -LiteralPath $protectedPath -Raw | ConvertFrom-Json
+    $referenceRoot = $projectRoot+'\.godot\imported'
+    AssertNoLinks $referenceRoot
+    $referenceRecords = @($protected.files | Where-Object { ([string]$_.path).StartsWith($referenceRoot+'\',[StringComparison]::OrdinalIgnoreCase) })
+    if (-not $referenceRecords.Count) { throw 'No retained cache baseline' }
+    foreach ($record in $referenceRecords) {
+        AssertNoLinks ([string]$record.path)
+        $info = Get-Item -LiteralPath ([string]$record.path) -Force
+        if ($info.Length -ne $record.bytes -or (FileHash ([string]$record.path)) -cne $record.sha256) { throw 'Retained main cache changed' }
+    }
+    $receipt.retained_reference_files_verified = $referenceRecords.Count
+    foreach ($candidate in $plan.approved) {
+        $target = [System.IO.Path]::GetFullPath([string]$candidate.path)
+        if (-not $target.EndsWith('\.godot\imported',[StringComparison]::OrdinalIgnoreCase)) { throw "Not an imported cache: $target" }
+        $inRepo = $target.StartsWith($projectRoot+'\.godot\',[StringComparison]::OrdinalIgnoreCase)
+        $inTemp = $false
+        foreach ($suite in $tempSuites) { if ($target.StartsWith('D:\CodexTemp\'+$suite+'\',[StringComparison]::OrdinalIgnoreCase)) { $inTemp=$true; break } }
+        if (-not ($inRepo -or $inTemp)) { throw "Outside approved workspace: $target" }
+        foreach ($keep in @(($projectRoot+'\.godot\imported'),($projectRoot+'\.godot\steam_candidates'),($projectRoot+'\.godot\steam_integration_qa'))) {
+            if ($target.Equals($keep,[StringComparison]::OrdinalIgnoreCase) -or $target.StartsWith($keep+'\',[StringComparison]::OrdinalIgnoreCase)) { throw "Protected cache: $target" }
+        }
+        if ($candidate.all_bytes_match_retained -ne $true -or [string]$candidate.reference_root -ine ($projectRoot+'\.godot\imported')) { throw 'Retained byte identity was not established' }
+        AssertNoLinks $target
+        $resolved = (Resolve-Path -LiteralPath $target).ProviderPath
+        if (-not $resolved.Equals($target,[StringComparison]::OrdinalIgnoreCase)) { throw "Resolved target differs: $target" }
+        if (-not (Test-Path -LiteralPath (Join-Path $candidate.project 'project.godot') -PathType Leaf)) { throw 'Source project missing' }
+        $manifestPath = [System.IO.Path]::GetFullPath([string]$candidate.manifest)
+        if (-not $manifestPath.StartsWith($cleanupRoot+'\cache_manifests\',[StringComparison]::OrdinalIgnoreCase)) { throw 'Manifest outside audit directory' }
+        if ((FileHash $manifestPath) -cne $candidate.manifest_sha256) { throw 'Cache manifest changed' }
+        $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+        if ([string]$manifest.root -cne [string]$candidate.path) { throw 'Manifest root mismatch' }
+        $actualFiles = @(Get-ChildItem -LiteralPath $target -Recurse -Force)
+        if (@($actualFiles | Where-Object { ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 }).Count) { throw 'Nested reparse refused' }
+        $actualFiles = @($actualFiles | Where-Object { -not $_.PSIsContainer })
+        if ($actualFiles.Count -ne $candidate.files -or $manifest.files.Count -ne $candidate.files) { throw 'Cache inventory changed' }
+        $expectedNames = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+        $verifiedBytes = 0L
+        foreach ($record in $manifest.files) {
+            $file = [System.IO.Path]::GetFullPath((Join-Path $target ([string]$record.relative)))
+            if (-not $file.StartsWith($target+'\',[StringComparison]::OrdinalIgnoreCase) -or -not $expectedNames.Add($file)) { throw 'Invalid or duplicate cache member path' }
+            $info = Get-Item -LiteralPath $file -Force
+            if ($info.PSIsContainer -or $info.Length -ne $record.bytes -or (FileHash $file) -cne $record.sha256) { throw "Cache changed after plan: $file" }
+            $verifiedBytes += $info.Length
+        }
+        foreach ($file in $actualFiles) { if (-not $expectedNames.Contains($file.FullName)) { throw 'Unexpected cache file' } }
+        if ($verifiedBytes -ne $candidate.bytes) { throw 'Cache size changed' }
+        AssertIdle
+        $receipt.in_progress_target = $target
+        [System.IO.File]::WriteAllText((Join-Path $cleanupRoot 'cache_deletion_receipt.json'),($receipt | ConvertTo-Json -Depth 8),[System.Text.UTF8Encoding]::new($false))
+        Remove-Item -LiteralPath $target -Recurse -Force -ErrorAction Stop
+        if (Test-Path -LiteralPath $target) { throw "Cache removal incomplete: $target" }
+        $results.Add([ordered]@{ path=$target; files=$candidate.files; bytes=$candidate.bytes; removed=$true; sha256_rechecked_before_delete=$true })
+        $receipt.deleted_roots += 1
+        $receipt.deleted_files += $candidate.files
+        $receipt.deleted_bytes += $candidate.bytes
+        $receipt.in_progress_target = $null
+        [System.IO.File]::WriteAllText((Join-Path $cleanupRoot 'cache_deletion_receipt.json'),($receipt | ConvertTo-Json -Depth 8),[System.Text.UTF8Encoding]::new($false))
+        if ($receipt.deleted_roots % 10 -eq 0) { Write-Output "Removed $($receipt.deleted_roots) verified cache roots" }
+    }
+    $receipt.complete = $true
+} catch {
+    $receipt.failure = $_.Exception.Message
+    throw
+} finally {
+    [System.IO.File]::WriteAllText((Join-Path $cleanupRoot 'cache_deletion_receipt.json'),($receipt | ConvertTo-Json -Depth 8),[System.Text.UTF8Encoding]::new($false))
+    [ordered]@{ complete=$receipt.complete; roots=$receipt.deleted_roots; files=$receipt.deleted_files; bytes=$receipt.deleted_bytes } | ConvertTo-Json -Compress | Write-Output
+}

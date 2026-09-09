@@ -1,0 +1,51 @@
+from cleanup_audit import ROOT,HERE,files,no_links,sha,write
+from pathlib import Path
+import concurrent.futures,hashlib,json,os,collections
+
+repo=json.loads((HERE/'repo_audit.json').read_text(encoding='utf-8'))
+temp=json.loads((HERE/'temp_audit.json').read_text(encoding='utf-8'))
+protected=json.loads((HERE/'protected_before.json').read_text(encoding='utf-8'))
+reference_root=ROOT/'.godot/imported'
+reference={str(Path(r['path']).relative_to(reference_root)).replace('\\','/'):r
+           for r in protected['files'] if Path(r['path']).is_relative_to(reference_root)}
+assert reference
+candidates=[Path(r['path']) for r in repo['imported_cache_candidates'] if not r['retain']]
+candidates += [Path(r['path'])/'imported' for r in temp['candidates'] if r['imported']['files']]
+candidates=sorted(set(candidates))
+(HERE/'cache_manifests').mkdir(exist_ok=True)
+
+def check(root):
+    no_links(root)
+    assert root.name=='imported' and root.parent.name=='.godot'
+    project=root.parent.parent
+    assert (project/'project.godot').is_file(), str(project)
+    assert root!=reference_root and not str(root).startswith(str(ROOT/'.godot/steam_candidates'))
+    assert not str(root).startswith(str(ROOT/'.godot/steam_integration_qa'))
+    rows=[];bad=[]
+    for p in files(root):
+        rel=p.relative_to(root).as_posix();s=p.stat();digest=sha(p);expected=reference.get(rel)
+        rows.append({'relative':rel,'bytes':s.st_size,'mtime_ns':s.st_mtime_ns,'sha256':digest})
+        if expected is None or expected['bytes']!=s.st_size or expected['sha256']!=digest: bad.append(rel)
+    ident=hashlib.sha256(str(root).encode()).hexdigest()[:20]
+    manifest=write('cache_manifests/'+ident+'.json',{'root':str(root),'files':rows})
+    return {'path':str(root),'project':str(project),'files':len(rows),'bytes':sum(r['bytes'] for r in rows),
+        'reference_root':str(reference_root),'all_bytes_match_retained':not bad,'mismatches':bad,
+        'manifest':str(manifest),'manifest_sha256':sha(manifest)}
+
+checked=[]
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    jobs={pool.submit(check,p):p for p in candidates}
+    for future in concurrent.futures.as_completed(jobs):
+        row=future.result();checked.append(row)
+        if len(checked)%10==0 or row['mismatches']:
+            print('CHECKED',len(checked),'of',len(candidates),'bad',len(row['mismatches']),flush=True)
+checked.sort(key=lambda r:r['path'])
+accepted=[r for r in checked if r['all_bytes_match_retained']]
+plan={'scope':'Only byte-identical old imported caches; source, project metadata, player/profile data, logs and latest suite runs retained',
+ 'head':protected['head'],'reference_root':str(reference_root),'candidate_count':len(checked),
+ 'approved':accepted,'skipped':[r for r in checked if not r['all_bytes_match_retained']],
+ 'file_count':sum(r['files'] for r in accepted),'bytes':sum(r['bytes'] for r in accepted),
+ 'protected_manifest_sha256':sha(HERE/'protected_before.json')}
+p=write('cache_plan.json',plan)
+print(json.dumps({'approved_roots':len(accepted),'skipped_roots':len(plan['skipped']),'files':plan['file_count'],
+ 'bytes':plan['bytes'],'plan_sha256':sha(p)}),flush=True)

@@ -1,0 +1,35 @@
+from cleanup_audit import ROOT,HERE,no_links,sha,write
+from pathlib import Path
+import json,os,re,subprocess,time
+
+cleanup=json.loads((HERE/'cache_deletion_receipt.json').read_text(encoding='utf-8'))
+assert cleanup['complete'] is True
+assert not any(Path(r['path']).exists() for r in cleanup['results'])
+lock=ROOT/'.godot/redraw_rejection_source.lock'
+assert lock.read_text(encoding='utf-8')==str(HERE).replace('\\','/')
+engine=Path((ROOT/'godot.local.txt').read_text(encoding='utf-8-sig').strip())
+assert sha(engine)=='ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00'
+profile=HERE/'smoke_profile';assert not profile.exists();profile.mkdir()
+env=os.environ.copy()
+for key in list(env):
+    if (key.endswith(('_TEST','_QA','_QA_MANIFEST','_AUDIT')) or key.startswith('LSH_')
+            or key in ['LEVEL','SCENARIO','CUSTOM_DEFENSE','SKIRMISH','SKIRMISH_AI','ARENA','AUTO_MICRO','AUTOMICRO','SCREENSHOT_DIR']):env.pop(key)
+for key,leaf in [('APPDATA','roaming'),('LOCALAPPDATA','local'),('USERPROFILE','user'),('TEMP','temp'),('TMP','temp')]:
+    d=profile/leaf;d.mkdir(exist_ok=True);env[key]=str(no_links(d))
+env['STEAM_DISABLED']='1'
+args=[str(engine),'--headless','--path',str(ROOT),'--audio-driver','Dummy','--quit-after','180']
+started=time.monotonic();log=HERE/'startup.log'
+with log.open('wb') as output:
+    child=subprocess.Popen(args,cwd=ROOT,env=env,stdout=output,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW)
+    try: exit_code=child.wait(timeout=120)
+    except subprocess.TimeoutExpired:
+        child.terminate();child.wait(timeout=15);raise
+text=log.read_text(encoding='utf-8',errors='replace')
+errors=re.findall(r'(?m)^(?:SCRIPT ERROR:|ERROR:|Parse Error:).*$',text)
+result={'passed':exit_code==0 and not errors,'exit_code':exit_code,'pid':child.pid,'requested_frames':180,
+ 'scope':'Current project default main-menu headless startup with retained main imports; not visual, full gameplay or performance acceptance',
+ 'engine_sha256':sha(engine),'source_head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+ 'seconds':round(time.monotonic()-started,3),'steam_disabled':True,'isolated_profile':str(profile),
+ 'log_sha256':sha(log),'errors':errors,'args':args[1:]}
+write('smoke_receipt.json',result);print(json.dumps(result,ensure_ascii=False),flush=True)
+if not result['passed']:raise SystemExit(1)

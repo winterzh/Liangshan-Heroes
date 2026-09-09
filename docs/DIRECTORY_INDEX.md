@@ -1,3 +1,10 @@
+## 2026-09-09 冗余缓存清理与归档
+
+- `qa/storage_cleanup_20260909/`：161个重复imported目录清理、受保护文件前后哈希、归档与隔离启动证据；原始源文件和所有已提交QA仍保留。
+- `qa/storage_cleanup_20260909/archive_guide/`：本机归档说明与清单的交接副本。7z位于`D:/AI项目/水浒/归档/`。
+- `D:/CodexTemp/level3_scenery_prepare_20260909/已归档.md`和工程`.godot/旧助手已归档_20260909.md`：原位置恢复指引；正式景物候选QA仍在原目录。
+- `D:/CodexTemp/watermargin-cleanup-20260909/`：本轮完整成员清单和审计执行目录；两份归档验证副本因审批拦截仍保留。
+
 ## 2026-09-09 祝家庄景物、暂停边界与特效分区
 
 - `scripts/run_map_state.gd`、`scripts/run_scenery_state.gd`：显式安装内容上下文、固定景物工厂与延迟激活。

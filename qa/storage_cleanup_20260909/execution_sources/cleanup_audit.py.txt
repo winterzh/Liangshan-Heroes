@@ -1,0 +1,66 @@
+"""Read-only file inventories and hashes for the authorized Water Margin cleanup."""
+from pathlib import Path
+import argparse, collections, hashlib, json, os, stat, subprocess, time
+
+ROOT = Path('D:/AI项目/水浒/开发工程')
+HERE = Path(__file__).resolve().parent
+LATEST = ROOT / '.godot/steam_candidates/20260908_184221_465b304a'
+
+def sha(path):
+    with path.open('rb') as f:
+        return hashlib.file_digest(f, 'sha256').hexdigest()
+
+def no_links(path):
+    path = Path(os.path.abspath(path))
+    for p in [path, *path.parents]:
+        if p.exists() and p.lstat().st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT:
+            raise RuntimeError('Reparse path refused: ' + str(p))
+    return path
+
+def files(path):
+    no_links(path)
+    result = []
+    for current, dirs, names in os.walk(path, followlinks=False):
+        for name in dirs + names:
+            p = Path(current) / name
+            if p.lstat().st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT:
+                raise RuntimeError('Nested reparse refused: ' + str(p))
+        result.extend(Path(current) / n for n in names)
+    return sorted(result)
+
+def write(name, data):
+    p = HERE / name
+    p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    return p
+
+def baseline():
+    tracked = [ROOT / p for p in subprocess.check_output(['git','ls-files','-z'],cwd=ROOT).decode().split('\0') if p]
+    extra = files(ROOT / '.godot/imported') + files(LATEST)
+    extra += [ROOT/'godot.local.txt', Path('D:/AI项目/水浒/开始游戏.cmd')]
+    selected = sorted(set(tracked + extra))
+    rows = []
+    for i,p in enumerate(selected):
+        no_links(p)
+        rows.append({'path': str(p), 'bytes': p.stat().st_size, 'sha256': sha(p)})
+        if i and i % 5000 == 0: print('HASHED', i, flush=True)
+    result={'head': subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+        'tracked_count':len(tracked), 'files':rows, 'file_count':len(rows),
+        'total_bytes':sum(r['bytes'] for r in rows), 'scope':'All tracked files, main imported cache, full latest Steam candidate, local Godot path and launcher'}
+    path=write('protected_before.json',result)
+    print(json.dumps({'protected_files':len(rows),'protected_bytes':result['total_bytes'],'manifest_sha256':sha(path)}),flush=True)
+
+def verify_protected():
+    data=json.loads((HERE/'protected_before.json').read_text(encoding='utf-8'))
+    changes=[]
+    for r in data['files']:
+        p=Path(r['path'])
+        if not p.is_file() or p.stat().st_size!=r['bytes'] or sha(p)!=r['sha256']: changes.append(r['path'])
+    result={'passed':not changes,'file_count':data['file_count'],'total_bytes':data['total_bytes'],
+        'changes':changes,'baseline_sha256':sha(HERE/'protected_before.json')}
+    write('protected_after.json',result)
+    print(json.dumps(result),flush=True)
+    if changes: raise SystemExit(1)
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('mode',choices=['baseline','verify']);a=p.parse_args()
+    baseline() if a.mode=='baseline' else verify_protected()
