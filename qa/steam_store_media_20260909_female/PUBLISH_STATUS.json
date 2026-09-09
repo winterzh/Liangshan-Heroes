@@ -10,9 +10,9 @@
     "你操作我的edge浏览器，我给你登录好了",
     "放了"
   ],
-  "store_upload_status": "store_capsules_8_uploaded_remaining_media_waiting_for_user_drag_drop",
+  "store_upload_status": "all_image_assets_published_video_and_thumbnail_waiting_for_drag_drop",
   "store_media_published": false,
-  "overall_status": "store_capsules_revision_6_publicly_verified_announcement_cover_previously_verified_remaining_media_pending",
+  "overall_status": "store_capsules_revision_6_library_and_screenshots_revision_7_published_video_pending",
   "local_delivery": {
     "status": "completed_and_visually_checked",
     "bundle": "D:/AI项目/水浒/Steam新素材-20260909",
@@ -66,8 +66,8 @@
       "news_listing_prior_to_capsule_publication": "Minor update cards still render the app's old store capsule. Replacing the announcement cover alone does not replace these store capsule surfaces."
     }
   },
-  "store_revision_observed": 6,
-  "observed_diff": "This game has not been modified. (After revision 6 publication.)",
+  "store_revision_observed": 7,
+  "observed_diff": "This game has not been modified. (After revision 7 publication, before opening the existing trailer replacement drop area.)",
   "browser": "User-owned Microsoft Edge; connected extension, claimed existing logged-in Steamworks tab",
   "attempts": [
     {
@@ -94,7 +94,7 @@
       "https://store.steampowered.com/app/5088120/_/?l=english"
     ],
     "visual": "Approved female cover is visible on the live Simplified Chinese storefront.",
-    "header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/df0980e3cc98f86583a5859efd44ae9589b04777/header_schinese.jpg?t=1788942928",
+    "header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/df0980e3cc98f86583a5859efd44ae9589b04777/header_schinese.jpg?t=1788943986",
     "english_header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/df0980e3cc98f86583a5859efd44ae9589b04777/header.jpg?t=1788942928",
     "natural_width": 460,
     "natural_height": 215,
@@ -103,14 +103,15 @@
       "schinese",
       "english"
     ],
-    "screenshots": "Existing six screenshot asset hashes remain on the public page; the five new captures have not been uploaded.",
-    "trailer": "The new 45-second trailer has not been uploaded or published. Existing trailer retained; no new duration claimed."
+    "screenshots": "The six old screenshot entries have been replaced by five new gameplay screenshots. All five current full resources loaded complete at 1920x1080 on the live Simplified Chinese page.",
+    "trailer": "The new 45-second trailer has not been uploaded or published. Existing trailer retained; no new duration claimed.",
+    "latest_check": "2026-09-09 revision 7: CN header and five new screenshots verified. Earlier EN header check belongs to revision 6."
   },
-  "next_step": "Edge has been returned to Graphical Assets > Library > base-assets drop area. User can drag the six files from 02-游戏库图片 and the five files from 03-实机截图 into that same area; agent will classify, upload and publish. Then upload the new trailer and its promotional thumbnail through the trailer page.",
+  "next_step": "Edge is on the existing trailer 1281043 replacement drop area. Drag D:/AI项目/水浒/Steam新素材-20260909/04-实机视频/LiangshanHeroes-Gameplay-20260909.mp4 into 将宣传片文件拖放此处以上传. Agent will check transcoding, content flags, playback and thumbnail; use promo_1920x1080.png from 05-视频封面与公告配图 for the thumbnail when that slot is shown.",
   "limits": [
-    "Only eight store capsules are published in revision 6; the complete 22-file media delivery is not fully online.",
+    "Twenty of the twenty-two prepared deliverables are published (8 store capsules, 6 library images, 5 screenshots, and the previously updated announcement cover). The 45-second trailer and its 1920x1080 thumbnail remain pending.",
     "Earlier native desktop automation was stopped by its URL-confidence safety check. No bypass or hidden endpoint upload was attempted. Current publication used the connected Edge extension after user file drag/drop.",
-    "Simplified Chinese and English live store headers were verified. Traditional Chinese/Japanese fallback and actual Steam client library display were not rechecked in this follow-up.",
+    "Library logo placement popup was visually checked at 1231px width, but actual Steam client display and narrow-window crop were not checked. Live CN screenshots/header checked in revision 7; English header was verified in revision 6.",
     "Keep prior failed upload attempts as history; do not infer publication from local files or Git sync."
   ],
   "history_before_capsule_publication": {
@@ -181,14 +182,6 @@
     "verification_method": "Read-only DOM image src/naturalWidth/naturalHeight/complete and rendered browser screenshot. No raw page HTML, auth data or browser session data retained."
   },
   "remaining_media": {
-    "library_images": {
-      "count": 6,
-      "status": "awaiting_user_drag_drop"
-    },
-    "screenshots": {
-      "count": 5,
-      "status": "awaiting_user_drag_drop"
-    },
     "trailer": {
       "count": 1,
       "status": "awaiting_user_drag_drop"
@@ -197,5 +190,111 @@
       "count": 1,
       "status": "not_uploaded"
     }
+  },
+  "library_images_published": true,
+  "screenshots_published": true,
+  "library_screenshot_publish_receipt": {
+    "verified_at_utc": "2026-09-09T08:55:37Z",
+    "revision_before": 6,
+    "revision_after": 7,
+    "backend_result": "Successfully published!",
+    "post_publish_diff": "This game has not been modified.",
+    "backend_displayed_publication_time": "9 月 9 日 上午 1:51 (Steamworks displayed timezone)",
+    "library_file_count": 6,
+    "new_screenshot_count": 5,
+    "old_screenshots_removed_from_store": 6,
+    "screenshot_order": [
+      "01_campaign_army.png",
+      "02_naval_fleet.png",
+      "05_naval_combat.png",
+      "03_liangshan_base.png",
+      "04_camp_construction.png"
+    ],
+    "classification_corrections": [
+      "library_header.png and library_header_schinese.png explicitly selected as Library Header",
+      "library_hero.png and library_hero_schinese.png explicitly selected as Library Hero",
+      "Screenshot 01 and 05 all_ages=0; screenshot 02,03,04 all_ages=1"
+    ],
+    "library_asset_hashes": {
+      "capsule": "42f33eff92bfcd47e4ec74c7601d736b64c820ee",
+      "header": "df0980e3cc98f86583a5859efd44ae9589b04777",
+      "hero": "505cc649b282baa54b931b0955bff6d401070b2c"
+    },
+    "library_languages": [
+      "english",
+      "schinese"
+    ],
+    "library_preview": {
+      "method": "Steamworks logo placement popup, rendered browser screenshot",
+      "window_width_pixels": 1231,
+      "old_transparent_logo_preserved": true,
+      "logo_position_changed": false,
+      "logo_clear_on_left_landscape": true,
+      "no_double_title_or_opaque_logo_background": true,
+      "three_main_faces_visible": true,
+      "actual_steam_client_checked": false,
+      "narrow_window_checked": false
+    },
+    "screenshots_public": [
+      {
+        "filename": "01_campaign_army.png",
+        "steam_asset_hash": "a3a0bf192edc3250eff75be2c67deadd57cbe15c",
+        "all_ages": false,
+        "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/a3a0bf192edc3250eff75be2c67deadd57cbe15c/ss_a3a0bf192edc3250eff75be2c67deadd57cbe15c.1920x1080.jpg?t=1788943986",
+        "natural_dimensions": [
+          1920,
+          1080
+        ],
+        "complete": true
+      },
+      {
+        "filename": "02_naval_fleet.png",
+        "steam_asset_hash": "517a24884d4575d343100c994d9f2b5bab0e9380",
+        "all_ages": true,
+        "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/517a24884d4575d343100c994d9f2b5bab0e9380/ss_517a24884d4575d343100c994d9f2b5bab0e9380.1920x1080.jpg?t=1788943986",
+        "natural_dimensions": [
+          1920,
+          1080
+        ],
+        "complete": true
+      },
+      {
+        "filename": "05_naval_combat.png",
+        "steam_asset_hash": "000ac450f54d117f0055b2e05e3f74711e276c4e",
+        "all_ages": false,
+        "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/000ac450f54d117f0055b2e05e3f74711e276c4e/ss_000ac450f54d117f0055b2e05e3f74711e276c4e.1920x1080.jpg?t=1788943986",
+        "natural_dimensions": [
+          1920,
+          1080
+        ],
+        "complete": true
+      },
+      {
+        "filename": "03_liangshan_base.png",
+        "steam_asset_hash": "546bab48968fd44e9fe1f536100d87fd5d189c7b",
+        "all_ages": true,
+        "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/546bab48968fd44e9fe1f536100d87fd5d189c7b/ss_546bab48968fd44e9fe1f536100d87fd5d189c7b.1920x1080.jpg?t=1788943986",
+        "natural_dimensions": [
+          1920,
+          1080
+        ],
+        "complete": true
+      },
+      {
+        "filename": "04_camp_construction.png",
+        "steam_asset_hash": "780b626fd51e3a06a9ff8cefdaf8895ad2efe803",
+        "all_ages": true,
+        "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/780b626fd51e3a06a9ff8cefdaf8895ad2efe803/ss_780b626fd51e3a06a9ff8cefdaf8895ad2efe803.1920x1080.jpg?t=1788943986",
+        "natural_dimensions": [
+          1920,
+          1080
+        ],
+        "complete": true
+      }
+    ],
+    "screenshot_public_check": "Live Simplified Chinese storefront shows exactly the five new thumbnail hashes in the order listed; all five thumbnails and full 1920x1080 resources loaded complete. Rendered storefront screenshot was visually inspected.",
+    "ordering_note": "Steam exposes drag-only sorting. The effective uploaded order 01,02,05,03,04 was retained: campaign, fleet, naval combat, base, construction; do not claim numeric 01-05 sorting.",
+    "discovery_surface_limit": "Three of the five images are marked all-ages. Steam recommends at least four for eligible off-store discovery placement; no claim is made about that placement.",
+    "diff_scope": "Library header/capsule/hero English+schinese variants (and generated hero blur), five replacement screenshots with honest all_ages flags, and asset_mtime. No logo, store capsule, trailer, price, body copy or game build changes."
   }
 }

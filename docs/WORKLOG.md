@@ -6,7 +6,9 @@
 
 商店small/header/vertical（平台字段hero_capsule）/main的English与schinese共8张封面已上传并公开发布，Steam返回`Successfully published!`，商店revision从5升至6。差异仅这8图及平台mtime、空alt_assets；用户在已连接的Edge页面拖入素材后，两张header手动指定为Header Capsule再上传。公开中文与英文页header均回读新资源标识`df0980e3cc98f86583a5859efd44ae9589b04777`，460×215、complete=true；公开中文页女性封面已截图目检。此公开验证范围是两语header，不扩称所有商店展示位置均已目检。
 
-最新公告714538122294067212的800×450配图此前已上传保存，四语公开分享元数据与公开PNG已回读。其余6张库图、5张实机截图、45秒视频及1920×1080视频配图仍未上传、未发布；不把商店封面发布计作整套媒体已上线。[实施与交接](STEAM_STORE_MEDIA_20260909.md)和[发布收据](../qa/steam_store_media_20260909_female/PUBLISH_STATUS.json)分别记录各项进度。本轮只按白名单同步stable，不改变游戏运行资源或发布游戏包。
+随后6张库图与5张新实机截图已发布，Steam再次返回`Successfully published!`，revision6→7；旧6张截图已替换。截图保留实际主题顺序01、02、05、03、04，`all_ages`对应0、1、0、1、1。1231px宽网页库预览已目检：既有透明Logo位于左侧空白，无黑底或重影、不挡女性，三名主要人物脸完整；没有修改Logo或位置，未验收实际Steam客户端或窄屏。公开中文页5张新截图的缩略图与1920×1080完整资源均已加载完成，详见[发布收据](../qa/steam_store_media_20260909_female/PUBLISH_STATUS.json)。
+
+最新公告714538122294067212的800×450配图此前已保存并完成四语公开分享元数据及PNG回读。现在仅45秒视频与1920×1080视频缩略图仍未上传、未发布，整套媒体尚未全部完成。[实施与交接](STEAM_STORE_MEDIA_20260909.md)保留各次发布边界；本轮只按白名单同步stable，不改变游戏运行资源或发布游戏包。
 
 首次Codex内置浏览器尝试受旧页面本地拖放控件限制，当时未触发文件选择器，重载与View Diffs确认无商店变更；该失败及revision5属于本次成功前的历史，原始记录保留。
 
