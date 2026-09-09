@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "created_on": "2026-09-09",
+  "purpose": [
+    "video_thumbnail",
+    "social_cover",
+    "current_announcement_image"
+  ],
+  "artwork_choice": "User-approved foreground female warrior cover",
+  "method": {
+    "generation_tool": "image_gen.imagegen (built-in)",
+    "generation_mode": "approved-reference image edit into 16:9 composition",
+    "skill": "C:/Users/rsb/.codex/skills/.system/imagegen/SKILL.md",
+    "output_normalization": "FFmpeg Lanczos scaling only, from the same native generation for both outputs; no cropping, compositing, or programmatic lettering replacement.",
+    "ffmpeg": "C:/Users/rsb/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.0.1-full_build/bin/ffmpeg.exe",
+    "visual_preservation_scope": "Recognizable character identities, costume and approved art direction were visually retained through generative composition adaptation; this is not a pixel-identical crop.",
+    "upload_or_publication_performed_by_asset_agent": false
+  },
+  "approved_reference": {
+    "path": "C:/Users/rsb/AppData/Local/Temp/codex-clipboard-fca20c7e-7ade-4a20-b073-becf3cce5e4b.png",
+    "width": 1657,
+    "height": 949,
+    "bytes": 3283720,
+    "sha256": "543d3b6298be9d49eb00752c7e5d2ac7a797e76e35c180051c4f2a1ae96510de"
+  },
+  "prompt": "Use case: identity-preserve / ads-marketing.\nEdit the supplied APPROVED cover into a finished landscape 16:9 promotional cover for the video thumbnail and announcement image of the game. Target exact 16:9, preferably 1920x1080 or another high-resolution size with that proportion.\nPreserve the approved FOREGROUND FEMALE WARRIOR as the primary subject, with her recognizable face, black hairstyle with red ribbon, gaze, white embroidered patterned robe, red cape, bronze shoulder armor and sword. Retain Song Jiang in ochre and Lin Chong in dark armor as smaller supporting men BEHIND her. Keep all three principal faces unobstructed, fully inside the canvas, and visually recognizable, with the woman dominant. Preserve the lake, wooden stockade, distant mountains and red flag, plus the aged parchment Chinese ink-painting appearance, expressive black brushwork, muted gold and restrained dark red color palette.\nOn the LEFT retain the dramatic black brush field and the complete, exact large gold Chinese brush-calligraphy title in two lines:\n水浒\n英雄传\nBelow it retain the exact subtitle:\n八幕战役\nKeep all five title characters accurately rendered, fully readable, with no missing or changed strokes. The subtitle must remain readable when the image is shown at 800x450. Keep generous safe margins around all lettering and principal heads. Do not add any slogan, English wording, date, platform logo, call to action, or other text.\nThis is a minimal composition adaptation of the SAME selected cover, not a new cast or campaign. Reframe subtly and extend the existing scenery only as needed for 16:9. Keep the composition faithful and avoid unnecessary redesign, face changes or costume changes. Do not turn the woman into a background character or replace her with a man. No stretching faces, no border, no mockup, no watermark.",
+  "title": "水浒英雄传",
+  "subtitle": "八幕战役",
+  "generated_original": "C:/Users/rsb/.codex/generated_images/01a084bf-c2b9-7d02-aea5-cd8aa382fc5a/exec-3c1d6349-6269-41f9-b087-8d7e9b9b2f16.png",
+  "native": {
+    "path": "source/promo_native.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 3224664,
+    "sha256": "4cbc53f69cf672673d5e86cdd9df55df04db371b53ae8170a4503b873b345f2d",
+    "copied_without_modification": true
+  },
+  "outputs": [
+    {
+      "path": "promotional/promo_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 4049198,
+      "sha256": "c819ce62e7d4c9e972981127465256bcefe7ed883655cd0084bdb51eb216dc34",
+      "normalization_arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-y",
+        "-i",
+        "source/promo_native.png",
+        "-vf",
+        "scale=1920:1080:flags=lanczos",
+        "-frames:v",
+        "1",
+        "-update",
+        "1",
+        "promotional/promo_1920x1080.png"
+      ]
+    },
+    {
+      "path": "promotional/announcement_800x450.png",
+      "width": 800,
+      "height": 450,
+      "bytes": 813603,
+      "sha256": "86b79569571e50c685bf7c2181a11ffd7d9aa0f268490da64ef17bfb26ee3fa2",
+      "normalization_arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-y",
+        "-i",
+        "source/promo_native.png",
+        "-vf",
+        "scale=800:450:flags=lanczos",
+        "-frames:v",
+        "1",
+        "-update",
+        "1",
+        "promotional/announcement_800x450.png"
+      ]
+    }
+  ],
+  "visual_inspection": {
+    "inspected_native_and_both_final_sizes": true,
+    "exact_title_readable": true,
+    "exact_subtitle_readable_at_800x450": true,
+    "foreground_female_face_visible": true,
+    "female_hair_costume_and_palette_recognizable": true,
+    "song_jiang_and_lin_chong_remain_in_background": true,
+    "no_title_or_principal_head_edge_clipping": true,
+    "no_added_promotional_slogan": true,
+    "notes": "The female warrior remains dominant center-right, with Song Jiang and Lin Chong behind her. The complete five-character title and four-character subtitle remain clear in both final sizes. All three principal faces have safe margins."
+  }
+}

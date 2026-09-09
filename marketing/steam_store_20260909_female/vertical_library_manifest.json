@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "created_date": "2026-09-09",
+  "timezone": "Asia/Shanghai",
+  "purpose": "Steam portrait covers adapted from the user's approved woman-in-foreground key art",
+  "generator": {
+    "tool": "image_gen.imagegen (built-in)",
+    "calls": 2,
+    "mode": "referenced_image_paths",
+    "skill": "C:/Users/rsb/.codex/skills/.system/imagegen/SKILL.md"
+  },
+  "reference": {
+    "path": "C:/Users/rsb/AppData/Local/Temp/codex-clipboard-fca20c7e-7ade-4a20-b073-becf3cce5e4b.png",
+    "width": 1657,
+    "height": 949,
+    "sha256": "543d3b6298be9d49eb00752c7e5d2ac7a797e76e35c180051c4f2a1ae96510de",
+    "inspected_before_generation": true
+  },
+  "exact_text": {
+    "title": "水浒英雄传",
+    "title_layout": [
+      "水浒",
+      "英雄传"
+    ],
+    "subtitle": "八幕战役"
+  },
+  "assets": [
+    {
+      "role": "vertical",
+      "prompt": "Use case: identity-preserve / ads-marketing.\nInput image 1 is the approved EDIT TARGET, not merely inspiration. Create ONE portrait Steam store vertical capsule adaptation of this exact cover. Intended final aspect ratio 748:896 (187:224); compose natively for that ratio, ideally a high-resolution 1504x1792 portrait. Do not return multiple panels or a mockup.\nPreserve the same recognizable young Chinese woman warrior as the dominant foreground subject, her exact facial identity, black tied-up hair with red ribbon, cream embroidered robe, dark lamellar shoulder armor, red cloak, belt and hand on the sword hilt. Preserve the two smaller male characters behind her: Song Jiang in ochre robes and black headgear, and Lin Chong in dark armor holding a spear. They remain supporting figures behind her and must not replace her as the focal point.\nRearrange only the framing/composition to fit the portrait: large foreground woman occupying the lower center/right, both men clearly readable farther behind; the existing river, Liangshan stockade, reeds, red banner and hazy mountains provide depth. Match the approved fine ink-and-brush historical illustration, aged parchment texture, restrained ochre, ivory, black and deep red, not photographic and not anime.\nPlace the complete legible gold brush-calligraphy title in a clean black ink area across the upper portion: first line exactly “水浒”, second line exactly “英雄传”. Together these read exactly “水浒英雄传”. Beneath the title, a clearly separate smaller line exactly “八幕战役”. These are the ONLY written words. Keep every character correct, unoccluded, and comfortably inside the canvas with 6 percent safe margins; never clip or abbreviate any character.\nThe title should remain visually dominant at small Steam thumbnail scale while the woman's unobscured face remains the main character focus. Keep all three faces comfortably within the frame. No borders, no extra logos, no invented characters, no additional weapons, no watermark. This must unmistakably remain the user-selected woman-in-foreground artwork, not a male-led variation.",
+      "generated_output_path": "C:/Users/rsb/.codex/generated_images/01a084c0-110f-7552-9f5d-f1de940b0e12/exec-6ad6153a-0131-45b7-b500-59e52a45f4bf.png",
+      "native": {
+        "path": "source/vertical_native.png",
+        "width": 1146,
+        "height": 1372,
+        "bytes": 3351602,
+        "sha256": "1284f15de71c8be6c621a55bae7ee0cdd0135025141390e1b395a23f71477d20"
+      },
+      "exports": [
+        {
+          "path": "capsules/vertical.png",
+          "width": 748,
+          "height": 896,
+          "bytes": 1514913,
+          "sha256": "b38cfe7391f5723a20ab6a08a019b0a951347eee63afa016a810f286b15b6454"
+        },
+        {
+          "path": "capsules/vertical_schinese.png",
+          "width": 748,
+          "height": 896,
+          "bytes": 1514913,
+          "sha256": "b38cfe7391f5723a20ab6a08a019b0a951347eee63afa016a810f286b15b6454"
+        }
+      ],
+      "normalization_filter": "scale=748:896:flags=lanczos,setsar=1",
+      "visual_qa": {
+        "method": "Direct view_image inspection of the native image and the final exact-size export",
+        "native_inspected": true,
+        "final_export_inspected": true,
+        "title_and_subtitle_complete_and_correct": true,
+        "woman_is_dominant_foreground_subject": true,
+        "song_jiang_and_lin_chong_behind_woman": true,
+        "all_three_faces_and_all_text_within_canvas": true,
+        "no_extra_words_observed": true,
+        "result": "pass",
+        "notes": "Gold title and subtitle remain readable at the exported size. The woman is foremost, with two smaller male figures behind her. Text is fully within the canvas; the requested numerical top safe margin was not achieved exactly. Composition was regenerated from the approved reference, not preserved pixel-for-pixel."
+      }
+    },
+    {
+      "role": "library_capsule",
+      "prompt": "Use case: identity-preserve / ads-marketing.\nInput image 1 is the user's approved cover EDIT TARGET. Create ONE Steam library portrait capsule adapted from that exact artwork. Intended final aspect ratio exactly 2:3 for 600x900 pixels; compose natively as a high-resolution 1200x1800 or equivalent 2:3 portrait. Do not create a contact sheet, grid or mockup.\nPreserve the same recognizable young Chinese woman warrior as the large foremost central character: the same face and expression looking to her right, black hair tied up with a red ribbon, ivory embroidered robe, dark lamellar shoulder armor, deep red cloak, decorated belt, and hand on sword hilt. Preserve the two same smaller men behind her, Song Jiang in ochre robes with black headgear and Lin Chong in dark armor holding his spear. They must visibly remain in the background. The woman is the main foreground star, never a supporting side character.\nRecompose for the tall frame without stretching: upper 30 percent holds the large title, the woman fills the lower center/left from head to below her belt, the two supporting men appear at different depths behind her on the right. Retain the reference river, reeds, fortified Liangshan gate, mountain landscape and red flag. Use the exact same finely drawn historical Chinese ink illustration, aged parchment texture, black ink masses, ivory/ochre tones and restrained deep red. Retain the approved character identities and clothing design; change only layout for the taller cover.\nOnly these exact Chinese words appear: main title “水浒英雄传”, rendered in two bold gold brush-calligraphy lines “水浒” then “英雄传”; smaller distinct subtitle directly beneath, exactly “八幕战役”. Spell every character correctly, completely and legibly. Leave at least 7 percent safe margin above the topmost title stroke and 6 percent on either side. The title must be readable at small library thumbnail size, with all text on a deep black ink area and no overlap with faces.\nKeep the woman's full face, Song Jiang's full face and Lin Chong's full face within safe framing. No additional wording, no English title, no extra characters, no border, no watermark. Maintain the precise approved woman-led key art rather than inventing a different protagonist or a male-led cover.",
+      "generated_output_path": "C:/Users/rsb/.codex/generated_images/01a084c0-110f-7552-9f5d-f1de940b0e12/exec-3803bcf3-370e-411c-ba59-599235839107.png",
+      "native": {
+        "path": "source/library_capsule_native.png",
+        "width": 1024,
+        "height": 1536,
+        "bytes": 3534027,
+        "sha256": "97a3a40b92658c966a735558acb60e035d3a4a8649f2a768d4450550a06d1fa5"
+      },
+      "exports": [
+        {
+          "path": "library/library_capsule.png",
+          "width": 600,
+          "height": 900,
+          "bytes": 1195578,
+          "sha256": "e96e6be4b78b88f9949c9a9010509d8c29f9608b78fedb70a4cb96ed1f71f70a"
+        },
+        {
+          "path": "library/library_capsule_schinese.png",
+          "width": 600,
+          "height": 900,
+          "bytes": 1195578,
+          "sha256": "e96e6be4b78b88f9949c9a9010509d8c29f9608b78fedb70a4cb96ed1f71f70a"
+        }
+      ],
+      "normalization_filter": "scale=600:900:flags=lanczos,setsar=1",
+      "visual_qa": {
+        "method": "Direct view_image inspection of the native image and the final exact-size export",
+        "native_inspected": true,
+        "final_export_inspected": true,
+        "title_and_subtitle_complete_and_correct": true,
+        "woman_is_dominant_foreground_subject": true,
+        "song_jiang_and_lin_chong_behind_woman": true,
+        "all_three_faces_and_all_text_within_canvas": true,
+        "no_extra_words_observed": true,
+        "result": "pass",
+        "notes": "Gold title and subtitle remain readable at the exported size. The woman is foremost, with two smaller male figures behind her. Text is fully within the canvas; the requested numerical top safe margin was not achieved exactly. Composition was regenerated from the approved reference, not preserved pixel-for-pixel."
+      }
+    }
+  ],
+  "normalization": {
+    "executable": "C:/Users/rsb/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.0.1-full_build/bin/ffmpeg.exe",
+    "operations": "Full-frame Lanczos scaling to exact required dimensions and square sample aspect ratio; no crop, compositing, face edits, or text redrawing.",
+    "localized_duplicates": "Each _schinese export is a byte-identical copy of its corresponding generic export.",
+    "native_sources": "Byte-identical copies of the built-in image generator's PNG outputs."
+  },
+  "scope": {
+    "browser_used": false,
+    "uploaded": false,
+    "git_commit_created": false,
+    "unrelated_files_modified": false
+  }
+}

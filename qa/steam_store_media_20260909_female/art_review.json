@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-09-09",
+  "timezone": "Asia/Shanghai",
+  "reviewer": "classic_reviews",
+  "purpose": "Independent read-only visual review of other agents' final Steam artwork exports",
+  "scope": {
+    "image_files_modified": false,
+    "browser_or_steam_used": false,
+    "reviewed_assets_only": true,
+    "excluded_own_work": [
+      "capsules/vertical.png",
+      "library/library_capsule.png"
+    ],
+    "pending_assets": []
+  },
+  "reference": {
+    "path": "C:/Users/rsb/AppData/Local/Temp/codex-clipboard-fca20c7e-7ade-4a20-b073-becf3cce5e4b.png",
+    "width": 1657,
+    "height": 949,
+    "sha256": "543d3b6298be9d49eb00752c7e5d2ac7a797e76e35c180051c4f2a1ae96510de",
+    "method": "Previously viewed in this same subtask session before portrait generation; used as the approved visual reference for this independent review.",
+    "expected_composition": "Woman warrior is largest and foremost; Song Jiang and Lin Chong remain smaller supporting figures behind her."
+  },
+  "methodology": {
+    "tools": [
+      "view_image detail=original",
+      "Read-only PNG IHDR, byte length and SHA-256 checks",
+      "FFmpeg in-memory 231x87 Lanczos preview of small.png; no preview file written"
+    ],
+    "text_check": "Visual inspection of exact title 水浒英雄传 (水浒 / 英雄传) and subtitle 八幕战役 on assets intended to contain text; no OCR used.",
+    "limitations": [
+      "This is model visual inspection, not a human unfamiliar-player/readability study.",
+      "No Steam upload, live page, client crop, language override, or actual logo overlay was inspected.",
+      "Generatively recomposed assets are checked for recognizable character and costume consistency, not pixel-identical faces."
+    ]
+  },
+  "assets": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\capsules\\main.png",
+      "relative_path": "capsules/main.png",
+      "width": 1232,
+      "height": 706,
+      "bytes": 1753983,
+      "sha256": "7e436b12ea22cf9b9fe6ede5841af775bac9a60fe190f7a2e5387529737cc722",
+      "status": "pass_with_documented_limits",
+      "inspected": true,
+      "rendered_views": [
+        {
+          "width": 1232,
+          "height": 706,
+          "method": "view_image original-size output"
+        }
+      ],
+      "observed": {
+        "woman_foreground": true,
+        "men_background": true,
+        "recognizable_reference_style_and_costume": true,
+        "exact_title": true,
+        "exact_subtitle": true,
+        "principal_faces_uncropped": true,
+        "text_uncropped": true,
+        "notes": "Large woman dominates the center-right foreground. Ochre-robed Song Jiang and armored Lin Chong are smaller behind her; title and subtitle occupy the black ink field at left."
+      },
+      "limitations": [
+        "Lower body and distant supporting figures extend beyond the composition by design; no principal face or letter is clipped."
+      ]
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\capsules\\header.png",
+      "relative_path": "capsules/header.png",
+      "width": 920,
+      "height": 430,
+      "bytes": 883930,
+      "sha256": "0d8056563a347e55c6898e4e2ddb88add57c5b05d69169437ca1af9278bedee9",
+      "status": "pass_with_documented_limits",
+      "inspected": true,
+      "rendered_views": [
+        {
+          "width": 920,
+          "height": 430,
+          "method": "view_image original-size output"
+        }
+      ],
+      "observed": {
+        "woman_foreground": true,
+        "men_background": true,
+        "recognizable_reference_style_and_costume": true,
+        "exact_title": true,
+        "exact_subtitle": true,
+        "principal_faces_uncropped": true,
+        "text_uncropped": true,
+        "notes": "The wide recomposition retains the woman as the dominant central foreground subject and both men behind her at right. All five title characters and four subtitle characters are complete."
+      },
+      "limitations": [
+        "Checked at exported resolution; no responsive Steam header crop was observed."
+      ]
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\capsules\\small.png",
+      "relative_path": "capsules/small.png",
+      "width": 462,
+      "height": 174,
+      "bytes": 178478,
+      "sha256": "e6dc90e27e8b2d9b278c7babaf29af8d05ab48ae42a1380d842c2873166b1f88",
+      "status": "pass_with_documented_limits",
+      "inspected": true,
+      "rendered_views": [
+        {
+          "width": 462,
+          "height": 174,
+          "method": "view_image original-size output"
+        },
+        {
+          "width": 231,
+          "height": 87,
+          "method": "Read-only FFmpeg in-memory scale=231:87:flags=lanczos preview, emitted directly to the image viewer; source unchanged"
+        }
+      ],
+      "observed": {
+        "woman_foreground": true,
+        "men_background": true,
+        "recognizable_reference_style_and_costume": true,
+        "exact_title": true,
+        "exact_subtitle": true,
+        "principal_faces_uncropped": true,
+        "text_uncropped": true,
+        "small_title_readable_at_231x87": true,
+        "small_subtitle_visually_decipherable_at_231x87": true,
+        "notes": "Title is clear in the 462x174 export and remains readable in a 231x87 preview. The woman remains the obvious primary subject. The subtitle is decipherable in the 231x87 preview but is materially smaller and less prominent than the title."
+      },
+      "limitations": [
+        "231x87 is a local preview, not an inspected Steam client rendering.",
+        "The small subtitle and background faces are detail-limited at 231x87; no claim of effortless subtitle readability on every display or UI scaling setting."
+      ]
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\library\\library_hero.png",
+      "relative_path": "library/library_hero.png",
+      "width": 3840,
+      "height": 1240,
+      "bytes": 7621525,
+      "sha256": "ed93940d4eea291de26878af5b7d68b23a03c1c170bfa168b84e83893343da58",
+      "status": "pass_with_documented_limits",
+      "inspected": true,
+      "rendered_views": [
+        {
+          "width": 2048,
+          "height": 661,
+          "method": "view_image detail=original was automatically resized by the tool from 3840x1240"
+        }
+      ],
+      "observed": {
+        "woman_foreground": true,
+        "men_background": true,
+        "recognizable_reference_style_and_costume": true,
+        "title_absent_as_intended": true,
+        "principal_faces_uncropped": true,
+        "left_logo_space_present": true,
+        "notes": "Hero has no baked-in words. The left half has lake, mountains, reeds and no principal characters; the dominant woman and the two supporting men occupy the right. This preserves left-side space for a separate library logo."
+      },
+      "limitations": [
+        "Full 3840x1240 pixel-level inspection was not possible in this tool response; the observed rendition is 2048x661.",
+        "Left-side space is textured landscape, not a flat-color field. Actual logo contrast and client placement require an overlay/client check."
+      ]
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\promotional\\promo_1920x1080.png",
+      "relative_path": "promotional/promo_1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 4049198,
+      "sha256": "c819ce62e7d4c9e972981127465256bcefe7ed883655cd0084bdb51eb216dc34",
+      "status": "pass_with_documented_limits",
+      "inspected": true,
+      "rendered_views": [
+        {
+          "width": 1920,
+          "height": 1080,
+          "method": "view_image original-size output"
+        }
+      ],
+      "observed": {
+        "woman_foreground": true,
+        "men_background": true,
+        "recognizable_reference_style_and_costume": true,
+        "exact_title": true,
+        "exact_subtitle": true,
+        "principal_faces_uncropped": true,
+        "text_uncropped": true,
+        "notes": "The 16:9 promotional artwork keeps the large woman at center-right, the two supporting men behind her, and the complete gold title/subtitle on the left black ink field. All three principal faces and the title strokes are fully inside the image. Costume, palette and ink/parchment treatment remain consistent with the approved artwork."
+      },
+      "limitations": [
+        "Reviewed as a standalone 1920x1080 image; any later platform crop, compression or embedded text overlay remains outside this review."
+      ]
+    }
+  ],
+  "overall": {
+    "status": "complete_pass_with_documented_limits",
+    "inspected_asset_count": 5,
+    "must_fix_findings": [],
+    "notes": "All five assigned exports were visually inspected. No required correction was found within this scope. The small preview and hero/logo/client limitations remain explicitly recorded."
+  }
+}

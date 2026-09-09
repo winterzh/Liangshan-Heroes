@@ -1,0 +1,647 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-09-09",
+  "timezone": "Asia/Shanghai",
+  "reviewer": "classic_reviews",
+  "scope": {
+    "type": "Independent sampled visual review",
+    "full_continuous_playback": false,
+    "audio_listened": false,
+    "human_audience_test": false,
+    "media_files_modified": false,
+    "viewed_contact_sheet_timestamps_seconds": [
+      2,
+      9,
+      16,
+      21,
+      26,
+      32,
+      38,
+      42.5,
+      44
+    ],
+    "viewed_full_resolution_frame_timestamps_seconds": [
+      2,
+      9,
+      16,
+      26,
+      32,
+      38,
+      42.5,
+      44.9
+    ],
+    "coverage_statement": "Five original gameplay screenshots, both versions' nine-cell contact sheets, eight full-resolution frames from the initial MP4, and a full-resolution 9-second frame from the corrected MP4 were inspected. The revised 9-second frame confirms the requested overlay removal. Other cuts were not re-reviewed at full resolution in the final MP4; the producer reports their segment hashes unchanged in caption_correction.json. No continuous playback or listening is claimed.",
+    "extraction_method": "Existing FFmpeg extracted frames without filters into D:/CodexTemp/female_video_review_20260909; source MP4 and delivery PNG/JPG files were unchanged.",
+    "technical_validation": "Only artifact identity and metadata were read/rechecked; the producer's full encoding, decoding, black-frame and loudness tests were not duplicated.",
+    "reviewed_versions": [
+      {
+        "sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+        "contact_sheet_seconds": [
+          2,
+          9,
+          16,
+          21,
+          26,
+          32,
+          38,
+          42.5,
+          44
+        ],
+        "full_resolution_seconds": [
+          2,
+          9,
+          16,
+          26,
+          32,
+          38,
+          42.5,
+          44.9
+        ]
+      },
+      {
+        "sha256": "74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657",
+        "contact_sheet_seconds": [
+          2,
+          9,
+          16,
+          21,
+          26,
+          32,
+          38,
+          42.5,
+          44
+        ],
+        "full_resolution_seconds": [
+          9
+        ]
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\screenshots\\01_campaign_army.png",
+      "relative_path": "screenshots/01_campaign_army.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2018070,
+      "sha256": "4b1142a355b909f113a8b1c68f15f824b0ee96ea59d70d69f4cc42dcf75f71ae",
+      "source": "raw/verified/zhu/zhu_040.png",
+      "capture_second": 40,
+      "source_commit": "cf746f1a0864355df7f80cd4f18c6882088f4b7e",
+      "steam_build_id": 25200149,
+      "inspected": true,
+      "viewed_at": {
+        "width": 1920,
+        "height": 1080,
+        "method": "view_image detail=original"
+      },
+      "status": "pass_with_documented_limits",
+      "observed": {
+        "scene": "Land combat by the northern mine",
+        "combat_visible": true,
+        "blood_visible": true,
+        "combat_evidence": "Orange enemy health bar, close-range combat poses and a small ground blood decal by the central troop group.",
+        "hud": "Resources, mission strip, selected hero name, stats and skill panel are readable.",
+        "composition": "The troop group is visible near the center-right; broad fog occupies the left side.",
+        "limitations": [
+          "The far-right selected-unit portrait is partly outside the viewport.",
+          "Some world-space hero/resource labels overlap neighboring labels or the top HUD.",
+          "The blood decal was also viewed in an in-memory crop (x=1100,y=370,w=240,h=200), enlarged 3x with nearest-neighbor; original file unchanged."
+        ]
+      }
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\screenshots\\02_naval_fleet.png",
+      "relative_path": "screenshots/02_naval_fleet.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2047871,
+      "sha256": "9f9725250376c8288c9e14563b48ef0df8fd2be8e60a6a497bebe633187a349d",
+      "source": "raw/verified/naval/naval_005.png",
+      "capture_second": 5,
+      "source_commit": "cf746f1a0864355df7f80cd4f18c6882088f4b7e",
+      "steam_build_id": 25200149,
+      "inspected": true,
+      "viewed_at": {
+        "width": 1920,
+        "height": 1080,
+        "method": "view_image detail=original"
+      },
+      "status": "pass_with_documented_limits",
+      "observed": {
+        "scene": "Fleet positioning near the fort",
+        "combat_visible": false,
+        "blood_visible": false,
+        "combat_evidence": "Selected boats, movement markers and full health bars; no visible attack impact in this still.",
+        "hud": "Resources, naval mission strip and selected-boat panel are readable.",
+        "composition": "The boats are spread across the water beside the fort; part of the explored map is bounded by fog.",
+        "limitations": [
+          "A still cannot establish actual movement; positioning is visible.",
+          "No combat or blood observed in this frame, not a claim about the whole source clip."
+        ]
+      }
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\screenshots\\03_liangshan_base.png",
+      "relative_path": "screenshots/03_liangshan_base.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2154118,
+      "sha256": "406e4bd9b6f59838eeb48475c645f0f2bcb308ced3ffe6c198e63b83b8ccd573",
+      "source": "raw/verified/defense/defense_040.png",
+      "capture_second": 40,
+      "source_commit": "cf746f1a0864355df7f80cd4f18c6882088f4b7e",
+      "steam_build_id": 25200149,
+      "inspected": true,
+      "viewed_at": {
+        "width": 1920,
+        "height": 1080,
+        "method": "view_image detail=original"
+      },
+      "status": "pass_with_documented_limits",
+      "observed": {
+        "scene": "Liangshan base preparation",
+        "combat_visible": false,
+        "blood_visible": false,
+        "combat_evidence": "Base buildings and workers; top status indicates zero current enemies.",
+        "hud": "Resources, defense progress strip and building labels are readable; no unit is selected and the bottom information area is intentionally mostly empty.",
+        "composition": "Main hall, house, warehouse and gate are visible together.",
+        "limitations": [
+          "Some resource labels near the top are underneath the fixed HUD.",
+          "No combat or blood observed in this frame, not a claim about the whole source clip."
+        ]
+      }
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\screenshots\\04_camp_construction.png",
+      "relative_path": "screenshots/04_camp_construction.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2297917,
+      "sha256": "0c8b8387d9820a600b3a337cd85ebfb5b53c23a2b46fda75874d3934ba6bce99",
+      "source": "raw/verified/zhu/zhu_010.png",
+      "capture_second": 10,
+      "source_commit": "cf746f1a0864355df7f80cd4f18c6882088f4b7e",
+      "steam_build_id": 25200149,
+      "inspected": true,
+      "viewed_at": {
+        "width": 1920,
+        "height": 1080,
+        "method": "view_image detail=original"
+      },
+      "status": "pass_with_documented_limits",
+      "observed": {
+        "scene": "Camp construction",
+        "combat_visible": false,
+        "blood_visible": false,
+        "combat_evidence": "House construction progress, workers and build/repair actions; no visible enemy engagement.",
+        "hud": "Resources, mission strip, selected worker stats and build/repair icons are readable.",
+        "composition": "House construction, camp buildings, workers and heroes are shown in one viewport.",
+        "limitations": [
+          "The 10 percent construction readout is small/dark over its progress area.",
+          "World-space labels near the bottom edge may run behind the bottom HUD.",
+          "No combat or blood observed in this frame, not a claim about the whole source clip."
+        ]
+      }
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\screenshots\\05_naval_combat.png",
+      "relative_path": "screenshots/05_naval_combat.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 1951798,
+      "sha256": "c277d6f28511a6c7fa3b0c731abe4986ead3f41730ebab41d40087a9b218c125",
+      "source": "raw/verified/naval/naval_035.png",
+      "capture_second": 35,
+      "source_commit": "cf746f1a0864355df7f80cd4f18c6882088f4b7e",
+      "steam_build_id": 25200149,
+      "inspected": true,
+      "viewed_at": {
+        "width": 1920,
+        "height": 1080,
+        "method": "view_image detail=original"
+      },
+      "status": "pass_with_documented_limits",
+      "observed": {
+        "scene": "Naval combat",
+        "combat_visible": true,
+        "blood_visible": false,
+        "combat_evidence": "Opposing boats with orange health bars, projectiles and floating damage numbers 30/32.",
+        "hud": "Resources, mission strip and selected-boat information are readable.",
+        "composition": "Friendly boats and enemy boats are in the same combat view; landing troops are also visible near the upper edge.",
+        "limitations": [
+          "No blood observed in this frame; red damage numbers and sails are not treated as blood.",
+          "Some land-unit labels/health bars at the upper edge sit behind the top HUD."
+        ]
+      }
+    }
+  ],
+  "source_video": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\LiangshanHeroes-Gameplay-20260909.mp4",
+    "bytes": 39360487,
+    "sha256": "74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657",
+    "width": 1920,
+    "height": 1080,
+    "video_duration_seconds": 45,
+    "container_duration_seconds": 45.109333,
+    "metadata_source": "video/final_qa.json; duration/codec/complete-decode/audio measurements were read from the producer's receipt and were not independently rerun.",
+    "hash_independently_rechecked": true,
+    "revision": "corrected_7_to_13_second_caption_removed"
+  },
+  "contact_sheet": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\contact_sheet.jpg",
+    "width": 1440,
+    "height": 810,
+    "bytes": 150752,
+    "sha256": "b39d2c349739bd374706e47166ef17a3e7d14cb46e4989911bb683ceadd0a8a9",
+    "inspected": true,
+    "viewed_size": [
+      1440,
+      810
+    ],
+    "tile_size": [
+      480,
+      270
+    ],
+    "timestamp_order_seconds": [
+      2,
+      9,
+      16,
+      21,
+      26,
+      32,
+      38,
+      42.5,
+      44
+    ],
+    "observations": "The updated nine-cell contact sheet was viewed directly. The 9-second cell has no added promotional caption/black plate; other sampled scene compositions remain consistent. Fine label-clearance confirmation relies on the revised full-resolution 9-second extraction.",
+    "source_video_sha256": "74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657"
+  },
+  "extracted_frames": [
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_002.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 1646025,
+      "sha256": "7caac240eaa8378df49fd5fad1099e70e1eed54f62f177e8d78d59d77251ea97",
+      "timestamp_seconds": 2,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": "水陆协同",
+        "scene": "Naval combat",
+        "combat_visible": true,
+        "blood_visible": false,
+        "notes": "Projectiles, enemy boats and damage values are visible. Caption is complete below the top status strip; selected boat information and mission strip remain legible. No blood observed in this water-combat frame."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_009.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 1775339,
+      "sha256": "9c15af09e986df4bcdf2c808bdf18099f3d2ae273cfc061f1b40e3a0edfc03ac",
+      "timestamp_seconds": 9,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": "英雄与部队配合",
+        "scene": "Hero/troop land combat",
+        "combat_visible": true,
+        "blood_visible": "not independently resolved in this MP4 still; confirmed in the nearby original zhu40s screenshot",
+        "notes": "Hero/troop group and an orange-bar opponent are visible. The overlay caption is readable, but its black plate partly covers the upper-right gold-mine world label/health bar and mine image. Main HUD and the troop group remain clear. Rightmost selected-unit portrait is partly clipped by the native viewport."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_016.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2097710,
+      "sha256": "dfe9ce4c7779714c8d0d4bfb2d954a14f2677c0b854600de3e2206833a903270",
+      "timestamp_seconds": 16,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": "扎营扩军",
+        "scene": "Construction and economy",
+        "combat_visible": false,
+        "blood_visible": false,
+        "notes": "House progress, selected worker build/repair actions and camp buildings are visible. Caption does not obscure core HUD text; it covers some background roof/terrain. Construction percentage is small and dark."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_026.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 1714971,
+      "sha256": "1af41e0d30810aed8b1747a1772dc3df35819ed0aced60a8ab50a24ac49c9c32",
+      "timestamp_seconds": 26,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": "指挥水上部队",
+        "scene": "Fleet positioning",
+        "combat_visible": false,
+        "blood_visible": false,
+        "notes": "Selected boats and movement markers are visible. Caption and core HUD are legible. The caption plate covers a portion of the fort background, without hiding the boats or mission strip."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_032.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 1920742,
+      "sha256": "4a11e76537f611cba275b8ff44f82aa851860840d2f1d3ddc612df1867f376c2",
+      "timestamp_seconds": 32,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": "抵御来袭官军",
+        "scene": "Gate defense combat",
+        "combat_visible": true,
+        "blood_visible": true,
+        "notes": "Enemy siege unit/infantry, damage value and small dark-red ground blood decals are visible. Heroes, gate and opposing forces are understandable in one view. Caption does not cover the central combat or core HUD."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_038.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2038295,
+      "sha256": "cd6681338e075988cbe80779bde026760405e8df68b0dd27f1dd8d0d7dbe3bd9",
+      "timestamp_seconds": 38,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": "英雄协同作战",
+        "scene": "Hero defense combat",
+        "combat_visible": true,
+        "blood_visible": true,
+        "notes": "Multiple enemies, damage numbers, a large effect/range circle and small ground blood decals are visible. The caption is clear above the battle. Native notifications and unit/world labels add visual density; main battle remains understandable."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_042_5.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 3574798,
+      "sha256": "f6409ef82ebbb30ea334dec4d482cd4949971b4b44afb0b439e9013036fe9ca1",
+      "timestamp_seconds": 42.5,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": null,
+        "scene": "Illustrated final title card",
+        "combat_visible": false,
+        "blood_visible": false,
+        "notes": "The approved woman is the largest foreground subject, with Song Jiang and Lin Chong smaller behind her. Exact complete title 水浒英雄传 and subtitle 八幕战役 are legible and uncropped. Same parchment/ink palette and costume treatment as the reviewed promo artwork. This is promotional illustration, not gameplay."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_044_9.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 1942059,
+      "sha256": "30a78fc80d210a4434393a84099baf1842eebd798dc22951363e9dcc77a2f3d5",
+      "timestamp_seconds": 44.9,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "observed": {
+        "caption": null,
+        "scene": "Final title-card fade",
+        "combat_visible": false,
+        "blood_visible": false,
+        "notes": "Same complete title-card composition under a dark fade near the end. The darker image is consistent with the intended outro fade; no composition change or text clipping was observed."
+      },
+      "source_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "version": "initial_reviewed_edit"
+    },
+    {
+      "path": "D:\\CodexTemp\\female_video_review_20260909\\frame_009_revised_74db.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 1786579,
+      "sha256": "bd3413bd933173355f7f1e27c13fb69cb03e075a7cf718f265bb78bf2c54f0a1",
+      "timestamp_seconds": 9,
+      "inspected": true,
+      "viewed_at": [
+        1920,
+        1080
+      ],
+      "source_video_sha256": "74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657",
+      "version": "corrected_edit",
+      "observed": {
+        "caption": null,
+        "scene": "Hero/troop land combat after caption removal",
+        "combat_visible": true,
+        "blood_visible": "not independently resolved in this MP4 still; confirmed in the nearby original zhu40s screenshot",
+        "extra_caption_and_black_plate_absent": true,
+        "gold_mine_label_and_health_bar_unobscured_by_added_overlay": true,
+        "native_hud_retained": true,
+        "notes": "The added promotional words and black plate are absent. The right-upper 金矿 label, complete green health bar and mine image are visible. Native mission/resources/hero/skill UI remains present. Native last-portrait clipping and some world-label crowding remain as before."
+      }
+    }
+  ],
+  "visual_classification": {
+    "combat_present": true,
+    "blood_present": true,
+    "blood_evidence": [
+      "screenshots/01_campaign_army.png: a small dark-red ground blood decal, confirmed with an in-memory enlarged crop",
+      "MP4 32 seconds: small ground blood decals inside the gate combat area",
+      "MP4 38 seconds: several small ground blood decals near the hero/enemy group"
+    ],
+    "no_blood_observed_in_screenshots": [
+      "screenshots/02_naval_fleet.png",
+      "screenshots/03_liangshan_base.png",
+      "screenshots/04_camp_construction.png",
+      "screenshots/05_naval_combat.png"
+    ],
+    "graphic_gore_observed": false,
+    "qualification": "The viewed images show stylized combat and small blood decals. No dismemberment, wound close-ups or other graphic gore was observed in the reviewed samples. This is a visual description of those samples, not a platform age rating or a claim about all game content."
+  },
+  "findings": [
+    {
+      "id": "V01",
+      "severity": "minor",
+      "blocking": false,
+      "asset": "LiangshanHeroes-Gameplay-20260909.mp4",
+      "timestamp_seconds": 9,
+      "description": "The promotional caption plate partly covers the upper-right gold-mine world label/health bar and mine image. Caption text and main HUD remain readable.",
+      "reported_to": [
+        "root",
+        "combat_ui"
+      ],
+      "disposition": "Resolved in corrected MP4 74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657: direct 1920x1080 inspection at 9 seconds and the revised contact sheet confirm the added caption/black plate are absent and the mine label/health bar are visible. Initial discovery and SHA are retained in history.",
+      "status": "resolved",
+      "observed_in_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+      "resolved_in_video_sha256": "74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657"
+    },
+    {
+      "id": "V02",
+      "severity": "minor",
+      "blocking": false,
+      "asset": "screenshots/01_campaign_army.png and MP4 9-second sample",
+      "description": "The native selected-unit row extends partly outside the right viewport, clipping its last portrait. Some world-space labels overlap nearby entities or fixed HUD panels.",
+      "reported_to": [
+        "root",
+        "combat_ui"
+      ],
+      "disposition": "Retained as actual gameplay UI; no source image modification or retouch was performed.",
+      "status": "documented_native_ui_limit"
+    }
+  ],
+  "title_card_review": {
+    "intended_interval_seconds": [
+      42,
+      45
+    ],
+    "evidence_source": "Initial MP4 direct frame at 42.5/44.9 seconds; both contact-sheet versions at 42.5/44 seconds. Producer's caption_correction.json records the title-card cut unchanged.",
+    "matches_approved_woman_led_visual": true,
+    "title_correct_and_complete": true,
+    "subtitle_correct_and_complete": true,
+    "principal_faces_uncropped": true,
+    "promotional_not_gameplay": true
+  },
+  "limitations": [
+    "No full continuous playback or listening was performed; motion smoothness, every transition, audio quality and audiovisual synchronization are not independently certified.",
+    "No human viewer panel, unfamiliar-player test, Steam transcode, upload, live store page or client playback was inspected.",
+    "Native HUD/world-label crowding prevents a blanket claim that all on-screen text is unobscured. The separate 9-second promotional-caption obstruction was confirmed fixed in the corrected MP4.",
+    "Source-build and unchanged-viewport provenance come from source_capture_summary.json and screenshot_qa.json; this review did not rerun the game capture.",
+    "The annotated contact sheet has only 480x270 pixels per video sample; fine readability conclusions rely on the original screenshots and the listed 1920x1080 extracted frames."
+  ],
+  "overall": {
+    "status": "sampled_visual_pass_with_documented_native_ui_limits",
+    "blocking_findings": 0,
+    "historical_minor_findings": 2,
+    "resolved_minor_findings": 1,
+    "remaining_native_ui_limit_findings": 1,
+    "screenshots_individually_viewed": 5,
+    "contact_sheet_cells_viewed_per_version": 9,
+    "full_resolution_video_frames_viewed_initial": 8,
+    "full_resolution_video_frames_viewed_corrected": 1,
+    "complete_human_audiovisual_acceptance": false,
+    "conclusion": "The corrected 9-second sample exposes the gold-mine label/health bar after removal of the added caption. The inspected media convey RTS construction, unit command and land/water combat, with stylized blood present in the recorded samples. The final illustrated card uses the approved woman-led artwork. Native UI crowding remains documented. No full continuous playback or listening was performed."
+  },
+  "revision_status": {
+    "state": "corrected_video_rechecked",
+    "requested_change": "Remove only the extra caption and black plate from the 7-13 second cut; preserve native gameplay HUD.",
+    "initial_video_sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+    "corrected_video_sha256": "74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657",
+    "initial_contact_sheet_sha256": "72d037fed575803d5226d741fd4f05ce1012fe52c7a1e0db66572c94ddd7e644",
+    "corrected_contact_sheet_sha256": "b39d2c349739bd374706e47166ef17a3e7d14cb46e4989911bb683ceadd0a8a9",
+    "corrected_frame_review_seconds": [
+      9
+    ],
+    "correction_passed": true,
+    "unchanged_other_cuts_evidence": "Producer's marketing/steam_store_20260909_female/video/caption_correction.json states the other seven segment MP4 SHA values are unchanged; this reviewer did not rerun that comparison.",
+    "history_preserved": true
+  },
+  "history": [
+    {
+      "version": "initial_reviewed_edit",
+      "source_video": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\LiangshanHeroes-Gameplay-20260909.mp4",
+        "bytes": 39360484,
+        "sha256": "a844b231202513380782f0d9d62a1f1ecba2a7bfa491b5ce07eebeb525f5ec90",
+        "width": 1920,
+        "height": 1080,
+        "video_duration_seconds": 45,
+        "container_duration_seconds": 45.109333,
+        "metadata_source": "video/final_qa.json; duration/codec/complete-decode/audio measurements were read from the producer's receipt and were not independently rerun.",
+        "hash_independently_rechecked": true,
+        "path_status": "The delivery path was subsequently replaced by the corrected edit; the original MP4 SHA is retained here."
+      },
+      "contact_sheet": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\marketing\\steam_store_20260909_female\\video\\contact_sheet.jpg",
+        "width": 1440,
+        "height": 810,
+        "bytes": 150966,
+        "sha256": "72d037fed575803d5226d741fd4f05ce1012fe52c7a1e0db66572c94ddd7e644",
+        "inspected": true,
+        "viewed_size": [
+          1440,
+          810
+        ],
+        "tile_size": [
+          480,
+          270
+        ],
+        "timestamp_order_seconds": [
+          2,
+          9,
+          16,
+          21,
+          26,
+          32,
+          38,
+          42.5,
+          44
+        ],
+        "observations": "The sequence visibly covers water combat, hero/troop combat, construction, base preparation, fleet positioning, defense combat and a final illustrated woman-led title card. A 480x270 tile is insufficient for fine HUD text inspection, which is why selected frames were inspected at 1920x1080.",
+        "path_status": "The producer replaced this contact-sheet path; original SHA and observations retained, no separate original JPG copy retained."
+      },
+      "sampled_full_resolution_seconds": [
+        2,
+        9,
+        16,
+        26,
+        32,
+        38,
+        42.5,
+        44.9
+      ],
+      "initial_findings": [
+        {
+          "id": "V01",
+          "severity": "minor",
+          "timestamp_seconds": 9,
+          "description": "The added caption and black plate obscured part of the upper-right gold-mine label/health bar and mine."
+        },
+        {
+          "id": "V02",
+          "severity": "minor",
+          "description": "Native selected-unit portrait clipping and world-label/HUD crowding."
+        }
+      ],
+      "corrective_request": "Remove only the 7-13 second added caption and black plate, keeping native gameplay HUD and other cuts unchanged."
+    }
+  ]
+}

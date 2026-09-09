@@ -1,3 +1,11 @@
+## 2026-09-09 女性封面与宣传媒体
+
+本次选定媒体位于`marketing/steam_store_20260909_female/`，由`marketing/.gdignore`排除游戏资源扫描，游戏启动方式未变。PNG验证：`py -3.14 -X utf8 -B marketing/steam_store_20260909_female/prepare_art.py`；只有显式`--rebuild`才重做尺寸规范，原生来源保持不变。
+
+实机录制取已发布Build25200149包，不使用包含未发布战役改动的当前开发源码。视频及来源说明见[媒体README](../marketing/steam_store_20260909_female/README.md)。使用`build_upload_bundle.py --output-dir <新目录>`可整理22份最终媒体，逐一验证复制哈希。只向Steam上传分组中的成品，不上传source、raw、清单或联系表。
+
+最新公告配图已保存且四语公开分享元数据回读通过；商店/库/截图/视频尚需正常拖放上传，不能把本地PNG与Git同步当成Steam发布。[当前状态和上传指引](STEAM_STORE_MEDIA_20260909.md)。
+
 ## 2026-09-09 黄泥冈入场与落担修复
 
 普通启动仍用 `Play.cmd`，菜单第二幕「智取生辰纲」使用新入场顺序：七星先在枣车旁，押队从东路陆续上冈并歇脚，盘问后白胜才挑酒走来。选白胜、右键落担旗标完成现场交互后才摆酒具。早期强夺仍可自由发起。

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-09",
+  "asset": "Steam library hero: female foreground approved-reference recomposition",
+  "generator": {
+    "tool": "image_gen.imagegen",
+    "mode": "edit with one local reference",
+    "native_resolution_claim": false
+  },
+  "prompt": "Use case: identity-preserve.\nAsset type: Steam library hero background, no logo and no typography.\nInput image 1 is the user's approved character and art reference. Create an ultra-wide landscape banner at approximately 3840:1240 aspect ratio (3.097:1). Recompose the reference for this wide canvas while preserving the exact recognisable foreground female warrior's face, hair with red ribbon, ivory embroidered robe, bronze-and-dark lamellar shoulder armor, red cloak and sword. Keep her calm determined expression and elegant face; no face redesign or costume redesign. Preserve Song Jiang in his ochre robe and dark headcloth, Lin Chong in dark armor, and a restrained line of Liangshan soldiers BEHIND her.\nComposition: the LEFT 40% must be quiet, open ink-wash lake scenery and low-contrast hazy mountains with dark sepia brush texture, suitable for an existing gold transparent logo to be overlaid later. This area must contain no people, no weapons, no large architecture and no lettering. The foreground woman's face should be around x=64%, y=40% of the banner, entirely inside the central vertical safe zone (not near top or bottom). Her upper body is on the right-center, with her sword hand naturally visible around the lower center-right. Song Jiang and Lin Chong are smaller in the background around x=78% and 87%, with complete heads and faces comfortably inside the image. Do not crop any face or distort hands. Keep enough margin for responsive cropping. Liangshan's timber lakeside fortress, lake reeds, ink-wash mountains, red banners and soldiers continue through the center and right background in the same brown-gold-black historical painted style as the reference, with rich paper texture and atmospheric depth.\nText: NONE. Remove ALL Chinese title lettering and subtitle from the reference. No words, no glyphs, no logo, no watermark, no UI, no border. No new transparent logo. Opaque painted background throughout. Do not place lettering-like marks in the left empty area.\nThe female warrior remains the dominant focal character. This is a coherent new wide composition based on the approved reference, not a stretched original poster.",
+  "reference": {
+    "path": "C:/Users/rsb/AppData/Local/Temp/codex-clipboard-fca20c7e-7ade-4a20-b073-becf3cce5e4b.png",
+    "width": 1657,
+    "height": 949,
+    "bytes": 3283720,
+    "sha256": "543D3B6298BE9D49EB00752C7E5D2AC7A797E76E35C180051C4F2A1AE96510DE"
+  },
+  "generated_original": "C:/Users/rsb/.codex/generated_images/01a0848c-e2bb-7142-965a-4b238ced1723/exec-a5b00176-c677-4439-9b98-bc972922b0b2.png",
+  "source": {
+    "path": "source/library_hero_native.png",
+    "width": 2206,
+    "height": 713,
+    "bytes": 3163775,
+    "sha256": "D7570F30DCF56ED07FB827017E925CA7C2FAD500F9E2C36D153815C0D32E28F2"
+  },
+  "normalization": {
+    "tool": "FFmpeg 8.0.1-full_build-www.gyan.dev",
+    "filter": "scale=3840:-1:flags=lanczos,crop=3840:1240:0:0,setsar=1",
+    "description": "Aspect-preserving Lanczos scaling and minimal bottom crop to required dimensions; output is normalized/upscaled, not natively generated 4K."
+  },
+  "outputs": [
+    {
+      "path": "library/library_hero.png",
+      "width": 3840,
+      "height": 1240,
+      "bytes": 7621525,
+      "sha256": "ED93940D4EEA291DE26878AF5B7D68B23A03C1C170BFA168B84E83893343DA58"
+    },
+    {
+      "path": "library/library_hero_schinese.png",
+      "width": 3840,
+      "height": 1240,
+      "bytes": 7621525,
+      "sha256": "ED93940D4EEA291DE26878AF5B7D68B23A03C1C170BFA168B84E83893343DA58"
+    }
+  ],
+  "checks": {
+    "final_png_dimensions": "PASS: both 3840 x 1240, read from PNG IHDR",
+    "locale_files_identical": "PASS: matching SHA-256; no text in artwork",
+    "visual_inspection": "PASS: generated native and normalized final viewed in Codex on 2026-09-09",
+    "text_and_logo": "No visible text, glyphs, UI, logo, border or watermark; existing transparent library logo is not regenerated or composited here.",
+    "logo_space": "Approximately left 40% is open ink-wash lake/mountains without faces, weapons or large architecture.",
+    "composition": "Foreground woman right-center with complete face and hairstyle; Song Jiang and Lin Chong smaller behind; timber waterside fortress, ink mountains, red banners, soldiers and reeds retained.",
+    "face_safe_area": "All three main faces inside frame with clear top/bottom margins; final normalization introduces no face clipping.",
+    "art_identity": "Reference-guided generated likeness and costume continuity checked visually; no claim of exact retained pixels.",
+    "steam_runtime_crop": "Pending parent task Steam library overlay and responsive crop verification.",
+    "publication": "Local artifact only; upload and publication delegated to parent task."
+  },
+  "scope": "Only source/library_hero_native.png, library/library_hero.png, library/library_hero_schinese.png and this manifest were written for the library-hero assignment."
+}

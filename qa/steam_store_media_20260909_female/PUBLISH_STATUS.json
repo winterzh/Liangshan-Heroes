@@ -1,0 +1,91 @@
+{
+  "date": "2026-09-09",
+  "app_id": 5088120,
+  "store_item_id": 1280793,
+  "scope": "User-approved female cover, matching store/library art, promotional companion images, freshly recorded gameplay trailer and screenshots.",
+  "authorization": [
+    "用这张吧",
+    "宣传图，配图，配套视频什么的这次记得一起更新"
+  ],
+  "store_upload_status": "blocked_before_file_selection",
+  "store_media_published": false,
+  "overall_status": "announcement_cover_saved_public_metadata_verified_store_media_blocked",
+  "local_delivery": {
+    "status": "completed_and_visually_checked",
+    "bundle": "D:/AI项目/水浒/Steam新素材-20260909",
+    "final_media_count": 22,
+    "store_capsules_with_language_copies": 8,
+    "library_images_with_language_copies": 6,
+    "screenshots": 5,
+    "promo_images": 2,
+    "trailer": {
+      "path": "marketing/steam_store_20260909_female/video/LiangshanHeroes-Gameplay-20260909.mp4",
+      "sha256": "74dbdaec8c5bf8d64275ea0a76951ef9b83d1f7cd4739ce67c4a1236b6459657",
+      "bytes": 39360487,
+      "video_duration_seconds": 45,
+      "frames": 1350,
+      "resolution": [1920, 1080],
+      "fresh_gameplay_seconds": 42,
+      "illustrated_end_card_seconds": 3,
+      "source_build": 25200149,
+      "caption_occlusion_corrected": true,
+      "full_decode_exit_code": 0,
+      "full_human_listening": false
+    }
+  },
+  "announcement": {
+    "event_id": "714538122294067212",
+    "local_file": "marketing/steam_store_20260909_female/promotional/announcement_800x450.png",
+    "local_sha256": "86b79569571e50c685bf7c2181a11ffd7d9aa0f268490da64ef17bfb26ee3fa2",
+    "action": "Replaced the existing latest announcement's English fallback cover through its normal visible file chooser, uploaded, and saved. No new announcement was created and no text was edited.",
+    "editor_result": "Upload success and saved; only English artwork slot used for four-language fallback as before.",
+    "public_url": "https://store.steampowered.com/news/app/5088120/view/714538122294067212",
+    "public_image": "https://clan.fastly.steamstatic.com/images/46272698/9a674291cb30fb99b7e81b18d053cb3ebabd6682.png",
+    "public_checks": {
+      "languages": ["schinese", "english", "tchinese", "japanese"],
+      "og_image_and_twitter_image": "All four public document metadata fields point to the new cover.",
+      "image_loaded": true,
+      "natural_dimensions": [800, 450],
+      "public_image_visually_inspected": true,
+      "news_listing": "Minor update cards still render the app's old store capsule. Replacing the announcement cover alone does not replace these store capsule surfaces.",
+      "library": "Event library visibility pending moderation; actual Steam client display not verified."
+    }
+  },
+  "store_revision_observed": 5,
+  "observed_diff": "This game has not been modified.",
+  "browser": "Codex in-app browser",
+  "attempts": [
+    {
+      "location": "Graphical Assets > Store assets > Update base assets > Agree and continue",
+      "result": "Only an image drag/drop area is visible. An image file input exists under a display:none form; normal and force locator clicks do not yield a visible match or file chooser."
+    },
+    {
+      "location": "Trailers > Replace",
+      "result": "Visible drop target does not open a file chooser. No video file input is present."
+    },
+    {
+      "location": "WebMCP",
+      "result": "No page-defined tools are available."
+    }
+  ],
+  "errors": [
+    "Timed out after 3000ms waiting for file chooser.",
+    "Locator diagnostics: no_visible_match for image input."
+  ],
+  "recovery": "Reloaded the store trailer editor; old trailer remains intact. Store View Diffs reports no modifications. No store/library/screenshot/trailer upload or store publication occurred; the separate announcement cover update is recorded above.",
+  "current_public_media": {
+    "checked_url": "https://store.steampowered.com/app/5088120/_/?l=schinese",
+    "visual": "Old gate/fortress header with yellow title remains visible.",
+    "header_src": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5088120/5833bfa4383177bc2fdb0c903f5b3a4b9d162224/header_schinese.jpg?t=1788855740",
+    "natural_width": 460,
+    "natural_height": 215,
+    "complete": true,
+    "trailer": "https://store.steampowered.com/trailer/assets/?trailer=5088120/2025932284/552f27e3ad468041f3d1548b5172d5910b5f42ba/1786373241"
+  },
+  "next_step": "After all assets finish local validation, use the normal file drag/drop UI to select the prepared deliverables; then classify slots/languages, upload, save, review diffs, publish and verify the public media.",
+  "limits": [
+    "This is a technical upload-control limitation, not an authorization rejection.",
+    "Native app APIs are disabled in this session; no alternate OS automation or hidden endpoint uploads were used.",
+    "Do not infer Steam publication from local artwork completion or Git sync."
+  ]
+}

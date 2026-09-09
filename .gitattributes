@@ -505,3 +505,8 @@ tools/huangnigang_arrival_test.gd text eol=lf
 tools/huangnigang_arrival_test.gd.uid text eol=lf
 tools/daming_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/zhujiazhuang_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve approved marketing sources, recording scripts and evidence bytes.
+marketing/steam_store_20260909_female/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+marketing/steam_store_20260909_female/video/*.log -text -whitespace
+qa/steam_store_media_20260909_female/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

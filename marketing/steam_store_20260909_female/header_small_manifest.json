@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "created_on": "2026-09-09",
+  "artwork_choice": "User-approved foreground female warrior cover",
+  "method": {
+    "generation_tool": "image_gen.imagegen (built-in)",
+    "generation_mode": "reference-image edit; each adaptation uses the same approved main image",
+    "skill": "C:/Users/rsb/.codex/skills/.system/imagegen/SKILL.md",
+    "output_normalization": "FFmpeg Lanczos scaling only; no cropping, compositing, or programmatic lettering replacement.",
+    "ffmpeg": "C:/Users/rsb/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.0.1-full_build/bin/ffmpeg.exe",
+    "visual_preservation_scope": "Recognizable character identities and approved art direction were visually retained through generative composition adaptation; the adaptations are not pixel-identical crops.",
+    "upload_or_publication_performed": false
+  },
+  "approved_reference": {
+    "path": "C:/Users/rsb/AppData/Local/Temp/codex-clipboard-fca20c7e-7ade-4a20-b073-becf3cce5e4b.png",
+    "width": 1657,
+    "height": 949,
+    "bytes": 3283720,
+    "sha256": "543d3b6298be9d49eb00752c7e5d2ac7a797e76e35c180051c4f2a1ae96510de",
+    "unchanged_after_generation": true
+  },
+  "title": "水浒英雄传",
+  "subtitle": "八幕战役",
+  "variants": [
+    {
+      "name": "header",
+      "prompt": "Use case: identity-preserve / ads-marketing.\nEdit target: the supplied approved Water Margin cover. Adapt ONLY its composition into a WIDE Steam header capsule, target aspect ratio exactly 920:430 (about 2.14:1), preferably native 1840x860 or another high-resolution size in that exact proportion.\nThe approved foreground WOMAN is the hero of this cover. Preserve her recognizable face, hairstyle with red ribbon, white patterned robe, red cape, bronze shoulder armor and sword, preserving the illustration's period and identity. Keep Song Jiang in ochre and Lin Chong in dark armor BEHIND her as smaller supporting men, with the existing lake, wooden stockade, distant mountains and red flag. Preserve the aged parchment, Chinese ink-brush, deep black and muted gold, dark red palette.\nKeep the strong black brush field on the LEFT with the exact LARGE Chinese title, rendered flawlessly and naturally as the existing gold calligraphy:\n水浒\n英雄传\nBelow it, exact smaller subtitle:\n八幕战役\nKeep all five title characters entirely readable, no missing or changed strokes, no additional slogans or English. Title remains large at final 920x430 size. The same foreground woman occupies the center-right, her face unobstructed and fully inside the canvas. Recompose / widen the surroundings and crop lower robe as necessary for this wider format; do not stretch faces, do not replace her with a man, do not turn the woman into a background supporting character, do not add people. Keep safe margins around title and woman's head. This is a finished full-bleed horizontal illustration, not a mockup, no border, no watermark.",
+      "generated_original": "C:/Users/rsb/.codex/generated_images/01a084bf-c2b9-7d02-aea5-cd8aa382fc5a/exec-ebf4af88-9136-4eb9-bf17-8ea82eab7858.png",
+      "native": {
+        "path": "source/header_native.png",
+        "width": 1834,
+        "height": 858,
+        "bytes": 3237492,
+        "sha256": "8d449256635c345e54a092a2574df2ac500b3406aff89c5bf88ff1cf0f747a77",
+        "copied_without_modification": true
+      },
+      "normalization_arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-y",
+        "-i",
+        "source/header_native.png",
+        "-vf",
+        "scale=920:430:flags=lanczos",
+        "-frames:v",
+        "1",
+        "-update",
+        "1",
+        "capsules/header.png"
+      ],
+      "outputs": [
+        {
+          "path": "capsules/header.png",
+          "width": 920,
+          "height": 430,
+          "bytes": 883930,
+          "sha256": "0d8056563a347e55c6898e4e2ddb88add57c5b05d69169437ca1af9278bedee9"
+        },
+        {
+          "path": "capsules/header_schinese.png",
+          "width": 920,
+          "height": 430,
+          "bytes": 883930,
+          "sha256": "0d8056563a347e55c6898e4e2ddb88add57c5b05d69169437ca1af9278bedee9"
+        }
+      ],
+      "schinese_copy_byte_identical": true,
+      "visual_inspection": {
+        "inspected_native_and_final": true,
+        "exact_title_readable": true,
+        "exact_subtitle_readable": true,
+        "foreground_female_face_visible": true,
+        "female_hair_costume_and_palette_recognizable": true,
+        "no_title_or_head_edge_clipping": true,
+        "notes": "Large gold title on left, female warrior prominent center-right, both supporting men behind. Full title and subtitle remain readable at 920x430.",
+        "song_jiang_and_lin_chong_remain_in_background": true
+      }
+    },
+    {
+      "name": "small",
+      "prompt": "Use case: identity-preserve / ads-marketing.\nEdit target: the supplied APPROVED cover with the foreground female warrior. Create its matching very wide Steam SMALL capsule adaptation, target aspect ratio exactly 462:174 (approximately 2.655:1), preferably 1848x696 native or another high-resolution size with that proportion.\nThis image must remain identifiable when displayed at only 462x174 pixels. Prioritize a very large, crisp gold Chinese brush-calligraphy title on a clean black ink field occupying the LEFT half, using exactly these title characters (5 total):\n水浒\n英雄传\nExact smaller subtitle immediately below: 八幕战役\nMake the title larger relative to the canvas than in the supplied main cover, with thick clear calligraphic strokes and comfortable outer margins. Do not invent lettering, change Chinese characters, add English, slogans, badges or watermarks.\nOn the RIGHT, keep the same recognizable foreground WOMAN: preserve her face, gaze, hair with red ribbon, white embroidered robe, red cape and bronze shoulder armor. Show her head and upper torso prominently; no need to show her full figure or sword. Her face must remain clear at thumbnail size. Keep the same two male supporting figures, Song Jiang in ochre and Lin Chong in dark armor, behind her as smaller restrained background accents, never in front and never replacing the female lead. Retain a suggestion of the original lake stockade, mountains and red flag where space allows, reducing distant detail for readability.\nPreserve the approved painting's aged parchment, flowing black brushwork, muted gold, restrained red and ink-wash mood. Adapt the WIDE composition using intelligent reframing, not distortion. Keep the same female lead and exact title as the approved main cover. Full bleed artwork, no mockup, no frame.",
+      "generated_original": "C:/Users/rsb/.codex/generated_images/01a084bf-c2b9-7d02-aea5-cd8aa382fc5a/exec-bff0b864-db4d-4167-8ad3-2c15e10fa0d8.png",
+      "native": {
+        "path": "source/small_native.png",
+        "width": 2042,
+        "height": 770,
+        "bytes": 2938678,
+        "sha256": "6f035fba0540ed481df8d972ba52ebc0ec7aa3517a65827e2efcbae1c00b645b",
+        "copied_without_modification": true
+      },
+      "normalization_arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-y",
+        "-i",
+        "source/small_native.png",
+        "-vf",
+        "scale=462:174:flags=lanczos",
+        "-frames:v",
+        "1",
+        "-update",
+        "1",
+        "capsules/small.png"
+      ],
+      "outputs": [
+        {
+          "path": "capsules/small.png",
+          "width": 462,
+          "height": 174,
+          "bytes": 178478,
+          "sha256": "e6dc90e27e8b2d9b278c7babaf29af8d05ab48ae42a1380d842c2873166b1f88"
+        },
+        {
+          "path": "capsules/small_schinese.png",
+          "width": 462,
+          "height": 174,
+          "bytes": 178478,
+          "sha256": "e6dc90e27e8b2d9b278c7babaf29af8d05ab48ae42a1380d842c2873166b1f88"
+        }
+      ],
+      "schinese_copy_byte_identical": true,
+      "visual_inspection": {
+        "inspected_native_and_final": true,
+        "exact_title_readable": true,
+        "exact_subtitle_readable": true,
+        "foreground_female_face_visible": true,
+        "female_hair_costume_and_palette_recognizable": true,
+        "no_title_or_head_edge_clipping": true,
+        "notes": "Title is dominant on left. Female head and upper torso stay clear at 462x174, with two supporting men behind. Subtitle remains visible and no title or head is clipped.",
+        "song_jiang_and_lin_chong_remain_in_background": true
+      }
+    }
+  ]
+}
