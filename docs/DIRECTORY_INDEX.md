@@ -1,3 +1,12 @@
+## 2026-09-09 祝家庄景物、暂停边界与特效分区
+
+- `scripts/run_map_state.gd`、`scripts/run_scenery_state.gd`：显式安装内容上下文、固定景物工厂与延迟激活。
+- `scripts/run_battle_barrier.gd`：官方祝家庄捕获选择，补禁用最后物理步/延迟回调新建的HUD节点。
+- `scripts/run_campaign_presentation_state.gd`、`scripts/run_visual_graph.gd`：原生容器兼容与任务标记分区，维护混合特效顺序和独立所有权。
+- `tools/level3_scenery_qa.gd`、`tools/run_level3_scenery_qa.py`、`qa/level3_scenery_20260909/`：真实菜单源、私有地图/景物组件恢复、双进程和四语图证据。
+- `tools/campaign_fx_partition_qa.gd`、`tools/run_campaign_fx_partition_qa.py`、`qa/campaign_fx_partition_20260909/`：合成组件宿主下真实Mission/标记/FloatLabel/Bolt分区，失败尝试保留。
+- `docs/LEVEL3_DISPLAY_RESTORE_20260909.md`：本批实现、精确QA和下一步世界整合边界；下面未应用候选状态保留历史语境。
+
 ## 2026-09-09 祝家庄恢复组件
 
 - `scripts/run_official_restore_profile.gd`、`scripts/run_level3_world_factory.gd`、`docs/OFFICIAL_RESTORE_PROFILE_20260909.md`：固定经典30波/祝家庄选型、私有运行定义与31字段关卡恢复工厂；组件验证不等于完整世界恢复。

@@ -1,3 +1,7 @@
+## 当前原生容器与ready连接修复回归
+
+[`20260909_084056_42d119f2`](20260909_084056_42d119f2/receipt.json) **348项（218组件＋130重启）通过**，四步按预期退出、引擎错误0；当前/冻结源码、归档和报告由[independent_readback](20260909_084056_42d119f2/independent_readback.json)复核。本驱动仍用Control宿主，CanvasLayer和gated ready回调由[FX622项](../campaign_fx_partition_20260909/README.md)覆盖；两者使用相同生产模块。旧runner行为报告没有PID，进程依据Popen与独立日志；没有逐阶段锁/真实玩家摘要等字段，不能借新runner补称。本轮`081115_07c4d29e`348项属于追加ready修复之前，原样保留。下方“最终”均保留历史语境。
+
 # Campaign presentation 状态验证
 
 本目录收纳真实 `CampaignMission` 控件、`MissionMarker`、Localize descriptor，以及当前祝家庄 `level3_zhujiazhuang_rts.gd` 获救者选择回调的隔离验证。Battle 使用无部署的合成宿主，Unit 与地图投影方法使用生产类型；这不等于完整战场保存、八关恢复、真人视觉验收或 Steam 发布。

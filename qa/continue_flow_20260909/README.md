@@ -1,3 +1,11 @@
+## 当前显示恢复改动后的经典回归
+
+[`20260909_085735_9439525c`](20260909_085735_9439525c/receipt.json) **295项、11个独立行为进程通过**，13步预期退出、引擎错误0。当前/私有源码与归档由[independent_readback](20260909_085735_9439525c/independent_readback.json)独立复核；16张截图留存并核对哈希，本批未逐张目检或再跑完整30波。默认验证器指向本批。`074753_67a610dd`为本轮中间来源的295项通过，原证据保留，不能替代最终版本。玩家入口未开放，未发布Steam新包。
+
+中间批`084233_9b135a87`虽295条行为断言全部true、13步预期退出，但整批`complete=false`：Windows将已结束的restore_and_overwrite的PID43248复用于terminal_reject，旧runner要求所有PID互异而拒绝汇总。原失败收据保持原样，不作为最终通过。新`continue_flow_process_identity_v2`逐次生成唯一32位nonce，报告case/PID/nonce必须与实际Popen相符，所有子进程完整结束后才启动下一例，并记录不重叠的monotonic_ns区间。PID允许复用；GDScript跨进程新鲜度改用同一nonce协议，仍记录PID。来源、引擎和场景在finally检查，确认锁归属并实际释放后写收据。
+
+[process_identity_contract_test.py](process_identity_contract_test.py)及其[报告](process_identity_contract_test.json)提供30项合成、无引擎的身份/顺序反例，包括完整13步和聚焦9步的PID复用、错报告、重复nonce、时间重叠与旧格式兼容；不并入原生295项。原`--terminal-only`能力保持。旧无schema收据继续按旧PID唯一规则回读，未知schema明确拒绝。
+
 # 正常菜单、保存退出与跨进程继续
 
 祝家庄共享UnitState/Graph和LevelState类型校验改动后的最新经典回归[`20260909_071843_3f014eaf`](20260909_071843_3f014eaf/receipt.json)通过**295项**、11个独立行为进程。13步预期退出，引擎错误0；来源、报告与16张截图的哈希由独立回读器再次通过。本批未追加截图逐张目检或完整30波长跑；下面完整旧结果保留其冻结来源。默认回读已指向新批次。此回归没有开放继续入口，也未上传Steam包。

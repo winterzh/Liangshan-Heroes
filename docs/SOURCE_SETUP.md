@@ -1,3 +1,11 @@
+## 2026-09-09 祝家庄景物和任务特效组件入口
+
+普通启动仍使用`Play.cmd`，玩家继续入口未开放。景物与地图跨进程组件197项、任务/特效分区622项、原Presentation组件348项和经典短流程295项分别通过；四批共同生产来源2953份与当前文件逐字节一致。各自QA驱动独立冻结，不合并成完整世界或九玩法验收。复现说明及边界见[显示恢复](LEVEL3_DISPLAY_RESTORE_20260909.md)。
+
+新增命令：`py -3.14 -X utf8 -B tools/run_level3_scenery_qa.py --run`、`py -3.14 -X utf8 -B tools/run_campaign_fx_partition_qa.py --run`。不带`--run`只预检；工具使用D盘真实路径私有profile、Steam禁用、共享引擎锁和图形兼容后端，必须串行。共享兼容性复跑仍用`tools/run_campaign_presentation_state_qa.py --run`和`tools/run_continue_flow_qa.py --run`。不要把内部QA开关写入玩家入口。
+
+原景物候选本批已应用并原生验证，历史归档内容保留。祝家庄完整Core/Session、章节持久结算和真实Steam确认继续实施；现行Steam包与公告不变。
+
 ## 2026-09-09 祝家庄恢复组件开发入口
 
 普通启动仍为`Play.cmd`，玩家继续入口未开放。本批新增选型/工厂341项与单位图423项原生组件证据，八关LevelState205项及经典短流程295项回归通过；各批独立冻结，不当作完整战役或正式包验收。说明见[官方选型](OFFICIAL_RESTORE_PROFILE_20260909.md)、[特殊单位图](LEVEL3_UNIT_GRAPH_20260909.md)。

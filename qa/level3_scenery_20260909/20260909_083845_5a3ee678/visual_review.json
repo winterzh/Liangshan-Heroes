@@ -1,0 +1,122 @@
+{
+  "scope": "Selected component screenshots only; separate from native assertions and human playtests",
+  "reviewer": "Codex image inspection",
+  "selected_images": 6,
+  "archived_images": 26,
+  "human_playtest": false,
+  "full_world_acceptance": false,
+  "normal_visibility_acceptance": false,
+  "selected_readability_passed": true,
+  "images": [
+    {
+      "path": "screenshots/component_unaltered_restored_view.png",
+      "sha256": "633abea32912af3d9238c72bab32057d48e1147c672d83d0353111dfb3d2793e",
+      "inspection": "Codex viewed the complete image",
+      "observed": "Restored camp, units, resources and fog visible; component host has no full HUD",
+      "controlled_visibility_override": false
+    },
+    {
+      "path": "screenshots/restart_unaltered_restored_view.png",
+      "sha256": "633abea32912af3d9238c72bab32057d48e1147c672d83d0353111dfb3d2793e",
+      "inspection": "Codex viewed the complete image",
+      "observed": "Restored camp, units, resources and fog visible; component host has no full HUD",
+      "controlled_visibility_override": false
+    },
+    {
+      "path": "screenshots/component_zh_CN_sign3.png",
+      "sha256": "c9268acf6a1cd4f22701f56920ef60f56b6654c5f912548f72c366e3707fcd14",
+      "inspection": "Codex viewed the complete image",
+      "observed": "Zhu Manor sign is readable within its box; English fits; no visible missing glyphs in this sign",
+      "controlled_visibility_override": true
+    },
+    {
+      "path": "screenshots/component_zh_TW_sign3.png",
+      "sha256": "51e8f4acb1e4ca1102566d1ab84e5f462eceaa2b7973dd529393b91e2100f91e",
+      "inspection": "Codex viewed the complete image",
+      "observed": "Zhu Manor sign is readable within its box; English fits; no visible missing glyphs in this sign",
+      "controlled_visibility_override": true
+    },
+    {
+      "path": "screenshots/component_en_sign3.png",
+      "sha256": "4b81f27e39386d828b534400f93807ba9533e2f4db419ce7177f0f35d9c236f9",
+      "inspection": "Codex viewed the complete image",
+      "observed": "Zhu Manor sign is readable within its box; English fits; no visible missing glyphs in this sign",
+      "controlled_visibility_override": true
+    },
+    {
+      "path": "screenshots/component_ja_sign3.png",
+      "sha256": "6e76198514c66b324f5b3f23fa6e615c90c5e996be22d37c7ede786604a5d2e3",
+      "inspection": "Codex viewed the complete image",
+      "observed": "Zhu Manor sign is readable within its box; English fits; no visible missing glyphs in this sign",
+      "controlled_visibility_override": true
+    }
+  ],
+  "cross_process_png_pairs": [
+    {
+      "component": "component_en_sign1.png",
+      "restart": "restart_en_sign1.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_en_sign2.png",
+      "restart": "restart_en_sign2.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_en_sign3.png",
+      "restart": "restart_en_sign3.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_ja_sign1.png",
+      "restart": "restart_ja_sign1.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_ja_sign2.png",
+      "restart": "restart_ja_sign2.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_ja_sign3.png",
+      "restart": "restart_ja_sign3.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_unaltered_restored_view.png",
+      "restart": "restart_unaltered_restored_view.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_zh_CN_sign1.png",
+      "restart": "restart_zh_CN_sign1.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_zh_CN_sign2.png",
+      "restart": "restart_zh_CN_sign2.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_zh_CN_sign3.png",
+      "restart": "restart_zh_CN_sign3.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_zh_TW_sign1.png",
+      "restart": "restart_zh_TW_sign1.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_zh_TW_sign2.png",
+      "restart": "restart_zh_TW_sign2.png",
+      "bytes_equal": true
+    },
+    {
+      "component": "component_zh_TW_sign3.png",
+      "restart": "restart_zh_TW_sign3.png",
+      "bytes_equal": true
+    }
+  ],
+  "note": "Sign shots temporarily reveal signs and hide fog drawing. Runner restores Map/Fog afterward. Unselected images were not visually inspected. Earlier failed batch image inspections are not included."
+}
