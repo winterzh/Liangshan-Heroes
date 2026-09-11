@@ -139,7 +139,7 @@ func configure_presentation(presentation_record: Variant, mission_record: Varian
 	if not MissionState.new()._context(context): return _failure("PARTITION_CONTEXT")
 	for key: String in ["level_id", "content_version", "mission_token", "presentation_token"]:
 		if typeof(context[key]) != TYPE_STRING: return _failure("PARTITION_CONTEXT")
-	if context.level_id != "level3": return _failure("PARTITION_OFFICIAL_LEVEL_REQUIRED")
+	if context.level_id not in ["level3", "level1"]: return _failure("PARTITION_OFFICIAL_LEVEL_REQUIRED")
 	for record: Variant in [presentation_record, mission_record]:
 		if typeof(record) != TYPE_DICTIONARY or not _fields(record, ["schema", "context", "payload"]) or typeof(record.schema) != TYPE_STRING or typeof(record.context) != TYPE_DICTIONARY: return _failure("PARTITION_COMPONENT_ENVELOPE")
 	var checked: Dictionary = Presentation.new().validate(presentation_record, context)

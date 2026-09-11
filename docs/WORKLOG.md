@@ -1,3 +1,7 @@
+## 2026-09-11 黄泥冈选中按钮改固定工厂
+
+`_sync_controls` 不再裸建 `Button.new()` + lambda，改用 `add_level_button`（`hg_chao_gai` 等已注册 ID）与 `activate_mission_button` 固定回调；补七条英/日文案并重建词库。Presentation 契约已过。Visual partition 允许 level1。组件 QA **19/19**。已知边界：黄泥冈使用 CampaignScenery（hills），现有景物 adapter 仍只装 Level3 祝家庄工厂，Session 整槽保存在 map/scenery 一步停下。祝家庄 67/67 与跨进程回归通过（`20260911_172252_8520614b`）。
+
 ## 2026-09-11 黄泥冈 Session 边界与 Save Barrier
 
 Session 的 presentation 布局门从 `_is_zhu` 泛化为 `_is_official_campaign`。Save Barrier 仅对经典 30 波要求 `economy`；官方战役可无经济（黄泥冈）。组件 QA **19/19**：UnitGraph capture/validate、Barrier HELD、Session 已走到 presentation。已知边界：Level1 任务按钮仍带额外 lambda 连接，固定 presentation 工厂报 `PRESENTATION_EXTRA_SIGNAL`，整槽保存待 UI 契约对齐。祝家庄 67/67 与跨进程回归通过（`20260911_164903_da912106`）。
