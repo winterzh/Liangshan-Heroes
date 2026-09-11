@@ -1,3 +1,7 @@
+## 2026-09-11 Steam 正式更新 Build 25250466
+
+正式 Steam Windows `public`/`default` 已更新为 **Build 25250466**，Depot `5088121`，Manifest `416479225955196133`。SteamCMD 回读确认 `branches.public.buildid=25250466`。包内含底部指挥栏无选中收起、祝家庄接应提示叠字修复等玩家可见改进；战斗中途保存/续玩仍未对玩家开放。更新公告已由用户在 Steamworks 发布。详见 [更新交接](STEAM_UPDATE_20260911.md)。
+
 ## 2026-09-10 第三章黑屏与偏门内应阻断修复及 Steam 正式更新
 
 正式 Steam Windows `default` 已更新上线，Depot `5088121`，Manifest `4469374751738838844`，关联补丁公告《【更新】战役关卡优化与第三章“三打祝家庄”体验修复》。
