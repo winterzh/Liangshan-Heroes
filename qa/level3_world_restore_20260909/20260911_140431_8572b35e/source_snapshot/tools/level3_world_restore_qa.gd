@@ -382,7 +382,7 @@ func test_stage_after_rescue(battle: Node) -> void:
 	battle._official_context = Profiles.ZHU_CONTEXT.duplicate(true)
 	var prison_world: Vector2 = battle.map.cell_to_world(lvl.PRISON + Vector2i(4, 0))
 	if battle.mission._actor != null and is_instance_valid(battle.mission._actor):
-		battle.mission._actor.position = prison_world
+		battle.mission._actor.global_position = prison_world
 		battle.mission._actor.order_stop()
 	Engine.time_scale = 1.0
 	var waited := 0.0

@@ -373,31 +373,23 @@ func test_stage_after_rescue(battle: Node) -> void:
 		return
 	if not check("STAGE3", "rescue action registered", battle.mission.actions.has("zhu_rts_rescue")):
 		return
-	# request_action dispatches the nearest legal actor. Long walks from the
-	# side gate can trip the 3s out-of-range cancel; place the actor at the
-	# mission cell so the hold itself is what is under test.
+	# request_action dispatches the nearest legal actor; wait with accelerated sim.
 	var started: bool = battle.mission.request_action("zhu_rts_rescue")
 	if not check("STAGE3", "request_action rescue accepted", started):
 		return
 	battle._official_context = Profiles.ZHU_CONTEXT.duplicate(true)
-	var prison_world: Vector2 = battle.map.cell_to_world(lvl.PRISON + Vector2i(4, 0))
-	if battle.mission._actor != null and is_instance_valid(battle.mission._actor):
-		battle.mission._actor.position = prison_world
-		battle.mission._actor.order_stop()
-	Engine.time_scale = 1.0
+	Engine.time_scale = 2.0
 	var waited := 0.0
-	while waited < 20.0 and battle.phase != B.Phase.END and not battle.mission.has_event("zhu_prisoners_freed"):
+	while waited < 120.0 and battle.phase != B.Phase.END and not battle.mission.has_event("zhu_prisoners_freed"):
 		await get_tree().process_frame
-		waited += get_process_delta_time()
-		if int(waited * 10) % 50 == 0:
+		waited += get_process_delta_time() * Engine.time_scale
+		if int(waited * 10) % 100 == 0 and battle.mission.active_action_id == "zhu_rts_rescue" and battle.mission._actor != null:
 			print("STAGE3_PROGRESS t=", snappedf(waited, 0.1), " prog=", battle.mission._progress,
-				" active=", battle.mission.active_action_id)
+				" actor=", battle.mission._actor.display_name if battle.mission._actor else "?",
+				" dist=", snappedf(battle.mission._actor.position.distance_to(battle.map.cell_to_world(lvl.PRISON + Vector2i(4, 0))), 0.1))
 	Engine.time_scale = 1.0
 	if not check("STAGE3", "prisoners freed after restore",
 			battle.mission.has_event("zhu_prisoners_freed") and lvl.prisoners_freed):
-		if is_instance_valid(battle):
-			battle.queue_free()
-			await get_tree().process_frame
 		return
 	check("STAGE3", "prisoners switched to Liangshan and not captive",
 		lvl.prisoners.all(func(u): return (not is_instance_valid(u)) or (u.faction == 0 and not u.is_captive)))
