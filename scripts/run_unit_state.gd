@@ -8,8 +8,13 @@ extends RefCounted
 ## Five draw caches are regenerated; draw cadence is not gameplay state.
 const SCHEMA := "defense_unit_state_v2"
 const LEVEL3_SCHEMA := "level3_unit_state_v1"
+const LEVEL1_SCHEMA := "level1_unit_state_v1"
 const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
 const ZHU_PRISONERS := ["shi_qian", "shi_xiu", "qin_ming", "yang_lin", "huang_xin", "wang_ying", "deng_fei"]
+const HG_CONTEXT := {"mode": "campaign", "level_id": "level1", "waves": 0}
+const HG_BUNDLE_COUNT := 3
+const HG_ACTOR_KEYS := ["chao_gai", "wu_yong", "gongsun_sheng", "liu_tang", "ruan_xiaoer", "ruan_xiaowu", "ruan_xiaoqi", "bai_sheng"]
+
 var _unit_schema := SCHEMA
 var _scope_error := ""
 var _chapter_roles: Dictionary = {}
@@ -865,25 +870,50 @@ func _configure_context(context: Dictionary, roles: Dictionary) -> void:
 	if context.mode == "defense" and context.level_id == "" and context.waves == 30:
 		if not roles.is_empty(): _scope_error = "CLASSIC_CHAPTER_ROLES"
 		return
-	if context.mode != "campaign" or context.level_id != "level3" or context.waves != 0:
-		_scope_error = "UNIT_CONTEXT_UNSUPPORTED"; return
 	if _unit_script != preload("res://scripts/unit.gd"):
-		_scope_error = "LEVEL3_PRODUCTION_UNIT_REQUIRED"; return
-	if not _fields(roles, ["hu", "gate", "side_gate", "prisoners"]) or not _id(roles.hu) or typeof(roles.prisoners) != TYPE_ARRAY or roles.prisoners.size() != ZHU_PRISONERS.size():
-		_scope_error = "LEVEL3_ROLES"; return
-	var pending: Dictionary = {}
-	for field: String in ["hu", "gate", "side_gate"]:
-		var id: Variant = roles[field]
-		if id == null: continue
-		if not _id(id) or pending.has(id): _scope_error = "LEVEL3_ROLE_ID"; return
-		pending[id] = {"role": field, "key": "hu_sanniang" if field == "hu" else "zhu_gate"}
-	for index: int in range(ZHU_PRISONERS.size()):
-		var id: Variant = roles.prisoners[index]
-		if id == null: continue
-		if not _id(id) or pending.has(id): _scope_error = "LEVEL3_ROLE_ID"; return
-		pending[id] = {"role": "prisoner", "key": ZHU_PRISONERS[index]}
-	_chapter_roles = pending
-	_unit_schema = LEVEL3_SCHEMA
+		_scope_error = "CHAPTER_PRODUCTION_UNIT_REQUIRED"; return
+	if context.mode == "campaign" and context.level_id == "level3" and context.waves == 0:
+		if not _fields(roles, ["hu", "gate", "side_gate", "prisoners"]) or not _id(roles.hu) or typeof(roles.prisoners) != TYPE_ARRAY or roles.prisoners.size() != ZHU_PRISONERS.size():
+			_scope_error = "LEVEL3_ROLES"; return
+		var pending: Dictionary = {}
+		for field: String in ["hu", "gate", "side_gate"]:
+			var id: Variant = roles[field]
+			if id == null: continue
+			if not _id(id) or pending.has(id): _scope_error = "LEVEL3_ROLE_ID"; return
+			pending[id] = {"role": field, "key": "hu_sanniang" if field == "hu" else "zhu_gate"}
+		for index: int in range(ZHU_PRISONERS.size()):
+			var id: Variant = roles.prisoners[index]
+			if id == null: continue
+			if not _id(id) or pending.has(id): _scope_error = "LEVEL3_ROLE_ID"; return
+			pending[id] = {"role": "prisoner", "key": ZHU_PRISONERS[index]}
+		_chapter_roles = pending
+		_unit_schema = LEVEL3_SCHEMA
+		return
+	if context.mode == "campaign" and context.level_id == "level1" and context.waves == 0:
+		if not _fields(roles, ["cart", "yang", "bundles", "convoy", "actors"]): _scope_error = "LEVEL1_ROLES"; return
+		if typeof(roles.bundles) != TYPE_ARRAY or roles.bundles.size() != HG_BUNDLE_COUNT: _scope_error = "LEVEL1_ROLES"; return
+		if typeof(roles.convoy) != TYPE_ARRAY or typeof(roles.actors) != TYPE_ARRAY: _scope_error = "LEVEL1_ROLES"; return
+		var pending: Dictionary = {}
+		for field: String in ["cart", "yang"]:
+			var id: Variant = roles[field]
+			if id == null: continue
+			if not _id(id) or pending.has(id): _scope_error = "LEVEL1_ROLE_ID"; return
+			pending[id] = {"role": field, "key": "treasure_cart" if field == "cart" else "yang_zhi"}
+		for index: int in range(HG_BUNDLE_COUNT):
+			var id: Variant = roles.bundles[index]
+			if id == null: continue
+			# cart aliases bundles[0] after assignment; one entity, one role entry.
+			if pending.has(id):
+				if pending[id].key != "treasure_cart": _scope_error = "LEVEL1_ROLE_ID"; return
+				continue
+			if not _id(id): _scope_error = "LEVEL1_ROLE_ID"; return
+			pending[id] = {"role": "bundle", "key": "treasure_cart"}
+		# convoy/actors are variable live pools; membership only requires graph presence.
+		_chapter_roles = pending
+		_unit_schema = LEVEL1_SCHEMA
+		return
+	_scope_error = "UNIT_CONTEXT_UNSUPPORTED"
+
 
 func _chapter_registry(known_ids: Dictionary) -> Dictionary:
 	if not _scope_error.is_empty(): return _failure(_scope_error)
@@ -899,9 +929,26 @@ func _check_chapter_values(v: Dictionary) -> Dictionary:
 			if v[field] != "": return _failure("CHAPTER_STATE_UNSUPPORTED", field)
 		if v._story_pose_t != 0.0 or v.is_captive: return _failure("CHAPTER_STATE_UNSUPPORTED")
 		return {"ok": true}
+	if _unit_schema == LEVEL1_SCHEMA:
+		var role: Dictionary = _chapter_roles.get(str(v.entity_id), {})
+		if role.is_empty():
+			# convoy/actors and ordinary troops: no chapter-role key lock.
+			if v.faction == 2 and v.is_building: return _failure("LEVEL1_ENEMY_BUILDING")
+			return {"ok": true}
+		if v.key != role.key: return _failure("LEVEL1_ROLE_KEY", role.role)
+		match role.role:
+			"cart", "bundle":
+				if v.key != "treasure_cart" or v.is_hero: return _failure("LEVEL1_BUNDLE_IDENTITY")
+				if (v.hp <= 0.0) != v._dying: return _failure("LEVEL1_BUNDLE_LIFETIME")
+			"yang":
+				if v.key != "yang_zhi" or not v.is_hero or v.is_building: return _failure("LEVEL1_YANG_IDENTITY")
+				if (v.hp <= 0.0) != v._dying: return _failure("LEVEL1_YANG_LIFETIME")
+		# Wine scheme uses story poses and may drug/capture escorts; allow those.
+		return {"ok": true}
 	# Level3 never plays a story pose or installs assistance links. Supporting
 	# another official chapter later requires its own explicit contract.
 	if v._story_pose_t != 0.0 or v._pose_previous_variant != "": return _failure("LEVEL3_STORY_POSE_UNSUPPORTED")
+
 	var role: Dictionary = _chapter_roles.get(str(v.entity_id), {})
 	if role.is_empty():
 		if v.defeat_outcome != "" or v.story_outcome != "" or v.is_captive or v.faction == 2: return _failure("LEVEL3_UNREGISTERED_CHAPTER_UNIT")
@@ -940,7 +987,12 @@ func _check_chapter_values(v: Dictionary) -> Dictionary:
 
 func _check_chapter_parts(v: Dictionary, refs: Dictionary, meta: Dictionary, node: Dictionary) -> Dictionary:
 	if _unit_schema == SCHEMA: return {"ok": true}
+	if _unit_schema == LEVEL1_SCHEMA:
+		# No gate footprints; bundles may be captured/drugged with ordinary units.
+		if v.is_captive and v.garrisoned: return _failure("LEVEL1_CAPTIVE_GARRISON")
+		return {"ok": true}
 	if meta.has("story_pose"): return _failure("LEVEL3_STORY_POSE_UNSUPPORTED")
+
 	for field: String in ["story_assist_partner", "story_assist_owner"]:
 		if refs[field].state != "none": return _failure("LEVEL3_ASSISTANCE_UNSUPPORTED", field)
 	var role: Dictionary = _chapter_roles.get(str(v.entity_id), {})
@@ -967,6 +1019,7 @@ func validate_level3_membership(states: Dictionary, active_ids: Array) -> Dictio
 	# Called on the outputs of validate(), before any allocation/activation.
 	# This is an additional graph obligation, not an alternative Unit decoder.
 	if _unit_schema != LEVEL3_SCHEMA or not _scope_error.is_empty(): return _failure("LEVEL3_CONTEXT_REQUIRED")
+
 	var known: Dictionary = {}
 	for id: Variant in states:
 		if not _id(id) or typeof(states[id]) != TYPE_DICTIONARY or states[id].get("ok") != true or states[id].get("entity_id") != id or typeof(states[id].get("values")) != TYPE_DICTIONARY: return _failure("VALIDATED_LEVEL3_STATES_REQUIRED")
@@ -982,6 +1035,24 @@ func validate_level3_membership(states: Dictionary, active_ids: Array) -> Dictio
 		if active.has(id) != (value.hp > 0.0 and not value._dying): return _failure("LEVEL3_ROLE_ACTIVE_MEMBERSHIP", id)
 	return {"ok": true, "complete_world": false, "root_and_effect_validation_required": true}
 
+func validate_level1_membership(states: Dictionary, active_ids: Array) -> Dictionary:
+	if _unit_schema != LEVEL1_SCHEMA or not _scope_error.is_empty(): return _failure("LEVEL1_CONTEXT_REQUIRED")
+	var known: Dictionary = {}
+	for id: Variant in states:
+		if not _id(id) or typeof(states[id]) != TYPE_DICTIONARY or states[id].get("ok") != true or states[id].get("entity_id") != id or typeof(states[id].get("values")) != TYPE_DICTIONARY: return _failure("VALIDATED_LEVEL1_STATES_REQUIRED")
+		known[id] = true
+	var checked: Dictionary = _chapter_registry(known)
+	if not checked.ok: return checked
+	var active: Dictionary = {}
+	for id: Variant in active_ids:
+		if not _id(id) or not known.has(id) or active.has(id): return _failure("LEVEL1_ACTIVE_REGISTRY")
+		active[id] = true
+	for id: String in _chapter_roles:
+		var value: Dictionary = states[id].values
+		if active.has(id) != (value.hp > 0.0 and not value._dying): return _failure("LEVEL1_ROLE_ACTIVE_MEMBERSHIP", id)
+	return {"ok": true, "complete_world": false, "root_and_effect_validation_required": true}
+
+
 func _check_values(values: Dictionary) -> Dictionary:
 	if not _fields(values, RULES.keys()): return _failure("VALUE_FIELDS")
 	for field in RULES:
@@ -994,7 +1065,7 @@ func _check_values(values: Dictionary) -> Dictionary:
 				if typeof(value) != TYPE_BOOL: return _failure("VALUE_TYPE",field)
 			"int":
 				if typeof(value) != TYPE_INT: return _failure("VALUE_TYPE",field)
-				if field == "faction" and _unit_schema == LEVEL3_SCHEMA:
+				if field == "faction" and _unit_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA]:
 					if value < 0 or value > 2: return _failure("VALUE_RANGE", field)
 				elif INT_RANGES.has(field) and (value < INT_RANGES[field][0] or value > INT_RANGES[field][1]): return _failure("VALUE_RANGE",field)
 			"float":
@@ -1037,7 +1108,7 @@ func _check_values(values: Dictionary) -> Dictionary:
 				if typeof(value) != TYPE_DICTIONARY: return _failure("VALUE_TYPE",field)
 				if value.size() > 512: return _failure("DEFINITION_LIMIT",field)
 				for key in value:
-					if typeof(key) != TYPE_STRING: return _failure("DEFINITION_KEY",field)
+					if typeof(key) != TYPE_STRING and typeof(key) != TYPE_STRING_NAME: return _failure("DEFINITION_KEY",field)
 			"ability_slots":
 				if typeof(value) != TYPE_ARRAY: return _failure("VALUE_TYPE",field)
 				if value.size() > 4: return _failure("ABILITY_SLOT_LIMIT",field)

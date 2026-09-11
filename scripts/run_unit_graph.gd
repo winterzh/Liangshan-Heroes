@@ -7,12 +7,19 @@ extends RefCounted
 ## prepare() never installs Battle fields, connects signals, attaches or activates.
 const SCHEMA := "defense_unit_graph_v2"
 const LEVEL3_SCHEMA := "level3_unit_graph_v1"
+const LEVEL1_SCHEMA := "level1_unit_graph_v1"
 const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
 const ZHU_CONTEXT := {"mode": "campaign", "level_id": "level3", "waves": 0}
+const HG_CONTEXT := {"mode": "campaign", "level_id": "level1", "waves": 0}
 const LevelState := preload("res://scripts/run_campaign_level_state.gd")
 const Zhu := preload("res://scripts/levels/level3_zhujiazhuang_rts.gd")
+const Huang := preload("res://scripts/levels/level1_huangnigang_short.gd")
 const CampaignScript := preload("res://scripts/campaign.gd")
+const HG_EXTERNAL_FIELDS := ["good_sign", "sale_sign", "suspicion_sign"]
+const HG_EXTERNAL_ARRAYS := ["field_signs", "jujube_carts"]
 var _graph_schema := SCHEMA
+var _campaign_level_id := ""
+
 var _scope_error := ""
 var _unit_state_script: Script
 var _codec_script: Script
@@ -47,28 +54,41 @@ func _configure_context(context: Dictionary) -> void:
 	if not _fields(context, ["mode", "level_id", "waves"]) or typeof(context.mode) != TYPE_STRING or typeof(context.level_id) != TYPE_STRING or typeof(context.waves) not in [TYPE_INT, TYPE_FLOAT]:
 		_scope_error = "GRAPH_CONTEXT_FIELDS"; return
 	if context.mode == "defense" and context.level_id == "" and context.waves == 30: return
-	if context.mode != "campaign" or context.level_id != "level3" or context.waves != 0:
+	if context.mode != "campaign" or context.waves != 0 or context.level_id not in ["level3", "level1"]:
 		_scope_error = "GRAPH_CONTEXT_UNSUPPORTED"; return
 	# Chapter roles may only be derived from this installed Level's checked record.
 	# No injected substitute factory/Unit/host/codec may weaken that contract.
 	if _unit_state_script != preload("res://scripts/run_unit_state.gd") or _identity_script != preload("res://scripts/run_graph_identity.gd") or _codec_script != preload("res://scripts/run_state_value_codec.gd") or _unit_script != preload("res://scripts/unit.gd") or _inventory_script != preload("res://scripts/hero_inventory.gd") or _battle_script != preload("res://scripts/battle.gd") or _map_script != preload("res://scripts/game_map.gd"):
-		_scope_error = "LEVEL3_INSTALLED_SCRIPTS_REQUIRED"; return
-	var installed_level_script: Script = Zhu
-	if CampaignScript.LEVELS.size() <= 2 or CampaignScript.LEVELS[2].id != "level3" or CampaignScript.LEVELS[2].script != installed_level_script.resource_path:
-		_scope_error = "LEVEL3_INSTALLED_CATALOG_REQUIRED"; return
-	_graph_schema = LEVEL3_SCHEMA
+		_scope_error = "CHAPTER_INSTALLED_SCRIPTS_REQUIRED"; return
+	if context.level_id == "level3":
+		var installed_level_script: Script = Zhu
+		if CampaignScript.LEVELS.size() <= 2 or CampaignScript.LEVELS[2].id != "level3" or CampaignScript.LEVELS[2].script != installed_level_script.resource_path:
+			_scope_error = "LEVEL3_INSTALLED_CATALOG_REQUIRED"; return
+		_graph_schema = LEVEL3_SCHEMA
+		_campaign_level_id = "level3"
+		return
+	var installed_hg_script: Script = Huang
+	if CampaignScript.LEVELS.size() <= 0 or CampaignScript.LEVELS[0].id != "level1" or CampaignScript.LEVELS[0].script != installed_hg_script.resource_path:
+		_scope_error = "LEVEL1_INSTALLED_CATALOG_REQUIRED"; return
+	_graph_schema = LEVEL1_SCHEMA
+	_campaign_level_id = "level1"
 
 func _select_factory(level_record: Variant, content_version: String, known: Dictionary,
-		next_id: int, mission_token: String) -> Dictionary:
+		next_id: int, mission_token: String, external_tokens: Dictionary = {}) -> Dictionary:
 	if not _scope_error.is_empty(): return _bad(_scope_error)
 	if _graph_schema == SCHEMA:
 		if level_record != null or mission_token != "": return _bad("CLASSIC_CHAPTER_CONTEXT")
 		return {"ok": true}
-	var checked: Dictionary = LevelState.new().validate(level_record, "level3", content_version, known, next_id, {}, mission_token)
+	var checked: Dictionary = LevelState.new().validate(level_record, _campaign_level_id, content_version, known, next_id, external_tokens, mission_token)
 	if not checked.ok: return _bad("LEVEL_" + String(checked.code), String(checked.get("field", "")))
 	var refs: Dictionary = checked.value.references
-	var roles := {"hu": refs.hu, "gate": refs.gate, "side_gate": refs.side_gate, "prisoners": refs.prisoners}
-	_factory = _unit_state_script.new(_codec_script, _unit_script, _inventory_script, ZHU_CONTEXT, roles)
+	if _graph_schema == LEVEL3_SCHEMA:
+		var roles := {"hu": refs.hu, "gate": refs.gate, "side_gate": refs.side_gate, "prisoners": refs.prisoners}
+		_factory = _unit_state_script.new(_codec_script, _unit_script, _inventory_script, ZHU_CONTEXT, roles)
+	else:
+		var hg_roles := {"cart": refs.cart, "yang": refs.yang, "bundles": refs.bundles,
+			"convoy": refs.convoy if refs.has("convoy") else [], "actors": refs.actors if refs.has("actors") else []}
+		_factory = _unit_state_script.new(_codec_script, _unit_script, _inventory_script, HG_CONTEXT, hg_roles)
 	# Membership also rejects a malformed/empty role set before Unit allocation.
 	return {"ok": true}
 
@@ -162,15 +182,21 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 		id_to_unit[entity_id] = unit
 	var level_record: Variant = null
 	var mission_token := ""
-	if _graph_schema == LEVEL3_SCHEMA:
+	var token_to_external: Dictionary = {}
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA]:
 		if not _fields(chapter_boundary, ["mission_token", "deferred_drained"]) or typeof(chapter_boundary.mission_token) != TYPE_STRING or typeof(chapter_boundary.deferred_drained) != TYPE_BOOL or not chapter_boundary.deferred_drained:
 			return _bad("LEVEL_EXTERNAL_BOUNDARY_REQUIRED")
-		var captured_level: Dictionary = LevelState.new().capture(battle.level, "level3", content_version, id_to_unit, battle.next_entity_id, {}, chapter_boundary)
+		var external_to_token: Dictionary = {}
+		if _graph_schema == LEVEL1_SCHEMA:
+			external_to_token = _level1_external_tokens(battle.level)
+			for node in external_to_token:
+				token_to_external[external_to_token[node]] = node
+		var captured_level: Dictionary = LevelState.new().capture(battle.level, _campaign_level_id, content_version, id_to_unit, battle.next_entity_id, external_to_token, chapter_boundary)
 		if not captured_level.ok: return _bad("LEVEL_" + String(captured_level.code), String(captured_level.get("field", "")))
 		level_record = captured_level.record
 		mission_token = chapter_boundary.mission_token
 	elif not chapter_boundary.is_empty(): return _bad("CLASSIC_CHAPTER_CONTEXT")
-	var selected: Dictionary = _select_factory(level_record, content_version, id_to_unit, battle.next_entity_id, mission_token)
+	var selected: Dictionary = _select_factory(level_record, content_version, id_to_unit, battle.next_entity_id, mission_token, token_to_external)
 	if not selected.ok: return selected
 	var owns_identity: bool = typeof(retained_identity) == TYPE_NIL
 	var identity: Variant = retained_identity
@@ -194,12 +220,31 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 		"root_order": root_order, "active_order": active_order, "records": records, "next_entity_id": str(battle.next_entity_id)}
 	# Capture must enforce the same full-graph membership as file validation.
 	# A held source with a missing live/captured role in Battle.units is not saved.
-	if _graph_schema == LEVEL3_SCHEMA:
-		var verified: Dictionary = validate(snapshot, content_version, level_record, mission_token)
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA]:
+		var verified: Dictionary = validate(snapshot, content_version, level_record, mission_token, token_to_external)
 		if not verified.ok: return _capture_failed(verified, identity, owns_identity)
 	var response := {"ok": true, "value": snapshot, "identity": identity, "complete_battle_restore": false}
-	if _graph_schema == LEVEL3_SCHEMA: response["level_record"] = level_record
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA]: response["level_record"] = level_record
 	return response
+
+func _level1_external_tokens(level: Variant) -> Dictionary:
+	var out: Dictionary = {}
+	if not is_instance_valid(level): return out
+	var index := 0
+	for field: String in HG_EXTERNAL_FIELDS:
+		var node: Variant = level.get(field)
+		if node != null and is_instance_valid(node):
+			out[node] = "ext:level1:%s:%d" % [field, index]
+			index += 1
+	for field: String in HG_EXTERNAL_ARRAYS:
+		var arr: Variant = level.get(field)
+		if arr is Array:
+			for j in range(arr.size()):
+				var node: Variant = arr[j]
+				if node != null and is_instance_valid(node):
+					out[node] = "ext:level1:%s:%d" % [field, j]
+					index += 1
+	return out
 
 # Structural index only; does not certify a Unit or allocate one. The Level
 # reference decoder needs this before its trusted role map can be constructed.
@@ -230,12 +275,12 @@ func validate_index(snapshot: Variant, content_version: String) -> Dictionary:
 	return {"ok": true, "known_ids": known, "next_entity_id": next_id, "index_only": true}
 
 func validate(snapshot: Variant, content_version: String, level_record: Variant = null,
-		mission_token: String = "") -> Dictionary:
+		mission_token: String = "", external_tokens: Dictionary = {}) -> Dictionary:
 	var indexed: Dictionary = validate_index(snapshot, content_version)
 	if not indexed.ok: return indexed
 	var known: Dictionary = indexed.known_ids
 	var next_id: int = indexed.next_entity_id
-	var selected: Dictionary = _select_factory(level_record, content_version, known, next_id, mission_token)
+	var selected: Dictionary = _select_factory(level_record, content_version, known, next_id, mission_token, external_tokens)
 	if not selected.ok: return selected
 	var states: Dictionary = {}
 	# Validate every record before any Unit or tombstone is allocated. The inner
@@ -260,6 +305,11 @@ func validate(snapshot: Variant, content_version: String, level_record: Variant 
 		if not membership.ok:
 			identity.dispose()
 			return membership
+	elif _graph_schema == LEVEL1_SCHEMA:
+		var hg_membership: Dictionary = _factory.validate_level1_membership(states, snapshot.active_order)
+		if not hg_membership.ok:
+			identity.dispose()
+			return hg_membership
 	identity.dispose()
 	# Deep copy only after the bounded inner codec has rejected cycles/invalid trees.
 	return {"ok": true, "value": snapshot.duplicate(true), "known_ids": known, "next_entity_id": next_id}

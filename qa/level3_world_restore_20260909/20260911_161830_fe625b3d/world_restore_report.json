@@ -1,0 +1,344 @@
+{
+	"chapter": "level3",
+	"checks": [
+		{
+			"label": "runtime content identity resolved",
+			"matrix": "INIT",
+			"passed": true
+		},
+		{
+			"label": "Level 3 runtime pack prepared",
+			"matrix": "INIT",
+			"passed": true
+		},
+		{
+			"label": "player continue button remains hidden before release",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "real Level 3 battle launched",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "Level 3 fighting without RNG fault",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "Level 3 has 7 prisoners and units deployed",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "contact action exists with quiet_complete before first save",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "save barrier requests capture",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "barrier reaches HELD state",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "session.save_held succeeds for Level 3",
+			"matrix": "SAVE",
+			"passed": true
+		},
+		{
+			"label": "disk slot readable",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "slot schema is official_continue_slot_v1",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "slot context matches Profiles.ZHU_CONTEXT",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "world schema is official_world_core_preparation_v1",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "world profile id is campaign_level3_v1",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "world sections count is 22",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "world sections has mission",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "world sections has presentation",
+			"matrix": "STORE",
+			"passed": true
+		},
+		{
+			"label": "session.prepare_restore succeeds",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "stage_mount succeeds",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "commit_restore without layout finish is rejected",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "finish_presentation_layout completes across frames",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "commit_restore succeeds",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "current_scene is restored battle",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "menu freed",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "official context is Level 3",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "level is Zhu RTS",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "level state ai_trained preserved",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "level state raids_sent preserved",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "level state expansion_secured preserved",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "economy gold restored",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "economy wood restored",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "faction_res float values preserved",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "mission node present and bound",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "units restored (>40)",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "prisoners count is 7",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "save barrier installed in IDLE state with valid scope",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "zhu_rts_inside quiet_complete preserved",
+			"matrix": "RESTORE",
+			"passed": true
+		},
+		{
+			"label": "restored battle still fighting",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "quiet_complete still set after restore",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "sun restored after first save",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "request_action contact accepted",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "contact opened side gate after restore",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "second save after contact succeeds",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "second restore commit succeeds",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "inside_open preserved",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "zhu_gate_opened event preserved",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "quiet_complete still set on second restore",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "prisoners still present after contact restore",
+			"matrix": "STAGE2",
+			"passed": true
+		},
+		{
+			"label": "battle fighting after contact restore",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "rescue action registered",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "request_action rescue accepted",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "prisoners freed after restore",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "prisoners switched to Liangshan and not captive",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "evacuation controls present",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "third save after rescue succeeds",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "third restore commit succeeds",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "prisoners_freed preserved",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "zhu_prisoners_freed event preserved",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "inside_open still true after rescue restore",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "evacuation controls restored",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "still fighting after rescue restore",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "local lifecycle terminal accepted",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "terminal slot restore refused",
+			"matrix": "STAGE3",
+			"passed": true
+		},
+		{
+			"label": "tampered profile id rejected with WORLD_CORE_PROFILE",
+			"matrix": "NEGATIVE",
+			"passed": true
+		},
+		{
+			"label": "missing presentation section rejected with WORLD_CORE_SECTIONS",
+			"matrix": "NEGATIVE",
+			"passed": true
+		},
+		{
+			"label": "mismatched content version rejected with WORLD_CORE_IDENTITY",
+			"matrix": "NEGATIVE",
+			"passed": true
+		}
+	],
+	"full_world": true,
+	"mode": "full",
+	"passed": true,
+	"pid": 40716
+}

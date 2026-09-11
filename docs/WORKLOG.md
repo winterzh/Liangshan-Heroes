@@ -1,3 +1,7 @@
+## 2026-09-11 黄泥冈 UnitGraph 成员图
+
+UnitState/UnitGraph 接入 `level1_unit_state_v1` / `level1_unit_graph_v1`：官方 HG 上下文、cart/yang/bundles 角色（cart 与 bundles[0] 同实体别名）、convoy/actors 变量池；允许酒计剧情姿态。UnitGraph capture 自动映射 level1 外部件 token，并在 capture 时 validate 整图。修复 `apply_overrides` 使用 StringName 键导致 `DEFINITION_KEY` 失败（改字符串键；UnitState 同时接受 String/StringName）。组件 QA **17/17**（含 `UnitGraph.capture/validate level1`）；祝家庄 67/67 与跨进程回归通过（`20260911_161830_fe625b3d`）。完整 Session 世界安装仍待 WorldCore 路径上的 level1 presentation 准备。
+
 ## 2026-09-11 黄泥冈官方选型与组件抓取
 
 官方恢复选型扩展 `campaign_level1_v1`（安装脚本 `level1_huangnigang_short.gd`）。新增 `run_level1_world_factory.gd`（prepare_runtime + audit）；WorldCore/Session/SlotStore/Barrier 从写死 level3 泛化为任意官方战役 profile（动态 level_id、脚本身份、flags）。组件 QA 12/12：真实开局、`LevelState.capture/validate` level1（含外部件 token）。完整 `factory.restore_level` 与 Session 保存仍待 Level1 UnitGraph 成员图；祝家庄 67/67 与跨进程回归保持通过（`20260911_153702_a97524f9`）。玩家入口仍关闭。
