@@ -69,14 +69,17 @@ func _scope() -> Dictionary:
 	if not _context_error.is_empty(): return {"ok": false, "code": _context_error}
 	if not is_instance_valid(world) or world.is_queued_for_deletion() or not world.is_inside_tree(): return {"ok": false, "code": "WORLD_UNAVAILABLE"}
 	if not world.gameplay_rng_fault().is_empty(): return {"ok": false, "code": "BATTLE_FAULT"}
-	if int(world.phase) != 2 or not world.economy: return {"ok": false, "code": "CLASSIC_FIGHT_REQUIRED"}
+	if int(world.phase) != 2: return {"ok": false, "code": "CLASSIC_FIGHT_REQUIRED"}
 	if _capture_context == Profiles.CLASSIC_CONTEXT:
+		# Classic 30-wave defense is an economy RTS capture.
+		if not world.economy: return {"ok": false, "code": "CLASSIC_FIGHT_REQUIRED"}
 		if world._official_context.get("mode", "") != "defense" or int(world._official_context.get("waves", 0)) != 30: return {"ok": false, "code": "CLASSIC_30_REQUIRED"}
 		if world.level == null or world.level.get_script().resource_path != "res://scripts/levels/skirmish.gd": return {"ok": false, "code": "CLASSIC_LEVEL_REQUIRED"}
 		if world.mission != null: return {"ok": false, "code": "UNSUPPORTED_CAPTURE_ENVIRONMENT"}
 	else:
 		# Context is supplied by the installed host, never copied from a slot.
 		# Selecting an official campaign chapter authorizes this boundary only.
+		# Some chapters (e.g. Level 1 Huangnigang) have no economy.
 		if not Profiles.is_official_campaign_context(_capture_context): return {"ok": false, "code": "CAMPAIGN_CAPTURE_CONTEXT"}
 		if world.get_script() != preload("res://scripts/battle.gd") or world._official_context != _capture_context: return {"ok": false, "code": "CAMPAIGN_CAPTURE_CONTEXT"}
 		var expected_script: Script = Profiles.level_script(Profiles.normalize_context(_capture_context).profile_id)

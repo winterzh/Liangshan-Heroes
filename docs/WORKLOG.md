@@ -1,3 +1,7 @@
+## 2026-09-11 黄泥冈 Session 边界与 Save Barrier
+
+Session 的 presentation 布局门从 `_is_zhu` 泛化为 `_is_official_campaign`。Save Barrier 仅对经典 30 波要求 `economy`；官方战役可无经济（黄泥冈）。组件 QA **19/19**：UnitGraph capture/validate、Barrier HELD、Session 已走到 presentation。已知边界：Level1 任务按钮仍带额外 lambda 连接，固定 presentation 工厂报 `PRESENTATION_EXTRA_SIGNAL`，整槽保存待 UI 契约对齐。祝家庄 67/67 与跨进程回归通过（`20260911_164903_da912106`）。
+
 ## 2026-09-11 黄泥冈 UnitGraph 成员图
 
 UnitState/UnitGraph 接入 `level1_unit_state_v1` / `level1_unit_graph_v1`：官方 HG 上下文、cart/yang/bundles 角色（cart 与 bundles[0] 同实体别名）、convoy/actors 变量池；允许酒计剧情姿态。UnitGraph capture 自动映射 level1 外部件 token，并在 capture 时 validate 整图。修复 `apply_overrides` 使用 StringName 键导致 `DEFINITION_KEY` 失败（改字符串键；UnitState 同时接受 String/StringName）。组件 QA **17/17**（含 `UnitGraph.capture/validate level1`）；祝家庄 67/67 与跨进程回归通过（`20260911_161830_fe625b3d`）。完整 Session 世界安装仍待 WorldCore 路径上的 level1 presentation 准备。
