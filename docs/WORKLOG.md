@@ -1,3 +1,7 @@
+## 2026-09-11 黄泥冈官方选型与组件抓取
+
+官方恢复选型扩展 `campaign_level1_v1`（安装脚本 `level1_huangnigang_short.gd`）。新增 `run_level1_world_factory.gd`（prepare_runtime + audit）；WorldCore/Session/SlotStore/Barrier 从写死 level3 泛化为任意官方战役 profile（动态 level_id、脚本身份、flags）。组件 QA 12/12：真实开局、`LevelState.capture/validate` level1（含外部件 token）。完整 `factory.restore_level` 与 Session 保存仍待 Level1 UnitGraph 成员图；祝家庄 67/67 与跨进程回归保持通过（`20260911_153702_a97524f9`）。玩家入口仍关闭。
+
 ## 2026-09-11 祝家庄跨进程继续
 
 Level3 恢复 QA 增加 `cross_save` / `cross_resume` 两进程：进程 A 真实开局并保存含孙立与 `quiet_complete` 的槽后退出；进程 B（新 PID）从磁盘槽 `commit_restore`，校验经济/孙立/接应任务/七囚徒，并继续 `request_action` 开偏门后二次保存。收据记录 `cross_process_pids=[31380,9468]`。同包 full 模式仍为 67/67；跨进程合计 8+18 项通过（`20260911_142825_a592a731`）。仍不开放玩家入口。

@@ -5,14 +5,19 @@ const CampaignScript := preload("res://scripts/campaign.gd")
 const Policy := preload("res://scripts/steam_run_policy.gd")
 const Classic := preload("res://scripts/levels/skirmish.gd")
 const Zhu := preload("res://scripts/levels/level3_zhujiazhuang_rts.gd")
+const Huang := preload("res://scripts/levels/level1_huangnigang_short.gd")
 const SCHEMA := "official_restore_profile_v1"
 const CLASSIC_ID := "classic_30_v1"
 const ZHU_ID := "campaign_level3_v1"
+const HG_ID := "campaign_level1_v1"
 const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
 const ZHU_CONTEXT := {"mode": "campaign", "level_id": "level3", "waves": 0}
+const HG_CONTEXT := {"mode": "campaign", "level_id": "level1", "waves": 0}
 const CLASSIC_FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false,
 	"custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
 const ZHU_FLAGS := {"current": 2, "skirmish": false, "skirmish_ai": false,
+	"arena": false, "custom_defense": false, "scenario": false}
+const HG_FLAGS := {"current": 0, "skirmish": false, "skirmish_ai": false,
 	"arena": false, "custom_defense": false, "scenario": false}
 
 static func _bad(code: String) -> Dictionary:
@@ -39,17 +44,25 @@ static func normalize_context(value: Variant) -> Dictionary:
 		return {"ok": true, "context": CLASSIC_CONTEXT.duplicate(), "profile_id": CLASSIC_ID}
 	if value.mode == "campaign" and value.level_id == "level3" and value.waves == 0:
 		return {"ok": true, "context": ZHU_CONTEXT.duplicate(), "profile_id": ZHU_ID}
+	if value.mode == "campaign" and value.level_id == "level1" and value.waves == 0:
+		return {"ok": true, "context": HG_CONTEXT.duplicate(), "profile_id": HG_ID}
 	return _bad("OFFICIAL_CONTEXT_NOT_SUPPORTED")
 
 static func _installed(profile_id: String) -> bool:
-	var script: Script = Classic if profile_id == CLASSIC_ID else Zhu
 	match profile_id:
 		CLASSIC_ID:
-			return CampaignScript.SKIRMISH_SCRIPT == script.resource_path
+			var classic_script: Script = Classic
+			return CampaignScript.SKIRMISH_SCRIPT == classic_script.resource_path
 		ZHU_ID:
+			var zhu_script: Script = Zhu
 			return CampaignScript.LEVELS.size() > 2 \
 				and CampaignScript.LEVELS[2].id == "level3" \
-				and CampaignScript.LEVELS[2].script == script.resource_path
+				and CampaignScript.LEVELS[2].script == zhu_script.resource_path
+		HG_ID:
+			var hg_script: Script = Huang
+			return CampaignScript.LEVELS.size() > 0 \
+				and CampaignScript.LEVELS[0].id == "level1" \
+				and CampaignScript.LEVELS[0].script == hg_script.resource_path
 	return false
 
 static func select_context(context: Variant, identity: Dictionary) -> Dictionary:
@@ -73,11 +86,11 @@ static func select_saved(context: Variant, content_version: Variant,
 
 static func capture_selection(campaign: Node, level: RefCounted, identity: Dictionary) -> Dictionary:
 	if not is_instance_valid(campaign) or campaign.get_script() != CampaignScript or not is_instance_valid(level): return _bad("OFFICIAL_SOURCE_REQUIRED")
-	if level.get_script() not in [Classic, Zhu]: return _bad("OFFICIAL_SCRIPT_IDENTITY")
+	if level.get_script() not in [Classic, Zhu, Huang]: return _bad("OFFICIAL_SCRIPT_IDENTITY")
 	var selected: Dictionary = select_context(Policy.classify(campaign, level), identity)
 	if not selected.ok: return selected
-	var expected: Script = Classic if selected.profile_id == CLASSIC_ID else Zhu
-	if level.get_script() != expected: return _bad("OFFICIAL_SCRIPT_IDENTITY")
+	var expected: Script = level_script(selected.profile_id)
+	if expected == null or level.get_script() != expected: return _bad("OFFICIAL_SCRIPT_IDENTITY")
 	return selected
 
 static func install_flags(profile_id: String) -> Dictionary:
@@ -86,6 +99,7 @@ static func install_flags(profile_id: String) -> Dictionary:
 	match profile_id:
 		CLASSIC_ID: return {"ok": true, "flags": CLASSIC_FLAGS.duplicate()}
 		ZHU_ID: return {"ok": true, "flags": ZHU_FLAGS.duplicate()}
+		HG_ID: return {"ok": true, "flags": HG_FLAGS.duplicate()}
 	return _bad("OFFICIAL_PROFILE_UNKNOWN")
 
 static func level_script(profile_id: String) -> Script:
@@ -93,4 +107,12 @@ static func level_script(profile_id: String) -> Script:
 	match profile_id:
 		CLASSIC_ID: return Classic
 		ZHU_ID: return Zhu
+		HG_ID: return Huang
 	return null
+
+static func is_official_campaign_profile(profile_id: String) -> bool:
+	return profile_id == ZHU_ID or profile_id == HG_ID
+
+static func is_official_campaign_context(context: Variant) -> bool:
+	var norm := normalize_context(context)
+	return norm.ok and is_official_campaign_profile(norm.profile_id)

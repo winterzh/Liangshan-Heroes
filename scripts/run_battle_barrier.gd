@@ -76,10 +76,12 @@ func _scope() -> Dictionary:
 		if world.mission != null: return {"ok": false, "code": "UNSUPPORTED_CAPTURE_ENVIRONMENT"}
 	else:
 		# Context is supplied by the installed host, never copied from a slot.
-		# Selecting Level3 authorizes this boundary only, not a save/restore entry.
-		if world.get_script() != preload("res://scripts/battle.gd") or world._official_context != Profiles.ZHU_CONTEXT: return {"ok": false, "code": "LEVEL3_CAPTURE_CONTEXT"}
-		if not is_instance_valid(world.level) or world.level.get_script() != Profiles.level_script(Profiles.ZHU_ID): return {"ok": false, "code": "LEVEL3_CAPTURE_LEVEL"}
-		if not is_instance_valid(world.mission) or world.mission.get_script() != Mission: return {"ok": false, "code": "LEVEL3_CAPTURE_MISSION"}
+		# Selecting an official campaign chapter authorizes this boundary only.
+		if not Profiles.is_official_campaign_context(_capture_context): return {"ok": false, "code": "CAMPAIGN_CAPTURE_CONTEXT"}
+		if world.get_script() != preload("res://scripts/battle.gd") or world._official_context != _capture_context: return {"ok": false, "code": "CAMPAIGN_CAPTURE_CONTEXT"}
+		var expected_script: Script = Profiles.level_script(Profiles.normalize_context(_capture_context).profile_id)
+		if not is_instance_valid(world.level) or expected_script == null or world.level.get_script() != expected_script: return {"ok": false, "code": "CAMPAIGN_CAPTURE_LEVEL"}
+		if not is_instance_valid(world.mission) or world.mission.get_script() != Mission: return {"ok": false, "code": "CAMPAIGN_CAPTURE_MISSION"}
 	if world.ai_friendly or world._smoke or world._prof_on or world._no_opt: return {"ok": false, "code": "UNSUPPORTED_CAPTURE_ENVIRONMENT"}
 	if Engine.physics_ticks_per_second != 60: return {"ok": false, "code": "CLOCK_HZ_CHANGED"}
 	if not clock.fault().is_empty(): return {"ok": false, "code": clock.fault()}
