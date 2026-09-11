@@ -33,7 +33,8 @@
 - **ManifestID：416479225955196133**
 - 上传：SteamCMD SteamPipe，缓存登录 `gaojing666`
 - Preview 与 Upload 均 exit 0；实际增量上传约 12.4 MB（仅 EXE chunk）
-- **Set Live**：SteamCMD `app_set_config` 无效；须在 Steamworks 网页将 `public`/`default` 指到 **25250466**
+- **Set Live**：已完成。SteamCMD `app_info_print` 回读 **public buildid = 25250466**
+- **公告**：用户已在 Steamworks 发布
 
 ## 4. 更新公告草稿
 
