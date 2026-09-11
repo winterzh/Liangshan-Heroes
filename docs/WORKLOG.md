@@ -1,3 +1,7 @@
+## 2026-09-11 Steam Build 25250466 已 Set Live
+
+用户在 Steamworks 将 public/default 指到 **25250466**。SteamCMD `app_info_print` 回读确认 `branches.public.buildid=25250466`。更新公告亦已由用户在 Steamworks 发布。[更新交接](STEAM_UPDATE_20260911.md) · [公告草稿](STEAM_ANNOUNCEMENT_20260911_draft.md)
+
 ## 2026-09-11 Steam 构建上传 Build 25250466
 
 `build_steam_release_zip.py` 导出最新源码，Smoke 退出0。ZIP 252,070,601 字节，SHA256 `cb1f7a25…d026b`。SteamCMD 缓存登录 `gaojing666`，Preview/Upload 均成功；**BuildID 25250466**，Manifest `416479225955196133`，增量约 12.4MB。`app_set_config` 无法改分支；**Set Live 仍须在 Steamworks 网页把 public/default 指到 25250466**。公告草稿见 [STEAM_ANNOUNCEMENT_20260911_draft](STEAM_ANNOUNCEMENT_20260911_draft.md)。详见 [更新交接](STEAM_UPDATE_20260911.md)。
