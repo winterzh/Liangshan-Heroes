@@ -248,12 +248,6 @@ func test_level3_save_and_restore() -> void:
 
 	await test_stage_after_contact(restored_battle, restore_session)
 
-func _diag_block_signals(node: Node, out: Array) -> void:
-	if node.is_blocking_signals():
-		out.append("%s/%s" % [node.name, node.get_class()])
-	for child in node.get_children(true):
-		_diag_block_signals(child, out)
-
 func _pause_save(battle: Node) -> Dictionary:
 	held = false
 	rejected = ""
@@ -280,16 +274,11 @@ func _restore_from_menu() -> Dictionary:
 	var prepared: Dictionary = session.prepare_restore(menu)
 	if not prepared.ok:
 		return prepared
-	return await session.commit_restore_async()
+	return session.commit_restore_async()
 
 func test_stage_after_contact(battle: Node, session: Variant) -> void:
 	# Stage-2: complete side-gate contact after the first restore (sun already saved).
 	var lvl = battle.level
-	get_tree().paused = false
-	Engine.time_scale = 1.0
-	for _i in range(12):
-		await get_tree().physics_frame
-	await get_tree().process_frame
 	if not check("STAGE2", "restored battle still fighting", battle.phase == B.Phase.FIGHT):
 		return
 	if not check("STAGE2", "quiet_complete still set after restore",
@@ -306,13 +295,9 @@ func test_stage_after_contact(battle: Node, session: Variant) -> void:
 	# Hold at contact until the 5s action completes (time_scale accelerates sim).
 	Engine.time_scale = 2.0
 	var waited := 0.0
-	while waited < 90.0 and battle.phase != B.Phase.END and not battle.mission.has_event("zhu_gate_opened"):
+	while waited < 30.0 and battle.phase != B.Phase.END and not battle.mission.has_event("zhu_gate_opened"):
 		await get_tree().process_frame
 		waited += get_process_delta_time() * Engine.time_scale
-		if int(waited * 10) % 50 == 0 and battle.mission.active_action_id == "zhu_rts_inside":
-			print("STAGE2_PROGRESS t=", snappedf(waited, 0.1), " prog=", battle.mission._progress,
-				" actor=", battle.mission._actor.display_name if battle.mission._actor else "?",
-				" dist=", snappedf(battle.mission._actor.position.distance_to(battle.map.cell_to_world(lvl.INNER_CONTACT)), 0.1) if battle.mission._actor else -1)
 	Engine.time_scale = 1.0
 	if not check("STAGE2", "contact opened side gate after restore",
 			battle.mission.has_event("zhu_gate_opened") and lvl.inside_open):
@@ -322,12 +307,6 @@ func test_stage_after_contact(battle: Node, session: Variant) -> void:
 	battle._save_barrier.configure(battle, battle._run_clock, Profiles.ZHU_CONTEXT)
 	battle._save_barrier.capture_ready.connect(_on_held)
 	battle._save_barrier.capture_rejected.connect(_on_rejected)
-	# Diagnose scenery signal gates before the second capture.
-	var scenery = battle.map.sample_scenery
-	if scenery != null:
-		var blocked: Array = []
-		_diag_block_signals(scenery, blocked)
-		print("STAGE2_SCENERY blocked=", blocked.size(), " sample=", blocked.slice(0, 12))
 	var saved2: Dictionary = await _pause_save(battle)
 	if not check("STAGE2", "second save after contact succeeds", saved2.get("ok", false)):
 		print("STAGE2_SAVE_FAILED: ", saved2)

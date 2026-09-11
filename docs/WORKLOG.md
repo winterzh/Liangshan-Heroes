@@ -1,3 +1,9 @@
+## 2026-09-11 祝家庄二次保存与景物激活修复
+
+扩展 Level3 世界恢复 QA：首存前引入孙立并带 `quiet_complete` 接应任务；恢复后取消暂停、走真实 `request_action` 完成偏门接应，再二次保存/恢复（`inside_open`、事件、囚徒、`quiet_complete` 保留）；本地生命周期 `terminal` 后 `prepare_restore` 以 `LOCAL_*` 拒绝。原 39 项扩至 **54/54 通过**（`20260911_131926_29a56f21`）。
+
+修复两处生产缺口：(1) Mission 动作可选字段补 `quiet_complete`，避免接应任务在保存时被 `UNKNOWN_ACTION_FIELD` 拒绝；(2) WorldCore `finish_display` 返回的战役景物 adapter 此前未保留，恢复后 98 个景物节点保持 `block_signals`，二次保存报 `CAMPAIGN_SIGNAL_GATE`。现挂到 `activate_components` 调用 `activate_campaign`，dispose 时清理。不开放玩家续玩入口，不发布 Steam。
+
 ## 2026-09-11 无选中时底部指挥栏收成矮条
 
 桌面端无选中单位/建筑时，底部指挥栏从 158px 收到 92px：只留小地图（72）、「未选中」提示与右侧「展开信息」；头像/属性/命令卡/多选格/物品栏隐藏。选中或查看敌方后恢复 158px 完整面板。`RTSCamera.PANEL_H` 改为静态可变高度，镜头边缘滚屏、信息抽屉与键位帮助随当前高度避让。触屏布局高度写死 166，本批不收起。提示文案补英/日译。

@@ -248,12 +248,6 @@ func test_level3_save_and_restore() -> void:
 
 	await test_stage_after_contact(restored_battle, restore_session)
 
-func _diag_block_signals(node: Node, out: Array) -> void:
-	if node.is_blocking_signals():
-		out.append("%s/%s" % [node.name, node.get_class()])
-	for child in node.get_children(true):
-		_diag_block_signals(child, out)
-
 func _pause_save(battle: Node) -> Dictionary:
 	held = false
 	rejected = ""
@@ -322,12 +316,6 @@ func test_stage_after_contact(battle: Node, session: Variant) -> void:
 	battle._save_barrier.configure(battle, battle._run_clock, Profiles.ZHU_CONTEXT)
 	battle._save_barrier.capture_ready.connect(_on_held)
 	battle._save_barrier.capture_rejected.connect(_on_rejected)
-	# Diagnose scenery signal gates before the second capture.
-	var scenery = battle.map.sample_scenery
-	if scenery != null:
-		var blocked: Array = []
-		_diag_block_signals(scenery, blocked)
-		print("STAGE2_SCENERY blocked=", blocked.size(), " sample=", blocked.slice(0, 12))
 	var saved2: Dictionary = await _pause_save(battle)
 	if not check("STAGE2", "second save after contact succeeds", saved2.get("ok", false)):
 		print("STAGE2_SAVE_FAILED: ", saved2)

@@ -60,7 +60,6 @@ var _mount_frame: Dictionary = {}
 var _environment: Variant = null
 var _fog_module: Variant = null
 var _fog_plan: Dictionary = {}
-var _scenery_adapter: Variant = null
 var _activated := false
 var _owns_world := true
 
@@ -349,11 +348,6 @@ func prepare(record: Variant) -> Dictionary:
 	if fog_plan.layer != null: _battle.world.add_child(fog_plan.layer)
 	checked = map_state.finish_display(_battle.map, s.map)
 	if not checked.ok: return _abort(checked, "map_display")
-	# Retain the campaign scenery adapter until final activation; otherwise its
-	# staged nodes stay block_signals and a later save cannot capture them.
-	if bool(checked.get("display_requires_activation", false)):
-		_scenery_adapter = checked.get("display_adapter")
-		if _scenery_adapter == null: return _abort(_bad("MAP_DISPLAY_ADAPTER_MISSING"), "map_display")
 	var known: Dictionary = {}
 	for id: String in ids: known[id] = true
 	var root: Dictionary = _root_state(_identity).validate(s.root, version, known)
@@ -455,9 +449,6 @@ func dispose() -> void:
 	_environment = null
 	_fog_module = null
 	_fog_plan.clear()
-	if _scenery_adapter != null and _scenery_adapter.has_method("dispose_campaign"):
-		_scenery_adapter.dispose_campaign()
-	_scenery_adapter = null
 
 func finish_presentation_layout() -> Dictionary:
 	if not _is_zhu() or _presentation_module == null: return {"ok": true}
@@ -546,10 +537,6 @@ func activate_components(root_node: Dictionary) -> Dictionary:
 	if not checked.ok: return checked
 	checked = _hud_module.activate()
 	if not checked.ok: return checked
-	if _scenery_adapter != null:
-		checked = _scenery_adapter.activate_campaign()
-		if not checked.ok: return checked
-		_scenery_adapter = null
 	if _is_zhu() and _presentation_module != null:
 		checked = _presentation_module.activate()
 		if not checked.ok: return checked

@@ -24,7 +24,7 @@ const NODE_FIELDS := ["_panel", "_toggle", "_details", "_detail_scroll", "_title
 const OTHER_FIELDS := ["battle", "story_goals", "events", "report", "actions", "_actor",
 	"_markers", "stage_metrics", "_stage_started_ms", "_result_cache"]
 const ACTION_FIELDS := ["label", "cell", "actors", "duration", "reach", "click_reach", "button", "show_button", "done", "marker"]
-const OPTIONAL_ACTION_FIELDS := ["actor_button", "blocked_reason", "settle_margin"]
+const OPTIONAL_ACTION_FIELDS := ["actor_button", "blocked_reason", "settle_margin", "quiet_complete"]
 var _codec := Codec.new()
 
 func _bad(code: String, field := "") -> Dictionary:
