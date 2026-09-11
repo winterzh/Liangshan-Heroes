@@ -784,7 +784,13 @@ func tick(delta: float) -> void:
 	active_action_id = ""
 	_actor = null
 	_refresh_marker_captions()
-	mark("action:%s:%s" % [stage_id, finished], String(action.label))
+	# Actions may supply their own success toast via mark()/level callback.
+	# Skip the generic label toast then so the right side does not stack near-duplicates.
+	if not bool(action.get("quiet_complete", false)):
+		mark("action:%s:%s" % [stage_id, finished], String(action.label))
+	else:
+		events["action:%s:%s" % [stage_id, finished]] = true
+		report.append(String(action.label))
 	battle.level.on_mission_action(battle, finished, actor)
 
 func mark(event_id: String, text: String) -> bool:

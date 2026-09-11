@@ -306,10 +306,11 @@ func _introduce_sun(b) -> void:
 		return
 	sun.order_hold_position()
 	b.mission.add_action("zhu_rts_inside","接应内应，打开偏门",INNER_CONTACT,["sun_li","song_jiang","lin_chong","hua_rong"],5.0,96.0,96.0)
+	b.mission.actions["zhu_rts_inside"]["quiet_complete"] = true
 	b.mission.add_actor_locator("zhu_rts_inside","sun_li")
 	if not _alive(side_gate):
 		b.mission.block_action("zhu_rts_inside","偏门已被攻破，无需再接应；可直接入庄救人。")
-	b.msg("孙立已到前营！可派孙立或宋江前往3号旗标（偏门前）；停留5秒即可接应开门，切勿强攻偏门。",9.0)
+	b.msg("孙立已到前营！选中孙立或宋江，右键偏门前3号旗标，停留5秒即可接应开门；切勿强攻偏门。",9.0)
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	match action_id:
@@ -336,8 +337,10 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			inside_open = true
 			b.unregister_building_footprint(side_gate)
 			side_gate.resolve_story("retreated")
-			b.mission.mark("zhu_gate_opened","孙立接应孙新换旗，偏门已开；军队由玩家自行调入")
-			b.msg("偏门已开！内应孙立与孙新成功换旗开门，可沿偏门入庄救人！",7.0)
+			# One success toast only: clear in-flight toasts, then mark the gate-opened line.
+			if b.hud != null and b.hud.has_method("_clear_info_toasts"):
+				b.hud._clear_info_toasts()
+			b.mission.mark("zhu_gate_opened","偏门已开！内应换旗成功，可沿偏门入庄救人；军队由玩家自行调入。")
 		"zhu_rts_rescue":
 			if prisoners_freed:
 				return
@@ -352,7 +355,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				u.art_variant = ""
 				u.queue_redraw()
 			_add_evacuation_controls(b)
-			b.mission.mark("zhu_prisoners_freed","七名好汉脱困，由玩家护送回前营；伤员不参加战斗")
+			b.mission.mark("zhu_prisoners_freed","七名好汉脱困；伤员不参加战斗")
 			b.msg("可点“选中 · 时迁”或“选中 · 获救队伍”，再右键送回前营；“查看 · 前营”只移镜头。大营仍须攻破，伤员需要战斗部队保护。",8.0)
 
 

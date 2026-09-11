@@ -1,3 +1,9 @@
+## 2026-09-11 祝家庄接应成功提示叠字修复
+
+按实机试玩截图，接应偏门成功时右侧「任务完成标签 + 成功说明 + 键位帮助」叠成难读鬼影。`zhu_rts_inside` 标记 `quiet_complete`，完成时不再弹通用任务名 toast；关卡回调先 `_clear_info_toasts` 再只保留一条「偏门已开」成功提示。键位帮助在任一 toast 出现时整块隐藏（原先 0.22 半透明仍透出字），toast 消失后按设置恢复。补全三句现行中文文案的英/日译并重建词库（4396 条）；`quiet_complete` 只影响本动作，其余任务完成提示不变。偏门自动索敌与接应开门逻辑未改。
+
+实机复验：开场/开局非黑屏、偏门满血不自动砍、`request_action` 5 秒开门、`inside_open=true`；成功截图右侧仅剩半透明成功 toast，无键位帮助叠字。[试玩脚本](../scratchpad/zhu_playtest.gd)（`.gdignore` 目录，不进生产）。未改底部无选中时的大块空面板。
+
 ## 2026-09-11 媒体完成状态交接对齐
 
 将 `SOURCE_SETUP.md`、`PUBLISH_STATUS.json` 与仓库外 `Steam新素材-20260909/先看这里.md` 中仍写着「45秒视频与1920×1080缩略图未上传」的旧文案，对齐为与 `STEAM_STORE_MEDIA_20260909.md` 一致的已完成状态（`store_media_published=true`，22份媒体发布完结）。不改游戏运行资源或重新发布 Steam 包。

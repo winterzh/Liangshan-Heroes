@@ -179,6 +179,7 @@ func _ready() -> void:
 	msg_box.add_theme_constant_override("separation", 5)
 	msg_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	msg_box.z_index = 89
+	msg_box.clip_contents = true
 	msg_box.visible = false
 	add_child(msg_box)
 
@@ -1592,7 +1593,9 @@ func _update_control_help_visibility() -> void:
 		_control_help_toggle.visible = not touch_ui
 		_control_help_toggle.set_pressed_no_signal(show_help)
 	if _control_help_panel != null:
-		_control_help_panel.visible = not touch_ui and show_help
+		var has_toast := msg_box != null and msg_box.visible and msg_box.get_child_count() > 0
+		_control_help_panel.visible = not touch_ui and show_help and not has_toast
+		_control_help_panel.modulate.a = 0.0 if has_toast else 1.0
 	# 操作提示是右下方最靠底的一层；开关变化时同步让消息/信息抽屉向上避让。
 	if _info_panel != null:
 		_layout_info_panel()
@@ -1696,6 +1699,8 @@ func _show_info_toast(text: String) -> void:
 
 	var row := _make_info_toast(text, 1)
 	_arm_info_toast(row, true)
+	_sync_help_dim_for_toasts()
+	_layout_info_panel.call_deferred()
 
 
 func _make_info_toast(text: String, count: int) -> PanelContainer:
@@ -1758,14 +1763,28 @@ func _remove_info_toast(row: Control, kill_tween := true) -> void:
 		msg_box.remove_child(row)
 	row.queue_free()
 	msg_box.visible = msg_box.get_child_count() > 0 and not _info_expanded
+	_sync_help_dim_for_toasts()
 	_layout_skill_rail()
+	_layout_info_panel.call_deferred()
 
 
 func _clear_info_toasts() -> void:
 	for child in msg_box.get_children():
 		_remove_info_toast(child)
 	msg_box.visible = false
+	_sync_help_dim_for_toasts()
 	_layout_skill_rail()
+	_layout_info_panel.call_deferred()
+
+
+## Toast fade-out is translucent; fully hide keybind help while any toast is on
+## screen so the two right-side layers do not read as overlapping ghost text.
+func _sync_help_dim_for_toasts() -> void:
+	if _control_help_panel == null:
+		return
+	var has_toast := msg_box != null and msg_box.visible and msg_box.get_child_count() > 0
+	_control_help_panel.visible = (not touch_ui) and _show_control_help_enabled() and not has_toast
+	_control_help_panel.modulate.a = 0.0 if has_toast else 1.0
 
 
 func _scroll_info_to_bottom() -> void:
