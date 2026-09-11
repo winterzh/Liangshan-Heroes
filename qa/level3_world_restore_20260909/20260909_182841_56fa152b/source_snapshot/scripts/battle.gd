@@ -540,8 +540,6 @@ func _ready() -> void:
 
 	camera.position = to_screen(map.cell_to_world(level.camera_start_cell()))
 	hud.set_top(Localize.format_text("%s · %s", [level.display_title(), level.display_subtitle()], false))
-	if fog:
-		_fog_pass(0.0)
 
 	if OS.get_environment("SMOKE_TEST") == "1":
 		_smoke = true
@@ -10179,18 +10177,6 @@ func _issue_order(p: Vector2, queued := false) -> void:
 	var enemy := _enemy_at(p)
 	_click_fx_attack = enemy != null
 	if enemy != null:
-		if mission != null and mission.actions.has("zhu_rts_inside") and not mission.actions["zhu_rts_inside"].done \
-				and is_instance_valid(enemy) and enemy.display_name == "祝家庄偏门" \
-				and movers.any(func(u: Unit) -> bool: return u.is_hero) \
-				and not movers.any(func(u: Unit) -> bool: return String(u.key).begins_with("siege")):
-			var contact_world: Vector2 = map.cell_to_world(mission.actions["zhu_rts_inside"].cell)
-			_click_fx_attack = false
-			msg(Localize.text("正在前往偏门前接应内应孙立/孙新，切勿强攻偏门！"), 3.0)
-			for u in movers:
-				u.order_move(contact_world, queued)
-			if not queued:
-				_stamp_mission_move(movers, contact_world)
-			return
 		for u in movers:
 			u.order_attack(enemy, queued, true)
 		return

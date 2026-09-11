@@ -561,10 +561,7 @@ func prepare_manual_move(movers: Array, target: Vector2) -> Dictionary:
 			candidate = u
 			best = u.position.distance_squared_to(destination)
 	if candidate == null:
-		var tip := Localize.format_text("需要%s：请选中该人物，再右键%d号旗标。", [_actor_labels(action.actors), action.marker.number])
-		set_feedback(tip)
-		if battle != null and battle.has_method("msg"):
-			battle.msg(tip, 3.5)
+		set_feedback(Localize.format_text("需要%s：请选中该人物，再右键%d号旗标。", [_actor_labels(action.actors), action.marker.number]))
 		return {}
 	set_status(Localize.format_text("%s正在前往%d号旗标；到场停留%s秒办理。", [candidate.display_name, action.marker.number, str(action.duration)]))
 	return {"actor":candidate, "target":destination}

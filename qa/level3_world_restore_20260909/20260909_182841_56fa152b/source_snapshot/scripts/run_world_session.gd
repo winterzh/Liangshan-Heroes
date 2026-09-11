@@ -255,7 +255,7 @@ func commit_restore_async(max_layout_frames := 12) -> Dictionary:
 	if _phase != "mounted": return _bad("RESTORE_NOT_PREPARED")
 	if _core._is_zhu():
 		var layout_ok := false
-		for frame: int in range(max_layout_frames):
+		for frame: int in max_layout_frames:
 			await _tree().process_frame
 			var res: Dictionary = finish_presentation_layout()
 			if res.ok:
@@ -271,12 +271,6 @@ func dispose() -> Dictionary:
 	# The caller must retain this object when this refusal is returned. Dropping
 	# the final reference would discard the only live token for this write.
 	if has_pending_save(): return _pending_save_refused("PENDING_SAVE_RETAIN_SESSION")
-	if _phase != "installed":
-		_core.dispose()
-		if _campaign_applied:
-			for name in _campaign_before: _campaign().set(name, _campaign_before[name])
-			for name in _settings_before: _settings().set(name, _settings_before[name])
-			_tree().root.canvas_transform = _canvas_before
-			_campaign_applied = false
+	if _phase != "installed": _core.dispose()
 	_old_scene = null; _packet.clear()
 	return {"ok": true}

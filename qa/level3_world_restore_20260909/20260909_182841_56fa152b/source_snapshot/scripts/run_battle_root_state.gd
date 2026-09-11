@@ -390,16 +390,10 @@ func capture(battle: Variant, content_version: String, object_to_id: Dictionary,
 	if not _node(battle, _battle_script) or not battle.is_inside_tree() or not battle.get_tree().paused: return _bad("PAUSED_REAL_BATTLE")
 	if boundary.get("quiescent") != true or boundary.get("input_released") != true or Engine.is_in_physics_frame(): return _bad("OUTER_SNAPSHOT_BARRIER_REQUIRED")
 	if not is_instance_valid(battle.level) or battle.level.get_script() != _level_script: return _bad("STANDARD_LEVEL_ONLY")
-	var is_skirmish: bool = _level_script == preload("res://scripts/levels/skirmish.gd") or _level_script.resource_path.ends_with("skirmish.gd") or _level_script.resource_path.ends_with("skirmish.gdc")
-	var is_zhu: bool = _level_script == preload("res://scripts/levels/level3_zhujiazhuang_rts.gd") or _level_script.resource_path.ends_with("level3_zhujiazhuang_rts.gd") or _level_script.resource_path.ends_with("level3_zhujiazhuang_rts.gdc")
-	if is_skirmish:
+	if _level_script.resource_path == "res://scripts/levels/skirmish.gd":
 		if battle.mission != null: return _bad("STANDARD_LEVEL_ONLY")
-	elif is_zhu:
-		var mission_script = preload("res://scripts/campaign_mission.gd")
-		if not is_instance_valid(battle.mission): return _bad("STANDARD_LEVEL_ONLY")
-		var b_mission_script = battle.mission.get_script()
-		if b_mission_script != mission_script and not b_mission_script.resource_path.ends_with("campaign_mission.gd") and not b_mission_script.resource_path.ends_with("campaign_mission.gdc"):
-			return _bad("STANDARD_LEVEL_ONLY")
+	elif _level_script.resource_path == "res://scripts/levels/level3_zhujiazhuang_rts.gd":
+		if not is_instance_valid(battle.mission) or battle.mission.get_script() != preload("res://scripts/campaign_mission.gd"): return _bad("STANDARD_LEVEL_ONLY")
 	else:
 		return _bad("STANDARD_LEVEL_ONLY")
 	if not battle.gameplay_rng_fault().is_empty(): return _bad("FAULTED_BATTLE")

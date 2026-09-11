@@ -1,3 +1,11 @@
+## 2026-09-10 第三章黑屏修复、偏门内应阻断修复与 Steam 更新
+
+按玩家实玩反馈，深入排查并彻底解决第三章“三打祝家庄”出征纯黑屏以及到达偏门前部队自动砍门导致无法触发孙立接应的两个核心阻断问题。
+
+1. **黑屏根因与修复**：排查引擎运行日志确认，`qa/` 目录下快照脚本（`qa/.../scripts/battle.gd`）因缺少 `.gdignore` 被 Godot 引擎索引扫描为全局类 `Battle`，污染了 `.godot/global_script_class_cache.cfg`。在导出 PCK 时因排除了 QA 目录导致主场景 `main.tscn` 编译崩溃报错 `Class "Battle" hides a global script class`。在 `qa/`、`scratchpad/`、`tools/` 根目录添加 `.gdignore` 并清除缓存修复。同时修复了开场对话阶段迷雾未进行初始照射（`_fog_pass(0.0)`）的问题。
+2. **偏门内应阻断根因与修复**：祝家庄偏门（`side_gate`）属于敌方建筑，原关卡缺少 `campaign_no_auto_target` 保护，导致部队驻扎在偏门前时底层战斗 AI 自动索敌拔刀砍门；且原关卡 `zhu_rts_inside` 仅判定 `sun_li`，玩家通常派宋江前往导致无法触发 5 秒倒计时。现已为偏门添加防自动索敌保护，将 3 号旗标接应英雄放宽至宋江、孙立、林冲、花荣，半径扩至 96 像素，右键偏门自动拦截攻击并引导至接应点，旗标添加实时 Toast 错误指引。
+3. **构建与发布**：运行 `tools/build_steam_release_zip.py` 完成自动化冒烟测试与打包，产出 ZIP（252,063,949 字节，SHA256 `bfa60738c4098eed029c806296288f3c61b3a197055ca8bbd22343cd922740e3`），Depot `5088121`，Manifest `4469374751738838844`，通过 SteamPipe 提交并上线 `default` 分支，发布中英双语补丁公告。详见[更新记录](STEAM_UPDATE_20260910.md)。
+
 ## 2026-09-09 女性封面与整套宣传媒体
 
 采用用户重新上传并指定的女性前景封面，保留原始PNG哈希；完成商店四图、库三图及16:9宣传配图，所有比例按定稿适配，七种封面均有同字节简中副本。主图只规范尺寸，其余构图使用内置image_gen，来源与完整prompt保存。尺寸/哈希与独立目检记录见[媒体目录](../marketing/steam_store_20260909_female/README.md)及[QA](../qa/steam_store_media_20260909_female/README.md)。

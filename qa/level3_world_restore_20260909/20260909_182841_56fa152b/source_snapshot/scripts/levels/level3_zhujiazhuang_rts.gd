@@ -199,7 +199,6 @@ func deploy(b) -> void:
 		b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 		return
 	side_gate.display_name = "祝家庄偏门"
-	side_gate.set_meta("campaign_no_auto_target", true)
 	preload("res://scripts/campaign_gate_visual.gd").configure_zhujiazhuang(side_gate)
 	# Existing shared towers cover both entrances. Catapults can outrange them;
 	# melee defenders protect the towers, making an escorted siege force useful.
@@ -305,11 +304,11 @@ func _introduce_sun(b) -> void:
 		b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 		return
 	sun.order_hold_position()
-	b.mission.add_action("zhu_rts_inside","接应内应，打开偏门",INNER_CONTACT,["sun_li","song_jiang","lin_chong","hua_rong"],5.0,96.0,96.0)
+	b.mission.add_action("zhu_rts_inside","接应内应，打开偏门",INNER_CONTACT,["sun_li"],5.0,64.0)
 	b.mission.add_actor_locator("zhu_rts_inside","sun_li")
 	if not _alive(side_gate):
 		b.mission.block_action("zhu_rts_inside","偏门已被攻破，无需再接应；可直接入庄救人。")
-	b.msg("孙立已到前营！可派孙立或宋江前往3号旗标（偏门前）；停留5秒即可接应开门，切勿强攻偏门。",9.0)
+	b.msg("孙立已到前营。点“选中·孙立”，再右键3号旗标；到场停留5秒即可接应开偏门。",9.0)
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	match action_id:
@@ -331,13 +330,13 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			_introduce_sun(b)
 			if not b._gameplay_rng_issue.is_empty(): return
 		"zhu_rts_inside":
-			if not _alive(sun) or not _alive(side_gate):
+			if actor != sun or not _alive(sun) or not _alive(side_gate):
 				return
 			inside_open = true
 			b.unregister_building_footprint(side_gate)
 			side_gate.resolve_story("retreated")
 			b.mission.mark("zhu_gate_opened","孙立接应孙新换旗，偏门已开；军队由玩家自行调入")
-			b.msg("偏门已开！内应孙立与孙新成功换旗开门，可沿偏门入庄救人！",7.0)
+			b.msg("偏门已开！可沿北路入庄；前营、外军与工人继续由你指挥。",6.0)
 		"zhu_rts_rescue":
 			if prisoners_freed:
 				return
