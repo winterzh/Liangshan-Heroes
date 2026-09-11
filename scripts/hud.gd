@@ -32,11 +32,13 @@ var _res_idle: Button     # 闲置喽啰徽标：显示闲置数，点击轮流�
 var minimap: Minimap
 var _bottom_panel: PanelContainer
 var _bottom_margin: MarginContainer
+var _port_holder: Control
 var _port_tex: TextureRect
 var _port_fallback: ColorRect
 var _port_char: Label
 var _port_frame: Panel       # 多选时点亮的金色边框：标出面板里这位就是「活动单位」
 var _delete_btn: Button      # 拆除按钮（选中己方单位/建筑时出现；亦可按 Delete）
+var _info_box: VBoxContainer
 var _info_name: Label
 var _info_hp: Label
 var _info_stats: Label
@@ -46,6 +48,8 @@ var _sel_grid: GridContainer
 var _sel_ref: Array = []
 var _grid_keys: Array = []
 var _skill_keys: Array = []
+var _bottom_collapsed := false
+var _bottom_hint: Label
 var _panel_accum := 0.0
 var _control_help: Label
 var _control_help_panel: PanelContainer
@@ -234,6 +238,7 @@ func _ready() -> void:
 		get_viewport().size_changed.connect(_on_viewport_size_changed)
 	refresh_inventory()
 	_apply_safe_area()
+	_apply_bottom_collapse()
 	if has_meta("_run_hud_prepared"): _gate_run_prepared_ui()
 
 
@@ -1113,8 +1118,18 @@ func _build_bottom_panel() -> void:
 	minimap = Minimap.new()
 	hbox.add_child(minimap)
 
+	_bottom_hint = Label.new()
+	Localize.bind_render(_bottom_hint, func() -> String: return Localize.text("未选中 · 点选单位或建筑后展开指挥面板"))
+	_bottom_hint.add_theme_font_size_override("font_size", 16)
+	_bottom_hint.add_theme_color_override("font_color", Color(0.86, 0.82, 0.72))
+	_bottom_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_bottom_hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_bottom_hint.visible = false
+	hbox.add_child(_bottom_hint)
+
 	var port_holder := Control.new()
 	port_holder.custom_minimum_size = Vector2(118, 118)
+	_port_holder = port_holder
 	hbox.add_child(port_holder)
 	_port_fallback = ColorRect.new()
 	_port_fallback.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -1173,6 +1188,7 @@ func _build_bottom_panel() -> void:
 	info.custom_minimum_size = Vector2(248, 0)
 	# 固定信息栏宽度上限：内部长文字（建筑提示/施工进度）自动折行，不再把命令卡与提示推出屏幕右缘
 	info.clip_contents = true
+	_info_box = info
 	hbox.add_child(info)
 	_info_name = Label.new()
 	_info_name.add_theme_font_size_override("font_size", 22)
@@ -1890,6 +1906,53 @@ func update_selection_panel(sel: Array) -> void:
 	_rebuild_command_card()
 	_refresh_panel()
 	refresh_inventory()
+	_apply_bottom_collapse()
+
+
+## 无选中时把底部指挥栏收成矮条（小地图+提示），选中后恢复完整高度。
+## 触屏布局高度写死为 166，收起会打断 chips/操作栏，故仅桌面生效。
+func _apply_bottom_collapse() -> void:
+	if _bottom_panel == null or minimap == null:
+		return
+	if touch_ui:
+		RTSCamera.PANEL_H = RTSCamera.PANEL_H_FULL
+		return
+	var show_detail := false
+	for u in _sel_ref:
+		if is_instance_valid(u) and u.hp > 0.0:
+			show_detail = true
+			break
+	if not show_detail and battle != null and battle._inspect_unit != null \
+			and is_instance_valid(battle._inspect_unit) and battle._inspect_unit.hp > 0.0:
+		show_detail = true
+	var collapsed := not show_detail
+	_bottom_collapsed = collapsed
+	var h := RTSCamera.PANEL_H_COLLAPSED if collapsed else RTSCamera.PANEL_H_FULL
+	RTSCamera.PANEL_H = h
+	var safe := _logical_safe_insets()
+	_bottom_panel.offset_top = -h - safe.w
+	minimap.custom_minimum_size = Vector2(72, 72) if collapsed else Vector2(132, 132)
+	if _port_holder != null:
+		_port_holder.visible = not collapsed
+	if _info_box != null:
+		_info_box.visible = not collapsed
+	if _skill_bar != null:
+		_skill_bar.visible = not collapsed
+	if _queue_bar != null and collapsed:
+		_queue_bar.visible = false
+	if _sel_grid != null and _sel_grid.get_parent() != null:
+		_sel_grid.get_parent().visible = not collapsed
+	if _inventory_dock != null:
+		_inventory_dock.visible = not collapsed
+	if _bottom_hint != null:
+		_bottom_hint.visible = collapsed
+	if _bottom_margin != null:
+		_bottom_margin.add_theme_constant_override("margin_top", 6 if collapsed else 8)
+	_layout_info_panel()
+	_layout_info_dock()
+	_layout_inventory()
+	_layout_hero_bar()
+	_layout_skill_rail()
 
 
 ## 情境命令卡（按当前活动单位 active_unit / Tab 子组）：英雄→技能槽；工人→建造；生产建筑→训练

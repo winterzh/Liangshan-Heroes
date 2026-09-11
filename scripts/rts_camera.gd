@@ -4,7 +4,10 @@ extends Camera2D
 ## 鼠标滚轮或触控板捏合缩放。（字母键留给指令：A=攻击移动）
 
 const EDGE := 30.0          # 边缘滚屏触发像素
-const PANEL_H := 158.0      # 底部面板高度：此区域不触发向下边缘滚屏
+const PANEL_H_FULL := 158.0     # 底部面板展开高度
+const PANEL_H_COLLAPSED := 92.0 # 无选中时矮条：小地图 + 提示
+## 当前底部面板高度（像素）。HUD 在收起/展开时改写；镜头边缘滚屏与点击判定每帧读取。
+static var PANEL_H := PANEL_H_FULL
 
 var pan_speed := 750.0
 var _mid_drag := false
