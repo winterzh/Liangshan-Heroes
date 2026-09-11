@@ -12,7 +12,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = Path(r"C:\Users\rsb\Desktop\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64.exe")
 TEMPLATE_APPDATA = Path(r"D:\tools\GodotExportTemplates\user_data")
-OUTPUT_DIR = Path(r"D:\CodexTemp\steam_release_20260910")
+OUTPUT_DIR = Path(r"D:\CodexTemp\steam_release_20260911")
 
 VENDOR_FILES = [
     (ROOT / "vendor/godotsteam/win64/steam_api64.dll", "steam_api64.dll"),
@@ -93,7 +93,7 @@ def main():
         sys.exit(1)
 
     print(f"[5/5] Creating Steam distribution ZIP archive...")
-    zip_path = OUTPUT_DIR / "LiangshanHeroes_Steam_build_20260910.zip"
+    zip_path = OUTPUT_DIR / "LiangshanHeroes_Steam_build_20260911.zip"
     if zip_path.exists():
         zip_path.unlink()
 

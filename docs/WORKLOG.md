@@ -1,3 +1,7 @@
+## 2026-09-11 Steam 构建上传 Build 25250466
+
+`build_steam_release_zip.py` 导出最新源码，Smoke 退出0。ZIP 252,070,601 字节，SHA256 `cb1f7a25…d026b`。SteamCMD 缓存登录 `gaojing666`，Preview/Upload 均成功；**BuildID 25250466**，Manifest `416479225955196133`，增量约 12.4MB。`app_set_config` 无法改分支；**Set Live 仍须在 Steamworks 网页把 public/default 指到 25250466**。公告草稿见 [STEAM_ANNOUNCEMENT_20260911_draft](STEAM_ANNOUNCEMENT_20260911_draft.md)。详见 [更新交接](STEAM_UPDATE_20260911.md)。
+
 ## 2026-09-11 黄泥冈选中按钮改固定工厂
 
 `_sync_controls` 不再裸建 `Button.new()` + lambda，改用 `add_level_button`（`hg_chao_gai` 等已注册 ID）与 `activate_mission_button` 固定回调；补七条英/日文案并重建词库。Presentation 契约已过。Visual partition 允许 level1。组件 QA **19/19**。已知边界：黄泥冈使用 CampaignScenery（hills），现有景物 adapter 仍只装 Level3 祝家庄工厂，Session 整槽保存在 map/scenery 一步停下。祝家庄 67/67 与跨进程回归通过（`20260911_172252_8520614b`）。
