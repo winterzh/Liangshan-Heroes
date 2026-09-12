@@ -1,3 +1,11 @@
+## 2026-09-13 四语图文版本汇总
+
+新Event714538122294068076已公开，06:49 HKT，类型“重大更新”，关联Build25276077；四语各5节与3张已有实机图。16个保存字段精确匹配，84个公开片段规范化后完整匹配，12处图片加载及尺寸通过。旧074小型公告保留。
+
+- [图文发布交接](STEAM_VERSION_ROUNDUP_20260913.md)：活动、四语链接、图片年代、回读及验收范围。
+- [文案与图片说明](../marketing/steam_version_roundup_20260913/README.md)：copy、rendered_copy、transfer_checks和images，不改已有小公告。
+- [发布收据](../qa/steam_version_roundup_20260913/publication_receipt.json)、[验证记录](../qa/steam_version_roundup_20260913/validation.json)：本篇发布和公开正文/图片的独立证据。
+
 ## 2026-09-13 四语更新公告
 
 Event714538122294068074已公开，Steam显示06:16 HKT开始并关联Build25276077；四语保存16字段、公开24片段精确匹配。

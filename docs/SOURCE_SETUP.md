@@ -1,3 +1,7 @@
+## 2026-09-13 四语图文汇总维护入口
+
+综合图文公告[714538122294068076](https://store.steampowered.com/news/app/5088120/view/714538122294068076)已公开，06:49 HKT，类型“重大更新”，关联既有default Build25276077，无需重构建或重传包。[文案目录](../marketing/steam_version_roundup_20260913/README.md)保存四语copy/rendered_copy、字段对照与图片来源；16个保存字段精确匹配，84个公开片段规范化后完整匹配，12处图片加载及尺寸通过。[validation.json](../qa/steam_version_roundup_20260913/validation.json)。后续维护本篇使用076活动，旧074小型公告仍保留；启动方式和玩家保存/继续入口未变。[汇总交接](STEAM_VERSION_ROUNDUP_20260913.md)。
+
 ## 2026-09-13 四语公告维护入口
 
 Build25276077的[四语更新公告714538122294068074](https://store.steampowered.com/news/app/5088120/view/714538122294068074)已公开，Steam显示06:16 HKT开始。定稿位于[copy.json](../marketing/steam_announcement_20260913/copy.json)，每语 `title/subtitle/summary/body`；后台16字段及公开24片段均精确匹配。后续维护复用当前Event，无需重构建或重传包；启动方式和玩家保存/继续入口未变。[公告交接](STEAM_ANNOUNCEMENT_20260913.md) · [文案说明](../marketing/steam_announcement_20260913/README.md)。
