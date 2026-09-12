@@ -1,3 +1,14 @@
+## 2026-09-13 黄泥冈跨进程恢复至全员胜利
+
+- [本轮实现与复现](HUANGNIGANG_WORLD_RESTORE_20260912.md)：黄泥冈景物、关卡道具、携担引用、六进程自然酒计路线及独立死亡掉担夹具。
+- `scripts/run_level1_visual_state.gd`：枣车、提示牌与酒具固定工厂及外部件token；由景物、视觉图、单位图和WorldCore接入受信黄泥冈上下文。
+- `tools/level1_world_restore_qa.gd`、`tools/level1_cross_process_qa.gd`：实际整槽组件验证与押队/挑酒/下药/携担/胜利/终局旧槽六进程路线。
+- `tools/run_level3_world_restore_qa.py`：祝家庄与黄泥冈隔离串行验证驱动，支持诊断子集和记录缓存复用来源。
+- [本轮QA汇总](../qa/huangnigang_world_restore_20260913/README.md)、`qa/huangnigang_world_restore_20260913/validation_summary.json`：六进程258项与同生产依赖前段167项的分阶段证据、2958份生产依赖SHA对照、胜利图目检与失败历史；不改写原收据。
+- `qa/level3_world_restore_20260909/20260913_021853_de632b8f/`：全新导入六进程子集258项通过，三担/八人/4of4/终局旧槽拒绝；`20260913_015956_3bc1fd31/` 保留完整批失败及此前167项通过证据，两者均不计 `acceptance_complete`。
+- [经典默认回归收据](../qa/continue_flow_20260909/20260913_024947_f6a8c09f/receipt.json)：本轮296项通过、退出0、`complete=true`；022858超时与024447主动诊断中止目录保留原始证据，均不计整批通过。
+- [统一交付状态](CONTINUE_DELIVERY_20260908.md)：后续扩展其余六关；玩家入口、完整30波同版、真实Steam确认和整体验收门槛仍开放。下方未接入的恢复计划与版本号保留历史语境。
+
 ## 2026-09-09 女性封面与整套宣传媒体
 
 - [发布范围与交接](STEAM_STORE_MEDIA_20260909.md)：商店8图revision6、6库图与5新截图revision7已发布，公告封面此前已更新；仅视频和视频缩略图待上传发布，首次阻塞留作历史。

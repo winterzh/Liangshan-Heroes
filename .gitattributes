@@ -507,6 +507,17 @@ tools/daming_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before
 tools/zhujiazhuang_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 
 # Preserve approved marketing sources, recording scripts and evidence bytes.
+# Preserve the Huangnigang restore runners and this batch's exact QA bytes.
+tools/level1_world_restore_qa.gd text eol=lf
+tools/level1_cross_process_qa.gd text eol=lf
+tools/campaign_freeplay_core_test.gd text eol=lf
+scripts/run_level1_visual_state.gd text eol=lf
+scripts/run_level1_visual_state.gd.uid text eol=lf
+tools/run_level3_world_restore_qa.py text eol=lf
+qa/level3_world_restore_20260909/20260912_*/** -text -whitespace
+qa/level3_world_restore_20260909/20260913_*/** -text -whitespace
+qa/huangnigang_world_restore_20260913/** -text -whitespace
+
 marketing/steam_store_20260909_female/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 marketing/steam_store_20260909_female/video/*.log -text -whitespace
 qa/steam_store_media_20260909_female/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

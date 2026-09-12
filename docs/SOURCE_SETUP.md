@@ -1,3 +1,11 @@
+## 2026-09-13 黄泥冈世界恢复开发入口
+
+普通启动仍使用 `Play.cmd`，玩家保存/继续入口保持隐藏。配置被忽略的 `godot.local.txt` 或 `GODOT_PATH` 后，用本机可用的 Python 3 执行 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root E:/CodexTemp/huangnigang_restore --run`；私有根可改为本机真实短路径。工具新建隔离工程与玩家目录、禁用Steam并独占共享引擎锁，须与其他Godot验证串行运行。[范围与复现](HUANGNIGANG_WORLD_RESTORE_20260912.md)。
+
+默认流程包含任务核心 `freeplay_core`、祝家庄同进程及跨进程回归、黄泥冈组件与六进程接续。`--cases` 选取子集，`--cache-from` 的复用情况写入收据；不把内部QA变量写入玩家启动脚本。全新导入六进程批 `20260913_021853_de632b8f` 258项通过，完成三担、八人实到、4/4剧情目标和终局旧槽拒绝，原生胜利图已目检。与015956批已通过的167项前段检查合计425项，2958份生产依赖SHA一致；这是分阶段证据，旧完整批仍失败，新子集也不计 `acceptance_complete`。[证据汇总](../qa/huangnigang_world_restore_20260913/README.md)。
+
+经典默认回归使用 `py -3 -X utf8 -B tools/run_continue_flow_qa.py --run`；本批 `20260913_024947_f6a8c09f` 已296项通过、退出0，收据 `complete=true`，见[原始收据](../qa/continue_flow_20260909/20260913_024947_f6a8c09f/receipt.json)。前两批超时/主动诊断中止及仅QA截图等待调整见[本轮记录](HUANGNIGANG_WORLD_RESTORE_20260912.md)，未据此修改生产逻辑或放宽断言。下方“祝家庄Core/Session待接入”等为历史；经典完整30波349项仍是旧冻结证据，不能代替最终同版重验。后续依次扩展野猪林、江州、快活林、连环马、高俅、大名府；统一Steam持久确认及整体验收门槛见[交付计划](CONTINUE_DELIVERY_20260908.md)。本轮不改变Steam包，最近发布记录见[9月11日交接](STEAM_UPDATE_20260911.md)。
+
 ## 2026-09-09 女性封面与宣传媒体
 
 本次选定媒体位于`marketing/steam_store_20260909_female/`，由`marketing/.gdignore`排除游戏资源扫描，游戏启动方式未变。PNG验证：`py -3.14 -X utf8 -B marketing/steam_store_20260909_female/prepare_art.py`；只有显式`--rebuild`才重做尺寸规范，原生来源保持不变。
