@@ -1,3 +1,18 @@
+## 2026-09-13 野猪林世界恢复开发与验证
+
+全新默认世界040000批916项已通过（425+183+308），19用例收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。经典042455全新默认批296项通过、退出0，联合核验退出0，两批与当前checkout的2960份生产文件同SHA，世界11张/经典16张图SHA通过。人工目检仅世界拦棍/求情/胜利3张及经典中文覆盖确认/英文终局等待2张。
+
+- [野猪林实现与复现](YEZHULIN_WORLD_RESTORE_20260913.md)：固定profile、52×40 marsh景物、独立角色图、两次林冲替换、固定按钮、阴影捕获竞态，以及组件夹具与七进程自然南路的边界；保留全部中止/失败及缓存诊断历史。
+- [野猪林证据汇总](../qa/yezhulin_world_restore_20260913/README.md)、`qa/yezhulin_world_restore_20260913/verify_evidence.py`、[联合核验JSON](../qa/yezhulin_world_restore_20260913/validation_summary.json)：040000完整世界916项与042455经典296项、2960份生产来源及图像SHA核验通过；README保留完整两收据复现命令。
+- [040000世界原始收据](../qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json)：同一全新批重跑既有425项和野猪林491项，不复用旧分阶段来源；原生路线11张图SHA通过，人工目检范围为已列三张。
+- [042455经典原始收据](../qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json)：全新默认296项通过，16张四语状态图SHA通过，人工目检范围为中文覆盖确认和英文终局等待两张。
+- `scripts/run_level6_world_factory.gd`：已安装野猪林的固定运行定义与关卡恢复工厂，不重放开局部署。
+- `tools/level6_world_restore_qa.gd`：提前强救、照料、护送、死亡动画尚存及释放后引用的独立组件夹具和坏档负例。
+- `tools/level6_cross_process_qa.gd`：真实南路七进程，040000全新默认批308项通过，覆盖跟随、拦棍、求情、护送、歇脚出林、四人生还3/3及终局旧槽拒绝。
+- `tools/run_level3_world_restore_qa.py`：扩展后的多章节隔离串行驱动，仍归档至 `qa/level3_world_restore_20260909/`；野猪林专项与全默认批分开判断，不把子集写成完整验收。
+- `tools/run_continue_flow_qa.py`：同版经典菜单/保存/恢复默认回归；本轮与世界驱动一同将资源导入时限设为600秒，玩法时限不变。
+- [既有黄泥冈425项分阶段汇总](../qa/huangnigang_world_restore_20260913/README.md)与[经典296项原收据](../qa/continue_flow_20260909/20260913_024947_f6a8c09f/receipt.json)：保留此前冻结来源，不能自动代表本轮同版回归。[统一交付计划](CONTINUE_DELIVERY_20260908.md)仍保留玩家入口和全部未完成门槛。
+
 ## 2026-09-13 黄泥冈跨进程恢复至全员胜利
 
 - [本轮实现与复现](HUANGNIGANG_WORLD_RESTORE_20260912.md)：黄泥冈景物、关卡道具、携担引用、六进程自然酒计路线及独立死亡掉担夹具。

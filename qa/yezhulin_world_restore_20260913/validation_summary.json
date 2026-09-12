@@ -1,0 +1,147 @@
+{
+  "schema": "yezhulin_world_validation_v1",
+  "status": "verified",
+  "yezhulin_world_validation_complete": true,
+  "component_checks": 183,
+  "route_checks": 308,
+  "yezhulin_checks": 491,
+  "route_processes": [
+    {
+      "case": "level6_cross_save",
+      "pid": 45948,
+      "checks": 25,
+      "process_nonce": "dee4d1f3e5824bcc9fd70d2ef76204d3",
+      "started_ns": 52015292268500,
+      "finished_ns": 52069661791600
+    },
+    {
+      "case": "level6_cross_rescue",
+      "pid": 78060,
+      "checks": 55,
+      "process_nonce": "7d36d2e899cd4aaf971ba5e71363f794",
+      "started_ns": 52075329936900,
+      "finished_ns": 52124557805400
+    },
+    {
+      "case": "level6_cross_care",
+      "pid": 52472,
+      "checks": 53,
+      "process_nonce": "efebbb1a4e414273bebc54ea5c2cfaf8",
+      "started_ns": 52130005918400,
+      "finished_ns": 52168909139700
+    },
+    {
+      "case": "level6_cross_escort",
+      "pid": 23132,
+      "checks": 57,
+      "process_nonce": "aaa53fc060974ecf9bb92f6ccfbe7606",
+      "started_ns": 52174387178800,
+      "finished_ns": 52224340434100
+    },
+    {
+      "case": "level6_cross_leave",
+      "pid": 39752,
+      "checks": 58,
+      "process_nonce": "170ea7014c024955b9da01752b723242",
+      "started_ns": 52229926069900,
+      "finished_ns": 52283869533500
+    },
+    {
+      "case": "level6_cross_finish",
+      "pid": 62840,
+      "checks": 48,
+      "process_nonce": "8c64d06c3fab4f2fafd0a0d88569781d",
+      "started_ns": 52290381152600,
+      "finished_ns": 52333512798900
+    },
+    {
+      "case": "level6_terminal_reject",
+      "pid": 9696,
+      "checks": 12,
+      "process_nonce": "d429d5e22e124078bec58486a1f065d5",
+      "started_ns": 52339218671300,
+      "finished_ns": 52371950891800
+    }
+  ],
+  "classic_default_verified": true,
+  "classic_checks": 296,
+  "production_file_count": 2960,
+  "production_manifest_sha256": "e3230d4733b409fdbb06edd71f2b8724c5672a385c37fc51bc5c1730347396ec",
+  "production_matches_current_checkout": true,
+  "world_qa_source_differences": [],
+  "native_route_screenshots_sha_verified": [
+    "level6_cross_care_report_restored.png",
+    "level6_cross_care_report_saved.png",
+    "level6_cross_escort_report_restored.png",
+    "level6_cross_escort_report_saved.png",
+    "level6_cross_finish_report_restored.png",
+    "level6_cross_finish_report_victory.png",
+    "level6_cross_leave_report_restored.png",
+    "level6_cross_leave_report_saved.png",
+    "level6_cross_rescue_report_restored.png",
+    "level6_cross_rescue_report_saved.png",
+    "level6_cross_save_report_saved.png"
+  ],
+  "manual_visual_review_performed_by_this_script": false,
+  "public_continue_acceptance": false,
+  "steam_release_performed": false,
+  "receipts": [
+    {
+      "path": "qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json",
+      "sha256": "58da0b2deded9a32445e580e358762fcd4398c7920470e5f42e227851951ee51",
+      "raw_complete": true,
+      "raw_acceptance_complete": true,
+      "raw_fresh_import": true
+    },
+    {
+      "path": "qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json",
+      "sha256": "4d2e7ff5fed0a5fd3780c8894fb8a7bf0745e8a1230a58229d86e5baa6516e69",
+      "raw_complete": true,
+      "raw_acceptance_complete": null,
+      "raw_fresh_import": true
+    }
+  ],
+  "limits": [
+    "All 19 cases are verified from one complete fresh default world receipt; no old staged evidence is reused.",
+    "Component early-force/death setup is an explicit fixture; the natural route covers the south route only.",
+    "No manual screenshot review, nine-mode, full 30-wave, live Steam, long-run, performance or human acceptance is inferred."
+  ],
+  "single_full_default_world_run_verified": true,
+  "default_world_cases": [
+    "freeplay_core",
+    "world_restore",
+    "cross_save",
+    "cross_resume",
+    "level1_component",
+    "level1_cross_save",
+    "level1_cross_arrival",
+    "level1_cross_wine",
+    "level1_cross_cargo",
+    "level1_cross_finish",
+    "level1_terminal_reject",
+    "level6_component",
+    "level6_cross_save",
+    "level6_cross_rescue",
+    "level6_cross_care",
+    "level6_cross_escort",
+    "level6_cross_leave",
+    "level6_cross_finish",
+    "level6_terminal_reject"
+  ],
+  "baseline_regression_cases": {
+    "freeplay_core": 28,
+    "world_restore": 67,
+    "cross_save": 8,
+    "cross_resume": 18,
+    "level1_component": 46,
+    "level1_cross_save": 20,
+    "level1_cross_arrival": 50,
+    "level1_cross_wine": 50,
+    "level1_cross_cargo": 76,
+    "level1_cross_finish": 53,
+    "level1_terminal_reject": 9
+  },
+  "baseline_regression_checks": 425,
+  "world_checks": 916,
+  "evidence_is_staged_from_old_batches": false
+}

@@ -1,3 +1,11 @@
+## 2026-09-13 野猪林世界恢复验证入口
+
+全新默认世界 `20260913_040000_60d3e221` 已916项通过（425+183+308），收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。[世界收据](../qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json)。经典全新默认 `20260913_042455_e8f43126` 已296项通过、退出0，`complete=true`；[经典收据](../qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json)。联合核验退出0，2960份生产文件与两批及当前checkout同SHA，世界11张/经典16张图SHA通过；[核验汇总与完整复现命令](../qa/yezhulin_world_restore_20260913/README.md)。资源导入600秒、普通玩法240秒、野猪林组件420秒；玩家入口仍隐藏。[最新状态与人工目检范围](YEZHULIN_WORLD_RESTORE_20260913.md)。
+
+基线 `de0f8bd6` 上已接入野猪林固定 profile、原生52×40 marsh景物、角色替换与护送状态。普通启动仍为 `Play.cmd`，玩家保存/继续入口隐藏。配置 `godot.local.txt` 或 `GODOT_PATH` 后，以本机Python 3执行 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root E:/CodexTemp/yezhulin_restore --cases level6_component level6_cross_save level6_cross_rescue level6_cross_care level6_cross_escort level6_cross_leave level6_cross_finish level6_terminal_reject --run`；私有根可换为本机短路径，须与其他Godot验证串行运行。[完整说明](YEZHULIN_WORLD_RESTORE_20260913.md)。
+
+最终完整验证使用 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root E:/CodexTemp/yezhulin_full_world --run`，不传 `--cases` 或 `--cache-from`；随后串行执行 `py -3 -X utf8 -B tools/run_continue_flow_qa.py --work-root E:/CodexTemp/yezhulin_classic --run`。032402/032721/033816中止和失败历史见[尝试记录](YEZHULIN_WORLD_RESTORE_20260913.md)。下方黄泥冈425项分阶段与经典296项保留旧冻结来源，不代替本轮同版重验。本轮不改变Steam包；后续继续其余五关及统一交付检查。
+
 ## 2026-09-13 黄泥冈世界恢复开发入口
 
 普通启动仍使用 `Play.cmd`，玩家保存/继续入口保持隐藏。配置被忽略的 `godot.local.txt` 或 `GODOT_PATH` 后，用本机可用的 Python 3 执行 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root E:/CodexTemp/huangnigang_restore --run`；私有根可改为本机真实短路径。工具新建隔离工程与玩家目录、禁用Steam并独占共享引擎锁，须与其他Godot验证串行运行。[范围与复现](HUANGNIGANG_WORLD_RESTORE_20260912.md)。
