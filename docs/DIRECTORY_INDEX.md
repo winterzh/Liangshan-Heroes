@@ -1,3 +1,11 @@
+## 2026-09-13 Windows Steam发布交接
+
+本地 `71098183` 候选验证完成，原生185项、包1120项、身份各10项及EXE11例通过。Steam登录正常，但本地文件选择返回 `Not allowed`，待用户允许本地文件上传或在保留表单手动选定ZIP后继续；正式default仍为旧25250466，本次尚未开始HTTP上传，玩家保存/继续入口仍隐藏。[独立阻塞收据](../qa/steam_release_20260913/publication_receipt.json)。
+
+- [本次Steam更新交接](STEAM_UPDATE_20260913.md)：发布范围、[唯一上传ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)和六成员清单、构建与验证结果，以及本地文件权限阻塞和接续步骤；没有新Build/Manifest。
+- [本轮Steam QA](../qa/steam_release_20260913/README.md)、[候选交付清单](../qa/steam_release_20260913/candidate_delivery.json)、[证据复制清单](../qa/steam_release_20260913/evidence_copy_manifest.json)：原生QA、候选、身份探针与实际EXE短测原始收据，不含发行二进制或私有缓存。
+- `qa/steam_release_20260913/collect_evidence.py`、`smoke_verified_package.py`：本机适配的证据复制与串行EXE短测工具；未修改生产逻辑。
+
 ## 2026-09-13 野猪林世界恢复开发与验证
 
 全新默认世界040000批916项已通过（425+183+308），19用例收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。经典042455全新默认批296项通过、退出0，联合核验退出0，两批与当前checkout的2960份生产文件同SHA，世界11张/经典16张图SHA通过。人工目检仅世界拦棍/求情/胜利3张及经典中文覆盖确认/英文终局等待2张。

@@ -1,3 +1,9 @@
+## 2026-09-13 Windows包与QA完成，Steam上传待用户选定文件
+
+已按用户“发布”指令完成 `71098183` Windows候选及本地验证：原生185项、候选1120项、source/PCK身份各10项、实际EXE11例全部通过。[已验证上传ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)为237,201,655字节，与验证候选字节一致。Steam网页登录正常，文件选择被 `Not allowed` 阻止；待用户允许本地文件上传或在已保留表单手动选定ZIP后继续。App5088120 / Depot5088121正式default/public仍为旧Build25250466，本次尚未开始HTTP上传，`uploaded=false/default_activated=false`，没有新Build/Manifest。[独立阻塞收据](../qa/steam_release_20260913/publication_receipt.json) · [发布交接](STEAM_UPDATE_20260913.md) · [本轮证据](../qa/steam_release_20260913/README.md)。
+
+本次玩家修复为相邻任务按原点击办理及黄泥冈死亡掉担清理；黄泥冈/野猪林整世界保存恢复是内部能力，玩家入口继续隐藏。下方“未发布”是先前开发验证阶段的历史记录，本次后续状态以本条和独立发布收据为准；不计九玩法全部验收，不合并main。
+
 ## 2026-09-13 野猪林整世界及经典同版回归通过
 
 全新默认世界批 `20260913_040000_60d3e221` 已916项通过：同版既有425项、野猪林组件183项和七进程308项；四人实到、3/3、终局旧槽拒绝均通过，19用例收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。[世界收据](../qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json)。经典全新默认 `20260913_042455_e8f43126` 已296项通过、退出0，`complete=true`；[经典收据](../qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json)。联合核验退出0，2960份生产文件与两批及当前checkout同SHA，世界11张/经典16张图SHA通过；[核验汇总](../qa/yezhulin_world_restore_20260913/validation_summary.json)。人工目检仅世界拦棍/求情/胜利3张及经典中文覆盖确认/英文终局等待2张。

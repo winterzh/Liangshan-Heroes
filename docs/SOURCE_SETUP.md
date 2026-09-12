@@ -1,3 +1,9 @@
+## 2026-09-13 Windows候选完成，上传待用户选定文件
+
+`71098183` 的本地Windows包已验证：原生整合185项、候选1120项、source/PCK身份各10项、实际EXE11例全部通过。唯一上传ZIP237,201,655字节；本轮本机成品路径、六成员SHA及保护后验只记录在[候选清单](../qa/steam_release_20260913/candidate_delivery.json)与[归档QA](../qa/steam_release_20260913/README.md)。Steam网页登录正常，但文件选择被 `Not allowed` 阻止；待用户允许本地文件上传或在保留表单手动选定ZIP后继续。App5088120 / Depot5088121仍是旧default25250466，本次尚未开始HTTP上传。[独立阻塞收据](../qa/steam_release_20260913/publication_receipt.json) · [发布交接](STEAM_UPDATE_20260913.md)。
+
+源码仍从本checkout的 `Play.cmd` 启动，Godot路径由被忽略的 `godot.local.txt` 或 `GODOT_PATH` 提供；玩家保存/继续入口隐藏。包由已验证候选生成，不在上传时重新拼包。开发者复现候选可使用 `py -3 -X utf8 -B tools/build_steam_candidate.py --qa-run "<成功原生QA目录>" --profile-root "<本机绝对短路径>" --run`，参数按当前机器配置；原生→候选→短测/归档三阶段命令见[QA复现](../qa/steam_release_20260913/README.md)。此次无需重建，文件选定后继续同一ZIP；下方各轮“不改变Steam包”属于当时开发状态，本次以顶部链接为准，不改写历史QA或合并main。
+
 ## 2026-09-13 野猪林世界恢复验证入口
 
 全新默认世界 `20260913_040000_60d3e221` 已916项通过（425+183+308），收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。[世界收据](../qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json)。经典全新默认 `20260913_042455_e8f43126` 已296项通过、退出0，`complete=true`；[经典收据](../qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json)。联合核验退出0，2960份生产文件与两批及当前checkout同SHA，世界11张/经典16张图SHA通过；[核验汇总与完整复现命令](../qa/yezhulin_world_restore_20260913/README.md)。资源导入600秒、普通玩法240秒、野猪林组件420秒；玩家入口仍隐藏。[最新状态与人工目检范围](YEZHULIN_WORLD_RESTORE_20260913.md)。

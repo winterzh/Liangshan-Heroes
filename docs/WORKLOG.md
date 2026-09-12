@@ -1,3 +1,9 @@
+## 2026-09-13 Windows包与QA完成，Steam上传待用户选定文件
+
+按用户“发布”指令，以已验证 `71098183` 构建既定 App5088120 / Depot5088121 的Windows更新包。原生整合185项、候选1120项、source/PCK身份各10项及实际EXE11例串行短测通过；源码、玩家文件和EXE未变，子进程退出且锁释放。[已验证上传ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)为237,201,655字节，与验证包一致。[发布交接](STEAM_UPDATE_20260913.md) · [本轮QA](../qa/steam_release_20260913/README.md)。Steam登录正常，文件选择返回 `Not allowed`；待用户允许本地文件上传或在已保留表单手动选定ZIP后继续。正式default仍为旧Build25250466，本次尚未开始HTTP上传，`uploaded=false/default_activated=false`，没有新Build/Manifest。[独立阻塞收据](../qa/steam_release_20260913/publication_receipt.json)。
+
+本次包含相邻任务点击认领和黄泥冈死亡掉担修复，以及黄泥冈/野猪林内部世界恢复接入；玩家保存/继续入口仍隐藏。新增两个QA适配工具仅归档和短测，无生产修改；不合并main。下方“未打包/发布”保留开发验证阶段的历史语境，随后发布状态以本条及链接收据为准。
+
 ## 2026-09-13 野猪林完整默认世界916项及经典296项通过
 
 全新默认世界批 `20260913_040000_60d3e221` 的19用例916项通过：同版既有425项、野猪林组件183项及七进程308项（25/55/53/57/58/48/12），四人实到、3/3与 `LOCAL_RUN_TERMINAL` 均通过。收据 `complete/full_suite/fresh_import/acceptance_complete` 均true，源码和玩家目录保护通过、无遗留引擎且锁已释放。[世界收据](../qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json)。经典全新默认 `20260913_042455_e8f43126` 另296项通过、退出0，`complete=true`；[经典收据](../qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json)。联合核验退出0，两批与当前checkout的2960份生产文件逐文件同SHA，世界11张路线图及经典16张图SHA均通过。[核验汇总](../qa/yezhulin_world_restore_20260913/validation_summary.json)。人工目检仅世界拦棍/求情/胜利3张、经典中文覆盖确认/英文终局等待2张，见[实现与画面范围](YEZHULIN_WORLD_RESTORE_20260913.md)。
