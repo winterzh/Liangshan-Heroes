@@ -52,4 +52,4 @@ EXE短测确认 `source_unchanged`、`players_unchanged`、`exe_unchanged`、`ch
 
 正式default的两次自动确认框接受调用都在 `Emulation.setFocusEmulationEnabled` 超时。第一次之后权威构建页仍为旧Build `25250466` / Manifest `416479225955196133`；第二次超时后由用户手动确认，用户另报告手机Steam令牌验证完成。06:01:22回读[Steamworks构建页](https://partner.steamgames.com/apps/builds/5088120?submittedbuild=25276077)明确显示新构建已向default玩家上线，default当前值为25276077，构建行带default标签并关联Depot5088121的Manifest4630656200603476714。最终收据为 `published_on_default`，待办为空；自动调用超时保留为过程记录，不再作为当前阻塞。Steam预览估算更新下载量28.8MB，仅为平台估算，未做客户端下载测量。
 
-本次没有发布公告、改动浏览器设置或合并main；未声称客户端已下载更新或真实Steam统计写入已验收。内部保存入口仍关闭，完整30波同版、剩余五关世界恢复、真实Steam持久确认、长跑/性能、双机/双账号与真人检查继续遵循[统一交付门槛](CONTINUE_DELIVERY_20260908.md)。
+打包上线阶段未发布公告，随后已于Steam显示的2026-09-13 06:16 HKT发布[四语更新公告](STEAM_ANNOUNCEMENT_20260913.md)，关联Build25276077，保存16字段和公开24片段回读全部匹配；原始包发布收据保留当时公告尚未发布的状态。本次未改动浏览器设置或合并main，未声称客户端已下载更新或真实Steam统计写入已验收。内部保存入口仍关闭，完整30波同版、剩余五关世界恢复、真实Steam持久确认、长跑/性能、双机/双账号与真人检查继续遵循[统一交付门槛](CONTINUE_DELIVERY_20260908.md)。

@@ -54,4 +54,4 @@ EXE短测仅证明启动和相应短测断言，不计八关完整通关、玩�
 
 用户通过Steamworks标准ZIP上传创建Build `25276077` / Manifest `4630656200603476714`；服务器6文件名称、大小及SHA1全部匹配。两次自动default确认框接受调用在 `Emulation.setFocusEmulationEnabled` 超时，第一次之后权威构建页仍为旧Build `25250466` / Manifest `416479225955196133`；第二次超时后，用户手动完成确认，并报告手机Steam令牌验证完成。06:01:22回读显示上线成功提示，default当前Build25276077，构建行带default标签并关联正确Manifest。[最终收据](publication_followup_receipt.json)记录 `published_on_default`、`default_activated=true` 和空待办。
 
-上传、服务器文件核对与正式上线回读均完成，无需重复操作。`candidate_delivery.json` 的本地准备false值和原 `publication_receipt.json` 的 `blocked_before_upload` / false / null均保持原字节；先前文件权限阻塞及自动确认超时保留历史。平台预览估算更新下载量28.8MB，不代表客户端实测。本次未发布公告、改设置或合并main，也未进行客户端安装验收。
+上传、服务器文件核对与正式上线回读均完成，无需重复操作。`candidate_delivery.json` 的本地准备false值和原 `publication_receipt.json` 的 `blocked_before_upload` / false / null均保持原字节；先前文件权限阻塞及自动确认超时保留历史。平台预览估算更新下载量28.8MB，不代表客户端实测。打包上线阶段未发布公告，随后已于06:16 HKT发布[四语更新公告](../steam_announcement_20260913/README.md)；原始收据保留各自时点。本次未改设置或合并main，也未进行客户端安装验收。

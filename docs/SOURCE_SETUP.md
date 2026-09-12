@@ -1,3 +1,7 @@
+## 2026-09-13 四语公告维护入口
+
+Build25276077的[四语更新公告714538122294068074](https://store.steampowered.com/news/app/5088120/view/714538122294068074)已公开，Steam显示06:16 HKT开始。定稿位于[copy.json](../marketing/steam_announcement_20260913/copy.json)，每语 `title/subtitle/summary/body`；后台16字段及公开24片段均精确匹配。后续维护复用当前Event，无需重构建或重传包；启动方式和玩家保存/继续入口未变。[公告交接](STEAM_ANNOUNCEMENT_20260913.md) · [文案说明](../marketing/steam_announcement_20260913/README.md)。
+
 ## 2026-09-13 Windows Build25276077正式上线交接
 
 `71098183` Windows包已正式上线App5088120 / Depot5088121的default，Build25276077 / Manifest4630656200603476714。原生185项、候选1120项、source/PCK身份各10项及EXE11例通过，服务器6文件名称、大小和SHA1全部匹配。用户完成手动确认并报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读确认成功提示、default当前构建及正确Manifest。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json)。本轮成品路径与SHA见[候选清单](../qa/steam_release_20260913/candidate_delivery.json)和[归档QA](../qa/steam_release_20260913/README.md)；[发布交接](STEAM_UPDATE_20260913.md)。

@@ -1,3 +1,11 @@
+## 2026-09-13 四语更新公告
+
+Event714538122294068074已公开，Steam显示06:16 HKT开始并关联Build25276077；四语保存16字段、公开24片段精确匹配。
+
+- [公告交接](STEAM_ANNOUNCEMENT_20260913.md)：四语公开链接、后台/公开回读、目检及英语封面回退范围。
+- [定稿与文案说明](../marketing/steam_announcement_20260913/README.md)、[copy.json](../marketing/steam_announcement_20260913/copy.json)：四语标题/副标题/摘要/四段正文，无新图片。
+- [公告QA](../qa/steam_announcement_20260913/README.md)、[发布收据](../qa/steam_announcement_20260913/publication_receipt.json)、[验证记录](../qa/steam_announcement_20260913/validation.json)：与包发布证据分别保存，不修改既有发布JSON。
+
 ## 2026-09-13 Windows Steam发布交接
 
 `71098183` Windows包已正式在default上线：App5088120 / Depot5088121 / Build25276077 / Manifest4630656200603476714，服务器6文件名称、大小和SHA1全部匹配。用户完成手动确认并报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读核实上线成功及当前default构建。玩家保存/继续入口仍隐藏。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json)。

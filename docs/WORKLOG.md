@@ -1,3 +1,7 @@
+## 2026-09-13 四语公告已公开并回读
+
+公告[714538122294068074](https://store.steampowered.com/news/app/5088120/view/714538122294068074)已公开，Steam显示06:16 HKT开始，关联default Build25276077。简中/繁中/英语/日语保存后16字段与公开24文本片段全部精确匹配；简中公开全篇及日文/英文预览首屏已目检。复用已有无文字英语封面，其余三语明确回退英语。本轮仅公告与文档更新，未改包/代码/商店语言表，未运行Godot；保存/继续仍未开放。[公告交接](STEAM_ANNOUNCEMENT_20260913.md) · [QA](../qa/steam_announcement_20260913/README.md)。
+
 ## 2026-09-13 Steam Build25276077已正式上线
 
 已验证 `71098183` 的Windows包正式上线App5088120 / Depot5088121的default：Build25276077 / Manifest4630656200603476714。用户手动上传并完成上线确认，另报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读确认成功提示、default当前值及构建行标签/Manifest，服务器6文件名称、大小和SHA1均匹配候选。原生185项、候选1120项、source/PCK身份各10项及EXE11例通过；[发布ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)237,201,655字节。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json) · [发布交接](STEAM_UPDATE_20260913.md)。首次文件权限阻塞、两次自动确认超时及本地候选原始值保留历史，当前无需重复操作。
