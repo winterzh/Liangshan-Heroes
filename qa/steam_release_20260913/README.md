@@ -1,6 +1,6 @@
 # 2026-09-13 Windows Steam 发布证据
 
-**当前状态：包与QA全部完成，待用户允许本地文件上传或手动选定ZIP。** 来源为 `71098183af98df1a0279dd205dc25d1b8d85f235`；目标 App `5088120`、Depot `5088121`、正式 `default/public`。Steam网页登录正常，正式分支仍为旧 Build `25250466`；本次尚未开始HTTP上传，`uploaded=false`、`default_activated=false`，新Build/Manifest均为null。[发布阻塞收据](publication_receipt.json) · [发布内容与交接](../../docs/STEAM_UPDATE_20260913.md)。
+**当前状态：Build `25276077` 已正式在default上线。** 来源 `71098183af98df1a0279dd205dc25d1b8d85f235`，App `5088120` / Depot `5088121` / Manifest `4630656200603476714`。用户手动上传并完成上线确认，另报告手机Steam令牌验证完成；2026-09-13 06:01:22（UTC+8）的Steamworks回读同时核实上线成功提示、default当前Build、构建行default标签及Manifest链接。服务器6个文件名称、大小和SHA1全部匹配候选。[最终发布收据](publication_followup_receipt.json) · [发布内容与交接](../../docs/STEAM_UPDATE_20260913.md)。无需再选ZIP、重传、重建或重复上线。
 
 ## 本地证据
 
@@ -11,6 +11,7 @@
 | [smoke_20260913_052835_0ca1bd88/receipt.json](smoke_20260913_052835_0ca1bd88/receipt.json) | 同一实际EXE的八关启动、据守、清敌及主菜单11例通过，全部退出0且无错误；源码、玩家目录和EXE未变化，子进程退出确认且锁释放。 |
 | [candidate_delivery.json](candidate_delivery.json) | 唯一ZIP及6个成员的尺寸、SHA256/SHA1、上传副本位置和字节一致性；仅证明本地准备完成。 |
 | [evidence_copy_manifest.json](evidence_copy_manifest.json) | 从原生QA及候选目录逐字节复制的原始收据、日志和身份报告来源；不修改原记录。 |
+| [publication_followup_receipt.json](publication_followup_receipt.json) | 用户手动上传及确认、Build25276077 / Manifest4630656200603476714、服务器6文件核对及default正式上线回读通过；`status=published_on_default`。 |
 
 ZIP为237,201,655字节，SHA256 `e2c35f3acc2813042b6e39463547d1b8cbf19316c93e00433d879fa1576ba6e5`；EXE为305,879,976字节，SHA256 `3409d0ccd2bd2d45095b99bd45be257ba2a5f58ae6d72ee2067082687f0a827a`。唯一上传副本为[已验证Windows ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)。发行包和私有缓存保留本机，不作为Git证据上传。
 
@@ -47,8 +48,10 @@ ZIP为237,201,655字节，SHA256 `e2c35f3acc2813042b6e39463547d1b8cbf19316c93e00
 
 EXE短测仅证明启动和相应短测断言，不计八关完整通关、玩家菜单交互、完整30波、真人体验、性能或真实Steam在线写入。黄泥冈与野猪林内部恢复能力已随生产源码进入包，但玩家保存/继续入口保持隐藏。
 
-## 本地文件权限阻塞
+## 发布尝试与最终回读
 
-已验证ZIP的 `fileChooser.setFiles` 调用返回 `Not allowed`。官方故障说明要求用户在Edge的ChatGPT扩展详情开启“允许访问文件URL / Allow access to file URLs”。代理只读访问 `edge://extensions/` 也被浏览器URL安全策略阻止，未绕过或修改设置。本机PATH和已检查的常见工具位置未找到SteamCMD；另一台电脑的旧D盘工具不适用于本机。
+首次选择已验证ZIP的 `fileChooser.setFiles` 调用返回 `Not allowed`。官方故障说明要求用户在Edge的ChatGPT扩展详情开启“允许访问文件URL / Allow access to file URLs”。代理只读访问 `edge://extensions/` 也被浏览器URL安全策略阻止，未绕过或修改设置。本机PATH和已检查的常见工具位置未找到SteamCMD；另一台电脑的旧D盘工具不适用于本机。上述[首次发布收据](publication_receipt.json)保留05:35时点尚未HTTP上传的事实，后续用户已手动上传成功。
 
-用户可允许本地文件上传，也可直接在已保留的Steam上传表单手动选定已验证ZIP；后一种方式无需扩大扩展权限。随后代理继续同一成品上传、服务器六成员核对与正式分支激活，无需重新构建。`candidate_delivery.json` 的 `uploaded=false`、`server_verified=false`、`default_active=false` 保留本地准备时点；[独立发布收据](publication_receipt.json)记录本次 `blocked_before_upload` 及未开始HTTP上传，后续不覆盖原始候选值。本次未发布公告、改设置或合并main，也未进行客户端安装验收。
+用户通过Steamworks标准ZIP上传创建Build `25276077` / Manifest `4630656200603476714`；服务器6文件名称、大小及SHA1全部匹配。两次自动default确认框接受调用在 `Emulation.setFocusEmulationEnabled` 超时，第一次之后权威构建页仍为旧Build `25250466` / Manifest `416479225955196133`；第二次超时后，用户手动完成确认，并报告手机Steam令牌验证完成。06:01:22回读显示上线成功提示，default当前Build25276077，构建行带default标签并关联正确Manifest。[最终收据](publication_followup_receipt.json)记录 `published_on_default`、`default_activated=true` 和空待办。
+
+上传、服务器文件核对与正式上线回读均完成，无需重复操作。`candidate_delivery.json` 的本地准备false值和原 `publication_receipt.json` 的 `blocked_before_upload` / false / null均保持原字节；先前文件权限阻塞及自动确认超时保留历史。平台预览估算更新下载量28.8MB，不代表客户端实测。本次未发布公告、改设置或合并main，也未进行客户端安装验收。

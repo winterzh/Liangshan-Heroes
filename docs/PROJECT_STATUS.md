@@ -1,6 +1,6 @@
-## 2026-09-13 Windows包与QA完成，Steam上传待用户选定文件
+## 2026-09-13 Steam Build25276077已正式上线
 
-已按用户“发布”指令完成 `71098183` Windows候选及本地验证：原生185项、候选1120项、source/PCK身份各10项、实际EXE11例全部通过。[已验证上传ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)为237,201,655字节，与验证候选字节一致。Steam网页登录正常，文件选择被 `Not allowed` 阻止；待用户允许本地文件上传或在已保留表单手动选定ZIP后继续。App5088120 / Depot5088121正式default/public仍为旧Build25250466，本次尚未开始HTTP上传，`uploaded=false/default_activated=false`，没有新Build/Manifest。[独立阻塞收据](../qa/steam_release_20260913/publication_receipt.json) · [发布交接](STEAM_UPDATE_20260913.md) · [本轮证据](../qa/steam_release_20260913/README.md)。
+`71098183` Windows包已正式上线App5088120 / Depot5088121的default：Build25276077 / Manifest4630656200603476714。用户手动上传[同一验证ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)并完成上线确认，另报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读核实成功提示、default当前构建、构建行标签与Manifest链接。服务器6文件名称、大小和SHA1全匹配；原生185项、候选1120项、source/PCK身份各10项及EXE11例通过。无需重复上传或上线操作。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json) · [发布交接](STEAM_UPDATE_20260913.md) · [本轮证据](../qa/steam_release_20260913/README.md)。
 
 本次玩家修复为相邻任务按原点击办理及黄泥冈死亡掉担清理；黄泥冈/野猪林整世界保存恢复是内部能力，玩家入口继续隐藏。下方“未发布”是先前开发验证阶段的历史记录，本次后续状态以本条和独立发布收据为准；不计九玩法全部验收，不合并main。
 

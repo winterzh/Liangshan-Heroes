@@ -1,8 +1,8 @@
 ## 2026-09-13 Windows Steam发布交接
 
-本地 `71098183` 候选验证完成，原生185项、包1120项、身份各10项及EXE11例通过。Steam登录正常，但本地文件选择返回 `Not allowed`，待用户允许本地文件上传或在保留表单手动选定ZIP后继续；正式default仍为旧25250466，本次尚未开始HTTP上传，玩家保存/继续入口仍隐藏。[独立阻塞收据](../qa/steam_release_20260913/publication_receipt.json)。
+`71098183` Windows包已正式在default上线：App5088120 / Depot5088121 / Build25276077 / Manifest4630656200603476714，服务器6文件名称、大小和SHA1全部匹配。用户完成手动确认并报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读核实上线成功及当前default构建。玩家保存/继续入口仍隐藏。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json)。
 
-- [本次Steam更新交接](STEAM_UPDATE_20260913.md)：发布范围、[唯一上传ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)和六成员清单、构建与验证结果，以及本地文件权限阻塞和接续步骤；没有新Build/Manifest。
+- [本次Steam更新交接](STEAM_UPDATE_20260913.md)：发布范围、[已发布唯一ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)、六成员核对和Build25276077正式上线回读；首次文件权限阻塞与两次自动确认超时保留历史。
 - [本轮Steam QA](../qa/steam_release_20260913/README.md)、[候选交付清单](../qa/steam_release_20260913/candidate_delivery.json)、[证据复制清单](../qa/steam_release_20260913/evidence_copy_manifest.json)：原生QA、候选、身份探针与实际EXE短测原始收据，不含发行二进制或私有缓存。
 - `qa/steam_release_20260913/collect_evidence.py`、`smoke_verified_package.py`：本机适配的证据复制与串行EXE短测工具；未修改生产逻辑。
 

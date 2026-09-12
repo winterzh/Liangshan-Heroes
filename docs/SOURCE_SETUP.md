@@ -1,8 +1,8 @@
-## 2026-09-13 Windows候选完成，上传待用户选定文件
+## 2026-09-13 Windows Build25276077正式上线交接
 
-`71098183` 的本地Windows包已验证：原生整合185项、候选1120项、source/PCK身份各10项、实际EXE11例全部通过。唯一上传ZIP237,201,655字节；本轮本机成品路径、六成员SHA及保护后验只记录在[候选清单](../qa/steam_release_20260913/candidate_delivery.json)与[归档QA](../qa/steam_release_20260913/README.md)。Steam网页登录正常，但文件选择被 `Not allowed` 阻止；待用户允许本地文件上传或在保留表单手动选定ZIP后继续。App5088120 / Depot5088121仍是旧default25250466，本次尚未开始HTTP上传。[独立阻塞收据](../qa/steam_release_20260913/publication_receipt.json) · [发布交接](STEAM_UPDATE_20260913.md)。
+`71098183` Windows包已正式上线App5088120 / Depot5088121的default，Build25276077 / Manifest4630656200603476714。原生185项、候选1120项、source/PCK身份各10项及EXE11例通过，服务器6文件名称、大小和SHA1全部匹配。用户完成手动确认并报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读确认成功提示、default当前构建及正确Manifest。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json)。本轮成品路径与SHA见[候选清单](../qa/steam_release_20260913/candidate_delivery.json)和[归档QA](../qa/steam_release_20260913/README.md)；[发布交接](STEAM_UPDATE_20260913.md)。
 
-源码仍从本checkout的 `Play.cmd` 启动，Godot路径由被忽略的 `godot.local.txt` 或 `GODOT_PATH` 提供；玩家保存/继续入口隐藏。包由已验证候选生成，不在上传时重新拼包。开发者复现候选可使用 `py -3 -X utf8 -B tools/build_steam_candidate.py --qa-run "<成功原生QA目录>" --profile-root "<本机绝对短路径>" --run`，参数按当前机器配置；原生→候选→短测/归档三阶段命令见[QA复现](../qa/steam_release_20260913/README.md)。此次无需重建，文件选定后继续同一ZIP；下方各轮“不改变Steam包”属于当时开发状态，本次以顶部链接为准，不改写历史QA或合并main。
+源码仍从本checkout的 `Play.cmd` 启动，Godot路径由被忽略的 `godot.local.txt` 或 `GODOT_PATH` 提供；玩家保存/继续入口隐藏。包由已验证候选生成，没有在上传时重新拼包。开发者复现候选可使用 `py -3 -X utf8 -B tools/build_steam_candidate.py --qa-run "<成功原生QA目录>" --profile-root "<本机绝对短路径>" --run`，参数按当前机器配置；原生→候选→短测/归档三阶段命令见[QA复现](../qa/steam_release_20260913/README.md)。本次上传及正式上线回读均完成，无需重复操作；下方各轮“不改变Steam包”和早期阻塞属于当时状态，不改写历史QA或合并main。
 
 ## 2026-09-13 野猪林世界恢复验证入口
 

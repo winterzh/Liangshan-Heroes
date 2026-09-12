@@ -1,8 +1,8 @@
 # 2026-09-13 Windows Steam 更新与交接
 
-**当前状态：包与QA全部完成，待用户允许本地文件上传或手动选定ZIP。** 已验证来源为 `71098183af98df1a0279dd205dc25d1b8d85f235`，目标为 App `5088120`、Depot `5088121` 的正式 `default/public` 分支。Steam网页登录正常，正式分支仍为旧 Build `25250466`；本次尚未开始HTTP上传，`uploaded=false`、`default_activated=false`，新BuildID和ManifestID均为null。[独立发布阻塞收据](../qa/steam_release_20260913/publication_receipt.json) · [本轮QA](../qa/steam_release_20260913/README.md)。
+**当前状态：Build `25276077` 已正式在default上线。** 来源为 `71098183af98df1a0279dd205dc25d1b8d85f235`，App `5088120` / Depot `5088121` / Manifest `4630656200603476714`。用户手动上传并完成上线确认，随后报告手机Steam令牌验证完成；2026-09-13 06:01:22（UTC+8）的Steamworks回读显示上线成功提示、default当前Build25276077，以及该构建的default标签和正确Manifest链接。服务器6个文件名称、大小及SHA1全部匹配验证候选。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json) · [本轮QA](../qa/steam_release_20260913/README.md)。
 
-待上传的唯一成品为[已验证Windows ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)。用户可在已保留的Steam上传表单手动选择该ZIP，或在Edge的ChatGPT扩展详情开启“允许访问文件URL / Allow access to file URLs”；随后代理继续上传、服务器核对与正式上线，无需重新构建。
+已发布的唯一成品为[已验证Windows ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)。上传、服务器核对和正式分支回读均已完成，无需再次选ZIP、重传、重建或重复上线操作。
 
 ## 发布内容与来源
 
@@ -44,10 +44,12 @@ EXE短测确认 `source_unchanged`、`players_unchanged`、`exe_unchanged`、`ch
 | `steam_api64.dll` | 319,128 | `05ea59cc2b15a10c66277659d5d0b51750460d28` |
 | `steam_stats_reader.dll` | 352,768 | `ac9a932af32cef47cb41a80fc766fd2a401b13ba` |
 
-## Steam上传阻塞与接续
+## Steam上传与上线确认记录
 
-Steam网页已登录，选择已验证ZIP时 `fileChooser.setFiles` 返回 `Not allowed`。官方故障说明要求用户为Edge的ChatGPT扩展开启“Allow access to file URLs”；代理随后只读打开 `edge://extensions/` 也被浏览器URL安全策略明确阻止，未绕过限制或修改设置。本机PATH及已检查的常见工具目录未找到SteamCMD；旧D盘工具属于另一台电脑，不能当作本机可用上传器。
+首次尝试时Steam网页已登录，选择已验证ZIP的 `fileChooser.setFiles` 返回 `Not allowed`。官方故障说明要求用户为Edge的ChatGPT扩展开启“Allow access to file URLs”；代理随后只读打开 `edge://extensions/` 也被浏览器URL安全策略明确阻止，未绕过限制或修改设置。本机PATH及已检查的常见工具目录未找到SteamCMD；旧D盘工具属于另一台电脑。这是[05:35首次阻塞收据](../qa/steam_release_20260913/publication_receipt.json)的历史状态，随后用户已手动完成上传。
 
-目标仍为既定 App `5088120` / Depot `5088121` / `default/public`。旧 Build `25250466` 保持在线，当前包尚未开始HTTP上传；等待用户允许本地文件上传或在保留的表单手动选定ZIP后，继续上传、服务器六成员核对和正式分支激活，再记录实际Build/Manifest。`candidate_delivery.json` 的 `uploaded/server_verified/default_active=false` 保留本地准备时点，[独立发布收据](../qa/steam_release_20260913/publication_receipt.json)记录 `blocked_before_upload`，不改写原始候选记录。
+用户通过Steamworks标准ZIP方式完成上传后，页面返回 `Building depot done` 与 `Build commit successful`，分别给出Manifest `4630656200603476714` 和Build `25276077`。服务器清单已按6个文件的名称、大小和SHA1逐项核对，全部一致。[后续收据](../qa/steam_release_20260913/publication_followup_receipt.json)记录上传与核验成功；`candidate_delivery.json` 的本地准备值和原 `publication_receipt.json` 的 `blocked_before_upload` / false / null保持原样，不覆盖历史。
+
+正式default的两次自动确认框接受调用都在 `Emulation.setFocusEmulationEnabled` 超时。第一次之后权威构建页仍为旧Build `25250466` / Manifest `416479225955196133`；第二次超时后由用户手动确认，用户另报告手机Steam令牌验证完成。06:01:22回读[Steamworks构建页](https://partner.steamgames.com/apps/builds/5088120?submittedbuild=25276077)明确显示新构建已向default玩家上线，default当前值为25276077，构建行带default标签并关联Depot5088121的Manifest4630656200603476714。最终收据为 `published_on_default`，待办为空；自动调用超时保留为过程记录，不再作为当前阻塞。Steam预览估算更新下载量28.8MB，仅为平台估算，未做客户端下载测量。
 
 本次没有发布公告、改动浏览器设置或合并main；未声称客户端已下载更新或真实Steam统计写入已验收。内部保存入口仍关闭，完整30波同版、剩余五关世界恢复、真实Steam持久确认、长跑/性能、双机/双账号与真人检查继续遵循[统一交付门槛](CONTINUE_DELIVERY_20260908.md)。
