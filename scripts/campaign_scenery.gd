@@ -222,6 +222,9 @@ func _add_story_crowd(p: Vector2,variant: int) -> void:
 	crowd.position=p
 	crowd.z_index=clampi(int(_map.project(p).y),1,3400)
 	add_child(crowd)
+	# The fixed restoration factory builds detached scenery before mounting it.
+	# Resolve the same deterministic facing/texture there, without a gameplay tick.
+	if not crowd.is_node_ready(): crowd.prepare_visual()
 	_sprites.append(crowd)
 
 func _add_story_sign(p: Vector2,size: float,label: String) -> void:
@@ -362,6 +365,9 @@ class StoryCrowd extends Node2D:
 		return DIRECTIONS[posmod(floori(float(variant) / ART_VARIANTS.size()), DIRECTIONS.size())]
 
 	func _ready() -> void:
+		prepare_visual()
+
+	func prepare_visual() -> void:
 		var scenery = get_parent()
 		if scenery.has_method("_add_story_crowd") and scenery._style == "level2":
 			# Jiangzhou spectators look toward the scaffold; no combat RNG is consumed.

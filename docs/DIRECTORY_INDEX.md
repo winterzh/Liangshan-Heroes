@@ -1,3 +1,12 @@
+## 2026-09-13 江州内部恢复里程碑
+
+全新默认27用例世界085554批1628项（916+381+331）与同版经典084224批296项完整通过；联合核验确认2962份生产文件同SHA、世界QA无来源差异、江州11张/经典16张PNG的SHA通过。人工目检仅江州保存/登船/胜利3张和经典两张代表图，准确路径见实现说明。`PLAYER_ENTRY=false`，下一步快活林，再连环马、高俅、大名府；下方旧阶段结论保留历史语境。
+
+- [江州实现与边界](JIANGZHOU_WORLD_RESTORE_20260913.md)：固定profile、60×58 town、独立角色图、两次替换、固定开船回调、组件/自然路线及全部失败历史。
+- [江州QA与复现](../qa/jiangzhou_world_restore_20260913/README.md)、[联合核验JSON](../qa/jiangzhou_world_restore_20260913/validation_summary.json)、`qa/jiangzhou_world_restore_20260913/verify_evidence.py`：单个全新完整世界批及同版经典证据，不合并旧缓存或失败批。
+- [085554世界收据](../qa/level3_world_restore_20260909/20260913_085554_ae1d1fcb/receipt.json)与[084224经典收据](../qa/continue_flow_20260909/20260913_084224_c71345c4/receipt.json)：本轮原始收据及对应报告、日志、PNG。
+- `scripts/run_level2_world_factory.gd`、`tools/level2_world_restore_qa.gd`、`tools/level2_cross_process_qa.gd`：已安装工厂、九槽显式组件夹具及七进程真实命令路线；[统一交付状态](CONTINUE_DELIVERY_20260908.md)保留未完成门槛。
+
 ## 2026-09-13 四语图文版本汇总
 
 新Event714538122294068076已公开，06:49 HKT，类型“重大更新”，关联Build25276077；四语各5节与3张已有实机图。16个保存字段精确匹配，84个公开片段规范化后完整匹配，12处图片加载及尺寸通过。旧074小型公告保留。

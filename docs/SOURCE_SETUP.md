@@ -1,3 +1,11 @@
+## 2026-09-13 江州世界恢复验证入口
+
+全新默认世界 `20260913_085554_ae1d1fcb` 的27用例1628项通过（既有916 + 江州组件381 + 自然七进程331），`complete/full_suite/fresh_import/acceptance_complete` 均true；同版经典全新默认 `20260913_084224_c71345c4` 完整296项通过。联合核验确认2962份生产文件与两批及当前checkout同SHA、世界QA无来源差异；江州11张/经典16张PNG字节核验通过，代表画面目检另列。[实现与原始收据](JIANGZHOU_WORLD_RESTORE_20260913.md) · [联合结果和完整复现命令](../qa/jiangzhou_world_restore_20260913/README.md)。
+
+普通启动仍为 `Play.cmd`，Godot由被忽略的 `godot.local.txt`、`GODOT_PATH` 或驱动参数提供。默认完整世界使用 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root "<本机绝对短路径>" --run`，不传 `--cases` 或 `--cache-from`；经典用 `tools/run_continue_flow_qa.py` 另选私有短目录串行执行。资源导入上限600秒，江州组件/各自然进程及野猪林组件420秒，其余玩法240秒。不要把QA私有环境变量接入玩家启动脚本。
+
+本轮江州内部里程碑完成，`PLAYER_ENTRY=false`；后续快活林、连环马、高俅、大名府与统一交付门槛保持。快活林私有候选未晋级，不属于当前默认27用例。本轮未重构建或发布Steam；下方旧命令及计数保留当时验证范围。
+
 ## 2026-09-13 四语图文汇总维护入口
 
 综合图文公告[714538122294068076](https://store.steampowered.com/news/app/5088120/view/714538122294068076)已公开，06:49 HKT，类型“重大更新”，关联既有default Build25276077，无需重构建或重传包。[文案目录](../marketing/steam_version_roundup_20260913/README.md)保存四语copy/rendered_copy、字段对照与图片来源；16个保存字段精确匹配，84个公开片段规范化后完整匹配，12处图片加载及尺寸通过。[validation.json](../qa/steam_version_roundup_20260913/validation.json)。后续维护本篇使用076活动，旧074小型公告仍保留；启动方式和玩家保存/继续入口未变。[汇总交接](STEAM_VERSION_ROUNDUP_20260913.md)。
