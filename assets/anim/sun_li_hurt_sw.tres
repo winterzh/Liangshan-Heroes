@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/sw_actions.png" id="sw_actions"]
+
+[sub_resource type="AtlasTexture" id="hurt_sw"]
+atlas = ExtResource("sw_actions")
+region = Rect2(443, 15, 280, 286)
+margin = Rect2(42.5, 39.5, 85, 79)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-0.5, -1.7)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

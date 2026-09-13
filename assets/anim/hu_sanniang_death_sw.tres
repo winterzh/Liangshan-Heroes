@@ -1,0 +1,42 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/sw_spacing.png" id="sw_spacing"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/sw.png" id="sw"]
+
+[sub_resource type="AtlasTexture" id="hurt_sw"]
+atlas = ExtResource("sw_spacing")
+region = Rect2(440.0, 50.0, 306.0, 311.0)
+margin = Rect2(57.0, 54.5, 114.0, 109.0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-15.685457, 3.088275)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_sw"]
+atlas = ExtResource("sw")
+region = Rect2(87, 575, 169, 159)
+margin = Rect2(43.5, 48.5, 87, 97)
+filter_clip = true
+metadata/draw_offset_px = Vector2(20.0, 28.92)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="ground_sw"]
+atlas = ExtResource("sw")
+region = Rect2(295, 579, 191, 166)
+margin = Rect2(32.5, 45.0, 65, 90)
+filter_clip = true
+metadata/draw_offset_px = Vector2(21.5, 48.42)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_sw")},
+{"duration": 1.0, "texture": SubResource("fall_sw")},
+{"duration": 1.0, "texture": SubResource("ground_sw")},
+{"duration": 1.0, "texture": SubResource("ground_sw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,3 +1,15 @@
+## 2026-09-13 孙立与扈三娘美术验证入口：最终原生结果通过
+
+两人各32姿态、20份四向基础动画已接入：孙立11张原生PNG、扈三娘9张；来源审计380项与259项通过。孙立保留相对补图补偿并移除全局1.35放大；扈三娘SW行走的区域/补边尺寸改为整数，构建器增加相应守卫。游戏规则不变，普通启动仍使用`Play.cmd`。[实现、来源和边界](CHARACTER_ART_20260913.md) · [原生QA记录](../qa/character_art_20260913/README.md)。最终180852批已扈三娘609项、孙立651项、共享路由8项通过；3054份冻结来源和64份归档文件核对当前一致，详见QA联合核验。
+
+从项目根目录运行下列命令；`X:/QA/character_art`只是工程外绝对路径占位，须换成本机实际可写短路径。Godot仍通过被忽略的`godot.local.txt`、`GODOT_PATH`或`--godot`提供。
+
+```powershell
+py -3 -X utf8 -B tools/run_character_art_qa.py --repo . --manifest hu_sanniang=assets/direction4/hu_sanniang_20260913.json --manifest sun_li=assets/direction4/sun_li_20260913.json --work-root "X:/QA/character_art" --shared-checks --run
+```
+
+默认使用图形原生窗口，位置为`20000,20000`并设为不可聚焦，不通过Computer Use注入输入；角色操作由隔离QA自身执行。可用`--cache-from "<已有来源收据的私有导入批目录>"`复用经驱动核对的资源缓存，必须保留复用来源，不把缓存批称为全新导入；`--headless`只检查资源和行为，不代表画面验收。各角色与共享检查由单一驱动串行运行，本轮不改变玩家入口、正常Play或Steam包。
+
 ## 2026-09-13 黄泥冈入场反馈验证入口：四批相关验证及联合核验通过
 
 普通启动仍为`Play.cmd`，Godot由被忽略的`godot.local.txt`、`GODOT_PATH`或`--godot`参数提供。本轮修改押队分散停靠及白胜在盘问后自动挑酒、停稳落担；手动命令会永久取消本次自动控制，玩家仍可右键落担标记继续。[实现和旧规则取代范围](HUANGNIGANG_FEEDBACK_20260913.md)。

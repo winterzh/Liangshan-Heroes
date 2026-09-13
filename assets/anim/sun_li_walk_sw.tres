@@ -1,0 +1,45 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/sw_idle.png" id="sw_idle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/sw_walk.png" id="sw_walk"]
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("sw_idle")
+region = Rect2(6, 24, 323, 349)
+margin = Rect2(54.5, 41.5, 109, 83)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-26.165835, -8.771859)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000255
+
+[sub_resource type="AtlasTexture" id="walk_a_sw"]
+atlas = ExtResource("sw_walk")
+region = Rect2(3, 3, 325, 399)
+margin = Rect2(86.5, 49.5, 173, 99)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-16.488413, -5.796422)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000172
+
+[sub_resource type="AtlasTexture" id="walk_b_sw"]
+atlas = ExtResource("sw_walk")
+region = Rect2(420, 3, 327, 398)
+margin = Rect2(85.5, 50.0, 171, 100)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-17.195249, -4.962722)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000172
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_sw")},
+{"duration": 1.0, "texture": SubResource("walk_a_sw")},
+{"duration": 1.0, "texture": SubResource("idle_sw")},
+{"duration": 1.0, "texture": SubResource("walk_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

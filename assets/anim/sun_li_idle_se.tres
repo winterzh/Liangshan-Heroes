@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/se.png" id="se"]
+
+[sub_resource type="AtlasTexture" id="idle_se"]
+atlas = ExtResource("se")
+region = Rect2(59, 13, 155, 183)
+margin = Rect2(35.0, 21.0, 70, 42)
+filter_clip = true
+metadata/draw_offset_px = Vector2(4.0, -8.0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

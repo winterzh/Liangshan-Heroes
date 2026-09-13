@@ -1,0 +1,326 @@
+{
+  "schema": "native_direction4_generation_v1",
+  "character": "hu_sanniang",
+  "original_reference": {
+    "path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_idle.png",
+    "sha256": "f2373755c3bcf1739c0b00e5452e0b72cbd2077ab637bf739d7abc00906c6cc9"
+  },
+  "additional_identity_references": {
+    "hu_sanniang_attack": {
+      "path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_attack.png",
+      "sha256": "83996117935cca499159b4e19098af02b6601b3ac0dbec8cd1393b3ec54e8fc7"
+    },
+    "hu_sanniang_death": {
+      "path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_death.png",
+      "sha256": "1cc57ba32bf03b98051258ea1aab621ce420de3339a19c63ab59a34d8496791e"
+    },
+    "hu_sanniang_idle": {
+      "path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_idle.png",
+      "sha256": "f2373755c3bcf1739c0b00e5452e0b72cbd2077ab637bf739d7abc00906c6cc9"
+    },
+    "hu_sanniang_walk": {
+      "path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_walk.png",
+      "sha256": "c89ac15bdcf08ed45f58733f90b4a57cc63c78b70cd403a59ad458a620113cfa"
+    },
+    "portraits2": {
+      "path": "tools/contracts/hu_sanniang_direction4_20260913/references/portraits2.png",
+      "sha256": "9fb2d65cc1b0d7ff185a7ea4f97044a5138c8dd0fc679e70ed1418df208eca1e"
+    }
+  },
+  "primary_text_url": "https://zh.wikisource.org/zh-hans/水滸傳_(120回本)/第048回",
+  "reference_policy": "Legacy game images establish face/style/mounted cavalry; original novel chapter 48 takes precedence for red gauze under linked armor, golden hairpins, dark mane and dual sabers. Chestnut coat is inherited game design, not claimed as exact novel specification.",
+  "jobs": [
+    {
+      "key": "legacy_walk",
+      "method": "existing_game_art_reference",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_walk.png",
+      "sha256": "c89ac15bdcf08ed45f58733f90b4a57cc63c78b70cd403a59ad458a620113cfa",
+      "prompt": "Unmodified existing game identity and mounted action reference; not generated in this batch.",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "legacy_attack",
+      "method": "existing_game_art_reference",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_attack.png",
+      "sha256": "83996117935cca499159b4e19098af02b6601b3ac0dbec8cd1393b3ec54e8fc7",
+      "prompt": "Unmodified existing game identity and mounted action reference; not generated in this batch.",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "legacy_death",
+      "method": "existing_game_art_reference",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/references/hu_sanniang_death.png",
+      "sha256": "1cc57ba32bf03b98051258ea1aab621ce420de3339a19c63ab59a34d8496791e",
+      "prompt": "Unmodified existing game identity and mounted action reference; not generated in this batch.",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "se_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/se_v1.png",
+      "sha256": "b19ca753177d0fefdf2442857d59fdbd9cb61ae4d31acd46eec274dd5396f4a4",
+      "prompt": "Use case: stylized-concept. Production asset: native transparent RGBA sprite atlas for the existing Chinese historical RTS, not a concept illustration. Reference images 1 idle, 2 walk, 3 attack, 4 death are the SAME mounted woman Hu Sanniang and chestnut horse, identity and rendering style references; preserve her green long-sleeved armored riding outfit, silver lamellar shoulder armor, dark high-tied hair, the same tack and two curved steel sabers (one in each hand). She is an adult serious warrior, fully clothed, no sexualization. Do NOT change her into infantry, add new armor colors, add a helmet, change the horse coat or create an extra rider.\nCreate one 1024x2048 portrait atlas, strict TWO COLUMNS by FOUR ROWS, eight equally sized 512x512 invisible cells, one entire mounted character group in each cell, large transparent gutters. EXACTLY eight poses, row-major order:\n1 relaxed battle ready, both sabers low and horse standing;\n2 locomotion A, horse near foreleg extended forward and opposite hind leg back, rider riding balanced;\n3 locomotion B, opposite leg phase clearly changed, horse near foreleg lifted/folded back and opposite foreleg forward, no duplicate of pose2;\n4 attack preparation, both arms draw the two sabers up/back for a strike, seated securely;\n5 actual crossing forward double-saber slash through an enemy location with visibly changed arms and torso, no drawn enemy, no motion trails;\n6 distinct hurt recoil while still seated, body pulls back, both sabers retained;\n7 losing balance and falling sideways off the saddle, no gore, full horse and falling rider visible;\n8 final motionless prone rider on ground alongside her stationary horse, both sabers visible near hands, no gore, no wound.\nEVERY cell must use the SAME three-quarter SOUTH-EAST orientation: horse head points diagonally to lower-right, we see its FRONT and left flank. Rider face/chest and gaze follow the same lower-right direction except the physical falling poses. Camera is fixed elevated RTS 30-degree view, no flat side view, no direction change between frames. Preserve the same scale, saddle/rider proportions, clean painterly detailed realism of reference, no chibi/cartoon style. Each whole horse+rider+two blades safely inside its cell with generous 30px transparent clearance and no overlap across cells. Consistent baseline for ground contact around 84% down each cell. No text, no cell borders, no labels, no checkerboard, no ground plane, no scenery, no effects, no ground shadow. BACKGROUND MUST BE ACTUAL TRANSPARENT ALPHA, including gaps between legs and weapons, NOT a drawn checkerboard/white/black background. Preserve fine edges and the original generated alpha. This is eight distinct functional animation key poses, not eight cosmetic variations of a standing pose.",
+      "references": [
+        "original",
+        "legacy_walk",
+        "legacy_attack",
+        "legacy_death"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-e3f261e6-685c-4640-93b1-8323f0394f02.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "se_v2",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/se_v2.png",
+      "sha256": "9904a52ebd6ea449d02904d5ee8b5c4d8a1c462da65d60a58c1cf05c0c29d10d",
+      "prompt": "Edit this sprite atlas. Critical production correction: remove the entire gray checkerboard background and make it genuinely transparent. Deliver a PNG with a real RGBA ALPHA CHANNEL, alpha 0 outside the painted eight horse/rider silhouettes and in the empty gaps. Do not paint white, black, gray, a checkerboard, a floor, or shadows as a substitute. Preserve the existing eight figures, their eight positions, their clothing, face, chestnut horse, scale and detailed painterly pixels as closely as possible. Do not mirror or change viewpoint. Also correct the top-left idle and two walking poses: this warrior must hold TWO curved steel sabers, one in each hand, as in the attack poses. Her current empty/rein-holding hand must visibly hold the second low saber. Keep the reins naturally draped on the horse neck. No new poses, labels, text, borders, scenery or effects. The output must be a functional isolated transparent sprite atlas, not an illustration that depicts transparency.",
+      "references": [
+        "se_v1"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-f1ecc75a-392a-4344-98f0-18e22cd55572.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "se_v3",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/se_v3.png",
+      "sha256": "80711a03b69030eeac424304c6d89a3e5a2c8a5a90364c92dc1c1b2e9348d4e1",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与马匹不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "se_v2"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-32b7a306-27c4-45f1-8a15-980a14fd67b8.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "se_v4",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/se_v4.png",
+      "sha256": "202b3513e1e05e2a2d198e95acba05d1ebe0a13712f4b7fbf54bfb5ee82446c9",
+      "prompt": "精确修改这张扈三娘8动作骑马图集，保留真正RGBA alpha透明背景。\n这是《水浒传》第48回扈三娘，“蝉鬓金钗双压，连环铠甲衬红纱”，骑青鬃马、使两口日月双刀。请保持现有成熟女将脸、束发金钗、连环式银灰甲胄、骑姿、棕色马体与青黑色鬃尾、鞍具、全部8格姿态与同一朝向。只做以下修正：\n1. 每一格甲胄下露出的布衣与裙摆改为沉稳朱红/暗红纱衣；保留银灰甲片覆盖肩胸腹，不要把甲胄也变红。可以有少量暗绿绣带但红纱必须清晰，身体全覆盖、无暴露/性感化。\n2. 第二行左格走路B还缺一把刀：上身前方握缰的手也必须握住第二把完整弯曲钢刀，刀刃低垂但与马脖/另一刀轮廓分开。第一行两格也必须两手各一刀。其余双刀姿势保持。\n3. 清除边缘孤立彩色噪点，毛发/马鬃/刀刃边缘保持干净细腻，没有发光线、特效或地面影子。保持同一写实手绘RTS风格，勿变卡通塑料。\n维持2列4行8格、大透明间距，完整人物/马/双刀不得触边和串格。输出真正透明背景RGBA PNG，不画网格、文字或地面。",
+      "references": [
+        "se_v3"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-e500c980-1782-4940-8447-df6d0b288601.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "se_v5",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/se.png",
+      "sha256": "56468efe346085ea889f327145fb4c369f27f7346295a44cb66748622ecd4f53",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。八组完整人物连同马和双刀整体缩小为现在的75%，各自居中于2列4行格子，留更宽空隙，完整刀尖和倒地者不能越出格子。保持八姿态、红纱银甲、女将身份、棕色青黑鬃马和双刀不变。不要任何背景图案。",
+      "references": [
+        "se_v4"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-7365bd30-a91e-49da-875d-523ce49e9cb7.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "se_v6",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/se_v6.png",
+      "sha256": "16c16d1ed24609278e6fadc24397b77dd272376be79dead400be9eedcdb6c9ff",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与马匹不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "se_v5"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-a250353c-c55d-419d-bc07-fb2a383f8379.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "sw_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/sw_v1.png",
+      "sha256": "27a8f25b91e9fe61791f05b349f3ed9e9b3b39ace833af309c9acd7498882d1e",
+      "prompt": "依照参考中同一扈三娘和马匹，制作真正RGBA透明PNG的西南，马头指向画面左下，看到马的正面与右侧、女将的脸和胸，不能只是水平翻转参考。八动作图集。严格保留红纱衬银灰连环铠甲、金钗束发、成熟脸、全覆盖女将服装、两手各持一把日月弯刀、棕色马体青黑鬃尾和鞍具；同一写实手绘RTS兵人画风，不性感化不换装。此图是全新真实sw方向视角，整体转过三维角度，不镜像、不只转头，全部格保持这个方向。\n1024×1536，2列4行8格，从左到右从上到下：1站立；2马步A近侧前腿伸前/远侧前腿折后；3反相马步B近侧前腿明显折后/远侧前腿伸前，后腿也换相，必须与2不同；4双刀举起蓄势；5双刀向该朝向真正前劈命中姿态；6女将受击后仰仍在鞍上；7女将失衡向马侧倒下；8女将已落地侧躺在马旁，马站立，刀完整，无血。马的四条腿结构正确，不额外复制腿。\n八组保持参考的小尺寸和宽阔间距，每格完整马+人+刀只占格子约70%，轮廓离格边至少30像素。人物身体和两刀都完整、无串格；同机位俯视30度，固定比例，无地面/影子/发光/字/编号/网格。保持真正透明alpha背景。",
+      "references": [
+        "se_v5"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-5abaaaac-f447-44ab-8881-21c641970394.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "ne_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/ne_v1.png",
+      "sha256": "290d24ec473a0d3c0ac66cd1e749a9bf728ffe29e4305499382d23d7ab44fbbb",
+      "prompt": "依照参考中同一扈三娘和马匹，制作真正RGBA透明PNG的东北，马頭指向画面右上远处，看到马的后臀和左侧、女将的后背和后脑，不能再露脸朝向右下。八动作图集。严格保留红纱衬银灰连环铠甲、金钗束发、成熟脸、全覆盖女将服装、两手各持一把日月弯刀、棕色马体青黑鬃尾和鞍具；同一写实手绘RTS兵人画风，不性感化不换装。此图是全新真实ne方向视角，整体转过三维角度，不镜像、不只转头，全部格保持这个方向。\n1024×1536，2列4行8格，从左到右从上到下：1站立；2马步A近侧前腿伸前/远侧前腿折后；3反相马步B近侧前腿明显折后/远侧前腿伸前，后腿也换相，必须与2不同；4双刀举起蓄势；5双刀向该朝向真正前劈命中姿态；6女将受击后仰仍在鞍上；7女将失衡向马侧倒下；8女将已落地侧躺在马旁，马站立，刀完整，无血。马的四条腿结构正确，不额外复制腿。\n八组保持参考的小尺寸和宽阔间距，每格完整马+人+刀只占格子约70%，轮廓离格边至少30像素。人物身体和两刀都完整、无串格；同机位俯视30度，固定比例，无地面/影子/发光/字/编号/网格。保持真正透明alpha背景。",
+      "references": [
+        "se_v5"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-07b9418b-adc4-4f73-8549-f81c4c0d62d6.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "nw_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/nw_v1.png",
+      "sha256": "2f53b3c5694b4d1bd509149138c57bacd1b632d635373ec52e6454de327e9048",
+      "prompt": "依照参考中同一扈三娘和马匹，制作真正RGBA透明PNG的西北，马頭指向画面左上远处，看到马的后臀和右侧、女将的后背和后脑，不能再露脸朝向左下。八动作图集。严格保留红纱衬银灰连环铠甲、金钗束发、成熟脸、全覆盖女将服装、两手各持一把日月弯刀、棕色马体青黑鬃尾和鞍具；同一写实手绘RTS兵人画风，不性感化不换装。此图是全新真实nw方向视角，整体转过三维角度，不镜像、不只转头，全部格保持这个方向。\n1024×1536，2列4行8格，从左到右从上到下：1站立；2马步A近侧前腿伸前/远侧前腿折后；3反相马步B近侧前腿明显折后/远侧前腿伸前，后腿也换相，必须与2不同；4双刀举起蓄势；5双刀向该朝向真正前劈命中姿态；6女将受击后仰仍在鞍上；7女将失衡向马侧倒下；8女将已落地侧躺在马旁，马站立，刀完整，无血。马的四条腿结构正确，不额外复制腿。\n八组保持参考的小尺寸和宽阔间距，每格完整马+人+刀只占格子约70%，轮廓离格边至少30像素。人物身体和两刀都完整、无串格；同机位俯视30度，固定比例，无地面/影子/发光/字/编号/网格。保持真正透明alpha背景。",
+      "references": [
+        "se_v5"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-5738b367-f4bd-4f58-af09-e1e3d6b93a79.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "se_walk_b_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/se_walk_b_v1.png",
+      "sha256": "bac2588a16f20a8ab7d31c00ba2ce05760d88a646fa0e54658b9efa5b1e9b841",
+      "prompt": "提取并重画参考第二行左边的一组扈三娘骑马行走，作为单独一张真正RGBA透明PNG。只要一组完整马+女将+双刀，保持红纱衬银灰甲、金钗发型、两手各持弯刀、棕色青黑鬃马和原画风。女将与马全部朝画面右下，俯视30度。关键只改马步：距离镜头近的那条前腿必须膝盖弯曲、蹄子收在马胸下并向后；远侧前腿要完全伸向前方右下，能清楚看见不同腿。两后腿也交换前后支撑关系。这是与原图第一行右侧走路A相反的明确马步B，不要近侧前腿再次伸直。上身保持平衡骑乘，双刀低持，不是攻击。不加腿、不换方向。整组占画布60%，四周宽阔真透明，双刀和马尾完整，无地板、文字或光效。输出RGBA PNG真实透明通道。",
+      "references": [
+        "se_v5"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-37ef38c3-27b7-4dde-83f8-9db38c3d1dde.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "sw_v2",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/sw.png",
+      "sha256": "7949b4ca9a021fc5999cbf84f26f5de311284c3518652bf34bb857a4bb3a60b2",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与马匹不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "sw_v1"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-02dac17f-7884-4664-b19c-f703847b8bb2.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "ne_v2",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/ne.png",
+      "sha256": "a775dbec38ab38caaba41c87cb30e55b5fec8627328ac77fc92c353cfeeda270",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与马匹不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "ne_v1"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-bd0c8a68-e40c-4802-a7db-41b042bc4ccf.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "nw_v2",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/nw.png",
+      "sha256": "46005b9978861c973c56cd616e384aae0fc787d61a9ce0bdc4f5414d3ae94b2b",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与马匹不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "nw_v1"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-81c97e5f-1f3d-4623-be3b-870b97f527d7.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "se_walk_b_v2",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/se_walk_b.png",
+      "sha256": "15fc0ee309f951c875fdf2fbfc1e0b9ddf2b1214406e6b6c8552a3654dd73a2d",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持这一组人物与马匹、双刀、折叠前腿的姿势和大小不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "se_walk_b_v1"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-7fb382ee-d04d-474e-9665-c0a66752e53e.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "sw_walk_b_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/sw_walk_b_v1.png",
+      "sha256": "cfd6aa9e5637eacc096b050d9831d3258d5e0ca79a5fda3c90cc7455bae7070c",
+      "prompt": "依据这张扈三娘图集，单独重画第二行左边的马步B，输出一组完整骑马女将。保持红纱银甲金钗、两手各一把弯刀、棕马青黑鬃、脸与装束，不改成步兵。所有身体朝左下，正面三分之四西南视角。关键马步相反：原图那只伸到最左下的近侧前腿必须膝盖深弯、蹄子回收到马胸下向后；另一条远侧前腿向左下充分伸出。前腿前后关系明确交换，后腿支撑也换相，不能只把原图稍微平移。女将平稳坐鞍，双刀低持不攻击。单组占画面60%，马尾、四蹄、两刀完整，四周宽阔透明，无文字/边框/地面/阴影/特效。真正RGBA透明PNG。",
+      "references": [
+        "sw_v2"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-039f2fa3-55b2-4db5-8c54-07c798a4d3ed.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "sw_walk_b_v2",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/sw_walk_b_v2.png",
+      "sha256": "b95464a3dc8e10605a77aaf192b03a2c6a315a6e88a24c6f751cdadd8c0ff199",
+      "prompt": "只修改这组完整骑马扈三娘的马腿，人物、红纱银甲、双刀、马身、脸、朝左下方向都保持：做明确收腿奔跑相位，两条前腿的膝盖都弯曲，两只前蹄都收在马胸下面，不许任何前腿伸长到左下；后腿向后蹬地支撑身体。动作要与前腿伸长那一帧明显不同。整组缩小到画布70%并居中，四周有余地，两刀马尾四蹄完整，无地面。去掉背景，透明背景，输出真正RGBA PNG。",
+      "references": [
+        "sw_walk_b_v1"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-2180bad9-d82c-4742-b811-b76e7746c204.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "sw_walk_b_v3",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/sw_walk_b.png",
+      "sha256": "83a031c6e3549368d6f02c20b3313ed35fd7145be4aa1cc38c70c487df3bbfed",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持这一组人物与马匹、双刀、双前蹄收在胸下的奔跑姿势和大小不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "sw_walk_b_v2"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-af910a0d-5a73-4880-9049-5faa3b6145f0.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "sw_spacing_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/sw_spacing.png",
+      "sha256": "d58beaae77f1a8fd8bce08938f293dfca6b42302cf81d587d4abba45a269ebe3",
+      "prompt": "把参考图里朝左下的骑马扈三娘重新排为只有两个完整动作的透明精灵图：左边只保留原第二排右侧举刀蓄力动作，右边只保留原第三排右侧受击动作。保持原人物银甲红纱、双刀、马匹、朝向和具体姿势。横向画布，每组完整人物加马只占画布宽30%、高60%，两组之间留30%透明空隙，所有刀尖、马尾、四蹄都完整。没有其他动作、没有文字、没有地面。真正alpha透明背景，RGBA PNG。",
+      "references": [
+        "sw_v2"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-5139129a-7306-44a1-82a7-411abc76a5d5.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "ne_spacing_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "tools/contracts/hu_sanniang_direction4_20260913/native/ne_spacing_v1.png",
+      "sha256": "e4e15a6f88f8e28b1c25472ebf3ceb61c3b1dba572b4dae822e24baa2ac7b2ab",
+      "prompt": "把参考图中朝右上的骑马扈三娘重新排为2列2行、仅四个完整动作的透明精灵图：左上原第一排右侧行走A；右上原第二排右侧举刀蓄力；左下原第三排右侧受击；右下原第四排右侧落马终态（马和人均完整）。保留原本背向右上的朝向、银甲红纱、双刀、马匹、具体动作，不翻面。每组缩小只占自己的格子宽高60%，格与格之间留大透明空隙，刀尖马尾四蹄不越格。没有多余动作、文字、地面。输出真正alpha透明RGBA PNG。",
+      "references": [
+        "ne_v2"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-f1cde2ed-2417-4623-ad27-c2d60ba1bcad.png",
+      "selected_for_runtime": false
+    },
+    {
+      "key": "nw_spacing_v1",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/nw_spacing.png",
+      "sha256": "713071863e69d3925cd0f4e7ab05d85df662609e7f6ccb8ff5de7a7a4aaca601",
+      "prompt": "把参考图里朝左上的骑马扈三娘重新排为只有两个完整动作的透明精灵图：左边只保留原第一排右侧行走A动作，右边只保留原第二排右侧举刀蓄力动作。保持原人物银甲红纱、双刀、马匹、背向左上的朝向和具体姿势。横向画布，每组完整人物加马只占画布宽30%、高60%，两组之间留30%透明空隙，所有刀尖、马尾、四蹄都完整。没有其他动作、没有文字、没有地面。真正alpha透明背景，RGBA PNG。",
+      "references": [
+        "nw_v2"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-defd54fb-f5fb-437f-a485-e55e44ac2fa7.png",
+      "selected_for_runtime": true
+    },
+    {
+      "key": "ne_spacing_v2",
+      "method": "built_in_image_gen",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/ne_spacing.png",
+      "sha256": "7b2c9a42c52f437006e6bd15fec7c291c09482231a734df150b2d442c1c6a7d2",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持这四组完整人物与马匹、双刀、姿势、朝向、大小和位置完全不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "ne_spacing_v1"
+      ],
+      "original_generated_path": "C:/Users/Administrator/.codex/generated_images/01a09689-cb54-7823-9e39-12a25caa3f6c/exec-c5499da2-51c9-4b09-8446-d268d1399f4f.png",
+      "selected_for_runtime": true
+    }
+  ],
+  "native_pixel_edits": false,
+  "runtime_acceptance": false,
+  "notes": [
+    "Existing references and built-in generator originals are retained byte-for-byte.",
+    "RGB and superseded outputs remain only as provenance; selected runtime PNGs have real alpha.",
+    "No browser/API fallback, programmatic matte, mirrored direction or raster frame synthesis."
+  ]
+}

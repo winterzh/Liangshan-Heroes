@@ -1,0 +1,41 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/se.png" id="se"]
+
+[sub_resource type="AtlasTexture" id="windup_se"]
+atlas = ExtResource("se")
+region = Rect2(304, 206, 164, 196)
+margin = Rect2(30.5, 14.5, 61, 29)
+filter_clip = true
+metadata/draw_offset_px = Vector2(3.5, -11.5)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="strike_se"]
+atlas = ExtResource("se")
+region = Rect2(36, 404, 190, 172)
+margin = Rect2(17.5, 26.5, 35, 53)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-1.5, 2.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="idle_se"]
+atlas = ExtResource("se")
+region = Rect2(59, 13, 155, 183)
+margin = Rect2(35.0, 21.0, 70, 42)
+filter_clip = true
+metadata/draw_offset_px = Vector2(4.0, -8.0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_se")},
+{"duration": 1.0, "texture": SubResource("windup_se")},
+{"duration": 1.0, "texture": SubResource("strike_se")},
+{"duration": 1.0, "texture": SubResource("strike_se")},
+{"duration": 1.0, "texture": SubResource("idle_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

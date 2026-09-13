@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/ne.png" id="ne"]
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("ne")
+region = Rect2(141, 35, 129, 145)
+margin = Rect2(24.0, 16.0, 48, 32)
+filter_clip = true
+metadata/draw_offset_px = Vector2(2.395128, -2.585173)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.99793
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

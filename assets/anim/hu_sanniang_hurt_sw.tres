@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/sw_spacing.png" id="sw_spacing"]
+
+[sub_resource type="AtlasTexture" id="hurt_sw"]
+atlas = ExtResource("sw_spacing")
+region = Rect2(440.0, 50.0, 306.0, 311.0)
+margin = Rect2(57.0, 54.5, 114.0, 109.0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-15.685457, 3.088275)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

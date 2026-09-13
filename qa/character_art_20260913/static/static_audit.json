@@ -1,0 +1,7035 @@
+{
+  "captured_at_utc": "2026-09-13T07:22:51.933393+00:00",
+  "scope": "Static source/file inventory only. File presence is not a Godot import or visual acceptance result.",
+  "passed": true,
+  "checks": [
+    {
+      "name": "actual Art autoload is art_db",
+      "passed": true
+    },
+    {
+      "name": "generic Sprite alias is empty",
+      "passed": true
+    },
+    {
+      "name": "SpriteFrames loader reads textures, not speed or duration",
+      "passed": true
+    },
+    {
+      "name": "square Texture2D frame validation is present",
+      "passed": true
+    },
+    {
+      "name": "draw_scale remains validated from 0.25 to 4",
+      "passed": true
+    },
+    {
+      "name": "captured Hu remains a nonlethal outcome",
+      "passed": true
+    },
+    {
+      "name": "Sun rider summon copies caster identity",
+      "passed": true
+    },
+    {
+      "name": "SW sword timing remains audited",
+      "passed": true
+    },
+    {
+      "name": "production wave table contains 30 groups",
+      "passed": true
+    },
+    {
+      "name": "catapult supplement matches audited production expression",
+      "passed": true
+    }
+  ],
+  "source_sha256": {
+    "project.godot": "989d43231a9df787c2069764f1addb3edc31f3bb81de9ac4d901f2b4774fe79d",
+    "scripts/art_db.gd": "e4e250cc7febf53b5b1e46978fb1d266a6e01049c9c93387b8ea7cc060ea739b",
+    "scripts/campaign_art.gd": "dfcbef879857d7676ad6f024a639c288d28dd477f896149e943a892a8c10443e",
+    "scripts/unit.gd": "f9748346d4e001cefcf48f89743dcbe18841a60a89c6ff0288b185ccedd4106b",
+    "scripts/defs.gd": "9d5d58bf3f0e1817e9d4db847abbd8e0afd5750d50e1e43eee0f297583e0c9dc",
+    "scripts/battle.gd": "64dbc7464616c0ef3b72f109283f4f4fa09e146be19fb7923297e4f0bfa5fd77",
+    "scripts/skirmish_frame_alignment.gd": "718f5eeb7c6eda78588b76c0f6328962d6f0b84656c0a85aa5672f2d7b5a85a2",
+    "scripts/levels/skirmish.gd": "84e9dc290de520dd2c7d443cfd5ff8cf6e955308760df31222d30bcc897d1d21",
+    "scripts/levels/level3_zhujiazhuang_rts.gd": "2a8ddf5cf6d62083bf95ba6724bb7969f9d852bc58e389858e5737cf7dd20702",
+    "tools/character_direction4_inventory.gd": "e07fa09d5a37445144c22268f62ed1135eddebc9aaba82a61c1e4af6241da17e",
+    "tools/skirmish_direction4_contract_test.gd": "b7502cda91f36b42d711d4c30fc43fce690b89ff0619e45f120fa29acec2ff81",
+    "tools/build_directional_spriteframes.py": "d5c912d977cced1dbe643ce33e20715f4a7b5f09adbc84aeea6d00c54c9a4aec",
+    "tools/directional_character_sources.py": "a244c59f88bd7b72babb0731fcc93d2c3981716976983bc0d9b32723ed77eb6a",
+    "tools/lin_chong_direction4_qa.gd": "9d91548c81f87e2905672d4e08884b110d63bb1b1ae6f18613a0b9ff19f6f7a5",
+    "tools/song_jiang_direction4_qa.gd": "9904739a66a92e3ebc1b36e8a35cf7d451600f12bb1951b000bc2702796ac23b",
+    "tools/zhujiazhuang_gate_contact_test.gd": "e2f412d40f1bb72356dd5f46c790013df9c388da4568b946158408f4de6d7763",
+    "tools/campaign_terminal_costume_qa.gd": "a9dcbc2a103c500032945c1de605624606f8f94b1042a111c9225795b041c75c",
+    "assets/direction4/lin_chong_20260906.json": "e16ddf97a05da1a991adbc37520154209e4463336701313f703058198e9c67ea",
+    "assets/direction4/song_jiang_20260906.json": "35638ef35081e48dd4c05acd4b32f3460bd8531f08547664beb69d6cef8eff15"
+  },
+  "godot_processes_read_only": [],
+  "targets": {
+    "sun_li": {
+      "authored_attack_key_present": false,
+      "states": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/sun_li_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/sun_li_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    "hu_sanniang": {
+      "authored_attack_key_present": false,
+      "states": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_death.png"
+        }
+      }
+    }
+  },
+  "authored_attack_keys": [
+    "guan_dao",
+    "guan_gong",
+    "guan_jingqi",
+    "guan_qi",
+    "song_jiang",
+    "lin_chong"
+  ],
+  "wave_count": 30,
+  "enemy_instances": 778,
+  "wave_roster": [
+    {
+      "key": "guan_gong",
+      "instances": 246,
+      "waves": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 4,
+        "hurt": 0,
+        "death": 4
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_gong_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_gong_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_gong_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_gong_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_gong_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_gong_walk_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_walk_se.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_gong_walk_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_walk_sw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_gong_walk_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_walk_ne.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_gong_walk_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_walk_nw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_gong_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_gong_attack_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_attack_se.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_gong_attack_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_attack_sw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_gong_attack_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_attack_ne.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_gong_attack_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_attack_nw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_gong_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_gong_death_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_death_se.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_gong_death_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_death_sw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_gong_death_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_death_ne.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_gong_death_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_gong_death_nw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_gong_death.png"
+        }
+      }
+    },
+    {
+      "key": "guan_jingqi",
+      "instances": 117,
+      "waves": [
+        7,
+        10,
+        11,
+        14,
+        18,
+        19,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 4,
+        "hurt": 0,
+        "death": 4
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_walk_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_walk_se.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_walk_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_walk_sw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_walk_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_walk_ne.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_walk_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_walk_nw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_jingqi_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_attack_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_attack_se.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_attack_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_attack_sw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_attack_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_attack_ne.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_attack_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_attack_nw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_jingqi_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_death_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_death_se.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_death_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_death_sw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_death_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_death_ne.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_jingqi_death_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_jingqi_death_nw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "guan_dao",
+      "instances": 111,
+      "waves": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        12,
+        13,
+        15,
+        20
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 4,
+        "hurt": 0,
+        "death": 4
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_dao_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_dao_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_dao_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_dao_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_dao_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_dao_walk_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_walk_se.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_dao_walk_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_walk_sw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_dao_walk_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_walk_ne.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_dao_walk_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_walk_nw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_dao_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_dao_attack_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_attack_se.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_dao_attack_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_attack_sw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_dao_attack_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_attack_ne.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_dao_attack_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_attack_nw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_dao_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_dao_death_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_death_se.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_dao_death_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_death_sw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_dao_death_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_death_ne.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_dao_death_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_dao_death_nw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_dao_death.png"
+        }
+      }
+    },
+    {
+      "key": "guan_qi",
+      "instances": 66,
+      "waves": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        11,
+        17,
+        20,
+        23,
+        24
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 4,
+        "hurt": 0,
+        "death": 4
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_qi_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_qi_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_qi_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_qi_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_qi_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_qi_walk_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_walk_se.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_qi_walk_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_walk_sw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_qi_walk_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_walk_ne.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_qi_walk_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_walk_nw.png",
+              "native_size": [
+                512,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_qi_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_qi_attack_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_attack_se.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_qi_attack_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_attack_sw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_qi_attack_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_attack_ne.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_qi_attack_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_attack_nw.png",
+              "native_size": [
+                768,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_qi_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_qi_death_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_death_se.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_qi_death_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_death_sw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_qi_death_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_death_ne.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_qi_death_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_qi_death_nw.png",
+              "native_size": [
+                1024,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": "assets/anim/guan_qi_death.png"
+        }
+      }
+    },
+    {
+      "key": "guan_zhanzi",
+      "instances": 54,
+      "waves": [
+        9,
+        12,
+        16,
+        22,
+        24,
+        26,
+        28
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_zhanzi_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_zhanzi_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_zhanzi_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_zhanzi_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_zhanzi_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_zhanzi_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_zhanzi_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_zhanzi_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/guan_zhanzi_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/guan_zhanzi_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "siege_cata",
+      "instances": 50,
+      "waves": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/siege_cata_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/siege_cata_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/siege_cata_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/siege_cata_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/siege_cata_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/siege_cata_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/siege_cata_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/siege_cata_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/siege_cata_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/siege_cata_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "guan_musket",
+      "instances": 27,
+      "waves": [
+        9,
+        16,
+        25,
+        28,
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/guan_musket_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_musket_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/guan_musket_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_musket_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/guan_musket_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_musket_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/guan_musket_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/guan_musket_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/guan_musket_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/guan_musket_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "zhu_qi",
+      "instances": 24,
+      "waves": [
+        13,
+        18,
+        29
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/zhu_qi_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_qi_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/zhu_qi_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_qi_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/zhu_qi_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_qi_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/zhu_qi_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_qi_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_qi_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_qi_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "camel_rider",
+      "instances": 20,
+      "waves": [
+        6,
+        14,
+        19,
+        27
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/camel_rider_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/camel_rider_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "guan_bomber",
+      "instances": 9,
+      "waves": [
+        12,
+        21
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/guan_bomber_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/guan_bomber_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "jiang_thug",
+      "instances": 8,
+      "waves": [
+        15
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/jiang_thug_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/jiang_thug_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/jiang_thug_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/jiang_thug_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/jiang_thug_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/jiang_thug_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/jiang_thug_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/jiang_thug_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jiang_thug_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jiang_thug_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "zhu_gong",
+      "instances": 6,
+      "waves": [
+        13
+      ],
+      "exact_direction_counts": {
+        "idle": 4,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [
+                "assets/anim/zhu_gong_idle_se.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_gong_idle_se.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [
+                "assets/anim/zhu_gong_idle_sw.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_gong_idle_sw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [
+                "assets/anim/zhu_gong_idle_ne.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_gong_idle_ne.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [
+                "assets/anim/zhu_gong_idle_nw.png"
+              ],
+              "selected_if_valid": "assets/anim/zhu_gong_idle_nw.png",
+              "native_size": [
+                256,
+                256
+              ],
+              "png_color_type": 6
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_gong_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_gong_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "war_elephant",
+      "instances": 5,
+      "waves": [
+        7,
+        17,
+        26,
+        29,
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/war_elephant_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/war_elephant_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "wang_huan",
+      "instances": 2,
+      "waves": [
+        8,
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wang_huan_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wang_huan_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "hu_yanzhuo",
+      "instances": 2,
+      "waves": [
+        10,
+        27
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_yanzhuo_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_yanzhuo_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_yanzhuo_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_yanzhuo_death.png"
+        }
+      }
+    },
+    {
+      "key": "zhu_hu",
+      "instances": 2,
+      "waves": [
+        13,
+        29
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_hu_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_hu_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "zhu_biao",
+      "instances": 2,
+      "waves": [
+        13,
+        29
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_biao_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_biao_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "zhu_long",
+      "instances": 2,
+      "waves": [
+        18,
+        29
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_long_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhu_long_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "shi_wengong",
+      "instances": 2,
+      "waves": [
+        25,
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/shi_wengong_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/shi_wengong_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/shi_wengong_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/shi_wengong_death.png"
+        }
+      }
+    },
+    {
+      "key": "luan_tingyu",
+      "instances": 1,
+      "waves": [
+        5
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/luan_tingyu_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/luan_tingyu_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/luan_tingyu_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/luan_tingyu_death.png"
+        }
+      }
+    },
+    {
+      "key": "han_tao",
+      "instances": 1,
+      "waves": [
+        8
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/han_tao_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/han_tao_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "peng_qi",
+      "instances": 1,
+      "waves": [
+        8
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/peng_qi_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/peng_qi_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "xu_jing",
+      "instances": 1,
+      "waves": [
+        11
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/xu_jing_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/xu_jing_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "wang_wende",
+      "instances": 1,
+      "waves": [
+        11
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wang_wende_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wang_wende_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "mei_zhan",
+      "instances": 1,
+      "waves": [
+        14
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/mei_zhan_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/mei_zhan_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "jiang_menshen",
+      "instances": 1,
+      "waves": [
+        15
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jiang_menshen_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jiang_menshen_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jiang_menshen_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jiang_menshen_death.png"
+        }
+      }
+    },
+    {
+      "key": "zhang_kai",
+      "instances": 1,
+      "waves": [
+        16
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhang_kai_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhang_kai_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "yang_wen",
+      "instances": 1,
+      "waves": [
+        17
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/yang_wen_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/yang_wen_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "hu_sanniang",
+      "instances": 1,
+      "waves": [
+        18
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/hu_sanniang_death.png"
+        }
+      }
+    },
+    {
+      "key": "li_congji",
+      "instances": 1,
+      "waves": [
+        19
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/li_congji_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/li_congji_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "duan_pengju",
+      "instances": 1,
+      "waves": [
+        19
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/duan_pengju_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/duan_pengju_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "zhang_qing",
+      "instances": 1,
+      "waves": [
+        20
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhang_qing_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhang_qing_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhang_qing_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/zhang_qing_death.png"
+        }
+      }
+    },
+    {
+      "key": "gong_wang",
+      "instances": 1,
+      "waves": [
+        20
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/gong_wang_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/gong_wang_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "ding_desun",
+      "instances": 1,
+      "waves": [
+        20
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/ding_desun_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/ding_desun_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "xiang_yuanzhen",
+      "instances": 1,
+      "waves": [
+        21
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/xiang_yuanzhen_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/xiang_yuanzhen_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "jing_zhong",
+      "instances": 1,
+      "waves": [
+        22
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jing_zhong_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/jing_zhong_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "shan_tinggui",
+      "instances": 1,
+      "waves": [
+        23
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/shan_tinggui_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/shan_tinggui_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "wei_dingguo",
+      "instances": 1,
+      "waves": [
+        23
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wei_dingguo_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wei_dingguo_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "ling_zhen",
+      "instances": 1,
+      "waves": [
+        25
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/ling_zhen_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/ling_zhen_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "wen_da",
+      "instances": 1,
+      "waves": [
+        27
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wen_da_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/wen_da_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "tong_guan",
+      "instances": 1,
+      "waves": [
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/tong_guan_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/tong_guan_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        }
+      }
+    },
+    {
+      "key": "gao_qiu",
+      "instances": 1,
+      "waves": [
+        30
+      ],
+      "exact_direction_counts": {
+        "idle": 0,
+        "walk": 0,
+        "attack": 0,
+        "hurt": 0,
+        "death": 0
+      },
+      "paths": {
+        "idle": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/gao_qiu_idle.png"
+        },
+        "walk": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/gao_qiu_walk.png"
+        },
+        "attack": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/gao_qiu_attack.png"
+        },
+        "hurt": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": null
+        },
+        "death": {
+          "exact": [
+            {
+              "direction": "se",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "sw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "ne",
+              "exact_paths": [],
+              "selected_if_valid": null
+            },
+            {
+              "direction": "nw",
+              "exact_paths": [],
+              "selected_if_valid": null
+            }
+          ],
+          "legacy_path": "assets/anim/gao_qiu_death.png"
+        }
+      }
+    }
+  ],
+  "recommended_next": {
+    "key": "guan_zhanzi",
+    "instances": 54,
+    "waves": [
+      9,
+      12,
+      16,
+      22,
+      24,
+      26,
+      28
+    ],
+    "exact_direction_counts": {
+      "idle": 4,
+      "walk": 0,
+      "attack": 0,
+      "hurt": 0,
+      "death": 0
+    }
+  },
+  "timing_contract": {
+    "weapon_kind_current": "SWORD",
+    "swing_speed": 2.1,
+    "lunge_hit_at": 0.48,
+    "normalized_hit_phase": 0.52,
+    "nominal_hit_seconds": 0.24761904761904763,
+    "suggested_attack_slots": [
+      "windup",
+      "windup",
+      "strike",
+      "strike",
+      "idle"
+    ],
+    "note": "Texture array slots control time; .tres speed/duration metadata are not consumed by Unit."
+  }
+}

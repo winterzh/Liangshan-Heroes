@@ -1,0 +1,42 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/ne_spacing.png" id="ne_spacing"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/ne.png" id="ne"]
+
+[sub_resource type="AtlasTexture" id="hurt_ne"]
+atlas = ExtResource("ne_spacing")
+region = Rect2(48.0, 421.0, 288.0, 286.0)
+margin = Rect2(67.0, 68.0, 134.0, 136.0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-26.095122, 19.978967)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_ne"]
+atlas = ExtResource("ne")
+region = Rect2(54, 564, 201, 167)
+margin = Rect2(27.5, 44.5, 55, 89)
+filter_clip = true
+metadata/draw_offset_px = Vector2(8.5, 23.92)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="ground_ne"]
+atlas = ExtResource("ne_spacing")
+region = Rect2(403.0, 429.0, 329.0, 290.0)
+margin = Rect2(37.5, 57.0, 75.0, 114.0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(9.344715, 51.86216)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_ne")},
+{"duration": 1.0, "texture": SubResource("fall_ne")},
+{"duration": 1.0, "texture": SubResource("ground_ne")},
+{"duration": 1.0, "texture": SubResource("ground_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

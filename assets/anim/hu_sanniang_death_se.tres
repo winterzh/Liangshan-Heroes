@@ -1,0 +1,40 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/se.png" id="se"]
+
+[sub_resource type="AtlasTexture" id="hurt_se"]
+atlas = ExtResource("se")
+region = Rect2(288, 386, 158, 166)
+margin = Rect2(49.0, 45.0, 98, 90)
+filter_clip = true
+metadata/draw_offset_px = Vector2(1.5, 15.92)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_se"]
+atlas = ExtResource("se")
+region = Rect2(56, 564, 199, 153)
+margin = Rect2(28.5, 51.5, 57, 103)
+filter_clip = true
+metadata/draw_offset_px = Vector2(7.5, 23.92)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="ground_se"]
+atlas = ExtResource("se")
+region = Rect2(283, 571, 177, 154)
+margin = Rect2(39.5, 51.0, 79, 102)
+filter_clip = true
+metadata/draw_offset_px = Vector2(5.5, 66.42)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_se")},
+{"duration": 1.0, "texture": SubResource("fall_se")},
+{"duration": 1.0, "texture": SubResource("ground_se")},
+{"duration": 1.0, "texture": SubResource("ground_se")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

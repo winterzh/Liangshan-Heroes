@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/se.png" id="se"]
+
+[sub_resource type="AtlasTexture" id="hurt_se"]
+atlas = ExtResource("se")
+region = Rect2(284, 407, 191, 174)
+margin = Rect2(17.0, 25.5, 34, 51)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-4.5, 0.5)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
