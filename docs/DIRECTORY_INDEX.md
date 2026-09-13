@@ -1,3 +1,12 @@
+## 2026-09-13 快活林内部恢复里程碑
+
+全新默认37用例110348批2811项（1628 + 789 + 394）与同版全新默认经典114838批296项均通过；联合核验确认2966份生产文件及世界12份/经典4份QA来源匹配当前，快活林15张/经典16张PNG的SHA通过，人工目检仅3+2张。验证基线34200d，最终源码同步以本轮提交与远端回读为准。本轮未打包发布Steam，`PLAYER_ENTRY=false`；连环马仍仅隔离候选，未计入原生完成范围。下方江州阶段索引与历史结论保留。
+
+- [快活林实现与边界](KUAIHUOLIN_WORLD_RESTORE_20260913.md)：固定profile、八实体、15组件槽、九进程真实命令路线与完整失败/中止历史。
+- [快活林QA和复现](../qa/kuaihuolin_world_restore_20260913/README.md)、[联合核验JSON](../qa/kuaihuolin_world_restore_20260913/validation_summary.json)、[核验器](../qa/kuaihuolin_world_restore_20260913/verify_evidence.py)：世界与经典同版联合证据，包含准确目检路径和原始收据SHA。
+- [110348世界收据](../qa/level3_world_restore_20260909/20260913_110348_38bd4cf4/receipt.json)和[114838经典收据](../qa/continue_flow_20260909/20260913_114838_3ea9d869/receipt.json)：独立全新默认原始证据；不合并旧失败、缓存或子集通过数。
+- [快活林工厂](../scripts/run_level7_world_factory.gd)、[预警适配器](../scripts/run_level7_visual_state.gd)、[组件QA](../tools/level7_world_restore_qa.gd)、[自然QA](../tools/level7_cross_process_qa.gd)：已安装源码；[统一交付状态](CONTINUE_DELIVERY_20260908.md)保留未完成门槛。
+
 ## 2026-09-13 江州内部恢复里程碑
 
 全新默认27用例世界085554批1628项（916+381+331）与同版经典084224批296项完整通过；联合核验确认2962份生产文件同SHA、世界QA无来源差异、江州11张/经典16张PNG的SHA通过。人工目检仅江州保存/登船/胜利3张和经典两张代表图，准确路径见实现说明。`PLAYER_ENTRY=false`，下一步快活林，再连环马、高俅、大名府；下方旧阶段结论保留历史语境。

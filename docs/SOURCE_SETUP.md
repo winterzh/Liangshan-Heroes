@@ -1,3 +1,11 @@
+## 2026-09-13 快活林内部里程碑与完整复现入口
+
+当前默认世界驱动已包含快活林，共37用例。[110348_38bd4cf4全新世界收据](../qa/level3_world_restore_20260909/20260913_110348_38bd4cf4/receipt.json)确认2811项通过（1628 + 789 + 394），完整/fresh/acceptance/UID标志均true；[114838_3ea9d869全新默认经典](../qa/continue_flow_20260909/20260913_114838_3ea9d869/receipt.json)已296项通过、退出0。联合核验确认2966份生产文件与两批及当前checkout同SHA，世界12份/经典4份QA来源匹配，快活林15张与经典16张PNG的SHA通过；人工目检范围仅3+2张代表画面。[联合结果](../qa/kuaihuolin_world_restore_20260913/validation_summary.json) · [实现与边界](KUAIHUOLIN_WORLD_RESTORE_20260913.md) · [两批及联合复现命令](../qa/kuaihuolin_world_restore_20260913/README.md)。
+
+普通启动仍用`Play.cmd`；Godot路径由被忽略的`godot.local.txt`、`GODOT_PATH`或驱动参数提供。默认完整世界命令为`py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root "<本机绝对短路径>" --run`，不传`--cases`或`--cache-from`；经典以`tools/run_continue_flow_qa.py`另选私有短目录串行执行。导入上限600秒，快活林各用例420秒；两批及联合核验已完成，无需为交接重复运行。
+
+`PLAYER_ENTRY=false`，本轮未打包发布Steam。验证基线`34200d967f989a80a4cea47c0550753fc37ca70f`，最终源码同步以本轮提交与远端回读为准。后续连环马候选仅隔离准备，未计入当前37用例；高俅、大名府及统一交付门槛仍待。下方27用例和“快活林候选未晋级”是江州阶段历史。
+
 ## 2026-09-13 江州世界恢复验证入口
 
 全新默认世界 `20260913_085554_ae1d1fcb` 的27用例1628项通过（既有916 + 江州组件381 + 自然七进程331），`complete/full_suite/fresh_import/acceptance_complete` 均true；同版经典全新默认 `20260913_084224_c71345c4` 完整296项通过。联合核验确认2962份生产文件与两批及当前checkout同SHA、世界QA无来源差异；江州11张/经典16张PNG字节核验通过，代表画面目检另列。[实现与原始收据](JIANGZHOU_WORLD_RESTORE_20260913.md) · [联合结果和完整复现命令](../qa/jiangzhou_world_restore_20260913/README.md)。

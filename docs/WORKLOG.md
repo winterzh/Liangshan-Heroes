@@ -1,3 +1,11 @@
+## 2026-09-13 快活林内部恢复里程碑完成
+
+全新默认37用例世界批110348_38bd4cf4已退出0，`complete/full_suite/fresh_import/acceptance_complete`与快活林UID清单完整标志均true；2811项来自该同一批重跑：既有27用例1628项、快活林15槽组件789项及九自然进程394项。真实4/4、零击杀非致死制服与终局前旧槽拒绝通过，世界批源码无漂移、玩家目录未变、锁释放且无遗留引擎。[世界收据](../qa/level3_world_restore_20260909/20260913_110348_38bd4cf4/receipt.json) · [实现与失败历史](KUAIHUOLIN_WORLD_RESTORE_20260913.md)。
+
+同版[经典全新默认114838_3ea9d869](../qa/continue_flow_20260909/20260913_114838_3ea9d869/receipt.json)已退出0，`complete/fresh_import=true`、296项通过；源码清单、引擎/场景保护及锁释放通过。联合核验退出0，确认2966份生产文件与两批及当前checkout同SHA，世界12份/经典4份QA来源均匹配当前，快活林15张/经典16张PNG的SHA全通过。人工仅目检快活林首次保存/冲撞在途/胜利3张及经典中文覆盖确认/英文终局等待2张，画面正常，不据此声称全部目检或性能验收。[联合结果](../qa/kuaihuolin_world_restore_20260913/validation_summary.json) · [QA与复现](../qa/kuaihuolin_world_restore_20260913/README.md)。
+
+验证基线为已同步`34200d967f989a80a4cea47c0550753fc37ca70f`，最终源码同步以本轮提交与远端回读为准；本轮未重构建或发布Steam。`PLAYER_ENTRY=false`，下一步连环马仅有隔离准备候选，连环马/高俅/大名府均未完成原生验收。九玩法统一、完整30波最终同版、真实Steam持久确认、1800秒长跑/性能、双机双账号与真人门槛保持。以下旧“下一步快活林”等按当时批次阅读，不覆盖本段现况。
+
 ## 2026-09-13 江州内部恢复里程碑完成
 
 全新默认世界批 `20260913_085554_ae1d1fcb` 的27用例1628项通过：既有19用例在本批重跑916项，江州组件381项及自然七进程331项（27/58/58/61/61/54/12）。真实付费补兵、两次解缚、追兵与护送、八人登船开船、4/4及 `LOCAL_RUN_TERMINAL` 均通过，收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。[世界收据](../qa/level3_world_restore_20260909/20260913_085554_ae1d1fcb/receipt.json)。同版经典全新默认 `20260913_084224_c71345c4` 完整296项通过、退出0。[经典收据](../qa/continue_flow_20260909/20260913_084224_c71345c4/receipt.json)。
