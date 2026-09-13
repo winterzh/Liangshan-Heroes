@@ -1,0 +1,325 @@
+{
+  "schema": "native_portrait_generation_v1",
+  "original_reference": {
+    "path": "assets/portraits_sheet.png",
+    "sha256": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535",
+    "role": "Shared paper-and-line historical illustration style; Song Jiang(0,0), Lin Chong(0,1).",
+    "viewed_before_generation": true
+  },
+  "reference_catalog": {
+    "original": {
+      "path": "assets/portraits_sheet.png",
+      "sha256": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535",
+      "role": "Shared paper-and-line historical illustration style; Song Jiang(0,0), Lin Chong(0,1).",
+      "viewed_before_generation": true
+    },
+    "ref_portraits2": {
+      "path": "assets/portraits2.png",
+      "sha256": "9fb2d65cc1b0d7ff185a7ea4f97044a5138c8dd0fc679e70ed1418df208eca1e",
+      "role": "Hu Sanniang original portrait cell(2,1); green clothing is not the novel constraint.",
+      "viewed_before_generation": true
+    },
+    "ref_portraits12": {
+      "path": "assets/portraits12.png",
+      "sha256": "4c582335ffbd7af61c607c4c54e28ecd7524d219906a369c1dbed4af0a68f7b8",
+      "role": "Sun Li original portrait cell(0,1); old horns and flexible whip are specifically rejected.",
+      "viewed_before_generation": true
+    },
+    "ref_hu_battle": {
+      "path": "assets/characters/hu_sanniang_direction4_20260913/se.png",
+      "sha256": "56468efe346085ea889f327145fb4c369f27f7346295a44cb66748622ecd4f53",
+      "role": "Current Hu red cloth, silver/gold armor and dual saber battle identity.",
+      "viewed_before_generation": true
+    },
+    "ref_sun_battle": {
+      "path": "assets/characters/sun_li_direction4_20260913/se.png",
+      "sha256": "6cfb0687c11a45328114e8052494fc4c632050b73415f395225551be6f235fc2",
+      "role": "Current Sun black/gold armor and rigid segmented whip identity; top horns are not inherited.",
+      "viewed_before_generation": true
+    },
+    "ref_song_battle": {
+      "path": "assets/characters/song_jiang_direction4_20260906/idle_se.png",
+      "sha256": "a58a62a5759ba64aea21c0a6966ac0ead77ccb9aa239bf10f90f86a69fc6b4b5",
+      "role": "Current Song gold-brown robe, dark scarf and stocky mature facial identity; skin corrected against primary text.",
+      "viewed_before_generation": true
+    },
+    "ref_lin_battle": {
+      "path": "assets/characters/lin_chong_direction4_20260906/se.png",
+      "sha256": "e09036504729a1c4d899bd6e9c935db948b9ba765ae053109bfd98cb6bc07c92",
+      "role": "Current Lin tied black hair, black/gold armor, blue scarf and existing facial hair identity.",
+      "viewed_before_generation": true
+    }
+  },
+  "jobs": [
+    {
+      "key": "ref_portraits2",
+      "method": "existing_game_art_reference",
+      "repository_path": "assets/portraits2.png",
+      "sha256": "9fb2d65cc1b0d7ff185a7ea4f97044a5138c8dd0fc679e70ed1418df208eca1e",
+      "prompt": "Hu Sanniang original portrait cell(2,1); green clothing is not the novel constraint.",
+      "references": [
+        "original"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535"
+      },
+      "selected_for_runtime": false,
+      "generated_in_this_batch": false
+    },
+    {
+      "key": "ref_portraits12",
+      "method": "existing_game_art_reference",
+      "repository_path": "assets/portraits12.png",
+      "sha256": "4c582335ffbd7af61c607c4c54e28ecd7524d219906a369c1dbed4af0a68f7b8",
+      "prompt": "Sun Li original portrait cell(0,1); old horns and flexible whip are specifically rejected.",
+      "references": [
+        "original"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535"
+      },
+      "selected_for_runtime": false,
+      "generated_in_this_batch": false
+    },
+    {
+      "key": "ref_hu_battle",
+      "method": "existing_game_art_reference",
+      "repository_path": "assets/characters/hu_sanniang_direction4_20260913/se.png",
+      "sha256": "56468efe346085ea889f327145fb4c369f27f7346295a44cb66748622ecd4f53",
+      "prompt": "Current Hu red cloth, silver/gold armor and dual saber battle identity.",
+      "references": [
+        "original"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535"
+      },
+      "selected_for_runtime": false,
+      "generated_in_this_batch": false
+    },
+    {
+      "key": "ref_sun_battle",
+      "method": "existing_game_art_reference",
+      "repository_path": "assets/characters/sun_li_direction4_20260913/se.png",
+      "sha256": "6cfb0687c11a45328114e8052494fc4c632050b73415f395225551be6f235fc2",
+      "prompt": "Current Sun black/gold armor and rigid segmented whip identity; top horns are not inherited.",
+      "references": [
+        "original"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535"
+      },
+      "selected_for_runtime": false,
+      "generated_in_this_batch": false
+    },
+    {
+      "key": "ref_song_battle",
+      "method": "existing_game_art_reference",
+      "repository_path": "assets/characters/song_jiang_direction4_20260906/idle_se.png",
+      "sha256": "a58a62a5759ba64aea21c0a6966ac0ead77ccb9aa239bf10f90f86a69fc6b4b5",
+      "prompt": "Current Song gold-brown robe, dark scarf and stocky mature facial identity; skin corrected against primary text.",
+      "references": [
+        "original"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535"
+      },
+      "selected_for_runtime": false,
+      "generated_in_this_batch": false
+    },
+    {
+      "key": "ref_lin_battle",
+      "method": "existing_game_art_reference",
+      "repository_path": "assets/characters/lin_chong_direction4_20260906/se.png",
+      "sha256": "e09036504729a1c4d899bd6e9c935db948b9ba765ae053109bfd98cb6bc07c92",
+      "prompt": "Current Lin tied black hair, black/gold armor, blue scarf and existing facial hair identity.",
+      "references": [
+        "original"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535"
+      },
+      "selected_for_runtime": false,
+      "generated_in_this_batch": false
+    },
+    {
+      "key": "hu_sanniang_v1",
+      "character": "hu_sanniang",
+      "method": "built_in_image_gen",
+      "tool": "image_gen.imagegen",
+      "repository_path": "tools/contracts/codex_identity_20260913/native/hu_sanniang_v1.png",
+      "sha256": "de76dd45f4151c317dcd71de1fdbaa0666b3302c067d3142d32a8b7a5ddef572",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "bytes": 3062956,
+      "prompt": "历史人物游戏图鉴肩胸肖像，单人一张，1024×1024正方形。图1仅作统一画风与暖灰褐纸底参考：细腻传统线描设色、克制手绘质感，不要照片或3D塑料感。图2只参考第二排最右侧扈三娘的面部身份，不沿用其绿色衣服。图3参考同一扈三娘新战斗形象的红衣银灰金边甲和双刀身份，不沿用3D光泽。\n画扈三娘：年轻成年女性将领（年龄不写），明亮偏白肤色，眉眼清秀而沉着坚毅，自然唇色，不浓妆、不网红尖下巴。黑发收束，鬓边两支小金钗，少量黑发垂在肩后；实用连环甲胄衬暗红纱衣，银灰甲带克制金边，红色领襟，全身衣甲完整不露胸。两柄日月弯刀的刀柄可在肩后低处各露少许，不能抢脸或横过头部；携带方式是克制游戏设计。图中只到肩胸，不画马、不画手、不画全身。\n统一构图：头肩居中，胸口以下自然出画，头顶保留约10%留白，人物略朝画面右侧三分之四、眼神朝观者，柔和左上光，背景为均匀低对比暖灰褐纸纹，无场景无边框。保留已有游戏历史插画感和真实成年比例。不要文字、题字、名字、水印、血迹或新增伤疤。",
+      "prompt_sha256": "7ccdc9607722e40712a9e82d8b1f994a60ac18c56b4821467a78a3430d91cfc0",
+      "references": [
+        "original",
+        "ref_portraits2",
+        "ref_hu_battle"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535",
+        "ref_portraits2": "9fb2d65cc1b0d7ff185a7ea4f97044a5138c8dd0fc679e70ed1418df208eca1e",
+        "ref_hu_battle": "56468efe346085ea889f327145fb4c369f27f7346295a44cb66748622ecd4f53"
+      },
+      "original_generated_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a09689-cb54-7823-9e39-12a25caa3f6c\\exec-f0fe7d84-cf72-4c82-ae58-b53ccab2453a.png",
+      "original_copy_exact": true,
+      "selected_for_runtime": false,
+      "review": "Superseded: high hair touches top border; identity/outfit retained in v2."
+    },
+    {
+      "key": "hu_sanniang_v2",
+      "character": "hu_sanniang",
+      "method": "built_in_image_gen",
+      "tool": "image_gen.imagegen",
+      "repository_path": "assets/characters/codex_portraits_20260913/hu_sanniang.png",
+      "sha256": "883c79324c438a4cff9a75116546902ab2976045e999c9ee7e9a0fd4a2205f4a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "bytes": 2982317,
+      "prompt": "只调整这张扈三娘肩胸肖像的取景：保持同一个人的面容、红纱银甲、双金钗、两刀柄、线描设色风格和暖灰褐纸底不变。整个人物缩小约12%，居中，完整保留头顶发髻和金钗，上方必须有清晰的纸底留白，不让发髻触碰画面边缘；肩胸仍延伸出下边。画布仍是正方形，目标输出1024×1024，背景自然延展同一均匀纸纹。不要新增饰物、文字、水印，不改脸、不改颜色。",
+      "prompt_sha256": "827287a520fbb172f57dbd7c4488724a1482c68f1173f7244ee3316aed63977e",
+      "references": [
+        "hu_sanniang_v1"
+      ],
+      "source_sha256": {
+        "hu_sanniang_v1": "de76dd45f4151c317dcd71de1fdbaa0666b3302c067d3142d32a8b7a5ddef572"
+      },
+      "original_generated_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a09689-cb54-7823-9e39-12a25caa3f6c\\exec-a4849c3c-104f-40c3-a2ec-3d3d5f5f5319.png",
+      "original_copy_exact": true,
+      "selected_for_runtime": true,
+      "review": "Selected: full top hair/gold pins, red cloth and gray/gold armor; adult age and carrying arrangement are design choices."
+    },
+    {
+      "key": "sun_li_v1",
+      "character": "sun_li",
+      "method": "built_in_image_gen",
+      "tool": "image_gen.imagegen",
+      "repository_path": "assets/characters/codex_portraits_20260913/sun_li.png",
+      "sha256": "be3f0e1c273dca322cee8ca4ccb71db50b0f4c2f089c0a9c587ec8adffc61f75",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "bytes": 3092420,
+      "prompt": "历史人物游戏图鉴肩胸肖像，单人一张，1024×1024正方形。图1只作统一画风与暖灰褐纸底参考：细腻传统线描设色、克制手绘纸本历史插画，不要照片、3D塑料感或网红脸。图2只参考第二排最左侧孙立的宽脸黑须身份，不沿用大牛角和卷曲软鞭。图3参考新战斗黑金甲和刚性竹节钢鞭，不沿用头顶尖角。\n画病尉迟孙立：成年壮实将领，宽而沉稳的面部、淡黄偏暖肤色、黑亮眼、浓黑络腮胡须，威严沉着，不画暴怒，不增伤疤，不编年龄。头戴低矮铁质幞头，铁黑帽身包住发髻，两片扁平的帽脚在脑后交错斜出；不能画成头顶向上长的圆锥角或牛角。额前大红罗抹额清楚可见，黑袍衬乌黑金纹实用甲胄，与新战斗角色身份一致。肩旁低处可露一小段刚性直竹节钢鞭的金属节棍，不弯曲、不盘圈、不链条、不双鞭；不画手、马或全身。\n统一构图：头肩居中、胸口以下自然出画，整个头饰完整且头顶留约10%纸底，人物略朝画面右侧三分之四、目光朝观者，左上柔和光，均匀低对比暖灰褐纸纹背景。真实成年比例，与图1同一套手绘人物图鉴。不要文字、题字、边框、水印。",
+      "prompt_sha256": "91b2947a75c38a067eb50320391e6a1676841ef08e5b09e436d7195d2a13b315",
+      "references": [
+        "original",
+        "ref_portraits12",
+        "ref_sun_battle"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535",
+        "ref_portraits12": "4c582335ffbd7af61c607c4c54e28ecd7524d219906a369c1dbed4af0a68f7b8",
+        "ref_sun_battle": "6cfb0687c11a45328114e8052494fc4c632050b73415f395225551be6f235fc2"
+      },
+      "original_generated_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a09689-cb54-7823-9e39-12a25caa3f6c\\exec-a4994152-8a94-467a-b9c7-2eff9094fb3a.png",
+      "original_copy_exact": true,
+      "selected_for_runtime": true,
+      "review": "Selected: broad warm-pale face, dark full beard, red forehead band, flat crossed cap extensions, rigid segmented whip. Cap material is stylized, not an exact iron reconstruction."
+    },
+    {
+      "key": "song_jiang_v1",
+      "character": "song_jiang",
+      "method": "built_in_image_gen",
+      "tool": "image_gen.imagegen",
+      "repository_path": "tools/contracts/codex_identity_20260913/native/song_jiang_v1.png",
+      "sha256": "03d2e6cd7b7a3338ecf094e34beca3130fce794d6e31961aeba6214b1ddc6174",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "bytes": 3002602,
+      "prompt": "历史人物游戏图鉴肩胸肖像，单人一张，1024×1024正方形。图1主图集第一排最左为宋江旧身份参考，并提供本套手绘线描设色风格与暖灰褐纸底。图2为当前宋江战斗身份参考，保留沉稳结实的脸部大形、金褐袍与黑色围巾气质，不沿用其3D光泽。新图必须仍是同一手绘历史人物图鉴，不是照片或网红脸。\n宋江：成年约三旬的沉稳首领，面部皮肤明确为深暖褐色，宽额、方正嘴型、宽厚耳垂，敦厚结实而不瘦长。眼神沉着略带亲和，短而整齐的髭须与小颏须，不画清瘦白面长须文士，不涂成灰黑面具。束起黑发，戴朴素黑色头巾；金褐色袍衬深灰黑围巾，暗色护领，衣料有克制传统纹样而无龙袍皇帝符号。服装颜色和头巾是与游戏协调的设计，不添加官阶文字。不画武器、手、马或全身，不新增伤疤。\n统一构图：肩胸居中，脸略朝画面右侧三分之四，眼神朝观者，双眼约位于画面高度45%，完整头顶上方留约10%暖灰褐纸底，肩胸延伸出下边；左上柔光，低对比均匀纸纹背景，自然成年比例与克制线描手绘质感。无文字、题字、边框、水印、现代物件。",
+      "prompt_sha256": "5a14f81d645767c44478d2b1c3342485caeeb856ca8dbf46cf9fbe8a3d4dc3ad",
+      "references": [
+        "original",
+        "ref_song_battle"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535",
+        "ref_song_battle": "a58a62a5759ba64aea21c0a6966ac0ead77ccb9aa239bf10f90f86a69fc6b4b5"
+      },
+      "original_generated_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a09689-cb54-7823-9e39-12a25caa3f6c\\exec-3d3f083a-7fb5-4582-aab8-1b0a73479852.png",
+      "original_copy_exact": true,
+      "selected_for_runtime": false,
+      "review": "Superseded: face too light and beard too heavy; v2 corrects both without changing outfit."
+    },
+    {
+      "key": "song_jiang_v2",
+      "character": "song_jiang",
+      "method": "built_in_image_gen",
+      "tool": "image_gen.imagegen",
+      "repository_path": "assets/characters/codex_portraits_20260913/song_jiang.png",
+      "sha256": "4e90d865fabb375dc31e9cc2d48fefce4e68f96182ce1865073e4951d07cea02",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "bytes": 2768544,
+      "prompt": "只修正这张宋江肖像的面相和肤色，服装、头巾、纸底、取景、手绘线描风格保持不变。按原著面黑的要点，把脸、耳朵和脖颈统一改成明确的深暖褐肤色，脸的亮部也不能变成浅黄白皮；自然有层次，不是黑色面具，保持中国人的五官。把颏须缩短到贴近下巴，鬓颊的胡须减薄，保留整齐短髭与小颏须，不要孙立式的大把络腮胡须。让神情更宽厚沉稳，眉头略放松，仍是同一个宋江的宽额、方口和厚耳垂，不变成清瘦年轻书生。没有伤疤、文字或新物件。",
+      "prompt_sha256": "62b30ffad331300680a040df9fe82dd45c01bafe5ec6d435b6af7cf48a1d3bcb",
+      "references": [
+        "song_jiang_v1"
+      ],
+      "source_sha256": {
+        "song_jiang_v1": "03d2e6cd7b7a3338ecf094e34beca3130fce794d6e31961aeba6214b1ddc6174"
+      },
+      "original_generated_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a09689-cb54-7823-9e39-12a25caa3f6c\\exec-5bdac723-d3c8-430c-9309-71ad85bedab2.png",
+      "original_copy_exact": true,
+      "selected_for_runtime": true,
+      "review": "Selected: deep warm-brown skin, broad forehead, thick earlobes and short beard. Gold-brown clothing and black headscarf are coordinated game design, not a fixed novel uniform."
+    },
+    {
+      "key": "lin_chong_v1",
+      "character": "lin_chong",
+      "method": "built_in_image_gen",
+      "tool": "image_gen.imagegen",
+      "repository_path": "assets/characters/codex_portraits_20260913/lin_chong.png",
+      "sha256": "d801cb931c481f0794d980cebccb4e035dbe7f771426e25ad4b00adf05bd299e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "bytes": 3084928,
+      "prompt": "历史人物游戏图鉴肩胸肖像，单人一张，1024×1024正方形。图1主图集第二排最左是林冲既有脸部身份参考，同时提供本套暖灰褐纸底和精细线描设色风格。图2是目前游戏内的林冲：保留束起黑发、黑金甲与蓝领巾身份，不要3D塑料感，不能画成照片。原著形容林冲豹头、环眼、燕颔、虎须：画成年壮健的人类武将，头颌宽阔有力、圆而警觉的眼睛、浓黑髭须连着短而硬的下颌须，目光沉着刚毅；不要兽耳、兽毛或猫脸，不要无须少年、细长网红下巴，不新增伤疤。与宋江宽厚文武首领、孙立长络腮须形象拉开。\n黑发在头顶束成整齐发髻，用克制的小金属束发饰，不加新盔，不加巨大冠。身着当前黑色金边的实用札甲，领部一条暗蓝青色围巾，银灰金属高光克制。肩旁低处可有一截长枪木杆，不能横过脸，不画手或全身。不把甲色、束发设计说成原著唯一装束。\n构图与同套图鉴一致：头肩居中，略朝画面右侧三分之四，眼神朝观者，眼睛约在画面高度45%，完整发髻与头顶上方约10%纸底留白，肩胸自然出下边；柔和左上光、均匀低对比暖灰褐纸纹、传统历史手绘插画。无场景、文字、题字、边框或水印。",
+      "prompt_sha256": "00fdfd88998dc342de6dfd884745f0b1d20adaaceb8f3b0acbf98dd45c23f176",
+      "references": [
+        "original",
+        "ref_lin_battle"
+      ],
+      "source_sha256": {
+        "original": "13c563a02570de07970721ab13762b65c3c54f35de071a350567ad1964200535",
+        "ref_lin_battle": "e09036504729a1c4d899bd6e9c935db948b9ba765ae053109bfd98cb6bc07c92"
+      },
+      "original_generated_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a09689-cb54-7823-9e39-12a25caa3f6c\\exec-bfc394af-c527-43b3-acf3-0eb3a6a9e78a.png",
+      "original_copy_exact": true,
+      "selected_for_runtime": true,
+      "review": "Selected: strong broad jaw, alert eyes and clear dark facial hair, tied hair and blue scarf. Only a partial spear is visible; this portrait does not prove the entire snake-spear shape."
+    }
+  ],
+  "native_pixel_edits": false,
+  "browser_or_api_fallback_used": false,
+  "requested_native_size": [
+    1024,
+    1024
+  ],
+  "actual_native_size": [
+    1254,
+    1254
+  ],
+  "size_policy": "The built-in tool returned 1254-square PNGs. Preserve original bytes; Godot import_limit1024 supplies the intended display resource size, pending root native readback.",
+  "source_review": "tools/contracts/codex_identity_20260913/source_identity_review.json"
+}

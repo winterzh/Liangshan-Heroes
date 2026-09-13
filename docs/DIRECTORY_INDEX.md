@@ -1,3 +1,11 @@
+## 2026-09-14 首批图鉴与肖像交付
+
+- [实现与边界](CODEX_IDENTITY_IMPLEMENTATION_20260913.md)：四人身份要点、图鉴方向与共同取景。
+- [生产肖像](../assets/characters/codex_portraits_20260913/)：四张原始PNG及Godot导入描述符。
+- [生成契约](../tools/contracts/codex_identity_20260913/README.md)：六次生成、精确提示词、原著审查和原图引用链。
+- [原生验证与人工目检](../qa/codex_identity_20260913/README.md)：历史诊断、最终同版批、导入探针及只读证据核验器。
+- [隔离驱动](../tools/run_codex_identity_qa.py)和[场景QA](../tools/codex_identity_qa.gd)：实际图鉴、四语与常规头像来源验证。
+
 ## 2026-09-13 角色身份与图鉴
 
 - [角色辨识与图鉴标准](CHARACTER_IDENTITY_CODEX_20260913.md)：统一画风与逐人面貌、原著/保守设计区分、肖像和战斗一致性、图鉴源码缺口、下一批顺序及独立验收口径。

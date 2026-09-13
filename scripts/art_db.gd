@@ -534,6 +534,10 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
+	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+	"sun_li": "res://assets/characters/codex_portraits_20260913/sun_li.png",
+	"hu_sanniang": "res://assets/characters/codex_portraits_20260913/hu_sanniang.png",
 	"gongsun_sheng": "res://assets/portrait_gongsun_sheng.png",
 }
 var _standalone_portraits := {}

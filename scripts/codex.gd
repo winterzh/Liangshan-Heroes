@@ -14,6 +14,9 @@ var _lore_source: Label
 var _port: AnimBox
 var _walk: AnimBox
 var _atk: AnimBox
+var _direction_picker: OptionButton
+var _direction_index := 0
+const PREVIEW_DIRECTIONS := ["se", "sw", "ne", "nw"]
 var _lore_root: ColorRect
 var _lore_panel: Panel
 var _lore_name: Label
@@ -184,6 +187,17 @@ func _ready() -> void:
 	_port = _img_col(imgs, Localize.text("头像"))
 	_walk = _img_col(imgs, Localize.text("移动动画"))
 	_atk = _img_col(imgs, Localize.text("攻击动画"))
+	var direction_row := HBoxContainer.new()
+	direction_row.add_theme_constant_override("separation", 10)
+	detail.add_child(direction_row)
+	var direction_label := Label.new()
+	direction_label.text = Localize.text("动作朝向")
+	direction_row.add_child(direction_label)
+	_direction_picker = OptionButton.new()
+	for direction_name in ["东南", "西南", "东北", "西北"]:
+		_direction_picker.add_item(Localize.text(direction_name))
+	_direction_picker.item_selected.connect(_on_direction_selected)
+	direction_row.add_child(_direction_picker)
 
 	# 技能数值（仅有技能组的英雄显示）
 	_abil_title = Label.new()
@@ -450,6 +464,7 @@ func _select(key: String) -> void:
 			tf.append(Art.tower_dir_texture(key, rc))
 		_walk.set_frames(tf)
 		_atk.set_frames(tf)
+		_direction_picker.disabled = true
 		return
 	# 头像：肖像 → 头像图标 → 立绘
 	var ptex: Texture2D = Art.portrait_texture(key)
@@ -458,15 +473,43 @@ func _select(key: String) -> void:
 	if ptex == null:
 		ptex = Art.unit_texture(key)
 	_port.set_frames([ptex] if ptex != null else [])
-	# 移动 / 攻击：逐帧带；无则退回立绘静帧
-	var wf: Array = Art.unit_anim_frames(key, "walk")
-	if wf.is_empty() and Art.unit_texture(key) != null:
-		wf = [Art.unit_texture(key)]
-	_walk.set_frames(wf)
-	var af: Array = Art.unit_anim_frames(key, "attack")
-	if af.is_empty():
-		af = wf
-	_atk.set_frames(af)
+	_refresh_animations()
+
+
+func _on_direction_selected(index: int) -> void:
+	if index < 0 or index >= PREVIEW_DIRECTIONS.size(): return
+	_direction_index = index
+	_direction_picker.select(index)
+	_refresh_animations()
+
+
+func _preview_frames(key: String, state: String, direction: String) -> Array:
+	var frames: Array = Art.unit_anim_frames(key, state, direction)
+	if frames.is_empty() and state == "attack":
+		frames = Art.unit_anim_frames(key, "walk", direction)
+	if frames.is_empty():
+		var texture: Texture2D = Art.unit_texture(key, "", direction)
+		if texture != null: frames = [texture]
+	return frames
+
+
+func _refresh_animations() -> void:
+	var has_direction := false
+	for direction in PREVIEW_DIRECTIONS:
+		for state in ["idle", "walk", "attack"]:
+			if Art.unit_anim_uses_directional_source(_cur, state, direction):
+				has_direction = true
+	_direction_picker.disabled = not has_direction
+	var direction: String = PREVIEW_DIRECTIONS[_direction_index] if has_direction else ""
+	# One fit envelope for both actions and all views prevents body-size changes
+	# when a larger padded attack frame or a different facing is selected.
+	var fit_frames: Array = []
+	if has_direction:
+		for facing in PREVIEW_DIRECTIONS:
+			for state in ["walk", "attack"]:
+				fit_frames.append_array(_preview_frames(_cur, state, facing))
+	_walk.set_frames(_preview_frames(_cur, "walk", direction), has_direction, fit_frames)
+	_atk.set_frames(_preview_frames(_cur, "attack", direction), has_direction, fit_frames)
 
 
 ## 图鉴优先使用星将本名；合并战斗单位的名称另在说明中交代。
@@ -540,13 +583,63 @@ class AnimBox extends Control:
 	var fps := 6.0
 	var _t := 0.0
 	var _i := 0
+	var _anchored := false
+	var _fit_bounds := Rect2()
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(232, 232)
+		clip_contents = true
 
-	func set_frames(fr: Array) -> void:
+	func set_frames(fr: Array, anchored := false, fit_frames: Array = []) -> void:
 		frames = fr; _i = 0; _t = 0.0
+		_anchored = anchored
+		fps = 4.0 if anchored else 6.0
+		var first := true
+		for texture in (fit_frames if not fit_frames.is_empty() else frames):
+			if texture == null: continue
+			var geometry := _frame_geometry(texture)
+			var content: Rect2 = geometry.content_rect
+			_fit_bounds = content if first else _fit_bounds.merge(content)
+			first = false
 		queue_redraw()
+
+	# Unit's authored rectangle in a normalized logical space (body size = 1).
+	# Atlas margins are transparent, so only the sampled content affects fitting.
+	func _frame_geometry(tex: Texture2D) -> Dictionary:
+		var ts := tex.get_size()
+		var body_scale := 1.0
+		var scale_meta: Variant = tex.get_meta("draw_scale", 1.0)
+		if (scale_meta is float or scale_meta is int) and is_finite(float(scale_meta)):
+			body_scale = clampf(float(scale_meta), 0.25, 4.0)
+		var offset := Vector2.ZERO
+		var offset_meta: Variant = tex.get_meta("draw_offset_px", Vector2.ZERO)
+		if offset_meta is Vector2 and offset_meta.is_finite(): offset = offset_meta
+		var rect := Rect2(Vector2(-0.5, -0.82) * body_scale + offset * body_scale / maxf(ts.y, 1.0), Vector2.ONE * body_scale)
+		var content := rect
+		if tex is AtlasTexture and ts.x > 0 and ts.y > 0:
+			content = Rect2(rect.position + tex.margin.position / ts * rect.size, tex.region.size / ts * rect.size)
+		return {"rect": rect, "content_rect": content}
+
+	func frame_layout(index: int) -> Dictionary:
+		if frames.is_empty(): return {}
+		var tex: Texture2D = frames[posmod(index, frames.size())]
+		if tex == null or tex.get_width() <= 0 or tex.get_height() <= 0: return {}
+		if not _anchored:
+			var factor := minf((size.x - 16.0) / tex.get_width(), (size.y - 16.0) / tex.get_height())
+			var rect := Rect2((size - tex.get_size() * factor) * 0.5, tex.get_size() * factor)
+			return {"rect": rect, "content_rect": rect, "ground": size * 0.5, "scale": factor, "authored": false}
+		var horizontal := maxf(absf(_fit_bounds.position.x), absf(_fit_bounds.end.x))
+		var above := maxf(-_fit_bounds.position.y, 0.0)
+		var below := maxf(_fit_bounds.end.y, 0.0)
+		var factor := minf((size.x * 0.5 - 8.0) / maxf(horizontal, 0.001), (size.y - 24.0) / maxf(above + below, 0.001))
+		factor = maxf(factor, 0.001)
+		# Reserve space for authored content below the logical feet. A fixed near-
+		# bottom anchor would shrink every frame to fit a few pixels of clearance.
+		var ground := Vector2(size.x * 0.5, size.y - 12.0 - below * factor)
+		var geometry := _frame_geometry(tex)
+		var rect: Rect2 = geometry.rect
+		var content: Rect2 = geometry.content_rect
+		return {"rect": Rect2(ground + rect.position * factor, rect.size * factor), "content_rect": Rect2(ground + content.position * factor, content.size * factor), "ground": ground, "scale": factor, "authored": true}
 
 	func _process(delta: float) -> void:
 		if frames.size() > 1:
@@ -565,12 +658,8 @@ class AnimBox extends Control:
 		var tex: Texture2D = frames[_i % frames.size()]
 		if tex == null:
 			return
-		var ts := tex.get_size()
-		if ts.x <= 0.0 or ts.y <= 0.0:
-			return
-		var sc: float = minf((size.x - 16.0) / ts.x, (size.y - 16.0) / ts.y)
-		var dsz := ts * sc
-		draw_texture_rect(tex, Rect2((size - dsz) * 0.5, dsz), false)
+		var layout := frame_layout(_i)
+		if not layout.is_empty(): draw_texture_rect(tex, layout.rect, false)
 
 
 func _localized_star_label(key: String) -> String:

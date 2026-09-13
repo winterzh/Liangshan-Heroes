@@ -1,3 +1,15 @@
+## 2026-09-14 图鉴四人肖像与四向预览验证入口
+
+已接入四人独立肖像、四向动作与稳定取景；下方旧记录所述图鉴缺口由本批取代。[实现](CODEX_IDENTITY_IMPLEMENTATION_20260913.md) · [证据和限制](../qa/codex_identity_20260913/README.md)。普通 Play.cmd 启动方式不变。
+
+从项目根执行，工作目录占位须替换为工程外可写路径。引擎继续通过 godot.local.txt、GODOT_PATH 或 --godot 提供：
+
+```powershell
+py -3 -X utf8 -B tools/run_codex_identity_qa.py --repo . --work-root "X:/QA/codex_identity" --timeout 240 --run
+```
+
+默认串行运行导入、headless和原生图形验证，独立源码/profile并使用共享Godot锁；图形窗口位于20000,20000且不可聚焦，没有Computer Use输入。默认不复用缓存；显式 --cache-from 必须指向驱动可校验的先前成功导入批，并按缓存批记录。--headless-only 仅用于诊断，不代表画面通过。四个PNG保留1254原图，受控Godot导入为1024，.import描述符随源码同步。新增界面词条沿现有 build_localization.py / OpenCC 0.1.7 标准生成。
+
 ## 2026-09-13 角色身份和图鉴制作入口
 
 后续美术按[角色辨识与图鉴标准](CHARACTER_IDENTITY_CODEX_20260913.md)先核对人物身份、原著依据与图鉴展示。源码入口为`scripts/codex.gd`、`scripts/art_db.gd`、`scripts/bios.gd`、`scripts/lore_data.gd`；当前图鉴动作未传方向，AnimBox亦未采用战斗脚锚/尺度元数据，后续修改须单独原生验证。本轮仅文档核对，普通`Play.cmd`、资源和验证驱动不变。
