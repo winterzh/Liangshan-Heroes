@@ -13,6 +13,9 @@ var pre_unload_clean:=true
 var last_trace_t:=-1.0
 var story_stall_script
 var base_fixture_evidence: Dictionary={}
+var convoy_stability: Array=[]
+var takeover_evidence: Dictionary={}
+var takeover_completed:=false
 
 func _xy(v: Vector2) -> Array: return [v.x,v.y]
 
@@ -79,7 +82,50 @@ func _observe(b) -> void:
 			"convoy":l.convoy.map(func(u): return {"id":u.get_instance_id(),"key":u.key,"position":_xy(u.position)}),
 			"bai_position":_xy(bai.position) if is_instance_valid(bai) else [],
 			"bai_carrying":bool(bai.get_meta("carrying_wine",false)) if is_instance_valid(bai) else false,
+			"bai_arrival_auto":l.bai_arrival_auto,"bai_arrival_serial":l.bai_arrival_serial,"bai_unload_t":l.bai_unload_t,
+			"bai_order_serial":bai._order_serial if is_instance_valid(bai) else -1,
 			"wine_ground_nodes":_wine_nodes(b).size(),"events":b.mission.events.keys()})
+
+func _convoy_sample(b,members: Array) -> Dictionary:
+	var rows: Array=[]
+	var minimum_distance:=INF
+	var minimum_clearance:=INF
+	var largest_slot_error:=0.0
+	var all_stopped:=true
+	for i in range(members.size()):
+		var u=members[i]
+		var slot: Vector2=b.map.cell_to_world(b.level._convoy_rest_cell(b.level.convoy.find(u)))
+		largest_slot_error=maxf(largest_slot_error,u.position.distance_to(slot))
+		all_stopped=all_stopped and u._state==u.ST_IDLE and u._queue.is_empty() and u._path.is_empty()
+		rows.append({"id":u.get_instance_id(),"position":_xy(u.position),"slot":_xy(slot),"radius":u.radius,"state":u._state,"queue_size":u._queue.size(),"path_size":u._path.size()})
+		for j in range(i):
+			var distance: float=u.position.distance_to(members[j].position)
+			minimum_distance=minf(minimum_distance,distance)
+			minimum_clearance=minf(minimum_clearance,distance-float(u.radius)-float(members[j].radius))
+	return {"seconds":b.mission.total_game_seconds,"members":rows,"all_stopped":all_stopped,"max_slot_error":largest_slot_error,"min_distance":minimum_distance,"min_body_clearance":minimum_clearance}
+
+func _sample_convoy_stability(b,members: Array,seconds: float,label: String) -> void:
+	# Real movement only. Yang deliberately leaves the row for inquiry after the
+	# two-second rest beat, so the later sample contains the other fourteen.
+	var origin: Array=members.map(func(u): return u.position)
+	var samples: Array=[]
+	var max_drift:=0.0
+	var stopped:=true
+	var separated:=true
+	var t:=0.0
+	while t<=seconds:
+		var row:=_convoy_sample(b,members)
+		samples.append(row)
+		stopped=stopped and row.all_stopped and row.max_slot_error<=12.001
+		separated=separated and row.min_distance>=39.999 and row.min_body_clearance>=0.0
+		for i in range(members.size()): max_drift=maxf(max_drift,members[i].position.distance_to(origin[i]))
+		if t>=seconds: break
+		await _wait(0.05); t+=0.05
+		_observe(b)
+	check(stopped,label+": actual units remain idle with empty paths and queues at their own slots")
+	check(separated,label+": actual body positions stay separated, not just target cells")
+	check(max_drift<=2.0,label+": no sustained pushing after stopping")
+	convoy_stability.append({"label":label,"fixture":false,"clock_acceleration":Engine.time_scale!=1.0,"duration":seconds,"max_drift":max_drift,"samples":samples})
 
 func _observe_until(b,predicate: Callable,seconds: float) -> bool:
 	var elapsed:=0.0
@@ -126,10 +172,13 @@ func _arrival_live() -> void:
 	check(await _observe_until(b,func(): return l.convoy.size()>=5,10),"convoy visibly grows through timed entries")
 	await _stage_shot(b,"02_convoy_on_east_road",Vector2i(38,20))
 	check(await _observe_until(b,func(): return b.mission.has_event("convoy_rested"),65),"the whole convoy and its loads actually reach the rest area")
+	check(l.convoy.size()==15,"rest marker includes all fifteen original convoy members")
+	if l.convoy.size()==15: await _sample_convoy_stability(b,l.convoy.duplicate(),1.0,"fifteen at the rest marker")
 	await _stage_shot(b,"03_convoy_resting",Vector2i(24,19))
 	check(l.convoy.size()==15 and l.convoy.filter(func(u): return u.key=="jun_han").size()==11 and l.convoy.filter(func(u): return u.key=="yu_hou").size()==2 and l.convoy.filter(func(u): return u.key=="lao_duguan").size()==1,"the final convoy has Yang, eleven carriers, two escorts and the steward")
 	check(await _observe_until(b,func(): return b.mission.has_event("yang_inquired") and b.mission.has_event("yang_saw_merchants"),12),"Yang walks from the resting column to inspect the merchants")
 	check(l.st==l.INQUIRY and _wine_absent(b) and b.find_unit("bai_sheng")==null,"inquiry precedes the wine seller and leaves the real rest scene intact")
+	await _sample_convoy_stability(b,l.convoy.filter(func(u): return u!=l.yang),3.0,"fourteen while Yang inquires")
 	await _stage_shot(b,"04_yang_inquires",Vector2i(24,18),1.1)
 	_action(b,b.find_unit("liu_tang"),"answer_yang")
 	check(await _observe_until(b,func(): return b.mission.has_event("merchant_identity_confirmed") and is_instance_valid(b.find_unit("bai_sheng")),30),"actual Liu movement and answer introduce Bai after inquiry")
@@ -138,12 +187,19 @@ func _arrival_live() -> void:
 		await _dispose(b)
 		return
 	var bai_origin: Vector2=bai.position
+	var bai_serial: int=bai._order_serial
+	var auto_orders:=orders
 	check(b.map.world_to_cell(bai.position).x>=44 and bai.get_meta("carrying_wine",false) and _wine_absent(b),"Bai appears carrying wine on the far road without pre-existing barrels")
+	check(l.bai_arrival_auto and l.bai_arrival_serial==bai_serial and not bai.manual_order_active and bai.manual_order_t==0.0,"answer issues one automatic arrival order without stamping manual control")
 	await _stage_shot(b,"05_bai_far_road",b.map.world_to_cell(bai.position),1.1)
-	_action(b,bai,"bring_wine")
-	check(await _observe_until(b,func(): return bai.position.distance_to(bai_origin)>120,15) and l.st==l.ARRIVAL and bai.get_meta("carrying_wine",false),"Bai carries the load along a real player-issued path")
+	check(await _observe_until(b,func(): return bai.position.distance_to(bai_origin)>120,15) and l.st==l.ARRIVAL and bai.get_meta("carrying_wine",false) and l.bai_arrival_auto and bai._order_serial==bai_serial,"Bai carries the load on the same automatic order without a player command")
 	await _stage_shot(b,"06_bai_carrying_uphill",b.map.world_to_cell(bai.position),1.1)
+	check(await _observe_until(b,func(): return l.bai_unload_t>0.0,45) and l.st==l.ARRIVAL and l.bai_unload_t<1.5 and bai._state==bai.ST_IDLE and _wine_absent(b),"automatic unload begins only after actually stopping, with no premature props")
+	var unloading_sample_seconds: float=b.mission.total_game_seconds
+	var unloading_sample_progress: float=l.bai_unload_t
 	check(await _observe_until(b,func(): return l.st==l.WINE and b.mission.has_event("bai_unloaded"),45),"Bai reaches the clearing and finishes putting the wine down")
+	check(unloading_sample_progress+b.mission.total_game_seconds-unloading_sample_seconds>=1.5-0.000001,"automatic unloading retains the full one-and-a-half-second stop beat")
+	check(orders==auto_orders and bai._order_serial==bai_serial and not l.bai_arrival_auto and l.bai_unload_t==0.0,"automatic arrival never needed a new player order and clears its timer after one unload")
 	await _stage_shot(b,"07_wine_put_down",Vector2i(24,22),1.1)
 	check(bai.position.distance_to(b.map.cell_to_world(l.WINE_UNLOAD))<=50 and not bai.get_meta("carrying_wine",false),"the same Bai stops carrying only at the unloading place")
 	check(pre_unload_clean,"no sampled frame exposes a wine stall, barrels, bowls or wine-use markers before unloading")
@@ -166,6 +222,52 @@ func _arrival_live() -> void:
 		for i in range(1,expected.size()): ordered=ordered and observed_events[expected[i]]>=observed_events[expected[i-1]]
 	check(ordered,"observed events preserve rest, inquiry, answer, seller entry and unloading order")
 	live_completed=true
+	await _dispose(b)
+
+func _arrival_takeover_live() -> void:
+	# Separate real playthrough: no shared trace/IDs with the unattended route,
+	# no position or stage injection, and no automatic order restored by the QA.
+	var b=await _start("",0)
+	var l=b.level
+	var first_orders:=orders
+	check(await until(func(): return b.mission.has_event("yang_inquired"),80),"takeover live: convoy and Yang reach inquiry through normal movement")
+	check(await action(b,b.find_unit("liu_tang"),"answer_yang"),"takeover live: real Liu answer starts Bai")
+	var bai=b.find_unit("bai_sheng")
+	if not is_instance_valid(bai):
+		check(false,"takeover live: original Bai exists"); await _dispose(b); return
+	var original_id: int=bai.get_instance_id()
+	var origin: Vector2=bai.position
+	check(await until(func(): return bai.position.distance_to(origin)>120,15) and l.bai_arrival_auto,"takeover live: Bai first moves automatically")
+	var auto_serial: int=bai._order_serial
+	b.select_single(bai,false)
+	var stop:=InputEventKey.new()
+	stop.keycode=root.get_node("Settings").key_for("stop")
+	stop.pressed=true
+	b._unhandled_input(stop); orders+=1
+	check(bai.manual_order_active and bai.manual_order_t>0.0 and bai._state==bai.ST_IDLE and bai._order_serial==auto_serial,"takeover live: actual stop hotkey stamps manual control even without a new Unit serial")
+	check(await until(func(): return not l.bai_arrival_auto,1),"takeover live: next real tick relinquishes automatic control")
+	var stopped_at: Vector2=bai.position
+	var stopped_serial: int=bai._order_serial
+	var stopped_samples: Array=[]
+	var largest_drift:=0.0
+	for i in range(65):
+		await _wait(0.1)
+		largest_drift=maxf(largest_drift,bai.position.distance_to(stopped_at))
+		stopped_samples.append({"seconds":b.mission.total_game_seconds,"position":_xy(bai.position),"serial":bai._order_serial,"auto":l.bai_arrival_auto,"manual_t":bai.manual_order_t,"manual_active":bai.manual_order_active})
+	check(largest_drift<=2.0 and bai._order_serial==stopped_serial and bai._queue.is_empty() and bai._state==bai.ST_IDLE and not l.bai_arrival_auto and l.bai_unload_t==0.0 and _wine_absent(b),"takeover live: stop remains respected beyond the five-second manual timer")
+	var redirect: Vector2i=l.BAI_ENTRY
+	_click(b,[bai],redirect)
+	var redirect_serial: int=bai._order_serial
+	check(redirect_serial>stopped_serial and bai.mission_order_active and bai.mission_order_token>0,"takeover live: real ground order changes Bai's route")
+	check(await until(func(): return bai.position.distance_to(stopped_at)>60,12),"takeover live: Bai actually moves on the replacement route")
+	check(await until(func(): return bai._state==bai.ST_IDLE and bai.position.distance_to(b.map.cell_to_world(redirect))<=40,15),"takeover live: replacement route actually reaches its destination")
+	var redirected_at: Vector2=bai.position
+	await _wait(2.0)
+	check(bai.position.distance_to(redirected_at)<=2.0 and bai._order_serial==redirect_serial and not l.bai_arrival_auto and l.st==l.ARRIVAL and _wine_absent(b),"takeover live: completing a manual route never restarts automatic arrival")
+	check(await action(b,bai,"bring_wine",60),"takeover live: player can explicitly resume the original bring-wine interaction")
+	check(l.st==l.WINE and b.mission.has_event("bai_unloaded") and _wine_nodes(b).size()==2 and bai.get_instance_id()==original_id and not bai.get_meta("carrying_wine",false) and not l.bai_arrival_auto and l.bai_unload_t==0.0,"takeover live: manual completion unloads once using the same Bai")
+	takeover_evidence={"fixture":false,"actor_teleports":0,"stage_injections":0,"clock_acceleration":Engine.time_scale!=1.0,"original_id":original_id,"orders":orders-first_orders,"auto_serial":auto_serial,"redirect_serial":redirect_serial,"stop_max_drift":largest_drift,"stopped_samples":stopped_samples,"redirect_cell":_xy(Vector2(redirect)),"finished_stage":l.st,"wine_nodes":_wine_nodes(b).size()}
+	takeover_completed=true
 	await _dispose(b)
 
 func _freeze_arrival_fixture(b) -> void:
@@ -264,9 +366,11 @@ func _arrival_boundaries() -> void:
 	var fallen_id: int=fallen_bai.get_instance_id()
 	l.st=l.ARRIVAL
 	fallen_bai.set_meta("carrying_wine",true)
+	fallen_bai.order_move(b.map.cell_to_world(l.WINE_UNLOAD))
+	l.bai_arrival_auto=true; l.bai_arrival_serial=fallen_bai._order_serial; l.bai_unload_t=0.5
 	b.mission.mark("merchant_identity_confirmed","explicit early-death boundary fixture")
 	fallen_bai.take_damage(10000,null,false,true)
-	check(fallen_bai.hp<=0 and l.force_started and b._gameplay_rng_issue.is_empty(),"boundary: seller death changes route without fabricating a required-entity failure")
+	check(fallen_bai.hp<=0 and l.force_started and not l.bai_arrival_auto and l.bai_unload_t==0.0 and b._gameplay_rng_issue.is_empty(),"boundary: death during automatic arrival clears ownership and timer without fabricating a required-entity failure")
 	var bai_instances: Array=l.actors.filter(func(u): return is_instance_valid(u) and u.key=="bai_sheng")
 	check(bai_instances.size()==1 and bai_instances[0].get_instance_id()==fallen_id and b.find_unit("bai_sheng")==null and _wine_absent(b),"boundary: dead Bai is never respawned by the force fallback and never unloads wine")
 	var actor_count: int=l.actors.size()
@@ -275,6 +379,27 @@ func _arrival_boundaries() -> void:
 	await process_frame
 	var replacement_bai=l._ensure_bai(b,false)
 	check(not is_instance_valid(replacement_bai) and l.actors.size()==actor_count and b.find_unit("bai_sheng")==null and b._gameplay_rng_issue.is_empty(),"boundary: freeing the original dead Bai node still cannot create a replacement seller")
+	await _dispose(b)
+	# Explicit automatic-arrival fixture; the route change itself is a real attack
+	# order, and the chapter must relinquish only its own original walking order.
+	b=await _start("",0); l=b.level
+	_freeze_arrival_fixture(b)
+	var interrupted=l._ensure_bai(b,true)
+	interrupted.set_physics_process(false)
+	l.st=l.ARRIVAL
+	interrupted.set_meta("carrying_wine",true)
+	interrupted.order_move(b.map.cell_to_world(l.WINE_UNLOAD))
+	l.bai_arrival_auto=true; l.bai_arrival_serial=interrupted._order_serial; l.bai_unload_t=0.75
+	b.mission.mark("merchant_identity_confirmed","explicit automatic-arrival force boundary fixture")
+	var interrupted_id: int=interrupted.get_instance_id()
+	chao=b.find_unit("chao_gai")
+	chao.position=l.yang.position+Vector2(24,0) # Explicit attack-position fixture.
+	b.select_single(chao,false)
+	b._issue_order(b.to_screen(l.yang.position),false); orders+=1
+	l.process(b,0.0)
+	check(l.force_started and not l.bai_arrival_auto and l.bai_unload_t==0.0 and interrupted._state==interrupted.ST_IDLE and interrupted._queue.is_empty(),"boundary: force interrupts the chapter-owned automatic walk immediately")
+	l.process(b,2.0)
+	check(b.find_unit("bai_sheng")==interrupted and interrupted.get_instance_id()==interrupted_id and not interrupted.get_meta("carrying_wine",false) and _wine_absent(b) and not b.mission.has_event("bai_unloaded"),"boundary: force retains the original Bai without unloading or restarting arrival")
 	await _dispose(b)
 	b=await _start("",0); l=b.level
 	_freeze_arrival_fixture(b)
@@ -289,7 +414,7 @@ func _arrival_boundaries() -> void:
 	check(_wine_absent(b) and bai.get_meta("carrying_wine",false),"boundary: seller cannot unload remotely without a completed command")
 	bai.position=b.map.cell_to_world(l.WINE_UNLOAD)
 	l.on_mission_action(b,"bring_wine",bai)
-	check(_wine_absent(b) and not b.mission.has_event("bai_unloaded"),"boundary: merely occupying the destination does not forge completed unloading")
+	check(_wine_absent(b) and not b.mission.has_event("bai_unloaded") and not l.bai_arrival_auto,"boundary: with automatic arrival cancelled, merely occupying the destination cannot forge a completed manual interaction")
 	_action(b,bai,"bring_wine"); b.mission.tick(1.6)
 	check(l.st==l.WINE and b.mission.has_event("bai_unloaded") and _wine_nodes(b).size()==2,"boundary: completed at-destination player interaction creates the wine scene")
 	var wine_ids: Array=_wine_nodes(b).map(func(n): return n.get_instance_id())
@@ -333,11 +458,15 @@ func _run() -> void:
 		root.content_scale_size=root.size
 		DisplayServer.window_set_size(root.size)
 	if selected in ["all","live"]: await _arrival_live()
+	if selected in ["all","live"]: await _arrival_takeover_live()
 	if selected in ["all","boundaries"]: await _arrival_boundaries()
-	var passed:=selected in ["all","live","boundaries"] and failures.is_empty() and (live_completed if selected!="boundaries" else true) and (arrival_boundaries_done if selected!="live" else true)
+	var passed:=selected in ["all","live","boundaries"] and failures.is_empty() and (live_completed and takeover_completed if selected!="boundaries" else true) and (arrival_boundaries_done if selected!="live" else true)
 	var report:={"passed":passed,"checks":checks,"failures":failures,"orders":orders,"live_completed":live_completed,
 		"boundary_fixtures_completed":arrival_boundaries_done,"boundary_fixtures_are_live_gameplay":false,
 		"base_arrival_fixture":base_fixture_evidence,"visual":visual,"frames":stage_frames,"observed_events":observed_events,"movers":movers.values(),"trace":arrival_trace}
+	report["convoy_stability"]=convoy_stability
+	report["takeover_live_completed"]=takeover_completed
+	report["takeover_live"]=takeover_evidence
 	FileAccess.open(folder.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"\t")+"\n")
 	print("[hna-result] ",checks," checks, failures=",failures)
 	quit(0 if passed else 1)

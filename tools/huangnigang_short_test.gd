@@ -51,7 +51,12 @@ func _live(name: String) -> void:
 		check(await until(func(): return l.st==l.INQUIRY,60) and l.convoy.size()==15 and b.mission.has_event("convoy_rested"),"all fifteen convoy members finish real arrival before inquiry")
 		check(await until(func(): return b.mission.has_event("yang_inquired"),12),"Yang actually approaches the merchants before they answer")
 		check(await action(b,b.find_unit("liu_tang"),"answer_yang"),"Liu answers Yang at the actual inquiry point")
-		check(await action(b,b.find_unit("bai_sheng"),"bring_wine"),"Bai carries wine to the actual sale area")
+		var bai=b.find_unit("bai_sheng")
+		var bai_origin: Vector2=bai.position if is_instance_valid(bai) else Vector2.ZERO
+		var arrival_orders:=orders
+		check(is_instance_valid(bai) and l.bai_arrival_auto and bai._order_serial==l.bai_arrival_serial,"answer starts one automatic Bai arrival order")
+		check(await until(func(): return is_instance_valid(bai) and bai.position.distance_to(bai_origin)>120,15) and l.st==l.ARRIVAL and bai.get_meta("carrying_wine",false),"Bai really carries wine along the road without a player bring-wine order")
+		check(await until(func(): return l.st==l.WINE and b.mission.has_event("bai_unloaded"),50) and orders==arrival_orders and not l.bai_arrival_auto and l.bai_unload_t==0.0,"Bai automatically arrives and unloads without new player orders")
 		if l.st!=l.WINE:
 			cases.append({"route":name,"failed_stage":l.st}); await _dispose(b); return
 		_click(b,[b.find_unit("wu_yong")],l.WU_STATION)
@@ -147,6 +152,7 @@ func _wine_fixture():
 	# would instead exercise the unrelated suspicious-cargo-approach fallback.
 	for i in range(l.convoy.size()):
 		l.convoy[i].position=b.map.cell_to_world(l._convoy_rest_cell(i))
+		l.convoy[i].order_stop() # Explicit fixture: arrival has already ended.
 	for i in range(l.bundles.size()):
 		l.bundles[i].position=b.map.cell_to_world(l.TOP+Vector2i(i,0))
 	l._place_jujube_carts(b)
@@ -167,6 +173,26 @@ func _start_fixture_distraction(b) -> void:
 	_action(b,b.find_unit("liu_tang"),"distract_yang")
 	b.mission.tick(1.0)
 
+func _check_cargo_marker_numbers(b,label: String) -> void:
+	var rows: Array=[]
+	var seen: Dictionary={}
+	var ordered:=true
+	var unique:=true
+	var index:=0
+	for action_id in b.mission.actions:
+		index+=1
+		var item: Dictionary=b.mission.actions[action_id]
+		if not is_instance_valid(item.marker):
+			ordered=false; unique=false
+			continue
+		var number: int=item.marker.number
+		ordered=ordered and number==index
+		unique=unique and not seen.has(number)
+		seen[number]=true
+		rows.append({"action_id":action_id,"number":number,"done":item.done})
+	print("[hns-marker-fixture] ",label," ",rows)
+	check(ordered and unique and seen.size()==b.mission.actions.size(),label+": all retained action markers have unique consecutive numbers in action order")
+
 func _boundaries() -> void:
 	var b=await _start("",0)
 	var ArtDB=root.get_node("Art")
@@ -180,6 +206,7 @@ func _boundaries() -> void:
 	b.find_unit("chao_gai").position=b.map.cell_to_world(l.DATES)
 	for i in range(l.convoy.size()):
 		l.convoy[i].position=b.map.cell_to_world(l._convoy_rest_cell(i))
+		l.convoy[i].order_stop() # Complete the injected arrival, including its queue.
 	for i in range(3): l.bundles[i].position=b.map.cell_to_world(l.TOP+Vector2i(i,0))
 	l.process(b,0) # Explicitly injected arrival starts the short rest beat.
 	l.process(b,1.5)
@@ -224,22 +251,46 @@ func _boundaries() -> void:
 	check(not b.mission.actions.force_take_1_0.actors.has(carrier.key),"loaded carrier cannot be assigned a second load")
 	l._force_take_cargo(b,"force_take_0_0",carrier,0)
 	check(l.cargo.size()==1 and l.delivered==0,"duplicate pickup callback cannot duplicate cargo")
-	var drop_at: Vector2=carrier.position
-	carrier.take_damage(10000,null,false,true)
-	check(b.units.has(first) and first.visible and first.position.distance_to(drop_at)<33 and not l.force_started,"real carrier death drops the same load without erasing the completed wine route")
-	liu.position=b.map.cell_to_world(l._bundle_claim_cell(b,0))
-	_action(b,liu,"force_take_0_1"); b.mission.tick(0.7)
-	check(l.cargo.get(0)==liu and l.bundles[0]==first,"another survivor can take over the dropped original load")
-	liu.position=b.map.cell_to_world(l.GATE_W+Vector2i(0,-1))
-	_action(b,liu,"force_deliver_0_1"); b.mission.tick(0.7)
-	l._force_deliver_cargo(b,"force_deliver_0_1",liu,0)
-	check(l.delivered==1 and b.units.has(first) and first.visible and not liu.has_meta("carrying_tribute"),"delivery resolves once and restores the original ground load")
+	# Explicit death fixture with three real pickups. The retired delivery is
+	# deliberately in the middle of the task list, before two still-live deliveries.
 	for i in [1,2]:
 		var u=wu if i==1 else bai
 		u.position=b.map.cell_to_world(l._bundle_claim_cell(b,i))
 		_action(b,u,"force_take_%d_0"%i); b.mission.tick(0.7)
+	check(l.cargo.size()==3 and l.cargo.get(0)==carrier and l.cargo.get(1)==wu and l.cargo.get(2)==bai and not liu.has_meta("carrying_tribute"),"three original loads are carried concurrently while Liu remains free to take over")
+	var other_deliveries: Array=[b.mission.actions.get("force_deliver_1_0",{}),b.mission.actions.get("force_deliver_2_0",{})]
+	var delivery_keys: Array=b.mission.actions.keys().filter(func(key): return String(key).begins_with("force_deliver_"))
+	check(delivery_keys==["force_deliver_0_0","force_deliver_1_0","force_deliver_2_0"] and other_deliveries.all(func(item): return not item.is_empty() and not item.done),"death will remove an earlier delivery while two later delivery markers remain pending")
+	_check_cargo_marker_numbers(b,"three pending deliveries before death")
+	var drop_at: Vector2=carrier.position
+	var expired_delivery: Dictionary=b.mission.actions.get("force_deliver_0_0",{})
+	var expired_delivery_event: String="action:%s:force_deliver_0_0"%b.mission.stage_id
+	carrier.take_damage(10000,null,false,true)
+	check(b.units.has(first) and first.visible and first.position.distance_to(drop_at)<33 and not l.force_started,"real carrier death drops the same load without erasing the completed wine route")
+	check(not expired_delivery.is_empty() and not b.mission.actions.has("force_deliver_0_0") and not expired_delivery.done and not b.mission.has_event(expired_delivery_event),"dead carrier delivery is retired without forging completion or retaining its click target")
+	_check_cargo_marker_numbers(b,"middle delivery retired and replacement pickup registered")
+	check(l.cargo.size()==2 and l.cargo.get(1)==wu and l.cargo.get(2)==bai and wu.get_meta("carrying_tribute",-1)==1 and bai.get_meta("carrying_tribute",-1)==2 and other_deliveries.all(func(item): return not item.is_empty() and not item.done and is_instance_valid(item.marker) and item.marker.visible),"retiring the dead carrier's delivery preserves both other carried loads and their pending markers")
+	liu.position=b.map.cell_to_world(l._bundle_claim_cell(b,0))
+	_action(b,liu,"force_take_0_1"); b.mission.tick(0.7)
+	_check_cargo_marker_numbers(b,"replacement carrier's delivery registered")
+	check(l.cargo.get(0)==liu and l.bundles[0]==first,"another survivor can take over the dropped original load")
+	var replacement_delivery: Dictionary=b.mission.actions.get("force_deliver_0_1",{})
+	var clicked_delivery: String=b.mission._nearest_clicked_action(b.map.cell_to_world(l.GATE_W+Vector2i(0,-1)))
+	print("[hns-cargo-retire] old_present=",b.mission.actions.has("force_deliver_0_0")," nearest=",clicked_delivery," replacement=",replacement_delivery.get("actors",[]))
+	check(not replacement_delivery.is_empty() and clicked_delivery=="force_deliver_0_1" and replacement_delivery.actors==[liu.key] and not replacement_delivery.done,"the same exit click selects the replacement carrier's new delivery attempt")
+	liu.position=b.map.cell_to_world(l.GATE_W+Vector2i(0,-1))
+	var delivery_orders:=orders
+	_action(b,liu,"force_deliver_0_1"); b.mission.tick(0.7)
+	check(orders==delivery_orders+1 and not replacement_delivery.is_empty() and replacement_delivery.done and b.mission.has_event("action:%s:force_deliver_0_1"%b.mission.stage_id) and l.delivered==1,"replacement delivery completes through the actual right-click and mission timer before any duplicate callback")
+	l._force_deliver_cargo(b,"force_deliver_0_1",liu,0)
+	check(l.delivered==1 and b.units.has(first) and first.visible and not liu.has_meta("carrying_tribute"),"delivery resolves once and restores the original ground load")
+	for i in [1,2]:
+		var u=wu if i==1 else bai
+		# These original carriers have held their loads throughout the death/relay.
+		check(l.cargo.get(i)==u and u.get_meta("carrying_tribute",-1)==i,"other original carrier still owns load %d before delivery"%i)
 		u.position=b.map.cell_to_world(l.GATE_W+Vector2i(0,i-1))
 		_action(b,u,"force_deliver_%d_0"%i); b.mission.tick(0.7)
+		check(b.mission.has_event("force_delivered_%d"%i) and not l.cargo.has(i) and not u.has_meta("carrying_tribute"),"other pending delivery still completes through its actual right-click %d"%i)
 	l._withdraw_tick(b)
 	check(l.delivered==3 and l.st==l.WITHDRAW and not l.victory,"cargo arrival does not silently abandon distant living companions")
 	_action(b,bai,"withdraw_now"); b.mission.tick(0.7)

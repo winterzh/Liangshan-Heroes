@@ -1,3 +1,11 @@
+## 2026-09-13 黄泥冈入场反馈验证入口：四批相关验证及联合核验通过
+
+普通启动仍为`Play.cmd`，Godot由被忽略的`godot.local.txt`、`GODOT_PATH`或`--godot`参数提供。本轮修改押队分散停靠及白胜在盘问后自动挑酒、停稳落担；手动命令会永久取消本次自动控制，玩家仍可右键落担标记继续。[实现和旧规则取代范围](HUANGNIGANG_FEEDBACK_20260913.md)。
+
+玩法驱动新增`--evidence-group huangnigang_feedback_20260913`，例如`py -3 -X utf8 -B tools/run_campaign_feedback_qa.py --run --cases arrival huangnigang --evidence-group huangnigang_feedback_20260913 --work-root "<本机绝对短路径>/gameplay"`。最终134926玩法批181项已通过；八关Level组件、黄泥冈组件/六进程和同版经典命令见[本轮QA入口](../qa/huangnigang_feedback_20260913/README.md)。四批串行，分别使用私有工程/玩家目录；世界专项明确以`--cache-from`复用本机134926玩法工程缓存，不能把该子集称作全新默认通过。已有游戏或Godot占用时应由独占检查拒绝，不能绕过保护。
+
+本轮玩法134926批181项、Level组件全新140508批207项、缓存七用例世界140919批309项、同版全新经典141759批296项及[四批联合核验](../qa/huangnigang_feedback_20260913/validation_summary.json)均通过；完整四参数联合命令见[本轮QA入口](../qa/huangnigang_feedback_20260913/README.md)。本轮覆盖相关专项，未重跑默认37用例完整世界验收；旧2811项世界/296项经典结论按原冻结版本阅读。保存/继续玩家入口仍隐藏，本轮未重构建或发布Steam。
+
 ## 2026-09-13 快活林内部里程碑与完整复现入口
 
 当前默认世界驱动已包含快活林，共37用例。[110348_38bd4cf4全新世界收据](../qa/level3_world_restore_20260909/20260913_110348_38bd4cf4/receipt.json)确认2811项通过（1628 + 789 + 394），完整/fresh/acceptance/UID标志均true；[114838_3ea9d869全新默认经典](../qa/continue_flow_20260909/20260913_114838_3ea9d869/receipt.json)已296项通过、退出0。联合核验确认2966份生产文件与两批及当前checkout同SHA，世界12份/经典4份QA来源匹配，快活林15张与经典16张PNG的SHA通过；人工目检范围仅3+2张代表画面。[联合结果](../qa/kuaihuolin_world_restore_20260913/validation_summary.json) · [实现与边界](KUAIHUOLIN_WORLD_RESTORE_20260913.md) · [两批及联合复现命令](../qa/kuaihuolin_world_restore_20260913/README.md)。

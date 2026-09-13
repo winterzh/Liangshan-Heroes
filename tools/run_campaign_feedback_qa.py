@@ -46,7 +46,7 @@ def main():
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--cases", nargs="+", choices=CASES, default=list(CASES))
     parser.add_argument("--godot")
-    parser.add_argument("--evidence-group", choices=["campaign_feedback_20260909", "huangnigang_arrival_20260909"], default="campaign_feedback_20260909")
+    parser.add_argument("--evidence-group", choices=["campaign_feedback_20260909", "huangnigang_arrival_20260909", "huangnigang_feedback_20260913"], default="campaign_feedback_20260909")
     parser.add_argument("--work-root", type=Path, default=Path("D:/CodexTemp/campaign_feedback"))
     args = parser.parse_args()
     engine = resolve_godot(args.godot)
