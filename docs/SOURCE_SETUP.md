@@ -1,3 +1,9 @@
+## 2026-09-14 Steam Windows 候选验证完成，等待浏览器选文件
+
+用户已明确授权更新Steam。固定来源 `50558b053998f8dbad2f54aae27b5610f8ac61ec` 的候选已完成：原生Steam整合185项、包内1126项、源码/PCK身份各10项、导出PCK图鉴449项及实际EXE11例短测全部通过。包含四人肖像/图鉴方向、孙立与扈三娘基础动作和黄泥冈押队/白胜反馈修复；玩家保存/继续仍隐藏。
+
+唯一上传ZIP为253330788字节，SHA256 `ee695683e325bdcc6ebd688632b38599d4f994e538b1f8af2952fb9aaef2505b`。Edge已登录，但自动选择文件返回 `Not allowed`；尚未提交HTTP上传，也未创建新Build或切换default。上传前已核实线上为25276077 / 4630656200603476714。等待用户在Windows Depot5088121手动选择已验证ZIP或恢复扩展文件访问能力。详见[更新说明](STEAM_UPDATE_20260914.md)、[本轮QA](../qa/steam_release_20260914/README.md)及[实时发布收据](../qa/steam_release_20260914/publication_receipt.json)。普通启动方式不变，不提交发行包/缓存/玩家目录，不发布无关设置或公告。
+
 ## 2026-09-14 图鉴四人肖像与四向预览验证入口
 
 已接入四人独立肖像、四向动作与稳定取景；下方旧记录所述图鉴缺口由本批取代。[实现](CODEX_IDENTITY_IMPLEMENTATION_20260913.md) · [证据和限制](../qa/codex_identity_20260913/README.md)。普通 Play.cmd 启动方式不变。

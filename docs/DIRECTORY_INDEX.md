@@ -1,3 +1,9 @@
+## 2026-09-14 Steam Windows 发布候选
+
+- [更新范围与限制](STEAM_UPDATE_20260914.md)。
+- [验证、原始收据与复现](../qa/steam_release_20260914/README.md)：185原生、1126包内、20身份、449图鉴及11例EXE短测。
+- [发布状态](../qa/steam_release_20260914/publication_receipt.json)：当前等待Edge本地文件选择，尚未上传上线。发行ZIP与EXE只保留本机。
+
 ## 2026-09-14 首批图鉴与肖像交付
 
 - [实现与边界](CODEX_IDENTITY_IMPLEMENTATION_20260913.md)：四人身份要点、图鉴方向与共同取景。
