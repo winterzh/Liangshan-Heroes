@@ -1,8 +1,13 @@
+## 2026-09-14 四语公告
+
+- [公告与公开入口](STEAM_ANNOUNCEMENT_20260914.md)。
+- [发布收据与64片段回读](../qa/steam_announcement_20260914/README.md)。
+
 ## 2026-09-14 Steam Windows 发布候选
 
 - [更新范围与限制](STEAM_UPDATE_20260914.md)。
 - [验证、原始收据与复现](../qa/steam_release_20260914/README.md)：185原生、1126包内、20身份、449图鉴及11例EXE短测。
-- [发布状态](../qa/steam_release_20260914/publication_receipt.json)：Build25290621已上传并核对六文件，default上线待Steam手机确认。发行ZIP与EXE只保留本机。
+- [发布状态](../qa/steam_release_20260914/publication_receipt.json)：Build25290621已正式上线，服务器六文件已核对。发行ZIP与EXE只保留本机。
 
 ## 2026-09-14 首批图鉴与肖像交付
 

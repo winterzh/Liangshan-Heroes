@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "status": "published",
-  "recorded_at_utc": "2026-09-14T01:22:14.733017+00:00",
+  "status": "awaiting_steam_mobile_confirmation",
+  "recorded_at_utc": "2026-09-14T01:15:31.100904+00:00",
   "app_id": 5088120,
   "depot_id": 5088121,
   "branch": "default",
@@ -10,16 +10,20 @@
   "archive_sha256": "ee695683e325bdcc6ebd688632b38599d4f994e538b1f8af2952fb9aaef2505b",
   "uploaded": true,
   "server_verified": true,
-  "default_active": true,
+  "default_active": false,
   "baseline_build_id": "25276077",
   "baseline_manifest_id": "4630656200603476714",
   "new_build_id": "25290621",
   "new_manifest_id": "53262799732835110",
-  "blocker": null,
+  "blocker": {
+    "operation": "Steam default branch activation",
+    "reason": "Steam page requires mobile authenticator confirmation",
+    "requested_user_action": "Approve Build 25290621 in Steam mobile app Confirmations."
+  },
   "scope_limits": [
-    "No live Steam client download or persistence test.",
-    "No unrelated Steamworks settings or macOS depot published.",
-    "Announcement now separately authorized by user; tracked in announcement receipt."
+    "Default activation pending mobile confirmation; no success readback yet.",
+    "No unrelated Steamworks settings, macOS depot or announcement published.",
+    "No live Steam client persistence test."
   ],
   "activation_requested": true,
   "estimated_update_download": "28.1 MB",
@@ -69,9 +73,6 @@
     "Agent committed the uploaded Windows depot; page showed Build commit successful (BuildID 25290621).",
     "All six manifest names, sizes and SHA1 values matched candidate_delivery.json.",
     "Preview changed only Windows Depot 5088121 from baseline 25276077; download 28.1 MB.",
-    "Final confirmation action was followed by Steam mobile authenticator requirement. Browser accept reported No dialog is showing; state readback showed mobile confirmation modal.",
-    "After user mobile confirmation, Steam success banner and default branch both showed Build25290621 with Manifest53262799732835110."
-  ],
-  "live_readback_url": "https://partner.steamgames.com/apps/builds/5088120?submittedbuild=25290621",
-  "platform_success_message": "生成版本 25290621 现已面向分支“default”上的玩家上线。"
+    "Final confirmation action was followed by Steam mobile authenticator requirement. Browser accept reported No dialog is showing; state readback showed mobile confirmation modal."
+  ]
 }

@@ -24,10 +24,10 @@
 
 Edge已由用户连接并登录。上传前构建页核实default为25276077、Manifest4630656200603476714；本次使用Windows Depot标准ZIP替换，预期六个根成员（主EXE、三DLL和两许可证）。不修改macOS Depot或其他应用设置，不覆盖旧包收据。
 
-宋江战斗小人肤色、孙立战斗头饰与须式仍待统一；全库美术及真人/性能门槛继续保持独立。公告不在本次打包发布操作中另行新建。
+宋江战斗小人肤色、孙立战斗头饰与须式仍待统一；全库美术及真人/性能门槛继续保持独立。用户随后明确要求写公告，已另行发布四语Event714538122294068252，公告发布证据独立记录。
 
 ## 当前交付状态
 
 用户手动提供ZIP后，Windows Depot上传完成，Manifest为 **53262799732835110**；随后提交为 Build **25290621**。服务器六成员的文件名、大小和SHA1逐一匹配candidate_delivery.json，总磁盘326730715字节，压缩250192576字节。default预览仅更新Windows Depot5088121，旧Build25276077，增量下载预估28.1 MB。
 
-已提交default上线请求，Steam显示必须由手机验证器确认；尚未取得default已切换的成功回读。先前Edge选文件限制已由用户手动操作解决，旧阶段收据保留于publication_before_upload.json；本地candidate_delivery仍保留创建时未上传的历史状态。最终状态以publication_receipt.json为准。
+用户已完成手机验证器确认，Steam成功提示与default分支均回读为Build25290621，正式上线完成。先前Edge选文件限制已由用户手动操作解决，旧阶段收据保留于publication_before_upload.json；本地candidate_delivery仍保留创建时未上传的历史状态。最终状态以publication_receipt.json为准。
