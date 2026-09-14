@@ -1,28 +1,78 @@
 {
   "schema": 1,
-  "status": "awaiting_local_file_selection",
-  "recorded_at_utc": "2026-09-14T00:37:46.126718+00:00",
+  "status": "awaiting_steam_mobile_confirmation",
+  "recorded_at_utc": "2026-09-14T01:15:31.100904+00:00",
   "app_id": 5088120,
   "depot_id": 5088121,
   "branch": "default",
   "source_head": "50558b053998f8dbad2f54aae27b5610f8ac61ec",
   "local_candidate_complete": true,
   "archive_sha256": "ee695683e325bdcc6ebd688632b38599d4f994e538b1f8af2952fb9aaef2505b",
-  "uploaded": false,
-  "server_verified": false,
+  "uploaded": true,
+  "server_verified": true,
   "default_active": false,
   "baseline_build_id": "25276077",
   "baseline_manifest_id": "4630656200603476714",
-  "new_build_id": null,
-  "new_manifest_id": null,
+  "new_build_id": "25290621",
+  "new_manifest_id": "53262799732835110",
   "blocker": {
-    "operation": "Edge fileChooser.setFiles",
-    "error": "CDP -32000 Not allowed",
-    "requested_user_action": "Select the verified ZIP manually in Windows Depot 5088121, or enable local file URL access for the extension."
+    "operation": "Steam default branch activation",
+    "reason": "Steam page requires mobile authenticator confirmation",
+    "requested_user_action": "Approve Build 25290621 in Steam mobile app Confirmations."
   },
   "scope_limits": [
-    "No HTTP upload has been submitted by this task.",
+    "Default activation pending mobile confirmation; no success readback yet.",
     "No unrelated Steamworks settings, macOS depot or announcement published.",
     "No live Steam client persistence test."
+  ],
+  "activation_requested": true,
+  "estimated_update_download": "28.1 MB",
+  "server_manifest_url": "https://partner.steamgames.com/apps/depotmanifest/5088120/5088121/53262799732835110",
+  "server_members": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68",
+      "matches_candidate": true
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 322095272,
+      "sha1": "1026a6ad2ad56775c920e5729c2e4fd8fee11f57",
+      "matches_candidate": true
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda",
+      "matches_candidate": true
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28",
+      "matches_candidate": true
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 352768,
+      "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba",
+      "matches_candidate": true
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2",
+      "matches_candidate": true
+    }
+  ],
+  "server_size_on_disk_bytes": 326730715,
+  "server_compressed_bytes": 250192576,
+  "observations": [
+    "User manually supplied ZIP and upload page showed Building depot done (ManifestID 53262799732835110).",
+    "Agent committed the uploaded Windows depot; page showed Build commit successful (BuildID 25290621).",
+    "All six manifest names, sizes and SHA1 values matched candidate_delivery.json.",
+    "Preview changed only Windows Depot 5088121 from baseline 25276077; download 28.1 MB.",
+    "Final confirmation action was followed by Steam mobile authenticator requirement. Browser accept reported No dialog is showing; state readback showed mobile confirmation modal."
   ]
 }
