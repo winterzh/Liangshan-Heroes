@@ -1,3 +1,10 @@
+## 2026-09-14 RTS 玩法方向定稿与调研入档
+
+- [玩法方向定稿](GAMEPLAY_DIRECTION_20260914.md)：后续设计与评审的现行依据。
+- [同类型精华旧稿](GAMEPLAY_ESSENCE_SAME_GENRE_20260914.md)、[帝国系列研究](AOE_SERIES_STUDY_20260914.md)、[调研全文](GAMEPLAY_STUDY_RTS_20260914.md)：历史过程资料，保留旧稿并注明被新方向替代的范围。
+- [既有关卡分配与样板](CAMPAIGN_FUN_REWORK_20260905.md)：保留实现历史，玩法评价转到新方向。
+- [归档核对记录](../qa/gameplay_direction_20260914/README.md)与[校验清单](../qa/gameplay_direction_20260914/archive_manifest.json)：定稿原文完整性、关联链接及文档同步范围。
+
 ## 2026-09-14 四语公告
 
 - [公告与公开入口](STEAM_ANNOUNCEMENT_20260914.md)。
