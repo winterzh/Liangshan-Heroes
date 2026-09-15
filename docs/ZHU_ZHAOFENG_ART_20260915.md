@@ -6,4 +6,10 @@
 
 来源提示词、会话地址、原图 SHA 和四格区域记录在 `assets/direction4/zhu_zhaofeng_20260915.json`；静态契约、Godot 路由和全库回归收据在 `qa/zhu_zhaofeng_idle_direction4_20260915/`。
 
-本批只认 idle。祝朝奉的 walk、attack、hurt、death 仍是开放缺口，不能用待机图或别的角色动作填空。后续动作要保持宽体乡绅轮廓、短须、栗袍和黑色幞头这组识别点，并逐状态核对原著身份、方向、脚底锚点、透明边界和实机画面。
+本批只认 idle。祝朝奉的 attack、hurt、death 仍是开放缺口，不能用待机图或别的角色动作填空。后续动作要保持宽体乡绅轮廓、短须、栗袍和黑色幞头这组识别点，并逐状态核对原著身份、方向、脚底锚点、透明边界和实机画面。
+
+## 四向行走
+
+本轮继续用同一网页会话生成祝朝奉的 **4×4 walk 身体原图**。四行固定为 SE、SW、NE、NW，每行四格是左脚着地、经过、右脚着地、经过的连续步态；NE/NW 保留真实后脑、后背和背向衣摆，没有用镜像代替。原始 1254×1254 RGBA PNG 保留为 `assets/characters/art_full_20260915/zhu_zhaofeng_walk_direction4_source.png`，生产图只做确定性 2 倍 LANCZOS 缩放；四份 walk TRES 固定引用 627 像素格，并设置透明补边、`filter_clip` 和四向元数据。
+
+原图目检确认宽体栗袍、短须、黑色幞头和陆谦身份差异成立，人物和脚底完整，无文字/网格/边框/地面/阴影。静态契约 125/125、Godot 路由 132/132、全库 321/321 通过；收据见 `qa/zhu_zhaofeng_walk_direction4_20260915/`。本批只认 walk；attack、hurt、death 仍开放，后续继续逐状态独立出图与实机核对。

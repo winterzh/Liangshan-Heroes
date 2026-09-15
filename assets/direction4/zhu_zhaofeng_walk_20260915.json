@@ -1,0 +1,51 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "character": "zhu_zhaofeng",
+  "scope": "walk-only four-direction body source; idle is already covered separately; attack/hurt/death remain open and must not be inferred from this sheet",
+  "sources": {
+    "zhu_zhaofeng_walk_atlas": {
+      "path": "assets/characters/art_full_20260915/zhu_zhaofeng_walk_direction4.png",
+      "sha256": "52e92f1148a7a83a552ee6528e53ef95d044ca3957632ca9a09a25cadeef3f33",
+      "job": "web ChatGPT conversation 6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "mode": "RGBA",
+      "native_size": [2508, 2508],
+      "import_limit": 0,
+      "imported_size": [2508, 2508],
+      "imported_size_verified": true,
+      "alpha_zero_fraction": 0.6148331718087447,
+      "layout": "4x4; each row is one direction and four columns are a walk cycle: SE,SW,NE,NW",
+      "raw_web_source": "assets/characters/art_full_20260915/zhu_zhaofeng_walk_direction4_source.png",
+      "raw_web_source_sha256": "8ad0f7b8509f1d8dfa67f3a6ba54e61305dea4b1f4573e36bcc7cc5ae1fbe0b9",
+      "raw_web_size": [1254, 1254],
+      "production_transform": "deterministic whole-image 2x LANCZOS scale to 2508x2508 so the 4x4 atlas has integer 627px cells; no mirroring, masking, repainting, alpha clearing or color correction",
+      "prompt_file": "assets/direction4/web_prompts_20260915/zhu_zhaofeng_walk_direction4.txt",
+      "prompt_sha256": "b26d4f2bb13dc0ebc4996370c19dc2aa2d8ef8eb7059c07326c40b18ecaddae7",
+      "conversation_url": "https://chatgpt.com/c/6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "visual_review": "Accepted after local original PNG inspection: same broad older village-lord identity, distinct front and true back rows, four visibly different steps per direction, complete feet and robe, clean transparent background and no text/grid/border.",
+      "retained_rgba": "Raw downloaded PNG is retained beside the deterministic production-sized atlas. AtlasTexture crops only fixed cells; no mirroring, masking, recoloring, repainting or pixel clearing."
+    }
+  },
+  "poses": {
+    "walk_a_se": {"source": "zhu_zhaofeng_walk_atlas", "region": [0, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_b_se": {"source": "zhu_zhaofeng_walk_atlas", "region": [627, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_c_se": {"source": "zhu_zhaofeng_walk_atlas", "region": [1254, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_d_se": {"source": "zhu_zhaofeng_walk_atlas", "region": [1881, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_a_sw": {"source": "zhu_zhaofeng_walk_atlas", "region": [0, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_b_sw": {"source": "zhu_zhaofeng_walk_atlas", "region": [627, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_c_sw": {"source": "zhu_zhaofeng_walk_atlas", "region": [1254, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_d_sw": {"source": "zhu_zhaofeng_walk_atlas", "region": [1881, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_a_ne": {"source": "zhu_zhaofeng_walk_atlas", "region": [0, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_b_ne": {"source": "zhu_zhaofeng_walk_atlas", "region": [627, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_c_ne": {"source": "zhu_zhaofeng_walk_atlas", "region": [1254, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_d_ne": {"source": "zhu_zhaofeng_walk_atlas", "region": [1881, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_a_nw": {"source": "zhu_zhaofeng_walk_atlas", "region": [0, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_b_nw": {"source": "zhu_zhaofeng_walk_atlas", "region": [627, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_c_nw": {"source": "zhu_zhaofeng_walk_atlas", "region": [1254, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "walk_d_nw": {"source": "zhu_zhaofeng_walk_atlas", "region": [1881, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0}
+  },
+  "states": {"walk": ["walk_a", "walk_b", "walk_c", "walk_d"]},
+  "resources": [
+    "assets/anim/zhu_zhaofeng_walk_se.tres", "assets/anim/zhu_zhaofeng_walk_sw.tres",
+    "assets/anim/zhu_zhaofeng_walk_ne.tres", "assets/anim/zhu_zhaofeng_walk_nw.tres"
+  ]
+}

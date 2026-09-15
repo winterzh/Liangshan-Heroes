@@ -1,3 +1,11 @@
+## 2026-09-15 祝朝奉四向行走原图（本地，未发布）
+
+继续推进美术缺口，使用同一网页原生会话生成祝朝奉 4×4 真透明行走图。原图目检确认年长宽体、灰黑短须、栗色乡绅袍、黑色幞头身份稳定；四行 SE/SW/NE/NW，四帧脚步与衣摆有变化，NE/NW 为真实背面，没有镜像、抠像、补画或清像素。原始 1254×1254 PNG 保留，生产图只做确定性 2× LANCZOS 缩放到 2508×2508。
+
+接入 `assets/anim/zhu_zhaofeng_walk_{se,sw,ne,nw}.tres` 与 `assets/direction4/zhu_zhaofeng_walk_20260915.json`；新增缩放、静态契约和 Godot 路由脚本。静态 125/125，Godot 4.6.3 导入退出0，运行时132/132，全库库存321/321，源文件/私有副本零漂移，共享锁释放。证据见 `qa/zhu_zhaofeng_walk_direction4_20260915/`，回归运行目录 `D:\CodexTemp\art_full_continue_20260915_r9\20260915_234846_9c838752`。
+
+本轮只补 walk；祝朝奉 attack/hurt/death、陆谦 hurt/death、旧头像背景、地形细节和技能实战辨识仍开放。未改玩法数值、玩家存档、导出包或 Steam 状态。
+
 ## 2026-09-15 图集采样边界修复（本地，未发布）
 
 继续推进全库美术时，先把最容易在实机缩放中放大的画面缺陷收口：`scripts/art_db.gd` 的头像、地形和动作条带切片，以及 `scripts/battle.gd` 的死亡残留切片，统一设置 `AtlasTexture.filter_clip = true`，阻断线性采样跨入相邻图格。PNG 原字节、来源链、角色身份、动作和玩法数值均未改。

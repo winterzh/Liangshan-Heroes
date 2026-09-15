@@ -48,6 +48,18 @@ py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_ful
 
 这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
 
+## 2026-09-15 祝朝奉四向行走原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_walk_direction4_source.png` 及确定性 2×生产图 `zhu_zhaofeng_walk_direction4.png`，并接入四份 walk SpriteFrames。四向资源由 `assets/direction4/zhu_zhaofeng_walk_20260915.json` 记录固定格、来源会话、提示词 SHA、原图 SHA 和生产变换；运行时只识别 walk，attack/hurt/death 仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_walk_direction4_contract.py --output qa/zhu_zhaofeng_walk_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_walk_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r9
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用祝朝奉自身原图和独立状态来源。
+
 ## 2026-09-15 祝朝奉四向待机身体原图
 
 新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_direction4.png`、同源头像和四份 idle SpriteFrames。四向资源由 `assets/direction4/zhu_zhaofeng_20260915.json` 记录固定格、来源会话、提示词 SHA 和原图 SHA；运行时只识别 idle，其他动作状态仍按缺图回退规则处理。复现检查：
