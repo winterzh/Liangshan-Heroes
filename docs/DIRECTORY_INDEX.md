@@ -1,3 +1,10 @@
+## 2026-09-16 官军精骑四向受击原图
+
+- `assets/characters/art_full_20260916/guan_jingqi_hurt_direction4_source.png`、`guan_jingqi_hurt_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/guan_jingqi_hurt_20260916.json`、`assets/direction4/web_prompts_20260916/guan_jingqi_hurt_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/guan_jingqi_hurt_{se,sw,ne,nw}.tres`：四向受击 SpriteFrames；`tools/guan_jingqi_hurt_atlas_scale.py`、`tools/guan_jingqi_hurt_direction4_contract.py`、`tools/guan_jingqi_hurt_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/guan_jingqi_hurt_direction4_20260916/README.md)。
+
 ## 2026-09-16 官军弓手四向受击原图
 
 - `assets/characters/art_full_20260916/guan_gong_hurt_direction4_source.png`、`guan_gong_hurt_direction4.png`：保留原生网页图与确定性 2×生产图。
