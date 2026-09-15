@@ -1,3 +1,13 @@
+## 2026-09-15 祝家庄恢复引导验证入口
+
+新增普通兵损失后的四语补员提示与主动定位，普通启动方式不变。[实现](ZHUJIAZHUANG_RECOVERY_20260915.md) · [验证结果与限制](../qa/zhujiazhuang_recovery_20260915/README.md)。
+
+```powershell
+py -3 -X utf8 -B tools/run_zhujiazhuang_recovery_qa.py --work-root D:/CodexTemp/zhu_recovery --min-png 3 --run
+```
+
+省略`--run`只读预检；引擎从`--godot`、`GODOT_PATH`或忽略的`godot.local.txt`读取。驱动使用当前Git基线加本轮六文件白名单，独立源码及APPDATA/LOCALAPPDATA/TEMP/TMP、禁用Steam、共享引擎锁；全新导入后串行解析与原生验证。窗口不可聚焦且移至屏幕外，截图来自实际渲染。此入口不会纳入其他未提交生产改动，也不执行玩家存档或Steam发布。
+
 ## 2026-09-14 玩法设计评审入口
 
 现行依据为[玩法方向定稿](GAMEPLAY_DIRECTION_20260914.md)，三份调研作历史参考；关卡分配与祝家庄样板沿用既有说明。七条按需组合，短篇突出人物、智谋与关键操作，设计公式可软化，质量底线仍须验收。现有[打磨路线](POLISH_ROADMAP_20260906.md)与[首次试玩清单](PLAYTEST_CHECKLIST_20260906.md)继续承担执行和验收记录。

@@ -1,3 +1,9 @@
+## 2026-09-15 祝家庄恢复引导
+
+- [实现与边界](ZHUJIAZHUANG_RECOVERY_20260915.md)：普通兵损失后的提示与主动定位。
+- [QA记录](../qa/zhujiazhuang_recovery_20260915/README.md)：自然接敌、补兵出营、GUI边界及截图。
+- [隔离驱动](../tools/run_zhujiazhuang_recovery_qa.py)与[原生场景验证](../tools/zhujiazhuang_recovery_qa.gd)。
+
 ## 2026-09-14 RTS 玩法方向定稿与调研入档
 
 - [玩法方向定稿](GAMEPLAY_DIRECTION_20260914.md)：后续设计与评审的现行依据。
