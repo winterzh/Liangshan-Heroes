@@ -1,0 +1,123 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "character": "lu_qian",
+  "scope": "idle-only four-direction body source; walk/attack/hurt/death remain open and must not be inferred from this sheet",
+  "sources": {
+    "lu_qian_atlas": {
+      "path": "assets/characters/art_full_20260915/lu_qian_direction4.png",
+      "sha256": "3f73f999960652ef35b4d3b42b39d43a937989663d8a235a1e989b705f26d8c0",
+      "job": "web ChatGPT conversation 6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "mode": "RGBA",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "import_limit": 0,
+      "imported_size": [
+        1254,
+        1254
+      ],
+      "imported_size_verified": true,
+      "alpha_zero_fraction": 0.7821096891859923,
+      "layout": "2x2; columns/rows map SE,SW,NE,NW in row-major order",
+      "prompt_file": "assets/direction4/web_prompts_20260915/lu_qian_idle_direction4.txt",
+      "prompt_sha256": "77a24866828be8874f1c9a360d04802e1a3fd020892e45266f6e17eceb0e69b2",
+      "conversation_url": "https://chatgpt.com/c/6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "visual_review": "Accepted after local original PNG inspection: four complete non-mirrored bodies, distinct front/back silhouettes, clean transparent background, no text/grid/border; source title typo does not change prompt identity.",
+      "retained_rgba": "Original downloaded PNG bytes kept. AtlasTexture crops only fixed cells; no mirroring, masking, recoloring, repainting or pixel clearing."
+    }
+  },
+  "poses": {
+    "idle_se": {
+      "source": "lu_qian_atlas",
+      "region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "idle_sw": {
+      "source": "lu_qian_atlas",
+      "region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "idle_ne": {
+      "source": "lu_qian_atlas",
+      "region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "idle_nw": {
+      "source": "lu_qian_atlas",
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    }
+  },
+  "states": {
+    "idle": [
+      "idle"
+    ]
+  },
+  "resources": [
+    "assets/anim/lu_qian_idle_se.tres",
+    "assets/anim/lu_qian_idle_sw.tres",
+    "assets/anim/lu_qian_idle_ne.tres",
+    "assets/anim/lu_qian_idle_nw.tres"
+  ]
+}

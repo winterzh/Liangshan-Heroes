@@ -3,6 +3,13 @@
 - `tools/art_sampling_clip_selftest.py`：头像、地形、动作和死亡残留 AtlasTexture 采样边界的源码回归检查。
 - `qa/art_sampling_clip_20260915/`：5/5 入口自测、来源契约和隔离 Godot 321 项渲染收据；不含生产 PNG 副本。
 
+## 2026-09-15 陆谦四向待机身体原图
+
+- [陆谦美术实现与边界](LU_QIAN_ART_20260915.md)
+- `assets/characters/art_full_20260915/lu_qian_direction4.png`、`assets/direction4/lu_qian_20260915.json`：原始网页 RGBA 图与固定 SE/SW/NE/NW 清单。
+- `assets/anim/lu_qian_idle_{se,sw,ne,nw}.tres`：直接引用原图的四向 idle 资源。
+- [来源、静态契约与 Godot 路由 QA](../qa/lu_qian_idle_direction4_20260915/README.md)
+
 ## 2026-09-15 Steam美术与镜头更新
 
 - `docs/STEAM_ART_UPDATE_20260915.md`：发行准备、酒幌导出修复及后续上线记录。

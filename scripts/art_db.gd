@@ -550,6 +550,8 @@ func terrain_texture(key: String) -> Texture2D:
 const STANDALONE_PORTRAITS := {
 	"dong_chao": "res://assets/characters/art_full_20260915/dong_chao.png",
 	"xue_ba": "res://assets/characters/art_full_20260915/xue_ba.png",
+	# 陆谦头像与本批四向身体原图同源，固定裁剪自SE格，避免旧灰底头像与新身体风格割裂。
+	"lu_qian": "res://assets/characters/art_full_20260915/lu_qian.png",
 	"guan_zhanzi": "res://assets/characters/guan_zhanzi_direction4_20260915/portrait.png",
 	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
 	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
