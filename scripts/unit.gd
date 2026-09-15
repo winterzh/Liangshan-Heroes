@@ -342,6 +342,7 @@ const DUST_DUR := 0.36
 # body motion and weapon pose already live in the bitmap, so the legacy whole-
 # sprite swing and procedural weapon trail must not be layered on top.
 const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"guan_zhanzi": true,
 	"guan_dao": true,
 	"guan_gong": true,
 	"guan_jingqi": true,

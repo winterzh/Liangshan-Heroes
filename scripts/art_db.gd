@@ -534,6 +534,7 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	"guan_zhanzi": "res://assets/characters/guan_zhanzi_direction4_20260915/portrait.png",
 	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
 	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
 	"sun_li": "res://assets/characters/codex_portraits_20260913/sun_li.png",
@@ -705,6 +706,13 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	if _generic_directional_path_cache.has(cache_key):
 		return String(_generic_directional_path_cache[cache_key])
 	var path := _generic_directional_path(key, state, direction)
+	# The executioner's legacy idle PNGs remain as provenance references.
+	# Prefer its reviewed atlas sequence without changing other units' routing.
+	if key == "guan_zhanzi":
+		var authored_path := path.get_basename() + ".tres"
+		if ResourceLoader.exists(authored_path) and not _load_generic_directional_frames(authored_path).is_empty():
+			_generic_directional_path_cache[cache_key] = authored_path
+			return authored_path
 	if not ResourceLoader.exists(path):
 		# Native transparent cutouts retain their original pixels. SpriteFrames
 		# resources provide frame order and AtlasTexture padding at draw time.

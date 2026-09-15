@@ -1,3 +1,10 @@
+## 2026-09-15 刽子手四向动作与肖像
+
+- [美术实现及边界](CHARACTER_ART_20260915.md)
+- [动作与肖像原图](../assets/characters/guan_zhanzi_direction4_20260915/)及[切片manifest](../assets/direction4/guan_zhanzi_20260915.json)
+- [生成提示词、退回稿与来源](../tools/contracts/guan_zhanzi_direction4_20260915/README.md)
+- [最终原生证据、失败诊断与目检](../qa/character_art_20260915/README.md)
+
 ## 2026-09-15 四语补丁说明
 
 - [发布说明与固定流程](STEAM_PATCH_NOTES_20260915.md)

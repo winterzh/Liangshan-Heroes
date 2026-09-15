@@ -1,0 +1,36 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/se.png" id="se"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/supplement.png" id="supplement"]
+
+[sub_resource type="AtlasTexture" id="walk_a_se"]
+atlas = ExtResource("se")
+region = Rect2(318, 27, 177, 177)
+margin = Rect2(39.5, 39.5, 79, 79)
+filter_clip = true
+metadata/draw_offset_px = Vector2(41.0, 8.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[sub_resource type="AtlasTexture" id="walk_b_se"]
+atlas = ExtResource("supplement")
+region = Rect2(0, 7, 275, 263)
+margin = Rect2(22.5, 28.5, 45, 57)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, -2.6)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_b_se")},
+{"duration": 1.0, "texture": SubResource("walk_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
