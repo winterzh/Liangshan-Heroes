@@ -40,3 +40,7 @@ py -3 -X utf8 -B qa/steam_release_20260915/collect_evidence.py --qa-run <成功Q
 **已正式上线**：Steam成功提示与default分支均回读为 **Build25316671**，Windows Depot5088121 / Manifest **7776799335954834384**。服务器六成员名称、字节数及SHA1全部匹配已验证候选；磁盘326741403字节、压缩250198816字节，Steam预计从上一版更新下载 **5.7 MB**。
 
 用户完成手动上传后，新Build已出现在构建页。本轮完成服务器核对和default上线；macos仍为0、steam-integration仍为25179481，其他Steamworks未发布设置和公告未改。原等待选文件阶段保留于 [publication_before_upload.json](publication_before_upload.json)，候选创建时的历史状态保留不回写。最终 [publication_receipt.json](publication_receipt.json) 与 [服务器核对](server_manifest_verification.json) 为本轮交付依据。未追加客户端下载试玩或真实Steam持久写入验收。
+
+## 后续补丁说明
+
+上述构建上线收据保留当时范围；随后按用户要求补发四语小型更新，见[补丁说明公开收据](../steam_patchnotes_20260915/README.md)。这不改变固定发行包或原有运行验收范围。

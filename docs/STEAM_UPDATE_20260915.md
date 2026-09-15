@@ -16,10 +16,10 @@
 
 包内专项是冻结状态夹具和按钮信号检查，不声称OS鼠标、自然接敌或真人理解通过；此前250项自然恢复/边界检查和11张源码截图目检保持[原有证据范围](../qa/zhujiazhuang_recovery_20260915/README.md)，不重复计为本轮完整EXE画面验收。实际EXE短测覆盖启动与预设断言，不等于八关完整通关、性能长跑、客户端下载或真实Steam持久写入。
 
-本次使用六个根文件的Windows标准ZIP，不修改macOS Depot、其他Steamworks未发布设置或商店页面，也未发布新公告。构建、上传副本哈希、服务器文件与default回读在[QA记录](../qa/steam_release_20260915/README.md)分别记录。
+本次使用六个根文件的Windows标准ZIP，不修改macOS Depot、其他Steamworks未发布设置或商店页面，构建上线阶段未发布新公告；随后按用户要求补发[四语补丁说明](STEAM_PATCH_NOTES_20260915.md)。构建、上传副本哈希、服务器文件与default回读在[QA记录](../qa/steam_release_20260915/README.md)分别记录。
 
 ## 当前交付状态
 
 **已正式上线**：Steam成功提示与default分支均回读为 **Build25316671**，Windows Depot5088121 / Manifest **7776799335954834384**。服务器六成员名称、字节数及SHA1全部匹配已验证候选；磁盘326741403字节、压缩250198816字节，Steam预计从上一版更新下载 **5.7 MB**。
 
-用户完成手动上传后，新Build已出现在构建页。本轮完成服务器核对和default上线；macos仍为0、steam-integration仍为25179481，其他Steamworks未发布设置和公告未改。原等待选文件阶段保留于 [publication_before_upload.json](../qa/steam_release_20260915/publication_before_upload.json)，候选创建时的历史状态保留不回写。最终 [publication_receipt.json](../qa/steam_release_20260915/publication_receipt.json) 与 [服务器核对](../qa/steam_release_20260915/server_manifest_verification.json) 为本轮交付依据。未追加客户端下载试玩或真实Steam持久写入验收。
+用户完成手动上传后，新Build已出现在构建页。本轮完成服务器核对和default上线；macos仍为0、steam-integration仍为25179481，其他Steamworks未发布设置未改。补丁说明已另行公开，见上述四语记录。原等待选文件阶段保留于 [publication_before_upload.json](../qa/steam_release_20260915/publication_before_upload.json)，候选创建时的历史状态保留不回写。最终 [publication_receipt.json](../qa/steam_release_20260915/publication_receipt.json) 与 [服务器核对](../qa/steam_release_20260915/server_manifest_verification.json) 为本轮交付依据。未追加客户端下载试玩或真实Steam持久写入验收。

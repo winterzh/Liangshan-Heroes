@@ -1,3 +1,8 @@
+## 2026-09-15 四语补丁说明
+
+- [发布说明与固定流程](STEAM_PATCH_NOTES_20260915.md)
+- [四语原文与公开回读收据](../qa/steam_patchnotes_20260915/README.md)
+
 ## 2026-09-15 Steam 祝家庄补员更新
 
 - [更新内容与范围](STEAM_UPDATE_20260915.md)
