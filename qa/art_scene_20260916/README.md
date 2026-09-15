@@ -41,4 +41,12 @@
 - 确定性 intake：`tools/intake_liangshan_trees_20260916.py`；素材契约：`liangshan_trees_contract.json`（21/21）。
 - 运行时路径：`assets/campaign/environment/level5/tree_broad.png`、`tree_young.png`、`willow_old.png`；三项校准已更新。
 - Level 5 实景捕获：`level5_capture/`；可达、寻路、选择、地表、隐蔽、阻挡全部通过，人工检查轮廓/透明和场景协调性。
+
+## 梁山水泊蒲苇场景统一
+
+- 原始图集：`assets/campaign/environment/art_scene_20260916/liangshan_reeds_source_20260916.png`；提示词：`liangshan_reeds_prompt.txt`。
+- 确定性 intake：`tools/intake_liangshan_reeds_20260916.py`；固定来源区域分别接入 `level5/reeds_short.png`、`reeds_tall.png`、`reeds_bent.png`、`reeds_seeded.png`。
+- 素材契约：`liangshan_reeds_contract.json`（32/32）；Level 5 运行时路由/尺寸/校准：`liangshan_reeds_runtime_contract.json`（24/24）；全库导入/库存回归摘录：`liangshan_reeds_art_full_qa_receipt_excerpt.json`（321/321）。
+- 四种生产图并排预览：`liangshan_reeds_preview.png`。
+- 透明边缘仅对 `0<alpha<=3` 像素统一 RGB，保留 alpha 与不透明原像素；未镜像、补画或改摆放。新素材尚未在当前无头会话产出新的 Level 5 图形捕获，因此窗口化场景目检仍是后续视觉门槛。
 - 梁山树木运行时路由/脚底校准：`liangshan_trees_runtime.json`，15/15 通过；关卡外访问被拒绝。

@@ -581,10 +581,10 @@ const SURFACE_ROUTES: Dictionary = {
 ## No crop, mask, pixel clearing, mirroring, or stitched sampling occurs here.
 const VISUAL_CALIBRATIONS: Dictionary = {
 	"object": {
-		"reeds_short": {"level_id":"level5", "source_sha256":"6549dfec74e9336a60a4e0290f60d72f9516c7bf4ee04710fefe674ce2a1b9ed", "visible_bbox_xywh":[115,145,282,222]},
-		"reeds_tall": {"level_id":"level5", "source_sha256":"2ac247db101fbdf1912266fcc4c88aa4d03a36fd33b64e6d7928d43fd660c4e3", "visible_bbox_xywh":[129,105,256,301]},
-		"reeds_bent": {"level_id":"level5", "source_sha256":"a76a1c59dd647defd49e66ea31f2822439375c4765a0ea65dd5696ffab4116e1", "visible_bbox_xywh":[95,139,319,231]},
-		"reeds_seeded": {"level_id":"level5", "source_sha256":"b0bfd2b8e9f8c176acf83918ca8183de15627da8a624b40c8a9d98f96e97bc46", "visible_bbox_xywh":[121,104,273,299]},
+		"reeds_short": {"level_id":"level5", "source_sha256":"eacb9d862c1d2d6aafc474290470fb01df13426b85bd8be56f787d4f0e5470e7", "visible_bbox_xywh":[115,145,505,366]},
+		"reeds_tall": {"level_id":"level5", "source_sha256":"96913721db6412806a37841a24e2c4ed18dedca49b44aaf90bde55dba994c885", "visible_bbox_xywh":[129,105,434,405]},
+		"reeds_bent": {"level_id":"level5", "source_sha256":"9632aec3e7634cc15456ceb9a40fcf247cc2b294583e252df9f9918e1091fb5f", "visible_bbox_xywh":[95,139,325,366]},
+		"reeds_seeded": {"level_id":"level5", "source_sha256":"40e9817c206cdabea9c092759a5215c579277966262e33e28bda17fb3ff217c9", "visible_bbox_xywh":[121,104,445,403]},
 		"willow_old": {"level_id":"level5", "source_sha256":"732aed950e4038773e189a9299f3befe66b36b7eb3fc8b66ceb9e538ce36879e", "visible_bbox_xywh":[120,107,407,392]},
 		"tree_broad": {"level_id":"level5", "source_sha256":"f7c85ba56bb2030430f6771dbd106c82729581c576d33a0da046ec2cb43f94e7", "visible_bbox_xywh":[115,119,426,416]},
 		"tree_young": {"level_id":"level5", "source_sha256":"8e0c1e7786a1a8fc133e354d5a01d8e65578ad1a7371ad960e337bc51bd05dcd", "visible_bbox_xywh":[120,132,355,408]},

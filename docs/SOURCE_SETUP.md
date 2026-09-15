@@ -1,3 +1,9 @@
+## 2026-09-16 梁山水泊蒲苇场景统一
+
+新增网页原生 `assets/campaign/environment/art_scene_20260916/liangshan_reeds_source_20260916.png`（1254×1254 RGBA）和提示词。`tools/intake_liangshan_reeds_20260916.py` 按固定来源区域把左上短蒲苇、右上高蒲苇、左下风压弯蒲苇、右下成熟带穗蒲苇裁切并确定性缩放到既有 Level 5 四个 512×512 路径；只对 `0<alpha<=3` 近透明像素改 RGB，alpha 和不透明图像保持不变。
+
+`tools/liangshan_reeds_contract.py`（32/32）、`tools/liangshan_reeds_runtime_contract.gd`（24/24）与全库 `tools/run_art_full_qa.py --run`（321/321）均通过。运行时校准已绑定新 SHA，四种形态仍由关卡路由单独取用；本批不改玩法或 Steam。无头会话未生成新的 Level 5 图形捕获，窗口化场景目检仍需补做。
+
 ## 2026-09-16 投石车四向攻击原图
 
 新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260916/siege_cata_attack_direction4_source.png`，生产图由 `tools/siege_cata_attack_atlas_scale.py` 对原图做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列为蓄力→上扬→释放→回稳。四份 `assets/anim/siege_cata_attack_{se,sw,ne,nw}.tres` 只引用固定 AtlasTexture 格、透明补边和 `filter_clip`，不镜像、不补画、不抹像素。

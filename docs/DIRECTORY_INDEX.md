@@ -1,3 +1,10 @@
+## 2026-09-16 梁山水泊蒲苇场景统一
+
+- `assets/campaign/environment/art_scene_20260916/liangshan_reeds_source_20260916.png`、`liangshan_reeds_prompt.txt`：网页原生 2×2 透明蒲苇图集与提示词。
+- `tools/intake_liangshan_reeds_20260916.py`、`tools/liangshan_reeds_contract.py`、`tools/liangshan_reeds_runtime_contract.gd`：固定裁切/缩放、来源契约与 Level 5 运行时路由验证。
+- `qa/art_scene_20260916/liangshan_reeds_{manifest,contract,runtime_contract}.json`、`liangshan_reeds_art_full_qa_receipt_excerpt.json`：SHA、尺寸、校准、路由和全库回归收据。
+- 生产路径仍为 `assets/campaign/environment/level5/reeds_{short,tall,bent,seeded}.png`。
+
 ## 2026-09-16 投石车四向攻击原图
 
 - `assets/characters/art_full_20260916/siege_cata_attack_direction4_source.png`、`siege_cata_attack_direction4.png`：保留原生网页图与确定性 2×生产图。
