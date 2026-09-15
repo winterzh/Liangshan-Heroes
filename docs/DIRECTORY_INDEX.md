@@ -1,3 +1,8 @@
+## 2026-09-15 Steam美术与镜头更新
+
+- `docs/STEAM_ART_UPDATE_20260915.md`：发行准备、酒幌导出修复及后续上线记录。
+- `qa/steam_art_release_20260915/`：本批发布验证、来源和公告。
+
 ## 2026-09-15 全库美术批次
 
 - `assets/characters/art_full_20260915/`：董超、薛霸独立原生头像。

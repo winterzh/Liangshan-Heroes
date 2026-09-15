@@ -632,7 +632,7 @@ const TEXT_RECT_SOURCE_SHA256: Dictionary = {
 
 
 const ATLAS_TEXT_CALIBRATIONS := {
-	"level7_heyang_wine_sign": {"route": "heyang_wine_sign", "level": "level7", "resource_sha256": "1ad2d48f8c77768c123700be9d6bf16205d6a4fdfb890bbb0b95aae4c3ef4c80", "source_sha256": "c8f487a92ff1e5639e154dad3ca1944fc22cf62e794e77d9807892377d726c4b", "rect": [0.3968633540372671, 0.37180124223602484, 0.08658385093167702, 0.2215527950310559]}
+	"level7_heyang_wine_sign": {"route": "heyang_wine_sign", "level": "level7", "resource_sha256": "1ad2d48f8c77768c123700be9d6bf16205d6a4fdfb890bbb0b95aae4c3ef4c80", "source_sha256": "c8f487a92ff1e5639e154dad3ca1944fc22cf62e794e77d9807892377d726c4b", "rect": [0.3968633540372671, 0.37180124223602484, 0.08658385093167702, 0.2215527950310559], "source_path": "res://assets/campaign/environment/art_full_20260915/market.png", "pixel_sha256": "99c8073e8cecfe81a03c9eb6c803020a37bd4fa7e2b9681b1e460ed24f77ebd0", "size": [1254, 1254], "region": [796, 0, 458, 698], "margin": [163.6829268292683, 0, 327.3658536585366, 87.3658536585366]}
 }
 
 static func _route_path(table: Dictionary, active_level_id: String, route_key: String,
@@ -715,6 +715,35 @@ static func text_rect(surface_id: String, accepted_source_sha256: String) -> Var
 
 ## Runtime text is enabled only for the exact accepted source file whose SHA was
 ## used to measure the rectangle. Missing files and stale measurements fail closed.
+static var _atlas_pixel_hashes: Dictionary = {}
+
+static func _atlas_calibration_matches(path: String, texture: Texture2D, record: Dictionary) -> bool:
+	if not texture is AtlasTexture or texture.atlas == null: return false
+	if texture.atlas.resource_path != record.source_path: return false
+	var region: Array = record.region
+	var margin: Array = record.margin
+	if not texture.region.is_equal_approx(Rect2(region[0],region[1],region[2],region[3])): return false
+	if not texture.margin.is_equal_approx(Rect2(margin[0],margin[1],margin[2],margin[3])): return false
+	# Source projects retain native bytes. Exported PCKs remap TRES/PNG resources;
+	# bind those to the same sampled geometry and decoded RGBA pixels instead.
+	if FileAccess.file_exists(path) and FileAccess.get_sha256(path) != record.resource_sha256: return false
+	var source_path: String = texture.atlas.resource_path
+	if FileAccess.file_exists(source_path):
+		return FileAccess.get_sha256(source_path) == record.source_sha256
+	if texture.atlas.get_size() != Vector2(record.size[0],record.size[1]): return false
+	var cache_key: int = texture.atlas.get_instance_id()
+	if not _atlas_pixel_hashes.has(cache_key):
+		var pixels: Image = texture.atlas.get_image()
+		if pixels == null or pixels.is_empty(): return false
+		if pixels.is_compressed() and pixels.decompress() != OK: return false
+		pixels.convert(Image.FORMAT_RGBA8)
+		var digest := HashingContext.new()
+		digest.start(HashingContext.HASH_SHA256)
+		digest.update(pixels.get_data())
+		_atlas_pixel_hashes[cache_key] = {"texture": texture.atlas, "sha256": digest.finish().hex_encode()}
+	return _atlas_pixel_hashes[cache_key].sha256 == record.pixel_sha256
+
+
 static func calibrated_text_rect(resolver: String, active_level_id: String,
 		route_key: String, state: String, surface_id: String) -> Variant:
 	var path := route_path(resolver,active_level_id,route_key,state)
@@ -723,9 +752,8 @@ static func calibrated_text_rect(resolver: String, active_level_id: String,
 		var record: Dictionary = ATLAS_TEXT_CALIBRATIONS.get(surface_id,{})
 		var atlas_path := path.get_basename()+".tres"
 		if record.is_empty() or record.route!=route_key or record.level!=active_level_id or state!="default": return null
-		if FileAccess.get_sha256(atlas_path)!=record.resource_sha256: return null
 		var texture = _load_texture(path)
-		if not texture is AtlasTexture or FileAccess.get_sha256(texture.atlas.resource_path)!=record.source_sha256: return null
+		if not _atlas_calibration_matches(atlas_path, texture, record): return null
 		return record.rect
 	var disk_path := ProjectSettings.globalize_path(path)
 	var source_sha := FileAccess.get_sha256(disk_path)
