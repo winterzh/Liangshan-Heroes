@@ -12,6 +12,10 @@
 
 网页端生成并下载陆谦严格四向 4×4 行走原图，原图检查为 1254×1254 RGBA、alpha 0–255、四行真实方向 SE/SW/NE/NW、每行四帧脚步有变化。原始 PNG 保留为 `lu_qian_walk_direction4_source.png`，生产图由确定性整图 2 倍 LANCZOS 缩放得到 2508×2508，四份 walk TRES 仅做固定矩形引用、透明补边和 `filter_clip`，没有镜像、抠像、重着色或补画。静态契约125项、独立Godot路由132项、全库库存321项均通过；收据见 `qa/lu_qian_walk_direction4_20260915/`，全库最终收据运行目录为 `D:\CodexTemp\art_full_continue_20260915_r7\20260915_231508_d9c52083`。陆谦 attack/hurt/death 仍未完成，本轮未导出、未上传或发布 Steam。
 
+## 2026-09-15 陆谦四向攻击原图
+
+网页端生成并下载陆谦严格四向 4×4 攻击原图，原图检查为 1254×1254 RGBA、alpha 0–255、四行真实方向 SE/SW/NE/NW、每行四帧刀法有变化。原始 PNG 保留为 `lu_qian_attack_direction4_source.png`，生产图由确定性整图 2 倍 LANCZOS 缩放得到 2508×2508，四份 attack TRES 仅做固定矩形引用、透明补边和 `filter_clip`，没有镜像、抠像、重着色或补画。静态契约125项、独立Godot路由140项、全库库存321项均通过；收据见 `qa/lu_qian_attack_direction4_20260915/`，全库最终收据运行目录为 `D:\CodexTemp\art_full_continue_20260915_r8\20260915_232636_fc9f23c9`。陆谦 hurt/death 仍未完成，本轮未导出、未上传或发布 Steam。
+
 ## 2026-09-15 祝朝奉四向待机身体原图
 
 网页端生成并下载祝朝奉严格四向 2×2 原图，原图检查为 1254×1254 RGBA、alpha 0–255、年长宽体、短须、栗色乡绅袍四格人物完整且方向固定 SE/SW/NE/NW。原始 PNG 直接纳入 `assets/characters/art_full_20260915/`，四份 idle TRES 仅做固定矩形引用、透明补边和 `filter_clip`，没有镜像、抠像、重着色或补画；又从同一 SE 格固定裁出头像，确保图鉴/HUD与身体同源。静态契约53项、独立Godot路由51项、全库库存321项均通过；收据见 `qa/zhu_zhaofeng_idle_direction4_20260915/`，全库最终收据运行目录为 `D:\CodexTemp\art_full_continue_20260915_r6\20260915_230149_2db3f629`。祝朝奉四种动作状态仍未完成，本轮未导出、未上传或发布 Steam。

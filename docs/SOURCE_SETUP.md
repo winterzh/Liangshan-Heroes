@@ -22,6 +22,19 @@ py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_ful
 
 这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
 
+## 2026-09-15 陆谦四向攻击原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260915/lu_qian_attack_direction4_source.png`，并以确定性整图 2 倍缩放得到 2508×2508 的生产图 `lu_qian_attack_direction4.png`；四行固定 SE/SW/NE/NW、四列依次为收刀、挥砍、伸展、收势。四向资源由 `assets/direction4/lu_qian_attack_20260915.json` 记录原图/生产图哈希、缩放步骤、固定格、来源会话和提示词 SHA；运行时只识别 attack，hurt 按既有规则回退 idle，death 仍为空。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/lu_qian_attack_atlas_scale.py
+py -3 -X utf8 -B tools/lu_qian_attack_direction4_contract.py --output qa/lu_qian_attack_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/lu_qian_attack_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r8
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
+
 ## 2026-09-15 陆谦四向行走原图
 
 新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260915/lu_qian_walk_direction4_source.png`，并以确定性整图 2 倍缩放得到 2508×2508 的生产图 `lu_qian_walk_direction4.png`；四行固定 SE/SW/NE/NW、四列为步态循环。四向资源由 `assets/direction4/lu_qian_walk_20260915.json` 记录原图/生产图哈希、缩放步骤、固定格、来源会话和提示词 SHA；运行时只识别 walk，attack/hurt/death 仍按缺图回退规则处理。复现检查：

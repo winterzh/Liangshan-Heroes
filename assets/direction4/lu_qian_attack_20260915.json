@@ -1,0 +1,51 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "character": "lu_qian",
+  "scope": "attack-only four-direction body source; idle and walk are covered separately; hurt/death remain open and must not be inferred from this sheet",
+  "sources": {
+    "lu_qian_attack_atlas": {
+      "path": "assets/characters/art_full_20260915/lu_qian_attack_direction4.png",
+      "sha256": "bc7884134a197d2e59509417868ae1114334929f2d221e877c47f27191059234",
+      "job": "web ChatGPT conversation 6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "mode": "RGBA",
+      "native_size": [2508, 2508],
+      "import_limit": 0,
+      "imported_size": [2508, 2508],
+      "imported_size_verified": true,
+      "alpha_zero_fraction": 0.65653481427216,
+      "layout": "4x4; each row is one direction and four columns are an attack cycle: SE,SW,NE,NW",
+      "raw_web_source": "assets/characters/art_full_20260915/lu_qian_attack_direction4_source.png",
+      "raw_web_source_sha256": "9b963e54a90a3010b9ca3ebb272b0058f60168410f37728b705f1a7573e6c918",
+      "raw_web_size": [1254, 1254],
+      "production_transform": "deterministic whole-image 2x LANCZOS scale to 2508x2508 so the 4x4 atlas has integer 627px cells; no mirroring, masking, repainting, alpha clearing or color correction",
+      "prompt_file": "assets/direction4/web_prompts_20260915/lu_qian_attack_direction4.txt",
+      "prompt_sha256": "8701ec0eedb57e4e59f7b99732e70d6e965db343965cbd0fe4392c24db237b2c",
+      "conversation_url": "https://chatgpt.com/c/6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "visual_review": "Accepted after local original PNG inspection: same slim official identity, distinct front and back rows, four visibly different non-gory sword attack poses per direction, clean transparent background and no text/grid/border.",
+      "retained_rgba": "Raw downloaded PNG is retained beside the deterministic production-sized atlas. AtlasTexture crops only fixed cells; no mirroring, masking, recoloring, repainting or pixel clearing."
+    }
+  },
+  "poses": {
+    "windup_se": {"source": "lu_qian_attack_atlas", "region": [0, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_se": {"source": "lu_qian_attack_atlas", "region": [627, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_se": {"source": "lu_qian_attack_atlas", "region": [1254, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_se": {"source": "lu_qian_attack_atlas", "region": [1881, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "windup_sw": {"source": "lu_qian_attack_atlas", "region": [0, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_sw": {"source": "lu_qian_attack_atlas", "region": [627, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_sw": {"source": "lu_qian_attack_atlas", "region": [1254, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_sw": {"source": "lu_qian_attack_atlas", "region": [1881, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "windup_ne": {"source": "lu_qian_attack_atlas", "region": [0, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_ne": {"source": "lu_qian_attack_atlas", "region": [627, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_ne": {"source": "lu_qian_attack_atlas", "region": [1254, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_ne": {"source": "lu_qian_attack_atlas", "region": [1881, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "windup_nw": {"source": "lu_qian_attack_atlas", "region": [0, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_nw": {"source": "lu_qian_attack_atlas", "region": [627, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_nw": {"source": "lu_qian_attack_atlas", "region": [1254, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_nw": {"source": "lu_qian_attack_atlas", "region": [1881, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0}
+  },
+  "states": {"attack": ["windup", "slash", "extend", "recover"]},
+  "resources": [
+    "assets/anim/lu_qian_attack_se.tres", "assets/anim/lu_qian_attack_sw.tres",
+    "assets/anim/lu_qian_attack_ne.tres", "assets/anim/lu_qian_attack_nw.tres"
+  ]
+}

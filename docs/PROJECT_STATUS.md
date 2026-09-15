@@ -12,6 +12,10 @@
 
 陆谦新增网页端 4×4 真透明行走原图；四行固定 SE/SW/NE/NW，每行四帧脚步变化，原始 1254×1254 PNG 保留并确定性缩放为 2508×2508 生产图，已接入四份 walk TRES。125 项静态契约、132 项 Godot 路由检查及全库 321 项库存检查通过。陆谦 attack/hurt/death、祝朝奉 walk/attack/hurt/death、旧头像背景和技能实战辨识仍开放；本批没有发布 Steam。详见 [行走 QA](../qa/lu_qian_walk_direction4_20260915/README.md)。
 
+## 2026-09-15 陆谦四向攻击原图
+
+陆谦新增网页端 4×4 真透明攻击原图；四行固定 SE/SW/NE/NW，每行四帧刀法变化，原始 1254×1254 PNG 保留并确定性缩放为 2508×2508 生产图，已接入四份 attack TRES。125 项静态契约、140 项 Godot 路由检查及全库 321 项库存检查通过。陆谦 hurt/death、祝朝奉 walk/attack/hurt/death、旧头像背景和技能实战辨识仍开放；本批没有发布 Steam。详见 [攻击 QA](../qa/lu_qian_attack_direction4_20260915/README.md)。
+
 ## 2026-09-15 祝朝奉四向待机身体原图
 
 祝朝奉新增网页端 2×2 真透明四向身体原图，并从同源 SE 格固定裁出匹配头像；年长宽体、短须、栗色乡绅袍与陆谦的精瘦官吏造型明确区分，四格固定 SE/SW/NE/NW，已接入四份 idle TRES。53 项静态契约、51 项 Godot 路由检查及全库 321 项库存检查通过。祝朝奉 walk/attack/hurt/death、旧头像背景和技能实战辨识仍开放；本批没有发布 Steam。详见 [祝朝奉美术记录](ZHU_ZHAOFENG_ART_20260915.md) 和 [QA](../qa/zhu_zhaofeng_idle_direction4_20260915/README.md)。

@@ -16,6 +16,12 @@
 - `assets/direction4/lu_qian_walk_20260915.json`、`assets/anim/lu_qian_walk_{se,sw,ne,nw}.tres`：4×4 行走图集清单和四方向四帧资源。
 - [来源、静态契约与 Godot 路由 QA](../qa/lu_qian_walk_direction4_20260915/README.md)
 
+## 2026-09-15 陆谦四向攻击原图
+
+- `assets/characters/art_full_20260915/lu_qian_attack_direction4_source.png`、`lu_qian_attack_direction4.png`：保留原始网页图及确定性 2×生产图。
+- `assets/direction4/lu_qian_attack_20260915.json`、`assets/anim/lu_qian_attack_{se,sw,ne,nw}.tres`：4×4 攻击图集清单和四方向四帧资源。
+- [来源、静态契约与 Godot 路由 QA](../qa/lu_qian_attack_direction4_20260915/README.md)
+
 ## 2026-09-15 祝朝奉四向待机身体原图
 
 - [祝朝奉美术实现与边界](ZHU_ZHAOFENG_ART_20260915.md)
