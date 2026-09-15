@@ -1823,3 +1823,10 @@ Godot 4.6.3 实际重新导入20项。专属运行合约90项、连环马深度2
 用户要求以后每次完成开发同步 GitHub 并更新项目文件。新增根目录 `AGENTS.md` 固化验证、文档更新、本轮差异审核、提交推送和远端 SHA 回读流程；同步更新 `SOURCE_SETUP.md`、`DIRECTORY_INDEX.md`。不包含 Steam 上传或正式发布，也不允许把凭据、缓存、无关备份及其他任务未完成修改一并推送。
 
 本轮只读确认外层和内层均不是 Git 仓库；来源是 ZIP 解压，文档只记录上游 `winterzh/Liangshan-Heroes`。用户目标仓库尚未确认，因此尚未 git init、commit 或 push，等待用户提供目标仓库地址后补同步；没有更改任何远端状态。
+## 2026-09-16 撞车四向攻击原图（本地，未发布）
+
+继续补普通攻城器械动作缺口，使用同一网页原生会话重做北宋木制撞车 `siege_ram` 的 4×4 真透明攻击原图。新版明确采用宋代开放式木架、低矮顶棚、粗大圆木撞槌、暗铁箍、双轮和麻绳，去掉旗帜与欧洲中世纪房车感；四行固定 SE/SW/NE/NW，四帧为收槌、推槌、顶到最前、回稳，正背面独立绘制，不镜像。
+
+接入 `assets/anim/siege_ram_attack_{se,sw,ne,nw}.tres`，原始 RGBA 图、确定性 2×生产图、提示词、清单与 QA 分别保留在 `assets/characters/art_full_20260916/`、`assets/direction4/`、`qa/siege_ram_attack_direction4_20260916/`。静态契约 128/128，Godot 4.6.3 运行时 128/128，全库美术导入/库存回归 `complete=true`（321 项）。
+
+本轮只补 `siege_ram` attack，既有 idle/walk 与玩法数值保持原路由；没有改镜头、玩家存档、导出包或 Steam。其余普通单位动作、旧头像背景、地形接缝与技能实战辨识仍开放。

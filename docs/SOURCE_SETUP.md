@@ -1271,3 +1271,14 @@ Steam 发布目录为 `<steamworks_workspace>`。`2026-09-01` 的 BuildID `25051
 - 当前状态：相关本地项目文档已更新；GitHub 接入等待用户确认目标仓库地址。尚未初始化仓库、创建提交或推送，不能称远端已同步。
 
 本机临时目录 `scratchpad/` 由 `.gdignore` 阻止 Godot 扫描，并在导出预设中排除。保留该标记；否则历史脚本可能覆盖当前全局类。Windows PCK 的目录排除与四语启动已验证，详见本批 QA。
+## 2026-09-16 撞车四向攻击原图
+
+- 私有 Godot 运行：`tools/siege_ram_attack_direction4_runtime_qa.gd`，输出 `128 checks; 0 failures`。
+- 全库隔离导入/库存回归：`complete=true`，321 项检查通过，运行目录为 `D:\CodexTemp\art_full_siege_ram_attack_20260916_r1\20260916_025716_ec2b9ecd`。
+
+```powershell
+py -3 -X utf8 -B tools/siege_ram_attack_atlas_scale.py
+py -3 -X utf8 -B tools/siege_ram_attack_direction4_contract.py --output qa/siege_ram_attack_direction4_20260916/contract.json
+$env:SIEGE_RAM_ATTACK_OUT='D:\CodexTemp\siege_ram_attack_runtime_20260916_r1'; $env:STEAM_DISABLED='1'; & 'C:\Users\rsb\Desktop\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'D:\AI项目\水浒\开发工程' --script res://tools/siege_ram_attack_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_siege_ram_attack_20260916_r1
+```

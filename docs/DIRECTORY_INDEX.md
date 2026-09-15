@@ -1037,3 +1037,9 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 3. 结束且不再被工具读取的实施批次，完整迁入 `_archive/implementation_history/`，同时更新本索引和活动工具路径。
 4. 新视觉对比放入 `_archive/visual_samples/<批次名>/`，不要再创建新的根目录 `visual_sample_*`。
 5. 新发布候选放入 `_archive/release_candidates/<批次名>/`；Steam 发布目录仍与本工作区隔离。
+## 2026-09-16 撞车四向攻击原图
+
+- `assets/characters/art_full_20260916/siege_ram_attack_direction4_source.png`、`siege_ram_attack_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/siege_ram_attack_20260916.json`、`assets/direction4/web_prompts_20260916/siege_ram_attack_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/siege_ram_attack_{se,sw,ne,nw}.tres`：四向攻击 SpriteFrames；`tools/siege_ram_attack_atlas_scale.py`、`tools/siege_ram_attack_direction4_contract.py`、`tools/siege_ram_attack_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/siege_ram_attack_direction4_20260916/README.md)。
