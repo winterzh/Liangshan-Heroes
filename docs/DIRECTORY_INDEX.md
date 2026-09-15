@@ -1,3 +1,8 @@
+## 2026-09-15 图集采样边界修复
+
+- `tools/art_sampling_clip_selftest.py`：头像、地形、动作和死亡残留 AtlasTexture 采样边界的源码回归检查。
+- `qa/art_sampling_clip_20260915/`：5/5 入口自测、来源契约和隔离 Godot 321 项渲染收据；不含生产 PNG 副本。
+
 ## 2026-09-15 Steam美术与镜头更新
 
 - `docs/STEAM_ART_UPDATE_20260915.md`：发行准备、酒幌导出修复及后续上线记录。

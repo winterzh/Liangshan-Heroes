@@ -1,3 +1,15 @@
+## 2026-09-15 图集采样边界修复
+
+美术运行时切片入口已为头像、地形、剧情变体、旧条带、四向动作和死亡残留启用 `AtlasTexture.filter_clip`，防止缩放时跨格采样。生产 PNG 与来源清单没有变化；本地验证入口与边界见 [采样修复 QA](../qa/art_sampling_clip_20260915/README.md)。
+
+```powershell
+py -3 -X utf8 -B tools/art_sampling_clip_selftest.py --out scratchpad/art_full_continue/art_sampling_clip_selftest.json
+py -3 -X utf8 -B tools/art_full_source_contract.py --output scratchpad/art_full_continue/source_contract.json
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r3
+```
+
+最后一条命令在工程外建立私有源码/profile 并串行执行 Godot 导入与全库库存渲染；它不操作玩家存档、生产 PNG、导出物或 Steam 状态。`--run` 以外只做源文件/契约检查。
+
 ## 2026-09-15 Steam美术更新准备与酒幌导出校准修复
 
 用户授权发布本次美术与镜头更新并配原画公告。首个包内专项发现酒幌原字节校准不兼容导出；已增加等价的纹理像素及图集几何校验，源码321项通过，继续发行包验证。见[更新记录](STEAM_ART_UPDATE_20260915.md)。

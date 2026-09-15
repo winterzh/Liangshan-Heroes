@@ -14509,6 +14509,9 @@ class DeathRemains extends Node2D:
 		var sliced := AtlasTexture.new()
 		sliced.atlas = atlas
 		sliced.region = Rect2(col * cell_w, row * cell_h, cell_w, cell_h)
+		# Death-remains are sampled from a 4x2 sheet; clip the sample to the
+		# selected cell so scaled blood/equipment marks do not pick up neighbours.
+		sliced.filter_clip = true
 		frame_texture = sliced
 
 	func is_revealed() -> bool:

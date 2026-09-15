@@ -349,6 +349,10 @@ func _atlas(tex: Texture2D, cell: Vector2i, grid: int, cache_key: String) -> Tex
 	var at := AtlasTexture.new()
 	at.atlas = tex
 	at.region = Rect2(cell.x * cs, cell.y * cs, cs, cs)
+	# Keep linear sampling inside this cell. Without filter_clip, the one-pixel
+	# edge of a neighbouring portrait/terrain cell can bleed into the silhouette
+	# when the atlas is scaled by the camera.
+	at.filter_clip = true
 	_cache[cache_key] = at
 	return at
 
@@ -640,6 +644,7 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 						var frame := AtlasTexture.new()
 						frame.atlas = variant_tex
 						frame.region = Rect2(i * frame_size, 0, frame_size, frame_size)
+						frame.filter_clip = true
 						result.append(frame)
 				_anim_cache[variant_cache_key] = result
 				return result
@@ -686,6 +691,7 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 			var at := AtlasTexture.new()
 			at.atlas = tex
 			at.region = Rect2(i * h, 0, h, h)
+			at.filter_clip = true
 			frames.append(at)
 	_anim_cache[ck] = frames
 	if not directional_ck.is_empty():
@@ -768,6 +774,7 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 		var at := AtlasTexture.new()
 		at.atlas = tex
 		at.region = Rect2(i * h, 0, h, h)
+		at.filter_clip = true
 		frames.append(at)
 	return frames
 
