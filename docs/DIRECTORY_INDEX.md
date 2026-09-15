@@ -1,3 +1,10 @@
+## 2026-09-16 黄泥冈松林场景统一
+
+- `assets/campaign/environment/art_scene_20260916/huangnigang_pines_source_20260916.png`：网页端原生 2×2 透明松树图集。
+- `tools/intake_huangnigang_pines_20260916.py`、`tools/huangnigang_pines_contract.py`：确定性裁切和来源/运行时契约。
+- `qa/art_scene_20260916/`：提示词、SHA清单、21项契约、Level 1 图形捕获与场景验证。
+- 运行时仍使用 `assets/campaign/environment/level1/huangnigang_pine_{old,double,young_lean}.png`。
+
 ## 2026-09-15 图集采样边界修复
 
 - `tools/art_sampling_clip_selftest.py`：头像、地形、动作和死亡残留 AtlasTexture 采样边界的源码回归检查。
