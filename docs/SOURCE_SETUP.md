@@ -1,3 +1,9 @@
+## 2026-09-16 梁山核心人物头像统一
+
+新增网页原生 `assets/characters/art_full_20260916/liangshan_core_portraits_source_20260916.png`（1254×1254 RGB 2×2 图集）和同源提示词。`tools/intake_liangshan_core_portraits_20260916.py` 按固定四象限裁切、2× LANCZOS 缩放，输出晁盖、鲁智深、武松、公孙胜四张 1254×1254 独立头像；源图像素完整保留，不镜像、不重绘、不清除背景。
+
+`scripts/art_db.gd` 的 `STANDALONE_PORTRAITS` 已优先接入四张新图，图鉴和 HUD 读取同一来源。`tools/liangshan_core_portraits_contract.py`（28/28）、`tools/liangshan_core_portraits_runtime_contract.gd`（13/13）及全库美术导入/库存回归（321/321）通过。原始图、提示词、裁切清单和 QA 收据见 `assets/characters/art_full_20260916/`、`qa/character_identity_20260916/`。
+
 ## 2026-09-16 梁山水泊蒲苇场景统一
 
 新增网页原生 `assets/campaign/environment/art_scene_20260916/liangshan_reeds_source_20260916.png`（1254×1254 RGBA）和提示词。`tools/intake_liangshan_reeds_20260916.py` 按固定来源区域把左上短蒲苇、右上高蒲苇、左下风压弯蒲苇、右下成熟带穗蒲苇裁切并确定性缩放到既有 Level 5 四个 512×512 路径；只对 `0<alpha<=3` 近透明像素改 RGB，alpha 和不透明图像保持不变。

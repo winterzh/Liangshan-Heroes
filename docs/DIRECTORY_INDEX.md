@@ -1,3 +1,11 @@
+## 2026-09-16 梁山核心人物头像统一
+
+- `assets/characters/art_full_20260916/liangshan_core_portraits_source_20260916.png`、`liangshan_core_portraits_prompt_20260916.txt`：网页原生 2×2 图集和提示词。
+- `assets/characters/art_full_20260916/{chao_gai,lu_zhishen,wu_song,gongsun_sheng}_portrait_20260916.png`：固定象限裁切并 2×缩放后的独立头像。
+- `assets/characters/art_full_20260916/liangshan_core_portraits_manifest_20260916.json`、`tools/intake_liangshan_core_portraits_20260916.py`：来源 SHA、裁切坐标和生产记录。
+- `tools/liangshan_core_portraits_contract.py`、`tools/liangshan_core_portraits_runtime_contract.gd`、`qa/character_identity_20260916/`：静态/运行时/全库回归证据。
+- `scripts/art_db.gd`：四名核心人物加入 `STANDALONE_PORTRAITS`，独立头像优先于旧图集。
+
 ## 2026-09-16 梁山水泊蒲苇场景统一
 
 - `assets/campaign/environment/art_scene_20260916/liangshan_reeds_source_20260916.png`、`liangshan_reeds_prompt.txt`：网页原生 2×2 透明蒲苇图集与提示词。
