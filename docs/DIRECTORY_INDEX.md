@@ -1,3 +1,10 @@
+## 2026-09-16 投石车四向攻击原图
+
+- `assets/characters/art_full_20260916/siege_cata_attack_direction4_source.png`、`siege_cata_attack_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/siege_cata_attack_20260916.json`、`assets/direction4/web_prompts_20260916/siege_cata_attack_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/siege_cata_attack_{se,sw,ne,nw}.tres`：四向攻击 SpriteFrames；`tools/siege_cata_attack_atlas_scale.py`、`tools/siege_cata_attack_direction4_contract.py`、`tools/siege_cata_attack_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/siege_cata_attack_direction4_20260916/README.md)。
+
 ## 2026-09-16 官军精骑四向受击原图
 
 - `assets/characters/art_full_20260916/guan_jingqi_hurt_direction4_source.png`、`guan_jingqi_hurt_direction4.png`：保留原生网页图与确定性 2×生产图。
