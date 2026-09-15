@@ -37,6 +37,6 @@ py -3 -X utf8 -B qa/steam_release_20260915/collect_evidence.py --qa-run <成功Q
 
 ## 当前交付状态
 
-本地候选、185项原生检查、1128项包内检查、20项内容身份、29项包内补员专项和11例实际EXE短测全部完成。上传副本已逐字节匹配。浏览器文件选择接口返回后，Windows Depot文件输入仍为空，两次尝试一致；未点击空上传，尚未创建新Build，也未改变default。
+**已正式上线**：Steam成功提示与default分支均回读为 **Build25316671**，Windows Depot5088121 / Manifest **7776799335954834384**。服务器六成员名称、字节数及SHA1全部匹配已验证候选；磁盘326741403字节、压缩250198816字节，Steam预计从上一版更新下载 **5.7 MB**。
 
-需要用户在已打开的Windows Depot5088121“选择文件”控件中手动选中 `D:\CodexTemp\steam_release_20260915\upload\LiangshanHeroes_Steam_candidate.zip`，随后继续上传、服务器六文件核对和default上线；若Steam要求手机确认，再由用户完成。实际进展由publication_receipt.json记录。
+用户完成手动上传后，新Build已出现在构建页。本轮完成服务器核对和default上线；macos仍为0、steam-integration仍为25179481，其他Steamworks未发布设置和公告未改。原等待选文件阶段保留于 [publication_before_upload.json](publication_before_upload.json)，候选创建时的历史状态保留不回写。最终 [publication_receipt.json](publication_receipt.json) 与 [服务器核对](server_manifest_verification.json) 为本轮交付依据。未追加客户端下载试玩或真实Steam持久写入验收。
