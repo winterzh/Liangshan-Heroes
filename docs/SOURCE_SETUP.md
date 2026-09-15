@@ -1,3 +1,18 @@
+## 2026-09-16 官军弓手四向受击原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260916/guan_gong_hurt_direction4_source.png`，生产图由 `tools/guan_gong_hurt_atlas_scale.py` 对原图做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列为持弓警戒→后仰→踉跄→回稳。四份 `assets/anim/guan_gong_hurt_{se,sw,ne,nw}.tres` 只引用固定 AtlasTexture 格、透明补边和 `filter_clip`，不镜像、不补画、不抹像素。
+
+复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/guan_gong_hurt_atlas_scale.py
+py -3 -X utf8 -B tools/guan_gong_hurt_direction4_contract.py --output qa/guan_gong_hurt_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/guan_gong_hurt_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_guan_gong_hurt_20260916_r1
+```
+
+静态契约 128/128、Godot 路由 128/128、全库美术导入/库存回归 complete=true。原始来源、提示词 SHA、生产 SHA 和固定格清单见 `assets/direction4/guan_gong_hurt_20260916.json`；QA 收据见 `qa/guan_gong_hurt_direction4_20260916/README.md`。本批未改玩法、导出包或 Steam。
+
 ## 2026-09-16 官军刀盾兵四向受击原图
 
 新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260916/guan_dao_hurt_direction4_source.png`，生产图由 `tools/guan_dao_hurt_atlas_scale.py` 对原图做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列为警戒→后仰→踉跄→回稳。四份 `assets/anim/guan_dao_hurt_{se,sw,ne,nw}.tres` 只引用固定 AtlasTexture 格、透明补边和 `filter_clip`，不镜像、不补画、不抹像素。
