@@ -632,7 +632,7 @@ const TEXT_RECT_SOURCE_SHA256: Dictionary = {
 
 
 const ATLAS_TEXT_CALIBRATIONS := {
-	"level7_heyang_wine_sign": {"route": "heyang_wine_sign", "level": "level7", "resource_sha256": "1ad2d48f8c77768c123700be9d6bf16205d6a4fdfb890bbb0b95aae4c3ef4c80", "source_sha256": "c8f487a92ff1e5639e154dad3ca1944fc22cf62e794e77d9807892377d726c4b", "rect": [0.3968633540372671, 0.37180124223602484, 0.08658385093167702, 0.2215527950310559], "source_path": "res://assets/campaign/environment/art_full_20260915/market.png", "pixel_sha256": "99c8073e8cecfe81a03c9eb6c803020a37bd4fa7e2b9681b1e460ed24f77ebd0", "size": [1254, 1254], "region": [796, 0, 458, 698], "margin": [163.6829268292683, 0, 327.3658536585366, 87.3658536585366]}
+	"level7_heyang_wine_sign": {"route": "heyang_wine_sign", "level": "level7", "resource_sha256": "1ad2d48f8c77768c123700be9d6bf16205d6a4fdfb890bbb0b95aae4c3ef4c80", "source_sha256": "c8f487a92ff1e5639e154dad3ca1944fc22cf62e794e77d9807892377d726c4b", "rect": [0.3968633540372671, 0.37180124223602484, 0.08658385093167702, 0.2215527950310559], "source_path": "res://assets/campaign/environment/art_full_20260915/market.png", "pixel_sha256": "99c8073e8cecfe81a03c9eb6c803020a37bd4fa7e2b9681b1e460ed24f77ebd0", "imported_pixel_sha256": "6a707814ca8d084fcf72fe00289d8004db3e39ae175c23e77a6280b7a275769b", "size": [1254, 1254], "region": [796, 0, 458, 698], "margin": [163.6829268292683, 0, 327.3658536585366, 87.3658536585366]}
 }
 
 static func _route_path(table: Dictionary, active_level_id: String, route_key: String,
@@ -719,7 +719,7 @@ static var _atlas_pixel_hashes: Dictionary = {}
 
 static func _atlas_calibration_matches(path: String, texture: Texture2D, record: Dictionary) -> bool:
 	if not texture is AtlasTexture or texture.atlas == null: return false
-	if texture.atlas.resource_path != record.source_path: return false
+	var atlas_is_native: bool = texture.atlas.resource_path == record.source_path
 	var region: Array = record.region
 	var margin: Array = record.margin
 	if not texture.region.is_equal_approx(Rect2(region[0],region[1],region[2],region[3])): return false
@@ -728,7 +728,7 @@ static func _atlas_calibration_matches(path: String, texture: Texture2D, record:
 	# bind those to the same sampled geometry and decoded RGBA pixels instead.
 	if FileAccess.file_exists(path) and FileAccess.get_sha256(path) != record.resource_sha256: return false
 	var source_path: String = texture.atlas.resource_path
-	if FileAccess.file_exists(source_path):
+	if atlas_is_native and FileAccess.file_exists(source_path):
 		return FileAccess.get_sha256(source_path) == record.source_sha256
 	if texture.atlas.get_size() != Vector2(record.size[0],record.size[1]): return false
 	var cache_key: int = texture.atlas.get_instance_id()
@@ -741,7 +741,8 @@ static func _atlas_calibration_matches(path: String, texture: Texture2D, record:
 		digest.start(HashingContext.HASH_SHA256)
 		digest.update(pixels.get_data())
 		_atlas_pixel_hashes[cache_key] = {"texture": texture.atlas, "sha256": digest.finish().hex_encode()}
-	return _atlas_pixel_hashes[cache_key].sha256 == record.pixel_sha256
+	var pixel_sha: String = _atlas_pixel_hashes[cache_key].sha256
+	return pixel_sha == record.pixel_sha256 or pixel_sha == record.get("imported_pixel_sha256", "")
 
 
 static func calibrated_text_rect(resolver: String, active_level_id: String,
