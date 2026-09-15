@@ -1,3 +1,10 @@
+## 2026-09-16 梁山水泊树木场景统一
+
+- `assets/campaign/environment/art_scene_20260916/liangshan_trees_source_20260916.png`：网页端原生 2×2 透明梁山植被图集。
+- `tools/intake_liangshan_trees_20260916.py`、`tools/liangshan_trees_contract.py`：确定性裁切、校准和来源契约。
+- `qa/art_scene_20260916/`：提示词、SHA 清单、契约、Level 5 图形捕获和回归记录。
+- 运行时仍使用 `assets/campaign/environment/level5/tree_{broad,young}.png` 与 `willow_old.png`。
+
 ## 2026-09-16 黄泥冈松林场景统一
 
 - `assets/campaign/environment/art_scene_20260916/huangnigang_pines_source_20260916.png`：网页端原生 2×2 透明松树图集。

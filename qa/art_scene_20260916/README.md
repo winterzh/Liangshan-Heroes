@@ -27,9 +27,18 @@
 
 ## 未在本批宣称完成
 
-梁山宽冠杂木/幼树/老柳、地表纹理接缝、旧树边缘、空白牌匾文字和 UI/特效仍按原台账继续排期；本批只关闭黄泥冈三种松树的场景缺口。
+地表纹理接缝、其他旧树边缘、空白牌匾文字和 UI/特效仍按原台账继续排期；本批已关闭黄泥冈松林和梁山三种路由树木的场景缺口。
 
 ## 全库回归链接
 
 - 全库美术 QA：`art_full_qa_receipt.json`，隔离导入和库存渲染完成，321 项库存通过。
 - 源文件/采样回归：`art_full_source_contract.json`、`art_sampling_clip_selftest.json`。
+
+## 梁山水泊树木场景统一
+
+- 原始图集：`assets/campaign/environment/art_scene_20260916/liangshan_trees_source_20260916.png`；会话仍为同一网页原生生图会话。
+- 清单、提示词与来源 SHA：`liangshan_trees_manifest.json`、`liangshan_trees_prompt.txt`。
+- 确定性 intake：`tools/intake_liangshan_trees_20260916.py`；素材契约：`liangshan_trees_contract.json`（21/21）。
+- 运行时路径：`assets/campaign/environment/level5/tree_broad.png`、`tree_young.png`、`willow_old.png`；三项校准已更新。
+- Level 5 实景捕获：`level5_capture/`；可达、寻路、选择、地表、隐蔽、阻挡全部通过，人工检查轮廓/透明和场景协调性。
+- 梁山树木运行时路由/脚底校准：`liangshan_trees_runtime.json`，15/15 通过；关卡外访问被拒绝。

@@ -1,3 +1,7 @@
+## 2026-09-16 梁山水泊树木场景统一
+
+新增网页端原生环境图集 `assets/campaign/environment/art_scene_20260916/liangshan_trees_source_20260916.png`（1254×1254 RGBA），由 `tools/intake_liangshan_trees_20260916.py` 固定裁切到既有 Level 5 三个 512×512 PNG 接口；幼树象限先裁掉相邻格溢出的透明外像素，未清除自身像素。`tools/liangshan_trees_contract.py` 负责来源、alpha、尺寸、SHA和运行时路径检查，21/21 通过；`scripts/campaign_environment_art.gd` 三项校准绑定新生产图哈希。
+
 ## 2026-09-16 黄泥冈松林场景统一
 
 新增网页端原生环境图集 `assets/campaign/environment/art_scene_20260916/huangnigang_pines_source_20260916.png`（1254×1254 RGBA），并由 `tools/intake_huangnigang_pines_20260916.py` 固定裁切到既有 `level1` 三个 512×512 PNG 接口；没有镜像、重绘、抠像或清理像素。`tools/huangnigang_pines_contract.py` 负责来源、alpha、尺寸、SHA和运行时路径检查，21/21 通过。图集提示词与会话保存在 `qa/art_scene_20260916/prompt.txt` 和清单中；图形捕获及 Level 1 场景验证也在同一 QA 目录。
