@@ -8,6 +8,7 @@ const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.
 const CampaignArt := preload("res://scripts/campaign_art.gd")
 const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
 const WorldShadow := preload("res://scripts/world_shadow.gd")
+const LIVE_TAVERN_FALLBACK := preload("res://assets/campaign/objects/roadside_tavern_default.png")
 
 enum { FACTION_LIANG = 0, FACTION_GUAN = 1 }
 enum { ST_IDLE, ST_MOVE, ST_AMOVE, ST_CHASE, ST_GATHER, ST_RETURN, ST_BUILD, ST_REPAIR, ST_GARRISON }
@@ -3875,7 +3876,8 @@ func _draw() -> void:
 			shadow_tex = _building_shadow_texture(tex,scoped_environment_tex)
 		# `_draw_sprite_animated` caches the actual source direction; reusing it
 		# avoids a second Art/ResourceLoader query for the remaining sparse route.
-		WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)
+		if key != "tavern" or scoped_environment_tex == null:
+			WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)
 	if Settings.get("effects_quality") != "reduced":
 		for d in _dust:
 			var da: float = d.t / DUST_DUR
@@ -4258,6 +4260,11 @@ func _draw_building() -> void:
 	if scoped_tex != null: tex = scoped_tex
 	var tint := (Color(0.5, 0.72, 1.0, 0.34) if _pending_build else Color(0.62, 0.66, 0.78, 0.82)) if is_constructing else Color.WHITE
 	tint.a *= float(get_meta("environment_roof_alpha",1.0))
+	if key == "tavern" and tex is AtlasTexture:
+		# The imported native atlas keeps its source bytes for QA, but Godot's
+		# Unit canvas path composites this specific margin as white. Use the
+		# already accepted transparent roadside-tavern PNG for the live draw.
+		tex = LIVE_TAVERN_FALLBACK
 	if tex != null:
 		# 视觉尺寸与「建造预览虚影」完全一致（GameMap.building_visual_px）——预览多大、建好就多大，
 		# 不再出现「预览很大、落成缩水」的落差。
@@ -4307,7 +4314,6 @@ func _draw_building() -> void:
 			_draw_build_progress()
 		return
 	_draw_building_fallback()
-
 
 ## Unit/building consumers opt in with campaign_environment_route. The current
 ## battle id is still passed to the resolver, so the same unit key in arena or a

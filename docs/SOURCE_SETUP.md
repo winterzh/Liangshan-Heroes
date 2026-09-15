@@ -1294,3 +1294,6 @@ py -3 -X utf8 -B tools/siege_ram_attack_direction4_contract.py --output qa/siege
 $env:SIEGE_RAM_ATTACK_OUT='D:\CodexTemp\siege_ram_attack_runtime_20260916_r1'; $env:STEAM_DISABLED='1'; & 'C:\Users\rsb\Desktop\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'D:\AI项目\水浒\开发工程' --script res://tools/siege_ram_attack_direction4_runtime_qa.gd
 py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_siege_ram_attack_20260916_r1
 ```
+## 2026-09-16 快活林酒望运行时绘制修复
+
+Level 7 四处酒望继续使用 `assets/campaign/environment/art_full_20260915/taverns.png` 与 `assets/campaign/environment/level7/roadside_tavern_{a,b,c,d}.tres` 作为来源和 route 记录。由于 Godot 4.6.3 的 Unit 画布路径会把这组带虚拟 margin 的 AtlasTexture 合成为白色矩形，`scripts/unit.gd` 的实时 Unit 绘制只改用已经验收的真透明 `assets/campaign/objects/roadside_tavern_default.png`；没有覆盖来源文件、改原图像素、改变关卡范围或删除 TRES。实景与全库回归收据见 `qa/level7_tavern_render_20260916/`。

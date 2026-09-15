@@ -1058,3 +1058,8 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `assets/direction4/siege_ram_attack_20260916.json`、`assets/direction4/web_prompts_20260916/siege_ram_attack_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
 - `assets/anim/siege_ram_attack_{se,sw,ne,nw}.tres`：四向攻击 SpriteFrames；`tools/siege_ram_attack_atlas_scale.py`、`tools/siege_ram_attack_direction4_contract.py`、`tools/siege_ram_attack_direction4_runtime_qa.gd`：可复现生产与验证。
 - [来源、静态契约、Godot 路由与全库回归 QA](../qa/siege_ram_attack_direction4_20260916/README.md)。
+## 2026-09-16 快活林酒望运行时绘制修复
+
+- `scripts/unit.gd`：Level 7 酒望实时 Unit 纹理接入修复，保留原始图集/TRES 来源链。
+- `qa/level7_tavern_render_20260916/`：窗口化 1280×720 实景截图、JSON 收据和复现说明。
+- [美术全库台账](ART_FULL_20260915.md)、[工作日志](WORKLOG.md)、[来源说明](SOURCE_SETUP.md)、[项目状态](PROJECT_STATUS.md)：同步本批运行时绘制结论。

@@ -1842,3 +1842,8 @@ Godot 4.6.3 实际重新导入20项。专属运行合约90项、连环马深度2
 接入 `assets/anim/siege_ram_attack_{se,sw,ne,nw}.tres`，原始 RGBA 图、确定性 2×生产图、提示词、清单与 QA 分别保留在 `assets/characters/art_full_20260916/`、`assets/direction4/`、`qa/siege_ram_attack_direction4_20260916/`。静态契约 128/128，Godot 4.6.3 运行时 128/128，全库美术导入/库存回归 `complete=true`（321 项）。
 
 本轮只补 `siege_ram` attack，既有 idle/walk 与玩法数值保持原路由；没有改镜头、玩家存档、导出包或 Steam。其余普通单位动作、旧头像背景、地形接缝与技能实战辨识仍开放。
+## 2026-09-16 快活林酒望运行时绘制修复（本地，未发布）
+
+窗口化 Level 7 实景截图发现四处 `roadside_tavern_{a,b,c,d}` 在 Unit 绘制路径里出现白色方块。核对确认原始 `taverns.png` 和四份 TRES 的透明像素正常，问题只发生在 Godot 对带虚拟 margin 的 AtlasTexture 进行 Unit 合成时。`scripts/unit.gd` 现在保留四个 route metadata 和来源图集，仅把 Level 7 酒望的实时纹理切换为已验收的真透明 `assets/campaign/objects/roadside_tavern_default.png`，同时避免该 scoped route 走重复投影。
+
+Godot 4.6.3、1280×720 窗口化、1 倍速、正常迷雾截图确认四处酒肆木结构、酒幌、名称和官道关系清晰，白块消失；八关部署态截图已重跑，此次仅将 Level 7 视觉结果作为本批验收。Level 6 的既有隐蔽检查、Level 7 的饮酒自动探针与 Level 8 的路由检查仍有历史边界，未拿它们冒充本批视觉通过。全库美术 QA `complete=true`。收据见 `qa/level7_tavern_render_20260916/`。本批没有改玩法、镜头、存档、导出包或 Steam。
