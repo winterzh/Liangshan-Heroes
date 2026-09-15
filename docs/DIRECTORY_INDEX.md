@@ -1,3 +1,10 @@
+## 2026-09-16 陆谦四向受击与死亡原图
+
+- `assets/characters/art_full_20260916/lu_qian_{hurt,death}_direction4_source.png`、对应生产图：保留网页原图与确定性 2×图。
+- `assets/direction4/lu_qian_{hurt,death}_20260916.json`、`assets/direction4/web_prompts_20260916/`：原图 SHA、固定格和提示词。
+- `assets/anim/lu_qian_{hurt,death}_{se,sw,ne,nw}.tres`：四向受击与死亡资源。
+- [受击 QA](../qa/lu_qian_hurt_direction4_20260916/README.md)、[死亡 QA](../qa/lu_qian_death_direction4_20260916/README.md)。
+
 ## 2026-09-16 梁山水泊树木场景统一
 
 - `assets/campaign/environment/art_scene_20260916/liangshan_trees_source_20260916.png`：网页端原生 2×2 透明梁山植被图集。

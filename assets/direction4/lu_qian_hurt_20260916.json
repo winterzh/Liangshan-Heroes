@@ -1,0 +1,373 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "character": "lu_qian",
+  "scope": "hurt-only four-direction body source; idle, walk and attack are covered separately; death remains open and must not be inferred from this sheet",
+  "sources": {
+    "lu_qian_hurt_atlas": {
+      "path": "assets/characters/art_full_20260916/lu_qian_hurt_direction4.png",
+      "sha256": "a0c3ae26374de6d1cd64595d8dd18abc14e773fd3099aeeb8906723cea8b1e02",
+      "job": "web ChatGPT conversation 6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "mode": "RGBA",
+      "native_size": [
+        2508,
+        2508
+      ],
+      "import_limit": 0,
+      "imported_size": [
+        2508,
+        2508
+      ],
+      "imported_size_verified": true,
+      "alpha_zero_fraction": 0.6640444357958838,
+      "layout": "4x4; each row is one direction and four columns are a hurt cycle: SE,SW,NE,NW",
+      "raw_web_source": "assets/characters/art_full_20260916/lu_qian_hurt_direction4_source.png",
+      "raw_web_source_sha256": "f06cc03216d3e227cf7789b17ed7b8d96c712a5d745323e77c0091ca793ac62b",
+      "raw_web_size": [
+        1254,
+        1254
+      ],
+      "production_transform": "deterministic whole-image 2x LANCZOS scale to 2508x2508 so the 4x4 atlas has integer 627px cells; no mirroring, masking, repainting, alpha clearing or color correction",
+      "prompt_file": "assets/direction4/web_prompts_20260916/lu_qian_hurt_direction4.txt",
+      "prompt_sha256": "1ddd5b2a89e38e0ef439e9c8867067d25eb591cdda6200d4dfc45756518579a7",
+      "conversation_url": "https://chatgpt.com/c/6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "visual_review": "Accepted after local original PNG inspection: same slim official identity, distinct front and back rows, four visibly different non-gory hurt poses per direction, clean transparent background and no text/grid/border.",
+      "retained_rgba": "Raw downloaded PNG is retained beside the deterministic production-sized atlas. AtlasTexture crops only fixed cells; no mirroring, masking, recoloring, repainting or pixel clearing."
+    }
+  },
+  "poses": {
+    "ready_se": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recoil_se": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "stagger_se": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1254,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recover_se": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1881,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "ready_sw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recoil_sw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "stagger_sw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1254,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recover_sw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1881,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "ready_ne": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        0,
+        1254,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recoil_ne": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        627,
+        1254,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "stagger_ne": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1254,
+        1254,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recover_ne": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1881,
+        1254,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "ready_nw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        0,
+        1881,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recoil_nw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        627,
+        1881,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "stagger_nw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1254,
+        1881,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    },
+    "recover_nw": {
+      "source": "lu_qian_hurt_atlas",
+      "region": [
+        1881,
+        1881,
+        627,
+        627
+      ],
+      "margin": [
+        70,
+        0,
+        141,
+        141
+      ],
+      "draw_offset_px": [
+        0.0,
+        0.0
+      ],
+      "draw_scale": 1.0
+    }
+  },
+  "states": {
+    "hurt": [
+      "ready",
+      "recoil",
+      "stagger",
+      "recover"
+    ]
+  },
+  "resources": [
+    "assets/anim/lu_qian_hurt_se.tres",
+    "assets/anim/lu_qian_hurt_sw.tres",
+    "assets/anim/lu_qian_hurt_ne.tres",
+    "assets/anim/lu_qian_hurt_nw.tres"
+  ]
+}

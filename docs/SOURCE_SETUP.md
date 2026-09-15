@@ -1,3 +1,17 @@
+## 2026-09-16 陆谦四向受击与死亡原图
+
+新增两张网页原生 4×4 RGBA 图：`assets/characters/art_full_20260916/lu_qian_hurt_direction4_source.png` 与 `lu_qian_death_direction4_source.png`。生产图只做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列分别为受击或死亡过程。四份 hurt 和四份 death TRES 固定引用对应原图，启用 `filter_clip=true`、真实方向元数据和非镜像路由。
+
+复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/lu_qian_hurt_direction4_contract.py --output qa/lu_qian_hurt_direction4_20260916/contract.json
+py -3 -X utf8 -B tools/lu_qian_death_direction4_contract.py --output qa/lu_qian_death_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/lu_qian_hurt_direction4_runtime_qa.gd 与 tools/lu_qian_death_direction4_runtime_qa.gd
+```
+
+两份静态契约各126项、Godot 路由运行时各128项通过。原始来源、提示词 SHA、生产 SHA 和固定格清单见 `assets/direction4/lu_qian_{hurt,death}_20260916.json`。本批未改玩法、导出包或 Steam。
+
 ## 2026-09-16 梁山水泊树木场景统一
 
 新增网页端原生环境图集 `assets/campaign/environment/art_scene_20260916/liangshan_trees_source_20260916.png`（1254×1254 RGBA），由 `tools/intake_liangshan_trees_20260916.py` 固定裁切到既有 Level 5 三个 512×512 PNG 接口；幼树象限先裁掉相邻格溢出的透明外像素，未清除自身像素。`tools/liangshan_trees_contract.py` 负责来源、alpha、尺寸、SHA和运行时路径检查，21/21 通过；`scripts/campaign_environment_art.gd` 三项校准绑定新生产图哈希。
