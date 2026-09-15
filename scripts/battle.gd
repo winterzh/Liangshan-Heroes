@@ -1196,12 +1196,28 @@ func train_cost_hidden() -> bool:
 	return level != null and level.has_method("uses_full_roster") and level.uses_full_roster()
 
 
+## QA-only tap for player resource events. Production leaves this empty (no-op).
+var qa_resource_observer: Callable = Callable()
+
+
+func _qa_resource_event(kind: String, g: int, w: int) -> void:
+	if qa_resource_observer.is_valid():
+		qa_resource_observer.call(kind, g, w)
+
+
 func spend(g: int, w: int) -> bool:
 	if not can_afford(g, w):
 		return false
 	gold -= g
 	wood -= w
+	_qa_resource_event("spend", g, w)
 	return true
+
+
+func refund(g: int, w: int) -> void:
+	gold += g
+	wood += w
+	_qa_resource_event("refund", g, w)
 
 
 func add_resources(g: int, w: int, faction := Unit.FACTION_LIANG) -> void:
@@ -1210,6 +1226,7 @@ func add_resources(g: int, w: int, faction := Unit.FACTION_LIANG) -> void:
 	if faction == Unit.FACTION_LIANG:
 		gold += g
 		wood += w
+		_qa_resource_event("income", g, w)
 		return
 	if not faction_res.has(faction):
 		faction_res[faction] = {"gold": 0.0, "wood": 0.0}
@@ -1533,7 +1550,7 @@ func _try_place_building(p: Vector2) -> void:
 	spend(cg, cw)
 	Sfx.play("build")
 	if not _start_construction(key, cell, half):
-		add_resources(cg, cw)
+		refund(cg, cw)
 		return
 	if not Input.is_key_pressed(KEY_SHIFT):   # 按住 Shift 连续放置
 		_cancel_build()
@@ -3324,7 +3341,7 @@ func _eco_build(tech_reserve := {}) -> void:
 	if not spend(cg, cw):
 		return
 	if ai_start_construction(key, cell, Unit.FACTION_LIANG, builder) == null:
-		add_resources(cg, cw)
+		refund(cg, cw)
 		return
 
 
