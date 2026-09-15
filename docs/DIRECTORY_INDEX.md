@@ -55,6 +55,13 @@
 - `tools/zhu_zhaofeng_hurt_atlas_scale.py`、`tools/zhu_zhaofeng_hurt_direction4_contract.py`、`tools/zhu_zhaofeng_hurt_direction4_runtime_qa.gd`：可复现画布归一化、静态契约和 Godot 路由验证。
 - [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_hurt_direction4_20260916/README.md)
 
+## 2026-09-16 祝朝奉四向死亡原图
+
+- `assets/characters/art_full_20260915/zhu_zhaofeng_death_direction4_source.png`、`zhu_zhaofeng_death_direction4.png`：保留原始网页图及透明画布归一化后的确定性 2×生产图。
+- `assets/direction4/zhu_zhaofeng_death_20260915.json`、`assets/anim/zhu_zhaofeng_death_{se,sw,ne,nw}.tres`：4×4 死亡图集清单和四方向四帧非循环资源。
+- `tools/zhu_zhaofeng_death_atlas_scale.py`、`tools/zhu_zhaofeng_death_direction4_contract.py`、`tools/zhu_zhaofeng_death_direction4_runtime_qa.gd`：可复现画布归一化、静态契约和 Godot 路由验证。
+- [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_death_direction4_20260916/README.md)
+
 ## 2026-09-15 全库美术批次
 
 - `assets/characters/art_full_20260915/`：董超、薛霸独立原生头像。

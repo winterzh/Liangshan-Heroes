@@ -60,6 +60,18 @@ py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_ful
 
 这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用祝朝奉自身原图和独立状态来源。
 
+## 2026-09-16 祝朝奉四向死亡原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_death_direction4_source.png` 及确定性生产图 `zhu_zhaofeng_death_direction4.png`，并接入四份 death SpriteFrames。原始网页画布为 1230×1278，缩放脚本先将全部像素居中放入 1278×1278 透明画布，再做一次 LANCZOS 缩放；四向资源由 `assets/direction4/zhu_zhaofeng_death_20260915.json` 记录固定格、来源会话、提示词 SHA、原图 SHA 和画布归一化方式。运行时只识别 death，序列为非循环。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_death_direction4_contract.py --output qa/zhu_zhaofeng_death_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_death_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260916_r12
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；陆谦受击/死亡仍需使用其自身原图和独立状态来源。
+
 ## 2026-09-16 祝朝奉四向受击原图
 
 新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_hurt_direction4_source.png` 及确定性生产图 `zhu_zhaofeng_hurt_direction4.png`，并接入四份 hurt SpriteFrames。原始网页画布为 1230×1278，缩放脚本先将全部像素居中放入 1278×1278 透明画布，再做一次 LANCZOS 缩放；四向资源由 `assets/direction4/zhu_zhaofeng_hurt_20260915.json` 记录固定格、来源会话、提示词 SHA、原图 SHA 和画布归一化方式。运行时只识别 hurt，death 仍按缺图规则处理。复现检查：
