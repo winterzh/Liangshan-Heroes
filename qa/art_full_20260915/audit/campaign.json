@@ -1,0 +1,4390 @@
+{
+  "schema_version": 1,
+  "scope": "Static source/art requirement inventory for the eight campaign levels. It does not execute Godot, certify animation quality, certify visual composition, or replace human playtesting.",
+  "story_order": [
+    "level6",
+    "level1",
+    "level7",
+    "level2",
+    "level3",
+    "level4",
+    "level8",
+    "level5"
+  ],
+  "levels": [
+    {
+      "id": "level6",
+      "title": "野猪林",
+      "script": "scripts/levels/level6_yezhulin.gd",
+      "unit_requirements": [
+        {
+          "key": "dong_chao",
+          "name": "董超",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level6_yezhulin.gd",
+              "line": 125,
+              "call": "at",
+              "expression": "inline literal array"
+            }
+          ]
+        },
+        {
+          "key": "lin_chong",
+          "name": "林冲",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level6_yezhulin.gd",
+              "line": 114,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level6_yezhulin.gd",
+              "line": 558,
+              "call": "unit"
+            }
+          ]
+        },
+        {
+          "key": "lin_chong_bound",
+          "name": "林冲",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true,
+            "captive": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level6_yezhulin.gd",
+              "line": 272,
+              "call": "unit"
+            },
+            {
+              "file": "scripts/levels/level6_yezhulin.gd",
+              "line": 364,
+              "call": "unit"
+            }
+          ]
+        },
+        {
+          "key": "lu_zhishen",
+          "name": "鲁智深",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level6_yezhulin.gd",
+              "line": 133,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "xue_ba",
+          "name": "薛霸",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level6_yezhulin.gd",
+              "line": 125,
+              "call": "at",
+              "expression": "inline literal array"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [],
+      "story_requirements": {
+        "variants": [
+          {
+            "variant": "dong_chao_escort",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "lines": [
+              73
+            ]
+          },
+          {
+            "variant": "lin_chong_bound",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "lines": [
+              272,
+              280,
+              364,
+              372
+            ]
+          },
+          {
+            "variant": "lin_chong_escort",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "lines": [
+              567
+            ]
+          },
+          {
+            "variant": "lin_chong_prisoner",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "lines": [
+              119
+            ]
+          },
+          {
+            "variant": "lu_zhishen_rescue",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "lines": [
+              72,
+              191
+            ]
+          },
+          {
+            "variant": "xue_ba_escort",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "lines": [
+              74
+            ]
+          }
+        ],
+        "object_aliases": [],
+        "defeat_outcomes": [
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "line": 131
+          }
+        ],
+        "story_poses": [
+          {
+            "pose": "intercept",
+            "file": "scripts/levels/level6_yezhulin.gd",
+            "line": 191
+          }
+        ],
+        "object_state_events": []
+      }
+    },
+    {
+      "id": "level1",
+      "title": "智取生辰纲",
+      "script": "scripts/levels/level1_huangnigang.gd",
+      "unit_requirements": [
+        {
+          "key": "bai_sheng",
+          "name": "白胜",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level1_huangnigang.gd",
+              "line": 529,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "treasure_cart",
+          "name": "生辰纲宝车",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level1_huangnigang.gd",
+              "line": 157,
+              "call": "at"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [
+        {
+          "file": "scripts/levels/level1_huangnigang.gd",
+          "line": 148,
+          "call": "at",
+          "first_argument": "SEVEN[i], Unit.FACTION_LIANG, MERCHANT_CELLS[i])"
+        },
+        {
+          "file": "scripts/levels/level1_huangnigang.gd",
+          "line": 825,
+          "call": "at",
+          "first_argument": "key,Unit.FACTION_GUAN,GATE_E)"
+        }
+      ],
+      "story_requirements": {
+        "variants": [],
+        "object_aliases": [
+          {
+            "object": "jujube_cart",
+            "file": "scripts/levels/level1_huangnigang.gd",
+            "lines": [
+              422,
+              432,
+              435
+            ]
+          },
+          {
+            "object": "jujube_load",
+            "file": "scripts/levels/level1_huangnigang.gd",
+            "lines": [
+              442,
+              442
+            ]
+          },
+          {
+            "object": "tribute_load",
+            "file": "scripts/levels/level1_huangnigang.gd",
+            "lines": [
+              162,
+              163
+            ]
+          },
+          {
+            "object": "wine_bowls",
+            "file": "scripts/levels/level1_huangnigang.gd",
+            "lines": [
+              507,
+              507
+            ]
+          },
+          {
+            "object": "wine_buckets",
+            "file": "scripts/levels/level1_huangnigang.gd",
+            "lines": [
+              506,
+              506
+            ]
+          }
+        ],
+        "defeat_outcomes": [
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level1_huangnigang.gd",
+            "line": 833
+          }
+        ],
+        "story_poses": [],
+        "object_state_events": []
+      }
+    },
+    {
+      "id": "level7",
+      "title": "醉打蒋门神",
+      "script": "scripts/levels/level7_kuaihuolin.gd",
+      "unit_requirements": [
+        {
+          "key": "jiang_menshen",
+          "name": "蒋门神",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level7_kuaihuolin.gd",
+              "line": 145,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "shi_en",
+          "name": "施恩",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level7_kuaihuolin.gd",
+              "line": 128,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "signboard",
+          "name": "蒋家招牌",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level7_kuaihuolin.gd",
+              "line": 153,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "tavern",
+          "name": "酒望",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true,
+            "noncombat": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level7_kuaihuolin.gd",
+              "line": 137,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "wu_song",
+          "name": "武松",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level7_kuaihuolin.gd",
+              "line": 121,
+              "call": "at"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [],
+      "story_requirements": {
+        "variants": [
+          {
+            "variant": "jiang_menshen_fists",
+            "file": "scripts/levels/level7_kuaihuolin.gd",
+            "lines": [
+              152
+            ]
+          },
+          {
+            "variant": "wu_song_mengzhou",
+            "file": "scripts/levels/level7_kuaihuolin.gd",
+            "lines": [
+              125
+            ]
+          }
+        ],
+        "object_aliases": [
+          {
+            "object": "heyang_tavern",
+            "file": "scripts/levels/level7_kuaihuolin.gd",
+            "lines": [
+              157
+            ]
+          },
+          {
+            "object": "roadside_tavern",
+            "file": "scripts/levels/level7_kuaihuolin.gd",
+            "lines": [
+              141
+            ]
+          }
+        ],
+        "defeat_outcomes": [
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level7_kuaihuolin.gd",
+            "line": 151
+          }
+        ],
+        "story_poses": [
+          {
+            "pose": "restored",
+            "file": "scripts/levels/level7_kuaihuolin.gd",
+            "line": 230
+          },
+          {
+            "pose": "windup",
+            "file": "scripts/levels/level7_kuaihuolin.gd",
+            "line": 342
+          }
+        ],
+        "object_state_events": []
+      }
+    },
+    {
+      "id": "level2",
+      "title": "江州劫法场",
+      "script": "scripts/levels/level2_jiangzhou.gd",
+      "unit_requirements": [
+        {
+          "key": "cai_jiu",
+          "name": "蔡九知府",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 178,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "dai_zong",
+          "name": "戴宗",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 264,
+              "call": "unit"
+            }
+          ]
+        },
+        {
+          "key": "dai_zong_bound",
+          "name": "戴宗",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true,
+            "captive": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 160,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "guan_dao",
+          "name": "官军刀盾兵",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "attack": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 453,
+              "call": "group"
+            },
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 567,
+              "call": "group"
+            },
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 583,
+              "call": "group"
+            },
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 604,
+              "call": "group"
+            }
+          ]
+        },
+        {
+          "key": "guan_gong",
+          "name": "官军弓手",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "attack": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 569,
+              "call": "group"
+            },
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 585,
+              "call": "group"
+            }
+          ]
+        },
+        {
+          "key": "guan_laozi",
+          "name": "江州牢子",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 173,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "guan_zhanzi",
+          "name": "刽子手",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 167,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "scaffold",
+          "name": "法场刑台",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 151,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "song_jiang",
+          "name": "宋江",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 245,
+              "call": "unit"
+            }
+          ]
+        },
+        {
+          "key": "song_jiang_bound",
+          "name": "宋江",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true,
+            "captive": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 156,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "tavern",
+          "name": "酒望",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true,
+            "noncombat": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level2_jiangzhou.gd",
+              "line": 198,
+              "call": "at"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [
+        {
+          "file": "scripts/levels/level2_jiangzhou.gd",
+          "line": 185,
+          "call": "at",
+          "first_argument": "spec[0], Unit.FACTION_LIANG, spec[1])"
+        },
+        {
+          "file": "scripts/levels/level2_jiangzhou.gd",
+          "line": 401,
+          "call": "at",
+          "first_argument": "key, Unit.FACTION_LIANG, DOCK_C + Vector2i(-2, -2))"
+        }
+      ],
+      "story_requirements": {
+        "variants": [
+          {
+            "variant": "dai_zong_bound",
+            "file": "scripts/levels/level2_jiangzhou.gd",
+            "lines": [
+              160,
+              165
+            ]
+          },
+          {
+            "variant": "dai_zong_rescued",
+            "file": "scripts/levels/level2_jiangzhou.gd",
+            "lines": [
+              272
+            ]
+          },
+          {
+            "variant": "li_kui_jiangzhou",
+            "file": "scripts/levels/level2_jiangzhou.gd",
+            "lines": [
+              192
+            ]
+          },
+          {
+            "variant": "song_jiang_bound",
+            "file": "scripts/levels/level2_jiangzhou.gd",
+            "lines": [
+              156,
+              164
+            ]
+          },
+          {
+            "variant": "song_jiang_rescued",
+            "file": "scripts/levels/level2_jiangzhou.gd",
+            "lines": [
+              253
+            ]
+          }
+        ],
+        "object_aliases": [
+          {
+            "object": "bailong_temple",
+            "file": "scripts/levels/level2_jiangzhou.gd",
+            "lines": [
+              203
+            ]
+          }
+        ],
+        "defeat_outcomes": [],
+        "story_poses": [],
+        "object_state_events": []
+      }
+    },
+    {
+      "id": "level3",
+      "title": "三打祝家庄",
+      "script": "scripts/levels/level3_zhujiazhuang.gd",
+      "unit_requirements": [
+        {
+          "key": "gu_dasao",
+          "name": "顾大嫂",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 652,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "hu_sanniang",
+          "name": "扈三娘",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 594,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "hua_rong",
+          "name": "花荣",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 581,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "liang_dao",
+          "name": "朴刀手",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 159,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "liang_qiang",
+          "name": "长枪手",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 586,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 644,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "lin_chong",
+          "name": "林冲",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 577,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "shi_xiu",
+          "name": "石秀",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 150,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "song_jiang",
+          "name": "宋江",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 154,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 573,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 634,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "sun_li",
+          "name": "孙立",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 648,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "zhu_gate",
+          "name": "祝家庄门",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 163,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 614,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 666,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "zhu_keke",
+          "name": "祝家庄客",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 189,
+              "call": "group"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 329,
+              "call": "group"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 603,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level3_zhujiazhuang.gd",
+              "line": 682,
+              "call": "at"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [
+        {
+          "file": "scripts/levels/level3_zhujiazhuang.gd",
+          "line": 639,
+          "call": "at",
+          "first_argument": "spec[0],Unit.FACTION_LIANG,spec[1])"
+        },
+        {
+          "file": "scripts/levels/level3_zhujiazhuang.gd",
+          "line": 659,
+          "call": "at",
+          "first_argument": "spec[0],Unit.FACTION_LIANG,spec[1])"
+        },
+        {
+          "file": "scripts/levels/level3_zhujiazhuang.gd",
+          "line": 674,
+          "call": "at",
+          "first_argument": "spec[0],Unit.FACTION_GUAN,spec[1])"
+        }
+      ],
+      "story_requirements": {
+        "variants": [],
+        "object_aliases": [],
+        "defeat_outcomes": [
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level3_zhujiazhuang.gd",
+            "line": 168
+          },
+          {
+            "outcome": "captured",
+            "file": "scripts/levels/level3_zhujiazhuang.gd",
+            "line": 598
+          },
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level3_zhujiazhuang.gd",
+            "line": 619
+          },
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level3_zhujiazhuang.gd",
+            "line": 671
+          }
+        ],
+        "story_poses": [],
+        "object_state_events": []
+      }
+    },
+    {
+      "id": "level4",
+      "title": "大破连环马",
+      "script": "scripts/levels/level4_lianhuanma.gd",
+      "unit_requirements": [
+        {
+          "key": "gou_lian",
+          "name": "钩镰枪手",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "attack": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "hurt": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "down": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ]
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 137,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 325,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "han_tao",
+          "name": "韩滔",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 373,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "hook_training_dummy",
+          "name": "钩镰演练骑",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 178,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "hu_yanzhuo",
+          "name": "呼延灼",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 380,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "jiangtai",
+          "name": "中军帅旗",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 302,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "lian_huan_ma",
+          "name": "连环马",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "attack": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "hurt": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 472,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "tang_long",
+          "name": "汤隆",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 131,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "xu_ning",
+          "name": "徐宁",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 127,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level4_lianhuanma.gd",
+              "line": 314,
+              "call": "at"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [
+        {
+          "file": "scripts/levels/level4_lianhuanma.gd",
+          "line": 307,
+          "call": "at",
+          "first_argument": "spec[0],Unit.FACTION_LIANG,spec[1])"
+        }
+      ],
+      "story_requirements": {
+        "variants": [],
+        "object_aliases": [
+          {
+            "object": "broken_cavalry",
+            "file": "scripts/levels/level4_lianhuanma.gd",
+            "lines": [
+              597
+            ]
+          },
+          {
+            "object": "hook_spear_team",
+            "file": "scripts/levels/level4_lianhuanma.gd",
+            "lines": [
+              164,
+              596
+            ]
+          },
+          {
+            "object": "hook_training_dummy",
+            "file": "scripts/levels/level4_lianhuanma.gd",
+            "lines": [
+              77,
+              77,
+              178
+            ]
+          }
+        ],
+        "defeat_outcomes": [
+          {
+            "outcome": "captured",
+            "file": "scripts/levels/level4_lianhuanma.gd",
+            "line": 377
+          },
+          {
+            "outcome": "retreated",
+            "file": "scripts/levels/level4_lianhuanma.gd",
+            "line": 384
+          }
+        ],
+        "story_poses": [],
+        "object_state_events": []
+      }
+    },
+    {
+      "id": "level8",
+      "title": "智取大名府",
+      "script": "scripts/levels/level8_dongchangfu.gd",
+      "unit_requirements": [
+        {
+          "key": "chai_jin",
+          "name": "柴进",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 127,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "guan_dao",
+          "name": "官军刀盾兵",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "attack": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 773,
+              "call": "group"
+            }
+          ]
+        },
+        {
+          "key": "liang_qiang",
+          "name": "长枪手",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 173,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "lou_luo",
+          "name": "喽啰",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 210,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "lu_junyi",
+          "name": "卢俊义",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 147,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "lu_zhishen",
+          "name": "鲁智深",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 162,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "shi_qian",
+          "name": "时迁",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 123,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "shi_xiu",
+          "name": "石秀",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 151,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "wu_song",
+          "name": "武松",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 167,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "wu_yong",
+          "name": "吴用",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 157,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "yue_he",
+          "name": "乐和",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 131,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "zhu_gate",
+          "name": "祝家庄门",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level8_dongchangfu.gd",
+              "line": 137,
+              "call": "at"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [
+        {
+          "file": "scripts/levels/level8_dongchangfu.gd",
+          "line": 229,
+          "call": "at",
+          "first_argument": "key,Unit.FACTION_GUAN,c)"
+        }
+      ],
+      "story_requirements": {
+        "variants": [
+          {
+            "variant": "chai_jin_officer",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "lines": [
+              282
+            ]
+          },
+          {
+            "variant": "shi_qian_lantern",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "lines": [
+              249
+            ]
+          },
+          {
+            "variant": "yue_he_officer",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "lines": [
+              283
+            ]
+          }
+        ],
+        "object_aliases": [
+          {
+            "object": "cuiyun_tower",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "lines": [
+              117,
+              326
+            ]
+          },
+          {
+            "object": "daming_south_gate",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "lines": [
+              142
+            ]
+          },
+          {
+            "object": "prison_gate",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "lines": [
+              117,
+              361,
+              620
+            ]
+          }
+        ],
+        "defeat_outcomes": [
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "line": 143
+          }
+        ],
+        "story_poses": [],
+        "object_state_events": [
+          {
+            "object": "cuiyun_tower",
+            "state": "signal",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "line": 326
+          },
+          {
+            "object": "prison_gate",
+            "state": "open",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "line": 361
+          },
+          {
+            "object": "prison_gate",
+            "state": "open",
+            "file": "scripts/levels/level8_dongchangfu.gd",
+            "line": 620
+          }
+        ]
+      }
+    },
+    {
+      "id": "level5",
+      "title": "三败高太尉",
+      "script": "scripts/levels/level5_liangshan.gd",
+      "unit_requirements": [
+        {
+          "key": "gao_flagship",
+          "name": "gao_flagship",
+          "category": "object-state",
+          "definition_flags": {
+            "movement_profile": "water"
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 803,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "gao_qiu",
+          "name": "高俅",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 408,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "gongsun_sheng",
+          "name": "公孙胜",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 711,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "guan_qi",
+          "name": "官军骑兵",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "cavalry": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "attack": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 314,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "hall",
+          "name": "聚义厅",
+          "category": "object-state",
+          "definition_flags": {
+            "building": true
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 100,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "hua_rong",
+          "name": "花荣",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 756,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "imperial_warship",
+          "name": "imperial_warship",
+          "category": "object-state",
+          "definition_flags": {
+            "movement_profile": "water"
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 172,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 722,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "liang_gong",
+          "name": "弓手",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 166,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "liang_qiang",
+          "name": "长枪手",
+          "category": "mobile-combat",
+          "definition_flags": {},
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [
+              "ne",
+              "nw",
+              "se",
+              "sw"
+            ],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 748,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "liangshan_warship",
+          "name": "liangshan_warship",
+          "category": "object-state",
+          "definition_flags": {
+            "movement_profile": "water"
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 154,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 158,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 695,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 699,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "lin_chong",
+          "name": "林冲",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 752,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "liu_tang",
+          "name": "刘唐",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 715,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "liu_tang_fireboat",
+          "name": "liu_tang_fireboat",
+          "category": "object-state",
+          "definition_flags": {
+            "movement_profile": "water"
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 683,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "ruan_xiaoer_boat",
+          "name": "ruan_xiaoer_boat",
+          "category": "object-state",
+          "definition_flags": {
+            "movement_profile": "water"
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 146,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 687,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "ruan_xiaoqi_boat",
+          "name": "ruan_xiaoqi_boat",
+          "category": "object-state",
+          "definition_flags": {
+            "movement_profile": "water"
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 142,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "ruan_xiaowu_boat",
+          "name": "ruan_xiaowu_boat",
+          "category": "object-state",
+          "definition_flags": {
+            "movement_profile": "water"
+          },
+          "required_states": [
+            "default"
+          ],
+          "directional_state_coverage": {
+            "default": []
+          },
+          "missing_exact_four_direction_actions": [],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 150,
+              "call": "at"
+            },
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 691,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "song_jiang",
+          "name": "宋江",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 110,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "wu_yong",
+          "name": "吴用",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true,
+            "ranged": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 114,
+              "call": "at"
+            }
+          ]
+        },
+        {
+          "key": "zhang_shun",
+          "name": "张顺",
+          "category": "mobile-combat",
+          "definition_flags": {
+            "hero": true
+          },
+          "required_states": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "directional_state_coverage": {
+            "idle": [],
+            "walk": [],
+            "attack": [],
+            "hurt": [],
+            "down": []
+          },
+          "missing_exact_four_direction_actions": [
+            "idle",
+            "walk",
+            "attack",
+            "hurt",
+            "down"
+          ],
+          "spawn_sites": [
+            {
+              "file": "scripts/levels/level5_liangshan.gd",
+              "line": 418,
+              "call": "at"
+            }
+          ]
+        }
+      ],
+      "dynamic_spawn_sites_requiring_manual_review": [
+        {
+          "file": "scripts/levels/level5_liangshan.gd",
+          "line": 782,
+          "call": "at",
+          "first_argument": "record[0],0,record[1])"
+        },
+        {
+          "file": "scripts/levels/level5_liangshan.gd",
+          "line": 792,
+          "call": "at",
+          "first_argument": "ship_key,1,Vector2i(40+i%3,8+i*3))"
+        }
+      ],
+      "story_requirements": {
+        "variants": [
+          {
+            "variant": "gao_qiu_captured",
+            "file": "scripts/levels/level5_liangshan.gd",
+            "lines": [
+              412
+            ]
+          }
+        ],
+        "object_aliases": [
+          {
+            "object": "gao_flagship",
+            "file": "scripts/levels/level5_liangshan.gd",
+            "lines": [
+              86,
+              92,
+              92,
+              803
+            ]
+          },
+          {
+            "object": "liangshan_boat",
+            "file": "scripts/levels/level5_liangshan.gd",
+            "lines": [
+              91
+            ]
+          },
+          {
+            "object": "official_vanguard",
+            "file": "scripts/levels/level5_liangshan.gd",
+            "lines": [
+              85,
+              94,
+              94,
+              791,
+              796,
+              799
+            ]
+          },
+          {
+            "object": "official_warship",
+            "file": "scripts/levels/level5_liangshan.gd",
+            "lines": [
+              93
+            ]
+          }
+        ],
+        "defeat_outcomes": [
+          {
+            "outcome": "captured",
+            "file": "scripts/levels/level5_liangshan.gd",
+            "line": 417
+          },
+          {
+            "outcome": "subdued",
+            "file": "scripts/levels/level5_liangshan.gd",
+            "line": 808
+          }
+        ],
+        "story_poses": [],
+        "object_state_events": []
+      }
+    }
+  ],
+  "inventory": {
+    "physical_png_counts": {
+      "campaign_anim": 336,
+      "campaign_objects": 74,
+      "campaign_portraits": 37,
+      "generic_anim": 568
+    },
+    "recognized_directional_animation_states": {
+      "bound_lu_junyi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "bound_shi_xiu|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "chai_jin_officer|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "dai_zong_bound|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "dai_zong_rescued|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "dai_zong_rescued|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "daming_bound_lu_junyi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "daming_bound_shi_xiu|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "daming_rescued_lu_junyi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "daming_rescued_lu_junyi|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "daming_rescued_shi_xiu|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "daming_rescued_shi_xiu|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "dong_chao_escort|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "dong_chao_escort|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gao_qiu_captured|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gao_qiu_captured|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gou_lian|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gou_lian|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gou_lian|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gou_lian|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gou_lian|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_dao_death|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_dao|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_dao|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_dao|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_gong_death|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_gong|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_gong|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_gong|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_jingqi_death|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_jingqi|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_jingqi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_jingqi|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_laozi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_musket|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_qi_death|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_qi|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_qi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_qi|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "guan_zhanzi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_bai_sheng|carry_idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_bai_sheng|carry_walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_bai_sheng|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_bai_sheng|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_chao_gai|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_chao_gai|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_gongsun_sheng|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_gongsun_sheng|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_liu_tang|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_liu_tang|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_ruan_xiaoer|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_ruan_xiaoer|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_ruan_xiaoqi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_ruan_xiaoqi|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_ruan_xiaowu|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_ruan_xiaowu|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_wu_yong|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "hn_wu_yong|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "jiang_menshen_fists|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "jiang_menshen_fists|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "jiang_menshen_fists|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "jiang_menshen_fists|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "jiang_menshen_fists|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "jiang_thug|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "jun_han|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lao_duguan|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lao_duguan|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui_jiangzhou|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui_jiangzhou|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui_jiangzhou|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui_jiangzhou|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui_jiangzhou|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "li_kui|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lian_huan_ma_death|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lian_huan_ma|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lian_huan_ma|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lian_huan_ma|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lian_huan_ma|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "liang_dao|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "liang_gong|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "liang_ma|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "liang_qiang|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_bound|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_bound|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_bound|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_bound|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_bound|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_escort|assisted": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_escort|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_escort|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_escort|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_escort|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_escort|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_prisoner|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_prisoner|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_prisoner|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_prisoner|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lin_chong_prisoner|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lou_luo|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lu_zhishen_rescue|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lu_zhishen_rescue|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lu_zhishen_rescue|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lu_zhishen_rescue|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lu_zhishen_rescue|intercept": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "lu_zhishen_rescue|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "rescued_lu_junyi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "rescued_shi_xiu|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "shi_qian_lantern|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "siege_cata|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "siege_ram|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "song_jiang_bound|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "song_jiang_rescued|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "song_jiang_rescued|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "town_elder|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "town_porter|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "town_vendor|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "town_woman|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "wu_song_mengzhou|attack": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "wu_song_mengzhou|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "wu_song_mengzhou|hurt": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "wu_song_mengzhou|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "wu_song_mengzhou|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "xue_ba_escort|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "xue_ba_escort|walk": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "yu_hou|down": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "yu_hou|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "yue_he_officer|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "zhu_gong|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "zhu_keke|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "zhu_qi|idle": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ]
+    },
+    "recognized_directional_object_states": {
+      "bailong_temple_default|default": [
+        "static"
+      ],
+      "broken_cavalry_default|default": [
+        "static"
+      ],
+      "cuiyun_tower_default|default": [
+        "static"
+      ],
+      "cuiyun_tower_signal|default": [
+        "static"
+      ],
+      "daming_south_gate_default|default": [
+        "static"
+      ],
+      "death_remains_default|default": [
+        "static"
+      ],
+      "gao_flagship_damaged|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gao_flagship_default|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gao_flagship_disabled|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "gao_flagship_flooding|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "heyang_tavern_default|default": [
+        "static"
+      ],
+      "hook_spear_team_default|default": [
+        "static"
+      ],
+      "hook_spear_team_engaged|default": [
+        "static"
+      ],
+      "hook_training_dummy_default|default": [
+        "static"
+      ],
+      "jujube_cart_default|default": [
+        "static"
+      ],
+      "jujube_load_default|default": [
+        "static"
+      ],
+      "liangshan_boat_default|default": [
+        "ne",
+        "nw",
+        "se",
+        "static",
+        "sw"
+      ],
+      "linked_cavalry_default|default": [
+        "static"
+      ],
+      "official_vanguard_damaged|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "official_vanguard_default|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "official_vanguard_disabled|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "official_vanguard_flooding|default": [
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "official_warship_damaged|default": [
+        "ne",
+        "nw",
+        "se",
+        "static",
+        "sw"
+      ],
+      "official_warship_default|default": [
+        "ne",
+        "nw",
+        "se",
+        "static",
+        "sw"
+      ],
+      "official_warship_disabled|default": [
+        "static"
+      ],
+      "official_warship_flooding|default": [
+        "ne",
+        "nw",
+        "se",
+        "static",
+        "sw"
+      ],
+      "prison_gate_default|default": [
+        "static"
+      ],
+      "prison_gate_open|default": [
+        "static"
+      ],
+      "roadside_tavern_default|default": [
+        "static"
+      ],
+      "tribute_load_alpha_20260906_default|default": [
+        "static"
+      ],
+      "tribute_load_default|default": [
+        "static"
+      ],
+      "wine_bowls_default|default": [
+        "static"
+      ],
+      "wine_buckets_default|default": [
+        "static"
+      ],
+      "zhu_gate_native_20260906_default|default": [
+        "static"
+      ]
+    },
+    "manifest_results": {
+      "direction4": {
+        "declared_outputs": 132,
+        "missing_output_files": [],
+        "output_hash_mismatch": [
+          "assets/anim/guan_dao_idle_se.png",
+          "assets/anim/guan_dao_idle_sw.png",
+          "assets/anim/guan_dao_idle_ne.png",
+          "assets/anim/guan_dao_idle_nw.png",
+          "assets/anim/guan_gong_idle_se.png",
+          "assets/anim/guan_gong_idle_sw.png",
+          "assets/anim/guan_gong_idle_ne.png",
+          "assets/anim/guan_gong_idle_nw.png",
+          "assets/anim/guan_qi_idle_se.png",
+          "assets/anim/guan_qi_idle_sw.png",
+          "assets/anim/guan_qi_idle_ne.png",
+          "assets/anim/guan_qi_idle_nw.png",
+          "assets/anim/guan_zhanzi_idle_se.png",
+          "assets/anim/guan_zhanzi_idle_sw.png",
+          "assets/anim/guan_zhanzi_idle_ne.png",
+          "assets/anim/guan_zhanzi_idle_nw.png",
+          "assets/anim/zhu_keke_idle_se.png",
+          "assets/anim/zhu_keke_idle_sw.png",
+          "assets/anim/zhu_keke_idle_ne.png",
+          "assets/anim/zhu_keke_idle_nw.png",
+          "assets/anim/guan_laozi_idle_se.png",
+          "assets/anim/guan_laozi_idle_sw.png",
+          "assets/anim/guan_laozi_idle_ne.png",
+          "assets/anim/guan_laozi_idle_nw.png",
+          "assets/anim/jun_han_idle_se.png",
+          "assets/anim/jun_han_idle_sw.png",
+          "assets/anim/jun_han_idle_ne.png",
+          "assets/anim/jun_han_idle_nw.png",
+          "assets/anim/lian_huan_ma_idle_se.png",
+          "assets/anim/lian_huan_ma_idle_sw.png",
+          "assets/anim/lian_huan_ma_idle_ne.png",
+          "assets/anim/lian_huan_ma_idle_nw.png"
+        ],
+        "source_hash_failures": [
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_idle_20260902_attempt3.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_walk_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_attack_20260902_attempt3.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_hurt_20260902_attempt2.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_down_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_idle_20260902_attempt2.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_walk_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_attack_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_hurt_20260902_attempt2.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_down_20260902_attempt1.png"
+        ]
+      },
+      "campaign_objects": {
+        "declared_outputs": 48,
+        "missing_output_files": [],
+        "output_hash_mismatch": [
+          "assets/campaign/objects/gao_flagship_default_se.png",
+          "assets/campaign/objects/gao_flagship_default_sw.png",
+          "assets/campaign/objects/gao_flagship_default_ne.png",
+          "assets/campaign/objects/gao_flagship_default_nw.png",
+          "assets/campaign/objects/gao_flagship_damaged_se.png",
+          "assets/campaign/objects/gao_flagship_damaged_sw.png",
+          "assets/campaign/objects/gao_flagship_damaged_ne.png",
+          "assets/campaign/objects/gao_flagship_damaged_nw.png",
+          "assets/campaign/objects/gao_flagship_flooding_se.png",
+          "assets/campaign/objects/gao_flagship_flooding_sw.png",
+          "assets/campaign/objects/gao_flagship_flooding_ne.png",
+          "assets/campaign/objects/gao_flagship_flooding_nw.png",
+          "assets/campaign/objects/gao_flagship_disabled_se.png",
+          "assets/campaign/objects/gao_flagship_disabled_sw.png",
+          "assets/campaign/objects/gao_flagship_disabled_ne.png",
+          "assets/campaign/objects/gao_flagship_disabled_nw.png"
+        ],
+        "source_hash_failures": []
+      },
+      "web": {
+        "declared_outputs": 129,
+        "missing_output_files": [],
+        "output_hash_mismatch": [],
+        "source_hash_failures": []
+      }
+    },
+    "manifest_counts": {
+      "direction4_outputs": 132,
+      "direction4_sources": 16,
+      "campaign_object_outputs": 48,
+      "campaign_object_sources": 4,
+      "web_artifacts": 129,
+      "web_artifacts_by_kind": {
+        "animation": 112,
+        "object": 1,
+        "portrait": 16
+      },
+      "web_artifacts_by_state": {
+        "carry_idle": 4,
+        "carry_walk": 4,
+        "idle": 64,
+        "unknown": 17,
+        "walk": 40
+      }
+    }
+  },
+  "documentation_count_reconciliation": [
+    {
+      "topic": "四向通用 manifest",
+      "current": "assets/direction4/manifest.json outputs=132",
+      "historical_text": "SOURCE_SETUP.md / WORKLOG.md retain the earlier 80-output statement.",
+      "evidence": {
+        "source_setup_mentions_80": false,
+        "worklog_mentions_80": false
+      },
+      "interpretation": "Current 96 is 16 higher. The older figure is a historical batch count and must not be silently overwritten as if it described the present directory."
+    },
+    {
+      "topic": "网页战役美术清单与物理目录",
+      "current": {
+        "web_artifacts": 129,
+        "physical": {
+          "campaign_anim": 336,
+          "campaign_objects": 74,
+          "campaign_portraits": 37,
+          "generic_anim": 568
+        }
+      },
+      "historical_text": "web_art_manifest tracks the accepted web batch only; it is not a total inventory of every campaign or generic asset.",
+      "interpretation": "Different scopes, therefore do not treat this as a manifest corruption solely because the physical directory has more files."
+    },
+    {
+      "topic": "旧 motion contract 库存",
+      "current": {
+        "physical_campaign_anim": 336,
+        "physical_campaign_objects": 74,
+        "physical_campaign_portraits": 37
+      },
+      "historical_text": "motion_contract_qa.json documents the previous 188 strips / 312 frames / 22 objects / 20 variants checkpoint.",
+      "interpretation": "It is preserved historical evidence, not a current-total manifest. Future reports must say which scope/count they use."
+    },
+    {
+      "topic": "战役物件四向 manifest",
+      "current": {
+        "declared_outputs": 48,
+        "physical_campaign_objects": 74
+      },
+      "historical_text": "campaign_object_manifest is a declared four-direction object batch, not necessarily every pre-existing campaign object.",
+      "interpretation": "The difference needs an explicit scope label, not automatic deletion or re-counting of legacy objects."
+    }
+  ],
+  "contract_checks": [
+    {
+      "name": "story_order_has_eight_registered_levels",
+      "passed": true
+    },
+    {
+      "name": "all_level_scripts_exist",
+      "passed": true
+    },
+    {
+      "name": "literal_spawn_keys_resolve_to_defs_or_level_local_defs",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "direction4_manifest_outputs_exist_and_match_hashes",
+      "passed": false,
+      "details": {
+        "declared_outputs": 132,
+        "missing_output_files": [],
+        "output_hash_mismatch": [
+          "assets/anim/guan_dao_idle_se.png",
+          "assets/anim/guan_dao_idle_sw.png",
+          "assets/anim/guan_dao_idle_ne.png",
+          "assets/anim/guan_dao_idle_nw.png",
+          "assets/anim/guan_gong_idle_se.png",
+          "assets/anim/guan_gong_idle_sw.png",
+          "assets/anim/guan_gong_idle_ne.png",
+          "assets/anim/guan_gong_idle_nw.png",
+          "assets/anim/guan_qi_idle_se.png",
+          "assets/anim/guan_qi_idle_sw.png",
+          "assets/anim/guan_qi_idle_ne.png",
+          "assets/anim/guan_qi_idle_nw.png",
+          "assets/anim/guan_zhanzi_idle_se.png",
+          "assets/anim/guan_zhanzi_idle_sw.png",
+          "assets/anim/guan_zhanzi_idle_ne.png",
+          "assets/anim/guan_zhanzi_idle_nw.png",
+          "assets/anim/zhu_keke_idle_se.png",
+          "assets/anim/zhu_keke_idle_sw.png",
+          "assets/anim/zhu_keke_idle_ne.png",
+          "assets/anim/zhu_keke_idle_nw.png",
+          "assets/anim/guan_laozi_idle_se.png",
+          "assets/anim/guan_laozi_idle_sw.png",
+          "assets/anim/guan_laozi_idle_ne.png",
+          "assets/anim/guan_laozi_idle_nw.png",
+          "assets/anim/jun_han_idle_se.png",
+          "assets/anim/jun_han_idle_sw.png",
+          "assets/anim/jun_han_idle_ne.png",
+          "assets/anim/jun_han_idle_nw.png",
+          "assets/anim/lian_huan_ma_idle_se.png",
+          "assets/anim/lian_huan_ma_idle_sw.png",
+          "assets/anim/lian_huan_ma_idle_ne.png",
+          "assets/anim/lian_huan_ma_idle_nw.png"
+        ],
+        "source_hash_failures": [
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_idle_20260902_attempt3.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_walk_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_attack_20260902_attempt3.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_hurt_20260902_attempt2.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_heroes_down_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_idle_20260902_attempt2.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_walk_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_attack_20260902_attempt1.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_hurt_20260902_attempt2.png",
+          "implementation_20260902/web_sample_sources_20260902/downloads/sample_troops_down_20260902_attempt1.png"
+        ]
+      }
+    },
+    {
+      "name": "campaign_object_manifest_outputs_exist_and_match_hashes",
+      "passed": false,
+      "details": {
+        "declared_outputs": 48,
+        "missing_output_files": [],
+        "output_hash_mismatch": [
+          "assets/campaign/objects/gao_flagship_default_se.png",
+          "assets/campaign/objects/gao_flagship_default_sw.png",
+          "assets/campaign/objects/gao_flagship_default_ne.png",
+          "assets/campaign/objects/gao_flagship_default_nw.png",
+          "assets/campaign/objects/gao_flagship_damaged_se.png",
+          "assets/campaign/objects/gao_flagship_damaged_sw.png",
+          "assets/campaign/objects/gao_flagship_damaged_ne.png",
+          "assets/campaign/objects/gao_flagship_damaged_nw.png",
+          "assets/campaign/objects/gao_flagship_flooding_se.png",
+          "assets/campaign/objects/gao_flagship_flooding_sw.png",
+          "assets/campaign/objects/gao_flagship_flooding_ne.png",
+          "assets/campaign/objects/gao_flagship_flooding_nw.png",
+          "assets/campaign/objects/gao_flagship_disabled_se.png",
+          "assets/campaign/objects/gao_flagship_disabled_sw.png",
+          "assets/campaign/objects/gao_flagship_disabled_ne.png",
+          "assets/campaign/objects/gao_flagship_disabled_nw.png"
+        ],
+        "source_hash_failures": []
+      }
+    },
+    {
+      "name": "web_manifest_declared_outputs_exist_and_sources_match_hashes",
+      "passed": true,
+      "details": {
+        "declared_outputs": 129,
+        "missing_output_files": [],
+        "output_hash_mismatch": [],
+        "source_hash_failures": []
+      }
+    }
+  ],
+  "contract_passed": false,
+  "limitations": [
+    "Dynamic spawn expressions are enumerated for manual review; only literal and inline-array keys are mechanically resolved.",
+    "Exact PNG state coverage is a production-backlog signal. A missing exact action can still have runtime fallback and is not a gameplay failure assertion.",
+    "No pixel, texture import, renderer, Steam directory, export, upload, performance run, screenshot review or human playtest is performed by this tool."
+  ]
+}

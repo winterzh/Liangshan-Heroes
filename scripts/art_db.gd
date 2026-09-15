@@ -358,7 +358,7 @@ func _atlas(tex: Texture2D, cell: Vector2i, grid: int, cache_key: String) -> Tex
 #  • 特殊道具建筑（集市/酒望/招牌/法场/帅旗/庄门/府衙）：世界内本就以「聚义厅」贴图渲染，头像同款兜底
 const ART_ALIAS := {
 	"lin_chong_bound": "lin_chong", "song_jiang_bound": "song_jiang", "dai_zong_bound": "dai_zong",
-	"gong_ren": "yu_hou", "guan_zhanchuan": "guan_dao",
+	"gong_ren": "yu_hou",
 	"market": "hall", "tavern": "hall", "signboard": "hall", "scaffold": "hall",
 	"jiangtai": "hall", "zhu_gate": "hall", "dongchang_yamen": "hall",
 }
@@ -374,7 +374,11 @@ const SPRITE_ALIAS := {}
 ## HUD 选区图标/面板头像统一取图：脸→走图→建筑→物件→地形，并先过别名表。
 ## 全空才返回 null（此时调用方画占位首字，而非黄圈）。这条链覆盖建筑/资源/特殊单位，
 ## 是消灭「黄色圈圈头像」的单一来源。
+const IDENTITY_PORTRAIT_VARIANTS := {"dong_chao_escort": "dong_chao", "xue_ba_escort": "xue_ba"}
+
 func avatar_texture(key: String, variant := "") -> Texture2D:
+	if IDENTITY_PORTRAIT_VARIANTS.has(variant):
+		return portrait_texture(key) if IDENTITY_PORTRAIT_VARIANTS[variant] == key else null
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -422,6 +426,8 @@ func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
 	var ov := _content_override(key)   # 内容包覆盖优先
 	if ov != null:
 		return ov
+	if key == "guan_zhanchuan":
+		return campaign_object_texture("official_warship","default",direction if direction in CampaignArt.DIRECTIONS else "se")
 	key = SPRITE_ALIAS.get(key, key)   # 无专属走图的将领/兵种借同型官军立绘
 	if direction in CampaignArt.DIRECTIONS and unit_anim_uses_directional_source(key, "idle", direction):
 		var directional_idle := unit_anim_frames(key, "idle", direction)
@@ -438,6 +444,10 @@ func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
 	var wf := unit_anim_frames(key, "walk", direction if direction in CampaignArt.DIRECTIONS else "")
 	if not wf.is_empty():
 		return wf[1 % wf.size()]
+	# Directionless icon callers can use an exact SE idle when legacy art is absent.
+	if direction.is_empty():
+		var exact_idle := _load_generic_directional_frames(_resolve_generic_directional_path(key, "idle", "se"))
+		if not exact_idle.is_empty(): return exact_idle[0]
 	return null
 
 
@@ -534,6 +544,8 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	"dong_chao": "res://assets/characters/art_full_20260915/dong_chao.png",
+	"xue_ba": "res://assets/characters/art_full_20260915/xue_ba.png",
 	"guan_zhanzi": "res://assets/characters/guan_zhanzi_direction4_20260915/portrait.png",
 	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
 	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
@@ -545,6 +557,7 @@ var _standalone_portraits := {}
 
 
 func portrait_texture(key: String) -> Texture2D:
+	if key == "guan_zhanchuan": return campaign_object_texture("official_warship","default","se")
 	key = _ra(key)                  # 运行时别名
 	key = ART_ALIAS.get(key, key)   # 被擒英雄等沿用本体脸
 	if STANDALONE_PORTRAITS.has(key):   # 独立头像图（有就用）

@@ -1,3 +1,11 @@
+## 2026-09-15 全库美术批次
+
+- `assets/characters/art_full_20260915/`：董超、薛霸独立原生头像。
+- `assets/campaign/environment/art_full_20260915/`：网页生成原生RGBA图集；各关卡/共享overlays目录中的TRES引用这些原图。
+- `tools/contracts/art_full_20260915/`：提示词、原图/资源SHA、原有同角色复用引用与拒稿证据。
+- `tools/run_art_full_qa.py`、`tools/art_full_inventory_qa.gd`、`tools/art_full_source_contract.py`：全库盘点、八关视觉夹具及来源检查。
+- `qa/art_full_20260915/`、`docs/ART_FULL_20260915.md`：验证原始记录与尚未完成台账。
+
 ## 2026-09-15 刽子手四向动作与肖像
 
 - [美术实现及边界](CHARACTER_ART_20260915.md)

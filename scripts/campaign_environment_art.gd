@@ -631,6 +631,10 @@ const TEXT_RECT_SOURCE_SHA256: Dictionary = {
 }
 
 
+const ATLAS_TEXT_CALIBRATIONS := {
+	"level7_heyang_wine_sign": {"route": "heyang_wine_sign", "level": "level7", "resource_sha256": "1ad2d48f8c77768c123700be9d6bf16205d6a4fdfb890bbb0b95aae4c3ef4c80", "source_sha256": "c8f487a92ff1e5639e154dad3ca1944fc22cf62e794e77d9807892377d726c4b", "rect": [0.3968633540372671, 0.37180124223602484, 0.08658385093167702, 0.2215527950310559]}
+}
+
 static func _route_path(table: Dictionary, active_level_id: String, route_key: String,
 		state: String = "default") -> String:
 	if active_level_id.is_empty() or route_key.is_empty() or not table.has(route_key):
@@ -644,8 +648,11 @@ static func _route_path(table: Dictionary, active_level_id: String, route_key: S
 
 
 static func _load_texture(path: String) -> Texture2D:
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return null
+	if path.is_empty(): return null
+	if not ResourceLoader.exists(path):
+		# A scoped atlas can sample native web PNG bytes without re-encoding them.
+		path = path.get_basename() + ".tres"
+		if not ResourceLoader.exists(path): return null
 	return ResourceLoader.load(path, "Texture2D") as Texture2D
 
 
@@ -711,7 +718,15 @@ static func text_rect(surface_id: String, accepted_source_sha256: String) -> Var
 static func calibrated_text_rect(resolver: String, active_level_id: String,
 		route_key: String, state: String, surface_id: String) -> Variant:
 	var path := route_path(resolver,active_level_id,route_key,state)
-	if path.is_empty() or not ResourceLoader.exists(path): return null
+	if path.is_empty(): return null
+	if not ResourceLoader.exists(path):
+		var record: Dictionary = ATLAS_TEXT_CALIBRATIONS.get(surface_id,{})
+		var atlas_path := path.get_basename()+".tres"
+		if record.is_empty() or record.route!=route_key or record.level!=active_level_id or state!="default": return null
+		if FileAccess.get_sha256(atlas_path)!=record.resource_sha256: return null
+		var texture = _load_texture(path)
+		if not texture is AtlasTexture or FileAccess.get_sha256(texture.atlas.resource_path)!=record.source_sha256: return null
+		return record.rect
 	var disk_path := ProjectSettings.globalize_path(path)
 	var source_sha := FileAccess.get_sha256(disk_path)
 	if source_sha.is_empty(): return null

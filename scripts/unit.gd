@@ -3974,7 +3974,7 @@ func _draw() -> void:
 
 	var bar_y: float
 	if is_building:
-		bar_y = -radius * 1.9
+		bar_y = float(get_meta("campaign_environment_label_y", -radius * 1.9))
 	elif as_sprite:
 		bar_y = -radius * 3.3 * visual_scale
 	else:
@@ -4195,6 +4195,7 @@ func is_bound_person() -> bool:
 
 
 func _draw_building() -> void:
+	remove_meta("campaign_environment_label_y")
 	# 某些关卡建筑由场景层绘制完整外观（例如梁山寨门）；Unit 只保留生命值、名字、受击与寻路占地。
 	# 提前返回只跳过建筑本体，调用方后续仍会绘制名字和血条。
 	if bool(get_meta("scene_visual_only", false)):
@@ -4265,6 +4266,8 @@ func _draw_building() -> void:
 		var foot := 0.82 if art_variant!="" else 0.78
 		if scoped_tex!=null:
 			foot=float(get_meta("campaign_environment_foot",foot))
+			if scoped_tex.has_meta("visible_top"):
+				set_meta("campaign_environment_label_y",s*(float(scoped_tex.get_meta("visible_top"))-foot)-8.0)
 		var static_campaign_visual := scoped_tex!=null \
 			and bool(get_meta("campaign_environment_static_visual",false))
 		if not static_campaign_visual:
@@ -4346,6 +4349,14 @@ func _draw_campaign_environment_runtime_text(visual_size: float, foot: float, al
 	var rect := Rect2(origin+Vector2(float(normalized[0]),float(normalized[1]))*visual_size,
 		Vector2(float(normalized[2]),float(normalized[3]))*visual_size)
 	if rect.size.x<1.0 or rect.size.y<1.0: return
+	if rect.size.y > rect.size.x * 2.0:
+		# A tall blank cloth receives vertical ink, fitted inside the measured surface.
+		var step := rect.size.y / maxf(label.length(),1)
+		var size_px := maxi(1,int(minf(rect.size.x*0.8,step*0.85)))
+		for i in range(label.length()):
+			var at := Vector2(rect.position.x,rect.position.y+step*i+(step+size_px)*0.5-1.0)
+			draw_string(ThemeDB.fallback_font,at,label.substr(i,1),HORIZONTAL_ALIGNMENT_CENTER,int(rect.size.x),size_px,Color(0.23,0.14,0.08,alpha))
+		return
 	var font_size := maxi(8,int(minf(rect.size.y*0.72,rect.size.x/maxf(label.length(),1)*1.55)))
 	var baseline := rect.position.y+(rect.size.y+font_size)*0.5-1.0
 	var ink := Color(0.92,0.82,0.58,alpha)
