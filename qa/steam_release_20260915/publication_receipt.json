@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "status": "awaiting_manual_file_selection",
+  "recorded_at_utc": "2026-09-15T06:37:09.434754+00:00",
+  "app_id": 5088120,
+  "depot_id": 5088121,
+  "branch": "default",
+  "source_head": "dd4046fdfd398fec43d992cb315982da35de0c2c",
+  "local_candidate_complete": true,
+  "archive_sha256": "80f112a8f1fafebb4bc0ff3c08348385e5c7137a14ea6a5f56a961e0da69532b",
+  "upload_copy": "D:\\CodexTemp\\steam_release_20260915\\upload\\LiangshanHeroes_Steam_candidate.zip",
+  "uploaded": false,
+  "server_verified": false,
+  "default_active": false,
+  "baseline_build_id": "25290621",
+  "baseline_manifest_id": "53262799732835110",
+  "new_build_id": null,
+  "new_manifest_id": null,
+  "checks": {
+    "native_qa": 185,
+    "package": 1128,
+    "source_identity_probe": 10,
+    "content_identity_probe": 10,
+    "actual_exe_smoke_cases": 11,
+    "packed_recovery": 29
+  },
+  "blocker": "Browser file chooser setFiles returned without populating the Windows depot file input. Two documented chooser attempts; DOM FileList remained empty. User must select the verified local ZIP once.",
+  "handoff_url": "https://partner.steamgames.com/apps/depotuploads/5088120",
+  "scope_limits": [
+    "No upload or default activation has occurred.",
+    "No unrelated Steamworks settings, macOS depot, store edits or announcement.",
+    "No Steam client download/persistence or human playtest acceptance."
+  ],
+  "observations": [
+    "Logged-in build page showed default Build25290621 / Windows Manifest53262799732835110.",
+    "Standard Windows upload form found; file input remained empty after documented file chooser attempts.",
+    "Upload was not clicked with an empty input."
+  ]
+}

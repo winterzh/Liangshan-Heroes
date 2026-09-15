@@ -1,3 +1,7 @@
+## 2026-09-15 Windows Steam：祝家庄补员候选已验收，待选文件
+
+按用户“发布steam”请求，从固定来源dd4046fd准备Windows候选；185项原生、1128项包内、20项身份、29项包内补员和11例实际EXE短测通过。上传ZIP及六成员哈希已核对。浏览器文件选择接口未填入ZIP，需要用户手动选择一次；尚未上传或改变default，线上核实仍为Build25290621。当前交付见[更新说明](STEAM_UPDATE_20260915.md)及[发布记录](../qa/steam_release_20260915/README.md)。
+
 ## 2026-09-15 祝家庄恢复引导验证入口
 
 新增普通兵损失后的四语补员提示与主动定位，普通启动方式不变。[实现](ZHUJIAZHUANG_RECOVERY_20260915.md) · [验证结果与限制](../qa/zhujiazhuang_recovery_20260915/README.md)。

@@ -1,0 +1,94 @@
+{
+  "schema": "recovery_pack_probe_runner_v1",
+  "complete": true,
+  "candidate_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57",
+  "pack": "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\windows\\LiangshanHeroes.exe",
+  "pack_sha256": "d478eca24766ad5fb67210d867dd8d5f19a48858a8da4a268df18bc711e1f2ca",
+  "guards_before": {
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\receipt.json": "df8688e877306d098a2e65ae268637297fc8b012c6642878e2dffd0dd2c315da",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\verification_report.json": "bd3070b9365c40a631816abe1ef0fc9f46ee8332faef0a96c4fa271fdeb2a9fe",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\windows\\LiangshanHeroes.exe": "d478eca24766ad5fb67210d867dd8d5f19a48858a8da4a268df18bc711e1f2ca",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\probe_host\\Godot.exe": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\probe_host\\libgodotsteam.windows.template_release.x86_64.dll": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\probe_host\\libgodotsteam.windows.template_debug.x86_64.dll": "da20924a9d29085c2256988b67de47003835910316712302e208e31c00f24b96",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\probe_host\\steam_api64.dll": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\probe_host\\steam_stats_reader.dll": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\steam_release_20260915\\recovery_pack_probe.gd": "c46de6a3871cb601d18a61aa3458cfe3ef8f663392ac55b720ef08ceac7fe2e7",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\steam_release_20260915\\run_recovery_pack_probe.py": "2e148393a6a4deaaf3d33f726b406a7c0ac2257702314bb4df69b08687b48db5",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_character_art_qa.py": "45c8e2fda4f1e11c65987fe0c73c206223ef11cc4e2ff1acf14c4b589c9c8344",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_steam_integration_qa.py": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_level_state_qa.py": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba"
+  },
+  "steps": [
+    {
+      "case": "recovery_pck",
+      "command": [
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\probe_host\\Godot.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\windows",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--main-pack",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\steam_candidates\\20260915_142823_e9f44c57\\windows\\LiangshanHeroes.exe",
+        "--script",
+        "D:\\CodexTemp\\steam_release_20260915\\recovery\\20260915_143159_b0782496\\harness\\recovery_pack_probe.gd"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 46096,
+      "exit_code": 0,
+      "seconds": 5.527,
+      "stopped_for": null,
+      "log_sha256": "afc2c4268ad1a90b7a51059aa9cf6bf977ad9b43fb1353508eb276ff49bb96c4"
+    }
+  ],
+  "scope": "Editor-host exported-PCK recovery state/binding check only; not release EXE gameplay, live Steam, upload or publication.",
+  "private_profile": "D:\\CodexTemp\\steam_release_20260915\\recovery\\profiles\\20260915_143159_b0782496",
+  "result": {
+    "checks": 29,
+    "languages": 4,
+    "report_sha256": "db2017cd1e4bce5ee5bda1755a8464f367e38212d08c33789dba7d9ee274d4b7",
+    "pid": 46096
+  },
+  "guards_changed": [],
+  "engines_remaining": false,
+  "lock_released": true,
+  "artifacts": [
+    {
+      "path": "harness/recovery_pack_probe.gd",
+      "bytes": 7497,
+      "sha256": "c46de6a3871cb601d18a61aa3458cfe3ef8f663392ac55b720ef08ceac7fe2e7"
+    },
+    {
+      "path": "harness/run_campaign_level_state_qa.py",
+      "bytes": 8216,
+      "sha256": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba"
+    },
+    {
+      "path": "harness/run_character_art_qa.py",
+      "bytes": 25803,
+      "sha256": "45c8e2fda4f1e11c65987fe0c73c206223ef11cc4e2ff1acf14c4b589c9c8344"
+    },
+    {
+      "path": "harness/run_recovery_pack_probe.py",
+      "bytes": 8873,
+      "sha256": "2e148393a6a4deaaf3d33f726b406a7c0ac2257702314bb4df69b08687b48db5"
+    },
+    {
+      "path": "harness/run_steam_integration_qa.py",
+      "bytes": 11766,
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9"
+    },
+    {
+      "path": "recovery_pck.log",
+      "bytes": 2148,
+      "sha256": "afc2c4268ad1a90b7a51059aa9cf6bf977ad9b43fb1353508eb276ff49bb96c4"
+    },
+    {
+      "path": "report.json",
+      "bytes": 4732,
+      "sha256": "db2017cd1e4bce5ee5bda1755a8464f367e38212d08c33789dba7d9ee274d4b7"
+    }
+  ]
+}
