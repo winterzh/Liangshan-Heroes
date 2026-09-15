@@ -41,6 +41,13 @@
 - `docs/STEAM_ART_UPDATE_20260915.md`：发行准备、酒幌导出修复及后续上线记录。
 - `qa/steam_art_release_20260915/`：本批发布验证、来源、四语公告与公开回读收据。
 
+## 2026-09-16 祝朝奉四向攻击原图
+
+- `assets/characters/art_full_20260915/zhu_zhaofeng_attack_direction4_source.png`、`zhu_zhaofeng_attack_direction4.png`：保留原始网页图及透明画布归一化后的确定性 2×生产图。
+- `assets/direction4/zhu_zhaofeng_attack_20260915.json`、`assets/anim/zhu_zhaofeng_attack_{se,sw,ne,nw}.tres`：4×4 攻击图集清单和四方向四帧资源。
+- `tools/zhu_zhaofeng_attack_atlas_scale.py`、`tools/zhu_zhaofeng_attack_direction4_contract.py`、`tools/zhu_zhaofeng_attack_direction4_runtime_qa.gd`：可复现画布归一化、静态契约和 Godot 路由验证。
+- [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_attack_direction4_20260916/README.md)
+
 ## 2026-09-15 全库美术批次
 
 - `assets/characters/art_full_20260915/`：董超、薛霸独立原生头像。

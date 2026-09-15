@@ -1,0 +1,52 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "character": "zhu_zhaofeng",
+  "scope": "attack-only four-direction body source; idle and walk are covered separately; hurt/death remain open and must not be inferred from this sheet",
+  "sources": {
+    "zhu_zhaofeng_attack_atlas": {
+      "path": "assets/characters/art_full_20260915/zhu_zhaofeng_attack_direction4.png",
+      "sha256": "ee50add283f682a36e3a6654c8c8de25830bb98982a1734fdaeacad85d8d586f",
+      "job": "web ChatGPT conversation 6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "mode": "RGBA",
+      "native_size": [2508, 2508],
+      "import_limit": 0,
+      "imported_size": [2508, 2508],
+      "imported_size_verified": true,
+      "alpha_zero_fraction": 0.5944767811583476,
+      "layout": "4x4; each row is one direction and four columns are an attack cycle: SE,SW,NE,NW",
+      "raw_web_source": "assets/characters/art_full_20260915/zhu_zhaofeng_attack_direction4_source.png",
+      "raw_web_source_sha256": "e86ac68e4e50919e5616f9c93634be807fc8284b4a8c805e9fbe12d978db7053",
+      "raw_web_size": [1230, 1278],
+      "raw_canvas_normalization": "center on a 1278x1278 transparent canvas at x=24,y=0; all source pixels retained",
+      "production_transform": "deterministic transparent-canvas normalization then whole-image LANCZOS scale to 2508x2508 so the 4x4 atlas has integer 627px cells; no mirroring, masking, repainting, alpha clearing or color correction",
+      "prompt_file": "assets/direction4/web_prompts_20260915/zhu_zhaofeng_attack_direction4.txt",
+      "prompt_sha256": "4c2d23d638c13df9594200922b8e43e2ceab411d1ce4a7439c9f4ae9f9823ac3",
+      "conversation_url": "https://chatgpt.com/c/6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "visual_review": "Accepted after local original PNG inspection: same broad older village-lord identity, brown robe and short saber, distinct front and true back rows, four visibly different attack poses per direction, complete bodies and weapons, clean transparent background and no text/grid/border.",
+      "retained_rgba": "Raw downloaded PNG is retained unchanged. Only a transparent canvas normalization and deterministic scale prepare the production atlas; no mirroring, masking, recoloring, repainting or pixel clearing."
+    }
+  },
+  "poses": {
+    "windup_se": {"source": "zhu_zhaofeng_attack_atlas", "region": [0, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_se": {"source": "zhu_zhaofeng_attack_atlas", "region": [627, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_se": {"source": "zhu_zhaofeng_attack_atlas", "region": [1254, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_se": {"source": "zhu_zhaofeng_attack_atlas", "region": [1881, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "windup_sw": {"source": "zhu_zhaofeng_attack_atlas", "region": [0, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_sw": {"source": "zhu_zhaofeng_attack_atlas", "region": [627, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_sw": {"source": "zhu_zhaofeng_attack_atlas", "region": [1254, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_sw": {"source": "zhu_zhaofeng_attack_atlas", "region": [1881, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "windup_ne": {"source": "zhu_zhaofeng_attack_atlas", "region": [0, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_ne": {"source": "zhu_zhaofeng_attack_atlas", "region": [627, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_ne": {"source": "zhu_zhaofeng_attack_atlas", "region": [1254, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_ne": {"source": "zhu_zhaofeng_attack_atlas", "region": [1881, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "windup_nw": {"source": "zhu_zhaofeng_attack_atlas", "region": [0, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "slash_nw": {"source": "zhu_zhaofeng_attack_atlas", "region": [627, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "extend_nw": {"source": "zhu_zhaofeng_attack_atlas", "region": [1254, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "recover_nw": {"source": "zhu_zhaofeng_attack_atlas", "region": [1881, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0}
+  },
+  "states": {"attack": ["windup", "slash", "extend", "recover"]},
+  "resources": [
+    "assets/anim/zhu_zhaofeng_attack_se.tres", "assets/anim/zhu_zhaofeng_attack_sw.tres",
+    "assets/anim/zhu_zhaofeng_attack_ne.tres", "assets/anim/zhu_zhaofeng_attack_nw.tres"
+  ]
+}
