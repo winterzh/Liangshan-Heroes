@@ -71,6 +71,9 @@ func set_muted(on: bool) -> void:
 
 
 func save() -> void:
+	# QA/截图/性能脚本会临时改 edge_scroll 等字段；隔离目录或 CAMPAIGN_QA 下禁止写回玩家存档。
+	if OS.get_environment("CAMPAIGN_QA") == "1":
+		return
 	var c := ConfigFile.new()
 	c.set_value("audio", "bgm", bgm)
 	c.set_value("audio", "sfx", sfx)

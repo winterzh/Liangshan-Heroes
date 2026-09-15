@@ -93,6 +93,9 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton or event is InputEventMouseMotion:
+		# 鼠标活动后退出触屏判定，避免一次误触后边缘滚屏永久失效。
+		touch_mode = false
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
 			_zoom_by(1.0 + 0.12 * Settings.zoom_sens)
