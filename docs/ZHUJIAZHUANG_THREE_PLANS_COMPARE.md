@@ -3,7 +3,7 @@ feature: zhujiazhuang-three-plans
 status: delivered
 updated: 2026-09-14
 branch: codex/sync-20260905-stable
-commits: 1f074d10..1f074d10
+commits: 1f074d10..731976c9
 ---
 
 # 祝家庄首批：三种计划的可比对照
