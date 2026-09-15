@@ -552,6 +552,8 @@ const STANDALONE_PORTRAITS := {
 	"xue_ba": "res://assets/characters/art_full_20260915/xue_ba.png",
 	# 陆谦头像与本批四向身体原图同源，固定裁剪自SE格，避免旧灰底头像与新身体风格割裂。
 	"lu_qian": "res://assets/characters/art_full_20260915/lu_qian.png",
+	# 祝朝奉使用同源SE格裁出的宽体乡绅头像，与陆谦保持身份和体态差异。
+	"zhu_zhaofeng": "res://assets/characters/art_full_20260915/zhu_zhaofeng.png",
 	"guan_zhanzi": "res://assets/characters/guan_zhanzi_direction4_20260915/portrait.png",
 	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
 	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",

@@ -22,6 +22,32 @@ py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_ful
 
 这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
 
+## 2026-09-15 陆谦四向行走原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260915/lu_qian_walk_direction4_source.png`，并以确定性整图 2 倍缩放得到 2508×2508 的生产图 `lu_qian_walk_direction4.png`；四行固定 SE/SW/NE/NW、四列为步态循环。四向资源由 `assets/direction4/lu_qian_walk_20260915.json` 记录原图/生产图哈希、缩放步骤、固定格、来源会话和提示词 SHA；运行时只识别 walk，attack/hurt/death 仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/lu_qian_walk_atlas_scale.py
+py -3 -X utf8 -B tools/lu_qian_walk_direction4_contract.py --output qa/lu_qian_walk_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/lu_qian_walk_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r7
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
+
+## 2026-09-15 祝朝奉四向待机身体原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_direction4.png`、同源头像和四份 idle SpriteFrames。四向资源由 `assets/direction4/zhu_zhaofeng_20260915.json` 记录固定格、来源会话、提示词 SHA 和原图 SHA；运行时只识别 idle，其他动作状态仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_portrait_crop.py
+py -3 -X utf8 -B tools/zhu_zhaofeng_idle_direction4_contract.py --output qa/zhu_zhaofeng_idle_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_idle_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r6
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用祝朝奉自身原图和独立状态来源。
+
 ## 2026-09-15 Steam美术更新准备与酒幌导出校准修复
 
 用户授权发布本次美术与镜头更新并配原画公告。首个包内专项发现酒幌原字节校准不兼容导出；已增加等价的纹理像素及图集几何校验，源码321项通过，继续发行包验证。见[更新记录](STEAM_ART_UPDATE_20260915.md)。

@@ -2,11 +2,19 @@
 
 统一运行时 AtlasTexture 切片已启用 `filter_clip`，头像、地形、四向动作条带及死亡残留在缩放时不再跨入相邻图格。PNG 原字节与来源链未变；采样自测5/5，隔离 Godot 导入/库存渲染321项通过。详见[QA记录](../qa/art_sampling_clip_20260915/README.md)。
 
-这只解决采样白边/串格，不代表全库美术完成；缺失角色动作、陆谦/祝朝奉身体图、旧头像背景、地形细节和技能实战辨识仍开放。Steam不变。
+这只解决采样白边/串格，不代表全库美术完成；缺失角色动作、陆谦与祝朝奉的 walk/attack/hurt/death、旧头像背景、地形细节和技能实战辨识仍开放。Steam不变。
 
 ## 2026-09-15 陆谦四向待机身体原图
 
-陆谦新增一张网页端生成的 2×2 真透明四向身体原图，并从同一 SE 格固定裁出匹配头像；四格固定 SE/SW/NE/NW，已接入四份 idle TRES。53 项静态契约、51 项 Godot 路由检查及全库 321 项库存检查通过。陆谦 walk/attack/hurt/death、祝朝奉身体图、旧头像背景和技能实战辨识仍开放；本批没有发布 Steam。详见 [陆谦美术记录](LU_QIAN_ART_20260915.md) 和 [QA](../qa/lu_qian_idle_direction4_20260915/README.md)。
+陆谦新增一张网页端生成的 2×2 真透明四向身体原图，并从同一 SE 格固定裁出匹配头像；四格固定 SE/SW/NE/NW，已接入四份 idle TRES。53 项静态契约、51 项 Godot 路由检查及全库 321 项库存检查通过。陆谦与祝朝奉的未完成动作、旧头像背景和技能实战辨识仍开放；本批没有发布 Steam。详见 [陆谦美术记录](LU_QIAN_ART_20260915.md)、[祝朝奉美术记录](ZHU_ZHAOFENG_ART_20260915.md) 和各自 QA（`qa/lu_qian_idle_direction4_20260915/`、`qa/zhu_zhaofeng_idle_direction4_20260915/`）。
+
+## 2026-09-15 陆谦四向行走原图
+
+陆谦新增网页端 4×4 真透明行走原图；四行固定 SE/SW/NE/NW，每行四帧脚步变化，原始 1254×1254 PNG 保留并确定性缩放为 2508×2508 生产图，已接入四份 walk TRES。125 项静态契约、132 项 Godot 路由检查及全库 321 项库存检查通过。陆谦 attack/hurt/death、祝朝奉 walk/attack/hurt/death、旧头像背景和技能实战辨识仍开放；本批没有发布 Steam。详见 [行走 QA](../qa/lu_qian_walk_direction4_20260915/README.md)。
+
+## 2026-09-15 祝朝奉四向待机身体原图
+
+祝朝奉新增网页端 2×2 真透明四向身体原图，并从同源 SE 格固定裁出匹配头像；年长宽体、短须、栗色乡绅袍与陆谦的精瘦官吏造型明确区分，四格固定 SE/SW/NE/NW，已接入四份 idle TRES。53 项静态契约、51 项 Godot 路由检查及全库 321 项库存检查通过。祝朝奉 walk/attack/hurt/death、旧头像背景和技能实战辨识仍开放；本批没有发布 Steam。详见 [祝朝奉美术记录](ZHU_ZHAOFENG_ART_20260915.md) 和 [QA](../qa/zhu_zhaofeng_idle_direction4_20260915/README.md)。
 
 ## 2026-09-15 Steam美术更新准备与酒幌导出校准修复
 
