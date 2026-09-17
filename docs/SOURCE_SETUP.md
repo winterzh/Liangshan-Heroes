@@ -1,3 +1,9 @@
+## 2026-09-17 Steam 发布入口
+
+Windows Steam 更新的完整操作顺序、六文件白名单、候选冻结、SteamCMD VDF 示例、`default/public` 回读、四语公告、客户端验收和回滚统一见 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)。开始任何新批次前仍须阅读最新 `docs/STEAM_UPDATE_<日期>.md` 与 `qa/steam_release_<日期>/README.md`；指南描述流程，不代表历史候选已经上传或当前仍是线上版本。
+
+本项目的标准候选入口继续是：先运行 `tools/run_steam_integration_qa.py --native ... --run`，再将成功收据传给 `tools/build_steam_candidate.py --qa-run ... --run`。候选完成不等于获得 Steam 发布授权，也不等于已上传或上线。
+
 ## 2026-09-16 梁山核心人物头像统一
 
 新增网页原生 `assets/characters/art_full_20260916/liangshan_core_portraits_source_20260916.png`（1254×1254 RGB 2×2 图集）和同源提示词。`tools/intake_liangshan_core_portraits_20260916.py` 按固定四象限裁切、2× LANCZOS 缩放，输出晁盖、鲁智深、武松、公孙胜四张 1254×1254 独立头像；源图像素完整保留，不镜像、不重绘、不清除背景。

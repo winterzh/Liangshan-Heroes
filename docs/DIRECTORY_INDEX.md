@@ -1,3 +1,8 @@
+## 2026-09-17 Steam 发布指南
+
+- [项目级 Steam 发布指南](STEAM_RELEASE_GUIDE.md)：App `5088120` / Windows Depot `5088121` 的候选、上传、`default` 上线、四语公告、回验、回滚和收据清单。
+- [文档 QA](../qa/steam_release_guide_20260917/README.md)：固定标识、六文件白名单、命令入口、VDF 示例与发布边界核对。
+
 ## 2026-09-16 梁山核心人物头像统一
 
 - `assets/characters/art_full_20260916/liangshan_core_portraits_source_20260916.png`、`liangshan_core_portraits_prompt_20260916.txt`：网页原生 2×2 图集和提示词。
