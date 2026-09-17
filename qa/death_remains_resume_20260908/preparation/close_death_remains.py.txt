@@ -1,0 +1,60 @@
+from pathlib import Path
+import datetime, hashlib, json, subprocess
+root=Path(__file__).resolve().parents[1]
+qa=root/'qa/death_remains_resume_20260908'
+candidate=root/'scratchpad/death_remains_20260908'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+runs=['overlay_20260907T204944Z_67f21bf5','overlay_20260907T205131Z_8bdd6970',
+      'overlay_20260907T205351Z_0a836ba6','overlay_20260907T205650Z_ac33e9d9',
+      'overlay_20260907T205859Z_88bb4854','overlay_20260907T210056Z_8ffac755',
+      'overlay_20260907T210458Z_406777b1']
+primary=runs[5]
+head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+assert head=='7a36b1c73fdf72b6523e9cdb7459667db808fc18'
+assert not (root/'.godot/redraw_rejection_source.lock').exists()
+last=root/'.godot/stabilization_overlay'/primary
+r=json.loads((last/'receipt.json').read_text())
+assert r['complete'] and not r['final_issues']
+regression=root/'.godot/stabilization_overlay'/runs[-1]
+assert json.loads((regression/'receipt.json').read_text())['complete']
+changes=json.loads((candidate/'overlay_manifest.json').read_text())['files']
+for change in changes:
+    path=root/change['path']
+    assert (sha(path)==change['before_raw_sha256']) if change['before_exists'] else not path.exists()
+    assert sha(root/change['candidate'])==sha(last/'project'/change['path'])==change['candidate_sha256']
+    assert sha(regression/'project'/change['path'])==change['candidate_sha256']
+qa.mkdir(exist_ok=False);(qa/'.gdignore').write_bytes(b'')
+pins=[];totals=[]
+def archive(source,relative):
+    target=qa/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(source.read_bytes())
+    pins.append({'source_relative':source.relative_to(root).as_posix(),'archive_relative':relative,'sha256':sha(target),'bytes':target.stat().st_size})
+for i,run_id in enumerate(runs,1):
+    run=root/'.godot/stabilization_overlay'/run_id
+    receipt=json.loads((run/'receipt.json').read_text())
+    assert receipt['source_head']==head and not receipt['final_issues'] and receipt['lock_released']
+    assert all(receipt[k] for k in ['source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged'])
+    for name in ['receipt.json','report.json','manifest.json','import.log','driver.log','freeze.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (run/name).exists(): archive(run/name,f'runs/r{i}/'+name)
+    driver=[x for x in receipt['steps'] if x['name']=='driver'][0]['command'][-1].removeprefix('res://')
+    archive(run/'project'/driver,f'runs/r{i}/driver.gd.txt')
+    for change in receipt['candidate_changes']:
+        archive(run/'project'/change['path'],f'runs/r{i}/'+Path(change['path']).name+'.txt')
+    item={'run_id':run_id,'complete':receipt['complete'],'error':receipt.get('error')}
+    if (run/'report.json').exists():
+        report=json.loads((run/'report.json').read_text());n=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks'])
+        item.update(checks=report['check_count'],source_sha_checks=n,other_checks=report['check_count']-n,failures=[x for x in report['checks'] if not x['passed']],completed_cases=report.get('completed_cases',[]))
+    totals.append(item)
+for name in ['driver.gd','mixed_driver.gd','run_death_remains_state.gd','run_visual_graph.gd','run_battle_world_core.gd']:
+    archive(candidate/name,'candidate/'+name+'.txt')
+for name in ['freeze.json','overlay_manifest.json']:archive(candidate/name,'candidate/'+name)
+for name in ['prepare_death_remains.py','prepare_death_driver.py','death_remains_cases.gd.inc','prepare_death_regression.py','death_fallback_case.gd.inc','close_death_remains.py']:
+    archive(root/'.godot'/name,'preparation/'+name+'.txt')
+for change in changes:
+    path=root/change['path'];path.write_bytes((last/'project'/change['path']).read_bytes())
+    if not change['before_exists']:
+        uid=Path(str(path)+'.uid');assert not uid.exists();uid.write_bytes((last/'project'/(change['path']+'.uid')).read_bytes())
+        archive(uid,'candidate/'+uid.name+'.txt')
+    assert sha(path)==change['candidate_sha256']
+(qa/'installation.json').write_text(json.dumps({'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'changes':changes,'installed_bytes_equal_native':True,'runs':totals,'complete_world_resume':False,'steam_updated':False},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(qa/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'runs':totals,'archived_files':len(pins),'bytes':sum(x['bytes'] for x in pins)},ensure_ascii=False))

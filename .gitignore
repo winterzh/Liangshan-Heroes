@@ -1,4 +1,5 @@
 # Godot 4 import cache / 编辑器本地缓存（打开工程自动重建，不入库）
+# 只放 editor/imported/exported 等编辑器产物；不要把 steam 候选、QA 副本或实验工程塞进 .godot/
 .godot/
 
 # Per-computer Godot executable path (one UTF-8 line, no quotes).
@@ -14,6 +15,37 @@ source code.zip
 .DS_Store
 *.tmp
 *~
+*.uid
+!scripts/run_level1_visual_state.gd.uid
+!scripts/run_level6_world_factory.gd.uid
+!scripts/run_level2_world_factory.gd.uid
+!scripts/run_level7_world_factory.gd.uid
+!scripts/run_level7_visual_state.gd.uid
 
 # 会话临时目录（不入库）
-scratchpad/
+scratchpad/*
+!scratchpad/.gdignore
+
+# Godot-generated QA sidecars; source evidence and already tracked files remain versioned.
+# Explicitly include a sidecar if a production or QA provenance manifest requires it.
+qa/**/*.import
+qa/**/*.uid
+!qa/level3_world_restore_20260909/20260913_*/source_snapshot/scripts/run_level1_visual_state.gd.uid
+!qa/level3_world_restore_20260909/20260913_*/source_snapshot/scripts/run_level6_world_factory.gd.uid
+!qa/level3_world_restore_20260909/20260913_*/source_snapshot/scripts/run_level2_world_factory.gd.uid
+!qa/level3_world_restore_20260909/20260913_*/source_snapshot/scripts/run_level7_world_factory.gd.uid
+!qa/level3_world_restore_20260909/20260913_*/source_snapshot/scripts/run_level7_visual_state.gd.uid
+!qa/stabilization_dust_filter_20260907/normal_ab/executed_projects/A/tools/polish_performance_probe.gd.uid
+!qa/stabilization_dust_filter_20260907/normal_ab/executed_projects/B/tools/polish_performance_probe.gd.uid
+!qa/stabilization_dust_filter_20260907/normal_ab/executed_projects/A/tools/zhujiazhuang_rts_test.gd.uid
+!qa/stabilization_dust_filter_20260907/normal_ab/executed_projects/B/tools/zhujiazhuang_rts_test.gd.uid
+
+# Standalone localization QA scripts are loaded by path.
+/tools/localization_qa.gd.uid
+/tools/localization_package_probe.gd.uid
+/tools/text_ui_review.gd.uid
+/tools/battle_text_ui_review.gd.uid
+/tools/text_review_contract.gd.uid
+
+# Rebuildable Python maintenance cache.
+__pycache__/

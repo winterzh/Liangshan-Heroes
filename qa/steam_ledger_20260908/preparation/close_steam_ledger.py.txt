@@ -1,0 +1,105 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys,re
+root=Path.cwd(); out=root/'scratchpad/steam_ledger_20260908'; q=root/'qa/steam_ledger_20260908'
+head='dbb101cd8dfab4c11c7410a956ff7d6eea073826'; run=sys.argv[1]; native=root/'.godot/stabilization_overlay'/run
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+assert r['suite']=='steam-ledger-native'
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and report['complete'] and not report['failed_count']
+assert report['diagnostics']['write_count']==2100 and len(report['diagnostics']['crashes'])==7
+assert 'Unicode parsing error' not in (native/'driver.log').read_text(encoding='utf-8')
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+assert len(changes)==3
+for row in changes:
+    assert not (root/row['path']).exists()
+    assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+q.mkdir(exist_ok=False); (q/'.gdignore').write_text('\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes())
+    assert sha(dst)==sha(src)
+    pins.append({'source_relative':str(src.relative_to(root)) if src.is_relative_to(root) else str(src), 'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    receipt=json.loads(path.read_text())
+    if receipt.get('source_head')!=head or receipt.get('suite')!='steam-ledger-native': continue
+    folder=path.parent; tag='runs/'+folder.name
+    runs.append({'run_id':folder.name,'complete':receipt.get('complete'),'freeze_sha256':receipt['freeze_sha256']})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes:
+        for suffix in ['', '.uid']:
+            source=folder/'project'/(row['path']+suffix)
+            if source.exists(): archive(source,tag+'/'+source.name+'.txt')
+    driver=folder/'project/tools/steam_ledger/driver.gd'
+    if driver.exists(): archive(driver,tag+'/driver.gd.txt')
+    if (folder/'manifest.json').exists():
+        m=json.loads((folder/'manifest.json').read_text()); fixture_root=Path(m['private_user'])/'ledger_qa'
+        assert fixture_root.is_relative_to(Path(receipt['private_profile']))
+        if fixture_root.exists():
+            for f in sorted(fixture_root.rglob('*')):
+                if f.is_file(): archive(f,tag+'/fixtures/'+f.relative_to(fixture_root).as_posix())
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_steam_ledger.py','extend_steam_ledger.py','close_steam_ledger.py']:
+    archive(root/'.godot'/name,'preparation/'+name+'.txt')
+for row in changes:
+    for suffix in ['', '.uid']:
+        source=native/'project'/(row['path']+suffix)
+        (root/(row['path']+suffix)).write_bytes(source.read_bytes())
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks'])
+assertions=report['check_count']-source_count
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'runs':runs,'changes':changes,'checks':report['check_count'],'source_sha_checks':source_count,'assertions':assertions,'steam_service_connected':False,'battle_slot_connected':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json'); write_ms=report['diagnostics']['write_ms']
+(root/'docs/STEAM_RUN_LEDGER_20260908.md').write_text(f'''# Steam 独立持久局记录
+
+三个内部模块已进入生产源码：steam_run_receipt保留严格账号/玩法/局身份、累计击杀高水位与终局一次；steam_receipt_store负责Windows实际文件事务及最近两份完整快照；steam_run_ledger串行完成校验、落盘回读、模型提交和读写新鲜度检查。尚未由SteamService或Battle调用，不会自行创建玩家记录或改变现有成就统计。后续须把此模块接到统一Session、Steam持续同步和玩家继续槽，不能把本批称为完整续玩或真实SDK验收。
+
+## 内部接口与存储
+
+open接收实时账号及首次读取的统计/解锁种子。默认位置为user://steam_receipts/v1/5088120/<账号>，独立于战斗槽；只有空目录初始化才使用种子，已存在记录不能被传入零值覆盖。账号必须是合法十进制SteamID；目录只允许user://子目录并拒绝父级跳转与检测到的链接。begin_run用Crypto产生128位随机局token，调用方只在落盘成功后取得它。progress接收本局累计有效击杀，只加超过历史高水位的差值；settle持久标记胜负，重复结算不再加胜场，失败终局也不能随后改判胜利。can_resume核对实时账号、受信玩法和未终局，调用者不得从槽读取受信账号、路径或玩法来源。
+
+每次修改在mkdir写者锁下比较当前修订与SHA，写pending、flush、close、原字节回读、严格JSON/UTF8/模型验证，rename后再次回读，再提交内存模型。旧宿主发现磁盘修订变化即停止读写，重复低水位事件不写新文件。每份快照含全部局记录和终局墓碑；新快照核验成功后才删除多余旧快照，正常只保留两份。相邻修订和前序SHA仍需匹配，不再有A2的2048次写入上限和随写入次数增长的全链重读。
+
+恢复仅在原写者PID确认不运行时进行，并重新核对完整目录清单。完整pending可向前恢复；半写、错误UTF8、缺失前序、损坏旧/新文件、账号或哈希不匹配、未知文件均阻断并保留原字节，不回退到旧记录继续计数。遇到存储错误，宿主不会返回可用记录。恢复过程本身再次被杀、空/损坏锁的自动修复仍待实现；它们会保留阻断状态。flush及进程强杀不证明断电耐久性；SHA链也不防止用户主动删除/替换整个目录或恶意改档。
+
+## 验证与边界
+
+最终原生{report['check_count']}条记录通过：{source_count}来源SHA和{assertions}功能/环境断言。实际连续2100次更新后只有两份完整快照，重新打开高水位与总击杀均为2100；该循环耗时{write_ms}ms，包含同步校验/读写，不能作为每次击杀在物理帧内直接落盘的性能证明。今后应在Session安全边界批量提交累计值，并在保存槽及任何SDK缓存写入前完成持久确认。
+
+7个实进程强杀点：写锁取得、pending半写、pending关闭验证、rename、新文件验证、删除旧快照前、删除旧快照后。每个均由父Godot核对活跃子PID和断点后执行OS.kill并确认终止，再启动新Godot恢复；共14个测试子进程。完整窗口重启后只保留正确的3或11击杀，旧累计2不加数；半写窗口保留损坏文件并阻断。活跃写者时竞争宿主均被拒绝且未修改文件。另有11类坏文件、账号/玩法隔离、旧宿主拒绝、八战役故事成就、20/30/60波据守、AI、胜负终局、整数饱和及服务端校正模型检查。所有账号均为测试常量，未调用真实Steam。
+
+Receipt的invalidate/correct仍是供未来SDK宿主使用的内部模型接口，测试中的校正输入是合成数据。Steam的UserStatsStored_t没有应用批次编号，退出还可能提交缓存；本模块不处理发送、回调归属、离线缓存或真实服务端确认，也不把read generation当SDK回调令牌。[官方API](https://partner.steamgames.com/doc/api/ISteamUserStats#UserStatsStored_t)、[StoreStats](https://partner.steamgames.com/doc/api/ISteamUserStats#StoreStats)。Steam离线缓存及多设备合并语义另见[官方统计说明](https://partner.steamgames.com/doc/features/achievements#offline_mode)。继续集成前必须解决持久outbox、迟到/重复回调和校正崩溃窗口，不能直接重放旧绝对目标。
+
+快照大小仍随局数增长，纯模型保留10000局上限；到限明确拒绝新局，不偷偷删除终局墓碑。长局数压缩及终局索引仍待后续实测。本次未接入A2每进程仅一次发送策略，原候选保留历史证据。[原生QA](../qa/steam_ledger_20260908/README.md)、[受测字节晋级](../qa/steam_ledger_20260908/installation.json)。全项目八关、完整30波、跨进程世界续玩、1800秒、两台Windows、60FPS、美术和真人/真实双账号验收保持开放。
+''',encoding='utf-8',newline='\n')
+(q/'README.md').write_text(f'''# 独立Steam局记录原生QA
+
+来源`{head}`，最终`{run}`，freeze`{freeze}`。{report['check_count']}条记录通过（{source_count}来源SHA、{assertions}其余断言），2100次实际写入、7次核对PID后的强杀和7次新进程恢复、11类坏账本。真实SDK、Battle绑定及玩家继续入口未测试。完整接口/边界见[实现说明](../../docs/STEAM_RUN_LEDGER_20260908.md)。
+
+R1完成8153项检查但出现3条Unicode解析警告，来源是旧候选中重复的NUL字符串检查。R2保留字节层UTF8/NUL拒绝，移除会自行触发警告的字符串字面量，并新增八关/据守/AI、失败终局、饱和值及活跃写者竞争检查。两轮原始输入、报告、日志、manifest、隔离fixture均保留；测试生成的记录只含固定虚拟账号，未归档实际用户profile或Steam缓存。
+
+所有文件映射与SHA见SOURCE_PINS.json。candidate为最终受测输入；.gd.txt需还原原名至独立来源checkout的scratchpad/steam_ledger_20260908，按原manifest/freeze复现：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/steam_ledger_20260908 --expected-files 3 --driver driver.gd --driver-destination tools/steam_ledger/driver.gd --suite steam-ledger-native --prefix "[steam ledger QA] " --profile-root D:/CodexTemp/lshqa --run
+```
+
+profile-root可换受控绝对路径。真实Windows/Godot4.6.3，无渲染性能或真人结论；仅文件进程崩溃验证，不等同断电。改动不触发Steam上传。
+''',encoding='utf-8',newline='\n')
+def prepend(path,text):
+    p=root/path; p.write_bytes((text+'\n\n').encode()+p.read_bytes())
+prepend('docs/WORKLOG.md',f'## 2026-09-08 Steam独立局记录存储\n\n接入三个内部持久记录模块，累计击杀高水位、胜负终局墓碑、账号/玩法校验和两份快照轮换。原生2100次写入、7个强杀重启窗口、11类坏记录及八关/据守/AI统计检查通过，共{assertions}非来源断言；{source_count}来源SHA单列。SteamService/Battle与玩家槽尚未调用，持续SDK发布及原整体验收仍待推进。[实现与限制](STEAM_RUN_LEDGER_20260908.md)、[QA](../qa/steam_ledger_20260908/README.md)。本批仅GitHub stable同步。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 持久局记录内部API\n\n新增steam_run_receipt/store/ledger内部模块。未来由Session传入实时账号和受信玩法；默认user://steam_receipts/v1独立于战斗槽。当前未由autoload或Battle调用，不改变启动和菜单。[接口、存储边界与复现](STEAM_RUN_LEDGER_20260908.md)。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 独立局记录存储通过原生验证\n\n高水位/终局防重、2100次持久写入与两份快照、7个强杀窗口恢复、坏文件阻断已进入内部源码。尚缺SteamService持续同步、Session/Battle绑定、玩家槽和跨进程世界续玩；[证据与剩余风险](STEAM_RUN_LEDGER_20260908.md)。原八关/长时/双机/性能/美术/真人验收不变。')
+prepend('docs/STABILIZATION_EXECUTION_20260907.md','2026-09-08推进：Steam独立局记录与有界快照存储已接入内部源码；2100写入、7个进程强杀恢复及坏记录拒绝通过。下一步仍是持久outbox/SDK持续发布、统一Session与Battle累计值绑定、玩家槽/菜单及跨进程世界继续，原范围不变。[最新证据](STEAM_RUN_LEDGER_20260908.md)。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 Steam独立局记录\n\n- scripts/steam_run_receipt.gd：账号、局token、高水位、终局与校正纯模型。\n- scripts/steam_receipt_store.gd：独立快照文件事务、压缩和死写者恢复。\n- scripts/steam_run_ledger.gd：内部串行落盘及新鲜度检查API。\n- docs/STEAM_RUN_LEDGER_20260908.md、qa/steam_ledger_20260908/：合同及原生崩溃/坏记录证据。')
+prepend('docs/STEAM_RUN_RECEIPT_DRAFT_20260907.md','后续接入：纯receipt已连同有界快照与串行宿主进入内部生产源码，见[2026-09-08实现与QA](STEAM_RUN_LEDGER_20260908.md)。旧draft/outbox和A2发送策略仍为历史候选；真实Steam持续同步及Battle/槽绑定尚未接通。')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve native-tested Steam ledger and evidence bytes.\nscripts/steam_run_receipt.gd* -text -whitespace\nscripts/steam_receipt_store.gd* -text -whitespace\nscripts/steam_run_ledger.gd* -text -whitespace\nqa/steam_ledger_20260908/** -text -whitespace\n')
+paths=['.gitattributes']+[row['path']+suffix for row in changes for suffix in ['', '.uid']]+['docs/'+n for n in ['STEAM_RUN_LEDGER_20260908.md','WORKLOG.md','SOURCE_SETUP.md','PROJECT_STATUS.md','STABILIZATION_EXECUTION_20260907.md','DIRECTORY_INDEX.md','STEAM_RUN_RECEIPT_DRAFT_20260907.md']]+[p.relative_to(root).as_posix() for p in q.rglob('*') if p.is_file()]
+assert len(paths)==len(set(paths))
+(root/'.godot/steam_ledger_stage_paths.txt').write_text('\n'.join(paths)+'\n',encoding='utf-8')
+print(json.dumps({'runs':runs,'pins':len(pins),'paths':len(paths),'checks':report['check_count'],'source_checks':source_count,'assertions':assertions,'bytes':sum((root/p).stat().st_size for p in paths)},ensure_ascii=False))

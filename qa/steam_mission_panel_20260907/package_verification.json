@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "source_commit": "443e75e887afd76f9569cae17b0527a72408aedc",
+  "overlay_commit": "f3da82f7452a2164c704c34a97c6b2696e99b9c3",
+  "source_tree_sha256": "756d5bc9e60a937d002be54213afd932ba1496b62c92855e02a4b4620b0a5e2a",
+  "source_manifest_sha256": "8bedfb697e7cdaaf248bddd1eeb6b55cbb36ef41435bf9ca600eee0af4df8336",
+  "executable": "D:\\AI项目\\水浒\\开发工程\\.godot\\mission_panel_steam_20260907\\windows\\LiangshanHeroes.exe",
+  "size_bytes": 286993472,
+  "sha256": "0934839ef975fd7fc7e4f31eead65c1df6097bcc1c2fc5570a7a0bb5094c0df5",
+  "steps": [
+    {
+      "name": "contract",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--main-pack",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\mission_panel_steam_20260907\\windows\\LiangshanHeroes.exe",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\mission_panel_steam_20260907\\package_contract.gd"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.717,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    },
+    {
+      "name": "visual",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--main-pack",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\mission_panel_steam_20260907\\windows\\LiangshanHeroes.exe",
+        "--rendering-method",
+        "forward_plus",
+        "--rendering-driver",
+        "vulkan",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\mission_panel_steam_20260907\\package_visual_capture.gd"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.105,
+      "errors": [],
+      "warnings": [],
+      "passed": true
+    }
+  ],
+  "contract_checks": 437,
+  "smoke_cases": 11,
+  "visual_captures": 2,
+  "visual_review_pending": true,
+  "scope": "Short actual release EXE smoke and embedded PCK checks; not full human campaign or 30-wave/long-duration acceptance."
+}

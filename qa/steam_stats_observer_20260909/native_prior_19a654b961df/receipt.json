@@ -1,0 +1,93 @@
+{
+  "complete": true,
+  "sources": {
+    "native/steam_stats_reader/build_profile.json": "3d38d062afbf6d75f648dec342a7e5d965bec84ebfa7b6ea63c0ac13a0dabcb8",
+    "native/steam_stats_reader/CMakeLists.txt": "250d13245b273ceb54fb2235f958ab826b5cd4bcc4141d0a4ca0d794d20c207a",
+    "native/steam_stats_reader/extension.cpp": "4540316e0f63973d2d796a9db3469826ec57e8a26475fe694807c0b325aedde6",
+    "native/steam_stats_reader/mock_steam.cpp": "334ff05c842a7b46c1fc2accd2e8c2617cc53d01823efcfced3544a431e85b5c",
+    "native/steam_stats_reader/observer.hpp": "14439fbb78372514c91c9c24a9809e341f94249f09b2d1541ca39b6578827cfb",
+    "native/steam_stats_reader/OBSERVER.md": "bb3d9f94fc9142d3eeb3306777dbf601efd2c73fc97d74b77dffd80eccb35a6c",
+    "native/steam_stats_reader/observer_test.cpp": "fa36e9915b42b13790c3faf36fa4d93d2d94331bdab0c99f2d842f39602bd021",
+    "native/steam_stats_reader/reader.hpp": "11be67d8d8cc1ef412c10073d8596f56e2b73ecdc6956f1b3ef309217f32e51c",
+    "native/steam_stats_reader/reader_test.cpp": "6e46151f60f2130d20462e6cc226201d884c083808cc13bb91d1c766979856c8",
+    "native/steam_stats_reader/README.md": "595a73f8d807fff729174046356f19a2a36de0949aec994fb3e3c0b6c7c5af45",
+    "native/steam_stats_reader/windows_api.hpp": "4b9a19a0094b4c540635cc5ac3586b869f9f0d93d818107c4171df60db7b528a",
+    "native/steam_stats_reader/third_party/gdextension_interface.h": "355ff4c6254fdd434ea16d9a8ef0f18e3f95aeb3e3f00d98db10769ece3c7fe5",
+    "scripts/steam_stats_reader.gd": "23dc98449a5e71add9114483b8c29a5e423044b257281ec699bca3b34e65c6ec",
+    "scripts/steam_stats_observer.gd": "1744c8d2aefcb05b86957bf5a07e57cddf6507093970d06949a4e2abab0e8fd7",
+    "tools/test_steam_stats_observer_native.py": "2d3699c285c2f94ce9cd4966c97cdf1f45d488d27e681304f3f181a737b7f3d8"
+  },
+  "commands": [
+    {
+      "name": "reader_test_compile",
+      "args": [
+        "<MSVC_ROOT>\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+        "/nologo",
+        "/std:c++17",
+        "/EHsc",
+        "/W4",
+        "/WX",
+        "/O2",
+        "/MT",
+        "/Brepro",
+        "/guard:cf",
+        "<WORKSPACE>\\native\\steam_stats_reader\\reader_test.cpp",
+        "/Fe:reader_test.exe"
+      ],
+      "exit_code": 0,
+      "log_sha256": "b29beca581e5f408aa919d635b517d53ccfe62a693897f00507010ed46a13732"
+    },
+    {
+      "name": "reader_test",
+      "args": [
+        "<WORKSPACE>\\.godot\\steam_observer_native\\19a654b961df\\reader_test.exe"
+      ],
+      "exit_code": 0,
+      "log_sha256": "b206a518124f38667896be76eb50c1ef8ffd8ad30e053e99cb2a55d72257a999"
+    },
+    {
+      "name": "observer_test_compile",
+      "args": [
+        "<MSVC_ROOT>\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+        "/nologo",
+        "/std:c++17",
+        "/EHsc",
+        "/W4",
+        "/WX",
+        "/O2",
+        "/MT",
+        "/Brepro",
+        "/guard:cf",
+        "<WORKSPACE>\\native\\steam_stats_reader\\observer_test.cpp",
+        "/Fe:observer_test.exe"
+      ],
+      "exit_code": 0,
+      "log_sha256": "8610432b934729e3d81c62d0937d42075d132c89125407e5ef27ad9d77ffc38e"
+    },
+    {
+      "name": "observer_test",
+      "args": [
+        "<WORKSPACE>\\.godot\\steam_observer_native\\19a654b961df\\observer_test.exe"
+      ],
+      "exit_code": 0,
+      "log_sha256": "845ff36607aae57d05166df716c64fa9efd74bbec34fa73b63f0e2b45c4ed26d"
+    }
+  ],
+  "reports": {
+    "reader_test": {
+      "passed": true,
+      "checks": 61,
+      "exe_sha256": "951a8a681e121cb71af4ff90bc4c41a7aab9be75e57c7fb630684792ca37516b"
+    },
+    "observer_test": {
+      "passed": true,
+      "checks": 184,
+      "live_steam_tested": false,
+      "exe_sha256": "1c9c590d8a962849b32a5a0a724dc688877aa9e2bf25971e07f8752e54cb189d"
+    }
+  },
+  "live_steam_tested": false,
+  "godot_run": false,
+  "production_dll_built": false,
+  "compiler_sha256": "a560c2e6d5c3c30bf563ba5285576e9423f18d44165e1398539d912866a4daab"
+}

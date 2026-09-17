@@ -1,0 +1,140 @@
+extends RefCounted
+## FIXTURE ONLY sole serialized writer. Model preparation, synchronous disk
+## close/readback and model commit share this non-yielding critical section.
+## No Callable, signal dispatch, callback pumping or SDK call occurs inside it.
+## SDK, owner/session identification and server reads remain fake-test adapters.
+const Receipt = preload("res://steam_run_receipt.gd")
+const Outbox = preload("res://steam_receipt_outbox.gd")
+const Disk = preload("res://receipt_disk.gd")
+const FakeSDK = preload("res://fake_sdk.gd")
+const Checkpoint = preload("res://checkpoint.gd")
+# Steam callbacks expose no application attempt token. This conservative first
+# adapter sends at most ONE batch in the whole process, across Host instances and
+# account/session changes. Ack does not replenish the lease. Further progress is
+# persisted for a new process and a new independently validated authority read.
+static var _process_publication_used := false
+var disk: RefCounted
+var model: RefCounted
+var sdk: RefCounted
+var owner := ""
+var session := ""
+var _head: Dictionary = {}
+var _busy := false
+var _fault := false
+var _inflight := ""
+var _fresh_fixture_read_revision := -1
+
+func _init(case_path: String, account: String, session_token: String) -> void:
+	owner = account
+	session = session_token
+	disk = Disk.new(case_path, owner)
+	model = Outbox.new(Receipt)
+	sdk = FakeSDK.new(disk, ProjectSettings.globalize_path(case_path).path_join("sdk.jsonl"))
+
+func open() -> Dictionary:
+	if not Receipt.new()._token(session): return {"ok": false, "code": "SESSION"}
+	_head = disk.open_head()
+	if not _head.ok: return _head
+	if _head.revision == 0: return {"ok": true, "code": "NO_DOCUMENT"}
+	return model.open_document(_head.document, owner)
+
+func transaction(operation: String, arguments: Array) -> Dictionary:
+	if _busy or _fault: return {"ok": false, "code": "HOST_BUSY_OR_FAULT"}
+	var counts := {"create": 2, "run": 2, "dispatch": 1, "stored": 1, "invalidate": 0, "external8": 1, "correct": 3}
+	if not counts.has(operation) or arguments.size() != counts[operation]: return {"ok": false, "code": "HOST_ARGUMENTS"}
+	if operation == "create" and (typeof(arguments[0]) != TYPE_DICTIONARY or typeof(arguments[1]) != TYPE_DICTIONARY): return {"ok": false, "code": "HOST_ARGUMENTS"}
+	if operation == "run" and (typeof(arguments[0]) != TYPE_STRING or typeof(arguments[1]) != TYPE_ARRAY): return {"ok": false, "code": "HOST_ARGUMENTS"}
+	if operation == "dispatch" and typeof(arguments[0]) != TYPE_STRING: return {"ok": false, "code": "HOST_ARGUMENTS"}
+	if operation in ["stored", "external8"] and typeof(arguments[0]) != TYPE_INT: return {"ok": false, "code": "HOST_ARGUMENTS"}
+	if operation == "correct" and (typeof(arguments[0]) != TYPE_STRING or typeof(arguments[1]) != TYPE_DICTIONARY or typeof(arguments[2]) != TYPE_DICTIONARY): return {"ok": false, "code": "HOST_ARGUMENTS"}
+	_busy = true
+	var locked: Dictionary = disk.acquire()
+	if not locked.ok: _busy = false; return locked
+	if locked.revision != _head.revision or locked.file_sha256 != _head.file_sha256:
+		disk.release()
+		_busy = false
+		_fault = true
+		return {"ok": false, "code": "HOST_CAS_CHANGED"}
+	var proposed := {"ok": false, "code": "OPERATION"}
+	match operation:
+		"create": proposed = model.prepare_create(owner, arguments[0], arguments[1])
+		"run": proposed = model.prepare_run_event(arguments[0], arguments[1])
+		"dispatch": proposed = model.prepare_dispatch(arguments[0])
+		"stored": proposed = model.prepare_stored(owner, _inflight, arguments[0])
+		"invalidate": proposed = model.prepare_recovery_invalidation(owner)
+		"external8": proposed = model.prepare_external_invalidation(owner)
+		"correct": proposed = model.prepare_authoritative_correction(owner, arguments[0], arguments[1], arguments[2])
+	if not proposed.ok or not proposed.get("changed", false):
+		var released: Dictionary = disk.release()
+		_busy = false
+		if not released.ok: _fault = true; return released
+		return proposed
+	Checkpoint.hit("prepared_" + operation)
+	var saved: Dictionary = disk.commit_locked(_head.revision, _head.file_sha256, proposed)
+	if not saved.ok:
+		_fault = true
+		_busy = false
+		# Keep lock/residue for explicit inspection. Never issue SDK after failure.
+		return saved
+	Checkpoint.hit("disk_before_model_" + operation)
+	var committed: Dictionary = model.commit(saved.document, proposed.sha256)
+	if not committed.ok: _fault = true; _busy = false; return committed
+	_head = saved
+	Checkpoint.hit("model_before_unlock_" + operation)
+	var unlocked: Dictionary = disk.release()
+	_busy = false
+	if not unlocked.ok: _fault = true; return unlocked
+	return {"ok": true, "code": "COMMITTED", "revision": saved.revision}
+
+func publish(token: String) -> Dictionary:
+	if _process_publication_used: return {"ok": false, "code": "PROCESS_PUBLICATION_EXHAUSTED"}
+	if not _inflight.is_empty(): return {"ok": false, "code": "INFLIGHT"}
+	if _fresh_fixture_read_revision != int(_head.revision): return {"ok": false, "code": "FRESH_AUTHORITY_REQUIRED"}
+	var persisted := transaction("dispatch", [token])
+	if not persisted.ok: return persisted
+	Checkpoint.hit("before_sdk")
+	var taken: Dictionary = model.take_sdk_targets(owner, token)
+	if not taken.ok: return taken
+	_process_publication_used = true
+	_inflight = token
+	sdk.token = token
+	for name in taken.targets.stats:
+		if not sdk.set_stat(name, taken.targets.stats[name]): return {"ok": false, "code": "SDK_STAT_UNCERTAIN"}
+		Checkpoint.hit("after_first_stat")
+	for name in taken.targets.unlocked:
+		if taken.targets.unlocked[name]:
+			if not sdk.set_achievement(name): return {"ok": false, "code": "SDK_ACHIEVEMENT_UNCERTAIN"}
+			Checkpoint.hit("after_achievement")
+	var accepted: bool = sdk.store_stats()
+	Checkpoint.hit("after_store")
+	return {"ok": accepted, "code": "WAITING" if accepted else "SDK_STORE_UNCERTAIN"}
+
+func accept_authoritative_fixture_read(app: String, account: String, callback_session: String, token: String, stats: Dictionary, unlocked: Dictionary) -> Dictionary:
+	# SYNTHETIC provenance boundary. Production must replace this with a proven
+	# server read adapter; a caller's cached getStatInt is not authoritative evidence.
+	if _busy or _fault or app != Disk.APP or account != owner or callback_session != session or not Receipt.new()._token(token): return {"ok": false, "code": "READ_IDENTITY"}
+	var document: Dictionary = model.capture()
+	if document.is_empty() or document.outbound.state != "none" or document.receipt.requires_correction: return {"ok": false, "code": "READ_RECOVERY_REQUIRED"}
+	var checker := Receipt.new()
+	var valid: Dictionary = checker.create(owner, stats, unlocked)
+	if not valid.ok: return valid
+	# No max-merge or automatic correction in the clean read path of this batch.
+	# Any mismatch requires explicit invalidation/correction before publication.
+	if checker.capture().stats != document.receipt.stats or checker.capture().unlocked != document.receipt.unlocked: return {"ok": false, "code": "READ_DIFFERENCE_REQUIRES_CORRECTION"}
+	_fresh_fixture_read_revision = int(_head.revision)
+	return {"ok": true, "code": "SYNTHETIC_AUTHORITY_ACCEPTED"}
+
+func on_stored(app: String, account: String, callback_session: String, result: int) -> Dictionary:
+	if _busy or _fault: return {"ok": false, "code": "HOST_BUSY_OR_FAULT"}
+	if app != Disk.APP or account != owner or callback_session != session: return {"ok": false, "code": "CALLBACK_IDENTITY"}
+	Checkpoint.hit("callback_" + str(result))
+	var operation := "external8" if _inflight.is_empty() and result == 8 else "stored"
+	var applied := transaction(operation, [result])
+	if applied.ok and result in [1, 8]: _inflight = ""
+	return applied
+
+func authoritative_fixture_correction(token: String, stats: Dictionary, unlocked: Dictionary) -> Dictionary:
+	if _busy or _fault: return {"ok": false, "code": "HOST_BUSY_OR_FAULT"}
+	var begin: Dictionary = model.begin_authoritative_read(owner, token)
+	if not begin.ok: return begin
+	return transaction("correct", [token, stats, unlocked])

@@ -1,0 +1,80 @@
+from pathlib import Path
+import hashlib,json
+root=Path.cwd(); out=root/'scratchpad/steam_ledger_20260908'; out.mkdir(exist_ok=True)
+(out/'.gdignore').write_text('\n')
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+receipt=(root/'tools/contracts/steam_receipt_outbox_draft_20260907/steam_run_receipt.gd.txt').read_bytes()
+(out/'steam_run_receipt.gd').write_bytes(receipt)
+s=(root/'qa/steam_receipt_disk_20260907/candidate_a2/receipt_disk.gd.txt').read_text(encoding='utf-8')
+s=s.replace('## FIXTURE ONLY append-only account journal. A complete valid pending record may\n## advance the unique hash chain after a dead writer. Torn files block recovery.','## Independent local Steam run receipts, outside the battle save slot.\n## Retains the latest two complete snapshots, including all run tombstones.\n## A valid closed pending record may advance recovery; corrupt bytes never fall back.')
+s=s.replace('const Receipt = preload("res://steam_run_receipt.gd")','const Receipt = preload("res://scripts/steam_run_receipt.gd")')
+s=s.replace('const Outbox = preload("res://steam_receipt_outbox.gd")\nconst Checkpoint = preload("res://checkpoint.gd")\n','')
+s=s.replace('const MAX_RECORDS := 2048','const MAX_RETAINED := 4')
+s=rep(s,'func _init(case_path: String, account: String) -> void:\n\towner = account\n\tdirectory = ProjectSettings.globalize_path(case_path).replace("\\\\", "/").simplify_path().path_join(APP).path_join(owner)', '''func _init(account: String, root_path := "user://steam_receipts/v1") -> void:
+	owner = account
+	if root_path.begins_with("user://") and ".." not in root_path.split("/") and Receipt.new()._owner(owner):
+		directory = ProjectSettings.globalize_path(root_path).replace("\\\\", "/").simplify_path().path_join(APP).path_join(owner)
+
+func _checkpoint(_name: String) -> void:
+	# No-op production seam. Native fault tests override this in a private process.
+	pass
+
+func initialize_directory() -> Dictionary:
+	var boundary := ProjectSettings.globalize_path("user://").replace("\\\\", "/").simplify_path().trim_suffix("/")
+	if directory.is_empty() or not directory.begins_with(boundary + "/"): return bad("USER_PATH")
+	var path := directory
+	while path != path.get_base_dir():
+		var parent := DirAccess.open(path.get_base_dir())
+		if parent != null and parent.is_link(path.get_file()): return bad("LINK_OR_PARENT")
+		path = path.get_base_dir()
+	if DirAccess.make_dir_recursive_absolute(directory) != OK: return bad("DIRECTORY_CREATE")
+	return _guard()''')
+s=s.replace('ProjectSettings.globalize_path("res://fixtures")','ProjectSettings.globalize_path("user://")').replace('.simplify_path()\n\tif not Receipt', '.simplify_path().trim_suffix("/")\n\tif not Receipt').replace('bad("FIXTURE_PATH")','bad("USER_PATH")')
+s=s.replace('"LH_STEAM_RECEIPT_JOURNAL"','"LH_STEAM_RUN_SNAPSHOTS"')
+s=rep(s,'\tif value.magic !=', '\tif JSON.stringify(value) != raw: return bad("NONCANONICAL_ENVELOPE")\n\tif value.magic !=')
+s=rep(s,'\tif int(model.capture().revision)', '\tif JSON.stringify(model.capture()) != value.payload: return bad("NONCANONICAL_RECORD")\n\tif int(model.capture().revision)')
+s=rep(s,'var model := Outbox.new(Receipt)\n\tvar opened: Dictionary = model.open_document(document_parser.data, owner)','var model := Receipt.new()\n\tvar opened: Dictionary = model.open_record(document_parser.data, owner)')
+s=s.replace('int(model.capture().revision) != int(value.revision)','int(model.capture().generation) + 1 != int(value.revision)')
+s=rep(s,'\t\titems[name] = FileAccess.get_sha256(directory.path_join(name))','\t\tvar read := _read(directory.path_join(name))\n\t\tif not read.ok: return read\n\t\titems[name] = read.file_sha256')
+s=s.replace('names.size() > MAX_RECORDS','names.size() > MAX_RETAINED')
+s=rep(s,'\tfor name in names:\n\t\tvar next := _verified(name)', '\tfor name in names:\n\t\tvar next := _verified(name)')
+s=rep(s,'\t\tif name != "record_%010d.json" % next.revision or next.revision != current.revision + 1 or next.previous != current.file_sha256: return bad("CHAIN_BROKEN")', '''		if name != "record_%010d.json" % next.revision: return bad("RECORD_NAME")
+		if int(current.revision) == 0:
+			if next.revision == 1 and next.previous != ZERO: return bad("GENESIS_HASH")
+			if next.revision != 1 and names.size() < 2: return bad("MISSING_PREDECESSOR")
+		else:
+			if next.revision != current.revision + 1 or next.previous != current.file_sha256: return bad("CHAIN_BROKEN")''')
+s=s.replace(' or "\\u0000" in raw', '')
+s=s.replace('Checkpoint.hit(', '_checkpoint(')
+s=s.replace('current.revision >= MAX_RECORDS or ', 'current.revision >= 2147483647 or ')
+s=s.replace('JSON.stringify(proposal.document)', 'JSON.stringify(proposal.record)')
+s=rep(s,'\t_checkpoint("record_verified")\n\treturn verified','\t_checkpoint("record_verified")\n\tvar pruned := _prune()\n\tif not pruned.ok: return pruned\n\treturn verified')
+s+='''
+func _prune() -> Dictionary:
+	# Only after a new snapshot has passed closed-file validation. Every retained
+	# snapshot carries the entire receipt; pruning never discards run identities.
+	var head := _chain()
+	if not head.ok: return head
+	var folder := DirAccess.open(directory)
+	var names: Array[String] = []
+	for name in folder.get_files():
+		if name.begins_with("record_"): names.append(name)
+	names.sort()
+	_checkpoint("before_prune")
+	while names.size() > 2:
+		if DirAccess.remove_absolute(directory.path_join(names.pop_front())) != OK: return bad("PRUNE_FAILED")
+		_checkpoint("after_prune_remove")
+	var checked := _chain()
+	if not checked.ok or checked.file_sha256 != head.file_sha256: return bad("PRUNE_READBACK")
+	return {"ok": true}
+'''
+s=rep(s,'\tvar checked := _chain()\n\tif not checked.ok: return checked\n\tif DirAccess.remove_absolute(directory.path_join("writing/owner.json"))', '\tvar checked := _chain()\n\tif not checked.ok: return checked\n\tvar pruned := _prune()\n\tif not pruned.ok: return pruned\n\tif DirAccess.remove_absolute(directory.path_join("writing/owner.json"))')
+(out/'steam_receipt_store.gd').write_text(s,encoding='utf-8',newline='\n')
+names=['steam_run_receipt.gd','steam_receipt_store.gd','steam_run_ledger.gd']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+if all((out/n).exists() for n in names+['driver.gd']):
+    rows=[{'path':'scripts/'+n,'before_exists':False,'candidate':out.relative_to(root).as_posix()+'/'+n,'candidate_sha256':sha(out/n)} for n in names]
+    (out/'overlay_manifest.json').write_text(json.dumps({'files':rows},indent=2)+'\n')
+    (out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names+['driver.gd','overlay_manifest.json']}},indent=2)+'\n')
+    print(sha(out/'freeze.json'))

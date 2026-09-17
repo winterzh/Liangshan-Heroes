@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-09-13T05:35:02+08:00",
+  "status": "blocked_before_upload",
+  "source_head": "71098183af98df1a0279dd205dc25d1b8d85f235",
+  "app_id": 5088120,
+  "depot_id": 5088121,
+  "target_branch": "default",
+  "candidate_delivery": "candidate_delivery.json",
+  "archive_sha256": "e2c35f3acc2813042b6e39463547d1b8cbf19316c93e00433d879fa1576ba6e5",
+  "archive_bytes": 237201655,
+  "upload_copy": "E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip",
+  "last_observed_platform": {
+    "observed_during_this_attempt": true,
+    "authenticated_steamworks_session": true,
+    "url": "https://partner.steamgames.com/apps/builds/5088120",
+    "default_build_id": 25250466,
+    "depot_manifest_id": "416479225955196133"
+  },
+  "file_selection_attempted": true,
+  "http_upload_started": false,
+  "uploaded": false,
+  "build_id": null,
+  "manifest_id": null,
+  "server_files_verified": false,
+  "default_activated": false,
+  "announcement_posted": false,
+  "blockers": [
+    {
+      "stage": "browser_file_selection",
+      "tool": "Microsoft Edge browser fileChooser.setFiles",
+      "result": "Not allowed",
+      "explanation": "The browser extension refused local file access. Its official troubleshooting guidance requires Allow access to file URLs."
+    },
+    {
+      "stage": "read_extension_settings",
+      "url": "edge://extensions/",
+      "result": "Blocked by browser URL security policy",
+      "explanation": "The agent stopped this action and did not use an alternate route to the blocked settings page."
+    }
+  ],
+  "steamcmd_fallback": "Not found in PATH or inspected local tool directories. No usable local SteamCMD session was established.",
+  "remaining": [
+    "User enables the Edge extension's local file upload permission or manually selects the verified ZIP in the Steamworks upload form.",
+    "Upload the verified ZIP to Depot 5088121 using the Standard method and create the Windows build.",
+    "Verify all six server files against candidate_delivery.json by name, size and SHA1.",
+    "Set the new build live on default and read back the resulting BuildID and manifest.",
+    "Record the actual publication outcome and synchronize the release documentation."
+  ],
+  "limits": "Local validation is complete. This receipt does not claim a Steam upload, a newly published build, client download verification or player save/continue availability."
+}

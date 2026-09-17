@@ -1,0 +1,48 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/art_full_20260915/lu_qian_walk_direction4.png" id="lu_qian_walk_atlas"]
+
+[sub_resource type="AtlasTexture" id="walk_a_sw"]
+atlas = ExtResource("lu_qian_walk_atlas")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_b_sw"]
+atlas = ExtResource("lu_qian_walk_atlas")
+region = Rect2(627, 627, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_c_sw"]
+atlas = ExtResource("lu_qian_walk_atlas")
+region = Rect2(1254, 627, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_d_sw"]
+atlas = ExtResource("lu_qian_walk_atlas")
+region = Rect2(1881, 627, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_b_sw")},
+{"duration": 1.0, "texture": SubResource("walk_c_sw")},
+{"duration": 1.0, "texture": SubResource("walk_d_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

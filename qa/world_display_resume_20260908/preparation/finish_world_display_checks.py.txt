@@ -1,0 +1,15 @@
+from pathlib import Path
+import json,hashlib
+out=Path('scratchpad/world_display_20260908');p=out/'driver.gd';s=p.read_text()
+a='\tfor role: String in ["water", "dapple", "shadow"]:'
+b='\tfor pair: Array in [[battle.world, target.world], [battle.units_root, target.units_root]]:\n\t\tvar left: Dictionary = display_reader._node._node_values(pair[0]); left.erase("activation")\n\t\tvar right: Dictionary = display_reader._node._node_values(pair[1]); right.erase("activation")\n\t\t_check("world and units container full render fields equal actual source", left == right)\n'
+assert s.count(a)==1;s=s.replace(a,b+a)
+a='\t\t_check("display native transform copied " + role,'
+idx=s.index(a)
+b='\t\tvar left: Dictionary = display_reader._node._node_values(a); left.erase("activation")\n\t\tvar right: Dictionary = display_reader._node._node_values(b); right.erase("activation")\n\t\t_check("display all inherited render fields exact " + role, left == right)\n'
+s=s[:idx]+b+s[idx:]
+a='\tstage.add_child(target)'
+b='\t_check("display refuses activation before mounting", not result.world_display.activate().ok)\n'
+assert s.count(a)==1;s=s.replace(a,b+a)
+p.write_text(s,encoding='utf-8',newline='\n')
+f=json.loads((out/'freeze.json').read_text());f['inputs']['driver.gd']=hashlib.sha256(p.read_bytes()).hexdigest();(out/'freeze.json').write_text(json.dumps(f,indent=2)+'\n');print(hashlib.sha256((out/'freeze.json').read_bytes()).hexdigest())

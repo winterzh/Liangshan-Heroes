@@ -110,13 +110,22 @@ func _economy(b) -> void:
 		for i in range(4):
 			if hero.can_learn(i): hero.learn(i)
 
+func _shared_definition_matches(b, key: String) -> bool:
+	var actual: Dictionary = b._defs[key].duplicate(true)
+	if key == "arrow_tower" and b.level.id() in ["level3", "level8"]:
+		if actual.get("fortification_damage_mult", 1.0) != 0.25 or actual.get("fortification_faction", -1) != 1:
+			return false
+		actual.erase("fortification_damage_mult")
+		actual.erase("fortification_faction")
+	return actual == load("res://scripts/defs.gd").UNITS[key]
+
 func _contracts(b) -> void:
 	var l = b.level
 	check(b.economy and b.fog and b.current_age == 3,"campaign uses economy, fog and available siege age")
 	check(b.used_pop() == 16 and b.pop_cap == 20,"opening population excludes seven captives")
 	check(b._defs.hall.produces == ["lou_luo","song_jiang","lin_chong","hua_rong"],"chapter hero recruitment is bounded")
 	for key in ["liang_qiang","liang_gong","liang_ma","siege_ram","siege_cata","arrow_tower"]:
-		check(b._defs[key] == Defs.UNITS[key],"shared definition unchanged: "+key)
+		check(_shared_definition_matches(b,key),"shared combat/costs unchanged; only declared enemy fortification allowed: "+key)
 	check(b.map.find_path(b.map.cell_to_world(Vector2i(25,28)),b.map.cell_to_world(Vector2i(16,28))).is_empty(),"both gates block actual navigation without boundary bypass")
 	for cell in [Vector2i(42,22),l.EXPANSION,l.OUTPOST,l.INNER_CONTACT]:
 		check(not b.map.find_path(l.song.position,b.map.cell_to_world(cell)).is_empty(),"army route reachable: "+str(cell))
@@ -259,7 +268,7 @@ func _mode_regression() -> void:
 		var wood_start: int = b.wood
 		await _wait(30.0)
 		check(b.gold > gold_start and b.wood > wood_start,mode+" actual mining/chopping/unloading survives mode switch")
-		check(b._defs.hall.produces == Defs.UNITS.hall.produces and bool(b._defs.shi_qian.get("hero_trainable",false)),mode+" has original roster and no captive overrides")
+		check(b._defs.hall.produces == load("res://scripts/defs.gd").UNITS.hall.produces and bool(b._defs.shi_qian.get("hero_trainable",false)),mode+" has original roster and no captive overrides")
 		await _dispose(b)
 	for index in [0,1,3,4,5,6,7]:
 		var b = await _start("",index)

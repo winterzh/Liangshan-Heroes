@@ -1,0 +1,56 @@
+"""Archive this release's allowlisted QA evidence, never package/player/cache data."""
+from pathlib import Path
+import hashlib, json, os, zipfile
+ROOT=Path(__file__).resolve().parents[2]
+LOCAL=Path(__file__).parent
+QA=ROOT/'.godot/steam_integration_qa/20260908_024451_558da66f'
+BUILD=ROOT/'.godot/steam_candidates/20260908_024605_edee2afb'
+OUT=ROOT/'qa/steam_upload_20260908'
+OUT.mkdir(exist_ok=False)
+(OUT/'.gdignore').write_text('',encoding='utf-8')
+sha=lambda data:hashlib.sha256(data).hexdigest()
+mapping=[]
+replacements=[(str(ROOT),'<CHECKOUT>'),(str(ROOT).replace('\\','/'),'<CHECKOUT>'),('<PRIVATE_PROFILE_ROOT>','<PRIVATE_PROFILE_ROOT>'),('<PRIVATE_PROFILE_ROOT>','<PRIVATE_PROFILE_ROOT>'),(os.environ['USERPROFILE'],'<HOST_USER>')]
+def clean(text):
+    for old,new in replacements:
+        for variant in (old,old.replace('\\','\\\\')): text=text.replace(variant,new)
+    return text
+def archive(src,name):
+    raw=src.read_bytes()
+    data=raw if src.suffix=='.png' else clean(raw.decode('utf-8')).encode('utf-8')
+    dst=OUT/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(data)
+    mapping.append(dict(source=src.relative_to(ROOT).as_posix(),destination=name,source_bytes=len(raw),source_sha256=sha(raw),archive_bytes=len(data),archive_sha256=sha(data),host_paths_replaced=data!=raw))
+for folder,prefix,names in [
+    (QA,'native',['receipt.json','report.json','import.log','catalog.log','contracts.log']),
+    (BUILD,'export',['receipt.json','content_identity_generation.json','verification_report.json','package_report.json','import.log','export.log','package.log','exe_smoke.log']),
+]:
+    for name in names: archive(folder/name,prefix+'/'+name)
+for image in QA.glob('*.png'): archive(image,'visual/'+image.name)
+for kind in ('source_identity_probe','content_identity_probe'):
+    for file in (BUILD/kind).iterdir():
+        if file.is_file() and file.suffix in ('.json','.log') and 'players' not in file.name:
+            archive(file,'export/'+kind+'/'+file.name)
+for folder in sorted(LOCAL.iterdir()):
+    if not folder.is_dir() or not folder.name.startswith(('qa_','build_','smoke_')): continue
+    for file in folder.iterdir():
+        if file.is_file() and file.suffix in ('.json','.log') and 'players' not in file.name:
+            archive(file,'guards/'+folder.name+'/'+file.name)
+    for player in folder.glob('players_*.json'):
+        raw=player.read_bytes()
+        mapping.append(dict(source=player.relative_to(ROOT).as_posix(),source_bytes=len(raw),source_sha256=sha(raw),omitted='Private player filenames/content; equality result retained in guard receipt.'))
+for name in ('run_guarded.py','smoke_verified_package.py','archive_run.py'):
+    archive(LOCAL/name,'helpers/'+name+'.txt')
+proof=json.loads((BUILD/'receipt.json').read_text(encoding='utf-8'))
+zip_path=BUILD/proof['archive']['path']
+members=[]
+with zipfile.ZipFile(zip_path) as z:
+    assert z.testzip() is None
+    assert sorted(z.namelist())==sorted(r['path'] for r in proof['archive']['members'])
+    for row in proof['archive']['members']:
+        data=z.read(row['path']); assert sha(data)==row['sha256'] and len(data)==row['bytes']
+        members.append({**row,'sha1':hashlib.sha1(data).hexdigest()})
+assert sha(zip_path.read_bytes())==proof['archive']['sha256']
+delivery=dict(source_head=proof['source_head'],candidate=zip_path.relative_to(ROOT).as_posix(),zip_bytes=zip_path.stat().st_size,zip_sha256=proof['archive']['sha256'],crc_passed=True,members=members,uploaded=False)
+(OUT/'candidate_delivery.json').write_text(json.dumps(delivery,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(OUT/'source_mapping.json').write_text(json.dumps(mapping,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'archive':str(OUT),'files':len(mapping),'delivery':delivery},ensure_ascii=False))

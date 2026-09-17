@@ -1,0 +1,121 @@
+# Append these helpers to ROOT's R2 SceneTree driver. Invoke
+#   if not await _qa_actual_damage_cases(): await _finish(true); return
+# AFTER restoring all original 105 root fixture fields and releasing capture,
+# BEFORE the final preexisting-user-pause case. Requires existing battle,
+# _check, _ok, _wait_barrier, captured_clock, capture_rejections helpers.
+# This is a PREPARED, STATIC-ONLY fragment. No native run was performed here.
+
+func _qa_damage_arena() -> Dictionary:
+	# Prefer a real open land pair far from every existing combatant/building.
+	# Resource bodies are excluded from combat isolation but their solid map
+	# cells remain excluded by is_open_world. Never alter terrain or move units.
+	for y in range(4, int(battle.map.h) - 4):
+		for x in range(4, int(battle.map.w) - 8):
+			var a: Vector2 = battle.map.cell_to_world(Vector2i(x, y))
+			var b: Vector2 = battle.map.cell_to_world(Vector2i(x + 4, y))
+			if not battle.map.is_open_world(a) or not battle.map.is_open_world(b): continue
+			var isolated := true
+			for unit: Variant in battle.units:
+				if not is_instance_valid(unit) or unit.hp <= 0.0 or unit.is_resource: continue
+				if a.distance_to(unit.position) < 480.0 or b.distance_to(unit.position) < 480.0:
+					isolated = false
+					break
+			if isolated: return {"ok": true, "caster": a, "target": b}
+	return {"ok": false, "code": "REAL_OPEN_ISOLATED_ARENA_REQUIRED"}
+
+func _qa_hero_damage(key: String) -> float:
+	return float(battle.hero_combat_stats.get(key, {}).get("damage", 0.0))
+
+func _qa_wait_effect_exit(effect: Variant, label: String) -> bool:
+	# Real engine callbacks only; never invoke Projectile._physics_process,
+	# LiBrawnAxesFx._process, resolve_hits, or set their lifetime/elapsed fields.
+	for tick in range(180):
+		if not is_instance_valid(effect): break
+		await physics_frame
+		await process_frame
+	return _check(label + " real effect queue_free drained", not is_instance_valid(effect))
+
+func _qa_hold_live_effect(effect: Variant, victim: Variant, label: String, is_axes: bool) -> bool:
+	captured_clock.clear()
+	capture_rejections.clear()
+	if not _ok(label + " real capture request", battle.request_run_capture()): return false
+	if not _check(label + " controller capture ready", await _wait_barrier()): return false
+	if not _check(label + " effect remains a live registered child", is_instance_valid(effect) and effect.get_parent() == battle.fx_root and not effect.is_queued_for_deletion()): return false
+	var hp_before: float = victim.hp
+	var position_before: Vector2 = effect.position
+	var timer_before: float = effect.elapsed if is_axes else effect._life
+	var clock_before: Dictionary = battle._run_clock.capture()
+	if not _ok(label + " held clock available", clock_before): return false
+	var engine_before: int = Engine.get_physics_frames()
+	var wave_before: float = battle.level._wave_t
+	for tick in range(5):
+		await physics_frame
+		await process_frame
+	if not _check(label + " real Engine physics clock advanced", Engine.get_physics_frames() > engine_before): return false
+	if not _check(label + " held effect and HP unchanged", is_instance_valid(effect) and victim.hp == hp_before and effect.position == position_before and (effect.elapsed if is_axes else effect._life) == timer_before): return false
+	if not _check(label + " no premature axes resolution", not is_axes or not effect.resolved): return false
+	if not _ok(label + " controller still healthy", battle._save_barrier.health()): return false
+	if not _check(label + " simulation and wave held", battle.level._wave_t == wave_before and battle._run_clock.capture() == clock_before): return false
+	return true
+
+func _qa_actual_damage_cases() -> bool:
+	if not _check("damage fixtures begin in running classic Battle", not paused and battle.phase == 2 and battle.gameplay_rng_fault().is_empty()): return false
+	var arena: Dictionary = _qa_damage_arena()
+	if not _ok("actual damage open land arena", arena): return false
+	var caster: Variant = battle.spawn_unit("li_kui", 0, arena.caster)
+	var victim: Variant = battle.spawn_unit("guan_dao", 1, arena.target)
+	if not _check("real spawn_unit gives living stable entities", is_instance_valid(caster) and is_instance_valid(victim) and caster.entity_id > 0 and victim.entity_id > caster.entity_id and caster.hp > 0.0 and victim.hp > 0.0): return false
+	# This fixture suppresses only these two units' autonomous actions, leaving
+	# Battle, spatial-grid construction, physics edges, effects, and HUD live.
+	caster.set_physics_process(false)
+	victim.set_physics_process(false)
+	for tick in range(2): await physics_frame
+	await process_frame
+	if not _check("real physics grid sees both fixtures", battle.units_near(caster.position, 180.0).has(victim)): return false
+	if not _check("damage fixture has no reduction shield immunity", victim._shield == 0.0 and victim._dmg_amp == 0.0 and victim._damage_reduction == 0.0 and not victim.is_phys_immune() and not victim.garrisoned and not victim.is_building and not victim.is_resource): return false
+	# Open the existing user pause first so creation cannot race a 360ms idle
+	# hitch. The candidate still reaches HELD solely through its real gate.
+	battle._open_pause()
+	if not _check("projectile fixture uses real user pause", paused): return false
+	var hp_arrow: float = victim.hp
+	var stats_arrow: float = _qa_hero_damage("li_kui")
+	var before_children: Array = battle.fx_root.get_children()
+	battle.spawn_projectile(caster, victim, 13.0)
+	var projectile: Variant = null
+	var new_projectiles := 0
+	for child: Node in battle.fx_root.get_children():
+		if not before_children.has(child) and child.get_script() == load("res://scripts/projectile.gd"):
+			projectile = child
+			new_projectiles += 1
+	if not _check("actual spawn_projectile creates one untouched arrow", new_projectiles == 1 and is_instance_valid(projectile) and projectile.shooter == caster and projectile.target == victim and projectile.dmg == 13.0 and projectile._life == 3.0): return false
+	if not await _qa_hold_live_effect(projectile, victim, "projectile", false): return false
+	if not _check("projectile release preserves preexisting pause", battle._save_barrier.release_capture().ok and paused): return false
+	battle._close_pause()
+	if not _check("projectile release resumes real engine", not paused): return false
+	if not await _qa_wait_effect_exit(projectile, "projectile"): return false
+	if not _check("projectile real damage exactly once", is_equal_approx(victim.hp, hp_arrow - 13.0) and is_equal_approx(_qa_hero_damage("li_kui") - stats_arrow, 13.0)): return false
+	for tick in range(12): await physics_frame
+	await process_frame
+	if not _check("projectile cannot repeat after freed", not is_instance_valid(projectile) and is_equal_approx(victim.hp, hp_arrow - 13.0) and is_equal_approx(_qa_hero_damage("li_kui") - stats_arrow, 13.0)): return false
+	# Same real entities, still alive. Grid comes from actual Battle callbacks.
+	battle._open_pause()
+	var hp_axes: float = victim.hp
+	var stats_axes: float = _qa_hero_damage("li_kui")
+	var axes: Variant = battle.spawn_li_brawn_axes(caster, 160.0)
+	if not _check("actual axes creator makes one unresolved live target", is_instance_valid(axes) and axes.hits.size() == 1 and axes.hits[0].target == victim and axes.elapsed == 0.0 and not axes.resolved): return false
+	# Read the creator's real, immutable hit plan; do not recompute damage logic.
+	var expected_axes: float = float(axes.hits[0].dmg)
+	if not _check("axes fixture is nonlethal positive damage", expected_axes > 0.0 and expected_axes < hp_axes): return false
+	if not await _qa_hold_live_effect(axes, victim, "axes", true): return false
+	if not _check("axes release preserves preexisting pause", battle._save_barrier.release_capture().ok and paused): return false
+	battle._close_pause()
+	if not _check("axes release resumes real engine", not paused): return false
+	if not await _qa_wait_effect_exit(axes, "axes"): return false
+	if not _check("axes real idle damage exactly once", is_equal_approx(victim.hp, hp_axes - expected_axes) and is_equal_approx(_qa_hero_damage("li_kui") - stats_axes, expected_axes)): return false
+	for tick in range(30): await physics_frame
+	await process_frame
+	if not _check("axes cannot repeat after freed", not is_instance_valid(axes) and is_equal_approx(victim.hp, hp_axes - expected_axes) and is_equal_approx(_qa_hero_damage("li_kui") - stats_axes, expected_axes)): return false
+	if not _check("damage cases retain source cache domain and healthy Battle", battle._run_cache_frame() == Engine.get_physics_frames() and battle.gameplay_rng_fault().is_empty() and battle._run_clock.fault().is_empty()): return false
+	# The two fixture Units stay registered and alive until the driver's existing
+	# final battle.free(). Do not free a live Unit behind Battle.units caches.
+	return true

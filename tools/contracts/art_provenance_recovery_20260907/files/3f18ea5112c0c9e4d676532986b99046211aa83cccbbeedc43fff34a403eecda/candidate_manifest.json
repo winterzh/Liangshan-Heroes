@@ -1,0 +1,386 @@
+{
+  "schema_version": 1,
+  "kind": "lin_chong_bound_direction4_idle_candidate_crop_manifest",
+  "status": "candidate_crop_pass_visual_review_pass",
+  "scope": "level6 static pine-tree binding only; no walk/attack/hurt/down substitution",
+  "source": {
+    "web_cleaned_path": "C:\\Users\\rsb\\Desktop\\AI项目\\水浒\\implementation_20260902\\lin_chong_p0_source\\alpha15_outputs\\part02_bound_toprow\\02_bound_toprow_alpha15_exact.png",
+    "web_cleaned_sha256": "25A89F3D90CC8F0EE1AA94518A446E1EC9344F870416F18268E8F79CC91B173A",
+    "web_cleaned_rgba_sha256": "213CB0ACBF828285448B1A091E884D610D88F2E3FFF551FAB13C9F3A38E7710A",
+    "original_continuous_crop_path": "C:\\Users\\rsb\\Desktop\\AI项目\\水浒\\implementation_20260902\\lin_chong_p0_source\\upload_transport\\02_bound_toprow_y0_509_transport.png",
+    "original_sha256": "CAF14CCD2449E5DE0258889CF68BD8898D4F625DB335DD0720D129AA1B7D452B",
+    "original_rgba_sha256": "7AFC82DEB8F7D2BFBE3F31FB40BF75D06375E35A65E70997BD545DE544F62F04",
+    "size": [
+      1536,
+      509
+    ],
+    "mode": "RGBA",
+    "web_cleanup_invariant": {
+      "low_alpha_pixel_count": 447802,
+      "low_alpha_all_rgba_zero": true,
+      "high_alpha_rgba_byte_identical": true,
+      "high_alpha_mismatch_values": 0
+    }
+  },
+  "mapping": {
+    "row": "idle",
+    "columns": [
+      "se",
+      "sw",
+      "ne",
+      "nw"
+    ]
+  },
+  "allowed_local_operations": [
+    "continuous rectangular crop",
+    "one batch-uniform proportional scale",
+    "transparent padding",
+    "PNG encoding"
+  ],
+  "forbidden_local_operations": [
+    "mirroring",
+    "masking",
+    "alpha clearing",
+    "repainting",
+    "inpainting",
+    "component deletion"
+  ],
+  "normalization": {
+    "output_size": [
+      256,
+      256
+    ],
+    "target_anchor_xy": [
+      128,
+      210
+    ],
+    "uniform_scale": 0.40749502982107355,
+    "resampling": "PIL.Image.Resampling.LANCZOS"
+  },
+  "source_discovery": {
+    "connected_component_count": 9,
+    "large_frame_component_count": 4,
+    "small_component_count": 5,
+    "small_components": [
+      {
+        "label": 5,
+        "pixels": 1,
+        "bbox": [
+          318,
+          57,
+          319,
+          58
+        ],
+        "center_x": 318.5
+      },
+      {
+        "label": 6,
+        "pixels": 1,
+        "bbox": [
+          355,
+          57,
+          356,
+          58
+        ],
+        "center_x": 355.5
+      },
+      {
+        "label": 7,
+        "pixels": 1,
+        "bbox": [
+          359,
+          60,
+          360,
+          61
+        ],
+        "center_x": 359.5
+      },
+      {
+        "label": 8,
+        "pixels": 7,
+        "bbox": [
+          1067,
+          82,
+          1070,
+          85
+        ],
+        "center_x": 1068.5
+      },
+      {
+        "label": 9,
+        "pixels": 1,
+        "bbox": [
+          915,
+          455,
+          916,
+          456
+        ],
+        "center_x": 915.5
+      }
+    ],
+    "source_nonzero_alpha_pixels": 334022,
+    "unowned_nonzero_alpha_pixels": 0,
+    "multiply_owned_nonzero_alpha_pixels": 0,
+    "all_source_alpha_owned_exactly_once": true,
+    "source_edge_contacts": [
+      {
+        "direction": "se",
+        "contacts": {
+          "left": false,
+          "right": false,
+          "top": true,
+          "bottom": false
+        }
+      },
+      {
+        "direction": "sw",
+        "contacts": {
+          "left": false,
+          "right": false,
+          "top": true,
+          "bottom": false
+        }
+      },
+      {
+        "direction": "ne",
+        "contacts": {
+          "left": false,
+          "right": false,
+          "top": true,
+          "bottom": false
+        }
+      },
+      {
+        "direction": "nw",
+        "contacts": {
+          "left": false,
+          "right": false,
+          "top": true,
+          "bottom": false
+        }
+      }
+    ],
+    "edge_contact_policy": "Disclosed generated-source boundary contact; no local masking or repaint. Output is padded and must pass visual review at real runtime scale."
+  },
+  "outputs": [
+    {
+      "direction": "se",
+      "state": "idle",
+      "operation": "one continuous RGBA source rectangle crop, batch-uniform proportional scale, transparent padding",
+      "forbidden_operations_absent": [
+        "mirroring",
+        "masking",
+        "local alpha clearing",
+        "repainting",
+        "component deletion"
+      ],
+      "source_rect_xyxy": [
+        95,
+        0,
+        402,
+        504
+      ],
+      "source_anchor_xy": [
+        199,
+        500
+      ],
+      "source_edge_contacts": {
+        "left": false,
+        "right": false,
+        "top": true,
+        "bottom": false
+      },
+      "requested_uniform_scale": 0.40749502982107355,
+      "actual_scale_xy": [
+        0.40716612377850164,
+        0.40674603174603174
+      ],
+      "resized_size": [
+        125,
+        205
+      ],
+      "paste_xy": [
+        86,
+        7
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ],
+      "output_perimeter_max_alpha": 0,
+      "output": "C:\\Users\\rsb\\Desktop\\AI项目\\水浒\\Liangshan-Heroes\\qa\\lin_chong_bound_direction4_candidate_pipeline_20260902\\candidate_outputs\\lin_chong_bound_idle_se.png",
+      "output_sha256": "CB58E5C5C9E41EFD330B1735DCDF905FBACAB55157BA18509382822A25EA2E39"
+    },
+    {
+      "direction": "sw",
+      "state": "idle",
+      "operation": "one continuous RGBA source rectangle crop, batch-uniform proportional scale, transparent padding",
+      "forbidden_operations_absent": [
+        "mirroring",
+        "masking",
+        "local alpha clearing",
+        "repainting",
+        "component deletion"
+      ],
+      "source_rect_xyxy": [
+        481,
+        0,
+        773,
+        493
+      ],
+      "source_anchor_xy": [
+        543,
+        490
+      ],
+      "source_edge_contacts": {
+        "left": false,
+        "right": false,
+        "top": true,
+        "bottom": false
+      },
+      "requested_uniform_scale": 0.40749502982107355,
+      "actual_scale_xy": [
+        0.4075342465753425,
+        0.4077079107505071
+      ],
+      "resized_size": [
+        119,
+        201
+      ],
+      "paste_xy": [
+        103,
+        10
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ],
+      "output_perimeter_max_alpha": 0,
+      "output": "C:\\Users\\rsb\\Desktop\\AI项目\\水浒\\Liangshan-Heroes\\qa\\lin_chong_bound_direction4_candidate_pipeline_20260902\\candidate_outputs\\lin_chong_bound_idle_sw.png",
+      "output_sha256": "853498999A66DFF52BD43EB63C251203166BDA1E2C6CF85CFCB92698E7A4F741"
+    },
+    {
+      "direction": "ne",
+      "state": "idle",
+      "operation": "one continuous RGBA source rectangle crop, batch-uniform proportional scale, transparent padding",
+      "forbidden_operations_absent": [
+        "mirroring",
+        "masking",
+        "local alpha clearing",
+        "repainting",
+        "component deletion"
+      ],
+      "source_rect_xyxy": [
+        839,
+        0,
+        1151,
+        493
+      ],
+      "source_anchor_xy": [
+        999,
+        490
+      ],
+      "source_edge_contacts": {
+        "left": false,
+        "right": false,
+        "top": true,
+        "bottom": false
+      },
+      "requested_uniform_scale": 0.40749502982107355,
+      "actual_scale_xy": [
+        0.40705128205128205,
+        0.4077079107505071
+      ],
+      "resized_size": [
+        127,
+        201
+      ],
+      "paste_xy": [
+        63,
+        10
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ],
+      "output_perimeter_max_alpha": 0,
+      "output": "C:\\Users\\rsb\\Desktop\\AI项目\\水浒\\Liangshan-Heroes\\qa\\lin_chong_bound_direction4_candidate_pipeline_20260902\\candidate_outputs\\lin_chong_bound_idle_ne.png",
+      "output_sha256": "8929E61C02C3E0A0D087C8B1813A9F8C9D4F8B2AFFE553FA5006C4CC2D1819D8"
+    },
+    {
+      "direction": "nw",
+      "state": "idle",
+      "operation": "one continuous RGBA source rectangle crop, batch-uniform proportional scale, transparent padding",
+      "forbidden_operations_absent": [
+        "mirroring",
+        "masking",
+        "local alpha clearing",
+        "repainting",
+        "component deletion"
+      ],
+      "source_rect_xyxy": [
+        1260,
+        0,
+        1527,
+        506
+      ],
+      "source_anchor_xy": [
+        1355,
+        503
+      ],
+      "source_edge_contacts": {
+        "left": false,
+        "right": false,
+        "top": true,
+        "bottom": false
+      },
+      "requested_uniform_scale": 0.40749502982107355,
+      "actual_scale_xy": [
+        0.40823970037453183,
+        0.40711462450592883
+      ],
+      "resized_size": [
+        109,
+        206
+      ],
+      "paste_xy": [
+        89,
+        5
+      ],
+      "target_anchor_xy": [
+        128,
+        210
+      ],
+      "output_perimeter_max_alpha": 0,
+      "output": "C:\\Users\\rsb\\Desktop\\AI项目\\水浒\\Liangshan-Heroes\\qa\\lin_chong_bound_direction4_candidate_pipeline_20260902\\candidate_outputs\\lin_chong_bound_idle_nw.png",
+      "output_sha256": "257178B7D538069736F606749F4D428474D083FF6910E262815A7F3632B2D154"
+    }
+  ],
+  "preview": {
+    "path": "C:\\Users\\rsb\\Desktop\\AI项目\\水浒\\Liangshan-Heroes\\qa\\lin_chong_bound_direction4_candidate_pipeline_20260902\\runtime_size_preview.png",
+    "sha256": "07ABC088AFDDD5AAC27422B0BF30F2CF5309B4635086F2AC1ADB1B020ECB50E8",
+    "manual_review": {
+      "passed": true,
+      "preview_sha256": "07ABC088AFDDD5AAC27422B0BF30F2CF5309B4635086F2AC1ADB1B020ECB50E8",
+      "reviewed_at": "2026-09-02",
+      "scope": "Four-direction idle-only candidate for the static level6 pine-tree binding state.",
+      "checks": {
+        "hands_in_cangue_holes_front_views": true,
+        "cangue_and_tree_binding_readable": true,
+        "four_directions_distinct": true,
+        "no_frame_overlap_or_side_clipping": true,
+        "feet_and_tree_base_not_clipped": true,
+        "source_top_edge_contact_disclosed": true,
+        "acceptable_at_runtime_scale": true
+      },
+      "original_text_boundary": "The novel explicitly supports the protective cangue, sealed paper, scalded feet and being tied by hands, feet and cangue to a tree. The readable destination text on the generated seal paper is a conservative visual addition, not an explicit quotation of the seal text; it is not legible at normal runtime scale.",
+      "restrictions": [
+        "Accept for lin_chong_bound idle only.",
+        "Do not copy into walk, attack, hurt or down.",
+        "Do not claim the source top-edge trunk contact was repaired; it is accepted only after runtime-scale visual QA."
+      ]
+    }
+  },
+  "production_assets_modified": false,
+  "steam_modified": false
+}

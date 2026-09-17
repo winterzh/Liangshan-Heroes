@@ -122,6 +122,7 @@ func _derive_default_trainable_roster(definitions: Dictionary) -> Dictionary:
 func _direction_file(key: String, state: String, direction: String) -> String:
 	var png := ANIM_DIR.path_join("%s_%s_%s.png" % [key,state,direction])
 	var frames := png.get_basename()+".tres"
+	if key == "guan_zhanzi" and FileAccess.file_exists(frames): return frames
 	return frames if not FileAccess.file_exists(png) and FileAccess.file_exists(frames) else png
 
 

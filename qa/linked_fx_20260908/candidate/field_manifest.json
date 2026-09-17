@@ -1,0 +1,166 @@
+{
+  "hua_snipe_aim": {
+    "class": "HuaSnipeAimFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "life": "TYPE_FLOAT",
+      "col": "TYPE_COLOR"
+    },
+    "references": [
+      "caster",
+      "target"
+    ],
+    "textures": []
+  },
+  "hua_snipe_mark": {
+    "class": "HuaSnipeMarkFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "life": "TYPE_FLOAT"
+    },
+    "references": [
+      "target"
+    ],
+    "textures": []
+  },
+  "hua_lock_mark": {
+    "class": "HuaLockMarkFx",
+    "fields": {
+      "col": "TYPE_COLOR",
+      "pulse": "TYPE_FLOAT"
+    },
+    "references": [
+      "source",
+      "target"
+    ],
+    "textures": []
+  },
+  "lin_guard": {
+    "class": "LinGuardFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "life": "TYPE_FLOAT",
+      "col": "TYPE_COLOR"
+    },
+    "references": [
+      "target"
+    ],
+    "textures": []
+  },
+  "lin_spear_stack": {
+    "class": "LinSpearStackFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "stacks": "TYPE_INT",
+      "proc": "TYPE_BOOL"
+    },
+    "references": [
+      "target"
+    ],
+    "textures": []
+  },
+  "lin_duel": {
+    "class": "LinDuelFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "life": "TYPE_FLOAT",
+      "col": "TYPE_COLOR"
+    },
+    "references": [
+      "source",
+      "target"
+    ],
+    "textures": []
+  },
+  "ability_projectile": {
+    "class": "AbilityProjectileFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "end_w": "TYPE_VECTOR2",
+      "col": "TYPE_COLOR",
+      "lob": "TYPE_BOOL",
+      "_E": "TYPE_VECTOR2",
+      "_ang": "TYPE_FLOAT"
+    },
+    "references": [],
+    "textures": [
+      "tex",
+      "impact_tex"
+    ]
+  },
+  "ability_impact": {
+    "class": "AbilityImpactFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "rad": "TYPE_FLOAT",
+      "col": "TYPE_COLOR",
+      "mode": "TYPE_STRING"
+    },
+    "references": [],
+    "textures": [
+      "tex"
+    ]
+  },
+  "orbit_axes": {
+    "class": "OrbitAxesFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "rad": "TYPE_FLOAT",
+      "col": "TYPE_COLOR",
+      "life": "TYPE_FLOAT",
+      "_spin": "TYPE_FLOAT"
+    },
+    "references": [
+      "target"
+    ],
+    "textures": [
+      "tex"
+    ]
+  },
+  "black_rain": {
+    "class": "BlackRainFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "rad": "TYPE_FLOAT",
+      "col": "TYPE_COLOR",
+      "life": "TYPE_FLOAT",
+      "lite": "TYPE_BOOL",
+      "_drops": "TYPE_ARRAY"
+    },
+    "references": [
+      "follow"
+    ],
+    "textures": []
+  },
+  "firefly": {
+    "class": "FireflyFx",
+    "fields": {
+      "dur": "TYPE_FLOAT",
+      "t": "TYPE_FLOAT",
+      "life": "TYPE_FLOAT",
+      "col": "TYPE_COLOR",
+      "_motes": "TYPE_ARRAY"
+    },
+    "references": [
+      "follow"
+    ],
+    "textures": []
+  },
+  "fading_mark": {
+    "class": "FadingMark",
+    "fields": {
+      "t": "TYPE_FLOAT"
+    },
+    "references": [],
+    "textures": []
+  }
+}

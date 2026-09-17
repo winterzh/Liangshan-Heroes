@@ -1,0 +1,56 @@
+from pathlib import Path
+import datetime,hashlib,json,shutil,subprocess,sys
+ROOT=Path(__file__).resolve().parents[2]
+HERE=Path(__file__).resolve().parent
+OUT=ROOT/'qa/stabilization_battle_barrier_integration_20260907/installation.json'
+HEAD='f3da82f7452a2164c704c34a97c6b2696e99b9c3'
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def read(p): return json.loads(p.read_text(encoding='utf-8'))
+assert not OUT.exists()
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()==HEAD
+assert subprocess.run(['git','diff','--quiet','HEAD','--','scripts','scenes','assets','project.godot'],cwd=ROOT).returncode==0
+sys.path.insert(0,str(ROOT/'tools'))
+import run_stabilization_performance as guard
+assert not guard.godot_processes()
+assert not (ROOT/'.godot/redraw_rejection_source.lock').exists()
+matrices=sorted(HERE.glob('world_matrix_*.json'))
+assert len(matrices)==1
+matrix=read(matrices[0])
+assert matrix['complete'] and matrix['source_head']==HEAD
+assert matrix['cases_requested']==['defense30']+['level'+str(i) for i in range(1,9)]
+assert [r['case_id'] for r in matrix['cases']]==matrix['cases_requested']
+run_paths=[ROOT/'.godot/stabilization_overlay/overlay_20260907T090717Z_76d7e04e/receipt.json']+[Path(row['receipt']) for row in matrix['cases']]
+for path in run_paths:
+    r=read(path)
+    assert r['source_head']==HEAD and r['complete']
+    assert all(r[key] is True for key in ['source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released'])
+    assert r['godot_pids_after']==[] and not r['final_issues']
+    assert all(s['exit_code']==0 and not s['errors'] and s['child_exit_confirmed'] for s in r['steps'])
+    p=read(path.parent/'report.json')
+    assert p['passed'] and p['complete'] and p['failed_count']==0
+base=HERE/'attempt_r4'
+assert sha(base/'freeze.json')=='cde2ddf8e6b99b45f309868b4d9715acc49680e055183a963dce6e84725f72d6'
+overlay=read(base/'overlay_manifest.json')
+pending=[]
+for row in overlay['files']:
+    target=ROOT/row['path']; source=ROOT/row['candidate']
+    assert target.exists()==row['before_exists']
+    assert not target.exists() or sha(target)==row['before_raw_sha256']
+    assert sha(source)==row['candidate_sha256']
+    for run_path in run_paths:
+        assert sha(run_path.parent/'project'/row['path'])==sha(source)
+    pending.append((source,target,row['before_raw_sha256']))
+    if not row['before_exists']:
+        uid=Path(row['path']+'.uid')
+        assert not (ROOT/uid).exists()
+        source_uid=run_paths[0].parent/'project'/uid
+        assert source_uid.read_text(encoding='utf-8').startswith('uid://')
+        pending.append((source_uid,ROOT/uid,None))
+installed=[]
+for source,target,before in pending:
+    shutil.copyfile(source,target)
+    assert sha(target)==sha(source)
+    installed.append({'path':target.relative_to(ROOT).as_posix(),'before_sha256':before,'after_sha256':sha(target),'source':source.relative_to(ROOT).as_posix()})
+result={'installed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_head_before':HEAD,'files':installed,'r4_receipt':run_paths[0].relative_to(ROOT).as_posix(),'world_matrix':matrices[0].relative_to(ROOT).as_posix(),'all_runtime_sources_match':True,'full_battle_resume_tested':False,'new_steam_build':False}
+OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps(result,ensure_ascii=False))

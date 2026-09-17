@@ -1,0 +1,105 @@
+from pathlib import Path
+import hashlib,json,subprocess
+root=Path.cwd(); out=root/'scratchpad/world_display_20260908'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def replace(s,a,b):
+ assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+b=(root/'scripts/battle.gd').read_text(encoding='utf-8')
+b=replace(b,'class LiangshanWaterBackdrop extends Node2D:\n','class LiangshanWaterBackdrop extends Node2D:\n')
+pos=b.index('class LiangshanWaterBackdrop extends Node2D:'); before=b[:pos]; part=b[pos:]
+part=replace(part,'\tfunc _ready() -> void:\n\t\tz_index = -1000','\tfunc _ready() -> void:\n\t\tif has_meta("_run_restore_prepared"):\n\t\t\tqueue_redraw()\n\t\t\treturn\n\t\tz_index = -1000')
+(out/'battle.gd').write_text(before+part,encoding='utf-8',newline='\n')
+c=(root/'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c=replace(c,'classic_world_core_preparation_v2','classic_world_core_preparation_v3')
+c=replace(c,'"item_casts", "death_remains"]','"item_casts", "death_remains", "world_display"]')
+c=replace(c,'const Codec :=','const WorldDisplay := preload("res://scripts/run_world_display_state.gd")\nconst Codec :=')
+c=replace(c,'var _unit_plan: Dictionary = {}','var _unit_plan: Dictionary = {}\nvar _display: Variant = null')
+c=replace(c,'\tsections["death_remains"] = remains.value','\tsections["death_remains"] = remains.value\n\tvar display: Dictionary = WorldDisplay.new().capture(source, ids)\n\tif not display.ok:\n\t\tif retained_identity == null: identity.dispose()\n\t\treturn display\n\tsections["world_display"] = display.value')
+c=replace(c,'\t_pending_root = s.root.duplicate(true)','\t_display = WorldDisplay.new()\n\tchecked = _display.bind(_battle, s.world_display, ids)\n\tif not checked.ok: return _abort(checked, "world_display")\n\t_pending_root = s.root.duplicate(true)')
+# checked now belongs to display; retain the already audited actual ground count.
+c=replace(c,'"pending_ground_fire_count": checked.value.values._ground_fire_visuals','"pending_ground_fire_count": ground_count, "world_display": _display')
+c=replace(c,'\t_pending_root.clear()','\t_pending_root.clear()\n\t_display = null')
+(out/'run_battle_world_core.gd').write_text(c,encoding='utf-8',newline='\n')
+d=(root/'qa/death_remains_resume_20260908/final_candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('death-remains-native','world-display-native').replace('[death remains QA] ','[world display QA] ')
+anchor='\t_check("world core root binding deliberately deferred'
+idx=d.index(anchor)
+d=d[:idx]+'''\tvar display_script: Script = load("res://scripts/run_world_display_state.gd")
+\tvar world_roles: Array = []
+\tvar restored_roles: Array = []
+\tvar display_reader: Variant = display_script.new()
+\tfor node: Node in battle.world.get_children(true): world_roles.append(display_reader._role(battle, node))
+\tfor node: Node in target.world.get_children(true): restored_roles.append(display_reader._role(target, node))
+\t_check("world sibling roles exactly match actual source", world_roles == restored_roles and world_roles.has("water") and world_roles.has("dapple") and world_roles.has("shadow"))
+\tfor role: String in ["water", "dapple", "shadow"]:
+\t\tvar a: Variant = battle.world.get_child(world_roles.find(role))
+\t\tvar b: Variant = target.world.get_child(restored_roles.find(role))
+\t\t_check("display native transform copied " + role, a.transform == b.transform and a.z_index == b.z_index and a.texture_repeat == b.texture_repeat)
+\t\tif role != "shadow":
+\t\t\t_check("display trusted pixels exact " + role, a.tex.get_image().get_data() == b.tex.get_image().get_data() and a.ws == b.ws)
+\t\telse:
+\t\t\t_check("shadow exact buffer capacity visible and owner", a.paired_multimesh.buffer == b.paired_multimesh.buffer and a.capacity == b.capacity and a.active_count == b.active_count and b.battle == target)
+\tif not await _display_cases(core_script, identity, runtime, wire):
+\t\ttarget_core.dispose(); source_core.dispose(); await _finish(true); return
+''' +d[idx:]
+d+='''
+func _display_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+\tvar before: int = checks.size()
+\tfor problem: String in ["duplicate", "missing", "unknown", "texture", "reference", "capacity"]:
+\t\tvar bad: Dictionary = wire.duplicate(true)
+\t\tvar raw: Dictionary = codec.decode(bad.sections.world_display).value
+\t\tmatch problem:
+\t\t\t"duplicate": raw.children.append(raw.children[0].duplicate(true))
+\t\t\t"missing": raw.children = raw.children.filter(func(row): return row.role != "map")
+\t\t\t"unknown": raw.children[0].role = "saved_script"
+\t\t\t"texture":
+\t\t\t\tfor row: Dictionary in raw.children:
+\t\t\t\t\tif row.role == "water": row.texture.sha256 = "0".repeat(64)
+\t\t\t"reference":
+\t\t\t\tfor row: Dictionary in raw.children:
+\t\t\t\t\tif row.role == "shadow": row.retained.append("999999999")
+\t\t\t"capacity":
+\t\t\t\tfor row: Dictionary in raw.children:
+\t\t\t\t\tif row.role == "shadow": row.capacity = 129
+\t\tbad.sections.world_display = codec.encode(raw).value
+\t\tvar module: Variant = core_script.new(identity, runtime)
+\t\tvar result: Dictionary = module.prepare(bad)
+\t\t_check("display corrupted " + problem + " rejects and frees destination", not result.ok and module._battle == null and module._identity == null)
+\t\tmodule.dispose()
+\tvar module: Variant = core_script.new(identity, runtime)
+\tvar result: Dictionary = module.prepare(wire)
+\tif not _ok("display lifecycle prepared", result): module.dispose(); return false
+\tvar target: Variant = result.battle
+\tvar source_world: Node2D = target.world
+\ttarget.remove_child(source_world)
+\tvar stage := Node2D.new(); stage.process_mode = Node.PROCESS_MODE_ALWAYS; root.add_child(stage)
+\tstage.add_child(source_world)
+\t# The rest of the prepared Battle stays off tree. Only rendering is enabled.
+\t_check("display activation after ready", result.world_display.activate().ok)
+\tvar roles: Array = []
+\tvar reader: Variant = load("res://scripts/run_world_display_state.gd").new()
+\tfor node: Node in source_world.get_children(true): roles.append(reader._role(target, node))
+\tvar water: Node2D = source_world.get_child(roles.find("water"))
+\tvar saved: Dictionary = codec.decode(wire.sections.world_display).value
+\tfor row: Dictionary in saved.children:
+\t\tif row.role == "water": _check("water ready preserves saved render state", water.z_index == row.node.z_index and water.transform == Transform2D(row.node.basis_x,row.node.basis_y,row.node.position) and not water.has_meta("_run_restore_prepared"))
+\tfor tick in range(4): await process_frame
+\tvar shadow: Variant = source_world.get_child(roles.find("shadow"))
+\t_check("shadow native processing keeps valid batch", shadow.battle == target and shadow.active_count == shadow.paired_multimesh.visible_instance_count)
+\tstage.remove_child(source_world); target.add_child(source_world); stage.free()
+\tmodule.dispose()
+\tfor index in range(before, checks.size()):
+\t\tif not checks[index].passed: return false
+\treturn true
+'''
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+changes=[]
+for name in ['run_world_display_state.gd','battle.gd','run_battle_world_core.gd']:
+ p=root/'scripts'/name
+ row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':'scratchpad/world_display_20260908/'+name,'candidate_sha256':sha(out/name)}
+ if p.exists():row['before_raw_sha256']=sha(p)
+ changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+names=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names}},indent=2)+'\n',encoding='utf-8')
+print('freeze',sha(out/'freeze.json'))

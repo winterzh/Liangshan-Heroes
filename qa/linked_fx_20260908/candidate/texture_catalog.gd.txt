@@ -1,0 +1,24 @@
+func _register_visual_textures() -> void:
+	# Current installed Art owns these resources. Saved tokens never select a loader.
+	var tree: Variant = Engine.get_main_loop()
+	if not tree is SceneTree: return
+	var art: Variant = tree.root.get_node_or_null("Art")
+	if art == null or art.get_script() != preload("res://scripts/art_db.gd"): return
+	for style: String in art.ITEM_CELLS:
+		_add_visual_texture("item:" + style, art.item_texture(style))
+	for style: String in art.ABILITY_PROJECTILE_CELLS:
+		_add_visual_texture("projectile:" + style, art.ability_projectile_texture(style))
+	for style: String in art.ABILITY_IMPACT_CELLS:
+		_add_visual_texture("impact:" + style, art.ability_impact_texture(style))
+	for key: String in _runtime.get("defs", {}):
+		if _runtime.defs[key].get("building", false) != true: continue
+		var texture: Texture2D = art.building_texture(key)
+		if texture == null: texture = art.terrain_texture(key)
+		_add_visual_texture("building:" + key, texture)
+	if _axe_texture == null:
+		_axe_texture = art.item_texture("axe")
+		if _axe_texture == null: _axe_texture = art.ability_projectile_texture("axe")
+
+func _add_visual_texture(key: String, texture: Texture2D) -> void:
+	# Explicit caller entries keep their identity, including conflicting symbolic keys.
+	if texture != null and not _textures.has(key): _textures[key] = texture

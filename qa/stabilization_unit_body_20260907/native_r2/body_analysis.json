@@ -1,0 +1,499 @@
+{
+  "native_receipt_sha256": "1fdbb1d7b4debb963eff08311120c2bc2ada477d8236da88e30d39df291db69c",
+  "source_head": "c0285f91d4131e7631707fa59903d4b61fd460bb",
+  "body_tools_sha256": {
+    "prepare.py": "0022adfaf3537e1d1ac6652eb856d2ee34ccd59b8e76553328af28001e2263dc",
+    "run.py": "dc3d9672109fc7e0118d09b41e2bf5baf18c2c0ea2984cfb0bea3a97cb40716b",
+    "observer.gd": "b835ba30053eb338a5e96f7996f88140df9042c4705fb4564435da8b364ffabc"
+  },
+  "modes": {
+    "timed": {
+      "physics_steps": 597,
+      "presented_frames": 246,
+      "hooks": 3656710,
+      "all_scope_pairs_closed": true,
+      "all_root_entries_covered": true,
+      "inline_span_count_order_valid": true,
+      "ledger_observed_us_per_step": 3012.9782244556113,
+      "nested_time_conservation": true,
+      "scope_rows": [
+        {
+          "scope": "body.entry_building_dying",
+          "calls": 111053,
+          "calls_per_step": 186.0184254606365,
+          "inclusive_us_per_step": 651.0569514237856,
+          "exclusive_us_per_step": 408.09547738693465
+        },
+        {
+          "scope": "body.regen",
+          "calls": 89747,
+          "calls_per_step": 150.32998324958123,
+          "inclusive_us_per_step": 474.641541038526,
+          "exclusive_us_per_step": 308.2177554438861
+        },
+        {
+          "scope": "body.ability_inventory",
+          "calls": 89747,
+          "calls_per_step": 150.32998324958123,
+          "inclusive_us_per_step": 445.5812395309883,
+          "exclusive_us_per_step": 267.7671691792295
+        },
+        {
+          "scope": "body.timed_statuses",
+          "calls": 89747,
+          "calls_per_step": 150.32998324958123,
+          "inclusive_us_per_step": 289.34170854271355,
+          "exclusive_us_per_step": 254.04690117252932
+        },
+        {
+          "scope": "body.eject_target",
+          "calls": 89747,
+          "calls_per_step": 150.32998324958123,
+          "inclusive_us_per_step": 401.27638190954775,
+          "exclusive_us_per_step": 286.8509212730318
+        },
+        {
+          "scope": "body.action_dispatch",
+          "calls": 89747,
+          "calls_per_step": 150.32998324958123,
+          "inclusive_us_per_step": 2411.7353433835847,
+          "exclusive_us_per_step": 302.04020100502515
+        },
+        {
+          "scope": "body.animation_dust_hit",
+          "calls": 89434,
+          "calls_per_step": 149.80569514237857,
+          "inclusive_us_per_step": 1098.8911222780569,
+          "exclusive_us_per_step": 516.8023450586264
+        },
+        {
+          "scope": "body.stuck_watchdog",
+          "calls": 89434,
+          "calls_per_step": 149.80569514237857,
+          "inclusive_us_per_step": 93.07872696817421,
+          "exclusive_us_per_step": 82.79899497487438
+        },
+        {
+          "scope": "unit._phys_body",
+          "calls": 111053,
+          "calls_per_step": 186.0184254606365,
+          "inclusive_us_per_step": 7274.175879396985,
+          "exclusive_us_per_step": 1408.572864321608
+        },
+        {
+          "scope": "unit._do_chase",
+          "calls": 44940,
+          "calls_per_step": 75.27638190954774,
+          "inclusive_us_per_step": 1418.9865996649917,
+          "exclusive_us_per_step": 320.8542713567839
+        },
+        {
+          "scope": "unit._follow_path",
+          "calls": 44940,
+          "calls_per_step": 75.27638190954774,
+          "inclusive_us_per_step": 1224.8911222780569,
+          "exclusive_us_per_step": 528.5443886097153
+        },
+        {
+          "scope": "unit._acquire",
+          "calls": 5641,
+          "calls_per_step": 9.44891122278057,
+          "inclusive_us_per_step": 247.20435510887773,
+          "exclusive_us_per_step": 53.44556113902848
+        },
+        {
+          "scope": "unit._begin_move",
+          "calls": 41,
+          "calls_per_step": 0.06867671691792294,
+          "inclusive_us_per_step": 1.7587939698492463,
+          "exclusive_us_per_step": 1.2663316582914572
+        },
+        {
+          "scope": "unit._begin_amove",
+          "calls": 1904,
+          "calls_per_step": 3.1892797319932997,
+          "inclusive_us_per_step": 236.7822445561139,
+          "exclusive_us_per_step": 225.97319932998326
+        },
+        {
+          "scope": "unit._try_attack_path_blocker",
+          "calls": 1732,
+          "calls_per_step": 2.9011725293132327,
+          "inclusive_us_per_step": 6.242881072026801,
+          "exclusive_us_per_step": 6.242881072026801
+        },
+        {
+          "scope": "unit._face_dir",
+          "calls": 53336,
+          "calls_per_step": 89.34003350083752,
+          "inclusive_us_per_step": 126.01675041876047,
+          "exclusive_us_per_step": 125.33668341708542
+        },
+        {
+          "scope": "unit.current_move_speed",
+          "calls": 43789,
+          "calls_per_step": 73.34840871021775,
+          "inclusive_us_per_step": 308.7671691792295,
+          "exclusive_us_per_step": 164.88107202680067
+        },
+        {
+          "scope": "unit._attack",
+          "calls": 177,
+          "calls_per_step": 0.2964824120603015,
+          "inclusive_us_per_step": 4.221105527638191,
+          "exclusive_us_per_step": 3.0720268006700167
+        },
+        {
+          "scope": "unit._gameplay_rng_fault",
+          "calls": 205319,
+          "calls_per_step": 343.9179229480737,
+          "inclusive_us_per_step": 344.03182579564486,
+          "exclusive_us_per_step": 344.03182579564486
+        },
+        {
+          "scope": "unit._passive_regen",
+          "calls": 89747,
+          "calls_per_step": 150.32998324958123,
+          "inclusive_us_per_step": 140.02345058626466,
+          "exclusive_us_per_step": 140.02345058626466
+        },
+        {
+          "scope": "unit._tick_ability_slots",
+          "calls": 89747,
+          "calls_per_step": 150.32998324958123,
+          "inclusive_us_per_step": 158.42211055276383,
+          "exclusive_us_per_step": 158.42211055276383
+        },
+        {
+          "scope": "unit._queue_animated_redraw",
+          "calls": 46268,
+          "calls_per_step": 77.50083752093802,
+          "inclusive_us_per_step": 127.28140703517587,
+          "exclusive_us_per_step": 107.88442211055276
+        },
+        {
+          "scope": "unit._queue_motion_redraw",
+          "calls": 43722,
+          "calls_per_step": 73.23618090452261,
+          "inclusive_us_per_step": 345.52763819095475,
+          "exclusive_us_per_step": 274.95644891122276
+        },
+        {
+          "scope": "unit._request_redraw",
+          "calls": 88086,
+          "calls_per_step": 147.54773869346732,
+          "inclusive_us_per_step": 130.48408710217757,
+          "exclusive_us_per_step": 130.48408710217757
+        },
+        {
+          "scope": "unit._spawn_dust",
+          "calls": 1380,
+          "calls_per_step": 2.3115577889447234,
+          "inclusive_us_per_step": 6.747068676716918,
+          "exclusive_us_per_step": 6.747068676716918
+        },
+        {
+          "scope": "unit._deal_hit",
+          "calls": 168,
+          "calls_per_step": 0.2814070351758794,
+          "inclusive_us_per_step": 32.49748743718593,
+          "exclusive_us_per_step": 30.758793969849247
+        },
+        {
+          "scope": "battle.can_unit_step",
+          "calls": 44915,
+          "calls_per_step": 75.23450586264657,
+          "inclusive_us_per_step": 201.49916247906197,
+          "exclusive_us_per_step": 201.49916247906197
+        },
+        {
+          "scope": "battle.eject_from_buildings",
+          "calls": 12907,
+          "calls_per_step": 21.619765494137354,
+          "inclusive_us_per_step": 32.731993299832496,
+          "exclusive_us_per_step": 32.731993299832496
+        },
+        {
+          "scope": "battle.target_visible_to",
+          "calls": 50261,
+          "calls_per_step": 84.1892797319933,
+          "inclusive_us_per_step": 93.1859296482412,
+          "exclusive_us_per_step": 93.1859296482412
+        },
+        {
+          "scope": "battle.enemy_candidates_near",
+          "calls": 5641,
+          "calls_per_step": 9.44891122278057,
+          "inclusive_us_per_step": 182.26633165829145,
+          "exclusive_us_per_step": 182.26633165829145
+        },
+        {
+          "scope": "game_map._segment_open",
+          "calls": 56614,
+          "calls_per_step": 94.83082077051927,
+          "inclusive_us_per_step": 149.11390284757118,
+          "exclusive_us_per_step": 149.11390284757118
+        },
+        {
+          "scope": "game_map.speed_mult_at",
+          "calls": 43789,
+          "calls_per_step": 73.34840871021775,
+          "inclusive_us_per_step": 143.88609715242882,
+          "exclusive_us_per_step": 143.88609715242882
+        },
+        {
+          "scope": "hero_inventory.tick",
+          "calls": 3582,
+          "calls_per_step": 6.0,
+          "inclusive_us_per_step": 13.375209380234505,
+          "exclusive_us_per_step": 13.375209380234505
+        }
+      ]
+    },
+    "clockless": {
+      "physics_steps": 601,
+      "presented_frames": 312,
+      "hooks": 3668494,
+      "all_scope_pairs_closed": true,
+      "all_root_entries_covered": true,
+      "inline_span_count_order_valid": true,
+      "ledger_observed_us_per_step": null,
+      "nested_time_conservation": null,
+      "scope_rows": [
+        {
+          "scope": "body.entry_building_dying",
+          "calls": 111521,
+          "calls_per_step": 185.55906821963396,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "body.regen",
+          "calls": 90091,
+          "calls_per_step": 149.9018302828619,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "body.ability_inventory",
+          "calls": 90091,
+          "calls_per_step": 149.9018302828619,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "body.timed_statuses",
+          "calls": 90091,
+          "calls_per_step": 149.9018302828619,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "body.eject_target",
+          "calls": 90091,
+          "calls_per_step": 149.9018302828619,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "body.action_dispatch",
+          "calls": 90091,
+          "calls_per_step": 149.9018302828619,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "body.animation_dust_hit",
+          "calls": 89777,
+          "calls_per_step": 149.3793677204659,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "body.stuck_watchdog",
+          "calls": 89777,
+          "calls_per_step": 149.3793677204659,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._phys_body",
+          "calls": 111521,
+          "calls_per_step": 185.55906821963396,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._do_chase",
+          "calls": 45036,
+          "calls_per_step": 74.9351081530782,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._follow_path",
+          "calls": 44991,
+          "calls_per_step": 74.86023294509151,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._acquire",
+          "calls": 5642,
+          "calls_per_step": 9.387687188019967,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._begin_move",
+          "calls": 41,
+          "calls_per_step": 0.06821963394342762,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._begin_amove",
+          "calls": 1904,
+          "calls_per_step": 3.168053244592346,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._try_attack_path_blocker",
+          "calls": 1732,
+          "calls_per_step": 2.8818635607321132,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._face_dir",
+          "calls": 53436,
+          "calls_per_step": 88.91181364392679,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit.current_move_speed",
+          "calls": 43850,
+          "calls_per_step": 72.96173044925125,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._attack",
+          "calls": 178,
+          "calls_per_step": 0.2961730449251248,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._gameplay_rng_fault",
+          "calls": 206155,
+          "calls_per_step": 343.01996672212977,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._passive_regen",
+          "calls": 90091,
+          "calls_per_step": 149.9018302828619,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._tick_ability_slots",
+          "calls": 90091,
+          "calls_per_step": 149.9018302828619,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._queue_animated_redraw",
+          "calls": 46432,
+          "calls_per_step": 77.25790349417638,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._queue_motion_redraw",
+          "calls": 43767,
+          "calls_per_step": 72.82362728785358,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._request_redraw",
+          "calls": 88239,
+          "calls_per_step": 146.82029950083194,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._spawn_dust",
+          "calls": 1383,
+          "calls_per_step": 2.301164725457571,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "unit._deal_hit",
+          "calls": 168,
+          "calls_per_step": 0.2795341098169717,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "battle.can_unit_step",
+          "calls": 44990,
+          "calls_per_step": 74.8585690515807,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "battle.eject_from_buildings",
+          "calls": 12908,
+          "calls_per_step": 21.477537437603992,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "battle.target_visible_to",
+          "calls": 50365,
+          "calls_per_step": 83.80199667221298,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "battle.enemy_candidates_near",
+          "calls": 5642,
+          "calls_per_step": 9.387687188019967,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "game_map._segment_open",
+          "calls": 56699,
+          "calls_per_step": 94.34109816971714,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "game_map.speed_mult_at",
+          "calls": 43850,
+          "calls_per_step": 72.96173044925125,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        },
+        {
+          "scope": "hero_inventory.tick",
+          "calls": 3606,
+          "calls_per_step": 6.0,
+          "inclusive_us_per_step": null,
+          "exclusive_us_per_step": null
+        }
+      ]
+    }
+  },
+  "production_optimization_adopted": false,
+  "cost_note": "Ledger intervals are observed instrumentation work, not a complete overhead estimate and not subtractable. Timed and clockless are separate combat runs. No FPS benefit claim."
+}

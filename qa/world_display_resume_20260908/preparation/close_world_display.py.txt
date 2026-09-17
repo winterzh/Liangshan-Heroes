@@ -1,0 +1,96 @@
+from pathlib import Path
+import hashlib,json,subprocess,datetime
+root=Path.cwd(); q=root/'qa/world_display_resume_20260908'; candidate=root/'scratchpad/world_display_20260908'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+head='ea4f9d6c73c68a6d1dca6aa416c2345b37180bb3'
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+runs=['overlay_20260907T212619Z_5fe77eed','overlay_20260907T212940Z_d849934f','overlay_20260907T213153Z_87280e94','overlay_20260907T213338Z_1a057c0f','overlay_20260907T213524Z_2976d65f','overlay_20260907T213909Z_77c5e5ee','overlay_20260907T214207Z_cf4e8d22','overlay_20260907T214557Z_386afef6']
+final=root/'.godot/stabilization_overlay'/runs[-1]
+receipt=json.loads((final/'receipt.json').read_text());assert receipt['complete'] and not receipt['final_issues']
+report=json.loads((final/'report.json').read_text());assert report['passed'] and not report['failed_count']
+assert not (root/'.godot/redraw_rejection_source.lock').exists()
+manifest=json.loads((candidate/'overlay_manifest.json').read_text())
+for row in manifest['files']:
+ p=root/row['path']; assert p.exists()==row['before_exists']
+ if p.exists():assert sha(p)==row['before_raw_sha256']
+ assert sha(root/row['candidate'])==row['candidate_sha256']==sha(final/'project'/row['path'])
+q.mkdir(exist_ok=False);(q/'.gdignore').write_text('\n')
+pins=[];summaries=[]
+def archive(src,dest):
+ target=q/dest;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(src.read_bytes());assert sha(src)==sha(target)
+ pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':dest,'bytes':target.stat().st_size,'sha256':sha(target)})
+for i,name in enumerate(runs,1):
+ p=root/'.godot/stabilization_overlay'/name
+ r=json.loads((p/'receipt.json').read_text());summary={'run_id':name,'complete':r['complete'],'error':r.get('error')}
+ for file in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+  if (p/file).exists():archive(p/file,f'runs/r{i}/{file}')
+ for name in ['battle.gd','run_world_display_state.gd','run_battle_world_core.gd']:
+  archive(p/'project/scripts'/name,f'runs/r{i}/{name}.txt')
+ archive(p/'project/tools/world_display/driver.gd',f'runs/r{i}/driver.gd.txt')
+ if (p/'report.json').exists():
+  rr=json.loads((p/'report.json').read_text());summary.update(checks=rr['check_count'],source_sha_checks=sum(x['label'].startswith(('source before ','source after ')) for x in rr['checks']),failures=[x for x in rr['checks'] if not x['passed']],cases=rr.get('completed_cases',[]))
+ summaries.append(summary)
+for p in candidate.iterdir():
+ if p.is_file():archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_world_display.py','refine_world_display_driver.py','refine_world_display_entry.py','extend_world_display_checks.py','finish_world_display_checks.py','close_world_display.py']:
+ archive(root/'.godot'/name,'preparation/'+name+'.txt')
+uid=final/'project/scripts/run_world_display_state.gd.uid';archive(uid,'candidate/run_world_display_state.gd.uid.txt')
+for row in manifest['files']:(root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/'scripts/run_world_display_state.gd.uid').write_bytes(uid.read_bytes())
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'final_native_run':runs[-1],'changes':manifest['files'],'native_uid_sha256':sha(uid),'runs':summaries,'complete_world_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+count=report['check_count']; sources=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks']);other=count-sources
+(q/'README.md').write_text(f'''# 世界显示恢复 QA
+
+来源提交 `{head}`；最终运行 `{runs[-1]}`。R1—R5为失败原文，R6首次通过，R7补容量及尸体真实物理消失，R8补完整继承绘制属性与挂载前拒绝。R8为{count}项，其中{sources}来源SHA，{other}其他断言；不是{count}个玩法场景。
+
+runs保存原始日志、收据、manifest/freeze、实际执行的三份生产脚本及驱动；不存在的报告不补造。candidate是最终受测输入，preparation仅供审计。SOURCE_PINS可逐文件复核，installation记录生产晋级字节和原生UID。QA通过.gdignore隔离，原字节由Git属性保留。
+
+在上述来源提交的独立checkout配置Godot4.6.3；把candidate的battle.gd.txt、run_world_display_state.gd.txt、run_battle_world_core.gd.txt、driver.gd.txt恢复为.gd原名，连同overlay_manifest.json、freeze.json放到scratchpad/world_display_20260908并加.gdignore。不要把归档UID复制进来源scripts；原生import在隔离工程生成。执行器和guard应与归档版本同SHA。
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 fb54c7536ff856f4c4181eca167b453a36f8517aa44d63ac5cd8a0df82a75d27 --candidate scratchpad/world_display_20260908 --expected-files 3 --driver driver.gd --driver-destination tools/world_display/driver.gd --suite world-display-native --prefix "[world display QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可换受控短绝对路径；历史路径不作新写入目的地。最终驱动使用Windows/Forward+/Vulkan，窗口最小化、viewport0×0；校验纹理像素数据，不是画面排版或可见像素验收。原生回调只启用显示层及单个临近消失的尸体夹具，Battle玩法/时钟保持关闭；没有整场或跨进程继续结论。[实现与剩余工作](../../docs/WORLD_DISPLAY_RESUME_20260908.md)。
+''',encoding='utf-8')
+(root/'docs/WORLD_DISPLAY_RESUME_20260908.md').write_text(f'''# 世界显示层与恢复准备入口
+
+新增run_world_display_state，world core内部schema v3增加第16分区world_display。恢复保留world/units容器的完整已声明Node2D绘制状态、world子节点实际排列、水面铺底、斑驳光影、阴影批次及死亡中Unit引用。map、units、fx、fog仍使用各自恢复模块，新的分区只绑定它们的同一对象和顺序。未知或重复world子节点、未知回调/元数据/材质覆盖均拒绝，不静默省略。
+
+## 资源与状态
+
+水面和斑驳纹理由当前受信Art与已有Battle._build_dapple逻辑重建，对照尺寸、格式、mipmap和像素SHA；存档中的纹理描述不驱动资源路径加载或脚本执行。图集水面按原初始化逻辑抽取为独立纹理。继承绘制属性包括变换、颜色、可见性、深度、过滤、重复和插值方式；处理状态单独保留到激活阶段。
+
+阴影网格和着色器只用当前WorldShadow.ShadowBatch.setup创建并检查固定资源，保存MultiMesh容量、可见实例数、完整float32缓冲和保留尸体的有序实体ID。恢复的引用指向同一UnitGraph中新对象，尸体继续排除在Battle.units之外。缓冲按有界十六进制放在独立信封中，最大4096槽，避免挤占通用codec的节点和字符串计费上限；解码检查长度、十六进制、有限数与容量关系。未经验证的对象序列化不参与恢复。
+
+Godot会自动给容器连接child_order_changed的两个Viewport原生回调。仅按当前viewport对象、完整方法名、绑定参数和REFERENCE_COUNTED标志精确放行，交给引擎在入树时重建。依据为实际原生诊断和[CanvasItem](https://github.com/godotengine/godot/blob/4.6/scene/main/canvas_item.cpp) / [Control](https://github.com/godotengine/godot/blob/4.6/scene/gui/control.cpp)源码。其他连接拒绝。
+
+## 准备与安装边界
+
+core在其余状态全部验证后绑定显示树，再加仅限内存的_run_core_prepared标志。Battle._ready在看到该标志时验证暂停、禁用、已恢复RNG、无新时钟/屏障及world归属，跳过整段新局初始化。异常准备入口停止而不回落新局。正常开局没有此标志，继续原逻辑。此入口允许准备树在正确Battle父子关系下入树，不会新建局、重复deploy、申请Steam局或启动玩法。
+
+水面节点带独立准备标志，_ready仅请求重绘，避免覆盖已保存的z_index和texture_repeat。显示模块必须在暂停且已入树时激活，核对world实际顺序后恢复处理标志并清掉水面标志。完整根时钟、Unit信号、HUD/相机/氛围、Steam续局和最终玩法激活仍归后续外层安装事务负责；core.prepare本身仍返回mounted=false、activated=false、complete_world=false，并拥有显式dispose释放责任。
+
+## 验证与失败
+
+最终R8共{count}项={sources}来源SHA+{other}其他。在真实经典开局正常推进120个physics观察帧后，对普通单位受控致死，并等待真实HELD屏障，保留尚未消失尸体。测试另明确改变源world颜色、units位置、水面位置/深度/重复及斑驳兄弟顺序；这些是恢复夹具，未改变正式默认布局。JSON恢复后，容器与新增显示节点的全部声明绘制字段、纹理像素、阴影缓冲与尸体身份顺序均与源相等。
+
+按真实Battle祖先关系挂载准备树，验证_ready不重建时钟/屏障、RNG或Steam局，不重新部署；Battle保持禁用。显示子树单独允许处理，临近消失的恢复尸体通过原Unit激活和真实physics帧释放，退出一次、阴影引用随后自然清除。另有4096槽缓冲往返、畸形/非有限缓冲、重复/缺失/未知节点、纹理变化、坏实体引用、非法容量、16分区损坏回滚和死亡残留生命周期回归。固定已知数量断言不能替代整局玩法验收。
+
+R1把引擎内部连接当成未知回调；R2增加诊断确认child_order_changed；R3仅用未限定方法名仍拒绝；R4诊断确认方法名实际带Viewport::前缀。R5世界子树单独挂测试Node2D父节点，liangshan_entrance沿祖先取Battle.units失败，执行器终止该进程，未补造报告。随后保留完整Battle祖先并加入受控准备入口。R6通过5871项，R7容量/自然消失通过5878项，R8补继承字段/挂载边界并仅修正core注释。原始失败/通过、输入和保护收据均保留在[QA](../qa/world_display_resume_20260908/README.md)。
+
+这是最小化Vulkan原生数据与回调验收，无截图或玩家可见排版结论；未做完整30波、跨进程、两台Windows或真实Steam双账号。后续仍需氛围/浮尘时间、相机/HUD/输入恢复、其他英雄特效、根同帧安装及Steam局身份，再完成原子继续槽、保存成功才退出、冷启动未来行为对照和八战役适配。本批仅同步stable，不更新Steam包。
+''',encoding='utf-8')
+def prepend(path,text):
+ p=root/path;p.write_text(text+'\n\n'+p.read_text(encoding='utf-8-sig'),encoding='utf-8',newline='\n')
+prepend('docs/WORKLOG.md',f'## 2026-09-08 续玩主线：世界显示与准备入口\n\n接入world/units容器、world兄弟顺序、水面/斑驳和阴影完整缓冲及尸体身份；core v3第16分区。准备Battle可在暂停禁用下跳过新局_ready并保留正确祖先供显示消费者使用。R8 {count}项中{sources}来源SHA、{other}其他；包含真实尸体物理消失、4096槽和坏记录回滚。原始五轮失败保留，受测三脚本/新UID晋级。[说明和边界](WORLD_DISPLAY_RESUME_20260908.md)、[QA](../qa/world_display_resume_20260908/README.md)。完整UI/根安装/磁盘槽/跨进程续玩未完成；同步stable，不更新Steam。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 世界显示恢复\n\n新增run_world_display_state及原生UID；core内部schema v3新增world_display。Battle新增仅供禁用准备树的_ready分流，玩家Play.cmd及菜单入口保持。按[本批QA](../qa/world_display_resume_20260908/README.md)在来源提交复现实测；[生命周期边界](WORLD_DISPLAY_RESUME_20260908.md)明确最终安装仍待接入。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 世界容器、铺底与阴影恢复已接入\n\n世界顺序、完整声明绘制属性、受信纹理与阴影/尸体引用通过原生对照；准备Battle入树可跳过新局初始化。[证据](WORLD_DISPLAY_RESUME_20260908.md)。尚不提供完整保存退出/继续：相机/HUD/氛围、其余特效、根/Steam最终安装、磁盘槽和跨进程验收待完成。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 世界显示恢复\n\n- scripts/run_world_display_state.gd：世界组成、受信资源、阴影缓冲与身份、暂停激活。\n- docs/WORLD_DISPLAY_RESUME_20260908.md：合同、原生结果、失败修复和剩余安装门。\n- qa/world_display_resume_20260908/：八轮原始证据、候选、执行器及SHA安装收据。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续更新：核心现为v3、world_display第16分区已接入，准备Battle具有跳过新局初始化的禁用入树入口，见[世界显示恢复](WORLD_DISPLAY_RESUME_20260908.md)。下方早期v1/v2记录保留为历史阶段。')
+p=root/'docs/STABILIZATION_EXECUTION_20260907.md';s=p.read_text();s=s.replace('混合Fx图、死亡残留及离树世界核心准备已接入；完整显示/最终安装','混合Fx图、死亡残留、世界显示及禁用准备入口已接入；相机/HUD/氛围与最终安装').replace('见[最新证据](DEATH_REMAINS_RESUME_20260908.md)','见[最新证据](WORLD_DISPLAY_RESUME_20260908.md)');p.write_text(s,encoding='utf-8')
+p=root/'.gitattributes';p.write_bytes(p.read_bytes()+b'\n# Preserve world display native candidates and audit evidence.\nscripts/run_world_display_state.gd* -text -whitespace\nqa/world_display_resume_20260908/** -text -whitespace\n')
+print(json.dumps({'files':len(pins),'checks':count,'source_checks':sources,'other_checks':other,'production_bytes_equal_native':True},ensure_ascii=False))

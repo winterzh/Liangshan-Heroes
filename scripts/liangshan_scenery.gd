@@ -398,8 +398,9 @@ func _shadow_texture_info(tex: Texture2D) -> Dictionary:
 			# source texel reproduces the clipped edge without changing geometry.
 			var inset := Vector2(0.5 / size.x, 0.5 / size.y)
 			return {"texture": atlas.atlas,
-				"uv": Rect2(atlas.region.position / size + inset, atlas.region.size / size - inset * 2.0)}
-	return {"texture": tex, "uv": Rect2(Vector2.ZERO, Vector2.ONE)}
+				"uv": Rect2(atlas.region.position / size + inset, atlas.region.size / size - inset * 2.0),
+				"content": Rect2(atlas.margin.position / atlas.get_size(), atlas.region.size / atlas.get_size())}
+	return {"texture": tex, "uv": Rect2(Vector2.ZERO, Vector2.ONE), "content": Rect2(Vector2.ZERO, Vector2.ONE)}
 
 
 func _append_mesh_quad(vertices: PackedVector3Array, uvs: PackedVector2Array,
@@ -480,6 +481,9 @@ func _build_ground_shadow_meshes() -> void:
 		if not cast_groups.has(key):
 			cast_groups[key] = {"texture": texture, "quads": []}
 		var rect := Rect2(-size * 0.5, -size * float(shadow.foot), size, size)
+		# Match AtlasTexture canvas padding instead of stretching its sampled cell.
+		var content: Rect2 = info.content
+		rect = Rect2(rect.position + content.position * rect.size, content.size * rect.size)
 		var cast := Transform2D(Vector2(1.0, 0.0), WorldShadow.CAST_SHEAR, WorldShadow.CAST_OFFSET)
 		cast_groups[key].quads.append({"transform": Transform2D(0.0, anchor) * ground * GameMap.ISO_INV * cast,
 			"rect": rect, "uv": info.uv, "alpha": float(shadow.alpha)})

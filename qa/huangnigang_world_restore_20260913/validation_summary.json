@@ -1,0 +1,98 @@
+{
+  "schema": "huangnigang_staged_validation_v1",
+  "staged_validation_complete": true,
+  "single_full_world_run_passed": false,
+  "public_continue_acceptance": false,
+  "steam_release_performed": false,
+  "production_file_count": 2958,
+  "production_manifest_sha256": "ed28278d9ac666be090caa00801f791b4cd8ce2eac664b440d5c19edd5df9d6b",
+  "production_matches_current_checkout": true,
+  "world_qa_source_changes": [
+    "tools/level1_cross_process_qa.gd"
+  ],
+  "foundation_cases": {
+    "freeplay_core": 28,
+    "world_restore": 67,
+    "cross_save": 8,
+    "cross_resume": 18,
+    "level1_component": 46
+  },
+  "world_checks": 425,
+  "route_checks": 258,
+  "route_processes": [
+    {
+      "case": "level1_cross_save",
+      "pid": 21824,
+      "checks": 20,
+      "process_nonce": "5919a0eb0fd94a469019c7748d97a8b8",
+      "started_ns": 45051792325200,
+      "finished_ns": 45103822744800
+    },
+    {
+      "case": "level1_cross_arrival",
+      "pid": 10440,
+      "checks": 50,
+      "process_nonce": "26944eda8dcf4cae97d7bee4b303f65c",
+      "started_ns": 45109245987400,
+      "finished_ns": 45180341861900
+    },
+    {
+      "case": "level1_cross_wine",
+      "pid": 20488,
+      "checks": 50,
+      "process_nonce": "13a9f82d9c98419da151e26e295dac17",
+      "started_ns": 45185959026700,
+      "finished_ns": 45249367856900
+    },
+    {
+      "case": "level1_cross_cargo",
+      "pid": 63984,
+      "checks": 76,
+      "process_nonce": "654cb18347314836abb0c08eb653ea0b",
+      "started_ns": 45254842685800,
+      "finished_ns": 45302727039500
+    },
+    {
+      "case": "level1_cross_finish",
+      "pid": 69480,
+      "checks": 53,
+      "process_nonce": "dc4a99866f4d450dbfe9a0b4850a1ea1",
+      "started_ns": 45308434312000,
+      "finished_ns": 45389867830400
+    },
+    {
+      "case": "level1_terminal_reject",
+      "pid": 45344,
+      "checks": 9,
+      "process_nonce": "da6fa33847734a96951b20959580aa47",
+      "started_ns": 45394994092600,
+      "finished_ns": 45425680874000
+    }
+  ],
+  "classic_checks": 296,
+  "classic_default_complete": true,
+  "receipts": [
+    {
+      "path": "qa/level3_world_restore_20260909/20260913_015956_3bc1fd31/receipt.json",
+      "sha256": "07fe916c887273db25001ee5b9be392aa471334a2ccd3950b5de1b705cf3a9ae",
+      "raw_complete": false
+    },
+    {
+      "path": "qa/level3_world_restore_20260909/20260913_021853_de632b8f/receipt.json",
+      "sha256": "54a7e3a3cbb5ea26cb0a3db1965337a3502ab406b311351e2f6be5fbb9ea65ce",
+      "raw_complete": true
+    },
+    {
+      "path": "qa/continue_flow_20260909/20260913_024947_f6a8c09f/receipt.json",
+      "sha256": "02ce4ff406ac78b2dc640538f357190cdd30c4b11ac15f4427a08d234c74ca0d",
+      "raw_complete": true
+    }
+  ],
+  "limits": [
+    "The full world diagnostic batch remains failed; only named passing foundation cases are reused.",
+    "The complete route run is a subset; its acceptance_complete remains false.",
+    "Death-drop is a positioned component fixture; the six-process route has no actor teleport or stage injection.",
+    "Group formation behavior is not claimed fixed; the successful route uses individual gathering orders.",
+    "No new full 30-wave, six other chapters, live Steam durability, long-run, two-machine/account or human acceptance."
+  ]
+}

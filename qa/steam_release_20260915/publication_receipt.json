@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "status": "published",
+  "recorded_at_utc": "2026-09-15T06:54:21.048977+00:00",
+  "app_id": 5088120,
+  "depot_id": 5088121,
+  "branch": "default",
+  "source_head": "dd4046fdfd398fec43d992cb315982da35de0c2c",
+  "local_candidate_complete": true,
+  "archive_sha256": "80f112a8f1fafebb4bc0ff3c08348385e5c7137a14ea6a5f56a961e0da69532b",
+  "upload_copy": "D:\\CodexTemp\\steam_release_20260915\\upload\\LiangshanHeroes_Steam_candidate.zip",
+  "uploaded": true,
+  "server_verified": true,
+  "default_active": true,
+  "baseline_build_id": "25290621",
+  "baseline_manifest_id": "53262799732835110",
+  "new_build_id": "25316671",
+  "new_manifest_id": "7776799335954834384",
+  "checks": {
+    "native_qa": 185,
+    "package": 1128,
+    "source_identity_probe": 10,
+    "content_identity_probe": 10,
+    "actual_exe_smoke_cases": 11,
+    "packed_recovery": 29
+  },
+  "blocker": null,
+  "handoff_url": "https://partner.steamgames.com/apps/depotuploads/5088120",
+  "scope_limits": [
+    "No Steam client download/persistence or human playtest acceptance.",
+    "No unrelated Steamworks settings, macOS depot, store edits or announcement published."
+  ],
+  "observations": [
+    "Logged-in build page showed default Build25290621 / Windows Manifest53262799732835110.",
+    "Standard Windows upload form found; file input remained empty after documented file chooser attempts.",
+    "Upload was not clicked with an empty input.",
+    "After user reported upload complete, builds page showed new Build25316671 linked to Windows Manifest7776799335954834384.",
+    "All six server manifest names, byte sizes and SHA1 hashes matched the verified candidate.",
+    "Default preview changed only Windows Depot5088121 from Build25290621; estimated update download 5.7 MB.",
+    "Requested activation from the preview page; after the confirmation transition Steam showed success and default Build25316671 with the verified manifest.",
+    "No mobile-confirmation requirement was observed before the final successful readback."
+  ],
+  "activation_requested": true,
+  "estimated_update_download": "5.7 MB",
+  "server_manifest_url": "https://partner.steamgames.com/apps/depotmanifest/5088120/5088121/7776799335954834384",
+  "server_members": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68",
+      "matches_candidate": true
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 322105960,
+      "sha1": "79985128f45874eae95e2c56660cbd9edfc27114",
+      "matches_candidate": true
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda",
+      "matches_candidate": true
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28",
+      "matches_candidate": true
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 352768,
+      "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba",
+      "matches_candidate": true
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2",
+      "matches_candidate": true
+    }
+  ],
+  "server_size_on_disk_bytes": 326741403,
+  "server_compressed_bytes": 250198816,
+  "live_readback_url": "https://partner.steamgames.com/apps/builds/5088120?submittedbuild=25316671",
+  "platform_success_message": "生成版本 25316671 现已面向分支“default”上的玩家上线。",
+  "unchanged_other_branches": {
+    "macos": "0",
+    "steam-integration": "25179481"
+  }
+}

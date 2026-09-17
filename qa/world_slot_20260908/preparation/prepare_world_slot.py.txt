@@ -1,0 +1,101 @@
+from pathlib import Path
+import json,hashlib,difflib,base64
+root=Path.cwd(); out=root/'scratchpad/world_slot_20260908'; out.mkdir(exist_ok=True)
+(out/'.gdignore').write_text('\n')
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+s=(root/'scripts/steam_receipt_store.gd').read_text(encoding='utf-8')
+s=rep(s,'## Independent local Steam run receipts, outside the battle save slot.\n## Retains the latest two complete snapshots, including all run tombstones.', '## Shared two-snapshot file transaction, independent of the document model.\n## Only trusted script subclasses define the envelope and document validator.')
+s=rep(s,'const Receipt = preload("res://scripts/steam_run_receipt.gd")\n','')
+s=s.replace('Receipt.new()._owner(owner)','_valid_owner(owner)').replace('Receipt.new()._token(metadata.token)','_valid_token(metadata.token)')
+s=s.replace('value.magic != "LH_STEAM_RUN_SNAPSHOTS"','value.magic != _magic()').replace('"magic": "LH_STEAM_RUN_SNAPSHOTS"','"magic": _magic()')
+s=s.replace('count > MAX_BYTES','count > _byte_limit()')
+a='''	var model := Receipt.new()
+	var opened: Dictionary = model.open_record(document_parser.data, owner)
+	if not opened.ok: return opened
+	if JSON.stringify(model.capture()) != value.payload: return bad("NONCANONICAL_RECORD")
+	if int(model.capture().generation) + 1 != int(value.revision): return bad("DOCUMENT_REVISION")
+	return {"ok": true, "revision": int(value.revision), "previous": value.previous_sha256, "document": model.capture(), "file_sha256": raw.sha256_text(), "payload_sha256": value.payload_sha256}'''
+b='''	var opened := _validate_document(document_parser.data)
+	if not opened.ok: return opened
+	if JSON.stringify(opened.document) != value.payload: return bad("NONCANONICAL_RECORD")
+	if int(opened.revision) != int(value.revision): return bad("DOCUMENT_REVISION")
+	return {"ok": true, "revision": int(value.revision), "previous": value.previous_sha256, "document": opened.document, "file_sha256": raw.sha256_text(), "payload_sha256": value.payload_sha256}'''
+s=rep(s,a,b)
+s=rep(s,'\tvar file := FileAccess.open(path, FileAccess.WRITE)','\tif raw.to_utf8_buffer().size() > _byte_limit(): return bad("WRITE_SIZE")\n\tvar file := FileAccess.open(path, FileAccess.WRITE)')
+s+='''
+func _magic() -> String:
+	return "LH_UNCONFIGURED_SNAPSHOT"
+
+func _byte_limit() -> int:
+	return MAX_BYTES
+
+func _validate_document(_value: Variant) -> Dictionary:
+	return bad("DOCUMENT_MODEL_REQUIRED")
+
+func _valid_owner(value: Variant) -> bool:
+	if typeof(value) != TYPE_STRING or value.length() < 1 or value.length() > 20 or value.begins_with("0"): return false
+	for c in value.to_utf8_buffer():
+		if c < 48 or c > 57: return false
+	return value.length() < 20 or value <= "18446744073709551615"
+
+func _valid_token(value: Variant) -> bool:
+	if typeof(value) != TYPE_STRING or value.length() != 32: return false
+	for c in value.to_utf8_buffer():
+		if not (c >= 48 and c <= 57) and not (c >= 97 and c <= 102): return false
+	return true
+'''
+(out/'run_snapshot_store.gd').write_text(s,encoding='utf-8',newline='\n')
+(out/'steam_receipt_store.gd').write_text('''extends "res://scripts/run_snapshot_store.gd"
+## Steam receipt specialization. File layout and envelope remain version 1.
+const Receipt = preload("res://scripts/steam_run_receipt.gd")
+
+func _magic() -> String:
+	return "LH_STEAM_RUN_SNAPSHOTS"
+
+func _validate_document(value: Variant) -> Dictionary:
+	var model := Receipt.new()
+	var opened: Dictionary = model.open_record(value, owner)
+	if not opened.ok: return opened
+	return {"ok": true, "document": model.capture(), "revision": int(model.capture().generation) + 1}
+''',encoding='utf-8',newline='\n')
+legacy=root/'qa/steam_ledger_20260908/runs/overlay_20260908T014855Z_09dbe1e9/fixtures/normal/5088120/76561198000000001'
+rows=[{'name':p.name,'base64':base64.b64encode(p.read_bytes()).decode(),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(legacy.glob('record_*.json'))]
+assert len(rows)==2
+ledger=(root/'qa/steam_ledger_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+ledger=rep(ledger,'\tvar long_lived := fresh("user://ledger_qa/long")','\tlegacy_bytes_case()\n\tvar long_lived := fresh("user://ledger_qa/long")')
+ledger+='''
+func legacy_bytes_case() -> void:
+	var path := "user://ledger_qa/legacy"
+	var directory := ProjectSettings.globalize_path(path).path_join("5088120").path_join(ACCOUNT)
+	DirAccess.make_dir_recursive_absolute(directory)
+	var rows: Array = JSON.parse_string(LEGACY_ROWS_LITERAL)
+	for row in rows:
+		var file := FileAccess.open(directory.path_join(row.name), FileAccess.WRITE)
+		file.store_buffer(Marshalls.base64_to_raw(row.base64)); file.flush(); file.close()
+		check("legacy fixture exact old bytes " + row.name, FileAccess.get_sha256(directory.path_join(row.name)) == row.sha256)
+	var before := folder_hashes(directory)
+	var ledger := Ledger.new()
+	if not ok("previous production receipts open unchanged", ledger.open(ACCOUNT, {}, {}, path)): return
+	check("legacy open does not rewrite files", folder_hashes(directory) == before)
+	var record: Dictionary = ledger.capture().record
+	check("previous correction and two tombstones preserved", record.stats.TOTAL_KILLS == 2 and record.runs.size() == 2)
+	for token in record.runs: check("previous terminal stays closed " + token, not ledger.can_resume(token, ACCOUNT, record.runs[token].context).ok)
+	var started: Dictionary = ledger.begin_run(CONTEXT)
+	if ok("new run after legacy open", started):
+		ok("new progress after legacy open", ledger.progress(started.token, CONTEXT, 7))
+		check("legacy progress composes with new run", ledger.capture().record.stats.TOTAL_KILLS == 9 and ledger.capture().record.runs.size() == 3)
+		check("legacy upgrade retains two snapshots", DirAccess.open(directory).get_files().size() == 2)
+'''.replace('LEGACY_ROWS_LITERAL',json.dumps(json.dumps(rows)))
+(out/'driver_ledger.gd').write_text(ledger,encoding='utf-8',newline='\n')
+names=['run_snapshot_store.gd','steam_receipt_store.gd','run_slot_store.gd','run_world_session.gd']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+if all((out/n).exists() for n in names+['driver.gd']):
+    rows=[]
+    for n in names:
+        p=root/'scripts'/n; row={'path':'scripts/'+n,'before_exists':p.exists(),'candidate':out.relative_to(root).as_posix()+'/'+n,'candidate_sha256':sha(out/n)}
+        if p.exists(): row['before_raw_sha256']=sha(p)
+        rows.append(row)
+    (out/'overlay_manifest.json').write_text(json.dumps({'files':rows},indent=2)+'\n')
+    (out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names+['driver.gd','driver_ledger.gd','overlay_manifest.json']}},indent=2)+'\n')
+    print(sha(out/'freeze.json'))

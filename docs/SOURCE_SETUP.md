@@ -1,3 +1,635 @@
+## 2026-09-17 Steam 发布入口
+
+Windows Steam 更新的完整操作顺序、六文件白名单、候选冻结、SteamCMD VDF 示例、`default/public` 回读、四语公告、客户端验收和回滚统一见 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)。开始任何新批次前仍须阅读最新 `docs/STEAM_UPDATE_<日期>.md` 与 `qa/steam_release_<日期>/README.md`；指南描述流程，不代表历史候选已经上传或当前仍是线上版本。
+
+本项目的标准候选入口继续是：先运行 `tools/run_steam_integration_qa.py --native ... --run`，再将成功收据传给 `tools/build_steam_candidate.py --qa-run ... --run`。候选完成不等于获得 Steam 发布授权，也不等于已上传或上线。
+
+## 2026-09-16 梁山核心人物头像统一
+
+新增网页原生 `assets/characters/art_full_20260916/liangshan_core_portraits_source_20260916.png`（1254×1254 RGB 2×2 图集）和同源提示词。`tools/intake_liangshan_core_portraits_20260916.py` 按固定四象限裁切、2× LANCZOS 缩放，输出晁盖、鲁智深、武松、公孙胜四张 1254×1254 独立头像；源图像素完整保留，不镜像、不重绘、不清除背景。
+
+`scripts/art_db.gd` 的 `STANDALONE_PORTRAITS` 已优先接入四张新图，图鉴和 HUD 读取同一来源。`tools/liangshan_core_portraits_contract.py`（28/28）、`tools/liangshan_core_portraits_runtime_contract.gd`（13/13）及全库美术导入/库存回归（321/321）通过。原始图、提示词、裁切清单和 QA 收据见 `assets/characters/art_full_20260916/`、`qa/character_identity_20260916/`。
+
+## 2026-09-16 梁山水泊蒲苇场景统一
+
+新增网页原生 `assets/campaign/environment/art_scene_20260916/liangshan_reeds_source_20260916.png`（1254×1254 RGBA）和提示词。`tools/intake_liangshan_reeds_20260916.py` 按固定来源区域把左上短蒲苇、右上高蒲苇、左下风压弯蒲苇、右下成熟带穗蒲苇裁切并确定性缩放到既有 Level 5 四个 512×512 路径；只对 `0<alpha<=3` 近透明像素改 RGB，alpha 和不透明图像保持不变。
+
+`tools/liangshan_reeds_contract.py`（32/32）、`tools/liangshan_reeds_runtime_contract.gd`（24/24）与全库 `tools/run_art_full_qa.py --run`（321/321）均通过。运行时校准已绑定新 SHA，四种形态仍由关卡路由单独取用；本批不改玩法或 Steam。无头会话未生成新的 Level 5 图形捕获，窗口化场景目检仍需补做。
+
+## 2026-09-16 投石车四向攻击原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260916/siege_cata_attack_direction4_source.png`，生产图由 `tools/siege_cata_attack_atlas_scale.py` 对原图做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列为蓄力→上扬→释放→回稳。四份 `assets/anim/siege_cata_attack_{se,sw,ne,nw}.tres` 只引用固定 AtlasTexture 格、透明补边和 `filter_clip`，不镜像、不补画、不抹像素。
+
+复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/siege_cata_attack_atlas_scale.py
+py -3 -X utf8 -B tools/siege_cata_attack_direction4_contract.py --output qa/siege_cata_attack_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/siege_cata_attack_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_siege_cata_attack_20260916_r1
+```
+
+静态契约 128/128、Godot 路由 128/128、全库美术导入/库存回归 complete=true。原始来源、提示词 SHA、生产 SHA 和固定格清单见 `assets/direction4/siege_cata_attack_20260916.json`；QA 收据见 `qa/siege_cata_attack_direction4_20260916/README.md`。本批未改玩法、镜头、导出包或 Steam。
+
+## 2026-09-16 官军精骑四向受击原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260916/guan_jingqi_hurt_direction4_source.png`，生产图由 `tools/guan_jingqi_hurt_atlas_scale.py` 对原图做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列为稳坐警戒→后仰→马身侧倾→回稳。四份 `assets/anim/guan_jingqi_hurt_{se,sw,ne,nw}.tres` 只引用固定 AtlasTexture 格、透明补边和 `filter_clip`，不镜像、不补画、不抹像素。
+
+复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/guan_jingqi_hurt_atlas_scale.py
+py -3 -X utf8 -B tools/guan_jingqi_hurt_direction4_contract.py --output qa/guan_jingqi_hurt_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/guan_jingqi_hurt_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_guan_jingqi_hurt_20260916_r1
+```
+
+静态契约 128/128、Godot 路由 128/128、全库美术导入/库存回归 complete=true。原始来源、提示词 SHA、生产 SHA 和固定格清单见 `assets/direction4/guan_jingqi_hurt_20260916.json`；QA 收据见 `qa/guan_jingqi_hurt_direction4_20260916/README.md`。本批未改玩法、镜头、导出包或 Steam。
+
+## 2026-09-16 官军弓手四向受击原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260916/guan_gong_hurt_direction4_source.png`，生产图由 `tools/guan_gong_hurt_atlas_scale.py` 对原图做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列为持弓警戒→后仰→踉跄→回稳。四份 `assets/anim/guan_gong_hurt_{se,sw,ne,nw}.tres` 只引用固定 AtlasTexture 格、透明补边和 `filter_clip`，不镜像、不补画、不抹像素。
+
+复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/guan_gong_hurt_atlas_scale.py
+py -3 -X utf8 -B tools/guan_gong_hurt_direction4_contract.py --output qa/guan_gong_hurt_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/guan_gong_hurt_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_guan_gong_hurt_20260916_r1
+```
+
+静态契约 128/128、Godot 路由 128/128、全库美术导入/库存回归 complete=true。原始来源、提示词 SHA、生产 SHA 和固定格清单见 `assets/direction4/guan_gong_hurt_20260916.json`；QA 收据见 `qa/guan_gong_hurt_direction4_20260916/README.md`。本批未改玩法、导出包或 Steam。
+
+## 2026-09-16 官军刀盾兵四向受击原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260916/guan_dao_hurt_direction4_source.png`，生产图由 `tools/guan_dao_hurt_atlas_scale.py` 对原图做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列为警戒→后仰→踉跄→回稳。四份 `assets/anim/guan_dao_hurt_{se,sw,ne,nw}.tres` 只引用固定 AtlasTexture 格、透明补边和 `filter_clip`，不镜像、不补画、不抹像素。
+
+复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/guan_dao_hurt_atlas_scale.py
+py -3 -X utf8 -B tools/guan_dao_hurt_direction4_contract.py --output qa/guan_dao_hurt_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/guan_dao_hurt_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_guan_dao_hurt_20260916_r1
+```
+
+静态契约 128/128、Godot 路由 128/128、全库美术导入/库存回归 complete=true。原始来源、提示词 SHA、生产 SHA 和固定格清单见 `assets/direction4/guan_dao_hurt_20260916.json`；QA 收据见 `qa/guan_dao_hurt_direction4_20260916/README.md`。本批未改玩法、导出包或 Steam。
+
+## 2026-09-16 陆谦四向受击与死亡原图
+
+新增两张网页原生 4×4 RGBA 图：`assets/characters/art_full_20260916/lu_qian_hurt_direction4_source.png` 与 `lu_qian_death_direction4_source.png`。生产图只做确定性整图 2× LANCZOS 缩放到 2508×2508；四行固定 SE/SW/NE/NW、四列分别为受击或死亡过程。四份 hurt 和四份 death TRES 固定引用对应原图，启用 `filter_clip=true`、真实方向元数据和非镜像路由。
+
+复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/lu_qian_hurt_direction4_contract.py --output qa/lu_qian_hurt_direction4_20260916/contract.json
+py -3 -X utf8 -B tools/lu_qian_death_direction4_contract.py --output qa/lu_qian_death_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/lu_qian_hurt_direction4_runtime_qa.gd 与 tools/lu_qian_death_direction4_runtime_qa.gd
+```
+
+两份静态契约各126项、Godot 路由运行时各128项通过。原始来源、提示词 SHA、生产 SHA 和固定格清单见 `assets/direction4/lu_qian_{hurt,death}_20260916.json`。本批未改玩法、导出包或 Steam。
+
+## 2026-09-16 梁山水泊树木场景统一
+
+新增网页端原生环境图集 `assets/campaign/environment/art_scene_20260916/liangshan_trees_source_20260916.png`（1254×1254 RGBA），由 `tools/intake_liangshan_trees_20260916.py` 固定裁切到既有 Level 5 三个 512×512 PNG 接口；幼树象限先裁掉相邻格溢出的透明外像素，未清除自身像素。`tools/liangshan_trees_contract.py` 负责来源、alpha、尺寸、SHA和运行时路径检查，21/21 通过；`scripts/campaign_environment_art.gd` 三项校准绑定新生产图哈希。
+
+## 2026-09-16 黄泥冈松林场景统一
+
+新增网页端原生环境图集 `assets/campaign/environment/art_scene_20260916/huangnigang_pines_source_20260916.png`（1254×1254 RGBA），并由 `tools/intake_huangnigang_pines_20260916.py` 固定裁切到既有 `level1` 三个 512×512 PNG 接口；没有镜像、重绘、抠像或清理像素。`tools/huangnigang_pines_contract.py` 负责来源、alpha、尺寸、SHA和运行时路径检查，21/21 通过。图集提示词与会话保存在 `qa/art_scene_20260916/prompt.txt` 和清单中；图形捕获及 Level 1 场景验证也在同一 QA 目录。
+
+## 2026-09-15 图集采样边界修复
+
+美术运行时切片入口已为头像、地形、剧情变体、旧条带、四向动作和死亡残留启用 `AtlasTexture.filter_clip`，防止缩放时跨格采样。生产 PNG 与来源清单没有变化；本地验证入口与边界见 [采样修复 QA](../qa/art_sampling_clip_20260915/README.md)。
+
+```powershell
+py -3 -X utf8 -B tools/art_sampling_clip_selftest.py --out scratchpad/art_full_continue/art_sampling_clip_selftest.json
+py -3 -X utf8 -B tools/art_full_source_contract.py --output scratchpad/art_full_continue/source_contract.json
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r3
+```
+
+最后一条命令在工程外建立私有源码/profile 并串行执行 Godot 导入与全库库存渲染；它不操作玩家存档、生产 PNG、导出物或 Steam 状态。`--run` 以外只做源文件/契约检查。
+
+## 2026-09-15 陆谦四向待机身体原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/lu_qian_direction4.png` 及四份 idle SpriteFrames。四向资源由 `assets/direction4/lu_qian_20260915.json` 记录固定格、来源会话、提示词 SHA 和原图 SHA；运行时只识别 idle，其他动作状态仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/lu_qian_idle_direction4_contract.py --output qa/lu_qian_idle_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/lu_qian_idle_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r4
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
+
+## 2026-09-15 陆谦四向攻击原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260915/lu_qian_attack_direction4_source.png`，并以确定性整图 2 倍缩放得到 2508×2508 的生产图 `lu_qian_attack_direction4.png`；四行固定 SE/SW/NE/NW、四列依次为收刀、挥砍、伸展、收势。四向资源由 `assets/direction4/lu_qian_attack_20260915.json` 记录原图/生产图哈希、缩放步骤、固定格、来源会话和提示词 SHA；运行时只识别 attack，hurt 按既有规则回退 idle，death 仍为空。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/lu_qian_attack_atlas_scale.py
+py -3 -X utf8 -B tools/lu_qian_attack_direction4_contract.py --output qa/lu_qian_attack_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/lu_qian_attack_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r8
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
+
+## 2026-09-15 陆谦四向行走原图
+
+新增网页原生 4×4 RGBA 图 `assets/characters/art_full_20260915/lu_qian_walk_direction4_source.png`，并以确定性整图 2 倍缩放得到 2508×2508 的生产图 `lu_qian_walk_direction4.png`；四行固定 SE/SW/NE/NW、四列为步态循环。四向资源由 `assets/direction4/lu_qian_walk_20260915.json` 记录原图/生产图哈希、缩放步骤、固定格、来源会话和提示词 SHA；运行时只识别 walk，attack/hurt/death 仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/lu_qian_walk_atlas_scale.py
+py -3 -X utf8 -B tools/lu_qian_walk_direction4_contract.py --output qa/lu_qian_walk_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/lu_qian_walk_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r7
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用陆谦自身原图和独立状态来源。
+
+## 2026-09-15 祝朝奉四向行走原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_walk_direction4_source.png` 及确定性 2×生产图 `zhu_zhaofeng_walk_direction4.png`，并接入四份 walk SpriteFrames。四向资源由 `assets/direction4/zhu_zhaofeng_walk_20260915.json` 记录固定格、来源会话、提示词 SHA、原图 SHA 和生产变换；运行时只识别 walk，attack/hurt/death 仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_walk_direction4_contract.py --output qa/zhu_zhaofeng_walk_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_walk_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r9
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用祝朝奉自身原图和独立状态来源。
+
+## 2026-09-16 祝朝奉四向死亡原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_death_direction4_source.png` 及确定性生产图 `zhu_zhaofeng_death_direction4.png`，并接入四份 death SpriteFrames。原始网页画布为 1230×1278，缩放脚本先将全部像素居中放入 1278×1278 透明画布，再做一次 LANCZOS 缩放；四向资源由 `assets/direction4/zhu_zhaofeng_death_20260915.json` 记录固定格、来源会话、提示词 SHA、原图 SHA 和画布归一化方式。运行时只识别 death，序列为非循环。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_death_direction4_contract.py --output qa/zhu_zhaofeng_death_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_death_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260916_r12
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；陆谦受击/死亡仍需使用其自身原图和独立状态来源。
+
+## 2026-09-16 祝朝奉四向受击原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_hurt_direction4_source.png` 及确定性生产图 `zhu_zhaofeng_hurt_direction4.png`，并接入四份 hurt SpriteFrames。原始网页画布为 1230×1278，缩放脚本先将全部像素居中放入 1278×1278 透明画布，再做一次 LANCZOS 缩放；四向资源由 `assets/direction4/zhu_zhaofeng_hurt_20260915.json` 记录固定格、来源会话、提示词 SHA、原图 SHA 和画布归一化方式。运行时只识别 hurt，death 仍按缺图规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_hurt_direction4_contract.py --output qa/zhu_zhaofeng_hurt_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_hurt_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260916_r11
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用祝朝奉自身原图和独立状态来源。
+
+## 2026-09-16 祝朝奉四向攻击原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_attack_direction4_source.png` 及确定性生产图 `zhu_zhaofeng_attack_direction4.png`，并接入四份 attack SpriteFrames。原始网页画布为 1230×1278，缩放脚本先将全部像素居中放入 1278×1278 透明画布，再做一次 LANCZOS 缩放；四向资源由 `assets/direction4/zhu_zhaofeng_attack_20260915.json` 记录固定格、来源会话、提示词 SHA、原图 SHA 和画布归一化方式。运行时只识别 attack，hurt/death 仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_attack_direction4_contract.py --output qa/zhu_zhaofeng_attack_direction4_20260916/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_attack_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260916_r10
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用祝朝奉自身原图和独立状态来源。
+
+## 2026-09-15 祝朝奉四向待机身体原图
+
+新增网页原生 RGBA 图 `assets/characters/art_full_20260915/zhu_zhaofeng_direction4.png`、同源头像和四份 idle SpriteFrames。四向资源由 `assets/direction4/zhu_zhaofeng_20260915.json` 记录固定格、来源会话、提示词 SHA 和原图 SHA；运行时只识别 idle，其他动作状态仍按缺图回退规则处理。复现检查：
+
+```powershell
+py -3 -X utf8 -B tools/zhu_zhaofeng_portrait_crop.py
+py -3 -X utf8 -B tools/zhu_zhaofeng_idle_direction4_contract.py --output qa/zhu_zhaofeng_idle_direction4_20260915/contract.json
+# 私有 Godot 运行：tools/zhu_zhaofeng_idle_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_continue_20260915_r6
+```
+
+这批没有改玩法数值、玩家存档、导出包或 Steam 状态；继续补动作时必须使用祝朝奉自身原图和独立状态来源。
+
+## 2026-09-15 Steam美术更新准备与酒幌导出校准修复
+
+用户授权发布本次美术与镜头更新并配原画公告。首个包内专项发现酒幌原字节校准不兼容导出；已增加等价的纹理像素及图集几何校验，源码321项通过，继续发行包验证。见[更新记录](STEAM_ART_UPDATE_20260915.md)。
+
+Steam 收尾状态：Windows Depot 5088121 已提交为 Build 25320696 / Manifest 1900491985471109610；四语原画公告 Event 714538122294068644 已公开。default 分支切换待 Steam 手机验证器确认，macOS 未改；完整收据见 `qa/steam_art_release_20260915/`。
+
+## 2026-09-15 全库美术盘点与网页原生环境补图
+
+新增5张网页RGBA原图与32份受关卡限制的环境资源，涵盖地面/田边、酒肆/主酒楼、酒幌、市镇和翠云楼；董超、薛霸新增独立头像并接通同角色既有四向待机/行走，官军战船通用图标改用船图。酒幌文字与美术分开，名称血条置于新建筑上方，图集投影保留画布边距。
+
+隔离引擎321项、来源契约192项通过；全库187定义、八关实景、图鉴、菜单与图标页留档82张截图，其中20张逐图目检；当前基线回归另321项通过、零漂移，原始证据分批保留。原生来源、精确验证结果与未完成台账见[全库美术完善](ART_FULL_20260915.md)和[QA记录](../qa/art_full_20260915/README.md)。当前RTS祝家庄门墙沿用既有对齐素材；全库动作、旧头像、地形细节和实战特效仍有缺口，不宣布整体美术完成。本轮仅开发源码同步，不发布Steam。
+
+## 2026-09-15 刽子手四向基础动作与肖像
+
+本批补齐高频普通单位刽子手：8张原生透明动作图、32个独立姿态、20份四向站立/行走/攻击/受击/死亡资源，并统一图鉴和HUD肖像。新动画仅对本角色优先采用，玩法属性未改。动作仍是低帧基础版，后续可补交替步与劈刀接触过渡。
+
+最终隔离Godot检查644项、来源切片258项及共享路由8项通过；27张截图留档，其中11张经代理逐图目检。全库覆盖和真人手感另计，本批未发布Steam。详见[实现](CHARACTER_ART_20260915.md)、[QA与复现](../qa/character_art_20260915/README.md)。素材、来源和交接按既定stable分支白名单同步。
+
+## 2026-09-15 四语补丁说明已公开，发布流程固定
+
+为 Build25316671 补发“祝家庄补员引导与定位改进”小型更新，公开条目714538122294068600的简中、繁中、英语、日语标题及六段正文均已回读。用户要求每次发布都写补丁说明，已写入根AGENTS.md：以后授权Steam发布时同步完成四语说明，无需另问；同一构建避免重复发布。详见[补丁说明记录](STEAM_PATCH_NOTES_20260915.md)及[公开验证](../qa/steam_patchnotes_20260915/README.md)。
+
+## 2026-09-15 Windows Steam：祝家庄补员更新已上线
+
+用户上传后完成服务器六文件名称/大小/SHA1核对并上线，Steam成功提示与default均为 **Build25316671 / Manifest7776799335954834384**，预计增量下载5.7 MB。固定生产来源dd4046fd，185项原生、1128项包内、20项身份、29项包内补员和11例实际EXE短测通过。构建上线阶段未修改其他分支或Steamworks设置；四语补丁说明随后补发，见上方记录。客户端更新与真人试玩仍为独立验收。详见[更新说明](STEAM_UPDATE_20260915.md)及[发布记录](../qa/steam_release_20260915/README.md)。
+
+## 2026-09-15 祝家庄恢复引导验证入口
+
+新增普通兵损失后的四语补员提示与主动定位，普通启动方式不变。[实现](ZHUJIAZHUANG_RECOVERY_20260915.md) · [验证结果与限制](../qa/zhujiazhuang_recovery_20260915/README.md)。
+
+```powershell
+py -3 -X utf8 -B tools/run_zhujiazhuang_recovery_qa.py --work-root D:/CodexTemp/zhu_recovery --min-png 3 --run
+```
+
+省略`--run`只读预检；引擎从`--godot`、`GODOT_PATH`或忽略的`godot.local.txt`读取。驱动使用当前Git基线加本轮六文件白名单，独立源码及APPDATA/LOCALAPPDATA/TEMP/TMP、禁用Steam、共享引擎锁；全新导入后串行解析与原生验证。窗口不可聚焦且移至屏幕外，截图来自实际渲染。此入口不会纳入其他未提交生产改动，也不执行玩家存档或Steam发布。
+
+## 2026-09-14 玩法设计评审入口
+
+现行依据为[玩法方向定稿](GAMEPLAY_DIRECTION_20260914.md)，三份调研作历史参考；关卡分配与祝家庄样板沿用既有说明。七条按需组合，短篇突出人物、智谋与关键操作，设计公式可软化，质量底线仍须验收。现有[打磨路线](POLISH_ROADMAP_20260906.md)与[首次试玩清单](PLAYTEST_CHECKLIST_20260906.md)继续承担执行和验收记录。
+
+本次仅入档，普通 Play.cmd、构建及 QA 启动方式不变。文档核验范围见[归档记录](../qa/gameplay_direction_20260914/README.md)。
+
+## 2026-09-14 Windows Build25290621与四语公告已公开
+
+用户完成手机确认后，Steam成功提示与default分支均回读为 **25290621**；Windows Depot5088121 / Manifest **53262799732835110**。服务器六文件名称、大小和SHA1匹配固定来源50558b05候选，预估更新下载28.1 MB。此前185原生、1126包内、20身份、449图鉴和11例EXE短测证据保持原范围。
+
+随后按用户要求公开[角色与图鉴更新公告](https://store.steampowered.com/news/app/5088120/view/714538122294068252)（Event714538122294068252，2026-09-14 09:26 HKT，定期更新）。简中、繁中、英语、日语保存16字段和公开64文本片段全部匹配；使用既有无文字封面，英语槽供三语回退。详见[公告交接](STEAM_ANNOUNCEMENT_20260914.md)、[发布收据](../qa/steam_release_20260914/publication_receipt.json)。四人美术为首批，战斗中途保存/继续仍隐藏；库曝光、客户端下载和真实Steam持久测试未在此轮追加验收。普通启动方式不变。
+
+## 2026-09-14 图鉴四人肖像与四向预览验证入口
+
+已接入四人独立肖像、四向动作与稳定取景；下方旧记录所述图鉴缺口由本批取代。[实现](CODEX_IDENTITY_IMPLEMENTATION_20260913.md) · [证据和限制](../qa/codex_identity_20260913/README.md)。普通 Play.cmd 启动方式不变。
+
+从项目根执行，工作目录占位须替换为工程外可写路径。引擎继续通过 godot.local.txt、GODOT_PATH 或 --godot 提供：
+
+```powershell
+py -3 -X utf8 -B tools/run_codex_identity_qa.py --repo . --work-root "X:/QA/codex_identity" --timeout 240 --run
+```
+
+默认串行运行导入、headless和原生图形验证，独立源码/profile并使用共享Godot锁；图形窗口位于20000,20000且不可聚焦，没有Computer Use输入。默认不复用缓存；显式 --cache-from 必须指向驱动可校验的先前成功导入批，并按缓存批记录。--headless-only 仅用于诊断，不代表画面通过。四个PNG保留1254原图，受控Godot导入为1024，.import描述符随源码同步。新增界面词条沿现有 build_localization.py / OpenCC 0.1.7 标准生成。
+
+## 2026-09-13 角色身份和图鉴制作入口
+
+后续美术按[角色辨识与图鉴标准](CHARACTER_IDENTITY_CODEX_20260913.md)先核对人物身份、原著依据与图鉴展示。源码入口为`scripts/codex.gd`、`scripts/art_db.gd`、`scripts/bios.gd`、`scripts/lore_data.gd`；当前图鉴动作未传方向，AnimBox亦未采用战斗脚锚/尺度元数据，后续修改须单独原生验证。本轮仅文档核对，普通`Play.cmd`、资源和验证驱动不变。
+
+## 2026-09-13 孙立与扈三娘美术验证入口：最终原生结果通过
+
+两人各32姿态、20份四向基础动画已接入：孙立11张原生PNG、扈三娘9张；来源审计380项与259项通过。孙立保留相对补图补偿并移除全局1.35放大；扈三娘SW行走的区域/补边尺寸改为整数，构建器增加相应守卫。游戏规则不变，普通启动仍使用`Play.cmd`。[实现、来源和边界](CHARACTER_ART_20260913.md) · [原生QA记录](../qa/character_art_20260913/README.md)。最终180852批已扈三娘609项、孙立651项、共享路由8项通过；3054份冻结来源和64份归档文件核对当前一致，详见QA联合核验。
+
+从项目根目录运行下列命令；`X:/QA/character_art`只是工程外绝对路径占位，须换成本机实际可写短路径。Godot仍通过被忽略的`godot.local.txt`、`GODOT_PATH`或`--godot`提供。
+
+```powershell
+py -3 -X utf8 -B tools/run_character_art_qa.py --repo . --manifest hu_sanniang=assets/direction4/hu_sanniang_20260913.json --manifest sun_li=assets/direction4/sun_li_20260913.json --work-root "X:/QA/character_art" --shared-checks --run
+```
+
+默认使用图形原生窗口，位置为`20000,20000`并设为不可聚焦，不通过Computer Use注入输入；角色操作由隔离QA自身执行。可用`--cache-from "<已有来源收据的私有导入批目录>"`复用经驱动核对的资源缓存，必须保留复用来源，不把缓存批称为全新导入；`--headless`只检查资源和行为，不代表画面验收。各角色与共享检查由单一驱动串行运行，本轮不改变玩家入口、正常Play或Steam包。
+
+## 2026-09-13 黄泥冈入场反馈验证入口：四批相关验证及联合核验通过
+
+普通启动仍为`Play.cmd`，Godot由被忽略的`godot.local.txt`、`GODOT_PATH`或`--godot`参数提供。本轮修改押队分散停靠及白胜在盘问后自动挑酒、停稳落担；手动命令会永久取消本次自动控制，玩家仍可右键落担标记继续。[实现和旧规则取代范围](HUANGNIGANG_FEEDBACK_20260913.md)。
+
+玩法驱动新增`--evidence-group huangnigang_feedback_20260913`，例如`py -3 -X utf8 -B tools/run_campaign_feedback_qa.py --run --cases arrival huangnigang --evidence-group huangnigang_feedback_20260913 --work-root "<本机绝对短路径>/gameplay"`。最终134926玩法批181项已通过；八关Level组件、黄泥冈组件/六进程和同版经典命令见[本轮QA入口](../qa/huangnigang_feedback_20260913/README.md)。四批串行，分别使用私有工程/玩家目录；世界专项明确以`--cache-from`复用本机134926玩法工程缓存，不能把该子集称作全新默认通过。已有游戏或Godot占用时应由独占检查拒绝，不能绕过保护。
+
+本轮玩法134926批181项、Level组件全新140508批207项、缓存七用例世界140919批309项、同版全新经典141759批296项及[四批联合核验](../qa/huangnigang_feedback_20260913/validation_summary.json)均通过；完整四参数联合命令见[本轮QA入口](../qa/huangnigang_feedback_20260913/README.md)。本轮覆盖相关专项，未重跑默认37用例完整世界验收；旧2811项世界/296项经典结论按原冻结版本阅读。保存/继续玩家入口仍隐藏，本轮未重构建或发布Steam。
+
+## 2026-09-13 快活林内部里程碑与完整复现入口
+
+当前默认世界驱动已包含快活林，共37用例。[110348_38bd4cf4全新世界收据](../qa/level3_world_restore_20260909/20260913_110348_38bd4cf4/receipt.json)确认2811项通过（1628 + 789 + 394），完整/fresh/acceptance/UID标志均true；[114838_3ea9d869全新默认经典](../qa/continue_flow_20260909/20260913_114838_3ea9d869/receipt.json)已296项通过、退出0。联合核验确认2966份生产文件与两批及当前checkout同SHA，世界12份/经典4份QA来源匹配，快活林15张与经典16张PNG的SHA通过；人工目检范围仅3+2张代表画面。[联合结果](../qa/kuaihuolin_world_restore_20260913/validation_summary.json) · [实现与边界](KUAIHUOLIN_WORLD_RESTORE_20260913.md) · [两批及联合复现命令](../qa/kuaihuolin_world_restore_20260913/README.md)。
+
+普通启动仍用`Play.cmd`；Godot路径由被忽略的`godot.local.txt`、`GODOT_PATH`或驱动参数提供。默认完整世界命令为`py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root "<本机绝对短路径>" --run`，不传`--cases`或`--cache-from`；经典以`tools/run_continue_flow_qa.py`另选私有短目录串行执行。导入上限600秒，快活林各用例420秒；两批及联合核验已完成，无需为交接重复运行。
+
+`PLAYER_ENTRY=false`，本轮未打包发布Steam。验证基线`34200d967f989a80a4cea47c0550753fc37ca70f`，最终源码同步以本轮提交与远端回读为准。后续连环马候选仅隔离准备，未计入当前37用例；高俅、大名府及统一交付门槛仍待。下方27用例和“快活林候选未晋级”是江州阶段历史。
+
+## 2026-09-13 江州世界恢复验证入口
+
+全新默认世界 `20260913_085554_ae1d1fcb` 的27用例1628项通过（既有916 + 江州组件381 + 自然七进程331），`complete/full_suite/fresh_import/acceptance_complete` 均true；同版经典全新默认 `20260913_084224_c71345c4` 完整296项通过。联合核验确认2962份生产文件与两批及当前checkout同SHA、世界QA无来源差异；江州11张/经典16张PNG字节核验通过，代表画面目检另列。[实现与原始收据](JIANGZHOU_WORLD_RESTORE_20260913.md) · [联合结果和完整复现命令](../qa/jiangzhou_world_restore_20260913/README.md)。
+
+普通启动仍为 `Play.cmd`，Godot由被忽略的 `godot.local.txt`、`GODOT_PATH` 或驱动参数提供。默认完整世界使用 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root "<本机绝对短路径>" --run`，不传 `--cases` 或 `--cache-from`；经典用 `tools/run_continue_flow_qa.py` 另选私有短目录串行执行。资源导入上限600秒，江州组件/各自然进程及野猪林组件420秒，其余玩法240秒。不要把QA私有环境变量接入玩家启动脚本。
+
+本轮江州内部里程碑完成，`PLAYER_ENTRY=false`；后续快活林、连环马、高俅、大名府与统一交付门槛保持。快活林私有候选未晋级，不属于当前默认27用例。本轮未重构建或发布Steam；下方旧命令及计数保留当时验证范围。
+
+## 2026-09-13 四语图文汇总维护入口
+
+综合图文公告[714538122294068076](https://store.steampowered.com/news/app/5088120/view/714538122294068076)已公开，06:49 HKT，类型“重大更新”，关联既有default Build25276077，无需重构建或重传包。[文案目录](../marketing/steam_version_roundup_20260913/README.md)保存四语copy/rendered_copy、字段对照与图片来源；16个保存字段精确匹配，84个公开片段规范化后完整匹配，12处图片加载及尺寸通过。[validation.json](../qa/steam_version_roundup_20260913/validation.json)。后续维护本篇使用076活动，旧074小型公告仍保留；启动方式和玩家保存/继续入口未变。[汇总交接](STEAM_VERSION_ROUNDUP_20260913.md)。
+
+## 2026-09-13 四语公告维护入口
+
+Build25276077的[四语更新公告714538122294068074](https://store.steampowered.com/news/app/5088120/view/714538122294068074)已公开，Steam显示06:16 HKT开始。定稿位于[copy.json](../marketing/steam_announcement_20260913/copy.json)，每语 `title/subtitle/summary/body`；后台16字段及公开24片段均精确匹配。后续维护复用当前Event，无需重构建或重传包；启动方式和玩家保存/继续入口未变。[公告交接](STEAM_ANNOUNCEMENT_20260913.md) · [文案说明](../marketing/steam_announcement_20260913/README.md)。
+
+## 2026-09-13 Windows Build25276077正式上线交接
+
+`71098183` Windows包已正式上线App5088120 / Depot5088121的default，Build25276077 / Manifest4630656200603476714。原生185项、候选1120项、source/PCK身份各10项及EXE11例通过，服务器6文件名称、大小和SHA1全部匹配。用户完成手动确认并报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读确认成功提示、default当前构建及正确Manifest。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json)。本轮成品路径与SHA见[候选清单](../qa/steam_release_20260913/candidate_delivery.json)和[归档QA](../qa/steam_release_20260913/README.md)；[发布交接](STEAM_UPDATE_20260913.md)。
+
+源码仍从本checkout的 `Play.cmd` 启动，Godot路径由被忽略的 `godot.local.txt` 或 `GODOT_PATH` 提供；玩家保存/继续入口隐藏。包由已验证候选生成，没有在上传时重新拼包。开发者复现候选可使用 `py -3 -X utf8 -B tools/build_steam_candidate.py --qa-run "<成功原生QA目录>" --profile-root "<本机绝对短路径>" --run`，参数按当前机器配置；原生→候选→短测/归档三阶段命令见[QA复现](../qa/steam_release_20260913/README.md)。本次上传及正式上线回读均完成，无需重复操作；下方各轮“不改变Steam包”和早期阻塞属于当时状态，不改写历史QA或合并main。
+
+## 2026-09-13 野猪林世界恢复验证入口
+
+全新默认世界 `20260913_040000_60d3e221` 已916项通过（425+183+308），收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。[世界收据](../qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json)。经典全新默认 `20260913_042455_e8f43126` 已296项通过、退出0，`complete=true`；[经典收据](../qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json)。联合核验退出0，2960份生产文件与两批及当前checkout同SHA，世界11张/经典16张图SHA通过；[核验汇总与完整复现命令](../qa/yezhulin_world_restore_20260913/README.md)。资源导入600秒、普通玩法240秒、野猪林组件420秒；玩家入口仍隐藏。[最新状态与人工目检范围](YEZHULIN_WORLD_RESTORE_20260913.md)。
+
+基线 `de0f8bd6` 上已接入野猪林固定 profile、原生52×40 marsh景物、角色替换与护送状态。普通启动仍为 `Play.cmd`，玩家保存/继续入口隐藏。配置 `godot.local.txt` 或 `GODOT_PATH` 后，以本机Python 3执行 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root E:/CodexTemp/yezhulin_restore --cases level6_component level6_cross_save level6_cross_rescue level6_cross_care level6_cross_escort level6_cross_leave level6_cross_finish level6_terminal_reject --run`；私有根可换为本机短路径，须与其他Godot验证串行运行。[完整说明](YEZHULIN_WORLD_RESTORE_20260913.md)。
+
+最终完整验证使用 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root E:/CodexTemp/yezhulin_full_world --run`，不传 `--cases` 或 `--cache-from`；随后串行执行 `py -3 -X utf8 -B tools/run_continue_flow_qa.py --work-root E:/CodexTemp/yezhulin_classic --run`。032402/032721/033816中止和失败历史见[尝试记录](YEZHULIN_WORLD_RESTORE_20260913.md)。下方黄泥冈425项分阶段与经典296项保留旧冻结来源，不代替本轮同版重验。本轮不改变Steam包；后续继续其余五关及统一交付检查。
+
+## 2026-09-13 黄泥冈世界恢复开发入口
+
+普通启动仍使用 `Play.cmd`，玩家保存/继续入口保持隐藏。配置被忽略的 `godot.local.txt` 或 `GODOT_PATH` 后，用本机可用的 Python 3 执行 `py -3 -X utf8 -B tools/run_level3_world_restore_qa.py --work-root E:/CodexTemp/huangnigang_restore --run`；私有根可改为本机真实短路径。工具新建隔离工程与玩家目录、禁用Steam并独占共享引擎锁，须与其他Godot验证串行运行。[范围与复现](HUANGNIGANG_WORLD_RESTORE_20260912.md)。
+
+默认流程包含任务核心 `freeplay_core`、祝家庄同进程及跨进程回归、黄泥冈组件与六进程接续。`--cases` 选取子集，`--cache-from` 的复用情况写入收据；不把内部QA变量写入玩家启动脚本。全新导入六进程批 `20260913_021853_de632b8f` 258项通过，完成三担、八人实到、4/4剧情目标和终局旧槽拒绝，原生胜利图已目检。与015956批已通过的167项前段检查合计425项，2958份生产依赖SHA一致；这是分阶段证据，旧完整批仍失败，新子集也不计 `acceptance_complete`。[证据汇总](../qa/huangnigang_world_restore_20260913/README.md)。
+
+经典默认回归使用 `py -3 -X utf8 -B tools/run_continue_flow_qa.py --run`；本批 `20260913_024947_f6a8c09f` 已296项通过、退出0，收据 `complete=true`，见[原始收据](../qa/continue_flow_20260909/20260913_024947_f6a8c09f/receipt.json)。前两批超时/主动诊断中止及仅QA截图等待调整见[本轮记录](HUANGNIGANG_WORLD_RESTORE_20260912.md)，未据此修改生产逻辑或放宽断言。下方“祝家庄Core/Session待接入”等为历史；经典完整30波349项仍是旧冻结证据，不能代替最终同版重验。后续依次扩展野猪林、江州、快活林、连环马、高俅、大名府；统一Steam持久确认及整体验收门槛见[交付计划](CONTINUE_DELIVERY_20260908.md)。本轮不改变Steam包，最近发布记录见[9月11日交接](STEAM_UPDATE_20260911.md)。
+
+## 2026-09-09 女性封面与宣传媒体
+
+本次选定媒体位于`marketing/steam_store_20260909_female/`，由`marketing/.gdignore`排除游戏资源扫描，游戏启动方式未变。PNG验证：`py -3.14 -X utf8 -B marketing/steam_store_20260909_female/prepare_art.py`；只有显式`--rebuild`才重做尺寸规范，原生来源保持不变。
+
+实机录制取已发布Build25200149包，不使用包含未发布战役改动的当前开发源码。视频及来源说明见[媒体README](../marketing/steam_store_20260909_female/README.md)。使用`build_upload_bundle.py --output-dir <新目录>`可整理22份最终媒体，逐一验证复制哈希。只向Steam上传分组中的成品，不上传source、raw、清单或联系表。
+
+商店4种封面的English与schinese共8图已公开发布为revision6（此前5）。公开中文/英文页header均为新资源`df0980e3cc98f86583a5859efd44ae9589b04777`、460×215且加载完成，中文页已目检；最新公告800×450配图此前也已保存并回读四语公开分享元数据。随后6张库图与5张新截图已发布为revision7，替换旧6张截图；实际顺序01、02、05、03、04，`all_ages`为0、1、0、1、1。1231px网页库预览的旧透明Logo和三人面部显示通过，未修改Logo/位置，未验收客户端或窄屏。公开中文页5张新截图的缩略图与1920×1080完整资源均已加载完成。45秒视频已完成替换上传、转码及播放声音检查，1920×1080视频缩略图已设置生效；全套22份媒体发布完结（`store_media_published=true`）。[当前状态](STEAM_STORE_MEDIA_20260909.md)。
+
+已完成的8张商店封面无需重传。本次由用户在已连接的Edge页面拖入文件，两张header需要手动指定Header Capsule，不能依赖所有类型自动识别。首次内置浏览器拖放受阻记录保留为历史；库图、截图、视频与视频缩略图均已完成发布，无需重传。Steam截图排序仅支持拖动，当前有效主题顺序予以保留，不记为按01至05排序。
+
+## 2026-09-09 黄泥冈入场与落担修复
+
+普通启动仍用 `Play.cmd`，菜单第二幕「智取生辰纲」使用新入场顺序：七星先在枣车旁，押队从东路陆续上冈并歇脚，盘问后白胜才挑酒走来。选白胜、右键落担旗标完成现场交互后才摆酒具。早期强夺仍可自由发起。
+
+复验命令：`py -3.14 -X utf8 -B tools/run_campaign_feedback_qa.py --run --cases arrival huangnigang zhu_contracts --evidence-group huangnigang_arrival_20260909`，随后串行运行 `py -3.14 -X utf8 -B tools/run_campaign_level_state_qa.py --run`。分别为80/61/39项和205项，使用私有D盘工程、私有玩家目录及禁用Steam的环境。[实现与边界](HUANGNIGANG_ARRIVAL_20260909.md)、[阶段图与证据](../qa/huangnigang_arrival_20260909/README.md)。未开放中途保存，未打包或更新Steam。
+
+## 2026-09-09 战役重新设计研究
+
+[同类评论与原著提案](CAMPAIGN_REDESIGN_RESEARCH_20260909.md)为研究文档；[来源表](research/campaign_20260909/sources.json)与[审计](research/campaign_20260909/audit.json)区分当前源码、旧批实战和待实现建议。当前第二幕仍为黄泥冈短篇；没有改菜单或游戏启动方式。黄泥冈200距离近战遗漏已记录但未修；本批未运行新玩法验收或发布。
+
+## 2026-09-09 城门与攻城反馈
+
+同批快活林重招命中代价已调整；单独复核运行 `py -3.14 -X utf8 -B tools/run_campaign_feedback_qa.py --run --cases kuaihuolin gate`，覆盖无准备站桩、酒路反击、直接反击和实际门向。站桩旧通过不再作为体验合格依据。
+
+本地启动仍使用 `Play.cmd`。孟州门向、两关城防与单体塔箭护甲修复仅进入开发源码；本批未打包或上传Steam。完整验证命令为 `py -3.14 -X utf8 -B tools/run_campaign_feedback_qa.py --run`，不带 `--run` 只预检，可用 `--cases gate siege fort_ui heroes zhu_direct daming_signal` 选取检查；不同Godot验证须串行。新驱动创建D盘私有副本与profile并禁用Steam，不使用玩家存档。[实现说明](CAMPAIGN_COMBAT_FEEDBACK_20260909.md) · [结果与边界](../qa/campaign_feedback_20260909/README.md)。
+
+## 2026-09-09 最新源码 Steam 正式更新
+
+Steam Windows `default` 正式分支已更新为 **Build 25200149**，Depot `5088121`，Manifest `7045932649257457621`。服务端六文件名称、字节数与 SHA1 已逐项核对本地候选；canonical 正式分支与部署历史均回读确认，激活时间为北京时间2026-09-09 11:16。
+
+本次发布源码 HEAD 为 `1102a9b629142524061a1b1fc005407c8da5fc07`，功能源码为 `cf746f1a0864355df7f80cd4f18c6882088f4b7e`。构建后新增的发布收据与交接文档不属于游戏运行内容。
+
+普通源码仍运行 `Play.cmd`。玩家启动不带续玩 QA 开关，保存/继续入口仍关闭；开发验证继续使用各自受控驱动和隔离 profile。新增原生 observer DLL 尚未晋级，发行包保留既有 vendor DLL；facade 对不可用能力安全拒绝。真实 Steam 持久写入确认仍为 `WRITE_CONFIRMATION_UNPROVEN`，不将读取成功或普通保存通知视为可归属写确认。
+
+[四语公开公告](https://store.steampowered.com/news/app/5088120/view/714538122294067212)已发布，活动 `714538122294067212`，收据记录发布时间 `2026-09-09 11:17 CST`（北京时间11:17）；四语各8段、共32段公开可见文本逐项一致，新闻列表已出现新标题。 [候选、验证与发布收据](STEAM_LATEST_UPDATE_20260909.md)。本批不计完整八关通关、九玩法续玩验收、1800秒长跑、性能达标、两台 Windows、真实双账号或真人验收，也未验收 Steam 客户端实际下载和安装。
+
+下方旧批次的版本号与“未发布”等描述保留其当时语境，当前发布状态以本节和正式发布收据为准。
+
+## 2026-09-09 冗余缓存清理与归档
+
+普通启动仍运行`Play.cmd`，本机Godot路径、主导入缓存、生产资源及最新Steam候选均保留。旧测试工程161个imported重复缓存已清理，旧源码/元数据/测档/日志仍在；复查历史私有工程前先重新导入资源，或按其QA驱动创建新隔离工程。不要把整个`.godot`当作缓存删除，其中仍包含发布包、冻结源码与原始验证资料。
+
+旧景物候选重复包及21个无引用收尾助手已归档到`D:/AI项目/水浒/归档/水浒_旧准备与收尾助手_20260909.7z`，当前QA副本和引用中的助手保持原位。恢复清单、保护校验及180帧启动见[本批清理QA](../qa/storage_cleanup_20260909/README.md)。
+
+## 2026-09-09 祝家庄景物和任务特效组件入口
+
+普通启动仍使用`Play.cmd`，玩家继续入口未开放。景物与地图跨进程组件197项、任务/特效分区622项、原Presentation组件348项和经典短流程295项分别通过；四批共同生产来源2953份与当前文件逐字节一致。各自QA驱动独立冻结，不合并成完整世界或九玩法验收。复现说明及边界见[显示恢复](LEVEL3_DISPLAY_RESTORE_20260909.md)。
+
+新增命令：`py -3.14 -X utf8 -B tools/run_level3_scenery_qa.py --run`、`py -3.14 -X utf8 -B tools/run_campaign_fx_partition_qa.py --run`。不带`--run`只预检；工具使用D盘真实路径私有profile、Steam禁用、共享引擎锁和图形兼容后端，必须串行。共享兼容性复跑仍用`tools/run_campaign_presentation_state_qa.py --run`和`tools/run_continue_flow_qa.py --run`。不要把内部QA开关写入玩家入口。
+
+原景物候选本批已应用并原生验证，历史归档内容保留。祝家庄完整Core/Session、章节持久结算和真实Steam确认继续实施；现行Steam包与公告不变。
+
+## 2026-09-09 祝家庄恢复组件开发入口
+
+普通启动仍为`Play.cmd`，玩家继续入口未开放。本批新增选型/工厂341项与单位图423项原生组件证据，八关LevelState205项及经典短流程295项回归通过；各批独立冻结，不当作完整战役或正式包验收。说明见[官方选型](OFFICIAL_RESTORE_PROFILE_20260909.md)、[特殊单位图](LEVEL3_UNIT_GRAPH_20260909.md)。
+
+命令分别为`py -3.14 -X utf8 -B tools/run_official_restore_profile_qa.py --run`与`py -3.14 -X utf8 -B tools/run_level3_unit_graph_qa.py --run`；省略`--run`只预检。工具自建D盘私有profile、禁用Steam并独占引擎锁，必须串行；不将QA环境变量写入玩家入口。经典短流程继续使用`tools/run_continue_flow_qa.py --run`，完整30波旧证据保持其原始来源身份。
+
+景物/MapState候选已归档到`qa/level3_scenery_prepare_20260909`，未解析未应用，不能直接视作生产实现。世界、任务UI、持久结算和真实Steam确认仍待完成。线上Build25185242和既有公告沿用，本批只同步已验证源码与相关记录。
+
+## 2026-09-09 本地终局收据与续玩诊断
+
+普通启动仍使用`Play.cmd`，玩家继续入口未开放。内部单槽现为`classic_continue_slot_v3`，保留本地active收据并新增本局英雄托管档位；旧v1/v2槽保留并明确拒绝，不手工补字段或猜测迁移。恢复前后托管档位一致，安装失败还原菜单原值，不写全局设置文件。终局记录失败时在错误界面重试结算或明确退出，不能把终局战斗恢复为继续运行。[本地收据说明](LOCAL_CONTINUE_LIFECYCLE_20260909.md)。
+
+完整流程使用`py -3.14 -X utf8 -B tools/run_continue_flow_qa.py --run`；加`--terminal-only`只验证收据/保存终局冲突/重启拒绝。任务界面组件使用`tools/run_campaign_presentation_state_qa.py --run`；普通经典玩法诊断使用`tools/run_classic30_continue_acceptance.py --diagnostic-seconds 300 --run`，完整30波命令及失败边界见[驱动说明](CLASSIC30_CONTINUE_ACCEPTANCE_20260909.md)。这些工具都由Python调用，独占共享Godot锁、使用新D盘冻结副本与隔离profile；诊断300秒不等于完整30波，组件PASS不等于八关世界验收。四语词库4393条。
+
+当前已完成Flow295项、Presentation348项、Mission142项及经典完整本地自动续玩349项；各组件持有自己的冻结源码记录，不冒充同版九种玩法总验收。完整`061540_1a95733a`完成三次保存/重启恢复、自然30波778敌胜利和两个进程终局旧槽拒绝，当前与私有2956份来源独立回读一致。复现使用不带`--diagnostic-seconds`的完整驱动，约20分钟另加导入/重启，以实际收据为准。Steam登录已核实正常，已发布Build25185242及公告继续沿用；内部续玩未打包发布。下方186项及300秒等为历史，现行结果见[流程QA](../qa/continue_flow_20260909/README.md)及[经典记录](CLASSIC30_CONTINUE_ACCEPTANCE_20260909.md)。
+
+## 2026-09-09 内部保存继续开发入口
+
+正常游戏仍使用`Play.cmd`，保存/继续按钮尚未对玩家开放。本批内部经典菜单流程186项、同进程事务故障76项、Mission状态142项、暂停确认93项通过；原统计队列221项和18处进程强杀回归通过。四语词库4391条，现有4361条不变。新增观察器仅在隔离构建验证，未替换vendor DLL，也未取得真实持久写确认。
+
+开发验证使用[流程说明](CONTINUE_FLOW_20260909.md)中的`tools/run_continue_flow_qa.py --run`，其自动创建独立D盘profile、Steam禁用的冻结副本并使用实际菜单/渲染/退出流程。Mission、HUD、事务和统计工具必须串行占用共享引擎锁，不将测试变量写入玩家启动脚本。不带`--run`只预检。完整30波、八关整合、双机/双账号/长跑及真人范围仍待完成，见[统一交付状态](CONTINUE_DELIVERY_20260908.md)。
+
+本批源码验证后同步既定stable分支；Steam线上仍为下方已验证的统计修复包，未用本批内部开发版本替换。当前用户会话已登录，正式分支和公开公告已再次回读，无需重复上传既有Build25185242。
+
+## 2026-09-09 Steam 发布状态与接续入口
+
+Steam 正式 `default` 当前已核实为 **Build 25185242** / Depot **5088121** / Manifest **1883518997850700800**，对应已验证的 `20260908_184221_465b304a` 候选。分支页和部署历史已回读，不需要重新上传该构建。四语统计修复公告 [708907988310559239](https://store.steampowered.com/news/app/5088120/view/708907988310559239) 已发布并关联25185242；编辑页显示公开可见、北京时间2026-09-09 02:17开始。公开四语每语9片段、共36片段已与原文逐项及顺序精确匹配，新闻列表已出现公告及正确标题。本次为已登录会话访问公开URL，未做退出登录对照；封面已保存，但新闻卡片与正文顶部实际采用游戏胶囊图和截图背景。[本次发布记录](STEAM_STATS_FIX_PUBLICATION_20260909.md) · [新收据](../qa/steam_stats_fix_publication_20260909/publication_receipt.json)。
+
+本轮未修改启动方式、源码或发行包，开发继续使用当前 checkout 的 `Play.cmd`；保存/继续按钮仍未开放。维护本次公告应使用已有活动ID，避免重复创建。`marketing/steam_stats_fix_20260908/copy.json` 是已发布文案来源，SHA256为 `ab474e4029d636eb95229bf091eadbe7c951a658e1c00704396d961fd5054d9c`；已保存复用英文封面，其他语言按发布提示回退英语。下方未激活、登录失效与未发布说明属于9月8日历史，不再作为继续操作的前提；旧QA原始收据保持不变。
+
+## 2026-09-08 Steam上传与源码同步收尾
+
+源码及QA已同步GitHub stable `da6612e`，远端SHA一致。Steam Build **25185242** / Manifest **1883518997850700800** 已上传，6个服务器文件大小/SHA1与验证包完全一致，预估Windows增量4.3MB。正式激活页面未完成操作，最后canonical回读仍为旧 default25182453；社区登录失效，四语公告已写好但尚未发布。发布预览与登录页已保留，需恢复页面操作并核实上线后完成公告；不要重复上传。[本批交付状态与续办步骤](STEAM_STATS_FIX_20260908.md)。
+
+## 2026-09-08 统计修复候选验收完成
+
+候选 `20260908_184221_465b304a` 的1088项同包检查、源码/PCK各10项身份检查、实际EXE三个DLL核对及11例串行短测通过，全部进程退出、玩家文件与源码未变。已开始上传经过验证的唯一ZIP；Steam正式分支和公告以随后服务端回读为准。[发行记录](STEAM_STATS_FIX_20260908.md) · [候选证据](../qa/steam_stats_fix_20260908/CANDIDATE.md)。下方构建中状态保留该记录的当时语境。
+
+## 2026-09-08 统计修复、原生候选与续玩组件入口
+
+正常开发继续从本 checkout 的 `Play.cmd` 启动，Godot 路径仍由被忽略的 `godot.local.txt` 或 `GODOT_PATH` 提供。普通 Steam 统计已修正初始化读取判定、连续游玩时的旧保存通知处理，以及服务器校正后停止本局统计并提示重启的行为。菜单没有新增保存/继续按钮，持久outbox生产确认仍为 **BLOCKED**。[本批范围](STEAM_STATS_FIX_20260908.md) · [九种玩法统一交付状态](CONTINUE_DELIVERY_20260908.md)。
+
+原生只读桥接现在与 GodotSteam 一起纳入整合QA和候选依赖清单，构建从成功的同依赖QA快照复制并核验源码、二进制及许可。下方“尚未加入候选”仅指旧批次。先关闭其他Godot/游戏进程，独占引擎槽；使用真实、较短、非链接的私有profile根，不能指向真实玩家目录或复用已有当轮profile。在开发工程根运行：
+
+```powershell
+py -3.14 -X utf8 -B tools/run_steam_integration_qa.py --run --native --visual --profile-root "D:/CodexTemp/lsh_stats_release_qa"
+py -3.14 -X utf8 -B tools/build_steam_candidate.py --qa-run ".godot/steam_integration_qa/<本轮成功QA批次>" --run --profile-root "D:/CodexTemp/lsh_stats_release_package"
+```
+
+第二条的批次替换为第一条实际输出且 `complete=true` 的目录，不能使用失败批次或源码/依赖已变化的旧快照；去掉 `--run` 仅做预检。两阶段均新建隔离APPDATA/LOCALAPPDATA/TEMP/TMP，候选构建不执行Steam上传或发布。当前原生整合批次 `20260908_184100_3f9024fc` 为191项通过、六图已目检；候选 `20260908_184221_465b304a` 在本条记录时仍在构建，未据此认定同包或线上通过。[整合与候选证据](../qa/steam_stats_fix_20260908/)。
+
+内部组件可分别用 `py -3.14 -X utf8 -B tools/run_campaign_level_state_qa.py --run` 和 `py -3.14 -X utf8 -B tools/run_steam_persistent_outbox_qa.py --run` 在独占引擎槽复现；默认不加 `--run` 只预检。前者最终205项行为检查，后者221项断言、18个外部PID强杀点和13条假SDK trace，完整隔离方式与边界见[八关QA](../qa/campaign_level_state_20260908/README.md)和[outbox QA](../qa/steam_persistent_outbox_20260908/README.md)。它们不启动完整九种玩法的玩家续玩流程，也不能证明真实服务端写入确认。
+
+用户已授权本轮Steam更新与公告，执行状态由[统计修复交付记录](STEAM_STATS_FIX_20260908.md)后续补记。四语公告初稿和复用封面说明位于[marketing目录](../marketing/steam_stats_fix_20260908/README.md)。不要把本地成功QA、候选目录或文案文件当作平台已经发布。
+
+## 2026-09-08 真实 Steam 只读诊断入口
+
+`py -3.14 -X utf8 -B tools/run_steam_stats_live_read.py` 默认只做前置检查；加 `--run` 在全新隔离最小工程使用当前登录账号，仅读取，不加载正常游戏服务。先关闭其他 Godot/游戏进程。原始日志可能含账号信息，留在本机临时目录，不提交。修正版 reader DLL 已实测连续读取；该工具不能证明统计写入完成，玩家保存/继续入口尚未开放。[合同与复现](STEAM_LIVE_READ_20260908.md)。
+
+## 2026-09-08 Steam 读取适配器构建入口
+
+新增内部读取桥接，普通游戏启动方式保持。开发者可在工程根执行 `py -3.14 -X utf8 -B tools/build_steam_stats_reader.py`，由 Visual Studio C++/CMake/Ninja 编译并运行隔离验证；无需初始化 Steam。依赖固定哈希，临时编译目录使用英文短路径，可用 `--work-root` 和 `--profile-root` 指定。受测 DLL 保存在 `vendor/steam_stats_reader/`，尚未加入正常启动和 Steam 候选安装清单。[接口与边界](STEAM_STATS_READER_20260908.md) · [构建说明](../native/steam_stats_reader/README.md)。
+
+## 2026-09-08 四语公告与商店语言表入口
+
+四语[公开更新公告](https://store.steampowered.com/news/app/5088120/view/708907988310559012)已发布，关联当前 default Build25182453；商店公开语言表已标注简体中文、英语、日语、繁体中文的界面支持，音频与字幕未标注。语言仍从主菜单左上角或设置顶部切换。本轮仅发布平台内容，没有改运行代码、EXE 或启动方式，也未重跑 Godot。文案、图片来源、四语公开回读及封面回退边界见[公告维护记录](STEAM_LOCALIZATION_ANNOUNCEMENT_20260908.md)与[QA](../qa/steam_localization_announcement_20260908/README.md)。客户端下载和玩家推送尚未验收；下方条目为历史演进。
+
+## 2026-09-08 Steam 四语打包入口
+
+Steam 候选从本轮成功的原生 QA 快照复制，必须保留 catalog、Noto CJK 字体及 OFL。当前 Windows 正式版 default 已更新为 Build25182453，Manifest4066863387208539897；用户手机确认后，服务器清单、canonical分支及发布历史已核实。主菜单左上角或设置顶部可选择四语。构建命令与收据见[四语 Steam 更新](STEAM_LOCALIZATION_UPDATE_20260908.md)，客户端下载尚未验收。
+
+## 2026-09-08 校订文本与排版入口
+
+启动本开发工程后，在图鉴查看按一百二十回本校订的生平及下方回目出处。选关、更多、设置与编辑器长页面支持滚动，返回按钮保持可达；据守自定义配置从「更多 → 据守数值编辑器」建立。四语入口及启动方式沿用下方说明。
+
+文本修改须同步译文并重建词库，复现命令及边界见[文本校订](TEXT_REVIEW_20260908.md)和[本批 QA](../qa/text_review_20260908/README.md)。
+
+## 2026-09-08 本地化入口
+
+继续使用 `D:\AI项目\水浒\开发工程` 的 `Play.cmd` 或外层开始游戏入口。启动后在主菜单左上角选择语言，也可在设置顶部切换；四种语言为简体、繁体、English、日本語。语言存入独立 `user://language.cfg`，无需重开战斗；场景编辑器自编对白保持原文。
+
+词库/字体随工程和导出包提供；运行游戏无需 Python。维护命令、系统语言回退与诊断环境变量见 [本地化说明](LOCALIZATION_20260908.md)。本轮源码同步不代表 Steam 线上版本已具有四语入口。
+
+## 2026-09-08 Steam测试更新交付
+
+当前d32b0b8更新包已作为Build25179481在steam-integration上线，服务器成品清单已核对。[路径、哈希与交付](STEAM_RESUME_UPDATE_20260908.md)。内部模式和玩家入口边界未变，真实客户端下载仍需单独验收。
+
+## 2026-09-08 收尾后的接续入口
+
+当前运行代码基线9529a8b；工程及启动方式未变，内部持久模式尚未由正常启动启用。继续开发先读[收尾与接续](CLOSEOUT_20260908.md)，从持续Steam发布器的读取确认合同开始。下方日期段落是历史演进，不作为最新待办。
+
+## 2026-09-08 持久局内部启用接口
+
+新增steam_local_run_session并与SteamService/世界Session连接，槽支持持久token绑定。_open_persistent_runs只供后续统一启动接入，当前正常启动不调用；启用后SDK写入被保留为待完成门槛，状态明确仅本机记录。现有启动和玩家菜单不变。[合同](PERSISTENT_RUN_SESSION_20260908.md)。
+
+## 2026-09-08 世界单槽内部接口
+
+新增run_snapshot_store、run_slot_store、run_world_session；Steam收据改用相同通用事务基类，原v1记录兼容验证通过。默认单槽路径user://continue/v1/5088120/1，当前仅内部未计Steam统计经典30波；启动方式和正常玩家菜单未变。[接口与限制](WORLD_SLOT_20260908.md)。
+
+## 2026-09-08 Steam战斗累计值接口
+
+record_kill现在要求run_id与本局累计有效击杀两个参数；Battle已同步调用，root v4保存新计数。旧root v3不推测迁移；目前玩家继续槽未开放。独立持久收据尚待接到服务及Session。[接口与原生验证](STEAM_BATTLE_COUNTER_20260908.md)。
+
+## 2026-09-08 持久局记录内部API
+
+新增steam_run_receipt/store/ledger内部模块。未来由Session传入实时账号和受信玩法；默认user://steam_receipts/v1独立于战斗槽。当前未由autoload或Battle调用，不改变启动和菜单。[接口、存储边界与复现](STEAM_RUN_LEDGER_20260908.md)。
+
+## 2026-09-08 世界替换内部接口
+
+run_world_swap要求实际current_scene的HELD经典30波来源，prepare/commit保持同步，返回新Battle及历史identity；失败保留旧世界HELD，成功继承用户暂停状态。未增加菜单或启动方式。[接口与复现](WORLD_SWAP_20260908.md)。跨进程及玩家继续尚未开放。
+
+## 2026-09-08 跟随与贴图特效恢复
+
+视觉图补齐此前剩余12类，世界工厂默认登记当前Art资源，恢复只从可信对象匹配贴图。core仍v7，菜单/启动方式未变。[实现与复现](LINKED_FX_RESUME_20260908.md)。完整玩家继续仍未开放。
+
+## 2026-09-08 三十类特效恢复
+
+视觉图增加30个固定程序化类，普通开局继续走原构造，恢复ready使用保存形状/时钟。core仍v7、玩家菜单/启动器未变。[字段合同及复现](PROCEDURAL_FX_RESUME_20260908.md)。完整玩家继续仍未开放。
+
+## 2026-09-08 战场环境恢复
+
+内部core v7新增environment，mount_disabled之后同帧交给最终事务激活环境；新局浮尘/微光改用可暂停场景相位。启动器与玩家菜单未变。[合同及复现](ENVIRONMENT_RESUME_20260908.md)。完整玩家继续仍未开放。
+
+## 2026-09-08 HUD 整体恢复
+
+core schema v6新增hud与mount_disabled：离树真实根绑定后暂停挂载、构建HUD，同帧交给最终事务激活。启动方式、Play.cmd和玩家菜单不变；[安装合同与复现](HUD_RESUME_20260908.md)。不得将HUD内部激活验证当完整继续功能。
+
+## 2026-09-08 HUD 消息恢复
+
+core schema v5增加hud_messages并返回已校验pending_hud_messages。调用方须先暂停构建全新HUD，再restore和activate_rows；HUD整体输入仍由最终安装控制。[合同和复现](HUD_MESSAGES_RESUME_20260908.md)。启动方式、Play.cmd及玩家菜单没有变化。
+
+## 2026-09-08 相机恢复
+
+core schema v4增加camera，返回待激活camera_module。RTSCamera._ready只对可信准备标记分流；Play.cmd及玩家菜单保持。完整安装顺序见[相机合同](CAMERA_RESUME_20260908.md)，隔离原生复现见[QA](../qa/camera_resume_20260908/README.md)。
+
+## 2026-09-08 世界显示恢复
+
+新增run_world_display_state及原生UID；core内部schema v3新增world_display。Battle新增仅供禁用准备树的_ready分流，玩家Play.cmd及菜单入口保持。按[本批QA](../qa/world_display_resume_20260908/README.md)在来源提交复现实测；[生命周期边界](WORLD_DISPLAY_RESUME_20260908.md)明确最终安装仍待接入。
+
+## 2026-09-08 死亡残留恢复
+
+run_visual_graph加入DeathRemains；run_battle_world_core内部schema v2新增death_remains分区。[接口与边界](DEATH_REMAINS_RESUME_20260908.md)、[两种原生驱动复现](../qa/death_remains_resume_20260908/README.md)。新模块UID和源码均取受测字节，QA隔离并保留原SHA。Play.cmd保持；完整玩家继续入口仍未开放。
+
+## 2026-09-08 战斗世界核心准备
+
+新增内部run_battle_world_core及原生UID，构造与后续安装边界见[实现说明](WORLD_CORE_PREPARATION_20260908.md)。Play.cmd和玩家入口保持；完整继续功能仍未开放。隔离overlay测试新增--rendered-driver以读取真实Vulkan纹理，默认/编辑器导入仍无头；R5复现需在e8b4d49独立checkout恢复归档执行器和候选，见[QA](../qa/world_core_20260908/README.md)。QA以.gdignore隔离、Git属性保持原字节。
+
+## 2026-09-08 混合特效图恢复
+
+run_visual_graph构造器增加可选的受信Projectile/飞斧适配器，调用顺序见[实现合同](MIXED_FX_RESUME_20260908.md)。原调用和Play.cmd启动保持；没有玩家继续入口。复现使用231f560来源的独立checkout，按[QA](../qa/mixed_fx_20260908/README.md)恢复冻结候选原名；全部QA以.gdignore隔离、.gitattributes保持原字节。完整世界工厂仍待开发。
+
+## 2026-09-08 闪现箭光恢复
+
+`battle.gd`和`run_visual_graph.gd`接入已原生验证的BlinkShotFx保存恢复；普通启动仍用Play.cmd，没有开放继续战斗入口。复现须在aae6593的独立checkout按[本批QA](../qa/blink_resume_20260908/README.md)恢复冻结候选名字；QA内.gd.txt不能直接运行。档案以.gdignore隔离并保持原字节。[范围与后续](BLINK_RESUME_20260908.md)。
+
+## 2026-09-08 公告发布交接
+
+中英文公告与任务框实机配图已发布，事件708907988310558956；[已发布内容与来源](STEAM_ANNOUNCEMENT_20260908.md)、[独立收据](../qa/steam_announcement_20260908/publication_receipt.json)。图片复用已跟踪QA原图，新增QA目录以.gdignore隔离并保持原字节。启动方式和游戏源码没有变化；此前上传收据未发布公告的字段保留历史状态，以本条后续记录为准。
+
+## 2026-09-08 Windows Steam 上传完成
+
+Windows 最新源码 `e3a758b` 已上传为 Steam Build **25173165**，Depot `5088121` / Manifest **2578852481018016286**。用户完成原确认框后，Steamworks canonical builds 页面已回读确认 `steam-integration` 测试分支为 **25173165**，并显示相应上线历史记录。服务端四文件大小与 SHA1 均匹配本地成品。
+
+本次从D盘规范checkout的干净e3a758b构建；本机包在忽略目录 `.godot/steam_candidates/20260908_024605_edee2afb/`。依赖Godot4.6.3及固定GodotSteam发行DLL，私有短路径测试环境；源码启动方式不变。[复现与边界](../qa/steam_upload_20260908/README.md)。
+
+公开 `default` 仍为 **25164373**。本次测试分支已从25160280更新为25173165，没有重新上传、重复提交分支切换或发布社区公告。完整续玩、真实客户端下载/双账号 Steam 验收和新美术生产验收仍未完成。
+
+## 2026-09-07 Steam任务框更新
+
+Windows Steam default现为Build 25164373，八关任务框支持默认收起/点击展开。构建来自公开443e75e及f3da82f单个组件，正常开发仍在本checkout。[来源、成品与复现](STEAM_MISSION_PANEL_UPDATE_20260907.md)。
+
+## 2026-09-07 实际Battle捕获基础已接入
+
+继续使用当前 `Play.cmd` 启动。Battle已接入run_battle_clock/run_battle_barrier，根状态为v3，尚未提供玩家继续本局入口。四源码与两个UID逐字节匹配R4及9个正常开局的实际执行源码；依据为[接入收据](../qa/stabilization_battle_barrier_integration_20260907/installation.json)。
+
+跨机接续先拉取stable，读取[本批说明](STABILIZATION_PARALLEL_BATCH_20260907.md)与各QA的SOURCE_PINS。屏障、Steam假SDK的归档GD以.gd.txt保留；按映射在匹配来源的独立scratchpad恢复后才能复跑，旧绝对路径只代表历史观察。两类QA和美术候选都以.gdignore隔离，缓存、玩家文件及完整私有工程不入库。Godot仍需串行预约；源码更新不等于这些恢复模块已随Steam包交付。
+
+## 2026-09-07 任务目标按需展开
+
+重新运行本工程 `Play.cmd` 进入战役，左侧默认显示 `▶ 任务目标`，点击查看详情，再点 `▼ 收起任务` 收回。阶段切换保持本局选择，新局默认收起。[实现与验证](MISSION_PANEL_TOGGLE_20260907.md)。源码更新不等于Steam构建更新。
+
+## 2026-09-07 停止前封存与继续开发入口
+
+此前验证代码基线 `2e40c4a` 已同步；本次仅增加交接与隔离草稿。`qa/stabilization_battle_barrier_draft_20260907/` 保存原字节候选、驱动、冻结记录和恢复说明，须按SOURCE_PINS在指定来源的独立checkout恢复至全新scratchpad，再运行原生QA。准备脚本不是自包含重建入口，不能从QA目录直接执行。
+
+`qa/stabilization_art_a1_brief_20260907/` 保存美术制作依据；迁移使用inputs.json的relative_path，绝对路径仅是历史观察。正常启动方式仍见原说明。[本次交接](STABILIZATION_CLOSEOUT_20260907.md)。
+
+## 2026-09-07 恢复模块与失败关闭事务基础
+
+生产新增run_battle_root_state、run_remaining_effect_state、run_item_cast_flow_state、run_visual_graph，使用实际受测字节及原生UID。五脚本/四UID安装收据位于qa/stabilization_resume_graph_20260907；完整玩家保存/继续入口仍未加入，正常启动方式不变。
+
+该QA与尘粒候选QA均以.gdignore隔离并按.gitattributes保持原字节。Steam outbox封存草稿须按SOURCE_PINS恢复原名至全新scratchpad子目录；只含纯模型，不能作为生产磁盘或SDK调用入口。旧overlay freeze的before绑定61f8f55，新阶段须针对当前集成来源重新审查冻结。[范围与原生结果](STABILIZATION_RESUME_GRAPH_20260907.md)。
+
+## 2026-09-07 稳定编号与隔离验收入口
+
+生产已接入25份稳定编号/驻守v2脚本，与9个正常世界开局、86身份及45桥接行为的受测字节一致。新`tools/run_stabilization_overlay.py`按明确Git生产白名单与外部冻结候选运行单个驱动；`--case-id`只接受冻结launch_contract内案例，所有修改仍留在全新私有工程。旧freeze中的before不能直接套到已更新生产上，下一轮须审查并重锁。
+
+身份、接入、Unit诊断和Steam回执QA均有独立`.gdignore`，原始证据按`.gitattributes`保持字节。回执草稿恢复原名到全新`scratchpad/<名称>/`后才可运行，不能从contracts直接执行；它仍无真实SDK/玩家槽权限入口。命令、范围与目录见[身份说明](STABILIZATION_IDENTITY_INTEGRATION_20260907.md)、[回执说明](STEAM_RUN_RECEIPT_DRAFT_20260907.md)。正常游戏仍用Play.cmd，尚无继续本局菜单。
+
+## 2026-09-07 性能基线与平台配置收据
+
+`tools/run_stabilization_performance.py`从明确Git提交的生产blob创建短路径私有工程，先冻结真实gameplay RNG，再运行五组各三次正常60秒窗口。诊断工具绑定完整基线输入，仅在私有派生工程插桩；命令和边界见[性能说明](STABILIZATION_PERFORMANCE_20260907.md)。Godot槽仍须独占，真实玩家目录只做前后守护。
+
+`qa/stabilization_performance_20260907/`保留原始结果、日志、截图、失败尝试和执行工具原字节，不同步私有profile或Godot缓存。`qa/steam_configuration_publish_20260907/`为脱敏浏览器观察及本地生产图SHA，不是HTTP响应或Steam客户端SDK收据。后台配置现已发布，测试分支包仍为d4728d4；Git源码更新和Steam构建交付分开记录。
+
+## 2026-09-07 来源审计可迁移化
+
+当前工程使用 `D:/AI项目/水浒/开发工程` 实路径。新增来源链位于 `tools/contracts/art_provenance_recovery_20260907/`：451个按固定历史SHA追回的文件，462个旧引用通过独立mapping映射，生产manifest原字节保留。该目录不是普通缓存，必须随本批源码白名单同步；`.gdignore`避免引擎导入证据图，`.gitattributes`避免Git改写原换行字节。
+
+日常运行 `py -3.14 -X utf8 -B tools/campaign_direction4_coverage_audit.py --check --output scratchpad/art-audit/report.json` 无需访问历史目录。118/347为文件与来源合同统计，退出0仍不代表229个缺项完成；新增角色TRES或正式修订须更新经独立验收的固定manifest/生成链，不能现场自认。命令、自测和独立副本证据见[来源修复说明](ART_PROVENANCE_RECOVERY_20260907.md)。
+
+## 2026-09-07 清理后的使用与还原入口
+
+当前开发仍直接使用 `D:\AI项目\水浒\开发工程` 的 `Play.cmd`，主导入缓存保留。旧历史 `Liangshan-Heroes` 的标准 `.godot` 已清理，旧启动器再次运行时会重建导入缓存；游戏内容、最新候选 ZIP、冻结源码、原始收据、正式素材和来源未作清退。
+
+9 组过期展开资料已归入 `D:\AI项目\水浒\归档\水浒_过期资料_20260907.7z`；完整性测试与完整解压后的 4,161 个文件 SHA-256 核对零差异，原位置的 `已归档.md` 提供归档入口。需要复查这些历史材料时按原相对路径解压还原，避免覆盖现有资料。原始 ZIP、战役重做基线、视觉 v7、`implementation_20260902/03` 保持直接可读。
+
+本轮清理与归档净减约 1.89 GiB。50 个 Git 临时垃圾文件的删除被自动审批策略阻止，仍保留且未计入释放量；最终保护复核及启动验证以[清理 QA](../qa/storage_cleanup_20260907/README.md)为准。
+
+## 2026-09-07 本机开发与历史材料位置
+
+当前工程实际位置为 `D:\AI项目\水浒\开发工程`，Godot 工程仍在目录根部，运行 `Play.cmd` 或顶层 `D:\AI项目\水浒\开始游戏.cmd`。原 `D:\CodexTemp\liangshan-github-sync-20260905-5f8a7c2e` 已改为指向新工程的目录联接。后续开发、构建与验证直接使用新的 D 实路径；Godot 可执行文件仍由本机 `godot.local.txt` 配置。
+
+旧 C 项目完整存放于 `D:\AI项目\水浒\历史资料`。原 `C:\Users\rsb\Desktop\AI项目\水浒` 根保持普通目录，8 个子目录分别联接到历史资料下的对应目录，10 个根文件保留本机交接用途（含本轮新增 README）。历史来源 JSON 与旧 QA 路径保持原文；不要移除这些兼容入口。构建隔离 profile 应使用独立的新实目录，不能使用目录联接路径。
+
+本轮只迁移存储位置并更新文档。旧材料 17,241 个文件逐文件 SHA-256 零差异；Godot 4.6.3 隔离导入与 180 帧主菜单 headless 启动均退出 0、无 ERROR，未增加真人通关结论。准确清单与收据见[存储迁移 QA](../qa/storage_migration_20260907/README.md)。
+
+## 2026-09-07 Windows Steam 候选的短用户目录
+
+Steam QA 与构建命令可追加 `--profile-root "<本机较短的绝对目录>"`，两阶段使用同一根但各自独占新建当轮目录。不得指向真实玩家目录、复用既有 profile 或使用链接/reparse 路径。未指定保持原有行为；无需修改系统设置。该选项仅影响隔离验证和候选导出，不改变 `Play.cmd`。完整命令见 [Steam 接入说明](STEAM_INTEGRATION_20260907.md)，边界检查见[公司 Steam QA](../qa/company_steam_upload_20260907/README.md)。
+
+## 2026-09-07 公司端已恢复启动
+
+公司继续使用已确认的独立 Git checkout，工程根目录直接包含 `project.godot`；旧共享外层仅保留历史工程和指向当前 checkout 的本机交接提示。`Play.cmd` 与 Godot 4.6.3 的正常启动方式不变，机器路径只放被忽略的 `godot.local.txt` 或 `GODOT_PATH`。
+
+首次导入已补齐需要跨电脑共享的资源/脚本 UID，并将生产 `.import` 固定为 LF。QA 图片旁自动生成的 `.import` 和 `.uid` 留在本地，原始图片、收据及来源 manifest 仍入库；若以后某份正式清单依赖具体 sidecar，须显式纳入。不要用全盘 git add 收进 QA 自动生成物。
+
+本机导入、主菜单和标准 30 波驻守入口已通过，驻守已越过旁白进入场景，RNG 无故障。隔离测试使用较短的私有用户路径，避免 Windows shader cache 路径过长；不需要改变系统设置。[实际结果、两轮失败及复验方式](../qa/company_handoff_20260907/README.md)。这不改变早间 Steam 上传和完整续玩的未完成边界。
+
 ## 2026-09-07 默认迷雾恢复组件
 
 正式入口为 `scripts/run_fog_state.gd`。capture 要求 SceneTree 真正暂停且不处于 physics 帧；单设 paused 不能保证屏障成立。恢复同时保留逻辑值和可能滞后的真实图像/纹理，不能按当前 vision 提前重画。bind 返回脱树禁用层及原 world 索引，外层负责 Map、Unit 可见标志和整体挂接/激活顺序。
@@ -655,3 +1287,19 @@ Steam 发布目录为 `<steamworks_workspace>`。`2026-09-01` 的 BuildID `25051
 - 用户要求以后每次开发完成，相关项目文件/文档与 GitHub 一起同步。长期收尾规则已写入根目录 `AGENTS.md`。
 - 本日实查，水浒根目录与 `Liangshan-Heroes/` 都没有 Git 历史或远端关联。本文“来源和位置”中的 `winterzh/Liangshan-Heroes` 是下载上游，不能当作已确认的推送目标。
 - 当前状态：相关本地项目文档已更新；GitHub 接入等待用户确认目标仓库地址。尚未初始化仓库、创建提交或推送，不能称远端已同步。
+
+本机临时目录 `scratchpad/` 由 `.gdignore` 阻止 Godot 扫描，并在导出预设中排除。保留该标记；否则历史脚本可能覆盖当前全局类。Windows PCK 的目录排除与四语启动已验证，详见本批 QA。
+## 2026-09-16 撞车四向攻击原图
+
+- 私有 Godot 运行：`tools/siege_ram_attack_direction4_runtime_qa.gd`，输出 `128 checks; 0 failures`。
+- 全库隔离导入/库存回归：`complete=true`，321 项检查通过，运行目录为 `D:\CodexTemp\art_full_siege_ram_attack_20260916_r1\20260916_025716_ec2b9ecd`。
+
+```powershell
+py -3 -X utf8 -B tools/siege_ram_attack_atlas_scale.py
+py -3 -X utf8 -B tools/siege_ram_attack_direction4_contract.py --output qa/siege_ram_attack_direction4_20260916/contract.json
+$env:SIEGE_RAM_ATTACK_OUT='D:\CodexTemp\siege_ram_attack_runtime_20260916_r1'; $env:STEAM_DISABLED='1'; & 'C:\Users\rsb\Desktop\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'D:\AI项目\水浒\开发工程' --script res://tools/siege_ram_attack_direction4_runtime_qa.gd
+py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_full_siege_ram_attack_20260916_r1
+```
+## 2026-09-16 快活林酒望运行时绘制修复
+
+Level 7 四处酒望继续使用 `assets/campaign/environment/art_full_20260915/taverns.png` 与 `assets/campaign/environment/level7/roadside_tavern_{a,b,c,d}.tres` 作为来源和 route 记录。由于 Godot 4.6.3 的 Unit 画布路径会把这组带虚拟 margin 的 AtlasTexture 合成为白色矩形，`scripts/unit.gd` 的实时 Unit 绘制只改用已经验收的真透明 `assets/campaign/objects/roadside_tavern_default.png`；没有覆盖来源文件、改原图像素、改变关卡范围或删除 TRES。实景与全库回归收据见 `qa/level7_tavern_render_20260916/`。

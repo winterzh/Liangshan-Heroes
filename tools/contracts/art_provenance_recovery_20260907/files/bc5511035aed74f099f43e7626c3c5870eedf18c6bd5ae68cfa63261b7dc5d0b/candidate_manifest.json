@@ -1,0 +1,1076 @@
+{
+  "schema_version": 1,
+  "kind": "li_kui_jiangzhou_native_alpha_fixed_rect_candidate",
+  "created_at": "2026-09-03T01:15:23.543733+08:00",
+  "variant": "li_kui_jiangzhou",
+  "states": [
+    "idle",
+    "walk",
+    "attack",
+    "hurt",
+    "down"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "frame_count": 20,
+  "source_generation_conversation": "https://chatgpt.com/c/6a985486-6cc8-83e9-b173-e8a1b797e746",
+  "web_native_alpha": true,
+  "alpha_cleanup_performed": false,
+  "crop_rule": "Four fixed cells per source; alpha>=8 is used only to select one padded continuous rectangle per cell. Every original RGBA pixel inside that rectangle is retained.",
+  "batch_uniform_requested_scale": 0.2804005722460658,
+  "allowed_operations": [
+    "continuous source rectangle crop",
+    "batch-uniform proportional scale",
+    "transparent padding",
+    "PNG format encoding"
+  ],
+  "forbidden_operations_used": [],
+  "sources": [
+    {
+      "action": "idle",
+      "source_file": "li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_sha256": "2ca9a04cdf4246f97cf0daaed87399143297b1490b01717eae59391fb6b45d6e",
+      "source_mode": "RGBA",
+      "source_size": [
+        2098,
+        749
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/01_li_kui_jiangzhou_idle_1x4.txt",
+      "prompt_sha256": "136ae3382af8fccce409ab07e13b2c2a13ab2d38128f57ab4a4e95cfe551c958",
+      "fixed_cell_x_boundaries": [
+        0,
+        531,
+        1070,
+        1595,
+        2098
+      ]
+    },
+    {
+      "action": "walk",
+      "source_file": "li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_sha256": "5ee7c0508b4c09a90aaf469b456a6882284fe4710b8f6ee0517095dd75232fec",
+      "source_mode": "RGBA",
+      "source_size": [
+        2048,
+        768
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/02_li_kui_jiangzhou_walk_1x4.txt",
+      "prompt_sha256": "3ccf46f397fe332ccdc902f629c48044f45370a7bae7610c4d7048ac331e9ec3",
+      "fixed_cell_x_boundaries": [
+        0,
+        519,
+        1060,
+        1570,
+        2048
+      ]
+    },
+    {
+      "action": "attack",
+      "source_file": "li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_sha256": "39b297d2bcf217fce90c19f36aaae514c3f3033cb2b9b690340d4b79021767da",
+      "source_mode": "RGBA",
+      "source_size": [
+        2048,
+        768
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/03_li_kui_jiangzhou_attack_1x4.txt",
+      "prompt_sha256": "e6587d53d14e910c58e351174c499670533c49ecf0fedfa3d1f1d193d38232b3",
+      "fixed_cell_x_boundaries": [
+        0,
+        526,
+        994,
+        1514,
+        2048
+      ]
+    },
+    {
+      "action": "hurt",
+      "source_file": "li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_sha256": "0d023f2907fc4f9398b1a6feab7ba54cdfd848150c7f33d25aec64cd6ffef58b",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/04_li_kui_jiangzhou_hurt_1x4.txt",
+      "prompt_sha256": "4f59762e9721a870d534881bbf58a28a183bdcdd5ee4e14db522844cdc4609c5",
+      "fixed_cell_x_boundaries": [
+        0,
+        566,
+        1104,
+        1673,
+        2172
+      ]
+    },
+    {
+      "action": "down",
+      "source_file": "li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_path": "implementation_20260902/li_kui_jiangzhou_source/li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_sha256": "27129937ba2c346ec2fc3078c065bbe37c3f8f08e06da0dfbfaa084d8e60f8e3",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/li_kui_jiangzhou_source/prompts/05_li_kui_jiangzhou_down_1x4.txt",
+      "prompt_sha256": "e0bd241d05584749ab6564d490e64c87b2109d8257206997f1c5308cd0ea232c",
+      "fixed_cell_x_boundaries": [
+        0,
+        566,
+        1110,
+        1602,
+        2172
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "se",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_se.png",
+      "candidate_sha256": "eeb9bd5a44e125a5e9b3e495cf909682df67ea1ad2c3fab89612779f8c586720",
+      "source_file": "li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_sha256": "2ca9a04cdf4246f97cf0daaed87399143297b1490b01717eae59391fb6b45d6e",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        531,
+        749
+      ],
+      "source_rect_xyxy": [
+        4,
+        41,
+        520,
+        717
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2810077519379845,
+        0.28106508875739644
+      ],
+      "resized_size": [
+        145,
+        190
+      ],
+      "paste_xy": [
+        55,
+        26
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "sw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_sw.png",
+      "candidate_sha256": "1eb0be2b3d84bbf171d8201b2a355033b2ef806dc6b6d190c3d0c87aab6d1d67",
+      "source_file": "li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_sha256": "2ca9a04cdf4246f97cf0daaed87399143297b1490b01717eae59391fb6b45d6e",
+      "source_cell_rect_xyxy": [
+        531,
+        0,
+        1070,
+        749
+      ],
+      "source_rect_xyxy": [
+        544,
+        41,
+        1045,
+        713
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.27944111776447106,
+        0.27976190476190477
+      ],
+      "resized_size": [
+        140,
+        188
+      ],
+      "paste_xy": [
+        58,
+        28
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "ne",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_ne.png",
+      "candidate_sha256": "a83d51038434b5dd59a5739a7dd206bfc0bb1fdfa268f3ad7480e419abe3dadf",
+      "source_file": "li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_sha256": "2ca9a04cdf4246f97cf0daaed87399143297b1490b01717eae59391fb6b45d6e",
+      "source_cell_rect_xyxy": [
+        1070,
+        0,
+        1595,
+        749
+      ],
+      "source_rect_xyxy": [
+        1095,
+        39,
+        1577,
+        711
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2800829875518672,
+        0.27976190476190477
+      ],
+      "resized_size": [
+        135,
+        188
+      ],
+      "paste_xy": [
+        60,
+        28
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "idle",
+      "direction": "nw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_nw.png",
+      "candidate_sha256": "87f2750bdf91672fbea17dacec58b461267f57e9763d8b8fa77f679691b8ed4b",
+      "source_file": "li_kui_jiangzhou_idle_20260903_attempt1_true_alpha.png",
+      "source_sha256": "2ca9a04cdf4246f97cf0daaed87399143297b1490b01717eae59391fb6b45d6e",
+      "source_cell_rect_xyxy": [
+        1595,
+        0,
+        2098,
+        749
+      ],
+      "source_rect_xyxy": [
+        1614,
+        42,
+        2098,
+        709
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2809917355371901,
+        0.280359820089955
+      ],
+      "resized_size": [
+        136,
+        187
+      ],
+      "paste_xy": [
+        60,
+        29
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "se",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_se.png",
+      "candidate_sha256": "782d08030baa129deef0b76d146270b852690639a49e899c7190153512490c3e",
+      "source_file": "li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_sha256": "5ee7c0508b4c09a90aaf469b456a6882284fe4710b8f6ee0517095dd75232fec",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        519,
+        768
+      ],
+      "source_rect_xyxy": [
+        19,
+        71,
+        499,
+        713
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28125,
+        0.2803738317757009
+      ],
+      "resized_size": [
+        135,
+        180
+      ],
+      "paste_xy": [
+        60,
+        36
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "sw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_sw.png",
+      "candidate_sha256": "fa3511cb2f4b03f46c56e0ea13fa7d371e025d0fd8398ffab2eebb2399ff3f17",
+      "source_file": "li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_sha256": "5ee7c0508b4c09a90aaf469b456a6882284fe4710b8f6ee0517095dd75232fec",
+      "source_cell_rect_xyxy": [
+        519,
+        0,
+        1060,
+        768
+      ],
+      "source_rect_xyxy": [
+        540,
+        61,
+        1047,
+        730
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28007889546351084,
+        0.28101644245142005
+      ],
+      "resized_size": [
+        142,
+        188
+      ],
+      "paste_xy": [
+        57,
+        28
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "ne",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_ne.png",
+      "candidate_sha256": "bc2f193fb74f34b02daa0d488ef6205e8ffcb3554de34d71f9b5ab9d12882d07",
+      "source_file": "li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_sha256": "5ee7c0508b4c09a90aaf469b456a6882284fe4710b8f6ee0517095dd75232fec",
+      "source_cell_rect_xyxy": [
+        1060,
+        0,
+        1570,
+        768
+      ],
+      "source_rect_xyxy": [
+        1073,
+        62,
+        1563,
+        704
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2795918367346939,
+        0.2803738317757009
+      ],
+      "resized_size": [
+        137,
+        180
+      ],
+      "paste_xy": [
+        59,
+        36
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "walk",
+      "direction": "nw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_walk_nw.png",
+      "candidate_sha256": "b95634ed33c218efd93212f7f220a35a841d11d24afee6b5cc62c78e69b18573",
+      "source_file": "li_kui_jiangzhou_walk_20260903_attempt1_true_alpha.png",
+      "source_sha256": "5ee7c0508b4c09a90aaf469b456a6882284fe4710b8f6ee0517095dd75232fec",
+      "source_cell_rect_xyxy": [
+        1570,
+        0,
+        2048,
+        768
+      ],
+      "source_rect_xyxy": [
+        1578,
+        72,
+        2048,
+        697
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28085106382978725,
+        0.28
+      ],
+      "resized_size": [
+        132,
+        175
+      ],
+      "paste_xy": [
+        62,
+        41
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "se",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_se.png",
+      "candidate_sha256": "6cef1a6e056c4140b21d31b1b43910a4331ccdf0655b1163eca6c62200a504f4",
+      "source_file": "li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_sha256": "39b297d2bcf217fce90c19f36aaae514c3f3033cb2b9b690340d4b79021767da",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        526,
+        768
+      ],
+      "source_rect_xyxy": [
+        69,
+        35,
+        487,
+        708
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2799043062200957,
+        0.28083209509658247
+      ],
+      "resized_size": [
+        117,
+        189
+      ],
+      "paste_xy": [
+        69,
+        27
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "sw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_sw.png",
+      "candidate_sha256": "de773716b0432c04d6c2b2327a86a6b1e3e5cb3261166c4c1c0069477ddf47df",
+      "source_file": "li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_sha256": "39b297d2bcf217fce90c19f36aaae514c3f3033cb2b9b690340d4b79021767da",
+      "source_cell_rect_xyxy": [
+        526,
+        0,
+        994,
+        768
+      ],
+      "source_rect_xyxy": [
+        565,
+        34,
+        966,
+        733
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2793017456359102,
+        0.2804005722460658
+      ],
+      "resized_size": [
+        112,
+        196
+      ],
+      "paste_xy": [
+        72,
+        20
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "ne",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_ne.png",
+      "candidate_sha256": "975010f6cf5894d7c3ad650d299cce8f81631816570fba5eed510d562804f203",
+      "source_file": "li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_sha256": "39b297d2bcf217fce90c19f36aaae514c3f3033cb2b9b690340d4b79021767da",
+      "source_cell_rect_xyxy": [
+        994,
+        0,
+        1514,
+        768
+      ],
+      "source_rect_xyxy": [
+        1023,
+        81,
+        1514,
+        709
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28105906313645623,
+        0.2802547770700637
+      ],
+      "resized_size": [
+        138,
+        176
+      ],
+      "paste_xy": [
+        59,
+        40
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "attack",
+      "direction": "nw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_attack_nw.png",
+      "candidate_sha256": "88aee545b2ba8d9d56af9722a0cb8b2d8bb69da9a8d0276590ce85500a5991d1",
+      "source_file": "li_kui_jiangzhou_attack_20260903_attempt1_true_alpha.png",
+      "source_sha256": "39b297d2bcf217fce90c19f36aaae514c3f3033cb2b9b690340d4b79021767da",
+      "source_cell_rect_xyxy": [
+        1514,
+        0,
+        2048,
+        768
+      ],
+      "source_rect_xyxy": [
+        1514,
+        68,
+        2031,
+        700
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2804642166344294,
+        0.2800632911392405
+      ],
+      "resized_size": [
+        145,
+        177
+      ],
+      "paste_xy": [
+        55,
+        39
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "se",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_se.png",
+      "candidate_sha256": "aff34b375e4a1474ed2fb40de050b929cc87656439c96b40a7d6abc06b48c151",
+      "source_file": "li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_sha256": "0d023f2907fc4f9398b1a6feab7ba54cdfd848150c7f33d25aec64cd6ffef58b",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        566,
+        724
+      ],
+      "source_rect_xyxy": [
+        32,
+        53,
+        540,
+        677
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2795275590551181,
+        0.28044871794871795
+      ],
+      "resized_size": [
+        142,
+        175
+      ],
+      "paste_xy": [
+        57,
+        41
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "sw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_sw.png",
+      "candidate_sha256": "5b9ea4564f01b960cafc7ce9c0ea0427f6eefde65ff343bde3b36e973505d4eb",
+      "source_file": "li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_sha256": "0d023f2907fc4f9398b1a6feab7ba54cdfd848150c7f33d25aec64cd6ffef58b",
+      "source_cell_rect_xyxy": [
+        566,
+        0,
+        1104,
+        724
+      ],
+      "source_rect_xyxy": [
+        592,
+        57,
+        1084,
+        671
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2804878048780488,
+        0.28013029315960913
+      ],
+      "resized_size": [
+        138,
+        172
+      ],
+      "paste_xy": [
+        59,
+        44
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "ne",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_ne.png",
+      "candidate_sha256": "56104394fc4e8aa938ec0f190522f9108f026ef6e4df528bf3e86f65dd5e799e",
+      "source_file": "li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_sha256": "0d023f2907fc4f9398b1a6feab7ba54cdfd848150c7f33d25aec64cd6ffef58b",
+      "source_cell_rect_xyxy": [
+        1104,
+        0,
+        1673,
+        724
+      ],
+      "source_rect_xyxy": [
+        1125,
+        61,
+        1637,
+        650
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28125,
+        0.2801358234295416
+      ],
+      "resized_size": [
+        144,
+        165
+      ],
+      "paste_xy": [
+        56,
+        51
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "hurt",
+      "direction": "nw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_hurt_nw.png",
+      "candidate_sha256": "232473d60b47b76fc7eaddd8f705b5e0cec10f08178bd6ac080334a4a307a1d4",
+      "source_file": "li_kui_jiangzhou_hurt_20260903_attempt1_true_alpha.png",
+      "source_sha256": "0d023f2907fc4f9398b1a6feab7ba54cdfd848150c7f33d25aec64cd6ffef58b",
+      "source_cell_rect_xyxy": [
+        1673,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1709,
+        72,
+        2166,
+        657
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2800875273522976,
+        0.28034188034188035
+      ],
+      "resized_size": [
+        128,
+        164
+      ],
+      "paste_xy": [
+        64,
+        52
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "se",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_se.png",
+      "candidate_sha256": "503b55976f33cbff91c9132fbc918478243fc03d6a109fbeea0a0a1706aec2db",
+      "source_file": "li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_sha256": "27129937ba2c346ec2fc3078c065bbe37c3f8f08e06da0dfbfaa084d8e60f8e3",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        566,
+        724
+      ],
+      "source_rect_xyxy": [
+        47,
+        208,
+        546,
+        574
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.280561122244489,
+        0.2814207650273224
+      ],
+      "resized_size": [
+        140,
+        103
+      ],
+      "paste_xy": [
+        58,
+        113
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "sw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_sw.png",
+      "candidate_sha256": "bacae24078cbbccc7cdcfa436df9891f248fcbe3c2035777c4cc4234dc8b1318",
+      "source_file": "li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_sha256": "27129937ba2c346ec2fc3078c065bbe37c3f8f08e06da0dfbfaa084d8e60f8e3",
+      "source_cell_rect_xyxy": [
+        566,
+        0,
+        1110,
+        724
+      ],
+      "source_rect_xyxy": [
+        587,
+        223,
+        1107,
+        563
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.28076923076923077,
+        0.27941176470588236
+      ],
+      "resized_size": [
+        146,
+        95
+      ],
+      "paste_xy": [
+        55,
+        121
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "ne",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_ne.png",
+      "candidate_sha256": "dc4c2a91c7c7e036fccbccd454850c64090c7c00b6cca91d13ba1417bf4a6e63",
+      "source_file": "li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_sha256": "27129937ba2c346ec2fc3078c065bbe37c3f8f08e06da0dfbfaa084d8e60f8e3",
+      "source_cell_rect_xyxy": [
+        1110,
+        0,
+        1602,
+        724
+      ],
+      "source_rect_xyxy": [
+        1111,
+        191,
+        1594,
+        558
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.2795031055900621,
+        0.28065395095367845
+      ],
+      "resized_size": [
+        135,
+        103
+      ],
+      "paste_xy": [
+        60,
+        113
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "variant": "li_kui_jiangzhou",
+      "state": "down",
+      "direction": "nw",
+      "candidate_path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_down_nw.png",
+      "candidate_sha256": "4a2755b0a196271622ee6efb137ed60364df35e4ed747735ee173ab6f74fe5d2",
+      "source_file": "li_kui_jiangzhou_down_20260903_attempt1_true_alpha.png",
+      "source_sha256": "27129937ba2c346ec2fc3078c065bbe37c3f8f08e06da0dfbfaa084d8e60f8e3",
+      "source_cell_rect_xyxy": [
+        1602,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1611,
+        206,
+        2154,
+        615
+      ],
+      "detection_alpha_used_only_to_choose_rect": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.2804005722460658,
+      "actual_scale_xy_after_integer_rounding": [
+        0.27992633517495397,
+        0.28117359413202936
+      ],
+      "resized_size": [
+        152,
+        115
+      ],
+      "paste_xy": [
+        52,
+        101
+      ],
+      "target_anchor_xy": [
+        128,
+        216
+      ],
+      "output_size": [
+        256,
+        256
+      ],
+      "output_mode": "RGBA"
+    }
+  ],
+  "portrait_candidate": {
+    "path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_portrait.png",
+    "sha256": "eeb9bd5a44e125a5e9b3e495cf909682df67ea1ad2c3fab89612779f8c586720",
+    "byte_identical_source": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/outputs/li_kui_jiangzhou_idle_se.png"
+  },
+  "preview": {
+    "path": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/runtime_size_fringe_preview.png",
+    "sha256": "d25621d940fd5d5cc23fa1bbb3479f5c650387d88c32f8ba765c3e2bc2d0f010"
+  },
+  "steam_modified_or_exported": false
+}

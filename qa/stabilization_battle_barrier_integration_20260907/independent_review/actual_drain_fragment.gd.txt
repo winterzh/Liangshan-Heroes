@@ -1,0 +1,84 @@
+# Append to the same SceneTree driver as actual_damage_driver_fragment.
+# Before that fragment's final return true, invoke:
+#   if not await _qa_exit_capture_cases(caster, victim): return false
+# STATIC PREPARATION ONLY. Original fragment and candidate remain unchanged.
+
+func _qa_capture_from_real_exit(observation: Dictionary) -> void:
+	# This callback is reached by real Projectile / LiBrawnAxesFx queue_free.
+	# The node has not finished leaving yet. Never fake capture_ready or advance
+	# either damage consumer manually. Record engine phase without assuming that
+	# queue_free's flush phase equals its originating damage callback phase.
+	observation["callbacks"] = int(observation["callbacks"]) + 1
+	observation["in_physics"] = Engine.is_in_physics_frame()
+	observation["engine_physics_frame"] = Engine.get_physics_frames()
+	observation["engine_process_frame"] = Engine.get_process_frames()
+	observation["request"] = battle.request_run_capture()
+
+func _qa_exit_capture_case(caster: Variant, victim: Variant, is_axes: bool) -> bool:
+	var label := "axes exit drain" if is_axes else "projectile exit drain"
+	if not _check(label + " starts running", not paused): return false
+	battle._open_pause()
+	if not _check(label + " fixture uses real user pause", paused): return false
+	var hp_before: float = victim.hp
+	var stats_before: float = _qa_hero_damage("li_kui")
+	var effect: Variant = null
+	var expected_damage := 13.0
+	if is_axes:
+		effect = battle.spawn_li_brawn_axes(caster, 160.0)
+		if not _check(label + " real unresolved axes creator", is_instance_valid(effect) and effect.hits.size() == 1 and effect.hits[0].target == victim and effect.elapsed == 0.0 and not effect.resolved): return false
+		expected_damage = float(effect.hits[0].dmg)
+	else:
+		var before_children: Array = battle.fx_root.get_children()
+		battle.spawn_projectile(caster, victim, expected_damage)
+		var count := 0
+		for child: Node in battle.fx_root.get_children():
+			if not before_children.has(child) and child.get_script() == load("res://scripts/projectile.gd"):
+				effect = child
+				count += 1
+		if not _check(label + " real single projectile creator", count == 1 and is_instance_valid(effect) and effect.target == victim and effect.shooter == caster): return false
+	if not _check(label + " positive nonlethal real hit plan", expected_damage > 0.0 and expected_damage < hp_before): return false
+	captured_clock.clear()
+	capture_rejections.clear()
+	var observation: Dictionary = {"callbacks": 0, "in_physics": false,
+		"engine_physics_frame": -1, "engine_process_frame": -1, "request": {}}
+	effect.tree_exiting.connect(_qa_capture_from_real_exit.bind(observation), CONNECT_ONE_SHOT)
+	battle._close_pause()
+	if not _check(label + " released to actual consumers", not paused): return false
+	# SceneTree signals continue while paused. Two boundaries are required by
+	# the candidate after the real exit callback requests capture.
+	for tick in range(180):
+		if not captured_clock.is_empty() or not capture_rejections.is_empty(): break
+		await physics_frame
+		await process_frame
+	if not _check(label + " actual exit callback exactly once", int(observation["callbacks"]) == 1): return false
+	if not _ok(label + " actual exit callback request accepted", observation["request"]): return false
+	if not _check(label + " actual controller reached HELD", not captured_clock.is_empty() and capture_rejections.is_empty() and paused): return false
+	if not _check(label + " queue_free completed before stable capture", not is_instance_valid(effect)): return false
+	if not _check(label + " real damage completed before stable capture", is_equal_approx(victim.hp, hp_before - expected_damage) and is_equal_approx(_qa_hero_damage("li_kui") - stats_before, expected_damage)): return false
+	if not _ok(label + " complete physics and world tree are healthy", battle._save_barrier.health()): return false
+	checks.append({"label": label + " exit callback engine phase recorded", "passed": true,
+		"tree_exiting_in_physics_frame": observation["in_physics"],
+		"engine_physics_frame": observation["engine_physics_frame"],
+		"engine_process_frame": observation["engine_process_frame"],
+		"note": "Queue-free flush observation, not a claim that this is the originating damage callback phase."})
+	var held_clock: Dictionary = battle._run_clock.capture()
+	if not _ok(label + " real held clock captured", held_clock): return false
+	var held_hp: float = victim.hp
+	var held_wave: float = battle.level._wave_t
+	var engine_before: int = Engine.get_physics_frames()
+	for tick in range(5):
+		await physics_frame
+		await process_frame
+	if not _check(label + " Engine advances while damage and world remain held", Engine.get_physics_frames() > engine_before and victim.hp == held_hp and battle.level._wave_t == held_wave and battle._run_clock.capture() == held_clock and not is_instance_valid(effect)): return false
+	if not _ok(label + " gate remains healthy after held frames", battle._save_barrier.health()): return false
+	if not _check(label + " release restores original running state", battle._save_barrier.release_capture().ok and not paused): return false
+	for tick in range(12): await physics_frame
+	await process_frame
+	if not _check(label + " no duplicate damage or exit after resume", int(observation["callbacks"]) == 1 and not is_instance_valid(effect) and is_equal_approx(victim.hp, hp_before - expected_damage) and is_equal_approx(_qa_hero_damage("li_kui") - stats_before, expected_damage)): return false
+	if not _check(label + " original cache phase and RNG health preserved", battle._run_cache_frame() == Engine.get_physics_frames() and battle._run_clock.fault().is_empty() and battle.gameplay_rng_fault().is_empty()): return false
+	return true
+
+func _qa_exit_capture_cases(caster: Variant, victim: Variant) -> bool:
+	if not await _qa_exit_capture_case(caster, victim, false): return false
+	if not await _qa_exit_capture_case(caster, victim, true): return false
+	return true

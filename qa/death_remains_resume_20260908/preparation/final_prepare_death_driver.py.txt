@@ -1,0 +1,24 @@
+from pathlib import Path
+root=Path(__file__).resolve().parents[1]
+s=(root/'qa/world_core_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+old='\tfor tick in range(120):'
+assert s.count(old)==1
+s=s.replace(old, '''\tvar victim: Variant = null
+\tfor unit: Variant in battle.units:
+\t\tif not unit.is_building and not unit.is_resource and not unit.is_hero:
+\t\t\tvictim = unit; break
+\tif not _check("actual classic death victim exists", victim != null): await _finish(true); return
+\tvictim.take_damage(1000000.0, null, false, true)
+\t_check("actual death creates a tracked remains node", victim.hp == 0.0 and battle._death_remains.size() == 1)
+''' + old)
+old='\ttarget_core.dispose()\n\tsource_core.dispose()\n\t_check("successful prepare'
+assert s.count(old)==1
+s=s.replace(old, '''\tif not await _remains_cases(core_script, identity, runtime, wire):
+\t\ttarget_core.dispose(); source_core.dispose(); await _finish(true); return
+''' + old)
+s=s.replace('world-core-native','death-remains-native').replace('[world core QA] ','[death remains QA] ')
+old='String(result.get("field", ""))'
+assert old in s
+s=s.replace(old, 'str(result.get("cause", result.get("path", result.get("section", result.get("field", "")))))')
+s+='\n'+(root/'.godot/death_remains_cases.gd.inc').read_text(encoding='utf-8')
+(root/'scratchpad/death_remains_20260908/driver.gd').write_text(s,encoding='utf-8',newline='\n')

@@ -1,0 +1,53 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+
+// Reads and validates files only. Deletion remains native PowerShell -LiteralPath.
+public static class CacheFileVerifier {
+    public static void NoLinks(string path) {
+        string current = Path.GetFullPath(path);
+        while (current != null) {
+            if ((File.GetAttributes(current) & FileAttributes.ReparsePoint) != 0)
+                throw new IOException("Reparse path refused: " + current);
+            var parent = Directory.GetParent(current);
+            current = parent == null ? null : parent.FullName;
+        }
+    }
+    public static long Verify(string root, string[] relative, long[] sizes, string[] digests) {
+        root = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar);
+        NoLinks(root);
+        if (relative.Length != sizes.Length || relative.Length != digests.Length)
+            throw new IOException("Expected cache arrays differ in length");
+        string prefix = root + Path.DirectorySeparatorChar;
+        var actual = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var pending = new Stack<string>(); pending.Push(root);
+        while (pending.Count > 0) {
+            foreach (string entry in Directory.EnumerateFileSystemEntries(pending.Pop())) {
+                var attributes = File.GetAttributes(entry);
+                if ((attributes & FileAttributes.ReparsePoint) != 0)
+                    throw new IOException("Nested reparse refused: " + entry);
+                if ((attributes & FileAttributes.Directory) != 0) pending.Push(entry);
+                else if (!actual.Add(Path.GetFullPath(entry))) throw new IOException("Duplicate actual file");
+            }
+        }
+        if (actual.Count != relative.Length) throw new IOException("Cache inventory count changed");
+        var expected = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        long bytes = 0;
+        for (int i = 0; i < relative.Length; i++) {
+            if (Path.IsPathRooted(relative[i])) throw new IOException("Rooted cache member refused");
+            string path = Path.GetFullPath(Path.Combine(root, relative[i]));
+            if (!path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) || !expected.Add(path))
+                throw new IOException("Outside or duplicate cache member");
+            if (!actual.Contains(path)) throw new IOException("Expected cache file missing");
+            if (new FileInfo(path).Length != sizes[i]) throw new IOException("Cache size changed");
+            using (var stream = File.OpenRead(path)) {
+                string hash = Convert.ToHexString(SHA256.HashData(stream)).ToLowerInvariant();
+                if (!String.Equals(hash, digests[i], StringComparison.Ordinal)) throw new IOException("Cache hash changed: " + path);
+            }
+            bytes = checked(bytes + sizes[i]);
+        }
+        if (!actual.SetEquals(expected)) throw new IOException("Unexpected cache file");
+        return bytes;
+    }
+}

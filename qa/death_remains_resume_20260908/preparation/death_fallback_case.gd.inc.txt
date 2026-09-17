@@ -1,0 +1,32 @@
+func _death_fallback_case() -> bool:
+	var source: Variant = _shell()
+	var target: Variant = _shell()
+	var stage: Variant = _stage()
+	source.fx_root = Node2D.new()
+	stage.add_child(source.fx_root)
+	var mark: Variant = scripts.battle.DeathRemains.new()
+	mark.configure(null, 7, 56.0, Transform2D(Vector2(1.0, 0.1), Vector2(0.0, 0.8), Vector2.ZERO), 2.0, 0.5)
+	mark.set_meta("render_height", 12.0)
+	source.fx_root.add_child(mark)
+	mark.expired.connect(Callable(source, "_on_death_remains_expired"))
+	source._death_remains = [mark]
+	source._death_remains_atlas_checked = true
+	var old: Variant = _mixed_visual(source)
+	contexts.append(old)
+	var saved: Dictionary = old.capture(source.fx_root, CONTENT, {})
+	if not _ok("remains missing optional atlas source capture", saved): return false
+	var owner: Dictionary = old.capture_remains_owner()
+	if not _ok("remains checked-null atlas cache capture", owner): return false
+	var restored: Variant = _mixed_visual(target)
+	contexts.append(restored)
+	var made: Dictionary = restored.prepare(JSON.parse_string(JSON.stringify(saved.value)), CONTENT, {})
+	if not _ok("remains no-atlas graph prepares", made): return false
+	target.fx_root = made.root
+	if not _ok("remains no-atlas owner binds", restored.bind_remains_owner(JSON.parse_string(JSON.stringify(owner.value)))): return false
+	var copy: Variant = target._death_remains[0]
+	_check("remains missing atlas preserves fallback and remembered failed lookup", copy.frame_texture == null and target._death_remains_atlas == null and target._death_remains_atlas_checked and copy.ground_basis == mark.ground_basis and copy.get_meta("render_height") == 12.0)
+	stage.add_child(target.fx_root)
+	if not _ok("remains missing atlas activates", restored.activate()): return false
+	var again: Dictionary = restored.capture(target.fx_root, CONTENT, {})
+	_check("remains missing atlas recaptures same value and metadata", again.ok and again.value == saved.value)
+	return failures.is_empty()

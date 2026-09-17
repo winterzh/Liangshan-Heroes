@@ -1,0 +1,96 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+root=Path.cwd(); out=root/'scratchpad/linked_fx_20260908'; q=root/'qa/linked_fx_20260908'
+head='0a51107243da347707386309ecfc2d9edd1bdabc'; run=sys.argv[1]; native=root/'.godot/stabilization_overlay'/run
+assert native.resolve().parent==(root/'.godot/stabilization_overlay').resolve()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+assert r['suite']=='linked-fx-resume-native'
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and report['complete'] and not report['failed_count'] and all(x['passed'] for x in report['checks'])
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+for row in changes:
+    p=root/row['path']; assert p.exists()==row['before_exists']
+    if p.exists(): assert sha(p)==row['before_raw_sha256']
+    assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+q.mkdir(exist_ok=False); (q/'.gdignore').write_text('\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes()); assert sha(dst)==sha(src)
+    pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    receipt=json.loads(path.read_text())
+    if receipt.get('source_head')!=head or receipt.get('suite')!='linked-fx-resume-native': continue
+    folder=path.parent; tag='runs/'+folder.name
+    runs.append({'run_id':folder.name,'complete':receipt.get('complete'),'freeze_sha256':receipt['freeze_sha256']})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes: archive(folder/'project'/row['path'],tag+'/'+Path(row['path']).name+'.txt')
+    archive(folder/'project/tools/linked_fx/driver.gd',tag+'/driver.gd.txt')
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_linked_fx.py','close_linked_fx.py','verify_linked_stage.py']: archive(root/'.godot'/name,'preparation/'+name+'.txt')
+uid=native/'project/scripts/run_linked_fx_state.gd.uid'; archive(uid,'candidate/run_linked_fx_state.gd.uid.txt')
+for row in changes: (root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/'scripts/run_linked_fx_state.gd.uid').write_bytes(uid.read_bytes())
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks']); count=report['check_count']; other=count-source_count
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'runs':runs,'changes':changes,'native_uid_sha256':sha(uid),'checks':count,'source_sha_checks':source_count,'other_checks':other,'full_gameplay_activation':False,'complete_world_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json')
+diagnostics=sum(x['label']=='native pixel diagnostics' for x in report['checks'])
+assertions=other-diagnostics
+spec=json.loads((out/'field_manifest.json').read_text())
+fields=sum(len(row['fields'])+len(row['references'])+len(row['textures']) for row in spec.values())
+installation.update({'diagnostic_rows':diagnostics,'non_source_assertions':assertions,'new_linked_classes':12,'new_native_fields':fields,'complete_visual_graph':False})
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+table='\n'.join('| '+row['class']+' | '+str(len(row['fields']))+' | '+(', '.join(row['references']) or '无')+' | '+(', '.join(row['textures']) or '无')+' |' for row in spec.values())
+frames=[x for x in report.get('completed_cases',[]) if str(x).startswith('linked_')]
+(root/'docs/LINKED_FX_RESUME_20260908.md').write_text(f'''# 单位跟随及贴图特效恢复
+
+视觉图补齐12个固定Battle类，合计{fields}个原生脚本字段（含继承时钟、Unit引用和Texture2D字段）。run_linked_fx_state校验固定字段/缓存，run_visual_graph只创建当前Script白名单；10个_ready增加恢复闸，普通新建仍执行原有投影、随机采样和寿命初始化。HuaLockMarkFx和FadingMark保持原Node2D行为。当前列出的剩余12类已接入；不把类型覆盖称为完整世界恢复，core仍v7及20分区，玩家继续入口尚未开放。
+
+| 原生类 | 标量及缓存字段数 | Unit引用 | 贴图 |
+| --- | --- | --- | --- |
+{table}
+
+共享Unit引用以稳定编号绑定新世界实际节点，空值和已释放引用分别保存；已释放引用必须先绑定共享脱树Unit占位，所有绑定完成并真正释放后才允许激活。该生命周期检查也覆盖既有Bolt链起点；激活前比较实际绑定对象及编号/有效性，拒绝被替换为旧世界指针、改号或提前释放。时钟、绘制缓存、贴图、节点变换和渲染覆盖在准备到激活间的变化会拒绝，额外元数据或回调也拒绝。关闭未提交图时清理本模块的引用记录。
+
+默认世界工厂从当前安装的Art固定脚本登记4种物品、16种技能弹体、16种技能命中图以及当前受信建筑定义的坍塌图；调用方显式资源登记保持优先级。普通飞斧默认使用当前物品axe图，缺失时按正常创建逻辑回退到技能弹体axe。符号标记匹配当前资源对象及图集区域/边距/尺寸/基础资源签名，保存的路径只参与比较，不作为资源加载入口；空贴图继续使用原程序化绘制分支。未登记资源或改变图集签名均拒绝。
+
+原生夹具使用12种实际构造器，确认完整脚本字段清单、JSON往返、缓存和生命周期保持、真实单位编号绑定。三组分别覆盖有效、空、已释放引用；有效组在真实idle中移动双方单位，然后结束蓄力/锁定、令目标死亡及释放引用，逐帧比较原/恢复效果的字段、变换、存在性和单次退出。黑雨失去跟随单位后保持原位置直到自身寿命结束，没有被错误改成即时消退。原生帧记录：{frames}。
+
+完整HELD经典Battle加入12类效果、非空建筑坍塌图及有待命中列表的贴图飞斧后，默认工厂完成capture/JSON/prepare，新效果绑定恢复后的实际Unit，数量一致且Battle仍DISABLED。飞斧绑定新Battle/Unit并保持未结算，不在准备阶段重放伤害。前序30类程序化特效、HUD/相机/世界显示/环境像素及分区坏记录回归保留。最终{count}条记录通过={source_count}来源SHA+{assertions}非来源断言+{diagnostics}像素诊断。[实际输入与日志](../qa/linked_fx_20260908/README.md)、[晋级收据](../qa/linked_fx_20260908/installation.json)。
+
+验证为Windows原生状态与生命周期、暂停全core准备，不是新增特效可见画面的人工验收、整场游戏重激活或跨进程继续。完整安装仍需Unit/视觉/显示激活的统一事务、场景与光标、Steam持久局绑定，随后继续槽/菜单/跨进程、经典30波和八关。1800秒、两台Windows、60FPS及真人/真实Steam双账号要求保持开放。GitHub stable同步，无Steam构建更新。
+''',encoding='utf-8',newline='\n')
+(q/'README.md').write_text(f'''# 单位跟随及贴图特效原生 QA
+
+来源`{head}`，最终运行`{run}`，freeze`{freeze}`。最终{count}条记录={source_count}来源SHA+{assertions}非来源断言+{diagnostics}像素诊断，全部通过。原有439项回归保留；新增{assertions-439}项。12个原生类、{fields}个脚本字段；实际帧记录{frames}。主窗口0×0、Windows Vulkan Forward+、隔离user://，Godot版本/二进制SHA、保护门禁和终止回执见runs内文件。
+
+三组真实idle对照覆盖有效/空/已释放引用、目标移动、蓄力和锁定结束、死亡及释放、贴图/缓存/自然退出保持；完整HELD世界中默认Art准备和新Unit引用回绑单列。没有把组件生命周期或环境专用像素回归当作新增特效可见画面、整场激活和跨进程验收。完整范围见[实现说明](../../docs/LINKED_FX_RESUME_20260908.md)。
+
+R1原生6535条记录通过；复核增加了激活前实际实体释放/编号变化、回调/元数据/渲染/变换变更拒绝，以及默认工厂贴图飞斧的准备核对。所有实际运行均归档于runs，SOURCE_PINS核对来源及受测副本，installation列明晋级文件。生产文件从最终受测字节复制，保留原有换行；新UID来自隔离Godot导入。
+
+复现需来源提交独立checkout，将candidate中的.gd.txt恢复为原.gd文件名放入scratchpad/linked_fx_20260908，保留.gdignore、manifest和freeze；新脚本UID由原生导入生成：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/linked_fx_20260908 --expected-files 4 --driver driver.gd --driver-destination tools/linked_fx/driver.gd --suite linked-fx-resume-native --prefix "[linked fx QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可更换受控短绝对路径。完整玩家继续、Steam持久绑定及原性能/美术/长时/双机/真人要求仍待完成。
+''',encoding='utf-8',newline='\n')
+def prepend(path,text):
+    p=root/path; p.write_bytes((text+'\n\n').encode()+p.read_bytes())
+prepend('docs/WORKLOG.md',f'## 2026-09-08 十二类单位跟随及贴图特效恢复\n\n12类/{fields}原生字段接入，稳定Unit引用/空与释放状态、Art贴图登记、缓存/时钟及激活前变更检查通过。三组原生逐帧生命周期、完整HELD工厂准备和前序回归通过，共{assertions}断言；{source_count}来源SHA与{diagnostics}诊断单列。[合同](LINKED_FX_RESUME_20260908.md)、[QA](../qa/linked_fx_20260908/README.md)。接下来推进完整世界安装/Steam持久局、磁盘继续和跨进程；仅同步stable。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 跟随与贴图特效恢复\n\n视觉图补齐此前剩余12类，世界工厂默认登记当前Art资源，恢复只从可信对象匹配贴图。core仍v7，菜单/启动方式未变。[实现与复现](LINKED_FX_RESUME_20260908.md)。完整玩家继续仍未开放。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 十二类单位跟随与贴图特效已接入\n\n此前剩余12类已完成固定字段、原生跟随/失效/生命周期及完整HELD工厂准备验证。[证据](LINKED_FX_RESUME_20260908.md)。完整世界安装、Steam持久局、磁盘继续/跨进程、八战役与原美术/性能/真人门槛保持开放。下方剩余12类状态为此前批次历史。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 跟随及贴图特效恢复\n\n- scripts/run_linked_fx_state.gd：12类固定字段、引用/贴图表及缓存校验。\n- docs/LINKED_FX_RESUME_20260908.md：当前Art登记与生命周期合同。\n- qa/linked_fx_20260908/：原生输入、来源/日志/报告及晋级SHA。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续更新：此前剩余12类特效已接入，默认工厂登记当前Art中的物品/技能/建筑贴图；core仍v7、20分区。见[当前证据](LINKED_FX_RESUME_20260908.md)，完整安装和玩家继续仍待交付。')
+prepend('docs/STABILIZATION_EXECUTION_20260907.md','2026-09-08推进：剩余12类特效已接入，当前Art贴图登记、稳定单位引用及原生跟随/失效行为验证通过。下一步推进完整世界安装、Steam持久局和玩家继续，原范围不变。[最新证据](LINKED_FX_RESUME_20260908.md)。')
+p=root/'docs/STABILIZATION_EXECUTION_20260907.md'
+s=p.read_text(encoding='utf-8').replace('剩余12类Fx与最终安装、继续槽和跨进程续玩仍未交付，见[最新证据](PROCEDURAL_FX_RESUME_20260908.md)','此前剩余12类Fx已补齐，完整安装、继续槽和跨进程续玩仍未交付，见[最新证据](LINKED_FX_RESUME_20260908.md)')
+p.write_text(s,encoding='utf-8',newline='\n')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve native-tested linked Fx adapter and evidence.\nscripts/run_linked_fx_state.gd* -text -whitespace\nqa/linked_fx_20260908/** -text -whitespace\n')
+print(json.dumps({'pins':len(pins),'runs':runs,'checks':count,'source_checks':source_count,'assertions':assertions,'diagnostics':diagnostics,'installed_bytes_equal_native':True}))

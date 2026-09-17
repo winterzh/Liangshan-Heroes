@@ -2,6 +2,22 @@ extends SceneTree
 ## Runs outside the exported pack; never initialize Steam or write account data.
 var checks: Array[Dictionary] = []
 var files: Array[String] = []
+var localization_report: Dictionary = {}
+var script_report: Dictionary = {}
+
+class SnapshotFixture extends RefCounted:
+	# Only the facade is injected. No live Steam initialization or write APIs.
+	var fail_getter := false
+	var invalid_counter := false
+	func query(command: String) -> String:
+		var owner := "76561198000000001"
+		if command == "identity": return JSON.stringify({"ok": true, "owner": owner, "app": 5088120})
+		if fail_getter: return JSON.stringify({"ok": false, "code": "GETTER_FAILED"})
+		if command.begins_with("current_stat "):
+			return JSON.stringify({"ok": true, "owner": owner, "source": "current_cache", "handle": "", "value": -1 if invalid_counter else 0})
+		if command.begins_with("current_achievement "):
+			return JSON.stringify({"ok": true, "owner": owner, "source": "current_cache", "handle": "", "value": false})
+		return JSON.stringify({"ok": false, "code": "BAD_COMMAND"})
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -16,19 +32,157 @@ func _list(path: String) -> void:
 	for name in dir.get_files(): files.append(path.path_join(name))
 	for name in dir.get_directories(): _list(path.path_join(name))
 
+func _check_scripts() -> void:
+	var path := OS.get_environment("LSH_QA_SCRIPTS_FILE")
+	var expected_hash := OS.get_environment("LSH_QA_SCRIPTS_SHA")
+	var manifest_valid: bool = not path.is_empty() and expected_hash.length() == 64 and FileAccess.get_sha256(path) == expected_hash
+	check("exact packaged script input manifest", manifest_valid)
+	if not manifest_valid: return
+	var paths: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	check("packaged script manifest is nonempty", paths is Array and not paths.is_empty())
+	if not paths is Array or paths.is_empty(): return
+	var seen: Dictionary = {}
+	for relative in paths:
+		var valid: bool = relative is String and relative.begins_with("scripts/") and relative.ends_with(".gd") and not ".." in relative and not "\\" in relative and not seen.has(relative)
+		check("valid unique packaged script path: " + str(relative), valid)
+		if not valid: continue
+		seen[relative] = true
+		var script: Resource = ResourceLoader.load("res://" + relative, "GDScript")
+		check("packaged script parses: " + relative, script is GDScript and script.can_instantiate())
+	script_report = {"manifest_sha256": expected_hash, "scripts": seen.size()}
+
+func _check_reader() -> void:
+	var present: bool = ClassDB.class_exists("SteamStatsReader")
+	check("read-only reader class in exported package", present)
+	if not present: return
+	var native_reader: Object = ClassDB.instantiate("SteamStatsReader")
+	for command in ["identity", "current_stat TOTAL_KILLS", "current_achievement ACH_WINS_10"]:
+		var raw: Variant = native_reader.call("query", command)
+		var row: Variant = JSON.parse_string(raw) if raw is String else null
+		check("native getter rejects uninitialized Steam: " + command, row is Dictionary and row.get("ok") == false and row.get("code") == "STEAM_NOT_INITIALIZED")
+	var facade_script: GDScript = load("res://scripts/steam_stats_reader.gd")
+	check("packed read-only facade", facade_script != null)
+	if facade_script == null: return
+	var reader: RefCounted = facade_script.new()
+	var fixture := SnapshotFixture.new()
+	reader.native = fixture
+	reader._owner = "76561198000000001"
+	var snapshot: Dictionary = reader.current_snapshot()
+	check("packed facade preserves valid zero and false", snapshot.get("ok", false) and snapshot.stats.size() == 4 and snapshot.unlocked.size() == 30 and snapshot.stats.TOTAL_KILLS == 0 and not snapshot.unlocked.ACH_WINS_10)
+	check("packed current cache is not write acknowledgement", snapshot.get("source") == "current_cache" and snapshot.get("handle") == "")
+	fixture.fail_getter = true
+	var failed: Dictionary = reader.current_snapshot()
+	check("packed getter failure supplies no default progress", failed.get("ok") == false and failed.get("code") == "GETTER_FAILED" and not failed.has("stats") and not failed.has("unlocked"))
+	fixture.fail_getter = false
+	fixture.invalid_counter = true
+	check("packed invalid counter rejects whole snapshot", reader.current_snapshot().get("code") == "BAD_STAT")
+
+func _check_unreleased_entries() -> void:
+	var flow: Node = root.get_node_or_null("ContinueFlow")
+	check("packed continue coordinator autoload", flow != null)
+	if flow != null:
+		check("packed public continue remains disabled and idle", not flow.is_enabled() and not flow.busy())
+		var parent := VBoxContainer.new()
+		flow.add_continue_entry(parent, null)
+		flow.add_save_entry(parent, null)
+		check("packed normal menus expose no save or continue buttons", parent.get_child_count() == 0)
+		parent.free()
+		var continued: Dictionary = flow.request_continue(null)
+		var saved: Dictionary = flow.request_save_exit(null)
+		check("packed direct continue request remains refused", continued.get("ok") == false and continued.get("code") == "CONTINUE_NOT_RELEASED")
+		check("packed direct save request remains refused", saved.get("ok") == false and saved.get("code") == "CONTINUE_NOT_RELEASED")
+		check("packed refused requests leave coordinator idle", not flow.busy())
+	var observer_script: GDScript = load("res://scripts/steam_stats_observer.gd")
+	check("packed optional observer facade", observer_script != null)
+	check("unreleased native observer is not shipped", not ClassDB.class_exists("SteamStatsObserver"))
+	if observer_script != null:
+		var observer: RefCounted = observer_script.new()
+		var attached: Dictionary = observer.attach("76561198000000001", "76561198000000002")
+		check("packed optional observer fails closed with released dependency", attached.get("ok") == false and attached.get("code") == "OBSERVER_UNSUPPORTED")
+		check("packed unsupported observer cannot request account data", observer.request().get("code") == "OBSERVER_CLOSED")
+
+func _check_localization() -> void:
+	var catalog_path := "res://assets/localization/catalog.json"
+	var expected_hash := OS.get_environment("LSH_QA_CATALOG_SHA")
+	var actual_hash := FileAccess.get_sha256(catalog_path)
+	check("packed localization catalog matches QA source", expected_hash.length() == 64 and actual_hash == expected_hash)
+	check("packed font license", FileAccess.file_exists("res://assets/fonts/OFL.txt"))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(catalog_path))
+	check("packed localization catalog is a nonempty dictionary", parsed is Dictionary and not parsed.is_empty())
+	var localize: Node = root.get_node_or_null("Localize")
+	check("packed Localize autoload", localize != null)
+	var font: Font = load("res://assets/fonts/NotoSansCJK-Regular.ttc")
+	check("packed CJK font resource", font != null)
+	var lore_script: GDScript = load("res://scripts/lore_data.gd")
+	check("packed original-text lore resource", lore_script != null)
+	if not parsed is Dictionary or parsed.is_empty() or localize == null or lore_script == null:
+		return
+	var constants: Dictionary = lore_script.get_script_constant_map()
+	var lore: Dictionary = constants.get("LORE", {})
+	var chapters: Dictionary = constants.get("CHAPTERS", {})
+	check("packed 108 complete biographies", lore.size() == 108)
+	check("packed 108 chapter reference entries", chapters.size() == 108)
+	for key in lore:
+		var source: String = lore[key]
+		check("packed biography has complete paragraphs: " + key, source.split("\n\n", false).size() >= 2)
+		var references: Variant = chapters.get(key, [])
+		var valid_references: bool = references is Array and not references.is_empty()
+		if references is Array:
+			for chapter in references:
+				valid_references = valid_references and chapter is int and chapter >= 1 and chapter <= 120
+		check("packed biography chapter references: " + key, valid_references)
+	var original_locale: String = localize.locale
+	var expected_pause := {"zh_CN": "暂停", "zh_TW": "暫停", "en": "Paused", "ja": "一時停止"}
+	var theme_script: GDScript = load("res://scripts/ui_theme.gd")
+	var locale_reports: Array[Dictionary] = []
+	for language in ["zh_CN", "zh_TW", "en", "ja"]:
+		check("packed language switch: " + language, localize.set_language(language, false))
+		check("packed translation locale: " + language, TranslationServer.get_locale() == language and localize.text("暂停") == expected_pause[language])
+		var mismatches: Array[String] = []
+		var mismatch_count := 0
+		for source in parsed:
+			var entry: Variant = parsed[source]
+			var translated: Variant = source if language == "zh_CN" else (entry.get(language, "") if entry is Dictionary else "")
+			if not translated is String or translated.is_empty() or localize.text(source) != translated:
+				mismatch_count += 1
+				if mismatches.size() < 20:
+					mismatches.append(source)
+		check("packed complete catalog translations: " + language, mismatch_count == 0)
+		for key in lore:
+			var source: String = lore[key]
+			var entry: Variant = parsed.get(source, {})
+			var translated: String = source if language == "zh_CN" else String(entry.get(language, ""))
+			check("packed full biography translation: " + language + ": " + key,
+				parsed.has(source) and not translated.is_empty() and localize.text(source) == translated
+				and translated.count("\n\n") == source.count("\n\n"))
+		var locale_font: FontVariation = theme_script.locale_font()
+		check("packed font face: " + language, locale_font.variation_face_index == {"zh_CN": 2, "zh_TW": 3}.get(language, 0))
+		for character in "汉語繁體中文日本語あいうえおカキクケコABC":
+			check("packed font glyph: " + language + ": " + character, font != null and locale_font.has_char(character.unicode_at(0)))
+		locale_reports.append({"locale": language, "catalog_entries": parsed.size(), "mismatch_count": mismatch_count, "first_mismatches": mismatches})
+	localize.set_language(original_locale, false)
+	localization_report = {"catalog_sha256": actual_hash, "expected_catalog_sha256": expected_hash,
+		"biographies": lore.size(), "chapter_references": chapters.size(), "locales": locale_reports}
+
 func _run() -> void:
 	await process_frame
 	check("Steam export feature", OS.has_feature("steam"))
 	check("native extension in exported package", Engine.has_singleton("Steam"))
 	var service := root.get_node("SteamService")
 	check("Steam QA initialization disabled", not service.available and service.native == null)
+	_check_reader()
+	_check_scripts()
+	_check_unreleased_entries()
 	_list("res://")
 	var forbidden := false
 	for path in files:
-		for prefix in ["tools/", "qa/", "docs/", "marketing/", "vendor/", "build/", "assets/campaign/source/"]:
+		for prefix in ["tools/", "qa/", "docs/", "marketing/", "vendor/", "native/", "build/", "scratchpad/", "assets/campaign/source/"]:
 			forbidden = forbidden or path.begins_with("res://" + prefix)
+		if path.begins_with("res://assets/localization/"):
+			forbidden = forbidden or path != "res://assets/localization/catalog.json"
 		forbidden = forbidden or "_raw" in path or "web_prompts" in path or ".godot/editor/" in path
 	check("package excludes development and source evidence", not forbidden)
+	_check_localization()
 	var catalog: GDScript = load("res://scripts/steam_achievement_catalog.gd")
 	for entry in catalog.entries():
 		for field in ["icon", "locked_icon"]:
@@ -48,7 +202,7 @@ func _run() -> void:
 	var passed := true
 	for row in checks: passed = passed and row.passed
 	var out := FileAccess.open(OS.get_environment("STEAM_PACKAGE_REPORT"), FileAccess.WRITE)
-	out.store_string(JSON.stringify({"passed":passed,"checks":checks,"files":files}, "\t"))
+	out.store_string(JSON.stringify({"passed":passed,"checks":checks,"files":files,"localization":localization_report,"scripts":script_report,"steam_initialized":false,"steam_write_calls":0}, "\t"))
 	out.close()
 	for i in range(3): await process_frame
 	print("STEAM_PACKAGE ", "PASS" if passed else "FAIL", " ", checks.size())

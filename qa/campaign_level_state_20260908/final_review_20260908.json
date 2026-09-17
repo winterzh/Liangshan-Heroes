@@ -1,0 +1,872 @@
+{
+  "reviewed_at": "2026-09-08T18:30:50.725368+08:00",
+  "complete": true,
+  "component_only": true,
+  "latest_batch": "20260908_182211_992a0be3",
+  "behavior_checks": 205,
+  "source_guard_checks": 5890,
+  "source_inputs": 2945,
+  "source_head": "21d70bcf85f6cd7c8601dec110a84c54f01f59ba",
+  "current_and_frozen_recheck_mismatches": [],
+  "snapshot_recheck_mismatches": [],
+  "steps": [
+    {
+      "name": "import",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "errors": 0,
+      "log_sha256": "e41aed83523e8094b719c3a9b303ab793c14f42908e1622ed29340dfe543f996"
+    },
+    {
+      "name": "profile_guard",
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "errors": 0,
+      "log_sha256": "1b2deb5f4d32d189d4cce47841620d65937eac2c424b9180dda7d2c58c999dfd"
+    },
+    {
+      "name": "component",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "errors": 0,
+      "log_sha256": "b12dc1a7809465aebc08b350c4cf78445196c6119bc029dda0465c76b08398c2"
+    }
+  ],
+  "engine_rerun_during_final_review": false,
+  "tested_sources_changed_during_final_review": false,
+  "sources": [
+    {
+      "path": "scripts/run_campaign_level_state.gd",
+      "sha256": "3c66f30484693163fbd518a7fc2c74701e8c0975788d5a02c7606daa6d9a5108"
+    },
+    {
+      "path": "tools/campaign_level_state_qa.gd",
+      "sha256": "b8e44bedc435c932c6921366151b895736f8244c143a27a4035edc7b67ed51ad"
+    },
+    {
+      "path": "tools/run_campaign_level_state_qa.py",
+      "sha256": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": "qa/campaign_level_state_20260908/.gdignore",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/component.log",
+      "sha256": "8305414d318b3f499ef442fee83ad7a1c713aa3319eaed257c9a1e972a0079ce",
+      "bytes": 10108
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/import.log",
+      "sha256": "e41aed83523e8094b719c3a9b303ab793c14f42908e1622ed29340dfe543f996",
+      "bytes": 293732
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/receipt.json",
+      "sha256": "26753fa448990660d128b19192f553f517b68ead0c8b770496b4b1fb432a1eca",
+      "bytes": 474109
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/report.json",
+      "sha256": "cae5e6fc7a4f1206ef9e393c8acbd45b044312052cab6dac45321608c6c570f1",
+      "bytes": 13975
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/campaign_level_state_qa.tscn",
+      "sha256": "52c2aad9062c6665c6cc92f495e9a74f246b83879485ab68d0640f6036519d1f",
+      "bytes": 192
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/campaign.gd",
+      "sha256": "63df0b8234065b0f50efcbbbe5bafc182a71f9b327c3b786e8e5c85e83842b22",
+      "bytes": 13895
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/level_base.gd",
+      "sha256": "667817e6611f2d2af0ce6c27712c32cd43f4d31edd87c269a68208835bb204d8",
+      "bytes": 3840
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/arena.gd",
+      "sha256": "48d3881fc1191c9c26285c06bb21780e64c0e005d652cc85443507a3300430de",
+      "bytes": 6571
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/arena.gd.uid",
+      "sha256": "50739cc341b3c6abdcf2f1f706c0df54115cdaa1c2a7592b0dc9e0d607ca4592",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/custom_defense.gd",
+      "sha256": "eb0d7d6977b675f9dc5dde34936e348b3b68d842d7b2ba4635edbf6e8c35451d",
+      "bytes": 2022
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/custom_defense.gd.uid",
+      "sha256": "69f4a9b2f705bb42a2a1b39f7e84fff9dd462595cc09df60cc29c9d08e5879e8",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level1_huangnigang.gd",
+      "sha256": "e53a1d132edf90bab9ee171df63673b010279527daef3c216e5d8cf2f23c4b03",
+      "bytes": 51880
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level1_huangnigang.gd.uid",
+      "sha256": "10aa5d1f2ac98fa7cf644992b7b97e10af6258961808f9862972ce4f106e4e50",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level1_huangnigang_short.gd",
+      "sha256": "f38349ee91234a0e27701d397e3674c58123fee645a1ba98afcb6613fb40cd77",
+      "bytes": 16419
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level1_huangnigang_short.gd.uid",
+      "sha256": "72f531a7433e54b979e4db4ab166de1b895ed762851c0356fd0c5fd667ae01b5",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level2_jiangzhou.gd",
+      "sha256": "d7841871235d924ebfd1509ac06cc2e3ddc6434a7accfd561de9c12280712f80",
+      "bytes": 33130
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level2_jiangzhou.gd.uid",
+      "sha256": "e94cc074af121222b26bc010196b607722559637c75e4bd2f2268912780d7f99",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level2_jiangzhou_rts.gd",
+      "sha256": "069643add4c227ffca62592ce60c3b0836a684eaf842ca8f910942190204e308",
+      "bytes": 23268
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level2_jiangzhou_rts.gd.uid",
+      "sha256": "e55b9aa4651bc19ff4fd1c0cb646d5edb34ceffe6d65b05c964fd5caa0bf259d",
+      "bytes": 19
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level3_zhujiazhuang.gd",
+      "sha256": "241e1d1bea7999e7188f17852aa35b166c16550a5facec99d70455d2ea552b75",
+      "bytes": 44875
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level3_zhujiazhuang.gd.uid",
+      "sha256": "0e68d612188fd20c467e780eeb4724df32297debade61c13ce0bfa69289e018e",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256": "143931c344b957e8fbb92418aed56655dbf2d3cc66dd2d47659c6c74afdca9de",
+      "bytes": 23607
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level3_zhujiazhuang_rts.gd.uid",
+      "sha256": "6210990b7afc46535db0400cfce95aedc626b1313e68b4bb070308ba1e7e67ec",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level4_lianhuanma.gd",
+      "sha256": "a45c965f624469aefd35b347b4f7bdbb7591ef16035b6851772ad4b417247e82",
+      "bytes": 37810
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level4_lianhuanma.gd.uid",
+      "sha256": "be4cf2c95e403bd6a12fd7f143862e8691b92783385701d7c7c747d9bb4579c3",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level4_lianhuanma_rts.gd",
+      "sha256": "81aa370ec7387b7eeaf28b57864972ff875067fcf121a686e9b498a46cbe20c1",
+      "bytes": 19110
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level4_lianhuanma_rts.gd.uid",
+      "sha256": "6a9815219bb87a3acde1cf51a79f8265c912d0ea5c2624794023fc0fbe3648ab",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level5_gao_rts.gd",
+      "sha256": "ef0100961ed7ea7ee247f53a13c40029167891a4eb08002cd9358fdb39375887",
+      "bytes": 26829
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level5_gao_rts.gd.uid",
+      "sha256": "e61c33e6d3f3a21e4f35ffaa439b4f1e700976402c0229c4474002f3437cdfdd",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level5_liangshan.gd",
+      "sha256": "118ccf8612edebec004b281f43bf8cd8018c9322453b495a0b9038b8b83f2091",
+      "bytes": 48783
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level5_liangshan.gd.uid",
+      "sha256": "48ff235ba4962d173c253a1768b1f0546012b2387e62a39d1a487ff023d41628",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level6_yezhulin.gd",
+      "sha256": "f8f23f85a6311ce0e65ffe60cfb2656fff4b23c713863725bf7b2c430449a25c",
+      "bytes": 33286
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level6_yezhulin.gd.uid",
+      "sha256": "35619467c7dae3f8ed730daf7548555faeedae9ecaa70c036eca8d2fd6f79c0c",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level7_kuaihuolin.gd",
+      "sha256": "37f6db9ad8cbd3f987bbd09e627444e73eae7b488d5279a99538766fe43682cb",
+      "bytes": 22741
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level7_kuaihuolin.gd.uid",
+      "sha256": "6ed904175e370cb2b30194e611ee19beb91990435dda3c650fe6593c11169739",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level7_kuaihuolin_short.gd",
+      "sha256": "f242caf12100dd22ee5c56a4b4133e1a897876ea5ae25aaaddaca65b51e53c55",
+      "bytes": 12634
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level7_kuaihuolin_short.gd.uid",
+      "sha256": "6df1267b30cd2bca84ca3cf3595039f32e7567e2fe4974fa87578cd4bf3c8e05",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level8_daming_rts.gd",
+      "sha256": "7bfb41ed9cf6421f87437661456a411bf3aeaa219267b43d9244978d9086f823",
+      "bytes": 24541
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level8_daming_rts.gd.uid",
+      "sha256": "d8fd777c6e62bc867720e5afd189342c1b546a3ff34934a482951abf0d53c601",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level8_dongchangfu.gd",
+      "sha256": "ac09d53e4c2f21a5012e91fda4cd9c39bd3a83cc0efb77c48d15bfe33775fa77",
+      "bytes": 47759
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/level8_dongchangfu.gd.uid",
+      "sha256": "d80b1121f91b05540fc3bc4cbdb7a6c9bfe05a9638015b884af976923dd2810b",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/scenario.gd",
+      "sha256": "a29496e73f8bf803feb779928da33d71f3cd9749350418645b27bd1a261f19b3",
+      "bytes": 12888
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/scenario.gd.uid",
+      "sha256": "d8ac5c23b240da2be804c020eb1bce929f4556ae0190df8e827cec51161e01bd",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/skirmish.gd",
+      "sha256": "84e9dc290de520dd2c7d443cfd5ff8cf6e955308760df31222d30bcc897d1d21",
+      "bytes": 27595
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/skirmish.gd.uid",
+      "sha256": "2a6abc84ccc5dc1a229749a34ef136cb167852a742c42c3877160244949f0a45",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/skirmish_ai.gd",
+      "sha256": "aebc9598fe381d05ec931055e46926b744e27a0a16e371f959e78d100952f9fd",
+      "bytes": 33102
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/levels/skirmish_ai.gd.uid",
+      "sha256": "00835a45cf4c9d019f7c99cf53967c903f9abda5fff38e76ddcfa82cae77ac19",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/run_campaign_level_state.gd",
+      "sha256": "14329277a43ef0a6817abefb5da1de94514120cefd01f04c1f392f3a919aafc8",
+      "bytes": 18611
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/run_state_value_codec.gd",
+      "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "bytes": 12091
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/scripts/unit.gd",
+      "sha256": "56e8458e4dbea7e4737fe2b857bac80c282165098c3ebbe69fa83cda90379309",
+      "bytes": 199432
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/tools/campaign_level_state_qa.gd",
+      "sha256": "217ed3a7f95b28ae9b63e02015ebcea1df282e704b0b9210a9ee9d2cfc97951f",
+      "bytes": 8953
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/tools/run_campaign_level_state_qa.py",
+      "sha256": "45a538c4592c386cdef56b807348611e56996c16c2dd12f7f0349aafb02e0d4a",
+      "bytes": 7600
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181217_518d3e1e/source_snapshot/tools/run_steam_integration_qa.py",
+      "sha256": "1b5772fd94ff59b5c067b0245e639611b9fed5f594c0e75d7dec2a45c8ce479c",
+      "bytes": 9225
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/component.log",
+      "sha256": "b12dc1a7809465aebc08b350c4cf78445196c6119bc029dda0465c76b08398c2",
+      "bytes": 13876
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/import.log",
+      "sha256": "e41aed83523e8094b719c3a9b303ab793c14f42908e1622ed29340dfe543f996",
+      "bytes": 293732
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/receipt.json",
+      "sha256": "e2849f22561b3838a93648e94714bd18ed9edc55c7c6be8087f1decb29107153",
+      "bytes": 474110
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/report.json",
+      "sha256": "6627a8286178e504149598c7e0a87a0f41aa3cda3a30804ddab309f1a620bac9",
+      "bytes": 19121
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/campaign_level_state_qa.tscn",
+      "sha256": "52c2aad9062c6665c6cc92f495e9a74f246b83879485ab68d0640f6036519d1f",
+      "bytes": 192
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/campaign.gd",
+      "sha256": "63df0b8234065b0f50efcbbbe5bafc182a71f9b327c3b786e8e5c85e83842b22",
+      "bytes": 13895
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/level_base.gd",
+      "sha256": "667817e6611f2d2af0ce6c27712c32cd43f4d31edd87c269a68208835bb204d8",
+      "bytes": 3840
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/arena.gd",
+      "sha256": "48d3881fc1191c9c26285c06bb21780e64c0e005d652cc85443507a3300430de",
+      "bytes": 6571
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/arena.gd.uid",
+      "sha256": "50739cc341b3c6abdcf2f1f706c0df54115cdaa1c2a7592b0dc9e0d607ca4592",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/custom_defense.gd",
+      "sha256": "eb0d7d6977b675f9dc5dde34936e348b3b68d842d7b2ba4635edbf6e8c35451d",
+      "bytes": 2022
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/custom_defense.gd.uid",
+      "sha256": "69f4a9b2f705bb42a2a1b39f7e84fff9dd462595cc09df60cc29c9d08e5879e8",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level1_huangnigang.gd",
+      "sha256": "e53a1d132edf90bab9ee171df63673b010279527daef3c216e5d8cf2f23c4b03",
+      "bytes": 51880
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level1_huangnigang.gd.uid",
+      "sha256": "10aa5d1f2ac98fa7cf644992b7b97e10af6258961808f9862972ce4f106e4e50",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level1_huangnigang_short.gd",
+      "sha256": "f38349ee91234a0e27701d397e3674c58123fee645a1ba98afcb6613fb40cd77",
+      "bytes": 16419
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level1_huangnigang_short.gd.uid",
+      "sha256": "72f531a7433e54b979e4db4ab166de1b895ed762851c0356fd0c5fd667ae01b5",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level2_jiangzhou.gd",
+      "sha256": "d7841871235d924ebfd1509ac06cc2e3ddc6434a7accfd561de9c12280712f80",
+      "bytes": 33130
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level2_jiangzhou.gd.uid",
+      "sha256": "e94cc074af121222b26bc010196b607722559637c75e4bd2f2268912780d7f99",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level2_jiangzhou_rts.gd",
+      "sha256": "069643add4c227ffca62592ce60c3b0836a684eaf842ca8f910942190204e308",
+      "bytes": 23268
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level2_jiangzhou_rts.gd.uid",
+      "sha256": "e55b9aa4651bc19ff4fd1c0cb646d5edb34ceffe6d65b05c964fd5caa0bf259d",
+      "bytes": 19
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level3_zhujiazhuang.gd",
+      "sha256": "241e1d1bea7999e7188f17852aa35b166c16550a5facec99d70455d2ea552b75",
+      "bytes": 44875
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level3_zhujiazhuang.gd.uid",
+      "sha256": "0e68d612188fd20c467e780eeb4724df32297debade61c13ce0bfa69289e018e",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256": "143931c344b957e8fbb92418aed56655dbf2d3cc66dd2d47659c6c74afdca9de",
+      "bytes": 23607
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level3_zhujiazhuang_rts.gd.uid",
+      "sha256": "6210990b7afc46535db0400cfce95aedc626b1313e68b4bb070308ba1e7e67ec",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level4_lianhuanma.gd",
+      "sha256": "a45c965f624469aefd35b347b4f7bdbb7591ef16035b6851772ad4b417247e82",
+      "bytes": 37810
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level4_lianhuanma.gd.uid",
+      "sha256": "be4cf2c95e403bd6a12fd7f143862e8691b92783385701d7c7c747d9bb4579c3",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level4_lianhuanma_rts.gd",
+      "sha256": "81aa370ec7387b7eeaf28b57864972ff875067fcf121a686e9b498a46cbe20c1",
+      "bytes": 19110
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level4_lianhuanma_rts.gd.uid",
+      "sha256": "6a9815219bb87a3acde1cf51a79f8265c912d0ea5c2624794023fc0fbe3648ab",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level5_gao_rts.gd",
+      "sha256": "ef0100961ed7ea7ee247f53a13c40029167891a4eb08002cd9358fdb39375887",
+      "bytes": 26829
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level5_gao_rts.gd.uid",
+      "sha256": "e61c33e6d3f3a21e4f35ffaa439b4f1e700976402c0229c4474002f3437cdfdd",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level5_liangshan.gd",
+      "sha256": "118ccf8612edebec004b281f43bf8cd8018c9322453b495a0b9038b8b83f2091",
+      "bytes": 48783
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level5_liangshan.gd.uid",
+      "sha256": "48ff235ba4962d173c253a1768b1f0546012b2387e62a39d1a487ff023d41628",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level6_yezhulin.gd",
+      "sha256": "f8f23f85a6311ce0e65ffe60cfb2656fff4b23c713863725bf7b2c430449a25c",
+      "bytes": 33286
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level6_yezhulin.gd.uid",
+      "sha256": "35619467c7dae3f8ed730daf7548555faeedae9ecaa70c036eca8d2fd6f79c0c",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level7_kuaihuolin.gd",
+      "sha256": "37f6db9ad8cbd3f987bbd09e627444e73eae7b488d5279a99538766fe43682cb",
+      "bytes": 22741
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level7_kuaihuolin.gd.uid",
+      "sha256": "6ed904175e370cb2b30194e611ee19beb91990435dda3c650fe6593c11169739",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level7_kuaihuolin_short.gd",
+      "sha256": "f242caf12100dd22ee5c56a4b4133e1a897876ea5ae25aaaddaca65b51e53c55",
+      "bytes": 12634
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level7_kuaihuolin_short.gd.uid",
+      "sha256": "6df1267b30cd2bca84ca3cf3595039f32e7567e2fe4974fa87578cd4bf3c8e05",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level8_daming_rts.gd",
+      "sha256": "7bfb41ed9cf6421f87437661456a411bf3aeaa219267b43d9244978d9086f823",
+      "bytes": 24541
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level8_daming_rts.gd.uid",
+      "sha256": "d8fd777c6e62bc867720e5afd189342c1b546a3ff34934a482951abf0d53c601",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level8_dongchangfu.gd",
+      "sha256": "ac09d53e4c2f21a5012e91fda4cd9c39bd3a83cc0efb77c48d15bfe33775fa77",
+      "bytes": 47759
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/level8_dongchangfu.gd.uid",
+      "sha256": "d80b1121f91b05540fc3bc4cbdb7a6c9bfe05a9638015b884af976923dd2810b",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/scenario.gd",
+      "sha256": "a29496e73f8bf803feb779928da33d71f3cd9749350418645b27bd1a261f19b3",
+      "bytes": 12888
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/scenario.gd.uid",
+      "sha256": "d8ac5c23b240da2be804c020eb1bce929f4556ae0190df8e827cec51161e01bd",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/skirmish.gd",
+      "sha256": "84e9dc290de520dd2c7d443cfd5ff8cf6e955308760df31222d30bcc897d1d21",
+      "bytes": 27595
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/skirmish.gd.uid",
+      "sha256": "2a6abc84ccc5dc1a229749a34ef136cb167852a742c42c3877160244949f0a45",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/skirmish_ai.gd",
+      "sha256": "aebc9598fe381d05ec931055e46926b744e27a0a16e371f959e78d100952f9fd",
+      "bytes": 33102
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/levels/skirmish_ai.gd.uid",
+      "sha256": "00835a45cf4c9d019f7c99cf53967c903f9abda5fff38e76ddcfa82cae77ac19",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/run_campaign_level_state.gd",
+      "sha256": "3c66f30484693163fbd518a7fc2c74701e8c0975788d5a02c7606daa6d9a5108",
+      "bytes": 20324
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/run_state_value_codec.gd",
+      "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "bytes": 12091
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/scripts/unit.gd",
+      "sha256": "56e8458e4dbea7e4737fe2b857bac80c282165098c3ebbe69fa83cda90379309",
+      "bytes": 199432
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/tools/campaign_level_state_qa.gd",
+      "sha256": "f5eb240e48c646b7fe4321325a57f4cfac3a59d722860f87296ec86dcac1c44f",
+      "bytes": 12193
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/tools/run_campaign_level_state_qa.py",
+      "sha256": "c50c6017225235999042b51cd8c47f969119bbbd4c94d7e31dbc6a1d91beeeef",
+      "bytes": 7600
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_181947_939bf440/source_snapshot/tools/run_steam_integration_qa.py",
+      "sha256": "1b5772fd94ff59b5c067b0245e639611b9fed5f594c0e75d7dec2a45c8ce479c",
+      "bytes": 9225
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/component.log",
+      "sha256": "b12dc1a7809465aebc08b350c4cf78445196c6119bc029dda0465c76b08398c2",
+      "bytes": 13876
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/import.log",
+      "sha256": "e41aed83523e8094b719c3a9b303ab793c14f42908e1622ed29340dfe543f996",
+      "bytes": 293732
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/profile_guard.log",
+      "sha256": "1b2deb5f4d32d189d4cce47841620d65937eac2c424b9180dda7d2c58c999dfd",
+      "bytes": 125
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/receipt.json",
+      "sha256": "514bbd7198968defb5b5e9cde8f9162a4f6cd48e5b4388f8e7b6186adad29e6d",
+      "bytes": 474408
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/report.json",
+      "sha256": "6627a8286178e504149598c7e0a87a0f41aa3cda3a30804ddab309f1a620bac9",
+      "bytes": 19121
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/campaign_level_state_qa.tscn",
+      "sha256": "52c2aad9062c6665c6cc92f495e9a74f246b83879485ab68d0640f6036519d1f",
+      "bytes": 192
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/campaign.gd",
+      "sha256": "63df0b8234065b0f50efcbbbe5bafc182a71f9b327c3b786e8e5c85e83842b22",
+      "bytes": 13895
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/level_base.gd",
+      "sha256": "667817e6611f2d2af0ce6c27712c32cd43f4d31edd87c269a68208835bb204d8",
+      "bytes": 3840
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/arena.gd",
+      "sha256": "48d3881fc1191c9c26285c06bb21780e64c0e005d652cc85443507a3300430de",
+      "bytes": 6571
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/arena.gd.uid",
+      "sha256": "50739cc341b3c6abdcf2f1f706c0df54115cdaa1c2a7592b0dc9e0d607ca4592",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/custom_defense.gd",
+      "sha256": "eb0d7d6977b675f9dc5dde34936e348b3b68d842d7b2ba4635edbf6e8c35451d",
+      "bytes": 2022
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/custom_defense.gd.uid",
+      "sha256": "69f4a9b2f705bb42a2a1b39f7e84fff9dd462595cc09df60cc29c9d08e5879e8",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level1_huangnigang.gd",
+      "sha256": "e53a1d132edf90bab9ee171df63673b010279527daef3c216e5d8cf2f23c4b03",
+      "bytes": 51880
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level1_huangnigang.gd.uid",
+      "sha256": "10aa5d1f2ac98fa7cf644992b7b97e10af6258961808f9862972ce4f106e4e50",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level1_huangnigang_short.gd",
+      "sha256": "f38349ee91234a0e27701d397e3674c58123fee645a1ba98afcb6613fb40cd77",
+      "bytes": 16419
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level1_huangnigang_short.gd.uid",
+      "sha256": "72f531a7433e54b979e4db4ab166de1b895ed762851c0356fd0c5fd667ae01b5",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level2_jiangzhou.gd",
+      "sha256": "d7841871235d924ebfd1509ac06cc2e3ddc6434a7accfd561de9c12280712f80",
+      "bytes": 33130
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level2_jiangzhou.gd.uid",
+      "sha256": "e94cc074af121222b26bc010196b607722559637c75e4bd2f2268912780d7f99",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level2_jiangzhou_rts.gd",
+      "sha256": "069643add4c227ffca62592ce60c3b0836a684eaf842ca8f910942190204e308",
+      "bytes": 23268
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level2_jiangzhou_rts.gd.uid",
+      "sha256": "e55b9aa4651bc19ff4fd1c0cb646d5edb34ceffe6d65b05c964fd5caa0bf259d",
+      "bytes": 19
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level3_zhujiazhuang.gd",
+      "sha256": "241e1d1bea7999e7188f17852aa35b166c16550a5facec99d70455d2ea552b75",
+      "bytes": 44875
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level3_zhujiazhuang.gd.uid",
+      "sha256": "0e68d612188fd20c467e780eeb4724df32297debade61c13ce0bfa69289e018e",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256": "143931c344b957e8fbb92418aed56655dbf2d3cc66dd2d47659c6c74afdca9de",
+      "bytes": 23607
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level3_zhujiazhuang_rts.gd.uid",
+      "sha256": "6210990b7afc46535db0400cfce95aedc626b1313e68b4bb070308ba1e7e67ec",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level4_lianhuanma.gd",
+      "sha256": "a45c965f624469aefd35b347b4f7bdbb7591ef16035b6851772ad4b417247e82",
+      "bytes": 37810
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level4_lianhuanma.gd.uid",
+      "sha256": "be4cf2c95e403bd6a12fd7f143862e8691b92783385701d7c7c747d9bb4579c3",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level4_lianhuanma_rts.gd",
+      "sha256": "81aa370ec7387b7eeaf28b57864972ff875067fcf121a686e9b498a46cbe20c1",
+      "bytes": 19110
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level4_lianhuanma_rts.gd.uid",
+      "sha256": "6a9815219bb87a3acde1cf51a79f8265c912d0ea5c2624794023fc0fbe3648ab",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level5_gao_rts.gd",
+      "sha256": "ef0100961ed7ea7ee247f53a13c40029167891a4eb08002cd9358fdb39375887",
+      "bytes": 26829
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level5_gao_rts.gd.uid",
+      "sha256": "e61c33e6d3f3a21e4f35ffaa439b4f1e700976402c0229c4474002f3437cdfdd",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level5_liangshan.gd",
+      "sha256": "118ccf8612edebec004b281f43bf8cd8018c9322453b495a0b9038b8b83f2091",
+      "bytes": 48783
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level5_liangshan.gd.uid",
+      "sha256": "48ff235ba4962d173c253a1768b1f0546012b2387e62a39d1a487ff023d41628",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level6_yezhulin.gd",
+      "sha256": "f8f23f85a6311ce0e65ffe60cfb2656fff4b23c713863725bf7b2c430449a25c",
+      "bytes": 33286
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level6_yezhulin.gd.uid",
+      "sha256": "35619467c7dae3f8ed730daf7548555faeedae9ecaa70c036eca8d2fd6f79c0c",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level7_kuaihuolin.gd",
+      "sha256": "37f6db9ad8cbd3f987bbd09e627444e73eae7b488d5279a99538766fe43682cb",
+      "bytes": 22741
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level7_kuaihuolin.gd.uid",
+      "sha256": "6ed904175e370cb2b30194e611ee19beb91990435dda3c650fe6593c11169739",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level7_kuaihuolin_short.gd",
+      "sha256": "f242caf12100dd22ee5c56a4b4133e1a897876ea5ae25aaaddaca65b51e53c55",
+      "bytes": 12634
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level7_kuaihuolin_short.gd.uid",
+      "sha256": "6df1267b30cd2bca84ca3cf3595039f32e7567e2fe4974fa87578cd4bf3c8e05",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level8_daming_rts.gd",
+      "sha256": "7bfb41ed9cf6421f87437661456a411bf3aeaa219267b43d9244978d9086f823",
+      "bytes": 24541
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level8_daming_rts.gd.uid",
+      "sha256": "d8fd777c6e62bc867720e5afd189342c1b546a3ff34934a482951abf0d53c601",
+      "bytes": 20
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level8_dongchangfu.gd",
+      "sha256": "ac09d53e4c2f21a5012e91fda4cd9c39bd3a83cc0efb77c48d15bfe33775fa77",
+      "bytes": 47759
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/level8_dongchangfu.gd.uid",
+      "sha256": "d80b1121f91b05540fc3bc4cbdb7a6c9bfe05a9638015b884af976923dd2810b",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/scenario.gd",
+      "sha256": "a29496e73f8bf803feb779928da33d71f3cd9749350418645b27bd1a261f19b3",
+      "bytes": 12888
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/scenario.gd.uid",
+      "sha256": "d8ac5c23b240da2be804c020eb1bce929f4556ae0190df8e827cec51161e01bd",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/skirmish.gd",
+      "sha256": "84e9dc290de520dd2c7d443cfd5ff8cf6e955308760df31222d30bcc897d1d21",
+      "bytes": 27595
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/skirmish.gd.uid",
+      "sha256": "2a6abc84ccc5dc1a229749a34ef136cb167852a742c42c3877160244949f0a45",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/skirmish_ai.gd",
+      "sha256": "aebc9598fe381d05ec931055e46926b744e27a0a16e371f959e78d100952f9fd",
+      "bytes": 33102
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/levels/skirmish_ai.gd.uid",
+      "sha256": "00835a45cf4c9d019f7c99cf53967c903f9abda5fff38e76ddcfa82cae77ac19",
+      "bytes": 21
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/run_campaign_level_state.gd",
+      "sha256": "3c66f30484693163fbd518a7fc2c74701e8c0975788d5a02c7606daa6d9a5108",
+      "bytes": 20324
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/run_state_value_codec.gd",
+      "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "bytes": 12091
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/scripts/unit.gd",
+      "sha256": "56e8458e4dbea7e4737fe2b857bac80c282165098c3ebbe69fa83cda90379309",
+      "bytes": 199432
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/tools/campaign_level_state_qa.gd",
+      "sha256": "b8e44bedc435c932c6921366151b895736f8244c143a27a4035edc7b67ed51ad",
+      "bytes": 13103
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/tools/run_campaign_level_state_qa.py",
+      "sha256": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba",
+      "bytes": 8216
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/20260908_182211_992a0be3/source_snapshot/tools/run_steam_integration_qa.py",
+      "sha256": "1b5772fd94ff59b5c067b0245e639611b9fed5f594c0e75d7dec2a45c8ce479c",
+      "bytes": 9225
+    },
+    {
+      "path": "qa/campaign_level_state_20260908/README.md",
+      "sha256": "5c3b5d114a9e12d853093de65d924ae28f01a8e996f7f70a90be98873326122d",
+      "bytes": 2554
+    }
+  ],
+  "fixed_during_review": [
+    "Documentation and QA index now identify final 205-check batch plus profile guard; historical 152-check evidence retained."
+  ],
+  "unresolved": [
+    "No Battle/world/campaign Mission/visual adapter integration.",
+    "No actual role and mission cross-validation or full chapter gameplay.",
+    "No cross-process whole-world resume or terminal reward verification.",
+    "No real Steam persistence acceptance, performance, two-machine or human acceptance."
+  ]
+}

@@ -1,0 +1,48 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/art_full_20260915/zhu_zhaofeng_hurt_direction4.png" id="zhu_zhaofeng_hurt_atlas"]
+
+[sub_resource type="AtlasTexture" id="hurt_a_nw"]
+atlas = ExtResource("zhu_zhaofeng_hurt_atlas")
+region = Rect2(0, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="hurt_b_nw"]
+atlas = ExtResource("zhu_zhaofeng_hurt_atlas")
+region = Rect2(627, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="hurt_c_nw"]
+atlas = ExtResource("zhu_zhaofeng_hurt_atlas")
+region = Rect2(1254, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="hurt_d_nw"]
+atlas = ExtResource("zhu_zhaofeng_hurt_atlas")
+region = Rect2(1881, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_a_nw")},
+{"duration": 1.0, "texture": SubResource("hurt_b_nw")},
+{"duration": 1.0, "texture": SubResource("hurt_c_nw")},
+{"duration": 1.0, "texture": SubResource("hurt_d_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

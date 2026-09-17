@@ -1,0 +1,123 @@
+from pathlib import Path
+import hashlib,json
+root=Path.cwd();out=root/'scratchpad/camera_resume_20260908'
+def rep(s,a,b):
+ assert s.count(a)==1,(a,s.count(a));return s.replace(a,b)
+c=(root/'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c=rep(c,'classic_world_core_preparation_v3','classic_world_core_preparation_v4')
+c=rep(c,'"death_remains", "world_display"]','"death_remains", "world_display", "camera"]')
+c=rep(c,'const WorldDisplay :=','const CameraState := preload("res://scripts/run_camera_state.gd")\nconst WorldDisplay :=')
+c=rep(c,'var _display: Variant = null','var _display: Variant = null\nvar _camera_module: Variant = null')
+c=rep(c,'\tsections["world_display"] = display.value','''\tsections["world_display"] = display.value
+\tvar camera_state: Dictionary = CameraState.new().capture(source)
+\tif not camera_state.ok:
+\t\tif retained_identity == null: identity.dispose()
+\t\treturn camera_state
+\tsections["camera"] = camera_state.value''')
+c=rep(c,'\t_pending_root = s.root.duplicate(true)','''\t_camera_module = CameraState.new()
+\tchecked = _camera_module.bind(_battle, s.camera)
+\tif not checked.ok: return _abort(checked, "camera")
+\t_pending_root = s.root.duplicate(true)''')
+c=rep(c,'"world_display": _display,','"world_display": _display, "camera_module": _camera_module,')
+c=rep(c,'\t_display = null','\t_display = null\n\t_camera_module = null')
+(out/'run_battle_world_core.gd').write_text(c,encoding='utf-8',newline='\n')
+s=(root/'scripts/rts_camera.gd').read_text(encoding='utf-8')
+s=rep(s,'func _ready() -> void:\n\tmake_current()', 'func _ready() -> void:\n\tif has_meta("_run_camera_prepared"):\n\t\treturn # The paused installation owns activation and preserves zoom.\n\tmake_current()')
+(out/'rts_camera.gd').write_text(s,encoding='utf-8',newline='\n')
+d=(root/'qa/world_display_resume_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('world-display-native','camera-resume-native').replace('[world display QA] ','[camera resume QA] ')
+a='\tbattle._save_barrier.capture_ready.connect(_barrier_ready)'
+d=rep(d,a,'''\tbattle.camera.position = Vector2(250.0, 320.0)
+\tbattle.camera.zoom = Vector2(2.3, 1.8)
+\tbattle.camera.pan_speed = 831.0
+\tbattle.camera._shake = 7.0; battle.camera._shake_ph = 1.25
+\tbattle.camera._user_input_t = 1.4
+\tbattle.camera.touch_mode = true
+\tbattle.camera.process_mode = Node.PROCESS_MODE_PAUSABLE
+\tbattle.camera.process_priority = 13
+\t# Explicit active pointer fixture; the real barrier must discard this gesture.
+\tbattle.camera._mid_drag = true; battle.camera._touches = {0: Vector2(20.0, 30.0)}
+\tbattle.camera._pinch_d = 8.0; battle.camera._pinch_mid = Vector2(4.0, 6.0)
+'''+a)
+a='\tvar target: Variant = prepared.battle'
+d=rep(d,a,a+'''\n\tif not await _camera_cases(core_script, identity, runtime, wire):
+\t\ttarget_core.dispose(); source_core.dispose(); await _finish(true); return''')
+d+='''
+func _camera_cases(core_script: Script, identity: Dictionary, runtime: Dictionary, wire: Dictionary) -> bool:
+\tvar before: int = checks.size()
+\tvar camera_script: Script = load("res://scripts/run_camera_state.gd")
+\tvar saved: Dictionary = codec.decode(wire.sections.camera).value
+\tvar actual: Variant = battle.camera
+\t_check("camera capture recovers activation from before real input gate", actual.process_mode == Node.PROCESS_MODE_DISABLED and not actual.is_processing_unhandled_input() and saved.node.activation.mode == Node.PROCESS_MODE_PAUSABLE and saved.node.activation.unhandled_input)
+\t_check("camera barrier releases pointer gesture but retains touch mode", saved.script._mid_drag == false and saved.script._touches.is_empty() and saved.script._pinch_d == 0.0 and saved.script._pinch_mid == Vector2.ZERO and saved.script.touch_mode)
+\tfor problem: String in ["zoom", "gesture", "smoothing", "unknown", "type"]:
+\t\tvar bad: Dictionary = wire.duplicate(true); var raw: Dictionary = saved.duplicate(true)
+\t\tmatch problem:
+\t\t\t"zoom": raw.engine.zoom.x = 0.0
+\t\t\t"gesture": raw.script._mid_drag = true
+\t\t\t"smoothing": raw.engine.position_smoothing_enabled = true
+\t\t\t"unknown": raw.engine["resource"] = "res://unknown.gd"
+\t\t\t"type": raw.script.pan_speed = "fast"
+\t\tbad.sections.camera = codec.encode(raw).value
+\t\tvar failed: Variant = core_script.new(identity, runtime)
+\t\t_check("camera corrupt " + problem + " rolls back complete prepared world", not failed.prepare(bad).ok and failed._battle == null and failed._identity == null)
+\t\tfailed.dispose()
+\tvar module: Variant = core_script.new(identity, runtime)
+\tvar plan: Dictionary = module.prepare(wire)
+\tif not _ok("camera comparison core prepares", plan): module.dispose(); return false
+\tvar target: Variant = plan.battle
+\tvar cam: Variant = target.camera
+\tvar equal := true
+\tfor key: String in camera_script.SCRIPT_FIELDS: equal = equal and cam.get(key) == actual.get(key)
+\t_check("camera all ten script values equal held source", equal)
+\tequal = true
+\tfor key: String in camera_script.CAMERA_INTS + camera_script.CAMERA_BOOLS + camera_script.CAMERA_FLOATS + ["offset", "zoom"]:
+\t\tif key != "enabled": equal = equal and cam.get(key) == actual.get(key)
+\t_check("camera all supported native values equal source before mount", equal)
+\tvar read: Variant = camera_script.new()
+\tvar a: Dictionary = read._nodes._node_values(actual); a.erase("activation")
+\tvar b: Dictionary = read._nodes._node_values(cam); b.erase("activation")
+\t_check("camera inherited Node2D fields equal source", a == b)
+\t_check("camera cannot activate before mounting", not plan.camera_module.activate().ok)
+\troot.add_child(target)
+\t_check("camera ready preserves zoom and never steals old viewport", cam.zoom == saved.engine.zoom and not cam.enabled and actual.is_current() and not cam.is_current())
+\t_check("camera paused activation selects prepared camera", plan.camera_module.activate().ok and cam.is_current() and not actual.is_current())
+\t_check("camera activation restores pre-barrier input and processing", cam.process_mode == saved.node.activation.mode and cam.is_processing() == saved.node.activation.process and cam.is_processing_unhandled_input() == saved.node.activation.unhandled_input and cam.process_priority == saved.node.activation.priority)
+\t# Isolate camera idle callbacks in the same real Viewport; gameplay stays off.
+\tcam.process_mode = Node.PROCESS_MODE_ALWAYS
+\tvar shake_before: float = cam._shake
+\tvar phase_before: float = cam._shake_ph
+\tfor frame in range(3): await process_frame
+\t_check("camera shake resumes through native idle frames", cam._shake < shake_before and cam._shake_ph > phase_before and cam._user_input_t < saved.script._user_input_t)
+\tvar wheel := InputEventMouseButton.new()
+\twheel.button_index = MOUSE_BUTTON_WHEEL_UP; wheel.pressed = true; wheel.position = Vector2(300.0, 200.0)
+\tvar old_zoom: Vector2 = cam.zoom
+\troot.push_input(wheel, true)
+\tawait process_frame
+\t_check("restored camera receives real viewport wheel input", cam.zoom.x > old_zoom.x and cam._user_input_t > 0.0)
+\tvar left: Vector2 = cam.position
+\tvar down := InputEventMouseButton.new(); down.button_index = MOUSE_BUTTON_MIDDLE; down.pressed = true; down.position = Vector2(300.0, 200.0)
+\troot.push_input(down, true)
+\tvar move := InputEventMouseMotion.new(); move.position = Vector2(330.0, 212.0); move.relative = Vector2(30.0, 12.0)
+\troot.push_input(move, true)
+\tdown.pressed = false; root.push_input(down, true)
+\tawait process_frame
+\t_check("restored camera receives viewport drag and release", cam.position != left and not cam._mid_drag)
+\t_check("camera refuses repeated activation", not plan.camera_module.activate().ok)
+\tmodule.dispose(); actual.make_current(); actual.force_update_scroll()
+\t_check("camera test leaves frozen source view current", actual.is_current() and battle._save_barrier.state == battle._save_barrier.State.HELD)
+\tfor index in range(before, checks.size()):
+\t\tif not checks[index].passed: return false
+\treturn true
+'''
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+changes=[]
+for name in ['run_camera_state.gd','rts_camera.gd','run_battle_world_core.gd']:
+ p=root/'scripts'/name;row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':'scratchpad/camera_resume_20260908/'+name,'candidate_sha256':sha(out/name)}
+ if p.exists():row['before_raw_sha256']=sha(p)
+ changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+names=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names}},indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))

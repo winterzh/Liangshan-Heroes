@@ -18,7 +18,7 @@ func _run() -> void:
 	await _dispose(b)
 	if route=="contracts":
 		b=await _start("skirmish")
-		check(b._defs.shi_qian==Defs.UNITS.shi_qian and b._defs.hall==Defs.UNITS.hall,"spy/population/roster overrides do not leak to defense")
+		check(b._defs.shi_qian==load("res://scripts/defs.gd").UNITS.shi_qian and b._defs.hall==load("res://scripts/defs.gd").UNITS.hall,"spy/population/roster overrides do not leak to defense")
 		await _dispose(b)
 	Engine.time_scale=1
 	check(checks==({"contracts":36,"assault":5,"signal":7}.get(route,0)),"all expected route assertions executed")
@@ -36,7 +36,7 @@ func _contracts_dm(b) -> void:
 	check(b.economy and b.fog and b.used_pop()==19 and b.pop_cap==24,"opening real economy/population matches deployed troops")
 	check(b.find_unit("song_jiang")==null and b._defs.hall.produces.has("wu_yong"),"Song Jiang remains on Liangshan; Wu Yong commands field camp")
 	for key in ["liang_dao","liang_qiang","liang_gong","siege_cata","siege_ram","arrow_tower","wu_yong","lu_zhishen","wu_song"]:
-		check(b._defs[key]==Defs.UNITS[key],"shared combat and costs unchanged: "+key)
+		check(_shared_definition_matches(b,key),"shared combat/costs unchanged; only declared enemy fortification allowed: "+key)
 	check(l.lu.faction==2 and l.shi.faction==2 and l.lu.is_captive and l.shi.is_captive,"bound prisoners are neutral and cannot reveal city or fill field hero bar")
 	check(l.reserve.size()==6 and l.pursuit.size()==6,"all diversion and pursuit soldiers exist before trigger")
 	check(b.map.find_path(l.strategist.position,b.map.cell_to_world(l.PRISON_CHECK)).is_empty(),"closed gates prevent outside army from entering city")

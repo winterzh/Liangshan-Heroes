@@ -1,0 +1,65 @@
+param([Parameter(Mandatory=$true)][string]$ExpectedReceiptHash)
+$ErrorActionPreference='Stop'
+$auditRoot='D:\CodexTemp\watermargin-cleanup-20260909'
+$projectRoot='D:\AI项目\水浒\开发工程'
+$duplicateRoot='D:\CodexTemp\level3_scenery_prepare_20260909'
+$archivePath='D:\AI项目\水浒\归档\水浒_旧准备与收尾助手_20260909.7z'
+function HashFile([string]$p) {
+ $s=[IO.File]::OpenRead($p)
+ try { return [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($s)).ToLowerInvariant() } finally { $s.Dispose() }
+}
+function SafePath([string]$p) {
+ $p=[IO.Path]::GetFullPath($p)
+ $current=$p
+ while($current) {
+  $i=Get-Item -LiteralPath $current -Force
+  if(($i.Attributes -band [IO.FileAttributes]::ReparsePoint)-ne 0){throw "Reparse refused: $current"}
+  $parent=[IO.Directory]::GetParent($current)
+  if($null-eq $parent){break};$current=$parent.FullName
+ }
+ if(-not ((Resolve-Path -LiteralPath $p).ProviderPath).Equals($p,[StringComparison]::OrdinalIgnoreCase)){throw 'Resolved path mismatch'}
+}
+if((HashFile (Join-Path $auditRoot 'archive_verified.json'))-cne $ExpectedReceiptHash){throw 'Archive receipt changed'}
+$receipt=Get-Content -LiteralPath (Join-Path $auditRoot 'archive_verified.json') -Raw | ConvertFrom-Json
+if($receipt.verified-ne $true -or $receipt.full_extract_exit-ne 0 -or $receipt.test_exit-ne 0 -or $receipt.file_count-ne 52 -or $receipt.helper_count-ne 21){throw 'Archive verification incomplete'}
+SafePath $archivePath
+if((HashFile $archivePath)-cne $receipt.archive_sha256){throw 'Archive changed'}
+if([IO.File]::ReadAllText((Join-Path $projectRoot '.godot\redraw_rejection_source.lock'))-cne 'D:/CodexTemp/watermargin-cleanup-20260909'){throw 'Cleanup lock not owned'}
+if(Get-Process -Name '*Godot*' -ErrorAction SilentlyContinue){throw 'Godot running'}
+$duplicatePaths=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+$helperPaths=[Collections.Generic.List[string]]::new()
+foreach($r in $receipt.files){
+ $p=[IO.Path]::GetFullPath([string]$r.source)
+ SafePath $p
+ if($p.StartsWith($duplicateRoot+'\',[StringComparison]::OrdinalIgnoreCase)){
+  if(-not $duplicatePaths.Add($p)){throw 'Duplicate source member'}
+  $retained=[IO.Path]::GetFullPath([string]$r.retained_duplicate)
+  if(-not $retained.StartsWith($projectRoot+'\qa\level3_scenery_prepare_20260909\',[StringComparison]::OrdinalIgnoreCase)){throw 'Retained duplicate outside QA'}
+  if((HashFile $retained)-cne $r.sha256){throw 'Retained QA copy changed'}
+ }elseif(([IO.Directory]::GetParent($p).FullName).Equals($projectRoot+'\.godot',[StringComparison]::OrdinalIgnoreCase)){
+  if([IO.Path]::GetExtension($p)-notin @('.py','.txt')){throw 'Unexpected helper type'}
+  $helperPaths.Add($p)
+ }else{throw "Archive source outside scope: $p"}
+ if((Get-Item -LiteralPath $p).Length-ne $r.bytes -or (HashFile $p)-cne $r.sha256){throw 'Original source changed'}
+}
+SafePath $duplicateRoot
+$allDuplicate=@(Get-ChildItem -LiteralPath $duplicateRoot -Recurse -Force)
+if(@($allDuplicate|Where-Object {($_.Attributes-band [IO.FileAttributes]::ReparsePoint)-ne 0}).Count){throw 'Nested duplicate reparse'}
+$duplicateFiles=@($allDuplicate|Where-Object {-not $_.PSIsContainer})
+if($duplicateFiles.Count-ne 31 -or $duplicatePaths.Count-ne 31 -or $helperPaths.Count-ne 21){throw 'Archive member count changed'}
+foreach($f in $duplicateFiles){if(-not $duplicatePaths.Contains($f.FullName)){throw 'Unexpected duplicate file'}}
+$done=[ordered]@{complete=$false;archive=$archivePath;archive_sha256=$receipt.archive_sha256;original_bytes=$receipt.original_bytes;archive_bytes=$receipt.archive_bytes;deleted_helpers=@();duplicate_removed=$false;in_progress=$null}
+try{
+ $done.in_progress=$duplicateRoot
+ Remove-Item -LiteralPath $duplicateRoot -Recurse -Force
+ if(Test-Path -LiteralPath $duplicateRoot){throw 'Duplicate removal incomplete'}
+ $done.duplicate_removed=$true
+ [IO.Directory]::CreateDirectory($duplicateRoot)|Out-Null
+ [IO.File]::WriteAllText((Join-Path $duplicateRoot '已归档.md'),"# 已归档`n`n旧景物候选完整保存在工程 qa/level3_scenery_prepare_20260909；另归档至 D:/AI项目/水浒/归档/水浒_旧准备与收尾助手_20260909.7z。恢复前按归档 manifest.json 校验，勿覆盖当前正式实现。`n",[Text.UTF8Encoding]::new($false))
+ foreach($p in $helperPaths){$done.in_progress=$p;Remove-Item -LiteralPath $p -Force;$done.deleted_helpers+= $p}
+ [IO.File]::WriteAllText((Join-Path $projectRoot '.godot\旧助手已归档_20260909.md'),"# 旧助手归档`n`n21 个未被当前源码、工具、QA 和文档引用的历史助手已完整归档。归档与恢复清单：D:/AI项目/水浒/归档/水浒_旧准备与收尾助手_20260909.7z。原始QA和仍被引用的55个助手保留原位。`n",[Text.UTF8Encoding]::new($false))
+ $done.in_progress=$null;$done.complete=$true
+}finally{
+ [IO.File]::WriteAllText((Join-Path $auditRoot 'archive_cleanup_receipt.json'),($done|ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
+ $done|ConvertTo-Json -Depth 4 -Compress|Write-Output
+}

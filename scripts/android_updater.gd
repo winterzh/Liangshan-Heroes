@@ -99,7 +99,7 @@ func _ready() -> void:
 	_request.body_size_limit = MAX_MANIFEST_BYTES
 	_request.request_completed.connect(_on_request_completed)
 	add_child(_request)
-	_set_status("idle", "%s内容 v%s" % [platform_display_name(), active_content_version])
+	_set_status("idle", Localize.format_text("%s内容 v%s", [platform_display_name(), active_content_version]))
 	if _is_update_test():
 		# 首个 Autoload 不引用 Campaign 等项目全局类，避免在 _init() 装 PCK 前连锁预载脚本。
 		if platform_id == "android":
@@ -123,7 +123,7 @@ func _process(_delta: float) -> void:
 	var pct := clampi(int(float(got) * 100.0 / float(total)), 0, 100)
 	if pct != _last_progress_percent:
 		_last_progress_percent = pct
-		_set_status("downloading", "正在下载%s更新 %d%%" % [platform_display_name(), pct], float(pct) / 100.0)
+		_set_status("downloading", Localize.format_text("正在下载%s更新 %d%%", [platform_display_name(), pct]), float(pct) / 100.0)
 
 
 func check_now() -> void:
@@ -132,7 +132,7 @@ func check_now() -> void:
 	available_manifest.clear()
 	_manifest_body = PackedByteArray()
 	_manifest_signature = ""
-	_set_status("checking", "正在检查%s更新……" % platform_display_name())
+	_set_status("checking", Localize.format_text("正在检查%s更新……", platform_display_name()))
 	_start_request(_cache_bust(_manifest_url()), "manifest")
 
 
@@ -142,7 +142,7 @@ func begin_download() -> void:
 	var patch: Dictionary = available_manifest.get("patch", {})
 	var url := String(patch.get("url", ""))
 	if url == "":
-		_fail("更新清单缺少补丁地址")
+		_fail(Localize.text("更新清单缺少补丁地址"))
 		return
 	_remove_file(_download_tmp_path)
 	_request.body_size_limit = -1
@@ -150,7 +150,7 @@ func begin_download() -> void:
 	_request.download_file = _download_tmp_path
 	_last_progress_percent = -1
 	set_process(true)
-	_set_status("downloading", "正在下载%s更新 0%%" % platform_display_name(), 0.0)
+	_set_status("downloading", Localize.format_text("正在下载%s更新 0%%", platform_display_name()), 0.0)
 	_start_request(url, "patch")
 
 
@@ -174,18 +174,18 @@ func quit_for_restart() -> void:
 func display_version() -> String:
 	if active_content_version == PACKAGE_VERSION_NAME:
 		return PACKAGE_VERSION_NAME
-	return "%s · 内容%s" % [PACKAGE_VERSION_NAME, active_content_version]
+	return Localize.format_text("%s · 内容%s", [PACKAGE_VERSION_NAME, active_content_version])
 
 
 func platform_display_name() -> String:
 	match platform_id:
 		"android":
-			return "安卓"
+			return Localize.text("安卓")
 		"windows":
 			return "Windows"
 		"macos":
 			return "macOS"
-	return "当前平台"
+	return Localize.text("当前平台")
 
 
 func get_full_package() -> Dictionary:
@@ -212,7 +212,7 @@ func _start_request(url: String, phase_name: String) -> void:
 		_phase = ""
 		if phase_name == "patch":
 			_reset_download_request()
-		_fail("无法连接更新服务器（%s）" % error_string(err))
+		_fail(Localize.format_text("无法连接更新服务器（%s）", error_string(err)))
 
 
 func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
@@ -222,12 +222,12 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 		_reset_download_request()
 	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
 		_remove_file(_download_tmp_path)
-		_fail("更新服务器暂时不可用（%d/%d）" % [result, response_code])
+		_fail(Localize.format_text("更新服务器暂时不可用（%d/%d）", [result, response_code]))
 		return
 	match finished_phase:
 		"manifest":
 			if body.is_empty() or body.size() > MAX_MANIFEST_BYTES:
-				_fail("更新清单大小异常")
+				_fail(Localize.text("更新清单大小异常"))
 				return
 			_manifest_body = body
 			_start_request.call_deferred(_cache_bust(_signature_url()), "signature")
@@ -237,20 +237,20 @@ func _on_request_completed(result: int, response_code: int, _headers: PackedStri
 		"patch":
 			_accept_patch()
 		_:
-			_fail("未知更新响应")
+			_fail(Localize.text("未知更新响应"))
 
 
 func _accept_manifest() -> void:
 	if not _verify_signature(_manifest_body, _manifest_signature):
-		_fail("更新清单签名无效，已拒绝下载")
+		_fail(Localize.text("更新清单签名无效，已拒绝下载"))
 		return
 	var parsed: Variant = JSON.parse_string(_manifest_body.get_string_from_utf8())
 	if not parsed is Dictionary:
-		_fail("更新清单格式错误")
+		_fail(Localize.text("更新清单格式错误"))
 		return
 	var manifest: Dictionary = parsed
 	if int(manifest.get("schema", 0)) != 1 or String(manifest.get("channel", "")) != "stable":
-		_fail("更新清单版本不受支持")
+		_fail(Localize.text("更新清单版本不受支持"))
 		return
 	var target_error := _target_validation_error(manifest, platform_id == "android")
 	if target_error != "":
@@ -259,32 +259,32 @@ func _accept_manifest() -> void:
 	available_manifest = manifest
 	var latest := String(manifest.get("content_version", BASE_CONTENT_VERSION))
 	if not _valid_version(latest):
-		_fail("更新清单的内容版本无效")
+		_fail(Localize.text("更新清单的内容版本无效"))
 		return
 	var min_bootstrap := int(manifest.get("min_bootstrap", 1))
 	if min_bootstrap > BOOTSTRAP_VERSION:
 		if not _offer_full_package_update(latest):
-			_fail("新版需要完整包，但清单缺少下载地址")
+			_fail(Localize.text("新版需要完整包，但清单缺少下载地址"))
 		return
 	if _version_compare(latest, active_content_version) <= 0:
-		_set_status("current", "%s内容 v%s · 已是最新" % [platform_display_name(), active_content_version])
+		_set_status("current", Localize.format_text("%s内容 v%s · 已是最新", [platform_display_name(), active_content_version]))
 		return
 	var patch_var: Variant = manifest.get("patch", null)
 	# 新的两段式完整发行版没有跨发行线差异包；已有桌面客户端应跳转完整包。
 	if not patch_var is Dictionary:
 		if not _offer_full_package_update(latest):
-			_fail("新版清单没有可用的差异包或完整包")
+			_fail(Localize.text("新版清单没有可用的差异包或完整包"))
 		return
 	var patch: Dictionary = patch_var
 	var patch_target_error := _target_validation_error(patch, true)
 	if patch_target_error != "":
-		_fail("差异包%s" % patch_target_error.trim_prefix("更新清单"))
+		_fail(Localize.format_text("差异包%s", patch_target_error.trim_prefix(Localize.text("更新清单"))))
 		return
 	var size_bytes := int(patch.get("size", 0))
 	if String(patch.get("url", "")) == "" or size_bytes <= 0 or String(patch.get("sha256", "")).length() != 64:
-		_fail("新版清单没有可用的差异包")
+		_fail(Localize.text("新版清单没有可用的差异包"))
 		return
-	_set_status("available", "发现%s内容更新 v%s（%s）" % [platform_display_name(), latest, format_bytes(size_bytes)])
+	_set_status("available", Localize.format_text("发现%s内容更新 v%s（%s）", [platform_display_name(), latest, format_bytes(size_bytes)]))
 	update_available.emit(latest, size_bytes)
 	if _env_flag("CONTENT_UPDATE_AUTO_DOWNLOAD") or _env_flag("ANDROID_UPDATE_AUTO_DOWNLOAD"):
 		begin_download.call_deferred()
@@ -300,12 +300,12 @@ func _accept_patch() -> void:
 		f.close()
 	if actual_size != expected_size:
 		_remove_file(_download_tmp_path)
-		_fail("补丁大小校验失败")
+		_fail(Localize.text("补丁大小校验失败"))
 		return
 	var actual_sha := FileAccess.get_sha256(_download_tmp_path).to_lower()
 	if actual_sha != expected_sha:
 		_remove_file(_download_tmp_path)
-		_fail("补丁 SHA-256 校验失败，已删除文件")
+		_fail(Localize.text("补丁 SHA-256 校验失败，已删除文件"))
 		return
 	var version := String(available_manifest.get("content_version", ""))
 	var final_path := _patch_path(version)
@@ -313,7 +313,7 @@ func _accept_patch() -> void:
 	var rename_err := DirAccess.rename_absolute(ProjectSettings.globalize_path(_download_tmp_path), ProjectSettings.globalize_path(final_path))
 	if rename_err != OK:
 		_remove_file(_download_tmp_path)
-		_fail("补丁保存失败（%s）" % error_string(rename_err))
+		_fail(Localize.format_text("补丁保存失败（%s）", error_string(rename_err)))
 		return
 	var state_data := {
 		"manifest": _manifest_body.get_string_from_utf8(),
@@ -321,9 +321,9 @@ func _accept_patch() -> void:
 	}
 	if not _write_json_atomic(_state_path, state_data):
 		_remove_file(final_path)
-		_fail("更新状态保存失败")
+		_fail(Localize.text("更新状态保存失败"))
 		return
-	_set_status("ready", "%s内容 v%s 已下载，重启后生效" % [platform_display_name(), version], 1.0)
+	_set_status("ready", Localize.format_text("%s内容 v%s 已下载，重启后生效", [platform_display_name(), version]), 1.0)
 	update_ready.emit(version)
 
 
@@ -533,9 +533,9 @@ func _target_validation_error(data: Dictionary, allow_missing: bool) -> String:
 	var declared_platform := String(data.get("platform", target.get("platform", "")))
 	if declared_platform == "":
 		if not allow_missing:
-			return "更新清单缺少平台标识"
+			return Localize.text("更新清单缺少平台标识")
 	elif _normalize_platform(declared_platform) != platform_id:
-		return "更新清单平台不匹配（需要 %s）" % platform_id
+		return Localize.format_text("更新清单平台不匹配（需要 %s）", platform_id)
 
 	var declared_arches: Array[String] = []
 	var arches_var: Variant = data.get("architectures", target.get("architectures", []))
@@ -548,13 +548,13 @@ func _target_validation_error(data: Dictionary, allow_missing: bool) -> String:
 		declared_arches.append(single_arch)
 	if declared_arches.is_empty():
 		if not allow_missing:
-			return "更新清单缺少架构标识"
+			return Localize.text("更新清单缺少架构标识")
 		return ""
 	for declared in declared_arches:
 		var normalized := _normalize_architecture(declared)
 		if normalized == architecture or normalized == "universal":
 			return ""
-	return "更新清单架构不匹配（本机为 %s）" % architecture
+	return Localize.format_text("更新清单架构不匹配（本机为 %s）", architecture)
 
 
 func _full_package_version(full: Dictionary, fallback: String) -> String:
@@ -567,7 +567,7 @@ func _offer_full_package_update(fallback_version: String) -> bool:
 	if String(full.get("url", "")) == "":
 		return false
 	var full_version := _full_package_version(full, fallback_version)
-	_set_status("full_update", "需要安装%s完整包 v%s" % [platform_display_name(), full_version])
+	_set_status("full_update", Localize.format_text("需要安装%s完整包 v%s", [platform_display_name(), full_version]))
 	full_update_required.emit(full_version)
 	return true
 

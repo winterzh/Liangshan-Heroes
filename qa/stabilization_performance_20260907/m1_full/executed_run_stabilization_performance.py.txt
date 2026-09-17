@@ -1,0 +1,256 @@
+"""Freeze committed production inputs and run the M1 matrix in a short private profile.
+
+Default is read-only preflight. --run owns the project's shared Godot lock until
+every child has exited. No production source swaps, Git writes, or player restores.
+"""
+import argparse
+import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+import time
+import uuid
+
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[1]
+DIRS = {"scripts", "scenes", "assets", "shaders", "resources", "data", "addons", "content", "scenarios", "fonts"}
+FIXED = {"project.godot", "export_presets.cfg", "icon.png", "icon.png.import", "icon.ico"}
+TOOLS = ["tools/run_polish_performance.py", "tools/polish_performance_probe.gd",
+         "tools/zhujiazhuang_rts_test.gd", "tools/analyze_polish_performance.py"]
+ERROR = re.compile(r"SCRIPT ERROR|^ERROR:|^WARNING:|Parse Error|Compile Error|\bFAIL\b|leaked|RID allocations", re.M)
+
+
+def need(ok, message):
+    if not ok:
+        raise RuntimeError(message)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def save(path, data):
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def no_links(path):
+    for item in [path] + list(path.parents):
+        if item.exists() or item.is_symlink():
+            stat = item.lstat()
+            need(not item.is_symlink() and not getattr(stat, "st_file_attributes", 0) & 0x400,
+                 "Link/reparse path refused: " + str(item))
+
+
+def snapshot(directory):
+    if not directory.exists():
+        return {"exists": False, "files": {}, "directories": []}
+    no_links(directory)
+    files, dirs = {}, []
+    for base, children, names in os.walk(directory, followlinks=False):
+        for name in children + names:
+            no_links(Path(base) / name)
+        dirs.append(Path(base).relative_to(directory).as_posix())
+        for name in names:
+            p = Path(base) / name
+            files[p.relative_to(directory).as_posix()] = sha(p.read_bytes())
+    return {"exists": True, "files": files, "directories": sorted(dirs)}
+
+
+def godot_processes():
+    command = "@(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | ForEach-Object { $_.Id }) | ConvertTo-Json -Compress"
+    raw = subprocess.check_output(["powershell.exe", "-NoProfile", "-Command", command], text=True).strip()
+    if not raw:
+        return []
+    result = json.loads(raw)
+    return result if isinstance(result, list) else [result]
+
+
+def tree(head):
+    raw = subprocess.check_output(["git", "ls-tree", "-rz", "--full-tree", head], cwd=ROOT)
+    rows = []
+    for item in raw.split(b"\0"):
+        if not item:
+            continue
+        meta, name = item.split(b"\t", 1)
+        mode, kind, oid = meta.decode().split()
+        name = name.decode("utf-8")
+        if name in FIXED or name.split("/")[0] in DIRS:
+            need(kind == "blob" and mode in ("100644", "100755"), "Non-regular production input: " + name)
+            rows.append({"path": name, "git_oid": oid})
+    return rows
+
+
+def freeze(project, rows):
+    proc = subprocess.Popen(["git", "cat-file", "--batch"], cwd=ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    try:
+        for row in rows:
+            proc.stdin.write((row["git_oid"] + "\n").encode()); proc.stdin.flush()
+            header = proc.stdout.readline().decode().split()
+            need(header[:2] == [row["git_oid"], "blob"], "Git blob read failed")
+            raw = proc.stdout.read(int(header[2]))
+            need(proc.stdout.read(1) == b"\n", "Git blob framing failed")
+            dest = project / row["path"]
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(raw)
+            row.update(bytes=len(raw), sha256=sha(raw))
+    finally:
+        proc.stdin.close()
+        proc.wait(timeout=30)
+    need(proc.returncode == 0, "Git blob reader did not exit normally")
+    tool_rows = []
+    for name in TOOLS + [x + ".uid" for x in TOOLS if x.endswith(".gd")]:
+        source = ROOT / name
+        if not source.exists() and name.endswith(".uid"):
+            continue
+        no_links(source)
+        raw = source.read_bytes()
+        dest = project / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(raw)
+        tool_rows.append({"path": name, "bytes": len(raw), "sha256": sha(raw)})
+    return tool_rows
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--run", action="store_true")
+    parser.add_argument("--source-head", required=True)
+    parser.add_argument("--godot")
+    parser.add_argument("--profile-root", type=Path, default=Path("D:/LHPerfProfiles"))
+    parser.add_argument("--short", action="store_true", help="four fixed and one auto 6-second harness checks only")
+    args = parser.parse_args()
+    head = subprocess.check_output(["git", "rev-parse", args.source_head + "^{commit}"], cwd=ROOT, text=True).strip()
+    current = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    need(head == current, "Requested production baseline is not the current committed HEAD")
+    rows = tree(head)
+    exe = Path(args.godot or os.environ.get("GODOT_PATH", "") or (ROOT / "godot.local.txt").read_text(encoding="utf-8-sig").strip())
+    need(exe.is_file(), "Godot executable missing")
+    no_links(args.profile_root)
+    need(args.profile_root.is_absolute(), "Private profile root must be absolute")
+    lock = ROOT / ".godot/redraw_rejection_source.lock"
+    info = {"preflight": True, "source_head": head, "committed_production_files": len(rows),
+            "godot_sha256": sha(exe.read_bytes()), "lock_busy": lock.exists(),
+            "godot_pids": godot_processes(), "matrix": "five 6-second harness windows" if args.short else "five groups, three 60-second windows each"}
+    print(json.dumps(info, ensure_ascii=False), flush=True)
+    if not args.run:
+        return 0
+    need(not info["godot_pids"], "Another Godot process owns the machine")
+    name = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "_" + uuid.uuid4().hex[:8]
+    run = ROOT / ".godot/stabilization_performance" / name
+    run.mkdir(parents=True, exist_ok=False)
+    owner = json.dumps({"owner": "stabilization_performance", "id": name, "pid": os.getpid()})
+    with lock.open("x", encoding="utf-8") as f:
+        f.write(owner)
+    receipt = dict(info, complete=False, run=name, steps=[], source_mode="committed production blobs plus explicit current performance tools")
+    receipt["runner_sha256"] = sha(Path(__file__).read_bytes())
+    active = None
+    project = run / "project"
+    profile = args.profile_root / name
+    protected = None
+    real_user = None
+    def execute(label, command, env, timeout):
+        nonlocal active
+        need(not godot_processes(), "Godot slot occupied before " + label)
+        log = run / (label + ".log")
+        start = time.monotonic()
+        print("RUN " + label + " " + str(run), flush=True)
+        with log.open("wb") as stream:
+            active = subprocess.Popen(command, cwd=project, env=env, stdout=stream, stderr=subprocess.STDOUT,
+                                      creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            pid = active.pid
+            try:
+                code = active.wait(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                # The runner is given its full per-sample timeout plus margin;
+                # do not kill an unowned system Godot process.
+                active.kill(); active.wait(timeout=30)
+                code = -1
+            active = None
+        errors = [line for line in log.read_text(encoding="utf-8", errors="replace").splitlines() if ERROR.search(line)]
+        receipt["steps"].append({"name": label, "pid": pid, "exit_code": code,
+                                 "seconds": time.monotonic() - start, "errors": errors})
+        save(run / "receipt.json", receipt)
+        need(not godot_processes(), "Unconfirmed Godot child exit after " + label)
+        if protected is not None:
+            need(snapshot(real_user) == protected, "Protected player data changed; never overwrite it")
+        need(code == 0 and not errors, "Failed " + label + "; original log retained")
+    try:
+        project.mkdir()
+        receipt["tools"] = freeze(project, rows)
+        receipt["source_files"] = rows
+        receipt["production_bytes"] = sum(row["bytes"] for row in rows)
+        save(project / ".polish_frozen_source.json", {"source_head": head, "source_files": rows, "tools": receipt["tools"]})
+        text = (project / "project.godot").read_text(encoding="utf-8-sig")
+        need("config/use_custom_user_dir" not in text and "config/custom_user_dir_name" not in text, "Custom profile mapping not reviewed")
+        found = re.findall(r'^config/name=("[^\n]+")\s*$', text, re.M)
+        need(len(found) == 1, "Project name missing")
+        project_name = json.loads(found[0])
+        need(not any(c in project_name for c in '<>:"/\\|?*'), "Project user path unsafe")
+        real_user = Path(os.environ["APPDATA"]) / "Godot/app_userdata" / project_name
+        protected = snapshot(real_user)
+        receipt["player_before_digest"] = sha(json.dumps(protected, sort_keys=True).encode())
+        profile.mkdir(parents=True, exist_ok=False)
+        env = os.environ.copy()
+        for key in ("APPDATA", "LOCALAPPDATA", "TEMP", "TMP"):
+            dest = profile / key.lower(); dest.mkdir(); env[key] = str(dest)
+        env.update(CAMPAIGN_QA="1", STEAM_DISABLED="1", PYTHONDONTWRITEBYTECODE="1")
+        receipt["private_profile"] = str(profile)
+        # Existing imported textures are cache seeds only. Import still runs and
+        # every test is a new process; no receipt or player file is reused.
+        cache = ROOT / ".godot/imported"
+        if cache.is_dir():
+            shutil.copytree(cache, project / ".godot/imported")
+            receipt["cache_seed"] = {"scope": "imported texture cache only", "files": len(list(cache.iterdir()))}
+        execute("import", [str(exe), "--headless", "--editor", "--import", "--path", str(project)], env, 600)
+        changes = []
+        for row in rows + receipt["tools"]:
+            p = project / row["path"]
+            if sha(p.read_bytes()) != row["sha256"]:
+                changes.append(row["path"])
+        need(not changes, "Import changed frozen inputs: " + repr(changes))
+        receipt["import_sources_unchanged"] = True
+        repeats, seconds = (1, 6) if args.short else (3, 60)
+        common = [sys.executable, "-B", str(project / TOOLS[0]), "--godot", str(exe),
+                  "--repeats", str(repeats), "--seconds", str(seconds), "--effects-quality", "standard", "--output", str(run / "samples"),
+                  "--expected-user-dir", str(profile / "appdata/Godot/app_userdata" / project_name)]
+        if args.short:
+            common.append("--allow-short")
+        execute("fixed", common + ["--cases", "economy", "defense200", "zhu_contact", "gao_contact", "--camera", "fixed", "--label", "fixed"], env, 3900)
+        execute("auto", common + ["--cases", "defense200", "--camera", "auto", "--label", "auto"], env, 1200)
+        groups = []
+        for folder in sorted((run / "samples").iterdir()):
+            execute("analyze_" + folder.name, [sys.executable, "-B", str(project / TOOLS[3]), str(folder)], env, 90)
+            groups.extend(json.loads((folder / "summary.json").read_text(encoding="utf-8"))["groups"])
+        receipt["groups"] = groups
+        receipt["baseline_eligible"] = not args.short and len(groups) == 5 and all(g["baseline_eligible"] for g in groups)
+        receipt["complete"] = True
+        return 0 if args.short or receipt["baseline_eligible"] else 1
+    except BaseException as exc:
+        receipt["error"] = type(exc).__name__ + ": " + str(exc)
+        raise
+    finally:
+        if active is not None:
+            active.kill(); active.wait(timeout=30)
+        if protected is not None:
+            after = snapshot(real_user)
+            receipt["player_unchanged"] = after == protected
+            receipt["player_after_digest"] = sha(json.dumps(after, sort_keys=True).encode())
+            if after != protected:
+                receipt["complete"] = False
+        receipt["godot_pids_after"] = godot_processes()
+        if lock.is_file() and lock.read_text(encoding="utf-8") == owner and not receipt["godot_pids_after"]:
+            lock.unlink(); receipt["lock_released"] = True
+        else:
+            receipt["lock_released"] = False
+            receipt["complete"] = False
+        save(run / "receipt.json", receipt)
+        print("RECEIPT " + str(run / "receipt.json"), flush=True)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

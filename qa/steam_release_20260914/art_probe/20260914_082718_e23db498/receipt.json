@@ -1,0 +1,90 @@
+{
+  "schema": "codex_pack_probe_runner_v1",
+  "complete": false,
+  "candidate_run": "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433",
+  "pack": "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\windows\\LiangshanHeroes.exe",
+  "pack_sha256": "c6c4737ee7c39338ef2a73373a8d365fd6b6638ad80c03b28fb57ef7e6d1198b",
+  "guards_before": {
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\receipt.json": "538056ba8ac0e21660fa956b138b073f56f2a22a092ddadb87c51654542e7d93",
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\verification_report.json": "85b76c753cbe342297768203c352251a25d96f3f4c740fb2cb7a7f02bc2adb25",
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\windows\\LiangshanHeroes.exe": "c6c4737ee7c39338ef2a73373a8d365fd6b6638ad80c03b28fb57ef7e6d1198b",
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\probe_host\\Godot.exe": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\probe_host\\libgodotsteam.windows.template_release.x86_64.dll": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\probe_host\\libgodotsteam.windows.template_debug.x86_64.dll": "da20924a9d29085c2256988b67de47003835910316712302e208e31c00f24b96",
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\probe_host\\steam_api64.dll": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+    "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\probe_host\\steam_stats_reader.dll": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+    "E:\\ChatGPT\\水浒\\qa\\steam_release_20260914\\codex_pack_probe.gd": "14993f49a5f41f55f688d15f569700d64b4609a504a0121b6d74a241f1700b90",
+    "E:\\ChatGPT\\水浒\\qa\\steam_release_20260914\\run_codex_pack_probe.py": "53784cabacb1f87e4f3c79024fb481efbd45cc098d78da26a7cdde0c7f5ec4b3",
+    "E:\\ChatGPT\\水浒\\tools\\run_character_art_qa.py": "45c8e2fda4f1e11c65987fe0c73c206223ef11cc4e2ff1acf14c4b589c9c8344",
+    "E:\\ChatGPT\\水浒\\tools\\run_steam_integration_qa.py": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+    "E:\\ChatGPT\\水浒\\tools\\run_campaign_level_state_qa.py": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba"
+  },
+  "steps": [
+    {
+      "case": "codex_pck",
+      "command": [
+        "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\probe_host\\Godot.exe",
+        "--path",
+        "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\windows",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--main-pack",
+        "E:\\ChatGPT\\水浒\\.godot\\steam_candidates\\20260914_081517_64e1d433\\windows\\LiangshanHeroes.exe",
+        "--script",
+        "E:\\CodexTemp\\steam_release_20260914\\art_probe_runs\\20260914_082718_e23db498\\harness\\codex_pack_probe.gd"
+      ],
+      "passed": false,
+      "errors": [
+        "\nSCRIPT ERROR: Parse Error: Cannot infer the type of \"path\" variable because the value doesn't have a set type.",
+        "ERROR: Failed to load script \"E:/CodexTemp/steam_release_20260914/art_probe_runs/20260914_082718_e23db498/harness/codex_pack_probe.gd\" with error \"Parse error\"."
+      ],
+      "pid": 25068,
+      "exit_code": 1,
+      "seconds": 1.014,
+      "stopped_for": "script_or_engine_error",
+      "log_sha256": "1f657dff30e6a4f17f7feeb244a45efbd018894e8df4b246e0405e7eff10ba0e"
+    }
+  ],
+  "scope": "Editor-host exported-PCK art/scene check only; not release EXE gameplay, live Steam, upload or publication.",
+  "private_profile": "E:\\CodexTemp\\steam_release_20260914\\art_probe_runs\\profiles\\20260914_082718_e23db498",
+  "failure": {
+    "type": "RuntimeError",
+    "message": "Private character QA step failed: codex_pck"
+  },
+  "guards_changed": [],
+  "engines_remaining": false,
+  "lock_released": true,
+  "artifacts": [
+    {
+      "path": "codex_pck.log",
+      "bytes": 533,
+      "sha256": "1f657dff30e6a4f17f7feeb244a45efbd018894e8df4b246e0405e7eff10ba0e"
+    },
+    {
+      "path": "harness/codex_pack_probe.gd",
+      "bytes": 10880,
+      "sha256": "14993f49a5f41f55f688d15f569700d64b4609a504a0121b6d74a241f1700b90"
+    },
+    {
+      "path": "harness/run_campaign_level_state_qa.py",
+      "bytes": 8216,
+      "sha256": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba"
+    },
+    {
+      "path": "harness/run_character_art_qa.py",
+      "bytes": 25803,
+      "sha256": "45c8e2fda4f1e11c65987fe0c73c206223ef11cc4e2ff1acf14c4b589c9c8344"
+    },
+    {
+      "path": "harness/run_codex_pack_probe.py",
+      "bytes": 10651,
+      "sha256": "53784cabacb1f87e4f3c79024fb481efbd45cc098d78da26a7cdde0c7f5ec4b3"
+    },
+    {
+      "path": "harness/run_steam_integration_qa.py",
+      "bytes": 11766,
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9"
+    }
+  ]
+}

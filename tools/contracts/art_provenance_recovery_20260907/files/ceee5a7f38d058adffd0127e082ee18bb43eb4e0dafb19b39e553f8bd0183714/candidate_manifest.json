@@ -1,0 +1,958 @@
+{
+  "schema_version": 1,
+  "kind": "gao_flagship_native_alpha_transparent_gutter_candidate",
+  "created_at": "2026-09-03T03:21:13.963489+08:00",
+  "key": "gao_flagship",
+  "states": [
+    "default",
+    "damaged",
+    "flooding",
+    "disabled"
+  ],
+  "directions": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "frame_count": 16,
+  "source_generation_conversation": "https://chatgpt.com/c/6a9867f8-96ac-83e9-bf07-2e5db6603722",
+  "web_native_alpha": true,
+  "alpha_cleanup_performed": false,
+  "crop_rule": "Each 1x4 source is divided only at audited full-height native-transparent gutters; alpha>=8 then selects one padded continuous rectangle per cell. Every RGBA pixel inside is retained.",
+  "batch_uniform_requested_scale": 0.6116207951070336,
+  "allowed_operations": [
+    "full-height transparent-gutter cell division",
+    "continuous source rectangle crop",
+    "batch-uniform proportional scale",
+    "transparent padding",
+    "PNG format encoding"
+  ],
+  "forbidden_operations_used": [],
+  "sources": [
+    {
+      "state": "default",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_default_1x4.png",
+      "source_sha256": "8293ffe5c8688695346e13ccec87b592b8c0b569a0c22b7217da1356ef2382c8",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/01_gao_flagship_default_1x4.txt",
+      "prompt_sha256": "28b2e029a9ce4d0fb89e4d77f83924a9f666235413b419b99b21ddf3a57523cc",
+      "fixed_cell_x_boundaries": [
+        0,
+        509,
+        1082,
+        1649,
+        2172
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 464,
+          "end_x_exclusive": 554,
+          "width": 90,
+          "chosen_boundary_x": 509
+        },
+        {
+          "start_x_inclusive": 952,
+          "end_x_exclusive": 1213,
+          "width": 261,
+          "chosen_boundary_x": 1082
+        },
+        {
+          "start_x_inclusive": 1620,
+          "end_x_exclusive": 1678,
+          "width": 58,
+          "chosen_boundary_x": 1649
+        }
+      ]
+    },
+    {
+      "state": "damaged",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_damaged_1x4.png",
+      "source_sha256": "eaa17d17014863d98e759d07abe6ef6efa8d10c062e2d9599077e85f0fc0a17c",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/02_gao_flagship_damaged_1x4.txt",
+      "prompt_sha256": "04148f97df9997df9965aaf6bcd57bd82128096044c62cedda943cdee2f49334",
+      "fixed_cell_x_boundaries": [
+        0,
+        508,
+        1081,
+        1654,
+        2172
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 470,
+          "end_x_exclusive": 546,
+          "width": 76,
+          "chosen_boundary_x": 508
+        },
+        {
+          "start_x_inclusive": 962,
+          "end_x_exclusive": 1200,
+          "width": 238,
+          "chosen_boundary_x": 1081
+        },
+        {
+          "start_x_inclusive": 1639,
+          "end_x_exclusive": 1670,
+          "width": 31,
+          "chosen_boundary_x": 1654
+        }
+      ]
+    },
+    {
+      "state": "flooding",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_flooding_1x4.png",
+      "source_sha256": "666d8bdf62799a721b013625edf9fc2510970f1fe5b7cc2f3eb638dc32674f1e",
+      "source_mode": "RGBA",
+      "source_size": [
+        2172,
+        724
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/03_gao_flagship_flooding_1x4.txt",
+      "prompt_sha256": "bad8cb087119b303a8f5c5a175efe0ce3543e370dadfa135db754ce4fb5c2781",
+      "fixed_cell_x_boundaries": [
+        0,
+        501,
+        1091,
+        1660,
+        2172
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 450,
+          "end_x_exclusive": 553,
+          "width": 103,
+          "chosen_boundary_x": 501
+        },
+        {
+          "start_x_inclusive": 977,
+          "end_x_exclusive": 1205,
+          "width": 228,
+          "chosen_boundary_x": 1091
+        },
+        {
+          "start_x_inclusive": 1638,
+          "end_x_exclusive": 1682,
+          "width": 44,
+          "chosen_boundary_x": 1660
+        }
+      ]
+    },
+    {
+      "state": "disabled",
+      "source_path": "implementation_20260902/gao_qiu_p0_source/web_gao_flagship_disabled_1x4.png",
+      "source_sha256": "ab54804bdf6bbe6c65cd4721b51b1265ac00a1cbdd25a954d4594a775c815b72",
+      "source_mode": "RGBA",
+      "source_size": [
+        2170,
+        725
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "prompt_path": "implementation_20260902/gao_qiu_p0_source/04_gao_flagship_disabled_1x4.txt",
+      "prompt_sha256": "f65f75580cc64b1bfb32063f22f7280928a059023d1342cbb8dff7046de0401c",
+      "fixed_cell_x_boundaries": [
+        0,
+        519,
+        1079,
+        1637,
+        2170
+      ],
+      "full_height_transparent_gutters": [
+        {
+          "start_x_inclusive": 495,
+          "end_x_exclusive": 544,
+          "width": 49,
+          "chosen_boundary_x": 519
+        },
+        {
+          "start_x_inclusive": 992,
+          "end_x_exclusive": 1166,
+          "width": 174,
+          "chosen_boundary_x": 1079
+        },
+        {
+          "start_x_inclusive": 1620,
+          "end_x_exclusive": 1655,
+          "width": 35,
+          "chosen_boundary_x": 1637
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "se",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_se.png",
+      "candidate_sha256": "78f249672f767fa6394889a4934fba032f5f8d382ef32c8cee751360b0c4068d",
+      "source_file": "web_gao_flagship_default_1x4.png",
+      "source_sha256": "8293ffe5c8688695346e13ccec87b592b8c0b569a0c22b7217da1356ef2382c8",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        509,
+        724
+      ],
+      "source_rect_xyxy": [
+        31,
+        31,
+        468,
+        638
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6109839816933639,
+        0.6112026359143328
+      ],
+      "resized_size": [
+        267,
+        371
+      ],
+      "paste_xy": [
+        122,
+        49
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "sw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_sw.png",
+      "candidate_sha256": "cf56ca8a262b2767d06b6acf04d89401cbe5cbcfee4469b8e54f44358e6410af",
+      "source_file": "web_gao_flagship_default_1x4.png",
+      "source_sha256": "8293ffe5c8688695346e13ccec87b592b8c0b569a0c22b7217da1356ef2382c8",
+      "source_cell_rect_xyxy": [
+        509,
+        0,
+        1082,
+        724
+      ],
+      "source_rect_xyxy": [
+        550,
+        65,
+        956,
+        645
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6108374384236454,
+        0.6120689655172413
+      ],
+      "resized_size": [
+        248,
+        355
+      ],
+      "paste_xy": [
+        132,
+        65
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "ne",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_ne.png",
+      "candidate_sha256": "44a8af6cfe9a18a9b1a0250b3b7ffde38f8c093be4452b1741f59642cfd5256b",
+      "source_file": "web_gao_flagship_default_1x4.png",
+      "source_sha256": "8293ffe5c8688695346e13ccec87b592b8c0b569a0c22b7217da1356ef2382c8",
+      "source_cell_rect_xyxy": [
+        1082,
+        0,
+        1649,
+        724
+      ],
+      "source_rect_xyxy": [
+        1209,
+        38,
+        1624,
+        651
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6120481927710844,
+        0.6117455138662317
+      ],
+      "resized_size": [
+        254,
+        375
+      ],
+      "paste_xy": [
+        129,
+        45
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "default",
+      "direction": "nw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_default_nw.png",
+      "candidate_sha256": "1cb257d34c69e661e524156ba4d913574234d0584721b0f69981a7ed8ce56167",
+      "source_file": "web_gao_flagship_default_1x4.png",
+      "source_sha256": "8293ffe5c8688695346e13ccec87b592b8c0b569a0c22b7217da1356ef2382c8",
+      "source_cell_rect_xyxy": [
+        1649,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1674,
+        106,
+        2104,
+        607
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6116279069767442,
+        0.6107784431137725
+      ],
+      "resized_size": [
+        263,
+        306
+      ],
+      "paste_xy": [
+        124,
+        114
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "se",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_se.png",
+      "candidate_sha256": "5e92de02b62a384190b7e4deb99d7a343a1a76a8d6aba3859ecfbc0da239c346",
+      "source_file": "web_gao_flagship_damaged_1x4.png",
+      "source_sha256": "eaa17d17014863d98e759d07abe6ef6efa8d10c062e2d9599077e85f0fc0a17c",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        508,
+        724
+      ],
+      "source_rect_xyxy": [
+        23,
+        30,
+        474,
+        642
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6119733924611973,
+        0.6111111111111112
+      ],
+      "resized_size": [
+        276,
+        374
+      ],
+      "paste_xy": [
+        118,
+        46
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "sw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_sw.png",
+      "candidate_sha256": "f46def80d22bff9fe9d0d11012b299bd647ad9bcf1993e9f584496148945bd7c",
+      "source_file": "web_gao_flagship_damaged_1x4.png",
+      "source_sha256": "eaa17d17014863d98e759d07abe6ef6efa8d10c062e2d9599077e85f0fc0a17c",
+      "source_cell_rect_xyxy": [
+        508,
+        0,
+        1081,
+        724
+      ],
+      "source_rect_xyxy": [
+        542,
+        63,
+        966,
+        652
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6108490566037735,
+        0.6112054329371817
+      ],
+      "resized_size": [
+        259,
+        360
+      ],
+      "paste_xy": [
+        126,
+        60
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "ne",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_ne.png",
+      "candidate_sha256": "a1ec72d9185ce75236e2ca3498ceb8f5329764040736c5f85b7280e5919d5817",
+      "source_file": "web_gao_flagship_damaged_1x4.png",
+      "source_sha256": "eaa17d17014863d98e759d07abe6ef6efa8d10c062e2d9599077e85f0fc0a17c",
+      "source_cell_rect_xyxy": [
+        1081,
+        0,
+        1654,
+        724
+      ],
+      "source_rect_xyxy": [
+        1196,
+        35,
+        1643,
+        655
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.610738255033557,
+        0.6112903225806452
+      ],
+      "resized_size": [
+        273,
+        379
+      ],
+      "paste_xy": [
+        119,
+        41
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "damaged",
+      "direction": "nw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_damaged_nw.png",
+      "candidate_sha256": "321c86132d7b10bf9a0b0d8fdab757b2bb5fc041ac910330a3f52642a2d48333",
+      "source_file": "web_gao_flagship_damaged_1x4.png",
+      "source_sha256": "eaa17d17014863d98e759d07abe6ef6efa8d10c062e2d9599077e85f0fc0a17c",
+      "source_cell_rect_xyxy": [
+        1654,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1666,
+        105,
+        2109,
+        617
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6117381489841986,
+        0.611328125
+      ],
+      "resized_size": [
+        271,
+        313
+      ],
+      "paste_xy": [
+        120,
+        107
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "se",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_se.png",
+      "candidate_sha256": "812a41df85803c2dad702f6f5f11373722dab631cb8509112d60ee9f5e062626",
+      "source_file": "web_gao_flagship_flooding_1x4.png",
+      "source_sha256": "666d8bdf62799a721b013625edf9fc2510970f1fe5b7cc2f3eb638dc32674f1e",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        501,
+        724
+      ],
+      "source_rect_xyxy": [
+        3,
+        23,
+        454,
+        645
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6119733924611973,
+        0.6109324758842444
+      ],
+      "resized_size": [
+        276,
+        380
+      ],
+      "paste_xy": [
+        118,
+        40
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "sw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_sw.png",
+      "candidate_sha256": "1a89a647c389729f8ad2c7a171586e3101242782e038f5ca45e21b5ad775e06e",
+      "source_file": "web_gao_flagship_flooding_1x4.png",
+      "source_sha256": "666d8bdf62799a721b013625edf9fc2510970f1fe5b7cc2f3eb638dc32674f1e",
+      "source_cell_rect_xyxy": [
+        501,
+        0,
+        1091,
+        724
+      ],
+      "source_rect_xyxy": [
+        549,
+        45,
+        981,
+        657
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6111111111111112,
+        0.6111111111111112
+      ],
+      "resized_size": [
+        264,
+        374
+      ],
+      "paste_xy": [
+        124,
+        46
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "ne",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_ne.png",
+      "candidate_sha256": "0d7c9e652b87be11fd515193c50398cfab0bab9d126181ad9695e1752c4c3d82",
+      "source_file": "web_gao_flagship_flooding_1x4.png",
+      "source_sha256": "666d8bdf62799a721b013625edf9fc2510970f1fe5b7cc2f3eb638dc32674f1e",
+      "source_cell_rect_xyxy": [
+        1091,
+        0,
+        1660,
+        724
+      ],
+      "source_rect_xyxy": [
+        1201,
+        25,
+        1642,
+        664
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6122448979591837,
+        0.6118935837245696
+      ],
+      "resized_size": [
+        270,
+        391
+      ],
+      "paste_xy": [
+        121,
+        29
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "flooding",
+      "direction": "nw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_flooding_nw.png",
+      "candidate_sha256": "c538523e248fa89b08fd937d182e89a24987b64657f2bf6b9ce9572c3eaef13d",
+      "source_file": "web_gao_flagship_flooding_1x4.png",
+      "source_sha256": "666d8bdf62799a721b013625edf9fc2510970f1fe5b7cc2f3eb638dc32674f1e",
+      "source_cell_rect_xyxy": [
+        1660,
+        0,
+        2172,
+        724
+      ],
+      "source_rect_xyxy": [
+        1678,
+        88,
+        2139,
+        628
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6117136659436009,
+        0.6111111111111112
+      ],
+      "resized_size": [
+        282,
+        330
+      ],
+      "paste_xy": [
+        115,
+        90
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "se",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_se.png",
+      "candidate_sha256": "c73f7ba702ceb0bef45350bbc1f702220e43335fd6e9a12a0ec4425b5285a2ee",
+      "source_file": "web_gao_flagship_disabled_1x4.png",
+      "source_sha256": "ab54804bdf6bbe6c65cd4721b51b1265ac00a1cbdd25a954d4594a775c815b72",
+      "source_cell_rect_xyxy": [
+        0,
+        0,
+        519,
+        725
+      ],
+      "source_rect_xyxy": [
+        8,
+        21,
+        499,
+        675
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6109979633401222,
+        0.6116207951070336
+      ],
+      "resized_size": [
+        300,
+        400
+      ],
+      "paste_xy": [
+        106,
+        20
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "sw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_sw.png",
+      "candidate_sha256": "981595f25ddbe20dad8d2d5a6014ec74733276d0e4b1e0ccc480cfc0ae913976",
+      "source_file": "web_gao_flagship_disabled_1x4.png",
+      "source_sha256": "ab54804bdf6bbe6c65cd4721b51b1265ac00a1cbdd25a954d4594a775c815b72",
+      "source_cell_rect_xyxy": [
+        519,
+        0,
+        1079,
+        725
+      ],
+      "source_rect_xyxy": [
+        540,
+        58,
+        996,
+        687
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6118421052631579,
+        0.6120826709062003
+      ],
+      "resized_size": [
+        279,
+        385
+      ],
+      "paste_xy": [
+        116,
+        35
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "ne",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_ne.png",
+      "candidate_sha256": "fa7473e4c7aa9d857024dbdea457d5d3894a4a35627ceddfecb3ba31c7d5b9a3",
+      "source_file": "web_gao_flagship_disabled_1x4.png",
+      "source_sha256": "ab54804bdf6bbe6c65cd4721b51b1265ac00a1cbdd25a954d4594a775c815b72",
+      "source_cell_rect_xyxy": [
+        1079,
+        0,
+        1637,
+        725
+      ],
+      "source_rect_xyxy": [
+        1162,
+        23,
+        1624,
+        671
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6125541125541125,
+        0.6111111111111112
+      ],
+      "resized_size": [
+        283,
+        396
+      ],
+      "paste_xy": [
+        114,
+        24
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    },
+    {
+      "key": "gao_flagship",
+      "state": "disabled",
+      "direction": "nw",
+      "candidate_path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/outputs/gao_flagship_disabled_nw.png",
+      "candidate_sha256": "f02dc76685da18ca4fde11bf9077d49edb4a20e177c63a032d4cd5d79dc1952d",
+      "source_file": "web_gao_flagship_disabled_1x4.png",
+      "source_sha256": "ab54804bdf6bbe6c65cd4721b51b1265ac00a1cbdd25a954d4594a775c815b72",
+      "source_cell_rect_xyxy": [
+        1637,
+        0,
+        2170,
+        725
+      ],
+      "source_rect_xyxy": [
+        1651,
+        89,
+        2129,
+        653
+      ],
+      "detection_alpha_used_only_for_transparent_gutter_and_rect_selection": 8,
+      "every_rgba_pixel_inside_source_rect_retained": true,
+      "batch_uniform_requested_scale": 0.6116207951070336,
+      "actual_scale_xy_after_integer_rounding": [
+        0.6108786610878661,
+        0.6117021276595744
+      ],
+      "resized_size": [
+        292,
+        345
+      ],
+      "paste_xy": [
+        110,
+        75
+      ],
+      "target_anchor_xy": [
+        256,
+        420
+      ],
+      "output_size": [
+        512,
+        512
+      ],
+      "output_mode": "RGBA"
+    }
+  ],
+  "preview": {
+    "path": "qa/gao_flagship_direction4_candidate_pipeline_20260903/runtime_size_fringe_preview.png",
+    "sha256": "76a90be4cffa0f0e280406763e58c45aaa3ff208d4f225e3851b05cf329a3a97"
+  },
+  "original_boundary": "Chapter 80 large sea-loach command ship; drilling from below progresses default to damaged to flooding to disabled. All web flag cloth remains blank for runtime-only 帅 overlay.",
+  "steam_modified_or_exported": false
+}

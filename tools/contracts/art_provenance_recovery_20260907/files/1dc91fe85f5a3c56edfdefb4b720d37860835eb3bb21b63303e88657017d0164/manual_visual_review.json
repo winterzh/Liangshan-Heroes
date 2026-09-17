@@ -1,0 +1,23 @@
+{
+  "reviewed_at": "2026-09-03T01:15:46.8113469+08:00",
+  "reviewed_artifact": "qa/li_kui_jiangzhou_direction4_candidate_pipeline_20260903/runtime_size_fringe_preview.png",
+  "passed": true,
+  "checks": {
+    "all_twenty_frames_present": true,
+    "se_sw_ne_nw_are_visually_distinct": true,
+    "same_identity_and_costume_across_states": true,
+    "bare_torso_checkered_waistcloth_short_dark_bottoms": true,
+    "exactly_two_plain_short_handled_single_edge_axes_visible_per_frame": true,
+    "complete_head_hands_feet_axes_and_handles": true,
+    "hurt_is_nonfatal_without_gore": true,
+    "down_is_incapacitated_without_corpse_gore": true,
+    "no_checkerboard_or_solid_background_baked_into_outputs": true,
+    "no_visible_edge_crop_or_runtime_size_fringe": true,
+    "no_local_masking_pixel_clearing_mirroring_or_repainting": true
+  },
+  "notes": [
+    "The checkerboard exists only in the QA preview; every production candidate remains RGBA with transparent frame edges.",
+    "The minimal checkered waistcloth and short dark bottoms are a platform-safe coverage adaptation, not a literal claim that chapter 40 gives Li Kui these garments.",
+    "The down state is reserved for free-play defeat handling and is not presented as the original chapter 40 or 41 outcome."
+  ]
+}

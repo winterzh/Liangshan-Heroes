@@ -1,3 +1,634 @@
+## 2026-09-17 Steam 发布指南
+
+- [项目级 Steam 发布指南](STEAM_RELEASE_GUIDE.md)：App `5088120` / Windows Depot `5088121` 的候选、上传、`default` 上线、四语公告、回验、回滚和收据清单。
+- [文档 QA](../qa/steam_release_guide_20260917/README.md)：固定标识、六文件白名单、命令入口、VDF 示例与发布边界核对。
+
+## 2026-09-16 梁山核心人物头像统一
+
+- `assets/characters/art_full_20260916/liangshan_core_portraits_source_20260916.png`、`liangshan_core_portraits_prompt_20260916.txt`：网页原生 2×2 图集和提示词。
+- `assets/characters/art_full_20260916/{chao_gai,lu_zhishen,wu_song,gongsun_sheng}_portrait_20260916.png`：固定象限裁切并 2×缩放后的独立头像。
+- `assets/characters/art_full_20260916/liangshan_core_portraits_manifest_20260916.json`、`tools/intake_liangshan_core_portraits_20260916.py`：来源 SHA、裁切坐标和生产记录。
+- `tools/liangshan_core_portraits_contract.py`、`tools/liangshan_core_portraits_runtime_contract.gd`、`qa/character_identity_20260916/`：静态/运行时/全库回归证据。
+- `scripts/art_db.gd`：四名核心人物加入 `STANDALONE_PORTRAITS`，独立头像优先于旧图集。
+
+## 2026-09-16 梁山水泊蒲苇场景统一
+
+- `assets/campaign/environment/art_scene_20260916/liangshan_reeds_source_20260916.png`、`liangshan_reeds_prompt.txt`：网页原生 2×2 透明蒲苇图集与提示词。
+- `tools/intake_liangshan_reeds_20260916.py`、`tools/liangshan_reeds_contract.py`、`tools/liangshan_reeds_runtime_contract.gd`：固定裁切/缩放、来源契约与 Level 5 运行时路由验证。
+- `qa/art_scene_20260916/liangshan_reeds_{manifest,contract,runtime_contract}.json`、`liangshan_reeds_art_full_qa_receipt_excerpt.json`：SHA、尺寸、校准、路由和全库回归收据。
+- 生产路径仍为 `assets/campaign/environment/level5/reeds_{short,tall,bent,seeded}.png`。
+
+## 2026-09-16 投石车四向攻击原图
+
+- `assets/characters/art_full_20260916/siege_cata_attack_direction4_source.png`、`siege_cata_attack_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/siege_cata_attack_20260916.json`、`assets/direction4/web_prompts_20260916/siege_cata_attack_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/siege_cata_attack_{se,sw,ne,nw}.tres`：四向攻击 SpriteFrames；`tools/siege_cata_attack_atlas_scale.py`、`tools/siege_cata_attack_direction4_contract.py`、`tools/siege_cata_attack_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/siege_cata_attack_direction4_20260916/README.md)。
+
+## 2026-09-16 官军精骑四向受击原图
+
+- `assets/characters/art_full_20260916/guan_jingqi_hurt_direction4_source.png`、`guan_jingqi_hurt_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/guan_jingqi_hurt_20260916.json`、`assets/direction4/web_prompts_20260916/guan_jingqi_hurt_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/guan_jingqi_hurt_{se,sw,ne,nw}.tres`：四向受击 SpriteFrames；`tools/guan_jingqi_hurt_atlas_scale.py`、`tools/guan_jingqi_hurt_direction4_contract.py`、`tools/guan_jingqi_hurt_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/guan_jingqi_hurt_direction4_20260916/README.md)。
+
+## 2026-09-16 官军弓手四向受击原图
+
+- `assets/characters/art_full_20260916/guan_gong_hurt_direction4_source.png`、`guan_gong_hurt_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/guan_gong_hurt_20260916.json`、`assets/direction4/web_prompts_20260916/guan_gong_hurt_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/guan_gong_hurt_{se,sw,ne,nw}.tres`：四向受击 SpriteFrames；`tools/guan_gong_hurt_atlas_scale.py`、`tools/guan_gong_hurt_direction4_contract.py`、`tools/guan_gong_hurt_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/guan_gong_hurt_direction4_20260916/README.md)。
+
+## 2026-09-16 官军刀盾兵四向受击原图
+
+- `assets/characters/art_full_20260916/guan_dao_hurt_direction4_source.png`、`guan_dao_hurt_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/guan_dao_hurt_20260916.json`、`assets/direction4/web_prompts_20260916/guan_dao_hurt_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/guan_dao_hurt_{se,sw,ne,nw}.tres`：四向受击 SpriteFrames；`tools/guan_dao_hurt_atlas_scale.py`、`tools/guan_dao_hurt_direction4_contract.py`、`tools/guan_dao_hurt_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/guan_dao_hurt_direction4_20260916/README.md)。
+
+## 2026-09-16 陆谦四向受击与死亡原图
+
+- `assets/characters/art_full_20260916/lu_qian_{hurt,death}_direction4_source.png`、对应生产图：保留网页原图与确定性 2×图。
+- `assets/direction4/lu_qian_{hurt,death}_20260916.json`、`assets/direction4/web_prompts_20260916/`：原图 SHA、固定格和提示词。
+- `assets/anim/lu_qian_{hurt,death}_{se,sw,ne,nw}.tres`：四向受击与死亡资源。
+- [受击 QA](../qa/lu_qian_hurt_direction4_20260916/README.md)、[死亡 QA](../qa/lu_qian_death_direction4_20260916/README.md)。
+
+## 2026-09-16 梁山水泊树木场景统一
+
+- `assets/campaign/environment/art_scene_20260916/liangshan_trees_source_20260916.png`：网页端原生 2×2 透明梁山植被图集。
+- `tools/intake_liangshan_trees_20260916.py`、`tools/liangshan_trees_contract.py`：确定性裁切、校准和来源契约。
+- `qa/art_scene_20260916/`：提示词、SHA 清单、契约、Level 5 图形捕获和回归记录。
+- 运行时仍使用 `assets/campaign/environment/level5/tree_{broad,young}.png` 与 `willow_old.png`。
+
+## 2026-09-16 黄泥冈松林场景统一
+
+- `assets/campaign/environment/art_scene_20260916/huangnigang_pines_source_20260916.png`：网页端原生 2×2 透明松树图集。
+- `tools/intake_huangnigang_pines_20260916.py`、`tools/huangnigang_pines_contract.py`：确定性裁切和来源/运行时契约。
+- `qa/art_scene_20260916/`：提示词、SHA清单、21项契约、Level 1 图形捕获与场景验证。
+- 运行时仍使用 `assets/campaign/environment/level1/huangnigang_pine_{old,double,young_lean}.png`。
+
+## 2026-09-15 图集采样边界修复
+
+- `tools/art_sampling_clip_selftest.py`：头像、地形、动作和死亡残留 AtlasTexture 采样边界的源码回归检查。
+- `qa/art_sampling_clip_20260915/`：5/5 入口自测、来源契约和隔离 Godot 321 项渲染收据；不含生产 PNG 副本。
+
+## 2026-09-15 陆谦四向待机身体原图
+
+- [陆谦美术实现与边界](LU_QIAN_ART_20260915.md)
+- `assets/characters/art_full_20260915/lu_qian_direction4.png`、`assets/direction4/lu_qian_20260915.json`：原始网页 RGBA 图与固定 SE/SW/NE/NW 清单。
+- `assets/anim/lu_qian_idle_{se,sw,ne,nw}.tres`：直接引用原图的四向 idle 资源。
+- [来源、静态契约与 Godot 路由 QA](../qa/lu_qian_idle_direction4_20260915/README.md)
+
+## 2026-09-15 陆谦四向行走原图
+
+- `assets/characters/art_full_20260915/lu_qian_walk_direction4_source.png`、`lu_qian_walk_direction4.png`：保留原始网页图及确定性 2×生产图。
+- `assets/direction4/lu_qian_walk_20260915.json`、`assets/anim/lu_qian_walk_{se,sw,ne,nw}.tres`：4×4 行走图集清单和四方向四帧资源。
+- [来源、静态契约与 Godot 路由 QA](../qa/lu_qian_walk_direction4_20260915/README.md)
+
+## 2026-09-15 陆谦四向攻击原图
+
+- `assets/characters/art_full_20260915/lu_qian_attack_direction4_source.png`、`lu_qian_attack_direction4.png`：保留原始网页图及确定性 2×生产图。
+- `assets/direction4/lu_qian_attack_20260915.json`、`assets/anim/lu_qian_attack_{se,sw,ne,nw}.tres`：4×4 攻击图集清单和四方向四帧资源。
+- [来源、静态契约与 Godot 路由 QA](../qa/lu_qian_attack_direction4_20260915/README.md)
+
+## 2026-09-15 祝朝奉四向待机身体原图
+
+- [祝朝奉美术实现与边界](ZHU_ZHAOFENG_ART_20260915.md)
+- `assets/characters/art_full_20260915/zhu_zhaofeng_direction4.png`、`assets/direction4/zhu_zhaofeng_20260915.json`：原始网页 RGBA 图与固定 SE/SW/NE/NW 清单。
+- `assets/anim/zhu_zhaofeng_idle_{se,sw,ne,nw}.tres`：直接引用原图的四向 idle 资源；同源头像为 `assets/characters/art_full_20260915/zhu_zhaofeng.png`。
+- [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_idle_direction4_20260915/README.md)
+
+## 2026-09-15 祝朝奉四向行走原图
+
+- `assets/characters/art_full_20260915/zhu_zhaofeng_walk_direction4_source.png`、`zhu_zhaofeng_walk_direction4.png`：保留原始网页图及确定性 2×生产图。
+- `assets/direction4/zhu_zhaofeng_walk_20260915.json`、`assets/anim/zhu_zhaofeng_walk_{se,sw,ne,nw}.tres`：4×4 行走图集清单和四方向四帧资源。
+- `tools/zhu_zhaofeng_walk_atlas_scale.py`、`tools/zhu_zhaofeng_walk_direction4_contract.py`、`tools/zhu_zhaofeng_walk_direction4_runtime_qa.gd`：可复现缩放、静态契约和 Godot 路由验证。
+- [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_walk_direction4_20260915/README.md)
+
+## 2026-09-15 Steam美术与镜头更新
+
+- `docs/STEAM_ART_UPDATE_20260915.md`：发行准备、酒幌导出修复及后续上线记录。
+- `qa/steam_art_release_20260915/`：本批发布验证、来源、四语公告与公开回读收据。
+
+## 2026-09-16 祝朝奉四向攻击原图
+
+- `assets/characters/art_full_20260915/zhu_zhaofeng_attack_direction4_source.png`、`zhu_zhaofeng_attack_direction4.png`：保留原始网页图及透明画布归一化后的确定性 2×生产图。
+- `assets/direction4/zhu_zhaofeng_attack_20260915.json`、`assets/anim/zhu_zhaofeng_attack_{se,sw,ne,nw}.tres`：4×4 攻击图集清单和四方向四帧资源。
+- `tools/zhu_zhaofeng_attack_atlas_scale.py`、`tools/zhu_zhaofeng_attack_direction4_contract.py`、`tools/zhu_zhaofeng_attack_direction4_runtime_qa.gd`：可复现画布归一化、静态契约和 Godot 路由验证。
+- [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_attack_direction4_20260916/README.md)
+
+## 2026-09-16 祝朝奉四向受击原图
+
+- `assets/characters/art_full_20260915/zhu_zhaofeng_hurt_direction4_source.png`、`zhu_zhaofeng_hurt_direction4.png`：保留原始网页图及透明画布归一化后的确定性 2×生产图。
+- `assets/direction4/zhu_zhaofeng_hurt_20260915.json`、`assets/anim/zhu_zhaofeng_hurt_{se,sw,ne,nw}.tres`：4×4 受击图集清单和四方向四帧资源。
+- `tools/zhu_zhaofeng_hurt_atlas_scale.py`、`tools/zhu_zhaofeng_hurt_direction4_contract.py`、`tools/zhu_zhaofeng_hurt_direction4_runtime_qa.gd`：可复现画布归一化、静态契约和 Godot 路由验证。
+- [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_hurt_direction4_20260916/README.md)
+
+## 2026-09-16 祝朝奉四向死亡原图
+
+- `assets/characters/art_full_20260915/zhu_zhaofeng_death_direction4_source.png`、`zhu_zhaofeng_death_direction4.png`：保留原始网页图及透明画布归一化后的确定性 2×生产图。
+- `assets/direction4/zhu_zhaofeng_death_20260915.json`、`assets/anim/zhu_zhaofeng_death_{se,sw,ne,nw}.tres`：4×4 死亡图集清单和四方向四帧非循环资源。
+- `tools/zhu_zhaofeng_death_atlas_scale.py`、`tools/zhu_zhaofeng_death_direction4_contract.py`、`tools/zhu_zhaofeng_death_direction4_runtime_qa.gd`：可复现画布归一化、静态契约和 Godot 路由验证。
+- [来源、静态契约与 Godot 路由 QA](../qa/zhu_zhaofeng_death_direction4_20260916/README.md)
+
+## 2026-09-15 全库美术批次
+
+- `assets/characters/art_full_20260915/`：董超、薛霸独立原生头像。
+- `assets/campaign/environment/art_full_20260915/`：网页生成原生RGBA图集；各关卡/共享overlays目录中的TRES引用这些原图。
+- `tools/contracts/art_full_20260915/`：提示词、原图/资源SHA、原有同角色复用引用与拒稿证据。
+- `tools/run_art_full_qa.py`、`tools/art_full_inventory_qa.gd`、`tools/art_full_source_contract.py`：全库盘点、八关视觉夹具及来源检查。
+- `qa/art_full_20260915/`、`docs/ART_FULL_20260915.md`：验证原始记录与尚未完成台账。
+
+## 2026-09-15 刽子手四向动作与肖像
+
+- [美术实现及边界](CHARACTER_ART_20260915.md)
+- [动作与肖像原图](../assets/characters/guan_zhanzi_direction4_20260915/)及[切片manifest](../assets/direction4/guan_zhanzi_20260915.json)
+- [生成提示词、退回稿与来源](../tools/contracts/guan_zhanzi_direction4_20260915/README.md)
+- [最终原生证据、失败诊断与目检](../qa/character_art_20260915/README.md)
+
+## 2026-09-15 四语补丁说明
+
+- [发布说明与固定流程](STEAM_PATCH_NOTES_20260915.md)
+- [四语原文与公开回读收据](../qa/steam_patchnotes_20260915/README.md)
+
+## 2026-09-15 Steam 祝家庄补员更新
+
+- [更新内容与范围](STEAM_UPDATE_20260915.md)
+- [候选、包内补员、EXE短测与发布证据](../qa/steam_release_20260915/README.md)
+
+## 2026-09-15 祝家庄恢复引导
+
+- [实现与边界](ZHUJIAZHUANG_RECOVERY_20260915.md)：普通兵损失后的提示与主动定位。
+- [QA记录](../qa/zhujiazhuang_recovery_20260915/README.md)：自然接敌、补兵出营、GUI边界及截图。
+- [隔离驱动](../tools/run_zhujiazhuang_recovery_qa.py)与[原生场景验证](../tools/zhujiazhuang_recovery_qa.gd)。
+
+## 2026-09-14 RTS 玩法方向定稿与调研入档
+
+- [玩法方向定稿](GAMEPLAY_DIRECTION_20260914.md)：后续设计与评审的现行依据。
+- [同类型精华旧稿](GAMEPLAY_ESSENCE_SAME_GENRE_20260914.md)、[帝国系列研究](AOE_SERIES_STUDY_20260914.md)、[调研全文](GAMEPLAY_STUDY_RTS_20260914.md)：历史过程资料，保留旧稿并注明被新方向替代的范围。
+- [既有关卡分配与样板](CAMPAIGN_FUN_REWORK_20260905.md)：保留实现历史，玩法评价转到新方向。
+- [归档核对记录](../qa/gameplay_direction_20260914/README.md)与[校验清单](../qa/gameplay_direction_20260914/archive_manifest.json)：定稿原文完整性、关联链接及文档同步范围。
+
+## 2026-09-14 四语公告
+
+- [公告与公开入口](STEAM_ANNOUNCEMENT_20260914.md)。
+- [发布收据与64片段回读](../qa/steam_announcement_20260914/README.md)。
+
+## 2026-09-14 Steam Windows 发布候选
+
+- [更新范围与限制](STEAM_UPDATE_20260914.md)。
+- [验证、原始收据与复现](../qa/steam_release_20260914/README.md)：185原生、1126包内、20身份、449图鉴及11例EXE短测。
+- [发布状态](../qa/steam_release_20260914/publication_receipt.json)：Build25290621已正式上线，服务器六文件已核对。发行ZIP与EXE只保留本机。
+
+## 2026-09-14 首批图鉴与肖像交付
+
+- [实现与边界](CODEX_IDENTITY_IMPLEMENTATION_20260913.md)：四人身份要点、图鉴方向与共同取景。
+- [生产肖像](../assets/characters/codex_portraits_20260913/)：四张原始PNG及Godot导入描述符。
+- [生成契约](../tools/contracts/codex_identity_20260913/README.md)：六次生成、精确提示词、原著审查和原图引用链。
+- [原生验证与人工目检](../qa/codex_identity_20260913/README.md)：历史诊断、最终同版批、导入探针及只读证据核验器。
+- [隔离驱动](../tools/run_codex_identity_qa.py)和[场景QA](../tools/codex_identity_qa.gd)：实际图鉴、四语与常规头像来源验证。
+
+## 2026-09-13 角色身份与图鉴
+
+- [角色辨识与图鉴标准](CHARACTER_IDENTITY_CODEX_20260913.md)：统一画风与逐人面貌、原著/保守设计区分、肖像和战斗一致性、图鉴源码缺口、下一批顺序及独立验收口径。
+
+## 2026-09-13 孙立与扈三娘四向基础美术：最终验证通过
+
+- [美术接入说明](CHARACTER_ART_20260913.md)：孙立11PNG、扈三娘9PNG，两人各32姿态/20动画资源；原生来源、相对体量、血条遮脸修正与SW整数尺寸修复。
+- [本轮QA与复现](../qa/character_art_20260913/README.md)：来源审计孙立380项、扈三娘259项已通过；最终180852批角色1260项、共享路由8项通过；52张PNG已SHA核验，六张总览与代表实机画面已目检。
+- [孙立帧清单](../assets/direction4/sun_li_20260913.json)、[扈三娘帧清单](../assets/direction4/hu_sanniang_20260913.json)与[隔离验证驱动](../tools/run_character_art_qa.py)：使用原生RGBA和标准AtlasTexture配方，构建器增加完整像素尺寸守卫。唯一游戏代码调整为Unit登记两名角色的四向攻击图，不改规则。
+
+普通`Play.cmd`不变，本轮未打包或发布Steam；最终验收与Git同步状态由本批收据及远端回读补记，以下历史保持原范围。
+
+## 2026-09-13 黄泥冈入场反馈：四批相关验证及联合核验通过
+
+- [本轮说明](HUANGNIGANG_FEEDBACK_20260913.md)：押队分流与停稳、白胜一次自动行走及1.5秒落担、玩家接管、强夺/死亡和三字段保存合同。
+- [本轮QA与复现](../qa/huangnigang_feedback_20260913/README.md)：最终134926玩法批181项、全新140508组件207项、缓存七用例140919世界309项、全新141759经典296项通过；人工目检玩法两张及世界胜利一张，经典16张仅作SHA核验。本轮不扩大为默认37用例完整世界验收。
+- [四批联合结果](../qa/huangnigang_feedback_20260913/validation_summary.json)与[核验工具](../qa/huangnigang_feedback_20260913/verify_evidence.py)：来源无变化，玩法13、世界90、经典16份归档文件SHA全部匹配；共享锁空，World玩家目录未变。
+- [旧入场说明](HUANGNIGANG_ARRIVAL_20260909.md)、[短篇说明](HUANGNIGANG_SHORT_20260906.md)、[世界恢复历史](HUANGNIGANG_WORLD_RESTORE_20260912.md)：顶部已指向本轮规则，旧手动入场规则和旧通过数保留其历史范围。
+
+本轮不开放玩家保存/继续入口，也未更新Steam包；以下旧里程碑保持其当时来源。
+
+## 2026-09-13 快活林内部恢复里程碑
+
+全新默认37用例110348批2811项（1628 + 789 + 394）与同版全新默认经典114838批296项均通过；联合核验确认2966份生产文件及世界12份/经典4份QA来源匹配当前，快活林15张/经典16张PNG的SHA通过，人工目检仅3+2张。验证基线34200d，最终源码同步以本轮提交与远端回读为准。本轮未打包发布Steam，`PLAYER_ENTRY=false`；连环马仍仅隔离候选，未计入原生完成范围。下方江州阶段索引与历史结论保留。
+
+- [快活林实现与边界](KUAIHUOLIN_WORLD_RESTORE_20260913.md)：固定profile、八实体、15组件槽、九进程真实命令路线与完整失败/中止历史。
+- [快活林QA和复现](../qa/kuaihuolin_world_restore_20260913/README.md)、[联合核验JSON](../qa/kuaihuolin_world_restore_20260913/validation_summary.json)、[核验器](../qa/kuaihuolin_world_restore_20260913/verify_evidence.py)：世界与经典同版联合证据，包含准确目检路径和原始收据SHA。
+- [110348世界收据](../qa/level3_world_restore_20260909/20260913_110348_38bd4cf4/receipt.json)和[114838经典收据](../qa/continue_flow_20260909/20260913_114838_3ea9d869/receipt.json)：独立全新默认原始证据；不合并旧失败、缓存或子集通过数。
+- [快活林工厂](../scripts/run_level7_world_factory.gd)、[预警适配器](../scripts/run_level7_visual_state.gd)、[组件QA](../tools/level7_world_restore_qa.gd)、[自然QA](../tools/level7_cross_process_qa.gd)：已安装源码；[统一交付状态](CONTINUE_DELIVERY_20260908.md)保留未完成门槛。
+
+## 2026-09-13 江州内部恢复里程碑
+
+全新默认27用例世界085554批1628项（916+381+331）与同版经典084224批296项完整通过；联合核验确认2962份生产文件同SHA、世界QA无来源差异、江州11张/经典16张PNG的SHA通过。人工目检仅江州保存/登船/胜利3张和经典两张代表图，准确路径见实现说明。`PLAYER_ENTRY=false`，下一步快活林，再连环马、高俅、大名府；下方旧阶段结论保留历史语境。
+
+- [江州实现与边界](JIANGZHOU_WORLD_RESTORE_20260913.md)：固定profile、60×58 town、独立角色图、两次替换、固定开船回调、组件/自然路线及全部失败历史。
+- [江州QA与复现](../qa/jiangzhou_world_restore_20260913/README.md)、[联合核验JSON](../qa/jiangzhou_world_restore_20260913/validation_summary.json)、`qa/jiangzhou_world_restore_20260913/verify_evidence.py`：单个全新完整世界批及同版经典证据，不合并旧缓存或失败批。
+- [085554世界收据](../qa/level3_world_restore_20260909/20260913_085554_ae1d1fcb/receipt.json)与[084224经典收据](../qa/continue_flow_20260909/20260913_084224_c71345c4/receipt.json)：本轮原始收据及对应报告、日志、PNG。
+- `scripts/run_level2_world_factory.gd`、`tools/level2_world_restore_qa.gd`、`tools/level2_cross_process_qa.gd`：已安装工厂、九槽显式组件夹具及七进程真实命令路线；[统一交付状态](CONTINUE_DELIVERY_20260908.md)保留未完成门槛。
+
+## 2026-09-13 四语图文版本汇总
+
+新Event714538122294068076已公开，06:49 HKT，类型“重大更新”，关联Build25276077；四语各5节与3张已有实机图。16个保存字段精确匹配，84个公开片段规范化后完整匹配，12处图片加载及尺寸通过。旧074小型公告保留。
+
+- [图文发布交接](STEAM_VERSION_ROUNDUP_20260913.md)：活动、四语链接、图片年代、回读及验收范围。
+- [文案与图片说明](../marketing/steam_version_roundup_20260913/README.md)：copy、rendered_copy、transfer_checks和images，不改已有小公告。
+- [发布收据](../qa/steam_version_roundup_20260913/publication_receipt.json)、[验证记录](../qa/steam_version_roundup_20260913/validation.json)：本篇发布和公开正文/图片的独立证据。
+
+## 2026-09-13 四语更新公告
+
+Event714538122294068074已公开，Steam显示06:16 HKT开始并关联Build25276077；四语保存16字段、公开24片段精确匹配。
+
+- [公告交接](STEAM_ANNOUNCEMENT_20260913.md)：四语公开链接、后台/公开回读、目检及英语封面回退范围。
+- [定稿与文案说明](../marketing/steam_announcement_20260913/README.md)、[copy.json](../marketing/steam_announcement_20260913/copy.json)：四语标题/副标题/摘要/四段正文，无新图片。
+- [公告QA](../qa/steam_announcement_20260913/README.md)、[发布收据](../qa/steam_announcement_20260913/publication_receipt.json)、[验证记录](../qa/steam_announcement_20260913/validation.json)：与包发布证据分别保存，不修改既有发布JSON。
+
+## 2026-09-13 Windows Steam发布交接
+
+`71098183` Windows包已正式在default上线：App5088120 / Depot5088121 / Build25276077 / Manifest4630656200603476714，服务器6文件名称、大小和SHA1全部匹配。用户完成手动确认并报告手机Steam令牌验证完成；06:01:22（UTC+8）Steamworks回读核实上线成功及当前default构建。玩家保存/继续入口仍隐藏。[最终发布收据](../qa/steam_release_20260913/publication_followup_receipt.json)。
+
+- [本次Steam更新交接](STEAM_UPDATE_20260913.md)：发布范围、[已发布唯一ZIP](E:/CodexTemp/steam_release_20260913/upload/LiangshanHeroes_Steam_candidate.zip)、六成员核对和Build25276077正式上线回读；首次文件权限阻塞与两次自动确认超时保留历史。
+- [本轮Steam QA](../qa/steam_release_20260913/README.md)、[候选交付清单](../qa/steam_release_20260913/candidate_delivery.json)、[证据复制清单](../qa/steam_release_20260913/evidence_copy_manifest.json)：原生QA、候选、身份探针与实际EXE短测原始收据，不含发行二进制或私有缓存。
+- `qa/steam_release_20260913/collect_evidence.py`、`smoke_verified_package.py`：本机适配的证据复制与串行EXE短测工具；未修改生产逻辑。
+
+## 2026-09-13 野猪林世界恢复开发与验证
+
+全新默认世界040000批916项已通过（425+183+308），19用例收据 `complete/full_suite/fresh_import/acceptance_complete` 均true。经典042455全新默认批296项通过、退出0，联合核验退出0，两批与当前checkout的2960份生产文件同SHA，世界11张/经典16张图SHA通过。人工目检仅世界拦棍/求情/胜利3张及经典中文覆盖确认/英文终局等待2张。
+
+- [野猪林实现与复现](YEZHULIN_WORLD_RESTORE_20260913.md)：固定profile、52×40 marsh景物、独立角色图、两次林冲替换、固定按钮、阴影捕获竞态，以及组件夹具与七进程自然南路的边界；保留全部中止/失败及缓存诊断历史。
+- [野猪林证据汇总](../qa/yezhulin_world_restore_20260913/README.md)、`qa/yezhulin_world_restore_20260913/verify_evidence.py`、[联合核验JSON](../qa/yezhulin_world_restore_20260913/validation_summary.json)：040000完整世界916项与042455经典296项、2960份生产来源及图像SHA核验通过；README保留完整两收据复现命令。
+- [040000世界原始收据](../qa/level3_world_restore_20260909/20260913_040000_60d3e221/receipt.json)：同一全新批重跑既有425项和野猪林491项，不复用旧分阶段来源；原生路线11张图SHA通过，人工目检范围为已列三张。
+- [042455经典原始收据](../qa/continue_flow_20260909/20260913_042455_e8f43126/receipt.json)：全新默认296项通过，16张四语状态图SHA通过，人工目检范围为中文覆盖确认和英文终局等待两张。
+- `scripts/run_level6_world_factory.gd`：已安装野猪林的固定运行定义与关卡恢复工厂，不重放开局部署。
+- `tools/level6_world_restore_qa.gd`：提前强救、照料、护送、死亡动画尚存及释放后引用的独立组件夹具和坏档负例。
+- `tools/level6_cross_process_qa.gd`：真实南路七进程，040000全新默认批308项通过，覆盖跟随、拦棍、求情、护送、歇脚出林、四人生还3/3及终局旧槽拒绝。
+- `tools/run_level3_world_restore_qa.py`：扩展后的多章节隔离串行驱动，仍归档至 `qa/level3_world_restore_20260909/`；野猪林专项与全默认批分开判断，不把子集写成完整验收。
+- `tools/run_continue_flow_qa.py`：同版经典菜单/保存/恢复默认回归；本轮与世界驱动一同将资源导入时限设为600秒，玩法时限不变。
+- [既有黄泥冈425项分阶段汇总](../qa/huangnigang_world_restore_20260913/README.md)与[经典296项原收据](../qa/continue_flow_20260909/20260913_024947_f6a8c09f/receipt.json)：保留此前冻结来源，不能自动代表本轮同版回归。[统一交付计划](CONTINUE_DELIVERY_20260908.md)仍保留玩家入口和全部未完成门槛。
+
+## 2026-09-13 黄泥冈跨进程恢复至全员胜利
+
+- [本轮实现与复现](HUANGNIGANG_WORLD_RESTORE_20260912.md)：黄泥冈景物、关卡道具、携担引用、六进程自然酒计路线及独立死亡掉担夹具。
+- `scripts/run_level1_visual_state.gd`：枣车、提示牌与酒具固定工厂及外部件token；由景物、视觉图、单位图和WorldCore接入受信黄泥冈上下文。
+- `tools/level1_world_restore_qa.gd`、`tools/level1_cross_process_qa.gd`：实际整槽组件验证与押队/挑酒/下药/携担/胜利/终局旧槽六进程路线。
+- `tools/run_level3_world_restore_qa.py`：祝家庄与黄泥冈隔离串行验证驱动，支持诊断子集和记录缓存复用来源。
+- [本轮QA汇总](../qa/huangnigang_world_restore_20260913/README.md)、`qa/huangnigang_world_restore_20260913/validation_summary.json`：六进程258项与同生产依赖前段167项的分阶段证据、2958份生产依赖SHA对照、胜利图目检与失败历史；不改写原收据。
+- `qa/level3_world_restore_20260909/20260913_021853_de632b8f/`：全新导入六进程子集258项通过，三担/八人/4of4/终局旧槽拒绝；`20260913_015956_3bc1fd31/` 保留完整批失败及此前167项通过证据，两者均不计 `acceptance_complete`。
+- [经典默认回归收据](../qa/continue_flow_20260909/20260913_024947_f6a8c09f/receipt.json)：本轮296项通过、退出0、`complete=true`；022858超时与024447主动诊断中止目录保留原始证据，均不计整批通过。
+- [统一交付状态](CONTINUE_DELIVERY_20260908.md)：后续扩展其余六关；玩家入口、完整30波同版、真实Steam确认和整体验收门槛仍开放。下方未接入的恢复计划与版本号保留历史语境。
+
+## 2026-09-09 女性封面与整套宣传媒体
+
+- [发布范围与交接](STEAM_STORE_MEDIA_20260909.md)：商店8图revision6、6库图与5新截图revision7已发布，公告封面此前已更新；仅视频和视频缩略图待上传发布，首次阻塞留作历史。
+- `marketing/steam_store_20260909_female/`：七种商店/库图、16:9宣传配图、原生来源、完整生成prompt和尺寸规范脚本。
+- `marketing/steam_store_20260909_female/video/`：Build25200149包的新录实机视频、五张截图、时间线与QA；raw及edit_work不进Git。
+- `qa/steam_store_media_20260909_female/`：独立媒体目检、revision6/7发布与公共回读、1231px库预览、截图实际顺序/分类、首次失败历史和22文件复制清单。
+- `D:/AI项目/水浒/Steam新素材-20260909/`：本机五组最终上传成品及“先看这里.md”，可由build_upload_bundle.py在另一台机器重建。
+
+## 2026-09-09 黄泥冈入场与落担
+
+- [改动说明](HUANGNIGANG_ARRIVAL_20260909.md)：七星歇脚、有限押队入场、盘问、白胜现场落担及尚未完成的完整酒计。
+- [QA记录](../qa/huangnigang_arrival_20260909/README.md)：三批原始证据、失败策略、最终八张阶段图及源码/输出校验。
+- `tools/huangnigang_arrival_test.gd`：实际入场观测及单列的酒摊、死亡、重打、基类边界夹具。
+- `qa/huangnigang_arrival_20260909/verify_evidence.py`：只读核对历史证据、当前输入与24条新增三语译文。
+
+## 2026-09-09 战役设计研究
+
+- [战役重新设计研究](CAMPAIGN_REDESIGN_RESEARCH_20260909.md)：原著因果、七作玩法/评论对照、黄泥冈与祝家庄最小样板及试玩标准。
+- `docs/research/campaign_20260909/sources.json`：24条Steam短摘录、元数据、3个公开讨论及官方来源；不含长评全文。
+- `docs/research/campaign_20260909/audit.json`：当前入口与12份文件哈希、旧QA边界、尚未修复的数值问题。
+
+## 2026-09-09 城门与攻城反馈
+
+- [实现与后续审计](CAMPAIGN_COMBAT_FEEDBACK_20260909.md)：孟州门向、敌方城防、单体塔箭护甲、四语说明和未调整数值。
+- [QA记录](../qa/campaign_feedback_20260909/README.md)：独立伤害/几何夹具、真实路线、1280×720截图及保留的失败尝试。
+- `scripts/campaign_mengzhou_gate.gd`：仅孟州东门的地面轴与阴影渲染；复用已有位图。
+- `tools/run_campaign_feedback_qa.py`：D盘私有工程、私有profile、禁用Steam、共享锁串行验证。
+
+## 2026-09-09 最新源码 Steam 正式更新
+
+- [本批发布说明](STEAM_LATEST_UPDATE_20260909.md)：Build 25200149、Manifest 7045932649257457621、来源与开放范围。
+- [本批 QA](../qa/steam_latest_update_20260909/README.md)：候选、短测、公开流程、服务端六文件与正式发布收据；总清单覆盖归档证据。
+- [四语公告文案](../marketing/steam_latest_update_20260909/README.md)：已发布的16个字段及活动 `714538122294067212`。
+
+下方旧批次的版本号与“未发布”等描述保留其当时语境，当前发布状态以本节和正式发布收据为准。
+
+## 2026-09-09 冗余缓存清理与归档
+
+- `qa/storage_cleanup_20260909/`：161个重复imported目录清理、受保护文件前后哈希、归档与隔离启动证据；原始源文件和所有已提交QA仍保留。
+- `qa/storage_cleanup_20260909/archive_guide/`：本机归档说明与清单的交接副本。7z位于`D:/AI项目/水浒/归档/`。
+- `D:/CodexTemp/level3_scenery_prepare_20260909/已归档.md`和工程`.godot/旧助手已归档_20260909.md`：原位置恢复指引；正式景物候选QA仍在原目录。
+- `D:/CodexTemp/watermargin-cleanup-20260909/`：本轮完整成员清单和审计执行目录；两份归档验证副本因审批拦截仍保留。
+
+## 2026-09-09 祝家庄景物、暂停边界与特效分区
+
+- `scripts/run_map_state.gd`、`scripts/run_scenery_state.gd`：显式安装内容上下文、固定景物工厂与延迟激活。
+- `scripts/run_battle_barrier.gd`：官方祝家庄捕获选择，补禁用最后物理步/延迟回调新建的HUD节点。
+- `scripts/run_campaign_presentation_state.gd`、`scripts/run_visual_graph.gd`：原生容器兼容与任务标记分区，维护混合特效顺序和独立所有权。
+- `tools/level3_scenery_qa.gd`、`tools/run_level3_scenery_qa.py`、`qa/level3_scenery_20260909/`：真实菜单源、私有地图/景物组件恢复、双进程和四语图证据。
+- `tools/campaign_fx_partition_qa.gd`、`tools/run_campaign_fx_partition_qa.py`、`qa/campaign_fx_partition_20260909/`：合成组件宿主下真实Mission/标记/FloatLabel/Bolt分区，失败尝试保留。
+- `docs/LEVEL3_DISPLAY_RESTORE_20260909.md`：本批实现、精确QA和下一步世界整合边界；下面未应用候选状态保留历史语境。
+
+## 2026-09-09 祝家庄恢复组件
+
+- `scripts/run_official_restore_profile.gd`、`scripts/run_level3_world_factory.gd`、`docs/OFFICIAL_RESTORE_PROFILE_20260909.md`：固定经典30波/祝家庄选型、私有运行定义与31字段关卡恢复工厂；组件验证不等于完整世界恢复。
+- `scripts/run_unit_state.gd`、`scripts/run_unit_graph.gd`：保留经典默认合同，增加从已校验祝家庄关卡记录派生的特殊单位角色与独立图版本。
+- `qa/official_restore_profile_20260909/`、`qa/level3_unit_graph_20260909/`：本批隔离组件证据；实际通过范围和失败尝试以各目录说明及原始收据为准。
+- `docs/LEVEL3_UNIT_GRAPH_20260909.md`：特殊单位角色、全图先验证后分配、九份组件快照与世界整合边界。
+- `qa/level3_scenery_prepare_20260909/`：景物与MapState接线候选，31份来源/补丁/静态证据按原字节归档；未原生解析、未应用，不计世界完成。
+
+## 2026-09-09 终局身份、任务界面与经典玩法驱动
+
+- `tools/classic30_inflight_observer.gd`：经典验收的只读弹道、五类施法队列和单位施法计时观察；HELD保存与新进程暂停恢复逐值比较。它不替代全部特殊伤害组件，也不写游戏状态。
+- `docs/CONTINUE_SETTINGS_RESTORE_20260909.md`：槽v3保留本局英雄托管档位、恢复事务回滚与295项流程回归的证据边界。
+- `docs/LEVEL3_WORLD_PREPARATION_20260909.md`、`qa/level3_world_prepare_20260909/`：祝家庄世界/单位设计候选与来源映射；未解析、未应用、未接入，不计正式完成。
+
+- `scripts/run_local_lifecycle.gd`、`docs/LOCAL_CONTINUE_LIFECYCLE_20260909.md`：未计Steam统计的本地active/terminal收据、槽v3绑定及终局故障重试；不包含Steam写确认。
+- `scripts/run_campaign_presentation_state.gd`、`docs/CAMPAIGN_PRESENTATION_STATE_20260909.md`、`qa/campaign_presentation_state_20260909/`：固定Mission控件、marker、翻译绑定及恢复布局组件；尚未由官方战役WorldCore调用，原生失败/成功以各批收据为准。
+- `tools/classic30_player_commands.gd`、`tools/classic30_continue_acceptance.gd`、`tools/run_classic30_continue_acceptance.py`、`docs/CLASSIC30_CONTINUE_ACCEPTANCE_20260909.md`、`qa/classic30_continue_20260909/`：普通经典局付费玩家命令驱动，300秒诊断与完整30波续玩验收分开；无AI友好、跳波或改模拟速度。
+- `qa/continue_flow_20260909/`新增本地收据、首次与已有槽保存终局相撞、失败重试及跨进程终局拒绝；32个四语键包含新增终局错误反馈。
+
+## 2026-09-09 续玩流程与故障恢复
+
+- `docs/CONTINUE_FLOW_20260909.md`、`qa/continue_flow_20260909/`：内部真实菜单保存退出、跨进程继续、覆盖竞争、错误操作及四语截图。
+- `docs/OWNED_SLOT_RETRY_20260909.md`、`qa/owned_slot_retry_20260909/`：同Session/原token事务重试、故障拒绝及受控复现。
+- `docs/CAMPAIGN_MISSION_STATE_20260909.md`、`qa/campaign_mission_state_20260909/`：44字段分类、Mission组件与跨进程QA；外部UI工厂尚待整合。
+- `docs/HUD_PAUSE_RESTORE_20260909.md`、`qa/hud_pause_restore_20260909/`：可信准备态暂停确认恢复与普通忙碌操作拦截。
+- `docs/CONTINUE_FLOW_TEXT_20260909.md`、`assets/localization/continue_flow.json`：30个四语源键及原词库不变核验。
+- `docs/STEAM_STATS_OBSERVER_20260909.md`、`qa/steam_stats_observer_20260909/`：独立目标只读观察器的原生/扩展证据；真实第二账号及写确认未通过。
+- 各`tools/run_*_qa.py`提供只读预检与显式`--run`；受控工程、私有profile和测试DLL位于忽略的工作目录，不作为玩家资源提交。
+
+## 2026-09-09 Steam 正式激活与公告发布
+
+- `docs/STEAM_STATS_FIX_PUBLICATION_20260909.md`：正式 default Build25185242 / Manifest1883518997850700800、公告708907988310559239，以及后台发布和公开页面回读的验收边界。
+- `qa/steam_stats_fix_publication_20260909/preflight.json`：四语字段、长度、BBCode、文案范围与哈希、原候选ZIP及六成员、复用封面的脱敏静态复核；不用于证明当前登录或公开状态。
+- `qa/steam_stats_fix_publication_20260909/publication_receipt.json`、`public_rendered.json`：本轮正式分支、部署历史、公告发布与四语公开回读收据及可见文本；每语9片段、合计36片段精确匹配。通过已登录会话访问公开URL，未做退出登录对照；封面保存和各公开位置实际展示分开记录。不覆盖9月8日原始收据，目录`.gdignore`阻止Godot扫描。
+- `docs/STEAM_STATS_FIX_20260908.md`、`marketing/steam_stats_fix_20260908/README.md`：修复发行范围与已发布文案的维护入口；源码、发行包及`copy.json`未变，玩家续玩入口仍未开放。
+
+以下各批次“候选仍在构建”“未发布”等说明保留当时语境；当前正式版及公告状态以上方新记录为准。
+
+## 2026-09-08 普通 Steam 统计修复与续玩组件收尾
+
+- `docs/STEAM_STATS_FIX_20260908.md`：普通统计初始化、旧保存通知与服务器校正处理的修复，以及本轮已获授权、执行中的候选/Steam更新/公告状态；以最终收据区分各阶段。
+- `docs/CONTINUE_DELIVERY_20260908.md`：经典30波与八关统一交付边界、生产持久确认BLOCKED及整体验收待办；玩家保存/继续仍未开放。
+- `tools/run_steam_integration_qa.py`、`tools/build_steam_candidate.py`、`tools/steam_package_probe.gd`：GodotSteam与只读reader共同依赖冻结、原生整合QA、候选复制及同包检查入口。最新191项整合QA通过，候选构建在本条记录时仍执行中。
+- `qa/steam_stats_fix_20260908/`：本批191项整合结果、六张已目检截图、前序fixture失败及候选/平台收据的归档入口；不能以未完成候选认定已发布。
+- `scripts/run_campaign_level_state.gd`、`tools/campaign_level_state_qa.gd`、`tools/run_campaign_level_state_qa.py`：八关显式Level状态组件与隔离运行器。
+- `docs/CAMPAIGN_RESUME_STATE_AUDIT_20260908.md`、`qa/campaign_level_state_20260908/`：逐关字段、共享世界阻塞、最终205项行为检查、profile_guard及5890次SHA核验；保留旧152项和中间批次。
+- `scripts/steam_persistent_outbox.gd`、`scripts/steam_persistent_outbox_state.gd`、`scripts/steam_persistent_outbox_store.gd`：内部持久发送意图/不确定标记及磁盘事务；生产确认未放行。
+- `tools/run_steam_persistent_outbox_qa.py`、`tools/steam_persistent_outbox_qa.gd`、`qa/steam_persistent_outbox_20260908/`：221项原生断言、18个PID强杀检查点和13条fake SDK trace的最终证据与保留诊断，不能替代真实Steam/完整续玩验收。
+- `marketing/steam_stats_fix_20260908/copy.json`、`marketing/steam_stats_fix_20260908/README.md`：四语公告初稿、字段长度检查和复用800×450封面的来源；公告发布状态另记。
+
+下方条目保留其批次当时语境；只读reader现已进入候选管线，不再沿用旧条目的“尚未加入候选”作为当前结论。
+
+## 2026-09-08 真实 Steam 读取修复
+
+- `tools/run_steam_stats_live_read.py`、`tools/steam_stats_live_read.gd`：独立真实账号只读诊断，默认预检。
+- `docs/STEAM_LIVE_READ_20260908.md`、`qa/steam_stats_live_read_20260908/`：真实 ABI 失败与修复证据、86项隔离检查及脱敏读取收据。
+- `vendor/steam_stats_reader/provenance.json`：已指向本次修正版，旧批次证据保留历史上下文。
+
+## 2026-09-08 Steam 读取适配器
+
+- `native/steam_stats_reader/`：原生只读桥接源码、CMake/精简绑定配置、合成核心/ABI测试及 MIT 头文件来源；`native/.gdignore` 阻止扫描。
+- `scripts/steam_stats_reader.gd`：完整统计/成就读取门面，当前为内部接口。
+- `tools/build_steam_stats_reader.py`、`tools/steam_stats_reader_qa.gd`：可复现编译和真实 Godot 隔离验证。
+- `vendor/steam_stats_reader/`：受测 DLL、许可和来源清单，尚未加入现有 Steam 候选安装步骤。
+- `docs/STEAM_STATS_READER_20260908.md`、`qa/steam_stats_reader_20260908/`：合同、86项验证及首次导入失败诊断。
+
+## 2026-09-08 四语公告与商店语言表
+
+- `marketing/steam_localization_announcement_20260908/copy.json`：四语标题、副标题、摘要、正文与图片占位符。
+- `marketing/steam_localization_announcement_20260908/rendered_copy.json`：替换为 Steam 图片引用的四语正文。
+- `marketing/steam_localization_announcement_20260908/images.json`：原图来源、尺寸、哈希、上传引用与封面记录；不复制或修改图片像素。
+- `docs/STEAM_LOCALIZATION_ANNOUNCEMENT_20260908.md`：已发布公告 708907988310559012、商店语言表与后续维护边界。
+- `qa/steam_localization_announcement_20260908/`：公开文本/图片、商店语言表的 `publication_receipt.json`、`validation.json` 及说明；`.gdignore` 阻止 Godot 扫描。本轮未变更运行代码或 EXE。
+
+## 2026-09-08 Steam 四语交付
+
+- `docs/STEAM_LOCALIZATION_UPDATE_20260908.md`、`qa/steam_localization_update_20260908/`：四语与校订内容的 Windows 更新记录。
+- `tools/build_steam_candidate.py`、`tools/steam_package_probe.gd`：纳入四语资源的候选白名单与实际 Steam 包检查。
+
+## 2026-09-08 文本校订与布局检查
+
+- `scripts/lore_data.gd`：108 篇校订生平与回目索引。
+- `scratchpad/.gdignore`：受控保留的扫描边界；目录中其他测试数据仍被 Git 忽略。
+- `assets/localization/text_review_ui.json`：出处、改编说明与补充界面词条。
+- `tools/apply_text_review.py`、`tools/normalize_localization_names.py`：精确替换及术语统一工具。
+- `tools/text_ui_review.gd/.tscn`、`tools/battle_text_ui_review.gd/.tscn`、`tools/text_review_contract.gd/.tscn`：界面、战斗文本和玩法定义回归。
+- `docs/TEXT_REVIEW_20260908.md`、`qa/text_review_20260908/`：逐人原著依据、应用收据、运行记录与选定截图。
+
+## 2026-09-08 本地化文件
+
+- `scripts/localization.gd`：四语注册、偏好保存、显示绑定。
+- `assets/localization/`：运行词库、源分片、完整传记、术语和精确排除清单。
+- `assets/fonts/`：Noto CJK 字体集合、OFL 许可证与来源哈希。
+- `tools/build_localization.py`、`tools/localization_catalog.py`：重建及完整性检查。
+- `tools/run_localization_qa.py`、`tools/localization_qa.gd/.tscn`：隔离运行与画面验证。
+- `tools/run_localization_package_qa.py`、`tools/localization_package_probe.gd`：本地 PCK 导出、四语资源与主菜单启动检查。
+- `docs/LOCALIZATION_20260908.md`、`qa/localization_20260908/`：实现说明与本批证据。
+
+## 2026-09-08 恢复组件Steam更新
+
+- docs/STEAM_RESUME_UPDATE_20260908.md：本轮构建、上传状态和接续。
+- qa/steam_resume_update_20260908/：原生/包/身份/EXE证据与交付清单。
+
+## 2026-09-08 收尾交接
+
+- docs/CLOSEOUT_20260908.md：当前代码/QA/玩家与Steam交付边界、固定版本接口研究和后续顺序。
+
+## 2026-09-08 持久局会话
+
+- scripts/steam_local_run_session.gd：累计意图、检查点、持久绑定及恢复验证。
+- docs/PERSISTENT_RUN_SESSION_20260908.md：SteamService与世界会话的内部连接合同。
+- qa/persistent_session_20260908/：四进程防重/终局、失败与原未计统计回归。
+
+## 2026-09-08 单槽与跨进程会话
+
+- scripts/run_snapshot_store.gd：共享双快照事务基类。
+- scripts/run_slot_store.gd：经典据守单槽模型与读写。
+- scripts/run_world_session.gd：HELD保存、当前菜单恢复事务。
+- docs/WORLD_SLOT_20260908.md、qa/world_slot_20260908/：合同、失败记录及跨进程/存储兼容证据。
+
+## 2026-09-08 战斗累计击杀
+
+- docs/STEAM_BATTLE_COUNTER_20260908.md：root v4、有效击杀累计/内存高水位合同。
+- qa/steam_counter_20260908/：真实死亡、第三次世界替换及Steam假SDK重试证据。
+
+## 2026-09-08 Steam独立局记录
+
+- scripts/steam_run_receipt.gd：账号、局token、高水位、终局与校正纯模型。
+- scripts/steam_receipt_store.gd：独立快照文件事务、压缩和死写者恢复。
+- scripts/steam_run_ledger.gd：内部串行落盘及新鲜度检查API。
+- docs/STEAM_RUN_LEDGER_20260908.md、qa/steam_ledger_20260908/：合同及原生崩溃/坏记录证据。
+
+## 2026-09-08 统一世界替换
+
+- scripts/run_world_swap.gd：同进程HELD世界替换与旧场景/Steam内存局交接。
+- docs/WORLD_SWAP_20260908.md：激活/回滚/所有权合同。
+- qa/world_swap_20260908/：原生生产/移动/伤害持续运行证据与受测SHA。
+
+## 2026-09-08 跟随及贴图特效恢复
+
+- scripts/run_linked_fx_state.gd：12类固定字段、引用/贴图表及缓存校验。
+- docs/LINKED_FX_RESUME_20260908.md：当前Art登记与生命周期合同。
+- qa/linked_fx_20260908/：原生输入、来源/日志/报告及晋级SHA。
+
+## 2026-09-08 程序化特效恢复
+
+- scripts/run_procedural_fx_state.gd：30类固定字段/缓存校验及受信Script白名单。
+- docs/PROCEDURAL_FX_RESUME_20260908.md：字段清单、恢复闸、剩余类。
+- qa/procedural_fx_20260908/：两轮原生证据、候选及来源/晋级SHA。
+
+## 2026-09-08 战场环境恢复
+
+- scripts/run_environment_state.gd：Overlay/氛围/浮尘的状态、隐藏准备及同帧激活。
+- docs/ENVIRONMENT_RESUME_20260908.md：环境相位与原生渲染验证。
+- qa/environment_resume_20260908/：原生运行、受测候选、来源和晋级SHA。
+
+## 2026-09-08 HUD 整体恢复
+
+- scripts/run_hud_state.gd：FIGHT HUD状态、隐藏准备及同帧激活。
+- docs/HUD_RESUME_20260908.md：真实根绑定后的安装顺序与剩余工作。
+- qa/hud_resume_20260908/：原始失败/通过、受测候选、来源和安装SHA。
+
+## 2026-09-08 HUD 消息恢复
+
+- scripts/run_hud_messages_state.gd：消息历史、阅读位置和有限提示动画的显式状态。
+- docs/HUD_MESSAGES_RESUME_20260908.md：恢复合同、原生证据及剩余工作。
+- qa/hud_messages_resume_20260908/：失败/通过原始运行、受测输入和安装SHA。
+
+## 2026-09-08 相机恢复
+
+- scripts/run_camera_state.gd：显式相机字段、屏障输入与暂停激活。
+- docs/CAMERA_RESUME_20260908.md：合同、原生结果及剩余工作。
+- qa/camera_resume_20260908/：原始执行证据、候选和SHA安装收据。
+
+## 2026-09-08 世界显示恢复
+
+- scripts/run_world_display_state.gd：世界组成、受信资源、阴影缓冲与身份、暂停激活。
+- docs/WORLD_DISPLAY_RESUME_20260908.md：合同、原生结果、失败修复和剩余安装门。
+- qa/world_display_resume_20260908/：八轮原始证据、候选、执行器及SHA安装收据。
+
+## 2026-09-08 死亡残留恢复
+
+- `scripts/run_death_remains_state.gd`：残留字段/贴图/元数据与所属列表和缓存的显式恢复。
+- `docs/DEATH_REMAINS_RESUME_20260908.md`：合同、失败修复、原生结果与完整世界后续。
+- `qa/death_remains_resume_20260908/`：八轮原始失败/通过、最终候选与驱动、SHA和安装收据。
+
+## 2026-09-08 世界核心准备事务
+
+- `scripts/run_battle_world_core.gd`：实际屏障捕获、同一身份的多模块离树准备与失败释放。
+- `docs/WORLD_CORE_PREPARATION_20260908.md`：接口顺序、原生证据、完整世界与继续槽后续。
+- `qa/world_core_20260908/`：五轮原始运行、失败/成功记录、冻结候选/驱动、来源与安装收据。
+
+## 2026-09-08 混合FxRoot
+
+- `docs/MIXED_FX_RESUME_20260908.md`：统一Projectile/飞斧/视觉图合同、原生结果与世界工厂后续。
+- `qa/mixed_fx_20260908/`：两轮原始原生记录、冻结候选/驱动、来源清单和安装收据。
+
+## 2026-09-08 闪现箭光恢复
+
+- `docs/BLINK_RESUME_20260908.md`：BlinkShotFx恢复合同、原生验证及后续世界工厂步骤。
+- `qa/blink_resume_20260908/`：受测原始候选/驱动、原生日志与报告、来源清单和安装收据。
+
+## 2026-09-08 公告发布归档
+
+- `docs/STEAM_ANNOUNCEMENT_20260908.md`：已发布中英文内容、正文实机配图来源与公开页检查。
+- `qa/steam_announcement_20260908/`：独立公告发布收据；复用任务框QA原图，不复制图片或改写构建收据。
+
+## 2026-09-08 Windows Steam 上传完成
+
+- `docs/STEAM_UPDATE_20260908.md`：本轮Steam构建、分支和验证范围。
+- `qa/steam_upload_20260908/`：全新原生、导出、实际EXE短测、原始失败、路径脱敏映射及服务端回读证据。
+
+## 2026-09-07 任务框Steam交付
+
+- `docs/STEAM_MISSION_PANEL_UPDATE_20260907.md`：实际线上Build与来源范围。
+- `docs/UPDATE_ANNOUNCEMENT_MISSION_PANEL_20260907.md`：简短公告草稿。
+- `qa/steam_mission_panel_20260907/`：独立成品验证、截图、双来源清单及服务端收据。
+
+## 2026-09-07 并行开发第一批
+
+- `scripts/run_battle_clock.gd`、`run_battle_barrier.gd`：已接入的模拟时钟和经典捕获屏障；根状态升级v3。
+- `docs/STABILIZATION_PARALLEL_BATCH_20260907.md`：本批实测结果、限定范围及下一批世界工厂顺序。
+- `qa/stabilization_battle_barrier_integration_20260907/`：失败/成功原记录、四份候选、9正常开局、安装收据、独立审查与世界工厂设计。
+- `qa/steam_receipt_disk_20260907/`：A1迟到回调缺陷、A2假SDK/磁盘强杀矩阵、合成fixture和来源映射；未接生产。
+- `qa/art_song_jiang_a1_candidates_20260907/`：独立网页原图、提示词、来源、明暗对照、初审和淘汰记录；不属于生产美术。
+
+## 2026-09-07 任务框交互
+
+- `docs/MISSION_PANEL_TOGGLE_20260907.md`：默认收起、点击展开/收回的玩家说明与实现。
+- `tools/campaign_objective_toggle_test.gd`：真实GUI点击、地图空出区域、隐藏状态更新及滚动验证。
+- `qa/mission_panel_toggle_20260907/`：首轮警告、最终原生结果、截图、候选字节、来源SHA与隔离复现入口。
+
+## 2026-09-07 本轮收尾交接
+
+- docs/STABILIZATION_CLOSEOUT_20260907.md：已同步代码基线、待验范围与下一次执行顺序。
+- qa/stabilization_battle_barrier_draft_20260907/：实际Battle屏障/根v3冻结候选与驱动，原生未运行，未接生产。
+- qa/stabilization_art_a1_brief_20260907/：宋江/林冲制作依据、状态表与输入摘要，没有新增生成图。
+
+## 2026-09-07 恢复图与待发送事务
+
+- scripts/run_battle_root_state.gd、run_remaining_effect_state.gd、run_item_cast_flow_state.gd、run_visual_graph.gd：四个已验证的局部恢复模块；整体世界工厂仍未完成。
+- docs/STABILIZATION_RESUME_GRAPH_20260907.md、qa/stabilization_resume_graph_20260907/：原生有限范围结果、历史失败、冻结候选及五脚本安装收据。
+- docs/STEAM_RECEIPT_OUTBOX_DRAFT_20260907.md、tools/contracts/steam_receipt_outbox_draft_20260907/：原生62项的纯事务模型和恢复执行说明。
+- docs/STABILIZATION_DUST_FILTER_QA_20260907.md、qa/stabilization_dust_filter_20260907/：原生数据等价与六次正常性能筛选；候选已停止。
+
+## 2026-09-07 稳定编号与后续基础
+
+- `docs/STABILIZATION_IDENTITY_INTEGRATION_20260907.md`、`qa/stabilization_identity_integration_20260907/`：25生产脚本、9正常开局、45桥接行为和精确接入收据。
+- `docs/STABILIZATION_IDENTITY_NATIVE_QA_20260907.md`、`qa/stabilization_identity_20260907/`：原24文件候选的86行为及失败入口历史。
+- `tools/run_stabilization_identity.py`、`tools/run_stabilization_overlay.py`：冻结候选的原生私有执行入口。
+- `docs/STABILIZATION_UNIT_BODY_QA_20260907.md`、`qa/stabilization_unit_body_20260907/`：33范围的高开销诊断，只用于定位。
+- `docs/STEAM_RUN_RECEIPT_DRAFT_20260907.md`、`qa/steam_run_receipt_draft_20260907/`、`tools/contracts/steam_run_receipt_draft_20260907/`：纯回执候选、原生结果和原字节恢复清单。
+
+## 2026-09-07 性能与 Steam 配置记录
+
+- `docs/STABILIZATION_PERFORMANCE_20260907.md`、`qa/stabilization_performance_20260907/`：五组三次正常基线、Unit诊断、失败尝试、原始工具与SHA清单。
+- `tools/run_stabilization_performance.py`、`prepare_unit_remainder_diagnostic.py`、`run_unit_remainder_diagnostic.py`、`unit_remainder_observer.gd`：冻结源码、私有执行及分段诊断入口。
+- `qa/steam_configuration_publish_20260907/`：60图标后台/玩家页面标识、原图SHA、发布及构建回读的脱敏观察；不含登录缓存或分支口令。
+
+## 2026-09-07 收尾计划与来源恢复
+
+- `docs/STABILIZATION_EXECUTION_20260907.md`：用户批准的Windows收尾范围、顺序、并行边界和实际批次结果。
+- `docs/ART_PROVENANCE_RECOVERY_20260907.md`、`qa/art_provenance_recovery_20260907/`：来源统计修复、失败与最终报告、正反例、独立副本和精确白名单。
+- `tools/contracts/art_provenance_recovery_20260907/`：固定mapping与451份去重原字节来源证据；随源码同步，不能按临时截图或Godot缓存排除。
+- `tools/campaign_art_evidence.py`、`campaign_art_evidence_selftest.py`、`campaign_art_portability_check.py`、`recover_campaign_art_provenance.py`：严格来源映射、TRES验收、隔离验证和受控历史回收工具。
+
+## 2026-09-07 缓存清理与历史归档映射
+
+- `D:\AI项目\水浒\归档\水浒_过期资料_20260907.7z`：9 组历史目录、4,161 个文件的归档，1,455,622,866 字节；已完成 `7z t` 和完整解压 SHA-256 零差异核对。
+- 已归档的历史目录：`_archive/release_candidates/release_candidate_20260901_134110`、`_archive/campaign_history/campaign_environment_v8_20260831`、`_archive/visual_samples/visual_sample_20260831` 与同目录的 `visual_sample_v2_20260831` 至 `visual_sample_v6_20260831`，以及 `implementation_20260904`。以上相对路径均位于 `D:\AI项目\水浒\历史资料`，原位置保留 `已归档.md`。
+- 继续展开：原始 ZIP、`_archive/campaign_history/campaign_rework_20260831_173850`、视觉 v7、`implementation_20260902` 和 `implementation_20260903`，以保持来源与基线可读。
+- 缓存处理：3 份已核验的重复导入缓存和旧历史工程的标准 `.godot` 已删除；当前工程主缓存保留，旧工程再次启动时重建缓存。最新候选 ZIP、冻结源码、原始收据、正式素材和来源保留。
+- `qa/storage_cleanup_20260907/`：本轮清理、归档及最终保护和启动验证的证据入口。50 个 Git 临时垃圾文件因删除被自动审批策略阻止而保留；不计入本轮约 1.89 GiB 净释放量。
+
+游戏内容及启动方式不变；更早的目录记录保持原文，已归档项目按上方入口还原。
+
+## 2026-09-07 本机存储迁移映射
+
+| 本机路径 | 当前用途 |
+| --- | --- |
+| `D:\AI项目\水浒\开发工程` | 当前 Git checkout 与 Godot 工程，后续开发和验证使用此实路径 |
+| `D:\AI项目\水浒\历史资料` | 原 C 外层的完整已核验副本，包含历史工程、来源、备份及交接材料 |
+| `D:\AI项目\水浒\README.md`、`开始游戏.cmd` | 本机总入口与当前游戏启动器，位于 Git checkout 外 |
+| 原 `D:\CodexTemp\liangshan-github-sync-20260905-5f8a7c2e` | 指向新开发工程的目录联接 |
+| 原 `C:\Users\rsb\Desktop\AI项目\水浒` | 保留普通根目录及 10 个根文件（含迁移 README）；8 个子目录分别联接到 D 历史资料对应目录 |
+| `qa/storage_migration_20260907/` | 本轮迁移清单、路径兼容及 Godot 启动验证收据 |
+
+本轮仅调整存储位置与文档，游戏内容及历史来源 JSON 未改。旧 C 材料 17,241 个文件 SHA-256 核对零差异，Godot 隔离导入与 180 帧 headless 启动通过。下方目录与路径记录保留各轮原始语境，当前本机入口以上表为准。
+
+## 2026-09-07 公司 Steam 构建与上传
+
+- `qa/company_steam_upload_20260907/`：本机短路径工具验证及本轮候选、服务器上传收据。
+- `.godot/company_steam_build_20260907/`：本机源码/真实玩家保护与原始运行缓存，保持忽略；ZIP 留在 `.godot/steam_candidates/`。
+
+## 2026-09-07 公司接续入口
+
+- `qa/company_handoff_20260907/`：公司环境恢复、首次导入元数据分类、原始失败/成功收据、受测运行输入清单和主菜单/驻守画面。
+- `godot.local.txt` 与 `.godot/company_handoff/`：本机引擎路径及隔离检查缓存，均被忽略；正式交接证据使用上方 QA 目录。
+- 旧共享外层的本机交接提示指向当前独立 checkout；该目录不再作为本次开发与提交入口。
+
 ## 2026-09-07 迷雾恢复组件与证据
 
 - `scripts/run_fog_state.gd`：第 15 个恢复组件，保存迷雾逻辑、刷新余时、真实滞后图像与默认 FogLayer。
@@ -426,3 +1057,14 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 3. 结束且不再被工具读取的实施批次，完整迁入 `_archive/implementation_history/`，同时更新本索引和活动工具路径。
 4. 新视觉对比放入 `_archive/visual_samples/<批次名>/`，不要再创建新的根目录 `visual_sample_*`。
 5. 新发布候选放入 `_archive/release_candidates/<批次名>/`；Steam 发布目录仍与本工作区隔离。
+## 2026-09-16 撞车四向攻击原图
+
+- `assets/characters/art_full_20260916/siege_ram_attack_direction4_source.png`、`siege_ram_attack_direction4.png`：保留原生网页图与确定性 2×生产图。
+- `assets/direction4/siege_ram_attack_20260916.json`、`assets/direction4/web_prompts_20260916/siege_ram_attack_direction4.txt`：原图/生产图 SHA、固定四向格、提示词和来源会话。
+- `assets/anim/siege_ram_attack_{se,sw,ne,nw}.tres`：四向攻击 SpriteFrames；`tools/siege_ram_attack_atlas_scale.py`、`tools/siege_ram_attack_direction4_contract.py`、`tools/siege_ram_attack_direction4_runtime_qa.gd`：可复现生产与验证。
+- [来源、静态契约、Godot 路由与全库回归 QA](../qa/siege_ram_attack_direction4_20260916/README.md)。
+## 2026-09-16 快活林酒望运行时绘制修复
+
+- `scripts/unit.gd`：Level 7 酒望实时 Unit 纹理接入修复，保留原始图集/TRES 来源链。
+- `qa/level7_tavern_render_20260916/`：窗口化 1280×720 实景截图、JSON 收据和复现说明。
+- [美术全库台账](ART_FULL_20260915.md)、[工作日志](WORKLOG.md)、[来源说明](SOURCE_SETUP.md)、[项目状态](PROJECT_STATUS.md)：同步本批运行时绘制结论。

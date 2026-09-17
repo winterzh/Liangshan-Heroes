@@ -1,0 +1,98 @@
+{
+  "scope": "pure_receipt_candidate",
+  "inputs": {
+    "D:\\AI项目\\水浒\\开发工程\\scratchpad\\stabilization_steam_receipt_20260907\\steam_run_receipt.gd": "acd21358de698c9a6c8e3806873439fe90abdc6ed3bc9b2a7153263de719cc66",
+    "D:\\AI项目\\水浒\\开发工程\\scratchpad\\stabilization_steam_receipt_20260907\\receipt_test.gd": "224b5864018b2b2a89088d6b81a9201dc32efbe5282002140be7094581d21032",
+    "D:\\AI项目\\水浒\\开发工程\\scratchpad\\stabilization_steam_receipt_20260907\\process_test.gd": "8d073c602e94aa493051a7d8a84de033ca6fabfddeb73ad8c882e8529eb2326f",
+    "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_achievement_state.gd": "f0dddf190f440d64367bb84c1ff1dc634174bdd3fab45148cfd5b879786bc71e",
+    "D:\\AI项目\\水浒\\开发工程\\scratchpad\\stabilization_steam_receipt_20260907\\run_receipt_tests.py": "1821df17ad0c644cd2b91f5ecd1427730853894c1e5ae89e422128c4e9f9f36a"
+  },
+  "production_integration": false,
+  "processes": [
+    {
+      "name": "import",
+      "exit_code": 0,
+      "child_exit_confirmed": true,
+      "log": "import.log",
+      "pid": 43752,
+      "seconds": 2.8982048999750987,
+      "log_errors": []
+    },
+    {
+      "name": "model",
+      "exit_code": 0,
+      "child_exit_confirmed": true,
+      "log": "model.log",
+      "pid": 38184,
+      "seconds": 0.35940319998189807,
+      "log_errors": [],
+      "checks": 88,
+      "passed": true
+    },
+    {
+      "name": "create",
+      "exit_code": 0,
+      "child_exit_confirmed": true,
+      "log": "create.log",
+      "pid": 36772,
+      "seconds": 0.25908430002164096,
+      "log_errors": [],
+      "checks": 5,
+      "passed": true
+    },
+    {
+      "name": "resume",
+      "exit_code": 0,
+      "child_exit_confirmed": true,
+      "log": "resume.log",
+      "pid": 35308,
+      "seconds": 0.1694798999815248,
+      "log_errors": [],
+      "checks": 6,
+      "passed": true
+    },
+    {
+      "name": "intent_only",
+      "exit_code": 0,
+      "child_exit_confirmed": true,
+      "log": "intent_only.log",
+      "pid": 29740,
+      "seconds": 0.16906280000694096,
+      "log_errors": [],
+      "checks": 4,
+      "passed": true
+    },
+    {
+      "name": "recover",
+      "exit_code": 1,
+      "child_exit_confirmed": true,
+      "log": "recover.log",
+      "pid": 46276,
+      "seconds": 0.16453760000877082,
+      "log_errors": []
+    }
+  ],
+  "passed": false,
+  "runner_sha256": "1821df17ad0c644cd2b91f5ecd1427730853894c1e5ae89e422128c4e9f9f36a",
+  "godot_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "private_profile": "D:\\LHReceiptProfiles\\073b5394ef78489b98c7099048e0e82e",
+  "boundary": "Pure model and graceful fixture-process exits only; no atomic disk adapter or result-8 pre-persistence crash guarantee",
+  "copied_inputs": {
+    "steam_run_receipt.gd": "acd21358de698c9a6c8e3806873439fe90abdc6ed3bc9b2a7153263de719cc66",
+    "receipt_test.gd": "224b5864018b2b2a89088d6b81a9201dc32efbe5282002140be7094581d21032",
+    "process_test.gd": "8d073c602e94aa493051a7d8a84de033ca6fabfddeb73ad8c882e8529eb2326f",
+    "scripts/steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "scripts/steam_achievement_state.gd": "f0dddf190f440d64367bb84c1ff1dc634174bdd3fab45148cfd5b879786bc71e",
+    "project.godot": "cb8a47271c17e7f03b433e655d6e722157f555a6854ca431fbcb7f6063e53bf0"
+  },
+  "expected_user_dir": "D:\\LHReceiptProfiles\\073b5394ef78489b98c7099048e0e82e\\appdata\\LHReceiptContract",
+  "error": "RuntimeError: Phase failed: recover",
+  "source_unchanged": true,
+  "frozen_inputs_unchanged": true,
+  "player_profiles_unchanged": true,
+  "godot_pids_after": [],
+  "child_exits_confirmed": true,
+  "lock_released": true,
+  "finalization_errors": []
+}

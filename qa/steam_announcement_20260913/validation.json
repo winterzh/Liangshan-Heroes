@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-09-13T06:20:53+08:00",
+  "complete": true,
+  "copy_file": "../../marketing/steam_announcement_20260913/copy.json",
+  "copy_sha256": "4c743de1acd2e4d259d7d151d1d1d77ea6b694c636a13022820560804afe2183",
+  "method": "Browser UI: switch editor language and compare visible input/textarea values after save; load each public language URL and match the complete title, subtitle and four body paragraphs in the rendered accessibility tree.",
+  "saved_field_count": 16,
+  "public_fragment_count": 24,
+  "languages": {
+    "schinese": {
+      "url": "https://store.steampowered.com/news/app/5088120/view/714538122294068074?l=schinese",
+      "lengths": {
+        "title": 16,
+        "subtitle": 20,
+        "summary": 63,
+        "body": 115
+      },
+      "body_paragraphs": 4,
+      "saved_fields_exact_match": {
+        "title": true,
+        "subtitle": true,
+        "summary": true,
+        "body": true
+      },
+      "public_title_exact_match": true,
+      "public_subtitle_exact_match": true,
+      "public_paragraphs_exact_match": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "public_fragment_count": 6
+    },
+    "tchinese": {
+      "url": "https://store.steampowered.com/news/app/5088120/view/714538122294068074?l=tchinese",
+      "lengths": {
+        "title": 16,
+        "subtitle": 19,
+        "summary": 62,
+        "body": 116
+      },
+      "body_paragraphs": 4,
+      "saved_fields_exact_match": {
+        "title": true,
+        "subtitle": true,
+        "summary": true,
+        "body": true
+      },
+      "public_title_exact_match": true,
+      "public_subtitle_exact_match": true,
+      "public_paragraphs_exact_match": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "public_fragment_count": 6
+    },
+    "english": {
+      "url": "https://store.steampowered.com/news/app/5088120/view/714538122294068074?l=english",
+      "lengths": {
+        "title": 55,
+        "subtitle": 79,
+        "summary": 178,
+        "body": 406
+      },
+      "body_paragraphs": 4,
+      "saved_fields_exact_match": {
+        "title": true,
+        "subtitle": true,
+        "summary": true,
+        "body": true
+      },
+      "public_title_exact_match": true,
+      "public_subtitle_exact_match": true,
+      "public_paragraphs_exact_match": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "public_fragment_count": 6
+    },
+    "japanese": {
+      "url": "https://store.steampowered.com/news/app/5088120/view/714538122294068074?l=japanese",
+      "lengths": {
+        "title": 21,
+        "subtitle": 29,
+        "summary": 82,
+        "body": 181
+      },
+      "body_paragraphs": 4,
+      "saved_fields_exact_match": {
+        "title": true,
+        "subtitle": true,
+        "summary": true,
+        "body": true
+      },
+      "public_title_exact_match": true,
+      "public_subtitle_exact_match": true,
+      "public_paragraphs_exact_match": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "public_fragment_count": 6
+    }
+  },
+  "visual_observations": [
+    {
+      "surface": "Japanese draft preview",
+      "result": "Title, subtitle and visible paragraphs readable without overlap."
+    },
+    {
+      "surface": "English draft preview",
+      "result": "Title and subtitle fit and visible paragraphs readable."
+    },
+    {
+      "surface": "Simplified Chinese public page",
+      "result": "Full four-paragraph body, title and subtitle readable; publication date and category visible."
+    }
+  ],
+  "visual_evidence_location": "Browser screenshots observed during this task; no screenshot files added to Git.",
+  "limits": [
+    "Public language pages were read through the authenticated browser session; no logged-out comparison.",
+    "No player delivery, recommendation placement or Steam library notification verification.",
+    "No new runtime, client-download or live Steam persistence testing."
+  ]
+}

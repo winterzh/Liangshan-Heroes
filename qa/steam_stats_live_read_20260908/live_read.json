@@ -1,0 +1,62 @@
+{
+  "complete": true,
+  "kind": "real_steam_read_only",
+  "write_calls": 0,
+  "sources": {
+    "scripts/steam_stats_reader.gd": "23dc98449a5e71add9114483b8c29a5e423044b257281ec699bca3b34e65c6ec",
+    "scripts/steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "tools/steam_stats_live_read.gd": "d3818ba0ee023b5848a6ed40b76e771aa5d7ef6df99f2080cc0667df95926dff",
+    "tools/run_steam_stats_live_read.py": "4e224c4517bd96f695f48c62d7e28e716b051a6bc7bd008758b76527dca50151",
+    "tools/run_steam_integration_qa.py": "1b5772fd94ff59b5c067b0245e639611b9fed5f594c0e75d7dec2a45c8ce479c"
+  },
+  "godot_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "reader_dll_sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+  "source_head": "3f3949f4741d473ee9ad90fca7b9db1c07f52dbc",
+  "steps": [
+    {
+      "label": "import",
+      "exit_code": 0,
+      "errors": 0
+    },
+    {
+      "label": "read",
+      "exit_code": 0,
+      "errors": 0
+    }
+  ],
+  "result": {
+    "code": "READ_ONLY_PASS",
+    "complete": true,
+    "current_read_ok": true,
+    "reads": [
+      {
+        "achievements_count": 30,
+        "elapsed_ms": 413,
+        "full_handle": true,
+        "iteration": 1,
+        "same_as_previous": true,
+        "same_owner": true,
+        "source": "requested_user_cache",
+        "stats_count": 4
+      },
+      {
+        "achievements_count": 30,
+        "elapsed_ms": 315,
+        "full_handle": true,
+        "iteration": 2,
+        "same_as_previous": true,
+        "same_owner": true,
+        "source": "requested_user_cache",
+        "stats_count": 4
+      }
+    ],
+    "write_acknowledgement_proven": false,
+    "write_calls": 0
+  },
+  "installed_binary_sha256": {
+    "addons\\steam_stats_reader\\steam_stats_reader.dll": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+    "addons\\godotsteam\\win64\\libgodotsteam.windows.template_debug.x86_64.dll": "da20924a9d29085c2256988b67de47003835910316712302e208e31c00f24b96",
+    "addons\\godotsteam\\win64\\libgodotsteam.windows.template_release.x86_64.dll": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+    "addons\\godotsteam\\win64\\steam_api64.dll": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+  }
+}

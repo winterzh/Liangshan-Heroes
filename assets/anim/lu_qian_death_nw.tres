@@ -1,0 +1,48 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/art_full_20260916/lu_qian_death_direction4.png" id="lu_qian_death_atlas"]
+
+[sub_resource type="AtlasTexture" id="fall_a_nw"]
+atlas = ExtResource("lu_qian_death_atlas")
+region = Rect2(0, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_b_nw"]
+atlas = ExtResource("lu_qian_death_atlas")
+region = Rect2(627, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_c_nw"]
+atlas = ExtResource("lu_qian_death_atlas")
+region = Rect2(1254, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_d_nw"]
+atlas = ExtResource("lu_qian_death_atlas")
+region = Rect2(1881, 1881, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_a_nw")},
+{"duration": 1.0, "texture": SubResource("fall_b_nw")},
+{"duration": 1.0, "texture": SubResource("fall_c_nw")},
+{"duration": 1.0, "texture": SubResource("fall_d_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

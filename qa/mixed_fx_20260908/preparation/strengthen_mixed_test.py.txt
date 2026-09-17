@@ -1,0 +1,37 @@
+from pathlib import Path
+import hashlib,json
+root=Path(__file__).resolve().parents[1];candidate=root/'scratchpad/mixed_fx_20260908'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+p=candidate/'driver.gd';s=p.read_text(encoding='utf-8')
+def rep(a,b):
+ global s
+ assert s.count(a)==1,a
+ s=s.replace(a,b)
+rep('func _mixed_visual(owner: Variant) -> Variant:', 'func _mixed_visual(owner: Variant, textures: Dictionary = {}) -> Variant:')
+rep('scripts.battle, scripts.unit, owner, {},', 'scripts.battle, scripts.unit, owner, textures,')
+rep('var old_visual: Variant = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit, source, textures)', 'var old_visual: Variant = _mixed_visual(source, textures)')
+rep('var new_visual: Variant = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit, null, textures)', 'var new_visual: Variant = _mixed_visual(target, textures)')
+rep('\t# Warm actual visuals, then selected gameplay consumers.', '''\tif kind == "ward_attack_boundary":
+\t\tvar concurrent_arrow: Variant = scripts.projectile.new()
+\t\tconcurrent_arrow.position = caster.position
+\t\tconcurrent_arrow.setup(caster, foe, 11.0, false)
+\t\tsource.fx_root.add_child(concurrent_arrow)
+\t\tvar concurrent_axes: Variant = scripts.battle.LiBrawnAxesFx.new()
+\t\tconcurrent_axes.caster = caster
+\t\tconcurrent_axes.game = source
+\t\tconcurrent_axes.dur = 0.9
+\t\tconcurrent_axes.hits = [{"target": foe, "dmg": 17.0}]
+\t\tsource.fx_root.add_child(concurrent_axes)
+\t# Warm actual visuals, then selected gameplay consumers.''')
+rep('\t\tvar pulse_copy: Variant = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit)', '\t\tvar pulse_owner: Variant = _shell()\n\t\tvar pulse_copy: Variant = _mixed_visual(pulse_owner)')
+rep('\t\t_stage().add_child(pulse_prepared.root)', '\t\tpulse_owner.fx_root = pulse_prepared.root\n\t\t_stage().add_child(pulse_prepared.root)')
+rep('\t\tif is_instance_valid(fx) and not fx.is_queued_for_deletion() and fx.has_method("_process"): fx._process(delta)', '''\t\tif not is_instance_valid(fx) or fx.is_queued_for_deletion(): continue
+\t\tif fx.get_script() == scripts.projectile: fx._physics_process(delta)
+\t\telif fx.has_method("_process"): fx._process(delta)''')
+rep('\t_check(kind + " real disappearance observed", not disappearance_steps.is_empty())', '''\t_check(kind + " real disappearance observed", not disappearance_steps.is_empty())
+\tif kind == "ward_attack_boundary": _check("concurrent ward arrow and axes exact cumulative damage", foe.hp == 920.0 and up.id_to_unit["2"].hp == 920.0)''')
+p.write_text(s,encoding='utf-8',newline='\n')
+freeze=json.loads((candidate/'freeze.json').read_text())
+freeze['inputs']['driver.gd']=sha(p)
+(candidate/'freeze.json').write_text(json.dumps(freeze,indent=2)+'\n',encoding='utf-8')
+print(sha(candidate/'freeze.json'))

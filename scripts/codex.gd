@@ -10,9 +10,13 @@ var _sub_lbl: Label
 var _abil_title: Label
 var _abil_lbl: Label
 var _bio_lbl: Label
+var _lore_source: Label
 var _port: AnimBox
 var _walk: AnimBox
 var _atk: AnimBox
+var _direction_picker: OptionButton
+var _direction_index := 0
+const PREVIEW_DIRECTIONS := ["se", "sw", "ne", "nw"]
 var _lore_root: ColorRect
 var _lore_panel: Panel
 var _lore_name: Label
@@ -79,13 +83,13 @@ func _ready() -> void:
 	top.offset_left = 18; top.offset_top = 12; top.offset_right = -18
 	add_child(top)
 	var title := Label.new()
-	title.text = "📖  英雄图鉴 · 水浒英雄传"
+	title.text = Localize.text("📖  英雄图鉴 · 水浒英雄传")
 	title.add_theme_font_size_override("font_size", 26)
 	title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	top.add_child(title)
 	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(sp)
 	var back := Button.new()
-	back.text = "返回主菜单"
+	back.text = Localize.text("返回主菜单")
 	back.add_theme_font_size_override("font_size", 20)
 	back.pressed.connect(func() -> void:
 		get_tree().change_scene_to_file.call_deferred("res://scenes/menu.tscn"))
@@ -100,7 +104,7 @@ func _ready() -> void:
 
 	# 左：分组单位列表（触屏加宽，便于手指点选）
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(340 if _touch else 232, 0)
+	scroll.custom_minimum_size = Vector2(340 if _touch or Localize.locale == "en" else 232, 0)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	body.add_child(scroll)
 	_list_scroll = scroll
@@ -135,7 +139,7 @@ func _ready() -> void:
 	stars.sort_custom(func(a, b): return Bios.star_rank(a) < Bios.star_rank(b))
 	if not stars.is_empty():
 		first = stars[0]
-		_add_group(list, "天罡地煞 · 梁山一百单八将", stars)
+		_add_group(list, Localize.text("天罡地煞 · 梁山一百单八将"), stars)
 	for t in TYPE_ORDER:
 		if not by_type.has(t):
 			continue
@@ -158,9 +162,16 @@ func _ready() -> void:
 	detail_scroll.add_child(detail)
 
 	_name_lbl = Label.new()
+	_name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_name_lbl.add_theme_font_size_override("font_size", 34)
 	_name_lbl.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	detail.add_child(_name_lbl)
+	var edition := Label.new()
+	edition.text = Localize.text("生平依据一百二十回本《水浒全传》；技能、数值及扩展兵种为游戏设计。")
+	edition.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	edition.add_theme_font_size_override("font_size", 14)
+	edition.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
+	detail.add_child(edition)
 	_sub_lbl = Label.new()
 	_sub_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_sub_lbl.custom_minimum_size = Vector2(660, 0)
@@ -173,9 +184,20 @@ func _ready() -> void:
 	var imgs := HBoxContainer.new()
 	imgs.add_theme_constant_override("separation", 18)
 	detail.add_child(imgs)
-	_port = _img_col(imgs, "头像")
-	_walk = _img_col(imgs, "移动动画")
-	_atk = _img_col(imgs, "攻击动画")
+	_port = _img_col(imgs, Localize.text("头像"))
+	_walk = _img_col(imgs, Localize.text("移动动画"))
+	_atk = _img_col(imgs, Localize.text("攻击动画"))
+	var direction_row := HBoxContainer.new()
+	direction_row.add_theme_constant_override("separation", 10)
+	detail.add_child(direction_row)
+	var direction_label := Label.new()
+	direction_label.text = Localize.text("动作朝向")
+	direction_row.add_child(direction_label)
+	_direction_picker = OptionButton.new()
+	for direction_name in ["东南", "西南", "东北", "西北"]:
+		_direction_picker.add_item(Localize.text(direction_name))
+	_direction_picker.item_selected.connect(_on_direction_selected)
+	direction_row.add_child(_direction_picker)
 
 	# 技能数值（仅有技能组的英雄显示）
 	_abil_title = Label.new()
@@ -194,12 +216,12 @@ func _ready() -> void:
 	bio_head.add_theme_constant_override("separation", 14)
 	detail.add_child(bio_head)
 	var bd_title := Label.new()
-	bd_title.text = "生平"
+	bd_title.text = Localize.text("生平")
 	bd_title.add_theme_font_size_override("font_size", 20)
 	bd_title.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	bio_head.add_child(bd_title)
 	var more := Button.new()
-	more.text = "详细 ▸"
+	more.text = Localize.text("详细 ▸")
 	more.add_theme_font_size_override("font_size", 16)
 	more.focus_mode = Control.FOCUS_NONE
 	more.pressed.connect(_show_lore)
@@ -237,8 +259,7 @@ func _build_lore_overlay() -> void:
 	add_child(_lore_root)
 
 	# 古朴宋体（系统字，零打包）：宋体/明体/思源宋体/Noto Serif CJK，找不到退回衬线
-	var serif := SystemFont.new()
-	serif.font_names = PackedStringArray(["Songti SC", "STSong", "SimSun", "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif CJK", "Noto Serif", "Serif", "serif"])
+	var serif := UITheme.locale_font()
 
 	# 右侧推出的卷轴面板（Panel=自由定位，便于滑入动画）
 	_lore_panel = Panel.new()
@@ -261,6 +282,7 @@ func _build_lore_overlay() -> void:
 	var head := HBoxContainer.new()
 	cv.add_child(head)
 	_lore_name = Label.new()
+	_lore_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_lore_name.add_theme_font_override("font", serif)
 	_lore_name.add_theme_font_size_override("font_size", 33)
 	_lore_name.add_theme_color_override("font_color", Color(0.46, 0.13, 0.10))   # 朱砂
@@ -296,15 +318,25 @@ func _build_lore_overlay() -> void:
 	_lore_text.add_theme_color_override("font_color", Color(0.15, 0.10, 0.05))   # 墨色
 	_lore_text.add_theme_constant_override("line_spacing", 13)
 	_lore_scroll.add_child(_lore_text)
+	_lore_source = Label.new()
+	_lore_source.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_lore_source.add_theme_font_size_override("font_size", 14)
+	_lore_source.add_theme_color_override("font_color", Color(0.35, 0.24, 0.14))
+	cv.add_child(_lore_source)
 
 
 func _show_lore() -> void:
 	if _cur == "" or _lore_root == null:
 		return
 	var d: Dictionary = Defs.UNITS.get(_cur, {})
-	var sl: String = Bios.star_label(_cur)
+	var sl: String = _localized_star_label(_cur)
 	_lore_name.text = _disp_name(_cur) + ("　〔%s〕" % sl if sl != "" else "")
 	_lore_text.text = Bios.get_lore(_cur, _utype(d))
+	var chapters: Array = LoreData.CHAPTERS.get(_cur, [])
+	var chapter_labels := PackedStringArray()
+	for chapter in chapters:
+		chapter_labels.append(str(chapter))
+	_lore_source.text = Localize.format_text("原著依据：第 %s 回（一百二十回本）", ", ".join(chapter_labels)) if not chapters.is_empty() else Localize.text("人物与单位说明；战斗能力为游戏设计。")
 	var vp: Vector2 = get_viewport_rect().size
 	var pw: float = clampf(vp.x * 0.54, 360.0, 760.0)   # 约半屏多一点，限个上下界
 	_lore_panel.size = Vector2(pw, vp.y)
@@ -329,13 +361,15 @@ func _hide_lore() -> void:
 ## 列表分组：一个标题 + 若干单位按钮
 func _add_group(list: VBoxContainer, title: String, keys: Array) -> void:
 	var hd := Label.new()
-	hd.text = "【%s】%d" % [title, keys.size()]
+	hd.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hd.text = "【%s】%d" % [Localize.text(title), keys.size()]
 	hd.add_theme_font_size_override("font_size", 18 if _touch else 15)
 	hd.add_theme_color_override("font_color", UITheme.COPPER_LIGHT)
 	list.add_child(hd)
 	for k in keys:
 		var b := Button.new()
-		var sl: String = Bios.star_label(k)
+		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		var sl: String = _localized_star_label(k)
 		b.text = "  " + _disp_name(k) + ("　" + sl.split(" · ")[1] if sl != "" else "")
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.add_theme_font_size_override("font_size", 22 if _touch else 17)
@@ -373,13 +407,15 @@ func _select(key: String) -> void:
 		_detail_scroll.scroll_vertical = 0   # 切换武将→右侧详情回到顶部（修「共享滚动」）
 	var d: Dictionary = Defs.UNITS.get(key, {})
 	var t := _utype(d)
-	var sl: String = Bios.star_label(key)
+	var sl: String = _localized_star_label(key)
 	_name_lbl.text = _disp_name(key) + ("　〔%s〕" % sl if sl != "" else "")
 	if d.is_empty():
-		_sub_lbl.text = "梁山一百单八将 · 图鉴专条"   # 无战斗单位条目者：不显血攻射程
+		_sub_lbl.text = Localize.text("梁山一百单八将 · 图鉴专条")   # 无战斗单位条目者：不显血攻射程
 	else:
 		_sub_lbl.text = _stat_block(d, t)
 	_bio_lbl.text = Bios.get_bio(key, t)
+	if key == "ruan_brother":
+		_bio_lbl.text = Localize.text("阮小二，号「立地太岁」，石碣村渔人，阮氏三兄弟中的长兄。参与智取生辰纲，入梁山后为水军头领。\n\n本条记阮小二生平；战斗单位「阮氏好汉」合并表现阮氏兄弟。")
 	# 技能（1/2/3 级数值）：有技能组的英雄；战役单将退回单技能
 	var abil: Array = d.get("abilities", [])
 	if abil.is_empty() and String(d.get("ability", "")) != "":
@@ -388,7 +424,7 @@ func _select(key: String) -> void:
 		_abil_title.text = ""
 		_abil_lbl.text = ""
 	else:
-		_abil_title.text = "技能（数值＝1级 / 2级 / 3级）"
+		_abil_title.text = Localize.text("技能（数值＝1级 / 2级 / 3级）")
 		var slots := Settings.command_key_labels()
 		var txt := ""
 		for i in abil.size():
@@ -396,15 +432,15 @@ func _select(key: String) -> void:
 			var a: Dictionary = Defs.ABILITIES.get(aid, {})
 			if a.is_empty():
 				continue
-			var head: String = (slots[i] if i < slots.size() else "·") + " " + String(a.get("name", aid))
+			var head: String = (slots[i] if i < slots.size() else "·") + " " + Localize.text(String(a.get("name", aid)))
 			var eff_d: Dictionary = a.get("effect", {})
 			var is_passive := bool(a.get("passive", false))
 			var has_active: bool = eff_d.has("active_kind")
 			if is_passive and not has_active:
-				head += "（被动）"
+				head += Localize.text("（被动）")
 			else:
 				if int(a.get("max_charges", 0)) > 0:
-					head += "　%d点充能·每%ss恢复1点" % [int(a["max_charges"]), str(a.get("charge_recovery", 0.0))]
+					head += Localize.format_text("　%d点充能·每%ss恢复1点", [int(a["max_charges"]), str(a.get("charge_recovery", 0.0))])
 				else:
 					var cr: Array = a.get("cd_ranks", [])
 					if cr.size() == 3:
@@ -412,7 +448,7 @@ func _select(key: String) -> void:
 					else:
 						head += "　cd%ss" % str(a.get("cd", 0.0))
 				if is_passive and has_active:
-					head += "（被动+主动）"
+					head += Localize.text("（被动+主动）")
 			# 技能详情：说明文字 + 各级数值速览
 			var desc_txt := Defs.ability_desc(aid, 1).replace("\n", "\n    ")
 			txt += head + "\n    " + desc_txt + "\n    " + Defs.ability_levels(aid) + "\n\n"
@@ -428,6 +464,7 @@ func _select(key: String) -> void:
 			tf.append(Art.tower_dir_texture(key, rc))
 		_walk.set_frames(tf)
 		_atk.set_frames(tf)
+		_direction_picker.disabled = true
 		return
 	# 头像：肖像 → 头像图标 → 立绘
 	var ptex: Texture2D = Art.portrait_texture(key)
@@ -436,23 +473,52 @@ func _select(key: String) -> void:
 	if ptex == null:
 		ptex = Art.unit_texture(key)
 	_port.set_frames([ptex] if ptex != null else [])
-	# 移动 / 攻击：逐帧带；无则退回立绘静帧
-	var wf: Array = Art.unit_anim_frames(key, "walk")
-	if wf.is_empty() and Art.unit_texture(key) != null:
-		wf = [Art.unit_texture(key)]
-	_walk.set_frames(wf)
-	var af: Array = Art.unit_anim_frames(key, "attack")
-	if af.is_empty():
-		af = wf
-	_atk.set_frames(af)
+	_refresh_animations()
 
 
-## 显示名：有战斗单位条目用其 name；图鉴专条（仅 STAR 名册）用一百单八将姓名；都没有退回 key。
+func _on_direction_selected(index: int) -> void:
+	if index < 0 or index >= PREVIEW_DIRECTIONS.size(): return
+	_direction_index = index
+	_direction_picker.select(index)
+	_refresh_animations()
+
+
+func _preview_frames(key: String, state: String, direction: String) -> Array:
+	var frames: Array = Art.unit_anim_frames(key, state, direction)
+	if frames.is_empty() and state == "attack":
+		frames = Art.unit_anim_frames(key, "walk", direction)
+	if frames.is_empty():
+		var texture: Texture2D = Art.unit_texture(key, "", direction)
+		if texture != null: frames = [texture]
+	return frames
+
+
+func _refresh_animations() -> void:
+	var has_direction := false
+	for direction in PREVIEW_DIRECTIONS:
+		for state in ["idle", "walk", "attack"]:
+			if Art.unit_anim_uses_directional_source(_cur, state, direction):
+				has_direction = true
+	_direction_picker.disabled = not has_direction
+	var direction: String = PREVIEW_DIRECTIONS[_direction_index] if has_direction else ""
+	# One fit envelope for both actions and all views prevents body-size changes
+	# when a larger padded attack frame or a different facing is selected.
+	var fit_frames: Array = []
+	if has_direction:
+		for facing in PREVIEW_DIRECTIONS:
+			for state in ["walk", "attack"]:
+				fit_frames.append_array(_preview_frames(_cur, state, facing))
+	_walk.set_frames(_preview_frames(_cur, "walk", direction), has_direction, fit_frames)
+	_atk.set_frames(_preview_frames(_cur, "attack", direction), has_direction, fit_frames)
+
+
+## 图鉴优先使用星将本名；合并战斗单位的名称另在说明中交代。
 func _disp_name(key: String) -> String:
+	if Bios.STAR.has(key):
+		return Localize.text(Bios.star_name(key))
 	if Defs.UNITS.has(key):
-		return String(Defs.UNITS[key].get("name", key))
-	var sn := Bios.star_name(key)
-	return sn if sn != "" else key
+		return Localize.text(String(Defs.UNITS[key].get("name", key)))
+	return key
 
 
 ## 详细数值条：血量/攻击/攻击间隔/射程/移速/造价/人口/建造·训练/特性——建筑与英雄/单位通用。
@@ -460,45 +526,45 @@ func _disp_name(key: String) -> String:
 func _stat_block(d: Dictionary, t: String) -> String:
 	var p: Array = []
 	if int(d.get("hp", 0)) > 0:
-		p.append("血量 %d" % int(d.get("hp", 0)))
+		p.append(Localize.format_text("血量 %d", int(d.get("hp", 0))))
 	var atk := int(d.get("atk", 0))
 	if atk > 0:
-		p.append("攻击 %d" % atk)
+		p.append(Localize.format_text("攻击 %d", atk))
 		var cd := float(d.get("cd", 0.0))
 		if cd > 0.0:
-			p.append("攻击间隔 %.2fs" % cd)
+			p.append(Localize.format_text("攻击间隔 %.2fs", cd))
 		var rng := int(d.get("range", 0))
 		if rng > 0:
-			p.append("射程 %d" % rng)
+			p.append(Localize.format_text("射程 %d", rng))
 	var spd := int(d.get("speed", 0))
 	if spd > 0:
-		p.append("移速 %d" % spd)
+		p.append(Localize.format_text("移速 %d", spd))
 	var cg := int(d.get("cost_gold", 0))
 	var cw := int(d.get("cost_wood", 0))
 	if cg > 0 or cw > 0:
-		p.append("造价 金%d/木%d" % [cg, cw])
+		p.append(Localize.format_text("造价 金%d/木%d", [cg, cw]))
 	if int(d.get("pop", 0)) > 0:
-		p.append("占人口 %d" % int(d.get("pop", 0)))
+		p.append(Localize.format_text("占人口 %d", int(d.get("pop", 0))))
 	if int(d.get("provides_pop", 0)) > 0:
-		p.append("供给人口 +%d" % int(d.get("provides_pop", 0)))
+		p.append(Localize.format_text("供给人口 +%d", int(d.get("provides_pop", 0))))
 	if int(d.get("build_time", 0)) > 0:
-		p.append("建造 %ds" % int(d.get("build_time", 0)))
+		p.append(Localize.format_text("建造 %ds", int(d.get("build_time", 0))))
 	if int(d.get("train_time", 0)) > 0:
-		p.append("训练 %ds" % int(d.get("train_time", 0)))
+		p.append(Localize.format_text("训练 %ds", int(d.get("train_time", 0))))
 	if int(d.get("garrison_cap", 0)) > 0:
-		p.append("可驻军 %d" % int(d.get("garrison_cap", 0)))
+		p.append(Localize.format_text("可驻军 %d", int(d.get("garrison_cap", 0))))
 	if float(d.get("splash", 0.0)) > 0.0:
-		p.append("溅射半径 %d" % int(d.get("splash", 0.0)))
+		p.append(Localize.format_text("溅射半径 %d", int(d.get("splash", 0.0))))
 	if float(d.get("bonus_cav", 1.0)) > 1.0:
-		p.append("克骑兵 ×%.1f" % float(d.get("bonus_cav", 1.0)))
+		p.append(Localize.format_text("克骑兵 ×%.1f", float(d.get("bonus_cav", 1.0))))
 	if float(d.get("bonus_hero", 1.0)) > 1.0:
-		p.append("克英雄 ×%.1f" % float(d.get("bonus_hero", 1.0)))
+		p.append(Localize.format_text("克英雄 ×%.1f", float(d.get("bonus_hero", 1.0))))
 	if float(d.get("slow_mult", 1.0)) < 1.0:
-		p.append("减速 %d%%·%.1fs" % [int(round((1.0 - float(d.get("slow_mult", 1.0))) * 100.0)), float(d.get("slow_dur", 0.0))])
+		p.append(Localize.format_text("减速 %d%%·%.1fs", [int(round((1.0 - float(d.get("slow_mult", 1.0))) * 100.0)), float(d.get("slow_dur", 0.0))]))
 	if String(d.get("aura", "")) != "":
-		var an: String = {"atk": "攻击", "speed": "移速", "def": "防御"}.get(String(d.get("aura", "")), String(d.get("aura", "")))
-		p.append("光环·%s ×%.2f(半径%d)" % [an, float(d.get("aura_p", 1.0)), int(d.get("aura_r", 0))])
-	var head := t
+		var an: String = {"atk": Localize.text("攻击"), "speed": Localize.text("移速"), "def": Localize.text("防御")}.get(String(d.get("aura", "")), String(d.get("aura", "")))
+		p.append(Localize.format_text("光环·%s ×%.2f(半径%d)", [an, float(d.get("aura_p", 1.0)), int(d.get("aura_r", 0))]))
+	var head := Localize.text(t)
 	return head + "　|　" + "　".join(p)
 
 
@@ -517,13 +583,63 @@ class AnimBox extends Control:
 	var fps := 6.0
 	var _t := 0.0
 	var _i := 0
+	var _anchored := false
+	var _fit_bounds := Rect2()
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(232, 232)
+		clip_contents = true
 
-	func set_frames(fr: Array) -> void:
+	func set_frames(fr: Array, anchored := false, fit_frames: Array = []) -> void:
 		frames = fr; _i = 0; _t = 0.0
+		_anchored = anchored
+		fps = 4.0 if anchored else 6.0
+		var first := true
+		for texture in (fit_frames if not fit_frames.is_empty() else frames):
+			if texture == null: continue
+			var geometry := _frame_geometry(texture)
+			var content: Rect2 = geometry.content_rect
+			_fit_bounds = content if first else _fit_bounds.merge(content)
+			first = false
 		queue_redraw()
+
+	# Unit's authored rectangle in a normalized logical space (body size = 1).
+	# Atlas margins are transparent, so only the sampled content affects fitting.
+	func _frame_geometry(tex: Texture2D) -> Dictionary:
+		var ts := tex.get_size()
+		var body_scale := 1.0
+		var scale_meta: Variant = tex.get_meta("draw_scale", 1.0)
+		if (scale_meta is float or scale_meta is int) and is_finite(float(scale_meta)):
+			body_scale = clampf(float(scale_meta), 0.25, 4.0)
+		var offset := Vector2.ZERO
+		var offset_meta: Variant = tex.get_meta("draw_offset_px", Vector2.ZERO)
+		if offset_meta is Vector2 and offset_meta.is_finite(): offset = offset_meta
+		var rect := Rect2(Vector2(-0.5, -0.82) * body_scale + offset * body_scale / maxf(ts.y, 1.0), Vector2.ONE * body_scale)
+		var content := rect
+		if tex is AtlasTexture and ts.x > 0 and ts.y > 0:
+			content = Rect2(rect.position + tex.margin.position / ts * rect.size, tex.region.size / ts * rect.size)
+		return {"rect": rect, "content_rect": content}
+
+	func frame_layout(index: int) -> Dictionary:
+		if frames.is_empty(): return {}
+		var tex: Texture2D = frames[posmod(index, frames.size())]
+		if tex == null or tex.get_width() <= 0 or tex.get_height() <= 0: return {}
+		if not _anchored:
+			var factor := minf((size.x - 16.0) / tex.get_width(), (size.y - 16.0) / tex.get_height())
+			var rect := Rect2((size - tex.get_size() * factor) * 0.5, tex.get_size() * factor)
+			return {"rect": rect, "content_rect": rect, "ground": size * 0.5, "scale": factor, "authored": false}
+		var horizontal := maxf(absf(_fit_bounds.position.x), absf(_fit_bounds.end.x))
+		var above := maxf(-_fit_bounds.position.y, 0.0)
+		var below := maxf(_fit_bounds.end.y, 0.0)
+		var factor := minf((size.x * 0.5 - 8.0) / maxf(horizontal, 0.001), (size.y - 24.0) / maxf(above + below, 0.001))
+		factor = maxf(factor, 0.001)
+		# Reserve space for authored content below the logical feet. A fixed near-
+		# bottom anchor would shrink every frame to fit a few pixels of clearance.
+		var ground := Vector2(size.x * 0.5, size.y - 12.0 - below * factor)
+		var geometry := _frame_geometry(tex)
+		var rect: Rect2 = geometry.rect
+		var content: Rect2 = geometry.content_rect
+		return {"rect": Rect2(ground + rect.position * factor, rect.size * factor), "content_rect": Rect2(ground + content.position * factor, content.size * factor), "ground": ground, "scale": factor, "authored": true}
 
 	func _process(delta: float) -> void:
 		if frames.size() > 1:
@@ -542,9 +658,12 @@ class AnimBox extends Control:
 		var tex: Texture2D = frames[_i % frames.size()]
 		if tex == null:
 			return
-		var ts := tex.get_size()
-		if ts.x <= 0.0 or ts.y <= 0.0:
-			return
-		var sc: float = minf((size.x - 16.0) / ts.x, (size.y - 16.0) / ts.y)
-		var dsz := ts * sc
-		draw_texture_rect(tex, Rect2((size - dsz) * 0.5, dsz), false)
+		var layout := frame_layout(_i)
+		if not layout.is_empty(): draw_texture_rect(tex, layout.rect, false)
+
+
+func _localized_star_label(key: String) -> String:
+	var parts := Bios.star_label(key).split(" · ")
+	for i in parts.size():
+		parts[i] = Localize.text(parts[i])
+	return " · ".join(parts)

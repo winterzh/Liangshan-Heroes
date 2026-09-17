@@ -1,0 +1,324 @@
+extends SceneTree
+const Ledger = preload("res://scripts/steam_run_ledger.gd")
+const Store = preload("res://scripts/steam_receipt_store.gd")
+const Receipt = preload("res://scripts/steam_run_receipt.gd")
+const Catalog = preload("res://scripts/steam_achievement_catalog.gd")
+const ACCOUNT := "76561198000000001"
+const CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
+var checks: Array = []
+var manifest: Dictionary = {}
+var diagnostics: Dictionary = {"children": [], "crashes": [], "write_count": 0}
+
+class FaultStore extends Store:
+	var stop_at := ""
+	var marker := ""
+	func _checkpoint(name: String) -> void:
+		if name != stop_at: return
+		var file := FileAccess.open(marker, FileAccess.WRITE)
+		file.store_string(JSON.stringify({"pid": OS.get_process_id(), "checkpoint": name}))
+		file.flush()
+		file.close()
+		while true: OS.delay_msec(10)
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	return passed
+
+func ok(label: String, result: Dictionary) -> bool:
+	checks.append({"label": label, "passed": result.get("ok") == true, "code": result.get("code", "")})
+	return result.get("ok") == true
+
+func stats(kills := 0) -> Dictionary:
+	return {"TOTAL_KILLS": kills, "TOTAL_WINS": 0, "DEFENSE_WINS": 0, "AI_WINS": 0}
+
+func unlocks() -> Dictionary:
+	var value := {}
+	for entry in Catalog.entries(): value[entry.id] = false
+	return value
+
+func write_json(path: String, value: Dictionary) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(JSON.stringify(value))
+	file.flush()
+	file.close()
+
+func read_json(path: String) -> Dictionary:
+	return JSON.parse_string(FileAccess.get_file_as_string(path))
+
+func fresh(path: String) -> RefCounted:
+	var ledger := Ledger.new()
+	ok("open " + path, ledger.open(ACCOUNT, stats(), unlocks(), path))
+	return ledger
+
+func folder_hashes(path: String) -> Dictionary:
+	var result := {}
+	var folder := DirAccess.open(path)
+	if folder == null: return result
+	for file in folder.get_files(): result[file] = FileAccess.get_sha256(path.path_join(file))
+	for directory in folder.get_directories(): result[directory + "/"] = folder_hashes(path.path_join(directory))
+	return result
+
+func _child(args: PackedStringArray) -> void:
+	var path := args[1]
+	var ledger := Ledger.new()
+	var opened: Dictionary = ledger.open(ACCOUNT, stats(), unlocks(), path)
+	if args[0] == "inspect":
+		var result := {"pid": OS.get_process_id(), "opened": opened}
+		if opened.ok:
+			var token: String = read_json(path.path_join("input.json")).token
+			result.before = ledger.capture()
+			result.old_progress = ledger.progress(token, CONTEXT, 2)
+			result.after = ledger.capture()
+		write_json(path.path_join("child_result.json"), result)
+		quit(0)
+		return
+	if not opened.ok:
+		write_json(path.path_join("child_error.json"), opened)
+		quit(1)
+		return
+	var store := FaultStore.new(ACCOUNT, path)
+	store.stop_at = args[2]
+	store.marker = path.path_join("checkpoint.json")
+	ledger._store = store
+	var token: String = read_json(path.path_join("input.json")).token
+	var result: Dictionary = ledger.progress(token, CONTEXT, 11)
+	write_json(path.path_join("unexpected_completion.json"), result)
+	quit(2)
+
+func spawn_child(arguments: PackedStringArray) -> int:
+	var command := PackedStringArray(["--headless", "--path", ProjectSettings.globalize_path("res://"), "--script", get_script().resource_path, "--"])
+	command.append_array(arguments)
+	var pid := OS.create_process(OS.get_executable_path(), command)
+	diagnostics.children.append({"pid": pid, "arguments": Array(arguments)})
+	return pid
+
+func wait_exit(pid: int) -> bool:
+	for i in range(300):
+		if not OS.is_process_running(pid): return true
+		await create_timer(0.02).timeout
+	return false
+
+func crash_case(point: String, blocked: bool, expected_kills: int) -> void:
+	var path := "user://ledger_qa/crash_" + point
+	var ledger := fresh(path)
+	var started: Dictionary = ledger.begin_run(CONTEXT)
+	if not ok(point + " begin", started): return
+	ok(point + " baseline", ledger.progress(started.token, CONTEXT, 3))
+	write_json(path.path_join("input.json"), {"token": started.token})
+	var pid := spawn_child(["crash", path, point])
+	if not check(point + " child started", pid > 0): return
+	var marker_path := path.path_join("checkpoint.json")
+	for i in range(400):
+		if FileAccess.file_exists(marker_path): break
+		if not OS.is_process_running(pid): break
+		await create_timer(0.02).timeout
+	if not check(point + " live checkpoint reached", FileAccess.file_exists(marker_path) and OS.is_process_running(pid)):
+		if OS.is_process_running(pid): OS.kill(pid); await wait_exit(pid)
+		return
+	var marker := read_json(marker_path)
+	check(point + " marker identity", int(marker.pid) == pid and marker.checkpoint == point)
+	var live_bytes := folder_hashes(ledger._store.directory)
+	var competing := Ledger.new()
+	var denied: Dictionary = competing.open(ACCOUNT, stats(), unlocks(), path)
+	check(point + " live writer blocks competitor", not denied.ok)
+	check(point + " competitor leaves writer bytes", folder_hashes(ledger._store.directory) == live_bytes)
+	check(point + " kill actual child", OS.kill(pid) == OK)
+	check(point + " confirmed terminal", await wait_exit(pid))
+	var directory: String = ledger._store.directory
+	var before := folder_hashes(directory)
+	var restart := spawn_child(["inspect", path])
+	check(point + " restart exited", await wait_exit(restart))
+	var result_path := path.path_join("child_result.json")
+	if not check(point + " restart receipt", FileAccess.file_exists(result_path)): return
+	var result := read_json(result_path)
+	check(point + " restart identity", int(result.pid) == restart and restart != pid)
+	check(point + " recovery outcome", bool(result.opened.ok) != blocked)
+	if blocked:
+		check(point + " corrupt bytes preserved", folder_hashes(directory) == before)
+	else:
+		check(point + " cumulative total", int(result.before.record.stats.TOTAL_KILLS) == expected_kills)
+		check(point + " high water", int(result.before.record.runs[started.token].credited_kills) == expected_kills)
+		check(point + " old slot no credit", result.old_progress.ok and not result.old_progress.changed and result.before == result.after)
+		check(point + " bounded files after recovery", DirAccess.open(directory).get_files().size() == 2)
+		check(point + " no residual lock", DirAccess.open(directory).get_directories().is_empty())
+	diagnostics.crashes.append({"point": point, "killed_pid": pid, "restart_pid": restart, "blocked": blocked, "before_sha": before, "restart": result, "after_sha": folder_hashes(directory)})
+
+func bad_case(name: String, mutation: String) -> void:
+	var path := "user://ledger_qa/bad_" + name
+	var ledger := fresh(path)
+	var started: Dictionary = ledger.begin_run(CONTEXT)
+	if not ok(name + " begin", started): return
+	ok(name + " baseline", ledger.progress(started.token, CONTEXT, 4))
+	var directory: String = ledger._store.directory
+	var files := Array(DirAccess.open(directory).get_files())
+	files.sort()
+	var latest: String = directory.path_join(files.back())
+	var previous: String = directory.path_join(files.front())
+	match mutation:
+		"empty":
+			var file := FileAccess.open(latest, FileAccess.WRITE); file.close()
+		"json":
+			var file := FileAccess.open(latest, FileAccess.WRITE); file.store_string("{torn"); file.close()
+		"previous":
+			var file := FileAccess.open(previous, FileAccess.WRITE); file.store_string("{}"); file.close()
+		"hash":
+			var value := read_json(latest); value.payload_sha256 = Store.ZERO; write_json(latest, value)
+		"owner":
+			var value := read_json(latest); value.owner = "76561198000000002"; write_json(latest, value)
+		"chain":
+			var value := read_json(latest); value.previous_sha256 = Store.ZERO; write_json(latest, value)
+		"missing_previous": DirAccess.remove_absolute(previous)
+		"unexpected": write_json(directory.path_join("surprise.json"), {})
+		"pending": write_json(directory.path_join("receipt.pending"), {})
+		"utf8":
+			var file := FileAccess.open(latest, FileAccess.WRITE); file.store_buffer(PackedByteArray([0xc0, 0x80])); file.close()
+		"noncanonical":
+			var raw := FileAccess.get_file_as_string(latest)
+			var file := FileAccess.open(latest, FileAccess.WRITE); file.store_string(" " + raw); file.close()
+	var before := folder_hashes(directory)
+	var reopened := Ledger.new()
+	var result: Dictionary = reopened.open(ACCOUNT, stats(), unlocks(), path)
+	check(name + " corrupt receipt blocks", not result.ok)
+	check(name + " no fallback mutation", folder_hashes(directory) == before)
+	check(name + " no live receipt", not reopened.capture().ok)
+
+func _run() -> void:
+	var args := OS.get_cmdline_user_args()
+	if args.size() >= 2:
+		_child(args)
+		return
+	manifest = read_json(OS.get_environment("RUN_RESTORE_QA_MANIFEST"))
+	check("private user directory", ProjectSettings.globalize_path("user://").replace("\\", "/").trim_suffix("/") == String(manifest.private_user).replace("\\", "/"))
+	check("real SDK disabled", OS.get_environment("STEAM_DISABLED") == "1")
+	for path in manifest.source_sha256: check("source before " + path, FileAccess.get_sha256(path) == manifest.source_sha256[path])
+	var ledger := fresh("user://ledger_qa/normal")
+	var started: Dictionary = ledger.begin_run(CONTEXT)
+	if not ok("new random persistent identity", started): finish(); return
+	var token: String = started.token
+	check("token cryptographic shape", Receipt.new()._token(token))
+	ok("first 12 kills", ledger.progress(token, CONTEXT, 12))
+	var snapshot: Dictionary = ledger.capture()
+	var repeated: Dictionary = ledger.progress(token, CONTEXT, 5)
+	check("old cumulative kills does not write", repeated.ok and not repeated.changed and ledger.capture() == snapshot)
+	check("other account refused", not ledger.can_resume(token, "76561198000000002", CONTEXT).ok)
+	check("other mode refused", not ledger.can_resume(token, ACCOUNT, {"mode": "defense", "level_id": "", "waves": 60}).ok)
+	check("invalid fractional kills", not ledger.progress(token, CONTEXT, 12.5).ok)
+	check("unknown run refused", not ledger.progress("a".repeat(32), CONTEXT, 100).ok)
+	check("custom begin refused", not ledger.begin_run({"mode": "custom", "level_id": "", "waves": 0}).ok)
+	var reopened := Ledger.new()
+	ok("reopen ignores supplied zero seed", reopened.open(ACCOUNT, stats(), unlocks(), "user://ledger_qa/normal"))
+	ok("known unfinished run resumes", reopened.can_resume(token, ACCOUNT, CONTEXT))
+	ok("new high water adds delta", reopened.progress(token, CONTEXT, 15))
+	check("total is 15", reopened.capture().record.stats.TOTAL_KILLS == 15)
+	check("stale host read blocked", not ledger.can_resume(token, ACCOUNT, CONTEXT).ok)
+	check("stale host write blocked", not ledger.progress(token, CONTEXT, 99).ok)
+	ok("settle victory", reopened.settle(token, CONTEXT, true, {}))
+	snapshot = reopened.capture()
+	check("win and defense counts", snapshot.record.stats.TOTAL_WINS == 1 and snapshot.record.stats.DEFENSE_WINS == 1 and snapshot.record.unlocked.ACH_DEFENSE_30)
+	var twice: Dictionary = reopened.settle(token, CONTEXT, true, {})
+	check("terminal at most once", twice.ok and not twice.changed and reopened.capture() == snapshot)
+	check("terminal cannot resume", not reopened.can_resume(token, ACCOUNT, CONTEXT).ok)
+	check("terminal cannot credit", not reopened.progress(token, CONTEXT, 999).ok)
+	var after_terminal := Ledger.new()
+	ok("terminal survives reopen", after_terminal.open(ACCOUNT, stats(), unlocks(), "user://ledger_qa/normal"))
+	check("terminal reopen no duplicate", after_terminal.settle(token, CONTEXT, true, {}).ok and after_terminal.capture().record.stats.TOTAL_WINS == 1)
+	var second: Dictionary = after_terminal.begin_run(CONTEXT)
+	if ok("second identity", second):
+		check("unique run token", second.token != token)
+		ok("second high water", after_terminal.progress(second.token, CONTEXT, 7))
+		check("independent run adds seven", after_terminal.capture().record.stats.TOTAL_KILLS == 22)
+		ok("durable invalidation", after_terminal.invalidate(ACCOUNT))
+		check("invalidation closes both runs", not after_terminal.can_resume(second.token, ACCOUNT, CONTEXT).ok)
+		var generation: int = after_terminal.capture().record.generation
+		check("stale correction blocked", not after_terminal.correct(ACCOUNT, stats(2), unlocks(), generation - 1).ok)
+		ok("authoritative correction exact", after_terminal.correct(ACCOUNT, stats(2), unlocks(), generation))
+		check("correction does not max old counts", after_terminal.capture().record.stats.TOTAL_KILLS == 2 and after_terminal.capture().record.stats.TOTAL_WINS == 0)
+		check("correction tombstones stay closed", not after_terminal.can_resume(second.token, ACCOUNT, CONTEXT).ok)
+	var other := Ledger.new()
+	ok("separate account", other.open("76561198000000002", stats(), unlocks(), "user://ledger_qa/normal"))
+	check("other account zero and unknown run", other.capture().record.stats.TOTAL_KILLS == 0 and not other.can_resume(token, "76561198000000002", CONTEXT).ok)
+	check("owner traversal rejected", not Ledger.new().open("../escape", stats(), unlocks()).ok)
+	check("resource path rejected", not Ledger.new().open(ACCOUNT, stats(), unlocks(), "res://escape").ok)
+	check("parent traversal rejected", not Ledger.new().open(ACCOUNT, stats(), unlocks(), "user://../escape").ok)
+	var modes := fresh("user://ledger_qa/modes")
+	for index in range(1, 9):
+		var context := {"mode": "campaign", "level_id": "level%d" % index, "waves": 0}
+		var game: Dictionary = modes.begin_run(context)
+		if not ok("campaign %d begins" % index, game): continue
+		ok("campaign %d settles" % index, modes.settle(game.token, context, true, {"story_total": 2, "story_done": 2, "story_complete": true}))
+		var state: Dictionary = modes.capture().record
+		check("campaign %d clear and story" % index, state.unlocked["ACH_CLEAR_LEVEL_%d" % index] and state.unlocked["ACH_STORY_LEVEL_%d" % index])
+	for waves in [20, 60]:
+		var context := {"mode": "defense", "level_id": "", "waves": waves}
+		var game: Dictionary = modes.begin_run(context)
+		if ok("defense %d begins" % waves, game): ok("defense %d win" % waves, modes.settle(game.token, context, true, {}))
+	var ai := {"mode": "ai", "level_id": "", "waves": 0}
+	var ai_run: Dictionary = modes.begin_run(ai)
+	if ok("AI official begins", ai_run): ok("AI victory", modes.settle(ai_run.token, ai, true, {}))
+	check("modes total eleven wins", modes.capture().record.stats.TOTAL_WINS == 11 and modes.capture().record.stats.DEFENSE_WINS == 2 and modes.capture().record.stats.AI_WINS == 1)
+	var loss: Dictionary = modes.begin_run(CONTEXT)
+	if ok("loss begins", loss):
+		ok("loss durable terminal", modes.settle(loss.token, CONTEXT, false, {}))
+		ok("later victory cannot reverse loss", modes.settle(loss.token, CONTEXT, true, {}))
+		check("loss not counted", modes.capture().record.stats.TOTAL_WINS == 11)
+	var capped := Ledger.new()
+	ok("saturation seed", capped.open(ACCOUNT, stats(2147483646), unlocks(), "user://ledger_qa/capped"))
+	var cap_run: Dictionary = capped.begin_run(CONTEXT)
+	if ok("saturation run", cap_run):
+		ok("saturation progress", capped.progress(cap_run.token, CONTEXT, 20))
+		check("saturates signed int and preserves high water", capped.capture().record.stats.TOTAL_KILLS == 2147483647 and capped.capture().record.runs[cap_run.token].credited_kills == 20)
+		var copy: Dictionary = capped.capture()
+		copy.record.stats.TOTAL_KILLS = 0
+		check("capture detached from live record", capped.capture().record.stats.TOTAL_KILLS == 2147483647)
+	legacy_bytes_case()
+	var long_lived := fresh("user://ledger_qa/long")
+	var long_run: Dictionary = long_lived.begin_run(CONTEXT)
+	if ok("long chain begin", long_run):
+		var start := Time.get_ticks_msec()
+		for i in range(1, 2101):
+			if not ok("durable cumulative event %d" % i, long_lived.progress(long_run.token, CONTEXT, i)): break
+			diagnostics.write_count += 1
+			if i % 100 == 0: await process_frame
+		diagnostics.write_ms = Time.get_ticks_msec() - start
+		check("2100 real events persisted", diagnostics.write_count == 2100)
+		check("journal remains two snapshots", DirAccess.open(long_lived._store.directory).get_files().size() == 2)
+		var latest := Ledger.new()
+		ok("long chain reopen", latest.open(ACCOUNT, stats(), unlocks(), "user://ledger_qa/long"))
+		check("long chain high water preserved", latest.capture().record.runs[long_run.token].credited_kills == 2100 and latest.capture().record.stats.TOTAL_KILLS == 2100)
+	for name in ["empty", "json", "previous", "hash", "owner", "chain", "missing_previous", "unexpected", "pending", "utf8", "noncanonical"]: bad_case(name, name)
+	for point in ["lock_acquired", "pending_half", "pending_verified", "record_renamed", "record_verified", "before_prune", "after_prune_remove"]:
+		await crash_case(point, point == "pending_half", 3 if point == "lock_acquired" else 11)
+	finish()
+
+func finish() -> void:
+	for path in manifest.source_sha256: check("source after " + path, FileAccess.get_sha256(path) == manifest.source_sha256[path])
+	var failures := checks.filter(func(row): return not row.passed)
+	var report := {"suite": "steam-ledger-native", "run_id": manifest.run_id, "process_id": OS.get_process_id(), "actual_user_dir": ProjectSettings.globalize_path("user://"), "complete": true, "passed": failures.is_empty(), "failed_count": failures.size(), "failures": failures, "check_count": checks.size(), "checks": checks, "source_sha256": manifest.source_sha256, "diagnostics": diagnostics, "steam_sdk_tested": false, "battle_binding_tested": false}
+	write_json(manifest.report, report)
+	print("[steam ledger QA] " + JSON.stringify(report))
+	quit(0 if failures.is_empty() else 1)
+
+func legacy_bytes_case() -> void:
+	var path := "user://ledger_qa/legacy"
+	var directory := ProjectSettings.globalize_path(path).path_join("5088120").path_join(ACCOUNT)
+	DirAccess.make_dir_recursive_absolute(directory)
+	var rows: Array = JSON.parse_string("[{\"name\": \"record_0000000008.json\", \"base64\": \"eyJhcHAiOiI1MDg4MTIwIiwibWFnaWMiOiJMSF9TVEVBTV9SVU5fU05BUFNIT1RTIiwib3duZXIiOiI3NjU2MTE5ODAwMDAwMDAwMSIsInBheWxvYWQiOiJ7XCJnZW5lcmF0aW9uXCI6NyxcIm93bmVyXCI6XCI3NjU2MTE5ODAwMDAwMDAwMVwiLFwicmVxdWlyZXNfY29ycmVjdGlvblwiOnRydWUsXCJydW5zXCI6e1wiMGM2YzZhYWQyNTc0NjZjM2MwOWMwZTgwN2NkY2NhNTFcIjp7XCJjb250ZXh0XCI6e1wibGV2ZWxfaWRcIjpcIlwiLFwibW9kZVwiOlwiZGVmZW5zZVwiLFwid2F2ZXNcIjozMH0sXCJjcmVkaXRlZF9raWxsc1wiOjE1LFwidGVybWluYWxcIjp0cnVlLFwidmljdG9yeVwiOnRydWV9LFwiZWRjNWI3MWEzNGM1YjAxYTY0YTkwNGZjMjlmNjA1NWZcIjp7XCJjb250ZXh0XCI6e1wibGV2ZWxfaWRcIjpcIlwiLFwibW9kZVwiOlwiZGVmZW5zZVwiLFwid2F2ZXNcIjozMH0sXCJjcmVkaXRlZF9raWxsc1wiOjcsXCJ0ZXJtaW5hbFwiOnRydWUsXCJ2aWN0b3J5XCI6ZmFsc2V9fSxcInN0YXRzXCI6e1wiQUlfV0lOU1wiOjAsXCJERUZFTlNFX1dJTlNcIjoxLFwiVE9UQUxfS0lMTFNcIjoyMixcIlRPVEFMX1dJTlNcIjoxfSxcInVubG9ja2VkXCI6e1wiQUNIX0FJX1dJTlNfMVwiOmZhbHNlLFwiQUNIX0FJX1dJTlNfMTBcIjpmYWxzZSxcIkFDSF9BTExfQ0xFQVJcIjpmYWxzZSxcIkFDSF9BTExfU1RPUllcIjpmYWxzZSxcIkFDSF9DTEVBUl9MRVZFTF8xXCI6ZmFsc2UsXCJBQ0hfQ0xFQVJfTEVWRUxfMlwiOmZhbHNlLFwiQUNIX0NMRUFSX0xFVkVMXzNcIjpmYWxzZSxcIkFDSF9DTEVBUl9MRVZFTF80XCI6ZmFsc2UsXCJBQ0hfQ0xFQVJfTEVWRUxfNVwiOmZhbHNlLFwiQUNIX0NMRUFSX0xFVkVMXzZcIjpmYWxzZSxcIkFDSF9DTEVBUl9MRVZFTF83XCI6ZmFsc2UsXCJBQ0hfQ0xFQVJfTEVWRUxfOFwiOmZhbHNlLFwiQUNIX0RFRkVOU0VfMzBcIjp0cnVlLFwiQUNIX0RFRkVOU0VfNjBcIjpmYWxzZSxcIkFDSF9ERUZFTlNFX1dJTlNfMTBcIjpmYWxzZSxcIkFDSF9ERUZFTlNFX1dJTlNfNTBcIjpmYWxzZSxcIkFDSF9LSUxMU18xMDAwXCI6ZmFsc2UsXCJBQ0hfS0lMTFNfMTAwMDBcIjpmYWxzZSxcIkFDSF9LSUxMU18xMDAwMDBcIjpmYWxzZSxcIkFDSF9TVE9SWV9MRVZFTF8xXCI6ZmFsc2UsXCJBQ0hfU1RPUllfTEVWRUxfMlwiOmZhbHNlLFwiQUNIX1NUT1JZX0xFVkVMXzNcIjpmYWxzZSxcIkFDSF9TVE9SWV9MRVZFTF80XCI6ZmFsc2UsXCJBQ0hfU1RPUllfTEVWRUxfNVwiOmZhbHNlLFwiQUNIX1NUT1JZX0xFVkVMXzZcIjpmYWxzZSxcIkFDSF9TVE9SWV9MRVZFTF83XCI6ZmFsc2UsXCJBQ0hfU1RPUllfTEVWRUxfOFwiOmZhbHNlLFwiQUNIX1dJTlNfMTBcIjpmYWxzZSxcIkFDSF9XSU5TXzEwMFwiOmZhbHNlLFwiQUNIX1dJTlNfNTBcIjpmYWxzZX0sXCJ2ZXJzaW9uXCI6Mn0iLCJwYXlsb2FkX2J5dGVzIjoiMTE5OSIsInBheWxvYWRfc2hhMjU2IjoiM2QyZjAwMGVlM2ZkMGMxNDIxMGZlZTRmNTM2MWM1MjQyOWYzMjRkNWJkNTE5Y2IwYzAxZmZmNmQxN2IxZmY1YiIsInByZXZpb3VzX3NoYTI1NiI6IjViODc2ZTA5MmUwMjM0ZTE5NWVhYzJkOTM4ZmZlNWFiMzYzZmE3ZTVjYzM4ZTU1ZTVkMWZhMDRjOGVkZDRhZjUiLCJyZXZpc2lvbiI6IjgiLCJ2ZXJzaW9uIjoiMSJ9\", \"sha256\": \"51c859d7fe37bee192848485e8024bbdf71604cae4de7b113fd7cdd6d6490f1a\"}, {\"name\": \"record_0000000009.json\", \"base64\": \"eyJhcHAiOiI1MDg4MTIwIiwibWFnaWMiOiJMSF9TVEVBTV9SVU5fU05BUFNIT1RTIiwib3duZXIiOiI3NjU2MTE5ODAwMDAwMDAwMSIsInBheWxvYWQiOiJ7XCJnZW5lcmF0aW9uXCI6OCxcIm93bmVyXCI6XCI3NjU2MTE5ODAwMDAwMDAwMVwiLFwicmVxdWlyZXNfY29ycmVjdGlvblwiOmZhbHNlLFwicnVuc1wiOntcIjBjNmM2YWFkMjU3NDY2YzNjMDljMGU4MDdjZGNjYTUxXCI6e1wiY29udGV4dFwiOntcImxldmVsX2lkXCI6XCJcIixcIm1vZGVcIjpcImRlZmVuc2VcIixcIndhdmVzXCI6MzB9LFwiY3JlZGl0ZWRfa2lsbHNcIjoxNSxcInRlcm1pbmFsXCI6dHJ1ZSxcInZpY3RvcnlcIjp0cnVlfSxcImVkYzViNzFhMzRjNWIwMWE2NGE5MDRmYzI5ZjYwNTVmXCI6e1wiY29udGV4dFwiOntcImxldmVsX2lkXCI6XCJcIixcIm1vZGVcIjpcImRlZmVuc2VcIixcIndhdmVzXCI6MzB9LFwiY3JlZGl0ZWRfa2lsbHNcIjo3LFwidGVybWluYWxcIjp0cnVlLFwidmljdG9yeVwiOmZhbHNlfX0sXCJzdGF0c1wiOntcIkFJX1dJTlNcIjowLFwiREVGRU5TRV9XSU5TXCI6MCxcIlRPVEFMX0tJTExTXCI6MixcIlRPVEFMX1dJTlNcIjowfSxcInVubG9ja2VkXCI6e1wiQUNIX0FJX1dJTlNfMVwiOmZhbHNlLFwiQUNIX0FJX1dJTlNfMTBcIjpmYWxzZSxcIkFDSF9BTExfQ0xFQVJcIjpmYWxzZSxcIkFDSF9BTExfU1RPUllcIjpmYWxzZSxcIkFDSF9DTEVBUl9MRVZFTF8xXCI6ZmFsc2UsXCJBQ0hfQ0xFQVJfTEVWRUxfMlwiOmZhbHNlLFwiQUNIX0NMRUFSX0xFVkVMXzNcIjpmYWxzZSxcIkFDSF9DTEVBUl9MRVZFTF80XCI6ZmFsc2UsXCJBQ0hfQ0xFQVJfTEVWRUxfNVwiOmZhbHNlLFwiQUNIX0NMRUFSX0xFVkVMXzZcIjpmYWxzZSxcIkFDSF9DTEVBUl9MRVZFTF83XCI6ZmFsc2UsXCJBQ0hfQ0xFQVJfTEVWRUxfOFwiOmZhbHNlLFwiQUNIX0RFRkVOU0VfMzBcIjpmYWxzZSxcIkFDSF9ERUZFTlNFXzYwXCI6ZmFsc2UsXCJBQ0hfREVGRU5TRV9XSU5TXzEwXCI6ZmFsc2UsXCJBQ0hfREVGRU5TRV9XSU5TXzUwXCI6ZmFsc2UsXCJBQ0hfS0lMTFNfMTAwMFwiOmZhbHNlLFwiQUNIX0tJTExTXzEwMDAwXCI6ZmFsc2UsXCJBQ0hfS0lMTFNfMTAwMDAwXCI6ZmFsc2UsXCJBQ0hfU1RPUllfTEVWRUxfMVwiOmZhbHNlLFwiQUNIX1NUT1JZX0xFVkVMXzJcIjpmYWxzZSxcIkFDSF9TVE9SWV9MRVZFTF8zXCI6ZmFsc2UsXCJBQ0hfU1RPUllfTEVWRUxfNFwiOmZhbHNlLFwiQUNIX1NUT1JZX0xFVkVMXzVcIjpmYWxzZSxcIkFDSF9TVE9SWV9MRVZFTF82XCI6ZmFsc2UsXCJBQ0hfU1RPUllfTEVWRUxfN1wiOmZhbHNlLFwiQUNIX1NUT1JZX0xFVkVMXzhcIjpmYWxzZSxcIkFDSF9XSU5TXzEwXCI6ZmFsc2UsXCJBQ0hfV0lOU18xMDBcIjpmYWxzZSxcIkFDSF9XSU5TXzUwXCI6ZmFsc2V9LFwidmVyc2lvblwiOjJ9IiwicGF5bG9hZF9ieXRlcyI6IjEyMDAiLCJwYXlsb2FkX3NoYTI1NiI6IjgyMmMxY2RhYTVhYmQyZTdlZWM4MTdmYmVjN2I4MDRhM2ZjMzBkYzUxZGMxZTNjMGIyNDU3YTM5Nzc2YTk5MTMiLCJwcmV2aW91c19zaGEyNTYiOiI1MWM4NTlkN2ZlMzdiZWUxOTI4NDg0ODVlODAyNGJiZGY3MTYwNGNhZTRkZTdiMTEzZmQ3Y2RkNmQ2NDkwZjFhIiwicmV2aXNpb24iOiI5IiwidmVyc2lvbiI6IjEifQ==\", \"sha256\": \"a027521e3e4a88738a05a529ca364a15c1a530b7e5f67e56d7b3102f5fcdbc4a\"}]")
+	for row in rows:
+		var file := FileAccess.open(directory.path_join(row.name), FileAccess.WRITE)
+		file.store_buffer(Marshalls.base64_to_raw(row.base64)); file.flush(); file.close()
+		check("legacy fixture exact old bytes " + row.name, FileAccess.get_sha256(directory.path_join(row.name)) == row.sha256)
+	var before := folder_hashes(directory)
+	var ledger := Ledger.new()
+	if not ok("previous production receipts open unchanged", ledger.open(ACCOUNT, {}, {}, path)): return
+	check("legacy open does not rewrite files", folder_hashes(directory) == before)
+	var record: Dictionary = ledger.capture().record
+	check("previous correction and two tombstones preserved", record.stats.TOTAL_KILLS == 2 and record.runs.size() == 2)
+	for token in record.runs: check("previous terminal stays closed " + token, not ledger.can_resume(token, ACCOUNT, record.runs[token].context).ok)
+	var started: Dictionary = ledger.begin_run(CONTEXT)
+	if ok("new run after legacy open", started):
+		ok("new progress after legacy open", ledger.progress(started.token, CONTEXT, 7))
+		check("legacy progress composes with new run", ledger.capture().record.stats.TOTAL_KILLS == 9 and ledger.capture().record.runs.size() == 3)
+		check("legacy upgrade retains two snapshots", DirAccess.open(directory).get_files().size() == 2)

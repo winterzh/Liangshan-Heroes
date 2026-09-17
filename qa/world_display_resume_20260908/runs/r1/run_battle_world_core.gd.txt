@@ -1,0 +1,241 @@
+extends RefCounted
+## Internal world preparation transaction. Never mounts, starts, saves or exposes a Battle.
+## Display/UI/Steam installation remains a required outer phase; root clock binds there.
+const SCHEMA := "classic_world_core_preparation_v3"
+const SECTIONS := ["map", "fog", "units", "level", "visual", "root", "rng", "items", "continuous", "zones", "meteor", "remaining", "casts", "item_casts", "death_remains", "world_display"]
+const WorldDisplay := preload("res://scripts/run_world_display_state.gd")
+const Codec := preload("res://scripts/run_state_value_codec.gd")
+const B := preload("res://scripts/battle.gd")
+const U := preload("res://scripts/unit.gd")
+const M := preload("res://scripts/game_map.gd")
+const L := preload("res://scripts/levels/skirmish.gd")
+const Inventory := preload("res://scripts/hero_inventory.gd")
+const UnitState := preload("res://scripts/run_unit_state.gd")
+const UnitGraph := preload("res://scripts/run_unit_graph.gd")
+const Identity := preload("res://scripts/run_graph_identity.gd")
+const MapState := preload("res://scripts/run_map_state.gd")
+const FogState := preload("res://scripts/run_fog_state.gd")
+const LevelState := preload("res://scripts/run_defense_level_state.gd")
+const RootState := preload("res://scripts/run_battle_root_state.gd")
+const Visual := preload("res://scripts/run_visual_graph.gd")
+const ProjectileState := preload("res://scripts/run_projectile_state.gd")
+const ProjectileScript := preload("res://scripts/projectile.gd")
+const AxesState := preload("res://scripts/run_li_brawn_axes_state.gd")
+const ItemState := preload("res://scripts/run_item_id_state.gd")
+const Continuous := preload("res://scripts/run_continuous_effect_state.gd")
+const Zones := preload("res://scripts/run_zone_effects_state.gd")
+const Meteor := preload("res://scripts/run_meteor_wards_state.gd")
+const Remaining := preload("res://scripts/run_remaining_effect_state.gd")
+const Casts := preload("res://scripts/run_cast_flow_state.gd")
+const ItemCasts := preload("res://scripts/run_item_cast_flow_state.gd")
+var _unit_checker: Variant = UnitState.new(Codec, U, Inventory)
+var _trusted: Dictionary
+var _runtime: Dictionary
+var _textures: Dictionary
+var _axe_texture: Texture2D
+var _battle: Variant = null
+var _identity: Variant = null
+var _visual: Variant = null
+var _unit_plan: Dictionary = {}
+var _display: Variant = null
+var _pending_root: Dictionary = {}
+
+func _init(trusted_identity: Dictionary, trusted_runtime: Dictionary, textures: Dictionary = {}, axe_texture: Texture2D = null) -> void:
+	_trusted = trusted_identity.duplicate(true)
+	_runtime = trusted_runtime.duplicate(true)
+	_textures = textures.duplicate()
+	_axe_texture = axe_texture
+
+func _bad(code: String, section: String = "") -> Dictionary:
+	return {"ok": false, "code": code, "section": section, "complete_world": false}
+
+func _context() -> bool:
+	return _trusted.get("ok") == true and _trusted.get("save_eligible") == true and typeof(_trusted.get("content_version")) == TYPE_STRING and not _trusted.content_version.is_empty() and typeof(_trusted.get("engine_binary_sha256")) == TYPE_STRING and _trusted.engine_binary_sha256.length() == 64 and _runtime.has("defs") and _runtime.has("abilities") and _runtime.has("items")
+
+func _graph() -> Variant:
+	return UnitGraph.new(UnitState, Identity, Codec, U, Inventory, B, M)
+
+func _visuals(owner: Variant) -> Variant:
+	return Visual.new(Codec, B, U, owner, _textures, ProjectileState.new(Codec, ProjectileScript, U), AxesState.new(Codec, B.LiBrawnAxesFx, U, _axe_texture))
+
+func _root_state(identity: Variant) -> Variant:
+	return RootState.new(Codec, B, U, L, _unit_checker._check_inventory, identity.encode_identity, identity.validate_identity, identity.decode_identity)
+
+func _effects(identity: Variant, visual: Variant) -> Dictionary:
+	var encode := func(value): return identity.encode_identity("_chase_last_id", value)
+	var validate := func(value): return identity.validate_identity("_chase_last_id", value)
+	var decode := func(value): return identity.decode_identity("_chase_last_id", value)
+	return {"continuous": Continuous.new(Codec, B, U), "zones": Zones.new(Codec, B, U), "meteor": Meteor.new(Codec, B, U, encode, validate, decode), "remaining": Remaining.new(Codec, B, U, encode, validate, decode, visual.encode_token, visual.validate_token, visual.decode_token), "casts": Casts.new(Codec, B, U), "item_casts": ItemCasts.new(Codec, B, U)}
+
+func _item_max(units: Array, progress: Dictionary, queue_max: int) -> Dictionary:
+	var maximum: int = queue_max
+	var physical: Dictionary = {}
+	for unit: Variant in units:
+		if unit.inventory == null: continue
+		for item: Variant in unit.inventory.slots:
+			if item.is_empty(): continue
+			if physical.has(item.uid): return _bad("DUPLICATE_LIVE_ITEM_UID")
+			physical[item.uid] = {"hero": unit.key, "item_id": item.id}
+			maximum = maxi(maximum, item.uid)
+		for key: String in unit.inventory.proc_cooldowns: maximum = maxi(maximum, key.left(key.find(":")).to_int())
+	var retired: Dictionary = {}
+	for hero: String in progress:
+		var inv: Dictionary = progress[hero]
+		for item: Variant in inv.slots:
+			if item.is_empty(): continue
+			var owner := {"hero": hero, "item_id": item.id}
+			if (physical.has(item.uid) and physical[item.uid] != owner) or (retired.has(item.uid) and retired[item.uid] != owner): return _bad("RETIRED_ITEM_UID_CONFLICT")
+			retired[item.uid] = owner
+			maximum = maxi(maximum, item.uid)
+		for key: String in inv.proc_cooldowns: maximum = maxi(maximum, key.left(key.find(":")).to_int())
+	return {"ok": true, "maximum": maximum}
+
+func capture(source: Variant, retained_identity: Variant = null) -> Dictionary:
+	if not _context(): return _bad("TRUSTED_CONTEXT_REQUIRED")
+	if not is_instance_valid(source) or source.get_script() != B or not source.is_inside_tree() or not source.get_tree().paused or source._save_barrier == null or source._save_barrier.state != source._save_barrier.State.HELD: return _bad("ACTUAL_HELD_BARRIER_REQUIRED")
+	var version: String = _trusted.content_version
+	var ids: Dictionary = {}
+	for unit: Variant in source.units_root.get_children(true):
+		if not is_instance_valid(unit) or unit.get_script() != U: return _bad("UNKNOWN_UNIT_ROOT_CHILD")
+		ids[unit] = str(unit.entity_id)
+	var units: Dictionary = _graph().capture(source, ids, version, retained_identity)
+	if not units.ok: return units
+	var identity: Variant = units.identity
+	var visual: Variant = _visuals(source)
+	var modules: Dictionary = _effects(identity, visual)
+	var sections: Dictionary = {"units": units.value}
+	var results := {"map": MapState.new(version).capture(source.map), "fog": FogState.new(_trusted, B, M, Codec, B.FogLayer).capture(source, {"quiescent": true}), "level": LevelState.new(Codec, L, U).capture(source.level, version, ids, source.next_entity_id), "visual": visual.capture(source.fx_root, version, ids), "root": _root_state(identity).capture(source, version, ids, {"quiescent": true, "input_released": true}), "rng": source.capture_gameplay_rng()}
+	for key: String in results:
+		if not results[key].ok:
+			if retained_identity == null: identity.dispose()
+			return {"ok": false, "code": results[key].get("code", "SECTION_CAPTURE"), "section": key, "cause": results[key], "complete_world": false}
+		sections[key] = results[key].value if key in ["map", "visual"] else results[key].record
+	for key: String in modules:
+		var captured: Dictionary = modules[key].capture(source, version, ids)
+		if not captured.ok:
+			if retained_identity == null: identity.dispose()
+			return {"ok": false, "code": captured.get("code", "EFFECT_CAPTURE"), "section": key, "cause": captured, "complete_world": false}
+		sections[key] = captured.record
+	var remains: Dictionary = visual.capture_remains_owner()
+	if not remains.ok:
+		if retained_identity == null: identity.dispose()
+		return remains
+	sections["death_remains"] = remains.value
+	var display: Dictionary = WorldDisplay.new().capture(source, ids)
+	if not display.ok:
+		if retained_identity == null: identity.dispose()
+		return display
+	sections["world_display"] = display.value
+	var known: Dictionary = {}
+	for id: String in units.value.root_order: known[id] = true
+	var queue: Dictionary = modules.item_casts.validate(sections.item_casts, version, known)
+	if not queue.ok:
+		if retained_identity == null: identity.dispose()
+		return queue
+	var maximum: Dictionary = _item_max(source.units_root.get_children(), source.hero_item_progress, queue.item_uid_alias_max)
+	if not maximum.ok:
+		if retained_identity == null: identity.dispose()
+		return maximum
+	var counter: Dictionary = ItemState.new(Codec, B).capture(source, version, maximum.maximum)
+	if not counter.ok:
+		if retained_identity == null: identity.dispose()
+		return counter
+	sections["items"] = counter.value
+	return {"ok": true, "record": {"schema": SCHEMA, "content_version": version, "engine_sha256": _trusted.engine_binary_sha256, "sections": sections}, "identity": identity, "complete_world": false, "display_ui_and_steam_pending": true}
+
+func _abort(result: Dictionary, section: String) -> Dictionary:
+	dispose()
+	return _bad(String(result.get("code", "SECTION_PREPARE")), section)
+
+func prepare(record: Variant) -> Dictionary:
+	if is_instance_valid(_battle): return _bad("ALREADY_PREPARED")
+	if not _context(): return _bad("TRUSTED_CONTEXT_REQUIRED")
+	var tree: Variant = Engine.get_main_loop()
+	if not tree is SceneTree or not tree.paused or Engine.is_in_physics_frame(): return _bad("PAUSED_PREPARATION_REQUIRED")
+	if typeof(record) != TYPE_DICTIONARY or record.size() != 4 or not record.has_all(["schema", "content_version", "engine_sha256", "sections"]) or record.schema != SCHEMA or record.content_version != _trusted.content_version or record.engine_sha256 != _trusted.engine_binary_sha256: return _bad("WORLD_CORE_IDENTITY")
+	if typeof(record.sections) != TYPE_DICTIONARY or record.sections.size() != SECTIONS.size() or not record.sections.has_all(SECTIONS): return _bad("WORLD_CORE_SECTIONS")
+	if JSON.stringify(record).to_utf8_buffer().size() > 67108864: return _bad("WORLD_CORE_LIMIT")
+	var s: Dictionary = record.sections
+	var version: String = _trusted.content_version
+	var map_state: Variant = MapState.new(version)
+	var checked: Dictionary = map_state.validate(s.map)
+	if not checked.ok: return checked
+	if not checked.requirements.is_empty(): return _bad("MAP_DISPLAY_UNSUPPORTED")
+	_battle = B.new()
+	_battle.process_mode = Node.PROCESS_MODE_DISABLED
+	_battle.set_block_signals(true)
+	_battle._defs = _runtime.defs.duplicate(true)
+	_battle._abilities = _runtime.abilities.duplicate(true)
+	_battle._items = _runtime.items.duplicate(true)
+	_battle.world = Node2D.new()
+	_battle.world.transform = M.ISO
+	_battle.add_child(_battle.world)
+	_battle.map = M.new()
+	_battle.world.add_child(_battle.map)
+	checked = map_state.stage_map_values(_battle.map, s.map)
+	if not checked.ok: return _abort(checked, "map")
+	_unit_plan = _graph().prepare(s.units, version, _battle, _battle.map)
+	if not _unit_plan.ok: return _abort(_unit_plan, "units")
+	_identity = _unit_plan.identity
+	_battle.units_root = Node2D.new()
+	_battle.world.add_child(_battle.units_root)
+	for unit: Variant in _unit_plan.units_in_root_order: _battle.units_root.add_child(unit)
+	_battle.units = _unit_plan.active_units
+	_battle.next_entity_id = _unit_plan.pending_battle_fields.next_entity_id
+	var ids: Dictionary = _unit_plan.id_to_unit
+	checked = LevelState.new(Codec, L, U).restore(s.level, version, ids, _battle.next_entity_id)
+	if not checked.ok: return _abort(checked, "level")
+	_battle.level = checked.level
+	_battle.level.bind_gameplay_rng_owner(_battle)
+	checked = _battle.configure_restored_gameplay_rng(_trusted, s.rng)
+	if not checked.ok: return _abort(checked, "rng")
+	var fog: Variant = FogState.new(_trusted, B, M, Codec, B.FogLayer)
+	var fog_plan: Dictionary = fog.bind(_battle, s.fog)
+	if not fog_plan.ok: return _abort(fog_plan, "fog")
+	if fog_plan.layer != null: _battle.world.add_child(fog_plan.layer)
+	checked = map_state.finish_display(_battle.map, s.map)
+	if not checked.ok: return _abort(checked, "map_display")
+	_visual = _visuals(_battle)
+	checked = _visual.prepare(s.visual, version, ids, _unit_plan.expired_unit)
+	if not checked.ok: return _abort(checked, "visual")
+	var ground_count := 0
+	for node: Variant in checked.nodes.values():
+		if node.get_script() == B.GroundFireFx: ground_count += 1
+	_battle.fx_root = checked.root
+	_battle.world.add_child(_battle.fx_root)
+	checked = _visual.bind_remains_owner(s.death_remains)
+	if not checked.ok: return _abort(checked, "death_remains")
+	var modules: Dictionary = _effects(_identity, _visual)
+	for key: String in modules:
+		checked = modules[key].bind(_battle, s[key], version, ids, _unit_plan.expired_unit)
+		if not checked.ok: return _abort(checked, key)
+	var known: Dictionary = {}
+	for id: String in ids: known[id] = true
+	checked = _root_state(_identity).validate(s.root, version, known)
+	if not checked.ok: return _abort(checked, "root")
+	if checked.value.values.next_entity_id != _battle.next_entity_id: return _abort(_bad("ROOT_ENTITY_COUNTER_MISMATCH"), "root")
+	if checked.value.values._ground_fire_visuals != ground_count: return _abort(_bad("ROOT_GROUND_FIRE_COUNT_MISMATCH"), "root")
+	var queues: Dictionary = modules.item_casts.validate(s.item_casts, version, known)
+	if not queues.ok: return _abort(queues, "item_casts")
+	var maximum: Dictionary = _item_max(_unit_plan.units_in_root_order, checked.value.values.hero_item_progress, queues.item_uid_alias_max)
+	if not maximum.ok: return _abort(maximum, "item_audit")
+	var counter: Dictionary = ItemState.new(Codec, B).restore(_battle, s.items, version, maximum.maximum)
+	if not counter.ok: return _abort(counter, "items")
+	_display = WorldDisplay.new()
+	checked = _display.bind(_battle, s.world_display, ids)
+	if not checked.ok: return _abort(checked, "world_display")
+	_pending_root = s.root.duplicate(true)
+	# Root values, UI/world child order, Unit signals, clock, Steam and activation
+	# must be installed together by the final whole-world transaction, never here.
+	return {"ok": true, "battle": _battle, "identity": _identity, "unit_plan": _unit_plan, "visual": _visual, "fog_module": fog, "fog_plan": fog_plan, "pending_root": _pending_root, "pending_ground_fire_count": ground_count, "world_display": _display, "complete_world": false, "mounted": false, "activated": false}
+
+func dispose() -> void:
+	if _visual != null: _visual.dispose()
+	_visual = null
+	if _identity != null: _identity.dispose()
+	_identity = null
+	if is_instance_valid(_battle): _battle.free()
+	_battle = null
+	_unit_plan.clear()
+	_pending_root.clear()
+	_display = null

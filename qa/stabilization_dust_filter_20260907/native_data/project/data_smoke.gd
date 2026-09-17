@@ -1,0 +1,154 @@
+extends SceneTree
+## Native pure-data test, generated from exact c028/candidate dust blocks.
+## Real Unit simulation and normal-window A/B remain separate requirements.
+var checks: Array = []
+var failures: Array = []
+var redraws := 0
+var manifest: Dictionary = {}
+var report_path := ""
+var ready_manifest := false
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _check(label: String, passed: bool) -> void:
+	checks.append({"label":label,"passed":passed})
+	if not passed: failures.append(label)
+
+func _request_redraw() -> void:
+	redraws += 1
+
+func _reference(dust: Array, delta: float) -> Array:
+	var _dust: Array = dust
+	if not _dust.is_empty():
+		for d in _dust:
+			d.t -= delta
+		_dust = _dust.filter(func(d): return d.t > 0.0)
+		_request_redraw()
+	return _dust
+
+func _candidate(dust: Array, delta: float) -> Array:
+	var _dust: Array = dust
+	if not _dust.is_empty():
+		for d in _dust:
+			d.t -= delta
+		var alive_dust: Array = []
+		for dust_particle in _dust:
+			if dust_particle.t > 0.0:
+				alive_dust.append(dust_particle)
+		_dust = alive_dust
+		_request_redraw()
+	return _dust
+
+
+func _wrong_fused(dust: Array, delta: float) -> Array:
+	var alive: Array = []
+	for d in dust:
+		d.t -= delta
+		if d.t > 0.0: alive.append(d)
+	return alive
+
+func _case(index: int) -> Dictionary:
+	match index:
+		0: return {"dust":[],"delta":0.0}
+		1: return {"dust":[{"id":0,"t":0.0}],"delta":0.0}
+		2: return {"dust":[{"id":0,"t":0.125}],"delta":0.125}
+		3: return {"dust":[{"id":0,"t":-0.0},{"id":1,"t":1e-12}],"delta":0.0}
+		4: return {"dust":[{"id":0,"t":-1.0},{"id":1,"t":0.5},{"id":2,"t":2.0}],"delta":0.5}
+		5:
+			var shared := {"id":0,"t":0.015}
+			return {"dust":[shared,{"id":1,"t":1.0},shared],"delta":0.01}
+		6:
+			var shared := {"id":0,"t":1.0}
+			return {"dust":[shared,{"id":1,"t":0.5},shared],"delta":0.1}
+	var maker := RandomNumberGenerator.new()
+	maker.seed = 5088120 + index
+	var pool: Array = []
+	var count := maker.randi_range(1, 5)
+	for item in range(count):
+		var values := [0.0,-0.0,0.125,1e-12,-0.5,2.0,maker.randf()]
+		pool.append({"id":item,"t":values[maker.randi_range(0, values.size()-1)]})
+	var dust: Array = []
+	for item in range(maker.randi_range(0, 8)):
+		dust.append(pool[maker.randi_range(0, pool.size()-1)])
+	var deltas := [0.0,0.125,1.0/60.0,1e-12,0.5]
+	return {"dust":dust,"delta":deltas[maker.randi_range(0, deltas.size()-1)]}
+
+func _alias_and_array_check(left: Array, right: Array, old: Array, fresh: Array, initial_count: int) -> bool:
+	if old.size() != fresh.size(): return false
+	for index in range(left.size()):
+		left[index]["probe"] = index
+		right[index]["probe"] = index
+		for output_index in range(old.size()):
+			if old[output_index].get("probe", -1) != fresh[output_index].get("probe", -1): return false
+		left[index].erase("probe")
+		right[index].erase("probe")
+	old.append({"sentinel":true})
+	fresh.append({"sentinel":true})
+	var expected_count := 1 if initial_count == 0 else initial_count
+	var same := left.size() == expected_count and right.size() == expected_count
+	old.pop_back(); fresh.pop_back()
+	return same
+
+func _source_guard(label: String) -> void:
+	for path in manifest.source_sha256:
+		_check(label + " " + String(path), FileAccess.get_sha256(String(path)) == manifest.source_sha256[path])
+
+func _finish(aborted: bool = false) -> void:
+	if ready_manifest: _source_guard("source after")
+	var report := {"suite":"dust-filter-data-candidate","run_id":manifest.get("run_id", ""),
+		"complete":not aborted,"passed":not aborted and failures.is_empty(),"checks":checks,
+		"check_count":checks.size(),"failed_count":failures.size(),"failures":failures,
+		"actual_user_dir":OS.get_user_data_dir(),"process_id":OS.get_process_id(),
+		"source_sha256":manifest.get("source_sha256",{}),"normal_game_ab_tested":false,
+		"scope":"Exact dust blocks in pure Array/Dictionary cases, shared references, cutoff, fresh Array and global RNG. No actual Unit timestep, performance or production integration."}
+	if not report_path.is_empty():
+		var file := FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null: quit(1); return
+		file.store_string(JSON.stringify(report,"\t")); file.close()
+	print("[dust-filter data QA] ",JSON.stringify(report))
+	quit(0 if report.passed else 1)
+
+func _run() -> void:
+	var name := OS.get_environment("RUN_RESTORE_QA_MANIFEST")
+	var decoded: Variant = JSON.parse_string(FileAccess.get_file_as_string(name)) if not name.is_empty() else null
+	if not decoded is Dictionary:
+		_check("valid host manifest",false); _finish(true); return
+	manifest = decoded
+	for key in ["run_id","private_user","report"]:
+		if typeof(manifest.get(key)) != TYPE_STRING or manifest[key].is_empty():
+			_check("host manifest " + key,false); _finish(true); return
+	if not manifest.get("source_sha256") is Dictionary or manifest.source_sha256.is_empty():
+		_check("host source manifest",false); _finish(true); return
+	var requested: String = manifest.report
+	if not requested.is_absolute_path() or FileAccess.file_exists(requested):
+		_check("fresh absolute report",false); _finish(true); return
+	report_path = requested
+	ready_manifest = true
+	_check("actual private user directory",OS.get_user_data_dir().replace("\\","/").simplify_path().to_lower() == String(manifest.private_user).replace("\\","/").simplify_path().to_lower())
+	_source_guard("source before")
+	if not failures.is_empty(): _finish(true); return
+	for index in range(1007):
+		var a := _case(index)
+		var b := _case(index)
+		var initial_count: int = a.dust.size()
+		seed(5088120)
+		var expected_next := randi()
+		seed(5088120)
+		redraws = 0
+		var old := _reference(a.dust, float(a.delta))
+		var old_redraws := redraws
+		var old_next := randi()
+		seed(5088120)
+		redraws = 0
+		var fresh := _candidate(b.dust, float(b.delta))
+		var new_redraws := redraws
+		var new_next := randi()
+		_check("values and stable order " + str(index),a.dust == b.dust and old == fresh)
+		_check("redraw count " + str(index),old_redraws == new_redraws and old_redraws == (0 if initial_count == 0 else 1))
+		_check("actual global RNG untouched " + str(index),old_next == expected_next and new_next == expected_next)
+		_check("Dictionary aliases and Array identity " + str(index),_alias_and_array_check(a.dust,b.dust,old,fresh,initial_count))
+	var duplicate_a := {"t":0.015}
+	var duplicate_b := {"t":0.015}
+	_check("negative control rejects fused decrement/filter",_reference([duplicate_a,duplicate_a],0.01).is_empty() and _wrong_fused([duplicate_b,duplicate_b],0.01).size() == 1)
+	_finish()

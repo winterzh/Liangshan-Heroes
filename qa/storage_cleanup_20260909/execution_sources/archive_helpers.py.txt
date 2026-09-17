@@ -1,0 +1,50 @@
+from cleanup_audit import ROOT,HERE,files,no_links,sha,write
+from pathlib import Path
+import json,shutil,subprocess
+
+repo=json.loads((HERE/'repo_audit.json').read_text(encoding='utf-8'))
+archive_root=Path('D:/AI项目/水浒/归档')
+archive=archive_root/'水浒_旧准备与收尾助手_20260909.7z'
+stage=HERE/'archive_stage'
+restore=HERE/'archive_verify'
+assert not archive.exists() and not stage.exists() and not restore.exists()
+stage.mkdir();restore.mkdir()
+source_root=Path('D:/CodexTemp/level3_scenery_prepare_20260909')
+rows=[]
+for p in files(source_root):
+    relative=p.relative_to(source_root)
+    qa=ROOT/'qa/level3_scenery_prepare_20260909'/relative
+    assert qa.is_file() and p.read_bytes()==qa.read_bytes(), str(p)
+    rows.append({'source':str(p),'archive_path':'duplicate_scenery_prepare/'+relative.as_posix(),
+      'bytes':p.stat().st_size,'sha256':sha(p),'retained_duplicate':str(qa)})
+helpers=[r for r in repo['archive_helper_candidates_unapproved'] if not r['references_in_current_tools_source_docs_qa_scratchpad']]
+assert len(helpers)==21
+for r in helpers:
+    p=no_links(Path(r['path']))
+    assert p.parent==ROOT/'.godot' and sha(p)==r['sha256'] and p.stat().st_size==r['bytes']
+    rows.append({'source':str(p),'archive_path':'development_helpers/'+p.name,'bytes':r['bytes'],
+      'sha256':r['sha256'],'retained_duplicate':None})
+for r in rows:
+    target=stage/r['archive_path'];target.parent.mkdir(parents=True,exist_ok=True)
+    shutil.copyfile(r['source'],target)
+    assert sha(target)==r['sha256']
+manifest={'scope':'Obsolete duplicate scenery preparation bundle and 21 unreferenced development helpers; not runtime files or original QA',
+    'archive':str(archive),'files':rows,'file_count':len(rows),'original_bytes':sum(r['bytes'] for r in rows)}
+(stage/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(stage/'README.md').write_text('# 水浒旧准备与收尾助手\n\n日期：2026-09-09。\n\n`duplicate_scenery_prepare` 是已被正式 QA 逐字节保存的旧景物候选副本；正式实现已进入 cf746f1。`development_helpers` 是未被当前源码、工具、文档和 QA 名称引用扫描命中的 21 个历史助手。\n\n先解压到新目录；逐项核对 manifest.json 的 SHA-256，再按 source 字段放回原位置。存在同名文件时先比较，不覆盖新文件。不要把旧候选应用为当前实现。\n',encoding='utf-8')
+seven=Path('D:/Tools/7-Zip/7z.exe');assert seven.is_file()
+for name,args in [('archive_build',['a','-t7z','-mx=7','-mmt=2','-ms=on',str(archive),'.']),
+                  ('archive_test',['t',str(archive)]),('archive_extract',['x',str(archive),'-o'+str(restore)])]:
+    result=subprocess.run([str(seven),*args],cwd=stage,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    (HERE/(name+'.log')).write_bytes(result.stdout)
+    assert result.returncode==0,(name,result.returncode)
+expected={r['archive_path'] for r in rows}|{'manifest.json','README.md'}
+assert {p.relative_to(restore).as_posix() for p in files(restore)}==expected
+for r in rows:
+    assert sha(restore/r['archive_path'])==r['sha256'] and sha(Path(r['source']))==r['sha256']
+for name in ('manifest.json','README.md'): assert (stage/name).read_bytes()==(restore/name).read_bytes()
+manifest.update(verified=True,archive_bytes=archive.stat().st_size,archive_sha256=sha(archive),
+    test_exit=0,full_extract_exit=0,verified_payload_files=len(rows),source_unchanged=True,
+    duplicate_root=str(source_root),helper_count=len(helpers),archive_file_count=len(expected))
+write('archive_verified.json',manifest)
+print(json.dumps({k:v for k,v in manifest.items() if k!='files'},ensure_ascii=False),flush=True)

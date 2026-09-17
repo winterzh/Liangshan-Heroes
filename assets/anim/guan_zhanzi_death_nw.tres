@@ -1,0 +1,45 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/nw.png" id="nw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/supplement.png" id="supplement"]
+
+[sub_resource type="AtlasTexture" id="hurt_nw"]
+atlas = ExtResource("nw")
+region = Rect2(267, 402, 239, 198)
+margin = Rect2(8.5, 29.0, 17, 58)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-6.0, 14.92)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[sub_resource type="AtlasTexture" id="fall_nw"]
+atlas = ExtResource("nw")
+region = Rect2(0, 600, 255, 168)
+margin = Rect2(0.5, 44.0, 1, 88)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-14.0, 58.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[sub_resource type="AtlasTexture" id="down_nw"]
+atlas = ExtResource("supplement")
+region = Rect2(262, 540, 248, 228)
+margin = Rect2(36.0, 46.0, 72, 92)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-3.5, 84.9)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_nw")},
+{"duration": 1.0, "texture": SubResource("fall_nw")},
+{"duration": 1.0, "texture": SubResource("down_nw")},
+{"duration": 1.0, "texture": SubResource("down_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,0 +1,77 @@
+from pathlib import Path
+import json, hashlib, subprocess
+root = Path(__file__).resolve().parents[1]
+out = root / 'scratchpad/death_remains_20260908'
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+
+def replace(text, old, new):
+    assert text.count(old) == 1, old[:90]
+    return text.replace(old, new)
+
+g = (root / 'scripts/run_visual_graph.gd').read_text(encoding='utf-8')
+g = replace(g, 'const LIMIT := 4096', 'const RemainsState := preload("res://scripts/run_death_remains_state.gd")\nconst LIMIT := 4096')
+g = replace(g, '\t"container": [],', '\t"container": [],\n\t"death_remains": ["state"],')
+g = replace(g, 'var _ground_bound := false', 'var _ground_bound := false\nvar _remains: Variant\nvar _remains_owner_record: Dictionary = {}')
+g = replace(g, '\t_codec = codec.new()', '\t_codec = codec.new()\n\t_remains = RemainsState.new(battle, _texture_signature)')
+g = replace(g, '\tif node.get_script() == _battle.BlinkShotFx:', '\tif node.get_script() == _battle.DeathRemains: return "death_remains"\n\tif node.get_script() == _battle.BlinkShotFx:')
+g = replace(g, '\t\t"container": return Node2D.new()', '\t\t"container": return Node2D.new()\n\t\t"death_remains": return _battle.DeathRemains.new()')
+g = replace(g, 'func _values(node: Node2D, kind: String) -> Dictionary:\n', 'func _values(node: Node2D, kind: String) -> Dictionary:\n\tif kind == "death_remains": return {"state": _remains.capture_node(node).value}\n')
+g = replace(g, '\tif kind in TIMED_KINDS: return _timed_check(values, kind)', '\tif kind == "death_remains": return _remains.validate_node(values.state)\n\tif kind in TIMED_KINDS: return _timed_check(values, kind)')
+g = replace(g, '\tvar owner_check: Dictionary = _capture_ground_owner(root, rows)', '''\tvar has_remains := false
+\tfor row: Dictionary in rows: has_remains = has_remains or row.kind == "death_remains"
+\tif has_remains:
+\t\tvar remains_owner: Dictionary = _remains.capture_owner(_owner, _objects)
+\t\tif not remains_owner.ok: return remains_owner
+\tvar owner_check: Dictionary = _capture_ground_owner(root, rows)''')
+g = replace(g, '\t\t\t\tif field == "ward_visual": continue', '\t\t\t\tif row.kind == "death_remains":\n\t\t\t\t\t_remains.restore_node(node, row.values.state); continue\n\t\t\t\tif field == "ward_visual": continue')
+g = replace(g, '\tif is_instance_valid(_unit_tombstone): return _failure("UNIT_TOMBSTONE_NOT_RELEASED")', '''\tif is_instance_valid(_unit_tombstone): return _failure("UNIT_TOMBSTONE_NOT_RELEASED")
+\tfor row: Dictionary in _records.values():
+\t\tif row.kind == "death_remains" and _remains_owner_record.is_empty(): return _failure("REMAINS_OWNER_NOT_BOUND")
+\tif not _remains_owner_record.is_empty():
+\t\tvar objects: Dictionary = {}
+\t\tfor id: String in _nodes: objects[_nodes[id]] = id
+\t\tvar check: Dictionary = _remains.capture_owner(_owner, objects)
+\t\tif not check.ok or check.value != _remains_owner_record: return _failure("REMAINS_OWNER_CHANGED")''')
+g = replace(g, '\t\tnode.process_priority = state.priority', '\t\tif _kind(node) == "death_remains": _remains.restore_render_transform(node)\n\t\tnode.process_priority = state.priority')
+g = replace(g, '\tif kind not in TIMED_KINDS + AUTHORITY_KINDS: return {"ok": true}', '\tif kind not in TIMED_KINDS + AUTHORITY_KINDS + ["death_remains"]: return {"ok": true}\n\tif kind == "death_remains":\n\t\tvar checked: Dictionary = _remains.capture_node(node)\n\t\tif not checked.ok: return checked')
+g += '''
+func capture_remains_owner() -> Dictionary:
+\tvar checked: Dictionary = _remains.capture_owner(_owner, _objects)
+\tif not checked.ok: return checked
+\treturn _codec.encode(checked.value)
+
+func bind_remains_owner(record: Variant) -> Dictionary:
+\tif _committed or not _remains_owner_record.is_empty() or not is_instance_valid(_root) or _root.is_inside_tree(): return _failure("REMAINS_BIND_PHASE")
+\tvar checked: Dictionary = _codec.decode(record)
+\tif not checked.ok: return checked
+\tvar bound: Dictionary = _remains.bind_owner(_owner, checked.value, _nodes)
+\tif not bound.ok: return bound
+\t_remains_owner_record = checked.value.duplicate(true)
+\treturn {"ok": true}
+'''
+(out / 'run_visual_graph.gd').write_text(g, encoding='utf-8', newline='\n')
+c = (root / 'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c = replace(c, 'classic_world_core_preparation_v1', 'classic_world_core_preparation_v2')
+c = replace(c, '"casts", "item_casts"]', '"casts", "item_casts", "death_remains"]')
+c = replace(c, 'return _bad(String(results[key].get("code", "SECTION_CAPTURE")), key)', 'return {"ok": false, "code": results[key].get("code", "SECTION_CAPTURE"), "section": key, "cause": results[key], "complete_world": false}')
+c = replace(c, 'return _bad(String(captured.get("code", "EFFECT_CAPTURE")), key)', 'return {"ok": false, "code": captured.get("code", "EFFECT_CAPTURE"), "section": key, "cause": captured, "complete_world": false}')
+c = replace(c, '\tvar known: Dictionary = {}\n\tfor id: String in units.value.root_order:', '''\tvar remains: Dictionary = visual.capture_remains_owner()
+\tif not remains.ok:
+\t\tif retained_identity == null: identity.dispose()
+\t\treturn remains
+\tsections["death_remains"] = remains.value
+\tvar known: Dictionary = {}
+\tfor id: String in units.value.root_order:''')
+c = replace(c, '\t_battle.world.add_child(_battle.fx_root)', '\t_battle.world.add_child(_battle.fx_root)\n\tchecked = _visual.bind_remains_owner(s.death_remains)\n\tif not checked.ok: return _abort(checked, "death_remains")')
+(out / 'run_battle_world_core.gd').write_text(c, encoding='utf-8', newline='\n')
+# Driver is edited independently, then included in the exact frozen package.
+changes = []
+for name in ['run_death_remains_state.gd', 'run_visual_graph.gd', 'run_battle_world_core.gd']:
+    path = root / 'scripts' / name
+    row = {'path': 'scripts/' + name, 'before_exists': path.exists(), 'candidate': 'scratchpad/death_remains_20260908/' + name, 'candidate_sha256': sha(out / name)}
+    if path.exists(): row['before_raw_sha256'] = sha(path)
+    changes.append(row)
+(out / 'overlay_manifest.json').write_text(json.dumps({'files': changes}, indent=2) + '\n', encoding='utf-8')
+names = [Path(x['candidate']).name for x in changes] + ['overlay_manifest.json', 'driver.gd']
+(out / 'freeze.json').write_text(json.dumps({'inputs': {n: sha(out/n) for n in names}}, indent=2) + '\n', encoding='utf-8')
+print(json.dumps({'head': subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(), 'freeze':sha(out/'freeze.json')}))

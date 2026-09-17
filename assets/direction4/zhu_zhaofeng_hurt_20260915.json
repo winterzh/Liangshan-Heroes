@@ -1,0 +1,52 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "character": "zhu_zhaofeng",
+  "scope": "hurt-only four-direction body source; idle/walk/attack are covered separately; death remains open and must not be inferred from this sheet",
+  "sources": {
+    "zhu_zhaofeng_hurt_atlas": {
+      "path": "assets/characters/art_full_20260915/zhu_zhaofeng_hurt_direction4.png",
+      "sha256": "888f4c8be6f77a7cc63d18ad7a77299413ed818c10c8106a7e1241353a8d5f22",
+      "job": "web ChatGPT conversation 6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "mode": "RGBA",
+      "native_size": [2508, 2508],
+      "import_limit": 0,
+      "imported_size": [2508, 2508],
+      "imported_size_verified": true,
+      "alpha_zero_fraction": 0.563627492502461,
+      "layout": "4x4; each row is one direction and four columns are a hurt reaction: SE,SW,NE,NW",
+      "raw_web_source": "assets/characters/art_full_20260915/zhu_zhaofeng_hurt_direction4_source.png",
+      "raw_web_source_sha256": "e0fff260a7c01b4eb58772d38d28ca3359b9cb7b0df0f8b8f0e6a4b2f128ddc3",
+      "raw_web_size": [1230, 1278],
+      "raw_canvas_normalization": "center on a 1278x1278 transparent canvas at x=24,y=0; all source pixels retained",
+      "production_transform": "deterministic transparent-canvas normalization then whole-image LANCZOS scale to 2508x2508 so the 4x4 atlas has integer 627px cells; no mirroring, masking, repainting, alpha clearing or color correction",
+      "prompt_file": "assets/direction4/web_prompts_20260915/zhu_zhaofeng_hurt_direction4.txt",
+      "prompt_sha256": "6d40ba36b68c658debc3121db5147b8f39aa45d129a627def0d14a077083aa0b",
+      "conversation_url": "https://chatgpt.com/c/6aa954d2-8d40-83e9-abb6-e30963f8ae3c",
+      "visual_review": "Accepted after local original PNG inspection: same broad older village-lord identity, distinct front and true back rows, four visibly different recoil/stagger poses per direction, complete bodies and weapon, clean transparent background and no text/grid/border.",
+      "retained_rgba": "Raw downloaded PNG is retained unchanged. Only a transparent canvas normalization and deterministic scale prepare the production atlas; no mirroring, masking, recoloring, repainting or pixel clearing."
+    }
+  },
+  "poses": {
+    "hurt_a_se": {"source": "zhu_zhaofeng_hurt_atlas", "region": [0, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_b_se": {"source": "zhu_zhaofeng_hurt_atlas", "region": [627, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_c_se": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1254, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_d_se": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1881, 0, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_a_sw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [0, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_b_sw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [627, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_c_sw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1254, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_d_sw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1881, 627, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_a_ne": {"source": "zhu_zhaofeng_hurt_atlas", "region": [0, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_b_ne": {"source": "zhu_zhaofeng_hurt_atlas", "region": [627, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_c_ne": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1254, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_d_ne": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1881, 1254, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_a_nw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [0, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_b_nw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [627, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_c_nw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1254, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0},
+    "hurt_d_nw": {"source": "zhu_zhaofeng_hurt_atlas", "region": [1881, 1881, 627, 627], "margin": [70, 0, 141, 141], "draw_offset_px": [0.0, 0.0], "draw_scale": 1.0}
+  },
+  "states": {"hurt": ["hurt_a", "hurt_b", "hurt_c", "hurt_d"]},
+  "resources": [
+    "assets/anim/zhu_zhaofeng_hurt_se.tres", "assets/anim/zhu_zhaofeng_hurt_sw.tres",
+    "assets/anim/zhu_zhaofeng_hurt_ne.tres", "assets/anim/zhu_zhaofeng_hurt_nw.tres"
+  ]
+}

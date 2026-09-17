@@ -1,0 +1,299 @@
+extends SceneTree
+var Session: Script
+var Slot: Script
+var Identity: Script
+var manifest: Dictionary
+var checks: Array = []
+var children: Array = []
+var battle: Variant
+var identity: Dictionary = {}
+var graph: Variant
+var capture_ready := false
+var capture_error := ""
+var slot_path := "user://slot_qa/main"
+var mode := ""
+var evidence: Dictionary = {}
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	return passed
+
+func ok(label: String, result: Dictionary) -> bool:
+	checks.append({"label": label, "passed": result.get("ok") == true, "code": result.get("code", "")})
+	return result.get("ok") == true
+
+func write_json(path: String, value: Dictionary) -> void:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path).get_base_dir())
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(JSON.stringify(value)); file.flush(); file.close()
+
+func read_json(path: String) -> Dictionary:
+	return JSON.parse_string(FileAccess.get_file_as_string(path))
+
+func runtime() -> Dictionary:
+	var defs: Dictionary = Defs.UNITS.duplicate(true)
+	var abilities: Dictionary = Defs.ABILITIES.duplicate(true)
+	var items: Dictionary = Defs.ITEMS.duplicate(true)
+	Defs.apply_content_pack(defs, abilities)
+	AbilityVisuals.apply(defs, abilities)
+	return {"defs": defs, "abilities": abilities, "items": items}
+
+func session() -> RefCounted:
+	return Session.new(identity, runtime(), slot_path)
+
+func ready_for_capture(_result: Dictionary) -> void:
+	capture_ready = true
+
+func failed_capture(code: String) -> void:
+	capture_error = code
+
+func hold() -> bool:
+	capture_ready = false; capture_error = ""
+	if not battle._save_barrier.capture_ready.is_connected(ready_for_capture): battle._save_barrier.capture_ready.connect(ready_for_capture)
+	if not battle._save_barrier.capture_rejected.is_connected(failed_capture): battle._save_barrier.capture_rejected.connect(failed_capture)
+	if not ok("actual barrier requested", battle.request_run_capture()): return false
+	for i in range(40):
+		if capture_ready or not capture_error.is_empty(): break
+		await process_frame
+	return check("actual complete-step HELD", capture_ready and capture_error.is_empty() and paused and battle._save_barrier.health().ok)
+
+func field_record() -> Dictionary:
+	var unit_ids: Array = []
+	for unit: Variant in battle.units: unit_ids.append(str(unit.entity_id))
+	return {"gold": battle.gold, "wood": battle.wood, "next_entity_id": str(battle.next_entity_id), "units": unit_ids, "wave": battle.level._wave, "wave_timer": battle.level._wave_t, "training": battle.level.hall._train_queue.duplicate(), "training_time": battle.level.hall._train_t, "kills": battle.kills, "valid_kills": battle._steam_valid_kills, "rng": battle.capture_gameplay_rng(), "clock": battle._run_clock.capture()}
+
+func unit_by_id(id: String) -> Variant:
+	for unit: Variant in battle.units:
+		if str(unit.entity_id) == id: return unit
+	return null
+
+func arena() -> Dictionary:
+	for y in range(4, int(battle.map.h) - 4):
+		for x in range(4, int(battle.map.w) - 8):
+			var a: Vector2 = battle.map.cell_to_world(Vector2i(x, y))
+			var b: Vector2 = battle.map.cell_to_world(Vector2i(x + 4, y))
+			if not battle.map.is_open_world(a) or not battle.map.is_open_world(b): continue
+			var isolated := true
+			for unit: Variant in battle.units:
+				if unit.hp > 0.0 and not unit.is_resource and (unit.position.distance_to(a) < 480.0 or unit.position.distance_to(b) < 480.0): isolated = false; break
+			if isolated: return {"ok": true, "caster": a, "target": b}
+	return {"ok": false, "code": "NO_ARENA"}
+
+func source_case() -> void:
+	var camp := root.get_node("Campaign")
+	for key in Session.FLAGS: camp.set(key, Session.FLAGS[key])
+	camp.defense_hero_cap = 4; camp.ai_friendly = false
+	camp.scale_on = true; camp.enemy_mult = 1.7; camp.hero_mult = 1.3; camp.hero_mult_touched = true
+	paused = true
+	battle = load("res://scenes/main.tscn").instantiate()
+	root.add_child(battle); current_scene = battle
+	await process_frame
+	battle.hud._intro_root.hide(); battle._on_intro_done()
+	await process_frame; paused = false
+	for i in range(5): await physics_frame
+	await process_frame
+	if not check("actual standard battle ready", battle.phase == 2 and battle.level._started and battle.gameplay_rng_fault().is_empty() and battle._steam_run_id == 0): return
+	var worker: Variant = null
+	for unit: Variant in battle.units:
+		if unit.is_worker and unit.faction == 0: worker = unit; break
+	if not check("actual worker exists", worker != null): return
+	var worker_id := str(worker.entity_id)
+	var move_start: Vector2 = worker.position
+	var target: Vector2i = battle.map.nearest_open(battle.map.world_to_cell(worker.position + Vector2(210.0, 0.0)))
+	worker.order_move(battle.map.cell_to_world(target))
+	var gold_before: int = battle.gold
+	if not check("actual paid production starts", battle.queue_train(battle.level.hall, worker.key, false)): return
+	check("production charged once", gold_before - battle.gold == int(battle._defs[worker.key].get("cost_gold", 0)))
+	var open := arena()
+	if not ok("actual damage arena", open): return
+	var caster: Variant = battle.spawn_unit("li_kui", 0, open.caster)
+	var victim: Variant = battle.spawn_unit("guan_dao", 1, open.target)
+	caster.set_physics_process(false); victim.set_physics_process(false)
+	for i in range(2): await physics_frame
+	await process_frame
+	battle._open_pause()
+	battle.spawn_projectile(caster, victim, 13.0)
+	if not await hold(): return
+	evidence = {"source_pid": OS.get_process_id(), "identity": identity, "state": field_record(), "worker_id": worker_id, "worker_start": [move_start.x, move_start.y], "victim_id": str(victim.entity_id), "victim_hp": victim.hp, "options": {"enemy_mult": camp.enemy_mult, "hero_mult": camp.hero_mult, "scale_on": camp.scale_on}, "steam_counter": root.get_node("SteamService")._run_counter}
+	var saver := session()
+	var result: Dictionary = saver.save_held(battle)
+	if not ok("complete world saved to actual slot", result): saver.dispose(); return
+	check("save keeps world alive HELD", current_scene == battle and is_instance_valid(battle) and result.source_retained and result.source_held)
+	check("first slot generation", result.generation == 1)
+	var stored: Dictionary = Slot.new(slot_path).read_slot()
+	check("closed disk readback matching SHA", stored.ok and stored.file_sha256 == result.file_sha256)
+	evidence.slot_sha = result.file_sha256
+	write_json("user://slot_qa/source.json", evidence)
+	saver.dispose()
+	# A real filesystem obstruction must not turn Save into Exit.
+	var blocked_path: String = Slot.new(slot_path).directory.path_join("blocked.json")
+	write_json(blocked_path, {})
+	var failing := session()
+	var failed: Dictionary = failing.save_held(battle)
+	check("filesystem failure retains actual world HELD", not failed.ok and current_scene == battle and battle._save_barrier.health().ok)
+	failing.dispose(); DirAccess.remove_absolute(blocked_path)
+	check("failed write preserves previous slot SHA", Slot.new(slot_path).read_slot().file_sha256 == result.file_sha256)
+	var steam := root.get_node("SteamService")
+	steam._active_run = 91; battle._steam_run_id = 91
+	var credited := session()
+	failed = credited.save_held(battle)
+	check("unbound credited run refused without replacing slot", not failed.ok and failed.code == "PERSISTENT_STEAM_BINDING_REQUIRED" and Slot.new(slot_path).read_slot().file_sha256 == result.file_sha256)
+	credited.dispose(); steam._active_run = 0; battle._steam_run_id = 0
+	check("source RNG and production unchanged by save or failure", field_record() == evidence.state)
+
+func menu_instance() -> Node:
+	var menu: Node = load("res://scenes/menu.tscn").instantiate()
+	root.add_child(menu); current_scene = menu
+	return menu
+
+func restore_case() -> void:
+	evidence = read_json("user://slot_qa/source.json")
+	if not check("fresh process identity independently matches source", int(evidence.source_pid) != OS.get_process_id() and identity.content_version == evidence.identity.content_version and identity.engine_binary_sha256 == evidence.identity.engine_binary_sha256): return
+	var menu := menu_instance()
+	await process_frame; paused = true
+	var original_canvas: Transform2D = root.canvas_transform
+	var camp := root.get_node("Campaign")
+	var original_mult: float = camp.enemy_mult
+	if mode == "restore":
+		var mismatch := identity.duplicate(true); mismatch.content_version += "x"
+		var incompatible: Variant = Session.new(mismatch, runtime(), slot_path)
+		check("new installation refuses incompatible slot", not incompatible.prepare_restore(menu).ok and current_scene == menu)
+		incompatible.dispose()
+		for fault in ["campaign", "packet", "late_environment"]:
+			var rejected := session()
+			if not ok("prepare rollback " + fault, rejected.prepare_restore(menu)): rejected.dispose(); return
+			if fault == "campaign": camp.enemy_mult = 2.6
+			elif fault == "packet": rejected._packet.resume_paused = not rejected._packet.resume_paused
+			else: rejected._core._environment._plan.overlay.position += Vector2.ONE
+			var failure: Dictionary = rejected.commit_restore()
+			check("failed restore keeps original menu " + fault, not failure.ok and current_scene == menu and is_instance_valid(menu) and not is_instance_valid(rejected._core._battle))
+			check("rollback preserves external choice or original option " + fault, is_equal_approx(camp.enemy_mult, 2.6 if fault == "campaign" else original_mult))
+			check("rollback restores menu canvas " + fault, root.canvas_transform == original_canvas)
+			rejected.dispose(); camp.enemy_mult = original_mult
+	var loader := session()
+	if not ok("prepare from disk with menu retained", loader.prepare_restore(menu)): loader.dispose(); return
+	var result: Dictionary = loader.commit_restore()
+	if not ok("install world in new process", result): loader.dispose(); return
+	battle = result.battle; graph = result.identity
+	check("menu replaced only after complete install", not is_instance_valid(menu) and current_scene == battle and paused)
+	check("uncredited binding never begins a Steam run", battle._steam_run_id == 0 and root.get_node("SteamService")._active_run == 0 and root.get_node("SteamService")._run_counter == int(evidence.steam_counter))
+	check("campaign multipliers restored before gameplay", camp.skirmish and not camp.defense_random and camp.defense_waves == 30 and camp.defense_hero_cap == 4 and camp.scale_on and is_equal_approx(camp.enemy_mult, 1.7) and is_equal_approx(camp.hero_mult, 1.3))
+	var expected: Dictionary = evidence.state if mode == "restore" else read_json("user://slot_qa/after.json").state
+	var actual := field_record()
+	for key in ["gold", "wood", "next_entity_id", "units", "wave", "training", "kills", "valid_kills", "rng"]:
+		check("restart preserves " + key, actual[key] == expected[key])
+	for key in ["wave_timer", "training_time"]: check("restart preserves " + key, is_equal_approx(float(actual[key]), float(expected[key])))
+	check("restart simulation clock retains saved next tick", actual.clock.ok and actual.clock.record.next_tick == expected.clock.record.next_tick)
+	check("repeat install rejected", not loader.commit_restore().ok)
+	var worker: Variant = unit_by_id(evidence.worker_id)
+	if not check("stable worker id bound after restart", worker != null): loader.dispose(); return
+	var victim: Variant = unit_by_id(evidence.victim_id)
+	battle._close_pause()
+	if mode == "restore":
+		for i in range(90): await physics_frame
+		await process_frame
+		if not check("pending projectile remains valid after restart", is_instance_valid(victim)): loader.dispose(); return
+		check("pending projectile hits once after restart", is_equal_approx(victim.hp, float(evidence.victim_hp) - 13.0))
+		for i in range(1100):
+			if battle.level.hall._train_queue.is_empty(): break
+			await physics_frame
+		await process_frame
+		check("native paid production completes after restart", battle.level.hall._train_queue.is_empty() and battle.next_entity_id == int(expected.next_entity_id) + 1)
+		check("worker keeps moving after restart", worker.position.distance_to(Vector2(evidence.worker_start[0], evidence.worker_start[1])) > 3.0)
+		check("projectile never applies a second hit", is_equal_approx(victim.hp, float(evidence.victim_hp) - 13.0))
+		var kills: int = battle._steam_valid_kills
+		victim.take_damage(1000000.0, null, false, true)
+		check("restored death updates new Battle and cumulative counter", not battle.units.has(victim) and battle._steam_valid_kills == kills + 1)
+		for i in range(3): await physics_frame
+		await process_frame
+		battle._open_pause()
+		if not await hold(): loader.dispose(); return
+		var saving := session()
+		var saved: Dictionary = saving.save_held(battle, graph)
+		if ok("save resumed world again", saved):
+			check("second slot generation", saved.generation == 2)
+			write_json("user://slot_qa/after.json", {"pid": OS.get_process_id(), "state": field_record(), "slot_sha": saved.file_sha256})
+		saving.dispose()
+	else:
+		for i in range(30): await physics_frame
+		await process_frame
+		check("second restart does not retrain paid unit", battle.level.hall._train_queue.is_empty() and battle.next_entity_id == int(expected.next_entity_id))
+		check("dead victim does not return", unit_by_id(evidence.victim_id) == null)
+		battle._open_pause()
+		if not await hold(): loader.dispose(); return
+	check("new-process world remains healthy and recapturable", battle._save_barrier.health().ok and battle.gameplay_rng_fault().is_empty())
+	loader.dispose()
+
+func child_finish() -> void:
+	if is_instance_valid(battle): battle.free(); battle = null
+	if graph != null: graph.dispose(); graph = null
+	root.get_node("Sfx").shutdown(); root.get_node("Music").shutdown()
+	for i in range(3): await process_frame
+	var failed := checks.filter(func(row): return not row.passed)
+	write_json("user://slot_qa/" + mode + "_report.json", {"mode": mode, "process_id": OS.get_process_id(), "passed": failed.is_empty(), "failures": failed, "checks": checks, "identity": identity, "actual_user_dir": OS.get_user_data_dir()})
+	quit(0 if failed.is_empty() else 1)
+
+func run_child(child_mode: String) -> void:
+	var logfile := ProjectSettings.globalize_path("user://slot_qa/" + child_mode + ".log")
+	var command := PackedStringArray(["--rendering-method", "forward_plus", "--rendering-driver", "vulkan", "--minimized", "--path", ProjectSettings.globalize_path("res://"), "--log-file", logfile, "--script", get_script().resource_path, "--", child_mode])
+	var pid := OS.create_process(OS.get_executable_path(), command)
+	if not check(child_mode + " native process started", pid > 0): return
+	var start := Time.get_ticks_msec()
+	for i in range(5500):
+		if not OS.is_process_running(pid): break
+		await create_timer(0.02).timeout
+	if not check(child_mode + " native process exited", not OS.is_process_running(pid)):
+		OS.kill(pid)
+		for i in range(100):
+			if not OS.is_process_running(pid): break
+			await create_timer(0.02).timeout
+		return
+	var report_path := "user://slot_qa/" + child_mode + "_report.json"
+	if not check(child_mode + " child receipt exists", FileAccess.file_exists(report_path)): return
+	var result := read_json(report_path)
+	check(child_mode + " receipt matches real child", int(result.process_id) == pid and result.actual_user_dir.replace("\\", "/") == OS.get_user_data_dir().replace("\\", "/"))
+	for row in result.checks: checks.append({"label": child_mode + ": " + row.label, "passed": row.passed, "code": row.get("code", "")})
+	var log := FileAccess.get_file_as_string(logfile)
+	check(child_mode + " native log has no errors", "SCRIPT ERROR" not in log and "ERROR:" not in log and "Unicode parsing error" not in log)
+	children.append({"mode": child_mode, "pid": pid, "seconds": float(Time.get_ticks_msec() - start) / 1000.0, "report": result, "log_sha256": FileAccess.get_sha256(logfile), "command": Array(command)})
+
+func _run() -> void:
+	# --script compiles the entry before Autoload identifiers are registered.
+	Session = load("res://scripts/run_world_session.gd")
+	Slot = load("res://scripts/run_slot_store.gd")
+	Identity = load("res://scripts/run_content_identity.gd")
+	manifest = read_json(OS.get_environment("RUN_RESTORE_QA_MANIFEST"))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://slot_qa"))
+	var args := OS.get_cmdline_user_args()
+	if not args.is_empty():
+		mode = args[0]
+		root.get_node("Settings").game_speed = 1.0
+		root.get_node("Settings").auto_micro_level = 0
+		root.get_node("Settings").atmosphere = true
+		AudioServer.set_bus_mute(0, true)
+		identity = Identity.new().resolve_runtime_identity()
+		if ok("fresh installation identity", identity) and check("native engine pinned", identity.engine_binary_sha256 == manifest.engine_binary_sha256):
+			if mode == "capture": await source_case()
+			else: await restore_case()
+		await child_finish()
+		return
+	check("parent private profile", OS.get_user_data_dir().replace("\\", "/") == String(manifest.private_user).replace("\\", "/"))
+	check("real Steam disabled", OS.get_environment("STEAM_DISABLED") == "1")
+	for path in manifest.source_sha256: check("source before " + path, FileAccess.get_sha256(path) == manifest.source_sha256[path])
+	for child_mode in ["capture", "restore", "restore_again"]:
+		await run_child(child_mode)
+		if checks.any(func(row): return not row.passed): break
+	check("three independent game processes completed", children.size() == 3)
+	if children.size() == 3:
+		check("process identities are distinct", children[0].pid != children[1].pid and children[1].pid != children[2].pid and children[0].pid != children[2].pid)
+	for path in manifest.source_sha256: check("source after " + path, FileAccess.get_sha256(path) == manifest.source_sha256[path])
+	root.get_node("Sfx").shutdown(); root.get_node("Music").shutdown()
+	for i in range(3): await process_frame
+	var failed := checks.filter(func(row): return not row.passed)
+	var report := {"suite": "world-slot-native", "run_id": manifest.run_id, "process_id": OS.get_process_id(), "actual_user_dir": OS.get_user_data_dir(), "source_sha256": manifest.source_sha256, "complete": true, "passed": failed.is_empty(), "failed_count": failed.size(), "failures": failed, "check_count": checks.size(), "checks": checks, "children": children, "real_steam_tested": false, "player_menu_entry": false}
+	write_json(manifest.report, report)
+	print("[world slot QA] " + JSON.stringify(report))
+	quit(0 if failed.is_empty() else 1)

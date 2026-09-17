@@ -1,0 +1,54 @@
+from pathlib import Path
+import sys, json, hashlib, re, time, uuid, shutil
+repo=Path(r'E:/ChatGPT/水浒')
+sys.path.insert(0,str(repo/'tools'))
+import run_character_art_qa as runner
+shared,running_engine=runner.load_helpers(repo)
+selection=json.loads(Path(sys.argv[1]).read_text(encoding='utf-8-sig'))
+work=Path(r'E:/CodexTemp/codex_identity_20260913/import_probes')
+run=work/(time.strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8])
+project=run/'project'; evidence=run/'evidence'
+engine=shared.resolve_godot(None)
+if running_engine() or shared.LOCK.exists(): raise RuntimeError('Shared engine slot occupied')
+receipt={'complete':False,'selection':selection,'steps':[],'engine_sha256':runner.sha(engine)}
+locked=False
+try:
+    with shared.LOCK.open('x',encoding='utf-8') as f: f.write(str(run))
+    locked=True
+    project.mkdir(parents=True); evidence.mkdir()
+    (project/'project.godot').write_text('config_version=5\n[application]\nconfig/name="LiangshanArtImportProbe"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n',encoding='utf-8')
+    template=(repo/'assets/characters/lin_chong_direction4_20260906/se.png.import').read_text(encoding='utf-8')
+    for item in selection:
+        rel=item['path']; path=Path(rel)
+        if path.is_absolute() or '..' in path.parts or not rel.startswith('assets/characters/'): raise ValueError('Unexpected destination')
+        source=Path(item['source']); data=source.read_bytes()
+        if hashlib.sha256(data).hexdigest()!=item['sha256']: raise ValueError('Source hash changed')
+        dest=project/rel; dest.parent.mkdir(parents=True,exist_ok=True); dest.write_bytes(data)
+        uri='res://'+rel
+        imported='res://.godot/imported/'+path.name+'-'+hashlib.md5(uri.encode()).hexdigest()+'.ctex'
+        descriptor=re.sub(r'^uid=.*\n','',template,flags=re.M)
+        descriptor=descriptor.replace('res://assets/characters/lin_chong_direction4_20260906/se.png',uri)
+        descriptor=descriptor.replace('res://.godot/imported/se.png-596bf392363c4e8ba57a8d0b2b09d9ff.ctex',imported)
+        descriptor=re.sub(r'process/size_limit=\d+','process/size_limit='+str(item['limit']),descriptor)
+        Path(str(dest)+'.import').write_text(descriptor,encoding='utf-8',newline='\n')
+    paths=['res://'+x['path'] for x in selection]
+    script='extends SceneTree\nfunc _initialize():\n\tvar rows: Array = []\n\tfor path in '+json.dumps(paths)+':\n\t\tvar tex=load(path)\n\t\tif not tex is Texture2D: quit(1); return\n\t\trows.append({"path":path,"width":tex.get_width(),"height":tex.get_height()})\n\tvar f=FileAccess.open(OS.get_environment("PROBE_OUT"),FileAccess.WRITE)\n\tf.store_string(JSON.stringify(rows,"\\t"))\n\tprint("ART_IMPORT_PROBE ",rows)\n\tquit()\n'
+    (project/'probe.gd').write_text(script,encoding='utf-8',newline='\n')
+    profile=shared.create_private_profile(run,work/'profiles')
+    env=runner.private_environment(profile)
+    env['PROBE_OUT']=str(evidence/'dimensions.json')
+    runner.process_step(engine,project,env,evidence,'import',['--headless','--editor','--import','--quit'],180,'gl_compatibility',running_engine,receipt['steps'])
+    runner.process_step(engine,project,env,evidence,'dimensions',['--headless','--script','res://probe.gd'],60,'gl_compatibility',running_engine,receipt['steps'])
+    receipt['dimensions']=json.loads((evidence/'dimensions.json').read_text(encoding='utf-8'))
+    receipt['files']=[]
+    for item in selection:
+        rel=item['path']; native=project/rel; descriptor=Path(str(native)+'.import')
+        if runner.sha(native)!=item['sha256'] or runner.sha(Path(item['source']))!=item['sha256']: raise ValueError('PNG bytes changed')
+        target=evidence/'imports'/(rel+'.import'); target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(descriptor,target)
+        receipt['files'].append({'path':rel,'sha256':runner.sha(native),'import_sha256':runner.sha(descriptor)})
+    receipt['complete']=True
+finally:
+    if locked and not running_engine() and shared.LOCK.exists() and shared.LOCK.read_text(encoding='utf-8')==str(run): shared.LOCK.unlink()
+    receipt['lock_released']=not shared.LOCK.exists()
+    if evidence.exists(): (evidence/'receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps({'complete':receipt['complete'],'evidence':str(evidence)},ensure_ascii=False))

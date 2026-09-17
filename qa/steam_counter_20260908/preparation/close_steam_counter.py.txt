@@ -1,0 +1,94 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+root=Path.cwd(); out=root/'scratchpad/steam_counter_20260908'; q=root/'qa/steam_counter_20260908'
+head='0df8997952cb5a7616a6bf3839da1fd30b9645bd'; run=sys.argv[1]; native=root/'.godot/stabilization_overlay'/run
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+assert r['suite']=='steam-counter-native'
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and report['complete'] and not report['failed_count']
+assert 'actual_battle_cumulative_steam_kills_across_world_restore' in report['completed_cases']
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+for row in changes:
+    assert sha(root/row['path'])==row['before_raw_sha256']
+    assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+tool_path='tools/steam_integration_suite.gd'
+before=(root/tool_path).read_bytes(); expected=before
+assert expected.count(b'service.record_kill(11)')==3
+for count in range(1,4): expected=expected.replace(b'service.record_kill(11)',f'service.record_kill(11, {count})'.encode(),1)
+assert expected==(out/'steam_integration_suite.gd').read_bytes()
+q.mkdir(exist_ok=False); (q/'.gdignore').write_text('\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes()); assert sha(dst)==sha(src)
+    pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    receipt=json.loads(path.read_text())
+    if receipt.get('source_head')!=head or receipt.get('suite')!='steam-counter-native': continue
+    folder=path.parent; tag='runs/'+folder.name
+    runs.append({'run_id':folder.name,'complete':receipt.get('complete'),'freeze_sha256':receipt['freeze_sha256']})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes: archive(folder/'project'/row['path'],tag+'/'+Path(row['path']).name+'.txt')
+    driver=folder/'project/tools/steam_counter/driver.gd'
+    if driver.exists(): archive(driver,tag+'/driver.gd.txt')
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_steam_counter.py','close_steam_counter.py']: archive(root/'.godot'/name,'preparation/'+name+'.txt')
+archive(root/tool_path,'before/steam_integration_suite.gd.txt')
+for row in changes: (root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/tool_path).write_bytes(expected)
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks'])
+diagnostics=sum(x['label'] in ['native pixel diagnostics','world swap install diagnostic'] for x in report['checks'])
+assertions=report['check_count']-source_count-diagnostics
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'runs':runs,'changes':changes,'tool_change':{'path':tool_path,'before_sha256':hashlib.sha256(before).hexdigest(),'after_sha256':sha(root/tool_path),'scope':'three existing mock-adapter calls now pass cumulative totals 1, 2, 3; full workshop/UI suite not rerun'},'checks':report['check_count'],'source_sha_checks':source_count,'diagnostic_rows':diagnostics,'assertions':assertions,'same_process_actual_battle_counter_tested':True,'persistent_steam_binding':False,'cross_process_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json')
+(root/'docs/STEAM_BATTLE_COUNTER_20260908.md').write_text(f'''# 实际战斗Steam累计击杀与恢复防重
+
+Battle的敌方非建筑死亡回调现在只在FIGHT阶段增加_steam_valid_kills，并把累计值传给SteamService.record_kill(run_id, total_valid_kills)。战后展示kills仍沿用原规则，不能拿包含非战斗阶段死亡的展示数替代有效统计。新累计值随战斗世界恢复；SteamService保留当前局已计入的高水位，只把超过它的差值加到统计，重复、较低值、错误局编号、已终局、账号切换和非法类型/范围不会重复计数。差值一次加总并饱和到2147483647，不为大差值逐次循环或在死亡回调做磁盘IO。
+
+例如世界保存于累计2击杀，此后服务已计到5；恢复那个世界再击杀至3、4、5不会重加，达到6只加1。这个同进程行为已在真实Battle死亡信号和完整世界替换中验证。服务高水位当前仍是进程内存，上一批独立持久局记录尚未接到SteamService；因此本批不证明跨进程防重、持久outbox或玩家继续入口已完成。
+
+## 恢复合同
+
+根记录提升为defense_battle_root_v4：新增_steam_valid_kills的明确整数类型、非负、32位上界及不大于展示kills的检查。Battle声明173项，根数据106项，时钟1项，外部66项。旧v3根记录拒绝，不猜测其有效击杀数；玩家继续槽尚未发布，因此没有已交付存档迁移。完整world_core继续校验受信安装内容身份和内部root版本，Steam局编号/账号与服务历史仍由外部会话绑定，不能来自根payload。
+
+begin_run重置内存局高水位；普通Steam准入和官方/自定义判定保持原逻辑。SDK缓存写失败时，已计入的内存目标保留，周期重试写同一个绝对值，不因重复累计输入再次加数。原异步StoreStats回调关联与重启不确定窗口未在本批解决；后续需要把有效累计值、持久局token和outbox接入统一Session，保存槽之前先确认独立收据落盘。
+
+## 原生证据
+
+最终{report['check_count']}条记录通过：{source_count}来源SHA、{assertions}功能/环境断言、{diagnostics}诊断行（既有环境像素和世界安装状态）。保留此前完整组件/世界替换回归，并新增真实INTRO/END死亡、友方死亡、敌方建筑不计入；FIGHT敌方死亡、已死Unit再次受伤不重计；第三次真实世界替换带回较低累计值，随后4次真实死亡跨过服务高水位，只新加一次。另测root v3拒绝、非法计数、SDK缓存setter失败和定时重试、StoreStats失败/重试、终局重复、整数饱和、账号变化和新局重置。
+
+Steam API由仅存在QA driver内的CounterSDK替代；账号为固定虚拟值，Steam_DISABLED保持开启。测试直接装配隔离内存租约，以触发实际生产Battle/SteamService路径，不代表真实Steam登录、上传或双账号验收。既有tools/steam_integration_suite.gd只将三处旧单参数调用更新为累计1/2/3，其他原字节不变；完整工坊/商店UI套件未重新运行。主窗口仍为最小化原生验证，未新增真人视觉或性能结论。[QA](../qa/steam_counter_20260908/README.md)、[受测字节](../qa/steam_counter_20260908/installation.json)。
+
+全目标继续保持：持久Steam/Session、玩家保存退出和继续、跨进程世界持续运行，随后祝家庄及其余七关、完整30波/1800秒、两台Windows、60FPS P95/P99、美术和真人/双账号验收。本批仅同步GitHub stable，未发布新Steam构建。
+''',encoding='utf-8',newline='\n')
+(q/'README.md').write_text(f'''# 实际战斗累计击杀原生QA
+
+来源`{head}`，最终`{run}`，freeze`{freeze}`。{report['check_count']}记录通过={source_count}来源SHA+{assertions}非来源断言+{diagnostics}诊断。三个生产脚本原字节与隔离受测版本一致，既有完整世界回归和第三次实际世界替换后的累计防重通过。Steam为driver内假SDK，未调用真实账号；持久局/跨进程/玩家槽仍待接通。[合同与范围](../../docs/STEAM_BATTLE_COUNTER_20260908.md)。
+
+保存每次实际运行日志、报告、freeze、manifest及执行输入。SOURCE_PINS逐文件SHA，installation列晋级范围与工具三行适配边界。candidate/*.gd.txt需还原原名至独立来源checkout的scratchpad/steam_counter_20260908，随后运行：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/steam_counter_20260908 --expected-files 3 --driver driver.gd --driver-destination tools/steam_counter/driver.gd --suite steam-counter-native --prefix "[steam counter QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可换受控绝对短路径。Godot4.6.3，Windows Vulkan，隔离玩家目录及共享Godot锁；不在当前玩家目录运行。真实Steam、长时/整场性能、真人八关和美术门槛不由本报告替代。
+''',encoding='utf-8',newline='\n')
+def prepend(path,text):
+    p=root/path; p.write_bytes((text+'\n\n').encode()+p.read_bytes())
+prepend('docs/WORKLOG.md',f'## 2026-09-08 实际战斗累计击杀防重\n\nBattle传递FIGHT有效敌军死亡累计值，SteamService按当前局历史高水位只加新增差值；root提升v4并恢复独立计数。第三次真实世界替换后旧进度不重加、超过高水位只加1，缓存失败/重试、终局和账号变化通过。最终{assertions}断言、{source_count}来源SHA及{diagnostics}诊断；[实现](STEAM_BATTLE_COUNTER_20260908.md)、[QA](../qa/steam_counter_20260908/README.md)。持久Steam/Session和玩家继续仍待接通，本批仅stable同步。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 Steam战斗累计值接口\n\nrecord_kill现在要求run_id与本局累计有效击杀两个参数；Battle已同步调用，root v4保存新计数。旧root v3不推测迁移；目前玩家继续槽未开放。独立持久收据尚待接到服务及Session。[接口与原生验证](STEAM_BATTLE_COUNTER_20260908.md)。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 实际战斗读旧世界不重计击杀\n\n累计值与Steam内存高水位分离，真实死亡及世界替换后防重通过；根v4纳入有效击杀数。[证据](STEAM_BATTLE_COUNTER_20260908.md)。跨进程仍缺持久Steam/outbox、Session/槽和菜单，原完整八关/长时/双机/性能/美术/真人验收保留。')
+prepend('docs/STABILIZATION_EXECUTION_20260907.md','2026-09-08推进：实际Battle累计有效击杀、root v4与Steam内存高水位已接通；真实世界替换后重复进度不加数、新进度只加差值。持久token/outbox、Session、槽与跨进程仍待接通，原范围不变。[最新证据](STEAM_BATTLE_COUNTER_20260908.md)。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 战斗累计击杀\n\n- docs/STEAM_BATTLE_COUNTER_20260908.md：root v4、有效击杀累计/内存高水位合同。\n- qa/steam_counter_20260908/：真实死亡、第三次世界替换及Steam假SDK重试证据。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续：根记录已提升v4，包含_steam_valid_kills；实际世界替换保留累计值，服务历史高水位保持外部。[验证](STEAM_BATTLE_COUNTER_20260908.md)。持久Steam与跨进程仍未接通。')
+prepend('docs/STEAM_RUN_LEDGER_20260908.md','后续：Battle现已传递可恢复的累计有效击杀，SteamService完成同进程高水位防重，见[实际世界验证](STEAM_BATTLE_COUNTER_20260908.md)。本页持久ledger仍未由服务调用，outbox及Session绑定继续待办。')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve Steam cumulative-counter native evidence.\nqa/steam_counter_20260908/** -text -whitespace\n')
+paths=['.gitattributes']+[row['path'] for row in changes]+[tool_path]+['docs/'+n for n in ['STEAM_BATTLE_COUNTER_20260908.md','WORKLOG.md','SOURCE_SETUP.md','PROJECT_STATUS.md','STABILIZATION_EXECUTION_20260907.md','DIRECTORY_INDEX.md','WORLD_CORE_PREPARATION_20260908.md','STEAM_RUN_LEDGER_20260908.md']]+[p.relative_to(root).as_posix() for p in q.rglob('*') if p.is_file()]
+assert len(paths)==len(set(paths))
+(root/'.godot/steam_counter_stage_paths.txt').write_text('\n'.join(paths)+'\n',encoding='utf-8')
+print(json.dumps({'runs':runs,'pins':len(pins),'paths':len(paths),'checks':report['check_count'],'source_checks':source_count,'assertions':assertions,'diagnostics':diagnostics,'bytes':sum((root/p).stat().st_size for p in paths)},ensure_ascii=False))

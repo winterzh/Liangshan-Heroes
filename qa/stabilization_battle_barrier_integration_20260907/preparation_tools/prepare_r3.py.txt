@@ -1,0 +1,41 @@
+from pathlib import Path
+import hashlib,json,shutil,sys
+ROOT=Path(__file__).resolve().parents[2]
+HERE=Path(__file__).resolve().parent
+OLD=HERE/'attempt_r2'
+OUT=HERE/'attempt_r3'
+FRAGMENT=ROOT/'scratchpad/parallel_barrier_qa_20260907/actual_damage_driver_fragment.gd.txt'
+def sha(data): return hashlib.sha256(data).hexdigest()
+def dump(path,data): path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+assert sha((OLD/'freeze.json').read_bytes())=='9290ee8d2ebe4ddf9bc0b34390660f55300089a4a6bf28409e58f76a6b408148'
+assert sha(FRAGMENT.read_bytes())=='ebc425d91a686fc3d98c12ddb91ffff6d867453130c92913160451a4d049ba31'
+assert not OUT.exists()
+shutil.copytree(OLD,OUT)
+driver=(OUT/'barrier_smoke.gd').read_text(encoding='utf-8')
+def once(a,b):
+    global driver
+    assert driver.count(a)==1,a
+    driver=driver.replace(a,b)
+once('var capture_rejections: Array = []','var capture_rejections: Array = []\nvar actual_damage_cases_tested := false')
+once('\t\t"battle_resume_tested": false,', '\t\t"actual_damage_cases_tested": actual_damage_cases_tested,\n\t\t"battle_resume_tested": false,')
+once('No whole world factory, cross-process gameplay, actual Projectile/LiBrawnAxes damage scenario, disk or player menu claim.', 'Adds real Projectile physics and LiBrawnAxes idle damage hold/release/one-hit/free checks through actual Battle creators. Test units suppress autonomous physics only. No whole world factory, cross-process gameplay, disk or player menu claim.')
+needle='\t_check("original process cache includes elapsed held Engine frames", battle._run_cache_frame() == Engine.get_physics_frames())'
+once(needle,needle+'\n\tif not await _qa_actual_damage_cases():\n\t\tawait _finish(true); return\n\tactual_damage_cases_tested = true')
+driver += '\n'+FRAGMENT.read_text(encoding='utf-8')
+(OUT/'barrier_smoke.gd').write_text(driver,encoding='utf-8',newline='\n')
+sys.path.insert(0,str(ROOT/'scratchpad/stabilization_identity_20260907/parser_runtime'))
+from gdtoolkit.parser import parser
+parser.parse(driver)
+overlay=json.loads((OUT/'overlay_manifest.json').read_text(encoding='utf-8'))
+for row in overlay['files']: row['candidate']=(OUT/'candidate'/row['path']).relative_to(ROOT).as_posix()
+dump(OUT/'overlay_manifest.json',overlay)
+dump(OUT/'r3_review.json',{'parent_freeze_sha256':sha((OLD/'freeze.json').read_bytes()),
+    'previous_native_pass':'overlay_20260907T085328Z_1674aa11',
+    'fragment_sha256':sha(FRAGMENT.read_bytes()), 'production_candidate_files_unchanged':True,
+    'scope':'Actual Battle creators, two stationary test units, real engine consumers and barrier; no manual damage/elapsed/life/frame callbacks',
+    'native_tested':False})
+freeze=json.loads((OUT/'freeze.json').read_text(encoding='utf-8'))
+freeze['parent_freeze_sha256']=sha((OLD/'freeze.json').read_bytes())
+freeze['inputs']={p.relative_to(OUT).as_posix():sha(p.read_bytes()) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='freeze.json'}
+dump(OUT/'freeze.json',freeze)
+print(json.dumps({'freeze_sha256':sha((OUT/'freeze.json').read_bytes()),'candidate':OUT.relative_to(ROOT).as_posix()}))

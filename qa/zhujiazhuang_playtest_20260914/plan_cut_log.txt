@@ -1,0 +1,22 @@
+OPEN plan=plan_cut gold=300 wood=200 pop=16/20
+HUD mission actions=["zhu_rts_recon", "zhu_rts_rescue"]
+HUD intro hint=<null>
+SHOT plan_cut_01_opening_camp (开局前营+任务栏) err=0 size=(1280, 720)
+ORDER recon by Song Jiang
+SHOT plan_cut_02_after_recon_area (探路区域（迷雾开启）) err=0 size=(1280, 720)
+t=10 sent_sun=true stage=contest
+ORDER cut south outpost
+SHOT plan_cut_03_outpost (南营断援) err=0 size=(1280, 720)
+t=151 supply_cut=false raids=1
+SHOT plan_cut_04_mid_camp (中盘前营（是否来袭）) err=0 size=(1280, 720)
+t=151 raids=1 camp_hp=1500.0 pop=15/20 gold=1550 wood=860
+t=171 stage_army=0 gate=true manor=false inside=false cut=false north=false
+t=191 stage_army=0 gate=true manor=false inside=false cut=false north=false
+t=211 stage_army=0 gate=true manor=false inside=false cut=false north=false
+t=231 stage_army=0 gate=true manor=false inside=false cut=false north=false
+t=251 stage_army=0 gate=true manor=false inside=false cut=false north=false
+t=271 stage_army=0 gate=true manor=false inside=false cut=false north=false
+t=291 stage_army=0 gate=true manor=false inside=false cut=false north=false
+t=311 stage_army=0 gate=true manor=false inside=false cut=false north=false
+SHOT plan_cut_05_late_gate_area (后期正门/偏门一带) err=0 size=(1280, 720)
+END t=311 phase=2 victory=false manor=false inside=false cut=false north=false raids=2

@@ -12,6 +12,7 @@ var level: LevelBase
 var mission = null
 var _official_context: Dictionary = {}
 var _steam_run_id := 0
+var _continue_receipt: RefCounted
 var _gameplay_rng: RefCounted = null
 var _gameplay_rng_issue := ""
 var _gameplay_rng_start_kind := ""
@@ -23,6 +24,11 @@ var _items := {}
 # it is never issued, so next_item_uid always exceeds every allocated item UID.
 const ITEM_UID_EXHAUSTED := 9223372036854775807
 var next_item_uid: int = 1
+# Positive per-Battle Unit identity; MAX is an exhausted next-counter sentinel.
+const ENTITY_ID_EXHAUSTED := 9223372036854775807
+var next_entity_id: int = 1
+var _run_clock: RefCounted
+var _save_barrier: Node
 
 var world: Node2D
 var map: GameMap
@@ -85,8 +91,8 @@ var _grid: Dictionary = {}            # 空间网格(每物理帧重建)：Vecto
 var _mob_grid: Dictionary = {}        # 仅存机动单位；分离按桶对遍历，避免每名单位重复查询 9 个邻桶
 var _body_grid_liang: Dictionary = {} # 身体阻挡只查敌方机动单位；分阵营建桶，避免后排单位反复扫描大批友军
 var _body_grid_guan: Dictionary = {}
-var _focus_counts: Dictionary = {}    # 目标 instance_id → 有多少机动单位正锁定它(每物理帧随网格重建)；索敌打分的「过度集火」惩罚用
-var _res_block_cache: Dictionary = {} # 资源点 instance_id → 是否被建筑压住(按物理帧缓存；排矿农民每帧都问，别每次全表扫建筑)
+var _focus_counts: Dictionary = {}    # 目标 entity_id → 有多少机动单位正锁定它(每物理帧随网格重建)；索敌打分的「过度集火」惩罚用
+var _res_block_cache: Dictionary = {} # 资源点 entity_id → 是否被建筑压住(按物理帧缓存；排矿农民每帧都问，别每次全表扫建筑)
 var _res_block_frame := -1
 var _blocker_cache: Dictionary = {}   # 起点格|终点格|导航版本 → 首个堵路建筑（或 null）
 var _blocker_cache_revision := -1
@@ -151,6 +157,7 @@ const GRID_CELL := 64.0               # 空间网格边长(px)
 var selection: Array = []
 var phase := Phase.INTRO
 var kills := 0
+var _steam_valid_kills := 0 # Cumulative eligible deaths; restored with the world, not Steam history.
 var hero_kills := {}          # 按英雄统计歼敌：instance_id -> {name, key, n}（战后结算展示）
 var track_hero_combat_stats := false   # 仅驻守/自定义据守启用；其他模式的受击路径只多一次布尔判断
 var hero_combat_stats := {}    # 英雄 key -> {name, damage, taken, healing, kills, skill_damage, item_stats}，英雄战死重练仍沿用
@@ -282,7 +289,7 @@ func _gameplay_rng_stop(code: String) -> Dictionary:
 			get_tree().paused = true
 			if hud != null:
 				hud.show_pause()
-				hud.show_message("本局运行异常，已暂停。请重新开始或返回主菜单。", 6.0)
+				hud.show_message(Localize.text("本局运行异常，已暂停。请重新开始或返回主菜单。"), 6.0)
 	return {"ok": false, "code": _gameplay_rng_issue}
 
 
@@ -370,7 +377,50 @@ func gameplay_randf_range(from: float, to: float) -> Dictionary:
 	return _gameplay_rng_result(_gameplay_rng.draw_randf_range(from, to), TYPE_FLOAT)
 
 
+func _run_cache_frame() -> int:
+	if _run_clock == null: return int(Engine.get_physics_frames())
+	var frame: int = _run_clock.observe_cache_frame(Engine.get_physics_frames())
+	if frame < 0: _gameplay_rng_stop(_run_clock.fault())
+	return frame
+
+func _run_capture_input_closed() -> bool:
+	var flow := get_node_or_null("/root/ContinueFlow")
+	if flow != null and flow.busy(): return true
+	return is_instance_valid(_save_barrier) and _save_barrier.input_closed()
+
+func request_run_capture() -> Dictionary:
+	if not is_instance_valid(_save_barrier): return {"ok": false, "code": "RUN_BARRIER_UNAVAILABLE"}
+	return _save_barrier.request_capture()
+
+func _refresh_run_capture_presentation() -> void:
+	# Camera updates can follow the atmosphere's last process callback. Once
+	# paused at the capture boundary, refresh derived geometry without advancing
+	# animation phases or the simulation. The final physics step can also free a
+	# dying unit before ShadowBatch's next idle callback. Rebuild its submissions
+	# here so the captured buffer and retained references describe the same world.
+	for child in get_children():
+		if child.get_script() == AtmosphereLayer:
+			child._fit_viewport()
+	var shadow := world.get_node_or_null(String(WorldShadow.BATCH_NODE_NAME))
+	if shadow is WorldShadow.ShadowBatch and shadow.battle == self:
+		shadow._update_visible_units()
+
 func _ready() -> void:
+	# Only the trusted core preparation transaction sets this transient marker.
+	# Child readiness is allowed while the Battle itself remains disabled. The
+	# outer installation still owns root clocks, input/UI, Steam and activation.
+	if has_meta("_run_core_prepared"):
+		if get_meta("_run_core_prepared") != true or process_mode != Node.PROCESS_MODE_DISABLED or not get_tree().paused or _gameplay_rng_start_kind != "restored" or not _prepared_clock_entry_valid() or _save_barrier != null or not is_instance_valid(world) or world.get_parent() != self:
+			_gameplay_rng_stop("INVALID_PREPARED_WORLD_ENTRY")
+		return
+	_run_clock = preload("res://scripts/run_battle_clock.gd").new()
+	var initialized: Dictionary = _run_clock.initialize_new(Engine.get_physics_frames())
+	if not initialized.ok:
+		_gameplay_rng_stop(initialized.code)
+		return
+	_save_barrier = preload("res://scripts/run_battle_barrier.gd").new()
+	_save_barrier.configure(self, _run_clock)
+	add_child(_save_barrier)
 	_refresh_hot_patch_classes()
 	level = _resolve_level()
 	# This is the new-game entry only. The future whole-world restore factory
@@ -482,12 +532,7 @@ func _ready() -> void:
 	add_child(_motes)
 
 	hud = HUD.new()
-	hud.start_battle.connect(_on_start_battle)
-	hud.intro_done.connect(_on_intro_done)
-	hud.restart.connect(func() -> void: get_tree().paused = false; get_tree().reload_current_scene())
-	hud.to_menu.connect(func() -> void: get_tree().paused = false; _goto_menu())
-	hud.resume_game.connect(_close_pause)
-	hud.quit_game.connect(func() -> void: get_tree().paused = false; AppLifecycle.request_quit("battle_quit"))
+	_connect_hud_signals()
 	add_child(hud)
 	hud.setup(self)
 	if not _gameplay_rng_issue.is_empty(): return
@@ -499,7 +544,9 @@ func _ready() -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 
 	camera.position = to_screen(map.cell_to_world(level.camera_start_cell()))
-	hud.set_top("%s · %s" % [level.title(), level.subtitle()])
+	hud.set_top(Localize.format_text("%s · %s", [level.display_title(), level.display_subtitle()], false))
+	if fog:
+		_fog_pass(0.0)
 
 	if OS.get_environment("SMOKE_TEST") == "1":
 		_smoke = true
@@ -550,7 +597,7 @@ func _ready() -> void:
 			_autocam_selftest()
 	else:
 		Engine.time_scale = Settings.game_speed   # 实时节奏（设置可调慢/正常/快）：技能冷却/建造/训练/波次按倍率走时
-		hud.show_intro(level.intro_lines())
+		hud.show_intro(level.intro_lines(), level.localize_intro_text())
 	var info_ui_dir := OS.get_environment("INFO_UI_TEST_DIR")
 	if info_ui_dir == "" and OS.get_environment("INFO_UI_TEST") == "1":
 		info_ui_dir = OS.get_environment("SCREENSHOT_DIR")
@@ -597,7 +644,7 @@ func _refresh_hot_patch_classes() -> void:
 	if refreshed != null and reduction_api and charge_api and aura_speed_api:
 		AndroidUpdater.set_meta("unit_cache_content_version", active_content)
 	else:
-		push_error("安卓内容补丁未能刷新 Unit 脚本缓存（content=%s）" % active_content)
+		push_error(Localize.format_text("安卓内容补丁未能刷新 Unit 脚本缓存（content=%s）", active_content))
 	if OS.get_environment("ANDROID_UPDATE_TEST") == "1":
 		print("[android_update] unit_cache_refresh=%s reduction_api=%s charge_api=%s aura_speed_api=%s" % [
 			refreshed != null, reduction_api, charge_api, aura_speed_api])
@@ -672,6 +719,7 @@ func _resolve_level() -> LevelBase:
 
 
 func _goto_menu() -> void:
+	if _run_capture_input_closed(): return
 	get_tree().change_scene_to_file("res://scenes/menu.tscn")
 
 
@@ -680,6 +728,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_EXIT_TREE:
 		_release_custom_cursor_resources()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		if _run_capture_input_closed(): return
 		if hud != null and hud._pause_root != null and hud._pause_root.visible:
 			hud.pause_back()
 		else:
@@ -687,6 +736,7 @@ func _notification(what: int) -> void:
 
 
 func _open_pause() -> void:
+	if _run_capture_input_closed(): return
 	if phase == Phase.END or phase == Phase.INTRO:
 		return
 	get_tree().paused = true
@@ -694,9 +744,10 @@ func _open_pause() -> void:
 
 
 func _close_pause() -> void:
+	if _run_capture_input_closed(): return
 	if not _gameplay_rng_issue.is_empty():
 		if hud != null:
-			hud.show_message("本局运行异常，已暂停。请重新开始或返回主菜单。", 6.0)
+			hud.show_message(Localize.text("本局运行异常，已暂停。请重新开始或返回主菜单。"), 6.0)
 		return
 	get_tree().paused = false
 	if phase != Phase.END:
@@ -714,8 +765,31 @@ func to_logic(p: Vector2) -> Vector2:
 	return map.unproject(p) if map != null else GameMap.ISO_INV * p
 
 
+func entity_ids_available(count: int = 1) -> bool:
+	return count >= 0 and next_entity_id >= 1 and next_entity_id <= ENTITY_ID_EXHAUSTED \
+		and count <= ENTITY_ID_EXHAUSTED - next_entity_id
+
+
+func _allocate_entity_id() -> int:
+	if not _gameplay_rng_issue.is_empty(): return 0
+	if not entity_ids_available(1):
+		_gameplay_rng_stop("ENTITY_ID_EXHAUSTED")
+		return 0
+	var allocated: int = next_entity_id
+	next_entity_id += 1
+	# Failed later construction burns this ID. No rollback/reuse, including death.
+	return allocated
+
+
 func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
+	if not _gameplay_rng_issue.is_empty(): return null
+	if not _defs.has(key) or not world_pos.is_finite():
+		_gameplay_rng_stop("ENTITY_SPAWN_ARGUMENTS")
+		return null
+	var stable_id: int = _allocate_entity_id()
+	if stable_id == 0: return null
 	var u := Unit.new()
+	u.entity_id = stable_id
 	units_root.add_child(u)
 	u.setup(key, _defs[key], faction, self, map)
 	if not u.is_building and not map.is_open_world(world_pos, u.movement_profile):
@@ -764,6 +838,7 @@ func spawn_at(key: String, faction: int, cell: Vector2i) -> Unit:
 		push_error("No valid spawn terrain for " + key)
 		return null
 	var u := spawn_unit(key, faction, map.cell_to_world(at))
+	if u == null: return null
 	if blocks:
 		u.set_meta("fcell", at)
 		u.set_meta("fhalf", building_footprint_half(key))
@@ -849,6 +924,9 @@ func resolve_path_blocker(mover: Unit, destination: Vector2, known_no_dynamic_ro
 ## 成批生成敌军并向目标 attack-move（波次用）。返回生成的单位数组。
 func spawn_group(key: String, n: int, faction: int, gate: Vector2i, target_w: Vector2, spread := 2) -> Array:
 	if not _gameplay_rng_issue.is_empty(): return []
+	if not entity_ids_available(maxi(0, n)):
+		_gameplay_rng_stop("ENTITY_WAVE_CAPACITY")
+		return []
 	var out: Array = []
 	for i in range(n):
 		var cell_x := gameplay_randi_range(-spread, spread)
@@ -926,13 +1004,13 @@ func _jump_alert_or_home() -> void:
 
 func _save_camera_loc(n: int) -> void:
 	_camera_locs[n] = camera.position
-	msg("已记录镜头位置 F%d" % n, 1.1)
+	msg(Localize.format_text("已记录镜头位置 F%d", n), 1.1)
 	Sfx.play("click")
 
 
 func _jump_camera_loc(n: int) -> void:
 	if not _camera_locs.has(n):
-		msg("F%d 尚未记录镜头位置" % n, 1.1)
+		msg(Localize.format_text("F%d 尚未记录镜头位置", n), 1.1)
 		return
 	camera.position = _camera_locs[n]
 	Sfx.play("select")
@@ -1096,7 +1174,7 @@ func ability_def(id: String) -> Dictionary:
 func alert(pos: Vector2) -> void:
 	_alert_pos = pos
 	if _alert_t <= 0.0:
-		msg("⚠ 寨子遭到攻击！", 2.0)
+		msg(Localize.text("⚠ 寨子遭到攻击！"), 2.0)
 	_alert_t = 2.0
 	Sfx.play("alert", 0.0, 0.0, 6000)
 
@@ -1118,12 +1196,28 @@ func train_cost_hidden() -> bool:
 	return level != null and level.has_method("uses_full_roster") and level.uses_full_roster()
 
 
+## QA-only tap for player resource events. Production leaves this empty (no-op).
+var qa_resource_observer: Callable = Callable()
+
+
+func _qa_resource_event(kind: String, g: int, w: int) -> void:
+	if qa_resource_observer.is_valid():
+		qa_resource_observer.call(kind, g, w)
+
+
 func spend(g: int, w: int) -> bool:
 	if not can_afford(g, w):
 		return false
 	gold -= g
 	wood -= w
+	_qa_resource_event("spend", g, w)
 	return true
+
+
+func refund(g: int, w: int) -> void:
+	gold += g
+	wood += w
+	_qa_resource_event("refund", g, w)
 
 
 func add_resources(g: int, w: int, faction := Unit.FACTION_LIANG) -> void:
@@ -1132,6 +1226,7 @@ func add_resources(g: int, w: int, faction := Unit.FACTION_LIANG) -> void:
 	if faction == Unit.FACTION_LIANG:
 		gold += g
 		wood += w
+		_qa_resource_event("income", g, w)
 		return
 	if not faction_res.has(faction):
 		faction_res[faction] = {"gold": 0.0, "wood": 0.0}
@@ -1225,11 +1320,11 @@ func eject_from_buildings(u: Unit) -> void:
 func _resource_blocked(node: Unit) -> bool:
 	if node == null or not is_instance_valid(node):
 		return true
-	var fr := int(Engine.get_physics_frames())
+	var fr := _run_cache_frame()
 	if _res_block_frame != fr:
 		_res_block_frame = fr
 		_res_block_cache.clear()
-	var nid := node.get_instance_id()
+	var nid := node.entity_id
 	if _res_block_cache.has(nid):
 		return bool(_res_block_cache[nid])
 	var blocked := _resource_blocked_calc(node)
@@ -1338,10 +1433,10 @@ const TRADE_GET := 70
 
 func trade_menu(_bld: Unit) -> Array:
 	return [
-		{"kind": "trade", "give": "wood", "label": "卖木换金", "cost_g": 0, "cost_w": TRADE_AMT,
-			"affordable": wood >= TRADE_AMT, "sub": "%d 木 → %d 金" % [TRADE_AMT, TRADE_GET]},
-		{"kind": "trade", "give": "gold", "label": "卖金换木", "cost_g": TRADE_AMT, "cost_w": 0,
-			"affordable": gold >= TRADE_AMT, "sub": "%d 金 → %d 木" % [TRADE_AMT, TRADE_GET]},
+		{"kind": "trade", "give": "wood", "label": Localize.text("卖木换金"), "cost_g": 0, "cost_w": TRADE_AMT,
+			"affordable": wood >= TRADE_AMT, "sub": Localize.format_text("%d 木 → %d 金", [TRADE_AMT, TRADE_GET])},
+		{"kind": "trade", "give": "gold", "label": Localize.text("卖金换木"), "cost_g": TRADE_AMT, "cost_w": 0,
+			"affordable": gold >= TRADE_AMT, "sub": Localize.format_text("%d 金 → %d 木", [TRADE_AMT, TRADE_GET])},
 	]
 
 
@@ -1416,7 +1511,7 @@ func arm_build(key: String) -> void:
 	# 触屏：先把虚影摆到视图中心，玩家再拖动定位、松手落地（见 _unhandled_input 触屏分支）。
 	if hud != null and hud.touch_ui:
 		_drag_cur = camera.get_screen_center_position() if is_instance_valid(camera) else get_global_mouse_position()
-		msg("拖动选址 → 松手建造（点「取消」放弃）", 2.0)
+		msg(Localize.text("拖动选址 → 松手建造（点「取消」放弃）"), 2.0)
 	Sfx.play("click")
 	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
 
@@ -1433,20 +1528,20 @@ func _try_place_building(p: Vector2) -> void:
 	var cell := map.world_to_cell(to_logic(p))
 	var half := building_footprint_half(key)
 	if not building_terrain_valid(key,cell):
-		msg("船坞须建在岸上，外侧留出开阔水面" if bool(d.get("requires_shore",false)) else "此处无法建造（地形不平或已被占用）", 1.5)
+		msg(Localize.text("船坞须建在岸上，外侧留出开阔水面") if bool(d.get("requires_shore",false)) else Localize.text("此处无法建造（地形不平或已被占用）"), 1.5)
 		return
 	if _building_overlap(cell, half):
-		msg("太靠近其它建筑了，不能压在上面", 1.5)
+		msg(Localize.text("太靠近其它建筑了，不能压在上面"), 1.5)
 		Sfx.play("cant")
 		return
 	if _resource_overlap(cell, half):
-		msg("不能把建筑压在资源点上", 1.5)
+		msg(Localize.text("不能把建筑压在资源点上"), 1.5)
 		Sfx.play("cant")
 		return
 	var cg := int(d.get("cost_gold", 0))
 	var cw := int(d.get("cost_wood", 0))
 	if not can_afford(cg, cw):
-		msg("资源不足：需 金%d 木%d" % [cg, cw], 1.5)
+		msg(Localize.format_text("资源不足：需 金%d 木%d", [cg, cw]), 1.5)
 		Sfx.play("cant")
 		return
 	var player_builders: Array = selection.filter(func(u) -> bool:
@@ -1454,14 +1549,17 @@ func _try_place_building(p: Vector2) -> void:
 	_stamp_manual(player_builders)
 	spend(cg, cw)
 	Sfx.play("build")
-	_start_construction(key, cell, half)
+	if not _start_construction(key, cell, half):
+		refund(cg, cw)
+		return
 	if not Input.is_key_pressed(KEY_SHIFT):   # 按住 Shift 连续放置
 		_cancel_build()
 
 
-func _start_construction(key: String, cell: Vector2i, half: int) -> void:
-	if not _gameplay_rng_issue.is_empty(): return
+func _start_construction(key: String, cell: Vector2i, half: int) -> bool:
+	if not _gameplay_rng_issue.is_empty(): return false
 	var site := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))
+	if site == null: return false
 	site.is_constructing = true
 	site._pending_build = true   # 先「虚影」：不挡路、不可被攻击；工人走到起第一锤才转实体、封路（见 advance_build）
 	site.build_progress = 0.0
@@ -1471,7 +1569,8 @@ func _start_construction(key: String, cell: Vector2i, half: int) -> void:
 	var builders := selection.filter(func(u) -> bool:
 		return is_instance_valid(u) and u.is_worker and u.hp > 0.0)
 	_order_builders_to_site(builders, site, Input.is_key_pressed(KEY_SHIFT))
-	msg("开始建造 %s" % String(_defs[key].get("name", key)), 1.5)
+	msg(Localize.format_text("开始建造 %s", String(_defs[key].get("name", key))), 1.5)
+	return true
 
 
 ## Shift 连放语义：首座「立刻开工」（非排队，打断采集——采集是无限循环任务，排在它后面的建造令
@@ -1493,6 +1592,7 @@ func _order_builders_to_site(builders: Array, site: Unit, shift: bool) -> void:
 func ai_start_construction(key: String, cell: Vector2i, faction: int, builder: Unit) -> Unit:
 	var half := building_footprint_half(key)
 	var site := spawn_unit(key, faction, map.cell_to_world(cell))
+	if site == null: return null
 	site.is_constructing = true
 	site._pending_build = true   # 同玩家：先虚影、工人到场起建才封路（见 advance_build）
 	site.build_progress = 0.0
@@ -1562,7 +1662,7 @@ func arm_trap(key: String) -> void:
 	_trap_armed = key
 	if hud != null and hud.touch_ui:
 		_drag_cur = camera.get_screen_center_position() if is_instance_valid(camera) else get_global_mouse_position()
-		msg("拖动选址 → 松手布置（点「取消」放弃）", 2.0)
+		msg(Localize.text("拖动选址 → 松手布置（点「取消」放弃）"), 2.0)
 	Sfx.play("click")
 	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
 
@@ -1581,13 +1681,13 @@ func _try_place_trap(p: Vector2) -> void:
 		return
 	var cell := map.world_to_cell(to_logic(p))
 	if not map.area_buildable(cell, 0):
-		msg("此处无法布置（地形不平或已被占用）", 1.5)
+		msg(Localize.text("此处无法布置（地形不平或已被占用）"), 1.5)
 		Sfx.play("cant")
 		return
 	var cg := int(d.get("cost_gold", 0))
 	var cw := int(d.get("cost_wood", 0))
 	if not can_afford(cg, cw):
-		msg("资源不足：需 金%d 木%d" % [cg, cw], 1.5)
+		msg(Localize.format_text("资源不足：需 金%d 木%d", [cg, cw]), 1.5)
 		Sfx.play("cant")
 		return
 	var player_trappers: Array = selection.filter(func(u) -> bool:
@@ -1690,7 +1790,7 @@ func on_building_complete(b: Unit) -> void:
 	if pp > 0 and b.faction == Unit.FACTION_LIANG:   # 人口上限只随玩家建筑增长；AI 人口由其关卡自行记账
 		pop_cap += pp
 	if b.faction == Unit.FACTION_LIANG:
-		msg("%s 建造完成！" % b.display_name, 2.0)
+		msg(Localize.format_text("%s 建造完成！", b.display_name), 2.0)
 		Sfx.play("complete", 0.0, 0.04, 200)
 
 
@@ -1731,7 +1831,7 @@ func train_menu(bld: Unit) -> Array:
 			var is_revive := false
 			if hero_progress.has(key):
 				is_revive = true
-				lbl = "复活·%s Lv%d" % [lbl, int(hero_progress[key].get("level", 1))]
+				lbl = Localize.format_text("复活·%s Lv%d", [lbl, int(hero_progress[key].get("level", 1))])
 			heroes.append({"kind": "train", "key": key, "label": lbl,
 				"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": is_revive,
 				"_star": int((Bios.STAR.get(key, [999]) as Array)[0])})
@@ -1752,9 +1852,9 @@ func train_menu(bld: Unit) -> Array:
 	_hall_page = clampi(_hall_page, 0, pages - 1)
 	var start := _hall_page * PAGE
 	out.append_array(heroes.slice(start, mini(start + PAGE, heroes.size())))
-	out.append({"kind": "train_page", "dir": -1, "label": "◀上页",
+	out.append({"kind": "train_page", "dir": -1, "label": Localize.text("◀上页"),
 		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
-	out.append({"kind": "train_page", "dir": 1, "label": "%d/%d页▶" % [_hall_page + 1, pages],
+	out.append({"kind": "train_page", "dir": 1, "label": Localize.format_text("%d/%d页▶", [_hall_page + 1, pages]),
 		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 	return out
 
@@ -1775,7 +1875,7 @@ func _hall_cat_menu(bld: Unit, out: Array, heroes: Array) -> Array:
 				if int(h["_star"]) >= int(c["lo"]) and int(h["_star"]) <= int(c["hi"]):
 					n += 1
 			out.append({"kind": "hall_cat", "cat": String(c["key"]), "glyph": String(c["glyph"]),
-				"label": "%s（%d）" % [String(c["label"]), n], "info": "▸ 展开",
+				"label": "%s（%d）" % [Localize.text(String(c["label"])), n], "info": Localize.text("▸ 展开"),
 				"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 		return out
 	var lo := 1
@@ -1787,7 +1887,7 @@ func _hall_cat_menu(bld: Unit, out: Array, heroes: Array) -> Array:
 	for h in heroes:
 		if int(h["_star"]) >= lo and int(h["_star"]) <= hi:
 			sub.append(h)
-	out.append({"kind": "hall_cat", "cat": "", "glyph": "返", "label": "◂ 返回分类", "info": "◂ 返回",
+	out.append({"kind": "hall_cat", "cat": "", "glyph": Localize.text("返"), "label": Localize.text("◂ 返回分类"), "info": Localize.text("◂ 返回"),
 		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 	var PAGE := 6
 	if sub.size() <= PAGE:
@@ -1797,9 +1897,9 @@ func _hall_cat_menu(bld: Unit, out: Array, heroes: Array) -> Array:
 	_hall_page = clampi(_hall_page, 0, pages - 1)
 	var start := _hall_page * PAGE
 	out.append_array(sub.slice(start, mini(start + PAGE, sub.size())))
-	out.append({"kind": "train_page", "dir": -1, "label": "◀上页",
+	out.append({"kind": "train_page", "dir": -1, "label": Localize.text("◀上页"),
 		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
-	out.append({"kind": "train_page", "dir": 1, "label": "%d/%d页▶" % [_hall_page + 1, pages],
+	out.append({"kind": "train_page", "dir": 1, "label": Localize.format_text("%d/%d页▶", [_hall_page + 1, pages]),
 		"cost_g": 0, "cost_w": 0, "affordable": true, "bld": bld})
 	return out
 
@@ -1888,16 +1988,16 @@ func _train_block_reason(bld: Unit, key: String) -> String:
 func _show_train_block(reason: String, key: String) -> void:
 	var d: Dictionary = _defs.get(key, {})
 	match reason:
-		"researching": msg("该建筑正在研究科技，暂时不能训练", 1.4)
-		"hero_exists": msg("%s 已在阵中" % String(d.get("name", key)), 1.5)
+		"researching": msg(Localize.text("该建筑正在研究科技，暂时不能训练"), 1.4)
+		"hero_exists": msg(Localize.format_text("%s 已在阵中", String(d.get("name", key))), 1.5)
 		"hero_cap":
 			var hcap := int(level.hero_cap()) if (level != null and level.has_method("hero_cap")) else 0
-			msg("聚义厅英雄已满（上限 %d 员，可在编辑器调整）" % hcap, 1.8)
-		"population": msg("人口已满（造民居可加人口）", 1.5)
-		"resources": msg("资源不足：需 金%d 木%d" % [int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0))], 1.5)
-		"queue_full": msg("生产队列已满", 1.2)
-		"age": msg("当前时代尚不能训练该单位", 1.4)
-		"unsupported": msg("该建筑不能训练此单位", 1.4)
+			msg(Localize.format_text("聚义厅英雄已满（上限 %d 员，可在编辑器调整）", hcap), 1.8)
+		"population": msg(Localize.text("人口已满（造民居可加人口）"), 1.5)
+		"resources": msg(Localize.format_text("资源不足：需 金%d 木%d", [int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0))]), 1.5)
+		"queue_full": msg(Localize.text("生产队列已满"), 1.2)
+		"age": msg(Localize.text("当前时代尚不能训练该单位"), 1.4)
+		"unsupported": msg(Localize.text("该建筑不能训练此单位"), 1.4)
 		_: return
 	Sfx.play("cant")
 
@@ -1940,7 +2040,7 @@ func queue_train_multi(bld: Unit, key: String) -> void:
 		return
 	pool.sort_custom(func(a: Unit, b: Unit) -> bool:
 		if a._train_queue.size() == b._train_queue.size():
-			return a.get_instance_id() < b.get_instance_id()
+			return a.entity_id < b.entity_id
 		return a._train_queue.size() < b._train_queue.size())
 	queue_train(pool[0], key)
 
@@ -1974,7 +2074,7 @@ func cancel_train(bld: Unit, index: int) -> void:
 	if index == 0 and not bld._train_queue.is_empty():   # 撤的是正在训练的 → 计时重置到新队首
 		bld._train_t = train_time_for(bld._train_queue[0])
 	Sfx.play("order")
-	msg("已取消生产 %s（资源已退还）" % String(d.get("name", key)), 1.2)
+	msg(Localize.format_text("已取消生产 %s（资源已退还）", String(d.get("name", key))), 1.2)
 	if hud != null:
 		hud.refresh_command()
 
@@ -2032,12 +2132,12 @@ func _research_block_reason(bld: Unit, key: String) -> String:
 func _show_research_block(reason: String, key: String) -> void:
 	var d: Dictionary = Defs.TECHS.get(key, {})
 	match reason:
-		"production": msg("请先完成或取消生产队列，再开始研究", 1.5)
-		"researching": msg("该建筑已有科技正在研究", 1.4)
-		"in_progress": msg("该科技已在另一座建筑研究中", 1.4)
-		"resources": msg("资源不足：需 金%d 木%d" % [int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0))], 1.5)
-		"age": msg("当前时代尚不能研究该科技", 1.4)
-		"unsupported": msg("该建筑不能研究此科技", 1.4)
+		"production": msg(Localize.text("请先完成或取消生产队列，再开始研究"), 1.5)
+		"researching": msg(Localize.text("该建筑已有科技正在研究"), 1.4)
+		"in_progress": msg(Localize.text("该科技已在另一座建筑研究中"), 1.4)
+		"resources": msg(Localize.format_text("资源不足：需 金%d 木%d", [int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0))]), 1.5)
+		"age": msg(Localize.text("当前时代尚不能研究该科技"), 1.4)
+		"unsupported": msg(Localize.text("该建筑不能研究此科技"), 1.4)
 		_: return
 	Sfx.play("cant")
 
@@ -2071,7 +2171,7 @@ func on_research_done(bld: Unit, key: String) -> void:
 	if eff.has("advance_age"):   # 时代进阶：解锁后期单位/建筑/科技
 		current_age = maxi(current_age, int(eff["advance_age"]))
 		if hud != null:
-			hud.show_message("【时代】晋升至「%s」！" % ["", "草莽", "聚义", "替天行道"][clampi(current_age, 1, 3)], 3.0)
+			hud.show_message(Localize.format_text("【时代】晋升至「%s」！", ["", Localize.text("草莽"), Localize.text("聚义"), Localize.text("替天行道")][clampi(current_age, 1, 3)]), 3.0)
 	tech_atk *= float(eff.get("atk_mult", 1.0))
 	tech_gather *= float(eff.get("gather_mult", 1.0))
 	var hp_m := float(eff.get("hp_mult", 1.0))
@@ -2089,7 +2189,7 @@ func on_research_done(bld: Unit, key: String) -> void:
 				var frac: float = u.hp / u.max_hp
 				u.max_hp *= hp_m
 				u.hp = u.max_hp * frac
-	msg("【科技】%s 研究完成！" % String(Defs.TECHS.get(key, {}).get("name", key)), 2.5)
+	msg(Localize.format_text("【科技】%s 研究完成！", String(Defs.TECHS.get(key, {}).get("name", key))), 2.5)
 	Sfx.play("complete", 0.0, 0.04, 200)
 	if hud != null:
 		hud.refresh_command()
@@ -2131,7 +2231,7 @@ func on_unit_trained(bld: Unit, key: String) -> bool:
 		var pr: Dictionary = hero_progress[key]
 		u.restore_progress(int(pr["level"]), float(pr["xp"]), int(pr["sp"]), pr["ranks"])
 		hero_progress.erase(key)
-		msg("%s 重整旗鼓归来——仍是 %d 级好汉！" % [u.display_name, u.hero_level], 3.5)
+		msg(Localize.format_text("%s 重整旗鼓归来——仍是 %d 级好汉！", [u.display_name, u.hero_level]), 3.5)
 	if u.is_worker:
 		# 工人优先复用 typed 集结点：去采指定资源；采空则就近补同类；都没有就近采任意资源
 		var node: Unit = null
@@ -2166,21 +2266,23 @@ func on_unit_trained(bld: Unit, key: String) -> bool:
 ## ---------- 主循环 ----------
 
 func _on_intro_done() -> void:
+	if _run_capture_input_closed(): return
 	if not _gameplay_rng_issue.is_empty(): return
 	phase = Phase.DEPLOY
 	if level.deploy_hint() != "":
 		hud.show_message(level.deploy_hint(), 6.0)
 	if level.auto_start_after_intro():
 		hud.hide_deploy()
-		hud.set_top("备战开始 — 120 秒后首波来袭")
+		hud.set_top(Localize.text("备战开始 — 120 秒后首波来袭"))
 		_on_start_battle()
 		if not _gameplay_rng_issue.is_empty(): return
 	else:
 		hud.show_deploy()
-		hud.set_top("准备阶段 — 查看战场，点击「开战」开始（开战前不能操作单位）")
+		hud.set_top(Localize.text("准备阶段 — 查看战场，点击「开战」开始（开战前不能操作单位）"))
 
 
 func _on_start_battle() -> void:
+	if _run_capture_input_closed(): return
 	if not _gameplay_rng_issue.is_empty(): return
 	if phase != Phase.DEPLOY:
 		return
@@ -2244,7 +2346,8 @@ func _on_unit_died(u: Unit) -> void:
 	if u.faction == Unit.FACTION_GUAN and not u.is_building:
 		kills += 1
 		if phase == Phase.FIGHT:
-			SteamService.record_kill(_steam_run_id)
+			_steam_valid_kills = mini(2147483647, _steam_valid_kills + 1)
+			SteamService.record_kill(_steam_run_id, _steam_valid_kills)
 		# 按英雄统计歼敌：把这一杀记到「最后一击」的梁山英雄名下。
 		# 用英雄 key 作键（而非 instance_id）→ 英雄阵亡后在聚义厅复活(新实例)仍并入同一条战功，不另起一行。
 		var k: Unit = u._killer
@@ -2492,7 +2595,7 @@ func _perf_bench_setup(n: int) -> void:
 		var e := spawn_unit(ek[i % 3], Unit.FACTION_GUAN, c + Vector2(340, -160) + off)
 		e.order_amove(c + Vector2(-140, 0))
 	_prof_on = true
-	print("[prof] bench(def): %d 敌 vs 6 英雄" % n)
+	print(Localize.format_text("[prof] bench(def): %d 敌 vs 6 英雄", n))
 
 
 func _physics_process(delta: float) -> void:
@@ -2699,7 +2802,7 @@ func _autocam_tick(delta: float) -> void:
 func toggle_autocam() -> void:
 	_autocam_enabled = not _autocam_enabled
 	if hud != null:
-		hud.show_message("自动镜头：%s" % ("开" if _autocam_enabled else "关"), 1.2)
+		hud.show_message(Localize.format_text("自动镜头：%s", (Localize.text("开") if _autocam_enabled else Localize.text("关"))), 1.2)
 
 
 ## 是否「全部我方英雄都在托管」（且至少有一名存活英雄）。
@@ -2872,7 +2975,7 @@ func final_wave_cleanup() -> Dictionary:
 			elif map.find_static_cell_path(e.position, hall.position, e.faction, e.movement_profile).is_empty() and not lanes.is_empty():
 				# 静态地形本身都断路才允许回填。玩家建筑封路必须正常攻破，不能瞬移越过。
 				var li := _eco_nearest_lane(e.position, lanes)
-				var eid := e.get_instance_id()
+				var eid := e.entity_id
 				var spread := Vector2i((eid % 5) - 2, (floori(float(eid) / 5.0) % 5) - 2)
 				var rc := map.nearest_open(map.world_to_cell(lanes[li]) + spread)
 				if rc.x >= 0:
@@ -2930,6 +3033,7 @@ func _auto_economy_pass(delta: float) -> void:
 	_eco_update_wood_stall()
 	_eco_workers()
 	_eco_build(tech_reserve)
+	if not _gameplay_rng_issue.is_empty(): return
 	_eco_train(research_plans, tech_reserve)
 	_eco_research(research_plans)
 	# 研究可能已在本拍启动并扣费；重新计算剩余计划，避免继续为已启动项目重复留预算。
@@ -3236,7 +3340,9 @@ func _eco_build(tech_reserve := {}) -> void:
 		return
 	if not spend(cg, cw):
 		return
-	ai_start_construction(key, cell, Unit.FACTION_LIANG, builder)
+	if ai_start_construction(key, cell, Unit.FACTION_LIANG, builder) == null:
+		refund(cg, cw)
+		return
 
 
 ## 练兵（英雄至上·高于一切）：只要还没出齐 或 有英雄战死，聚义厅就【只许排英雄】——
@@ -3277,7 +3383,7 @@ func _eco_train(research_plans := [], tech_reserve := {}) -> void:
 			queue_train(hall, hk, false)
 		return
 	# 英雄齐全且无人阵亡：补农民 → 兵营常备军
-	if not reserved.has(hall.get_instance_id()) and _eco_count_workers() < _eco_wcap_dyn() \
+	if not reserved.has(hall.entity_id) and _eco_count_workers() < _eco_wcap_dyn() \
 			and _eco_can_train("lou_luo", hall, tech_reserve):
 		queue_train(hall, "lou_luo", false)
 		return
@@ -3358,7 +3464,7 @@ func _eco_research_barracks() -> Unit:
 				and u.hp > 0.0 and not u.is_constructing and u._research_key == ""):
 			continue
 		if best == null or u._train_queue.size() < best._train_queue.size() \
-				or (u._train_queue.size() == best._train_queue.size() and u.get_instance_id() < best.get_instance_id()):
+				or (u._train_queue.size() == best._train_queue.size() and u.entity_id < best.entity_id):
 			best = u
 	return best
 
@@ -3380,7 +3486,7 @@ func _eco_reserved_buildings(plans: Array) -> Dictionary:
 	for p in plans:
 		var bld = p.get("bld", null)
 		if is_instance_valid(bld):
-			out[bld.get_instance_id()] = true
+			out[bld.entity_id] = true
 	return out
 
 
@@ -3846,7 +3952,7 @@ func _eco_lane_heroes() -> Array:
 		if is_instance_valid(h) and h.faction == Unit.FACTION_LIANG and h.is_hero and h.hp > 0.0 \
 				and h.auto_micro and not h.manual_order_active and h.manual_order_t <= 0.0:
 			heroes.append(h)
-	heroes.sort_custom(func(a, b): return a.get_instance_id() < b.get_instance_id())
+	heroes.sort_custom(func(a, b): return a.entity_id < b.entity_id)
 	return heroes
 
 
@@ -3933,7 +4039,7 @@ func _eco_lane_assignments(lanes: Array, heroes: Array, pressure: Array, cover: 
 		stay.sort_custom(func(a, b): return a.position.distance_squared_to(lanes[li]) < b.position.distance_squared_to(lanes[li]))
 		for si in range(mini(int(need[li]), stay.size())):
 			var h: Unit = stay[si]
-			result[h.get_instance_id()] = li
+			result[h.entity_id] = li
 			open.erase(h)
 			need[li] = int(need[li]) - 1
 	# 剩余英雄按到尚缺路线的距离补位，跨路人数保持最少。
@@ -3949,7 +4055,7 @@ func _eco_lane_assignments(lanes: Array, heroes: Array, pressure: Array, cover: 
 				best = li
 		if best < 0:
 			best = _eco_nearest_lane(h.position, lanes)
-		result[h.get_instance_id()] = best
+		result[h.entity_id] = best
 		if best >= 0:
 			need[best] = maxi(0, int(need[best]) - 1)
 	return result
@@ -3958,7 +4064,7 @@ func _eco_lane_assignments(lanes: Array, heroes: Array, pressure: Array, cover: 
 ## 同一个 AI 决策周期只扫描一次全场敌军/守军，所有英雄共享同一份路线计划。
 ## 最多延迟 AI_TICK 帧（约 0.27 秒）响应新波次，和英雄本身的决策节流一致。
 func _eco_lane_runtime_state() -> Dictionary:
-	var bucket := int(Engine.get_physics_frames() / maxi(1, AI_TICK))
+	var bucket := int(_run_cache_frame() / maxi(1, AI_TICK))
 	if _eco_lane_cache_bucket == bucket and not _eco_lane_cache.is_empty():
 		return _eco_lane_cache
 	var lanes := _eco_lanes()
@@ -3998,7 +4104,7 @@ func _eco_idle_barracks(reserved := {}) -> Unit:
 	for u in units:
 		if is_instance_valid(u) and u.key == "barracks" and u.faction == Unit.FACTION_LIANG \
 				and u.hp > 0.0 and not u.is_constructing and u._research_key == "" \
-				and not reserved.has(u.get_instance_id()) and u._train_queue.size() < bq:
+				and not reserved.has(u.entity_id) and u._train_queue.size() < bq:
 			bq = u._train_queue.size()
 			best = u
 	return best
@@ -4061,43 +4167,7 @@ func _build_atmosphere() -> void:
 	# 宁可不要这层暖色滤镜，也别冒黑屏风险（手机上画面照常，只是少一层调色）。
 	if OS.has_feature("mobile"):
 		return
-	var sh := Shader.new()
-	sh.code = """
-shader_type canvas_item;
-uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
-uniform float vignette : hint_range(0.0, 1.0) = 0.34;
-uniform float warmth : hint_range(0.0, 0.3) = 0.07;
-uniform float contrast : hint_range(0.8, 1.4) = 1.07;
-uniform float saturation : hint_range(0.5, 1.6) = 1.14;
-void fragment() {
-	vec2 uv = SCREEN_UV;
-	vec3 col = texture(screen_tex, uv).rgb;
-	col = (col - 0.5) * contrast + 0.5;                       // 对比
-	float l = dot(col, vec3(0.299, 0.587, 0.114));
-	col = mix(vec3(l), col, saturation);                      // 饱和
-	col.r += warmth * l;                                      // 高光偏暖
-	col.b += warmth * (1.0 - l) * 0.55;                       // 阴影偏冷
-	// 水面波光：在偏蓝像素上叠加随时间流动的微光（无需逐格扫描）
-	float waterness = clamp((col.b - max(col.r, col.g)) * 3.2, 0.0, 1.0);
-	float sh = (sin(uv.x * 60.0 + uv.y * 38.0 + TIME * 1.4) * 0.5 + 0.5)
-		* (sin(uv.x * 28.0 - uv.y * 66.0 - TIME * 1.05) * 0.5 + 0.5);
-	col += waterness * sh * 0.10 * vec3(0.72, 0.86, 1.0);
-	vec2 d = uv - vec2(0.5);
-	float vig = smoothstep(0.92, 0.30, length(d) * 1.28);     // 暗角
-	col *= mix(1.0 - vignette, 1.0, vig);
-	COLOR = vec4(clamp(col, 0.0, 1.0), 1.0);
-}
-"""
-	var mat := ShaderMaterial.new()
-	mat.shader = sh
-	var rect := ColorRect.new()
-	rect.name = "Atmosphere"
-	rect.material = mat
-	rect.color = Color(1, 1, 1, 1)
-	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	rect.z_index = 3700   # 氛围调色在单位/特效/迷雾之上（单位现走 z_index 深度序，z≤3400）
-	add_child(rect)
+	add_child(AtmosphereLayer.new())
 
 
 ## ---------- 战争迷雾 ----------
@@ -4287,6 +4357,13 @@ func _end(victory: bool, line: String) -> void:
 	_disarm_patrol()
 	_disarm_ability()
 	_disarm_item()
+	if _continue_receipt != null or get_node("/root/ContinueFlow").has_capture_request(self):
+		get_node("/root/ContinueFlow").finish_local_battle(self, victory, line)
+		return
+	_complete_end(victory, line)
+
+
+func _complete_end(victory: bool, line: String) -> void:
 	var camp = get_node_or_null("/root/Campaign")
 	var campaign_result: Dictionary = {}
 	if mission != null:
@@ -4303,7 +4380,7 @@ func _end(victory: bool, line: String) -> void:
 		var report_sections: Array[String] = [mission.result_report(campaign_result)]
 		if not mission.report.is_empty(): report_sections.append("\n".join(mission.report))
 		if report != "": report_sections.append(report)
-		report = "任务战报\n" + "\n".join(report_sections)
+		report = Localize.text("任务战报\n") + "\n".join(report_sections)
 		mission._panel.hide()
 	hud.show_end(victory, line, kills, mission != null and camp != null and victory and camp.has_next(), report, campaign_result)
 	if _smoke:
@@ -4318,7 +4395,7 @@ func _hero_kill_tally() -> String:
 	var parts: Array = []
 	for r in arr:
 		if int(r["n"]) > 0:
-			parts.append("%s 斩 %d" % [r["name"], int(r["n"])])
+			parts.append(Localize.format_text("%s 斩 %d", [r["name"], int(r["n"])]))
 	return "    ".join(parts)
 
 
@@ -4336,18 +4413,18 @@ func _hero_end_tally() -> String:
 	var parts: Array = []
 	for r in arr:
 		var hero_key := String(r.get("key", ""))
-		var block := "%s　击杀 %d　伤害 %s　承伤 %s　治疗 %s" % [
-			String(r.get("name", "好汉")), int(r.get("kills", 0)),
+		var block := Localize.format_text("%s　击杀 %d　伤害 %s　承伤 %s　治疗 %s", [
+			String(r.get("name", Localize.text("好汉"))), int(r.get("kills", 0)),
 			_format_end_combat_stat(float(r.get("damage", 0.0))),
 			_format_end_combat_stat(float(r.get("taken", 0.0))),
-			_format_end_combat_stat(float(r.get("healing", 0.0)))]
+			_format_end_combat_stat(float(r.get("healing", 0.0)))])
 		var skill_damage: Dictionary = r.get("skill_damage", {})
 		var active_ids := _active_ability_ids_for_hero(hero_key)
 		for entry in active_ids:
 			var aid := String(entry.get("id", ""))
 			var slot_i := int(entry.get("slot", 0))
 			var slot_name: String = String(["Q", "W", "E", "R"][slot_i]) if slot_i < 4 else str(slot_i + 1)
-			block += "\n　%s %s　%s" % [slot_name, String(_abilities[aid].get("name", aid)),
+			block += "\n　%s %s　%s" % [slot_name, Localize.text(String(_abilities[aid].get("name", aid))),
 				_format_end_combat_stat(float(skill_damage.get(aid, 0.0)))]
 		var item_stats: Dictionary = r.get("item_stats", {})
 		var item_ids: Array = item_stats.keys()
@@ -4356,9 +4433,9 @@ func _hero_end_tally() -> String:
 			var item_id := String(item_id_v)
 			var ir: Dictionary = item_stats[item_id]
 			var item_name := String(ir.get("name", item_def(item_id).get("name", item_id)))
-			block += "\n　物品 %s　伤害 %s　治疗 %s　击杀 %d" % [item_name,
+			block += Localize.format_text("\n　物品 %s　伤害 %s　治疗 %s　击杀 %d", [item_name,
 				_format_end_combat_stat(float(ir.get("damage", 0.0))),
-				_format_end_combat_stat(float(ir.get("healing", 0.0))), int(ir.get("kills", 0))]
+				_format_end_combat_stat(float(ir.get("healing", 0.0))), int(ir.get("kills", 0))])
 		parts.append(block)
 	return "\n\n".join(parts)
 
@@ -4963,7 +5040,7 @@ func _eco_rebalance_hero(u: Unit) -> bool:
 		return false
 	var pressure: Array = state.get("pressure", [])
 	var assignments: Dictionary = state.get("assignments", {})
-	var li := int(assignments.get(u.get_instance_id(), _eco_nearest_lane(u.position, lanes)))
+	var li := int(assignments.get(u.entity_id, _eco_nearest_lane(u.position, lanes)))
 	if li < 0:
 		return false
 	var anchor: Vector2 = lanes[li]
@@ -5541,7 +5618,7 @@ func _grid_build() -> void:
 				body_grid[k] = [u]
 			var ft = u._target   # 目标可能已在同帧释放；先以 Variant 接住，再做实例有效性检查。
 			if ft != null and is_instance_valid(ft):   # 顺路统计「谁被几人锁定」，索敌打分 O(1) 查——别在打分里逐目标扫邻格
-				var fid: int = ft.get_instance_id()
+				var fid: int = ft.entity_id
 				_focus_counts[fid] = int(_focus_counts.get(fid, 0)) + 1
 		if _grid.has(k):
 			_grid[k].append(u)
@@ -5643,7 +5720,7 @@ func _separation_pass(_delta: float) -> void:
 	for a: Unit in units:
 		if a.is_building or a.is_resource or a.hp <= 0.0 or a.garrisoned or a.story_outcome != "":
 			continue
-		var aid := a.get_instance_id()
+		var aid := a.entity_id
 		if stagger and aid % 3 != _sep_phase:
 			continue
 		var a_mv := a._state == Unit.ST_MOVE or a._state == Unit.ST_AMOVE or a._state == Unit.ST_CHASE
@@ -5661,7 +5738,7 @@ func _separation_pass(_delta: float) -> void:
 					continue
 				var bucket: Array = bucket_v
 				for b: Unit in bucket:
-					if b.get_instance_id() <= aid or b.story_outcome != "" or b.movement_profile != a_profile:
+					if b.entity_id <= aid or b.story_outcome != "" or b.movement_profile != a_profile:
 						continue   # 每对只处理一次；同时跳过自身
 					if a_phase and _gold_phasing(b):
 						continue
@@ -5705,6 +5782,7 @@ func _item_slot_for_event_compat(event: InputEventKey) -> int:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _run_capture_input_closed(): return
 	if not _gameplay_rng_issue.is_empty(): return
 	# 开战(FIGHT)之前一律不接收对单位的操作：旁白/布阵/结算阶段不能选取或指挥单位。
 	# （镜头平移缩放在 RTSCamera 里另行处理，「开战」按钮是 HUD 控件，二者不受影响。）
@@ -6142,7 +6220,7 @@ func arm_patrol() -> void:
 	cancel_armed()
 	_patrol_armed = true
 	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
-	msg("巡逻：左键选择另一端", 1.4)
+	msg(Localize.text("巡逻：左键选择另一端"), 1.4)
 
 
 func _disarm_repair() -> void:
@@ -6154,7 +6232,7 @@ func _disarm_repair() -> void:
 func arm_repair() -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 	if not _selection_has_worker():
-		msg("先选中农民/工人，再点维修", 1.3)
+		msg(Localize.text("先选中农民/工人，再点维修"), 1.3)
 		return
 	_disarm_ability()
 	_disarm_item()
@@ -6163,7 +6241,7 @@ func arm_repair() -> void:
 	_disarm_patrol()
 	_repair_armed = true
 	Input.set_default_cursor_shape(Input.CURSOR_CROSS)
-	msg("维修：点选要修缮的己方建筑", 1.5)
+	msg(Localize.text("维修：点选要修缮的己方建筑"), 1.5)
 
 
 func _disarm_garrison() -> void:
@@ -6187,7 +6265,7 @@ func arm_garrison() -> void:
 	_disarm_repair()
 	_garrison_armed = true
 	Input.set_custom_mouse_cursor(_cur_garrison, Input.CURSOR_ARROW, Vector2(CURSOR_SZ * 0.5, CURSOR_SZ * 0.5))
-	msg("驻扎：左键点选要进驻的己方建筑（箭楼/聚义厅）", 1.6)
+	msg(Localize.text("驻扎：左键点选要进驻的己方建筑（箭楼/聚义厅）"), 1.6)
 
 
 ## 武装驻扎落点：点己方有空位的箭楼/聚义厅 → 选中可动单位进驻（含英雄）。
@@ -6195,7 +6273,7 @@ func _order_garrison_at(p: Vector2, queued := false) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 	var bld := _garrisonable_at(p)
 	if bld == null:
-		msg("那不是可进驻的建筑（需箭楼/聚义厅且有空位）", 1.4)
+		msg(Localize.text("那不是可进驻的建筑（需箭楼/聚义厅且有空位）"), 1.4)
 		return
 	var movers := _selected_movers()
 	if movers.is_empty():
@@ -6212,7 +6290,7 @@ func _order_garrison_at(p: Vector2, queued := false) -> void:
 			u.order_move(glp, queued)   # 满了的就移动过去待有空位再点
 	if sent > 0:
 		Sfx.play("order")
-		msg("驻入 %s（%d 人）" % [bld.display_name, sent], 1.2)
+		msg(Localize.format_text("驻入 %s（%d 人）", [bld.display_name, sent]), 1.2)
 
 
 ## 取消一切「待指向」状态（触屏取消键 / Esc / 右键共用）
@@ -6477,10 +6555,10 @@ func cast_item(caster: Unit, slot: int, show_blocked := false) -> void:
 		_item_armed = String(item.get("id", ""))
 		_item_slot = slot
 		Input.set_default_cursor_shape(Input.CURSOR_CROSS)
-		var hint := "左键选择目标位置"
+		var hint := Localize.text("左键选择目标位置")
 		if mode == "unit":
-			hint = "左键点选目标单位（超射程会自动走近）"
-		msg("%s · %s：%s" % [caster.display_name, String(idef.get("name", _item_armed)), hint], 2.2)
+			hint = Localize.text("左键点选目标单位（超射程会自动走近）")
+		msg(Localize.format_text("%s · %s：%s", [caster.display_name, String(idef.get("name", _item_armed)), hint]), 2.2)
 		if overlay != null:
 			overlay.queue_redraw()
 	else:
@@ -6494,16 +6572,16 @@ func _show_item_blocked(caster: Unit, slot: int) -> void:
 		return
 	var item_id := String(caster.inventory.slot_item(slot).get("id", ""))
 	var idef := item_def(item_id)
-	var text := "暂时无法使用"
+	var text := Localize.text("暂时无法使用")
 	if caster.inventory.cooldown_left(item_id) > 0.0:
-		text = "物品冷却中（%d秒）" % int(ceil(caster.inventory.cooldown_left(item_id)))
+		text = Localize.format_text("物品冷却中（%d秒）", int(ceil(caster.inventory.cooldown_left(item_id))))
 	elif caster._stun_t > 0.0:
-		text = "眩晕中，无法使用"
+		text = Localize.text("眩晕中，无法使用")
 	elif caster.garrisoned:
-		text = "驻军中，无法使用"
+		text = Localize.text("驻军中，无法使用")
 	elif caster._cast_t > 0.0 or caster._channel_t > 0.0:
-		text = "正在施法，无法使用"
-	msg("%s · %s：%s" % [caster.display_name, String(idef.get("name", item_id)), text], 1.3)
+		text = Localize.text("正在施法，无法使用")
+	msg(Localize.format_text("%s · %s：%s", [caster.display_name, String(idef.get("name", item_id)), text]), 1.3)
 
 
 func _disarm_item() -> void:
@@ -6530,7 +6608,7 @@ func _cast_item_armed_at(p: Vector2) -> void:
 	if mode == "unit":
 		var target := _armed_unit_at(p, String(active.get("unit_team", "enemy")))
 		if target == null:
-			msg("请点选一个目标单位（右键取消）", 1.2)
+			msg(Localize.text("请点选一个目标单位（右键取消）"), 1.2)
 			return
 		_stamp_manual([caster])
 		_disarm_item()
@@ -6597,6 +6675,8 @@ func _tick_pending_item_casts() -> void:
 		if slot < 0 or not caster.inventory.ready(slot):
 			continue
 		var target = pc.get("target")
+		if typeof(target) == TYPE_OBJECT and not is_instance_valid(target):
+			continue # Freed targets must never reach a typed Unit cast API.
 		if target != null and (not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned or target.story_outcome != ""):
 			continue
 		_do_item_active(caster, slot, pc.get("point", caster.position), target)
@@ -6649,7 +6729,7 @@ func _do_item_active(caster: Unit, slot: int, point: Vector2, target: Unit = nul
 	var radius := float(active.get("radius", 0.0))
 	spawn_impact(center, radius >= 40.0)
 	Sfx.play("cast", -0.8, 0.05, 70)
-	msg("【%s】" % String(idef.get("name", item_id)), 1.5)
+	msg(Localize.format_text("【%s】", String(idef.get("name", item_id))), 1.5)
 	if hud != null:
 		hud.refresh_inventory()
 
@@ -6787,7 +6867,7 @@ func transfer_hero_item(from_hero: Unit, slot: int, to_hero: Unit) -> bool:
 		return false
 	var ok := from_hero.inventory.transfer_slot(slot, to_hero.inventory)
 	if not ok:
-		msg("%s 的物品栏已满" % to_hero.display_name, 1.3)
+		msg(Localize.format_text("%s 的物品栏已满", to_hero.display_name), 1.3)
 	return ok
 
 
@@ -6812,10 +6892,10 @@ func cast_ability(caster: Unit, slot := 0, show_blocked := false) -> void:
 		_ability_armed = aid
 		_ability_slot = slot
 		Input.set_default_cursor_shape(Input.CURSOR_CROSS)
-		var aim_hint := "左键选择目标位置"
+		var aim_hint := Localize.text("左键选择目标位置")
 		if String(ad.get("target", "point")) == "unit":
-			aim_hint = "左键点选目标单位（超射程会自动走近再放）"
-		hud.show_message("%s · %s：%s" % [caster.display_name, ad["name"], aim_hint], 2.5)
+			aim_hint = Localize.text("左键点选目标单位（超射程会自动走近再放）")
+		hud.show_message(Localize.format_text("%s · %s：%s", [caster.display_name, ad["name"], aim_hint]), 2.5)
 	else:
 		_stamp_manual([caster])
 		_begin_cast(caster, slot, caster.position)
@@ -6826,18 +6906,18 @@ func cast_ability(caster: Unit, slot := 0, show_blocked := false) -> void:
 func _show_cast_blocked(caster: Unit, slot: int) -> void:
 	if hud == null or caster == null or not is_instance_valid(caster) or slot < 0 or slot >= caster.slot_count():
 		return
-	var text := "暂时无法施放"
+	var text := Localize.text("暂时无法施放")
 	if is_cast_pending(caster, slot) or caster._cast_t > 0.0:
-		text = "上一发仍在施法，请稍候"
+		text = Localize.text("上一发仍在施法，请稍候")
 	elif caster.slot_max_charges(slot) > 0 and caster.slot_charges(slot) <= 0:
-		text = "能量恢复中"
+		text = Localize.text("能量恢复中")
 	elif float(caster.ability_slots[slot].get("cd_t", 0.0)) > 0.0:
-		text = "技能冷却中"
+		text = Localize.text("技能冷却中")
 	elif caster._silence_t > 0.0:
-		text = "沉默中，无法施法"
+		text = Localize.text("沉默中，无法施法")
 	elif caster._stun_t > 0.0:
-		text = "眩晕中，无法施法"
-	hud.show_message("%s：%s" % [caster.display_name, text], 1.2)
+		text = Localize.text("眩晕中，无法施法")
+	hud.show_message(Localize.format_text("%s：%s", [caster.display_name, text]), 1.2)
 
 
 ## QWER：对「活动英雄」的第 slot 个技能（学习/施放/提示）
@@ -6865,7 +6945,7 @@ func _cycle_idle_worker() -> void:
 	var idle := units.filter(func(u: Unit) -> bool:
 		return is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.is_idle_worker())
 	if idle.is_empty():
-		hud.show_message("没有闲置的喽啰", 1.2)
+		hud.show_message(Localize.text("没有闲置的喽啰"), 1.2)
 		return
 	_idle_i = _idle_i % idle.size()
 	var w: Unit = idle[_idle_i]
@@ -6900,7 +6980,7 @@ func _cast_ability_slot(slot: int) -> void:
 	if bool(s["passive"]) and not h.slot_has_active(slot):   # 纯被动不可施放；混合被动（宋江R）可主动放
 		return
 	if int(s["rank"]) <= 0:
-		hud.show_message("%s 尚未学习该技能（升级后点 + 学习）" % h.display_name, 1.5)
+		hud.show_message(Localize.format_text("%s 尚未学习该技能（升级后点 + 学习）", h.display_name), 1.5)
 		return
 	if h.slot_ready(slot):
 		cast_ability(h, slot)
@@ -6933,13 +7013,13 @@ func _cast_armed_at(p: Vector2) -> void:
 		# 单体指向：必须点到一个合法单位；点空地保持待指向态（可再点/右键取消）
 		var tu := _armed_unit_at(p, String(ad.get("unit_team", "enemy")))
 		if tu == null:
-			hud.show_message("请点选一个目标单位（右键取消）", 1.2)
+			hud.show_message(Localize.text("请点选一个目标单位（右键取消）"), 1.2)
 			return
 		if bool(ad.get("combat_only", false)) and (tu.is_building or tu.is_resource or tu.is_captive):
-			hud.show_message("该技能只能选择作战单位", 1.2)
+			hud.show_message(Localize.text("该技能只能选择作战单位"), 1.2)
 			return
 		if bool(ad.get("hero_only", false)) and not tu.is_hero:
-			hud.show_message("该技能只能选择敌方武将", 1.2)
+			hud.show_message(Localize.text("该技能只能选择敌方武将"), 1.2)
 			return
 		_stamp_manual([caster])
 		_disarm_ability()
@@ -7002,7 +7082,7 @@ func toggle_hero_melee(hero) -> void:
 		return
 	hero.toggle_melee()
 	Sfx.play("click")
-	hud.show_message("%s · %s" % [hero.display_name, "拔刀近战（+10%% 吸血）" if hero.melee_mode else "挂弓远射"], 1.8)
+	hud.show_message(Localize.format_text("%s · %s", [hero.display_name, Localize.text("拔刀近战（+10% 吸血）") if hero.melee_mode else Localize.text("挂弓远射")]), 1.8)
 	hud.refresh_command()   # 刷新命令卡，更新「持刀/持弓」按钮态
 
 
@@ -7292,7 +7372,7 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 	if String(eff.get("kind", "")) == "weapon_toggle":
 		caster.toggle_melee()
 		_spawn_ability_fx(caster.position, 46.0, ad["color"])
-		hud.show_message("%s · %s" % [caster.display_name, "拔刀近战（+10%% 吸血）" if caster.melee_mode else "挂弓远射"], 1.8)
+		hud.show_message(Localize.format_text("%s · %s", [caster.display_name, Localize.text("拔刀近战（+10% 吸血）") if caster.melee_mode else Localize.text("挂弓远射")]), 1.8)
 		caster.slot_start_cd(slot)
 		hud.refresh_command()
 		return
@@ -7706,10 +7786,10 @@ func _do_ability(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 		var cast_label := String(ad["name"])
 		if aid == "song_banner":
 			# cast_seq 已在扣能量后 +1；刚刚落下的第奇数面为忠、偶数面为义。
-			cast_label = "忠义双旗·%s旗" % ("忠" if caster.slot_cast_sequence(slot) % 2 == 1 else "义")
-		hud.show_message("【%s】· 剩余能量 %d/%d" % [cast_label, remaining, maximum], 2.0)
+			cast_label = Localize.format_text("忠义双旗·%s旗", (Localize.text("忠") if caster.slot_cast_sequence(slot) % 2 == 1 else Localize.text("义")))
+		hud.show_message(Localize.format_text("【%s】· 剩余能量 %d/%d", [cast_label, remaining, maximum]), 2.0, true)
 	else:
-		hud.show_message("【%s】" % ad["name"], 1.8)
+		hud.show_message(Localize.format_text("【%s】", ad["name"]), 1.8, true)
 	# 技能音已在函数开头按 id/种类播放，这里不再重复
 
 
@@ -8051,7 +8131,7 @@ func _bolt_pass(delta: float) -> void:
 					var step: float = float(b["speed"]) * delta
 					if to.length() <= step + tgt.radius:
 						var beff: Dictionary = b["eff"]
-						_apply_riders(tgt, beff, int(b["rank"]), caster)
+						_apply_riders(tgt, beff, int(b["rank"]), caster if is_instance_valid(caster) else null)
 						if float(beff.get("dmg", 0.0)) > 0.0:
 							tgt.take_damage(float(beff["dmg"]) * float(b["sc"]),
 								caster if (caster != null and is_instance_valid(caster)) else null, false, false,
@@ -8078,7 +8158,7 @@ func _bolt_pass(delta: float) -> void:
 						break
 				if hitl != null:
 					var leff: Dictionary = b["eff"]
-					_apply_riders(hitl, leff, int(b["rank"]), caster)
+					_apply_riders(hitl, leff, int(b["rank"]), caster if is_instance_valid(caster) else null)
 					if float(leff.get("dmg", 0.0)) > 0.0:
 						hitl.take_damage(float(leff["dmg"]) * float(b["sc"]),
 							caster if (caster != null and is_instance_valid(caster)) else null, false, false,
@@ -8165,7 +8245,7 @@ func _queue_walk_item(caster: Unit, slot: int, tgt: Unit, point: Vector2) -> voi
 	_walk_item_casts.append({"c": caster, "uid": uid, "tgt": tgt, "point": point,
 		"serial": -1, "t": 0.0, "age": 0.0})
 	if hud != null:
-		hud.show_message("超出物品使用距离——正在接近…", 1.4)
+		hud.show_message(Localize.text("超出物品使用距离——正在接近…"), 1.4)
 
 
 func _walk_item_cast_pass(delta: float) -> void:
@@ -8176,6 +8256,8 @@ func _walk_item_cast_pass(delta: float) -> void:
 	for wc in _walk_item_casts:
 		var caster = wc.get("c")
 		var target = wc.get("tgt")
+		if typeof(target) == TYPE_OBJECT and not is_instance_valid(target):
+			continue # Freed targets must never reach a typed Unit cast API.
 		if caster == null or not is_instance_valid(caster) or caster.hp <= 0.0 or caster.inventory == null:
 			continue
 		if target != null and (not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned or target.story_outcome != ""):
@@ -8188,7 +8270,7 @@ func _walk_item_cast_pass(delta: float) -> void:
 		wc["age"] = float(wc.get("age", 0.0)) + delta
 		if float(wc["age"]) > 15.0:
 			if caster.faction == Unit.FACTION_LIANG:
-				msg("无法接近物品使用位置，命令已取消", 1.5)
+				msg(Localize.text("无法接近物品使用位置，命令已取消"), 1.5)
 			continue
 		var active: Dictionary = caster.inventory.slot_def(slot).get("active", {})
 		var range := item_cast_range(active)
@@ -8224,7 +8306,7 @@ func _queue_walk_cast(caster: Unit, slot: int, tgt: Unit) -> void:
 			return
 	_walk_casts.append({"c": caster, "slot": slot, "tgt": tgt, "point": Vector2.INF, "serial": -1, "t": 0.0, "age": 0.0})
 	if hud != null:
-		hud.show_message("目标超出施法距离——正在接近…", 1.4)
+		hud.show_message(Localize.text("目标超出施法距离——正在接近…"), 1.4)
 
 
 func _queue_walk_cast_point(caster: Unit, slot: int, point: Vector2) -> void:
@@ -8239,7 +8321,7 @@ func _queue_walk_cast_point(caster: Unit, slot: int, point: Vector2) -> void:
 			return
 	_walk_casts.append({"c": caster, "slot": slot, "tgt": null, "point": point, "serial": -1, "t": 0.0, "age": 0.0})
 	if hud != null:
-		hud.show_message("落点超出施法距离——正在接近原落点…", 1.4)
+		hud.show_message(Localize.text("落点超出施法距离——正在接近原落点…"), 1.4)
 
 
 func _walk_cast_pass(delta: float) -> void:
@@ -8265,7 +8347,7 @@ func _walk_cast_pass(delta: float) -> void:
 		wc["age"] = float(wc.get("age", 0.0)) + delta
 		if float(wc["age"]) > 15.0:
 			if c.faction == Unit.FACTION_LIANG:
-				msg("无法接近施法位置，命令已取消", 1.5)
+				msg(Localize.text("无法接近施法位置，命令已取消"), 1.5)
 			continue
 		var ad: Dictionary = _abilities.get(String(c.ability_slots[slot]["id"]), {})
 		var rng := ability_cast_range(c, ad)
@@ -9335,6 +9417,19 @@ func _do_summon(caster: Unit, eff: Dictionary, rank: int) -> void:
 		skey = caster.key
 	if skey == "" or not _defs.has(skey):
 		return
+	var n := maxi(1, int(eff.get("count", 1)))
+	if not entity_ids_available(n):
+		_gameplay_rng_stop("ENTITY_SUMMON_CAPACITY")
+		return
+	var spawn_positions: Array[Vector2] = []
+	for i in n:
+		var ang := TAU * (float(i) / float(n)) + 0.6
+		var off := Vector2(cos(ang), sin(ang)) * (34.0 + 8.0 * float(n))
+		var cell: Vector2i = map.nearest_open(map.world_to_cell(caster.position + off))
+		if cell.x < 0:
+			_gameplay_rng_stop("ENTITY_SUMMON_TERRAIN")
+			return
+		spawn_positions.append(map.cell_to_world(cell))
 	# 武松虎等“场上只留一只”的召唤：仅替换同一英雄本人拥有、同种类的旧召唤，不误伤队友的虎。
 	if bool(eff.get("replace_existing", false)):
 		for old in units.duplicate():
@@ -9342,16 +9437,16 @@ func _do_summon(caster: Unit, eff: Dictionary, rank: int) -> void:
 					and old.stat_owner_key == caster.key and old.summon_kind == skind:
 				despawn_summon(old)
 				if not _gameplay_rng_issue.is_empty(): return
-	var n := maxi(1, int(eff.get("count", 1)))
 	var dur := float(_pick(eff["dur_ranks"], rank)) if eff.has("dur_ranks") else float(eff.get("dur", 0.0))
 	var cmult := float(_pick(eff["copy_mult"], rank)) if eff.has("copy_mult") else 1.0   # copy_caster 时按等级取本体血/攻的百分比
 	var hp_mult := float(_pick(eff["copy_hp_mult"], rank)) if eff.has("copy_hp_mult") else cmult
 	var atk_mult := float(_pick(eff["copy_atk_mult"], rank)) if eff.has("copy_atk_mult") else cmult
 	for i in n:
-		var ang := TAU * (float(i) / float(n)) + 0.6
-		var off := Vector2(cos(ang), sin(ang)) * (34.0 + 8.0 * float(n))
-		var pos := map.cell_to_world(map.nearest_open(map.world_to_cell(caster.position + off)))
+		var pos: Vector2 = spawn_positions[i]
 		var su := spawn_unit(skey, caster.faction, pos)
+		if su == null:
+			_gameplay_rng_stop("ENTITY_SUMMON_CREATION")
+			return
 		su.is_summon = true
 		su.summon_kind = skind
 		su.stat_owner_key = caster.key   # 驻守战的召唤物/幻象战绩归召唤英雄
@@ -9683,7 +9778,7 @@ func _resolve_lin_duel_death(dead: Unit) -> void:
 			fx.position = caster.position
 			fx_root.add_child(fx)
 			if hud != null:
-				hud.show_message("【豹子头·点将】敌将授首，林冲回复生命并刷新 Q/W", 2.0)
+				hud.show_message(Localize.text("【豹子头·点将】敌将授首，林冲回复生命并刷新 Q/W"), 2.0)
 		d["t"] = 0.0
 	_lin_duels = _lin_duels.filter(func(d): return float(d["t"]) > 0.0)
 
@@ -9853,7 +9948,7 @@ func _assign_group(n: int) -> void:
 		return
 	_groups[n] = members.duplicate()
 	_refresh_group_badges()
-	hud.show_message("编队 [%d]：%d 个单位" % [n, members.size()], 1.4)
+	hud.show_message(Localize.format_text("编队 [%d]：%d 个单位", [n, members.size()]), 1.4)
 
 
 func _add_to_group(n: int) -> void:
@@ -9871,7 +9966,7 @@ func _add_to_group(n: int) -> void:
 			combined.append(u)
 	_groups[n] = combined
 	_refresh_group_badges()
-	hud.show_message("编队 [%d] +%d：共 %d 个单位" % [n, members.size(), combined.size()], 1.4)
+	hud.show_message(Localize.format_text("编队 [%d] +%d：共 %d 个单位", [n, members.size(), combined.size()]), 1.4)
 
 
 func _refresh_group_badges() -> void:
@@ -10050,7 +10145,7 @@ func _issue_order(p: Vector2, queued := false) -> void:
 			_click_fx_pos = p
 			_click_fx_t = 0.5
 			Sfx.play("order")
-			msg("工人前去续建 %s" % con.display_name, 1.2)
+			msg(Localize.format_text("工人前去续建 %s", con.display_name), 1.2)
 			return
 		if movers_c.is_empty():
 			# 没选可移动单位 → 右键在建工地视作「取消建造」（退还资源）
@@ -10101,11 +10196,23 @@ func _issue_order(p: Vector2, queued := false) -> void:
 				if u.is_hero:
 					u.order_move(glp, queued)   # 混选里的英雄：右键建筑时只移动过去，不进驻
 			if sent > 0:
-				msg("驻入 %s（%d 人）" % [garr.display_name, sent], 1.2)
+				msg(Localize.format_text("驻入 %s（%d 人）", [garr.display_name, sent]), 1.2)
 				return
 	var enemy := _enemy_at(p)
 	_click_fx_attack = enemy != null
 	if enemy != null:
+		if mission != null and mission.actions.has("zhu_rts_inside") and not mission.actions["zhu_rts_inside"].done \
+				and is_instance_valid(enemy) and enemy.display_name == "祝家庄偏门" \
+				and movers.any(func(u: Unit) -> bool: return u.is_hero) \
+				and not movers.any(func(u: Unit) -> bool: return String(u.key).begins_with("siege")):
+			var contact_world: Vector2 = map.cell_to_world(mission.actions["zhu_rts_inside"].cell)
+			_click_fx_attack = false
+			msg(Localize.text("正在前往偏门前接应内应孙立/孙新，切勿强攻偏门！"), 3.0)
+			for u in movers:
+				u.order_move(contact_world, queued)
+			if not queued:
+				_stamp_mission_move(movers, contact_world)
+			return
 		for u in movers:
 			u.order_attack(enemy, queued, true)
 		return
@@ -10134,7 +10241,7 @@ func _issue_order(p: Vector2, queued := false) -> void:
 	if not queued and not ground_movers.is_empty():
 		_stamp_mission_move(ground_movers, lp)
 	if repaired:
-		msg("工人前去修缮 %s" % rep.display_name, 1.3)
+		msg(Localize.format_text("工人前去修缮 %s", rep.display_name), 1.3)
 
 
 ## 武装维修落点：点己方建筑 → 选区里的工人前去修缮（受损才修；完好则提示）。
@@ -10143,16 +10250,16 @@ func _order_repair_at(p: Vector2, queued := false) -> void:
 	var workers: Array = selection.filter(func(u: Unit) -> bool:
 		return is_instance_valid(u) and u.is_worker and u.faction == Unit.FACTION_LIANG and u.hp > 0.0)
 	if workers.is_empty():
-		msg("没有可派遣的工人", 1.2)
+		msg(Localize.text("没有可派遣的工人"), 1.2)
 		return
 	var rep := _damaged_building_at(p)
 	if rep == null:
 		# 也许点到的是完好的己方建筑 → 明确告知无需修缮，而不是静默无反应
 		var whole := _friendly_building_at(p)
 		if whole != null:
-			msg("%s 完好无损，无需修缮" % whole.display_name, 1.3)
+			msg(Localize.format_text("%s 完好无损，无需修缮", whole.display_name), 1.3)
 		else:
-			msg("请点选要修缮的己方建筑", 1.3)
+			msg(Localize.text("请点选要修缮的己方建筑"), 1.3)
 		return
 	_stamp_manual(workers)
 	for u in workers:
@@ -10161,7 +10268,7 @@ func _order_repair_at(p: Vector2, queued := false) -> void:
 	_click_fx_t = 0.5
 	_click_fx_attack = false
 	Sfx.play("order")
-	msg("工人前去修缮 %s" % rep.display_name, 1.3)
+	msg(Localize.format_text("工人前去修缮 %s", rep.display_name), 1.3)
 
 
 ## 屏幕点下处是否为己方非资源建筑（完好或受损都算；用于维修反馈区分）
@@ -10211,7 +10318,7 @@ func _order_stop() -> void:
 	for u in movers:
 		u.order_stop()
 	Sfx.play("order")
-	msg("原地待命", 1.2)
+	msg(Localize.text("原地待命"), 1.2)
 
 
 ## H：原地据守——停止当前命令并切到据守姿态，只攻击进入射程的敌人。
@@ -10224,7 +10331,7 @@ func _order_hold_position() -> void:
 	for u in movers:
 		u.order_hold_position()
 	Sfx.play("order")
-	msg("原地据守", 1.2)
+	msg(Localize.text("原地据守"), 1.2)
 	_refresh_active_highlight()
 
 
@@ -10244,7 +10351,7 @@ func _order_patrol_at(p: Vector2) -> void:
 	for i in range(movers.size()):
 		movers[i].order_patrol(targets[i])
 	_apply_group_cap(movers)
-	msg("巡逻", 1.2)
+	msg(Localize.text("巡逻"), 1.2)
 
 
 ## G：循环切换选中战斗单位的作战姿态（进攻 → 守备 → 据守）
@@ -10258,9 +10365,9 @@ func _cycle_stance() -> void:
 	var nxt := (base + 1) % 4
 	for u in movers:
 		u.set_stance(nxt)
-	var names := ["进攻（追击索敌）", "守备（守阵地·短追）", "据守（原地·只打近敌）", "避战（不索敌·不还手）"]
+	var names := [Localize.text("进攻（追击索敌）"), Localize.text("守备（守阵地·短追）"), Localize.text("据守（原地·只打近敌）"), Localize.text("避战（不索敌·不还手）")]
 	Sfx.play("click")
-	msg("姿态：" + names[nxt], 1.6)
+	msg(Localize.text("姿态：") + names[nxt], 1.6)
 	_refresh_active_highlight()
 
 
@@ -10466,7 +10573,7 @@ func cancel_construction(bld: Unit) -> void:
 		_set_selection(ns)
 	units.erase(bld)
 	bld.queue_free()
-	msg("已取消建造 %s（资源已退还）" % String(d.get("name", bld.key)), 1.5)
+	msg(Localize.format_text("已取消建造 %s（资源已退还）", String(d.get("name", bld.key))), 1.5)
 	Sfx.play("cant")
 
 
@@ -10493,7 +10600,7 @@ func sortie_unit(u: Unit) -> void:
 	u.leave_garrison()
 	if not _gameplay_rng_issue.is_empty(): return
 	Sfx.play("order")
-	msg("%s 出击！" % u.display_name, 1.2)
+	msg(Localize.format_text("%s 出击！", u.display_name), 1.2)
 	if bld != null and is_instance_valid(bld):
 		on_garrison_changed(bld)
 	focus_unit(u)
@@ -10510,7 +10617,7 @@ func ungarrison(bld: Unit) -> void:
 			if not _gameplay_rng_issue.is_empty(): return
 	bld.passengers.clear()
 	Sfx.play("order")
-	msg("驻军出击！", 1.2)
+	msg(Localize.text("驻军出击！"), 1.2)
 	on_garrison_changed(bld)
 
 
@@ -10542,7 +10649,7 @@ func delete_selected(skip_confirm := false) -> void:
 		return u.is_building and not u.is_constructing).size()
 	if solid_blds > 0 and not skip_confirm and _demolish_armed_t <= 0.0:
 		_demolish_armed_t = 2.5
-		msg("再按 Delete 确认拆除 %d 座建筑（Shift+Delete 直接拆）" % solid_blds, 2.5)
+		msg(Localize.format_text("再按 Delete 确认拆除 %d 座建筑（Shift+Delete 直接拆）", solid_blds), 2.5)
 		Sfx.play("click")
 		return
 	_demolish_armed_t = 0.0
@@ -10556,7 +10663,7 @@ func delete_selected(skip_confirm := false) -> void:
 		n += 1
 	_set_selection([])
 	Sfx.play("cant")
-	msg("已拆除 %d 个目标" % n, 1.2)
+	msg(Localize.format_text("已拆除 %d 个目标", n), 1.2)
 
 
 ## 销毁单个已成型目标：释放占地、清理工人引用、扣回人口、留血渍、移除节点
@@ -10687,11 +10794,11 @@ func _combat_stats_selftest() -> void:
 					and child.custom_minimum_size.x >= child.custom_minimum_size.y + 100.0
 			break
 	var end_tally := _hero_end_tally()
-	var tally_ok := end_tally.contains("宋江") and end_tally.contains("击杀 2") \
-			and end_tally.contains("伤害 470") and end_tally.contains("承伤 100") \
-			and end_tally.contains("治疗 130") and end_tally.contains("李逵") \
-			and end_tally.contains("E 火攻连营　220") and end_tally.contains("R 替天行道·仁义　0") \
-			and end_tally.contains("E 蛮力　%s" % _format_end_combat_stat(brawn_expected))
+	var tally_ok := end_tally.contains(Localize.text("宋江")) and end_tally.contains(Localize.text("击杀 2")) \
+			and end_tally.contains(Localize.text("伤害 470")) and end_tally.contains(Localize.text("承伤 100")) \
+			and end_tally.contains(Localize.text("治疗 130")) and end_tally.contains(Localize.text("李逵")) \
+			and end_tally.contains(Localize.text("E 火攻连营　220")) and end_tally.contains(Localize.text("R 替天行道·仁义　0")) \
+			and end_tally.contains(Localize.format_text("E 蛮力　%s", _format_end_combat_stat(brawn_expected)))
 	var all_ok := damage_ok and taken_ok and kills_ok and healing_ok and skills_ok and mitigation_ok and brawn_stats_ok \
 			and format_ok and layout_ok and tally_ok
 	print("[combatstats] damage=%.0f/%s taken=%.0f/%s healing=%.0f/%s kills=%d/%s skills=%s mitigation=%s brawn=%s summon_owner=%s format=%s layout=%s tally=%s ALL=%s" % [
@@ -10699,7 +10806,7 @@ func _combat_stats_selftest() -> void:
 		float(rec.get("healing", 0.0)), healing_ok, int(rec.get("kills", 0)), kills_ok,
 		skills_ok, mitigation_ok, brawn_stats_ok, damage_ok and kills_ok and healing_ok, format_ok, layout_ok, tally_ok, all_ok])
 	if OS.get_environment("COMBAT_STATS_KEEP") == "1":
-		hud.show_end(true, "驻守战结算界面测试", kills, false, end_tally)
+		hud.show_end(true, Localize.text("驻守战结算界面测试"), kills, false, end_tally)
 		return   # 有窗口截图时保留非零样例；进程退出即销毁，不影响存档。
 
 	track_hero_combat_stats = false
@@ -10971,17 +11078,17 @@ func _item_selftest() -> void:
 	var saved_hero_kills: Dictionary = hero_kills.duplicate(true)
 	var saved_selection: Array = selection.duplicate()
 	_items = {
-		"test_bomb": {"name": "试炼雷", "color": Color("ff9b62"), "stats": {"attack": 5.0},
+		"test_bomb": {"name": Localize.text("试炼雷"), "color": Color("ff9b62"), "stats": {"attack": 5.0},
 			"active": {"target": "unit", "unit_team": "enemy", "range": 300.0, "cooldown": 10.0,
-				"description": "对单体造成伤害", "effect": {"target": "explicit", "damage": 60.0}}},
-		"test_heal": {"name": "试炼药", "color": Color("75dfa0"),
+				"description": Localize.text("对单体造成伤害"), "effect": {"target": "explicit", "damage": 60.0}}},
+		"test_heal": {"name": Localize.text("试炼药"), "color": Color("75dfa0"),
 			"active": {"target": "self", "cooldown": 8.0, "effect": {"target": "self", "heal": 40.0}}},
-		"test_low": {"name": "旧护符", "passive": {"unique_group": "test_guard", "power": 1.0,
+		"test_low": {"name": Localize.text("旧护符"), "passive": {"unique_group": "test_guard", "power": 1.0,
 			"stats": {"defense": 2.0}}},
-		"test_high": {"name": "新护符", "passive": {"unique_group": "test_guard", "power": 2.0,
+		"test_high": {"name": Localize.text("新护符"), "passive": {"unique_group": "test_guard", "power": 2.0,
 			"stats": {"defense": 6.0}, "triggers": {"on_damaged": {"target": "self", "heal": 10.0,
 				"cooldown": 3.0}}}},
-		"test_stack": {"name": "试炼符", "max_stack": 3, "stats": {"hp": 4.0}},
+		"test_stack": {"name": Localize.text("试炼符"), "max_stack": 3, "stats": {"hp": 4.0}},
 	}
 	track_hero_combat_stats = true
 	var origin := map.cell_to_world(map.nearest_open(level.camera_start_cell() + Vector2i(9, 9)))
@@ -11035,8 +11142,8 @@ func _item_selftest() -> void:
 		and int(bomb_rec.get("kills", 0)) == 1 \
 		and absf(float(heal_rec.get("healing", 0.0)) - 40.0) < 0.01
 	var tally := _hero_end_tally()
-	var tally_ok := tally.contains("物品 试炼雷") and tally.contains("伤害 50") \
-		and tally.contains("物品 试炼药") and tally.contains("治疗 40")
+	var tally_ok := tally.contains(Localize.text("物品 试炼雷")) and tally.contains(Localize.text("伤害 50")) \
+		and tally.contains(Localize.text("物品 试炼药")) and tally.contains(Localize.text("治疗 40"))
 	var all_ok := added_ok and stats_ok and full_ok and shared_cd_ok and snapshot_ok \
 		and swap_ok and transfer_ok and combat_ok and tally_ok
 	print("[item] add=%s stats=%s full=%s shared_cd=%s snapshot=%s swap=%s transfer=%s combat=%s tally=%s ALL=%s" % [
@@ -11279,7 +11386,7 @@ func _rework_selftest() -> void:
 		if not _wards.is_empty() and ally.hp > 10.0:
 			pass_n += 1
 		else:
-			fail.append("治疗桩 wards=%d hp=%.0f" % [_wards.size(), ally.hp])
+			fail.append(Localize.format_text("治疗桩 wards=%d hp=%.0f", [_wards.size(), ally.hp]))
 	# 2) 侯健 R·死神之眼：攻击桩连珠射敌
 	var hj := _rwt_hero("hou_jian", Vector2i(8, 12))
 	var f2 := _rwt_foe(Vector2i(10, 12))
@@ -11290,7 +11397,7 @@ func _rework_selftest() -> void:
 		if f2.hp < hp0:
 			pass_n += 1
 		else:
-			fail.append("死神之眼桩未射敌")
+			fail.append(Localize.text("死神之眼桩未射敌"))
 	# 3) 张青(菜)E·毒桩：射敌+减速
 	var zqc := _rwt_hero("zhang_qing_cai", Vector2i(8, 16))
 	var f3 := _rwt_foe(Vector2i(10, 16))
@@ -11301,7 +11408,7 @@ func _rework_selftest() -> void:
 		if f3.hp < hp0b:
 			pass_n += 1
 		else:
-			fail.append("毒桩未射敌")
+			fail.append(Localize.text("毒桩未射敌"))
 	# 4) 董平 R·百枪分身：生成「长得像董平」的幻象(非老虎)
 	var dp := _rwt_hero("dong_ping", Vector2i(8, 20))
 	if dp != null:
@@ -11313,7 +11420,7 @@ func _rework_selftest() -> void:
 		if imgs >= 1:
 			pass_n += 1
 		else:
-			fail.append("分身非本体形象 imgs=%d" % imgs)
+			fail.append(Localize.format_text("分身非本体形象 imgs=%d", imgs))
 	# 5) 鲁智深 Q·裂地：贯穿伤+晕+生成阻路实墙
 	var lz := _rwt_hero("lu_zhishen", Vector2i(14, 8))
 	var f5 := _rwt_foe(Vector2i(16, 8))
@@ -11324,7 +11431,7 @@ func _rework_selftest() -> void:
 		if _ice_walls.size() > walls0 and f5.hp < hp5 and f5._stun_t > 0.0:
 			pass_n += 1
 		else:
-			fail.append("裂地 wall+%d dmg=%.0f stun=%.1f" % [_ice_walls.size() - walls0, hp5 - f5.hp, f5._stun_t])
+			fail.append(Localize.format_text("裂地 wall+%d dmg=%.0f stun=%.1f", [_ice_walls.size() - walls0, hp5 - f5.hp, f5._stun_t]))
 	# 6) 鲁智深 R·回音：敌越密每人受创越重（4 敌 vs 1 敌对比）
 	var lz1 := _rwt_hero("lu_zhishen", Vector2i(14, 12))
 	var lone := _rwt_foe(Vector2i(14, 13))
@@ -11350,7 +11457,7 @@ func _rework_selftest() -> void:
 		if dmg_crowd > dmg_lone + 1.0:
 			pass_n += 1
 		else:
-			fail.append("回音未随密度增伤 lone=%.0f crowd=%.0f" % [dmg_lone, dmg_crowd])
+			fail.append(Localize.format_text("回音未随密度增伤 lone=%.0f crowd=%.0f", [dmg_lone, dmg_crowd]))
 	# 7) 樊瑞 W·摄魂咒：易伤(受伤大增)
 	var fr := _rwt_hero("fan_rui", Vector2i(14, 16))
 	var f7 := _rwt_foe(Vector2i(15, 16))
@@ -11364,9 +11471,9 @@ func _rework_selftest() -> void:
 			if (hpa - f7.hp) > 120.0:   # 100×(1+0.3)=130
 				pass_n += 1
 			else:
-				fail.append("易伤未放大伤害 d=%.0f" % (hpa - f7.hp))
+				fail.append(Localize.format_text("易伤未放大伤害 d=%.0f", (hpa - f7.hp)))
 		else:
-			fail.append("易伤未施加")
+			fail.append(Localize.text("易伤未施加"))
 	# 8) 安道全 E·影波：伤敌同时愈友
 	var adq := _rwt_hero("an_daoquan", Vector2i(14, 20))
 	var wally := spawn_unit("liang_qiang", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(Vector2i(15, 20))))
@@ -11378,7 +11485,7 @@ func _rework_selftest() -> void:
 		if wally.hp > 20.0 and f8.hp < fhp:
 			pass_n += 1
 		else:
-			fail.append("影波 heal=%.0f foeDmg=%.0f" % [wally.hp - 20.0, fhp - f8.hp])
+			fail.append(Localize.format_text("影波 heal=%.0f foeDmg=%.0f", [wally.hp - 20.0, fhp - f8.hp]))
 	# 9) 魏定国 E·火径：随身落地火（_fire_trails + 推帧后 _ground_dots 增长）
 	var wdg := _rwt_hero("wei_dingguo", Vector2i(26, 8))
 	if wdg != null:
@@ -11389,7 +11496,7 @@ func _rework_selftest() -> void:
 		if _fire_trails.size() > ft0 and _ground_dots.size() > gd0:
 			pass_n += 1
 		else:
-			fail.append("火径未铺地火 trails+%d dots+%d" % [_fire_trails.size() - ft0, _ground_dots.size() - gd0])
+			fail.append(Localize.format_text("火径未铺地火 trails+%d dots+%d", [_fire_trails.size() - ft0, _ground_dots.size() - gd0]))
 	# 10) 解珍 R·一线长焰：沿线铺多处地火
 	var xz := _rwt_hero("xie_zhen", Vector2i(26, 12))
 	if xz != null:
@@ -11398,8 +11505,8 @@ func _rework_selftest() -> void:
 		if _ground_dots.size() - gdl >= 3:
 			pass_n += 1
 		else:
-			fail.append("一线火 patches=%d" % (_ground_dots.size() - gdl))
-	print("[rework] %d/10 机制已验证生效" % pass_n)
+			fail.append(Localize.format_text("一线火 patches=%d", (_ground_dots.size() - gdl)))
+	print(Localize.format_text("[rework] %d/10 机制已验证生效", pass_n))
 	if not fail.is_empty():
 		print("[rework] FAIL: %s" % ", ".join(fail))
 
@@ -11889,7 +11996,7 @@ func _eco_research_selftest() -> void:
 	var picks_shortest := picked != null and picked._train_queue.is_empty()
 	var reserved := {}
 	if picked != null:
-		reserved[picked.get_instance_id()] = true
+		reserved[picked.entity_id] = true
 	var skips_reserved := picked == null or _eco_idle_barracks(reserved) != picked
 	gold = 100; wood = 100
 	var reserve_blocks_spend := not _eco_can_spend_after_tech(25, 14, {"gold": 80, "wood": 80})
@@ -12128,8 +12235,8 @@ func _towertrap_selftest() -> void:
 	hbh.slot_start_cd(0)   # 真·施放：cd_t 应被设成缩短后的冷却
 	var cdt: float = float(hbh.ability_slots[0]["cd_t"])
 	var cast_cd_ok: bool = absf(cdt - hbh._slot_cd(0)) < 0.01
-	print("[cdtest] song_rally(slot0): 原cd=%.1f  n=1→cd=%.1f  n=3→cd=%.1f  施放后cd_t=%.1f(应=%.1f)  ok=%s" % [
-		float(_abilities.get("song_rally", {}).get("cd", 0.0)), cd1, hbh._slot_cd(0), cdt, hbh._slot_cd(0), cast_cd_ok])
+	print(Localize.format_text("[cdtest] song_rally(slot0): 原cd=%.1f  n=1→cd=%.1f  n=3→cd=%.1f  施放后cd_t=%.1f(应=%.1f)  ok=%s", [
+		float(_abilities.get("song_rally", {}).get("cd", 0.0)), cd1, hbh._slot_cd(0), cdt, hbh._slot_cd(0), cast_cd_ok]))
 	# UI 时序：抬手阶段 cd_t 本来就应为 0，HUD 必须识别 pending 并显示「施法中」，不能显示「冷却 0」。
 	hbh.ability_slots[0]["cd_t"] = 0.0
 	_begin_cast(hbh, 0, hbh.position)
@@ -12137,7 +12244,7 @@ func _towertrap_selftest() -> void:
 			and float(hbh.ability_slots[0]["cd_t"]) <= 0.0
 	print("[cdui] pending=%s cd_t=%.1f label=%s ok=%s" % [
 		is_cast_pending(hbh, 0), float(hbh.ability_slots[0]["cd_t"]),
-		"施法中" if is_cast_pending(hbh, 0) else "冷却", cast_ui_state_ok])
+		Localize.text("施法中") if is_cast_pending(hbh, 0) else Localize.text("冷却"), cast_ui_state_ok])
 	hbh.cancel_cast_windup()
 	# 敌方倍率 e=4：数量×4、血×(1+3/3)=2.0、攻×(1+3/4)=1.75
 	var _em0 := Campaign.enemy_mult
@@ -12323,10 +12430,10 @@ func _ai_observer_hardening_selftest() -> void:
 			and 39 <= LITE_FX_MOB_THRESHOLD])
 	results.append(["lite_remains_bounded", DEATH_REMAINS_LITE_CAP < DEATH_REMAINS_CAP \
 			and DEATH_REMAINS_LITE_LIFETIME < DEATH_REMAINS_LIFETIME])
-	results.append(["observer_skill_quiet", hud._is_quiet_ai_observer_message("【百步穿杨】") \
-			and hud._is_quiet_ai_observer_message("【忠义双旗·忠旗】· 剩余能量 1/2")])
-	results.append(["observer_wave_visible", not hud._is_quiet_ai_observer_message("【第 1/20 波】山前来敌") \
-			and not hud._is_quiet_ai_observer_message("【科技】聚义研究完成！")])
+	results.append(["observer_skill_quiet", hud._is_quiet_ai_observer_message(Localize.text("【百步穿杨】")) \
+			and hud._is_quiet_ai_observer_message(Localize.text("【忠义双旗·忠旗】· 剩余能量 1/2"))])
+	results.append(["observer_wave_visible", not hud._is_quiet_ai_observer_message(Localize.text("【第 1/20 波】山前来敌")) \
+			and not hud._is_quiet_ai_observer_message(Localize.text("【科技】聚义研究完成！"))])
 	results.append(["autocam_readable_dwell", AUTOCAM_DWELL >= 4.0])
 	ai_friendly = prev_ai
 	Settings.auto_micro_level = prev_micro
@@ -12467,7 +12574,7 @@ func _final_cleanup_selftest() -> void:
 		level.set("_wave", level.call("_waves").size())
 		level.set("_final_cleanup_last_alive", 1)
 		level.set("_final_cleanup_last_hp", foe.hp)
-		level.set("_final_cleanup_positions", {foe.get_instance_id(): foe.position})
+		level.set("_final_cleanup_positions", {foe.entity_id: foe.position})
 		level.set("_final_cleanup_quiet", 6.0)
 		level.set("_final_cleanup_active", false)
 		level.set("_final_cleanup_tick", 0.0)
@@ -12705,8 +12812,8 @@ func _info_ui_selftest(dir: String) -> void:
 		_set_selection([test_heroes[0]])
 	if hud.touch_ui:
 		hud._refresh_skill_rail()
-	hud.show_message("官军探马杀到——头一拨人马已近寨门！", 8.0)
-	hud.show_message("科技研究正在等待生产队列排空", 8.0)
+	hud.show_message(Localize.text("官军探马杀到——头一拨人马已近寨门！"), 8.0)
+	hud.show_message(Localize.text("科技研究正在等待生产队列排空"), 8.0)
 	hud._set_show_control_help_enabled(false)
 	hud._update_control_help_visibility()
 	hud._set_info_expanded(false)
@@ -13407,6 +13514,7 @@ class AbilityFx extends TimedFx:
 	var _seed := 0
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = 0.7
 		t = 0.7
 		_seed = (int(position.x) * 13 + int(position.y) * 7) % 360
@@ -13439,6 +13547,7 @@ class HuaSnipeAimFx extends TimedFx:
 	var col := Color("ffd86a")
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = maxf(life, 0.05)
 		t = dur
 
@@ -13488,6 +13597,7 @@ class HuaTargetArrowFx extends TimedFx:
 	var _E := Vector2.ZERO
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		travel = 0.13 if snipe else 0.22
 		dur = travel + (0.62 if snipe else 0.72)
 		t = dur
@@ -13561,6 +13671,7 @@ class HuaSnipeMarkFx extends TimedFx:
 	var life := 5.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 
@@ -13621,6 +13732,7 @@ class LinGuardFx extends TimedFx:
 	var col := Color("9fc8ff")
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 
@@ -13653,6 +13765,7 @@ class LinCounterFx extends TimedFx:
 	var _end := Vector2.ZERO
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.46
 		t = dur
 		_end = GameMap.projected_delta(self, end_w - position)
@@ -13683,6 +13796,7 @@ class LinSpearStackFx extends TimedFx:
 	var proc := false
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.58 if proc else 0.42
 		t = dur
 
@@ -13718,6 +13832,7 @@ class LinDuelFx extends TimedFx:
 	var col := Color("ffd06a")
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 
@@ -13741,13 +13856,14 @@ class LinDuelFx extends TimedFx:
 		draw_arc(Vector2.ZERO, 21.0, 0.0, TAU, 32, c, 2.8)
 		draw_arc(Vector2.ZERO, 27.0, -PI * 0.5, -PI * 0.5 + TAU * clampf(t / dur, 0.0, 1.0), 32,
 			Color(1.0, 0.95, 0.68, 0.55 * fade), 2.0)
-		draw_string(ThemeDB.fallback_font, Vector2(-8, -31), "将", HORIZONTAL_ALIGNMENT_LEFT, -1, 17,
+		draw_string(ThemeDB.fallback_font, Vector2(-8, -31), Localize.text("将"), HORIZONTAL_ALIGNMENT_LEFT, -1, 17,
 			Color(1.0, 0.94, 0.62, 0.95 * fade))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 class LinDuelResolveFx extends TimedFx:
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.75
 		t = dur
 
@@ -13773,6 +13889,7 @@ class ArrowRainFx extends TimedFx:
 	var _arrows: Array = []       # 每根：{p:Vector2(屏幕落点偏移), delay:float}
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = 1.2
 		t = 1.2
 		for i in range(N):
@@ -13823,6 +13940,7 @@ class ArrowShotFx extends TimedFx:
 	var _ang := 0.0
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		travel = 0.24 if (pin or big) else 0.18
 		dur = travel + (0.6 if (pin or big) else 0.34)
 		t = dur
@@ -13885,6 +14003,7 @@ class FlameburstFx extends TimedFx:
 	var _embers: Array = []
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = 0.85
 		t = 0.85
 		var n := 9 + int(rad / 14.0)
@@ -13938,6 +14057,7 @@ class LightningFx extends TimedFx:
 	var _branches: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.55
 		t = 0.55
 		var steps := 7
@@ -13974,6 +14094,7 @@ class RallyFx extends TimedFx:
 	var _motes: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.95
 		t = 0.95
 		for i in range(18):
@@ -14011,6 +14132,7 @@ class HasteFx extends TimedFx:
 	var col := Color("9ce0a0")
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.6
 		t = 0.6
 
@@ -14040,6 +14162,7 @@ class SlashArcFx extends TimedFx:
 	var _a0 := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.42
 		t = 0.42
 		_a0 = randf() * TAU
@@ -14073,6 +14196,7 @@ class IronStaffSweepFx extends TimedFx:
 	var _a0 := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.46
 		t = dur
 		_a0 = randf() * TAU
@@ -14112,6 +14236,7 @@ class WaterSplashFx extends TimedFx:
 	var _drops: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.8
 		t = 0.8
 		for i in range(12):
@@ -14151,6 +14276,7 @@ class PoisonCloudFx extends TimedFx:
 	var _bubbles: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 1.2
 		t = 1.2
 		for i in range(9):
@@ -14191,6 +14317,7 @@ class StoneFx extends TimedFx:
 	var _ang := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		travel = 0.16
 		dur = travel + 0.28
 		t = dur
@@ -14228,6 +14355,9 @@ class LiangshanWaterBackdrop extends Node2D:
 	var ws := Vector2.ZERO
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"):
+			queue_redraw()
+			return
 		z_index = -1000
 		texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 		# AtlasTexture不能可靠循环；先提取当前水面区域为独立纹理，避免补底退化成纯色。
@@ -14269,8 +14399,10 @@ class FogLayer extends Node2D:
 ## 极淡、缓慢，不喧宾夺主；HUD 在更高层会盖住面板区。
 class AmbientMotes extends Node2D:
 	const N := 30
+	var phase := 0.0
 
 	func _process(_d: float) -> void:
+		phase += _d
 		queue_redraw()
 
 	func _draw() -> void:
@@ -14280,7 +14412,7 @@ class AmbientMotes extends Node2D:
 		if vpn == null:
 			return   # 场景拆卸时 viewport 可能为 null，跳过本帧绘制，避免崩溃
 		var vp := vpn.get_visible_rect().size
-		var t := Time.get_ticks_msec() / 1000.0
+		var t := phase
 		for i in range(N):
 			var bx := float((i * 131 + 7) % 1000) / 1000.0 * vp.x
 			var by := float((i * 197 + 31) % 1000) / 1000.0 * vp.y
@@ -14377,6 +14509,9 @@ class DeathRemains extends Node2D:
 		var sliced := AtlasTexture.new()
 		sliced.atlas = atlas
 		sliced.region = Rect2(col * cell_w, row * cell_h, cell_w, cell_h)
+		# Death-remains are sampled from a 4x2 sheet; clip the sample to the
+		# selected cell so scaled blood/equipment marks do not pick up neighbours.
+		sliced.filter_clip = true
 		frame_texture = sliced
 
 	func is_revealed() -> bool:
@@ -14446,6 +14581,7 @@ class HitSpark extends Node2D:
 	var _seed := 0
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		_seed = get_index() * 37 + int(position.x) + int(position.y)
 
 	func _process(delta: float) -> void:
@@ -14572,6 +14708,7 @@ class MeteorFx extends TimedFx:
 	var _embers: Array = []
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = life
 		t = life
 		position = start_w
@@ -14644,6 +14781,7 @@ class GroundFireFx extends TimedFx:
 	var _embers: Array = []
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = life
 		t = life
 		var n := (5 + int(rad / 20.0)) if lite else (10 + int(rad / 10.0))
@@ -14696,6 +14834,7 @@ class StompFx extends TimedFx:
 	var _debris: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.6
 		t = 0.6
 		for i in range(7):
@@ -14737,6 +14876,7 @@ class WhirlFx extends TimedFx:
 	var _spin := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.5
 		t = 0.5
 		_spin = randf() * TAU
@@ -14774,6 +14914,7 @@ class BloodFx extends TimedFx:
 	var _a0 := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.45
 		t = 0.45
 		_a0 = randf() * TAU
@@ -14816,6 +14957,7 @@ class ChargeFx extends TimedFx:
 	var dir := 1.0   # 面向：+1 右 / -1 左
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.4
 		t = 0.4
 
@@ -14845,6 +14987,7 @@ class PinFx extends TimedFx:
 	var _stakes: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.7
 		t = 0.7
 		for i in range(6):
@@ -14945,6 +15088,7 @@ class AbilityProjectileFx extends TimedFx:
 	var _ang := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.62
 		t = dur
 		_E = GameMap.projected_delta(self, end_w - position)
@@ -14993,6 +15137,7 @@ class BuildingCollapseFx extends TimedFx:
 	const N := 10   # 10×10 = 100 块碎片：块切得细才有「一块块塌下来」的颗粒感
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = 1.1
 		t = dur
 
@@ -15050,6 +15195,7 @@ class AbilityImpactFx extends TimedFx:
 	var mode := "impact"
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.78
 		t = dur
 
@@ -15109,6 +15255,7 @@ class AbilityBeamFx extends TimedFx:
 	var _E := Vector2.ZERO
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.46
 		t = dur
 		_S = GameMap.ISO.basis_xform(start_w - position)
@@ -15151,6 +15298,7 @@ class AbilitySweepFx extends TimedFx:
 	var _ang := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.42
 		t = dur
 		_E = GameMap.projected_delta(self, end_w - position)
@@ -15181,6 +15329,7 @@ class SpearSweepFx extends TimedFx:
 	var _dir := 1.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.46
 		t = 0.46
 		_a0 = randf() * TAU
@@ -15227,6 +15376,7 @@ class ThrustFx extends TimedFx:
 	var _ang := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.40
 		t = dur
 		_E = GameMap.projected_delta(self, end_w - position)
@@ -15266,6 +15416,7 @@ class BlinkShotFx extends TimedFx:
 	var _E := Vector2.ZERO
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = 0.42
 		t = dur
 		_S = GameMap.ISO.basis_xform(start_w - position)   # position == end_w（节点放在落点）
@@ -15303,6 +15454,7 @@ class OrbitAxesFx extends TimedFx:
 	var _spin := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 
@@ -15434,6 +15586,7 @@ class ChronoFx extends TimedFx:
 	var _spin := 0.0
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 
@@ -15469,6 +15622,7 @@ class BlackRainFx extends TimedFx:
 	var _drops: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 		var drop_count := int(rad / (8.0 if lite else 5.0)) + (8 if lite else 14)
@@ -15510,6 +15664,7 @@ class IceWallFx extends TimedFx:
 	var _shards: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 		var n := maxi(3, int(half_len * 2.0 / 22.0))
@@ -15547,6 +15702,7 @@ class BeastStampedeFx extends TimedFx:
 	const FRAME_BOB := [-2.0, 1.5, 0.0, -1.0]
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		# 150 是兽群前后错列的行进余量；每只兽在世界坐标里都保持同一恒定速度。
 		dur = (length + 150.0) / maxf(travel_speed, 1.0)
 		t = dur
@@ -15596,6 +15752,7 @@ class WardFx extends TimedFx:
 	var _ph := 0.0
 
 	func _ready() -> void:
+		if get_meta("_run_restore_prepared", false): return
 		dur = life
 		t = life
 		_ph = float((int(position.x) * 7 + int(position.y) * 3) % 100) * 0.06
@@ -15645,7 +15802,7 @@ class WardFx extends TimedFx:
 				draw_polyline(PackedVector2Array([cloth[0], cloth[1], cloth[2], cloth[3], cloth[0]]), edge_col, 2.0)
 				var font := ThemeDB.fallback_font
 				var text_x := -38.0 if loyalty else 8.0
-				var glyph := "忠" if loyalty else "义"
+				var glyph := Localize.text("忠") if loyalty else Localize.text("义")
 				draw_string_outline(font, topp + Vector2(text_x, 22 + flap), glyph, HORIZONTAL_ALIGNMENT_CENTER, 30, 16, 3, edge_col)
 				draw_string(font, topp + Vector2(text_x, 22 + flap), glyph, HORIZONTAL_ALIGNMENT_CENTER, 30, 16, text_col)
 				draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -15681,6 +15838,7 @@ class EarthCrackFx extends TimedFx:
 	var _rub: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 		var perp := Vector2(-dir.y, dir.x)
@@ -15713,6 +15871,7 @@ class EchoSlamFx extends TimedFx:
 	var col := Color("8a5a2a")
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.85
 		t = 0.85
 
@@ -15738,6 +15897,7 @@ class SplitMirrorFx extends TimedFx:
 	var from_w := Vector2.ZERO
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.5
 		t = 0.5
 
@@ -15761,6 +15921,7 @@ class FireflyFx extends TimedFx:
 	var _motes: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = life
 		t = life
 		for i in range(10):
@@ -15792,6 +15953,7 @@ class FireLineFx extends TimedFx:
 	var col := Color("ff5522")
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.6
 		t = 0.6
 
@@ -15814,6 +15976,7 @@ class ShadowWaveFx extends TimedFx:
 	var heal := false
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.45
 		t = 0.45
 
@@ -15832,6 +15995,7 @@ class AmpCastFx extends TimedFx:
 	var col := Color("6a4fb0")
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.7
 		t = 0.7
 
@@ -15853,6 +16017,7 @@ class SilenceFx extends TimedFx:
 	var _talismans: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.8
 		t = 0.8
 		for i in range(4):
@@ -15892,6 +16057,7 @@ class ArmorCrackFx extends TimedFx:
 	var _cracks: Array = []
 
 	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
 		dur = 0.6
 		t = 0.6
 		for i in range(9):
@@ -15957,7 +16123,7 @@ func _armor_selftest() -> void:
 			missing += k + " "
 	var applied := dao.defense > 0.0 and absf(dao.defense - Defs.armor_for("guan_dao", Defs.UNITS["guan_dao"])) < 0.001
 	var all_ok := cls_ok and counter_ok and armor_nonzero and applied
-	print("[armor] cls=%s counter=%s nonzero=%s applied=%s ALL=%s | dao护甲=%.0f 缺:[%s]" % [cls_ok, counter_ok, armor_nonzero, applied, all_ok, dao.defense, missing])
+	print(Localize.format_text("[armor] cls=%s counter=%s nonzero=%s applied=%s ALL=%s | dao护甲=%.0f 缺:[%s]", [cls_ok, counter_ok, armor_nonzero, applied, all_ok, dao.defense, missing]))
 	for u in [qiang, qi, gong, dao]:
 		if is_instance_valid(u):
 			u.take_damage(u.hp + 1.0, null)
@@ -17120,3 +17286,86 @@ func clear_campaign_section() -> void:
 		collection.clear()
 	_mob_count = 0
 	_ground_fire_visuals = 0
+
+
+func _connect_hud_signals() -> void:
+	hud.start_battle.connect(_on_start_battle)
+	hud.intro_done.connect(_on_intro_done)
+	hud.restart.connect(func() -> void: get_tree().paused = false; get_tree().reload_current_scene())
+	hud.to_menu.connect(func() -> void: get_tree().paused = false; _goto_menu())
+	hud.resume_game.connect(_close_pause)
+	hud.quit_game.connect(func() -> void: get_tree().paused = false; AppLifecycle.request_quit("battle_quit"))
+
+
+func _prepared_clock_entry_valid() -> bool:
+	if not has_meta("_run_core_clock_bound"): return _run_clock == null
+	var bound: Variant = get_meta("_run_core_clock_bound")
+	return typeof(bound) == TYPE_DICTIONARY and bound.size() == 3 and bound.has_all(["clock", "physics", "process"]) and _run_clock != null and bound.clock == _run_clock and bound.physics == Engine.get_physics_frames() and bound.process == Engine.get_process_frames()
+
+
+## Scene-local phase survives pause and process restart; no engine TIME dependency.
+class AtmosphereLayer extends Node2D:
+	var phase := 0.0
+	var rect: ColorRect
+	var screen: Node2D
+
+	func _init() -> void:
+		var sh := Shader.new()
+		sh.code = """
+shader_type canvas_item;
+uniform float phase = 0.0;
+uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
+uniform float vignette : hint_range(0.0, 1.0) = 0.34;
+uniform float warmth : hint_range(0.0, 0.3) = 0.07;
+uniform float contrast : hint_range(0.8, 1.4) = 1.07;
+uniform float saturation : hint_range(0.5, 1.6) = 1.14;
+void fragment() {
+		vec2 uv = SCREEN_UV;
+		vec3 col = texture(screen_tex, uv).rgb;
+		col = (col - 0.5) * contrast + 0.5;                       // 对比
+		float l = dot(col, vec3(0.299, 0.587, 0.114));
+		col = mix(vec3(l), col, saturation);                      // 饱和
+		col.r += warmth * l;                                      // 高光偏暖
+		col.b += warmth * (1.0 - l) * 0.55;                       // 阴影偏冷
+		// 水面波光：在偏蓝像素上叠加随时间流动的微光（无需逐格扫描）
+		float waterness = clamp((col.b - max(col.r, col.g)) * 3.2, 0.0, 1.0);
+		float sh = (sin(uv.x * 60.0 + uv.y * 38.0 + phase * 1.4) * 0.5 + 0.5)
+			* (sin(uv.x * 28.0 - uv.y * 66.0 - phase * 1.05) * 0.5 + 0.5);
+		col += waterness * sh * 0.10 * vec3(0.72, 0.86, 1.0);
+		vec2 d = uv - vec2(0.5);
+		float vig = smoothstep(0.92, 0.30, length(d) * 1.28);     // 暗角
+		col *= mix(1.0 - vignette, 1.0, vig);
+		COLOR = vec4(clamp(col, 0.0, 1.0), 1.0);
+}
+"""
+		var mat := ShaderMaterial.new()
+		mat.shader = sh
+		rect = ColorRect.new()
+		rect.name = "Atmosphere"
+		rect.material = mat
+		rect.color = Color(1, 1, 1, 1)
+		rect.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		z_index = 3700   # 氛围调色在单位/特效/迷雾之上（单位现走 z_index 深度序，z≤3400）
+		screen = Node2D.new()
+		add_child(screen)
+		screen.add_child(rect)
+		set_phase(0.0)
+
+	func set_phase(value: float) -> void:
+		phase = value
+		rect.material.set_shader_parameter("phase", phase)
+
+	func _process(delta: float) -> void:
+		set_phase(phase + delta)
+		_fit_viewport()
+
+	func _ready() -> void:
+		get_viewport().size_changed.connect(_fit_viewport)
+		_fit_viewport()
+
+	func _fit_viewport() -> void:
+		if not is_inside_tree(): return
+		# Keep the original z ordering while drawing the filter in screen space.
+		screen.transform = get_global_transform_with_canvas().affine_inverse()
+		rect.size = get_viewport_rect().size

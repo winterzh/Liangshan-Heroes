@@ -1,0 +1,91 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,sys
+root=Path.cwd(); out=root/'scratchpad/hud_resume_20260908'; q=root/'qa/hud_resume_20260908'
+head='b19aed5f63ac9f7657204176350ef8362352555a'; run=sys.argv[1]; native=root/'.godot/stabilization_overlay'/run
+assert native.resolve().parent==(root/'.godot/stabilization_overlay').resolve()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'])
+r=json.loads((native/'receipt.json').read_text()); report=json.loads((native/'report.json').read_text())
+assert r['suite']=='hud-resume-native'
+assert all(r[k] for k in ['complete','source_unchanged','player_unchanged','private_source_unchanged','candidate_unchanged','lock_released']) and not r['final_issues']
+assert report['passed'] and report['complete'] and not report['failed_count'] and all(x['passed'] for x in report['checks'])
+changes=json.loads((out/'overlay_manifest.json').read_text())['files']
+for row in changes:
+    p=root/row['path']; assert p.exists()==row['before_exists']
+    if p.exists(): assert sha(p)==row['before_raw_sha256']
+    assert sha(root/row['candidate'])==row['candidate_sha256']==sha(native/'project'/row['path'])
+q.mkdir(exist_ok=False); (q/'.gdignore').write_text('\n'); pins=[]; runs=[]
+def archive(src,name):
+    dst=q/name; dst.parent.mkdir(parents=True,exist_ok=True); dst.write_bytes(src.read_bytes()); assert sha(dst)==sha(src)
+    pins.append({'source_relative':src.relative_to(root).as_posix(),'archive_relative':name,'bytes':dst.stat().st_size,'sha256':sha(dst)})
+for path in sorted((root/'.godot/stabilization_overlay').glob('*/receipt.json')):
+    receipt=json.loads(path.read_text())
+    if receipt.get('source_head')!=head or receipt.get('suite')!='hud-resume-native': continue
+    folder=path.parent; tag='runs/'+folder.name
+    runs.append({'run_id':folder.name,'complete':receipt.get('complete'),'freeze_sha256':receipt['freeze_sha256']})
+    for name in ['receipt.json','manifest.json','freeze.json','import.log','driver.log','report.json','executed_runner.py.txt','executed_guard.py.txt']:
+        if (folder/name).exists(): archive(folder/name,tag+'/'+name)
+    for row in changes: archive(folder/'project'/row['path'],tag+'/'+Path(row['path']).name+'.txt')
+    archive(folder/'project/tools/hud_resume/driver.gd',tag+'/driver.gd.txt')
+for p in out.iterdir():
+    if p.is_file(): archive(p,'candidate/'+p.name+('.txt' if p.suffix=='.gd' else ''))
+for name in ['prepare_hud_resume.py','close_hud_resume.py']: archive(root/'.godot'/name,'preparation/'+name+'.txt')
+uid=native/'project/scripts/run_hud_state.gd.uid'; archive(uid,'candidate/run_hud_state.gd.uid.txt')
+for row in changes: (root/row['path']).write_bytes((root/row['candidate']).read_bytes())
+(root/'scripts/run_hud_state.gd.uid').write_bytes(uid.read_bytes())
+source_count=sum(x['label'].startswith(('source before ','source after ')) for x in report['checks']); count=report['check_count']; other=count-source_count
+installation={'source_head':head,'installed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_run':run,'runs':runs,'changes':changes,'native_uid_sha256':sha(uid),'checks':count,'source_sha_checks':source_count,'other_checks':other,'full_gameplay_activation':False,'complete_world_resume':False,'steam_updated':False}
+(q/'installation.json').write_text(json.dumps(installation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(q/'SOURCE_PINS.json').write_text(json.dumps({'files':pins},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+freeze=sha(out/'freeze.json')
+(q/'README.md').write_text(f'''# HUD 整体恢复原生 QA
+
+来源 `{head}`，最终运行 `{run}`。{count}项通过，其中{source_count}为来源SHA、{other}为其他检查。Godot4.6.3 / Windows / Forward+ / Vulkan，私有user://，最小化窗口。界面值、小地图缓存像素和处理状态经过原生验证；不是可见布局截图或人工鼠标手感验收。
+
+真实经典战斗正常运行后，按正常spawn接口补足12个可选单位和英雄，设置资源、选区、物品栏及暂停确认状态，再通过真实HELD屏障捕获。最终夹具额外覆盖实际Viewport拖拽取消、已有HeroChip信号与非零重绘相位。新世界先准备、绑定真实根时钟和数据，再挂载禁用Battle并构建HUD；同帧激活仅HUD消费者。Escape经Viewport.push_input分发，第二次Escape确实调用Battle._close_pause；驱动同步重新暂停，未让战斗世界运行一帧。0/1/10/12单位和生产建筑使用真实还原的Unit及HUD入口。取消手势后的松开测试直接调用真实控件_gui_input，不能写成OS输入测试。
+
+runs保留本批原始失败及通过的脚本、执行器、manifest/freeze、日志、report/receipt。R1为驱动过早引用全局HUD/Unit类型导致autoload尚不可用；R2初始经典模式无英雄，补实际英雄夹具；R3驱动错误地用字符串比较整型Steam局编号。后续结果以各自报告为准。生产文件仅从最后受测字节晋级，既有混合换行保留。
+
+在来源提交的独立checkout核对Godot、runner/guard SHA，将candidate中的.gd.txt恢复.gd原名，连同overlay_manifest.json、freeze.json放到scratchpad/hud_resume_20260908并保留.gdignore；不要提前把归档UID复制进来源scripts，隔离导入会生成。复现：
+
+```text
+py -3.14 -X utf8 -B tools/run_stabilization_overlay.py --source-head {head} --freeze-sha256 {freeze} --candidate scratchpad/hud_resume_20260908 --expected-files 5 --driver driver.gd --driver-destination tools/hud_resume/driver.gd --suite hud-resume-native --prefix "[hud resume QA] " --profile-root D:/CodexTemp/lshqa --rendered-driver --run
+```
+
+profile-root可换受控短绝对路径。源码、玩家文件、私有源码、候选保护及原生退出/锁释放均以最终receipt为准。未完成全世界物理激活、磁盘槽、跨进程、Steam真实账号及人工/性能验收。[合同](../../docs/HUD_RESUME_20260908.md)。
+''',encoding='utf-8')
+(root/'docs/HUD_RESUME_20260908.md').write_text(f'''# FIGHT HUD 与暂停安装顺序
+
+core内部schema v6新增第19分区hud；hud_messages继续使用既有第18分区。run_hud_state保存触屏模式、物品栏开关、面板/小地图/物品按钮/已有英雄头像的刷新相位、HUD选区身份、顶部文本、暂停及确认动作、自动镜头按钮状态和CanvasLayer变换/显示/处理状态。地图缓存保存原RGBA8像素；图标、技能/生产命令、肖像、库存对象和资源文本从同一个已恢复Battle/Unit及当前受信HUD代码重建。旧Control地址、资源路径、回调和运行时实例ID不进入存档。
+
+## 安装顺序
+
+prepare仍创建离树禁用世界，新增隐藏的HUD骨架。mount_disabled要求暂停树和非physics回调，在离树Battle上调用已验证RootState.bind，生成真实恢复时钟与根字段，再挂载Battle。临时_run_core_clock_bound记录时钟对象和当次physics/process帧，Battle._ready只接受一致的绑定，跳过新局部署、Steam.begin_run等初始化；准备节点固定使用受信main.tscn作为原有重开回调的场景资源路径。HUD就绪先造控件，随后finish读取已恢复数据、重建选区/命令卡/物品栏、即时刷新资源、绑定小地图、恢复消息及暂停状态；所有控件仍禁用并阻断信号，HUD不可见且不抢焦点。
+
+hud_module.activate只允许同一个暂停安装帧，验证全部原有及动态控件的输入闸，连接既有Battle菜单回调、Settings/视口回调，再恢复HUD处理/显示。暂停确认恢复后焦点落在取消按钮。过帧、重复调用、控件被改动或晚期地图缓存不匹配均拒绝；挂载失败释放新世界与时钟。完整世界的Unit/Fx/Fog/显示/相机激活、共享失效占位对象释放、Steam持久局和current_scene切换仍须由最后事务在同帧统筹，不能把此内部HUD测试入口当玩家继续功能。
+
+活动单位查询带懒更新，finish结束恢复原根_active指针，避免UI准备改写捕获数据。资源刷新从原_process块抽成共用方法，构造不调用伪造delta的_process。新视口按既有触屏/安全区规则重排，宽屏可用内联物品栏时遵循原布局规则关闭弹窗。开局/剧情/结算界面仅在FIGHT捕获时要求关闭；将来相应状态由原玩法事件生成。
+
+## 手势与回滚
+
+真实屏障现在取消原生GUI拖拽、清除HUD长按/瞄准/组按钮手势和悬停提示，释放该HUD的键盘焦点；已经提交的命令不受此步骤影响。三个自定义物品/技能/命令控件只处理具有对应新按下的松开，防止取消后重放操作。原生拖拽接口依据[Viewport公开API](https://docs.godotengine.org/en/4.6/classes/class_viewport.html#class-viewport-method-gui-cancel-drag)。
+
+准备世界把_cursor_resources_released置true，因为尚未接管全局光标；挂载后失败释放时不清除旧世界光标。原_install_target_cursor仍在真正接管时清除此标志。HUD原有UITheme和Settings热键标签路径复用，没有另造布局。
+
+## 证据与未完成项
+
+最终{count}项={source_count}来源SHA+{other}其他检查通过。[QA](../qa/hud_resume_20260908/README.md)、[安装收据](../qa/hud_resume_20260908/installation.json)。覆盖真实根绑定和禁止重新部署、全部控件禁用、资源首次正确显示及后续原生idle更新、共享Unit选区/物品栏/命令/肖像、小地图像素、暂停确认的两次Viewport Escape、取消手势后孤立松开、0/1/10/12选区和生产建筑、晚期错误整树回滚与过帧拒绝，另保留消息/相机/世界显示/死亡残留和19分区坏记录回归。原始失败全部保留，不把来源哈希数量当功能用例数。
+
+下一步是氛围/浮尘、Overlay/光标和剩余Fx的完整准备，以及全世界/Steam最终安装和跨进程持续行为，随后原子继续槽、保存成功才退出及菜单入口，再适配八战役。完整30波、1800秒、两台Windows、真实性能和真人验收仍开放。本轮仅开发分支同步，没有更新Steam。
+''',encoding='utf-8')
+def prepend(path,text):
+    p=root/path; p.write_text(text+'\n\n'+p.read_text(encoding='utf-8-sig'),encoding='utf-8',newline='\n')
+prepend('docs/WORKLOG.md',f'## 2026-09-08 HUD 整体恢复与根绑定后挂载\n\ncore v6第19分区hud，先恢复根数据/时钟再暂停挂载和构建全HUD，同帧统一开放其输入。资源/选区/物品栏/小地图/暂停确认、手势释放、晚期回滚及过帧拒绝通过；最终{count}项中{source_count}来源SHA、{other}其他。受测五脚本及原生UID晋级。[合同](HUD_RESUME_20260908.md)、[QA](../qa/hud_resume_20260908/README.md)。全世界激活、Steam持久局、继续槽和跨进程仍待交付；本批同步stable，不更新Steam。')
+prepend('docs/SOURCE_SETUP.md','## 2026-09-08 HUD 整体恢复\n\ncore schema v6新增hud与mount_disabled：离树真实根绑定后暂停挂载、构建HUD，同帧交给最终事务激活。启动方式、Play.cmd和玩家菜单不变；[安装合同与复现](HUD_RESUME_20260908.md)。不得将HUD内部激活验证当完整继续功能。')
+prepend('docs/PROJECT_STATUS.md','## 2026-09-08 HUD 整体恢复与暂停安装已接入\n\n已接资源、选区/库存/命令、小地图及暂停确认，真实根绑定后挂载、同帧输入闸与手势取消通过。[证据](HUD_RESUME_20260908.md)。完整世界/Steam激活、磁盘继续槽、跨进程及全项目验收继续开放。')
+prepend('docs/DIRECTORY_INDEX.md','## 2026-09-08 HUD 整体恢复\n\n- scripts/run_hud_state.gd：FIGHT HUD状态、隐藏准备及同帧激活。\n- docs/HUD_RESUME_20260908.md：真实根绑定后的安装顺序与剩余工作。\n- qa/hud_resume_20260908/：原始失败/通过、受测候选、来源和安装SHA。')
+prepend('docs/WORLD_CORE_PREPARATION_20260908.md','后续更新：核心现为v6、19分区，mount_disabled可先绑定真实根时钟和数据再暂停挂载HUD；全世界激活仍由最终事务负责，见[HUD合同](HUD_RESUME_20260908.md)。下方早期“绝不挂载”表述仅描述各阶段历史API。')
+p=root/'docs/STABILIZATION_EXECUTION_20260907.md'; s=p.read_text(); s=s.replace('相机、HUD消息及禁用准备入口已接入；其余HUD/氛围与最终安装','相机、HUD整体及根绑定后的暂停挂载已接入；氛围/其余显示与最终安装').replace('见[最新证据](HUD_MESSAGES_RESUME_20260908.md)','见[最新证据](HUD_RESUME_20260908.md)'); p.write_text(s,encoding='utf-8')
+p=root/'.gitattributes'; p.write_bytes(p.read_bytes()+b'\n# Preserve tested HUD factory and paused mounting evidence.\nscripts/run_hud_state.gd* -text -whitespace\nqa/hud_resume_20260908/** -text -whitespace\n')
+print(json.dumps({'pins':len(pins),'runs':runs,'checks':count,'source_checks':source_count,'other_checks':other,'installed_bytes_equal_native':True}))

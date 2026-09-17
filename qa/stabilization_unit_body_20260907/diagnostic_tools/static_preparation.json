@@ -1,0 +1,330 @@
+{
+  "baseline_head": "c0285f91d4131e7631707fa59903d4b61fd460bb",
+  "files": [
+    {
+      "path": "scripts/unit.gd",
+      "before_sha256": "b0ffcb7ada64918d21f91fe7dfd5e7500c59b5545150fdf90294ccc8a8bd253f",
+      "after_sha256": "d7bd441ff1b854879d8b05aad79528ca98d0020f5bf4f8cb57caf026cfd5124c",
+      "reversible": true,
+      "edits": [
+        {
+          "method": "_phys_body inline spans",
+          "old": "func _phys_body(delta: float) -> void:\n\tif not _gameplay_rng_fault().is_empty(): return\n\tif _story_pose_t > 0.0:\n\t\t_story_pose_t -= delta\n\t\tif _story_pose_t <= 0.0:\n\t\t\tart_variant = _pose_previous_variant\n\t\t\tremove_meta(\"story_pose\")\n\t\t\t_request_redraw()\n\tif story_outcome != \"\" or is_captive:\n\t\treturn\n\t_animated_redraw_t = maxf(0.0, _animated_redraw_t - delta)\n\tif is_building:\n\t\tif hp <= 0.0:\n\t\t\treturn   # 已被摧毁的建筑：停止一切活动（节点随后由主控释放；自检直接置 hp=0 时也安全）\n\t\tif not is_resource and not is_constructing and hp < max_hp * 0.65:\n\t\t\t_burn_t += delta   # 受损起火：驱动火苗/浓烟动画（仅受损建筑每帧重绘，常态零开销）\n\t\t\t_queue_animated_redraw()\n\t\tif not passengers.is_empty():\n\t\t\tfor pg in passengers:   # 驻军缓慢回血（经典RTS式）\n\t\t\t\tif is_instance_valid(pg) and pg.hp > 0.0 and pg.hp < pg.max_hp:\n\t\t\t\t\tpg.hp = minf(pg.max_hp, pg.hp + 9.0 * delta)\n\t\tif atk > 0.0 and not is_resource and not is_constructing:\n\t\t\t_tower_tick(delta)   # 防御塔（箭楼）固定索敌射击\n\t\tif not is_constructing and not _train_queue.is_empty():\n\t\t\t_production_tick(delta)\n\t\telif not is_constructing and _research_key != \"\":\n\t\t\t_research_t -= delta\n\t\t\tif _research_t <= 0.0:\n\t\t\t\tvar rk := _research_key\n\t\t\t\t_research_key = \"\"\n\t\t\t\tif battle != null:\n\t\t\t\t\tbattle.on_research_done(self, rk)\n\t\t# 建筑/资源点动画时钟：炊烟·资源被采摇晃（建筑物理在此 return，不走下面的 _idle_t）\n\t\tif is_resource or _has_smoke():\n\t\t\t_idle_t += delta\n\t\t\tif _harvest_pulse > 0.0:\n\t\t\t\t_harvest_pulse = maxf(0.0, _harvest_pulse - delta * 2.0)\n\t\t\t_queue_animated_redraw()\n\t\treturn\n\tif _dying:\n\t\t_death_t += delta\n\t\t# A lethal hit sets the same short white flash as any other hit. Death used\n\t\t# to return before the normal decay below, leaving all 1.4 seconds tinted.\n\t\tif _flash > 0.0:\n\t\t\t_flash = maxf(0.0, _flash - delta)\n\t\t_queue_animated_redraw()\n\t\tif _death_t >= DEATH_DUR:\n\t\t\tqueue_free()\n\t\treturn\n\tif garrisoned:\n\t\treturn   # 驻军中：藏在建筑里，停止一切活动（移动/索敌/动画）\n\t_cd = maxf(0.0, _cd - delta)\n\tif _flash > 0.0:\n\t\t_flash = maxf(0.0, _flash - delta)\n\t\t_queue_animated_redraw(0.08, _flash <= 0.0)\n\n\t# 梁山兵熟悉水泊、补给充足，脱战 6 秒后缓慢回血；官军远征无此待遇\n\t_combat_cool = maxf(0.0, _combat_cool - delta)\n\t_hit_recent_t = maxf(0.0, _hit_recent_t - delta)\n\tvar regen := 0.0\n\tif faction == FACTION_LIANG and _combat_cool <= 0.0:\n\t\tregen += 2.5\n\tvar passive_regen := _passive_regen()\n\tregen += passive_regen    # 被动回血（如宋江·仁义）：战斗中也生效\n\tif regen > 0.0 and hp < max_hp:\n\t\tvar hp_before_regen := hp\n\t\thp = minf(max_hp, hp + regen * delta)\n\t\t# 只把英雄被动产生的份额计入治疗；通用脱战补给不算英雄战绩。\n\t\tif _track_combat_stats and passive_regen > 0.0 and battle != null:\n\t\t\tvar effective_regen := hp - hp_before_regen\n\t\t\tbattle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)\n\t\t_request_redraw()\n\n\t# 技能冷却/充能（各槽）与临时增益计时\n\t_tick_ability_slots(delta)\n\tif inventory != null:\n\t\tinventory.tick(delta)\n\t\tif not _gameplay_rng_fault().is_empty(): return\n\tif _temp_atk_t > 0.0:\n\t\t_temp_atk_t -= delta\n\t\tif _temp_atk_t <= 0.0:\n\t\t\ttemp_atk = 1.0\n\tif _temp_atk_add_t > 0.0:\n\t\t_temp_atk_add_t -= delta\n\t\tif _temp_atk_add_t <= 0.0:\n\t\t\ttemp_atk_add = 0.0\n\tif _temp_speed_t > 0.0:\n\t\t_temp_speed_t -= delta\n\t\tif _temp_speed_t <= 0.0:\n\t\t\ttemp_speed = 1.0\n\tif _temp_move_boost_t > 0.0:\n\t\t_temp_move_boost_t -= delta\n\t\tif _temp_move_boost_t <= 0.0:\n\t\t\t_temp_move_boost = 1.0\n\tif _temp_evasion_t > 0.0:\n\t\t_temp_evasion_t -= delta\n\t\tif _temp_evasion_t <= 0.0:\n\t\t\t_temp_evasion = 0.0\n\tif _temp_lifesteal_t > 0.0:\n\t\t_temp_lifesteal_t -= delta\n\t\tif _temp_lifesteal_t <= 0.0:\n\t\t\ttemp_lifesteal = 0.0\n\t# 三碗不过岗：醉酒期间周期性重掷移动/攻速倍率（醉态飘忽）\n\tif _drunk_t > 0.0:\n\t\t_drunk_t -= delta\n\t\t_drunk_reroll -= delta\n\t\tif _drunk_reroll <= 0.0:\n\t\t\t_drunk_reroll = 1.4\n\t\t\tvar drunk_move_roll: Dictionary = _gameplay_randf_range_checked(_drunk_lo, _drunk_hi)\n\t\t\tif not drunk_move_roll.ok: return\n\t\t\t_drunk_move = float(drunk_move_roll.value)\n\t\t\tvar drunk_atk_roll: Dictionary = _gameplay_randf_range_checked(_drunk_lo, _drunk_hi)\n\t\t\tif not drunk_atk_roll.ok: return\n\t\t\t_drunk_atk = float(drunk_atk_roll.value)\n\t\t\t_buff_glow = maxf(_buff_glow, 0.5)\n\t\tif _drunk_t <= 0.0:\n\t\t\t_drunk_move = 1.0\n\t\t\t_drunk_atk = 1.0\n\t# 醉神：物免倒计时；结束瞬间把期间挡下物理伤害的 50% 转化为回血\n\tif _phys_immune_t > 0.0:\n\t\t_phys_immune_t -= delta\n\t\tif _phys_immune_t <= 0.0:\n\t\t\tif _absorbed_phys > 0.0:\n\t\t\t\theal(_absorbed_phys * 0.5, self)\n\t\t\t\t_buff_glow = 1.0\n\t\t\t_absorbed_phys = 0.0\n\t\t\t_drunk_god_bonus_per_hit = 0.0\n\t\t\t_drunk_god_stacks = 0\n\tif _stats_mitigation_t > 0.0:\n\t\t_stats_mitigation_t = maxf(0.0, _stats_mitigation_t - delta)\n\tif _lin_guard_t > 0.0:\n\t\t_lin_guard_t = maxf(0.0, _lin_guard_t - delta)\n\t\tif _lin_guard_t <= 0.0:\n\t\t\t_lin_guard_rank = 0\n\t\t\t_lin_guard_used = false\n\tif _lin_spear_t > 0.0:\n\t\t_lin_spear_t = maxf(0.0, _lin_spear_t - delta)\n\t\tif _lin_spear_t <= 0.0:\n\t\t\t_lin_spear_target_id = 0\n\t\t\t_lin_spear_stacks = 0\n\t# 护甲削减计时\n\tif _def_down_t > 0.0:\n\t\t_def_down_t -= delta\n\t\tif _def_down_t <= 0.0:\n\t\t\t_def_down = 0.0\n\t# 致盲计时（武松 E）：期间攻击必失\n\tif _blind_t > 0.0:\n\t\t_blind_t -= delta\n\t# 概率障目计时（公孙胜 Q）：只影响普攻命中率，离开雨区后很快恢复。\n\tif _attack_miss_t > 0.0:\n\t\t_attack_miss_t -= delta\n\t\tif _attack_miss_t <= 0.0:\n\t\t\t_attack_miss_chance = 0.0\n\t# 技能原语计时：护盾 / 沉默 / 临时攻速\n\tif _shield_t > 0.0:\n\t\t_shield_t -= delta\n\t\tif _shield_t <= 0.0:\n\t\t\t_shield = 0.0\n\tif _silence_t > 0.0:\n\t\t_silence_t = maxf(0.0, _silence_t - delta)\n\tif _root_t > 0.0:\n\t\t_root_t = maxf(0.0, _root_t - delta)\n\t\t_queue_animated_redraw(0.08, _root_t <= 0.0)\n\tif _disarm_t > 0.0:\n\t\t_disarm_t = maxf(0.0, _disarm_t - delta)\n\t\t_queue_animated_redraw(0.08, _disarm_t <= 0.0)\n\tif _taunt_t > 0.0:\n\t\t_taunt_t = maxf(0.0, _taunt_t - delta)\n\t\tif _taunt_t <= 0.0 or _taunt_src == null or not is_instance_valid(_taunt_src) or _taunt_src.hp <= 0.0:\n\t\t\t_taunt_t = 0.0\n\t\t\t_taunt_src = null\n\t\t\tif _chase_intent == CHASE_FORCED:\n\t\t\t\t_chase_intent = CHASE_AUTO\n\t\t_queue_animated_redraw(0.08, _taunt_t <= 0.0)\n\tif _channel_t > 0.0:\n\t\t_channel_t = maxf(0.0, _channel_t - delta)\n\t\t_queue_animated_redraw(0.08, _channel_t <= 0.0)\n\tif _invis_t > 0.0:\n\t\t_invis_t = maxf(0.0, _invis_t - delta)\n\t\tif _invis_t <= 0.0:\n\t\t\tmodulate.a = 1.0   # 隐身自然结束 → 现形（_stealth_pass 下一帧亦会校正）\n\t\t_queue_animated_redraw(0.08, _invis_t <= 0.0)\n\tif _hex_t > 0.0:\n\t\t_hex_t = maxf(0.0, _hex_t - delta)\n\t\t_queue_animated_redraw(0.08, _hex_t <= 0.0)\n\tif _form_t > 0.0:\n\t\t_form_t = maxf(0.0, _form_t - delta)\n\t\tif _form_t <= 0.0:\n\t\t\t_end_form()   # 变身到期 → 还原形态\n\t\t_queue_animated_redraw(0.08, _form_t <= 0.0)\n\tif _dmg_amp_t > 0.0:\n\t\t_dmg_amp_t -= delta\n\t\tif _dmg_amp_t <= 0.0:\n\t\t\t_dmg_amp = 0.0\n\tif not _damage_reduction_sources.is_empty():\n\t\tfor source_id in _damage_reduction_sources.keys():\n\t\t\tvar state: Dictionary = _damage_reduction_sources[source_id]\n\t\t\tstate[\"t\"] = float(state[\"t\"]) - delta\n\t\t\tif float(state[\"t\"]) <= 0.0:\n\t\t\t\t_damage_reduction_sources.erase(source_id)\n\t\t_refresh_damage_reduction()\n\tif _temp_atkspeed_t > 0.0:\n\t\t_temp_atkspeed_t -= delta\n\t\tif _temp_atkspeed_t <= 0.0:\n\t\t\ttemp_atkspeed = 1.0\n\tif _attack_speed_slow_t > 0.0:\n\t\t_attack_speed_slow_t -= delta\n\t\tif _attack_speed_slow_t <= 0.0:\n\t\t\t_attack_speed_slow = 1.0\n\tif not _aura_atkspeed_sources.is_empty():\n\t\tfor source_id in _aura_atkspeed_sources.keys():\n\t\t\tvar aura_state: Dictionary = _aura_atkspeed_sources[source_id]\n\t\t\taura_state[\"t\"] = float(aura_state[\"t\"]) - delta\n\t\t\tif float(aura_state[\"t\"]) <= 0.0:\n\t\t\t\t_aura_atkspeed_sources.erase(source_id)\n\t\t_refresh_aura_atkspeed()\n\t# 限时召唤物：寿命到 → 消散\n\tif _summon_ttl > 0.0:\n\t\t_summon_ttl -= delta\n\t\tif _summon_ttl <= 0.0 and not _dying and hp > 0.0:\n\t\t\t_summon_ttl = 0.0\n\t\t\tif battle != null and battle.has_method(\"despawn_summon\"):\n\t\t\t\tbattle.despawn_summon(self)\n\t\t\t\tif not _gameplay_rng_fault().is_empty(): return\n\tif _buff_glow > 0.0:\n\t\t_buff_glow = maxf(0.0, _buff_glow - delta)\n\t\t_queue_animated_redraw(0.08, _buff_glow <= 0.0)\n\tif _giveup_t > 0.0:\n\t\t_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标\n\tif _blocker_check_t > 0.0:\n\t\t_blocker_check_t = maxf(0.0, _blocker_check_t - delta)\n\tif manual_order_t > 0.0:\n\t\tmanual_order_t = maxf(0.0, manual_order_t - delta)\n\tif mission_order_arrival_t > 0.0:\n\t\tmission_order_arrival_t = maxf(0.0, mission_order_arrival_t - delta)\n\t\tif mission_order_arrival_t <= 0.0:\n\t\t\tmission_order_target = Vector2.INF\n\t\t\tmission_order_token = 0\n\n\t# 星际/红警式硬占位兜底：机动单位若被「放」进建筑占地（出生/钩拽/闪现/直点建筑中心），\n\t# 弹出到占地外沿。寻路层本就把占地当 solid（走不进）；这里只兜传送类落点。10Hz 限流。\n\t_eject_t -= delta\n\tif _eject_t <= 0.0:\n\t\t_eject_t = 0.1\n\t\tif not is_building and not garrisoned and hp > 0.0 and battle != null:\n\t\t\tbattle.eject_from_buildings(self)\n\n\tif _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned or _target.story_outcome != \"\" \\\n\t\t\tor _target._invis_t > 0.0 \\\n\t\t\tor (battle != null and battle.has_method(\"target_visible_to\") and not battle.target_visible_to(self, _target))):\n\t\t_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击\n\tif _hua_lock_target != null and (not is_instance_valid(_hua_lock_target) or _hua_lock_target.hp <= 0.0 \\\n\t\t\tor _hua_lock_target.garrisoned or _hua_lock_target.story_outcome != \"\" or _hua_lock_target._invis_t > 0.0):\n\t\t_clear_hua_lock()\n\t# 施放其他技能会暂时清掉普通攻击目标；技能结束后若 E 的连珠箭尚未打完，就继续优先射原目标。\n\tif _target == null and hua_lock_active() and (battle == null or not battle.has_method(\"target_visible_to\") \\\n\t\t\tor battle.target_visible_to(self, _hua_lock_target)):\n\t\t_begin_attack(_hua_lock_target, false)\n\n\t# 引导施法（凌振轰天连炮等）：定身、不索敌/不移动/不普攻，逐 tick 结算由 battle._channel_pass 负责。\n\t# 计时递减已在上面 timer 段完成；被眩晕/沉默/拖走时 _break_channel 会清零本状态。\n\tif _channel_t > 0.0:\n\t\t_stepped = false\n\t\t_queue_animated_redraw()\n\t\treturn\n\n\t# 普通施法抬手是正式动作状态：定身、停攻、停索敌；归零后的技能结算由 Battle 下一物理帧完成。\n\tif _cast_t > 0.0:\n\t\t_cast_t = maxf(0.0, _cast_t - delta)\n\t\t_stepped = false\n\t\t_queue_animated_redraw(0.08, _cast_t <= 0.0)\n\t\treturn\n\n\t# 冲锋窗口（李逵 W）：优先于普通状态机。蓄力期原地，冲刺期高速平移撞伤。\n\tif _charge_t > 0.0 or _charge_dash > 0.0:\n\t\t_do_charge_step(delta)\n\t\treturn\n\n\tif _stun_t > 0.0:\n\t\t_stun_t = maxf(0.0, _stun_t - delta)   # 眩晕（踩地板）：呆立，本帧不索敌/不移动/不攻击\n\t\t_queue_animated_redraw(0.08, _stun_t <= 0.0)\n\telse:\n\t\t# 嘲讽(taunt)：dur 内强制锁定并攻击 _taunt_src，压过玩家指令与 AI 大脑（仅上面的眩晕能盖过）\n\t\tif _taunt_t > 0.0 and _taunt_src != null and is_instance_valid(_taunt_src) and _taunt_src.hp > 0.0 and _target != _taunt_src:\n\t\t\t_target = _taunt_src\n\t\t\t_chase_intent = CHASE_FORCED\n\t\t\t_state = ST_CHASE\n\t\tmatch _state:\n\t\t\tST_IDLE:\n\t\t\t\tif not passive and not is_worker:   # 工人不主动索敌（经典RTS式村民）\n\t\t\t\t\t_acq_t -= delta\n\t\t\t\t\tif _acq_t <= 0.0:\n\t\t\t\t\t\t_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12\n\t\t\t\t\t\t_acquire()\n\t\t\t\tif _target != null:\n\t\t\t\t\t_chase_intent = CHASE_AUTO\n\t\t\t\t\tif not _has_home:\n\t\t\t\t\t\t_home = position\n\t\t\t\t\t\t_has_home = true\n\t\t\t\t\t_repath = 0.0\n\t\t\t\t\t_idle_push_t = 0.0\n\t\t\t\t\t_state = ST_CHASE\n\t\t\t\telif stance == STANCE_DEFEND and _has_home and _amove_dest == Vector2.ZERO and position.distance_to(_home) > 30.0:\n\t\t\t\t\t# A target that escapes/gives up can end a chase directly in idle.\n\t\t\t\t\t# Defensive guards still return home; explicit Stop resets this\n\t\t\t\t\t# anchor and Hold Position never enters this branch.\n\t\t\t\t\t_begin_move(_home)\n\t\t\t\telif faction == FACTION_GUAN and _amove_dest != Vector2.ZERO and battle != null:\n\t\t\t\t\t# 进攻方呆住看门狗：没目标却停在原地超 2.5s → 重新攻击移动压向聚义厅，半路遇我方单位就接着打\n\t\t\t\t\t_idle_push_t += delta\n\t\t\t\t\tif _idle_push_t > 2.5:\n\t\t\t\t\t\t_idle_push_t = 0.0\n\t\t\t\t\t\tvar hall = battle.main_base(FACTION_LIANG)\n\t\t\t\t\t\tvar dest: Vector2 = hall.position if (hall != null and is_instance_valid(hall)) else _amove_dest\n\t\t\t\t\t\torder_amove(dest)\n\t\t\tST_MOVE:\n\t\t\t\tif _follow_path(delta):\n\t\t\t\t\t# 路径提前耗尽但离目的地还远（被挤出路线/跳点吃光路径导致截断）→ 重新寻路续走。\n\t\t\t\t\t# 与 ST_AMOVE 同款兜底；否则半路转 IDLE 被待机索敌勾走，表现为「走一半回头打两下」。\n\t\t\t\t\tif position.distance_to(_move_retry_pos) > 24.0:\n\t\t\t\t\t\t_move_retry = 0   # 有实际推进 → 重置计数（长途拥挤行军允许多次重寻）\n\t\t\t\t\tif _has_home and position.distance_to(_home) > 70.0 and _move_retry < 3:\n\t\t\t\t\t\t_move_retry += 1\n\t\t\t\t\t\t_move_retry_pos = position\n\t\t\t\t\t\tvar mh := _home\n\t\t\t\t\t\t_begin_move(mh)\n\t\t\t\t\telse:\n\t\t\t\t\t\t_done_order()\n\t\t\tST_AMOVE:\n\t\t\t\tif _target == null:\n\t\t\t\t\t# A 移动时收紧索敌半径，但保留足够侧翼宽度；否则往一个方向 A 地板时，\n\t\t\t\t\t# 侧边敌人擦身接敌却没进窄扫描圈，会表现成“接敌但不打”。\n\t\t\t\t\t# 限流 ~8 次/秒：兵海里大量「无目标 A 移动」单位每帧重扫，是索敌开销的最大头。\n\t\t\t\t\t_acq_t -= delta\n\t\t\t\t\tif (battle != null and battle._no_opt) or _acq_t <= 0.0:\n\t\t\t\t\t\t_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12\n\t\t\t\t\t\t_acquire(maxf(atk_range + radius + 56.0, 180.0), true)\n\t\t\t\tif _target != null:\n\t\t\t\t\t_resume_amove = true\n\t\t\t\t\t_chase_intent = CHASE_AMOVE\n\t\t\t\t\t_repath = 0.0\n\t\t\t\t\t_state = ST_CHASE\n\t\t\t\telif _follow_path(delta):\n\t\t\t\t\t# 路径走完但离目的地还远（被挤出路线/目的地不可达）→ 有限重寻。\n\t\t\t\t\t# 原逻辑会在空路径时每物理帧重跑 A*；末波几个卡墙残兵就能把帧率压垮。\n\t\t\t\t\tvar engaged_blocker := position.distance_to(_amove_dest) > 70.0 and _try_attack_path_blocker()\n\t\t\t\t\tif engaged_blocker:\n\t\t\t\t\t\tpass\n\t\t\t\t\telif position.distance_to(_move_retry_pos) > 24.0:\n\t\t\t\t\t\t_move_retry = 0\n\t\t\t\t\tif not engaged_blocker and position.distance_to(_amove_dest) > 70.0 and _move_retry < 3:\n\t\t\t\t\t\t_move_retry += 1\n\t\t\t\t\t\t_move_retry_pos = position\n\t\t\t\t\t\t_begin_amove(_amove_dest)\n\t\t\t\t\telif not engaged_blocker:\n\t\t\t\t\t\t_done_order()\n\t\t\tST_CHASE:\n\t\t\t\t_do_chase(delta)\n\t\t\tST_GATHER:\n\t\t\t\t_do_gather(delta)\n\t\t\tST_RETURN:\n\t\t\t\t_do_return(delta)\n\t\t\tST_BUILD:\n\t\t\t\t_do_build(delta)\n\t\t\tST_REPAIR:\n\t\t\t\t_do_repair(delta)\n\t\t\tST_GARRISON:\n\t\t\t\t_do_garrison(delta)\n\n\t# 动画状态推进：步频随移速，骑兵更快；停下时平滑收势\n\tif not _gameplay_rng_fault().is_empty(): return\n\t_move_blend = move_toward(_move_blend, 1.0 if _stepped else 0.0, delta * 6.0)\n\t_stepped = false\n\t_idle_t += delta\n\tif _move_blend > 0.01:\n\t\tvar prev := _anim_t\n\t\t# 步频与「实际移速」(含 MOVE_SCALE 减速) 挂钩：腿不再比身体快、不再刨地（原来没乘 MOVE_SCALE→偏快）\n\t\t_anim_t += delta * (13.0 if is_cavalry else 9.5) * MOVE_SCALE * (base_speed / 72.0)\n\t\t# 每半个步频相位 = 一次落脚 → 扬尘\n\t\tif floori(_anim_t / PI) != floori(prev / PI):\n\t\t\t_spawn_dust()\n\t\t_queue_motion_redraw()\n\tif not _dust.is_empty():\n\t\tfor d in _dust:\n\t\t\td.t -= delta\n\t\t_dust = _dust.filter(func(d): return d.t > 0.0)\n\t\t_request_redraw()\n\tif _lunge > 0.0:\n\t\tvar prev_l := _lunge\n\t\t_lunge = maxf(0.0, _lunge - delta * _swing_speed)\n\t\tif not _pending_done and prev_l > _hit_at and _lunge <= _hit_at:\n\t\t\t_deal_hit()\n\t\t\tif not _gameplay_rng_fault().is_empty(): return\n\t\t_request_redraw()\n\tif _flinch != Vector2.ZERO:\n\t\t_flinch = _flinch.move_toward(Vector2.ZERO, delta * 90.0)\n\t\t_queue_animated_redraw(0.08, _flinch == Vector2.ZERO)\n\t# 卡死看门狗：移动状态下长时间原地不动 → 强制重新寻路/跳过路点\n\tif _state != ST_IDLE:\n\t\tif position.distance_to(_last_pos) < 2.0:\n\t\t\t_stuck_t += delta\n\t\t\tif _stuck_t > 1.5:\n\t\t\t\t_stuck_t = 0.0\n\t\t\t\tmatch _state:\n\t\t\t\t\tST_AMOVE:\n\t\t\t\t\t\t_begin_amove(_amove_dest)\n\t\t\t\t\tST_MOVE:\n\t\t\t\t\t\t# 整体重寻而非跳点：跳点会把路径吃光、半路「视为到达」转 IDLE（回头打的引信）\n\t\t\t\t\t\tif _has_home:\n\t\t\t\t\t\t\tvar wh := _home\n\t\t\t\t\t\t\t_begin_move(wh)\n\t\t\t\t\t\telse:\n\t\t\t\t\t\t\t_path_i = mini(_path_i + 1, _path.size())\n\t\t\t\t\tST_CHASE, ST_GATHER, ST_RETURN:\n\t\t\t\t\t\t_repath = 0.0\n\t\telse:\n\t\t\t_stuck_t = 0.0\n\t\t_last_pos = position\n\n\n",
+          "new": "func _phys_body(delta: float) -> void:\n\tvar __bodydiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __bodydiag_token_0: int = __bodydiag_observer.enter(\"body.entry_building_dying\")\n\tif not _gameplay_rng_fault().is_empty():\n\t\t__bodydiag_observer.leave(__bodydiag_token_0)\n\t\treturn\n\tif _story_pose_t > 0.0:\n\t\t_story_pose_t -= delta\n\t\tif _story_pose_t <= 0.0:\n\t\t\tart_variant = _pose_previous_variant\n\t\t\tremove_meta(\"story_pose\")\n\t\t\t_request_redraw()\n\tif story_outcome != \"\" or is_captive:\n\t\t__bodydiag_observer.leave(__bodydiag_token_0)\n\t\treturn\n\t_animated_redraw_t = maxf(0.0, _animated_redraw_t - delta)\n\tif is_building:\n\t\tif hp <= 0.0:\n\t\t\t__bodydiag_observer.leave(__bodydiag_token_0)\n\t\t\treturn   # 已被摧毁的建筑：停止一切活动（节点随后由主控释放；自检直接置 hp=0 时也安全）\n\t\tif not is_resource and not is_constructing and hp < max_hp * 0.65:\n\t\t\t_burn_t += delta   # 受损起火：驱动火苗/浓烟动画（仅受损建筑每帧重绘，常态零开销）\n\t\t\t_queue_animated_redraw()\n\t\tif not passengers.is_empty():\n\t\t\tfor pg in passengers:   # 驻军缓慢回血（经典RTS式）\n\t\t\t\tif is_instance_valid(pg) and pg.hp > 0.0 and pg.hp < pg.max_hp:\n\t\t\t\t\tpg.hp = minf(pg.max_hp, pg.hp + 9.0 * delta)\n\t\tif atk > 0.0 and not is_resource and not is_constructing:\n\t\t\t_tower_tick(delta)   # 防御塔（箭楼）固定索敌射击\n\t\tif not is_constructing and not _train_queue.is_empty():\n\t\t\t_production_tick(delta)\n\t\telif not is_constructing and _research_key != \"\":\n\t\t\t_research_t -= delta\n\t\t\tif _research_t <= 0.0:\n\t\t\t\tvar rk := _research_key\n\t\t\t\t_research_key = \"\"\n\t\t\t\tif battle != null:\n\t\t\t\t\tbattle.on_research_done(self, rk)\n\t\t# 建筑/资源点动画时钟：炊烟·资源被采摇晃（建筑物理在此 return，不走下面的 _idle_t）\n\t\tif is_resource or _has_smoke():\n\t\t\t_idle_t += delta\n\t\t\tif _harvest_pulse > 0.0:\n\t\t\t\t_harvest_pulse = maxf(0.0, _harvest_pulse - delta * 2.0)\n\t\t\t_queue_animated_redraw()\n\t\t__bodydiag_observer.leave(__bodydiag_token_0)\n\t\treturn\n\tif _dying:\n\t\t_death_t += delta\n\t\t# A lethal hit sets the same short white flash as any other hit. Death used\n\t\t# to return before the normal decay below, leaving all 1.4 seconds tinted.\n\t\tif _flash > 0.0:\n\t\t\t_flash = maxf(0.0, _flash - delta)\n\t\t_queue_animated_redraw()\n\t\tif _death_t >= DEATH_DUR:\n\t\t\tqueue_free()\n\t\t__bodydiag_observer.leave(__bodydiag_token_0)\n\t\treturn\n\tif garrisoned:\n\t\t__bodydiag_observer.leave(__bodydiag_token_0)\n\t\treturn   # 驻军中：藏在建筑里，停止一切活动（移动/索敌/动画）\n\t__bodydiag_observer.leave(__bodydiag_token_0)\n\tvar __bodydiag_token_1: int = __bodydiag_observer.enter(\"body.regen\")\n\t_cd = maxf(0.0, _cd - delta)\n\tif _flash > 0.0:\n\t\t_flash = maxf(0.0, _flash - delta)\n\t\t_queue_animated_redraw(0.08, _flash <= 0.0)\n\n\t# 梁山兵熟悉水泊、补给充足，脱战 6 秒后缓慢回血；官军远征无此待遇\n\t_combat_cool = maxf(0.0, _combat_cool - delta)\n\t_hit_recent_t = maxf(0.0, _hit_recent_t - delta)\n\tvar regen := 0.0\n\tif faction == FACTION_LIANG and _combat_cool <= 0.0:\n\t\tregen += 2.5\n\tvar passive_regen := _passive_regen()\n\tregen += passive_regen    # 被动回血（如宋江·仁义）：战斗中也生效\n\tif regen > 0.0 and hp < max_hp:\n\t\tvar hp_before_regen := hp\n\t\thp = minf(max_hp, hp + regen * delta)\n\t\t# 只把英雄被动产生的份额计入治疗；通用脱战补给不算英雄战绩。\n\t\tif _track_combat_stats and passive_regen > 0.0 and battle != null:\n\t\t\tvar effective_regen := hp - hp_before_regen\n\t\t\tbattle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)\n\t\t_request_redraw()\n\n\t__bodydiag_observer.leave(__bodydiag_token_1)\n\tvar __bodydiag_token_2: int = __bodydiag_observer.enter(\"body.ability_inventory\")\n\t# 技能冷却/充能（各槽）与临时增益计时\n\t_tick_ability_slots(delta)\n\tif inventory != null:\n\t\tinventory.tick(delta)\n\t\tif not _gameplay_rng_fault().is_empty():\n\t\t\t__bodydiag_observer.leave(__bodydiag_token_2)\n\t\t\treturn\n\t__bodydiag_observer.leave(__bodydiag_token_2)\n\tvar __bodydiag_token_3: int = __bodydiag_observer.enter(\"body.timed_statuses\")\n\tif _temp_atk_t > 0.0:\n\t\t_temp_atk_t -= delta\n\t\tif _temp_atk_t <= 0.0:\n\t\t\ttemp_atk = 1.0\n\tif _temp_atk_add_t > 0.0:\n\t\t_temp_atk_add_t -= delta\n\t\tif _temp_atk_add_t <= 0.0:\n\t\t\ttemp_atk_add = 0.0\n\tif _temp_speed_t > 0.0:\n\t\t_temp_speed_t -= delta\n\t\tif _temp_speed_t <= 0.0:\n\t\t\ttemp_speed = 1.0\n\tif _temp_move_boost_t > 0.0:\n\t\t_temp_move_boost_t -= delta\n\t\tif _temp_move_boost_t <= 0.0:\n\t\t\t_temp_move_boost = 1.0\n\tif _temp_evasion_t > 0.0:\n\t\t_temp_evasion_t -= delta\n\t\tif _temp_evasion_t <= 0.0:\n\t\t\t_temp_evasion = 0.0\n\tif _temp_lifesteal_t > 0.0:\n\t\t_temp_lifesteal_t -= delta\n\t\tif _temp_lifesteal_t <= 0.0:\n\t\t\ttemp_lifesteal = 0.0\n\t# 三碗不过岗：醉酒期间周期性重掷移动/攻速倍率（醉态飘忽）\n\tif _drunk_t > 0.0:\n\t\t_drunk_t -= delta\n\t\t_drunk_reroll -= delta\n\t\tif _drunk_reroll <= 0.0:\n\t\t\t_drunk_reroll = 1.4\n\t\t\tvar drunk_move_roll: Dictionary = _gameplay_randf_range_checked(_drunk_lo, _drunk_hi)\n\t\t\tif not drunk_move_roll.ok:\n\t\t\t\t__bodydiag_observer.leave(__bodydiag_token_3)\n\t\t\t\treturn\n\t\t\t_drunk_move = float(drunk_move_roll.value)\n\t\t\tvar drunk_atk_roll: Dictionary = _gameplay_randf_range_checked(_drunk_lo, _drunk_hi)\n\t\t\tif not drunk_atk_roll.ok:\n\t\t\t\t__bodydiag_observer.leave(__bodydiag_token_3)\n\t\t\t\treturn\n\t\t\t_drunk_atk = float(drunk_atk_roll.value)\n\t\t\t_buff_glow = maxf(_buff_glow, 0.5)\n\t\tif _drunk_t <= 0.0:\n\t\t\t_drunk_move = 1.0\n\t\t\t_drunk_atk = 1.0\n\t# 醉神：物免倒计时；结束瞬间把期间挡下物理伤害的 50% 转化为回血\n\tif _phys_immune_t > 0.0:\n\t\t_phys_immune_t -= delta\n\t\tif _phys_immune_t <= 0.0:\n\t\t\tif _absorbed_phys > 0.0:\n\t\t\t\theal(_absorbed_phys * 0.5, self)\n\t\t\t\t_buff_glow = 1.0\n\t\t\t_absorbed_phys = 0.0\n\t\t\t_drunk_god_bonus_per_hit = 0.0\n\t\t\t_drunk_god_stacks = 0\n\tif _stats_mitigation_t > 0.0:\n\t\t_stats_mitigation_t = maxf(0.0, _stats_mitigation_t - delta)\n\tif _lin_guard_t > 0.0:\n\t\t_lin_guard_t = maxf(0.0, _lin_guard_t - delta)\n\t\tif _lin_guard_t <= 0.0:\n\t\t\t_lin_guard_rank = 0\n\t\t\t_lin_guard_used = false\n\tif _lin_spear_t > 0.0:\n\t\t_lin_spear_t = maxf(0.0, _lin_spear_t - delta)\n\t\tif _lin_spear_t <= 0.0:\n\t\t\t_lin_spear_target_id = 0\n\t\t\t_lin_spear_stacks = 0\n\t# 护甲削减计时\n\tif _def_down_t > 0.0:\n\t\t_def_down_t -= delta\n\t\tif _def_down_t <= 0.0:\n\t\t\t_def_down = 0.0\n\t# 致盲计时（武松 E）：期间攻击必失\n\tif _blind_t > 0.0:\n\t\t_blind_t -= delta\n\t# 概率障目计时（公孙胜 Q）：只影响普攻命中率，离开雨区后很快恢复。\n\tif _attack_miss_t > 0.0:\n\t\t_attack_miss_t -= delta\n\t\tif _attack_miss_t <= 0.0:\n\t\t\t_attack_miss_chance = 0.0\n\t# 技能原语计时：护盾 / 沉默 / 临时攻速\n\tif _shield_t > 0.0:\n\t\t_shield_t -= delta\n\t\tif _shield_t <= 0.0:\n\t\t\t_shield = 0.0\n\tif _silence_t > 0.0:\n\t\t_silence_t = maxf(0.0, _silence_t - delta)\n\tif _root_t > 0.0:\n\t\t_root_t = maxf(0.0, _root_t - delta)\n\t\t_queue_animated_redraw(0.08, _root_t <= 0.0)\n\tif _disarm_t > 0.0:\n\t\t_disarm_t = maxf(0.0, _disarm_t - delta)\n\t\t_queue_animated_redraw(0.08, _disarm_t <= 0.0)\n\tif _taunt_t > 0.0:\n\t\t_taunt_t = maxf(0.0, _taunt_t - delta)\n\t\tif _taunt_t <= 0.0 or _taunt_src == null or not is_instance_valid(_taunt_src) or _taunt_src.hp <= 0.0:\n\t\t\t_taunt_t = 0.0\n\t\t\t_taunt_src = null\n\t\t\tif _chase_intent == CHASE_FORCED:\n\t\t\t\t_chase_intent = CHASE_AUTO\n\t\t_queue_animated_redraw(0.08, _taunt_t <= 0.0)\n\tif _channel_t > 0.0:\n\t\t_channel_t = maxf(0.0, _channel_t - delta)\n\t\t_queue_animated_redraw(0.08, _channel_t <= 0.0)\n\tif _invis_t > 0.0:\n\t\t_invis_t = maxf(0.0, _invis_t - delta)\n\t\tif _invis_t <= 0.0:\n\t\t\tmodulate.a = 1.0   # 隐身自然结束 → 现形（_stealth_pass 下一帧亦会校正）\n\t\t_queue_animated_redraw(0.08, _invis_t <= 0.0)\n\tif _hex_t > 0.0:\n\t\t_hex_t = maxf(0.0, _hex_t - delta)\n\t\t_queue_animated_redraw(0.08, _hex_t <= 0.0)\n\tif _form_t > 0.0:\n\t\t_form_t = maxf(0.0, _form_t - delta)\n\t\tif _form_t <= 0.0:\n\t\t\t_end_form()   # 变身到期 → 还原形态\n\t\t_queue_animated_redraw(0.08, _form_t <= 0.0)\n\tif _dmg_amp_t > 0.0:\n\t\t_dmg_amp_t -= delta\n\t\tif _dmg_amp_t <= 0.0:\n\t\t\t_dmg_amp = 0.0\n\tif not _damage_reduction_sources.is_empty():\n\t\tfor source_id in _damage_reduction_sources.keys():\n\t\t\tvar state: Dictionary = _damage_reduction_sources[source_id]\n\t\t\tstate[\"t\"] = float(state[\"t\"]) - delta\n\t\t\tif float(state[\"t\"]) <= 0.0:\n\t\t\t\t_damage_reduction_sources.erase(source_id)\n\t\t_refresh_damage_reduction()\n\tif _temp_atkspeed_t > 0.0:\n\t\t_temp_atkspeed_t -= delta\n\t\tif _temp_atkspeed_t <= 0.0:\n\t\t\ttemp_atkspeed = 1.0\n\tif _attack_speed_slow_t > 0.0:\n\t\t_attack_speed_slow_t -= delta\n\t\tif _attack_speed_slow_t <= 0.0:\n\t\t\t_attack_speed_slow = 1.0\n\tif not _aura_atkspeed_sources.is_empty():\n\t\tfor source_id in _aura_atkspeed_sources.keys():\n\t\t\tvar aura_state: Dictionary = _aura_atkspeed_sources[source_id]\n\t\t\taura_state[\"t\"] = float(aura_state[\"t\"]) - delta\n\t\t\tif float(aura_state[\"t\"]) <= 0.0:\n\t\t\t\t_aura_atkspeed_sources.erase(source_id)\n\t\t_refresh_aura_atkspeed()\n\t# 限时召唤物：寿命到 → 消散\n\tif _summon_ttl > 0.0:\n\t\t_summon_ttl -= delta\n\t\tif _summon_ttl <= 0.0 and not _dying and hp > 0.0:\n\t\t\t_summon_ttl = 0.0\n\t\t\tif battle != null and battle.has_method(\"despawn_summon\"):\n\t\t\t\tbattle.despawn_summon(self)\n\t\t\t\tif not _gameplay_rng_fault().is_empty():\n\t\t\t\t\t__bodydiag_observer.leave(__bodydiag_token_3)\n\t\t\t\t\treturn\n\tif _buff_glow > 0.0:\n\t\t_buff_glow = maxf(0.0, _buff_glow - delta)\n\t\t_queue_animated_redraw(0.08, _buff_glow <= 0.0)\n\tif _giveup_t > 0.0:\n\t\t_giveup_t = maxf(0.0, _giveup_t - delta)   # 追击放弃冷却：到点后可重新锁定旧目标\n\tif _blocker_check_t > 0.0:\n\t\t_blocker_check_t = maxf(0.0, _blocker_check_t - delta)\n\tif manual_order_t > 0.0:\n\t\tmanual_order_t = maxf(0.0, manual_order_t - delta)\n\tif mission_order_arrival_t > 0.0:\n\t\tmission_order_arrival_t = maxf(0.0, mission_order_arrival_t - delta)\n\t\tif mission_order_arrival_t <= 0.0:\n\t\t\tmission_order_target = Vector2.INF\n\t\t\tmission_order_token = 0\n\n\t__bodydiag_observer.leave(__bodydiag_token_3)\n\tvar __bodydiag_token_4: int = __bodydiag_observer.enter(\"body.eject_target\")\n\t# 星际/红警式硬占位兜底：机动单位若被「放」进建筑占地（出生/钩拽/闪现/直点建筑中心），\n\t# 弹出到占地外沿。寻路层本就把占地当 solid（走不进）；这里只兜传送类落点。10Hz 限流。\n\t_eject_t -= delta\n\tif _eject_t <= 0.0:\n\t\t_eject_t = 0.1\n\t\tif not is_building and not garrisoned and hp > 0.0 and battle != null:\n\t\t\tbattle.eject_from_buildings(self)\n\n\tif _target != null and (not is_instance_valid(_target) or _target.hp <= 0.0 or _target.garrisoned or _target.story_outcome != \"\" \\\n\t\t\tor _target._invis_t > 0.0 \\\n\t\t\tor (battle != null and battle.has_method(\"target_visible_to\") and not battle.target_visible_to(self, _target))):\n\t\t_target = null   # 目标若已驻入建筑（隐身无敌）→ 放弃追击\n\tif _hua_lock_target != null and (not is_instance_valid(_hua_lock_target) or _hua_lock_target.hp <= 0.0 \\\n\t\t\tor _hua_lock_target.garrisoned or _hua_lock_target.story_outcome != \"\" or _hua_lock_target._invis_t > 0.0):\n\t\t_clear_hua_lock()\n\t# 施放其他技能会暂时清掉普通攻击目标；技能结束后若 E 的连珠箭尚未打完，就继续优先射原目标。\n\tif _target == null and hua_lock_active() and (battle == null or not battle.has_method(\"target_visible_to\") \\\n\t\t\tor battle.target_visible_to(self, _hua_lock_target)):\n\t\t_begin_attack(_hua_lock_target, false)\n\n\t__bodydiag_observer.leave(__bodydiag_token_4)\n\tvar __bodydiag_token_5: int = __bodydiag_observer.enter(\"body.action_dispatch\")\n\t# 引导施法（凌振轰天连炮等）：定身、不索敌/不移动/不普攻，逐 tick 结算由 battle._channel_pass 负责。\n\t# 计时递减已在上面 timer 段完成；被眩晕/沉默/拖走时 _break_channel 会清零本状态。\n\tif _channel_t > 0.0:\n\t\t_stepped = false\n\t\t_queue_animated_redraw()\n\t\t__bodydiag_observer.leave(__bodydiag_token_5)\n\t\treturn\n\n\t# 普通施法抬手是正式动作状态：定身、停攻、停索敌；归零后的技能结算由 Battle 下一物理帧完成。\n\tif _cast_t > 0.0:\n\t\t_cast_t = maxf(0.0, _cast_t - delta)\n\t\t_stepped = false\n\t\t_queue_animated_redraw(0.08, _cast_t <= 0.0)\n\t\t__bodydiag_observer.leave(__bodydiag_token_5)\n\t\treturn\n\n\t# 冲锋窗口（李逵 W）：优先于普通状态机。蓄力期原地，冲刺期高速平移撞伤。\n\tif _charge_t > 0.0 or _charge_dash > 0.0:\n\t\t_do_charge_step(delta)\n\t\t__bodydiag_observer.leave(__bodydiag_token_5)\n\t\treturn\n\n\tif _stun_t > 0.0:\n\t\t_stun_t = maxf(0.0, _stun_t - delta)   # 眩晕（踩地板）：呆立，本帧不索敌/不移动/不攻击\n\t\t_queue_animated_redraw(0.08, _stun_t <= 0.0)\n\telse:\n\t\t# 嘲讽(taunt)：dur 内强制锁定并攻击 _taunt_src，压过玩家指令与 AI 大脑（仅上面的眩晕能盖过）\n\t\tif _taunt_t > 0.0 and _taunt_src != null and is_instance_valid(_taunt_src) and _taunt_src.hp > 0.0 and _target != _taunt_src:\n\t\t\t_target = _taunt_src\n\t\t\t_chase_intent = CHASE_FORCED\n\t\t\t_state = ST_CHASE\n\t\tmatch _state:\n\t\t\tST_IDLE:\n\t\t\t\tif not passive and not is_worker:   # 工人不主动索敌（经典RTS式村民）\n\t\t\t\t\t_acq_t -= delta\n\t\t\t\t\tif _acq_t <= 0.0:\n\t\t\t\t\t\t_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12\n\t\t\t\t\t\t_acquire()\n\t\t\t\tif _target != null:\n\t\t\t\t\t_chase_intent = CHASE_AUTO\n\t\t\t\t\tif not _has_home:\n\t\t\t\t\t\t_home = position\n\t\t\t\t\t\t_has_home = true\n\t\t\t\t\t_repath = 0.0\n\t\t\t\t\t_idle_push_t = 0.0\n\t\t\t\t\t_state = ST_CHASE\n\t\t\t\telif stance == STANCE_DEFEND and _has_home and _amove_dest == Vector2.ZERO and position.distance_to(_home) > 30.0:\n\t\t\t\t\t# A target that escapes/gives up can end a chase directly in idle.\n\t\t\t\t\t# Defensive guards still return home; explicit Stop resets this\n\t\t\t\t\t# anchor and Hold Position never enters this branch.\n\t\t\t\t\t_begin_move(_home)\n\t\t\t\telif faction == FACTION_GUAN and _amove_dest != Vector2.ZERO and battle != null:\n\t\t\t\t\t# 进攻方呆住看门狗：没目标却停在原地超 2.5s → 重新攻击移动压向聚义厅，半路遇我方单位就接着打\n\t\t\t\t\t_idle_push_t += delta\n\t\t\t\t\tif _idle_push_t > 2.5:\n\t\t\t\t\t\t_idle_push_t = 0.0\n\t\t\t\t\t\tvar hall = battle.main_base(FACTION_LIANG)\n\t\t\t\t\t\tvar dest: Vector2 = hall.position if (hall != null and is_instance_valid(hall)) else _amove_dest\n\t\t\t\t\t\torder_amove(dest)\n\t\t\tST_MOVE:\n\t\t\t\tif _follow_path(delta):\n\t\t\t\t\t# 路径提前耗尽但离目的地还远（被挤出路线/跳点吃光路径导致截断）→ 重新寻路续走。\n\t\t\t\t\t# 与 ST_AMOVE 同款兜底；否则半路转 IDLE 被待机索敌勾走，表现为「走一半回头打两下」。\n\t\t\t\t\tif position.distance_to(_move_retry_pos) > 24.0:\n\t\t\t\t\t\t_move_retry = 0   # 有实际推进 → 重置计数（长途拥挤行军允许多次重寻）\n\t\t\t\t\tif _has_home and position.distance_to(_home) > 70.0 and _move_retry < 3:\n\t\t\t\t\t\t_move_retry += 1\n\t\t\t\t\t\t_move_retry_pos = position\n\t\t\t\t\t\tvar mh := _home\n\t\t\t\t\t\t_begin_move(mh)\n\t\t\t\t\telse:\n\t\t\t\t\t\t_done_order()\n\t\t\tST_AMOVE:\n\t\t\t\tif _target == null:\n\t\t\t\t\t# A 移动时收紧索敌半径，但保留足够侧翼宽度；否则往一个方向 A 地板时，\n\t\t\t\t\t# 侧边敌人擦身接敌却没进窄扫描圈，会表现成“接敌但不打”。\n\t\t\t\t\t# 限流 ~8 次/秒：兵海里大量「无目标 A 移动」单位每帧重扫，是索敌开销的最大头。\n\t\t\t\t\t_acq_t -= delta\n\t\t\t\t\tif (battle != null and battle._no_opt) or _acq_t <= 0.0:\n\t\t\t\t\t\t_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12\n\t\t\t\t\t\t_acquire(maxf(atk_range + radius + 56.0, 180.0), true)\n\t\t\t\tif _target != null:\n\t\t\t\t\t_resume_amove = true\n\t\t\t\t\t_chase_intent = CHASE_AMOVE\n\t\t\t\t\t_repath = 0.0\n\t\t\t\t\t_state = ST_CHASE\n\t\t\t\telif _follow_path(delta):\n\t\t\t\t\t# 路径走完但离目的地还远（被挤出路线/目的地不可达）→ 有限重寻。\n\t\t\t\t\t# 原逻辑会在空路径时每物理帧重跑 A*；末波几个卡墙残兵就能把帧率压垮。\n\t\t\t\t\tvar engaged_blocker := position.distance_to(_amove_dest) > 70.0 and _try_attack_path_blocker()\n\t\t\t\t\tif engaged_blocker:\n\t\t\t\t\t\tpass\n\t\t\t\t\telif position.distance_to(_move_retry_pos) > 24.0:\n\t\t\t\t\t\t_move_retry = 0\n\t\t\t\t\tif not engaged_blocker and position.distance_to(_amove_dest) > 70.0 and _move_retry < 3:\n\t\t\t\t\t\t_move_retry += 1\n\t\t\t\t\t\t_move_retry_pos = position\n\t\t\t\t\t\t_begin_amove(_amove_dest)\n\t\t\t\t\telif not engaged_blocker:\n\t\t\t\t\t\t_done_order()\n\t\t\tST_CHASE:\n\t\t\t\t_do_chase(delta)\n\t\t\tST_GATHER:\n\t\t\t\t_do_gather(delta)\n\t\t\tST_RETURN:\n\t\t\t\t_do_return(delta)\n\t\t\tST_BUILD:\n\t\t\t\t_do_build(delta)\n\t\t\tST_REPAIR:\n\t\t\t\t_do_repair(delta)\n\t\t\tST_GARRISON:\n\t\t\t\t_do_garrison(delta)\n\n\t__bodydiag_observer.leave(__bodydiag_token_5)\n\tvar __bodydiag_token_6: int = __bodydiag_observer.enter(\"body.animation_dust_hit\")\n\t# 动画状态推进：步频随移速，骑兵更快；停下时平滑收势\n\tif not _gameplay_rng_fault().is_empty():\n\t\t__bodydiag_observer.leave(__bodydiag_token_6)\n\t\treturn\n\t_move_blend = move_toward(_move_blend, 1.0 if _stepped else 0.0, delta * 6.0)\n\t_stepped = false\n\t_idle_t += delta\n\tif _move_blend > 0.01:\n\t\tvar prev := _anim_t\n\t\t# 步频与「实际移速」(含 MOVE_SCALE 减速) 挂钩：腿不再比身体快、不再刨地（原来没乘 MOVE_SCALE→偏快）\n\t\t_anim_t += delta * (13.0 if is_cavalry else 9.5) * MOVE_SCALE * (base_speed / 72.0)\n\t\t# 每半个步频相位 = 一次落脚 → 扬尘\n\t\tif floori(_anim_t / PI) != floori(prev / PI):\n\t\t\t_spawn_dust()\n\t\t_queue_motion_redraw()\n\tif not _dust.is_empty():\n\t\tfor d in _dust:\n\t\t\td.t -= delta\n\t\t_dust = _dust.filter(func(d): return d.t > 0.0)\n\t\t_request_redraw()\n\tif _lunge > 0.0:\n\t\tvar prev_l := _lunge\n\t\t_lunge = maxf(0.0, _lunge - delta * _swing_speed)\n\t\tif not _pending_done and prev_l > _hit_at and _lunge <= _hit_at:\n\t\t\t_deal_hit()\n\t\t\tif not _gameplay_rng_fault().is_empty():\n\t\t\t\t__bodydiag_observer.leave(__bodydiag_token_6)\n\t\t\t\treturn\n\t\t_request_redraw()\n\tif _flinch != Vector2.ZERO:\n\t\t_flinch = _flinch.move_toward(Vector2.ZERO, delta * 90.0)\n\t\t_queue_animated_redraw(0.08, _flinch == Vector2.ZERO)\n\t__bodydiag_observer.leave(__bodydiag_token_6)\n\tvar __bodydiag_token_7: int = __bodydiag_observer.enter(\"body.stuck_watchdog\")\n\t# 卡死看门狗：移动状态下长时间原地不动 → 强制重新寻路/跳过路点\n\tif _state != ST_IDLE:\n\t\tif position.distance_to(_last_pos) < 2.0:\n\t\t\t_stuck_t += delta\n\t\t\tif _stuck_t > 1.5:\n\t\t\t\t_stuck_t = 0.0\n\t\t\t\tmatch _state:\n\t\t\t\t\tST_AMOVE:\n\t\t\t\t\t\t_begin_amove(_amove_dest)\n\t\t\t\t\tST_MOVE:\n\t\t\t\t\t\t# 整体重寻而非跳点：跳点会把路径吃光、半路「视为到达」转 IDLE（回头打的引信）\n\t\t\t\t\t\tif _has_home:\n\t\t\t\t\t\t\tvar wh := _home\n\t\t\t\t\t\t\t_begin_move(wh)\n\t\t\t\t\t\telse:\n\t\t\t\t\t\t\t_path_i = mini(_path_i + 1, _path.size())\n\t\t\t\t\tST_CHASE, ST_GATHER, ST_RETURN:\n\t\t\t\t\t\t_repath = 0.0\n\t\telse:\n\t\t\t_stuck_t = 0.0\n\t\t_last_pos = position\n\n\n\t__bodydiag_observer.leave(__bodydiag_token_7)\n",
+          "coverage": [
+            {
+              "scope": "body.entry_building_dying",
+              "from_function_line": 2,
+              "to_function_line": 51,
+              "early_return_sites": 6
+            },
+            {
+              "scope": "body.regen",
+              "from_function_line": 52,
+              "to_function_line": 73,
+              "early_return_sites": 0
+            },
+            {
+              "scope": "body.ability_inventory",
+              "from_function_line": 74,
+              "to_function_line": 78,
+              "early_return_sites": 1
+            },
+            {
+              "scope": "body.timed_statuses",
+              "from_function_line": 79,
+              "to_function_line": 239,
+              "early_return_sites": 3
+            },
+            {
+              "scope": "body.eject_target",
+              "from_function_line": 240,
+              "to_function_line": 259,
+              "early_return_sites": 0
+            },
+            {
+              "scope": "body.action_dispatch",
+              "from_function_line": 260,
+              "to_function_line": 369,
+              "early_return_sites": 3
+            },
+            {
+              "scope": "body.animation_dust_hit",
+              "from_function_line": 370,
+              "to_function_line": 397,
+              "early_return_sites": 2
+            },
+            {
+              "scope": "body.stuck_watchdog",
+              "from_function_line": 398,
+              "to_function_line": 420,
+              "early_return_sites": 0
+            }
+          ],
+          "returns": [
+            {
+              "scope": "body.entry_building_dying",
+              "original_function_line": 2,
+              "original": "\tif not _gameplay_rng_fault().is_empty(): return\n"
+            },
+            {
+              "scope": "body.entry_building_dying",
+              "original_function_line": 10,
+              "original": "\t\treturn\n"
+            },
+            {
+              "scope": "body.entry_building_dying",
+              "original_function_line": 14,
+              "original": "\t\t\treturn   # 已被摧毁的建筑：停止一切活动（节点随后由主控释放；自检直接置 hp=0 时也安全）\n"
+            },
+            {
+              "scope": "body.entry_building_dying",
+              "original_function_line": 39,
+              "original": "\t\treturn\n"
+            },
+            {
+              "scope": "body.entry_building_dying",
+              "original_function_line": 49,
+              "original": "\t\treturn\n"
+            },
+            {
+              "scope": "body.entry_building_dying",
+              "original_function_line": 51,
+              "original": "\t\treturn   # 驻军中：藏在建筑里，停止一切活动（移动/索敌/动画）\n"
+            },
+            {
+              "scope": "body.ability_inventory",
+              "original_function_line": 78,
+              "original": "\t\tif not _gameplay_rng_fault().is_empty(): return\n"
+            },
+            {
+              "scope": "body.timed_statuses",
+              "original_function_line": 110,
+              "original": "\t\t\tif not drunk_move_roll.ok: return\n"
+            },
+            {
+              "scope": "body.timed_statuses",
+              "original_function_line": 113,
+              "original": "\t\t\tif not drunk_atk_roll.ok: return\n"
+            },
+            {
+              "scope": "body.timed_statuses",
+              "original_function_line": 224,
+              "original": "\t\t\t\tif not _gameplay_rng_fault().is_empty(): return\n"
+            },
+            {
+              "scope": "body.action_dispatch",
+              "original_function_line": 265,
+              "original": "\t\treturn\n"
+            },
+            {
+              "scope": "body.action_dispatch",
+              "original_function_line": 272,
+              "original": "\t\treturn\n"
+            },
+            {
+              "scope": "body.action_dispatch",
+              "original_function_line": 277,
+              "original": "\t\treturn\n"
+            },
+            {
+              "scope": "body.animation_dust_hit",
+              "original_function_line": 371,
+              "original": "\tif not _gameplay_rng_fault().is_empty(): return\n"
+            },
+            {
+              "scope": "body.animation_dust_hit",
+              "original_function_line": 393,
+              "original": "\t\t\tif not _gameplay_rng_fault().is_empty(): return\n"
+            }
+          ]
+        },
+        {
+          "method": "_phys_body",
+          "old": "func _phys_body(delta: float) -> void:\n",
+          "new": "func _phys_body(delta: float) -> void:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._phys_body\")\n\t__unitdiag_original__phys_body(delta)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__phys_body(delta: float) -> void:\n"
+        },
+        {
+          "method": "_do_chase",
+          "old": "func _do_chase(delta: float) -> void:\r\n",
+          "new": "func _do_chase(delta: float) -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._do_chase\")\n\t__unitdiag_original__do_chase(delta)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__do_chase(delta: float) -> void:\r\n"
+        },
+        {
+          "method": "_follow_path",
+          "old": "func _follow_path(delta: float) -> bool:\r\n",
+          "new": "func _follow_path(delta: float) -> bool:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._follow_path\")\n\tvar __unitdiag_result: bool = __unitdiag_original__follow_path(delta)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original__follow_path(delta: float) -> bool:\r\n"
+        },
+        {
+          "method": "_acquire",
+          "old": "func _acquire(range_override := -1.0, closest_first := false) -> void:\r\n",
+          "new": "func _acquire(range_override := -1.0, closest_first := false) -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._acquire\")\n\t__unitdiag_original__acquire(range_override, closest_first)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__acquire(range_override := -1.0, closest_first := false) -> void:\r\n"
+        },
+        {
+          "method": "_begin_move",
+          "old": "func _begin_move(pos: Vector2) -> void:\n",
+          "new": "func _begin_move(pos: Vector2) -> void:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._begin_move\")\n\t__unitdiag_original__begin_move(pos)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__begin_move(pos: Vector2) -> void:\n"
+        },
+        {
+          "method": "_begin_amove",
+          "old": "func _begin_amove(pos: Vector2) -> void:\n",
+          "new": "func _begin_amove(pos: Vector2) -> void:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._begin_amove\")\n\t__unitdiag_original__begin_amove(pos)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__begin_amove(pos: Vector2) -> void:\n"
+        },
+        {
+          "method": "_try_attack_path_blocker",
+          "old": "func _try_attack_path_blocker() -> bool:\n",
+          "new": "func _try_attack_path_blocker() -> bool:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._try_attack_path_blocker\")\n\tvar __unitdiag_result: bool = __unitdiag_original__try_attack_path_blocker()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original__try_attack_path_blocker() -> bool:\n"
+        },
+        {
+          "method": "_face_dir",
+          "old": "func _face_dir(d: Vector2, force := false) -> void:\n",
+          "new": "func _face_dir(d: Vector2, force := false) -> void:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._face_dir\")\n\t__unitdiag_original__face_dir(d, force)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__face_dir(d: Vector2, force := false) -> void:\n"
+        },
+        {
+          "method": "current_move_speed",
+          "old": "func current_move_speed(at := Vector2.INF) -> float:\r\n",
+          "new": "func current_move_speed(at := Vector2.INF) -> float:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit.current_move_speed\")\n\tvar __unitdiag_result: float = __unitdiag_original_current_move_speed(at)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original_current_move_speed(at := Vector2.INF) -> float:\r\n"
+        },
+        {
+          "method": "_attack",
+          "old": "func _attack() -> void:\n",
+          "new": "func _attack() -> void:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._attack\")\n\t__unitdiag_original__attack()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__attack() -> void:\n"
+        },
+        {
+          "method": "_gameplay_rng_fault",
+          "old": "func _gameplay_rng_fault() -> String:\n",
+          "new": "func _gameplay_rng_fault() -> String:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._gameplay_rng_fault\")\n\tvar __unitdiag_result: String = __unitdiag_original__gameplay_rng_fault()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original__gameplay_rng_fault() -> String:\n"
+        },
+        {
+          "method": "_passive_regen",
+          "old": "func _passive_regen() -> float:\r\n",
+          "new": "func _passive_regen() -> float:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._passive_regen\")\n\tvar __unitdiag_result: float = __unitdiag_original__passive_regen()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original__passive_regen() -> float:\r\n"
+        },
+        {
+          "method": "_tick_ability_slots",
+          "old": "func _tick_ability_slots(delta: float) -> void:\r\n",
+          "new": "func _tick_ability_slots(delta: float) -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._tick_ability_slots\")\n\t__unitdiag_original__tick_ability_slots(delta)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__tick_ability_slots(delta: float) -> void:\r\n"
+        },
+        {
+          "method": "_queue_animated_redraw",
+          "old": "func _queue_animated_redraw(interval := 0.08, force := false) -> void:\r\n",
+          "new": "func _queue_animated_redraw(interval := 0.08, force := false) -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._queue_animated_redraw\")\n\t__unitdiag_original__queue_animated_redraw(interval, force)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__queue_animated_redraw(interval := 0.08, force := false) -> void:\r\n"
+        },
+        {
+          "method": "_queue_motion_redraw",
+          "old": "func _queue_motion_redraw() -> void:\r\n",
+          "new": "func _queue_motion_redraw() -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._queue_motion_redraw\")\n\t__unitdiag_original__queue_motion_redraw()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__queue_motion_redraw() -> void:\r\n"
+        },
+        {
+          "method": "_request_redraw",
+          "old": "func _request_redraw() -> void:\r\n",
+          "new": "func _request_redraw() -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._request_redraw\")\n\t__unitdiag_original__request_redraw()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__request_redraw() -> void:\r\n"
+        },
+        {
+          "method": "_spawn_dust",
+          "old": "func _spawn_dust() -> void:\r\n",
+          "new": "func _spawn_dust() -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._spawn_dust\")\n\t__unitdiag_original__spawn_dust()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__spawn_dust() -> void:\r\n"
+        },
+        {
+          "method": "_deal_hit",
+          "old": "func _deal_hit() -> void:\n",
+          "new": "func _deal_hit() -> void:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"unit._deal_hit\")\n\t__unitdiag_original__deal_hit()\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original__deal_hit() -> void:\n"
+        }
+      ]
+    },
+    {
+      "path": "scripts/battle.gd",
+      "before_sha256": "07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd",
+      "after_sha256": "1c78fb07d5bfa7d467df569662f1dba8b9486cf4cd9bbab9b1b1ca4d67f3f578",
+      "reversible": true,
+      "edits": [
+        {
+          "method": "can_unit_step",
+          "old": "func can_unit_step(mover: Unit, next: Vector2) -> bool:\r\n",
+          "new": "func can_unit_step(mover: Unit, next: Vector2) -> bool:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"battle.can_unit_step\")\n\tvar __unitdiag_result: bool = __unitdiag_original_can_unit_step(mover, next)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original_can_unit_step(mover: Unit, next: Vector2) -> bool:\r\n"
+        },
+        {
+          "method": "eject_from_buildings",
+          "old": "func eject_from_buildings(u: Unit) -> void:\r\n",
+          "new": "func eject_from_buildings(u: Unit) -> void:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"battle.eject_from_buildings\")\n\t__unitdiag_original_eject_from_buildings(u)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original_eject_from_buildings(u: Unit) -> void:\r\n"
+        },
+        {
+          "method": "target_visible_to",
+          "old": "func target_visible_to(observer: Unit, target: Unit) -> bool:\r\n",
+          "new": "func target_visible_to(observer: Unit, target: Unit) -> bool:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"battle.target_visible_to\")\n\tvar __unitdiag_result: bool = __unitdiag_original_target_visible_to(observer, target)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original_target_visible_to(observer: Unit, target: Unit) -> bool:\r\n"
+        },
+        {
+          "method": "enemy_candidates_near",
+          "old": "func enemy_candidates_near(pos: Vector2, radius: float, faction: int) -> Array:\n",
+          "new": "func enemy_candidates_near(pos: Vector2, radius: float, faction: int) -> Array:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"battle.enemy_candidates_near\")\n\tvar __unitdiag_result: Array = __unitdiag_original_enemy_candidates_near(pos, radius, faction)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original_enemy_candidates_near(pos: Vector2, radius: float, faction: int) -> Array:\n"
+        }
+      ]
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "before_sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87",
+      "after_sha256": "906c52f6f0c2294da8d8a1b4dde697dfb0a9aa90a713cdb552f7f3c6ed91f724",
+      "reversible": true,
+      "edits": [
+        {
+          "method": "_segment_open",
+          "old": "func _segment_open(a: Vector2, b: Vector2, profile: String = \"land\") -> bool:\n",
+          "new": "func _segment_open(a: Vector2, b: Vector2, profile: String = \"land\") -> bool:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"game_map._segment_open\")\n\tvar __unitdiag_result: bool = __unitdiag_original__segment_open(a, b, profile)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original__segment_open(a: Vector2, b: Vector2, profile: String = \"land\") -> bool:\n"
+        },
+        {
+          "method": "speed_mult_at",
+          "old": "func speed_mult_at(p: Vector2, faction: int, profile: String = \"land\") -> float:\r\n",
+          "new": "func speed_mult_at(p: Vector2, faction: int, profile: String = \"land\") -> float:\r\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"game_map.speed_mult_at\")\n\tvar __unitdiag_result: float = __unitdiag_original_speed_mult_at(p, faction, profile)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\treturn __unitdiag_result\n\nfunc __unitdiag_original_speed_mult_at(p: Vector2, faction: int, profile: String = \"land\") -> float:\r\n"
+        }
+      ]
+    },
+    {
+      "path": "scripts/hero_inventory.gd",
+      "before_sha256": "0614224f63d208a0846589d3fe17af38a0b25c7058e173e4991ecd28f9d2e2f1",
+      "after_sha256": "b2a4bb11dc43d9af2d26ab7dbdc2f672dd0f0d58bed49d1b165e895b19c0518c",
+      "reversible": true,
+      "edits": [
+        {
+          "method": "tick",
+          "old": "func tick(delta: float) -> void:\n",
+          "new": "func tick(delta: float) -> void:\n\tvar __unitdiag_observer = Engine.get_meta(\"liangshan_unit_remainder_observer\")\n\tvar __unitdiag_token: int = __unitdiag_observer.enter(\"hero_inventory.tick\")\n\t__unitdiag_original_tick(delta)\n\t__unitdiag_observer.leave(__unitdiag_token)\n\nfunc __unitdiag_original_tick(delta: float) -> void:\n"
+        }
+      ]
+    }
+  ],
+  "scopes": [
+    "body.entry_building_dying",
+    "body.regen",
+    "body.ability_inventory",
+    "body.timed_statuses",
+    "body.eject_target",
+    "body.action_dispatch",
+    "body.animation_dust_hit",
+    "body.stuck_watchdog",
+    "unit._phys_body",
+    "unit._do_chase",
+    "unit._follow_path",
+    "unit._acquire",
+    "unit._begin_move",
+    "unit._begin_amove",
+    "unit._try_attack_path_blocker",
+    "unit._face_dir",
+    "unit.current_move_speed",
+    "unit._attack",
+    "unit._gameplay_rng_fault",
+    "unit._passive_regen",
+    "unit._tick_ability_slots",
+    "unit._queue_animated_redraw",
+    "unit._queue_motion_redraw",
+    "unit._request_redraw",
+    "unit._spawn_dust",
+    "unit._deal_hit",
+    "battle.can_unit_step",
+    "battle.eject_from_buildings",
+    "battle.target_visible_to",
+    "battle.enemy_candidates_near",
+    "game_map._segment_open",
+    "game_map.speed_mult_at",
+    "hero_inventory.tick"
+  ],
+  "production_modified": false
+}

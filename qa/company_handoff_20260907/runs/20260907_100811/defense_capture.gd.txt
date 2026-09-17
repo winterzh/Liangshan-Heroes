@@ -1,0 +1,35 @@
+extends SceneTree
+
+func _initialize() -> void:
+    call_deferred("_run")
+
+func _run() -> void:
+    root.size = Vector2i(1280, 720)
+    if change_scene_to_file("res://scenes/menu.tscn") != OK:
+        quit(2)
+        return
+    await process_frame
+    await process_frame
+    var menu: Node = current_scene
+    menu.call("_show_defense")
+    var selected: Button = null
+    for node: Node in menu.find_children("*", "Button", true, false):
+        if "30 关" in String(node.get("text")):
+            selected = node as Button
+            break
+    if selected == null:
+        push_error("Standard 30-wave menu button missing")
+        quit(3)
+        return
+    selected.pressed.emit()
+    await create_timer(6.0, true, false, true).timeout
+    await RenderingServer.frame_post_draw
+    var battle: Node = current_scene
+    var is_battle := battle != null and battle.scene_file_path == "res://scenes/main.tscn"
+    var fault := String(battle.call("gameplay_rng_fault")) if is_battle else "SCENE_MISMATCH"
+    var ready := is_battle and fault.is_empty() and battle.get("_gameplay_rng") != null and battle.get("world") != null and battle.get("map") != null and battle.get("hud") != null
+    var output := OS.get_environment("COMPANY_CAPTURE_OUTPUT")
+    var save_error: Error = root.get_texture().get_image().save_png(output)
+    var report := {"scene": battle.scene_file_path, "ready": ready, "rng_fault": fault, "paused": paused, "save_error": save_error, "user_dir": OS.get_user_data_dir()}
+    print("COMPANY_DEFENSE_CAPTURE ", JSON.stringify(report))
+    quit(0 if ready and save_error == OK else 4)

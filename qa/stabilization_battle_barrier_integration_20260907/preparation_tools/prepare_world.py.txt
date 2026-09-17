@@ -1,0 +1,44 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess,sys
+ROOT=Path(__file__).resolve().parents[2]
+HERE=Path(__file__).resolve().parent
+BASE=HERE/'attempt_r4'
+OLD=ROOT/'qa/stabilization_identity_integration_20260907/frozen_packages/stabilization_identity_world_20260907'
+OUT=HERE/'world_r1'
+HEAD='f3da82f7452a2164c704c34a97c6b2696e99b9c3'
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def dump(p,v): p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()==HEAD
+assert sha(BASE/'freeze.json')=='cde2ddf8e6b99b45f309868b4d9715acc49680e055183a963dce6e84725f72d6'
+assert not OUT.exists()
+OUT.mkdir()
+shutil.copytree(BASE/'candidate',OUT/'candidate')
+overlay=json.loads((BASE/'overlay_manifest.json').read_text(encoding='utf-8'))
+for row in overlay['files']:
+    row['candidate']=(OUT/'candidate'/row['path']).relative_to(ROOT).as_posix()
+    assert sha(ROOT/row['candidate'])==row['candidate_sha256']
+dump(OUT/'overlay_manifest.json',overlay)
+driver=(OLD/'world_smoke.gd').read_text(encoding='utf-8')
+needle='\t_check("real world hierarchy and FX ordering",'
+insert='\t_check("new clock and capture gate attached by actual ready", is_instance_valid(battle._run_clock) and is_instance_valid(battle._save_barrier) and battle._run_clock.fault().is_empty() and not battle._save_barrier.input_closed())\n\t_check("new game cache phase retains actual engine frame", battle._run_cache_frame() == Engine.get_physics_frames())\n'
+assert driver.count(needle)==1
+driver=driver.replace(needle,insert+needle)
+needle='\t_sample("final")'
+insert='\t_check("final clock completed actual steps without fault", battle._run_clock.fault().is_empty() and not battle._run_clock.in_step() and battle._run_clock._next_tick >= completed_ticks)\n\t_check("final new game cache phase retains actual engine frame", battle._run_cache_frame() == Engine.get_physics_frames())\n\tif case_id != "defense30":\n\t\tvar rejected: Dictionary = battle._save_barrier.request_capture()\n\t\t_check("unsupported campaign capture fails without closing input or pausing", rejected.get("ok") == false and not battle._save_barrier.input_closed() and not paused and battle.hud.can_process() and battle.camera.can_process())\n'
+assert driver.count(needle)==1
+driver=driver.replace(needle,insert+needle)
+driver=driver.replace('return _audit() and not paused and battle.phase == battle.Phase.FIGHT','return _audit() and not paused and battle.phase == battle.Phase.FIGHT and battle._run_clock.fault().is_empty()')
+driver=driver.replace('No stage skip, fixture-spawn, full campaign completion,','Adds actual new-game clock/cache-phase checks and rejected campaign capture leaves input running. No stage skip, fixture-spawn, full campaign completion,')
+(OUT/'world_smoke.gd').write_text(driver,encoding='utf-8',newline='\n')
+sys.path.insert(0,str(ROOT/'scratchpad/stabilization_identity_20260907/parser_runtime'))
+from gdtoolkit.parser import parser
+parser.parse(driver)
+contract=json.loads((OLD/'launch_contract.json').read_text(encoding='utf-8'))
+for name in contract['production_source_sha256']:
+    candidate=OUT/'candidate'/name
+    contract['production_source_sha256'][name]=sha(candidate if candidate.exists() else ROOT/name)
+contract['production_source_sha256']['scripts/campaign_mission.gd']=sha(ROOT/'scripts/campaign_mission.gd')
+dump(OUT/'launch_contract.json',contract)
+dump(OUT/'review.json',{'source_head':HEAD,'barrier_freeze_sha256':sha(BASE/'freeze.json'),'prior_world_driver_sha256':sha(OLD/'world_smoke.gd'),'candidate_sources_unchanged':True,'changes':'Same nine actual world entries; additionally clock health, new-game engine cache equality and campaign fail-closed capture. No full restore or victories.'})
+dump(OUT/'freeze.json',{'source_head':HEAD,'inputs':{p.relative_to(OUT).as_posix():sha(p) for p in sorted(OUT.rglob('*')) if p.is_file()}})
+print(json.dumps({'candidate':OUT.relative_to(ROOT).as_posix(),'freeze_sha256':sha(OUT/'freeze.json')}))

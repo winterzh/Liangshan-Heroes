@@ -1,5 +1,11 @@
 # Steam 成就与创意工坊接入
 
+2026-09-07 本轮已补齐并保存60张成就图标，发布4项统计、30项中英文成就/10项阈值及既有工坊、Cloud、语言配置；发布页面确认成功。玩家成就页面显示30项，60张256×256图标加载且顺序与后台一致。公开页面通过当前浏览器会话读取，未完成退出登录的匿名验证。
+
+发布后独立回读：`default=25154403`、`steam-integration=25160280`均保持原构建，测试包来源仍为`d4728d4`。本批是配置上线，不代表后续源码已入包或真实客户端联调通过。工坊保持仅开发人员；测试组与第二账号信息待提供，品牌图、实际作品和双账号流程仍待验收。详见[本轮发布QA](../qa/steam_configuration_publish_20260907/README.md)。下方段落保留各阶段历史观察，以本段及本轮收据更新配置状态。
+
+2026-09-07 公司续传：当前 stable `d4728d4` 已上传为 Build `25160280`，Windows Depot `5088121` / Manifest `399339942090359717`，并激活在新建的 `steam-integration` 测试分支；`default` 保持 `25154403`。服务端 4 文件逐项大小/SHA1 与本地候选一致。60 张后台图标、配置发布和双账号真实联调仍未完成，故不能把测试分支收据当作成就/工坊已经正式上线。见[公司 Steam QA](../qa/company_steam_upload_20260907/README.md)。下方旧段落保留各阶段原始状态。
+
 2026-09-07 后续后台执行状态见[后台接续记录](STEAM_BACKEND_SETUP_20260907.md)：4项统计、30项中英文成就/10项阈值、工坊UGC/介绍/分类及Cloud文件额度已保存回读；60图标仍待正常文件访问/手工选择，测试分支命名prompt未完成，配置与ZIP尚未发布。用户已确认后台发布、测试分支上传与联调，授权继续有效。新候选固定df7ed18、ZIP SHA256为`768d1c15dedfd0cd19f89bb3528028171f2abf0115d3ca51a244e90e8f3b44d5`，见[新QA](../qa/steam_backend_20260907/README.md)；下文保留首轮源码接入及原候选的历史记录。
 
 2026-09-07。App ID `5088120`。本轮实现 Windows 源码及隔离候选包；线上配置、双账号联调和 Steam 上传/发布分开验收。当前线上游戏状态仍见 [最近发布记录](STEAM_UPDATE_20260907.md)，不能把本页的本地功能当作已上线。
@@ -57,6 +63,8 @@ python -X utf8 -B tools/run_steam_integration_qa.py --run --native --visual
 python -X utf8 -B tools/build_steam_candidate.py --qa-run .godot/steam_integration_qa/本次成功目录
 python -X utf8 -B tools/build_steam_candidate.py --run --qa-run .godot/steam_integration_qa/本次成功目录
 ```
+
+Windows 私有用户路径过长时，QA 和构建命令都可追加 `--profile-root "<本机较短绝对目录>"`；工具在该根下独占新建各轮子目录，拒绝既有目录及链接/reparse，不复用玩家数据。未指定时保持原目录布局。
 
 每次创建全新私有 project/profile、APPDATA/LOCALAPPDATA/TEMP/TMP，强制 `STEAM_DISABLED=1`；自动测试不连接真实账号。`--cache-from` 仅接受此前隔离 QA 目录，复用导入纹理以减少等待。收据核对受测源码前后 SHA；源码改变后不能用旧 QA 收据导出。
 

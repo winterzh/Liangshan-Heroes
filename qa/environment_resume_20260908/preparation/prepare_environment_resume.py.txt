@@ -1,0 +1,102 @@
+from pathlib import Path
+import hashlib,json,difflib
+root=Path.cwd(); out=root/'scratchpad/environment_resume_20260908'; out.mkdir(exist_ok=True)
+(out/'.gdignore').write_text('\n')
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+def save(name,s):
+    p=root/'scripts'/name
+    if p.exists():
+        old=p.read_bytes().decode().splitlines(keepends=True); new=s.splitlines(); result=[]
+        for op,i,j,a,b in difflib.SequenceMatcher(None,[x.rstrip('\r\n') for x in old],new,autojunk=False).get_opcodes():
+            if op=='equal': result.extend(old[i:j])
+            elif op in ('insert','replace'):
+                e='\r\n' if old[min(i,len(old)-1)].endswith('\r\n') else '\n'
+                result.extend(x+e for x in new[a:b])
+        assert ''.join(result).replace('\r\n','\n')==s
+        (out/name).write_bytes(''.join(result).encode())
+    else: (out/name).write_text(s,encoding='utf-8',newline='\n')
+b=(root/'scripts/battle.gd').read_text(encoding='utf-8')
+a=b.index('\tvar sh := Shader.new()',b.index('func _build_atmosphere()')); z=b.index('\n\n\n## ---------- 战争迷雾',a)
+body=b[a:z]
+body=rep(body,'uniform sampler2D screen_tex','uniform float phase = 0.0;\nuniform sampler2D screen_tex').replace('TIME *','phase *')
+body=rep(body,'\tvar rect := ColorRect.new()','\trect = ColorRect.new()')
+body=rep(body,'Control.PRESET_FULL_RECT','Control.PRESET_TOP_LEFT')
+body=rep(body,'\trect.z_index = 3700','\tz_index = 3700')
+body=rep(body,'\tadd_child(rect)','\tscreen = Node2D.new()\n\tadd_child(screen)\n\tscreen.add_child(rect)\n\tset_phase(0.0)')
+body=''.join('\t'+line if line.startswith('\t') else line for line in body.splitlines(keepends=True))
+b=b[:a]+'\tadd_child(AtmosphereLayer.new())'+b[z:]
+b+='''
+
+## Scene-local phase survives pause and process restart; no engine TIME dependency.
+class AtmosphereLayer extends Node2D:
+	var phase := 0.0
+	var rect: ColorRect
+	var screen: Node2D
+
+	func _init() -> void:
+'''+body+'''
+
+	func set_phase(value: float) -> void:
+		phase = value
+		rect.material.set_shader_parameter("phase", phase)
+
+	func _process(delta: float) -> void:
+		set_phase(phase + delta)
+		_fit_viewport()
+
+	func _ready() -> void:
+		get_viewport().size_changed.connect(_fit_viewport)
+		_fit_viewport()
+
+	func _fit_viewport() -> void:
+		if not is_inside_tree(): return
+		# Keep the original z ordering while drawing the filter in screen space.
+		screen.transform = get_global_transform_with_canvas().affine_inverse()
+		rect.size = get_viewport_rect().size
+'''
+b=rep(b,'class AmbientMotes extends Node2D:\n\tconst N := 30','class AmbientMotes extends Node2D:\n\tconst N := 30\n\tvar phase := 0.0')
+b=rep(b,'\tvar phase := 0.0\n\n\tfunc _process(_d: float) -> void:\n\t\tqueue_redraw()','\tvar phase := 0.0\n\n\tfunc _process(_d: float) -> void:\n\t\tphase += _d\n\t\tqueue_redraw()')
+b=rep(b,'\t\tvar t := Time.get_ticks_msec() / 1000.0','\t\tvar t := phase')
+save('battle.gd',b)
+c=(root/'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c=rep(c,'classic_world_core_preparation_v6','classic_world_core_preparation_v7')
+c=rep(c,'"hud_messages", "hud"]','"hud_messages", "hud", "environment"]')
+c=rep(c,'const HudState :=','const EnvironmentState := preload("res://scripts/run_environment_state.gd")\nconst HudState :=')
+c=rep(c,'var _mount_frame: Dictionary = {}','var _mount_frame: Dictionary = {}\nvar _environment: Variant = null')
+c=rep(c,'\tsections["hud"] = hud_state.value','''	sections["hud"] = hud_state.value
+	var environment: Dictionary = EnvironmentState.new().capture(source)
+	if not environment.ok:
+		if retained_identity == null: identity.dispose()
+		return environment
+	sections["environment"] = environment.value''')
+c=rep(c,'\t_pending_root = s.root.duplicate(true)','''	_environment = EnvironmentState.new()
+	checked = _environment.bind(_battle, s.environment)
+	if not checked.ok: return _abort(checked, "environment")
+	_pending_root = s.root.duplicate(true)''')
+c=rep(c,'"hud_module": _hud_module, "complete_world": false','"hud_module": _hud_module, "environment_module": _environment, "complete_world": false')
+c=rep(c,'\t_mount_frame.clear()','\t_mount_frame.clear()\n\t_environment = null')
+save('run_battle_world_core.gd',c)
+d=(root/'qa/hud_resume_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('hud-resume-native','environment-resume-native').replace('[hud resume QA] ','[environment resume QA] ')
+d=d.replace('## Real root-only transaction. One real new game is the capture fixture;\n## every destination stays detached. Map and Unit local restoration are external.','## Actual HELD classic capture, disabled world mounting and consumer restoration.\n## Full gameplay, Steam and player disk continuation remain external.')
+d=d.replace('Actual classic Battle runs normally, captures all core sections under its HELD barrier, prepares a disabled detached world and rolls back corrupt sections. Root-clock binding, all-world display/UI/Steam, final attachment and activation remain pending. No cross-process or player-slot claim.','Actual classic Battle captures twenty sections under HELD. Tests prepare and mount disabled worlds after root-clock binding, activate individual UI/display consumers, and verify native environment idle plus nonzero Vulkan viewport pixels. Full gameplay/Steam/cursor installation, cross-process and player-slot remain pending.')
+d=rep(d,'\troot.get_node("Settings").set("game_speed", 1.0)','\troot.get_node("Settings").set("game_speed", 1.0)\n\troot.get_node("Settings").set("atmosphere", true)')
+d=rep(d,'\tif not await _hud_cases(core_script, identity, runtime, wire):','\tif not await _environment_cases(core_script, identity, runtime, wire):\n\t\ttarget_core.dispose(); source_core.dispose(); await _finish(true); return\n\tif not await _hud_cases(core_script, identity, runtime, wire):')
+d+='\n'+(out/'driver_cases.gd').read_text(encoding='utf-8')
+legacy=(root/'scripts/battle.gd').read_text(encoding='utf-8').split('sh.code = """',1)[1].split('"""',1)[0]
+d+='\nconst LEGACY_ENVIRONMENT_SHADER := """'+legacy+'"""\n'
+(out/'pixel_cases.gd').write_bytes((root/'.godot/environment_pixel_cases.gd').read_bytes())
+d+='\n'+(out/'pixel_cases.gd').read_text(encoding='utf-8')
+d=rep(d,'\tvar adapter: Script = load("res://scripts/run_environment_state.gd")','\tif not await _environment_pixels(): return false\n\tvar adapter: Script = load("res://scripts/run_environment_state.gd")')
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+changes=[]
+for name in ['battle.gd','run_battle_world_core.gd','run_environment_state.gd']:
+    p=root/'scripts'/name; row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':out.relative_to(root).as_posix()+'/'+name,'candidate_sha256':sha(out/name)}
+    if p.exists(): row['before_raw_sha256']=sha(p)
+    changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+names=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd','driver_cases.gd','pixel_cases.gd']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in names}},indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))

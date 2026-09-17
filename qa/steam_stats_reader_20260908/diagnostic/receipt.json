@@ -1,0 +1,120 @@
+{
+  "complete": false,
+  "sources": {
+    "native/steam_stats_reader/build_profile.json": "3d38d062afbf6d75f648dec342a7e5d965bec84ebfa7b6ea63c0ac13a0dabcb8",
+    "native/steam_stats_reader/CMakeLists.txt": "1e8619a61703c69da14d8ee9cb6a3502ae7c25d7da5a90b3ae6e9f89a44c7185",
+    "native/steam_stats_reader/extension.cpp": "0161456b315ff225ab384e282feea7fb731095330dafe9f1dca2af9208babc37",
+    "native/steam_stats_reader/mock_steam.cpp": "15705a5bc3860304d2b9b62b1f624e0e39b57a4e090510a803ac4fdcbce3c0ca",
+    "native/steam_stats_reader/reader.hpp": "b4d560009217b4e948a64c84d935fb450b997e9e28e9adddc75ddeda37ca71d0",
+    "native/steam_stats_reader/reader_test.cpp": "6e46151f60f2130d20462e6cc226201d884c083808cc13bb91d1c766979856c8",
+    "native/steam_stats_reader/windows_api.hpp": "6b74a6aeb8c53674acfe388b102cf79e29bae8389cf845eb807052db4ad77504",
+    "native/steam_stats_reader/third_party/gdextension_interface.h": "355ff4c6254fdd434ea16d9a8ef0f18e3f95aeb3e3f00d98db10769ece3c7fe5",
+    "scripts/steam_stats_reader.gd": "23dc98449a5e71add9114483b8c29a5e423044b257281ec699bca3b34e65c6ec",
+    "scripts/steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "tools/steam_stats_reader_qa.gd": "38298d7e2ea751449a69c44a9e42c5157aac454bb8c1026477713c6daed86214"
+  },
+  "commands": [
+    {
+      "name": "compile_tests",
+      "args": [
+        "C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+        "/nologo",
+        "/std:c++17",
+        "/EHsc",
+        "/W4",
+        "/WX",
+        "/O2",
+        "/MT",
+        "/Brepro",
+        "/guard:cf",
+        "/ID:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\native\\steam_stats_reader\\third_party",
+        "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\native\\steam_stats_reader\\reader_test.cpp",
+        "/Fe:reader_test.exe"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "unit_tests",
+      "args": [
+        "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\.godot\\steam_reader_build\\d2c8e12c1960\\reader_test.exe"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "configure_extension",
+      "args": [
+        "C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe",
+        "-S",
+        "D:\\CodexTemp\\lsh_reader_build\\d2c8e12c1960\\source",
+        "-B",
+        "D:\\CodexTemp\\lsh_reader_build\\d2c8e12c1960\\cmake",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_MAKE_PROGRAM=C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja\\ninja.exe",
+        "-DCMAKE_CXX_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+        "-DPython3_EXECUTABLE=C:\\Python314\\python.exe",
+        "-DGODOT_CPP_SOURCE=D:\\CodexTemp\\lsh_reader_build\\d2c8e12c1960\\dependency\\godot-cpp-godot-4.4-stable"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "compile_extension",
+      "args": [
+        "C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe",
+        "--build",
+        "D:\\CodexTemp\\lsh_reader_build\\d2c8e12c1960\\cmake",
+        "--target",
+        "steam_stats_reader",
+        "--parallel",
+        "6"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "compile_mock",
+      "args": [
+        "C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+        "/nologo",
+        "/std:c++17",
+        "/EHsc",
+        "/W4",
+        "/WX",
+        "/O2",
+        "/MT",
+        "/Brepro",
+        "/guard:cf",
+        "/ID:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\native\\steam_stats_reader\\third_party",
+        "/LD",
+        "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\native\\steam_stats_reader\\mock_steam.cpp",
+        "/Fe:steam_api64.dll",
+        "/link",
+        "/DYNAMICBASE",
+        "/NXCOMPAT",
+        "/Brepro"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "absent_import",
+      "args": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--headless",
+        "--path",
+        "D:\\CodexTemp\\lsh_reader_build\\d2c8e12c1960\\absent",
+        "--editor",
+        "--import"
+      ],
+      "exit_code": 3221225477
+    }
+  ],
+  "live_steam_tested": false,
+  "unit_tests": {
+    "passed": true,
+    "checks": 61
+  },
+  "godot_cpp": {
+    "url": "https://github.com/godotengine/godot-cpp/archive/refs/tags/godot-4.4-stable.zip",
+    "sha256": "0d64106ce1e09547f6054743b6fb9db903f23f27d1e669c7556a0a02669bd9ba"
+  }
+}

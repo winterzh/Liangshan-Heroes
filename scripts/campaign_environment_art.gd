@@ -581,13 +581,13 @@ const SURFACE_ROUTES: Dictionary = {
 ## No crop, mask, pixel clearing, mirroring, or stitched sampling occurs here.
 const VISUAL_CALIBRATIONS: Dictionary = {
 	"object": {
-		"reeds_short": {"level_id":"level5", "source_sha256":"6549dfec74e9336a60a4e0290f60d72f9516c7bf4ee04710fefe674ce2a1b9ed", "visible_bbox_xywh":[115,145,282,222]},
-		"reeds_tall": {"level_id":"level5", "source_sha256":"2ac247db101fbdf1912266fcc4c88aa4d03a36fd33b64e6d7928d43fd660c4e3", "visible_bbox_xywh":[129,105,256,301]},
-		"reeds_bent": {"level_id":"level5", "source_sha256":"a76a1c59dd647defd49e66ea31f2822439375c4765a0ea65dd5696ffab4116e1", "visible_bbox_xywh":[95,139,319,231]},
-		"reeds_seeded": {"level_id":"level5", "source_sha256":"b0bfd2b8e9f8c176acf83918ca8183de15627da8a624b40c8a9d98f96e97bc46", "visible_bbox_xywh":[121,104,273,299]},
-		"willow_old": {"level_id":"level5", "source_sha256":"71625a8e05c0e6f1f8dbd4b375dafa977a4ea0179cc73eac1acb0eb585f06324", "visible_bbox_xywh":[120,107,272,294]},
-		"tree_broad": {"level_id":"level5", "source_sha256":"4fbfb8c75628b443debe7f7b789d1b735b15e217a471febbefd6420d543a5c6a", "visible_bbox_xywh":[115,105,287,303]},
-		"tree_young": {"level_id":"level5", "source_sha256":"9b5985c16184cf574702e5c9b8bd74d193f39ddbc80f1d6e8d7f389ede6a9f9f", "visible_bbox_xywh":[166,119,183,280]},
+		"reeds_short": {"level_id":"level5", "source_sha256":"eacb9d862c1d2d6aafc474290470fb01df13426b85bd8be56f787d4f0e5470e7", "visible_bbox_xywh":[115,145,505,366]},
+		"reeds_tall": {"level_id":"level5", "source_sha256":"96913721db6412806a37841a24e2c4ed18dedca49b44aaf90bde55dba994c885", "visible_bbox_xywh":[129,105,434,405]},
+		"reeds_bent": {"level_id":"level5", "source_sha256":"9632aec3e7634cc15456ceb9a40fcf247cc2b294583e252df9f9918e1091fb5f", "visible_bbox_xywh":[95,139,325,366]},
+		"reeds_seeded": {"level_id":"level5", "source_sha256":"40e9817c206cdabea9c092759a5215c579277966262e33e28bda17fb3ff217c9", "visible_bbox_xywh":[121,104,445,403]},
+		"willow_old": {"level_id":"level5", "source_sha256":"732aed950e4038773e189a9299f3befe66b36b7eb3fc8b66ceb9e538ce36879e", "visible_bbox_xywh":[120,107,407,392]},
+		"tree_broad": {"level_id":"level5", "source_sha256":"f7c85ba56bb2030430f6771dbd106c82729581c576d33a0da046ec2cb43f94e7", "visible_bbox_xywh":[115,119,426,416]},
+		"tree_young": {"level_id":"level5", "source_sha256":"8e0c1e7786a1a8fc133e354d5a01d8e65578ad1a7371ad960e337bc51bd05dcd", "visible_bbox_xywh":[120,132,355,408]},
 		"dock_straight": {"level_id":"level5", "source_sha256":"633cba86c77ac76e9cfd023d816939d5ec2b691e256c2aa917a1a9c01d9889d8", "visible_bbox_xywh":[132,148,249,217]},
 		"dock_head_t": {"level_id":"level5", "source_sha256":"8d327ee3cdcceb71fca6ded2b2b27755b9905cfc7da14d64b80308bdb691624f", "visible_bbox_xywh":[159,175,193,163]},
 		"watchtower": {"level_id":"level5", "source_sha256":"23ab85096e6d15a9a55ace23960f053a660ca5fe0e43a6b93d682e354d2782c4", "visible_bbox_xywh":[200,152,111,208]},
@@ -631,6 +631,10 @@ const TEXT_RECT_SOURCE_SHA256: Dictionary = {
 }
 
 
+const ATLAS_TEXT_CALIBRATIONS := {
+	"level7_heyang_wine_sign": {"route": "heyang_wine_sign", "level": "level7", "resource_sha256": "1ad2d48f8c77768c123700be9d6bf16205d6a4fdfb890bbb0b95aae4c3ef4c80", "source_sha256": "c8f487a92ff1e5639e154dad3ca1944fc22cf62e794e77d9807892377d726c4b", "rect": [0.3968633540372671, 0.37180124223602484, 0.08658385093167702, 0.2215527950310559], "source_path": "res://assets/campaign/environment/art_full_20260915/market.png", "pixel_sha256": "99c8073e8cecfe81a03c9eb6c803020a37bd4fa7e2b9681b1e460ed24f77ebd0", "imported_pixel_sha256": "6a707814ca8d084fcf72fe00289d8004db3e39ae175c23e77a6280b7a275769b", "size": [1254, 1254], "region": [796, 0, 458, 698], "margin": [163.6829268292683, 0, 327.3658536585366, 87.3658536585366]}
+}
+
 static func _route_path(table: Dictionary, active_level_id: String, route_key: String,
 		state: String = "default") -> String:
 	if active_level_id.is_empty() or route_key.is_empty() or not table.has(route_key):
@@ -644,8 +648,11 @@ static func _route_path(table: Dictionary, active_level_id: String, route_key: S
 
 
 static func _load_texture(path: String) -> Texture2D:
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return null
+	if path.is_empty(): return null
+	if not ResourceLoader.exists(path):
+		# A scoped atlas can sample native web PNG bytes without re-encoding them.
+		path = path.get_basename() + ".tres"
+		if not ResourceLoader.exists(path): return null
 	return ResourceLoader.load(path, "Texture2D") as Texture2D
 
 
@@ -708,10 +715,47 @@ static func text_rect(surface_id: String, accepted_source_sha256: String) -> Var
 
 ## Runtime text is enabled only for the exact accepted source file whose SHA was
 ## used to measure the rectangle. Missing files and stale measurements fail closed.
+static var _atlas_pixel_hashes: Dictionary = {}
+
+static func _atlas_calibration_matches(path: String, texture: Texture2D, record: Dictionary) -> bool:
+	if not texture is AtlasTexture or texture.atlas == null: return false
+	var atlas_is_native: bool = texture.atlas.resource_path == record.source_path
+	var region: Array = record.region
+	var margin: Array = record.margin
+	if not texture.region.is_equal_approx(Rect2(region[0],region[1],region[2],region[3])): return false
+	if not texture.margin.is_equal_approx(Rect2(margin[0],margin[1],margin[2],margin[3])): return false
+	# Source projects retain native bytes. Exported PCKs remap TRES/PNG resources;
+	# bind those to the same sampled geometry and decoded RGBA pixels instead.
+	if FileAccess.file_exists(path) and FileAccess.get_sha256(path) != record.resource_sha256: return false
+	var source_path: String = texture.atlas.resource_path
+	if atlas_is_native and FileAccess.file_exists(source_path):
+		return FileAccess.get_sha256(source_path) == record.source_sha256
+	if texture.atlas.get_size() != Vector2(record.size[0],record.size[1]): return false
+	var cache_key: int = texture.atlas.get_instance_id()
+	if not _atlas_pixel_hashes.has(cache_key):
+		var pixels: Image = texture.atlas.get_image()
+		if pixels == null or pixels.is_empty(): return false
+		if pixels.is_compressed() and pixels.decompress() != OK: return false
+		pixels.convert(Image.FORMAT_RGBA8)
+		var digest := HashingContext.new()
+		digest.start(HashingContext.HASH_SHA256)
+		digest.update(pixels.get_data())
+		_atlas_pixel_hashes[cache_key] = {"texture": texture.atlas, "sha256": digest.finish().hex_encode()}
+	var pixel_sha: String = _atlas_pixel_hashes[cache_key].sha256
+	return pixel_sha == record.pixel_sha256 or pixel_sha == record.get("imported_pixel_sha256", "")
+
+
 static func calibrated_text_rect(resolver: String, active_level_id: String,
 		route_key: String, state: String, surface_id: String) -> Variant:
 	var path := route_path(resolver,active_level_id,route_key,state)
-	if path.is_empty() or not ResourceLoader.exists(path): return null
+	if path.is_empty(): return null
+	if not ResourceLoader.exists(path):
+		var record: Dictionary = ATLAS_TEXT_CALIBRATIONS.get(surface_id,{})
+		var atlas_path := path.get_basename()+".tres"
+		if record.is_empty() or record.route!=route_key or record.level!=active_level_id or state!="default": return null
+		var texture = _load_texture(path)
+		if not _atlas_calibration_matches(atlas_path, texture, record): return null
+		return record.rect
 	var disk_path := ProjectSettings.globalize_path(path)
 	var source_sha := FileAccess.get_sha256(disk_path)
 	if source_sha.is_empty(): return null

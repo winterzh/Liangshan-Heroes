@@ -1,0 +1,25 @@
+from pathlib import Path
+import datetime,hashlib,json,subprocess,sys
+ROOT=Path(__file__).resolve().parents[2]
+HERE=Path(__file__).resolve().parent
+CANDIDATE=HERE/'world_r1'
+FREEZE=hashlib.sha256((CANDIDATE/'freeze.json').read_bytes()).hexdigest()
+HEAD='f3da82f7452a2164c704c34a97c6b2696e99b9c3'
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()==HEAD
+cases=['defense30']+['level'+str(i) for i in range(1,9)]
+out=HERE/('world_matrix_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'.json')
+report={'source_head':HEAD,'freeze_sha256':FREEZE,'cases_requested':cases,'cases':[],'complete':False,'scope':'nine real new games, candidate clock compatibility, no full restore or victories'}
+for case in cases:
+    cmd=[sys.executable,'-X','utf8','-B','tools/run_stabilization_overlay.py','--source-head',HEAD,'--candidate',CANDIDATE.relative_to(ROOT).as_posix(),'--freeze-sha256',FREEZE,'--expected-files','4','--driver','world_smoke.gd','--driver-destination','tools/stabilization_identity_world/world_smoke.gd','--suite','stable-identity-world-entry','--prefix','[stable-identity world-entry QA] ','--case-id',case,'--run']
+    r=subprocess.run(cmd,cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,encoding='utf-8',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+    receipts=[line.removeprefix('RECEIPT ') for line in r.stdout.splitlines() if line.startswith('RECEIPT ')]
+    row={'case_id':case,'exit_code':r.returncode,'receipt':receipts[-1] if receipts else None}
+    report['cases'].append(row)
+    out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps(row,ensure_ascii=False),flush=True)
+    if r.returncode:
+        print(r.stdout[-3500:],flush=True)
+        raise SystemExit(1)
+report['complete']=True
+out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(str(out),flush=True)

@@ -1,0 +1,63 @@
+{
+  "suite": "steam-persistent-outbox",
+  "passed": false,
+  "source_head": "21d70bcf85f6cd7c8601dec110a84c54f01f59ba",
+  "freeze_sha256": "8597a6885af0173ff9352c1a91a9ced893631c54d2cca5d4511d4b771ab02b2c",
+  "runner_sha256": "e82e6bacf94ed2e71659bd4feed2906602fba38506c7193b2c229d328909a372",
+  "godot_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "run": "D:\\CodexTemp\\steam_persistent_outbox\\20260908T103058Z_9d3bd74d",
+  "production_confirmation_blocked": true,
+  "real_sdk": false,
+  "processes": [
+    {
+      "name": "import",
+      "mode": null,
+      "case": "",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 45404,
+      "exit_code": 0,
+      "seconds": 3.11378999997396,
+      "errors": []
+    },
+    {
+      "name": "profile_guard",
+      "mode": "seed",
+      "case": "profile_guard",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 42140,
+      "exit_code": 1,
+      "seconds": 0.17424240004038438,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"exact\" variable because the value doesn't have a set type.",
+        "ERROR: Failed to load script \"res://tools/steam_persistent_outbox_qa.gd\" with error \"Parse error\"."
+      ]
+    }
+  ],
+  "crashes": [],
+  "inputs": {
+    "scripts/steam_persistent_outbox.gd": "6f26e68a76398d81b504a687e4943c141bb8fe3dc94da779955d03265c433fa0",
+    "scripts/steam_persistent_outbox_state.gd": "4fb04626fc6fd2ff60384a3d2ecbed751a7d3a7e78fcc03db510fd22819a6f59",
+    "scripts/steam_persistent_outbox_store.gd": "e09ebba43711fae2e4e5ff377a8e5f897e0ba77d462276a648762d0a2c21977f",
+    "scripts/run_snapshot_store.gd": "54855b1a7ca90db3d2859e2f9595b320e1b75062e3520bdb29111824af1be73c",
+    "scripts/steam_receipt_store.gd": "7fb5ad82a04a1922de07e00b358d5bc5e263e0e53ad4361ae88048a06289e4bb",
+    "scripts/steam_run_ledger.gd": "c3b5162a9cebeea584e2be30d40d35438cab0bdf045daf62c3733accc2f313cb",
+    "scripts/steam_run_receipt.gd": "acd21358de698c9a6c8e3806873439fe90abdc6ed3bc9b2a7153263de719cc66",
+    "scripts/steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "scripts/steam_achievement_state.gd": "f0dddf190f440d64367bb84c1ff1dc634174bdd3fab45148cfd5b879786bc71e",
+    "tools/steam_persistent_outbox_qa.gd": "9177304b584b2940e18353612f3380f8db2bbf3d3493928c14b8d465defdf23d",
+    "tools/run_steam_persistent_outbox_qa.py": "e82e6bacf94ed2e71659bd4feed2906602fba38506c7193b2c229d328909a372",
+    "project.godot": "edb24534a61dd9844d241753d7a861c80c5f7e11596ca1188259960246602fad"
+  },
+  "error": "RuntimeError: Godot errors profile_guard",
+  "source_unchanged": true,
+  "frozen_inputs_unchanged": true,
+  "engine_unchanged": true,
+  "head_unchanged": true,
+  "player_profiles_unchanged": true,
+  "child_exits_confirmed": true,
+  "godot_pids_after": [],
+  "lock_released": true,
+  "native_checks": 0
+}

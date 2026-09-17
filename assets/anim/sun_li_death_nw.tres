@@ -1,0 +1,41 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/nw.png" id="nw"]
+
+[sub_resource type="AtlasTexture" id="hurt_nw"]
+atlas = ExtResource("nw")
+region = Rect2(294, 392, 145, 137)
+margin = Rect2(22.5, 26.5, 45, 53)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-1.5, 13.8)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_nw"]
+atlas = ExtResource("nw")
+region = Rect2(47, 560, 167, 117)
+margin = Rect2(11.5, 36.5, 23, 73)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-5.0, 33.8)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="terminal_nw"]
+atlas = ExtResource("nw")
+region = Rect2(267, 590, 209, 94)
+margin = Rect2(0.0, 57.5, 0, 115)
+filter_clip = true
+metadata/draw_offset_px = Vector2(4.0, 52.38)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_nw")},
+{"duration": 1.0, "texture": SubResource("fall_nw")},
+{"duration": 1.0, "texture": SubResource("terminal_nw")},
+{"duration": 1.0, "texture": SubResource("terminal_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

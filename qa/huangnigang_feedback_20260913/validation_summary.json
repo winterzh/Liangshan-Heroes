@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "scope": "Huangnigang feedback, not full-suite or Steam acceptance",
+  "batches": {
+    "gameplay": {
+      "receipt": "qa/huangnigang_feedback_20260913/20260913_134926_3ee0795d/receipt.json",
+      "receipt_sha256": "23e01fb30a5d0c8ecd13ec48485599a6301a2fb616ca4d9fef7d8e8c4d2236eb",
+      "complete": true,
+      "source_count": 2973,
+      "changed_sources": [],
+      "checks": null,
+      "lock_released": true,
+      "artifact_hashes_checked": 13,
+      "bad_artifacts": []
+    },
+    "component": {
+      "receipt": "qa/campaign_level_state_20260908/20260913_140508_ef6856bd/receipt.json",
+      "receipt_sha256": "70af554717a811143995ac14c72544da9b8b3face5881e919641a6dfd5f58bd9",
+      "complete": true,
+      "source_count": 2969,
+      "changed_sources": [],
+      "checks": 207,
+      "lock_released": null,
+      "artifact_hashes_checked": 0,
+      "bad_artifacts": [],
+      "component_report_sha256": "41600e0445d8697f5a0b2261bac101d56a15ff93fc6c603731fe1e1918068595"
+    },
+    "world": {
+      "receipt": "qa/level3_world_restore_20260909/20260913_140919_e1abda20/receipt.json",
+      "receipt_sha256": "99c1b033d3814fa995e4c0fde27e137a4284dbdea9d3285ae822a7d0ce28dd98",
+      "complete": true,
+      "source_count": 2978,
+      "changed_sources": [],
+      "checks": 0,
+      "lock_released": true,
+      "artifact_hashes_checked": 90,
+      "bad_artifacts": [],
+      "total_checks": 309,
+      "full_suite": false,
+      "acceptance_complete": false,
+      "protected_player_unchanged": true
+    },
+    "classic": {
+      "receipt": "qa/continue_flow_20260909/20260913_141759_58ff5f3a/receipt.json",
+      "receipt_sha256": "bed36dbaa2f57fb31d580c79f471311e992ff8662b3e5805f032e143a6e7dba4",
+      "complete": true,
+      "source_count": 2970,
+      "changed_sources": [],
+      "checks": 296,
+      "lock_released": true,
+      "artifact_hashes_checked": 16,
+      "bad_artifacts": []
+    }
+  },
+  "shared_lock_free_at_verification": true,
+  "gameplay": {
+    "arrival_checks": 105,
+    "arrival_failures": [],
+    "short_checks": 76,
+    "short_failures": [],
+    "stability": [
+      {
+        "label": "fifteen at the rest marker",
+        "duration": 1.0,
+        "max_drift": 0.0,
+        "min_distance": 57.6111373901367
+      },
+      {
+        "label": "fourteen while Yang inquires",
+        "duration": 3.0,
+        "max_drift": 0.0,
+        "min_distance": 63.654296875
+      }
+    ],
+    "takeover_stop_max_drift": 0.0,
+    "after_answer_observation": {
+      "samples": 48,
+      "min_body_clearance": 1.2496076113864838,
+      "includes_Yang_returning": true
+    }
+  },
+  "localization": {
+    "added_source_keys": 25,
+    "translated_target_strings_added": 75,
+    "strict_build_exit_code": 0,
+    "level1_missing_count": 0,
+    "global_missing_count": 8,
+    "global_require_complete_exit_code": 1
+  }
+}

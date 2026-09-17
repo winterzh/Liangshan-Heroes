@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/sun_li_direction4_20260913/ne.png" id="ne"]
+
+[sub_resource type="AtlasTexture" id="windup_ne"]
+atlas = ExtResource("ne")
+region = Rect2(442, 218, 139, 154)
+margin = Rect2(19.0, 11.5, 38, 23)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.195293, -4.868083)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.99793
+
+[sub_resource type="AtlasTexture" id="strike_ne"]
+atlas = ExtResource("ne")
+region = Rect2(128, 408, 157, 141)
+margin = Rect2(10.0, 18.0, 20, 36)
+filter_clip = true
+metadata/draw_offset_px = Vector2(1.623865, 1.264711)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.99793
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("ne")
+region = Rect2(141, 35, 129, 145)
+margin = Rect2(24.0, 16.0, 48, 32)
+filter_clip = true
+metadata/draw_offset_px = Vector2(2.395128, -2.585173)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.99793
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_ne")},
+{"duration": 1.0, "texture": SubResource("windup_ne")},
+{"duration": 1.0, "texture": SubResource("strike_ne")},
+{"duration": 1.0, "texture": SubResource("strike_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

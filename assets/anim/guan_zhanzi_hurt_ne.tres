@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/ne.png" id="ne"]
+
+[sub_resource type="AtlasTexture" id="hurt_ne"]
+atlas = ExtResource("ne")
+region = Rect2(298, 402, 208, 198)
+margin = Rect2(24.0, 29.0, 48, 58)
+filter_clip = true
+metadata/draw_offset_px = Vector2(18.0, 23.92)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

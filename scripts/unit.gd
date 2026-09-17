@@ -1,11 +1,14 @@
 class_name Unit
 extends Node2D
+# 0 is an unregistered constructor shell; real Battle entities are positive.
+var entity_id: int = 0
 const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 ## 单位：梁山好汉 / 官军。有图集贴图就用贴图，否则绘制占位图形。
 
 const CampaignArt := preload("res://scripts/campaign_art.gd")
 const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
 const WorldShadow := preload("res://scripts/world_shadow.gd")
+const LIVE_TAVERN_FALLBACK := preload("res://assets/campaign/objects/roadside_tavern_default.png")
 
 enum { FACTION_LIANG = 0, FACTION_GUAN = 1 }
 enum { ST_IDLE, ST_MOVE, ST_AMOVE, ST_CHASE, ST_GATHER, ST_RETURN, ST_BUILD, ST_REPAIR, ST_GARRISON }
@@ -340,12 +343,15 @@ const DUST_DUR := 0.36
 # body motion and weapon pose already live in the bitmap, so the legacy whole-
 # sprite swing and procedural weapon trail must not be layered on top.
 const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"guan_zhanzi": true,
 	"guan_dao": true,
 	"guan_gong": true,
 	"guan_jingqi": true,
 	"guan_qi": true,
 	"song_jiang": true,
 	"lin_chong": true,
+	"sun_li": true,
+	"hu_sanniang": true,
 }
 
 
@@ -871,8 +877,36 @@ func recently_hit() -> bool:
 	return _hit_recent_t > 0.0
 
 
+## Ordinary attacks, including tower and garrison arrows, share this armor rule.
+## Skills do not call this helper and continue to bypass physical armor.
+func physical_damage_after_armor(d: float) -> float:
+	return d / (1.0 + 0.05 * maxf(0.0, defense - _def_down))
+
+
+## Chapters opt individual building definitions into fortified defenses. The
+## faction gate prevents the same definition from silently buffing player towers.
+func fortification_regular_damage_mult() -> float:
+	if not is_building or is_resource:
+		return 1.0
+	if int(setup_def.get("fortification_faction", faction)) != faction:
+		return 1.0
+	return clampf(float(setup_def.get("fortification_damage_mult", 1.0)), 0.05, 1.0)
+
+
+func _fortification_hit_mult(from: Unit, ignore_reduction: bool, damage_ability_id: String, siege_weapon_hit: bool) -> float:
+	# Explicit source-free internal removals (Delete, section cleanup) must still
+	# remove a building. Named DOT/skills cannot borrow this cleanup exception.
+	if from == null and ignore_reduction and damage_ability_id.is_empty():
+		return 1.0
+	# Only ordinary attacks from real siege engines bypass fortification. A
+	# generic ability attributed to an engine remains an ordinary skill hit.
+	if damage_ability_id.is_empty() and (siege_weapon_hit or (is_instance_valid(from) and from.key in ["siege_ram", "siege_cata"])):
+		return 1.0
+	return fortification_regular_damage_mult()
+
+
 func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction := false,
-		damage_ability_id := "") -> void:
+		damage_ability_id := "", siege_weapon_hit := false) -> void:
 	if not _gameplay_rng_fault().is_empty(): return
 	if hp <= 0.0 or story_outcome != "":
 		return
@@ -885,6 +919,10 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if _track_combat_stats and damage_ability_id == "" and from != null and is_instance_valid(from) \
 			and from.stat_ability_id != "":
 		damage_ability_id = from.stat_ability_id
+	# Fortification is a building/weapon interaction, separate from temporary
+	# damage reduction. Piercing spells and source-free named DOT still obey it.
+	if d > 0.0:
+		d *= _fortification_hit_mult(from, ignore_reduction, damage_ability_id, siege_weapon_hit)
 	var hp_before := hp
 	var shield_absorbed := 0.0
 	# 易伤：摄魂咒等令目标「受到伤害大增」——在扣盾/扣血前先把这一击整体放大
@@ -1099,7 +1137,7 @@ func _queue_motion_redraw() -> void:
 		if battle._mob_count > 260 and not selected:
 			# Keep the existing per-instance cadence; reject before projecting.
 			var stride := 3 if battle._mob_count > 500 else 2
-			if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:
+			if entity_id % stride != int(Engine.get_physics_frames()) % stride:
 				return
 		if not battle.unit_visual_active(position):
 			return
@@ -1143,6 +1181,7 @@ func _phys_body(delta: float) -> void:
 			_tower_tick(delta)   # 防御塔（箭楼）固定索敌射击
 		if not is_constructing and not _train_queue.is_empty():
 			_production_tick(delta)
+			if not _gameplay_rng_fault().is_empty(): return
 		elif not is_constructing and _research_key != "":
 			_research_t -= delta
 			if _research_t <= 0.0:
@@ -1848,7 +1887,7 @@ func advance_build(delta: float) -> void:
 func production_wait_label() -> String:
 	var water := not _train_queue.is_empty() and battle!=null \
 		and String(battle._defs.get(_train_queue[0],{}).get("movement_profile","land"))=="water"
-	return "等待下水" if water else "等待出口"
+	return Localize.text("等待下水") if water else Localize.text("等待出口")
 
 
 ## 建筑生产：完成且出口可用时才出队；堵口的成船仍可取消并退费。
@@ -1861,8 +1900,9 @@ func _production_tick(delta: float) -> void:
 	if _train_t <= 0.0:
 		var key: String = _train_queue[0]
 		if not battle.on_unit_trained(self,key):
+			if not _gameplay_rng_fault().is_empty(): return
 			if not production_blocked and faction==FACTION_LIANG:
-				battle.msg(display_name+"："+production_wait_label()+"，请清开出口；取消队列可退资源。",4)
+				battle.msg(Localize.format_text("%s：%s%s", [display_name, production_wait_label(), "，请清开出口；取消队列可退资源。"]),4)
 			production_blocked=true
 			_production_retry=0.5
 			return
@@ -1899,6 +1939,11 @@ func _tower_tick(delta: float) -> void:
 			if _target.is_hero:
 				dmg *= float(setup_def.get("bonus_hero", 1.0))   # 法坛对英雄 3×
 			var sp := float(setup_def.get("splash", 0.0))         # 霹雳炮溅射
+			# Single-target tower fire follows ordinary armor. Preserve existing
+			# splash damage until it has per-victim armor and saved provenance;
+			# the primary target's armor must not leak into every blast victim.
+			if sp <= 0.0:
+				dmg = _target.physical_damage_after_armor(dmg)
 			var sm := float(setup_def.get("slow_mult", 1.0))      # 拒马减速倍率
 			var sd := float(setup_def.get("slow_dur", 0.0))       # 拒马减速时长
 			battle.spawn_projectile(self, _target, dmg, false, sp, sm, sd)
@@ -1906,7 +1951,7 @@ func _tower_tick(delta: float) -> void:
 			# 驻军增援：每个驻入的远程兵额外放一箭（经典RTS式 garrison-fire）
 			for pg in passengers:
 				if is_instance_valid(pg) and pg.is_ranged and pg.hp > 0.0:
-					battle.spawn_projectile(self, _target, pg.atk * 0.85)
+					battle.spawn_projectile(self, _target, _target.physical_damage_after_armor(pg.atk * 0.85))
 
 
 ## 五雷法坛专用索敌：警戒范围内优先取最近的「敌方英雄」；无英雄则留空(交回 _acquire 取最近)。
@@ -2050,9 +2095,7 @@ func _deal_hit() -> void:
 		dmg += float(lin_spear.get("bonus", 0.0))
 	# 目标防御值：每点 +5% 等效血量 → 伤害 ÷(1+0.05·防御)。仅普通攻击在此减；技能走 take_damage 不经过这里。
 	# 护甲削减（双戒刀）：有效防御 = 防御 − _def_down
-	var eff_def := maxf(0.0, t.defense - t._def_down)
-	if eff_def > 0.0:
-		dmg /= (1.0 + 0.05 * eff_def)
+	dmg = t.physical_damage_after_armor(dmg)
 	# 李逵 E·蛮力：每次有效普攻只掷一次概率；飞斧自身直接结算伤害，不会递归触发本被动。
 	_try_li_brawn_axes()
 	if not _gameplay_rng_fault().is_empty(): return
@@ -2125,9 +2168,7 @@ func secondary_basic_damage_against(t: Unit) -> float:
 		dmg *= float(setup_def["vs_building"])
 	if t.is_hero and setup_def.has("vs_hero"):
 		dmg *= float(setup_def["vs_hero"])
-	var eff_def := maxf(0.0, t.defense - t._def_down)
-	if eff_def > 0.0:
-		dmg /= (1.0 + 0.05 * eff_def)
+	dmg = t.physical_damage_after_armor(dmg)
 	return dmg
 
 
@@ -2309,7 +2350,7 @@ func _target_score(u: Unit, d: float) -> float:
 		s += 30.0
 	if battle != null and not u.is_hero:
 		# 集火人数走 battle 每帧统计的全局表(O(1))——此前逐候选扫邻格是 O(候选×邻居)，兵海下正是索敌卡顿的老路
-		var already := int(battle._focus_counts.get(u.get_instance_id(), 0))
+		var already := int(battle._focus_counts.get(u.entity_id, 0))
 		if u == _target:
 			already -= 1   # 自己当前锁定的不算「别人集火」
 		s -= float(clampi(already, 0, 6)) * 8.0
@@ -3835,7 +3876,8 @@ func _draw() -> void:
 			shadow_tex = _building_shadow_texture(tex,scoped_environment_tex)
 		# `_draw_sprite_animated` caches the actual source direction; reusing it
 		# avoids a second Art/ResourceLoader query for the remaining sparse route.
-		WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)
+		if key != "tavern" or scoped_environment_tex == null:
+			WorldShadow.draw_unit(self, death_f, shadow_tex, _frame_directional)
 	if Settings.get("effects_quality") != "reduced":
 		for d in _dust:
 			var da: float = d.t / DUST_DUR
@@ -3934,7 +3976,7 @@ func _draw() -> void:
 
 	var bar_y: float
 	if is_building:
-		bar_y = -radius * 1.9
+		bar_y = float(get_meta("campaign_environment_label_y", -radius * 1.9))
 	elif as_sprite:
 		bar_y = -radius * 3.3 * visual_scale
 	else:
@@ -3944,9 +3986,9 @@ func _draw() -> void:
 	if (is_hero or is_building) and not _dying:
 		var f := ThemeDB.fallback_font
 		var ty := bar_y - 6.0
-		draw_string(f, Vector2(-49.0, ty + 1.0), display_name, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 13, Color(0, 0, 0, 0.8))
+		UITheme.draw_compact_label(self, f, Vector2(-49.0, ty + 1.0), Localize.text(display_name), 100.0, 13, Color(0, 0, 0, 0.8))
 		var nc := Color("ffd866") if faction == FACTION_LIANG else Color("ff8866")
-		draw_string(f, Vector2(-50.0, ty), display_name, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 13, nc)
+		UITheme.draw_compact_label(self, f, Vector2(-50.0, ty), Localize.text(display_name), 100.0, 13, nc)
 		# 驻军占用徽标：建筑里有兵时在名字上方显示「▣ N/容量」，一眼看出驻军情况
 		if is_building and not passengers.is_empty():
 			var gt := "▣ %d/%d" % [passengers.size(), garrison_cap]
@@ -3958,7 +4000,7 @@ func _draw() -> void:
 	if story_outcome != "":
 		var status_text := story_label()
 		if not is_hero and not is_building and not inspected and movement_profile!="water":
-			status_text = {"unconscious":"昏", "subdued":"服", "captured":"俘"}.get(story_outcome,status_text)
+			status_text = {"unconscious":Localize.text("昏"), "subdued":Localize.text("服"), "captured":Localize.text("俘")}.get(story_outcome,status_text)
 		draw_string(ThemeDB.fallback_font, Vector2(-45,bar_y+12), status_text, HORIZONTAL_ALIGNMENT_CENTER, 90, 13, Color(0.96,0.83,0.53))
 	if is_bound_person():
 		for rope_y in [-22,-19]: draw_line(Vector2(-7,rope_y),Vector2(7,rope_y),Color(0.65,0.48,0.27),1.7)
@@ -4155,6 +4197,7 @@ func is_bound_person() -> bool:
 
 
 func _draw_building() -> void:
+	remove_meta("campaign_environment_label_y")
 	# 某些关卡建筑由场景层绘制完整外观（例如梁山寨门）；Unit 只保留生命值、名字、受击与寻路占地。
 	# 提前返回只跳过建筑本体，调用方后续仍会绘制名字和血条。
 	if bool(get_meta("scene_visual_only", false)):
@@ -4217,6 +4260,11 @@ func _draw_building() -> void:
 	if scoped_tex != null: tex = scoped_tex
 	var tint := (Color(0.5, 0.72, 1.0, 0.34) if _pending_build else Color(0.62, 0.66, 0.78, 0.82)) if is_constructing else Color.WHITE
 	tint.a *= float(get_meta("environment_roof_alpha",1.0))
+	if key == "tavern" and tex is AtlasTexture:
+		# The imported native atlas keeps its source bytes for QA, but Godot's
+		# Unit canvas path composites this specific margin as white. Use the
+		# already accepted transparent roadside-tavern PNG for the live draw.
+		tex = LIVE_TAVERN_FALLBACK
 	if tex != null:
 		# 视觉尺寸与「建造预览虚影」完全一致（GameMap.building_visual_px）——预览多大、建好就多大，
 		# 不再出现「预览很大、落成缩水」的落差。
@@ -4225,6 +4273,8 @@ func _draw_building() -> void:
 		var foot := 0.82 if art_variant!="" else 0.78
 		if scoped_tex!=null:
 			foot=float(get_meta("campaign_environment_foot",foot))
+			if scoped_tex.has_meta("visible_top"):
+				set_meta("campaign_environment_label_y",s*(float(scoped_tex.get_meta("visible_top"))-foot)-8.0)
 		var static_campaign_visual := scoped_tex!=null \
 			and bool(get_meta("campaign_environment_static_visual",false))
 		if not static_campaign_visual:
@@ -4264,7 +4314,6 @@ func _draw_building() -> void:
 			_draw_build_progress()
 		return
 	_draw_building_fallback()
-
 
 ## Unit/building consumers opt in with campaign_environment_route. The current
 ## battle id is still passed to the resolver, so the same unit key in arena or a
@@ -4306,6 +4355,14 @@ func _draw_campaign_environment_runtime_text(visual_size: float, foot: float, al
 	var rect := Rect2(origin+Vector2(float(normalized[0]),float(normalized[1]))*visual_size,
 		Vector2(float(normalized[2]),float(normalized[3]))*visual_size)
 	if rect.size.x<1.0 or rect.size.y<1.0: return
+	if rect.size.y > rect.size.x * 2.0:
+		# A tall blank cloth receives vertical ink, fitted inside the measured surface.
+		var step := rect.size.y / maxf(label.length(),1)
+		var size_px := maxi(1,int(minf(rect.size.x*0.8,step*0.85)))
+		for i in range(label.length()):
+			var at := Vector2(rect.position.x,rect.position.y+step*i+(step+size_px)*0.5-1.0)
+			draw_string(ThemeDB.fallback_font,at,label.substr(i,1),HORIZONTAL_ALIGNMENT_CENTER,int(rect.size.x),size_px,Color(0.23,0.14,0.08,alpha))
+		return
 	var font_size := maxi(8,int(minf(rect.size.y*0.72,rect.size.x/maxf(label.length(),1)*1.55)))
 	var baseline := rect.position.y+(rect.size.y+font_size)*0.5-1.0
 	var ink := Color(0.92,0.82,0.58,alpha)
@@ -4454,8 +4511,8 @@ func resolve_story(outcome: String) -> bool:
 
 func story_label() -> String:
 	if movement_profile=="water" and story_outcome=="subdued":
-		return {"damaged":"已停航","flooding":"正在进水","disabled":"已沉陷"}.get(String(get_meta("ship_state","")),"已停航")
-	return {"unconscious":"昏迷", "subdued":"已制服", "captured":"已被擒", "retreated":"已撤离", "embarked":"已登船"}.get(story_outcome, "")
+		return {"damaged":Localize.text("已停航"),"flooding":Localize.text("正在进水"),"disabled":Localize.text("已沉陷")}.get(String(get_meta("ship_state","")),Localize.text("已停航"))
+	return {"unconscious":Localize.text("昏迷"), "subdued":Localize.text("已制服"), "captured":Localize.text("已被擒"), "retreated":Localize.text("已撤离"), "embarked":Localize.text("已登船")}.get(story_outcome, "")
 
 func play_story_pose(pose: String, variant: String, duration := 2.0) -> void:
 	if _story_pose_t <= 0.0: _pose_previous_variant = art_variant

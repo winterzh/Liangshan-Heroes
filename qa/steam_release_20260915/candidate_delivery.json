@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "complete": true,
+  "scope": "local_candidate_preparation_only",
+  "created_at_utc": "2026-09-15T06:34:48.922039+00:00",
+  "app_id": 5088120,
+  "depot_id": 5088121,
+  "candidate": "20260915_142823_e9f44c57",
+  "source_head": "dd4046fdfd398fec43d992cb315982da35de0c2c",
+  "qa_run": ".godot/steam_integration_qa/20260915_142655_042b3d73",
+  "smoke_run": "qa/steam_release_20260915/smoke_20260915_143217_df42aca4",
+  "archive": {
+    "path": "LiangshanHeroes_Steam_candidate.zip",
+    "source": ".godot/steam_candidates/20260915_142823_e9f44c57/LiangshanHeroes_Steam_candidate.zip",
+    "upload_copy": "D:\\CodexTemp\\steam_release_20260915\\upload\\LiangshanHeroes_Steam_candidate.zip",
+    "bytes": 254520023,
+    "sha256": "80f112a8f1fafebb4bc0ff3c08348385e5c7137a14ea6a5f56a961e0da69532b",
+    "sha1": "2bd4a7295edce3aafbdf3411dae9740af07e76e6"
+  },
+  "members": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68"
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 322105960,
+      "sha256": "d478eca24766ad5fb67210d867dd8d5f19a48858a8da4a268df18bc711e1f2ca",
+      "sha1": "79985128f45874eae95e2c56660cbd9edfc27114"
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf",
+      "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2"
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda"
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28"
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 352768,
+      "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+      "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba"
+    }
+  ],
+  "member_count": 6,
+  "verified_against_candidate_receipt": true,
+  "upload_copy_byte_identical": true,
+  "checks": {
+    "native_qa": 185,
+    "package": 1128,
+    "source_identity_probe": 10,
+    "content_identity_probe": 10,
+    "actual_exe_smoke_cases": 11
+  },
+  "native_qa_source_files": 3062,
+  "candidate_source_files": 2806,
+  "uploaded": false,
+  "server_verified": false,
+  "default_active": false,
+  "live_steam_tested": false,
+  "limits": [
+    "Local offline preparation only; no Steam upload or branch activation.",
+    "Eleven EXE smoke cases cover startup/assertions, not full campaign completion or menu interaction.",
+    "Identity probes do not claim full battle resume or release process testing."
+  ]
+}

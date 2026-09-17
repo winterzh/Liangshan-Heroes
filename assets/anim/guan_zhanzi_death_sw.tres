@@ -1,0 +1,43 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/sw.png" id="sw"]
+
+[sub_resource type="AtlasTexture" id="hurt_sw"]
+atlas = ExtResource("sw")
+region = Rect2(251, 406, 256, 190)
+margin = Rect2(0.0, 33.0, 0, 66)
+filter_clip = true
+metadata/draw_offset_px = Vector2(16.0, 22.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[sub_resource type="AtlasTexture" id="fall_sw"]
+atlas = ExtResource("sw")
+region = Rect2(11, 606, 243, 145)
+margin = Rect2(6.5, 55.5, 13, 111)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-6.0, 45.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[sub_resource type="AtlasTexture" id="down_sw"]
+atlas = ExtResource("sw")
+region = Rect2(263, 610, 228, 150)
+margin = Rect2(14.0, 53.0, 28, 106)
+filter_clip = true
+metadata/draw_offset_px = Vector2(3.0, 76.92)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_sw")},
+{"duration": 1.0, "texture": SubResource("fall_sw")},
+{"duration": 1.0, "texture": SubResource("down_sw")},
+{"duration": 1.0, "texture": SubResource("down_sw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

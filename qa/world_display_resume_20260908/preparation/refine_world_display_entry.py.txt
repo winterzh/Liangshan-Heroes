@@ -1,0 +1,65 @@
+from pathlib import Path
+import hashlib,json
+out=Path('scratchpad/world_display_20260908')
+def edit(name, fn):
+ p=out/name;p.write_text(fn(p.read_text(encoding='utf-8')),encoding='utf-8',newline='\n')
+def rep(s,a,b):
+ assert s.count(a)==1,(a,s.count(a));return s.replace(a,b)
+def battle(s):
+ return rep(s,'func _ready() -> void:\n\t_run_clock', '''func _ready() -> void:
+\t# Only the trusted core preparation transaction sets this transient marker.
+\t# Child readiness is allowed while the Battle itself remains disabled. The
+\t# outer installation still owns root clocks, input/UI, Steam and activation.
+\tif has_meta("_run_core_prepared"):
+\t\tif get_meta("_run_core_prepared") != true or process_mode != Node.PROCESS_MODE_DISABLED or not get_tree().paused or _gameplay_rng_start_kind != "restored" or _run_clock != null or _save_barrier != null or not is_instance_valid(world) or world.get_parent() != self:
+\t\t\t_gameplay_rng_stop("INVALID_PREPARED_WORLD_ENTRY")
+\t\treturn
+\t_run_clock''')
+edit('battle.gd',battle)
+edit('run_battle_world_core.gd',lambda s:rep(s,'\t_pending_root = s.root.duplicate(true)','\t_pending_root = s.root.duplicate(true)\n\t_battle.set_meta("_run_core_prepared", true)'))
+def module(s):
+ s=rep(s,'\treturn _codec.encode(raw)','\treturn encode_record(raw)')
+ s=rep(s,'\tvar decoded: Dictionary = _codec.decode(record)','\tvar decoded: Dictionary = decode_record(record)')
+ s+='''
+func encode_record(raw: Dictionary) -> Dictionary:
+\tvar copy: Dictionary = raw.duplicate(true)
+\tvar buffer := ""
+\tfor row: Dictionary in copy.children:
+\t\tif row.role == "shadow": buffer = row.buffer; row.buffer = ""
+\tvar encoded: Dictionary = _codec.encode(copy)
+\tif not encoded.ok: return encoded
+\t# Fixed f32 bytes are separately bounded, not arbitrary serialized objects.
+\treturn {"ok": true, "value": {"payload": encoded.value, "shadow_buffer": buffer}}
+
+func decode_record(record: Variant) -> Dictionary:
+\tif not _fields(record, ["payload", "shadow_buffer"]) or typeof(record.shadow_buffer) != TYPE_STRING or record.shadow_buffer.length() > 4096 * 12 * 8: return _bad("DISPLAY_ENVELOPE")
+\tvar decoded: Dictionary = _codec.decode(record.payload)
+\tif not decoded.ok: return decoded
+\tif not _fields(decoded.value, ["schema", "world", "units", "children"]) or typeof(decoded.value.children) != TYPE_ARRAY: return _bad("DISPLAY_RECORD")
+\tvar count := 0
+\tfor row: Variant in decoded.value.children:
+\t\tif typeof(row) != TYPE_DICTIONARY: return _bad("DISPLAY_CHILD_RECORD")
+\t\tif row.get("role") == "shadow":
+\t\t\tif row.get("buffer") != "": return _bad("DISPLAY_BUFFER_PLACEHOLDER")
+\t\t\trow.buffer = record.shadow_buffer; count += 1
+\tif count > 1 or (count == 0 and not record.shadow_buffer.is_empty()): return _bad("DISPLAY_BUFFER_OWNER")
+\treturn decoded
+'''
+ return s
+edit('run_world_display_state.gd',module)
+def driver(s):
+ s=s.replace('codec.decode(bad.sections.world_display)','load("res://scripts/run_world_display_state.gd").new().decode_record(bad.sections.world_display)').replace('codec.decode(wire.sections.world_display)','load("res://scripts/run_world_display_state.gd").new().decode_record(wire.sections.world_display)').replace('codec.encode(raw).value\n\t\tvar module: Variant = core_script', 'load("res://scripts/run_world_display_state.gd").new().encode_record(raw).value\n\t\tvar module: Variant = core_script')
+ s=rep(s,'\ttarget.remove_child(source_world)\n','')
+ s=rep(s,'\tstage.add_child(source_world)\n\t# The rest of the prepared Battle stays off tree. Only rendering is enabled.','''\tstage.add_child(target)
+\t_check("prepared Battle ready skips new clock RNG Steam and deployment", target._run_clock == null and target._save_barrier == null and target._steam_run_id == 0 and target.gameplay_rng_fault().is_empty() and target.level._wave == battle.level._wave and target.units.size() == battle.units.size())
+\t# Keep real Battle ancestry for map consumers; Battle and Units stay disabled.''')
+ s=rep(s,'\t_check("display activation after ready", result.world_display.activate().ok)','\t_check("display activation after ready", result.world_display.activate().ok)\n\tsource_world.process_mode = Node.PROCESS_MODE_ALWAYS # explicit rendering-only fixture')
+ s=rep(s,'\tstage.remove_child(source_world); target.add_child(source_world); stage.free()','\tstage.remove_child(target); stage.free()')
+ return s
+edit('driver.gd',driver)
+changes=json.loads((out/'overlay_manifest.json').read_text())
+for row in changes['files']:row['candidate_sha256']=hashlib.sha256((out/Path(row['path']).name).read_bytes()).hexdigest()
+(out/'overlay_manifest.json').write_text(json.dumps(changes,indent=2)+'\n')
+f=json.loads((out/'freeze.json').read_text())
+for n in f['inputs']:f['inputs'][n]=hashlib.sha256((out/n).read_bytes()).hexdigest()
+(out/'freeze.json').write_text(json.dumps(f,indent=2)+'\n');print(hashlib.sha256((out/'freeze.json').read_bytes()).hexdigest())

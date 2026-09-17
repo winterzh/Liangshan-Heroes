@@ -1,0 +1,1018 @@
+{
+  "suite": "steam-persistent-outbox",
+  "passed": true,
+  "source_head": "21d70bcf85f6cd7c8601dec110a84c54f01f59ba",
+  "freeze_sha256": "5be5d5735da3e66f55d04f3ae836dae39575a38de104392fc46ca1bf64c83e0f",
+  "production_confirmation_blocked": true,
+  "real_sdk": false,
+  "processes": [
+    {
+      "name": "import",
+      "mode": null,
+      "case": "",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 34588,
+      "exit_code": 0,
+      "seconds": 3.0886593000032008,
+      "errors": []
+    },
+    {
+      "name": "seed",
+      "mode": "seed",
+      "case": "base",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 3644,
+      "exit_code": 0,
+      "seconds": 0.35366959997918457,
+      "errors": [],
+      "checks": 6
+    },
+    {
+      "name": "contract",
+      "mode": "contract",
+      "case": "contract",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 11544,
+      "exit_code": 0,
+      "seconds": 1.6477642000536434,
+      "errors": [],
+      "checks": 70
+    },
+    {
+      "name": "case_00",
+      "mode": "stage",
+      "case": "case_00",
+      "stop": "prepared",
+      "child_exit_confirmed": true,
+      "pid": 15572,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.23869790002936497,
+      "errors": []
+    },
+    {
+      "name": "case_00_recover",
+      "mode": "recover",
+      "case": "case_00",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 45144,
+      "exit_code": 0,
+      "seconds": 0.2594734000158496,
+      "errors": [],
+      "checks": 6
+    },
+    {
+      "name": "case_01_half",
+      "mode": "stage",
+      "case": "case_01_half",
+      "stop": "pending_half",
+      "child_exit_confirmed": true,
+      "pid": 28092,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.22330329997930676,
+      "errors": []
+    },
+    {
+      "name": "case_01_half_recover",
+      "mode": "recover",
+      "case": "case_01_half",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 42444,
+      "exit_code": 0,
+      "seconds": 0.26459199999226257,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "case_02",
+      "mode": "stage",
+      "case": "case_02",
+      "stop": "pending_verified",
+      "child_exit_confirmed": true,
+      "pid": 30080,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2169071999960579,
+      "errors": []
+    },
+    {
+      "name": "case_02_recover",
+      "mode": "recover",
+      "case": "case_02",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 35384,
+      "exit_code": 0,
+      "seconds": 0.3534557999810204,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_03",
+      "mode": "stage",
+      "case": "case_03",
+      "stop": "record_renamed",
+      "child_exit_confirmed": true,
+      "pid": 32744,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.21866079996107146,
+      "errors": []
+    },
+    {
+      "name": "case_03_recover",
+      "mode": "recover",
+      "case": "case_03",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 26808,
+      "exit_code": 0,
+      "seconds": 0.2609972999780439,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_04",
+      "mode": "stage",
+      "case": "case_04",
+      "stop": "disk_before_memory",
+      "child_exit_confirmed": true,
+      "pid": 42232,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.22326969995629042,
+      "errors": []
+    },
+    {
+      "name": "case_04_recover",
+      "mode": "recover",
+      "case": "case_04",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 30388,
+      "exit_code": 0,
+      "seconds": 0.3556716000312008,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_05",
+      "mode": "stage",
+      "case": "case_05",
+      "stop": "memory_before_unlock",
+      "child_exit_confirmed": true,
+      "pid": 26164,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2167199000250548,
+      "errors": []
+    },
+    {
+      "name": "case_05_recover",
+      "mode": "recover",
+      "case": "case_05",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 43972,
+      "exit_code": 0,
+      "seconds": 0.3587221999769099,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_06",
+      "mode": "stage",
+      "case": "case_06",
+      "stop": "before_sdk",
+      "child_exit_confirmed": true,
+      "pid": 43932,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.23885800002608448,
+      "errors": []
+    },
+    {
+      "name": "case_06_recover",
+      "mode": "recover",
+      "case": "case_06",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 23392,
+      "exit_code": 0,
+      "seconds": 0.2596589000313543,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_07",
+      "mode": "stage",
+      "case": "case_07",
+      "stop": "after_sdk",
+      "child_exit_confirmed": true,
+      "pid": 39644,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.23993929999414831,
+      "errors": []
+    },
+    {
+      "name": "case_07_recover",
+      "mode": "recover",
+      "case": "case_07",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 41296,
+      "exit_code": 0,
+      "seconds": 0.35593019996304065,
+      "errors": [],
+      "checks": 8
+    },
+    {
+      "name": "case_08",
+      "mode": "confirm",
+      "case": "case_08",
+      "stop": "before_notification",
+      "child_exit_confirmed": true,
+      "pid": 20780,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2374472999945283,
+      "errors": []
+    },
+    {
+      "name": "case_08_recover",
+      "mode": "recover",
+      "case": "case_08",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 46496,
+      "exit_code": 0,
+      "seconds": 0.3661548000527546,
+      "errors": [],
+      "checks": 8
+    },
+    {
+      "name": "case_09_half",
+      "mode": "confirm",
+      "case": "case_09_half",
+      "stop": "pending_half",
+      "child_exit_confirmed": true,
+      "pid": 30132,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2685513000469655,
+      "errors": []
+    },
+    {
+      "name": "case_09_half_recover",
+      "mode": "recover",
+      "case": "case_09_half",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 43124,
+      "exit_code": 0,
+      "seconds": 0.26416449999669567,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "case_10",
+      "mode": "confirm",
+      "case": "case_10",
+      "stop": "record_renamed",
+      "child_exit_confirmed": true,
+      "pid": 45616,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.28062400000635535,
+      "errors": []
+    },
+    {
+      "name": "case_10_recover",
+      "mode": "recover",
+      "case": "case_10",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 36776,
+      "exit_code": 0,
+      "seconds": 0.36457270005485043,
+      "errors": [],
+      "checks": 6
+    },
+    {
+      "name": "case_11",
+      "mode": "confirm",
+      "case": "case_11",
+      "stop": "disk_before_memory",
+      "child_exit_confirmed": true,
+      "pid": 32744,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.28308470000047237,
+      "errors": []
+    },
+    {
+      "name": "case_11_recover",
+      "mode": "recover",
+      "case": "case_11",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 39480,
+      "exit_code": 0,
+      "seconds": 0.3558437000028789,
+      "errors": [],
+      "checks": 6
+    },
+    {
+      "name": "case_12",
+      "mode": "result8",
+      "case": "case_12",
+      "stop": "before_notification",
+      "child_exit_confirmed": true,
+      "pid": 36480,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2595775000518188,
+      "errors": []
+    },
+    {
+      "name": "case_12_recover",
+      "mode": "recover",
+      "case": "case_12",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 45240,
+      "exit_code": 0,
+      "seconds": 0.26522239996120334,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_13_half",
+      "mode": "result8",
+      "case": "case_13_half",
+      "stop": "pending_half",
+      "child_exit_confirmed": true,
+      "pid": 45672,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.28217570000560954,
+      "errors": []
+    },
+    {
+      "name": "case_13_half_recover",
+      "mode": "recover",
+      "case": "case_13_half",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 6660,
+      "exit_code": 0,
+      "seconds": 0.27068170002894476,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "case_14",
+      "mode": "result8",
+      "case": "case_14",
+      "stop": "record_renamed",
+      "child_exit_confirmed": true,
+      "pid": 27356,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.27941829996416345,
+      "errors": []
+    },
+    {
+      "name": "case_14_recover",
+      "mode": "recover",
+      "case": "case_14",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 12932,
+      "exit_code": 0,
+      "seconds": 0.36220579996006563,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_15",
+      "mode": "result8",
+      "case": "case_15",
+      "stop": "disk_before_memory",
+      "child_exit_confirmed": true,
+      "pid": 8612,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.3151293999981135,
+      "errors": []
+    },
+    {
+      "name": "case_15_recover",
+      "mode": "recover",
+      "case": "case_15",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 32984,
+      "exit_code": 0,
+      "seconds": 0.3659095999901183,
+      "errors": [],
+      "checks": 7
+    },
+    {
+      "name": "case_16_half",
+      "mode": "enqueue",
+      "case": "case_16_half",
+      "stop": "pending_half",
+      "child_exit_confirmed": true,
+      "pid": 32716,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.3036438000272028,
+      "errors": []
+    },
+    {
+      "name": "case_16_half_recover",
+      "mode": "recover",
+      "case": "case_16_half",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 43932,
+      "exit_code": 0,
+      "seconds": 0.267725599987898,
+      "errors": [],
+      "checks": 2
+    },
+    {
+      "name": "case_17",
+      "mode": "enqueue",
+      "case": "case_17",
+      "stop": "pending_verified",
+      "child_exit_confirmed": true,
+      "pid": 43516,
+      "checkpoint_verified": true,
+      "exit_code": 1,
+      "seconds": 0.2841162999975495,
+      "errors": []
+    },
+    {
+      "name": "case_17_recover",
+      "mode": "recover",
+      "case": "case_17",
+      "stop": "",
+      "child_exit_confirmed": true,
+      "pid": 43776,
+      "exit_code": 0,
+      "seconds": 0.3549936999916099,
+      "errors": [],
+      "checks": 7
+    }
+  ],
+  "crashes": [
+    {
+      "name": "case_00",
+      "mode": "stage",
+      "point": "prepared",
+      "writer_pid": 15572,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000001.json": "a07ffad07c063e6b9bdc753b5f0b0de38091330c49a9e7d8e52212aab1cc3c37",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/writing/owner.json": "4e7496ca4dc5d9d601b2016b7aed964064a3d9a1727d341f0db4dc4c215e1101"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_01_half",
+      "mode": "stage",
+      "point": "pending_half",
+      "writer_pid": 28092,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/receipt.pending": "b282fec7d302f4f5f96fd10fc71f5bdc2c83eccbeacc39554ad84e6ac0874911",
+          "queue/5088120/76561198000000001/record_0000000001.json": "a07ffad07c063e6b9bdc753b5f0b0de38091330c49a9e7d8e52212aab1cc3c37",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/writing/owner.json": "a24af2a98cb34ed37f3c958e2739a1f06cb9b498c1df888260e9ab754deb3cb6"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_02",
+      "mode": "stage",
+      "point": "pending_verified",
+      "writer_pid": 30080,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/receipt.pending": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/record_0000000001.json": "a07ffad07c063e6b9bdc753b5f0b0de38091330c49a9e7d8e52212aab1cc3c37",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/writing/owner.json": "76183fe240cfff5f86090dee58bcc5a8283794c00a029303bf719e75f575fe63"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_03",
+      "mode": "stage",
+      "point": "record_renamed",
+      "writer_pid": 32744,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000001.json": "a07ffad07c063e6b9bdc753b5f0b0de38091330c49a9e7d8e52212aab1cc3c37",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/writing/owner.json": "524661360ae64722c893e9ed3d3b0eaab8951ba6117c3f3090ba107afb024ec1"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_04",
+      "mode": "stage",
+      "point": "disk_before_memory",
+      "writer_pid": 42232,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/writing/owner.json": "e5defffd2488933f481e280118963e9942195a0610b36c7ea5e36f1b82af68a6"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_05",
+      "mode": "stage",
+      "point": "memory_before_unlock",
+      "writer_pid": 26164,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/writing/owner.json": "3b1b68f9300a15d14335cca0f35481ec5119f95e7e6660241a7bc6539f9ba950"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_06",
+      "mode": "stage",
+      "point": "before_sdk",
+      "writer_pid": 43932,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_07",
+      "mode": "stage",
+      "point": "after_sdk",
+      "writer_pid": 39644,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "b04d8198623e751b408cfe9456a8f7c2e211b9eb6bb33cbc289814bfe5b151ce",
+          "fake_authority/6c7972c997b186506dc0b60a679f22f4.json": "86c7667ada4746a691e59dae24ccc85d319aa3256f2cc821ff865b3c868a53b1",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_08",
+      "mode": "confirm",
+      "point": "before_notification",
+      "writer_pid": 20780,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "e6277b094449dc3ed8b94178a6a1c96dfc003609889fabe33e0a064f8fd88a9f",
+          "fake_authority/6c7972c997b186506dc0b60a679f22f4.json": "86c7667ada4746a691e59dae24ccc85d319aa3256f2cc821ff865b3c868a53b1",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_09_half",
+      "mode": "confirm",
+      "point": "pending_half",
+      "writer_pid": 30132,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "9ba57a24aff3bc44e7873d3b64b3e4c02f9df03a4579982aaba0ca7afc231eae",
+          "fake_authority/6c7972c997b186506dc0b60a679f22f4.json": "86c7667ada4746a691e59dae24ccc85d319aa3256f2cc821ff865b3c868a53b1",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/receipt.pending": "7c7da1ea997a14366bae3a4f99addc2be267f7bd30720e65392688b92f03f323",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/writing/owner.json": "94a208dd050156973e88b01460961fddb7037ff3b515109e55c912e4166d149f"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_10",
+      "mode": "confirm",
+      "point": "record_renamed",
+      "writer_pid": 45616,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "dafd3614cee4e2dd60ff351240e80ac6291871f1ba7b0cb1cfac08942fcca2d0",
+          "fake_authority/6c7972c997b186506dc0b60a679f22f4.json": "86c7667ada4746a691e59dae24ccc85d319aa3256f2cc821ff865b3c868a53b1",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/record_0000000004.json": "7c1324c9c1524a7d4ef540fea063ea4e34e46cb7ab2203cb3dc0e6febad77bbf",
+          "queue/5088120/76561198000000001/writing/owner.json": "cf8389d35f90d0ec748630474e4ff1ad429e7561ff422138e125a06f7684e907"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_11",
+      "mode": "confirm",
+      "point": "disk_before_memory",
+      "writer_pid": 32744,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "cf5966d9e8f845153045d755078f3a617918dbb0a006cbde7a4acbde607cd9d0",
+          "fake_authority/6c7972c997b186506dc0b60a679f22f4.json": "86c7667ada4746a691e59dae24ccc85d319aa3256f2cc821ff865b3c868a53b1",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/record_0000000004.json": "7c1324c9c1524a7d4ef540fea063ea4e34e46cb7ab2203cb3dc0e6febad77bbf",
+          "queue/5088120/76561198000000001/writing/owner.json": "771f40b5b9904e8a393dbf18b324fe74393a11b25bae4217a0206159b7c65230"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_12",
+      "mode": "result8",
+      "point": "before_notification",
+      "writer_pid": 36480,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "f31de0a6c5533599ecfe5bac2473149fbd1d3448e38c6b1de70f4660b36bb3e0",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_13_half",
+      "mode": "result8",
+      "point": "pending_half",
+      "writer_pid": 45672,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "2e07ee36ef5d12a76960e17b793adbf44b5bf79533f29b242ad24d1d9cbea77c",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/receipt.pending": "fe7c44b83621e6ce84b17a47609e94cc8bd929171dec59436dc6a801071a23cd",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/writing/owner.json": "096183df32456693119ce640c751d97c7a867a612c6e04797901b7efb27f1fd4"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_14",
+      "mode": "result8",
+      "point": "record_renamed",
+      "writer_pid": 27356,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "9fb57d23597e9670df7efa54e105a6bbb40d91990391d244b707124968330e54",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/record_0000000004.json": "414737d0dda92aea5aa934ed092af6ff549f5c8b6c04f9e6f939af6b570bee60",
+          "queue/5088120/76561198000000001/writing/owner.json": "3a99402222b77a2f0ac2cf4d42d967008e9ed493927f300afffdce3851b52e65"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_15",
+      "mode": "result8",
+      "point": "disk_before_memory",
+      "writer_pid": 8612,
+      "before": {
+        "exists": true,
+        "files": {
+          "sdk.jsonl": "61baa558b2b414e6c13bf7dd0f7815f99418504940fff87ee264b848c448dd0a",
+          "ledger/5088120/76561198000000001/record_0000000002.json": "f7b4dbb32f120b5c6c8a72fa988f0ae3483d501fd3d5f2abf079a1cd294a5268",
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "queue/5088120/76561198000000001/record_0000000003.json": "843600b96e215ecfe171b15c677409346f54d1c3da814ec537b9263124b6c8c5",
+          "queue/5088120/76561198000000001/record_0000000004.json": "414737d0dda92aea5aa934ed092af6ff549f5c8b6c04f9e6f939af6b570bee60",
+          "queue/5088120/76561198000000001/writing/owner.json": "958fccde41b36838d955171402cbc397f2e44478e0bda7cedb629f755de1630a"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_16_half",
+      "mode": "enqueue",
+      "point": "pending_half",
+      "writer_pid": 32716,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "ledger/5088120/76561198000000001/record_0000000004.json": "97d9cec4f8c9cca52146232f522dbf01021a8b64d1d80e7dfbf95d39e0141e74",
+          "queue/5088120/76561198000000001/receipt.pending": "bba3098c537d1423ad5cf98f0a03b7741636c73eee7d844af9683380e6fa1d96",
+          "queue/5088120/76561198000000001/record_0000000001.json": "a07ffad07c063e6b9bdc753b5f0b0de38091330c49a9e7d8e52212aab1cc3c37",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/writing/owner.json": "091dfd7f5fd084696cd24fa8a9a9cce658b25202315cb1457ef9db4320a9c608"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    },
+    {
+      "name": "case_17",
+      "mode": "enqueue",
+      "point": "pending_verified",
+      "writer_pid": 43516,
+      "before": {
+        "exists": true,
+        "files": {
+          "ledger/5088120/76561198000000001/record_0000000003.json": "716467557d3f623fb04076d3977f828703b38272dabe6a2de35480682b239744",
+          "ledger/5088120/76561198000000001/record_0000000004.json": "97d9cec4f8c9cca52146232f522dbf01021a8b64d1d80e7dfbf95d39e0141e74",
+          "queue/5088120/76561198000000001/receipt.pending": "ee1a8a52a511b3749375b3541e2887132cea0dd6d06981562013263dcdc2e309",
+          "queue/5088120/76561198000000001/record_0000000001.json": "a07ffad07c063e6b9bdc753b5f0b0de38091330c49a9e7d8e52212aab1cc3c37",
+          "queue/5088120/76561198000000001/record_0000000002.json": "3a4322f56791d7b83d1d2a04f1ea74b0ba96a2b7c7ee8ea710a0e91975d4ba87",
+          "queue/5088120/76561198000000001/writing/owner.json": "f163474cee6868d9f5e6cf6ad11d6adb4cdd8df871c61f649458f78111798a6b"
+        },
+        "directories": [
+          ".",
+          "fake_authority",
+          "ledger",
+          "ledger/5088120",
+          "ledger/5088120/76561198000000001",
+          "queue",
+          "queue/5088120",
+          "queue/5088120/76561198000000001",
+          "queue/5088120/76561198000000001/writing"
+        ]
+      },
+      "no_sdk_replay": true
+    }
+  ],
+  "inputs": {
+    "scripts/steam_persistent_outbox.gd": "6f26e68a76398d81b504a687e4943c141bb8fe3dc94da779955d03265c433fa0",
+    "scripts/steam_persistent_outbox_state.gd": "eeed0ed425589bf82c0b68b60aeeaa2319bbdd5b31d7cb90d20b7af12b921370",
+    "scripts/steam_persistent_outbox_store.gd": "e09ebba43711fae2e4e5ff377a8e5f897e0ba77d462276a648762d0a2c21977f",
+    "scripts/run_snapshot_store.gd": "54855b1a7ca90db3d2859e2f9595b320e1b75062e3520bdb29111824af1be73c",
+    "scripts/steam_receipt_store.gd": "7fb5ad82a04a1922de07e00b358d5bc5e263e0e53ad4361ae88048a06289e4bb",
+    "scripts/steam_run_ledger.gd": "c3b5162a9cebeea584e2be30d40d35438cab0bdf045daf62c3733accc2f313cb",
+    "scripts/steam_run_receipt.gd": "acd21358de698c9a6c8e3806873439fe90abdc6ed3bc9b2a7153263de719cc66",
+    "scripts/steam_achievement_catalog.gd": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d",
+    "scripts/steam_achievement_state.gd": "f0dddf190f440d64367bb84c1ff1dc634174bdd3fab45148cfd5b879786bc71e",
+    "tools/steam_persistent_outbox_qa.gd": "5bef55db621f6d0c10772b88da8854ff2e3f77d151629510005a2d4f22ccbfa0"
+  },
+  "trace_events_independently_checked": 13,
+  "source_unchanged": true,
+  "frozen_inputs_unchanged": true,
+  "head_unchanged": true,
+  "player_profiles_unchanged": true,
+  "child_exits_confirmed": true,
+  "godot_pids_after": [],
+  "lock_released": true
+}

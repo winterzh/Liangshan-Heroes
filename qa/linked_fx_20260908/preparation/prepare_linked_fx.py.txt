@@ -1,0 +1,111 @@
+from pathlib import Path
+import hashlib,json,re,difflib
+root=Path.cwd(); out=root/'scratchpad/linked_fx_20260908'; out.mkdir(exist_ok=True)
+(out/'.gdignore').write_text('\n')
+def rep(s,a,b):
+    assert s.count(a)==1,(a,s.count(a)); return s.replace(a,b)
+def save(name,s):
+    p=root/'scripts'/name
+    if p.exists():
+        old=p.read_bytes().decode().splitlines(keepends=True); new=s.splitlines(); result=[]
+        for op,i,j,a,b in difflib.SequenceMatcher(None,[x.rstrip('\r\n') for x in old],new,autojunk=False).get_opcodes():
+            if op=='equal': result.extend(old[i:j])
+            elif op in ('insert','replace'):
+                e='\r\n' if old[min(i,len(old)-1)].endswith('\r\n') else '\n'
+                result.extend(x+e for x in new[a:b])
+        assert ''.join(result).replace('\r\n','\n')==s
+        (out/name).write_bytes(''.join(result).encode())
+    else: (out/name).write_text(s,encoding='utf-8',newline='\n')
+b=(root/'scripts/battle.gd').read_text(encoding='utf-8')
+names=['HuaSnipeAimFx','HuaSnipeMarkFx','HuaLockMarkFx','LinGuardFx','LinSpearStackFx','LinDuelFx','AbilityProjectileFx','AbilityImpactFx','OrbitAxesFx','BlackRainFx','FireflyFx','FadingMark']
+spec={}
+for name in names:
+    kind=re.sub(r'(?<!^)(?=[A-Z])','_',name[:-2] if name.endswith('Fx') else name).lower()
+    begin=b.index('class '+name+' extends '); end=begin+len(b[begin:].split('\nclass ',1)[0].split('\nfunc ',1)[0]); block=b[begin:end]
+    fields={'dur':'TYPE_FLOAT','t':'TYPE_FLOAT'} if 'extends TimedFx:' in block else {}
+    refs=[]; textures=[]
+    for line in block.splitlines():
+        if not line.startswith('\tvar '): continue
+        key=re.match(r'\tvar (\w+)',line).group(1)
+        if ': Unit' in line: refs.append(key); continue
+        if ': Texture2D' in line: textures.append(key); continue
+        if 'Vector2' in line: typ='TYPE_VECTOR2'
+        elif 'Color' in line: typ='TYPE_COLOR'
+        elif ': Array' in line: typ='TYPE_ARRAY'
+        elif ':= false' in line or ':= true' in line: typ='TYPE_BOOL'
+        elif re.search(r':= -?\d+\.\d+',line): typ='TYPE_FLOAT'
+        elif re.search(r':= -?\d+',line): typ='TYPE_INT'
+        elif ':= "' in line: typ='TYPE_STRING'
+        else: raise ValueError(line)
+        fields[key]=typ
+    spec[kind]={'class':name,'fields':fields,'references':refs,'textures':textures}
+    if '\tfunc _ready() -> void:\n' in block:
+        changed=rep(block,'\tfunc _ready() -> void:\n','\tfunc _ready() -> void:\n\t\tif has_meta("_run_restore_prepared"): return\n')
+        b=b[:begin]+changed+b[end:]
+save('battle.gd',b)
+(out/'field_manifest.json').write_text(json.dumps(spec,indent=2)+'\n',encoding='utf-8')
+s='extends RefCounted\n## Fixed remaining Battle Fx scripts, scalar state and reference/texture fields.\nconst Scalar := preload("res://scripts/run_procedural_fx_state.gd")\nconst TYPES := {\n'+',\n'.join('\t'+json.dumps(k)+': {'+', '.join(json.dumps(f)+': '+t for f,t in row['fields'].items())+'}' for k,row in spec.items())+'}\n'
+for field,label in [('references','REFERENCES'),('textures','TEXTURES')]:
+    s+='const '+label+' := '+json.dumps({k:r[field] for k,r in spec.items()})+'\n'
+s+='var scripts: Dictionary\nvar _scalar: Variant\n\nfunc _init(battle: Script) -> void:\n\t_scalar = Scalar.new(battle)\n\tscripts = {'+', '.join(json.dumps(k)+': battle.'+row['class'] for k,row in spec.items())+'}\n'
+save('run_linked_fx_state.gd',s+'\n'+(out/'validator.gd').read_text(encoding='utf-8'))
+g=(root/'scripts/run_visual_graph.gd').read_text(encoding='utf-8')
+g=rep(g,'const Procedural :=','const Linked := preload("res://scripts/run_linked_fx_state.gd")\nconst Procedural :=')
+g=rep(g,'\t"container": [],','\t"container": [],\n'+''.join('\t'+json.dumps(k)+': '+json.dumps(list(row['fields'])+row['textures'])+',\n' for k,row in spec.items()).rstrip('\n'))
+g=rep(g,'var _procedural: Variant','var _linked: Variant\nvar _procedural: Variant')
+g=rep(g,'var _unit_tombstone: Variant = null','var _unit_tombstone: Variant = null\nvar _reference_bindings: Dictionary = {}')
+g=rep(g,'\t_unit_tombstone = null','\t_unit_tombstone = null\n\t_reference_bindings.clear()')
+g=rep(g,'\t_procedural = Procedural.new(battle)','\t_procedural = Procedural.new(battle)\n\t_linked = Linked.new(battle)')
+g=rep(g,'\tvar procedural_kind: String =','\tvar linked_kind: String = _linked.kind(node)\n\tif not linked_kind.is_empty(): return linked_kind\n\tvar procedural_kind: String =')
+g=rep(g,'func _new(kind: String) -> Node2D:\n','func _new(kind: String) -> Node2D:\n\tif _linked.TYPES.has(kind): return _linked.scripts[kind].new()\n')
+g=rep(g,'\tif kind == "building_collapse": values["tex"]','\tfor field: String in _linked.TEXTURES.get(kind, []): values[field] = _texture_token(node.get(field)).value\n\tif kind == "building_collapse": values["tex"]')
+g=rep(g,'\tif _procedural.TYPES.has(kind): return _procedural.validate(values, kind)','\tif _linked.TYPES.has(kind):\n\t\tvar checked: Dictionary = _linked.validate(values, kind)\n\t\tif not checked.ok: return checked\n\t\tfor field: String in _linked.TEXTURES[kind]:\n\t\t\tchecked = _texture_check(values[field])\n\t\t\tif not checked.ok: return checked\n\t\treturn {"ok": true}\n\tif _procedural.TYPES.has(kind): return _procedural.validate(values, kind)')
+g=rep(g,'\t\tif kind == "bolt":\n\t\t\tvar tag: Dictionary = _tag(node.chain_from, units)\n\t\t\tif not tag.ok: return tag\n\t\t\trefs["chain_from"] = tag.value','\t\tfor field: String in _reference_fields(kind):\n\t\t\tvar tag: Dictionary = _tag(node.get(field), units)\n\t\t\tif not tag.ok: return tag\n\t\t\trefs[field] = tag.value')
+g=rep(g,'["chain_from"] if row.kind == "bolt" else []','_reference_fields(row.kind)')
+g=rep(g,'\t\tif row.kind == "bolt":\n\t\t\tvar tc: Dictionary = _tag_check(row.references.chain_from, known)\n\t\t\tif not tc.ok: return tc','\t\tfor field: String in row.references:\n\t\t\tvar tc: Dictionary = _tag_check(row.references[field], known)\n\t\t\tif not tc.ok: return tc')
+g=rep(g,'\t\tif row.kind == "bolt" and row.references.chain_from.state == "expired":','\t\tif row.references.values().any(func(tag: Dictionary) -> bool: return tag.state == "expired"):')
+g=rep(g,'or _procedural.TYPES.has(row.kind): node.set_meta','or _procedural.TYPES.has(row.kind) or _linked.TYPES.has(row.kind): node.set_meta')
+g=rep(g,'\t\t\t\tif row.kind == "building_collapse" and field == "tex":','\t\t\t\tif field in _linked.TEXTURES.get(row.kind, []) or (row.kind == "building_collapse" and field == "tex"):')
+g=rep(g,'\t\t\t\t\tnode.tex = null if row.values.tex.state == "none" else _textures[row.values.tex.key]','\t\t\t\t\tnode.set(field, null if row.values[field].state == "none" else _textures[row.values[field].key])')
+g=rep(g,'\t\t\tif row.kind == "bolt":\n\t\t\t\tvar tag: Dictionary = row.references.chain_from\n\t\t\t\tnode.chain_from = units[tag.id] if tag.state == "entity" else (expired_unit if tag.state == "expired" else null)','\t\t\tfor field: String in row.references:\n\t\t\t\tvar tag: Dictionary = row.references[field]\n\t\t\t\tnode.set(field, units[tag.id] if tag.state == "entity" else (expired_unit if tag.state == "expired" else null))\n\t\t\t\tif tag.state == "expired": _unit_tombstone = expired_unit')
+g=rep(g,'\t\t\tfor field: String in row.references:\n\t\t\t\tvar tag:', '\t\t\t_reference_bindings[row.id] = {}\n\t\t\tfor field: String in row.references:\n\t\t\t\tvar tag:')
+g=rep(g,'\t\t\t\tif tag.state == "expired": _unit_tombstone = expired_unit','\t\t\t\t_reference_bindings[row.id][field] = node.get(field)\n\t\t\t\tif tag.state == "expired": _unit_tombstone = expired_unit')
+g=rep(g,'\t\tif _procedural.TYPES.has(row.kind) and _values(node, row.kind) != row.values:', '\t\tfor field: String in _reference_bindings.get(id, {}):\n\t\t\tif not is_same(node.get(field), _reference_bindings[id][field]): return _failure("VISUAL_REFERENCE_CHANGED", row.kind + "." + field)\n\t\tif _linked.TYPES.has(row.kind):\n\t\t\tfor field: String in _linked.TEXTURES[row.kind]:\n\t\t\t\tif not _texture_token(node.get(field)).ok: return _failure("LINKED_TEXTURE_CHANGED", field)\n\t\t\tif _values(node, row.kind) != row.values: return _failure("LINKED_PREPARATION_CHANGED", row.kind)\n\t\tif _procedural.TYPES.has(row.kind) and _values(node, row.kind) != row.values:')
+g=rep(g,'\tif _procedural.TYPES.has(kind):\n\t\tif not node.get_meta_list()','\tif _procedural.TYPES.has(kind) or _linked.TYPES.has(kind):\n\t\tif not node.get_meta_list()')
+g=rep(g,'\tif not _procedural.TYPES.has(kind) and kind not in','\tfor field: String in _linked.TEXTURES.get(kind, []):\n\t\tvar texture: Dictionary = _texture_token(node.get(field))\n\t\tif not texture.ok: return texture\n\tif not _procedural.TYPES.has(kind) and not _linked.TYPES.has(kind) and kind not in')
+g+='\n\nfunc _reference_fields(kind: String) -> Array:\n\treturn ["chain_from"] if kind == "bolt" else _linked.REFERENCES.get(kind, [])\n'
+g=rep(g,'\t\t\tif not is_same(node.get(field), _reference_bindings[id][field]): return _failure("VISUAL_REFERENCE_CHANGED", row.kind + "." + field)', '''\t\t\tif not is_same(node.get(field), _reference_bindings[id][field]): return _failure("VISUAL_REFERENCE_CHANGED", row.kind + "." + field)
+\t\t\tvar tag: Dictionary = row.references[field]
+\t\t\tvar target: Variant = node.get(field)
+\t\t\tif tag.state == "entity" and (not is_instance_valid(target) or target.is_queued_for_deletion() or target.get_script() != _unit or str(target.entity_id) != tag.id): return _failure("VISUAL_BOUND_UNIT_CHANGED", row.kind + "." + field)''')
+g=rep(g,'\t\tif _linked.TYPES.has(row.kind):\n\t\t\tfor field:', '\t\tif _linked.TYPES.has(row.kind):\n\t\t\tvar prepared_check: Dictionary = _linked_prepared_check(node, row)\n\t\t\tif not prepared_check.ok: return prepared_check\n\t\t\tfor field:')
+g+='''
+func _linked_prepared_check(node: Node2D, row: Dictionary) -> Dictionary:
+\tif node.get_meta_list().size() != 1 or node.get_meta("_run_restore_prepared", false) != true: return _failure("LINKED_PREPARATION_MARKER", row.kind)
+\tfor info: Dictionary in node.get_signal_list():
+\t\tif not node.get_signal_connection_list(info.name).is_empty(): return _failure("LINKED_PREPARATION_CONNECTION", row.kind)
+\tif node.material != null or node.use_parent_material or node.texture_filter != CanvasItem.TEXTURE_FILTER_PARENT_NODE or node.texture_repeat != CanvasItem.TEXTURE_REPEAT_PARENT_NODE or node.light_mask != 1 or node.visibility_layer != 1 or node.clip_children != CanvasItem.CLIP_CHILDREN_DISABLED: return _failure("LINKED_PREPARATION_RENDER", row.kind)
+\tvar state: Dictionary = _read_node(node); state.erase("activation")
+\tvar expected: Dictionary = row.node.duplicate(); expected.erase("activation")
+\tif state != expected: return _failure("LINKED_PREPARATION_NODE", row.kind)
+\treturn {"ok": true}
+'''
+save('run_visual_graph.gd',g)
+c=(root/'scripts/run_battle_world_core.gd').read_text(encoding='utf-8')
+c=rep(c,'\t_axe_texture = axe_texture','\t_axe_texture = axe_texture\n\t_register_visual_textures()')
+c+='\n'+(out/'texture_catalog.gd').read_text(encoding='utf-8')
+save('run_battle_world_core.gd',c)
+d=(root/'qa/procedural_fx_20260908/candidate/driver.gd.txt').read_text(encoding='utf-8')
+d=d.replace('procedural-fx-resume-native','linked-fx-resume-native').replace('[procedural fx QA] ','[linked fx QA] ')
+d=rep(d,'\tif not await _procedural_cases(core_script, identity, runtime):','\tif not await _linked_cases(core_script, identity, runtime):\n\t\ttarget_core.dispose(); source_core.dispose(); await _finish(true); return\n\tif not await _procedural_cases(core_script, identity, runtime):')
+d+='\n'+(out/'driver_cases.gd').read_text(encoding='utf-8')
+(out/'driver.gd').write_text(d,encoding='utf-8',newline='\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest(); changes=[]
+for name in ['battle.gd','run_visual_graph.gd','run_battle_world_core.gd','run_linked_fx_state.gd']:
+    p=root/'scripts'/name; row={'path':'scripts/'+name,'before_exists':p.exists(),'candidate':out.relative_to(root).as_posix()+'/'+name,'candidate_sha256':sha(out/name)}
+    if p.exists(): row['before_raw_sha256']=sha(p)
+    changes.append(row)
+(out/'overlay_manifest.json').write_text(json.dumps({'files':changes},indent=2)+'\n',encoding='utf-8')
+inputs=[Path(x['candidate']).name for x in changes]+['overlay_manifest.json','driver.gd','driver_cases.gd','validator.gd','texture_catalog.gd','field_manifest.json']
+(out/'freeze.json').write_text(json.dumps({'inputs':{n:sha(out/n) for n in inputs}},indent=2)+'\n',encoding='utf-8')
+print(sha(out/'freeze.json'))

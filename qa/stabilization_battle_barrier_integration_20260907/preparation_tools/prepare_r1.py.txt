@@ -1,0 +1,48 @@
+from pathlib import Path
+import hashlib, json, subprocess, sys
+
+ROOT=Path(__file__).resolve().parents[2]
+HERE=Path(__file__).resolve().parent
+SOURCE='2e40c4afd5d3bce22a8204bed2c1f903fc046ff5'
+HEAD='b074ba91c28a9e24a32b1ad2469522094f8267cd'
+OLD_FREEZE='8c6305d1d26043a3afb940b728ffd78ae8525fa512ce79bd0b465ac3f642b550'
+ARCHIVE=ROOT/'qa/stabilization_battle_barrier_draft_20260907'
+OUT=HERE/'attempt_r1'
+def sha(raw): return hashlib.sha256(raw).hexdigest()
+def dump(path,data): path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+def git(*args): return subprocess.check_output(['git',*args],cwd=ROOT)
+assert git('rev-parse','HEAD').decode().strip()==HEAD
+sys.path.insert(0,str(ROOT/'tools'))
+import run_stabilization_performance as guard
+before=guard.tree(SOURCE)
+after=guard.tree(HEAD)
+assert before==after, 'Production Git blobs changed since source freeze'
+assert not git('diff','--name-only',HEAD,'--',*sorted(guard.DIRS|guard.FIXED))
+pins=json.loads((ARCHIVE/'SOURCE_PINS.json').read_text(encoding='utf-8'))
+assert sha((ARCHIVE/'original/freeze.json').read_bytes())==OLD_FREEZE
+OUT.mkdir()
+for row in pins['files']:
+    raw=(ARCHIVE/row['archive']).read_bytes()
+    assert sha(raw)==row['sha256'] and len(raw)==row['bytes']
+    if row['restore_name']=='freeze.json': continue
+    p=OUT/row['restore_name']; p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(raw)
+overlay=json.loads((OUT/'overlay_manifest.json').read_text(encoding='utf-8'))
+overlay['source_head']=HEAD
+for row in overlay['files']:
+    p=ROOT/row['path']
+    assert p.exists()==row['before_exists']
+    if p.exists(): assert sha(p.read_bytes())==row['before_raw_sha256']
+    row['candidate']=(OUT/'candidate'/row['path']).relative_to(ROOT).as_posix()
+    assert sha((ROOT/row['candidate']).read_bytes())==row['candidate_sha256']
+dump(OUT/'overlay_manifest.json',overlay)
+dump(OUT/'rebase_review.json',{'original_source_head':SOURCE,'source_head':HEAD,
+    'original_freeze_sha256':OLD_FREEZE,'production_git_rows_equal':True,
+    'production_rows':len(before),'candidate_gd_and_driver_original_bytes':True,
+    'source_change_scope':'b074ba9 adds documentation and inert archived drafts only',
+    'original_preparation_metadata_retained':True,'native_tested':False})
+files=[p.relative_to(OUT).as_posix() for p in OUT.rglob('*') if p.is_file()]
+freeze={'status':'native_pending','source_head':HEAD,'production_changed':False,
+    'parent_freeze_sha256':OLD_FREEZE,'inputs':{n:sha((OUT/n).read_bytes()) for n in sorted(files)}}
+dump(OUT/'freeze.json',freeze)
+print(json.dumps({'candidate':OUT.relative_to(ROOT).as_posix(),'source_head':HEAD,
+    'production_rows_equal':len(before),'freeze_sha256':sha((OUT/'freeze.json').read_bytes())}))

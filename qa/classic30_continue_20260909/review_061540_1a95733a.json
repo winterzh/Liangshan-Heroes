@@ -1,0 +1,157 @@
+{
+  "batch": "D:\\AI项目\\水浒\\开发工程\\qa\\classic30_continue_20260909\\20260909_061540_1a95733a",
+  "evidence_consistent": true,
+  "gameplay_status": "full_acceptance_passed",
+  "full_acceptance_verified": true,
+  "diagnostic_complete_verified": false,
+  "current_source_match": true,
+  "private_source_match": true,
+  "checks": 15161,
+  "evidence_errors": [],
+  "source_comparison_errors": [],
+  "steps": [
+    {
+      "case": "import",
+      "pid": 41880,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "profile_guard",
+      "pid": 9248,
+      "exit_code": 2,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "public_gate",
+      "pid": 42212,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "public_gate_verified",
+      "report_passed": true,
+      "checks": 7,
+      "failed_checks": [],
+      "events": 0,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "new_economy",
+      "pid": 42428,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "saved_and_exiting",
+      "report_passed": true,
+      "checks": 27,
+      "failed_checks": [],
+      "events": 43,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "resume_combat",
+      "pid": 3716,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "saved_and_exiting",
+      "report_passed": true,
+      "checks": 35,
+      "failed_checks": [],
+      "events": 61,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "resume_transition",
+      "pid": 36376,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "saved_and_exiting",
+      "report_passed": true,
+      "checks": 30,
+      "failed_checks": [],
+      "events": 72,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "resume_victory",
+      "pid": 12624,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "natural_victory",
+      "report_passed": true,
+      "checks": 226,
+      "failed_checks": [],
+      "events": 8532,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "terminal_reject_1",
+      "pid": 20220,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "terminal_refused",
+      "report_passed": true,
+      "checks": 12,
+      "failed_checks": [],
+      "events": 2,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "terminal_reject_2",
+      "pid": 39132,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "terminal_refused",
+      "report_passed": true,
+      "checks": 12,
+      "failed_checks": [],
+      "events": 2,
+      "gameplay_step_passed": true
+    }
+  ],
+  "manifest_entries": 61,
+  "manifest_entry_bytes": 5528216,
+  "manifest_sha256": "9beae47f7f9bc5ebd79d01028786905cf4eec3d78f701741c42777c71a7c3720",
+  "receipt_sha256": "5e347194e1dc7397325d3abb5c921423c52fe4ba7d42f6cbeeb71093663a100c",
+  "frozen_source_files": 2956,
+  "receipt_claims": {
+    "complete": true,
+    "acceptance_passed": true,
+    "diagnostic_complete": false,
+    "source_guard": true,
+    "player_unchanged": true,
+    "failure": null,
+    "final_guard_failure": null
+  },
+  "limits": [
+    "Evidence consistency is not gameplay acceptance.",
+    "Archived process exit and player digests are recorded evidence, not independently re-executed or re-read player files.",
+    "Without --current, private control files and full frozen source copies are not read.",
+    "--current checks every receipt-listed source path; it does not execute the historical dynamic source collector.",
+    "Full acceptance here is automated classic-only; no Steam, eight missions, human, second Windows or performance claim."
+  ],
+  "review_kind": "root_readonly_completed_batch_review",
+  "command_exit_code": 0,
+  "visual_review": {
+    "reviewed": [
+      "screenshots/resume_victory_victory.png"
+    ],
+    "visible_viewport_readable": true,
+    "all_scroll_content_reviewed": false,
+    "other_three_screenshots_reviewed": false
+  },
+  "observed_limits": [
+    "Only two pending spell windups were nonempty at the combat saved boundary; no nonempty Projectile/item/channel/walk restore is claimed.",
+    "resource_extracted excludes removed resource nodes; terminal value is not a cumulative run total.",
+    "Candidate Level3 designs were not parsed or applied."
+  ]
+}

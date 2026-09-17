@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/nw_spacing.png" id="nw_spacing"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_sanniang_direction4_20260913/nw.png" id="nw"]
+
+[sub_resource type="AtlasTexture" id="walk_a_nw"]
+atlas = ExtResource("nw_spacing")
+region = Rect2(40.0, 46.0, 294.0, 314.0)
+margin = Rect2(92.5, 82.5, 185.0, 165.0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-18.204059, 19.468275)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_b_nw"]
+atlas = ExtResource("nw")
+region = Rect2(84, 199, 159, 161)
+margin = Rect2(48.5, 47.5, 97, 95)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 23.92)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_b_nw")},
+{"duration": 1.0, "texture": SubResource("walk_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

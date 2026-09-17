@@ -1,0 +1,100 @@
+extends RefCounted
+## Thirty trusted procedural TimedFx classes. No saved Script, resource or callback.
+const TYPES := {
+	"hua_target_arrow": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "end_w": TYPE_VECTOR2, "col": TYPE_COLOR, "snipe": TYPE_BOOL, "lock_shots": TYPE_INT, "travel": TYPE_FLOAT, "_E": TYPE_VECTOR2},
+	"lin_counter": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "end_w": TYPE_VECTOR2, "col": TYPE_COLOR, "_end": TYPE_VECTOR2},
+	"lin_duel_resolve": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT},
+	"lightning": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_segs": TYPE_PACKED_VECTOR2_ARRAY, "_branches": TYPE_ARRAY},
+	"rally": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_motes": TYPE_ARRAY},
+	"haste": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR},
+	"slash_arc": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_a0": TYPE_FLOAT},
+	"iron_staff_sweep": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_a0": TYPE_FLOAT},
+	"water_splash": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_drops": TYPE_ARRAY},
+	"poison_cloud": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_blobs": TYPE_ARRAY, "_bubbles": TYPE_ARRAY},
+	"stone": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "end_w": TYPE_VECTOR2, "col": TYPE_COLOR, "travel": TYPE_FLOAT, "_E": TYPE_VECTOR2, "_ang": TYPE_FLOAT},
+	"stomp": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_cracks": TYPE_ARRAY, "_debris": TYPE_ARRAY},
+	"whirl": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_spin": TYPE_FLOAT},
+	"blood": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_drops": TYPE_ARRAY, "_a0": TYPE_FLOAT},
+	"charge": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "dir": TYPE_FLOAT},
+	"pin": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_stakes": TYPE_ARRAY},
+	"ability_beam": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "start_w": TYPE_VECTOR2, "end_w": TYPE_VECTOR2, "col": TYPE_COLOR, "chain": TYPE_BOOL, "dash": TYPE_BOOL, "_S": TYPE_VECTOR2, "_E": TYPE_VECTOR2},
+	"ability_sweep": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "end_w": TYPE_VECTOR2, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_E": TYPE_VECTOR2, "_ang": TYPE_FLOAT},
+	"spear_sweep": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_a0": TYPE_FLOAT, "_dir": TYPE_FLOAT},
+	"thrust": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "end_w": TYPE_VECTOR2, "col": TYPE_COLOR, "_E": TYPE_VECTOR2, "_ang": TYPE_FLOAT},
+	"chrono": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "life": TYPE_FLOAT, "lite": TYPE_BOOL, "_spin": TYPE_FLOAT},
+	"ice_wall": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "dir": TYPE_VECTOR2, "half_len": TYPE_FLOAT, "col": TYPE_COLOR, "life": TYPE_FLOAT, "_shards": TYPE_ARRAY},
+	"earth_crack": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "dir": TYPE_VECTOR2, "length": TYPE_FLOAT, "col": TYPE_COLOR, "life": TYPE_FLOAT, "_pts": TYPE_PACKED_VECTOR2_ARRAY, "_rub": TYPE_ARRAY},
+	"echo_slam": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR},
+	"split_mirror": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "col": TYPE_COLOR, "from_w": TYPE_VECTOR2},
+	"fire_line": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "dir": TYPE_VECTOR2, "length": TYPE_FLOAT, "col": TYPE_COLOR},
+	"shadow_wave": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "col": TYPE_COLOR, "heal": TYPE_BOOL},
+	"amp_cast": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR},
+	"silence": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_talismans": TYPE_ARRAY},
+	"armor_crack": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "col": TYPE_COLOR, "_shards": TYPE_ARRAY, "_cracks": TYPE_ARRAY}}
+var scripts: Dictionary
+
+func _init(battle: Script) -> void:
+	scripts = {"hua_target_arrow": battle.HuaTargetArrowFx, "lin_counter": battle.LinCounterFx, "lin_duel_resolve": battle.LinDuelResolveFx, "lightning": battle.LightningFx, "rally": battle.RallyFx, "haste": battle.HasteFx, "slash_arc": battle.SlashArcFx, "iron_staff_sweep": battle.IronStaffSweepFx, "water_splash": battle.WaterSplashFx, "poison_cloud": battle.PoisonCloudFx, "stone": battle.StoneFx, "stomp": battle.StompFx, "whirl": battle.WhirlFx, "blood": battle.BloodFx, "charge": battle.ChargeFx, "pin": battle.PinFx, "ability_beam": battle.AbilityBeamFx, "ability_sweep": battle.AbilitySweepFx, "spear_sweep": battle.SpearSweepFx, "thrust": battle.ThrustFx, "chrono": battle.ChronoFx, "ice_wall": battle.IceWallFx, "earth_crack": battle.EarthCrackFx, "echo_slam": battle.EchoSlamFx, "split_mirror": battle.SplitMirrorFx, "fire_line": battle.FireLineFx, "shadow_wave": battle.ShadowWaveFx, "amp_cast": battle.AmpCastFx, "silence": battle.SilenceFx, "armor_crack": battle.ArmorCrackFx}
+
+func kind(node: Node2D) -> String:
+	for key: String in scripts:
+		if node.get_script() == scripts[key]: return key
+	return ""
+
+func _bad(code: String, field := "") -> Dictionary:
+	return {"ok": false, "code": code, "field": field}
+
+func _typed(value: Variant, type: int) -> bool:
+	if typeof(value) != type: return false
+	if type == TYPE_FLOAT: return is_finite(value)
+	if type == TYPE_VECTOR2: return value.is_finite()
+	if type == TYPE_COLOR:
+		return is_finite(value.r) and is_finite(value.g) and is_finite(value.b) and is_finite(value.a)
+	return true
+
+func _rows(value: Variant, count: int, shape: Dictionary) -> bool:
+	if typeof(value) != TYPE_ARRAY or count < 0 or count > 4096 or value.size() != count: return false
+	for row: Variant in value:
+		if typeof(row) != TYPE_DICTIONARY or row.size() != shape.size() or not row.has_all(shape.keys()): return false
+		for key: String in shape:
+			if not _typed(row[key], shape[key]): return false
+	return true
+
+func _points(value: Variant, count: int, type: int) -> bool:
+	if typeof(value) != type or count < 0 or count > 4096 or value.size() != count: return false
+	for point: Variant in value:
+		if not _typed(point, TYPE_VECTOR2): return false
+	return true
+
+func validate(values: Variant, kind: String) -> Dictionary:
+	if not TYPES.has(kind) or typeof(values) != TYPE_DICTIONARY or values.size() != TYPES[kind].size() or not values.has_all(TYPES[kind].keys()): return _bad("PROCEDURAL_FIELDS", kind)
+	for key: String in TYPES[kind]:
+		var wire_type: int = TYPE_ARRAY if TYPES[kind][key] == TYPE_PACKED_VECTOR2_ARRAY else TYPES[kind][key]
+		if not _typed(values[key], wire_type): return _bad("PROCEDURAL_TYPE", kind + "." + key)
+	if values.dur <= 0.0 or values.t <= 0.0 or values.t > values.dur: return _bad("PROCEDURAL_LIFETIME", kind)
+	for key: String in ["rad", "half_len", "length", "travel", "life"]:
+		if values.has(key) and (values[key] < 0.0 or values[key] > 1000000.0): return _bad("PROCEDURAL_GEOMETRY", key)
+	if values.has("life") and values.life <= 0.0: return _bad("PROCEDURAL_LIFE")
+	var v: Dictionary = values; var valid := true
+	match kind:
+		"hua_target_arrow": valid = v.lock_shots >= 0 and v.lock_shots <= 4096 and v.travel > 0.0
+		"stone": valid = v.travel > 0.0
+		"lightning":
+			valid = _points(v._segs, 8, TYPE_ARRAY) and v._branches.size() == 3
+			for branch: Variant in v._branches: valid = valid and _points(branch, 2, TYPE_ARRAY)
+		"rally": valid = _rows(v._motes, 18, {"p": TYPE_VECTOR2, "delay": TYPE_FLOAT, "spd": TYPE_FLOAT, "cross": TYPE_BOOL})
+		"water_splash": valid = _rows(v._drops, 12, {"ang": TYPE_FLOAT, "spd": TYPE_FLOAT, "delay": TYPE_FLOAT})
+		"poison_cloud": valid = _rows(v._blobs, 9, {"p": TYPE_VECTOR2, "r": TYPE_FLOAT, "ph": TYPE_FLOAT}) and _rows(v._bubbles, 10, {"p": TYPE_VECTOR2, "delay": TYPE_FLOAT, "spd": TYPE_FLOAT})
+		"stomp": valid = _rows(v._cracks, 7, {"a": TYPE_FLOAT, "len": TYPE_FLOAT, "w": TYPE_FLOAT}) and _rows(v._debris, 12, {"dir": TYPE_VECTOR2, "spd": TYPE_FLOAT})
+		"blood": valid = _rows(v._drops, 14, {"dir": TYPE_VECTOR2, "spd": TYPE_FLOAT, "r": TYPE_FLOAT})
+		"pin":
+			valid = v._stakes.size() == 6
+			for stake: Variant in v._stakes: valid = valid and _typed(stake, TYPE_FLOAT)
+		"ice_wall": valid = _rows(v._shards, maxi(3, int(v.half_len * 2.0 / 22.0)) + 1, {"off": TYPE_VECTOR2, "h": TYPE_FLOAT, "w": TYPE_FLOAT})
+		"earth_crack":
+			var count: int = maxi(6, int(v.length / 26.0))
+			valid = _points(v._pts, count + 1, TYPE_ARRAY) and _points(v._rub, count / 2 + 1, TYPE_ARRAY)
+		"silence": valid = _rows(v._talismans, 4, {"p": TYPE_VECTOR2, "delay": TYPE_FLOAT, "sway": TYPE_FLOAT, "h": TYPE_FLOAT})
+		"armor_crack": valid = _rows(v._shards, 9, {"dir": TYPE_VECTOR2, "spd": TYPE_FLOAT, "rot": TYPE_FLOAT, "sz": TYPE_FLOAT}) and _rows(v._cracks, 5, {"a": TYPE_FLOAT, "len": TYPE_FLOAT, "w": TYPE_FLOAT})
+	if not valid: return _bad("PROCEDURAL_CACHE", kind)
+	return {"ok": true}

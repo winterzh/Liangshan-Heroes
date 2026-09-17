@@ -1,0 +1,36 @@
+from pathlib import Path
+import hashlib,json,shutil,sys
+ROOT=Path(__file__).resolve().parents[2]
+HERE=Path(__file__).resolve().parent
+OLD=HERE/'attempt_r1'
+OUT=HERE/'attempt_r2'
+def sha(data): return hashlib.sha256(data).hexdigest()
+def dump(path,data): path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+assert sha((OLD/'freeze.json').read_bytes())=='00fcbba226f1279d7e6f1886dc50e464fe59ef2b4a41781118176e07a976bbb2'
+assert not OUT.exists()
+shutil.copytree(OLD,OUT)
+driver=(OUT/'barrier_smoke.gd').read_text(encoding='utf-8')
+def once(a,b):
+    global driver
+    assert driver.count(a)==1,a
+    driver=driver.replace(a,b)
+once('\tfor frame in range(5): await process_frame','\tfor frame in range(5): await physics_frame\n\tawait process_frame')
+once('\t# Original actual viewport/grid path; no mirrored view calculation.', '\tvar live_root_before_fixtures: Dictionary = _root_values(battle)\n\t# Original actual viewport/grid path; no mirrored view calculation.')
+once('\t_check("actual capture releases back to running",', '\t# Undo only test-injected fields before allowing live consumers to run.\n\t# The negative-size Rect2 roundtrip remains fully tested above.\n\tfor field: String in live_root_before_fixtures: battle.set(field, live_root_before_fixtures[field])\n\t_check("all 105 fixture fields restored before release", _same(_root_values(battle), live_root_before_fixtures))\n\t_check("actual capture releases back to running",')
+(OUT/'barrier_smoke.gd').write_text(driver,encoding='utf-8',newline='\n')
+sys.path.insert(0,str(ROOT/'scratchpad/stabilization_identity_20260907/parser_runtime'))
+from gdtoolkit.parser import parser
+parser.parse(driver)
+overlay=json.loads((OUT/'overlay_manifest.json').read_text(encoding='utf-8'))
+for row in overlay['files']: row['candidate']=(OUT/'candidate'/row['path']).relative_to(ROOT).as_posix()
+dump(OUT/'overlay_manifest.json',overlay)
+dump(OUT/'r2_review.json',{'previous_freeze_sha256':sha((OLD/'freeze.json').read_bytes()),
+    'previous_native_failure':'overlay_20260907T085050Z_56e30ee4',
+    'failure':'test injected negative-size Rect2 remained in live Battle when capture released; world shadow read it before next grid rebuild',
+    'change':'driver restores all prior 105 ordinary fields before source release; held wait uses actual physics frames',
+    'production_candidate_files_unchanged':True,'native_tested':False})
+freeze=json.loads((OUT/'freeze.json').read_text(encoding='utf-8'))
+freeze['parent_freeze_sha256']=sha((OLD/'freeze.json').read_bytes())
+freeze['inputs']={p.relative_to(OUT).as_posix():sha(p.read_bytes()) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='freeze.json'}
+dump(OUT/'freeze.json',freeze)
+print(json.dumps({'freeze_sha256':sha((OUT/'freeze.json').read_bytes()),'candidate':OUT.relative_to(ROOT).as_posix()}))

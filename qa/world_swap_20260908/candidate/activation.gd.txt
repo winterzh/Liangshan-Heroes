@@ -1,0 +1,49 @@
+func activate_components(root_node: Dictionary) -> Dictionary:
+	# Internal final phase. The caller retains the old HELD world until success.
+	if _activated or not is_instance_valid(_battle) or not _battle.is_inside_tree() or not _battle.get_tree().paused or Engine.is_in_physics_frame() or not _battle._prepared_clock_entry_valid() or _battle._save_barrier != null: return _bad("WORLD_ACTIVATION_PHASE")
+	var checked: Dictionary = _visual._check_node(root_node)
+	if not checked.ok: return checked
+	for row: Dictionary in _unit_plan.activation_plan:
+		var unit: Variant = row.unit
+		if not is_instance_valid(unit) or unit.is_queued_for_deletion() or not unit.is_node_ready() or unit.get_parent() != _battle.units_root or unit.battle != _battle or str(unit.entity_id) != row.entity_id or not unit.is_blocking_signals() or unit.process_mode != Node.PROCESS_MODE_DISABLED: return _bad("PREPARED_UNIT_CHANGED")
+		for signal_name: String in ["died", "story_resolved"]:
+			if not unit.get_signal_connection_list(signal_name).is_empty(): return _bad("PREPARED_UNIT_SIGNAL_CHANGED")
+	_identity.release_tombstones(); _visual.release_expired_fx()
+	for row: Dictionary in _unit_plan.activation_plan:
+		row.unit.died.connect(Callable(_battle, "_on_unit_died"))
+		row.unit.story_resolved.connect(Callable(_battle, "_on_unit_story_resolved"))
+		checked = _unit_checker.activate(row.unit, row.activation)
+		if not checked.ok: return checked
+	checked = _visual.activate()
+	if not checked.ok: return checked
+	checked = _fog_module.activate(_battle, _fog_plan.activation)
+	if not checked.ok: return checked
+	checked = _display.activate()
+	if not checked.ok: return checked
+	checked = _camera_module.activate()
+	if not checked.ok: return checked
+	checked = _environment.activate()
+	if not checked.ok: return checked
+	checked = _hud_module.activate()
+	if not checked.ok: return checked
+	# Environment order is checked before adding the new clock edge controller.
+	_battle._save_barrier = preload("res://scripts/run_battle_barrier.gd").new()
+	_battle._save_barrier.configure(_battle, _battle._run_clock)
+	_battle.add_child(_battle._save_barrier)
+	checked = _battle._run_clock.activate_restored(Engine.get_physics_frames())
+	if not checked.ok: return checked
+	_visual._assign_node(_battle, root_node)
+	var a: Dictionary = root_node.activation
+	_battle.process_priority = a.priority; _battle.process_physics_priority = a.physics_priority
+	_battle.set_process(a.process); _battle.set_physics_process(a.physics); _battle.set_process_input(a.input)
+	_battle.set_process_shortcut_input(a.shortcut); _battle.set_process_unhandled_input(a.unhandled_input); _battle.set_process_unhandled_key_input(a.unhandled_key)
+	_battle.set_block_signals(a.signals_blocked); _battle.process_mode = a.mode
+	_battle.remove_meta("_run_core_prepared"); _battle.remove_meta("_run_core_clock_bound")
+	_activated = true
+	return {"ok": true, "battle": _battle, "tree_still_paused": true}
+
+func handoff_world() -> Dictionary:
+	if not _activated or not _owns_world or not is_instance_valid(_battle): return _bad("WORLD_HANDOFF_PHASE")
+	_owns_world = false
+	var identity: Variant = _identity; _identity = null
+	return {"ok": true, "battle": _battle, "identity": identity}

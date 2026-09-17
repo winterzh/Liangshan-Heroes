@@ -1,0 +1,23 @@
+连环马攻击四方向 V2 生成与取舍记录
+
+日期：2026-09-03
+目标：重排攻击四方向，避免相邻角色在固定矩形裁切中互相串格；保持第五十五、五十七回的深盔露眼、马披重甲只露四蹄、铁环短链设定。
+
+判废 1：
+C:\Users\rsb\.codex\generated_images\01a060ed-ea65-74f1-aa47-a8daa91a06d0\exec-325bc1bd-ecb3-487b-97f4-083e539432bb.png
+原因：虽然四组间距合格，但输出为 RGB，棋盘格被画入像素，不是真透明。
+
+判废 2：
+C:\Users\rsb\.codex\generated_images\01a060ed-ea65-74f1-aa47-a8daa91a06d0\exec-43d8cbe3-d9d9-423a-97fb-d6174d3f75bf.png
+原因：再次输出为 RGB，棋盘格被画入像素，不是真透明。
+
+采用候选：
+C:\Users\rsb\.codex\generated_images\01a060ed-ea65-74f1-aa47-a8daa91a06d0\exec-1199f26d-16b5-40c2-8637-89a4ce390d5d.png
+原始 SHA256：592A110D2ED3B4692266D463687376E50F46A7C7DF4B05EB5F86B6D19AB11E27
+模式与尺寸：RGBA，2126x740
+四角：RGBA(0,0,0,0)
+
+采用候选的生成提示词：
+Create a production-ready transparent PNG sprite atlas for a Chinese Water Margin strategy RPG, matching realistic painterly dark-iron campaign sprites. Subject: Song-dynasty imperial 连环马 heavy cavalry in an attack state, faithful to chapters 55 and 57 of 水浒传. Exactly four complete full-body mounted figures, one per equal column, arranged in one horizontal row in this order: southeast/front-right, southwest/front-left, northeast/rear-right, northwest/rear-left. Each direction must be independently drawn, not mirrored. The rider wears a deep closed helmet with neck protection and only a narrow eye slit visible, dark iron lamellar armor and armored gauntlets, a restrained dark-red helmet plume, no exposed face. The warhorse is heavily barded with dense dark metal lamellar armor extending down the legs so only the four hooves are exposed. Show large iron side rings and one short heavy chain segment suggesting each group of thirty horses is linked, but no second horse. Rider attacks forward with a long spear; every spear and spear tip stays fully inside its own column. Add generous genuine transparent gutters between columns and transparent outer margins; no figure, antialiasing, plume, spear, chain, hoof, or fragment crosses a column boundary. Consistent size, ground contact, lighting, and rendering across all four panels. True RGBA alpha transparency, not a drawn checkerboard and not a white/black/colored background. No text, labels, numbers, flags, banners, emblems, scenery, floor, shadows, blood, gore, UI, borders, extra weapons, extra people, or extra horses.
+
+说明：不采用两张判废图；不对任何生成图做本地抠图、遮罩、补画或镜像。

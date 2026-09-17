@@ -1,0 +1,43 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/art_full_20260916/siege_ram_attack_direction4.png" id="siege_ram_attack_atlas"]
+
+[sub_resource type="AtlasTexture" id="charge_se"]
+atlas = ExtResource("siege_ram_attack_atlas")
+region = Rect2(0, 0, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="push_se"]
+atlas = ExtResource("siege_ram_attack_atlas")
+region = Rect2(627, 0, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="impact_se"]
+atlas = ExtResource("siege_ram_attack_atlas")
+region = Rect2(1254, 0, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="recover_se"]
+atlas = ExtResource("siege_ram_attack_atlas")
+region = Rect2(1881, 0, 627, 627)
+margin = Rect2(70, 0, 141, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("charge_se")},{"duration": 1.0, "texture": SubResource("push_se")},{"duration": 1.0, "texture": SubResource("impact_se")},{"duration": 1.0, "texture": SubResource("recover_se")}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

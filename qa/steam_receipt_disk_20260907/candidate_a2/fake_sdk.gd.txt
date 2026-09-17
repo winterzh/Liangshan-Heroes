@@ -1,0 +1,51 @@
+extends RefCounted
+## File-backed FAKE SDK only. Every mutator independently reopens the account
+## journal and requires the exact committed uncertain batch before recording it.
+var store: RefCounted
+var trace := ""
+var token := ""
+var cache: Dictionary = {}
+var fail_stat := ""
+var store_accepts := true
+
+func _init(disk: RefCounted, path: String) -> void:
+	store = disk
+	trace = path
+
+func _log(event: Dictionary) -> bool:
+	var file := FileAccess.open(trace, FileAccess.READ_WRITE if FileAccess.file_exists(trace) else FileAccess.WRITE)
+	if file == null: return false
+	file.seek_end()
+	file.store_line(JSON.stringify(event))
+	file.flush()
+	var error := file.get_error()
+	file.close()
+	return error == OK
+
+func _marker() -> Dictionary:
+	var head: Dictionary = store.open_head()
+	if not head.ok or head.document.is_empty(): return {"ok": false}
+	var outbound: Dictionary = head.document.outbound
+	if outbound.state != "uncertain" or outbound.token != token or head.document.receipt.requires_correction: return {"ok": false}
+	return {"ok": true, "outbound": outbound, "revision": head.revision, "file_sha256": head.file_sha256}
+
+func set_stat(name: String, value: int) -> bool:
+	var durable := _marker()
+	if not durable.ok or not durable.outbound.stats.has(name) or durable.outbound.stats[name] != value: return false
+	var accepted := name != fail_stat
+	if not _log({"call": "SetStat", "name": name, "value": value, "accepted": accepted, "token": token, "marker_sha256": durable.file_sha256, "revision": durable.revision, "pid": OS.get_process_id()}): return false
+	if accepted: cache[name] = value
+	return accepted
+
+func set_achievement(name: String) -> bool:
+	var durable := _marker()
+	if not durable.ok or durable.outbound.unlocked.get(name) != true: return false
+	if not _log({"call": "SetAchievement", "name": name, "accepted": true, "token": token, "marker_sha256": durable.file_sha256, "revision": durable.revision, "pid": OS.get_process_id()}): return false
+	cache[name] = true
+	return true
+
+func store_stats() -> bool:
+	var durable := _marker()
+	if not durable.ok: return false
+	if not _log({"call": "StoreStats", "accepted": store_accepts, "token": token, "marker_sha256": durable.file_sha256, "revision": durable.revision, "pid": OS.get_process_id()}): return false
+	return store_accepts

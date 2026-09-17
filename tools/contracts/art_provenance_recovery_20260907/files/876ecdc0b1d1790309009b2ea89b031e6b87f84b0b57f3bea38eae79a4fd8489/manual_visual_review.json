@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-03T03:15:35+08:00",
+  "reviewer": "Codex visual inspection of all four native-alpha web sources and the 512x512 checkerboard preview",
+  "passed": true,
+  "scope": "gao_flagship default/damaged/flooding/disabled x SE/SW/NE/NW",
+  "checks": {
+    "four_direction_order_is_consistent_across_states": true,
+    "same_flagship_identity_across_all_states": true,
+    "chapter_80_large_sea_loach_ship_features_remain_readable": true,
+    "state_progression_is_visually_distinguishable": true,
+    "default_is_intact_and_dry": true,
+    "damaged_is_still_navigable_without_fire_or_water_plane": true,
+    "flooding_has_only_hull_attached_water_and_partial_failure": true,
+    "disabled_is_heavily_flooded_but_more_than_half_visible": true,
+    "all_web_flags_are_blank_red_cloth": true,
+    "no_web_baked_shuai_text_or_pseudo_text_seen": true,
+    "no_foreign_neighbor_pixels": true,
+    "no_cropping_or_transparency_fringe_seen_at_runtime_size": true
+  },
+  "notes": [
+    "The four rows preserve the same long dark wooden hull, green canopy, purple bamboo screens, crossbow tower, arrow ports, dense paddle wheels and bow spikes.",
+    "Damage deliberately progresses without fire: intact, dry structural damage, hull-attached flooding, then heavier flooding and partial canopy/deck collapse.",
+    "The generated red cloth remains blank. The single 帅 glyph is reserved for the runtime text-only overlay in the chapter80_gao_flagship context.",
+    "Automated native-alpha, transparent-gutter, fixed-rectangle and scale evidence is recorded in candidate_manifest.json; this file records only the visual and story-semantic gate."
+  ],
+  "steam_modified_or_exported": false
+}

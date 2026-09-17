@@ -349,6 +349,10 @@ func _atlas(tex: Texture2D, cell: Vector2i, grid: int, cache_key: String) -> Tex
 	var at := AtlasTexture.new()
 	at.atlas = tex
 	at.region = Rect2(cell.x * cs, cell.y * cs, cs, cs)
+	# Keep linear sampling inside this cell. Without filter_clip, the one-pixel
+	# edge of a neighbouring portrait/terrain cell can bleed into the silhouette
+	# when the atlas is scaled by the camera.
+	at.filter_clip = true
 	_cache[cache_key] = at
 	return at
 
@@ -358,7 +362,7 @@ func _atlas(tex: Texture2D, cell: Vector2i, grid: int, cache_key: String) -> Tex
 #  • 特殊道具建筑（集市/酒望/招牌/法场/帅旗/庄门/府衙）：世界内本就以「聚义厅」贴图渲染，头像同款兜底
 const ART_ALIAS := {
 	"lin_chong_bound": "lin_chong", "song_jiang_bound": "song_jiang", "dai_zong_bound": "dai_zong",
-	"gong_ren": "yu_hou", "guan_zhanchuan": "guan_dao",
+	"gong_ren": "yu_hou",
 	"market": "hall", "tavern": "hall", "signboard": "hall", "scaffold": "hall",
 	"jiangtai": "hall", "zhu_gate": "hall", "dongchang_yamen": "hall",
 }
@@ -374,7 +378,11 @@ const SPRITE_ALIAS := {}
 ## HUD 选区图标/面板头像统一取图：脸→走图→建筑→物件→地形，并先过别名表。
 ## 全空才返回 null（此时调用方画占位首字，而非黄圈）。这条链覆盖建筑/资源/特殊单位，
 ## 是消灭「黄色圈圈头像」的单一来源。
+const IDENTITY_PORTRAIT_VARIANTS := {"dong_chao_escort": "dong_chao", "xue_ba_escort": "xue_ba"}
+
 func avatar_texture(key: String, variant := "") -> Texture2D:
+	if IDENTITY_PORTRAIT_VARIANTS.has(variant):
+		return portrait_texture(key) if IDENTITY_PORTRAIT_VARIANTS[variant] == key else null
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -422,6 +430,8 @@ func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
 	var ov := _content_override(key)   # 内容包覆盖优先
 	if ov != null:
 		return ov
+	if key == "guan_zhanchuan":
+		return campaign_object_texture("official_warship","default",direction if direction in CampaignArt.DIRECTIONS else "se")
 	key = SPRITE_ALIAS.get(key, key)   # 无专属走图的将领/兵种借同型官军立绘
 	if direction in CampaignArt.DIRECTIONS and unit_anim_uses_directional_source(key, "idle", direction):
 		var directional_idle := unit_anim_frames(key, "idle", direction)
@@ -438,6 +448,10 @@ func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
 	var wf := unit_anim_frames(key, "walk", direction if direction in CampaignArt.DIRECTIONS else "")
 	if not wf.is_empty():
 		return wf[1 % wf.size()]
+	# Directionless icon callers can use an exact SE idle when legacy art is absent.
+	if direction.is_empty():
+		var exact_idle := _load_generic_directional_frames(_resolve_generic_directional_path(key, "idle", "se"))
+		if not exact_idle.is_empty(): return exact_idle[0]
 	return null
 
 
@@ -534,12 +548,28 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
-	"gongsun_sheng": "res://assets/portrait_gongsun_sheng.png",
+	"dong_chao": "res://assets/characters/art_full_20260915/dong_chao.png",
+	"xue_ba": "res://assets/characters/art_full_20260915/xue_ba.png",
+	# 陆谦头像与本批四向身体原图同源，固定裁剪自SE格，避免旧灰底头像与新身体风格割裂。
+	"lu_qian": "res://assets/characters/art_full_20260915/lu_qian.png",
+	# 祝朝奉使用同源SE格裁出的宽体乡绅头像，与陆谦保持身份和体态差异。
+	"zhu_zhaofeng": "res://assets/characters/art_full_20260915/zhu_zhaofeng.png",
+	"guan_zhanzi": "res://assets/characters/guan_zhanzi_direction4_20260915/portrait.png",
+	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
+	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+	"sun_li": "res://assets/characters/codex_portraits_20260913/sun_li.png",
+	"hu_sanniang": "res://assets/characters/codex_portraits_20260913/hu_sanniang.png",
+	# 四人同源北宋工笔厚涂头像：独立图优先于旧灰底图集，保持身份差异与图鉴阅读一致。
+	"chao_gai": "res://assets/characters/art_full_20260916/chao_gai_portrait_20260916.png",
+	"lu_zhishen": "res://assets/characters/art_full_20260916/lu_zhishen_portrait_20260916.png",
+	"wu_song": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+	"gongsun_sheng": "res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png",
 }
 var _standalone_portraits := {}
 
 
 func portrait_texture(key: String) -> Texture2D:
+	if key == "guan_zhanchuan": return campaign_object_texture("official_warship","default","se")
 	key = _ra(key)                  # 运行时别名
 	key = ART_ALIAS.get(key, key)   # 被擒英雄等沿用本体脸
 	if STANDALONE_PORTRAITS.has(key):   # 独立头像图（有就用）
@@ -622,6 +652,7 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 						var frame := AtlasTexture.new()
 						frame.atlas = variant_tex
 						frame.region = Rect2(i * frame_size, 0, frame_size, frame_size)
+						frame.filter_clip = true
 						result.append(frame)
 				_anim_cache[variant_cache_key] = result
 				return result
@@ -668,6 +699,7 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 			var at := AtlasTexture.new()
 			at.atlas = tex
 			at.region = Rect2(i * h, 0, h, h)
+			at.filter_clip = true
 			frames.append(at)
 	_anim_cache[ck] = frames
 	if not directional_ck.is_empty():
@@ -701,6 +733,13 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	if _generic_directional_path_cache.has(cache_key):
 		return String(_generic_directional_path_cache[cache_key])
 	var path := _generic_directional_path(key, state, direction)
+	# The executioner's legacy idle PNGs remain as provenance references.
+	# Prefer its reviewed atlas sequence without changing other units' routing.
+	if key == "guan_zhanzi":
+		var authored_path := path.get_basename() + ".tres"
+		if ResourceLoader.exists(authored_path) and not _load_generic_directional_frames(authored_path).is_empty():
+			_generic_directional_path_cache[cache_key] = authored_path
+			return authored_path
 	if not ResourceLoader.exists(path):
 		# Native transparent cutouts retain their original pixels. SpriteFrames
 		# resources provide frame order and AtlasTexture padding at draw time.
@@ -743,6 +782,7 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 		var at := AtlasTexture.new()
 		at.atlas = tex
 		at.region = Rect2(i * h, 0, h, h)
+		at.filter_clip = true
 		frames.append(at)
 	return frames
 

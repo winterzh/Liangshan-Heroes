@@ -1,0 +1,251 @@
+extends RefCounted
+## FIXTURE ONLY append-only account journal. A complete valid pending record may
+## advance the unique hash chain after a dead writer. Torn files block recovery.
+## Flush/readback and actual process termination do NOT prove power-loss durability.
+const Receipt = preload("res://steam_run_receipt.gd")
+const Outbox = preload("res://steam_receipt_outbox.gd")
+const Checkpoint = preload("res://checkpoint.gd")
+const APP := "5088120"
+const ZERO := "0000000000000000000000000000000000000000000000000000000000000000"
+const MAX_BYTES := 16 * 1024 * 1024
+const MAX_RECORDS := 2048
+const FIELDS := ["magic", "version", "app", "owner", "revision", "previous_sha256", "payload_bytes", "payload_sha256", "payload"]
+var directory := ""
+var owner := ""
+var _lock_raw := ""
+var _locked := false
+
+func _init(case_path: String, account: String) -> void:
+	owner = account
+	directory = ProjectSettings.globalize_path(case_path).replace("\\", "/").simplify_path().path_join(APP).path_join(owner)
+
+func bad(code: String) -> Dictionary:
+	return {"ok": false, "code": code}
+
+func _valid_utf8(raw: PackedByteArray) -> bool:
+	var index := 0
+	while index < raw.size():
+		var first: int = raw[index]
+		if first == 0: return false
+		if first <= 127: index += 1; continue
+		var width := 0
+		var low := 128
+		var high := 191
+		if first >= 194 and first <= 223: width = 2
+		elif first >= 224 and first <= 239:
+			width = 3
+			if first == 224: low = 160
+			if first == 237: high = 159
+		elif first >= 240 and first <= 244:
+			width = 4
+			if first == 240: low = 144
+			if first == 244: high = 143
+		else: return false
+		if index + width > raw.size() or raw[index + 1] < low or raw[index + 1] > high: return false
+		for offset in range(2, width):
+			if raw[index + offset] < 128 or raw[index + offset] > 191: return false
+		index += width
+	return true
+
+func _guard() -> Dictionary:
+	var boundary := ProjectSettings.globalize_path("res://fixtures").replace("\\", "/").simplify_path()
+	if not Receipt.new()._owner(owner) or not directory.begins_with(boundary + "/") or not DirAccess.dir_exists_absolute(directory): return bad("FIXTURE_PATH")
+	var path := directory
+	while path != path.get_base_dir():
+		var parent := DirAccess.open(path.get_base_dir())
+		if parent == null or parent.is_link(path.get_file()): return bad("LINK_OR_PARENT")
+		path = path.get_base_dir()
+	var folder := DirAccess.open(directory)
+	for name in folder.get_files() + folder.get_directories():
+		if folder.is_link(name): return bad("LINK_REFUSED")
+	return {"ok": true}
+
+func _read(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return bad("READ_OPEN")
+	var count := file.get_length()
+	if count < 1 or count > MAX_BYTES: file.close(); return bad("READ_SIZE")
+	var bytes := file.get_buffer(count)
+	var error := file.get_error()
+	file.close()
+	if bytes.size() != count or error not in [OK, ERR_FILE_EOF]: return bad("READ_INCOMPLETE")
+	if not _valid_utf8(bytes): return bad("UTF8")
+	var raw := bytes.get_string_from_utf8()
+	if raw.to_utf8_buffer() != bytes or "\u0000" in raw: return bad("UTF8")
+	return {"ok": true, "raw": raw, "file_sha256": FileAccess.get_sha256(path)}
+
+func _decode(raw: String) -> Dictionary:
+	var parser := JSON.new()
+	if parser.parse(raw) != OK: return bad("ENVELOPE_JSON")
+	var value: Variant = parser.data
+	if typeof(value) != TYPE_DICTIONARY or value.size() != FIELDS.size(): return bad("ENVELOPE_FIELDS")
+	for key in value:
+		if typeof(key) != TYPE_STRING or key not in FIELDS or typeof(value[key]) != TYPE_STRING: return bad("ENVELOPE_TYPES")
+	if value.magic != "LH_STEAM_RECEIPT_JOURNAL" or value.version != "1" or value.app != APP or value.owner != owner: return bad("IDENTITY")
+	if not value.revision.is_valid_int() or value.revision != str(int(value.revision)) or int(value.revision) < 1 or int(value.revision) > 2147483647: return bad("REVISION")
+	if value.payload_bytes != str(value.payload.to_utf8_buffer().size()) or value.payload_sha256 != value.payload.sha256_text(): return bad("PAYLOAD_HASH")
+	if value.previous_sha256.length() != 64: return bad("PREVIOUS_HASH")
+	var document_parser := JSON.new()
+	if document_parser.parse(value.payload) != OK: return bad("DOCUMENT_JSON")
+	var model := Outbox.new(Receipt)
+	var opened: Dictionary = model.open_document(document_parser.data, owner)
+	if not opened.ok: return opened
+	if int(model.capture().revision) != int(value.revision): return bad("DOCUMENT_REVISION")
+	return {"ok": true, "revision": int(value.revision), "previous": value.previous_sha256, "document": model.capture(), "file_sha256": raw.sha256_text(), "payload_sha256": value.payload_sha256}
+
+func _verified(name: String) -> Dictionary:
+	var read := _read(directory.path_join(name))
+	if not read.ok: return read
+	return _decode(read.raw)
+
+func inventory() -> Dictionary:
+	var guard := _guard()
+	if not guard.ok: return guard
+	var items := {}
+	var folder := DirAccess.open(directory)
+	for name in folder.get_files():
+		items[name] = FileAccess.get_sha256(directory.path_join(name))
+	for name in folder.get_directories():
+		if name not in ["writing", "recovering"]: return bad("UNKNOWN_DIRECTORY")
+		var child := DirAccess.open(directory.path_join(name))
+		if child == null or not child.get_directories().is_empty(): return bad("LOCK_SHAPE")
+		items[name + "/"] = "directory"
+		for leaf in child.get_files():
+			if leaf != "owner.json" or child.is_link(leaf): return bad("LOCK_SHAPE")
+			items[name + "/" + leaf] = FileAccess.get_sha256(directory.path_join(name).path_join(leaf))
+	return {"ok": true, "items": items}
+
+func _chain() -> Dictionary:
+	var guard := _guard()
+	if not guard.ok: return guard
+	var folder := DirAccess.open(directory)
+	var names: Array[String] = []
+	for name in folder.get_files():
+		if name == "receipt.pending": continue
+		if not name.begins_with("record_") or not name.ends_with(".json") or name.length() != 22: return bad("UNKNOWN_FILE")
+		names.append(name)
+	if names.size() > MAX_RECORDS: return bad("JOURNAL_LIMIT")
+	names.sort()
+	var current := {"ok": true, "revision": 0, "file_sha256": ZERO, "document": {}}
+	for name in names:
+		var next := _verified(name)
+		if not next.ok: return next
+		if name != "record_%010d.json" % next.revision or next.revision != current.revision + 1 or next.previous != current.file_sha256: return bad("CHAIN_BROKEN")
+		current = next
+	return current
+
+func open_head() -> Dictionary:
+	var inv := inventory()
+	if not inv.ok: return inv
+	if inv.items.has("writing/") or inv.items.has("recovering/") or inv.items.has("receipt.pending"): return bad("RECOVERY_REQUIRED")
+	return _chain()
+
+func _write_new(path: String, raw: String, partial_checkpoint := false) -> Dictionary:
+	if FileAccess.file_exists(path) or DirAccess.dir_exists_absolute(path): return bad("TARGET_EXISTS")
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null: return bad("WRITE_OPEN")
+	var bytes := raw.to_utf8_buffer()
+	if partial_checkpoint:
+		var middle := floori(float(bytes.size()) * 0.5)
+		file.store_buffer(bytes.slice(0, middle))
+		file.flush()
+		Checkpoint.hit("pending_half")
+		file.store_buffer(bytes.slice(middle))
+	else: file.store_buffer(bytes)
+	file.flush()
+	var error := file.get_error()
+	var length := file.get_position()
+	file.close()
+	if error != OK or length != bytes.size(): return bad("WRITE_INCOMPLETE")
+	var read := _read(path)
+	if not read.ok or read.raw != raw: return bad("CLOSED_READBACK")
+	return {"ok": true}
+
+func acquire() -> Dictionary:
+	if _locked: return bad("REENTRANT_LOCK")
+	var opened := open_head()
+	if not opened.ok: return opened
+	if DirAccess.make_dir_absolute(directory.path_join("writing")) != OK: return bad("WRITER_BUSY")
+	_lock_raw = JSON.stringify({"version": "1", "owner": owner, "pid": str(OS.get_process_id()), "token": Crypto.new().generate_random_bytes(16).hex_encode()})
+	var written := _write_new(directory.path_join("writing/owner.json"), _lock_raw)
+	if not written.ok: return written
+	_locked = true
+	Checkpoint.hit("lock_acquired")
+	return opened
+
+func release() -> Dictionary:
+	if not _locked: return bad("LOCK_NOT_OWNED")
+	var read := _read(directory.path_join("writing/owner.json"))
+	if not read.ok or read.raw != _lock_raw: return bad("LOCK_CHANGED")
+	if DirAccess.remove_absolute(directory.path_join("writing/owner.json")) != OK or DirAccess.remove_absolute(directory.path_join("writing")) != OK: return bad("LOCK_RELEASE")
+	_locked = false
+	return {"ok": true}
+
+func commit_locked(expected_revision: int, expected_sha: String, proposal: Dictionary) -> Dictionary:
+	if not _locked: return bad("LOCK_NOT_OWNED")
+	var guard := _guard()
+	if not guard.ok: return guard
+	var read := _read(directory.path_join("writing/owner.json"))
+	if not read.ok or read.raw != _lock_raw or DirAccess.dir_exists_absolute(directory.path_join("recovering")): return bad("LOCK_CHANGED")
+	var current := _chain()
+	if not current.ok: return current
+	if current.revision != expected_revision or current.file_sha256 != expected_sha: return bad("CAS_CHANGED")
+	if current.revision >= MAX_RECORDS or FileAccess.file_exists(directory.path_join("receipt.pending")): return bad("JOURNAL_LIMIT_OR_RESIDUE")
+	var raw: String = JSON.stringify(proposal.document)
+	if raw.sha256_text() != proposal.sha256: return bad("PREPARATION_HASH")
+	var envelope := JSON.stringify({"magic": "LH_STEAM_RECEIPT_JOURNAL", "version": "1", "app": APP, "owner": owner, "revision": str(expected_revision + 1), "previous_sha256": expected_sha, "payload_bytes": str(raw.to_utf8_buffer().size()), "payload_sha256": proposal.sha256, "payload": raw})
+	var checked := _decode(envelope)
+	if not checked.ok: return checked
+	var written := _write_new(directory.path_join("receipt.pending"), envelope, true)
+	if not written.ok: return written
+	Checkpoint.hit("pending_verified")
+	var destination := "record_%010d.json" % checked.revision
+	if FileAccess.file_exists(directory.path_join(destination)): return bad("TARGET_EXISTS")
+	if DirAccess.rename_absolute(directory.path_join("receipt.pending"), directory.path_join(destination)) != OK: return bad("RENAME")
+	Checkpoint.hit("record_renamed")
+	var verified := _verified(destination)
+	if not verified.ok or verified.file_sha256 != checked.file_sha256: return bad("FINAL_READBACK")
+	Checkpoint.hit("record_verified")
+	return verified
+
+func inspect_recovery() -> Dictionary:
+	var inv := inventory()
+	if not inv.ok: return inv
+	if inv.items.has("recovering/"): return bad("RECOVERY_WRITER_OR_RESIDUE")
+	var current := _chain()
+	if not current.ok: return current
+	if not inv.items.has("writing/owner.json"): return bad("UNKNOWN_OR_MISSING_LOCK")
+	var lock := _read(directory.path_join("writing/owner.json"))
+	if not lock.ok: return lock
+	var metadata: Variant = JSON.parse_string(lock.raw)
+	if typeof(metadata) != TYPE_DICTIONARY or metadata.size() != 4 or not metadata.has_all(["version", "owner", "pid", "token"]): return bad("LOCK_METADATA")
+	if metadata.version != "1" or metadata.owner != owner or typeof(metadata.pid) != TYPE_STRING or not metadata.pid.is_valid_int() or str(int(metadata.pid)) != metadata.pid or int(metadata.pid) <= 0 or not Receipt.new()._token(metadata.token): return bad("LOCK_METADATA")
+	if OS.is_process_running(int(metadata.pid)): return bad("WRITER_ALIVE")
+	var action := "release_committed_lock"
+	if inv.items.has("receipt.pending"):
+		var pending := _verified("receipt.pending")
+		if not pending.ok: return pending
+		if pending.revision != current.revision + 1 or pending.previous != current.file_sha256: return bad("PENDING_CHAIN")
+		action = "forward_pending"
+	return {"ok": true, "inventory": inv.items, "action": action, "head_revision": current.revision, "head_sha256": current.file_sha256, "dead_pid": int(metadata.pid)}
+
+func recover(plan: Dictionary) -> Dictionary:
+	if _locked: return bad("REENTRANT_RECOVERY")
+	var fresh := inspect_recovery()
+	if not fresh.ok: return fresh
+	if fresh != plan: return bad("RECOVERY_PLAN_CHANGED")
+	# All normal commits still see the original writing directory. Another recovery
+	# must win this atomic mkdir before it may alter that directory.
+	if DirAccess.make_dir_absolute(directory.path_join("recovering")) != OK: return bad("RECOVERY_BUSY")
+	var inv := inventory()
+	if not inv.ok: return inv
+	inv.items.erase("recovering/")
+	if inv.items != plan.inventory or OS.is_process_running(plan.dead_pid): return bad("RECOVERY_CAS_CHANGED")
+	if plan.action == "forward_pending":
+		var name := "record_%010d.json" % (int(plan.head_revision) + 1)
+		if FileAccess.file_exists(directory.path_join(name)) or DirAccess.rename_absolute(directory.path_join("receipt.pending"), directory.path_join(name)) != OK: return bad("RECOVERY_RENAME")
+	var checked := _chain()
+	if not checked.ok: return checked
+	if DirAccess.remove_absolute(directory.path_join("writing/owner.json")) != OK or DirAccess.remove_absolute(directory.path_join("writing")) != OK: return bad("RECOVERY_LOCK_RELEASE")
+	if DirAccess.remove_absolute(directory.path_join("recovering")) != OK: return bad("RECOVERY_FINISH")
+	return open_head()

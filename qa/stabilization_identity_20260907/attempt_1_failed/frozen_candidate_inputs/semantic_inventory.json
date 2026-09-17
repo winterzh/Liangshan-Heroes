@@ -1,0 +1,2993 @@
+{
+  "status": "static_verified_runtime_pending",
+  "source_creation_rows": 350,
+  "statuses": {
+    "developer_fixture_fresh_allocator_only": 135,
+    "shared_runtime_reviewed": 8,
+    "level_guarded_or_transaction_reviewed": 207
+  },
+  "creation_calls": [
+    {
+      "path": "scripts/battle.gd",
+      "line": 612,
+      "method": "_build_test",
+      "code": "var wkr := spawn_unit(\"lou_luo\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(c + Vector2i(-4, 0))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 639,
+      "method": "_build_test",
+      "code": "var w2 := spawn_unit(\"lou_luo\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(c + Vector2i(-3, 3))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 766,
+      "method": "spawn_at",
+      "code": "var u := spawn_unit(key, faction, map.cell_to_world(at))",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 859,
+      "method": "spawn_group",
+      "code": "var u := spawn_unit(key, faction, map.cell_to_world(cell))",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 1457,
+      "method": "_try_place_building",
+      "code": "_start_construction(key, cell, half)",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 1464,
+      "method": "_start_construction",
+      "code": "var site := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 1495,
+      "method": "ai_start_construction",
+      "code": "var site := spawn_unit(key, faction, map.cell_to_world(cell))",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2126,
+      "method": "on_unit_trained",
+      "code": "var u := spawn_unit(key, bld.faction, map.cell_to_world(cell))",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2484,
+      "method": "_perf_bench_setup",
+      "code": "var h := spawn_unit(heroes[hi], Unit.FACTION_LIANG, c + Vector2(-140, -100 + hi * 30))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2492,
+      "method": "_perf_bench_setup",
+      "code": "var e := spawn_unit(ek[i % 3], Unit.FACTION_GUAN, c + Vector2(340, -160) + off)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3239,
+      "method": "_eco_build",
+      "code": "ai_start_construction(key, cell, Unit.FACTION_LIANG, builder)",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 9354,
+      "method": "_do_summon",
+      "code": "var su := spawn_unit(skey, caster.faction, pos)",
+      "status": "shared_runtime_reviewed"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10603,
+      "method": "_combat_stats_selftest",
+      "code": "var hero := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10604,
+      "method": "_combat_stats_selftest",
+      "code": "var foe_a := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(56, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10605,
+      "method": "_combat_stats_selftest",
+      "code": "var foe_b := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(72, 16))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10606,
+      "method": "_combat_stats_selftest",
+      "code": "var foe_attacker := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(-56, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10607,
+      "method": "_combat_stats_selftest",
+      "code": "var summon := spawn_unit(\"tiger_summon\", Unit.FACTION_LIANG, origin + Vector2(16, 48))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10611,
+      "method": "_combat_stats_selftest",
+      "code": "var tank := spawn_unit(\"li_kui\", Unit.FACTION_LIANG, origin + Vector2(-16, 64))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10638,
+      "method": "_combat_stats_selftest",
+      "code": "var brawn_target := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(-16, 140))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10724,
+      "method": "_hua_rework_selftest",
+      "code": "var hua := spawn_unit(\"hua_rong\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10725,
+      "method": "_hua_rework_selftest",
+      "code": "var lane := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(150, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10726,
+      "method": "_hua_rework_selftest",
+      "code": "var pin_target := spawn_unit(\"guan_musket\", Unit.FACTION_GUAN, origin + Vector2(280, 20))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10727,
+      "method": "_hua_rework_selftest",
+      "code": "var enemy_hero := spawn_unit(\"hu_yanzhuo\", Unit.FACTION_GUAN, origin + Vector2(360, -20))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10728,
+      "method": "_hua_rework_selftest",
+      "code": "var cata := spawn_unit(\"siege_cata\", Unit.FACTION_GUAN, origin + Vector2(300, 60))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10820,
+      "method": "_lin_rework_selftest",
+      "code": "var lin := spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10821,
+      "method": "_lin_rework_selftest",
+      "code": "var foot := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(100, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10822,
+      "method": "_lin_rework_selftest",
+      "code": "var cav := spawn_unit(\"guan_qi\", Unit.FACTION_GUAN, origin + Vector2(155, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10823,
+      "method": "_lin_rework_selftest",
+      "code": "var hero := spawn_unit(\"hu_yanzhuo\", Unit.FACTION_GUAN, origin + Vector2(215, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10824,
+      "method": "_lin_rework_selftest",
+      "code": "var helper := spawn_unit(\"guan_dao\", Unit.FACTION_LIANG, origin + Vector2(-45, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10877,
+      "method": "_lin_rework_selftest",
+      "code": "var stack_target := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(25, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10931,
+      "method": "_lin_rework_selftest",
+      "code": "var late_hero := spawn_unit(\"hua_rong\", Unit.FACTION_GUAN, origin + Vector2(250, 15))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10941,
+      "method": "_lin_rework_selftest",
+      "code": "var ai_low := spawn_unit(\"hu_yanzhuo\", Unit.FACTION_GUAN, origin + Vector2(430, -30))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10942,
+      "method": "_lin_rework_selftest",
+      "code": "var ai_ranged := spawn_unit(\"hua_rong\", Unit.FACTION_GUAN, origin + Vector2(180, 30))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10988,
+      "method": "_item_selftest",
+      "code": "var hero := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 10989,
+      "method": "_item_selftest",
+      "code": "var receiver := spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, origin + Vector2(80, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11019,
+      "method": "_item_selftest",
+      "code": "var foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(120, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11122,
+      "method": "_kit2_selftest",
+      "code": "var vic := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(Vector2i(11, 20))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11204,
+      "method": "_kit2_selftest",
+      "code": "var friend := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(Vector2i(41, 40))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11249,
+      "method": "_rwt_hero",
+      "code": "var h := spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(cell)))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11263,
+      "method": "_rwt_foe",
+      "code": "return spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(cell)))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11273,
+      "method": "_rework_selftest",
+      "code": "var ally := spawn_unit(\"liang_qiang\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(Vector2i(9, 8))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11372,
+      "method": "_rework_selftest",
+      "code": "var wally := spawn_unit(\"liang_qiang\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(Vector2i(15, 20))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11415,
+      "method": "_ability_cast_selftest",
+      "code": "var fu := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(base + Vector2i(2 + i % 3, 2 + i / 3))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11425,
+      "method": "_ability_cast_selftest",
+      "code": "var h := spawn_unit(String(key), Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-3, 0))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11508,
+      "method": "_economy_selftest",
+      "code": "var hero := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-3, 0))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11525,
+      "method": "_economy_selftest",
+      "code": "var cav := spawn_unit(\"liang_ma\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-2, 2))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11563,
+      "method": "_economy_selftest",
+      "code": "var mu := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-4, 1))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11565,
+      "method": "_economy_selftest",
+      "code": "var foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, mu.position + Vector2(20, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11569,
+      "method": "_economy_selftest",
+      "code": "var cu := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-3, 3))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11575,
+      "method": "_economy_selftest",
+      "code": "var far_foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, cu.position + Vector2(120, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11590,
+      "method": "_economy_selftest",
+      "code": "var twr := spawn_unit(\"arrow_tower\", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(base + Vector2i(-6, 5))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11593,
+      "method": "_economy_selftest",
+      "code": "var tgt := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, twr.position + Vector2(30, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11611,
+      "method": "_economy_selftest",
+      "code": "_start_construction(\"house\", rcell, building_footprint_half(\"house\"))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11616,
+      "method": "_economy_selftest",
+      "code": "var newwkr := spawn_unit(\"lou_luo\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(2, -4))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11640,
+      "method": "_economy_selftest",
+      "code": "var dbld := spawn_unit(\"depot\", Unit.FACTION_LIANG, map.cell_to_world(dcell))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11647,
+      "method": "_economy_selftest",
+      "code": "var dunit := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-4, -5))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11664,
+      "method": "_economy_selftest",
+      "code": "var rw := spawn_unit(\"lou_luo\", Unit.FACTION_LIANG, gnode.position + Vector2(40, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11667,
+      "method": "_economy_selftest",
+      "code": "var bs := spawn_unit(\"house\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(5, -2))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11693,
+      "method": "_economy_selftest",
+      "code": "var melee_u := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(0, 6))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11694,
+      "method": "_economy_selftest",
+      "code": "var ranged_u := spawn_unit(\"liang_gong\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(1, 6))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11696,
+      "method": "_economy_selftest",
+      "code": "spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(2, 6)))),",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11697,
+      "method": "_economy_selftest",
+      "code": "spawn_unit(\"liang_gong\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(3, 6))))]",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11729,
+      "method": "_economy_selftest",
+      "code": "var pfoe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, pv.position + Vector2(30, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11755,
+      "method": "_economy_selftest",
+      "code": "var gtow := spawn_unit(\"arrow_tower\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-7, -2))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11759,
+      "method": "_economy_selftest",
+      "code": "var garch := spawn_unit(\"liang_gong\", Unit.FACTION_LIANG, gtow.position + Vector2(20, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11767,
+      "method": "_economy_selftest",
+      "code": "var genemy := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, gtow.position + Vector2(40, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11784,
+      "method": "_economy_selftest",
+      "code": "var gtow2 := spawn_unit(\"arrow_tower\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(base + Vector2i(-9, 5))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11789,
+      "method": "_economy_selftest",
+      "code": "var garch2 := spawn_unit(\"liang_gong\", Unit.FACTION_LIANG, gtow2.position + Vector2(18, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11843,
+      "method": "_economy_selftest",
+      "code": "var hidden_spawn := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, map.cell_to_world(dark_cell))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11881,
+      "method": "_eco_research_selftest",
+      "code": "var hall2 := spawn_unit(\"hall\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(origin + Vector2i(7, 0))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11884,
+      "method": "_eco_research_selftest",
+      "code": "var bar1 := spawn_unit(\"barracks\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(origin + Vector2i(8, 3))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11885,
+      "method": "_eco_research_selftest",
+      "code": "var bar2 := spawn_unit(\"barracks\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(origin + Vector2i(10, 3))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11941,
+      "method": "_amove_side_selftest",
+      "code": "var mover := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11942,
+      "method": "_amove_side_selftest",
+      "code": "var side_foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(165.0, 0.0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11964,
+      "method": "_shiftbuild_selftest",
+      "code": "var w := spawn_unit(\"lou_luo\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11970,
+      "method": "_shiftbuild_selftest",
+      "code": "var st := spawn_unit(\"house\", Unit.FACTION_LIANG, origin + Vector2(80.0 + 40.0 * float(k), 40.0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12004,
+      "method": "_tech_selftest",
+      "code": "var hero := spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12005,
+      "method": "_tech_selftest",
+      "code": "var sol := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(64, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12047,
+      "method": "_towertrap_selftest",
+      "code": "var tw := spawn_unit(tkey, Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12050,
+      "method": "_towertrap_selftest",
+      "code": "var foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(90, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12059,
+      "method": "_towertrap_selftest",
+      "code": "var altar := spawn_unit(\"altar_tower\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12062,
+      "method": "_towertrap_selftest",
+      "code": "var grunt := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(70, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12063,
+      "method": "_towertrap_selftest",
+      "code": "var ehero := spawn_unit(\"wang_huan\", Unit.FACTION_GUAN, origin + Vector2(0, 150))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12074,
+      "method": "_towertrap_selftest",
+      "code": "var v1 := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12082,
+      "method": "_towertrap_selftest",
+      "code": "var v2 := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12090,
+      "method": "_towertrap_selftest",
+      "code": "var v3 := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12113,
+      "method": "_towertrap_selftest",
+      "code": "var hbh := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12145,
+      "method": "_towertrap_selftest",
+      "code": "var eg := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(0, 80))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12171,
+      "method": "_towertrap_selftest",
+      "code": "var gh := spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12172,
+      "method": "_towertrap_selftest",
+      "code": "var gnat := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin + Vector2(40, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12184,
+      "method": "_towertrap_selftest",
+      "code": "var lg := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, lanes_t[0])",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12200,
+      "method": "_towertrap_selftest",
+      "code": "var route_gong := spawn_unit(\"gongsun_sheng\", Unit.FACTION_LIANG, lanes_t[0] if lanes_ok else origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12207,
+      "method": "_towertrap_selftest",
+      "code": "lane_foes.append(spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, lanes_t[2] + Vector2(float(fi % 3) * 12.0, float(fi / 3) * 12.0)))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12224,
+      "method": "_towertrap_selftest",
+      "code": "var mh_t := spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12284,
+      "method": "_defense_hardfix_selftest",
+      "code": "var probe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, outside)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12374,
+      "method": "_final_cleanup_selftest",
+      "code": "var foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12386,
+      "method": "_final_cleanup_selftest",
+      "code": "var hunter := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, origin + Vector2(320, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12423,
+      "method": "_final_cleanup_selftest",
+      "code": "var second_blocker := spawn_unit(\"house\", Unit.FACTION_LIANG, map.cell_to_world(second_cell))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12427,
+      "method": "_final_cleanup_selftest",
+      "code": "var blocker := spawn_unit(\"house\", Unit.FACTION_LIANG, origin)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12510,
+      "method": "_hover_selftest",
+      "code": "var t_tow := spawn_unit(\"arrow_tower\", Unit.FACTION_LIANG, ht_lp)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12513,
+      "method": "_hover_selftest",
+      "code": "var t_arch := spawn_unit(\"liang_gong\", Unit.FACTION_LIANG, ht_lp + Vector2(18, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12523,
+      "method": "_hover_selftest",
+      "code": "var t_hero := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, ht_lp + Vector2(18, 6))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12540,
+      "method": "_hover_selftest",
+      "code": "var t_h2 := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, t_hall.position + Vector2(40, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12625,
+      "method": "_artshot",
+      "code": "var h := spawn_unit(heroes[i], Unit.FACTION_LIANG, hp)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12634,
+      "method": "_artshot",
+      "code": "var f := spawn_unit(foes[i], Unit.FACTION_GUAN, fp)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12697,
+      "method": "_info_ui_selftest",
+      "code": "spawn_unit(key, Unit.FACTION_LIANG, map.cell_to_world(cell))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12913,
+      "method": "_huarong_test",
+      "code": "var hr := spawn_unit(\"hua_rong\", Unit.FACTION_LIANG, c)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12915,
+      "method": "_huarong_test",
+      "code": "var hero_tgt := spawn_unit(\"hu_yanzhuo\", Unit.FACTION_GUAN, center)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12920,
+      "method": "_huarong_test",
+      "code": "var mob := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, center + Vector2(randf_range(-55, 55), randf_range(-38, 38)))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12991,
+      "method": "_cmdcard_test",
+      "code": "hero = spawn_unit(\"hua_rong\", Unit.FACTION_LIANG, hall.position + Vector2(80, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15938,
+      "method": "_armor_selftest",
+      "code": "var qiang := spawn_unit(\"liang_qiang\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(o + Vector2(40, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15939,
+      "method": "_armor_selftest",
+      "code": "var qi := spawn_unit(\"guan_qi\", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(map.world_to_cell(o + Vector2(-40, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15940,
+      "method": "_armor_selftest",
+      "code": "var gong := spawn_unit(\"liang_gong\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(o + Vector2(0, 40)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15941,
+      "method": "_armor_selftest",
+      "code": "var dao := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(map.world_to_cell(o + Vector2(0, -40)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15977,
+      "method": "_newhero_selftest",
+      "code": "var gong := spawn_unit(\"gongsun_sheng\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(60, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15978,
+      "method": "_newhero_selftest",
+      "code": "var wus := spawn_unit(\"wu_song\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(-60, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15979,
+      "method": "_newhero_selftest",
+      "code": "var lik := spawn_unit(\"li_kui\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(100, -60)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 15980,
+      "method": "_newhero_selftest",
+      "code": "var foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(0, 64)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16109,
+      "method": "_newhero_selftest",
+      "code": "var cleave_primary := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, wus.position + Vector2(34, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16110,
+      "method": "_newhero_selftest",
+      "code": "var cleave_side := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, wus.position + Vector2(78, 8))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16182,
+      "method": "_newhero_selftest",
+      "code": "var axe_near_a := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, lik.position + Vector2(36, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16183,
+      "method": "_newhero_selftest",
+      "code": "var axe_near_b := spawn_unit(\"guan_qi\", Unit.FACTION_GUAN, lik.position + Vector2(92, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16184,
+      "method": "_newhero_selftest",
+      "code": "var axe_far := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, lik.position + Vector2(132, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16242,
+      "method": "_newhero_selftest",
+      "code": "var song := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(0, -64)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16281,
+      "method": "_newhero_selftest",
+      "code": "var banner_troop := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, song.position + Vector2(24, 0))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16527,
+      "method": "_autocam_selftest",
+      "code": "var ha := spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(A))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16531,
+      "method": "_autocam_selftest",
+      "code": "spawned.append(spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, A + Vector2(24 + k * 18, 0)))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16534,
+      "method": "_autocam_selftest",
+      "code": "var hb := spawn_unit(\"hua_rong\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(B))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16538,
+      "method": "_autocam_selftest",
+      "code": "spawned.append(spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, B + Vector2(20 + (k % 3) * 22, (k / 3) * 22)))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16539,
+      "method": "_autocam_selftest",
+      "code": "spawned.append(spawn_unit(\"hu_yanzhuo\", Unit.FACTION_GUAN, B + Vector2(0, 30)))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16609,
+      "method": "_automicro_selftest",
+      "code": "var lin := spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(0, -40)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16610,
+      "method": "_automicro_selftest",
+      "code": "var li := spawn_unit(\"li_kui\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(-40, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16611,
+      "method": "_automicro_selftest",
+      "code": "var wu := spawn_unit(\"wu_song\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(40, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16612,
+      "method": "_automicro_selftest",
+      "code": "var hua := spawn_unit(\"hua_rong\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(0, 40)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16613,
+      "method": "_automicro_selftest",
+      "code": "var song := spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(-40, -40)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16614,
+      "method": "_automicro_selftest",
+      "code": "var gong := spawn_unit(\"gongsun_sheng\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(40, -40)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16624,
+      "method": "_automicro_selftest",
+      "code": "var ecav := spawn_unit(\"guan_qi\", Unit.FACTION_GUAN, park)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16625,
+      "method": "_automicro_selftest",
+      "code": "var emel := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, park)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16626,
+      "method": "_automicro_selftest",
+      "code": "var ehero := spawn_unit(\"hu_yanzhuo\", Unit.FACTION_GUAN, park)",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16824,
+      "method": "_automicro_selftest",
+      "code": "var troop := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG, map.cell_to_world(map.nearest_open(map.world_to_cell(origin + Vector2(50, 0)))))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16916,
+      "method": "_automicro_selftest",
+      "code": "var dense_friend := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG,",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16920,
+      "method": "_automicro_selftest",
+      "code": "var sparse_friend := spawn_unit(\"liang_dao\", Unit.FACTION_LIANG,",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 16929,
+      "method": "_automicro_selftest",
+      "code": "var sparse_foe := spawn_unit(\"guan_dao\", Unit.FACTION_GUAN, sparse_center + Vector2(-35, 25))",
+      "status": "developer_fixture_fresh_allocator_only"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "line": 59,
+      "method": "deploy",
+      "code": "hall = b.spawn_at(\"hall\", Unit.FACTION_LIANG, HALL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "line": 60,
+      "method": "deploy",
+      "code": "b.spawn_at(\"gold_mine\", Unit.FACTION_LIANG, Vector2i(5, 20))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "line": 62,
+      "method": "deploy",
+      "code": "b.spawn_at(\"tree\", Unit.FACTION_LIANG, c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "line": 64,
+      "method": "deploy",
+      "code": "b.spawn_at(\"lou_luo\", Unit.FACTION_LIANG, c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "line": 109,
+      "method": "_arena_spawn",
+      "code": "for u in b.spawn_group(String(k), int(counts[k]), Unit.FACTION_GUAN, SPAWN, target):",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "line": 116,
+      "method": "_arena_spawn",
+      "code": "for u in b.spawn_group(boss, 1, Unit.FACTION_GUAN, SPAWN, target):",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "line": 139,
+      "method": "deploy",
+      "code": "var u: Unit = b.spawn_at(SEVEN[i], Unit.FACTION_LIANG, Vector2i(19 + i % 4, 15 + i / 4))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "line": 145,
+      "method": "deploy",
+      "code": "var bundle: Unit = b.spawn_at(\"treasure_cart\", Unit.FACTION_GUAN, Vector2i(39 + i, 20))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "line": 434,
+      "method": "_ensure_bai",
+      "code": "bai = b.spawn_at(\"bai_sheng\", Unit.FACTION_LIANG, Vector2i(32, 25))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "line": 668,
+      "method": "_start_convoy",
+      "code": "yang = b.spawn_at(\"yang_zhi\", Unit.FACTION_GUAN, GATE_E + Vector2i(0, -1))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "line": 671,
+      "method": "_start_convoy",
+      "code": "convoy.append(b.spawn_at(key, Unit.FACTION_GUAN, GATE_E + Vector2i(0, 1)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "line": 673,
+      "method": "_start_convoy",
+      "code": "convoy.append(b.spawn_at(\"jun_han\", Unit.FACTION_GUAN, GATE_E + Vector2i(-i % 3, i % 3 - 1)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 151,
+      "method": "deploy",
+      "code": "scaffold = b.spawn_at(\"scaffold\", Unit.FACTION_LIANG, SCAFFOLD)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 153,
+      "method": "deploy",
+      "code": "song_bound = b.spawn_at(\"song_jiang_bound\", Unit.FACTION_LIANG, SCAFFOLD + Vector2i(-1, 0))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 154,
+      "method": "deploy",
+      "code": "dai_bound = b.spawn_at(\"dai_zong_bound\", Unit.FACTION_LIANG, SCAFFOLD + Vector2i(1, 0))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 158,
+      "method": "deploy",
+      "code": "var guard: Unit = b.spawn_at(\"guan_zhanzi\", Unit.FACTION_GUAN, SCAFFOLD + off)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 161,
+      "method": "deploy",
+      "code": "var guard: Unit = b.spawn_at(\"guan_laozi\", Unit.FACTION_GUAN, SCAFFOLD + off)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 163,
+      "method": "deploy",
+      "code": "cai = b.spawn_at(\"cai_jiu\", Unit.FACTION_GUAN, YAMEN)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 167,
+      "method": "deploy",
+      "code": "var u: Unit = b.spawn_at(spec[0], Unit.FACTION_LIANG, spec[1])",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 177,
+      "method": "deploy",
+      "code": "var temple: Unit = b.spawn_at(\"tavern\", Unit.FACTION_LIANG, BAILONG + Vector2i(1, -1))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 223,
+      "method": "on_mission_action",
+      "code": "song_freed = b.spawn_unit(\"song_jiang\", Unit.FACTION_LIANG, at)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 237,
+      "method": "on_mission_action",
+      "code": "dai_freed = b.spawn_unit(\"dai_zong\", Unit.FACTION_LIANG, at)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 363,
+      "method": "_begin_river_escape",
+      "code": "var sailor: Unit = b.spawn_at(key, Unit.FACTION_LIANG, DOCK_C + Vector2i(-2, -2))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 410,
+      "method": "_spawn_pursuit_wave",
+      "code": "var pursuers: Array = b.spawn_group(\"guan_dao\", 3, Unit.FACTION_GUAN, PLAZA_C, target)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 514,
+      "method": "_spawn_wave1",
+      "code": "b.spawn_group(\"guan_dao\", 3, Unit.FACTION_GUAN, GATE_N, b.map.cell_to_world(PLAZA_C))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 515,
+      "method": "_spawn_wave1",
+      "code": "b.spawn_group(\"guan_gong\", 2, Unit.FACTION_GUAN, GATE_E, b.map.cell_to_world(PLAZA_C))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 523,
+      "method": "_spawn_wave2",
+      "code": "var west_group: Array = b.spawn_group(\"guan_dao\", 3, Unit.FACTION_GUAN, GATE_E, b.map.cell_to_world(Vector2i(18, 34)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 524,
+      "method": "_spawn_wave2",
+      "code": "var south_group: Array = b.spawn_group(\"guan_gong\", 3, Unit.FACTION_GUAN, GATE_N, b.map.cell_to_world(Vector2i(27, 36)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 537,
+      "method": "_spawn_wave3",
+      "code": "b.spawn_group(\"guan_dao\", 3, Unit.FACTION_GUAN, GATE_E, b.map.cell_to_world(BAILONG))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 115,
+      "method": "_guard",
+      "code": "var u: Unit=b.spawn_at(key,1,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 126,
+      "method": "deploy",
+      "code": "var camp: Unit=b.spawn_at(\"barracks\",0,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 130,
+      "method": "deploy",
+      "code": "var cache: Unit=b.spawn_at(\"depot\",2,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 133,
+      "method": "deploy",
+      "code": "scaffold=b.spawn_at(\"scaffold\",0,SCAFFOLD)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 135,
+      "method": "deploy",
+      "code": "song_bound=b.spawn_at(\"song_jiang_bound\",0,SCAFFOLD+Vector2i(-1,0))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 136,
+      "method": "deploy",
+      "code": "dai_bound=b.spawn_at(\"dai_zong_bound\",0,SCAFFOLD+Vector2i(1,0))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 140,
+      "method": "deploy",
+      "code": "var u: Unit=b.spawn_at(record[0],0,record[1])",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 145,
+      "method": "deploy",
+      "code": "var u: Unit=b.spawn_at(record[0],0,record[1]); u.set_stance(Unit.STANCE_PASSIVE)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 156,
+      "method": "deploy",
+      "code": "post=b.spawn_at(\"barracks\",1,CITY_POST)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 158,
+      "method": "deploy",
+      "code": "temple=b.spawn_at(\"tavern\",0,BAILONG+Vector2i(1,-1))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "line": 204,
+      "method": "_free",
+      "code": "var rescued: Unit=b.spawn_unit(key,0,pos)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 150,
+      "method": "deploy",
+      "code": "shi = b.spawn_at(\"shi_xiu\", Unit.FACTION_LIANG, DEPLOY_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 151,
+      "method": "deploy",
+      "code": "song = b.spawn_at(\"song_jiang\", Unit.FACTION_LIANG, DEPLOY_CELL + Vector2i(1,2))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 153,
+      "method": "deploy",
+      "code": "b.spawn_at(\"liang_dao\",Unit.FACTION_LIANG,DEPLOY_CELL+c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 154,
+      "method": "deploy",
+      "code": "gate = b.spawn_at(\"zhu_gate\",Unit.FACTION_GUAN,GATE_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 177,
+      "method": "on_mission_action",
+      "code": "b.spawn_group(\"zhu_keke\",4,Unit.FACTION_GUAN,Vector2i(28,28),shi.position,1)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 305,
+      "method": "_free_scout_tick",
+      "code": "b.spawn_group(\"zhu_keke\",4,Unit.FACTION_GUAN,Vector2i(28,28),actor.position,1)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 544,
+      "method": "_second_day",
+      "code": "song = b.spawn_at(\"song_jiang\",Unit.FACTION_LIANG,DEPLOY_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 545,
+      "method": "_second_day",
+      "code": "lin = b.spawn_at(\"lin_chong\",Unit.FACTION_LIANG,Vector2i(42,21))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 546,
+      "method": "_second_day",
+      "code": "hua = b.spawn_at(\"hua_rong\",Unit.FACTION_LIANG,Vector2i(43,22))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 548,
+      "method": "_second_day",
+      "code": "var spear: Unit = b.spawn_at(\"liang_qiang\",Unit.FACTION_LIANG,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 553,
+      "method": "_second_day",
+      "code": "hu = b.spawn_at(\"hu_sanniang\",Unit.FACTION_GUAN,HU_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 559,
+      "method": "_second_day",
+      "code": "var guard: Unit = b.spawn_at(\"zhu_keke\",Unit.FACTION_GUAN,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 567,
+      "method": "_second_day",
+      "code": "gate = b.spawn_at(\"zhu_gate\",Unit.FACTION_GUAN,GATE_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 581,
+      "method": "_third_day",
+      "code": "song = b.spawn_at(\"song_jiang\",Unit.FACTION_LIANG,Vector2i(27,28))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 583,
+      "method": "_third_day",
+      "code": "b.spawn_at(spec[0],Unit.FACTION_LIANG,spec[1])",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 585,
+      "method": "_third_day",
+      "code": "b.spawn_at(\"liang_qiang\" if i%2==0 else \"liang_gong\",Unit.FACTION_LIANG,Vector2i(26+i%4,30+i/4))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 586,
+      "method": "_third_day",
+      "code": "sun = b.spawn_at(\"sun_li\",Unit.FACTION_LIANG,Vector2i(26,26))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 587,
+      "method": "_third_day",
+      "code": "gu = b.spawn_at(\"gu_dasao\",Unit.FACTION_LIANG,Vector2i(26,27))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 591,
+      "method": "_third_day",
+      "code": "var u = b.spawn_at(spec[0],Unit.FACTION_LIANG,spec[1])",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 595,
+      "method": "_third_day",
+      "code": "gate = b.spawn_at(\"zhu_gate\",Unit.FACTION_GUAN,GATE_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 600,
+      "method": "_third_day",
+      "code": "var u = b.spawn_at(spec[0],Unit.FACTION_GUAN,spec[1])",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "line": 605,
+      "method": "_third_day",
+      "code": "var u = b.spawn_at(\"zhu_keke\",Unit.FACTION_GUAN,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 115,
+      "method": "_guard",
+      "code": "var u: Unit = b.spawn_at(key, Unit.FACTION_GUAN, cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 123,
+      "method": "_resource",
+      "code": "var u: Unit = b.spawn_at(key, faction, cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 128,
+      "method": "deploy",
+      "code": "hall = b.spawn_at(\"hall\", Unit.FACTION_LIANG, CAMP)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 130,
+      "method": "deploy",
+      "code": "b.spawn_at(\"barracks\", Unit.FACTION_LIANG, Vector2i(55,37))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 131,
+      "method": "deploy",
+      "code": "song = b.spawn_at(\"song_jiang\", Unit.FACTION_LIANG, Vector2i(50,28))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 132,
+      "method": "deploy",
+      "code": "b.spawn_at(\"lin_chong\", Unit.FACTION_LIANG, Vector2i(49,29))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 133,
+      "method": "deploy",
+      "code": "for i in range(4): b.spawn_at(\"liang_qiang\" if i < 2 else \"liang_gong\", Unit.FACTION_LIANG, Vector2i(49+i,32))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 134,
+      "method": "deploy",
+      "code": "for i in range(6): workers.append(b.spawn_at(\"lou_luo\", Unit.FACTION_LIANG, Vector2i(53+i,23)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 141,
+      "method": "deploy",
+      "code": "gate = b.spawn_at(\"zhu_gate\",1,MAIN_GATE)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 144,
+      "method": "deploy",
+      "code": "side_gate = b.spawn_at(\"zhu_gate\",1,SIDE_GATE)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 151,
+      "method": "deploy",
+      "code": "var tower: Unit = b.spawn_at(\"arrow_tower\",1,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 153,
+      "method": "deploy",
+      "code": "outpost = b.spawn_at(\"barracks\",1,OUTPOST)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 159,
+      "method": "deploy",
+      "code": "enemy_base = b.spawn_at(\"hall\",1,Vector2i(10,26))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 166,
+      "method": "deploy",
+      "code": "for i in range(4): enemy_workers.append(b.spawn_at(\"lou_luo\",1,Vector2i(7+i,21)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 169,
+      "method": "deploy",
+      "code": "var u: Unit = b.spawn_at(PRISONERS[i],2,PRISON+Vector2i(i%3,i/3))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "line": 198,
+      "method": "_introduce_sun",
+      "code": "sun = b.spawn_at(\"sun_li\",0,Vector2i(52,25))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 127,
+      "method": "deploy",
+      "code": "xu = b.spawn_at(\"xu_ning\",Unit.FACTION_LIANG,Vector2i(16,40))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 128,
+      "method": "deploy",
+      "code": "var tang = b.spawn_at(\"tang_long\",Unit.FACTION_LIANG,Vector2i(17,42))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 131,
+      "method": "deploy",
+      "code": "var u = b.spawn_at(\"gou_lian\",Unit.FACTION_LIANG,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 166,
+      "method": "on_mission_action",
+      "code": "dummy = b.spawn_at(\"hook_training_dummy\",Unit.FACTION_GUAN,DRILL_APPROACH)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 270,
+      "method": "_deploy_battle",
+      "code": "jiangtai = b.spawn_at(\"jiangtai\",Unit.FACTION_LIANG,JIANGTAI_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 272,
+      "method": "_deploy_battle",
+      "code": "var hero = b.spawn_at(spec[0],Unit.FACTION_LIANG,spec[1])",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 276,
+      "method": "_deploy_battle",
+      "code": "xu = b.spawn_at(\"xu_ning\",Unit.FACTION_LIANG,Vector2i(26,31))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 283,
+      "method": "_deploy_battle",
+      "code": "var u = b.spawn_at(\"gou_lian\",Unit.FACTION_LIANG,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 323,
+      "method": "_spawn_battle_enemies",
+      "code": "han = b.spawn_at(\"han_tao\",Unit.FACTION_GUAN,_lane_gate(rear_lane_name)+Vector2i(-2,0))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 327,
+      "method": "_spawn_battle_enemies",
+      "code": "hu = b.spawn_at(\"hu_yanzhuo\",Unit.FACTION_GUAN,_lane_gate(front_lane_name)+Vector2i(-2,-2))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "line": 408,
+      "method": "_spawn_riders",
+      "code": "var u = b.spawn_at(\"lian_huan_ma\",Unit.FACTION_GUAN,from_cell+Vector2i(-i/3,(i%3-1)*2))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 104,
+      "method": "_guard",
+      "code": "var u: Unit=b.spawn_at(key,1,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 108,
+      "method": "_resource",
+      "code": "var u: Unit=b.spawn_at(key,0,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 112,
+      "method": "deploy",
+      "code": "hall=b.spawn_at(\"hall\",0,CAMP)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 114,
+      "method": "deploy",
+      "code": "b.spawn_at(\"barracks\",0,Vector2i(8,36))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 115,
+      "method": "deploy",
+      "code": "song=b.spawn_at(\"song_jiang\",0,Vector2i(14,29))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 116,
+      "method": "deploy",
+      "code": "xu=b.spawn_at(\"xu_ning\",0,Vector2i(15,31))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 117,
+      "method": "deploy",
+      "code": "for i in range(6): workers.append(b.spawn_at(\"lou_luo\",0,Vector2i(5+i,25)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 118,
+      "method": "deploy",
+      "code": "for i in range(6): b.spawn_at([\"gou_lian\",\"gou_lian\",\"liang_qiang\",\"liang_qiang\",\"liang_gong\",\"liang_gong\"][i],0,Vector2i(17+i%3,28+i/3))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 123,
+      "method": "deploy",
+      "code": "enemy_base=b.spawn_at(\"hall\",1,ENEMY_CAMP)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 126,
+      "method": "deploy",
+      "code": "var post: Unit=b.spawn_at(\"barracks\",1,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 144,
+      "method": "deploy",
+      "code": "for i in range(2): enemy_workers.append(b.spawn_at(\"lou_luo\",1,Vector2i(58,27+i*7)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "line": 160,
+      "method": "on_mission_action",
+      "code": "dummy=b.spawn_at(\"hook_training_dummy\",1,DRILL_ENTRY)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 121,
+      "method": "_guard",
+      "code": "var u: Unit=b.spawn_at(key,faction,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 126,
+      "method": "_resource",
+      "code": "var u: Unit=b.spawn_at(key,0,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 129,
+      "method": "deploy",
+      "code": "hall=b.spawn_at(\"hall\",0,HALL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 132,
+      "method": "deploy",
+      "code": "b.spawn_at(\"barracks\",0,Vector2i(24,37))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 133,
+      "method": "deploy",
+      "code": "song=b.spawn_at(\"song_jiang\",0,Vector2i(20,34))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 135,
+      "method": "deploy",
+      "code": "var u: Unit=b.spawn_at(record[0],0,record[1]); u.set_stance(Unit.STANCE_DEFEND)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 136,
+      "method": "deploy",
+      "code": "for i in range(6): workers.append(b.spawn_at(\"lou_luo\",0,Vector2i(10+i,31)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 146,
+      "method": "deploy",
+      "code": "posts=[b.spawn_at(\"barracks\",1,LAND_POST),b.spawn_at(\"shipyard\",1,SEA_POST)]",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 150,
+      "method": "deploy",
+      "code": "var tower: Unit=b.spawn_at(\"arrow_tower\",1,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "line": 311,
+      "method": "on_mission_action",
+      "code": "prisoner=b.spawn_at(\"gao_qiu\",0,LANDING)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 100,
+      "method": "_spawn_command",
+      "code": "hall=b.spawn_at(\"hall\",0,HALL_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 107,
+      "method": "_spawn_command",
+      "code": "commanders=[b.spawn_at(\"song_jiang\",0,Vector2i(18,34)),b.spawn_at(\"wu_yong\",0,Vector2i(19,36))]",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 117,
+      "method": "deploy",
+      "code": "fleet=[b.spawn_at(\"ruan_xiaoqi_boat\",0,Vector2i(41,33)),b.spawn_at(\"ruan_xiaoer_boat\",0,Vector2i(41,39)),",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 118,
+      "method": "deploy",
+      "code": "b.spawn_at(\"ruan_xiaowu_boat\",0,Vector2i(43,42)),b.spawn_at(\"liangshan_warship\",0,Vector2i(41,45)),b.spawn_at(\"liangshan_warship\",0,Vector2i(43,48))]",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 121,
+      "method": "deploy",
+      "code": "var archer=b.spawn_at(\"liang_gong\",0,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 124,
+      "method": "deploy",
+      "code": "var ship=b.spawn_at(\"imperial_warship\",1,Vector2i(40+i%3,5+i*3))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 247,
+      "method": "on_mission_action",
+      "code": "land_enemies.append(b.spawn_at(\"guan_qi\" if i%4==0 else \"guan_dao\",1,Vector2i(17+i%3,2+i/3)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 321,
+      "method": "on_mission_action",
+      "code": "gao=b.spawn_at(\"gao_qiu\",1,PRISONER_DOCK_LAND)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 325,
+      "method": "on_mission_action",
+      "code": "var rescuer=b.spawn_at(\"zhang_shun\",0,PRISONER_DOCK_LAND+Vector2i(-1,0))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 561,
+      "method": "_start_land",
+      "code": "fleet=[b.spawn_at(\"liu_tang_fireboat\",0,Vector2i(41,38)),b.spawn_at(\"ruan_xiaoer_boat\",0,Vector2i(40,34)),",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 562,
+      "method": "_start_land",
+      "code": "b.spawn_at(\"ruan_xiaowu_boat\",0,Vector2i(43,35)),b.spawn_at(\"liangshan_warship\",0,Vector2i(40,39)),b.spawn_at(\"liangshan_warship\",0,Vector2i(43,40))]",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 568,
+      "method": "_start_land",
+      "code": "wind_leader=b.spawn_at(\"gongsun_sheng\",0,FIRE_WIND_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 569,
+      "method": "_start_land",
+      "code": "fire_leader=b.spawn_at(\"liu_tang\",0,FIRE_LEADER_CELL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 572,
+      "method": "_start_land",
+      "code": "var ship=b.spawn_at(\"imperial_warship\",1,Vector2i(42,19+i*3))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 589,
+      "method": "_start_land_closure",
+      "code": "b.spawn_at(\"liang_qiang\" if i%2==0 else \"liang_gong\",0,Vector2i(24+i%5,25+i/5))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 590,
+      "method": "_start_land_closure",
+      "code": "b.spawn_at(\"lin_chong\",0,Vector2i(25,24))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 591,
+      "method": "_start_land_closure",
+      "code": "b.spawn_at(\"hua_rong\",0,Vector2i(27,26))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 604,
+      "method": "_start_final_fleet",
+      "code": "var ship=b.spawn_at(record[0],0,record[1]); ship.visual_scale=1.2; fleet.append(ship)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 608,
+      "method": "_start_final_fleet",
+      "code": "var ship=b.spawn_at(ship_key,1,Vector2i(40+i%3,8+i*3))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "line": 615,
+      "method": "_start_final_fleet",
+      "code": "flagship=b.spawn_at(\"gao_flagship\",1,Vector2i(42,5)); flagship.visual_scale=1.8; flagship.defeat_outcome=\"subdued\"",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 114,
+      "method": "deploy",
+      "code": "lin_freed = b.spawn_at(\"lin_chong\", Unit.FACTION_LIANG, Vector2i(43, 20))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 122,
+      "method": "deploy",
+      "code": "var g: Unit = b.spawn_at([\"dong_chao\", \"xue_ba\"][i], Unit.FACTION_GUAN, Vector2i(43 + i, 19 + i * 2))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 127,
+      "method": "deploy",
+      "code": "lu = b.spawn_at(\"lu_zhishen\", Unit.FACTION_LIANG, AMBUSH)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 263,
+      "method": "process",
+      "code": "lin_bound = b.spawn_unit(\"lin_chong_bound\", Unit.FACTION_LIANG, old_pos)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 348,
+      "method": "_begin_open_rescue",
+      "code": "lin_bound = b.spawn_unit(\"lin_chong_bound\", Unit.FACTION_LIANG, bind_at)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 536,
+      "method": "_finish_untie",
+      "code": "lin_freed = b.spawn_unit(\"lin_chong\", Unit.FACTION_LIANG, patient_pos)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "line": 121,
+      "method": "deploy",
+      "code": "wu = b.spawn_at(\"wu_song\", Unit.FACTION_LIANG, START_E)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "line": 125,
+      "method": "deploy",
+      "code": "shi = b.spawn_at(\"shi_en\", Unit.FACTION_LIANG, START_E + Vector2i(0, 1))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "line": 131,
+      "method": "deploy",
+      "code": "var tv: Unit = b.spawn_at(\"tavern\", Unit.FACTION_LIANG, cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "line": 136,
+      "method": "deploy",
+      "code": "menshen = b.spawn_at(\"jiang_menshen\", Unit.FACTION_GUAN, KUAIHUO)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "line": 141,
+      "method": "deploy",
+      "code": "sign = b.spawn_at(\"signboard\", Unit.FACTION_LIANG, SIGN)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 111,
+      "method": "_guard",
+      "code": "var u: Unit=b.spawn_at(key,1,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 115,
+      "method": "_resource",
+      "code": "var u: Unit=b.spawn_at(key,0,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 127,
+      "method": "deploy",
+      "code": "hall=b.spawn_at(\"hall\",0,CAMP)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 129,
+      "method": "deploy",
+      "code": "b.spawn_at(\"barracks\",0,Vector2i(24,58))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 130,
+      "method": "deploy",
+      "code": "strategist=b.spawn_at(\"wu_yong\",0,Vector2i(29,54))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 131,
+      "method": "deploy",
+      "code": "b.spawn_at(\"lu_zhishen\",0,Vector2i(30,52))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 132,
+      "method": "deploy",
+      "code": "b.spawn_at(\"wu_song\",0,Vector2i(32,52))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 133,
+      "method": "deploy",
+      "code": "for i in range(4): b.spawn_at(\"liang_qiang\" if i<2 else \"liang_gong\",0,Vector2i(29+i,51))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 134,
+      "method": "deploy",
+      "code": "for i in range(6): workers.append(b.spawn_at(\"lou_luo\",0,Vector2i(26+i,61)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 139,
+      "method": "deploy",
+      "code": "scout=b.spawn_at(\"shi_qian\",0,Vector2i(46,29))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 140,
+      "method": "deploy",
+      "code": "chai=b.spawn_at(\"chai_jin\",0,SAFEHOUSE+Vector2i(1,0))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 141,
+      "method": "deploy",
+      "code": "yue=b.spawn_at(\"yue_he\",0,SAFEHOUSE+Vector2i(2,1))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 147,
+      "method": "deploy",
+      "code": "gate=b.spawn_at(\"zhu_gate\",1,SOUTH_GATE)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 157,
+      "method": "deploy",
+      "code": "lu=b.spawn_at(\"lu_junyi\",2,Vector2i(18,16))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 158,
+      "method": "deploy",
+      "code": "shi=b.spawn_at(\"shi_xiu\",2,Vector2i(19,16))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 169,
+      "method": "deploy",
+      "code": "var post: Unit=b.spawn_at(\"barracks\",1,cell)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 172,
+      "method": "deploy",
+      "code": "enemy_hq=b.spawn_at(\"hall\",1,ENEMY_HQ)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 176,
+      "method": "deploy",
+      "code": "var worker: Unit=b.spawn_at(\"lou_luo\",1,Vector2i(47+i*3,11))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "line": 180,
+      "method": "deploy",
+      "code": "var tower: Unit=b.spawn_at(\"arrow_tower\",1,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 123,
+      "method": "deploy",
+      "code": "scout = b.spawn_at(\"shi_qian\",Unit.FACTION_LIANG,Vector2i(36,48))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 124,
+      "method": "deploy",
+      "code": "chai = b.spawn_at(\"chai_jin\",Unit.FACTION_LIANG,Vector2i(37,48))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 125,
+      "method": "deploy",
+      "code": "yue = b.spawn_at(\"yue_he\",Unit.FACTION_LIANG,Vector2i(38,48))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 127,
+      "method": "deploy",
+      "code": "gate = b.spawn_at(\"zhu_gate\",Unit.FACTION_GUAN,SOUTH_GATE)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 134,
+      "method": "deploy",
+      "code": "lu = b.spawn_at(\"lu_junyi\",Unit.FACTION_LIANG,Vector2i(18,16))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 135,
+      "method": "deploy",
+      "code": "shi = b.spawn_at(\"shi_xiu\",Unit.FACTION_LIANG,Vector2i(19,16))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 138,
+      "method": "deploy",
+      "code": "strategist = b.spawn_at(\"wu_yong\",Unit.FACTION_LIANG,Vector2i(26,48))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 140,
+      "method": "deploy",
+      "code": "outside_army.append(b.spawn_at(\"lu_zhishen\",Unit.FACTION_LIANG,Vector2i(29,47)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 141,
+      "method": "deploy",
+      "code": "outside_army.append(b.spawn_at(\"wu_song\",Unit.FACTION_LIANG,Vector2i(31,47)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 142,
+      "method": "deploy",
+      "code": "for i in range(8): outside_army.append(b.spawn_at(\"liang_qiang\" if i%2==0 else \"liang_gong\",Unit.FACTION_LIANG,Vector2i(27+i%4,49+i/4)))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 164,
+      "method": "deploy",
+      "code": "var u = b.spawn_at(\"lou_luo\",Unit.FACTION_LIANG,Vector2i(42+i,31))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 180,
+      "method": "_guard",
+      "code": "var u = b.spawn_at(key,Unit.FACTION_GUAN,c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "line": 719,
+      "method": "process",
+      "code": "b.spawn_group(\"guan_dao\",count,Unit.FACTION_GUAN,Vector2i(39,27),b.map.cell_to_world(Vector2i(30,33)),1)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/scenario.gd",
+      "line": 139,
+      "method": "deploy",
+      "code": "var u = b.spawn_at(String(e.get(\"key\", \"\")), _fac(e.get(\"faction\", \"LIANG\")), _cell(e.get(\"cell\", [0, 0])))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/scenario.gd",
+      "line": 223,
+      "method": "_spawn_wave",
+      "code": "var spawned: Array = b.spawn_group(String(g.get(\"key\", \"\")), int(g.get(\"n\", 1)), wf, gate_cell, target)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/scenario.gd",
+      "line": 232,
+      "method": "_spawn_wave",
+      "code": "var ru = b.spawn_at(String(e.get(\"key\", \"\")), _fac(e.get(\"faction\", \"LIANG\")), _cell(e.get(\"cell\", [0, 0])))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 326,
+      "method": "deploy",
+      "code": "hall = b.spawn_at(\"hall\", Unit.FACTION_LIANG, HALL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 333,
+      "method": "deploy",
+      "code": "var gm: Unit = b.spawn_at(\"gold_mine\", Unit.FACTION_LIANG, GOLD)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 340,
+      "method": "deploy",
+      "code": "b.spawn_at(\"tree\", Unit.FACTION_LIANG, c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 345,
+      "method": "deploy",
+      "code": "var gate: Unit = b.spawn_at(\"stockade_gate\", Unit.FACTION_LIANG, spec[1])",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 351,
+      "method": "deploy",
+      "code": "b.spawn_at(\"lou_luo\", Unit.FACTION_LIANG, c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 352,
+      "method": "deploy",
+      "code": "b.spawn_at(\"liang_dao\", Unit.FACTION_LIANG, Vector2i(17, 39))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 353,
+      "method": "deploy",
+      "code": "b.spawn_at(\"liang_dao\", Unit.FACTION_LIANG, Vector2i(19, 39))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 465,
+      "method": "_spawn_wave",
+      "code": "var spawned: Array = b.spawn_group(key, cnt, Unit.FACTION_GUAN, gate, hall_pos)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 474,
+      "method": "_spawn_wave",
+      "code": "var scata: Array = b.spawn_group(\"siege_cata\", n_cata, Unit.FACTION_GUAN, cgate, hall_pos)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 157,
+      "method": "deploy",
+      "code": "hall = b.spawn_at(\"hall\", Unit.FACTION_LIANG, HALL)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 158,
+      "method": "deploy",
+      "code": "b.spawn_at(\"gold_mine\", Unit.FACTION_LIANG, P_GOLD)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 159,
+      "method": "deploy",
+      "code": "b.spawn_at(\"gold_mine\", Unit.FACTION_LIANG, P_GOLD2)   # 双方各两座金矿(对等)：金是瓶颈，两座可同时下两人",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 162,
+      "method": "deploy",
+      "code": "b.spawn_at(\"tree\", Unit.FACTION_LIANG, c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 164,
+      "method": "deploy",
+      "code": "b.spawn_at(\"lou_luo\", Unit.FACTION_LIANG, c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 165,
+      "method": "deploy",
+      "code": "b.spawn_at(\"liang_dao\", Unit.FACTION_LIANG, Vector2i(20, 46))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 166,
+      "method": "deploy",
+      "code": "b.spawn_at(\"liang_dao\", Unit.FACTION_LIANG, Vector2i(21, 47))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 171,
+      "method": "deploy",
+      "code": "_p_king = b.spawn_at(\"song_jiang\", Unit.FACTION_LIANG, HALL + Vector2i(2, 2))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 172,
+      "method": "deploy",
+      "code": "_ai_king = b.spawn_at(\"gao_qiu\", _guan(), AI_BASE + Vector2i(-2, 2))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 177,
+      "method": "deploy",
+      "code": "ai_base = b.spawn_at(\"hall\", _guan(), AI_BASE)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 179,
+      "method": "deploy",
+      "code": "b.spawn_at(\"gold_mine\", Unit.FACTION_LIANG, AI_GOLD)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 180,
+      "method": "deploy",
+      "code": "b.spawn_at(\"gold_mine\", Unit.FACTION_LIANG, AI_GOLD2)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 183,
+      "method": "deploy",
+      "code": "b.spawn_at(\"tree\", Unit.FACTION_LIANG, c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 188,
+      "method": "deploy",
+      "code": "b.spawn_unit(\"lou_luo\", _guan(), b.map.cell_to_world(wc))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 190,
+      "method": "deploy",
+      "code": "var g: Unit = b.spawn_at(\"guan_dao\", _guan(), c)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 337,
+      "method": "_ai_workers",
+      "code": "var nw: Unit = b.spawn_unit(\"lou_luo\", _guan(), b.map.cell_to_world(wc))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 438,
+      "method": "_ai_build",
+      "code": "_pending_site = b.ai_start_construction(key, cell, _guan(), builder)   # 完工/失败前不推进 _build_i",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 477,
+      "method": "_ai_rebuild_missing",
+      "code": "_pending_site = b.ai_start_construction(String(k), b.map.nearest_open(cell), _guan(), builder)",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 555,
+      "method": "_ai_train",
+      "code": "var u: Unit = b.spawn_unit(pick[\"key\"], _guan(), b.map.cell_to_world(cell))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 580,
+      "method": "_ai_heroes",
+      "code": "var h: Unit = b.spawn_unit(key, _guan(), b.map.cell_to_world(cell))",
+      "status": "level_guarded_or_transaction_reviewed"
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "line": 609,
+      "method": "_ai_siege",
+      "code": "var u: Unit = b.spawn_unit(\"siege_ram\", _guan(), b.map.cell_to_world(cell))",
+      "status": "level_guarded_or_transaction_reviewed"
+    }
+  ],
+  "direct_Unit_constructors": [
+    {
+      "path": "scripts/battle.gd",
+      "line": 592,
+      "method": "_refresh_hot_patch_classes",
+      "code": "var probe := Unit.new()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 718,
+      "method": "spawn_unit",
+      "code": "var u := Unit.new()"
+    }
+  ],
+  "native_identity_and_frame_calls": [
+    {
+      "path": "scripts/battle.gd",
+      "line": 1228,
+      "method": "_resource_blocked",
+      "code": "var fr := int(Engine.get_physics_frames())"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 1232,
+      "method": "_resource_blocked",
+      "code": "var nid := node.get_instance_id()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 1943,
+      "method": "queue_train_multi",
+      "code": "return a.get_instance_id() < b.get_instance_id()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2277,
+      "method": "_on_unit_died",
+      "code": "xk_id = k.get_instance_id()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2281,
+      "method": "_on_unit_died",
+      "code": "and h.get_instance_id() != xk_id \\"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2296,
+      "method": "_on_unit_died",
+      "code": "xkg_id = kg.get_instance_id()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2299,
+      "method": "_on_unit_died",
+      "code": "and h.get_instance_id() != xkg_id \\"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 2875,
+      "method": "final_wave_cleanup",
+      "code": "var eid := e.get_instance_id()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3280,
+      "method": "_eco_train",
+      "code": "if not reserved.has(hall.get_instance_id()) and _eco_count_workers() < _eco_wcap_dyn() \\"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3361,
+      "method": "_eco_research_barracks",
+      "code": "or (u._train_queue.size() == best._train_queue.size() and u.get_instance_id() < best.get_instance_id()):"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3383,
+      "method": "_eco_reserved_buildings",
+      "code": "out[bld.get_instance_id()] = true"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3849,
+      "method": "_eco_lane_heroes",
+      "code": "heroes.sort_custom(func(a, b): return a.get_instance_id() < b.get_instance_id())"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3936,
+      "method": "_eco_lane_assignments",
+      "code": "result[h.get_instance_id()] = li"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3952,
+      "method": "_eco_lane_assignments",
+      "code": "result[h.get_instance_id()] = best"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 3961,
+      "method": "_eco_lane_runtime_state",
+      "code": "var bucket := int(Engine.get_physics_frames() / maxi(1, AI_TICK))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 4001,
+      "method": "_eco_idle_barracks",
+      "code": "and not reserved.has(u.get_instance_id()) and u._train_queue.size() < bq:"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 4966,
+      "method": "_eco_rebalance_hero",
+      "code": "var li := int(assignments.get(u.get_instance_id(), _eco_nearest_lane(u.position, lanes)))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5544,
+      "method": "_grid_build",
+      "code": "var fid: int = ft.get_instance_id()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5646,
+      "method": "_separation_pass",
+      "code": "var aid := a.get_instance_id()"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 5664,
+      "method": "_separation_pass",
+      "code": "if b.get_instance_id() <= aid or b.story_outcome != \"\" or b.movement_profile != a_profile:"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7522,
+      "method": "_do_ability",
+      "code": "float(eff.get(\"self_reduction_dur\", orbit_dur)), -int(caster.get_instance_id()))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7571,
+      "method": "_do_ability",
+      "code": "caster.apply_damage_reduction(duel_reduce, duel_dur, -600000 - int(caster.get_instance_id()))"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7828,
+      "method": "_zone_pass",
+      "code": "and not hit.has(u.get_instance_id()) and mp.distance_to(u.position) <= mhw + u.radius:"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7829,
+      "method": "_zone_pass",
+      "code": "hit[u.get_instance_id()] = true"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7861,
+      "method": "_zone_pass",
+      "code": "or hit_g.has(u.get_instance_id()):"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 7865,
+      "method": "_zone_pass",
+      "code": "hit_g[u.get_instance_id()] = true"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8386,
+      "method": "_do_chain_nuke",
+      "code": "hit[cur.get_instance_id()] = true"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8410,
+      "method": "_nearest_foe_to",
+      "code": "if is_instance_valid(u) and u.faction == foe and u.hp > 0.0 and not u.garrisoned and u.story_outcome == \"\" and not u.is_resource and not u.is_building and not hit.has(u.get_instance_id()):"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8656,
+      "method": "_do_heal_wave",
+      "code": "hit[caster.get_instance_id()] = true"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8663,
+      "method": "_do_heal_wave",
+      "code": "hit[cur.get_instance_id()] = true"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 8694,
+      "method": "_nearest_wave_node",
+      "code": "and (u.faction == ally or u.faction == foe) and not hit.has(u.get_instance_id()):"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 11892,
+      "method": "_eco_research_selftest",
+      "code": "reserved[picked.get_instance_id()] = true"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "line": 12470,
+      "method": "_final_cleanup_selftest",
+      "code": "level.set(\"_final_cleanup_positions\", {foe.get_instance_id(): foe.position})"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 16,
+      "method": "solve",
+      "code": "var id := u.get_instance_id()"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 25,
+      "method": "solve",
+      "code": "var id := u.get_instance_id()"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 47,
+      "method": "solve",
+      "code": "ids[i] = u.get_instance_id()"
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "line": 65,
+      "method": "solve",
+      "code": "var id := u.get_instance_id()"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 682,
+      "method": "_refresh_skill_rail",
+      "code": "sig.append(h.get_instance_id())"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 824,
+      "method": "_refresh_hero_bar",
+      "code": "keys.append(h.get_instance_id())"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1842,
+      "method": "_rebuild_command_card",
+      "code": "sig = [\"hero\", au.get_instance_id(), au.melee_mode]   # 切刀/弓 → 重建命令卡更新按钮态"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1846,
+      "method": "_rebuild_command_card",
+      "code": "sig = [\"train\", au.get_instance_id(), au._train_queue.size(), au._research_key,"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1849,
+      "method": "_rebuild_command_card",
+      "code": "sig = [\"trade\", au.get_instance_id()]"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "line": 1999,
+      "method": "_rebuild_grid",
+      "code": "var keys: Array = alive.map(func(u) -> int: return u.get_instance_id())"
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "line": 561,
+      "method": "on_unit_resolved",
+      "code": "b.mission.mark(\"embarked_%d\" % u.get_instance_id(), u.display_name + \"活着登船\")"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 437,
+      "method": "_adopt_latest_player_escort_order",
+      "code": "escort_orders[unit.get_instance_id()] = unit._order_serial"
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "line": 497,
+      "method": "_enforce_post_rescue_escort_control",
+      "code": "and int(escort_orders.get(unit.get_instance_id(),-1))==unit._order_serial \\"
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "line": 430,
+      "method": "process",
+      "code": "var eid: int = e.get_instance_id()"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 78,
+      "method": "configure",
+      "code": "var object_id: int = unit.get_instance_id()"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 122,
+      "method": "_registered_live",
+      "code": "return is_instance_valid(unit) and not unit.is_queued_for_deletion() and unit.get_instance_id() == object_id"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 212,
+      "method": "decode_identity",
+      "code": "return _good(unit.get_instance_id())"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 217,
+      "method": "decode_identity",
+      "code": "if unit.get_instance_id() > MAX_I64 - token.offset.to_int(): return _bad(\"SOURCE_OVERFLOW\")"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 218,
+      "method": "decode_identity",
+      "code": "return _good(-unit.get_instance_id() - token.offset.to_int())"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 223,
+      "method": "decode_identity",
+      "code": "var object_id: int = unit.get_instance_id()"
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "line": 236,
+      "method": "decode_identity",
+      "code": "if -unit.get_instance_id() - offset == source_id: return _bad(\"SOURCE_COLLISION\")"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 415,
+      "method": "chase_blocked",
+      "code": "return v != null and _giveup_t > 0.0 and v.get_instance_id() == _giveup_id"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1080,
+      "method": "_request_redraw",
+      "code": "var frame := Engine.get_process_frames()"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1102,
+      "method": "_queue_motion_redraw",
+      "code": "if get_instance_id() % stride != int(Engine.get_physics_frames()) % stride:"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1542,
+      "method": "_do_chase",
+      "code": "if _target != null and _target.get_instance_id() != _chase_last_id:"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1543,
+      "method": "_do_chase",
+      "code": "_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 1610,
+      "method": "_do_chase",
+      "code": "_giveup_id = _target.get_instance_id()"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2312,
+      "method": "_target_score",
+      "code": "var already := int(battle._focus_counts.get(u.get_instance_id(), 0))"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2852,
+      "method": "start_lin_guard",
+      "code": "apply_damage_reduction(reduction, dur, -500000 - int(get_instance_id()))"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "line": 2862,
+      "method": "_advance_lin_spear",
+      "code": "var tid := int(t.get_instance_id())"
+    }
+  ],
+  "source_inputs": [
+    {
+      "path": "scripts/battle.gd",
+      "raw_sha256": "07d7cb179642b3b6b5716a7e290c24a3c54f586ea39460f7905ba778ca202efd",
+      "bytes": 777207
+    },
+    {
+      "path": "scripts/crowd_separation.gd",
+      "raw_sha256": "3f6eb8221547787d5da59f58976ba506228c22ed5a3aa71822b160d659ce817b",
+      "bytes": 5786
+    },
+    {
+      "path": "scripts/hud.gd",
+      "raw_sha256": "5ddcb5d6bccb5462c11d507b619e142a9ffd2e32ddb6da57b06f5a005ebdb9df",
+      "bytes": 179142
+    },
+    {
+      "path": "scripts/levels/arena.gd",
+      "raw_sha256": "146ad503b96e81384e277ede74cca2cc891da9c17882a586707c3e6c3c3bc1b0",
+      "bytes": 5647
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "raw_sha256": "fb2023c37a6e7334833372509b1a385b0e3998aa74290d4ffa804fd3c2334fb7",
+      "bytes": 49769
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang_short.gd",
+      "raw_sha256": "977de70cea8e7e47e652631c3942318f5814934a2289a3bd0ee9a4fe5de4be82",
+      "bytes": 15824
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou.gd",
+      "raw_sha256": "250a51cfdd623c923c84c317094fdb44fe8623944a64a041cbba516b4cb3271b",
+      "bytes": 30394
+    },
+    {
+      "path": "scripts/levels/level2_jiangzhou_rts.gd",
+      "raw_sha256": "0cd6e8aa730431184e48f4480f88b7dfc4391952331f23748582bc6ab7ba28a8",
+      "bytes": 21116
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang.gd",
+      "raw_sha256": "85dbddeb19e450364303cf1c833baceb2eb8ded6b4dccf8db74fab7a32217475",
+      "bytes": 43361
+    },
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "raw_sha256": "e71bec8aeebef161c82d1e12416737be6b8f5194138bcf674e68002b056b9d2c",
+      "bytes": 20505
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma.gd",
+      "raw_sha256": "43b7572160958e44bb62dccedb94782b7063e9397de25204c8a67b18160452ef",
+      "bytes": 36272
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "raw_sha256": "9f466cb1c0e9e5fca676347a2bc21d75bfb9bd7165a1ee761da78fe547f848ed",
+      "bytes": 16641
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "raw_sha256": "f6f00af10b9526ab70ea497f9f87f2c99fb58a768695131ac555e0978c8e4bb3",
+      "bytes": 24788
+    },
+    {
+      "path": "scripts/levels/level5_liangshan.gd",
+      "raw_sha256": "c406a026bdbd7465c9a6c8056f028d7ea2648d31a420c7020d7e508b6dc71396",
+      "bytes": 45372
+    },
+    {
+      "path": "scripts/levels/level6_yezhulin.gd",
+      "raw_sha256": "543b6dcfea921465d060f3d398b2fd4c308878599271f2fe53f72b3fe75509d1",
+      "bytes": 32171
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin.gd",
+      "raw_sha256": "9ed8e07f29c9beb608681444f154ac1bc256611b65f5dd43c40d57af271e5a6f",
+      "bytes": 22275
+    },
+    {
+      "path": "scripts/levels/level7_kuaihuolin_short.gd",
+      "raw_sha256": "8bd7056bd2bf19b49865dc3f7644cf6c03586695ce794ec077edeaa66a93044f",
+      "bytes": 12288
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "raw_sha256": "f1c8aacaf524c9a881a0d5ef0e530f52cd7c091485694001693e9af41f818911",
+      "bytes": 21783
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "raw_sha256": "3171c1819884e706c5d271b04c7b32238ea6c4b469ed93190495104248197839",
+      "bytes": 46714
+    },
+    {
+      "path": "scripts/levels/scenario.gd",
+      "raw_sha256": "453c14078cbe6d50e4df391e30faaba8f9fece198b3ae5a47a71329e984bfcb6",
+      "bytes": 11881
+    },
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "raw_sha256": "f4d609aaf020829e1fbabe82413fa88e1d310cfdde5e9511f40ca61e21e5fd5f",
+      "bytes": 26869
+    },
+    {
+      "path": "scripts/levels/skirmish_ai.gd",
+      "raw_sha256": "5c44952de5bdc1d729beab785afe3cb5b73e2ca9beda1ba596bfba6ea5c8315c",
+      "bytes": 31905
+    },
+    {
+      "path": "scripts/run_graph_identity.gd",
+      "raw_sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+      "bytes": 11445
+    },
+    {
+      "path": "scripts/run_unit_graph.gd",
+      "raw_sha256": "633b631234664fb1abf17d738a6be8599d0c1c9eb55620d495cab51da06f6319",
+      "bytes": 11716
+    },
+    {
+      "path": "scripts/run_unit_state.gd",
+      "raw_sha256": "e17915f82c7bbb159e7674458368f138d5696762b1a78974bbfe616e438886c6",
+      "bytes": 66629
+    },
+    {
+      "path": "scripts/unit.gd",
+      "raw_sha256": "b0ffcb7ada64918d21f91fe7dfd5e7500c59b5545150fdf90294ccc8a8bd253f",
+      "bytes": 201865
+    }
+  ],
+  "notes": [
+    "Source call rows are not runtime cases. Offline Unit/Graph shells remain entity_id zero until trusted binding.",
+    "Non-defense retained routes receive failure propagation only; continuation scope remains standard30 first.",
+    "Normal spawn/RNG source calls retain arguments and lexical order; frame scheduling is not proved here.",
+    "Mission commits action.done before level callback; required creation failure retains old entity and stops world. Full callback rollback is not implemented."
+  ]
+}

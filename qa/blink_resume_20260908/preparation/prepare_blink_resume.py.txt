@@ -1,0 +1,64 @@
+from pathlib import Path
+import hashlib, json, subprocess
+
+root = Path(__file__).resolve().parents[1]
+dest = root/'scratchpad/blink_resume_20260908'
+dest.mkdir(parents=True, exist_ok=True)
+(dest/'.gdignore').write_text('', encoding='utf-8')
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+def replace_once(text, old, new):
+    assert text.count(old) == 1, old
+    return text.replace(old, new)
+
+battle = (root/'scripts/battle.gd').read_text(encoding='utf-8')
+battle = replace_once(battle, 'class BlinkShotFx extends TimedFx:', 'class BlinkShotFx extends TimedFx:')
+start = battle.index('class BlinkShotFx extends TimedFx:')
+part = battle[start:]
+part = part.replace('\tfunc _ready() -> void:\n\t\tdur = 0.42', '\tfunc _ready() -> void:\n\t\tif get_meta("_run_restore_prepared", false): return\n\t\tdur = 0.42', 1)
+battle = battle[:start] + part
+visual = (root/'scripts/run_visual_graph.gd').read_text(encoding='utf-8')
+visual = replace_once(visual, '\t"container": [],', '\t"container": [],\n\t"blink_shot": ["dur", "t", "start_w", "end_w", "col", "_S", "_E"],')
+visual = replace_once(visual, 'const TIMED_KINDS := [', 'const TIMED_KINDS := ["blink_shot", ')
+visual = replace_once(visual, 'const TIMED_FLOATS := {', 'const TIMED_FLOATS := {"blink_shot": [], ')
+visual = replace_once(visual, '\tif node.get_script() == _battle.BoltFx:', '\tif node.get_script() == _battle.BlinkShotFx: return "blink_shot"\n\tif node.get_script() == _battle.BoltFx:')
+visual = replace_once(visual, '\t\t"container": return Node2D.new()', '\t\t"container": return Node2D.new()\n\t\t"blink_shot": return _battle.BlinkShotFx.new()')
+visual = replace_once(visual, '\tmatch kind:\n\t\t"meteor":', '\tmatch kind:\n\t\t"blink_shot":\n\t\t\tif v.dur != 0.42: return _failure("BLINK_SHOT_DURATION")\n\t\t\tfor key: String in ["start_w", "end_w", "_S", "_E"]:\n\t\t\t\tif typeof(v[key]) != TYPE_VECTOR2 or not v[key].is_finite(): return _failure("BLINK_SHOT_POINT", key)\n\t\t"meteor":')
+visual = visual.replace('# The actual eight creators use these inherited defaults.', '# The supported timed creators use these inherited defaults.')
+for name, content in [('battle.gd', battle), ('run_visual_graph.gd', visual)]:
+    (dest/name).write_text(content, encoding='utf-8', newline='\n')
+
+driver = (root/'qa/stabilization_resume_graph_20260907/packages/timed_13/timed_smoke.gd').read_text(encoding='utf-8')
+driver = driver.replace('timed-effects-visual-candidate', 'blink-resume-native').replace('[timed-effects visual candidate QA] ', '[blink resume QA] ')
+driver = driver.replace('Attack-ward next snapshot explicitly rejects BlinkShotFx.', 'Attack-ward next snapshot includes BlinkShotFx; standalone blink lifecycle additionally uses real idle callbacks.')
+begin = driver.index('\tif kind == "ward_attack_boundary":\n\t\t# Actual attack consumer')
+end = driver.index('\tvar equal := true', begin)
+driver = driver[:begin] + '''\tif kind == "ward_attack_boundary":
+\t\tvar hp_before: float = up.id_to_unit["2"].hp
+\t\tseed(770000)
+\t\tsource._ward_pass(0.55)
+\t\tseed(770000)
+\t\ttarget._ward_pass(0.55)
+\t\tvar has_blink := false
+\t\tfor fx: Variant in target.fx_root.get_children(): has_blink = has_blink or fx.get_script() == scripts.battle.BlinkShotFx
+\t\t_check("attack ward consumes damage once and creates real BlinkShotFx", up.id_to_unit["2"].hp == hp_before - 13.0 and has_blink)
+\t\tvar pulse_snapshot: Dictionary = new_visual.capture(target.fx_root, CONTENT, target_ids)
+\t\tif not _ok("attack ward future mixed visual graph remains capturable", pulse_snapshot): return false
+\t\tvar pulse_copy: Variant = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit)
+\t\tcontexts.append(pulse_copy)
+\t\tvar pulse_prepared: Dictionary = pulse_copy.prepare(JSON.parse_string(JSON.stringify(pulse_snapshot.value)), CONTENT, up.id_to_unit)
+\t\tif not _ok("attack ward second generation JSON prepares every visual", pulse_prepared): return false
+\t\t_stage().add_child(pulse_prepared.root)
+\t\tif not _ok("attack ward second generation activation", pulse_copy.activate()): return false
+\t\tvar pulse_reread: Dictionary = pulse_copy.capture(pulse_prepared.root, CONTENT, target_ids)
+\t\t_check("attack ward second generation preserves complete captured visual records", pulse_reread.ok and pulse_reread.value == pulse_snapshot.value)
+''' + driver[end:]
+driver = replace_once(driver, '\t_finish()\n\nfunc _shell()', '\tif not await _blink_engine_case():\n\t\t_finish(true)\n\t\treturn\n\t_finish()\n\nfunc _shell()')
+driver += (root/'.godot/blink_engine_case.gd.inc').read_text(encoding='utf-8')
+(dest/'driver.gd').write_text(driver, encoding='utf-8', newline='\n')
+changes = []
+for name in ['battle.gd','run_visual_graph.gd']:
+    changes.append(dict(path='scripts/'+name, before_exists=True, before_raw_sha256=sha(root/'scripts'/name), candidate=(dest/name).relative_to(root).as_posix(), candidate_sha256=sha(dest/name)))
+(dest/'overlay_manifest.json').write_text(json.dumps({'files': changes},indent=2)+'\n',encoding='utf-8')
+inputs = {p:sha(dest/p) for p in ['battle.gd','run_visual_graph.gd','driver.gd','overlay_manifest.json']}
+(dest/'freeze.json').write_text(json.dumps({'inputs':inputs},indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'freeze':sha(dest/'freeze.json'),'candidate':str(dest)}))

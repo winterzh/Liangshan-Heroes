@@ -8,12 +8,13 @@ import json
 import shutil
 import subprocess
 import time
+from run_steam_integration_qa import native_dependencies
 
 ROOT = Path(__file__).resolve().parents[1]
 
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 
-def verify(run, windows, engine, env):
+def verify(run, windows, engine, env, source_records):
     report = {"complete":False,"steps":[],"modules":[],"verifier_sha256":sha(Path(__file__))}
     child = None
     try:
@@ -23,15 +24,25 @@ def verify(run, windows, engine, env):
         shutil.copyfile(engine, probe_engine)
         report["editor_sha256"] = sha(probe_engine)
         assert report["editor_sha256"] == sha(Path(engine))
-        vendor = ROOT / "vendor/godotsteam"
-        provenance = json.loads((vendor / "provenance.json").read_text(encoding="utf-8"))
-        for row in provenance["files"]:
-            if not row["path"].endswith(".dll"): continue
-            source = vendor / row["path"]
-            assert sha(source) == row["sha256"]
-            shutil.copyfile(source, host / source.name)
+        pinned = native_dependencies()
+        for dependency, provenance in pinned.items():
+            for row in provenance["files"]:
+                if not row["path"].endswith(".dll"): continue
+                source = ROOT / "vendor" / dependency / row["path"]
+                assert sha(source) == row["sha256"]
+                target = host / source.name
+                assert not target.exists(), "Duplicate native basename"
+                shutil.copyfile(source, target)
+                assert sha(target) == row["sha256"]
         env = env.copy()
         env["STEAM_PACKAGE_REPORT"] = str(run / "package_report.json")
+        scripts = sorted({row["path"] for row in source_records if row["path"].startswith("scripts/") and row["path"].endswith(".gd")} | {"scripts/run_build_identity.gd"})
+        script_manifest = run / "package_script_inputs.json"
+        script_manifest.write_text(json.dumps(scripts, indent=2) + "\n", encoding="utf-8")
+        report["script_inputs_sha256"] = sha(script_manifest)
+        report["script_count"] = len(scripts)
+        env["LSH_QA_SCRIPTS_FILE"] = str(script_manifest)
+        env["LSH_QA_SCRIPTS_SHA"] = report["script_inputs_sha256"]
         exe = windows / "LiangshanHeroes.exe"
         for name, command in [
             ("package",[str(probe_engine),"--headless","--main-pack",str(exe),"--script",str(ROOT / "tools/steam_package_probe.gd")]),
@@ -44,17 +55,17 @@ def verify(run, windows, engine, env):
                 try:
                     if name == "exe_smoke":
                         # Inspect only this verifier's exact process, never another game.
-                        query = "[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)\n@(Get-Process -Id %d -ErrorAction Stop | ForEach-Object { $_.Modules } | Where-Object { $_.ModuleName -match 'godotsteam|steam_api64' } | Select-Object ModuleName,FileName) | ConvertTo-Json -Compress" % child.pid
+                        query = "[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)\n@(Get-Process -Id %d -ErrorAction Stop | ForEach-Object { $_.Modules } | Where-Object { $_.ModuleName -match 'godotsteam|steam_api64|steam_stats_reader' } | Select-Object ModuleName,FileName) | ConvertTo-Json -Compress" % child.pid
                         for _ in range(15):
                             if child.poll() is not None: break
                             raw = subprocess.check_output(["powershell.exe","-NoProfile","-Command",query],text=True,encoding="utf-8",errors="replace",creationflags=subprocess.CREATE_NO_WINDOW).strip()
                             observed = json.loads(raw) if raw else []
                             if isinstance(observed,dict): observed = [observed]
-                            if len(observed) == 2:
+                            if len(observed) == 3:
                                 report["modules"] = observed
                                 break
                             time.sleep(0.2)
-                        expected = {"steam_api64.dll","libgodotsteam.windows.template_release.x86_64.dll"}
+                        expected = {"steam_api64.dll","libgodotsteam.windows.template_release.x86_64.dll","steam_stats_reader.dll"}
                         assert {m["ModuleName"] for m in report["modules"]} == expected, report["modules"]
                         report["release_pid"] = child.pid
                     code = child.wait(timeout=180)
@@ -71,6 +82,11 @@ def verify(run, windows, engine, env):
             path = Path(module["FileName"])
             assert path.resolve() == (windows / module["ModuleName"]).resolve()
             module["sha256"] = sha(path)
+            dependency = "steam_stats_reader" if module["ModuleName"] == "steam_stats_reader.dll" else "godotsteam"
+            expected_row = next(row for row in pinned[dependency]["files"] if Path(row["path"]).name == module["ModuleName"])
+            assert module["sha256"] == expected_row["sha256"], "Loaded native bytes differ from QA provenance"
+        assert sha(script_manifest) == report["script_inputs_sha256"]
+        assert native_dependencies() == pinned
         report["checks"] = len(package["checks"])
         report["complete"] = True
         return report

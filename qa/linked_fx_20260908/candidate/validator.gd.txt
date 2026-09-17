@@ -1,0 +1,26 @@
+func kind(node: Node2D) -> String:
+	for key: String in scripts:
+		if node.get_script() == scripts[key]: return key
+	return ""
+
+func validate(values: Variant, kind: String) -> Dictionary:
+	if not TYPES.has(kind) or typeof(values) != TYPE_DICTIONARY or values.size() != TYPES[kind].size() + TEXTURES[kind].size() or not values.has_all(TYPES[kind].keys() + TEXTURES[kind]): return _scalar._bad("LINKED_FIELDS", kind)
+	for key: String in TYPES[kind]:
+		if not _scalar._typed(values[key], TYPES[kind][key]): return _scalar._bad("LINKED_TYPE", kind + "." + key)
+	if values.has("t") and (values.t <= 0.0 or values.t > values.get("dur", 1.2)): return _scalar._bad("LINKED_LIFETIME", kind)
+	if values.has("dur") and values.dur <= 0.0: return _scalar._bad("LINKED_LIFETIME", kind)
+	for key: String in ["rad", "life", "pulse"]:
+		if values.has(key) and (values[key] < 0.0 or values[key] > 1000000.0): return _scalar._bad("LINKED_RANGE", key)
+	if values.has("life") and values.life <= 0.0: return _scalar._bad("LINKED_LIFE", kind)
+	if values.has("mode") and values.mode.length() > 128: return _scalar._bad("LINKED_MODE", kind)
+	if kind == "lin_spear_stack" and (values.stacks < 0 or values.stacks > 4096): return _scalar._bad("LINKED_STACKS")
+	if kind == "black_rain":
+		var count: int = int(values.rad / (8.0 if values.lite else 5.0)) + (8 if values.lite else 14)
+		if not _scalar._rows(values._drops, count, {"p": TYPE_VECTOR2, "ph": TYPE_FLOAT, "spd": TYPE_FLOAT, "h": TYPE_FLOAT}): return _scalar._bad("LINKED_RAIN_CACHE")
+		for drop: Dictionary in values._drops:
+			if drop.spd <= 0.0 or drop.h <= 0.0: return _scalar._bad("LINKED_RAIN_RANGE")
+	if kind == "firefly":
+		if not _scalar._rows(values._motes, 10, {"a": TYPE_FLOAT, "r": TYPE_FLOAT, "sp": TYPE_FLOAT, "ph": TYPE_FLOAT}): return _scalar._bad("LINKED_FIREFLY_CACHE")
+		for mote: Dictionary in values._motes:
+			if mote.r <= 0.0 or mote.sp <= 0.0: return _scalar._bad("LINKED_FIREFLY_RANGE")
+	return {"ok": true}

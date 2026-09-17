@@ -1,0 +1,93 @@
+
+func _blink_engine_case() -> bool:
+	# Normal ready and real idle scheduling, followed by paused JSON staging.
+	var stage := _stage()
+	var copy_stage := _stage()
+	stage.process_mode = Node.PROCESS_MODE_INHERIT
+	copy_stage.process_mode = Node.PROCESS_MODE_INHERIT
+	stage.transform = Transform2D(Vector2(0.9, 0.3), Vector2(-0.2, 0.8), Vector2(19, -7))
+	copy_stage.transform = stage.transform
+	var original := Node2D.new()
+	original.name = "FxRoot"
+	original.transform = Transform2D(Vector2(0.8, -0.1), Vector2(0.2, 1.1), Vector2(35, 12))
+	stage.add_child(original)
+	var blink: Variant = scripts.battle.BlinkShotFx.new()
+	blink.start_w = Vector2(121, 37)
+	blink.end_w = Vector2(289, 183)
+	blink.position = Vector2(14, -6)
+	blink.col = Color(0.37, 0.62, 0.88, 0.79)
+	original.add_child(blink)
+	_check("blink normal ready retains standard lifetime", blink.dur == 0.42 and blink.t == 0.42)
+	Engine.max_fps = 120
+	paused = false
+	for i: int in range(5): await process_frame
+	paused = true
+	if not _check("blink naturally reaches midlife without manual process calls", is_instance_valid(blink) and blink.t > 0.0 and blink.t < blink.dur): return false
+	var old: Variant = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit)
+	contexts.append(old)
+	var captured: Dictionary = old.capture(original, CONTENT, {})
+	if not _ok("blink real engine midlife capture", captured): return false
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.value))
+	var codec: Variant = scripts.run_state_value_codec.new()
+	for mutation: String in ["duration", "expired", "point_type", "extra_field", "render_override", "unknown_kind"]:
+		var decoded: Dictionary = codec.decode(wire.records)
+		var rows: Array = decoded.value
+		match mutation:
+			"duration": rows[1].values.dur = 0.43
+			"expired": rows[1].values.t = 0.0
+			"point_type": rows[1].values._S = "not a vector"
+			"extra_field": rows[1].values["unexpected"] = true
+			"render_override": rows[1].node["material"] = "untrusted"
+			"unknown_kind": rows[1].kind = "unsupported_fx"
+		var bad: Dictionary = wire.duplicate(true)
+		bad.records = codec.encode(rows).value
+		var reject: Variant = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit)
+		contexts.append(reject)
+		_check("blink malformed graph allocates nothing " + mutation, not reject.prepare(bad, CONTENT, {}).ok and reject._nodes.is_empty())
+	var original_s: Vector2 = blink._S
+	blink._S = Vector2(INF, 0)
+	_check("blink nonfinite cached projected point rejects", not old.capture(original, CONTENT, {}).ok)
+	blink._S = original_s
+	blink.material = CanvasItemMaterial.new()
+	_check("blink live material override rejects", old.capture(original, CONTENT, {}).get("code") == "TIMED_RENDER_OVERRIDE")
+	blink.material = null
+	var unknown: Variant = scripts.battle.OrbitAxesFx.new()
+	original.add_child(unknown)
+	_check("blink adjacent unknown Fx rejects whole graph", old.capture(original, CONTENT, {}).get("code") == "UNSUPPORTED_VISUAL_SCRIPT")
+	unknown.free()
+	var restore: Variant = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit)
+	contexts.append(restore)
+	seed(194021)
+	var expected_next := randi()
+	seed(194021)
+	var prepared: Dictionary = restore.prepare(wire, CONTENT, {})
+	if not _ok("blink JSON prepares disabled private graph", prepared): return false
+	var restored: Variant = prepared.root.get_child(0)
+	var saved_t: float = blink.t
+	copy_stage.add_child(prepared.root)
+	_check("blink restore ready preserves midlife and cached projected endpoints", restored.t == saved_t and restored._S == blink._S and restored._E == blink._E)
+	_check("blink restore ready consumes no global RNG", randi() == expected_next)
+	for i: int in range(4): await process_frame
+	_check("blink paused original and restored graph retain timers", blink.t == saved_t and restored.t == saved_t)
+	if not _ok("blink one paused activation", restore.activate()): return false
+	_check("blink duplicate activation refuses", restore.activate().get("code") == "VISUAL_ALREADY_ACTIVATED")
+	var reread: Dictionary = restore.capture(prepared.root, CONTENT, {})
+	_check("blink post-ready graph equals JSON source", reread.ok and reread.value == captured.value)
+	var exits := {"original": 0, "restored": 0}
+	blink.tree_exited.connect(func(): exits["original"] += 1)
+	restored.tree_exited.connect(func(): exits["restored"] += 1)
+	paused = false
+	var equal := true
+	var paired_live_frames := 0
+	for i: int in range(100):
+		await process_frame
+		if is_instance_valid(blink) != is_instance_valid(restored): equal = false
+		if not is_instance_valid(blink) and not is_instance_valid(restored): break
+		if is_instance_valid(blink) and is_instance_valid(restored):
+			paired_live_frames += 1
+			equal = equal and blink.t == restored.t and blink._S == restored._S and blink._E == restored._E and blink.transform == restored.transform and blink.is_queued_for_deletion() == restored.is_queued_for_deletion()
+	paused = true
+	_check("blink real idle lifecycle stays equal through natural deletion", equal and paired_live_frames > 0 and not is_instance_valid(blink) and not is_instance_valid(restored))
+	_check("blink both real exits fire exactly once", exits.original == 1 and exits.restored == 1)
+	observations["blink_engine"] = {"paired_live_frames": paired_live_frames, "saved_remaining": saved_t, "exits": exits, "manual_process_calls": false, "cross_process": false, "rendered_pixels_verified": false}
+	return failures.is_empty()

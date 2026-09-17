@@ -1,0 +1,288 @@
+{
+  "schema": "continue_flow_process_identity_contract_test_v1",
+  "generated_utc": "2026-09-09T01:05:03.822385+00:00",
+  "scope": "Synthetic process-identity validator contract only; independent of native 295 gameplay checks",
+  "synthetic": true,
+  "no_engine": true,
+  "engine_rerun": false,
+  "actual_child_processes_started": 0,
+  "native_receipts_read_or_changed": false,
+  "gameplay_acceptance": false,
+  "native_gameplay_checks_added": 0,
+  "full_30_waves": false,
+  "real_steam": false,
+  "passed": true,
+  "check_count": 30,
+  "passed_count": 30,
+  "source_sha256": {
+    "process_identity_contract_test.py": "ed16d9f15b6788334933a3b43584f6db1a67c1058b14ff0bbd8900ce4ad0caa2",
+    "validate_evidence.py": "3eb8627b0141ca0cb98e52f6af5526262dd35498a4e93e8356da2f5228f3b3a1"
+  },
+  "validator_function_sha256": "e210c19af2d6661dfd6b2a83cc15c0da60612d530f8cb4faa36f8ec500738510",
+  "checks": [
+    {
+      "name": "full_reused_pid_pass",
+      "expected": "accept",
+      "expected_exception": null,
+      "observed": "accept",
+      "passed": true
+    },
+    {
+      "name": "focused_reused_pid_pass",
+      "expected": "accept",
+      "expected_exception": null,
+      "observed": "accept",
+      "passed": true
+    },
+    {
+      "name": "unknown_schema",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "Unknown process identity schema",
+      "passed": true
+    },
+    {
+      "name": "null_schema",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "Unknown process identity schema",
+      "passed": true
+    },
+    {
+      "name": "terminal_flag_int",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "terminal_flag_missing",
+      "expected": "reject",
+      "expected_exception": "KeyError",
+      "observed": "reject",
+      "exception": "KeyError",
+      "detail": "'terminal_only'",
+      "passed": true
+    },
+    {
+      "name": "full_marked_focused",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "missing_import",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "step_order",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "nonce_duplicate",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "Reused process nonce: profile_guard",
+      "passed": true
+    },
+    {
+      "name": "nonce_short",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "import",
+      "passed": true
+    },
+    {
+      "name": "nonce_nonhex",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "import",
+      "passed": true
+    },
+    {
+      "name": "nonce_type",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "import",
+      "passed": true
+    },
+    {
+      "name": "pid_bool",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "pid_zero",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "timestamp_float",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "zero_duration",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "import",
+      "passed": true
+    },
+    {
+      "name": "overlapping_steps",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "profile_guard",
+      "passed": true
+    },
+    {
+      "name": "report_case",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "public_gate",
+      "passed": true
+    },
+    {
+      "name": "report_pid",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "public_gate",
+      "passed": true
+    },
+    {
+      "name": "report_float_pid",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "report_nonce",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "public_gate",
+      "passed": true
+    },
+    {
+      "name": "projection_missing",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "projection_extra_field",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "projection_changed",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "Process runs differ from behavioral Popen steps",
+      "passed": true
+    },
+    {
+      "name": "projection_float",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "pid_list_order_or_value",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "pid_list_float",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "legacy_reused_pid_rejected",
+      "expected": "reject",
+      "expected_exception": "AssertionError",
+      "observed": "reject",
+      "exception": "AssertionError",
+      "detail": "",
+      "passed": true
+    },
+    {
+      "name": "legacy_unique_pid_pass",
+      "expected": "accept",
+      "expected_exception": null,
+      "observed": "accept",
+      "passed": true
+    }
+  ]
+}

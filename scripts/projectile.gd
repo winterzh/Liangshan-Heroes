@@ -81,7 +81,9 @@ func _physics_process(delta: float) -> void:
 			target.absorb_physical_damage(dmg, s)
 		else:
 			var before_pool := maxf(0.0, target.hp) + maxf(0.0, target._shield)
-			target.take_damage(dmg, s, crit, false, damage_ability_id)
+			# kind is already serialized. A stone fired before its catapult died
+			# keeps its ordinary siege damage without adding save-state fields.
+			target.take_damage(dmg, s, crit, false, damage_ability_id, kind == "boulder" and damage_ability_id.is_empty())
 			if not _gameplay_rng_fault().is_empty():
 				queue_free()
 				return
@@ -112,7 +114,7 @@ func _physics_process(delta: float) -> void:
 					if u.is_phys_immune():
 						u.absorb_physical_damage(dmg, s)
 					else:
-						u.take_damage(dmg, s, false, false, damage_ability_id)
+						u.take_damage(dmg, s, false, false, damage_ability_id, kind == "boulder" and damage_ability_id.is_empty())
 						if not _gameplay_rng_fault().is_empty():
 							queue_free()
 							return

@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/sw.png" id="sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_zhanzi_direction4_20260915/supplement.png" id="supplement"]
+
+[sub_resource type="AtlasTexture" id="windup_sw"]
+atlas = ExtResource("sw")
+region = Rect2(255, 204, 248, 200)
+margin = Rect2(4.0, 28.0, 8, 56)
+filter_clip = true
+metadata/draw_offset_px = Vector2(6.5, 0.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[sub_resource type="AtlasTexture" id="strike_sw"]
+atlas = ExtResource("sw")
+region = Rect2(23, 404, 227, 196)
+margin = Rect2(14.5, 30.0, 29, 60)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-16.5, 23.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("supplement")
+region = Rect2(265, 270, 242, 270)
+margin = Rect2(39.0, 25.0, 78, 50)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-3.0, 8.9)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.1
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_sw")},
+{"duration": 1.0, "texture": SubResource("windup_sw")},
+{"duration": 1.0, "texture": SubResource("strike_sw")},
+{"duration": 1.0, "texture": SubResource("strike_sw")},
+{"duration": 1.0, "texture": SubResource("idle_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

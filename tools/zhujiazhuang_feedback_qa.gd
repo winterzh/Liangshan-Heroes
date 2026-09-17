@@ -20,6 +20,7 @@ func _freeze(b) -> void:
 
 func _fixture():
 	var b = await _start()
+	b.mission._toggle.button_pressed = true
 	Engine.time_scale = 1.0
 	# Let normal first-frame fog, world visibility, and top HUD settle before
 	# freezing the explicit input fixture; screenshots must show the battle.

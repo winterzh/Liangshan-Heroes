@@ -1,0 +1,79 @@
+{
+  "source_head": "6738b3fe9f996a0da034d8237b4f7fbaeb5d831b",
+  "installed_at_utc": "2026-09-08T03:20:13.059318+00:00",
+  "world_run": "overlay_20260908T031211Z_fe3853a5",
+  "ledger_run": "overlay_20260908T031706Z_0f7b87d5",
+  "runs": [
+    {
+      "run_id": "overlay_20260908T030944Z_b22f88d2",
+      "suite": "persistent-session-native",
+      "complete": false,
+      "freeze_sha256": "ae9be3826cb8daad9088a4242bb4acec3b618bc536696f05a1bb92d31f4f2360",
+      "error": "RuntimeError: Native process failed: driver"
+    },
+    {
+      "run_id": "overlay_20260908T031211Z_fe3853a5",
+      "suite": "persistent-session-native",
+      "complete": true,
+      "freeze_sha256": "0683d4069e03a6ff4361cfdef3b79bb4f79b35f0097ba728ac5133e0aed337fe",
+      "error": null
+    },
+    {
+      "run_id": "overlay_20260908T031706Z_0f7b87d5",
+      "suite": "world-slot-native",
+      "complete": true,
+      "freeze_sha256": "0683d4069e03a6ff4361cfdef3b79bb4f79b35f0097ba728ac5133e0aed337fe",
+      "error": null
+    }
+  ],
+  "changes": [
+    {
+      "path": "scripts/steam_local_run_session.gd",
+      "before_exists": false,
+      "candidate": "scratchpad/persistent_session_20260908/steam_local_run_session.gd",
+      "candidate_sha256": "b102aed1246e467ab416019cbbb72f6452fa4ffcc18012cf7f7114f013232039"
+    },
+    {
+      "path": "scripts/steam_service.gd",
+      "before_exists": true,
+      "candidate": "scratchpad/persistent_session_20260908/steam_service.gd",
+      "candidate_sha256": "65b40acae6180066ca116c0ee6105db98bfcb14c33d6d7ba142153c4a9d8d7cd",
+      "before_raw_sha256": "b3bca0e49468f10f8cc2f88a1bc332a9ff56b84c1b64bb94baf64bff35162c55"
+    },
+    {
+      "path": "scripts/run_slot_store.gd",
+      "before_exists": true,
+      "candidate": "scratchpad/persistent_session_20260908/run_slot_store.gd",
+      "candidate_sha256": "bdbb872925d81e114f3dee675f6760e729547d37a68fd569cb63d39007fb2a6a",
+      "before_raw_sha256": "a2d4b94f4baf8e55703778b9219f3254ce3bb61bbab5dd1ab80f09f113c162e7"
+    },
+    {
+      "path": "scripts/run_world_session.gd",
+      "before_exists": true,
+      "candidate": "scratchpad/persistent_session_20260908/run_world_session.gd",
+      "candidate_sha256": "c5afe899ca483bbe2ba20c1b85d404a9eb91eaba7b1c4cee1c4cf249741233f9",
+      "before_raw_sha256": "b071e180b2af679ffedb6f34c42acbf50bc63d03497dd88ca6b0fd246adb6411"
+    }
+  ],
+  "uids": {
+    "scripts/steam_local_run_session.gd.uid": "1e681cc5c686c145107f78dcb3438dd54adc4be0e9474f5d0f29de0d037dd25e"
+  },
+  "counts": {
+    "persistent-session-native": {
+      "checks": 6030,
+      "source_sha_checks": 5842,
+      "other_checks": 188
+    },
+    "world-slot-native": {
+      "checks": 5955,
+      "source_sha_checks": 5842,
+      "other_checks": 113
+    }
+  },
+  "scope": "internal persistent local Steam receipt binding and cross-process classic30 session; normal startup and SDK publisher remain gated",
+  "player_menu_entry": false,
+  "persistent_steam_binding": true,
+  "real_sdk_published": false,
+  "slot_specific_force_kill_tested": false,
+  "steam_updated": false
+}

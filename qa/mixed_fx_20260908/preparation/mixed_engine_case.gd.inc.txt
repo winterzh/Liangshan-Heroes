@@ -1,0 +1,152 @@
+
+func _mixed_visual(owner: Variant) -> Variant:
+	return scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit, owner, {},
+		scripts.run_projectile_state.new(scripts.run_state_value_codec, scripts.projectile, scripts.unit),
+		scripts.run_li_brawn_axes_state.new(scripts.run_state_value_codec, scripts.battle.LiBrawnAxesFx, scripts.unit))
+
+func _mixed_engine_case() -> bool:
+	var source: Variant = _shell()
+	var target: Variant = _shell()
+	var stage := _stage()
+	var target_stage := _stage()
+	stage.process_mode = Node.PROCESS_MODE_INHERIT
+	target_stage.process_mode = Node.PROCESS_MODE_INHERIT
+	var trusted := {"ok": true, "save_eligible": true, "content_version": CONTENT, "engine_binary_sha256": manifest.engine_binary_sha256}
+	if not _ok("mixed source RNG", source.configure_new_gameplay_rng(trusted, 5088120)): return false
+	if not _ok("mixed target RNG", target.configure_new_gameplay_rng(trusted, 5088120)): return false
+	var src: Variant = _unit(source, 1, 0, Vector2(40, 40))
+	var foe: Variant = _unit(source, 2, 1, Vector2(440, 40))
+	var second: Variant = _unit(source, 3, 1, Vector2(480, 100))
+	var src_copy: Variant = _unit(target, 1, 0, src.position)
+	var foe_copy: Variant = _unit(target, 2, 1, foe.position)
+	var second_copy: Variant = _unit(target, 3, 1, second.position)
+	var ids := {src: "1", foe: "2", second: "3"}
+	var copies := {"1": src_copy, "2": foe_copy, "3": second_copy}
+	var copy_ids := {src_copy: "1", foe_copy: "2", second_copy: "3"}
+	source.fx_root = Node2D.new()
+	source.fx_root.name = "FxRoot"
+	stage.add_child(source.fx_root)
+	var marker: Variant = scripts.battle.TrapMarkerFx.new()
+	marker.name = "Before"
+	source.fx_root.add_child(marker)
+	var arrow: Variant = scripts.projectile.new()
+	arrow.name = "Arrow"
+	arrow.position = src.position
+	arrow.setup(src, foe, 11.0, false)
+	source.fx_root.add_child(arrow)
+	var nested := Node2D.new()
+	nested.name = "Nested"
+	source.fx_root.add_child(nested)
+	var bolt: Variant = scripts.battle.BoltFx.new()
+	bolt.name = "SharedBolt"
+	bolt.chain_from = src
+	bolt.chain = true
+	nested.add_child(bolt)
+	var other_arrow: Variant = scripts.projectile.new()
+	other_arrow.name = "OtherArrow"
+	other_arrow.position = src.position
+	other_arrow.setup(src, second, 7.0, false)
+	nested.add_child(other_arrow)
+	var blink: Variant = scripts.battle.BlinkShotFx.new()
+	blink.name = "Blink"
+	blink.start_w = src.position
+	blink.end_w = foe.position
+	source.fx_root.add_child(blink)
+	var expired: Variant = scripts.unit.new()
+	var axes: Variant = scripts.battle.LiBrawnAxesFx.new()
+	axes.name = "Axes"
+	axes.caster = src
+	axes.game = source
+	axes.dur = 0.65
+	axes.hits = [{"target": foe, "dmg": 17.0}, {"target": expired, "dmg": 999.0}, {"target": second, "dmg": 19.0}]
+	source.fx_root.add_child(axes)
+	expired.free()
+	Engine.max_fps = 120
+	paused = false
+	for i: int in range(4): await process_frame
+	paused = true
+	if not _check("mixed actual pending arrow axes and blink coexist", is_instance_valid(blink) and axes.elapsed > 0.0 and axes.elapsed < axes.dur and arrow.position != src.position and foe.hp == 1000.0): return false
+	var old: Variant = _mixed_visual(source)
+	contexts.append(old)
+	var captured: Dictionary = old.capture(source.fx_root, CONTENT, ids)
+	if not _ok("mixed capture all nested children in original order", captured): return false
+	var wire: Dictionary = JSON.parse_string(JSON.stringify(captured.value))
+	var codec: Variant = scripts.run_state_value_codec.new()
+	var rows: Array = codec.decode(wire.records).value
+	var kinds: Array = []
+	for row: Dictionary in rows: kinds.append(row.kind)
+	_check("mixed preorder routes every authority and visual node", kinds == ["container", "trap_marker", "projectile", "container", "bolt", "projectile", "blink_shot", "li_brawn_axes"])
+	var saved_token: Dictionary = old.encode_token(bolt, "bolt")
+	if not _ok("mixed shared visual reference token", saved_token): return false
+	var live_tombstone: Variant = scripts.unit.new()
+	owned.append(live_tombstone)
+	for mutation: String in ["late_payload", "outer_inner_node", "sibling_order", "wrong_schema", "missing_entity", "missing_adapter", "missing_owner", "missing_tombstone"]:
+		var bad: Dictionary = wire.duplicate(true)
+		var changed: Array = codec.decode(bad.records).value
+		match mutation:
+			"late_payload": changed[-1].values.state["unexpected"] = true
+			"outer_inner_node": changed[2].node.position += Vector2(1, 0)
+			"sibling_order": changed[2].index += 1
+			"wrong_schema": changed[2].values.state.schema = "unknown_projectile"
+		bad.records = codec.encode(changed).value
+		var reject: Variant = _mixed_visual(target)
+		if mutation == "missing_adapter": reject = scripts.run_visual_graph.new(scripts.run_state_value_codec, scripts.battle, scripts.unit)
+		if mutation == "missing_owner": reject = _mixed_visual(null)
+		contexts.append(reject)
+		var registry: Dictionary = copies.duplicate()
+		if mutation == "missing_entity": registry.erase("2")
+		var result: Dictionary = reject.prepare(bad, CONTENT, registry, null if mutation == "missing_tombstone" else live_tombstone)
+		_check("mixed invalid complete graph allocates nothing " + mutation, not result.ok and reject._nodes.is_empty() and not is_instance_valid(reject._root))
+	_check("mixed all rejects preserve source health and child count", foe.hp == 1000.0 and second.hp == 1000.0 and source.fx_root.get_child_count() == 5)
+	var restored: Variant = _mixed_visual(target)
+	contexts.append(restored)
+	var prepared: Dictionary = restored.prepare(wire, CONTENT, copies, live_tombstone)
+	if not _ok("mixed JSON creates disabled complete graph", prepared): return false
+	target.fx_root = prepared.root
+	var arrow_copy: Variant = prepared.nodes["3"]
+	var axes_copy: Variant = prepared.nodes["8"]
+	var other_arrow_copy: Variant = prepared.nodes["6"]
+	_check("mixed all authority refs bind exact new units and Battle", arrow_copy.shooter == src_copy and arrow_copy.target == foe_copy and axes_copy.game == target and axes_copy.caster == src_copy and axes_copy.hits[0].target == foe_copy and axes_copy.hits[2].target == second_copy and axes_copy.hits[1].target == live_tombstone)
+	_check("mixed bolt token validates across authority rows", restored.validate_token(saved_token.value, "bolt").ok)
+	var decoded: Dictionary = restored.decode_token(saved_token.value, "bolt")
+	_check("mixed bolt token resolves exact shared node", decoded.ok and decoded.value == prepared.nodes["5"] and decoded.value.chain_from == src_copy)
+	if not _ok("mixed zero ground owner binding", restored.bind_ground_fire_owner(target, 0)): return false
+	target_stage.add_child(target.fx_root)
+	_check("mixed live expired-unit placeholder blocks all activation", restored.activate().get("code") == "UNIT_TOMBSTONE_NOT_RELEASED" and arrow_copy.process_mode == Node.PROCESS_MODE_DISABLED)
+	live_tombstone.free()
+	target.fx_root.move_child(axes_copy, 0)
+	_check("mixed reordered late node blocks all activation", restored.activate().get("code") == "VISUAL_ACTIVATION_TOPOLOGY" and arrow_copy.process_mode == Node.PROCESS_MODE_DISABLED)
+	target.fx_root.move_child(axes_copy, 4)
+	if not _ok("mixed one paused activation for all ordered nodes", restored.activate()): return false
+	var reread: Dictionary = restored.capture(target.fx_root, CONTENT, copy_ids)
+	_check("mixed post-ready JSON equality includes nested order expired hits and timing", reread.ok and reread.value == captured.value)
+	var exits := {"arrow": 0, "arrow_copy": 0, "axes": 0, "axes_copy": 0, "other": 0, "other_copy": 0}
+	arrow.tree_exited.connect(func(): exits["arrow"] += 1)
+	arrow_copy.tree_exited.connect(func(): exits["arrow_copy"] += 1)
+	axes.tree_exited.connect(func(): exits["axes"] += 1)
+	axes_copy.tree_exited.connect(func(): exits["axes_copy"] += 1)
+	other_arrow.tree_exited.connect(func(): exits["other"] += 1)
+	other_arrow_copy.tree_exited.connect(func(): exits["other_copy"] += 1)
+	paused = false
+	var equal := true
+	var observed_frames := 0
+	for i: int in range(240):
+		await process_frame
+		observed_frames += 1
+		equal = equal and foe.hp == foe_copy.hp and second.hp == second_copy.hp
+		for pair: Array in [[arrow, arrow_copy], [other_arrow, other_arrow_copy], [axes, axes_copy]]:
+			equal = equal and is_instance_valid(pair[0]) == is_instance_valid(pair[1])
+			if is_instance_valid(pair[0]) and is_instance_valid(pair[1]):
+				equal = equal and pair[0].position == pair[1].position and pair[0].is_queued_for_deletion() == pair[1].is_queued_for_deletion()
+				if pair[0].get_script() == scripts.projectile: equal = equal and pair[0]._life == pair[1]._life
+				else: equal = equal and pair[0].elapsed == pair[1].elapsed and pair[0].resolved == pair[1].resolved
+		if not is_instance_valid(arrow) and not is_instance_valid(other_arrow) and not is_instance_valid(axes): break
+	paused = true
+	_check("mixed real physics and idle agree throughout restoration", equal and observed_frames > 0)
+	_check("mixed actual authority damages each live target once", foe.hp == 972.0 and foe_copy.hp == 972.0 and second.hp == 974.0 and second_copy.hp == 974.0)
+	_check("mixed all six authority nodes naturally exit exactly once", exits.values().all(func(v): return v == 1))
+	_check("mixed gameplay RNG streams remain equal", source.capture_gameplay_rng().record == target.capture_gameplay_rng().record)
+	var after: Dictionary = restored.capture(target.fx_root, CONTENT, copy_ids)
+	_check("mixed future ordinary impact visuals remain capturable", after.ok)
+	observations["mixed_engine"] = {"initial_kinds": kinds, "observed_idle_frames": observed_frames, "exits": exits, "hp": [foe.hp, foe_copy.hp, second.hp, second_copy.hp], "cross_process": false, "manual_damage_or_lifetime_calls": false, "future_visual_rng_compared": false}
+	return failures.is_empty()

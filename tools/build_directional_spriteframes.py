@@ -51,6 +51,11 @@ def render(manifest):
             raise ValueError('Negative/outside frame bounds: ' + key)
         if x + width > imported_w or y + height > imported_h or width + pad_w != height + pad_h:
             raise ValueError('Frame must fit the imported texture and padded square: ' + key)
+        # AtlasTexture reports integer Texture2D dimensions. Fractional region
+        # and margin sizes can truncate separately and break a nominal square.
+        # Sampling origins/padding positions may still use subpixel alignment.
+        if any(float(v) % 1 for v in (width, height, pad_w, pad_h)):
+            raise ValueError('Frame and padding sizes must be whole texture pixels: ' + key)
     outputs = {}
     for direction in DIRECTIONS:
         for state, order in manifest['states'].items():

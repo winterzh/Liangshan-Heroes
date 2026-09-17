@@ -1,0 +1,293 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "guan_zhanzi",
+  "original_reference": {
+    "path": "assets/anim/guan_zhanzi_idle_se.png",
+    "sha256": "88002bbe4b0890e185801ab610ba824dce82d61b031b95db6fb53e6721dc7561"
+  },
+  "jobs": [
+    {
+      "key": "original_sw",
+      "repository_path": "assets/anim/guan_zhanzi_idle_sw.png",
+      "sha256": "ce15077c59e8ec426bf8410c3c04357b2585390672d2d44d2161c01a28b1b06c",
+      "method": "existing_project_reference",
+      "prompt": "Existing accepted southwest identity and costume reference.",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "SE",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/SE.png",
+      "sha256": "d399f1cf04e0372235529d9d885cd35b294c7817186c4aa6246e8d04a713b47e",
+      "method": "built_in_imagegen",
+      "prompt": "Create a production-ready transparent RGBA PNG sprite atlas for the attached existing Water Margin RTS executioner foot soldier (guan_zhanzi). Reference image is identity/style reference, not an edit target. Preserve his stocky muscular adult body, broad weathered face, short black beard, dark charcoal rough cloth vest and trousers, muted red head wrap and sash, brown cloth boots, plain broad two-handed curved executioner's saber. No new armor, symbols, text, scars, fantasy gear or heroic embellishments. Painterly 2D isometric game art with crisp readable silhouettes and earthy shading, matching the reference. Fixed elevated three-quarter camera; ALL eight poses face SOUTHEAST, toward lower-right of the image. Keep body size/camera/light and weapon handedness consistent, camera never rotates. 1024x1536 portrait atlas, TWO columns by FOUR rows, exactly eight separate cells, generous fully transparent padding between cells and outside, no touching or overlapping neighboring weapons/limbs. Each whole body and whole saber fits inside its own cell. Reading order: (1) idle ready stance, (2) walk left foot forward right leg back, (3) walk right foot forward left leg back -- must be genuinely opposing phases, not same step twice; (4) attack windup both hands raise the saber above and behind shoulder; (5) attack strike both hands bring saber downward-forward in a forceful cut, arms extended, clear different silhouette; (6) hurt recoil stagger backward, still standing; (7) collapsing onto one knee with blade lowering, (8) fully fallen lying on side, entire body and blade on ground. Non-graphic no wounds no blood no victim. Falling poses remain the same grounded physical body proportions, not miniaturized. Transparent background, REAL alpha channel not painted checkerboard, no floor, no baked shadow, no labels, no frames, no text. Do not simulate motion by rotating an identical figure. Draw independent anatomical poses.",
+      "references": [
+        "original"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "SEAlpha",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/SEAlpha.png",
+      "sha256": "40d397e36634f86834131a25c4b0e58e1f385a4784924af9240ef03db630bc73",
+      "method": "built_in_imagegen",
+      "prompt": "Edit this sprite sheet for production. Deliver an actual RGBA PNG with a real transparent alpha channel. Remove the ENTIRE baked white and gray checkerboard background everywhere around the eight figures, including holes between arms/legs/blade. Background pixels must be fully alpha=0, NOT a drawing of transparency, not white, not black. Preserve the 8 figure placements, exact painterly style, red/black clothes, size and facing. Do not add shadows or text. Also fix ONLY the walk pose in row 2 column 1: make the OTHER leg lead compared with row 1 column 2 (the far leg toward the upper-right is now planted forward toward screen-right, near leg extended backward toward screen-left), torso still faces bottom-right. Clearly opposite anatomical walking phase, not mirror the character. All other poses unchanged. Transparent PNG with alpha is mandatory.",
+      "references": [
+        "SE"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "SEAlpha3",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/se.png",
+      "sha256": "6ff8f863a9fa63c9e97eb5b6098c6b072bb92ec9a329ef6cf5d95f43270101f9",
+      "method": "built_in_imagegen",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与刀不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "SEAlpha"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    },
+    {
+      "key": "SW",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/SW.png",
+      "sha256": "e224f4439cec655626da8817057448caca5d7f9af3bd2c5640b6aca1a7e37de3",
+      "method": "built_in_imagegen",
+      "prompt": "真正透明背景，RGBA PNG，背景alpha为0，不要棋盘格，不要实色背景。\nCreate a production-ready transparent RGBA PNG sprite atlas for the attached Water Margin RTS executioner foot soldier atlas (guan_zhanzi). Reference image is identity/style reference, not an edit target. Preserve his stocky muscular adult body, broad weathered face, short black beard, dark charcoal rough cloth vest and trousers, muted red head wrap and sash, brown cloth boots, plain broad two-handed curved executioner's saber. No new armor, symbols, text, scars, fantasy gear or heroic embellishments. Painterly 2D isometric game art with crisp readable silhouettes and earthy shading, matching the reference. Fixed elevated three-quarter camera; ALL eight poses face SOUTHWEST, toward lower-left of the image, front and left-facing three-quarter view. Keep body size/camera/light and weapon handedness consistent, camera never rotates. 1024x1536 portrait atlas, TWO columns by FOUR rows, exactly eight separate cells, generous fully transparent padding between cells and outside, no touching or overlapping neighboring weapons/limbs. Each whole body and whole saber fits inside its own cell. Reading order: (1) idle ready stance, (2) walk left foot forward right leg back, (3) walk right foot forward left leg back -- must be genuinely opposing phases, not same step twice; (4) attack windup both hands raise the saber above and behind shoulder; (5) attack strike both hands bring saber downward-forward in a forceful cut, arms extended, clear different silhouette; (6) hurt recoil stagger backward, still standing; (7) collapsing onto one knee with blade lowering, (8) fully fallen lying on side, entire body and blade on ground. Non-graphic no wounds no blood no victim. Falling poses remain the same grounded physical body proportions, not miniaturized. Transparent background, REAL alpha channel not painted checkerboard, no floor, no baked shadow, no labels, no frames, no text. Do not simulate motion by rotating an identical figure. Draw independent anatomical poses.\nReference is only for identity and style. Draw fresh direction-specific anatomy and weapon grip; DO NOT mirror the reference. Match the stance and blade proportions. Ensure two walk phases lead with opposite anatomical feet; second walking pose can instead be a clearly narrow passing pose, ankles crossing under pelvis, both feet close together. Eight independent poses well separated.",
+      "references": [
+        "SEAlpha3"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "NE",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/NE.png",
+      "sha256": "c49bb2cab1a823feed7375d2f04ef4f6e4a8625618b6048a75af478cb4bae305",
+      "method": "built_in_imagegen",
+      "prompt": "真正透明背景，RGBA PNG，背景alpha为0，不要棋盘格，不要实色背景。\nCreate a production-ready transparent RGBA PNG sprite atlas for the attached Water Margin RTS executioner foot soldier atlas (guan_zhanzi). Reference image is identity/style reference, not an edit target. Preserve his stocky muscular adult body, broad weathered face, short black beard, dark charcoal rough cloth vest and trousers, muted red head wrap and sash, brown cloth boots, plain broad two-handed curved executioner's saber. No new armor, symbols, text, scars, fantasy gear or heroic embellishments. Painterly 2D isometric game art with crisp readable silhouettes and earthy shading, matching the reference. Fixed elevated three-quarter camera; ALL eight poses face NORTHEAST, toward upper-right of the image, a REAR three-quarter view with back visible, face mostly hidden; feet and blade move away up-right. Keep body size/camera/light and weapon handedness consistent, camera never rotates. 1024x1536 portrait atlas, TWO columns by FOUR rows, exactly eight separate cells, generous fully transparent padding between cells and outside, no touching or overlapping neighboring weapons/limbs. Each whole body and whole saber fits inside its own cell. Reading order: (1) idle ready stance, (2) walk left foot forward right leg back, (3) walk right foot forward left leg back -- must be genuinely opposing phases, not same step twice; (4) attack windup both hands raise the saber above and behind shoulder; (5) attack strike both hands bring saber downward-forward in a forceful cut, arms extended, clear different silhouette; (6) hurt recoil stagger backward, still standing; (7) collapsing onto one knee with blade lowering, (8) fully fallen lying on side, entire body and blade on ground. Non-graphic no wounds no blood no victim. Falling poses remain the same grounded physical body proportions, not miniaturized. Transparent background, REAL alpha channel not painted checkerboard, no floor, no baked shadow, no labels, no frames, no text. Do not simulate motion by rotating an identical figure. Draw independent anatomical poses.\nReference is only for identity and style. Draw fresh direction-specific anatomy and weapon grip; DO NOT mirror the reference. Match the stance and blade proportions. Ensure two walk phases lead with opposite anatomical feet; second walking pose can instead be a clearly narrow passing pose, ankles crossing under pelvis, both feet close together. Eight independent poses well separated.",
+      "references": [
+        "SEAlpha3"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "NW",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/NW.png",
+      "sha256": "4bcf2ce5ff4a5bb7021a7a1782989c49bce5d8ef95e840f13fc078923fa7d758",
+      "method": "built_in_imagegen",
+      "prompt": "真正透明背景，RGBA PNG，背景alpha为0，不要棋盘格，不要实色背景。\nCreate a production-ready transparent RGBA PNG sprite atlas for the attached Water Margin RTS executioner foot soldier atlas (guan_zhanzi). Reference image is identity/style reference, not an edit target. Preserve his stocky muscular adult body, broad weathered face, short black beard, dark charcoal rough cloth vest and trousers, muted red head wrap and sash, brown cloth boots, plain broad two-handed curved executioner's saber. No new armor, symbols, text, scars, fantasy gear or heroic embellishments. Painterly 2D isometric game art with crisp readable silhouettes and earthy shading, matching the reference. Fixed elevated three-quarter camera; ALL eight poses face NORTHWEST, toward upper-left of the image, a REAR three-quarter view with back visible, face mostly hidden; feet and blade move away up-left. Keep body size/camera/light and weapon handedness consistent, camera never rotates. 1024x1536 portrait atlas, TWO columns by FOUR rows, exactly eight separate cells, generous fully transparent padding between cells and outside, no touching or overlapping neighboring weapons/limbs. Each whole body and whole saber fits inside its own cell. Reading order: (1) idle ready stance, (2) walk left foot forward right leg back, (3) walk right foot forward left leg back -- must be genuinely opposing phases, not same step twice; (4) attack windup both hands raise the saber above and behind shoulder; (5) attack strike both hands bring saber downward-forward in a forceful cut, arms extended, clear different silhouette; (6) hurt recoil stagger backward, still standing; (7) collapsing onto one knee with blade lowering, (8) fully fallen lying on side, entire body and blade on ground. Non-graphic no wounds no blood no victim. Falling poses remain the same grounded physical body proportions, not miniaturized. Transparent background, REAL alpha channel not painted checkerboard, no floor, no baked shadow, no labels, no frames, no text. Do not simulate motion by rotating an identical figure. Draw independent anatomical poses.\nReference is only for identity and style. Draw fresh direction-specific anatomy and weapon grip; DO NOT mirror the reference. Match the stance and blade proportions. Ensure two walk phases lead with opposite anatomical feet; second walking pose can instead be a clearly narrow passing pose, ankles crossing under pelvis, both feet close together. Eight independent poses well separated.",
+      "references": [
+        "SEAlpha3"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "SW2",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/SW2.png",
+      "sha256": "0fc31a0f3faed000dd99d280a846fe1598eca20e0ab24a146e63b131c057892c",
+      "method": "built_in_imagegen",
+      "prompt": "绘制游戏实际使用的四向动作中的西南方向一张动作图集，透明背景RGBA PNG。参考图只用于确认同一个人：壮实成年刽子手、红头巾和暗红腰带、黑色粗布短褂、黑裤绑腿、双手宽刃大刀、短黑须。保持低饱和手绘2D等距游戏风格，不加花纹不加盔甲。整张8个人物都朝向画面左下角（西南），鼻尖朝左，胸前可见，双脚脚尖朝左下，不能朝右。镜头在人物前侧偏上30度，不能正侧平视。1024x1536，2列4行，8个姿态独立格子，留足真正透明空隙，刀和人不得跨格。第一行：左格静止握刀，右格跨步前进。第二行：左格行走收步，双腿靠近、后脚抬起从身体下方穿过，明显区别大跨步；右格双手举刀过肩的攻击预备。第三行：左格双手向画面左下用力斩出的命中姿态，右格受击向后仰。第四行：左格失去平衡单膝着地，右格完全倒在地上、头在画面左侧脚在右侧、大刀平放在地上。各格同一人同尺度，不能镜像复制他人，不能改换惯用手；体型和原图保持一致。非血腥无伤口，无文字无边框无地面无阴影。输出必须是真正透明RGBA，绝不能把灰白格画成背景。",
+      "references": [
+        "original_sw"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "SWAlpha",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/sw.png",
+      "sha256": "9f1e344d751903cf90b9b297dcc34f3ac0838713d44d609d48dd96b249b1f434",
+      "method": "built_in_imagegen",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与刀不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "SW2"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    },
+    {
+      "key": "NEAlpha",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/ne.png",
+      "sha256": "41d03c34f5b2826653e46759e8d6776c7b7e177d73d708b60cdb84968c38fcdc",
+      "method": "built_in_imagegen",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与刀不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "NE"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    },
+    {
+      "key": "NWAlpha",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/nw.png",
+      "sha256": "8d836083051c55e7ed9b79ea1092ef3dbfd42a3e42c4f33072ef3d6a413c6808",
+      "method": "built_in_imagegen",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持八个动作的大小、位置、人物与刀不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "NW"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    },
+    {
+      "key": "Supplement",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/Supplement.png",
+      "sha256": "40ecb8bc5420f95820a1159d97ccbcf5adbeb4cf62d984551b35cae5b32745ad",
+      "method": "built_in_imagegen",
+      "prompt": "为参考图中同一个红头巾黑衣壮实刽子手制作补充动作图集，保持暗红布背心、短黑须、双手宽刃长刀、粗布黑裤绑腿、等距手绘RTS风格，真正透明RGBA PNG。只画6个人物，2列3行，不画任何格线文字背景阴影，各格留足空白、身体和刀完整不跨格，1024x1536。第一行左：朝右下东南的行走收步姿态，双腿贴近、两脚在骨盆下交错、远腿抬膝向前、近腿直立支撑，绝对不要前后大跨步。第一行右：同样的收步姿态但朝右上东北，背面三分之二可见、面部基本不可见，腿靠近，两脚交错于骨盆下。第二行左：同样的收步姿态但朝左上西北，背部可见，双腿靠近，两脚交错于骨盆下。第二行右：朝左下西南的静止握刀姿态，鼻尖脸部和双脚全部朝左下，不回头看右边。第三行左：东北方向倒地终态，背部完全朝镜头，脸贴地不可见，头位于格子右上方、双腿位于左下方，人横躺、右上方向大刀平放地上。第三行右：西北方向倒地终态，背部完全朝镜头，脸贴地不可见，头位于格子左上方、双腿位于右下方，人横躺、左上方向大刀平放地上。所有格子同一个人同一体型尺度，非血腥无伤口。不要照抄参考中两个一样的跨步，更不要照抄朝右下的倒地。生成真正透明alpha PNG，不允许灰白棋盘背景。",
+      "references": [
+        "SEAlpha3",
+        "NEAlpha"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "SupplementAlpha",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/supplement.png",
+      "sha256": "9eecd7588dde74e7e46cecc9a0777330f0ae409ff8f99ee95ef43f1a6a1fceff",
+      "method": "built_in_imagegen",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持六个动作的大小、位置、人物与刀不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "Supplement"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    },
+    {
+      "key": "NEFall",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/NEFall.png",
+      "sha256": "7424820eef96745a3a6a51cc9d09e6e00c837e4a8a2f5cbd9d7b9563f39551bc",
+      "method": "built_in_imagegen",
+      "prompt": "只画一个人物的一个动作，不要图集：参考中的红头巾黑衣壮实刽子手朝右上东北方向正在倒下，背部朝镜头、看不见正脸；单膝跪地，左手撑地，另一手将宽刃刀放低到右上前方地面。身体失衡前倾但还没有完全平躺，是从站立到趴倒的中间动作。固定高处俯视的2D等距手绘RTS视角，保持参考服装、脸部身份、体型与刀长，不增加甲胄花纹。只有一个完整全身和完整刀，居中，四边充足空白。去掉背景，透明背景，输出真正带alpha透明通道的RGBA PNG，绝对不能画棋盘格或任何背景、阴影、文字。",
+      "references": [
+        "NEAlpha"
+      ],
+      "native_size": [
+        1402,
+        1122
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "NEFallAlpha",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/ne_fall.png",
+      "sha256": "4dd5be57299cff88aa29254bc20a6ef2ba64bb2877c3bcb98bd692c2f787b9ed",
+      "method": "built_in_imagegen",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持人物大小、位置、人物与刀不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "NEFall"
+      ],
+      "native_size": [
+        1402,
+        1122
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    },
+    {
+      "key": "SEWindup",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/se_windup.png",
+      "sha256": "019fb8c750f59ebc8f502d8c8c1a1f58fd42946c1d2b7a7493cee990104c3cc4",
+      "method": "built_in_imagegen",
+      "prompt": "只画一个人物一个动作，参考中的壮实红头巾黑衣刽子手，朝画面右下东南，双手举宽刃大刀到头顶后方准备下劈，前胸可见，完整全身，刀尖不得截断。保持暗红布衣腰带、短黑须、黑裤绑腿和手绘等距RTS画风。画布方形，人物居中，四边20%空白。去掉背景，输出真正透明RGBA PNG，必须alpha透明通道，不要任何棋盘格、文字、阴影或地面。",
+      "references": [
+        "SEAlpha3"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    },
+    {
+      "key": "SEHurt",
+      "repository_path": "tools/contracts/guan_zhanzi_direction4_20260915/generated/SEHurt.png",
+      "sha256": "f159583f8cf0c1d14060396113c1b84015cf8cbcfd59dcb925fe9409af54bc02",
+      "method": "built_in_imagegen",
+      "prompt": "单个游戏角色立绘动作：红头巾黑衣壮实刽子手，暗红粗布背心和腰带、黑裤绑腿、短黑须、手持宽刃刀，朝画面右下东南，受击后身体明显后仰、一手伸出失去平衡、另一手握刀下垂，双脚仍站地上。与参考保持同一体型、装束和低饱和手绘等距RTS画风，俯视30度，全身与完整刀居中，四周留白。不要任何背景，去掉背景，输出真正透明RGBA PNG，必须alpha透明通道，不能把棋盘格图案画进去。不要地面、阴影、文字和血伤。只画一个人物一个受击动作。",
+      "references": [
+        "SEAlpha3"
+      ],
+      "native_size": [
+        1167,
+        1348
+      ],
+      "mode": "RGB",
+      "status": "rejected_or_intermediate"
+    },
+    {
+      "key": "SEHurtAlpha",
+      "repository_path": "assets/characters/guan_zhanzi_direction4_20260915/se_hurt.png",
+      "sha256": "b3e5efe9a17f458bf80b51041dde858ade7f368ded440e3c42459727e87d6c33",
+      "method": "built_in_imagegen",
+      "prompt": "去掉背景，透明背景，输出 RGBA PNG。保持人物大小、位置、人物与刀不变。必须是真正alpha透明通道，不是把棋盘格图案当成背景画进去。",
+      "references": [
+        "SEHurt"
+      ],
+      "native_size": [
+        1167,
+        1348
+      ],
+      "mode": "RGBA",
+      "status": "selected_partial_atlas"
+    }
+  ]
+}

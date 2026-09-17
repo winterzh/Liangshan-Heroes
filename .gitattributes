@@ -156,3 +156,432 @@ qa/morning_handoff_20260907/** -text -whitespace
 qa/run_fog_runtime_20260907/** -text -whitespace
 scripts/run_fog_state.gd* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 qa/run_resume_handoff_20260907/** -text -whitespace
+
+# Godot rewrites import descriptors as LF on every platform.
+assets/**/*.import text eol=lf
+docs/**/*.import text eol=lf
+icon*.import text eol=lf
+
+qa/company_handoff_20260907/** -text -whitespace
+qa/company_steam_upload_20260907/** -text -whitespace
+qa/storage_migration_20260907/** -text -whitespace
+qa/storage_cleanup_20260907/** -text -whitespace
+
+# Fixed provenance evidence retains its historical bytes across checkouts.
+tools/contracts/art_provenance_recovery_20260907/** -text -whitespace
+qa/art_provenance_recovery_20260907/** -text -whitespace
+tools/campaign_direction4_coverage_audit.py text eol=lf
+tools/campaign_direction4_coverage_audit_selftest.py text eol=lf
+tools/campaign_art_evidence.py text eol=lf
+tools/campaign_art_evidence_selftest.py text eol=lf
+tools/campaign_art_portability_check.py text eol=lf
+tools/recover_campaign_art_provenance.py text eol=lf
+assets/campaign/daming_lu_rescued_p0_direction4_manifest.json -text -whitespace
+assets/campaign/daming_prisoners_rect_rebuild_direction4_manifest.json -text -whitespace
+assets/campaign/gao_flagship_direction4_manifest.json -text -whitespace
+assets/campaign/gao_qiu_captured_direction4_manifest.json -text -whitespace
+assets/campaign/huangnigang_p0_direction4_manifest.json -text -whitespace
+assets/campaign/jiangzhou_prisoners_p0_direction4_manifest.json -text -whitespace
+assets/campaign/li_kui_jiangzhou_direction4_manifest.json -text -whitespace
+assets/campaign/lin_chong_p0_direction4_manifest.json -text -whitespace
+assets/campaign/ordinary_officials_p0_direction4_manifest.json -text -whitespace
+assets/campaign/yezhulin_remaining_p0_direction4_manifest.json -text -whitespace
+assets/direction4/lianhuanma_p0_direction4_manifest.json -text -whitespace
+assets/direction4/song_jiang_20260906.json -text -whitespace
+assets/direction4/lin_chong_20260906.json -text -whitespace
+tools/contracts/song_jiang_direction4_20260906/** -text -whitespace
+assets/direction4/skirmish_top4_actions_direction4_manifest.json -text -whitespace
+qa/skirmish_direction4_actions_20260905/** -text -whitespace
+qa/skirmish_direction4_fix_20260905/** -text -whitespace
+
+# Keep native test receipts and executed tooling byte-identical on other PCs.
+qa/stabilization_performance_20260907/** -text -whitespace
+qa/steam_configuration_publish_20260907/** -text -whitespace
+tools/run_polish_performance.py -text -whitespace
+tools/polish_performance_probe.gd -text -whitespace
+tools/run_stabilization_performance.py -text -whitespace
+tools/prepare_unit_remainder_diagnostic.py -text -whitespace
+tools/run_unit_remainder_diagnostic.py -text -whitespace
+tools/unit_remainder_observer.gd -text -whitespace
+
+# Tested identity sources and new QA retain their exact accepted bytes.
+scripts/battle.gd -text -whitespace
+scripts/crowd_separation.gd -text -whitespace
+scripts/levels/arena.gd -text -whitespace
+scripts/levels/level1_huangnigang.gd -text -whitespace
+scripts/levels/level1_huangnigang_short.gd -text -whitespace
+scripts/levels/level2_jiangzhou.gd -text -whitespace
+scripts/levels/level2_jiangzhou_rts.gd -text -whitespace
+scripts/levels/level3_zhujiazhuang.gd -text -whitespace
+scripts/levels/level3_zhujiazhuang_rts.gd -text -whitespace
+scripts/levels/level4_lianhuanma.gd -text -whitespace
+scripts/levels/level4_lianhuanma_rts.gd -text -whitespace
+scripts/levels/level5_gao_rts.gd -text -whitespace
+scripts/levels/level5_liangshan.gd -text -whitespace
+scripts/levels/level6_yezhulin.gd -text -whitespace
+scripts/levels/level7_kuaihuolin.gd -text -whitespace
+scripts/levels/level7_kuaihuolin_short.gd -text -whitespace
+scripts/levels/level8_daming_rts.gd -text -whitespace
+scripts/levels/level8_dongchangfu.gd -text -whitespace
+scripts/levels/scenario.gd -text -whitespace
+scripts/levels/skirmish.gd -text -whitespace
+scripts/levels/skirmish_ai.gd -text -whitespace
+scripts/run_unit_graph.gd -text -whitespace
+scripts/run_unit_state.gd -text -whitespace
+scripts/unit.gd -text -whitespace
+scripts/run_defense_level_state.gd -text -whitespace
+qa/stabilization_identity_20260907/** -text -whitespace
+qa/stabilization_identity_integration_20260907/** -text -whitespace
+qa/stabilization_unit_body_20260907/** -text -whitespace
+qa/steam_run_receipt_draft_20260907/** -text -whitespace
+tools/contracts/steam_run_receipt_draft_20260907/** -text -whitespace
+tools/run_stabilization_identity.py -text -whitespace
+tools/run_stabilization_overlay.py -text -whitespace
+
+# Native resume module inputs and evidence retain accepted bytes.
+scripts/run_remaining_effect_state.gd -text -whitespace
+scripts/run_remaining_effect_state.gd.uid -text -whitespace
+scripts/run_item_cast_flow_state.gd -text -whitespace
+scripts/run_item_cast_flow_state.gd.uid -text -whitespace
+scripts/run_visual_graph.gd -text -whitespace
+scripts/run_visual_graph.gd.uid -text -whitespace
+scripts/run_battle_root_state.gd -text -whitespace
+scripts/run_battle_root_state.gd.uid -text -whitespace
+qa/stabilization_resume_graph_20260907/** -text -whitespace
+qa/stabilization_dust_filter_20260907/** -text -whitespace
+tools/contracts/steam_receipt_outbox_draft_20260907/** -text -whitespace
+
+# Frozen closeout candidates and planning records retain their original bytes.
+qa/stabilization_battle_barrier_draft_20260907/** -text -whitespace
+qa/stabilization_art_a1_brief_20260907/** -text -whitespace
+
+# Preserve native mission panel QA evidence bytes.
+qa/mission_panel_toggle_20260907/** -text -whitespace
+
+# Preserve parallel barrier, journal fixture, and original art evidence bytes.
+scripts/run_battle_clock.gd* -text -whitespace
+scripts/run_battle_barrier.gd* -text -whitespace
+qa/stabilization_battle_barrier_integration_20260907/** -text -whitespace
+qa/steam_receipt_disk_20260907/** -text -whitespace
+qa/art_song_jiang_a1_candidates_20260907/** -text -whitespace
+
+# Preserve mission panel Steam release receipts and source evidence.
+qa/steam_mission_panel_20260907/** -text -whitespace
+
+# Preserve September 8 Steam upload evidence across checkouts.
+qa/steam_upload_20260908/** -text -whitespace
+
+# Preserve September 8 announcement publication evidence.
+qa/steam_announcement_20260908/** -text -whitespace
+
+# Preserve tested BlinkShotFx source/driver and native QA bytes.
+qa/blink_resume_20260908/** -text -whitespace
+
+# Preserve mixed FxRoot native runs and tested source evidence.
+qa/mixed_fx_20260908/** -text -whitespace
+
+# Preserve world core tested production and native QA bytes.
+scripts/run_battle_world_core.gd* -text -whitespace
+tools/run_stabilization_overlay.py -text -whitespace
+qa/world_core_20260908/** -text -whitespace
+
+# Preserve tested death remains adapters and native evidence bytes.
+scripts/run_death_remains_state.gd* -text -whitespace
+scripts/run_visual_graph.gd -text -whitespace
+qa/death_remains_resume_20260908/** -text -whitespace
+
+# Preserve world display native candidates and audit evidence.
+scripts/run_world_display_state.gd* -text -whitespace
+qa/world_display_resume_20260908/** -text -whitespace
+
+# Preserve exact tested camera adapters and native evidence.
+scripts/run_camera_state.gd* -text -whitespace
+scripts/rts_camera.gd -text -whitespace
+qa/camera_resume_20260908/** -text -whitespace
+
+# Preserve tested HUD message adapters and all native evidence.
+scripts/run_hud_messages_state.gd* -text -whitespace
+qa/hud_messages_resume_20260908/** -text -whitespace
+
+# Preserve tested HUD factory and paused mounting evidence.
+scripts/run_hud_state.gd* -text -whitespace
+qa/hud_resume_20260908/** -text -whitespace
+
+# Preserve native-tested environment adapter and evidence.
+scripts/run_environment_state.gd* -text -whitespace
+qa/environment_resume_20260908/** -text -whitespace
+
+# Preserve native-tested procedural Fx adapter and evidence.
+scripts/run_procedural_fx_state.gd* -text -whitespace
+qa/procedural_fx_20260908/** -text -whitespace
+
+# Preserve native-tested linked Fx adapter and evidence.
+scripts/run_linked_fx_state.gd* -text -whitespace
+qa/linked_fx_20260908/** -text -whitespace
+
+# Preserve native-tested world swap and evidence.
+scripts/run_world_swap.gd* -text -whitespace
+qa/world_swap_20260908/** -text -whitespace
+
+# Preserve native-tested Steam ledger and evidence bytes.
+scripts/steam_run_receipt.gd* -text -whitespace
+scripts/steam_receipt_store.gd* -text -whitespace
+scripts/steam_run_ledger.gd* -text -whitespace
+qa/steam_ledger_20260908/** -text -whitespace
+
+# Preserve Steam cumulative-counter native evidence.
+qa/steam_counter_20260908/** -text -whitespace
+
+# Preserve tested world slot inputs and native synthetic evidence.
+scripts/run_snapshot_store.gd* -text -whitespace
+scripts/run_slot_store.gd* -text -whitespace
+scripts/run_world_session.gd* -text -whitespace
+qa/world_slot_20260908/** -text -whitespace
+
+# Preserve persistent session native code and evidence.
+scripts/steam_local_run_session.gd* -text -whitespace
+qa/persistent_session_20260908/** -text -whitespace
+
+# Preserve current Steam candidate QA evidence bytes.
+qa/steam_resume_update_20260908/** -text -whitespace
+
+# Localization sources, fonts and retained verification.
+assets/localization/** text eol=lf
+assets/fonts/*.ttc binary
+assets/fonts/*.import text eol=lf
+assets/fonts/*.json text eol=lf
+assets/fonts/OFL.txt -text
+scripts/localization.gd* text eol=lf
+tools/*localization*.py text eol=lf
+tools/localization_*.gd* text eol=lf
+tools/localization_qa.tscn text eol=lf
+qa/localization_20260908/** -text -whitespace
+
+# Preserve the exact runtime source bytes accepted by localization QA.
+export_presets.cfg -text -whitespace
+project.godot -text -whitespace
+scripts/android_updater.gd -text -whitespace
+scripts/battle.gd -text -whitespace
+scripts/bios.gd -text -whitespace
+scripts/campaign_mission.gd -text -whitespace
+scripts/campaign_scenery.gd -text -whitespace
+scripts/codex.gd -text -whitespace
+scripts/defs.gd -text -whitespace
+scripts/editor.gd -text -whitespace
+scripts/hud.gd -text -whitespace
+scripts/level_base.gd -text -whitespace
+scripts/levels/arena.gd -text -whitespace
+scripts/levels/custom_defense.gd -text -whitespace
+scripts/levels/level1_huangnigang.gd -text -whitespace
+scripts/levels/level1_huangnigang_short.gd -text -whitespace
+scripts/levels/level2_jiangzhou.gd -text -whitespace
+scripts/levels/level2_jiangzhou_rts.gd -text -whitespace
+scripts/levels/level3_zhujiazhuang.gd -text -whitespace
+scripts/levels/level3_zhujiazhuang_rts.gd -text -whitespace
+scripts/levels/level4_lianhuanma.gd -text -whitespace
+scripts/levels/level4_lianhuanma_rts.gd -text -whitespace
+scripts/levels/level5_gao_rts.gd -text -whitespace
+scripts/levels/level5_liangshan.gd -text -whitespace
+scripts/levels/level6_yezhulin.gd -text -whitespace
+scripts/levels/level7_kuaihuolin.gd -text -whitespace
+scripts/levels/level7_kuaihuolin_short.gd -text -whitespace
+scripts/levels/level8_daming_rts.gd -text -whitespace
+scripts/levels/level8_dongchangfu.gd -text -whitespace
+scripts/levels/scenario.gd -text -whitespace
+scripts/levels/skirmish.gd -text -whitespace
+scripts/levels/skirmish_ai.gd -text -whitespace
+scripts/menu.gd -text -whitespace
+scripts/scenario_editor.gd -text -whitespace
+scripts/settings_panel.gd -text -whitespace
+scripts/steam_panels.gd -text -whitespace
+scripts/ui_theme.gd -text -whitespace
+scripts/unit.gd -text -whitespace
+scripts/workshop_content.gd -text -whitespace
+scripts/workshop_service.gd -text -whitespace
+scripts/lore_data.gd -text -whitespace
+tools/*text*review*.gd* text eol=lf
+tools/*text*review*.tscn text eol=lf
+tools/apply_text_review.py text eol=lf
+tools/normalize_localization_names.py text eol=lf
+qa/text_review_20260908/** -text -whitespace
+qa/steam_localization_update_20260908/** -text -whitespace
+qa/steam_localization_announcement_20260908/** -text -whitespace
+marketing/steam_localization_announcement_20260908/** -text -whitespace
+native/steam_stats_reader/** -text -whitespace
+scripts/steam_stats_reader.gd -text -whitespace
+tools/build_steam_stats_reader.py -text -whitespace
+tools/steam_stats_reader_qa.gd -text -whitespace
+vendor/steam_stats_reader/** -text -whitespace
+qa/steam_stats_reader_20260908/** -text -whitespace
+tools/run_steam_stats_live_read.py -text -whitespace
+tools/steam_stats_live_read.gd -text -whitespace
+qa/steam_stats_live_read_20260908/** -text -whitespace
+scripts/run_campaign_level_state.gd -text -whitespace
+scripts/steam_persistent_outbox.gd -text -whitespace
+scripts/steam_persistent_outbox_state.gd -text -whitespace
+scripts/steam_persistent_outbox_store.gd -text -whitespace
+scripts/steam_service.gd -text -whitespace
+scripts/run_content_identity.gd -text -whitespace
+tools/campaign_level_state_qa.gd -text -whitespace
+tools/run_campaign_level_state_qa.py -text -whitespace
+tools/run_steam_persistent_outbox_qa.py -text -whitespace
+tools/steam_persistent_outbox_qa.gd -text -whitespace
+tools/build_steam_candidate.py -text -whitespace
+tools/run_steam_integration_qa.py -text -whitespace
+tools/steam_candidate_verification.py -text -whitespace
+tools/steam_fake_api.gd -text -whitespace
+tools/steam_integration_suite.gd -text -whitespace
+tools/steam_package_probe.gd -text -whitespace
+qa/campaign_level_state_20260908/** -text -whitespace
+qa/steam_persistent_outbox_20260908/** -text -whitespace
+qa/steam_stats_fix_20260908/** -text -whitespace
+marketing/steam_stats_fix_20260908/** -text -whitespace
+qa/steam_stats_fix_publication_20260909/** -text -whitespace
+scripts/continue_flow.gd -text -whitespace
+scripts/app_lifecycle.gd -text -whitespace
+scripts/run_campaign_mission_state.gd -text -whitespace
+scripts/steam_stats_observer.gd -text -whitespace
+assets/localization/continue_flow.json -text -whitespace
+tools/continue_flow_qa.gd -text -whitespace
+tools/run_continue_flow_qa.py -text -whitespace
+tools/campaign_mission_state_qa.gd -text -whitespace
+tools/run_campaign_mission_state_qa.py -text -whitespace
+tools/hud_pause_restore_qa.gd -text -whitespace
+tools/run_hud_pause_restore_qa.py -text -whitespace
+tools/owned_slot_retry_qa.gd -text -whitespace
+tools/run_owned_slot_retry_qa.py -text -whitespace
+tools/steam_stats_observer_qa.gd -text -whitespace
+tools/test_steam_stats_observer_native.py -text -whitespace
+tools/validate_steam_stats_observer.py -text -whitespace
+qa/continue_flow_20260909/** -text -whitespace
+qa/campaign_mission_state_20260909/** -text -whitespace
+qa/hud_pause_restore_20260909/** -text -whitespace
+qa/owned_slot_retry_20260909/** -text -whitespace
+qa/steam_stats_observer_20260909/** -text -whitespace
+scripts/run_local_lifecycle.gd -text -whitespace
+scripts/run_campaign_presentation_state.gd -text -whitespace
+tools/campaign_presentation_state_qa.gd -text -whitespace
+tools/run_campaign_presentation_state_qa.py -text -whitespace
+tools/classic30_player_commands.gd -text -whitespace
+tools/classic30_continue_acceptance.gd -text -whitespace
+tools/run_classic30_continue_acceptance.py -text -whitespace
+qa/campaign_presentation_state_20260909/** -text -whitespace
+qa/classic30_continue_20260909/** -text -whitespace
+tools/classic30_inflight_observer.gd -text -whitespace
+qa/level3_world_prepare_20260909/** -text -whitespace
+scripts/run_official_restore_profile.gd -text -whitespace
+scripts/run_level3_world_factory.gd -text -whitespace
+tools/official_restore_profile_qa.gd -text -whitespace
+tools/run_official_restore_profile_qa.py -text -whitespace
+tools/level3_unit_graph_qa.gd -text -whitespace
+tools/run_level3_unit_graph_qa.py -text -whitespace
+qa/official_restore_profile_20260909/** -text -whitespace
+qa/level3_unit_graph_20260909/** -text -whitespace
+qa/level3_scenery_prepare_20260909/** -text -whitespace
+tools/level3_scenery_qa.gd -text -whitespace
+tools/run_level3_scenery_qa.py -text -whitespace
+tools/campaign_fx_partition_qa.gd -text -whitespace
+tools/run_campaign_fx_partition_qa.py -text -whitespace
+qa/level3_scenery_20260909/** -text -whitespace
+qa/campaign_fx_partition_20260909/** -text -whitespace
+qa/storage_cleanup_20260909/** -text -whitespace
+qa/steam_latest_update_20260909/** -text -whitespace
+marketing/steam_latest_update_20260909/copy.json -text -whitespace
+
+# Preserve campaign feedback evidence and tested source bytes.
+qa/campaign_feedback_20260909/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/campaign_environment.gd -text
+scripts/campaign_mengzhou_gate.gd -text
+scripts/campaign_mengzhou_gate.gd.uid -text
+tools/mengzhou_gate_alignment_test.gd -text
+tools/mengzhou_gate_alignment_test.gd.uid -text
+tools/campaign_siege_balance_test.gd -text
+tools/campaign_siege_balance_test.gd.uid -text
+tools/campaign_fortification_ui_test.gd -text
+tools/campaign_fortification_ui_test.gd.uid -text
+tools/run_campaign_feedback_qa.py -text
+qa/huangnigang_arrival_20260909/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/huangnigang_arrival_test.gd text eol=lf
+tools/huangnigang_arrival_test.gd.uid text eol=lf
+tools/daming_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/zhujiazhuang_rts_test.gd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve approved marketing sources, recording scripts and evidence bytes.
+# Preserve the Huangnigang restore runners and this batch's exact QA bytes.
+tools/level1_world_restore_qa.gd text eol=lf
+tools/level1_cross_process_qa.gd text eol=lf
+tools/campaign_freeplay_core_test.gd text eol=lf
+scripts/run_level1_visual_state.gd text eol=lf
+scripts/run_level1_visual_state.gd.uid text eol=lf
+tools/run_level3_world_restore_qa.py text eol=lf
+qa/level3_world_restore_20260909/20260912_*/** -text -whitespace
+qa/level3_world_restore_20260909/20260913_*/** -text -whitespace
+qa/huangnigang_world_restore_20260913/** -text -whitespace
+scripts/run_level6_world_factory.gd text eol=lf
+scripts/run_level6_world_factory.gd.uid text eol=lf
+tools/level6_world_restore_qa.gd text eol=lf
+tools/level6_cross_process_qa.gd text eol=lf
+qa/yezhulin_world_restore_20260913/** -text -whitespace
+
+marketing/steam_store_20260909_female/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+marketing/steam_store_20260909_female/video/*.log -text -whitespace
+qa/steam_store_media_20260909_female/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+qa/steam_release_20260913/** -text -whitespace
+marketing/steam_announcement_20260913/** -text -whitespace
+qa/steam_announcement_20260913/** -text -whitespace
+marketing/steam_version_roundup_20260913/** -text -whitespace
+qa/steam_version_roundup_20260913/** -text -whitespace
+scripts/run_level2_world_factory.gd text eol=lf
+scripts/run_level2_world_factory.gd.uid text eol=lf
+tools/level2_world_restore_qa.gd text eol=lf
+tools/level2_cross_process_qa.gd text eol=lf
+qa/jiangzhou_world_restore_20260913/** -text -whitespace
+scripts/run_level7_world_factory.gd text eol=lf
+scripts/run_level7_world_factory.gd.uid text eol=lf
+scripts/run_level7_visual_state.gd text eol=lf
+scripts/run_level7_visual_state.gd.uid text eol=lf
+tools/level7_world_restore_qa.gd text eol=lf
+tools/level7_cross_process_qa.gd text eol=lf
+qa/kuaihuolin_world_restore_20260913/** -text -whitespace
+qa/huangnigang_feedback_20260913/** -text -whitespace
+tools/art_character_direction4_qa.gd text eol=lf
+tools/run_character_art_qa.py text eol=lf
+qa/character_art_20260913/** -text -whitespace
+assets/anim/sun_li_*.tres text eol=lf
+assets/anim/hu_sanniang_*.tres text eol=lf
+assets/direction4/sun_li_20260913.json -text -whitespace
+assets/direction4/hu_sanniang_20260913.json -text -whitespace
+tools/contracts/sun_li_direction4_20260913/** -text -whitespace
+tools/contracts/hu_sanniang_direction4_20260913/** -text -whitespace
+tools/codex_identity_qa.gd text eol=lf
+tools/run_codex_identity_qa.py text eol=lf
+qa/codex_identity_20260913/** -text -whitespace
+tools/contracts/codex_identity_20260913/** -text -whitespace
+scripts/art_db.gd -text -whitespace
+qa/steam_release_20260914/** -text -whitespace
+
+# Preserve executioner native art, provenance and frozen QA evidence.
+qa/character_art_20260915/** -text -whitespace
+tools/contracts/guan_zhanzi_direction4_20260915/** -text -whitespace
+assets/characters/guan_zhanzi_direction4_20260915/** -text -whitespace
+assets/direction4/guan_zhanzi_20260915.json -text -whitespace
+assets/anim/guan_zhanzi_*.tres -text -whitespace
+tools/skirmish_direction4_contract_test.gd -text -whitespace
+
+# Native web art and the exact files used in the full-library visual receipts.
+assets/characters/art_full_20260915/** -text -whitespace
+assets/campaign/environment/art_full_20260915/** -text -whitespace
+assets/campaign/environment/level3/*.tres -text -whitespace
+assets/campaign/environment/level7/*.tres -text -whitespace
+assets/campaign/environment/level8/*.tres -text -whitespace
+assets/campaign/environment/shared/overlays/*.tres -text -whitespace
+assets/anim/dong_chao_*.tres -text -whitespace
+assets/anim/xue_ba_*.tres -text -whitespace
+tools/contracts/art_full_20260915/** -text -whitespace
+qa/art_full_20260915/** -text -whitespace
+tools/art_full_inventory_qa.gd text eol=lf
+tools/art_full_source_contract.py text eol=lf
+tools/run_art_full_qa.py text eol=lf
+
+scripts/campaign_environment_art.gd -text -whitespace
+scripts/liangshan_scenery.gd -text -whitespace

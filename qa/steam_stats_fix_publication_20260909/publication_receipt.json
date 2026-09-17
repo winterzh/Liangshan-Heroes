@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-09-08 18:27:33 UTC",
+  "status": "PUBLISHED",
+  "authorization": "User explicitly requested Steam update and announcement publication.",
+  "source_commit": "da6612e6f63961e897bb1711ecc3b3e5d9613f94",
+  "local_baseline_commit": "ac48686e06f2a2bbf630dfb2fce2aecf305db867",
+  "steam": {
+    "app_id": "5088120",
+    "branch": "default",
+    "build_id": "25185242",
+    "depot_id": "5088121",
+    "manifest_id": "1883518997850700800",
+    "canonical_url": "https://partner.steamgames.com/apps/builds/5088120",
+    "canonical_default_row_verified": true,
+    "deployment_history_verified": true,
+    "deployment_history_displayed_time": "9 月 8 日 上午 11:01",
+    "deployment_history_timezone": "Steam page Pacific time; equivalent to 2026-09-09 02:01 Asia/Shanghai",
+    "deployment_history_description": "设置上线 BuildID 25185242 for branch \"default\", description \"Windows Steam stats read and callback fixes; source da6612e. QA191 package1088 identity20 and 11 EXE smoke cases passed; six server files verified. Battle resume remains gated.\"",
+    "confirmation": "Steam mobile confirmation request was shown; subsequent canonical default and deployment history confirmed successful activation.",
+    "unchanged_other_branches": [
+      "macos",
+      "steam-integration"
+    ],
+    "only_windows_depot_changed": true,
+    "duplicate_upload": false,
+    "previous_stage_receipt": "qa/steam_stats_fix_20260908/steam_server_receipt.json"
+  },
+  "announcement": {
+    "event_id": "708907988310559239",
+    "public_url": "https://store.steampowered.com/news/app/5088120/view/708907988310559239",
+    "editor_url": "https://steamcommunity.com/games/5088120/partnerevents/edit/708907988310559239",
+    "type": "Small Update / Patch Notes",
+    "editor_status": "公开可见",
+    "publish_confirmation": "发布成功完成。",
+    "published_at_local": "2026-09-09 02:17 Asia/Shanghai",
+    "linked_build_id": "25185242",
+    "languages": [
+      "schinese",
+      "tchinese",
+      "english",
+      "japanese"
+    ],
+    "copy_path": "marketing/steam_stats_fix_20260908/copy.json",
+    "copy_sha256": "ab474e4029d636eb95229bf091eadbe7c951a658e1c00704396d961fd5054d9c",
+    "public_text_observation": "CUA DOM on four public URLs in the authenticated browser; complete title, subtitle and seven body segments for each language.",
+    "public_rendered_file": "public_rendered.json",
+    "public_text_comparison": "All 36 ordered text segments match local copy after removing BBCode and blank lines.",
+    "public_index_title_visible": true,
+    "public_visual_review": [
+      "schinese article top viewport",
+      "japanese article top viewport",
+      "schinese news list viewport"
+    ],
+    "cover": {
+      "path": "docs/steam_announcement_20260901/event_cover_800x450_english_v2.png",
+      "width": 800,
+      "height": 450,
+      "sha256": "508a9c882c68579ebdcc4832890f83ccd36448269ade8347b027bfdb035a56da",
+      "language": "english",
+      "text_free": true,
+      "saved_before_publication": true,
+      "server_url": "https://clan.fastly.steamstatic.com/images/46272698/2105fa26234a9377723de86a7519262f3f5949cb.png",
+      "other_language_fallback": "Publish dialog explicitly confirmed English artwork fallback for the other three languages.",
+      "placement_observation": "Current small-update news-list card uses game capsule art and article top uses game screenshot background. No claim that the uploaded cover is displayed in every public placement."
+    }
+  },
+  "frozen_package": {
+    "candidate": "20260908_184221_465b304a",
+    "zip_bytes": 238222829,
+    "zip_sha256": "b160a06f066f9b4c087d5ee1ef5ebd2265954ba8c91a2c73ec4bf191b317bd96",
+    "runtime_changed_this_turn": false,
+    "godot_rerun": false,
+    "prior_integration_checks": 191,
+    "prior_package_checks": 1088,
+    "prior_exe_smoke_cases": 11
+  },
+  "limits": {
+    "resume_entrypoints_open": false,
+    "production_durable_confirmation": "WRITE_CONFIRMATION_UNPROVEN",
+    "full_nine_mode_resume_acceptance_complete": false,
+    "client_download_verified": false,
+    "logged_out_page_control_performed": false,
+    "independent_web_reader": "Safe-open failed for the four URLs; excluded from verification.",
+    "all_cover_placements_verified": false,
+    "human_full_playthrough_complete": false
+  },
+  "evidence_method": "Sanitized observations from actual rendered browser UI. No session/cookie, private account header, wallet, deployment IP or credentials stored. Old stage receipts remain immutable."
+}

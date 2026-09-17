@@ -1,0 +1,19 @@
+extends SceneTree
+
+func _initialize() -> void:
+    call_deferred("_capture")
+
+func _capture() -> void:
+    root.size = Vector2i(1280, 720)
+    var err: Error = change_scene_to_file("res://scenes/menu.tscn")
+    if err != OK:
+        push_error("Company menu load failed: %s" % err)
+        quit(2)
+        return
+    await create_timer(3.0).timeout
+    await RenderingServer.frame_post_draw
+    var output := OS.get_environment("COMPANY_CAPTURE_OUTPUT")
+    var screenshot: Image = root.get_texture().get_image()
+    err = screenshot.save_png(output)
+    print("COMPANY_MENU_CAPTURE ", JSON.stringify({"scene": current_scene.scene_file_path, "width": screenshot.get_width(), "height": screenshot.get_height(), "save_error": err, "user_dir": OS.get_user_data_dir()}))
+    quit(0 if err == OK else 3)

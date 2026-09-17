@@ -1,7 +1,7 @@
 """Export a private Windows Steam feature candidate from a successful QA snapshot.
 
 No upload or publication; this is not the commercial artwork/readiness gate.
-The runtime allowlist follows the verified September 7 Windows update scope.
+The runtime allowlist includes the reviewed four-language catalog and font.
 """
 from pathlib import Path, PurePosixPath
 import argparse
@@ -13,12 +13,14 @@ import subprocess
 import time
 import uuid
 import zipfile
-from run_steam_integration_qa import ROOT, LOCK, install_native, resolve_godot
+from run_steam_integration_qa import ROOT, LOCK, install_native, native_dependencies, sources, resolve_godot, resolve_profile_root, create_private_profile
 from steam_candidate_verification import verify
 from contracts.run_content_identity_20260907.build_identity import seed, generate, verify_generated, DERIVED
 from contracts.run_content_identity_20260907.probe_runner import run_locked as probe_content_identity, utilities as identity_utilities
 
 CORE = {"project.godot", "export_presets.cfg", "icon.png", "icon.png.import", "icon.ico"}
+LOCALIZATION = {"assets/localization/catalog.json", "assets/fonts/NotoSansCJK-Regular.ttc",
+                "assets/fonts/NotoSansCJK-Regular.ttc.import", "assets/fonts/OFL.txt"}
 RUNTIME = ("assets/anim/", "assets/campaign/anim/", "assets/campaign/objects/",
            "assets/campaign/portraits/", "assets/campaign/environment/", "assets/vfx/", "assets/characters/")
 
@@ -27,7 +29,7 @@ def sha(path):
 
 def allowed(name):
     path = PurePosixPath(name)
-    if name in CORE: return True
+    if name in CORE or name in LOCALIZATION: return True
     if name.startswith("content/"): return path.suffix == ".json"
     if name.startswith("scripts/"): return path.suffix in {".gd", ".gdshader", ".uid"}
     if name.startswith("scenes/"): return path.suffix == ".tscn"
@@ -35,11 +37,19 @@ def allowed(name):
         return "_raw" not in name and "/atlases/" not in name and name.endswith((".png", ".png.import"))
     return name.startswith(RUNTIME) and "_raw" not in name and name.endswith((".png", ".png.import", ".tres"))
 
+def verify_runtime_inventory(records):
+    expected = {row["path"] for row in records}
+    if len(expected) != len(records): raise RuntimeError("Duplicate QA runtime paths")
+    current = {name for name in sources() if allowed(name) and name != DERIVED}
+    if current != expected:
+        raise RuntimeError("Runtime source inventory changed since QA: added=" + repr(sorted(current - expected)) + "; removed=" + repr(sorted(expected - current)))
+
 def package_archive(run, windows):
     archive = run / "LiangshanHeroes_Steam_candidate.zip"
     if archive.exists(): raise RuntimeError("Refusing to overwrite a candidate archive")
     sources = [(p, p.relative_to(windows).as_posix()) for p in sorted(windows.rglob("*")) if p.is_file()]
     sources.append((ROOT / "vendor/godotsteam/license.md", "GODOTSTEAM_LICENSE.txt"))
+    sources.append((ROOT / "vendor/steam_stats_reader/GODOT_CPP_LICENSE.md", "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt"))
     rows = [{"path":name,"bytes":path.stat().st_size,"sha256":sha(path)} for path,name in sources]
     with zipfile.ZipFile(archive,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=6) as output:
         for path,name in sources: output.write(path,name)
@@ -56,20 +66,28 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--qa-run", type=Path, required=True)
     parser.add_argument("--godot")
+    parser.add_argument("--profile-root", type=Path, help="Absolute short parent for a new, exclusive private profile")
     parser.add_argument("--run", action="store_true")
     args = parser.parse_args()
+    profile_root = resolve_profile_root(args.profile_root)
     qa = args.qa_run.resolve()
     qa.relative_to((ROOT / ".godot/steam_integration_qa").resolve())
     proof = json.loads((qa / "receipt.json").read_text())
     if not proof.get("complete"): raise RuntimeError("A successful QA run is required")
+    if proof.get("native") is not True or proof.get("native_dependencies") != native_dependencies():
+        raise RuntimeError("A successful QA snapshot with these exact native dependencies is required")
     records = [row for row in proof["source_files"] if allowed(row["path"]) and row["path"] != DERIVED]
+    verify_runtime_inventory(records)
+    missing_localization = LOCALIZATION - {row["path"] for row in records}
+    if missing_localization:
+        raise RuntimeError("The successful QA snapshot must include localization inputs: " + ", ".join(sorted(missing_localization)))
     if not any(row["path"] == "scripts/run_content_identity.gd" for row in records):
         raise RuntimeError("The successful QA snapshot must include the reviewed identity provider")
     for row in records:
         if sha(ROOT / row["path"]) != row["sha256"]:
             raise RuntimeError("Source changed since QA: " + row["path"])
     if not args.run:
-        print(json.dumps({"preflight":True, "source_files":len(records), "godot":str(resolve_godot(args.godot))}))
+        print(json.dumps({"preflight":True, "source_files":len(records), "godot":str(resolve_godot(args.godot)), "profile_root":str(profile_root) if profile_root else None}))
         return
     running = subprocess.check_output(["powershell.exe", "-NoProfile", "-Command", "@(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | ForEach-Object { $_.Id }) | ConvertTo-Json -Compress"], text=True).strip()
     if running and json.loads(running): raise RuntimeError("Godot engine slot occupied")
@@ -89,16 +107,20 @@ def main():
             shutil.copyfile(ROOT / row["path"], dest)
             if sha(dest) != row["sha256"]: raise RuntimeError("Source changed during copy")
         shutil.copytree(qa / "project/.godot/imported", project / ".godot/imported")
-        install_native(project)
-        receipt["native_provenance"] = json.loads((ROOT / "vendor/godotsteam/provenance.json").read_text())
+        receipt["native_dependencies"] = install_native(project)
+        if receipt["native_dependencies"] != proof["native_dependencies"]:
+            raise RuntimeError("Native dependencies changed after QA")
+        receipt["native_provenance"] = receipt["native_dependencies"]["godotsteam"]
         env = os.environ.copy()
         for key in list(env):
             if key.endswith(("_TEST", "_QA", "_AUDIT")) or key in {"LEVEL", "SCENARIO", "CUSTOM_DEFENSE", "SKIRMISH", "SKIRMISH_AI", "ARENA", "SCREENSHOT_DIR"}:
                 env.pop(key)
         template = Path(os.environ["APPDATA"]) / "Godot/export_templates/4.6.3.stable/windows_release_x86_64.exe"
+        profile = create_private_profile(run, profile_root)
+        receipt["private_profile"] = str(profile)
         for key in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
-            private = run / "profile" / key.lower()
-            private.mkdir(parents=True, exist_ok=True)
+            private = profile / key.lower()
+            private.mkdir()
             env[key] = str(private)
         target = Path(env["APPDATA"]) / "Godot/export_templates/4.6.3.stable/windows_release_x86_64.exe"
         target.parent.mkdir(parents=True)
@@ -106,7 +128,10 @@ def main():
         receipt["template_sha256"] = sha(target)
         engine = str(resolve_godot(args.godot))
         receipt["godot_sha256"] = sha(Path(engine))
-        env.update(STEAM_DISABLED="1", CONTENT_UPDATE_NO_AUTO="1", STEAM_PACKAGE_REPORT=str(run / "package_report.json"))
+        catalog_sha256 = sha(project / "assets/localization/catalog.json")
+        receipt["localization_catalog_sha256"] = catalog_sha256
+        env.update(STEAM_DISABLED="1", CONTENT_UPDATE_NO_AUTO="1", STEAM_PACKAGE_REPORT=str(run / "package_report.json"),
+                   LSH_QA_CATALOG_SHA=catalog_sha256)
         windows = run / "windows"
         windows.mkdir()
         exe = windows / "LiangshanHeroes.exe"
@@ -135,7 +160,7 @@ def main():
                 receipt["content_identity"] = identity_generation
             else:
                 verify_generated(project, identity_generation)
-        verification = verify(run, windows, Path(engine), env)
+        verification = verify(run, windows, Path(engine), env, records)
         receipt["steps"].extend(verification["steps"])
         receipt["verification"] = verification
         identity_util = identity_utilities()
@@ -149,6 +174,8 @@ def main():
             if LOCK.read_text(encoding="utf-8") != str(run): raise RuntimeError("Identity probe lost builder lock")
             if identity_util.tree(real_user) != identity_players_before: raise RuntimeError("Real player profile changed")
             if identity_source_guard.source_receipt(ROOT) != identity_sources_before: raise RuntimeError("Production source changed")
+            verify_runtime_inventory(records)
+            if native_dependencies() != receipt["native_dependencies"]: raise RuntimeError("Native dependencies changed during export")
             for row in records:
                 if sha(ROOT / row["path"]) != row["sha256"]: raise RuntimeError("Production source changed before identity probe")
             verify_generated(project, identity_generation)
@@ -168,6 +195,9 @@ def main():
             found = list(windows.rglob(expected))
             if len(found) != 1 or sha(found[0]) != sha(ROOT / "vendor/godotsteam/win64" / expected):
                 raise RuntimeError("Native export dependency missing or changed: " + expected)
+        reader = windows / "steam_stats_reader.dll"
+        if not reader.is_file() or sha(reader) != sha(ROOT / "vendor/steam_stats_reader/win64/steam_stats_reader.dll"):
+            raise RuntimeError("Reader export dependency missing or changed")
         receipt["outputs"] = [{"path":p.relative_to(windows).as_posix(),"bytes":p.stat().st_size,"sha256":sha(p)} for p in sorted(windows.rglob("*")) if p.is_file()]
         for row in records:
             if sha(ROOT / row["path"]) != row["sha256"]: raise RuntimeError("Source changed during export")
@@ -175,6 +205,8 @@ def main():
                 raise RuntimeError("Exporter changed production source: " + row["path"])
         receipt["checks"] = verification["checks"]
         receipt["archive"] = package_archive(run, windows)
+        verify_runtime_inventory(records)
+        if native_dependencies() != receipt["native_dependencies"]: raise RuntimeError("Native dependencies changed during packaging")
         receipt["complete"] = True
     finally:
         if child is not None and child.poll() is None: child.kill(); child.wait(timeout=30)
