@@ -494,9 +494,11 @@ func on_unit_died(b,u) -> void:
 	if u==posts[0]: b.mission.mark("gao_land_post_destroyed","山前补给营被拆，停止该处所有陆军补充，北侧资源可争取。")
 	if u==posts[1]: b.mission.mark("gao_sea_post_destroyed","东岸官军船坞被拆，停止该处所有战船补充。")
 	if u==flagship: flagship_disabled=true; _capture_failed(b,"座船已沉，未能生擒高俅")
-	if u==carrier or u==prisoner or u.key=="zhang_shun_boat": _capture_failed(b,"押俘所需小艇或俘虏损失")
+	if u==prisoner or (not landed and (u==carrier or u.key=="zhang_shun_boat")):
+		_capture_failed(b,"押俘所需小艇或俘虏损失")
 	if u.key in ["ruan_xiaoer_boat","ruan_xiaowu_boat"]:
-		if not alive(b.find_unit("ruan_xiaoer_boat")) and not alive(b.find_unit("ruan_xiaowu_boat")): _capture_failed(b,"两艘封港专船均已损失")
+		if not port_sealed and not alive(b.find_unit("ruan_xiaoer_boat")) and not alive(b.find_unit("ruan_xiaowu_boat")):
+			_capture_failed(b,"两艘封港专船均已损失")
 		if not b.mission.has_event("fire_escort_safe"):
 			b.mission.miss_story_goal("gao_fire","接应船损失，可继续用普通舰队正面作战。")
 	if u==fireboat and not fire_lit: b.mission.miss_story_goal("gao_fire","火船损失，可建船坞补普通战船继续进攻。")

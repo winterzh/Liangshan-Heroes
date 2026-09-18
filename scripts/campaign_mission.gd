@@ -342,6 +342,7 @@ func _refresh_campaign_text() -> void:
 func begin(new_id: String, title: String, text: String) -> void:
 	if active_action_id!="": _stage_interruptions+=1
 	_clear_auto_dispatch(_actor)
+	_clear_manual_action_orders()
 	_close_stage_metrics("transition")
 	_generation += 1
 	stage_id = new_id
@@ -526,6 +527,7 @@ func block_action(action_id: String, reason: String) -> void:
 	if not actions.has(action_id) or actions[action_id].done: return
 	var action: Dictionary = actions[action_id]
 	if action.get("blocked_reason", "") == reason: return
+	_clear_manual_action_orders(action_id)
 	action["blocked_reason"] = reason
 	if active_action_id == action_id: on_player_order(_actor)
 	if is_instance_valid(action.button):
@@ -667,6 +669,35 @@ func _consume_mission_order_token(token: int) -> void:
 		if is_instance_valid(unit) and unit.mission_order_token == token:
 			unit.clear_mission_order_intent()
 
+## A task can wait behind another actor without losing its already-arrived click.
+## Keep only that live task's arrival grace, never a general movement receipt.
+## Unit's normal new-order path still cancels the receipt immediately.
+func _retain_waiting_manual_arrivals() -> void:
+	for unit in battle.units:
+		if not is_instance_valid(unit) or unit.mission_order_active or unit.mission_order_arrival_t <= 0.0 \
+				or unit.mission_order_token <= 0 or unit.mission_order_target == Vector2.INF:
+			continue
+		var action_id := _nearest_clicked_action(unit.mission_order_target)
+		if action_id.is_empty() or bool(unit.get_meta(AUTO_DISPATCH_META, false)):
+			continue
+		var action: Dictionary = actions[action_id]
+		var destination: Vector2 = battle.map.cell_to_world(action.cell)
+		if not String(action.get("blocked_reason", "")).is_empty() or not _valid_action_actor(unit, action) \
+				or unit.position.distance_to(destination) > float(action.reach) \
+				or not battle.map._segment_open(unit.position, destination, unit.movement_profile):
+			unit.clear_mission_order_intent()
+			continue
+		unit.mission_order_arrival_t = maxf(unit.mission_order_arrival_t, 0.35)
+
+## Consume before changing/removing a task so an old click cannot resolve to a
+## neighbouring or newly-created follow-up marker after the original disappears.
+func _clear_manual_action_orders(action_id := "") -> void:
+	for unit in battle.units:
+		if not is_instance_valid(unit) or unit.mission_order_token <= 0:
+			continue
+		if action_id.is_empty() or _nearest_clicked_action(unit.mission_order_target) == action_id:
+			unit.clear_mission_order_intent()
+
 func _try_manual_action() -> bool:
 	if battle.phase != battle.Phase.FIGHT or active_action_id != "":
 		return false
@@ -733,6 +764,8 @@ func tick(delta: float) -> void:
 	_panel.reset_size()
 	elapsed += delta
 	total_game_seconds += delta
+	if active_action_id != "":
+		_retain_waiting_manual_arrivals()
 	if active_action_id == "":
 		_try_manual_action()
 		if active_action_id == "":
@@ -777,6 +810,7 @@ func tick(delta: float) -> void:
 	var finished := active_action_id
 	var actor = _actor
 	_clear_auto_dispatch(actor)
+	_clear_manual_action_orders(finished)
 	action.done = true
 	if is_instance_valid(action.button):
 		action.button.disabled = true
@@ -807,6 +841,7 @@ func has_event(event_id: String) -> bool:
 	return events.has(event_id)
 
 func finish_metrics(victory: bool) -> void:
+	_clear_manual_action_orders()
 	if _metrics_closed or stage_id == "": return
 	# A terminal result cancels a pending task just like a phase transition.
 	if active_action_id != "": _stage_interruptions += 1

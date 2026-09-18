@@ -1,3 +1,12 @@
+## 2026-09-18 操作与更新链路回归
+
+- `tools/{input,combat,campaign}_controls_regression_qa.gd`：私有项目中的输入、自然战斗 tick、任务/押俘/模式切换边界回归。
+- `tools/run_update_transport_qa.py`、`tools/update_transport_qa.gd`：真实 HTTP、签名、下载、重启挂载及异常包/跨底包拒绝测试，不发布。
+- `tools/update_release_policy_qa.py`：离线验证 Windows 排除、bootstrap 4、Android 完整基线策略与导出过滤。
+- `tools/verify_platform_exports.py`：白名单冻结、EXE/APK 诊断导出、实际包清单/签名/版本与宿主菜单加载检查。
+- `qa/controls_update_20260918/`：本轮修复说明、通过日志、更新与导出收据摘要、原生设备验证限制；不收录安装包、私钥或测试缓存。
+- `docs/ANDROID_RELEASE.md`、`docs/DESKTOP_RELEASE.md`：更新后的完整基线迁移与 Windows 停用策略。
+
 ## 2026-09-17 Steam 发布指南
 
 - [项目级 Steam 发布指南](STEAM_RELEASE_GUIDE.md)：App `5088120` / Windows Depot `5088121` 的候选、上传、`default` 上线、四语公告、回验、回滚和收据清单。

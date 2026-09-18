@@ -4813,8 +4813,9 @@ func _auto_micro_pass() -> void:
 			_auto_learn(u)
 		if u.slot_count() <= 0 or u._cast_t > 0.0:
 			continue
-		if u.manual_order_active or u.manual_order_t > 0.0:
-			continue   # 玩家刚亲自下过令：保护期内托管不插手（执行完会提前解除）
+		if u.manual_order_active or u.manual_order_t > 0.0 \
+				or u.waiting_manual_mission_arrival():
+			continue   # 玩家命令及经任务层有限续期的现场等待：托管不抢走；取消/完成后解除
 		if String(u.key) == "hua_rong" and u.hua_lock_active() and target_visible_to(u, u._hua_lock_target):
 			continue   # E 的五次跨距锁定普攻正在执行：托管不能用走位/换目标把它中途覆盖
 		# 每 ~0.27s 一次；按战斗内生成顺序分配相位，不受装饰对象数量影响。

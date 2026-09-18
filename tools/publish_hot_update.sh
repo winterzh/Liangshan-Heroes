@@ -1,6 +1,6 @@
 #!/bin/bash
-# 从各平台固定基线生成“基线 -> 当前源码”的累计差异包，并同步提升三端 stable。
-# Android 固定从 1.4.0 生成以兼容旧 APK；Windows/macOS 从当前两段式完整版本生成。
+# 从签名基线清单指定的固定基线生成累计差异包，同步提升 Android/macOS stable。
+# Windows 在线更新暂停。Bootstrap 4 的 Android 必须使用新完整包基线。
 set -euo pipefail
 
 if [ "$#" -lt 1 ]; then
@@ -13,7 +13,7 @@ source "$ROOT/tools/update_release.env"
 source "$ROOT/tools/lib_update_release.sh"
 
 VERSION="$1"
-NOTES="${2:-三端内容更新}"
+NOTES="${2:-Android/macOS 内容更新}"
 GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
 BUILD="$ROOT/build"
 UPDATE_OUT="$BUILD/updates"
@@ -22,7 +22,7 @@ UPDATE_PRIVATE_KEY="${LIANGSHAN_UPDATE_SIGNING_KEY:-$HOME/.config/liangshan-upda
 UPDATE_PUBLIC_KEY="${LIANGSHAN_UPDATE_PUBLIC_KEY:-$HOME/.config/liangshan-update/manifest-signing-public.pem}"
 SSH_KEY="${LIANGSHAN_UPDATE_SSH_KEY:-$HOME/.ssh/liangshan_update_ed25519}"
 REMOTE="${LIANGSHAN_UPDATE_REMOTE:-root@120.26.237.195}"
-PLATFORMS="android windows macos"
+PLATFORMS="android macos" # Windows EXE 在线更新暂停；不得上传或提升 Windows stable。
 
 update_require_patch_version "$VERSION"
 update_same_release_line "$VERSION" "$UPDATE_BASE_VERSION" || \
@@ -36,7 +36,7 @@ update_verify_git_release_point "$VERSION"
 update_require_hot_update_safe "$UPDATE_BASE_VERSION"
 mkdir -p "$WORK"
 
-echo "== 读取并验证三端 v$UPDATE_BASE_VERSION 基线清单 =="
+echo "== 读取并验证 Android/macOS v$UPDATE_BASE_VERSION 基线清单 =="
 for platform in $PLATFORMS; do
 	dir="$WORK/base-manifest-$platform"
 	mkdir -p "$dir"
@@ -162,7 +162,7 @@ for platform in $PLATFORMS; do \
 done; \
 rm -rf '$REMOTE_TMP'"
 
-echo "== 公网回读三端版本化文件，验签、验大小、验 SHA-256 =="
+echo "== 公网回读 Android/macOS 版本化文件，验签、验大小、验 SHA-256 =="
 for platform in $PLATFORMS; do
 	manifest="$WORK/base-manifest-$platform/manifest.json"
 	base_version="$(update_manifest_value "$manifest" patch_base.version)"
@@ -178,7 +178,7 @@ for platform in $PLATFORMS; do
 	update_verify_manifest "$WORK/$platform/public-manifest.json" "$WORK/$platform/public-manifest.sig"
 done
 
-echo "== 三端一起提升 stable =="
+echo "== Android/macOS 一起提升 stable（Windows 不动）=="
 update_promote_all_stable "$VERSION"
 
 for platform in $PLATFORMS; do
@@ -187,5 +187,5 @@ for platform in $PLATFORMS; do
 	cmp -s "$WORK/$platform/manifest.json" "$dir/manifest.json" || update_die "$platform stable 未指向 v$VERSION"
 done
 
-echo "三端累计内容补丁 v$VERSION 已发布。"
+echo "Android/macOS 累计内容补丁 v$VERSION 已发布；Windows stable 未修改。"
 echo "版本化文件不可覆盖；若发布后发现问题，请修复后使用更高三段版本。"

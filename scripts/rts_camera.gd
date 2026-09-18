@@ -93,8 +93,9 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton or event is InputEventMouseMotion:
-		# 鼠标活动后退出触屏判定，避免一次误触后边缘滚屏永久失效。
+	if (event is InputEventMouseButton or event is InputEventMouseMotion) \
+			and event.device != InputEvent.DEVICE_ID_EMULATION:
+		# 只有真实鼠标退出触屏模式；触摸生成的模拟鼠标不能重新开启边缘滚屏。
 		touch_mode = false
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:

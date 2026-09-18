@@ -805,6 +805,7 @@ func _make_card(i: int) -> Control:
 		btn.text = "出 征"
 		btn.pressed.connect(func() -> void:
 			Campaign.current = i
+			Campaign.arena = false
 			Campaign.skirmish = false       # 清掉自由模式残留（Campaign 是常驻 autoload，
 			Campaign.skirmish_ai = false    # 上次点过「据守/AI」的旗标会留着 → 否则战役关也进据守）
 			Campaign.custom_defense = false

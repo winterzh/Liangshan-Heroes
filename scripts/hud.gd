@@ -266,8 +266,7 @@ func set_touch_ui(v: bool) -> void:
 	_refresh_touch_controls()
 	_position_fps()   # 触屏布局启用 → FPS 移到菜单键左侧
 	_update_info_panel_mode()
-	_layout_info_panel()
-	_layout_info_dock()
+	_apply_bottom_collapse()   # _ready 先按桌面空选区折叠；切触屏必须恢复实际控件。
 	refresh_inventory()
 	_layout_top_status()
 	call_deferred("_layout_top_status")
@@ -1911,12 +1910,9 @@ func update_selection_panel(sel: Array) -> void:
 
 
 ## 无选中时把底部指挥栏收成矮条（小地图+提示），选中后恢复完整高度。
-## 触屏布局高度写死为 166，收起会打断 chips/操作栏，故仅桌面生效。
+## 触屏始终展开；两种模式走同一恢复路径，避免沿用桌面初始化时的隐藏状态。
 func _apply_bottom_collapse() -> void:
 	if _bottom_panel == null or minimap == null:
-		return
-	if touch_ui:
-		RTSCamera.PANEL_H = RTSCamera.PANEL_H_FULL
 		return
 	var show_detail := false
 	for u in _sel_ref:
@@ -1926,7 +1922,7 @@ func _apply_bottom_collapse() -> void:
 	if not show_detail and battle != null and battle._inspect_unit != null \
 			and is_instance_valid(battle._inspect_unit) and battle._inspect_unit.hp > 0.0:
 		show_detail = true
-	var collapsed := not show_detail
+	var collapsed := not touch_ui and not show_detail
 	_bottom_collapsed = collapsed
 	var h := RTSCamera.PANEL_H_COLLAPSED if collapsed else RTSCamera.PANEL_H_FULL
 	RTSCamera.PANEL_H = h
@@ -3471,13 +3467,7 @@ class HeroSlotButton extends Control:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
 		# 方形徽记：技能色块底 + 矢量图标（无图标的技能回退名称首字）
 		var big: bool = hud != null and hud.touch_ui
-		var ir: Rect2
-		if compact:
-			ir = Rect2(14, 4, 50, 50) if big else Rect2(10, 6, 58, 58)
-		elif big:
-			ir = Rect2(14, 6, 60, 60)
-		else:
-			ir = Rect2(12, 5, 52, 52)
+		var ir := _icon_rect()
 		var ds := ir.size.x / 52.0
 		var ability_id := String(s["id"])
 		var art_tex := _ability_art_icon(ability_id)
@@ -3557,8 +3547,8 @@ class HeroSlotButton extends Control:
 			draw_string(f, Vector2(size.x - 14, 15), hotkey, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("ffe9a8"))
 		# 学习按钮 +（图标右下角）；触屏放大到易点
 		if hero.can_learn(slot) and not display_only:
-			var pc := Vector2(ir.end.x - 9.0, ir.end.y - 9.0)
-			var pr := (11.0 if compact else 18.0) if _touch else 9.0
+			var pc := _learn_plus_center()
+			var pr := _learn_plus_radius()
 			draw_circle(pc, pr, Color(0.18, 0.6, 0.24))
 			draw_circle(pc, pr, Color(0.85, 0.95, 0.85), false, 1.5)
 			var pf := (18 if compact else 28) if _touch else 18
@@ -3718,17 +3708,29 @@ class HeroSlotButton extends Control:
 		if sc != 1.0:
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
+	## 绘制、按下瞄准和松手加点共用几何，紧凑技能轨缩放后热区仍贴着「+」。
+	func _icon_rect() -> Rect2:
+		var touch: bool = hud != null and hud.touch_ui
+		if compact:
+			return Rect2(14, 4, 50, 50) if touch else Rect2(10, 6, 58, 58)
+		return Rect2(14, 6, 60, 60) if touch else Rect2(12, 5, 52, 52)
+
+	func _learn_plus_center() -> Vector2:
+		return _icon_rect().end - Vector2(9.0, 9.0)
+
+	func _learn_plus_radius() -> float:
+		return (11.0 if compact else 18.0) if (hud != null and hud.touch_ui) else 9.0
+
+	func _is_learn_hit(pos: Vector2) -> bool:
+		var tolerance := 4.0 if (hud != null and hud.touch_ui) else 1.0
+		return pos.distance_to(_learn_plus_center()) <= _learn_plus_radius() + tolerance
+
 	func _execute(pos: Vector2) -> void:
 		if hud == null or hud.battle == null or not is_instance_valid(hero) or slot >= hero.slot_count():
 			return
 		if display_only:
 			return
-		# 学习「+」热区：精确匹配 _draw 里画的圆（圆心 ir.end-9，半径 9，留 1px 容差）。
-		# 用同一 ir 推导，避免热区无右/下界——否则点图标右下空白会误把「升级技能」当成施放，白扣技能点。
-		var ir := Rect2(14, 6, 60, 60) if (hud != null and hud.touch_ui) else Rect2(12, 5, 52, 52)
-		var plus_r: float = 22.0 if (hud != null and hud.touch_ui) else 10.0   # 触屏放大「+」热区，好点
-		var on_plus: bool = pos.distance_to(Vector2(ir.end.x - 9.0, ir.end.y - 9.0)) <= plus_r
-		if hero.can_learn(slot) and (on_plus or int(hero.ability_slots[slot]["rank"]) == 0):
+		if hero.can_learn(slot) and (_is_learn_hit(pos) or int(hero.ability_slots[slot]["rank"]) == 0):
 			hud.battle.learn_slot(hero, slot)
 		elif (not bool(hero.ability_slots[slot]["passive"]) or hero.slot_has_active(slot)) and int(hero.ability_slots[slot]["rank"]) > 0:
 			# cast_ability 会对抬手/冷却/空能量分别提示；快速二连不再静默丢掉第二次操作。
@@ -3744,8 +3746,7 @@ class HeroSlotButton extends Control:
 			return false
 		if bool(s["passive"]) and not hero.slot_has_active(slot):
 			return false
-		var ir := Rect2(14, 6, 60, 60) if (hud != null and hud.touch_ui) else Rect2(12, 5, 52, 52)
-		if hero.can_learn(slot) and _press_pos.distance_to(Vector2(ir.end.x - 9.0, ir.end.y - 9.0)) <= 22.0:
+		if hero.can_learn(slot) and _is_learn_hit(_press_pos):
 			return false   # 按在「+」上 → 是学习，不是施放
 		var ad: Dictionary = hud.battle.ability_def(String(s["id"]))
 		if not bool(ad.get("targeted", false)):

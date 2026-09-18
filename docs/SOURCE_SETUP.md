@@ -1,3 +1,20 @@
+## 2026-09-18 操作回归与平台导出诊断
+
+新增 `tools/input_controls_regression_qa.gd`（122 项）、`tools/combat_controls_regression_qa.gd`（95 项）、`tools/campaign_controls_regression_qa.gd`（32 项），对应本轮八处操作/流程修复。只在私有工程副本运行，Steam 禁用并使用独立 `LSH-*` 用户目录；详细设置、断言和边界见 [QA](../qa/controls_update_20260918/README.md)。不得直接对主工程或玩家真实用户目录运行这些场景夹具。
+
+不发布、不改版本的更新与导出诊断入口：
+
+```bash
+python3 tools/update_release_policy_qa.py
+python3 tools/run_update_transport_qa.py --godot "$GODOT_PATH" --out "$QA_OUT" --live
+python3 tools/verify_platform_exports.py --godot "$GODOT_PATH" \
+  --android-sdk "$ANDROID_SDK_ROOT" --java-home "$JAVA_HOME" --build
+```
+
+`$QA_OUT` 必须是 checkout 外不存在的新目录。更新测试用临时签名密钥及本地 HTTP 服务，私钥只留在私有测试目录；`--live` 仅回读公网清单与补丁，不发布。导出工具默认仅预检，带 `--build` 才复制白名单源码并生成 EXE/APK 候选，保留收据和资源清单；依赖 Godot 匹配版本导出模板、已配置 Android SDK/JDK 和原有签名证书，不创建或替换签名材料。工具不重设 HOME、不创建 tag、不生成正式发布证明。
+
+本轮 Windows 应用内更新已停用，新客户端忽略旧 PCK 缓存；Steam 更新不受影响。Android/macOS 新底包采用 bootstrap 4，底包不匹配不能热更；正式发布规则见 [Android 发布文档](ANDROID_RELEASE.md) 和 [跨平台发布文档](DESKTOP_RELEASE.md)。诊断候选保持旧版号不是可直接上线的新完整包；实际原生启动、安装与真机网络验收不能用宿主 Godot 模拟替代。
+
 ## 2026-09-17 Steam 发布入口
 
 Windows Steam 更新的完整操作顺序、六文件白名单、候选冻结、SteamCMD VDF 示例、`default/public` 回读、四语公告、客户端验收和回滚统一见 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)。开始任何新批次前仍须阅读最新 `docs/STEAM_UPDATE_<日期>.md` 与 `qa/steam_release_<日期>/README.md`；指南描述流程，不代表历史候选已经上传或当前仍是线上版本。

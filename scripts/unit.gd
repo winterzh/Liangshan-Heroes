@@ -568,6 +568,26 @@ func stamp_mission_order_intent(target: Vector2, token: int) -> void:
 		mission_order_active = true
 
 
+## Ordinary ground moves also receive an arrival token. Only a still-qualified
+## task arrival may suspend automatic combat, never every right-click for 0.35s.
+## This is read-only: the mission keeps ownership of finite renewal/cancellation.
+func waiting_manual_mission_arrival() -> bool:
+	if mission_order_arrival_t <= 0.0 or mission_order_token <= 0 or mission_order_target == Vector2.INF \
+			or map == null or battle == null or battle.mission == null:
+		return false
+	var mission = battle.mission
+	if bool(get_meta(mission.AUTO_DISPATCH_META, false)):
+		return false
+	var action_id: String = mission._nearest_clicked_action(mission_order_target)
+	if action_id.is_empty():
+		return false
+	var action: Dictionary = mission.actions[action_id]
+	var destination: Vector2 = map.cell_to_world(action.cell)
+	return String(action.get("blocked_reason", "")).is_empty() and mission._valid_action_actor(self, action) \
+		and position.distance_to(destination) <= float(action.reach) \
+		and map._segment_open(position, destination, movement_profile)
+
+
 func _enqueue(o: Dictionary, queued: bool) -> void:
 	if is_building or is_captive or story_outcome != "":
 		return
@@ -1003,10 +1023,10 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 			and from.hp > 0.0 and from.faction != faction:
 		passive = false
 	# 只有「待命」或「攻击移动」时才自动还手；正在执行移动/采集/建造/返还/修理等
-	# 明确命令时，挨一下不回头（移动指令覆盖自动攻击）。
+	# 明确命令时，挨一下不回头（含到任务点后仍有效的现场等待意图）。
 	if not is_building and stance != STANCE_PASSIVE and _target == null and from != null and is_instance_valid(from) \
 			and from.hp > 0.0 and from.faction != faction \
-			and (_state == ST_IDLE or _state == ST_AMOVE):
+			and (_state == ST_IDLE or _state == ST_AMOVE) and not waiting_manual_mission_arrival():
 		if _state == ST_AMOVE:
 			_resume_amove = true
 		_target = from
@@ -1446,7 +1466,10 @@ func _phys_body(delta: float) -> void:
 			_state = ST_CHASE
 		match _state:
 			ST_IDLE:
-				if not passive and not is_worker:   # 工人不主动索敌（经典RTS式村民）
+				# 已到任务现场、正等待前一项办理结束：短凭证由任务层逐帧验资格后续期。
+				# 不让待机索敌/守备归位抢走玩家到达意图；取消或失效后仍会自然恢复。
+				var awaiting_task := waiting_manual_mission_arrival()
+				if not passive and not is_worker and not awaiting_task:   # 工人不主动索敌（经典RTS式村民）
 					_acq_t -= delta
 					if _acq_t <= 0.0:
 						_acq_t = 0.04 if (battle != null and battle.selection.has(self)) else 0.12
@@ -1459,7 +1482,7 @@ func _phys_body(delta: float) -> void:
 					_repath = 0.0
 					_idle_push_t = 0.0
 					_state = ST_CHASE
-				elif stance == STANCE_DEFEND and _has_home and _amove_dest == Vector2.ZERO and position.distance_to(_home) > 30.0:
+				elif not awaiting_task and stance == STANCE_DEFEND and _has_home and _amove_dest == Vector2.ZERO and position.distance_to(_home) > 30.0:
 					# A target that escapes/gives up can end a chase directly in idle.
 					# Defensive guards still return home; explicit Stop resets this
 					# anchor and Hold Position never enters this branch.
@@ -1577,6 +1600,28 @@ func _phys_body(delta: float) -> void:
 		_last_pos = position
 
 
+## Melee attacks reach the actual occupied edge of a solid building. Its art
+## radius is smaller than its navigation footprint (a house is 3x3 cells), so
+## testing distance to that radius leaves legal adjacent path endpoints out of
+## reach forever. Mobile targets keep their circular body/range rule.
+func _melee_target_in_range(t: Unit, extra := 0.0) -> bool:
+	if t.is_building and not t.is_resource and map != null and bool(t.get_meta("footprint_blocked", false)):
+		var cell: Vector2i = t.get_meta("fcell", map.world_to_cell(t.position))
+		var half := int(t.get_meta("fhalf", GameMap.footprint_half_for(t.radius)))
+		var lo := Vector2(cell - Vector2i(half, half)) * GameMap.CELL
+		var hi := lo + Vector2.ONE * float((2 * half + 1) * GameMap.CELL)
+		var contact := Vector2(clampf(position.x, lo.x, hi.x), clampf(position.y, lo.y, hi.y))
+		var toward := contact - position
+		if toward.length() > atk_range + radius + extra:
+			return false
+		# The final quarter-pixel belongs to the target's own solid footprint.
+		# The approach before it must still be legal terrain: a different wall or
+		# shoreline cannot be ignored just because the building is in melee reach.
+		var approach := contact - toward.normalized() * minf(0.25, toward.length())
+		return map._segment_open(position, approach, movement_profile)
+	return position.distance_to(t.position) <= atk_range + radius + t.radius + extra
+
+
 func _do_chase(delta: float) -> void:
 	if _target != null and _target.get_instance_id() != _chase_last_id:
 		_chase_last_id = _target.get_instance_id()   # 换了目标 → 追击计时重置
@@ -1620,7 +1665,8 @@ func _do_chase(delta: float) -> void:
 		return
 	var d := position.distance_to(_target.position)
 	var reach := atk_range + radius + _target.radius
-	if d <= reach or hua_locked:
+	var within_reach := d <= reach if is_ranged else _melee_target_in_range(_target)
+	if within_reach or hua_locked:
 		_chase_t = 0.0   # 已进攻击范围（咬住了）：追击计时清零
 		_chase_best_distance = d
 		_face_dir(_target.position - position)
@@ -1981,7 +2027,8 @@ func _attack() -> void:
 	if _invis_t > 0.0:
 		_invis_strike_pending = _invis_strike_bonus   # 破隐突袭：这一击兑现加成
 		_break_invis()
-	_cd = atk_cd / maxf(_drunk_atk * maxf(temp_atkspeed, _aura_atkspeed) * atkspeed_mult * _attack_speed_slow, 0.1)   # 增益取高值，再乘醉酒/被动与敌方攻速压制
+	var attack_rate := maxf(_drunk_atk * maxf(temp_atkspeed, _aura_atkspeed) * atkspeed_mult * _attack_speed_slow, 0.1)
+	_cd = atk_cd / attack_rate   # 增益取高值，再乘醉酒/被动与敌方攻速压制
 	_combat_cool = 6.0
 	_lunge = 1.0
 	_lunge_dir = (_target.position - position).normalized()
@@ -2002,6 +2049,11 @@ func _attack() -> void:
 			_swing_speed = 1.9; _hit_at = 0.42   # 张弓→撒放（放慢，原 2.9）
 		_:
 			_swing_speed = 2.1; _hit_at = 0.48   # 劈砍（放慢看清，原 3.6）
+	# The authored hit phase and the attack cooldown share one rate. Otherwise a
+	# fast next attack restarts _lunge before this one reaches its damage frame.
+	# Fit unusually short base attack periods too; ordinary unbuffed weapons keep
+	# their existing timing, and higher attack speed still grants more real hits.
+	_swing_speed = maxf(_swing_speed, 1.0 / maxf(atk_cd, 0.01)) * attack_rate
 	_request_redraw()
 
 
@@ -2024,7 +2076,7 @@ func _deal_hit() -> void:
 	if story_outcome != "" or t == null or not is_instance_valid(t) or t.hp <= 0.0 or t.story_outcome != "":
 		return
 	# 近战伤害点到来前目标已经脱离武器范围，则这一刀落空；避免隔着数个身位“粘住”命中。
-	if not is_ranged and position.distance_to(t.position) > atk_range + radius + t.radius + 8.0:
+	if not is_ranged and not _melee_target_in_range(t, 8.0):
 		return
 	# E 锁定的是「接下来五次普攻」而非五次命中：箭一旦撒放，即使被致盲/闪避也消耗一发。
 	_consume_hua_locked_attack(t)

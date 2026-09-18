@@ -1,6 +1,6 @@
 #!/bin/bash
-# 发布两段式完整版本：三端完整包已在 GitHub 后，登记不可变基线并切换三端 stable。
-# Android 为兼容 1.4/1.5 旧 APK，同时发布 1.4.0 -> 当前版累计补丁；桌面本版本 patch=null。
+# 发布两段式完整版本：完整包已在 GitHub 后，仅登记 Android/macOS 更新基线。
+# Bootstrap 4 要求旧 APK 覆盖安装新完整包；两端完整基线清单均为 patch=null。
 set -euo pipefail
 
 if [ "$#" -lt 1 ]; then
@@ -13,7 +13,7 @@ source "$ROOT/tools/update_release.env"
 source "$ROOT/tools/lib_update_release.sh"
 
 VERSION="$1"
-NOTES="${2:-三端内容更新基线}"
+NOTES="${2:-Android/macOS 内容更新基线}"
 GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
 BUILD="$ROOT/build"
 UPDATE_OUT="$BUILD/updates"
@@ -22,7 +22,7 @@ UPDATE_PRIVATE_KEY="${LIANGSHAN_UPDATE_SIGNING_KEY:-$HOME/.config/liangshan-upda
 UPDATE_PUBLIC_KEY="${LIANGSHAN_UPDATE_PUBLIC_KEY:-$HOME/.config/liangshan-update/manifest-signing-public.pem}"
 SSH_KEY="${LIANGSHAN_UPDATE_SSH_KEY:-$HOME/.ssh/liangshan_update_ed25519}"
 REMOTE="${LIANGSHAN_UPDATE_REMOTE:-root@120.26.237.195}"
-PLATFORMS="android windows macos"
+PLATFORMS="android macos" # Windows EXE 在线更新暂停；完整包仍由 GitHub/Steam 分发。
 
 update_require_full_version "$VERSION"
 [ "$VERSION" = "$UPDATE_BASE_VERSION" ] || update_die "版本 $VERSION 与 update_release.env 基线 $UPDATE_BASE_VERSION 不一致"
@@ -44,20 +44,9 @@ ANDROID_APK_NAME="$(update_artifact_name android "$VERSION")"
 ANDROID_APK="$BUILD/$ANDROID_APK_NAME"
 ANDROID_APK_URL="$UPDATE_PUBLIC_ROOT/android/releases/$ANDROID_APK_NAME"
 
-echo "== 生成 Android 旧客户端累计补丁 =="
-ANDROID_OLD_BASE="$UPDATE_OUT/android/base-$UPDATE_ANDROID_PATCH_BASE_VERSION.pck"
-if [ ! -f "$ANDROID_OLD_BASE" ] && [ -f "$BUILD/android-update/base-$UPDATE_ANDROID_PATCH_BASE_VERSION.pck" ]; then
-	cp "$BUILD/android-update/base-$UPDATE_ANDROID_PATCH_BASE_VERSION.pck" "$ANDROID_OLD_BASE"
-fi
-if [ ! -f "$ANDROID_OLD_BASE" ]; then
-	scp -i "$SSH_KEY" "$REMOTE:$UPDATE_REMOTE_BASE_ROOT/base-$UPDATE_ANDROID_PATCH_BASE_VERSION.pck" "$ANDROID_OLD_BASE"
-fi
-[ "$(update_sha256 "$ANDROID_OLD_BASE")" = "$UPDATE_ANDROID_PATCH_BASE_SHA256" ] || \
-	update_die "Android $UPDATE_ANDROID_PATCH_BASE_VERSION 历史基线 SHA-256 不匹配"
-ANDROID_PATCH_NAME="patch-$UPDATE_ANDROID_PATCH_BASE_VERSION-to-$VERSION.pck"
-ANDROID_PATCH="$UPDATE_OUT/android/$ANDROID_PATCH_NAME"
-cd "$ROOT"
-"$GODOT" --headless --path . --export-patch "Android" "$ANDROID_PATCH" --patches "$ANDROID_OLD_BASE"
+# Bootstrap 4 introduces new autoloads/configuration that an old APK cannot
+# install from a PCK. Advertise a full APK instead of an incompatible legacy
+# cumulative patch. Later x.x.x patches use this new full package's base.
 
 echo "== 检查现有 stable，只允许升版 =="
 for platform in $PLATFORMS; do
@@ -68,8 +57,8 @@ for platform in $PLATFORMS; do
 	fi
 done
 
-echo "== 检查 GitHub 三端完整包并回读哈希 =="
-for platform in $PLATFORMS; do
+echo "== 检查 GitHub 三端完整包并回读哈希（Windows 只读校验）=="
+for platform in android windows macos; do
 	artifact="$BUILD/$(update_artifact_name "$platform" "$VERSION")"
 	url="$(update_github_artifact_url "$platform" "$VERSION")"
 	size="$(update_size "$artifact")"
@@ -81,7 +70,7 @@ for platform in $PLATFORMS; do
 	fi
 done
 
-echo "== 生成并签名三端 v$VERSION 清单 =="
+echo "== 生成并签名 Android/macOS v$VERSION 清单 =="
 for platform in $PLATFORMS; do
 	dir="$WORK/$platform"
 	mkdir -p "$dir"
@@ -96,13 +85,6 @@ for platform in $PLATFORMS; do
 	patch_base_version="$VERSION"
 	if [ "$platform" = "android" ]; then
 		full_url="$ANDROID_APK_URL"
-		min_bootstrap=1
-		patch_base="$ANDROID_OLD_BASE"
-		patch_base_version="$UPDATE_ANDROID_PATCH_BASE_VERSION"
-		patch_size="$(update_size "$ANDROID_PATCH")"
-		patch_sha="$(update_sha256 "$ANDROID_PATCH")"
-		patch_url="$UPDATE_PUBLIC_ROOT/android/releases/$ANDROID_PATCH_NAME"
-		patch_json="{\"platform\":\"$platform\",\"architecture\":\"$architecture\",\"url\":\"$patch_url\",\"size\":$patch_size,\"sha256\":\"$patch_sha\"}"
 	fi
 	python3 - "$dir/manifest.json" "$platform" "$architecture" "$VERSION" "$min_bootstrap" \
 		"$packaged_base" "$patch_base_version" "$patch_base" "$patch_json" \
@@ -159,7 +141,6 @@ for platform in $PLATFORMS; do \
   test ! -e '$UPDATE_REMOTE_WEB_ROOT/'\"\$platform\"'/releases/manifest-$VERSION.sig'; \
   test ! -e '$UPDATE_REMOTE_BASE_ROOT/'\"\$platform\"'/base-$VERSION.pck'; \
 done; \
-test ! -e '$UPDATE_REMOTE_WEB_ROOT/android/releases/$ANDROID_PATCH_NAME'; \
 test ! -e '$UPDATE_REMOTE_WEB_ROOT/android/releases/$ANDROID_APK_NAME'"
 
 REMOTE_TMP="/tmp/liangshan-baseline-$VERSION-$$"
@@ -176,12 +157,9 @@ echo '$base_sha  $REMOTE_TMP/base-$platform.pck' | sha256sum -c -; \
 echo '$manifest_sha  $REMOTE_TMP/manifest-$platform.json' | sha256sum -c -; \
 echo '$signature_sha  $REMOTE_TMP/manifest-$platform.sig' | sha256sum -c -"
 done
-scp -i "$SSH_KEY" "$ANDROID_PATCH" "$REMOTE:$REMOTE_TMP/$ANDROID_PATCH_NAME"
 scp -i "$SSH_KEY" "$ANDROID_APK" "$REMOTE:$REMOTE_TMP/$ANDROID_APK_NAME"
-android_patch_sha="$(update_sha256 "$ANDROID_PATCH")"
 android_apk_sha="$(update_sha256 "$ANDROID_APK")"
 ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
-echo '$android_patch_sha  $REMOTE_TMP/$ANDROID_PATCH_NAME' | sha256sum -c -; \
 echo '$android_apk_sha  $REMOTE_TMP/$ANDROID_APK_NAME' | sha256sum -c -"
 ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
 for platform in $PLATFORMS; do \
@@ -189,11 +167,10 @@ for platform in $PLATFORMS; do \
   install -m 644 '$REMOTE_TMP/manifest-'\"\$platform\"'.json' '$UPDATE_REMOTE_WEB_ROOT/'\"\$platform\"'/releases/manifest-$VERSION.json'; \
   install -m 644 '$REMOTE_TMP/manifest-'\"\$platform\"'.sig' '$UPDATE_REMOTE_WEB_ROOT/'\"\$platform\"'/releases/manifest-$VERSION.sig'; \
 done; \
-install -m 644 '$REMOTE_TMP/$ANDROID_PATCH_NAME' '$UPDATE_REMOTE_WEB_ROOT/android/releases/$ANDROID_PATCH_NAME'; \
 install -m 644 '$REMOTE_TMP/$ANDROID_APK_NAME' '$UPDATE_REMOTE_WEB_ROOT/android/releases/$ANDROID_APK_NAME'; \
 rm -rf '$REMOTE_TMP'"
 
-echo "== 公网回读版本化清单、签名和 Android 补丁 =="
+echo "== 公网回读版本化清单、签名和 Android 完整包 =="
 for platform in $PLATFORMS; do
 	url="$UPDATE_PUBLIC_ROOT/$platform/releases"
 	curl --noproxy '*' --fail --silent --show-error "$url/manifest-$VERSION.json" -o "$WORK/$platform/public-manifest.json"
@@ -201,12 +178,10 @@ for platform in $PLATFORMS; do
 	cmp -s "$WORK/$platform/manifest.json" "$WORK/$platform/public-manifest.json" || update_die "$platform 公网清单内容不一致"
 	update_verify_manifest "$WORK/$platform/public-manifest.json" "$WORK/$platform/public-manifest.sig"
 done
-update_download_and_verify "$UPDATE_PUBLIC_ROOT/android/releases/$ANDROID_PATCH_NAME" \
-	"$WORK/android/public-$ANDROID_PATCH_NAME" "$(update_size "$ANDROID_PATCH")" "$(update_sha256 "$ANDROID_PATCH")"
 update_download_and_verify "$ANDROID_APK_URL" "$WORK/android/public-$ANDROID_APK_NAME" \
 	"$(update_size "$ANDROID_APK")" "$(update_sha256 "$ANDROID_APK")"
 
-echo "== 三端一起提升 stable =="
+echo "== Android/macOS 一起提升 stable（Windows 不动）=="
 update_promote_all_stable "$VERSION"
 
 for platform in $PLATFORMS; do
@@ -215,5 +190,5 @@ for platform in $PLATFORMS; do
 	cmp -s "$WORK/$platform/manifest.json" "$stable_dir/manifest.json" || update_die "$platform stable 未指向 v$VERSION"
 done
 
-echo "三端 v$VERSION 更新基线发布完成。"
-echo "Android：保留 $UPDATE_ANDROID_PATCH_BASE_VERSION 累计补丁链；Windows/macOS：v$VERSION 起建立新补丁链。"
+echo "Android/macOS v$VERSION 更新基线发布完成。"
+echo "Android/macOS：v$VERSION 起建立新补丁链；旧 APK 必须先安装完整包。Windows 在线更新未发布。"
