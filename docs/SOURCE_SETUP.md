@@ -1,3 +1,7 @@
+## 2026-09-20 Steam 正式候选与上传状态
+
+冻结生产提交 `3d69b57d`，正式候选 `20260920_105442_c9bb1d61` 已通过原生整合、六文件包检查与独立 APPDATA 实际 EXE 短测，并上传为 Build 25416073。不要把前批带 `override.cfg` 的私有诊断包用于 Steam。上传副本与回滚位置、待完成的上线确认和四语公告步骤见 [本批发布说明](STEAM_UPDATE_20260920.md) 和 [QA](../qa/steam_release_20260920/README.md)。
+
 ## 2026-09-20 Windows 与连环马恢复复现入口
 
 新增 `tools/run_controls_update_qa.py`：先配置 `godot.local.txt` 或 `GODOT_PATH`，再用 `--run --level4 --prior-level3 --export --out <checkout 外不存在的绝对目录>` 运行冻结私有批次。默认重新导入；`--cache-from` 只复用已核验的纹理导入缓存。EXE 必须带同目录 `override.cfg` 使用独立测试用户目录；不拿私有诊断包直接发布。

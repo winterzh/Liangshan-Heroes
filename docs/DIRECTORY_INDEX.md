@@ -1,3 +1,8 @@
+## 2026-09-20 Steam 发布链与四语补丁说明
+
+- [发布说明](STEAM_UPDATE_20260920.md)：生产来源、玩家更新内容、上传与 default/公告状态。
+- `qa/steam_release_20260920/`：正式候选/原生 QA/实际 EXE 证据、服务器六文件核验、四语稿、草稿回读和最新发布收据。安装包及测试 profile 保留 checkout 外，不入库。
+
 ## 2026-09-20 连环马内部恢复与 Windows 回归
 
 - `scripts/run_level4_unit_contract.gd`、`scripts/run_level4_world_factory.gd`：连环马安装内容、人物/编队和恢复工厂。
