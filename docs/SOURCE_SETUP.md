@@ -1,3 +1,9 @@
+## 2026-09-20 Android 用户测试包入口
+
+本地测试交付位于 `build/android-test-20260920/水浒英雄传-Android-TEST-20260920-fbe43a3e.apk`，菜单应显示 `TEST 0920-fbe43a3e`。它基于 `fbe43a3e` 冻结，仅修改副本中的 Android versionName 和菜单显示文本，不改生产基线或正式版本。沿用原签名/包名/code 15，可尝试直接覆盖旧 1.8；不要先卸载，系统若报冲突应保留原应用与错误提示。
+
+此测试包不是正式补丁基线，不上传 stable；后续正式迁移仍按 [Android 发布流程](ANDROID_RELEASE.md) 升完整版本和 versionCode。构建方法、两处标记、SHA、实际 APK 菜单探针及真机待验收边界见 [本轮 QA](../qa/android_test_20260920/README.md)。APK 在 Git 忽略目录，不随源码同步。
+
 ## 2026-09-20 Steam 正式候选与上传状态
 
 冻结生产提交 `3d69b57d`，正式候选 `20260920_105442_c9bb1d61` 已通过原生整合、六文件包检查与独立 APPDATA 实际 EXE 短测，并上传为 Build 25416073。不要把前批带 `override.cfg` 的私有诊断包用于 Steam。本批 default 与四语公告均已上线，上传副本、回滚位置及验证范围见 [本批发布说明](STEAM_UPDATE_20260920.md) 和 [QA](../qa/steam_release_20260920/README.md)。
