@@ -1,3 +1,11 @@
+## 2026-09-20 连环马内部恢复与 Windows 回归
+
+- `scripts/run_level4_unit_contract.gd`、`scripts/run_level4_world_factory.gd`：连环马安装内容、人物/编队和恢复工厂。
+- `tools/level4_world_restore_qa.gd`：八阶段夹具、独立保存与新进程继续；不计自然全关。
+- `tools/run_controls_update_qa.py`：私有冻结工程、249 项操作回归、可选连环马/祝家庄与诊断 EXE。
+- `qa/level4_world_restore_20260920/`：最终 524 项证据、原始失败、Windows 基线、目录隔离修复与有限截图目检。
+- [连环马接入说明](LIANHUANMA_WORLD_RESTORE_20260920.md)：接线、复现、覆盖和未闭合门槛。
+
 ## 2026-09-18 操作与更新链路回归
 
 - `tools/{input,combat,campaign}_controls_regression_qa.gd`：私有项目中的输入、自然战斗 tick、任务/押俘/模式切换边界回归。

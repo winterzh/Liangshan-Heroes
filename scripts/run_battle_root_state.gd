@@ -397,7 +397,7 @@ func capture(battle: Variant, content_version: String, object_to_id: Dictionary,
 	var is_zhu: bool = _level_script == preload("res://scripts/levels/level3_zhujiazhuang_rts.gd") or _level_script.resource_path.ends_with("level3_zhujiazhuang_rts.gd") or _level_script.resource_path.ends_with("level3_zhujiazhuang_rts.gdc")
 	if is_skirmish:
 		if battle.mission != null: return _bad("STANDARD_LEVEL_ONLY")
-	elif is_zhu or _level_script in [preload("res://scripts/levels/level1_huangnigang_short.gd"), preload("res://scripts/levels/level6_yezhulin.gd"), preload("res://scripts/levels/level2_jiangzhou_rts.gd"), preload("res://scripts/levels/level7_kuaihuolin_short.gd")]:
+	elif is_zhu or _level_script in [preload("res://scripts/levels/level4_lianhuanma_rts.gd"), preload("res://scripts/levels/level1_huangnigang_short.gd"), preload("res://scripts/levels/level6_yezhulin.gd"), preload("res://scripts/levels/level2_jiangzhou_rts.gd"), preload("res://scripts/levels/level7_kuaihuolin_short.gd")]:
 		var mission_script = preload("res://scripts/campaign_mission.gd")
 		if not is_instance_valid(battle.mission): return _bad("STANDARD_LEVEL_ONLY")
 		var b_mission_script = battle.mission.get_script()

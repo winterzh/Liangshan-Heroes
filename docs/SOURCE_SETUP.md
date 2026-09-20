@@ -1,3 +1,9 @@
+## 2026-09-20 Windows 与连环马恢复复现入口
+
+新增 `tools/run_controls_update_qa.py`：先配置 `godot.local.txt` 或 `GODOT_PATH`，再用 `--run --level4 --prior-level3 --export --out <checkout 外不存在的绝对目录>` 运行冻结私有批次。默认重新导入；`--cache-from` 只复用已核验的纹理导入缓存。EXE 必须带同目录 `override.cfg` 使用独立测试用户目录；不拿私有诊断包直接发布。
+
+最终本机 524 项功能检查、实际 EXE 短启动及冻结来源核对通过；完整范围、基线 EXE 隔离疏漏与修复见 [QA](../qa/level4_world_restore_20260920/README.md)，命令见 [连环马说明](LIANHUANMA_WORLD_RESTORE_20260920.md)。玩家续玩入口仍关闭，本批不代替全章节默认回归或发布验收。
+
 ## 2026-09-18 操作回归与平台导出诊断
 
 新增 `tools/input_controls_regression_qa.gd`（122 项）、`tools/combat_controls_regression_qa.gd`（95 项）、`tools/campaign_controls_regression_qa.gd`（32 项），对应本轮八处操作/流程修复。只在私有工程副本运行，Steam 禁用并使用独立 `LSH-*` 用户目录；详细设置、断言和边界见 [QA](../qa/controls_update_20260918/README.md)。不得直接对主工程或玩家真实用户目录运行这些场景夹具。

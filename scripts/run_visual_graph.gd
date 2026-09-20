@@ -150,7 +150,7 @@ func configure_presentation(presentation_record: Variant, mission_record: Varian
 	if not MissionState.new()._context(context): return _failure("PARTITION_CONTEXT")
 	for key: String in ["level_id", "content_version", "mission_token", "presentation_token"]:
 		if typeof(context[key]) != TYPE_STRING: return _failure("PARTITION_CONTEXT")
-	if context.level_id not in ["level3", "level1", "level6", "level2", "level7"]: return _failure("PARTITION_OFFICIAL_LEVEL_REQUIRED")
+	if context.level_id not in ["level3", "level1", "level6", "level2", "level7", "level4"]: return _failure("PARTITION_OFFICIAL_LEVEL_REQUIRED")
 	for record: Variant in [presentation_record, mission_record]:
 		if typeof(record) != TYPE_DICTIONARY or not _fields(record, ["schema", "context", "payload"]) or typeof(record.schema) != TYPE_STRING or typeof(record.context) != TYPE_DICTIONARY: return _failure("PARTITION_COMPONENT_ENVELOPE")
 	var checked: Dictionary = Presentation.new().validate(presentation_record, context)
@@ -216,6 +216,7 @@ func _marker_objects(mission: Variant, root: Node2D) -> Dictionary:
 	var chapter_script: Script = preload("res://scripts/levels/level1_huangnigang_short.gd") if _presentation_context.get("level_id") == "level1" else preload("res://scripts/levels/level3_zhujiazhuang_rts.gd")
 	if _presentation_context.get("level_id") == "level6": chapter_script = preload("res://scripts/levels/level6_yezhulin.gd")
 	if _presentation_context.get("level_id") == "level2": chapter_script = preload("res://scripts/levels/level2_jiangzhou_rts.gd")
+	if _presentation_context.get("level_id") == "level4": chapter_script = preload("res://scripts/levels/level4_lianhuanma_rts.gd")
 	if _presentation_context.get("level_id") == "level7": chapter_script = KuaiVisual.Kuai
 	if not is_instance_valid(_owner.level) or _owner.level.get_script() != chapter_script: return _failure("PARTITION_INSTALLED_LEVEL")
 	if mission._markers.size() != _marker_rows.size(): return _failure("PARTITION_MARKER_COUNT")
@@ -353,6 +354,9 @@ func _id(value: Variant) -> bool:
 	return value.length() < 19 or value <= "9223372036854775806"
 
 func _kind(node: Node2D) -> String:
+	# Reuse the explicit ArtEvent wire fields; Level4 admits only its installed
+	# short broken-cavalry overlay, never Huangnigang props or external tokens.
+	if _presentation_context.get("level_id") == "level4" and node.get_script() == HuangVisual.ArtEvent: return "hg_art"
 	if _presentation_context.get("level_id") == "level7":
 		var kuai_kind: String = KuaiVisual.kind(node)
 		if not kuai_kind.is_empty(): return kuai_kind
@@ -433,7 +437,7 @@ func _values(node: Node2D, kind: String) -> Dictionary:
 					break
 		return {"kind": node.kind, "progress": node.progress, "extent": node.extent, "metadata": KuaiVisual.metadata(node), "token": token}
 	if HuangVisual.FIELDS.has(kind):
-		var values := {"metadata": HuangVisual.metadata(node), "token": HuangVisual.tokens(_owner.level).get(node, "")}
+		var values := {"metadata": HuangVisual.metadata(node), "token": "" if kind == "hg_art" else HuangVisual.tokens(_owner.level).get(node, "")}
 		for field in FIELDS[kind]:
 			if field in ["metadata", "token"]: continue
 			values[field] = _texture_token(node.get(field)).value if field == "texture" else node.get(field)
@@ -455,7 +459,13 @@ func _values_check(values: Variant, kind: String) -> Dictionary:
 	if KuaiVisual.FIELDS.has(kind):
 		return {"ok": true} if _presentation_context.get("level_id") == "level7" and _kuai_configured and KuaiVisual.valid(values) else _failure("KUAI_VISUAL_VALUE")
 	if HuangVisual.FIELDS.has(kind):
-		if _presentation_context.get("level_id") != "level1" or not HuangVisual.valid(values, kind): return _failure("HUANG_VISUAL_VALUE", kind)
+		var lian_art: bool = _presentation_context.get("level_id") == "level4" and kind == "hg_art"
+		if (_presentation_context.get("level_id") != "level1" and not lian_art) or not HuangVisual.valid(values, kind): return _failure("HUANG_VISUAL_VALUE", kind)
+		if lian_art:
+			if values.token != "" or values.size != 72.0 or values.foot != 0.82 or values.duration != 1.5 or values.life <= 0.0 or values.life > values.duration: return _failure("LEVEL4_BREAK_ART_STATE")
+			if typeof(values.texture) != TYPE_DICTIONARY or values.texture.get("key") != "lian:broken_cavalry": return _failure("LEVEL4_BREAK_ART_TEXTURE")
+			for key in values.metadata:
+				if key != "render_height": return _failure("LEVEL4_BREAK_ART_METADATA")
 		return {"ok": true} if kind == "hg_sign" else _texture_check(values.texture)
 	if _linked.TYPES.has(kind):
 		var checked: Dictionary = _linked.validate(values, kind)
@@ -1101,6 +1111,7 @@ func _reference_fields(kind: String) -> Array:
 	return ["chain_from"] if kind == "bolt" else _linked.REFERENCES.get(kind, [])
 
 func _wire_schema() -> String:
+	if _presentation_context.get("level_id") == "level4": return "level4_visual_graph_partition_v1"
 	if _presentation_context.get("level_id") == "level7": return "level7_visual_graph_partition_v1"
 	if _presentation_context.get("level_id") == "level6": return "level6_visual_graph_partition_v1"
 	if _presentation_context.get("level_id") == "level2": return "level2_visual_graph_partition_v1"

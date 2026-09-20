@@ -591,6 +591,7 @@ func _register_visual_textures() -> void:
 	if not tree is SceneTree: return
 	var art: Variant = tree.root.get_node_or_null("Art")
 	if art == null or art.get_script() != preload("res://scripts/art_db.gd"): return
+	_add_visual_texture("lian:broken_cavalry", art.campaign_object_texture("broken_cavalry"))
 	var hg_routes: Array = ["jujube_load", "wine_buckets", "wine_bowls"]
 	for index in range(1, 8): hg_routes.append("jujube_cart_%02d" % index)
 	for route: String in hg_routes:

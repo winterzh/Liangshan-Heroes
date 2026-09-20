@@ -1,0 +1,200 @@
+"""Run controls regressions in a frozen private Windows project and profile.
+
+No performance claims: unrelated Godot projects may be running. The repository
+QA lock still serializes work on this source. Never closes other processes.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import time
+import uuid
+
+import run_character_art_qa as common
+import run_steam_integration_qa as shared
+
+ROOT = Path(__file__).resolve().parents[1]
+CASES = ("input_controls", "combat_controls", "campaign_controls")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--run", action="store_true")
+    parser.add_argument("--export", action="store_true", help="Also export and launch a private diagnostic EXE")
+    parser.add_argument("--cache-from", type=Path, help="Reuse verified imported assets; source/profile stay fresh")
+    parser.add_argument("--level4", action="store_true", help="Also exercise internal Level4 restore and separate-process resave")
+    parser.add_argument("--only-level4", action="store_true", help="Focused iteration; does not claim controls regression")
+    parser.add_argument("--prior-level3", action="store_true", help="Also run the existing Zhujiazhuang whole-world regression")
+    parser.add_argument("--out", type=Path, required=True)
+    args = parser.parse_args()
+    out = shared.resolve_profile_root(args.out)
+    if out == ROOT or ROOT in out.parents or out.exists():
+        raise SystemExit("--out must be a new directory outside the checkout")
+    engine = shared.resolve_godot(None)
+    names = set(shared.sources()) | {f"tools/{case}_regression_qa.gd" for case in CASES}
+    if args.level4 or args.only_level4:
+        names.add("tools/level4_world_restore_qa.gd")
+    if args.prior_level3:
+        names.add("tools/level3_world_restore_qa.gd")
+    pending = [name for name in names if name.startswith("tools/")]
+    while pending:
+        name = pending.pop()
+        for dependency in re.findall(r'res://(tools/[^"\s]+)', (ROOT / name).read_text(encoding="utf-8")):
+            common.relative_source(ROOT, dependency)
+            if dependency not in names:
+                names.add(dependency)
+                pending.append(dependency)
+    names = sorted(names)
+    if not args.run:
+        print(json.dumps({"files": len(names), "engine": str(engine), "lock_busy": shared.LOCK.exists()}))
+        return
+    token = "LSH-controls-" + uuid.uuid4().hex
+    project = out / "project"
+    evidence = out / "evidence"
+    receipt = {"complete": False, "source_head": subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+        "engine_sha256": common.sha(engine), "source_files": [], "steps": [],
+        "runner_sha256": common.sha(Path(__file__)),
+        "scope": "private_functional_regressions_not_performance_or_publication"}
+    locked = False
+    try:
+        with shared.LOCK.open("x", encoding="utf-8") as stream:
+            stream.write(str(out))
+        locked = True
+        project.mkdir(parents=True)
+        evidence.mkdir()
+        for name in names:
+            common.relative_source(ROOT, name)
+            destination = project / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / name, destination)
+            receipt["source_files"].append({"path": name, "sha256": common.sha(destination)})
+        (project / "override.cfg").write_text(
+            '[application]\nconfig/name="' + token + '"\nconfig/use_custom_user_dir=true\n'
+            'config/custom_user_dir_name="' + token + '"\n', encoding="utf-8")
+        profile = Path(os.environ["APPDATA"]) / token
+        if profile.exists():
+            raise RuntimeError("Fresh profile unexpectedly exists")
+        receipt["profile"] = str(profile)
+        if args.cache_from:
+            old = args.cache_from.resolve()
+            previous = json.loads((old / "evidence/receipt.json").read_text(encoding="utf-8"))
+            if previous["engine_sha256"] != receipt["engine_sha256"] or not any(
+                row["case"] == "import" and row["passed"] for row in previous["steps"]
+            ):
+                raise RuntimeError("Unverified engine/import cache")
+            assets = [row for row in previous["source_files"] if row["path"].startswith("assets/")]
+            if common.source_changes(ROOT, assets) or common.source_changes(old / "project", assets):
+                raise RuntimeError("Cache asset source differs")
+            shutil.copytree(old / "project/.godot/imported", project / ".godot/imported")
+            receipt["cache_from"] = str(old)
+        env = os.environ.copy()
+        for key in list(env):
+            if key.startswith(("LSH_", "CAMPAIGN_", "CONTENT_UPDATE_", "ANDROID_UPDATE_")) or key.endswith(("_QA", "_TEST")):
+                env.pop(key)
+        env.update(STEAM_DISABLED="1", CAMPAIGN_QA="1", LSH_LANGUAGE="zh_CN",
+                   LSH_INPUT_QA_PROJECT=str(project), LSH_INPUT_QA_PROFILE=str(profile),
+                   CONTENT_UPDATE_NO_AUTO="1")
+
+        def run(label, command, timeout=300):
+            log = evidence / (label + ".log")
+            print("RUN " + label, flush=True)
+            start = time.monotonic()
+            with log.open("wb") as stream:
+                result = subprocess.run(command, cwd=project, env=env,
+                    stdout=stream, stderr=subprocess.STDOUT, timeout=timeout,
+                    creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            contents = log.read_text(encoding="utf-8", errors="replace")
+            errors = re.findall(r"(?m)^\s*(?:SCRIPT ERROR:|ERROR:|Parse Error:).*$", contents)
+            row = {"case": label, "exit_code": result.returncode, "errors": errors,
+                   "seconds": round(time.monotonic() - start, 2), "log_sha256": common.sha(log)}
+            row["passed"] = result.returncode == 0 and not errors
+            receipt["steps"].append(row)
+            if not row["passed"]:
+                raise RuntimeError("Failed " + label + ": " + str(log))
+            return contents
+
+        base = [str(engine), "--headless", "--path", str(project)]
+        run("import", base + ["--editor", "--import", "--quit"], 600)
+        if not args.only_level4:
+            for case in CASES:
+                contents = run(case, base + ["--script", f"res://tools/{case}_regression_qa.gd"])
+                if case == "combat_controls":
+                    match = re.search(r"\[combat-controls-result\] (.+)", contents)
+                    result = json.loads(match.group(1)) if match else {}
+                    if result.get("passed") is not True or result.get("checks", 0) <= 0 or result.get("failures"):
+                        raise RuntimeError("Missing/failed combat completion record")
+                    receipt["combat_checks"] = result["checks"]
+                if case == "campaign_controls":
+                    match = re.search(r"\[campaign-controls-regression\] checks=(\d+) failures=0", contents)
+                    if not match or int(match.group(1)) <= 0:
+                        raise RuntimeError("Missing/failed campaign completion record")
+                    receipt["campaign_checks"] = int(match.group(1))
+            report = json.loads((project / "input_controls_regression_report.json").read_text(encoding="utf-8"))
+            if not report["passed"] or report["failures"]:
+                raise RuntimeError("Input report failed")
+            shutil.copyfile(project / "input_controls_regression_report.json", evidence / "input_controls.json")
+            receipt["input_checks"] = report["check_count"]
+        if args.level4 or args.only_level4:
+            (project / "tools/level4_world_restore_qa.tscn").write_text(
+                '[gd_scene load_steps=2 format=3]\n[ext_resource type="Script" path="res://tools/level4_world_restore_qa.gd" id="1"]\n'
+                '[node name="Level4QA" type="Node"]\nscript = ExtResource("1")\n', encoding="utf-8")
+            for mode in ("component", "save", "resume"):
+                env.update(LSH_LEVEL4_MODE=mode, LSH_LEVEL4_REPORT=str(evidence / ("level4_" + mode + ".json")))
+                run("level4_" + mode, [str(engine), "--path", str(project), "--position", "20000,20000",
+                    "--rendering-method", "gl_compatibility", "res://tools/level4_world_restore_qa.tscn"], 1200)
+                report = json.loads((evidence / ("level4_" + mode + ".json")).read_text(encoding="utf-8"))
+                if not report["passed"] or not report["checks"] or not all(row["passed"] for row in report["checks"]):
+                    raise RuntimeError("Level4 report failed: " + mode)
+        if args.prior_level3:
+            legacy_profile = out / "level3_profile"
+            legacy_env = env.copy()
+            for key in ("APPDATA", "LOCALAPPDATA", "TEMP", "TMP"):
+                directory = legacy_profile / key.lower()
+                directory.mkdir(parents=True)
+                env[key] = str(directory)
+            env.update(LSH_LEVEL3_RESTORE_PROFILE=str(legacy_profile), LSH_LEVEL3_RESTORE_MODE="full",
+                       LSH_LEVEL3_RESTORE_REPORT=str(evidence / "prior_level3.json"))
+            (project / "tools/level3_world_restore_qa.tscn").write_text(
+                '[gd_scene load_steps=2 format=3]\n[ext_resource type="Script" path="res://tools/level3_world_restore_qa.gd" id="1"]\n'
+                '[node name="Level3QA" type="Node"]\nscript = ExtResource("1")\n', encoding="utf-8")
+            run("prior_level3", [str(engine), "--path", str(project), "--position", "20000,20000",
+                "--rendering-method", "gl_compatibility", "res://tools/level3_world_restore_qa.tscn"], 600)
+            report = json.loads((evidence / "prior_level3.json").read_text(encoding="utf-8"))
+            if not report["passed"] or not report["checks"] or not all(row["passed"] for row in report["checks"]):
+                raise RuntimeError("Existing Level3 report failed")
+            env = legacy_env
+        if args.export:
+            executable = out / "diagnostic" / "LiangshanHeroes.exe"
+            executable.parent.mkdir()
+            # Exported games read the external override beside their binary.
+            # Do not rely on editor overrides being baked into project.binary.
+            shutil.copyfile(project / "override.cfg", executable.parent / "override.cfg")
+            run("export", base + ["--export-release", "Windows Desktop", str(executable)], 600)
+            run("exe_startup", [str(executable), "--headless", "--quit-after", "180"])
+            receipt["diagnostic_exe"] = {"path": str(executable), "bytes": executable.stat().st_size,
+                                         "sha256": common.sha(executable)}
+        receipt["source_changes"] = common.source_changes(ROOT, receipt["source_files"])
+        receipt["private_source_changes"] = common.source_changes(project, receipt["source_files"])
+        if receipt["source_changes"] or receipt["private_source_changes"]:
+            raise RuntimeError("Frozen source changed")
+        receipt["complete"] = True
+    except Exception as exc:
+        receipt["error"] = str(exc)
+    finally:
+        if locked:
+            shared.LOCK.unlink()
+        receipt["lock_released"] = locked and not shared.LOCK.exists()
+        evidence.mkdir(parents=True, exist_ok=True)
+        (evidence / "receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"complete": receipt["complete"], "out": str(out), "error": receipt.get("error")}, ensure_ascii=False))
+    raise SystemExit(0 if receipt["complete"] else 1)
+
+
+if __name__ == "__main__":
+    main()

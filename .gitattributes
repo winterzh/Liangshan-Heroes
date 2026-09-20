@@ -585,3 +585,13 @@ tools/run_art_full_qa.py text eol=lf
 
 scripts/campaign_environment_art.gd -text -whitespace
 scripts/liangshan_scenery.gd -text -whitespace
+
+# 2026-09-20 Level4 frozen sources and raw QA evidence.
+qa/level4_world_restore_20260920/** -text whitespace=-blank-at-eof,cr-at-eol
+scripts/run_level4_unit_contract.gd -text
+scripts/run_level4_unit_contract.gd.uid -text
+scripts/run_level4_world_factory.gd -text
+scripts/run_level4_world_factory.gd.uid -text
+tools/level4_world_restore_qa.gd -text
+tools/level4_world_restore_qa.gd.uid -text
+tools/run_controls_update_qa.py -text

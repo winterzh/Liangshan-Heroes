@@ -14,6 +14,7 @@ const Level3 := preload("res://scripts/levels/level3_zhujiazhuang_rts.gd")
 const Level1 := preload("res://scripts/levels/level1_huangnigang_short.gd")
 const Level6 := preload("res://scripts/levels/level6_yezhulin.gd")
 const Level2 := preload("res://scripts/levels/level2_jiangzhou_rts.gd")
+const Level4 := preload("res://scripts/levels/level4_lianhuanma_rts.gd")
 const Level7 := preload("res://scripts/levels/level7_kuaihuolin_short.gd")
 const MengzhouGate := preload("res://scripts/campaign_mengzhou_gate.gd")
 const BattleScript := preload("res://scripts/battle.gd")
@@ -639,10 +640,11 @@ func _fail(code: String, path := "") -> Dictionary:
 func _campaign_enabled() -> bool:
 	return _fields(_trusted_context, ["mode", "level_id", "waves"]) \
 		and typeof(_trusted_context.mode) == TYPE_STRING and _trusted_context.mode == "campaign" \
-		and typeof(_trusted_context.level_id) == TYPE_STRING and _trusted_context.level_id in ["level1", "level2", "level3", "level6", "level7"] \
+		and typeof(_trusted_context.level_id) == TYPE_STRING and _trusted_context.level_id in ["level1", "level2", "level3", "level6", "level7", "level4"] \
 		and typeof(_trusted_context.waves) == TYPE_INT and _trusted_context.waves == 0
 
 func _campaign_schema() -> String:
+	if _trusted_context.get("level_id") == "level4": return "level4_scenery_state_v1"
 	if _trusted_context.get("level_id") == "level7": return "level7_scenery_state_v1"
 	if _trusted_context.get("level_id") == "level2": return "level2_scenery_state_v1"
 	if _trusted_context.get("level_id") == "level6": return "level6_scenery_state_v1"
@@ -666,11 +668,14 @@ func _campaign_map(game_map: GameMap) -> Dictionary:
 	if not _campaign_enabled() or not is_instance_valid(game_map) or game_map.get_script() != preload("res://scripts/game_map.gd"): return _fail("CAMPAIGN_CONTEXT_REQUIRED")
 	var level_id: String = _trusted_context.level_id
 	var level_script: Script = Level1 if level_id == "level1" else Level3
+	if level_id == "level4": level_script = Level4
 	if level_id == "level6": level_script = Level6
 	if level_id == "level2": level_script = Level2
 	if level_id == "level7": level_script = Level7
 	if level_id == "level1":
 		if game_map.environment_style != "level1" or game_map.w != 48 or game_map.h != 40 or game_map.theme != "hills" or game_map.has_meta("campaign_wall_segments"): return _fail("LEVEL1_MAP_IDENTITY")
+	elif level_id == "level4":
+		if game_map.environment_style != "level4" or game_map.w != 64 or game_map.h != 60 or game_map.theme != "plain" or game_map.has_meta("campaign_wall_segments"): return _fail("LEVEL4_MAP_IDENTITY")
 	elif level_id == "level6":
 		if game_map.environment_style != "level6" or game_map.w != 52 or game_map.h != 40 or game_map.theme != "marsh" or game_map.has_meta("campaign_wall_segments"): return _fail("LEVEL6_MAP_IDENTITY")
 	elif level_id == "level2":
