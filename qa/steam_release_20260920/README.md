@@ -6,7 +6,9 @@
 
 上传成功并已提交 **Build 25416073 / Manifest 4282617870240600843**，服务器六文件名称、字节数、SHA1 全部与唯一候选一致。上线预览只改变 Windows Depot，预计从旧版更新下载 87.1 MB。
 
-**尚未确认 default 上线，公告尚未公开。** 原生浏览器确认框的自动操作连续超时；随后权威 Builds 页仍为旧 Build `25320696`，已请用户完成页面确认和可能出现的手机验证。四语公告草稿 `698776157349217078` 已保存，重新加载后 16 个文本字段全部精确匹配。关联构建对话框仍显示旧 default，故未关联、未发布。后续只需完成上线、关联本批 Build、发布同一条公告并逐语言公开回读，不再重复上传或创建活动。最新状态以 [publication_receipt.json](publication_receipt.json) 为准。
+**已正式上线并公开四语公告。** 用户完成确认后，Steamworks 成功消息、default 分支及构建行均显示 **25416073**，Windows Manifest 为 **4282617870240600843**。同一条活动 `698776157349217078` 已关联新 Build 并发布；简中、繁中、英语、日语公开页的标题、副标题、9 个正文段落/标题及 6 条项目均与原稿一致。公开新闻页可访问，Steam 库曝光仍显示待管理。
+
+[公开公告](https://store.steampowered.com/news/app/5088120/view/698776157349217078?l=schinese) · [最终发布收据](publication_receipt.json) · [default 回读](default_live_verification.json) · [四语公开回读](announcement_public_readback.json)。此前原生确认框受阻的中间状态保留于 `publication_pending_confirmation.json`，未重复上传或新建公告。
 
 ## 已验证证据
 
@@ -19,6 +21,8 @@
 | 保护性核验 | 生产源码、真实玩家目录、候选 EXE 前后哈希一致，测试进程退出、锁释放 |
 | 服务端 Manifest | 六个成员名称、字节数、SHA1 一致 |
 | 公告草稿 | 简中、繁中、英语、日语共 16 字段回读一致 |
+| 正式 default | Build 25416073 / Manifest 4282617870240600843 |
+| 公告公开回读 | 四语标题、副标题、全部正文与 6 条项目一致；Steam 库曝光待管理 |
 
 原生批 `.godot/steam_integration_qa/20260920_105032_89b2a16f`；候选 `.godot/steam_candidates/20260920_105442_c9bb1d61`；短测 `smoke_20260920_105937_87a42e4b`。复现命令沿 [项目发布指南](../../docs/STEAM_RELEASE_GUIDE.md)，随后用本目录 `smoke_verified_package.py` 与 `collect_evidence.py` 收集实际包证据。独立 profile 位于 `D:/CodexTemp/lsh_steam_qa_20260920`、`D:/CodexTemp/lsh_steam_candidate_20260920`、`D:/CodexTemp/lsh_steam_smoke_20260920`。
 

@@ -1,6 +1,6 @@
 ## 2026-09-20 Steam 正式候选与上传状态
 
-冻结生产提交 `3d69b57d`，正式候选 `20260920_105442_c9bb1d61` 已通过原生整合、六文件包检查与独立 APPDATA 实际 EXE 短测，并上传为 Build 25416073。不要把前批带 `override.cfg` 的私有诊断包用于 Steam。上传副本与回滚位置、待完成的上线确认和四语公告步骤见 [本批发布说明](STEAM_UPDATE_20260920.md) 和 [QA](../qa/steam_release_20260920/README.md)。
+冻结生产提交 `3d69b57d`，正式候选 `20260920_105442_c9bb1d61` 已通过原生整合、六文件包检查与独立 APPDATA 实际 EXE 短测，并上传为 Build 25416073。不要把前批带 `override.cfg` 的私有诊断包用于 Steam。本批 default 与四语公告均已上线，上传副本、回滚位置及验证范围见 [本批发布说明](STEAM_UPDATE_20260920.md) 和 [QA](../qa/steam_release_20260920/README.md)。
 
 ## 2026-09-20 Windows 与连环马恢复复现入口
 
