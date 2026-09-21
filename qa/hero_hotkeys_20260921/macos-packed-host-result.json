@@ -1,0 +1,227 @@
+{
+	"checks": [
+		{
+			"name": "absolute QA output directory is available",
+			"passed": true
+		},
+		{
+			"name": "user data directory exactly matches the isolated requested profile",
+			"passed": true
+		},
+		{
+			"name": "menu stamp expectation is nonempty",
+			"passed": true
+		},
+		{
+			"name": "packed-host mode is only enabled by explicit LSH_MAC_TEST_PACKED_HOST=1",
+			"passed": true
+		},
+		{
+			"name": "packed-resource host is the macOS editor-capable engine",
+			"passed": true
+		},
+		{
+			"name": "launcher supplies an absolute PCK path inside the actual app's Resources directory",
+			"passed": true
+		},
+		{
+			"name": "launcher-supplied PCK SHA-256 exactly matches the app's actual PCK bytes",
+			"passed": true
+		},
+		{
+			"name": "any runtime-visible --main-pack argument agrees with the supplied PCK binding",
+			"passed": true
+		},
+		{
+			"name": "runtime-visible arguments contain no source-project path or upward search override",
+			"passed": true
+		},
+		{
+			"name": "res:// is the exported binary project, not the editable source checkout",
+			"passed": true
+		},
+		{
+			"name": "local test feature exists and Steam feature is absent",
+			"passed": true
+		},
+		{
+			"name": "unrelated launch and benchmark hooks are absent",
+			"passed": true
+		},
+		{
+			"name": "packed AndroidUpdater autoload exists",
+			"passed": true
+		},
+		{
+			"name": "content updater is disabled and never created its HTTP request",
+			"passed": true
+		},
+		{
+			"name": "disabled updater completed its content identity bootstrap",
+			"passed": true
+		},
+		{
+			"name": "packed SteamService autoload exists",
+			"passed": true
+		},
+		{
+			"name": "Steam service has no live native connection",
+			"passed": true
+		},
+		{
+			"name": "packed Campaign and Settings autoloads exist",
+			"passed": true
+		},
+		{
+			"name": "actual packed menu scene loads",
+			"passed": true
+		},
+		{
+			"name": "actual menu contains the requested visible test stamp",
+			"passed": true
+		},
+		{
+			"name": "test stamp intersects the native menu viewport",
+			"passed": true
+		},
+		{
+			"name": "native viewport screenshot saved: macos-test-menu",
+			"passed": true
+		},
+		{
+			"name": "actual packed battle scene loads",
+			"passed": true
+		},
+		{
+			"name": "real arena battle attaches and initializes its HUD and level",
+			"passed": true
+		},
+		{
+			"name": "arena deploy is nonempty and has no gameplay RNG fault",
+			"passed": true
+		},
+		{
+			"name": "real friendly Lin Chong spawns with an inventory",
+			"passed": true
+		},
+		{
+			"name": "selected newly born Lin Chong has exactly one health potion",
+			"passed": true
+		},
+		{
+			"name": "birth potion occupies a real inventory slot",
+			"passed": true
+		},
+		{
+			"name": "production cast_item heals 200 plus 20 percent of current maximum HP",
+			"passed": true
+		},
+		{
+			"name": "one production item use consumes exactly the one birth potion",
+			"passed": true
+		},
+		{
+			"name": "reusing the now-empty slot produces no extra heal or consumption",
+			"passed": true
+		},
+		{
+			"name": "native viewport screenshot saved: macos-test-arena",
+			"passed": true
+		},
+		{
+			"name": "arena remains paused with no gameplay RNG fault after the item effect",
+			"passed": true
+		},
+		{
+			"name": "packed AndroidUpdater autoload exists",
+			"passed": true
+		},
+		{
+			"name": "content updater is disabled and never created its HTTP request",
+			"passed": true
+		},
+		{
+			"name": "disabled updater completed its content identity bootstrap",
+			"passed": true
+		},
+		{
+			"name": "packed SteamService autoload exists",
+			"passed": true
+		},
+		{
+			"name": "Steam service has no live native connection",
+			"passed": true
+		},
+		{
+			"name": "both real-scene suites completed with nonempty evidence",
+			"passed": true
+		}
+	],
+	"completed": [
+		"menu",
+		"arena_potion"
+	],
+	"elapsed_ms": 3094,
+	"evidence": {
+		"menu_stamp_labels": [
+			{
+				"inside_viewport": true,
+				"path": "/root/Menu/@Label@16",
+				"rect": "[P: (16.0, 684.0), S: (154.0, 24.0)]",
+				"text": "TEST 0921-55089263"
+			}
+		],
+		"pack_binding": {
+			"actual_sha256": "dc50c521ac24f9c4fddc9dfacb32c45fe8d4a1695fe65fd3eddd2c04f2f0be5f",
+			"expected_sha256": "dc50c521ac24f9c4fddc9dfacb32c45fe8d4a1695fe65fd3eddd2c04f2f0be5f",
+			"kind": "launcher_supplied_path_and_sha256",
+			"limitation": "Godot may consume --main-pack before script execution. When absent here, the launcher command receipt binds these verified bytes to the mounted pack; this is not runtime argument proof.",
+			"path": "/Users/dztdash/Antigravity/ra-aa/build/macos-test-20260921-hotkeys/水浒英雄传-TEST-20260921-55089263.app/Contents/Resources/水浒英雄传：八幕战役.pck",
+			"runtime_main_pack_argument_visible": false,
+			"runtime_visible_main_pack_values": []
+		},
+		"potion": {
+			"after_hp": 265.0,
+			"before_hp": 1.0,
+			"count_after": 0,
+			"count_before": 1,
+			"expected_hp": 265.0,
+			"hero": "lin_chong",
+			"max_hp": 320.0
+		},
+		"resource_origin": {
+			"editable_project_visible": false,
+			"loose_project_probe_visible": false,
+			"main_pack": "/Users/dztdash/Antigravity/ra-aa/build/macos-test-20260921-hotkeys/水浒英雄传-TEST-20260921-55089263.app/Contents/Resources/水浒英雄传：八幕战役.pck",
+			"packed_project_binary": true,
+			"resource_root": "",
+			"source_checkout_visible": false
+		},
+		"unrelated_hooks": []
+	},
+	"executable": "/Applications/Godot.app/Contents/MacOS/Godot",
+	"expected_profile": "LSH-macos-test-20260921-55089263",
+	"expected_stamp": "TEST 0921-55089263",
+	"failures": [],
+	"main_pack": "/Users/dztdash/Antigravity/ra-aa/build/macos-test-20260921-hotkeys/水浒英雄传-TEST-20260921-55089263.app/Contents/Resources/水浒英雄传：八幕战役.pck",
+	"mode": "packed_resources_native_host",
+	"native_graphics": true,
+	"passed": true,
+	"profile": "/Users/dztdash/Library/Application Support/LSH-macos-test-20260921-55089263",
+	"schema": 1,
+	"scope": "Packaged resources on a native editor host, NOT the actual app binary. Menu and paused real arena; production potion effect and consumption; not a full match or save/continue test",
+	"screenshots": {
+		"macos-test-arena": {
+			"height": 720,
+			"path": "/tmp/lsh-macos-hotkeys-20260921-55089263/packed-host/macos-test-arena.png",
+			"saved": true,
+			"width": 1280
+		},
+		"macos-test-menu": {
+			"height": 720,
+			"path": "/tmp/lsh-macos-hotkeys-20260921-55089263/packed-host/macos-test-menu.png",
+			"saved": true,
+			"width": 1280
+		}
+	}
+}

@@ -31,4 +31,17 @@ python3 tools/run_rts_refinement_qa.py --godot "$GODOT_PATH" \
   --out /absolute/new/directory/outside/checkout
 ```
 
-本轮不重跑手机分辨率矩阵或60波性能，因为没有改布局计算/战斗循环；原触屏适配边界仍以 [前批 QA](../rts_foundation_20260920/README.md) 为准。Mac 测试包的本轮路径与回验结果在打包后补入本文件；旧 e3be6474 包保留历史，不再作为本次修改的测试入口。
+本轮不重跑手机分辨率矩阵或60波性能，因为没有改布局计算/战斗循环；原触屏适配边界仍以 [前批 QA](../rts_foundation_20260920/README.md) 为准。
+
+## 最新 Mac 测试包
+
+- 冻结生产提交 `55089263e68376d831ce9ef2327163fc2a432dbd`，3062份生产来源逐一匹配 Git blob、构建 SHA，私有覆盖层外零漂移。
+- 本机目录 `build/macos-test-20260921-hotkeys/`：双击 `水浒英雄传-TEST-20260921-55089263.app`；同名 DMG 386,667,685 字节。
+- 菜单左下 `TEST 0921-55089263`，独立 profile `LSH-macos-test-20260921-55089263`，更新器停用。此包不读取旧测试包或正式包的设置/进度；旧设置迁移另在功能专项真实 `_load` 中验证。
+- Universal（arm64/x86_64），Godot 4.6.1；本机 Apple M4 Max / Metal 实际 App 主入口录帧4帧、退出0，截图 `macos-menu.png` 已目检。未验证 Intel 或 Apple 公证。
+- 实际 PCK 由原生 Godot 宿主 `--main-pack` 加载，39项通过，包含菜单身份、隔离、血瓶恢复/消耗。报告 mode 是 `packed_resources_native_host`，不冒称 release 二进制执行了外部脚本。全键映射由上述93项源码冻结批验证，包内来源完全匹配该提交。
+- 严格 ad-hoc 验签和 `hdiutil verify` 通过。正常定帧退出仍有音频实例残留提示，日志保留，不宣称零警告或真人整场验收。
+- DMG SHA-256：`029e3efdda93640d28ce043e0c5f9ff586c734a48e05ba43cdbd5cba2dd2361a`。
+- PCK SHA-256：`dc50c521ac24f9c4fddc9dfacb32c45fe8d4a1695fe65fd3eddd2c04f2f0be5f`。
+
+构建原始收据 `macos-build-receipt.json`，后续启动收据 `macos-handoff.json`，包内宿主结果 `macos-packed-host-result.json`。构建收据的 `native_launch_tested=false` 保留其“构建工具本身未负责启动”的原意，启动另有收据。完整私有目录 `/tmp/lsh-macos-hotkeys-20260921-55089263/`。旧 e3be6474 包保留历史，不再作为本次修改的测试入口；不创建 Release、不更新 Steam/服务器。

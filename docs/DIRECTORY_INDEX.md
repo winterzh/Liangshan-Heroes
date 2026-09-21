@@ -2,6 +2,7 @@
 
 - `tools/hero_function_keys_qa.gd`：真实 F1～F8 输入、阵亡/空槽、头像键帽、镜头组合键与旧设置迁移回归，接入 RTS 总入口。
 - `qa/hero_hotkeys_20260921/`：本轮功能检查、旧失败夹具记录、语言保留与更新后 Mac 测试包交接。
+- `build/macos-test-20260921-hotkeys/`：最新 `TEST 0921-55089263` App/DMG，仅本机，不入 Git。
 - `assets/localization/zz_rts_refinement_20260920.json`：补齐旧 RTS 57 条翻译来源分片，保留既有译文，避免重建快捷键文案时丢失。
 
 ## 2026-09-21 macOS 本地试玩
