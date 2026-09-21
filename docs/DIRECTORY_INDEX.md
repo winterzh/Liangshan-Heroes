@@ -1,3 +1,12 @@
+## 2026-09-20 RTS 操作、触屏布局与血瓶
+
+- [实现与边界](RTS_REFINEMENT_20260920.md)、[触屏矩阵](QA_RTS_TOUCH_HUD_20260920.md)。
+- `assets/ui/items/health_potion.svg`：首个生产物品的代码原生矢量图标。
+- `tools/run_rts_refinement_qa.py`：白名单冻结、独立 profile、功能回归及可选原生离屏截图。
+- `tools/rts_{foundation_regression,economy_rules,hero_items_regression,hud_snapshot}_qa.gd`：操作/经济/物品/内部 HUD 捕获验证。
+- `tools/rts_touch_layout_qa.gd`、`tools/rts_touch_visual_qa.gd/.tscn`：只读布局审计和原生尺寸状态矩阵。
+- `qa/rts_foundation_20260920/`：最终收据、回归日志、文案验证与代表截图；不含缓存、玩家存档或安装包。
+
 ## 2026-09-20 Android 用户测试包
 
 - `build/android-test-20260920/`：本机用户测试 APK 与完整收据，Git 忽略，不是线上发布目录。

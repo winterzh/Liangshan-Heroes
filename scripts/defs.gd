@@ -339,13 +339,18 @@ const TRAPS := {
 		"color": Color("ff7a2a"), "effect": {"kind": "fire", "total": 150.0, "dur": 6.0, "radius": 95.0}},
 }
 
-# 物品注册表（第一版保持为空）：未来商店/掉落只需向这里加入数据，不改英雄或 HUD。
+# 物品注册表：出生/复活补给和未来商店、掉落共用同一物品实例系统。
 # 字段约定：
 # name/desc/color/icon/max_stack；stats 固定属性；stats_pct 百分比属性；
 # active={target:self|point|unit, unit_team, range, radius, cooldown, cast_time, consume, effect={...}}；
 # passive={unique_group,power,stats,stats_pct,triggers={on_attack/on_hit/on_damaged/on_kill/
 # low_hp/periodic:{...}}}，也可用 passive 数组组合多个被动。
-const ITEMS := {}
+const ITEMS := {
+	"health_potion": {"name": "血瓶", "desc": "立即恢复 200＋最大生命值的20%，不超过生命上限。使用后消耗。满血时不消耗。",
+		"icon": "res://assets/ui/items/health_potion.svg", "color": Color("d95a50"), "max_stack": 6,
+		"active": {"target": "self", "cooldown": 0.0, "cast_time": 0.0, "consume": true, "requires_missing_hp": true,
+			"effect": {"target": "self", "heal": 200.0, "heal_max_hp_pct": 0.2}}},
+}
 
 # 技能定义：name,cd,targeted,radius,color,desc(UI), 以及 effect(数据化结算描述)。
 # effect.kind: rally(治疗+攻击buff队友) / haste(队友移速) / smite(范围伤敌,可附slow,可cav加成,可self自身buff)
@@ -1008,9 +1013,9 @@ const TECHS := {
 		"desc": "采集效率 +30%", "effect": {"gather_mult": 1.3}},
 	# 时代进阶（聚义厅研究，单向）：解锁后期单位/建筑并给全军加成
 	"tech_age2": {"name": "聚义·壮大", "cost_gold": 200, "cost_wood": 120, "time": 40.0,
-		"desc": "进「聚义」时代：解锁英雄/马军/箭楼/集市，全军生命 +10%（含英雄）", "effect": {"advance_age": 2, "hp_mult": 1.1}},
+		"desc": "进「聚义」时代：解锁马军，全军生命 +10%（含英雄）；英雄/箭楼/集市在草莽时代已可用", "effect": {"advance_age": 2, "hp_mult": 1.1}},
 	"tech_age3": {"name": "替天行道·鼎盛", "cost_gold": 350, "cost_wood": 220, "time": 55.0, "min_age": 2,
-		"desc": "进「替天行道」时代：解锁攻城作坊/撞车，全军攻击 +10%（含英雄）", "effect": {"advance_age": 3, "atk_mult": 1.1}},
+		"desc": "进「替天行道」时代：攻城作坊可训练投石车/撞车，全军攻击 +10%（含英雄）", "effect": {"advance_age": 3, "atk_mult": 1.1}},
 }
 
 

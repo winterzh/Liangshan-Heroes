@@ -253,6 +253,9 @@ var _idle_i := 0              # 闲置喽啰轮询索引
 var _groups := {}
 var _last_group_key := -1
 var _last_group_time := 0
+var _hero_roster_keys: Array[String] = [] # 本局加入顺序固定，阵亡不补位。
+var _last_hero_key := ""
+var _last_hero_time := 0
 var _camera_locs := {}     # Ctrl/⌘+F1-F4 记录；Shift+F1-F4 跳转
 var _smoke := false
 var _smoke_t := 0.0
@@ -544,6 +547,7 @@ func _ready() -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 
 	camera.position = to_screen(map.cell_to_world(level.camera_start_cell()))
+	camera.clamp_to_limits()
 	hud.set_top(Localize.format_text("%s · %s", [level.display_title(), level.display_subtitle()], false))
 	if fog:
 		_fog_pass(0.0)
@@ -799,12 +803,18 @@ func spawn_unit(key: String, faction: int, world_pos: Vector2) -> Unit:
 			push_error("No passable spawn region for " + key)
 			return null
 		world_pos = map.cell_to_world(legal)
-	if u.is_hero and u.inventory != null and hero_item_progress.has(key):
+	if u.is_hero and faction == Unit.FACTION_LIANG and u.inventory != null and hero_item_progress.has(key):
 		if not u.inventory.restore(hero_item_progress[key]):
 			# Keep the retired snapshot if its UID domain is not installed yet.
 			u.queue_free()
 			return null
 		hero_item_progress.erase(key)
+	if u.is_hero and faction == Unit.FACTION_LIANG and u.inventory != null:
+		# 复活恢复旧包后补到至少一瓶，不覆盖满栏，也不重复累加。
+		if not u.inventory.has_item("health_potion"):
+			u.inventory.add_item("health_potion", 1)
+		if key not in _hero_roster_keys:
+			_hero_roster_keys.append(key)
 	if track_hero_combat_stats and u.is_hero and faction == Unit.FACTION_LIANG:
 		_ensure_hero_combat_stat(u.key, u.display_name)
 	if u.ability != "" and _abilities.has(u.ability):
@@ -993,17 +1003,19 @@ func set_top(text: String) -> void:
 
 func center_camera_cell(cell: Vector2i) -> void:
 	camera.position = to_screen(map.cell_to_world(cell))
+	camera.clamp_to_limits()
 
 
 func _jump_alert_or_home() -> void:
 	if _alert_t > 0.0:
 		camera.position = to_screen(_alert_pos)
+		camera.clamp_to_limits()
 	else:
 		center_camera_cell(level.camera_start_cell())
 
 
 func _save_camera_loc(n: int) -> void:
-	_camera_locs[n] = camera.position
+	_camera_locs[n] = camera.view_center()
 	msg(Localize.format_text("已记录镜头位置 F%d", n), 1.1)
 	Sfx.play("click")
 
@@ -1013,6 +1025,7 @@ func _jump_camera_loc(n: int) -> void:
 		msg(Localize.format_text("F%d 尚未记录镜头位置", n), 1.1)
 		return
 	camera.position = _camera_locs[n]
+	camera.clamp_to_limits()
 	Sfx.play("select")
 
 
@@ -1137,7 +1150,7 @@ func shake(amount: float, at := Vector2.INF) -> void:
 		return
 	if at != Vector2.INF:
 		# camera.position 是视图中心（iso 屏幕空间）；偏移超出半屏的 ~0.7 倍则不震
-		var off := to_screen(at) - camera.position
+		var off := to_screen(at) - camera.view_center()
 		var rect := get_viewport().get_visible_rect()
 		if off.length() > rect.size.length() * 0.7 / camera.zoom.x:
 			return
@@ -1818,8 +1831,6 @@ func train_menu(bld: Unit) -> Array:
 	var workers: Array = []
 	var heroes: Array = []
 	for key in _trainable_keys(bld):
-		if int(_defs.get(key, {}).get("min_age", 1)) > current_age:
-			continue   # 时代未到 → 不出
 		var d: Dictionary = _defs.get(key, {})
 		var cg := int(d.get("cost_gold", 0))
 		var cw := int(d.get("cost_wood", 0))
@@ -1833,11 +1844,13 @@ func train_menu(bld: Unit) -> Array:
 				is_revive = true
 				lbl = Localize.format_text("复活·%s Lv%d", [lbl, int(hero_progress[key].get("level", 1))])
 			heroes.append({"kind": "train", "key": key, "label": lbl,
-				"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": is_revive,
+				"cost_g": cg, "cost_w": cw, "affordable": train_block_reason(bld, key).is_empty(), "bld": bld, "revive": is_revive,
+				"min_age": int(d.get("min_age", 1)), "blocked": train_block_reason(bld, key),
 				"_star": int((Bios.STAR.get(key, [999]) as Array)[0])})
 		else:
 			workers.append({"kind": "train", "key": key, "label": String(d.get("name", key)),
-				"cost_g": cg, "cost_w": cw, "affordable": can_afford(cg, cw), "bld": bld, "revive": false})
+				"cost_g": cg, "cost_w": cw, "affordable": train_block_reason(bld, key).is_empty(), "bld": bld, "revive": false,
+				"min_age": int(d.get("min_age", 1)), "blocked": train_block_reason(bld, key)})
 	heroes.sort_custom(func(a, b): return int(a["_star"]) < int(b["_star"]))   # 天罡在前、地煞在后
 	var out: Array = workers.duplicate()
 	var PAGE := 6
@@ -1944,11 +1957,37 @@ func _queued_pop() -> int:
 	return n
 
 
+func population_summary() -> Dictionary:
+	return {"active": used_pop(), "queued": _queued_pop(), "cap": pop_cap}
+
+
+## HUD 与下单使用相同的条件，不能只按库存点亮按钮。
+func train_block_reason(bld: Unit, key: String) -> String:
+	var reason := _train_block_reason(bld, key)
+	if not reason.is_empty():
+		for candidate in _selected_producers_for(bld, key):
+			if _train_block_reason(candidate, key).is_empty():
+				return ""
+	match reason:
+		"": return ""
+		"age": return Localize.format_text("需要时代 %d", int(_defs.get(key, {}).get("min_age", 1)))
+		"population": return Localize.text("人口已预占，需建民居")
+		"resources": return Localize.text("资源不足")
+		"constructing": return Localize.text("建筑尚未完成")
+		"researching": return Localize.text("正在研究科技")
+		"queue_full": return Localize.text("生产队列已满")
+		"hero_exists": return Localize.text("该英雄已在场或训练中")
+		"hero_cap": return Localize.text("已达英雄数量上限")
+		_: return Localize.text("该建筑不能训练此单位")
+
+
 ## 训练/研究共用建筑的唯一训练校验入口。返回空串=可下单；非空为稳定原因码。
 ## 玩家与托管都走这一套，避免自动预检和实际下单条件漂移。
 func _train_block_reason(bld: Unit, key: String) -> String:
 	if bld == null or not is_instance_valid(bld):
 		return "invalid"
+	if bld.faction != Unit.FACTION_LIANG:
+		return String(level.faction_train_block_reason(self, bld, key)) if level != null and level.has_method("faction_train_block_reason") else "unsupported"
 	if bld.is_constructing:
 		return "constructing"
 	if bld._research_key != "":
@@ -1961,7 +2000,7 @@ func _train_block_reason(bld: Unit, key: String) -> String:
 	if bool(d.get("hero_trainable", false)):   # 英雄每种限一员
 		var have := count_alive(Unit.FACTION_LIANG, key)
 		for u in units:
-			if is_instance_valid(u) and u.is_building:
+			if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG:
 				have += u._train_queue.count(key)
 		if have >= 1:
 			return "hero_exists"
@@ -1970,7 +2009,7 @@ func _train_block_reason(bld: Unit, key: String) -> String:
 		if hcap > 0:
 			var htotal := liang_heroes().size()
 			for u in units:
-				if is_instance_valid(u) and u.is_building:
+				if is_instance_valid(u) and u.is_building and u.faction == Unit.FACTION_LIANG:
 					for qk in u._train_queue:
 						if bool(_defs.get(qk, {}).get("hero_trainable", false)):
 							htotal += 1
@@ -2013,7 +2052,7 @@ func queue_train(bld: Unit, key: String, feedback := true) -> bool:
 	var d: Dictionary = _defs.get(key, {})
 	var cg := int(d.get("cost_gold", 0))
 	var cw := int(d.get("cost_wood", 0))
-	if not spend(cg, cw):
+	if not faction_spend(bld.faction, cg, cw):
 		return false
 	if feedback:
 		Sfx.play("click")
@@ -2036,6 +2075,10 @@ func queue_train_multi(bld: Unit, key: String) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 	var pool := _selected_producers_for(bld, key)
 	if pool.size() <= 1:
+		queue_train(bld, key)
+		return
+	pool = pool.filter(func(candidate: Unit) -> bool: return _train_block_reason(candidate, key).is_empty())
+	if pool.is_empty():
 		queue_train(bld, key)
 		return
 	pool.sort_custom(func(a: Unit, b: Unit) -> bool:
@@ -2065,7 +2108,7 @@ func cancel_train(bld: Unit, index: int) -> void:
 		return
 	var key: String = bld._train_queue[index]
 	var d: Dictionary = _defs.get(key, {})
-	add_resources(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0)))   # 退还花费
+	add_resources(int(d.get("cost_gold", 0)), int(d.get("cost_wood", 0)), bld.faction)   # 退还原阵营花费
 	bld._train_queue.remove_at(index)
 	if index==0:
 		bld.production_blocked=false
@@ -2099,9 +2142,9 @@ func research_menu(bld: Unit) -> Array:
 
 
 ## 同一科技是全局状态：任意建筑研究中，都不能在另一座建筑重复扣费研究。
-func _tech_in_progress(key: String) -> bool:
+func _tech_in_progress(key: String, faction := Unit.FACTION_LIANG) -> bool:
 	for u in units:
-		if is_instance_valid(u) and u.is_building and u.hp > 0.0 and u._research_key == key:
+		if is_instance_valid(u) and u.is_building and u.hp > 0.0 and u.faction == faction and u._research_key == key:
 			return true
 	return false
 
@@ -2109,6 +2152,8 @@ func _tech_in_progress(key: String) -> bool:
 func _research_block_reason(bld: Unit, key: String) -> String:
 	if bld == null or not is_instance_valid(bld):
 		return "invalid"
+	if bld.faction != Unit.FACTION_LIANG:
+		return String(level.faction_research_block_reason(self, bld, key)) if level != null and level.has_method("faction_research_block_reason") else "unsupported"
 	if bld.is_constructing:
 		return "constructing"
 	if bld._research_key != "":
@@ -2152,7 +2197,7 @@ func queue_research(bld: Unit, key: String, feedback := true) -> bool:
 	var d: Dictionary = Defs.TECHS.get(key, {})
 	var cg := int(d.get("cost_gold", 0))
 	var cw := int(d.get("cost_wood", 0))
-	if not spend(cg, cw):
+	if not faction_spend(bld.faction, cg, cw):
 		return false
 	if feedback:
 		Sfx.play("click")
@@ -2164,6 +2209,10 @@ func queue_research(bld: Unit, key: String, feedback := true) -> bool:
 
 
 func on_research_done(bld: Unit, key: String) -> void:
+	if is_instance_valid(bld) and bld.faction != Unit.FACTION_LIANG:
+		if level != null and level.has_method("on_faction_research_done"):
+			level.on_faction_research_done(self, bld, key)
+		return
 	if _tech_done.has(key):
 		return
 	_tech_done[key] = true
@@ -2226,6 +2275,10 @@ func on_unit_trained(bld: Unit, key: String) -> bool:
 	var u := spawn_unit(key, bld.faction, map.cell_to_world(cell))
 	if u==null: return false
 	level.on_unit_trained(self,u,bld)
+	if bld.faction != Unit.FACTION_LIANG:
+		if level.has_method("on_faction_unit_trained"):
+			level.on_faction_unit_trained(self, bld, u)
+		return true
 	# 战死英雄重练 → 恢复原等级/技能（不从 1 级重来）
 	if u.is_hero and u._hero_leveled and hero_progress.has(key):
 		var pr: Dictionary = hero_progress[key]
@@ -2296,6 +2349,10 @@ func _on_start_battle() -> void:
 
 func _on_unit_died(u: Unit) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
+	if _ability_caster == u: _disarm_ability()
+	if _item_caster == u: _disarm_item()
+	_cancel_walk_cast_intents(u)
+	cancel_pending_cast(u)
 	_resolve_lin_duel_death(u)   # 必须在 units.erase 前判定；助攻/队友补刀同样由目标死亡事件结算。
 	var item_killer: Unit = u._killer
 	if item_killer != null and is_instance_valid(item_killer) and item_killer.faction != u.faction \
@@ -2304,10 +2361,10 @@ func _on_unit_died(u: Unit) -> void:
 		if not _gameplay_rng_issue.is_empty(): return
 	if String(u._killer_source_id).begins_with("item:"):
 		record_item_kill(item_killer, String(u._killer_source_id).trim_prefix("item:"))
-	if u.is_hero and u.inventory != null:
+	if u.is_hero and u.faction == Unit.FACTION_LIANG and u.inventory != null:
 		hero_item_progress[u.key] = u.inventory.snapshot()
 	# 战死英雄存档：可培养英雄阵亡时记下等级/经验/技能点/已学技能，重练后恢复（issue：复活变1级）
-	if u.is_hero and u._hero_leveled:
+	if u.is_hero and u.faction == Unit.FACTION_LIANG and u._hero_leveled:
 		hero_progress[u.key] = {
 			"level": u.hero_level, "xp": u.hero_xp, "sp": u.skill_points,
 			"ranks": u.ability_slots.map(func(s: Dictionary) -> int: return int(s["rank"]))}
@@ -2735,6 +2792,7 @@ func _process(_delta: float) -> void:
 		elif sm.y > bottom - m: dir.y = 1.0
 		if dir != Vector2.ZERO:
 			camera.position += dir * (640.0 * _delta * Settings.cam_speed) / camera.zoom.x
+			camera.clamp_to_limits()
 			_drag_cur = get_global_mouse_position()   # 滚屏后准星落在新露出的区域
 			overlay.queue_redraw()
 	if _click_fx_t > 0.0:
@@ -2772,12 +2830,14 @@ func _autocam_tick(delta: float) -> void:
 		_autocam_dwell = 999.0           # 刚接管：立即选点
 		_autocam_focus = Vector2.INF     # 清掉上次的聚焦（未选到目标前不移镜）
 		_autocam_review_unit = null
-		_autocam_target_pos = camera.position   # 安全兜底：先对齐当前视角，避免漂向 (0,0)
+		_autocam_target_pos = camera.view_center()   # 安全兜底：先对齐当前视角，避免漂向 (0,0)
 		camera.auto_driving = want
 		if not want:
 			return
 	if not _autocam_active:
 		return
+	if _ability_armed != "" or _item_armed != "":
+		return # 手动瞄准时自动镜头不能把落点移走。
 	# 玩家显式操控镜头（方向键/滚轮/拖拽/手势）→ 暂时让位，期间不抢镜
 	if camera.user_controlling():
 		_autocam_dwell = 999.0           # 让位结束后立即重新选点
@@ -2795,6 +2855,7 @@ func _autocam_tick(delta: float) -> void:
 	# 平滑插值到目标机位（时间无关阻尼，掉帧也不突跳）
 	var t := 1.0 - pow(0.0025, delta)
 	camera.position = camera.position.lerp(_autocam_target_pos, t)
+	camera.clamp_to_limits()
 	camera.zoom = camera.zoom.lerp(Vector2.ONE * _autocam_target_zoom, t)
 
 
@@ -4679,6 +4740,10 @@ func _aura_pass() -> void:
 		for u in units:
 			if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and not u.is_building:
 				u.buff_atk *= (hero_tech_atk if u.is_hero else tech_atk)   # 英雄只吃基地科技；喽啰/常备军吃兵营+基地
+	if level != null and level.has_method("faction_attack_tech_mult"):
+		for u in units:
+			if is_instance_valid(u) and u.faction != Unit.FACTION_LIANG and u.hp > 0.0 and not u.is_building:
+				u.buff_atk *= float(level.faction_attack_tech_mult(u))
 
 
 func _slow_aura_of(h: Unit) -> Array:
@@ -4814,7 +4879,7 @@ func _auto_micro_pass() -> void:
 		if u.slot_count() <= 0 or u._cast_t > 0.0:
 			continue
 		if u.manual_order_active or u.manual_order_t > 0.0 \
-				or u.waiting_manual_mission_arrival():
+				or u.waiting_manual_mission_arrival() or is_manual_aiming(u) or unit_action_queue_busy(u):
 			continue   # 玩家命令及经任务层有限续期的现场等待：托管不抢走；取消/完成后解除
 		if String(u.key) == "hua_rong" and u.hua_lock_active() and target_visible_to(u, u._hua_lock_target):
 			continue   # E 的五次跨距锁定普攻正在执行：托管不能用走位/换目标把它中途覆盖
@@ -5586,7 +5651,7 @@ func _grid_build() -> void:
 	_focus_counts.clear()
 	if camera != null:
 		var half: Vector2 = get_viewport().get_visible_rect().size * 0.5 / camera.zoom
-		_unit_draw_rect = Rect2(camera.position - half, half * 2.0).grow(120.0)
+		_unit_draw_rect = Rect2(camera.view_center() - half, half * 2.0).grow(120.0)
 	var mob := 0
 	for u in units:
 		if not is_instance_valid(u):
@@ -5725,6 +5790,7 @@ func _separation_pass(_delta: float) -> void:
 		if stagger and aid % 3 != _sep_phase:
 			continue
 		var a_mv := a._state == Unit.ST_MOVE or a._state == Unit.ST_AMOVE or a._state == Unit.ST_CHASE
+		var a_hold := a.is_holding_ground()
 		var a_phase := _gold_phasing(a)
 		var a_pos := a.position
 		var a_radius := a.radius
@@ -5753,7 +5819,11 @@ func _separation_pass(_delta: float) -> void:
 					var b_mv := b._state == Unit.ST_MOVE or b._state == Unit.ST_AMOVE or b._state == Unit.ST_CHASE
 					var aw := 0.5
 					var bw := 0.5
-					if a_mv and not b_mv:
+					var b_hold := b.is_holding_ground()
+					if a_hold != b_hold:
+						aw = Unit.HOLD_SEPARATION_SHARE if a_hold else 1.0 - Unit.HOLD_SEPARATION_SHARE
+						bw = 1.0 - aw
+					elif a_mv and not b_mv:
 						aw = 0.85; bw = 0.15
 					elif b_mv and not a_mv:
 						aw = 0.15; bw = 0.85
@@ -5761,6 +5831,10 @@ func _separation_pass(_delta: float) -> void:
 					var overlap := min_d - d
 					var ap := a_pos + dirn * overlap * aw
 					var bp := b_pos - dirn * overlap * bw
+					if a_hold and not b_hold:
+						bp = Unit.separation_yield_position(b, b_pos, a, a_pos, bp, overlap, map)
+					elif b_hold and not a_hold:
+						ap = Unit.separation_yield_position(a, a_pos, b, b_pos, ap, overlap, map)
 					if map._segment_open(a_pos, ap, a_profile):
 						a_pos = ap
 					if map._segment_open(b_pos, bp, a_profile):
@@ -5792,9 +5866,19 @@ func _unhandled_input(event: InputEvent) -> void:
 	# 桌面端纯键鼠：丢弃一切触摸事件（不切触屏布局、不复位框选/施法）。触摸经鼠标模拟仍当点击用。
 	if not _allow_touch and (event is InputEventScreenTouch or event is InputEventScreenDrag):
 		return
+	# 真实鼠标恢复键鼠语义；触屏合成的鼠标(device=-1)仍沿用触屏模式。
+	if event is InputEventMouse and event.device != InputEvent.DEVICE_ID_EMULATION and _touch_mode:
+		_touch_mode = false
+		_dragging = false
+		_box_mode = false
+		_panning = false
+		camera.touch_mode = false
+		if hud != null:
+			hud.set_touch_ui(false)
 	if event is InputEventScreenTouch:
 		if not _touch_mode:
 			_touch_mode = true   # 进入触摸交互模式 → 通知 HUD 切到触屏布局（屏上操作栏/编队条/长按出说明）
+			camera.touch_mode = true
 			if hud != null:
 				hud.set_touch_ui(true)
 		if event.pressed and event.index >= 1:
@@ -5814,6 +5898,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif _panning or _drag_from.distance_to(_drag_cur) > 12.0:
 			_panning = true
 			camera.position -= event.relative / camera.zoom.x
+			camera.clamp_to_limits()
 		return
 	if event is InputEventMouseButton:
 		var p := get_global_mouse_position()
@@ -6332,17 +6417,52 @@ func focus_unit(u: Unit) -> void:
 ## 与点头像一致：驻军中的英雄改为「出击」，在场英雄则选中并居中。
 func _select_hero_by_index(idx: int) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
-	var hs := liang_heroes()
+	var hs := hero_roster_slots()
 	if idx < 0 or idx >= hs.size():
 		return
-	var h: Unit = hs[idx]
+	var h: Unit = hs[idx].get("hero")
 	if not is_instance_valid(h):
+		msg(Localize.text("该英雄已阵亡，可在聚义厅复活"), 1.5)
 		return
 	if h.garrisoned:
 		sortie_unit(h)
 		if not _gameplay_rng_issue.is_empty(): return
 	else:
-		focus_unit(h)
+		_set_selection([h])
+		var now := Time.get_ticks_msec()
+		if _last_hero_key == h.key and now - _last_hero_time < 350:
+			_center_on([h])
+		_last_hero_key = h.key
+		_last_hero_time = now
+
+
+func hero_roster_slots() -> Array:
+	# 恢复/测试入口不一定走 spawn_unit；补登记，但不因阵亡移除旧槽位。
+	var live := liang_heroes()
+	for h in live:
+		if h.key not in _hero_roster_keys:
+			_hero_roster_keys.append(h.key)
+	for key in hero_progress:
+		if key not in _hero_roster_keys:
+			_hero_roster_keys.append(key)
+	var out: Array = []
+	for key in _hero_roster_keys:
+		var hero: Unit = null
+		for h in live:
+			if h.key == key:
+				hero = h
+				break
+		var revive_left := -1.0
+		for bld in units:
+			if not is_instance_valid(bld) or not bld.is_building or bld.faction != Unit.FACTION_LIANG:
+				continue
+			var elapsed: float = bld._train_t
+			for i in range(bld._train_queue.size()):
+				if i > 0: elapsed += train_time_for(bld._train_queue[i])
+				if bld._train_queue[i] == key: revive_left = elapsed
+		out.append({"key": key, "hero": hero, "name": String(_defs.get(key, {}).get("name", key)),
+			"hotkey": "F%d" % (out.size() + 1), "dead": hero == null, "revive_left": revive_left})
+	return out
 
 
 ## 全选己方军队（非工人、非建筑、未驻军的作战单位）——触屏「全军」一键
@@ -6548,8 +6668,11 @@ func cast_item(caster: Unit, slot: int, show_blocked := false) -> void:
 		if show_blocked:
 			_show_item_blocked(caster, slot)
 		return
+	if active_unit() != caster:
+		_set_selection([caster])
 	_cancel_walk_cast_intents(caster)
 	cancel_armed()
+	_stamp_manual([caster])
 	var mode := String(active.get("target", "self"))
 	if mode == "point" or mode == "unit":
 		_item_caster = caster
@@ -6582,6 +6705,8 @@ func _show_item_blocked(caster: Unit, slot: int) -> void:
 		text = Localize.text("驻军中，无法使用")
 	elif caster._cast_t > 0.0 or caster._channel_t > 0.0:
 		text = Localize.text("正在施法，无法使用")
+	elif bool(idef.get("active", {}).get("requires_missing_hp", false)) and caster.hp >= caster.max_hp:
+		text = Localize.text("生命已满，血瓶未消耗")
 	msg(Localize.format_text("%s · %s：%s", [caster.display_name, String(idef.get("name", item_id)), text]), 1.3)
 
 
@@ -6637,7 +6762,7 @@ func item_cast_range(active: Dictionary) -> float:
 	return maxf(0.0, float(active.get("range", 0.0)))
 
 
-func _begin_item_cast(caster: Unit, slot: int, point: Vector2, target: Unit = null) -> void:
+func _begin_item_cast(caster: Unit, slot: int, point: Vector2, target: Unit = null, preserve_queue := false) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 	if caster == null or not is_instance_valid(caster) or caster.inventory == null \
 			or not caster.inventory.ready(slot):
@@ -6652,7 +6777,7 @@ func _begin_item_cast(caster: Unit, slot: int, point: Vector2, target: Unit = nu
 		if not _gameplay_rng_issue.is_empty(): return
 		return
 	var col: Color = idef.get("color", Color("d9bd75"))
-	caster.begin_cast_windup(windup, col)
+	caster.begin_cast_windup(windup, col, preserve_queue)
 	_pending_item_casts.append({"caster": caster, "slot": slot, "uid": int(caster.inventory.slot_item(slot).get("uid", 0)),
 		"point": point, "target": target, "serial": caster._cast_serial})
 	Sfx.play("cast", -1.0, 0.05, 70)
@@ -6787,7 +6912,8 @@ func _apply_item_effect_to(caster: Unit, target: Unit, effect: Dictionary, sourc
 	if damage > 0.0 and target.faction != caster.faction:
 		target.take_damage(damage, caster, false, bool(effect.get("ignore_reduction", false)), source_id)
 		if not _gameplay_rng_issue.is_empty(): return
-	var healing := maxf(0.0, float(effect.get("heal", 0.0)))
+	var healing := maxf(0.0, float(effect.get("heal", 0.0)) \
+		+ target.max_hp * maxf(0.0, float(effect.get("heal_max_hp_pct", 0.0))))
 	if healing > 0.0 and target.faction == caster.faction:
 		target.heal(healing, caster, source_id)
 	var dur := maxf(0.0, float(effect.get("duration", effect.get("dur", 0.0))))
@@ -6866,6 +6992,11 @@ func transfer_hero_item(from_hero: Unit, slot: int, to_hero: Unit) -> bool:
 			or from_hero == to_hero or from_hero.faction != Unit.FACTION_LIANG \
 			or to_hero.faction != Unit.FACTION_LIANG or from_hero.inventory == null or to_hero.inventory == null:
 		return false
+	if from_hero.hp <= 0.0 or to_hero.hp <= 0.0 or from_hero.garrisoned or to_hero.garrisoned:
+		return false
+	if from_hero.position.distance_to(to_hero.position) > 200.0:
+		msg(Localize.text("请让两位英雄靠近后再转交物品（距离200以内）"), 1.5)
+		return false
 	var ok := from_hero.inventory.transfer_slot(slot, to_hero.inventory)
 	if not ok:
 		msg(Localize.format_text("%s 的物品栏已满", to_hero.display_name), 1.3)
@@ -6881,6 +7012,12 @@ func cast_ability(caster: Unit, slot := 0, show_blocked := false) -> void:
 		if show_blocked:
 			_show_cast_blocked(caster, slot)
 		return
+	# A ready replacement command owns the cursor, including instant/self skills.
+	# A blocked click above deliberately preserves the player's current aim.
+	cancel_armed()
+	if active_unit() != caster:
+		_set_selection([caster])
+	_stamp_manual([caster])
 	_cancel_walk_cast_intents(caster)
 	var aid: String = caster.ability_slots[slot]["id"]
 	var ad: Dictionary = _abilities[aid]
@@ -6963,7 +7100,7 @@ func _select_all_type(proto: Unit, additive: bool) -> void:
 	# 是屏幕像素——空间不符会几乎一个都框不中（之前双击选同类失效的根因）。这里用相机中心+缩放
 	# 算出当前可见的世界矩形，再向外放宽 64px 让贴边单位也算「在屏内」。
 	var vsize: Vector2 = get_viewport().get_visible_rect().size / camera.zoom
-	var vrect := Rect2(camera.position - vsize * 0.5, vsize).grow(64.0)
+	var vrect := Rect2(camera.view_center() - vsize * 0.5, vsize).grow(64.0)
 	var sel: Array = selection.duplicate() if additive else []
 	for u in units:
 		if is_instance_valid(u) and u.faction == Unit.FACTION_LIANG and u.hp > 0.0 and not u.is_building and not u.garrisoned and u.story_outcome == "" \
@@ -7065,6 +7202,58 @@ func cancel_pending_cast(caster: Unit) -> void:
 	cancel_pending_item_cast(caster)
 
 
+func is_manual_aiming(caster: Unit) -> bool:
+	return (_ability_armed != "" and _ability_caster == caster) or (_item_armed != "" and _item_caster == caster)
+
+
+## Unit 队列门闩：抬手计时归零但本帧尚未结算时，也不能抢跑下一条移动。
+func unit_action_queue_busy(caster: Unit) -> bool:
+	if not is_instance_valid(caster):
+		return false
+	if _pending_casts.is_empty() and _pending_item_casts.is_empty() and _walk_casts.is_empty() and _walk_item_casts.is_empty():
+		return false
+	if is_cast_pending(caster, -1): return true
+	for pc in _pending_item_casts:
+		if pc.get("caster") == caster and int(pc.get("serial", -1)) == caster._cast_serial:
+			return true
+	for wc in _walk_casts:
+		if wc.get("c") == caster and int(wc.get("serial", -1)) == caster._order_serial:
+			return true
+	for wc in _walk_item_casts:
+		if wc.get("c") == caster and int(wc.get("serial", -1)) == caster._order_serial:
+			return true
+	return false
+
+
+func hero_command_state(hero: Unit, slot: int) -> Dictionary:
+	if not is_instance_valid(hero) or hero.hp <= 0.0:
+		return {"state": "controlled", "label": Localize.text("阵亡")}
+	if hero._stun_t > 0.0:
+		return {"state": "controlled", "label": Localize.text("眩晕"), "remaining": hero._stun_t}
+	if hero._silence_t > 0.0:
+		return {"state": "controlled", "label": Localize.text("沉默"), "remaining": hero._silence_t}
+	if hero.garrisoned:
+		return {"state": "controlled", "label": Localize.text("驻军")}
+	if _ability_caster == hero and _ability_armed != "" and _ability_slot == slot:
+		return {"state": "aiming", "label": Localize.text("瞄准中")}
+	for wc in _walk_casts:
+		if wc.get("c") == hero and int(wc.get("slot", -1)) == slot and int(wc.get("serial", -1)) == hero._order_serial:
+			return {"state": "approaching", "label": Localize.text("接近目标")}
+	if is_cast_pending(hero, slot):
+		return {"state": "casting", "label": Localize.text("施法中"), "remaining": hero._cast_t}
+	if hero._channel_t > 0.0:
+		return {"state": "casting", "label": Localize.text("引导中"), "remaining": hero._channel_t}
+	if hero._charge_t > 0.0 or hero._charge_dash > 0.0:
+		return {"state": "controlled", "label": Localize.text("冲锋中")}
+	return {"state": "ready", "label": ""}
+
+
+func _report_cast_cancel(caster: Unit, item := false) -> void:
+	if is_instance_valid(caster) and caster.faction == Unit.FACTION_LIANG \
+			and (caster.manual_order_active or caster.manual_order_t > 0.0):
+		msg(Localize.text("目标不可用，物品命令已取消") if item else Localize.text("目标不可用，施法已取消"), 1.5)
+
+
 ## HUD 查询：某个技能是否正在抬手待结算。这与 cd_t 是两个独立状态，不能把抬手误画成「冷却 0」。
 func is_cast_pending(caster: Unit, slot: int) -> bool:
 	if caster == null or not is_instance_valid(caster):
@@ -7126,7 +7315,7 @@ func _clamp_cast_point(caster: Unit, ad: Dictionary, lp: Vector2) -> Vector2:
 
 ## 施法抬手：技能不再瞬发——先让英雄抬手蓄势 CAST_WINDUP 秒（带蓄能辉光），归零后才结算。
 ## 目标点 lp 在点击瞬间已锁定，抬手只是表演；抬手期间技能仍占「就绪」，靠 _cast_t>0 防连发。
-func _begin_cast(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void:
+func _begin_cast(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null, preserve_queue := false) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 	if is_instance_valid(caster) and (caster.story_outcome != "" or caster.is_captive): return
 	if caster == null or not is_instance_valid(caster):
@@ -7165,7 +7354,7 @@ func _begin_cast(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null) -> void
 				facing_point = facing_foe.position
 	caster._face_dir(facing_point - caster.position, true)   # 起手立即锁定施法方向，不能被四向磁滞留在旧朝向
 	var windup := float(ad.get("cast_windup", CAST_WINDUP))
-	caster.begin_cast_windup(windup, col)
+	caster.begin_cast_windup(windup, col, preserve_queue)
 	_pending_casts.append({"caster": caster, "slot": slot, "lp": lp, "tgt": tgt, "serial": caster._cast_serial})
 	if aid == "hua_blade" and tgt != null and is_instance_valid(tgt):
 		var aim := HuaSnipeAimFx.new()   # R 的 1 秒蓄力全程可见：收束准星 + 单体瞄准线
@@ -7194,9 +7383,11 @@ func _tick_pending_casts() -> void:
 		else:
 			var tgt = pc.get("tgt")
 			if typeof(tgt) == TYPE_OBJECT and not is_instance_valid(tgt):
+				_report_cast_cancel(c)
 				continue   # A freed Object may compare equal to null; never pass it to a typed cast API.
 			if tgt != null and (not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned or tgt.story_outcome != "" \
 					or not target_visible_to(c, tgt)):
+				_report_cast_cancel(c)
 				continue
 			_do_ability(c, int(pc["slot"]), pc["lp"], tgt)
 			if not _gameplay_rng_issue.is_empty(): return
@@ -8234,17 +8425,19 @@ func _queue_walk_item(caster: Unit, slot: int, tgt: Unit, point: Vector2) -> voi
 	var uid := int(caster.inventory.slot_item(slot).get("uid", 0))
 	if uid <= 0:
 		return
+	caster.order_move(tgt.position if is_instance_valid(tgt) else point)
+	caster.manual_order_active = true
 	for wc in _walk_item_casts:
 		if wc.get("c") == caster:
 			wc["uid"] = uid
 			wc["tgt"] = tgt
 			wc["point"] = point
-			wc["serial"] = -1
+			wc["serial"] = caster._order_serial
 			wc["t"] = 0.0
 			wc["age"] = 0.0
 			return
 	_walk_item_casts.append({"c": caster, "uid": uid, "tgt": tgt, "point": point,
-		"serial": -1, "t": 0.0, "age": 0.0})
+		"serial": caster._order_serial, "t": 0.4, "age": 0.0})
 	if hud != null:
 		hud.show_message(Localize.text("超出物品使用距离——正在接近…"), 1.4)
 
@@ -8254,42 +8447,62 @@ func _walk_item_cast_pass(delta: float) -> void:
 	if _walk_item_casts.is_empty():
 		return
 	var keep: Array = []
+	var cancelled: Array = []
 	for wc in _walk_item_casts:
 		var caster = wc.get("c")
 		var target = wc.get("tgt")
+		if caster == null or not is_instance_valid(caster) or caster.hp <= 0.0:
+			continue
+		if int(wc.get("serial", -1)) >= 0 and caster._order_serial != int(wc["serial"]):
+			continue # A replacement player command must never be stopped by stale intent.
 		if typeof(target) == TYPE_OBJECT and not is_instance_valid(target):
+			_report_cast_cancel(caster, true)
+			cancelled.append(wc)
 			continue # Freed targets must never reach a typed Unit cast API.
-		if caster == null or not is_instance_valid(caster) or caster.hp <= 0.0 or caster.inventory == null:
+		if caster.inventory == null:
+			cancelled.append(wc)
 			continue
 		if target != null and (not is_instance_valid(target) or target.hp <= 0.0 or target.garrisoned or target.story_outcome != ""):
+			_report_cast_cancel(caster, true)
+			cancelled.append(wc)
 			continue
 		var slot: int = caster.inventory.find_uid(int(wc.get("uid", 0)))
 		if slot < 0 or not caster.inventory.ready(slot):
-			continue
-		if int(wc.get("serial", -1)) >= 0 and caster._order_serial != int(wc["serial"]):
+			cancelled.append(wc)
 			continue
 		wc["age"] = float(wc.get("age", 0.0)) + delta
 		if float(wc["age"]) > 15.0:
 			if caster.faction == Unit.FACTION_LIANG:
 				msg(Localize.text("无法接近物品使用位置，命令已取消"), 1.5)
+			cancelled.append(wc)
 			continue
 		var active: Dictionary = caster.inventory.slot_def(slot).get("active", {})
 		var range := item_cast_range(active)
 		var cast_pos: Vector2 = target.position if target != null else wc.get("point", Vector2.INF)
-		if cast_pos == Vector2.INF:
+		if not cast_pos.is_finite():
+			cancelled.append(wc)
 			continue
 		if range == INF or caster.position.distance_to(cast_pos) <= range:
-			_begin_item_cast(caster, slot, cast_pos, target)
+			_begin_item_cast(caster, slot, cast_pos, target, true)
 			if not _gameplay_rng_issue.is_empty(): return
 			continue
 		wc["t"] = float(wc.get("t", 0.0)) - delta
 		if float(wc["t"]) <= 0.0:
 			wc["t"] = 0.4
-			caster.order_move(cast_pos)
+			caster.continue_action_move(cast_pos)
 			wc["serial"] = caster._order_serial
 			caster.manual_order_active = true
 		keep.append(wc)
 	_walk_item_casts = keep
+	_finish_cancelled_approaches(cancelled)
+
+
+func _finish_cancelled_approaches(cancelled: Array) -> void:
+	# Drop Battle's busy latch before Unit hands off the existing Shift queue.
+	for intent in cancelled:
+		var caster = intent.get("c")
+		if is_instance_valid(caster) and caster.hp > 0.0:
+			caster.finish_action_move(int(intent.get("serial", -1)))
 
 
 ## ───────────────── 走近施法 ─────────────────
@@ -8297,30 +8510,36 @@ func _walk_item_cast_pass(delta: float) -> void:
 ## 玩家中途下达任何新指令（_order_serial 变化）即取消；目标/技能失效也取消。
 func _queue_walk_cast(caster: Unit, slot: int, tgt: Unit) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
+	if not is_instance_valid(caster) or not is_instance_valid(tgt): return
+	caster.order_move(tgt.position)
+	caster.manual_order_active = true
 	for wc in _walk_casts:
 		if wc["c"] == caster:
 			wc["slot"] = slot
 			wc["tgt"] = tgt
 			wc["point"] = Vector2.INF
-			wc["serial"] = -1
+			wc["serial"] = caster._order_serial
 			wc["age"] = 0.0
 			return
-	_walk_casts.append({"c": caster, "slot": slot, "tgt": tgt, "point": Vector2.INF, "serial": -1, "t": 0.0, "age": 0.0})
+	_walk_casts.append({"c": caster, "slot": slot, "tgt": tgt, "point": Vector2.INF, "serial": caster._order_serial, "t": 0.4, "age": 0.0})
 	if hud != null:
 		hud.show_message(Localize.text("目标超出施法距离——正在接近…"), 1.4)
 
 
 func _queue_walk_cast_point(caster: Unit, slot: int, point: Vector2) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
+	if not is_instance_valid(caster) or not point.is_finite(): return
+	caster.order_move(point)
+	caster.manual_order_active = true
 	for wc in _walk_casts:
 		if wc["c"] == caster:
 			wc["slot"] = slot
 			wc["tgt"] = null
 			wc["point"] = point
-			wc["serial"] = -1
+			wc["serial"] = caster._order_serial
 			wc["age"] = 0.0
 			return
-	_walk_casts.append({"c": caster, "slot": slot, "tgt": null, "point": point, "serial": -1, "t": 0.0, "age": 0.0})
+	_walk_casts.append({"c": caster, "slot": slot, "tgt": null, "point": point, "serial": caster._order_serial, "t": 0.4, "age": 0.0})
 	if hud != null:
 		hud.show_message(Localize.text("落点超出施法距离——正在接近原落点…"), 1.4)
 
@@ -8330,42 +8549,51 @@ func _walk_cast_pass(delta: float) -> void:
 	if _walk_casts.is_empty():
 		return
 	var keep: Array = []
+	var cancelled: Array = []
 	for wc in _walk_casts:
 		var c = wc["c"]
 		var tgt = wc.get("tgt")
-		if typeof(tgt) == TYPE_OBJECT and not is_instance_valid(tgt):
-			continue   # A freed Object may compare equal to null; never pass it to a typed cast API.
 		if c == null or not is_instance_valid(c) or c.hp <= 0.0:
 			continue
+		if int(wc["serial"]) >= 0 and c._order_serial != int(wc["serial"]):
+			continue   # 玩家亲自下了新指令 → 让路取消，不停止新路径。
+		if typeof(tgt) == TYPE_OBJECT and not is_instance_valid(tgt):
+			_report_cast_cancel(c)
+			cancelled.append(wc)
+			continue   # A freed Object may compare equal to null; never pass it to a typed cast API.
 		if tgt != null and (not is_instance_valid(tgt) or tgt.hp <= 0.0 or tgt.garrisoned or tgt.story_outcome != "" \
 				or not target_visible_to(c, tgt)):
+			_report_cast_cancel(c)
+			cancelled.append(wc)
 			continue
 		var slot: int = int(wc["slot"])
-		if slot >= c.slot_count() or not c.slot_ready(slot):
+		if slot < 0 or slot >= c.slot_count() or not c.slot_ready(slot):
+			cancelled.append(wc)
 			continue
-		if int(wc["serial"]) >= 0 and c._order_serial != int(wc["serial"]):
-			continue   # 玩家亲自下了新指令 → 让路取消
 		wc["age"] = float(wc.get("age", 0.0)) + delta
 		if float(wc["age"]) > 15.0:
 			if c.faction == Unit.FACTION_LIANG:
 				msg(Localize.text("无法接近施法位置，命令已取消"), 1.5)
+			cancelled.append(wc)
 			continue
 		var ad: Dictionary = _abilities.get(String(c.ability_slots[slot]["id"]), {})
 		var rng := ability_cast_range(c, ad)
 		var cast_pos: Vector2 = tgt.position if tgt != null else wc.get("point", Vector2.INF)
-		if cast_pos == Vector2.INF:
+		if not cast_pos.is_finite():
+			cancelled.append(wc)
 			continue
 		if rng == INF or c.position.distance_to(cast_pos) <= rng:
-			_begin_cast(c, slot, cast_pos, tgt)
+			_begin_cast(c, slot, cast_pos, tgt, true)
 			continue
 		wc["t"] = float(wc["t"]) - delta
 		if float(wc["t"]) <= 0.0:
 			wc["t"] = 0.4
-			c.order_move(cast_pos)   # 单体追移动目标；点地技能始终走向玩家原落点
+			c.continue_action_move(cast_pos)   # 追目标不覆盖玩家已追加的后续命令
 			wc["serial"] = c._order_serial
 			c.manual_order_active = true   # 走近期间托管别插手（这就是玩家的意图）
 		keep.append(wc)
 	_walk_casts = keep
+	_finish_cancelled_approaches(cancelled)
 
 
 ## ───────────────── 引导施法（channel）─────────────────
@@ -10005,10 +10233,12 @@ func _recall_group(n: int) -> void:
 
 
 func _center_on(members: Array) -> void:
+	if members.is_empty(): return
 	var c := Vector2.ZERO
 	for u in members:
 		c += u.position
 	camera.position = to_screen(c / float(members.size()))
+	camera.clamp_to_limits()
 
 
 func select_single(u: Unit, additive: bool) -> void:
@@ -10055,6 +10285,8 @@ func select_same_in_selection(proto: Unit) -> void:
 
 ## 查看敌方单位（只读）：清掉己方选区与命令卡，高亮该敌、面板显示其信息，但不可对其下令。
 func _set_inspect(u: Unit) -> void:
+	_disarm_ability()
+	_disarm_item()
 	for s in selection:
 		if is_instance_valid(s):
 			s.set_selected(false)
@@ -10087,6 +10319,10 @@ func _set_selection(arr: Array) -> void:
 		u.set_selected(true)
 	if _active == null or not selection.has(_active):
 		_active = _default_active()
+	if _ability_armed != "" and _ability_caster != _active:
+		_disarm_ability()
+	if _item_armed != "" and _item_caster != _active:
+		_disarm_item()
 	if not selection.is_empty():
 		Sfx.play("select")
 	_update_sel_label()
@@ -10109,13 +10345,14 @@ func _refresh_active_highlight() -> void:
 # 手动指令保护戳：至少保护 5 秒，并持续到整条指令链自然执行完；停止/据守则保持到下一条命令。
 const MANUAL_ORDER_PROTECT := 5.0
 var _mission_order_token_seq := 0
-func _stamp_manual(arr: Array) -> void:
+func _stamp_manual(arr: Array, queued := false) -> void:
 	for u in arr:
 		if is_instance_valid(u):
 			# 任何新玩家命令都先取消同一人物正在办理的任务；随后本命令正常接管。
-			if mission != null:
+			if not queued and mission != null:
 				mission.on_player_order(u)
-			u.clear_mission_order_intent()
+			if not queued:
+				u.clear_mission_order_intent()
 			u.manual_order_t = MANUAL_ORDER_PROTECT
 			u.manual_order_active = true
 
@@ -10140,7 +10377,7 @@ func _issue_order(p: Vector2, queued := false) -> void:
 		var builders := movers_c.filter(func(u: Unit) -> bool: return u.is_worker)
 		if not builders.is_empty():
 			# 工人续建：右键在建工地 → 派工人接着建。地基永不消失、任何工人都能续建（经典RTS式）。
-			_stamp_manual(builders)
+			_stamp_manual(builders, queued)
 			for w in builders:
 				w.order_build(con, queued)
 			_click_fx_pos = p
@@ -10174,7 +10411,7 @@ func _issue_order(p: Vector2, queued := false) -> void:
 	_click_fx_pos = p
 	_click_fx_t = 0.5
 	Sfx.play("order")
-	_stamp_manual(movers)
+	_stamp_manual(movers, queued)
 	var node := _resource_at(p)
 	var rep := _damaged_building_at(p)
 	# 驻军优先：右键自家有空位的箭楼/聚义厅 → 单位进驻——即使旁边正围着敌人也先进驻，
@@ -10262,7 +10499,7 @@ func _order_repair_at(p: Vector2, queued := false) -> void:
 		else:
 			msg(Localize.text("请点选要修缮的己方建筑"), 1.3)
 		return
-	_stamp_manual(workers)
+	_stamp_manual(workers, queued)
 	for u in workers:
 		u.order_repair(rep, queued)
 	_click_fx_pos = p
@@ -10297,7 +10534,7 @@ func _order_amove_at(p: Vector2, queued := false) -> void:
 	_click_fx_attack = true
 	Sfx.play("order")
 	var enemy := _enemy_at(p)
-	_stamp_manual(movers)
+	_stamp_manual(movers, queued)
 	if enemy != null:
 		for u in movers:
 			u.order_attack(enemy, queued, true)   # A+点单位是明确集火，不降级成地面阵型落点

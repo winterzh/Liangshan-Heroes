@@ -34,6 +34,25 @@ func _ready() -> void:
 		return # The paused installation owns activation and preserves zoom.
 	make_current()
 	zoom = Vector2(1.1, 1.1)
+	clamp_to_limits()
+
+
+## Camera2D.limit_*仅夹紧渲染视图，不会夹紧Node2D.position。
+## 所有平移/缩放/外部跳转共用此入口，避免越界累计后反向滚屏要先“还债”。
+func clamp_to_limits() -> void:
+	if not is_inside_tree():
+		return
+	var half := get_viewport().get_visible_rect().size * 0.5 / zoom
+	var lo := Vector2(limit_left, limit_top) + half
+	var hi := Vector2(limit_right, limit_bottom) - half
+	position.x = clampf(position.x, lo.x, hi.x) if lo.x <= hi.x else (float(limit_left) + float(limit_right)) * 0.5
+	position.y = clampf(position.y, lo.y, hi.y) if lo.y <= hi.y else (float(limit_top) + float(limit_bottom)) * 0.5
+	force_update_scroll()
+
+
+## 双击同屏选取、可见裁剪、小地图视框须读实际视图中心，不能读节点目标位置。
+func view_center() -> Vector2:
+	return get_screen_center_position() if is_inside_tree() else position
 
 
 ## 叠加屏震（取较大值，封顶防过激）。暴击/施法/大单位阵亡时触发。
@@ -90,6 +109,7 @@ func _process(delta: float) -> void:
 	if Input.is_key_pressed(KEY_MINUS) or Input.is_key_pressed(KEY_KP_SUBTRACT):
 		_zoom_by(1.0 - 1.6 * delta * Settings.zoom_sens)
 		_user_input_t = USER_HOLD
+	clamp_to_limits()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -142,7 +162,9 @@ func _unhandled_input(event: InputEvent) -> void:
 					position -= (mid - _pinch_mid) / zoom.x
 			_pinch_d = d
 			_pinch_mid = mid
+	clamp_to_limits()
 
 
 func _zoom_by(f: float) -> void:
 	zoom = Vector2.ONE * clampf(zoom.x * f, 0.5, 3.2)
+	clamp_to_limits()

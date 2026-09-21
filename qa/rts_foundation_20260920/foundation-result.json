@@ -1,0 +1,227 @@
+{
+	"checks": [
+		{
+			"name": "fixture wrapper compiles",
+			"passed": true
+		},
+		{
+			"name": "ordinary 3-second march retains 30px/s group speed",
+			"passed": true
+		},
+		{
+			"name": "ordinary progress does not trigger watchdog repathing",
+			"passed": true
+		},
+		{
+			"name": "genuine 1.5-second stall repaths and retains group cap",
+			"passed": true
+		},
+		{
+			"name": "attack-move resumes after combat without losing group cap",
+			"passed": true
+		},
+		{
+			"name": "unreachable patrol is bounded across three seconds",
+			"passed": true
+		},
+		{
+			"name": "unreachable patrol waits without fabricating movement",
+			"passed": true
+		},
+		{
+			"name": "patrol resumes after route opens and keeps group cap",
+			"passed": true
+		},
+		{
+			"name": "failed patrol does not block queued withdrawal",
+			"passed": true
+		},
+		{
+			"name": "fixture wrapper compiles",
+			"passed": true
+		},
+		{
+			"name": "Shift move preserves active windup and replacement serial",
+			"passed": true
+		},
+		{
+			"name": "windup settles exactly once before queued movement begins",
+			"passed": true
+		},
+		{
+			"name": "walk-cast replans and transfers to windup without eating queued withdrawal",
+			"passed": true
+		},
+		{
+			"name": "explicit Stop cancels walk-cast intent",
+			"passed": true
+		},
+		{
+			"name": "walk-cast dead target immediately hands off Shift retreat without executing or losing its queue",
+			"passed": true
+		},
+		{
+			"name": "walk-cast freed target immediately hands off Shift retreat without executing or losing its queue",
+			"passed": true
+		},
+		{
+			"name": "walk-cast timeout immediately hands off Shift retreat without executing or losing its queue",
+			"passed": true
+		},
+		{
+			"name": "walk-cast unready slot immediately hands off Shift retreat without executing or losing its queue",
+			"passed": true
+		},
+		{
+			"name": "walk-cast nonfinite point immediately hands off Shift retreat without executing or losing its queue",
+			"passed": true
+		},
+		{
+			"name": "stale cast serial never stops a newer explicit move or its Shift queue",
+			"passed": true
+		},
+		{
+			"name": "cancelled approach without a queue stops at its current position",
+			"passed": true
+		},
+		{
+			"name": "new immediate cast still replaces previous movement queue",
+			"passed": true
+		},
+		{
+			"name": "blocked approach naturally reaches an idle busy wait (queued=false)",
+			"passed": true
+		},
+		{
+			"name": "timeout during idle approach wait clears the cancelled home anchor",
+			"passed": true
+		},
+		{
+			"name": "blocked approach naturally reaches an idle busy wait (queued=true)",
+			"passed": true
+		},
+		{
+			"name": "timeout during idle approach wait immediately hands off Shift retreat",
+			"passed": true
+		},
+		{
+			"name": "switch gold to wood deposits existing gold first",
+			"passed": true
+		},
+		{
+			"name": "gold cargo is not converted and new wood target resumes",
+			"passed": true
+		},
+		{
+			"name": "wood cargo keeps wood conversion rate before gold collection",
+			"passed": true
+		},
+		{
+			"name": "missing depot preserves old cargo without changing type",
+			"passed": true
+		},
+		{
+			"name": "Hold gives way slightly while moving friend resolves almost all overlap",
+			"passed": true
+		},
+		{
+			"name": "buffered and direct separation use identical Hold priorities",
+			"passed": true
+		},
+		{
+			"name": "two holding units can still resolve overlap instead of hard-locking",
+			"passed": true
+		},
+		{
+			"name": "head-on friend passes Hold without pushing it away (direct)",
+			"passed": true
+		},
+		{
+			"name": "head-on friend passes Hold without pushing it away (buffered)",
+			"passed": true
+		},
+		{
+			"name": "head-on traversal agrees between direct and buffered separation",
+			"passed": true
+		},
+		{
+			"name": "Hold sidestep never grants enemy phasing",
+			"passed": true
+		},
+		{
+			"name": "Hold sidestep remains on navigable side of a cliff",
+			"passed": true
+		},
+		{
+			"name": "camera node and actual center agree at right limit zoom 0.5",
+			"passed": true
+		},
+		{
+			"name": "reverse pan reacts immediately at zoom 0.5",
+			"passed": true
+		},
+		{
+			"name": "camera node and actual center agree at right limit zoom 1.1",
+			"passed": true
+		},
+		{
+			"name": "reverse pan reacts immediately at zoom 1.1",
+			"passed": true
+		},
+		{
+			"name": "camera node and actual center agree at right limit zoom 3.2",
+			"passed": true
+		},
+		{
+			"name": "reverse pan reacts immediately at zoom 3.2",
+			"passed": true
+		},
+		{
+			"name": "zooming out at an edge clamps the input center immediately",
+			"passed": true
+		},
+		{
+			"name": "real middle-drag input reverses immediately from the clamped edge",
+			"passed": true
+		},
+		{
+			"name": "all six runtime suites reached their final assertions",
+			"passed": true
+		}
+	],
+	"evidence": {
+		"hold": {
+			"holding_displacement": 0.350006103515625,
+			"moving_displacement": 13.6499938964844
+		},
+		"hold_crossing": [
+			{
+				"holder": "(320.5203, 300.3079)",
+				"mover": "(384.6961, 281.6819)",
+				"side": 23.6924438476562
+			},
+			{
+				"holder": "(320.5203, 300.3079)",
+				"mover": "(384.6961, 281.6819)",
+				"side": 23.6924438476562
+			}
+		],
+		"move": {
+			"cap": 30.0,
+			"distance": 90.0000915527344,
+			"frames": 180,
+			"path_calls": 1
+		},
+		"patrol": {
+			"frames": 180,
+			"path_calls": 8,
+			"retry": 3,
+			"wait": 1.11666666666667
+		}
+	},
+	"failures": [],
+	"passed": true,
+	"profile": "/Users/dztdash/Library/Application Support/LSH-rts-refinement-lsh-rts-refinement-20260920-final",
+	"schema": 1,
+	"scope": "Real production primitives; counted spell payload; not a full campaign playthrough"
+}

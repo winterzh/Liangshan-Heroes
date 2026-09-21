@@ -8,7 +8,8 @@ static func classify(campaign: Node, level: RefCounted) -> Dictionary:
 		return out
 	var path: String = level.get_script().resource_path
 	if campaign.skirmish_ai and path == campaign.SKIRMISH_AI_SCRIPT:
-		out.mode = "ai"
+		if not (level.has_method("is_training_match") and level.is_training_match()):
+			out.mode = "ai"
 	elif campaign.skirmish and not campaign.skirmish_ai and path == campaign.SKIRMISH_SCRIPT:
 		if not campaign.defense_random and campaign.defense_waves in [20, 30, 60]:
 			out.mode = "defense"

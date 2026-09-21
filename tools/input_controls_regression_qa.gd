@@ -159,6 +159,22 @@ func _skill_click_case(battle, hero, compact: bool, point: Vector2, learns: bool
 	check(battle._ability_armed == ("" if learns else "lin_thrust"), label + ": learn/cast distinction")
 	battle.cancel_armed()
 
+func _mobile_rail_learning_contract(battle, hero) -> void:
+	_reset_skill(battle, hero)
+	var button = _skill_button(battle, hero, true)
+	check(_skill_button(battle, hero, false) == null, "mobile command card has no duplicate hero skills")
+	check(button != null and button.is_visible_in_tree(), "mobile right rail remains the visible learning control")
+	if button == null: return
+	var center: Vector2 = button._learn_plus_center()
+	check(Rect2(Vector2.ZERO, button.size).has_point(center) and button._is_learn_hit(center),
+		"mobile right rail rendered plus center is inside its production hit region")
+	_click_skill(button, center)
+	check(int(hero.ability_slots[0]["rank"]) == 2 and hero.skill_points == 1 and battle._ability_armed == "",
+		"mobile right rail plus learns exactly once without arming a spell")
+	observe("mobile single skill surface", {"size": str(button.size), "center": str(center),
+		"radius": button._learn_plus_radius(), "rank": hero.ability_slots[0]["rank"], "points": hero.skill_points})
+	battle.cancel_armed()
+
 func _dispatch(event: InputEvent, watcher: InputRecorder, camera, label: String, touch: bool) -> void:
 	watcher.events.clear()
 	Input.parse_input_event(event)
@@ -239,10 +255,15 @@ func _run() -> void:
 	await _selection_case(mobile, _find_unit(mobile, "building"), "mobile selected producer")
 	var mobile_hero = _spawn_hero(mobile)
 	await _selection_case(mobile, mobile_hero, "mobile selected hero")
-	_skill_click_case(mobile, mobile_hero, true, Vector2(48, 39), true, "compact plus upper-left regression")
-	_skill_click_case(mobile, mobile_hero, true, Vector2(55, 45), true, "compact plus center")
-	_skill_click_case(mobile, mobile_hero, true, Vector2(76, 65), false, "compact below-plus regression")
-	_skill_click_case(mobile, mobile_hero, false, Vector2(65, 57), true, "full mobile plus center")
+	var rail_button = _skill_button(mobile, mobile_hero, true)
+	var plus_center: Vector2 = rail_button._learn_plus_center() if rail_button != null else Vector2.ZERO
+	var plus_radius: float = rail_button._learn_plus_radius() if rail_button != null else 0.0
+	# Use the production drawing geometry after responsive layout. The first
+	# point is visibly inside the plus; the last is beyond its touch tolerance.
+	_skill_click_case(mobile, mobile_hero, true, plus_center - Vector2.ONE.normalized() * (plus_radius - 1.0), true, "compact plus upper-left regression")
+	_skill_click_case(mobile, mobile_hero, true, plus_center, true, "compact plus center")
+	_skill_click_case(mobile, mobile_hero, true, plus_center + Vector2(0, plus_radius + 5.0), false, "compact below-plus regression")
+	_mobile_rail_learning_contract(mobile, mobile_hero)
 	mobile._set_selection([])
 	await _settle()
 	_check_panel(mobile, true, "mobile selection cleared stays expanded")

@@ -1,3 +1,16 @@
+## 2026-09-20 RTS 综合修复验证入口
+
+本批触屏右栏、血瓶、操作和 1v1 经济改动见 [实现说明](RTS_REFINEMENT_20260920.md)。不改生产版本、不自动发安装包。下方同日 `TEST 0920-fbe43a3e` APK 早于本批，不能用它判断本批修改是否生效。
+
+```sh
+python3 tools/run_rts_refinement_qa.py --godot "$GODOT_PATH" \
+  --out /absolute/new/directory/outside/checkout --visual
+```
+
+输出目录必须尚不存在且位于 checkout 外。工具复制生产白名单和回归工具、导入资源、启用唯一 `LSH-rts-*` 用户目录，禁用 Steam/自动更新，不重设 HOME。依次运行基础操作、经济规则、英雄物品、HUD 内部快照及旧输入/战斗/战役套件；退出码、完成标记、结果与来源 SHA 均核对。`--visual` 追加原生分辨率离屏截图和四语状态（需要可用图形环境），`--prepare-only` 只准备私有工程。
+
+全部报告和完整截图保留私有输出；入库只保留必要 QA 收据与代表截图。真实安卓点按、安全区、长时间性能和完整存档继续不由该工具证明。[综合 QA](../qa/rts_foundation_20260920/README.md) · [触屏矩阵](QA_RTS_TOUCH_HUD_20260920.md)。
+
 ## 2026-09-20 Android 用户测试包入口
 
 本地测试交付位于 `build/android-test-20260920/水浒英雄传-Android-TEST-20260920-fbe43a3e.apk`，菜单应显示 `TEST 0920-fbe43a3e`。它基于 `fbe43a3e` 冻结，仅修改副本中的 Android versionName 和菜单显示文本，不改生产基线或正式版本。沿用原签名/包名/code 15，可尝试直接覆盖旧 1.8；不要先卸载，系统若报冲突应保留原应用与错误提示。

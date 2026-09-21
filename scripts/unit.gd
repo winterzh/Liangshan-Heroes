@@ -218,7 +218,7 @@ var _hex_t := 0.0           # 变形术(hex)：>0 时画"小猪替身"（沉默+
 var _form_t := 0.0          # 变身(transform)：>0 时处于临时形态（燕顺狼形/朱仝龙形）——换攻/攻速/移速/体型/染色
 var _form: Dictionary = {}       # 当前形态修正表（recompute 时叠加 atk/hp/射程；到期还原）
 var _form_backup: Dictionary = {} # 进入变身前的原始 atk_cd/base_speed/radius/modulate（到期恢复）
-var _order_serial := 0      # 指令序号：每次 _enqueue +1（walk-cast 用它检测「玩家又下了新令」即让路）
+var _order_serial := 0      # 替代指令序号：Shift追加不改变它，走近施法只向明确改令让路。
 var temp_atkspeed := 1.0    # 临时攻速倍率（>1 出手更快），_attack 并入 _cd
 var _temp_atkspeed_t := 0.0
 var _attack_speed_slow := 1.0   # 敌方攻速压制（<1）；与自身攻速增益相乘，黑雨等控制不会被增益池吃掉
@@ -295,6 +295,10 @@ var mission_order_token := 0
 var _move_retry := 0        # ST_MOVE/ST_AMOVE 路径耗尽重寻计数：同一地点反复重寻视为目的地不可达
 var _move_retry_pos := Vector2.ZERO
 var _last_pos := Vector2.ZERO
+const MOVE_STALL_SECONDS := 1.5
+const MOVE_PROGRESS_DISTANCE := 2.0
+const PATROL_RETRY_DELAY := 2.0
+const HOLD_SEPARATION_SHARE := 0.025 # 据守仍保留少量软让路，不把窄口变成硬碰撞死锁。
 var _combat_cool := 0.0  # 最近交战计时；梁山兵脱战后回血（主场休整）
 var _hit_recent_t := 0.0 # 最近被敌方击中计时（托管磁滞：被打后扩大防区/搜索范围）
 # 追击放弃：出攻击范围连续追同一目标却始终够不着(对方更快/在风筝) → 超时放手，改打就近威胁，
@@ -473,6 +477,7 @@ func order_stop() -> void:
 	if is_building:
 		return
 	clear_mission_order_intent()
+	_order_serial += 1
 	_cancel_hold_order()
 	cancel_cast_windup()
 	_queue.clear()
@@ -508,8 +513,12 @@ func order_patrol(pos: Vector2) -> void:
 	if is_building or is_worker:
 		return
 	clear_mission_order_intent()
+	_order_serial += 1
 	_cancel_hold_order()
+	cancel_cast_windup()
 	_queue.clear()
+	_move_retry = 0
+	_move_retry_pos = position
 	passive = false
 	_patrol_a = position
 	_patrol_b = pos
@@ -529,6 +538,32 @@ func set_stance(s: int) -> void:
 	if s != STANCE_AGGRO:
 		_home = position
 		_has_home = true
+
+
+## H/据守的身体位置优先级，不限制明确攻击、嘲讽或正在行军的单位。
+func is_holding_ground() -> bool:
+	return stance == STANCE_HOLD and (_state == ST_IDLE \
+		or (_state == ST_CHASE and _chase_intent == CHASE_AUTO))
+
+
+static func separation_yield_position(mover: Unit, mover_pos: Vector2, holder: Unit, holder_pos: Vector2,
+		radial_pos: Vector2, overlap: float, nav_map: GameMap) -> Vector2:
+	# A radial weight alone makes a head-on friend push the holder at 2.5% speed
+	# indefinitely. Add a small navigable tangent for friends, never enemy phasing.
+	if mover.faction != holder.faction or not holder.is_holding_ground(): return radial_pos
+	if mover._state != ST_MOVE and mover._state != ST_AMOVE and mover._state != ST_CHASE: return radial_pos
+	if mover._path_i >= mover._path.size(): return radial_pos
+	var heading := (mover._path[mover._path_i] - mover_pos).normalized()
+	var away := (mover_pos - holder_pos).normalized()
+	if heading.dot(away) > -0.2: return radial_pos
+	var tangent := away.orthogonal()
+	var turn := heading.dot(tangent)
+	if turn < -0.001 or (absf(turn) <= 0.001 and mover.entity_id % 2 == 0): tangent = -tangent
+	var step := minf(3.0, overlap * 0.65)
+	for side in [1.0, -1.0]:
+		var candidate: Vector2 = radial_pos + tangent * step * side
+		if nav_map._segment_open(mover_pos, candidate, mover.movement_profile): return candidate
+	return radial_pos
 
 
 func order_build(site: Unit, queued := false) -> void:
@@ -591,29 +626,76 @@ func waiting_manual_mission_arrival() -> bool:
 func _enqueue(o: Dictionary, queued: bool) -> void:
 	if is_building or is_captive or story_outcome != "":
 		return
+	if queued:
+		# 追加不取消当前抬手/走近施法/任务意图，也不改变覆盖命令序号。
+		_queue.append(o)
+		if _state == ST_IDLE and _target == null and not _action_queue_busy():
+			_done_order()
+		return
 	clear_mission_order_intent()
 	_cancel_hold_order()
 	# 普通指令会打断尚未结算的施法抬手；不允许移动后技能仍从原地“幽灵施放”。
 	cancel_cast_windup()
-	_order_serial += 1   # 新指令序号：walk-cast 据此发现「有人下了新令」而让路
+	_order_serial += 1
 	passive = false
 	_patrolling = false   # 任何新明确指令都终止巡逻
-	if not queued:
-		_clear_hua_lock()   # 新的立即指令覆盖 E 的三箭锁定；Shift 排队不打断当前三箭
-		_queue.clear()
-		_begin_order(o)
-	else:
-		_queue.append(o)
-		if _state == ST_IDLE and _target == null:
-			_done_order()
+	_clear_hua_lock()   # 新的立即指令覆盖 E 的三箭锁定；Shift 排队不打断当前三箭
+	_queue.clear()
+	_begin_order(o)
+
+
+## Battle拥有待结算/走近技能与物品，Unit拥有抬手/引导计时；两边都空才能执行下一令。
+func _action_queue_busy() -> bool:
+	return _cast_t > 0.0 or _channel_t > 0.0 or (is_instance_valid(battle) \
+		and battle.has_method("unit_action_queue_busy") and battle.unit_action_queue_busy(self))
+
+
+## 同一走近施法动作的内部重寻，不清空玩家已追加的后续命令。
+func continue_action_move(pos: Vector2) -> void:
+	_begin_move(pos)
+
+
+## Battle先移除失效的走近意图，再结束其内部移动；不能中断较新的覆盖命令。
+## 路径耗尽可先进入无目标待机，此时也要清掉旧_home，避免守备重新走回去。
+## 不增加命令序号、不清空Shift队列，由_done_order立即交接下一令。
+func finish_action_move(expected_order_serial: int) -> bool:
+	if _order_serial != expected_order_serial or _state not in [ST_MOVE, ST_IDLE] \
+			or (_state == ST_IDLE and _target != null) or hp <= 0.0 \
+			or is_captive or garrisoned or story_outcome != "":
+		return false
+	_path = PackedVector2Array()
+	_path_i = 0
+	_target = null
+	_chasing_path_blocker = false
+	_resume_amove = false
+	_group_cap = 0.0
+	_home = position
+	_has_home = true
+	_move_retry = 0
+	_move_retry_pos = position
+	_last_pos = position
+	_stuck_t = 0.0
+	_state = ST_IDLE
+	_done_order()
+	return true
 
 
 ## 取队首指令执行；队列空则回待机（队列空时等价于原 _state = ST_IDLE，战役行为不变）
 func _done_order() -> void:
+	if _action_queue_busy():
+		_state = ST_IDLE
+		return
 	# 巡逻：到达一端 → 攻击移动折返另一端（沿途自动交战）。去离当前更远的那个端点。
 	if _patrolling and _queue.is_empty():
+		# 不可达端点等待再试；不能把耗尽的三次额度绕成每物理帧一次A*。
+		if position.distance_to(_amove_dest) > 70.0 and _move_retry >= 3:
+			_repath = PATROL_RETRY_DELAY
+			_state = ST_AMOVE
+			return
 		var far := _patrol_b if position.distance_to(_patrol_b) >= position.distance_to(_patrol_a) else _patrol_a
-		_begin_amove(far)   # _begin_amove 不改 _patrolling，循环保持
+		_move_retry = 0
+		_move_retry_pos = position
+		_begin_amove(far, true)
 		return
 	if _queue.is_empty():
 		# Unit 先收完路径，CampaignMission 再在下一帧检查。仅移动右键的专用
@@ -659,6 +741,10 @@ func _cancel_hold_order() -> void:
 
 
 func _begin_order(o: Dictionary) -> void:
+	clear_mission_order_intent()   # 追加时保留当前意图，轮到新命令真正开始时再解除。
+	_cancel_hold_order()
+	_patrolling = false
+	passive = false
 	var kind := String(o.get("kind", ""))
 	# 一条新移动命令获得独立的有限重试额度；内部重寻直接调用 _begin_move/_begin_amove，
 	# 不会在不可达点每帧把额度重置，避免残兵反复跑 A* 拖垮整局。
@@ -678,7 +764,7 @@ func _begin_order(o: Dictionary) -> void:
 
 
 # —— 原始指令（不动队列；供内部重发/回防/续采复用）——
-func _begin_move(pos: Vector2) -> void:
+func _begin_move(pos: Vector2, preserve_group_cap := false) -> void:
 	if is_captive or story_outcome != "":
 		return
 	if is_building:
@@ -689,7 +775,8 @@ func _begin_move(pos: Vector2) -> void:
 	_chasing_path_blocker = false
 	_resume_amove = false
 	_chase_intent = CHASE_AUTO
-	_group_cap = 0.0   # 每次新移动默认解除队伍限速；成队移动时由 _apply_group_cap 在下令后重设
+	if not preserve_group_cap:
+		_group_cap = 0.0
 	_home = pos
 	_has_home = true
 	_path = map.find_path(position, pos, faction, movement_profile)
@@ -710,7 +797,7 @@ func _begin_attack(t: Unit, explicit := false) -> void:
 	_state = ST_CHASE
 
 
-func _begin_amove(pos: Vector2) -> void:
+func _begin_amove(pos: Vector2, preserve_group_cap := false) -> void:
 	if is_captive or story_outcome != "":
 		return
 	if is_building:
@@ -722,10 +809,28 @@ func _begin_amove(pos: Vector2) -> void:
 	_amove_dest = pos
 	_resume_amove = false
 	_chase_intent = CHASE_AMOVE
-	_group_cap = 0.0   # 同 _begin_move：默认解除限速，成队由 _apply_group_cap 重设
+	if not preserve_group_cap:
+		_group_cap = 0.0
 	_path = map.find_path(position, pos, faction, movement_profile)
 	_path_i = 0
 	_state = ST_AMOVE
+	if _patrolling and _move_retry >= 3 and _path.is_empty():
+		_repath = PATROL_RETRY_DELAY
+
+
+func _waiting_patrol_retry(delta: float) -> bool:
+	if not _patrolling or _move_retry < 3 or _path_i < _path.size() \
+		or position.distance_to(_amove_dest) <= 70.0:
+		return false
+	if not _queue.is_empty():
+		_done_order()   # 本段已失败，不能让无限巡逻阻塞玩家追加的撤离命令。
+		return true
+	_repath -= delta
+	if _repath <= 0.0:
+		_move_retry = 0
+		_move_retry_pos = position
+		_begin_amove(_amove_dest, true)
+	return true
 
 
 func _try_attack_path_blocker() -> bool:
@@ -761,8 +866,10 @@ func _begin_gather(node: Unit) -> void:
 	_chase_intent = CHASE_AUTO
 	_group_cap = 0.0   # 采集独立行动，解除队伍限速（与 _begin_move 一致）
 	_gather_node = node
-	_carry_kind = node.res_kind   # 出发即记住资源种类（节点被别人采空时据此就近补同类，而非乱采）
-	if _carry_amt >= GATHER_CAP:
+	# 已携带的货物不能因改点资源而变种类；先卸旧货，再按新节点续采。
+	if _carry_amt <= 0.0:
+		_carry_kind = node.res_kind
+	if _carry_amt >= GATHER_CAP or (_carry_amt > 0.0 and _carry_kind != node.res_kind):
 		_begin_return()
 	else:
 		_repath = 0.0
@@ -1464,11 +1571,13 @@ func _phys_body(delta: float) -> void:
 			_target = _taunt_src
 			_chase_intent = CHASE_FORCED
 			_state = ST_CHASE
+		if _state == ST_IDLE and not _queue.is_empty() and not _action_queue_busy():
+			_done_order()   # 技能真正结算后先执行Shift后续命令，不先被闲置索敌抢走。
 		match _state:
 			ST_IDLE:
 				# 已到任务现场、正等待前一项办理结束：短凭证由任务层逐帧验资格后续期。
 				# 不让待机索敌/守备归位抢走玩家到达意图；取消或失效后仍会自然恢复。
-				var awaiting_task := waiting_manual_mission_arrival()
+				var awaiting_task := waiting_manual_mission_arrival() or _action_queue_busy()
 				if not passive and not is_worker and not awaiting_task:   # 工人不主动索敌（经典RTS式村民）
 					_acq_t -= delta
 					if _acq_t <= 0.0:
@@ -1505,7 +1614,7 @@ func _phys_body(delta: float) -> void:
 						_move_retry += 1
 						_move_retry_pos = position
 						var mh := _home
-						_begin_move(mh)
+						_begin_move(mh, true)
 					else:
 						_done_order()
 			ST_AMOVE:
@@ -1522,6 +1631,8 @@ func _phys_body(delta: float) -> void:
 					_chase_intent = CHASE_AMOVE
 					_repath = 0.0
 					_state = ST_CHASE
+				elif _waiting_patrol_retry(delta):
+					pass
 				elif _follow_path(delta):
 					# 路径走完但离目的地还远（被挤出路线/目的地不可达）→ 有限重寻。
 					# 原逻辑会在空路径时每物理帧重跑 A*；末波几个卡墙残兵就能把帧率压垮。
@@ -1533,7 +1644,7 @@ func _phys_body(delta: float) -> void:
 					if not engaged_blocker and position.distance_to(_amove_dest) > 70.0 and _move_retry < 3:
 						_move_retry += 1
 						_move_retry_pos = position
-						_begin_amove(_amove_dest)
+						_begin_amove(_amove_dest, true)
 					elif not engaged_blocker:
 						_done_order()
 			ST_CHASE:
@@ -1577,27 +1688,36 @@ func _phys_body(delta: float) -> void:
 	if _flinch != Vector2.ZERO:
 		_flinch = _flinch.move_toward(Vector2.ZERO, delta * 90.0)
 		_queue_animated_redraw(0.08, _flinch == Vector2.ZERO)
-	# 卡死看门狗：移动状态下长时间原地不动 → 强制重新寻路/跳过路点
-	if _state != ST_IDLE:
-		if position.distance_to(_last_pos) < 2.0:
-			_stuck_t += delta
-			if _stuck_t > 1.5:
-				_stuck_t = 0.0
-				match _state:
-					ST_AMOVE:
-						_begin_amove(_amove_dest)
-					ST_MOVE:
-						# 整体重寻而非跳点：跳点会把路径吃光、半路「视为到达」转 IDLE（回头打的引信）
-						if _has_home:
-							var wh := _home
-							_begin_move(wh)
-						else:
-							_path_i = mini(_path_i + 1, _path.size())
-					ST_CHASE, ST_GATHER, ST_RETURN:
-						_repath = 0.0
-		else:
-			_stuck_t = 0.0
+	_movement_watchdog(delta)
+
+
+## 以累计位移刷新观察锚点，而不是把每帧不到2px的正常行军误当成停滞。
+func _movement_watchdog(delta: float) -> void:
+	if _state not in [ST_MOVE, ST_AMOVE, ST_CHASE, ST_GATHER, ST_RETURN] \
+		or _root_t > 0.0 or _stun_t > 0.0 \
+		or (_patrolling and _move_retry >= 3 and _path_i >= _path.size()):
+		_stuck_t = 0.0
 		_last_pos = position
+		return
+	if position.distance_to(_last_pos) >= MOVE_PROGRESS_DISTANCE:
+		_stuck_t = 0.0
+		_last_pos = position
+		return
+	_stuck_t += delta
+	if _stuck_t < MOVE_STALL_SECONDS:
+		return
+	_stuck_t = 0.0
+	_last_pos = position
+	match _state:
+		ST_AMOVE:
+			_begin_amove(_amove_dest, true)
+		ST_MOVE:
+			if _has_home:
+				_begin_move(_home, true)
+			else:
+				_path_i = mini(_path_i + 1, _path.size())
+		ST_CHASE, ST_GATHER, ST_RETURN:
+			_repath = 0.0
 
 
 ## Melee attacks reach the actual occupied edge of a solid building. Its art
@@ -1636,7 +1756,7 @@ func _do_chase(delta: float) -> void:
 			return
 		# 自动接敌目标没了：A 移动继续前进，普通警戒接敌回驻守点。
 		if _resume_amove:
-			_begin_amove(_amove_dest)
+			_begin_amove(_amove_dest, true)
 		elif _chase_intent == CHASE_AUTO and _has_home and position.distance_to(_home) > 30.0:
 			var h := _home
 			_begin_move(h)
@@ -1700,7 +1820,7 @@ func _do_chase(delta: float) -> void:
 				_acquire()   # 立刻改打就近威胁（_acquire 会跳过刚拉黑的目标）
 			if _target == null:
 				if _resume_amove:
-					_begin_amove(_amove_dest)
+					_begin_amove(_amove_dest, true)
 				else:
 					_done_order()
 			return
@@ -1748,6 +1868,9 @@ func _do_gather(delta: float) -> void:
 			_begin_return()
 		else:
 			_done_order()
+		return
+	if _carry_amt > 0.0 and _carry_kind != _gather_node.res_kind:
+		_begin_return()   # 同时保护旧存档/其他资源重定向入口，禁止混货后整袋按新种类结算。
 		return
 	var reach := _gather_node.radius + radius + 6.0
 	if _gather_node.res_kind == "wood" and bool(_gather_node.get_meta("resource_footprint",false)):
@@ -2832,6 +2955,9 @@ func _recompute_hero_stats() -> void:
 	var frac := (hp / max_hp) if max_hp > 0.0 else 1.0
 	# 英雄生命只吃「基地(聚义厅)·时代科技」(hero_tech_hp，约+10%)，不吃兵营的坚铠——折进重算保持持久
 	var tech_hp_f: float = float(battle.hero_tech_hp) if (battle != null and battle.economy and faction == FACTION_LIANG) else 1.0
+	if battle != null and battle.economy and faction != FACTION_LIANG \
+		and battle.level != null and battle.level.has_method("faction_hero_tech_hp"):
+		tech_hp_f = float(battle.level.faction_hero_tech_hp(faction))
 	# 物品固定属性放在英雄倍率之后，确保“+100生命”在 1×/3× 都严格只加 100；百分比再乘最终基础值。
 	max_hp = ((_base_hp * mult + add_hp) * tech_hp_f * (1.0 + (hero_boost_n() - 1.0) / 3.0) \
 		+ float(item_flat.get("hp", 0.0))) * (1.0 + float(item_pct.get("hp", 0.0)))
@@ -3473,10 +3599,11 @@ func _draw_cast_glow() -> void:
 
 
 ## 施法抬手：开始一段蓄势（dur 秒），期间播放抬手姿+蓄能辉光；归零后由 battle 触发技能结算。
-func begin_cast_windup(dur: float, col: Color) -> void:
-	# 施法替换当前移动/攻击命令并清队列；完成后原地待命，再由玩家或托管下新令。
+func begin_cast_windup(dur: float, col: Color, preserve_queue := false) -> void:
+	# 新施法替换当前命令；同一走近动作转抬手则保留期间追加的后续队列。
 	clear_mission_order_intent()
-	_queue.clear()
+	if not preserve_queue:
+		_queue.clear()
 	_patrolling = false
 	_target = null
 	_resume_amove = false
@@ -3485,7 +3612,7 @@ func begin_cast_windup(dur: float, col: Color) -> void:
 	_path = PackedVector2Array()
 	_path_i = 0
 	_state = ST_IDLE
-	manual_order_active = false
+	manual_order_active = not _queue.is_empty()
 	_cast_serial += 1
 	_cast_t = dur
 	_cast_dur = maxf(dur, 0.001)
