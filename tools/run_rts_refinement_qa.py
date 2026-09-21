@@ -19,11 +19,12 @@ import tempfile
 from verify_platform_exports import allowlist, sha
 
 ROOT = Path(__file__).resolve().parents[1]
-SUITES = ["rts_foundation_regression_qa.gd", "rts_economy_rules_qa.gd",
+SUITES = ["hero_function_keys_qa.gd", "rts_foundation_regression_qa.gd", "rts_economy_rules_qa.gd",
           "rts_hero_items_regression_qa.gd", "rts_hud_snapshot_qa.gd",
           "input_controls_regression_qa.gd", "combat_controls_regression_qa.gd",
           "campaign_controls_regression_qa.gd"]
 COMPLETION_MARKERS = {
+    "hero_function_keys_qa": r"\[hero-function-keys-result\] (.+)",
     "rts_foundation_regression_qa": r"\[foundation\] summary checks=(\d+) failures=0",
     "rts_economy_rules_qa": r"\[rts-economy-rules-result\] (.+)",
     "rts_hero_items_regression_qa": r"\[hero-items-result\] (.+)",

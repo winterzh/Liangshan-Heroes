@@ -52,7 +52,9 @@ def main():
     if args.strict and unresolved:
         raise ValueError('Unresolved conflicting translations: ' + ', '.join(c['source'] for c in unresolved))
     for source, entry in merged.items():
-        entry['zh_TW'] = converter.convert(source)
+        # Preserve reviewed Traditional Chinese when a shard supplies it;
+        # use OpenCC only for entries without an explicit translation.
+        entry['zh_TW'] = entry.get('zh_TW') or converter.convert(source)
     (folder/'catalog.json').write_text(json.dumps(merged, ensure_ascii=False, indent=2)+'\n', encoding='utf-8', newline='\n')
     report = {'entries': len(merged), 'shards': counts, 'conflicts': conflicts,
               'glossary_resolved': len(conflicts) - len(unresolved), 'unresolved': unresolved}

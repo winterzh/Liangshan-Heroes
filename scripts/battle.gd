@@ -6059,6 +6059,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			_save_camera_loc(kc - KEY_F1 + 1)
 		elif kc >= KEY_F1 and kc <= KEY_F4 and event.shift_pressed:
 			_jump_camera_loc(kc - KEY_F1 + 1)
+		elif kc >= KEY_F1 and kc <= KEY_F8:
+			_select_hero_by_index(kc - KEY_F1)
+			if not _gameplay_rng_issue.is_empty(): return
 		elif Settings.key_matches(event, "alert"):
 			_jump_alert_or_home()
 		elif Settings.key_matches(event, "amove"):
@@ -6091,14 +6094,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			_command_hotkey(2)
 		elif Settings.key_matches(event, "command_3"):
 			_command_hotkey(3)
-		elif Settings.key_matches(event, "select_army") and not event.shift_pressed and not event.ctrl_pressed and not event.meta_pressed:
-			select_all_army()
-		elif kc >= KEY_F1 and kc <= KEY_F8 and kc != KEY_F2:
-			var hidx := kc - KEY_F1
-			if kc > KEY_F2:
-				hidx -= 1   # F2 留给全军；F3 起顺延选择后续英雄
-			_select_hero_by_index(hidx)
-			if not _gameplay_rng_issue.is_empty(): return
 		elif Settings.key_matches(event, "subgroup"):
 			_cycle_subgroup()
 		elif Settings.key_matches(event, "idle_worker") \

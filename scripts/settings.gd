@@ -10,7 +10,7 @@ const DEFAULT_KEYBINDS := {
 	"command_0": KEY_Q, "command_1": KEY_W, "command_2": KEY_E, "command_3": KEY_R,
 	"item_0": KEY_Z, "item_1": KEY_X, "item_2": KEY_C,
 	"item_3": KEY_V, "item_4": KEY_B, "item_5": KEY_N,
-	"alert": KEY_SPACE, "select_army": KEY_F2, "subgroup": KEY_TAB,
+	"alert": KEY_SPACE, "subgroup": KEY_TAB,
 	"idle_worker": KEY_PERIOD, "demolish": KEY_DELETE,
 }
 
@@ -113,9 +113,7 @@ func _load() -> void:
 	formation_mode = String(c.get_value("game", "formation", formation_mode))
 	if formation_mode not in ["loose", "box", "line"]:
 		formation_mode = "loose"
-	for action in DEFAULT_KEYBINDS:
-		var key := int(c.get_value("keys", action, DEFAULT_KEYBINDS[action]))
-		keybinds[action] = key if can_bind_key(key) else DEFAULT_KEYBINDS[action]
+	_load_keybinds(c)
 	edge_scroll = bool(c.get_value("cam", "edge", edge_scroll))
 	cam_speed = float(c.get_value("cam", "speed", cam_speed))
 	zoom_sens = float(c.get_value("cam", "zoom", zoom_sens))
@@ -128,6 +126,33 @@ func _load() -> void:
 	show_target_lines = bool(c.get_value("show", "target_lines", show_target_lines))
 	show_range_rings = bool(c.get_value("show", "range_rings", show_range_rings))
 	show_control_help = bool(c.get_value("show", "control_help", show_control_help))
+
+
+func _load_keybinds(c: ConfigFile) -> void:
+	# 旧全军/F2 绑定不再导入；其他动作曾换到 F2 时恢复默认。
+	# 恢复键可能仍被交换链中的另一动作占用，沿冲突链恢复，保留无关自定义。
+	keybinds = DEFAULT_KEYBINDS.duplicate()
+	var restore: Array[String] = []
+	var used := {}
+	for action in DEFAULT_KEYBINDS:
+		var key := int(c.get_value("keys", action, DEFAULT_KEYBINDS[action]))
+		if not can_bind_key(key):
+			restore.append(action)
+			key = DEFAULT_KEYBINDS[action]
+		keybinds[action] = key
+		if used.has(key):
+			restore.append(action)
+		used[key] = true
+	var restored := {}
+	while not restore.is_empty():
+		var action: String = restore.pop_front()
+		if restored.has(action): continue
+		restored[action] = true
+		var key: int = DEFAULT_KEYBINDS[action]
+		keybinds[action] = key
+		for other in DEFAULT_KEYBINDS:
+			if other != action and int(keybinds[other]) == key:
+				restore.append(other)
 
 
 func key_for(action: String) -> int:
@@ -165,8 +190,8 @@ func can_bind_key(key: int) -> bool:
 		return false   # 数字键固定留给编队
 	if key in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_EQUAL, KEY_MINUS, KEY_KP_ADD, KEY_KP_SUBTRACT]:
 		return false   # 镜头移动/缩放保留键
-	if key >= KEY_F1 and key <= KEY_F8 and key != KEY_F2:
-		return false   # F1/F3-F8 固定留给英雄与镜头位置
+	if key >= KEY_F1 and key <= KEY_F8:
+		return false   # F1-F8 固定留给英雄；带修饰键的 F1-F4 留给镜头位置
 	return true
 
 
