@@ -1,3 +1,10 @@
+## 2026-09-21 macOS 本地试玩
+
+- `tools/build_macos_test.py`：冻结生产白名单、仅副本隔离/禁更新/测试标记、macOS App 与 DMG、原始哈希收据。
+- `tools/macos_test_package_probe.gd`：实际 PCK 的原生宿主探针，明确区分宿主与导出 App；release App 不支持 `--script`。
+- `qa/macos_test_20260921/`：构建/原生入口/宿主检查收据、必要截图、已知问题与玩家改动清单。
+- `build/macos-test-20260921/`：本地 App/DMG/试玩说明，Git 忽略，不是发布目录。
+
 ## 2026-09-20 RTS 操作、触屏布局与血瓶
 
 - [实现与边界](RTS_REFINEMENT_20260920.md)、[触屏矩阵](QA_RTS_TOUCH_HUD_20260920.md)。

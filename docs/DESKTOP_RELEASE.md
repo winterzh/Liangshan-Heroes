@@ -55,6 +55,8 @@ Android/macOS 公开文件分别位于 `/var/www/pAI/liangshan/{android,macos}/{
 
 ## 本地诊断（不是发布）
 
+仅需 macOS 本地试玩时可用 `tools/build_macos_test.py`：只在冻结副本加入独立用户目录、禁更新和测试标记，输出 Universal App/DMG，使用本地 ad-hoc 签名，不创建正式 tag/基线证明。实际测试架构须单独记录，不能把 Universal 文件当作 Intel 与 ARM64 均已验收。2026-09-21 本地包与入口验证见 [QA](../qa/macos_test_20260921/README.md)。此路径不代替下述正式发布流程或 Apple 公证。
+
 ```bash
 python3 tools/update_release_policy_qa.py
 python3 tools/run_update_transport_qa.py --godot "$GODOT_PATH" --out "$QA_OUT" --live

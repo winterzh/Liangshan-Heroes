@@ -1,3 +1,9 @@
+## 2026-09-21 macOS 试玩包
+
+本机双击 `build/macos-test-20260921/水浒英雄传-TEST-20260921-e3be6474.app`；同目录 DMG 用于拷贝。菜单左下角 `TEST 0921-e3be6474` 标识本次 RTS 修复，普通版本号仍为 1.8。它使用专属测试存档目录、关闭内容更新，不改变原版进度或联网更新设置；没有 Apple 公证，不代表正式发布。
+
+复用 `tools/build_macos_test.py --godot "$GODOT_PATH" --out <checkout外新目录> --delivery-dir <checkout/build下新目录> --expected-commit <已核对SHA>` 生成新测试包。仅在冻结副本加身份/隔离覆盖层，勿并行修改生产文件。release 模板不支持外部 `--script`；App 入口与 PCK 宿主测试须分开记录。[本次结果、改动清单与复现](../qa/macos_test_20260921/README.md)。安装包不随 Git 同步。
+
 ## 2026-09-20 RTS 综合修复验证入口
 
 本批触屏右栏、血瓶、操作和 1v1 经济改动见 [实现说明](RTS_REFINEMENT_20260920.md)。不改生产版本、不自动发安装包。下方同日 `TEST 0920-fbe43a3e` APK 早于本批，不能用它判断本批修改是否生效。
