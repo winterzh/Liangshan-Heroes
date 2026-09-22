@@ -4,7 +4,7 @@
 
 ## 实现内容与当前发布状态
 
-2026-09-23，包含本功能的 Windows Build `25460867` / Manifest `2563454806170954821` 继续为 Steam `default`，客户端安装与启动通过。Steam Cloud 已对普通玩家开放、动态云同步已关闭，商店公开页可见“Steam 云”；四语 Rich Presence 映射和公告 `698776157349217400` 已公开。当前测试账号的 Steam 客户端/账号 Cloud 偏好仍关闭，因此真实生产写入、跨设备和第二账号读回尚未验收。最新状态见 [发布复查](STEAM_UPDATE_20260922.md)。
+2026-09-23，包含本功能的 Windows Build `25460867` / Manifest `2563454806170954821` 继续为 Steam `default`，客户端安装与启动通过。Steam Cloud 已对普通玩家开放、动态云同步已关闭，商店公开页可见“Steam 云”；四语 Rich Presence 映射和公告 `698776157349217400` 已公开。用户启用账号 Cloud 后，03:35 的生产启动已成功上传 `liangshan_profile_v1.json`，客户端日志与 Steam 账号云文件页均确认。跨设备和第二账号读回尚未验收。最新状态见 [发布复查](STEAM_UPDATE_20260922.md)。
 
 - 好友状态包含主菜单、具体战役关卡、据守梁山波次、AI/竞技场/自定义及暂停；据守波次通过关卡事件更新，不每帧扫描战场，不为好友状态重新生成随机波次。
 - 文案四语：`status_zh_CN` / `status_zh_TW` / `status_en` / `status_ja`，并写 `status`（当前游戏语言）与 `steam_display=#Status`（供 Steamworks Localization 按好友语言映射）。
@@ -40,7 +40,7 @@
 
 - Cloud 配额为每用户 1 GB / 1000 文件；本批使用 ISteamRemoteStorage API，**不**使用 Auto-Cloud 玩家存档规则。正确公开配置见 [cloud_configuration.json](../tools/contracts/steam/cloud_configuration.json)：取消“仅为开发人员”、关闭动态云同步、商店支持功能勾选 Steam 云。
 - Rich Presence 语言映射是**必需前置**：上传并发布 [rich_presence.vdf](../tools/contracts/steam/rich_presence.vdf)，四语 `#Status` 分别引用 `status_en` / `status_zh_CN` / `status_zh_TW` / `status_ja`。未配置有效 token 时，好友列表不会自动以 `status` 兜底；该键只是额外游戏信息。参见 [Valve 文档](https://partner.steamgames.com/doc/api/ISteamFriends#SetRichPresence)。
-- `rich_presence.vdf` 的四语 token 已在 Steamworks 公开发布；Build 已上线，四语公告 `698776157349217400` 已公开并逐语言回读。真实客户端已验证包下载与启动；发布后探针确认 App Cloud 已启用，但当前测试账号/客户端 Cloud 偏好关闭，两个真实账号和跨设备回读继续作为独立验收。
+- `rich_presence.vdf` 的四语 token 已在 Steamworks 公开发布；Build 已上线，四语公告 `698776157349217400` 已公开并逐语言回读。真实客户端已验证包下载与启动，当前账号 Cloud 生产上传及服务器文件列表通过；第二账号和跨设备回读继续作为独立验收。
 
 ## 复现
 

@@ -1,10 +1,14 @@
+## 2026-09-23 当前账号 Steam 云上传复验
+
+用户开启 Steam 云偏好后，真实 Steam 库版本从主菜单正常退出，Steam API App/账号 Cloud 均为 `true`，文件写入 1,395 字节；客户端日志 `Upload OK` / `result OK`，Steam 账号云文件页列出 `liangshan_profile_v1.json`。启动前备份玩家目录 172 文件并核对哈希，战役进度等文件未变化，只有云镜像标记与日志改变。当前账号上传通过；跨设备和第二账号读回未测。[收据](../qa/steam_release_20260922/cloud_client_acceptance_20260923.json)。本次只更新验证与交接文档，没有重发 Steam 构建或公告。
+
 ## 2026-09-23 Steam 平台配置与四语公告公开
 
 用户确认发布后，Steamworks 已公开正确的 Cloud/Rich Presence 配置：普通玩家 Cloud 开启、动态云同步关闭、商店支持功能新增“Steam 云”，四语 `#Status` token 发布。商店资料 revision 9 发布后，公开商店页回读到“Steam 云”。
 
 补丁说明 `698776157349217400` 已关联 Build `25460867`，使用无文字 800×450 活动封面公开；简体中文、繁体中文、英语、日语页面分别回读到对应标题与完整正文。[公开公告](https://store.steampowered.com/news/app/5088120/view/698776157349217400) · [发布说明](STEAM_UPDATE_20260922.md) · [QA](../qa/steam_release_20260922/README.md)。
 
-真实客户端复测显示 App 侧 Cloud 已启用，但当前测试账号/Steam 客户端的全局 Cloud 偏好关闭；生产镜像保留三项 dirty 标记并继续重试，没有误报远端写入成功。诊断用本地配置已恢复并重启 Steam。当前账号实际写入、跨设备和第二账号读回仍单列为未完成验收。
+当时的真实客户端复测显示 App 侧 Cloud 已启用、账号全局 Cloud 偏好关闭；生产镜像保留三项 dirty 标记并继续重试。此为 01:41 历史状态；03:35 当前账号实际上传已通过，见上方更新。
 
 ## 2026-09-22 Steam Build 25460867 上线复查与 GitHub 收尾
 

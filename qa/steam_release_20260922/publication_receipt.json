@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "public_with_test_account_cloud_preference_blocker",
+  "status": "public_with_first_account_cloud_upload_verified",
   "complete": false,
   "source_head": "729892b0694406e591be585855a4590fd691d134",
   "app_id": 5088120,
@@ -16,6 +16,10 @@
   "steam_cloud_app_configuration_published": true,
   "steam_cloud_store_feature_public": true,
   "steam_cloud_player_acceptance": false,
+  "steam_cloud_first_account_upload_verified": true,
+  "steam_cloud_remote_file_visible": true,
+  "steam_cloud_cross_device_readback_verified": false,
+  "steam_cloud_second_account_isolation_verified": false,
   "rich_presence_published": true,
   "announcement_published": true,
   "announcement_event_id": "698776157349217400",
@@ -27,8 +31,8 @@
     "japanese"
   ],
   "blockers": [
-    "The current test account reports Steam Cloud enabled for the app but disabled for the account/client, so a production fileWrite and remote readback could not be accepted.",
-    "Cross-device and second-account Cloud readback remain independent acceptance boundaries."
+    "Cross-device Cloud readback remains an independent acceptance boundary.",
+    "Second-account Cloud isolation and readback remain an independent acceptance boundary."
   ],
   "rollback_build": "25451455",
   "rollback_manifest": "141439361708043047"

@@ -1,8 +1,10 @@
 ## 2026-09-23 Steam Cloud、四语好友状态与公告已公开
 
+03:35 再验：用户启用 Steam 云后，实际 Steam 库版本已把 `liangshan_profile_v1.json` 上传到账号云端，Steam 客户端日志与账号云文件页均确认；启动前备份完整，战役进度未变。当前账号上传已通过，跨设备读回和第二账号隔离仍未完成。[证据](../qa/steam_release_20260922/cloud_client_acceptance_20260923.json)。
+
 Build **25460867** / Manifest **2563454806170954821** 继续为 Windows `default`。Steamworks Cloud 已对普通玩家开放、动态云同步已关闭，商店公开页可见“Steam 云”；四语 Rich Presence 映射已发布。补丁说明 **698776157349217400** 已关联本 Build 并公开，简中、繁中、英语、日语正文均完成访客侧回读。[发布说明](STEAM_UPDATE_20260922.md) · [公开公告](https://store.steampowered.com/news/app/5088120/view/698776157349217400) · [QA](../qa/steam_release_20260922/README.md)。
 
-发布后探针确认 App 侧 Cloud 已启用，但当前测试账号/Steam 客户端全局 Cloud 偏好关闭，因此生产文件写入、跨设备和第二账号读回尚未验收；镜像保留 dirty 重试标记且没有误报成功。
+此前账号 Cloud 偏好关闭、镜像保留 dirty 标记的记录为 01:41 历史快照，已由上述 03:35 实测更新。
 
 ## 2026-09-22 Steam Build 25460867 已上线，Cloud/好友状态后台待发布
 

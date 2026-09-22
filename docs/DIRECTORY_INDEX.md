@@ -1,8 +1,10 @@
 ## 2026-09-23 Steam 平台配置与公告公开证据
 
+- `qa/steam_release_20260922/cloud_client_acceptance_20260923.json`：当前账号启用 Steam 云后的生产上传、Steam 客户端 OK 日志、账号云文件页及玩家数据备份/差异收据；跨设备与第二账号读回仍待测。
+
 - `qa/steam_release_20260922/cloud_backend_publication.json`：Cloud 普通玩家开放、动态云同步关闭、商店 revision 9 与公开“Steam 云”回读。
 - `qa/steam_release_20260922/rich_presence_publication.json`：四语 `#Status` token 公开发布结果。
-- `qa/steam_release_20260922/cloud_client_retest.json`：App Cloud 已启用、当前测试账号 Cloud 偏好关闭、dirty 重试保留与本地配置恢复记录。
+- `qa/steam_release_20260922/cloud_client_retest.json`：01:41 历史快照；App Cloud 已启用但当时账号偏好关闭，已由 03:35 上传收据更新。
 - `qa/steam_release_20260922/announcement_publication.json`：公告 `698776157349217400`、Build `25460867` 关联和四语公开回读。
 - `qa/steam_release_20260922/publication_receipt.json`、`docs/STEAM_UPDATE_20260922.md`：本轮上线状态、已完成公共动作和剩余客户端验收边界。
 
