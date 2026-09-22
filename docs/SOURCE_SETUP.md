@@ -1,3 +1,19 @@
+## 2026-09-22 main 整合后的 Steam 验证入口
+
+`main` 已整合 stable `0854f07b` 的账号隔离云存档与统一 Rich Presence，旧 HUD 直写入口已移除。Windows 11 / Godot 4.6.3 隔离全量回归 740/740、默认主场景 180 帧启动均通过；证据见 [main 合并 QA](../qa/steam_cloud_main_merge_20260922/README.md)。
+
+专项复现仍使用 `python -X utf8 -B tools/run_steam_cloud_presence_qa.py --godot <本机Godot路径> --out <工程外全新绝对目录>`；完整 RTS 回归使用 `tools/run_rts_refinement_qa.py`。两者会冻结当前工作区到工程外并创建唯一私有 profile，不要把输出目录放入 checkout，也不要复用已有目录。真实账号验证与 Steamworks `#Status` 发布不由该离线入口完成。
+
+## 2026-09-22 Steam 云存档安全修复与实际 GDScript 检查
+
+新增云存档/好友状态测试已改为冻结私有工程后运行生产 GDScript，而非 Python 重写逻辑。专项入口 `python -X utf8 -B tools/run_steam_cloud_presence_qa.py --godot <本机Godot路径> --out <新的工程外绝对路径>`；`tools/run_rts_refinement_qa.py` 同时包含原 RTS 回归和新专项。每批使用全新 profile，禁 Steam 和更新，不改 HOME。设置/语言下载后即时应用，按账号隔离本地状态，云读取失败不允许盲写覆盖。详见 [实现与后台前置](STEAM_CLOUD_PRESENCE_20260921.md)、[修复 QA](../qa/steam_cloud_safety_20260922/README.md)。
+
+正式发布前仍须 Windows Steam 原生、真实双账号/跨设备云回读和 `tools/contracts/steam/rich_presence.vdf` 后台发布验证；本轮不执行 Steam 发布。下方 9 月 21 日为历史描述，其共享镜像与旧测试入口说明以本节为准。
+
+## 2026-09-21 Steam 云存档与好友状态
+
+Steam 版启动后自动检查云存档（`liangshan_profile_v1.json`）并合并战役进度/个人设置；本地镜像在 `user://steam_cloud_profile.json`。好友列表见模式、关卡、据守波次与暂停，四语文本。普通 `Play.cmd` 与测试环境完全 no-op。复现：`python -X utf8 -B tools/run_steam_cloud_presence_qa.py`。详见[实现](STEAM_CLOUD_PRESENCE_20260921.md)。战斗中途续玩档仍不进云。
+
 ## 2026-09-21 F1～F8 英雄选择
 
 F1～F8 连续对应第 1～8 位英雄，F2 全军键盘动作及改键项已移除，全军屏幕按钮保留。旧设置加载时自动迁移，保留无冲突的自定义按键；不用删除玩家 `settings.cfg`。镜头组合键保持不变。`tools/run_rts_refinement_qa.py` 现包含真实输入/设置迁移专项；[结果与新 Mac 包](../qa/hero_hotkeys_20260921/README.md)。本机启动 `build/macos-test-20260921-hotkeys/水浒英雄传-TEST-20260921-55089263.app`，应见 `TEST 0921-55089263`；下方旧 `TEST 0921-e3be6474` 包不含本次更改。

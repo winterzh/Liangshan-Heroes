@@ -34,6 +34,9 @@ func _waves() -> Array:
 	return WAVES
 
 
+func presence_wave_total() -> int: return _waves().size()
+
+
 ## 每波投石车数：config 每波带 "cata" 字段则用之，否则沿用本体 1/2 规则。
 func _cata_for(i: int) -> int:
 	var ws: Array = _waves()

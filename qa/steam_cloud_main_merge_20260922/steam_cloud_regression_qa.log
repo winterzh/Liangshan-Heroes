@@ -1,0 +1,107 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[steam-cloud] PASS production startup did not initialize or load real Steam
+[steam-cloud] PASS normal _ready under STEAM_DISABLED/CAMPAIGN_QA never calls cloud storage
+[steam-cloud] PASS public attach, dirty, timer paths remain inert in ordinary/test startup
+[steam-cloud] PASS SDK fake honors zero requested bytes, not full file
+[steam-cloud] PASS SDK fake exposes exact ret byte count and buf
+[steam-cloud] PASS SDK fake keeps requested-size buffer separate from actual returned byte count
+[steam-cloud] PASS actual production cloud reads getFileSize bytes using SDK buf contract
+[steam-cloud] PASS production checks both account and app Cloud enablement
+[steam-cloud] PASS first successful pull binds campaign to verified account
+[steam-cloud] PASS fake has no boolean async fallback to mask a synchronous write failure
+[steam-cloud] PASS account-level Cloud opt-out prevents read/write
+[steam-cloud] PASS app-level Cloud opt-out prevents read/write
+[steam-cloud] PASS write private foreign legacy mirror fixture
+[steam-cloud] PASS foreign legacy/local progress cannot enter B (empty remote)
+[steam-cloud] PASS B cloud never receives A's unlock 8 (empty remote)
+[steam-cloud] PASS foreign account preferences are not relabeled
+[steam-cloud] PASS write private foreign legacy mirror fixture
+[steam-cloud] PASS foreign legacy/local progress cannot enter B (existing remote)
+[steam-cloud] PASS B cloud never receives A's unlock 8 (existing remote)
+[steam-cloud] PASS foreign account preferences are not relabeled
+[steam-cloud] PASS A fixture is actually loaded before switching accounts
+[steam-cloud] PASS native owner change blocks writes before service account is rebound
+[steam-cloud] PASS live account switch exactly replaces A runtime progress/settings with B
+[steam-cloud] PASS post-switch B upload stays at B's progress
+[steam-cloud] PASS local cloud mirrors are physically partitioned by owner
+[steam-cloud] PASS write private pre-upgrade Steam ownership proof
+[steam-cloud] PASS pre-upgrade migration.owner prevents untagged A progress being adopted by B
+[steam-cloud] PASS pre-upgrade A progress remains recoverable in A's scoped mirror
+[steam-cloud] PASS write private orphaned scoped-mirror ownership fixture
+[steam-cloud] PASS missing binding plus an orphaned scoped mirror blocks first-account adoption
+[steam-cloud] PASS orphaned ownership evidence and B's remote progress are preserved unchanged
+[steam-cloud] PASS initial read failure performs no upload
+[steam-cloud] PASS dirty and explicit flush cannot overwrite unread newer remote data
+[steam-cloud] PASS failed pull respects retry backoff
+[steam-cloud] PASS timer retries actual fileRead, not an unsafe upload
+[steam-cloud] PASS successful retry merges remote progress before permitting upload
+[steam-cloud] PASS edits made while awaiting a failed pull survive the successful retry
+[steam-cloud] PASS incomplete SDK read fails closed: partial_bytes
+[steam-cloud] PASS incomplete SDK read fails closed: wrong_ret
+[steam-cloud] PASS failed synchronous seed write stays dirty
+[steam-cloud] PASS write retry observes backoff
+[steam-cloud] PASS successful synchronous retry alone clears pending write
+[steam-cloud] PASS offline dirty changes do not call remote storage
+[steam-cloud] PASS offline changes retain pending dirty state
+[steam-cloud] PASS same-owner reconnect uses current offline progress, not stale mirror
+[steam-cloud] PASS same-owner reconnect preserves and uploads current offline settings
+[steam-cloud] PASS same-owner reconnect preserves and uploads current offline language
+[steam-cloud] PASS reconnect clears dirty only after the merged payload is written
+[steam-cloud] PASS write-failure concurrency fixture retains pending local progress
+[steam-cloud] PASS failed-write retry re-reads and merges concurrently advanced remote progress before overwriting
+[steam-cloud] PASS failed-write preference fixture first downloads 0.2 over untouched local default 0.8
+[steam-cloud] PASS retry does not mistake downloaded 0.2 for a local edit and overwrite newer remote 0.3
+[steam-cloud] PASS transition-failure fixture starts as verified A
+[steam-cloud] PASS create an empty private directory to force an actual atomic settings write failure
+[steam-cloud] PASS failed A-to-B local transition cannot upload retained A runtime progress as B
+[steam-cloud] PASS remove only the empty private fault-injection directory
+[steam-cloud] PASS ambiguous partial ownership transition remains fail-closed after the I/O fault is removed
+[steam-cloud] PASS new Cloud instance rejects the durable pending-owner marker instead of adopting mixed files
+[steam-cloud] PASS torn-transition safety latch preserves both owner-scoped recovery copies
+[steam-cloud] PASS download immediately reloads runtime settings and both audio paths
+[steam-cloud] PASS download emits keybind/language signals and updates runtime language
+[steam-cloud] PASS cloud settings use production legacy F2 and collision-chain migration
+[steam-cloud] PASS cloud settings cannot revive removed legacy F2 army action
+[steam-cloud] PASS cloud-loaded settings retain F1 reserved hero key
+[steam-cloud] PASS cloud-loaded settings retain F2 reserved hero key
+[steam-cloud] PASS cloud-loaded settings retain F3 reserved hero key
+[steam-cloud] PASS cloud-loaded settings retain F4 reserved hero key
+[steam-cloud] PASS cloud-loaded settings retain F5 reserved hero key
+[steam-cloud] PASS cloud-loaded settings retain F6 reserved hero key
+[steam-cloud] PASS cloud-loaded settings retain F7 reserved hero key
+[steam-cloud] PASS cloud-loaded settings retain F8 reserved hero key
+[steam-cloud] PASS downloaded settings are persisted in the verified private profile
+[steam-cloud] PASS ordinary Settings.save remains disabled under CAMPAIGN_QA without a global bypass
+[steam-cloud] PASS partial legacy cloud settings reset omitted fields to defaults, not prior account
+[steam-cloud] PASS malformed settings reject atomically: [audio]/bgm="bad"/
+[steam-cloud] PASS malformed settings reject atomically: [audio]/bgm=0.5/sfx=8/
+[steam-cloud] PASS malformed settings reject atomically: [game]/auto_micro="two"/
+[steam-cloud] PASS malformed settings reject atomically: [keys]/stop="S"/
+[steam-cloud] PASS invalid language rejects without changing runtime locale
+[steam-cloud] PASS actual production campaign merge keeps maximum unlocked chapter
+[steam-cloud] PASS distinct equal-scoring runs never union disjoint goal IDs into false completion
+[steam-cloud] PASS better single run wins intact while cleared flag remains monotonic
+[steam-cloud] PASS malformed remote fails closed: wrong type owner
+[steam-cloud] PASS malformed remote fails closed: wrong type schema
+[steam-cloud] PASS malformed remote fails closed: wrong type campaign
+[steam-cloud] PASS malformed remote fails closed: wrong type updated_at
+[steam-cloud] PASS malformed remote fails closed: wrong type settings_text
+[steam-cloud] PASS malformed remote fails closed: wrong type language_text
+[steam-cloud] PASS malformed remote fails closed: ownerless/foreign owner 
+[steam-cloud] PASS malformed remote fails closed: ownerless/foreign owner 222
+[steam-cloud] PASS malformed remote fails closed: malformed nested campaign record
+[steam-cloud] PASS malformed remote fails closed: invalid settings prevents partial campaign apply
+[steam-cloud] PASS malformed remote fails closed: invalid language prevents partial campaign apply
+[steam-cloud] PASS write private campaign unknown-section fixture
+[steam-cloud] PASS actual Campaign._save persists bound owner and downloaded unlock progress
+[steam-cloud] PASS normal campaign persistence preserves unrelated future sections
+[steam-cloud] PASS actual Campaign._save routes dirty notification into the tested /root/SteamCloud
+[steam-cloud] PASS actual Campaign._load restores account ownership and intact best-run goal set
+[steam-cloud] PASS actual Settings.save persists and notifies the tested Cloud fixture through the production root path
+[steam-cloud] PASS actual language persistence notifies Cloud and stores the new locale only in the private profile
+[steam-cloud] PASS real Campaign save callback during cloud apply is suppressed by the production reentrancy guard
+[steam-cloud] PASS scoped private persistence probe immediately restores the QA guard
+[steam-cloud] PASS Steam stayed disabled and the player-persistence environment guard is restored
+[steam-cloud] PASS write cloud regression receipt outside the frozen project
+[steam-cloud-result] {"checks":[{"label":"production startup did not initialize or load real Steam","passed":true},{"label":"normal _ready under STEAM_DISABLED/CAMPAIGN_QA never calls cloud storage","passed":true},{"label":"public attach, dirty, timer paths remain inert in ordinary/test startup","passed":true},{"label":"SDK fake honors zero requested bytes, not full file","passed":true},{"label":"SDK fake exposes exact ret byte count and buf","passed":true},{"label":"SDK fake keeps requested-size buffer separate from actual returned byte count","passed":true},{"label":"actual production cloud reads getFileSize bytes using SDK buf contract","passed":true},{"label":"production checks both account and app Cloud enablement","passed":true},{"label":"first successful pull binds campaign to verified account","passed":true},{"label":"fake has no boolean async fallback to mask a synchronous write failure","passed":true},{"label":"account-level Cloud opt-out prevents read/write","passed":true},{"label":"app-level Cloud opt-out prevents read/write","passed":true},{"label":"write private foreign legacy mirror fixture","passed":true},{"label":"foreign legacy/local progress cannot enter B (empty remote)","passed":true},{"label":"B cloud never receives A's unlock 8 (empty remote)","passed":true},{"label":"foreign account preferences are not relabeled","passed":true},{"label":"write private foreign legacy mirror fixture","passed":true},{"label":"foreign legacy/local progress cannot enter B (existing remote)","passed":true},{"label":"B cloud never receives A's unlock 8 (existing remote)","passed":true},{"label":"foreign account preferences are not relabeled","passed":true},{"label":"A fixture is actually loaded before switching accounts","passed":true},{"label":"native owner change blocks writes before service account is rebound","passed":true},{"label":"live account switch exactly replaces A runtime progress/settings with B","passed":true},{"label":"post-switch B upload stays at B's progress","passed":true},{"label":"local cloud mirrors are physically partitioned by owner","passed":true},{"label":"write private pre-upgrade Steam ownership proof","passed":true},{"label":"pre-upgrade migration.owner prevents untagged A progress being adopted by B","passed":true},{"label":"pre-upgrade A progress remains recoverable in A's scoped mirror","passed":true},{"label":"write private orphaned scoped-mirror ownership fixture","passed":true},{"label":"missing binding plus an orphaned scoped mirror blocks first-account adoption","passed":true},{"label":"orphaned ownership evidence and B's remote progress are preserved unchanged","passed":true},{"label":"initial read failure performs no upload","passed":true},{"label":"dirty and explicit flush cannot overwrite unread newer remote data","passed":true},{"label":"failed pull respects retry backoff","passed":true},{"label":"timer retries actual fileRead, not an unsafe upload","passed":true},{"label":"successful retry merges remote progress before permitting upload","passed":true},{"label":"edits made while awaiting a failed pull survive the successful retry","passed":true},{"label":"incomplete SDK read fails closed: partial_bytes","passed":true},{"label":"incomplete SDK read fails closed: wrong_ret","passed":true},{"label":"failed synchronous seed write stays dirty","passed":true},{"label":"write retry observes backoff","passed":true},{"label":"successful synchronous retry alone clears pending write","passed":true},{"label":"offline dirty changes do not call remote storage","passed":true},{"label":"offline changes retain pending dirty state","passed":true},{"label":"same-owner reconnect uses current offline progress, not stale mirror","passed":true},{"label":"same-owner reconnect preserves and uploads current offline settings","passed":true},{"label":"same-owner reconnect preserves and uploads current offline language","passed":true},{"label":"reconnect clears dirty only after the merged payload is written","passed":true},{"label":"write-failure concurrency fixture retains pending local progress","passed":true},{"label":"failed-write retry re-reads and merges concurrently advanced remote progress before overwriting","passed":true},{"label":"failed-write preference fixture first downloads 0.2 over untouched local default 0.8","passed":true},{"label":"retry does not mistake downloaded 0.2 for a local edit and overwrite newer remote 0.3","passed":true},{"label":"transition-failure fixture starts as verified A","passed":true},{"label":"create an empty private directory to force an actual atomic settings write failure","passed":true},{"label":"failed A-to-B local transition cannot upload retained A runtime progress as B","passed":true},{"label":"remove only the empty private fault-injection directory","passed":true},{"label":"ambiguous partial ownership transition remains fail-closed after the I/O fault is removed","passed":true},{"label":"new Cloud instance rejects the durable pending-owner marker instead of adopting mixed files","passed":true},{"label":"torn-transition safety latch preserves both owner-scoped recovery copies","passed":true},{"label":"download immediately reloads runtime settings and both audio paths","passed":true},{"label":"download emits keybind/language signals and updates runtime language","passed":true},{"label":"cloud settings use production legacy F2 and collision-chain migration","passed":true},{"label":"cloud settings cannot revive removed legacy F2 army action","passed":true},{"label":"cloud-loaded settings retain F1 reserved hero key","passed":true},{"label":"cloud-loaded settings retain F2 reserved hero key","passed":true},{"label":"cloud-loaded settings retain F3 reserved hero key","passed":true},{"label":"cloud-loaded settings retain F4 reserved hero key","passed":true},{"label":"cloud-loaded settings retain F5 reserved hero key","passed":true},{"label":"cloud-loaded settings retain F6 reserved hero key","passed":true},{"label":"cloud-loaded settings retain F7 reserved hero key","passed":true},{"label":"cloud-loaded settings retain F8 reserved hero key","passed":true},{"label":"downloaded settings are persisted in the verified private profile","passed":true},{"label":"ordinary Settings.save remains disabled under CAMPAIGN_QA without a global bypass","passed":true},{"label":"partial legacy cloud settings reset omitted fields to defaults, not prior account","passed":true},{"label":"malformed settings reject atomically: [audio]/bgm=\"bad\"/","passed":true},{"label":"malformed settings reject atomically: [audio]/bgm=0.5/sfx=8/","passed":true},{"label":"malformed settings reject atomically: [game]/auto_micro=\"two\"/","passed":true},{"label":"malformed settings reject atomically: [keys]/stop=\"S\"/","passed":true},{"label":"invalid language rejects without changing runtime locale","passed":true},{"label":"actual production campaign merge keeps maximum unlocked chapter","passed":true},{"label":"distinct equal-scoring runs never union disjoint goal IDs into false completion","passed":true},{"label":"better single run wins intact while cleared flag remains monotonic","passed":true},{"label":"malformed remote fails closed: wrong type owner","passed":true},{"label":"malformed remote fails closed: wrong type schema","passed":true},{"label":"malformed remote fails closed: wrong type campaign","passed":true},{"label":"malformed remote fails closed: wrong type updated_at","passed":true},{"label":"malformed remote fails closed: wrong type settings_text","passed":true},{"label":"malformed remote fails closed: wrong type language_text","passed":true},{"label":"malformed remote fails closed: ownerless/foreign owner ","passed":true},{"label":"malformed remote fails closed: ownerless/foreign owner 222","passed":true},{"label":"malformed remote fails closed: malformed nested campaign record","passed":true},{"label":"malformed remote fails closed: invalid settings prevents partial campaign apply","passed":true},{"label":"malformed remote fails closed: invalid language prevents partial campaign apply","passed":true},{"label":"write private campaign unknown-section fixture","passed":true},{"label":"actual Campaign._save persists bound owner and downloaded unlock progress","passed":true},{"label":"normal campaign persistence preserves unrelated future sections","passed":true},{"label":"actual Campaign._save routes dirty notification into the tested /root/SteamCloud","passed":true},{"label":"actual Campaign._load restores account ownership and intact best-run goal set","passed":true},{"label":"actual Settings.save persists and notifies the tested Cloud fixture through the production root path","passed":true},{"label":"actual language persistence notifies Cloud and stores the new locale only in the private profile","passed":true},{"label":"real Campaign save callback during cloud apply is suppressed by the production reentrancy guard","passed":true},{"label":"scoped private persistence probe immediately restores the QA guard","passed":true},{"label":"Steam stayed disabled and the player-persistence environment guard is restored","passed":true},{"label":"write cloud regression receipt outside the frozen project","passed":true}],"failures":[],"native_steam":false,"passed":true,"production_scripts":true,"profile":"C:/Users/rsb/AppData/Roaming/LSH-rts-refinement-25ae2bea59934086ad7f2c5382aa79f1"}

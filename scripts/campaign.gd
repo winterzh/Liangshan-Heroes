@@ -28,6 +28,7 @@ const ARENA_SCRIPT := "res://scripts/levels/arena.gd"
 var current := 0
 var unlocked := 1
 var records: Dictionary = {} # stable level id -> best base clear / same-run original-story result
+var cloud_owner := "" # Owner of the shared local progress; never relabel another account's progress.
 var skirmish := false       # 启动自由「遭遇战」模式而非战役关卡
 var skirmish_ai := false    # 启动「AI 对战」1v1 模式
 var arena := false          # 启动「竞技场」沙盒模式：自由点将+刷敌
@@ -251,9 +252,9 @@ func save_prefs() -> void:
 	_save()
 
 
-func _save() -> void:
+func _save() -> bool:
 	if OS.get_environment("CAMPAIGN_QA") == "1":
-		return
+		return true
 	var cfg := ConfigFile.new()
 	# Preserve unknown sections/keys from prior or newer builds instead of
 	# reconstructing campaign.cfg and silently discarding them.
@@ -261,6 +262,7 @@ func _save() -> void:
 	cfg.set_value("progress", "schema", SAVE_SCHEMA)
 	cfg.set_value("progress", "unlocked", unlocked)
 	cfg.set_value("progress", "records", records)
+	cfg.set_value("progress", "owner", cloud_owner)
 	cfg.set_value("pref", "ai_difficulty", ai_difficulty)
 	cfg.set_value("pref", "victory_mode", victory_mode)
 	cfg.set_value("pref", "scale_on", scale_on)
@@ -269,12 +271,28 @@ func _save() -> void:
 	cfg.set_value("pref", "hero_mult_touched", hero_mult_touched)
 	cfg.set_value("pref", "defense_rand_waves", defense_rand_waves)
 	cfg.set_value("pref", "defense_interval", defense_interval)
-	cfg.save(SAVE_PATH)
+	if cfg.save(SAVE_PATH) != OK:
+		return false
+	var cloud := get_node_or_null("/root/SteamCloud")
+	if cloud != null:
+		cloud.mark_dirty()
+	return true
+
+
+## SteamCloud validates the complete profile first. Replacement is intentional:
+## merging here would carry the previous account's progress into the new one.
+func apply_cloud_progress(progress: Dictionary, owner: String) -> bool:
+	unlocked = maxi(1, int(progress.get("unlocked", 1)))
+	records = _normalized_records(progress.get("records", {}))
+	cloud_owner = owner
+	return _save()
 
 
 func _load() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(SAVE_PATH) == OK:
+		var saved_owner: Variant = cfg.get_value("progress", "owner", "")
+		cloud_owner = saved_owner if saved_owner is String else "INVALID_OWNER"
 		unlocked = maxi(1, int(cfg.get_value("progress", "unlocked", 1)))
 		records = _normalized_records(cfg.get_value("progress", "records", {}))
 		ai_difficulty = String(cfg.get_value("pref", "ai_difficulty", ai_difficulty))

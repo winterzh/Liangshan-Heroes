@@ -1,5 +1,6 @@
 class_name LevelBase
 extends RefCounted
+signal presence_changed
 ## 关卡基类。战斗运行器 Battle 通过这些钩子驱动各关内容与机制。
 ## 各关只需覆盖需要的钩子；通用系统（选取/指挥/技能/编队/动画/光环/隐蔽）由 Battle 统一负责。
 
@@ -34,6 +35,8 @@ func on_unit_died(_b, _u) -> void: pass             # 单位阵亡钩子（统�
 func on_unit_resolved(_b, _u, _outcome: String) -> void: pass
 func on_mission_action(_b, _action_id: String, _actor) -> void: pass
 func top_status(_b) -> String: return ""            # 顶栏文字
+func presence_wave() -> int: return 0
+func presence_wave_total() -> int: return 0
 func on_ability(_b, _caster, _ability_id: String, _lp: Vector2) -> bool: return false  # 关卡自定义技能(如指路)，处理返回 true
 
 # 战役双层结算。核心目标决定是否通关；演义目标只决定非数值奖励，

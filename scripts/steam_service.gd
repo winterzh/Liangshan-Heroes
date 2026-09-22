@@ -45,7 +45,6 @@ func _ready() -> void:
 		return
 	if int(native.call("getAppID")) != SteamAchievementCatalog.APP_ID:
 		status = "Steam 应用不匹配，功能已停用"
-		clear_presence()
 		native.call("steamShutdown")
 		native = null
 		return
@@ -274,7 +273,6 @@ func _exit_tree() -> void:
 	if _local_runs != null and _local_runs.has_pending(): _checkpoint_persistent_run()
 	flush()
 	if native != null:
-		clear_presence()
 		native.call("steamShutdown")
 
 func _local_bad(code: String) -> Dictionary:
@@ -341,12 +339,3 @@ func _install_persistent_resume(prepared: Dictionary) -> void:
 	_run_counter = prepared.handle; _active_run = prepared.handle
 	_context = prepared.context.duplicate(true); _run_kill_highwater = prepared.credited_kills
 	state.seed(prepared.record.stats, prepared.record.unlocked)
-
-func set_presence(text: String) -> void:
-	if native == null: return
-	native.call("setRichPresence", "status", text)
-	native.call("setRichPresence", "steam_display", "#Status")
-
-func clear_presence() -> void:
-	if native == null: return
-	native.call("clearRichPresence")

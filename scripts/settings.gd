@@ -4,6 +4,7 @@ extends Node
 
 const PATH := "user://settings.cfg"
 signal keybinds_changed
+signal cloud_settings_applied
 const DEFAULT_KEYBINDS := {
 	"amove": KEY_A, "stop": KEY_S, "hold": KEY_H, "patrol": KEY_P,
 	"stance": KEY_G, "auto": KEY_T,
@@ -12,6 +13,20 @@ const DEFAULT_KEYBINDS := {
 	"item_3": KEY_V, "item_4": KEY_B, "item_5": KEY_N,
 	"alert": KEY_SPACE, "subgroup": KEY_TAB,
 	"idle_worker": KEY_PERIOD, "demolish": KEY_DELETE,
+}
+const CLOUD_DEFAULTS := {
+	"audio": {"bgm": 0.8, "sfx": 0.9, "muted": false},
+	"game": {"speed": 1.0, "atmosphere": true, "auto_micro": 2, "formation": "loose"},
+	"keys": DEFAULT_KEYBINDS,
+	"cam": {"edge": true, "speed": 1.0, "zoom": 1.0},
+	"show": {"effects_quality": "standard", "damage": true, "hpbar": true,
+		"cooldown": true, "command_queue": true, "target_lines": true,
+		"range_rings": true, "control_help": false},
+}
+const CLOUD_RANGES := {
+	"audio/bgm": Vector2(0.0, 1.0), "audio/sfx": Vector2(0.0, 1.0),
+	"game/speed": Vector2(0.1, 1.5), "game/auto_micro": Vector2(0, 3),
+	"cam/speed": Vector2(0.3, 2.5), "cam/zoom": Vector2(0.3, 2.5),
 }
 
 # —— 音频（0..1 线性音量）——
@@ -74,6 +89,14 @@ func save() -> void:
 	# QA/截图/性能脚本会临时改 edge_scroll 等字段；隔离目录或 CAMPAIGN_QA 下禁止写回玩家存档。
 	if OS.get_environment("CAMPAIGN_QA") == "1":
 		return
+	if _settings_config().save(PATH) != OK:
+		return
+	var cloud := get_node_or_null("/root/SteamCloud")
+	if cloud != null:
+		cloud.mark_dirty()
+
+
+func _settings_config() -> ConfigFile:
 	var c := ConfigFile.new()
 	c.set_value("audio", "bgm", bgm)
 	c.set_value("audio", "sfx", sfx)
@@ -95,13 +118,73 @@ func save() -> void:
 	c.set_value("show", "target_lines", show_target_lines)
 	c.set_value("show", "range_rings", show_range_rings)
 	c.set_value("show", "control_help", show_control_help)
-	c.save(PATH)
+	return c
+
+
+func cloud_text() -> String:
+	return _settings_config().encode_to_text()
+
+
+func default_cloud_text() -> String:
+	return _decode_cloud_text("").encode_to_text()
+
+
+func validate_cloud_text(value: String) -> bool:
+	return _decode_cloud_text(value) != null
+
+
+## Cloud owns persistence; validate before changing runtime or emitting signals.
+## Missing legacy fields use defaults, not another account's current preferences.
+func apply_cloud_text(value: String) -> bool:
+	var c := _decode_cloud_text(value)
+	if c == null:
+		return false
+	_load_config(c)
+	apply_audio()
+	keybinds_changed.emit()
+	cloud_settings_applied.emit()
+	return true
+
+
+func _decode_cloud_text(value: String) -> ConfigFile:
+	if value.to_utf8_buffer().size() > 131072:
+		return null
+	var input := ConfigFile.new()
+	if input.parse(value) != OK:
+		return null
+	var normalized := ConfigFile.new()
+	for section in CLOUD_DEFAULTS:
+		for key in CLOUD_DEFAULTS[section]:
+			var fallback: Variant = CLOUD_DEFAULTS[section][key]
+			var entry: Variant = input.get_value(section, key, fallback)
+			if fallback is float:
+				if not (entry is float or entry is int) or not is_finite(float(entry)):
+					return null
+			elif typeof(entry) != typeof(fallback):
+				return null
+			var id := String(section) + "/" + String(key)
+			if CLOUD_RANGES.has(id):
+				var limits: Vector2 = CLOUD_RANGES[id]
+				if float(entry) < limits.x or float(entry) > limits.y:
+					return null
+			if section == "keys" and (int(entry) < 0 or int(entry) >= KEY_UNKNOWN):
+				return null
+			if id == "game/formation" and entry not in ["loose", "box", "line"]:
+				return null
+			if id == "show/effects_quality" and entry not in ["standard", "reduced"]:
+				return null
+			normalized.set_value(section, key, entry)
+	return normalized
 
 
 func _load() -> void:
 	var c := ConfigFile.new()
 	if c.load(PATH) != OK:
 		return
+	_load_config(c)
+
+
+func _load_config(c: ConfigFile) -> void:
 	bgm = float(c.get_value("audio", "bgm", bgm))
 	sfx = float(c.get_value("audio", "sfx", sfx))
 	muted = bool(c.get_value("audio", "muted", muted))

@@ -15,6 +15,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import uuid
 
 from verify_platform_exports import allowlist, sha
 
@@ -22,7 +23,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SUITES = ["hero_function_keys_qa.gd", "rts_foundation_regression_qa.gd", "rts_economy_rules_qa.gd",
           "rts_hero_items_regression_qa.gd", "rts_hud_snapshot_qa.gd",
           "input_controls_regression_qa.gd", "combat_controls_regression_qa.gd",
-          "campaign_controls_regression_qa.gd"]
+          "campaign_controls_regression_qa.gd", "steam_cloud_regression_qa.gd",
+          "steam_presence_regression_qa.gd"]
 COMPLETION_MARKERS = {
     "hero_function_keys_qa": r"\[hero-function-keys-result\] (.+)",
     "rts_foundation_regression_qa": r"\[foundation\] summary checks=(\d+) failures=0",
@@ -32,10 +34,12 @@ COMPLETION_MARKERS = {
     "input_controls_regression_qa": r"INPUT_CONTROLS_QA checks=(\d+) failures=0",
     "combat_controls_regression_qa": r"\[combat-controls-result\] (.+)",
     "campaign_controls_regression_qa": r"\[campaign-controls-regression\] checks=(\d+) failures=0",
+    "steam_cloud_regression_qa": r"\[steam-cloud-result\] (.+)",
+    "steam_presence_regression_qa": r"\[steam-presence-result\] (.+)",
 }
 
 
-def main() -> int:
+def main(suites: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", default=os.environ.get("GODOT_PATH", "godot"))
     parser.add_argument("--out", type=Path)
@@ -52,13 +56,19 @@ def main() -> int:
     selected = allowlist(ROOT)
     selected += [p.relative_to(ROOT).as_posix() for p in (ROOT / "tools").iterdir()
                  if p.is_file() and p.suffix in {".gd", ".tscn"}]
+    selected.append("tools/contracts/steam/rich_presence.vdf")
     records = []
     for relative in sorted(set(selected)):
         src, dst = ROOT / relative, project / relative
+        if src.is_symlink():
+            raise RuntimeError("Symbolic test source is not allowed: " + relative)
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
-        records.append({"path": relative, "sha256": sha(src)})
-    profile = "LSH-rts-refinement-" + out.name
+        frozen_hash = sha(dst)
+        if sha(src) != frozen_hash:
+            raise RuntimeError("Source changed while freezing: " + relative)
+        records.append({"path": relative, "sha256": frozen_hash})
+    profile = "LSH-rts-refinement-" + uuid.uuid4().hex
     (project / "override.cfg").write_text(
         '[application]\nconfig/name=' + json.dumps(profile) + '\nconfig/use_custom_user_dir=true\n'
         'config/custom_user_dir_name=' + json.dumps(profile) + '\n', encoding="utf-8")
@@ -70,17 +80,23 @@ def main() -> int:
         profile_dir = Path(os.environ["APPDATA"]) / profile
     else:
         profile_dir = Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local" / "share"))) / profile
+    if profile_dir.exists():
+        raise RuntimeError("Refusing to reuse an existing profile: " + str(profile_dir))
     env["LSH_RTS_QA_PROFILE"] = str(profile_dir)
     env["LSH_INPUT_QA_PROJECT"] = str(project)
     env["LSH_INPUT_QA_PROFILE"] = str(profile_dir)
     for key in ("SMOKE_TEST", "ARENA", "SCENARIO", "CUSTOM_DEFENSE", "SKIRMISH_AI", "SKIRMISH", "LEVEL"):
         env.pop(key, None)
     receipt = {"source_root": str(ROOT), "project": str(project), "profile": profile,
-               "files": records, "runs": []}
+               "profile_directory": str(profile_dir), "files": records, "runs": [],
+               "isolation": {"STEAM_DISABLED": "1", "CAMPAIGN_QA": "1", "home_overridden": False,
+                             "native_steam_sdk_copied": False},
+               "suites": SUITES if suites is None else suites}
+    (out / "source-receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     def run(label: str, command: list[str], timeout: int) -> bool:
         log = out / (label + ".log")
         with log.open("w", encoding="utf-8") as stream:
-            result = subprocess.run(command, env=env, stdout=stream, stderr=subprocess.STDOUT, timeout=timeout)
+            result = subprocess.run(command, cwd=project, env=env, stdout=stream, stderr=subprocess.STDOUT, timeout=timeout)
         text = log.read_text(encoding="utf-8", errors="replace")
         ok = result.returncode == 0 and "SCRIPT ERROR:" not in text and "Parse Error:" not in text and "\nERROR:" not in text
         count = None
@@ -109,7 +125,7 @@ def main() -> int:
     if not imported or args.prepare_only:
         return 0 if imported else 1
     passed = True
-    for suite in SUITES:
+    for suite in SUITES if suites is None else suites:
         if not (project / "tools" / suite).is_file():
             raise RuntimeError("Missing regression: " + suite)
         passed = run(suite.removesuffix(".gd"), [args.godot, "--headless", "--path", str(project),

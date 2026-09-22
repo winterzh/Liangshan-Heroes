@@ -1,3 +1,16 @@
+## 2026-09-22 main Steam 整合验证
+
+- `qa/steam_cloud_main_merge_20260922/`：stable `0854f07b` 合入 `main` 后的 Windows Godot 4.6.3 全量 740 项回归、默认主场景 180 帧启动、来源哈希与零漂移收据。
+- `scripts/steam_cloud.gd`、`scripts/steam_presence.gd`：当前统一的账号隔离云同步与好友状态入口；HUD 不再直接写 SteamService Presence。
+
+## 2026-09-22 Steam 云存档与好友状态修复
+
+- `tools/steam_cloud_regression_qa.gd`、`tools/steam_presence_regression_qa.gd`：实际生产脚本的账号、失败重试、离线合并、设置和状态事件回归。
+- `tools/run_steam_cloud_presence_qa.py`：复用 RTS 私有冻结入口，不再重写合并逻辑；总 RTS 入口也包含这两组。
+- `tools/contracts/steam/rich_presence.vdf`：待 Steamworks 上传并发布的四语 `#Status` 映射，不代表后台已配置。
+- `assets/localization/steam_cloud_presence.json`：补齐原 12 条云存档/好友状态文案的可重建来源。
+- `qa/steam_cloud_safety_20260922/`：本轮真实脚本与回归收据、原问题、未验证边界。
+
 ## 2026-09-21 连续英雄功能键
 
 - `tools/hero_function_keys_qa.gd`：真实 F1～F8 输入、阵亡/空槽、头像键帽、镜头组合键与旧设置迁移回归，接入 RTS 总入口。
@@ -772,6 +785,13 @@ Event714538122294068074已公开，Steam显示06:16 HKT开始并关联Build25276
 - `tools/run_steam_integration_qa.py`、`tools/build_steam_candidate.py`：隔离 QA 和 Windows Steam 候选导出入口；辅助 GD 均排除出包。
 - `docs/STEAM_INTEGRATION_20260907.md`、`qa/steam_integration_20260907/`：产品规则、后台待执行清单、真实离线/原生/界面证据与失败轮。
 - `.godot/steam_integration_qa/`、`.godot/steam_candidates/`：仅本机私有工程、用户目录、缓存和候选 EXE/DLL，不提交 Git。
+
+## 2026-09-21 Steam 云存档与好友状态
+
+- `scripts/steam_cloud.gd`、`scripts/steam_presence.gd`：战役进度/设置云同步与好友 Rich Presence（四语）。
+- `tools/run_steam_cloud_presence_qa.py`：合并规则与文案纯逻辑检查；`tools/steam_fake_api.gd` 含 fileWrite/fileRead/setRichPresence 模拟。
+- `docs/STEAM_CLOUD_PRESENCE_20260921.md`、`qa/steam_cloud_presence_20260921/`：实现边界、复现与本轮证据。
+- 玩家本地 `user://steam_cloud_profile.json` 为云镜像，属用户数据，不进 Git。
 
 ## 2026-09-07 Steam 商店与公告素材
 

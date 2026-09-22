@@ -1,3 +1,21 @@
+## 2026-09-22 main 已整合 Steam 安全修复
+
+`main` 已合入 stable `0854f07b`，旧版 Cloud 与 HUD 直写 Presence 已由账号隔离 Cloud、统一 SteamPresence Autoload 替换。Windows Godot 4.6.3 隔离全量回归 **740/740**，默认主场景 180 帧退出 0、问题行 0；详见 [main 合并 QA](../qa/steam_cloud_main_merge_20260922/README.md)。下方“main 尚未整合”保留为修复批完成时的历史记录，以本节为当前状态。
+
+源码已达到本地合并验证门槛；真实 Steam 双账号、跨设备/离线云回读及 `#Status` 后台映射仍未验收，本节不表示已更新线上 Build。
+
+## 2026-09-22 Steam 云存档/好友状态审查修复（源码，未发布）
+
+修复新脚本编译、实际 SDK 合约、账号隔离、读取失败覆盖、离线合并、设置即时应用及好友状态事件；本地归属异常采用保留副本、停止同步策略。最终隔离实际 GDScript + RTS 回归 **740/740**，3331份来源零漂移。[QA](../qa/steam_cloud_safety_20260922/README.md) · [实现](STEAM_CLOUD_PRESENCE_20260921.md)。旧批 Python11项不能证明功能原生接通，其记录已加审查纠正。
+
+仅 stable 源码同步，不更新 Steam Build/公告/安装包。下一步发布门槛是 Windows 真实 SDK、双账号和跨设备云回读，以及必需的四语 `#Status` 后台配置验证，不以本轮 fake 通过替代。
+
+收尾发现 main 已独立更新至 `80f4aeb4`：其旧版 Cloud 和另一条好友状态写入链尚未整合本批修复。后续合并需单独处理这两套入口及 SteamPresence 注册；当前不声明 main 已修复或可直接合并。
+
+## 2026-09-21 Steam 云存档与好友状态（源码，未发包）
+
+好友 Rich Presence 与战役进度/设置云同步代码已进入 stable 源码：进度合并保留单局演义印、账号隔离、离线重试；战斗中途续玩档不进云。纯逻辑 QA 11/11。真实双账号云读写、Steamworks `#Status` 映射与工坊正式开放未完成。下一步按用户优先级：工坊开放 → 排行榜/每周挑战。[实现](STEAM_CLOUD_PRESENCE_20260921.md)。本批未导出 Steam 包。
+
 ## 2026-09-20 Steam 正式上线与四语公告公开
 
 Build **25416073** / Manifest **4282617870240600843** 已成为 Steam default，六文件服务器核验通过。四语补丁说明 **698776157349217078** 已关联新 Build 并公开，各语言标题、副标题及正文回读一致；Steam 库曝光仍待平台审核，客户端更新试玩未在本轮追加。最新结果见 [发布收据](../qa/steam_release_20260920/publication_receipt.json)。本轮原生 185、包检查 1132、身份 20、实际 EXE 短测 11 通过，玩家续玩入口仍关闭。

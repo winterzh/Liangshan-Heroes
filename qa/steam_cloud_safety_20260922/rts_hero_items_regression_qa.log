@@ -1,0 +1,68 @@
+Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org
+
+[hero-items] project=/private/tmp/lsh-cloud-safety-final-20260922-r2/project/ profile=/Users/dztdash/Library/Application Support/LSH-rts-refinement-cff870b8720a45c9a659159751a24a5b
+[hero-items] PASS nonempty real skirmish scene starts with valid RNG
+[hero-items] PASS all available friendly hero definitions spawn with exactly one potion
+[hero-items] PASS ordinary soldier receives no potion
+[hero-items] PASS enemy hero never receives or consumes the player's retired inventory
+[hero-items] PASS player test hero exists
+[hero-items] PASS real potion heals 200 + 20% current maximum at hero scale 1.0
+[hero-items] PASS one item click consumes exactly one potion at scale 1.0
+[hero-items] PASS near-full potion clips healing at max_hp (1.0)
+[hero-items] PASS full-health click consumes nothing (1.0)
+[hero-items] PASS real potion heals 200 + 20% current maximum at hero scale 3.0
+[hero-items] PASS one item click consumes exactly one potion at scale 3.0
+[hero-items] PASS near-full potion clips healing at max_hp (3.0)
+[hero-items] PASS full-health click consumes nothing (3.0)
+[hero-items] PASS real lethal damage retires the hero inventory
+[hero-items] PASS dead hero enters the real paid revival queue
+[hero-items] PASS building ticks finish a real hero revival
+[hero-items] PASS revival restores old items then replenishes one missing potion
+[hero-items] PASS real lethal damage retires the hero inventory
+[hero-items] PASS dead hero enters the real paid revival queue
+[hero-items] PASS building ticks finish a real hero revival
+[hero-items] PASS revival preserves existing potion stack without accumulating a free bottle
+[hero-items] PASS real lethal damage retires the hero inventory
+[hero-items] PASS dead hero enters the real paid revival queue
+[hero-items] PASS building ticks finish a real hero revival
+[hero-items] PASS full restored inventory is never overwritten to grant a potion
+[hero-items] PASS real active-item use keeps same-name shared cooldown
+[hero-items] PASS item transfer beyond 200 is rejected without losing the item
+[hero-items] PASS item transfer at exactly 200 succeeds and preserves identity
+[hero-items] PASS transferred item retains shared cooldown
+[hero-items] PASS real scene ability target death immediately starts queued withdrawal
+[hero-items] PASS real scene ability timeout immediately starts queued withdrawal
+[hero-items] PASS cancelled ability timeout does not apply an effect
+[hero-items] PASS real scene ability stale dead-target intent never interferes with a newer move
+[hero-items] PASS real scene item target death immediately starts queued withdrawal
+[hero-items] PASS real scene item timeout immediately starts queued withdrawal
+[hero-items] PASS cancelled item timeout does not apply an effect
+[hero-items] PASS real scene item stale dead-target intent never interferes with a newer move
+[hero-items] PASS real scene item freed target immediately starts queued withdrawal
+[hero-items] PASS real scene item lost item immediately starts queued withdrawal
+[hero-items] PASS cancelled item lost item does not apply an effect
+[hero-items] PASS real scene item item cooldown immediately starts queued withdrawal
+[hero-items] PASS cancelled item item cooldown does not apply an effect
+[hero-items] PASS real scene item nonfinite point immediately starts queued withdrawal
+[hero-items] PASS cancelled item nonfinite point does not apply an effect
+[hero-items] PASS manual W enters the real armed/aiming state
+[hero-items] PASS AI never takes Q or replaces W after the manual grace timer expires
+[hero-items] PASS explicit cancel releases armed protection
+[hero-items] PASS positive control: after cancel the same AI pass really casts Q against the nearby threat
+[hero-items] PASS switching active hero clears the old aimed ability
+[hero-items] PASS Lin Q hotkey enters aimed state before replacement
+[hero-items] PASS blocked W keeps the existing Q aim instead of cancelling it
+[hero-items] PASS ready W hotkey clears old Q aim before starting the real windup
+[hero-items] PASS W settles its real guard effect without retaining stale manual aim
+[hero-items] PASS death leaves the fixed hero shortcut slot empty instead of shifting survivors
+[hero-items] PASS dead hero shortcut does not select a replacement hero
+[hero-items] PASS emulated mouse retains touch control mode
+[hero-items] PASS real mouse exits touch control mode in Battle and camera
+[hero-items] PASS population fixture creates a genuine paid production queue
+[hero-items] PASS population HUD separates alive population from reserved queued population
+[hero-items] PASS production menu exposes an age-locked unit with its reason
+[hero-items] PASS menu unlock uses genuine paid research tech_age2
+[hero-items] PASS building ticks complete research before unlock tech_age2
+[hero-items] PASS same production menu entry becomes available at its required age
+[hero-items] PASS all runtime suites completed with nonempty evidence and no RNG fault
+[hero-items-result] {"checks":[{"label":"nonempty real skirmish scene starts with valid RNG","passed":true},{"label":"all available friendly hero definitions spawn with exactly one potion","passed":true},{"label":"ordinary soldier receives no potion","passed":true},{"label":"enemy hero never receives or consumes the player's retired inventory","passed":true},{"label":"player test hero exists","passed":true},{"label":"real potion heals 200 + 20% current maximum at hero scale 1.0","passed":true},{"label":"one item click consumes exactly one potion at scale 1.0","passed":true},{"label":"near-full potion clips healing at max_hp (1.0)","passed":true},{"label":"full-health click consumes nothing (1.0)","passed":true},{"label":"real potion heals 200 + 20% current maximum at hero scale 3.0","passed":true},{"label":"one item click consumes exactly one potion at scale 3.0","passed":true},{"label":"near-full potion clips healing at max_hp (3.0)","passed":true},{"label":"full-health click consumes nothing (3.0)","passed":true},{"label":"real lethal damage retires the hero inventory","passed":true},{"label":"dead hero enters the real paid revival queue","passed":true},{"label":"building ticks finish a real hero revival","passed":true},{"label":"revival restores old items then replenishes one missing potion","passed":true},{"label":"real lethal damage retires the hero inventory","passed":true},{"label":"dead hero enters the real paid revival queue","passed":true},{"label":"building ticks finish a real hero revival","passed":true},{"label":"revival preserves existing potion stack without accumulating a free bottle","passed":true},{"label":"real lethal damage retires the hero inventory","passed":true},{"label":"dead hero enters the real paid revival queue","passed":true},{"label":"building ticks finish a real hero revival","passed":true},{"label":"full restored inventory is never overwritten to grant a potion","passed":true},{"label":"real active-item use keeps same-name shared cooldown","passed":true},{"label":"item transfer beyond 200 is rejected without losing the item","passed":true},{"label":"item transfer at exactly 200 succeeds and preserves identity","passed":true},{"label":"transferred item retains shared cooldown","passed":true},{"label":"real scene ability target death immediately starts queued withdrawal","passed":true},{"label":"real scene ability timeout immediately starts queued withdrawal","passed":true},{"label":"cancelled ability timeout does not apply an effect","passed":true},{"label":"real scene ability stale dead-target intent never interferes with a newer move","passed":true},{"label":"real scene item target death immediately starts queued withdrawal","passed":true},{"label":"real scene item timeout immediately starts queued withdrawal","passed":true},{"label":"cancelled item timeout does not apply an effect","passed":true},{"label":"real scene item stale dead-target intent never interferes with a newer move","passed":true},{"label":"real scene item freed target immediately starts queued withdrawal","passed":true},{"label":"real scene item lost item immediately starts queued withdrawal","passed":true},{"label":"cancelled item lost item does not apply an effect","passed":true},{"label":"real scene item item cooldown immediately starts queued withdrawal","passed":true},{"label":"cancelled item item cooldown does not apply an effect","passed":true},{"label":"real scene item nonfinite point immediately starts queued withdrawal","passed":true},{"label":"cancelled item nonfinite point does not apply an effect","passed":true},{"label":"manual W enters the real armed/aiming state","passed":true},{"label":"AI never takes Q or replaces W after the manual grace timer expires","passed":true},{"label":"explicit cancel releases armed protection","passed":true},{"label":"positive control: after cancel the same AI pass really casts Q against the nearby threat","passed":true},{"label":"switching active hero clears the old aimed ability","passed":true},{"label":"Lin Q hotkey enters aimed state before replacement","passed":true},{"label":"blocked W keeps the existing Q aim instead of cancelling it","passed":true},{"label":"ready W hotkey clears old Q aim before starting the real windup","passed":true},{"label":"W settles its real guard effect without retaining stale manual aim","passed":true},{"label":"death leaves the fixed hero shortcut slot empty instead of shifting survivors","passed":true},{"label":"dead hero shortcut does not select a replacement hero","passed":true},{"label":"emulated mouse retains touch control mode","passed":true},{"label":"real mouse exits touch control mode in Battle and camera","passed":true},{"label":"population fixture creates a genuine paid production queue","passed":true},{"label":"population HUD separates alive population from reserved queued population","passed":true},{"label":"production menu exposes an age-locked unit with its reason","passed":true},{"label":"menu unlock uses genuine paid research tech_age2","passed":true},{"label":"building ticks complete research before unlock tech_age2","passed":true},{"label":"same production menu entry becomes available at its required age","passed":true},{"label":"all runtime suites completed with nonempty evidence and no RNG fault","passed":true}],"failures":[],"passed":true,"profile":"/Users/dztdash/Library/Application Support/LSH-rts-refinement-cff870b8720a45c9a659159751a24a5b","samples":[{"hero_definitions":130,"kind":"birth definitions"},{"after":265.0,"before":1.0,"kind":"potion heal","max_hp":320.0,"scale":1.0},{"after":307.666666666667,"before":1.0,"kind":"potion heal","max_hp":533.333333333333,"scale":3.0}],"scope":"Paused real skirmish scene; real potion effects, revival, input, and approach cancellation; custom cooldown/approach items"}

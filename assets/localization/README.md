@@ -13,6 +13,7 @@
 Run `tools/build_localization.py` after editing a shard. The final build applies the glossary, preserves any explicit reviewed Traditional Chinese translation (otherwise converting with OpenCC), and checks unresolved duplicate translations with `--strict`. Run `tools/localization_catalog.py` to verify coverage and placeholders. Do not edit gameplay definitions to insert translated identifiers.
 
 - `zz_rts_refinement_20260920.json`: preserves the previously runtime-only RTS controls/economy/item translations, including their reviewed Traditional Chinese. Do not remove these when rebuilding the catalogue.
+- `steam_cloud_presence.json`: Steam Cloud and Rich Presence status messages; preserves the 12 previously runtime-only entries when rebuilding.
 
 See `docs/LOCALIZATION_20260908.md` for the player flow, isolated QA and review limits.
 

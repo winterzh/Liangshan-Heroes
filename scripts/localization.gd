@@ -67,10 +67,47 @@ func set_language(value: String, persist := true) -> bool:
 		var error := preference.save(PREFERENCE_PATH)
 		if error != OK:
 			push_warning("Could not save language preference: %s" % error_string(error))
+		else:
+			var cloud := get_node_or_null("/root/SteamCloud")
+			if cloud != null:
+				cloud.mark_dirty()
 	if changed:
 		_refresh_bindings()
 		language_changed.emit(locale)
 	return true
+
+
+func cloud_text() -> String:
+	return _language_config(locale).encode_to_text()
+
+
+func default_cloud_text() -> String:
+	return _language_config(normalize_locale(OS.get_locale())).encode_to_text()
+
+
+func _language_config(selected: String) -> ConfigFile:
+	var cfg := ConfigFile.new()
+	cfg.set_value("language", "locale", selected)
+	return cfg
+
+
+func validate_cloud_text(value: String) -> bool:
+	if value.to_utf8_buffer().size() > 4096:
+		return false
+	var cfg := ConfigFile.new()
+	if cfg.parse(value) != OK:
+		return false
+	var selected: Variant = cfg.get_value("language", "locale", normalize_locale(OS.get_locale()))
+	return selected is String and selected in LOCALES
+
+
+## Persistence is coordinated by SteamCloud after the complete payload validates.
+func apply_cloud_text(value: String) -> bool:
+	if not validate_cloud_text(value):
+		return false
+	var cfg := ConfigFile.new()
+	cfg.parse(value)
+	return set_language(String(cfg.get_value("language", "locale", normalize_locale(OS.get_locale()))), false)
 
 
 func text(source: String) -> String:
