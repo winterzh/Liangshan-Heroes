@@ -52,7 +52,7 @@ func run() -> void:
 	if not check("installed Yezhulin runtime", pack.ok and Profiles._installed(Profiles.YEZHU_ID)): finish(); return
 	runtime = pack.runtime
 	check("runtime does not deploy or change art", not pack.deploy_or_start_called and not pack.global_art_changed)
-	check("uninstalled chapter still rejected", not Profiles.select_context({"mode": "campaign", "level_id": "level4", "waves": 0}, trusted).ok)
+	check("uninstalled chapter still rejected", not Profiles.select_context({"mode": "campaign", "level_id": "level5", "waves": 0}, trusted).ok)
 	var b: Node = await _launch()
 	if not is_instance_valid(b): finish(); return
 	b = await _roundtrip(b, "stalk")

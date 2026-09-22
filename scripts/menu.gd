@@ -108,7 +108,7 @@ func _build() -> void:
 
 	col.add_child(_mk_module("📜  剧情模式", "八幕全开放 · 自由通关，依原著完成可收录演义印", UITheme.PAPER_DARK, _show_story))
 	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", UITheme.COMPLETE, _show_defense, true))
-	col.add_child(_mk_module("⚔  1v1 对战", "对称经济 · 真实造兵造房，两种胜利条件、三档 AI", UITheme.COPPER_LIGHT, _show_1v1))
+	col.add_child(_mk_module("⚔  1v1 对战", "同规则经济 · 真实生产与升代，两种胜利条件、三档 AI", UITheme.COPPER_LIGHT, _show_1v1))
 	col.add_child(_mk_module("🏟  竞技场", "百八好汉技能试演场 · 自由点将放技能、一键刷敌", UITheme.VERMILION, func() -> void:
 		Campaign.arena = true
 		Campaign.skirmish = false
@@ -548,7 +548,7 @@ func _show_defense() -> void:
 # 模块三：1v1 对战（难度 + 胜利条件）
 # ======================================================================
 func _show_1v1() -> void:
-	var ov := _mk_overlay("1v1 对战 · 对称经济真实对抗")
+	var ov := _mk_overlay("1v1 对战 · 同规则经济")
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
 
@@ -586,6 +586,35 @@ func _show_1v1() -> void:
 	dtip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(dtip)
 
+	var intel := CheckButton.new()
+	intel.name = "TrainingIntelToggle"
+	intel.text = "训练情报：公开敌军经济、兵力与突击计时"
+	intel.button_pressed = bool(Campaign.get_meta("rts_training_intel", false))
+	intel.custom_minimum_size.y = 48
+	intel.add_theme_font_size_override("font_size", 17)
+	intel.toggled.connect(func(on: bool) -> void: Campaign.set_meta("rts_training_intel", on))
+	box.add_child(intel)
+	var intel_note := Label.new()
+	intel_note.text = "默认关闭；开启后为观察练习局，不计正式对战奖励。"
+	intel_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intel_note.custom_minimum_size.x = 520
+	intel_note.add_theme_font_size_override("font_size", 15)
+	box.add_child(intel_note)
+
+	var rules := Label.new()
+	rules.name = "DifficultyRules"
+	rules.text = preload("res://scripts/levels/skirmish_ai.gd").difficulty_rules_text()
+	rules.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rules.custom_minimum_size.x = 520
+	rules.add_theme_font_size_override("font_size", 15)
+	box.add_child(rules)
+	var guide := Button.new()
+	guide.text = "经济与兵种入门"
+	guide.custom_minimum_size.y = 44
+	guide.add_theme_font_size_override("font_size", 18)
+	guide.pressed.connect(_show_economy_guide)
+	box.add_child(guide)
+
 	# 难度（即开战）
 	var drow := HBoxContainer.new()
 	drow.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -610,6 +639,18 @@ func _show_1v1() -> void:
 		drow.add_child(ab)
 
 	_add_back(box, overlay)
+
+
+func _show_economy_guide() -> void:
+	var ov := _mk_overlay("经济与兵种入门")
+	var box: VBoxContainer = ov[1]
+	var guide := Label.new()
+	guide.text = preload("res://scripts/levels/skirmish_ai.gd").economy_guide_text()
+	guide.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	guide.custom_minimum_size.x = 520
+	guide.add_theme_font_size_override("font_size", 18)
+	box.add_child(guide)
+	_add_back(box, ov[0])
 
 
 # ======================================================================
@@ -805,6 +846,7 @@ func _make_card(i: int) -> Control:
 		btn.text = "出 征"
 		btn.pressed.connect(func() -> void:
 			Campaign.current = i
+			Campaign.arena = false
 			Campaign.skirmish = false       # 清掉自由模式残留（Campaign 是常驻 autoload，
 			Campaign.skirmish_ai = false    # 上次点过「据守/AI」的旗标会留着 → 否则战役关也进据守）
 			Campaign.custom_defense = false

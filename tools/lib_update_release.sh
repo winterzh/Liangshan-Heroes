@@ -222,8 +222,8 @@ update_require_hot_update_safe() {
 
 update_promote_all_stable() {
 	local version="$1"
-	# 一个远端进程先读取全部三端源文件并备份旧 stable，再替换；任何异常都会恢复三端旧值。
-	ssh -i "$SSH_KEY" "$REMOTE" python3 - "$UPDATE_REMOTE_WEB_ROOT" "$version" android windows macos <<'PY'
+	# Windows 在线更新已停用；不得再修改其 stable。两端仍一起回滚。
+	ssh -i "$SSH_KEY" "$REMOTE" python3 - "$UPDATE_REMOTE_WEB_ROOT" "$version" android macos <<'PY'
 import os, pathlib, sys
 
 root = pathlib.Path(sys.argv[1])

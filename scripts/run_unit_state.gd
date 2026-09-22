@@ -12,6 +12,8 @@ const LEVEL3_SCHEMA := "level3_unit_state_v1"
 const LEVEL1_SCHEMA := "level1_unit_state_v1"
 const LEVEL6_SCHEMA := "level6_unit_state_v1"
 const LEVEL2_SCHEMA := "level2_unit_state_v1"
+const LEVEL4_SCHEMA := "level4_unit_state_v1"
+var _lian_contract: RefCounted
 const LEVEL7_SCHEMA := "level7_unit_state_v1"
 const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
 const ZHU_PRISONERS := ["shi_qian", "shi_xiu", "qin_ming", "yang_lin", "huang_xin", "wang_ying", "deng_fei"]
@@ -888,6 +890,13 @@ func _configure_context(context: Dictionary, roles: Dictionary) -> void:
 		return
 	if _unit_script != preload("res://scripts/unit.gd"):
 		_scope_error = "CHAPTER_PRODUCTION_UNIT_REQUIRED"; return
+	if context.mode == "campaign" and context.level_id == "level4" and context.waves == 0:
+		_lian_contract = preload("res://scripts/run_level4_unit_contract.gd").new()
+		var result: Dictionary = _lian_contract.configure(roles)
+		if not result.ok: _scope_error = result.code; return
+		_chapter_roles = _lian_contract.actors
+		_unit_schema = LEVEL4_SCHEMA
+		return
 	if context.mode == "campaign" and context.level_id == "level3" and context.waves == 0:
 		if not _fields(roles, ["hu", "gate", "side_gate", "prisoners"]) or not _id(roles.hu) or typeof(roles.prisoners) != TYPE_ARRAY or roles.prisoners.size() != ZHU_PRISONERS.size():
 			_scope_error = "LEVEL3_ROLES"; return
@@ -1190,6 +1199,7 @@ func _check_chapter_values(v: Dictionary) -> Dictionary:
 				if (v.hp <= 0.0) != v._dying: return _failure("LEVEL1_YANG_LIFETIME")
 		# Wine scheme uses story poses and may drug/capture escorts; allow those.
 		return {"ok": true}
+	if _unit_schema == LEVEL4_SCHEMA: return _lian_contract.values(v)
 	if _unit_schema == LEVEL6_SCHEMA: return _check_level6_values(v)
 	if _unit_schema == LEVEL2_SCHEMA: return _check_level2_values(v)
 	if _unit_schema == LEVEL7_SCHEMA: return _check_level7_values(v)
@@ -1239,6 +1249,7 @@ func _check_chapter_parts(v: Dictionary, refs: Dictionary, meta: Dictionary, nod
 		# No gate footprints; bundles may be captured/drugged with ordinary units.
 		if v.is_captive and v.garrisoned: return _failure("LEVEL1_CAPTIVE_GARRISON")
 		return {"ok": true}
+	if _unit_schema == LEVEL4_SCHEMA: return _lian_contract.parts(v, refs, meta, node)
 	if _unit_schema == LEVEL6_SCHEMA: return _check_level6_parts(v, refs, meta)
 	if _unit_schema == LEVEL2_SCHEMA: return _check_level2_parts(v, refs, meta, node)
 	if _unit_schema == LEVEL7_SCHEMA: return _check_level7_parts(v, refs, meta, node)
@@ -1631,6 +1642,10 @@ func validate_level6_membership(states: Dictionary, active_ids: Array) -> Dictio
 			retired_orders += 1
 	if retired_orders > absent_escorts: return _failure("LEVEL6_ESCORT_ORDER_RETIRED_COUNT")
 	return {"ok": true, "complete_world": false, "root_and_effect_validation_required": true}
+
+func validate_level4_membership(states: Dictionary, active_ids: Array) -> Dictionary:
+	if _unit_schema != LEVEL4_SCHEMA or not _scope_error.is_empty(): return _failure("LEVEL4_CONTEXT_REQUIRED")
+	return _lian_contract.membership(states, active_ids)
 
 func validate_level3_membership(states: Dictionary, active_ids: Array) -> Dictionary:
 	# Called on the outputs of validate(), before any allocation/activation.

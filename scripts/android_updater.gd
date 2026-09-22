@@ -10,7 +10,7 @@ signal update_available(version: String, size_bytes: int)
 signal full_update_required(version: String)
 signal update_ready(version: String)
 
-const BOOTSTRAP_VERSION := 3
+const BOOTSTRAP_VERSION := 4
 const PACKAGE_VERSION_NAME := "1.8"
 const PACKAGE_VERSION_CODE := 15
 const BASE_CONTENT_VERSION := "1.8"
@@ -73,6 +73,11 @@ var _download_tmp_path := ""
 func _init() -> void:
 	platform_id = _detect_platform()
 	architecture = _detect_architecture()
+	# Windows is updated by replacing the complete EXE (or by Steam). Stop
+	# before reading cached PCKs; overrides must not re-enable a Windows build.
+	if OS.has_feature("windows") or platform_id == "windows":
+		_run_identity_complete = true
+		return
 	# Godot 4.6 导出模板并不保证提供 `standalone` feature tag；v1.6 因此把
 	# 真实 EXE/APP/APK 的更新器全部关掉了。`editor` 只存在编辑器可执行文件，
 	# 所以反向判断才能稳定区分导出程序与本地编辑调试。专项测试仍可显式绕过。
@@ -137,7 +142,7 @@ func check_now() -> void:
 
 
 func begin_download() -> void:
-	if state != "available" or available_manifest.is_empty() or _phase != "":
+	if not enabled or state != "available" or available_manifest.is_empty() or _phase != "":
 		return
 	var patch: Dictionary = available_manifest.get("patch", {})
 	var url := String(patch.get("url", ""))
@@ -280,6 +285,15 @@ func _accept_manifest() -> void:
 	if patch_target_error != "":
 		_fail(Localize.format_text("差异包%s", patch_target_error.trim_prefix(Localize.text("更新清单"))))
 		return
+	if not _patch_base_matches_package(manifest):
+		# A later release can use the same bootstrap, but its delta cannot be
+		# applied to this complete package. Never offer an older/same-version
+		# legacy APK merely because that incompatible manifest has a URL.
+		var full_version := _full_package_version(get_full_package(), "")
+		if not _valid_version(full_version) or _version_compare(full_version, PACKAGE_VERSION_NAME) <= 0 \
+				or not _offer_full_package_update(latest):
+			_fail(Localize.text("新版清单没有可用的差异包或完整包"))
+		return
 	var size_bytes := int(patch.get("size", 0))
 	if String(patch.get("url", "")) == "" or size_bytes <= 0 or String(patch.get("sha256", "")).length() != 64:
 		_fail(Localize.text("新版清单没有可用的差异包"))
@@ -366,6 +380,8 @@ func _load_installed_patch() -> void:
 	if not patch_var is Dictionary:
 		return
 	var patch: Dictionary = patch_var
+	if not _patch_base_matches_package(manifest):
+		return
 	var path := _patch_path(version)
 	if version == "" or not FileAccess.file_exists(path):
 		return
@@ -383,6 +399,36 @@ func _load_installed_patch() -> void:
 		_run_identity_patch_sha256 = expected_sha
 		active_content_version = version
 		_cleanup_stale_patches(path)
+
+
+## Bootstrap 4 starts a per-complete-package chain. Both signed descriptors
+## must identify this built-in base and the same immutable PCK. No 1.4.0
+## cumulative-chain exception is safe for a bootstrap-4 package. Older clients
+## keep their old bootstrap and are directed to a full APK by min_bootstrap.
+## The release tag/build proof binds this version to its immutable base bytes;
+## an installed APK/EXE does not contain a separate baseline PCK to rehash.
+func _patch_base_matches_package(manifest: Dictionary) -> bool:
+	var packaged_var: Variant = manifest.get("packaged_base", null)
+	var patch_var: Variant = manifest.get("patch_base", null)
+	if not packaged_var is Dictionary or not patch_var is Dictionary:
+		return false
+	var packaged: Dictionary = packaged_var
+	var patch: Dictionary = patch_var
+	for descriptor: Dictionary in [packaged, patch]:
+		var base_version: Variant = descriptor.get("version", null)
+		if not base_version is String or base_version != BASE_CONTENT_VERSION:
+			return false
+		var size: Variant = descriptor.get("size", null)
+		if not (size is int or size is float) or float(size) <= 0.0 or float(size) != float(int(size)):
+			return false
+		var digest_var: Variant = descriptor.get("sha256", null)
+		if not digest_var is String:
+			return false
+		var digest := String(digest_var).to_lower()
+		if digest.length() != 64 or not digest.is_valid_hex_number(false):
+			return false
+	return int(packaged.size) == int(patch.size) \
+		and String(packaged.sha256).to_lower() == String(patch.sha256).to_lower()
 
 
 func _verify_signature(body: PackedByteArray, signature_b64: String) -> bool:

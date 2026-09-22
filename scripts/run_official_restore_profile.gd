@@ -15,6 +15,10 @@ const ZHU_ID := "campaign_level3_v1"
 const HG_ID := "campaign_level1_v1"
 const YEZHU_ID := "campaign_level6_v1"
 const JIANG_ID := "campaign_level2_v1"
+const LIAN_ID := "campaign_level4_v1"
+const LIAN_CONTEXT := {"mode": "campaign", "level_id": "level4", "waves": 0}
+const LIAN_FLAGS := {"current": 3, "skirmish": false, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false}
+const Lian := preload("res://scripts/levels/level4_lianhuanma_rts.gd")
 const KUAI_ID := "campaign_level7_v1"
 const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
 const ZHU_CONTEXT := {"mode": "campaign", "level_id": "level3", "waves": 0}
@@ -67,10 +71,14 @@ static func normalize_context(value: Variant) -> Dictionary:
 		return {"ok": true, "context": JIANG_CONTEXT.duplicate(), "profile_id": JIANG_ID}
 	if value.mode == "campaign" and value.level_id == "level7" and value.waves == 0:
 		return {"ok": true, "context": KUAI_CONTEXT.duplicate(), "profile_id": KUAI_ID}
+	if value.mode == "campaign" and value.level_id == "level4" and value.waves == 0:
+		return {"ok": true, "context": LIAN_CONTEXT.duplicate(), "profile_id": LIAN_ID}
 	return _bad("OFFICIAL_CONTEXT_NOT_SUPPORTED")
 
 static func _installed(profile_id: String) -> bool:
 	match profile_id:
+		LIAN_ID:
+			return CampaignScript.LEVELS.size() > 3 and CampaignScript.LEVELS[3].id == "level4" and CampaignScript.LEVELS[3].script == (Lian as Script).resource_path
 		CLASSIC_ID:
 			var classic_script: Script = Classic
 			return CampaignScript.SKIRMISH_SCRIPT == classic_script.resource_path
@@ -122,7 +130,7 @@ static func select_saved(context: Variant, content_version: Variant,
 
 static func capture_selection(campaign: Node, level: RefCounted, identity: Dictionary) -> Dictionary:
 	if not is_instance_valid(campaign) or campaign.get_script() != CampaignScript or not is_instance_valid(level): return _bad("OFFICIAL_SOURCE_REQUIRED")
-	if level.get_script() not in [Classic, Zhu, Huang, Yezhu, Jiang, Kuai]: return _bad("OFFICIAL_SCRIPT_IDENTITY")
+	if level.get_script() not in [Classic, Zhu, Huang, Yezhu, Jiang, Kuai, Lian]: return _bad("OFFICIAL_SCRIPT_IDENTITY")
 	var selected: Dictionary = select_context(Policy.classify(campaign, level), identity)
 	if not selected.ok: return selected
 	var expected: Script = level_script(selected.profile_id)
@@ -133,6 +141,7 @@ static func install_flags(profile_id: String) -> Dictionary:
 	# Internal return value, never read from a file or applied by this selector.
 	# Session must snapshot/revalidate/rollback every returned Campaign field.
 	match profile_id:
+		LIAN_ID: return {"ok": true, "flags": LIAN_FLAGS.duplicate()}
 		CLASSIC_ID: return {"ok": true, "flags": CLASSIC_FLAGS.duplicate()}
 		ZHU_ID: return {"ok": true, "flags": ZHU_FLAGS.duplicate()}
 		HG_ID: return {"ok": true, "flags": HG_FLAGS.duplicate()}
@@ -144,6 +153,7 @@ static func install_flags(profile_id: String) -> Dictionary:
 static func level_script(profile_id: String) -> Script:
 	# Call only with a profile selected above; no ResourceLoader/load/fallback.
 	match profile_id:
+		LIAN_ID: return Lian
 		CLASSIC_ID: return Classic
 		ZHU_ID: return Zhu
 		HG_ID: return Huang
@@ -153,7 +163,7 @@ static func level_script(profile_id: String) -> Script:
 	return null
 
 static func is_official_campaign_profile(profile_id: String) -> bool:
-	return profile_id in [ZHU_ID, HG_ID, YEZHU_ID, JIANG_ID, KUAI_ID]
+	return profile_id in [ZHU_ID, HG_ID, YEZHU_ID, JIANG_ID, KUAI_ID, LIAN_ID]
 
 static func is_official_campaign_context(context: Variant) -> bool:
 	var norm := normalize_context(context)

@@ -5,7 +5,7 @@ const H := preload("res://scripts/hud.gd")
 const U := preload("res://scripts/unit.gd")
 const Codec := preload("res://scripts/run_state_value_codec.gd")
 const Messages := preload("res://scripts/run_hud_messages_state.gd")
-const SCHEMA := "fight_hud_v1"
+const SCHEMA := "fight_hud_v2"
 const BOOLS := ["touch_ui", "_inventory_popup_open", "_autocam_on", "_legacy_show_control_help"]
 var _codec: Variant = Codec.new()
 var _owner: Variant = null
@@ -37,8 +37,27 @@ func _tag_valid(tag: Variant, ids: Dictionary) -> bool:
 	if _fields(tag, ["kind"]): return tag.kind in ["none", "expired"]
 	return _fields(tag, ["kind", "id"]) and tag.kind == "unit" and typeof(tag.id) == TYPE_STRING and ids.has(tag.id)
 
-func validate(raw: Variant, ids: Dictionary) -> Dictionary:
-	if not _fields(raw, ["schema", "values", "selected", "top", "pause", "canvas", "activation", "minimap", "inventory_clocks", "hero_clocks", "autocam_visible", "autocam_alpha"]) or raw.schema != SCHEMA: return _bad("HUD_RECORD")
+func validate_roster(keys: Variant, definitions: Dictionary = {}) -> Dictionary:
+	if typeof(keys) != TYPE_ARRAY or keys.size() > 4096: return _bad("HUD_ROSTER")
+	var seen := {}
+	for key: Variant in keys:
+		if typeof(key) != TYPE_STRING or key.is_empty() or key.length() > 128 or seen.has(key): return _bad("HUD_ROSTER_KEY")
+		# Keys identify definitions, never paths/resources. Hyphens are valid in
+		# content-pack IDs; traversal, separators and whitespace are not.
+		if not key.replace("-", "_").is_valid_identifier(): return _bad("HUD_ROSTER_KEY")
+		if not definitions.is_empty() and (not definitions.has(key) or not bool(definitions[key].get("hero", false))): return _bad("HUD_ROSTER_UNKNOWN")
+		seen[key] = true
+	return {"ok": true}
+
+
+func validate(raw: Variant, ids: Dictionary, definitions: Dictionary = {}) -> Dictionary:
+	var names := ["schema", "values", "selected", "top", "pause", "canvas", "activation", "minimap", "inventory_clocks", "hero_clocks", "autocam_visible", "autocam_alpha"]
+	var legacy: bool = _fields(raw, names) and raw.schema == "fight_hud_v1"
+	if not legacy and (not _fields(raw, names + ["hero_roster", "compact_stats"]) or raw.schema != SCHEMA): return _bad("HUD_RECORD")
+	if not legacy:
+		if typeof(raw.compact_stats) != TYPE_BOOL: return _bad("HUD_ROSTER")
+		var roster_checked := validate_roster(raw.hero_roster, definitions)
+		if not roster_checked.ok: return roster_checked
 	if not _fields(raw.values, BOOLS + ["_panel_accum", "_autocam_pulse"]): return _bad("HUD_VALUES")
 	for key: String in BOOLS:
 		if typeof(raw.values[key]) != TYPE_BOOL: return _bad("HUD_BOOL")
@@ -105,13 +124,19 @@ func capture(owner: Variant, object_to_id: Dictionary) -> Dictionary:
 			clocks.append(node._draw_acc)
 	var heroes: Array = []
 	for chip: Variant in hud._hero_bar.get_children():
-		if not chip is H.HeroChip or not is_instance_valid(chip.hero) or not object_to_id.has(chip.hero): return _bad("HUD_HERO_ID")
+		if not chip is H.HeroChip: return _bad("HUD_HERO_ID")
+		if not is_instance_valid(chip.hero):
+			if chip.roster_key not in owner._hero_roster_keys: return _bad("HUD_HERO_ID")
+			continue # 阵亡头像由固定名册重建，没有活体时钟引用。
+		if not object_to_id.has(chip.hero): return _bad("HUD_HERO_ID")
 		heroes.append({"id": object_to_id[chip.hero], "clock": chip._redraw_accum})
 	var t: Transform2D = hud.transform
 	var raw := {"schema": SCHEMA, "values": values, "selected": selected, "top": hud.top_label.text, "pause": {"visible": hud._pause_root.visible, "pending": hud._pause_pending_action}, "canvas": {"layer": hud.layer, "visible": hud.visible, "x": t.x, "y": t.y, "origin": t.origin, "follow": hud.follow_viewport_enabled, "follow_scale": hud.follow_viewport_scale}, "activation": a, "minimap": {"clock": hud.minimap._accum, "pixels": pixels}, "inventory_clocks": clocks, "hero_clocks": heroes, "autocam_visible": hud._autocam_btn.visible, "autocam_alpha": float(hud._autocam_btn.modulate.a)}
+	raw["hero_roster"] = Array(owner._hero_roster_keys)
+	raw["compact_stats"] = hud._compact_combat_stats
 	var known: Dictionary = {}
 	for id: String in object_to_id.values(): known[id] = true
-	var checked: Dictionary = validate(raw, known)
+	var checked: Dictionary = validate(raw, known, owner._defs)
 	if not checked.ok: return checked
 	return _codec.encode(raw)
 
@@ -119,7 +144,7 @@ func bind(owner: Variant, record: Variant, messages: Variant, ids: Dictionary, e
 	if _owner != null or not is_instance_valid(owner) or owner.get_script() != B or owner.is_inside_tree() or owner.hud != null: return _bad("HUD_BIND_PHASE")
 	var decoded: Dictionary = _codec.decode(record)
 	if not decoded.ok: return decoded
-	var checked: Dictionary = validate(decoded.value, ids)
+	var checked: Dictionary = validate(decoded.value, ids, owner._defs)
 	if not checked.ok: return checked
 	checked = _messages.decode(messages)
 	if not checked.ok: return checked
@@ -134,6 +159,12 @@ func finish() -> Dictionary:
 	if _finished or not is_instance_valid(_owner) or not _owner.is_inside_tree() or not _owner.get_tree().paused or _owner.process_mode != Node.PROCESS_MODE_DISABLED or _owner._run_clock == null or not _owner._prepared_clock_entry_valid(): return _bad("HUD_FINISH_PHASE")
 	var hud: Variant = _owner.hud
 	if not hud.is_node_ready() or not hud.get_meta("_run_hud_prepared", false): return _bad("HUD_NOT_PREPARED")
+	if _raw.has("hero_roster"):
+		var checked_roster := validate_roster(_raw.hero_roster, _owner._defs)
+		if not checked_roster.ok: return checked_roster
+		_owner._hero_roster_keys.assign(_raw.hero_roster)
+		hud._compact_combat_stats = _raw.compact_stats
+		hud._combat_stats_toggle.set_pressed_no_signal(_raw.compact_stats)
 	var old_active: Variant = _owner._active
 	hud.setup(_owner)
 	hud.set_touch_ui(_raw.values.touch_ui)

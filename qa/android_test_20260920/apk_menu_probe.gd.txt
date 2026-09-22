@@ -1,0 +1,32 @@
+extends SceneTree
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+func _has_marker(node: Node) -> bool:
+	if node is Label and "TEST 0920-fbe43a3e" in node.text:
+		return true
+	for child in node.get_children():
+		if _has_marker(child):
+			return true
+	return false
+
+func _run() -> void:
+	if OS.get_user_data_dir().get_file() != "LSH-android-test-20260920-xmm3iiyt":
+		push_error("Private profile mismatch")
+		quit(2)
+		return
+	var packed = load("res://scenes/menu.tscn")
+	var menu = packed.instantiate()
+	root.add_child(menu)
+	current_scene = menu
+	for frame in range(30):
+		await process_frame
+	var updater = root.get_node("AndroidUpdater")
+	var passed: bool = _has_marker(menu) and updater.enabled and updater.platform_id == "android" \
+		and updater.BASE_CONTENT_VERSION == "1.8" and root.get_node("Campaign").VERSION == "1.8"
+	print("[android-test-menu] ", JSON.stringify({"passed": passed,
+		"marker": "TEST 0920-fbe43a3e", "updater_enabled": updater.enabled,
+		"base": updater.BASE_CONTENT_VERSION, "user_dir": OS.get_user_data_dir(),
+		"scope": "actual APK assets loaded by host Godot; not native Android"}))
+	quit(0 if passed else 3)

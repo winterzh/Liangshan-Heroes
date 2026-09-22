@@ -225,6 +225,8 @@ func ready(slot: int) -> bool:
 	if owner._stun_t > 0.0 or owner._channel_t > 0.0 or owner._cast_t > 0.0 \
 			or owner._charge_t > 0.0 or owner._charge_dash > 0.0:
 		return false
+	if bool(slot_def(slot).get("active", {}).get("requires_missing_hp", false)) and owner.hp >= owner.max_hp:
+		return false
 	return cooldown_left(String(slots[slot].get("id", ""))) <= 0.0
 
 

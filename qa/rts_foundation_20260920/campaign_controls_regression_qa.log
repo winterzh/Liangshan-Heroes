@@ -1,0 +1,35 @@
+Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org
+
+[rts] PASS independent overlapping arrivals both complete without another click
+[rts] PASS player stop cancels a waiting arrival
+[rts] PASS new movement replaces a waiting task instead of reviving it later
+[rts] PASS leaving task range cancels the waiting receipt even if later moved back
+[rts] PASS blocking a task consumes its waiting receipt; reopening needs a new order
+[rts] PASS stage transition consumes old arrivals before adding a colocated follow-up
+[rts] PASS duplicate independent click on a finished task never transfers to its neighbour
+[rts] PASS ordinary non-task arrivals retain their short expiry while another task runs
+[rts] PASS valid waiting receipt survives natural idle acquisition and defensive return-to-home
+[rts] PASS unmanaged waiting hero completes the second task despite a visible nearby enemy
+[rts] PASS real eligible auto-micro passes cannot overwrite a valid waiting task
+[rts] PASS managed second task completes and consumes its finite waiting receipt
+[rts] PASS actual auto-micro target acquisition resumes after task completion
+[rts] PASS task cancellation removes waiting protection and real auto-micro resumes
+[rts] PASS an invalidated actor loses the receipt and ordinary idle acquisition resumes
+[rts] PASS ordinary non-task arrivals still acquire enemies immediately, without a new 0.35s combat delay
+[rts] PASS arrival tokens outside campaign missions never delay real auto-micro acquisition
+[rts] PASS real enemy bow attacks deal damage without replacing a valid waiting player's task
+[rts] PASS subsequent real enemy hits restore automatic retaliation after waiting is cancelled
+[rts] PASS new explicit player stop cancels waiting and keeps its normal damage-retaliation behavior
+[rts] PASS leaving task range releases waiting protection and damage retaliation resumes
+[rts] PASS real taunt still overrides and cancels a waiting task; waiting grants no control immunity
+[rts] PASS settlement clears waiting player task receipts
+[rts] PASS mission restore field audit remains complete
+[rts] PASS real landing creates a live land prisoner and empties the cargo boat
+[rts] PASS post-landing empty transport and completed sealing ships may sink without losing Gao
+[rts] PASS live prisoner reaching the hall still earns capture credit after empty-boat loss
+[rts] PASS real landing creates a live land prisoner and empties the cargo boat
+[rts] PASS actual land prisoner death still fails the capture route
+[rts] PASS transport loss before prisoner landing still fails capture
+[rts] PASS losing both sealing ships before sealing still fails capture
+[rts] PASS story card clears arena and other previous modes before launch
+[campaign-controls-regression] checks=32 failures=0

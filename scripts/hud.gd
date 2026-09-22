@@ -27,6 +27,8 @@ var _res_gold: Label
 var _res_wood: Label
 var _res_pop: Label
 var _res_idle: Button     # 闲置喽啰徽标：显示闲置数，点击轮流选中（经典RTS式）
+var _combat_stats_toggle: CheckButton
+var _compact_combat_stats := false
 
 # 底部指挥面板
 var minimap: Minimap
@@ -144,6 +146,7 @@ var _hero_keys: Array = []
 var _skill_rail: VBoxContainer   # 右缘常驻技能轨（每英雄一行，免选直放）
 var _skill_rail_keys: Array = []
 const SKILL_RAIL_AVOID_GAP := 8.0
+var _skill_rail_cell := Vector2(64, 64)
 var _touch_action_layout_signature := ""
 var _intro_btn: Button
 var _menu_btn: Button      # 触屏屏上「菜单」键（右上角）：等同安卓返回键，呼出暂停菜单
@@ -167,6 +170,9 @@ func _ready() -> void:
 	top_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	top_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	top_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	top_label.max_lines_visible = 2
+	top_label.clip_text = true
+	top_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_style_label(top_label, 18)
 	var top_sb := StyleBoxFlat.new()
 	top_sb.bg_color = Color(UITheme.INK_SOFT, 0.90)
@@ -263,11 +269,12 @@ func set_touch_ui(v: bool) -> void:
 		_apply_touch_fonts()
 	if v:
 		_ensure_touch_info_dock_overlay()
+	if _skill_rail != null:
+		_skill_rail.visible = v
 	_refresh_touch_controls()
 	_position_fps()   # 触屏布局启用 → FPS 移到菜单键左侧
 	_update_info_panel_mode()
-	_layout_info_panel()
-	_layout_info_dock()
+	_apply_bottom_collapse()   # _ready 先按桌面空选区折叠；切触屏必须恢复实际控件。
 	refresh_inventory()
 	_layout_top_status()
 	call_deferred("_layout_top_status")
@@ -497,12 +504,7 @@ func _current_safe_layout_signature() -> String:
 func _apply_safe_area() -> void:
 	var safe := _logical_safe_insets()
 	if _touch_built:
-		if _touch_groups != null:
-			_touch_groups.offset_left = 12.0 + safe.x
-			_touch_groups.offset_bottom = -166.0 - safe.w
-		if _touch_actions != null:
-			_touch_actions.offset_right = -12.0 - safe.z
-			_touch_actions.offset_bottom = -166.0 - safe.w
+		_layout_touch_action_buttons(true)
 		if _menu_btn != null:
 			_menu_btn.offset_right = -12.0 - safe.z
 			_menu_btn.offset_top = 10.0 + safe.y
@@ -531,14 +533,39 @@ func _layout_top_status() -> void:
 	if top_label == null:
 		return
 	var safe := _logical_safe_insets()
+	if touch_ui and _res_bar != null and _res_bar.visible:
+		_fit_touch_resource_fonts(safe)
 	var left := 170.0 + safe.x
 	if battle != null and battle.economy and _res_bar != null and _res_bar.visible:
 		var res_w := maxf(_res_bar.size.x, _res_bar.get_combined_minimum_size().x)
 		left = maxf(322.0 + safe.x, _res_bar.position.x + res_w + 8.0)
 	top_label.offset_left = left
 	top_label.offset_right = -128.0 - safe.z
-	top_label.offset_bottom = (68.0 if Localize.locale == "en" else 48.0) + safe.y
+	top_label.offset_bottom = (58.0 if touch_ui else (68.0 if Localize.locale == "en" else 48.0)) + safe.y
 	top_label.add_theme_font_size_override("font_size", 16 if Localize.locale == "en" else 18)
+
+
+func _fit_touch_resource_fonts(safe: Vector4) -> void:
+	# The translated worker counts must not consume the whole top band. Keep
+	# a readable resource line and room for two clipped lines of battle status.
+	var vp := get_viewport().get_visible_rect().size
+	var available := maxf(480.0, vp.x - safe.x - safe.z - 128.0 - maxf(280.0, vp.x * 0.23) - 28.0)
+	var controls: Array = [_res_gold, _res_wood, _res_pop]
+	if _res_idle != null and _res_idle.visible:
+		controls.append(_res_idle)
+	var font_size := 24
+	while font_size > 18:
+		var required := 40.0 + float(maxi(0, controls.size() - 1)) * 20.0
+		for control in controls:
+			var font: Font = control.get_theme_font("font")
+			required += font.get_string_size(control.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		if required <= available:
+			break
+		font_size -= 1
+	for control in controls:
+		if control.get_theme_font_size("font_size") != font_size:
+			control.add_theme_font_size_override("font_size", font_size)
+	_res_bar.reset_size()
 
 
 func _mk_action_btn(text: String, col: Color, cb: Callable) -> Button:
@@ -618,13 +645,62 @@ func _refresh_touch_controls() -> void:
 				all_on = false
 				break
 		Localize.bind_render(_act_allauto, func() -> String: return Localize.text("🚫取消托管军") if all_on else Localize.text("🪄托管军"))
-	var action_layout_signature := "%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+	var action_layout_signature := "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_touch_actions.visible, _act_amove.visible, _act_stop.visible, _act_stance.visible,
 		_act_delete.visible, _act_cancel.visible, _act_eject.visible, _act_auto.visible,
-		_act_allauto.visible]
+		_act_allauto.visible, Localize.locale, _act_auto.text, _act_allauto.text]
 	if action_layout_signature != _touch_action_layout_signature:
 		_touch_action_layout_signature = action_layout_signature
+		_layout_touch_action_buttons(true)
 		call_deferred("_layout_skill_rail")
+	else:
+		_layout_touch_action_buttons()
+
+
+func _touch_row_minimum(row: HBoxContainer) -> Vector2:
+	var total := Vector2.ZERO
+	var count := 0
+	for control in row.get_children():
+		if not control.visible:
+			continue
+		var minimum: Vector2 = control.get_combined_minimum_size()
+		total.x += minimum.x
+		total.y = maxf(total.y, minimum.y)
+		count += 1
+	total.x += float(maxi(0, count - 1) * row.get_theme_constant("separation"))
+	return total
+
+
+func _layout_touch_action_buttons(reset_fonts := false) -> void:
+	if not touch_ui or _touch_actions == null or _touch_groups == null:
+		return
+	var safe := _logical_safe_insets()
+	var vp := get_viewport().get_visible_rect().size
+	if reset_fonts:
+		for control in _touch_actions.get_children():
+			control.add_theme_font_size_override("font_size", 22)
+		for control in _touch_groups.get_children():
+			if control is Button:
+				control.add_theme_font_size_override("font_size", 18 if control == _act_allauto else 20)
+	var actions := _touch_row_minimum(_touch_actions)
+	var groups := _touch_row_minimum(_touch_groups)
+	if _touch_actions.visible and actions.x + groups.x + 32.0 > vp.x - safe.x - safe.z:
+		for control in _touch_actions.get_children():
+			control.add_theme_font_size_override("font_size", 18)
+		for control in _touch_groups.get_children():
+			if control is Button:
+				control.add_theme_font_size_override("font_size", 16)
+		actions = _touch_row_minimum(_touch_actions)
+		groups = _touch_row_minimum(_touch_groups)
+	var bottom := vp.y - safe.w - 166.0
+	# HBox minimum size can lag a visibility change by a frame. Position from
+	# visible child minima so stale parent bounds cannot push buttons off-screen.
+	_touch_actions.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_touch_actions.position = Vector2(vp.x - safe.z - 12.0 - actions.x, bottom - actions.y)
+	_touch_actions.size = actions
+	_touch_groups.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_touch_groups.position = Vector2(safe.x + 12.0, bottom - groups.y)
+	_touch_groups.size = groups
 
 
 ## 托管「当前选中的英雄」：选 1 个=单托管；框选/编队多个=整队托管。（PC 热键 T，移动端「托管」按钮）
@@ -676,7 +752,7 @@ func _toggle_all_auto() -> void:
 
 
 ## 右缘常驻技能轨（仅触屏）：每个在场英雄一行，主动与被动技能全部显示。
-## 主动免选英雄即可直接点放；纯被动仅展示状态/说明，不接受施放或学习操作。
+## 主动免选英雄即可直接点放；纯被动不能施放，但独立「+」热区仍可升级。
 func _build_skill_rail() -> void:
 	_skill_rail = VBoxContainer.new()
 	_skill_rail.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
@@ -689,43 +765,60 @@ func _build_skill_rail() -> void:
 
 
 ## 技能轨刷新：英雄集合或技能槽数量变化时重排。
+func _hero_roster_slots() -> Array:
+	if battle == null:
+		return []
+	if battle.has_method("hero_roster_slots"):
+		return battle.call("hero_roster_slots")
+	var out: Array = []
+	for h in battle.liang_heroes():
+		out.append({"key": h.key, "hero": h, "name": h.display_name, "dead": false, "hotkey": ""})
+	return out
+
+
 func _refresh_skill_rail() -> void:
 	if _skill_rail == null or battle == null:
 		return
-	var heroes: Array = battle.liang_heroes()
+	var heroes: Array = _hero_roster_slots()
 	var sig: Array = []
-	for h in heroes:
-		sig.append(h.get_instance_id())
-		sig.append(h.slot_count())
+	for entry in heroes:
+		var h = entry.get("hero")
+		sig.append(entry.get("key", ""))
+		sig.append(h.get_instance_id() if is_instance_valid(h) else 0)
+		sig.append(h.slot_count() if is_instance_valid(h) else 4)
 	if sig == _skill_rail_keys:
 		return
 	_skill_rail_keys = sig
 	for c in _skill_rail.get_children():
+		_skill_rail.remove_child(c)
 		c.queue_free()
-	for h in heroes:
+	for entry in heroes:
+		var h = entry.get("hero")
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 4)
 		row.alignment = BoxContainer.ALIGNMENT_END
 		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var av := TextureRect.new()
+		var av := HeroChip.new()
+		av.hud = self
+		av.hero = h if is_instance_valid(h) else null
+		av.roster_key = String(entry.get("key", ""))
+		av.roster_hotkey = String(entry.get("hotkey", ""))
 		av.custom_minimum_size = Vector2(56, 56)
-		av.expand_mode = TextureRect.EXPAND_IGNORE_SIZE   # 否则 TextureRect 会撑到原图尺寸（巨幅头像）
-		av.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		av.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		av.texture = Art.avatar_texture(h.key, h.art_variant)
-		av.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(av)
-		var any := false
-		for i in range(h.slot_count()):
+		var ids: Array = Defs.UNITS.get(String(entry.get("key", "")), {}).get("abilities", [])
+		var count: int = h.slot_count() if is_instance_valid(h) else ids.size()
+		for i in range(count):
 			var b := HeroSlotButton.new()
 			b.hud = self
-			b.hero = h
+			b.hero = h if is_instance_valid(h) else null
+			b.roster_ability_id = String(ids[i]) if i < ids.size() else ""
 			b.slot = i
+			b.hotkey = ["Q", "W", "E", "R"][i] if i < 4 else ""
 			b.compact = true
-			b.display_only = bool(h.ability_slots[i]["passive"]) and not h.slot_has_active(i)
+			b.display_only = not is_instance_valid(h) or (bool(h.ability_slots[i]["passive"]) and not h.slot_has_active(i))
 			row.add_child(b)
-			any = true
-		if any:
+		if count > 0:
 			_skill_rail.add_child(row)
 		else:
 			row.queue_free()
@@ -734,13 +827,16 @@ func _refresh_skill_rail() -> void:
 	call_deferred("_layout_skill_rail")
 
 
-## 技能轨需要避让的右侧浮层。只有实际可见的控件才参与，避免三英雄等常规场景无故左移。
+## 技能轨右侧保留区的遮挡审计；只有实际可见的控件才参与。
 func _skill_rail_visible_blockers() -> Array:
 	var out: Array = []
 	var candidates := [
 		{"name": "info_panel", "control": _info_panel},
 		{"name": "toasts", "control": msg_box},
 		{"name": "touch_actions", "control": _touch_actions},
+		{"name": "menu", "control": _menu_btn},
+		{"name": "top_status", "control": top_label},
+		{"name": "control_help", "control": _control_help_panel},
 		{"name": "inventory_popup", "control": _inventory_popup},
 	]
 	for entry in candidates:
@@ -750,32 +846,35 @@ func _skill_rail_visible_blockers() -> Array:
 	return out
 
 
-## 右上技能轨动态避让：默认贴右；英雄较多且纵向碰到信息/消息/操作区时整体向左。
-## 不缩小按钮，保证手机和平板上的点按面积与被动技能可读性。
+## 技能轨拥有固定右侧区域。消息和物品浮层避让它，不能反过来把技能推入战场。
 func _layout_skill_rail() -> void:
 	if not touch_ui or _skill_rail == null or not is_instance_valid(_skill_rail):
 		return
 	var vp := get_viewport().get_visible_rect().size
 	var safe := _logical_safe_insets()
-	var rail_size := _skill_rail.get_combined_minimum_size()
-	rail_size.x = maxf(rail_size.x, _skill_rail.size.x)
-	rail_size.y = maxf(rail_size.y, _skill_rail.size.y)
 	var top := 70.0 + safe.y
-	var rail_right := vp.x - safe.z - 10.0
-	_skill_rail.offset_top = top
-	if rail_size.x <= 0.0 or rail_size.y <= 0.0:
-		_skill_rail.offset_right = rail_right - vp.x
-		return
-	var rail_rect := Rect2(Vector2(rail_right - rail_size.x, top), rail_size)
-	for entry in _skill_rail_visible_blockers():
-		var blocker := (entry["control"] as Control).get_global_rect()
-		if rail_rect.grow(SKILL_RAIL_AVOID_GAP).intersects(blocker):
-			rail_right = minf(rail_right, blocker.position.x - SKILL_RAIL_AVOID_GAP)
-			rail_rect.position.x = rail_right - rail_size.x
-	# 极窄画布宁可保留安全区内的点按区域；回归契约会报告仍无法消除的交叉。
-	var min_right := safe.x + rail_size.x + SKILL_RAIL_AVOID_GAP
-	rail_right = maxf(min_right, rail_right)
-	_skill_rail.offset_right = rail_right - vp.x
+	if _menu_btn != null:
+		top = maxf(top, _menu_btn.get_global_rect().end.y + SKILL_RAIL_AVOID_GAP)
+	var bottom := vp.y - safe.w - 166.0 - 72.0 - SKILL_RAIL_AVOID_GAP
+	var rows := maxi(6, _skill_rail.get_child_count())
+	var cell_h := clampf(floorf((bottom - top - float(rows - 1) * 4.0) / float(rows)), 48.0, 78.0)
+	_skill_rail_cell = Vector2(maxf(58.0, cell_h), cell_h)
+	for row in _skill_rail.get_children():
+		for child in row.get_children():
+			child.custom_minimum_size = _skill_rail_cell if child is HeroSlotButton else Vector2(cell_h - 4.0, cell_h - 4.0)
+	var rail_size := Vector2((cell_h - 4.0) + _skill_rail_cell.x * 4.0 + 16.0,
+		float(_skill_rail.get_child_count()) * cell_h + maxf(0.0, float(_skill_rail.get_child_count() - 1) * 4.0))
+	_skill_rail.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_skill_rail.position = Vector2(vp.x - safe.z - 10.0 - rail_size.x, top)
+	_skill_rail.size = rail_size
+
+
+func _touch_float_right() -> float:
+	var vp := get_viewport().get_visible_rect().size
+	var right := vp.x - _logical_safe_insets().z - 12.0
+	if touch_ui and is_instance_valid(_skill_rail) and _skill_rail.visible and _skill_rail.get_child_count() > 0:
+		right = minf(right, _skill_rail.position.x - SKILL_RAIL_AVOID_GAP)
+	return right
 
 
 ## 视觉回归契约：技能轨必须在安全区内，且与当前所有右侧浮层保持避让间距。
@@ -796,14 +895,18 @@ func _skill_rail_contract() -> Dictionary:
 	if _skill_rail == null or battle == null:
 		return {"all_slots": false, "passives_read_only": false, "expected": 0, "actual": 0}
 	var expected := 0
-	for h in battle.liang_heroes():
-		expected += h.slot_count()
+	for entry in _hero_roster_slots():
+		var h = entry.get("hero")
+		expected += h.slot_count() if is_instance_valid(h) else Defs.UNITS.get(String(entry.get("key", "")), {}).get("abilities", []).size()
 	var actual := 0
 	var passives_read_only := true
 	for row in _skill_rail.get_children():
 		for child in row.get_children():
 			if child is HeroSlotButton:
 				actual += 1
+				if not is_instance_valid(child.hero):
+					passives_read_only = passives_read_only and child.display_only
+					continue
 				var pure_passive: bool = bool(child.hero.ability_slots[child.slot]["passive"]) \
 					and not child.hero.slot_has_active(child.slot)
 				passives_read_only = passives_read_only and child.display_only == pure_passive
@@ -834,20 +937,24 @@ func _build_hero_bar() -> void:
 func _refresh_hero_bar() -> void:
 	if _hero_bar == null or battle == null:
 		return
-	var heroes: Array = battle.liang_heroes()
+	var heroes: Array = _hero_roster_slots()
 	var keys: Array = []
-	for h in heroes:
-		keys.append(h.get_instance_id())
+	for entry in heroes:
+		var h = entry.get("hero")
+		keys.append([entry.get("key", ""), h.get_instance_id() if is_instance_valid(h) else 0])
 	if keys == _hero_keys:
 		return
 	_hero_keys = keys
 	for c in _hero_bar.get_children():
+		_hero_bar.remove_child(c)
 		c.queue_free()
-	for h in heroes:
+	for entry in heroes:
 		var chip := HeroChip.new()
 		chip.hud = self
-		chip.hero = h
-		chip.show_combat_stats = bool(battle.track_hero_combat_stats)
+		chip.hero = entry.get("hero") if is_instance_valid(entry.get("hero")) else null
+		chip.roster_key = String(entry.get("key", ""))
+		chip.roster_hotkey = String(entry.get("hotkey", ""))
+		chip.show_combat_stats = bool(battle.track_hero_combat_stats) and _compact_combat_stats
 		_hero_bar.add_child(chip)
 	_layout_hero_bar()
 
@@ -857,6 +964,7 @@ func _refresh_hero_bar() -> void:
 func _layout_hero_bar() -> void:
 	if _hero_bar == null:
 		return
+	_hero_bar.visible = not touch_ui or _compact_combat_stats
 	var n := _hero_bar.get_child_count()
 	if n == 0:
 		return
@@ -1031,6 +1139,8 @@ func _position_tip() -> void:
 	var safe := _logical_safe_insets()
 	var x := clampf(_tip_anchor.position.x + _tip_anchor.size.x * 0.5 - sz.x * 0.5,
 		8.0 + safe.x, maxf(8.0 + safe.x, vp.x - safe.z - sz.x - 8.0))
+	if touch_ui and _skill_rail != null:
+		x = maxf(safe.x + 8.0, minf(x, _touch_float_right() - sz.x))
 	var y := _tip_anchor.position.y - sz.y - 8.0
 	if y < 8.0 + safe.y:
 		y = _tip_anchor.end.y + 8.0
@@ -1274,6 +1384,16 @@ func _build_bottom_panel() -> void:
 		_inventory_popup_open = not _inventory_popup_open
 		_layout_inventory())
 	_inventory_dock.add_child(_inventory_toggle)
+	_combat_stats_toggle = CheckButton.new()
+	Localize.bind_text(_combat_stats_toggle, "战绩")
+	_combat_stats_toggle.focus_mode = Control.FOCUS_NONE
+	_combat_stats_toggle.add_theme_font_size_override("font_size", 14)
+	_combat_stats_toggle.toggled.connect(func(on: bool) -> void:
+		_compact_combat_stats = on
+		_hero_keys.clear()
+		_refresh_hero_bar()
+		_layout_hero_bar())
+	_info_dock.add_child(_combat_stats_toggle)
 
 	# 操作提示不再常驻底栏；按信息抽屉里的开关显示为右下纯文字，避免挤占命令区。
 	_control_help_panel = PanelContainer.new()
@@ -1374,6 +1494,8 @@ func _layout_inventory() -> void:
 	var has_hero := _inventory_hero != null and is_instance_valid(_inventory_hero) \
 		and _inventory_hero.inventory != null
 	_inventory_dock.visible = has_hero
+	if _combat_stats_toggle != null:
+		_combat_stats_toggle.visible = battle != null and bool(battle.track_hero_combat_stats)
 	var narrow := touch_ui or get_viewport().get_visible_rect().size.x < 1400.0
 	_inventory_dock.custom_minimum_size.x = 92.0 if narrow else 304.0
 	_inventory_title.visible = has_hero and not narrow
@@ -1385,6 +1507,7 @@ func _layout_inventory() -> void:
 	Localize.bind_render(_inventory_toggle, func() -> String: return (Localize.text("▾ 收起") if _inventory_popup_open else Localize.text("▦ 物品")))
 	if not _inventory_popup.visible:
 		_layout_skill_rail()
+		_layout_info_panel()
 		return
 	_inventory_popup.reset_size()
 	var vp := get_viewport().get_visible_rect().size
@@ -1399,9 +1522,13 @@ func _layout_inventory() -> void:
 		var action_rect := _touch_actions.get_global_rect()
 		y = minf(y, action_rect.position.y - popup_size.y - 8.0)
 		y = maxf(8.0 + safe.y, y)
+	if touch_ui:
+		_layout_skill_rail()
+		x = maxf(safe.x + 8.0, _touch_float_right() - popup_size.x)
 	_inventory_popup.position = Vector2(x, y)
 	_inventory_popup.size = popup_size
 	_layout_skill_rail()
+	_layout_info_panel()
 
 
 func _item_tip_data(hero: Unit, slot: int) -> Dictionary:
@@ -1626,6 +1753,12 @@ func _layout_control_help_panel() -> void:
 	var right_gap := 8.0 + safe.z
 	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0) + safe.w
 	var width := 420.0
+	if touch_ui:
+		var float_right := _touch_float_right()
+		if _inventory_popup != null and _inventory_popup.visible:
+			float_right = minf(float_right, _inventory_popup.position.x - SKILL_RAIL_AVOID_GAP)
+		right_gap = get_viewport().get_visible_rect().size.x - float_right
+		width = minf(width, maxf(220.0, float_right - safe.x - 12.0))
 	# 固定贴右、贴近底栏；消息和展开信息由 _layout_info_panel() 向上避让它。
 	var height := maxf(118.0, _control_help_panel.get_combined_minimum_size().y)
 	_control_help_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -1647,6 +1780,13 @@ func _layout_info_panel() -> void:
 	var height := 276.0
 	var vp := get_viewport().get_visible_rect().size
 	var help_lift := 0.0
+	if touch_ui:
+		_layout_skill_rail()
+		var float_right := _touch_float_right()
+		if _inventory_popup != null and _inventory_popup.visible:
+			float_right = minf(float_right, _inventory_popup.position.x - SKILL_RAIL_AVOID_GAP)
+		right_gap = vp.x - float_right
+		width = minf(width, maxf(220.0, float_right - safe.x - 12.0))
 	if _control_help_panel != null and _control_help_panel.visible:
 		help_lift = maxf(118.0, _control_help_panel.get_combined_minimum_size().y) + 8.0
 	var panel_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - help_lift - height),
@@ -1911,12 +2051,9 @@ func update_selection_panel(sel: Array) -> void:
 
 
 ## 无选中时把底部指挥栏收成矮条（小地图+提示），选中后恢复完整高度。
-## 触屏布局高度写死为 166，收起会打断 chips/操作栏，故仅桌面生效。
+## 触屏始终展开；两种模式走同一恢复路径，避免沿用桌面初始化时的隐藏状态。
 func _apply_bottom_collapse() -> void:
 	if _bottom_panel == null or minimap == null:
-		return
-	if touch_ui:
-		RTSCamera.PANEL_H = RTSCamera.PANEL_H_FULL
 		return
 	var show_detail := false
 	for u in _sel_ref:
@@ -1926,7 +2063,7 @@ func _apply_bottom_collapse() -> void:
 	if not show_detail and battle != null and battle._inspect_unit != null \
 			and is_instance_valid(battle._inspect_unit) and battle._inspect_unit.hp > 0.0:
 		show_detail = true
-	var collapsed := not show_detail
+	var collapsed := not touch_ui and not show_detail
 	_bottom_collapsed = collapsed
 	var h := RTSCamera.PANEL_H_COLLAPSED if collapsed else RTSCamera.PANEL_H_FULL
 	RTSCamera.PANEL_H = h
@@ -1962,7 +2099,7 @@ func _rebuild_command_card() -> void:
 	var eco: bool = battle != null and battle.economy
 	var sig: Array
 	if au != null and au.is_hero and au.slot_count() > 0:
-		sig = ["hero", au.get_instance_id(), au.melee_mode]   # 切刀/弓 → 重建命令卡更新按钮态
+		sig = ["hero", au.get_instance_id(), au.melee_mode, touch_ui]   # 触屏由右轨统一施法/升级
 	elif au != null and au.is_worker and eco:
 		sig = ["build", battle._worker_cat]   # 分类页切换 → 重建命令卡
 	elif au != null and au.is_building and not au.is_constructing and (au.setup_def.has("produces") or au.setup_def.has("researches")) and eco:
@@ -1988,7 +2125,7 @@ func _rebuild_command_card() -> void:
 		return
 	if au.is_hero and au.slot_count() > 0:
 		var hotkeys := Settings.command_key_labels()
-		for i in range(au.slot_count()):
+		for i in range(0 if touch_ui else au.slot_count()):
 			var b := HeroSlotButton.new()
 			b.hud = self
 			b.hero = au
@@ -2234,7 +2371,7 @@ func _refresh_panel() -> void:
 		_info_stats.text = Localize.format_text("攻 %d  防 %d  生命 %d  ｜ 经验 %d/%d  技能点 %d  ｜ %s", [
 			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.max_hp), int(prim.hero_xp), int(prim.xp_to_next()), prim.skill_points, _stance_tag(prim)])
 	elif prim.is_worker:
-		_info_stats.text = Localize.format_text("攻 %d    防 %d    射程 %d    移速 %d", [int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed)])
+		_info_stats.text = _worker_status_text(prim)
 	else:
 		_info_stats.text = Localize.format_text("攻 %d    防 %d    射程 %d    移速 %d    ｜ %s", [
 			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)])
@@ -2243,6 +2380,37 @@ func _refresh_panel() -> void:
 ## 有效防御值（含双戒刀削甲 _def_down）；每点防约减 5% 普攻伤害。
 func _eff_def(u) -> int:
 	return int(round(maxf(0.0, u.defense - u._def_down)))
+
+
+func _worker_status_text(u: Unit) -> String:
+	var job := Localize.text("闲置")
+	match u._state:
+		Unit.ST_MOVE: job = Localize.text("移动中")
+		Unit.ST_AMOVE, Unit.ST_CHASE: job = Localize.text("战斗中")
+		Unit.ST_GATHER: job = Localize.text("采集中")
+		Unit.ST_RETURN: job = Localize.text("运回资源")
+		Unit.ST_BUILD: job = Localize.text("建造中")
+		Unit.ST_REPAIR: job = Localize.text("修理中")
+		Unit.ST_GARRISON: job = Localize.text("进驻中")
+	var kind := Localize.text("金") if u._carry_kind == "gold" else Localize.text("木")
+	var carry := Localize.format_text("携带 %s %d/%d", [kind, int(u._carry_amt), int(Unit.GATHER_CAP)]) if u._carry_amt > 0.0 else Localize.text("未携带资源")
+	return "%s · %s" % [job, carry]
+
+
+func _hero_skill_state(hero: Unit, slot: int) -> Dictionary:
+	if battle == null or not is_instance_valid(hero):
+		return {"state": "dead", "label": Localize.text("阵亡")}
+	if battle.has_method("hero_command_state"):
+		return battle.call("hero_command_state", hero, slot)
+	if hero._stun_t > 0.0:
+		return {"state": "controlled", "label": Localize.text("眩晕")}
+	if hero._silence_t > 0.0:
+		return {"state": "controlled", "label": Localize.text("沉默")}
+	if battle.is_cast_pending(hero, slot):
+		return {"state": "casting", "label": Localize.text("施法中")}
+	if battle._ability_caster == hero and battle._ability_slot == slot and battle._ability_armed != "":
+		return {"state": "aiming", "label": Localize.text("瞄准中")}
+	return {"state": "ready", "label": ""}
 
 
 func _stance_tag(u) -> String:
@@ -2846,7 +3014,8 @@ class Minimap extends Control:
 		var minp := Vector2(INF, INF)
 		var maxp := Vector2(-INF, -INF)
 		for corner in [Vector2(-0.5, -0.5), Vector2(0.5, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5), Vector2(-0.5, -0.5)]:
-			var sp: Vector2 = cam.position + corner * vp
+			var center: Vector2 = cam.call("view_center") if cam.has_method("view_center") else cam.get_screen_center_position()
+			var sp: Vector2 = center + corner * vp
 			var mp: Vector2 = battle.to_logic(sp) / ws * size
 			minp = minp.min(mp)
 			maxp = maxp.max(mp)
@@ -2884,6 +3053,8 @@ class Minimap extends Control:
 			jump = true
 		if jump:
 			battle.camera.position = battle.to_screen(event.position / size * _ws())
+			if battle.camera.has_method("clamp_to_limits"):
+				battle.camera.clamp_to_limits()
 			accept_event()
 
 
@@ -3007,6 +3178,13 @@ class CmdButton extends Control:
 	var _press_pos := Vector2.ZERO   # 触屏：按下位置（判定是否「拖出按钮」）
 	var _aiming := false             # 触屏：建造/陷阱按下即 arm，拖动选址、松手落地
 
+	func _blocked_reason() -> String:
+		if String(spec.get("kind", "")) != "train" or hud == null or hud.battle == null:
+			return ""
+		if hud.battle.has_method("train_block_reason"):
+			return String(hud.battle.call("train_block_reason", spec.get("bld"), String(spec.get("key", ""))))
+		return String(spec.get("blocked", ""))
+
 	func _init() -> void:
 		# 经典RTS式紧凑命令图标：方形图标 + 单位/建筑名 + 花费。详细说明走「悬浮说明卡」，省横向空间。
 		custom_minimum_size = Vector2(76, 88)
@@ -3046,6 +3224,9 @@ class CmdButton extends Control:
 			foot = Localize.format_text("花费　金 %d　木 %d", [cg, cw])
 		# 点将悬浮卡：训练英雄时附上该英雄 4 技能速览（名字·kind·一句说明），点将前先看清 kit
 		if kind == "train":
+			var blocked := _blocked_reason()
+			if blocked != "":
+				foot += ("\n" if foot != "" else "") + Localize.text(blocked)
 			var kit := _train_kit_summary(String(spec.get("key", "")))
 			if kit != "":
 				sub = (sub + "\n" + kit) if sub != "" else kit
@@ -3116,6 +3297,8 @@ class CmdButton extends Control:
 		var cg := int(spec.get("cost_g", 0))
 		var cw := int(spec.get("cost_w", 0))
 		var aff: bool = b != null and b.can_afford(cg, cw)
+		var blocked := _blocked_reason()
+		aff = aff and blocked == ""
 		var kind := String(spec.get("kind", "build"))
 		var key := String(spec.get("key", ""))
 		var accent := Color(0.55, 0.42, 0.22)
@@ -3223,6 +3406,8 @@ class CmdButton extends Control:
 				info = cb.production_wait_label()+Localize.text("·点撤") if cb.production_blocked else Localize.format_text("训练中 剩%ds·点撤", int(ceil(cb._train_t)))
 			else:
 				info = Localize.text("排队·点撤单")
+		if blocked != "":
+			info = Localize.text(blocked)
 		# 撤单图标：右上角红 × 角标，提示「点我取消」
 		if kind == "cancel_train":
 			var bdg := Rect2(ir.position.x + ir.size.x - 17, ir.position.y, 17, 17)
@@ -3336,7 +3521,8 @@ class HeroSlotButton extends Control:
 	var slot := 0
 	var hotkey := ""
 	var compact := false      # 右侧技能轨用紧凑尺寸
-	var display_only := false # 移动端技能轨中的纯被动：显示但不可施放/学习
+	var display_only := false # 纯被动本体只读；独立「+」热区仍允许学习
+	var roster_ability_id := "" # 阵亡固定槽的只读技能图标
 	var _press_ms := 0
 	var _held := false
 	var _tip_shown := false
@@ -3410,7 +3596,7 @@ class HeroSlotButton extends Control:
 		if is_instance_valid(hero) and slot < hero.slot_count():
 			queue_redraw()
 		mouse_default_cursor_shape = Control.CURSOR_ARROW if display_only else Control.CURSOR_POINTING_HAND
-		custom_minimum_size = (Vector2(78, 78) if compact else Vector2(88, 104)) if (hud != null and hud.touch_ui) else Vector2(76, 88)   # 六英雄技能轨压进战场可用高度；主图仍保留 50px
+		custom_minimum_size = (hud._skill_rail_cell if compact else Vector2(88, 104)) if (hud != null and hud.touch_ui) else Vector2(76, 88)
 		# 触屏：长按 ≥400ms 弹技能说明（替代失效的鼠标 hover；松手不施放）。瞄准中不弹说明。
 		if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
 			_tip_shown = true
@@ -3455,7 +3641,10 @@ class HeroSlotButton extends Control:
 			hud.hide_skill_tip(self)
 
 	func _draw() -> void:
-		if hud == null or hud.battle == null or not is_instance_valid(hero) or slot >= hero.slot_count():
+		if not is_instance_valid(hero):
+			_draw_roster_empty()
+			return
+		if hud == null or hud.battle == null or slot >= hero.slot_count():
 			return
 		var f := ThemeDB.fallback_font
 		var s: Dictionary = hero.ability_slots[slot]
@@ -3471,13 +3660,7 @@ class HeroSlotButton extends Control:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
 		# 方形徽记：技能色块底 + 矢量图标（无图标的技能回退名称首字）
 		var big: bool = hud != null and hud.touch_ui
-		var ir: Rect2
-		if compact:
-			ir = Rect2(14, 4, 50, 50) if big else Rect2(10, 6, 58, 58)
-		elif big:
-			ir = Rect2(14, 6, 60, 60)
-		else:
-			ir = Rect2(12, 5, 52, 52)
+		var ir := _icon_rect()
 		var ds := ir.size.x / 52.0
 		var ability_id := String(s["id"])
 		var art_tex := _ability_art_icon(ability_id)
@@ -3518,6 +3701,9 @@ class HeroSlotButton extends Control:
 		var castable: bool = (not passive) or hero.slot_has_active(slot)
 		var cd_left := float(s["cd_t"])
 		var pending: bool = hud.battle.is_cast_pending(hero, slot)
+		var command_state: Dictionary = hud._hero_skill_state(hero, slot)
+		var state_name := String(command_state.get("state", "ready"))
+		var state_label := Localize.text(String(command_state.get("label", "")))
 		var charge_empty := max_charges > 0 and charges <= 0
 		# 冷却遮罩 / 施法抬手 / 未学暗罩（叠在图标上）。
 		# slot_ready 还会因抬手、沉默、眩晕而 false，不能拿它当「正在冷却」，否则 cd_t=0 会闪出数字 0。
@@ -3528,9 +3714,15 @@ class HeroSlotButton extends Control:
 				draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.65), center_text, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int((16 if pending else 24) * ds), Color(1, 1, 1, 0.95))
 		elif rank == 0 and not passive:
 			draw_rect(ir, Color(0, 0, 0, 0.36))
+		if castable and learned and state_name == "controlled":
+			draw_rect(ir, Color(0.16, 0.05, 0.03, 0.66))
+			draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.64), state_label, HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, int(14 * ds), Color("ffb0a0"))
+		elif state_name in ["aiming", "approaching"]:
+			draw_rect(ir, Color("ffe292"), false, 2.5)
 		# 名称（y 随按钮高度）
-		var nm_fs: int = 12 if compact and big else (14 if compact else (15 if big else 13))
-		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 19), nm, size.x - 6, nm_fs, Color("ffd866") if learned else Color(0.6, 0.55, 0.45))
+		var nm_fs: int = 10 if compact and big else (14 if compact else (15 if big else 13))
+		var name_y := size.y - (14.0 if compact and big else 19.0)
+		UITheme.draw_compact_label(self, f, Vector2(3, name_y), nm, size.x - 6, nm_fs, Color("ffd866") if learned else Color(0.6, 0.55, 0.45))
 		# 底行状态：未冷却时显示该技能（当前等级）的冷却秒数——让玩家随时看到「CD 多少」
 		var st := ""
 		if castable and learned and pending:
@@ -3542,12 +3734,14 @@ class HeroSlotButton extends Control:
 		elif castable and learned and cd_left > 0.0:
 			st = Localize.format_text("冷却 %ds", int(ceil(cd_left)))
 		elif castable and learned:
-			st = "CD %ds " % int(round(hero.slot_cd(slot))) + hotkey   # 就绪：直接标出冷却时长
+			st = "CD %ds" % int(round(hero.slot_cd(slot))) + (" " + hotkey if not big else "")
 		elif passive:
 			st = Localize.text("常驻") if learned else Localize.text("被动·未学")
 		elif hero.can_learn(slot):
 			st = Localize.text("可学 +")
-		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 4), st, size.x - 6, (10 if compact else 13) if big else 11, Color(0.82, 0.86, 0.72))
+		if castable and learned and state_name in ["aiming", "approaching", "casting", "controlled"]:
+			st = state_label
+		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 3), st, size.x - 6, (9 if compact else 13) if big else 11, Color(0.82, 0.86, 0.72))
 		var _touch: bool = big
 		# 热键键帽（触屏隐藏，手机无键盘）
 		if hotkey != "" and not passive and not _touch:
@@ -3556,14 +3750,30 @@ class HeroSlotButton extends Control:
 			draw_rect(kr, Color(0.75, 0.62, 0.34), false, 1.0)
 			draw_string(f, Vector2(size.x - 14, 15), hotkey, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("ffe9a8"))
 		# 学习按钮 +（图标右下角）；触屏放大到易点
-		if hero.can_learn(slot) and not display_only:
-			var pc := Vector2(ir.end.x - 9.0, ir.end.y - 9.0)
-			var pr := (11.0 if compact else 18.0) if _touch else 9.0
+		if hero.can_learn(slot):
+			var pc := _learn_plus_center()
+			var pr := _learn_plus_radius()
 			draw_circle(pc, pr, Color(0.18, 0.6, 0.24))
 			draw_circle(pc, pr, Color(0.85, 0.95, 0.85), false, 1.5)
 			var pf := (18 if compact else 28) if _touch else 18
 			draw_string(f, Vector2(pc.x - 11, pc.y + pf * 0.34), "+", HORIZONTAL_ALIGNMENT_CENTER, 24, pf, Color(0.95, 1, 0.95))
 		draw_rect(Rect2(Vector2.ZERO, size), col if learned else Color(0.35, 0.3, 0.22), false, 1.5)
+
+	func _draw_roster_empty() -> void:
+		var f := ThemeDB.fallback_font
+		draw_rect(Rect2(Vector2.ZERO, size), Color(0.08, 0.07, 0.05, 0.92))
+		var tex := _ability_art_icon(roster_ability_id)
+		var ad: Dictionary = hud.battle.ability_def(roster_ability_id) if hud != null and hud.battle != null else {}
+		var nm := Localize.text(String(ad.get("name", "")))
+		if tex != null:
+			draw_texture_rect(tex, _icon_rect(), false, Color(0.35, 0.35, 0.35))
+		else:
+			var ir := _icon_rect()
+			draw_string(f, Vector2(ir.position.x, ir.position.y + ir.size.y * 0.72), nm.substr(0, 1), HORIZONTAL_ALIGNMENT_CENTER, ir.size.x, 20, Color("968a78"))
+		if hud == null or not hud.touch_ui:
+			draw_string(f, Vector2(3, 13), hotkey, HORIZONTAL_ALIGNMENT_LEFT, size.x - 6, 11, Color("b5a78b"))
+		UITheme.draw_compact_label(self, f, Vector2(3, size.y - 14), nm, size.x - 6, 10, Color("968a78"))
+		draw_string(f, Vector2(0, size.y - 3), Localize.text("阵亡"), HORIZONTAL_ALIGNMENT_CENTER, size.x, 9, Color("968a78"))
 
 	func _ability_art_icon(ability_id: String) -> Texture2D:
 		if ability_id == _art_icon_id:
@@ -3718,19 +3928,32 @@ class HeroSlotButton extends Control:
 		if sc != 1.0:
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
+	## 绘制、按下瞄准和松手加点共用几何，紧凑技能轨缩放后热区仍贴着「+」。
+	func _icon_rect() -> Rect2:
+		var touch: bool = hud != null and hud.touch_ui
+		if compact:
+			var side := minf(size.x - 8.0, size.y - 25.0)
+			return Rect2((size.x - side) * 0.5, 2, side, side) if touch else Rect2(10, 6, 58, 58)
+		return Rect2(14, 6, 60, 60) if touch else Rect2(12, 5, 52, 52)
+
+	func _learn_plus_center() -> Vector2:
+		return _icon_rect().end - Vector2(9.0, 9.0)
+
+	func _learn_plus_radius() -> float:
+		return (11.0 if compact else 18.0) if (hud != null and hud.touch_ui) else 9.0
+
+	func _is_learn_hit(pos: Vector2) -> bool:
+		var tolerance := 4.0 if (hud != null and hud.touch_ui) else 1.0
+		return pos.distance_to(_learn_plus_center()) <= _learn_plus_radius() + tolerance
+
 	func _execute(pos: Vector2) -> void:
 		if hud == null or hud.battle == null or not is_instance_valid(hero) or slot >= hero.slot_count():
 			return
-		if display_only:
-			return
-		# 学习「+」热区：精确匹配 _draw 里画的圆（圆心 ir.end-9，半径 9，留 1px 容差）。
-		# 用同一 ir 推导，避免热区无右/下界——否则点图标右下空白会误把「升级技能」当成施放，白扣技能点。
-		var ir := Rect2(14, 6, 60, 60) if (hud != null and hud.touch_ui) else Rect2(12, 5, 52, 52)
-		var plus_r: float = 22.0 if (hud != null and hud.touch_ui) else 10.0   # 触屏放大「+」热区，好点
-		var on_plus: bool = pos.distance_to(Vector2(ir.end.x - 9.0, ir.end.y - 9.0)) <= plus_r
-		if hero.can_learn(slot) and (on_plus or int(hero.ability_slots[slot]["rank"]) == 0):
+		if hero.can_learn(slot) and (_is_learn_hit(pos) or int(hero.ability_slots[slot]["rank"]) == 0):
+			if display_only and not _is_learn_hit(pos):
+				return
 			hud.battle.learn_slot(hero, slot)
-		elif (not bool(hero.ability_slots[slot]["passive"]) or hero.slot_has_active(slot)) and int(hero.ability_slots[slot]["rank"]) > 0:
+		elif not display_only and (not bool(hero.ability_slots[slot]["passive"]) or hero.slot_has_active(slot)) and int(hero.ability_slots[slot]["rank"]) > 0:
 			# cast_ability 会对抬手/冷却/空能量分别提示；快速二连不再静默丢掉第二次操作。
 			hud.battle.cast_ability(hero, slot, true)
 
@@ -3744,8 +3967,7 @@ class HeroSlotButton extends Control:
 			return false
 		if bool(s["passive"]) and not hero.slot_has_active(slot):
 			return false
-		var ir := Rect2(14, 6, 60, 60) if (hud != null and hud.touch_ui) else Rect2(12, 5, 52, 52)
-		if hero.can_learn(slot) and _press_pos.distance_to(Vector2(ir.end.x - 9.0, ir.end.y - 9.0)) <= 22.0:
+		if hero.can_learn(slot) and _is_learn_hit(_press_pos):
 			return false   # 按在「+」上 → 是学习，不是施放
 		var ad: Dictionary = hud.battle.ability_def(String(s["id"]))
 		if not bool(ad.get("targeted", false)):
@@ -3974,6 +4196,8 @@ class InventorySlotButton extends Control:
 class HeroChip extends Control:
 	var hud = null
 	var hero: Unit = null
+	var roster_key := ""
+	var roster_hotkey := ""
 	var show_combat_stats := false
 	var _redraw_accum := 0.0
 	var _last_drawn_art_variant := ""
@@ -4021,6 +4245,15 @@ class HeroChip extends Control:
 
 	func _draw() -> void:
 		if not is_instance_valid(hero):
+			var f := ThemeDB.fallback_font
+			var avatar_w := minf(size.x, size.y)
+			draw_rect(Rect2(Vector2.ZERO, size), Color(0.08, 0.07, 0.05, 0.96))
+			var tex := Art.avatar_texture(roster_key)
+			if tex != null:
+				draw_texture_rect(tex, Rect2(3, 3, avatar_w - 6, size.y - 15), false, Color(0.38, 0.38, 0.38))
+			draw_string(f, Vector2(0, size.y - 3), Localize.text("阵亡"), HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 12, UITheme.PAPER_MUTED)
+			if roster_hotkey != "" and (hud == null or not hud.touch_ui):
+				draw_string(f, Vector2(4, 14), roster_hotkey, HORIZONTAL_ALIGNMENT_LEFT, avatar_w - 8, 11, UITheme.PAPER)
 			return
 		var f := ThemeDB.fallback_font
 		var garr: bool = hero.garrisoned
@@ -4054,6 +4287,9 @@ class HeroChip extends Control:
 		var frac := clampf(hero.hp / hero.max_hp, 0.0, 1.0)
 		draw_rect(Rect2(3, size.y - 10, avatar_w - 6, 7), Color(0, 0, 0, 0.7))
 		draw_rect(Rect2(3, size.y - 10, (avatar_w - 6) * frac, 7), Color(0.3, 0.85, 0.3).lerp(Color(0.85, 0.2, 0.15), 1.0 - frac))
+		if roster_hotkey != "" and hud != null and not hud.touch_ui:
+			draw_rect(Rect2(3, 3, 25, 16), Color(0, 0, 0, 0.76))
+			draw_string(f, Vector2(5, 16), roster_hotkey, HORIZONTAL_ALIGNMENT_LEFT, 25, 11, UITheme.PAPER)
 		if show_combat_stats and hud != null and hud.battle != null:
 			var rec: Dictionary = hud.battle.hero_combat_stat(hero.key)
 			var stat_x := avatar_w + 4.0
@@ -4119,10 +4355,23 @@ class TouchChip extends Control:
 
 func _refresh_resource_values() -> void:
 	if battle != null and battle.economy and _res_bar.visible:
-		Localize.bind_render(_res_gold, func() -> String: return Localize.format_text("金 %d", battle.gold))
-		Localize.bind_render(_res_wood, func() -> String: return Localize.format_text("木 %d", battle.wood))
+		var workers := {"gold": 0, "wood": 0}
+		for u in battle.units:
+			if not is_instance_valid(u) or not u.is_worker or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0:
+				continue
+			if u._state in [Unit.ST_GATHER, Unit.ST_RETURN]:
+				var kind: String = u._gather_node.res_kind if is_instance_valid(u._gather_node) else u._carry_kind
+				if workers.has(kind):
+					workers[kind] += 1
+		Localize.bind_render(_res_gold, func() -> String: return Localize.format_text("金 %d · %d工", [battle.gold, workers.gold]))
+		Localize.bind_render(_res_wood, func() -> String: return Localize.format_text("木 %d · %d工", [battle.wood, workers.wood]))
 		var up: int = battle.used_pop()
-		Localize.bind_render(_res_pop, func() -> String: return Localize.format_text("人口 %d / %d", [up, battle.pop_cap]))
+		var pop := {"active": up, "queued": 0, "cap": battle.pop_cap}
+		if battle.has_method("population_summary"):
+			pop = battle.call("population_summary")
+		up = int(pop.active) + int(pop.queued)
+		Localize.bind_render(_res_pop, func() -> String: return Localize.format_text("人口 %d+%d / %d", [int(pop.active), int(pop.queued), int(pop.cap)]))
+		Localize.bind_render(_res_pop, func() -> String: return Localize.text("现役 + 排队 / 人口上限"), &"tooltip_text")
 		# 人口已满 → 标红提示（该造民居/聚义厅扩人口了）
 		_res_pop.add_theme_color_override("font_color",
 			UITheme.DANGER if up >= battle.pop_cap and battle.pop_cap > 0 else UITheme.PAPER_MUTED)

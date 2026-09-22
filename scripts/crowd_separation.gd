@@ -6,6 +6,7 @@ const ACTIVE := 1
 const MOVING := 2
 const GOLD_PHASING := 4
 const NAV_OPEN := 8  # Current position stays in open navigation during this synchronous solve.
+const HOLDING := 16
 
 static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: float) -> void:
 	var sources: Array[Unit] = []
@@ -51,6 +52,7 @@ static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: fl
 		var moving := u._state == Unit.ST_MOVE or u._state == Unit.ST_AMOVE or u._state == Unit.ST_CHASE
 		var phasing := u.is_worker and u._carry_kind == "gold" and (u._state == Unit.ST_GATHER or u._state == Unit.ST_RETURN)
 		flags[i] = (ACTIVE if u.story_outcome == "" else 0) | (MOVING if moving else 0) | (GOLD_PHASING if phasing else 0)
+		if u.is_holding_ground(): flags[i] |= HOLDING
 		var p := positions[i]
 		if (water_ready if profiles[i] == "water" else land_ready) and p.x >= 0 and p.y >= 0 and p.x < width and p.y < height:
 			var cell := Vector2i(p / float(GameMap.CELL))
@@ -85,6 +87,7 @@ static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: fl
 		var cells: Variant = profile_cells.get(profile)
 		if cells == null: continue
 		var moving := (flags[ai] & MOVING) != 0
+		var holding := (flags[ai] & HOLDING) != 0
 		var phasing := (flags[ai] & GOLD_PHASING) != 0
 		var radius := radii[ai]
 		var cx := int(floor(ap.x / cell_size))
@@ -103,9 +106,13 @@ static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: fl
 					if d2 >= min_d*min_d or d2 <= 0.0001: continue
 					var distance := sqrt(d2)
 					var b_moving := (flags[bi] & MOVING) != 0
+					var b_holding := (flags[bi] & HOLDING) != 0
 					var aw := 0.5
 					var bw := 0.5
-					if moving and not b_moving:
+					if holding != b_holding:
+						aw = Unit.HOLD_SEPARATION_SHARE if holding else 1.0 - Unit.HOLD_SEPARATION_SHARE
+						bw = 1.0 - aw
+					elif moving and not b_moving:
 						aw=0.85;bw=0.15
 					elif b_moving and not moving:
 						aw=0.15;bw=0.85
@@ -113,6 +120,10 @@ static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: fl
 					var overlap := min_d-distance
 					var next_a := ap+direction*overlap*aw
 					var next_b := bp-direction*overlap*bw
+					if holding and not b_holding:
+						next_b = Unit.separation_yield_position(sources[bi],bp,sources[ai],ap,next_b,overlap,map)
+					elif b_holding and not holding:
+						next_a = Unit.separation_yield_position(sources[ai],ap,sources[bi],bp,next_a,overlap,map)
 					# A segment contained in one open cell cannot cross a blocked edge.
 					# Reject nonfinite destinations before Rect2.has_point.
 					if a_open and next_a.is_finite() and a_nav.has_point(next_a):

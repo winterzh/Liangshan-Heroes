@@ -1,3 +1,53 @@
+## 2026-09-21 连续英雄功能键
+
+- `tools/hero_function_keys_qa.gd`：真实 F1～F8 输入、阵亡/空槽、头像键帽、镜头组合键与旧设置迁移回归，接入 RTS 总入口。
+- `qa/hero_hotkeys_20260921/`：本轮功能检查、旧失败夹具记录、语言保留与更新后 Mac 测试包交接。
+- `build/macos-test-20260921-hotkeys/`：最新 `TEST 0921-55089263` App/DMG，仅本机，不入 Git。
+- `assets/localization/zz_rts_refinement_20260920.json`：补齐旧 RTS 57 条翻译来源分片，保留既有译文，避免重建快捷键文案时丢失。
+
+## 2026-09-21 macOS 本地试玩
+
+- `tools/build_macos_test.py`：冻结生产白名单、仅副本隔离/禁更新/测试标记、macOS App 与 DMG、原始哈希收据。
+- `tools/macos_test_package_probe.gd`：实际 PCK 的原生宿主探针，明确区分宿主与导出 App；release App 不支持 `--script`。
+- `qa/macos_test_20260921/`：构建/原生入口/宿主检查收据、必要截图、已知问题与玩家改动清单。
+- `build/macos-test-20260921/`：本地 App/DMG/试玩说明，Git 忽略，不是发布目录。
+
+## 2026-09-20 RTS 操作、触屏布局与血瓶
+
+- [实现与边界](RTS_REFINEMENT_20260920.md)、[触屏矩阵](QA_RTS_TOUCH_HUD_20260920.md)。
+- `assets/ui/items/health_potion.svg`：首个生产物品的代码原生矢量图标。
+- `tools/run_rts_refinement_qa.py`：白名单冻结、独立 profile、功能回归及可选原生离屏截图。
+- `tools/rts_{foundation_regression,economy_rules,hero_items_regression,hud_snapshot}_qa.gd`：操作/经济/物品/内部 HUD 捕获验证。
+- `tools/rts_touch_layout_qa.gd`、`tools/rts_touch_visual_qa.gd/.tscn`：只读布局审计和原生尺寸状态矩阵。
+- `qa/rts_foundation_20260920/`：最终收据、回归日志、文案验证与代表截图；不含缓存、玩家存档或安装包。
+
+## 2026-09-20 Android 用户测试包
+
+- `build/android-test-20260920/`：本机用户测试 APK 与完整收据，Git 忽略，不是线上发布目录。
+- `qa/android_test_20260920/`：源码身份、仅副本测试标记、签名/元数据/资源校验、实际 APK 菜单探针与安装说明。
+
+## 2026-09-20 Steam 发布链与四语补丁说明
+
+- [发布说明](STEAM_UPDATE_20260920.md)：生产来源、玩家更新内容、上传与 default/公告状态。
+- `qa/steam_release_20260920/`：正式候选/原生 QA/实际 EXE 证据、服务器六文件核验、default 上线、四语稿及公开回读、确认受阻中间状态和最终发布收据。安装包及测试 profile 保留 checkout 外，不入库。
+
+## 2026-09-20 连环马内部恢复与 Windows 回归
+
+- `scripts/run_level4_unit_contract.gd`、`scripts/run_level4_world_factory.gd`：连环马安装内容、人物/编队和恢复工厂。
+- `tools/level4_world_restore_qa.gd`：八阶段夹具、独立保存与新进程继续；不计自然全关。
+- `tools/run_controls_update_qa.py`：私有冻结工程、249 项操作回归、可选连环马/祝家庄与诊断 EXE。
+- `qa/level4_world_restore_20260920/`：最终 524 项证据、原始失败、Windows 基线、目录隔离修复与有限截图目检。
+- [连环马接入说明](LIANHUANMA_WORLD_RESTORE_20260920.md)：接线、复现、覆盖和未闭合门槛。
+
+## 2026-09-18 操作与更新链路回归
+
+- `tools/{input,combat,campaign}_controls_regression_qa.gd`：私有项目中的输入、自然战斗 tick、任务/押俘/模式切换边界回归。
+- `tools/run_update_transport_qa.py`、`tools/update_transport_qa.gd`：真实 HTTP、签名、下载、重启挂载及异常包/跨底包拒绝测试，不发布。
+- `tools/update_release_policy_qa.py`：离线验证 Windows 排除、bootstrap 4、Android 完整基线策略与导出过滤。
+- `tools/verify_platform_exports.py`：白名单冻结、EXE/APK 诊断导出、实际包清单/签名/版本与宿主菜单加载检查。
+- `qa/controls_update_20260918/`：本轮修复说明、通过日志、更新与导出收据摘要、原生设备验证限制；不收录安装包、私钥或测试缓存。
+- `docs/ANDROID_RELEASE.md`、`docs/DESKTOP_RELEASE.md`：更新后的完整基线迁移与 Windows 停用策略。
+
 ## 2026-09-17 Steam 发布指南
 
 - [项目级 Steam 发布指南](STEAM_RELEASE_GUIDE.md)：App `5088120` / Windows Depot `5088121` 的候选、上传、`default` 上线、四语公告、回验、回滚和收据清单。

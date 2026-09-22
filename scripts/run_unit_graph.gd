@@ -10,6 +10,9 @@ const LEVEL3_SCHEMA := "level3_unit_graph_v1"
 const LEVEL1_SCHEMA := "level1_unit_graph_v1"
 const LEVEL6_SCHEMA := "level6_unit_graph_v1"
 const LEVEL2_SCHEMA := "level2_unit_graph_v1"
+const LEVEL4_SCHEMA := "level4_unit_graph_v1"
+const LIAN_CONTEXT := {"mode": "campaign", "level_id": "level4", "waves": 0}
+const Lian := preload("res://scripts/levels/level4_lianhuanma_rts.gd")
 const LEVEL7_SCHEMA := "level7_unit_graph_v1"
 const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
 const ZHU_CONTEXT := {"mode": "campaign", "level_id": "level3", "waves": 0}
@@ -63,12 +66,18 @@ func _configure_context(context: Dictionary) -> void:
 	if not _fields(context, ["mode", "level_id", "waves"]) or typeof(context.mode) != TYPE_STRING or typeof(context.level_id) != TYPE_STRING or typeof(context.waves) not in [TYPE_INT, TYPE_FLOAT]:
 		_scope_error = "GRAPH_CONTEXT_FIELDS"; return
 	if context.mode == "defense" and context.level_id == "" and context.waves == 30: return
-	if context.mode != "campaign" or context.waves != 0 or context.level_id not in ["level3", "level1", "level6", "level2", "level7"]:
+	if context.mode != "campaign" or context.waves != 0 or context.level_id not in ["level3", "level1", "level6", "level2", "level7", "level4"]:
 		_scope_error = "GRAPH_CONTEXT_UNSUPPORTED"; return
 	# Chapter roles may only be derived from this installed Level's checked record.
 	# No injected substitute factory/Unit/host/codec may weaken that contract.
 	if _unit_state_script != preload("res://scripts/run_unit_state.gd") or _identity_script != preload("res://scripts/run_graph_identity.gd") or _codec_script != preload("res://scripts/run_state_value_codec.gd") or _unit_script != preload("res://scripts/unit.gd") or _inventory_script != preload("res://scripts/hero_inventory.gd") or _battle_script != preload("res://scripts/battle.gd") or _map_script != preload("res://scripts/game_map.gd"):
 		_scope_error = "CHAPTER_INSTALLED_SCRIPTS_REQUIRED"; return
+	if context.level_id == "level4":
+		if CampaignScript.LEVELS.size() <= 3 or CampaignScript.LEVELS[3].id != "level4" or CampaignScript.LEVELS[3].script != (Lian as Script).resource_path:
+			_scope_error = "LEVEL4_INSTALLED_CATALOG_REQUIRED"; return
+		_graph_schema = LEVEL4_SCHEMA
+		_campaign_level_id = "level4"
+		return
 	if context.level_id == "level3":
 		var installed_level_script: Script = Zhu
 		if CampaignScript.LEVELS.size() <= 2 or CampaignScript.LEVELS[2].id != "level3" or CampaignScript.LEVELS[2].script != installed_level_script.resource_path:
@@ -112,7 +121,12 @@ func _select_factory(level_record: Variant, content_version: String, known: Dict
 	var checked: Dictionary = LevelState.new().validate(level_record, _campaign_level_id, content_version, known, next_id, external_tokens, mission_token)
 	if not checked.ok: return _bad("LEVEL_" + String(checked.code), String(checked.get("field", "")))
 	var refs: Dictionary = checked.value.references
-	if _graph_schema == LEVEL3_SCHEMA:
+	if _graph_schema == LEVEL4_SCHEMA:
+		var lian_roles: Dictionary = refs.duplicate(true)
+		for field in ["broken_count", "lhm_killed", "waves", "drill_complete"]:
+			lian_roles[field] = checked.value.values[field]
+		_factory = _unit_state_script.new(_codec_script, _unit_script, _inventory_script, LIAN_CONTEXT, lian_roles)
+	elif _graph_schema == LEVEL3_SCHEMA:
 		var roles := {"hu": refs.hu, "gate": refs.gate, "side_gate": refs.side_gate, "prisoners": refs.prisoners}
 		_factory = _unit_state_script.new(_codec_script, _unit_script, _inventory_script, ZHU_CONTEXT, roles)
 	elif _graph_schema == LEVEL6_SCHEMA:
@@ -248,7 +262,7 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 	var level_record: Variant = null
 	var mission_token := ""
 	var token_to_external: Dictionary = {}
-	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA]:
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA]:
 		if not _fields(chapter_boundary, ["mission_token", "deferred_drained"]) or typeof(chapter_boundary.mission_token) != TYPE_STRING or typeof(chapter_boundary.deferred_drained) != TYPE_BOOL or not chapter_boundary.deferred_drained:
 			return _bad("LEVEL_EXTERNAL_BOUNDARY_REQUIRED")
 		var external_to_token: Dictionary = {}
@@ -293,11 +307,11 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 		"root_order": root_order, "active_order": active_order, "records": records, "next_entity_id": str(battle.next_entity_id)}
 	# Capture must enforce the same full-graph membership as file validation.
 	# A held source with a missing live/captured role in Battle.units is not saved.
-	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA]:
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA]:
 		var verified: Dictionary = validate(snapshot, content_version, level_record, mission_token, token_to_external)
 		if not verified.ok: return _capture_failed(verified, identity, owns_identity)
 	var response := {"ok": true, "value": snapshot, "identity": identity, "complete_battle_restore": false}
-	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA]: response["level_record"] = level_record
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA]: response["level_record"] = level_record
 	return response
 
 func _level1_external_tokens(level: Variant) -> Dictionary:
@@ -386,7 +400,12 @@ func validate(snapshot: Variant, content_version: String, level_record: Variant 
 			identity.dispose()
 			return _bad("UNIT_" + String(result.get("code", "INVALID")), str(index) + ":" + String(result.get("field", "")))
 		states[record.entity_id] = result
-	if _graph_schema == LEVEL3_SCHEMA:
+	if _graph_schema == LEVEL4_SCHEMA:
+		var membership: Dictionary = _factory.validate_level4_membership(states, snapshot.active_order)
+		if not membership.ok:
+			identity.dispose()
+			return membership
+	elif _graph_schema == LEVEL3_SCHEMA:
 		var membership: Dictionary = _factory.validate_level3_membership(states, snapshot.active_order)
 		if not membership.ok:
 			identity.dispose()

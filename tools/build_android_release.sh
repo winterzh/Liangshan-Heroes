@@ -51,4 +51,4 @@ SIGNER_SHA256="$("$APKSIGNER" verify --print-certs "$APK" | awk -F': ' '/Signer 
 
 shasum -a 256 "$APK" "$BASE"
 ls -lh "$APK" "$BASE"
-echo "Android v$VERSION 完整包构建完成；该 PCK 是留档基线，不替换旧客户端使用的 1.4.0 补丁基线。"
+echo "Android v$VERSION 完整包构建完成；Bootstrap 4 需覆盖安装此包，后续补丁使用该完整包基线。"

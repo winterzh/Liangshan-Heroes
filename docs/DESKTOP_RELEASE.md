@@ -1,92 +1,67 @@
-# 三端完整包与差异更新
+# 完整包与内容更新
 
-从 `v1.6` 开始，Windows x86_64、macOS arm64 和 Android arm64 使用同一套签名内容更新协议，但每个平台拥有独立基线、补丁和 stable 清单，不允许串包。
+## 当前平台策略（2026-09-18）
 
-## 版本规则
-
-- `vX.X`：完整发包。GitHub Release 必须同时包含 EXE、DMG、APK。
-- `vX.X.X`：当前完整版发布线上的三端差异内容包，不创建新安装包。
-- 所有发布都要先提交、推送、创建 tag。脚本要求工作区完全干净（包括未跟踪文件）且 HEAD 精确等于 tag。
-
-`v1.8` 是当前完整基线，并保留了 v1.7 对导出程序更新器的修复。Windows/macOS 用户必须先安装 v1.8 完整包，之后才能正常接收 v1.8.x 差异 PCK。v1.8 桌面基线清单的 `patch` 为 `null`。
-
-## 平台通道
-
-| 平台 | 架构 | 完整包 | 清单 |
+| 平台 | 架构 | 完整包 | 应用内内容更新 |
 | --- | --- | --- | --- |
-| Android | arm64 | APK | `/liangshan/android/stable/manifest.json` |
-| Windows | x86_64 | EXE | `/liangshan/windows/stable/manifest.json` |
-| macOS | arm64 | DMG | `/liangshan/macos/stable/manifest.json` |
+| Windows | x86_64 | EXE | 暂停；安装新完整包或通过 Steam 更新 |
+| Android | arm64 | APK | 保留；下一次先安装 bootstrap 4 新完整包 |
+| macOS | arm64 | DMG | 保留；受保护变更需新完整包 |
 
-更新器先校验 RSA 签名，再校验平台、架构、大小和 SHA-256。PCK 保存到平台独立的 `user://` 目录，重启后在主场景和其他 Autoload 前优先装载。它不改写 EXE、APP 或 APK，也不会破坏原安装包签名。
+Windows 客户端在创建网络请求、读取更新缓存或挂载 PCK 之前即停用更新器；环境变量不能重新启用原生 Windows 导出程序。既有缓存文件不删除，但本轮新 EXE 不会加载。发布脚本不再提升 Windows stable；已经安装的旧 EXE 不会因源码改变而自动停用，用户需要换装包含此修复的 EXE/Steam 构建。本轮未发布任何安装包或服务器内容。
+
+Android/macOS 更新器验证 RSA 签名、平台、架构、底包兼容性、大小及 SHA-256，补丁保存在平台独立用户目录，重启后挂载。它不改写 EXE、APP 或 APK，也不能替换原生库或启动配置。Android 新基线迁移详见 [ANDROID_RELEASE.md](ANDROID_RELEASE.md)。
+
+## 版本与源码规则
+
+- `vX.X`：完整发包，GitHub Release 同时包含 EXE、DMG、APK。
+- `vX.X.X`：当前完整发布线上的 Android/macOS 累计差异内容包，不创建新安装包；Windows 不接收这类 PCK。
+- 当前源码版本仍为 `1.8`，引导协议已升到 `4`。本轮同号诊断包不可直接作为新正式基线；后续应选新的两段式版本，提高 Android versionCode 并同步各平台版本字段。
+- 日常源码同步仅推 `codex/sync-20260905-stable`。合并 main、tag、GitHub Release、Steam 和更新服务器发布均需相应授权，不能把日常推送当作发布。
+- 正式构建/发布要求干净工作区（包括未跟踪文件），HEAD 精确等于已验证 tag，不得绕过构建来源证明。
 
 ## 完整版流程
 
-1. 同步 `export_presets.cfg`、`Campaign.VERSION`、更新器基线和 `tools/update_release.env`。
-2. 运行游戏回归、更新器端到端测试和跨平台串包拒绝测试。
-3. 提交并推送 `main`，在同一提交创建/推送 `vX.X` tag。
-4. 构建三端完整包与基线：
+1. 同步 `export_presets.cfg`、`Campaign.VERSION`、更新器底包版本与 `tools/update_release.env`。
+2. 运行游戏回归、更新器端到端和串包/跨底包拒绝测试，完成各目标系统原生验收。
+3. 白名单提交并推送既定分支；获得发布授权后，在同一提交创建/推送 `vX.X` tag。
+4. 运行 `bash tools/build_packages.sh "$VERSION"`，生成三端完整包与三个基线 PCK。
+5. 创建 GitHub Release，上传对应 EXE、DMG、APK；公网核对三包哈希。
+6. 运行 `bash tools/publish_update_baseline.sh "$VERSION" "更新说明"`。
 
-   ```bash
-   bash tools/build_packages.sh 1.8
-   ```
+`build/updates/build-source.json` 绑定源码提交、tag 和六个产物的大小/SHA-256，发布时重新验证。Android/macOS 新完整基线的 `patch` 都为 `null`，客户端不兼容时提示安装完整包。Windows 完整包仍保留在 GitHub Release，但不发布或切换其应用内更新清单。
 
-5. 创建 GitHub Release，上传 `LiangshanHeroes-v1.8.exe/.dmg/.apk`。
-6. 公网三包可下载后，发布签名基线：
+Steam 是另一条独立发布链，按 [Steam 发布指南](STEAM_RELEASE_GUIDE.md) 准备原生整合 QA 与专用候选；诊断单文件 EXE 不能替代 Steam 六文件候选。
 
-   ```bash
-   bash tools/publish_update_baseline.sh 1.8 "更新说明"
-   ```
+## 小版本与保护边界
 
-构建脚本会写入 `build/updates/build-source.json`。发布脚本重新计算三个完整包和三个基线 PCK 的大小/SHA-256，并要求其提交与 tag 完全一致，避免误发 `build/` 中的旧产物。
-
-## 小版本流程
-
-提交、推送并创建 `v1.8.1` tag 后：
+同一完整基线内，验证、提交、推送并创建三段式 tag 后：
 
 ```bash
-bash tools/publish_hot_update.sh 1.8.1 "更新说明"
+bash tools/publish_hot_update.sh "$CONTENT_VERSION" "更新说明"
 ```
 
-脚本会从三端固定基线生成累计差异包，上传版本化文件，公网回读验签/验哈希，最后一起切换三端 stable。
+脚本只处理 Android/macOS，取各自已签名清单指定的固定底包生成累计差异，上传不可变版本文件，公网回读验签/验哈希，再一起切换两个 stable。
 
-下列受保护变更不允许走小版本：
+下列变化不得走小版本：`project.godot`、`export_presets.cfg`、`scripts/android_updater.gd`、`scripts/campaign.gd`、各平台原生工程目录、`.gdextension`、DLL/dylib/SO/framework。命中保护规则应发布下一个完整版本，不得放宽检查来强行生成内容包。
 
-- `project.godot`、`export_presets.cfg`
-- `scripts/android_updater.gd`、`scripts/campaign.gd`
-- Android/iOS/macOS/Windows 原生工程目录
-- `.gdextension`、DLL、dylib、SO、framework
+## 服务器与回滚
 
-命中时脚本会中止，应改发下一个两段式完整版。
+Android/macOS 公开文件分别位于 `/var/www/pAI/liangshan/{android,macos}/{stable,releases}/`，私有基线位于 `/root/liangshan-update-bases/{android,macos}/base-X.X.pck`。Windows 与 Android 1.4.0 的历史文件保持原位，不删除、不覆盖，不把它们当新版本兼容基线。
 
-## 服务器布局
+不要重启或替换 1234 端口的文件服务；发布只需要原子替换 stable 文件。提升进程预加载 Android/macOS 两端文件，任一替换失败恢复两端旧清单。版本化清单、补丁和底包不可覆盖。
 
-公开文件：
+回滚 stable 只能阻止尚未下载的客户端继续获取新版，不能让已安装 PCK 自动降级。已发布故障应以更高内容版本修复；涉及底包/引导器/原生层时改发更高完整版本。
 
-```text
-/var/www/pAI/liangshan/{android,windows,macos}/stable/
-/var/www/pAI/liangshan/{android,windows,macos}/releases/
+## 本地诊断（不是发布）
+
+仅需 macOS 本地试玩时可用 `tools/build_macos_test.py`：只在冻结副本加入独立用户目录、禁更新和测试标记，输出 Universal App/DMG，使用本地 ad-hoc 签名，不创建正式 tag/基线证明。实际测试架构须单独记录，不能把 Universal 文件当作 Intel 与 ARM64 均已验收。2026-09-21 本地包与入口验证见 [QA](../qa/macos_test_20260921/README.md)。此路径不代替下述正式发布流程或 Apple 公证。
+
+```bash
+python3 tools/update_release_policy_qa.py
+python3 tools/run_update_transport_qa.py --godot "$GODOT_PATH" --out "$QA_OUT" --live
+python3 tools/verify_platform_exports.py --godot "$GODOT_PATH" \
+  --android-sdk "$ANDROID_SDK_ROOT" --java-home "$JAVA_HOME" --build
 ```
 
-私有不可变基线：
-
-```text
-/root/liangshan-update-bases/{android,windows,macos}/base-X.X.pck
-/root/liangshan-update-bases/base-1.4.0.pck   # Android 历史累计基线
-```
-
-不要重启或替换当前 1234 端口的文件服务进程；发布只需要原子替换 stable 文件。版本化清单、补丁和基线均不允许覆盖。
-
-## 回滚
-
-- stable 提升由同一个远程进程预加载三端新文件，任一替换失败会恢复三端旧清单。
-- 手工回滚只能阻止尚未更新的客户端继续获取新版；已下载 PCK 的客户端不会自动降级。
-- 已发布内容存在问题时，优先修复后发更高的 `vX.X.X`；若涉及引导器/工程/原生层，发更高的 `vX.X` 完整包。
-
-## 发布后验证
-
-1. 三端 stable 的 `content_version`、`platform`、`architecture` 与预期一致，且签名有效。
-2. v1.8 Windows/macOS 真实导出程序会主动请求 stable 清单，并显示“已是最新”；Android 旧包可获取累计补丁。
-3. v1.8.1 模拟清单在三端都能完成检查、下载、哈希校验、保存和重启装载。
-4. 将 Android 清单提供给 Windows/macOS，或修改架构字段，客户端必须明确拒绝。
-5. 服务器公网回读的补丁/完整 APK 大小和 SHA-256 与本地一致。
+测试输出必须放在 checkout 外新目录。导出诊断不改版本、不创建 tag、不生成正式 `build-source.json`，也不上传文件；它只能证明实际导出、资源清单和签名校验，不能证明 Windows/Android 原生启动和真机操作。详见 [本轮 QA](../qa/controls_update_20260918/README.md)。

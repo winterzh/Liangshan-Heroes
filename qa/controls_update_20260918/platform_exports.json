@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "diagnostic_only": true,
+  "published": false,
+  "version_changed": false,
+  "passed": true,
+  "godot": "4.6.1.stable.official.14d19694e",
+  "file_count": 3057,
+  "source_tree_sha256": "00ee85c8ee540b1e0da3773b5d7644e4cec4b20a0fe5680bc4a0b9e93969691d",
+  "source_inventory_unchanged": true,
+  "source_changed_during_build": [],
+  "verifier_sha256": "210a3191a7777115dbffce7a405eb70750d1a97736f46300087f7218b8521e10",
+  "artifacts": {
+    "windows": {
+      "path": "LiangshanHeroes-candidate.exe",
+      "sha256": "babe96404eaff78ace53889bd5c8b967ae73dbd88a8b0a0a3385c205e845b4f9",
+      "bytes": 420665288,
+      "resources": 3280,
+      "architecture": "x86_64",
+      "file_version": "1.8.0.0",
+      "product_version": "1.8.0.0",
+      "authenticode_present": false,
+      "native_launch": "not tested: this verifier does not run Windows binaries",
+      "packed_menu_loaded_on_host": true
+    },
+    "android": {
+      "path": "LiangshanHeroes-candidate.apk",
+      "sha256": "25f81d3c17e1a927046840d0de29c45e9d75ad995b7bb939ddd0a2ac190c0e84",
+      "bytes": 343927284,
+      "resources": 3282,
+      "abis": [
+        "arm64-v8a"
+      ],
+      "signer_sha256": "5d1a80e66ce545a69acb6e2ffc7c22d61d0c62961ac44a9b0b9619888196ac54",
+      "internet": true,
+      "explicit_cleartext_traffic": false,
+      "native_http_request": "not tested by static export audit",
+      "native_launch": "not tested by static export audit",
+      "version": "1.8",
+      "code": "15",
+      "package": "com.liangshan.heroes"
+    }
+  },
+  "runs": [
+    {
+      "step": "import",
+      "exit": 0,
+      "seconds": 11.3,
+      "errors": []
+    },
+    {
+      "step": "windows-export",
+      "exit": 0,
+      "seconds": 8.17,
+      "errors": []
+    },
+    {
+      "step": "android-export",
+      "exit": 0,
+      "seconds": 9.32,
+      "errors": []
+    },
+    {
+      "step": "android-badging",
+      "exit": 0,
+      "seconds": 0.03,
+      "errors": []
+    },
+    {
+      "step": "android-manifest",
+      "exit": 0,
+      "seconds": 0.01,
+      "errors": []
+    },
+    {
+      "step": "android-signature",
+      "exit": 0,
+      "seconds": 0.51,
+      "errors": []
+    },
+    {
+      "step": "windows-packed-menu",
+      "exit": 0,
+      "seconds": 2.86,
+      "errors": []
+    }
+  ],
+  "changed_runtime_files": [
+    {
+      "path": "export_presets.cfg",
+      "bytes": 6708,
+      "sha256": "da2b1847f110722335b1e4d7eb90ae85f6fb882c7aceda74dad1057312fb417d"
+    },
+    {
+      "path": "scripts/android_updater.gd",
+      "bytes": 26012,
+      "sha256": "7d2e92e1f58d60428abcb4d7639bd72d53c63a5cea681afa94a5343888e83976"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "bytes": 774857,
+      "sha256": "a21d290f44a742414ccf17e55d0816e344b6f6833b2682d46246928240480ec4"
+    },
+    {
+      "path": "scripts/campaign_mission.gd",
+      "bytes": 36624,
+      "sha256": "c4694973f9abce06792ad9eab6e3c37450d4c6138679c446c7a112ecc3db06c7"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "bytes": 195749,
+      "sha256": "e6a2fadb30640943f1a1582ecc3dedc05ec501a76f3f7ce3ca18fab1b2d76405"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "bytes": 26873,
+      "sha256": "bbe8caf25ab8cfd7ce75c6103d1b0f9430b49d04d45389863dbaa8cc97edc0a6"
+    },
+    {
+      "path": "scripts/menu.gd",
+      "bytes": 40171,
+      "sha256": "9d9348f2a449cf00f07136ad10f5071af934a492c3f8aeb43071399c31e23c06"
+    },
+    {
+      "path": "scripts/rts_camera.gd",
+      "bytes": 6010,
+      "sha256": "b3b5bfb6483dd6afb3eb8bbaa8ebf1f1c5b45577c13e6c72e0dfc781d644e560"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "bytes": 205835,
+      "sha256": "48febd8aeb42c8866023f1c7883633aa5aaf4ef3729cb5eaffe7fd7d7f86b3ac"
+    }
+  ]
+}

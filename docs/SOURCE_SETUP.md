@@ -1,3 +1,59 @@
+## 2026-09-21 F1～F8 英雄选择
+
+F1～F8 连续对应第 1～8 位英雄，F2 全军键盘动作及改键项已移除，全军屏幕按钮保留。旧设置加载时自动迁移，保留无冲突的自定义按键；不用删除玩家 `settings.cfg`。镜头组合键保持不变。`tools/run_rts_refinement_qa.py` 现包含真实输入/设置迁移专项；[结果与新 Mac 包](../qa/hero_hotkeys_20260921/README.md)。本机启动 `build/macos-test-20260921-hotkeys/水浒英雄传-TEST-20260921-55089263.app`，应见 `TEST 0921-55089263`；下方旧 `TEST 0921-e3be6474` 包不含本次更改。
+
+## 2026-09-21 macOS 试玩包
+
+本机双击 `build/macos-test-20260921/水浒英雄传-TEST-20260921-e3be6474.app`；同目录 DMG 用于拷贝。菜单左下角 `TEST 0921-e3be6474` 标识本次 RTS 修复，普通版本号仍为 1.8。它使用专属测试存档目录、关闭内容更新，不改变原版进度或联网更新设置；没有 Apple 公证，不代表正式发布。
+
+复用 `tools/build_macos_test.py --godot "$GODOT_PATH" --out <checkout外新目录> --delivery-dir <checkout/build下新目录> --expected-commit <已核对SHA>` 生成新测试包。仅在冻结副本加身份/隔离覆盖层，勿并行修改生产文件。release 模板不支持外部 `--script`；App 入口与 PCK 宿主测试须分开记录。[本次结果、改动清单与复现](../qa/macos_test_20260921/README.md)。安装包不随 Git 同步。
+
+## 2026-09-20 RTS 综合修复验证入口
+
+本批触屏右栏、血瓶、操作和 1v1 经济改动见 [实现说明](RTS_REFINEMENT_20260920.md)。不改生产版本、不自动发安装包。下方同日 `TEST 0920-fbe43a3e` APK 早于本批，不能用它判断本批修改是否生效。
+
+```sh
+python3 tools/run_rts_refinement_qa.py --godot "$GODOT_PATH" \
+  --out /absolute/new/directory/outside/checkout --visual
+```
+
+输出目录必须尚不存在且位于 checkout 外。工具复制生产白名单和回归工具、导入资源、启用唯一 `LSH-rts-*` 用户目录，禁用 Steam/自动更新，不重设 HOME。依次运行基础操作、经济规则、英雄物品、HUD 内部快照及旧输入/战斗/战役套件；退出码、完成标记、结果与来源 SHA 均核对。`--visual` 追加原生分辨率离屏截图和四语状态（需要可用图形环境），`--prepare-only` 只准备私有工程。
+
+全部报告和完整截图保留私有输出；入库只保留必要 QA 收据与代表截图。真实安卓点按、安全区、长时间性能和完整存档继续不由该工具证明。[综合 QA](../qa/rts_foundation_20260920/README.md) · [触屏矩阵](QA_RTS_TOUCH_HUD_20260920.md)。
+
+## 2026-09-20 Android 用户测试包入口
+
+本地测试交付位于 `build/android-test-20260920/水浒英雄传-Android-TEST-20260920-fbe43a3e.apk`，菜单应显示 `TEST 0920-fbe43a3e`。它基于 `fbe43a3e` 冻结，仅修改副本中的 Android versionName 和菜单显示文本，不改生产基线或正式版本。沿用原签名/包名/code 15，可尝试直接覆盖旧 1.8；不要先卸载，系统若报冲突应保留原应用与错误提示。
+
+此测试包不是正式补丁基线，不上传 stable；后续正式迁移仍按 [Android 发布流程](ANDROID_RELEASE.md) 升完整版本和 versionCode。构建方法、两处标记、SHA、实际 APK 菜单探针及真机待验收边界见 [本轮 QA](../qa/android_test_20260920/README.md)。APK 在 Git 忽略目录，不随源码同步。
+
+## 2026-09-20 Steam 正式候选与上传状态
+
+冻结生产提交 `3d69b57d`，正式候选 `20260920_105442_c9bb1d61` 已通过原生整合、六文件包检查与独立 APPDATA 实际 EXE 短测，并上传为 Build 25416073。不要把前批带 `override.cfg` 的私有诊断包用于 Steam。本批 default 与四语公告均已上线，上传副本、回滚位置及验证范围见 [本批发布说明](STEAM_UPDATE_20260920.md) 和 [QA](../qa/steam_release_20260920/README.md)。
+
+## 2026-09-20 Windows 与连环马恢复复现入口
+
+新增 `tools/run_controls_update_qa.py`：先配置 `godot.local.txt` 或 `GODOT_PATH`，再用 `--run --level4 --prior-level3 --export --out <checkout 外不存在的绝对目录>` 运行冻结私有批次。默认重新导入；`--cache-from` 只复用已核验的纹理导入缓存。EXE 必须带同目录 `override.cfg` 使用独立测试用户目录；不拿私有诊断包直接发布。
+
+最终本机 524 项功能检查、实际 EXE 短启动及冻结来源核对通过；完整范围、基线 EXE 隔离疏漏与修复见 [QA](../qa/level4_world_restore_20260920/README.md)，命令见 [连环马说明](LIANHUANMA_WORLD_RESTORE_20260920.md)。玩家续玩入口仍关闭，本批不代替全章节默认回归或发布验收。
+
+## 2026-09-18 操作回归与平台导出诊断
+
+新增 `tools/input_controls_regression_qa.gd`（122 项）、`tools/combat_controls_regression_qa.gd`（95 项）、`tools/campaign_controls_regression_qa.gd`（32 项），对应本轮八处操作/流程修复。只在私有工程副本运行，Steam 禁用并使用独立 `LSH-*` 用户目录；详细设置、断言和边界见 [QA](../qa/controls_update_20260918/README.md)。不得直接对主工程或玩家真实用户目录运行这些场景夹具。
+
+不发布、不改版本的更新与导出诊断入口：
+
+```bash
+python3 tools/update_release_policy_qa.py
+python3 tools/run_update_transport_qa.py --godot "$GODOT_PATH" --out "$QA_OUT" --live
+python3 tools/verify_platform_exports.py --godot "$GODOT_PATH" \
+  --android-sdk "$ANDROID_SDK_ROOT" --java-home "$JAVA_HOME" --build
+```
+
+`$QA_OUT` 必须是 checkout 外不存在的新目录。更新测试用临时签名密钥及本地 HTTP 服务，私钥只留在私有测试目录；`--live` 仅回读公网清单与补丁，不发布。导出工具默认仅预检，带 `--build` 才复制白名单源码并生成 EXE/APK 候选，保留收据和资源清单；依赖 Godot 匹配版本导出模板、已配置 Android SDK/JDK 和原有签名证书，不创建或替换签名材料。工具不重设 HOME、不创建 tag、不生成正式发布证明。
+
+本轮 Windows 应用内更新已停用，新客户端忽略旧 PCK 缓存；Steam 更新不受影响。Android/macOS 新底包采用 bootstrap 4，底包不匹配不能热更；正式发布规则见 [Android 发布文档](ANDROID_RELEASE.md) 和 [跨平台发布文档](DESKTOP_RELEASE.md)。诊断候选保持旧版号不是可直接上线的新完整包；实际原生启动、安装与真机网络验收不能用宿主 Godot 模拟替代。
+
 ## 2026-09-17 Steam 发布入口
 
 Windows Steam 更新的完整操作顺序、六文件白名单、候选冻结、SteamCMD VDF 示例、`default/public` 回读、四语公告、客户端验收和回滚统一见 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)。开始任何新批次前仍须阅读最新 `docs/STEAM_UPDATE_<日期>.md` 与 `qa/steam_release_<日期>/README.md`；指南描述流程，不代表历史候选已经上传或当前仍是线上版本。

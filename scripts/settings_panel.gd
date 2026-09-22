@@ -309,7 +309,7 @@ func _keybind_grid() -> Control:
 		["物品槽 1", "item_0"], ["物品槽 2", "item_1"],
 		["物品槽 3", "item_2"], ["物品槽 4", "item_3"],
 		["物品槽 5", "item_4"], ["物品槽 6", "item_5"],
-		["告警/基地", "alert"], ["全选军队", "select_army"],
+		["告警/基地", "alert"],
 		["切子编组", "subgroup"], ["闲置工人", "idle_worker"],
 		["拆除", "demolish"],
 	]
@@ -367,9 +367,9 @@ func _keybind_text() -> String:
 	var item_keys := _item_key_labels_compat()
 	var lines := [
 		Localize.text("编队：Ctrl/⌘+数字 设组　数字 选组　Shift+数字 并入"),
-		Localize.format_text("%s 全选军队　Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头", Settings.key_label("select_army")),
+		Localize.text("Ctrl/⌘+F1-F4 记录镜头　Shift+F1-F4 跳转镜头"),
 		Localize.format_text("%s 攻击移动　%s 停止　%s 原地据守　%s 巡逻　%s 切换姿态", [Settings.key_label("amove"), Settings.key_label("stop"), Settings.key_label("hold"), Settings.key_label("patrol"), Settings.key_label("stance")]),
-		Localize.format_text("%s 英雄技能/命令　F1/F3-F8 按头像选英雄", " / ".join(command_keys)),
+		Localize.format_text("%s 英雄技能/命令　F1-F8 按头像选英雄", " / ".join(command_keys)),
 		Localize.format_text("%s 当前英雄物品栏", " / ".join(item_keys)),
 		Localize.format_text("%s 跳最近告警/回起始视角　%s 子编组　%s 切闲置工人", [Settings.key_label("alert"), Settings.key_label("subgroup"), Settings.key_label("idle_worker")]),
 		Localize.format_text("%s 拆除　Esc 菜单 / 取消", Settings.key_label("demolish")),

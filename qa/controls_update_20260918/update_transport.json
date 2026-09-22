@@ -1,0 +1,310 @@
+{
+  "passed": true,
+  "live": {
+    "content_version": "1.8",
+    "published_at": "2026-08-10T10:04:07+00:00",
+    "signature": true,
+    "patch_size": 1672532,
+    "patch_sha256": "6833974c5f5961599f6c2a29fabcc96143445e54caf4775ad0c13a15bc509ba5"
+  },
+  "base_version": "1.8",
+  "test_version": "1.8.99",
+  "bootstrap": 4,
+  "ephemeral_key_only_in_private_copy": true,
+  "production_source_unchanged": true,
+  "scope": "macOS Godot simulates Android platform; real HTTP/signature/cache/PCK mount, not physical Android acceptance",
+  "runs": [
+    {
+      "enabled": false,
+      "mode": "windows",
+      "passed": true,
+      "state": "disabled",
+      "version": "1.8",
+      "name": "windows_disabled"
+    },
+    {
+      "enabled": true,
+      "mode": "inspect_live",
+      "passed": true,
+      "state": "current",
+      "status_text": "安卓内容 v1.8 · 已是最新",
+      "version": "1.8",
+      "name": "live_android"
+    },
+    {
+      "enabled": true,
+      "mode": "pack",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "make_patch"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "更新清单签名无效，已拒绝下载",
+      "version": "1.8",
+      "name": "reject_signature"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "更新清单平台不匹配（需要 android）",
+      "version": "1.8",
+      "name": "reject_platform"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "更新清单架构不匹配（本机为 arm64）",
+      "version": "1.8",
+      "name": "reject_architecture"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "差异包平台不匹配（需要 android）",
+      "version": "1.8",
+      "name": "reject_patch_platform"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "补丁大小校验失败",
+      "version": "1.8",
+      "name": "reject_size"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "补丁 SHA-256 校验失败，已删除文件",
+      "version": "1.8",
+      "name": "reject_hash"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "full_update",
+      "status_text": "需要安装安卓完整包 v1.9",
+      "version": "1.8",
+      "name": "reject_bootstrap"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "full_update",
+      "status_text": "需要安装安卓完整包 v1.9",
+      "version": "1.8",
+      "name": "reject_packaged_base"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "full_update",
+      "status_text": "需要安装安卓完整包 v1.9",
+      "version": "1.8",
+      "name": "reject_patch_base"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "full_update",
+      "status_text": "需要安装安卓完整包 v1.9",
+      "version": "1.8",
+      "name": "reject_cross_base"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "新版清单没有可用的差异包或完整包",
+      "version": "1.8",
+      "name": "reject_missing_base"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "新版清单没有可用的差异包或完整包",
+      "version": "1.8",
+      "name": "reject_legacy_base"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "新版清单没有可用的差异包或完整包",
+      "version": "1.8",
+      "name": "reject_base_hash"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "新版清单没有可用的差异包或完整包",
+      "version": "1.8",
+      "name": "reject_base_size"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "新版清单没有可用的差异包或完整包",
+      "version": "1.8",
+      "name": "reject_base_type"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "新版清单没有可用的差异包或完整包",
+      "version": "1.8",
+      "name": "reject_base_version_type"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "error",
+      "status_text": "新版清单没有可用的差异包或完整包",
+      "version": "1.8",
+      "name": "reject_base_hash_type"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "current",
+      "status_text": "安卓内容 v1.8 · 已是最新",
+      "version": "1.8",
+      "name": "legacy_current_no_downgrade"
+    },
+    {
+      "enabled": true,
+      "mode": "request",
+      "passed": true,
+      "state": "ready",
+      "status_text": "安卓内容 v1.8.99 已下载，重启后生效",
+      "version": "1.8",
+      "name": "download"
+    },
+    {
+      "enabled": true,
+      "mode": "mount",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8.99",
+      "name": "restart_mount"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_corrupt_cache"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_packaged_base"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_patch_base"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_cross_base"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_missing_base"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_legacy_base"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_base_hash"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_base_size"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_base_type"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_base_version_type"
+    },
+    {
+      "enabled": true,
+      "mode": "reject_cached",
+      "passed": true,
+      "state": "idle",
+      "version": "1.8",
+      "name": "reject_cached_base_hash_type"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+	"checks": [
+		{
+			"name": "absolute QA output directory is available",
+			"passed": true
+		},
+		{
+			"name": "user data directory exactly matches the isolated requested profile",
+			"passed": true
+		},
+		{
+			"name": "menu stamp expectation is nonempty",
+			"passed": true
+		},
+		{
+			"name": "packed-host mode is only enabled by explicit LSH_MAC_TEST_PACKED_HOST=1",
+			"passed": true
+		},
+		{
+			"name": "packed-resource host is the macOS editor-capable engine",
+			"passed": true
+		},
+		{
+			"name": "one absolute --main-pack points to the actual app's Resources PCK",
+			"passed": false
+		},
+		{
+			"name": "packed-resource host has no source-project --path or upward search override",
+			"passed": true
+		},
+		{
+			"name": "res:// is the exported binary project, not the editable source checkout",
+			"passed": true
+		},
+		{
+			"name": "local test feature exists and Steam feature is absent",
+			"passed": true
+		},
+		{
+			"name": "unrelated launch and benchmark hooks are absent",
+			"passed": true
+		}
+	],
+	"completed": [],
+	"elapsed_ms": 887,
+	"evidence": {
+		"resource_origin": {
+			"editable_project_visible": false,
+			"loose_project_probe_visible": false,
+			"main_pack": "",
+			"packed_project_binary": true,
+			"resource_root": "",
+			"source_checkout_visible": false
+		},
+		"unrelated_hooks": []
+	},
+	"executable": "/Applications/Godot.app/Contents/MacOS/Godot",
+	"expected_profile": "LSH-macos-test-20260921-e3be6474",
+	"expected_stamp": "TEST 0921-e3be6474",
+	"failures": [
+		"one absolute --main-pack points to the actual app's Resources PCK"
+	],
+	"main_pack": "",
+	"mode": "packed_resources_native_host",
+	"native_graphics": true,
+	"passed": false,
+	"profile": "/Users/dztdash/Library/Application Support/LSH-macos-test-20260921-e3be6474",
+	"schema": 1,
+	"scope": "Packaged resources on a native editor host, NOT the actual app binary. Menu and paused real arena; production potion effect and consumption; not a full match or save/continue test",
+	"screenshots": {
+
+	}
+}
