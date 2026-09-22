@@ -283,6 +283,10 @@ func _read_mirror() -> Dictionary:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MIRROR_PATH))
 	return parsed if parsed is Dictionary else {}
 
+func _exit_tree() -> void:
+	if ready and dirty and not _busy and SteamService.ensure_account() and SteamService.account == _owner:
+		_flush()
+
 func _cloud_read(native: Object) -> Dictionary:
 	if not bool(native.call("fileExists", CLOUD_FILE)):
 		return {"ok": true, "payload": {}}

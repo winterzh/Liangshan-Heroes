@@ -121,6 +121,9 @@ func _t(locale: String, source: String) -> String:
 		return String(entry[locale])
 	return source
 
+func _exit_tree() -> void:
+	clear_presence()
+
 func level_title(level_id: String) -> String:
 	var campaign := get_node_or_null("/root/Campaign")
 	if campaign == null:
