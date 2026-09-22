@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "observed_date": "2026-09-22",
+  "app_id": 5088120,
+  "source": "https://partner.steamgames.com/apps/cloud/5088120",
+  "quota": {
+    "bytes_per_user": 1000000000,
+    "files_per_user": 1000
+  },
+  "current": {
+    "developer_only_cloud_support": true,
+    "dynamic_cloud_sync": true,
+    "store_support_feature_steam_cloud": false
+  },
+  "required_before_announcement": {
+    "developer_only_cloud_support": false,
+    "dynamic_cloud_sync": false,
+    "store_support_feature_steam_cloud": true
+  },
+  "reason": "The game uses ISteamRemoteStorage and does not implement Steam Dynamic Cloud Sync write batches or local-file-change callbacks. Player-facing Cloud support must be enabled, while Dynamic Cloud Sync must remain disabled to avoid advertising an unsupported suspend/resume contract.",
+  "legacy_autocloud_rule_present": true,
+  "legacy_autocloud_rule_action": "leave_unchanged_in_this_release",
+  "published": false,
+  "player_cloud_acceptance": false
+}

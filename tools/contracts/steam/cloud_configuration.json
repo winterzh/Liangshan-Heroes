@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "app_id": 5088120,
+  "integration": "ISteamRemoteStorage",
+  "cloud_file": "liangshan_profile_v1.json",
+  "quota": {
+    "bytes_per_user": 1000000000,
+    "files_per_user": 1000
+  },
+  "required_published_state": {
+    "developer_only_cloud_support": false,
+    "dynamic_cloud_sync": false,
+    "store_support_feature_steam_cloud": true
+  },
+  "dynamic_cloud_sync_reason": "The game does not implement beginFileWriteBatch/endFileWriteBatch or local-file-change callbacks.",
+  "autocloud": {
+    "used_for_player_profile": false,
+    "reason": "The production game owns serialization, validation, account isolation, conflict handling and retry through ISteamRemoteStorage."
+  }
+}

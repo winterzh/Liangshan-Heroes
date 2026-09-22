@@ -1,0 +1,41 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[hud-snapshot] PASS nonempty real battle and HUD start without RNG fault
+[hud-snapshot] PASS real lethal damage leaves one dead chip and stable living/dead roster order
+[hud-snapshot] PASS HUD adapter rejects capture outside a HELD boundary
+[hud-snapshot] PASS real live/dead HUD captures successfully behind the UI gate
+[hud-snapshot] PASS production value codec decodes the captured HUD
+[hud-snapshot] PASS v2 capture preserves exact roster order and enabled compact statistics
+[hud-snapshot] PASS dead HeroChip contributes no living entity clock reference
+[hud-snapshot] PASS living hero still retains a captured clock
+[hud-snapshot] PASS captured fight_hud_v2 passes production validation
+[hud-snapshot] PASS legacy fight_hud_v1 remains accepted without new fields
+[hud-snapshot] PASS duplicate roster key is rejected
+[hud-snapshot] PASS illegal roster key rejected: 
+[hud-snapshot] PASS illegal roster key rejected: 7
+[hud-snapshot] PASS illegal roster key rejected: <null>
+[hud-snapshot] PASS illegal roster key rejected: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+[hud-snapshot] PASS illegal roster key rejected: ../bad
+[hud-snapshot] PASS illegal roster key rejected: bad key
+[hud-snapshot] PASS illegal roster key rejected: bad\nkey
+[hud-snapshot] PASS compact_stats requires a boolean
+[hud-snapshot] PASS hero_roster requires an array
+[hud-snapshot] PASS unknown record field is rejected
+[hud-snapshot] PASS unknown schema version is rejected
+[hud-snapshot] PASS v2 cannot silently omit compact_stats
+[hud-snapshot] PASS v1 with unversioned v2 fields is rejected
+[hud-snapshot] PASS unknown living hero clock reference is rejected
+[hud-snapshot] PASS duplicate living hero clock reference is rejected
+[hud-snapshot] PASS unknown selection reference is rejected
+[hud-snapshot] PASS oversized roster is rejected
+[hud-snapshot] PASS definition-aware validation rejects missing/nonhero key: qa_unknown_hero
+[hud-snapshot] PASS definition-aware validation rejects missing/nonhero key: liang_dao
+[hud-snapshot] PASS valid dynamic content-pack hero key remains supported
+[hud-snapshot] PASS living chip still requires a registered live entity
+[hud-snapshot] PASS unregistered dead chip cannot bypass the capture registry
+[hud-snapshot] PASS capture rejects unknown/nonhero/illegal roster key: qa_unknown_hero
+[hud-snapshot] PASS capture rejects unknown/nonhero/illegal roster key: liang_dao
+[hud-snapshot] PASS capture rejects unknown/nonhero/illegal roster key: ../bad
+[hud-snapshot] PASS disabled compact statistics are captured too
+[hud-snapshot] PASS capture and mutation suites completed with nonempty evidence
+[hud-snapshot-result] {"checks":[{"label":"nonempty real battle and HUD start without RNG fault","passed":true},{"label":"real lethal damage leaves one dead chip and stable living/dead roster order","passed":true},{"label":"HUD adapter rejects capture outside a HELD boundary","passed":true},{"label":"real live/dead HUD captures successfully behind the UI gate","passed":true},{"label":"production value codec decodes the captured HUD","passed":true},{"label":"v2 capture preserves exact roster order and enabled compact statistics","passed":true},{"label":"dead HeroChip contributes no living entity clock reference","passed":true},{"label":"living hero still retains a captured clock","passed":true},{"label":"captured fight_hud_v2 passes production validation","passed":true},{"label":"legacy fight_hud_v1 remains accepted without new fields","passed":true},{"label":"duplicate roster key is rejected","passed":true},{"label":"illegal roster key rejected: ","passed":true},{"label":"illegal roster key rejected: 7","passed":true},{"label":"illegal roster key rejected: <null>","passed":true},{"label":"illegal roster key rejected: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","passed":true},{"label":"illegal roster key rejected: ../bad","passed":true},{"label":"illegal roster key rejected: bad key","passed":true},{"label":"illegal roster key rejected: bad\\nkey","passed":true},{"label":"compact_stats requires a boolean","passed":true},{"label":"hero_roster requires an array","passed":true},{"label":"unknown record field is rejected","passed":true},{"label":"unknown schema version is rejected","passed":true},{"label":"v2 cannot silently omit compact_stats","passed":true},{"label":"v1 with unversioned v2 fields is rejected","passed":true},{"label":"unknown living hero clock reference is rejected","passed":true},{"label":"duplicate living hero clock reference is rejected","passed":true},{"label":"unknown selection reference is rejected","passed":true},{"label":"oversized roster is rejected","passed":true},{"label":"definition-aware validation rejects missing/nonhero key: qa_unknown_hero","passed":true},{"label":"definition-aware validation rejects missing/nonhero key: liang_dao","passed":true},{"label":"valid dynamic content-pack hero key remains supported","passed":true},{"label":"living chip still requires a registered live entity","passed":true},{"label":"unregistered dead chip cannot bypass the capture registry","passed":true},{"label":"capture rejects unknown/nonhero/illegal roster key: qa_unknown_hero","passed":true},{"label":"capture rejects unknown/nonhero/illegal roster key: liang_dao","passed":true},{"label":"capture rejects unknown/nonhero/illegal roster key: ../bad","passed":true},{"label":"disabled compact statistics are captured too","passed":true},{"label":"capture and mutation suites completed with nonempty evidence","passed":true}],"failures":[],"full_save_continue":false,"passed":true,"profile":"C:/Users/rsb/AppData/Roaming/LSH-rts-refinement-73eae1096b2f44fa9e2828c32fec02b9","samples":[{"compact_stats":true,"dead_chips":1,"hero_roster":["hua_rong","lin_chong"],"live_clocks":1,"schema":"fight_hud_v2"}],"scope":"Real Battle/HUD death and capture, production validation/codec; HELD boundary supplied without whole-world save or restore"}

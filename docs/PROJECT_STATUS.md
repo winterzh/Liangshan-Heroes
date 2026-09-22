@@ -1,3 +1,9 @@
+## 2026-09-22 Steam Build 25460867 已上线，Cloud/好友状态后台待发布
+
+Windows `default` 已更新至 Build **25460867** / Manifest **2563454806170954821**。候选、服务器及 Steam 客户端安装目录六文件一致，客户端实际启动通过；同源码完整回归 **740/740**，默认场景 180 帧退出 0、问题行 0。
+
+真实客户端 Cloud 镜像仍保留脏标记，原因已定位为 Steamworks Cloud 仅对开发者开放；后台还错误启用了项目未实现的动态云同步，商店未勾选 Steam 云。四语 Rich Presence 是未发布草稿，四语公告也未公开。正确后台契约、证据和剩余验收见 [发布说明](STEAM_UPDATE_20260922.md) 与 [QA](../qa/steam_release_20260922/README.md)。
+
 ## 2026-09-22 main 已整合 Steam 安全修复
 
 `main` 已合入 stable `0854f07b`，旧版 Cloud 与 HUD 直写 Presence 已由账号隔离 Cloud、统一 SteamPresence Autoload 替换。Windows Godot 4.6.3 隔离全量回归 **740/740**，默认主场景 180 帧退出 0、问题行 0；详见 [main 合并 QA](../qa/steam_cloud_main_merge_20260922/README.md)。下方“main 尚未整合”保留为修复批完成时的历史记录，以本节为当前状态。

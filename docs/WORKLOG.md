@@ -1,3 +1,9 @@
+## 2026-09-22 Steam Build 25460867 上线复查与 GitHub 收尾
+
+源码 `729892b0` 的 Windows 候选已上传并成为 Steam `default`：Build `25460867` / Manifest `2563454806170954821`。服务器、候选与客户端安装目录六文件名称/大小/SHA-1 一致；Steam 库实际启动退出正常。重新冻结同一源码完成 740/740 全量回归、3347 份来源零漂移及默认场景 180 帧启动，未发现需要削弱 Cloud 安全判断的源码缺陷。
+
+真实客户端镜像保留脏标记，进一步定位为 Steamworks 后台仍限制 Cloud 为开发人员、错误启用动态云同步且商店未勾选 Steam 云。新增后台契约 `tools/contracts/steam/cloud_configuration.json` 并纠正文档：普通玩家 Cloud 开启、动态云同步关闭、商店声明 Steam 云。Rich Presence 四语映射仍为待发布草稿，四语公告仅完成定稿；本轮 GitHub 同步不代替这些公共发布动作。[发布复查](STEAM_UPDATE_20260922.md) · [QA](../qa/steam_release_20260922/README.md)。
+
 ## 2026-09-22 Steam 安全修复合入 main 与 Windows 复验
 
 将远端 stable 安全修复 `0854f07b` 合入 `main`，冲突处完整采用已审查的 SteamCloud/SteamPresence 组合，并移除 `main` 旧 HUD → SteamService 的第二套好友状态写入链。文档更新前的合并树 `d3326ede` 与 stable 目标树完全一致；Cloud 编译冲突、GodotSteam `fileRead` 长度/`buf` 合约、账号隔离、失败重试、保存标脏、设置即时应用和主菜单/波次/暂停 Presence 入口均保留。

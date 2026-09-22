@@ -1,5 +1,7 @@
 ## 2026-09-22 main Steam 整合验证
 
+- `docs/STEAM_UPDATE_20260922.md`、`qa/steam_release_20260922/`：Build 25460867 / Manifest 2563454806170954821 的候选、服务器、客户端启动、740 项复查、公告草稿及尚未发布的 Cloud/Rich Presence 平台配置证据。
+- `tools/contracts/steam/cloud_configuration.json`：Steam Cloud 公开后台契约；普通玩家开启、动态云同步关闭、商店声明 Steam 云。
 - `qa/steam_cloud_main_merge_20260922/`：stable `0854f07b` 合入 `main` 后的 Windows Godot 4.6.3 全量 740 项回归、默认主场景 180 帧启动、来源哈希与零漂移收据。
 - `scripts/steam_cloud.gd`、`scripts/steam_presence.gd`：当前统一的账号隔离云同步与好友状态入口；HUD 不再直接写 SteamService Presence。
 

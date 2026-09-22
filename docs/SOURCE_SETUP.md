@@ -1,3 +1,9 @@
+## 2026-09-22 Steam Build 25460867 复查与后台契约
+
+Windows `default` 已为 Build `25460867` / Manifest `2563454806170954821`，服务器六文件、Steam 客户端安装文件和候选一致，客户端实际启动通过。再次运行 `tools/run_rts_refinement_qa.py` 得 740/740，默认场景 180 帧退出 0、问题行 0。
+
+Steam Cloud 的正确后台状态固定在 `tools/contracts/steam/cloud_configuration.json`：取消仅开发者限制、关闭动态云同步、商店支持功能勾选 Steam 云。当前 Steamworks 仍未发布这些修正；四语 Rich Presence 也只是草稿，公告未公开。详见 [发布复查](STEAM_UPDATE_20260922.md) 与 [QA](../qa/steam_release_20260922/README.md)。
+
 ## 2026-09-22 main 整合后的 Steam 验证入口
 
 `main` 已整合 stable `0854f07b` 的账号隔离云存档与统一 Rich Presence，旧 HUD 直写入口已移除。Windows 11 / Godot 4.6.3 隔离全量回归 740/740、默认主场景 180 帧启动均通过；证据见 [main 合并 QA](../qa/steam_cloud_main_merge_20260922/README.md)。

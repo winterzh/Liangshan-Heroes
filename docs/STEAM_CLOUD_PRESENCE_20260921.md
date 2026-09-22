@@ -2,7 +2,9 @@
 
 范围严格限定：只同步已稳定战役进度和个人设置，不含战斗中途续玩档；不创建 Release、不改 Steam 默认构建、不开放工坊。9 月 21 日版本的 11 项 Python 检查只运行重写逻辑，未加载生产 GDScript，不能证明原生接通。9 月 22 日审查发现的编译、SDK 接口和存档隔离问题及修复验证见 [修复 QA](../qa/steam_cloud_safety_20260922/README.md)。
 
-## 实现内容（尚未发布）
+## 实现内容与当前发布状态
+
+2026-09-22，包含本功能的 Windows Build `25460867` / Manifest `2563454806170954821` 已成为 Steam `default`，客户端安装与启动通过。Steam Cloud 后台仍限制为开发人员，四语 Rich Presence 映射仍是未发布草稿，因此不能称普通玩家 Cloud 和四语好友状态已经验收。最新状态见 [发布复查](STEAM_UPDATE_20260922.md)。
 
 - 好友状态包含主菜单、具体战役关卡、据守梁山波次、AI/竞技场/自定义及暂停；据守波次通过关卡事件更新，不每帧扫描战场，不为好友状态重新生成随机波次。
 - 文案四语：`status_zh_CN` / `status_zh_TW` / `status_en` / `status_ja`，并写 `status`（当前游戏语言）与 `steam_display=#Status`（供 Steamworks Localization 按好友语言映射）。
@@ -36,9 +38,9 @@
 
 ## Steamworks 后台
 
-- Cloud 已有工坊配额；本批使用 ISteamRemoteStorage API，**不**配置 Auto-Cloud 玩家存档规则。
+- Cloud 配额为每用户 1 GB / 1000 文件；本批使用 ISteamRemoteStorage API，**不**使用 Auto-Cloud 玩家存档规则。正确公开配置见 [cloud_configuration.json](../tools/contracts/steam/cloud_configuration.json)：取消“仅为开发人员”、关闭动态云同步、商店支持功能勾选 Steam 云。
 - Rich Presence 语言映射是**必需前置**：上传并发布 [rich_presence.vdf](../tools/contracts/steam/rich_presence.vdf)，四语 `#Status` 分别引用 `status_en` / `status_zh_CN` / `status_zh_TW` / `status_ja`。未配置有效 token 时，好友列表不会自动以 `status` 兜底；该键只是额外游戏信息。参见 [Valve 文档](https://partner.steamgames.com/doc/api/ISteamFriends#SetRichPresence)。
-- 本轮仅提供配置文件，没有上传 Steamworks、发布 token、修改正式 Build 或公告。Windows 原生 SDK、两个真实账号和跨设备云同步仍属于正式发布前验收。
+- `rich_presence.vdf` 已上传为 Steamworks 草稿，但 token 尚未发布；Build 已上线，四语公告尚未公开。真实客户端已验证包下载与启动，Cloud 写入因后台仍限制开发人员而未通过；两个真实账号和跨设备回读继续作为独立验收。
 
 ## 复现
 
