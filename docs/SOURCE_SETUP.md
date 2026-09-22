@@ -1,3 +1,7 @@
+## 2026-09-21 Steam 云存档与好友状态
+
+Steam 版启动后自动检查云存档（`liangshan_profile_v1.json`）并合并战役进度/个人设置；本地镜像在 `user://steam_cloud_profile.json`。好友列表见模式、关卡、据守波次与暂停，四语文本。普通 `Play.cmd` 与测试环境完全 no-op。复现：`python -X utf8 -B tools/run_steam_cloud_presence_qa.py`。详见[实现](STEAM_CLOUD_PRESENCE_20260921.md)。战斗中途续玩档仍不进云。
+
 ## 2026-09-21 F1～F8 英雄选择
 
 F1～F8 连续对应第 1～8 位英雄，F2 全军键盘动作及改键项已移除，全军屏幕按钮保留。旧设置加载时自动迁移，保留无冲突的自定义按键；不用删除玩家 `settings.cfg`。镜头组合键保持不变。`tools/run_rts_refinement_qa.py` 现包含真实输入/设置迁移专项；[结果与新 Mac 包](../qa/hero_hotkeys_20260921/README.md)。本机启动 `build/macos-test-20260921-hotkeys/水浒英雄传-TEST-20260921-55089263.app`，应见 `TEST 0921-55089263`；下方旧 `TEST 0921-e3be6474` 包不含本次更改。

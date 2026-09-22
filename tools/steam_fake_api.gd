@@ -61,3 +61,33 @@ func submitItemUpdate(_handle: int, _notes: String) -> void: submits += 1
 func getItemUpdateProgress(_handle: int) -> Dictionary: return {"status":3,"processed":1,"total":2}
 func isOverlayEnabled() -> bool: return true
 func activateGameOverlayToWebPage(url: String) -> void: pages.append(url)
+var rich_presence := {}
+var cloud_files := {}
+var file_write_ok := true
+var file_read_ok := true
+var file_writes := 0
+func setRichPresence(key: String, value: String) -> bool:
+	rich_presence[key] = value
+	return true
+func clearRichPresence() -> void:
+	rich_presence.clear()
+func fileExists(name: String) -> bool:
+	return cloud_files.has(name)
+func fileWrite(name: String, data: PackedByteArray) -> bool:
+	file_writes += 1
+	if not file_write_ok: return false
+	cloud_files[name] = data.duplicate()
+	return true
+func fileWriteAsync(name: String, data: PackedByteArray) -> bool:
+	return fileWrite(name, data)
+func fileRead(name: String, _size: int = 0) -> Dictionary:
+	if not file_read_ok or not cloud_files.has(name):
+		return {"ret": false}
+	return {"ret": true, "content": cloud_files[name].duplicate()}
+func fileDelete(name: String) -> bool:
+	cloud_files.erase(name)
+	return true
+func filePersisted(name: String) -> bool:
+	return cloud_files.has(name)
+func getQuota() -> Dictionary:
+	return {"ret": true, "total": 104857600, "available": 104857600}

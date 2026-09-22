@@ -449,6 +449,7 @@ func _ready() -> void:
 		level.bind_gameplay_rng_owner(self)
 	_official_context = SteamRunPolicy.classify(Campaign, level)
 	_steam_run_id = SteamService.begin_run(_official_context)
+	_update_steam_presence()
 	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense
 	_defs = Defs.UNITS.duplicate(true)
 	_abilities = Defs.ABILITIES.duplicate(true)
@@ -724,7 +725,33 @@ func _resolve_level() -> LevelBase:
 
 func _goto_menu() -> void:
 	if _run_capture_input_closed(): return
+	var presence := get_node_or_null("/root/SteamPresence")
+	if presence != null:
+		presence.set_presence({"mode": "menu"})
 	get_tree().change_scene_to_file("res://scenes/menu.tscn")
+
+
+func _update_steam_presence(paused := false) -> void:
+	var presence := get_node_or_null("/root/SteamPresence")
+	if presence == null:
+		return
+	var mode := String(_official_context.get("mode", "custom"))
+	var level_id := String(_official_context.get("level_id", Campaign.LEVELS[Campaign.current].id))
+	var wave := 0
+	var wave_total := 0
+	if is_instance_valid(level):
+		wave = int(level.get("_wave"))
+		var waves: Variant = level.call("_waves") if level.has_method("_waves") else []
+		if waves is Array:
+			wave_total = waves.size()
+	presence.set_presence({
+		"mode": mode,
+		"level_id": level_id,
+		"level_title": presence.level_title(level_id) if presence.has_method("level_title") else level_id,
+		"wave": wave,
+		"wave_total": wave_total,
+		"paused": paused or get_tree().paused,
+	})
 
 
 ## 安卓系统「返回键」：开/关暂停菜单——而非默认「直接退出 app」(被当成闪退)。
@@ -745,6 +772,7 @@ func _open_pause() -> void:
 		return
 	get_tree().paused = true
 	hud.show_pause()
+	_update_steam_presence(true)
 
 
 func _close_pause() -> void:
@@ -757,6 +785,7 @@ func _close_pause() -> void:
 	if phase != Phase.END:
 		Engine.time_scale = Settings.game_speed   # 恢复对战时套用最新游戏速度（设置改了即生效）
 	hud.hide_pause()
+	_update_steam_presence(false)
 
 
 ## ---------- 关卡可用的辅助 API ----------
@@ -4435,6 +4464,7 @@ func _complete_end(victory: bool, line: String) -> void:
 		var saved_result: Dictionary = camp.on_level_won(campaign_result, _official_context)
 		campaign_result["new_story_seal"] = bool(saved_result.get("new_story_seal", false))
 	SteamService.settle(_steam_run_id, victory, campaign_result)
+	_update_steam_presence()
 	var report := _hero_end_tally()
 	if mission != null:
 		mission.finish_metrics(victory)

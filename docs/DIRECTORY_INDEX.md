@@ -773,6 +773,13 @@ Event714538122294068074已公开，Steam显示06:16 HKT开始并关联Build25276
 - `docs/STEAM_INTEGRATION_20260907.md`、`qa/steam_integration_20260907/`：产品规则、后台待执行清单、真实离线/原生/界面证据与失败轮。
 - `.godot/steam_integration_qa/`、`.godot/steam_candidates/`：仅本机私有工程、用户目录、缓存和候选 EXE/DLL，不提交 Git。
 
+## 2026-09-21 Steam 云存档与好友状态
+
+- `scripts/steam_cloud.gd`、`scripts/steam_presence.gd`：战役进度/设置云同步与好友 Rich Presence（四语）。
+- `tools/run_steam_cloud_presence_qa.py`：合并规则与文案纯逻辑检查；`tools/steam_fake_api.gd` 含 fileWrite/fileRead/setRichPresence 模拟。
+- `docs/STEAM_CLOUD_PRESENCE_20260921.md`、`qa/steam_cloud_presence_20260921/`：实现边界、复现与本轮证据。
+- 玩家本地 `user://steam_cloud_profile.json` 为云镜像，属用户数据，不进 Git。
+
 ## 2026-09-07 Steam 商店与公告素材
 
 - `marketing/steam_store_20260907/`：四种商店封面、三种库图、生成来源/提示词/哈希、复现脚本与中英文介绍；只把交付图拖入Steam，源图及失败证据不投放。

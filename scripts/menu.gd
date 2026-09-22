@@ -17,6 +17,9 @@ func _ready() -> void:
 		_launch()
 		return
 	_build()
+	var presence := get_node_or_null("/root/SteamPresence")
+	if presence != null:
+		presence.set_presence({"mode": "menu"})
 
 
 ## 主菜单按安卓「返回键」=退出游戏（quit_on_go_back 已关，需自己处理；否则按返回毫无反应）

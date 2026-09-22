@@ -96,6 +96,9 @@ func save() -> void:
 	c.set_value("show", "range_rings", show_range_rings)
 	c.set_value("show", "control_help", show_control_help)
 	c.save(PATH)
+	var cloud := get_node_or_null("/root/SteamCloud")
+	if cloud != null:
+		cloud.mark_dirty()
 
 
 func _load() -> void:

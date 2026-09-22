@@ -270,6 +270,9 @@ func _save() -> void:
 	cfg.set_value("pref", "defense_rand_waves", defense_rand_waves)
 	cfg.set_value("pref", "defense_interval", defense_interval)
 	cfg.save(SAVE_PATH)
+	var cloud := get_node_or_null("/root/SteamCloud")
+	if cloud != null:
+		cloud.mark_dirty()
 
 
 func _load() -> void:
