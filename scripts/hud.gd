@@ -2675,8 +2675,12 @@ func show_message(text: String, _dur := 3.5, quiet_in_full_auto := false) -> voi
 	_append_info_message(text, quiet_in_full_auto)
 
 
+var _last_top_status := ""
 func set_top(text: String) -> void:
 	Localize.bind_text(top_label, text)
+	if text != _last_top_status:
+		_last_top_status = text
+		SteamService.set_presence(text)
 
 
 ## AI友好模式·自动镜头按钮：左下角（命令面板上方）。全员托管后出现，点一下开/关自动镜头。
