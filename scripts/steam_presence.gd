@@ -20,59 +20,125 @@ const PRESENCE_STRINGS := {
 }
 
 const LOCALES := ["zh_CN", "zh_TW", "en", "ja"]
+const RETRY_SECONDS := 5.0
 
 var status := "好友状态未连接"
-var ready := false
+var presence_ready := false
 var _last_key := ""
+var _context: Dictionary = {}
+var _bound_account := ""
+var _native: Object
+var _retry_pending := false
+var _retry_after := 0.0
+var _account_tick := 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	SteamService.initialized.connect(_attach)
+	SteamService.changed.connect(_on_service_changed)
+	Localize.language_changed.connect(_on_language_changed)
 	if SteamService.available:
 		_attach()
 
 func _attach() -> void:
 	if SteamRunPolicy.test_environment() or not SteamService.available or not SteamService.ensure_account():
 		return
-	ready = true
+	clear_presence()
+	_bound_account = SteamService.account
+	_native = SteamService.native
+	presence_ready = true
 	status = Localize.text("好友状态已就绪")
 	set_presence({"mode": "menu"})
 	changed.emit()
 
 func set_presence(context: Dictionary) -> void:
-	if not ready or not SteamService.ensure_account():
+	if not _account_valid():
 		return
-	var lines := _build_keys(context)
+	_context = context.duplicate(true)
+	_publish()
+
+func _publish() -> void:
+	if not _account_valid() or _context.is_empty():
+		return
+	var lines := _build_keys(_context)
+	# This token REQUIRES the published Steamworks localization mapping in
+	# tools/contracts/steam/rich_presence.vdf. `status` is not a display fallback.
+	lines["steam_display"] = "#Status"
 	var fingerprint := JSON.stringify(lines)
 	if fingerprint == _last_key:
 		return
-	_last_key = fingerprint
-	var native: Object = SteamService.native
-	if native == null:
-		return
-	native.call("clearRichPresence")
+	_native.call("clearRichPresence")
 	for key in lines:
-		native.call("setRichPresence", key, String(lines[key]))
-	native.call("setRichPresence", "steam_display", "#Status")
+		if not bool(_native.call("setRichPresence", key, String(lines[key]))):
+			# Never cache failed/partial writes as successfully published. Clear the
+			# partial display, then retry the latest context without another event.
+			_native.call("clearRichPresence")
+			_last_key = ""
+			_retry_pending = true
+			_retry_after = RETRY_SECONDS
+			return
+	_last_key = fingerprint
+	_retry_pending = false
+	_retry_after = 0.0
 	changed.emit()
 
 func clear_presence() -> void:
-	if not ready or SteamService.native == null:
-		return
 	_last_key = ""
-	SteamService.native.call("clearRichPresence")
+	_context.clear()
+	_retry_pending = false
+	_retry_after = 0.0
+	if is_instance_valid(_native):
+		_native.call("clearRichPresence")
 	changed.emit()
+
+func _account_valid() -> bool:
+	if not presence_ready:
+		return false
+	if not SteamService.ensure_account() or SteamService.account != _bound_account or SteamService.native != _native:
+		_detach()
+		return false
+	return true
+
+func _detach() -> void:
+	presence_ready = false
+	clear_presence()
+	_bound_account = ""
+	_native = null
+	_account_tick = 0.0
+	status = Localize.text("好友状态未连接")
+
+func _on_service_changed() -> void:
+	if presence_ready and (not SteamService.available or SteamService.account != _bound_account or SteamService.native != _native):
+		_detach()
+
+func _on_language_changed(_locale: String) -> void:
+	if presence_ready:
+		_publish()
+
+func _process(delta: float) -> void:
+	# No polling or context allocation at all in ordinary/non-Steam launches.
+	if not presence_ready:
+		return
+	_account_tick += delta
+	if _account_tick >= 1.0:
+		_account_tick = 0.0
+		if not _account_valid():
+			return
+	if _retry_pending:
+		_retry_after -= delta
+		if _retry_after <= 0.0:
+			_publish()
 
 func _build_keys(context: Dictionary) -> Dictionary:
 	var mode := String(context.get("mode", "menu"))
 	var level_id := String(context.get("level_id", ""))
-	var level_title := String(context.get("level_title", ""))
 	var wave := int(context.get("wave", 0))
 	var wave_total := int(context.get("wave_total", 0))
 	var paused := bool(context.get("paused", false))
 	var keys := {"mode": mode, "paused": "1" if paused else "0"}
 	for locale in LOCALES:
-		keys["status_" + locale] = _status_for(locale, mode, level_title, wave, wave_total, paused)
+		var title := level_title(level_id, locale) if mode == "campaign" else ""
+		keys["status_" + locale] = _status_for(locale, mode, title, wave, wave_total, paused)
 	keys["status"] = String(keys.get("status_" + Localize.locale, keys.get("status_en", "Liangshan Heroes")))
 	if level_id != "":
 		keys.level = level_id
@@ -124,11 +190,20 @@ func _t(locale: String, source: String) -> String:
 func _exit_tree() -> void:
 	clear_presence()
 
-func level_title(level_id: String) -> String:
+func level_title(level_id: String, locale := "") -> String:
 	var campaign := get_node_or_null("/root/Campaign")
 	if campaign == null:
 		return level_id
 	for entry in campaign.LEVELS:
 		if String(entry.id) == level_id:
-			return String(entry.title)
+			var source := String(entry.title)
+			var target_locale := Localize.locale if locale.is_empty() else locale
+			# Query each catalog directly; do not change the game's global locale
+			# while constructing the other three friends-list language variants.
+			var translation := TranslationServer.get_translation_object(target_locale)
+			if translation != null:
+				var translated := String(translation.get_message(source))
+				if not translated.is_empty():
+					return translated
+			return source
 	return level_id

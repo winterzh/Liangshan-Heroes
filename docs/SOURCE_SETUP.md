@@ -1,3 +1,9 @@
+## 2026-09-22 Steam 云存档安全修复与实际 GDScript 检查
+
+新增云存档/好友状态测试已改为冻结私有工程后运行生产 GDScript，而非 Python 重写逻辑。专项入口 `python -X utf8 -B tools/run_steam_cloud_presence_qa.py --godot <本机Godot路径> --out <新的工程外绝对路径>`；`tools/run_rts_refinement_qa.py` 同时包含原 RTS 回归和新专项。每批使用全新 profile，禁 Steam 和更新，不改 HOME。设置/语言下载后即时应用，按账号隔离本地状态，云读取失败不允许盲写覆盖。详见 [实现与后台前置](STEAM_CLOUD_PRESENCE_20260921.md)、[修复 QA](../qa/steam_cloud_safety_20260922/README.md)。
+
+正式发布前仍须 Windows Steam 原生、真实双账号/跨设备云回读和 `tools/contracts/steam/rich_presence.vdf` 后台发布验证；本轮不执行 Steam 发布。下方 9 月 21 日为历史描述，其共享镜像与旧测试入口说明以本节为准。
+
 ## 2026-09-21 Steam 云存档与好友状态
 
 Steam 版启动后自动检查云存档（`liangshan_profile_v1.json`）并合并战役进度/个人设置；本地镜像在 `user://steam_cloud_profile.json`。好友列表见模式、关卡、据守波次与暂停，四语文本。普通 `Play.cmd` 与测试环境完全 no-op。复现：`python -X utf8 -B tools/run_steam_cloud_presence_qa.py`。详见[实现](STEAM_CLOUD_PRESENCE_20260921.md)。战斗中途续玩档仍不进云。

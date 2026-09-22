@@ -202,6 +202,14 @@ func _waves() -> Array:
 	return _wavelist_cache
 
 
+func presence_wave() -> int: return _wave
+
+func presence_wave_total() -> int:
+	# Display must not build random waves or consume gameplay RNG before start.
+	if not _wavelist_cache.is_empty(): return _wavelist_cache.size()
+	return clampi(Campaign.defense_rand_waves, 1, 999) if Campaign.defense_random else maxi(1, Campaign.defense_waves)
+
+
 ## 按菜单所选波数构造波次表：30=经典原表；<30 取前 n 波；>30 经典之后循环加量续到 n 波。
 func _build_wavelist() -> Array:
 	if Campaign.defense_random:
@@ -422,6 +430,7 @@ func process(b, delta: float) -> void:
 		if _wave_t <= 0.0:
 			if not _spawn_wave(b, _wave): return
 			_wave += 1
+			presence_changed.emit()
 			if _wave < ws.size():
 				_wave_t = float(ws[_wave]["t"])
 	else:

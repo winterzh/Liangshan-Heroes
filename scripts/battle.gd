@@ -409,12 +409,18 @@ func _refresh_run_capture_presentation() -> void:
 		shadow._update_visible_units()
 
 func _ready() -> void:
+	if not Settings.cloud_settings_applied.is_connected(_on_cloud_settings_applied):
+		Settings.cloud_settings_applied.connect(_on_cloud_settings_applied)
 	# Only the trusted core preparation transaction sets this transient marker.
 	# Child readiness is allowed while the Battle itself remains disabled. The
 	# outer installation still owns root clocks, input/UI, Steam and activation.
 	if has_meta("_run_core_prepared"):
 		if get_meta("_run_core_prepared") != true or process_mode != Node.PROCESS_MODE_DISABLED or not get_tree().paused or _gameplay_rng_start_kind != "restored" or not _prepared_clock_entry_valid() or _save_barrier != null or not is_instance_valid(world) or world.get_parent() != self:
 			_gameplay_rng_stop("INVALID_PREPARED_WORLD_ENTRY")
+		else:
+			# The owner completes activation/unpause in this turn. Deferred display
+			# then observes the restored state and reconnects its wave event hook.
+			_update_steam_presence.call_deferred()
 		return
 	_run_clock = preload("res://scripts/run_battle_clock.gd").new()
 	var initialized: Dictionary = _run_clock.initialize_new(Engine.get_physics_frames())
@@ -732,26 +738,47 @@ func _goto_menu() -> void:
 
 
 func _update_steam_presence(paused := false) -> void:
-	var presence := get_node_or_null("/root/SteamPresence")
-	if presence == null:
+	if not is_inside_tree():
 		return
-	var mode := String(_official_context.get("mode", "custom"))
-	var level_id := String(_official_context.get("level_id", Campaign.LEVELS[Campaign.current].id))
-	var wave := 0
-	var wave_total := 0
+	if is_instance_valid(level) and not level.presence_changed.is_connected(_update_steam_presence):
+		level.presence_changed.connect(_update_steam_presence)
+	var presence := get_node_or_null("/root/SteamPresence")
+	if presence == null or not presence.presence_ready:
+		return
+	presence.set_presence(_steam_presence_context(paused))
+
+
+func _steam_presence_context(paused := false) -> Dictionary:
+	# Display describes the actual loaded mode, not achievement eligibility:
+	# random defense, training matches, arena and custom content remain distinct.
+	var mode := "custom"
+	var level_id := ""
 	if is_instance_valid(level):
-		wave = int(level.get("_wave"))
-		var waves: Variant = level.call("_waves") if level.has_method("_waves") else []
-		if waves is Array:
-			wave_total = waves.size()
-	presence.set_presence({
-		"mode": mode,
-		"level_id": level_id,
-		"level_title": presence.level_title(level_id) if presence.has_method("level_title") else level_id,
-		"wave": wave,
-		"wave_total": wave_total,
+		var path := String(level.get_script().resource_path)
+		if path == Campaign.SCENARIO_SCRIPT: mode = "scenario"
+		elif path == Campaign.CUSTOM_DEFENSE_SCRIPT: mode = "custom_defense"
+		elif path == Campaign.ARENA_SCRIPT: mode = "arena"
+		elif path == Campaign.SKIRMISH_AI_SCRIPT: mode = "ai"
+		elif path == Campaign.SKIRMISH_SCRIPT: mode = "defense"
+		else:
+			for entry in Campaign.LEVELS:
+				if path == entry.script:
+					mode = "campaign"
+					level_id = String(entry.id)
+					break
+	return {
+		"mode": mode, "level_id": level_id,
+		"wave": level.presence_wave() if is_instance_valid(level) else 0,
+		"wave_total": level.presence_wave_total() if is_instance_valid(level) else 0,
 		"paused": paused or get_tree().paused,
-	})
+	}
+
+
+func _on_cloud_settings_applied() -> void:
+	# A late cloud pull can arrive during play. Respect presentation/pause clocks
+	# and let _close_pause apply the new speed after an already paused battle.
+	if is_inside_tree() and phase in [Phase.DEPLOY, Phase.FIGHT] and not get_tree().paused:
+		Engine.time_scale = Settings.game_speed
 
 
 ## 安卓系统「返回键」：开/关暂停菜单——而非默认「直接退出 app」(被当成闪退)。

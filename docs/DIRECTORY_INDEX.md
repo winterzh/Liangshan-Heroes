@@ -1,3 +1,11 @@
+## 2026-09-22 Steam 云存档与好友状态修复
+
+- `tools/steam_cloud_regression_qa.gd`、`tools/steam_presence_regression_qa.gd`：实际生产脚本的账号、失败重试、离线合并、设置和状态事件回归。
+- `tools/run_steam_cloud_presence_qa.py`：复用 RTS 私有冻结入口，不再重写合并逻辑；总 RTS 入口也包含这两组。
+- `tools/contracts/steam/rich_presence.vdf`：待 Steamworks 上传并发布的四语 `#Status` 映射，不代表后台已配置。
+- `assets/localization/steam_cloud_presence.json`：补齐原 12 条云存档/好友状态文案的可重建来源。
+- `qa/steam_cloud_safety_20260922/`：本轮真实脚本与回归收据、原问题、未验证边界。
+
 ## 2026-09-21 连续英雄功能键
 
 - `tools/hero_function_keys_qa.gd`：真实 F1～F8 输入、阵亡/空槽、头像键帽、镜头组合键与旧设置迁移回归，接入 RTS 总入口。

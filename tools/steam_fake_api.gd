@@ -65,25 +65,63 @@ var rich_presence := {}
 var cloud_files := {}
 var file_write_ok := true
 var file_read_ok := true
+var cloud_enabled_account := true
+var cloud_enabled_app := true
 var file_writes := 0
+var file_reads := 0
+var file_size_reads := 0
+var file_exists_reads := 0
+var cloud_account_checks := 0
+var cloud_app_checks := 0
+var read_sizes: Array[int] = []
+var file_read_ret_override := -1
+var short_read_by := 0
+var rich_presence_writes := 0
+var rich_presence_clears := 0
+var presence_writes := 0
+var presence_clears := 0
+var presence_write_ok := true
+var presence_fail_key := ""
 func setRichPresence(key: String, value: String) -> bool:
+	rich_presence_writes += 1
+	presence_writes += 1
+	if not presence_write_ok or key == presence_fail_key: return false
 	rich_presence[key] = value
 	return true
 func clearRichPresence() -> void:
+	rich_presence_clears += 1
+	presence_clears += 1
 	rich_presence.clear()
+func isCloudEnabledForAccount() -> bool:
+	cloud_account_checks += 1
+	return cloud_enabled_account
+func isCloudEnabledForApp() -> bool:
+	cloud_app_checks += 1
+	return cloud_enabled_app
 func fileExists(name: String) -> bool:
+	file_exists_reads += 1
 	return cloud_files.has(name)
+func getFileSize(name: String) -> int:
+	file_size_reads += 1
+	return cloud_files[name].size() if cloud_files.has(name) else 0
 func fileWrite(name: String, data: PackedByteArray) -> bool:
 	file_writes += 1
 	if not file_write_ok: return false
 	cloud_files[name] = data.duplicate()
 	return true
-func fileWriteAsync(name: String, data: PackedByteArray) -> bool:
-	return fileWrite(name, data)
-func fileRead(name: String, _size: int = 0) -> Dictionary:
+func fileRead(name: String, size: int) -> Dictionary:
+	# GodotSteam 4.22.1: caller supplies the requested byte count; ret is the
+	# number of bytes read and buf is PackedByteArray, not bool/content.
+	file_reads += 1
+	read_sizes.append(size)
+	var result := PackedByteArray()
+	result.resize(maxi(0, size))
 	if not file_read_ok or not cloud_files.has(name):
-		return {"ret": false}
-	return {"ret": true, "content": cloud_files[name].duplicate()}
+		return {"ret": 0, "buf": result}
+	var bytes: PackedByteArray = cloud_files[name]
+	var returned := maxi(0, mini(size, bytes.size()) - short_read_by)
+	for index in range(returned): result[index] = bytes[index]
+	return {"ret": file_read_ret_override if file_read_ret_override >= 0 else returned, "buf": result}
 func fileDelete(name: String) -> bool:
 	cloud_files.erase(name)
 	return true

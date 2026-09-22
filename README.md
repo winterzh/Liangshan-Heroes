@@ -1,3 +1,9 @@
+## 2026-09-22 Steam 云存档/好友状态修复（源码，未发布）
+
+修复新 Steam 脚本编译、云读写接口、换账号串档、读取失败覆盖、离线设置/进度遗漏及好友状态更新。云设置即时应用并保留 F1～F8 迁移；损坏或归属不明的本地状态停止同步，不自动改写账号。[实现与恢复边界](docs/STEAM_CLOUD_PRESENCE_20260921.md) · [实际脚本 QA](qa/steam_cloud_safety_20260922/README.md)。专项入口现为 `python3 -B tools/run_steam_cloud_presence_qa.py --godot <本机Godot路径> --out <新的工程外绝对路径>`，不再运行 Python 重写逻辑。
+
+本条只对应源码，不包含新安装包、Steam Build 或后台 token 发布；Windows 原生、真实双账号/跨设备验收仍需单独完成。下方 Mac 测试包保持原版本，未包含本批新修复。
+
 ## 2026-09-21 Mac 本地试玩包（未正式发布）
 
 最新本机试玩入口为 `build/macos-test-20260921-hotkeys/水浒英雄传-TEST-20260921-55089263.app`，同目录有 DMG；菜单左下角 `TEST 0921-55089263`。包含下述 RTS 修复、血瓶和连续 F1～F8 英雄键，已取消 F2 全军。独立测试存档，不覆盖原进度、不自动更新。本机 ARM64 原生启动短测通过，未 Apple 公证；[本次规则、验证与测试包](qa/hero_hotkeys_20260921/README.md)。安装包不随 Git 上传，没有 Steam/Release/更新服务器发布。旧 e3be6474 包未改，不含最新键位。
