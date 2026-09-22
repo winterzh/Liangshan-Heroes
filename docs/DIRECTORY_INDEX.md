@@ -1,3 +1,11 @@
+## 2026-09-23 Steam 平台配置与公告公开证据
+
+- `qa/steam_release_20260922/cloud_backend_publication.json`：Cloud 普通玩家开放、动态云同步关闭、商店 revision 9 与公开“Steam 云”回读。
+- `qa/steam_release_20260922/rich_presence_publication.json`：四语 `#Status` token 公开发布结果。
+- `qa/steam_release_20260922/cloud_client_retest.json`：App Cloud 已启用、当前测试账号 Cloud 偏好关闭、dirty 重试保留与本地配置恢复记录。
+- `qa/steam_release_20260922/announcement_publication.json`：公告 `698776157349217400`、Build `25460867` 关联和四语公开回读。
+- `qa/steam_release_20260922/publication_receipt.json`、`docs/STEAM_UPDATE_20260922.md`：本轮上线状态、已完成公共动作和剩余客户端验收边界。
+
 ## 2026-09-22 main Steam 整合验证
 
 - `docs/STEAM_UPDATE_20260922.md`、`qa/steam_release_20260922/`：Build 25460867 / Manifest 2563454806170954821 的候选、服务器、客户端启动、740 项复查、公告草稿及尚未发布的 Cloud/Rich Presence 平台配置证据。

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "default_live_platform_configuration_pending",
+  "status": "public_with_test_account_cloud_preference_blocker",
   "complete": false,
   "source_head": "729892b0694406e591be585855a4590fd691d134",
   "app_id": 5088120,
@@ -13,15 +13,22 @@
   "client_download_verified": true,
   "client_launch_verified": true,
   "client_files_match_server": true,
+  "steam_cloud_app_configuration_published": true,
+  "steam_cloud_store_feature_public": true,
   "steam_cloud_player_acceptance": false,
-  "rich_presence_published": false,
-  "announcement_published": false,
+  "rich_presence_published": true,
+  "announcement_published": true,
+  "announcement_event_id": "698776157349217400",
+  "announcement_url": "https://store.steampowered.com/news/app/5088120/view/698776157349217400",
+  "announcement_languages_read_back": [
+    "schinese",
+    "tchinese",
+    "english",
+    "japanese"
+  ],
   "blockers": [
-    "Steam Cloud is still restricted to developers in Steamworks.",
-    "Dynamic Cloud Sync is enabled although the game does not implement its required APIs.",
-    "The Steam Cloud store support feature is not selected.",
-    "The four-language Rich Presence localization is only an unpublished draft.",
-    "The four-language announcement is prepared but not public."
+    "The current test account reports Steam Cloud enabled for the app but disabled for the account/client, so a production fileWrite and remote readback could not be accepted.",
+    "Cross-device and second-account Cloud readback remain independent acceptance boundaries."
   ],
   "rollback_build": "25451455",
   "rollback_manifest": "141439361708043047"

@@ -1,3 +1,9 @@
+## 2026-09-23 Steam 平台发布后的验证入口
+
+Build `25460867` / Manifest `2563454806170954821` 继续为 Windows `default`。Steam Cloud 已对普通玩家开放、动态云同步关闭，商店公开页显示“Steam 云”；四语 Rich Presence 映射与公告 `698776157349217400` 已公开。当前权威状态见 [发布说明](STEAM_UPDATE_20260922.md) 与 [QA](../qa/steam_release_20260922/README.md)。
+
+真实客户端 Cloud 验收必须同时确认 `Steam.isCloudEnabledForApp()` 与 `Steam.isCloudEnabledForAccount()`。本次探针为 App `true`、账号 `false`，因此不要把平台配置公开当作生产 `fileWrite` 或跨设备读回成功。当前账号启用 Steam 云后，再运行 Steam 库版本并检查账号分区镜像 dirty 标记、远端文件及另一设备读回；诊断期间不得修改或删除玩家文件来强行制造通过。
+
 ## 2026-09-22 Steam Build 25460867 复查与后台契约
 
 Windows `default` 已为 Build `25460867` / Manifest `2563454806170954821`，服务器六文件、Steam 客户端安装文件和候选一致，客户端实际启动通过。再次运行 `tools/run_rts_refinement_qa.py` 得 740/740，默认场景 180 帧退出 0、问题行 0。

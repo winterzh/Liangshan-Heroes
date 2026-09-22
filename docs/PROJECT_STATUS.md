@@ -1,3 +1,9 @@
+## 2026-09-23 Steam Cloud、四语好友状态与公告已公开
+
+Build **25460867** / Manifest **2563454806170954821** 继续为 Windows `default`。Steamworks Cloud 已对普通玩家开放、动态云同步已关闭，商店公开页可见“Steam 云”；四语 Rich Presence 映射已发布。补丁说明 **698776157349217400** 已关联本 Build 并公开，简中、繁中、英语、日语正文均完成访客侧回读。[发布说明](STEAM_UPDATE_20260922.md) · [公开公告](https://store.steampowered.com/news/app/5088120/view/698776157349217400) · [QA](../qa/steam_release_20260922/README.md)。
+
+发布后探针确认 App 侧 Cloud 已启用，但当前测试账号/Steam 客户端全局 Cloud 偏好关闭，因此生产文件写入、跨设备和第二账号读回尚未验收；镜像保留 dirty 重试标记且没有误报成功。
+
 ## 2026-09-22 Steam Build 25460867 已上线，Cloud/好友状态后台待发布
 
 Windows `default` 已更新至 Build **25460867** / Manifest **2563454806170954821**。候选、服务器及 Steam 客户端安装目录六文件一致，客户端实际启动通过；同源码完整回归 **740/740**，默认场景 180 帧退出 0、问题行 0。
