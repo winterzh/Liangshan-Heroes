@@ -1,4 +1,4 @@
-# Steam 创意工坊品牌图候选
+# Steam 创意工坊品牌图与示例封面
 
 `source_workshop_header.png` 是 2026-09-23 用项目已验收的商店原画 `marketing/steam_store_20260909_female/source/header_native.png` 作风格参照，生成的原创水泊营寨横幅。画面左侧留出深色文字区，右侧为两名北宋人物及水寨；没有镜像、补画或叠加文字。
 
@@ -8,4 +8,6 @@
 
 最终 JPG SHA-256 `5d8abfbcfc6e88483fe1d9991ff8da280cdc0a5795eb82ddc80da754d409a516`。
 
-两张图当前都是**本地候选**，尚未上传 Steamworks，也没有改变工坊曝光设置。
+品牌 JPG 已上传至 Steamworks，并随“所有人可见”配置正式发布；公开工坊首页已回读。`sample_scenario_cover.jpg` 是当前 Steam 客户端对《示例地图 · 水泊练兵》的 F12 实机截图，直接复制原图、不镜像、不补画，作为作品 `3806632089` 的封面来源。作品及订阅实战验收见 [`qa/workshop_public_20260923/`](../../qa/workshop_public_20260923/README.md)。
+
+公告 `694273194214817894` 复用已验收的 `marketing/steam_store_20260909_female/promotional/announcement_800x450.png` 品牌封面，未修改原画；Steam 英文封面作为其他语言的回退图。`announcement_public_copy.json` 保存从无登录页面回读的简中、繁中、英语、日语标题和正文，公告已关联 Build `25476210`。

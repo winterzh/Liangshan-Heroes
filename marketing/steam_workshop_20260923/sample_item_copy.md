@@ -1,6 +1,6 @@
 # 首批工坊示例作品文案候选
 
-两份作品取自游戏内 `WorkshopExamples`，供当前账号私有联调与后续公开审查。作品内容、封面和胜负流程必须在实际游戏中核实后才能上传为公开示例；此处文案尚未提交 Steam。
+两份作品取自游戏内 `WorkshopExamples`。地图示例已在 Steam 客户端实机完成两波并获胜，使用实机封面与下列双语说明上传为作品 `3806632089`；据守示例仍是文案候选，尚未提交 Steam。地图的发布与订阅实战收据见 [`qa/workshop_public_20260923/`](../../qa/workshop_public_20260923/README.md)。
 
 ## 地图：示例地图 · 水泊练兵
 
@@ -14,4 +14,4 @@
 
 **English description:** Prepare for two short defense waves with 250 gold and 150 wood: first swordsmen, then swordsmen and archers. Adjust units and waves in the defense editor. Workshop play does not count toward Steam achievements.
 
-封面应使用这两份作品实际进入游戏后的截图，分别反映地图与据守内容；不以空白编辑器或概念图代替实机画面。
+地图封面已使用实机截图 `sample_scenario_cover.jpg`；如将来发布据守示例，也须先使用实际进入该局的截图，不以空白编辑器或概念图代替。

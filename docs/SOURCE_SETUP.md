@@ -1,3 +1,7 @@
+## 2026-09-23 工坊实机验收与公开状态
+
+Steam Windows `default` 已切到 Build `25476210` / Manifest `4175538259787899440`，工坊“所有人可见”及品牌图配置发布成功。当前账号作品 `3806632089` 的上传、订阅三文件哈希和两波实战胜利通过；四语公告 `694273194214817894` 已公开并关联构建。完整收据见 [工坊发布 QA](../qa/workshop_public_20260923/README.md)。本机安装六文件与候选一致，但客户端 BetaKey 仍为 `steam-integration`；Steam 主窗口无法定位，本轮未切回默认。下次可在 Steam 库 → 游戏属性 → 测试版选“无”，再核对 buildid 和 manifest。跨设备及第二账号验收仍未做；下方旧批次保留当时状态。
+
 ## 2026-09-23 工坊 SDK 修复复现
 
 本机真实 GodotSteam 4.22.1 已核对 `getSubscribedItems(bool)` 和 `setItemTags(int, Array, bool)`；对应生产调用与模拟 API 同步修正。共用 Godot 引擎空闲时运行 `python -X utf8 -B tools/run_steam_integration_qa.py --run --native --profile-root <工程外独占目录>`，检查原生签名、两类标签和订阅链；隔离 QA 不登录 Steam 或创建作品。最近成功原生 run 为 `20260923_150857_37cd75ea`（189/189），据此重构的本地候选 `20260923_152018_ac980678` 完成 1136 项包内检查及内容身份探针；候选未上传 Steam。工坊后台仍仅开发人员可见，品牌图在 `marketing/steam_workshop_20260923/` 只是本地候选。进度与证据见 [阶段 QA](../qa/workshop_stage_20260923/README.md)。

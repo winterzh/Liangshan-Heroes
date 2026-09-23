@@ -1,3 +1,10 @@
+## 2026-09-23 工坊公开发布与实机验收
+
+- `marketing/steam_workshop_20260923/sample_scenario_cover.jpg`：官方示例地图的原样 Steam F12 实机截图，已用作作品 `3806632089` 封面。
+- `qa/workshop_public_20260923/`：default Build `25476210`、工坊公开、首个作品订阅胜利、四语公告与匿名回读收据；保留客户端分支和跨设备/双账号待办。
+- `marketing/steam_workshop_20260923/announcement_public_copy.json`：从无登录公开页面回读的四语公告标题及正文。
+- `docs/STEAM_UPDATE_20260923.md`：本次交付范围、公开链接、构建和验收边界。
+
 ## 2026-09-23 工坊下一阶段
 
 - `scripts/workshop_service.gd`、`tools/steam_fake_api.gd`、`tools/steam_integration_suite.gd`：GodotSteam 4.22.1 订阅与标签调用签名修复及原生/两类作品回归。
