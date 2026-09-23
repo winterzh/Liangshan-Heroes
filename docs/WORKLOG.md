@@ -1,6 +1,6 @@
 ## 2026-09-23 工坊下一阶段启动
 
-只读核对 Steamworks：工坊仅开发人员可见，文件传输/立即可用内容已启用，标题与简介已完成；品牌图和首个公开作品缺失。真实 GodotSteam 4.22.1 方法签名显示 `getSubscribedItems(bool)` 与 `setItemTags(int, Array, bool)`；修复两处生产调用及 fake，增加原生签名和 Map/Defense 标签断言。修改后隔离原生 QA `20260923_150857_37cd75ea` 为 189/189、失败 0。Cloud 当前账号另做只读 API 回读，1395 字节完整、账号归属和战役/设置/语言字段有效。工坊 948×203 品牌图候选已生成并目检，未上传。候选导出和短测通过，但最终身份探针因另一项目新启动 Godot 而按独占规则中止，收据不完整，待重跑。[QA](../qa/workshop_stage_20260923/README.md)。没有切换 Steamworks 曝光或发布构建。
+只读核对 Steamworks：工坊仅开发人员可见，文件传输/立即可用内容已启用，标题与简介已完成；品牌图和首个公开作品缺失。真实 GodotSteam 4.22.1 方法签名显示 `getSubscribedItems(bool)` 与 `setItemTags(int, Array, bool)`；修复两处生产调用及 fake，增加原生签名和 Map/Defense 标签断言。修改后隔离原生 QA `20260923_150857_37cd75ea` 为 189/189、失败 0。Cloud 当前账号另做只读 API 回读，1395 字节完整、账号归属和战役/设置/语言字段有效。工坊 948×203 品牌图候选已生成并目检，未上传。第一次候选因另一项目 Godot 抢占中止；引擎空闲后独立重构 `20260923_152018_ac980678`，包内 1136 项、EXE 短测及源码/包内容身份探针全部完成，ZIP SHA-256 `dedc6b1f3bdfa348553703f4362bd060730da8fdc1452b8b6234b428843769e0`。[QA](../qa/workshop_stage_20260923/README.md)。没有切换 Steamworks 曝光或发布构建。
 
 ## 2026-09-23 当前账号 Steam 云上传复验
 
