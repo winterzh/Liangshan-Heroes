@@ -12,6 +12,14 @@ func check(name: String, condition: bool) -> void:
 	checks.append({"name":name, "passed":condition})
 	if not condition: print("FAIL " + name)
 
+func _native_method_args(native: Object, method_name: String) -> Array:
+	for method in native.get_method_list():
+		if method.name != method_name: continue
+		var types := []
+		for arg in method.args: types.append(int(arg.type))
+		return types
+	return []
+
 func _run() -> void:
 	var campaign := root.get_node("Campaign")
 	var service := root.get_node("SteamService")
@@ -130,6 +138,8 @@ func _run() -> void:
 			var native := Engine.get_singleton("Steam")
 			for method in ["steamInitEx", "run_callbacks", "steamShutdown", "getAchievement", "getStatInt", "setStatInt", "storeStats", "getSubscribedItems", "getItemInstallInfo", "createItem", "setItemTags", "submitItemUpdate", "getItemUpdateProgress"]:
 				check("native method " + method, native.has_method(method))
+			check("native getSubscribedItems(bool) signature", _native_method_args(native, "getSubscribedItems") == [TYPE_BOOL])
+			check("native setItemTags(int, Array, bool) signature", _native_method_args(native, "setItemTags") == [TYPE_INT, TYPE_ARRAY, TYPE_BOOL])
 			for s in ["item_created", "item_updated", "item_downloaded", "item_installed", "user_stats_stored"]:
 				check("native signal " + s, native.has_signal(s))
 	if OS.get_environment("STEAM_QA_VISUAL") == "1":
@@ -246,12 +256,18 @@ func _adapter_tests(service: Node) -> void:
 	check("duplicate submit blocked", api.creates == 1)
 	api.item_created.emit(1, 999001, false)
 	check("created id persisted before submit", int(workshop._pending.id) == 999001 and api.submits == 1)
+	check("workshop tags use native Array signature", api.tag_calls.size() == 1 and api.tag_calls[0].tags == ["Map"] and not api.tag_calls[0].allow_admin_tags)
 	api.item_updated.emit(2, false, 999001)
 	check("failed update is retryable", not workshop.busy)
 	workshop.publish("scenario", source, "QA retry", 2, preview)
 	check("retry reuses created item", api.creates == 1 and api.submits == 2)
 	api.item_updated.emit(1, true, 999001)
 	check("agreement success opens mocked page", not workshop.busy and api.pages.size() == 1)
+	var defense_source := WorkshopExamples.defense()
+	workshop.publish("custom_defense", defense_source, "QA defense", 2, preview)
+	api.item_created.emit(1, 999002, false)
+	check("defense workshop uses Defense tag", api.tag_calls.size() == 3 and api.tag_calls[2].tags == ["Defense"] and not api.tag_calls[2].allow_admin_tags)
+	api.item_updated.emit(1, false, 999002)
 	api.subscribed = [999001]
 	workshop.refresh()
 	check("installed package validates", workshop.items.size() == 1 and workshop.items[0].ok)

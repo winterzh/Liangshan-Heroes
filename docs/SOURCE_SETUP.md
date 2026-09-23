@@ -1,3 +1,7 @@
+## 2026-09-23 工坊 SDK 修复复现
+
+本机真实 GodotSteam 4.22.1 已核对 `getSubscribedItems(bool)` 和 `setItemTags(int, Array, bool)`；对应生产调用与模拟 API 同步修正。共用 Godot 引擎空闲时运行 `python -X utf8 -B tools/run_steam_integration_qa.py --run --native --profile-root <工程外独占目录>`，检查原生签名、两类标签和订阅链；隔离 QA 不登录 Steam 或创建作品。工坊后台仍仅开发人员可见，品牌图在 `marketing/steam_workshop_20260923/` 只是本地候选。进度与证据见 [阶段 QA](../qa/workshop_stage_20260923/README.md)。
+
 ## 2026-09-23 Steam 平台发布后的验证入口
 
 **03:35 验收更新：** 用户启用账号 Steam 云后，实际 Steam 库版本已上传 `liangshan_profile_v1.json`，客户端日志为 `Upload OK` / `result OK`，账号[云文件页面](https://store.steampowered.com/account/remotestorageapp/?appid=5088120)可见。完整玩家备份及文件差异见 [收据](../qa/steam_release_20260922/cloud_client_acceptance_20260923.json)。跨设备下载读回与第二账号隔离尚未验收；不能只凭此账号上传判定全链路完成。

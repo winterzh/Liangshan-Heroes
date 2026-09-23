@@ -1,3 +1,9 @@
+## 2026-09-23 工坊下一阶段
+
+- `scripts/workshop_service.gd`、`tools/steam_fake_api.gd`、`tools/steam_integration_suite.gd`：GodotSteam 4.22.1 订阅与标签调用签名修复及原生/两类作品回归。
+- `marketing/steam_workshop_20260923/`：工坊 948×203 品牌图及原创来源，本地候选，未上传。
+- `qa/workshop_stage_20260923/`：Steamworks 曝光只读回看、Cloud 同机读回和工坊接口修复的验收边界。
+
 ## 2026-09-23 Steam 平台配置与公告公开证据
 
 - `qa/steam_release_20260922/cloud_client_acceptance_20260923.json`：当前账号启用 Steam 云后的生产上传、Steam 客户端 OK 日志、账号云文件页及玩家数据备份/差异收据；跨设备与第二账号读回仍待测。

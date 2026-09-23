@@ -19,6 +19,7 @@ var subscribed := []
 var folder := ""
 var flags := 5
 var pages := []
+var tag_calls: Array = []
 
 func getSteamID() -> int: return owner
 func run_callbacks() -> void: pass
@@ -42,7 +43,7 @@ func setAchievement(id: String) -> bool:
 func storeStats() -> bool:
 	stores += 1
 	return store_ok
-func getSubscribedItems() -> Array: return subscribed
+func getSubscribedItems(_include_locally_disabled: bool) -> Array: return subscribed
 func getItemState(_id: int) -> int: return flags
 func getItemInstallInfo(_id: int) -> Dictionary: return {"ret":true,"folder":folder}
 func downloadItem(_id: int, _priority: bool) -> bool: return true
@@ -56,7 +57,9 @@ func setItemContent(_handle: int, value: String) -> bool:
 	folder = value
 	return true
 func setItemPreview(_handle: int, _path: String) -> bool: return true
-func setItemTags(_handle: int, _tags: PackedStringArray) -> bool: return true
+func setItemTags(_handle: int, tags: Array, allow_admin_tags: bool) -> bool:
+	tag_calls.append({"tags":tags.duplicate(), "allow_admin_tags":allow_admin_tags})
+	return true
 func submitItemUpdate(_handle: int, _notes: String) -> void: submits += 1
 func getItemUpdateProgress(_handle: int) -> Dictionary: return {"status":3,"processed":1,"total":2}
 func isOverlayEnabled() -> bool: return true

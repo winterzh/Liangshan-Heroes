@@ -48,7 +48,7 @@ func refresh() -> void:
 		status = Localize.text("Steam 未连接，无法读取订阅")
 		changed.emit()
 		return
-	for id in SteamService.native.call("getSubscribedItems"):
+	for id in SteamService.native.call("getSubscribedItems", false):
 		var flags := int(SteamService.native.call("getItemState", id))
 		var row := {"id":str(id), "title":Localize.text("作品 ") + str(id), "ok":false, "error":Localize.text("等待下载")}
 		if flags & 4 and not (flags & (8 | 16 | 32)):
@@ -162,10 +162,13 @@ func _submit() -> void:
 	if _handle == 0 or _handle == -1:
 		_finish(Localize.text("无法开始作品更新，可重试"))
 		return
-	for call_spec in [["setItemTitle", _pending.title], ["setItemDescription", _pending.description], ["setItemVisibility", _pending.visibility], ["setItemContent", _pending.folder], ["setItemPreview", String(_pending.folder).path_join("preview.jpg")], ["setItemTags", PackedStringArray(["Map" if _pending.kind == "scenario" else "Defense"])]]:
+	for call_spec in [["setItemTitle", _pending.title], ["setItemDescription", _pending.description], ["setItemVisibility", _pending.visibility], ["setItemContent", _pending.folder], ["setItemPreview", String(_pending.folder).path_join("preview.jpg")]]:
 		if not bool(api.call(call_spec[0], _handle, call_spec[1])):
 			_finish(Localize.text("Steam 拒绝作品信息：") + String(call_spec[0]))
 			return
+	if not bool(api.call("setItemTags", _handle, ["Map" if _pending.kind == "scenario" else "Defense"], false)):
+		_finish(Localize.text("Steam 拒绝作品信息：setItemTags"))
+		return
 	api.call("submitItemUpdate", _handle, "Updated from Liangshan Heroes editor")
 	status = Localize.text("正在上传；Steam 提交后无法取消")
 	changed.emit()
