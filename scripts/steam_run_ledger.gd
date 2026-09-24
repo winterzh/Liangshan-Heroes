@@ -111,3 +111,7 @@ func invalidate(live_account: String) -> Dictionary:
 func correct(live_account: String, stats: Dictionary, unlocked: Dictionary, read_generation: Variant) -> Dictionary:
 	if not _ready_for_event(): return _bad("NOT_READY")
 	return _persist(_model.prepare_server_correction(live_account, stats, unlocked, read_generation))
+
+func merge_remote_floor(live_account: String, stats: Dictionary, unlocked: Dictionary, generation: int) -> Dictionary:
+	if not _ready_for_event(): return _bad("NOT_READY")
+	return _persist(_model.prepare_remote_floor(live_account, stats, unlocked, generation))

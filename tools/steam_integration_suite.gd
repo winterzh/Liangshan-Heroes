@@ -109,6 +109,7 @@ func _run() -> void:
 	check("map example", validator.validate("scenario", WorkshopExamples.scenario()))
 	check("defense example", validator.validate("custom_defense", WorkshopExamples.defense()))
 	await _adapter_tests(service)
+	_durable_publisher_tests()
 	# Actual campaign/node boundary: content-supplied level ids cannot create missions.
 	campaign.current = 0
 	campaign.scenario = false; campaign.custom_defense = false; campaign.skirmish = false; campaign.skirmish_ai = false; campaign.arena = false
@@ -305,3 +306,86 @@ func _adapter_tests(service: Node) -> void:
 	service.status = "普通启动：Steam 成就不计入"
 	workshop.items.clear()
 	await get_tree().process_frame
+
+func _publisher_fixture(api: RefCounted) -> Node:
+	var service: Node = load("res://scripts/steam_service.gd").new()
+	root.add_child(service)
+	service.set_process(false)
+	service.native = api
+	service.available = true
+	service.stats_ready = true
+	service.account = str(api.owner)
+	service._stats_reader = api
+	var snapshot: Dictionary = api.current_snapshot()
+	service.state.seed(snapshot.stats, snapshot.unlocked)
+	service._sent_stats = snapshot.stats.duplicate()
+	service._sent_achievements = snapshot.unlocked.duplicate()
+	return service
+
+func _durable_publisher_tests() -> void:
+	var api: RefCounted = load("res://tools/steam_fake_api.gd").new()
+	api.owner = 55555
+	api.stats.TOTAL_KILLS = 40
+	var service := _publisher_fixture(api)
+	check("durable publisher adopts before gameplay", service._adopt_publisher().ok and service._publisher_enabled)
+	var run_id: int = service._begin_persistent_run({"mode":"defense", "level_id":"", "waves":30})
+	check("durable publisher allocates official run", run_id > 0)
+	service.record_kill(run_id, 3)
+	check("kills wait for durable checkpoint", api.stats.TOTAL_KILLS == 40)
+	check("durable checkpoint succeeds", service._checkpoint_persistent_run().ok)
+	check("checkpoint publishes absolute total", api.stats.TOTAL_KILLS == 43 and api.stores == 1)
+	var binding: Dictionary = service._persistent_binding(run_id, service._context, 3)
+	check("save binds to durable run", binding.ok)
+	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
+	check("durable success never acknowledges receipt", service._dirty and service._store_busy)
+	service._process(31.0)
+	service._process(61.0)
+	check("durable publisher retries after timeout", api.stores >= 2 and api.stats.TOTAL_KILLS == 43)
+	service.native = null; service.available = false; service.free()
+	# Restart with the same independent disk ledger and older world highwater.
+	api.stats.TOTAL_KILLS = 45
+	service = _publisher_fixture(api)
+	check("restart adopts ledger and remote floor", service._adopt_publisher().ok and service.state.stats.TOTAL_KILLS == 45)
+	var prepared: Dictionary = service._prepare_persistent_resume(binding.binding, {"mode":"defense", "level_id":"", "waves":30}, 3)
+	check("restart accepts saved run identity", prepared.ok)
+	if prepared.ok:
+		service._install_persistent_resume(prepared)
+		run_id = service._active_run
+		service.record_kill(run_id, 3)
+		service._checkpoint_persistent_run()
+		check("replayed kills do not increment after restart", api.stats.TOTAL_KILLS == 45)
+		service.record_kill(run_id, 4)
+		service._checkpoint_persistent_run()
+		check("new kill increments preserved remote floor", api.stats.TOTAL_KILLS == 46)
+		service.settle(run_id, true, {})
+		service._checkpoint_persistent_run()
+		service.settle(run_id, true, {})
+		service._checkpoint_persistent_run()
+		check("durable duplicate terminal counts once", api.stats.TOTAL_WINS == 1 and api.stats.DEFENSE_WINS == 1)
+		check("terminal run cannot resume old slot", not service._prepare_persistent_resume(binding.binding, {"mode":"defense", "level_id":"", "waves":30}, 3).ok)
+	service.native = null; service.available = false; service.free()
+	service = _publisher_fixture(api)
+	check("settled publisher reopens in new process", service._adopt_publisher().ok and service._active_run == 0)
+	var old_slot: Dictionary = service._prepare_persistent_resume(binding.binding, {"mode":"defense", "level_id":"", "waves":30}, 3)
+	check("settled Steam run refused after restart", old_slot.get("code") == "RUN_TERMINAL")
+	var writes: int = api.stat_writes
+	service._on_stored(SteamAchievementCatalog.APP_ID, 8)
+	service._on_stored(SteamAchievementCatalog.APP_ID, 1)
+	service._process(120.0)
+	check("durable correction stops further SDK writes", service._correction_required and not service.stats_ready and api.stat_writes == writes)
+	service.native = null; service.available = false; service.free()
+	service = _publisher_fixture(api)
+	api.read_ok = false
+	check("correction with failed read cannot publish", not service._adopt_publisher().ok and not service._publisher_enabled and api.stat_writes == writes)
+	api.read_ok = true
+	api.stats.TOTAL_KILLS = 2
+	api.stats.TOTAL_WINS = 0
+	api.stats.DEFENSE_WINS = 0
+	api.achievements.clear()
+	check("restart accepts corrected server values", service._adopt_publisher().ok and service._publisher_enabled and service.state.stats.TOTAL_KILLS == 2 and service.state.stats.TOTAL_WINS == 0)
+	check("correction keeps old run terminal", not service._prepare_persistent_resume(binding.binding, {"mode":"defense", "level_id":"", "waves":30}, 3).ok)
+	var fresh_run: int = service._begin_persistent_run({"mode":"defense", "level_id":"", "waves":30})
+	service.record_kill(fresh_run, 1)
+	service._checkpoint_persistent_run()
+	check("new run counts after correction", fresh_run > 0 and api.stats.TOTAL_KILLS == 3)
+	service.native = null; service.available = false; service.free()

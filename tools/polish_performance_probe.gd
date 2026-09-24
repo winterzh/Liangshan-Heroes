@@ -77,7 +77,7 @@ func _on_tick() -> void:
 			_amove(fixture_units,b.level.gate.position,"synthetic deployed army attacks native main gate")
 		elif scenario == "gao_contact":
 			_amove(b.units.filter(func(u):return alive(u) and u.faction==0 and u.movement_profile=="water"),b.map.cell_to_world(b.level.SEA_FRONT),"native player ships advance")
-			_amove(b.units.filter(func(u):return alive(u) and u.faction==0 and not u.is_worker and not u.is_noncombat and u.movement_profile!="water"),b.map.cell_to_world(b.level.LAND_FRONT),"native player land army advances")
+			_amove(b.units.filter(func(u):return alive(u) and u.faction==0 and not u.is_worker and not u.is_noncombat and u.key!="song_jiang" and u.movement_profile!="water"),b.map.cell_to_world(b.level.LAND_FRONT),"native player land army advances")
 			b.level._send_wave(b,0)
 			input_log.append({"planned_tick":1,"executed_tick":physics_tick,"action":"authored fixture: send existing first land/water wave early"})
 	if frozen_camera and (b.camera.position != camera_origin or b.camera.zoom != Vector2.ONE or b.camera.offset != Vector2.ZERO or b.camera.rotation != 0.0):

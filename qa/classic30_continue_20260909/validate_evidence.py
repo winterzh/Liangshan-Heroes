@@ -244,13 +244,17 @@ def verify(args):
     # arbitrary path or a player's profile. Known private batch path only.
     if args.current is not None:
         current = args.current.absolute()
-        private_run = Path("D:/CodexTemp/classic30_continue") / batch.name
+        private_root = getattr(args, "private_root", Path("D:/CodexTemp/classic30_continue"))
+        if not private_root.is_absolute():
+            raise ValueError("private root must be an explicit absolute path")
+        no_links(private_root)
+        private_run = private_root / batch.name
         private = private_run / "project"
         no_links(current); no_links(private)
         result["current_source_match"] = True
         result["private_source_match"] = True
         check(str(receipt.get("run", "")).replace("\\", "/").casefold() == str(private_run).replace("\\", "/").casefold(),
-              "receipt fixed private run path")
+              "receipt explicitly selected private run path")
         for label, base in (("current", current), ("private", private)):
             for name, digest in sources.items():
                 path = file_at(base, name)
@@ -329,7 +333,8 @@ def verify(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("batch", type=Path, help="Explicit completed public archive batch directory")
-    parser.add_argument("--current", type=Path, metavar="CHECKOUT", help="Also compare every frozen input in this checkout and fixed D private copy")
+    parser.add_argument("--current", type=Path, metavar="CHECKOUT", help="Also compare every frozen input in this checkout and selected private copy")
+    parser.add_argument("--private-root", type=Path, default=Path("D:/CodexTemp/classic30_continue"), help="Explicit trusted parent used with --work-root when running the batch")
     parser.add_argument("--require-acceptance", action="store_true")
     args = parser.parse_args()
     try:

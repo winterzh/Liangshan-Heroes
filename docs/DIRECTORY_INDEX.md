@@ -1,3 +1,10 @@
+## 2026-09-24 续玩、稳定性与工坊收尾
+
+- `docs/CLASSIC_CONTINUE_RELEASE_20260924.md`：首批开放范围、Steam 统计恢复与实际验收边界。
+- `qa/continue_release_20260924/`：本轮汇总、独立回读及最终验收记录。
+- `tools/run_private_release_soak.py`：冻结源码、隔离玩家目录、独占引擎的 30 分钟正式渲染器稳定性执行器。
+- `marketing/steam_continue_20260924/`：四语更新说明草稿；公开状态以发布收据为准。
+
 ## 2026-09-23 工坊公开发布与实机验收
 
 - `marketing/steam_workshop_20260923/sample_scenario_cover.jpg`：官方示例地图的原样 Steam F12 实机截图，已用作作品 `3806632089` 封面。

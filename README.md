@@ -1,3 +1,7 @@
+## 2026-09-24 经典 30 波续玩（源码，尚未上线）
+
+首批支持固定 30 波、四英雄上限的经典据守：正式导出程序中暂停后“保存并退出游戏”，重启后从主菜单“继续上次战斗”。战斗槽保存在本机，不参与 Steam Cloud；版本更新可能导致旧战斗槽不能继续。其他玩法暂未开放。当前 Steam 仍是 Build 25476210；[验收与发布边界](docs/CLASSIC_CONTINUE_RELEASE_20260924.md)。
+
 ## 2026-09-23 Steam 创意工坊已公开
 
 Windows 正式分支现为 Build `25476210`。更新 Steam 游戏后，在「更多 → 创意工坊」查看订阅作品并游玩，也可从场景/据守编辑器上传自己的作品。首个[示例地图《水泊练兵》](https://steamcommunity.com/sharedfiles/filedetails/?id=3806632089)已完成当前账号订阅、下载与两波实战通关；工坊局不计入 Steam 成就。[公开工坊](https://steamcommunity.com/app/5088120/workshop/) · [四语上线公告](https://store.steampowered.com/news/app/5088120/view/694273194214817894) · [发布记录](docs/STEAM_UPDATE_20260923.md)。

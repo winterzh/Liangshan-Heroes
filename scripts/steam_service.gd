@@ -7,6 +7,8 @@ signal initialized
 const LocalRunSession = preload("res://scripts/steam_local_run_session.gd")
 const StatsReader = preload("res://scripts/steam_stats_reader.gd")
 var _local_runs: RefCounted
+var _publisher_enabled := false
+var _local_tick := 0.0
 var _stats_reader: RefCounted
 var _correction_required := false
 
@@ -60,11 +62,11 @@ func _process(delta: float) -> void:
 		return
 	native.call("run_callbacks")
 	if _local_runs != null:
-		_tick += delta
-		if _tick >= 1.0:
-			_tick = 0.0
+		_local_tick += delta
+		if _local_tick >= 1.0:
+			_local_tick = 0.0
 			if ensure_account() and stats_ready and _local_runs.has_pending(): _checkpoint_persistent_run()
-		return
+		if not _publisher_enabled: return
 	if _correction_required:
 		ensure_account()
 		return
@@ -116,6 +118,14 @@ func _read_initial_state() -> void:
 	status = "Steam 成就已就绪（官方玩法计入；工坊与自定义不计入）"
 	_import_legacy()
 	state.evaluate()
+	if OS.has_feature("steam") and not SteamRunPolicy.test_environment():
+		var adopted := _adopt_publisher()
+		if not adopted.ok:
+			stats_ready = false
+			_correction_required = true
+			status = "本机战斗记录暂不可用，请保留存档并重新启动游戏"
+			changed.emit()
+			return
 	_sync_state()
 	flush()
 	changed.emit()
@@ -163,7 +173,7 @@ func settle(run_id: int, victory: bool, result: Dictionary) -> void:
 		changed.emit()
 
 func _sync_state() -> void:
-	if _local_runs != null: return # Durable local mode awaits the continuous SDK publisher.
+	if _local_runs != null and not _publisher_enabled: return
 	if not ensure_account() or not stats_ready or _correction_required: return
 	var new_unlock := false
 	for name in state.stats:
@@ -186,7 +196,7 @@ func _sync_state() -> void:
 		changed.emit()
 
 func flush() -> void:
-	if _local_runs != null: return
+	if _local_runs != null and not _publisher_enabled: return
 	if not ensure_account() or not stats_ready or not _dirty or _store_busy or _retry_after > 0:
 		return
 	_store_revision = _revision
@@ -199,9 +209,15 @@ func _on_stored(game_id: int, result: int) -> void:
 		return
 	if _local_runs != null:
 		if result == 8:
+			_correction_required = true
 			_local_runs.invalidate(); stats_ready = false; _active_run = 0
 			status = "Steam 统计发生校正，本局停止计入，请重启后检查"
 			changed.emit()
+		elif _publisher_enabled:
+			# Neither a late success nor a failure may acknowledge a run generation.
+			# Repeated absolute SetStat targets are idempotent on this account.
+			_dirty = true
+			status = "本局已保存到本机，Steam 统计将自动重试同步"
 		return # Uncorrelated callbacks cannot acknowledge local receipt generations.
 	if _correction_required: return
 	if result == 1:
@@ -279,15 +295,33 @@ func _local_bad(code: String) -> Dictionary:
 	return {"ok": false, "code": code}
 
 func _open_persistent_runs(root_path := "user://steam_receipts/v1") -> Dictionary:
-	# Internal activation seam. The normal startup does not enable this until
-	# the persistent outbox/SDK publisher is ready. Never inject paths from slots.
+	# Account-local receipt adoption. Normal startup enables retained absolute
+	# SDK retries only after this transaction succeeds. Paths never come from slots.
 	if _local_runs != null or _active_run != 0 or _dirty or _store_busy or _store_revision >= 0 or _correction_required: return _local_bad("PERSISTENT_ADOPTION_BUSY")
 	if not ensure_account() or not stats_ready: return _local_bad("STEAM_NOT_READY")
 	var local := LocalRunSession.new()
 	var opened: Dictionary = local.open(account, state.stats, state.unlocked, root_path)
 	if not opened.ok: return opened
 	var captured: Dictionary = local.capture()
-	if not captured.ok or captured.record.requires_correction: return _local_bad("LOCAL_RECEIPT_UNAVAILABLE")
+	if not captured.ok: return _local_bad("LOCAL_RECEIPT_UNAVAILABLE")
+	if captured.record.requires_correction:
+		# A new process has not issued any writes. Accept the typed startup cache
+		# only after a durable invalidation; old run tokens remain terminal.
+		if _stats_reader == null: return _local_bad("CORRECTION_READ_REQUIRED")
+		var fresh: Dictionary = _stats_reader.current_snapshot()
+		if not fresh.get("ok", false) or fresh.get("owner") != account or not ensure_account(): return _local_bad("CORRECTION_READ_REQUIRED")
+		var corrected: Dictionary = local._ledger.correct(account, fresh.stats, fresh.unlocked, int(captured.record.generation))
+		if not corrected.ok: return corrected
+		captured = local.capture()
+		if not captured.ok: return captured
+		state.seed(captured.record.stats, captured.record.unlocked)
+		_sent_stats = fresh.stats.duplicate()
+		_sent_achievements = fresh.unlocked.duplicate()
+	# Never lower an observed remote counter when an older local ledger exists.
+	var merged: Dictionary = local._ledger.merge_remote_floor(account, state.stats, state.unlocked, int(captured.record.generation))
+	if not merged.ok: return merged
+	captured = local.capture()
+	if not captured.ok: return captured
 	_local_runs = local
 	state.seed(captured.record.stats, captured.record.unlocked)
 	status = "本局进度保存在本机，Steam 同步尚未接通"
@@ -313,6 +347,9 @@ func _checkpoint_persistent_run() -> Dictionary:
 		return captured
 	state.seed(captured.record.stats, captured.record.unlocked)
 	if _local_runs._settled: state.settled[_active_run] = true
+	if _publisher_enabled:
+		_sync_state()
+		flush()
 	changed.emit()
 	return captured
 
@@ -339,3 +376,12 @@ func _install_persistent_resume(prepared: Dictionary) -> void:
 	_run_counter = prepared.handle; _active_run = prepared.handle
 	_context = prepared.context.duplicate(true); _run_kill_highwater = prepared.credited_kills
 	state.seed(prepared.record.stats, prepared.record.unlocked)
+
+func _adopt_publisher() -> Dictionary:
+	# Read/merge before gameplay begins; never retire local targets on an SDK
+	# callback. Across restarts, publish absolute maxima, not replayed deltas.
+	var adopted := _open_persistent_runs()
+	if not adopted.ok: return adopted
+	_publisher_enabled = true
+	status = "战斗记录已保存到本机，Steam 统计自动同步"
+	return adopted
