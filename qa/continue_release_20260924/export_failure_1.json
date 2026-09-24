@@ -1,0 +1,29 @@
+{
+  "candidate": ".godot/steam_candidates/20260924_101559_f8ed14fb",
+  "package_checks": 1136,
+  "package_smoke_passed": true,
+  "player_save_exit_passed": false,
+  "observed_error": "保存未能确认完成，当前战斗已保留。请检查存储后重试。",
+  "cases": [
+    {
+      "runtime": "actual release EXE",
+      "steam": true,
+      "profile_isolated": true,
+      "result": "save refused; battle retained"
+    },
+    {
+      "runtime": "actual release EXE",
+      "steam": false,
+      "profile_isolated": true,
+      "result": "same refusal"
+    },
+    {
+      "runtime": "editor host with same compiled PCK",
+      "steam": false,
+      "profile_isolated": true,
+      "result": "save succeeded"
+    }
+  ],
+  "upload_allowed": false,
+  "release_script_probe": "release template does not support --script; attempted probe timed out and only owned PID was stopped"
+}

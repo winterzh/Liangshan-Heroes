@@ -27,7 +27,7 @@ func _ready() -> void:
 	set_process_input(false)
 
 func is_enabled() -> bool:
-	if PLAYER_ENTRY_ENABLED and OS.get_name() == "Windows" and OS.has_feature("steam") and not SteamRunPolicy.test_environment(): return true
+	if PLAYER_ENTRY_ENABLED and not SteamRunPolicy.test_environment(): return true
 	return _private_qa_enabled()
 
 func _private_qa_enabled() -> bool:

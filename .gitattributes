@@ -598,3 +598,7 @@ tools/run_controls_update_qa.py -text
 
 # Preserve original Steam release evidence bytes.
 qa/steam_release_20260920/** -text whitespace=-blank-at-eof,cr-at-eol
+
+# Continue release receipts retain their exact verification bytes.
+qa/continue_release_20260924/** -text -whitespace
+tools/run_private_release_soak.py text eol=lf
