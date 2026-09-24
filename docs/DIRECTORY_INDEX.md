@@ -1176,3 +1176,5 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - [美术全库台账](ART_FULL_20260915.md)、[工作日志](WORKLOG.md)、[来源说明](SOURCE_SETUP.md)、[项目状态](PROJECT_STATUS.md)：同步本批运行时绘制结论。
 
 - `qa/workshop_defense_public_20260924/`: public Defense example, subscription file hashes, callback reproduction and native regression.
+
+- `qa/stockade_boundary_20260924/`：据守围栏缺口复现、修复前后地图寻路检查及独立回读。

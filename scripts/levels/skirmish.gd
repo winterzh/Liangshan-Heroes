@@ -153,10 +153,11 @@ func paint_map(map: GameMap) -> void:
 	map.fill_ellipse(Vector2(13, 37), 3, 2, T.FOREST, [T.GRASS])
 	map.fill_ellipse(Vector2(25, 22), 2, 2, T.FOREST, [T.GRASS])
 	Landscape.paint(map)
-	Layout.paint(map)
 	# 第八十回所说的山前新筑大路；其余两路只从滩头登陆，不再跨水铺直线土路。
 	map.paint_path([Vector2(18, 0), Vector2(18, 6), Vector2(21, 11), Vector2(19, 17),
-		Vector2(23, 22), Vector2(29, 29), Vector2(GATE_B.x, GATE_B.y)], 1, T.ROAD)
+		Vector2(33, 17), Vector2(34, 26), Vector2(GATE_B.x, GATE_B.y)], 1, T.ROAD)
+	# 大路绕北墙外侧抵达东山关；最后重建院墙边界，避免铺路覆盖 CLIFF 造成隐形缺口。
+	Layout.paint(map)
 	# 忠义堂地基；厅、寨门、木墙、码头由共同视觉系统按同一坐标绘制。
 	for y in range(HALL.y - 1, HALL.y + 2):
 		for x in range(HALL.x - 1, HALL.x + 2):
