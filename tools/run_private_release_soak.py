@@ -99,7 +99,10 @@ def main():
                 raise RuntimeError('Import failed')
             if engine_pids():
                 raise RuntimeError('Engine still running after ' + label)
-        report = json.loads((evidence/'campaign_mode_soak.json').read_text(encoding='utf-8-sig'))
+        report_path = evidence/'campaign_mode_soak.json'
+        if not report_path.is_file():
+            raise RuntimeError('Soak runner did not produce a report; exit=' + str(code) + '; inspect soak_runner.log')
+        report = json.loads(report_path.read_text(encoding='utf-8-sig'))
         receipt['complete'] = True
         receipt['passed'] = report.get('passed') is True and all(row['exit_code'] == 0 for row in receipt['steps'])
     except Exception as exc:

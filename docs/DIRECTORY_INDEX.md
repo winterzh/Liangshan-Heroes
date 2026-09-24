@@ -1,3 +1,10 @@
+## 2026-09-24 围栏修复后最终复验
+
+- `qa/continue_release_20260924/native_wallfix/`、`candidate_wallfix/`：最终原生集成、候选包和生产来源收据。
+- `qa/continue_release_20260924/performance/`：15 窗口原始样本、分段分析及严格目标边界。
+- `qa/continue_release_20260924/soak/`：编码修复前失败批及用户缩短的 12 分钟观察。
+- `qa/workshop_defense_public_20260924/candidate_installation_retest.json`、`subscribed_candidate_victory.jpg`：新包真实重新订阅与胜利证据。
+
 ## 2026-09-24 正式包续玩验收补充
 
 - [续玩与收尾 QA](../qa/continue_release_20260924/README.md)：正式模板回调、物理帧恢复修复，302 项流程、210 项原生集成与 1136 项包检查；正式 EXE 保存重启/覆盖验收收据。

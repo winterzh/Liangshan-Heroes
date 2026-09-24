@@ -1,0 +1,142 @@
+{
+  "batch": "D:\\AI项目\\水浒\\开发工程\\qa\\classic30_continue_20260909\\20260924_125334_7d11f343",
+  "evidence_consistent": true,
+  "gameplay_status": "full_acceptance_passed",
+  "full_acceptance_verified": true,
+  "diagnostic_complete_verified": false,
+  "current_source_match": true,
+  "private_source_match": true,
+  "checks": 13622,
+  "evidence_errors": [],
+  "source_comparison_errors": [],
+  "steps": [
+    {
+      "case": "import",
+      "pid": 4064,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "profile_guard",
+      "pid": 30560,
+      "exit_code": 2,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "public_gate",
+      "pid": 41544,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "public_gate_verified",
+      "report_passed": true,
+      "checks": 7,
+      "failed_checks": [],
+      "events": 0,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "new_economy",
+      "pid": 42328,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "saved_and_exiting",
+      "report_passed": true,
+      "checks": 27,
+      "failed_checks": [],
+      "events": 43,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "resume_combat",
+      "pid": 11796,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "saved_and_exiting",
+      "report_passed": true,
+      "checks": 35,
+      "failed_checks": [],
+      "events": 59,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "resume_transition",
+      "pid": 40036,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "saved_and_exiting",
+      "report_passed": true,
+      "checks": 29,
+      "failed_checks": [],
+      "events": 44,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "resume_victory",
+      "pid": 42944,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "natural_victory",
+      "report_passed": true,
+      "checks": 224,
+      "failed_checks": [],
+      "events": 6249,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "terminal_reject_1",
+      "pid": 8996,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "terminal_refused",
+      "report_passed": true,
+      "checks": 12,
+      "failed_checks": [],
+      "events": 2,
+      "gameplay_step_passed": true
+    },
+    {
+      "case": "terminal_reject_2",
+      "pid": 37796,
+      "exit_code": 0,
+      "engine_errors": 0,
+      "process_expected_result": true,
+      "outcome": "terminal_refused",
+      "report_passed": true,
+      "checks": 12,
+      "failed_checks": [],
+      "events": 2,
+      "gameplay_step_passed": true
+    }
+  ],
+  "manifest_entries": 61,
+  "manifest_entry_bytes": 5453837,
+  "manifest_sha256": "d1f60fdc6c928b44938bc57875627ce17798c658471a58c64daad28a4981df6c",
+  "receipt_sha256": "f79f4b26ea75f939d1bfa844384b4757badd12a200bee929ee1bbce0adb0223c",
+  "frozen_source_files": 3343,
+  "receipt_claims": {
+    "complete": true,
+    "acceptance_passed": true,
+    "diagnostic_complete": false,
+    "source_guard": true,
+    "player_unchanged": true,
+    "failure": null,
+    "final_guard_failure": null
+  },
+  "limits": [
+    "Evidence consistency is not gameplay acceptance.",
+    "Archived process exit and player digests are recorded evidence, not independently re-executed or re-read player files.",
+    "Without --current, private control files and full frozen source copies are not read.",
+    "--current checks every receipt-listed source path; it does not execute the historical dynamic source collector.",
+    "Full acceptance here is automated classic-only; no Steam, eight missions, human, second Windows or performance claim."
+  ]
+}
