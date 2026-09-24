@@ -1,3 +1,9 @@
+## 2026-09-24 续玩与围栏修复发布
+
+- `docs/STEAM_UPDATE_20260924_CONTINUE.md`：Build 25498721 上线、回滚与四语公告记录。
+- `qa/steam_release_20260924_continue/`：候选、服务器、客户端及公开公告收据。
+- `marketing/steam_continue_20260924/announcement_public_copy.json`：已公开四语正文；原草稿保留历史状态。
+
 ## 2026-09-24 围栏修复后最终复验
 
 - `qa/continue_release_20260924/native_wallfix/`、`candidate_wallfix/`：最终原生集成、候选包和生产来源收据。
