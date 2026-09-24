@@ -10,10 +10,17 @@
 - 四语公告 `694273194214817894` 于 18:15 CST 公开，关联 Build `25476210`，工坊页曝光开启；正文包含入口、编辑器、示例链接、接口修复和成就限制。公开 DOM 分别回读四语标题、正文与链接，简中页面目检排版。封面使用已有 `announcement_800x450.png`，Steam 对其他语言回退同图。
 - 22:35 后不携带 Cookie 的工坊首页请求为 HTTP 200，包含标题、作品 `3806632089` 和公告。四语公告 HTTP 均为 200，公开响应 `logged_in=false`、`published=1`、`hidden=0`、`build_id=25476210`；对应正文成就说明和示例链接均匹配。已发布文案保存在 [announcement_public_copy.json](../../marketing/steam_workshop_20260923/announcement_public_copy.json)，不纳入原始网页中的账户或站点会话字段。
 
-## 待完成
+## 2026-09-24 收尾复核
 
-- 本机 Steam appmanifest 仍为 BetaKey `steam-integration`，Build/Manifest 与已上线 default 相同。恢复操作时 Steam 主窗口短暂出现后消失，重新枚举无可操作窗口，故未修改客户端分支。默认分支客户端切换仍待完成，不能与当前账号的同构建实战验收混为一项。
-- 当前没有第二台 Steam 电脑或第二个测试账号，跨设备 Cloud 读回和跨账号工坊验收未做。本次当前账号的订阅与实战通过不替代这些检查。
+2026-09-24 用户已在 Steam 测试版选“无”。本机 appmanifest 的 UserConfig.BetaKey 已为 public，Build 25476210 / Manifest 4175538259787899440 未变，六个安装文件 SHA-1 再次全部匹配发布收据。MountedConfig.BetaKey 仍留有 steam-integration，本轮未重启游戏，未宣称该字段已刷新。
+
+按用户 2026-09-24 的决定，以本机实测作为本阶段验收标准；第二账号测试不再作为发布阻塞项。跨账号与跨设备仍记录为未测试，不标记通过。
+
+## 后续内容
+
 - 示例据守内容仅为文案候选，尚未上传公开。
+- 长局性能与中途续玩另属后续开发和验证范围。
 
 本批收尾只更新发布文档与作品封面来源，没有修改游戏代码或重新打包。GitHub 按白名单同步 stable 分支，排除无关 `assets/ui/items/health_potion.svg.import`、Steam 缓存、玩家数据和候选 ZIP。
+
+2026-09-24 用户另行授权 stable 与 main 同步；此前 stable-only 范围不限制本次明确授权。

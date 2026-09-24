@@ -106,8 +106,60 @@
     ]
   },
   "limitations": [
-    "No second Steam account available; cross-account Workshop test pending.",
-    "No second device available; cross-device Cloud test pending.",
+    "Cross-account and cross-device tests not performed; user accepts local-machine evidence for this release.",
+    "MountedConfig still records steam-integration; UserConfig selection is public.",
     "Sample defense item is not published."
-  ]
+  ],
+  "closeout_20260924": {
+    "verified_at": "2026-09-24T09:23:08.201098+08:00",
+    "user_reported_beta_selection": "None",
+    "user_config_beta_key": "public",
+    "mounted_config_beta_key": "steam-integration",
+    "default_branch_selected": true,
+    "game_restarted_this_check": false,
+    "build_id": 25476210,
+    "manifest_id": "4175538259787899440",
+    "files": [
+      {
+        "path": "LiangshanHeroes.exe",
+        "sha1": "bbd695741ea24cd77a23a64666d60ef14e53d5ac",
+        "matches_release": true
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda",
+        "matches_release": true
+      },
+      {
+        "path": "steam_api64.dll",
+        "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28",
+        "matches_release": true
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba",
+        "matches_release": true
+      },
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "sha1": "3891aeb1976703fc639c168329d90e27c7680a68",
+        "matches_release": true
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2",
+        "matches_release": true
+      }
+    ],
+    "acceptance_policy": {
+      "basis": "User accepted local-machine tests for this release",
+      "second_account_test_is_release_blocker": false,
+      "cross_account_test_performed": false,
+      "cross_device_test_performed": false
+    },
+    "github_sync_authorized_targets": [
+      "main",
+      "codex/sync-20260905-stable"
+    ]
+  }
 }

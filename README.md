@@ -2,7 +2,9 @@
 
 Windows 正式分支现为 Build `25476210`。更新 Steam 游戏后，在「更多 → 创意工坊」查看订阅作品并游玩，也可从场景/据守编辑器上传自己的作品。首个[示例地图《水泊练兵》](https://steamcommunity.com/sharedfiles/filedetails/?id=3806632089)已完成当前账号订阅、下载与两波实战通关；工坊局不计入 Steam 成就。[公开工坊](https://steamcommunity.com/app/5088120/workshop/) · [四语上线公告](https://store.steampowered.com/news/app/5088120/view/694273194214817894) · [发布记录](docs/STEAM_UPDATE_20260923.md)。
 
-跨设备 Cloud 与第二账号工坊测试仍待完成。本机目前使用同构建的 `steam-integration` 测试分支，默认分支客户端切换尚待验收。下方历史批次的“未发布”等描述保留其当时语境。
+2026-09-24 用户已在 Steam 测试版选“无”。本机 appmanifest 的 UserConfig.BetaKey 已为 public，Build 25476210 / Manifest 4175538259787899440 未变，六个安装文件 SHA-1 再次全部匹配发布收据。MountedConfig.BetaKey 仍留有 steam-integration，本轮未重启游戏，未宣称该字段已刷新。
+
+按用户 2026-09-24 的决定，以本机实测作为本阶段验收标准；第二账号测试不再作为发布阻塞项。跨账号与跨设备仍记录为未测试，不标记通过。下方历史批次的“未发布”等描述保留其当时语境。
 
 ## 2026-09-22 Steam 修复已整合 main（源码，未发布）
 
