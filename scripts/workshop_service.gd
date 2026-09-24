@@ -187,8 +187,11 @@ func _finish(message: String) -> void:
 	status = message
 	changed.emit()
 
-func _installed(app_id: int, _id: int) -> void:
-	if app_id == SteamAchievementCatalog.APP_ID: refresh()
+func _installed(app_id: int, id: int, _content_handle: int = 0, _manifest_id: int = 0) -> void:
+	# GodotSteam 4.22.1 declares two args, but native installation emits four.
+	if app_id != SteamAchievementCatalog.APP_ID: return
+	_requested.erase(id)
+	refresh()
 
 func _downloaded(result: int, id: int, app_id: int) -> void:
 	if app_id != SteamAchievementCatalog.APP_ID: return

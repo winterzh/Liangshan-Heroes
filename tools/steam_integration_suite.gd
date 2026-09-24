@@ -20,6 +20,14 @@ func _native_method_args(native: Object, method_name: String) -> Array:
 		return types
 	return []
 
+func _native_signal_args(native: Object, signal_name: String) -> Array:
+	for entry in native.get_signal_list():
+		if entry.name != signal_name: continue
+		var types := []
+		for arg in entry.args: types.append(int(arg.type))
+		return types
+	return []
+
 func _run() -> void:
 	var campaign := root.get_node("Campaign")
 	var service := root.get_node("SteamService")
@@ -143,6 +151,10 @@ func _run() -> void:
 			check("native setItemTags(int, Array, bool) signature", _native_method_args(native, "setItemTags") == [TYPE_INT, TYPE_ARRAY, TYPE_BOOL])
 			for s in ["item_created", "item_updated", "item_downloaded", "item_installed", "user_stats_stored"]:
 				check("native signal " + s, native.has_signal(s))
+				var adapter: RefCounted = load("res://tools/steam_fake_api.gd").new()
+				# 4.22.1 metadata advertises two installation arguments; the real callback emits four.
+				var expected: Array = [TYPE_INT, TYPE_INT] if s == "item_installed" else _native_signal_args(adapter, s)
+				check("native signal argument types " + s, _native_signal_args(native, s) == expected)
 	if OS.get_environment("STEAM_QA_VISUAL") == "1":
 		var menu: Control = load("res://scenes/menu.tscn").instantiate()
 		root.add_child(menu)
@@ -276,6 +288,15 @@ func _adapter_tests(service: Node) -> void:
 	workshop.refresh()
 	check("updating package cannot play", not workshop.items[0].ok)
 	api.flags = 5
+	workshop._requested[999001] = true
+	api.item_installed.emit(SteamAchievementCatalog.APP_ID + 1, 999001, 7, 8)
+	check("foreign install leaves pending and listing unchanged", workshop._requested.has(999001) and not workshop.items[0].ok)
+	api.item_installed.emit(SteamAchievementCatalog.APP_ID, 999001, 7, 8)
+	check("four argument install refreshes playable package", workshop.items.size() == 1 and workshop.items[0].ok)
+	check("installed item clears download request", not workshop._requested.has(999001))
+	workshop.items.clear()
+	workshop._installed(SteamAchievementCatalog.APP_ID, 999001)
+	check("declared two argument install remains compatible", workshop.items.size() == 1 and workshop.items[0].ok)
 	workshop.unsubscribe("999001")
 	workshop.refresh()
 	check("unsubscribe removes listing", workshop.items.is_empty())

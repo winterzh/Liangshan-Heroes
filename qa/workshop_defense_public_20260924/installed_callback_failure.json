@@ -1,0 +1,9 @@
+{
+  "observed_at": "2026-09-24T11:49:15.265098",
+  "build": 25476210,
+  "trigger": "Subscribe to public item 3807085508 while the game is running",
+  "error": "Error calling from signal 'item_installed' to callable: 'Node(workshop_service.gd)::_installed': Method expected 2 argument(s), but called with 4.",
+  "effect": "The installation callback could not refresh the listing. Downloaded content was valid, and reopening Workshop displayed the installed item.",
+  "fix": "Accept four arguments with two optional trailing integers because GodotSteam metadata declares two but its real installation callback emits four. Ignore other AppIDs, clear the item download request and refresh.",
+  "verification": "219/219 native integration checks passed in 20260924_115024_08360086; includes two-argument and four-argument refresh, foreign AppID rejection, pending request cleanup, and native signal metadata checks."
+}

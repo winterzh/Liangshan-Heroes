@@ -1174,3 +1174,5 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `scripts/unit.gd`：Level 7 酒望实时 Unit 纹理接入修复，保留原始图集/TRES 来源链。
 - `qa/level7_tavern_render_20260916/`：窗口化 1280×720 实景截图、JSON 收据和复现说明。
 - [美术全库台账](ART_FULL_20260915.md)、[工作日志](WORKLOG.md)、[来源说明](SOURCE_SETUP.md)、[项目状态](PROJECT_STATUS.md)：同步本批运行时绘制结论。
+
+- `qa/workshop_defense_public_20260924/`: public Defense example, subscription file hashes, callback reproduction and native regression.

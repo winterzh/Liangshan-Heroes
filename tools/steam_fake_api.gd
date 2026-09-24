@@ -3,7 +3,7 @@ extends RefCounted
 signal user_stats_stored(game_id: int, result: int)
 signal item_created(result: int, file_id: int, accept_tos: bool)
 signal item_updated(result: int, accept_tos: bool, file_id: int)
-signal item_installed(app_id: int, file_id: int)
+signal item_installed(app_id: int, file_id: int, content_handle: int, manifest_id: int)
 signal item_downloaded(result: int, file_id: int, app_id: int)
 var owner := 111
 var stats := {"TOTAL_KILLS":0, "TOTAL_WINS":0, "DEFENSE_WINS":0, "AI_WINS":0}
