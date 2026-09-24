@@ -1,0 +1,51 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[foundation] profile=/Users/dztdash/Library/Application Support/LSH-rts-refinement-1674f17146ef43d19630924fb8fb3afa
+[foundation] PASS fixture wrapper compiles
+[foundation] PASS ordinary 3-second march retains 30px/s group speed
+[foundation] PASS ordinary progress does not trigger watchdog repathing
+[foundation] PASS genuine 1.5-second stall repaths and retains group cap
+[foundation] PASS attack-move resumes after combat without losing group cap
+[foundation] PASS unreachable patrol is bounded across three seconds
+[foundation] PASS unreachable patrol waits without fabricating movement
+[foundation] PASS patrol resumes after route opens and keeps group cap
+[foundation] PASS failed patrol does not block queued withdrawal
+[foundation] PASS fixture wrapper compiles
+[foundation] PASS Shift move preserves active windup and replacement serial
+[foundation] PASS windup settles exactly once before queued movement begins
+[foundation] PASS walk-cast replans and transfers to windup without eating queued withdrawal
+[foundation] PASS explicit Stop cancels walk-cast intent
+[foundation] PASS walk-cast dead target immediately hands off Shift retreat without executing or losing its queue
+[foundation] PASS walk-cast freed target immediately hands off Shift retreat without executing or losing its queue
+[foundation] PASS walk-cast timeout immediately hands off Shift retreat without executing or losing its queue
+[foundation] PASS walk-cast unready slot immediately hands off Shift retreat without executing or losing its queue
+[foundation] PASS walk-cast nonfinite point immediately hands off Shift retreat without executing or losing its queue
+[foundation] PASS stale cast serial never stops a newer explicit move or its Shift queue
+[foundation] PASS cancelled approach without a queue stops at its current position
+[foundation] PASS new immediate cast still replaces previous movement queue
+[foundation] PASS blocked approach naturally reaches an idle busy wait (queued=false)
+[foundation] PASS timeout during idle approach wait clears the cancelled home anchor
+[foundation] PASS blocked approach naturally reaches an idle busy wait (queued=true)
+[foundation] PASS timeout during idle approach wait immediately hands off Shift retreat
+[foundation] PASS switch gold to wood deposits existing gold first
+[foundation] PASS gold cargo is not converted and new wood target resumes
+[foundation] PASS wood cargo keeps wood conversion rate before gold collection
+[foundation] PASS missing depot preserves old cargo without changing type
+[foundation] PASS Hold gives way slightly while moving friend resolves almost all overlap
+[foundation] PASS buffered and direct separation use identical Hold priorities
+[foundation] PASS two holding units can still resolve overlap instead of hard-locking
+[foundation] PASS head-on friend passes Hold without pushing it away (direct)
+[foundation] PASS head-on friend passes Hold without pushing it away (buffered)
+[foundation] PASS head-on traversal agrees between direct and buffered separation
+[foundation] PASS Hold sidestep never grants enemy phasing
+[foundation] PASS Hold sidestep remains on navigable side of a cliff
+[foundation] PASS camera node and actual center agree at right limit zoom 0.5
+[foundation] PASS reverse pan reacts immediately at zoom 0.5
+[foundation] PASS camera node and actual center agree at right limit zoom 1.1
+[foundation] PASS reverse pan reacts immediately at zoom 1.1
+[foundation] PASS camera node and actual center agree at right limit zoom 3.2
+[foundation] PASS reverse pan reacts immediately at zoom 3.2
+[foundation] PASS zooming out at an edge clamps the input center immediately
+[foundation] PASS real middle-drag input reverses immediately from the clamped edge
+[foundation] PASS all six runtime suites reached their final assertions
+[foundation] summary checks=47 failures=0 evidence={"hold":{"holding_displacement":0.350006103515625,"moving_displacement":13.6499938964844},"hold_crossing":[{"holder":"(320.5203, 300.3079)","mover":"(384.6961, 281.6819)","side":23.6924438476562},{"holder":"(320.5203, 300.3079)","mover":"(384.6961, 281.6819)","side":23.6924438476562}],"move":{"cap":30.0,"distance":90.0000915527344,"frames":180,"path_calls":1},"patrol":{"frames":180,"path_calls":8,"retry":3,"wait":1.11666666666667}}

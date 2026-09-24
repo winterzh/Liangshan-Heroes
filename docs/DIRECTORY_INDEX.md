@@ -1,3 +1,9 @@
+## 2026-09-24 Android 测试包
+
+- `tools/build_android_test.py`：冻结源码、私有测试标记、签名/资源检查及实际APK菜单宿主检查；不发布。
+- `qa/android_test_20260924/`：740项源码回归、官方工具链来源、最终APK收据/检查日志与失败记录。
+- `build/android-test-20260924-final/`：本机APK与交付收据，Git忽略，不上传安装包。
+
 ## 2026-09-24 续玩与围栏修复发布
 
 - `docs/STEAM_UPDATE_20260924_CONTINUE.md`：Build 25498721 上线、回滚与四语公告记录。

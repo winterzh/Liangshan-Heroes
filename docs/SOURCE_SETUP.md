@@ -1,3 +1,9 @@
+## 2026-09-24 Android 本地测试包
+
+最新APK基于 `39160307`，位于 `build/android-test-20260924-final/水浒英雄传-Android-TEST-20260924-39160307.apk`，菜单显示 `TEST 0924-39160307`。同包名/证书/code 15，可尝试覆盖安装旧版；不要先卸载或清除进度。测试标记不改变1.8热更新基线，已有合法更高内容缓存仍按原规则处理。
+
+新增 `tools/build_android_test.py --godot <Godot> --android-sdk <SDK> --java-home <JDK> --android-template <匹配版本android_debug.apk> --out <工程外全新绝对目录> --delivery-dir <checkout/build下全新目录> --expected-commit <源SHA>`。仅构建Android测试APK，私有副本添加标记，校验原证书和最终APK资源，并以宿主独占profile加载实际包菜单；不替代手机验收，不生成正式更新基线。[来源、工具链与结果](../qa/android_test_20260924/README.md)。本机仍保留原Godot安装，工具路径由参数提供。
+
 ## 2026-09-24 当前 Steam 发布入口
 
 Windows default 已上线 Build `25498721` / Manifest `1253492451014755378`，候选 `20260924_135637_0ef1fc1a`，源码 `3d8ac781`、验收收尾 `c6e6b843`。Steam 客户端正常更新后六文件 SHA-256 全部匹配，库内启动和退出正常。四语公告已公开并绑定本 Build，见[发布记录](STEAM_UPDATE_20260924_CONTINUE.md)。上一正式版及回滚基线为 `25496433`，下方更早的线上状态仅作历史记录。
