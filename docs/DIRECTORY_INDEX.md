@@ -1,3 +1,10 @@
+## 2026-09-25 Android 2.0.1 累计热更新
+
+- `tools/build_android_hot_patch.py`：生产白名单冻结、原底包差分导出、日志/资源/来源防漂移；本身不签名或发布。
+- `tools/verify_android_hot_candidate.py`、`tools/android_hot_candidate_probe.gd`：原 APK 原资源、私有配置、同一签名候选的离线挂载及在线下载/跨进程重启宿主检查。
+- `tools/update_release_policy_qa.py`：Android-only 发布与 30 个差分纯函数正负例，锁定两道 APK 门禁的执行顺序。
+- `qa/android_hot_update_201_20260925/`：发布授权、传输验证、候选/正式构建及服务器回读证据；不含安装包、PCK、冻结工程或凭据。
+
 ## 2026-09-25 Android 操作与渲染修复
 
 - `scripts/static_scenery_draw_batch.gd`：保透明顺序与抗锯齿的静态岸线/台地网格缓存，附 Godot 来源声明。

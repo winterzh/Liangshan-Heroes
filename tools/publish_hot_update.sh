@@ -38,12 +38,8 @@ SOURCE_COMMIT="$(git rev-parse HEAD)"
 update_require_hot_update_safe "$UPDATE_BASE_VERSION"
 mkdir -p "$WORK"
 WORK="$(mktemp -d "$WORK/run.XXXXXX")"
-# Export only this immutable tag tree, never a concurrently edited checkout.
-SOURCE_DIR="$WORK/source"
-mkdir "$SOURCE_DIR"
-git archive "$SOURCE_COMMIT" | tar -xf - -C "$SOURCE_DIR"
-"$GODOT" --headless --path "$SOURCE_DIR" --editor --import --quit
-update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
+# The builder freezes and hashes the same production allowlist as the full APK.
+# Import/export logs, delta inventory and actual APK mount gates fail closed.
 
 echo "== 读取并验证 Android v$UPDATE_BASE_VERSION 基线清单 =="
 for platform in $PLATFORMS; do
@@ -103,21 +99,32 @@ for platform in $PLATFORMS; do
 	[ "$(update_sha256 "$base")" = "$base_sha" ] || update_die "$platform 冻结基线 SHA-256 不匹配"
 	patch_name="patch-$base_version-to-$VERSION.pck"
 	patch="$WORK/$platform/$patch_name"
-	preset="$(update_platform_preset "$platform")"
-	"$GODOT" --headless --path "$SOURCE_DIR" --export-patch "$preset" "$patch" --patches "$base"
+	python3 -B "$ROOT/tools/build_android_hot_patch.py" --godot "$GODOT" \
+		--commit "$SOURCE_COMMIT" --version "$VERSION" --base "$base" --manifest "$manifest" \
+		--out "$WORK/build-$platform"
+	cp "$WORK/build-$platform/patch.pck" "$patch"
 	update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
 	patch_size="$(update_size "$patch")"
 	patch_sha="$(update_sha256 "$patch")"
 	patch_url="$UPDATE_PUBLIC_ROOT/$platform/releases/$patch_name"
 	architecture="$(update_platform_architecture "$platform")"
 	python3 - "$manifest" "$WORK/$platform/manifest.json" "$VERSION" \
-		"$platform" "$architecture" "$patch_url" "$patch_size" "$patch_sha" "$NOTES" <<'PY'
+		"$platform" "$architecture" "$patch_url" "$patch_size" "$patch_sha" "$NOTES" "$SOURCE_COMMIT" \
+		"$WORK/build-$platform/build-receipt.json" <<'PY'
 import datetime, json, sys
-source, target, version, platform, architecture, patch_url, patch_size, patch_sha, notes = sys.argv[1:]
+source, target, version, platform, architecture, patch_url, patch_size, patch_sha, notes, source_commit, receipt_path = sys.argv[1:]
 with open(source, encoding="utf-8") as stream:
     data = json.load(stream)
+with open(receipt_path, encoding="utf-8") as stream:
+    receipt = json.load(stream)
+if receipt.get("passed") is not True or receipt.get("source_commit") != source_commit \
+        or receipt.get("content_version") != version or receipt.get("baseline") != data["patch_base"] \
+        or receipt.get("patch", {}).get("size") != int(patch_size) \
+        or receipt.get("patch", {}).get("sha256") != patch_sha:
+    raise SystemExit("Copied patch does not match verified build receipt")
 data["published_at"] = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat()
 data["content_version"] = version
+data["source_commit"] = source_commit
 data["platform"] = platform
 data["architecture"] = architecture
 data["patch"] = {
@@ -135,6 +142,19 @@ PY
 	update_sign_manifest "$WORK/$platform/manifest.json" "$WORK/$platform/manifest.sig"
 	printf '%-8s %-34s %12s %s\n' "$platform" "$patch_name" "$patch_size" "$patch_sha"
 done
+
+echo "== 上传前：原 APK 加载同一签名候选补丁 =="
+BASE_APK="$BUILD/LiangshanHeroes-v$UPDATE_BASE_VERSION.apk"
+BASE_MANIFEST="$WORK/base-manifest-android/manifest.json"
+if [ ! -f "$BASE_APK" ]; then
+	BASE_APK="$WORK/base.apk"
+	update_download_and_verify "$(update_manifest_value "$BASE_MANIFEST" full_package.url)" "$BASE_APK" \
+		"$(update_manifest_value "$BASE_MANIFEST" full_package.size)" "$(update_manifest_value "$BASE_MANIFEST" full_package.sha256)"
+fi
+python3 -B "$ROOT/tools/verify_android_hot_candidate.py" --godot "$GODOT" --apk "$BASE_APK" \
+	--manifest "$WORK/android/manifest.json" --signature "$WORK/android/manifest.sig" \
+	--patch "$WORK/android/patch-$UPDATE_BASE_VERSION-to-$VERSION.pck" \
+	--source-root "$WORK/build-android/project" --out "$WORK/offline-apk-gate"
 
 update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
 for platform in $PLATFORMS; do
@@ -199,6 +219,13 @@ for platform in $PLATFORMS; do
 	update_verify_manifest "$WORK/$platform/public-manifest.json" "$WORK/$platform/public-manifest.sig"
 done
 
+echo "== 提升前：原 APK 真实下载候选补丁并跨进程重启 =="
+python3 -B "$ROOT/tools/verify_android_hot_candidate.py" --godot "$GODOT" --apk "$BASE_APK" \
+	--manifest "$WORK/android/manifest.json" --signature "$WORK/android/manifest.sig" \
+	--patch "$WORK/android/patch-$UPDATE_BASE_VERSION-to-$VERSION.pck" \
+	--source-root "$WORK/build-android/project" --out "$WORK/online-apk-gate" \
+	--live-url "$UPDATE_PUBLIC_ROOT/android/releases/manifest-$VERSION.json"
+
 echo "== 仅提升 Android stable（Windows/macOS 不动）=="
 update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
 for platform in $PLATFORMS; do
@@ -206,6 +233,11 @@ for platform in $PLATFORMS; do
 	base_version="$(update_manifest_value "$manifest" patch_base.version)"
 	update_verify_manifest "$manifest" "$WORK/$platform/manifest.sig"
 	update_verify_manifest_artifact "$manifest" patch "$WORK/$platform/patch-$base_version-to-$VERSION.pck"
+	update_fetch_stable "$platform" "$WORK/pre-promote-$platform" || update_die "提升前 stable 回读失败"
+	cmp -s "$WORK/current-$platform/manifest.json" "$WORK/pre-promote-$platform/manifest.json" || \
+		update_die "构建期间 stable 被其他发布改变，拒绝覆盖"
+	cmp -s "$WORK/current-$platform/manifest.sig" "$WORK/pre-promote-$platform/manifest.sig" || \
+		update_die "构建期间 stable 签名被其他发布改变，拒绝覆盖"
 done
 update_promote_all_stable "$VERSION"
 

@@ -1,5 +1,7 @@
 # Android 开局渲染与操作修复
 
+后续交付：用户授权将本批修复制成 Android 2.0.1 热更新，底包仍为 2.0；正式状态以[发布收据](../qa/android_hot_update_201_20260925/README.md)为准。下方“只同步源码”为实现批当时边界。
+
 本批基于 stable `3fe9eecf`，只同步源码，不改 2.0 版本号、APK、Release、更新服务器或 Steam。验证结论与原始收据见 [QA](../qa/android_controls_performance_20260925/README.md)。
 
 ## 托管

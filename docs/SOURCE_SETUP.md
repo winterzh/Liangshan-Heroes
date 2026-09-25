@@ -1,3 +1,9 @@
+## 2026-09-25 Android 2.0.1 热更新入口
+
+用户允许通过自动化验证后先更新 Android 服务器，真机后验；只同步源码/`v2.0.1` 标签，不新建 APK、GitHub Release 或 Steam 发布。底包保持 2.0 / code 16 / bootstrap 4；内容版本由签名清单及菜单 `2.0 · 内容2.0.1` 表示，不修改底包版本常量。
+
+在已推送、干净且 HEAD 对应标签的 checkout，使用匹配原底包的 Godot 4.6.3：`GODOT_PATH=<本机引擎> bash tools/publish_hot_update.sh 2.0.1 "更新说明"`。工具从生产白名单冻结源码、构建累计 PCK，先以真实 2.0 APK 原资源做挂载检查，再上传不可变文件，经公网下载/跨进程重启验证后才提升 Android stable。收据在 `build/update-publish/hot-2.0.1/run.*/`，禁止上传整个构建目录或密钥；入库范围和正式状态见[本轮 QA](../qa/android_hot_update_201_20260925/README.md)。
+
 ## 2026-09-25 Android 操作与性能源码修复
 
 本批在 2.0 发布之后修复 FPS 遮挡、平板尺寸、托管状态及静态岸线/台地绘制开销；尚未打包或更新服务器，线上 APK 仍是下方原 2.0。详见 [实现与复现](ANDROID_CONTROLS_PERFORMANCE_20260925.md) 和 [QA](../qa/android_controls_performance_20260925/README.md)。

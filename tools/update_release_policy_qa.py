@@ -153,6 +153,109 @@ os.replace = fail_once
             assert after == expected, "promotion or rollback changed a historical/unexpected file"
 
 
+def check_hot_delta():
+    """Exercise only the builder's pure inventory check, without running Godot."""
+    from build_android_hot_patch import check_delta
+
+    def entry(path, digest="a" * 32, size=16):
+        return {"path": path, "bytes": size, "md5": digest}
+
+    protected = ("project.binary", "scripts/android_updater.gdc", "scripts/campaign.gdc")
+    base = {"entries": [entry(path) for path in protected] + [
+        entry("assets/fonts/OFL.txt"), entry("assets/fonts/NotoSansCJK-Regular.ttc"),
+        entry("assets/localization/catalog.json")]}
+
+    def verify(entries, changed=(), failure=None, baseline=None):
+        inventory = {"entries": entries}
+        baseline = base if baseline is None else baseline
+        inputs = (inventory, baseline, list(changed))
+        before = copy.deepcopy(inputs)
+        try:
+            check_delta(*inputs)
+        except RuntimeError as error:
+            assert failure is not None and failure in str(error), str(error)
+        else:
+            assert failure is None, "Unsafe delta accepted: " + repr(inputs)
+        assert inputs == before, "Pure delta validation mutated its inputs"
+
+    # A delta inherits complete-package resources from the fixed base. Neither
+    # fonts/OFL nor project.binary/catalog is mandatory in an unrelated delta.
+    verify([entry("scripts/hud.gdc")], ["scripts/hud.gd"])
+    verify([entry("assets/localization/catalog.json")], ["assets/localization/catalog.json"])
+    verify([entry(".godot/imported/icon.svg-fixture.ctex")], ["assets/icon.svg"])
+    verify([entry(path) for path in protected])  # Byte-identical protected entries are safe.
+    verify([], failure="Empty/duplicate")
+    verify([entry("scripts/hud.gdc"), entry("scripts/hud.gdc", "b" * 32)], failure="Empty/duplicate")
+    for path in ("tools/probe.gdc", "qa/result.json", "docs/readme.md", "build/fixture.pck",
+                 "assets/campaign/source/background.png", "assets/poses/reference.png",
+                 "assets/hero_raw.png", "override.cfg"):
+        verify([entry(path)], failure="Development/native")
+    for extension in (".so", ".dll", ".dylib", ".gdextension"):
+        verify([entry("plugins/runtime" + extension)], failure="Development/native")
+    for path in protected:
+        verify([entry(path, "b" * 32)], failure="Protected exported resource changed")
+        verify([entry(path, size=17)], failure="Protected exported resource changed")
+        verify([entry(path)], baseline={"entries": []}, failure="Protected exported resource changed")
+    for source in ("scripts/hud.gd", "scripts/static_scenery_draw_batch.gd", "assets/localization/catalog.json"):
+        verify([entry("scenes/menu.tscn")], [source], failure="Changed production resource missing")
+
+
+def check_hot_publication_policy(hot):
+    """Keep both original-APK gates mandatory and ahead of their remote writes."""
+    assert "set -euo pipefail" in hot
+    assert 'git archive "$SOURCE_COMMIT"' not in hot and '--export-patch' not in hot
+    assert 'WORK="$(mktemp -d "$WORK/run.XXXXXX")"' in hot
+    assert 'patch="$WORK/$platform/$patch_name"' in hot
+    builder_call = 'python3 -B "$ROOT/tools/build_android_hot_patch.py"'
+    gate_call = 'python3 -B "$ROOT/tools/verify_android_hot_candidate.py"'
+    commands = [line.strip() for line in hot.replace("\\\n", " ").splitlines()]
+    builds = [line for line in commands if line.startswith(builder_call)]
+    gates = [line for line in commands if line.startswith(gate_call)]
+    assert len(builds) == 1 and len(gates) == 2
+    for argument in ('--godot "$GODOT"', '--commit "$SOURCE_COMMIT"', '--version "$VERSION"',
+                     '--base "$base"', '--manifest "$manifest"', '--out "$WORK/build-$platform"'):
+        assert argument in builds[0]
+    assert 'cp "$WORK/build-$platform/patch.pck" "$patch"' in hot
+    assert '"$WORK/build-$platform/build-receipt.json"' in hot
+    for guard in ('receipt.get("passed") is not True', 'receipt.get("source_commit") != source_commit',
+                  'receipt.get("content_version") != version', 'receipt.get("baseline") != data["patch_base"]',
+                  'receipt.get("patch", {}).get("size") != int(patch_size)',
+                  'receipt.get("patch", {}).get("sha256") != patch_sha'):
+        assert guard in hot
+    assert hot.index('Copied patch does not match verified build receipt') < hot.index('update_sign_manifest ')
+    for gate in gates:
+        for argument in ('--godot "$GODOT"', '--apk "$BASE_APK"', '--manifest "$WORK/android/manifest.json"',
+                         '--signature "$WORK/android/manifest.sig"',
+                         '--patch "$WORK/android/patch-$UPDATE_BASE_VERSION-to-$VERSION.pck"',
+                         '--source-root "$WORK/build-android/project"'):
+            assert argument in gate
+        assert "||" not in gate and "&&" not in gate and not gate.endswith("&")
+    assert '--out "$WORK/offline-apk-gate"' in gates[0] and '--live-url' not in gates[0]
+    assert '--out "$WORK/online-apk-gate"' in gates[1]
+    assert '--live-url "$UPDATE_PUBLIC_ROOT/android/releases/manifest-$VERSION.json"' in gates[1]
+    build = hot.index(builder_call)
+    offline = hot.index(gate_call)
+    online = hot.index(gate_call, offline + len(gate_call))
+    assert build < hot.index('update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"', build) \
+        < hot.index('update_sign_manifest ') < offline
+    assert offline < hot.index('echo "== 服务器不可变路径预检') \
+        < hot.index('"install -d -m 700 \'$REMOTE_TMP\'"') \
+        < hot.index('scp -i "$SSH_KEY" "$patch" "$REMOTE:$REMOTE_TMP/$remote_patch"')
+    assert hot.index('update_verify_manifest "$WORK/$platform/public-manifest.json"') < online \
+        < hot.rindex('update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"') \
+        < hot.index('update_promote_all_stable "$VERSION"')
+
+    builder = (ROOT / "tools/build_android_hot_patch.py").read_text(encoding="utf-8")
+    for guard in ('selected = allowlist(ROOT)', 'shutil.copy2(source, dest)',
+                  'sha(dest) != before or sha(source) != before',
+                  '[str(args.godot), "--headless", "--path", str(project), *extra]',
+                  '"--export-patch", "Android"', '"--patches", str(args.base.resolve())',
+                  'check_delta(inventory, base_inventory, [name for name in changed if name in selected])',
+                  'selected != allowlist(ROOT)', 'git("rev-parse", "HEAD") != args.commit',
+                  'any(sha(Path(path)) != digest for path, digest in identities.items())'):
+        assert guard in builder
+
+
 def main():
     files = ["publish_hot_update.sh", "publish_update_baseline.sh", "lib_update_release.sh",
              "publish_android_baseline.sh", "publish_android_hot_update.sh", "build_android_release.sh", "build_packages.sh"]
@@ -184,11 +287,8 @@ def main():
     assert 'update_require_executable "$GODOT"' not in baseline
     assert baseline.count('update_verify_build_source "$UPDATE_OUT/build-source.json" "$ROOT" "$VERSION" android') >= 3
     hot = (ROOT / "tools/publish_hot_update.sh").read_text(encoding="utf-8")
-    assert 'git archive "$SOURCE_COMMIT" | tar -xf - -C "$SOURCE_DIR"' in hot
-    assert '--path "$SOURCE_DIR" --export-patch' in hot and '--path . --export-patch' not in hot
-    assert 'WORK="$(mktemp -d "$WORK/run.XXXXXX")"' in hot
-    assert 'patch="$WORK/$platform/$patch_name"' in hot
-    assert hot.index('update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"', hot.index('--export-patch')) < hot.index('update_sign_manifest ')
+    check_hot_publication_policy(hot)
+    check_hot_delta()
     for alias, target in (("publish_android_baseline.sh", "publish_update_baseline.sh"),
                           ("publish_android_hot_update.sh", "publish_hot_update.sh")):
         text = (ROOT / "tools" / alias).read_text(encoding="utf-8")
@@ -204,7 +304,7 @@ def main():
     android = preset.split('name="Android"', 1)[1].split('[preset.3]', 1)[0]
     for pattern in ('qa/*', 'docs/*', 'tools/*', 'assets/campaign/source/*', 'assets/direction4/source/*'):
         assert pattern in android
-    print("[update-release-policy] PASS Android-only targets, scoped build proofs, mandatory Git/tag/drift guards, protected deletions/renames, frozen hot-update inputs, signed-input hashes, canonical APK URL, promotion rollback, desktop history untouched, shell syntax, bootstrap 4, APK filters")
+    print("[update-release-policy] PASS Android-only targets, scoped build proofs, mandatory Git/tag/drift guards, protected deletions/renames, frozen allowlisted hot-update inputs, delta-only positive/negative inventory cases, mandatory offline/online original-APK gates, signed-input hashes, canonical APK URL, promotion rollback, desktop history untouched, shell syntax, bootstrap 4, APK filters")
 
 
 if __name__ == "__main__":
