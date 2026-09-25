@@ -24,7 +24,7 @@ SUITES = ["hero_function_keys_qa.gd", "rts_foundation_regression_qa.gd", "rts_ec
           "rts_hero_items_regression_qa.gd", "rts_hud_snapshot_qa.gd",
           "input_controls_regression_qa.gd", "combat_controls_regression_qa.gd",
           "campaign_controls_regression_qa.gd", "steam_cloud_regression_qa.gd",
-          "steam_presence_regression_qa.gd"]
+          "steam_presence_regression_qa.gd", "android_autoplay_regression_qa.gd"]
 COMPLETION_MARKERS = {
     "hero_function_keys_qa": r"\[hero-function-keys-result\] (.+)",
     "rts_foundation_regression_qa": r"\[foundation\] summary checks=(\d+) failures=0",
@@ -36,6 +36,7 @@ COMPLETION_MARKERS = {
     "campaign_controls_regression_qa": r"\[campaign-controls-regression\] checks=(\d+) failures=0",
     "steam_cloud_regression_qa": r"\[steam-cloud-result\] (.+)",
     "steam_presence_regression_qa": r"\[steam-presence-result\] (.+)",
+    "android_autoplay_regression_qa": r"\[android-autoplay-result\] (.+)",
 }
 
 

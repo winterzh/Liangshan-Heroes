@@ -5,6 +5,8 @@ const GateVisual := preload("res://scripts/liangshan_gate.gd")
 const Stockade := preload("res://scripts/liangshan_stockade.gd")
 const EnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 const CampaignArtEvent := preload("res://scripts/campaign_art_event.gd")
+const StaticDrawBatch := preload("res://scripts/static_scenery_draw_batch.gd")
+var _terrace_draw_batch: StaticDrawBatch
 var _map: GameMap
 var _gate_parts: Array[Node2D] = []
 var _wall_parts: Array[Node2D] = []
@@ -162,7 +164,17 @@ func _draw() -> void:
 	if _map == null:
 		return
 	draw_set_transform_matrix(GameMap.ISO_INV)
-	_draw_terrace()
+	if StaticDrawBatch.enabled():
+		if _terrace_draw_batch == null:
+			_terrace_draw_batch = StaticDrawBatch.new()
+			_draw_terrace(_terrace_draw_batch)
+			_terrace_draw_batch.finish()
+		if _terrace_draw_batch.valid:
+			_terrace_draw_batch.draw(self)
+		else:
+			_draw_terrace(self)
+	else:
+		_draw_terrace(self)
 	# 铺石主路由Layout铺设，与厅前同一种纹理，不再叠一块不同材质的台阶。
 	# 同一片真实可行走的 T.DOCK，不拿桥贴图重复填格。
 	var dock_axis_x := _gate_cell.x
@@ -188,7 +200,12 @@ func _draw() -> void:
 func _screen(cell: Vector2) -> Vector2:
 	return _map.project(cell * GameMap.CELL)
 
-func _draw_terrace() -> void:
+func static_terrace_batch_summary() -> Dictionary:
+	return _terrace_draw_batch.summary() if _terrace_draw_batch != null else {"valid": false, "draw_submissions": 0}
+
+
+## Preserve every cap, rock overlay, crack and AA fringe in original order.
+func _draw_terrace(canvas) -> void:
 	var rock := Art.terrain_texture("cliff") as AtlasTexture
 	var uv := _rock_uv(rock)
 	for ridge in _bank_ridges:
@@ -211,20 +228,20 @@ func _draw_terrace() -> void:
 		for i in range(points.size() - 1):
 			var n := normals[i]
 			if n.x + n.y > 0.05:
-				_face(outer[i], outer[i + 1], _ridge_depth(points[i]), _ridge_depth(points[i + 1]), i)
+				_face(canvas, outer[i], outer[i + 1], _ridge_depth(points[i]), _ridge_depth(points[i + 1]), i)
 			else:
-				draw_line(outer[i], outer[i + 1], Color(0.08, 0.14, 0.07, 0.40), 5.0, true)
+				canvas.draw_line(outer[i], outer[i + 1], Color(0.08, 0.14, 0.07, 0.40), 5.0, true)
 			var cap := PackedVector2Array([inner[i],inner[i+1],outer[i+1],outer[i]])
-			draw_colored_polygon(cap,Color("797460").darkened(float(i%5)*0.025))
-			draw_polygon(cap,PackedColorArray([Color(0.85,0.81,0.71,0.18)]),uv,rock.atlas)
+			canvas.draw_colored_polygon(cap,Color("797460").darkened(float(i%5)*0.025))
+			canvas.draw_polygon(cap,PackedColorArray([Color(0.85,0.81,0.71,0.18)]),uv,rock.atlas)
 			var crack := inner[i].lerp(outer[i],0.65)
-			draw_polyline(PackedVector2Array([inner[i],crack+Vector2(2,-1),outer[i]]),Color(0.25,0.26,0.20,0.55),0.85,true)
+			canvas.draw_polyline(PackedVector2Array([inner[i],crack+Vector2(2,-1),outer[i]]),Color(0.25,0.26,0.20,0.55),0.85,true)
 			if i % 3 != 0:
-				draw_line(inner[i],inner[i].lerp(inner[i+1],0.65),Color(0.28,0.34,0.17,0.55),2.0,true)
+				canvas.draw_line(inner[i],inner[i].lerp(inner[i+1],0.65),Color(0.28,0.34,0.17,0.55),2.0,true)
 			if i % 4 == 2:
 				var p := _screen(points[i])
 				var size := 26.0 + float(i % 3) * 7.0
-				draw_texture_rect(Art.terrain_texture("rocks"), Rect2(p - Vector2(size * 0.5, size * 0.78), Vector2.ONE * size), false, Color(0.73, 0.81, 0.66))
+				canvas.draw_texture_rect(Art.terrain_texture("rocks"), Rect2(p - Vector2(size * 0.5, size * 0.78), Vector2.ONE * size), false, Color(0.73, 0.81, 0.66))
 
 func _ridge_depth(p: Vector2) -> float:
 	# 低石脚承托木墙，不再用高岩圈暗示院内土丘。
@@ -236,21 +253,21 @@ func _rock_uv(rock: AtlasTexture) -> PackedVector2Array:
 		uv.append((rock.region.position + corner * rock.region.size) / rock.atlas.get_size())
 	return uv
 
-func _face(a: Vector2, b: Vector2, depth_a: float, depth_b: float, salt: int) -> void:
+func _face(canvas, a: Vector2, b: Vector2, depth_a: float, depth_b: float, salt: int) -> void:
 	var drop_a := Vector2(0, depth_a)
 	var drop_b := Vector2(0, depth_b)
 	var rock := Art.terrain_texture("cliff") as AtlasTexture
 	var face := PackedVector2Array([a,b,b+drop_b,a+drop_a])
-	draw_polygon(face,PackedColorArray([Color("7c7766"),Color("726e5d"),Color("494b3c"),Color("575545")]))
-	draw_polygon(face,PackedColorArray([Color(0.82,0.79,0.69,0.16)]),_rock_uv(rock),rock.atlas)
-	draw_line(a.lerp(b,0.55),a.lerp(b,0.42)+drop_a*0.7,Color(0.21,0.23,0.18,0.6),1.0,true)
-	draw_line(a, b, Color(0.48, 0.53, 0.35, 0.45), 1.1, true)
-	draw_line(a + drop_a, b + drop_b, Color(0.10, 0.14, 0.09, 0.35), 3.0, true)
+	canvas.draw_polygon(face,PackedColorArray([Color("7c7766"),Color("726e5d"),Color("494b3c"),Color("575545")]))
+	canvas.draw_polygon(face,PackedColorArray([Color(0.82,0.79,0.69,0.16)]),_rock_uv(rock),rock.atlas)
+	canvas.draw_line(a.lerp(b,0.55),a.lerp(b,0.42)+drop_a*0.7,Color(0.21,0.23,0.18,0.6),1.0,true)
+	canvas.draw_line(a, b, Color(0.48, 0.53, 0.35, 0.45), 1.1, true)
+	canvas.draw_line(a + drop_a, b + drop_b, Color(0.10, 0.14, 0.09, 0.35), 3.0, true)
 	for i in range(3):
 		var p := (a + drop_a).lerp(b + drop_b, float(i + 1) / 4.0)
 		var h := 2.0 + float((salt * 7 + i * 11) % 6)
-		draw_line(p, p + Vector2(-2, -h), Color(0.25, 0.32, 0.15, 0.8), 1.3, true)
-		draw_line(p, p + Vector2(3, -h * 0.7), Color(0.34, 0.38, 0.19, 0.7), 1.0, true)
+		canvas.draw_line(p, p + Vector2(-2, -h), Color(0.25, 0.32, 0.15, 0.8), 1.3, true)
+		canvas.draw_line(p, p + Vector2(3, -h * 0.7), Color(0.34, 0.38, 0.19, 0.7), 1.0, true)
 
 func _process(delta: float) -> void:
 	_tick += delta

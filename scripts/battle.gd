@@ -4912,6 +4912,42 @@ const AI_TICK := 16   # 托管决策节流：每英雄约每 16 物理帧(~0.27s
 # Spread consecutive spawns across the cycle before filling neighboring ticks.
 const AI_TICK_PHASES := [0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15]
 
+## Manual autoplay controls share one state transition on desktop and touch.
+## Cancelling a hero while fully automated exits the active level-3
+## policy first, otherwise the next AI pass would immediately undo the click.
+## The settings panel reflects level 2; choosing full automation there restores
+## level 3. No save is triggered here, but a later Settings.save() saves this level.
+func set_heroes_managed(heroes: Array, enabled: bool) -> Dictionary:
+	var result := {"changed": 0, "exited_full_auto": false}
+	if not gameplay_rng_fault().is_empty() or (enabled and int(Settings.auto_micro_level) <= 0):
+		return result
+	var targets: Array = []
+	for hero in heroes:
+		if is_instance_valid(hero) and hero is Unit and units.has(hero) \
+				and hero.faction == Unit.FACTION_LIANG and hero.is_hero \
+				and not hero.is_building and hero.hp > 0.0 and not targets.has(hero):
+			targets.append(hero)
+	if targets.is_empty():
+		return result
+	if not enabled and _full_auto():
+		Settings.auto_micro_level = 2
+		_autocam_enabled = false
+		_autocam_review_unit = null
+		_autocam_focus = Vector2.INF
+		result.exited_full_auto = true
+	for hero in targets:
+		if hero.auto_micro == enabled:
+			continue
+		hero.auto_micro = enabled
+		result.changed += 1
+		if enabled:
+			hero.manual_order_active = false
+			hero.manual_order_t = 0.0
+			hero.clear_mission_order_intent()
+			hero.set_stance(Unit.STANCE_AGGRO)
+	return result
+
+
 func _auto_micro_pass() -> void:
 	if hud == null:
 		return

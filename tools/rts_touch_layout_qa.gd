@@ -20,6 +20,19 @@ func audit(hud: HUD) -> Dictionary:
 	geometry["safe"] = str(safe_rect)
 	var card := hud._skill_rail_contract()
 	if hud.touch_ui:
+		var fps: Label = hud._fps_label
+		record.call("fps_exists", is_instance_valid(fps))
+		if is_instance_valid(fps):
+			var fps_rect := fps.get_global_rect()
+			geometry["fps"] = str(fps_rect)
+			record.call("fps_visible", fps.is_visible_in_tree() and fps.modulate.a > 0.01 and fps.self_modulate.a > 0.01)
+			record.call("fps_text_present", fps.text.begins_with("FPS ") and fps_rect.size.x > 0.0 and fps_rect.size.y > 0.0, fps.text)
+			record.call("fps_in_safe_area", safe_rect.grow(0.5).encloses(fps_rect), fps_rect)
+			for named in [["menu", hud._menu_btn], ["rail", hud._skill_rail],
+				["resources", hud._res_bar], ["top_status", hud.top_label]]:
+				var control: Control = named[1]
+				if is_instance_valid(control) and control.is_visible_in_tree() and control.get_global_rect().has_area():
+					record.call("fps_avoids_" + String(named[0]), not fps_rect.intersects(control.get_global_rect()), control.get_global_rect())
 		for row in [hud._touch_actions, hud._touch_groups]:
 			if not is_instance_valid(row) or not row.is_visible_in_tree():
 				continue
@@ -40,6 +53,13 @@ func audit(hud: HUD) -> Dictionary:
 		record.call("pure_passives_not_castable", bool(card.passives_read_only), card)
 		var rail: Rect2 = hud._skill_rail.get_global_rect()
 		geometry["rail"] = str(rail)
+		# A portrait plus four skill targets must retain 48px hit areas. On
+		# unusually narrow safe rectangles this floor takes priority over 25%.
+		var target_floor := 48.0 * 5.0 + 4.0 * 4.0
+		var rail_width_limit := maxf(safe_rect.size.x * 0.25, target_floor)
+		geometry["rail_width_fraction"] = rail.size.x / maxf(1.0, safe_rect.size.x)
+		geometry["rail_width_limit"] = rail_width_limit
+		record.call("rail_quarter_safe_width", rail.size.x <= rail_width_limit + 1.0, [rail.size.x, rail_width_limit])
 		record.call("rail_in_safe_area", safe_rect.encloses(rail), rail)
 		record.call("rail_right_pinned", absf(rail.end.x - (vp.x - safe.z - 10.0)) < 1.1, rail.end.x)
 		var blockers := hud._skill_rail_avoidance_contract()

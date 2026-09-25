@@ -18,6 +18,8 @@ const Entrance := preload("res://scripts/liangshan_entrance.gd")
 const Layout := preload("res://scripts/liangshan_layout.gd")
 const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
 const WorldShadow := preload("res://scripts/world_shadow.gd")
+const StaticDrawBatch := preload("res://scripts/static_scenery_draw_batch.gd")
+var _bank_draw_batch: StaticDrawBatch
 const EnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 var _entrance: Node2D
 var _sprites: Array[Node2D] = []
@@ -595,6 +597,40 @@ func _draw() -> void:
 	draw_set_transform_matrix(GameMap.ISO_INV)
 	if _reed_mesh!=null:
 		draw_mesh(_reed_mesh,null)
+	if StaticDrawBatch.enabled():
+		if _bank_draw_batch == null:
+			_bank_draw_batch = StaticDrawBatch.new()
+			_draw_banks(_bank_draw_batch)
+			_bank_draw_batch.finish()
+		if _bank_draw_batch.valid:
+			_bank_draw_batch.draw(self)
+		else:
+			_draw_banks(self)
+	else:
+		_draw_banks(self)
+	draw_set_transform_matrix(Transform2D.IDENTITY)
+	if WorldShadow.scenery_batch_enabled():
+		_ensure_ground_shadow_meshes()
+		if _ground_shadow_contact_mesh != null and not _ground_shadow_cast_meshes.is_empty():
+			draw_mesh(_ground_shadow_contact_mesh, null)
+			for entry in _ground_shadow_cast_meshes:
+				draw_mesh(entry.mesh, entry.texture)
+		else:
+			# A missing cached resource must never silently drop shadows. This branch
+			# is also useful when an incomplete art database is opened in the editor.
+			_draw_legacy_ground_shadows()
+	else:
+		_draw_legacy_ground_shadows()
+	draw_set_transform_matrix(Transform2D.IDENTITY)
+
+
+func static_bank_batch_summary() -> Dictionary:
+	return _bank_draw_batch.summary() if _bank_draw_batch != null else {"valid": false, "draw_submissions": 0}
+
+
+## One geometry recipe for the original commands and the ordered mesh cache.
+## Reeds, shadows and depth-sorted child sprites retain their existing routes.
+func _draw_banks(canvas) -> void:
 	for bank in _banks:
 		var a: Vector2 = bank.a
 		var b: Vector2 = bank.b
@@ -617,29 +653,15 @@ func _draw() -> void:
 			for i in range(foot.size() - 1, -1, -1):
 				polygon.append(foot[i])
 				colors.append(bottom)
-			draw_polygon(polygon, colors)
-			draw_polyline(foot, Color(0.08, 0.13, 0.10, 0.22), 1.4, true)
+			canvas.draw_polygon(polygon, colors)
+			canvas.draw_polyline(foot, Color(0.08, 0.13, 0.10, 0.22), 1.4, true)
 			if bank.tone == 1:
-				draw_line(ridge[1], ridge[3], Color(0.54, 0.53, 0.33, 0.25), 1.0, true)
+				canvas.draw_line(ridge[1], ridge[3], Color(0.54, 0.53, 0.33, 0.25), 1.0, true)
 		elif bank.coast:
-			draw_line(a, b, Color(0.12, 0.20, 0.17, 0.35), 1.6, true)
+			canvas.draw_line(a, b, Color(0.12, 0.20, 0.17, 0.35), 1.6, true)
 		if bank.coast and bank.tone == 2:
 			var offset := Vector2(0, depth + 4.0) if bank.front else Vector2(0, -3)
-			draw_line(a.lerp(b, 0.20) + offset, a.lerp(b, 0.75) + offset, Color(0.50, 0.65, 0.59, 0.13), 1.0, true)
-	draw_set_transform_matrix(Transform2D.IDENTITY)
-	if WorldShadow.scenery_batch_enabled():
-		_ensure_ground_shadow_meshes()
-		if _ground_shadow_contact_mesh != null and not _ground_shadow_cast_meshes.is_empty():
-			draw_mesh(_ground_shadow_contact_mesh, null)
-			for entry in _ground_shadow_cast_meshes:
-				draw_mesh(entry.mesh, entry.texture)
-		else:
-			# A missing cached resource must never silently drop shadows. This branch
-			# is also useful when an incomplete art database is opened in the editor.
-			_draw_legacy_ground_shadows()
-	else:
-		_draw_legacy_ground_shadows()
-	draw_set_transform_matrix(Transform2D.IDENTITY)
+			canvas.draw_line(a.lerp(b, 0.20) + offset, a.lerp(b, 0.75) + offset, Color(0.50, 0.65, 0.59, 0.13), 1.0, true)
 
 
 ## 不留完整不透明树冠盖住可通行林地里的士兵。仅作视觉避让。

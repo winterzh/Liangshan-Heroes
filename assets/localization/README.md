@@ -2,6 +2,8 @@
 
 `catalog.json` is the generated runtime catalogue. Chinese source strings are stable lookup keys; each entry contains `en`, `ja`, and `zh_TW`. Simplified Chinese is supplied by the key itself.
 
+`android_controls_20260925.json` supplies the full-automation exit notice used by the shared desktop/touch autoplay controls.
+
 - `menu_settings.json`: navigation and settings.
 - `ui.json`, `ui_extra.json`: HUD, editors, Workshop UI and remaining shared labels.
 - `campaign.json`: campaigns, mission guidance, dialogue and reusable modes.

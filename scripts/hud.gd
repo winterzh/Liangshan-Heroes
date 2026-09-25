@@ -146,6 +146,7 @@ var _hero_keys: Array = []
 var _skill_rail: VBoxContainer   # 右缘常驻技能轨（每英雄一行，免选直放）
 var _skill_rail_keys: Array = []
 const SKILL_RAIL_AVOID_GAP := 8.0
+const SKILL_RAIL_MAX_WIDTH_RATIO := 0.25
 var _skill_rail_cell := Vector2(64, 64)
 var _touch_action_layout_signature := ""
 var _intro_btn: Button
@@ -238,7 +239,7 @@ func _ready() -> void:
 	_build_skill_tip()
 	_build_autocam_badge()
 	_build_arena_buttons()
-	_build_fps_label()   # 最后建→置于最上层，覆盖各遮罩始终可见
+	_build_fps_label()   # 独立绘制层级，不依赖后来创建的触屏控件顺序。
 	UITheme.apply_canvas_layer(self)
 	if not has_meta("_run_hud_prepared"):
 		get_viewport().size_changed.connect(_on_viewport_size_changed)
@@ -272,7 +273,7 @@ func set_touch_ui(v: bool) -> void:
 	if _skill_rail != null:
 		_skill_rail.visible = v
 	_refresh_touch_controls()
-	_position_fps()   # 触屏布局启用 → FPS 移到菜单键左侧
+	_position_fps()   # 触屏布局启用 → FPS 与菜单同排，给技能轨让出下方区域。
 	_update_info_panel_mode()
 	_apply_bottom_collapse()   # _ready 先按桌面空选区折叠；切触屏必须恢复实际控件。
 	refresh_inventory()
@@ -533,23 +534,40 @@ func _layout_top_status() -> void:
 	if top_label == null:
 		return
 	var safe := _logical_safe_insets()
+	_position_fps()
 	if touch_ui and _res_bar != null and _res_bar.visible:
 		_fit_touch_resource_fonts(safe)
 	var left := 170.0 + safe.x
 	if battle != null and battle.economy and _res_bar != null and _res_bar.visible:
 		var res_w := maxf(_res_bar.size.x, _res_bar.get_combined_minimum_size().x)
 		left = maxf(322.0 + safe.x, _res_bar.position.x + res_w + 8.0)
-	top_label.offset_left = left
-	top_label.offset_right = -128.0 - safe.z
-	top_label.offset_bottom = (58.0 if touch_ui else (68.0 if Localize.locale == "en" else 48.0)) + safe.y
 	top_label.add_theme_font_size_override("font_size", 16 if Localize.locale == "en" else 18)
+	if touch_ui:
+		var vp := get_viewport().get_visible_rect().size
+		var right := _fps_label.position.x - 8.0 if _fps_label != null else vp.x - safe.z - 128.0
+		var available := maxf(0.0, right - left)
+		var font: Font = top_label.get_theme_font("font")
+		var text_width := 0.0
+		for line in top_label.text.split("\n"):
+			text_width = maxf(text_width, font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, top_label.get_theme_font_size("font_size")).x)
+		var width := minf(available, minf(600.0, text_width + 24.0))
+		top_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		top_label.position = Vector2(left + (available - width) * 0.5, 8.0 + safe.y)
+		top_label.size = Vector2(width, 50.0)
+	else:
+		top_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		top_label.offset_left = left
+		top_label.offset_right = -128.0
+		top_label.offset_top = 8.0
+		top_label.offset_bottom = 68.0 if Localize.locale == "en" else 48.0
 
 
 func _fit_touch_resource_fonts(safe: Vector4) -> void:
 	# The translated worker counts must not consume the whole top band. Keep
 	# a readable resource line and room for two clipped lines of battle status.
 	var vp := get_viewport().get_visible_rect().size
-	var available := maxf(480.0, vp.x - safe.x - safe.z - 128.0 - maxf(280.0, vp.x * 0.23) - 28.0)
+	var right := _fps_label.position.x - 8.0 if _fps_label != null else vp.x - safe.z - 128.0
+	var available := maxf(360.0, right - safe.x - 10.0 - maxf(220.0, vp.x * 0.18) - 8.0)
 	var controls: Array = [_res_gold, _res_wood, _res_pop]
 	if _res_idle != null and _res_idle.visible:
 		controls.append(_res_idle)
@@ -565,6 +583,28 @@ func _fit_touch_resource_fonts(safe: Vector4) -> void:
 	for control in controls:
 		if control.get_theme_font_size("font_size") != font_size:
 			control.add_theme_font_size_override("font_size", font_size)
+	# Unusually long translated counts may still exceed the band at 18 px.
+	# Bound the actual child minima as a last resort, reserving a clipped
+	# status field as well as FPS/menu rather than drawing underneath them.
+	var widths: Array[float] = []
+	var total_width := 0.0
+	for control in controls:
+		var font: Font = control.get_theme_font("font")
+		var width := ceilf(font.get_string_size(control.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x)
+		if control is Button:
+			width += control.get_theme_stylebox("normal").get_minimum_size().x
+		widths.append(width)
+		total_width += width
+	var content_budget := maxf(48.0, right - safe.x - 10.0 - 48.0 - 24.0 - float(controls.size() - 1) * 20.0)
+	var width_scale := minf(1.0, content_budget / maxf(1.0, total_width))
+	for i in range(controls.size()):
+		var control: Control = controls[i]
+		if control is Label:
+			control.clip_text = true
+			control.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		elif control is Button:
+			control.clip_text = true
+		control.custom_minimum_size.x = floorf(widths[i] * width_scale)
 	_res_bar.reset_size()
 
 
@@ -630,20 +670,17 @@ func _refresh_touch_controls() -> void:
 		if garrisoned_bld:
 			_act_eject.text = Localize.format_text("🚪出击 (%d)", au.passengers.size())
 	var micro_on: bool = int(Settings.auto_micro_level) > 0   # 「无托管」档隐藏托管按钮
+	var selected_heroes := _managed_heroes(false)
 	if _act_auto != null:
-		_act_auto.visible = micro_on and au != null and au.is_hero and not au.is_building and not placing
+		_act_auto.visible = micro_on and not selected_heroes.is_empty() and not placing
 		if _act_auto.visible:
-			_act_auto.text = Localize.text("🚫取消托管") if au.auto_micro else Localize.text("🪄托管")
-			_act_auto.add_theme_color_override("font_color", Color(1.0, 0.7, 0.6) if au.auto_micro else Color(1, 0.96, 0.9))
+			var selected_all_on := _heroes_all_managed(selected_heroes)
+			_act_auto.text = Localize.text("🚫取消托管") if selected_all_on else Localize.text("🪄托管")
+			_act_auto.add_theme_color_override("font_color", Color(1.0, 0.7, 0.6) if selected_all_on else Color(1, 0.96, 0.9))
 	if _act_allauto != null:
 		_act_allauto.visible = micro_on
 		# 托管军：全员都在托管→显示「取消托管军」，否则「托管军」
-		var hs: Array = battle.liang_heroes() if battle != null else []
-		var all_on: bool = not hs.is_empty()
-		for h in hs:
-			if not h.auto_micro:
-				all_on = false
-				break
+		var all_on := _heroes_all_managed(_managed_heroes(true))
 		Localize.bind_render(_act_allauto, func() -> String: return Localize.text("🚫取消托管军") if all_on else Localize.text("🪄托管军"))
 	var action_layout_signature := "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
 		_touch_actions.visible, _act_amove.visible, _act_stop.visible, _act_stance.visible,
@@ -703,29 +740,38 @@ func _layout_touch_action_buttons(reset_fonts := false) -> void:
 	_touch_groups.size = groups
 
 
-## 托管「当前选中的英雄」：选 1 个=单托管；框选/编队多个=整队托管。（PC 热键 T，移动端「托管」按钮）
+## 文案与动作共用目标集：只操作仍存活的己方英雄，允许英雄与士兵混选。
+func _managed_heroes(all_army: bool) -> Array:
+	var out: Array = []
+	if battle == null:
+		return out
+	var candidates: Array = battle.liang_heroes() if all_army else battle.selection
+	for hero in candidates:
+		if is_instance_valid(hero) and hero.is_hero and not hero.is_building \
+			and hero.faction == Unit.FACTION_LIANG and hero.hp > 0.0 and not out.has(hero):
+			out.append(hero)
+	return out
+
+
+func _heroes_all_managed(heroes: Array) -> bool:
+	if heroes.is_empty():
+		return false
+	for hero in heroes:
+		if not hero.auto_micro:
+			return false
+	return true
+
+
+## 托管「当前选中的英雄」：全开时取消，否则补齐整组选中英雄的托管。
 func toggle_auto_selected() -> void:
 	if battle == null:
 		return
 	if not battle.gameplay_rng_fault().is_empty(): return
-	var hs: Array = battle.selection.filter(func(u): return is_instance_valid(u) and u.is_hero and not u.is_building)
+	var hs := _managed_heroes(false)
 	if hs.is_empty():
 		show_message(Localize.text("先选中英雄再托管") if touch_ui else Localize.text("先选中英雄再托管（T 托管 / Shift+T 全军）"), 1.4)
 		return
-	# 有任一已托管 → 视为取消（全部关）；否则全部开。这样混合选区也能一键取消。
-	var any_on := false
-	for h in hs:
-		if h.auto_micro:
-			any_on = true
-			break
-	for h in hs:
-		h.auto_micro = not any_on
-		if h.auto_micro:
-			h.manual_order_active = false
-			h.manual_order_t = 0.0
-			h.clear_mission_order_intent()
-			h.set_stance(Unit.STANCE_AGGRO)
-	show_message(Localize.format_text("%s %d 名英雄托管", [Localize.text("关闭") if any_on else Localize.text("开启"), hs.size()]), 1.2)
+	_apply_heroes_managed(hs, false)
 
 
 ## 托管全军：一键切换全部在场英雄的 auto_micro（已全开→全关，否则全开）。
@@ -733,22 +779,22 @@ func _toggle_all_auto() -> void:
 	if battle == null:
 		return
 	if not battle.gameplay_rng_fault().is_empty(): return
-	var hs: Array = battle.liang_heroes()
+	var hs := _managed_heroes(true)
 	if hs.is_empty():
 		return
-	var all_on := true
-	for h in hs:
-		if not h.auto_micro:
-			all_on = false
-			break
-	for h in hs:
-		h.auto_micro = not all_on
-		if h.auto_micro:
-			h.manual_order_active = false
-			h.manual_order_t = 0.0
-			h.clear_mission_order_intent()
-			h.set_stance(Unit.STANCE_AGGRO)
-	show_message(Localize.format_text("%s全军托管（%d 名英雄）", [Localize.text("开启") if not all_on else Localize.text("关闭"), hs.size()]), 1.2)
+	_apply_heroes_managed(hs, true)
+
+
+func _apply_heroes_managed(heroes: Array, all_army: bool) -> void:
+	var enabled := not _heroes_all_managed(heroes)
+	var result: Dictionary = battle.set_heroes_managed(heroes, enabled)
+	_refresh_touch_controls()
+	if bool(result.get("exited_full_auto", false)):
+		show_message(Localize.text("已退出全托管，经济与镜头改为手动"), 2.0)
+	elif int(result.get("changed", 0)) > 0:
+		var action := Localize.text("开启") if enabled else Localize.text("关闭")
+		var message := "%s全军托管（%d 名英雄）" if all_army else "%s %d 名英雄托管"
+		show_message(Localize.format_text(message, [action, int(result.changed)]), 1.2)
 
 
 ## 右缘常驻技能轨（仅触屏）：每个在场英雄一行，主动与被动技能全部显示。
@@ -835,6 +881,7 @@ func _skill_rail_visible_blockers() -> Array:
 		{"name": "toasts", "control": msg_box},
 		{"name": "touch_actions", "control": _touch_actions},
 		{"name": "menu", "control": _menu_btn},
+		{"name": "fps", "control": _fps_label},
 		{"name": "top_status", "control": top_label},
 		{"name": "control_help", "control": _control_help_panel},
 		{"name": "inventory_popup", "control": _inventory_popup},
@@ -858,7 +905,12 @@ func _layout_skill_rail() -> void:
 	var bottom := vp.y - safe.w - 166.0 - 72.0 - SKILL_RAIL_AVOID_GAP
 	var rows := maxi(6, _skill_rail.get_child_count())
 	var cell_h := clampf(floorf((bottom - top - float(rows - 1) * 4.0) / float(rows)), 48.0, 78.0)
-	_skill_rail_cell = Vector2(maxf(58.0, cell_h), cell_h)
+	# Taller tablet canvases must not grow the five-column rail to a third of
+	# the battlefield. Keep the minimum touch targets if a safe area is tight.
+	var width_budget := (vp.x - safe.x - safe.z) * SKILL_RAIL_MAX_WIDTH_RATIO
+	var width_cell_h := maxf(48.0, floorf((width_budget - 12.0) / 5.0))
+	cell_h = minf(cell_h, width_cell_h)
+	_skill_rail_cell = Vector2(cell_h, cell_h)
 	for row in _skill_rail.get_children():
 		for child in row.get_children():
 			child.custom_minimum_size = _skill_rail_cell if child is HeroSlotButton else Vector2(cell_h - 4.0, cell_h - 4.0)
@@ -2439,6 +2491,7 @@ func _build_fps_label() -> void:
 	_fps_label = Label.new()
 	_fps_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_fps_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fps_label.z_index = 250   # Above battle HUD/tooltips; pause and result modals remain above it.
 	_fps_label.text = "FPS --"
 	_style_label(_fps_label, 16)
 	_fps_label.add_theme_color_override("font_color", Color("9fe89f"))
@@ -2446,7 +2499,7 @@ func _build_fps_label() -> void:
 	_position_fps()
 
 
-## FPS 标签定位：桌面→右上角；触屏→「☰ 菜单」键(右距12·宽104·顶10高52)左侧，随安全区位移、竖直居中。
+## FPS 与触屏菜单同排；军情/资源条从它的左缘计算可用宽度。
 func _position_fps() -> void:
 	if _fps_label == null:
 		return
@@ -2454,9 +2507,15 @@ func _position_fps() -> void:
 	_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	if touch_ui:
 		var safe := _logical_safe_insets()
-		_fps_label.offset_right = -14.0 - safe.z    # 菜单下方独立一行，避免与军情横幅争宽
-		_fps_label.offset_top = 68.0 + safe.y
 		_fps_label.add_theme_font_size_override("font_size", 16)
+		var vp := get_viewport().get_visible_rect().size
+		var menu_size := Vector2(104, 52)
+		if _menu_btn != null:
+			menu_size = _menu_btn.size.max(_menu_btn.get_combined_minimum_size())
+		var label_size := _fps_label.get_combined_minimum_size().max(Vector2(74, 24))
+		_fps_label.size = label_size
+		_fps_label.position = Vector2(vp.x - safe.z - 12.0 - menu_size.x - 8.0 - label_size.x,
+			10.0 + safe.y + (menu_size.y - label_size.y) * 0.5)
 	else:
 		_fps_label.offset_right = -14.0            # 桌面：右上角
 		_fps_label.offset_top = 12.0

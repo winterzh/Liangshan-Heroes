@@ -1,0 +1,79 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[android-autoplay] PASS fixed fixture seed uses production new-game RNG API
+[android-autoplay] PASS real defense Battle/HUD starts without RNG fault
+[android-autoplay] PASS defense naturally starts before the first hero is trained
+[android-autoplay] PASS natural 0-hero rail: fps_exists 
+[android-autoplay] PASS natural 0-hero rail: fps_visible 
+[android-autoplay] PASS natural 0-hero rail: fps_text_present FPS 1
+[android-autoplay] PASS natural 0-hero rail: fps_in_safe_area [P: (1082.0, 24.0), S: (74.0, 24.0)]
+[android-autoplay] PASS natural 0-hero rail: fps_avoids_menu [P: (1164.0, 10.0), S: (104.0, 52.0)]
+[android-autoplay] PASS natural 0-hero rail: fps_avoids_resources [P: (10.0, 8.0), S: (486.0, 45.0)]
+[android-autoplay] PASS natural 0-hero rail: fps_avoids_top_status [P: (656.5, 8.0), S: (265.0, 50.0)]
+[android-autoplay] PASS natural 0-hero rail: rail_quarter_safe_width [317.0, 320.0]
+[android-autoplay] PASS natural 0-hero rail fixture and FPS contract are nonempty
+[android-autoplay] PASS spawn real fixture hero song_jiang
+[android-autoplay] PASS natural 1-hero rail: fps_exists 
+[android-autoplay] PASS natural 1-hero rail: fps_visible 
+[android-autoplay] PASS natural 1-hero rail: fps_text_present FPS 1
+[android-autoplay] PASS natural 1-hero rail: fps_in_safe_area [P: (1082.0, 24.0), S: (74.0, 24.0)]
+[android-autoplay] PASS natural 1-hero rail: fps_avoids_menu [P: (1164.0, 10.0), S: (104.0, 52.0)]
+[android-autoplay] PASS natural 1-hero rail: fps_avoids_rail [P: (953.0, 70.0), S: (317.0, 61.0)]
+[android-autoplay] PASS natural 1-hero rail: fps_avoids_resources [P: (10.0, 8.0), S: (500.0, 45.0)]
+[android-autoplay] PASS natural 1-hero rail: fps_avoids_top_status [P: (663.5, 8.0), S: (265.0, 50.0)]
+[android-autoplay] PASS natural 1-hero rail: rail_quarter_safe_width [317.0, 320.0]
+[android-autoplay] PASS natural 1-hero rail fixture and FPS contract are nonempty
+[android-autoplay] PASS spawn real fixture hero hua_rong
+[android-autoplay] PASS spawn real fixture hero lin_chong
+[android-autoplay] PASS spawn real fixture hero gongsun_sheng
+[android-autoplay] PASS spawn real fixture hero li_kui
+[android-autoplay] PASS spawn real fixture hero wu_song
+[android-autoplay] PASS natural 6-hero rail: fps_exists 
+[android-autoplay] PASS natural 6-hero rail: fps_visible 
+[android-autoplay] PASS natural 6-hero rail: fps_text_present FPS 1
+[android-autoplay] PASS natural 6-hero rail: fps_in_safe_area [P: (1082.0, 24.0), S: (74.0, 24.0)]
+[android-autoplay] PASS natural 6-hero rail: fps_avoids_menu [P: (1164.0, 10.0), S: (104.0, 52.0)]
+[android-autoplay] PASS natural 6-hero rail: fps_avoids_rail [P: (953.0, 70.0), S: (317.0, 386.0)]
+[android-autoplay] PASS natural 6-hero rail: fps_avoids_resources [P: (10.0, 8.0), S: (500.0, 45.0)]
+[android-autoplay] PASS natural 6-hero rail: fps_avoids_top_status [P: (663.5, 8.0), S: (265.0, 50.0)]
+[android-autoplay] PASS natural 6-hero rail: rail_quarter_safe_width [317.0, 320.0]
+[android-autoplay] PASS natural 6-hero rail fixture and FPS contract are nonempty
+[android-autoplay] PASS shared API deduplicates heroes and rejects enemy/dead/nonhero/foreign/null targets
+[android-autoplay] PASS invalid and cross-Battle objects are not modified
+[android-autoplay] PASS enabling a mixed group preserves already-managed hero's manual intent and stance
+[android-autoplay] PASS only newly enabled hero clears manual intent
+[android-autoplay] PASS disabling management preserves both heroes' manual orders
+[android-autoplay] PASS repeating an explicit disable is an idempotent no-op without message growth
+[android-autoplay] PASS empty targets do not leave full-auto mode
+[android-autoplay] PASS nonhero-only targets do not leave full-auto mode
+[android-autoplay] PASS level zero hides both management buttons
+[android-autoplay] PASS level zero API and hidden-button callbacks cannot enable management
+[android-autoplay] PASS level zero no-op callbacks do not claim successful management
+[android-autoplay] PASS level zero AI pass clears stale per-hero management
+[android-autoplay] PASS repeated HUD refresh keeps exactly one gameplay callback per management button
+[android-autoplay] PASS level 1 mixed selection advertises enable
+[android-autoplay] PASS level 1 mixed click enables selected heroes only
+[android-autoplay] PASS level 1 stays selected and label follows all-on group
+[android-autoplay] PASS level 1 hero-management button remains visible when active subgroup is a soldier
+[android-autoplay] PASS level 1 all-on mixed army click disables heroes without managing soldier
+[android-autoplay] PASS level 2 mixed selection advertises enable
+[android-autoplay] PASS level 2 mixed click enables selected heroes only
+[android-autoplay] PASS level 2 stays selected and label follows all-on group
+[android-autoplay] PASS level 2 hero-management button remains visible when active subgroup is a soldier
+[android-autoplay] PASS level 2 all-on mixed army click disables heroes without managing soldier
+[android-autoplay] PASS selected cancellation explicitly exits full economy/camera automation to level two
+[android-autoplay] PASS selected cancellation preserves all unselected heroes' management flags
+[android-autoplay] PASS forty AI passes cannot reenable selected cancellation or repeat its status messages
+[android-autoplay] PASS all-army cancellation exits full-auto and disables every hero
+[android-autoplay] PASS one cancellation emits status messages once, without a misleading repeated-count suffix
+[android-autoplay] PASS all-army cancellation remains off with stable message/unread counters
+[android-autoplay] PASS next enable button enables heroes only; it does not silently restore level-three economy/camera AI
+[android-autoplay] PASS enabled strong management does not independently increment button messages
+[android-autoplay] PASS third all-army click cancels normally at level two
+[android-autoplay] PASS explicitly reselecting full-auto in settings still reenables its global policy
+[android-autoplay] PASS desktop T uses the same enable-mixed-selection rule
+[android-autoplay] PASS keyboard echo cannot retrigger management
+[android-autoplay] PASS desktop Shift+T exits full-auto through the shared transition
+[android-autoplay] PASS all required autoplay/FPS suites completed with nonempty evidence
+[android-autoplay] PASS no gameplay RNG fault after regression cases
+[android-autoplay-result] {"checks":[{"label":"fixed fixture seed uses production new-game RNG API","passed":true},{"label":"real defense Battle/HUD starts without RNG fault","passed":true},{"label":"defense naturally starts before the first hero is trained","passed":true},{"label":"natural 0-hero rail: fps_exists ","passed":true},{"label":"natural 0-hero rail: fps_visible ","passed":true},{"label":"natural 0-hero rail: fps_text_present FPS 1","passed":true},{"label":"natural 0-hero rail: fps_in_safe_area [P: (1082.0, 24.0), S: (74.0, 24.0)]","passed":true},{"label":"natural 0-hero rail: fps_avoids_menu [P: (1164.0, 10.0), S: (104.0, 52.0)]","passed":true},{"label":"natural 0-hero rail: fps_avoids_resources [P: (10.0, 8.0), S: (486.0, 45.0)]","passed":true},{"label":"natural 0-hero rail: fps_avoids_top_status [P: (656.5, 8.0), S: (265.0, 50.0)]","passed":true},{"label":"natural 0-hero rail: rail_quarter_safe_width [317.0, 320.0]","passed":true},{"label":"natural 0-hero rail fixture and FPS contract are nonempty","passed":true},{"label":"spawn real fixture hero song_jiang","passed":true},{"label":"natural 1-hero rail: fps_exists ","passed":true},{"label":"natural 1-hero rail: fps_visible ","passed":true},{"label":"natural 1-hero rail: fps_text_present FPS 1","passed":true},{"label":"natural 1-hero rail: fps_in_safe_area [P: (1082.0, 24.0), S: (74.0, 24.0)]","passed":true},{"label":"natural 1-hero rail: fps_avoids_menu [P: (1164.0, 10.0), S: (104.0, 52.0)]","passed":true},{"label":"natural 1-hero rail: fps_avoids_rail [P: (953.0, 70.0), S: (317.0, 61.0)]","passed":true},{"label":"natural 1-hero rail: fps_avoids_resources [P: (10.0, 8.0), S: (500.0, 45.0)]","passed":true},{"label":"natural 1-hero rail: fps_avoids_top_status [P: (663.5, 8.0), S: (265.0, 50.0)]","passed":true},{"label":"natural 1-hero rail: rail_quarter_safe_width [317.0, 320.0]","passed":true},{"label":"natural 1-hero rail fixture and FPS contract are nonempty","passed":true},{"label":"spawn real fixture hero hua_rong","passed":true},{"label":"spawn real fixture hero lin_chong","passed":true},{"label":"spawn real fixture hero gongsun_sheng","passed":true},{"label":"spawn real fixture hero li_kui","passed":true},{"label":"spawn real fixture hero wu_song","passed":true},{"label":"natural 6-hero rail: fps_exists ","passed":true},{"label":"natural 6-hero rail: fps_visible ","passed":true},{"label":"natural 6-hero rail: fps_text_present FPS 1","passed":true},{"label":"natural 6-hero rail: fps_in_safe_area [P: (1082.0, 24.0), S: (74.0, 24.0)]","passed":true},{"label":"natural 6-hero rail: fps_avoids_menu [P: (1164.0, 10.0), S: (104.0, 52.0)]","passed":true},{"label":"natural 6-hero rail: fps_avoids_rail [P: (953.0, 70.0), S: (317.0, 386.0)]","passed":true},{"label":"natural 6-hero rail: fps_avoids_resources [P: (10.0, 8.0), S: (500.0, 45.0)]","passed":true},{"label":"natural 6-hero rail: fps_avoids_top_status [P: (663.5, 8.0), S: (265.0, 50.0)]","passed":true},{"label":"natural 6-hero rail: rail_quarter_safe_width [317.0, 320.0]","passed":true},{"label":"natural 6-hero rail fixture and FPS contract are nonempty","passed":true},{"label":"shared API deduplicates heroes and rejects enemy/dead/nonhero/foreign/null targets","passed":true},{"label":"invalid and cross-Battle objects are not modified","passed":true},{"label":"enabling a mixed group preserves already-managed hero's manual intent and stance","passed":true},{"label":"only newly enabled hero clears manual intent","passed":true},{"label":"disabling management preserves both heroes' manual orders","passed":true},{"label":"repeating an explicit disable is an idempotent no-op without message growth","passed":true},{"label":"empty targets do not leave full-auto mode","passed":true},{"label":"nonhero-only targets do not leave full-auto mode","passed":true},{"label":"level zero hides both management buttons","passed":true},{"label":"level zero API and hidden-button callbacks cannot enable management","passed":true},{"label":"level zero no-op callbacks do not claim successful management","passed":true},{"label":"level zero AI pass clears stale per-hero management","passed":true},{"label":"repeated HUD refresh keeps exactly one gameplay callback per management button","passed":true},{"label":"level 1 mixed selection advertises enable","passed":true},{"label":"level 1 mixed click enables selected heroes only","passed":true},{"label":"level 1 stays selected and label follows all-on group","passed":true},{"label":"level 1 hero-management button remains visible when active subgroup is a soldier","passed":true},{"label":"level 1 all-on mixed army click disables heroes without managing soldier","passed":true},{"label":"level 2 mixed selection advertises enable","passed":true},{"label":"level 2 mixed click enables selected heroes only","passed":true},{"label":"level 2 stays selected and label follows all-on group","passed":true},{"label":"level 2 hero-management button remains visible when active subgroup is a soldier","passed":true},{"label":"level 2 all-on mixed army click disables heroes without managing soldier","passed":true},{"label":"selected cancellation explicitly exits full economy/camera automation to level two","passed":true},{"label":"selected cancellation preserves all unselected heroes' management flags","passed":true},{"label":"forty AI passes cannot reenable selected cancellation or repeat its status messages","passed":true},{"label":"all-army cancellation exits full-auto and disables every hero","passed":true},{"label":"one cancellation emits status messages once, without a misleading repeated-count suffix","passed":true},{"label":"all-army cancellation remains off with stable message/unread counters","passed":true},{"label":"next enable button enables heroes only; it does not silently restore level-three economy/camera AI","passed":true},{"label":"enabled strong management does not independently increment button messages","passed":true},{"label":"third all-army click cancels normally at level two","passed":true},{"label":"explicitly reselecting full-auto in settings still reenables its global policy","passed":true},{"label":"desktop T uses the same enable-mixed-selection rule","passed":true},{"label":"keyboard echo cannot retrigger management","passed":true},{"label":"desktop Shift+T exits full-auto through the shared transition","passed":true},{"label":"all required autoplay/FPS suites completed with nonempty evidence","passed":true},{"label":"no gameplay RNG fault after regression cases","passed":true}],"completed":["natural_fps","api","levels_0_1_2","full_auto","keyboard"],"failures":[],"passed":true,"physical_android_input":false,"profile":"/Users/dztdash/Library/Application Support/LSH-rts-refinement-ee3389e6bc644fd8989725d912b90170","samples":[{"geometry":{"fps":"[P: (1082.0, 24.0), S: (74.0, 24.0)]","portraits":0,"rail":"[P: (953.0, 70.0), S: (317.0, 0.0)]","rail_width_fraction":0.24765625,"rail_width_limit":320.0,"safe":"[P: (0.0, 0.0), S: (1280.0, 720.0)]","slots":0,"viewport":"(1280.0, 720.0)"},"heroes":0,"kind":"natural_hero_arrival_fps"},{"geometry":{"fps":"[P: (1082.0, 24.0), S: (74.0, 24.0)]","portraits":1,"rail":"[P: (953.0, 70.0), S: (317.0, 61.0)]","rail_width_fraction":0.24765625,"rail_width_limit":320.0,"safe":"[P: (0.0, 0.0), S: (1280.0, 720.0)]","slots":4,"viewport":"(1280.0, 720.0)"},"heroes":1,"kind":"natural_hero_arrival_fps"},{"geometry":{"fps":"[P: (1082.0, 24.0), S: (74.0, 24.0)]","portraits":6,"rail":"[P: (953.0, 70.0), S: (317.0, 386.0)]","rail_width_fraction":0.24765625,"rail_width_limit":320.0,"safe":"[P: (0.0, 0.0), S: (1280.0, 720.0)]","slots":24,"viewport":"(1280.0, 720.0)"},"heroes":6,"kind":"natural_hero_arrival_fps"},{"final_level":2,"flags":[false,false,false,false,false,false],"kind":"full_auto_click_sequence","messages":{"rows":[{"count":1,"text":"已退出全托管，经济与镜头改为手动"},{"count":1,"text":"开启全军托管（6 名英雄）"},{"count":1,"text":"关闭全军托管（6 名英雄）"}],"unread":3}}],"scope":"Production callbacks, API state transitions and natural 0/1/6-hero FPS layout; no device FPS claim"}

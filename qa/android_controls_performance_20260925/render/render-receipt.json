@@ -1,0 +1,285 @@
+{
+  "passed": true,
+  "native_android": false,
+  "visual_approved": false,
+  "scope": "Desktop synthetic/real-scene execution and capture only; pixel acceptance requires review",
+  "snapshot": "/private/tmp/lsh_android_fix_20260925_c/source-receipt.json",
+  "snapshot_sha256": "2d3888f8ccf052af125c9b4b7bb92bbbd91b77e8712db97d3f1c029d3bedd736",
+  "project": "/private/tmp/lsh_android_fix_20260925_c/project",
+  "profile": "/Users/dztdash/Library/Application Support/LSH-rts-refinement-ee3389e6bc644fd8989725d912b90170",
+  "source_records": 3337,
+  "isolation": {
+    "STEAM_DISABLED": "1",
+    "CAMPAIGN_QA": "1",
+    "CONTENT_UPDATE_NO_AUTO": "1"
+  },
+  "start_drift": [],
+  "runs": [
+    {
+      "label": "static_scenery_batch",
+      "command": [
+        "/private/tmp/lsh-godot-4.6.3-20260924/editor/Godot.app/Contents/MacOS/Godot",
+        "--path",
+        "/private/tmp/lsh_android_fix_20260925_c/project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--position",
+        "20000,20000",
+        "--script",
+        "res://tools/static_scenery_batch_qa.gd"
+      ],
+      "mode": "1",
+      "size": "3000x1876",
+      "timeout_seconds": 180,
+      "returncode": 0,
+      "passed": true,
+      "error_log": false,
+      "report": {
+        "path": "static-scenery-batch-result.json",
+        "sha256": "43d40be0b8ea974f5f458a157fb58439c991e1b10d0d33932e604bb378165aeb",
+        "passed": true
+      },
+      "pngs": [
+        {
+          "path": "static_batch_s060_batch.png",
+          "sha256": "a0b9e033cbf32681d473a5f977ece364577aaf1ba1dafa02872ac0993d38173a",
+          "bytes": 20748
+        },
+        {
+          "path": "static_batch_s060_hard.png",
+          "sha256": "8b6c5b791a0c2de65e0181b17e3618e2e74d7a257a74c44a7688b2325b1cb0f3",
+          "bytes": 14890
+        },
+        {
+          "path": "static_batch_s060_legacy.png",
+          "sha256": "2355f34aa3699085b6ef2f90b06218b30ae06543d3988e3300814664f56bf014",
+          "bytes": 20763
+        },
+        {
+          "path": "static_batch_s060_legacy_left_batch_right.png",
+          "sha256": "4873ab7847b7404b654be671e5a2e23bde9d13054e8c32cd551a20fdf562e741",
+          "bytes": 34856
+        },
+        {
+          "path": "static_batch_s100_batch.png",
+          "sha256": "afae35d62b8a6a69ae9c84363e18a4cb0d6349be7bf3afafcb665fa9109c3767",
+          "bytes": 40548
+        },
+        {
+          "path": "static_batch_s100_hard.png",
+          "sha256": "dcbe29a5167c132a0c2f06fc66dcf994115b1231ca2ea11135509caa8cee4d33",
+          "bytes": 31259
+        },
+        {
+          "path": "static_batch_s100_legacy.png",
+          "sha256": "78a1398fdff16e9440d81cda9bc6b4a086abeb1fee4b4a6a2a1231da4655d7e6",
+          "bytes": 40112
+        },
+        {
+          "path": "static_batch_s100_legacy_left_batch_right.png",
+          "sha256": "df48816cec9f16fe1ebabf66e49c7829beb553dd045af6e3596f4ec5e336a80b",
+          "bytes": 70051
+        },
+        {
+          "path": "static_batch_s170_batch.png",
+          "sha256": "f622027c4a714c8148d304a116e85fa59e8a717e918891c18a1ac0f15c0c175b",
+          "bytes": 81910
+        },
+        {
+          "path": "static_batch_s170_hard.png",
+          "sha256": "1c6333924fc9c31db9f666081b715077fc6e7bb411767dd403a6b78cd24d2363",
+          "bytes": 64901
+        },
+        {
+          "path": "static_batch_s170_legacy.png",
+          "sha256": "48aa0de85005de1192c4a1e1c53831a250b0d266b772b7c83a2b1a91e5b5c8e1",
+          "bytes": 81990
+        },
+        {
+          "path": "static_batch_s170_legacy_left_batch_right.png",
+          "sha256": "0a9e26942494f74066e32c50a3ad0e746ace2c1b16a080bd712400ca83eb70c3",
+          "bytes": 147467
+        }
+      ],
+      "seconds": 4.282,
+      "log": "/private/tmp/lsh_android_render_20260925_c/static_scenery_batch/stdout.log"
+    },
+    {
+      "label": "baseline_3000x1876",
+      "command": [
+        "/private/tmp/lsh-godot-4.6.3-20260924/editor/Godot.app/Contents/MacOS/Godot",
+        "--path",
+        "/private/tmp/lsh_android_fix_20260925_c/project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--position",
+        "20000,20000",
+        "--script",
+        "res://tools/android_opening_render_qa.gd"
+      ],
+      "mode": "0",
+      "size": "3000x1876",
+      "timeout_seconds": 180,
+      "returncode": 0,
+      "passed": true,
+      "error_log": false,
+      "report": {
+        "path": "opening-render.json",
+        "sha256": "a632785ca74dec8e8cd8e0ed25916a20313a75e3d8636c7ab7028d8a5fb4c3f2",
+        "passed": true
+      },
+      "pngs": [
+        {
+          "path": "opening_no_heroes.png",
+          "sha256": "bb7d61f235bd3beb005a3041276a1092078a992d95021ee0b217d42223673705",
+          "bytes": 4074905
+        },
+        {
+          "path": "opening_six_heroes.png",
+          "sha256": "80bfc4e6766658cc6bed48ed2d18d6d0f6daba05317c832a48e045e4f5607927",
+          "bytes": 5286979
+        },
+        {
+          "path": "whole_terrace.png",
+          "sha256": "f6920938aa3e3451df126db4d31aaa16d2a97664206c1e27db7a90e1e958622c",
+          "bytes": 7668131
+        }
+      ],
+      "seconds": 45.075,
+      "log": "/private/tmp/lsh_android_render_20260925_c/baseline_3000x1876/stdout.log"
+    },
+    {
+      "label": "optimized_3000x1876",
+      "command": [
+        "/private/tmp/lsh-godot-4.6.3-20260924/editor/Godot.app/Contents/MacOS/Godot",
+        "--path",
+        "/private/tmp/lsh_android_fix_20260925_c/project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--position",
+        "20000,20000",
+        "--script",
+        "res://tools/android_opening_render_qa.gd"
+      ],
+      "mode": "1",
+      "size": "3000x1876",
+      "timeout_seconds": 180,
+      "returncode": 0,
+      "passed": true,
+      "error_log": false,
+      "report": {
+        "path": "opening-render.json",
+        "sha256": "63b4298cdc8671501854fe18ccf5c725bb8b1b78336ad215ccdd3e8fdb8766c3",
+        "passed": true
+      },
+      "pngs": [
+        {
+          "path": "opening_no_heroes.png",
+          "sha256": "97b1019a1edf68d5c659864a9b8c8ff009a2da795db302fecaa1cadd59309590",
+          "bytes": 4074687
+        },
+        {
+          "path": "opening_six_heroes.png",
+          "sha256": "b5f7b4be3b1feef3588d44ab10b3e80d3efbcfce67845ef90876b02b31ed7c1d",
+          "bytes": 5286818
+        },
+        {
+          "path": "whole_terrace.png",
+          "sha256": "63f45d52941a8649c2c7d73f2a9a3a828cb2cc3d7055724953698aecbb51daca",
+          "bytes": 7667296
+        }
+      ],
+      "seconds": 44.983,
+      "log": "/private/tmp/lsh_android_render_20260925_c/optimized_3000x1876/stdout.log"
+    },
+    {
+      "label": "baseline_3840x2560",
+      "command": [
+        "/private/tmp/lsh-godot-4.6.3-20260924/editor/Godot.app/Contents/MacOS/Godot",
+        "--path",
+        "/private/tmp/lsh_android_fix_20260925_c/project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--position",
+        "20000,20000",
+        "--script",
+        "res://tools/android_opening_render_qa.gd"
+      ],
+      "mode": "0",
+      "size": "3840x2560",
+      "timeout_seconds": 180,
+      "returncode": 0,
+      "passed": true,
+      "error_log": false,
+      "report": {
+        "path": "opening-render.json",
+        "sha256": "b64e3be7e4f5ed29ac11471f3a060fa4b5c754570c6590b0cfe78c676329eec8",
+        "passed": true
+      },
+      "pngs": [
+        {
+          "path": "opening_no_heroes.png",
+          "sha256": "996f1af434c791722111f56980600c116366e387e9f7569aa19f7c8d910aebfc",
+          "bytes": 6095855
+        },
+        {
+          "path": "opening_six_heroes.png",
+          "sha256": "3c6a5c51aab2dc9a8da8256a5e3a35fcc175dfa0847cd7c2022c5deee6c9add6",
+          "bytes": 7978665
+        },
+        {
+          "path": "whole_terrace.png",
+          "sha256": "cad1e64a9d1edad439947b3ba1b5858aafd8fba80d8e9697517aa76090fc4007",
+          "bytes": 12280345
+        }
+      ],
+      "seconds": 47.449,
+      "log": "/private/tmp/lsh_android_render_20260925_c/baseline_3840x2560/stdout.log"
+    },
+    {
+      "label": "optimized_3840x2560",
+      "command": [
+        "/private/tmp/lsh-godot-4.6.3-20260924/editor/Godot.app/Contents/MacOS/Godot",
+        "--path",
+        "/private/tmp/lsh_android_fix_20260925_c/project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--position",
+        "20000,20000",
+        "--script",
+        "res://tools/android_opening_render_qa.gd"
+      ],
+      "mode": "1",
+      "size": "3840x2560",
+      "timeout_seconds": 180,
+      "returncode": 0,
+      "passed": true,
+      "error_log": false,
+      "report": {
+        "path": "opening-render.json",
+        "sha256": "b240aa802528e13f12ef9b13afcd1e59e77594567cdd2dbffcb69d9ca1ea662b",
+        "passed": true
+      },
+      "pngs": [
+        {
+          "path": "opening_no_heroes.png",
+          "sha256": "292d3e331cdef5b6df71da6e782979b182352cbcca1cb87930d2d2fe3460b4bb",
+          "bytes": 6095444
+        },
+        {
+          "path": "opening_six_heroes.png",
+          "sha256": "1b1a6391b1920a48c7fcd1a17770762408cfd6243704102268f85b0409122ca0",
+          "bytes": 7978176
+        },
+        {
+          "path": "whole_terrace.png",
+          "sha256": "ed153e4631320956c36678bbc27a3e5fb22e5049f5aab3d97d55f8cea48a98b8",
+          "bytes": 12279259
+        }
+      ],
+      "seconds": 47.235,
+      "log": "/private/tmp/lsh_android_render_20260925_c/optimized_3840x2560/stdout.log"
+    }
+  ],
+  "end_drift": []
+}

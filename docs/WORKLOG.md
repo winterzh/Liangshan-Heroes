@@ -1,4 +1,13 @@
 ## 2026-09-25 Android 2.0 已发布
+## 2026-09-25 Android 操作与开局渲染修复（源码，未发包）
+
+从干净 stable 拉取核对，基线仍为 `3fe9eecf`。修复全托管取消后被下一轮 AI 恢复、混选文案与动作不一致；取消明确降为英雄托管等级并接管经济/镜头。FPS 改为菜单旁独立占位；平板技能栏限制约四分之一屏宽，顶部军情条按内容收缩。岸线与台地改为保序、保抗锯齿的持久网格合批，AtlasTexture 矩形保留原生命令。
+
+官方 Godot 4.6.3 私有冻结批完成 816 项逻辑回归、173 个原生尺寸触屏/桌面图形样例，3337 个输入零漂移。覆盖两种 Y900 尺寸、两款手机、16:10/4:3、安全区及四语长文；新增托管 76 项。渲染 A/B 和视觉证据详见 [本轮 QA](../qa/android_controls_performance_20260925/README.md)，实现/复现见 [说明](ANDROID_CONTROLS_PERFORMANCE_20260925.md)。本机未连接 Android 设备，不声明真机帧率或手感通过。
+
+两种平板分辨率的冻结开局 A/B 均通过，绘制调用约降 57%、宿主渲染 CPU 约降 59%；三尺度图元对照最大通道差为 1/255，缓存重复重绘保持不变。独立核对 6674 次输入哈希及 38 份入库原始证据均一致。
+
+只提交推送既定 stable，不合并 main，不移动 v2.0 标签，不重建 APK、不建 Release、不更新 Android 服务器或 Steam；线上 2.0 APK 不包含本批修复。
 
 `v2.0` 与 APK 源码提交为 `9cf45c7204d3a3f6a31a3d3765b3bf5db8439a80`，已推送 `codex/sync-20260905-stable` 并回读一致。[GitHub Release](https://github.com/winterzh/Liangshan-Heroes/releases/tag/v2.0) 于 2026-09-25 16:00:28（UTC+8）公开，附 APK；Android stable 已切到 2.0，Windows/macOS 的旧清单与签名字节完全未变。
 

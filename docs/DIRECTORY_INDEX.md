@@ -1,3 +1,11 @@
+## 2026-09-25 Android 操作与渲染修复
+
+- `scripts/static_scenery_draw_batch.gd`：保透明顺序与抗锯齿的静态岸线/台地网格缓存，附 Godot 来源声明。
+- `tools/android_autoplay_regression_qa.gd`：真实 HUD 回调、T/Shift+T、AI 后续状态、0/1/6 英雄 FPS/布局回归。
+- `tools/static_scenery_batch_qa.gd`、`tools/android_opening_render_qa.gd`、`tools/run_android_render_qa.py`：私有冻结工程中的图元/真实开局图形 A/B，非真机测试。
+- `assets/localization/android_controls_20260925.json`：退出全托管提示翻译来源。
+- `docs/ANDROID_CONTROLS_PERFORMANCE_20260925.md`、`qa/android_controls_performance_20260925/`：实现、复现与验证边界；本批未发包。
+
 ## 2026-09-25 Android 2.0 发布
 
 - `tools/build_android_test.py`、`tools/build_android_release.sh`：私有冻结 Android 构建，正式模式校验版本/tag/签名/资源和来源证明；测试模式独立。

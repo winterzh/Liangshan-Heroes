@@ -1,3 +1,9 @@
+## 2026-09-25 Android 操作与性能源码修复
+
+本批在 2.0 发布之后修复 FPS 遮挡、平板尺寸、托管状态及静态岸线/台地绘制开销；尚未打包或更新服务器，线上 APK 仍是下方原 2.0。详见 [实现与复现](ANDROID_CONTROLS_PERFORMANCE_20260925.md) 和 [QA](../qa/android_controls_performance_20260925/README.md)。
+
+`tools/run_rts_refinement_qa.py --godot <Godot 4.6.3> --out <全新外部目录> --visual` 现为 816 项逻辑回归加 173 个图形布局样例。通过后以 `tools/run_android_render_qa.py --godot <同一引擎> --snapshot <上述目录> --out <另一个全新外部目录>` 串行运行 3 尺度图元对照和两种平板分辨率的开局 A/B，核对来源零漂移。两工具禁止直接使用玩家配置，渲染采样不是安卓真机性能验收。
+
 ## 2026-09-25 Android v2.0 已发布
 
 正式 APK、`v2.0` 标签对应 stable 提交 `9cf45c7204d3a3f6a31a3d3765b3bf5db8439a80`。[GitHub Release](https://github.com/winterzh/Liangshan-Heroes/releases/tag/v2.0) 与 [服务器 APK](http://120.26.237.195:1234/liangshan/android/releases/LiangshanHeroes-v2.0.apk) 已公开，Android stable 为 2.0；两处完整下载 SHA-256 为 `78a15c9e1e31b9fbcab2e09ab92f6bbbd6a62a1bcfef7e0896f9c19ab1c249c0`。后续交接提交不移动该标签。桌面 stable/签名未变，Steam 未操作。
