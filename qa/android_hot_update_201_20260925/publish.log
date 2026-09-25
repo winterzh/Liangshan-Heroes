@@ -1,0 +1,17 @@
+== 读取并验证 Android v2.0 基线清单 ==
+== 检查 stable，只允许当前发布线同步升版 ==
+== 取回、校验固定 PCK 基线并生成累计补丁 ==
+{"passed": true, "patch": {"path": "/Users/dztdash/Antigravity/ra-aa/build/update-publish/hot-2.0.1/run.1AkPUD/build-android/patch.pck", "size": 2374976, "sha256": "a7b489df78eb30c80e8534963ffbb92258eec3992a6cea76bdd20c09cfa2855c", "resources": 13}}
+android  patch-2.0-to-2.0.1.pck                  2374976 a7b489df78eb30c80e8534963ffbb92258eec3992a6cea76bdd20c09cfa2855c
+== 上传前：原 APK 加载同一签名候选补丁 ==
+{"passed": true, "report": "/Users/dztdash/Antigravity/ra-aa/build/update-publish/hot-2.0.1/run.1AkPUD/offline-apk-gate/report.json", "failure": null}
+== 服务器不可变路径预检 ==
+/tmp/liangshan-hot-2.0.1-8065/android-patch-2.0-to-2.0.1.pck: OK
+/tmp/liangshan-hot-2.0.1-8065/manifest-android.json: OK
+/tmp/liangshan-hot-2.0.1-8065/manifest-android.sig: OK
+== 公网回读 Android 版本化文件，验签、验大小、验 SHA-256 ==
+== 提升前：原 APK 真实下载候选补丁并跨进程重启 ==
+{"passed": true, "report": "/Users/dztdash/Antigravity/ra-aa/build/update-publish/hot-2.0.1/run.1AkPUD/online-apk-gate/report.json", "failure": null}
+== 仅提升 Android stable（Windows/macOS 不动）==
+Android 累计内容补丁 v2.0.1 已发布；Windows/macOS 历史文件未修改。
+版本化文件不可覆盖；若发布后发现问题，请修复后使用更高三段版本。

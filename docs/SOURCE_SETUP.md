@@ -1,8 +1,8 @@
 ## 2026-09-25 Android 2.0.1 热更新入口
 
-用户允许通过自动化验证后先更新 Android 服务器，真机后验；只同步源码/`v2.0.1` 标签，不新建 APK、GitHub Release 或 Steam 发布。底包保持 2.0 / code 16 / bootstrap 4；内容版本由签名清单及菜单 `2.0 · 内容2.0.1` 表示，不修改底包版本常量。
+Android stable 已上线 2.0.1，`v2.0.1` 标签绑定 `b3b0b7ac405f2584b811b0841d085cf2f28b3dc6`；补丁 2,374,976 字节。用户允许自动化后先更新服务器、真机后验；未新建 APK、GitHub Release 或 Steam 发布。底包保持 2.0 / code 16 / bootstrap 4；主菜单右下角显示当前内容 `v2.0.1`，不修改底包版本常量。
 
-在已推送、干净且 HEAD 对应标签的 checkout，使用匹配原底包的 Godot 4.6.3：`GODOT_PATH=<本机引擎> bash tools/publish_hot_update.sh 2.0.1 "更新说明"`。工具从生产白名单冻结源码、构建累计 PCK，先以真实 2.0 APK 原资源做挂载检查，再上传不可变文件，经公网下载/跨进程重启验证后才提升 Android stable。收据在 `build/update-publish/hot-2.0.1/run.*/`，禁止上传整个构建目录或密钥；入库范围和正式状态见[本轮 QA](../qa/android_hot_update_201_20260925/README.md)。
+后续发布须使用更高三段版本，不能重新发布/覆盖 2.0.1。在已推送、干净且 HEAD 对应新标签的 checkout，使用匹配原底包的 Godot 4.6.3：`GODOT_PATH=<本机引擎> bash tools/publish_hot_update.sh <下一内容版本> "更新说明"`。工具从生产白名单冻结源码、构建累计 PCK，先以真实 2.0 APK 原资源做挂载检查，再上传不可变文件，经公网下载/跨进程重启验证后才提升 Android stable。本次收据在 `build/update-publish/hot-2.0.1/run.1AkPUD/`，禁止上传整个构建目录或密钥；入库范围和正式状态见[本轮 QA](../qa/android_hot_update_201_20260925/README.md)。
 
 ## 2026-09-25 Android 操作与性能源码修复
 
