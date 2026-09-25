@@ -1,6 +1,6 @@
 #!/bin/bash
-# 从签名基线清单指定的固定基线生成累计差异包，同步提升 Android/macOS stable。
-# Windows 在线更新暂停。Bootstrap 4 的 Android 必须使用新完整包基线。
+# 从签名基线清单指定的固定基线生成累计差异包，仅提升 Android stable。
+# Windows/macOS 历史文件不写、不删。Bootstrap 4 必须使用新完整包基线。
 set -euo pipefail
 
 if [ "$#" -lt 1 ]; then
@@ -9,12 +9,13 @@ if [ "$#" -lt 1 ]; then
 fi
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
 source "$ROOT/tools/update_release.env"
 source "$ROOT/tools/lib_update_release.sh"
 
 VERSION="$1"
-NOTES="${2:-Android/macOS 内容更新}"
-GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
+NOTES="${2:-Android 内容更新}"
+GODOT="${GODOT_PATH:-${GODOT:-$(command -v godot || true)}}"
 BUILD="$ROOT/build"
 UPDATE_OUT="$BUILD/updates"
 WORK="$BUILD/update-publish/hot-$VERSION"
@@ -22,7 +23,7 @@ UPDATE_PRIVATE_KEY="${LIANGSHAN_UPDATE_SIGNING_KEY:-$HOME/.config/liangshan-upda
 UPDATE_PUBLIC_KEY="${LIANGSHAN_UPDATE_PUBLIC_KEY:-$HOME/.config/liangshan-update/manifest-signing-public.pem}"
 SSH_KEY="${LIANGSHAN_UPDATE_SSH_KEY:-$HOME/.ssh/liangshan_update_ed25519}"
 REMOTE="${LIANGSHAN_UPDATE_REMOTE:-root@120.26.237.195}"
-PLATFORMS="android macos" # Windows EXE 在线更新暂停；不得上传或提升 Windows stable。
+PLATFORMS="android" # 不得上传、删除或提升 Windows/macOS 的服务器文件。
 
 update_require_patch_version "$VERSION"
 update_same_release_line "$VERSION" "$UPDATE_BASE_VERSION" || \
@@ -33,10 +34,18 @@ update_require_file "$UPDATE_PRIVATE_KEY"
 update_require_file "$UPDATE_PUBLIC_KEY"
 update_require_file "$SSH_KEY"
 update_verify_git_release_point "$VERSION"
+SOURCE_COMMIT="$(git rev-parse HEAD)"
 update_require_hot_update_safe "$UPDATE_BASE_VERSION"
 mkdir -p "$WORK"
+WORK="$(mktemp -d "$WORK/run.XXXXXX")"
+# Export only this immutable tag tree, never a concurrently edited checkout.
+SOURCE_DIR="$WORK/source"
+mkdir "$SOURCE_DIR"
+git archive "$SOURCE_COMMIT" | tar -xf - -C "$SOURCE_DIR"
+"$GODOT" --headless --path "$SOURCE_DIR" --editor --import --quit
+update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
 
-echo "== 读取并验证 Android/macOS v$UPDATE_BASE_VERSION 基线清单 =="
+echo "== 读取并验证 Android v$UPDATE_BASE_VERSION 基线清单 =="
 for platform in $PLATFORMS; do
 	dir="$WORK/base-manifest-$platform"
 	mkdir -p "$dir"
@@ -87,11 +96,16 @@ for platform in $PLATFORMS; do
 	fi
 	[ "$(update_size "$base")" = "$base_size" ] || update_die "$platform 基线大小不匹配：$base"
 	[ "$(update_sha256 "$base")" = "$base_sha" ] || update_die "$platform 基线 SHA-256 不匹配：$base"
+	# Keep this run's base and patch separate from any parallel build outputs.
+	cp "$base" "$WORK/$platform/base-$base_version.pck"
+	base="$WORK/$platform/base-$base_version.pck"
+	[ "$(update_size "$base")" = "$base_size" ] || update_die "$platform 冻结基线大小不匹配"
+	[ "$(update_sha256 "$base")" = "$base_sha" ] || update_die "$platform 冻结基线 SHA-256 不匹配"
 	patch_name="patch-$base_version-to-$VERSION.pck"
-	patch="$base_dir/$patch_name"
+	patch="$WORK/$platform/$patch_name"
 	preset="$(update_platform_preset "$platform")"
-	cd "$ROOT"
-	"$GODOT" --headless --path . --export-patch "$preset" "$patch" --patches "$base"
+	"$GODOT" --headless --path "$SOURCE_DIR" --export-patch "$preset" "$patch" --patches "$base"
+	update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
 	patch_size="$(update_size "$patch")"
 	patch_sha="$(update_sha256 "$patch")"
 	patch_url="$UPDATE_PUBLIC_ROOT/$platform/releases/$patch_name"
@@ -122,6 +136,13 @@ PY
 	printf '%-8s %-34s %12s %s\n' "$platform" "$patch_name" "$patch_size" "$patch_sha"
 done
 
+update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
+for platform in $PLATFORMS; do
+	manifest="$WORK/$platform/manifest.json"
+	base_version="$(update_manifest_value "$manifest" patch_base.version)"
+	update_verify_manifest "$manifest" "$WORK/$platform/manifest.sig"
+	update_verify_manifest_artifact "$manifest" patch "$WORK/$platform/patch-$base_version-to-$VERSION.pck"
+done
 echo "== 服务器不可变路径预检 =="
 for platform in $PLATFORMS; do
 	manifest="$WORK/base-manifest-$platform/manifest.json"
@@ -139,8 +160,8 @@ for platform in $PLATFORMS; do
 	manifest="$WORK/base-manifest-$platform/manifest.json"
 	base_version="$(update_manifest_value "$manifest" patch_base.version)"
 	patch_name="patch-$base_version-to-$VERSION.pck"
-	patch="$UPDATE_OUT/$platform/$patch_name"
-	remote_patch="$platform-$patch_name"   # 同名桌面补丁的纹理压缩可不同，临时区不得互相覆盖
+	patch="$WORK/$platform/$patch_name"
+	remote_patch="$platform-$patch_name"
 	scp -i "$SSH_KEY" "$patch" "$REMOTE:$REMOTE_TMP/$remote_patch"
 	scp -i "$SSH_KEY" "$WORK/$platform/manifest.json" "$REMOTE:$REMOTE_TMP/manifest-$platform.json"
 	scp -i "$SSH_KEY" "$WORK/$platform/manifest.sig" "$REMOTE:$REMOTE_TMP/manifest-$platform.sig"
@@ -162,12 +183,12 @@ for platform in $PLATFORMS; do \
 done; \
 rm -rf '$REMOTE_TMP'"
 
-echo "== 公网回读 Android/macOS 版本化文件，验签、验大小、验 SHA-256 =="
+echo "== 公网回读 Android 版本化文件，验签、验大小、验 SHA-256 =="
 for platform in $PLATFORMS; do
 	manifest="$WORK/base-manifest-$platform/manifest.json"
 	base_version="$(update_manifest_value "$manifest" patch_base.version)"
 	patch_name="patch-$base_version-to-$VERSION.pck"
-	patch="$UPDATE_OUT/$platform/$patch_name"
+	patch="$WORK/$platform/$patch_name"
 	url="$UPDATE_PUBLIC_ROOT/$platform/releases"
 	update_download_and_verify "$url/$patch_name" "$WORK/$platform/public-$patch_name" \
 		"$(update_size "$patch")" "$(update_sha256 "$patch")"
@@ -178,7 +199,14 @@ for platform in $PLATFORMS; do
 	update_verify_manifest "$WORK/$platform/public-manifest.json" "$WORK/$platform/public-manifest.sig"
 done
 
-echo "== Android/macOS 一起提升 stable（Windows 不动）=="
+echo "== 仅提升 Android stable（Windows/macOS 不动）=="
+update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
+for platform in $PLATFORMS; do
+	manifest="$WORK/$platform/manifest.json"
+	base_version="$(update_manifest_value "$manifest" patch_base.version)"
+	update_verify_manifest "$manifest" "$WORK/$platform/manifest.sig"
+	update_verify_manifest_artifact "$manifest" patch "$WORK/$platform/patch-$base_version-to-$VERSION.pck"
+done
 update_promote_all_stable "$VERSION"
 
 for platform in $PLATFORMS; do
@@ -187,5 +215,5 @@ for platform in $PLATFORMS; do
 	cmp -s "$WORK/$platform/manifest.json" "$dir/manifest.json" || update_die "$platform stable 未指向 v$VERSION"
 done
 
-echo "Android/macOS 累计内容补丁 v$VERSION 已发布；Windows stable 未修改。"
+echo "Android 累计内容补丁 v$VERSION 已发布；Windows/macOS 历史文件未修改。"
 echo "版本化文件不可覆盖；若发布后发现问题，请修复后使用更高三段版本。"

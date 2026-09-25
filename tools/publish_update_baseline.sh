@@ -1,6 +1,6 @@
 #!/bin/bash
-# 发布两段式完整版本：完整包已在 GitHub 后，仅登记 Android/macOS 更新基线。
-# Bootstrap 4 要求旧 APK 覆盖安装新完整包；两端完整基线清单均为 patch=null。
+# 发布 Android 两段式完整版本及更新基线；不依赖 GitHub Release。
+# Bootstrap 4 要求旧 APK 覆盖安装新完整包；基线清单为 patch=null。
 set -euo pipefail
 
 if [ "$#" -lt 1 ]; then
@@ -9,12 +9,12 @@ if [ "$#" -lt 1 ]; then
 fi
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
 source "$ROOT/tools/update_release.env"
 source "$ROOT/tools/lib_update_release.sh"
 
 VERSION="$1"
-NOTES="${2:-Android/macOS 内容更新基线}"
-GODOT="${GODOT:-/Applications/Godot.app/Contents/MacOS/Godot}"
+NOTES="${2:-Android 内容更新基线}"
 BUILD="$ROOT/build"
 UPDATE_OUT="$BUILD/updates"
 WORK="$BUILD/update-publish/baseline-$VERSION"
@@ -22,15 +22,15 @@ UPDATE_PRIVATE_KEY="${LIANGSHAN_UPDATE_SIGNING_KEY:-$HOME/.config/liangshan-upda
 UPDATE_PUBLIC_KEY="${LIANGSHAN_UPDATE_PUBLIC_KEY:-$HOME/.config/liangshan-update/manifest-signing-public.pem}"
 SSH_KEY="${LIANGSHAN_UPDATE_SSH_KEY:-$HOME/.ssh/liangshan_update_ed25519}"
 REMOTE="${LIANGSHAN_UPDATE_REMOTE:-root@120.26.237.195}"
-PLATFORMS="android macos" # Windows EXE 在线更新暂停；完整包仍由 GitHub/Steam 分发。
+PLATFORMS="android" # Windows/macOS 历史服务器文件不写、不删。
 
 update_require_full_version "$VERSION"
 [ "$VERSION" = "$UPDATE_BASE_VERSION" ] || update_die "版本 $VERSION 与 update_release.env 基线 $UPDATE_BASE_VERSION 不一致"
-update_require_executable "$GODOT"
 update_require_file "$UPDATE_PRIVATE_KEY"
 update_require_file "$UPDATE_PUBLIC_KEY"
 update_require_file "$SSH_KEY"
 update_verify_git_release_point "$VERSION"
+SOURCE_COMMIT="$(git rev-parse HEAD)"
 mkdir -p "$WORK"
 
 echo "== 检查完整包与新基线 =="
@@ -38,7 +38,7 @@ for platform in $PLATFORMS; do
 	update_require_file "$BUILD/$(update_artifact_name "$platform" "$VERSION")"
 	update_require_file "$UPDATE_OUT/$platform/base-$VERSION.pck"
 done
-update_verify_build_source "$UPDATE_OUT/build-source.json" "$ROOT" "$VERSION"
+update_verify_build_source "$UPDATE_OUT/build-source.json" "$ROOT" "$VERSION" android
 
 ANDROID_APK_NAME="$(update_artifact_name android "$VERSION")"
 ANDROID_APK="$BUILD/$ANDROID_APK_NAME"
@@ -57,35 +57,19 @@ for platform in $PLATFORMS; do
 	fi
 done
 
-echo "== 检查 GitHub 三端完整包并回读哈希（Windows 只读校验）=="
-for platform in android windows macos; do
-	artifact="$BUILD/$(update_artifact_name "$platform" "$VERSION")"
-	url="$(update_github_artifact_url "$platform" "$VERSION")"
-	size="$(update_size "$artifact")"
-	sha="$(update_sha256 "$artifact")"
-	if [ "${LIANGSHAN_VERIFY_FULL_DOWNLOAD:-1}" = "1" ]; then
-		update_download_and_verify "$url" "$WORK/public-$(basename "$artifact")" "$size" "$sha"
-	else
-		curl --fail --silent --show-error --location --head "$url" >/dev/null
-	fi
-done
-
-echo "== 生成并签名 Android/macOS v$VERSION 清单 =="
+echo "== 生成并签名 Android v$VERSION 清单 =="
 for platform in $PLATFORMS; do
 	dir="$WORK/$platform"
 	mkdir -p "$dir"
 	artifact="$BUILD/$(update_artifact_name "$platform" "$VERSION")"
 	packaged_base="$UPDATE_OUT/$platform/base-$VERSION.pck"
-	full_url="$(update_github_artifact_url "$platform" "$VERSION")"
+	full_url="$ANDROID_APK_URL"
 	full_kind="$(update_platform_kind "$platform")"
 	architecture="$(update_platform_architecture "$platform")"
 	min_bootstrap="$UPDATE_BOOTSTRAP_VERSION"
 	patch_json="null"
 	patch_base="$packaged_base"
 	patch_base_version="$VERSION"
-	if [ "$platform" = "android" ]; then
-		full_url="$ANDROID_APK_URL"
-	fi
 	python3 - "$dir/manifest.json" "$platform" "$architecture" "$VERSION" "$min_bootstrap" \
 		"$packaged_base" "$patch_base_version" "$patch_base" "$patch_json" \
 		"$full_kind" "$full_url" "$artifact" "$UPDATE_ANDROID_VERSION_CODE" "$NOTES" <<'PY'
@@ -132,6 +116,14 @@ PY
 	update_sign_manifest "$dir/manifest.json" "$dir/manifest.sig"
 done
 
+update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
+update_verify_build_source "$UPDATE_OUT/build-source.json" "$ROOT" "$VERSION" android
+for platform in $PLATFORMS; do
+	manifest="$WORK/$platform/manifest.json"
+	update_verify_manifest "$manifest" "$WORK/$platform/manifest.sig"
+	update_verify_manifest_artifact "$manifest" full_package "$ANDROID_APK"
+	update_verify_manifest_artifact "$manifest" packaged_base "$UPDATE_OUT/$platform/base-$VERSION.pck"
+done
 echo "== 服务器不可变路径预检 =="
 ssh -i "$SSH_KEY" "$REMOTE" "set -e; \
 for platform in $PLATFORMS; do \
@@ -181,7 +173,15 @@ done
 update_download_and_verify "$ANDROID_APK_URL" "$WORK/android/public-$ANDROID_APK_NAME" \
 	"$(update_size "$ANDROID_APK")" "$(update_sha256 "$ANDROID_APK")"
 
-echo "== Android/macOS 一起提升 stable（Windows 不动）=="
+echo "== 仅提升 Android stable（Windows/macOS 不动）=="
+update_verify_release_checkout "$VERSION" "$SOURCE_COMMIT"
+update_verify_build_source "$UPDATE_OUT/build-source.json" "$ROOT" "$VERSION" android
+for platform in $PLATFORMS; do
+	manifest="$WORK/$platform/manifest.json"
+	update_verify_manifest "$manifest" "$WORK/$platform/manifest.sig"
+	update_verify_manifest_artifact "$manifest" full_package "$ANDROID_APK"
+	update_verify_manifest_artifact "$manifest" packaged_base "$UPDATE_OUT/$platform/base-$VERSION.pck"
+done
 update_promote_all_stable "$VERSION"
 
 for platform in $PLATFORMS; do
@@ -190,5 +190,5 @@ for platform in $PLATFORMS; do
 	cmp -s "$WORK/$platform/manifest.json" "$stable_dir/manifest.json" || update_die "$platform stable 未指向 v$VERSION"
 done
 
-echo "Android/macOS v$VERSION 更新基线发布完成。"
-echo "Android/macOS：v$VERSION 起建立新补丁链；旧 APK 必须先安装完整包。Windows 在线更新未发布。"
+echo "Android v$VERSION 更新基线发布完成。"
+echo "Android：v$VERSION 起建立新补丁链；旧 APK 必须先安装完整包。Windows/macOS 历史文件未修改。"

@@ -1,7 +1,7 @@
 extends Node
 ## 战役进度管理（Autoload "Campaign"）：关卡注册表、当前关、解锁进度、存档。
 
-const VERSION := "1.8"   # 完整包版本；三端内容更新状态由 AndroidUpdater 统一显示
+const VERSION := "2.0"   # 完整包版本；仅 Android 启用应用内内容更新。
 
 const LEVELS := [
 	{"id": "level1", "title": "智取生辰纲", "sub": "三人酒计·分队夺纲", "script": "res://scripts/levels/level1_huangnigang_short.gd"},

@@ -1,5 +1,5 @@
 #!/bin/bash
-# 三端内容更新发布脚本的公共函数。只供 tools/ 下脚本 source。
+# Android 更新发布及历史多平台构建证明的公共函数。只供 tools/ 下脚本 source。
 
 update_die() {
 	echo "错误：$*" >&2
@@ -150,7 +150,7 @@ update_download_and_verify() {
 update_verify_git_release_point() {
 	local version="$1"
 	if [ "${LIANGSHAN_SKIP_GIT_GUARD:-0}" = "1" ]; then
-		return
+		update_die "正式构建/发布不允许跳过 Git 工作区与版本标签检查"
 	fi
 	local dirty
 	dirty="$(git status --porcelain --untracked-files=all)"
@@ -165,28 +165,51 @@ update_verify_git_release_point() {
 	[ "$head" = "$tag_head" ] || update_die "HEAD 不是标签 v$version 指向的提交"
 }
 
+update_verify_release_checkout() {
+	update_verify_git_release_point "$1"
+	[ "$(git rev-parse HEAD)" = "$2" ] || update_die "发布过程中源码提交已变化，拒绝继续"
+}
+
+update_verify_manifest_artifact() {
+	local manifest="$1" field="$2" artifact="$3"
+	[ "$(update_size "$artifact")" = "$(update_manifest_value "$manifest" "$field.size")" ] || \
+		update_die "发布输入大小偏离签名清单：$artifact"
+	[ "$(update_sha256 "$artifact")" = "$(update_manifest_value "$manifest" "$field.sha256")" ] || \
+		update_die "发布输入 SHA-256 偏离签名清单：$artifact"
+}
+
 update_verify_build_source() {
 	local proof="$1"
 	local root="$2"
 	local version="$3"
+	local required_platform="${4:-}"
 	update_require_file "$proof"
-	python3 - "$proof" "$root" "$version" "$(git rev-parse HEAD)" <<'PY'
+	python3 - "$proof" "$root" "$version" "$(git rev-parse HEAD)" "$required_platform" <<'PY'
 import hashlib, json, os, sys
 
-proof_path, root, version, commit = sys.argv[1:]
+proof_path, root, version, commit, required_platform = sys.argv[1:]
 with open(proof_path, encoding="utf-8") as stream:
     proof = json.load(stream)
-if proof.get("schema") != 1 or proof.get("version") != version or proof.get("git_commit") != commit:
+if not isinstance(proof, dict) or proof.get("schema") != 1 or proof.get("version") != version or proof.get("git_commit") != commit:
     raise SystemExit("构建来源证明的版本或提交与当前 tag 不一致")
 expected = {"android": "apk", "windows": "exe", "macos": "dmg"}
-for platform, extension in expected.items():
-    entries = proof.get("platforms", {}).get(platform, {})
+declared = proof.get("platforms")
+if not isinstance(declared, dict) or not declared or set(declared) - set(expected):
+    raise SystemExit("构建来源证明必须明确声明非空、受支持的平台集合")
+if required_platform and (required_platform not in expected or required_platform not in declared):
+    raise SystemExit(f"构建来源证明未声明发布所需平台：{required_platform}")
+# Android-only proofs require only APK/PCK. Legacy three-platform proofs are
+# still accepted, but every explicitly declared artifact must verify in full.
+for platform, entries in declared.items():
+    extension = expected[platform]
+    if not isinstance(entries, dict):
+        raise SystemExit(f"{platform} 构建来源证明格式错误")
     for kind, relative in (
         ("package", f"build/LiangshanHeroes-v{version}.{extension}"),
         ("base", f"build/updates/{platform}/base-{version}.pck"),
     ):
         recorded = entries.get(kind, {})
-        if recorded.get("path") != relative:
+        if not isinstance(recorded, dict) or recorded.get("path") != relative:
             raise SystemExit(f"{platform} {kind} 构建路径证明不一致")
         path = os.path.join(root, relative)
         if not os.path.isfile(path):
@@ -204,7 +227,8 @@ PY
 update_require_hot_update_safe() {
 	local base_version="$1"
 	local changed protected=""
-	changed="$(git diff --name-only --diff-filter=ACMRTUXB "v${base_version}..HEAD")"
+	# Disable rename detection so the removed protected path is also checked.
+	changed="$(git diff --no-renames --name-only --diff-filter=ACDMRTUXB "v${base_version}..HEAD")"
 	while IFS= read -r path; do
 		[ -n "$path" ] || continue
 		case "$path" in
@@ -222,13 +246,15 @@ update_require_hot_update_safe() {
 
 update_promote_all_stable() {
 	local version="$1"
-	# Windows 在线更新已停用；不得再修改其 stable。两端仍一起回滚。
-	ssh -i "$SSH_KEY" "$REMOTE" python3 - "$UPDATE_REMOTE_WEB_ROOT" "$version" android macos <<'PY'
+	# Retain the helper name for callers; only Android may be promoted/rolled back.
+	ssh -i "$SSH_KEY" "$REMOTE" python3 - "$UPDATE_REMOTE_WEB_ROOT" "$version" android <<'PY'
 import os, pathlib, sys
 
 root = pathlib.Path(sys.argv[1])
 version = sys.argv[2]
 platforms = sys.argv[3:]
+if platforms != ["android"]:
+    raise SystemExit("only Android stable may be modified")
 names = ("manifest.sig", "manifest.json")  # 先签名、后 JSON，兼容旧 Android 客户端。
 sources = {}
 backups = {}

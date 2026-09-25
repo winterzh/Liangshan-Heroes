@@ -1,19 +1,21 @@
 # Android 完整包与内容更新发布
 
-## 当前规则（2026-09-18）
+## 当前规则（2026-09-25 候选）
 
-安卓继续支持签名 PCK 差异更新；Windows EXE 暂停应用内更新，macOS 通道保留。当前源码引导协议为 `4`，包版本仍为 `1.8` / `versionCode=15`，本轮只是修复与诊断导出，没有发布新版。线上 Android stable 的历史版本仍为 `1.8`（2026-09-18 只读回读结果）。
+本次目标为 Android `2.0` 完整 APK，`versionCode=16`、引导协议 `4`，沿用包名 `com.liangshan.heroes` 和原签名证书。正式候选不含 `TEST` 版本后缀或菜单标记。这是候选要求；构建、真机验收和上线状态以当批 QA 与发布收据为准，本文不表示已经发布。
 
-**下一次正式发布必须先发新的完整 APK，不能把当前工程直接制成旧 1.8 客户端的内容补丁。** 工程新增的 Autoload、工程配置及更新引导器不能通过旧进程挂载 PCK 完整替换。下一次完整版本应使用新的两段式版本号、更高的 Android versionCode、现有签名证书；不要把本轮同号诊断候选当作正式更新包。
+以后应用内内容更新仅保留 Android；Windows/macOS 客户端均在网络请求、缓存读取和 PCK 挂载前停用更新器。此次不发布桌面完整包或桌面 PCK，不切换桌面 stable，旧线上文件原样保留。用户本次授权 GitHub 代码、`v2.0` tag 和 Release/APK 附件；不涉及 Steam。服务器发布工具本身不依赖 GitHub Release。
 
-- 完整发包：`vX.X`，EXE、DMG、APK 的版本保持一致。
-- 差异内容更新：`vX.X.X`，仅针对兼容底包的 Android/macOS；不创建新安装包，不发布 Windows PCK。
+**2.0 必须先发完整 APK，不能把当前工程直接制成旧 1.8 客户端的内容补丁。** 新增的 Autoload、工程配置及更新引导器不能通过旧进程挂载 PCK 完整替换。2026-09-18 的历史说明使用 `1.8` / `versionCode=15`，当时 macOS 通道仍保留；该批诊断包不属于本次正式基线。
+
+- 完整发包：`vX.X`，本次仅交付 Android；不要求同时导出三端。
+- 差异内容更新：`vX.X.X`，仅针对兼容底包的 Android，不创建新安装包，不发布 Windows/macOS PCK。
 - Godot、Autoload/工程配置、导出配置、引导器或原生库变化，必须发下一个完整版本。
 - 客户端仅内置验签公钥；私钥、SSH 密钥、签名材料不得提交到仓库。
 
 ## 新完整包基线
 
-以用户确认的下一完整版本为准，同步 `Campaign.VERSION`、`export_presets.cfg`、`scripts/android_updater.gd`、`tools/update_release.env`，并提高 Android versionCode。Android 新完整基线的清单必须是：
+本次同步 `Campaign.VERSION`、`export_presets.cfg`、`scripts/android_updater.gd`、`tools/update_release.env` 的 `2.0` 版本字段，Android versionCode 提高到 `16`。版本字段同步不代表桌面产物已构建或发布。Android 新完整基线的清单必须是：
 
 - `packaged_base.version` / `patch_base.version` 均为新完整版本，两份描述的大小和 SHA-256 一致。
 - `patch: null`，`min_bootstrap: 4`（以后协议升级时相应提高）。
@@ -25,21 +27,27 @@
 
 ## 构建与发布
 
-先验证源码、更新交接记录，按文件白名单提交并推送 `codex/sync-20260905-stable`。不得自行直接推 main、合并、创建 Release 或更新服务器；正式发布仍需当次授权。授权后在同一已验证提交创建版本 tag，完整构建要求工作区干净且 HEAD 精确匹配 tag：
+先验证源码、更新交接记录，按文件白名单提交并推送 `codex/sync-20260905-stable`。不得自行直接推 main 或合并。正式发布需当次授权；本次在已验证提交创建 `v2.0` tag，完整构建要求工作区干净且 HEAD 精确匹配 tag。
+
+Android-only 完整构建入口如下，工具链路径可由 `GODOT_PATH`、`ANDROID_TEMPLATE`、`ANDROID_SDK_ROOT`、`JAVA_HOME` 显式提供。引擎与 Android 模板须版本匹配并保留校验记录；不替换全局编辑器、模板或签名配置。
 
 ```bash
-bash tools/build_packages.sh "$VERSION"
+bash tools/build_android_release.sh 2.0
 ```
 
-产物包括三个完整包、各平台 `base-X.X.pck` 和绑定 tag/提交/大小/哈希的 `build/updates/build-source.json`。APK 必须校验包名 `com.liangshan.heroes`、arm64、versionName/versionCode 和既有证书，保证覆盖安装身份不变。
+构建在私有目录冻结生产白名单，复制前后核对源文件与副本 SHA-256，结束时再次检查源码与副本漂移。APK 与 `base-2.0.pck` 必须来自同一冻结源码；正式包不得加入测试标签。产物及日志目录以当次收据为准，`build/updates/build-source.json` 绑定 tag、提交、大小和哈希，平台范围只声明 `android`，不得声称验证了桌面产物。
 
-三端完整包上传 GitHub Release、确认公网三包哈希后：
+APK 必须校验包名、arm64、`versionName=2.0`、`versionCode=16`、INTERNET 权限及签名。证书 SHA-256 必须匹配 `tools/update_release.env` 的原证书契约，并验证 v2/v3 签名，保证覆盖安装身份不变。不要读取或打印签名密码。
+
+完成对应验收、取得发布授权后，发布 Android 完整包及基线；此入口不依赖 GitHub Release：
 
 ```bash
-bash tools/publish_update_baseline.sh "$VERSION" "本次实际交付的更新说明"
+bash tools/publish_update_baseline.sh 2.0 "本次实际交付的更新说明"
 ```
 
-脚本仅上传 Android/macOS 更新清单与不可变基线、镜像完整 APK、回读验签/验哈希，再一起提升这两个 stable；失败回滚这两个通道。Windows 历史 stable 不读写，不发新 PCK。历史 `publish_android_baseline.sh` 已禁用。
+脚本仅上传 Android 清单、不可变基线与完整 APK，公网回读验签/验哈希后提升 Android stable；提升失败恢复该通道旧清单。Windows/macOS 历史 stable、版本文件和基线不写、不删。旧入口 `publish_android_baseline.sh` 是同一安全流程的参数透传别名。
+
+`build_packages.sh` 仍保留多端完整构建用途，但不用于此次 Android 发布，也不据此发布桌面 PCK。桌面完整包另行授权、另行验收。
 
 完整包已部署、通过真实设备验收后，兼容的小版本可运行：
 
@@ -47,7 +55,7 @@ bash tools/publish_update_baseline.sh "$VERSION" "本次实际交付的更新说
 bash tools/publish_hot_update.sh "$CONTENT_VERSION" "本次实际交付的更新说明"
 ```
 
-脚本从已签名清单获取平台固定基线；受保护文件变化会拒绝小版本。旧入口 `publish_android_hot_update.sh` 是 Android/macOS 共用流程的兼容别名，不是只发 Android。
+脚本仅从 Android 已签名清单获取固定基线；受保护文件变化会拒绝小版本。旧入口 `publish_android_hot_update.sh` 是同一 Android-only 流程的兼容别名，不再处理 macOS。
 
 ## 发布前验收
 
@@ -58,4 +66,4 @@ bash tools/publish_hot_update.sh "$CONTENT_VERSION" "本次实际交付的更新
 5. 断网/恢复、取消、重启和下载失败可重试，下载失败不破坏现有可运行内容。
 6. 真机确认当前 HTTP 服务可以访问；主机上的 Android 平台模拟和静态 INTERNET 权限检查不能代替真机网络验收。
 
-本轮自动化、诊断构建与尚未完成的真机验证见 [QA 记录](../qa/controls_update_20260918/README.md)。通用流程及回滚见 [DESKTOP_RELEASE.md](DESKTOP_RELEASE.md)。
+2026-09-18 的自动化和同号诊断构建见 [历史 QA](../qa/controls_update_20260918/README.md)，不能代替 2.0 验收。宿主 Godot 加载最终 APK 资源时须使用全新独占 profile，明确记录 Android 平台模拟；该检查不证明 Android 真机启动、覆盖安装或网络可用。通用流程及回滚见 [DESKTOP_RELEASE.md](DESKTOP_RELEASE.md)。

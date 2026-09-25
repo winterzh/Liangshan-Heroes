@@ -1,3 +1,9 @@
+## 2026-09-25 Android 2.0 与更新平台收敛（发布准备）
+
+从干净 stable 快进至 `7f4a67c0`，本次完整包设为 2.0 / versionCode 16 / bootstrap 4，保持原 Android 包名与证书。仅真实 Android 或严格隔离的编辑器 Android 测试启用更新；所有桌面导出在缓存/网络初始化前停用。发布链仅操作 Android，保留签名、来源证明、升版和回滚门禁；不依赖桌面安装包或 GitHub Release。
+
+正式 APK 与 base PCK 从同一生产白名单冻结副本生成，正式包无 TEST 标记。用户授权 GitHub 代码、v2.0 标签及 Release/APK 附件、Android 更新服务器；不发布 Steam、不合并 main、不删除旧桌面服务器文件。验证与最终状态见 [本轮 QA](../qa/android_release_20260925/README.md)。
+
 ## 2026-09-25 文件命名与格式盘点
 
 - 新增 [文件约定](FILE_CONVENTIONS.md)，统一后续新增源码、文档、QA 和营销文件的命名、格式及去重边界，并在 [目录索引](DIRECTORY_INDEX.md) 与 [源码设置交接](SOURCE_SETUP.md) 中加入入口。

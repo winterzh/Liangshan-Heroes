@@ -1,3 +1,9 @@
+## 2026-09-25 Android v2.0 发布准备
+
+完整 APK 版本统一为 `2.0`（versionCode `16`），沿用原包名与签名，不带测试包标记。应用内更新今后只支持 Android；新 Windows/macOS 程序不再读取更新缓存或连接更新服务器，旧桌面线上文件保留不变。旧安卓版本需先覆盖安装完整 2.0 APK，之后接收同基线累计差异补丁；不要先卸载旧版或清除数据。
+
+本次授权包含 GitHub `v2.0 Release`、APK 附件和安卓更新服务器，不包含 Steam。实际构建和上线状态以[本次记录](qa/android_release_20260925/README.md)为准；当前为发布准备。[Android 发布流程](docs/ANDROID_RELEASE.md)。
+
 ## 2026-09-24 Android 本地试玩 APK
 
 最新源码 `39160307` 已打为测试APK：`build/android-test-20260924-final/水浒英雄传-Android-TEST-20260924-39160307.apk`，菜单标记 `TEST 0924-39160307`。沿用原包名和签名；安装前不要卸载旧版或清除数据。源码740项回归、APK签名与实际包菜单宿主检查通过，手机安装/触控/网络仍待试用；Android不开放Windows Steam专属续玩功能。[构建与验收](qa/android_test_20260924/README.md)。本次未上传Release、Steam或更新服务器。

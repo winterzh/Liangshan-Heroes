@@ -32,7 +32,7 @@ def main():
     parser.add_argument("--live", action="store_true")
     args = parser.parse_args()
     out = args.out.resolve()
-    if out == ROOT or ROOT in out.parents or out.exists():
+    if not args.out.is_absolute() or out == ROOT or ROOT in out.parents or out.exists():
         raise SystemExit("--out must be a new directory outside the checkout")
     project = out / "project"
     project.mkdir(parents=True)
@@ -53,10 +53,11 @@ def main():
     reports = []
     env = os.environ.copy()
     for key in list(env):
-        if key.startswith(("CONTENT_UPDATE_", "ANDROID_UPDATE_", "UPDATE_QA_")):
+        if key.startswith(("CONTENT_UPDATE_", "ANDROID_UPDATE_", "UPDATE_QA_", "LSH_")):
             env.pop(key)
     env.update(STEAM_DISABLED="1", CAMPAIGN_QA="1", LSH_LANGUAGE="zh_CN",
-               CONTENT_UPDATE_NO_AUTO="1")
+               CONTENT_UPDATE_NO_AUTO="1", UPDATE_QA_PROFILE=profile,
+               UPDATE_QA_PROJECT=str(project), UPDATE_QA_OUT=str(out))
 
     def command(name, argv, process_env=None, timeout=300):
         log = out / (name + ".log")
@@ -80,7 +81,10 @@ def main():
         return report
 
     command("import", [str(args.godot), "--headless", "--path", str(project), "--editor", "--import"])
-    run("windows_disabled", "windows", CONTENT_UPDATE_PLATFORM="windows", CONTENT_UPDATE_ARCHITECTURE="x86_64")
+    for platform in ("windows", "macos"):
+        run(platform + "_disabled", "disabled", CONTENT_UPDATE_PLATFORM=platform,
+            CONTENT_UPDATE_ARCHITECTURE="x86_64")
+    run("android_override_without_test_disabled", "disabled", CONTENT_UPDATE_TEST="0")
     live_report = None
     if args.live:
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -143,6 +147,25 @@ def main():
         (web / "manifest.sig").write_bytes(base64.b64encode(signature))
 
     try:
+        # A complete 2.0 release offers no delta to the old 1.8 APK. Change only
+        # version constants in the private fixture; the shipped source stays 2.0.
+        full_release = copy.deepcopy(manifest)
+        full_release["content_version"] = base_version
+        del full_release["patch"]
+        publish_fixture(full_release)
+        legacy_source = test_source.replace('const PACKAGE_VERSION_NAME := "' + base_version + '"',
+                                            'const PACKAGE_VERSION_NAME := "1.8"', 1)
+        legacy_source = legacy_source.replace('const BASE_CONTENT_VERSION := "' + base_version + '"',
+                                              'const BASE_CONTENT_VERSION := "1.8"', 1)
+        legacy_source = re.sub(r'const PACKAGE_VERSION_CODE := \d+', 'const PACKAGE_VERSION_CODE := 15', legacy_source, count=1)
+        try:
+            (project / "scripts/android_updater.gd").write_text(legacy_source, encoding="utf-8")
+            run("old_1_8_apk_requires_full_2_0", "request", "full_update",
+                UPDATE_QA_FULL_VERSION=base_version, CONTENT_UPDATE_URL=base_url + "manifest.json")
+        finally:
+            (project / "scripts/android_updater.gd").write_text(test_source, encoding="utf-8")
+        run("full_2_0_already_current", "request", "current", CONTENT_UPDATE_URL=base_url + "manifest.json")
+
         for case in ("signature", "platform", "architecture", "patch_platform", "size", "hash", "bootstrap"):
             data = copy.deepcopy(manifest)
             if case == "platform": data["platform"] = "macos"
@@ -211,7 +234,7 @@ def main():
     summary = {"passed": all(report["passed"] for report in reports), "live": live_report,
                "base_version": base_version, "test_version": test_version, "bootstrap": bootstrap,
                "ephemeral_key_only_in_private_copy": True, "production_source_unchanged": True,
-               "scope": "macOS Godot simulates Android platform; real HTTP/signature/cache/PCK mount, not physical Android acceptance",
+               "scope": "Private editor simulates Android; desktop disable policy, 1.8-to-2.0 full-package migration, same-base signed HTTP/cache/PCK mount; not physical Android acceptance",
                "runs": reports}
     (out / "report.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("REPORT " + str(out / "report.json"), flush=True)

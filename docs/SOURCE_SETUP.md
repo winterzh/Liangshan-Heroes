@@ -1,3 +1,9 @@
+## 2026-09-25 Android v2.0 发布准备
+
+当前完整源码版本 2.0，Android versionCode 16、bootstrap 4。正式入口 `bash tools/build_android_release.sh 2.0`，通过 `GODOT_PATH`、`ANDROID_TEMPLATE`、`ANDROID_SDK_ROOT`、`JAVA_HOME` 指定本机工具；不把路径或凭据写入公共文件。构建要求干净 checkout 且 HEAD 精确对应 `v2.0`，APK 与基线由同一冻结副本生成，来源证明只声明 Android。
+
+应用内更新仅 Android；Windows/macOS 程序不读更新缓存、不发更新请求，Steam 更新独立不受影响。旧安卓客户端覆盖安装同签名 2.0 完整包后，`2.0.x` 才是同基线累计 PCK。历史桌面 stable 不改。GitHub Release/APK 与 Android 服务本次均获授权，实际状态见 [QA](../qa/android_release_20260925/README.md) 和 [发布流程](ANDROID_RELEASE.md)。
+
 ## 2026-09-25 文件命名与格式
 
 新建源码、工具、文档和 QA 文件遵循[项目文件约定](FILE_CONVENTIONS.md)。改动 Godot 资源路径前检查场景、脚本、UID、导入侧车和 QA 清单引用；冻结 QA、资产来源和发布证据不作批量改名、转码或去重。

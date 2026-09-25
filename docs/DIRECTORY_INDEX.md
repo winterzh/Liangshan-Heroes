@@ -1,3 +1,9 @@
+## 2026-09-25 Android 2.0 发布
+
+- `tools/build_android_test.py`、`tools/build_android_release.sh`：私有冻结 Android 构建，正式模式校验版本/tag/签名/资源和来源证明；测试模式独立。
+- `tools/publish_update_baseline.sh`、`tools/publish_hot_update.sh`：仅 Android 完整基线与累计补丁发布，桌面历史文件不改。
+- `qa/android_release_20260925/`：更新传输、发布策略、源码回归、APK 构建与线上回读证据，不包含私钥、安装包或 PCK。
+
 ## 2026-09-25 文件命名与格式约定
 
 - 新增文件命名、文本编码、格式选择和证据去重规则见 [FILE_CONVENTIONS.md](FILE_CONVENTIONS.md)。只对后续文件和已确认可替换的工作文件执行；历史 QA 与来源链按原样保留。

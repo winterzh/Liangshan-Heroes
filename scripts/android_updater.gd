@@ -1,5 +1,5 @@
 extends Node
-## Android / Windows / macOS 内容热更新引导器。
+## Android 内容热更新引导器；其他平台只接受完整包或商店更新。
 ##
 ## 必须位于 Autoload 第一位：_init() 在主场景和战斗资源加载前装入已验证的累计 PCK，
 ## 从而让补丁中的 res:// 同路径资源覆盖完整包基础资源。Autoload 自身仍须随完整包更新。
@@ -11,9 +11,9 @@ signal full_update_required(version: String)
 signal update_ready(version: String)
 
 const BOOTSTRAP_VERSION := 4
-const PACKAGE_VERSION_NAME := "1.8"
-const PACKAGE_VERSION_CODE := 15
-const BASE_CONTENT_VERSION := "1.8"
+const PACKAGE_VERSION_NAME := "2.0"
+const PACKAGE_VERSION_CODE := 16
+const BASE_CONTENT_VERSION := "2.0"
 
 # 旧补丁脚本和专项测试可能仍读取这两个名字，不能删除。
 const APK_VERSION_NAME := PACKAGE_VERSION_NAME
@@ -73,19 +73,14 @@ var _download_tmp_path := ""
 func _init() -> void:
 	platform_id = _detect_platform()
 	architecture = _detect_architecture()
-	# Windows is updated by replacing the complete EXE (or by Steam). Stop
-	# before reading cached PCKs; overrides must not re-enable a Windows build.
-	if OS.has_feature("windows") or platform_id == "windows":
-		_run_identity_complete = true
-		return
-	# Godot 4.6 导出模板并不保证提供 `standalone` feature tag；v1.6 因此把
-	# 真实 EXE/APP/APK 的更新器全部关掉了。`editor` 只存在编辑器可执行文件，
-	# 所以反向判断才能稳定区分导出程序与本地编辑调试。专项测试仍可显式绕过。
-	enabled = platform_id != "" and (not OS.has_feature("editor") or _is_update_test())
+	# Check the real runtime before touching caches or constructing HTTPRequest.
+	# Environment overrides can simulate Android only in an isolated editor QA;
+	# they can never re-enable a Windows/macOS (or other non-Android) export.
+	enabled = _platform_updates_allowed(OS.get_name() == "Android", OS.has_feature("editor"), _private_android_test(), platform_id)
 	if not enabled:
 		_run_identity_complete = true
 		return
-	_update_dir = ANDROID_UPDATE_DIR if platform_id == "android" else DESKTOP_UPDATE_ROOT.path_join(platform_id)
+	_update_dir = ANDROID_UPDATE_DIR
 	_state_path = _update_dir.path_join("state.json")
 	_state_tmp_path = _update_dir.path_join("state.json.tmp")
 	_download_tmp_path = _update_dir.path_join("download.pck.tmp")
@@ -275,7 +270,7 @@ func _accept_manifest() -> void:
 		_set_status("current", Localize.format_text("%s内容 v%s · 已是最新", [platform_display_name(), active_content_version]))
 		return
 	var patch_var: Variant = manifest.get("patch", null)
-	# 新的两段式完整发行版没有跨发行线差异包；已有桌面客户端应跳转完整包。
+	# 新的完整发行版没有跨发行线差异包；旧 APK 应跳转完整包。
 	if not patch_var is Dictionary:
 		if not _offer_full_package_update(latest):
 			_fail(Localize.text("新版清单没有可用的差异包或完整包"))
@@ -518,12 +513,12 @@ func _cache_bust(url: String) -> String:
 
 
 func _detect_platform() -> String:
-	var override := OS.get_environment("CONTENT_UPDATE_PLATFORM")
-	if override != "":
-		return _normalize_platform(override)
-	# 历史 Android 专项在 macOS 构建机运行，继续将该开关解释为 Android 客户端。
-	if _env_flag("ANDROID_UPDATE_TEST"):
-		return "android"
+	if _private_android_test():
+		var override := OS.get_environment("CONTENT_UPDATE_PLATFORM")
+		if override != "":
+			return _normalize_platform(override)
+		if _env_flag("ANDROID_UPDATE_TEST"):
+			return "android"
 	if OS.has_feature("android"):
 		return "android"
 	if OS.has_feature("windows"):
@@ -534,11 +529,12 @@ func _detect_platform() -> String:
 
 
 func _detect_architecture() -> String:
-	var override := OS.get_environment("CONTENT_UPDATE_ARCHITECTURE")
-	if override != "":
-		return _normalize_architecture(override)
-	if _env_flag("ANDROID_UPDATE_TEST") and OS.get_environment("CONTENT_UPDATE_PLATFORM") == "":
-		return "arm64"
+	if _private_android_test():
+		var override := OS.get_environment("CONTENT_UPDATE_ARCHITECTURE")
+		if override != "":
+			return _normalize_architecture(override)
+		if _env_flag("ANDROID_UPDATE_TEST") and OS.get_environment("CONTENT_UPDATE_PLATFORM") == "":
+			return "arm64"
 	var detected := _normalize_architecture(Engine.get_architecture_name())
 	if detected != "":
 		return detected
@@ -633,6 +629,22 @@ func _valid_version(version: String) -> bool:
 
 func _is_update_test() -> bool:
 	return _env_flag("CONTENT_UPDATE_TEST") or _env_flag("ANDROID_UPDATE_TEST")
+
+
+func _platform_updates_allowed(native_android: bool, editor: bool, private_test: bool, target: String) -> bool:
+	return target == "android" and ((native_android and not editor) or (editor and private_test))
+
+
+func _private_android_test() -> bool:
+	if not OS.has_feature("editor") or not _is_update_test() or not _env_flag("STEAM_DISABLED") or not _env_flag("CAMPAIGN_QA"):
+		return false
+	var profile := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false)) or not profile.begins_with("LSH-") or "/" in profile or "\\" in profile:
+		return false
+	if OS.get_user_data_dir().get_file() != profile:
+		return false
+	var project := ProjectSettings.globalize_path("res://")
+	return FileAccess.file_exists(project.path_join("override.cfg")) and not FileAccess.file_exists(project.path_join(".git")) and not DirAccess.dir_exists_absolute(project.path_join(".git"))
 
 
 func _env_flag(name: String) -> bool:
