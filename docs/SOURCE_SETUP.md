@@ -1,8 +1,10 @@
-## 2026-09-25 Android v2.0 发布准备
+## 2026-09-25 Android v2.0 已发布
+
+正式 APK、`v2.0` 标签对应 stable 提交 `9cf45c7204d3a3f6a31a3d3765b3bf5db8439a80`。[GitHub Release](https://github.com/winterzh/Liangshan-Heroes/releases/tag/v2.0) 与 [服务器 APK](http://120.26.237.195:1234/liangshan/android/releases/LiangshanHeroes-v2.0.apk) 已公开，Android stable 为 2.0；两处完整下载 SHA-256 为 `78a15c9e1e31b9fbcab2e09ab92f6bbbd6a62a1bcfef7e0896f9c19ab1c249c0`。后续交接提交不移动该标签。桌面 stable/签名未变，Steam 未操作。
 
 当前完整源码版本 2.0，Android versionCode 16、bootstrap 4。正式入口 `bash tools/build_android_release.sh 2.0`，通过 `GODOT_PATH`、`ANDROID_TEMPLATE`、`ANDROID_SDK_ROOT`、`JAVA_HOME` 指定本机工具；不把路径或凭据写入公共文件。构建要求干净 checkout 且 HEAD 精确对应 `v2.0`，APK 与基线由同一冻结副本生成，来源证明只声明 Android。
 
-应用内更新仅 Android；Windows/macOS 程序不读更新缓存、不发更新请求，Steam 更新独立不受影响。旧安卓客户端覆盖安装同签名 2.0 完整包后，`2.0.x` 才是同基线累计 PCK。历史桌面 stable 不改。GitHub Release/APK 与 Android 服务本次均获授权，实际状态见 [QA](../qa/android_release_20260925/README.md) 和 [发布流程](ANDROID_RELEASE.md)。
+应用内更新仅 Android；新 Windows/macOS 程序不读更新缓存、不发更新请求，Steam 更新独立不受影响。旧安卓客户端覆盖安装同签名 2.0 完整包后，`2.0.x` 才是同基线累计 PCK。游戏 740 项、更新 38 场景、正式 APK/基线及线上回读已验收；手机安装、触控、网络和性能仍未实测，见 [QA](../qa/android_release_20260925/README.md) 和 [发布流程](ANDROID_RELEASE.md)。
 
 ## 2026-09-25 文件命名与格式
 

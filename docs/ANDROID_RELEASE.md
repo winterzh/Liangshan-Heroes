@@ -1,8 +1,8 @@
 # Android 完整包与内容更新发布
 
-## 当前规则（2026-09-25 候选）
+## 当前规则（2026-09-25）
 
-本次目标为 Android `2.0` 完整 APK，`versionCode=16`、引导协议 `4`，沿用包名 `com.liangshan.heroes` 和原签名证书。正式候选不含 `TEST` 版本后缀或菜单标记。这是候选要求；构建、真机验收和上线状态以当批 QA 与发布收据为准，本文不表示已经发布。
+Android `2.0` 完整 APK 已发布，`versionCode=16`、引导协议 `4`，沿用包名 `com.liangshan.heroes` 和原签名证书，无 `TEST` 后缀或菜单标记。标签对应 `9cf45c72`，GitHub Release 和 Android stable 均已回读确认。[本次收据与边界](../qa/android_release_20260925/README.md)；手机安装、触控及原生网络仍未实测。
 
 以后应用内内容更新仅保留 Android；Windows/macOS 客户端均在网络请求、缓存读取和 PCK 挂载前停用更新器。此次不发布桌面完整包或桌面 PCK，不切换桌面 stable，旧线上文件原样保留。用户本次授权 GitHub 代码、`v2.0` tag 和 Release/APK 附件；不涉及 Steam。服务器发布工具本身不依赖 GitHub Release。
 

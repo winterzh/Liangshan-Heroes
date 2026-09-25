@@ -1,14 +1,14 @@
 # 完整包与内容更新
 
-## 当前平台策略（2026-09-25 候选）
+## 当前平台策略（2026-09-25）
 
 | 平台 | 架构 | 完整包 | 应用内内容更新 |
 | --- | --- | --- | --- |
 | Windows | x86_64 | EXE | 停用；安装新完整包或通过 Steam 更新 |
-| Android | arm64 | APK | 保留；本次目标为 2.0 / versionCode 16 / bootstrap 4 新完整包 |
+| Android | arm64 | APK | 保留；2.0 / versionCode 16 / bootstrap 4 完整包已发布 |
 | macOS | arm64 | DMG | 停用；需另行安装新完整包 |
 
-本次只发布 Android 完整包与 Android 内容基线，用户授权 GitHub 代码、`v2.0` tag 及 Release/APK 附件，不涉及 Steam。服务器发布工具不依赖 GitHub Release。此处记录候选策略，实际构建、验收和上线状态以当批 QA 和发布收据为准。
+本次 Android 完整包与内容基线、GitHub `v2.0` tag 和 Release/APK 已发布，不涉及 Steam。服务器发布工具不依赖 GitHub Release。源码为 stable `9cf45c72`，桌面历史 stable 和签名字节未变；实际验收及手机未测边界见 [本批 QA](../qa/android_release_20260925/README.md)。
 
 Windows/macOS 客户端均须在创建网络请求、读取更新缓存或挂载 PCK 之前停用更新器；环境变量不能重新启用原生桌面导出程序。既有缓存文件不删除，新桌面程序不加载。已安装的旧程序不会因源码改变而自动停用，需要另行换装包含此策略的完整包；此次没有桌面安装包交付。
 

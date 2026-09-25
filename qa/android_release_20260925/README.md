@@ -1,5 +1,22 @@
 # Android 2.0 发布记录
 
+## 已上线
+
+发布源码/标签 `v2.0`：`9cf45c7204d3a3f6a31a3d3765b3bf5db8439a80`，分支 `codex/sync-20260905-stable`。GitHub Release 于 2026-09-25 16:00:28（UTC+8）公开，Android stable 已为 2.0；未合并 main、更新 Steam 或交付桌面包。
+
+- [GitHub Release](https://github.com/winterzh/Liangshan-Heroes/releases/tag/v2.0)
+- [APK 直链](http://120.26.237.195:1234/liangshan/android/releases/LiangshanHeroes-v2.0.apk)
+- APK 344,116,603 字节，SHA-256 `78a15c9e1e31b9fbcab2e09ab92f6bbbd6a62a1bcfef7e0896f9c19ab1c249c0`。
+- 基线 PCK 315,958,024 字节，SHA-256 `05ee4bb3f04393c898986dd6f1d31483e4ba7fdbebbcfc07e04bd4f888d6e9b7`；不作为玩家下载附件。
+
+`build/receipt.json`、`build/build-source.json` 记录官方 Godot 4.6.3、匹配 Android 模板、3064 生产输入、唯一人工模板路径覆盖和全部通过的构建步骤。沿用项目原有 debug 导出模板和证书以保持原流程与覆盖安装身份；APK 的 debuggable 标志仍为 true，本次未轮换签名或宣称经过商店签名/加固。版本与菜单不带 TEST。
+
+独立核验 `build/lsh_android_v2_independent_20260925.json` 重算 APK 与基线 3290 个共同资源的实际内容 MD5，全部一致；APK 仅额外包含 `_cl_` 和 `assets.sparsepck`。3064 个源文件及私有覆盖哈希通过；16 个 UID 和一个 SVG 导入侧车为引擎生成元数据，已明列。首次把生成侧车误当源码漂移的过严检查失败原样保留，不隐去失败。
+
+`publication/publication_receipt.json` 确认三平台签名、Android 新基线、GitHub 公开状态/正文/附件元数据以及两个入口整包下载哈希；Windows/macOS 清单与签名字节等于 `server_before/`。`apk_live_update.log` 使用最终 APK 的真实资源及内置公钥联网验签，结果 current 2.0；`legacy_live_update.log` 另外加载 `v1.8` tag 原样引导器（bootstrap 3），结果 full_update，完整包链接指向 2.0。两个检查均为私有宿主模拟，非手机验收。
+
+构建首次调用曾因手动传入错误的 expected-commit 被前置门禁立即拒绝，尚未创建目录或输出；改为完整实际 SHA 后通过。发布后只补收据/文档，不移动标签或重建 APK。
+
 2026-09-25 从 `7f4a67c0` 准备 2.0 / versionCode 16 / bootstrap 4。授权为 stable 源码、`v2.0` 标签、GitHub Release/APK、Android 更新服务器；不合并 main、不发布 Steam、不改桌面历史 stable。
 
 ## 本次修改

@@ -1,8 +1,8 @@
-## 2026-09-25 Android v2.0 发布准备
+## 2026-09-25 Android v2.0 已发布
 
 完整 APK 版本统一为 `2.0`（versionCode `16`），沿用原包名与签名，不带测试包标记。应用内更新今后只支持 Android；新 Windows/macOS 程序不再读取更新缓存或连接更新服务器，旧桌面线上文件保留不变。旧安卓版本需先覆盖安装完整 2.0 APK，之后接收同基线累计差异补丁；不要先卸载旧版或清除数据。
 
-本次授权包含 GitHub `v2.0 Release`、APK 附件和安卓更新服务器，不包含 Steam。实际构建和上线状态以[本次记录](qa/android_release_20260925/README.md)为准；当前为发布准备。[Android 发布流程](docs/ANDROID_RELEASE.md)。
+[GitHub v2.0 Release](https://github.com/winterzh/Liangshan-Heroes/releases/tag/v2.0) 与 [APK 直链](http://120.26.237.195:1234/liangshan/android/releases/LiangshanHeroes-v2.0.apk) 已上线，约 328 MiB。标签对应 stable 源码 `9cf45c72`；两个下载入口整包哈希一致，Android stable 已为 2.0，桌面清单/签名字节未变。740 项游戏回归、38 项更新场景和最终 APK 宿主联网检查通过；手机实测仍待完成。本次没有发布 Steam 或合并 main。[发布证据](qa/android_release_20260925/README.md) · [Android 发布流程](docs/ANDROID_RELEASE.md)。
 
 ## 2026-09-24 Android 本地试玩 APK
 

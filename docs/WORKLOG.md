@@ -1,4 +1,12 @@
-## 2026-09-25 Android 2.0 与更新平台收敛（发布准备）
+## 2026-09-25 Android 2.0 已发布
+
+`v2.0` 与 APK 源码提交为 `9cf45c7204d3a3f6a31a3d3765b3bf5db8439a80`，已推送 `codex/sync-20260905-stable` 并回读一致。[GitHub Release](https://github.com/winterzh/Liangshan-Heroes/releases/tag/v2.0) 于 2026-09-25 16:00:28（UTC+8）公开，附 APK；Android stable 已切到 2.0，Windows/macOS 的旧清单与签名字节完全未变。
+
+APK 为 344,116,603 字节，SHA-256 `78a15c9e1e31b9fbcab2e09ab92f6bbbd6a62a1bcfef7e0896f9c19ab1c249c0`。GitHub 与更新服务器两次整包下载均一致。官方 Godot 4.6.3、游戏 740/740、更新 38/38 场景、发布策略通过；3064 生产来源零漂移，3290 APK/PCK 共同资源实际内容一致。实际 APK 资源联网验签回读 2.0 为 current；原 `v1.8` 引导器未改源码在独占宿主中回读为 full_update → 2.0。以上不代替手机安装、触控或原生网络验收。
+
+发布后仅补文档/QA 收据，不移动标签或重建安装包；没有 Steam 更新、main 合并、桌面安装包或桌面 PCK 发布。完整来源、生成侧车与首次失败记录见 [QA](../qa/android_release_20260925/README.md)。
+
+## 2026-09-25 Android 2.0 与更新平台收敛（发布前记录）
 
 从干净 stable 快进至 `7f4a67c0`，本次完整包设为 2.0 / versionCode 16 / bootstrap 4，保持原 Android 包名与证书。仅真实 Android 或严格隔离的编辑器 Android 测试启用更新；所有桌面导出在缓存/网络初始化前停用。发布链仅操作 Android，保留签名、来源证明、升版和回滚门禁；不依赖桌面安装包或 GitHub Release。
 
