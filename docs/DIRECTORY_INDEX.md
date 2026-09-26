@@ -1,3 +1,8 @@
+## 2026-09-27 main 合并与交接
+
+- `docs/MAIN_MERGE_20260927.md`：16 个提交的合并范围、验证依据、待办和发布边界。
+- `qa/main_merge_20260927/`：合并前范围检查、完整提交清单及远端回读收据；不含新游戏测试。
+
 ## 2026-09-27 战役物件 UI 路由
 
 - `tools/scoped_object_icons_qa.gd`、`tools/run_scoped_object_icons_qa.py`：全局路线回归、实例关卡校验与真实 HUD。

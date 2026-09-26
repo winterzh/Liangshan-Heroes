@@ -1,3 +1,9 @@
+## 2026-09-27 合并后的源码入口
+
+main 已按本轮授权从 `39160307` 快进纳入 stable `89fead90` 的 16 个提交；后续交接文档同步两分支。开发继续使用 `codex/sync-20260905-stable`，正常启动与本机 Godot 配置方式不变。换机先运行 `git status --short --branch`；确认该分支、工作区干净且本地无分叉后，再运行 `git pull --ff-only origin codex/sync-20260905-stable`。有修改或分叉先核对来源，不自动 stash/reset。
+
+本次源码包括新头像和物件图标，不代表现有 Steam/Android 安装包包含这些资源。合并范围、历史 QA 和未完成项见 [合并说明](MAIN_MERGE_20260927.md)。本轮没有重新运行下列复验命令。
+
 ## 2026-09-27 关卡物件 UI 复验
 
 已有场景实例的建筑通过 `Unit.ui_portrait_texture()` 取得有效关卡外观，人物仍使用标准身份画像。复验：`python -X utf8 -B tools/run_scoped_object_icons_qa.py --work-root <工程外目录> --run`。工具显式冻结上一批归档的全局路由基线，并检查实际第七幕、第五幕和遭遇战。Godot 本机配置、共享锁及正常启动方式不变。详见 [说明](SCOPED_OBJECT_ICONS_20260927.md)。
