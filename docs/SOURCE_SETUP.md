@@ -1,3 +1,9 @@
+## 2026-09-26 旧图集裁切复验
+
+旧头像不再全部按三等分取图；81 个在用区域由 `scripts/portrait_atlas_regions.gd` 管理，独立头像仍优先。来源图更新时同时维护区域表、来源哈希并重新目检，不能沿用旧坐标直接验收。
+
+运行：`python -X utf8 -B tools/run_portrait_regions_qa.py --work-root <工程外目录> --run`。沿用本机 Godot 配置与共享锁；截图包含旧/新区域和 32/64/200 像素展示，并检查实际图鉴、战斗 HUD。正常启动方式不变。详见 [裁切说明](PORTRAIT_REGIONS_20260926.md)。
+
 ## 2026-09-26 配角头像与寨门图标
 
 陆谦、祝朝奉的半身头像已按现有四向模型补齐，路径为 `assets/characters/supporting_portraits_20260926/`。头像 QA：`python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外目录> --contract tools/contracts/supporting_portraits_20260926 --ui --run`。`--ui` 会加入指定清单人物，并保留原八名核心人物回归。

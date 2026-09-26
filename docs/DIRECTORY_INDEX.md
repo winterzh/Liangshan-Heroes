@@ -1,3 +1,10 @@
+## 2026-09-26 旧头像区域修正
+
+- `scripts/portrait_atlas_regions.gd`：81 个旧头像的原图区域表。
+- `tools/contracts/portrait_regions_20260926/`：十张来源图哈希及旧/新坐标。
+- `tools/run_portrait_regions_qa.py`、`tools/portrait_regions_qa.gd`：冻结来源、裁切对照、真实图鉴/HUD 验证。
+- `docs/PORTRAIT_REGIONS_20260926.md`、`qa/portrait_regions_20260926/`：裁切说明和验收证据。
+
 ## 2026-09-26 全量美术盘点与配角头像
 
 - `docs/ART_COMPLETION_20260926.md`、`qa/art_inventory_20260926/`：全库基线、82 张截图与逐定义缺项；持续更新批次状态，不将基线计数当完成率。

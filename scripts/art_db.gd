@@ -1,6 +1,7 @@
 extends Node
 const CampaignArt := preload("res://scripts/campaign_art.gd")
 const SkirmishFrameAlignment := preload("res://scripts/skirmish_frame_alignment.gd")
+const PortraitAtlasRegions := preload("res://scripts/portrait_atlas_regions.gd")
 ## 美术资源管理（Autoload: Art）。
 ## 把 Imagen 生成的整张图集放进 assets/ 即自动切片使用；缺图时返回 null，
 ## 单位/地块会用代码绘制的占位图形代替，随时可以无缝换皮。
@@ -592,6 +593,23 @@ const STANDALONE_PORTRAITS := {
 var _standalone_portraits := {}
 
 
+func _measured_portrait(key: String) -> Texture2D:
+	if not PortraitAtlasRegions.REGIONS.has(key): return null
+	var cache_key := "portrait_region|" + key
+	if _cache.has(cache_key): return _cache[cache_key]
+	var spec: Array = PortraitAtlasRegions.REGIONS[key]
+	var atlas := _try_load(String(spec[0]))
+	if atlas == null: return null
+	var region: Rect2 = spec[1]
+	if not Rect2(Vector2.ZERO, atlas.get_size()).encloses(region): return null
+	var texture := AtlasTexture.new()
+	texture.atlas = atlas
+	texture.region = region
+	texture.filter_clip = true
+	_cache[cache_key] = texture
+	return texture
+
+
 func portrait_texture(key: String) -> Texture2D:
 	if key == "guan_zhanchuan": return campaign_object_texture("official_warship","default","se")
 	key = _ra(key)                  # 运行时别名
@@ -601,6 +619,9 @@ func portrait_texture(key: String) -> Texture2D:
 			_standalone_portraits[key] = _try_load(STANDALONE_PORTRAITS[key])
 		if _standalone_portraits[key] != null:
 			return _standalone_portraits[key]
+	# Legacy AI sheets have uneven panel boundaries; uniform thirds include neighbours.
+	var measured := _measured_portrait(key)
+	if measured != null: return measured
 	if _portraits_tex != null and PORTRAIT_CELLS.has(key):
 		return _atlas(_portraits_tex, PORTRAIT_CELLS[key], 3, "p_" + key)
 	if _portraits2_tex != null and PORTRAIT2_CELLS.has(key):
