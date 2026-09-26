@@ -4503,8 +4503,20 @@ func _active_campaign_level_id() -> String:
 	return ""
 
 
-func _campaign_environment_texture() -> Texture2D:
-	remove_meta("campaign_environment_foot")
+## Instance UI can use the same scoped prop as the world without changing its
+## drawing metadata. Character portraits keep their canonical identity route.
+func ui_portrait_texture() -> Texture2D:
+	if is_building and not is_hero and not is_bound_person() and not is_resource \
+			and not _is_tower() and not bool(get_meta("scene_visual_only", false)):
+		var scoped := _campaign_environment_texture(false)
+		if scoped != null:
+			# Match the live Unit canvas fallback for this native tavern atlas.
+			return LIVE_TAVERN_FALLBACK if key == "tavern" and scoped is AtlasTexture else scoped
+	return Art.ui_portrait_texture(key, art_variant)
+
+
+func _campaign_environment_texture(update_metadata := true) -> Texture2D:
+	if update_metadata: remove_meta("campaign_environment_foot")
 	var route_key := String(get_meta("campaign_environment_route", ""))
 	if route_key.is_empty(): return null
 	var state := String(get_meta("campaign_environment_state", "default"))
@@ -4515,13 +4527,13 @@ func _campaign_environment_texture() -> Texture2D:
 		var metrics := CampaignEnvironmentArt.calibrated_visual_metrics("object",
 			_active_campaign_level_id(),route_key,state)
 		if metrics.is_empty(): return null
-		set_meta("campaign_environment_foot",float(metrics.get("foot",0.78)))
+		if update_metadata: set_meta("campaign_environment_foot",float(metrics.get("foot",0.78)))
 	var text_surface_id := String(get_meta("campaign_environment_text_surface_id",""))
 	if not text_surface_id.is_empty():
 		var normalized = CampaignEnvironmentArt.calibrated_text_rect("object",
 			_active_campaign_level_id(),route_key,state,text_surface_id)
 		if normalized==null: return null
-		set_meta("campaign_environment_text_rect",normalized)
+		if update_metadata: set_meta("campaign_environment_text_rect",normalized)
 	return texture
 
 

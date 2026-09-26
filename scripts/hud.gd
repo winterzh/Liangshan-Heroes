@@ -2379,7 +2379,7 @@ func _refresh_panel() -> void:
 			if u.is_hero:
 				prim = u
 				break
-	var ptex: Texture2D = Art.ui_portrait_texture(prim.key, prim.art_variant)
+	var ptex: Texture2D = prim.ui_portrait_texture()
 	if ptex != null:
 		_port_tex.texture = ptex
 		_port_tex.visible = true
@@ -2695,7 +2695,7 @@ func _show_intro_line() -> void:
 	if battle != null:
 		var actor = battle.find_unit(String(line.get("key", "narrator")))
 		if is_instance_valid(actor) and actor.art_variant != "":
-			tex = Art.ui_portrait_texture(actor.key, actor.art_variant)
+			tex = actor.ui_portrait_texture()
 	if tex != null:
 		_intro_port_tex.texture = tex
 		_intro_port_tex.visible = true
@@ -3138,7 +3138,7 @@ class UnitIcon extends Control:
 			return
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.06, 0.05, 0.04))
 		# 统一取图链（脸→走图→建筑→物件→地形+别名）：建筑/资源/特殊单位都能拿到图，消灭黄圈
-		var tex: Texture2D = Art.ui_portrait_texture(unit.key, unit.art_variant)
+		var tex: Texture2D = unit.ui_portrait_texture()
 		if tex != null:
 			draw_texture_rect(tex, Rect2(3, 1, size.x - 6, size.y - 9), false)
 		else:
@@ -4327,7 +4327,7 @@ class HeroChip extends Control:
 			border = Color(0.42, 0.85, 0.48)   # 托管中：绿描边
 		draw_rect(avatar_rect, border, false, 4.0 if (sel or garr or hero.auto_micro) else 3.0)
 		var ir := Rect2(3, 3, avatar_w - 6, size.y - 15)
-		var tex: Texture2D = Art.ui_portrait_texture(hero.key, hero.art_variant)   # 脸→走图→…回退，公孙胜无专属头像时也有图（不画空白首字）
+		var tex: Texture2D = hero.ui_portrait_texture()   # 人物仍使用统一身份头像；建筑实例可读取关卡外观。
 		_last_drawn_art_variant = hero.art_variant
 		_last_drawn_portrait_path = tex.resource_path if tex != null else ""
 		if tex != null:

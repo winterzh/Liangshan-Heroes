@@ -1,3 +1,7 @@
+## 2026-09-27 关卡物件 UI 复验
+
+已有场景实例的建筑通过 `Unit.ui_portrait_texture()` 取得有效关卡外观，人物仍使用标准身份画像。复验：`python -X utf8 -B tools/run_scoped_object_icons_qa.py --work-root <工程外目录> --run`。工具显式冻结上一批归档的全局路由基线，并检查实际第七幕、第五幕和遭遇战。Godot 本机配置、共享锁及正常启动方式不变。详见 [说明](SCOPED_OBJECT_ICONS_20260927.md)。
+
 ## 2026-09-27 非人物图标复验
 
 集市、法场、庄门的基础界面图标使用既有场景图集。复验：`python -X utf8 -B tools/run_nonperson_icons_qa.py --baseline-from qa/nonperson_icons_20260927/baseline --work-root <工程外目录> --run`。归档基线使用资源相对路径与哈希，可在另一台电脑的 checkout 重放；Godot 继续从本机配置解析。

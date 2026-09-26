@@ -1,3 +1,8 @@
+## 2026-09-27 战役物件 UI 路由
+
+- `tools/scoped_object_icons_qa.gd`、`tools/run_scoped_object_icons_qa.py`：全局路线回归、实例关卡校验与真实 HUD。
+- `docs/SCOPED_OBJECT_ICONS_20260927.md`、`qa/scoped_object_icons_20260927/`：木牌/忠义堂来源一致性、作用域及身份保护验证；没有新增生产位图。
+
 ## 2026-09-27 非人物图标路由
 
 - `tools/nonperson_icons_qa.gd`、`tools/run_nonperson_icons_qa.py`：修改前基线采集、完整路由对比、图鉴及当前战役 HUD 验证。
