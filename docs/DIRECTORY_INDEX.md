@@ -1,3 +1,10 @@
+## 2026-09-26 核心英雄头像
+
+- `assets/characters/hero_portraits_20260926/`：吴用、花荣、杨志、李逵的原生独立 PNG。
+- `tools/contracts/hero_portraits_20260926/`：完整提示词、参考图和生产图片哈希。
+- `tools/run_hero_portraits_qa.py`、`tools/hero_portraits_qa.gd`：隔离导入、实际图鉴取图与多尺寸渲染验证。
+- `docs/HERO_PORTRAITS_20260926.md`、`qa/hero_portraits_20260926/`：本批范围、复现、收据与视觉验收。
+
 ## 2026-09-25 Android 2.0.1 累计热更新
 
 - `tools/build_android_hot_patch.py`：生产白名单冻结、原底包差分导出、日志/资源/来源防漂移；本身不签名或发布。

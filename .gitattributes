@@ -610,3 +610,10 @@ tools/run_stockade_navigation_qa.py text eol=lf
 
 # Android 2.0 release evidence retains original logs, signatures and receipts.
 qa/android_release_20260925/** -text -whitespace
+
+# Preserve generated portrait provenance and exact validation evidence.
+assets/characters/hero_portraits_20260926/** -text
+tools/contracts/hero_portraits_20260926/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/hero_portraits_qa.gd text eol=lf
+tools/run_hero_portraits_qa.py text eol=lf
+qa/hero_portraits_20260926/** -text -whitespace

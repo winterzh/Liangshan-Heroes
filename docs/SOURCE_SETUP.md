@@ -1,3 +1,7 @@
+## 2026-09-26 核心英雄头像补充
+
+吴用、花荣、杨志、李逵的通用头像在 `assets/characters/hero_portraits_20260926/`，原始提示词与哈希在 `tools/contracts/hero_portraits_20260926/`。正常启动沿用现有入口。复验运行 `python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外QA目录> --run`，工具使用本机 Godot 配置、共享引擎锁和私有用户目录，输出真实图鉴及多尺寸头像截图。详见 [本批说明](HERO_PORTRAITS_20260926.md)。
+
 ## 2026-09-25 Android 2.0.1 热更新入口
 
 Android stable 已上线 2.0.1，`v2.0.1` 标签绑定 `b3b0b7ac405f2584b811b0841d085cf2f28b3dc6`；补丁 2,374,976 字节。用户允许自动化后先更新服务器、真机后验；未新建 APK、GitHub Release 或 Steam 发布。底包保持 2.0 / code 16 / bootstrap 4；主菜单右下角显示当前内容 `v2.0.1`，不修改底包版本常量。

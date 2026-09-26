@@ -548,6 +548,11 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	# 新增四名核心英雄的独立头像，沿用统一纸纹与工笔厚涂风格。
+	"wu_yong": "res://assets/characters/hero_portraits_20260926/wu_yong.png",
+	"hua_rong": "res://assets/characters/hero_portraits_20260926/hua_rong.png",
+	"yang_zhi": "res://assets/characters/hero_portraits_20260926/yang_zhi.png",
+	"li_kui": "res://assets/characters/hero_portraits_20260926/li_kui.png",
 	"dong_chao": "res://assets/characters/art_full_20260915/dong_chao.png",
 	"xue_ba": "res://assets/characters/art_full_20260915/xue_ba.png",
 	# 陆谦头像与本批四向身体原图同源，固定裁剪自SE格，避免旧灰底头像与新身体风格割裂。
