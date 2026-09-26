@@ -1,3 +1,10 @@
+## 2026-09-26 将领头像与战斗/图鉴统一
+
+- `assets/characters/hero_portraits_commanders_20260926/`：卢俊义、关胜、秦明、呼延灼四幅原生 PNG 与导入侧车。
+- `tools/contracts/hero_portraits_commanders_20260926/`：本批完整提示词、身份/风格参考及 SHA-256。
+- `tools/ui_portraits_qa.gd`：实际 Battle/HUD 与图鉴的人物一致性专项，由现有头像 QA 工具的 `--ui` 选项运行。
+- `docs/HERO_PORTRAITS_COMMANDERS_20260926.md`、`qa/hero_portraits_commanders_20260926/`：实现、复现、实测与截图。
+
 ## 2026-09-26 核心英雄头像
 
 - `assets/characters/hero_portraits_20260926/`：吴用、花荣、杨志、李逵的原生独立 PNG。

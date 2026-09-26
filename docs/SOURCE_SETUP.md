@@ -1,3 +1,9 @@
+## 2026-09-26 战斗与图鉴头像统一
+
+新增卢俊义、关胜、秦明、呼延灼头像，战斗左下角、英雄栏及图鉴共用 `Art.ui_portrait_texture`。人物变体须在 `CampaignArt.PORTRAIT_OWNERS` 或程序化被缚归属表登记；更新人物造型时同时维护其标准头像，不能将其他人物的变体当替代图。
+
+复验：`python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外QA目录> --contract tools/contracts/hero_portraits_commanders_20260926 --ui --run`。正常启动入口不变；本批为源码修改，已安装的 Steam/Android 版本需另行打包发布后才包含。见 [实现与范围](HERO_PORTRAITS_COMMANDERS_20260926.md) 和 [QA](../qa/hero_portraits_commanders_20260926/README.md)。
+
 ## 2026-09-26 核心英雄头像补充
 
 吴用、花荣、杨志、李逵的通用头像在 `assets/characters/hero_portraits_20260926/`，原始提示词与哈希在 `tools/contracts/hero_portraits_20260926/`。正常启动沿用现有入口。复验运行 `python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外QA目录> --run`，工具使用本机 Godot 配置、共享引擎锁和私有用户目录，输出真实图鉴及多尺寸头像截图。详见 [本批说明](HERO_PORTRAITS_20260926.md)。

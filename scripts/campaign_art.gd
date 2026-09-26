@@ -179,6 +179,30 @@ const OBJECT_ALIASES := {
 }
 
 
+## 界面统一使用所属人物的标准头像；剧情身体、动作和来源预览继续按变体取图。
+const PORTRAIT_OWNERS := {
+	"wu_song_mengzhou": "wu_song", "lin_chong_prisoner": "lin_chong",
+	"lin_chong_bound": "lin_chong", "lin_chong_escort": "lin_chong",
+	"jiang_menshen_fists": "jiang_menshen", "li_kui_jiangzhou": "li_kui",
+	"lu_zhishen_rescue": "lu_zhishen", "shi_qian_lantern": "shi_qian",
+	"chai_jin_officer": "chai_jin", "yue_he_officer": "yue_he",
+	"bound_lu_junyi": "lu_junyi", "rescued_lu_junyi": "lu_junyi",
+	"bound_shi_xiu": "shi_xiu", "rescued_shi_xiu": "shi_xiu",
+	"song_jiang_bound": "song_jiang", "song_jiang_rescued": "song_jiang",
+	"dai_zong_bound": "dai_zong", "dai_zong_rescued": "dai_zong",
+	"gao_qiu_captured": "gao_qiu", "dong_chao_escort": "dong_chao",
+	"xue_ba_escort": "xue_ba", "hn_chao_gai": "chao_gai",
+	"hn_wu_yong": "wu_yong", "hn_gongsun_sheng": "gongsun_sheng",
+	"hn_liu_tang": "liu_tang", "hn_ruan_xiaoer": "ruan_xiaoer",
+	"hn_ruan_xiaowu": "ruan_xiaowu", "hn_ruan_xiaoqi": "ruan_xiaoqi",
+	"hn_bai_sheng": "bai_sheng", "daming_bound_lu_junyi": "lu_junyi",
+	"daming_rescued_lu_junyi": "lu_junyi", "daming_bound_shi_xiu": "shi_xiu",
+	"daming_rescued_shi_xiu": "shi_xiu",
+}
+
+static func portrait_owner(variant: String) -> String:
+	return String(PORTRAIT_OWNERS.get(variant, PROGRAMMATIC_BOUND_VARIANTS.get(variant, "")))
+
 static func programmatic_bound_owner(variant: String) -> String:
 	return String(PROGRAMMATIC_BOUND_VARIANTS.get(variant, ""))
 

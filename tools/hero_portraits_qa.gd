@@ -1,6 +1,6 @@
 extends SceneTree
 ## Run against frozen production inputs and a private user profile.
-const MANIFEST := "res://tools/contracts/hero_portraits_20260926/manifest.json"
+const DEFAULT_MANIFEST := "res://tools/contracts/hero_portraits_20260926/manifest.json"
 var checks: Array = []
 var output := ""
 
@@ -23,7 +23,9 @@ func run() -> void:
 	DirAccess.make_dir_recursive_absolute(output)
 	root.size = Vector2i(1280, 720)
 	root.content_scale_size = Vector2i(1280, 720)
-	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST))
+	var manifest_path := OS.get_environment("HERO_PORTRAITS_MANIFEST")
+	if manifest_path.is_empty(): manifest_path = DEFAULT_MANIFEST
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
 	var art = root.get_node("Art")
 	var codex = load("res://scenes/codex.tscn").instantiate()
 	root.add_child(codex)
@@ -36,7 +38,7 @@ func run() -> void:
 		check(texture != null and texture.resource_path == path, key + " standalone portrait route")
 		if texture != null:
 			check(texture.get_width() == row.width and texture.get_height() == row.height, key + " imported dimensions")
-		var avatar: Texture2D = art.avatar_texture(key)
+		var avatar: Texture2D = art.ui_portrait_texture(key)
 		check(avatar != null and avatar.resource_path == path, key + " HUD avatar route")
 		codex._select(key)
 		await process_frame
@@ -63,7 +65,7 @@ func run() -> void:
 		var y := 48
 		for side in [256, 96, 64, 32]:
 			var box := TextureRect.new()
-			box.texture = art.avatar_texture(key)
+			box.texture = art.ui_portrait_texture(key)
 			box.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			box.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			box.size = Vector2(side, side)

@@ -467,9 +467,7 @@ func _select(key: String) -> void:
 		_direction_picker.disabled = true
 		return
 	# 头像：肖像 → 头像图标 → 立绘
-	var ptex: Texture2D = Art.portrait_texture(key)
-	if ptex == null:
-		ptex = Art.avatar_texture(key)
+	var ptex: Texture2D = Art.ui_portrait_texture(key)
 	if ptex == null:
 		ptex = Art.unit_texture(key)
 	_port.set_frames([ptex] if ptex != null else [])

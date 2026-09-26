@@ -19,24 +19,34 @@ def main():
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--godot")
     parser.add_argument("--work-root", required=True, type=Path)
+    parser.add_argument("--contract", default=CONTRACT, help="Repository-relative portrait contract directory")
+    parser.add_argument("--ui", action="store_true", help="Also check real battle HUD and campaign portrait identities")
     args = parser.parse_args()
     shared, running = common.load_helpers(ROOT)
     engine = shared.resolve_godot(args.godot)
     work = shared.resolve_profile_root(args.work_root)
     if work.is_relative_to(ROOT):
         raise ValueError("QA workspace must be outside the source checkout")
-    manifest = json.loads((ROOT / CONTRACT / "manifest.json").read_text(encoding="utf-8"))
+    contract = common.relative_source(ROOT, args.contract + "/manifest.json").rsplit("/", 1)[0]
+    manifest = json.loads((ROOT / contract / "manifest.json").read_text(encoding="utf-8"))
     for row in manifest["portraits"].values():
         common.relative_source(ROOT, row["path"])
         if common.sha(ROOT / row["path"]) != row["sha256"]:
             raise ValueError("Portrait source changed: " + row["path"])
+        if "identity_reference" in row:
+            ref = row["identity_reference"]
+            common.relative_source(ROOT, ref["path"])
+            if common.sha(ROOT / ref["path"]) != ref["sha256"]:
+                raise ValueError("Identity reference changed: " + ref["path"])
     for row in (manifest["style_reference"], manifest["prompts"]):
         if common.sha(ROOT / row["path"]) != row["sha256"]:
             raise ValueError("Provenance changed: " + row["path"])
     names = set(shared.sources()) | set(common.TOOLS) | {
         SCRIPT, "tools/run_hero_portraits_qa.py", "tools/run_character_art_qa.py",
-        CONTRACT + "/manifest.json", CONTRACT + "/prompts.json",
+        contract + "/manifest.json", contract + "/prompts.json",
     }
+    if args.ui:
+        names.add("tools/ui_portraits_qa.gd")
     if not args.run:
         print(json.dumps({"preflight": True, "source_files": len(names),
                           "lock_busy": shared.LOCK.exists(), "engine_busy": running()}))
@@ -67,13 +77,22 @@ def main():
         common.process_step(engine, project, env, evidence, "import",
                             ["--headless", "--editor", "--import", "--quit"],
                             600, "gl_compatibility", running, receipt["steps"])
-        common.process_step(engine, project, env | {"HERO_PORTRAITS_OUT": str(evidence)}, evidence,
+        common.process_step(engine, project, env | {"HERO_PORTRAITS_OUT": str(evidence),
+                            "HERO_PORTRAITS_MANIFEST": "res://" + contract + "/manifest.json"}, evidence,
                             "portraits", ["--position", "20000,20000", "--script", "res://" + SCRIPT],
                             180, "gl_compatibility", running, receipt["steps"])
         report = json.loads((evidence / "report.json").read_text(encoding="utf-8"))
         if not report["passed"]:
             raise RuntimeError("Portrait route check failed")
         receipt["checks"] = len(report["checks"])
+        if args.ui:
+            common.process_step(engine, project, env | {"HERO_PORTRAITS_OUT": str(evidence)}, evidence,
+                                "ui_portraits", ["--position", "20000,20000", "--script", "res://tools/ui_portraits_qa.gd"],
+                                180, "gl_compatibility", running, receipt["steps"])
+            ui_report = json.loads((evidence / "ui_report.json").read_text(encoding="utf-8"))
+            if not ui_report["passed"]:
+                raise RuntimeError("Battle UI portrait check failed")
+            receipt["checks"] += len(ui_report["checks"])
         receipt["source_changes"] = common.source_changes(ROOT, receipt["source_files"])
         receipt["private_source_changes"] = common.source_changes(project, receipt["source_files"])
         if receipt["source_changes"] or receipt["private_source_changes"]:

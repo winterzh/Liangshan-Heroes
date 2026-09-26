@@ -2379,7 +2379,7 @@ func _refresh_panel() -> void:
 			if u.is_hero:
 				prim = u
 				break
-	var ptex: Texture2D = Art.avatar_texture(prim.key, prim.art_variant)
+	var ptex: Texture2D = Art.ui_portrait_texture(prim.key, prim.art_variant)
 	if ptex != null:
 		_port_tex.texture = ptex
 		_port_tex.visible = true
@@ -2695,7 +2695,7 @@ func _show_intro_line() -> void:
 	if battle != null:
 		var actor = battle.find_unit(String(line.get("key", "narrator")))
 		if is_instance_valid(actor) and actor.art_variant != "":
-			tex = Art.avatar_texture(actor.key, actor.art_variant)
+			tex = Art.ui_portrait_texture(actor.key, actor.art_variant)
 	if tex != null:
 		_intro_port_tex.texture = tex
 		_intro_port_tex.visible = true
@@ -3138,7 +3138,7 @@ class UnitIcon extends Control:
 			return
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.06, 0.05, 0.04))
 		# 统一取图链（脸→走图→建筑→物件→地形+别名）：建筑/资源/特殊单位都能拿到图，消灭黄圈
-		var tex: Texture2D = Art.avatar_texture(unit.key, unit.art_variant)
+		var tex: Texture2D = Art.ui_portrait_texture(unit.key, unit.art_variant)
 		if tex != null:
 			draw_texture_rect(tex, Rect2(3, 1, size.x - 6, size.y - 9), false)
 		else:
@@ -3364,7 +3364,7 @@ class CmdButton extends Control:
 		var glyph := Localize.text("建")
 		var tex: Texture2D = null
 		if kind == "train":
-			accent = Color(0.45, 0.55, 0.32); glyph = Localize.text("练"); tex = Art.avatar_texture(key)   # 有头像优先用头像(干净)，无则退回走图
+			accent = Color(0.45, 0.55, 0.32); glyph = Localize.text("练"); tex = Art.ui_portrait_texture(key)   # 有头像优先用头像(干净)，无则退回走图
 		elif kind == "build":
 			tex = Art.building_texture(key)
 		elif kind == "cat":
@@ -3398,7 +3398,7 @@ class CmdButton extends Control:
 		elif kind == "garrison":
 			accent = Color(0.42, 0.45, 0.72); glyph = Localize.text("驻")
 		elif kind == "cancel_train":
-			accent = Color(0.66, 0.28, 0.24); glyph = "×"; tex = Art.avatar_texture(key)   # 队列图标同样优先用头像
+			accent = Color(0.66, 0.28, 0.24); glyph = "×"; tex = Art.ui_portrait_texture(key)   # 队列图标同样优先用头像
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.12, 0.09, 0.06))
 		# 方形图标：有贴图用贴图（不可负担则压暗），否则画类别字形底。触屏整体放大（图标盒 + 字形随盒缩放）。
 		var big: bool = hud != null and hud.touch_ui
@@ -4307,7 +4307,7 @@ class HeroChip extends Control:
 			var f := ThemeDB.fallback_font
 			var avatar_w := minf(size.x, size.y)
 			draw_rect(Rect2(Vector2.ZERO, size), Color(0.08, 0.07, 0.05, 0.96))
-			var tex := Art.avatar_texture(roster_key)
+			var tex := Art.ui_portrait_texture(roster_key)
 			if tex != null:
 				draw_texture_rect(tex, Rect2(3, 3, avatar_w - 6, size.y - 15), false, Color(0.38, 0.38, 0.38))
 			draw_string(f, Vector2(0, size.y - 3), Localize.text("阵亡"), HORIZONTAL_ALIGNMENT_CENTER, avatar_w, 12, UITheme.PAPER_MUTED)
@@ -4327,7 +4327,7 @@ class HeroChip extends Control:
 			border = Color(0.42, 0.85, 0.48)   # 托管中：绿描边
 		draw_rect(avatar_rect, border, false, 4.0 if (sel or garr or hero.auto_micro) else 3.0)
 		var ir := Rect2(3, 3, avatar_w - 6, size.y - 15)
-		var tex: Texture2D = Art.avatar_texture(hero.key, hero.art_variant)   # 脸→走图→…回退，公孙胜无专属头像时也有图（不画空白首字）
+		var tex: Texture2D = Art.ui_portrait_texture(hero.key, hero.art_variant)   # 脸→走图→…回退，公孙胜无专属头像时也有图（不画空白首字）
 		_last_drawn_art_variant = hero.art_variant
 		_last_drawn_portrait_path = tex.resource_path if tex != null else ""
 		if tex != null:

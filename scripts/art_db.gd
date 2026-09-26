@@ -380,6 +380,18 @@ const SPRITE_ALIAS := {}
 ## 是消灭「黄色圈圈头像」的单一来源。
 const IDENTITY_PORTRAIT_VARIANTS := {"dong_chao_escort": "dong_chao", "xue_ba_escort": "xue_ba"}
 
+## 图鉴、战斗面板与英雄栏共用入口。先核对人物身份，防止变体借到别人的脸。
+func ui_portrait_texture(key: String, variant := "") -> Texture2D:
+	var owner := CampaignArt.portrait_owner(variant)
+	if not owner.is_empty():
+		if String(ART_ALIAS.get(key, key)) != owner: return null
+		return portrait_texture(key)
+	# 平民、建筑和物件仍可使用自己的专用图标。
+	if not variant.is_empty(): return avatar_texture(key, variant)
+	var portrait := portrait_texture(key)
+	return portrait if portrait != null else avatar_texture(key)
+
+## 保留战役变体原图查询，用于素材预览与来源契约；游戏界面用 ui_portrait_texture。
 func avatar_texture(key: String, variant := "") -> Texture2D:
 	if IDENTITY_PORTRAIT_VARIANTS.has(variant):
 		return portrait_texture(key) if IDENTITY_PORTRAIT_VARIANTS[variant] == key else null
@@ -548,6 +560,10 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	"lu_junyi": "res://assets/characters/hero_portraits_commanders_20260926/lu_junyi.png",
+	"guan_sheng": "res://assets/characters/hero_portraits_commanders_20260926/guan_sheng.png",
+	"qin_ming": "res://assets/characters/hero_portraits_commanders_20260926/qin_ming.png",
+	"hu_yanzhuo": "res://assets/characters/hero_portraits_commanders_20260926/hu_yanzhuo.png",
 	# 新增四名核心英雄的独立头像，沿用统一纸纹与工笔厚涂风格。
 	"wu_yong": "res://assets/characters/hero_portraits_20260926/wu_yong.png",
 	"hua_rong": "res://assets/characters/hero_portraits_20260926/hua_rong.png",
