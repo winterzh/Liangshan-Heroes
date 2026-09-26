@@ -1,0 +1,106 @@
+{
+  "schema": 2,
+  "generator": "Built-in image_gen edit",
+  "style_reference": {
+    "path": "assets/characters/supporting_portraits_20260926/lu_qian.png",
+    "sha256": "ca0bd6b3d87f56216293523b3bcc679da10715eeaa99d886d35312b2b4a7b750"
+  },
+  "prompts": {
+    "path": "tools/contracts/officer_portraits_20260927/prompts.json",
+    "sha256": "3b1a949b76241eb0b371d1516c57cad5e3ea7f3f1992104755b25152ce2ccbeb"
+  },
+  "portraits": {
+    "cai_jiu": {
+      "name": "蔡九",
+      "path": "assets/characters/officer_portraits_20260927/cai_jiu.png",
+      "sha256": "3a406dde678b5766d815da68a20c7d2f87a7156df54754b8e21eff3c48e6ac4c",
+      "bytes": 2798860,
+      "width": 1254,
+      "height": 1254,
+      "generation_id": "exec-668eb732-6427-4208-8952-63952cd9804c",
+      "identity_reference": {
+        "path": "assets/anim/cai_jiu_walk.png",
+        "sha256": "b587c60148f14efeff1a2ade2949b6e2fc3714ffdc4163bc7d6e294118065d68"
+      },
+      "edit_target": {
+        "path": "assets/portraits2.png",
+        "sha256": "9fb2d65cc1b0d7ff185a7ea4f97044a5138c8dd0fc679e70ed1418df208eca1e"
+      },
+      "transform": "none; native generated PNG copied byte-for-byte"
+    },
+    "shi_wengong": {
+      "name": "史文恭",
+      "path": "assets/characters/officer_portraits_20260927/shi_wengong.png",
+      "sha256": "c214006ff9aefc9aa4af828781376f8df66cbec3bf7bad8e01895b8cfd1c552b",
+      "bytes": 2964188,
+      "width": 1254,
+      "height": 1254,
+      "generation_id": "exec-9b0502dc-a22d-44db-8bd0-4477c46af131",
+      "identity_reference": {
+        "path": "assets/anim/shi_wengong_idle.png",
+        "sha256": "72336bec0865da589ca30665df8ead9f57d190ee26e028f7feac0e80505dd9a0"
+      },
+      "edit_target": {
+        "path": "assets/portraits4.png",
+        "sha256": "58dced486064872d57f7cd1d350664d9cb12126e9808393543be2e60d4bbf21e"
+      },
+      "transform": "none; native generated PNG copied byte-for-byte"
+    }
+  },
+  "model_alignment": {
+    "cai_jiu": {
+      "name": "蔡九",
+      "state": "walk",
+      "directional": false,
+      "sources": [
+        {
+          "path": "assets/anim/cai_jiu_walk.png",
+          "sha256": "b587c60148f14efeff1a2ade2949b6e2fc3714ffdc4163bc7d6e294118065d68"
+        }
+      ],
+      "world_files": [
+        {
+          "path": "assets/anim/cai_jiu_attack.png",
+          "sha256": "406a0c856d73803a2d6cf633b99d8f3ca9cfe146b0a37e154727f2a97f6914ad"
+        },
+        {
+          "path": "assets/anim/cai_jiu_walk.png",
+          "sha256": "b587c60148f14efeff1a2ade2949b6e2fc3714ffdc4163bc7d6e294118065d68"
+        }
+      ],
+      "review": "圆脸细眼、小须保留；靛蓝金边官袍与黑色展脚帽按当前动作源校准。",
+      "limit": "四个请求方向均为旧图回退，本批未新增独立四向或修改身体动作。"
+    },
+    "shi_wengong": {
+      "name": "史文恭",
+      "state": "idle",
+      "directional": false,
+      "sources": [
+        {
+          "path": "assets/anim/shi_wengong_idle.png",
+          "sha256": "72336bec0865da589ca30665df8ead9f57d190ee26e028f7feac0e80505dd9a0"
+        }
+      ],
+      "world_files": [
+        {
+          "path": "assets/anim/shi_wengong_attack.png",
+          "sha256": "e320d29d19eb870ddb864b5c75376e0c8ff4120f0525c0e03d3f287007f7e159"
+        },
+        {
+          "path": "assets/anim/shi_wengong_death.png",
+          "sha256": "0b6ede0a67e9aeb55947976babc3d068bd96d483b041465954ec1f4bbbdeef50"
+        },
+        {
+          "path": "assets/anim/shi_wengong_idle.png",
+          "sha256": "72336bec0865da589ca30665df8ead9f57d190ee26e028f7feac0e80505dd9a0"
+        },
+        {
+          "path": "assets/anim/shi_wengong_walk.png",
+          "sha256": "486725a3043bacc9b9c15a9ae9030e7d6ddd4331a65ba0eb28b756823eb01e95"
+        }
+      ],
+      "review": "长脸锐眼保留；黑金甲、红盔缨、暗红披風与短须按当前动作源校准。",
+      "limit": "四个请求方向均为旧图回退，本批未新增独立四向或修改身体动作。"
+    }
+  }
+}

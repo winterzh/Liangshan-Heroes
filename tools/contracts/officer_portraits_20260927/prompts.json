@@ -1,0 +1,33 @@
+{
+  "generator": "Built-in image_gen edit",
+  "prompts": {
+    "cai_jiu": {
+      "prompt": "Use case: identity-preserve. Image1 is a 3x3 original portrait atlas. Edit ONLY Cai Jiu, the plump official in the LEFT panel of the MIDDLE row (red robe, black winged official hat), into one standalone square portrait. Image2 is his current blue-robed walk sprite strip and image3 his attack strip: authoritative costume references. Image4 is STYLE ONLY for parchment, fine ink edges, painterly material treatment; DO NOT use its narrow face. Preserve Cai Jiu's individual round heavy cheeks, small half-lidded eyes, arched thin brows, small moustache and little pointed chin beard, self-satisfied restrained expression. Match body costume: deep indigo blue official robe, gold embroidered collar edging, square gold bird/rank chest patch, black upright winged official hat with a small round gold forehead button. No red robe or red scarf. No armor. Tight head and upper chest portrait facing slightly right, hat wings fully within square with clear margin; face large enough to read at64px. Muted warm tan parchment background matching the style example, detailed Chinese historical game illustration, no glossy3D or photorealism. No other characters, grid, borders, text or watermark. Output only this one independently recognizable character.",
+      "references": [
+        "assets/portraits2.png",
+        "assets/anim/cai_jiu_walk.png",
+        "assets/anim/cai_jiu_attack.png",
+        "assets/characters/supporting_portraits_20260926/lu_qian.png"
+      ]
+    },
+    "shi_wengong": {
+      "prompt": "Use case: identity-preserve. Image1 is original atlas; edit ONLY Shi Wengong, CENTER panel BOTTOM row, the stern long-faced warrior in silver armor and white cloak/white plume. Image2 is the authoritative current idle body and image3 his walk strip; image4 is STYLE ONLY, not a facial identity source. Produce one standalone square bust. Retain Shi Wengong's angular long face, strong cheekbones, straight nose, piercing stern eyes and bold eyebrows. Shorten the huge old beard to the model's close moustache and pointed compact black chin beard. Match the current body rather than the obsolete white outfit: dark iron helmet with modest bronze/gold brows and RED plume, dark iron lamellar armor with bronze/gold trim and shoulder ornaments, deep muted burgundy/red cloak and collar. No silver armor, white cloak, white plume, cloth cap or green robe. Subtle spear shaft or tassel may be behind shoulder but do not obstruct the face. Head-and-upper-chest crop with full helmet/plume inside safe margins. Warm tan parchment, restrained fine ink and painterly shading consistent with image4, recognizable serious adult male independent of Lu Qian and Cai Jiu. Face readable at64px. No horse, full body, collage, other people, border, text, watermarks, glossy3D or photorealism.",
+      "references": [
+        "assets/portraits4.png",
+        "assets/anim/shi_wengong_idle.png",
+        "assets/anim/shi_wengong_walk.png",
+        "assets/characters/supporting_portraits_20260926/lu_qian.png"
+      ]
+    }
+  },
+  "framing_edit": {
+    "generator": "Built-in image_gen edit",
+    "key": "shi_wengong",
+    "edit_target_generation": "exec-1d8cde07-e2f1-4860-b886-711028569873",
+    "prompt": "Edit only the framing of this finished Shi Wengong square portrait. Preserve exactly the same face, helmet, dark bronze armor, red plume, burgundy cloak, spear and fine hand-painted parchment style. His red plume currently touches and is clipped by the top edge. Pull the entire bust back slightly (roughly 12 percent) and complete the red plume so ALL of it is fully visible with a clear warm parchment margin of at least 6 percent of image height above the highest plume tip. Keep face large and centered. Complete only the background and any necessary upper plume contour; do not redesign his clothing, expression, facial identity or weapon. Square canvas, no text, border or other characters.",
+    "input": {
+      "path": "qa/officer_portraits_20260927/sources/shi_wengong_initial.png",
+      "sha256": "3693edc574398ccb091bae35f8cd4f732763529572dff1edbee4842532b211db"
+    }
+  }
+}

@@ -1,3 +1,9 @@
+## 2026-09-27 蔡九与史文恭头像
+
+- `assets/characters/officer_portraits_20260927/`：两幅原生独立头像与导入配置。
+- `tools/contracts/officer_portraits_20260927/`：完整提示词、模型参考及生成链。
+- `docs/OFFICER_PORTRAITS_20260927.md`、`qa/officer_portraits_20260927/`：造型修订与真实界面验证。
+
 ## 2026-09-26 孙立与扈三娘头像校准
 
 - `assets/characters/mounted_portraits_20260926/`：两幅原生修订头像及 Godot 导入侧车。

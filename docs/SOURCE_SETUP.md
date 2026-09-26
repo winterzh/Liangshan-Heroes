@@ -1,3 +1,7 @@
+## 2026-09-27 官员与敌将头像复验
+
+蔡九、史文恭新增独立画像。运行 `python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外目录> --contract tools/contracts/officer_portraits_20260927 --ui --run`，沿用本机 Godot 配置和共享锁。两人并排图标为旧方向回退，不计入独立四向覆盖；正常启动方式不变。见 [校准说明](OFFICER_PORTRAITS_20260927.md)。
+
 ## 2026-09-26 骑马人物头像复验
 
 孙立、扈三娘头像已按现有四向模型修订，复验使用 `python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外目录> --contract tools/contracts/mounted_portraits_20260926 --ui --run`。新头像及已有 `.import` 会直接从清单纳入冻结，无需先暂存到 Git。首次导入生成侧车后，将其复制回生产资源目录并再跑完整复验；旧画像保留作为来源。

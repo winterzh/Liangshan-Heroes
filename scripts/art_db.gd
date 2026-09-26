@@ -563,6 +563,8 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	"cai_jiu": "res://assets/characters/officer_portraits_20260927/cai_jiu.png",
+	"shi_wengong": "res://assets/characters/officer_portraits_20260927/shi_wengong.png",
 	# aligned 批按实际在用模型校准服装/头饰；原先批次继续保留为来源。
 	"lu_junyi": "res://assets/characters/hero_portraits_commanders_20260926/lu_junyi.png",
 	"guan_sheng": "res://assets/characters/hero_portraits_aligned_20260926/guan_sheng.png",
