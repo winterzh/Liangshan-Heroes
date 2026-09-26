@@ -1,3 +1,8 @@
+## 2026-09-27 非人物图标路由
+
+- `tools/nonperson_icons_qa.gd`、`tools/run_nonperson_icons_qa.py`：修改前基线采集、完整路由对比、图鉴及当前战役 HUD 验证。
+- `docs/NONPERSON_ICONS_20260927.md`、`qa/nonperson_icons_20260927/`：素材复用范围、实际关卡调用与验证证据；生产图集没有复制或新增。
+
 ## 2026-09-27 蔡九与史文恭头像
 
 - `assets/characters/officer_portraits_20260927/`：两幅原生独立头像与导入配置。

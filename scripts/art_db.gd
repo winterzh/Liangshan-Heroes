@@ -360,12 +360,13 @@ func _atlas(tex: Texture2D, cell: Vector2i, grid: int, cache_key: String) -> Tex
 
 # 无专属美术的 key → 借用一张合适的现成图，免得 HUD 头像画成空白黄圈。
 #  • *_bound：被擒的英雄沿用本体脸  • 公人/战船：借同阵营官军立绘
-#  • 特殊道具建筑（集市/酒望/招牌/法场/帅旗/庄门/府衙）：世界内本就以「聚义厅」贴图渲染，头像同款兜底
+#  • 无基础素材的道具保留聚义厅兜底；战役专用变体先于此表解析。
+# 集市、法场、庄门已有独立建筑/地形格，使用自身 key，避免 UI 被旧占位覆盖。
 const ART_ALIAS := {
 	"lin_chong_bound": "lin_chong", "song_jiang_bound": "song_jiang", "dai_zong_bound": "dai_zong",
 	"gong_ren": "yu_hou",
-	"market": "hall", "tavern": "hall", "signboard": "hall", "scaffold": "hall",
-	"jiangtai": "hall", "zhu_gate": "hall", "dongchang_yamen": "hall",
+	"tavern": "hall", "signboard": "hall",
+	"jiangtai": "hall", "dongchang_yamen": "hall",
 }
 
 # 世界内走图别名：暂无专属逐帧走图的地方将领/兵种 → 借同型官军立绘渲染，

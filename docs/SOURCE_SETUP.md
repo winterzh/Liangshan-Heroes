@@ -1,3 +1,9 @@
+## 2026-09-27 非人物图标复验
+
+集市、法场、庄门的基础界面图标使用既有场景图集。复验：`python -X utf8 -B tools/run_nonperson_icons_qa.py --baseline-from qa/nonperson_icons_20260927/baseline --work-root <工程外目录> --run`。归档基线使用资源相对路径与哈希，可在另一台电脑的 checkout 重放；Godot 继续从本机配置解析。
+
+`--baseline` 用于在修改前源码采集基线，不应在已修正的版本上重新覆盖历史基线。可选 `--cache-from` 只接受本机同来源/同引擎且成功导入的私有批次，仍会重新导入。正常游戏启动方式不变。详见 [说明](NONPERSON_ICONS_20260927.md)。
+
 ## 2026-09-27 官员与敌将头像复验
 
 蔡九、史文恭新增独立画像。运行 `python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外目录> --contract tools/contracts/officer_portraits_20260927 --ui --run`，沿用本机 Godot 配置和共享锁。两人并排图标为旧方向回退，不计入独立四向覆盖；正常启动方式不变。见 [校准说明](OFFICER_PORTRAITS_20260927.md)。
