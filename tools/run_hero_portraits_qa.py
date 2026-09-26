@@ -10,7 +10,7 @@ import uuid
 import run_character_art_qa as common
 
 ROOT = Path(__file__).resolve().parents[1]
-CONTRACT = "tools/contracts/hero_portraits_20260926"
+CONTRACT = "tools/contracts/hero_portraits_aligned_20260926"
 SCRIPT = "tools/hero_portraits_qa.gd"
 
 
@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--work-root", required=True, type=Path)
     parser.add_argument("--contract", default=CONTRACT, help="Repository-relative portrait contract directory")
     parser.add_argument("--ui", action="store_true", help="Also check real battle HUD and campaign portrait identities")
+    parser.add_argument("--cache-from", type=Path, help="Private run with a successful import from this checkout and engine")
     args = parser.parse_args()
     shared, running = common.load_helpers(ROOT)
     engine = shared.resolve_godot(args.godot)
@@ -33,14 +34,21 @@ def main():
         common.relative_source(ROOT, row["path"])
         if common.sha(ROOT / row["path"]) != row["sha256"]:
             raise ValueError("Portrait source changed: " + row["path"])
-        if "identity_reference" in row:
-            ref = row["identity_reference"]
+        for ref_key in ("identity_reference", "edit_target"):
+            if ref_key not in row:
+                continue
+            ref = row[ref_key]
             common.relative_source(ROOT, ref["path"])
             if common.sha(ROOT / ref["path"]) != ref["sha256"]:
                 raise ValueError("Identity reference changed: " + ref["path"])
     for row in (manifest["style_reference"], manifest["prompts"]):
         if common.sha(ROOT / row["path"]) != row["sha256"]:
             raise ValueError("Provenance changed: " + row["path"])
+    for row in manifest.get("model_alignment", {}).values():
+        for ref in row["sources"] + row.get("world_files", []):
+            common.relative_source(ROOT, ref["path"])
+            if common.sha(ROOT / ref["path"]) != ref["sha256"]:
+                raise ValueError("Model reference changed: " + ref["path"])
     names = set(shared.sources()) | set(common.TOOLS) | {
         SCRIPT, "tools/run_hero_portraits_qa.py", "tools/run_character_art_qa.py",
         contract + "/manifest.json", contract + "/prompts.json",
@@ -74,6 +82,17 @@ def main():
             receipt["source_files"].append({"path": name, "sha256": hashlib.sha256(data).hexdigest()})
         profile = shared.create_private_profile(run, work / "profiles")
         env = common.private_environment(profile)
+        if args.cache_from:
+            old = args.cache_from.resolve()
+            if old.is_relative_to(ROOT):
+                raise ValueError("Import cache must come from an external private run")
+            old_receipt = json.loads((old / "evidence/receipt.json").read_text(encoding="utf-8"))
+            if old_receipt["source_root"] != str(ROOT) or old_receipt["godot_sha256"] != receipt["godot_sha256"]:
+                raise ValueError("Cache checkout or Godot differs")
+            if not any(step["case"] == "import" and step["passed"] for step in old_receipt["steps"]):
+                raise ValueError("Cache has no successful import")
+            shutil.copytree(old / "project/.godot/imported", project / ".godot/imported")
+            receipt["cache_from"] = str(old)
         common.process_step(engine, project, env, evidence, "import",
                             ["--headless", "--editor", "--import", "--quit"],
                             600, "gl_compatibility", running, receipt["steps"])

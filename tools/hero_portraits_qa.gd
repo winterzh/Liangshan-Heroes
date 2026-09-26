@@ -1,6 +1,6 @@
 extends SceneTree
 ## Run against frozen production inputs and a private user profile.
-const DEFAULT_MANIFEST := "res://tools/contracts/hero_portraits_20260926/manifest.json"
+const DEFAULT_MANIFEST := "res://tools/contracts/hero_portraits_aligned_20260926/manifest.json"
 var checks: Array = []
 var output := ""
 
@@ -56,33 +56,97 @@ func run() -> void:
 	bg.size = Vector2(1280, 720)
 	canvas.add_child(bg)
 	var index := 0
+	var column_width: float = 1280.0 / manifest.portraits.size()
 	for key in manifest.portraits:
 		var row: Dictionary = manifest.portraits[key]
 		var label := Label.new()
-		label.text = row.name + " / " + key
-		label.position = Vector2(index * 320 + 24, 12)
+		label.text = row.name + "\n" + key
+		label.add_theme_font_size_override("font_size", 16)
+		label.position = Vector2(index * column_width + 16, 12)
 		canvas.add_child(label)
-		var y := 48
-		for side in [256, 96, 64, 32]:
+		var y := 70
+		for side in [mini(256, int(column_width) - 32), 96, 64, 32]:
 			var box := TextureRect.new()
 			box.texture = art.ui_portrait_texture(key)
 			box.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			box.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			box.size = Vector2(side, side)
-			box.position = Vector2(index * 320 + 24, y)
+			box.position = Vector2(index * column_width + 16, y)
 			canvas.add_child(box)
 			var size_label := Label.new()
 			size_label.text = str(side) + " px"
-			size_label.position = Vector2(index * 320 + 24, y + side + 2)
+			size_label.position = Vector2(index * column_width + 16, y + side + 2)
 			canvas.add_child(size_label)
 			y += side + 42
 		index += 1
 	await snap("portrait_sizes")
 	canvas.queue_free()
 	await process_frame
+	if manifest.has("model_alignment"):
+		await model_alignment(manifest.model_alignment, art)
 	var passed := checks.all(func(row): return row.passed)
-	var report := {"passed": passed, "checks": checks, "scope": "Original PNG identity, production Art/HUD routes, actual codex and 256/96/64/32px engine rendering; no animation, combat or release acceptance."}
+	var report := {"passed": passed, "checks": checks, "scope": "Original PNG identity, production Art/HUD routes, actual codex and size previews; optional model reference bytes, actual sprite paths and honest directional coverage. Visual similarity is reviewed separately; no combat or release acceptance."}
 	var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "\t") + "\n")
 	file.close()
 	quit(0 if passed else 1)
+
+func model_alignment(rows: Dictionary, art) -> void:
+	var samples: Array = []
+	for key in rows:
+		var row: Dictionary = rows[key]
+		for source in row.sources + row.get("world_files", []):
+			check(FileAccess.get_sha256("res://" + source.path) == source.sha256, key + " model source bytes " + source.path)
+		var canvas := Control.new()
+		canvas.theme = UITheme.shared()
+		root.add_child(canvas)
+		var bg := ColorRect.new()
+		bg.color = Color("25271e")
+		bg.size = Vector2(1280, 720)
+		canvas.add_child(bg)
+		var title := Label.new()
+		title.text = row.name + " / " + key + " · 头像与实际造型对照"
+		title.position = Vector2(24, 24)
+		canvas.add_child(title)
+		var portrait := TextureRect.new()
+		portrait.texture = art.ui_portrait_texture(key)
+		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait.position = Vector2(24, 112)
+		portrait.size = Vector2(320, 320)
+		canvas.add_child(portrait)
+		var index := 0
+		for direction in ["se", "sw", "ne", "nw"]:
+			var frames: Array = art.unit_anim_frames(key, row.state, direction)
+			var exact: bool = art.unit_anim_uses_directional_source(key, row.state, direction)
+			check(not frames.is_empty(), key + " model available " + direction)
+			check(exact == row.directional, key + " honest directional coverage " + direction)
+			if not frames.is_empty():
+				var box := TextureRect.new()
+				box.texture = frames[0]
+				box.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				box.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				box.position = Vector2(370 + index * 224, 150)
+				box.size = Vector2(220, 220)
+				canvas.add_child(box)
+				var frame: Texture2D = frames[0]
+				var source_path: String = frame.atlas.resource_path if frame is AtlasTexture else frame.resource_path
+				check(row.sources.any(func(source): return "res://" + source.path == source_path), key + " actual source matches approved reference " + direction)
+				samples.append({"key": key, "state": row.state, "direction": direction, "independent_direction": exact, "source": source_path, "portrait": portrait.texture.resource_path})
+			var label := Label.new()
+			label.text = direction.to_upper() + " · " + ("独立四向" if exact else "旧图回退")
+			label.position = Vector2(380 + index * 224, 392)
+			canvas.add_child(label)
+			index += 1
+		var notes := Label.new()
+		notes.text = row.review + "\n" + row.limit
+		notes.position = Vector2(24, 476)
+		notes.size = Vector2(1210, 200)
+		notes.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		canvas.add_child(notes)
+		await snap(key + "_model_alignment")
+		canvas.queue_free()
+		await process_frame
+	var file := FileAccess.open(output.path_join("model_alignment.json"), FileAccess.WRITE)
+	file.store_string(JSON.stringify(samples, "\t") + "\n")
+	file.close()

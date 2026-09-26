@@ -86,7 +86,7 @@ func run() -> void:
 		b._set_selection([])
 		unit.queue_free()
 		await process_frame
-	for key in ["lu_junyi", "guan_sheng", "qin_ming", "hu_yanzhuo"]:
+	for key in NEW_HEROES:
 		var unit = b.spawn_at(key, 0, Vector2i(20, 20))
 		b._set_selection([unit])
 		b.hud._refresh_panel()

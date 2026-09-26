@@ -1,3 +1,9 @@
+## 2026-09-26 头像与模型造型校准
+
+- `assets/characters/hero_portraits_aligned_20260926/`：六人修订头像及导入侧车。
+- `tools/contracts/hero_portraits_aligned_20260926/`：编辑提示词、原头像、实际模型引用、八人方向覆盖与哈希清单。
+- `docs/HERO_PORTRAIT_MODEL_ALIGNMENT_20260926.md`、`qa/hero_portraits_aligned_20260926/`：造型差异、真实覆盖、并排图与验证记录。
+
 ## 2026-09-26 将领头像与战斗/图鉴统一
 
 - `assets/characters/hero_portraits_commanders_20260926/`：卢俊义、关胜、秦明、呼延灼四幅原生 PNG 与导入侧车。
