@@ -25,6 +25,12 @@ func run() -> void:
 	root.size = Vector2i(1280, 720)
 	root.content_scale_size = Vector2i(1280, 720)
 	var art = root.get_node("Art")
+	var heroes: Array = NEW_HEROES.duplicate()
+	var manifest_path := OS.get_environment("HERO_PORTRAITS_MANIFEST")
+	if not manifest_path.is_empty():
+		var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+		for key in manifest.portraits:
+			if not key in heroes: heroes.append(key)
 	var campaign = root.get_node("Campaign")
 	for mode in ["skirmish", "skirmish_ai", "arena", "scenario", "custom_defense", "ai_friendly", "scale_on"]:
 		campaign.set(mode, false)
@@ -44,7 +50,7 @@ func run() -> void:
 	root.add_child(codex)
 	await process_frame
 	var portraits := {}
-	for key in NEW_HEROES:
+	for key in heroes:
 		codex._select(key)
 		var tex: Texture2D = art.ui_portrait_texture(key)
 		check(tex != null and codex._port.frames.size() == 1 and codex._port.frames[0] == tex, key + " real codex uses common portrait")
@@ -52,7 +58,7 @@ func run() -> void:
 	var distinct: Array = []
 	for value in portraits.values():
 		if not value in distinct: distinct.append(value)
-	check(distinct.size() == NEW_HEROES.size(), "eight heroes have eight different source images")
+	check(distinct.size() == heroes.size(), "all reviewed heroes have distinct source images")
 	codex.queue_free()
 	await process_frame
 	var pairs := CA.PORTRAIT_OWNERS.duplicate()
@@ -86,7 +92,7 @@ func run() -> void:
 		b._set_selection([])
 		unit.queue_free()
 		await process_frame
-	for key in NEW_HEROES:
+	for key in heroes:
 		var unit = b.spawn_at(key, 0, Vector2i(20, 20))
 		b._set_selection([unit])
 		b.hud._refresh_panel()

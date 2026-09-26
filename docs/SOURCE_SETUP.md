@@ -1,3 +1,11 @@
+## 2026-09-26 配角头像与寨门图标
+
+陆谦、祝朝奉的半身头像已按现有四向模型补齐，路径为 `assets/characters/supporting_portraits_20260926/`。头像 QA：`python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外目录> --contract tools/contracts/supporting_portraits_20260926 --ui --run`。`--ui` 会加入指定清单人物，并保留原八名核心人物回归。
+
+寨门头像复验：`python -X utf8 -B tools/run_stockade_icon_qa.py --work-root <工程外目录> --run`。可用 `--generate` 仅输出原生绘制候选到私有证据目录；该模式不自动覆盖生产图标。修改寨门绘制后重新生成、目检、复制产物与导入侧车，再执行完整复验。
+
+全量美术目标仍在进行中，当前缺项与批次见 [完善记录](ART_COMPLETION_20260926.md)。以上工具沿用本机 Godot 配置、共享锁、新私有用户目录和可选导入缓存；正常启动方式不变，未发布 Steam/Android 更新。
+
 ## 2026-09-26 头像按实际模型校准
 
 花荣、杨志、李逵、关胜、秦明、呼延灼现使用 `hero_portraits_aligned_20260926` 修订图；吴用、卢俊义保留已有头像。更新头像时以当前实际渲染源为服装/头饰参考，并保留每人的独立面容。复验参数：`--contract tools/contracts/hero_portraits_aligned_20260926 --ui`，其余沿用下方私有 QA 命令。

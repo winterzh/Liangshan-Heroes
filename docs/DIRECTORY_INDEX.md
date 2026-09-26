@@ -1,3 +1,12 @@
+## 2026-09-26 全量美术盘点与配角头像
+
+- `docs/ART_COMPLETION_20260926.md`、`qa/art_inventory_20260926/`：全库基线、82 张截图与逐定义缺项；持续更新批次状态，不将基线计数当完成率。
+- `tools/summarize_art_inventory.py`：从带来源收据的通过报告派生缺项 JSON。
+- `assets/characters/supporting_portraits_20260926/`、`tools/contracts/supporting_portraits_20260926/`：陆谦/祝朝奉原生半身头像、提示词及四向引用。
+- `assets/ui/stockade_gate_20260926.png`、`tools/contracts/stockade_icon_20260926/`：原生寨门绘制生成的透明图标及来源。
+- `tools/run_stockade_icon_qa.py`、`tools/stockade_icon_qa.gd`：私有源冻结、图标生成与实际 HUD 验证。
+- `qa/supporting_portraits_20260926/`、`qa/stockade_icon_20260926/`：本批图鉴/HUD/四向对照、透明及来源验证。
+
 ## 2026-09-26 头像与模型造型校准
 
 - `assets/characters/hero_portraits_aligned_20260926/`：六人修订头像及导入侧车。

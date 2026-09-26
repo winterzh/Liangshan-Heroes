@@ -409,6 +409,8 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 		var variant_tex := _campaign_texture(CampaignArt.still_path(variant))
 		if variant_tex != null: return variant_tex
 	if environment_buildings.has(key): return terrain_texture(environment_buildings[key])
+	# The RTS gate is drawn by LiangshanEntrance; this render is for UI only.
+	if key == "stockade_gate": return _try_load("res://assets/ui/stockade_gate_20260926.png")
 	var rk: String = ART_ALIAS.get(key, key)
 	var t := portrait_texture(rk)
 	if t == null: t = unit_texture(rk)
@@ -572,10 +574,10 @@ const STANDALONE_PORTRAITS := {
 	"li_kui": "res://assets/characters/hero_portraits_aligned_20260926/li_kui.png",
 	"dong_chao": "res://assets/characters/art_full_20260915/dong_chao.png",
 	"xue_ba": "res://assets/characters/art_full_20260915/xue_ba.png",
-	# 陆谦头像与本批四向身体原图同源，固定裁剪自SE格，避免旧灰底头像与新身体风格割裂。
-	"lu_qian": "res://assets/characters/art_full_20260915/lu_qian.png",
-	# 祝朝奉使用同源SE格裁出的宽体乡绅头像，与陆谦保持身份和体态差异。
-	"zhu_zhaofeng": "res://assets/characters/art_full_20260915/zhu_zhaofeng.png",
+	# 陆谦半身头像参考已完成四向：瘦脸短须、蓝灰官袍与帽上铜饰。
+	"lu_qian": "res://assets/characters/supporting_portraits_20260926/lu_qian.png",
+	# 祝朝奉保留四向中的年长宽脸、灰白胡须和褐袍，与陆谦保持身份差异。
+	"zhu_zhaofeng": "res://assets/characters/supporting_portraits_20260926/zhu_zhaofeng.png",
 	"guan_zhanzi": "res://assets/characters/guan_zhanzi_direction4_20260915/portrait.png",
 	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
 	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",

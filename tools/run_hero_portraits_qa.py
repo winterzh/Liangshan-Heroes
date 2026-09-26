@@ -105,7 +105,8 @@ def main():
             raise RuntimeError("Portrait route check failed")
         receipt["checks"] = len(report["checks"])
         if args.ui:
-            common.process_step(engine, project, env | {"HERO_PORTRAITS_OUT": str(evidence)}, evidence,
+            common.process_step(engine, project, env | {"HERO_PORTRAITS_OUT": str(evidence),
+                                "HERO_PORTRAITS_MANIFEST": "res://" + contract + "/manifest.json"}, evidence,
                                 "ui_portraits", ["--position", "20000,20000", "--script", "res://tools/ui_portraits_qa.gd"],
                                 180, "gl_compatibility", running, receipt["steps"])
             ui_report = json.loads((evidence / "ui_report.json").read_text(encoding="utf-8"))
