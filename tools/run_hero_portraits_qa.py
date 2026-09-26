@@ -55,6 +55,12 @@ def main():
     }
     if args.ui:
         names.add("tools/ui_portraits_qa.gd")
+    # Newly created production portraits must be frozen before Git staging too.
+    for row in manifest["portraits"].values():
+        names.add(row["path"])
+        sidecar = row["path"] + ".import"
+        if (ROOT / sidecar).is_file():
+            names.add(sidecar)
     if not args.run:
         print(json.dumps({"preflight": True, "source_files": len(names),
                           "lock_busy": shared.LOCK.exists(), "engine_busy": running()}))

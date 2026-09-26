@@ -1,3 +1,9 @@
+## 2026-09-26 孙立与扈三娘头像校准
+
+- `assets/characters/mounted_portraits_20260926/`：两幅原生修订头像及 Godot 导入侧车。
+- `tools/contracts/mounted_portraits_20260926/`：完整编辑提示词、模型参考与输出哈希。
+- `docs/MOUNTED_PORTRAITS_20260926.md`、`qa/mounted_portraits_20260926/`：差异、四向对照及真实 UI 验证。
+
 ## 2026-09-26 旧头像区域修正
 
 - `scripts/portrait_atlas_regions.gd`：81 个旧头像的原图区域表。

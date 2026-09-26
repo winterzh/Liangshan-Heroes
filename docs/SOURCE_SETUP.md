@@ -1,3 +1,9 @@
+## 2026-09-26 骑马人物头像复验
+
+孙立、扈三娘头像已按现有四向模型修订，复验使用 `python -X utf8 -B tools/run_hero_portraits_qa.py --work-root <工程外目录> --contract tools/contracts/mounted_portraits_20260926 --ui --run`。新头像及已有 `.import` 会直接从清单纳入冻结，无需先暂存到 Git。首次导入生成侧车后，将其复制回生产资源目录并再跑完整复验；旧画像保留作为来源。
+
+模型和启动方式不变。造型差异与来源见 [校准说明](MOUNTED_PORTRAITS_20260926.md)。
+
 ## 2026-09-26 旧图集裁切复验
 
 旧头像不再全部按三等分取图；81 个在用区域由 `scripts/portrait_atlas_regions.gd` 管理，独立头像仍优先。来源图更新时同时维护区域表、来源哈希并重新目检，不能沿用旧坐标直接验收。

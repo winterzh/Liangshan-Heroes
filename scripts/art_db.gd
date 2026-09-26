@@ -582,8 +582,8 @@ const STANDALONE_PORTRAITS := {
 	"guan_zhanzi": "res://assets/characters/guan_zhanzi_direction4_20260915/portrait.png",
 	"song_jiang": "res://assets/characters/codex_portraits_20260913/song_jiang.png",
 	"lin_chong": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
-	"sun_li": "res://assets/characters/codex_portraits_20260913/sun_li.png",
-	"hu_sanniang": "res://assets/characters/codex_portraits_20260913/hu_sanniang.png",
+	"sun_li": "res://assets/characters/mounted_portraits_20260926/sun_li.png",
+	"hu_sanniang": "res://assets/characters/mounted_portraits_20260926/hu_sanniang.png",
 	# 四人同源北宋工笔厚涂头像：独立图优先于旧灰底图集，保持身份差异与图鉴阅读一致。
 	"chao_gai": "res://assets/characters/art_full_20260916/chao_gai_portrait_20260916.png",
 	"lu_zhishen": "res://assets/characters/art_full_20260916/lu_zhishen_portrait_20260916.png",
