@@ -1,0 +1,58 @@
+name: 问题反馈
+description: 报告可复现的游戏或工具问题
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请提供复现步骤和运行环境。不要附上玩家存档、凭据、私钥或完整安装包。
+  - type: input
+    id: version
+    attributes:
+      label: 游戏版本或提交号
+      description: Steam Build、测试标记或 Git commit
+      placeholder: "例如：Build 25498721"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 平台
+      options:
+        - Windows
+        - macOS
+        - Android
+        - Godot 编辑器 / 源码运行
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 按顺序描述操作，并尽量提供最短复现流程
+      placeholder: |
+        1. 打开……
+        2. 选择……
+        3. 观察……
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 日志或截图
+      description: 可附精简日志和必要截图；请先检查并遮挡个人信息
+    validations:
+      required: false

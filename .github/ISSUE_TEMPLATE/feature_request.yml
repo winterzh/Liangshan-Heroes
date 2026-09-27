@@ -1,0 +1,38 @@
+name: 功能建议
+description: 提出玩法、工具或文档改进建议
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 要解决的问题
+      description: 描述当前遇到的限制或需求
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议方案
+      description: 说明期望的行为和使用场景
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 其他方案
+      description: 可补充考虑过的替代方案或影响
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: 相关范围
+      options:
+        - 游戏玩法
+        - 编辑器 / 工具
+        - 本地化 / 可访问性
+        - 构建 / 更新
+        - 文档
+        - 其他
+    validations:
+      required: true
