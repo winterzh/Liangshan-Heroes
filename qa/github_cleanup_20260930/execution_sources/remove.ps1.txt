@@ -1,0 +1,24 @@
+$ErrorActionPreference = 'Stop'
+$repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
+$manifest = Get-Content -LiteralPath (Join-Path $repoRoot 'qa/github_cleanup_20260930/archive_manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+if ((git -C $repoRoot rev-parse HEAD) -ne $manifest.source_commit) { throw 'Source commit changed' }
+if (git -C $repoRoot diff --name-only) { throw 'Tracked worktree has changes' }
+if ((Get-FileHash -LiteralPath $manifest.local_archive.path -Algorithm SHA256).Hash.ToLowerInvariant() -ne $manifest.local_archive.sha256) { throw 'Archive changed' }
+$targets = @()
+foreach ($row in $manifest.files) {
+ if ($row.path -notmatch '^qa/level3_world_restore_20260909/20260911_[0-9]{6}_[0-9a-f]{8}/source_snapshot/.+') { throw 'Unexpected payload path' }
+ $absolute = [IO.Path]::GetFullPath((Join-Path $repoRoot $row.path))
+ if (-not $absolute.StartsWith($repoRoot + '\qa\level3_world_restore_20260909\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Outside intended QA root' }
+ $item = Get-Item -LiteralPath $absolute -Force
+ if ($item.PSIsContainer -or $item.Length -ne $row.local_bytes) { throw 'Unexpected file type/size' }
+ $cursor = $item
+ while ($null -ne $cursor) {
+  if ($cursor.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Reparse path refused' }
+  $cursor = if ($cursor -is [IO.DirectoryInfo]) { $cursor.Parent } else { $cursor.Directory }
+ }
+ if ((Get-FileHash -LiteralPath $absolute -Algorithm SHA256).Hash.ToLowerInvariant() -ne $row.local_sha256) { throw 'Local payload changed' }
+ $targets += $absolute
+}
+Remove-Item -LiteralPath $targets -Force
+foreach ($path in $targets) { if (Test-Path -LiteralPath $path) { throw 'Payload removal incomplete' } }
+[ordered]@{ completed = $true; files = $targets.Count; source_commit = $manifest.source_commit; archive_verified = $true } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $repoRoot 'qa/github_cleanup_20260930/deletion_receipt.json') -Encoding UTF8
