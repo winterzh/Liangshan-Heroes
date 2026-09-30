@@ -1,0 +1,122 @@
+import concurrent.futures
+import gzip
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import zipfile
+
+ROOT = Path(__file__).resolve().parents[2]
+OUT = ROOT / 'qa/storage_cleanup_20260930'
+OUT.mkdir(exist_ok=True)
+ARCHIVE_DIR = ROOT.parent / '归档'
+ARCHIVE = ARCHIVE_DIR / '水浒_未提交旧测试记录_20260930.zip'
+KEEP = [
+    ROOT / '.godot/imported',
+    ROOT / '.godot/steam_candidates/20260924_135637_0ef1fc1a',
+    ROOT / '.godot/steam_integration_qa/20260924_135529_b4b6077c',
+    ROOT / '.godot/stabilization_performance/20260924T051636Z_6c74d4a3',
+]
+OLD = [
+    'qa/continue_flow_20260909/20260924_104107_ed14e9bd',
+    'qa/continue_flow_20260909/20260924_104728_334492ef',
+    'qa/stockade_boundary_20260924/20260924_120022_before_31dcd01f',
+    'qa/workshop_defense_public_20260924/cover_before_victory_capture.jpg',
+]
+
+def safe(path):
+    path = Path(path)
+    for part in (path, *path.parents):
+        if part.exists():
+            assert not part.lstat().st_file_attributes & 0x400, str(part)
+    return path
+
+def files(path):
+    safe(path)
+    if path.is_file():
+        return [path]
+    found = []
+    for base, dirs, names in os.walk(path):
+        for name in dirs + names:
+            safe(Path(base) / name)
+        found.extend(Path(base) / name for name in names)
+    return sorted(found)
+
+def digest(path):
+    with path.open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+def entry(path):
+    return {'path': path.relative_to(ROOT).as_posix(), 'bytes': path.stat().st_size, 'sha256': digest(path)}
+
+def save(name, data):
+    (OUT / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+tracked = set(filter(None, subprocess.check_output(['git','ls-files','-z'], cwd=ROOT).decode('utf-8').split('\0')))
+baseline = {p.name: entry(p) for p in files(KEEP[0])}
+inventory = json.loads((ROOT / 'scratchpad/cleanup_20260930/inventory.json').read_text(encoding='utf-8'))
+targets, retained = [], []
+for raw in inventory['cache_roots']:
+    path = safe(Path(raw))
+    if path.name != 'imported' or any(path == keep or keep in path.parents for keep in KEEP):
+        continue
+    assert path.parent.name == '.godot' and path.parent.parent.name == 'project'
+    assert path.is_relative_to(ROOT / '.godot')
+    rows, mismatches = [], []
+    for p in files(path):
+        assert p.parent == path
+        assert p.relative_to(ROOT).as_posix() not in tracked
+        record = entry(p)
+        reference = baseline.get(p.name)
+        if not reference or (record['bytes'], record['sha256']) != (reference['bytes'], reference['sha256']):
+            mismatches.append(record['path'])
+        else:
+            record['retained_copy'] = reference['path']
+            rows.append(record)
+    if mismatches:
+        retained.append({'path': path.relative_to(ROOT).as_posix(), 'mismatches': mismatches})
+    if rows:
+        targets.append({'path': path.relative_to(ROOT).as_posix(), 'kind': 'duplicate_import_cache', 'files': rows, 'retain_files': mismatches})
+    print('audited', path.relative_to(ROOT), len(rows), len(mismatches), flush=True)
+
+archive_rows = []
+for relative in OLD:
+    for p in files(ROOT / relative):
+        record = entry(p)
+        assert record['path'] not in tracked
+        archive_rows.append(record)
+assert not ARCHIVE.exists(), 'Do not overwrite existing archive'
+with zipfile.ZipFile(ARCHIVE, 'x', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+    for record in archive_rows:
+        z.write(ROOT / record['path'], record['path'])
+    z.writestr('RESTORE.json', json.dumps({'original_root': str(ROOT), 'files': archive_rows}, ensure_ascii=False, indent=2))
+with zipfile.ZipFile(ARCHIVE) as z:
+    assert z.testzip() is None
+    for record in archive_rows:
+        with z.open(record['path']) as stream:
+            assert hashlib.file_digest(stream, 'sha256').hexdigest() == record['sha256']
+for relative in OLD:
+    targets.append({'path':relative,'kind':'verified_archive','files':[r for r in archive_rows if r['path']==relative or r['path'].startswith(relative + '/')]})
+
+protected = {ROOT / p for p in tracked}
+for keep in KEEP:
+    protected.update(files(keep))
+protected.update(files(ROOT / 'build'))
+protected.add(ROOT / 'godot.local.txt')
+protected.add(ROOT / 'assets/ui/items/health_potion.svg.import')
+print('hashing protected',len(protected),flush=True)
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    protected_rows = list(pool.map(entry, sorted(protected)))
+with gzip.open(OUT / 'protected_before.json.gz', 'wt', encoding='utf-8') as f:
+    json.dump(protected_rows, f, ensure_ascii=False)
+plan = {
+    'root':str(ROOT), 'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+    'free_bytes_before':shutil.disk_usage(ROOT).free, 'targets':targets,
+    'retained_cache_mismatches':retained, 'kept_latest':[str(p.relative_to(ROOT)) for p in KEEP],
+    'archive':{'path':str(ARCHIVE),'bytes':ARCHIVE.stat().st_size,'sha256':digest(ARCHIVE),'files':len(archive_rows)},
+    'protected':{'files':len(protected_rows),'bytes':sum(r['bytes'] for r in protected_rows),'manifest_sha256':digest(OUT/'protected_before.json.gz')},
+}
+save('plan.json', plan)
+print(json.dumps({'targets':len(targets),'delete_bytes':sum(r['bytes'] for t in targets for r in t['files']),'retained_mismatch_roots':len(retained),'archive':plan['archive'],'protected':plan['protected']},ensure_ascii=False),flush=True)
