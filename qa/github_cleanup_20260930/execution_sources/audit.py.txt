@@ -1,0 +1,54 @@
+import collections
+import hashlib
+import json
+import re
+import subprocess
+from pathlib import Path
+
+ROOT=Path(__file__).resolve().parents[2]
+OUT=ROOT/'scratchpad/github_cleanup_20260930'
+GROUPS=['qa/level3_world_restore_20260909','qa/continue_flow_20260909','qa/level3_scenery_20260909']
+HEAD=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+rows=[]
+for raw in subprocess.check_output(['git','ls-tree','-r','-l','-z',HEAD],cwd=ROOT).split(b'\0'):
+    if not raw:continue
+    meta,path=raw.split(b'\t'); mode,kind,oid,size=meta.decode().split()
+    if kind=='blob':rows.append({'path':path.decode(),'oid':oid,'bytes':int(size)})
+batches={}
+for row in rows:
+    for group in GROUPS:
+        if row['path'].startswith(group+'/'):
+            parts=row['path'].split('/')
+            if re.fullmatch(r'\d{8}_\d{6}_[0-9a-f]{8}',parts[2]):
+                key='/'.join(parts[:3]); batches.setdefault(key,{'name':parts[2],'rows':[],'references':set()})['rows'].append(row)
+by_name={v['name']:k for k,v in batches.items()}
+pattern=re.compile('|'.join(map(re.escape,by_name)))
+extensions={'.gd','.py','.ps1','.md','.json','.jsonl','.txt','.log','.tscn','.tres','.cfg','.toml','.yml','.yaml'}
+scanned=0
+for row in rows:
+    path=row['path']
+    if Path(path).suffix.lower() not in extensions:continue
+    text=(ROOT/path).read_text(encoding='utf-8-sig',errors='replace'); scanned+=1
+    for name in set(pattern.findall(text)):
+        key=by_name[name]
+        if not path.startswith(key+'/'): batches[key]['references'].add(path)
+for group in GROUPS:
+    latest=max(k for k in batches if k.startswith(group+'/'))
+    for key,batch in batches.items():
+        if not key.startswith(group+'/'):continue
+        p=ROOT/key/'receipt.json'
+        receipt=json.loads(p.read_text(encoding='utf-8-sig')) if p.is_file() else {}
+        reasons=[]
+        if key==latest:reasons.append('latest_batch')
+        if receipt.get('acceptance_complete') is True:reasons.append('accepted_full_batch')
+        if receipt.get('complete') is True and 'acceptance_complete' not in receipt:reasons.append('completed_legacy_batch')
+        if batch['references']:reasons.append('referenced_outside_batch')
+        batch['keep_reasons']=reasons
+        batch['complete']=receipt.get('complete')
+        batch['acceptance_complete']=receipt.get('acceptance_complete')
+        batch['references']=sorted(batch['references'])
+        batch['payload']=[row for row in batch['rows'] if '/source_snapshot/' in row['path'] or Path(row['path']).suffix.lower() in ('.png','.jpg','.webp')]
+candidates={k:v for k,v in batches.items() if not v['keep_reasons'] and v['payload']}
+plan={'head':HEAD,'scanned_text_files':scanned,'batches':batches,'candidates':list(candidates),'files':[r for b in candidates.values() for r in b['payload']]}
+(OUT/'audit.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf-8')
+print(json.dumps({'batches':len(batches),'candidates':len(candidates),'files':len(plan['files']),'bytes':sum(r['bytes'] for r in plan['files']),'text_files_scanned':scanned,'selected':[{'path':k,'complete':b['complete'],'acceptance_complete':b['acceptance_complete'],'files':len(b['payload']),'bytes':sum(r['bytes'] for r in b['payload'])} for k,b in candidates.items()]},ensure_ascii=False,indent=2))

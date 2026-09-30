@@ -1,0 +1,56 @@
+import concurrent.futures
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import zipfile
+
+ROOT=Path(__file__).resolve().parents[2]
+OUT=ROOT/'qa/github_cleanup_20260930'
+OUT.mkdir(exist_ok=True)
+audit=json.loads((Path(__file__).parent/'audit.json').read_text(encoding='utf-8'))
+def sha(p):
+    with p.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+def save(name,data):
+    (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+rows=[]
+blob_process=subprocess.Popen(['git','cat-file','--batch'],cwd=ROOT,stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+payloads={}
+for r in audit['files']:
+    p=ROOT/r['path']
+    local=p.read_bytes()
+    blob_process.stdin.write((r['oid']+'\n').encode());blob_process.stdin.flush()
+    header=blob_process.stdout.readline().decode().strip().split()
+    assert header==[r['oid'],'blob',str(r['bytes'])]
+    raw=blob_process.stdout.read(r['bytes']);assert blob_process.stdout.read(1)==b'\n'
+    assert len(raw)==r['bytes']
+    assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==r['oid']
+    payloads[r['path']]=raw
+    rows.append({'path':r['path'],'bytes':r['bytes'],'git_blob':r['oid'],'sha256':hashlib.sha256(raw).hexdigest(),'local_bytes':len(local),'local_sha256':hashlib.sha256(local).hexdigest()})
+blob_process.stdin.close();assert blob_process.wait()==0;blob_process.stdout.close()
+assert not subprocess.check_output(['git','diff','--name-only'],cwd=ROOT).strip(), 'Tracked edits exist'
+archive=ROOT.parent/'归档/水浒_GitHub中间QA源码_20260930.zip'
+assert not archive.exists()
+manifest={'source_commit':audit['head'],'batches':audit['candidates'],'files':rows}
+with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+    for r in rows:z.writestr(r['path'],payloads[r['path']])
+    z.writestr('RESTORE.json',json.dumps(manifest,ensure_ascii=False,indent=2))
+with zipfile.ZipFile(archive) as z:
+    assert z.testzip() is None
+    for r in rows:
+        with z.open(r['path']) as f:assert hashlib.file_digest(f,'sha256').hexdigest()==r['sha256']
+manifest['local_archive']={'path':str(archive),'bytes':archive.stat().st_size,'sha256':sha(archive)}
+save('archive_manifest.json',manifest)
+save('selection.json',{'source_commit':audit['head'],'scanned_text_files':audit['scanned_text_files'],'batches':{k:{'complete':v['complete'],'acceptance_complete':v['acceptance_complete'],'keep_reasons':v['keep_reasons'],'references':v['references'],'selected':k in audit['candidates']} for k,v in audit['batches'].items()}})
+removed={r['path'] for r in rows}
+names=subprocess.check_output(['git','ls-files','-z'],cwd=ROOT).decode().split('\0')
+def record(name):
+    p=ROOT/name
+    return {'path':name,'bytes':p.stat().st_size,'sha256':sha(p)}
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    protected=list(pool.map(record,[p for p in names if p and p not in removed]))
+with gzip.open(OUT/'protected_before.json.gz','wt',encoding='utf-8') as f:json.dump(protected,f,ensure_ascii=False)
+save('preflight.json',{'archive_verified':True,'files':len(rows),'bytes':sum(r['bytes'] for r in rows),'protected_files':len(protected),'protected_bytes':sum(r['bytes'] for r in protected),'local_archive':manifest['local_archive']})
+print(json.dumps({'files':len(rows),'bytes':sum(r['bytes'] for r in rows),'protected':len(protected),'archive':manifest['local_archive']},ensure_ascii=False))

@@ -1,0 +1,120 @@
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import shutil
+
+ROOT=Path(__file__).resolve().parents[2]
+OUT=ROOT/'qa/storage_cleanup_20260930'
+result=json.loads((OUT/'verification.json').read_text(encoding='utf-8'))
+plan=json.loads((OUT/'plan.json').read_text(encoding='utf-8'))
+assert result['passed'] and not result['tracked_status']
+payload=(OUT/'plan.json').read_bytes()
+with gzip.open(OUT/'plan.json.gz','wb',compresslevel=9) as f:f.write(payload)
+with gzip.open(OUT/'plan.json.gz','rb') as f:assert f.read()==payload
+sources=OUT/'execution_sources'
+sources.mkdir(exist_ok=True)
+for name in ('prepare.py','execute.ps1','verify.py','closeout.py'):
+    shutil.copyfile(Path(__file__).parent/name,sources/(name+'.txt'))
+inventory=json.loads((Path(__file__).parent/'inventory.json').read_text(encoding='utf-8'))
+inventory_bytes=(Path(__file__).parent/'inventory.json').read_bytes()
+with gzip.open(OUT/'inventory_original.json.gz','wb',compresslevel=9) as f:f.write(inventory_bytes)
+with gzip.open(OUT/'inventory_original.json.gz','rb') as f:assert f.read()==inventory_bytes
+summary={k:inventory[k] for k in ('root','files','groups','cache_roots','disk_free')}
+summary['skipped_initial_inventory_files']=len(inventory['skipped'])
+summary['scope_note']='Initial broad scan skipped 274 long shader-cache paths under old marketing recordings. Those paths were excluded from cleanup. The explicit deletion and protected-file manifests are complete for their scoped paths.'
+(OUT/'inventory_summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+archive=Path(plan['archive']['path'])
+restore=f'''# 2026-09-30 旧测试记录恢复说明
+
+归档：`{archive.name}`，{plan['archive']['bytes']} 字节。
+SHA-256：`{plan['archive']['sha256']}`。
+
+包含 128 个未跟踪文件：两份 2026-09-24 续玩中间测试批、围栏修复前测试记录、一张工坊旧封面备份。当前 Git 跟踪内容没有引用这些批次名称。原文件总计 12,434,471 字节。
+
+恢复时先把 ZIP 解压到新的临时目录。读取 `RESTORE.json`，逐文件校验大小及 SHA-256；其中路径相对于 `D:/AI项目/水浒/开发工程`。核对后只复制需要的文件回原位置，不覆盖后续修改。CRC 完整性和全部载荷 SHA 已在删除前及删除后分别核验。
+
+重复导入缓存不在此归档中。其逐文件保留副本位于主工程 `.godot/imported`，映射见 `qa/storage_cleanup_20260930/plan.json.gz`。复查旧测试工程前，使用原 Godot 版本重新导入对应 `project.godot`；它们的源码、资源、日志、存档与导出包均保留。
+'''
+(archive.parent/'水浒_未提交旧测试记录_20260930_恢复说明.md').write_text(restore,encoding='utf-8')
+(OUT/'RESTORE.md').write_text(restore,encoding='utf-8')
+text=f'''# 2026-09-30 本地冗余清理
+
+用户授权“本地冗余清理一下”。基线提交 `{plan['head']}`，工作目录 `D:/AI项目/水浒/开发工程`。仅操作明确白名单中的重复缓存及可恢复旧记录；不修改游戏实现、素材或 Steam/Android 发布状态。
+
+| 实际操作 | 根数 | 文件数 | 原文件字节 |
+| --- | ---: | ---: | ---: |
+| 删除与保留主缓存 SHA-256 一致的旧导入文件 | 40 | 108558 | 14626231201 |
+| 归档核验后移除未提交旧 QA 原件 | 4 | 128 | 12434471 |
+| 合计 | 44 | 108686 | 14638665672 |
+
+归档新增 6,453,593 字节，扣除归档后净减少 **14,632,212,079 字节，约 13.63 GiB**，尚未扣除本轮少量审计清单和文档。磁盘空闲值另见 [后验](verification.json)，并不等于本次释放量，期间其他程序也可能写磁盘。
+
+## 缓存判定与保留
+
+只处理 `.godot/steam_candidates`、`.godot/steam_integration_qa`、`.godot/stabilization_performance` 中旧私有 `project/.godot/imported` 的重复文件。每个文件在规划和删除前分别比较大小与 SHA-256，并记录主缓存中的保留副本。不同的 **221 个缓存文件、13,283,273 字节**保留原处；未把旧目录整体视为垃圾。
+
+保留主导入缓存，以及最新候选 `20260924_135637_0ef1fc1a`、集成 QA `20260924_135529_b4b6077c`、性能批 `20260924T051636Z_6c74d4a3` 的完整目录。所有旧批源码、素材、原日志/测试存档和发布 ZIP/EXE 仍在。Git 对象库、旧临时包、历史归档、其他项目和个人存档未清理。生产资源的未提交 `health_potion.svg.import` 保留。
+
+老缓存目录可能只剩不重复文件，重新打开旧工程时应先重新导入；不能把它们当作已完成导入的工程直接跳过导入运行。
+
+## 旧测试归档
+
+归档路径：`{archive.as_posix()}`。两份续玩中间批、修复前围栏 QA 和旧封面备份共 128 文件，Git 跟踪内容中未发现其批次/文件名引用。ZIP 完整性检查与全载荷 SHA-256 在删除前后均通过；恢复方法见 [RESTORE.md](RESTORE.md)。压缩包仅保留本机，GitHub 同步清单、收据与恢复说明。
+
+## 保护复核
+
+清理后 **{result['protected_files']} 个受保护文件、{result['protected_bytes']} 字节**，大小与 SHA-256 全部一致，缺失/变化 0。覆盖原 Git 跟踪文件、主缓存、三类最新完整批、现有 build、本机 Godot 配置、生产导入侧车和上述不同缓存。实际删除路径全部不存在，128 个归档载荷再次核验成功。后验先于本轮文档变更，原源码提交仍为 `{plan['head']}`。
+
+初步全目录盘点的 274 条长路径着色器缓存无法由该普通路径扫描读取，位于旧营销录像的隔离用户目录，未进入任何删除目标；不宣称扫描了这些路径。删除目标和受保护清单均独立完整校验。
+
+本轮为文件清理，未重新启动游戏、导入主工程或运行玩法/性能测试。文件完整性通过不替代游戏功能验收。
+
+## 证据
+
+- [plan.json.gz](plan.json.gz)：精确文件白名单、哈希、保留副本映射、归档哈希。
+- [deletion_receipt.json](deletion_receipt.json)：逐目标实际移除记录。
+- [protected_before.json.gz](protected_before.json.gz)、[retained_unique_cache.json](retained_unique_cache.json)、[verification.json](verification.json)：保护基线和后验。
+- [inventory_summary.json](inventory_summary.json)：初步容量盘点范围。
+- `execution_sources/`：本次一次性脚本的固定文本副本，不应对后续批次直接重跑。
+
+目录清理不改变启动入口。按项目既定流程只提交本次文档与 QA 白名单到 stable；main 合并及平台发布不属于本轮清理操作。
+'''
+(OUT/'README.md').write_text(text,encoding='utf-8')
+prefixes={
+'WORKLOG.md':'''## 2026-09-30 本地重复缓存与旧 QA 清理
+
+按用户授权，删除 40 个旧私有工程中 108558 个与主缓存大小/SHA 相同的导入文件；221 个不同文件保留。128 个未提交旧 QA/封面备份经 ZIP 完整性及全部载荷 SHA 核验后归档至 D 盘。合计移除 14,638,665,672 字节，扣归档后净减少约 13.63 GiB，未扣少量审计元数据。最新候选、最新集成/性能批、源码素材、历史证据和 Git 对象库保留。
+
+52721 个受保护文件前后 SHA 一致；未运行游戏或发布平台版本。清理收据、恢复路径与范围见 [QA](../qa/storage_cleanup_20260930/README.md)。只同步本轮说明和 QA。
+
+''',
+'SOURCE_SETUP.md':'''## 2026-09-30 旧私有工程缓存清理说明
+
+当前主缓存与最新候选/集成/性能工程保留完整。40 个旧私有工程只移除与主缓存逐字节相同的导入文件，复查这些旧工程前应使用对应 Godot 版本重新导入，不能直接假设旧 `imported` 完整。源码、资源、日志、发布包与存档保留，正常开发启动入口不变。
+
+两份未提交续玩中间批、修复前围栏记录和工坊旧封面备份已归档，按 [恢复说明](../qa/storage_cleanup_20260930/RESTORE.md) 校验并恢复。此次只做文件完整性验证，没有重跑游戏。详见 [清理 QA](../qa/storage_cleanup_20260930/README.md)。
+
+''',
+'DIRECTORY_INDEX.md':'''## 2026-09-30 本地缓存清理与 QA 归档
+
+- `qa/storage_cleanup_20260930/`：精确删除白名单、保留副本映射、保护清单、后验与恢复说明。
+- `D:/AI项目/水浒/归档/水浒_未提交旧测试记录_20260930.zip`：128 个旧未提交测试记录和封面备份；本机归档，不上传 GitHub。
+- 40 个旧私有 `project/.godot/imported` 移除重复文件，221 个不同文件及全部来源工程保留；需复查时先重新导入。
+
+'''}
+assert result['protected_files']==52721
+for name,prefix in prefixes.items():
+    p=ROOT/'docs'/name
+    previous=p.read_text(encoding='utf-8-sig')
+    assert not previous.startswith(prefix)
+    p.write_text(prefix+previous,encoding='utf-8')
+agent=ROOT/'AGENTS.md'
+agent.write_text('''## 2026-09-30 本地重复缓存与旧 QA 清理
+
+当前开发入口不变。40 个旧私有工程的 `project/.godot/imported` 已移除 108558 个与保留主缓存大小/SHA 完全一致的文件，221 个不同缓存文件保留原处。复查这些旧工程前须重新导入；其源码、资源、日志、存档及导出包仍在。主缓存、最新 Steam 候选 `20260924_135637_0ef1fc1a`、最新集成 QA `20260924_135529_b4b6077c`、最新性能批 `20260924T051636Z_6c74d4a3` 均保留完整。
+
+128 个未提交旧测试记录/封面备份已核验归档至 `D:/AI项目/水浒/归档/水浒_未提交旧测试记录_20260930.zip`。净减少约 13.63 GiB（未扣少量审计清单）；52721 个受保护文件前后 SHA 一致。Git 对象库和旧临时包未清理。详见 `qa/storage_cleanup_20260930/README.md` 和 `RESTORE.md`，本轮未运行游戏或发布平台版本。
+
+'''+agent.read_text(encoding='utf-8-sig'),encoding='utf-8')
+print(json.dumps({'qa_files':len(list(OUT.rglob('*'))),'plan_plain_sha256':hashlib.sha256(payload).hexdigest(),'logical_net_gib':result['logical_net_before_audit_metadata']/1024**3},ensure_ascii=False))
