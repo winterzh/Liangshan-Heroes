@@ -1,3 +1,11 @@
+## 2026-10-03 最新开发交接入口
+
+最新进度见 [PROJECT_STATUS](PROJECT_STATUS.md)，后续批次、验收条件与未完成项统一维护在 [DEVELOPMENT_PLAN](DEVELOPMENT_PLAN.md)。正常 Godot 启动方式不变，继续从本机 `godot.local.txt`、`GODOT_PATH` 或参数解析，不将本机路径写进公共脚本。
+
+本轮开始 stable 与远端同为 `f4402676`；main `6cb12a19` 已合入同树内容。大厅候选现已完成原生 51/51 与来源零漂移验证，代码、工具、证据和交接按白名单一同同步 stable。换机后可用 `python -X utf8 -B tools/run_defense_hall_qa.py --work-root <工程外QA目录>` 只读预检，确认引擎空闲后加 `--run` 执行。详见 [复验说明](DEFENSE_HALL_20261003.md)，正常游戏启动不变。
+
+工作区有修改时不自动 pull/stash/reset。干净且无分叉时才按下方既定 stable 命令拉取。Steam 经典据守续玩已发布、战役入口未开放；Android 当前发布依据为 2.0 底包及 2.0.1 内容；本轮不打包或更新平台。
+
 ## 2026-09-30 历史 QA 快照恢复
 
 25 个未完成的历史世界恢复批只保留原收据、日志和 `ARCHIVED.md`；558 份源码快照改由不可变 Git 源提交恢复。运行 `python -B tools/restore_archived_qa.py` 可验证全部归档字节；加 `--output <新建的工程外目录>` 可恢复，不覆盖现有文件。详见 [恢复说明](../qa/github_cleanup_20260930/README.md)。当前游戏运行不依赖这些中间快照，正常启动入口不变。
