@@ -1,0 +1,1046 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "yang_zhi",
+  "original_reference": {
+    "path": "assets/characters/hero_portraits_aligned_20260926/yang_zhi.png",
+    "sha256": "fce130a3a191b298d2412f6b712efac2ec866ca20e9b472d4165fb70c2abf661"
+  },
+  "identity_note": "Current dark lamellar armor, red scarf, anatomical right cheek blue birthmark, right-hand curved dao. Existing melee infantry stats and skills retained.",
+  "jobs": [
+    {
+      "key": "old_body",
+      "repository_path": "assets/anim/yang_zhi_walk.png",
+      "sha256": "cd24c859aa8b5d274e9595b57f65915d07a1249eff2a43f99174aa91547b3f0e",
+      "method": "existing_project_reference",
+      "prompt": "Existing legacy body for costume and rendering reference.",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "idle_candidate",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/native_inputs/idle_candidate.png",
+      "sha256": "83cd4657e6037130434038c66b4ad4c597db06f4f32fbc9177808232e1a637eb",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. NEW native transparent 2x2 isometric game sprite atlas for Yang Zhi, reference1 exact current aligned portrait identity and reference2 legacy body/weapon rendering only. Same rugged adult muscular infantry, dark steel/bronze lamellar armor engraved round chest boss, dark navy/black robe, red scarf and waist sash, iron rounded helmet with ear flaps and small red tassel, short black mustache/goatee. Blue birthmark on anatomical RIGHT temple/cheek matches supplied portrait; no symmetric blue markings on both cheeks. Holds ONE broad curved Chinese steel dao saber in anatomical RIGHT hand, red tassel at pommel; left empty hand rests at waist. No horse, shield, second weapon or fantasy horn. Four independently drawn IDLE views: top-left SE toward lower-right, top-right SW toward lower-left, bottom-left NE BACK towardupper-right, bottom-right NW BACK towardupper-left. Orthographic elevated30degree isometric, same physicalbody scale/armor/camera in all cells, no mirrors. Figure height380px maximum per625px square cell, every bow/saber/limb/tassel wholly inside quadrant, atleast75px empty margins/gutters. Truly transparent RGBA no matte/checkerboard/floor/shadow/text/grid/effects/extrafigures. Both boots planted, sword held lowered diagonally in alert relaxed standing. Exact FOUR figures on SQUARE canvas.",
+      "references": [
+        "original",
+        "old_body"
+      ],
+      "status": "required_reference",
+      "generation_id": "exec-1f0a1b01-58f9-4ea9-994b-c790dc2dd8d6"
+    },
+    {
+      "key": "yang_strike_se",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_strike_se.png",
+      "sha256": "b2f33cf3865779e9f59338317a068fcca23f941093072ebfcf4dad5165a0e2fd",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dpose into single Yang Zhi MELEE ATTACK STRIKE game sprite, front body/face towards LOWER-RIGHT, rightcheekbluebirthmarkvisible. Image1 edit target controls camera and EVERYlimb. BLUE limb is RIGHT arm holdsONEcurvedsteeldao, REDLEFT arm emptybalances. Knife has just been brought fromoverhead throughforward diagonaldownwardchop; followguideRHhand/blade endpoint, nohand swap. In NW guideRIGHT arm/hand may beoccludedbytorso, butkeepvisibleLEFT handEMPTY. Image2 costumeonly: darksteel/bronze lamellararmor roundchestboss, navyrobe,redscarf/sash, ironhelmetredtassel,shortblackmustachegoatee, anatomicalRIGHT cheekbluebirthmarkonly. Replaceguidecolorswithnormalcostume, keep exact stance/facing, fulladultbody. SINGLE SE figure only on native transparentRGBA, not atlas, completebladetipandbootswith70pxclearedges,no floor/shadow/trail/spark/text/extrafigure. Dynamic diagonal chop DISTINCT from idle and raisedwindup; guideposehighestpriority, costume second.",
+      "references": [
+        "guide_v4_strike_se",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-cbb0c6b9-997d-403e-a918-b2de262047e1"
+    },
+    {
+      "key": "yang_strike_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/native_inputs/yang_strike_sw.png",
+      "sha256": "ce8354cbdfa5a904c71943fd07e37fe1bbdcac463a688d3646868c7a97d907f1",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dpose into single Yang Zhi MELEE ATTACK STRIKE game sprite, front body/face towards LOWER-LEFT, nearleftcheekNORMALskin,rightbirthmarkoccluded. Image1 edit target controls camera and EVERYlimb. BLUE limb is RIGHT arm holdsONEcurvedsteeldao, REDLEFT arm emptybalances. Knife has just been brought fromoverhead throughforward diagonaldownwardchop; followguideRHhand/blade endpoint, nohand swap. In NW guideRIGHT arm/hand may beoccludedbytorso, butkeepvisibleLEFT handEMPTY. Image2 costumeonly: darksteel/bronze lamellararmor roundchestboss, navyrobe,redscarf/sash, ironhelmetredtassel,shortblackmustachegoatee, anatomicalRIGHT cheekbluebirthmarkonly. Replaceguidecolorswithnormalcostume, keep exact stance/facing, fulladultbody. SINGLE SW figure only on native transparentRGBA, not atlas, completebladetipandbootswith70pxclearedges,no floor/shadow/trail/spark/text/extrafigure. Dynamic diagonal chop DISTINCT from idle and raisedwindup; guideposehighestpriority, costume second.",
+      "references": [
+        "guide_v4_strike_sw",
+        "idle_corrected_candidate"
+      ],
+      "status": "required_reference",
+      "generation_id": "exec-813b66dd-8a2a-4614-b930-35f84539ad93"
+    },
+    {
+      "key": "yang_strike_ne",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_strike_ne.png",
+      "sha256": "7f01bd203fc8eaeec98566ca7058d074034e1b5803ff0aa9d260b41b7397391e",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dpose into single Yang Zhi MELEE ATTACK STRIKE game sprite, BACK view body/head towards UPPER-RIGHT, helmetnape/armorback visible,nofrontface. Image1 edit target controls camera and EVERYlimb. BLUE limb is RIGHT arm holdsONEcurvedsteeldao, REDLEFT arm emptybalances. Knife has just been brought fromoverhead throughforward diagonaldownwardchop; followguideRHhand/blade endpoint, nohand swap. In NW guideRIGHT arm/hand may beoccludedbytorso, butkeepvisibleLEFT handEMPTY. Image2 costumeonly: darksteel/bronze lamellararmor roundchestboss, navyrobe,redscarf/sash, ironhelmetredtassel,shortblackmustachegoatee, anatomicalRIGHT cheekbluebirthmarkonly. Replaceguidecolorswithnormalcostume, keep exact stance/facing, fulladultbody. SINGLE NE figure only on native transparentRGBA, not atlas, completebladetipandbootswith70pxclearedges,no floor/shadow/trail/spark/text/extrafigure. Dynamic diagonal chop DISTINCT from idle and raisedwindup; guideposehighestpriority, costume second.",
+      "references": [
+        "guide_v4_strike_ne",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-e18f53f3-865c-4c7c-908b-a83c36006f28"
+    },
+    {
+      "key": "yang_strike_nw",
+      "repository_path": "",
+      "sha256": "6fb27d67f339e18248d40fdaae22c249addf6ac63b89df0a183e8acb5de0e381",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dpose into single Yang Zhi MELEE ATTACK STRIKE game sprite, BACK view body/head towards UPPER-LEFT, helmetnape/armorback visible,nofrontface. Image1 edit target controls camera and EVERYlimb. BLUE limb is RIGHT arm holdsONEcurvedsteeldao, REDLEFT arm emptybalances. Knife has just been brought fromoverhead throughforward diagonaldownwardchop; followguideRHhand/blade endpoint, nohand swap. In NW guideRIGHT arm/hand may beoccludedbytorso, butkeepvisibleLEFT handEMPTY. Image2 costumeonly: darksteel/bronze lamellararmor roundchestboss, navyrobe,redscarf/sash, ironhelmetredtassel,shortblackmustachegoatee, anatomicalRIGHT cheekbluebirthmarkonly. Replaceguidecolorswithnormalcostume, keep exact stance/facing, fulladultbody. SINGLE NW figure only on native transparentRGBA, not atlas, completebladetipandbootswith70pxclearedges,no floor/shadow/trail/spark/text/extrafigure. Dynamic diagonal chop DISTINCT from idle and raisedwindup; guideposehighestpriority, costume second.",
+      "references": [
+        "guide_v4_strike_nw",
+        "idle_corrected_candidate"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-81710a45-da10-4f9d-aa0a-02691e94ca25"
+    },
+    {
+      "key": "yang_windup_sw",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_windup_sw.png",
+      "sha256": "547090d47fc44f1769d8fc59f77c2e0b3213c5c77026a1226f9b15dfb5d39ea2",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exactly as Yang Zhi SW ATTACK WINDUP. Image1 exact pose/camera, image2 identitycostumeonly. GuideBLUE is RIGHT arm, RED LEFT arm. BLUE RIGHT hand holdsone curveddao ABOVEhead on IMAGE LEFT, RIGHT elbowraised besideleftedgeofhead; RED LEFT empty hand extendsonIMAGE RIGHT forbalance. Face points LEFT/DOWN-LEFT exactlyguide, NOT RIGHT. Left cheek visible must haveNORMAL skin; rightcheekbluebirthmarkoccluded atthisSWview. Darksteelbronze lamellararmor,navyrobe,redscarf-sash,ironhelmetredtassel,shortmustachegoatee fromimage2. Replaceguideblue/redwithnaturalcostume butnohandorlimbswap. Wide planted stance prechop, not releaseyet. SINGLE FULLBODY SW only on transparentnativeRGBA, full saberwith70pxclearmargin, noatlas/no shadow/background/text/effects. Highestpriority exactguidefacingleft andblueRIGHT weaponarmIMAGE LEFT; don'tcopy costume reference's pose.",
+      "references": [
+        "guide_v3_windup_sw",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-46e0112a-2fd9-4709-8bc7-e475bb30ddce"
+    },
+    {
+      "key": "yang_walk_a_guided",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_walk_a_guided.png",
+      "sha256": "73f8c3424b23af5d45fd5976d191388c00dcad560b27d092c803597b4bb1a020",
+      "method": "built_in_imagegen",
+      "prompt": "新画杨志四格行走A全身图。第1图只用于暗铁甲、红巾红带、铁盔红缨、胡须和右脸青色胎记的身份。第2/3/4/5图是东南/西南/东北/西北的同一个三维步态：红色左腿迈前，蓝色右腿在后，蓝色右手握刀、红色左手空手。请严格跟这些3D关节和脚的位置，给简模穿上杨志原衣甲，用正常服装颜色代替简模红蓝。前排两格尤其西南，前脚是红色参考左腿，在画面右侧、另一腿在后较高；不能再默认画成画面左侧前脚。后排两格显示真正背面，左腿迈前右腿后抬。四格分别左上朝右下、右上朝左下、左下背面朝右上、右下背面朝左上，准确独立方向，不能镜像。右手一把弯钢朴刀放低，不遮双脚，无其他武器。高度390px以内置于625px格、有60px透明留白，刀尖脚头发完整在各格。真原生RGBA透明，无文字、影子、地板、特效，精细写实游戏精灵。姿态以3D参考优先，不复制第一图待机腿姿。",
+      "references": [
+        "idle_corrected_candidate",
+        "guide_v3_walk_a_se",
+        "guide_v3_walk_a_sw",
+        "guide_v3_walk_a_ne",
+        "guide_v3_walk_a_nw"
+      ],
+      "status": "selected",
+      "generation_id": "exec-cfb51bda-c585-4de4-9cd1-b1606fd490dd"
+    },
+    {
+      "key": "yang_walk_a_sw_guided",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/native_inputs/yang_walk_a_sw_guided.png",
+      "sha256": "4f4c7df5ace57d87e944d3ae343744e17bf9e430ac36ef251cab9bbc7db4e3cb",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 mannequin as a realistic isometric Yang Zhi game sprite. IMAGE1 is the edit target and EXACT POSE: keep its camera, body facing lower-left, every limb position and foot placement. BLUE limbs are RIGHT hand/right leg; RED limbs are LEFT hand/left leg. The forward leg on IMAGE RIGHT is RED left leg; rear bent blue right leg is behind. The sword is held in BLUE RIGHT hand on IMAGE LEFT side. This must remain. Image2 is COSTUME ONLY, NOT POSE: dark steel bronze-trim lamellararmor, navyrobe, redscarf/sash, ironhelmetredtassel, mustachegoatee, bluebirthmarkRIGHT cheek. Replace rod body with adult muscular fullypainted anatomy andcostume following SAME joints andsilhouette; gray blade become ONE curved steel dao with redpommeltassel. Do not copy image2 legs or sword hand, no mirror. SINGLE FULLBODY SW view only, not atlas. Both boots visible andcomplete, longstepleftleg infront onimage-right exactlyasguide. Native transparentRGBA background, removeguidebackground and guideblue/red colorcoding, no floor/shadow/text. 70px emptyedges aroundfigure/knife. Pose and handedness are highestpriority, identitysecond.",
+      "references": [
+        "guide_v3_walk_a_sw",
+        "idle_corrected_candidate"
+      ],
+      "status": "required_reference",
+      "generation_id": "exec-6c58d5bb-6c37-4662-b805-35fd0f3fda45"
+    },
+    {
+      "key": "yang_walk_a_sw",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_walk_a_sw.png",
+      "sha256": "b52eaf392cf406a544760f41e645e2fd5f273d0d8b29ad838d99188f91bc85d5",
+      "method": "built_in_imagegen",
+      "prompt": "精确编辑这张杨志西南行走单人精灵：只去掉当前可见的近侧脸颊蓝色胎记，让这块近侧脸颊恢复正常肤色。杨志胎记在解剖学右脸，在此西南背向右侧脸的视角应被头部遮住，不能在左右两颊都画蓝色。保持人物脸朝左下，双腿的姿势、右手持刀、所有衣甲和透明背景原样，不镜像、不移手、不改刀或步态。全身和刀完整，原生RGBA透明，仅修改近侧脸颊蓝色区域。",
+      "references": [
+        "yang_walk_a_sw_guided"
+      ],
+      "status": "selected",
+      "generation_id": "exec-3ab13ab6-e2cd-45d5-bbd5-00ee5bf0376f"
+    },
+    {
+      "key": "yang_windup_guided",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_windup_guided.png",
+      "sha256": "37d952bdebe3db504cb5e663eb0e0e944a9011c57241f54080a5b4db58690c0f",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Produce new native RGBA 2x2 Yang Zhi MELEE ATTACK WINDUP atlas. Images1/2/3/4 are EXACT 3D pose/camera guides SE/SW/NE/NW; image5 costume reference ONLY. Copy guide limb positions before applying armor. BLUE guide arm is anatomical RIGHT: it alone raises saber behind/above right shoulder. RED LEFT arm is EMPTY reaching for balance. In both frontviews sword arm should appear IMAGE LEFT, in backviews IMAGE RIGHT, exactly asguides. Do not swap hands in SW/NE. Replace guide colors with darksteel bronze-trimlamellararmor/navyrobe/redscarf-sash/ironhelmetredtassel; adult stocky Yang Zhi shortmustachegoatee. RIGHT cheekbluebirthmark visibleonlySE, SWnearcheekplain becausemarkfar/occluded. One curved broadsteeldao redpommeltassel inRIGHT hand. Four independentlydrawn completefigures: TLSE lower-right, TRSW lower-left, BLNE BACKupper-right, BRNW BACKupper-left. Wide planted stance, swordraised prechop, leftopenhand balance. Not strikingyet. No mirrors, secondweapon, trail, shadow, floor, gore,text. Square transparentRGBA atlas, fourfullfigures about380pxbodyheight in625pxcells, bladetips complete with60pxclearmargin; naturalhumananatomy overguide withunchanged pose and camera.",
+      "references": [
+        "guide_v3_windup_se",
+        "guide_v3_windup_sw",
+        "guide_v3_windup_ne",
+        "guide_v3_windup_nw",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-0ce7ed21-d306-47b7-b3df-5050763e2d83"
+    },
+    {
+      "key": "idle_nw_candidate",
+      "repository_path": "",
+      "sha256": "0471dd1c6b20160b50da6b4d0a6c91216839512f94d2a77daba60a1bdb2d6dd3",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. NEW SINGLE FULL-BODY NW IDLE Yang Zhi game sprite, only ONE character centered truly transparent RGBA. Exact reference dark steel/bronze lamellar armor round chest boss, dark navy robe, red scarf/waist sash, iron helmet ear flaps red tassel, rugged adult stocky body shortmustache/goatee. Northern Song infantry on foot. Orthographic elevated30degree isometric BACK view facing UPPER LEFT/NORTHWEST, back of helmet and armor visible; chest must not show, facemostly hidden. Holds ONE curved broad steel Chinese dao in anatomical RIGHT hand, from BACK view this is arm on IMAGE RIGHT side; sword lowered beside IMAGE RIGHT boot, blade can slope lower-right, red pommeltassel rightside. LEFT hand IMAGE LEFT is EMPTY resting by left hip. This is essential: correct original atlas NW wronghand, don't mirror whole body. Fullheadbodybootsweaponscomplete with100px transparentedges, no horse, floor/shadow/text/otherpeople/effects. Original atlas is costume/identity reference only; create an independently drawn NW direction with RIGHT saber hand.",
+      "references": [
+        "idle_candidate"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-e11f0e0f-8658-4f75-8334-66552c362b00"
+    },
+    {
+      "key": "yang_hurt_sw_fixed",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_hurt_sw_fixed.png",
+      "sha256": "6fbc40e364a8c83534c6135305379dfd005e6bcf8350768e544d791f2ca4f5cc",
+      "method": "built_in_imagegen",
+      "prompt": "只精确编辑杨志受击图：去掉当前可见近侧左脸颊上的蓝色胎记，恢复正常肤色；胎记在解剖学右脸，当前西南角度的近侧左颊不应该有蓝色。其余保持原样：头部方向、受击后仰、左手抚胸、右手握刀、全部盔甲红缨、完整双腿刀尖、原生RGBA透明。不得镜像、换手、改变动作。仅修改可见近侧脸颊蓝色区域。",
+      "references": [
+        "yang_hurt_sw"
+      ],
+      "status": "selected",
+      "generation_id": "exec-ca09384f-8d4a-4b14-8ff8-d2ed7081f599"
+    },
+    {
+      "key": "yang_hurt_nw_fixed",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_hurt_nw_fixed.png",
+      "sha256": "4f4892ae07b2615fa3feba0cbdd62a0ca2107441cba64bebab0618d0d24a6005",
+      "method": "built_in_imagegen",
+      "prompt": "只精确编辑杨志受击图：去掉当前可见近侧左脸颊上的蓝色胎记，恢复正常肤色；胎记在解剖学右脸，当前西北背面回头角度的近侧左颊不应该有蓝色。其余保持原样：头部方向、受击后仰、左手抚胸、右手握刀、全部盔甲红缨、完整双腿刀尖、原生RGBA透明。不得镜像、换手、改变动作。仅修改可见近侧脸颊蓝色区域。",
+      "references": [
+        "yang_hurt_nw"
+      ],
+      "status": "selected",
+      "generation_id": "exec-0e4fd736-3e9d-4402-b511-0ab04549c138"
+    },
+    {
+      "key": "yang_fall_se",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_fall_se.png",
+      "sha256": "ca4a153822c0adda7023e3aba002490607ca8030dd83301e59ed94d263197261",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact3Dkneelingfall into Yang Zhi DEATH FALL intermediate single SE sprite. FRONT facelower-right,rightcheekbluebirthmarkvisible. BLUE RIGHT hand keeps ONEcurvedsteeldao lowered near ground, RED LEFT emptyhand braceson ground infront. Kneescollapse, torsoslumps, NOT standinghurt andNOT lyingterminal. Keepguidehands/legjoints/camera; replaceblue/redwith darksteelbronzelamellararmor/navyrobe/redscarf-sash/ironhelmetredtassel/shortblackmustachegoatee fromimage2 costumeonly. Completefullbody boots/fingertips/blade,adultnormalproportions, SINGLE nativeRGBAtransparentwith70pxmargin,no floor/shadow/blood/impact/text/extrafigure.",
+      "references": [
+        "guide_v5_fall_se",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-82a583de-8820-4d4f-8ba3-5aab1b1c802d"
+    },
+    {
+      "key": "yang_fall_sw",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_fall_sw.png",
+      "sha256": "974be85c08405214c4c783b3d792f1bb1ada442d7c2c972b0b0695134194d9c7",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact3Dkneelingfall into Yang Zhi DEATH FALL intermediate single SW sprite. FRONT facelower-left,nearleftcheekNORMALskin,rightcheekbirthmarkoccluded. BLUE RIGHT hand keeps ONEcurvedsteeldao lowered near ground, RED LEFT emptyhand braceson ground infront. Kneescollapse, torsoslumps, NOT standinghurt andNOT lyingterminal. Keepguidehands/legjoints/camera; replaceblue/redwith darksteelbronzelamellararmor/navyrobe/redscarf-sash/ironhelmetredtassel/shortblackmustachegoatee fromimage2 costumeonly. Completefullbody boots/fingertips/blade,adultnormalproportions, SINGLE nativeRGBAtransparentwith70pxmargin,no floor/shadow/blood/impact/text/extrafigure.",
+      "references": [
+        "guide_v5_fall_sw",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-5557589f-ac2a-4bf6-982a-dad76203fb1b"
+    },
+    {
+      "key": "yang_fall_ne",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_fall_ne.png",
+      "sha256": "9310d504a50696aa5e63cc500972363beb64f9c85419ff6803473a3f4ad4a1e4",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact3Dkneelingfall into Yang Zhi DEATH FALL intermediate single NE sprite. BACK body/head towards UPPER-RIGHT,helmetnape/backarmorvisible,notfront. BLUE RIGHT hand keepsONEcurvedsteeldao lowered near ground onIMAGE RIGHT; REDLEFT EMPTY hand braceson ground onIMAGE LEFT. Do NOT swapknifearm. Kneescollapse, torsoslumps, NOT standinghurt/NOT lyingterminal. Keepguidejoint/camera, replaceguidecolorswith normal darksteelbronzelamellararmor/navyrobe/redscarf-sash/ironhelmetredtassel fromimage2costumeonly. Normaladultproportions, completefullbody/boots/fingertips/blade. SINGLE nativeRGBAtransparentwith70pxmargin,no background/floor/shadow/blood/effects/text/extrafigure.",
+      "references": [
+        "guide_v5_fall_ne",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-cf1035ae-7126-4674-b37d-2ace29db7fa7"
+    },
+    {
+      "key": "yang_fall_nw",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_fall_nw.png",
+      "sha256": "048aee5543dc6b7e753d387e6695b59b47bc45611db84b6b667c3f6e43801159",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact3Dkneelingfall into Yang Zhi DEATH FALL intermediate single NW sprite. BACK body/head towards UPPER-LEFT,helmetnape/backarmorvisible,notfront. BLUE RIGHT hand keepsONEcurvedsteeldao lowered near ground onIMAGE RIGHT; REDLEFT EMPTY hand braceson ground onIMAGE LEFT. Do NOT swapknifearm. Kneescollapse, torsoslumps, NOT standinghurt/NOT lyingterminal. Keepguidejoint/camera, replaceguidecolorswith normal darksteelbronzelamellararmor/navyrobe/redscarf-sash/ironhelmetredtassel fromimage2costumeonly. Normaladultproportions, completefullbody/boots/fingertips/blade. SINGLE nativeRGBAtransparentwith70pxmargin,no background/floor/shadow/blood/effects/text/extrafigure.",
+      "references": [
+        "guide_v5_fall_nw",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-9d32c086-8077-4c67-ae4e-05dcde73f06c"
+    },
+    {
+      "key": "yang_terminal_se",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_terminal_se.png",
+      "sha256": "e4e5aae75b728781fe76908cf89574e3839b40c9deddf4c2a13e01b091731b43",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact3D lyingpose as single Yang Zhi DEATH TERMINAL SE sprite. Body lies relaxedon side on invisibleground, head/torsofrontview towards LOWER-RIGHT,rightcheekbluebirthmarkvisible. EYES CLOSED, lifelessrelaxed finalpose, not kneeling/not sleepinggesture/no raisedhead. BLUE RIGHT hand retains ONE curvedsteeldao restingclosebodyside, REDLEFT hand relaxedempty. Keepguidebody/limbs/facing, convertguidecolors to darksteel/bronze lamellararmor navyrobe redscarf/sash ironhelmetredtassel,shortblackmustachegoatee image2identityonly. Actual normaladultlength, fullfigureallboots/bladetipcompletewith70pxmargins. NativeRGBAtransparent,no floor,castshadow,gore,particles,text,otherobjects. SINGLE only, noatlas.",
+      "references": [
+        "guide_v5_terminal_se",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-f2cc164f-2839-4bb6-a470-09a0bdbc37d1"
+    },
+    {
+      "key": "yang_terminal_sw",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_terminal_sw.png",
+      "sha256": "4ee4e450f758288de7ead09be121c094b0f7aa9f2b1318dcb364b1c3f7d35bd0",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact3D lyingpose as single Yang Zhi DEATH TERMINAL SW sprite. Body lies relaxedon side on invisibleground, head/torsofrontview towards LOWER-LEFT,visibleleftcheekNORMALskin,rightbirthmarkoccluded. EYES CLOSED, lifelessrelaxed finalpose, not kneeling/not sleepinggesture/no raisedhead. BLUE RIGHT hand retains ONE curvedsteeldao restingclosebodyside, REDLEFT hand relaxedempty. Keepguidebody/limbs/facing, convertguidecolors to darksteel/bronze lamellararmor navyrobe redscarf/sash ironhelmetredtassel,shortblackmustachegoatee image2identityonly. Actual normaladultlength, fullfigureallboots/bladetipcompletewith70pxmargins. NativeRGBAtransparent,no floor,castshadow,gore,particles,text,otherobjects. SINGLE only, noatlas.",
+      "references": [
+        "guide_v5_terminal_sw",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-f60b7a73-ec5a-40d5-86c0-107db82d47c7"
+    },
+    {
+      "key": "yang_walk_b_guided",
+      "repository_path": "",
+      "sha256": "49caeb55111815b9ac36d4fba3dbd97bb7982399f8601c927a27caabc1aa65b6",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Asset: new native RGBA 2x2 game sprite atlas Yang Zhi WALK B. Image1 is costume/identity only; images2/3/4/5 are exact independently rendered 3D limb/camera guides for SE/SW/NE/NW respectively. Repaint the guide poses with Yang Zhi's dark steel bronze-trim lamellar armor, dark navy robe, red scarf/sash, iron helmet redtassel, shortblackmustache/goatee, anatomical RIGHT cheekbluebirthmark. Keep guides' EXACT leg positions, joint order and foreshortening; BLUE guide arm/leg are anatomical RIGHT, RED are LEFT. BLUE right hand holds ONE broad curved steel dao lowered, red left empty. Blue right leg reaches forward, red left trails. Do NOT paint blue/red mannequin colors; convert to normalcostume, but preserve correct limbs. Do NOT use identity reference's static legs. Four separate drawn compass views: TLSE towards lower-right, TRSW lower-left, BLNE BACK upper-right, BRNW BACK upper-left. Each fullbody has sameadultproportions andheight about390px inside625px cell with60px emptyedges; saber/clothing/feet complete insideowncell. Actual transparentRGBA, no background/floor/castshadow/text/grid/effects/extrafigures. Exactguideposes, not mirrored, do not replacewith generic walk. Renderrightfootvisible perguide.",
+      "references": [
+        "idle_corrected_candidate",
+        "guide_v1_walk_b_se",
+        "guide_v1_walk_b_sw",
+        "guide_v1_walk_b_ne",
+        "guide_v1_walk_b_nw"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-3622a395-4f69-4779-bb5e-bbcc34e5f5fa"
+    },
+    {
+      "key": "yang_walk_b_guided2",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_walk_b_guided2.png",
+      "sha256": "fa92b6d0776361af1fcfceb81ca7b47e607fd0c579bc41c564099b395071ee80",
+      "method": "built_in_imagegen",
+      "prompt": "新画杨志四格行走B全身图。第1图只参考身份衣甲：暗铁层叠甲、红巾红腰带、铁盔红缨、右脸青色胎记与胡须、右手一把弯朴刀。第2至5图分别是东南、西南、东北、西北真实3D同人姿态，严格临摹这些肢体位置：蓝色为解剖学右手右腿，红色为左手左腿，尤其第2图的蓝色前脚在画面左下方、红色后腿藏在身体后。衣甲覆盖后也不能交换这两条腿。第2图的前腿必须画在画面左下方，不准再次把前靴画到右下方。红色左手空手，蓝色右手持刀。把蓝红色简模转化为正常衣甲颜色，不画简模配色。左上东南朝右下、右上西南朝左下、左下东北背面朝右上、右下西北背面朝左上，严格跟四张对应参考，不镜像。四个独立人物，等距俯视30度、相同尺寸，625px格内人物高度约390px，刀尖和脚完整、留60px透明边。真正原生RGBA透明，无文字、地面、阴影、光效。只生成一张四格新图，姿态以3D参考优先。",
+      "references": [
+        "idle_corrected_candidate",
+        "guide_v2_walk_b_se",
+        "guide_v2_walk_b_sw",
+        "guide_v2_walk_b_ne",
+        "guide_v2_walk_b_nw"
+      ],
+      "status": "selected",
+      "generation_id": "exec-38322688-961c-4f26-b6d8-1d5971d9307b"
+    },
+    {
+      "key": "idle_corrected_candidate",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/idle_corrected_candidate.png",
+      "sha256": "56857457cf27aded27353603346c4f80589c1a562c8b92aa1fc726299977e618",
+      "method": "built_in_imagegen",
+      "prompt": "编辑参考四格杨志待机图，保持四个独立方向及青面兽身份、暗色钢铁片甲、红领巾红腰带、带耳护铁盔红缨、弯曲朴刀。只修正右下格西北背面人物的持刀手：右上臂及右手应位于该人物画面右侧，右手握一把刀，刀在画面右下侧放低；画面左侧的左手空手垂在左胯。头朝左上方，显示后脑护颈，不能改成东北朝右。其他三格的刀仍由解剖学右手握持。不要镜像整个人物。四个全身像仍分别位于左上东南、右上西南、左下东北、右下西北，四格留白要更宽，所有刀尖离格边至少60px，身体高度400px以内。原生RGBA透明背景，无地面阴影、文字或格线，所有脚和刀尖完整。",
+      "references": [
+        "idle_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-3538fe47-59b0-4b4a-83d0-f25b62c77cf1"
+    },
+    {
+      "key": "yang_strike_nw_low",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_strike_nw_low.png",
+      "sha256": "6838bcf7db9d91223224118b576046230fdacb3af806789aa13d7f1728fc408c",
+      "method": "built_in_imagegen",
+      "prompt": "精确修改这一张杨志西北背面全身图的攻击动作：目前右手把刀举在头顶，像起手，不合格。改为右手下劈完成后的低位跟随动作。保持背面朝左上、盔甲后背与铁盔后脑、红缨、脚步和空手左臂不变。解剖学右肩在画面右边，右上臂必须向下，右肘和握刀右拳降到腰带附近的画面右侧；刀从右侧腰部的右拳，斜横过身体前方指向画面左下，整把刀在胸口以下，不得任何刀刃高于肩膀或头。刀可在远侧被身体部分遮挡，但可见握刀手必须连着画面右边的右肩，左手画面左边始终空手，严禁交换持刀手。让姿态明显成为重刀挥下之后，躯干稍前倾，不再高举、不静止待机。全身、刀尖和双靴完整，留70px透明边界。保持原有写实等距俯视、成年人体比例、暗铁铜边层甲蓝袍红巾红腰带和独立原生RGBA透明，无地面阴影文字血液特效，不镜像、不改向、不多人。",
+      "references": [
+        "yang_strike_nw_fixed"
+      ],
+      "status": "selected",
+      "generation_id": "exec-4f799152-5fd5-4867-8cb1-eda037db82f9"
+    },
+    {
+      "key": "yang_strike_sw_fixed",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_strike_sw_fixed.png",
+      "sha256": "fe33571f9c9b885395f0f4fa96f7e6a1d426d5a4b629629183e881e45ccfffbf",
+      "method": "built_in_imagegen",
+      "prompt": "只精确编辑参考杨志西南劈斩图：去掉可见近侧左脸颊上的蓝色胎记，恢复正常肤色，解剖学右脸的胎记在此西南角度应被头部遮挡。其余全部保持：脸朝左下、右手持刀在画面左侧、刀已劈到低处、左手空手、盔甲红缨、双腿姿势、全身刀尖完整和原生RGBA透明。不得镜像、换手、换步态、改刀。仅修改近侧脸颊。",
+      "references": [
+        "yang_strike_sw"
+      ],
+      "status": "selected",
+      "generation_id": "exec-8e37a0bf-b4d5-4052-a85b-c13e2cd7af02"
+    },
+    {
+      "key": "yang_strike_nw_fixed",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/native_inputs/yang_strike_nw_fixed.png",
+      "sha256": "a9564ecbd683cb67f557614640d7be0b3f295c1a18847308b344b519c2c21abd",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact3D pose into Yang Zhi NW MELEE STRIKE. BACK of ironhelmet/neckarmor and BACK torso towardsUPPER-LEFT. BLUE RIGHT arm is on IMAGE RIGHT: rightELBOW and RIGHT hand must be visible onIMAGE RIGHT holdingONEcurveddao swept across towardUPPER-LEFT. RED LEFT arm onIMAGE LEFT stays completelyEMPTY and balances. Do NOT put knife intoleftarm nearshoulder. In thisguide blade sweeps acrossfrontofbody, rightelbowvisibleonright; followeveryjoint. Image2 costumeonly darksteelbronze lamellararmor/navyrobe/redscarf-sash/helmetredtassel/YangZhi identity. Naturalhumanrender, replaceguidecolorswithcostume. SINGLEFULLBODYNW on native transparentRGBA, wideplantedstance/chopfollowthrough, allblade/bootswith70px margin,no floor/shadow/text/trail, not overheadwindup.",
+      "references": [
+        "guide_v5_strike_nw",
+        "idle_corrected_candidate"
+      ],
+      "status": "required_reference",
+      "generation_id": "exec-f321ab31-0e33-4848-a362-f38fa880ef54"
+    },
+    {
+      "key": "yang_hurt_se",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_hurt_se.png",
+      "sha256": "09bcb17aee7f5519d1b916b3e610fdf91e56d4bfda5a4f91b131b61fb3578ff5",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dguide as single Yang Zhi HURT recoil sprite. FRONT facing LOWER-RIGHT; right cheekbluebirthmarkvisible. BLUE RIGHT arm retains one loweredcurvedsteeldao, RED LEFT arm/hand clutches chest, exactlysame joints asguide. Blue/redguidecolorsconvert to normalcostume; never swaprightknifehand. Image2 costumeONLY darksteel bronze-trimlamellararmor roundchestboss/navyrobe/redscarf-sash/ironhelmetredtassel/blackmustachegoatee/rightcheekbluebirthmarkonly. Flinchback slightly, painedexpression, kneesfirm; livingstandinghurt, NOT attack/kneelingdeath. Sameadultbodyproportions. SINGLESE fullbody elevated30degreeorthographic nativeRGBAtransparent, everyblade/boot completewith70pxmargin,no background/floor/shadow/blood/trail/effects/text/extrafigures.",
+      "references": [
+        "guide_v5_hurt_se",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-46e8d89b-645b-4bf9-afb7-df2bb4645884"
+    },
+    {
+      "key": "yang_hurt_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/native_inputs/yang_hurt_sw.png",
+      "sha256": "7d4f6712e4fc90a9e91b06180caf81a8bfc14981235b86a92a170903a12add78",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dguide as single Yang Zhi HURT recoil sprite. FRONT facing LOWER-LEFT; nearleft cheekNORMAL skin,rightbirthmarkoccluded. BLUE RIGHT arm retains one loweredcurvedsteeldao, RED LEFT arm/hand clutches chest, exactlysame joints asguide. Blue/redguidecolorsconvert to normalcostume; never swaprightknifehand. Image2 costumeONLY darksteel bronze-trimlamellararmor roundchestboss/navyrobe/redscarf-sash/ironhelmetredtassel/blackmustachegoatee/rightcheekbluebirthmarkonly. Flinchback slightly, painedexpression, kneesfirm; livingstandinghurt, NOT attack/kneelingdeath. Sameadultbodyproportions. SINGLESW fullbody elevated30degreeorthographic nativeRGBAtransparent, everyblade/boot completewith70pxmargin,no background/floor/shadow/blood/trail/effects/text/extrafigures.",
+      "references": [
+        "guide_v5_hurt_sw",
+        "idle_corrected_candidate"
+      ],
+      "status": "required_reference",
+      "generation_id": "exec-4fe9c7e6-9d83-4316-8b9d-b7ef0cd039cf"
+    },
+    {
+      "key": "yang_hurt_ne",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_hurt_ne.png",
+      "sha256": "66f3723fb0baaa8b241bcc7ed44c843f66e23db49cc1f26b17825e2843eef8f4",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dguide as single Yang Zhi HURT recoil sprite. BACK facing UPPER-RIGHT, helmetnape andarmorbackvisible. BLUE RIGHT arm retains one loweredcurvedsteeldao, RED LEFT arm/hand clutches chest, exactlysame joints asguide. Blue/redguidecolorsconvert to normalcostume; never swaprightknifehand. Image2 costumeONLY darksteel bronze-trimlamellararmor roundchestboss/navyrobe/redscarf-sash/ironhelmetredtassel/blackmustachegoatee/rightcheekbluebirthmarkonly. Flinchback slightly, painedexpression, kneesfirm; livingstandinghurt, NOT attack/kneelingdeath. Sameadultbodyproportions. SINGLENE fullbody elevated30degreeorthographic nativeRGBAtransparent, everyblade/boot completewith70pxmargin,no background/floor/shadow/blood/trail/effects/text/extrafigures.",
+      "references": [
+        "guide_v5_hurt_ne",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-88c62f65-5ab1-40e3-80dc-ba64e60d2aed"
+    },
+    {
+      "key": "yang_hurt_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/native_inputs/yang_hurt_nw.png",
+      "sha256": "2cbee7db1d5d421315294acfc7b12979409166790f4c6db3dd8e18f7f365675f",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. Repaint IMAGE1 exact3Dguide as single Yang Zhi HURT recoil sprite. BACK facing UPPER-LEFT, helmetnape andarmorbackvisible. BLUE RIGHT arm retains one loweredcurvedsteeldao, RED LEFT arm/hand clutches chest, exactlysame joints asguide. Blue/redguidecolorsconvert to normalcostume; never swaprightknifehand. Image2 costumeONLY darksteel bronze-trimlamellararmor roundchestboss/navyrobe/redscarf-sash/ironhelmetredtassel/blackmustachegoatee/rightcheekbluebirthmarkonly. Flinchback slightly, painedexpression, kneesfirm; livingstandinghurt, NOT attack/kneelingdeath. Sameadultbodyproportions. SINGLENW fullbody elevated30degreeorthographic nativeRGBAtransparent, everyblade/boot completewith70pxmargin,no background/floor/shadow/blood/trail/effects/text/extrafigures.",
+      "references": [
+        "guide_v5_hurt_nw",
+        "idle_corrected_candidate"
+      ],
+      "status": "required_reference",
+      "generation_id": "exec-df7d1008-2634-41c4-a862-b5d783cf7a9a"
+    },
+    {
+      "key": "yang_terminal_ne",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_terminal_ne.png",
+      "sha256": "97d9b6d375b1e8e08de0345de1650c3851ce3cabf011fb0f009456c496b07ea1",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact 3D lying terminal pose as single Yang Zhi DEATH TERMINAL NE sprite. BACK VIEW, back armor and helmet nape prominently visible; body/head facing UPPER-RIGHT. Match guide camera, relaxed horizontal side-lying full body, eyes closed if barely visible. BLUE is anatomical RIGHT arm retaining ONE curved steel dao resting along body; RED is anatomical LEFT empty relaxed arm. Do not swap weapon hand or turn front. Image2 is costume identity only: dark steel/bronze lamellar armor, navy robe, red scarf/sash, iron helmet red tassel, adult stocky warrior. Keep normal adult full length and both complete boots, fingertips and blade. Native transparent RGBA single canvas, minimum70px margin; no floor, cast shadow, background, blood, effects, text, extra figure. This is fully lying final dead pose, not standing or kneeling.",
+      "references": [
+        "guide_v5_terminal_ne",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-6135bc12-bbe4-45ea-af78-78957265d510"
+    },
+    {
+      "key": "yang_terminal_nw",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/yang_terminal_nw.png",
+      "sha256": "0641ca47f99fc4cfd2a602ed3b6745ed58298269a3367c8bc1b51994b098f56e",
+      "method": "built_in_imagegen",
+      "prompt": "Repaint IMAGE1 exact 3D lying terminal pose as single Yang Zhi DEATH TERMINAL NW sprite. BACK VIEW, back armor and helmet nape prominently visible; body/head facing UPPER-LEFT. Match guide camera, relaxed horizontal side-lying full body, eyes closed if barely visible. BLUE is anatomical RIGHT arm retaining ONE curved steel dao resting along body; RED is anatomical LEFT empty relaxed arm. Do not swap weapon hand or turn front. Image2 is costume identity only: dark steel/bronze lamellar armor, navy robe, red scarf/sash, iron helmet red tassel, adult stocky warrior. Keep normal adult full length and both complete boots, fingertips and blade. Native transparent RGBA single canvas, minimum70px margin; no floor, cast shadow, background, blood, effects, text, extra figure. This is fully lying final dead pose, not standing or kneeling.",
+      "references": [
+        "guide_v5_terminal_nw",
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-2c75767e-d03b-4cd9-82ba-7f7ca692e3b4"
+    },
+    {
+      "key": "yang_walk_a",
+      "repository_path": "",
+      "sha256": "0278235d7261d3950e3781896bed703a0f8e4cd3c11dbf3d04d712c62dde347f",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. NEW native transparent 2x2 isometric game sprite atlas for Yang Zhi, exact identity/costume from reference. Rugged stocky adult infantry with short black mustache/goatee, blue birthmark on anatomical RIGHT temple/cheek, dark steel/bronze lamellar armor engraved round chest boss, dark navy/black robe, red scarf and waist sash, iron helmet ear flaps small red tassel, dark boots. Single broad curved Chinese steel dao saber with red tassel held by anatomical RIGHT hand throughout; free LEFT hand empty. On front SE/SW images RIGHT sword hand generally near IMAGE LEFT side; rear NE/NW RIGHT sword hand near IMAGE RIGHT side. No horse, shield, second weapon, fantasyhorn. Elevated30degree orthographic isometric. Four independently painted directions, NOT mirror/rotation: top-left SE toward lower-right; top-right SW toward lower-left; bottom-left NE BACK toward upper-right; bottom-right NW BACK toward upper-left. Same physicalbody proportion and camera. Each figure entirely insideown quadrant, fullbodyheight400px in625pxcell, sword and tassel inside with60px transparentmargins, clear gutters, no neighboring fragments. SQUARE atlas exactlyfour figures on truly transparent RGBA, no matte/checkerboard/floor/shadow/text/grid/effect. Asset type: WALK STRIDE A. Anatomical LEFT leg leads, RIGHT trails. Top row LEFT boot viewer-right is forward/lower, RIGHT boot viewer-left bent/trailing higher. Bottom row LEFT boot viewer-left leads with visible sole, rightboot viewer-right trails. Right hand keeps sword lowered near waist across body, left arm counterswings slightly. Distinct walking gesture, not idle. Armor plates/redcloth sway, maintain size, no attack/no raisedblade. All fournewdrawn separateviews.",
+      "references": [
+        "idle_corrected_candidate"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-63219cc0-3461-4b41-b2b7-365d43668313"
+    },
+    {
+      "key": "yang_walk_b",
+      "repository_path": "",
+      "sha256": "ae31a6dc050a18514bb730e8e37c9402e2649391cadc74a21461c4d2659a3aa1",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. NEW native transparent 2x2 isometric game sprite atlas for Yang Zhi, exact identity/costume from reference. Rugged stocky adult infantry with short black mustache/goatee, blue birthmark on anatomical RIGHT temple/cheek, dark steel/bronze lamellar armor engraved round chest boss, dark navy/black robe, red scarf and waist sash, iron helmet ear flaps small red tassel, dark boots. Single broad curved Chinese steel dao saber with red tassel held by anatomical RIGHT hand throughout; free LEFT hand empty. On front SE/SW images RIGHT sword hand generally near IMAGE LEFT side; rear NE/NW RIGHT sword hand near IMAGE RIGHT side. No horse, shield, second weapon, fantasyhorn. Elevated30degree orthographic isometric. Four independently painted directions, NOT mirror/rotation: top-left SE toward lower-right; top-right SW toward lower-left; bottom-left NE BACK toward upper-right; bottom-right NW BACK toward upper-left. Same physicalbody proportion and camera. Each figure entirely insideown quadrant, fullbodyheight400px in625pxcell, sword and tassel inside with60px transparentmargins, clear gutters, no neighboring fragments. SQUARE atlas exactlyfour figures on truly transparent RGBA, no matte/checkerboard/floor/shadow/text/grid/effect. Asset type: WALK STRIDE B. RIGHT leg leads and LEFT trails, distinctly opposite step phase to strideA reference2. Top row RIGHT boot viewer-left reaches forward LOWER than other boot; LEFT boot viewer-right bends back HIGHER. Bottom row RIGHT boot viewer-right reaches forward and LEFT viewer-left trails. Right sword hand retains lowered blade at hip, LEFT free arm counter-swings, no attack. Blade shortened to fit eachcell with60px margin. Do NOT mirror whole body or move sword into left hand. Samephysicalbody/helmet/armor/redcloth. Reference1 idle identity;reference2 oppositegaitonly.",
+      "references": [
+        "idle_corrected_candidate",
+        "yang_walk_a"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-3c3b2e5f-c706-4a2b-9571-f3ebf698cb37"
+    },
+    {
+      "key": "yang_walk_b2",
+      "repository_path": "",
+      "sha256": "685de688c8149e73517ea021eb7631c7b68a384f522b172bfb941a445924fa1e",
+      "method": "built_in_imagegen",
+      "prompt": "编辑四格杨志行走图，只改双腿为相反步态，不镜像身体、不换持刀右手。当前四格都是左脚领先，这次必须右脚领先：上排两个正面人物，画面左边的右腿向前伸，右靴在画面更低处；画面右边的左腿膝盖弯曲向后收，左靴较高。下排两个背面人物，画面右边的右腿向前伸，右靴在画面更低处露出靴底；画面左边的左腿弯曲后收，左靴较高。两只靴子的上下位置必须与参考图反过来。所有上身、头部方向、铁盔红缨、青面胎记、暗甲红领巾及右手放低的朴刀保持不变。全身与刀尖完整，四格间透明留白，真RGBA透明背景，不要地面阴影文字特效。只重画行走双腿，不画攻击。",
+      "references": [
+        "yang_walk_b"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-7bd25f50-831c-4eed-8444-8e68edd5d11b"
+    },
+    {
+      "key": "yang_walk_b3",
+      "repository_path": "",
+      "sha256": "5878c861dd5e9c2b2474044a2ace846b93705846b2f0fd7dee0921fd69c49509",
+      "method": "built_in_imagegen",
+      "prompt": "生成杨志四向行走第二步的全新四格透明精细写实游戏精灵。参考图仅用于暗色钢铁片甲、铁盔红缨、红领巾、青面胎记、右手朴刀的身份，不要复制参考腿姿。这次每个人物必须是『持刀这一侧的腿向前迈，空手这一侧的腿向后抬』。上排正面人物：持刀手在画面左侧，该手下方的右腿向前伸出，右靴是低处前脚；空手在画面右侧，该侧左腿弯曲并收在身后，左靴高处后脚。下排背面人物：持刀手在画面右侧，该手下方的右腿迈出，右靴低处露靴底；左侧空手下面的左腿后抬，左靴高处。两靴清楚分开。不是双脚站立，不是左腿迈出，不是攻击。四个完整独立方向：左上向右下、右上向左下、左下背面向右上、右下背面向左上。所有刀由右手放低持住，不能整个人镜像。原生RGBA透明，四格完整全身与刀尖均在各格内，有60px以上透明留白，无文字地面阴影。",
+      "references": [
+        "idle_corrected_candidate"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-f2d39ed8-ef13-4b44-851b-e25d960085e2"
+    },
+    {
+      "key": "yang_walk_b4",
+      "repository_path": "",
+      "sha256": "b2d7c0047af76ab66038c464f1386e31f8f7cb0873d6beabfa84f24596eb05cc",
+      "method": "built_in_imagegen",
+      "prompt": "编辑参考四格杨志步行图：只重新画左上角朝右下的东南人物双腿，其他三个格子完全保持。左上人物当前前脚在画面右下方，请把这只左脚收回至身体后方，膝盖弯曲、脚抬起；把画面左侧、右手持刀下方的右腿伸到前方，右靴清楚落在画面左下方且比另一只靴更低。上身朝右下、刀仍由右手握持且放低，不要镜像人物、不换手。右前脚、左后脚要一眼可分，与参考左上人物原先步态明显相反。盔甲、青面胎记、红领巾保持。其他三格不改。原生RGBA透明四格全身，宽留白、完整刀尖，无背景、地面阴影、文字。",
+      "references": [
+        "yang_walk_b3"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-41f03690-5132-4c30-8bd2-8dd6f10c8f8b"
+    },
+    {
+      "key": "yang_walk_b_se",
+      "repository_path": "",
+      "sha256": "6e7bf4cb88af8216891c3627fa89b57b5542cbffde4225f2b07f0fef9d99acda",
+      "method": "built_in_imagegen",
+      "prompt": "制作一张独立的杨志东南方向行走精灵，参考只用于人物暗甲、红领巾、青面胎记、右手朴刀的身份。完整单人全身，俯视30度等距视角，头和胸朝画面右下方。新的步态：解剖学右膝明显抬到腰前，右大腿向前水平伸，右小腿折下且右靴悬空，右足绝不能落地；解剖学左腿伸直在身体下方支撑地面，左靴是唯一落地脚。这是提右膝踏步瞬间。持刀的右手在画面左侧，右膝从同侧抬起；左手空手前摆。单把朴刀由右手握住，刀向画面左边低处斜伸，不遮住两只脚。右手不能换成左手。人物要抬右膝，不能复制参考图左脚在前的迈步姿势。暗铁盔红缨、层叠甲片、红腰带、胡须、右颊蓝胎记。完整全身、所有刀尖衣摆离边至少60px，原生RGBA透明背景，不画任何地面阴影或特效，不画四格，只有一个东南人物。",
+      "references": [
+        "idle_corrected_candidate"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-650e61cd-2f78-492a-8754-2b37ef228a37"
+    },
+    {
+      "key": "windup_candidate",
+      "repository_path": "assets/characters/yang_zhi_direction4_20261004/windup_candidate.png",
+      "sha256": "0d6e9669a3ed9d719470d11839401a0fdd9971dda427728fd6a16e5a377d6167",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: historical-scene. NEW native transparent 2x2 isometric game sprite atlas for Yang Zhi, exact identity/costume from reference. Rugged stocky adult infantry with short black mustache/goatee, blue birthmark on anatomical RIGHT temple/cheek, dark steel/bronze lamellar armor engraved round chest boss, dark navy/black robe, red scarf and waist sash, iron helmet ear flaps small red tassel, dark boots. Single broad curved Chinese steel dao saber with red tassel held by anatomical RIGHT hand throughout; free LEFT hand empty. On front SE/SW images RIGHT sword hand generally near IMAGE LEFT side; rear NE/NW RIGHT sword hand near IMAGE RIGHT side. No horse, shield, second weapon, fantasyhorn. Elevated30degree orthographic isometric. Four independently painted directions, NOT mirror/rotation: top-left SE toward lower-right; top-right SW toward lower-left; bottom-left NE BACK toward upper-right; bottom-right NW BACK toward upper-left. Same physicalbody proportion and camera. Each figure entirely insideown quadrant, fullbodyheight400px in625pxcell, sword and tassel inside with60px transparentmargins, clear gutters, no neighboring fragments. SQUARE atlas exactlyfour figures on truly transparent RGBA, no matte/checkerboard/floor/shadow/text/grid/effect. Asset type: MELEE ATTACK WINDUP, four distinct orientations. Right sword hand raises dao beside/above RIGHT shoulder, elbow bent preparing diagonal chop; LEFT empty hand opens for balance. Frontviews right shoulder/image-left, rearviews rightshoulder/image-right. Right saberhand remains visible on hilt,no hand swap. Weight loads rearleg, kneesflex torso turns slightly but head faces original compass; blade points diagonally up away from body with generousgap, not throughhelmet. No contact, motiontrail, flames, spark, enemy, duplicate weapon or detached arm. Four independently painted complete fullbody frames. Preserve current armor/helmet/redscarf, RIGHT cheekbluebirthmark only.",
+      "references": [
+        "idle_corrected_candidate"
+      ],
+      "status": "selected",
+      "generation_id": "exec-93309490-b2e1-43b6-8140-d42ccc83d5c3"
+    },
+    {
+      "key": "guide_v2_walk_b_ne",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v2_walk_b_ne.png",
+      "sha256": "25a4f62e7074ad480930013de3b058b07a807bdbfa9da897ece1e34a17e7b6a6",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/pose_guide.gd.txt",
+          "sha256": "f35ae45fc34cfd7aa7fdaf9cd4df85e183645d896ec2de3c633a4b9d0bd356e3"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v2_walk_b_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v2_walk_b_nw.png",
+      "sha256": "3a9477f42ea498e05b1f3bcd4d497def6552ba85088dac6004234d4515869b2b",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/pose_guide.gd.txt",
+          "sha256": "f35ae45fc34cfd7aa7fdaf9cd4df85e183645d896ec2de3c633a4b9d0bd356e3"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v2_walk_b_se",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v2_walk_b_se.png",
+      "sha256": "5c2d0afea45ae22029695dfea53cc19337716919bfbf0d7d22ba4d67c5738e83",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/pose_guide.gd.txt",
+          "sha256": "f35ae45fc34cfd7aa7fdaf9cd4df85e183645d896ec2de3c633a4b9d0bd356e3"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v2_walk_b_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v2_walk_b_sw.png",
+      "sha256": "61ee88f2af45607bc7d6c6ea83f168929b381873f6ec3bea1a9df9dce2a8bed2",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/pose_guide.gd.txt",
+          "sha256": "f35ae45fc34cfd7aa7fdaf9cd4df85e183645d896ec2de3c633a4b9d0bd356e3"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v2/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_walk_a_ne",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_walk_a_ne.png",
+      "sha256": "8ba12685eec070fa85c45282a173a67af63b81c7c9c678129614f90a8c265579",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_walk_a_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_walk_a_nw.png",
+      "sha256": "e772dc8d5a730eccff5e9dace2b3319b17cc9c5ed0522af3dfb53cce0661bf8c",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_walk_a_se",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_walk_a_se.png",
+      "sha256": "0100caa491311631a09381c5932795b4859df5ec623423f77fa28335957960c5",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_walk_a_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_walk_a_sw.png",
+      "sha256": "37ddd44f534c26d0dfb57fdd2179cefa7fd2033e066649f8c332e2b3f1f3cb3a",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_windup_ne",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_windup_ne.png",
+      "sha256": "6a9c437b49b88e5bac332f93a9b5db6843254508b9a8cb2b6a905efab2e4d077",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_windup_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_windup_nw.png",
+      "sha256": "d70b0fa0075f3d5858cf1d59a0957614c09c0e3b02e9c7e8d1763393c1be6b87",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_windup_se",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_windup_se.png",
+      "sha256": "e16d7bb18feeca609755414f5e73d96bdfe6b3d61f38bdc4c7a32f1ba88e0025",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v3_windup_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v3_windup_sw.png",
+      "sha256": "188f71310d7ce86bc5af8f325232db7ec9a111a3f4b0ca70e7617164718d5970",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/pose_guide.gd.txt",
+          "sha256": "4dbd1d549fd45628e2e0e34b65fe9ab57689cd13429c7b980c4bd4b1498bd30b"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v3/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v4_strike_ne",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v4_strike_ne.png",
+      "sha256": "c72d586d4380d06f4a3e71d8e4622c82471b20af46701b8dc9a7769d2cee232f",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v4/pose_guide.gd.txt",
+          "sha256": "122e09739368e416c3f255f13d0e72c49e098b61eff419f615f750cafc6cadd3"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v4/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v4_strike_se",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v4_strike_se.png",
+      "sha256": "2f83ae932287ee0548d93e8516c12bd42296684d486c9909a3f77ca468669e01",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v4/pose_guide.gd.txt",
+          "sha256": "122e09739368e416c3f255f13d0e72c49e098b61eff419f615f750cafc6cadd3"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v4/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v4_strike_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v4_strike_sw.png",
+      "sha256": "28b7997480dc1067e2a95c5f1f7e27776c2238fe397498d9b4dbbabdc9fc7c2c",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v4/pose_guide.gd.txt",
+          "sha256": "122e09739368e416c3f255f13d0e72c49e098b61eff419f615f750cafc6cadd3"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v4/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_fall_ne",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_fall_ne.png",
+      "sha256": "c3aa7ba5ec56d03a87836e3ac70966396c92047dbbab9468b1f6222048c5085e",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_fall_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_fall_nw.png",
+      "sha256": "a59a727681563bd873cf5e1f90866f4a2b9767423ea8ef7c39ec5f09088d1e07",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_fall_se",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_fall_se.png",
+      "sha256": "ab497d93768754a869e8611368ccebd990ccbeeb406222c96fc522ad9cd9d181",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_fall_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_fall_sw.png",
+      "sha256": "5894849119c39a82f21c34e91a8f8f49f1b9f3aaf645b17ea0e11fa3c1961a94",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_hurt_ne",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_hurt_ne.png",
+      "sha256": "ddc99cee045c35e4520e5f0a41540e0287d91b0f037171b54ccc7a8478408f20",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_hurt_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_hurt_nw.png",
+      "sha256": "c531c338a47419133746e868480cd4e832af17bb3eb869c976ae98f0dccef87f",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_hurt_se",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_hurt_se.png",
+      "sha256": "77ebc2c266e8ab06f6ee9802165992fa099b97b29546568f96f7fd558c844446",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_hurt_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_hurt_sw.png",
+      "sha256": "ff207b831039dbdc1475fc2f8e52ea95bd0fcd0e1e92f597da3270076ea07db1",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_strike_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_strike_nw.png",
+      "sha256": "c37bc915074c24dc0634b139a98f946e10906a5eedc2006ae49c54508b4c2644",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_terminal_ne",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_terminal_ne.png",
+      "sha256": "a26347e22dcdf8fe0a3d85aaf3e36bb1a6894edef14a76fbce294e658e6aa04f",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_terminal_nw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_terminal_nw.png",
+      "sha256": "106dd24b43ad3e8c9c30d3e69d0b1aa76d6ffd0a589adbdbae312f7ba4b94fb9",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_terminal_se",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_terminal_se.png",
+      "sha256": "c5dfa9104cf913747efff0d60f1359f7b0ecbef2042203327aec21b06153db84",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    },
+    {
+      "key": "guide_v5_terminal_sw",
+      "repository_path": "tools/contracts/yang_zhi_direction4_20261004/guides/guide_v5_terminal_sw.png",
+      "sha256": "d904199592872bd90510db42812427b69256c76f358da96b07df09df5d3d7a9b",
+      "method": "godot_3d_pose_reference",
+      "prompt": "Deterministic code-native anatomy reference; blue anatomical right, red left. Reference only, never production artwork.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/pose_guide.gd.txt",
+          "sha256": "93aa9c75e5ce22eeceebf5718aad6cd0013659cfa36b963ca8b730f7e5579170"
+        },
+        {
+          "path": "tools/contracts/yang_zhi_direction4_20261004/guides/v5/project.godot.txt",
+          "sha256": "37a45e9245714632be3e856e9ff198ba223a07e98e1ce212ae7850f8c7933fcc"
+        }
+      ]
+    }
+  ]
+}

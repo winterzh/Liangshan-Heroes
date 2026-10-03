@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_zhi_direction4_20261004/yang_fall_nw.png" id="yang_fall_nw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_zhi_direction4_20261004/yang_terminal_nw.png" id="yang_terminal_nw"]
+
+[sub_resource type="AtlasTexture" id="fall_nw"]
+atlas = ExtResource("yang_fall_nw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-90.0, 50.28)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.068858
+
+[sub_resource type="AtlasTexture" id="terminal_nw"]
+atlas = ExtResource("yang_terminal_nw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-128.0, 74.28)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.23295
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_nw")},
+{"duration": 1.0, "texture": SubResource("terminal_nw")},
+{"duration": 1.0, "texture": SubResource("terminal_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

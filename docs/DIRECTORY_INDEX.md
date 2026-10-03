@@ -1,3 +1,11 @@
+## 2026-10-04 杨志通用四向已验收
+
+- assets/characters/yang_zhi_direction4_20261004/：23原生PNG与import。
+- assets/direction4/yang_zhi_20261004.json与assets/anim/yang_zhi_*_<方向>.tres：32姿态、20资源、透明分格/脚点元数据。
+- tools/contracts/yang_zhi_direction4_20261004/：完整提示/来源选择、6必需父图、28份3D参考和源码、复现助手。
+- qa/yang_zhi_direction4_20261004/：final报告/28截图/路由/盘点、首轮返工证据、来源/留边/复现/清理收据。
+- [实现](YANG_ZHI_DIRECTION4_20261004.md)：近战步兵五状态四向。
+
 ## 2026-10-04 花荣通用四向已验收
 
 - assets/characters/hua_rong_direction4_20261004/：14 原生 PNG 与 import。

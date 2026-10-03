@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_zhi_direction4_20261004/yang_walk_a_guided.png" id="yang_walk_a_guided"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_zhi_direction4_20261004/yang_walk_b_guided2.png" id="yang_walk_b_guided2"]
+
+[sub_resource type="AtlasTexture" id="walk_a_nw"]
+atlas = ExtResource("yang_walk_a_guided")
+region = Rect2(695, 634, 559, 620)
+margin = Rect2(30, 0, 61, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(33.5, -48.6)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.926437
+
+[sub_resource type="AtlasTexture" id="walk_b_nw"]
+atlas = ExtResource("yang_walk_b_guided2")
+region = Rect2(685, 652, 569, 602)
+margin = Rect2(16, 0, 33, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-68.0, -27.36)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.917109
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,3 +1,15 @@
+## 2026-10-04 杨志通用四向已验收
+
+杨志23原生源、32独立姿态和20资源完成验收：600/600 原生、8/8 公共路由、467 项来源审计通过，3585 冻结输入及私有副本零漂移，28 张截图。正常启动、当前头像和游戏参数不变；运行不依赖生成目录/Pillow，平台安装包尚未包含增量。见 [实现](YANG_ZHI_DIRECTION4_20261004.md)、[QA](../qa/yang_zhi_direction4_20261004/README.md)。
+
+只读预检（共享引擎空闲后加--run才隔离执行）：
+
+```powershell
+python -X utf8 -B tools/run_character_art_qa.py --repo <当前checkout> --manifest yang_zhi=assets/direction4/yang_zhi_20261004.json --work-root <工程外QA目录> --shared-checks
+```
+
+本轮复用同引擎成功imported后重新导入，非无缓存首启验收。首次画面返工后重新冻结来源与私有profile；最新成功缓存、必要父图和参考保留。
+
 ## 2026-10-04 花荣通用四向已验收
 
 花荣 14 原生图、32 姿态及 20 TRES 完成本地验收：563/563 原生、8/8 公共路由、290 项来源审计通过，3518 冻结输入及私有副本零漂移，32 张截图。正常启动和头像入口不变，游戏不依赖 Pillow 或生成目录，平台包尚未包含本轮增量。见 [实现](HUA_RONG_DIRECTION4_20261004.md)、[QA](../qa/hua_rong_direction4_20261004/README.md)。
