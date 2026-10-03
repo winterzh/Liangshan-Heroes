@@ -1,0 +1,386 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "hua_rong",
+  "original_reference": {
+    "path": "assets/characters/hero_portraits_aligned_20260926/hua_rong.png",
+    "sha256": "616cc6b3b03b3dc6d2f3637c03f7418951ed4600c7504b92c3deae5283224eaf"
+  },
+  "identity_note": "Existing aligned silver armor, white robe, pale-blue trim, high ponytail and bow identity. Current ranged infantry gameplay retained.",
+  "jobs": [
+    {
+      "key": "old_body",
+      "repository_path": "assets/anim/hua_rong_idle.png",
+      "sha256": "3eafdcc0e672c6d0e52ba40a5526bbaf17de7f627447558a81ff6af12ca783d4",
+      "method": "existing_project_reference",
+      "prompt": "Existing game body rendering reference.",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "idle_rejected",
+      "repository_path": "tools/contracts/hua_rong_direction4_20261004/generated/idle_rejected.png",
+      "sha256": "828d211e94874876ca52038d7d1cedbde2fd903f5fdc96e5aee8042e8fe7b7bc",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-6d4aebce-6f94-416f-a06a-4c340d0ca467",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand draws string/arrows. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. Asset type: NEW IDLE four-direction atlas. Relaxed alert standing on both feet, bow held lowered across body by LEFT hand, RIGHT hand near quiver/belt ready to pick an arrow; no nocked arrow yet. Reference1 existing aligned portrait for exact identity and costume, reference2 old body for scale/render language only; create real new directions.",
+      "references": [
+        "original",
+        "old_body"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "idle",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/idle.png",
+      "sha256": "3de4dfc5aab3aa767e512e501454a9a9d97f08f481642672584e7283a69394bd",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-936fc833-200c-4394-b5b1-32c324a04f18",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand draws string/arrows. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. Asset type: IDLE four-direction atlas corrected composition. Match four exact directions and identity in supplied atlas, left hand carries lowered bow, right hand near belt, standing both feet. IMPORTANT each body must be visibly SMALLER in its cell, body height ONLY420px maximum in approx625px cell; arrange figures at centers (25%,25%),(75%,25%),(25%,75%),(75%,75%) with at least85px transparent clearance around all outer extremities including bow/ribbons/boots. Transparent gutter at horizontal and vertical cell boundary at least100px wide. Complete figure entirely visible. Do not zoom/crop. Preserve native transparency.",
+      "references": [
+        "idle_rejected"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "walk_a_rejected",
+      "repository_path": "",
+      "sha256": "8435c2e4d19cd7ce8c71f9db39ec2f8d090974238acf63633111a46a7d21aff9",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-03d66a11-d88e-4b28-8080-1968f36f43d1",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand draws string/arrows. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: NEW WALK STRIDE A atlas. Anatomical LEFT leg stepping forward toward facing, RIGHT leg trailing, knees slightly flexed, both boots visible, skirt panels sway with walking. LEFT hand retains lowered bow; RIGHT arm gently counter-swings near belt. Distinct moving silhouette, keep face/head height, armor and quiver identical to reference; rear view shows actual back. Draw all four new views separately; no mirroring bow hand.",
+      "references": [
+        "idle"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "walk_b_rejected",
+      "repository_path": "",
+      "sha256": "d40f14341306a4cfe8b4aac64de5a2fa903837f660af21b1959ddcbf9656a46f",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-5f39e97e-88d9-4f23-a4b1-c8ba824121d7",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand draws string/arrows. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: NEW WALK STRIDE B atlas. Opposite stepping phase to stride A reference2: anatomical RIGHT leg stepping forward in facing direction, LEFT leg trailing, both boots visible, skirt panels sway oppositely. LEFT hand retains lowered bow, RIGHT hand free near belt; do not mirror whole body or switch bow hand. Keep same face/head height/quiver/body physical proportions. Draw all four new views, no duplicates of stride A. Reference1 idle identity; reference2 preceding stride left leg.",
+      "references": [
+        "idle",
+        "walk_a_rejected"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "walk_b_attack_rejected",
+      "repository_path": "",
+      "sha256": "1bf32d9d39b2c4397294564437b314d6ca61aa5deb55f82db4b6ddc38fe69dcb",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-982285f7-91b0-4a31-84e5-f46266380f90",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand draws string/arrows. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: WALK STRIDE B, opposite stride of reference, REPAINT LEG POSES. In BOTH front-facing TOP ROW cells, the RIGHT BOOT on viewer's LEFT must be the forward-reaching LOWER boot (near bottom of cell); the LEFT BOOT on viewer's RIGHT must be bent backward and HIGHER in cell. This is essential: reference shows left boot viewer-right leading; change to right boot viewer-left leading. In back-facing bottom row cells show right leg leading and left leg behind. Clear wide stride with TWO boots separated horizontally. Keep left hand bow and exact identity, no body mirroring. Every cell fully fits inside its quadrant, generous empty space. No identical leg poses to input.",
+      "references": [
+        "idle"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "walk_b",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/walk_b.png",
+      "sha256": "b55bad9fbaeeeae0ce7d11e945c461f3f162e362c6f3b746ce26ea39fb64ead7",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-682efd17-5019-4ecf-99e5-403c0899efab",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: WALK STRIDE B NONATTACK. Draw walking with bow DOWN across hips exactly as idle reference. NO ARROW IN HAND, NO NOCKED ARROW, NO AIMING, NO DRAWING STRING. Right arm rests freely near waist. In top row RIGHT BOOT viewer LEFT is lower forward foot, LEFT BOOT viewer RIGHT bends behind and is higher. Walking step only, feet clearly separated, not firing while moving. Bottom views independently walk opposite leg phase to preceding stride A. Keep left hand lowered bow, consistent costume and proportions.",
+      "references": [
+        "idle"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "windup_rejected",
+      "repository_path": "",
+      "sha256": "f11a5d53ef17f4db60d0d231cbc75f22a9e4627f2565900139f3d6f61be6c305",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-06453b72-e321-48a5-acec-44d129402adf",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: NEW ATTACK WINDUP / FULL DRAW. Stand still in balanced wide archer stance, boots planted, knees firm. Left arm extends brown recurved bow toward target in facing direction, RIGHT hand draws SINGLE nocked arrow and bowstring back to cheek, taut triangular string, arrow pointed toward that target. Right elbow back, face sights along arrow. SE shoots lower-right, SW shoots lower-left, NE shoots upper-right with back visible, NW shoots upper-left with back visible. Essential LEFT bow hand/RIGHT draw hand consistently, not mirrored handedness. No multiple arrows, no floating arrow, no bent arrow, no release yet. Reference for identity only; depict correct historical human archery mechanics. All limbs, bow tips and arrow fit inside each isolated quadrant.",
+      "references": [
+        "idle"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "windup_se",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/windup_se.png",
+      "sha256": "d42529d136de863976d9d71e7578ce7dd30277dea7f2cd3b2cb02501fee7abce",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ea21c683-e5b0-48ff-a803-56bc95f565f5",
+      "prompt": "Use case: historical-scene. NEW SINGLE FULL-BODY Hua Rong ATTACK FULL DRAW pose, NOT atlas, only ONE character centered on truly transparent RGBA. Identity/costume matches supplied silver lamellar armor, white robe pale blue trim, silver boots, high black ponytail silver ornament and pale blue ribbons, brown quiver; clean-shaven handsome young infantry archer. Orthographic30degree elevated isometric SE view: face/chest toward lower-right. Stand firmly on both boots, left arm holds recurved brown wooden bow extended lower-right, RIGHT hand draws nocked arrow/string to right cheek, elbow pulled back. One arrow points lower-right, taut triangular string. Anatomical LEFT bow hand is essential. Full body and bow within canvas, body height600px on1254canvas, generous200px margins. No horse, no scene/shadow/effects/text/checkerboard. Existing atlas identity reference only. Independently drawn accurate archery mechanics.",
+      "references": [
+        "idle"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1133,
+        1388
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "windup_sw_rejected",
+      "repository_path": "tools/contracts/hua_rong_direction4_20261004/generated/windup_sw_rejected.png",
+      "sha256": "5325d3e53730f186cf6aff62dbc5affeaaad8fb06993cebb709e73d4eae9f10e",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-13945991-7b17-403f-aab7-072985dd3a99",
+      "prompt": "Use case: historical-scene. NEW SINGLE full-body Hua Rong FULL DRAW attack pose, ONLY ONE independently painted character, true transparent RGBA. Match referenced silver armor white robe pale blue trim silver boots black high ponytail silver ornament blue ribbons brown quiver. Clean-shaven handsome slim young infantry archer. SW direction: face/body toward lower-left in elevated30degree isometric view. View him from HIS anatomical RIGHT front side: nearer foreground RIGHT arm bends with RIGHT hand at cheek pulling string, farther LEFT arm extends across body and holds wooden recurved bow toward lower-left. Do NOT mirror right-handed archer into left-handed archer. LEFT hand holds bow, RIGHT hand pulls one arrow/string. Right shoulder/forearm visible nearer camera, left bow shoulder farther camera. Arrow aims lower-left; boots planted wide. Entire bow/body/arrow fit with100px+ empty margins, center figure, no crop. No horse, effects, floor, shadow, text or extra people. Reference1 identity; reference2 correct SE handedness mechanics ONLY, draw independent SW anatomy.",
+      "references": [
+        "idle",
+        "windup_se"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "windup_ne_rejected",
+      "repository_path": "tools/contracts/hua_rong_direction4_20261004/generated/windup_ne_rejected.png",
+      "sha256": "58f1c249e9336656ab6954fbad52d12c0fe41355033eba5b099f69e1b044d2ca",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-2cee6fda-8c0c-4e08-a6a1-ecdc34524e50",
+      "prompt": "Use case: historical-scene. NEW SINGLE full-body Hua Rong FULL DRAW attack, ONE figure centered true transparent RGBA. Exact white robe pale blue trim, silver armor/boots, high black ponytail silver ornament blue ribbons, brown quiver identity. NE direction toward UPPER RIGHT: camera sees BACK and his LEFT rear side, face mostly hidden, left cheek may be slight visible. LEFT upper arm nearest camera extends forward diagonally toward upper-right to hold recurved brown bow; RIGHT arm is farther side with right elbow pulled back near his right shoulder. Bow arm must emerge from LEFT shoulder on viewer's LEFT, crossing diagonally in front of torso toward upper-right; don't simply give bow to right shoulder viewer-right. RIGHT hand nocks/pulls one straight arrow/string to cheek, taut draw. Quiver stays on back. Balanced planted boots, not stepping. Full bow/body/ties/arrow inside canvas100px margins. Reference exact identity only. No mirror, horse, floor/shadow/effects/text/extra people.",
+      "references": [
+        "idle"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "windup_nw",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/windup_nw.png",
+      "sha256": "b9af275793c67db3ed938c2121736ea7e129e458e91bdfde65873b4f859ccaa1",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-eae6c440-5cae-492e-bbae-44d3fc29d9e9",
+      "prompt": "Edit target is supplied full-body Hua Rong NE bow draw. Correct ONLY handedness and top canvas clearance; keep exact identity, clothing, bow, NE-facing rear camera and planted boots. This is currently LEFT-HANDED archery: his RIGHT arm on image-right holds bow. Replace arm anatomy with RIGHT-HANDED archery: LEFT arm from image-left shoulder reaches forward in front of torso (mostly occluded behind body from this rear camera) to hold bow at upper-right. RIGHT shoulder image-right now bends elbow BACK toward camera on image-right; RIGHT hand pulls bowstring to right cheek. Right elbow must visibly protrude on IMAGE RIGHT, not image left. Left bow upper arm may be hidden by body. Place quiver on back. Repaint arms and correctly taut bowstring ONE arrow; no mirrored body, no rotating entire sprite. Lower bow tip top edge by80px to leave canvas margin. One fullbody only, genuinely transparent RGBA.",
+      "references": [
+        "windup_ne_rejected"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "windup_ne_missing_draw_rejected",
+      "repository_path": "tools/contracts/hua_rong_direction4_20261004/generated/windup_ne_missing_draw_rejected.png",
+      "sha256": "abbe4c0465a2aee7e72f0178d1665a51bdbf7ef2a3959ccef7a7076c2a136a65",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-e9f7a7c5-d2c8-4610-86c9-db319990464b",
+      "prompt": "Use case: historical-scene. NEW ONE FULL-BODY independent Hua Rong right-handed archer, true transparent background. Identity white robe silver lamellar armor pale blue trim high black ponytail silver ornament blue ribbons silver boots brown quiver. Facing NORTHEAST (UPPER-RIGHT of screen), his BACK toward viewer. Bow and arrow must extend toward UPPER-RIGHT, not upper-left. Anatomy: anatomical LEFT hand holds recurved bow; RIGHT hand draws to cheek, right elbow projecting toward viewer on screen-right. Show back of RIGHT upper arm bent toward camera; left bow arm mostly in front of torso and may be occluded by body. Camera is BEHIND HIS RIGHT SHOULDER; arrowhead/bow upper-right of head, quiver and BACK visible. This is a NEW camera view of SAME right-handed archer, do NOT MIRROR the NW reference. Keep plantedboots,100px clear transparent borders, no horse/shadows/text/effects. Reference same identity/correct handedness only; independently turn the character toward upper-right.",
+      "references": [
+        "windup_nw"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "windup_ne",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/windup_ne.png",
+      "sha256": "1f8222d8400a243da7c227f075fb42be9108e40f20ebfd2b4787dccc0663d7d7",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-e9254020-d47c-4e10-8dd4-fda626cdb42e",
+      "prompt": "编辑参考图，只修改双臂的骨骼姿态，并在画布顶端留出80像素透明空间。人物花荣、银甲白袍、蓝色飘带、背后箭袋、双脚站姿和脸朝右上方都保持。必须是一名左手持弓、右手拉弦的弓箭手，当前图画错成右手持弓，且右侧弯肘拉弦姿势缺失。请明确绘制：画面右侧的右肩连接一条弯曲的右臂，右肘向右下方靠观众位置突出，右前臂斜向上回到人物右脸颊，右手捏住箭尾与弓弦。左肩在画面左侧，左臂向人物身体前方伸直（上臂部分可被身体遮挡），左手伸到画面右上方握住弓的中央。弓和箭头仍在人物头部右上方，绝对不能改为左上方。镜头从人物背后看右肩，背部可见，人物朝东北右上方。只有一张完整人物透明RGBA立绘。不得将整个人镜像，不得省略右肘和拉弦右手，不得改变面向。",
+      "references": [
+        "windup_ne_missing_draw_rejected"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "windup_sw",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/windup_sw.png",
+      "sha256": "2fb0c949a9ed89716d7fff1143df7f431dfe84c6bc3aef875c6ef25f73e18763",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-d9f6a480-e069-4419-bbba-205fcaede864",
+      "prompt": "编辑参考图的花荣西南方向射箭姿势。人物仍朝画面左下方，脸部可见，保持银甲白袍、蓝色衣缘与飘带、高束发银饰、背箭袋和站姿。只重画双臂以修正左右手：当前图为左撇子弓箭手，要改为右撇子——左手持弓，右手拉弦。右肩位于图中偏左、靠近观众，右上臂向后弯曲，右肘在画面左侧偏下靠观众突出，右前臂斜向上伸回右脸颊，右手捏箭尾拉弦。左肩在画面偏右远离观众，左臂从该肩朝左下方伸直、横越身体前方，左手在画面左侧握弓。镜头看人物右前侧，近处右拉弦臂清楚可见，远处左持弓臂部分被近处手臂遮挡。弓和箭仍朝画面左下，不得改为朝右。仅一名完整人物，100px透明留白，真RGBA透明背景。不能镜像整个角色，不能换成背面，不能缺少拉弦手。",
+      "references": [
+        "windup_sw_rejected"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1179,
+        1334
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "strike_rejected",
+      "repository_path": "",
+      "sha256": "3dda2fa1bcc218641aa4a2f3fc784facb0da02e95cb74c23e9b1477f2a3a4850",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b0bae1a7-ab2f-4ba2-9042-84df8359410c",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: NEW ATTACK RELEASE four-direction atlas. All four stand in same planted archer stance. LEFT arm keeps wooden recurved bow extended toward target; RIGHT hand has JUST RELEASED STRING, recoils open near right cheek/shoulder, right elbow pulled back. NO ARROW IN SPRITE (arrow is separate runtime projectile), relaxed straight string between bow tips, no taut triangle to right hand. Bow faces correct SE lower-right SW lower-left NE upper-right NW upper-left. NE back view RIGHT bent draw/recoil elbow foreground on image-right, LEFT extended bow arm in front mostly occluded; NW back view LEFT bow arm image-left and RIGHT elbow image-right. Correct mechanics of same right-handed archer, not mirrored handedness. Four figures fit completely inside625px cells with50px transparent edges including bow tips. Reference1 idle identity; other three correct independent draw directions for handedness. No floor/shadows/trails/glow/text.",
+      "references": [
+        "idle",
+        "windup_se",
+        "windup_ne",
+        "windup_nw"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "strike_se",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/strike_se.png",
+      "sha256": "38f50a23c48b10daf0fc28b807ff927aa120becbf280403b4bcd14c85ceca751",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ab6eb653-01be-4347-a856-edda90608242",
+      "prompt": "Edit target: supplied SINGLE Hua Rong SE full draw. Change ONLY shooting phase to JUST RELEASED: remove nocked arrow entirely, RIGHT drawing hand now open and recoiled behind cheek near shoulder, LEFT bow arm stays extended toward lower-right. Bowstring is now one STRAIGHT unstretched cord directly between upper and lower bow tips, NOT connected to right hand. Preserve exact face, body, silver/white/blue costume, planted boots, bow position, isometric SE camera, transparent RGBA. No projectile/trail/effect painted. Complete uncropped character with transparent margin. Fullbody ONE figure.",
+      "references": [
+        "windup_se"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1133,
+        1388
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "strike_ne",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/strike_ne.png",
+      "sha256": "24057cea455f0bba131163fade9c869a5c9dd0a5d4091615ad99ace086ffdd11",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-289b2a28-38be-4711-aba2-07cf553571b8",
+      "prompt": "编辑参考中的东北方向花荣拉弓图，仅改为刚松弦的发射瞬间，严格保持当前左右臂骨骼：左持弓臂在身体前方、右弯肘臂在靠镜头右侧。左手继续在画面右上方握弓，右肘位置不变，右手在右脸颊旁松开，五指略张，箭已经飞出因此删除整支箭；弓弦恢复为两弓梢直接相连的一根直弦，不能仍然连到右手成三角。保持朝右上方的背面、银甲白袍、蓝边飘带、高束发银饰、箭袋、原双脚站姿与身体比例。原生透明RGBA背景，一名完整人物，不额外画飞箭或特效，不镜像，不改变面向，不改变左右手。",
+      "references": [
+        "windup_ne"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "strike_nw",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/strike_nw.png",
+      "sha256": "bacc1f625ba639bff209265277c1a79b0f50115b4ada11f7dde8b234113c113a",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-743ef8f3-7b6e-4aa6-b25a-f1e8f7d9a491",
+      "prompt": "Edit SINGLE Hua Rong NW full draw into JUST RELEASED phase. Keep exact identity silver armor white robe pale blue trim silver hair ornament ponytail blue ribbons quiver, body and plantedboots, facing UPPER LEFT BACK view. LEFT bow arm extended upper-left remains. RIGHT bent arm image-right recoils with right hand OPEN near cheek/back of neck, arrow completely removed. Bowstring now STRAIGHT cord directly between bow tips, not connected to hand. No baked projectile or effect. Maintain genuine transparent RGBA, fullbody one figure entirely within original canvas. Do not mirror/change direction/bodyhandedness/camera.",
+      "references": [
+        "windup_nw"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "strike_sw",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/strike_sw.png",
+      "sha256": "b15e2ee9db28ea7115a6a255c3154fdb9be4e329b098469104e792155d09eb8d",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ed332216-cced-4450-98b4-178872b8c89d",
+      "prompt": "Edit SINGLE Hua Rong SW full draw into JUST RELEASED phase, preserving exact independent SW view/identity/body/archery handedness. Bow and head point lower-left, face visible. Holding arm stays extended, drawing hand open and recoiled near cheek/shoulder, elbow stays pulled back. Remove entire nocked arrow. Bowstring becomes ONE straight cord directly joining bow tips without connection to right hand, no triangular full draw. Retain silver lamellar armor white robe light blue trim/ribbons silver ornament black ponytail brown quiver silver boots planted wide. One full character native transparent RGBA, no floor/shadow/projectile/effects, no mirrored body or opposite-facing image, no cropped limbs.",
+      "references": [
+        "windup_sw"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1179,
+        1334
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "hurt",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/hurt.png",
+      "sha256": "5c46ec5be466dac4f9a93e40b543582d2540dca7fc25408deec54091163bb38f",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8a5284a3-e850-4067-b091-d2a174c6c0da",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: HURT RECOIL four-direction atlas, nonattack. Torso visibly leans backwards, shoulders flinch, knees bend, free RIGHT hand protects chest, anatomical LEFT hand retains bow lowered at hip across body. No nocked arrow, no aiming, no gore. Four NEW distinct hurt views, NE/NW show BACK. Same physicalbody/armor size as idle, hair/quiver constant. All fullfigures isolated within respective quadrants, atleast50px transparent edgeclearance. Identity reference only. Match existing silver/white/pale-blue palette without exaggeration.",
+      "references": [
+        "idle"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "fall_rejected",
+      "repository_path": "",
+      "sha256": "bd1cf8d2626c30f6e8eef69105e05219e5eccc0a88a527a82e408ae50fd989d5",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ee9e3013-ec0d-4f36-abde-26a1d3943339",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: DEATH FALLING four-direction atlas. Collapse onto one knee, torso slumps sideways, RIGHT free hand braces towards invisible ground, LEFT hand lowers bow near feet, no arrow nocked. Rear views show BACK and corresponding NE/NW facing, front SE/SW face correspondingly. Body same adultphysical proportions asidle; deathfall heightabout330px in each625pxcell, allcomplete body/bow/hair/boots/quiver have50px clear transparent edges. Kneeling intermediate fall DISTINCT from standing hurt and lying terminal. No gore, floor, castshadow, magicaleffect. Four independently painted orientations.",
+      "references": [
+        "idle"
+      ],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "fall",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/fall.png",
+      "sha256": "d642a8c4ee7583f5fb163c9b6b8388e43f2d1e2b7c817dc97aae561970983e88",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-89ad14d8-4aa7-42bb-8701-3cdb26babd93",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: DEATH FALLING 2x2 atlas, NOT standing. Kneeling collapse, torso slumps, same body size as idle. Crucial arm positions based on idle: in TOP ROW SE/SW, left bow hand is on IMAGE RIGHT SIDE OF EACH FIGURE, bow lowered on that side. Free right hand is on IMAGE LEFT SIDE, bracing ground. In BOTTOM ROW NE/NW BACK views, left bow hand on IMAGE LEFT of each figure lowers bow there, free right hand on IMAGE RIGHT braces ground. Do not swap arm roles when kneeling. Body bends at hips onto knees, silverboots visiblebehind. Fullbody/bow/ponytail/quiver inside each cell with50px transparentmargins. Four independent directions following idle reference, no mirror, no arrow, floor, shadows, text, gore or effects.",
+      "references": [
+        "idle"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "terminal",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/terminal.png",
+      "sha256": "8ffe3b6f9e244c57dc3bb1f1310641c1c2b7c2d38b602efd1a34cb6540ef9d96",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-30180459-89f6-4aca-877f-72754d9b6f4c",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: DEATH TERMINAL lying body atlas. All four figures completely lie motionless on SIDE on invisible ground, knees curled, head low, whole fullbody visible, samephysicaladultbody NOT shrunk. Bow is RELEASED and rests alongside left hand; no hand gripping bow so no hand swap. Quiver stays on back, hair/blue ribbons gentlyrest. SE front lying head facinglower-right, SW front lying head facinglower-left; NE rear lying showsback/head towardupper-right, NW rear lying showsback/headtowardupper-left. Do not stand, crouch or kneel. Each lying body about450px long within625pxcell, at least50px transparentedges. Four separate paintings, no mirrors, no shadows/ground/gore/wounds/effects/text.",
+      "references": [
+        "idle"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "key": "walk_a",
+      "repository_path": "assets/characters/hua_rong_direction4_20261004/walk_a.png",
+      "sha256": "a661e137e64c1f55c7d9e5bccce06037ff6293417db81c68a8cc0ba8633d65e3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-9e2154f3-087d-4331-be39-0dfb5866b0be",
+      "prompt": "Use case: historical-scene. Production native transparent isometric Northern Song Chinese game sprite atlas, fine painted realism matching references. Same Hua Rong identity as ALIGNED silver-armored portrait: handsome clean-shaven young adult, black high ponytail with silver hair ornament and light blue ribbons, white crossed collar robe with pale blue trim, silver lamellar armor and shoulder guards, white skirt panels, silver boots, brown waist belt and brown quiver on back. Slim agile INFANTRY on foot, no horse. Anatomical LEFT hand always holds single brown wooden recurved bow, RIGHT hand is free except during attack. Four independently drawn directions in square 2x2 atlas: top-left SE body/face toward lower-right; top-right SW toward lower-left; bottom-left NE back toward upper-right; bottom-right NW back toward upper-left. Orthographic elevated 30 degree isometric camera. Same body proportions/armor/quiver in all cells, no mirror/rotate substitutes. Each full figure, bow, hair ribbons and boots wholly within its quadrant, at least50px transparent margin on all cell edges, no fragments crossing cells. Entire figure height about440px in625px cell. Truly transparent RGBA background, no matte/checkerboard/ground/shadow/text/grid/labels/effects/extra characters. COMPOSITION: figures about420px body height, each centered in its625px quadrant with75px transparent margin; keep entire atlas transparent between cells. Asset type: NEW WALK STRIDE A, walking only. Anatomical LEFT leg forward, RIGHT trailing, opposite leg phase to reference2 right-leading strideB. LEFT bow hand holds bow DOWN across hips, RIGHT hand freely near belt, NO nocked arrow, NO aiming. Draw figures MUCH SMALLER in each cell: fullbodyheight380px maximum, bowwidth300px maximum. IMPORTANT empty transparent gutter120px between quadrants, feet and bow ends at least80px from all cell boundaries, no extremities crossing. Must be SQUARE canvas and exact 2x2 layout. Each view fully contains both boots, all bowtips/ribbons/quiver. Reference1 idle identity, reference2 opposite stride. No mirrors or duplicated gait.",
+      "references": [
+        "idle",
+        "walk_b"
+      ],
+      "status": "accepted",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    }
+  ]
+}

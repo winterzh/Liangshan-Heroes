@@ -1,3 +1,11 @@
+## 2026-10-04 花荣通用四向已验收
+
+- assets/characters/hua_rong_direction4_20261004/：14 原生 PNG 与 import。
+- assets/direction4/hua_rong_20261004.json 与 assets/anim/hua_rong_*_<方向>.tres：32 姿态、20 资源及采样/脚点元数据。
+- tools/contracts/hua_rong_direction4_20261004/：原提示、生成 SHA/引用链、元数据复现与四份必需拒绝父图。
+- qa/hua_rong_direction4_20261004/：final 原生报告/32 截图/路由/全库盘点，visual_review、source/bounds/reproduction、cleanup；engine_pause 保存历史暂停证据。
+- [实现](HUA_RONG_DIRECTION4_20261004.md)：远程步兵通用四向与独立攻击保护。
+
 ## 2026-10-04 吴用通用四向已验收
 
 - assets/characters/wu_yong_direction4_20261003/：十张原生 RGBA 生产源和 import；起手原图下半拒绝采样。

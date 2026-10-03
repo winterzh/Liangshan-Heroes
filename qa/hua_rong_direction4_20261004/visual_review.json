@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "method": "Direct native rendered image review. Three matrices cover all 32 poses; selected normal-time combat, codex/HUD and portrait sizes directly inspected. Automated screenshots retained for all four directions.",
+  "reviewed": [
+    {
+      "path": "final/hua_rong/unit_pose_matrix_1.png",
+      "sha256": "6e4284956fa4b45b425d7d709440de2733593c57b5bcce3efff56dea991821e5"
+    },
+    {
+      "path": "final/hua_rong/unit_pose_matrix_2.png",
+      "sha256": "8727e200c261bae1a46241141a0df9347748d00e9921408d3ca48da5ea0ee2fa"
+    },
+    {
+      "path": "final/hua_rong/unit_pose_matrix_3.png",
+      "sha256": "efe7e962ee496157f4abb1e1f6b7c1f2e60175988bb7f6e61d9108a88f5a26cf"
+    },
+    {
+      "path": "final/hua_rong/ranged_se.png",
+      "sha256": "54a8dc887f3fb1a66e6d4f631d3e4631645f7fd97936a279dd840d873169b863"
+    },
+    {
+      "path": "final/hua_rong/release_se.png",
+      "sha256": "4dcac3057768a4823d12e978567dab2b0791c2b2c848f1babef444c0c7d043d7"
+    },
+    {
+      "path": "final/hua_rong/release_sw.png",
+      "sha256": "93b10b43cc6561ed7b0720ef4785528cf4d8c135989fd47a551224bde5ad4237"
+    },
+    {
+      "path": "final/hua_rong/release_ne.png",
+      "sha256": "64eb22afbe623c6aca30a7ad1e5da0b65d36795abb36e45f5c5c04454e62fe7e"
+    },
+    {
+      "path": "final/hua_rong/release_nw.png",
+      "sha256": "a3627b7ea457afe1afa17b5a20c10d5ee09af25374b1dd32aa43c04c57baa38d"
+    },
+    {
+      "path": "final/hua_rong/codex_se.png",
+      "sha256": "86e1664989c693f778ee7fca9016252dabc42f37362602e033ecbed03919b57c"
+    },
+    {
+      "path": "final/hua_rong/codex_nw.png",
+      "sha256": "8b2375fd7c691e6e3da07c6e6e6c568a0a020a963de915321a5efa7ff09a0405"
+    },
+    {
+      "path": "final/hua_rong/portrait_sizes.png",
+      "sha256": "028b4ac81f0de8ca485d0e4b4bf159af512402c1de9d9982ae31fba57b18f5b4"
+    },
+    {
+      "path": "final/hua_rong/fall_sw.png",
+      "sha256": "7c7e92f02d81c9691509268db7164b3da015b2f6761a8b709fcb0c4c55334076"
+    },
+    {
+      "path": "final/hua_rong/terminal_nw.png",
+      "sha256": "462be7ed7a9b4a62023d061cccfb28b07b70199d4b195382909258962d55958f"
+    },
+    {
+      "path": "final/hua_rong/walk_nw.png",
+      "sha256": "4f1dfcf05316b62c007b84a3b49749464a7d942df80f1e2d6f067d8fcf97aaa9"
+    },
+    {
+      "path": "final/hua_rong/hurt_ne.png",
+      "sha256": "2253037806b874f9c4d7ca37982e6988b7b03c3bc40eaeff1f29fa3ea725d184"
+    }
+  ],
+  "findings": [
+    "Independent SE/SW front and NE/NW back views present; no neighboring sprite fragments in matrices.",
+    "Silver armor, white robe, pale-blue trim and current aligned portrait match.",
+    "Draw/release poses preserve bow/draw arms; arrow release uses existing separate runtime projectile.",
+    "Walking phases, recoil, falling and lying terminal remain readable; selection/HUD follows actor lifecycle."
+  ],
+  "limitations": "Low-frame-count generic character batch; no whole-campaign, performance, device or platform build acceptance."
+}

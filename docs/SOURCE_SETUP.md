@@ -1,3 +1,15 @@
+## 2026-10-04 花荣通用四向已验收
+
+花荣 14 原生图、32 姿态及 20 TRES 完成本地验收：563/563 原生、8/8 公共路由、290 项来源审计通过，3518 冻结输入及私有副本零漂移，32 张截图。正常启动和头像入口不变，游戏不依赖 Pillow 或生成目录，平台包尚未包含本轮增量。见 [实现](HUA_RONG_DIRECTION4_20261004.md)、[QA](../qa/hua_rong_direction4_20261004/README.md)。
+
+只读预检（共享引擎空闲后加 --run 才冻结执行）：
+
+```powershell
+python -X utf8 -B tools/run_character_art_qa.py --repo <当前checkout> --manifest hua_rong=assets/direction4/hua_rong_20261004.json --work-root <工程外QA目录> --shared-checks
+```
+
+允许 --cache-from 复用同引擎成功 imported，但仍重新导入、记录来源 SHA，不能称为全新无缓存导入。本轮恢复仍使用原冻结工程及私有用户目录；最新成功外部缓存保留，只有同 SHA 临时副本删除。
+
 ## 2026-10-04 吴用通用四向已验收
 
 十张原生 RGBA 源、32 姿势、20 个通用五状态四向 TRES 已完成本地验收：543/543 原生、8/8 公共路由、249 项来源审计通过，3469 冻结输入及私有副本零漂移，32 张截图。正常启动与头像入口不变，不依赖 Pillow 或生成目录，现有平台安装包未包含本批源码增量。详见 [实现](WU_YONG_DIRECTION4_20261003.md)、[QA](../qa/wu_yong_direction4_20261003/README.md)。
