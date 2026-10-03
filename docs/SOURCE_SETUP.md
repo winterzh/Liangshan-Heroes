@@ -1,3 +1,11 @@
+## 2026-10-03 呼延灼开发交接
+
+本轮 stable 增量包含呼延灼新身份头像与 20 个独立四向五状态资源：最终原生 517/517、公共路由 8/8、来源 458 项，3428 输入零漂移，画面目检与范围见 [本批说明](HU_YANZHUO_DIRECTION4_20261003.md)。源码资源在工程内完整保留，正常 Godot 启动入口不变；不需要访问生成目录或安装 Pillow，现有 Steam/Android 安装包尚未包含本批增量。
+
+只读预检：`python -X utf8 -B tools/run_character_art_qa.py --repo <本checkout绝对路径> --manifest hu_yanzhuo=assets/direction4/hu_yanzhuo_20261003.json --work-root <工程外QA目录> --shared-checks`。确认引擎和共享锁空闲后加 `--run`，必须保持独立配置和正常模拟速度；导入描述符已保留 UID。TRES 默认只读复现比较和来源审计见 [契约](../tools/contracts/hu_yanzhuo_direction4_20261003/README.md)。
+
+开发仍在 stable，本次不再次合并 main。两台电脑切换前后按下方流程核对状态、验证、白名单提交/推送；有修改或分叉不自动 stash/reset。后续执行顺序见 [最新计划](DEVELOPMENT_PLAN.md)。
+
 ## 2026-10-03 main 合并后的开发入口
 
 用户已授权将 stable `429b7f1c` 合入 main，源码合并为 `5eba64d7`，内容树与已验证 stable 完全相同；本批交接文档同步两分支。开发仍使用 `codex/sync-20260905-stable`，正常启动和本机 Godot 配置不变。换机先核对状态，干净且无分叉时才按既定 stable 命令拉取；不自动 stash/reset。合并记录见 [说明](MAIN_MERGE_20261003.md)。

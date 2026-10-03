@@ -1,0 +1,192 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "hu_yanzhuo",
+  "original_reference": {
+    "path": "assets/characters/hero_portraits_aligned_20260926/hu_yanzhuo.png",
+    "sha256": "45e9e0321dfb59c5436c62d3bbe2626539cd6b85838d3434e2949f0dd879b684"
+  },
+  "historical_source": "https://ctext.org/wiki.pl?chapter=810331&if=en",
+  "jobs": [
+    {
+      "key": "old_body",
+      "repository_path": "assets/anim/hu_yanzhuo_idle.png",
+      "sha256": "95c20260acdb0d4f1be509fd3df3c3a36c05e6f4ea5967a76bb71a4d08a46789",
+      "method": "existing_project_reference",
+      "prompt": "Old mounted body rendering style only; mace/costume not retained.",
+      "references": [
+        "original"
+      ]
+    },
+    {
+      "key": "idle",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/idle.png",
+      "sha256": "a1bc29646d2b2bd29a58e28847f33fc580095388f8083004baa563d8820c316f",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-93b6f07e-6c61-4dae-bc44-b4a8909212f7",
+      "prompt": "Use case: historical-scene. Asset type: native transparent 2x2 isometric mounted hero sprite atlas for the existing Chinese RTS Liangshan Heroes. Input image 1 is a FACE IDENTITY AND PAINTING STYLE reference only (existing Huyan Zhuo portrait); input image 2 is the existing mounted body/horse rendering style reference only. Create a NEW square sheet with exactly FOUR distinct full-body mounted idle views of the SAME Huyan Zhuo and SAME black horse. Equal 2x2 cells, top left SE facing viewer/down-right, top right SW facing viewer/down-left, bottom left NE facing away/up-right showing back, bottom right NW facing away/up-left showing back. Each is a separately drawn view, not a reflected reuse. Consistent orthographic isometric camera looking down 30 degrees, identical horse/rider scale, all hooves and head and weapons fit inside each cell with broad transparent margins, feet centered in lower part of each cell. Low-saturation Northern Song meticulous painted realism with crisp readable edges matching the old sprite, not cartoon/3D plastic. Preserve Huyan Zhuo's distinctive broad weathered face, heavy dark brows, full black beard, imposing robust mature build. Correct costume to chapter 55: dark upright angular iron futou headgear, two small upward corners (not deer horns), an ochre golden-yellow brocade forehead band, black robe with restrained seven-star stud details beneath dark oiled interlocking lamellar armor, only muted bronze fittings; remove the old green headcloth and huge red plume and red scarf. Mounted on a black horse with four pale hoof socks, dark mane/tail and dark brown Chinese saddle, no fantasy armor. The rider visibly holds TWO separate solid straight water-polished octagonal steel whips, one in EACH hand; these are slender rigid blunt rods with tapering tips and handles, NOT flexible whips, NOT maces. Show both shafts against the silhouette even in rear views. Idle stance: horse calmly stands on four hooves, rider sits upright holding both rods lowered diagonally at his sides; left/right rod grips correspond to actual rider anatomy as camera changes. Genuinely transparent RGBA canvas (alpha zero outside rider/horse), no colored background, no painted checkerboard, no ground, no cast shadow, no vignette, no text, no labels, no cell borders. No spikes, spherical heads, chains, sword blades, reins grasped in place of the second weapon, extra hands, extra legs or extra characters. This is a production sprite source, not a mockup. Leave every surrounding pixel truly transparent.",
+      "references": [
+        "original",
+        "old_body"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    },
+    {
+      "key": "walk",
+      "repository_path": "tools/contracts/hu_yanzhuo_direction4_20261003/generated/walk_rejected.png",
+      "sha256": "61ee6533b462e12bacfc6915581e13552e1062590c4b4594f94942564e495d94",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-52d2835b-fd49-437f-864d-684e1585f01a",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Make a NEW tall 2 columns x 4 rows full-body mounted WALK animation atlas. Each ROW is a different separately drawn view: row1 SE, row2 SW, row3 NE, row4 NW. Column1 walking stride A, column2 clearly OPPOSITE stride B of the same view: opposite diagonal hoof pairs reach forward while other legs extend back. Horse gently trots, rider stays seated and holds both rods lowered. Eight distinct poses total. Stable camera and body scale, broad transparent gaps and contained limbs. Reference is four-view identity/style only; do not duplicate idle.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "rejected_sampling_overlap"
+    },
+    {
+      "key": "attack",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/attack.png",
+      "sha256": "be22156c1565c6fa1add021c0472c05c0846f17fea1f8927011aa3aea9f48dc1",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-de55edc3-9fba-45eb-8e75-af4a51ef685d",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Make a NEW tall 2 columns x 4 rows full-body mounted ATTACK animation atlas. Each ROW is a different separately drawn view: row1 SE, row2 SW, row3 NE, row4 NW. Column1 WINDUP: rider raises both steel rods above/behind shoulders, elbows bent, horse firmly braces. Column2 STRIKE: both arms swing steel rods forward/down, shafts extended clearly away from body toward facing direction. Eight anatomically distinct poses total. Keep identical camera and rider/horse scale. BOTH rods exist in all cells. Reference is identity only, no standing-idle duplicates.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "accepted_except_rejected_regions"
+    },
+    {
+      "key": "hurt",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/hurt.png",
+      "sha256": "fe67a4881e3042bb754a075cbe4dc22ba373563129fae2b981f6aa4a3f8a55aa",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b1525d8f-ffb2-434d-baf8-95778ef6cb93",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Make a NEW square 2x2 full-body mounted HURT recoil atlas, four distinct views: TL SE, TR SW, BL NE, BR NW. Horse flinches backward with head raised and forelegs braced; seated rider leans backwards in a clearly different silhouette from idle, both arms recoil but continue gripping one rod each. All body/horse proportions match reference. This is a non-graphic incoming damage reaction, no gore or wound. Broad transparent margins, all limbs contained.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    },
+    {
+      "key": "death",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/death.png",
+      "sha256": "7d403970bf13a8e8b82d7c604b5d82c0ed5f9c91bbe77184d64d5bdd115af4bd",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-6ba1b425-c801-429b-ad37-6bc7d6dc2793",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Make a NEW tall 2 columns x 4 rows full-body mounted DEATH animation atlas, no gore or wounds. Each ROW has a separately drawn facing: row1 SE, row2 SW, row3 NE, row4 NW. Column1 FALL: horse collapses onto bent forelegs with chest low, rider slumps forward/sideways still partly in saddle. Column2 TERMINAL: same horse lies on its side fully on ground with bent limbs, rider fallen alongside horse still complete and same size, both steel rods resting nearby. Eight distinct physical poses total, horse/rider proportions preserved not tiny. Four directions must remain distinguishable, show backs in NE/NW, no standing survivors in terminal. No ground surface or shadow.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    },
+    {
+      "key": "portrait",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/portrait.png",
+      "sha256": "64976f0335a3bddefa31f1e331078948083201e98ba34fa726099c69d16d90eb",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-40a28ea6-1bb0-41be-8fe5-46f5cf15ee15",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Create a NEW square standalone painterly bust PORTRAIT of exactly Huyan Zhuo from this corrected four-view reference. Broad mature weathered face, heavy dark brows, full long black beard, robust shoulders, serious composed expression; dark angular iron futou with two small upright corners, ochre/golden yellow forehead band, black star-studded robe/dark oiled lamellar armor, muted gold fittings. Show two SOLID STRAIGHT OCTAGONAL STEEL WHIP rods vertically at his left and right shoulders, held by his two hands and both readable within portrait. Front three-quarter face, strong detail at HUD size, generous space around head. Same face/body costume style as reference, no helmet plume, green cloth, red scarf, spherical mace or additional people. Transparent cutout bust, not a rectangular scene.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    },
+    {
+      "key": "ne_strike",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/ne_strike.png",
+      "sha256": "2580b06a61d634edc8c90a2449aeb4611bc86e0852ea384b8e2ab8f0c2bea200",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-7910e25d-b591-4197-a96e-98db7b3b9a22",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Produce ONE independent full-body mounted attack STRIKE pose facing NORTHEAST: black horse's HEAD is on the UPPER RIGHT and rump on LOWER LEFT, see rider's BACK, never his chest. Rider leans FORWARD toward upper-right and extends BOTH arms and both rigid steel rods toward upper-right beyond the horse neck. Distinct forceful strike, not idle or windup. Three-quarter elevated isometric camera exactly like reference bottom LEFT idle view. Entire black horse, rider, both rods and four hooves inside a square transparent canvas with broad margins. This replaces a wrong-facing cell; cannot face screen-left. No extra characters.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    },
+    {
+      "key": "walk_a",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/walk_a.png",
+      "sha256": "43321eaab58f555c912ab113f69c3c549ed02e401e1b012351991a7a77135c25",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-5025b845-2547-4a3e-b1bf-21ffb09c4c94",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Create a NEW square 2x2 mounted WALKING STRIDE A four-view atlas: TL SE, TR SW, BL NE, BR NW. Horse's near foreleg and far hindleg advance, opposite pair trail. Rider seated with both rods lowered at his sides. Four independently painted camera views, not mirrored. Exactly one whole rider/horse in each cell. IMPORTANT: total figure height no more than 450 pixels within each approx 625px cell; at least 70 pixels truly empty margin at every cell edge. Broad space so not one single hoof/weapon/pixel enters another cell. No ground or cast shadows.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    },
+    {
+      "key": "walk_b",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/walk_b.png",
+      "sha256": "93803f9525fec4b6cd30c1474182ba2ba250653c2d499419949511937f4c5e91",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-3c4fadc3-b0b7-4644-a004-09fbea02bfb6",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Create a NEW square 2x2 mounted WALKING STRIDE B four-view atlas: TL SE, TR SW, BL NE, BR NW. Horse's FAR foreleg and NEAR hindleg advance, opposite pair trail: clearly opposite paired hoof phase to stride A. Rider seated with both rods lowered at his sides. Four independently painted views, not mirrored. Exactly one whole rider/horse per cell. IMPORTANT: total figure height no more than 450 pixels within each approx 625px cell; at least 70 pixels truly empty margin at every cell edge. Broad space so no hoof/weapon/pixel enters another cell. No ground/shadows.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    },
+    {
+      "key": "windup",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/windup.png",
+      "sha256": "b0d574f6af130b4ec1a4c2a173ccfcc780566b08247ed616dc0aea53eef7f92d",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8a168a5a-72ae-4a0b-8719-e2f08de93f8e",
+      "prompt": "Use case: historical-scene. Historical painted game sprite in the same subdued detailed Northern Song RTS style as the reference. EXACT same Huyan Zhuo identity, broad weathered face, heavy black eyebrows and full black beard, stocky mature rider in black seven-star robe, dark oiled lamellar armor, ochre/golden-yellow brow band and dark iron angular futou with two small upright corners. Same black horse with white hoof socks, dark brown Chinese saddle. TWO solid straight tapering octagonal blunt steel whips with handles, one in EACH rider hand, NO spherical or spiked mace heads, chains, sword blades, fantasy antlers, red plume, green hat or red scarf. Maintain correct independent isometric facing: SE front down-right, SW front down-left, NE rear up-right, NW rear up-left. True RGBA alpha zero outside figures. No background, ground, cast shadow, colored matte, checkerboard painting, border, text or labels. Keep full figures and both weapon shafts visible with generous margins. Create a NEW square 2x2 mounted ATTACK WINDUP four-view atlas: TL SE, TR SW, BL NE, BR NW. Rider raises BOTH solid steel rods up and back over his shoulders in preparation for forceful strike. Horse braces on four hooves. Four separately painted views, correct rear views in NE/NW, two distinct hands/rods every view. IMPORTANT: whole figure including highest rod tips is at most 450 pixels high within each approx625px cell. At least70pixels fully transparent margin at every cell edge. No cell crossing/touching or fragments of neighboring figure. Reference identity/style only. No floor/shadow.",
+      "references": [
+        "idle"
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "status": "accepted"
+    }
+  ]
+}

@@ -1,3 +1,9 @@
+## 2026-10-03 呼延灼身份与四向基础动作
+
+按最新计划完成呼延灼身体与头像双鞭身份修正，真透明四向待机、行走、攻击、受击、死亡接入图鉴和战斗 HUD。原生 517 项、公共路由 8 项及来源审计 458 项通过，3428 输入零漂移；32 独立姿势、九份生产 PNG 和全部来源链已保留。详见 [说明与限制](docs/HU_YANZHUO_DIRECTION4_20261003.md)、[QA](qa/hu_yanzhuo_direction4_20261003/README.md)。
+
+本批为 stable 源码增量，正常启动方式不变，未打包或发布 Steam/Android。后续按 [开发计划](docs/DEVELOPMENT_PLAN.md) 继续六名核心人物、晁盖身份及全库美术完善；此前 main 合并记录按日期保留。
+
 ## 2026-10-03 main 已合入最新进度与大厅修复
 
 按用户授权，main 已合入 stable `429b7f1c` 的大厅修复、验证工具/QA 和最新开发计划，源码合并 `5eba64d7` 与原 stable 内容树一致。本批交接同步 main/stable；开发继续使用 stable，Steam/Android 安装包不变。详见 [合并说明](docs/MAIN_MERGE_20261003.md)，最新后续顺序见 [开发计划](docs/DEVELOPMENT_PLAN.md)。

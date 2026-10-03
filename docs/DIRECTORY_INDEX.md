@@ -1,3 +1,11 @@
+## 2026-10-03 呼延灼身份与四向
+
+- `assets/characters/hu_yanzhuo_direction4_20261003/`：九份原生 RGBA 生产 PNG 及 import 描述符；八张动作源和独立头像。
+- `assets/direction4/hu_yanzhuo_20261003.json`、`assets/anim/hu_yanzhuo_*_<方向>.tres`：32 姿势/20 资源的来源、帧序、脚点和未选区域。
+- `tools/contracts/hu_yanzhuo_direction4_20261003/`：原生生成提示、引用链、SHA、元数据准备入口与拒绝的密排行走图。
+- `docs/HU_YANZHUO_DIRECTION4_20261003.md`、`qa/hu_yanzhuo_direction4_20261003/`：实现范围、导入保护中止、自动通过但目检拒绝的候选、最终报告和真实截图。
+- `tools/run_character_art_qa.py`、`tools/art_character_direction4_qa.gd`：新增呼延灼选择，实际近战/HUD/图鉴/姿态矩阵及尺寸头像复验，保留原有三名角色分支。
+
 ## 2026-10-03 main 合并交接
 
 - `docs/MAIN_MERGE_20261003.md`：本次授权、两分支历史关系、合入范围、内容树和验证边界。

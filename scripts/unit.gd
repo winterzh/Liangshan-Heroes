@@ -356,6 +356,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"lin_chong": true,
 	"sun_li": true,
 	"hu_sanniang": true,
+	"hu_yanzhuo": true,
 }
 
 

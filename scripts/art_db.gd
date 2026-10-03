@@ -570,7 +570,7 @@ const STANDALONE_PORTRAITS := {
 	"lu_junyi": "res://assets/characters/hero_portraits_commanders_20260926/lu_junyi.png",
 	"guan_sheng": "res://assets/characters/hero_portraits_aligned_20260926/guan_sheng.png",
 	"qin_ming": "res://assets/characters/hero_portraits_aligned_20260926/qin_ming.png",
-	"hu_yanzhuo": "res://assets/characters/hero_portraits_aligned_20260926/hu_yanzhuo.png",
+	"hu_yanzhuo": "res://assets/characters/hu_yanzhuo_direction4_20261003/portrait.png",
 	# 新增四名核心英雄的独立头像，沿用统一纸纹与工笔厚涂风格。
 	"wu_yong": "res://assets/characters/hero_portraits_20260926/wu_yong.png",
 	"hua_rong": "res://assets/characters/hero_portraits_aligned_20260926/hua_rong.png",
