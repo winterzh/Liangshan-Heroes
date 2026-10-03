@@ -1,3 +1,11 @@
+## 2026-10-04 吴用通用四向已验收
+
+- assets/characters/wu_yong_direction4_20261003/：十张原生 RGBA 生产源和 import；起手原图下半拒绝采样。
+- assets/direction4/wu_yong_20261003.json 与 assets/anim/wu_yong_*_se/sw/ne/nw.tres：32 姿势与 20 个资源，区域/脚点/尺寸元数据。
+- tools/contracts/wu_yong_direction4_20261003/：完整提示、引用链、哈希、只读图片检查/元数据构建，generated 保留拒绝候选。
+- qa/wu_yong_direction4_20261003/：最终原生/截图、公共路由与盘点、来源/留边/复现，启动失败、引擎暂停与 UID 导入证据。
+- [实现](WU_YONG_DIRECTION4_20261003.md)：两个角色 QA 工具新增远程分支，unit 仅补独立攻击保护名单。
+
 ## 2026-10-03 呼延灼身份与四向
 
 - `assets/characters/hu_yanzhuo_direction4_20261003/`：九份原生 RGBA 生产 PNG 及 import 描述符；八张动作源和独立头像。

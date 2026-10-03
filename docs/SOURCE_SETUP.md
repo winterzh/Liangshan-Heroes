@@ -1,3 +1,15 @@
+## 2026-10-04 吴用通用四向已验收
+
+十张原生 RGBA 源、32 姿势、20 个通用五状态四向 TRES 已完成本地验收：543/543 原生、8/8 公共路由、249 项来源审计通过，3469 冻结输入及私有副本零漂移，32 张截图。正常启动与头像入口不变，不依赖 Pillow 或生成目录，现有平台安装包未包含本批源码增量。详见 [实现](WU_YONG_DIRECTION4_20261003.md)、[QA](../qa/wu_yong_direction4_20261003/README.md)。
+
+只读预检（引擎空闲后加 --run 才会冻结执行）：
+
+```powershell
+python -X utf8 -B tools/run_character_art_qa.py --repo <当前checkout> --manifest wu_yong=assets/direction4/wu_yong_20261003.json --work-root <工程外QA目录> --shared-checks
+```
+
+保留共享引擎锁、私有用户目录与来源 SHA。可通过 --cache-from 复用同引擎成功导入缓存，但仍重新导入并明确记录，不称为全新无缓存导入。新导入描述符含稳定 UID 后再冻结。
+
 ## 2026-10-03 呼延灼开发交接
 
 本轮 stable 增量包含呼延灼新身份头像与 20 个独立四向五状态资源：最终原生 517/517、公共路由 8/8、来源 458 项，3428 输入零漂移，画面目检与范围见 [本批说明](HU_YANZHUO_DIRECTION4_20261003.md)。源码资源在工程内完整保留，正常 Godot 启动入口不变；不需要访问生成目录或安装 Pillow，现有 Steam/Android 安装包尚未包含本批增量。
