@@ -1,3 +1,15 @@
+## 2026-10-04 关胜骑乘四向已验收
+
+关胜17原生源、32姿态、20资源完成验收：578/578 原生、8/8 公共路由、365 项来源审计通过，3699 冻结输入及私有副本零漂移，28 张截图。当前aligned头像、骑兵运行参数和技能沿用，游戏不依赖Python、Pillow或原始生成目录。见[实现](GUAN_SHENG_DIRECTION4_20261004.md)、[QA](../qa/guan_sheng_direction4_20261004/README.md)。
+
+只读预检（共享引擎空闲后加--run执行隔离验收）：
+
+```powershell
+python -X utf8 -B tools/run_character_art_qa.py --repo <当前checkout> --manifest guan_sheng=assets/direction4/guan_sheng_20261004.json --work-root <工程外QA目录> --shared-checks
+```
+
+本轮复用同引擎成功imported后重新导入，非无缓存首启验收。最新成功工程/缓存及原生来源保留，Steam/Android包尚未包含增量。
+
 ## 2026-10-04 卢俊义通用四向已验收
 
 卢俊义19原生源、32姿态、20资源完成验收：720/720 原生、8/8 公共路由、427 项来源审计通过，3644 冻结输入及私有副本零漂移，28 张截图。当前头像、运行参数与大名府外观沿用，游戏无需Python、Pillow或原始生成目录。见[实现](LU_JUNYI_DIRECTION4_20261004.md)、[QA](../qa/lu_junyi_direction4_20261004/README.md)。

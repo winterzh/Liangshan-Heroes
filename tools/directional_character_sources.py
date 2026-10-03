@@ -24,7 +24,7 @@ def main():
     for key,job in jobs.items():
         if not job['repository_path']: continue
         check(key+' native bytes',verify(job['repository_path'],job['sha256']))
-        if job.get('method')=='godot_3d_pose_reference':
+        if job.get('method') in ('godot_3d_pose_reference', 'orthographic_geometry_diagram'):
             generators=job.get('generator_artifacts',[])
             check(key+' code-native pose generator retained',bool(generators) and all(verify(item['path'],item['sha256']) for item in generators))
         else:
