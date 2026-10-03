@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lu_junyi_direction4_20261004/windup_ne_v2.png" id="windup_ne_v2"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lu_junyi_direction4_20261004/strike_ne.png" id="strike_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lu_junyi_direction4_20261004/idle_ne.png" id="idle_ne"]
+
+[sub_resource type="AtlasTexture" id="windup_ne"]
+atlas = ExtResource("windup_ne_v2")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-145.5, -133.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.270247
+
+[sub_resource type="AtlasTexture" id="strike_ne"]
+atlas = ExtResource("strike_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-235.5, -80.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.305617
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-169.5, -58.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.14
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_ne")},
+{"duration": 1.0, "texture": SubResource("strike_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

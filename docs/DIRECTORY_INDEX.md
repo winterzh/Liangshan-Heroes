@@ -1,3 +1,11 @@
+## 2026-10-04 卢俊义通用四向已验收
+
+- assets/characters/lu_junyi_direction4_20261004/：19原生PNG及import。
+- assets/direction4/lu_junyi_20261004.json、assets/anim/lu_junyi_*_<方向>.tres：32姿态、20资源与脚点元数据。
+- tools/contracts/lu_junyi_direction4_20261004/：提示、选择、32份3D参考/生成源码及可复现元数据。
+- qa/lu_junyi_direction4_20261004/：验收报告/截图、来源/留边/复现/清理及首轮占用记录。
+- [实现](LU_JUNYI_DIRECTION4_20261004.md)。
+
 ## 2026-10-04 杨志通用四向已验收
 
 - assets/characters/yang_zhi_direction4_20261004/：23原生PNG与import。
