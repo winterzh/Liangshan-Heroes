@@ -4515,23 +4515,41 @@ func ui_portrait_texture() -> Texture2D:
 	return Art.ui_portrait_texture(key, art_variant)
 
 
+## Defense deliberately reuses the static Liangshan hall. Only that exact
+## gameplay owner may share its scenery scope; unrelated props keep their level.
+func _campaign_environment_art_level_id() -> String:
+	var level_id := _active_campaign_level_id()
+	if level_id in ["skirmish", "custom_defense"] and key == "hall" \
+			and bool(get_meta("campaign_environment_static_visual", false)) \
+			and String(get_meta("campaign_environment_route", "")) == "zhongyi_hall" \
+			and battle != null and battle.map != null:
+		var map = battle.map
+		var hall_cell = map.get_meta("liangshan_hall_cell", null)
+		if String(map.get_meta("liangshan_art_level_id", "")) == "level5" \
+				and hall_cell is Vector2i and position == map.cell_to_world(hall_cell) \
+				and map.sample_scenery != null:
+			return "level5"
+	return level_id
+
+
 func _campaign_environment_texture(update_metadata := true) -> Texture2D:
 	if update_metadata: remove_meta("campaign_environment_foot")
 	var route_key := String(get_meta("campaign_environment_route", ""))
 	if route_key.is_empty(): return null
 	var state := String(get_meta("campaign_environment_state", "default"))
-	var texture := CampaignEnvironmentArt.object(_active_campaign_level_id(), route_key, state)
+	var art_level_id := _campaign_environment_art_level_id()
+	var texture := CampaignEnvironmentArt.object(art_level_id, route_key, state)
 	if texture==null: return null
 	var registered_metrics: Dictionary = CampaignEnvironmentArt.VISUAL_CALIBRATIONS.get("object",{})
 	if registered_metrics.has(route_key):
 		var metrics := CampaignEnvironmentArt.calibrated_visual_metrics("object",
-			_active_campaign_level_id(),route_key,state)
+			art_level_id,route_key,state)
 		if metrics.is_empty(): return null
 		if update_metadata: set_meta("campaign_environment_foot",float(metrics.get("foot",0.78)))
 	var text_surface_id := String(get_meta("campaign_environment_text_surface_id",""))
 	if not text_surface_id.is_empty():
 		var normalized = CampaignEnvironmentArt.calibrated_text_rect("object",
-			_active_campaign_level_id(),route_key,state,text_surface_id)
+			art_level_id,route_key,state,text_surface_id)
 		if normalized==null: return null
 		if update_metadata: set_meta("campaign_environment_text_rect",normalized)
 	return texture

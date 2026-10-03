@@ -167,6 +167,7 @@ func paint_map(map: GameMap) -> void:
 func decorate(map: GameMap) -> void:
 	# 驻守战复用已经校准过的梁山泊第五关环境素材，但不改变关卡ID或战役进度。
 	map.set_meta("liangshan_art_level_id", "level5")
+	map.set_meta("liangshan_hall_cell", HALL)
 	map.decor = [
 		["banner", Vector2i(18, 33), 220.0, "zhongyi_hall_standard_east"],
 		["banner", Vector2i(14, 33), 220.0, "zhongyi_hall_standard_west"],
