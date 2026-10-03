@@ -1,3 +1,7 @@
+## 2026-10-03 main 已合入最新进度与大厅修复
+
+按用户授权，main 已合入 stable `429b7f1c` 的大厅修复、验证工具/QA 和最新开发计划，源码合并 `5eba64d7` 与原 stable 内容树一致。本批交接同步 main/stable；开发继续使用 stable，Steam/Android 安装包不变。详见 [合并说明](docs/MAIN_MERGE_20261003.md)，最新后续顺序见 [开发计划](docs/DEVELOPMENT_PLAN.md)。
+
 ## 2026-10-03 最新项目进度与开发计划
 
 项目进入已发布版本持续打磨阶段。最新入口：[项目进度](docs/PROJECT_STATUS.md) · [开发计划与验收条件](docs/DEVELOPMENT_PLAN.md) · [源码启动与换机交接](docs/SOURCE_SETUP.md)。近期重点为核心人物身份/四向、全库场景/特效/UI、战役续玩及真人和设备验收；平台新功能后续为排行榜/每周挑战。

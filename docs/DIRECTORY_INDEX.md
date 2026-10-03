@@ -1,6 +1,11 @@
+## 2026-10-03 main 合并交接
+
+- `docs/MAIN_MERGE_20261003.md`：本次授权、两分支历史关系、合入范围、内容树和验证边界。
+- `qa/main_merge_20261003/`：合并父提交/树、白名单检查、链接和同步核对依据；无新增游戏测试或平台发布。
+
 ## 2026-10-03 项目进度与计划入口
 
-- `docs/DEVELOPMENT_PLAN.md`：当前开发顺序、每批完成条件、最新发布边界及本地候选待验状态。
+- `docs/DEVELOPMENT_PLAN.md`：当前开发顺序、每批完成条件、最新发布边界及大厅修复完成状态。
 - `docs/PROJECT_STATUS.md`：最新进度置顶，旧日期保留历史状态。
 - `qa/project_sync_20261003/`：远端分支/内容树核对、文档校验及白名单同步记录；不发布平台版本。
 - `tools/defense_hall_qa.gd`、`tools/run_defense_hall_qa.py`：真实经典/自定义据守、第五幕大厅外观/HUD 和作用域的隔离原生验证。

@@ -1,3 +1,9 @@
+## 2026-10-03 main 合并后的开发入口
+
+用户已授权将 stable `429b7f1c` 合入 main，源码合并为 `5eba64d7`，内容树与已验证 stable 完全相同；本批交接文档同步两分支。开发仍使用 `codex/sync-20260905-stable`，正常启动和本机 Godot 配置不变。换机先核对状态，干净且无分叉时才按既定 stable 命令拉取；不自动 stash/reset。合并记录见 [说明](MAIN_MERGE_20261003.md)。
+
+下方同步记录的“只同步 stable”是本次合并授权前的状态。本次合并不表示发布了新的 Steam/Android 包，也不增加游戏验收范围。
+
 ## 2026-10-03 最新开发交接入口
 
 最新进度见 [PROJECT_STATUS](PROJECT_STATUS.md)，后续批次、验收条件与未完成项统一维护在 [DEVELOPMENT_PLAN](DEVELOPMENT_PLAN.md)。正常 Godot 启动方式不变，继续从本机 `godot.local.txt`、`GODOT_PATH` 或参数解析，不将本机路径写进公共脚本。
