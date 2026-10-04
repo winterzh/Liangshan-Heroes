@@ -1,3 +1,11 @@
+## 2026-10-04 祝家庄客四向已验收
+
+- assets/characters/zhu_keke_direction4_20261004/：13张生产原生PNG及import。
+- assets/direction4/zhu_keke_20261004.json、assets/anim/zhu_keke_*_<方向>.tres：32姿态、20资源及脚点/身体比例元数据。
+- tools/contracts/zhu_keke_direction4_20261004/：提示、实际引用、两份父图与复现工具。
+- qa/zhu_keke_direction4_20261004/：来源、留边、复现、最终四步报告、全部画面与清理记录。
+- [实现](ZHU_KEKE_DIRECTION4_20261004.md)。
+
 ## 2026-10-04 祝家弓手四向已验收
 
 - assets/characters/zhu_gong_direction4_20261004/：12张生产原生PNG及import。
