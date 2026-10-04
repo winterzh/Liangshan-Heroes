@@ -1,0 +1,83 @@
+{
+  "complete": true,
+  "passed": true,
+  "screenshots": [
+    {
+      "name": "han_opening",
+      "path": "final/han_tao/han_opening.png",
+      "sha256": "d94d7efd640a444d7ba6cae3a6e7788173d69a4c517363bcbdbe910e948f6b1e",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: original living Han in chapter is visible; old blue mounted body retained pending full normal-state batch. Not evidence of completed normal art."
+    },
+    {
+      "name": "han_captured_se",
+      "path": "final/han_tao/han_captured_se.png",
+      "sha256": "61909113aa8c5c66fc0ef5fc5e32f00eb2455b0d01e472ee7fb0201c9374a4e2",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: living red-armored kneeling captive, front wrists bound, no horse/weapon/blood. Cursor partially covers hands; body matrix supplies unobstructed hand review."
+    },
+    {
+      "name": "han_captured_sw",
+      "path": "final/han_tao/han_captured_sw.png",
+      "sha256": "d51f702c91c53c3471ede75e0e906e5dca7955337eeda843b125d859867fdf75",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: distinct facing, front bound hands, whole kneeling body visible and stable ground contact."
+    },
+    {
+      "name": "han_captured_ne",
+      "path": "final/han_tao/han_captured_ne.png",
+      "sha256": "8a2b6fbec80a5de79842d739c554940431d759ca116b35ac9232ca6819024225",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: rear-right facing, red cape and helmet/shoulder identity visible, hands naturally hidden by body; no mirrored front view."
+    },
+    {
+      "name": "han_captured_nw",
+      "path": "final/han_tao/han_captured_nw.png",
+      "sha256": "5c0e9495a9553703f8ecf162d3aaab74a871675b01e57eccc8e29556afa742eb",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: distinct rear-left facing, cape and bent lower legs visible, stable ground contact."
+    },
+    {
+      "name": "han_capture_persistent",
+      "path": "final/han_tao/han_capture_persistent.png",
+      "sha256": "74a8a4128daddb041d2bcff76aeea689562e2493d02c66f560ae63c439dd1d9f",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: same original captive remains visible beyond corpse lifetime, no fade or death squash."
+    },
+    {
+      "name": "hu_retreated",
+      "path": "final/han_tao/hu_retreated.png",
+      "sha256": "cf2649ada2c5798ab8f2a0b7c558c77616c2c819d36fee8a8c21457174caf005",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: original Hu is absent after explicit retreat fixture, chapter retreat message visible; no natural victory/retreat-threshold claim."
+    },
+    {
+      "name": "han_captured_matrix",
+      "path": "final/han_tao/han_captured_matrix.png",
+      "sha256": "d407e25d68267644f866f4af2046f0424f1c3eebb764e5cbc3d9b1f91df6fea7",
+      "passed": true,
+      "review_method": "direct native screenshot inspection",
+      "notes": "Directly reviewed: normal/2x display fixtures show all four independently sampled poses without UI/body overlap; consistent body heights/contact, front wrists tied, no horse or weapon."
+    }
+  ],
+  "production_source": "assets/characters/han_tao_captured_20261005/captured.png",
+  "native_source_review": "Directly reviewed unchanged 1254x1254 RGBA, four independent front/rear kneeling views, identity matches portraits4 top middle; no weapon/horse/blood, genuine alpha.",
+  "scope": "Captured appearance and local normal-damage story-state boundary only.",
+  "limitations": [
+    "Four facings are explicit display fixtures on the original captured actor; fog-disabled fixture sets initial foe visibility.",
+    "Original Xu normal attacks original full-HP Han; contact positioning, frozen nonparticipants/defender and normal level-one Q learning are explicit fixtures.",
+    "Adjacent actors have name/status text overlap at contact distance; bodies remain visible. This does not qualify whole-project label spacing or UI.",
+    "SE cursor obscures some hand detail; unobstructed native body matrix reviewed separately.",
+    "Normal mounted five-state identity remains unfinished; opening shows old blue costume.",
+    "Hu retreat is explicit resolve_story on original actor, not natural full-chapter victory.",
+    "No campaign continuation, long performance soak, fresh no-cache qualification, device/platform or published package claim; screenshot FPS is not a measurement."
+  ],
+  "failed_iteration": "review_iterations/continuation_20261005_070145_14bd79ed preserves invisible-actor failure; final fixture fixes visibility without production vision edits."
+}

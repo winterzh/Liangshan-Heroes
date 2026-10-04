@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/han_tao_captured_20261005/captured.png" id="captured"]
+
+[sub_resource type="AtlasTexture" id="captured_se"]
+atlas = ExtResource("captured")
+region = Rect2(0, 0, 638, 635)
+margin = Rect2(0, 1, 0, 3)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-2.0, -84.84)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.681139
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("captured_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

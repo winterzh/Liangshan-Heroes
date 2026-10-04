@@ -1,3 +1,12 @@
+## 2026-10-05 韩滔生擒增量
+
+- `assets/characters/han_tao_captured_20261005/`：一张原生透明四向图及生产导入描述。
+- `assets/anim/han_tao_captured_{se,sw,ne,nw}.tres`、`assets/direction4/han_tao_captured_20261005.json`：四份独立取样的生擒资源/元数据。
+- `tools/contracts/han_tao_captured_20261005/`：完整实际生成请求、来源与只读测量/元数据重建工具。
+- `tools/run_han_tao_capture_qa.py`、`han_tao_capture_direction4_qa.gd`、`han_tao_capture_body_fixture.gd`：复用冻结/锁/私有档保护的专用验收入口。
+- `qa/han_tao_captured_20261005/`：最终105项、公共路由、8张逐图审核、全部失败记录、来源、清理及字节索引。
+- `docs/HAN_TAO_CAPTURED_20261005.md`：范围、夹具及下一批边界。
+
 ## 2026-10-05 验收锁修复
 
 `tools/character_art_lock_selftest.py`：五项临时文件锁安全检查；`qa/character_art_lock_20261005/`：验证收据和说明。韩滔生擒候选路径仍为本地准备，待原生验收完成后更新正式目录交接。

@@ -768,6 +768,19 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 	return frames
 
 
+## A living prisoner has a dedicated pose, never idle/death or an aliased hero.
+## Only the reviewed Han Tao body owns this route; campaign outfits remain isolated.
+func unit_captured_frames(key: String, direction: String, variant := "") -> Array:
+	if key != "han_tao" or not variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
+		return []
+	var cache_key := "captured|%s|%s" % [key, direction]
+	if _anim_cache.has(cache_key): return _anim_cache[cache_key]
+	var path := _resolve_generic_directional_path(key, "captured", direction)
+	var frames := _load_generic_directional_frames(path)
+	_anim_cache[cache_key] = frames
+	return frames
+
+
 func _generic_directional_path(key: String, state: String, direction: String) -> String:
 	if direction not in CampaignArt.DIRECTIONS:
 		return ""

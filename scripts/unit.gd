@@ -3670,9 +3670,8 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 		_frame_directional = Art.campaign_object_uses_directional_source(ship_key, ship_state, animation_direction)
 		off.y = sin(_idle_t * 1.4) * 1.2 if story_outcome == "" else 0.0
 	elif story_outcome != "":
-		var down: Array = Art.unit_anim_frames(_anim_key(), "down", animation_direction, art_variant)
+		var down: Array = _story_animation_frames()
 		if not down.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "down", animation_direction, art_variant)
 			frame = down[-1]
 		elif story_outcome == "unconscious":
 			frame = _rest_frame(tex)
@@ -3831,6 +3830,19 @@ func _campaign_flag_route(for_render := false) -> Dictionary:
 	if for_render and not _frame_directional:
 		return {}
 	return route
+
+
+## Use the same exact selection for the real draw and story-pose QA. A captured
+## actor keeps its living outcome; other outcomes and costumes keep their down route.
+func _story_animation_frames() -> Array:
+	if story_outcome == "captured":
+		var captive: Array = Art.unit_captured_frames(_anim_key(), animation_direction, art_variant)
+		if not captive.is_empty():
+			_frame_directional = true
+			return captive
+	var down: Array = Art.unit_anim_frames(_anim_key(), "down", animation_direction, art_variant)
+	_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "down", animation_direction, art_variant)
+	return down
 
 
 func _frame_draw_scale(frame: Texture2D) -> float:
