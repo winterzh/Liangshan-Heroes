@@ -1,0 +1,454 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "lian_huan_ma",
+  "original_reference": {
+    "path": "assets/portraits9.png",
+    "sha256": "a6574bfef9b63b1f9b8ac5909d2b72651e277a6725167d8e8b905a6c926b30dd"
+  },
+  "identity_note": "Top-middle current portrait: iron helmet and neck/cheek guards, red plume, short black moustache/beard, dark iron lamellar. Brown iron-barded horse/rings/sagging chain/red tailcloth from existing bodies. Right-hand single lance and left-hand reins independently reconstructed; empty hands and one grounded lance on death. Existing ordinary cavalry, explicit key spear timing and linked-break mechanism retained.",
+  "jobs": [
+    {
+      "key": "original",
+      "repository_path": "assets/portraits9.png",
+      "sha256": "a6574bfef9b63b1f9b8ac5909d2b72651e277a6725167d8e8b905a6c926b30dd",
+      "method": "existing_project_reference",
+      "prompt": "Existing unmodified reference. Portrait9 top-middle supplies helmet/beard/iron armor; old bodies supply armored horse/rings/chain/painting camera.",
+      "references": [],
+      "status": "required_reference"
+    },
+    {
+      "key": "legacy_idle_se",
+      "repository_path": "assets/anim/lian_huan_ma_idle_se.png",
+      "sha256": "4f5f213aa2c3aab34828429b1ce47efd9f694eb92abb3f138820e3d5de04de22",
+      "method": "existing_project_reference",
+      "prompt": "Existing unmodified reference. Portrait9 top-middle supplies helmet/beard/iron armor; old bodies supply armored horse/rings/chain/painting camera.",
+      "references": [],
+      "status": "required_reference"
+    },
+    {
+      "key": "legacy_idle_nw",
+      "repository_path": "assets/anim/lian_huan_ma_idle_nw.png",
+      "sha256": "b6b9884ac914c5ed4cb9f840f18557f83e45b386450ca7ab0ad24069e92d3a45",
+      "method": "existing_project_reference",
+      "prompt": "Existing unmodified reference. Portrait9 top-middle supplies helmet/beard/iron armor; old bodies supply armored horse/rings/chain/painting camera.",
+      "references": [],
+      "status": "required_reference"
+    },
+    {
+      "key": "grip_sw_guide",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/guides/grip_sw.png",
+      "sha256": "e2615e2400f9a9f966bc857b4b3b585a6462416916d50d8764ea3db179e0df21",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "Existing blank-canvas anatomical grip diagram; upper-body geometry only. Final mounted strike returns left hand to reins.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/gou_lian_direction4_20261004/guides/draw_grip_guides.py",
+          "sha256": "a2ef863b7e53d0b1514d402beab9d4c007f47c43688538cb4d32cf201f0cd7e5"
+        }
+      ]
+    },
+    {
+      "key": "walk_b_guide",
+      "repository_path": "",
+      "sha256": "71b9cdb9c25b2a70aaa66cf4fa20d7ca421b40cd9ec2664696fd32c565c9a762",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "Fresh analytical four-leg arrangement on blank canvas; attempted slower walk phase failed and was superseded by existing cavalry gallop cycle.",
+      "references": [],
+      "status": "rejected_unused"
+    },
+    {
+      "key": "idle_initial",
+      "repository_path": "tools/contracts/lian_huan_ma_direction4_20261004/generated/idle_initial.png",
+      "sha256": "71c6f415865376fdbf77bf042aee64ae624696e9526f5abfbf851d070e6b5098",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA four-direction game sprite atlas for Liangshan Heroes ordinary linked armored cavalry lian_huan_ma. Input 1 is identity reference ONLY: use ONLY TOP-MIDDLE portrait of the 3x3 sheet, mature Chinese man with short black moustache and pointed beard, dark iron conical segmented helmet, cheek and neck guards, muted red plume, dark iron riveted lamellar armor. Inputs 2 and 3 are existing mounted unit camera/scale/style references ONLY. Create NEW four independently painted full rider and single armored horse idle poses on a square genuinely transparent canvas, compact painterly realistic low-frame strategy game art. Strict 2x2 grid: top-left southeast DOWN-RIGHT front view; top-right southwest DOWN-LEFT front view; bottom-left northeast UP-RIGHT rear view; bottom-right northwest UP-LEFT rear view. Elevated isometric camera identical in all four directions. Generous clean transparent horizontal and vertical gutters, at least 32 pixels separating all cell content; all content padded inside its own cell. Rider seated firmly in brown saddle on a brown horse with black mane, dark iron lamellar barding on chest, sides and neck, visible four anatomically correct legs and hooves; exposed knees and lower legs, dark red short tailcloth. Two iron rings with a small sagging linked chain attached to the visible side of the horse armor, no disconnected or dangling off-canvas chain, no second horse. ONE complete long wooden lance with silver pointed spearhead and small muted red tassel, held at a relaxed diagonal with tip leading the facing direction. Rider anatomical RIGHT hand holds lance at waist, anatomical LEFT hand holds reins at front. Both arms traced naturally from correct shoulders; rear views independently drawn, never mirrored front views. All four hooves grounded stationary, no attack or gallop. Match portrait helmet, beard, plume and armor across views. Entire helmet, lance tip, tail and hooves safely inside each cell. No sword, shield, flags, scenery, text, labels, border, glow, cast ground shadow, fake transparency checkerboard or extra human.\n",
+      "references": [
+        "original",
+        "legacy_idle_se",
+        "legacy_idle_nw"
+      ],
+      "status": "required_reference",
+      "generation_id": "c3650f91-e1ce-4cb3-8dbe-04440d874974"
+    },
+    {
+      "key": "idle_v2_rejected",
+      "repository_path": "",
+      "sha256": "aa37ca7c4527b71d7ac01c9aa2d1f292020004198db09ceb3b0746360bac8ff8",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: identity-preserve. Correct ONLY the rider's arm/hand/weapon grip in this native four-direction armored cavalry idle atlas. Preserve exact four-cell layout, scale, knight identity, helmet/plume, armor, armored brown horse, four grounded legs, linked side chain, one spear, isometric camera and genuine transparent alpha. The same anatomical RIGHT hand ALONE holds the spear in every view; anatomical LEFT hand holds separate leather reins near horse neck in every view. No hand may change roles across directions. Do NOT mirror the rider. Top-left southeast and top-right southwest are FRONT views: rider anatomical RIGHT shoulder/arm is on SCREEN-LEFT, so draw the spear-gripping hand attached to that SCREEN-LEFT arm. Rider anatomical LEFT shoulder/arm is on SCREEN-RIGHT and holds only the dark reins, visibly clear of spear. Bottom-left northeast and bottom-right northwest are BACK views: anatomical RIGHT shoulder/arm is SCREEN-RIGHT and holds spear; anatomical LEFT shoulder/arm is SCREEN-LEFT and holds only reins, clear of spear. Spear can pass diagonally across body toward facing but only the prescribed RIGHT hand grips it. Southwest front view: silver tip leads down-left, rear wooden butt trails up-right; correct grip at rider screen-left waist and left hand on screen-right above horse neck holds reins. Northeast back view: spear tip leads up-right, wooden butt trails down-left; correct grip at rider screen-right waist, left hand screen-left goes forward to reins. Complete each arm from shoulder to elbow to assigned hand without swapped shoulders. The other hand must be visibly on leather reins with a gap from lance shaft. All helmet, full lance tips/butts, mane, tail and hooves inside padded separate cells with empty gutters. No text, extra weapons, extra arms, background, ground shadow or fake checkerboard. Repaint anatomy natively; keep armor and horse details and transparency.\n",
+      "references": [
+        "idle_initial"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "0ac6b7e2-4838-44a2-9075-5ffb2dfe1945"
+    },
+    {
+      "key": "idle_v3_parent",
+      "repository_path": "tools/contracts/lian_huan_ma_direction4_20261004/generated/idle_v3_parent.png",
+      "sha256": "62f12ff5b8b9597074b32b0030230f7afaae4831bbf1d1d157217b46fc147c38",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: identity-preserve. Edit this four-view armored horse rider atlas by replacing ALL spear carries with a simple UPRIGHT SINGLE-RIGHT-HAND LANCE GUARD. Preserve horse, rider outfit, helmet red plume, iron barding with two rings and linked chain, armor colors, same stationary four-legged horse stance, 2x2 isometric directions, transparent RGBA. ALL FOUR POSES: ONE straight long lance nearly VERTICAL, pointed silver blade with red tassel above the rider head, butt extends down alongside saddle, tip/butt never cropped. Rider anatomical RIGHT HAND ALONE grips the vertical shaft at waist-height; LEFT HAND holds ONLY leather reins at horse neck, visibly separated from shaft. Remove the previous diagonal spear and the left-hand spear grip. TOP ROW FRONT views: both southeast and southwest have RIGHT shoulder and RIGHT spear-gripping hand on SCREEN-LEFT of rider chest. Put vertical spear immediately to SCREEN-LEFT of rider, one right hand wrapping shaft there. LEFT hand on SCREEN-RIGHT holds dark leather reins in front of saddle, NOT spear. BOTTOM ROW BACK views: northeast and northwest have RIGHT shoulder and RIGHT spear-gripping hand on SCREEN-RIGHT of rider spine. Put vertical spear immediately SCREEN-RIGHT of rider, one right hand wrapping shaft there. LEFT hand on SCREEN-LEFT goes toward reins in front of saddle, NOT spear. Clearly connect each gripping arm to the correct shoulder, do not flip arm roles or mirror a front view. Exactly four independent directions TL down-right front, TR down-left front, BL up-right rear, BR up-left rear. Give vertical lance enough height but retain compact horse/rider proportion; leave all four cells separate and safely padded with transparent gutters and 32px+ outer margin. Do not add weapons, cape, shields, flags, extra hands, floating limbs, scenery, text or shadows. Lance is an upright ready carry in IDLE, not an attacking thrust.\n",
+      "references": [
+        "idle_initial"
+      ],
+      "status": "required_reference",
+      "generation_id": "53671863-d56d-4641-b1a0-236469046993"
+    },
+    {
+      "key": "idle_v4_parent",
+      "repository_path": "tools/contracts/lian_huan_ma_direction4_20261004/generated/idle_v4_parent.png",
+      "sha256": "df783e24a34cb43026bde6a234edb43f9fb88670b211330abf8aac0640fcb207",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Fix the TOP-RIGHT southwest front-facing rider only: move the ONE vertical spear from SCREEN-RIGHT of his chest to SCREEN-LEFT of his chest. His anatomical RIGHT arm comes from SCREEN-LEFT shoulder and bends to grip that shaft on SCREEN-LEFT of chest. His anatomical LEFT arm comes from SCREEN-RIGHT shoulder and bends down to the leather reins over the horse neck in front of saddle; the LEFT hand must no longer hold the spear. Draw the correct two complete shoulder/elbow/hand chains. Do not merely move the spear and leave the arm at its old screen-right position. Face/helmet horse direction remain down-left. All other views keep their current right-hand upright lance: top-left shaft on SCREEN-LEFT; bottom-left and bottom-right shafts on SCREEN-RIGHT. Also give the entire four-cell canvas much more genuine transparent padding: at least 50px outside all spear tips and horse hooves, and at least 70px fully empty cross gutters. Full spear tips must be contained, currently top-left is too near the top border. Preserve exact same plated knight/red plume/short beard, brown armored horses/rings/chains, stationary four legs, one lance per knight, camera, painterly style and alpha transparency. Four directions remain TL southeast front, TR southwest front, BL northeast rear, BR northwest rear. Keep four rider/horse bodies the same scale. No scenery, text, fake alpha checkerboard, ground shadow, additional weapons or disconnected extra hands.\n",
+      "references": [
+        "idle_v3_parent"
+      ],
+      "status": "required_reference",
+      "generation_id": "1bf9902f-6371-476d-ab4c-668cde8dd541"
+    },
+    {
+      "key": "idle",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/idle.png",
+      "sha256": "744f7dbcf874e1014bf55ff3ff852f4b79fee6a4490b8756fbd9172c88c6dcf1",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. This four-view transparent armored cavalry idle atlas now has correct RIGHT-hand upright lance grips. Fix only the residual old lance butt fragments: TOP-RIGHT southwest cell has an obsolete silver pointed butt with a short pole fragment hanging on SCREEN-RIGHT beside the horse front shoulder, far to the right of its actual upright lance on SCREEN-LEFT. Remove that entire obsolete fragment and reconstruct normal horse armor/leg behind it. BOTTOM-RIGHT northwest cell likewise has an obsolete silver pointed butt/wood pole fragment hanging on SCREEN-LEFT below horse chest; remove this fragment entirely and reconstruct normal horse armor/leg. Neither of these removed fragments connects to the held lance. Each rider must have exactly ONE straight wooden shaft on the SAME vertical line as his right hand: top-left and top-right shaft SCREEN-LEFT of rider; bottom-left and bottom-right shaft SCREEN-RIGHT of rider. The legitimate shaft can disappear naturally behind barding but cannot emerge far to the opposite side; no bent/second shaft. Replace ALL remaining legitimate silver pointy bottom spear butts with a simple flat blunt wooden butt or dark iron flat ferrule, only the top silver spearhead is pointed. Preserve correct right-hand spear grip, left-hand dark reins, all four faces/directions, armor, barding, rings, sagging chain, grounded four horse legs, cell layout and genuine transparent alpha. Do not change body poses or mirror them. Keep tips and hooves fully contained with empty cross gutter. No text, background, shadows or extra arms. No detached weapon shards anywhere.\n",
+      "references": [
+        "idle_v4_parent"
+      ],
+      "status": "selected",
+      "generation_id": "1d53e693-66ee-40fc-99d7-073f209225e2"
+    },
+    {
+      "key": "idle_sw",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/idle_sw.png",
+      "sha256": "9c074716e682bb70460e7b1e7bd94a5c7a3fdda7b4349056f5ef32ab70334474",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Create ONE new independently drawn southwest-facing IDLE armored cavalry sprite on a genuinely transparent square canvas. Input1 four-view atlas is armor/horse/painting identity reference ONLY; input2 top-middle portrait is helmet/beard identity reference ONLY. One whole rider on one brown armored horse, viewed elevated isometric FRONT and facing DOWN-LEFT. Same dark iron plated red-plumed helmet and short black beard, dark iron lamellar armor, brown saddle, horse dark mane/red tailcloth, iron barding and two large side rings connected by a small sagging chain. Exactly four grounded horse legs. Rider anatomical RIGHT hand holds ONE UPRIGHT VERTICAL long lance on SCREEN-LEFT of his chest, outside his right shoulder/knee. Connect his SCREEN-LEFT shoulder to SCREEN-LEFT elbow to the gripping hand on SCREEN-LEFT vertical shaft. Rider anatomical LEFT hand is on SCREEN-RIGHT of chest and holds ONLY leather reins near saddle, separated from lance. The ONE lance's wooden shaft is straight and continuous on the SAME SCREEN-LEFT vertical line from TOP silver pointed head/red tassel to BOTTOM flat wooden blunt butt. There is NO lance shaft or butt on SCREEN-RIGHT of rider or horse. Do not copy any redundant detached shaft fragments from reference. Show only one complete lance; no butt coming out of opposite horse flank, no bent shaft, no second weapon. Horse head points DOWN-LEFT, rider face visible. Full body and complete tall spear centered with generous 80px+ transparent padding; spear blade above helmet, butt beside same SCREEN-LEFT saddle/knee. All tips, plume, mane/tail/hooves safely inside image. Stationary idle posture, no gallop, attack or rearing. Match compact painterly realistic strategy game style, elevated camera, identity. No other direction, sprite grid, other riders, flags, shield, sword, text, labels, scene, cast shadow or checkerboard.\n",
+      "references": [
+        "idle",
+        "original"
+      ],
+      "status": "selected",
+      "generation_id": "f7a44d5b-af7d-4d0c-8f08-2e5d91dc1ea5"
+    },
+    {
+      "key": "idle_nw",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/idle_nw.png",
+      "sha256": "2581cd501fa00839f5b36e89c96b2871ab36825c54ea54bf0593782d3e1a9d88",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Create ONE new independently drawn northwest-facing IDLE armored cavalry sprite on a genuinely transparent square canvas. Input1 four-view atlas is armor/horse/painting identity reference ONLY; input2 top-middle portrait is helmet/beard identity reference ONLY. One whole rider on one brown armored horse, elevated isometric REAR view facing UP-LEFT. Same dark iron plated red-plumed helmet, iron lamellar back/shoulder armor, brown saddle, horse dark mane/red tailcloth, iron barding and two large side rings linked by one small sagging chain. Exactly four grounded horse legs. Rider anatomical RIGHT hand holds ONE UPRIGHT VERTICAL long lance on SCREEN-RIGHT of his back/spine, outside his right shoulder/knee. Connect SCREEN-RIGHT shoulder to SCREEN-RIGHT elbow to gripping hand on SCREEN-RIGHT vertical shaft. Rider anatomical LEFT arm goes from SCREEN-LEFT shoulder toward horse reins in front of saddle, NOT spear. The ONE lance wooden shaft stays straight on SAME SCREEN-RIGHT vertical line from TOP silver pointed head/red tassel to BOTTOM flat blunt wood butt. NO shaft/butt emerges on SCREEN-LEFT below horse chest, no hidden diagonal connecting to a fragment. Remove any redundant shaft fragments from reference; one complete straight weapon only. Horse head up-left and rider back dominates; do not draw front-facing knight or mirrored front anatomy. Full rider, horse, tall lance centered and generously padded, 80px+ transparent margin. Entire tip, plume, tail, hooves and butt contained. Compact painterly strategy game style, stationary idle, same identity. No other directions, grid, extra riders, flags, sword/shield, text, labels, scenery, ground shadow or checkerboard.\n",
+      "references": [
+        "idle",
+        "original"
+      ],
+      "status": "selected",
+      "generation_id": "71047c42-6e1a-43a3-b606-2d1650025807"
+    },
+    {
+      "key": "walk_a_initial",
+      "repository_path": "tools/contracts/lian_huan_ma_direction4_20261004/generated/walk_a_initial.png",
+      "sha256": "a797f7c0c3cf54f9d9ccfc431ee9c9b8db7885dae14c524bc6fbaf846707e478",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Production native transparent RGBA WALK-A four-direction atlas for ordinary linked armored cavalry lian_huan_ma. References: input1 defines ONLY southeast/top-left and northeast/bottom-left identity and armor; input2 is corrected SOUTHWEST idle and input3 corrected NORTHWEST idle. Independently paint FOUR mounted horse walking poses in strict 2x2: TL southeast down-right FRONT; TR southwest down-left FRONT; BL northeast up-right REAR; BR northwest up-left REAR. Same iron segmented helmet/red plume/short beard knight, dark iron riveted lamellar, armored brown horse/dark mane/red tailcloth, brown saddle, two side rings plus one short sagging linked chain. All rider/horse bodies equal scale, elevated isometric painterly game style. WALK-A horse gait: anatomical horse LEFT FORELEG reaches forward toward nose with knee slightly lifted, RIGHT FORELEG trails back planted; RIGHT HINDLEG steps forward underneath belly, LEFT HINDLEG trails. Show exactly FOUR anatomically attached legs, make left forehoof clearly lead and right forehoof clearly trail in every facing, front and rear perspectives independently reconstructed. Rider seated firmly with slight travel lean, not lifted from saddle. ONE upright long lance in SAME human anatomical RIGHT HAND as corrected idle: top row RIGHT arm/gripping hand on SCREEN-LEFT of chest with vertical shaft on SCREEN-LEFT; bottom row RIGHT arm/gripping hand on SCREEN-RIGHT of back with vertical shaft on SCREEN-RIGHT. Human LEFT hand holds reins only in all views, no spear grip. One straight wooden shaft with ONE pointed silver head/red tassel at top, blunt flat wood butt at bottom; shaft continuous on grip vertical line or naturally hidden by armor. Absolutely NO detached opposite-flank spear butt/second rod; do not inherit those rejected artifacts from input1 top-right/bottom-right. Different horse limb phases from idle, not stationary duplicated legs. Retain armor panels/rings/chain locations but animate slack slightly. Generous fully transparent outer padding and wide 80px cross gutters, complete lance tips, plume, hooves/tail contained inside each quadrant. No mirrored hand roles, swords/shields/flags, extra riders/limbs/weapons, text, labels, scene, ground shadow, fake checkerboard, rearing or flying horse.\n",
+      "references": [
+        "idle",
+        "idle_sw",
+        "idle_nw"
+      ],
+      "status": "required_reference",
+      "generation_id": "ce38b17b-1d1e-4bd7-a74c-a587d0183b29"
+    },
+    {
+      "key": "walk_a",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/walk_a.png",
+      "sha256": "e46302188a46aa83bd28f9ceb93a89bd75706ac646269a8afcb1e5affeaa418a",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Preserve ALL four walking poses, correct right-hand upright lance and left-hand reins, exact iron knight and armored horse, limb phase, barding/chain, camera and colors in this transparent 2x2 sprite atlas. Fix ONLY spacing and containment by redrawing every whole rider/horse/lance group at a smaller consistent size centered in its own quadrant. Each complete group INCLUDING lance tip/hooves/tail must occupy at most 72 percent of its quadrant width AND height. Leave at least 60px genuinely transparent outer border around all four groups, and at least 100px completely empty transparent horizontal and vertical cross gutters. The top-left spear tip is currently cropped against the image border, and the top-row hooves/bottom-row lance tips almost touch: give abundant real empty alpha padding. All four full lance silver heads, tassels, flat butts, hooves and tails must be entirely present, never cropped. No background, scene, cast shadows, labels, mirrored grip or duplicate shaft. This remains WALK-A, not stationary: keep exact four anatomical horse legs and current stride. Transparent pixels outside groups must remain fully clear.\n",
+      "references": [
+        "walk_a_initial"
+      ],
+      "status": "selected",
+      "generation_id": "df2b1a73-6974-4761-a79a-b56aad113f92"
+    },
+    {
+      "key": "walk_b_initial",
+      "repository_path": "",
+      "sha256": "681bf6f3d916770ad8c0abc3fd37657eec713b2b5795f71cc5ae64c5eb49b1e7",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Draw native WALK-B as the opposite horse leg phase to the input WALK-A atlas. Preserve exact four-view 2x2 grid, small centered scale, generous 60px+ outer alpha margin and 100px cross gutters, iron armored rider/red plume, brown armored horse/red tailcloth, saddle/rings/linked chain, camera, colors, one upright right-hand lance and left-hand reins. Change ONLY horse leg articulation, subtle rider travel bounce and plume/tail slack. Exactly four anatomical horse legs in each facing. Exchange leg phase decisively: in top-left southeast and top-right southwest FRONT views the nearer visible FORELEG must now lift its knee HIGH and extend its hoof FORWARD toward horse nose, rather than remain back/down as input; the farther FORELEG moves BACK behind the chest with hoof planted. Exchange hind pair too: the nearer hind leg steps forward under belly while farther hind trails backward planted. In bottom-left northeast and bottom-right northwest REAR views reconstruct the same opposite fore/hind phase anatomically, do not reflect a front view; exchange which near hind hoof is lifted vs planted and which front knee is extended vs flexed compared to input. Make the difference readable at game scale: bent near foreknee clearly advances in FRONT views and lifted/extended hind placement exchanges in REAR views. Keep torso, horse trunk/barding, ring/chain attachment and rider silhouette the same scale/anchor as WALK-A. No duplicate stationary leg positions, no merely offset/rotated copy, no missing or extra legs. Human hands stay same roles: top row right spear hand SCREEN-LEFT, bottom row right spear hand SCREEN-RIGHT, LEFT hand reins only. Single straight upright wooden lance with silver head/red tassel and blunt butt; no stray opposite-side shaft. Full horse hooves/lance tips/plume/tail inside cells, genuinely transparent alpha, no shadow, background, text or labels.\n",
+      "references": [
+        "walk_a"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "d74dc455-9307-4f7f-8eef-78da2c60db1e"
+    },
+    {
+      "key": "walk_b_v2_rejected",
+      "repository_path": "",
+      "sha256": "28f360e0e571a2bd729b670591503591c6de06d33c914fdfbd187714bbf8f6fe",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Correct ONLY the horse gait in this four-view WALK-B transparent atlas. Current result lifted the far front knees but failed to exchange the NEAR foreleg phase; also most hind legs stayed as WALK-A. True opposite stride required. TOP-LEFT southeast: identify NEAR foreleg directly below the chain's FRONT ring, the leg currently standing near lower-center of this quadrant. Lift that NEAR knee and reach its hoof noticeably DOWN-RIGHT toward nose. The other FORELEG beneath horse neck, currently raised far to SCREEN-RIGHT, instead trails BACK DOWN-LEFT with hoof touching ground. TOP-RIGHT southwest: NEAR foreleg directly below chain's FRONT ring, currently standing near lower-center/right of this quadrant, must lift its knee and advance hoof DOWN-LEFT toward nose. The other FORELEG under neck currently raised far to SCREEN-LEFT must trail BACK DOWN-RIGHT, planted. BOTH top row: visibly bent lifted NEAR front knee, far front leg extended backward; do not keep current near-leg straight/down. Swap hind legs: near hindhoof under tail/visible side armor advances under belly and lifts while far hind trails. BOTTOM-LEFT northeast rear: NEAR hind leg below left tail/rump currently reaching far down-left must now flex knee and bring hoof FORWARD UP-RIGHT under rump, while far hind stretches BACK DOWN-LEFT, planted. BOTTOM-RIGHT northwest rear: NEAR hind leg below right tail/rump currently stretching far down-right must now flex knee and bring hoof FORWARD UP-LEFT under rump, while far hind trails BACK DOWN-RIGHT, planted. Reconstruct exactly four anatomically attached legs independently per direction, no added limbs. This is a leg-phase swap, not merely a raised far hoof or mirrored copy. Keep all rider positions, right-hand lance/left-hand reins, upright one spear, barding/rings/chain, horse trunk/head/tail, armor identity, 2x2 layout, compact scale, same wide transparent cross gutters and outer margins. No changes to upper bodies or colors, no text, extra weapons, shadows or background.\n",
+      "references": [
+        "walk_b_initial"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "cc50ddd2-6e8c-4eb7-a4e8-b41ebe8061ea"
+    },
+    {
+      "key": "walk_b_v3_rejected",
+      "repository_path": "",
+      "sha256": "82e40c31746686e2e2967bc06d75ac9281854db8d51568f4dc046ebc787e9294",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: sketch-to-render. Input1 is the EXACT desired leg pose guide, drawn analytically from a blank canvas, not production art. Input2 supplies armored horse and rider identity, right-hand upright lance/left-hand reins, painterly camera/colors and atlas layout. Repaint WALK-B in four directions using the RED near-leg versus BLUE far-leg arrangement shown in input1. The thick RED limbs are the NEAR visible fore/hind legs: both flex and step FORWARD under/in front of body, the near front knee sharply bends and near front hoof advances toward nose, visibly ABOVE and ahead of the planted far front hoof. Thin BLUE far legs trail backward and plant; their lower portions can overlap behind but must remain separate anatomical legs. For SE front (top-left), put near foreknee forward SCREEN-RIGHT under front chain ring, near hoof farther SCREEN-RIGHT and HIGHER than far forehoof; far foreleg trails down-left. For SW front (top-right), put near foreknee forward SCREEN-LEFT under front chain ring, near hoof farther SCREEN-LEFT and HIGHER than far forehoof; far foreleg trails down-right. For NE rear (bottom-left), near hind leg under visible left rump bends FORWARD up-right and its hoof moves toward middle under belly, far hind planted back down-left. For NW rear (bottom-right), near hind leg under right rump bends FORWARD up-left under belly, far hind planted back down-right. Show thick/visible near leg on top of other limbs, not swapped into the far position. Independently reconstruct directions, do not mirror rider grips. Human/horse upper bodies remain same costume and size; current input2 near straight planted foreleg must be replaced, not kept. Exactly four horse legs, anatomically attached, not detached. Ignore sketch text/colors/materials in final; render all limbs naturally brown horse/dark hoof. Preserve transparent RGBA, strict TL-SE/TR-SW/BL-NE/BR-NW 2x2 atlas, 60px+ outer padding and 100px empty cross gutters. All tall lance tips and hoof/tail contained. Single vertical wooden spear held RIGHT (top row screen-left, bottom row screen-right), left holds leather reins; no stray shafts. No text, colored diagram markers, shadow, background, checkerboard or extra humans/weapons.\n",
+      "references": [
+        "walk_b_guide",
+        "walk_b_v2_rejected"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "2eecd1f1-69f5-4920-8af7-ea20c5d76e96"
+    },
+    {
+      "key": "walk_b_se_initial",
+      "repository_path": "",
+      "sha256": "080f8d88d29f58eb0aa679aaad13fdbc33eac8431febefc4fd27cec664b5b52d",
+      "method": "built_in_imagegen",
+      "prompt": "Create ONE new southeast DOWN-RIGHT FRONT-view isometric armored cavalry WALK-B game sprite on a genuinely transparent square canvas. Input1 is ONLY costume, camera, proportions and same right-hand-lance/left-hand-reins reference; match its TOP-LEFT rider. Input2 top-middle portrait is exact helmet/short-beard reference. Change horse gait: horse's VISIBLE NEAR RIGHT FORELEG (the front leg directly beneath side chain's forward ring) bends its knee deeply FORWARD and lifts its hoof HIGH, almost under the horse chin and farther to SCREEN-RIGHT than its knee. That near right hoof MUST NOT touch ground or remain vertical below chest. The FAR LEFT FORELEG is stretched BACK behind the chest and PLANTED, visibly lower than the lifted near hoof. Near right hindleg stretches backward PLANTED; far left hindleg steps forward lifted under belly. Exactly four attached horse legs. This must visibly exchange input top-left's straight planted near front leg with a bent raised near front leg; not merely lift far leg. Draw the near foreleg thick and fully visible in front of the farther leg, with hoof in air. Brown armored horse with black mane/red tailcloth, iron barding, two side rings and one small sagging linked chain. Iron armored knight/red-plumed helmet, seated firmly, slight travel lean. Human RIGHT arm on SCREEN-LEFT of front chest holds ONE vertical lance to SCREEN-LEFT of chest, LEFT hand on SCREEN-RIGHT holds only leather reins. Single straight wooden lance/silver pointed tip/red tassel/blunt butt; no other shafts or weapons. Full rider/horse/lance centered, 80px outer alpha padding, all plume/tips/hooves/tail contained. Compact painterly game art matching reference; no grid, other facings, shadow, scene, text, labels, fake checkerboard or extra limbs.\n",
+      "references": [
+        "walk_a",
+        "original"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "16468f3a-c79e-4c8b-baee-1123a5e4bea4"
+    },
+    {
+      "key": "walk_b_se_v2",
+      "repository_path": "",
+      "sha256": "56ee49ee3d0d53a30e45c713c7064832a1420cafdd717c6fcdc14c537eeb666d",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Change ONLY the horse FORELEG whose hoof is LOWEST in the image, the straight leg descending below the FRONT CHAIN RING to the lowest hoof near lower-center/right. Lift this specific lowest hoof up off ground, bend its knee strongly forward SCREEN-RIGHT, and place this hoof higher and farther SCREEN-RIGHT, underneath horse muzzle. The leg must no longer hang straight down to its old lowest-hoof location. Keep the OTHER horse foreleg at far screen-right unchanged for this edit. Keep the two hind legs unchanged too. Preserve all armor, four total legs, horse trunk, knight, right-hand vertical lance, left-hand reins, face, chain, exact camera and real transparent alpha. Only redraw the low straight FORELEG into a clearly bent, forward-reaching raised limb. Entire hooves must be visible. Do not change a hind leg or the already-bent foreleg; target precisely the current LOWEST front hoof. No extra limbs, weapons, scene, text, ground shadow or grid.\n",
+      "references": [
+        "walk_b_se_initial"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "ee843936-955b-4eb4-a990-34a655cff56a"
+    },
+    {
+      "key": "walk_b_se_marker",
+      "repository_path": "",
+      "sha256": "55153aa89a722026f450ab07438c26217b6c2d2a5072e92de118118a15f14caf",
+      "method": "built_in_imagegen",
+      "prompt": "Make an annotated edit reference, NOT a production sprite. Preserve this transparent armored cavalry image and all poses. Draw ONE thin bright GREEN circle around the straight front horse leg with the lowest hoof near bottom-center-right. The circle center is approximately 65 percent of image width and 78 percent of image height; cover its knee-to-lowest-hoof segment. Draw ONE GREEN arrow from that lowest hoof UP and RIGHT to the space beneath horse muzzle, indicating the desired raised forward hoof location. DO NOT circle or point from the already-bent raised hoof at far right. Do not alter horse or rider pixels otherwise. Annotation specifically identifies the STRAIGHT lowest front leg beneath the forward chain ring that still needs to bend and advance; keep all four horse legs visible and same alpha. No other marks or text.\n",
+      "references": [
+        "walk_b_se_v2"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "8da70a7e-16ba-4fae-b84e-78042c62b1df"
+    },
+    {
+      "key": "walk_b_se_v3_rejected",
+      "repository_path": "",
+      "sha256": "3c61aa7d0d5ba816e3c35cc783fa70d886a4686c0ef419567001ef1ee9123144",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. The GREEN CIRCLE precisely marks the near front horse leg that must CHANGE. Lift and bend THAT CIRCLED LEG forward: its thigh/knee move screen-right toward muzzle, knee bends, and the hoof moves UP-RIGHT along green arrow to the airborne position below muzzle. The old circled straight limb/lowest hoof location must be empty transparent after redraw, not remain standing. Draw thick near foreleg in FRONT of the other leg. The OTHER foreleg, currently already raised at far right, instead stretches backward/down and PLANTS its hoof beneath chest, lower than the circled leg's new lifted hoof. Exactly four horse legs remain attached, exchange these two front-leg positions, do not create another limb. Keep both hind legs and all horse/rider armor, chains, face, right-hand upright lance and left-hand reins unchanged. REMOVE ALL GREEN CIRCLE AND ARROW MARKS completely after implementing this pose. Transparent native production sprite, same full canvas/padding/camera/style. No text, annotations, ground or shadows. This is the opposite front hoof contact phase: CIRCLED near foreleg lifted forward, uncircled far foreleg planted backward.\n",
+      "references": [
+        "walk_b_se_marker"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "5ab32db6-42e3-488e-954e-6ce5fa41b52e"
+    },
+    {
+      "key": "walk_b",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/walk_b.png",
+      "sha256": "973f7079c27ab4b853d2509a6b9fbb2336dfeecde9ccb2b5d70cb3870d4f6c30",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Create the opposite contact phase for this cavalry RUN/GALLOP atlas, matching existing mounted movement rather than a slow walking pace. Preserve four independent directions, correct same RIGHT-hand upright lance/LEFT-hand reins in input, armor/horse identity, colors, camera, body scale and transparent spacing. ALL FOUR HORSES: lift BOTH front legs together OFF the ground, fold BOTH front knees strongly forward/up under chest, hooves visibly airborne higher than belly-bottom. BOTH hind legs extend backward/down and their hooves contact ground supporting the current gallop push-off. Front torso stays low/horizontal and pitched slightly forward, never rear the horse upright on hind legs. Exactly FOUR anatomical legs: two front limbs curled HIGH together under front chest, two hind limbs long grounded behind rump. In top-left SE and top-right SW, there must be NO vertical front leg extending straight down to a low planted front hoof. Both front hooves should be tucked near lowered neck/chest, above the hind-hoof ground line. Rear views also have both front knees tucked and both hind hooves touching ground behind rump. Distinguish this HIND-HOOF-WEIGHT GALLOP phase clearly from input's FRONT-HOOF-WEIGHT extended-contact phase. This is the cavalry run cycle: horizontal moving horse, not stationary trot, not idle, not rearing. Rider seated, slightly forward, reins taut. Do not swap rider arms: front-row right hand SCREEN-LEFT lance, back-row right hand SCREEN-RIGHT lance, LEFT holds reins only. Same ONE vertical wooden lance/silver tip/red tassel/blunt butt without loose fragments. Keep each full group <72% quadrant extents, >=60px outer border and >=100px clear cross gutters; complete tips/tails/hooves contained. Native genuine RGBA, no shadows/background/text/labels/extra legs, weapons or people.\n",
+      "references": [
+        "walk_a"
+      ],
+      "status": "selected",
+      "generation_id": "04cac388-7396-4645-9415-59bcd739e7dd"
+    },
+    {
+      "key": "windup",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/windup.png",
+      "sha256": "f8a53323ea23b2246874cf19ffae6f5ef2f9ee6e6a612a559e2605a0faa63e68",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native four-direction ATTACK WINDUP sprite atlas for lian_huan_ma armored cavalry. Input1 top-left SE and bottom-left NE idle supply identity, input2 corrected SW and input3 corrected NW supply remaining views. Independently redraw four poised lance attack preparations, TL southeast down-right FRONT, TR southwest down-left FRONT, BL northeast up-right REAR, BR northwest up-left REAR, elevated painterly strategy game camera. Same iron segmented helmet/red plume, short black beard, dark iron lamellar rider on brown iron-barded horse/red tailcloth, saddle/reins, flank rings with one sagging chain. RIGHT HUMAN HAND alone holds ONE lance in all views; LEFT holds leather reins. In FRONT top row right arm comes from SCREEN-LEFT shoulder; BACK bottom row right arm comes from SCREEN-RIGHT shoulder. Draw lance lowered from idle upright into a forward diagonal guard but PULLED BACK: right elbow bends rearward at waist, wrist near hip, rider slight backward torso coil, pointed silver head/red tassel leads toward facing and remains near or just ahead horse nose. Wooden butt trails behind right elbow; ONE straight coherent shaft, no duplicate shaft or opposite-flank fragments. SW frontal knight right hand SCREEN-LEFT holding lance, left hand SCREEN-RIGHT reins; never mirror SE arm roles. NE/NW rear right hand SCREEN-RIGHT, left reins arm SCREEN-LEFT. Attack is preparing a THRUST, not axe overhead chop or sword slash; horse is braced, four hooves planted or lightly flexed, no gallop or upright rearing. Keep SAME horse body scale and armored identity for each facing. Draw each complete unit small at most 72% of quadrant width/height, with >60px outer transparent border and >100px empty cross gutters. Full lance head/butt, plume, hooves/tail safely inside cell. Truly transparent native RGBA, no text, flags, extra weapons/riders/arms, background, ground shadow or checkerboard.\n",
+      "references": [
+        "idle",
+        "idle_sw",
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "0bf789fd-4c7f-4356-acc7-6f9916cdf27c"
+    },
+    {
+      "key": "windup_sw",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/windup_sw.png",
+      "sha256": "3f8d72a38d294d7567fad0fe5f11877b0687a6e67e3707cad6702caea89e3011",
+      "method": "built_in_imagegen",
+      "prompt": "Create ONE native transparent SOUTHWEST down-left FRONT-view mounted lance ATTACK WINDUP game sprite. Reference1 is this exact corrected SW idle rider/armored horse identity and hand assignment; reference2 top-middle portrait is helmet/short beard identity only. Repaint the same red-plumed iron helmet, iron lamellar knight, brown iron-barded horse/rings/slack chain/red tailcloth and saddle/reins in elevated isometric camera. Change the RIGHT-hand lance from vertical idle to a COUCHED DIAGONAL preparation: anatomical RIGHT arm on SCREEN-LEFT of chest, elbow bent backwards, hand at SCREEN-LEFT waist holding the ONE lance pulled back under RIGHT armpit. Spear silver tip/red tassel leads down-left and is near horse nose; straight wooden shaft passes diagonally across/under rider's waist to blunt butt trailing up-right BEHIND rider. LEFT hand on SCREEN-RIGHT of chest holds ONLY separate leather reins raised near saddle, fingers NOT on spear. Do not mirror hands. Clearly trace correct right shoulder/elbow/grip on SCREEN-LEFT; human LEFT shoulder/arm SCREEN-RIGHT toward reins. Rider slight backward coil, horse four legs braced ground, no gallop or rearing. One full spear only, no opposite-flank stray fragments. Match exact compact painterly costume/horse, not hero. Full group centered small with >=80px genuine transparent margins; full tip/butt/hooves/plume/tail inside canvas. No grid, other view, extra arms/weapons/horse, labels/text, scenic background, ground shadow or checkerboard.\n",
+      "references": [
+        "idle_sw",
+        "original"
+      ],
+      "status": "selected",
+      "generation_id": "bdd1d8f6-d93a-4d84-9251-e63655bdd1b4"
+    },
+    {
+      "key": "windup_ne",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/windup_ne.png",
+      "sha256": "d6a84dbcf7d2482a7ed0e165f85414aaff1966f219d7a921c59225ca73c23788",
+      "method": "built_in_imagegen",
+      "prompt": "Create ONE native transparent NORTHEAST up-right REAR-view mounted lance ATTACK WINDUP game sprite. Reference1 four-view idle atlas supplies ONLY bottom-left NE identity and correct RIGHT-hand arm. Reference2 top-middle portrait helmet identity only. Same iron helmet/red plume, iron lamellar back armor, brown iron-barded horse/rings/slack chain/red tailcloth and saddle/reins, elevated isometric camera, horse nose up-right with rider back dominating. RIGHT human shoulder/arm is SCREEN-RIGHT of rider spine; RIGHT elbow bent back at SCREEN-RIGHT waist, fist on SCREEN-RIGHT grips ONE straight lance pulled back under RIGHT armpit, silver head/red tassel leads UP-RIGHT just near horse nose, blunt wooden butt trails DOWN-LEFT behind elbow. LEFT arm from SCREEN-LEFT shoulder holds ONLY separate dark leather reins toward horse neck; LEFT hand never touches spear. This is preparation not a fully extended strike: right elbow bent, torso slightly backward coiled, horse four legs braced ground, no rearing. Correct independent rear anatomy, no mirrored front view or swapped weapon hand. Entire lance stays coherent, one shaft only with head/tassel and blunt butt, no fragments. Same compact painterly identity, full group centered small and >=80px true transparent alpha padding; all tips/butts/plume/tail/hooves contained. No grid, other facings, extra people/weapons/limbs, labels, scene, shadows or checkerboard.\n",
+      "references": [
+        "idle",
+        "original"
+      ],
+      "status": "selected",
+      "generation_id": "888ceca9-0fbc-48ce-86f9-8da948fa8897"
+    },
+    {
+      "key": "strike_initial",
+      "repository_path": "tools/contracts/lian_huan_ma_direction4_20261004/generated/strike_initial.png",
+      "sha256": "1ba680d82a6a9bc73d2a00c39d08e33ac8118155ded82093f762e8187ef66e41",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent ATTACK STRIKE four-direction game atlas for ordinary linked armored cavalry lian_huan_ma. Input1 windup is identity/style only; its SE and NW weapon hand is correct, SW and NE weapon hand must be independently rebuilt to anatomical RIGHT. Input2 corrected SW idle and input3 corrected NW idle define anatomy/identity. Four independent elevated isometric views in strict 2x2 TL southeast/down-right FRONT, TR southwest/down-left FRONT, BL northeast/up-right REAR, BR northwest/up-left REAR. Same iron helmet/red plume, short black beard, iron lamellar knight, brown armored horse/red tailcloth, reins/saddle/side chain rings. STRIKE: right shoulder and right elbow reach forward in the facing direction, one lance thrusts well beyond horse nose, silver head/red tassel leads, ONE long straight wooden shaft, blunt butt tucked behind that SAME right elbow. Knight leans forward slightly from firm seated saddle; four horse hooves braced, no rearing. LEFT hand holds dark reins only, never lance. FRONT SE and SW: right arm is SCREEN-LEFT of chest, lance-gripping fist originates SCREEN-LEFT shoulder; left reins arm SCREEN-RIGHT. BACK NE and NW: right arm is SCREEN-RIGHT of back, lance-gripping fist originates SCREEN-RIGHT shoulder; left reins arm SCREEN-LEFT. SW lance points down-left but is held by SCREEN-LEFT right arm, not the far screen-right hand. NE lance points up-right and is held by SCREEN-RIGHT right arm, not the near screen-left arm. Make these asymmetric anatomical grips clear, no mirrored rider arms. This is a FORWARD STAB extension clearly farther ahead than windup, not low relaxed guard or sword sweep. Keep horse/rider body size consistent, complete extended spear/tips/tails/hooves inside cell. Each whole group occupies <=72% of each quadrant; >60px transparent outer padding and >100px empty cross gutters. Painterly compact game style, native genuine RGBA, no text, glow, hit effects, scenery, shadow, flags, extra shafts/weapons/limbs or checkerboard.\n",
+      "references": [
+        "windup",
+        "idle_sw",
+        "idle_nw"
+      ],
+      "status": "required_reference",
+      "generation_id": "140ab02f-b8ad-4bc9-be4a-6283ac9a4bdc"
+    },
+    {
+      "key": "strike",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/strike.png",
+      "sha256": "a49ebf5e91bd385a86d32e1e7cc179cd11b266f56c08a2f2ed233ddba77cd5f5",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. In this four-direction armored cavalry STRIKE atlas, correct ONLY each rider's LEFT arm so ALL four strikes use SINGLE RIGHT HAND spear and LEFT HAND leather reins. Keep each RIGHT arm and spear grip as they are. TOP-LEFT SE: RIGHT hand is screen-left rear shaft grip, keep it; LEFT hand screen-right currently extended to forward shaft near horse head must release shaft and hold dark reins over saddle/horse neck instead. TOP-RIGHT SW: RIGHT hand is screen-left forward shaft grip, keep it; LEFT hand screen-right currently holds rear butt must release and hold leather reins near saddle instead. BOTTOM-LEFT NE rear: RIGHT hand screen-right currently extended on forward shaft, keep it; LEFT hand screen-left currently grips rear butt must release and reach forward to horse reins instead. BOTTOM-RIGHT NW rear: RIGHT hand screen-right currently rear grip, keep it; LEFT hand screen-left currently on forward shaft must release and hold horse reins instead. Connect each left hand to its original left shoulder via natural bent elbow, do not swap arms. The left hand must visibly wrap leather straps, not wood. Preserve exact ONE lance in each cell, full silver tip/red tassel and wooden shaft/blunt butt, controlled ONLY by the specified right hand. Keep correct extended strike pose, torso lean, helmet/red plume/beard, knight/horse armor/rings/chain, saddle, four legs, camera, colors, scale, atlas layout and genuine transparent alpha. Full endpoints/plume/tails/hooves contained and cells separated. No extra limbs/shafts, new weapons, background, scene, text, labels or shadows.\n",
+      "references": [
+        "strike_initial"
+      ],
+      "status": "selected",
+      "generation_id": "1a42b0ff-6c4d-4d8a-b1ed-57b5a620d016"
+    },
+    {
+      "key": "strike_sw_parent",
+      "repository_path": "tools/contracts/lian_huan_ma_direction4_20261004/generated/strike_sw_parent.png",
+      "sha256": "04947470e1ee10a9134bdbdd502a637c120b61ed04142d0e3659d19bf81246d3",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: sketch-to-render. Produce ONE native transparent SOUTHWEST down-left FRONT-view armored cavalry STRIKE sprite. Input1 is human upper-body ARM/GRIP GEOMETRY ONLY: BLUE anatomical LEFT arm from screen-right shoulder crosses to forward spear grip near screen-left blade; RED anatomical RIGHT arm from screen-left shoulder crosses to rear grip nearer screen-right shaft butt. Ignore the standing legs, colors/labels/materials of diagram. Input2 gives exact mounted windup costume, horse/rings/chain/saddle identity; input3 top-middle portrait helmet/beard only. Rider stays seated on same iron-barded brown horse, not standing foot soldier. STRIKE one complete spear toward DOWN-LEFT well in front of horse muzzle; extend spear farther forward than windup. Left hand leaves reins to assist FORWARD grip near blade, right hand stays REAR grip near butt: the two arms CROSS across rider chest exactly as guide, do NOT mirror left/right shoulder origins. LEFT shoulder on SCREEN-RIGHT goes across chest down-left to FORE grip; RIGHT shoulder on SCREEN-LEFT goes across chest toward REAR grip near waist/up-right. One straight shaft joins both grips and silver tip/red tassel with blunt wood butt, no disconnected rods. Iron helmet/red plume/short black beard, dark lamellar rider, armored brown horse/dark mane/red tailcloth, side rings/slack chain. Slight forward torso lean, four horse hooves braced, not rearing/galloping. Same elevated isometric compact painterly style. Whole rider/horse/full extended spear centered with >=80px genuine transparent margin, full endpoints/hooves/tail contained. No diagram colors/text, grid, ground shadow, flags/extra weapons/limbs/bodies or checkerboard.\n",
+      "references": [
+        "grip_sw_guide",
+        "windup_sw",
+        "original"
+      ],
+      "status": "required_reference",
+      "generation_id": "383724b9-5e98-4685-ae73-4751437336eb"
+    },
+    {
+      "key": "strike_sw",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/strike_sw.png",
+      "sha256": "8e636b913e55113f001327db0a28bf640eaff926e4a630ba5ff432466dbc3976",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Correct ONLY the LEFT arm in this southwest mounted spear strike. The rider's RIGHT arm on SCREEN-LEFT is already correctly extending and gripping the forward lance; KEEP that right arm/hand/shaft exactly. Remove the OTHER hand currently gripping the REAR shaft near SCREEN-RIGHT shoulder. Redraw that anatomical LEFT arm from SCREEN-RIGHT shoulder bent down to hold the dark leather reins near saddle/horse neck at rider waist. Left fist now holds reins only, not any part of lance. Leave the lance unchanged as ONE full coherent wooden weapon from silver head at lower-left to blunt butt upper-right, now controlled ONLY by the correct RIGHT hand at screen-left. This is a single-right-hand mounted thrust with left hand reins, not two-handed. Preserve same knight helmet/face, right arm strike extension, armor, body lean, horse, all four legs, chain/rings/saddle, exact camera, scale, canvas and true transparency. No new weapons, shafts, detached hand fragments, background, shadows, text or labels.\n",
+      "references": [
+        "strike_sw_parent"
+      ],
+      "status": "selected",
+      "generation_id": "72daa4a5-0cf3-4400-b2ba-9caf87fe750c"
+    },
+    {
+      "key": "strike_nw_rejected",
+      "repository_path": "",
+      "sha256": "9e174dd46674416cee66542bbbd083a01dbf572018ceddc6eabfb8b98b9f5cfb",
+      "method": "built_in_imagegen",
+      "prompt": "Create ONE native transparent NORTHWEST up-left REAR-view cavalry spear STRIKE game sprite. Reference1 supplies ONLY bottom-right NW windup mounted identity and correct hand roles. Keep same red-plumed iron helmet, lamellar back armor, brown iron-barded horse/dark mane/red tailcloth, saddle/reins/rings/short chain, elevated isometric rear camera. Change ONLY right-arm spear motion from bent windup to full forward THRUST: anatomical RIGHT shoulder is SCREEN-RIGHT of spine, right elbow/forearm extends forward across toward UP-LEFT and RIGHT fist wraps ONE lance shaft. Lance silver head/red tassel points far UP-LEFT beyond horse nose, wooden butt trails DOWN-RIGHT behind hand. LEFT shoulder/arm SCREEN-LEFT remains bent toward saddle/horse neck holding ONLY dark leather reins, not shaft. Only ONE human hand grips the lance: RIGHT arm originating screen-right. Left hand must visibly hold reins below and separate from the wood shaft, not extend along lance. Torso leans forward in firm saddle, four hooves braced ground, same one coherent complete lance and blunt butt, no loose fragments/extra rods. One whole horse/rider and full spear centered, >=80px genuine transparent padding, all tips/hooves/plume/tail contained. Compact painterly game style and remembered rear facing, no mirror/front view, grid, extra arms/people/weapons, labels/text, scene, cast shadows or checkerboard.\n",
+      "references": [
+        "windup"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "bf9b8c84-f478-414d-8981-253b974fc19f"
+    },
+    {
+      "key": "strike_nw",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/strike_nw.png",
+      "sha256": "03918e65290da7bf9517ac3ca8378653ca45cf913e80fc50a8345ffe16a2a831",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Draw ONE NORTHWEST up-left REAR-view armored cavalry STRIKE from the input atlas's BOTTOM-RIGHT windup, keeping its correct human arms. Use classic COUCHED LANCE strike, not an arm-reaching swing. RIGHT hand remains at SCREEN-RIGHT HIP on the REAR part of lance, RIGHT elbow BENT and tucked under right armpit at screen-right; do NOT extend the screen-left arm along spear. LEFT hand stays on dark leather reins in front of saddle, SCREEN-LEFT shoulder/arm, clearly separate from lance. Rebuild one long straight spear so silver tip/red tassel thrusts FARTHER UP-LEFT beyond horse nose than windup, shaft runs diagonally past knight waist, rear wooden butt only a SHORT extension behind the right hip to DOWN-RIGHT. Right fist on screen-right is the ONLY weapon grip. Make attack motion through forward-leaning torso and horizontal braced horse posture while right elbow stays folded at waist; no left-hand spear grip at upper-left. Preserve iron helmet/red plume, back lamellar knight, brown armored horse/rings/slack chain/red tailcloth/saddle identity, four grounded legs, elevated isometric rear camera. Independent correct rear anatomy, not front view or mirrored hands. One full rider/horse and complete long lance centered with >=80px transparent padding, all endpoints/plume/tail/hooves contained. Native true RGBA, compact painterly game art, no grid/other facings, text/labels, ground/shadow, extra arms/weapons/riders or checkerboard.\n",
+      "references": [
+        "windup"
+      ],
+      "status": "selected",
+      "generation_id": "c90a5222-d513-40f7-830b-698b9071b2ea"
+    },
+    {
+      "key": "hurt",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/hurt.png",
+      "sha256": "dc7d1bffeafad0fec32b35acb1f9d8ad0d81c2167f347a205b08b6613516e55e",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent four-direction HURT recoil game atlas for lian_huan_ma armored cavalry. Input1 gives ONLY SE/top-left and NE/bottom-left idle identity; input2 corrected SW and input3 corrected NW anatomy/idle identity. Independently paint TL southeast/down-right FRONT, TR southwest/down-left FRONT, BL northeast/up-right REAR, BR northwest/up-left REAR. Same iron segmented helmet/red plume, short beard, iron lamellar rider, brown armored horse/dark mane/red tailcloth, saddle/reins/side rings and short chain. Rider recoils torso backward slightly from saddle, head turns away from incoming facing, horse neck recoils and foreknees flex in a compact braced flinch. Four attached horse legs, grounded weight, not rearing or galloping. ONE upright lance retained in RIGHT HAND (top row SCREEN-LEFT of front chest; bottom row SCREEN-RIGHT of back), LEFT HAND holds ONLY dark leather reins, visibly separate from shaft; same correct roles as corrected idle. Lance tilted slightly back with recoil but remains ONE straight wooden shaft with silver point/red tassel and blunt wooden butt, no opposite-flank loose fragment. Native painted recoil clearly differs from idle; do not use mere color tint or shifted copy. Leave metal/skin natural colors, no blood spray or baked damage digits/red glow. Same compact elevated isometric strategy game style and scale. Each full group at most72% quadrant size, >60px outside alpha margin, >100px empty cross gutters. Complete lance tip/butt, plume/tail/hooves safe inside separate cells. Genuine RGBA transparency, no scene, shadows, text, flags, extra arms/legs/riders/weapons or checkerboard.\n",
+      "references": [
+        "idle",
+        "idle_sw",
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "5f8c7a0b-1057-4632-8f53-d85519402fce"
+    },
+    {
+      "key": "hurt_sw",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/hurt_sw.png",
+      "sha256": "4e86d66b4779abcc72be36af2d7a806b9c3b3846a0db28a60d5e89d1ceb9fe90",
+      "method": "built_in_imagegen",
+      "prompt": "Edit this corrected SOUTHWEST down-left FRONT-view armored cavalry idle into ONE native transparent HURT recoil sprite. Preserve exactly rider/horse identity, single right-hand spear and left-hand reins. Human RIGHT shoulder/arm on SCREEN-LEFT holds the one lance; human LEFT arm on SCREEN-RIGHT holds separate dark leather reins, never change which hand grips weapon. Recoil rider torso/head backward and raise chin away from incoming down-left direction, shoulders flinch, horse neck slightly withdraws and four legs flex in compact braced stance. Right hand keeps full upright lance tilted slightly backward with recoil, LEFT hand keeps visible leather reins clear from wood. Same iron helmet/red plume/short beard and lamellar knight, brown armored horse/black mane/red tailcloth, saddle/rings/short slack chain. One coherent wooden shaft with top silver head/red tassel and flat blunt butt, no stray opposite-flank shaft. Real painted recoil pose different from idle, not just red tint/offset, no blood or baked damage marks. Exactly four horse legs, stationary grounded compact flinch, no gallop/rearing. Complete body/full spear centered with >=80px transparent padding, full tips/hooves/tail inside, same compact elevated painterly style. No grid, other views, extra arms/weapons/people, text/labels, scene, ground/shadow or checkerboard. Genuine RGBA alpha.\n",
+      "references": [
+        "idle_sw"
+      ],
+      "status": "selected",
+      "generation_id": "5aee4690-0291-4f33-bc8e-83d4369cad1c"
+    },
+    {
+      "key": "hurt_ne",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/hurt_ne.png",
+      "sha256": "6bf007ad5af1cbcea65116ab3e2d9df2167d5083451d764769a541d9d0c253f6",
+      "method": "built_in_imagegen",
+      "prompt": "Create ONE native transparent NORTHEAST up-right REAR-view armored cavalry HURT recoil sprite. Reference supplies ONLY bottom-left NE idle identity and correct RIGHT-hand upright lance. Same iron helmet/red plume/back lamellar knight, brown iron-barded horse/black mane/red tailcloth, saddle/rings/short chain, elevated rear isometric camera with nose up-right. Recoil rider torso/helmet backward toward down-left, shoulders hunch, horse neck slightly withdraws, four horse legs flex in grounded braced flinch; not gallop/rearing. Human RIGHT shoulder/arm is SCREEN-RIGHT of spine and continues holding ONE upright spear just SCREEN-RIGHT of torso, tilted slightly backward with recoil. Human LEFT arm from SCREEN-LEFT shoulder bends forward to separate dark leather reins, no spear grip. Do NOT mirror hands or move weapon to left arm. Exactly one complete coherent wooden shaft with top silver head/red tassel and flat blunt butt, no disconnected opposite-flank fragments. Natural painted recoil different from idle, no red tint-only substitution, blood or baked damage text. Same compact painterly game identity/style, whole horse/rider/full spear centered with >=80px genuinely transparent padding, every plume/tip/butt/tail/hoof contained. No other views/grid, labels, scene/ground/shadow, extra arms/weapons/people or checkerboard.\n",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "850340c0-3fe3-44b8-99d5-2747479bd856"
+    },
+    {
+      "key": "fall",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/fall.png",
+      "sha256": "2ea20d5b229d164a1c3e19d280f0bb3f7261ead656d6490d44a59922dc6205b4",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent four-direction DEATH FALL transition game atlas for lian_huan_ma armored cavalry. Inputs define only same iron-armored red-plumed knight and single iron-barded brown horse/rings/short chain/red tailcloth identity. Independently paint collapse halfway toward ground, four elevated isometric facings in 2x2 TL southeast/down-right FRONT, TR southwest/down-left FRONT, BL northeast/up-right REAR, BR northwest/up-left REAR. Horse folds BOTH front knees underneath lowered chest while hindquarters sag, rear legs flex and body tilts onto flank; silhouette height much lower than standing but still a recognizable ongoing collapse. Rider has slipped sideways from saddle with torso lowered and bent arms bracing fall, helmet stays on and red plume falls with him. Exactly ONE horse, ONE rider, FOUR horse legs total in each cell, knees anatomically folded without extra hooves; armor and saddle/rings/chain stay attached, horse tail slack. Both human hands EMPTY: knight has released spear. Exactly ONE intact wooden spear with pointed silver head/red tassel and blunt butt lies flat ON GROUND BESIDE the falling horse, separated from empty hands. No upright spear, no extra weapon shafts, fragments or broken duplicate spear. Ground weapon points toward each remembered facing without clipping the canvas. Same dark iron and brown colors/painted game identity, no blood/gore. Low-frame FALL transitional silhouette, not standing idle, rearing, kneeling tall knight or already-final full horizontal corpse. Keep all four groups same compact scale, <=72% per-cell extents, >60px outer transparent padding and >100px empty cross gutters; all weapon endpoints, helmet/tail/hooves contained. Native true RGBA transparency, no labels/text, cast shadows, ground/background, shields/flags/extra bodies or checkerboard.\n",
+      "references": [
+        "idle",
+        "idle_sw",
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "07cc7b4b-88ae-4594-a0ca-34900388f3a7"
+    },
+    {
+      "key": "terminal",
+      "repository_path": "assets/characters/lian_huan_ma_direction4_20261004/terminal.png",
+      "sha256": "71758cad2a019c654c1a3376220478ea6ec57c7b1229f6ae660f6682e3efa019",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent four-direction FINAL DEATH TERMINAL sprite atlas for the same lian_huan_ma armored cavalry. Input is only same rider/horse/weapon identity and fall transition reference. Complete the fall: ONE brown armored horse FULLY LYING ON ITS SIDE, chest/rump/head fully down on ground plane; FOUR legs slack/folded sideways, no standing hooves or kneeling upright horse. ONE armored rider FULLY LYING HORIZONTALLY beside/partly against collapsed horse, helmeted head down and torso horizontal, not still seated in saddle, crouching, kneeling, bracing on hands or propped up. Both human arms slack and hands empty. Same iron segmented helmet/red plume and dark lamellar rider, brown barded horse/dark mane/red tailcloth, saddle and two side rings/one slack chain remain attached. Exactly ONE complete long wooden spear with silver head/red tassel and flat butt lies separately alongside on same ground plane, no fragments or extra shaft, no hand grip. Four independently painted remembered facings, strict 2x2: top-left SE with horse nose toward down-right and front rider armor visible; top-right SW nose down-left/front armor visible; bottom-left NE nose up-right/back armor visible; bottom-right NW nose up-left/back armor visible. Final flat corpse silhouettes much lower height than input fall transition, clearly fully down and inert. No blood/gore, smoke or glow. Preserve compact painterly elevated isometric game camera, identity/colors, equal full-unit footprint. Give each complete group including flat ground spear <=72% quadrant extents, >60px outer transparent border and >100px entirely empty cross gutters. Full spear endpoints/plume/tail/hooves inside cells. Native genuine RGBA transparency, no scene, painted ground or cast shadow, text/labels, flags/shields/extra bodies or checkerboard.\n",
+      "references": [
+        "fall"
+      ],
+      "status": "selected",
+      "generation_id": "4c1eba71-ece4-453a-a0b2-7fb9e3afe874"
+    }
+  ]
+}
