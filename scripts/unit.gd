@@ -363,6 +363,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"lu_junyi": true,
 	"guan_sheng": true,
 	"qin_ming": true,
+	"chao_gai": true,
 }
 
 

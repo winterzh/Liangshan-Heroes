@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_direction4_20261004/hurt.png" id="hurt"]
+
+[sub_resource type="AtlasTexture" id="hurt_ne"]
+atlas = ExtResource("hurt")
+region = Rect2(0, 623, 685, 631)
+margin = Rect2(0, 27, 0, 54)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-19.5, -23.3)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.993123
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

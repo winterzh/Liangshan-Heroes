@@ -1,3 +1,11 @@
+## 2026-10-04 晁盖通用四向已验收
+
+- assets/characters/chao_gai_direction4_20261004/：19原生PNG及import。
+- assets/direction4/chao_gai_20261004.json、assets/anim/chao_gai_*_<方向>.tres：32姿态、20资源及脚点元数据。
+- tools/contracts/chao_gai_direction4_20261004/：提示、选择、必需父图、实际引用几何图/生成器、SHA及复现工具。
+- qa/chao_gai_direction4_20261004/：原生报告/截图、来源/留边/复现与清理记录。
+- [实现](CHAO_GAI_DIRECTION4_20261004.md)。
+
 ## 2026-10-04 秦明通用四向已验收
 
 - assets/characters/qin_ming_direction4_20261004/：16原生PNG及import。

@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_direction4_20261004/fall_sw_v2.png" id="fall_sw_v2"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_direction4_20261004/terminal.png" id="terminal"]
+
+[sub_resource type="AtlasTexture" id="fall_sw"]
+atlas = ExtResource("fall_sw_v2")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-8.5, -44.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.789034
+
+[sub_resource type="AtlasTexture" id="terminal_sw"]
+atlas = ExtResource("terminal")
+region = Rect2(615, 0, 639, 697)
+margin = Rect2(29, 0, 58, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(4.0, 5.54)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.941582
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_sw")},
+{"duration": 1.0, "texture": SubResource("terminal_sw")},
+{"duration": 1.0, "texture": SubResource("terminal_sw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

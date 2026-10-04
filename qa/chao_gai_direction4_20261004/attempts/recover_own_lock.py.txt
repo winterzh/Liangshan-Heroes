@@ -1,0 +1,24 @@
+from pathlib import Path
+import sys,json,hashlib
+sys.dont_write_bytecode=True
+repo=Path('E:/ChatGPT/水浒');base=Path(__file__).parent
+tag=sys.argv[1] if len(sys.argv)>1 else '20261004_100534_bf0b3185'
+assert tag in ['20261004_100534_bf0b3185','20261004_101116_4f09d274']
+run=base/tag
+sys.path.insert(0,str(repo/'tools'))
+import run_steam_integration_qa as shared
+from run_campaign_level_state_qa import running_engine
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+receipt=run/'evidence/receipt.json';r=json.loads(receipt.read_text(encoding='utf-8'))
+assert not r['complete'] and not r['steps'] and r['failure']['message']=='Godot/Liangshan engine appeared before step import'
+assert not r['source_changes'] and not r['private_source_changes']
+assert not running_engine() and shared.LOCK.is_file() and shared.LOCK.read_text()==str(run)
+for row in r['source_files']:
+ assert sha(repo/row['path'])==row['sha256']==sha(run/'project'/row['path'])
+assert sha(repo/'tools/art_character_direction4_qa.gd')==r['qa_sha256']
+assert sha(repo/'tools/run_character_art_qa.py')==r['driver_sha256']
+assert sha(shared.resolve_godot(None))==r['godot_sha256']
+proof={'scope':'Only terminated own pre-import runner lock; no other process, lock, profile or project altered.','original_receipt_sha256':sha(receipt),'own_run':str(run),'frozen_source_files':len(r['source_files']),'source_drift':[],'private_drift':[],'engines_remaining':False,'runner_exit_observed':1}
+shared.LOCK.unlink();proof['lock_released']=not shared.LOCK.exists()
+(run/'lock_recovery.json').write_text(json.dumps(proof,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(proof))

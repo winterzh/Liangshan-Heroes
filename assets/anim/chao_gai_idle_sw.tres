@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_direction4_20261004/idle_sw_v3.png" id="idle_sw_v3"]
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("idle_sw_v3")
+region = Rect2(0, 0, 1086, 1448)
+margin = Rect2(181, 0, 362, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(11.0, -187.64)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.87418
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
