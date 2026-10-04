@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/xu_ning_direction4_20261005/fall_initial.png" id="fall_initial"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/xu_ning_direction4_20261005/terminal_initial.png" id="terminal_initial"]
+
+[sub_resource type="AtlasTexture" id="fall_se"]
+atlas = ExtResource("fall_initial")
+region = Rect2(0, 0, 641, 669)
+margin = Rect2(14, 0, 28, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, -47.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.812668
+
+[sub_resource type="AtlasTexture" id="terminal_se"]
+atlas = ExtResource("terminal_initial")
+region = Rect2(0, 0, 635, 668)
+margin = Rect2(16, 0, 33, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-12.5, -24.24)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.966067
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_se")},
+{"duration": 1.0, "texture": SubResource("terminal_se")},
+{"duration": 1.0, "texture": SubResource("terminal_se")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

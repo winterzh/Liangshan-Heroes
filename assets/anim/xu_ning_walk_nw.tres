@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/xu_ning_direction4_20261005/walk_a_nw_v3.png" id="walk_a_nw_v3"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/xu_ning_direction4_20261005/walk_b_nw.png" id="walk_b_nw"]
+
+[sub_resource type="AtlasTexture" id="walk_a_nw"]
+atlas = ExtResource("walk_a_nw_v3")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-41.0, -161.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.888392
+
+[sub_resource type="AtlasTexture" id="walk_b_nw"]
+atlas = ExtResource("walk_b_nw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-149.0, -130.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.982048
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -370,6 +370,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"zhu_keke": true,
 	"gou_lian": true,
 	"lian_huan_ma": true,
+	"xu_ning": true,
 }
 
 

@@ -783,7 +783,7 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	var path := _generic_directional_path(key, state, direction)
 	# Keep legacy PNGs as provenance while these reviewed batches use native
 	# atlas sequences. All other units retain their existing PNG-first routing.
-	if key in ["guan_zhanzi", "siege_cata", "zhu_qi", "zhu_gong", "zhu_keke", "gou_lian", "lian_huan_ma"]:
+	if key in ["guan_zhanzi", "siege_cata", "zhu_qi", "zhu_gong", "zhu_keke", "gou_lian", "lian_huan_ma", "xu_ning"]:
 		var authored_path := path.get_basename() + ".tres"
 		if ResourceLoader.exists(authored_path) and not _load_generic_directional_frames(authored_path).is_empty():
 			_generic_directional_path_cache[cache_key] = authored_path
