@@ -365,6 +365,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"qin_ming": true,
 	"chao_gai": true,
 	"siege_cata": true,
+	"zhu_qi": true,
 }
 
 
@@ -2434,6 +2435,7 @@ func _has_smoke() -> bool:
 func _attack_sfx_name() -> String:
 	match key:
 		"siege_cata": return "atk_catapult"
+		"zhu_qi": return "atk_spear"       # Authored spear appearance; existing hit timing stays unchanged.
 		"guan_gong": return "atk_crossbow"   # 弩手
 		"hu_yanzhuo": return "atk_mace"       # 双鞭
 		"jiang_menshen": return "atk_fist"    # 赤手

@@ -1,3 +1,11 @@
+## 2026-10-04 祝家马军四向已验收
+
+- assets/characters/zhu_qi_direction4_20261004/：八张原生PNG及import。
+- assets/direction4/zhu_qi_20261004.json、assets/anim/zhu_qi_*_<方向>.tres：32姿态、20资源及脚点元数据。
+- tools/contracts/zhu_qi_direction4_20261004/：原生提示、选择、SHA、引用链及复现工具。
+- qa/zhu_qi_direction4_20261004/：最终四步报告、32截图、首轮迷雾问题及清理记录。
+- [实现](ZHU_QI_DIRECTION4_20261004.md)。
+
 ## 2026-10-04 投石车机械四向已验收
 
 - assets/characters/siege_cata_direction4_20261004/：八张原生PNG及import。

@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhu_qi_direction4_20261004/idle.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle")
+region = Rect2(0, 627, 643, 627)
+margin = Rect2(0, 8, 0, 16)
+filter_clip = true
+metadata/draw_offset_px = Vector2(43.5, -54.74)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.890835
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

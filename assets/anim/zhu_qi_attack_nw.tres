@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhu_qi_direction4_20261004/windup.png" id="windup"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhu_qi_direction4_20261004/strike.png" id="strike"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhu_qi_direction4_20261004/idle.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="windup_nw"]
+atlas = ExtResource("windup")
+region = Rect2(628, 632, 626, 622)
+margin = Rect2(0, 2, 0, 4)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-38.0, -61.68)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.875054
+
+[sub_resource type="AtlasTexture" id="strike_nw"]
+atlas = ExtResource("strike")
+region = Rect2(635, 626, 619, 628)
+margin = Rect2(4, 0, 9, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-60.5, -50.04)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.890618
+
+[sub_resource type="AtlasTexture" id="idle_nw"]
+atlas = ExtResource("idle")
+region = Rect2(643, 627, 611, 627)
+margin = Rect2(8, 0, 16, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-29.0, -61.86)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.895714
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_nw")},
+{"duration": 1.0, "texture": SubResource("strike_nw")},
+{"duration": 1.0, "texture": SubResource("idle_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
