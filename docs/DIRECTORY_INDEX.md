@@ -1,3 +1,11 @@
+## 2026-10-04 祝家弓手四向已验收
+
+- assets/characters/zhu_gong_direction4_20261004/：12张生产原生PNG及import。
+- assets/direction4/zhu_gong_20261004.json、assets/anim/zhu_gong_*_<方向>.tres：32姿态、20资源与脚点/身体比例元数据。
+- tools/contracts/zhu_gong_direction4_20261004/：提示、实际引用、四份父图、几何参考/生成器与复现工具。
+- qa/zhu_gong_direction4_20261004/：来源、留边、复现、最终四步报告、全部画面与清理记录。
+- [实现](ZHU_GONG_DIRECTION4_20261004.md)。
+
 ## 2026-10-04 祝家马军四向已验收
 
 - assets/characters/zhu_qi_direction4_20261004/：八张原生PNG及import。

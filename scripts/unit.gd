@@ -366,6 +366,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"chao_gai": true,
 	"siege_cata": true,
 	"zhu_qi": true,
+	"zhu_gong": true,
 }
 
 
