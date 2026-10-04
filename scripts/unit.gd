@@ -368,6 +368,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"zhu_qi": true,
 	"zhu_gong": true,
 	"zhu_keke": true,
+	"gou_lian": true,
 }
 
 
