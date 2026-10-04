@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "own unstarted race releases despite unrelated engine",
+      "passed": true
+    },
+    {
+      "label": "different owner stays untouched even idle",
+      "passed": true
+    },
+    {
+      "label": "busy after a step retains own lock",
+      "passed": true
+    },
+    {
+      "label": "unproven busy failure retains own lock",
+      "passed": true
+    },
+    {
+      "label": "idle completed child permits own release",
+      "passed": true
+    }
+  ],
+  "scope": "Temporary lock files only; no Godot process, actual shared lock or other task is changed.",
+  "script_sha256": "546460394b12afeb337dc8f83fa85a108a09970231e79e9f3e81906087131609",
+  "driver_sha256": "52ff35be2e81be9cbb9f6550d5a462b8d9d767cbb581429e704b98cf70413856"
+}

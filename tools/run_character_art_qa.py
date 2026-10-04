@@ -220,6 +220,23 @@ def process_step(engine: Path, project: Path, env: dict, evidence: Path,
         raise RuntimeError("Private character QA step failed: " + label)
 
 
+def release_owned_lock(lock: Path, run: Path, receipt: dict, engine_busy: bool) -> bool:
+    """A refused pre-import run never launched a child; release only its own lock.
+
+    A different task starting during source freeze must not strand this lock.
+    After any engine step, retain the existing busy-engine guard.
+    """
+    if not lock.is_file() or lock.read_text(encoding="utf-8") != str(run):
+        return False
+    pre_import_race = (receipt.get("steps") == [] and
+                      receipt.get("failure", {}).get("message") ==
+                      "Godot/Liangshan engine appeared before step import")
+    if engine_busy and not pre_import_race:
+        return False
+    lock.unlink()
+    return True
+
+
 def verify_character_report(case: dict, directory: Path, visual: bool):
     report_path = directory / "report.json"
     report = json.loads(report_path.read_text(encoding="utf-8"))
@@ -491,8 +508,7 @@ def main():
             receipt["private_source_changes"] = source_changes(project, receipt["source_files"])
             engine_busy = running_engine()
             receipt["engines_remaining"] = engine_busy
-            if shared.LOCK.exists() and shared.LOCK.read_text(encoding="utf-8") == str(run) and not engine_busy:
-                shared.LOCK.unlink()
+            receipt["owned_lock_removed"] = release_owned_lock(shared.LOCK, run, receipt, engine_busy)
             receipt["lock_released"] = not shared.LOCK.exists()
             receipt["complete"] = receipt["complete"] and receipt["lock_released"] and not receipt["source_changes"] and not receipt["private_source_changes"]
         if evidence.exists():
