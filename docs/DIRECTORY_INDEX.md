@@ -1,3 +1,11 @@
+## 2026-10-04 秦明通用四向已验收
+
+- assets/characters/qin_ming_direction4_20261004/：16原生PNG及import。
+- assets/direction4/qin_ming_20261004.json、assets/anim/qin_ming_*_<方向>.tres：32姿态、20资源与脚点元数据。
+- tools/contracts/qin_ming_direction4_20261004/：提示、选择、必需父图、实际引用几何图/生成源码与可复现元数据。
+- qa/qin_ming_direction4_20261004/：原生报告/截图及来源、留边、复现、清理记录。
+- [实现](QIN_MING_DIRECTION4_20261004.md)。
+
 ## 2026-10-04 关胜骑乘四向已验收
 
 - assets/characters/guan_sheng_direction4_20261004/：17原生PNG及import。
