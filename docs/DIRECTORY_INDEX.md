@@ -1,3 +1,11 @@
+## 2026-10-04 投石车机械四向已验收
+
+- assets/characters/siege_cata_direction4_20261004/：八张原生PNG及import。
+- assets/direction4/siege_cata_20261004.json、assets/anim/siege_cata_*_<方向>.tres：32姿态、16机械资源及脚点元数据。
+- tools/contracts/siege_cata_direction4_20261004/：提示、选择、SHA、必需父图、轮辐参考/生成器及复现工具。
+- qa/siege_cata_direction4_20261004/：最终四步报告/23截图、原始收尾中断收据、认证锁关闭、失败及清理记录。
+- [实现](SIEGE_CATA_DIRECTION4_20261004.md)。
+
 ## 2026-10-04 晁盖通用四向已验收
 
 - assets/characters/chao_gai_direction4_20261004/：19原生PNG及import。

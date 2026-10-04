@@ -1,0 +1,15 @@
+from pathlib import Path
+from PIL import Image,ImageDraw
+import math
+base=Path(__file__).parent
+im=Image.new('RGBA',(800,380),(242,237,221,255));draw=ImageDraw.Draw(im)
+for cx,phase,title in [(205,0,'A: cardinal spokes'),(595,22.5,'B: spokes turned 22.5 degrees')]:
+ cy=205;rx=90;ry=140
+ draw.ellipse((cx-rx,cy-ry,cx+rx,cy+ry),fill=(132,91,52),outline=(42,43,42),width=12)
+ for k in range(8):
+  a=math.radians(k*45+phase)
+  draw.line((cx,cy,cx+(rx-12)*math.cos(a),cy+(ry-12)*math.sin(a)),fill=(246,195,101),width=9)
+ draw.ellipse((cx-15,cy-15,cx+15,cy+15),fill=(48,49,45))
+ draw.text((cx-90,25),title,fill=(32,34,31))
+im.save(base/'wheel_phase_guide.png')
+print('Fresh analytical wheel diagram; no sprite read or modified.')

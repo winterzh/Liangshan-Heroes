@@ -364,6 +364,7 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"guan_sheng": true,
 	"qin_ming": true,
 	"chao_gai": true,
+	"siege_cata": true,
 }
 
 
@@ -3722,6 +3723,13 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			var swdamp := _programmatic_swing_scale()
 			off += _swing_offset() * swdamp
 			ang += _swing_rot() * swdamp
+		# Authored catapult wheels and lever already carry all motion. A rigid
+		# timber chassis must not inherit infantry breathing, gait or bow lean.
+		if _authored_catapult_chassis_active():
+			off = Vector2.ZERO
+			ang = 0.0
+			sx_scale = 1.0
+			sy = 1.0
 		if _cast_t > 0.0:                                     # 施法抬手：起身后仰蓄势，结算瞬间回落=「放招」
 			var lift := 1.0 - _cast_t / _cast_dur             # 0→1
 			lift = lift * lift * (3.0 - 2.0 * lift)           # smoothstep
@@ -3841,6 +3849,10 @@ func _frame_draw_offset(frame: Texture2D, drawn_size: float) -> Vector2:
 func _authored_direction4_attack_active() -> bool:
 	return _lunge > 0.0 and _real_frames and _frame_directional \
 		and art_variant.is_empty() and AUTHORED_DIRECTION4_ATTACK_KEYS.has(key)
+
+
+func _authored_catapult_chassis_active() -> bool:
+	return key == "siege_cata" and art_variant.is_empty() and _real_frames and _frame_directional
 
 
 func _programmatic_swing_scale() -> float:

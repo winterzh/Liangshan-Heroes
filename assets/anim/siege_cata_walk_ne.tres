@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/walk_a.png" id="walk_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/walk_b_v2.png" id="walk_b_v2"]
+
+[sub_resource type="AtlasTexture" id="walk_a_ne"]
+atlas = ExtResource("walk_a")
+region = Rect2(0, 624, 638, 630)
+margin = Rect2(0, 4, 0, 8)
+filter_clip = true
+metadata/draw_offset_px = Vector2(5.0, 26.16)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.297627
+
+[sub_resource type="AtlasTexture" id="walk_b_ne"]
+atlas = ExtResource("walk_b_v2")
+region = Rect2(0, 624, 637, 630)
+margin = Rect2(0, 3, 0, 7)
+filter_clip = true
+metadata/draw_offset_px = Vector2(4.5, 24.34)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.295593
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_ne")},
+{"duration": 1.0, "texture": SubResource("walk_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/collapse.png" id="collapse"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/wreck_v2.png" id="wreck_v2"]
+
+[sub_resource type="AtlasTexture" id="collapse_ne"]
+atlas = ExtResource("collapse")
+region = Rect2(0, 625, 638, 629)
+margin = Rect2(0, 4, 0, 9)
+filter_clip = true
+metadata/draw_offset_px = Vector2(11.5, 22.16)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.297627
+
+[sub_resource type="AtlasTexture" id="wreck_ne"]
+atlas = ExtResource("wreck_v2")
+region = Rect2(0, 688, 630, 566)
+margin = Rect2(0, 32, 0, 64)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-31.0, 58.6)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.281356
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("collapse_ne")},
+{"duration": 1.0, "texture": SubResource("wreck_ne")},
+{"duration": 1.0, "texture": SubResource("wreck_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]
