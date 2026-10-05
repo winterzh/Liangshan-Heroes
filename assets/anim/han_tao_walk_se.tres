@@ -1,0 +1,32 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/han_tao_direction4_20261005/walk_se.png" id="walk_se"]
+
+[sub_resource type="AtlasTexture" id="walk_a_se"]
+atlas = ExtResource("walk_se")
+region = Rect2(0, 0, 889, 887)
+margin = Rect2(0, 1, 0, 2)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-19.5, -100.02)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.997727
+
+[sub_resource type="AtlasTexture" id="walk_b_se"]
+atlas = ExtResource("walk_se")
+region = Rect2(889, 0, 885, 887)
+margin = Rect2(1, 0, 2, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-34.5, -94.66)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.00561
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/han_tao_direction4_20261005/attack_nw.png" id="attack_nw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/han_tao_direction4_20261005/idle_nw.png" id="idle_nw"]
+
+[sub_resource type="AtlasTexture" id="windup_nw"]
+atlas = ExtResource("attack_nw")
+region = Rect2(0, 0, 833, 887)
+margin = Rect2(27, 0, 54, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-129.0, -111.66)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.053059
+
+[sub_resource type="AtlasTexture" id="strike_nw"]
+atlas = ExtResource("attack_nw")
+region = Rect2(833, 0, 941, 887)
+margin = Rect2(0, 27, 0, 54)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-117.5, -80.38)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.141493
+
+[sub_resource type="AtlasTexture" id="idle_nw"]
+atlas = ExtResource("idle_nw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-66.0, -96.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.165816
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_nw")},
+{"duration": 1.0, "texture": SubResource("strike_nw")},
+{"duration": 1.0, "texture": SubResource("idle_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

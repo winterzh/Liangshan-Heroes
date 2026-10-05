@@ -1,0 +1,317 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "han_tao",
+  "original_reference": {
+    "path": "assets/portraits4.png",
+    "sha256": "58dced486064872d57f7cd1d350664d9cb12126e9808393543be2e60d4bbf21e"
+  },
+  "identity_note": "Current portraits4 top-middle identity: red-plumed iron helmet with gold wing ear guards, long black beard, red-brown lamellar/gold shoulders, dark red scarf/cape. Chestnut horse and black mane/tail. RIGHT alone holds lance; LEFT reins, near RIGHT in SE/NE and near LEFT in SW/NW. Existing cavalry stats, four skills, range-inferred SWORD mechanics and 2.1/.48 attack timing retained. Paint does not change weapon inference.",
+  "jobs": [
+    {
+      "key": "captured_identity",
+      "repository_path": "assets/characters/han_tao_captured_20261005/captured.png",
+      "sha256": "002a560d14d19c5d3bc37693384d4366210af63ccc58448417de394853b51f12",
+      "method": "existing_project_reference",
+      "prompt": "Existing approved Han Tao captured identity reference only, not normal cavalry pose.",
+      "references": [
+        "original"
+      ],
+      "status": "required_reference"
+    },
+    {
+      "key": "idle_se_parent",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/native_references/idle_se_parent.png",
+      "sha256": "b1da77cdbe9bb4d825829c899487a6b951cf09b74bfe89c9313af8f9233d8c78",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: one native transparent RGBA cavalry idle sprite for a painterly isometric RTS. Reference image 1 is a 3x3 portrait atlas: use ONLY the TOP ROW MIDDLE MAN, Han Tao. Reference image 2 is the approved captured identity, identity and rendering reference only; draw him alive and mounted now. Full body Han Tao wearing red-plumed iron helmet with gold wing-shaped ear guards, stern middle-aged face, long black beard, gold-accented red-brown lamellar armor, dark-red scarf and cape. One chestnut brown horse with black mane and tail, military saddle and reins. One single southeast facing view: horse nose and rider chest face diagonally down-right, fixed elevated isometric camera about 30 degrees. Stationary horse with four hooves planted. Weapon grip is asymmetric and anatomically clear: the rider's RIGHT arm on the viewer-near side holds exactly ONE jujube-wood lance vertically beside his right hip. Its small straight silver tip and modest red tassel are fully visible well inside the image, the straight shaft runs through ONLY the right fist. His LEFT arm on the far side reaches forward to horse neck, and the left hand holds ONLY two leather reins, visibly separated from the lance. No left hand touching lance. Two hands total, one weapon total. Lance upright rather than horizontal so all its ends have generous transparent margins. Horse, rider, plume, cape, every hoof, and the entire lance must fit centered with at least 10 percent transparent padding on every canvas edge. Painterly detailed RTS sprite, legible silhouette at small scale, natural same identity and proportions as references, no photographic backdrop. Genuine transparent alpha, no floor rectangle, no text, no labels, no other sprites or views, no blue armor, no white horse, no weapon switch or mirrored hand roles. One square native image no larger than 1536px.",
+      "references": [
+        "original",
+        "captured_identity"
+      ],
+      "status": "required_reference",
+      "generation_id": "2fa1d408-1174-4701-9670-0d5c6910e26d",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/idle_se_parent.json",
+      "request_sha256": "a42a6b95e4f472390f48952bbcf59839b6b7b57038b7452c34f10eae19b59c8b",
+      "review": "Required native padding-edit parent, not production."
+    },
+    {
+      "key": "idle_se",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/idle_se.png",
+      "sha256": "29f4536d46c4f1aee1009d27fcb06bbcf4a6db3920a491385efe217059a11936",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Edit target: the attached single southeast Han Tao mounted idle sprite. Change ONLY composition/padding. Recompose the exact same full horse, rider and entire vertical lance centrally at roughly 65% of image height, with at least 12% completely transparent padding between EVERY extremity and all four canvas edges, especially ABOVE the lance tip and BELOW the front hooves. The previous tip is too close to top edge. Keep southeast elevated isometric facing, exactly the same face, red-plumed gold-wing iron helmet, long black beard, red-brown lamellar armor/cape, chestnut horse with black mane/tail, saddle, planted hooves, colors and painterly quality. Keep anatomical RIGHT near hand alone holding one straight jujube-wood lance; LEFT far hand alone holding reins, two hands total, one weapon total. Do not swap roles, add weapons, add text, mirror, crop or clip anything. Real alpha transparency. Square native image, no larger than 1536px. Whole subject visibly smaller in the same square canvas to ensure abundant empty alpha margin.",
+      "references": [
+        "idle_se_parent"
+      ],
+      "status": "selected",
+      "generation_id": "cd172e3f-2b3f-483d-83a2-d416772c4255",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/idle_se.json",
+      "request_sha256": "32483821b0dc8928a86963f7a5073494ed3999ba1b9eed8df3d5e670088266d1",
+      "review": "Selected native art after direct inspection; engine/body-size review pending. Correct anatomical right weapon, left reins. Rear near-side wording in original request is inaccurate; actual NE near right grips shaft and NW near left grips reins, consistent with game ISO axes."
+    },
+    {
+      "key": "idle_sw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/idle_sw.png",
+      "sha256": "feb87ffd39491a68c660bf49454809c30663b0f92c7fa49bb34aa2667aba2f63",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: ONE native transparent RGBA mounted Han Tao IDLE RTS sprite. Reference image is identity, horse, equipment and painterly isometric style ONLY. Independently redraw a new viewing direction; never mirror the reference. Preserve Han Tao's red-plumed iron helmet with gold wing-shaped ear guards, stern face, long black beard, red-brown lamellar armor, gold shoulder details and dark-red scarf/cape. Preserve chestnut-brown horse, black mane/tail, leather military saddle, brown tack and simple saddlecloth. Stationary horse with exactly four legs and four hooves planted; one seated rider with two legs in stirrups. Exactly one upright straight dark-red jujube-wood lance with a small straight silver tip and modest red tassel. Anatomical RIGHT hand alone grips the lance beside his RIGHT hip; anatomical LEFT hand alone holds the two reins at the horse neck. Two hands total, never let left hand touch shaft. Rider and horse face the same prescribed direction. Fixed elevated 30-degree isometric camera. Whole horse/rider and entire vertical lance occupies at most 68% of square canvas height; minimum 12% empty transparent padding above spear tip, below hooves, and both sides. Entire silhouette visible, no crop. Detailed natural painterly RTS sprite compatible with reference, legible at small scale. Genuine alpha background, no ground rectangle, cast shadow, text, labels, duplicates, other views, white horse or blue armor. SOUTHWEST: horse nose and rider look diagonally down-left. Viewer is nearer the rider's LEFT side, so the visible near LEFT forearm reaches forward/down to hold reins only. RIGHT shoulder/arm is on far side: far RIGHT forearm grips upright lance beside far right hip. Make both hands' distinct functions readable; lance remains on far side, passing only through the right fist. Do not flip the reference hand roles. Front/left three-quarter face and horse chest view.",
+      "references": [
+        "idle_se"
+      ],
+      "status": "selected",
+      "generation_id": "22ffae15-f3ef-43bd-930d-276894e69131",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/idle_sw.json",
+      "request_sha256": "a7d9e8a2aafcf625ff627c2ece61458b91caf3bf5c1a28ad01b6745841cbab5c",
+      "review": "Selected native art after direct inspection; engine/body-size review pending. Correct anatomical right weapon, left reins. Rear near-side wording in original request is inaccurate; actual NE near right grips shaft and NW near left grips reins, consistent with game ISO axes."
+    },
+    {
+      "key": "idle_ne",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/idle_ne.png",
+      "sha256": "88498cc0f970620d83319d816c16c3276f7c6347e0647303f56f0907f55dc782",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: ONE native transparent RGBA mounted Han Tao IDLE RTS sprite. Reference image is identity, horse, equipment and painterly isometric style ONLY. Independently redraw a new viewing direction; never mirror the reference. Preserve Han Tao's red-plumed iron helmet with gold wing-shaped ear guards, stern face, long black beard, red-brown lamellar armor, gold shoulder details and dark-red scarf/cape. Preserve chestnut-brown horse, black mane/tail, leather military saddle, brown tack and simple saddlecloth. Stationary horse with exactly four legs and four hooves planted; one seated rider with two legs in stirrups. Exactly one upright straight dark-red jujube-wood lance with a small straight silver tip and modest red tassel. Anatomical RIGHT hand alone grips the lance beside his RIGHT hip; anatomical LEFT hand alone holds the two reins at the horse neck. Two hands total, never let left hand touch shaft. Rider and horse face the same prescribed direction. Fixed elevated 30-degree isometric camera. Whole horse/rider and entire vertical lance occupies at most 68% of square canvas height; minimum 12% empty transparent padding above spear tip, below hooves, and both sides. Entire silhouette visible, no crop. Detailed natural painterly RTS sprite compatible with reference, legible at small scale. Genuine alpha background, no ground rectangle, cast shadow, text, labels, duplicates, other views, white horse or blue armor. NORTHEAST: horse nose points diagonally up-right, camera views rider and horse from rear/left three-quarter. Show horse rump/tail and back of dark-red cape/helmet, not a front portrait. Viewer-near LEFT arm reaches forward to hold leather reins only. Far RIGHT arm alone holds upright lance on far right side, visible above right shoulder. Distinguishable side routing, no reversed-handed mirror.",
+      "references": [
+        "idle_se"
+      ],
+      "status": "selected",
+      "generation_id": "64e7574e-4d8e-428f-b5fc-7e70563c5425",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/idle_ne.json",
+      "request_sha256": "acdfd59f5005795a1e66b0603634cb38d77964846e1b7c376435d03d1bc2c775",
+      "review": "Selected native art after direct inspection; engine/body-size review pending. Correct anatomical right weapon, left reins. Rear near-side wording in original request is inaccurate; actual NE near right grips shaft and NW near left grips reins, consistent with game ISO axes."
+    },
+    {
+      "key": "idle_nw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/idle_nw.png",
+      "sha256": "1836393e3d0fd9b9bb0506093698cf5a6f372af852f6d038c7e32c925b253e28",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: ONE native transparent RGBA mounted Han Tao IDLE RTS sprite. Reference image is identity, horse, equipment and painterly isometric style ONLY. Independently redraw a new viewing direction; never mirror the reference. Preserve Han Tao's red-plumed iron helmet with gold wing-shaped ear guards, stern face, long black beard, red-brown lamellar armor, gold shoulder details and dark-red scarf/cape. Preserve chestnut-brown horse, black mane/tail, leather military saddle, brown tack and simple saddlecloth. Stationary horse with exactly four legs and four hooves planted; one seated rider with two legs in stirrups. Exactly one upright straight dark-red jujube-wood lance with a small straight silver tip and modest red tassel. Anatomical RIGHT hand alone grips the lance beside his RIGHT hip; anatomical LEFT hand alone holds the two reins at the horse neck. Two hands total, never let left hand touch shaft. Rider and horse face the same prescribed direction. Fixed elevated 30-degree isometric camera. Whole horse/rider and entire vertical lance occupies at most 68% of square canvas height; minimum 12% empty transparent padding above spear tip, below hooves, and both sides. Entire silhouette visible, no crop. Detailed natural painterly RTS sprite compatible with reference, legible at small scale. Genuine alpha background, no ground rectangle, cast shadow, text, labels, duplicates, other views, white horse or blue armor. NORTHWEST: horse nose points diagonally up-left, camera views rider and horse from rear/right three-quarter. Show horse rump/tail and back of dark-red cape/helmet, not a front portrait. Viewer-near RIGHT arm alone holds upright lance at right hip, clearly visible. Far LEFT arm reaches forward to reins only. Distinguishable side routing, no reversed-handed mirror.",
+      "references": [
+        "idle_se"
+      ],
+      "status": "selected",
+      "generation_id": "a499a7d6-b99f-4848-a262-095a987015c3",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/idle_nw.json",
+      "request_sha256": "3004c3d58168d752b44136c48f3018a3bf21bbefea5f3ba34a153415f25ab0fa",
+      "review": "Selected native art after direct inspection; engine/body-size review pending. Correct anatomical right weapon, left reins. Rear near-side wording in original request is inaccurate; actual NE near right grips shaft and NW near left grips reins, consistent with game ISO axes."
+    },
+    {
+      "key": "walk_se",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/walk_se.png",
+      "sha256": "60536c5f0f88a551c32bb3a2f63f7522353282d8d27e16759cd16981c3e7c86f",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME in-motion Han Tao cavalry sprite atlas. Reference is accepted idle identity, equipment, single-direction camera and horse only. Create two independently painted phases of a low-frame TROTTING gait in ONE horizontal strip, LEFT frame A and RIGHT frame B, both in the SAME specified direction; not opposite directions. Southeast faces screen down-right. Rider RIGHT side is nearer camera, near right hand holds lance; far LEFT hand holds reins. Preserve exactly stern long-black-bearded Han Tao, red-plumed iron/gold-wing helmet, red-brown lamellar armor, gold shoulders, dark-red scarf/cape, chestnut horse, black mane/tail, same saddle and tack. RIGHT anatomical hand alone holds one upright jujube-wood lance beside right hip, full silver spearhead and red tassel intact. LEFT hand alone controls two reins, visibly separate from shaft. Two hands, one weapon; keep grip roles from reference. Gait A: visible nearer FRONT leg reaches forward/up while farther FRONT leg trails beneath chest; nearer HIND leg extends backward while farther HIND leg reaches forward under belly. Gait B: opposite alternating diagonal pair, nearer FRONT leg visibly lifted and tucked back beneath chest while farther FRONT leg reaches forward; nearer HIND leg lifts/folds forward under belly while farther HIND leg extends backward. Draw clearly different four-leg silhouettes, natural horse joints and hooves, not same standing horse with a translated hoof. Rider stays mounted, modest bounce/forward lean, cape and tail flow behind. Same horse mass, rider height and grounded gait baseline across both panels. Do not mirror or rotate frame A to form B. Whole horse/rider/full lance inside each equal panel at central 65% height, generous transparent margins all around, at least 60px wide EMPTY alpha gutter between panels. Exactly two sprites, no blood, labels, text, grid, checkerboard, opaque ground or extra views. Native image maximum dimension 1536, real transparent background.",
+      "references": [
+        "idle_se"
+      ],
+      "status": "selected",
+      "generation_id": "dd2b15dc-fe7f-467e-8acb-7699ab3f04a1",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/walk_se.json",
+      "request_sha256": "be9ac08b866f2bb81a7e8a5bab80a05cc06577a48d0e804cb52a9da5f502314a",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "walk_sw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/walk_sw.png",
+      "sha256": "3fa2a51605321f21c5012a893b447e2daa9d13b1476c860f673ce3cffd91872a",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME in-motion Han Tao cavalry sprite atlas. Reference is accepted idle identity, equipment, single-direction camera and horse only. Create two independently painted phases of a low-frame TROTTING gait in ONE horizontal strip, LEFT frame A and RIGHT frame B, both in the SAME specified direction; not opposite directions. Southwest faces screen down-left. Rider LEFT side is nearer camera, near left hand holds reins; far RIGHT hand holds lance. Preserve exactly stern long-black-bearded Han Tao, red-plumed iron/gold-wing helmet, red-brown lamellar armor, gold shoulders, dark-red scarf/cape, chestnut horse, black mane/tail, same saddle and tack. RIGHT anatomical hand alone holds one upright jujube-wood lance beside right hip, full silver spearhead and red tassel intact. LEFT hand alone controls two reins, visibly separate from shaft. Two hands, one weapon; keep grip roles from reference. Gait A: visible nearer FRONT leg reaches forward/up while farther FRONT leg trails beneath chest; nearer HIND leg extends backward while farther HIND leg reaches forward under belly. Gait B: opposite alternating diagonal pair, nearer FRONT leg visibly lifted and tucked back beneath chest while farther FRONT leg reaches forward; nearer HIND leg lifts/folds forward under belly while farther HIND leg extends backward. Draw clearly different four-leg silhouettes, natural horse joints and hooves, not same standing horse with a translated hoof. Rider stays mounted, modest bounce/forward lean, cape and tail flow behind. Same horse mass, rider height and grounded gait baseline across both panels. Do not mirror or rotate frame A to form B. Whole horse/rider/full lance inside each equal panel at central 65% height, generous transparent margins all around, at least 60px wide EMPTY alpha gutter between panels. Exactly two sprites, no blood, labels, text, grid, checkerboard, opaque ground or extra views. Native image maximum dimension 1536, real transparent background.",
+      "references": [
+        "idle_sw"
+      ],
+      "status": "selected",
+      "generation_id": "8787f4c0-91b8-4aa5-9a9b-4e097a8bd99c",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/walk_sw.json",
+      "request_sha256": "0226cd04cc5247f1590e6e058ff03782a4ae3b1c08cd1665d503624f3effdb83",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "walk_ne",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/walk_ne.png",
+      "sha256": "0aa32bfee665b7bdf57d446d66669308f61ced3109d591195d2537916c9346c2",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME in-motion Han Tao cavalry sprite atlas. Reference is accepted idle identity, equipment, single-direction camera and horse only. Create two independently painted phases of a low-frame TROTTING gait in ONE horizontal strip, LEFT frame A and RIGHT frame B, both in the SAME specified direction; not opposite directions. Northeast faces screen up-right, rear/right three-quarter view. Rider RIGHT side is nearer camera, near right hand holds lance; far LEFT hand holds reins. Show back of cape and horse rump. Preserve exactly stern long-black-bearded Han Tao, red-plumed iron/gold-wing helmet, red-brown lamellar armor, gold shoulders, dark-red scarf/cape, chestnut horse, black mane/tail, same saddle and tack. RIGHT anatomical hand alone holds one upright jujube-wood lance beside right hip, full silver spearhead and red tassel intact. LEFT hand alone controls two reins, visibly separate from shaft. Two hands, one weapon; keep grip roles from reference. Gait A: visible nearer FRONT leg reaches forward/up while farther FRONT leg trails beneath chest; nearer HIND leg extends backward while farther HIND leg reaches forward under belly. Gait B: opposite alternating diagonal pair, nearer FRONT leg visibly lifted and tucked back beneath chest while farther FRONT leg reaches forward; nearer HIND leg lifts/folds forward under belly while farther HIND leg extends backward. Draw clearly different four-leg silhouettes, natural horse joints and hooves, not same standing horse with a translated hoof. Rider stays mounted, modest bounce/forward lean, cape and tail flow behind. Same horse mass, rider height and grounded gait baseline across both panels. Do not mirror or rotate frame A to form B. Whole horse/rider/full lance inside each equal panel at central 65% height, generous transparent margins all around, at least 60px wide EMPTY alpha gutter between panels. Exactly two sprites, no blood, labels, text, grid, checkerboard, opaque ground or extra views. Native image maximum dimension 1536, real transparent background.",
+      "references": [
+        "idle_ne"
+      ],
+      "status": "selected",
+      "generation_id": "2d3910aa-bb3a-4992-b842-e506402bf837",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/walk_ne.json",
+      "request_sha256": "264fa6af2056ad0463277e4c165460d0b9f67c03e8e85dfb20265648fc644de7",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "walk_nw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/walk_nw.png",
+      "sha256": "893fe1069e78397c972b5f8ce1677d6c159b17c451836b63f835a1c02b21404e",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME in-motion Han Tao cavalry sprite atlas. Reference is accepted idle identity, equipment, single-direction camera and horse only. Create two independently painted phases of a low-frame TROTTING gait in ONE horizontal strip, LEFT frame A and RIGHT frame B, both in the SAME specified direction; not opposite directions. Northwest faces screen up-left, rear/left three-quarter view. Rider LEFT side is nearer camera, near left hand holds reins; far RIGHT hand holds lance. Show back of cape and horse rump. Preserve exactly stern long-black-bearded Han Tao, red-plumed iron/gold-wing helmet, red-brown lamellar armor, gold shoulders, dark-red scarf/cape, chestnut horse, black mane/tail, same saddle and tack. RIGHT anatomical hand alone holds one upright jujube-wood lance beside right hip, full silver spearhead and red tassel intact. LEFT hand alone controls two reins, visibly separate from shaft. Two hands, one weapon; keep grip roles from reference. Gait A: visible nearer FRONT leg reaches forward/up while farther FRONT leg trails beneath chest; nearer HIND leg extends backward while farther HIND leg reaches forward under belly. Gait B: opposite alternating diagonal pair, nearer FRONT leg visibly lifted and tucked back beneath chest while farther FRONT leg reaches forward; nearer HIND leg lifts/folds forward under belly while farther HIND leg extends backward. Draw clearly different four-leg silhouettes, natural horse joints and hooves, not same standing horse with a translated hoof. Rider stays mounted, modest bounce/forward lean, cape and tail flow behind. Same horse mass, rider height and grounded gait baseline across both panels. Do not mirror or rotate frame A to form B. Whole horse/rider/full lance inside each equal panel at central 65% height, generous transparent margins all around, at least 60px wide EMPTY alpha gutter between panels. Exactly two sprites, no blood, labels, text, grid, checkerboard, opaque ground or extra views. Native image maximum dimension 1536, real transparent background.",
+      "references": [
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "daad1d83-c750-4312-ad37-a7180b4552d6",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/walk_nw.json",
+      "request_sha256": "3d9e99cc5f29eb51432f35f5fb77aeeff122013ee8e25435a7585c0b67619564",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "attack_se",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/attack_se.png",
+      "sha256": "3aa8290a55f8cb22655b24de2798859d9744f35befe157f044b696b7c8cc0531",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME mounted Han Tao attack atlas, ONE horizontal two-panel sheet. Identity/equipment/camera reference only: same red-plumed gold-wing iron helmet, long black beard, red-brown lamellar/gold shoulders, dark-red cape, chestnut horse with black mane/tail and tack. Southeast faces screen down-right. Rider RIGHT side is nearer camera, near right hand holds lance; far LEFT hand holds reins. Draw LEFT panel WINDUP and RIGHT panel STRIKE in that SAME direction. One seated rider, one horse with four anatomically correct legs, one continuous long dark-red jujube-wood shaft with small straight silver lance tip and red tassel. Exactly two hands: RIGHT anatomical hand alone grips the lance; LEFT hand stays holding reins only. In WINDUP rider twists slightly and draws RIGHT elbow back, holds lance at a forward slanted high guard, weapon point along facing, not an idle vertical pole. In STRIKE rider leans forward in saddle and extends RIGHT arm in a decisive one-handed forward lance thrust along horse's nose/facing, straight shaft visible through exactly the right fist; LEFT fist keeps reins near horse neck. No two-handed shaft grip, no left-handed switch, no second spear. Horse takes short braced step in strike, weight balanced, right-arm/body thrust distinct from windup. Rear directions show back cape and correct anatomical hands, not mirrored front faces. Same size and planted contact baseline in both frames, all plume/cape/hooves and entire lance including butt/tip contained within each panel, strongly foreshortened thrust as needed to fit. At least 60px fully transparent vertical central gutter and generous outer alpha margin; sprite plus complete weapon inside central 65% panel extent. Both figures centered in separate equal panels. Painterly elevated isometric RTS, sharp silhouette, no weapon trail, no blur, no shadows, floor, text, labels, grid, opaque rectangle, blue costume, white horse or blood. Native sheet maximum dimension 2048px, genuine alpha background.",
+      "references": [
+        "idle_se"
+      ],
+      "status": "selected",
+      "generation_id": "50f42ffe-bb0b-44b8-a1fd-7a85709194bf",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/attack_se.json",
+      "request_sha256": "0dd4e7e6bcddcfae720db6b7284bab9e15a31ac680a0ee059e72bb2848755fb0",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "attack_sw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/attack_sw.png",
+      "sha256": "95e52e1eb78e2bbffcbb0732589898918f86c477945fa93278b2a009d94f4413",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME mounted Han Tao attack atlas, ONE horizontal two-panel sheet. Identity/equipment/camera reference only: same red-plumed gold-wing iron helmet, long black beard, red-brown lamellar/gold shoulders, dark-red cape, chestnut horse with black mane/tail and tack. Southwest faces screen down-left. Rider LEFT side is nearer camera, near left hand holds reins; far RIGHT hand holds lance. Draw LEFT panel WINDUP and RIGHT panel STRIKE in that SAME direction. One seated rider, one horse with four anatomically correct legs, one continuous long dark-red jujube-wood shaft with small straight silver lance tip and red tassel. Exactly two hands: RIGHT anatomical hand alone grips the lance; LEFT hand stays holding reins only. In WINDUP rider twists slightly and draws RIGHT elbow back, holds lance at a forward slanted high guard, weapon point along facing, not an idle vertical pole. In STRIKE rider leans forward in saddle and extends RIGHT arm in a decisive one-handed forward lance thrust along horse's nose/facing, straight shaft visible through exactly the right fist; LEFT fist keeps reins near horse neck. No two-handed shaft grip, no left-handed switch, no second spear. Horse takes short braced step in strike, weight balanced, right-arm/body thrust distinct from windup. Rear directions show back cape and correct anatomical hands, not mirrored front faces. Same size and planted contact baseline in both frames, all plume/cape/hooves and entire lance including butt/tip contained within each panel, strongly foreshortened thrust as needed to fit. At least 60px fully transparent vertical central gutter and generous outer alpha margin; sprite plus complete weapon inside central 65% panel extent. Both figures centered in separate equal panels. Painterly elevated isometric RTS, sharp silhouette, no weapon trail, no blur, no shadows, floor, text, labels, grid, opaque rectangle, blue costume, white horse or blood. Native sheet maximum dimension 2048px, genuine alpha background.",
+      "references": [
+        "idle_sw"
+      ],
+      "status": "selected",
+      "generation_id": "1208dca6-979e-406b-9b68-628a8bbb56ee",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/attack_sw.json",
+      "request_sha256": "2ab980d84114111173be465e272a09860d97939375571e587920d72fd17e8a98",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "attack_ne",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/attack_ne.png",
+      "sha256": "6bea55a2cb766edd288a120b944c3d6c739250cb9824d92b1dee3ff7fd5b1ca7",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME mounted Han Tao attack atlas, ONE horizontal two-panel sheet. Identity/equipment/camera reference only: same red-plumed gold-wing iron helmet, long black beard, red-brown lamellar/gold shoulders, dark-red cape, chestnut horse with black mane/tail and tack. Northeast faces screen up-right, rear/right three-quarter view. Rider RIGHT side is nearer camera, near right hand holds lance; far LEFT hand holds reins. Show back of cape and horse rump. Draw LEFT panel WINDUP and RIGHT panel STRIKE in that SAME direction. One seated rider, one horse with four anatomically correct legs, one continuous long dark-red jujube-wood shaft with small straight silver lance tip and red tassel. Exactly two hands: RIGHT anatomical hand alone grips the lance; LEFT hand stays holding reins only. In WINDUP rider twists slightly and draws RIGHT elbow back, holds lance at a forward slanted high guard, weapon point along facing, not an idle vertical pole. In STRIKE rider leans forward in saddle and extends RIGHT arm in a decisive one-handed forward lance thrust along horse's nose/facing, straight shaft visible through exactly the right fist; LEFT fist keeps reins near horse neck. No two-handed shaft grip, no left-handed switch, no second spear. Horse takes short braced step in strike, weight balanced, right-arm/body thrust distinct from windup. Rear directions show back cape and correct anatomical hands, not mirrored front faces. Same size and planted contact baseline in both frames, all plume/cape/hooves and entire lance including butt/tip contained within each panel, strongly foreshortened thrust as needed to fit. At least 60px fully transparent vertical central gutter and generous outer alpha margin; sprite plus complete weapon inside central 65% panel extent. Both figures centered in separate equal panels. Painterly elevated isometric RTS, sharp silhouette, no weapon trail, no blur, no shadows, floor, text, labels, grid, opaque rectangle, blue costume, white horse or blood. Native sheet maximum dimension 2048px, genuine alpha background.",
+      "references": [
+        "idle_ne"
+      ],
+      "status": "selected",
+      "generation_id": "0950c67a-6f09-482a-9f1e-6c7de15889c8",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/attack_ne.json",
+      "request_sha256": "7d799e346c5dc53c931dfeea27027c17baafa98e18cfe921f4a1faec7c3456d7",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "attack_nw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/attack_nw.png",
+      "sha256": "ad330a3f26b1c446accdaaf5ca7ee46a28dc873347b7515ca658f561b61da16d",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA TWO-FRAME mounted Han Tao attack atlas, ONE horizontal two-panel sheet. Identity/equipment/camera reference only: same red-plumed gold-wing iron helmet, long black beard, red-brown lamellar/gold shoulders, dark-red cape, chestnut horse with black mane/tail and tack. Northwest faces screen up-left, rear/left three-quarter view. Rider LEFT side is nearer camera, near left hand holds reins; far RIGHT hand holds lance. Show back of cape and horse rump. Draw LEFT panel WINDUP and RIGHT panel STRIKE in that SAME direction. One seated rider, one horse with four anatomically correct legs, one continuous long dark-red jujube-wood shaft with small straight silver lance tip and red tassel. Exactly two hands: RIGHT anatomical hand alone grips the lance; LEFT hand stays holding reins only. In WINDUP rider twists slightly and draws RIGHT elbow back, holds lance at a forward slanted high guard, weapon point along facing, not an idle vertical pole. In STRIKE rider leans forward in saddle and extends RIGHT arm in a decisive one-handed forward lance thrust along horse's nose/facing, straight shaft visible through exactly the right fist; LEFT fist keeps reins near horse neck. No two-handed shaft grip, no left-handed switch, no second spear. Horse takes short braced step in strike, weight balanced, right-arm/body thrust distinct from windup. Rear directions show back cape and correct anatomical hands, not mirrored front faces. Same size and planted contact baseline in both frames, all plume/cape/hooves and entire lance including butt/tip contained within each panel, strongly foreshortened thrust as needed to fit. At least 60px fully transparent vertical central gutter and generous outer alpha margin; sprite plus complete weapon inside central 65% panel extent. Both figures centered in separate equal panels. Painterly elevated isometric RTS, sharp silhouette, no weapon trail, no blur, no shadows, floor, text, labels, grid, opaque rectangle, blue costume, white horse or blood. Native sheet maximum dimension 2048px, genuine alpha background.",
+      "references": [
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "036f41a4-d77c-4e63-ad2c-8909e65e660a",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/attack_nw.json",
+      "request_sha256": "d80bc6a2cd71ac4fed397296c5875d05991f51927c49288df8abf28adbe44ae8",
+      "review": "Direct native output review: correct one-handed right lance / left reins, two different gait or windup/strike phases in same authored facing. Native margin/body-scale and actual gameplay review pending. Wide native geometry is imported losslessly with bounded 2048 limit."
+    },
+    {
+      "key": "hurt",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/hurt.png",
+      "sha256": "5a9edb03ee36ef093e4cf1b5079c3ced7fc22e728e2114bc3ea5fae85177b5b6",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: ONE native transparent RGBA square 2x2 sprite atlas of FOUR independently painted mounted Han Tao poses. Reference images 1/2/3/4 are accepted SE/SW/NE/NW idle identity/horse/camera ONLY. Keep same red-plumed iron helmet/gold wing ear guards, long black beard, red-brown lamellar/gold shoulders, dark-red scarf/cape, chestnut horse with black mane/tail, military saddle and tack. Cell order top-left SE screen down-right, top-right SW down-left, bottom-left NE screen up-right rear/right side, bottom-right NW screen up-left rear/left side. Horse muzzle and rider orientation match prescribed direction. Rear views show back cape/helmet and rump, no copied front face or mirrored pose. Every cell has exactly one horse with four correct legs and one rider with two arms/two legs. Whole silhouette and any lance fit comfortably inside each equal square cell at about 55% of cell height; at least 60px truly empty transparent cross gutters and 35px exterior margins. Fixed elevated 30-degree isometric camera, detailed painterly RTS, identical proportions across cells. Native square maximum dimension 1536px, genuine alpha, no shadows, floor/ground block, text, labels, grids, blood or gore. HURT recoil pose, same living horse and mounted rider: horse flinches with neck lowered and knees slightly bent, four hooves braced. Han leans torso noticeably BACK with raised shoulders and grimace, cloak swings slightly forward. Anatomical RIGHT hand alone retains one upright or forward-slanted jujube-wood lance, with small silver tip/red tassel; LEFT hand retains reins only. RIGHT near-side grip in SE/NE; LEFT near-side reins in SW/NW, opposite arm on far side. Exactly two hands, one straight shaft, no second hand on shaft. Distinct hurt silhouette, not idle or attacking. Full spear tip/butt stay in cell.",
+      "references": [
+        "idle_se",
+        "idle_sw",
+        "idle_ne",
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "b71c82b8-e7ca-4cfd-b2f0-d7ea982202f5",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/hurt.json",
+      "request_sha256": "0fcf6a3a42f82f0df2d6f145a2a4bcd0f02426292313440f1293944dd0fb2f79",
+      "review": "Direct native review. Only selected directions use this unchanged atlas. Rejected hurt SW/NW wrong-hand poses and fall SW duplicate shaft remain explicitly unused source regions; separately painted replacements selected; engine review pending."
+    },
+    {
+      "key": "fall",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/fall.png",
+      "sha256": "cd44dca176ae88c0fc02d9dc553c1e4b49d98740e89ef48bcc94e01d9086cb0e",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: ONE native transparent RGBA square 2x2 sprite atlas of FOUR independently painted mounted Han Tao poses. Reference images 1/2/3/4 are accepted SE/SW/NE/NW idle identity/horse/camera ONLY. Keep same red-plumed iron helmet/gold wing ear guards, long black beard, red-brown lamellar/gold shoulders, dark-red scarf/cape, chestnut horse with black mane/tail, military saddle and tack. Cell order top-left SE screen down-right, top-right SW down-left, bottom-left NE screen up-right rear/right side, bottom-right NW screen up-left rear/left side. Horse muzzle and rider orientation match prescribed direction. Rear views show back cape/helmet and rump, no copied front face or mirrored pose. Every cell has exactly one horse with four correct legs and one rider with two arms/two legs. Whole silhouette and any lance fit comfortably inside each equal square cell at about 55% of cell height; at least 60px truly empty transparent cross gutters and 35px exterior margins. Fixed elevated 30-degree isometric camera, detailed painterly RTS, identical proportions across cells. Native square maximum dimension 1536px, genuine alpha, no shadows, floor/ground block, text, labels, grids, blood or gore. DEATH first collapse pose: horse buckles onto visibly folded foreknees, hindquarters drops, four legs bend naturally beneath body, still one horse. Rider slumps in saddle toward his anatomical RIGHT with head/shoulder lowered, cape drooping; clearly failing and not a ready combat pose. RIGHT hand loosely retains ONE lowered jujube-wood lance beside the ground on his right, LEFT hand empty relaxed against saddle, no left grip on weapon and no reins clenched. One continuous shaft with small silver tip/red tassel fully visible. Direction preserved through collapse: four orientations genuinely different; rear cells show back cape and horse rump, not reflected front face. Compact low silhouette; no standing feet beside horse, no combat thrust, no gore.",
+      "references": [
+        "idle_se",
+        "idle_sw",
+        "idle_ne",
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "b1b57609-fef5-438f-b531-a7098192125e",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/fall.json",
+      "request_sha256": "741cc1130279eab9cbc05399f2c58ea8b7dd640d5f952872a8e1132754c0b56c",
+      "review": "Direct native review. Only selected directions use this unchanged atlas. Rejected hurt SW/NW wrong-hand poses and fall SW duplicate shaft remain explicitly unused source regions; separately painted replacements selected; engine review pending."
+    },
+    {
+      "key": "terminal",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/terminal.png",
+      "sha256": "2b5bdbf6cfe0c50f0673d55a0978bbb51611986aafc7c845704b121998f25e82",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: ONE native transparent RGBA square 2x2 sprite atlas of FOUR independently painted mounted Han Tao poses. Reference images 1/2/3/4 are accepted SE/SW/NE/NW idle identity/horse/camera ONLY. Keep same red-plumed iron helmet/gold wing ear guards, long black beard, red-brown lamellar/gold shoulders, dark-red scarf/cape, chestnut horse with black mane/tail, military saddle and tack. Cell order top-left SE screen down-right, top-right SW down-left, bottom-left NE screen up-right rear/right side, bottom-right NW screen up-left rear/left side. Horse muzzle and rider orientation match prescribed direction. Rear views show back cape/helmet and rump, no copied front face or mirrored pose. Every cell has exactly one horse with four correct legs and one rider with two arms/two legs. Whole silhouette and any lance fit comfortably inside each equal square cell at about 55% of cell height; at least 60px truly empty transparent cross gutters and 35px exterior margins. Fixed elevated 30-degree isometric camera, detailed painterly RTS, identical proportions across cells. Native square maximum dimension 1536px, genuine alpha, no shadows, floor/ground block, text, labels, grids, blood or gore. DEATH terminal ground pose: horse rests fully on its side with FOUR legs folded together, motionless and low, no standing or kneeling horse. Han is displaced beside saddle on ground, entire armored body visible reclining and slumped, eyes closed when face visible, cloak spreads naturally. BOTH hands EMPTY and relaxed. Exactly ONE continuous jujube-wood lance with small silver tip and red tassel lying SEPARATELY on ground beside his anatomical right, disconnected from hands; fully visible tip and butt, no broken/duplicate shaft. One dead horse and one fallen rider per cell. Last facing remains SE/SW/NE/NW; rear orientations show back cape/helmet and rump appropriately. No tied wrists, no prisoner kneel, no survivor holding weapon, no blood/gore.",
+      "references": [
+        "idle_se",
+        "idle_sw",
+        "idle_ne",
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "0c80eefb-2721-4d10-a3c9-d317f43a6eb5",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/terminal.json",
+      "request_sha256": "c9ddebee9b4f70f58a01e15e6991b9fb51f7a406a625cdee5f1a10968df3891c",
+      "review": "Direct native review: four different terminal orientations, both hands empty and one separate dropped weapon; body/anchor/native engine review pending."
+    },
+    {
+      "key": "hurt_sw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/hurt_sw.png",
+      "sha256": "bbfa99faf4f7f99d07a9b022fe58919cb666c3584f6cba9faa0f8a3ee90a548b",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE independently painted native transparent RGBA Han Tao cavalry HURT sprite, southwest facing down-left, elevated isometric camera, same identity/equipment/horse as idle reference. Red-plumed gold-wing iron helmet, long black beard, red-brown lamellar/gold shoulders, dark red cape, chestnut horse with black mane/tail and same tack. Rider noticeably recoils backwards, shoulders raised and grimaces, horse neck lowered and all FOUR knees slightly bent in braced flinch. Viewer sees rider LEFT side near camera: near LEFT arm MUST reach to the horse neck and LEFT hand holds leather reins ONLY. Viewer-far RIGHT arm on opposite side holds exactly ONE slanted upright jujube-wood lance in RIGHT hand only; small silver blade/red tassel above his far right shoulder. Visibly separate reins from shaft. Do not put weapon in visible near LEFT hand. Two hands, one shaft, no reversed grip, no two-handed lance. Keep legs in stirrups, no extra limbs, no blood. Distinct backward recoil compared with idle, preserve painterly identity/horse proportions. Full horse, cape, plume and complete lance centered with 12% alpha margin on all four edges in one square native image <=1536px. Genuine transparent background, no floor, text, labels, shadows, other sprites.",
+      "references": [
+        "idle_sw"
+      ],
+      "status": "selected",
+      "generation_id": "442fbfc3-bf22-4516-9c31-4ac439250a59",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/hurt_sw.json",
+      "request_sha256": "6854caefe89110447ad14b87127b35bea7cbea6487a50b7991f45db558493c0d",
+      "review": "Native direct inspection: anatomical near LEFT reins / far RIGHT single lance in hurt; fall LEFT empty / RIGHT loose single lance. Replacement for explicitly unused quad region. Engine/body-size review pending."
+    },
+    {
+      "key": "hurt_nw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/hurt_nw.png",
+      "sha256": "a693ac29ea25cb2082d05137fba00130200d89a712b644c65c0789b3a0534e2d",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE independently painted native transparent RGBA Han Tao cavalry HURT sprite, northwest facing up-left, elevated isometric REAR/LEFT three-quarter camera, same identity/equipment/horse as idle reference. Show BACK of red-plumed gold-wing iron helmet/dark red cape and horse rump; long beard may show only profile. Red-brown armor/gold shoulders, chestnut horse black mane/tail and tack identical. Rider visibly recoils backwards with raised shoulders, horse neck lowers and four knees slightly bent, braced flinch. Viewer sees anatomical LEFT side near camera: near LEFT forearm reaches FORWARD to horse neck, LEFT hand holds ONLY leather reins. Far RIGHT arm holds exactly ONE forward-slanted upright jujube-wood lance in RIGHT hand beside far-right hip, silver blade/red tassel appears above far right shoulder. Do not swap near left hand onto lance. Two arms/two hands, one weapon total. Preserve rear facing, mounted legs in stirrups, proportions and painterly style, no mirrored front. Distinct recoil not idle, no blood. Full horse, plume, cape, tip/butt of lance completely inside one square canvas <=1536px with at least 12% empty alpha padding on ALL edges. Real transparency, no shadows/ground/text/labels/extra views.",
+      "references": [
+        "idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "4e69431c-119d-471a-a00d-b5a0436bd285",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/hurt_nw.json",
+      "request_sha256": "cd8dfe0acc9c8a7d0ecafb45e0029663aa0c2359c4606fc78bcba3c6e266adbd",
+      "review": "Native direct inspection: anatomical near LEFT reins / far RIGHT single lance in hurt; fall LEFT empty / RIGHT loose single lance. Replacement for explicitly unused quad region. Engine/body-size review pending."
+    },
+    {
+      "key": "fall_sw",
+      "repository_path": "assets/characters/han_tao_direction4_20261005/fall_sw.png",
+      "sha256": "f6b101c93e8a10257ba8911dc41afd5cdda178b7c998e9b5b9a7d665f8a2283d",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE independently painted native transparent RGBA Han Tao cavalry DEATH COLLAPSE sprite southwest facing down-left, elevated isometric front/left view. Identity/equipment/horse reference only: red-plumed gold-wing iron helmet, long black beard, red-brown/gold lamellar, dark-red cape, chestnut horse black mane/tail and same saddle/tack. Horse buckles onto folded foreknees, hindquarters drops and all FOUR legs bend naturally under body; neck/head low, dying not standing. Han still seated but shoulders/head slump to his anatomical RIGHT, cloak droops. Exactly ONE lance total: far RIGHT hand loosely retains continuous jujube-wood shaft lowered along horse's FAR right side with its one small silver tip/red tassel near ground to screen left. Viewer-near LEFT hand is visibly OPEN and EMPTY, resting against LEFT thigh/saddle; no rod, weapon butt, handle or shaft under that empty hand. Both arms present. Ensure only one continuous straight weapon shaft from right fist to silver tip; no second shaft on other side of saddle. No blood/gore. All horse/rider/plume/lance tip AND butt fit centered in one native square transparent image <=1536px with generous 12% alpha margin on each edge. No floor, shadow, text, labels, other figures or extra weapon.",
+      "references": [
+        "idle_sw"
+      ],
+      "status": "selected",
+      "generation_id": "d4ec5dc6-a9eb-43db-a5a0-fb15e6e04d6a",
+      "request_file": "tools/contracts/han_tao_direction4_20261005/requests/fall_sw.json",
+      "request_sha256": "b6d4587f04513148d23ea27c08fe564e15cb0a7420f44213d858b20fd8102615",
+      "review": "Native direct inspection: anatomical near LEFT reins / far RIGHT single lance in hurt; fall LEFT empty / RIGHT loose single lance. Replacement for explicitly unused quad region. Engine/body-size review pending."
+    }
+  ]
+}

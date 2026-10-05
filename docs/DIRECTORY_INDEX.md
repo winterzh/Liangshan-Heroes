@@ -1,3 +1,12 @@
+## 2026-10-05 韩滔常态骑乘增量
+
+- `assets/characters/han_tao_direction4_20261005/`：18张原生PNG与导入描述；native_references保留一个必需编辑父图并以.gdignore排除运行导入。
+- `assets/anim/han_tao_{idle,walk,attack,hurt,death}_{se,sw,ne,nw}.tres`、`assets/direction4/han_tao_20261005.json`：20资源、32独立姿态与脚点/取样元数据。
+- `tools/contracts/han_tao_direction4_20261005/`：真实请求、来源/审阅、原生SHA与只读测量重建工具。
+- `tools/run_character_art_qa.py`、`art_character_direction4_qa.gd`：扩展韩滔公共验收、完整请求/父图冻结和实际命中/技能/生擒检查。
+- `qa/han_tao_direction4_20261005/`：640项最终检查、43图审核、来源、纹理、重建、全部失败证据与清理记录。
+- `docs/HAN_TAO_DIRECTION4_20261005.md`：实际交付与夹具/验收边界。
+
 ## 2026-10-05 韩滔生擒增量
 
 - `assets/characters/han_tao_captured_20261005/`：一张原生透明四向图及生产导入描述。
