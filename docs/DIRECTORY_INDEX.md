@@ -1,3 +1,11 @@
+## 2026-10-05 祝家庄剩余四名被缚专图
+
+- `assets/characters/{yang_lin,huang_xin,wang_ying,deng_fei}_bound_20261005/`：原生四向透明站姿与导入描述；黄信native_references保留必需编辑父图，禁止当缓存删去。
+- `assets/direction4/bound_<人物>_20261005.json`及`assets/anim/bound_<人物>_idle_*.tres`：只读取样与脚点/身体高度。
+- `tools/contracts/<人物>_bound_20261005/`：完整内置生成/编辑请求、原参考SHA与可复現prepare.py。
+- `tools/zhu_captives_bound_qa.gd`、`run_zhu_captives_bound_qa.py`：整批冻结、四名原演员与七人正常解救。
+- `qa/bound_<人物>_20261005/`：来源/边界/复现；`qa/zhu_captives_bound_20261005/`：最终/失败运行、32张画面及清理证据。
+
 ## 2026-10-05 时迁专用被缚四向
 
 - `assets/characters/shi_qian_bound_20261005/`：原生透明站立囚徒图和导入描述。

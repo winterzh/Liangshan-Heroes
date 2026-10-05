@@ -1,3 +1,9 @@
+## 2026-10-05 祝家庄四名原囚徒验收
+
+    python -X utf8 -B tools/run_zhu_captives_bound_qa.py --repo <当前checkout> --manifest zhu_captives_bound=assets/direction4/bound_yang_lin_20261005.json --work-root <工程外QA目录> --shared-checks
+
+该批入口虽然以杨林manifest指定批次，会冻结并逐一核对全部四人的manifest、来源和原生资源。默认只读预检，执行加--run，可通过--cache-from提供同源已验收私有缓存并记录来源；每阶段自然等引擎空闲，无其他应用控制。当前启动方式不变。[QA与边界](../qa/zhu_captives_bound_20261005/README.md)。
+
 ## 2026-10-05 时迁当前囚徒验收
 
     python -X utf8 -B tools/run_shi_qian_bound_qa.py --repo <当前checkout> --manifest bound_shi_qian=assets/direction4/bound_shi_qian_20261005.json --work-root <工程外QA目录> --shared-checks

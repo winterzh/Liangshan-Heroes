@@ -164,7 +164,7 @@ const PROGRAMMATIC_BOUND_VARIANTS := {
 
 ## Dedicated native captive bodies take priority over the historical rope overlay.
 ## Only authored standing poses exist; terminal states keep procedural rendering.
-const NATIVE_BOUND_VARIANTS := {"bound_qin_ming": "qin_ming", "bound_shi_qian": "shi_qian"}
+const NATIVE_BOUND_VARIANTS := {"bound_qin_ming": "qin_ming", "bound_shi_qian": "shi_qian", "bound_yang_lin": "yang_lin", "bound_huang_xin": "huang_xin", "bound_wang_ying": "wang_ying", "bound_deng_fei": "deng_fei"}
 
 static func native_bound_owner(variant: String) -> String:
 	return String(NATIVE_BOUND_VARIANTS.get(variant, ""))

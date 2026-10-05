@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/deng_fei_bound_20261005/bound.png" id="bound"]
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("bound")
+region = Rect2(0, 635, 627, 619)
+margin = Rect2(0, 4, 0, 8)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-27.5, -43.86)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.907347
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
