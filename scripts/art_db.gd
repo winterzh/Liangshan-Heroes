@@ -680,7 +680,14 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 	var native_owner := CampaignArt.native_bound_owner(variant)
 	if not native_owner.is_empty():
 		if key != native_owner: return []
-		return _load_generic_directional_frames(CampaignArt.native_bound_path(variant, state, direction))
+		var native_path := CampaignArt.native_bound_path(variant, state, direction)
+		if native_path.is_empty(): return []
+		# Canvas draw commands retain a texture RID, not the temporary resource.
+		# Keep native frames alive between draws, including stationary captives.
+		var native_cache_key := "native_bound|" + native_path
+		if not _anim_cache.has(native_cache_key):
+			_anim_cache[native_cache_key] = _load_generic_directional_frames(native_path)
+		return _anim_cache[native_cache_key]
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():

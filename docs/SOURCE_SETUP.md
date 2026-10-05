@@ -1,3 +1,9 @@
+## 2026-10-05 时迁当前囚徒验收
+
+    python -X utf8 -B tools/run_shi_qian_bound_qa.py --repo <当前checkout> --manifest bound_shi_qian=assets/direction4/bound_shi_qian_20261005.json --work-root <工程外QA目录> --shared-checks
+
+默认只读预检；共享引擎自然空闲后加 --run。可加 --cache-from <同源私有批>，记录缓存来源；执行阶段只等待空闲，不控制其他应用。prepare.py和build_directional_spriteframes.py只写元数据/TRES，PNG保留原字节。通用启动方式不变。[QA与边界](../qa/bound_shi_qian_20261005/README.md)。
+
 ## 2026-10-05 原祝家庄秦明被缚与解救验收
 
     python -X utf8 -B tools/run_qin_ming_bound_qa.py --repo <当前checkout> --manifest bound_qin_ming=assets/direction4/bound_qin_ming_20261005.json --work-root <工程外QA目录> --shared-checks

@@ -1,0 +1,40 @@
+[
+  {
+    "key": "bound",
+    "method": "built_in_imagegen",
+    "generation_id": "97cb8bbd-2db9-4261-978e-482ece6e9844",
+    "selected": true,
+    "repository_input": "assets/characters/shi_qian_bound_20261005/bound.png",
+    "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108",
+    "references": [
+      "original",
+      "body"
+    ],
+    "prompt": "Use case: historical-scene. Asset type: native transparent four-view bound captive sprite atlas for the existing Chinese RTS Liangshan Heroes. Input 1 is the CURRENT IDENTITY PORTRAIT SHEET: ONLY the figure in MIDDLE ROW RIGHT CELL (column3,row2), masked slim male Shi Qian in black head wrap, charcoal clothes, brown sack. All other people on the sheet are irrelevant and must not appear. Input2 is current Shi Qian walking strip, solely identity, clothes and painterly style reference. Create a NEW independent square RGBA atlas with exactly FOUR full-body standing alive bound Shi Qian prisoner poses, 2x2 grid. Preserve slim agile adult Chinese man's sharp brows/visible alert eyes and visible warm skin around eyes, BLACK wrapped cloth headscarf and BLACK mouth/nose covering, charcoal black cross-over cloth tunic, plain dark waist sash, narrow dark trousers, dark wrapped cloth boots. Cloth folds and restrained brown belt details only: NO armor, metal helmet, general costume, cape, horse, beard exposed through mask, other characters or fantasy accessories. Remove the loot sack/bag/backpack entirely, both hands empty, no dagger or weapon. Both wrists tied together with coarse tan rope IN FRONT of lower chest/upper abdomen; elbows close to body. One natural rope wrap around torso and upper arms joins front wrist binding. Standing calmly confined with feet fairly close, no running, fighting, injury, blood or death. Rear views show back of charcoal cloth tunic/headwrap and torso/upper-arm rope; front wrists are naturally hidden by torso, NEVER wrists behind back. Four separately drawn elevated isometric views, same body height: TOP LEFT SE front three-quarter facing down-right; TOP RIGHT SW front three-quarter facing down-left; BOTTOM LEFT NE rear three-quarter facing up-right; BOTTOM RIGHT NW rear three-quarter facing up-left. No mirrored duplication. Full heads, headcloth tails, hands, ropes and feet contained in their own quadrant, each figure centered. VERY wide EMPTY TRANSPARENT center gutters and at least 50px transparent padding per cell edge; figure height roughly 65–72% of its cell. Match readable historical painterly RTS body at small render size, crisp silhouette, quiet natural cloth. Genuinely TRANSPARENT alpha background, no floor shadow, checkerboard, color backdrop, text, border, grid, labels, guards, lantern or additional objects. Square atlas max side1536, ideally1024. Output actual alpha; do not bake transparency pattern.",
+    "original_reference_paths": [
+      "E:/ChatGPT/水浒/assets/portraits18.png",
+      "E:/ChatGPT/水浒/assets/anim/shi_qian_walk.png"
+    ],
+    "transparent_background": true,
+    "request_file": "tools/contracts/shi_qian_bound_20261005/generation_request.json",
+    "request_sha256": "6ab664034789ae8de31509e2db31f340a442730b8e9685d40280f51ce097cfa2"
+  },
+  {
+    "key": "original",
+    "method": "existing_project_reference",
+    "selected": false,
+    "repository_input": "assets/portraits18.png",
+    "sha256": "79bb5b537f4e2fa96be66f7f90d6228ce9f3b94c5232bab9f39ad6c4997eea33",
+    "references": [],
+    "prompt": "Current Shi Qian identity portrait sheet MIDDLE ROW RIGHT CELL only."
+  },
+  {
+    "key": "body",
+    "method": "existing_project_reference",
+    "selected": false,
+    "repository_input": "assets/anim/shi_qian_walk.png",
+    "sha256": "6d25fbaf35b1a1397530ee92326e380f67f912712282a14f6701f48b4e2bae62",
+    "references": [],
+    "prompt": "Current Shi Qian existing unarmored black-cloth masked walking body reference only."
+  }
+]

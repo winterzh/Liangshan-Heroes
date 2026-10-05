@@ -23,7 +23,7 @@ func _bound_contracts() -> void:
 	for d in ["","bad"]:
 		check(art.unit_anim_frames("qin_ming","idle",d,"bound_qin_ming").is_empty() and not art.unit_anim_uses_directional_source("qin_ming","idle",d,"bound_qin_ming"), "empty/invalid animation direction rejected "+d)
 	check(art.unit_texture("qin_ming","bound_qin_ming","bad")==null,"invalid static direction rejected")
-	check(ca.portrait_owner("bound_qin_ming")=="qin_ming" and ca.NATIVE_BOUND_VARIANTS=={"bound_qin_ming":"qin_ming"},"native bound registry isolated to Qin and portrait owner retained")
+	check(ca.portrait_owner("bound_qin_ming")=="qin_ming" and ca.native_bound_owner("bound_qin_ming")=="qin_ming","native bound registry owns Qin and portrait owner retained")
 
 func _current_rescue() -> void:
 	var b = await _start("",2)

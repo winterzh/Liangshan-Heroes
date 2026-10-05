@@ -1,3 +1,11 @@
+## 2026-10-05 时迁专用被缚四向
+
+- `assets/characters/shi_qian_bound_20261005/`：原生透明站立囚徒图和导入描述。
+- `assets/direction4/bound_shi_qian_20261005.json`与`assets/anim/bound_shi_qian_idle_*.tres`：四取样区、脚点与身体高度；仅待机专用。
+- `tools/contracts/shi_qian_bound_20261005/`：完整生成请求、原参考SHA、来源与可复现元数据脚本。
+- `tools/shi_qian_bound_qa.gd`、`run_shi_qian_bound_qa.py`：原时迁、原七人及正常右键/计时解救、旧通用动画保留。
+- `qa/bound_shi_qian_20261005/`：冻结收据、实际画面、共享契约、导入/来源/重建及清理证据。
+
 ## 2026-10-05 秦明专用被缚四向
 
 - `assets/characters/qin_ming_bound_20261005/`：原生透明四向被缚图与原生导入描述；PNG保持原字节。

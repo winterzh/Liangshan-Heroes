@@ -1,0 +1,84 @@
+{
+  "complete": true,
+  "scope": "Independent tiny-tree deterministic metadata/lineage/bounds/source audit/four TRES rebuild; no native pixel edits or engine run.",
+  "outputs": [
+    {
+      "path": "assets/direction4/bound_shi_qian_20261005.json",
+      "sha256": "4692d2d249d7b8c3c83a77e5cf44c8fecd02ef30b747c750ee9ff99f1339cc0e",
+      "reproduced_sha256": "4692d2d249d7b8c3c83a77e5cf44c8fecd02ef30b747c750ee9ff99f1339cc0e",
+      "passed": true
+    },
+    {
+      "path": "tools/contracts/shi_qian_bound_20261005/generation.json",
+      "sha256": "1af827e71aab16b23bbf7e6e492cbb1241b6cc2a9923e4f3e218353f316c1f5d",
+      "reproduced_sha256": "1af827e71aab16b23bbf7e6e492cbb1241b6cc2a9923e4f3e218353f316c1f5d",
+      "passed": true
+    },
+    {
+      "path": "qa/bound_shi_qian_20261005/bounds_audit.json",
+      "sha256": "36c6792eaba44348f4e4dd2b58e40bdb8246b8a62d6df9d9e7c7e88f4b85b5ed",
+      "reproduced_sha256": "36c6792eaba44348f4e4dd2b58e40bdb8246b8a62d6df9d9e7c7e88f4b85b5ed",
+      "passed": true
+    },
+    {
+      "path": "qa/bound_shi_qian_20261005/source_audit.json",
+      "sha256": "6e461adf740e44ba1f855a1ae67e629284cf2bf5d4d6f1929c9935f45a08514b",
+      "reproduced_sha256": "6e461adf740e44ba1f855a1ae67e629284cf2bf5d4d6f1929c9935f45a08514b",
+      "passed": true
+    },
+    {
+      "path": "assets/anim/bound_shi_qian_idle_se.tres",
+      "sha256": "ea3e2600604821353804d4ee700520282f51e059f435c81fb5df69a02351feda",
+      "reproduced_sha256": "ea3e2600604821353804d4ee700520282f51e059f435c81fb5df69a02351feda",
+      "passed": true
+    },
+    {
+      "path": "assets/anim/bound_shi_qian_idle_sw.tres",
+      "sha256": "9cac419c56b8783406b8a813bfcf302ae0e5046f24b7dae92bae305104ffed4a",
+      "reproduced_sha256": "9cac419c56b8783406b8a813bfcf302ae0e5046f24b7dae92bae305104ffed4a",
+      "passed": true
+    },
+    {
+      "path": "assets/anim/bound_shi_qian_idle_ne.tres",
+      "sha256": "d9e636d3a40b022149e1d45e004fc2191053b1d754f72a7b3c014cecb8690d2c",
+      "reproduced_sha256": "d9e636d3a40b022149e1d45e004fc2191053b1d754f72a7b3c014cecb8690d2c",
+      "passed": true
+    },
+    {
+      "path": "assets/anim/bound_shi_qian_idle_nw.tres",
+      "sha256": "46b89b9990c0f1254fff178d648251fe06335801ae1013495959de4fa69f5682",
+      "reproduced_sha256": "46b89b9990c0f1254fff178d648251fe06335801ae1013495959de4fa69f5682",
+      "passed": true
+    }
+  ],
+  "steps": [
+    {
+      "argv": [
+        "E:\\ChatGPT\\qa-shi-qian-bound-20261005\\reproduction\\project\\tools\\contracts\\shi_qian_bound_20261005\\prepare.py"
+      ],
+      "stdout": "{\"sources\": 1, \"poses\": 4, \"resources\": 4, \"native_size\": [1254, 1254], \"bounds\": [{\"pose\": \"idle_se\", \"bounds\": [203, 65, 411, 604], \"region\": [0, 0, 617, 636], \"clearance_px\": 32, \"passed\": true}, {\"pose\": \"idle_sw\", \"bounds\": [207, 72, 409, 604], \"region\": [617, 0, 637, 636], \"clearance_px\": 32, \"passed\": true}, {\"pose\": \"idle_ne\", \"bounds\": [224, 33, 439, 552], \"region\": [0, 636, 633, 618], \"clearance_px\": 33, \"passed\": true}, {\"pose\": \"idle_nw\", \"bounds\": [195, 34, 398, 552], \"region\": [633, 636, 621, 618], \"clearance_px\": 34, \"passed\": true}]}",
+      "passed": true
+    },
+    {
+      "argv": [
+        "E:\\ChatGPT\\qa-shi-qian-bound-20261005\\reproduction\\project\\tools\\build_directional_spriteframes.py",
+        "assets/direction4/bound_shi_qian_20261005.json",
+        "--write"
+      ],
+      "stdout": "{\"resources\": 4, \"written\": true, \"differences\": []}",
+      "passed": true
+    },
+    {
+      "argv": [
+        "E:\\ChatGPT\\qa-shi-qian-bound-20261005\\reproduction\\project\\tools\\directional_character_sources.py",
+        "assets/direction4/bound_shi_qian_20261005.json",
+        "tools/contracts/shi_qian_bound_20261005/generation.json",
+        "--out",
+        "qa/bound_shi_qian_20261005/source_audit.json"
+      ],
+      "stdout": "{\"checks\": 36, \"passed\": true, \"failed\": []}",
+      "passed": true
+    }
+  ],
+  "native_inputs_unchanged": true
+}
