@@ -1,3 +1,13 @@
+## 2026-10-05 呼延灼撤离与当前关卡入口验证
+
+    python -X utf8 -B tools/run_hu_yanzhuo_retreat_qa.py --repo <当前checkout> --manifest hu_yanzhuo=assets/direction4/hu_yanzhuo_20261003.json --work-root <工程外QA目录> --shared-checks
+
+上式默认只读预检，共享引擎自然空闲后加 --run；可加 --cache-from <成功私有批>，须记录缓存来源。只读入口对账：
+
+    python -X utf8 -B tools/campaign_art_entrypoint_audit.py --output <工程外输出.json>
+
+入口对账不代表动态生成全量或视觉通过，旧curated覆盖报告的旧脚本计数不能当现行八关资格。普通启动方式不变。详见[QA](../qa/hu_yanzhuo_retreat_20261005/README.md)。
+
 ## 2026-10-05 韩滔常态骑乘四向已验收
 
 从 stable 09369d7e 接续，韩滔18张原生透明RGBA、32独立姿态和20份五状态四向TRES已验收，统一旧蓝甲/白马为portraits4顶行中格的红缨铁盔、长黑须、红褐甲与棕马。640/640原生、8/8公共路由、320/320来源检查通过；4233冻结输入及私有副本零漂移，43张最终截图审核（35张直接目检，8张与已目检首轮逐字节相同）。45个原图/资源/来源文件重建SHA一致，18张纹理实际导入尺寸通过。

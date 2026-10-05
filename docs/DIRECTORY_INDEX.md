@@ -1,3 +1,9 @@
+## 2026-10-05 撤离回归与入口对账
+
+- `tools/hu_yanzhuo_retreat_qa.gd`、`run_hu_yanzhuo_retreat_qa.py`：原关卡、原780血呼延灼、普通攻击及非死亡结果边界验收，复用共享冻结/引擎/私有档守卫。
+- `tools/campaign_art_entrypoint_audit.py`：现行八关注册入口与旧curated台账对账，保留字面引用及源SHA，动态路径另需审核。
+- `qa/hu_yanzhuo_retreat_20261005/`：92项原生、7图审核、公共路由/盘点、入口快照、旧台账诊断、复现与无旧缓存清理记录。
+
 ## 2026-10-05 韩滔常态骑乘增量
 
 - `assets/characters/han_tao_direction4_20261005/`：18张原生PNG与导入描述；native_references保留一个必需编辑父图并以.gdignore排除运行导入。
