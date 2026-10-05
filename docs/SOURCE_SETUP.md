@@ -1,3 +1,9 @@
+## 2026-10-05 当前八关与七人真实撤回验收
+
+    python -X utf8 -B tools/run_current_campaign_art_qa.py --repo <checkout> --manifest current_campaign_art=assets/direction4/bound_yang_lin_20261005.json --work-root <工程外QA目录> --shared-checks
+
+默认只读预检，执行加--run；可用--cache-from提供同源私有缓存，逐阶段自然等待共享引擎。入口冻结全部运行输入及四名被缚来源链，杨林manifest仅作为批次入口。现行8开场资源lookup与七人原演员撤离；tools/contracts/current_campaign_opening_20261005/snapshot.json保存独立通过的开场子项，输入及原证据哈希一致才复用，漂移则重新启动全部八关，未含整章战斗/胜利或跨进程续玩。公共启动方式未变。[QA](../qa/current_campaign_art_20261005/README.md)。
+
 ## 2026-10-05 祝家庄四名原囚徒验收
 
     python -X utf8 -B tools/run_zhu_captives_bound_qa.py --repo <当前checkout> --manifest zhu_captives_bound=assets/direction4/bound_yang_lin_20261005.json --work-root <工程外QA目录> --shared-checks

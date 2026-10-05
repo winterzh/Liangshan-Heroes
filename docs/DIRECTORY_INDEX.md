@@ -1,3 +1,10 @@
+## 2026-10-05 当前八关素材开场与真实撤回
+
+- tools/current_campaign_art_qa.gd与run_current_campaign_art_qa.py：当前注册八关开场、石秀和原七人正常移动验收。
+- tools/contracts/current_campaign_opening_20261005/：可核验输入哈希的八关开场子项快照。
+- qa/current_campaign_art_20261005/：final、历次失败、opening_evidence原证据、12张最终画面、源码继承引用、隔离/冻结/缓存来源及受限清理证据。
+- docs/CURRENT_CAMPAIGN_ART_20261005.md：当前入口范围和开场对照；不替代全阶段覆盖率。
+
 ## 2026-10-05 祝家庄剩余四名被缚专图
 
 - `assets/characters/{yang_lin,huang_xin,wang_ying,deng_fei}_bound_20261005/`：原生四向透明站姿与导入描述；黄信native_references保留必需编辑父图，禁止当缓存删去。
