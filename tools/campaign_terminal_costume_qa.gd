@@ -48,7 +48,7 @@ func _terminal_contracts() -> void:
 	else: art._anim_cache[ck]=cached_frames
 	check(art.unit_anim_frames("lin_chong","death","invalid","lin_chong_bound").is_empty(),"invalid direction rejected")
 	check(art.unit_anim_frames("song_jiang","death","se","unknown_variant")==art.unit_anim_frames("song_jiang","death","se"),"unknown variants retain existing compatibility")
-	check(art.unit_anim_frames("qin_ming","death","se","bound_qin_ming")==art.unit_anim_frames("qin_ming","death","se"),"programmatic bindings retain their own generic body")
+	check(art.unit_anim_frames("qin_ming","death","se","bound_qin_ming").is_empty(),"native bound Qin terminal pose cannot borrow generic weapon body")
 	check(art.unit_anim_frames("song_jiang","death","se","bound_qin_ming").is_empty(),"programmatic binding rejects wrong owner")
 
 func _label(parent, value: String, pos: Vector2) -> void:

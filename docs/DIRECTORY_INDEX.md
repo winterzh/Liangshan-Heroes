@@ -1,3 +1,11 @@
+## 2026-10-05 秦明专用被缚四向
+
+- `assets/characters/qin_ming_bound_20261005/`：原生透明四向被缚图与原生导入描述；PNG保持原字节。
+- `assets/direction4/bound_qin_ming_20261005.json`、`assets/anim/bound_qin_ming_idle_*.tres`：四个独立取样区域与脚点/身体高度元数据，待机专用。
+- `tools/contracts/qin_ming_bound_20261005/`：生成请求、参考SHA、原图来源及可复现元数据脚本。
+- `tools/qin_ming_bound_qa.gd`、`run_qin_ming_bound_qa.py`：当前RTS原演员与正常右键计时解救；旧三日兼容另列。
+- `qa/bound_qin_ming_20261005/`：最终/失败回归、实际画面审核、原生导入、来源/重建、清理及归档索引。
+
 ## 2026-10-05 撤离回归与入口对账
 
 - `tools/hu_yanzhuo_retreat_qa.gd`、`run_hu_yanzhuo_retreat_qa.py`：原关卡、原780血呼延灼、普通攻击及非死亡结果边界验收，复用共享冻结/引擎/私有档守卫。

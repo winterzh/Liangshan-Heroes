@@ -423,6 +423,10 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 
 
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
+	if not CampaignArt.native_bound_owner(variant).is_empty():
+		var native_direction: String = "se" if direction.is_empty() else direction
+		var native_frames := unit_anim_frames(key, "idle", native_direction, variant)
+		return null if native_frames.is_empty() else native_frames[0]
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -673,6 +677,10 @@ func portrait_texture(key: String) -> Texture2D:
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
 	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
 		return []
+	var native_owner := CampaignArt.native_bound_owner(variant)
+	if not native_owner.is_empty():
+		if key != native_owner: return []
+		return _load_generic_directional_frames(CampaignArt.native_bound_path(variant, state, direction))
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -853,6 +861,8 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
 	if direction not in CampaignArt.DIRECTIONS:
 		return false
+	if not CampaignArt.native_bound_owner(variant).is_empty():
+		return not unit_anim_frames(key, state, direction, variant).is_empty()
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -899,12 +909,16 @@ func _campaign_texture(path: String) -> Texture2D:
 func campaign_variant_has_direction(variant: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
 		return false
+	if not CampaignArt.native_bound_owner(variant).is_empty():
+		return not _load_generic_directional_frames(CampaignArt.native_bound_path(variant, "idle", direction)).is_empty()
 	var path := CampaignArt.animation_path(variant, "idle", direction)
 	return not path.is_empty() and ResourceLoader.exists(path)
 
 ## 精确动作存在判断；复用纹理缓存，绝不以idle回退冒充双人动作。
 func campaign_variant_has_animation(variant: String, state: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS: return false
+	if not CampaignArt.native_bound_owner(variant).is_empty():
+		return state == "idle" and campaign_variant_has_direction(variant, direction)
 	var path := CampaignArt.animation_path(variant, state, direction)
 	var texture := _campaign_texture(path)
 	return texture != null and texture.get_height() > 0 and texture.get_width() % texture.get_height() == 0

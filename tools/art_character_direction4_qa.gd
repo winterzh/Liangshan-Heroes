@@ -243,10 +243,10 @@ func _qin_bound_priority(b) -> void:
 		u.animation_direction = direction
 		var bound_frames: Array = art.unit_anim_frames("qin_ming", "idle", direction, "bound_qin_ming")
 		var generic_frames: Array = art.unit_anim_frames("qin_ming", "idle", direction)
-		check(not bound_frames.is_empty() and _texture_pose(bound_frames[0]) == _texture_pose(generic_frames[0]), "Qin registered programmatic bound keeps own four-way body: " + direction)
+		check(not bound_frames.is_empty() and _texture_source(bound_frames[0]) == "res://assets/characters/qin_ming_bound_20261005/bound.png" and _texture_pose(bound_frames[0]) != _texture_pose(generic_frames[0]), "Qin native bound body takes priority in legacy binding compatibility: " + direction)
 		check(art.unit_texture("guan_sheng", "bound_qin_ming", direction) == null and art.unit_anim_frames("guan_sheng", "idle", direction, "bound_qin_ming").is_empty(), "Qin bound alias rejects another character: " + direction)
 		var actual = u._anim_frame_for_state(art.unit_texture(u.key, u.art_variant, direction))
-		check(u._frame_directional and _texture_pose(actual) == _texture_pose(generic_frames[0]) and not u._authored_direction4_attack_active(), "Qin real captive uses own idle and excludes generic combat display: " + direction)
+		check(u._frame_directional and _texture_pose(actual) == _texture_pose(bound_frames[0]) and not u._authored_direction4_attack_active(), "Qin captive uses native idle and excludes generic combat display: " + direction)
 		u.queue_redraw()
 		await _art_screenshot(b, "qin_bound_" + direction, u)
 	chapter._release_captive(u)

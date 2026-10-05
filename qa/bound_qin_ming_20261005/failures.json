@@ -1,0 +1,37 @@
+{
+  "complete": true,
+  "failed_engine_batches": [
+    {
+      "run": "20261005_103732_f541e8f0",
+      "failure": {
+        "type": "RuntimeError",
+        "message": "Private character QA step failed: bound_qin_ming"
+      },
+      "receipt_sha256": "3e2623a6f9a6f41b3b2ba7a69f4b1dc9bed24935ef599d56366020fc0bee51ad",
+      "final_acceptance": false
+    },
+    {
+      "run": "20261005_104144_04942427",
+      "failure": {
+        "type": "RuntimeError",
+        "message": "Godot/Liangshan engine appeared before step bound_qin_ming"
+      },
+      "receipt_sha256": "c095423ad8c6f4b7da313a552c94549c3a568759cd5a98e72835609cc1e34c24",
+      "final_acceptance": false
+    },
+    {
+      "run": "20261005_104553_5aa1a251",
+      "failure": {
+        "type": "RuntimeError",
+        "message": "Private character QA step failed: campaign_contract"
+      },
+      "receipt_sha256": "1d2b8f0995e8f28bda2a191c79ed26a51eb911aff22e34745f6123620540c629",
+      "final_acceptance": false
+    }
+  ],
+  "preparation_notes": [
+    "Initial metadata source key captured corrected to bound before engine runs.",
+    "Source audit invoked before four TRES existed; reordered after native import and resource build."
+  ],
+  "scope": "Preserve unsuccessful evidence; only final complete receipt and visual review qualify this batch."
+}

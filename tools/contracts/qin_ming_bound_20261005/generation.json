@@ -1,0 +1,42 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "bound_qin_ming",
+  "identity_note": "Current Qin Ming red headscarf, curly beard, golden beast shoulders, red robe. Standing foot captive with front wrist and torso ropes, no weapon/mount/blood.",
+  "jobs": [
+    {
+      "key": "bound",
+      "method": "built_in_imagegen",
+      "sha256": "f1dda9f6ac465a29a42ab4e920d6deb04eec5bd907f883528c67c205078abfc9",
+      "references": [
+        "original",
+        "body"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: native transparent four-view bound captive sprite atlas for the existing Chinese RTS Liangshan Heroes. Input 1 is current Qin Ming face and costume identity reference only; input 2 is current approved unmounted Qin Ming four-view body identity, painting and scale reference only. Create a NEW independent square RGBA atlas containing exactly FOUR full-body standing, alive, unarmed bound Qin Ming prisoner poses in a regular 2x2 grid. Preserve middle-aged broad strong face, curly dark hair and full curly black beard, RED WRAPPED CLOTH HEADSCARF with small ornamental golden headband, dark-and-bronze-gold armor with large golden beast-face shoulder guards, red scarf/red robe and dark trousers/gold armored boots, long dark red cloak. He is already a FOOT warrior; absolutely no horse, saddle, mount or cavalry. Remove spiked club entirely: NO weapon anywhere, hands empty. Both wrists tied together with clearly visible coarse tan rope in FRONT of lower chest/upper abdomen. Single natural rope wrap around torso/upper arms connects to wrist binding. Standing calmly confined, shoulders down, elbows close to torso, feet close together on ground; no attacking stance, injury, blood, corpse, weapon, guards or other people. Rear views show rear cloak and tied upper-arm/torso rope as anatomically appropriate; hands remain at FRONT of abdomen naturally occluded by body, never hands tied behind back. Exactly four separately drawn elevated isometric views: TOP LEFT SE front three-quarter looking down-right; TOP RIGHT SW front three-quarter looking down-left; BOTTOM LEFT NE rear three-quarter facing up-right; BOTTOM RIGHT NW rear three-quarter facing up-left. No mirrored duplication. Same body height and costume in all views; all feet, headscarf tails and cloak fully contained in their own square cell. Cloak hangs calmly close to body, not wildly billowing. Wide EMPTY TRANSPARENT central gutters and at least 50 pixels transparent padding inside each quadrant; no cropped plume/clothes, overlap, labels, grid marks, borders, text, backdrop or cast ground shadows. Fixed camera compatible with the approved body. Readable at about 60–85 pixel rendered body height. Genuinely transparent background alpha, native painterly historical RTS cutout. Square atlas max side1536, ideally1024. Output actual alpha; do not bake checkerboard or opaque black background.",
+      "repository_path": "assets/characters/qin_ming_bound_20261005/bound.png",
+      "status": "selected",
+      "generation_id": "ba9766c9-b5fa-4de9-bf83-929962a38f4e"
+    },
+    {
+      "key": "original",
+      "method": "existing_project_reference",
+      "sha256": "00c00e9d1ae325a0b6754112828aa267019662bcead11f57be88d27678186ddd",
+      "references": [],
+      "prompt": "Current Qin Ming portrait identity reference only.",
+      "repository_path": "assets/characters/hero_portraits_aligned_20260926/qin_ming.png",
+      "status": "required_reference"
+    },
+    {
+      "key": "body",
+      "method": "existing_project_reference",
+      "sha256": "d4ce5ad39720f45c489cd4263c89dc159a11c0820d51e4728eb98326bba292bb",
+      "references": [],
+      "prompt": "Current native unmounted Qin Ming four-view body/costume reference only.",
+      "repository_path": "assets/characters/qin_ming_direction4_20261004/idle.png",
+      "status": "required_reference"
+    }
+  ],
+  "original_reference": {
+    "path": "assets/characters/hero_portraits_aligned_20260926/qin_ming.png",
+    "sha256": "00c00e9d1ae325a0b6754112828aa267019662bcead11f57be88d27678186ddd"
+  }
+}

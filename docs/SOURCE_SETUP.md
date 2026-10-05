@@ -1,3 +1,9 @@
+## 2026-10-05 原祝家庄秦明被缚与解救验收
+
+    python -X utf8 -B tools/run_qin_ming_bound_qa.py --repo <当前checkout> --manifest bound_qin_ming=assets/direction4/bound_qin_ming_20261005.json --work-root <工程外QA目录> --shared-checks
+
+默认只读预检；引擎空闲后加 --run。可加 --cache-from <同源私有批>，必须记录缓存来源。该专用待机不是秦明通用五状态包；每个执行阶段等待共享引擎自然空闲，不控制其他应用。按请求/参考/native PNG SHA重建的 prepare.py 与 build_directional_spriteframes.py只生成资源元数据，不改像素。普通启动方式不变。[QA与边界](../qa/bound_qin_ming_20261005/README.md)。
+
 ## 2026-10-05 呼延灼撤离与当前关卡入口验证
 
     python -X utf8 -B tools/run_hu_yanzhuo_retreat_qa.py --repo <当前checkout> --manifest hu_yanzhuo=assets/direction4/hu_yanzhuo_20261003.json --work-root <工程外QA目录> --shared-checks

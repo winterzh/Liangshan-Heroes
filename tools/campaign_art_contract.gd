@@ -119,13 +119,18 @@ func _run() -> void:
 	_check("legacy_cache_not_polluted",art.unit_anim_frames("wu_song","walk")==old_frames and art.avatar_texture("wu_song")==old_texture)
 	_check("period_avatar_not_old_portrait",art.avatar_texture("wu_song","wu_song_mengzhou")!=old_texture)
 	for variant in CA.ANIMATED_VARIANTS:
-		var okay := art.avatar_texture("wu_song",variant)!=null
+		var owner := CA.portrait_owner(variant)
+		if owner.is_empty(): owner = "wu_song" # Historical variants without an owner retain compatibility.
+		var okay := art.avatar_texture(owner,variant)!=null
 		for direction in CA.DIRECTIONS:
 			okay = okay and art.campaign_variant_has_direction(variant,direction)
-			var frames: Array = art.unit_anim_frames("wu_song","idle",direction,variant)
+			var frames: Array = art.unit_anim_frames(owner,"idle",direction,variant)
 			okay = okay and not frames.is_empty()
 			if not frames.is_empty(): okay = okay and _alpha_check(frames[0].get_image()).passed
 		_check("variant_ready_"+variant,okay)
+	for variant in art.IDENTITY_PORTRAIT_VARIANTS:
+		var owner: String = art.IDENTITY_PORTRAIT_VARIANTS[variant]
+		_check("identity_portrait_owner_"+variant,art.avatar_texture(owner,variant)!=null and art.avatar_texture("wu_song",variant)==null)
 	# 黄泥冈押送角色使用剧情状态而不是死亡替身：每个方向都有独立站姿和非致死倒地帧。
 	for role in ["yu_hou", "lao_duguan"]:
 		for state in ["idle", "down"]:
@@ -169,7 +174,7 @@ func _run() -> void:
 			CA.programmatic_bound_owner(bound_variant) == owner
 			and not bound_variant in CA.ANIMATED_VARIANTS
 			and own_texture != null
-			and own_texture == art.unit_texture(owner, "", "se")
+			and ((own_texture != art.unit_texture(owner, "", "se")) if not CA.native_bound_owner(bound_variant).is_empty() else (own_texture == art.unit_texture(owner, "", "se")))
 			and art.avatar_texture(owner, bound_variant) == art.avatar_texture(owner))
 		var wrong_owner := "qin_ming" if owner != "qin_ming" else "shi_qian"
 		_check("zhujiazhuang_%s_rejects_wrong_owner" % bound_variant,

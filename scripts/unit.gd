@@ -4221,7 +4221,7 @@ func _draw() -> void:
 		if not is_hero and not is_building and not inspected and movement_profile!="water":
 			status_text = {"unconscious":Localize.text("昏"), "subdued":Localize.text("服"), "captured":Localize.text("俘")}.get(story_outcome,status_text)
 		draw_string(ThemeDB.fallback_font, Vector2(-45,bar_y+12), status_text, HORIZONTAL_ALIGNMENT_CENTER, 90, 13, Color(0.96,0.83,0.53))
-	if is_bound_person():
+	if is_bound_person() and CampaignArt.native_bound_owner(art_variant).is_empty():
 		for rope_y in [-22,-19]: draw_line(Vector2(-7,rope_y),Vector2(7,rope_y),Color(0.65,0.48,0.27),1.7)
 	if hp > 0.0 and story_outcome == "" and Settings.show_healthbars and (not _mass_visuals() or hp < max_hp - 0.5):
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
@@ -4426,7 +4426,8 @@ func _draw_building() -> void:
 		var captive_tex := Art.unit_texture(key.trim_suffix("_bound"), art_variant, animation_direction)
 		if captive_tex!=null:
 			draw_texture_rect(captive_tex,Rect2(-31,-53,62,62),false,Color(0.84,0.83,0.78))
-			for y in [-24,-21]: draw_line(Vector2(-8,y),Vector2(8,y),Color(0.60,0.44,0.24),2.0)
+			if CampaignArt.native_bound_owner(art_variant).is_empty():
+				for y in [-24,-21]: draw_line(Vector2(-8,y),Vector2(8,y),Color(0.60,0.44,0.24),2.0)
 		return
 	if is_resource:
 		_draw_resource_node()
