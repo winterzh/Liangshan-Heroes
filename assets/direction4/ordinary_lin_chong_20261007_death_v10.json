@@ -1,0 +1,159 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "revision": "character_traits_v5",
+  "character": "character_traits_v10_lin_chong_death",
+  "identity_key": "lin_chong",
+  "candidate_only": true,
+  "production_qualified": false,
+  "runtime_death_qualified": false,
+  "states": {
+    "death": [
+      "fatal",
+      "fall",
+      "impact",
+      "rest"
+    ]
+  },
+  "sources": {
+    "sw2": {
+      "path": "assets/characters/lin_chong_traits_20261006/death_sw2_v10.png",
+      "sha256": "accef36715f88e1a0dc9289974db50e9c03e66ddc0b35c9701210416766c9528",
+      "mode": "RGBA",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "imported_size": [
+        1254,
+        1254
+      ],
+      "import_dimensions_verified": true
+    }
+  },
+  "poses": {
+    "fatal_sw": {
+      "source": "sw2",
+      "region": [
+        0,
+        0,
+        627,
+        720
+      ],
+      "margin": [
+        46.5,
+        0.0,
+        93,
+        0
+      ],
+      "virtual_size_imported": 720,
+      "pivot": [
+        471.75,
+        609.0
+      ],
+      "draw_offset_px": [
+        -111.75,
+        -18.6
+      ],
+      "draw_scale": 1.120958
+    },
+    "fall_sw": {
+      "source": "sw2",
+      "region": [
+        627,
+        0,
+        627,
+        720
+      ],
+      "margin": [
+        46.5,
+        0.0,
+        93,
+        0
+      ],
+      "virtual_size_imported": 720,
+      "pivot": [
+        485.4,
+        612.0
+      ],
+      "draw_offset_px": [
+        -125.4,
+        -21.6
+      ],
+      "draw_scale": 1.120958
+    },
+    "impact_sw": {
+      "source": "sw2",
+      "region": [
+        0,
+        740,
+        627,
+        514
+      ],
+      "margin": [
+        0.0,
+        56.5,
+        0,
+        113
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        313.5,
+        370.04
+      ],
+      "draw_offset_px": [
+        0.0,
+        144.1
+      ],
+      "draw_scale": 0.976168
+    },
+    "rest_sw": {
+      "source": "sw2",
+      "region": [
+        627,
+        740,
+        627,
+        514
+      ],
+      "margin": [
+        0.0,
+        56.5,
+        0,
+        113
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        313.5,
+        370.04
+      ],
+      "draw_offset_px": [
+        0.0,
+        144.1
+      ],
+      "draw_scale": 0.976168
+    }
+  },
+  "resources": [
+    "assets/anim/character_traits_v10_lin_chong_death_death_sw.tres",
+    "assets/anim/character_traits_v10_lin_chong_death_death_se.tres",
+    "assets/anim/character_traits_v10_lin_chong_death_death_ne.tres",
+    "assets/anim/character_traits_v10_lin_chong_death_death_nw.tres"
+  ],
+  "preserved_resources": [
+    {
+      "original": "assets/anim/lin_chong_death_se.tres",
+      "alias": "assets/anim/character_traits_v10_lin_chong_death_death_se.tres",
+      "sha256": "d8c5006da1ec2f3ae11d4f7c78320fbfd26d457df4c56b437ba2383e8c18be2f"
+    },
+    {
+      "original": "assets/anim/lin_chong_death_ne.tres",
+      "alias": "assets/anim/character_traits_v10_lin_chong_death_death_ne.tres",
+      "sha256": "1d1521057c1f24bb21d9854933f97bc62cf14ec9202e9172022ac825bd695e97"
+    },
+    {
+      "original": "assets/anim/lin_chong_death_nw.tres",
+      "alias": "assets/anim/character_traits_v10_lin_chong_death_death_nw.tres",
+      "sha256": "268ef9bee8a9b2439d1eab016398b9942db56fa26e384f840d070c645db41c66"
+    }
+  ],
+  "scope": "Only southwest has four new native poses. Other three resources are exact byte aliases of existing Lin death resources; their actual texture queries must remain equal. Existing originals and failed first candidate retained. Actual world support, death/shadow/release and production adoption pending."
+}

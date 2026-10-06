@@ -1,0 +1,74 @@
+{
+  "jobs": [
+    {
+      "key": "death_sw_v10",
+      "generation_id": "d12c91e7-00be-4ac6-9dd6-25f4d901f7d5",
+      "method": "built_in_imagegen",
+      "path": "assets/characters/lin_chong_traits_20261006/death_sw_v10.png",
+      "sha256": "8561c141d5b5c55ed71eecd71b619b40b5fb22c4bf3e559e22efd3c77f76a93a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "request": "tools/contracts/zhu_wounded_20261005/lin_chong_death_sw_v10_request.json",
+      "request_sha256": "dea66a44c8b346d89220119d6ac2e4b26e193632c9734832fd8f02cf9b739ac0",
+      "prompt": "Use case: identity-preserve. Create ONE new genuinely transparent RGBA 2x2 game death-animation atlas for Lin Chong (林冲), Water Margin. Image 1 TOP RIGHT figure is the authoritative adult identity, healthy body proportions, mature face, blue clothing, gold-edged lamellar armor, boots and single long spear. Image 2 is ONLY a choreography reference: its existing southwest fatal and final poses turn the wrong way. Correct that error; do not inherit the wrong heading or compressed anatomy. All FOUR cells depict the SAME adult man consistently oriented screen-left/down (SOUTHWEST), FRONT LEFT three-quarter view, fixed isometric camera about 30 degrees downward, face/chest visible where physically appropriate. He never switches to a right-facing or rear-view man. TOP LEFT: fatal recoil, face still looking LEFT and slightly up, spine naturally arches a little, both knees soften, both boots visible, SINGLE long spear held low with red tassel and metal tip pointing lower-left. TOP RIGHT: knees give way, torso drops toward the LEFT, left-facing head lowers, a hand braces against the ground, adult arms and legs remain anatomically complete, spear remains visible and points left. BOTTOM LEFT: complete grounded side/prone impact, HEAD on the LEFT and BOOTS on the RIGHT, face still oriented toward lower-left, blue and gold armor unchanged, exactly one spear resting beside him with tip on the LEFT. BOTTOM RIGHT: same grounded body direction and same anatomical scale as bottom-left, motionless final rest, HEAD LEFT / BOOTS RIGHT, one full spear beside him, tip LEFT. Preserve Image 1's mature stern face, tied black hair, beard, full-height healthy adult torso/limbs and armor details in all four cells. The natural fatal collapse is NOT an idle hunch. No oversized head, childlike proportions, tiny corpse, shortened limbs, extra hands, extra spears, or right-facing pose. Exactly one full spear and one red tassel per cell. Detailed painterly RTS game illustration, same lighting/color/material finish as Image 1. Four equal separated quadrants, generous transparent gutters and outer margins. Every head/hair, hand, boot, entire lying body and entire spear must fit completely inside its own cell; no clipping or cell crossing. Non-graphic fictional game death: no blood, wounds, gore, dismemberment. No background, floor, ground shadow, text, labels, borders, panels or effects. Real transparent alpha.",
+      "references": [
+        {
+          "path": "assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+          "sha256": "5d1480e516058b09adee8b4b0593a83b1f5a4d87ebb4c1fc898e2b5b081ec484"
+        },
+        {
+          "path": "assets/characters/lin_chong_direction4_20260906/sw.png",
+          "sha256": "8dcef108eb8ce6c7a755300463f44c3fe7b73859170e57e7d51d8479927c4516"
+        }
+      ],
+      "native_pixel_edits": false,
+      "selection": "retained wrong-facing fatal ancestor"
+    },
+    {
+      "key": "death_sw2_v10",
+      "generation_id": "581c91c5-4f6d-4432-bcda-01dbf83a5a81",
+      "method": "built_in_imagegen",
+      "path": "assets/characters/lin_chong_traits_20261006/death_sw2_v10.png",
+      "sha256": "accef36715f88e1a0dc9289974db50e9c03e66ddc0b35c9701210416766c9528",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "request": "tools/contracts/zhu_wounded_20261005/lin_chong_death_sw2_v10_request.json",
+      "request_sha256": "49647557a421fa7348ac99ebaae3ee19b91b7ec8632c403fe6ddfac797fd627a",
+      "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET: preserve the complete transparent 2x2 Lin Chong death atlas. Make EXACTLY ONE targeted correction in the TOP LEFT cell: his FACE currently looks screen RIGHT, which is wrong. Turn ONLY that cell's head/face naturally toward screen LEFT, matching the left-facing mature face/nose/eyes of Image 2 TOP RIGHT figure. The nose must project toward the LEFT edge of the image, eyes look LEFT (slightly upward is okay), visible ear on the RIGHT side of the face; never a right-pointing nose. Preserve his black tied hair, beard, gold hair tie, healthy neck connection, blue scarf, armor, body recoil, both boots and entire spear. Do not mirror or rotate the whole body/cell. Do not change the three other cells: the upper-right kneeling figure and both bottom-left-headed resting figures already face LEFT correctly. Keep their body/limb proportions, armor, single spear and left-pointing spear tips unchanged. Preserve all source details, scale, positions, full 2x2 composition, transparent gutters, outer margins and genuine RGBA transparency. No cropping, new background, shadow, text, border, blood or effects. The sole required difference is TOP LEFT HEAD/FACE LOOKS LEFT rather than RIGHT. Detailed painterly RTS style stays unchanged.",
+      "references": [
+        {
+          "path": "assets/characters/lin_chong_traits_20261006/death_sw_v10.png",
+          "sha256": "8561c141d5b5c55ed71eecd71b619b40b5fb22c4bf3e559e22efd3c77f76a93a"
+        },
+        {
+          "path": "assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+          "sha256": "5d1480e516058b09adee8b4b0593a83b1f5a4d87ebb4c1fc898e2b5b081ec484"
+        }
+      ],
+      "native_pixel_edits": false,
+      "selection": "selected"
+    }
+  ],
+  "preserved_resources": [
+    {
+      "original": "assets/anim/lin_chong_death_se.tres",
+      "alias": "assets/anim/character_traits_v10_lin_chong_death_death_se.tres",
+      "sha256": "d8c5006da1ec2f3ae11d4f7c78320fbfd26d457df4c56b437ba2383e8c18be2f"
+    },
+    {
+      "original": "assets/anim/lin_chong_death_ne.tres",
+      "alias": "assets/anim/character_traits_v10_lin_chong_death_death_ne.tres",
+      "sha256": "1d1521057c1f24bb21d9854933f97bc62cf14ec9202e9172022ac825bd695e97"
+    },
+    {
+      "original": "assets/anim/lin_chong_death_nw.tres",
+      "alias": "assets/anim/character_traits_v10_lin_chong_death_death_nw.tres",
+      "sha256": "268ef9bee8a9b2439d1eab016398b9942db56fa26e384f840d070c645db41c66"
+    }
+  ],
+  "scope": "Only southwest has four new native poses. Other three resources are exact byte aliases of existing Lin death resources; their actual texture queries must remain equal. Existing originals and failed first candidate retained. Actual world support, death/shadow/release and production adoption pending."
+}

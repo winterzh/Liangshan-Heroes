@@ -1,3 +1,15 @@
+2026-10-07复验入口修正：林冲SW第二版原生导入/1254×1254尺寸回读已通过，PNG字节不变；收据lin_sw_death_native_texture_v10.json。v10影子夹具因提前preload触发Art依赖编译错误，未取得死亡画面；失败源码/批保留，ordinary_death_pilot_rejected_v10.json记录原因。改用run_ordinary_death_pilot_v10a.py（其余参数同前）；它从原关卡实际WorldShadowBatch取保留/释放证据，生产脚本未改。v9未执行；v10已失败，不能再称待验证成功候选。v10a资格依新收据，目前新death未默认接入。
+
+<!-- death-diagnostic-v10-current -->
+## 2026-10-07 技能/真实倒地诊断完成，林冲西南朝向需修正
+
+原关卡武松、林冲的八项技能四向484检查/64图完成；原level1生命与数值下真实致命战斗及四个倒地阶段177检查/32图完成，共661项、96个原生视口。正常时钟1.0，4904来源、105既有与13新输入零漂移，私有ArtDB仅试接武松death。完整机械收据ordinary_final_actions_pilot_v8a.json和直接查看/原字节保留的40图见ordinary_final_actions_pilot_visual_review_v8a.json。合法level6/rank1恢复、接触摆位、冻结非参与者、关雾/镜头/相位冻结仍是明确夹具。敌方近战英雄会保留自然技能使用，资格为原敌人真实战斗伤害，不称“致命一击全是普通近战”。
+
+机械通过不等于整体画面通过：武松四向16个倒地阶段直接审查，成人体型、双刀、前后方向及静止/淡出保留；林冲旧西南fatal转右、fall转左、最终头脚又反向，画面判退。新内置imagegen西南候选两张1254RGBA原生图及精确请求/父图均保存；首版fatal仍转右，第二版定向修正为左。编排四个新SW姿态，其他三向死亡资源为原TRES逐字节别名，不改旧图/旧资源、不本地裁切/缩放/镜像/重绘。清单ordinary_lin_chong_20261007_death_v10.json，来源generation_lin_chong_death_v10.json。原生导入/尺寸资格依独立收据，实际落地点、完整死亡/影子及生产接入仍待新批验证。
+
+v9生产复验脚本仅准备，未执行，保留为v10生成输入；v10在私有ArtDB试接武松四向死亡与林冲西南修正，并新增影子保留/释放与其他普通/剧情路由守卫。共享Godot自然等待，不操作其他任务。生产ArtDB/Unit未改，新death仍未默认采纳。施法中后期血条间距、连续动作、多尺寸UI及DEVELOPMENT_AUDIT_20261006.md的八关动态/保存终局/九模式/性能/Android实际设备等项仍开放；本批未新增清理、打包或平台发布。
+<!-- /death-diagnostic-v10-current -->
+
 2026-10-07同步收据：本轮59白名单文件（24,434,909字节）已提交并推送stable，独立回读远端e51422a73a2981c18838309a117ac2333bcc7801一致；qa/zhu_wounded_20261005/wu_death_candidate_source_sync_v8.json记录候选范围与实际资格。生产源码未改，新death仍未默认接入；完整技能/死亡批继续。文档收尾是后续元数据提交。
 
 <!-- wu-death-candidate-v8-current -->
